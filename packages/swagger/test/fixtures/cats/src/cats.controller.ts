@@ -25,11 +25,16 @@ import {
   ApiResponse,
   ApiTags,
   getSchemaPath,
+  ApiExtraModel,
 } from '../../../../src';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './entities/cat.entity';
+import { Cata } from './entities/cata.entity';
+import { Catd } from './entities/catd.entity';
+import { CatT } from './entities/catt.entity';
 
+@ApiExtraModel([CatT, Cata, Catd])
 @ApiTags(['2-国家测试', 'sss'])
 @Controller('/cats')
 @ApiHeader({

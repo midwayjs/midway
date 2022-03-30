@@ -125,6 +125,8 @@ export class SwaggerExplorer {
   }
 
   private generatePath(target: Type) {
+    this.parseExtraModel(target);
+
     const metaForMethods: any[] =
       getClassMetadata(INJECT_CUSTOM_METHOD, target) || [];
     const exs = metaForMethods.filter(
@@ -579,6 +581,26 @@ export class SwaggerExplorer {
     }
   }
   /**
+   * 解析 ApiExtraModel
+   * @param clzz
+   */
+  private parseExtraModel(clzz: any) {
+    const metaForMethods: any[] =
+      getClassMetadata(INJECT_CUSTOM_METHOD, clzz) || [];
+    const extraModels = metaForMethods.filter(
+      item => item.key === DECORATORS.API_EXTRA_MODEL
+    );
+    for (const m of extraModels) {
+      if (Array.isArray(m.metadata)) {
+        for (const sclz of m.metadata) {
+          this.parseClzz(sclz);
+        }
+      } else {
+        this.parseClzz(m.metadata);
+      }
+    }
+  }
+  /**
    * 解析类型的 ApiProperty
    * @param clzz
    */
@@ -586,6 +608,7 @@ export class SwaggerExplorer {
     if (this.documentBuilder.getSchema(clzz.name)) {
       return;
     }
+    this.parseExtraModel(clzz);
 
     const props = getClassMetadata(INJECT_CUSTOM_PROPERTY, clzz);
 
@@ -606,11 +629,13 @@ export class SwaggerExplorer {
 
           delete metadata.example;
         }
-        if (metadata?.required !== false) {
-          if (!tt.required) {
-            tt.required = [];
+        if (typeof metadata?.required !== undefined) {
+          if (metadata?.required) {
+            if (!tt.required) {
+              tt.required = [];
+            }
+            tt.required.push(key);
           }
-          tt.required.push(key);
 
           delete metadata.required;
         }
@@ -647,7 +672,7 @@ export class SwaggerExplorer {
           isArray = true;
           currentType = metadata?.items?.type;
 
-          delete metadata.items;
+          delete metadata?.items.type;
         }
 
         if (Types.isClass(currentType)) {
@@ -667,12 +692,22 @@ export class SwaggerExplorer {
           }
         } else {
           if (isArray) {
-            tt.properties[key] = {
-              type: 'array',
-              items: {
-                type: convertSchemaType(currentType?.name || currentType),
-              },
-            };
+            // 没有配置类型则认为自己配置了 items 内容
+            if (!currentType) {
+              tt.properties[key] = {
+                type: 'array',
+                items: metadata?.items,
+              };
+
+              delete metadata.items;
+            } else {
+              tt.properties[key] = {
+                type: 'array',
+                items: {
+                  type: convertSchemaType(currentType?.name || currentType),
+                },
+              };
+            }
           } else {
             tt.properties[key] = {
               type: getPropertyType(clzz.prototype, key).name,

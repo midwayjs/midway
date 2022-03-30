@@ -19,4 +19,5 @@ export * from './api-bearer.decorator';
 export * from './api-cookie.decorator';
 export * from './api-oauth2.decorator';
 export * from './api-security.decorator';
+export * from './api-extra-model.decorator';
 export { getSchemaPath } from './helpers';
