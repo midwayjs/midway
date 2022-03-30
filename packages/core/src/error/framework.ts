@@ -15,6 +15,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   SINGLETON_INJECT_REQUEST: 10010,
   MISSING_IMPORTS: 10011,
   UTIL_HTTP_TIMEOUT: 10012,
+  INCONSISTENT_VERSION: 10013,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -128,5 +129,13 @@ export class MidwayMissingImportComponentError extends MidwayError {
 export class MidwayUtilHttpClientTimeoutError extends MidwayError {
   constructor(message: string) {
     super(message, FrameworkErrorEnum.UTIL_HTTP_TIMEOUT);
+  }
+}
+
+export class MidwayInconsistentVersionError extends MidwayError {
+  constructor() {
+    const text =
+      'We find a latest dependency package installed, please remove the lock file and use "npm update" to upgrade all dependencies first.';
+    super(text, FrameworkErrorEnum.INCONSISTENT_VERSION);
   }
 }
