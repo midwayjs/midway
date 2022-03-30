@@ -25,6 +25,7 @@ import {
   MidwayMissingImportComponentError,
   MidwayResolverMissingError,
   MidwaySingletonInjectRequestError,
+  MidwayInconsistentVersionError,
 } from '../error';
 
 const debug = util.debuglog('midway:managedresolver');
@@ -54,7 +55,11 @@ class RefResolver {
         mr.name
       )
     ) {
-      throw new MidwayMissingImportComponentError(originName);
+      if (originName === 'loggerService') {
+        throw new MidwayInconsistentVersionError();
+      } else {
+        throw new MidwayMissingImportComponentError(originName);
+      }
     }
     return this.factory.context.get(mr.name, mr.args, {
       originName,
@@ -72,7 +77,11 @@ class RefResolver {
         mr.name
       )
     ) {
-      throw new MidwayMissingImportComponentError(originName);
+      if (originName === 'loggerService') {
+        throw new MidwayInconsistentVersionError();
+      } else {
+        throw new MidwayMissingImportComponentError(originName);
+      }
     }
     return this.factory.context.getAsync(mr.name, mr.args, {
       originName,
