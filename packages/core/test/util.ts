@@ -18,7 +18,7 @@ import * as getRawBody from 'raw-body';
  * 任意一个数组中的对象，和预期的对象属性一致即可
  * @param arr
  * @param matchObject
- * @param ignoreProperties
+ * @param debug
  */
 export function matchObjectPropertyInArray(arr, matchObject, debug = false): boolean {
   let matched = false;

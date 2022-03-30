@@ -7,3 +7,4 @@ export {
 } from './creator';
 export * from './client/index';
 export { transformFrameworkToConfiguration } from './utils';
+export * from './mock';

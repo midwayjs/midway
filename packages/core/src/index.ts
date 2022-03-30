@@ -30,6 +30,7 @@ export { MidwayAspectService } from './service/aspectService';
 export { MidwayLifeCycleService } from './service/lifeCycleService';
 export { MidwayMiddlewareService } from './service/middlewareService';
 export { MidwayDecoratorService } from './service/decoratorService';
+export { MidwayMockService } from './service/mockService';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './common/serviceFactory';
