@@ -32,7 +32,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
           !this.applicationContext.hasDefinition(fn)
         ) {
           throw new MidwayCommonError(
-            'Middleware definition not found in midway container'
+            `Middleware definition of "${fn}" not found in midway container`
           );
         }
         const classMiddleware = await this.applicationContext.getAsync<
