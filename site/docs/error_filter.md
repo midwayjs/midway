@@ -10,7 +10,7 @@ Midway 提供了一个内置的异常处理器，负责处理应用程序中所�
 
 ## Http 异常
 
-在 Http 请求中，Midway 提供了通用的 Http 类型的异常。
+在 Http 请求中，Midway 提供了通用的 `MidwayHttpError` 类型的异常，其继承与标准的 `MidwayError`。
 
 ```typescript
 export class MidwayHttpError extends MidwayError {
@@ -19,6 +19,8 @@ export class MidwayHttpError extends MidwayError {
 ```
 
 我们可以在请求的过程中抛出该错误，由于错误中包含状态码，Http 程序将会自动返回该状态码。
+
+比如，下面的代码，抛出了包含 400 状态码的错误。
 
 ```typescript
 import { MidwayHttpError } from '@midwayjs/core';
@@ -32,7 +34,9 @@ async findAll() {
 // got status: 400
 ```
 
-如果业务有一些复用的异常，比如自定义一个状态码为 400 的 Http 异常，可以如下定义错误。
+但是一般我们很少这么做，大多数的业务的错误都是复用的，错误消息也基本是固定的，为了减少重复定义，我们可以自定义一些异常类型。
+
+比如自定义一个状态码为 400 的 Http 异常，可以如下定义错误。
 
 ```typescript
 // src/error/custom.error.ts
@@ -65,16 +69,18 @@ async findAll() {
 
 通过 `@Catch` 装饰器我们可以定义某一类异常的处理程序，我们可以轻松的捕获某一类型的错误，做出处理，也可以捕获全局的错误，返回统一的格式。
 
+同时，框架也提供了一些默认的 Http 错误，放在 `httpError` 这个对象下。
+
 比如捕获抛出的 `InternalServerErrorError` 错误。
 
 ```typescript
 import { Catch } from '@midwayjs/decorator';
-import { InternalServerErrorError } from '@midwayjs/core';
+import { httpError, MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
-@Catch(InternalServerErrorError)
+@Catch(httpError.InternalServerErrorError)
 export class InternalServerErrorFilter {
-  async catch(err: InternalServerErrorError, ctx: Context) {
+  async catch(err: MidwayHttpError, ctx: Context) {
 
     // ...
     return 'got 500 error, ' + err.message;
@@ -84,11 +90,10 @@ export class InternalServerErrorFilter {
 
 `catch` 方法的参数为当前的错误，以及当前应用该异常处理器的上下文 `Context` 。我们可以简单的将响应的数据返回。
 
-如果不写参数，那么会捕获所有的错误。
+如果不写参数，那么会捕获所有的错误，不管是不是 HttpError，只在要请求中抛出的错误，都会被这里捕获。
 
 ```typescript
 import { Catch } from '@midwayjs/decorator';
-import { InternalServerErrorError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
@@ -143,12 +148,12 @@ export class ContainerConfiguration {
 ```typescript
 // src/filter/notfound.filter.ts
 import { Catch } from '@midwayjs/decorator';
-import { httpError} from '@midwayjs/core';
+import { httpError, MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch(httpError.NotFoundError)
 export class NotFoundFilter {
-  async catch(err: httpError.NotFoundError, ctx: Context) {
+  async catch(err: MidwayHttpError, ctx: Context) {
     // 404 错误会到这里
     ctx.redirect('/404.html');
 
@@ -170,7 +175,6 @@ export class NotFoundFilter {
 
 ```typescript
 import { Catch } from '@midwayjs/decorator';
-import { MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
@@ -229,7 +233,6 @@ Midway 内置了默认的异常处理行为。
 
 ```typescript
 import { Catch } from '@midwayjs/decorator';
-import { InternalServerErrorError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
