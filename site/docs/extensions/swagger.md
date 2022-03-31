@@ -168,6 +168,43 @@ hello: HelloWorld;
 Swagger UI 中展示：
 ![swagger3](https://img.alicdn.com/imgextra/i1/O1CN015M37MU1KgtdNfqsgp_!!6000000001194-0-tps-1406-426.jpg)
 
+#### ApiExtraModel
+* 当不希望通过 type 来定义 model 类型时，我们可以通过在 Controller 中或者 Model Class 中加入 @ApiExtraModel 来增加额外的 schema 类型描述。
+
+```typescript
+@ApiExtraModel(TestExtraModel)
+@Controller()
+class HelloController {
+  @Post('/:id', { summary: 'test'})
+  @ApiResponse({
+    status: 200,
+    content: {
+      'application/json': {
+        schema: {
+          properties: {
+            data: { '$ref': getSchemaPath(TestExtraModel)}
+          }
+        }
+      }
+    }
+  })
+  async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
+    return this.catsService.create(createCatDto);
+  }
+}
+
+// or
+@ApiExtraModel(TestExtraModel)
+class TestModel {
+  @ApiProperty({
+    item: {
+      $ref: getSchemaPath(TestExtraModel)
+    },
+    description: 'The name of the Catage'
+  })
+  one: TestExtraModel;
+}
+```
 
 ### 路由定义
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
@@ -673,5 +710,5 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
 | ```@ApiOAuth2```            | Controller        |
 | ```@ApiSecurity```          | Controller        |
 | ```@ApiParam```             | Method            |
-| ```@ApiParam```             | Method            |
+| ```@ApiExtraModel```        | Controller/Model  |
 

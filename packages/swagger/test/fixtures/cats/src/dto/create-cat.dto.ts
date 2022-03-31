@@ -1,5 +1,6 @@
 
 import { ApiProperty } from "../../../../../src";
+import { Catd } from "../entities/catd.entity";
 
 export enum HelloWorld {
   One = 'One',
@@ -35,4 +36,6 @@ export class CreateCatDto {
 
   @ApiProperty({ enum: ['One', 'Two', 'Three'] })
   hello: HelloWorld;
+
+  catds: Catd[];
 }
