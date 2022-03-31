@@ -50,7 +50,6 @@ describe('/service/mockService.test.ts', () => {
     mockService.restore();
 
     expect(mockService.getContextMocksSize()).toEqual(0);
-    expect(mockService.getMocksSize()).toEqual(0);
 
     expect(await userService.invoke()).toEqual('hello world');
 

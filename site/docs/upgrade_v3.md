@@ -267,7 +267,7 @@ const env = environmentService.getCurrentEnvironment();
 ```json
 {
   "devDependencies": {
-    "egg/mock": "^3.0.0",
+    "egg-mock": "^1.0.0",
     // ...
   }
 }

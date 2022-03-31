@@ -16,6 +16,7 @@ import * as Koa from '../../web-koa/src';
 import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
 import { join } from 'path';
 import { existsSync } from 'fs';
+import { MidwayContainer, MidwayMockService } from '@midwayjs/core';
 
 describe('/test/new.test.ts', () => {
   it('should test create app with framework and with new mode', async () => {
@@ -100,5 +101,23 @@ describe('/test/new.test.ts', () => {
     const homeController2 = await app2.getApplicationContext().getAsync('homeController') as any;
     expect(await homeController2.index()).toEqual('hello world 2222');
     await close(app2);
+  });
+
+  it('should test mock without app', async () => {
+    class BBB {
+      invoke() {
+        return 'hello';
+      }
+    }
+    mockClassProperty(BBB, 'invoke', 'midway');
+
+    const b = new BBB();
+    mockProperty(b, 'ccc', 'ab');
+
+    const container = new MidwayContainer();
+    container.bindClass(MidwayMockService);
+    await container.getAsync(MidwayMockService, [container]);
+    expect(new BBB().invoke).toEqual('midway');
+    expect(b['ccc']).toEqual('ab');
   });
 });

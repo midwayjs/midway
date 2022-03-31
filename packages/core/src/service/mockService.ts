@@ -1,4 +1,4 @@
-import { Destroy, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Destroy, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
   IMidwayApplication,
   IMidwayContainer,
@@ -16,6 +16,34 @@ export class MidwayMockService {
   }> = [];
   protected cache = new Map();
   constructor(readonly applicationContext: IMidwayContainer) {}
+
+  @Init()
+  async init() {
+    if (MidwayMockService.prepareMocks.length > 0) {
+      for (const item of MidwayMockService.prepareMocks) {
+        this.mockProperty(item.obj, item.key, item.value);
+      }
+      MidwayMockService.prepareMocks = [];
+    }
+  }
+
+  static prepareMocks = [];
+
+  static mockClassProperty(
+    clzz: new (...args) => any,
+    propertyName: string,
+    value: any
+  ) {
+    this.mockProperty(clzz.prototype, propertyName, value);
+  }
+
+  static mockProperty(obj: new (...args) => any, key: string, value: any) {
+    this.prepareMocks.push({
+      obj,
+      key,
+      value,
+    });
+  }
 
   mockClassProperty(
     clzz: new (...args) => any,
@@ -80,6 +108,7 @@ export class MidwayMockService {
     this.mocks = [];
     this.contextMocks = [];
     this.cache.clear();
+    MidwayMockService.prepareMocks = [];
   }
 
   isMocked(obj, key) {
@@ -104,10 +133,6 @@ export class MidwayMockService {
 
   getContextMocksSize() {
     return this.contextMocks.length;
-  }
-
-  getMocksSize() {
-    return this.mocks.length;
   }
 
   private overridePropertyDescriptor(value) {

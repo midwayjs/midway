@@ -17,7 +17,7 @@ Midway 的应用会同时对外暴露不同协议，比如 Http，WebSocket 等�
 ```typescript
 import { Application, Context } from '@midwayjs/koa';
 import { Application, Context } from '@midwayjs/express';
-import { Application, Context } from 'egg';
+import { Application, Context } from '@midwayjs/web';
 ```
 
 且非 Web 框架，我们也保持了一致。
@@ -35,7 +35,7 @@ import { Application, Context } from '@midwayjs/rabbitmq';
 Application 是某一个组件中的应用对象，在不同的组件中，可能有着不同的实现。Application 对象上会包含一些统一的方法，这些方法统一来自于 `IMidwayApplication` 定义。
 
 ```typescript
-import { Application, Context } from '@midwayjs/koa';
+import { Application } from '@midwayjs/koa';
 ```
 
 

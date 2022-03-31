@@ -34,6 +34,7 @@
       "items": [
         "container",
         "testing",
+        "mock",
         "debugger",
         "environment",
         "env_config",
@@ -101,7 +102,8 @@
         "extensions/upload",
         "extensions/passport",
         "extensions/static_file",
-        "extensions/cross_domain"
+        "extensions/cross_domain",
+        "extensions/http-proxy"
       ]
     },
     {
