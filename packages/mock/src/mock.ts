@@ -9,6 +9,9 @@ function getMockService(app?): MidwayMockService {
   if (!app) {
     app = getCurrentMainApp();
   }
+  if (!app) {
+    return null;
+  }
   if (!app.getApplicationContext) {
     throw new Error('[mock]: app.getApplicationContext is undefined.');
   }
@@ -21,11 +24,7 @@ function getMockService(app?): MidwayMockService {
   return mockService;
 }
 
-export function mockSession(
-  app: IMidwayApplication,
-  key: string,
-  value: string
-) {
+export function mockSession(app: IMidwayApplication, key: string, value: any) {
   const mockService = getMockService(app);
   mockService.mockContext(app, (ctx: any) => {
     if (!ctx.session) {
@@ -52,17 +51,29 @@ export function mockClassProperty(
   value: any
 ) {
   const mockService = getMockService();
-  return mockService.mockClassProperty(clzz, propertyName, value);
+  if (!mockService) {
+    return MidwayMockService.mockClassProperty(clzz, propertyName, value);
+  } else {
+    return mockService.mockClassProperty(clzz, propertyName, value);
+  }
 }
 
 export function mockProperty(obj: any, key: string, value) {
   const mockService = getMockService();
-  return mockService.mockProperty(obj, key, value);
+  if (!mockService) {
+    return MidwayMockService.mockProperty(obj, key, value);
+  } else {
+    return mockService.mockProperty(obj, key, value);
+  }
 }
 
 export function restoreAllMocks() {
   const mockService = getMockService();
-  mockService.restore();
+  if (mockService) {
+    mockService.restore();
+  } else {
+    MidwayMockService.prepareMocks = [];
+  }
 }
 
 export function mockContext(

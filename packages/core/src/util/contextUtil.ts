@@ -19,5 +19,9 @@ export const getCurrentMainFramework = <
 };
 
 export const getCurrentMainApp = <APP extends IMidwayApplication>(): APP => {
-  return getCurrentMainFramework().getApplication() as APP;
+  const framework = getCurrentMainFramework();
+  if (framework) {
+    return framework.getApplication() as APP;
+  }
+  return undefined;
 };

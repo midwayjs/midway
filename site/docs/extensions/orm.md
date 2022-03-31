@@ -29,7 +29,7 @@ $ npm i @midwayjs/orm@3 typeorm --save
 {
   "dependencies": {
     "@midwayjs/orm": "^3.0.0",
-    "typeorm": "^0.2.41",
+    "typeorm": "~0.3.0",
     // ...
   },
   "devDependencies": {
@@ -38,7 +38,11 @@ $ npm i @midwayjs/orm@3 typeorm --save
 }
 ```
 
+:::tip
 
+@midwayjs/orm 组件已经支持 0.2.x 和 0.3.x 版本的 typeorm，两者 API 略有不同，请注意阅读文档。
+
+:::
 
 
 
@@ -132,8 +136,9 @@ MyProject
 
 ## 入门
 
-
 下面，我们将以 mysql 举例。
+
+
 
 
 ### 1、创建 Model
@@ -370,9 +375,15 @@ name: string;
 - `@VersionColumn` 是一个特殊列，在每次调用实体管理器或存储库的save时自动增长实体版本（增量编号）。
 - `@DeleteDateColumn` 是一个特殊列，会在调用 soft-delete（软删除）时自动设置实体的删除时间。
 
-
-
 列类型是特定于数据库的。您可以设置数据库支持的任何列类型。有关支持的列类型的更多信息，请参见[此处](https://github.com/typeorm/typeorm/blob/master/docs/entities.md#column-types)。
+
+:::tip
+
+`CreateDateColumn` 和 `UpdateDateColumn` 是依靠第一次同步表结构时，创建列上的默认数据完成的插入日期功能，如果是自己创建的表，需要自行在列上加入默认数据。
+
+:::
+
+
 
 
 ### 7、配置连接信息
@@ -1393,5 +1404,25 @@ createdOn: Date;
   type: 'timestamp'
 })
 modifiedOn: Date;
+```
+
+
+
+### 同时安装 mysql 和 mysql2
+
+在 node_modules 中同时有 mysql  和 mysql2 时，typeorm 会自动加载 mysql，而不是 mysql2。
+
+这个时候如需使用 mysql2，请指定  driver。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  orm: {
+    //...
+    type: 'mysql',
+    driver: require('mysql2'),
+  },
+}
 ```
 

@@ -317,3 +317,38 @@ API 如下：
 Midway 内置的生命周期运行服务，用于运行 `configuration` 中的生命周期。
 
 该服务均为内部方法，用户无法直接使用。
+
+
+
+## MidwayMockService
+
+Midway 内置的数据模拟服务，用于在开发和单测时模拟数据。
+
+可以通过注入获取。
+
+```typescript
+import { Inject, Controller, Get } from '@midwayjs/decorator';
+import { MidwayMockService } from '@midwayjs/core';
+
+@Controller('/')
+export class HomeController {
+
+  @Inject()
+  mockService: MidwayMockService;
+
+  @Get('/')
+  async home() {
+    // this.mockService.mockProperty(/** 省略 **/);
+  }
+}
+```
+
+API 如下
+
+| API                                          | 返回类型 | 描述                               |
+| -------------------------------------------- | -------- | ---------------------------------- |
+| mockClassProperty(clzz, propertyName, value) |          | mock 一个class 上的属性（方法 ）   |
+| mockProperty(obj, key, value)                |          | mock 一个普通对象上的属性（方法 ） |
+| mockContext(app, key, vlue)                  |          | mock 上下文对象上的属性            |
+| restore()                                    |          | 清空所有 mock 数据                 |
+
