@@ -13,6 +13,7 @@ import {
   MidwayMiddlewareService,
   RouterInfo,
   ServerlessTriggerCollector,
+  initializeGlobalApplicationContext,
 } from '@midwayjs/core';
 import {
   Framework,
@@ -269,3 +270,15 @@ export class MidwayFaaSFramework extends BaseFramework<
     return 'midway:faas';
   }
 }
+
+export const createModuleServerlessFramework = async (
+  globalOption: Omit<IMidwayBootstrapOptions, 'applicationContext'> &
+    IFaaSConfigurationOptions
+) => {
+  const applicationContext = await initializeGlobalApplicationContext({
+    ...globalOption,
+    baseDir: '',
+    appDir: '',
+  });
+  return applicationContext.get(Framework);
+};
