@@ -280,5 +280,5 @@ export const createModuleServerlessFramework = async (
     baseDir: '',
     appDir: '',
   });
-  return applicationContext.get(Framework);
+  return applicationContext.get(MidwayFaaSFramework);
 };
