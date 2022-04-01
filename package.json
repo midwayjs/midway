@@ -35,7 +35,7 @@
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "version": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js && git add .",
     "lint": "lerna exec mwts check",
-    "lint:cycle": "lerna exec --ignore @midwayjs/version --ignore @midwayjs/faas-typings -- madge --circular  --extensions ts src",
+    "lint:cycle": "lerna exec --ignore @midwayjs/version --ignore @midwayjs/faas-typings --ignore @midwayjs/*-layer -- madge --circular --extensions ts src",
     "lint:fix": "lerna exec mwts fix",
     "typedoc": "typedoc"
   },
