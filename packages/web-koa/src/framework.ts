@@ -70,6 +70,10 @@ export class MidwayKoaFramework extends BaseFramework<
 
     this.app = new koa<DefaultState, IMidwayKoaContext>({
       keys: [].concat(appKeys),
+      proxy: this.configurationOptions.proxy,
+      proxyIpHeader: this.configurationOptions.proxyIpHeader,
+      subdomainOffset: this.configurationOptions.subdomainOffset,
+      maxIpsCount: this.configurationOptions.maxIpsCount,
     }) as IMidwayKoaApplication;
 
     Object.defineProperty(this.app.context, 'cookies', {

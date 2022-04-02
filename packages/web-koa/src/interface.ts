@@ -56,9 +56,27 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * http global prefix
    */
   globalPrefix?: string;
+  /**
+   * Trust proxy headers
+   */
+  proxy?: boolean;
+  /**
+   * Subdomain offset
+   */
+  subdomainOffset?: number;
+  /**
+   * Proxy IP header, defaults to X-Forwarded-For
+   */
+  proxyIpHeader?: string;
+  /**
+   * Max IPs read from proxy IP header, default to 0 (means infinity)
+   */
+  maxIpsCount?: number;
 }
 
-export type MiddlewareParamArray = Array<Middleware<DefaultState, IMidwayKoaContext>>;
+export type MiddlewareParamArray = Array<
+  Middleware<DefaultState, IMidwayKoaContext>
+>;
 
 export interface IWebMiddleware {
   resolve(): koa.Middleware<DefaultState, IMidwayKoaContext>;
@@ -109,7 +127,7 @@ export interface BodyParserOptions {
   /**
    * custom json request detect function. Default is null
    */
-  detectJSON?: ((ctx: IMidwayKoaContext) => boolean);
+  detectJSON?: (ctx: IMidwayKoaContext) => boolean;
 
   /**
    * support extend types
@@ -123,5 +141,5 @@ export interface BodyParserOptions {
   /**
    * support custom error handle
    */
-  onerror?: ((err: Error, ctx: IMidwayKoaContext) => void);
+  onerror?: (err: Error, ctx: IMidwayKoaContext) => void;
 }
