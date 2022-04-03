@@ -6,7 +6,10 @@ import {
 } from '@midwayjs/decorator';
 import { getMetadataArgsStorage } from 'typeorm';
 import { ViewEntityOptions as BaseViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
-import { ENTITY_MODEL_KEY, EVENT_SUBSCRIBER_KEY, ORM_MODEL_KEY } from './index';
+
+export const ENTITY_MODEL_KEY = 'entity_model_key';
+export const EVENT_SUBSCRIBER_KEY = 'event_subscriber_key';
+export const ORM_MODEL_KEY = '__orm_model_key__';
 
 export interface EntityOptions extends BaseEntityOptions {
   connectionName?: string;

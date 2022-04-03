@@ -8,7 +8,11 @@ import {
   Utils,
 } from '@midwayjs/decorator';
 import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
-import { DefaultConfig, IClientOptions } from '../interface';
+import {
+  DefaultConfig,
+  IClientOptions,
+  IGRPCClientServiceOptions,
+} from '../interface';
 import { finePackageProto, loadProto } from '../util';
 import { ILogger } from '@midwayjs/logger';
 import { ClientUnaryRequest } from './type/unary-request';
@@ -109,3 +113,16 @@ export class GRPCClients extends Map {
     return genericFunctionName;
   }
 }
+
+export const createGRPCConsumer = async <T>(
+  options: IGRPCClientServiceOptions
+): Promise<T> => {
+  const clients = new GRPCClients();
+  options.url = options.url || 'localhost:6565';
+  clients.grpcConfig = {
+    services: [options],
+  };
+
+  await clients.initService();
+  return Array.from(clients.values())[0];
+};

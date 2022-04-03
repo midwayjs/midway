@@ -9,9 +9,11 @@ import {
 } from 'typeorm';
 
 export const CONNECTION_KEY = 'orm:getConnection';
-export const ENTITY_MODEL_KEY = 'entity_model_key';
-export const EVENT_SUBSCRIBER_KEY = 'event_subscriber_key';
-export const ORM_MODEL_KEY = '__orm_model_key__';
+export {
+  ENTITY_MODEL_KEY,
+  EVENT_SUBSCRIBER_KEY,
+  ORM_MODEL_KEY,
+} from './decorator';
 
 /**
  * Gets repository for the given entity.

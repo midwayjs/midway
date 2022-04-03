@@ -9,6 +9,7 @@
     "autocannon": "7.7.1",
     "jest": "27.5.1",
     "lerna": "4.0.0",
+    "madge": "^5.0.1",
     "mwts": "1.3.0",
     "tree-kill": "1.2.2",
     "ts-jest": "27.1.3",
@@ -34,6 +35,7 @@
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "version": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js && git add .",
     "lint": "lerna exec mwts check",
+    "lint:cycle": "lerna exec --ignore @midwayjs/version --ignore @midwayjs/faas-typings --ignore @midwayjs/*-layer --ignore @midwayjs/core -- madge --circular --extensions ts src",
     "lint:fix": "lerna exec mwts fix",
     "typedoc": "typedoc"
   },
