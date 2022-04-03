@@ -522,7 +522,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should test object config load', async () => {
-    mm(process.env, 'NODE_ENV', 'unittest');
+    mm(process.env, 'NODE_ENV', 'test');
     const framework = await createLightFramework(path.join(
       __dirname,
       './fixtures/base-app-config-object/src'

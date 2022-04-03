@@ -146,6 +146,43 @@ describe('/test/service/configService.test.ts', () => {
     mm.restore()
   });
 
+  it('should compatible old test with object mode', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'test');
+    const cfg = await createConfigService();
+
+    cfg.add([
+      {
+        default: {
+          key: {
+            data: 123,
+          }
+        },
+        prod: {
+          bbb: {
+            data: 123,
+          }
+        },
+        unittest: {
+          bbb: {
+            data: 321
+          }
+        }
+      }
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.getConfiguration()).toEqual({
+      key: {
+        data: 123,
+      },
+      bbb: {
+        data: 321,
+      }
+    })
+    mm.restore()
+  });
+
   it('should test config merge order', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'test');
     const cfg = await createConfigService();
