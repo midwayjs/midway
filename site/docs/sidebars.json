@@ -172,7 +172,6 @@
       "label": "从 Serverless v1 迁移到 v2"
     },
     {
-
       "type": "category",
       "label": "基础",
       "collapsed": false,
@@ -317,6 +316,11 @@
       "items": [
         "release_schedule"
       ]
+    },
+    {
+      "type": "doc",
+      "label": "Awesome Midway",
+      "id": "tool/awesome_midway"
     }
   ]
 }
