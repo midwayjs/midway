@@ -82,8 +82,11 @@ export class MidwayConfigService implements IConfigService {
       } else {
         // object add
         for (const env in dir) {
-          const envSet = this.getEnvSet(env);
-          envSet.add(dir[env]);
+          if (this.aliasMap[env]) {
+            this.getEnvSet(this.aliasMap[env]).add(dir[env]);
+          } else {
+            this.getEnvSet(env).add(dir[env]);
+          }
         }
       }
     }
