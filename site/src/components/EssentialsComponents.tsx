@@ -91,7 +91,7 @@ const components = [
   },
   {
     title: 'Mongodb',
-    link: '/docs/extensions/mongo',
+    link: '/docs/extensions/mongodb',
     description: 'NoSQL Database',
     icon: 'icon-MongoDB',
   },
