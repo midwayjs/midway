@@ -8,12 +8,12 @@ import {
   ScopeEnum,
 } from '@midwayjs/decorator';
 import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
-import * as Redis from 'ioredis';
+import Redis from 'ioredis';
 import * as assert from 'assert';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class RedisServiceFactory extends ServiceFactory<Redis.Redis> {
+export class RedisServiceFactory extends ServiceFactory<Redis> {
   @Config('redis')
   redisConfig;
 
@@ -25,7 +25,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis.Redis> {
   @Logger('coreLogger')
   logger;
 
-  async createClient(config): Promise<Redis.Redis> {
+  async createClient(config): Promise<Redis> {
     let client;
 
     if (config.cluster === true) {
@@ -97,7 +97,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis.Redis> {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class RedisService implements Redis.Redis {
+export class RedisService implements Redis {
   @Inject()
   private serviceFactory: RedisServiceFactory;
 
@@ -111,7 +111,7 @@ export class RedisService implements Redis.Redis {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface RedisService extends Redis.Redis {
+export interface RedisService extends Redis {
   // empty
 }
 
