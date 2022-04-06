@@ -7,7 +7,10 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
+import {
+  ServiceFactory,
+  delegateTargetAllPrototypeMethod,
+} from '@midwayjs/core';
 import Redis from 'ioredis';
 import * as assert from 'assert';
 
@@ -102,7 +105,7 @@ export class RedisService implements Redis {
   private serviceFactory: RedisServiceFactory;
 
   // @ts-expect-error used
-  private instance: Redis.Redis;
+  private instance: Redis;
 
   @Init()
   async init() {
@@ -115,4 +118,4 @@ export interface RedisService extends Redis {
   // empty
 }
 
-delegateTargetPrototypeMethod(RedisService, [Redis], ['on']);
+delegateTargetAllPrototypeMethod(RedisService, Redis);

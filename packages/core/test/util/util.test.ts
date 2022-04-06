@@ -8,9 +8,10 @@ import {
   delegateTargetMethod,
   delegateTargetProperties,
   transformRequestObjectByType,
-  isIncludeProperty
+  isIncludeProperty, delegateTargetAllPrototypeMethod
 } from '../../src/util';
 import { PathFileUtil } from '../../src';
+import * as EventEmitter from 'events';
 
 describe('/test/util/util.test.ts', () => {
 
@@ -171,5 +172,29 @@ describe('/test/pathFileUtil.test.ts', () => {
     const newContext = Object.create(context);
     expect(isIncludeProperty(newContext, 'body')).toBeTruthy();
     expect(isIncludeProperty(newContext, 'xxx')).toBeFalsy();
+  });
+
+  it('should delegate all method for class', function () {
+    class TargetA extends EventEmitter {
+      invoke() {
+        return 'A';
+      }
+    }
+    class TargetB extends TargetA {
+    }
+    class TargetC extends TargetB {
+      invoke() {
+        return 'C';
+      }
+    }
+
+    class TargetD {
+      instance = new TargetC();
+    }
+
+    delegateTargetAllPrototypeMethod(TargetD, TargetC);
+
+    const d = new TargetD();
+    expect(d['invoke']()).toEqual('C');
   });
 });

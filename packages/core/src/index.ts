@@ -10,6 +10,7 @@ export {
   delegateTargetPrototypeMethod,
   delegateTargetMethod,
   delegateTargetProperties,
+  delegateTargetAllPrototypeMethod,
   deprecatedOutput,
   transformRequestObjectByType,
   pathMatching,
