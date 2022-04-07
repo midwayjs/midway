@@ -19,6 +19,7 @@ import {
   INJECT_CUSTOM_METHOD,
   getPropertyType,
   RequestMethod,
+  getClassExtendedMetadata,
 } from '@midwayjs/decorator';
 import { PathItemObject, Type } from './interfaces';
 import { DECORATORS } from './constants';
@@ -610,7 +611,7 @@ export class SwaggerExplorer {
     }
     this.parseExtraModel(clzz);
 
-    const props = getClassMetadata(INJECT_CUSTOM_PROPERTY, clzz);
+    const props = getClassExtendedMetadata(INJECT_CUSTOM_PROPERTY, clzz);
 
     const tt: any = {
       type: 'object',
