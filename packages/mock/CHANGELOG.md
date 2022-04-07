@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/midwayjs/midway/compare/v3.2.2...v3.3.0) (2022-04-07)
+
+
+### Bug Fixes
+
+* mock when app not start ([#1876](https://github.com/midwayjs/midway/issues/1876)) ([bd32f3e](https://github.com/midwayjs/midway/commit/bd32f3e3e366f5f81c05bfa2b00530ea5ec95744))
+
+
+
+
+
 ## [3.2.2](https://github.com/midwayjs/midway/compare/v3.2.1...v3.2.2) (2022-03-30)
 
 **Note:** Version bump only for package @midwayjs/mock

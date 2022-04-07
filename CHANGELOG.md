@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/midwayjs/midway/compare/v3.2.2...v3.3.0) (2022-04-07)
+
+
+### Bug Fixes
+
+* mapping prod and test config in object mode ([#1886](https://github.com/midwayjs/midway/issues/1886)) ([d00f622](https://github.com/midwayjs/midway/commit/d00f622f2a2dc095c8e829b862f2ac155a8e6c91))
+* mock when app not start ([#1876](https://github.com/midwayjs/midway/issues/1876)) ([bd32f3e](https://github.com/midwayjs/midway/commit/bd32f3e3e366f5f81c05bfa2b00530ea5ec95744))
+
+
+### Features
+
+* add ApiExtraModel && fix items bug ([#1873](https://github.com/midwayjs/midway/issues/1873)) ([40cce3b](https://github.com/midwayjs/midway/commit/40cce3be1d8ebd5b2723aff2e6d6d488024c5a56))
+* add koa init options ([#1885](https://github.com/midwayjs/midway/issues/1885)) ([93d4aed](https://github.com/midwayjs/midway/commit/93d4aed45bc45c2742ceb2bfb990edeaa59d7187))
+* upgrade ioredis to v5 ([#1893](https://github.com/midwayjs/midway/issues/1893)) ([42b3dc7](https://github.com/midwayjs/midway/commit/42b3dc723cd291d37f7fd40da90cf031a45f6d78))
+
+
+
+
+
 ## [3.2.2](https://github.com/midwayjs/midway/compare/v3.2.1...v3.2.2) (2022-03-30)
 
 

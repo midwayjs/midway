@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/midwayjs/midway/compare/v3.2.2...v3.3.0) (2022-04-07)
+
+
+### Features
+
+* add ApiExtraModel && fix items bug ([#1873](https://github.com/midwayjs/midway/issues/1873)) ([40cce3b](https://github.com/midwayjs/midway/commit/40cce3be1d8ebd5b2723aff2e6d6d488024c5a56))
+
+
+
+
+
 ## [3.2.2](https://github.com/midwayjs/midway/compare/v3.2.1...v3.2.2) (2022-03-30)
 
 **Note:** Version bump only for package @midwayjs/swagger

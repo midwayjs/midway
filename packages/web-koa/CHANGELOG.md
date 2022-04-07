@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/midwayjs/midway/compare/v3.2.2...v3.3.0) (2022-04-07)
+
+
+### Features
+
+* add koa init options ([#1885](https://github.com/midwayjs/midway/issues/1885)) ([93d4aed](https://github.com/midwayjs/midway/commit/93d4aed45bc45c2742ceb2bfb990edeaa59d7187))
+
+
+
+
+
 ## [3.2.2](https://github.com/midwayjs/midway/compare/v3.2.1...v3.2.2) (2022-03-30)
 
 

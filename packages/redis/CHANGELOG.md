@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/midwayjs/midway/compare/v3.2.2...v3.3.0) (2022-04-07)
+
+
+### Features
+
+* upgrade ioredis to v5 ([#1893](https://github.com/midwayjs/midway/issues/1893)) ([42b3dc7](https://github.com/midwayjs/midway/commit/42b3dc723cd291d37f7fd40da90cf031a45f6d78))
+
+
+
+
+
 ## [3.2.2](https://github.com/midwayjs/midway/compare/v3.2.1...v3.2.2) (2022-03-30)
 
 **Note:** Version bump only for package @midwayjs/redis
