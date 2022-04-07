@@ -991,6 +991,46 @@ export const getGlobalConfig = () => {
 
 
 
+## 自动绑定
+
+上面提到，在容器初始化之后，我们会将现有的 class 注册绑定到容器中。
+
+```typescript
+const container = new MidwayContainer();
+container.bind(UserController);
+container.bind(UserService);
+```
+
+Midway 在启动过程中会自动扫描整个项目目录，自动处理这个行为，使得用户无需手动执行绑定的操作。
+
+简单的来说，框架默认会递归扫描整个 `src` 目录下的 ts/js 文件，然后进行 require 操作，当文件导出的为 class，且包含 `@Provide()` 装饰器时，会执行 `container.bind` 逻辑。
+
+一般情况下，我们不应该把非 ts 文件放在 src 下（比如前端代码），特殊场景下，我们可以忽略某些目录，可以在 `@Configuration` 装饰器中配置。
+
+示例如下：
+
+```typescript
+import { App, Configuration, Logger } from '@midwayjs/decorator';
+// ...
+
+@Configuration({
+  // ...
+  detectorOptions: {
+    ignore: [
+      '**/web/**'
+    ]
+  }
+})
+export class ContainerLifeCycle {
+  // ...
+}
+
+```
+
+
+
+
+
 ## 对象生命周期
 
 在依赖注入容器创建和销毁实例的时候，我们可以使用装饰器做一些自定义的操作。
