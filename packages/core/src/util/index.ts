@@ -124,17 +124,39 @@ export function delegateTargetPrototypeMethod(
   otherMethods?: string[]
 ) {
   constructors.forEach(baseCtor => {
-    Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-      if (name !== 'constructor' && !/^_/.test(name)) {
-        derivedCtor.prototype[name] = function (...args) {
-          return this.instance[name](...args);
-        };
-      }
-    });
+    if (baseCtor.prototype) {
+      Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+        if (
+          name !== 'constructor' &&
+          !/^_/.test(name) &&
+          !derivedCtor.prototype[name]
+        ) {
+          derivedCtor.prototype[name] = function (...args) {
+            return this.instance[name](...args);
+          };
+        }
+      });
+    }
   });
   if (otherMethods) {
     delegateTargetMethod(derivedCtor, otherMethods);
   }
+}
+
+/**
+ * 代理目标所有的原型方法，包括原型链，不包括构造器和内部隐藏方法
+ * @param derivedCtor
+ * @param constructor
+ * @since 3.0.0
+ */
+export function delegateTargetAllPrototypeMethod(
+  derivedCtor: any,
+  constructor: any
+) {
+  do {
+    delegateTargetPrototypeMethod(derivedCtor, [constructor]);
+    constructor = Object.getPrototypeOf(constructor);
+  } while (constructor);
 }
 
 /**
@@ -171,7 +193,7 @@ export function delegateTargetProperties(
 }
 
 /**
- * 代理目标原型属性
+ * 获取当前的时间戳
  * @since 2.0.0
  * @param timestamp
  */

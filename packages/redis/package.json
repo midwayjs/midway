@@ -12,11 +12,10 @@
   "devDependencies": {
     "@midwayjs/core": "^3.2.2",
     "@midwayjs/decorator": "^3.1.6",
-    "@midwayjs/mock": "^3.2.2",
-    "@types/ioredis": "4.28.10"
+    "@midwayjs/mock": "^3.2.2"
   },
   "dependencies": {
-    "ioredis": "^4.27.1"
+    "ioredis": "^5.0.0"
   },
   "keywords": [
     "redis"
