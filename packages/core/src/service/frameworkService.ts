@@ -102,6 +102,15 @@ export class MidwayFrameworkService {
 
     if (frameworks.length) {
       for (const frameworkClz of frameworks) {
+        if (
+          !this.applicationContext.hasDefinition(getProviderUUId(frameworkClz))
+        ) {
+          debug(
+            `[core]: Found Framework "${frameworkClz.constructor.name}" but missing definition, skip initialize.`
+          );
+          continue;
+        }
+
         const frameworkInstance = await this.applicationContext.getAsync<
           IMidwayFramework<any, any, any>
         >(frameworkClz, [this.applicationContext]);
