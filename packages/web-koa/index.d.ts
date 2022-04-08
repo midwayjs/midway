@@ -2,8 +2,8 @@ import {
   Application,
   IMidwayKoaConfigurationOptions,
   IMidwayKoaContext,
+  BodyParserOptions,
 } from './dist';
-import { BodyParserOptions } from './src/interface';
 import { CookieSetOptions } from '@midwayjs/cookies';
 import * as Cookies from 'cookies';
 
