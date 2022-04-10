@@ -387,7 +387,7 @@ export abstract class BaseFramework<
   }
 
   public getFrameworkName() {
-    return '';
+    return this.constructor.name;
   }
 
   public useMiddleware(

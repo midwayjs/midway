@@ -106,7 +106,7 @@ export class MidwayFrameworkService {
           !this.applicationContext.hasDefinition(getProviderUUId(frameworkClz))
         ) {
           debug(
-            `[core]: Found Framework "${frameworkClz.constructor.name}" but missing definition, skip initialize.`
+            `[core]: Found Framework "${frameworkClz.name}" but missing definition, skip initialize.`
           );
           continue;
         }
