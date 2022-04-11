@@ -622,7 +622,7 @@ export class UserService {
 
 ### 1、允许未定义的字段
 
-1、由于部分用户在参数校验的时候，希望允许出现没有定义的字段，可以在全局配置，以及装饰器上分别设置，前者对全局生效，后者对单个校验生效。
+由于部分用户在参数校验的时候，希望允许出现没有定义的字段，可以在全局配置，以及装饰器上分别设置，前者对全局生效，后者对单个校验生效。
 
 ```typescript
 // src/config/config.default.ts
@@ -653,3 +653,30 @@ export class HomeController {
   }
 }
 ```
+
+
+
+### 2、处理校验错误
+
+上面提到，Midway 会在校验失败时抛出 `MidwayValidationError` 错误，我们可以在 [异常处理器](../error_filter) 中处理。
+
+比如：
+
+```typescript
+// src/filter/validate.filter
+import { Catch } from '@midwayjs/decorator';
+import { MidwayValidationError } from '@midwayjs/validate';
+import { Context } from '@midwayjs/koa';
+
+@Catch(MidwayValidationError)
+export class ValidateErrorFilter {
+  async catch(err: MidwayValidationError, ctx: Context) {
+    // ...
+    return {
+      status: 422,
+      message: '校验参数错误,' + err.message
+    }
+  }
+}
+```
+
