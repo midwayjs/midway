@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mock",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "create your test app from midway framework",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.3.0",
+    "@midwayjs/core": "^3.3.1",
     "@midwayjs/decorator": "^3.1.6",
     "@midwayjs/logger": "^2.15.0",
     "@types/amqplib": "0.8.2",

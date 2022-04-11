@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/midwayjs/midway/compare/v3.3.0...v3.3.1) (2022-04-11)
+
+
+### Bug Fixes
+
+* cookies and BodyParserOptions definition in Koa after [#1856](https://github.com/midwayjs/midway/issues/1856) ([#1899](https://github.com/midwayjs/midway/issues/1899)) ([02fa026](https://github.com/midwayjs/midway/commit/02fa0262ccc2a44fb7e4482ed780cda9026a9a6c))
+* swagger_extend_bug ([#1894](https://github.com/midwayjs/midway/issues/1894)) ([b918ef8](https://github.com/midwayjs/midway/commit/b918ef871f6daf43a1bf3754e705b7c3e12bf3cd))
+
+
+
+
+
 # [3.3.0](https://github.com/midwayjs/midway/compare/v3.2.2...v3.3.0) (2022-04-07)
 
 
