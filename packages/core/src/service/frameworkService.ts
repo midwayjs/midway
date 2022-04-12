@@ -164,7 +164,14 @@ export class MidwayFrameworkService {
         }
       );
 
+      const nsSet = this.applicationContext['namespaceSet'] as Set<string>;
+      let mainNs;
+      if (nsSet.size > 0) {
+        [mainNs] = nsSet;
+      }
+
       global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =
+        this.applicationManager.getFramework(mainNs) ??
         this.globalFrameworkList[0];
     }
 
