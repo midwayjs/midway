@@ -1,4 +1,4 @@
-# HTTP 代理组件
+# HTTP 代理
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的 HTTP 请求代理组件，支持 GET、POST 等多种请求方法。
 
@@ -16,7 +16,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/http-proxy --save
+$ npm i @midwayjs/http-proxy@3 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。

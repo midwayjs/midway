@@ -314,13 +314,9 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
-        "release_schedule"
+        "release_schedule",
+        "tool/awesome_midway"
       ]
-    },
-    {
-      "type": "doc",
-      "label": "Awesome Midway",
-      "id": "tool/awesome_midway"
     }
   ]
 }

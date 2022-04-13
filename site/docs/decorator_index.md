@@ -31,7 +31,7 @@ Midway 提供了很多装饰器能力，这些装饰器分布在不同的包，�
 | @Head              | Method       | 注册为一个 HEAD 类型的路由                |
 | @All               | Method       | 注册为一个全类型的路由                    |
 | @Session           | Parameter    | 从参数获取 ctx.session                    |
-| @Body              | Parameter    | 从参数获取 ctx.body                       |
+| @Body              | Parameter    | 从参数获取 ctx.request.body               |
 | @Query             | Parameter    | 从参数获取 ctx.query                      |
 | @Param             | Parameter    | 从参数获取 ctx.param                      |
 | @Headers           | Parameter    | 从参数获取 ctx.headers                    |

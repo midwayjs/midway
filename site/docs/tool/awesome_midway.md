@@ -9,6 +9,8 @@ title: Awesome Midway
 | ------------------------ | ----- | ----------------------------------------------------------------------------------------------- | ---------------- |
 | @letscollab/midway-nacos | Nawbc | [https://github.com/nawb-letscollab/midway-nacos](https://github.com/nawb-letscollab/midway-nacos) | midway nacos组件 |
 
+
+
 :::tip
 欢迎大家为社区贡献力量， 编辑此页添加你所喜爱的高质量midway项目/组件
 :::
