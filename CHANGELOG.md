@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.2](https://github.com/midwayjs/midway/compare/v3.3.1...v3.3.2) (2022-04-13)
+
+
+### Bug Fixes
+
+* main framework found ([#1903](https://github.com/midwayjs/midway/issues/1903)) ([8a22267](https://github.com/midwayjs/midway/commit/8a22267db744e2269e41089a27fd8e935c1f69e3))
+
+
+
+
+
 ## [3.3.1](https://github.com/midwayjs/midway/compare/v3.3.0...v3.3.1) (2022-04-11)
 
 
