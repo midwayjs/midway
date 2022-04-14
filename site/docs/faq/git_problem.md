@@ -59,6 +59,17 @@ $ git config --global core.autocrlf false
 ```
 注意：git 全局配置之后，你需要重新拉取代码。
 
+如您使用的是vscode编辑器，解决方案如下：
+
+
+在编辑器右下角将`CRLF`手动更改为`LF`
+
+此方法仅可修改当前文件的换行符，使用vscode新建文件换行符还为`CRLF`，可在`settings.json`中增加以下配置
+
+```
+"files.eol": "\n",
+```
+
 
 参考：
 
