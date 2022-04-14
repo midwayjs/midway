@@ -521,12 +521,12 @@ export class PhotoService {
     console.log("All photos from the db: ", allPhotos);
 
     // find first
-    let firstPhoto = await this.photoModel.findOne(1);   
+    let firstPhoto = await this.photoModel.findOne(1);
     let firstPhoto = await this.photoModel.findOne({     //  v0.3.x
       where: {
         id: 1
       }
-    });   
+    });
     console.log("First photo from the db: ", firstPhoto);
 
     // find one by name
@@ -1311,7 +1311,7 @@ export async function getPhoto() {
 ### 关于表结构同步
 
 
-- 如果你已有表结构，想自动创建 Entity，使用 [生成器](typeorm_generator)
+- 如果你已有表结构，想自动创建 Entity，使用 [生成器](../tool/typeorm_generator)
 - 如果已经有 Entity 代码，想创建表结构请使用配置中的  `synchronize:  true` 。
 
 ## 常见问题
@@ -1321,8 +1321,8 @@ export async function getPhoto() {
 
 
 一般是网络原因，如果本地出现，可以 ping 但是telnet不通，可以尝试执行如下命令：
-```shell
-sudo sysctl -w net.inet.tcp.sack=0
+```bash
+$ sudo sysctl -w net.inet.tcp.sack=0
 ```
 
 ### 关于 mysql 时间列的当前时区展示

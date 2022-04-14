@@ -1,7 +1,9 @@
 # RabbitMQ
 
 在复杂系统的架构中，会有负责处理消息队列的微服务，如下图：服务A负责产生消息给消息队列，而服务B则负责消费消息队列中的任务。
+
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01SYMbCz1moVSVLl7S2_!!6000000005001-2-tps-646-251.png)
+
 在Midway中，我们提供了订阅rabbitMQ的能力，专门来满足用户的这类需求。
 
 :::tip
@@ -106,7 +108,7 @@ import * as rabbitmq from '@midwayjs/rabbitmq';
 
 @Configuration({
   imports: [
-    koa, 
+    koa,
     rabbitmq
   ],
   // ...
