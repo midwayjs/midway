@@ -15,6 +15,10 @@ module.exports = {
     return this['starttime'];
   },
 
+  getLogger(name) {
+    return this.app.createContextLogger(this, name);
+  },
+
   get logger() {
     if (this[ctxLogger]) {
       return this[ctxLogger];
