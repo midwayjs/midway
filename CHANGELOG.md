@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.3](https://github.com/midwayjs/midway/compare/v3.3.2...v3.3.3) (2022-04-14)
+
+
+### Bug Fixes
+
+* ctx.getLogger does not overwrite success ([#1908](https://github.com/midwayjs/midway/issues/1908)) ([5fcb1c6](https://github.com/midwayjs/midway/commit/5fcb1c6273675c5a1123a94bdaae057781eb217f))
+
+
+
+
+
 ## [3.3.2](https://github.com/midwayjs/midway/compare/v3.3.1...v3.3.2) (2022-04-13)
 
 

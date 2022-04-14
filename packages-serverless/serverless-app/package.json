@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-app",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/bootstrap": "^3.3.2",
+    "@midwayjs/bootstrap": "^3.3.3",
     "@midwayjs/core": "^3.3.2",
     "@midwayjs/faas": "^3.3.2",
     "@midwayjs/faas-typings": "^3.1.6",
