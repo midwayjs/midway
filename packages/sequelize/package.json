@@ -12,7 +12,7 @@
     "@midwayjs/decorator": "^3.1.6",
     "@midwayjs/koa": "^3.3.2",
     "@midwayjs/mock": "^3.3.2",
-    "sqlite3": "5.0.2"
+    "sqlite3": "5.0.3"
   },
   "dependencies": {
     "sequelize": "~6.17.0",
