@@ -95,12 +95,12 @@ import { Validate, Rule, RuleType } from '@midwayjs/validate';
 由于 validate 抽象成了组件，需要在代码中安装依赖并开启。
 ```typescript
 // src/configuration
-import * as Validate from '@midwayjs/validate';
+import * as validate from '@midwayjs/validate';
 
 @Configuration({
   // ...
   imports: [
-    Validate
+    validate
   ],
 })
 export class MainConfiguration {
@@ -197,14 +197,14 @@ Bootstrap.run();
 作为替代，以组件的形式引入
 ```typescript
 // src/configuration
-import * as Web from '@midwayjs/web';
-import * as Grpc from '@midwayjs/grpc';
+import * as web from '@midwayjs/web';
+import * as grpc from '@midwayjs/grpc';
 
 @Configuration({
   // ...
   imports: [
-    Web,
-    Grpc,
+    web,
+    grpc,
     //...
   ],
 })

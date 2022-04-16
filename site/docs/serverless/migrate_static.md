@@ -14,7 +14,7 @@ service: my-static-demo       ## 应用发布到云平台的名字
 provider:
   name: aliyun                ## 发布的云平台，aliyun，tencent 等
 
-deployType: 
+deployType:
   type: static
   version: 3.0.0
 
@@ -159,10 +159,10 @@ package:
 ```
 
 此 rewrite 可以写多个，规则同 [koa-rewrite](https://github.com/koajs/rewrite)。
-​
+
 
 如果要排除某些目录，可以使用 `@not` 取反语法。
-​
+
 
 比如，排除 static 目录。
 
@@ -181,7 +181,7 @@ deployType:
 ### 修改部署的函数名
 
 可以通过 name 字段。
-​
+
 
 ```yaml
 service: my-static-demo      ## 应用发布到云平台的名字

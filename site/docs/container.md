@@ -21,7 +21,7 @@ Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量�
 ```
 
 
-在上面的示例中，提供了两个文件， `userController.ts` 和 `userService.ts` 。
+在上面的示例中，提供了两个文件， `user.controller.ts` 和 `user.service.ts` 。
 
 :::tip
 下面的示例，为了展示完整的功能，我们会写完整的 `@Provide` 装饰器，而在实际使用中，如果有其他装饰器（比如 `@Controller` ）的情况下， `@Provide` 可以被省略。
@@ -1003,13 +1003,14 @@ container.bind(UserService);
 
 Midway 在启动过程中会自动扫描整个项目目录，自动处理这个行为，使得用户无需手动执行绑定的操作。
 
-简单的来说，框架默认会递归扫描整个 `src` 目录下的 ts/js 文件，然后进行 require 操作，当文件导出的为 class，且包含 `@Provide()` 装饰器时，会执行 `container.bind` 逻辑。
+简单的来说，框架默认会递归扫描整个 `src` 目录下的 ts/js 文件，然后进行 require 操作，当文件导出的为 class，且显式或隐式包含 `@Provide()` 装饰器时，会执行 `container.bind` 逻辑。
 
 一般情况下，我们不应该把非 ts 文件放在 src 下（比如前端代码），特殊场景下，我们可以忽略某些目录，可以在 `@Configuration` 装饰器中配置。
 
 示例如下：
 
 ```typescript
+// src/configuration.ts
 import { App, Configuration, Logger } from '@midwayjs/decorator';
 // ...
 

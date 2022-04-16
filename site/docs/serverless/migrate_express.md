@@ -14,7 +14,7 @@ service: my-express-demo     ## 发布到云平台的应用名
 provider:
   name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
-deployType: 
+deployType:
   type: express              ## 部署的应用类型
   version: 3.0.0
 
@@ -82,7 +82,7 @@ service: my-egg-demo         ## 应用发布到云平台的名字
 provider:
   name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
-deployType: 
+deployType:
   type: express              ## 部署的应用类型
   version: 3.0.0
 
@@ -137,7 +137,7 @@ $ npx midway-bin deploy --npm=cnpm        ## deploy by cnpm
 ### 腾讯云
 
 默认发布为 API 网关触发器，同时会自动配置网关路由。
-​
+
 
 ### 修改部署的函数名
 

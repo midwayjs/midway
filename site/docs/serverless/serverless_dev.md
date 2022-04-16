@@ -67,7 +67,7 @@ export class HelloHTTPService {
 ```
 
 除了触发器外，我们还可以使用 `@ServerlessFunction` 装饰器描述函数层面的元信息，比如函数名，并发度等等。
-​
+
 
 这样，当我们在一个函数上，使用多个触发器时，就可以这样设置。
 
@@ -123,7 +123,7 @@ custom:
 ## 触发器装饰器参数
 
 `@ServerlessTrigger` 装饰器用于定义不同的触发器，它的参数为每个触发器信息，以及通用触发器参数。
-​
+
 
 触发器和 [f.yml 的定义](/docs/serverless_yml#YoMeC)保持一致，当前的定义请参考每个触发器的 [interface](https://github.com/midwayjs/midway/blob/2.x/packages/decorator/src/interface.ts#L141)。
 
@@ -140,10 +140,10 @@ custom:
 ## 函数装饰器参数
 
 `@ServerlessFunction` 装饰器用于定义函数，通过它可以修改函数名。
-​
+
 
 函数触发器和 [f.yml 的定义](/docs/serverless_yml#f1568472) 保持一致，当前的定义请参考每个触发器的 [interface](https://github.com/midwayjs/midway/blob/2.x/packages/decorator/src/interface.ts#L141)。
-​
+
 
 比如：
 
