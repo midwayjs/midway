@@ -7,6 +7,7 @@ import { EssentialsComponents } from '../components/EssentialsComponents'
 import { UsedBy } from '../components/UsedBy'
 import { Footer } from '../components/Footer'
 import { Example } from '../components/Example'
+import { Recommend } from '../components/Recommend'
 
 export default function Home(): JSX.Element {
   const [hidden, setHidden] = React.useState(true)
@@ -24,6 +25,7 @@ export default function Home(): JSX.Element {
         <PreviewFunctionSyntax />
         <EssentialsComponents />
         <Example />
+        <Recommend />
         <UsedBy />
         <Footer />
       </div>
