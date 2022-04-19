@@ -57,7 +57,7 @@ const brands = [
 
 export function UsedBy() {
   return (
-    <Block title="Used by" subtitle="Trusted by these great front-end teams" background="light">
+    <Block title="Used by" subtitle="Trusted by these great front-end teams" background="dark">
       {renderMarquee(brands)}
     </Block>
   )

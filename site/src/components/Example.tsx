@@ -1,6 +1,5 @@
 import { Block } from './Block'
 import React from 'react'
-import { VAR } from '../var'
 import { styled } from '../styled'
 
 const Container = styled('div', {})
