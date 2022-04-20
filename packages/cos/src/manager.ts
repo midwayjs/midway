@@ -27,8 +27,8 @@ export class COSServiceFactory extends ServiceFactory<COS> {
 
   async createClient(config: COS.COSOptions): Promise<COS> {
     assert(
-      config.SecretId && config.SecretId,
-      '[midway:cos] secretId secretKey is required on config'
+      config.SecretKey && config.SecretId,
+      '[@midwayjs/cos] secretId secretKey is required on config'
     );
     this.logger.info('[midway:cos] init %s', config.SecretKey);
 
