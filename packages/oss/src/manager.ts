@@ -81,7 +81,7 @@ delegateTargetPrototypeMethod(OSSService, [OSS]);
 @Scope(ScopeEnum.Singleton)
 export class OSSSTSService implements OSS.STS {
   @Inject()
-  private serviceFactory: OSSServiceFactory<OSS>;
+  private serviceFactory: OSSServiceFactory<OSS.STS>;
 
   private instance: OSS.STS;
 
