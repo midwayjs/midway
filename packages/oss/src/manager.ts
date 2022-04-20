@@ -35,18 +35,21 @@ export class OSSServiceFactory<T extends OSSServiceFactoryReturnType = OSSServic
     await this.initClients(this.ossConfig);
   }
 
-  async createClient(config: OSSServiceFactoryCreateClientConfigType) {
+  async createClient(config: OSSServiceFactoryCreateClientConfigType): Promise<T> {
 
     if (config.clusters) {
       config.clusters.forEach(checkBucketConfig);
+      // @ts-ignore
       return new OSS.ClusterClient(config as MWOSSClusterOptions);
     }
 
     if (config.sts === true) {
+      // @ts-ignore
       return new OSS.STS(config);
     }
 
     checkBucketConfig(config);
+    // @ts-ignore
     return new OSS(config);
   }
 

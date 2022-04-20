@@ -13,6 +13,6 @@ export interface MWOSSSTSOptions extends OSS.STSOptions {
     sts: boolean
 }
 
-export type OSSServiceFactoryReturnType = OSS | OSS.STS | OSS.ClusterClient
+export type OSSServiceFactoryReturnType = XOR<XOR<OSS, OSS.STS>, OSS.ClusterClient>
 
 export type OSSServiceFactoryCreateClientConfigType = XOR<XOR<MWOSSOptions, MWOSSClusterOptions>, MWOSSSTSOptions>
