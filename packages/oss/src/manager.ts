@@ -9,6 +9,7 @@ import {
 import * as OSS from 'ali-oss';
 import * as assert from 'assert';
 import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
+import { OSSServiceFactoryReturnType, MWOSSClusterOptions, OSSServiceFactoryCreateClientConfigType } from './interface';
 
 function checkBucketConfig(config) {
   assert(
@@ -21,29 +22,32 @@ function checkBucketConfig(config) {
   );
 }
 
+
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class OSSServiceFactory<T = OSS> extends ServiceFactory<T> {
+export class OSSServiceFactory<T extends OSSServiceFactoryReturnType> extends
+  ServiceFactory<T> {
   @Config('oss')
-  ossConfig;
+  ossConfig: OSSServiceFactoryCreateClientConfigType;
 
   @Init()
   async init() {
     await this.initClients(this.ossConfig);
   }
 
-  async createClient(config): Promise<T> {
-    if (config.cluster) {
-      config.cluster.forEach(checkBucketConfig);
-      return new (OSS as any).ClusterClient(config);
+  async createClient(config: OSSServiceFactoryCreateClientConfigType) {
+
+    if (config.clusters) {
+      config.clusters.forEach(checkBucketConfig);
+      return new OSS.ClusterClient(config as MWOSSClusterOptions);
     }
 
     if (config.sts === true) {
-      return new OSS.STS(config) as any;
+      return new OSS.STS(config);
     }
 
     checkBucketConfig(config);
-    return new OSS(config) as any;
+    return new OSS(config);
   }
 
   getName() {
@@ -77,7 +81,7 @@ delegateTargetPrototypeMethod(OSSService, [OSS]);
 @Scope(ScopeEnum.Singleton)
 export class OSSSTSService implements OSS.STS {
   @Inject()
-  private serviceFactory: OSSServiceFactory<OSS.STS>;
+  private serviceFactory: OSSServiceFactory<OSS>;
 
   private instance: OSS.STS;
 
