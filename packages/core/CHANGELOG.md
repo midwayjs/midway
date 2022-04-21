@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
+
+
+### Bug Fixes
+
+* register app before framework init ([#1925](https://github.com/midwayjs/midway/issues/1925)) ([e2fd742](https://github.com/midwayjs/midway/commit/e2fd7425983e30b5ff61fe27db4215b05d33b778))
+
+
+
+
+
 ## [3.3.2](https://github.com/midwayjs/midway/compare/v3.3.1...v3.3.2) (2022-04-13)
 
 

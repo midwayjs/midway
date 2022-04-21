@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
+
+
+### Bug Fixes
+
+* is express method got error result ([#1919](https://github.com/midwayjs/midway/issues/1919)) ([7ca9359](https://github.com/midwayjs/midway/commit/7ca9359c8421f77f1f410c56730cb8babaf65a8c))
+
+
+
+
+
 ## [3.3.3](https://github.com/midwayjs/midway/compare/v3.3.2...v3.3.3) (2022-04-14)
 
 **Note:** Version bump only for package @midwayjs/passport
