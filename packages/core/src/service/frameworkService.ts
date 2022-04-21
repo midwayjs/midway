@@ -94,6 +94,26 @@ export class MidwayFrameworkService {
       }
     );
 
+    // register @App decorator handler
+    this.decoratorService.registerPropertyHandler(
+      APPLICATION_KEY,
+      (propertyName, mete) => {
+        if (mete.type) {
+          const framework = this.applicationManager.getApplication(mete.type);
+          if (!framework) {
+            throw new MidwayCommonError(`Framework ${mete.type} not Found`);
+          }
+          return framework;
+        } else {
+          return this.getMainApp();
+        }
+      }
+    );
+
+    this.decoratorService.registerPropertyHandler(PLUGIN_KEY, (key, target) => {
+      return this.getMainApp()[key];
+    });
+
     let frameworks: Array<new (...args) => any> = listModule(FRAMEWORK_KEY);
     // filter proto
     frameworks = filterProtoFramework(frameworks);
@@ -140,29 +160,6 @@ export class MidwayFrameworkService {
         );
         this.globalFrameworkList.push(frameworkInstance);
       }
-
-      // register @App decorator handler
-      this.decoratorService.registerPropertyHandler(
-        APPLICATION_KEY,
-        (propertyName, mete) => {
-          if (mete.type) {
-            const framework = this.applicationManager.getApplication(mete.type);
-            if (!framework) {
-              throw new MidwayCommonError(`Framework ${mete.type} not Found`);
-            }
-            return framework;
-          } else {
-            return this.getMainApp();
-          }
-        }
-      );
-
-      this.decoratorService.registerPropertyHandler(
-        PLUGIN_KEY,
-        (key, target) => {
-          return this.getMainApp()[key];
-        }
-      );
 
       const nsSet = this.applicationContext['namespaceSet'] as Set<string>;
       let mainNs;
