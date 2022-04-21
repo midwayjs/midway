@@ -20,9 +20,11 @@ export function Config(identifier?: string): PropertyDecorator {
   });
 }
 
-export function App(type?: FrameworkType): PropertyDecorator {
+export function App(
+  typeOrNamespace?: FrameworkType | string
+): PropertyDecorator {
   return createCustomPropertyDecorator(APPLICATION_KEY, {
-    type,
+    type: typeOrNamespace,
   });
 }
 
