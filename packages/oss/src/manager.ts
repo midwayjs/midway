@@ -9,7 +9,11 @@ import {
 import * as OSS from 'ali-oss';
 import * as assert from 'assert';
 import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
-import type { OSSServiceFactoryReturnType, MWOSSClusterOptions, OSSServiceFactoryCreateClientConfigType } from './interface';
+import type {
+  OSSServiceFactoryReturnType,
+  MWOSSClusterOptions,
+  OSSServiceFactoryCreateClientConfigType,
+} from './interface';
 
 function checkBucketConfig(config) {
   assert(
@@ -24,7 +28,9 @@ function checkBucketConfig(config) {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class OSSServiceFactory<T extends OSSServiceFactoryReturnType = OSSServiceFactoryReturnType> extends ServiceFactory<T> {
+export class OSSServiceFactory<
+  T extends OSSServiceFactoryReturnType = OSSServiceFactoryReturnType
+> extends ServiceFactory<T> {
   @Config('oss')
   ossConfig: OSSServiceFactoryCreateClientConfigType;
 
@@ -33,8 +39,9 @@ export class OSSServiceFactory<T extends OSSServiceFactoryReturnType = OSSServic
     await this.initClients(this.ossConfig);
   }
 
-  async createClient(config: OSSServiceFactoryCreateClientConfigType): Promise<T> {
-
+  async createClient(
+    config: OSSServiceFactoryCreateClientConfigType
+  ): Promise<T> {
     if (config.clusters) {
       config.clusters.forEach(checkBucketConfig);
       // @ts-expect-error because this code can return the correct type, but TS still reports an error
