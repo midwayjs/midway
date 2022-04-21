@@ -159,12 +159,23 @@ class MidwayLoggers extends Map<string, ILogger> {
      * 提前备份 egg 日志
      */
     checkEggLoggerExistsAndBackup(options.dir, options.fileLogName);
-    const logger: ILogger = loggers.createLogger(loggerKey, options);
+    let logger: ILogger = loggers.createLogger(loggerKey, options);
 
     // overwrite values for pandora collect
     (logger as any).values = () => {
       return [];
     };
+
+    if (process.env['EGG_CLUSTER_MODE'] !== 'true') {
+      logger = new Proxy(logger, {
+        get(target, prop, receiver) {
+          if (prop === 'close') {
+            return () => {};
+          }
+          return target[prop];
+        },
+      });
+    }
 
     this[loggerKey] = logger;
     this.set(loggerKey, logger);
