@@ -9,7 +9,7 @@ import {
 import * as OSS from 'ali-oss';
 import * as assert from 'assert';
 import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
-import { OSSServiceFactoryReturnType, MWOSSClusterOptions, OSSServiceFactoryCreateClientConfigType } from './interface';
+import type { OSSServiceFactoryReturnType, MWOSSClusterOptions, OSSServiceFactoryCreateClientConfigType } from './interface';
 
 function checkBucketConfig(config) {
   assert(
