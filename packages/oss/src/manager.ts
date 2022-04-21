@@ -22,7 +22,6 @@ function checkBucketConfig(config) {
   );
 }
 
-
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class OSSServiceFactory<T extends OSSServiceFactoryReturnType = OSSServiceFactoryReturnType> extends ServiceFactory<T> {
@@ -38,17 +37,17 @@ export class OSSServiceFactory<T extends OSSServiceFactoryReturnType = OSSServic
 
     if (config.clusters) {
       config.clusters.forEach(checkBucketConfig);
-      // @ts-expect-error
+      // @ts-expect-error because this code can return the correct type, but TS still reports an error
       return new OSS.ClusterClient(config as MWOSSClusterOptions);
     }
 
     if (config.sts === true) {
-      // @ts-expect-error
+      // @ts-expect-error because this code can return the correct type, but TS still reports an error
       return new OSS.STS(config);
     }
 
     checkBucketConfig(config);
-    // @ts-expect-error
+    // @ts-expect-error because this code can return the correct type, but TS still reports an error
     return new OSS(config);
   }
 
