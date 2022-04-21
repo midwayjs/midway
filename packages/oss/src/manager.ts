@@ -25,8 +25,7 @@ function checkBucketConfig(config) {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class OSSServiceFactory<T extends OSSServiceFactoryReturnType = OSSServiceFactoryReturnType> extends
-  ServiceFactory<T> {
+export class OSSServiceFactory<T extends OSSServiceFactoryReturnType = OSSServiceFactoryReturnType> extends ServiceFactory<T> {
   @Config('oss')
   ossConfig: OSSServiceFactoryCreateClientConfigType;
 
