@@ -39,17 +39,17 @@ export class OSSServiceFactory<T extends OSSServiceFactoryReturnType = OSSServic
 
     if (config.clusters) {
       config.clusters.forEach(checkBucketConfig);
-      // @ts-ignore
+      // @ts-expect-error
       return new OSS.ClusterClient(config as MWOSSClusterOptions);
     }
 
     if (config.sts === true) {
-      // @ts-ignore
+      // @ts-expect-error
       return new OSS.STS(config);
     }
 
     checkBucketConfig(config);
-    // @ts-ignore
+    // @ts-expect-error
     return new OSS(config);
   }
 
