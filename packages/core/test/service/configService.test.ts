@@ -1,6 +1,6 @@
 import assert = require('assert');
 import { resolve, join } from 'path';
-import { MidwayContainer, MidwayConfigService, MidwayInformationService, MidwayEnvironmentService } from '../../src';
+import { MidwayContainer, MidwayConfigService, MidwayInformationService, MidwayEnvironmentService, MidwayInvalidConfigError } from '../../src';
 import * as mm from 'mm';
 
 async function createConfigService(): Promise<MidwayConfigService> {
@@ -103,6 +103,16 @@ describe('/test/service/configService.test.ts', () => {
     const resultLocal = await cfg.loadConfig(configFileLocal);
     expect(resultLocal.parent).toEqual({a: 1});
   });
+
+  it('invalid config', async () => {
+    const cfg: any = await createConfigService()
+    const configFile = resolve(join(__dirname, './fixtures/invalid_case', 'config.default'));
+    try {
+      await cfg.loadConfig(configFile);
+    } catch (error) {
+      expect(error).toBeInstanceOf(MidwayInvalidConfigError)
+    }
+  })
 
   it('should compatible old production', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'production');

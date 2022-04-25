@@ -14,6 +14,7 @@ import * as util from 'util';
 import { MidwayEnvironmentService } from './environmentService';
 import { MidwayInformationService } from './informationService';
 import { extend } from '../util/extend';
+import { MidwayInvalidConfigError } from '../error';
 
 const debug = util.debuglog('midway:debug');
 
@@ -200,9 +201,16 @@ export class MidwayConfigService implements IConfigService {
       typeof configFilename === 'string'
         ? require(configFilename)
         : configFilename;
-    if (exports && exports['default'] && Object.keys(exports).length === 1) {
-      exports = exports['default'];
+
+    if (exports && exports.default) {
+      if (Object.keys(exports).length > 1) {
+        throw new MidwayInvalidConfigError(
+          `${configFilename} should not have both a default export and named export`
+        );
+      }
+      exports = exports.default;
     }
+
     return exports;
   }
 
