@@ -17,11 +17,6 @@ jobs:
       matrix:
         node-version: [12, 14, 16]
         os: [ubuntu-latest]
-        include:
-          - node: 14
-            os: windows-latest
-          - node: 14
-            os: macos-latest
     runs-on: ${{ matrix.os }}
     services:
       redis:
