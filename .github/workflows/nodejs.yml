@@ -2,6 +2,7 @@ name: Node.js CI
 
 on:
   push:
+    branches: [main]
     paths-ignore:
       - 'site/**'
       - '*.md'
@@ -12,13 +13,16 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
-
+        node-version: [12, 14, 16]
+        os: [ubuntu-latest]
+        include:
+          - node: 14
+            os: windows-latest
+          - node: 14
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
     services:
       redis:
         image: redis
@@ -75,7 +79,7 @@ jobs:
 #
 #     strategy:
 #       matrix:
-#         node-version: [12.x, 14.x]
+#         node-version: [12, 14.x]
 #
 #     steps:
 #     - uses: actions/checkout@v2
