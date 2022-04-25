@@ -56,6 +56,10 @@ export const context = {
     return this.request.url;
   },
 
+  get originalUrl() {
+    return this.request.url;
+  },
+
   get params() {
     return this.request.params;
   },
