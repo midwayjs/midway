@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.8](https://github.com/midwayjs/midway/compare/v2.14.7...v2.14.8) (2022-04-25)
+
+
+### Bug Fixes
+
+* add original url proxy from url ([#1936](https://github.com/midwayjs/midway/issues/1936)) ([36ddcf0](https://github.com/midwayjs/midway/commit/36ddcf0994d2725fc68be0a7f48b721c4ebc497d))
+
+
+
+
+
 ## [2.14.7](https://github.com/midwayjs/midway/compare/v2.14.6...v2.14.7) (2022-03-20)
 
 
