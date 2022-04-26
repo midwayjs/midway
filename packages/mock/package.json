@@ -33,7 +33,8 @@
     "amqplib": "0.8.0",
     "socket.io": "4.4.1",
     "socket.io-client": "4.4.1",
-    "ws": "8.5.0"
+    "ws": "8.5.0",
+    "kafkajs": "1.16.0"
   },
   "dependencies": {
     "@types/supertest": "2.0.11",
