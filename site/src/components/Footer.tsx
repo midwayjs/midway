@@ -3,7 +3,7 @@ import { VAR } from '../var'
 import { styled } from '../styled'
 
 const Container = styled('div', {
-  backgroundColor: VAR.backgroundSecondary,
+  backgroundColor: VAR.background,
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',

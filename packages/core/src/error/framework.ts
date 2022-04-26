@@ -16,6 +16,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   MISSING_IMPORTS: 10011,
   UTIL_HTTP_TIMEOUT: 10012,
   INCONSISTENT_VERSION: 10013,
+  INVALID_CONFIG: 10014,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -77,6 +78,15 @@ export class MidwayConfigMissingError extends MidwayError {
     super(
       `Can't found config key "${configKey}" in your config, please set it first`,
       FrameworkErrorEnum.MISSING_CONFIG
+    );
+  }
+}
+
+export class MidwayInvalidConfigError extends MidwayError {
+  constructor(message?: string) {
+    super(
+      'Invalid config file \n' + message,
+      FrameworkErrorEnum.INVALID_CONFIG
     );
   }
 }

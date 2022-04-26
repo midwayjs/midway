@@ -352,3 +352,133 @@ API 如下
 | mockContext(app, key, vlue)                  |          | mock 上下文对象上的属性            |
 | restore()                                    |          | 清空所有 mock 数据                 |
 
+
+### mockClassProperty
+
+用于模拟类的某个属性或者方法。
+
+比如某个类。
+
+```typescript
+@Provide()
+export class UserService {
+  data;
+
+  async getUser() {
+    return 'hello';
+  }
+}
+```
+
+我们也可以在代码中模拟。
+
+```typescript
+
+import { Provide, Inject } from '@middwayjs/decorator';
+import { MidwayMockService } from '@midwayjs/core';
+
+@Provide()
+class TestMockService {
+  @Inject()
+  mockService: MidwayMockService;
+
+  mock() {
+    // 模拟方法
+    this.mockService.mockClassProperty(UserService, 'getUser', async () => {
+      return 'midway';
+    });
+
+    // 模拟属性
+    this.mockService.mockClassProperty(UserService, 'data', {
+      bbb: '1'
+    });
+  }
+}
+```
+
+
+
+### mockProperty
+
+使用 `mockProperty` 方法来模拟对象的属性。
+
+```typescript
+import { Provide, Inject } from '@middwayjs/decorator';
+import { MidwayMockService } from '@midwayjs/core';
+
+@Provide()
+class TestMockService {
+  @Inject()
+  mockService: MidwayMockService;
+
+  mock() {
+    const a = {};
+    // 模拟属性
+    this.mockService.mockProperty(a, 'name', 'hello');
+    // a['name'] => 'hello'
+
+    // 模拟方法
+    this.mockService.mockProperty(a, 'getUser', async () => {
+      return 'midway';
+    });
+    // await a.getUser() => 'midway'
+  }
+}
+
+```
+
+
+
+### mockContext
+
+由于 Midway 的 Context 和 app 关联，所以在模拟的时候需要传入 app 实例。
+
+使用 `mockContext` 方法来模拟上下文。
+
+```typescript
+import { Configuration, App } from '@middwayjs/decorator';
+import { MidwayMockService } from '@midwayjs/core';
+
+@Configuration(/**/)
+export class AutoConfiguration {
+  @Inject()
+  mockService: MidwayMockService;
+
+  @App()
+  app;
+
+  async onReady() {
+    // 模拟上下文
+    mockContext(app, 'user', 'midway');
+  }
+}
+
+// ctx.user => midway
+```
+
+如果你的数据比较复杂，或者带有逻辑，也可以使用回调形式。
+
+```typescript
+import { Configuration, App } from '@middwayjs/decorator';
+import { MidwayMockService } from '@midwayjs/core';
+
+@Configuration(/**/)
+export class AutoConfiguration {
+  @Inject()
+  mockService: MidwayMockService;
+
+  @App()
+  app;
+
+  async onReady() {
+    // 模拟上下文
+    mockContext(app, (ctx) => {
+      ctx.user = 'midway';
+    });
+  }
+}
+
+// ctx.user => midway
+```
+
+注意，这个 mock 行为是在所有中间件之前执行。

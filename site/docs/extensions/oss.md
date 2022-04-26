@@ -121,7 +121,7 @@ export default {
   oss: {
     // need to config all bucket information under cluster
     client: {
-      cluster: [{
+      clusters: [{
         endpoint: 'host1',
         accessKeyId: 'id1',
         accessKeySecret: 'secret1',

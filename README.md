@@ -151,17 +151,12 @@ cd my_midway_app && npm run dev
 
 ## 答疑
 
-群里会有热心的朋友，也会有新版本发布推送。钉钉扫码加入答疑群
+群里会有热心的朋友，也会有新版本发布推送。
 
+- 钉钉（左图）：扫码加入答疑群（申请加入，自动通过）
+- 微信（右图）：由于微信群限制，可以先加拉群小助手（备注 midway 加群），然后拉到微信群。
 
-二群
-
-![image](https://user-images.githubusercontent.com/418820/160375495-cbb0369f-7b86-458f-9051-40b6ecab98b9.png)
-
-
-一群（已满）
-
-![](https://img.alicdn.com/imgextra/i2/O1CN01ofEEAL2AEpJHbpse5_!!6000000008172-2-tps-311-401.png)
+![](https://img.alicdn.com/imgextra/i4/O1CN01LW04Ah1EFWHjVLu7s_!!6000000000322-0-tps-1658-1010.jpg)
 
 ## 贡献
 

@@ -9,6 +9,11 @@ import {
 import * as OSS from 'ali-oss';
 import * as assert from 'assert';
 import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
+import type {
+  OSSServiceFactoryReturnType,
+  MWOSSClusterOptions,
+  OSSServiceFactoryCreateClientConfigType,
+} from './interface';
 
 function checkBucketConfig(config) {
   assert(
@@ -23,27 +28,37 @@ function checkBucketConfig(config) {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class OSSServiceFactory<T = OSS> extends ServiceFactory<T> {
+export class OSSServiceFactory<
+  T extends OSSServiceFactoryReturnType = OSSServiceFactoryReturnType
+> extends ServiceFactory<T> {
   @Config('oss')
-  ossConfig;
+  ossConfig: OSSServiceFactoryCreateClientConfigType;
 
   @Init()
   async init() {
     await this.initClients(this.ossConfig);
   }
 
-  async createClient(config): Promise<T> {
-    if (config.cluster) {
-      config.cluster.forEach(checkBucketConfig);
-      return new (OSS as any).ClusterClient(config);
+  async createClient(
+    config: OSSServiceFactoryCreateClientConfigType
+  ): Promise<T> {
+    if (config['cluster'] && !config.clusters) {
+      config.clusters = config['cluster'];
+    }
+    if (config.clusters) {
+      config.clusters.forEach(checkBucketConfig);
+      // @ts-expect-error because this code can return the correct type, but TS still reports an error
+      return new OSS.ClusterClient(config as MWOSSClusterOptions);
     }
 
     if (config.sts === true) {
-      return new OSS.STS(config) as any;
+      // @ts-expect-error because this code can return the correct type, but TS still reports an error
+      return new OSS.STS(config);
     }
 
     checkBucketConfig(config);
-    return new OSS(config) as any;
+    // @ts-expect-error because this code can return the correct type, but TS still reports an error
+    return new OSS(config);
   }
 
   getName() {

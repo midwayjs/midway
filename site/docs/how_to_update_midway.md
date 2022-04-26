@@ -1,10 +1,43 @@
 # 如何更新 Midway
 
-## midway 项目的依赖使用 lerna 发布，**请不要**：
+
+
+## 什么时候要更新 Midway
+
+一般来说，在下面的情况下，你可能需要更新：
+
+- 1、Midway 发了新版本之后，你希望用到新功能的时候
+- 2、你安装了一个新的组件且带有 lock 文件的时候
+- 3、出现方法找不到的错误的时候
+- ... 等等
+
+比如出现下面错误的时候
+
+1、一般是装了组件的新包，但是老的 @midwayjs/core 未包含该方法从而报错。
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01dDNRZr1MBPewPo7Xg_!!6000000001396-2-tps-1196-317.png)
+
+2、一般原因为 mock 依赖的 @midwayjs/core 版本没这个方法，说明版本不对，可能是错误引用了版本，也可能是版本太低
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01HVMJKP1xNuFO2Wv73_!!6000000006432-2-tps-1055-135.png)
+
+3、新装组件的时候，我们发现某个包的版本实例不止一个
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01jZxQu91YBCs0N9S9Y_!!6000000003020-2-tps-1133-43.png)
+
+## 更新注意事项
+
+:::danger
+
+midway 项目的依赖使用 lerna 发布，**请不要**：
 
 
 - 1、单独升级某个 @midwayjs/* 的包
 - 2、将 package.json 中的版本号移除 ^ 符号
+
+:::
+
+
 
 
 ## 普通项目更新
@@ -20,6 +53,8 @@
 
 
 **我们不保证使用其他工具、cli 单独升级包的效果。**
+
+
 
 
 ## lerna 项目更新

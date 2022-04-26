@@ -138,6 +138,7 @@ interface ContextDelegatedRequest {
    * Get/Set request URL.
    */
   url: string;
+  originalUrl: string;
   accept: any;
   /**
    * Get request pathname.

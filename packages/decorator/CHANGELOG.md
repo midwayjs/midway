@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
+
+
+### Bug Fixes
+
+* typings for app decorator ([#1929](https://github.com/midwayjs/midway/issues/1929)) ([c508458](https://github.com/midwayjs/midway/commit/c508458f9f7505185e676330b3668d38701c6137))
+
+
+
+
+
 ## [3.1.6](https://github.com/midwayjs/midway/compare/v3.1.5...v3.1.6) (2022-03-21)
 
 **Note:** Version bump only for package @midwayjs/decorator

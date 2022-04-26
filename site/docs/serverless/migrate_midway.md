@@ -11,7 +11,7 @@ Midway Serverless 提供了一套通用的应用迁移方案，将原有应用�
 ## @midway/koa
 
 Serverless 环境指的是阿里云 FC，腾讯云等函数环境。Midway 可以将现有的 Web 项目部署为 Serverless 应用，这里以部署到阿里云函数计算作为示例。
-​
+
 
 1、添加 `f.yml` 文件到你的项目根目录。
 
@@ -31,7 +31,7 @@ service: my-midway-app         ## 应用发布到云平台的名字，一般指�
 provider:
   name: aliyun                 ## 发布的云平台，aliyun，tencent 等
 
-deployType: 
+deployType:
   type: koa                    ## 部署的应用类型
   version: 3.0.0
 ```
@@ -165,7 +165,7 @@ service: my-egg-demo          ## 应用发布到云平台的名字
 provider:
   name: aliyun                ## 发布的云平台，aliyun，tencent 等
 
-deployType: 
+deployType:
   type: egg                   ## 部署的应用类型
   version: 3.0.0
 

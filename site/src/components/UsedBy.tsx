@@ -49,6 +49,7 @@ const brands = [
   'icon-dcaadaacdcabasvg',
   'icon-is-aliyun_logo',
   'icon-vivo',
+  'https://img.alicdn.com/imgextra/i3/O1CN015RbnOy1GX2fWWaBbs_!!6000000000631-2-tps-614-200.png',
   'https://img.alicdn.com/imgextra/i4/O1CN01RpFMeb1LiYexaZIcP_!!6000000001333-2-tps-320-150.png',
   'https://img.alicdn.com/imgextra/i3/O1CN010wn80L1UR01GSABXa_!!6000000002513-2-tps-277-121.png',
   'https://img.alicdn.com/imgextra/i3/O1CN01vsbUzd1T9J6X9VBg7_!!6000000002339-2-tps-400-400.png',
@@ -57,7 +58,7 @@ const brands = [
 
 export function UsedBy() {
   return (
-    <Block title="Used by" subtitle="Trusted by these great front-end teams" background="light">
+    <Block title="Used by" subtitle="Trusted by these great front-end teams" background="dark">
       {renderMarquee(brands)}
     </Block>
   )

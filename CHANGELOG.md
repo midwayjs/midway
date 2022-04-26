@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
+
+
+### Bug Fixes
+
+* close logger before egg app close ([#1928](https://github.com/midwayjs/midway/issues/1928)) ([d30d21f](https://github.com/midwayjs/midway/commit/d30d21f7b2727a2891ac3810dc8dbcbc5276abd7))
+* is express method got error result ([#1919](https://github.com/midwayjs/midway/issues/1919)) ([7ca9359](https://github.com/midwayjs/midway/commit/7ca9359c8421f77f1f410c56730cb8babaf65a8c))
+* register app before framework init ([#1925](https://github.com/midwayjs/midway/issues/1925)) ([e2fd742](https://github.com/midwayjs/midway/commit/e2fd7425983e30b5ff61fe27db4215b05d33b778))
+* typings for app decorator ([#1929](https://github.com/midwayjs/midway/issues/1929)) ([c508458](https://github.com/midwayjs/midway/commit/c508458f9f7505185e676330b3668d38701c6137))
+
+
+### Features
+
+* add recommend extension for site ([#1922](https://github.com/midwayjs/midway/issues/1922)) ([290179c](https://github.com/midwayjs/midway/commit/290179ce47c287f2b39599e609a349c14907cccc))
+
+
+
+
+
 ## [3.3.3](https://github.com/midwayjs/midway/compare/v3.3.2...v3.3.3) (2022-04-14)
 
 

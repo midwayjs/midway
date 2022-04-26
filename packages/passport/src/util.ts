@@ -8,7 +8,7 @@ export function getPassport() {
 
 export function isExpressMode(): boolean {
   return !!(
-    process.env['MIDWAY_PASSPORT_MODE'] === 'express' ??
+    process.env['MIDWAY_PASSPORT_MODE'] === 'express' ||
     safeRequire('@midwayjs/express')
   );
 }

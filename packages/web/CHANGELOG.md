@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
+
+
+### Bug Fixes
+
+* close logger before egg app close ([#1928](https://github.com/midwayjs/midway/issues/1928)) ([d30d21f](https://github.com/midwayjs/midway/commit/d30d21f7b2727a2891ac3810dc8dbcbc5276abd7))
+
+
+
+
+
 ## [3.3.3](https://github.com/midwayjs/midway/compare/v3.3.2...v3.3.3) (2022-04-14)
 
 
