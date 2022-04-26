@@ -233,7 +233,7 @@ export class JwtStrategy extends PassportStrategy(
 
 import { Middleware } from '@midwayjs/decorator';
 import { PassportMiddleware } from '@midwayjs/passport';
-import { JwtStrategy } from './strategy/jwt-strategy';
+import { JwtStrategy } from '../strategy/jwt-strategy';
 import * as passport from 'passport';
 
 @Middleware()
