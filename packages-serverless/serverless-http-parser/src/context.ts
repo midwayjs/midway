@@ -60,6 +60,10 @@ export const context = {
     return this.request.url;
   },
 
+  set originalUrl(originalUrl) {
+    this.request.originalUrl = originalUrl;
+  },
+
   get params() {
     return this.request.params;
   },
