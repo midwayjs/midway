@@ -42,6 +42,9 @@ export class OSSServiceFactory<
   async createClient(
     config: OSSServiceFactoryCreateClientConfigType
   ): Promise<T> {
+    if (config['cluster'] && !config.clusters) {
+      config.clusters = config['cluster'];
+    }
     if (config.clusters) {
       config.clusters.forEach(checkBucketConfig);
       // @ts-expect-error because this code can return the correct type, but TS still reports an error
