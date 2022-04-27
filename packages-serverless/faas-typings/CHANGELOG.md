@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+
+### Bug Fixes
+
+* add original url proxy from url ([#1936](https://github.com/midwayjs/midway/issues/1936)) ([402ad24](https://github.com/midwayjs/midway/commit/402ad249d10f5e9a30d68ee58bc57dc33d7b3107))
+
+
+
+
+
 ## [3.1.6](https://github.com/midwayjs/midway/compare/v3.1.5...v3.1.6) (2022-03-21)
 
 **Note:** Version bump only for package @midwayjs/faas-typings

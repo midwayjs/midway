@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+
+### Bug Fixes
+
+* add original url proxy from url ([#1936](https://github.com/midwayjs/midway/issues/1936)) ([402ad24](https://github.com/midwayjs/midway/commit/402ad249d10f5e9a30d68ee58bc57dc33d7b3107))
+* cluster compatible ([#1942](https://github.com/midwayjs/midway/issues/1942)) ([3891150](https://github.com/midwayjs/midway/commit/3891150deec98c9f09edee0973ca8f52d79c66f5))
+* oss cluster typings ([#1924](https://github.com/midwayjs/midway/issues/1924)) ([ab2e2be](https://github.com/midwayjs/midway/commit/ab2e2beb9cadb80885ffeb3406da1fb78530f7ef))
+* throw error if config is invalid ([#1939](https://github.com/midwayjs/midway/issues/1939)) ([cc5fc1e](https://github.com/midwayjs/midway/commit/cc5fc1e0500554e52853246b90655c05f481fe6c))
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 

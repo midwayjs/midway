@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/socketio",
-  "version": "3.3.4",
+  "version": "3.3.5",
   "description": "Midway Web Framework for socket.io",
   "main": "dist/index",
   "typings": "index.d.ts",
@@ -25,13 +25,13 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/decorator": "^3.3.4",
-    "@midwayjs/mock": "^3.3.4",
+    "@midwayjs/mock": "^3.3.5",
     "@types/socket.io-client": "1.4.36",
     "fs-extra": "10.0.1",
     "socket.io-client": "4.4.1"
   },
   "dependencies": {
-    "@midwayjs/core": "^3.3.4",
+    "@midwayjs/core": "^3.3.5",
     "@midwayjs/logger": "^2.15.0",
     "socket.io": "4.4.1",
     "socket.io-redis": "^6.1.0"

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+
+### Bug Fixes
+
+* oss cluster typings ([#1924](https://github.com/midwayjs/midway/issues/1924)) ([ab2e2be](https://github.com/midwayjs/midway/commit/ab2e2beb9cadb80885ffeb3406da1fb78530f7ef))
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 **Note:** Version bump only for package @midwayjs/cos
