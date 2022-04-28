@@ -140,14 +140,14 @@ export class Photo extends Model{
 ```
 
 ```typescript
-import {Model, Column, HasMany} from 'sequelize-typescript';
+import { Model, Column, HasMany } from 'sequelize-typescript';
 import { BaseTable } from "@midwayjs/sequelize";
 import { Photo } from './Photo';
 
 @BaseTable
 export class User extends Model {
   @Column name!: string;
-  @HasMany(() => Photo) Photo: Post[];
+  @HasMany(() => Photo) Photo: Photo[];
 }
 ```
 
