@@ -131,7 +131,7 @@ export class MidwayAspectService {
         }
       };
     } else {
-      Clz.prototype[methodName] = function (...args) {
+      Clz.prototype[methodName] = async function (...args) {
         let error, result;
         const newProceed = (...args) => {
           return originMethod.apply(this, args);
@@ -148,7 +148,7 @@ export class MidwayAspectService {
         }
 
         try {
-          aspectObject.before?.(joinPoint);
+          await aspectObject.before?.(joinPoint);
           if (aspectObject.around) {
             result = aspectObject.around(joinPoint);
           } else {
