@@ -87,7 +87,7 @@ export class MidwayAspectService {
   ) {
     const originMethod = Clz.prototype[methodName];
 
-    if (Types.isAsyncFunction(Clz.prototype[methodName])) {
+    if (Types.isAsyncFunction(originMethod)) {
       Clz.prototype[methodName] = async function (...args) {
         let error, result;
         const newProceed = (...args) => {
