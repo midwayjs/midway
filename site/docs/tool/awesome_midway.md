@@ -21,6 +21,7 @@ title: Awesome Midway
 | 名称          | 作者          | 地址                                                                                             | 描述                                     |
 | ------------- | ------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------- |
 | midwayjs-crud | DeveloperYvan | [https://github.com/developeryvan/midwayjs-crud](https://github.com/developeryvan/midwayjs-crud) | 一个包含 prisma+casbin+nacos+crud 的示例 |
+| midway-practice | ddzyan | [https://github.com/ddzyan/midway-practice](https://github.com/ddzyan/midway-practice) | 一个包含 请求日志链路，统一响应体，统一异常处理，异常过滤器 + 三大主流 ORM 模型 (sequelize，typeORM，prisma)  的示例 |
 
 :::tip
 欢迎大家为社区贡献力量， 编辑此页添加你所喜爱的高质量 midway 项目/组件
