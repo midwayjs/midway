@@ -43,7 +43,8 @@
         "cookie_session",
         "built_in_service",
         "router_table",
-        "decorator_index"
+        "decorator_index",
+        "error_code"
       ]
     },
     {

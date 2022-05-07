@@ -414,7 +414,7 @@ module.exports = {
 ## 扩展 Application/Context/Request/Response
 
 
-### 增加扩展文件
+### 增加扩展逻辑
 
 
 虽然 MidwayJS 并不希望直接将属性挂载到 koa 的 Context，App 上（会造成管理和定义的不确定性），但是 EggJS 的这项功能依旧可用。
@@ -442,49 +442,33 @@ module.exports = {
 // src/app/extend/context.ts
 export default {
   get hello() {
-		return 'hello world';
+    return 'hello world';
   },
 };
 ```
 ### 增加扩展定义
 
+Context 请使用 Midway 的方式来扩展，请查看 [扩展上下文定义](https://midwayjs.org/docs/context_definition)。
 
-扩展了 EggJS 之后，你需要增加扩展的定义。请在 `src/interface.ts` 中扩展增加的 `ctx.hello` 属性。
+
+其余的部分，沿用 egg 的方式，请在 `src/interface.ts` 中扩展。
 ```typescript
 // src/interface.ts
 declare module 'egg' {
-  interface Context {
-    hello: string;
+  interface Request {
+    // ...
+  }
+  interface Response {
+    // ...
+  }
+  interface Application {
+    // ...
   }
 }
 ```
 :::info
 业务自定义扩展的定义请 **不要放在根目录** `typings` 下，避免被 ts-helper 工具覆盖掉。
 :::
-
-
-除此之外，还可以扩展其他的定义，MidwayJS 的相关方法也是如此支持的。
-```typescript
-declare module 'egg' {
-
-  interface Application {										// 扩展 Application
-    applicationContext: IMidwayContainer;
-    getBaseDir(): string;
-    getAppDir(): string;
-    getEnv(): string;
-    getFrameworkType(): MidwayFrameworkType;
-    getProcessType(): MidwayProcessTypeEnum;
-    getApplicationContext(): IMidwayContainer;
-    getConfig(key?: string): any;
-    generateController?(controllerMapping: string);
-    generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
-  }
-
-  interface Context {												// 扩展 Context
-    requestContext: IMidwayContainer;
-  }
-}
-```
 
 
 
@@ -739,7 +723,7 @@ export const security = {
 ### 5、不存在定义的问题
 
 一些 egg 插件未提供 ts 定义，导致使用会出现未声明方法的情况，比如 egg-mysql。
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/501408/1623158462288-d55fc0ff-dcc3-4c58-b952-101a552efe12.png#clientId=u9825f56d-757f-4&from=paste&height=438&id=uec9c4ff6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=876&originWidth=1478&originalType=binary&ratio=2&size=581313&status=done&style=none&taskId=ubcf947b0-1a9d-43b5-9b57-f678da05da9&width=739)
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01mv68zG1zN6nALff8n_!!6000000006701-2-tps-1478-876.png)
 可以使用 any 绕过。
 
 ```typescript
