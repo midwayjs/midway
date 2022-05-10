@@ -5,7 +5,10 @@ import {
 import {
   IMidwayWebBaseApplication,
   IMidwayWebConfigurationOptions,
+  Context as EggContext,
 } from './dist';
+import { ILogger, LoggerOptions } from '@midwayjs/logger';
+import { EggAppConfig } from 'egg';
 
 export * from './dist/index';
 
@@ -16,9 +19,9 @@ declare module 'egg' {
 
   // 这里再次覆盖和 egg 不同的定义，不然 egg 插件里可能会报错
   interface Application
-    extends IMidwayBaseApplication<Context>,
+    extends IMidwayBaseApplication<EggContext>,
       IMidwayWebBaseApplication {
-    createAnonymousContext(...args: any[]): EggContext;
+    createAnonymousContext(...args: any[]): any;
     getCoreLogger(): EggLogger & ILogger;
     getLogger(name?: string): EggLogger & ILogger;
     createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
