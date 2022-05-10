@@ -21,7 +21,7 @@ declare module 'egg' {
   interface Application
     extends IMidwayBaseApplication<EggContext>,
       IMidwayWebBaseApplication {
-    createAnonymousContext(...args: any[]): any;
+    createAnonymousContext(...args: any[]): EggContext;
     getCoreLogger(): EggLogger & ILogger;
     getLogger(name?: string): EggLogger & ILogger;
     createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
