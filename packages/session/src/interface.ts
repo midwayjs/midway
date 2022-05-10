@@ -1,5 +1,4 @@
 import { CookieSetOptions } from '@midwayjs/cookies';
-import { opts } from 'koa-session';
 
 export interface ISession {
   /**
@@ -21,7 +20,7 @@ export interface ISession {
   /**
    * get/set session maxAge
    */
-  maxAge: opts["maxAge"];
+  maxAge: SessionOptions["maxAge"];
 
   /**
    * commit this session's headers if autoCommit is set to false.
