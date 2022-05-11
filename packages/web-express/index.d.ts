@@ -6,6 +6,7 @@ import {
   OptionsUrlencoded,
 } from 'body-parser';
 import { IMidwayExpressConfigurationOptions } from './dist';
+import '@midwayjs/express-session';
 
 export * from './dist/index';
 

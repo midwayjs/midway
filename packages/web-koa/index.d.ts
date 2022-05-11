@@ -1,10 +1,11 @@
 import {
   Application,
   IMidwayKoaConfigurationOptions,
-  IMidwayKoaContext,
+  Context as KoaContext,
   BodyParserOptions,
 } from './dist';
 import { CookieSetOptions, Cookies } from '@midwayjs/cookies';
+import '@midwayjs/session';
 
 export * from './dist/index';
 
@@ -17,9 +18,9 @@ declare module '@midwayjs/core/dist/interface' {
      * onerror middleware options
      */
     onerror?: {
-      text?: (err: Error, ctx: IMidwayKoaContext) => void;
-      json?: (err: Error, ctx: IMidwayKoaContext) => void;
-      html?: (err: Error, ctx: IMidwayKoaContext) => void;
+      text?: (err: Error, ctx: KoaContext) => void;
+      json?: (err: Error, ctx: KoaContext) => void;
+      html?: (err: Error, ctx: KoaContext) => void;
       redirect?: string;
       accepts?: (...args) => any;
     };
