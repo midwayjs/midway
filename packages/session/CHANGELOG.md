@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
+
+
+### Bug Fixes
+
+* session maxAge definition ([#1968](https://github.com/midwayjs/midway/issues/1968)) ([3e93254](https://github.com/midwayjs/midway/commit/3e93254b54b30215ddeb3ad6d60469bdb42e284c))
+
+
+
+
+
 ## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
 
 **Note:** Version bump only for package @midwayjs/session

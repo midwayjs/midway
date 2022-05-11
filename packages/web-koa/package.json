@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa",
-  "version": "3.3.5",
+  "version": "3.3.6",
   "description": "Midway Web Framework for KOA",
   "main": "dist/index",
   "typings": "index.d.ts",
@@ -35,7 +35,7 @@
     "@koa/router": "^10.0.0",
     "@midwayjs/cookies": "^1.0.2",
     "@midwayjs/core": "^3.3.5",
-    "@midwayjs/session": "^3.3.5",
+    "@midwayjs/session": "^3.3.6",
     "koa": "2.13.4",
     "koa-bodyparser": "4.3.0"
   },
