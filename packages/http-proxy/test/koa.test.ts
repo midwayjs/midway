@@ -25,6 +25,18 @@ describe('test/koa.test.ts', function () {
       });
   });
 
+  it('get html by host', async () => {
+    const request = await createHttpRequest(app);
+    await request.get('/baidu')
+      .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
+      .expect(200)
+      .then(async response => {
+        assert(response.status === 200)
+        assert(response.text.length);
+        assert(response.text.endsWith('</html>'));
+      });
+  });
+
   it('get javascript by target', async () => {
     const request = await createHttpRequest(app);
     await request.get('/bdimg/static/wiseindex/amd_modules/@searchfe/assert_3ed54c3.js')
