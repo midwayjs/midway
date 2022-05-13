@@ -33,7 +33,10 @@
     "3.3.6"
   ],
   "@midwayjs/core": "3.3.5",
-  "@midwayjs/cos": "3.3.5",
+  "@midwayjs/cos": [
+    "3.3.5",
+    "3.3.7"
+  ],
   "@midwayjs/cross-domain": [
     "3.3.5",
     "3.3.6"
@@ -44,7 +47,8 @@
   "@midwayjs/grpc": "3.3.5",
   "@midwayjs/http-proxy": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.7"
   ],
   "@midwayjs/i18n": [
     "3.3.5",
@@ -64,7 +68,10 @@
     "3.3.5",
     "3.3.6"
   ],
-  "@midwayjs/oss": "3.3.5",
+  "@midwayjs/oss": [
+    "3.3.5",
+    "3.3.7"
+  ],
   "@midwayjs/otel": [
     "3.3.5",
     "3.3.6"
@@ -124,7 +131,8 @@
   ],
   "@midwayjs/version": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.7"
   ],
   "@midwayjs/view-ejs": [
     "3.3.5",
