@@ -86,7 +86,8 @@
         "extensions/orm",
         "extensions/sequelize",
         "extensions/redis",
-        "extensions/mongodb"
+        "extensions/mongodb",
+        "extensions/jwt"
       ]
     },
     {
