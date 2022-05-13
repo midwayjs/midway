@@ -127,6 +127,11 @@ describe('/test/index.test.ts', () => {
             "type": "number",
             "description": "The age of the Cat"
           },
+          "agedata": {
+            "description": "The age of the CatDSate",
+            "format": "date",
+            "type": "string",
+          },
           "breed": {
             "type": "string",
             "description": "The breed of the Cat"
@@ -142,6 +147,7 @@ describe('/test/index.test.ts', () => {
         "example": {
           "name": "Kitty",
           "age": 1,
+          "agedata": "2022-12-12 11:11:11",
           "breed": "Maine Coon"
         }
       });

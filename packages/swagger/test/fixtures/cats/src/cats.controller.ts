@@ -95,18 +95,18 @@ export class CatsController {
     return null;
   }
 
-  @Post('/test2')
+  @Post('/test2', { description: 'hello test2', summary: 'hello test2 summary' })
   async upload2(@Files() f: any[]) {
     return null;
   }
 
-  @Get('/test3')
+  @Get('/test3', { description: 'hello test3', summary: 'hello test3 summary' })
   async get(@Body('aa') aa: string, @Body('bb') bb: string) {
     return null;
   }
   @Get('/test4')
   @ApiQuery({name: 'aa'})
-  async getfour(@Query() aa: CreateCatDto, @Body('bb') bb: string) {
+  async getfour(@Query() aa: CreateCatDto, @Query('t') t: number, @Body('bb') bb: string) {
     return null;
   }
 

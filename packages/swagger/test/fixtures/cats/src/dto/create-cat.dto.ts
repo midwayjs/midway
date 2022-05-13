@@ -22,6 +22,9 @@ export class CreateCatDto {
   })
   age: number;
 
+  @ApiProperty({ example: '2022-12-12 11:11:11', description: 'The age of the CatDSate' })
+  agedata?: Date;
+
   @ApiProperty({ example: 'bbbb', description: 'The name of the Catbreed'})
   breed: string;
 
