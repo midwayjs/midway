@@ -168,6 +168,11 @@ describe('/test/index.test.ts', () => {
             "maxLength": 1,
             "maxProperties": 2
           },
+          "agedata": {
+            "description": "The age of the CatDSate",
+            "format": "date",
+            "type": "string",
+          },
           "breed": {
             "type": "string",
             "description": "The name of the Catbreed"
@@ -190,6 +195,7 @@ describe('/test/index.test.ts', () => {
         },
         "example": {
           "name": "Kitty",
+          "agedata": "2022-12-12 11:11:11",
           "age": "1",
           "breed": "bbbb",
           "breeds": [
