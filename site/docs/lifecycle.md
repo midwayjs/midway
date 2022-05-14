@@ -167,7 +167,7 @@ export class ContainerConfiguration implements ILifeCycle {
   
   async onServerReady(container: IMidwayContainer): Promise<void> {
     // 获取到 koa 中暴露的 Framework
-    const framework = container.getAsync(koa.Framework);
+    const framework = await container.getAsync(koa.Framework);
     const server = framework.getServer();
     // ...
     
