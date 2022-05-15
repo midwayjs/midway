@@ -1,5 +1,7 @@
 import {
   BaseFramework,
+  CommonMiddlewareUnion,
+  ContextMiddlewareManager,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
@@ -9,9 +11,12 @@ import { debuglog } from 'util';
 const debug = debuglog('midway:debug');
 
 import {
+  Application,
+  Context,
   IMidwayWSApplication,
   IMidwayWSConfigurationOptions,
   IMidwayWSContext,
+  NextFunction,
 } from './interface';
 import * as WebSocket from 'ws';
 import {
@@ -23,15 +28,17 @@ import {
   getClassMetadata,
   listModule,
   Framework,
+  WSControllerOption,
 } from '@midwayjs/decorator';
 
 @Framework()
 export class MidwayWSFramework extends BaseFramework<
-  IMidwayWSApplication,
-  IMidwayWSContext,
+  Application,
+  Context,
   IMidwayWSConfigurationOptions
 > {
   server: http.Server;
+  protected connectionMiddlewareManager = this.createMiddlewareManager();
 
   configure(): IMidwayWSConfigurationOptions {
     return this.configService.getConfiguration('webSocket');
@@ -41,6 +48,20 @@ export class MidwayWSFramework extends BaseFramework<
     this.configurationOptions.noServer = true;
     const opts = Object.assign({}, this.configurationOptions, { port: null });
     this.app = new WebSocket.Server(opts) as IMidwayWSApplication;
+    this.defineApplicationProperties({
+      useConnectionMiddleware: (
+        middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>
+      ) => {
+        return this.useConnectionMiddleware(middleware);
+      },
+      getConnectionMiddleware: (): ContextMiddlewareManager<
+        Context,
+        NextFunction,
+        undefined
+      > => {
+        return this.getConnectionMiddleware();
+      },
+    });
   }
   public app: IMidwayWSApplication;
 
@@ -106,6 +127,15 @@ export class MidwayWSFramework extends BaseFramework<
   }
 
   private async addNamespace(target: any) {
+    const controllerOption: WSControllerOption = getClassMetadata(
+      WS_CONTROLLER_KEY,
+      target
+    );
+    const controllerMiddleware =
+      controllerOption.routerOptions.middleware ?? [];
+    const controllerConnectionMiddleware =
+      controllerOption.routerOptions.connectionMiddleware ?? [];
+
     this.app.on(
       'connection',
       async (socket: IMidwayWSContext, request: http.IncomingMessage) => {
@@ -113,6 +143,16 @@ export class MidwayWSFramework extends BaseFramework<
         this.app.createAnonymousContext(socket);
         socket.requestContext.registerObject('socket', socket);
         socket.app = this.app;
+
+        // run connection middleware
+        const connectFn = await this.middlewareService.compose(
+          [
+            ...this.connectionMiddlewareManager,
+            ...controllerConnectionMiddleware,
+          ],
+          this.app
+        );
+        await connectFn(socket);
 
         const wsEventInfos: WSEventInfo[] = getClassMetadata(
           WS_EVENT_KEY,
@@ -131,10 +171,21 @@ export class MidwayWSFramework extends BaseFramework<
             // on connection
             if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
               try {
-                const result = await controller[wsEventInfo.propertyName].apply(
-                  controller,
-                  [socket, request]
+                const fn = await this.middlewareService.compose(
+                  [
+                    ...(wsEventInfo?.eventOptions?.middleware || []),
+                    async (ctx, next) => {
+                      // eslint-disable-next-line prefer-spread
+                      return controller[wsEventInfo.propertyName].apply(
+                        controller,
+                        [socket, request]
+                      );
+                    },
+                  ],
+                  this.app
                 );
+                const result = await fn(socket);
+
                 await this.bindSocketResponse(
                   result,
                   socket,
@@ -152,11 +203,22 @@ export class MidwayWSFramework extends BaseFramework<
                 try {
                   const result = await (
                     await this.applyMiddleware(async (ctx, next) => {
-                      // eslint-disable-next-line prefer-spread
-                      return controller[wsEventInfo.propertyName].apply(
-                        controller,
-                        args
+                      // add controller middleware
+                      const fn = await this.middlewareService.compose(
+                        [
+                          ...controllerMiddleware,
+                          ...(wsEventInfo?.eventOptions?.middleware || []),
+                          async (ctx, next) => {
+                            // eslint-disable-next-line prefer-spread
+                            return controller[wsEventInfo.propertyName].apply(
+                              controller,
+                              args
+                            );
+                          },
+                        ],
+                        this.app
                       );
+                      return await fn(ctx, next);
                     })
                   )(socket);
                   if (typeof args[args.length - 1] === 'function') {
@@ -247,6 +309,20 @@ export class MidwayWSFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'midway:ws';
+  }
+
+  public useConnectionMiddleware(
+    middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>
+  ) {
+    this.connectionMiddlewareManager.insertLast(middleware);
+  }
+
+  public getConnectionMiddleware(): ContextMiddlewareManager<
+    Context,
+    NextFunction,
+    undefined
+  > {
+    return this.connectionMiddlewareManager;
   }
 }
 

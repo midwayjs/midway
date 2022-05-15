@@ -11,15 +11,17 @@ import { MiddlewareParamArray } from '../../interface';
 export interface WSControllerOption {
   namespace: string;
   routerOptions: {
+    connectionMiddleware?: MiddlewareParamArray;
     middleware?: MiddlewareParamArray;
   };
 }
 
 export function WSController(
   namespace: string | RegExp = '/',
-  routerOptions: {
-    middleware?: MiddlewareParamArray;
-  } = { middleware: [] }
+  routerOptions: WSControllerOption['routerOptions'] = {
+    middleware: [],
+    connectionMiddleware: [],
+  }
 ): ClassDecorator {
   return (target: any) => {
     saveModule(WS_CONTROLLER_KEY, target);

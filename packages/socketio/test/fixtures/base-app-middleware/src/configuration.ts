@@ -1,7 +1,7 @@
 import { Configuration, App } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
 import { Application } from '../../../../src';
-import { ConnectionMiddleware } from './middleware/conn.middleware';
+import { ConnectionMiddleware, PacketMiddleware } from './middleware/conn.middleware';
 
 
 @Configuration({
@@ -20,10 +20,11 @@ import { ConnectionMiddleware } from './middleware/conn.middleware';
 })
 export class AutoConfiguration implements ILifeCycle {
 
-  @App()
+  @App('socketIO')
   app: Application;
 
   async onReady() {
-    this.app.useMiddleware(ConnectionMiddleware);
+    this.app.useConnectionMiddleware(ConnectionMiddleware);
+    this.app.useMiddleware(PacketMiddleware);
   }
 }

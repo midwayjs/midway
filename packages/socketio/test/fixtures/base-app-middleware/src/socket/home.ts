@@ -1,7 +1,5 @@
 import {
   Inject,
-  OnWSConnection,
-  OnWSDisConnection,
   OnWSMessage,
   WSController,
   WSEmit,
@@ -13,19 +11,12 @@ export class APIController {
   @Inject()
   ctx: Context;
 
-  @OnWSConnection()
-  init() {
-    console.log(`namespace ${this.ctx.nsp.name} / got a connection ${this.ctx.id}`);
-  }
-
   @OnWSMessage('my')
   @WSEmit('ok')
-  async gotMyMessage(data1, data2, data3) {
-    return { name: 'harry', result: data1 + data2 + data3 };
-  }
-
-  @OnWSDisConnection()
-  disconnect(reason: string) {
-    console.log(this.ctx.id + ' disconnect ' + reason);
+  async gotMyMessage() {
+    return {
+      name: 'harry',
+      result: this.ctx.getAttr('result'),
+    };
   }
 }

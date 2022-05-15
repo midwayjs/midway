@@ -1,4 +1,4 @@
-import { WS_EVENT_KEY, attachClassMetadata } from '../../';
+import { WS_EVENT_KEY, attachClassMetadata, MiddlewareParamArray } from '../../';
 
 export enum WSEventTypeEnum {
   ON_CONNECTION = 'ws:onConnection',
@@ -27,15 +27,26 @@ export interface WSEventInfo {
    * the room name to emit
    */
   roomName?: string[];
+  /**
+   * event options, like middleware
+   */
+  eventOptions?: {
+    middleware?: MiddlewareParamArray;
+  };
 }
 
-export function OnWSConnection(): MethodDecorator {
+export function OnWSConnection(
+  eventOptions: {
+    middleware?: MiddlewareParamArray;
+  } = {}
+): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
         eventType: WSEventTypeEnum.ON_CONNECTION,
         propertyName: propertyKey,
+        eventOptions,
         descriptor,
       },
       target.constructor
@@ -57,7 +68,12 @@ export function OnWSDisConnection(): MethodDecorator {
   };
 }
 
-export function OnWSMessage(eventName: string): MethodDecorator {
+export function OnWSMessage(
+  eventName: string,
+  eventOptions: {
+    middleware?: MiddlewareParamArray;
+  } = {}
+): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       WS_EVENT_KEY,
@@ -65,6 +81,7 @@ export function OnWSMessage(eventName: string): MethodDecorator {
         eventType: WSEventTypeEnum.ON_MESSAGE,
         messageEventName: eventName,
         propertyName: propertyKey,
+        eventOptions,
         descriptor,
       },
       target.constructor

@@ -1,5 +1,6 @@
 import * as SocketIO from 'socket.io';
 import {
+  CommonMiddlewareUnion, ContextMiddlewareManager,
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
@@ -8,6 +9,10 @@ import {
 
 export type Application = IMidwayApplication<Context, {
   use(fn: (socket: Context, fn: (err?: any) => void) => void): SocketIO.Namespace;
+  useConnectionMiddleware: (
+    middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>
+  ) => void;
+  getConnectionMiddleware: ContextMiddlewareManager<Context, NextFunction, undefined>;
 } & SocketIO.Server>;
 
 export type IMidwaySocketIOOptions = {

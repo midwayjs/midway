@@ -175,58 +175,32 @@ describe('/test/index.test.ts', () => {
     await client.close();
   });
 
-  it('should test create socket app with different namespace', async () => {
-    const app = await createServer('base-app-namespace');
-    const client1 = await createSocketIOClient({
-      port: 3000,
-      namespace: '/',
-    });
-    const client2 = await createSocketIOClient({
-      port: 3000,
-      namespace: '/test',
-    });
-    const client3 = await createSocketIOClient({
-      port: 3000,
-      namespace: '/test2',
-    });
-
-    const gotEvent = once(client1, 'ok');
-    client1.send('my');
-    const [data1] = await gotEvent;
-    expect(data1).toEqual({
-      name: 'harry home',
-    });
-
-    const gotEvent2 = once(client2, 'ok');
-    client2.send('my');
-    const [data2] = await gotEvent2;
-    expect(data2).toEqual({
-      name: 'harry',
-    });
-
-    const gotEvent3 = once(client3, 'ok');
-    client3.send('my');
-    const [data] = await gotEvent3;
-    expect(data).toEqual({
-      name: 'harry 2',
-    });
-
-    await client1.close();
-    await client2.close();
-    await client3.close();
-    await closeApp(app);
-  });
-
   it('should test create socket and with middleware', async () => {
     const app = await createServer('base-app-middleware');
     const client1 = await createSocketIOClient({
       port: 3000,
       namespace: '/',
     });
+
+    const gotEvent = once(client1, 'ok');
+    client1.send('my');
+    const [data] = await gotEvent;
+    expect(data.result).toEqual(3);
+
     const client2 = await createSocketIOClient({
       port: 3000,
       namespace: '/api',
     });
+
+    const gotEvent2 = once(client2, 'ok');
+    client2.send('my');
+    const [result] = await gotEvent2;
+    expect(result.result).toEqual(15);
+
+    const gotEvent3 = once(client2, 'ok1');
+    client2.send('my1');
+    const [result2] = await gotEvent3;
+    expect(result2.result).toEqual(26);
 
     await sleep();
 
