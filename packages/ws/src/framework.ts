@@ -82,7 +82,7 @@ export class MidwayWSFramework extends BaseFramework<
       server = this.configurationOptions.server ?? http.createServer();
     }
 
-    server.on('upgrade', (request, socket: any, head) => {
+    server.on('upgrade', (request, socket: any, head: Buffer) => {
       this.app.handleUpgrade(request, socket, head, ws => {
         this.app.emit('connection', ws, request);
       });
