@@ -60,4 +60,27 @@ describe('/test/index.test.ts', () => {
     await client2.close();
     await closeApp(app);
   });
+
+
+  it('should test create socket and with filter', async () => {
+    const app = await createServer('base-app-filter');
+    const client1 = await createWebSocketClient(`ws://localhost:3000`);
+
+    // await new Promise(resolve => {
+    //   client1.on('message', result => {
+    //     console.log(result);
+    //     resolve(result);
+    //   });
+    //   client1.send('my');
+    // })
+
+    const gotEvent = once(client1, 'message');
+    const [data] = await gotEvent;
+    expect(data.toString()).toEqual('packet error');
+
+    await sleep();
+
+    await client1.close();
+    await closeApp(app);
+  });
 });

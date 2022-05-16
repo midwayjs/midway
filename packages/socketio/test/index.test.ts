@@ -208,4 +208,22 @@ describe('/test/index.test.ts', () => {
     await client2.close();
     await closeApp(app);
   });
+
+  it('should test create socket and with filter', async () => {
+    const app = await createServer('base-app-filter');
+    const client1 = await createSocketIOClient({
+      port: 3000,
+      namespace: '/',
+    });
+
+    const gotEvent = once(client1, 'ok');
+    client1.send('my');
+    const [data] = await gotEvent;
+    expect(data).toEqual('packet error');
+
+    await sleep();
+
+    await client1.close();
+    await closeApp(app);
+  });
 });
