@@ -102,7 +102,7 @@ export class UserService {
   memoryDataListener: MemoryDataListener;
   
   async getUserHelloData() {
-    const helloData = await memoryDataListener.getData();
+    const helloData = await this.memoryDataListener.getData();
     // helloData => helloxxxxxxxx
     // ...
   }
