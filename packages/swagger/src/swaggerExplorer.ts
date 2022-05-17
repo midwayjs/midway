@@ -715,6 +715,14 @@ export class SwaggerExplorer {
               format: metadata?.format,
             };
 
+            // Date 类型支持
+            if (tt.properties[key].type === 'Date') {
+              tt.properties[key].type = 'string';
+              if (!tt.properties[key].format) {
+                tt.properties[key].format = 'date';
+              }
+            }
+
             delete metadata.format;
           }
         }
