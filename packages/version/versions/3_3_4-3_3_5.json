@@ -113,7 +113,8 @@
   ],
   "@midwayjs/swagger": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.8"
   ],
   "@midwayjs/tablestore": "3.3.5",
   "@midwayjs/task": [
@@ -132,7 +133,8 @@
   "@midwayjs/version": [
     "3.3.5",
     "3.3.6",
-    "3.3.7"
+    "3.3.7",
+    "3.3.8"
   ],
   "@midwayjs/view-ejs": [
     "3.3.5",

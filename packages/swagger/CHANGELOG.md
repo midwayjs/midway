@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.8](https://github.com/midwayjs/midway/compare/v3.3.7...v3.3.8) (2022-05-17)
+
+
+### Bug Fixes
+
+* compatible date type ([#1979](https://github.com/midwayjs/midway/issues/1979)) ([24140f1](https://github.com/midwayjs/midway/commit/24140f1c2b93e8c3a10b996e0f135b260abfbf86))
+
+
+
+
+
 ## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
 
 **Note:** Version bump only for package @midwayjs/swagger
