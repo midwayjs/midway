@@ -272,42 +272,24 @@ export interface ProviderStructure {
 
 ### 字段描述
 
-| **ProviderStructure** |        |                                                                         |
-| --------------------- | ------ | ----------------------------------------------------------------------- |
-| name                  | string | 必选，可以发布的平台信息，可选的有 `aliyun`， `tencent`，后续还会增加 |
-| runtime               | string | 必选，函数的运行时                                                      |
-
-默认值
-
-- 阿里云：nodejs12（可选 nodejs6、nodejs8、nodejs10、nodejs12）
-- 腾讯云：nodejs10（可选 nodejs6, nodejs8, nodejs10)
-
-|
-| stage | string | 全局发布的环境 |
-| region | string | 部署的区域，腾讯云特有，比如
-ap-shanghai |
-| timeout | number | 超时时间，单位 秒
-默认值
-
-- 阿里云：3
-- 腾讯云:：3
-  |
-  | initTimeout | number | 阿里云字段，全局初始化函数超时时间，单位秒，默认 3 |
-  | memorySize | number | 内存限制大小，单位 M，
-  默认值：
-- 阿里云：128
-- 腾讯云：128
-  |
-  | description | string | 描述 |
-  | role | string | 角色，事件源会使用该角色触发函数执行，请确保该角色有调用函数的权限。 |
-  | environment | object | 全局环境变量 |
-  | serviceId | string | 网关服务 Id，目前只有腾讯云用到 |
-  | vpcConfig | object | 阿里云字段，vpcConfig 包含的属性包括： `vpcId`、 `vSwitchIds` 以及 `securityGroupId` 属性 |
-  | internetAccess | boolean | 阿里云字段，表示此服务是否可以访问公网。 |
-  | policies | string | string[] | 阿里云字段，函数需要的阿里云管理的 RAM policies 或 RAM policy 文档的名称，将会被附加到该函数的默认角色上。如果设置了 Role 属性，则该属性会被忽略。 |
-  | logConfig | object | 阿里云字段，函数执行的日志存储服务配置。 |
-  | nasConfig | 'auto' | object | 阿里云字段，Nas 配置对象用来指定函数可以访问的 Nas 共享的文件系统。
-  Nas 配置对象可配置的属性包括：`UserId`、`GroupId`、`MountPoints`。 |
+| **ProviderStructure** | Type | Default | Description |
+| --------------------- | ---- | ------- | ----------- |
+| name                  | `aliyun` \| `tencent` | - | 必选，可以发布的平台信息，后续还会增加 |
+| runtime | 阿里云：nodejs6、nodejs8、nodejs10、nodejs12<br/>腾讯云：nodejs6、nodejs8、nodejs10 | 阿里云：nodejs12<br/>腾讯云：nodejs10 | 必选，函数的运行时  |
+| stage | string | - | 全局发布的环境 |
+| region | string | - | 部署的区域，腾讯云特有，比如 ap-shanghai |
+| timeout | number | 3 | 超时时间，单位 秒 |
+| initTimeout | number | 3 | 阿里云字段，全局初始化函数超时时间，单位 秒 |
+| memorySize | number | 128 | 内存限制大小，单位 M |
+| description | string | - | 描述 |
+| role | string | - | 角色，事件源会使用该角色触发函数执行，请确保该角色有调用函数的权限。 |
+| environment | object | - | 全局环境变量 |
+| serviceId | string | - | 网关服务 Id，目前只有腾讯云用到 |
+| vpcConfig | object | - | 阿里云字段，vpcConfig 包含的属性包括： `vpcId`、 `vSwitchIds` 以及 `securityGroupId` 属性 |
+| internetAccess | boolean | - | 阿里云字段，表示此服务是否可以访问公网。 |
+| policies | string \| string[] | - | 阿里云字段，函数需要的阿里云管理的 RAM policies 或 RAM policy 文档的名称，将会被附加到该函数的默认角色上。如果设置了 Role 属性，则该属性会被忽略。 |
+| logConfig | object | - | 阿里云字段，函数执行的日志存储服务配置。 |
+| nasConfig | 'auto' \| object | - | 阿里云字段，Nas 配置对象用来指定函数可以访问的 Nas 共享的文件系统。Nas 配置对象可配置的属性包括：`UserId`、`GroupId`、`MountPoints`。 |
 
 :::info
 腾讯云的 Node.js Runtime 版本我们做了映射，对应关系如下：
@@ -315,7 +297,7 @@ ap-shanghai |
 - nodejs10 -> Node.js10.15
 - nodejs8 -> Node.js8.9
 - node.js6 -> Node.js6.10
-  :::
+:::
 
 ### 示例
 
@@ -494,9 +476,9 @@ export interface MQEvent {
 events 是一个由不同事件（触发器）组成的**对象数组**。这个对象的 key 为事件类型，值为事件描述。
 
 | **EventStructureType** |           |                                         |
-| ---------------------- | --------- | --------------------------------------- | ------------------------------------------------------------------------- | ------------ |
+| ---------------------- | --------- | --------------------------------------- |
 | key: eventName         | string    | 事件类型名                              |
-| value: Event           | HTTPEvent | MQEvent                                | TimerEvent ...                                                            | 事件描述结构 |
+| value: Event           | HTTPEvent \| MQEvent  \| TimerEvent ... | 事件描述结构 |
 |                        |           |                                         |
 | **HTTPEvent**          |           |                                         |
 | name                   | string    | 触发器的名字                            |
@@ -515,24 +497,17 @@ events 是一个由不同事件（触发器）组成的**对象数组**。这个
 |                        |           |                                         |
 | **TimerEvent**         |           |                                         |
 | name                   | string    | 触发器的名字                            |
-| type                   | 'cron'    | 'every'                                 | 必填，触发类型，分别代表 cron 表达式，固定时间间隔。腾讯云只支持 `cron` |
-| value                  | string    | 必填，对应触发的值。                    |
-
-如果是 cron 类型，则填写 cron 表达式。
-如果是 every 类型，则填写间隔时间，**带上单位** |
+| type                   | 'cron' \| 'every' | 必填，触发类型，分别代表 cron 表达式，固定时间间隔。腾讯云只支持 `cron` |
+| value                  | string    | 必填，对应触发的值。如果是 cron 类型，则填写 cron 表达式。如果是 every 类型，则填写间隔时间，**带上单位** |
 | payload | string | 可选，配置在网关，每次触发的内容 |
 | version | string | 阿里云云字段，服务版本，默认 "LATEST"。 |
 | enable | boolean | 是否默认开启，默认 true |
-| | | |
 | | | |
 | **OSEvent** | | |
 | name | string | 可选，触发器名 |
 | bucket | string | 对象存储的 bucket 名 |
 | events | string | 触发函数执行的事件名 |
-| filter | {
- prefix: string;
- suffix: string;
-} | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
+| filter | { prefix: string; suffix: string; } | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
 | enable | boolean | 是否默认开启，默认 true |
 | role | string | 此角色用来可以触发函数执行 |
 | version | string | 阿里云云字段，服务版本，默认 "LATEST"。 |
@@ -546,8 +521,6 @@ events 是一个由不同事件（触发器）组成的**对象数组**。这个
 | role | string | 此角色用来可以触发函数执行 |
 | version | string | 阿里云云字段，服务版本，默认 "LATEST"。 |
 | enable | boolean | 是否默认开启，默认 true |
-| | | |
-| | | |
 | | | |
 
 ### 示例
@@ -633,8 +606,6 @@ layers 是一个由多个 layer 组成的对象（非数组），**以 layer 名
 | key: layerName      | string | layer 名   |
 | value: path         | string | layer 路径 |
 | value: name         | string | layer 名   |
-|                     |        |            |
-|                     |        |            |
 
 ### 示例
 
