@@ -1,4 +1,4 @@
-import { WebRouterCollector } from './webRouterCollector';
+import { RouterInfo, WebRouterCollector } from './webRouterCollector';
 
 export class ServerlessTriggerCollector extends WebRouterCollector {
   protected async analyze() {
@@ -30,7 +30,7 @@ export class ServerlessTriggerCollector extends WebRouterCollector {
     super.collectFunctionRoute(module, true);
   }
 
-  async getFunctionList(): Promise<any[]> {
+  async getFunctionList(): Promise<RouterInfo[]> {
     return this.getFlattenRouterTable();
   }
 }

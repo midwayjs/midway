@@ -14,6 +14,7 @@ import {
   RouterInfo,
   ServerlessTriggerCollector,
   initializeGlobalApplicationContext,
+  pathToRegexp,
 } from '@midwayjs/core';
 import {
   Framework,
@@ -42,6 +43,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   private isReplaceLogger =
     process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
   private developmentRun = false;
+  private serverlessRoutes = [];
 
   @Inject()
   environmentService: MidwayEnvironmentService;
@@ -109,7 +111,15 @@ export class MidwayFaaSFramework extends BaseFramework<
       const collector = new ServerlessTriggerCollector();
       const functionList = await collector.getFunctionList();
       for (const funcInfo of functionList) {
+        // store handler
         this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
+        if (funcInfo.url) {
+          // store router
+          this.serverlessRoutes.push({
+            matchPattern: pathToRegexp(funcInfo.url, [], { end: false }),
+            funcInfo: funcInfo,
+          });
+        }
       }
     }, LOCK_KEY);
   }
@@ -119,19 +129,29 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   public handleInvokeWrapper(handlerMapping: string) {
-    const funOptions: RouterInfo = this.funMappingStore.get(handlerMapping);
+    let funOptions: RouterInfo = this.funMappingStore.get(handlerMapping);
 
     return async (...args) => {
       if (args.length === 0) {
         throw new Error('first parameter must be function context');
       }
 
+      const context: FaaSContext = this.getContext(args.shift());
+      const isHttpFunction = !!(context.headers && context.get);
+
+      if (!funOptions && isHttpFunction) {
+        for (const item of this.serverlessRoutes) {
+          if (item.matchPattern.test(context.path)) {
+            funOptions = item.funcInfo;
+            break;
+          }
+        }
+      }
+
       if (!funOptions) {
         throw new Error(`function handler = ${handlerMapping} not found`);
       }
 
-      const context: FaaSContext = this.getContext(args.shift());
-      const isHttpFunction = !!(context.headers && context.get);
       const globalMiddlewareFn = await this.applyMiddleware();
       const middlewareManager = new ContextMiddlewareManager();
 
