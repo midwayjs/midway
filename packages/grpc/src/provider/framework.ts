@@ -8,6 +8,7 @@ import {
 import {
   BaseFramework,
   IMidwayBootstrapOptions,
+  MidwayCommonError,
   MidwayFrameworkType,
 } from '@midwayjs/core';
 
@@ -111,6 +112,12 @@ export class MidwayGRPCFramework extends BaseFramework<
         const serviceDefinition: any = serviceClassDefinition.get(
           classMetadata.package
         )[`${classMetadata?.package}.${serviceName}`];
+
+        if (!serviceDefinition) {
+          throw new MidwayCommonError(
+            `${classMetadata?.package}.${serviceName} definition not found and init fail`
+          );
+        }
 
         for (const method in serviceDefinition) {
           serviceInstance[method] = async (

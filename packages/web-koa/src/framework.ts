@@ -128,6 +128,14 @@ export class MidwayKoaFramework extends BaseFramework<
     );
   }
 
+  async addClassRouter() {
+
+  }
+
+  async addFunctionRouter(routeFun: (ctx, next) => {}, routerOptions: {}) {
+
+  }
+
   /**
    * wrap controller string to middleware function
    */
