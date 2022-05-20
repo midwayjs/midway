@@ -34,7 +34,7 @@
     "axios": "0.26.1",
     "dayjs": "1.10.8",
     "egg-logger": "2.7.1",
-    "egg-mock": "4.2.0",
+    "egg-mock": "4.2.1",
     "egg-scripts": "2.15.3",
     "egg-socket.io": "4.1.6",
     "egg-view-nunjucks": "2.3.0",
