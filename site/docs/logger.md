@@ -128,7 +128,7 @@ export class ContainerConfiguration implements ILifeCycle {
 @Configuration()
 export class ContainerConfiguration implements ILifeCycle {
 
-  @Logger()
+  @Logger('coreLogger')
   logger: ILogger;
 
   async onReady(container: IMidwayContainer): Promise<void> {
