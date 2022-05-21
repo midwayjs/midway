@@ -26,6 +26,8 @@ import {
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
+import * as http from 'http';
+import { isDevelopmentEnvironment } from '@midwayjs/core/dist/util';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
@@ -44,6 +46,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
   private developmentRun = false;
   private serverlessRoutes = [];
+  private server;
 
   @Inject()
   environmentService: MidwayEnvironmentService;
@@ -120,6 +123,23 @@ export class MidwayFaaSFramework extends BaseFramework<
             funcInfo: funcInfo,
           });
         }
+      }
+
+      if (isDevelopmentEnvironment(this.app.getEnv())) {
+        const faasConfig = this.configService.getConfiguration('faas') ?? {};
+        this.server = await new Promise(resolve => {
+          const server = http.createServer((req, res) => {
+            const url = new URL(req.url, `http://${req.headers.host}`);
+            if (url.pathname) {
+
+            }
+            res.end();
+          });
+          if (faasConfig['port']) {
+            server.listen(faasConfig['port']);
+          }
+          resolve(server);
+        });
       }
     }, LOCK_KEY);
   }
