@@ -1,14 +1,17 @@
----
-title: 应用迁移方案说明
----
+# 标准应用迁移方案
 
-## 迁移方案
 
 本方案适用于已有 EggJS，Express，Koa 等应用，可以部署在不同云平台的弹性容器中，减少部署和运维成本。
 
-请根据当前的应用类型进行文档选择。
+部分的功能可能无法支持，适合于中后台，个人网站等。
 
-[Egg/Midway 应用迁移](https://www.yuque.com/go/doc/32353538?view=doc_embed)[Express 应用迁移](https://www.yuque.com/go/doc/32353537?view=doc_embed)[Koa 应用迁移](https://www.yuque.com/go/doc/32353536?view=doc_embed)
+针对不同的项目有不同的方案，请根据当前的应用类型进行文档选择。
+
+- [Midway 应用](./migrate_midway)
+- [静态网站](./migrate_static)
+- [Express 应用](./migrate_express)
+- [Koa 应用](./migrate_koa)
+- [Egg 应用](./migrate_egg)
 
 ## 这套方案和平台的迁移方案有什么区别？
 

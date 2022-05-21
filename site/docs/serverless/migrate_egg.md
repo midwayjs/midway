@@ -168,4 +168,3 @@ package:
 
 - 不支持 egg-socketio 等
 - 不支持文件上传等网关无法支持的能力
-- 还有一些，请参考 [应用迁移 faq](migrate_faq)

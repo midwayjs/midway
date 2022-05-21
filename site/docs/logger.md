@@ -1,7 +1,5 @@
 # 日志
 
-## 简介
-
 Midway 为不同场景提供了一套统一的日志接入方式。通过 `@midwayjs/logger` 包导出的方法，可以方便的接入不同场景的日志系统。
 
 Midway 的日志系统基于社区的 [winston](https://github.com/winstonjs/winston)，是现在社区非常受欢迎的日志库。
@@ -377,7 +375,7 @@ const levels = {
 
 
 - 在开发环境下（local，test，unittest），文本和控制台日志等级统一为 `info` 。
-- 在服务器环境（除开发环境外），为减少日志数量，日志等级统一为 `warn` 。 
+- 在服务器环境（除开发环境外），为减少日志数量，日志等级统一为 `warn` 。
 
 
 
@@ -600,7 +598,7 @@ import { Context } from '@midwayjs/koa';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   ctx: Context;
 
@@ -804,3 +802,22 @@ export class AutoConfiguration {
   }
 }
 ```
+
+
+
+## 常见问题
+
+
+
+### 1、服务器环境日志不输出
+
+服务器环境，默认日志等级为 warn，即 `logger.warn 才会打印输出，请查看 ”日志等级“ 部分。
+
+我们不推荐在服务器环境打印太多的日志，只打印必须的内容，过多的日志输出影响性能，也影响快速定位问题。
+
+
+
+### 2、服务器没有控制台日志
+
+一般来说，服务器控制台日志（console）是关闭的，只会输出到文件中，如有特殊需求，可以单独调整。
+
