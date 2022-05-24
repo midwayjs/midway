@@ -31,6 +31,9 @@ export class ReportMiddleware implements IWebMiddleware {
 
 ```typescript
 // src/interface.ts
+
+import '@midwayjs/core';
+
 declare module '@midwayjs/core' {
   interface Context {
     abc: string;
