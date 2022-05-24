@@ -504,3 +504,51 @@ export class UserService {
 
 ```
 目前是否默认删除，需要跟用户沟通。
+
+
+
+### 3、配置 Redis 集群
+
+你可以使用 bull 提供的 `createClient` 方式来接入自定义的 redis 实例，这样你可以接入 Redis 集群。
+
+比如：
+
+```typescript
+// src/config/config.default
+import Redis from 'ioredis';
+
+const clusterOptions = {
+  enableReadyCheck: false,  // 一定要是false
+  retryDelayOnClusterDown: 300,
+  retryDelayOnFailover: 1000,
+  retryDelayOnTryAgain: 3000,
+  slotsRefreshTimeout: 10000,
+  maxRetriesPerRequest: null  // 一定要是null
+}
+
+const redisClientInstance = new Redis.Cluster([
+  {
+    port: 7000,
+    host: '127.0.0.1'
+  },
+  {
+    port: 7002,
+    host: '127.0.0.1'
+  },
+], clusterOptions);
+
+export default {
+  task: {
+    createClient: (type, opts) => {
+      return redisClientInstance;
+    },
+    prefix: 'midway-task',                      // 这些任务存储的key，都是相同开头，以便区分用户原有redis里面的配置。
+    defaultJobOptions: {
+      repeat: {
+        tz: "Asia/Shanghai"                     // Task等参数里面设置的比如（0 0 0 * * *）本来是为了0点执行，但是由于时区不对，所以国内用户时区设置一下。
+      }
+    }
+  }
+}
+```
+
