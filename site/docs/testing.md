@@ -638,6 +638,16 @@ $ midway-bin test --ts --mocha
 
 使用 mocha 进行单测时，需要手动安装 `mocha` 和 `@types/mocha` 两个依赖到 `devDependencies` 中：`npm i mocha @types/mocha -D` 。
 
+### 配置 alias paths
+当你在 `tsconfig.json` 中配置了 paths 之后，并且模块包导入使用了 paths ，则会存在 mocha 做单元测试会导致路径无法被解析，需要添加 `tsconfig-paths` 并且在测试的时候引用进行解决
+
+```bash
+$ npm install --save-dev tsconfig-paths
+```
+
+```bash
+$ midway-bin test --ts --mocha -r tsconfig-paths/register
+```
 
 :::info
 注意，由于 mocha 没有自带断言工具，需要使用其他如 assert，chai 等工具进行断言。
