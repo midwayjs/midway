@@ -1,13 +1,14 @@
 {
   "name": "@midwayjs/faas",
-  "version": "3.3.5",
+  "version": "3.3.6-beta.5",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^3.3.5",
     "@midwayjs/faas-typings": "^3.3.5",
     "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/simple-lock": "^1.1.4"
+    "@midwayjs/simple-lock": "^1.1.4",
+    "@midwayjs/serverless-http-parser": "^3.3.5"
   },
   "devDependencies": {
     "@midwayjs/decorator": "^3.3.4",

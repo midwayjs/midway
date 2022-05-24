@@ -9,6 +9,8 @@ describe('test/index.test.ts', () => {
     const data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
+        originContext: {},
+        originEvent: {},
       },
       { text: 'a' }
     );
@@ -21,6 +23,8 @@ describe('test/index.test.ts', () => {
       (await starter.handleInvokeWrapper('indexService.handler')(
         {
           text: 'hello',
+          originContext: {},
+          originEvent: {},
         },
         { text: 'a' }
       )) === 'ahello'
@@ -29,6 +33,8 @@ describe('test/index.test.ts', () => {
       (await starter.handleInvokeWrapper('indexService.getList')(
         {
           text: 'hello',
+          originContext: {},
+          originEvent: {},
         },
         { text: 'a' }
       )) === 'ahello'
@@ -42,6 +48,8 @@ describe('test/index.test.ts', () => {
       (await starter.handleInvokeWrapper('indexService.handler')(
         {
           text: 'hello',
+          originContext: {},
+          originEvent: {},
         },
         { text: 'a' }
       )) === 'defaultahello'
@@ -50,6 +58,8 @@ describe('test/index.test.ts', () => {
       (await starter.handleInvokeWrapper('indexService.getList')(
         {
           text: 'hello',
+          originContext: {},
+          originEvent: {},
         },
         { text: 'ab' }
       )) === 'abhello'
@@ -66,6 +76,8 @@ describe('test/index.test.ts', () => {
     const data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
+        originContext: {},
+        originEvent: {},
       },
       { text: 'ab' }
     );
@@ -91,6 +103,8 @@ describe('test/index.test.ts', () => {
     const data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
+        originContext: {},
+        originEvent: {},
       },
       { text: 'ab' }
     );
@@ -225,6 +239,8 @@ describe('test/index.test.ts', () => {
     let data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
+        originContext: {},
+        originEvent: {},
       },
       { text: 'a' }
     );
@@ -237,12 +253,14 @@ describe('test/index.test.ts', () => {
       set(key, value) {
         ctx.headers[key] = value;
       },
-      get(key) {}
+      get(key) {},
+      originContext: {},
+      originEvent: {},
     }
 
     data = await starter.handleInvokeWrapper('apiController.homeSet')(
       ctx,
-      { text: 'a' }
+      { text: 'a' },
     );
     expect(data).toEqual('bbb');
     expect(ctx.headers['ccc']).toEqual('ddd');
