@@ -542,7 +542,7 @@ export default {
     createClient: (type, opts) => {
       return redisClientInstance;
     },
-    prefix: 'midway-task',                      // 这些任务存储的key，都是相同开头，以便区分用户原有redis里面的配置。
+    prefix: '{midway-task}',                    // 这些任务存储的key，都是相同开头，以便区分用户原有redis里面的配置。
     defaultJobOptions: {
       repeat: {
         tz: "Asia/Shanghai"                     // Task等参数里面设置的比如（0 0 0 * * *）本来是为了0点执行，但是由于时区不对，所以国内用户时区设置一下。
