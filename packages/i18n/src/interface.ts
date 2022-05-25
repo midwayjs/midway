@@ -4,19 +4,21 @@ export interface TranslateOptions {
   args?: any;
 }
 
+export interface RequestResolver {
+  queryField: string;
+  cookieField: {
+    fieldName: string;
+    cookieDomain: string;
+    cookieMaxAge: number;
+  };
+}
+
 export interface I18nOptions {
   defaultLocale: string;
   localeTable: Record<string, Record<string, any>>;
   fallbacks: Record<string, any>;
   writeCookie: boolean;
-  resolver: {
-    queryField: string;
-    cookieField: {
-      fieldName: string;
-      cookieDomain: string;
-      cookieMaxAge: number;
-    };
-  },
+  resolver:  RequestResolver | false,
 }
 
 export const I18N_ATTR_KEY = 'i18n:locale';

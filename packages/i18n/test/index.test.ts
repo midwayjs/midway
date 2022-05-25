@@ -280,6 +280,23 @@ describe('test/index.test.ts', () => {
       expect(result.headers['set-cookie']).toBeUndefined();
       await close(app);
     });
+
+    it('should test close resolver', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-koa-close-resolver'
+      ));
+
+      const result = await createHttpRequest(app).get('/')
+        .set('Accept-Language', 'zh-CN,zh;q=0.5')
+        .query({
+          username: '世界',
+        });
+
+      expect(result.text).toEqual('Hello 世界');
+      expect(result.headers['set-cookie']).toBeUndefined();
+      await close(app);
+    });
   });
 
   describe('i18n in express', function () {
@@ -340,6 +357,23 @@ describe('test/index.test.ts', () => {
 
       expect(result1.text).toEqual('你好 世界');
       expect(result1.headers['set-cookie'][0]).toMatch(/zh-cn/);
+      await close(app);
+    });
+
+    it('should test close resolver', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-express-close-resolver'
+      ));
+
+      const result = await createHttpRequest(app).get('/')
+        .set('Accept-Language', 'zh-CN,zh;q=0.5')
+        .query({
+          username: '世界',
+        });
+
+      expect(result.text).toEqual('Hello 世界');
+      expect(result.headers['set-cookie']).toBeUndefined();
       await close(app);
     });
 
