@@ -585,6 +585,37 @@ async getUser(@Query('id') id: boolean): Promise<User> {
 }
 ```
 
+如果是复杂类型，如果指定的类型是 Class，将会自动转换为该类的实例。
+
+```typescript
+// class
+class UserDTO {
+  name: string;
+  
+  getName() {
+    return this.name;
+  }
+}
+
+@Get('/')
+async getUser(@Query() query: UserDTO): Promise<User> {
+  // query.getName()
+}
+```
+
+如果不希望被转换，可以使用 Interface。
+
+```typescript
+interface User {
+  name: string;
+}
+
+@Get('/')
+async getUser(@Query() query: User): Promise<User> {
+  // ...
+}
+```
+
 
 
 ## 参数校验

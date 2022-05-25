@@ -204,16 +204,17 @@ export class ContainerConfiguration implements ILifeCycle {
   async onReady(container: IMidwayContainer, app?: IMidwayBaseApplication<Context>): Promise<void> {
 
     // Task这块的启动后立马执行
-    let result: any = await container.getAsync(QueueService);
-    let job: Queue = result.getQueueTask(`HelloTask`, 'task') // 此处第一个是你任务的类名，第二个任务的名字也就是装饰器Task的函数名
-    job.add({}, {delay: 0}) // 表示立即执行。
+    let result: QueueService = await container.getAsync(QueueService);
+    // 此处第一个是你任务的类名，第二个任务的名字也就是装饰器Task的函数名
+    let job: Queue = result.getQueueTask(`HelloTask`, 'task')
+    // 表示立即执行。
+    job.add({}, {delay: 0, repeat: null}) 
 
     // LocalTask的启动后立马执行
     const result = await container.getAsync(QueueService);
     let job = result.getLocalTask(`HelloTask`, 'task'); // 参数1:类名 参数2: 装饰器TaskLocal的函数名
     job(); // 表示立即执行
   }
-
 }
 
 ```
@@ -284,12 +285,7 @@ FORMAT.CRONTAB.EVERY_MINUTE
 import { Provide, Inject, Queue } from '@midwayjs/decorator';
 
 @Queue()
-@Provide()
 export class HelloTask{
-
-  @Inject()
-  service;
-
   async execute(params){
     console.log(params);
   }
@@ -304,20 +300,22 @@ import { Provide, Inject } from '@midwayjs/decorator';
 
 @Provide()
 export class UserTask{
-
-  @Inject()
-  service;
-
   @Inject()
   queueService: QueueService;
 
-  async execute(params){
+  async execute(params = {}){
     // 3秒后触发分布式任务调度。
     const xxx = await this.queueService.execute(HelloTask, params, {delay: 3000});
   }
 }
 ```
  3 秒后，会触发 HelloTask 这个任务。
+
+:::tip
+
+注意，如果没触发，请检查上面的 params，保证其不为空。
+
+:::
 
 
 
