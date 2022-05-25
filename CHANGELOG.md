@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
+
+
+### Bug Fixes
+
+* i18 resolver and task typing ([#2003](https://github.com/midwayjs/midway/issues/2003)) ([c7b8ad1](https://github.com/midwayjs/midway/commit/c7b8ad1a86eb680059ab685e1f84ffe046a59292))
+
+
+
+
+
 ## [3.3.8](https://github.com/midwayjs/midway/compare/v3.3.7...v3.3.8) (2022-05-17)
 
 

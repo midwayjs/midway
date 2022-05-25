@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/i18n",
   "description": "midway i18n component",
-  "version": "3.3.6",
+  "version": "3.3.9",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [

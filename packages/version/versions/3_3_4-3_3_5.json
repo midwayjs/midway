@@ -1,7 +1,8 @@
 {
   "@midwayjs/egg-layer": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/express-layer": "3.3.5",
   "@midwayjs/faas-typings": "3.3.5",
@@ -10,7 +11,8 @@
   "@midwayjs/runtime-mock": "3.0.4",
   "@midwayjs/serverless-app": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/serverless-aws-starter": "3.3.5",
   "@midwayjs/serverless-fc-starter": "3.3.5",
@@ -25,7 +27,8 @@
   "@midwayjs/axios": "3.3.5",
   "@midwayjs/bootstrap": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/cache": "3.3.5",
   "@midwayjs/consul": [
@@ -39,7 +42,8 @@
   ],
   "@midwayjs/cross-domain": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/decorator": "3.3.4",
   "@midwayjs/express-session": "3.3.5",
@@ -48,11 +52,13 @@
   "@midwayjs/http-proxy": [
     "3.3.5",
     "3.3.6",
-    "3.3.7"
+    "3.3.7",
+    "3.3.9"
   ],
   "@midwayjs/i18n": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/info": [
     "3.3.5",
@@ -60,7 +66,8 @@
   ],
   "@midwayjs/jwt": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/mock": "3.3.5",
   "@midwayjs/mongoose": "3.3.5",
@@ -78,7 +85,8 @@
   ],
   "@midwayjs/passport": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/process-agent": [
     "3.3.5",
@@ -86,7 +94,8 @@
   ],
   "@midwayjs/prometheus-socket-io": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/prometheus": [
     "3.3.5",
@@ -96,7 +105,8 @@
   "@midwayjs/redis": "3.3.5",
   "@midwayjs/security": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/sequelize": [
     "3.3.5",
@@ -109,7 +119,8 @@
   "@midwayjs/socketio": "3.3.5",
   "@midwayjs/static-file": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/swagger": [
     "3.3.5",
@@ -119,22 +130,26 @@
   "@midwayjs/tablestore": "3.3.5",
   "@midwayjs/task": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/typegoose": "3.3.5",
   "@midwayjs/upload": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/validate": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/version": [
     "3.3.5",
     "3.3.6",
     "3.3.7",
-    "3.3.8"
+    "3.3.8",
+    "3.3.9"
   ],
   "@midwayjs/view-ejs": [
     "3.3.5",
@@ -158,7 +173,8 @@
   ],
   "@midwayjs/web": [
     "3.3.5",
-    "3.3.6"
+    "3.3.6",
+    "3.3.9"
   ],
   "@midwayjs/ws": "3.3.5"
 }

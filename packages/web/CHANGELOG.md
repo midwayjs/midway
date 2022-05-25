@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
+
+**Note:** Version bump only for package @midwayjs/web
+
+
+
+
+
 ## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
 
 
