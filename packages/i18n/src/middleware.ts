@@ -19,19 +19,25 @@ export class I18nFilter {
 
   match(value, req, res) {
     const saveLocale = req.getAttr(I18N_ATTR_KEY);
-    if (this.i18nConfig.writeCookie && saveLocale) {
-      const cookieOptions = {
-        // make sure browser javascript can read the cookie
-        httpOnly: false,
-        maxAge: this.resolverConfig.cookieField.cookieMaxAge,
-        signed: false,
-        domain: this.resolverConfig.cookieField.cookieDomain,
-      };
-      res.cookie(
-        this.resolverConfig.cookieField.fieldName,
-        saveLocale,
-        cookieOptions
-      );
+    if (this.resolverConfig) {
+      if (
+        this.i18nConfig.writeCookie &&
+        saveLocale &&
+        this.resolverConfig.cookieField
+      ) {
+        const cookieOptions = {
+          // make sure browser javascript can read the cookie
+          httpOnly: false,
+          maxAge: this.resolverConfig.cookieField.cookieMaxAge,
+          signed: false,
+          domain: this.resolverConfig.cookieField.cookieDomain,
+        };
+        res.cookie(
+          this.resolverConfig.cookieField.fieldName,
+          saveLocale,
+          cookieOptions
+        );
+      }
     }
     return value;
   }
@@ -50,35 +56,38 @@ export class I18nMiddleware implements IMiddleware<any, any> {
       // add a filter for i18n cookie
       app.useFilter(I18nFilter);
       return async (req, res, next) => {
-        // get request locale from query/header/cookie
-        let requestLocale =
-          req.query[this.resolverConfig.queryField] ||
-          req.cookies[this.resolverConfig.cookieField.fieldName];
-
         const i18nService = await req.requestContext.getAsync(
           MidwayI18nService
         );
 
-        if (!requestLocale) {
-          // Accept-Language: zh-CN,zh;q=0.5
-          // Accept-Language: zh-CN
-          let languages = req.acceptsLanguages();
-          if (languages) {
-            if (Array.isArray(languages)) {
-              if (languages[0] === '*') {
-                languages = languages.slice(1);
-              }
-              if (languages.length > 0) {
-                for (let i = 0; i < languages.length; i++) {
-                  const lang = formatLocale(languages[i]);
-                  if (i18nService.hasAvailableLocale(lang)) {
-                    requestLocale = lang;
-                    break;
+        let requestLocale;
+        if (this.resolverConfig) {
+          // get request locale from query/header/cookie
+          requestLocale =
+            req.query[this.resolverConfig.queryField] ||
+            req.cookies[this.resolverConfig.cookieField.fieldName];
+
+          if (!requestLocale) {
+            // Accept-Language: zh-CN,zh;q=0.5
+            // Accept-Language: zh-CN
+            let languages = req.acceptsLanguages();
+            if (languages) {
+              if (Array.isArray(languages)) {
+                if (languages[0] === '*') {
+                  languages = languages.slice(1);
+                }
+                if (languages.length > 0) {
+                  for (let i = 0; i < languages.length; i++) {
+                    const lang = formatLocale(languages[i]);
+                    if (i18nService.hasAvailableLocale(lang)) {
+                      requestLocale = lang;
+                      break;
+                    }
                   }
                 }
+              } else {
+                requestLocale = languages;
               }
-            } else {
-              requestLocale = languages;
             }
           }
         }
@@ -93,45 +102,46 @@ export class I18nMiddleware implements IMiddleware<any, any> {
       };
     } else {
       return async (ctx, next) => {
-        // get request locale from query/header/cookie
-        let requestLocale =
-          ctx.query[this.resolverConfig.queryField] ||
-          ctx.cookies.get(this.resolverConfig.cookieField.fieldName, {
-            signed: false,
-          });
+        if (this.resolverConfig) {
+          // get request locale from query/header/cookie
+          let requestLocale =
+            ctx.query[this.resolverConfig.queryField] ||
+            ctx.cookies.get(this.resolverConfig.cookieField.fieldName, {
+              signed: false,
+            });
 
-        const i18nService = await ctx.requestContext.getAsync(
-          MidwayI18nService
-        );
-        if (!requestLocale) {
-          // Accept-Language: zh-CN,zh;q=0.5
-          // Accept-Language: zh-CN
-          let languages = ctx.acceptsLanguages();
-          if (languages) {
-            if (Array.isArray(languages)) {
-              if (languages[0] === '*') {
-                languages = languages.slice(1);
-              }
-              if (languages.length > 0) {
-                for (let i = 0; i < languages.length; i++) {
-                  const lang = formatLocale(languages[i]);
-                  if (i18nService.hasAvailableLocale(lang)) {
-                    requestLocale = lang;
-                    break;
+          const i18nService = await ctx.requestContext.getAsync(
+            MidwayI18nService
+          );
+          if (!requestLocale) {
+            // Accept-Language: zh-CN,zh;q=0.5
+            // Accept-Language: zh-CN
+            let languages = ctx.acceptsLanguages();
+            if (languages) {
+              if (Array.isArray(languages)) {
+                if (languages[0] === '*') {
+                  languages = languages.slice(1);
+                }
+                if (languages.length > 0) {
+                  for (let i = 0; i < languages.length; i++) {
+                    const lang = formatLocale(languages[i]);
+                    if (i18nService.hasAvailableLocale(lang)) {
+                      requestLocale = lang;
+                      break;
+                    }
                   }
                 }
+              } else {
+                requestLocale = languages;
               }
-            } else {
-              requestLocale = languages;
             }
           }
-        }
-
-        // save current locale
-        if (requestLocale) {
-          i18nService.saveRequestLocale(requestLocale);
-        } else {
-          i18nService.saveRequestLocale();
+          // save current locale
+          if (requestLocale) {
+            i18nService.saveRequestLocale(requestLocale);
+          } else {
+            i18nService.saveRequestLocale();
+          }
         }
 
         // run next middleware and controller
@@ -139,20 +149,27 @@ export class I18nMiddleware implements IMiddleware<any, any> {
 
         // get need save locale
         const saveLocale = ctx.getAttr(I18N_ATTR_KEY);
-        if (this.i18nConfig.writeCookie && saveLocale) {
-          const cookieOptions = {
-            // make sure browser javascript can read the cookie
-            httpOnly: false,
-            maxAge: this.resolverConfig.cookieField.cookieMaxAge,
-            signed: false,
-            domain: this.resolverConfig.cookieField.cookieDomain,
-            overwrite: true,
-          };
-          ctx.cookies.set(
-            this.resolverConfig.cookieField.fieldName,
-            saveLocale,
-            cookieOptions
-          );
+
+        if (this.resolverConfig) {
+          if (
+            this.i18nConfig.writeCookie &&
+            saveLocale &&
+            this.resolverConfig.cookieField
+          ) {
+            const cookieOptions = {
+              // make sure browser javascript can read the cookie
+              httpOnly: false,
+              maxAge: this.resolverConfig.cookieField.cookieMaxAge,
+              signed: false,
+              domain: this.resolverConfig.cookieField.cookieDomain,
+              overwrite: true,
+            };
+            ctx.cookies.set(
+              this.resolverConfig.cookieField.fieldName,
+              saveLocale,
+              cookieOptions
+            );
+          }
         }
       };
     }

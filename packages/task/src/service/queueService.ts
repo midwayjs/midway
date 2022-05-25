@@ -8,9 +8,13 @@ export class QueueService {
   private queueTaskMap = {};
   private localTaskMap = {};
 
-  async execute(queueName: any, data: any, options: JobOptions = {}) {
+  async execute(
+    queueName: any,
+    data: Record<string, any>,
+    options: JobOptions = {}
+  ) {
     const queue = this.queueMap[`${queueName.name}:execute`] as Queue;
-    return await queue.add(data, options);
+    return await queue.add(data || {}, options);
   }
 
   getClassQueue(queueName: any): Queue {
