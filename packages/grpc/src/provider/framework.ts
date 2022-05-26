@@ -56,10 +56,15 @@ export class MidwayGRPCFramework extends BaseFramework<
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     // set logger to grpc server
     setLogger(this.logger);
-    const server: Server = new Server({
-      'grpc.max_receive_message_length': -1,
-      'grpc.max_send_message_length': -1,
-    });
+    const server: Server = new Server(
+      Object.assign(
+        {
+          'grpc.max_receive_message_length': -1,
+          'grpc.max_send_message_length': -1,
+        },
+        this.configurationOptions.serverOptions || {}
+      )
+    );
 
     this.app = server as IMidwayGRPCApplication;
     this.server = server;
