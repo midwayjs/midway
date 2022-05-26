@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/grpc",
-  "version": "3.3.5",
+  "version": "3.3.10",
   "description": "Midway Framework for gRPC",
   "main": "dist/index",
   "typings": "index.d.ts",

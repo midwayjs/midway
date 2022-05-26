@@ -48,7 +48,10 @@
   "@midwayjs/decorator": "3.3.4",
   "@midwayjs/express-session": "3.3.5",
   "@midwayjs/faas": "3.3.5",
-  "@midwayjs/grpc": "3.3.5",
+  "@midwayjs/grpc": [
+    "3.3.5",
+    "3.3.10"
+  ],
   "@midwayjs/http-proxy": [
     "3.3.5",
     "3.3.6",
@@ -149,7 +152,8 @@
     "3.3.6",
     "3.3.7",
     "3.3.8",
-    "3.3.9"
+    "3.3.9",
+    "3.3.10"
   ],
   "@midwayjs/view-ejs": [
     "3.3.5",
