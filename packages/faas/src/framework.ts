@@ -82,7 +82,8 @@ export class MidwayFaaSFramework extends BaseFramework<
     if (!this.logger) {
       this.logger = options.logger || loggers.getLogger('appLogger');
     }
-    this.applicationAdapter = this.configurationOptions.applicationAdapter;
+    this.applicationAdapter =
+      this.configurationOptions.applicationAdapter || ({} as any);
     this.app =
       this.applicationAdapter.getApplication?.() ||
       (new HttpApplication() as unknown as Application);
@@ -166,7 +167,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     return MidwayFrameworkType.FAAS;
   }
 
-  public handleInvokeWrapper(handlerMapping: string) {
+  public handleInvokeWrapper(handlerMapping: string): any {
     let funOptions: RouterInfo = this.funMappingStore.get(handlerMapping);
 
     return async (...args) => {
@@ -205,7 +206,7 @@ export class MidwayFaaSFramework extends BaseFramework<
         context = this.getContext(await this.createHttpContext(newReq, newRes));
       } else {
         context = this.getContext(
-          await this.applicationAdapter?.runEventHook(...args)
+          await this.applicationAdapter?.runEventHook?.(...args)
         );
       }
 
