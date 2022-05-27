@@ -383,6 +383,7 @@ services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 
 | --- | --- | --- |
 | protoPath | string | 必选，proto 文件的绝对路径 |
 | package | string | 必选，服务对应的 package |
+| serverOptions | channelOptions | 可选，grpc Server 的 [自定义 options](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js#supported-channel-options) |
 
 
 
