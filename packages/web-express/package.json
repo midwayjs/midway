@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/express",
-  "version": "3.3.6",
+  "version": "3.3.11",
   "description": "Midway Web Framework for Express",
   "main": "dist/index",
   "typings": "index.d.ts",
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@midwayjs/core": "^3.3.5",
-    "@midwayjs/express-session": "^3.3.5",
+    "@midwayjs/express-session": "^3.3.11",
     "body-parser": "1.19.2",
     "cookie-parser": "^1.4.6",
     "express": "4.17.3"

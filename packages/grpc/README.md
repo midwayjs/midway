@@ -1,7 +1,6 @@
-# midway-web
+# @midwayjs/grpc
 
-[![Package Quality](http://npm.packagequality.com/shield/midway-web.svg)](http://packagequality.com/#?package=midway-web)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)
+Grpc component for midway.
 
 this is a sub package for midway.
 
