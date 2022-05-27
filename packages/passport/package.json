@@ -31,7 +31,7 @@
     "@midwayjs/web": "^3.3.9",
     "@types/passport": "1.0.7",
     "@types/passport-local": "1.0.34",
-    "express-session": "1.17.2",
+    "express-session": "1.17.3",
     "passport": "0.5.2",
     "passport-jwt": "4.0.0",
     "passport-local": "1.0.0"
