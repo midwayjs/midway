@@ -217,4 +217,4 @@ fetch('/api/upload', {
 
 ## Postman 测试示例
 
-![](/Users/harry/Library/Application Support/typora-user-images/image-20220506200135331.png)
+![](https://img.alicdn.com/imgextra/i4/O1CN01iv9ESW1uIShNiRjBF_!!6000000006014-2-tps-2086-1746.png)
