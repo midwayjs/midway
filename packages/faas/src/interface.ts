@@ -5,7 +5,8 @@ import {
   IMidwayContext,
   NextFunction as BaseNextFunction,
   CommonMiddlewareUnion,
-  ContextMiddlewareManager
+  ContextMiddlewareManager,
+  IMidwayBootstrapOptions,
 } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import { ILogger } from '@midwayjs/logger';
@@ -21,6 +22,12 @@ export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
  * @deprecated
  */
 export type FaaSMiddleware = ((context: Context, next: () => Promise<any>) => any) | string;
+
+export interface HandlerOptions {
+  isHttpFunction: boolean;
+  originEvent: any;
+  originContext: any;
+}
 
 export type IMidwayFaaSApplication = IMidwayApplication<Context, {
   getInitializeContext();
@@ -42,6 +49,7 @@ export type IMidwayFaaSApplication = IMidwayApplication<Context, {
 
   useEventMiddleware(middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>): void;
   getEventMiddleware: ContextMiddlewareManager<Context, NextFunction, undefined>;
+  getTriggerFunction(handler: string): (context, options: HandlerOptions) => Promise<any>;
 }> & ServerlessHttpApplication;
 
 export interface Application extends IMidwayFaaSApplication {}
@@ -57,8 +65,6 @@ export interface IFaaSConfigurationOptions extends IConfigurationOptions {
     getFunctionName(): string;
     getFunctionServiceName(): string;
     runAppHook?(app: Application): void;
-    runEventHook?(...args): any | void;
-    runRequestHook?(...args): any | void;
   };
 }
 
@@ -67,4 +73,17 @@ export interface IFaaSConfigurationOptions extends IConfigurationOptions {
  */
 export interface IWebMiddleware {
   resolve(): FaaSMiddleware;
+}
+
+export interface ServerlessStarterOptions extends IMidwayBootstrapOptions {
+  initializeMethodName?: string;
+  createAdapter?: () => Promise<{
+    close();
+    createAppHook(app?);
+  }>;
+  performance?: {
+    mark(label: string);
+    end();
+  };
+  exportAllHandler?: boolean;
 }

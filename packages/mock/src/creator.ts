@@ -172,27 +172,34 @@ export async function createFunctionApp<
   options?: MockAppConfigurationOptions,
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
-  const customFramework =
-    customFrameworkModule ??
-    findFirstExistModule([
-      process.env.MIDWAY_SERVERLESS_APP_NAME,
-      '@ali/serverless-app',
-      '@midwayjs/serverless-app',
-    ]);
-  const serverlessModule = transformFrameworkToConfiguration(customFramework);
-  if (serverlessModule) {
-    if (options && options.imports) {
-      options.imports.unshift(serverlessModule);
-    } else {
-      options = options || {};
-      options.imports = [serverlessModule];
+  if (options.starter) {
+    const exports = options.starter.start(options);
+    await exports[options.initializeMethodName || 'initializer']();
+    const appCtx = options.starter.getApplicationContext();
+    const appManager = appCtx.get(MidwayApplicationManager);
+    return appManager.getApplication(MidwayFrameworkType.FAAS) as unknown as Y;
+  } else {
+    const customFramework =
+      customFrameworkModule ??
+      findFirstExistModule([
+        process.env.MIDWAY_SERVERLESS_APP_NAME,
+        '@ali/serverless-app',
+        '@midwayjs/serverless-app',
+      ]);
+    const serverlessModule = transformFrameworkToConfiguration(customFramework);
+    if (serverlessModule) {
+      if (options && options.imports) {
+        options.imports.unshift(serverlessModule);
+      } else {
+        options = options || {};
+        options.imports = [serverlessModule];
+      }
     }
+    const framework = await createApp(baseDir, options);
+    const appCtx = framework.getApplicationContext();
+    const appManager = appCtx.get(MidwayApplicationManager);
+    return appManager.getApplication(MidwayFrameworkType.SERVERLESS_APP);
   }
-
-  const framework = await createApp(baseDir, options);
-  const appCtx = framework.getApplicationContext();
-  const appManager = appCtx.get(MidwayApplicationManager);
-  return appManager.getApplication(MidwayFrameworkType.SERVERLESS_APP);
 }
 
 /**
