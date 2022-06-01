@@ -266,7 +266,7 @@ Midway 提供了 `MidwayConfig` 作为统一的配置项定义，所有的组件
 
 比如，我们启用了 view 组件的效果。
 
-![](/Users/harry/Library/Application Support/typora-user-images/image-20220508111525361.png)
+![](https://img.alicdn.com/imgextra/i2/O1CN013sHGlA1o3uQ4Pg0nO_!!6000000005170-2-tps-1416-572.png)
 
 :::tip
 
