@@ -123,6 +123,9 @@ export class MidwayFaaSFramework extends BaseFramework<
           .createAnonymousContext()
           .requestContext.getAsync(serviceClass);
       },
+      getTriggerFunction: (handlerMapping: string) => {
+        return this.getTriggerFunction(handlerMapping);
+      },
     });
     // hack use method
     (this.app as any).originUse = this.app.use;
@@ -156,21 +159,6 @@ export class MidwayFaaSFramework extends BaseFramework<
       }
 
       this.respond = this.app.callback();
-
-      if (this.environmentService.isDevelopmentEnvironment()) {
-        const faasConfig = this.configService.getConfiguration('faas') ?? {};
-        this.server = await new Promise(resolve => {
-          const server = http.createServer((req, res) => {
-            const url = new URL(req.url, `http://${req.headers.host}`);
-            // create event and invoke
-            this.handleInvokeWrapper(url.pathname)(req, res, {});
-          });
-          if (faasConfig['port']) {
-            server.listen(faasConfig['port']);
-          }
-          resolve(server);
-        });
-      }
     }, LOCK_KEY);
   }
 
@@ -203,6 +191,9 @@ export class MidwayFaaSFramework extends BaseFramework<
       middlewareManager.insertLast(async (ctx, next) => {
         const fn = await this.middlewareService.compose(
           [
+            ...(isHttpFunction
+              ? this.httpMiddlewareManager
+              : this.eventMiddlewareManager),
             ...funOptions.controllerMiddleware,
             ...funOptions.middleware,
             async (ctx, next) => {

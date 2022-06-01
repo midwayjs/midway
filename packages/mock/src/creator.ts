@@ -11,6 +11,8 @@ import {
   MidwayContainer,
   MidwayCommonError,
   MidwayApplicationManager,
+  MidwayEnvironmentService,
+  MidwayConfigService,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
@@ -24,7 +26,10 @@ import {
   transformFrameworkToConfiguration,
 } from './utils';
 import { debuglog } from 'util';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
+import * as http from 'http';
+import * as yaml from 'js-yaml';
+
 const debug = debuglog('midway:debug');
 
 process.setMaxListeners(0);
@@ -172,12 +177,57 @@ export async function createFunctionApp<
   options?: MockAppConfigurationOptions,
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
+  let starterName;
+  if (!options.starter) {
+    // load yaml
+    try {
+      const doc = yaml.load(readFileSync(join(baseDir, 'f.yml'), 'utf8'));
+      starterName = doc?.['provider']?.['starter'];
+      if (starterName) {
+        const m = safeRequire(starterName);
+        if (m && m['BootstrapStarter']) {
+          options.starter = new m['BootstrapStarter']();
+        }
+      }
+    } catch (e) {
+      // ignore
+      console.error('[mock]: get f.yml information fail, err = ' + e.stack);
+    }
+  }
+
   if (options.starter) {
-    const exports = options.starter.start(options);
+    options.exportAllHandler = true;
+    // new mode
+    const exports = options.starter.start(
+      Object.assign(options, {
+        baseDir,
+      })
+    );
     await exports[options.initializeMethodName || 'initializer']();
     const appCtx = options.starter.getApplicationContext();
+
+    const environmentService = appCtx.get(MidwayEnvironmentService) as any;
+    const configService = appCtx.get(MidwayConfigService) as any;
+
     const appManager = appCtx.get(MidwayApplicationManager);
-    return appManager.getApplication(MidwayFrameworkType.FAAS) as unknown as Y;
+    const app = appManager.getApplication(MidwayFrameworkType.FAAS);
+
+    if (environmentService.isDevelopmentEnvironment()) {
+      const faasConfig = configService.getConfiguration('faas') ?? {};
+      await new Promise<void>(resolve => {
+        const server = http.createServer((req, res) => {
+          const url = new URL(req.url, `http://${req.headers.host}`);
+          // create event and invoke
+          this.handleInvokeWrapper(url.pathname)(req, res, {});
+        });
+        if (faasConfig['port']) {
+          server.listen(faasConfig['port']);
+        }
+        (app as any).server = server;
+        resolve();
+      });
+    }
+    return app as unknown as Y;
   } else {
     const customFramework =
       customFrameworkModule ??

@@ -2,17 +2,19 @@ import * as assert from 'assert';
 import * as mm from 'mm';
 import { createNewStarter, closeApp } from './utils';
 
-describe('test/index.test.ts', () => {
+describe('test/new.test.ts', () => {
 
   it('invoke handler by default name', async () => {
     const starter = await createNewStarter('base-app');
     const data = await starter.getTriggerFunction('helloService.handler')(
       {
         text: 'hello',
-        originContext: {},
-        originEvent: {},
       },
-      { text: 'a' }
+      {
+        isHttpFunction: false,
+        originContext: {},
+        originEvent: { text: 'a' },
+      }
     );
     expect(data).toEqual('ahello');
   });
@@ -23,10 +25,12 @@ describe('test/index.test.ts', () => {
       (await starter.getTriggerFunction('indexService.handler')(
         {
           text: 'hello',
-          originContext: {},
-          originEvent: {},
         },
-        { text: 'a' }
+        {
+          isHttpFunction: false,
+          originContext: {},
+          originEvent:  { text: 'a' }
+        }
       )) === 'ahello'
     );
     assert(
@@ -36,7 +40,11 @@ describe('test/index.test.ts', () => {
           originContext: {},
           originEvent: {},
         },
-        { text: 'a' }
+        {
+          isHttpFunction: false,
+          originContext: {},
+          originEvent:  { text: 'a' }
+        }
       )) === 'ahello'
     );
     await closeApp(starter);
@@ -51,7 +59,11 @@ describe('test/index.test.ts', () => {
           originContext: {},
           originEvent: {},
         },
-        { text: 'a' }
+        {
+          isHttpFunction: false,
+          originContext: {},
+          originEvent:  { text: 'a' }
+        }
       )) === 'defaultahello'
     );
     assert(
@@ -61,11 +73,19 @@ describe('test/index.test.ts', () => {
           originContext: {},
           originEvent: {},
         },
-        { text: 'ab' }
+        {
+          isHttpFunction: false,
+          originContext: {},
+          originEvent:  { text: 'ab' }
+        }
       )) === 'abhello'
     );
     assert(
-      (await starter.getTriggerFunction('indexService.get')({}, {})) ===
+      (await starter.getTriggerFunction('indexService.get')({}, {
+        isHttpFunction: false,
+        originEvent: undefined,
+        originContext: undefined
+      })) ===
         'hello'
     );
     await closeApp(starter);
@@ -79,7 +99,11 @@ describe('test/index.test.ts', () => {
         originContext: {},
         originEvent: {},
       },
-      { text: 'ab' }
+      {
+        isHttpFunction: false,
+        originContext: {},
+        originEvent:  { text: 'ab' }
+      }
     );
     assert(data === 'abhello');
     await closeApp(starter);
@@ -106,7 +130,11 @@ describe('test/index.test.ts', () => {
         originContext: {},
         originEvent: {},
       },
-      { text: 'ab' }
+      {
+        isHttpFunction: false,
+        originContext: {},
+        originEvent:  { text: 'ab' }
+      }
     );
     expect(data).toEqual('abhelloextra data');
     await closeApp(starter);
@@ -219,7 +247,11 @@ describe('test/index.test.ts', () => {
         originContext: {},
         originEvent: {},
       },
-      { text: 'a' }
+      {
+        isHttpFunction: false,
+        originContext: {},
+        originEvent:  { text: 'a' }
+      }
     );
     expect(data).toEqual('ahello');
 
@@ -237,7 +269,11 @@ describe('test/index.test.ts', () => {
 
     data = await starter.getTriggerFunction('apiController.homeSet')(
       ctx,
-      { text: 'a' },
+      {
+        isHttpFunction: true,
+        originContext: {},
+        originEvent:  { text: 'a' }
+      }
     );
     expect(data).toEqual('bbb');
     expect(ctx.headers['ccc']).toEqual('ddd');

@@ -1,8 +1,8 @@
 import { Framework, Application } from '../src';
 import * as FaaS from '../src';
 import { join } from 'path';
-import { close, create, createApp } from '@midwayjs/mock';
-import { FC } from '../../../packages-serverless/serverless-starter/src'
+import { close, create, createFunctionApp } from '@midwayjs/mock';
+import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
 
 const originReady = FaaS.Configuration.prototype.init;
 let isProxy = false;
@@ -23,8 +23,8 @@ export async function creatStarter(name, options = {}): Promise<Framework> {
 }
 
 export async function createNewStarter(name, options = {}): Promise<Application> {
-  const app = await createApp<Framework>(join(__dirname, 'fixtures', name), Object.assign({
-    starter: new FC.BootstrapStarter(),
+  const app = await createFunctionApp<Framework>(join(__dirname, 'fixtures', name), Object.assign({
+    starter: new BootstrapStarter(),
     imports: [
       require('../src')
     ]

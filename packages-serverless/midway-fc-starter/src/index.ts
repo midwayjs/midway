@@ -9,12 +9,14 @@ import {
   FC,
 } from '@midwayjs/faas';
 import * as getRawBody from 'raw-body';
-import { isOutputError } from './util';
 
-export const start = function (options: ServerlessStarterOptions = {}) {
-  const starter = new BootstrapStarter();
-  return starter.start(options);
-};
+function isOutputError() {
+  return (
+    process.env.SERVERLESS_OUTPUT_ERROR_STACK === 'true' ||
+    ['local', 'development'].includes(process.env.MIDWAY_SERVER_ENV) ||
+    ['local', 'development'].includes(process.env.NODE_ENV)
+  );
+}
 
 export class BootstrapStarter {
   applicationContext;
@@ -34,8 +36,6 @@ export class BootstrapStarter {
 
     exports[options.initializeMethodName || 'initializer'] = asyncWrapper(
       async (context: FC.InitializeContext) => {
-        const handlerMethodName = context.function.handler.split('.')[1];
-
         const applicationAdapter = {
           getFunctionName() {
             return context.function.name;
@@ -219,6 +219,7 @@ export class BootstrapStarter {
             exports[handlerName.split('.')[1]] = handlerWrapper;
           }
         } else {
+          const handlerMethodName = context.function.handler.split('.')[1];
           exports[handlerMethodName] = handlerWrapper;
         }
 

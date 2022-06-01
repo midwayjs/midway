@@ -8,12 +8,14 @@ import {
   IFaaSConfigurationOptions,
   SCF,
 } from '@midwayjs/faas';
-import { isOutputError } from './util';
 
-export const start = function (options: ServerlessStarterOptions = {}) {
-  const starter = new BootstrapStarter();
-  return starter.start(options);
-};
+function isOutputError() {
+  return (
+    process.env.SERVERLESS_OUTPUT_ERROR_STACK === 'true' ||
+    ['local', 'development'].includes(process.env.MIDWAY_SERVER_ENV) ||
+    ['local', 'development'].includes(process.env.NODE_ENV)
+  );
+}
 
 function isHttpEvent(event): event is SCF.APIGatewayEvent {
   return event?.httpMethod && event?.headers && event?.requestContext;

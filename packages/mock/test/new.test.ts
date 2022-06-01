@@ -13,10 +13,11 @@ import {
 } from '../src';
 import * as Web from '../../web/src';
 import * as Koa from '../../web-koa/src';
-import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
+import * as faas from '../../faas/src';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { MidwayContainer, MidwayMockService } from '@midwayjs/core';
+import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
 
 describe('/test/new.test.ts', () => {
   it('should test create app with framework and with new mode', async () => {
@@ -73,12 +74,13 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test with createFunctionApp with new mode', async () => {
-    const app = await createFunctionApp<ServerlessApp.Framework>(join(__dirname, 'fixtures/base-faas'), {
+    const app = await createFunctionApp<faas.Framework>(join(__dirname, 'fixtures/base-faas'), {
       imports: [
-        ServerlessApp
-      ]
+        faas
+      ],
+      starter: new BootstrapStarter(),
     });
-    const instance = await app.getServerlessInstance('eventService');
+    const instance = await app.getServerlessInstance('eventService') as any;
     const result = await instance.handleEvent();
 
     expect(result).toEqual('hello world');

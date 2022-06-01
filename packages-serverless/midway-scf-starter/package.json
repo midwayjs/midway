@@ -1,0 +1,33 @@
+{
+  "name": "@midwayjs/scf-starter",
+  "version": "3.0.0",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@midwayjs/faas": "^3.3.5"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "^3.3.5",
+    "@midwayjs/decorator": "^3.3.4",
+    "@midwayjs/runtime-mock": "^3.0.4",
+    "@midwayjs/serverless-http-parser": "^3.3.5"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway.git"
+  },
+  "license": "MIT",
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
+}
