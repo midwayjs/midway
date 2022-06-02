@@ -1,7 +1,7 @@
 export const midwayLogger = {
   default: {
-    disableFile: true,
-    disableError: true,
+    enableFile: false,
+    enableError: false,
     printFormat: (info: any) => {
       const requestId =
         info.ctx?.['originContext']?.['requestId'] ??

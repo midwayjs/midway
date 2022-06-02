@@ -1,6 +1,10 @@
 import * as assert from 'assert';
 import * as mm from 'mm';
 import { createNewStarter, closeApp } from './utils';
+import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { Framework } from '../src';
+import { join } from 'path';
+import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
 
 describe('test/new.test.ts', () => {
 
@@ -140,82 +144,6 @@ describe('test/new.test.ts', () => {
     await closeApp(starter);
   });
 
-  it('test custom global middleware in fc', async () => {
-    mm(process.env, 'MIDWAY_SERVERLESS_FUNCTION_NAME',  'aaa');
-    mm(process.env, 'MIDWAY_SERVERLESS_SERVICE_NAME',  'bbb');
-    const { start } = require('@midwayjs/serverless-fc-starter');
-    const runtime = await start();
-    const starter = await createNewStarter('base-app-middleware', {
-      applicationAdapter: runtime,
-    });
-
-    const data = await runtime.asyncEvent(
-      starter.getTriggerFunction('helloService.handler')
-    )(
-      {
-        text: 'hello',
-        httpMethod: 'GET',
-        headers: {},
-        requestContext: {},
-        queryParameters: {},
-      },
-      { text: 'a' }
-    );
-
-    expect(data.body).toEqual('ahello555aaabbb');
-    await closeApp(starter);
-    mm.restore();
-  });
-
-  it('test throw error from code and middleware catch it', async () => {
-    const { start } = require('@midwayjs/serverless-scf-starter');
-    const runtime = await start();
-
-    const starter = await createNewStarter('base-app-middleware-err', {
-      applicationAdapter: runtime,
-    });
-    const data = await runtime.asyncEvent(
-      starter.getTriggerFunction('helloService.handler')
-    )(
-      {
-        text: 'hello',
-        httpMethod: 'GET',
-        headers: {},
-        requestContext: {},
-      },
-      { text: 'a' }
-    );
-
-    assert(data.body === 'ahello555');
-    await closeApp(starter);
-  });
-
-  it('test inject app and plugin', async () => {
-    const { start } = require('@midwayjs/serverless-scf-starter');
-    const runtime = await start();
-    const starter = await createNewStarter('base-app-inject', {
-      applicationAdapter: runtime,
-    });
-    // set app
-    const app = runtime.getApplication();
-    app.mysql = {
-      model: '123',
-    };
-    const data = await runtime.asyncEvent(
-      starter.getTriggerFunction('helloService.handler')
-    )(
-      {
-        text: 'hello',
-        httpMethod: 'GET',
-        requestContext: {},
-      },
-      { text: 'a' }
-    );
-
-    expect(data).toEqual('ahello123');
-    await closeApp(starter);
-  });
-
   it('test inject logger', async () => {
     const { start } = require('@midwayjs/serverless-scf-starter');
     const runtime = await start();
@@ -255,28 +183,60 @@ describe('test/new.test.ts', () => {
     );
     expect(data).toEqual('ahello');
 
-    let ctx = {
-      text: 'hello',
-      httpMethod: 'GET',
-      headers: {},
-      set(key, value) {
-        ctx.headers[key] = value;
-      },
-      get(key) {},
-      originContext: {},
-      originEvent: {},
-    }
+    const result = await createHttpRequest(starter).get('/api').query({
+      name: 'zhangting',
+      age: 3
+    });
 
-    data = await starter.getTriggerFunction('apiController.homeSet')(
-      ctx,
-      {
-        isHttpFunction: true,
-        originContext: {},
-        originEvent:  { text: 'a' }
+    expect(result.text).toEqual('hello world,zhangting3');
+  });
+
+  it('should test new test method', async () => {
+    mm(process.env, 'MIDWAY_SERVERLESS_FUNCTION_NAME',  'aaa');
+    mm(process.env, 'MIDWAY_SERVERLESS_SERVICE_NAME',  'bbb');
+    const app = await createFunctionApp<Framework>(join(__dirname, 'fixtures/base-app-event-middleware'), {
+      starter: new BootstrapStarter(),
+      globalConfig: {
+        faas: {
+          initContext: {}
+        }
+      },
+      imports: [
+        require('../src'),
+        require('./fixtures/base-app-event-middleware/src')
+      ]
+    });
+
+    const helloService: any = await app.getServerlessInstance('helloService');
+
+    let result = await helloService.handler({
+      text: 'abc',
+    });
+
+    expect(result).toEqual('hello eventundefined');
+
+    // test event middleware
+    const handlerFn = app.getTriggerFunction('helloService.handler');
+
+    result = await handlerFn({}, {
+      isHttpFunction: false,
+      originContext: {},
+      originEvent: {
+        text: 'abc',
       }
-    );
-    expect(data).toEqual('bbb');
-    expect(ctx.headers['ccc']).toEqual('ddd');
-    expect(ctx.headers['bbb']).toEqual('aaa');
+    });
+
+    expect(result).toEqual('hello event3');
+
+    // test http
+    result = await createHttpRequest(app).get('/test').query({
+      name: 'zhangting',
+      age: 3
+    });
+
+    expect(result.text).toEqual('hello http5');
+
+    await closeApp(app);
+    mm.restore();
   });
 });

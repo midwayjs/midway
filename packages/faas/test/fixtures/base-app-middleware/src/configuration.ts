@@ -12,7 +12,6 @@ export class AutoConfiguration {
 
   async onReady(container) {
     container.registerObject('adb', { data: '123' });
-
-    this.app.useMiddleware(TestMiddleware);
+    this.app.useEventMiddleware(TestMiddleware);
   }
 }

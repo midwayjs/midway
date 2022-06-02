@@ -4,4 +4,3 @@ export {
   createModuleServerlessFramework,
 } from './framework';
 export { FaaSConfiguration as Configuration } from './configuration';
-export { asyncWrapper } from './util';

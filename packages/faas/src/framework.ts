@@ -106,11 +106,22 @@ export class MidwayFaaSFramework extends BaseFramework<
       },
 
       getFunctionName: () => {
-        return this.configurationOptions.applicationAdapter?.getFunctionName();
+        return (
+          process.env.MIDWAY_SERVERLESS_FUNCTION_NAME ||
+          this.configurationOptions.applicationAdapter?.getFunctionName() ||
+          ''
+        );
       },
 
+      /**
+       * get function service/group in runtime
+       */
       getFunctionServiceName: () => {
-        return this.configurationOptions.applicationAdapter?.getFunctionServiceName();
+        return (
+          process.env.MIDWAY_SERVERLESS_SERVICE_NAME ||
+          this.configurationOptions.applicationAdapter?.getFunctionServiceName() ||
+          ''
+        );
       },
       useEventMiddleware: middleware => {
         return this.useEventMiddleware(middleware);
@@ -233,13 +244,15 @@ export class MidwayFaaSFramework extends BaseFramework<
       const isHttpFunction = options.isHttpFunction;
       if (!funOptions && isHttpFunction) {
         for (const item of this.serverlessRoutes) {
-          if (item.matchPattern.test(context.path)) {
+          if (
+            context.method === item.funcInfo['requestMethod'].toUpperCase() &&
+            item.matchPattern.test(context.path)
+          ) {
             funOptions = item.funcInfo;
             break;
           }
         }
       }
-
       if (!funOptions) {
         throw new Error(`function handler = ${handlerMapping} not found`);
       }
@@ -282,7 +295,7 @@ export class MidwayFaaSFramework extends BaseFramework<
       )(context);
 
       if (isHttpFunction) {
-        if (!context.response._explicitStatus) {
+        if (!context.response?._explicitStatus) {
           if (context.body === null || context.body === 'undefined') {
             context.body = '';
             context.type = 'text';
