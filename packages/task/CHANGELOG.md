@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.12](https://github.com/midwayjs/midway/compare/v3.3.11...v3.3.12) (2022-06-02)
+
+
+### Bug Fixes
+
+* add duplicate check for task ([#2019](https://github.com/midwayjs/midway/issues/2019)) ([0b42b56](https://github.com/midwayjs/midway/commit/0b42b560c11d6ff718493b752e2c32cb2c44eb59))
+
+
+
+
+
 ## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
 
 
