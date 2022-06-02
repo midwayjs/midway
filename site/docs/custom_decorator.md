@@ -521,14 +521,14 @@ export class ContainerConfiguration {
 
 `registerParameterHandler` 方法的第一个参数是装饰器定义的 id，第二个参数是回调的实现，参数为 options 对象，包含：
 
-| 参数                    | 类型          | 描述                   |
-| ----------------------- | ------------- | ---------------------- |
-| options.target          | new (...args) | 装饰器修饰所在的类     |
-| options.propertyName    | string        | 装饰器修饰所在的方法名 |
-| options.metadata        | {}            | 装饰器本身的参数       |
-| options.originArgs      | Array         | 方法原始的参数         |
-| options.originParamType |               | 方法原始的参数类型     |
-| options.parameterIndex  | number        | 装饰器修饰的参数索引   |
+| 参数                    | 类型            | 描述                   |
+| ----------------------- | --------------- | ---------------------- |
+| options.target          | new (...args)   | 装饰器修饰所在的类     |
+| options.propertyName    | string          | 装饰器修饰所在的方法名 |
+| options.metadata        | {} \| undefined | 装饰器本身的参数       |
+| options.originArgs      | Array           | 方法原始的参数         |
+| options.originParamType |                 | 方法原始的参数类型     |
+| options.parameterIndex  | number          | 装饰器修饰的参数索引   |
 
 使用装饰器如下：
 
@@ -559,19 +559,42 @@ export class UserController {
 
 在 Midway 的依赖注入的请求作用域中，我们将上下文绑定到了每个实例上，从实例的特定属性 `REQUEST_OBJ_CTX_KEY` 上即可获取当前的上下文，从而进一步对请求做操作。
 
+比如在我们自定义实现的方法装饰器中：
+
 ```typescript
 import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
+//...
 
-export function MyCustomDecorator(): MethodDecorator {
-  return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const method = descriptor.value;
-    descriptor.value = function (...args) {
-      // 指向当前上层框架的上下文对象，上层框架的上下文对象请参考各上层框架文档。
-      console.log(this[REQUEST_OBJ_CTX_KEY]);
+export class ContainerConfiguration {
 
-      return method.apply(this, [...args]);
-    };
-    return descriptor;
-  };
+  @App()
+  app: koa.Application;
+
+  @Inject()
+  decoratorService: MidwayDecoratorService;
+
+  @Logger()
+  logger;
+
+  async onReady() {
+    // ...
+
+    // 实现方法装饰器
+    this.decoratorService.registerMethodHandler(
+      LOGGING_KEY,
+      (options) => {
+        return {
+          around: async (joinPoint: JoinPoint) => {
+            
+            // 装饰器所在的实例
+            const instance = joinPoint.target;
+            const ctx = instnace[REQUEST_OBJ_CTX_KEY];
+            // ctx.xxxx
+            // ...
+          },
+        };
+      }
+    );
+  }
 }
 ```
