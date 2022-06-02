@@ -1,7 +1,12 @@
-import { BaseFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
+import {
+  BaseFramework,
+  IMidwayBootstrapOptions,
+  MidwayCommonError,
+} from '@midwayjs/core';
 import {
   Framework,
   getClassMetadata,
+  getProviderName,
   Inject,
   listModule,
   MidwayFrameworkType,
@@ -51,8 +56,17 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
     }
     const taskConfig = this.configService.getConfiguration('task');
     const modules = listModule(MODULE_TASK_KEY);
+    const duplicatedCheck = new Set();
 
     for (const module of modules) {
+      const providerName = getProviderName(module);
+      if (duplicatedCheck.has(providerName)) {
+        throw new MidwayCommonError(
+          `Duplicate task class name "${providerName}"`
+        );
+      } else {
+        duplicatedCheck.add(providerName);
+      }
       const rules = getClassMetadata(MODULE_TASK_METADATA, module);
       for (const rule of rules) {
         const queue = new Bull(`${rule.name}:${rule.propertyKey}`, taskConfig);
@@ -95,12 +109,22 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
         this.queueList.push(queue);
       }
     }
+    duplicatedCheck.clear();
   }
 
   async loadLocalTask() {
     const taskConfig = this.configService.getConfiguration('task');
     const modules = listModule(MODULE_TASK_TASK_LOCAL_KEY);
+    const duplicatedCheck = new Set();
     for (const module of modules) {
+      const providerName = getProviderName(module);
+      if (duplicatedCheck.has(providerName)) {
+        throw new MidwayCommonError(
+          `Duplicate task class name "${providerName}"`
+        );
+      } else {
+        duplicatedCheck.add(providerName);
+      }
       const rules = getClassMetadata(MODULE_TASK_TASK_LOCAL_OPTIONS, module);
       for (const rule of rules) {
         const triggerFunction = async () => {
@@ -137,6 +161,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
         this.jobList.push(job);
       }
     }
+    duplicatedCheck.clear();
   }
 
   async loadQueue() {
