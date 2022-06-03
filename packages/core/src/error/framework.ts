@@ -17,6 +17,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   UTIL_HTTP_TIMEOUT: 10012,
   INCONSISTENT_VERSION: 10013,
   INVALID_CONFIG: 10014,
+  DUPLICATE_CLASS_NAME: 10015,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -147,5 +148,14 @@ export class MidwayInconsistentVersionError extends MidwayError {
     const text =
       'We find a latest dependency package installed, please remove the lock file and use "npm update" to upgrade all dependencies first.';
     super(text, FrameworkErrorEnum.INCONSISTENT_VERSION);
+  }
+}
+
+export class MidwayDuplicateClassNameError extends MidwayError {
+  constructor(className: string, existPath: string, existPathOther: string) {
+    super(
+      `"${className}" duplicated between "${existPath}" and "${existPathOther}"`,
+      FrameworkErrorEnum.DUPLICATE_CLASS_NAME
+    );
   }
 }

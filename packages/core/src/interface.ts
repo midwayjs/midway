@@ -184,6 +184,7 @@ export interface IObjectDefinition {
   }>;
   createFrom: 'framework' | 'file' | 'module';
   allowDowngrade: boolean;
+  bindHook?: (module: any, options?: IObjectDefinition) => void;
 }
 
 export interface IObjectCreator {
