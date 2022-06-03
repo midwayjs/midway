@@ -1,29 +1,24 @@
-import { Config, Configuration, listModule } from '@midwayjs/decorator';
-import { Sequelize } from 'sequelize-typescript';
-import * as DefaultConfig from './config/config.default';
+import { Configuration } from '@midwayjs/decorator';
+import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { SequelizeServiceFactory } from './manager';
 
 @Configuration({
   namespace: 'sequelize',
   importConfigs: [
     {
-      default: DefaultConfig,
+      default: {
+        sequelize:{}
+      },
     },
   ],
 })
-export class SequelizeConfiguration {
-  instance: Sequelize;
+export class SequelizeConfiguration implements ILifeCycle  {
+  async onReady(container:IMidwayContainer) {
+    await container.getAsync(SequelizeServiceFactory);
+  }
 
-  @Config('sequelize')
-  sequelizeConfig;
-
-  async onReady() {
-    const options = this.sequelizeConfig.options;
-    this.instance = new Sequelize(options);
-    const entities = listModule('sequelize:core');
-    this.instance.addModels(entities);
-    await this.instance.authenticate();
-    if (this.sequelizeConfig.sync) {
-      await this.instance.sync();
-    }
+  async onStop(container:IMidwayContainer): Promise<void> {
+    const factory = await container.getAsync(SequelizeServiceFactory);
+    await factory.stop();
   }
 }
