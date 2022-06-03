@@ -190,7 +190,7 @@ export default {
 默认情况下，单测环境由于需要 supertest 来启动端口，我们的 port 配置为 `null`。
 
 ```typescript
-// src/config/config.default
+// src/config/config.unittest
 export default {
   // ...
   koa: {

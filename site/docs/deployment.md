@@ -183,6 +183,10 @@ Bootstrap.run();
 
 虽然启动文件的代码很简单，但是我们依旧需要这个文件，在后续的链路追踪等场景中需要用到。
 
+注意，这里不含 http 的启动端口，如果你需要，可以参考文档 修改。
+
+- [修改 koa 端口](extensions/koa#修改端口)
+
 这个时候，你已经可以直接使用 `NODE_ENV=production node bootstrap.js` 来启动代码了，也可以使用 pm2 来执行启动。
 
 我们一般推荐使用工具使用工具来启动 Node.js 项目，下面有一些文档可以进阶阅读。
@@ -194,7 +198,7 @@ Bootstrap.run();
 
 ### 启动参数
 
-Bootstrap 有一些可配置的启动参数，通过 `configure` 方法传入。
+在大多数情况下，不太需要在 Bootstrap 里配置参数，但是依旧有一些可配置的启动参数选项，通过 `configure` 方法传入。
 
 ```typescript
 const { Bootstrap } = require('@midwayjs/bootstrap');
