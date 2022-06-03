@@ -29,7 +29,7 @@
     "@midwayjs/koa": "^3.3.6",
     "@midwayjs/mock": "^3.3.5",
     "@midwayjs/web": "^3.3.9",
-    "@types/passport": "1.0.7",
+    "@types/passport": "1.0.8",
     "@types/passport-local": "1.0.34",
     "express-session": "1.17.3",
     "passport": "0.5.2",
