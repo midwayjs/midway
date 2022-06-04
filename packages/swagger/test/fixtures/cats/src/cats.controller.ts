@@ -33,6 +33,7 @@ import { Cat } from './entities/cat.entity';
 import { Cata } from './entities/cata.entity';
 import { Catd } from './entities/catd.entity';
 import { CatT } from './entities/catt.entity';
+import { OssMultipleUploadResponseDto } from './entities/test';
 
 @ApiExtraModel([CatT, Cata, Catd])
 @ApiTags(['2-国家测试', 'sss'])
@@ -113,6 +114,9 @@ export class CatsController {
   @Post('/test5/{aa}')
   @ApiParam({name: 'aa'})
   @ApiBody({})
+  @ApiResponse({
+    type: OssMultipleUploadResponseDto
+  })
   async getfive(@Param('aa') aa: CreateCatDto, @Body('bb') bb: string) {
     return null;
   }
