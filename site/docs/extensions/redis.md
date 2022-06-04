@@ -181,7 +181,7 @@ export class UserService {
     await this.redisService.set('foo', 'bar');
 
     // 设置过期时间，单位秒
-    await redisService.set('foo', 'bar', 'EX', 10);
+    await this.redisService.set('foo', 'bar', 'EX', 10);
 
     // 获取数据
     const result = await this.redisService.get('foo');
