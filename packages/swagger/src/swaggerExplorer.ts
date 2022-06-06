@@ -691,6 +691,8 @@ export class SwaggerExplorer {
               $ref: '#components/schemas/' + currentType?.name,
             };
           }
+
+          delete metadata.items;
         } else {
           if (isArray) {
             // 没有配置类型则认为自己配置了 items 内容
@@ -699,8 +701,6 @@ export class SwaggerExplorer {
                 type: 'array',
                 items: metadata?.items,
               };
-
-              delete metadata.items;
             } else {
               tt.properties[key] = {
                 type: 'array',
@@ -709,6 +709,8 @@ export class SwaggerExplorer {
                 },
               };
             }
+
+            delete metadata.items;
           } else {
             tt.properties[key] = {
               type: getPropertyType(clzz.prototype, key).name,
