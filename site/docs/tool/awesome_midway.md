@@ -10,6 +10,11 @@ title: Awesome Midway
 | ------------------------ | ----- | -------------------------------------------------------------------------------------------------- | ----------------- |
 | @letscollab/midway-nacos | Nawbc | [https://github.com/nawb-letscollab/midway-nacos](https://github.com/nawb-letscollab/midway-nacos) | midway nacos 组件 |
 
+### swagger
+|名称|作者|地址|描述|
+| ------------------------ | ----- | -------------------------------------------------------------------------------------------------- | ----------------- |
+|midwayjs-knife4j2|Junyi|[https://github.com/fangbao-0418/midway/tree/master/packages/swagger](https://github.com/fangbao-0418/midway/tree/master/packages/swagger)|midway swagger新皮肤 |
+
 ### 模板渲染
 
 | 名称                        | 作者       | 地址                                                                                             | 描述                                                                 |
