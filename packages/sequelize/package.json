@@ -10,6 +10,7 @@
   ],
   "devDependencies": {
     "@midwayjs/decorator": "^3.3.4",
+    "@midwayjs/core": "^3.3.5",
     "@midwayjs/koa": "^3.3.6",
     "@midwayjs/mock": "^3.3.5",
     "sqlite3": "5.0.8"
