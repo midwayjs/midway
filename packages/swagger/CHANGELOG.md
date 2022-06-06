@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.13](https://github.com/midwayjs/midway/compare/v3.3.12...v3.3.13) (2022-06-06)
+
+
+### Bug Fixes
+
+* swagger items assign bug ([#2025](https://github.com/midwayjs/midway/issues/2025)) ([e81a79f](https://github.com/midwayjs/midway/commit/e81a79fd9f88af56d5e1da7421548388d118b2ec))
+
+
+
+
+
 ## [3.3.8](https://github.com/midwayjs/midway/compare/v3.3.7...v3.3.8) (2022-05-17)
 
 

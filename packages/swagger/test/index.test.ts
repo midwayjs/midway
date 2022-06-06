@@ -179,7 +179,9 @@ describe('/test/index.test.ts', () => {
           },
           "breeds": {
             "type": "array",
-            "items": {},
+            "items": {
+              "type": "string"
+            },
             "description": "The name of the Catage",
             "nullable": true,
             "uniqueItems": true
