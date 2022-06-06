@@ -7,17 +7,17 @@ import { SequelizeServiceFactory } from './manager';
   importConfigs: [
     {
       default: {
-        sequelize:{}
+        sequelize: {},
       },
     },
   ],
 })
-export class SequelizeConfiguration implements ILifeCycle  {
-  async onReady(container:IMidwayContainer) {
+export class SequelizeConfiguration implements ILifeCycle {
+  async onReady(container: IMidwayContainer) {
     await container.getAsync(SequelizeServiceFactory);
   }
 
-  async onStop(container:IMidwayContainer): Promise<void> {
+  async onStop(container: IMidwayContainer): Promise<void> {
     const factory = await container.getAsync(SequelizeServiceFactory);
     await factory.stop();
   }
