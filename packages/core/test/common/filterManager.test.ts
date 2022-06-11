@@ -97,6 +97,41 @@ describe('/test/common/filterManager.test.ts', function () {
     expect(error2).toBeUndefined();
   });
 
+  it('should test catch error with prototype', async () => {
+    const container = new MidwayContainer();
+    const filterManager = new FilterManager();
+
+    class CustomError extends MidwayError {}
+
+    class CustomError2 extends MidwayError {}
+
+    @Catch(MidwayError, {
+      matchPrototype: true
+    })
+    class TestFilter {
+      catch(err, ctx) {
+        return {
+          status: 500,
+          err
+        }
+      }
+    }
+
+    container.bindClass(TestFilter);
+    filterManager.useFilter(TestFilter);
+    await filterManager.init(container);
+
+    const { result, error } = await filterManager.runErrorFilter(new CustomError('test error'), {} as any);
+
+    expect(result.err.name).toEqual('CustomError');
+    expect(error).toBeUndefined();
+
+    const { result: result2, error: error2 } = await filterManager.runErrorFilter(new CustomError2('test error'), {} as any);
+
+    expect(result2.err.name).toEqual('CustomError2');
+    expect(error2).toBeUndefined();
+  });
+
   it('should test one catch class got two error', async () => {
     const container = new MidwayContainer();
     const filterManager = new FilterManager();
