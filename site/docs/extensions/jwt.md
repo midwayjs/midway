@@ -138,12 +138,12 @@ export class JwtMiddleware {
 
       if (parts.length === 2) {
         const scheme = parts[0];
-        const credentials = parts[1];
+        const token = parts[1];
 
         if (/^Bearer$/i.test(scheme)) {
           try {
             //jwt.verify方法验证token是否有效
-            await jwtService.verify(token, secret.sign, {
+            await jwtService.verify(token, {
               complete: true
             });
           } catch (error) {
