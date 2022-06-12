@@ -105,7 +105,9 @@ describe('/test/common/filterManager.test.ts', function () {
 
     class CustomError2 extends MidwayError {}
 
-    @Catch(MidwayError, {
+    class CustomError3 extends Error {}
+
+    @Catch([CustomError3, MidwayError], {
       matchPrototype: true
     })
     class TestFilter {
@@ -130,6 +132,33 @@ describe('/test/common/filterManager.test.ts', function () {
 
     expect(result2.err.name).toEqual('CustomError2');
     expect(error2).toBeUndefined();
+  });
+
+  it('should test catch error not match', async () => {
+    const container = new MidwayContainer();
+    const filterManager = new FilterManager();
+
+    class CustomError extends MidwayError {}
+    class CustomError2 extends MidwayError {}
+
+    @Catch(CustomError)
+    class TestFilter {
+      catch(err, ctx) {
+        return {
+          status: 500,
+          err
+        }
+      }
+    }
+
+    container.bindClass(TestFilter);
+    filterManager.useFilter(TestFilter);
+    await filterManager.init(container);
+
+    const { result, error } = await filterManager.runErrorFilter(new CustomError2('test error'), {} as any);
+
+    expect(result).toBeUndefined();
+    expect(error).toBeDefined();
   });
 
   it('should test one catch class got two error', async () => {
