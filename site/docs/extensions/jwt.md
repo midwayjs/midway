@@ -154,5 +154,11 @@ export class JwtMiddleware {
       }
     };
   }
+
+  // 配置忽略鉴权的路由地址
+  public match(ctx: Context): boolean {
+    const ignore = ctx.path.indexOf('/api/admin/login') !== -1;
+    return !ignore;
+  }
 }
 ```
