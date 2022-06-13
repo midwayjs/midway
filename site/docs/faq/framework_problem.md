@@ -64,3 +64,11 @@ $ npm ls @midwayjs/decorator
 @Inject()
 service: PackageBuildInfoHsfService;
 ```
+
+## TypeError: (0 ,decorator_1.Framework) is not a function
+
+原因为使用了错误的版本，比如低版本的框架，使用了高版本的组件（2.x 的框架使用了 3.x 的组件）。
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01G7gzCj1EkCpW1gaJl_!!6000000000389-2-tps-1461-491.png)
+
+解法：确认自己的框架大版本（@midwayjs/core 的版本即为框架版本），选择对应的文档，对应的组件使用。

@@ -578,7 +578,7 @@ export default {
 | ----------------- | ----------------------------- | ------------------------------------------------------------ |
 | errorStatus       | number                        | 当校验出错时，返回的 Http 状态码，在 http 场景生效，默认 422 |
 | locale            | string                        | 校验出错文本的默认语言，当前有 `en_US` 和 `zh_CN` 两种，默认为 `en_US`，会根据 i18n 组件的规则切换 |
-| validationOptions | joi 的 ValidationOptions 选项 | 常用的有 allowUnknown 选项，如果配置，那么全局的校验都允许出现没有定义的字段 |
+| validationOptions | joi 的 ValidationOptions 选项 | 常用的有 allowUnknown，stripUnknown 等选项，如果配置，那么全局的校验都允许出现没有定义的字段，更多的请查看 joi 的 [ValidationOptions 选项](https://joi.dev/api/?v=17.6.0#anyvalidatevalue-options)。 |
 
 
 
@@ -656,7 +656,42 @@ export class HomeController {
 
 
 
-### 2、处理校验错误
+### 2、剔除参数中的未定义属性
+
+也同样是 validationOptions 的属性，可以直接剔除传入的参数中的某些属性。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  validate: {
+    validationOptions: {
+      stripUnknown: true,		// 全局生效
+  	}
+  }
+}
+```
+
+或者在装饰器上。
+
+```typescript
+@Controller('/api/user')
+export class HomeController {
+
+  @Post('/')
+  @Validate({
+    validationOptions: {
+      stripUnknown: true,
+    }
+  })
+  async updateUser(@Body() user: UserDTO ) {
+  }
+}
+```
+
+
+
+### 3、处理校验错误
 
 上面提到，Midway 会在校验失败时抛出 `MidwayValidationError` 错误，我们可以在 [异常处理器](../error_filter) 中处理。
 
