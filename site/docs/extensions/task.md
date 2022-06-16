@@ -330,6 +330,32 @@ export class UserTask{
 
 分别在task、localTask、queue触发开始和结束的时候会打印对应的日志。
 
+task日志基本配置：
+```typescript
+// src/config/config.default.ts
+import { MidwayConfig } from '@midwayjs/core';
+
+export default {
+  midwayLogger: {
+    default: {
+      // ...
+    },
+    clients: {
+      coreLogger: {
+        // ...
+      },
+      appLogger: {
+        // ...
+      },
+			taskLog: {
+        disableConsole: false, // 是否禁用控制到打印，插件默认禁用
+				level: 'warn', // 服务器默认是warn
+        consoleLevel: 'warn',
+      },
+    }
+  },
+} as MidwayConfig;
+```
 
 分布式的Task触发日志：
 ```typescript
