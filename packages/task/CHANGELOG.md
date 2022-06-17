@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.14](https://github.com/midwayjs/midway/compare/v3.3.13...v3.3.14) (2022-06-17)
+
+
+### Bug Fixes
+
+* throw error when task run fail and add task to fail queue ([#2044](https://github.com/midwayjs/midway/issues/2044)) ([3c6cd0f](https://github.com/midwayjs/midway/commit/3c6cd0f69bb3c934c56ab5d1e30a333bac6b3e1a))
+
+
+
+
+
 ## [3.3.12](https://github.com/midwayjs/midway/compare/v3.3.11...v3.3.12) (2022-06-02)
 
 
