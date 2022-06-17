@@ -85,6 +85,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
             await Utils.toAsyncFunction(rule.value.bind(service))(job.data);
           } catch (e) {
             logger.error(`${e.stack}`);
+            throw e;
           }
           logger.info('task end.');
         });
@@ -143,6 +144,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
             await Utils.toAsyncFunction(rule.value.bind(service))();
           } catch (err) {
             logger.error(err);
+            throw err;
           }
           logger.info('local task end.');
         };
@@ -191,6 +193,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
           );
         } catch (e) {
           logger.error(`${e.stack}`);
+          throw e;
         }
         logger.info('queue process end.');
       });
