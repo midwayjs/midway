@@ -1,9 +1,17 @@
 import { Readable, Transform, Writable } from 'stream';
-import { UploadFileInfo } from './interface';
+import { UploadFileInfo, UploadOptions } from './interface';
 const headSeparator = Buffer.from('\r\n\r\n');
-export const parseMultipart = async (body: any, boundary: string) => {
+export const parseMultipart = async (
+  body: any,
+  boundary: string,
+  uploadConfig: UploadOptions
+) => {
   if (typeof body === 'string') {
-    body = Buffer.from(body);
+    if (uploadConfig.base64) {
+      body = Buffer.from(body, 'base64');
+    } else {
+      body = Buffer.from(body);
+    }
   }
   const bufferSeparator = Buffer.from('\r\n--' + boundary);
   const fields = {};

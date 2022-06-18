@@ -8,6 +8,7 @@ export interface UploadOptions {
   whitelist?: string[]; // The white ext file names, default is `null`
   tmpdir?: string; // 临时文件目录
   cleanTimeout?: number; // 临时文件自动清理时间
+  base64?: boolean; // 上传的body是否为base64，例如腾讯云的apigw
 }
 
 export interface UploadFileInfo<T> {
