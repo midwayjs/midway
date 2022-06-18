@@ -1,4 +1,5 @@
 import * as assert from 'assert';
+import { extend } from '../util/extend';
 
 /**
  * 多客户端工厂实现
@@ -38,7 +39,7 @@ export abstract class ServiceFactory<T> {
 
   public async createInstance(config, clientName?): Promise<T | void> {
     // options.default will be merge in to options.clients[id]
-    config = Object.assign({}, this.options['default'], config);
+    config = extend(true, {}, this.options['default'], config);
     const client = await this.createClient(config, clientName);
     if (client) {
       if (clientName) {

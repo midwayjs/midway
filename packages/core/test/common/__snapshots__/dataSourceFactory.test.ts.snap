@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test/common/dataSource.test.ts should test base data source 1`] = `undefined`;
+
+exports[`test/common/dataSource.test.ts should test base data source 2`] = `undefined`;
