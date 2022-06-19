@@ -1,6 +1,9 @@
-import { Config, Configuration, listModule } from '@midwayjs/decorator';
+import { Config, Configuration } from '@midwayjs/decorator';
+import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+
 import { Sequelize } from 'sequelize-typescript';
 import * as DefaultConfig from './config/config.default';
+import { SequelizeDataSourceManager } from './dataSourceManager';
 
 @Configuration({
   namespace: 'sequelize',
@@ -10,20 +13,19 @@ import * as DefaultConfig from './config/config.default';
     },
   ],
 })
-export class SequelizeConfiguration {
-  instance: Sequelize;
+export class SequelizeConfiguration implements ILifeCycle {
+  dataSourceManager: SequelizeDataSourceManager;
 
-  @Config('sequelize')
-  sequelizeConfig;
+  async onReady(container: IMidwayContainer) {
+    this.dataSourceManager = await container.getAsync(
+      SequelizeDataSourceManager
+    );
+  }
 
-  async onReady() {
-    const options = this.sequelizeConfig.options;
-    this.instance = new Sequelize(options);
-    const entities = listModule('sequelize:core');
-    this.instance.addModels(entities);
-    await this.instance.authenticate();
-    if (this.sequelizeConfig.sync) {
-      await this.instance.sync();
-    }
+  async onStop(container: IMidwayContainer) {
+    const dataSourceManager = await container.getAsync(
+      SequelizeDataSourceManager
+    );
+    await dataSourceManager.stop();
   }
 }
