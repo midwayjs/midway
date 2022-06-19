@@ -52,7 +52,7 @@ export abstract class DataSourceManager<T> {
    * check the data source is connected
    * @param dataSourceName
    */
-  public isConnected(dataSourceName: string): boolean {
+  public async isConnected(dataSourceName: string): Promise<boolean> {
     return this.checkConnected(this.getDataSource(dataSourceName));
   }
 
@@ -74,7 +74,7 @@ export abstract class DataSourceManager<T> {
     config,
     dataSourceName: string
   ): Promise<T | void> | (T | void);
-  protected abstract checkConnected(dataSource: T): boolean;
+  protected abstract checkConnected(dataSource: T): Promise<boolean>;
   protected async destroyDataSource(dataSource: T): Promise<void> {}
 
   public async stop(): Promise<void> {

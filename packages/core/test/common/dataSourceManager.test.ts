@@ -11,14 +11,14 @@ describe('test/common/dataSourceManager.test.ts', () => {
     }
 
     protected createDataSource(config, dataSourceName: string): any {
+      config.entitiesLength = config.entities.length;
       return config;
     }
 
-    protected addEntities(entities: any[], dataSource: any, dataSourceName: string) {
-      dataSource.entitiesLength = entities.length;
+    protected addEntities(entities: any[], dataSourceName: string) {
     }
 
-    protected checkConnected(dataSource: any): boolean {
+    protected async checkConnected(dataSource: any) {
       return false;
     }
   }
