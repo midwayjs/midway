@@ -1,6 +1,6 @@
 import { DataSourceManager } from '../../src';
 
-describe('test/common/dataSource.test.ts', () => {
+describe('test/common/dataSourceManager.test.ts', () => {
 
   class CustomDataSourceFactory extends DataSourceManager<any> {
     getName() {
@@ -13,9 +13,21 @@ describe('test/common/dataSource.test.ts', () => {
     protected createDataSource(config, dataSourceName: string): any {
       return config;
     }
+
+    protected addEntities(entities: any[], dataSource: any, dataSourceName: string) {
+      dataSource.entitiesLength = entities.length;
+    }
+
+    protected checkConnected(dataSource: any): boolean {
+      return false;
+    }
   }
 
   it('should test base data source', async () => {
+    class EntityA {}
+
+    class EntityB {}
+
     const instance = new CustomDataSourceFactory();
     expect(instance.getName()).toEqual('test');
 
@@ -30,7 +42,7 @@ describe('test/common/dataSource.test.ts', () => {
             min: 0, //最小连接数
             idle: 10000
           },
-          dataSourceGroup: 'aa'
+          entities: [EntityA, EntityB]
         },
         test: {
           host: 'localhost',    //数据库地址,默认本机
@@ -41,13 +53,16 @@ describe('test/common/dataSource.test.ts', () => {
             min: 0, //最小连接数
             idle: 10000
           },
-          dataSourceGroup: 'bb'
+          dataSourceGroup: 'bb',
+          entities: [EntityA]
         }
       },
     })
 
     expect(instance.getDataSource('default')).toMatchSnapshot();
+    expect(instance.getDataSource('default').entitiesLength).toEqual(2);
     expect(instance.getDataSource('test')).toMatchSnapshot();
+    expect(instance.getDataSource('test').entitiesLength).toEqual(1);
     expect(instance.getDataSource('fff')).not.toBeDefined();
   });
 });
