@@ -1,16 +1,16 @@
-# midway orm component
+# midway typeorm component
 
 ## How to use
 
 in Configuration.ts file
 
 ```ts
-import * as orm from '@midwayjs/orm';
+import * as typeorm from '@midwayjs/typeorm';
 import { join } from 'path';
 
 @Configuration({
   imports: [
-    orm,
+    typeorm,
   ],
   importConfigs: [
     join(__dirname, './config')
@@ -27,37 +27,30 @@ in config files
 
 ```ts
 export default {
-  orm: {
-    type: 'mysql',
-    host: '',
-    port: 3306,
-    username: '',
-    password: '',
-    database: undefined,
-    synchronize: true,
-    logging: false,
- }
+  typeorm: {
+    dataSource: {
+      default: {
+        type: 'mysql',
+        host: '',
+        port: 3306,
+        username: '',
+        password: '',
+        database: undefined,
+        synchronize: true,
+        logging: false,
+      }
+    }
+  }
 };
-```
-
-or
-
-```ts
-export const orm = {
-  type: 'sqlite',  // or use mysql see typeorm docs
-  database: join(__dirname, './test.sqlite'),
-  logging: true,
-}
 ```
 
 ## Define EntityModel
 
 ```ts
 // model/user.ts
-import { EntityModel } from '@midwayjs/orm';
-import { PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-@EntityModel('test_user')
+@Entity('test_user')
 export class Photo {
   @PrimaryGeneratedColumn({ name: "id" })
   id: number;
@@ -94,7 +87,9 @@ export class UserService {
 
     const user = new User();
     user.id = 1;
-    const users = await this.userModel.findAndCount(user);
+    const users = await this.userModel.findAndCount({
+      where: user
+    });
     return 'hello world' + JSON.stringify(users);
   }
 }

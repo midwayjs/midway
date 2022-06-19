@@ -4,15 +4,8 @@ import {
   IMidwayContainer,
   MidwayDecoratorService,
 } from '@midwayjs/core';
-import {
-  App,
-  Configuration,
-  Init,
-  Inject,
-} from '@midwayjs/decorator';
-import {
-  ORM_MODEL_KEY,
-} from '.';
+import { App, Configuration, Init, Inject } from '@midwayjs/decorator';
+import { ORM_MODEL_KEY } from './decorator';
 import { TypeORMDataSourceManager } from './dataSourceManager';
 import { useContainer } from 'typeorm';
 
@@ -46,7 +39,9 @@ export class OrmConfiguration implements ILifeCycle {
           connectionName: string;
         }
       ) => {
-        return this.dataSourceManager.getDataSource(meta.connectionName).getRepository(meta.modelKey);
+        return this.dataSourceManager
+          .getDataSource(meta.connectionName)
+          .getRepository(meta.modelKey);
       }
     );
   }
@@ -57,7 +52,9 @@ export class OrmConfiguration implements ILifeCycle {
   }
 
   async onStop(container: IMidwayContainer) {
-    const dataSourceManager = await container.getAsync(TypeORMDataSourceManager);
+    const dataSourceManager = await container.getAsync(
+      TypeORMDataSourceManager
+    );
     await dataSourceManager.stop();
   }
 }
