@@ -38,7 +38,7 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
     return dataSource;
   }
 
-  protected checkConnected(dataSource: DataSource): boolean {
+  protected async checkConnected(dataSource: DataSource) {
     return dataSource.isInitialized;
   }
 
