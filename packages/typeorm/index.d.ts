@@ -1,13 +1,9 @@
-import { ConnectionOptions } from './dist/index';
+import { typeormConfigOptions } from './dist/index';
 
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    orm?:
-      | Partial<ConnectionOptions>
-      | {
-          [key: string]: Partial<ConnectionOptions>;
-        };
+    orm?: PowerPartial<typeormConfigOptions>;
   }
 }

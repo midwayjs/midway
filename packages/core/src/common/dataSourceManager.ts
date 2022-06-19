@@ -14,13 +14,21 @@ export abstract class DataSourceManager<T> {
       for (const dataSourceName in options.dataSource) {
         // create entity and bind to data source
         if (options.dataSource[dataSourceName]['entities']) {
-          this.addEntities(options.dataSource[dataSourceName]['entities'], dataSourceName);
+          this.addEntities(
+            options.dataSource[dataSourceName]['entities'],
+            dataSourceName
+          );
         }
         // create data source
-        await this.createInstance(options.dataSource[dataSourceName], dataSourceName);
+        await this.createInstance(
+          options.dataSource[dataSourceName],
+          dataSourceName
+        );
       }
     } else {
-      throw new MidwayParameterError('DataSourceManager must set options.dataSource.');
+      throw new MidwayParameterError(
+        'DataSourceManager must set options.dataSource.'
+      );
     }
   }
 
