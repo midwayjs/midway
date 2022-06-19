@@ -1,0 +1,486 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/index.test.ts should fix issue1976 1`] = `
+Object {
+  "components": Object {
+    "schemas": Object {
+      "CodeLoginDTO": Object {
+        "example": Object {
+          "code": "0000",
+          "phone": "17755556666",
+          "site": "sport",
+          "uuid": "xxxx",
+        },
+        "properties": Object {
+          "code": Object {
+            "description": "验证码",
+            "example": "0000",
+            "type": "string",
+          },
+          "phone": Object {
+            "description": "11位手机号码",
+            "example": "17755556666",
+            "type": "string",
+          },
+          "site": Object {
+            "description": "产品线",
+            "enum": Array [
+              "sport",
+              "question",
+            ],
+            "type": "string",
+          },
+          "uuid": Object {
+            "description": "随机数",
+            "example": "xxxx",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "LoginDTO": Object {
+        "example": Object {
+          "password": "xxx",
+          "phone": "17755556666",
+          "site": "sport",
+        },
+        "properties": Object {
+          "password": Object {
+            "description": "密码",
+            "example": "xxx",
+            "type": "string",
+          },
+          "phone": Object {
+            "description": "11位手机号码",
+            "example": "17755556666",
+            "type": "string",
+          },
+          "site": Object {
+            "description": "产品线",
+            "enum": Array [
+              "sport",
+              "question",
+            ],
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": Object {
+    "contact": Object {},
+    "description": "This is a swagger-ui for midwayjs project",
+    "title": "My Project",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": Object {
+    "/cats/login": Object {
+      "post": Object {
+        "parameters": Array [],
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/LoginDTO",
+              },
+            },
+          },
+          "description": "",
+          "required": true,
+        },
+        "responses": Object {
+          "200": Object {
+            "description": "OK",
+          },
+        },
+        "tags": Array [
+          "cats",
+        ],
+      },
+    },
+    "/cats/smsLogin": Object {
+      "post": Object {
+        "parameters": Array [],
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "$ref": "#/components/schemas/CodeLoginDTO",
+              },
+            },
+          },
+          "description": "",
+          "required": true,
+        },
+        "responses": Object {
+          "200": Object {
+            "description": "OK",
+          },
+        },
+        "tags": Array [
+          "cats",
+        ],
+      },
+    },
+  },
+  "servers": Array [],
+  "tags": Array [
+    Object {
+      "description": "cats",
+      "name": "cats",
+    },
+  ],
+}
+`;
+
+exports[`/test/index.test.ts test swagger should get swagger json 1`] = `
+Object {
+  "example": Object {
+    "agedt": 1,
+    "breedtd": "Maine Coon",
+    "namedt": "Kitty",
+  },
+  "properties": Object {
+    "agedt": Object {
+      "description": "The age of ttthe Cat",
+      "example": 1,
+      "type": "number",
+    },
+    "breedtd": Object {
+      "description": "The breed tttof the Cat",
+      "example": "Maine Coon",
+      "type": "string",
+    },
+    "namedt": Object {
+      "description": "The name of the Cat",
+      "example": "Kitty",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/index.test.ts test swagger should get swagger json 2`] = `
+Object {
+  "example": Object {
+    "aged": 1,
+    "breedd": "Maine Coon",
+    "named": "Kitty",
+  },
+  "properties": Object {
+    "aged": Object {
+      "description": "The age of the Cat",
+      "example": 1,
+      "type": "number",
+    },
+    "breedd": Object {
+      "description": "The breed of the Cat",
+      "example": "Maine Coon",
+      "type": "string",
+    },
+    "named": Object {
+      "description": "The name of the Cat",
+      "example": "Kitty",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/index.test.ts test swagger should get swagger json 3`] = `
+Object {
+  "example": Object {
+    "agea": 1,
+    "breeda": "Maine Coon",
+    "namea": "Kitty",
+  },
+  "properties": Object {
+    "agea": Object {
+      "description": "The age of thaae Cat",
+      "example": 1,
+      "type": "number",
+    },
+    "breeda": Object {
+      "description": "The breed of taahe Cat",
+      "example": "Maine Coon",
+      "type": "string",
+    },
+    "catdsa": Object {
+      "description": "The breed of the Cat",
+      "items": Object {
+        "$ref": "#/components/schemas/Catd",
+      },
+      "type": "array",
+    },
+    "namea": Object {
+      "description": "The name aaof the Cat",
+      "example": "Kitty",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/index.test.ts test swagger should get swagger json 4`] = `
+Object {
+  "example": Object {
+    "age": 1,
+    "agedata": "2022-12-12 11:11:11",
+    "breed": "Maine Coon",
+    "name": "Kitty",
+  },
+  "properties": Object {
+    "age": Object {
+      "description": "The age of the Cat",
+      "example": 1,
+      "type": "number",
+    },
+    "agedata": Object {
+      "description": "The age of the CatDSate",
+      "example": "2022-12-12 11:11:11",
+      "format": "date",
+      "type": "string",
+    },
+    "breed": Object {
+      "description": "The breed of the Cat",
+      "example": "Maine Coon",
+      "type": "string",
+    },
+    "catds": Object {
+      "description": "The breed of the Cat",
+      "items": Object {
+        "$ref": "#/components/schemas/Catd",
+      },
+      "type": "array",
+    },
+    "name": Object {
+      "description": "The name of the Cat",
+      "example": "Kitty",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/index.test.ts test swagger should get swagger json 5`] = `
+Object {
+  "example": Object {
+    "age": "1",
+    "agedata": "2022-12-12 11:11:11",
+    "breed": "bbbb",
+    "breeds": Array [
+      "1",
+    ],
+    "name": "Kitty",
+  },
+  "properties": Object {
+    "age": Object {
+      "description": "The name of the Catage",
+      "example": "1",
+      "maxItems": 1,
+      "maxLength": 1,
+      "maxProperties": 2,
+      "maximum": 10,
+      "type": "number",
+    },
+    "agedata": Object {
+      "description": "The age of the CatDSate",
+      "example": "2022-12-12 11:11:11",
+      "format": "date",
+      "type": "string",
+    },
+    "breed": Object {
+      "description": "The name of the Catbreed",
+      "example": "bbbb",
+      "type": "string",
+    },
+    "breeds": Object {
+      "description": "The name of the Catage",
+      "example": Array [
+        "1",
+      ],
+      "items": Object {
+        "type": "string",
+      },
+      "nullable": true,
+      "type": "array",
+      "uniqueItems": true,
+    },
+    "hello": Object {
+      "enum": Array [
+        "One",
+        "Two",
+        "Three",
+      ],
+      "type": "string",
+    },
+    "name": Object {
+      "description": "The name of the Catname",
+      "example": "Kitty",
+      "format": "binary",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/index.test.ts test swagger should get swagger json 6`] = `
+Object {
+  "get": Object {
+    "parameters": Array [
+      Object {
+        "in": "header",
+        "name": "x-test-one",
+        "schema": Object {
+          "type": "string",
+        },
+      },
+      Object {
+        "allowEmptyValue": false,
+        "explode": true,
+        "in": "query",
+        "name": "aa",
+        "required": true,
+        "schema": Object {
+          "enum": Array [
+            "One",
+            "Two",
+            "Three",
+          ],
+          "type": "string",
+        },
+        "style": "form",
+      },
+      Object {
+        "allowEmptyValue": false,
+        "explode": true,
+        "in": "query",
+        "name": "test",
+        "required": true,
+        "schema": Object {
+          "enum": Array [
+            "One",
+            "Two",
+            "Three",
+          ],
+          "type": "string",
+        },
+        "style": "form",
+      },
+      Object {
+        "description": "hello world id number",
+        "example": 12,
+        "explode": false,
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": Object {
+          "type": "string",
+        },
+        "style": "simple",
+      },
+    ],
+    "responses": Object {
+      "200": Object {
+        "content": Object {
+          "application/json": Object {
+            "schema": Object {
+              "$ref": "#/components/schemas/Cat",
+            },
+          },
+        },
+        "description": "The found record",
+      },
+    },
+    "security": Array [
+      Object {
+        "ttt": Array [],
+      },
+      Object {
+        "bbb": Array [],
+      },
+    ],
+    "tags": Array [
+      "2-国家测试",
+      "sss",
+    ],
+    "x-hello": Object {
+      "hello": "world",
+    },
+  },
+  "post": Object {
+    "parameters": Array [
+      Object {
+        "in": "header",
+        "name": "x-test-one",
+        "schema": Object {
+          "type": "string",
+        },
+      },
+      Object {
+        "description": "hello world id number",
+        "example": 12,
+        "explode": false,
+        "in": "path",
+        "name": "id",
+        "required": true,
+        "schema": Object {
+          "format": "int32",
+          "type": "number",
+        },
+        "style": "simple",
+      },
+    ],
+    "requestBody": Object {
+      "content": Object {
+        "application/octet-stream": Object {
+          "schema": Object {
+            "format": "binary",
+            "type": "string",
+          },
+        },
+      },
+      "description": "hello world",
+      "required": true,
+    },
+    "responses": Object {
+      "200": Object {
+        "content": Object {
+          "application/json": Object {
+            "schema": Object {
+              "$ref": "#/components/schemas/Cat",
+            },
+          },
+        },
+        "description": "成功了",
+      },
+      "403": Object {
+        "description": "Forbidden.",
+      },
+      "404": Object {
+        "description": "NotFound.",
+      },
+    },
+    "security": Array [
+      Object {
+        "ttt": Array [],
+      },
+      Object {
+        "bbb": Array [],
+      },
+    ],
+    "summary": "Create cat",
+    "tags": Array [
+      "2-国家测试",
+      "sss",
+    ],
+  },
+}
+`;

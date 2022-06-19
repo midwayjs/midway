@@ -9,4 +9,5 @@ export const upload: UploadOptions = {
   whitelist: uploadWhiteList,
   tmpdir: join(tmpdir(), 'midway-upload-files'),
   cleanTimeout: 5 * 60 * 1000,
+  base64: false,
 };

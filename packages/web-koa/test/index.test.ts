@@ -53,7 +53,7 @@ describe('/test/feature.test.ts', () => {
     it('test post json data', async () => {
       const result = await createHttpRequest(app).post('/').send({
         bbbb: 222,
-      })
+      });
       expect(result.status).toBe(200);
       expect(result.text).toBe('222');
     });
@@ -113,7 +113,7 @@ describe('/test/feature.test.ts', () => {
         });
         expect(result.body).toStrictEqual({
           name: 'harry',
-          other: "1",
+          other: '1',
         });
       });
 
@@ -129,14 +129,14 @@ describe('/test/feature.test.ts', () => {
         });
         expect(result.body).toStrictEqual({
           name: 'harry',
-          other: "1",
+          other: '1',
         });
       });
 
       it('should test body', async () => {
         const result = await createHttpRequest(app).post('/param/param_body').send({
           name: 'harry'
-        })
+        });
         expect(result.text).toBe('harry');
       });
 
@@ -159,7 +159,7 @@ describe('/test/feature.test.ts', () => {
       it('should test headers', async () => {
         const result = await createHttpRequest(app).get('/param/headers').set({
           name: 'harry'
-        })
+        });
         expect(result.text).toBe('harry');
       });
 
@@ -170,7 +170,7 @@ describe('/test/feature.test.ts', () => {
           .set({
             name: 'harry'
           })
-          .set('Cookie', cookie)
+          .set('Cookie', cookie);
         expect(result.text).toBe('harry');
       });
 
@@ -346,6 +346,36 @@ describe('/test/feature.test.ts', () => {
       .get('/');
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('abc');
+    await closeApp(app);
+  });
+
+  it('should test throw error got right type when set json type', async () => {
+    const app = await creatApp('base-app-json-error');
+    let result = await createHttpRequest(app)
+      .get('/');
+    expect(result.status).toEqual(400);
+    expect(result.body).toEqual({
+      'code': '400',
+      'message': 'my error'
+    });
+
+    result = await createHttpRequest(app)
+      .get('/bbb.json');
+    expect(result.status).toEqual(400);
+    expect(result.body).toEqual({
+      'code': '400',
+      'message': 'my error'
+    });
+
+    result = await createHttpRequest(app)
+      .get('/accept_json')
+      .set('Accept', 'text/*, application/json');
+    expect(result.status).toEqual(400);
+    expect(result.body).toEqual({
+      'code': '400',
+      'message': 'my error'
+    });
+
     await closeApp(app);
   });
 });

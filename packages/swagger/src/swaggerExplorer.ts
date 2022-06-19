@@ -627,8 +627,6 @@ export class SwaggerExplorer {
             tt.example = {};
           }
           tt.example[key] = metadata?.example;
-
-          delete metadata.example;
         }
         if (typeof metadata?.required !== undefined) {
           if (metadata?.required) {

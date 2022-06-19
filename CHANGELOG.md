@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.14](https://github.com/midwayjs/midway/compare/v3.3.13...v3.3.14) (2022-06-17)
+
+
+### Bug Fixes
+
+* swagger delete example when extends ([#2041](https://github.com/midwayjs/midway/issues/2041)) ([47b62b8](https://github.com/midwayjs/midway/commit/47b62b8ebfb4a5ad4fe9ca0ba0038bb324711404))
+* throw error when task run fail and add task to fail queue ([#2044](https://github.com/midwayjs/midway/issues/2044)) ([3c6cd0f](https://github.com/midwayjs/midway/commit/3c6cd0f69bb3c934c56ab5d1e30a333bac6b3e1a))
+
+
+
+
+
 ## [3.3.13](https://github.com/midwayjs/midway/compare/v3.3.12...v3.3.13) (2022-06-06)
 
 

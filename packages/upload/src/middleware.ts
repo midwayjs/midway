@@ -83,11 +83,17 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       body = await getRawBody(req, {
         limit: fileSize,
       });
+    } else if (
+      req?.originEvent?.body &&
+      (typeof req.originEvent.body === 'string' ||
+        Buffer.isBuffer(req.originEvent.body))
+    ) {
+      body = req.originEvent.body;
     } else {
       body = req.body;
     }
 
-    const data = await parseMultipart(body, boundary);
+    const data = await parseMultipart(body, boundary, this.upload);
     if (!data) {
       return next();
     }

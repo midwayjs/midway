@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.14](https://github.com/midwayjs/midway/compare/v3.3.13...v3.3.14) (2022-06-17)
+
+**Note:** Version bump only for package @midwayjs/consul
+
+
+
+
+
 ## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
 
 **Note:** Version bump only for package @midwayjs/consul

@@ -585,10 +585,10 @@ export class ContainerConfiguration {
       (options) => {
         return {
           around: async (joinPoint: JoinPoint) => {
-            
+
             // 装饰器所在的实例
             const instance = joinPoint.target;
-            const ctx = instnace[REQUEST_OBJ_CTX_KEY];
+            const ctx = instance[REQUEST_OBJ_CTX_KEY];
             // ctx.xxxx
             // ...
           },
