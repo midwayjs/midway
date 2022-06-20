@@ -6,11 +6,7 @@
 - 定义可包裹方法，做拦截的方法装饰器
 - 定义修改参数的参数装饰器
 
-
-
 我们考虑到了装饰器当前在标准中的阶段以及后续风险，Midway 提供的自定义装饰器方式及其配套能力由框架实现，以尽可能的规避后续规范变化带来的问题。
-
-
 
 一般，我们推荐将自定义装饰器放到 `src/decorator` 目录中。
 
@@ -33,8 +29,6 @@
 └── tsconfig.json
 ```
 
-
-
 ## 装饰器 API
 
 Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依赖注入容器，实现扫描和扩展，这些 API 方法我们都从 `@midwayjs/decorator` 包进行导出。
@@ -53,13 +47,13 @@ Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依
 - `saveClassMetadata` 保存元信息到 class
 - `attachClassMetadata` 附加元信息到 class
 - `getClassMetadata` 从 class 获取元信息
-- `savePropertyDataToClass`  保存属性的元信息到 class
+- `savePropertyDataToClass` 保存属性的元信息到 class
 - `attachPropertyDataToClass` 附加属性的元信息到 class
 - `getPropertyDataFromClass` 从 class 获取属性元信息
 - `listPropertyDataFromClass` 列出 class 上保存的所有的属性的元信息
 - `savePropertyMetadata` 保存属性元信息到属性本身
 - `attachPropertyMetadata` 附加属性元信息到属性本身
-- `getPropertyMetadata`  从属性上获取保存的元信息
+- `getPropertyMetadata` 从属性上获取保存的元信息
 
 **快捷操作**
 
@@ -73,8 +67,6 @@ Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依
 - `getMethodParamTypes` 获取某个方法的参数类型，等价于 `Reflect.getMetadata(design:paramtypes)`
 - `getPropertyType` 获取某个属性的类型，等价于 `Reflect.getMetadata(design:type)`
 - `getMethodReturnTypes` 获取方法返回值类型，等价于 `Reflect.getMetadata(design:returntype)`
-
-
 
 ## 类装饰器
 
@@ -111,8 +103,6 @@ export function Model(): ClassDecorator {
 }
 ```
 
-
-
 上面只是定了了这个装饰器，我们还要实现相应的功能，midway v2 开始有生命周期的概念，可以在 `configuration` 中的生命周期中执行。
 
 ```typescript
@@ -121,15 +111,12 @@ export function Model(): ClassDecorator {
 import { listModule, Configuration, App, Inject } from '@midwayjs/decorator';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
-import { MODEL_KEY } from './decorator/model.decorator'
+import { MODEL_KEY } from './decorator/model.decorator';
 
 @Configuration({
-  imports: [
-    koa
-  ],
+  imports: [koa],
 })
 export class ContainerConfiguration {
-
   @App()
   app: koa.Application;
 
@@ -145,10 +132,7 @@ export class ContainerConfiguration {
     }
   }
 }
-
 ```
-
-
 
 最后，我们要使用这个装饰器。
 
@@ -162,15 +146,11 @@ export class UserModel {
 }
 ```
 
-
-
 ## 属性装饰器
 
 Midway 提供了 `createCustomPropertyDecorator` 方法，用于创建自定义属性装饰器，框架的 `@Logger` ，`@Config` 等装饰器都是这样创建而来的。
 
 和 TypeScript 中定义的装饰器不同的是，Midway 提供的属性装饰器，可以在继承中使用。
-
-
 
 我们举个例子，假如现在有一个内存缓存，我们的属性装饰器用于获取缓存数据，下面是一些准备工作。
 
@@ -181,7 +161,6 @@ import { Configuration, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MemoryStore extends Map {
-
   save(key, value) {
     this.set(key, value);
   }
@@ -191,7 +170,6 @@ export class MemoryStore extends Map {
   }
 }
 
-
 // src/configuration.ts
 // 入口实例化，并保存一些数据
 import { Configuration, App, Inject } from '@midwayjs/decorator';
@@ -199,12 +177,9 @@ import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
-  imports: [
-    koa
-  ],
+  imports: [koa],
 })
 export class ContainerConfiguration {
-
   @App()
   app: koa.Application;
 
@@ -221,14 +196,10 @@ export class ContainerConfiguration {
 }
 ```
 
-
-
 我们来实现一个简单的 `@MemoryCache()` 装饰器。属性装饰器的实现分为两部分：
 
 - 1、定义一个装饰器方法，一般只保存元数据
 - 2、定义一个实现，在装饰器逻辑执行前即可
-
-
 
 下面是定义装饰器方法的部分。
 
@@ -246,23 +217,17 @@ export function MemoryCache(key?: string): PropertyDecorator {
 }
 ```
 
-
-
 在装饰器的方法执行之前（一般在初始化的地方）去实现。实现装饰器，我们需要用到内置的 `MidwayDecoratorService` 服务。
 
 ```typescript
-import { Configuration, App, Inject, Init } from '@midwayjs/decorator';
-import { join } from 'path';
+import { Configuration, Inject, Init, MidwayDecoratorService } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
-import { MEMORY_CACHE_KEY } from 'decorator/memoryCache.decorator';
+import { MEMORY_CACHE_KEY, MemoryStore } from 'decorator/memoryCache.decorator';
 
 @Configuration({
-  imports: [
-    koa
-  ],
+  imports: [koa],
 })
 export class ContainerConfiguration {
-
   @App()
   app: koa.Application;
 
@@ -277,12 +242,9 @@ export class ContainerConfiguration {
     // ...
 
     // 实现装饰器
-    this.decoratorService.registerPropertyHandler(
-      MEMORY_CACHE_KEY,
-      (propertyName, meta) => {
-        return this.store.get(meta.key);
-      }
-    );
+    this.decoratorService.registerPropertyHandler(MEMORY_CACHE_KEY, (propertyName, meta) => {
+      return this.store.get(meta.key);
+    });
   }
 }
 ```
@@ -298,27 +260,21 @@ import { MemoryCache } from 'decorator/memoryCache.decorator';
 
 // ...
 export class UserService {
-
   @MemoryCache('aaa')
   cacheValue;
 
   async invoke() {
-
     console.log(this.cacheValue);
     // => 1
   }
 }
 ```
 
-
-
 ## 方法装饰器
 
 Midway 提供了 `createCustomMethodDecorator` 方法，用于创建自定义方法装饰器。
 
 和 TypeScript 中定义的装饰器不同的是，Midway 提供的方法装饰器，由拦截器统一实现，和其他拦截方式不冲突，并且更加简单。
-
-
 
 我们以打印方法执行时间为例。
 
@@ -339,8 +295,6 @@ export function LoggingTime(formatUnit = 'ms'): MethodDecorator {
 }
 ```
 
-
-
 实现的部分，同样需要使用框架内置的 `DecoratorService` 服务。
 
 ```typescript
@@ -350,18 +304,15 @@ function formatDuring(value, formatUnit: string) {
   // 这里返回时间格式化
   if (formatUnit === 'ms') {
     return `${value} ms`;
-  } else if (formatUnit === 'min' ) {
+  } else if (formatUnit === 'min') {
     // return xxx
   }
 }
 
 @Configuration({
-  imports: [
-    koa
-  ],
+  imports: [koa],
 })
 export class ContainerConfiguration {
-
   @App()
   app: koa.Application;
 
@@ -375,32 +326,28 @@ export class ContainerConfiguration {
     // ...
 
     // 实现方法装饰器
-    this.decoratorService.registerMethodHandler(
-      LOGGING_KEY,
-      (options) => {
-        return {
-          around: async (joinPoint: JoinPoint) => {
+    this.decoratorService.registerMethodHandler(LOGGING_KEY, (options) => {
+      return {
+        around: async (joinPoint: JoinPoint) => {
+          // 拿到格式化参数
+          const format = options.metadata.formatUnit || 'ms';
 
-            // 拿到格式化参数
-            const format = options.metadata.formatUnit || 'ms';
+          // 记录开始时间
+          const startTime = Date.now();
 
-            // 记录开始时间
-            const startTime = Date.now();
+          // 执行原方法
+          const result = await joinPoint.proceed(...joinPoint.args);
 
-            // 执行原方法
-            const result = await joinPoint.proceed(...joinPoint.args);
+          const during = formatDuring(Date.now() - startTime, format);
 
-            const during = formatDuring(Date.now() - startTime, format);
+          // 打印执行时间
+          this.logger.info(`Method ${joinPoint.methodName} invoke during ${during}`);
 
-            // 打印执行时间
-            this.logger.info(`Method ${joinPoint.methodName} invoke during ${during}`);
-
-            // 返回执行结果
-            return result;
-          },
-        };
-      }
-    );
+          // 返回执行结果
+          return result;
+        },
+      };
+    });
   }
 }
 ```
@@ -422,20 +369,15 @@ export class ContainerConfiguration {
 ```typescript
 // ...
 export class UserService {
-
   @LoggingTime()
   async getUser() {
-  	// ...
+    // ...
   }
 }
 
 // 执行时
 // output => Method "getUser" invoke during 4ms
 ```
-
-
-
-
 
 ## 无需实现的方法装饰器
 
@@ -458,13 +400,11 @@ export function LoggingTime(): MethodDecorator {
 }
 ```
 
-
-
 ## 参数装饰器
 
 Midway 提供了 `createCustomParamDecorator` 方法，用于创建自定义参数装饰器。
 
-参数装饰器，一般用于修改参数值，提前预处理数据等，Midway 的 `@Query  `等请求系列的装饰器都基于其实现。
+参数装饰器，一般用于修改参数值，提前预处理数据等，Midway 的 `@Query `等请求系列的装饰器都基于其实现。
 
 和其他装饰器相同，我们的定义与实现是分离的，我们以获取参数中的用户（ctx.user）来举例。
 
@@ -488,12 +428,9 @@ export function User(): MethodDecorator {
 //...
 
 @Configuration({
-  imports: [
-    koa
-  ],
+  imports: [koa],
 })
 export class ContainerConfiguration {
-
   @App()
   app: koa.Application;
 
@@ -507,14 +444,11 @@ export class ContainerConfiguration {
     // ...
 
     // 实现参数装饰器
-    this.decoratorService.registerParameterHandler(
-      USER_KEY,
-      (options) => {
-        // originArgs 是原始的方法入参
-        // 这里第一个参数是 ctx，所以取 ctx.user
-        return options.originArgs[0]?.user ?? {};
-      }
-    );
+    this.decoratorService.registerParameterHandler(USER_KEY, (options) => {
+      // originArgs 是原始的方法入参
+      // 这里第一个参数是 ctx，所以取 ctx.user
+      return options.originArgs[0]?.user ?? {};
+    });
   }
 }
 ```
@@ -535,7 +469,6 @@ export class ContainerConfiguration {
 ```typescript
 // ...
 export class UserController {
-
   async invoke(@User() user: string) {
     console.log(user);
     // => xxx
@@ -551,8 +484,6 @@ export class UserController {
 
 :::
 
-
-
 ## 方法装饰器获取上下文
 
 在请求链路上，如果自定义了装饰器要获取上下文往往比较困难，如果代码没有显示的注入上下文，装饰器中获取会非常困难。
@@ -566,7 +497,6 @@ import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
 //...
 
 export class ContainerConfiguration {
-
   @App()
   app: koa.Application;
 
@@ -580,21 +510,17 @@ export class ContainerConfiguration {
     // ...
 
     // 实现方法装饰器
-    this.decoratorService.registerMethodHandler(
-      LOGGING_KEY,
-      (options) => {
-        return {
-          around: async (joinPoint: JoinPoint) => {
-
-            // 装饰器所在的实例
-            const instance = joinPoint.target;
-            const ctx = instance[REQUEST_OBJ_CTX_KEY];
-            // ctx.xxxx
-            // ...
-          },
-        };
-      }
-    );
+    this.decoratorService.registerMethodHandler(LOGGING_KEY, (options) => {
+      return {
+        around: async (joinPoint: JoinPoint) => {
+          // 装饰器所在的实例
+          const instance = joinPoint.target;
+          const ctx = instance[REQUEST_OBJ_CTX_KEY];
+          // ctx.xxxx
+          // ...
+        },
+      };
+    });
   }
 }
 ```
