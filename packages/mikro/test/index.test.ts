@@ -4,16 +4,22 @@ import { close, createLightApp } from '@midwayjs/mock';
 import { IMidwayApplication } from '@midwayjs/core';
 
 describe('/test/index.test.ts', () => {
-  it('should test base entity', async () => {
-    cleanFile(join(__dirname, 'fixtures/base-fn-origin', 'test.sqlite'));
+  if (/v12/.test(process.version) || /v14/.test(process.version)) {
+    it('should ignore mikro test', () => {
+      console.log('not support current node version');
+    });
+  } else {
+    it('should test base entity', async () => {
+      cleanFile(join(__dirname, 'fixtures/base-fn-origin', 'test.sqlite'));
 
-    const app: IMidwayApplication = await createLightApp(join(__dirname, 'fixtures/base-fn-origin'), {});
-    const result = app.getAttr<string>('result');
+      const app: IMidwayApplication = await createLightApp(join(__dirname, 'fixtures/base-fn-origin'), {});
+      const result = app.getAttr<string>('result');
 
-    expect(result.includes('b1')).toBeTruthy();
+      expect(result.includes('b1')).toBeTruthy();
 
-    await close(app);
-  });
+      await close(app);
+    });
+  }
 });
 
 function cleanFile(file) {
