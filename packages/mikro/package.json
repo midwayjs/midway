@@ -1,5 +1,5 @@
 {
-  "name": "@midwayjs/knex",
+  "name": "@midwayjs/mikro",
   "version": "3.3.0",
   "main": "dist/index",
   "typings": "index.d.ts",
