@@ -19,8 +19,6 @@ export class MikroDataSourceManager extends DataSourceManager<
     return 'mikro';
   }
 
-  protected addEntities(entities: any[], dataSourceName: string): void {}
-
   protected async createDataSource(
     config: any,
     dataSourceName: string

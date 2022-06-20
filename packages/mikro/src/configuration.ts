@@ -5,7 +5,7 @@ import {
   MidwayDecoratorService,
 } from '@midwayjs/core';
 import { App, Configuration, Init, Inject } from '@midwayjs/decorator';
-import { ORM_MODEL_KEY } from './decorator';
+import { ENTITY_MODEL_KEY } from './decorator';
 import { MikroDataSourceManager } from './dataSourceManager';
 
 @Configuration({
@@ -30,7 +30,7 @@ export class MikroConfiguration implements ILifeCycle {
   @Init()
   async init() {
     this.decoratorService.registerPropertyHandler(
-      ORM_MODEL_KEY,
+      ENTITY_MODEL_KEY,
       (
         propertyName,
         meta: {
@@ -50,7 +50,8 @@ export class MikroConfiguration implements ILifeCycle {
   }
 
   async onStop(container: IMidwayContainer) {
-    const dataSourceManager = await container.getAsync(MikroDataSourceManager);
-    await dataSourceManager.stop();
+    if (this.dataSourceManager) {
+      await this.dataSourceManager.stop();
+    }
   }
 }

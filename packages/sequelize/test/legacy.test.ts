@@ -1,8 +1,9 @@
 import { createApp, close } from '@midwayjs/mock';
 import { Framework } from '@midwayjs/koa';
 import { join } from 'path';
+import { UserService } from './fixtures/sequelize-demo/src/service/user'
 import { existsSync, unlinkSync } from 'fs';
-import { UserService } from './fixtures/sequelize-new/src/service/user';
+
 
 function cleanFile(file) {
   if (existsSync(file)) {
@@ -10,11 +11,11 @@ function cleanFile(file) {
   }
 }
 
-describe('/test/index.test.ts', () => {
+describe('/test/legacy.test.ts', () => {
   let app = null;
   beforeAll(async () => {
-    cleanFile(join(__dirname, 'fixtures/sequelize-new', 'database.sqlite'));
-    app = await createApp(join(__dirname, 'fixtures', 'sequelize-new'), {}, Framework);
+    cleanFile(join(__dirname, 'fixtures/sequelize-demo', 'database.sqlite'));
+    app = await createApp(join(__dirname, 'fixtures', 'sequelize-demo'), {}, Framework);
   });
 
   afterAll(async () => {

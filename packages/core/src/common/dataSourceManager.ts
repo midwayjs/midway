@@ -12,13 +12,6 @@ export abstract class DataSourceManager<T> {
     this.options = options;
     if (options.dataSource) {
       for (const dataSourceName in options.dataSource) {
-        // create entity and bind to data source
-        if (options.dataSource[dataSourceName]['entities']) {
-          this.addEntities(
-            options.dataSource[dataSourceName]['entities'],
-            dataSourceName
-          );
-        }
         // create data source
         await this.createInstance(
           options.dataSource[dataSourceName],
@@ -69,7 +62,6 @@ export abstract class DataSourceManager<T> {
   }
 
   public abstract getName(): string;
-  protected abstract addEntities(entities: any[], dataSourceName: string): void;
   protected abstract createDataSource(
     config,
     dataSourceName: string

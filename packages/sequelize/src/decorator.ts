@@ -1,3 +1,4 @@
+import { createCustomPropertyDecorator } from '@midwayjs/decorator';
 import {
   setModelName,
   addOptions,
@@ -6,6 +7,11 @@ import {
 } from 'sequelize-typescript';
 import { saveModule } from '@midwayjs/decorator';
 
+/**
+ * @deprecated
+ * @param options
+ * @constructor
+ */
 export function BaseTable<M extends Model = Model>(
   options: TableOptions<M>
 ): any;
@@ -26,4 +32,13 @@ export function BaseTable(arg?: any) {
 function annotate(target, options: any = {}) {
   setModelName(target.prototype, options.modelName || target.name);
   addOptions(target.prototype, options);
+}
+
+export const ENTITY_MODEL_KEY = 'sequelize:entity_model_key';
+
+export function InjectRepository(modelKey: any, connectionName = 'default') {
+  return createCustomPropertyDecorator(ENTITY_MODEL_KEY, {
+    modelKey,
+    connectionName,
+  });
 }
