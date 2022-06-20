@@ -1,5 +1,6 @@
 import { Author, BaseEntity, Book, BookTag, Publisher } from '../entity';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
+import { join } from 'path';
 
 export default (appInfo) => {
   return {
@@ -7,9 +8,8 @@ export default (appInfo) => {
       dataSource: {
         default: {
           entities: [Author, Book, BookTag, Publisher, BaseEntity],
-          dbName: 'mikro-orm-ts',
+          dbName: join(__dirname, '../../test.sqlite'),
           type: 'sqlite',
-          port: 3307,
           highlighter: new SqlHighlighter(),
           debug: true,
           allowGlobalContext: true,

@@ -3,9 +3,6 @@
   "version": "3.3.6",
   "main": "dist/index",
   "typings": "index.d.ts",
-  "peerDependencies": {
-    "typeorm": "*"
-  },
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",

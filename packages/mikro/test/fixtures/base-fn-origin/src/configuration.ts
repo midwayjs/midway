@@ -1,4 +1,4 @@
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration, Inject } from '@midwayjs/decorator';
 import * as mikro from '../../../../src';
 import { join } from 'path';
 import { InjectRepository } from '../../../../src';
@@ -21,7 +21,14 @@ export class ContainerConfiguration {
   @App()
   app: IMidwayApplication;
 
+  @Inject()
+  mikroDataSourceManager: mikro.MikroDataSourceManager;
+
   async onReady() {
+    const orm = this.mikroDataSourceManager.getDataSource('default');
+    const connection = orm.em.getConnection();
+    await (connection as any).loadFile(join(__dirname, '../sqlite-schema.sql'));
+
     const book = this.bookRepository.create({ title: 'b1', author: { name: 'a1', email: 'e1' } });
     wrap(book.author, true).__initialized = true;
     await this.bookRepository.persist(book).flush();

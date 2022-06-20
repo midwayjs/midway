@@ -5,13 +5,12 @@ import { IMidwayApplication } from '@midwayjs/core';
 
 describe('/test/index.test.ts', () => {
   it('should test base entity', async () => {
-    cleanFile(join(__dirname, 'fixtures/base-fn-origin', 'default.sqlite'));
+    cleanFile(join(__dirname, 'fixtures/base-fn-origin', 'test.sqlite'));
 
     const app: IMidwayApplication = await createLightApp(join(__dirname, 'fixtures/base-fn-origin'), {});
     const result = app.getAttr<string>('result');
 
-    expect(result.includes('hello world')).toBeTruthy();
-    expect(result).toEqual('hello world[[{"id":1,"name":"oneuser1"}],1]');
+    expect(result.includes('b1')).toBeTruthy();
 
     await close(app);
   });
@@ -22,4 +21,3 @@ function cleanFile(file) {
     unlinkSync(file);
   }
 }
-
