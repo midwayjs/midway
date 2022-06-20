@@ -41,6 +41,10 @@ export abstract class DataSourceManager<T> {
     return this.dataSource.has(dataSourceName);
   }
 
+  public getDataSourceNames() {
+    return Array.from(this.dataSource.keys());
+  }
+
   /**
    * check the data source is connected
    * @param dataSourceName

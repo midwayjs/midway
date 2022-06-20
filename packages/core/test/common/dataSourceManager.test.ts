@@ -15,9 +15,6 @@ describe('test/common/dataSourceManager.test.ts', () => {
       return config;
     }
 
-    protected addEntities(entities: any[], dataSourceName: string) {
-    }
-
     protected async checkConnected(dataSource: any) {
       return false;
     }
@@ -58,7 +55,7 @@ describe('test/common/dataSourceManager.test.ts', () => {
         }
       },
     })
-
+    expect(instance.getDataSourceNames()).toEqual(['default', 'test']);
     expect(instance.getDataSource('default')).toMatchSnapshot();
     expect(instance.getDataSource('default').entitiesLength).toEqual(2);
     expect(instance.getDataSource('test')).toMatchSnapshot();
