@@ -39,7 +39,7 @@
     "@types/supertest": "2.0.11",
     "fs-extra": "10.0.1",
     "js-yaml": "4.1.0",
-    "supertest": "6.2.2",
+    "supertest": "6.2.3",
     "raw-body": "2.5.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

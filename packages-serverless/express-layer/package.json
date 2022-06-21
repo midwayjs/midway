@@ -18,7 +18,7 @@
     "@midwayjs/serverless-scf-trigger": "^3.3.5",
     "body-parser": "1.19.2",
     "express": "4.17.3",
-    "supertest": "6.2.2"
+    "supertest": "6.2.3"
   },
   "engines": {
     "node": ">=12"
