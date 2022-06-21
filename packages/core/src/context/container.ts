@@ -342,6 +342,10 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       return;
     }
 
+    if (options?.bindHook) {
+      options.bindHook(target, options);
+    }
+
     let definition;
     if (Types.isClass(target)) {
       definition = new ObjectDefinition();
