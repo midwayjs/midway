@@ -1,5 +1,5 @@
 import { Configuration } from '@midwayjs/decorator';
-import { HttpService } from './serviceManager';
+import { HttpServiceFactory } from './serviceManager';
 
 @Configuration({
   namespace: 'axios',
@@ -13,6 +13,6 @@ import { HttpService } from './serviceManager';
 })
 export class AxiosConfiguration {
   async onReady(container) {
-    await container.getAsync(HttpService);
+    await container.getAsync(HttpServiceFactory);
   }
 }

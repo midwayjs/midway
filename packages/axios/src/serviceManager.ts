@@ -1,20 +1,54 @@
-import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
-import { Provide, Inject, Init, Config, App } from '@midwayjs/decorator';
-import { IMidwayApplication } from '@midwayjs/core';
-import { AXIOS_INSTANCE_KEY, AxiosHttpService } from './interface';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import {
+  Config,
+  Init,
+  Inject,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
+import { ServiceFactory } from '@midwayjs/core';
+import { AxiosHttpService } from './interface';
 
 @Provide()
+@Scope(ScopeEnum.Singleton)
+export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
+  @Config('axios')
+  axiosConfig;
+
+  @Init()
+  async init() {
+    let axiosConfig = this.axiosConfig;
+    if (!this.axiosConfig['clients']) {
+      axiosConfig = {
+        default: {},
+        clients: {
+          default: this.axiosConfig,
+        },
+      };
+    }
+    await this.initClients(axiosConfig);
+  }
+
+  protected async createClient(
+    config: any,
+    clientName: any
+  ): Promise<AxiosInstance> {
+    return axios.create(config);
+  }
+
+  getName(): string {
+    return 'axios';
+  }
+}
+
+@Provide()
+@Scope(ScopeEnum.Singleton)
 export class HttpService implements AxiosHttpService {
   private instance: AxiosInstance;
 
   @Inject()
-  protected ctx: any;
-
-  @App()
-  protected app: IMidwayApplication;
-
-  @Config('axios')
-  protected httpConfig: AxiosRequestConfig;
+  private serviceFactory: HttpServiceFactory;
 
   get interceptors() {
     return this.instance.interceptors;
@@ -22,46 +56,7 @@ export class HttpService implements AxiosHttpService {
 
   @Init()
   protected async init() {
-    if (
-      !this.app.getApplicationContext().registry.hasObject(AXIOS_INSTANCE_KEY)
-    ) {
-      // 动态往全局容器中创建一个单例
-      const instance = axios.create(this.httpConfig ?? {});
-
-      // Add a request interceptor
-      instance.interceptors.request.use(
-        config => {
-          // Do something before request is sent
-          return config;
-        },
-        error => {
-          // Do something with request error
-          return Promise.reject(error);
-        }
-      );
-
-      // Add a response interceptor
-      instance.interceptors.response.use(
-        response => {
-          // Any status code that lie within the range of 2xx cause this function to trigger
-          // Do something with response data
-          return response;
-        },
-        error => {
-          // Any status codes that falls outside the range of 2xx cause this function to trigger
-          // Do something with response error
-          return Promise.reject(error);
-        }
-      );
-
-      this.app
-        .getApplicationContext()
-        .registry.registerObject(AXIOS_INSTANCE_KEY, instance);
-    }
-
-    this.instance = this.app
-      .getApplicationContext()
-      .registry.getObject(AXIOS_INSTANCE_KEY);
+    this.instance = this.serviceFactory.get('default');
   }
 
   getUri(config?: AxiosRequestConfig): string {
