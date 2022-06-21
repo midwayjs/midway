@@ -3,7 +3,7 @@
  */
 import { Types } from '@midwayjs/decorator';
 
-export function extend(...args) {
+export function extend(...args): any {
   let options, name, src, copy, clone;
   let target = args[0];
   let i = 1;

@@ -36,6 +36,7 @@ export { MidwayMockService } from './service/mockService';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './common/serviceFactory';
+export * from './common/dataSourceManager';
 export * from './common/dataListener';
 export * from './common/fileDetector';
 export * from './common/webGenerator';
