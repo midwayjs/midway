@@ -1,6 +1,16 @@
-import { MidwayRequestContainer, IMidwayApplication, IConfigurationOptions, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
+import {
+  MidwayRequestContainer,
+  IMidwayApplication,
+  IConfigurationOptions,
+  IMidwayContext,
+  NextFunction as BaseNextFunction,
+  CommonMiddlewareUnion,
+  ContextMiddlewareManager,
+  IMidwayBootstrapOptions,
+} from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import { ILogger } from '@midwayjs/logger';
+import { Application as ServerlessHttpApplication } from '@midwayjs/serverless-http-parser';
 
 export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
   logger: ILogger;
@@ -8,10 +18,18 @@ export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
   requestContext: MidwayRequestContainer;
   originContext: any;
 }
+/**
+ * @deprecated
+ */
+export type FaaSMiddleware = ((context: Context, next: () => Promise<any>) => any) | string;
 
-export type FaaSMiddleware = ((context: FaaSContext, next: () => Promise<any>) => any) | string;
+export interface HandlerOptions {
+  isHttpFunction: boolean;
+  originEvent: any;
+  originContext: any;
+}
 
-export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
+export type IMidwayFaaSApplication = IMidwayApplication<Context, {
   getInitializeContext();
   use(middleware: FaaSMiddleware);
   /**
@@ -28,7 +46,12 @@ export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
    * Get function service name in serverless environment
    */
   getFunctionServiceName(): string;
-}>;
+
+  useEventMiddleware(middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>): void;
+  getEventMiddleware: ContextMiddlewareManager<Context, NextFunction, undefined>;
+  getTriggerFunction(handler: string): (context, options: HandlerOptions) => Promise<any>;
+  getServerlessInstance<T>(serviceClass: T): Promise<T>;
+}> & ServerlessHttpApplication;
 
 export interface Application extends IMidwayFaaSApplication {}
 
@@ -39,12 +62,29 @@ export interface IFaaSConfigurationOptions extends IConfigurationOptions {
   config?: object;
   initializeContext?: object;
   applicationAdapter?: {
-    getApplication(): IMidwayFaaSApplication;
+    getApplication(): Application;
     getFunctionName(): string;
     getFunctionServiceName(): string;
+    runAppHook?(app: Application): void;
   };
 }
 
+/**
+ * @deprecated
+ */
 export interface IWebMiddleware {
   resolve(): FaaSMiddleware;
+}
+
+export interface ServerlessStarterOptions extends IMidwayBootstrapOptions {
+  initializeMethodName?: string;
+  createAdapter?: () => Promise<{
+    close();
+    createAppHook(app?);
+  }>;
+  performance?: {
+    mark(label: string);
+    end();
+  };
+  exportAllHandler?: boolean;
 }

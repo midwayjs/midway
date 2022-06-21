@@ -11,6 +11,7 @@ import {
   MidwayContainer,
   MidwayCommonError,
   MidwayApplicationManager,
+  MidwayConfigService,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
@@ -24,7 +25,11 @@ import {
   transformFrameworkToConfiguration,
 } from './utils';
 import { debuglog } from 'util';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
+import * as http from 'http';
+import * as yaml from 'js-yaml';
+import * as getRawBody from 'raw-body';
+
 const debug = debuglog('midway:debug');
 
 process.setMaxListeners(0);
@@ -172,27 +177,140 @@ export async function createFunctionApp<
   options?: MockAppConfigurationOptions,
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
-  const customFramework =
-    customFrameworkModule ??
-    findFirstExistModule([
-      process.env.MIDWAY_SERVERLESS_APP_NAME,
-      '@ali/serverless-app',
-      '@midwayjs/serverless-app',
-    ]);
-  const serverlessModule = transformFrameworkToConfiguration(customFramework);
-  if (serverlessModule) {
-    if (options && options.imports) {
-      options.imports.unshift(serverlessModule);
-    } else {
-      options = options || {};
-      options.imports = [serverlessModule];
+  let starterName;
+  if (!options.starter) {
+    // load yaml
+    try {
+      const doc = yaml.load(readFileSync(join(baseDir, 'f.yml'), 'utf8'));
+      starterName = doc?.['provider']?.['starter'];
+      if (starterName) {
+        const m = safeRequire(starterName);
+        if (m && m['BootstrapStarter']) {
+          options.starter = new m['BootstrapStarter']();
+        }
+      }
+    } catch (e) {
+      // ignore
+      console.error('[mock]: get f.yml information fail, err = ' + e.stack);
     }
   }
 
-  const framework = await createApp(baseDir, options);
-  const appCtx = framework.getApplicationContext();
-  const appManager = appCtx.get(MidwayApplicationManager);
-  return appManager.getApplication(MidwayFrameworkType.SERVERLESS_APP);
+  if (options.starter) {
+    options.exportAllHandler = true;
+    options.appDir = baseDir;
+    debug(`[mock]: Create app, appDir="${options.appDir}"`);
+    process.env.MIDWAY_TS_MODE = 'true';
+
+    // 处理测试的 fixtures
+    if (!isAbsolute(options.appDir)) {
+      options.appDir = join(process.cwd(), 'test', 'fixtures', options.appDir);
+    }
+
+    if (!existsSync(options.appDir)) {
+      throw new MidwayCommonError(
+        `Path "${options.appDir}" not exists, please check it.`
+      );
+    }
+
+    clearAllLoggers();
+
+    options = options || ({} as any);
+    if (options.baseDir) {
+      safeRequire(join(`${options.baseDir}`, 'interface'));
+    } else if (options.appDir) {
+      options.baseDir = `${options.appDir}/src`;
+      safeRequire(join(`${options.baseDir}`, 'interface'));
+    }
+
+    // new mode
+    const exports = options.starter.start(options);
+    await exports[options.initializeMethodName || 'initializer']();
+    const appCtx = options.starter.getApplicationContext();
+
+    const configService = appCtx.get(MidwayConfigService) as any;
+    const frameworkService = appCtx.get(MidwayFrameworkService) as any;
+    const framework = frameworkService.getMainFramework();
+
+    const appManager = appCtx.get(MidwayApplicationManager);
+    const app = appManager.getApplication(MidwayFrameworkType.FAAS);
+
+    const faasConfig = configService.getConfiguration('faas') ?? {};
+    const customPort = process.env.MIDWAY_HTTP_PORT ?? faasConfig['port'];
+
+    app.callback2 = () => {
+      // mock a real http server response for local dev
+      return async (req, res) => {
+        const url = new URL(req.url, `http://${req.headers.host}`);
+        req.query = Object.fromEntries(url.searchParams);
+        req.path = url.pathname;
+        // 如果需要解析body并且body是个stream，函数网关不会接受比 10m 更大的文件了
+        if (
+          ['post', 'put', 'delete'].indexOf(req.method.toLowerCase()) !== -1 &&
+          !(req as any).body &&
+          typeof req.on === 'function'
+        ) {
+          (req as any).body = await getRawBody(req, {
+            limit: '10mb',
+          });
+        }
+        const ctx = await framework.wrapHttpRequest(req);
+
+        // create event and invoke
+        const func = framework.getTriggerFunction(url.pathname);
+        const result = await func(ctx, {
+          isHttpFunction: true,
+          originEvent: req,
+          originContext: {},
+        });
+        const { statusCode, headers, body } = result as any;
+        if (res.headersSent) {
+          return;
+        }
+
+        for (const key in headers) {
+          res.setHeader(key, headers[key]);
+        }
+        if (res.statusCode !== statusCode) {
+          res.statusCode = statusCode;
+        }
+
+        // http trigger only support `Buffer` or a `string` or a `stream.Readable`
+        res.end(body);
+      };
+    };
+
+    if (customPort) {
+      await new Promise<void>(resolve => {
+        const server = http.createServer(app.callback2());
+        server.listen(customPort);
+        process.env.MIDWAY_HTTP_PORT = String(customPort);
+        (app as any).server = server;
+        resolve();
+      });
+    }
+    return app as unknown as Y;
+  } else {
+    const customFramework =
+      customFrameworkModule ??
+      findFirstExistModule([
+        process.env.MIDWAY_SERVERLESS_APP_NAME,
+        '@ali/serverless-app',
+        '@midwayjs/serverless-app',
+      ]);
+    const serverlessModule = transformFrameworkToConfiguration(customFramework);
+    if (serverlessModule) {
+      if (options && options.imports) {
+        options.imports.unshift(serverlessModule);
+      } else {
+        options = options || {};
+        options.imports = [serverlessModule];
+      }
+    }
+    const framework = await createApp(baseDir, options);
+    const appCtx = framework.getApplicationContext();
+    const appManager = appCtx.get(MidwayApplicationManager);
+    return appManager.getApplication(MidwayFrameworkType.SERVERLESS_APP);
+  }
 }
 
 /**

@@ -15,6 +15,7 @@ export {
   transformRequestObjectByType,
   pathMatching,
   wrapMiddleware,
+  wrapAsync,
 } from './util/';
 export { extend } from './util/extend';
 export * from './util/pathFileUtil';

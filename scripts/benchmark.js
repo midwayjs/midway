@@ -34,10 +34,13 @@ const cannon = () => {
 };
 
 (async () => {
-  const child = spawn('node', ['--expose-gc', 'start.js'], { cwd: __dirname,  stdio: ['inherit', 'inherit', 'inherit', 'ipc']});
+  const child = spawn('node', ['--expose-gc', 'start.js'], {
+    cwd: __dirname,
+    stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
+  });
 
   let callback = () => {};
-  child.on('message', (data) => {
+  child.on('message', data => {
     if (data.action === 'collect_mem_result') {
       return callback(data.data);
     }
@@ -46,13 +49,17 @@ const cannon = () => {
   async function collectMem() {
     return new Promise((resolve, reject) => {
       callback = resolve;
-      child.send({action: 'collect_mem'});
+      child.send({ action: 'collect_mem' });
     });
   }
 
   console.log(`Current pid is ${child.pid}`);
   const firstMem = await collectMem();
-  console.log(`first memory（init）, rss=${format(firstMem.rss)}, heapUsed=${format(firstMem.heapUsed)}`);
+  console.log(
+    `first memory（init）, rss=${format(firstMem.rss)}, heapUsed=${format(
+      firstMem.heapUsed
+    )}`
+  );
 
   child.on('error', err => {
     console.error(err);
@@ -62,25 +69,33 @@ const cannon = () => {
     console.log(`Exited with code ${code} and signal ${signal}`);
   });
 
-  console.log(`Waiting for to initialize after 10s...`);
+  console.log('Waiting for to initialize after 10s...');
   await wait(10000);
 
-  console.log(`Running benchmark...`);
+  console.log('Running benchmark...');
   const results = await cannon();
   console.log(console.log(`QPS:  ${results.requests.average}`));
   await wait(10000);
 
   // 过 10s 采集一次内存
   const secondMem = await collectMem();
-  console.log(`second memory（before gc), rss=${format(secondMem.rss)}, heapUsed=${format(secondMem.heapUsed)}`);
+  console.log(
+    `second memory（before gc), rss=${format(secondMem.rss)}, heapUsed=${format(
+      secondMem.heapUsed
+    )}`
+  );
 
-  child.send({action: 'gc'});
+  child.send({ action: 'gc' });
   // 等 10s gc
   await wait(10000);
 
   // gc 后采集一次内存
   const thirdMem = await collectMem();
-  console.log(`third memory（after gc), rss=${format(thirdMem.rss)}, heapUsed =${format(thirdMem.heapUsed)}`);
+  console.log(
+    `third memory（after gc), rss=${format(thirdMem.rss)}, heapUsed =${format(
+      thirdMem.heapUsed
+    )}`
+  );
 
   // 第一次检查，gc 后和初始化持平
   if (Math.abs(thirdMem.heapUsed / firstMem.heapUsed) > 1.1) {
@@ -88,22 +103,30 @@ const cannon = () => {
   }
 
   // 继续压测 30s
-  console.log(`Running benchmark 2...`);
+  console.log('Running benchmark 2...');
   const secondResult = await cannon();
   console.log(console.log(`QPS:  ${secondResult.requests.average}`));
   await wait(10000);
 
   // 过 10s 采集一次内存
   const fourthMem = await collectMem();
-  console.log(`fourth memory（before gc2), rss=${format(fourthMem.rss)}, heapUsed=${format(fourthMem.heapUsed)}`);
+  console.log(
+    `fourth memory（before gc2), rss=${format(
+      fourthMem.rss
+    )}, heapUsed=${format(fourthMem.heapUsed)}`
+  );
 
-  child.send({action: 'gc'});
+  child.send({ action: 'gc' });
   // 等 10s gc
   await wait(10000);
 
   // gc 后采集一次内存
   const fifthMem = await collectMem();
-  console.log(`fifth memory（after gc2), rss=${format(fifthMem.rss)}, heapUsed =${format(fifthMem.heapUsed)}`);
+  console.log(
+    `fifth memory（after gc2), rss=${format(fifthMem.rss)}, heapUsed =${format(
+      fifthMem.heapUsed
+    )}`
+  );
 
   // 第二次检查，第二次 gc 中的堆内存和第一次 gc 持平，gc 前的数值不定，容错率大一些
   if (Math.abs(fourthMem.heapUsed / secondMem.heapUsed) > 1.5) {
@@ -117,7 +140,7 @@ const cannon = () => {
 
   child.kill();
   process.exit(0);
-})().catch((err) => {
+})().catch(err => {
   console.error(err);
   process.exit(1);
 });
