@@ -19,9 +19,18 @@ export class FilterManager<
 > {
   private errFilterList: Array<new (...args) => IFilter<CTX, R, N>> = [];
   private successFilterList: Array<new (...args) => IFilter<CTX, R, N>> = [];
-  private exceptionMap: WeakMap<Error, IFilter<CTX, R, N>> = new WeakMap();
+  private exceptionMap: WeakMap<
+    Error,
+    {
+      filter: IFilter<CTX, R, N>;
+      catchOptions: {
+        matchPrototype?: boolean;
+      };
+    }
+  > = new WeakMap();
   private defaultErrFilter = undefined;
   private matchFnList = [];
+  private protoMatchList = [];
 
   public useFilter(Filters: CommonFilterUnion<CTX, R, N>) {
     if (!Array.isArray(Filters)) {
@@ -44,7 +53,19 @@ export class FilterManager<
       const exceptionMetadata = getClassMetadata(CATCH_KEY, FilterClass);
       if (exceptionMetadata && exceptionMetadata.catchTargets) {
         for (const Exception of exceptionMetadata.catchTargets) {
-          this.exceptionMap.set(Exception, filter);
+          this.exceptionMap.set(Exception, {
+            filter,
+            catchOptions: exceptionMetadata.catchOptions || {},
+          });
+          if (exceptionMetadata.catchOptions['matchPrototype']) {
+            this.protoMatchList.push(err => {
+              if (err instanceof Exception) {
+                return Exception;
+              } else {
+                return false;
+              }
+            });
+          }
         }
       } else {
         // default filter
@@ -77,12 +98,35 @@ export class FilterManager<
     error: any;
   }> {
     let result, error;
+    let matched = false;
     if (this.exceptionMap.has((err as any).constructor)) {
-      const filter = this.exceptionMap.get((err as any).constructor);
-      result = await filter.catch(err, ctx, res, next);
-    } else if (this.defaultErrFilter) {
+      matched = true;
+      const filterData = this.exceptionMap.get((err as any).constructor);
+      result = await filterData.filter.catch(err, ctx, res, next);
+    }
+
+    // match with prototype
+    if (!matched && this.protoMatchList.length) {
+      let protoException;
+      for (const matchPattern of this.protoMatchList) {
+        protoException = matchPattern(err);
+        if (protoException) {
+          break;
+        }
+      }
+      if (protoException) {
+        matched = true;
+        const filterData = this.exceptionMap.get(protoException);
+        result = await filterData.filter.catch(err, ctx, res, next);
+      }
+    }
+
+    if (!matched && this.defaultErrFilter) {
+      matched = true;
       result = await this.defaultErrFilter.catch(err, ctx, res, next);
-    } else {
+    }
+
+    if (!matched) {
       error = err;
     }
     return {

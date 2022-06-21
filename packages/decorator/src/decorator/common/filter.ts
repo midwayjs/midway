@@ -4,13 +4,19 @@ import { Scope } from './objectDef';
 import { ScopeEnum } from '../../interface';
 import { Provide } from './provide';
 
-export function Catch(catchTarget?: any | any[]) {
+export function Catch(
+  catchTarget?: any | any[],
+  options: {
+    matchPrototype?: boolean;
+  } = {}
+) {
   return function (target) {
     const catchTargets = catchTarget ? [].concat(catchTarget) : undefined;
     saveClassMetadata(
       CATCH_KEY,
       {
         catchTargets,
+        catchOptions: options,
       },
       target
     );
