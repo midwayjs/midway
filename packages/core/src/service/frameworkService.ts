@@ -97,11 +97,11 @@ export class MidwayFrameworkService {
     // register @App decorator handler
     this.decoratorService.registerPropertyHandler(
       APPLICATION_KEY,
-      (propertyName, mete) => {
-        if (mete.type) {
-          const framework = this.applicationManager.getApplication(mete.type);
+      (propertyName, meta) => {
+        if (meta.type) {
+          const framework = this.applicationManager.getApplication(meta.type);
           if (!framework) {
-            throw new MidwayCommonError(`Framework ${mete.type} not Found`);
+            throw new MidwayCommonError(`Framework ${meta.type} not Found`);
           }
           return framework;
         } else {
@@ -110,9 +110,12 @@ export class MidwayFrameworkService {
       }
     );
 
-    this.decoratorService.registerPropertyHandler(PLUGIN_KEY, (key, target) => {
-      return this.getMainApp()[key];
-    });
+    this.decoratorService.registerPropertyHandler(
+      PLUGIN_KEY,
+      (propertyName, meta) => {
+        return this.getMainApp()[meta.identifier ?? propertyName];
+      }
+    );
 
     let frameworks: Array<new (...args) => any> = listModule(FRAMEWORK_KEY);
     // filter proto

@@ -44,7 +44,7 @@ export class BaseService {
   @Config('hello') innerConfig;
   @Inject() a;
   @Inject() b;
-  @Plugin('plugin2') plugin2;
+  @Plugin('plugin2') plugin;
 
   @Init()
   async init() {
