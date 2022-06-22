@@ -108,4 +108,13 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test middleware return value and body not empty', async () => {
+    const app = await creatApp('feature/base-app-middleware-return-body');
+    const result = await createHttpRequest(app)
+      .get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('{"code":0,"msg":"ok"}');
+    await closeApp(app);
+  });
+
 });

@@ -110,6 +110,10 @@ export class MidwayWebFramework extends BaseFramework<
       await (
         await this.applyMiddleware(notFound)
       )(ctx as any, next);
+      // middleware return value and will be got 204 status
+      if (ctx.status === 204 && (ctx.body !== undefined || true)) {
+        ctx.status = 200;
+      }
     };
     this.app.use(midwayRootMiddleware);
     this.webRouterService = await this.applicationContext.getAsync(

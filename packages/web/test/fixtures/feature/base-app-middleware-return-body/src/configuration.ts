@@ -1,0 +1,42 @@
+import { Configuration, App, Inject, Get, Controller, } from '@midwayjs/decorator';
+
+@Controller('/')
+export class HomeController {
+
+  @Inject()
+  ctx;
+
+  @Get('/')
+  async home() {
+    return null;
+  }
+}
+
+@Configuration({
+  importConfigs: [
+    {
+      default: {
+        keys: 'key',
+      }
+    }
+  ],
+  imports: [],
+})
+export class ContainerConfiguration {
+
+  @App()
+  app;
+
+  async onReady() {
+    this.app.useMiddleware(async (ctx, next) => {
+      const result = await next();
+      if (!result) {
+        return {
+          code: 0,
+          msg: 'ok',
+          data: result,
+        }
+      }
+    });
+  }
+}
