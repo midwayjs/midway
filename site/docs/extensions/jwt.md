@@ -103,6 +103,8 @@ export class UserService {
 }
 ```
 
+这些 API 都来自于 [node-jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) 基础库，如果不了解请阅读原版文档。
+
 ## 中间件示例
 
 下面是一个自定义 jwt 鉴权的中间件示例。

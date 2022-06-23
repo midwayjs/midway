@@ -568,12 +568,13 @@ export default {
 ```typescript
 // src/config/config.default
 import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export default {
   // ...
   express: {
-    key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
-  	cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+    key: join(__dirname, '../ssl/ssl.key'),
+    cert: join(__dirname, '../ssl/ssl.pem'),
   },
 }
 ```

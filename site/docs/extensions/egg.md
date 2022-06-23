@@ -504,7 +504,7 @@ $ npm i egg-scripts --save
 
 > 注意：`egg-scripts` 对 Windows 系统的支持有限，参见 [#22](https://github.com/eggjs/egg-scripts/pull/22)。
 
-#### 
+####
 
 **启动参数**
 
@@ -628,12 +628,13 @@ export default {
 ```typescript
 // src/config/config.default
 import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export default {
   // ...
   egg: {
-    key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
-  	cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+    key: join(__dirname, '../ssl/ssl.key'),
+    cert: join(__dirname, '../ssl/ssl.pem'),
   },
 }
 ```
