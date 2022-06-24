@@ -1,16 +1,16 @@
-# 请求、响应、应用
+# Application 和 Context
 
 Midway 的应用会同时对外暴露不同协议，比如 Http，WebSocket 等等，这里每个协议对 Midway 来说都是由独立的组件提供的。
 
 比如我们前面示例中的 `@midwayjs/koa` ，就是一个提供 Http 服务的组件，下面我们将以这个组件为例，来介绍内置对象。
 
-每个使用的 Web 框架会提供自己独特的能力，这些独特的能力都会体现在各自的 **请求和响应**（Context）和 **应用**（Application）之上。
+每个使用的 Web 框架会提供自己独特的能力，这些独特的能力都会体现在各自的 **上下文**（Context）和 **应用**（Application）之上。
 
 
 
 ## 定义约定
 
-为了简化使用，所有的暴露协议的组件会导出 **请求和响应**（Context）和 **应用**（Application）定义，我们都保持一致。即 `Context` 和 `Application` 。
+为了简化使用，所有的暴露协议的组件会导出 **上下文**（Context）和 **应用**（Application）定义，我们都保持一致。即 `Context` 和 `Application` 。
 
 比如：
 
@@ -243,8 +243,8 @@ this.app.setAttr('abc', {
 
 ```typescript
 const value = this.app.getAttr('abc');
-// { a: 1, b: 2 }
 console.log(value);
+// { a: 1, b: 2 }
 ```
 
 
@@ -253,7 +253,9 @@ console.log(value);
 
 Context 是一个**请求级别的对象**，在每一次收到用户请求时，框架会实例化一个 Context 对象，
 
-在 Http 场景中，这个对象封装了这次用户请求的信息，或者其他获取请求参数，设置响应信息的方法。
+在 Http 场景中，这个对象封装了这次用户请求的信息，或者其他获取请求参数，设置响应信息的方法，在 WebSocket，Rabbitmq 等场景中，Context 也有各自的属性，以框架的定义为准。
+
+下面的 API 是每个上下文实现通用的属性或者接口。
 
 
 
@@ -297,7 +299,7 @@ const userService = await this.ctx.requestContext.getAsync(UserService);
 
 ### logger
 
-请求作用域下的 logger 对象，包含上下文数据。
+请求作用域下的默认 logger 对象，包含上下文数据。
 
 ```typescript
 this.ctx.logger.info('xxxx');
@@ -307,7 +309,7 @@ this.ctx.logger.info('xxxx');
 
 ### startTime
 
-请求执行开始的时间。
+上下文执行开始的时间。
 
 ```typescript
 this.ctx.startTime
@@ -331,7 +333,19 @@ this.ctx.setAttr('abc', {
 
 ```typescript
 const value = this.ctx.getAttr('abc');
-// { a: 1, b: 2 }
 console.log(value);
+// { a: 1, b: 2 }
 ```
+
+
+
+### getLogger
+
+获取某个自定义 Logger 对应的上下文日志。
+
+```typescript
+this.ctx.getLogger('custom');
+// => custom logger
+```
+
 

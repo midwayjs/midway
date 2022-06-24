@@ -73,7 +73,10 @@ async findAll() {
 
 比如捕获抛出的 `InternalServerErrorError` 错误。
 
+我们可以将这一类异常处理器放在 `filter` 目录，比如 `src/filter/internal.filter.ts`。
+
 ```typescript
+// src/filter/internal.filter.ts
 import { Catch } from '@midwayjs/decorator';
 import { httpError, MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
@@ -93,6 +96,7 @@ export class InternalServerErrorFilter {
 如果不写参数，那么会捕获所有的错误，不管是不是 HttpError，只在要请求中抛出的错误，都会被这里捕获。
 
 ```typescript
+// src/filter/all.filter.ts
 import { Catch } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 
@@ -109,6 +113,7 @@ export class AllErrorFilter {
 我们可以在 `src/configuration.ts` 中将错误处理过滤器应用上，由于参数可以是数组，我们可以应用多个错误处理器。
 
 ```typescript
+// src/configuration.ts
 import { Configuration, App, Catch } from '@midwayjs/decorator';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
@@ -174,6 +179,8 @@ export class NotFoundFilter {
 比如，捕获所有的错误，并返回特定的 JSON 结构，示例如下。
 
 ```typescript
+// src/filter/default.filter.ts
+
 import { Catch } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 

@@ -17,7 +17,7 @@ title: 默认错误行为
 ```typescript
 @ServerlessTrigger(//...)
 async invoke() {
-	throw new Error('abc');
+  throw new Error('abc');
 }
 ```
 

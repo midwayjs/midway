@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.10](https://github.com/midwayjs/midway/compare/v3.3.9...v3.3.10) (2022-05-26)
+
+
+### Features
+
+* add grpc server options ([#2005](https://github.com/midwayjs/midway/issues/2005)) ([a35d94b](https://github.com/midwayjs/midway/commit/a35d94b37e3134e12d0ec7ff2f4751fc0d7e9d73))
+
+
+
+
+
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+**Note:** Version bump only for package @midwayjs/grpc
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 **Note:** Version bump only for package @midwayjs/grpc

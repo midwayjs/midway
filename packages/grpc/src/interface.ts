@@ -4,7 +4,7 @@ import {
   IMidwayContext,
   NextFunction as BaseNextFunction
 } from '@midwayjs/core';
-import { Server, ServerCredentials, Metadata, ServerDuplexStream, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall } from '@grpc/grpc-js';
+import { Server, ServerCredentials, Metadata, ServerDuplexStream, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall, ChannelOptions } from '@grpc/grpc-js';
 
 export interface Context extends IMidwayContext<ServerDuplexStream<any, any>> {
   metadata: Metadata;
@@ -57,6 +57,10 @@ export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
    * Server credentials. Optional.
    */
   credentials?: ServerCredentials;
+  /**
+   * grpc server options
+   */
+  serverOptions?: ChannelOptions;
 }
 
 export interface DefaultConfig extends IConfigurationOptions {

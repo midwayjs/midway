@@ -24,7 +24,7 @@ describe('/test/index.test.ts', () => {
     const ctx = app.createAnonymousContext();
     const httpServiceWithRequest = await ctx.requestContext.getAsync(HttpService);
     expect(httpServiceWithRequest).toBeDefined();
-    expect(httpServiceWithRequest).not.toEqual(httpService);
+    expect(httpServiceWithRequest).toEqual(httpService);
   });
 
   it('should test proxy method', function () {

@@ -27,6 +27,10 @@ import * as proxy from '../../../../src';
               // https://httpbin.org/
               match: /\/httpbin\/(.*)$/,
               target: 'https://httpbin.org/$1',
+            },
+            d: {
+              match: /.*?baidu.*$/,
+              target: 'https://www.baidu.com/'
             }
           }
         },

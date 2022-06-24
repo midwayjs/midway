@@ -1,7 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 import path = require('path');
-import { creatApp, closeApp, createHttpRequest } from './utils';
+import { creatApp, closeApp } from './utils';
 
 const mm = require('mm');
 const pedding = require('pedding');
@@ -91,15 +91,13 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load ts class controller use decorator conflicts', () => {
     it('should load controller conflicts', async () => {
-      let app = await creatApp('enhance/base-app-controller-conflicts');
-
-      let result = await createHttpRequest(app).get('/');
-      expect(result.text).toEqual('root_test');
-
-      result = await createHttpRequest(app).get('/components/');
-      expect(result.text).toEqual('hello');
-
-      await closeApp(app);
+      let error;
+      try {
+        await creatApp('enhance/base-app-controller-conflicts');
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeDefined();
     });
   });
 

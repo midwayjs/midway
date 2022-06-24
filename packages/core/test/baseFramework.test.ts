@@ -135,40 +135,17 @@ describe('/test/baseFramework.test.ts', () => {
     mm.restore();
   });
 
-  // it('should load conflict with error', async () => {
-  //   const framework = new MockFramework();
-  //   await framework.initialize();
-  //   container.load({
-  //     loadDir: path.join(
-  //       __dirname,
-  //       './fixtures/app-with-conflict/base-app-decorator/src'
-  //     ),
-  //     disableConflictCheck: false,
-  //   });
-  //   loader.initialize();
-  //   const callback = sinon.spy();
-  //   try {
-  //     loader.loadDirectory();
-  //
-  //   } catch (e) {
-  //     callback(e.message);
-  //   }
-  //   const p = path.resolve(
-  //     __dirname,
-  //     './fixtures/app-with-conflict/base-app-decorator/src/lib/'
-  //   );
-  //   const s = `baseService path = ${p}/userManager.ts already exist (${p}/service.ts)!`;
-  //   assert.ok(callback.withArgs(s).calledOnce);
-  // });
-
   it('should load conflict without error', async () => {
-    const framework = await createLightFramework(path.join(
-      __dirname,
-      './fixtures/app-with-conflict/base-app-decorator/src'
-    ));
-    const appCtx = framework.getApplicationContext();
-    const baseService: any = await appCtx.getAsync('baseService');
-    assert.ok((await baseService.getInformation()) === 'this is conflict');
+    let error;
+    try {
+      await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-conflict/base-app-decorator/src'
+      ));
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toMatch('"baseService" duplicated between');
   });
 
   describe('test load different env', () => {

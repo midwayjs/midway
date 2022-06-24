@@ -3,6 +3,120 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.14](https://github.com/midwayjs/midway/compare/v3.3.13...v3.3.14) (2022-06-17)
+
+
+### Bug Fixes
+
+* swagger delete example when extends ([#2041](https://github.com/midwayjs/midway/issues/2041)) ([47b62b8](https://github.com/midwayjs/midway/commit/47b62b8ebfb4a5ad4fe9ca0ba0038bb324711404))
+* throw error when task run fail and add task to fail queue ([#2044](https://github.com/midwayjs/midway/issues/2044)) ([3c6cd0f](https://github.com/midwayjs/midway/commit/3c6cd0f69bb3c934c56ab5d1e30a333bac6b3e1a))
+
+
+
+
+
+## [3.3.13](https://github.com/midwayjs/midway/compare/v3.3.12...v3.3.13) (2022-06-06)
+
+
+### Bug Fixes
+
+* swagger items assign bug ([#2025](https://github.com/midwayjs/midway/issues/2025)) ([e81a79f](https://github.com/midwayjs/midway/commit/e81a79fd9f88af56d5e1da7421548388d118b2ec))
+
+
+
+
+
+## [3.3.12](https://github.com/midwayjs/midway/compare/v3.3.11...v3.3.12) (2022-06-02)
+
+
+### Bug Fixes
+
+* add duplicate check for task ([#2019](https://github.com/midwayjs/midway/issues/2019)) ([0b42b56](https://github.com/midwayjs/midway/commit/0b42b560c11d6ff718493b752e2c32cb2c44eb59))
+* cache typings ([#2018](https://github.com/midwayjs/midway/issues/2018)) ([8db4e69](https://github.com/midwayjs/midway/commit/8db4e698e534da3eb7b4a37eeb7485b4fe34b977))
+
+
+
+
+
+## [3.3.11](https://github.com/midwayjs/midway/compare/v3.3.10...v3.3.11) (2022-05-27)
+
+**Note:** Version bump only for package midway_project
+
+
+
+
+
+## [3.3.10](https://github.com/midwayjs/midway/compare/v3.3.9...v3.3.10) (2022-05-26)
+
+
+### Features
+
+* add grpc server options ([#2005](https://github.com/midwayjs/midway/issues/2005)) ([a35d94b](https://github.com/midwayjs/midway/commit/a35d94b37e3134e12d0ec7ff2f4751fc0d7e9d73))
+
+
+
+
+
+## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
+
+
+### Bug Fixes
+
+* i18 resolver and task typing ([#2003](https://github.com/midwayjs/midway/issues/2003)) ([c7b8ad1](https://github.com/midwayjs/midway/commit/c7b8ad1a86eb680059ab685e1f84ffe046a59292))
+
+
+
+
+
+## [3.3.8](https://github.com/midwayjs/midway/compare/v3.3.7...v3.3.8) (2022-05-17)
+
+
+### Bug Fixes
+
+* compatible date type ([#1979](https://github.com/midwayjs/midway/issues/1979)) ([24140f1](https://github.com/midwayjs/midway/commit/24140f1c2b93e8c3a10b996e0f135b260abfbf86))
+
+
+
+
+
+## [3.3.7](https://github.com/midwayjs/midway/compare/v3.3.6...v3.3.7) (2022-05-13)
+
+
+### Bug Fixes
+
+* koa pipe ([#1973](https://github.com/midwayjs/midway/issues/1973)) ([5cebb76](https://github.com/midwayjs/midway/commit/5cebb76e793abd75bc34dd328d9c1db3d430b58a))
+
+
+
+
+
+## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ejs to v3.1.7 [security] ([#1949](https://github.com/midwayjs/midway/issues/1949)) ([ef8e3fc](https://github.com/midwayjs/midway/commit/ef8e3fcc005b76196ac120dbb0f36e07b6fe6d91))
+* egg missing session definition ([#1969](https://github.com/midwayjs/midway/issues/1969)) ([9ded02a](https://github.com/midwayjs/midway/commit/9ded02adce74c59f8644a5f92e5a437deb0d1d8c))
+* session maxAge definition ([#1968](https://github.com/midwayjs/midway/issues/1968)) ([3e93254](https://github.com/midwayjs/midway/commit/3e93254b54b30215ddeb3ad6d60469bdb42e284c))
+
+
+
+
+
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+
+### Bug Fixes
+
+* add original url proxy from url ([#1936](https://github.com/midwayjs/midway/issues/1936)) ([402ad24](https://github.com/midwayjs/midway/commit/402ad249d10f5e9a30d68ee58bc57dc33d7b3107))
+* cluster compatible ([#1942](https://github.com/midwayjs/midway/issues/1942)) ([3891150](https://github.com/midwayjs/midway/commit/3891150deec98c9f09edee0973ca8f52d79c66f5))
+* oss cluster typings ([#1924](https://github.com/midwayjs/midway/issues/1924)) ([ab2e2be](https://github.com/midwayjs/midway/commit/ab2e2beb9cadb80885ffeb3406da1fb78530f7ef))
+* throw error if config is invalid ([#1939](https://github.com/midwayjs/midway/issues/1939)) ([cc5fc1e](https://github.com/midwayjs/midway/commit/cc5fc1e0500554e52853246b90655c05f481fe6c))
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 

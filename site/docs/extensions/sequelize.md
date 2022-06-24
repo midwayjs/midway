@@ -72,10 +72,10 @@ import { App, Configuration } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
 import { Application } from 'egg';
 import { join } from 'path';
-import * as sequlize from '@midwayjs/sequelize';
+import * as sequelize from '@midwayjs/sequelize';
 
 @Configuration({
-  imports: [sequlize],
+  imports: [sequelize],
   importConfigs: [join(__dirname, './config')],
 })
 export class ContainerLifeCycle implements ILifeCycle {
@@ -116,14 +116,22 @@ export default {
 
 ## 业务层
 
-定义Entity
+### 定义Entity
 
 ```typescript
-import { Column, Model } from "sequelize-typescript";
+import { Column, Model, BelongsTo, ForeignKey } from "sequelize-typescript";
 import { BaseTable } from "@midwayjs/sequelize";
+import { User } from './User';
 
 @BaseTable
 export class Photo extends Model{
+  @ForeignKey(() => User)
+  @Column({
+    comment: '用户Id'
+  })
+  userId: number;
+  @BelongsTo(() => User) user: User;
+
   @Column({
     comment: '名字'
   })
@@ -131,9 +139,21 @@ export class Photo extends Model{
 }
 ```
 
-使用Entity:
+```typescript
+import { Model, Column, HasMany } from 'sequelize-typescript';
+import { BaseTable } from "@midwayjs/sequelize";
+import { Photo } from './Photo';
 
-查询列表
+@BaseTable
+export class User extends Model {
+  @Column name!: string;
+  @HasMany(() => Photo) Photo: Photo[];
+}
+```
+
+### 使用Entity:
+
+#### 查询列表
 
 ```typescript
 import { Config, Controller, Get, Provide } from '@midwayjs/decorator';
@@ -155,7 +175,7 @@ export class HomeController {
 增加数据：
 
 ```typescript
-import { Config, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/decorator';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -173,10 +193,10 @@ export class HomeController {
 }
 ```
 
-删除：
+#### 删除：
 
 ```typescript
-import { Config, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/decorator';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -195,10 +215,10 @@ export class HomeController {
 }
 ```
 
-查找单个：
+#### 查找单个：
 
 ```typescript
-import { Config, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/decorator';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -217,10 +237,10 @@ export class HomeController {
 }
 ```
 
-联合查询：
+#### 联合查询：
 
 ```typescript
-import { Config, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/decorator';
 import { Photo } from '../entity/Photo';
 import { Op } from 'sequelize';
 
@@ -233,7 +253,7 @@ export class HomeController {
     // SELECT * FROM photo WHERE name = "23" OR name = "34";
     let result = await Photo.findAll({
       where: {
-        [Op.or]: [{name: "23"}, {name: "34"}] 
+        [Op.or]: [{name: "23"}, {name: "34"}]
       }
     })
     console.log(result);
@@ -242,8 +262,28 @@ export class HomeController {
 }
 ```
 
+#### 连表查询
+```typescript
+import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { User } from '../entity/User';
+import { Photo } from '../entity/Photo';
+
+@Provide()
+@Controller('/users')
+export class HomeController {
+
+  @Get('/')
+  async home() {
+    let result = await User.findAll({include: [Photo]})
+    console.log(result);
+    return 'hello world'
+  }
+}
+```
+
 关于OP的更多用法：[https://sequelize.org/v5/manual/querying.html](https://sequelize.org/v5/manual/querying.html)
 
+midway + sequelize 完整使用案例 [https://github.com/ddzyan/midway-practice/tree/sequelize](https://github.com/ddzyan/midway-practice/tree/sequelize)
 
 如果遇到比较复杂的，可以使用raw query方法：
 [https://sequelize.org/v5/manual/raw-queries.html](https://sequelize.org/v5/manual/raw-queries.html)

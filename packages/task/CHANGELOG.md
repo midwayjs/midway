@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.14](https://github.com/midwayjs/midway/compare/v3.3.13...v3.3.14) (2022-06-17)
+
+
+### Bug Fixes
+
+* throw error when task run fail and add task to fail queue ([#2044](https://github.com/midwayjs/midway/issues/2044)) ([3c6cd0f](https://github.com/midwayjs/midway/commit/3c6cd0f69bb3c934c56ab5d1e30a333bac6b3e1a))
+
+
+
+
+
+## [3.3.12](https://github.com/midwayjs/midway/compare/v3.3.11...v3.3.12) (2022-06-02)
+
+
+### Bug Fixes
+
+* add duplicate check for task ([#2019](https://github.com/midwayjs/midway/issues/2019)) ([0b42b56](https://github.com/midwayjs/midway/commit/0b42b560c11d6ff718493b752e2c32cb2c44eb59))
+
+
+
+
+
+## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
+
+
+### Bug Fixes
+
+* i18 resolver and task typing ([#2003](https://github.com/midwayjs/midway/issues/2003)) ([c7b8ad1](https://github.com/midwayjs/midway/commit/c7b8ad1a86eb680059ab685e1f84ffe046a59292))
+
+
+
+
+
+## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
+
+**Note:** Version bump only for package @midwayjs/task
+
+
+
+
+
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+**Note:** Version bump only for package @midwayjs/task
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 **Note:** Version bump only for package @midwayjs/task

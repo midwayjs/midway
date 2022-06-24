@@ -269,3 +269,19 @@ export default {
 }
 ```
 
+
+
+## 自定义 Session Store
+
+过多的将数据放在 Session 中并不太合理，大部分情况下，我们只需要在 Session 中存储一些 Id，来保证安全性。虽然我们觉得 Cookie 作为存储 Session 已经足够，但是在某些极端情况下，还是需要使用例如 Redis 来存储 Session 的情况。
+
+不同的上层框架使用了不同的 Session 方案，下面列举了一些 Session 替换方案
+
+- [@midwayjs/koa 方案](https://github.com/midwayjs/midway/tree/main/packages/session#custom-session-store)
+- [@midwayjs/express 方案](https://github.com/midwayjs/midway/tree/main/packages/express-session)
+- [@midwayjs/web（egg）方案](https://github.com/eggjs/egg-session)
+
+
+
+
+

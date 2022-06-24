@@ -204,16 +204,17 @@ export class ContainerConfiguration implements ILifeCycle {
   async onReady(container: IMidwayContainer, app?: IMidwayBaseApplication<Context>): Promise<void> {
 
     // Task这块的启动后立马执行
-    let result: any = await container.getAsync(QueueService);
-    let job: Queue = result.getQueueTask(`HelloTask`, 'task') // 此处第一个是你任务的类名，第二个任务的名字也就是装饰器Task的函数名
-    job.add({}, {delay: 0}) // 表示立即执行。
+    let result: QueueService = await container.getAsync(QueueService);
+    // 此处第一个是你任务的类名，第二个任务的名字也就是装饰器Task的函数名
+    let job: Queue = result.getQueueTask(`HelloTask`, 'task')
+    // 表示立即执行。
+    job.add({}, {delay: 0, repeat: null}) 
 
     // LocalTask的启动后立马执行
     const result = await container.getAsync(QueueService);
     let job = result.getLocalTask(`HelloTask`, 'task'); // 参数1:类名 参数2: 装饰器TaskLocal的函数名
     job(); // 表示立即执行
   }
-
 }
 
 ```
@@ -284,12 +285,7 @@ FORMAT.CRONTAB.EVERY_MINUTE
 import { Provide, Inject, Queue } from '@midwayjs/decorator';
 
 @Queue()
-@Provide()
 export class HelloTask{
-
-  @Inject()
-  service;
-
   async execute(params){
     console.log(params);
   }
@@ -304,20 +300,22 @@ import { Provide, Inject } from '@midwayjs/decorator';
 
 @Provide()
 export class UserTask{
-
-  @Inject()
-  service;
-
   @Inject()
   queueService: QueueService;
 
-  async execute(params){
+  async execute(params = {}){
     // 3秒后触发分布式任务调度。
     const xxx = await this.queueService.execute(HelloTask, params, {delay: 3000});
   }
 }
 ```
  3 秒后，会触发 HelloTask 这个任务。
+
+:::tip
+
+注意，如果没触发，请检查上面的 params，保证其不为空。
+
+:::
 
 
 
@@ -332,7 +330,31 @@ export class UserTask{
 
 分别在task、localTask、queue触发开始和结束的时候会打印对应的日志。
 
-
+task日志基本配置：
+```typescript
+// src/config/config.default.ts
+import { MidwayConfig } from '@midwayjs/core';
+export default {
+  midwayLogger: {
+    default: {
+      // ...
+    },
+    clients: {
+      coreLogger: {
+        // ...
+      },
+      appLogger: {
+        // ...
+      },
+			taskLog: {
+        disableConsole: false, // 是否禁用打印到控制台，默认禁用
+				level: 'warn', // 服务器默认warn
+        consoleLevel: 'warn',
+      },
+    }
+  },
+} as MidwayConfig;
+```
 分布式的Task触发日志：
 ```typescript
 logger.info(`task start.`)
@@ -504,3 +526,51 @@ export class UserService {
 
 ```
 目前是否默认删除，需要跟用户沟通。
+
+
+
+### 3、配置 Redis 集群
+
+你可以使用 bull 提供的 `createClient` 方式来接入自定义的 redis 实例，这样你可以接入 Redis 集群。
+
+比如：
+
+```typescript
+// src/config/config.default
+import Redis from 'ioredis';
+
+const clusterOptions = {
+  enableReadyCheck: false,  // 一定要是false
+  retryDelayOnClusterDown: 300,
+  retryDelayOnFailover: 1000,
+  retryDelayOnTryAgain: 3000,
+  slotsRefreshTimeout: 10000,
+  maxRetriesPerRequest: null  // 一定要是null
+}
+
+const redisClientInstance = new Redis.Cluster([
+  {
+    port: 7000,
+    host: '127.0.0.1'
+  },
+  {
+    port: 7002,
+    host: '127.0.0.1'
+  },
+], clusterOptions);
+
+export default {
+  task: {
+    createClient: (type, opts) => {
+      return redisClientInstance;
+    },
+    prefix: '{midway-task}',                    // 这些任务存储的key，都是相同开头，以便区分用户原有redis里面的配置。
+    defaultJobOptions: {
+      repeat: {
+        tz: "Asia/Shanghai"                     // Task等参数里面设置的比如（0 0 0 * * *）本来是为了0点执行，但是由于时区不对，所以国内用户时区设置一下。
+      }
+    }
+  }
+}
+```
+

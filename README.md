@@ -19,6 +19,7 @@
 
 ## 资源
 
+- [2022 冬季直面会](https://www.bilibili.com/video/BV1W44y1s7dj?spm_id_from=333.999.0.0)
 - [3.x beta 功能预览](https://www.bilibili.com/video/BV1aL4y1p7oA?from=search&seid=8235946720906913847&spm_id_from=333.337.0.0)
 - [2021 秋季直面会](https://www.bilibili.com/video/BV1Ng411T76f?from=search&seid=8235946720906913847&spm_id_from=333.337.0.0)
 - [2021 夏季直面会](https://www.bilibili.com/video/BV1nF411a7sr?from=search&seid=8235946720906913847&spm_id_from=333.337.0.0)

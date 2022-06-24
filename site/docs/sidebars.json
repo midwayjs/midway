@@ -43,7 +43,8 @@
         "cookie_session",
         "built_in_service",
         "router_table",
-        "decorator_index"
+        "decorator_index",
+        "error_code"
       ]
     },
     {
@@ -85,7 +86,8 @@
         "extensions/orm",
         "extensions/sequelize",
         "extensions/redis",
-        "extensions/mongodb"
+        "extensions/mongodb",
+        "extensions/jwt"
       ]
     },
     {
@@ -168,8 +170,7 @@
     },
     {
       "type": "doc",
-      "id": "serverless/serverless_v1_upgrade_serverless_v2",
-      "label": "从 Serverless v1 迁移到 v2"
+      "id": "serverless/serverless_v2_upgrade_serverless_v3"
     },
     {
       "type": "category",
@@ -179,7 +180,6 @@
       "items": [
         "serverless/serverless_dev",
         "serverless/serverless_testing",
-        "serverless/serverless_aggr",
         "serverless/serverless_context",
         "serverless/serverless_yml",
         "serverless/serverless_environment",
@@ -188,43 +188,26 @@
     },
     {
       "type": "category",
-      "label": "阿里云 FC",
-      "collapsed": true,
+      "label": "平台触发器",
+      "collapsed": false,
+      "collapsible": false,
       "items": [
-        "serverless/aliyun_trigger_event",
-        "serverless/aliyun_trigger_http",
-        "serverless/aliyun_trigger_apigw",
-        "serverless/aliyun_trigger_timer",
-        "serverless/aliyun_trigger_oss",
-        "serverless/aliyun_trigger_mns",
-        "serverless/deploy_to_aliyun",
-        "serverless/deploy_aliyun_faq"
+        "serverless/aliyun_faas",
+        "serverless/tencent_faas"
       ]
     },
     {
       "type": "category",
-      "label": "腾讯云 SCF",
-      "collapsed": true,
-      "items": [
-        "serverless/tencent_trigger_apigw",
-        "serverless/tencent_trigger_timer",
-        "serverless/tencent_trigger_cos",
-        "serverless/tencent_trigger_cmq",
-        "serverless/deploy_to_tencent",
-        "serverless/deploy_tencent_faq"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "应用部署到 Serverless 环境",
-      "collapsed": true,
+      "label": "应用部署到弹性容器",
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         "serverless/app_deploy_serverless",
         "serverless/migrate_midway",
+        "serverless/migrate_static",
         "serverless/migrate_koa",
         "serverless/migrate_express",
-        "serverless/migrate_egg",
-        "serverless/migrate_static"
+        "serverless/migrate_egg"
       ]
     },
     {

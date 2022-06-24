@@ -1,12 +1,10 @@
 # 日志
 
-## 简介
-
 Midway 为不同场景提供了一套统一的日志接入方式。通过 `@midwayjs/logger` 包导出的方法，可以方便的接入不同场景的日志系统。
 
 Midway 的日志系统基于社区的 [winston](https://github.com/winstonjs/winston)，是现在社区非常受欢迎的日志库。
 
-实现的功能：
+实现的功能有：
 
 - 日志分级
 - 按大小和时间自动切割
@@ -23,6 +21,8 @@ Midway 会在日志根目录创建一些默认的文件。
 - `midway-core.log` 框架、组件打印信息的日志，对应 `coreLogger` 。
 - `midway-app.log` 应用打印信息的日志，对应 `appLogger`
 - `common-error.log` 所有错误的日志（所有 Midway 创建出来的日志，都会将错误重复打印一份到该文件中）
+
+本地开发和服务器部署时的 **日志路径** 和 **日志等级** 不同，具体请参考 [配置日志根目录](#配置日志根目录) 和 [框架的默认等级](#框架的默认等级)。
 
 
 
@@ -43,6 +43,8 @@ Midway 默认在框架提供了三种不同的日志，对应三种不同的行�
 Midway 的常用日志使用方法。
 
 ### 上下文日志
+
+上下文日志是关联框架上下文对象（Context） 的日志。
 
 ```typescript
 import { Get, Inject, Controller, Provide } from '@midwayjs/decorator';
@@ -124,7 +126,7 @@ export class ContainerConfiguration implements ILifeCycle {
 @Configuration()
 export class ContainerConfiguration implements ILifeCycle {
 
-  @Logger()
+  @Logger('coreLogger')
   logger: ILogger;
 
   async onReady(container: IMidwayContainer): Promise<void> {
@@ -307,7 +309,7 @@ export class UserService {
 
 
 
-## 日志配置
+## 日志基本配置
 
 我们可以在配置文件中配置日志的各种行为。
 
@@ -338,7 +340,7 @@ export default {
 
 
 
-## 日志等级
+## 配置日志等级
 
 
 winston 的日志等级分为下面几类，日志等级依次降低（数字越大，等级越低）：
@@ -373,7 +375,7 @@ const levels = {
 
 
 - 在开发环境下（local，test，unittest），文本和控制台日志等级统一为 `info` 。
-- 在服务器环境（除开发环境外），为减少日志数量，日志等级统一为 `warn` 。 
+- 在服务器环境（除开发环境外），为减少日志数量，日志等级统一为 `warn` 。
 
 
 
@@ -424,7 +426,7 @@ export default {
 
 
 
-## 日志根目录
+## 配置日志根目录
 
 默认情况下，Midway 会在本地开发和服务器部署时输出日志到 **日志根目录**。
 
@@ -450,7 +452,7 @@ export default {
 
 
 
-## 日志切割（轮转）
+## 配置日志切割（轮转）
 
 
 默认行为下，同一个日志对象 **会生成两个文件**。
@@ -482,7 +484,7 @@ export default {
 
 
 
-## 日志清理
+## 配置日志清理
 
 默认情况下，日志会存在 31 天。
 
@@ -501,89 +503,12 @@ export default {
 
 
 
-## 日志输出格式
-
-
-显示格式指的是日志输出时单行文本的字符串结构。Miidway 对 Winston 的日志做了定制，提供了一些默认对象。
-
-显示格式是一个返回字符串结构的方法，参数为 Winston 的 [info 对象](https://github.com/winstonjs/logform#info-objects)。
-
-一般情况下，我们只会自定义单个日志的输出格式，比如 `appLogger`。
-
-```typescript
-export default {
-  midwayLogger: {
-    clients: {
-      appLogger: {
-        format: info => {
-          return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
-        }
-        // ...
-      }
-    }
-    // ...
-  },
-} as MidwayConfig;
-```
-
-info 对象的默认属性如下：
-
-| **属性名**  | **描述**                                         | **示例**                                                     |
-| ----------- | ------------------------------------------------ | ------------------------------------------------------------ |
-| timestamp   | 时间戳，默认为 `'YYYY-MM-DD HH:mm:ss,SSS` 格式。 | 2020-12-30 07:50:10,453                                      |
-| level       | 小写的日志等级                                   | info                                                         |
-| LEVEL       | 大写的日志等级                                   | INFO                                                         |
-| pid         | 当前进程 pid                                     | 3847                                                         |
-| labelText   | 标签的聚合文本                                   | [abcde]                                                      |
-| message     | 普通消息 + 错误消息 + 错误堆栈的组合             | 1、普通文本，如 `123456` ， `hello world`<br />2、错误文本（错误名+堆栈）Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18)<br />3、普通文本+错误文本 hello world Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |
-| stack       | 错误堆栈                                         |                                                              |
-| originError | 原始错误对象                                     | 错误实例本身                                                 |
-| originArgs  | 原始的用户入参                                   | [ 'a', 'b', 'c' ]                                            |
 
 
 
+## 高级配置
 
-## 修改上下文日志输出格式
-
-上下文日志是基于 appLogger 来打日志的，**会复用 appLogger 的所有信息**。我们可以单独对其进行输出格式的配置。
-
-我们依旧以修改 `appLogger` 的上下文日志为例。
-
-```typescript
-export default {
-  midwayLogger: {
-    clients: {
-      appLogger: {
-        contextFormat: info => {
-          const ctx = info.ctx;
-          return `${info.timestamp} ${info.LEVEL} ${info.pid} [${Date.now() - ctx.startTime}ms ${ctx.method}] ${info.message}`;
-        }
-        // ...
-      }
-    }
-    // ...
-  },
-} as MidwayConfig;
-```
-
-则你在使用 `ctx.logger` 输出时，会默认变成你 format 的样子。
-
-```typescript
-ctx.logger.info('hello world');
-// 2021-01-28 11:10:19,334 INFO 9223 [2ms POST] hello world
-```
-
-:::tip
-注意，由于 app logger 是所有框架通用的，这一修改会影响所有类型的 context logger。
-:::
-
-未避免影响过大，你也可以单独修改某一框架的上下文日志格式，比如 [修改 koa 的上下文日志格式](./extensions/koa)。
-
-
-## 自定义日志
-
-
-如果用户不满足于默认的日志对象，也可以自行创建。
+如果用户不满足于默认的日志对象，也可以自行创建和修改。
 
 
 
@@ -608,6 +533,124 @@ export default {
 自定义的日志可以通过 `@Logger('abcLogger')` 获取。
 
 更多的日志选项可以参考 interface 中 [LoggerOptions 描述](https://github.com/midwayjs/logger/blob/main/src/interface.ts)。
+
+
+
+### 配置日志输出格式
+
+
+显示格式指的是日志输出时单行文本的字符串结构。Midway 对 Winston 的日志做了定制，提供了一些默认对象。
+
+每个 logger 对象，都可以配置一个输出格式，显示格式是一个返回字符串结构的方法，参数为 Winston 的 [info 对象](https://github.com/winstonjs/logform#info-objects)。
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      appLogger: {
+        format: info => {
+          return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
+        }
+        // ...
+      },
+      customOtherLogger: {
+        format: info => {
+          return 'xxxx';
+        }
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+info 对象的默认属性如下：
+
+| **属性名**  | **描述**                                         | **示例**                                                     |
+| ----------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| timestamp   | 时间戳，默认为 `'YYYY-MM-DD HH:mm:ss,SSS` 格式。 | 2020-12-30 07:50:10,453                                      |
+| level       | 小写的日志等级                                   | info                                                         |
+| LEVEL       | 大写的日志等级                                   | INFO                                                         |
+| pid         | 当前进程 pid                                     | 3847                                                         |
+| labelText   | 标签的聚合文本                                   | [abcde]                                                      |
+| message     | 普通消息 + 错误消息 + 错误堆栈的组合             | 1、普通文本，如 `123456` ， `hello world`<br />2、错误文本（错误名+堆栈）Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18)<br />3、普通文本+错误文本 hello world Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |
+| stack       | 错误堆栈                                         |                                                              |
+| originError | 原始错误对象                                     | 错误实例本身                                                 |
+| originArgs  | 原始的用户入参                                   | [ 'a', 'b', 'c' ]                                            |
+
+
+
+### 获取自定义上下文日志
+
+上下文日志是基于 **原始日志对象** 来打日志的，会复用原始日志的所有格式，他们的关系如下。
+
+```typescript
+// 伪代码
+const contextLogger = customLogger.createContextLogger(ctx);
+```
+
+`@Inject` 只能注入默认的上下文日志，我们可以通过 `ctx.getLogger` 方法获取其他 **自定义日志** 对应的 **上下文日志**。上下文日志和 ctx 关联，同一个上下文会相同的 key 会获取到同一个日志对象，当 ctx 被销毁，日志对象也会被回收。
+
+```typescript
+import { Provide } from '@midwayjs/decorator';
+import { IMidwayLogger } from '@midwayjs/logger';
+import { Context } from '@midwayjs/koa';
+
+@Provide()
+export class UserService {
+
+  @Inject()
+  ctx: Context;
+
+  async getUser() {
+    // 这里获取的是 customLogger 对应的上下文日志对象
+    const customLogger = this.ctx.getLogger('customLogger');
+  	customLogger.info('hello world');
+  }
+
+}
+```
+
+
+
+
+### 配置上下文日志输出格式
+
+上下文日志是基于 **原始日志对象** 来打日志的，会复用原始日志的所有格式，但是我们可以单独配置日志对象的对应的上下文日志格式。
+
+上下文日志的 info 对象中多了 ctx 对象，我们以修改 `customLogger` 的上下文日志为例。
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      customLogger: {
+        contextFormat: info => {
+          const ctx = info.ctx;
+          return `${info.timestamp} ${info.LEVEL} ${info.pid} [${Date.now() - ctx.startTime}ms ${ctx.method}] ${info.message}`;
+        }
+        // ...
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+则你在使用上下文日志输出时，会默认变成你 format 的样子。
+
+```typescript
+ctx.getLogger('customLogger').info('hello world');
+// 2021-01-28 11:10:19,334 INFO 9223 [2ms POST] hello world
+```
+
+注意，由于 `App Logger` 是所有框架默认的日志对象，较为特殊，现有部分框架默认配置了其上下文格式，导致在 `midwayLogger` 字段中配置无效。
+
+为此你需要单独修改某一框架的上下文日志格式配置，请跳转到不同的框架查看。
+
+-  [修改 koa 的上下文日志格式](./extensions/koa#修改上下文日志)
+-  [修改 egg 的上下文日志格式](./extensions/egg#修改上下文日志)
+-  [修改 express 的上下文日志格式](./extensions/express#修改上下文日志)
 
 
 
@@ -759,3 +802,22 @@ export class AutoConfiguration {
   }
 }
 ```
+
+
+
+## 常见问题
+
+
+
+### 1、服务器环境日志不输出
+
+服务器环境，默认日志等级为 warn，即 `logger.warn 才会打印输出，请查看 ”日志等级“ 部分。
+
+我们不推荐在服务器环境打印太多的日志，只打印必须的内容，过多的日志输出影响性能，也影响快速定位问题。
+
+
+
+### 2、服务器没有控制台日志
+
+一般来说，服务器控制台日志（console）是关闭的，只会输出到文件中，如有特殊需求，可以单独调整。
+

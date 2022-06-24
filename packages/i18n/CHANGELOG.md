@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.11](https://github.com/midwayjs/midway/compare/v3.3.10...v3.3.11) (2022-05-27)
+
+**Note:** Version bump only for package @midwayjs/i18n
+
+
+
+
+
+## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
+
+
+### Bug Fixes
+
+* i18 resolver and task typing ([#2003](https://github.com/midwayjs/midway/issues/2003)) ([c7b8ad1](https://github.com/midwayjs/midway/commit/c7b8ad1a86eb680059ab685e1f84ffe046a59292))
+
+
+
+
+
+## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
+
+**Note:** Version bump only for package @midwayjs/i18n
+
+
+
+
+
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+**Note:** Version bump only for package @midwayjs/i18n
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 **Note:** Version bump only for package @midwayjs/i18n

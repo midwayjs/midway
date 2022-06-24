@@ -190,7 +190,7 @@ export default {
 默认情况下，单测环境由于需要 supertest 来启动端口，我们的 port 配置为 `null`。
 
 ```typescript
-// src/config/config.default
+// src/config/config.unittest
 export default {
   // ...
   koa: {
@@ -222,12 +222,13 @@ export default {
 ```typescript
 // src/config/config.default
 import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export default {
   // ...
   koa: {
-    key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
-  	cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+    key: join(__dirname, '../ssl/ssl.key'),
+    cert: join(__dirname, '../ssl/ssl.pem'),
   },
 }
 ```

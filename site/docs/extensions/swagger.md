@@ -83,13 +83,16 @@ export class ContainerConfiguration {
 }
 ```
 
-然后启动项目，访问：http://127.0.0.1:7001/swagger-ui/index.html
+然后启动项目，访问地址：
+
+- UI: http://127.0.0.1:7001/swagger-ui/index.html
+- JSON: http://127.0.0.1:7001/swagger-ui/index.json
+
+路径可以通过 `swaggerPath` 参数配置。
 
 
 
-## 基本使用
-
-### 类型和参数
+## 类型和参数
 
 Swagger 组件会识别各个 ```@Controller``` 中每个路由方法的 ```@Body()```、```@Query()```、```@Param()``` 装饰器，提取路由方法参数和类型。
 
@@ -168,7 +171,7 @@ hello: HelloWorld;
 Swagger UI 中展示：
 ![swagger3](https://img.alicdn.com/imgextra/i1/O1CN015M37MU1KgtdNfqsgp_!!6000000001194-0-tps-1406-426.jpg)
 
-#### ApiExtraModel
+### ApiExtraModel
 * 当不希望通过 type 来定义 model 类型时，我们可以通过在 Controller 中或者 Model Class 中加入 @ApiExtraModel 来增加额外的 schema 类型描述。
 
 ```typescript
@@ -206,10 +209,10 @@ class TestModel {
 }
 ```
 
-### 路由定义
+## 路由定义
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
 
-#### Query 定义
+### Query 定义
 
 使用 `@ApiQuery` 来定义 Query 数据。
 
@@ -241,7 +244,7 @@ async getUser(@Query() dto: UserDTO) {
 
 
 
-#### Body 定义
+### Body 定义
 
 使用 `@ApiBody` 来定义 Body 数据。
 
@@ -263,7 +266,7 @@ async upateUser(@Body() dto: UserDTO) {
 
 
 
-### 路由标签
+## 路由标签
 Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则会默认归组到 default 下。可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
 
 ```typescript
@@ -272,7 +275,7 @@ Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则�
 export class HelloController {}
 ```
 
-### 请求 Header
+## 请求 Header
 
 通过 ```@ApiHeader({...})``` 装饰器来定义 Header 参数。
 
@@ -286,7 +289,7 @@ export class HelloController {}
 export class HelloController {}
 ```
 
-### 请求 Response
+## 请求 Response
 
 可以使用 ```@ApiResponse({...})``` 来自定义请求 Response。
 
@@ -356,7 +359,7 @@ Swagger 还支持带前缀 ```x-``` 的扩展字段，可以使用 ```@ApiExtens
 
 
 
-### 文件上传
+## 文件上传
 
 使用 ```@ApiBody``` 设置 ```contentType```
 
@@ -420,11 +423,11 @@ Swagger UI 中展示：
 
 
 
-### 授权验证
+## 授权验证
 
 组件可以通过添加授权验证配置来设置验证方式，我们支持配置 ```basic```、```bearer```、```cookie```、```oauth2```、```apikey```、```custom```。
 
-#### basic
+### basic
 
 * 启用 basic 验证
 
@@ -447,7 +450,7 @@ export default {
 export class HelloController {}
 ```
 
-#### bearer
+### bearer
 
 * 启用 bearer 验证（bearerFormat 为 JWT）
 
@@ -471,7 +474,7 @@ export default {
 export class HelloController {}
 ```
 
-#### oauth2
+### oauth2
 
 * 启用 oauth2 验证
 
@@ -511,7 +514,7 @@ export default {
 export class HelloController {}
 ```
 
-#### cookie
+### cookie
 * 启用 cookie 验证
 
 ```typescript
@@ -536,7 +539,7 @@ export default {
 export class HelloController {}
 ```
 
-#### apikey
+### apikey
 
 * 启用 cookie 验证
 
@@ -561,7 +564,7 @@ export default {
 export class HelloController {}
 ```
 
-#### custom
+### custom
 
 * 自定义验证方式，需要自己设计参数配置
 

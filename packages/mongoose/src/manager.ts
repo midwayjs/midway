@@ -1,7 +1,7 @@
 import {
+  DataSourceManager,
   delegateTargetMethod,
   delegateTargetProperties,
-  ServiceFactory,
 } from '@midwayjs/core';
 import {
   Config,
@@ -16,7 +16,7 @@ import * as mongoose from 'mongoose';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class MongooseConnectionServiceFactory extends ServiceFactory<mongoose.Connection> {
+export class MongooseDataSourceManager extends DataSourceManager<mongoose.Connection> {
   @Config('mongoose')
   config;
 
@@ -25,33 +25,50 @@ export class MongooseConnectionServiceFactory extends ServiceFactory<mongoose.Co
 
   @Init()
   async init() {
-    await this.initClients(this.config);
+    if (this.config.client) {
+      this.logger.warn(
+        '[midway:mongoose] mongoose.client is deprecated, please use new config format.'
+      );
+      this.config.dataSource = {
+        default: this.config.client,
+      };
+    }
+    if (this.config.clients) {
+      this.logger.warn(
+        '[midway:mongoose] mongoose.clients is deprecated, please use new config format.'
+      );
+      this.config.dataSource = this.config.clients;
+    }
+    await this.initDataSource(this.config);
   }
 
-  protected async createClient(config: any, name: string) {
+  protected async createDataSource(config: any, name: string) {
     const connection = await mongoose.createConnection(
       config.uri,
       config.options
     );
     connection.on('error', err => {
-      err.message = `[mongoose]${err.message}`;
+      err.message = `[midway:mongoose] ${err.message}`;
       this.logger.error(err);
     });
 
     /* istanbul ignore next */
     connection.on('disconnected', () => {
-      this.logger.info(`[mongoose] ${name} disconnected`);
+      this.logger.info(`[midway:mongoose] ${name} disconnected`);
     });
 
     connection.on('connected', () => {
-      this.logger.info(`[mongoose] ${name} connected successfully`);
+      this.logger.info(`[midway:mongoose] ${name} connected successfully`);
     });
 
     /* istanbul ignore next */
     connection.on('reconnected', () => {
-      this.logger.info(`[mongoose] ${name} reconnected successfully`);
+      this.logger.info(`[midway:mongoose] ${name} reconnected successfully`);
     });
 
+    if (config.entities) {
+      (connection as any).entities = config.entities;
+    }
     return connection;
   }
 
@@ -59,23 +76,61 @@ export class MongooseConnectionServiceFactory extends ServiceFactory<mongoose.Co
     return 'mongoose';
   }
 
-  async destroyClient(connection: mongoose.Connection) {
-    await connection.close();
+  async destroyDataSource(dataSource: mongoose.Connection) {
+    await dataSource.close();
+  }
+
+  protected async checkConnected(
+    dataSource: mongoose.Connection
+  ): Promise<boolean> {
+    return dataSource.readyState === mongoose.ConnectionStates.connected;
   }
 }
 
+/**
+ * @deprecated
+ */
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class MongooseConnectionServiceFactory {
+  @Inject()
+  mongooseDataSourceManager: MongooseDataSourceManager;
+
+  createInstance(
+    config: any,
+    clientName: any
+  ): Promise<void | mongoose.Connection> {
+    return this.mongooseDataSourceManager.createInstance(config, clientName);
+  }
+
+  get(id: string): mongoose.Connection {
+    return this.mongooseDataSourceManager.getDataSource(id);
+  }
+
+  getName(): string {
+    return 'mongoose';
+  }
+
+  has(id: string): boolean {
+    return this.mongooseDataSourceManager.hasDataSource(id);
+  }
+}
+
+/**
+ * @deprecated
+ */
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MongooseConnectionService implements mongoose.Connection {
   @Inject()
-  private serviceFactory: MongooseConnectionServiceFactory;
+  private mongooseDataSourceManager: MongooseDataSourceManager;
 
   // @ts-expect-error used
   private instance: mongoose.Connection;
 
   @Init()
   async init() {
-    this.instance = this.serviceFactory.get('default');
+    this.instance = this.mongooseDataSourceManager.getDataSource('default');
   }
 }
 

@@ -6,13 +6,11 @@ Midway 提供了 jwt 组件，简单提供了一些 jwt 相关的 API，可以�
 
 相关信息：
 
-| 描述              |      |
-| ----------------- | ---- |
-| 可用于标准项目    | ✅    |
-| 可用于 Serverless | ✅    |
-| 可用于一体化      | ✅    |
-
-
+| 描述              |     |
+| ----------------- | --- |
+| 可用于标准项目    | ✅  |
+| 可用于 Serverless | ✅  |
+| 可用于一体化      | ✅  |
 
 ## 安装依赖
 
@@ -26,7 +24,7 @@ $ npm i @types/jsonwebtoken --save-dev
 ```json
 {
   "dependencies": {
-    "@midwayjs/jwt": "^3.0.0",
+    "@midwayjs/jwt": "^3.0.0"
     // ...
   },
   "devDependencies": {
@@ -35,28 +33,31 @@ $ npm i @types/jsonwebtoken --save-dev
 }
 ```
 
-
-
 ## 使用组件
 
 将 jwt 组件配置到代码中。
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
+import { IMidwayContainer } from '@midwayjs/core';
 import * as jwt from '@midwayjs/jwt';
 
 @Configuration({
   imports: [
     // ...
-    jwt
-  ]
+    jwt,
+  ],
 })
 export class AutoConfiguration {
-  //...
+  async onReady(applicationContext: IMidwayContainer): Promise<void> {
+    // 添加中间件
+    this.app.useMiddleware([
+      // ...
+      JwtMiddleware,
+    ]);
+  }
 }
 ```
-
-
 
 ## 基础配置
 
@@ -68,14 +69,12 @@ export default {
   // ...
   jwt: {
     secret: 'xxxxxxxxxxxxxx', // fs.readFileSync('xxxxx.key')
-    expiresIn: '2d'   // https://github.com/vercel/ms
+    expiresIn: '2d', // https://github.com/vercel/ms
   },
-}
+};
 ```
 
 更多配置请查看 ts 定义。
-
-
 
 ## 常用 API
 
@@ -83,7 +82,7 @@ Midway 将 jwt 常用 API 提供为同步和异步两种形式。
 
 ```typescript
 import { Provide, Inject } from '@midwayjs/decorator';
-import { JwtService} from '@midwayjs/jwt';
+import { JwtService } from '@midwayjs/jwt';
 
 @Provide()
 export class UserService {
@@ -91,7 +90,6 @@ export class UserService {
   jwtService: JwtService;
 
   async invoke() {
-
     // 同步 API
     this.jwtService.signSync(payload, secretOrPrivateKey, options);
     this.jwtService.verifySync(token, secretOrPublicKey, options);
@@ -105,7 +103,7 @@ export class UserService {
 }
 ```
 
-
+这些 API 都来自于 [node-jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) 基础库，如果不了解请阅读原版文档。
 
 ## 中间件示例
 
@@ -121,42 +119,48 @@ import { JwtService } from '@midwayjs/jwt';
 
 @Middleware()
 export class JwtMiddleware {
-
   @Inject()
   jwtService: JwtService;
 
+  public static getName(): string {
+    return 'jwt';
+  }
+
   resolve() {
     return async (ctx: Context, next: NextFunction) => {
-
       // 判断下有没有校验信息
       if (!ctx.headers['authorization']) {
         throw new httpError.UnauthorizedError();
-        return;
-    	}
+      }
       // 从 header 上获取校验信息
       const parts = ctx.get('authorization').trim().split(' ');
 
-      if (parts.length === 2) {
-        const scheme = parts[0];
-        const credentials = parts[1];
-
-        if (/^Bearer$/i.test(scheme)) {
-          try {
-            //jwt.verify方法验证token是否有效
-            await jwtService.verify(token, secret.sign, {
-              complete: true
-            });
-          } catch (error) {
-            //token过期 生成新的token
-            const newToken = getToken(user);
-            //将新token放入Authorization中返回给前端
-            ctx.set('Authorization', newToken);
-          }
-        }
+      if (parts.length !== 2) {
+        throw new httpError.UnauthorizedError();
       }
 
-    }
+      const [scheme, token] = parts;
+
+      if (/^Bearer$/i.test(scheme)) {
+        try {
+          //jwt.verify方法验证token是否有效
+          await jwtService.verify(token, {
+            complete: true,
+          });
+        } catch (error) {
+          //token过期 生成新的token
+          const newToken = getToken(user);
+          //将新token放入Authorization中返回给前端
+          ctx.set('Authorization', newToken);
+        }
+      }
+    };
+  }
+
+  // 配置忽略鉴权的路由地址
+  public match(ctx: Context): boolean {
+    const ignore = ctx.path.indexOf('/api/admin/login') !== -1;
+    return !ignore;
   }
 }
 ```
-

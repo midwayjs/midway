@@ -17,10 +17,54 @@ export interface IMidwayWebBaseApplication {
   createLogger(name: string, options: LoggerOptions): ILogger;
 }
 
+/**
+ * @deprecated since version 3.0.0
+ * Please use Application from '@midwayjs/web'
+ */
 export type IMidwayWebApplication = IMidwayApplication<Context, EggApplication & IMidwayWebBaseApplication>;
 export interface Application extends IMidwayWebApplication {}
-export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {}
+/**
+ * @deprecated since version 3.0.0
+ * Please use Context from '@midwayjs/web'
+ */
 export type IMidwayWebContext <ResponseBodyT = unknown> = IMidwayContext<EggContext<ResponseBodyT>>;
+export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {
+  session: {
+    /**
+     * JSON representation of the session.
+     */
+    toJSON(): object;
+    /**
+     * Return how many values there are in the session object.
+     * Used to see if it"s "populated".
+     */
+    readonly length: number;
+    /**
+     * populated flag, which is just a boolean alias of .length.
+     */
+    readonly populated: boolean;
+    /**
+     * get/set session maxAge
+     */
+    maxAge: number | 'session' | undefined;
+    /**
+     * commit this session's headers if autoCommit is set to false.
+     */
+    manuallyCommit(): Promise<void>;
+    /**
+     * save this session no matter whether it is populated
+     */
+    save(): void;
+    /**
+     * allow to put any value on session object
+     */
+    [_: string]: any;
+  }
+}
+/**
+ * @deprecated since version 3.0.0
+ * Please use NextFunction from '@midwayjs/web'
+ */
 export type IMidwayWebNext = BaseNextFunction;
 export type NextFunction = BaseNextFunction;
 

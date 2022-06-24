@@ -22,6 +22,15 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
   };
 };
 
+export type DataSourceManagerConfigOption<OPTIONS> = {
+  default?: PowerPartial<OPTIONS>;
+  dataSource?: {
+    [key: string]: PowerPartial<{
+      entities: any[],
+    } & OPTIONS>;
+  };
+};
+
 type ConfigType<T> = T extends (...args: any[]) => any
   ? Writable<PowerPartial<ReturnType<T>>>
   : Writable<PowerPartial<T>>;
@@ -184,6 +193,7 @@ export interface IObjectDefinition {
   }>;
   createFrom: 'framework' | 'file' | 'module';
   allowDowngrade: boolean;
+  bindHook?: (module: any, options?: IObjectDefinition) => void;
 }
 
 export interface IObjectCreator {

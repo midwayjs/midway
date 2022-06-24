@@ -76,7 +76,6 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
           .join('&');
       }
     }
-
     const proxyResponse = await axios(reqOptions).catch(err => {
       if (!err || !err.response) {
         throw err || new Error('proxy unknown error');
@@ -84,13 +83,24 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
       return err.response;
     });
     res.type = proxyResponse.headers['content-type'];
+    const ignoreHeaders = {
+      'transfer-encoding': true,
+    };
     Object.keys(proxyResponse.headers).forEach(key => {
+      if (ignoreHeaders[key.toLowerCase()]) {
+        return;
+      }
       res.set(key, proxyResponse.headers[key]);
     });
     res.status = proxyResponse.status;
     if (isStream) {
       await new Promise(resolve => {
-        proxyResponse.data.on('finish', resolve);
+        proxyResponse.data.on('finish', () => {
+          if (targetRes.end) {
+            targetRes.end();
+          }
+          resolve(void 0);
+        });
         proxyResponse.data.pipe(targetRes);
       });
     } else {

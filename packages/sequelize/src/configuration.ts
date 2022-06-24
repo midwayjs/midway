@@ -1,29 +1,54 @@
-import { Config, Configuration, listModule } from '@midwayjs/decorator';
-import { Sequelize } from 'sequelize-typescript';
-import * as DefaultConfig from './config/config.default';
+import { Config, Configuration, Init, Inject } from '@midwayjs/decorator';
+import { SequelizeDataSourceManager } from './dataSourceManager';
+import { IMidwayContainer, MidwayDecoratorService } from '@midwayjs/core';
+import { ENTITY_MODEL_KEY } from './decorator';
 
 @Configuration({
   namespace: 'sequelize',
   importConfigs: [
     {
-      default: DefaultConfig,
+      default: {
+        sequelize: {},
+      },
     },
   ],
 })
 export class SequelizeConfiguration {
-  instance: Sequelize;
-
   @Config('sequelize')
   sequelizeConfig;
 
-  async onReady() {
-    const options = this.sequelizeConfig.options;
-    this.instance = new Sequelize(options);
-    const entities = listModule('sequelize:core');
-    this.instance.addModels(entities);
-    await this.instance.authenticate();
-    if (this.sequelizeConfig.sync) {
-      await this.instance.sync();
+  @Inject()
+  decoratorService: MidwayDecoratorService;
+
+  dataSourceManager: SequelizeDataSourceManager;
+
+  @Init()
+  async init() {
+    this.decoratorService.registerPropertyHandler(
+      ENTITY_MODEL_KEY,
+      (
+        propertyName,
+        meta: {
+          modelKey: string;
+          connectionName: string;
+        }
+      ) => {
+        return this.dataSourceManager
+          .getDataSource(meta.connectionName)
+          .getRepository(meta.modelKey as any);
+      }
+    );
+  }
+
+  async onReady(container: IMidwayContainer) {
+    this.dataSourceManager = await container.getAsync(
+      SequelizeDataSourceManager
+    );
+  }
+
+  async onStop() {
+    if (this.dataSourceManager) {
+      await this.dataSourceManager.stop();
     }
   }
 }

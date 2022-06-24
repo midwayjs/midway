@@ -1,6 +1,6 @@
 import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
-import { MongooseConnectionServiceFactory } from './manager';
+import { MongooseDataSourceManager } from './manager';
 
 @Configuration({
   namespace: 'mongoose',
@@ -13,12 +13,14 @@ import { MongooseConnectionServiceFactory } from './manager';
   ],
 })
 export class MongooseConfiguration implements ILifeCycle {
+  mongooseDataSourceManager: MongooseDataSourceManager;
   async onReady(container: IMidwayContainer) {
-    await container.getAsync(MongooseConnectionServiceFactory);
+    this.mongooseDataSourceManager = await container.getAsync(
+      MongooseDataSourceManager
+    );
   }
 
   async onStop(container: IMidwayContainer) {
-    const factory = await container.getAsync(MongooseConnectionServiceFactory);
-    await factory.stop();
+    await this.mongooseDataSourceManager.stop();
   }
 }

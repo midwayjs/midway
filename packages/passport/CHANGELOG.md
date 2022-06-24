@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.13](https://github.com/midwayjs/midway/compare/v3.3.12...v3.3.13) (2022-06-06)
+
+**Note:** Version bump only for package @midwayjs/passport
+
+
+
+
+
+## [3.3.11](https://github.com/midwayjs/midway/compare/v3.3.10...v3.3.11) (2022-05-27)
+
+**Note:** Version bump only for package @midwayjs/passport
+
+
+
+
+
+## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
+
+**Note:** Version bump only for package @midwayjs/passport
+
+
+
+
+
+## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
+
+**Note:** Version bump only for package @midwayjs/passport
+
+
+
+
+
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+**Note:** Version bump only for package @midwayjs/passport
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 

@@ -384,6 +384,14 @@ services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 
 | protoPath | string | 必选，proto 文件的绝对路径 |
 | package | string | 必选，服务对应的 package |
 
+除了 Service 配置之外，还有一些其他的配置。
+
+| 属性          | 类型              | 描述                                                         |
+| ------------- | ----------------- | ------------------------------------------------------------ |
+| loaderOptions | Object            | 可选，proto file loader 的 options                           |
+| credentials   | ServerCredentials | 可选，grpc Server binding 时的 credentials 参数选项          |
+| serverOptions | ChannelOptions    | 可选，grpc Server 的 [自定义 options](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js#supported-channel-options) |
+
 
 
 ### 编写单元测试

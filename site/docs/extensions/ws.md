@@ -196,6 +196,46 @@ export class HelloSocketController {
 
 
 
+## WebSocket Server 实例
+
+该组件提供的 App 即为 WebSocket Server 实例本身，我们可以如下获取。
+
+```typescript
+import { Controller, App } from '@midwayjs/decorator';
+import { Application } from '@midwayjs/ws';
+
+@Controller()
+export class HomeController {
+
+  @App('webSocket')
+  wsApp: Application;
+}
+```
+
+比如，我们可以在其他 Controller 或者 Service 中广播消息。
+
+```typescript
+import { Controller, App } from '@midwayjs/decorator';
+import { Application } from '@midwayjs/ws';
+
+@Controller()
+export class HomeController {
+
+  @App('webSocket')
+  wsApp: Application;
+  
+  async invoke() {
+    this.wsApp.clients.forEach(ws => {
+      // ws.send('something');
+    });
+  }
+}
+```
+
+
+
+
+
 ## 本地测试
 
 ### 配置测试端口

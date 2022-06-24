@@ -43,5 +43,27 @@ describe(`midway task`, () => {
     let ctx = app.createAnonymousContext();
     let service = await ctx.requestContext.getAsync(`task:queueService`);
     expect((service as any).getClassQueue(QueueTask)).not.toBeNull();
-  })
+  });
 })
+
+describe('test another duplicated error', function () {
+  it('should throw error when start with duplicate task', async () => {
+    let error;
+    try {
+      await createApp(join(__dirname, 'fixtures', 'base-app-duplicate-task'), {}, TaskModule);
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeDefined();
+  });
+
+  it('should throw error when start with duplicate local task', async () => {
+    let error;
+    try {
+      await createApp(join(__dirname, 'fixtures', 'base-app-duplicate-local-task'), {}, TaskModule);
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeDefined();
+  });
+});

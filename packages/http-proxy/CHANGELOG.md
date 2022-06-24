@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.11](https://github.com/midwayjs/midway/compare/v3.3.10...v3.3.11) (2022-05-27)
+
+**Note:** Version bump only for package @midwayjs/http-proxy
+
+
+
+
+
+## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
+
+**Note:** Version bump only for package @midwayjs/http-proxy
+
+
+
+
+
+## [3.3.7](https://github.com/midwayjs/midway/compare/v3.3.6...v3.3.7) (2022-05-13)
+
+
+### Bug Fixes
+
+* koa pipe ([#1973](https://github.com/midwayjs/midway/issues/1973)) ([5cebb76](https://github.com/midwayjs/midway/commit/5cebb76e793abd75bc34dd328d9c1db3d430b58a))
+
+
+
+
+
+## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
+
+**Note:** Version bump only for package @midwayjs/http-proxy
+
+
+
+
+
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+**Note:** Version bump only for package @midwayjs/http-proxy
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 **Note:** Version bump only for package @midwayjs/http-proxy

@@ -1,6 +1,6 @@
 # 扩展上下文定义
 
-在某些场景下，需要扩展上下文 ctx 属性，比如 Web 场景下中间件，我们可以往上附加一些方法或者属性。
+由于 TS 的静态类型分析，我们并不推荐动态去挂载某些属性，动态的挂载会导致 TS 的类型处理非常困难。在某些特殊场景下，如果需要扩展上下文 ctx 属性，比如 Web 场景下中间件，我们可以往上附加一些方法或者属性。
 
 ```typescript
 import { Middleware } from '@midwayjs/decorator';
@@ -24,6 +24,8 @@ export class ReportMiddleware implements IWebMiddleware {
 但是由于 TypeScript 模块定义的关系，我们无法往现有的模块上去附加定义，所以我们使用了一种新的方法来扩展。
 
 
+
+
 ## 项目中扩展定义
 
 
@@ -31,12 +33,25 @@ export class ReportMiddleware implements IWebMiddleware {
 
 ```typescript
 // src/interface.ts
+
+import '@midwayjs/core';
+
+// ...
+
 declare module '@midwayjs/core' {
   interface Context {
     abc: string;
   }
 }
 ```
+
+:::info
+
+注意，`declare module` 会替代原有的定义，所以请在之前使用 `import` 语法导入模块后再操作。
+
+:::
+
+
 
 ## 组件中扩展定义
 
@@ -95,4 +110,5 @@ declare module '@midwayjs/express/dist/interface' {
 :::caution
 - 1、组件中扩展和项目中略有不同（怀疑是 TS 的 bug）。
 - 2、如果组件中使用了项目的扩展方式，那么其余组件的扩展提示会出现问题。
+
 :::

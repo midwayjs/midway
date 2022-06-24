@@ -1,14 +1,16 @@
 {
   "packages": [
     "packages/*",
-    "packages-serverless/*"
+    "packages-serverless/*",
+    "packages-legacy/*"
   ],
   "command": {
     "bootstrap": {
       "hoist": true,
       "noCi": true,
       "npmClientArgs": [
-        "--no-package-lock"
+        "--no-package-lock",
+        "--legacy-peer-deps"
       ],
       "nohoist": [
         "@midwayjs/faas-middleware-upload",
@@ -31,5 +33,5 @@
     }
   },
   "npmClient": "npm",
-  "version": "3.3.4"
+  "version": "3.4.0-beta.1"
 }

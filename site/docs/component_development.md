@@ -86,53 +86,6 @@ export class BookConfiguration {
 
 
 
-### 组件依赖
-
-如果组件依赖另一个组件中的类，和应用相同，需要在入口处声明，框架会按照模块顺序加载并处理重复的情况。
-
-如果明确依赖某个组件中的类，那么必然是该组件的强依赖。
-
-比如：
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import * as axios from '@midwayjs/axios';
-
-@Configuration({
-  namespace: 'book',
-  imports: [axios]
-})
-export class BookConfiguration {
-  async onReady() {
-    // ...
-  }
-}
-```
-
-还有一种弱依赖的情况，无需显式声明，但是需要额外的判断。
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
-
-@Configuration({
-  namespace: 'book',
-})
-export class BookConfiguration {
-  async onReady(container: IMidwayContainer) {
-    // ...
-    if (container.hasNamespace('axios')) {
-      // 当 axios 组件被加载时才执行
-    }
-    // ...
-  }
-}
-```
-
-
-
 ### 组件逻辑代码
 
 和应用相同，编写类导出即可，由依赖注入容器负责管理和加载。
@@ -301,6 +254,78 @@ describe('/test/index.test.ts', () => {
 
 
 
+### 依赖其他组件
+
+如果组件依赖另一个组件中的类，和应用相同，需要在入口处声明，框架会按照模块顺序加载并处理重复的情况。
+
+如果明确依赖某个组件中的类，那么必然是该组件的强依赖。
+
+比如：
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as axios from '@midwayjs/axios';
+
+@Configuration({
+  namespace: 'book',
+  imports: [axios]
+})
+export class BookConfiguration {
+  async onReady() {
+    // ...
+  }
+}
+```
+
+还有一种弱依赖的情况，无需显式声明，但是需要额外的判断。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import { IMidwayContainer } from '@midwayjs/core';
+
+@Configuration({
+  namespace: 'book',
+})
+export class BookConfiguration {
+  async onReady(container: IMidwayContainer) {
+    // ...
+    if (container.hasNamespace('axios')) {
+      // 当 axios 组件被加载时才执行
+    }
+    // ...
+  }
+}
+```
+
+增加依赖。
+
+```json
+// package.json
+{
+  "dependencies": {
+    "@midwayjs/axios": "xxxx"
+  }
+}
+```
+
+在根目录下的 `index.d.ts` 中增加显式导入依赖的组件定义。
+
+```typescript
+// 显式导入依赖的组件
+import '@midwayjs/axios';
+export * from './dist/index';
+
+// ...
+
+```
+
+:::tip
+
+如果主应用不显式依赖 axios，代码执行是正常的，但是 typescript 的 axios 的定义不会被扫描到，导致编写配置时没有 axios 定义，上述代码可以解决这个问题。
+
+:::
 
 
 ### 应用中开发组件
@@ -613,11 +638,6 @@ export class MidwayCustomFramework extends BaseFramework<Application, Context, I
 
   // 框架启动，比如 listen
   async run() {
-    // ...
-  }
-
-  // 框架类型
-  async getFrameworkType() {
     // ...
   }
 }

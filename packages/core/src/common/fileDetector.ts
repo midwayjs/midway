@@ -1,6 +1,11 @@
-import { IFileDetector, IMidwayContainer } from '../interface';
-import { Types, ResolveFilter } from '@midwayjs/decorator';
+import {
+  IFileDetector,
+  IMidwayContainer,
+  IObjectDefinition,
+} from '../interface';
+import { Types, ResolveFilter, getProviderName } from '@midwayjs/decorator';
 import { run } from '@midwayjs/glob';
+import { MidwayDuplicateClassNameError } from '../error';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
@@ -39,6 +44,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
   namespace: string;
 }> {
   private directoryFilterArray: ResolveFilter[] = [];
+  private duplicateModuleCheckSet = new Map();
 
   run(container) {
     const loadDirs = []
@@ -57,6 +63,24 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
           ).concat(this.extraDetectorOptions.ignore || []),
         }
       );
+
+      // 检查重复模块
+      const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {
+        if (Types.isClass(module)) {
+          const name = getProviderName(module);
+          if (name) {
+            if (this.duplicateModuleCheckSet.has(name)) {
+              throw new MidwayDuplicateClassNameError(
+                name,
+                options.srcPath,
+                this.duplicateModuleCheckSet.get(name)
+              );
+            } else {
+              this.duplicateModuleCheckSet.set(name, options.srcPath);
+            }
+          }
+        }
+      };
 
       for (const file of fileResults) {
         if (this.directoryFilterArray.length) {
@@ -85,6 +109,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
               namespace: this.options.namespace,
               srcPath: file,
               createFrom: 'file',
+              bindHook: checkDuplicatedHandler,
             });
           }
         } else {
@@ -94,10 +119,14 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
             namespace: this.options.namespace,
             srcPath: file,
             createFrom: 'file',
+            bindHook: checkDuplicatedHandler,
           });
         }
       }
     }
+
+    // check end
+    this.duplicateModuleCheckSet.clear();
   }
 }
 

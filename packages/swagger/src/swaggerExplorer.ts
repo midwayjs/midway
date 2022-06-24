@@ -627,8 +627,6 @@ export class SwaggerExplorer {
             tt.example = {};
           }
           tt.example[key] = metadata?.example;
-
-          delete metadata.example;
         }
         if (typeof metadata?.required !== undefined) {
           if (metadata?.required) {
@@ -691,6 +689,8 @@ export class SwaggerExplorer {
               $ref: '#components/schemas/' + currentType?.name,
             };
           }
+
+          delete metadata.items;
         } else {
           if (isArray) {
             // 没有配置类型则认为自己配置了 items 内容
@@ -699,8 +699,6 @@ export class SwaggerExplorer {
                 type: 'array',
                 items: metadata?.items,
               };
-
-              delete metadata.items;
             } else {
               tt.properties[key] = {
                 type: 'array',
@@ -709,11 +707,21 @@ export class SwaggerExplorer {
                 },
               };
             }
+
+            delete metadata.items;
           } else {
             tt.properties[key] = {
               type: getPropertyType(clzz.prototype, key).name,
               format: metadata?.format,
             };
+
+            // Date 类型支持
+            if (tt.properties[key].type === 'Date') {
+              tt.properties[key].type = 'string';
+              if (!tt.properties[key].format) {
+                tt.properties[key].format = 'date';
+              }
+            }
 
             delete metadata.format;
           }

@@ -25,7 +25,7 @@ import { Cat } from './entities/cat.entity';
 })
 @ApiBasicAuth('bbb')
 @ApiBearerAuth('ttt')
-export class CatsController {
+export class CatsTestController {
   @Inject()
   private readonly catsService: CatsService
 

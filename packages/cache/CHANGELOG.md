@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.12](https://github.com/midwayjs/midway/compare/v3.3.11...v3.3.12) (2022-06-02)
+
+
+### Bug Fixes
+
+* cache typings ([#2018](https://github.com/midwayjs/midway/issues/2018)) ([8db4e69](https://github.com/midwayjs/midway/commit/8db4e698e534da3eb7b4a37eeb7485b4fe34b977))
+
+
+
+
+
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+**Note:** Version bump only for package @midwayjs/cache
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 **Note:** Version bump only for package @midwayjs/cache

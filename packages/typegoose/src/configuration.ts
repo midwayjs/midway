@@ -11,7 +11,11 @@ import * as mongoose from '@midwayjs/mongoose';
 import { ENTITY_MODEL_KEY } from './interface';
 import { getModelForClass } from '@typegoose/typegoose';
 import * as mongo from 'mongoose';
-import { IMidwayApplication, MidwayDecoratorService } from '@midwayjs/core';
+import {
+  IMidwayApplication,
+  IMidwayContainer,
+  MidwayDecoratorService,
+} from '@midwayjs/core';
 
 @Configuration({
   namespace: 'typegoose',
@@ -47,15 +51,27 @@ export class TypegooseConfiguration {
     );
   }
 
-  async onReady(container) {
+  async onReady(container: IMidwayContainer) {
     const connectionFactory = await container.getAsync(
-      mongoose.MongooseConnectionServiceFactory
+      mongoose.MongooseDataSourceManager
     );
+
+    for (const dataSourceName of connectionFactory.getDataSourceNames()) {
+      const conn = connectionFactory.getDataSource(dataSourceName);
+      if (conn && (conn as any).entities) {
+        for (const Model of (conn as any).entities) {
+          const model = getModelForClass(Model, { existingConnection: conn });
+          this.modelMap.set(Model, model);
+        }
+      }
+    }
+
     const Models = listModule(ENTITY_MODEL_KEY);
+    // 兼容老代码
     for (const Model of Models) {
       const metadata = getClassMetadata(ENTITY_MODEL_KEY, Model) ?? {};
       const connectionName = metadata.connectionName ?? 'default';
-      const conn = connectionFactory.get(connectionName);
+      const conn = connectionFactory.getDataSource(connectionName);
       if (conn) {
         const model = getModelForClass(Model, { existingConnection: conn });
         this.modelMap.set(Model, model);

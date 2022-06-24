@@ -93,7 +93,7 @@ export class HomeController {
 ```
 
 
-## 配置
+## 配置示例
 ```typescript
 // src/config/config.default.ts
 import { uploadWhiteList } from '@midwayjs/upload';
@@ -111,6 +111,8 @@ export default {
     tmpdir: join(tmpdir(), 'midway-upload-files'),
     // cleanTimeout: number，上传的文件在临时目录中多久之后自动删除，默认为 5 分钟
     cleanTimeout: 5 * 60 * 1000,
+    // base64: boolean，设置原始body是否是base64格式，默认为false，一般用于腾讯云的兼容
+    base64: false,
   },
 }
 
@@ -118,11 +120,9 @@ export default {
 
 
 
-### mode 配置上传模式
+## 上传模式 - file
 
-
-
-#### 1. file 模式【默认值】
+`file` 为默认值，也是框架的推荐值。
 
 配置 upload 的 mode 为 `file` 字符串，或使用 `@midwayjs/upload` 包导出的 `UploadMode.File` 来配置。
 
@@ -132,7 +132,7 @@ export default {
 
 
 
-#### 2. stream 模式
+## 上传模式 - stream
 
 配置 upload 的 mode 为 `stream` 字符串，或使用 `@midwayjs/upload` 包导出的 `UploadMode.Stream` 来配置。
 
@@ -144,7 +144,7 @@ export default {
 
 
 
-### whitelist 白名单配置
+## 配置上传白名单
 
 配置允许上传的文件后缀名，配置 `null` 则不校验后缀名，如果上传的文件后缀不匹配，会响应 `400` error，默认值如下：
 ```ts
@@ -180,7 +180,7 @@ export default {
 
 
 
-### 临时文件与清理
+## 临时文件与清理
 
 
 如果你使用了 `file` 模式来获取上传的文件，那么上传的文件会存放在您于 `config` 文件中设置的 `upload` 组件配置中的 `tmpdir` 选项指向的文件夹内。
@@ -191,7 +191,7 @@ export default {
 
 
 
-## 前端如何将文件上传到服务器？
+## 前端文件上传示例
 
 ### 1. html form 的形式
 
@@ -214,3 +214,9 @@ fetch('/api/upload', {
   body: formData,
 });
 ```
+
+
+
+## Postman 测试示例
+
+![](https://img.alicdn.com/imgextra/i4/O1CN01iv9ESW1uIShNiRjBF_!!6000000006014-2-tps-2086-1746.png)

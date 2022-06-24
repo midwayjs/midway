@@ -258,6 +258,20 @@ const env = environmentService.getCurrentEnvironment();
 
 ## @midwayjs/web（egg）部分
 
+### 启动端口
+
+新版本框架启动会读取一个端口配置，如果未配，可能不会启动端口监听。
+
+```json
+// src/config/config.default
+export default {
+  // ...
+  egg: {
+    port: 7001,
+  },
+}
+```
+
 
 
 ### 添加 egg-mock

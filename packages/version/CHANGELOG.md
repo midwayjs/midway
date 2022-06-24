@@ -3,6 +3,86 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.14](https://github.com/midwayjs/midway/compare/v3.3.13...v3.3.14) (2022-06-17)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.13](https://github.com/midwayjs/midway/compare/v3.3.12...v3.3.13) (2022-06-06)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.12](https://github.com/midwayjs/midway/compare/v3.3.11...v3.3.12) (2022-06-02)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.11](https://github.com/midwayjs/midway/compare/v3.3.10...v3.3.11) (2022-05-27)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.10](https://github.com/midwayjs/midway/compare/v3.3.9...v3.3.10) (2022-05-26)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.8](https://github.com/midwayjs/midway/compare/v3.3.7...v3.3.8) (2022-05-17)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.7](https://github.com/midwayjs/midway/compare/v3.3.6...v3.3.7) (2022-05-13)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.6](https://github.com/midwayjs/midway/compare/v3.3.5...v3.3.6) (2022-05-11)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
+## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
 ## [3.3.4](https://github.com/midwayjs/midway/compare/v3.3.3...v3.3.4) (2022-04-21)
 
 **Note:** Version bump only for package @midwayjs/version

@@ -1,6 +1,4 @@
----
-title: Serverless 函数部署为应用
----
+# Serverless 函数部署为应用
 
 Midway Serverless 在 v1.0 版本已经支持部署到各个 Serverless 云平台，例如阿里云 FC、腾讯云 SCF 等。从 v2.0 版本开始支持已有的 Serverless 函数以应用模式部署在你的私有服务器上。
 

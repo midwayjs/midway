@@ -15,5 +15,6 @@ describe('/test/annotation/pipeline.test.ts', () => {
   it('pipeline decorator should be ok', () => {
     let data = getClassMetadata(INJECT_CUSTOM_PROPERTY, Test);
     expect(data).toMatchSnapshot();
+
   });
 });

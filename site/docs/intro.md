@@ -1,8 +1,8 @@
 # 介绍
 
-Midway 是阿里巴巴 - 淘宝前端架构团队，基于渐进式理念研发的 Node.js 框架。
+Midway 是阿里巴巴 - 淘宝前端架构团队，基于渐进式理念研发的 Node.js 框架，通过自研的依赖注入容器，搭配各种上层模块，组合出适用于不同场景的解决方案。
 
-Midway 基于 TypeScript 开发，结合了`面向对象（OOP + Class + IoC）`与`函数式（FP + Function + Hooks）`两种编程范式，并在此之上支持了 Web / 全栈 / 微服务 / RPC / Socket / Serverless 等多种场景，致力于为用户提供简单、易用、可靠的 Node.js 服务端研发体验
+Midway 基于 TypeScript 开发，结合了`面向对象（OOP + Class + IoC）`与`函数式（FP + Function + Hooks）`两种编程范式，并在此之上支持了 Web / 全栈 / 微服务 / RPC / Socket / Serverless 等多种场景，致力于为用户提供简单、易用、可靠的 Node.js 服务端研发体验。
 
 
 
@@ -10,7 +10,7 @@ Midway 基于 TypeScript 开发，结合了`面向对象（OOP + Class + IoC）`
 
 社区上也有很多类似的框架，那为什么还需要 Midway ？
 
-原因有三点
+原因有三点：
 
 1. Midway 是阿里内部一直持续在研发的框架，之前 egg 是作为底层框架，需要有面向应用层面的框架来和集团场景对接
 2. 全量使用 TypeScript 是未来一段时间的趋势，面向未来去迭代和研发是作为架构组创新的要求
@@ -20,7 +20,7 @@ Midway 基于 TypeScript 开发，结合了`面向对象（OOP + Class + IoC）`
 
 ## 我们的优势
 
-1. Midway 框架是在内部已经使用 5 年以上的 Node.js 框架，有着长期投入和持续维护的团队做后盾。
+1. Midway 框架是在内部已经使用 5 年以上的 Node.js 框架，有着长期投入和持续维护的团队做后盾
 2. 已经在每年的大促场景经过考验，稳定性无须担心
 3. 丰富的组件和扩展能力，例如数据库，缓存，定时任务，进程模型，部署以及 Web，Socket 甚至 Serverless 等新场景的支持
 4. 一体化调用方案可以方便快捷和前端页面协同开发
@@ -118,3 +118,10 @@ Midway 运行请预先安装 Node.js 环境和 npm，在国内可以使用 cnpm�
 - 微信（右图）：由于微信群限制，可以先加拉群小助手（备注 midway 加群），然后拉到微信群。
 
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01LW04Ah1EFWHjVLu7s_!!6000000000322-0-tps-1658-1010.jpg)
+
+
+
+## 官方宣传渠道
+
+- [哔哩哔哩](https://space.bilibili.com/1746017680)，会提供更新信息和教程
+
