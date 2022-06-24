@@ -5,6 +5,7 @@ import {
   getClassMetadata,
   listModule,
   listPropertyDataFromClass,
+  MidwayFrameworkType,
   MSListenerType,
   MS_CONSUMER_KEY,
 } from '@midwayjs/decorator';
@@ -19,7 +20,10 @@ export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
 
   async applicationInitialize(options) {
     // Create a connection manager
-    this.app = new KafkaConsumerServer() as unknown as IMidwayKafkaApplication;
+    this.app = new KafkaConsumerServer({
+      logger: this.logger,
+      ...this.configurationOptions,
+    }) as unknown as IMidwayKafkaApplication;
   }
 
   public async run(): Promise<void> {
@@ -32,14 +36,6 @@ export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
   }
 
   private async loadSubscriber() {
-    //     await consumer.subscribe({ topic: 'test-topic', fromBeginning: true })
-    // await consumer.run({
-    //   eachMessage: async ({ topic, partition, message }) => {
-    //     console.log({
-    //       value: message.value.toString(),
-    //     })
-    //   },
-    // })
     const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
       const metadata: ConsumerMetadata.ConsumerMetadata = getClassMetadata(
         MS_CONSUMER_KEY,
@@ -51,41 +47,63 @@ export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
       const data = listPropertyDataFromClass(MS_CONSUMER_KEY, module);
       for (const methodBindListeners of data) {
         for (const listenerOptions of methodBindListeners) {
-          await this.app.subscribe({
-            topic: listenerOptions,
-            fromBeginning: true,
+          await this.app.connection.subscribe({
+            topic: listenerOptions.topic,
+            // fromBeginning: true,
+          });
+          await this.app.connection.run({
+            autoCommit: false,
+            eachMessage: async ({ topic, partition, message }) => {
+              const ctx = {
+                topic: topic,
+                partition: partition,
+                message: message,
+                commitOffsets: (offset: any) => {
+                  return this.app.connection.commitOffsets([
+                    {
+                      topic: topic,
+                      partition: partition,
+                      offset,
+                    },
+                  ]);
+                },
+              } as IMidwayKafkaContext;
+              this.app.createAnonymousContext(ctx);
+              const ins = await ctx.requestContext.getAsync(module);
+              const fn = await this.applyMiddleware(async ctx => {
+                return await ins[listenerOptions.propertyKey].call(
+                  ins,
+                  message
+                );
+              });
+              try {
+                const result = await fn(ctx);
+                // 返回为undefined，下面永远不会执行
+                if (result) {
+                  const res = await this.app.connection.commitOffsets(
+                    message.offset
+                  );
+                  return res;
+                }
+              } catch (error) {
+                this.logger.error(error);
+              }
+            },
           });
         }
       }
     }
-
-    await this.app.run({
-      eachMessage: async ({ topic, partition, message }) => {
-        console.log({
-          value: message.value.toString(),
-        });
-        const ctx = {
-          topic: topic,
-          partition: partition,
-          message: message,
-        } as IMidwayKafkaContext;
-        const ins = await ctx.requestContext.getAsync(module);
-        const fn = await this.applyMiddleware(async ctx => {
-          return await ins['test'];
-        });
-        try {
-          const result = await fn(ctx);
-          if (result) {
-            return message;
-          }
-        } catch (error) {
-          this.logger.error(error);
-        }
-      },
-    });
   }
 
   public getFrameworkName() {
     return 'midway:kafka';
+  }
+
+  protected async beforeStop(): Promise<void> {
+    await this.app.close();
+  }
+
+  public getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.MS_KAFKA;
   }
 }

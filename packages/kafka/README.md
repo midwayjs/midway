@@ -6,15 +6,10 @@
 this is a sub package for midway.
 
 
-this module use [kafkaJS](https://github.com/squaremo/amqp.node)
+this module use [kafkaJS](https://kafka.js.org)
 
 Document: [https://midwayjs.org](https://midwayjs.org)
 
 ## License
 
 [MIT]((http://github.com/midwayjs/midway/blob/master/LICENSE))
-
-## 选用kafkaJS包来进行整合
-### 原因1: 有在不断的更新维护
-### 原因2：star数不断的在上升
-### 原因3：kafka官方推荐node包

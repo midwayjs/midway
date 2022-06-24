@@ -12,10 +12,9 @@ export class UserConsumer {
   @Inject()
   logger;
 
-  @KafkaListener('tasks')
+  @KafkaListener('topic-test')
   async gotData(message: KafkaMessage) {
-    this.logger.info('test output =>', message.value.toString('utf8'));
-    this.ctx.ack(message);
+    this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
+    this.ctx.commitOffsets(message.offset);
   }
-
 }

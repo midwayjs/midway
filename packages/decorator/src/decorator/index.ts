@@ -12,6 +12,7 @@ export * from './framework/schedule';
 export * from './microservice/consumer';
 export * from './microservice/provider';
 export * from './microservice/rabbitmqListener';
+export * from './microservice/kafkaListener';
 
 // rpc
 export * from './rpc/hsf';

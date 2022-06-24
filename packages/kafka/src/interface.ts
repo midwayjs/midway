@@ -7,25 +7,21 @@ import {
 import { Kafka, KafkaConfig } from 'kafkajs';
 
 export interface IKafkaApplication {
-  // connect(...args): Promise<void>;
-  // close(): Promise<void>;
 }
 
 export type IMidwayKafkaApplication = IMidwayApplication<IMidwayKafkaContext> &
   IKafkaApplication;
 
-export interface IMidwayKakfaConfigurationOptions
+export interface IMidwayKafkaConfigurationOptions
   extends IConfigurationOptions,
     KafkaConfig {}
 
 export type IMidwayKafkaContext = IMidwayContext<{
-  // ack: (data: any) => void;
-  topic: any,
-  partition: any,
-  message: any,
+  topic: any;
+  partition: any;
+  message: any;
+  commitOffsets(data: any): void;
 }>;
-
-// export interface IKafkaApplication extends Kafka {}
 
 export type Application = IMidwayKafkaApplication;
 export interface Context extends IMidwayKafkaContext {}

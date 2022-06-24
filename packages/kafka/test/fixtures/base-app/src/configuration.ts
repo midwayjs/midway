@@ -9,8 +9,11 @@ import { IMidwayKafkaApplication } from '../../../../src';
         kafka: {
           kafkaConfig: {
             clientId: 'my-app',
-            brokers: process.env.KAFKA_URL || ['localhost://9092'],
+            brokers: [process.env.KAFKA_URL || 'localhost:9093'],
           },
+          consumerConfig: {
+            groupId: 'groupId-test'
+          }
         },
       },
     },

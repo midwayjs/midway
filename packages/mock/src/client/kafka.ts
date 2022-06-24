@@ -1,4 +1,4 @@
-import { KafkaConfig, Producer } from 'kafkajs';
+import { KafkaConfig, Producer, ProducerConfig } from 'kafkajs';
 
 const connect = async () => ({
   producer: () => {
@@ -8,9 +8,11 @@ const connect = async () => ({
   cousumer: () => {},
 });
 
-export async function createKafkaProducer(
-  options: KafkaConfig
-): Promise<Producer>;
+export async function createKafkaProducer(options: {
+  kafkaConfig: KafkaConfig;
+  producerConfig?: ProducerConfig;
+  mock?: boolean;
+}): Promise<Producer>;
 export async function createKafkaProducer(
   options: any = {
     mock: true,
@@ -21,7 +23,7 @@ export async function createKafkaProducer(
   if (options.mock) {
     Kafka = connect;
   }
-  const kafka = new Kafka(options);
+  const kafka = new Kafka(options.kafkaConfig);
 
-  return kafka.producer();
+  return kafka.producer(options.producerConfig);
 }

@@ -7,24 +7,26 @@ loggers.updateConsoleLevel('silly');
 
 describe('/test/index.test.ts', () => {
   it('should test create producer with method', async () => {
-    // create a queue and channel
-    const producer = await createKafkaProducer('tasks', {
+    // create a producer
+    const producer = await createKafkaProducer({
+      kafkaConfig: {
+        clientId: 'my-app',
+        brokers: [process.env.KAFKA_BROKERS as string || 'localhost:9093'],
+      },
       mock: false,
-      brokers: process.env.KAFKA_BROKERS || ['localhost:9092'],
     });
+    await producer.connect()
     // send data to topic
     await producer.send({
-      topic: 'tasks',
       // compression: CompressionTypes.GZIP,
-      messages: 'something to do',
+      topic: 'topic-test',
+      messages: [{ key: 'message-key1', value: 'hello consumer!' }, { key: 'message-key2', value: 'hello consumer!!' }],
     });
-
     // create app and got data
-    const app = await creatApp('base-app');
-    // will be close app wait a moment(after ack)
-    await sleep();
-
-    await producer.disconncect();
+    const app = await creatApp('base-app')
+    // will be close app wait a moment(after commit)
+    await sleep(1000)
+    await producer.disconnect();
     await closeApp(app);
   });
 });

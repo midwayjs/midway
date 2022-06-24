@@ -233,6 +233,7 @@ export class MidwayFrameworkType extends FrameworkType {
   static FAAS = new MidwayFrameworkType('@midwayjs/faas');
   static MS_GRPC = new MidwayFrameworkType('@midwayjs/grpc');
   static MS_RABBITMQ = new MidwayFrameworkType('@midwayjs/rabbitmq');
+  static MS_KAFKA = new MidwayFrameworkType('@midwayjs/kafka');
   static WS_IO = new MidwayFrameworkType('@midwayjs/socketio');
   static WS = new MidwayFrameworkType('@midwayjs/ws');
   static SERVERLESS_APP = new MidwayFrameworkType('@midwayjs/serverless-app');
@@ -254,6 +255,7 @@ export enum ServerlessTriggerType {
   LOG = 'log',
   TIMER = 'timer',
   MQ = 'mq',
+  KAFKA = 'kafka',
   HSF = 'hsf',
   MTOP = 'mtop',
 }

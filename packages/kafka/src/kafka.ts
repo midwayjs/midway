@@ -10,8 +10,10 @@ export class KafkaConsumerServer
   protected loggers: ILogger;
   protected connection: Consumer = null;
 
-  constructor() {
+  constructor(options: any = {}) {
     super();
+    this.loggers = options.logger;
+    this.bindError();
   }
 
   bindError() {
@@ -20,9 +22,9 @@ export class KafkaConsumerServer
     });
   }
 
-  async connect(options: KafkaConfig, coonsumerOptions: ConsumerConfig) {
+  async connect(options: KafkaConfig, consumerOptions: ConsumerConfig) {
     try {
-      this.connection = new Kafka(options).consumer(coonsumerOptions);
+      this.connection = new Kafka(options).consumer(consumerOptions);
       this.connection.on('consumer.connect', () => {
         this.loggers.info('Kafka consumer connected!');
       });
