@@ -24,7 +24,10 @@ const debug = util.debuglog('midway:debug');
 export abstract class WebControllerGenerator<
   Router extends { use: (...args) => void }
 > {
-  protected constructor(readonly app: IMidwayApplication, readonly midwayWebRouterService: MidwayWebRouterService) {}
+  protected constructor(
+    readonly app: IMidwayApplication,
+    readonly midwayWebRouterService: MidwayWebRouterService
+  ) {}
 
   /**
    * wrap controller string to middleware function
@@ -39,7 +42,10 @@ export abstract class WebControllerGenerator<
       } else {
         const controller = await ctx.requestContext.getAsync(routeInfo.id);
         // eslint-disable-next-line prefer-spread
-        result = await controller[routeInfo.method as string].apply(controller, args);
+        result = await controller[routeInfo.method as string].apply(
+          controller,
+          args
+        );
       }
 
       if (result !== undefined) {

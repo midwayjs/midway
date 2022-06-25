@@ -1,13 +1,25 @@
 import {
   bindContainer,
-  CONTROLLER_KEY, ControllerOption, FaaSMetadata,
-  FUNC_KEY, getClassMetadata, getPropertyDataFromClass, getPropertyMetadata,
+  CONTROLLER_KEY,
+  ControllerOption,
+  FaaSMetadata,
+  FUNC_KEY,
+  getClassMetadata,
+  getPropertyDataFromClass,
+  getPropertyMetadata,
   getProviderName,
   getProviderUUId,
   listModule,
-  Provide, RouterOption,
+  Provide,
+  RouterOption,
   Scope,
-  ScopeEnum, SERVERLESS_FUNC_KEY, ServerlessTriggerType, Types, WEB_RESPONSE_KEY, WEB_ROUTER_KEY, WEB_ROUTER_PARAM_KEY
+  ScopeEnum,
+  SERVERLESS_FUNC_KEY,
+  ServerlessTriggerType,
+  Types,
+  WEB_RESPONSE_KEY,
+  WEB_ROUTER_KEY,
+  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import { joinURLPath } from '../util';
 import { MidwayCommonError, MidwayDuplicateRouteError } from '../error';
@@ -42,7 +54,7 @@ export interface RouterInfo {
   /**
    * invoke function method
    */
-  method: string | ((...args: any[]) => void)
+  method: string | ((...args: any[]) => void);
   /**
    * router description
    */
@@ -94,7 +106,16 @@ export interface RouterInfo {
   functionMetadata?: any;
 }
 
-export type DynamicRouterInfo = Omit<RouterInfo, 'id' | 'url' | 'prefix' | 'method' | 'controllerId' | 'controllerMiddleware' | 'responseMetadata'>
+export type DynamicRouterInfo = Omit<
+  RouterInfo,
+  | 'id'
+  | 'url'
+  | 'prefix'
+  | 'method'
+  | 'controllerId'
+  | 'controllerMiddleware'
+  | 'responseMetadata'
+>;
 
 export interface RouterPriority {
   prefix: string;
@@ -130,7 +151,11 @@ export class MidwayWebRouterService {
         CONTROLLER_KEY,
         module
       );
-      this.addController(module, controllerOption, this.options.includeFunctionRouter);
+      this.addController(
+        module,
+        controllerOption,
+        this.options.includeFunctionRouter
+      );
     }
 
     if (this.options.includeFunctionRouter) {
@@ -189,7 +214,11 @@ export class MidwayWebRouterService {
    * @param controllerOption
    * @param functionMeta
    */
-  public addController(controllerClz: any, controllerOption: ControllerOption, functionMeta = false) {
+  public addController(
+    controllerClz: any,
+    controllerOption: ControllerOption,
+    functionMeta = false
+  ) {
     const controllerId = getProviderName(controllerClz);
     debug(`[core]: Found Controller ${controllerId}.`);
     const id = getProviderUUId(controllerClz);
@@ -257,7 +286,11 @@ export class MidwayWebRouterService {
           ) || [];
 
         const routerResponseData =
-          getPropertyMetadata(WEB_RESPONSE_KEY, controllerClz, webRouter.method) || [];
+          getPropertyMetadata(
+            WEB_RESPONSE_KEY,
+            controllerClz,
+            webRouter.method
+          ) || [];
 
         const data: RouterInfo = {
           id,
@@ -301,11 +334,18 @@ export class MidwayWebRouterService {
    * @param routerFunction
    * @param routerInfoOption
    */
-  public addRouter(routerPath: string | RegExp, routerFunction: (...args) => void, routerInfoOption: DynamicRouterInfo) {
-    this.checkDuplicateAndPush('/', Object.assign(routerInfoOption, {
-      method: routerFunction,
-      url: routerPath
-    }));
+  public addRouter(
+    routerPath: string | RegExp,
+    routerFunction: (...args) => void,
+    routerInfoOption: DynamicRouterInfo
+  ) {
+    this.checkDuplicateAndPush(
+      '/',
+      Object.assign(routerInfoOption, {
+        method: routerFunction,
+        url: routerPath,
+      })
+    );
   }
 
   protected collectFunctionRoute(module, functionMeta = false) {
@@ -550,7 +590,6 @@ function createFunctionName(target, functionName) {
   return getProviderName(target).replace(/[:#]/g, '-') + '-' + functionName;
 }
 
-
 /**
  * @deprecated use built-in MidwayWebRouterService first
  */
@@ -577,7 +616,9 @@ export class WebRouterCollector {
         await container.ready();
       }
       if (getCurrentMainFramework()) {
-        this.proxy = await getCurrentMainFramework().getApplicationContext().getAsync(MidwayWebRouterService, [this.options]);
+        this.proxy = await getCurrentMainFramework()
+          .getApplicationContext()
+          .getAsync(MidwayWebRouterService, [this.options]);
       } else {
         this.proxy = new MidwayWebRouterService(this.options);
       }
