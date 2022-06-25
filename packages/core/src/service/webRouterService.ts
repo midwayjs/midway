@@ -1,27 +1,20 @@
 import {
-  CONTROLLER_KEY,
-  ControllerOption,
-  FaaSMetadata,
-  FUNC_KEY,
-  getClassMetadata,
-  getPropertyDataFromClass,
-  getPropertyMetadata,
+  bindContainer,
+  CONTROLLER_KEY, ControllerOption, FaaSMetadata,
+  FUNC_KEY, getClassMetadata, getPropertyDataFromClass, getPropertyMetadata,
   getProviderName,
   getProviderUUId,
-  Types,
   listModule,
-  RouterOption,
-  ServerlessTriggerType,
-  SERVERLESS_FUNC_KEY,
-  WEB_RESPONSE_KEY,
-  WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY,
+  Provide, RouterOption,
+  Scope,
+  ScopeEnum, SERVERLESS_FUNC_KEY, ServerlessTriggerType, Types, WEB_RESPONSE_KEY, WEB_ROUTER_KEY, WEB_ROUTER_PARAM_KEY
 } from '@midwayjs/decorator';
 import { joinURLPath } from '../util';
-import { MidwayContainer } from '../context/container';
-import { DirectoryFileDetector } from './fileDetector';
-import * as util from 'util';
 import { MidwayCommonError, MidwayDuplicateRouteError } from '../error';
+import * as util from 'util';
+import { getCurrentMainFramework } from '../util/contextUtil';
+import { MidwayContainer } from '../context/container';
+import { DirectoryFileDetector } from '../common/fileDetector';
 
 const debug = util.debuglog('midway:debug');
 
@@ -29,15 +22,15 @@ export interface RouterInfo {
   /**
    * uuid
    */
-  id: string;
+  id?: string;
   /**
    * router prefix from controller
    */
-  prefix: string;
+  prefix?: string;
   /**
    * router alias name
    */
-  routerName: string;
+  routerName?: string;
   /**
    * router path, without prefix
    */
@@ -49,40 +42,40 @@ export interface RouterInfo {
   /**
    * invoke function method
    */
-  method: string;
+  method: string | ((...args: any[]) => void)
   /**
    * router description
    */
-  description: string;
-  summary: string;
+  description?: string;
+  summary?: string;
   /**
    * router handler function key，for IoC container load
    */
-  handlerName: string;
+  handlerName?: string;
   /**
    *  serverless func load key
    */
-  funcHandlerName: string;
+  funcHandlerName?: string;
   /**
    * controller provideId
    */
-  controllerId: string;
+  controllerId?: string;
   /**
    * router middleware
    */
-  middleware: any[];
+  middleware?: any[];
   /**
    * controller middleware in this router
    */
-  controllerMiddleware: any[];
+  controllerMiddleware?: any[];
   /**
    * request args metadata
    */
-  requestMetadata: any[];
+  requestMetadata?: any[];
   /**
    * response data metadata
    */
-  responseMetadata: any[];
+  responseMetadata?: any[];
   /**
    * serverless function name
    */
@@ -101,6 +94,8 @@ export interface RouterInfo {
   functionMetadata?: any;
 }
 
+export type DynamicRouterInfo = Omit<RouterInfo, 'id' | 'url' | 'prefix' | 'method' | 'controllerId' | 'controllerMiddleware' | 'responseMetadata'>
+
 export interface RouterPriority {
   prefix: string;
   priority: number;
@@ -118,38 +113,30 @@ export interface RouterCollectorOptions {
   globalPrefix?: string;
 }
 
-export class WebRouterCollector {
-  protected readonly baseDir: string;
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class MidwayWebRouterService {
   private isReady = false;
   protected routes = new Map<string, RouterInfo[]>();
   private routesPriority: RouterPriority[] = [];
-  protected options: RouterCollectorOptions;
 
-  constructor(baseDir = '', options: RouterCollectorOptions = {}) {
-    this.baseDir = baseDir;
-    this.options = options;
-  }
+  constructor(readonly options: RouterCollectorOptions = {}) {}
 
-  protected async analyze() {
-    if (this.baseDir) {
-      const container = new MidwayContainer();
-      container.setFileDetector(
-        new DirectoryFileDetector({
-          loadDir: this.baseDir,
-        })
-      );
-      await container.ready();
-    }
+  private async analyze() {
     const controllerModules = listModule(CONTROLLER_KEY);
 
     for (const module of controllerModules) {
-      this.collectRoute(module);
+      const controllerOption: ControllerOption = getClassMetadata(
+        CONTROLLER_KEY,
+        module
+      );
+      this.addController(module, controllerOption, this.options.includeFunctionRouter);
     }
 
     if (this.options.includeFunctionRouter) {
       const fnModules = listModule(FUNC_KEY);
       for (const module of fnModules) {
-        this.collectFunctionRoute(module);
+        this.collectFunctionRoute(module, this.options.includeFunctionRouter);
       }
     }
 
@@ -174,16 +161,38 @@ export class WebRouterCollector {
     this.routesPriority = this.routesPriority.sort((routeA, routeB) => {
       return routeB.prefix.length - routeA.prefix.length;
     });
+
+    // format function router meta
+    if (this.options.includeFunctionRouter) {
+      // requestMethod all transform to other method
+      for (const routerInfo of this.routes.values()) {
+        for (const info of routerInfo) {
+          if (info.requestMethod === 'all') {
+            info.functionTriggerMetadata.method = [
+              'get',
+              'post',
+              'put',
+              'delete',
+              'head',
+              'patch',
+              'options',
+            ];
+          }
+        }
+      }
+    }
   }
 
-  protected collectRoute(module, functionMeta = false) {
-    const controllerId = getProviderName(module);
+  /**
+   * dynamically add a controller
+   * @param controllerClz
+   * @param controllerOption
+   * @param functionMeta
+   */
+  public addController(controllerClz: any, controllerOption: ControllerOption, functionMeta = false) {
+    const controllerId = getProviderName(controllerClz);
     debug(`[core]: Found Controller ${controllerId}.`);
-    const id = getProviderUUId(module);
-    const controllerOption: ControllerOption = getClassMetadata(
-      CONTROLLER_KEY,
-      module
-    );
+    const id = getProviderUUId(controllerClz);
 
     let priority;
     // implement middleware in controller
@@ -216,7 +225,7 @@ export class WebRouterCollector {
         middleware,
         routerOptions: controllerOption.routerOptions,
         controllerId,
-        routerModule: module,
+        routerModule: controllerClz,
       });
     }
 
@@ -229,13 +238,13 @@ export class WebRouterCollector {
         middleware,
         routerOptions: controllerOption.routerOptions,
         controllerId,
-        routerModule: module,
+        routerModule: controllerClz,
       });
     }
 
     const webRouterInfo: RouterOption[] = getClassMetadata(
       WEB_ROUTER_KEY,
-      module
+      controllerClz
     );
 
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
@@ -243,12 +252,12 @@ export class WebRouterCollector {
         const routeArgsInfo =
           getPropertyDataFromClass(
             WEB_ROUTER_PARAM_KEY,
-            module,
+            controllerClz,
             webRouter.method
           ) || [];
 
         const routerResponseData =
-          getPropertyMetadata(WEB_RESPONSE_KEY, module, webRouter.method) || [];
+          getPropertyMetadata(WEB_RESPONSE_KEY, controllerClz, webRouter.method) || [];
 
         const data: RouterInfo = {
           id,
@@ -284,6 +293,19 @@ export class WebRouterCollector {
         this.checkDuplicateAndPush(data.prefix, data);
       }
     }
+  }
+
+  /**
+   * dynamically add a route to root prefix
+   * @param routerPath
+   * @param routerFunction
+   * @param routerInfoOption
+   */
+  public addRouter(routerPath: string | RegExp, routerFunction: (...args) => void, routerInfoOption: DynamicRouterInfo) {
+    this.checkDuplicateAndPush('/', Object.assign(routerInfoOption, {
+      method: routerFunction,
+      url: routerPath
+    }));
   }
 
   protected collectFunctionRoute(module, functionMeta = false) {
@@ -475,7 +497,7 @@ export class WebRouterCollector {
       });
   }
 
-  async getRoutePriorityList(): Promise<RouterPriority[]> {
+  public async getRoutePriorityList(): Promise<RouterPriority[]> {
     if (!this.isReady) {
       await this.analyze();
       this.isReady = true;
@@ -483,7 +505,7 @@ export class WebRouterCollector {
     return this.routesPriority;
   }
 
-  async getRouterTable(): Promise<Map<string, RouterInfo[]>> {
+  public async getRouterTable(): Promise<Map<string, RouterInfo[]>> {
     if (!this.isReady) {
       await this.analyze();
       this.isReady = true;
@@ -491,7 +513,7 @@ export class WebRouterCollector {
     return this.routes;
   }
 
-  async getFlattenRouterTable(): Promise<RouterInfo[]> {
+  public async getFlattenRouterTable(): Promise<RouterInfo[]> {
     if (!this.isReady) {
       await this.analyze();
       this.isReady = true;
@@ -526,4 +548,54 @@ export class WebRouterCollector {
 
 function createFunctionName(target, functionName) {
   return getProviderName(target).replace(/[:#]/g, '-') + '-' + functionName;
+}
+
+
+/**
+ * @deprecated use built-in MidwayWebRouterService first
+ */
+export class WebRouterCollector {
+  private baseDir: string;
+  private options: RouterCollectorOptions;
+  private proxy: MidwayWebRouterService;
+
+  constructor(baseDir = '', options: RouterCollectorOptions = {}) {
+    this.baseDir = baseDir;
+    this.options = options;
+  }
+
+  protected async init() {
+    if (!this.proxy) {
+      if (this.baseDir) {
+        const container = new MidwayContainer();
+        bindContainer(container);
+        container.setFileDetector(
+          new DirectoryFileDetector({
+            loadDir: this.baseDir,
+          })
+        );
+        await container.ready();
+      }
+      if (getCurrentMainFramework()) {
+        this.proxy = await getCurrentMainFramework().getApplicationContext().getAsync(MidwayWebRouterService, [this.options]);
+      } else {
+        this.proxy = new MidwayWebRouterService(this.options);
+      }
+    }
+  }
+
+  async getRoutePriorityList(): Promise<RouterPriority[]> {
+    await this.init();
+    return this.proxy.getRoutePriorityList();
+  }
+
+  async getRouterTable(): Promise<Map<string, RouterInfo[]>> {
+    await this.init();
+    return this.proxy.getRouterTable();
+  }
+
+  async getFlattenRouterTable(): Promise<RouterInfo[]> {
+    await this.init();
+    return this.proxy.getFlattenRouterTable();
+  }
 }

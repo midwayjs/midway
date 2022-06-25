@@ -12,7 +12,7 @@ import {
   WEB_RESPONSE_REDIRECT,
 } from '@midwayjs/decorator';
 import {
-  WebRouterCollector,
+  MidwayWebRouterService,
   RouterInfo,
   MidwayMiddlewareService,
   IMidwayApplication,
@@ -24,7 +24,7 @@ const debug = util.debuglog('midway:debug');
 export abstract class WebControllerGenerator<
   Router extends { use: (...args) => void }
 > {
-  protected constructor(readonly app: IMidwayApplication) {}
+  protected constructor(readonly app: IMidwayApplication, readonly midwayWebRouterService: MidwayWebRouterService) {}
 
   /**
    * wrap controller string to middleware function
@@ -33,9 +33,15 @@ export abstract class WebControllerGenerator<
   public generateKoaController(routeInfo: RouterInfo) {
     return async (ctx, next) => {
       const args = [ctx, next];
-      const controller = await ctx.requestContext.getAsync(routeInfo.id);
-      // eslint-disable-next-line prefer-spread
-      const result = await controller[routeInfo.method].apply(controller, args);
+      let result;
+      if (typeof routeInfo.method !== 'string') {
+        result = await routeInfo.method(ctx, next);
+      } else {
+        const controller = await ctx.requestContext.getAsync(routeInfo.id);
+        // eslint-disable-next-line prefer-spread
+        result = await controller[routeInfo.method as string].apply(controller, args);
+      }
+
       if (result !== undefined) {
         ctx.body = result;
       }
@@ -73,14 +79,10 @@ export abstract class WebControllerGenerator<
   }
 
   public async loadMidwayController(
-    globalPrefix: string,
     routerHandler?: (newRouter: Router) => void
   ): Promise<void> {
-    const collector = new WebRouterCollector('', {
-      globalPrefix,
-    });
-    const routerTable = await collector.getRouterTable();
-    const routerList = await collector.getRoutePriorityList();
+    const routerTable = await this.midwayWebRouterService.getRouterTable();
+    const routerList = await this.midwayWebRouterService.getRoutePriorityList();
     const applicationContext = this.app.getApplicationContext();
     const logger = this.app.getCoreLogger();
     const middlewareService = applicationContext.get(MidwayMiddlewareService);
