@@ -8,7 +8,8 @@ import {
   RouterInfo,
   httpError,
   CommonMiddlewareUnion,
-  FunctionMiddleware, MidwayWebRouterService,
+  FunctionMiddleware,
+  MidwayWebRouterService,
 } from '@midwayjs/core';
 
 import {
@@ -282,11 +283,14 @@ export class MidwayExpressFramework extends BaseFramework<
       middleware: any;
     }>
   > {
-    this.webRouterService = await this.applicationContext.getAsync(MidwayWebRouterService, [
-      {
-        globalPrefix: this.configurationOptions.globalPrefix,
-      }
-    ]);
+    this.webRouterService = await this.applicationContext.getAsync(
+      MidwayWebRouterService,
+      [
+        {
+          globalPrefix: this.configurationOptions.globalPrefix,
+        },
+      ]
+    );
     const routerTable = await this.webRouterService.getRouterTable();
     const routerList = await this.webRouterService.getRoutePriorityList();
     const routerMiddlewares = [];

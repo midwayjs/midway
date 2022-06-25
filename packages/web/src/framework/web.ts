@@ -3,7 +3,8 @@ import {
   HTTP_SERVER_KEY,
   httpError,
   IMidwayBootstrapOptions,
-  MidwayProcessTypeEnum, MidwayWebRouterService,
+  MidwayProcessTypeEnum,
+  MidwayWebRouterService,
   PathFileUtil,
   RouterInfo,
   WebControllerGenerator,
@@ -111,12 +112,18 @@ export class MidwayWebFramework extends BaseFramework<
       )(ctx as any, next);
     };
     this.app.use(midwayRootMiddleware);
-    this.webRouterService = await this.applicationContext.getAsync(MidwayWebRouterService, [
-      {
-        globalPrefix: this.configurationOptions.globalPrefix,
-      }
-    ]);
-    this.generator = new EggControllerGenerator(this.app, this.webRouterService);
+    this.webRouterService = await this.applicationContext.getAsync(
+      MidwayWebRouterService,
+      [
+        {
+          globalPrefix: this.configurationOptions.globalPrefix,
+        },
+      ]
+    );
+    this.generator = new EggControllerGenerator(
+      this.app,
+      this.webRouterService
+    );
 
     this.overwriteApplication('app');
 
@@ -194,15 +201,11 @@ export class MidwayWebFramework extends BaseFramework<
   async loadMidwayController() {
     // move egg router to last
     this.app.getMiddleware().findAndInsertLast('eggRouterMiddleware');
-    await this.generator.loadMidwayController(
-      newRouter => {
-        const dispatchFn = newRouter.middleware();
-        dispatchFn._name = `midwayController(${
-          newRouter?.opts?.prefix || '/'
-        })`;
-        this.app.useMiddleware(dispatchFn);
-      }
-    );
+    await this.generator.loadMidwayController(newRouter => {
+      const dispatchFn = newRouter.middleware();
+      dispatchFn._name = `midwayController(${newRouter?.opts?.prefix || '/'})`;
+      this.app.useMiddleware(dispatchFn);
+    });
 
     // restore use method
     this.app.use = (this.app as any).originUse;

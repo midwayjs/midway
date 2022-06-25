@@ -9,7 +9,8 @@ import {
   RouterInfo,
   WebControllerGenerator,
   MidwayConfigMissingError,
-  httpError, MidwayWebRouterService,
+  httpError,
+  MidwayWebRouterService,
 } from '@midwayjs/core';
 import { Cookies } from '@midwayjs/cookies';
 
@@ -107,12 +108,18 @@ export class MidwayKoaFramework extends BaseFramework<
     };
     this.app.use(midwayRootMiddleware);
 
-    this.webRouterService = await this.applicationContext.getAsync(MidwayWebRouterService, [
-      {
-        globalPrefix: this.configurationOptions.globalPrefix,
-      }
-    ]);
-    this.generator = new KoaControllerGenerator(this.app, this.webRouterService);
+    this.webRouterService = await this.applicationContext.getAsync(
+      MidwayWebRouterService,
+      [
+        {
+          globalPrefix: this.configurationOptions.globalPrefix,
+        },
+      ]
+    );
+    this.generator = new KoaControllerGenerator(
+      this.app,
+      this.webRouterService
+    );
 
     this.defineApplicationProperties();
 
@@ -122,15 +129,11 @@ export class MidwayKoaFramework extends BaseFramework<
   }
 
   async loadMidwayController() {
-    await this.generator.loadMidwayController(
-      newRouter => {
-        const dispatchFn = newRouter.middleware();
-        dispatchFn._name = `midwayController(${
-          newRouter?.opts?.prefix || '/'
-        })`;
-        this.app.use(dispatchFn);
-      }
-    );
+    await this.generator.loadMidwayController(newRouter => {
+      const dispatchFn = newRouter.middleware();
+      dispatchFn._name = `midwayController(${newRouter?.opts?.prefix || '/'})`;
+      this.app.use(dispatchFn);
+    });
   }
 
   /**
