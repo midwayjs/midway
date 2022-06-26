@@ -85,7 +85,7 @@ describe('test/index.test.ts', function () {
         .set({
           cookie: result.headers['set-cookie']
         })
-        .expect(204)
+        .expect(200)
         .expect('set-cookie', /MW_SESS=;/);
 
       await request
