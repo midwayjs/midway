@@ -1,7 +1,7 @@
 
 import { close, createApp, createFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
-import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
+import * as ServerlessApp from '../../../packages-legacy/serverless-app/src';
 import { readFileSync, copy, writeFile, remove } from 'fs-extra';
 import { existsSync } from 'fs';
 const type = 'hsts';
@@ -35,11 +35,11 @@ describe(`test/${type}.test.ts`, function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { hsts: { enable: true }};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { hsts: { enable: true }};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -60,11 +60,11 @@ describe(`test/${type}.test.ts`, function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -86,11 +86,11 @@ describe(`test/${type}.test.ts`, function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -109,15 +109,15 @@ describe(`test/${type}.test.ts`, function () {
         await remove(appDir);
       }
       await copy(csrfBase, appDir);
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`);
       app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
-    
+
     it('with hsts header', async () => {
       await withHSTSHeader(app);
     });
@@ -135,11 +135,11 @@ describe(`test/${type}.test.ts`, function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { hsts: { enable: true, includeSubdomains: true }};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { hsts: { enable: true, includeSubdomains: true }};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -160,11 +160,11 @@ describe(`test/${type}.test.ts`, function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -186,11 +186,11 @@ describe(`test/${type}.test.ts`, function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -209,15 +209,15 @@ describe(`test/${type}.test.ts`, function () {
         await remove(appDir);
       }
       await copy(csrfBase, appDir);
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`);
       app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
-    
+
     it('with hsts header', async () => {
       await withHSTSHeaderIncludeSubdomains(app);
     });

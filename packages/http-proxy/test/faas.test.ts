@@ -1,7 +1,7 @@
 import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
-import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
+import * as ServerlessApp from '../../../packages-legacy/serverless-app/src';
 
 describe('test/faas.test.ts', function () {
   let app;
