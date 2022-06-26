@@ -1,7 +1,7 @@
 import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
-import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
+import * as ServerlessApp from '../../../packages-legacy/serverless-app/src';
 import { existsSync, statSync } from 'fs';
 
 describe('test/faas.test.ts', function () {
@@ -30,7 +30,7 @@ describe('test/faas.test.ts', function () {
         const file1Stat = statSync(response.body.files[0].data);
         assert(file1Stat.size && file1Stat.size === stat.size);
       });
-    
+
   });
   it('upload file mode and auto clean', async () => {
     const imagePath = join(__dirname, 'fixtures/1.jpg');

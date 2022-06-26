@@ -5,11 +5,11 @@ import {
   MiddlewareRespond,
   MidwayFrameworkType,
   PathFileUtil,
-  WebRouterCollector,
   RouterInfo,
   httpError,
   CommonMiddlewareUnion,
   FunctionMiddleware,
+  MidwayWebRouterService,
 } from '@midwayjs/core';
 
 import {
@@ -46,6 +46,7 @@ export class MidwayExpressFramework extends BaseFramework<
   public app: IMidwayExpressApplication;
   private server: Server;
   private expressMiddlewareService: MidwayExpressMiddlewareService;
+  private webRouterService: MidwayWebRouterService;
 
   configure(): IMidwayExpressConfigurationOptions {
     return this.configService.getConfiguration('express');
@@ -221,14 +222,18 @@ export class MidwayExpressFramework extends BaseFramework<
    */
   protected generateController(routeInfo: RouterInfo): IRouterHandler<any> {
     return wrapAsyncHandler(async (req, res, next) => {
-      const controller = await req.requestContext.getAsync(routeInfo.id);
-
-      const result = await controller[routeInfo.method].call(
-        controller,
-        req,
-        res,
-        next
-      );
+      let result;
+      if (typeof routeInfo.method !== 'string') {
+        result = await routeInfo.method(req, res, next);
+      } else {
+        const controller = await req.requestContext.getAsync(routeInfo.id);
+        result = await controller[routeInfo.method].call(
+          controller,
+          req,
+          res,
+          next
+        );
+      }
 
       if (res.headersSent) {
         // return when response send
@@ -278,11 +283,16 @@ export class MidwayExpressFramework extends BaseFramework<
       middleware: any;
     }>
   > {
-    const collector = new WebRouterCollector('', {
-      globalPrefix: this.configurationOptions.globalPrefix,
-    });
-    const routerTable = await collector.getRouterTable();
-    const routerList = await collector.getRoutePriorityList();
+    this.webRouterService = await this.applicationContext.getAsync(
+      MidwayWebRouterService,
+      [
+        {
+          globalPrefix: this.configurationOptions.globalPrefix,
+        },
+      ]
+    );
+    const routerTable = await this.webRouterService.getRouterTable();
+    const routerList = await this.webRouterService.getRoutePriorityList();
     const routerMiddlewares = [];
 
     for (const routerInfo of routerList) {

@@ -14,6 +14,7 @@ import {
   MidwayDecoratorService,
   MidwayApplicationManager,
   MidwayMockService,
+  MidwayWebRouterService,
   safeRequire,
 } from './';
 import defaultConfig from './config/config.default';
@@ -139,6 +140,7 @@ export function prepareGlobalApplicationContext(
   applicationContext.bindClass(MidwayMiddlewareService);
   applicationContext.bindClass(MidwayLifeCycleService);
   applicationContext.bindClass(MidwayMockService);
+  applicationContext.bindClass(MidwayWebRouterService);
 
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {

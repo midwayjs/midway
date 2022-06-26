@@ -20,8 +20,6 @@ export {
 export { extend } from './util/extend';
 export * from './util/pathFileUtil';
 export * from './util/webRouterParam';
-export * from './common/webRouterCollector';
-export * from './common/triggerCollector';
 export { createConfiguration } from './functional/configuration';
 export { MidwayConfigService } from './service/configService';
 export { MidwayEnvironmentService } from './service/environmentService';
@@ -33,6 +31,14 @@ export { MidwayLifeCycleService } from './service/lifeCycleService';
 export { MidwayMiddlewareService } from './service/middlewareService';
 export { MidwayDecoratorService } from './service/decoratorService';
 export { MidwayMockService } from './service/mockService';
+export {
+  RouterInfo,
+  DynamicRouterInfo,
+  RouterPriority,
+  RouterCollectorOptions,
+  MidwayWebRouterService,
+  WebRouterCollector,
+} from './service/webRouterService';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './common/serviceFactory';

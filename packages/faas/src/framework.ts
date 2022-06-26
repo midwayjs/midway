@@ -15,9 +15,9 @@ import {
   MidwayEnvironmentService,
   MidwayFrameworkType,
   MidwayMiddlewareService,
+  MidwayWebRouterService,
   pathToRegexp,
   RouterInfo,
-  ServerlessTriggerCollector,
 } from '@midwayjs/core';
 import {
   Framework,
@@ -56,6 +56,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   private server: http.Server;
   private respond: (req, res, respond) => void;
   private applicationAdapter: IFaaSConfigurationOptions['applicationAdapter'];
+  private webRouterService: MidwayWebRouterService;
   protected httpMiddlewareManager = this.createMiddlewareManager();
   protected eventMiddlewareManager = this.createMiddlewareManager();
 
@@ -153,10 +154,16 @@ export class MidwayFaaSFramework extends BaseFramework<
     return this.lock.sureOnce(async () => {
       // set app keys
       this.app['keys'] = this.configService.getConfiguration('keys') ?? '';
-
       // store all http function entry
-      const collector = new ServerlessTriggerCollector();
-      const functionList = await collector.getFunctionList();
+      this.webRouterService = await this.applicationContext.getAsync(
+        MidwayWebRouterService,
+        [
+          {
+            includeFunctionRouter: true,
+          },
+        ]
+      );
+      const functionList = await this.webRouterService.getFlattenRouterTable();
       for (const funcInfo of functionList) {
         // store handler
         this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);

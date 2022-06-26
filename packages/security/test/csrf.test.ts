@@ -1,7 +1,7 @@
 
 import { createHttpRequest, close, createApp, createFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
-import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
+import * as ServerlessApp from '../../../packages-legacy/serverless-app/src';
 import * as assert from 'assert';
 import { readFileSync, copy, writeFile, remove } from 'fs-extra';
 import { existsSync } from 'fs';
@@ -134,10 +134,10 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`)); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -148,7 +148,7 @@ describe('test/csrf.test.ts', function () {
     it('post with csrf token set to query', async () => {
       await postWithCsrfTokenSetToQuery(app);
     });
-  
+
     it('post with csrf token rotate', async () => {
       await postWithCsrfTokenRotate(app)
     });
@@ -168,10 +168,10 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`)); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`));
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -182,7 +182,7 @@ describe('test/csrf.test.ts', function () {
     it('post with csrf token set to query', async () => {
       await postWithCsrfTokenSetToQuery(app);
     });
-  
+
     it('post with csrf token rotate', async () => {
       await postWithCsrfTokenRotate(app)
     });
@@ -202,10 +202,10 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`)); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`));
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -216,7 +216,7 @@ describe('test/csrf.test.ts', function () {
     it('post with csrf token set to query', async () => {
       await postWithCsrfTokenSetToQuery(app);
     });
-  
+
     it('post with csrf token rotate', async () => {
       await postWithCsrfTokenRotate(app)
     });
@@ -235,10 +235,10 @@ describe('test/csrf.test.ts', function () {
         await remove(appDir);
       }
       await copy(csrfBase, appDir);
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`)); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
       app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -250,7 +250,7 @@ describe('test/csrf.test.ts', function () {
     it('post with csrf token set to query', async () => {
       await postWithCsrfTokenSetToQuery(app);
     });
-  
+
     it('post with csrf token rotate', async () => {
       await postWithCsrfTokenRotate(app)
     });
@@ -270,11 +270,11 @@ describe('test/csrf.test.ts', function () {
         await remove(appDir);
       }
       await copy(csrfBase, appDir);
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`);
       app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -299,11 +299,11 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -328,11 +328,11 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -357,11 +357,11 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -387,11 +387,11 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -412,11 +412,11 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
@@ -437,11 +437,11 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
-      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`)); 
-      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`); 
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`);
       app = await createApp(appDir);
     });
-  
+
     afterAll(async () => {
       await close(app);
     });
