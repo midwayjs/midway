@@ -77,16 +77,11 @@
       "collapsible": false,
       "items": [
         "extensions/axios",
-        "extensions/cache",
         "extensions/i18n",
         "extensions/info",
         "extensions/validate",
         "extensions/swagger",
         "extensions/task",
-        "extensions/orm",
-        "extensions/sequelize",
-        "extensions/redis",
-        "extensions/mongodb",
         "extensions/jwt"
       ]
     },
@@ -110,12 +105,18 @@
     },
     {
       "type": "category",
-      "label": "Socket",
+      "label": "数据存储",
       "collapsed": false,
       "collapsible": false,
       "items": [
-        "extensions/socketio",
-        "extensions/ws"
+        "extensions/orm",
+        "extensions/sequelize",
+        "extensions/redis",
+        "extensions/mongodb",
+        "extensions/cache",
+        "extensions/oss",
+        "extensions/cos",
+        "extensions/tablestore"
       ]
     },
     {
@@ -130,22 +131,21 @@
     },
     {
       "type": "category",
+      "label": "WebSocket",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "extensions/socketio",
+        "extensions/ws"
+      ]
+    },
+    {
+      "type": "category",
       "label": "消息",
       "collapsed": false,
       "collapsible": false,
       "items": [
         "extensions/rabbitmq"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "云服务",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "extensions/oss",
-        "extensions/cos",
-        "extensions/tablestore"
       ]
     },
     {
@@ -298,7 +298,8 @@
       "collapsible": false,
       "items": [
         "release_schedule",
-        "tool/awesome_midway"
+        "contributing",
+        "awesome_midway"
       ]
     }
   ]

@@ -2,10 +2,6 @@
 
 Socket.io 是一个业界常用库，可用于在浏览器和服务器之间进行实时，双向和基于事件的通信。
 
-:::tip
-调整暂未完成，请等待完成后再使用。
-:::
-
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01YTye6U22gICvarVur_!!6000000007149-2-tps-1204-352.png)
 
 
@@ -652,36 +648,71 @@ export default {
 | 属性           | 类型   | 描述                                                         |
 | --- | --- | --- |
 | port | number | 可选，如果传递了该端口，socket.io 内部会创建一个该端口的 HTTP 服务，并将 socket 服务 attach 在其之上。如果希望和 midway 其他的 web 框架配合使用，请不要传递该参数。 |
-| pubClient | object | 可选，当 ioredis 作为适配器时的参数 |
-| subClient | object | 可选，当 ioredis 作为适配器时的参数 |
 | path | string | 可选，服务端 path |
-| adapter | object | socket.io-redis 适配器 |
+| adapter | object | 分布式处理的适配器，比如可以配置 redis-adapter |
 | connectTimeout | number | 客户端超时时间，单位 ms，默认值 _45000_ |
 
 更多的启动选项，请参考 [Socket.io 文档](https://socket.io/docs/v4/server-api/#new-Server-httpServer-options)。
 
 
 
+## 适配器
+
+适配器是用于 Socket.io 在分布式部署时，在多台机器，多个进程能够进行通信的一层适配层，当前 socket.io 官方提供的适配器有几种：
+
+
+
+- 1、cluster-adapter 用于在单台机器，多进程之间适配
+- 2、redis-adapter 用于在多台机器，多个进程之间适配
+
+
+
+在分布式场景下，我们一般使用 redis-adapater 来实现功能。
+
+
+
 
 ### 配置 redis 适配器
 
+`@midwayjs/socketio` 提供了一个适配器（adapter）的入口配置，只需要初始化适配器实例，传入即可。
 
-`@midwayjs/socketio` 提供了一个生成 redis 适配器的工具类，只需要传入 redis 的 host 和 port 即可。
+:::tip
+
+Socket.io 官方已经更新了原有的适配器包名，现在的包名为 `@socket.io/redis-adapter`（原来叫 `socket.io-redis`)，配置有更新，迁移参考请查看 [官方文档](https://github.com/socketio/socket.io-redis-adapter#migrating-from-socketio-redis)。
+
+:::
+
+安装如下：
+
+```bash
+$ npm i @socket.io/redis-adapter --save
+```
 
 
-示例如下：
+
+新版本配置的示例如下，更多的配置可以参考 [官方文档](https://github.com/socketio/socket.io-redis-adapter)：
 
 ```typescript
 // src/config/config.default
-import { createRedisAdapter } from '@midwayjs/socketio';
+import { createAdapter } from '@socket.io/redis-adapter';
+import Redis from 'ioredis';
+
+// github 文档创建 redis 实例
+
+const pubClient = new Redis(/* redis 配置 */);
+const subClient = pubClient.duplicate();
 
 export default {
   // ...
   socketIO: {
-    adapter: createRedisAdapter({ host: '127.0.0.1', port: 6379}),
+    adapter: redisAdapter(pubClient, subClient)
   },
 }
 ```
+
+通过使用 `@socket.io/redis-adapter` 适配器运行 Socket.io，可以在不同的进程或服务器中运行多个 Socket.io 实例，这些实例都可以相互广播和发送事件。
+
+此外，还有一些 Adapter 上的特殊 API，具体可以查看 [文档](https://github.com/socketio/socket.io-redis-adapter#api)。
 
 
 
@@ -692,7 +723,7 @@ export default {
 ### 获取连接数
 ```typescript
 const count = app.engine.clientsCount;		// 获取所有的连接数
-const count = app.of('/').sockets.size;			// 获取单个 namespace 里的连接数
+const count = app.of('/').sockets.size;		// 获取单个 namespace 里的连接数
 ```
 
 
@@ -782,7 +813,7 @@ export class HelloController {
 
 // socket.io client
 const io = require("socket.io-client")
-io('*****:3000/test', {});		// 这里是客户端的 namespace
+io('*****:3000/test', {});			// 这里是客户端的 namespace
 
 
 // midway 的 socket.io 测试客户端

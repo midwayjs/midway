@@ -37,7 +37,7 @@ const result = await makeHttpRequest('http://127.1:7001/', {
 // result.data.url => /?a=1&b=2
 ```
 
-可以可以指定类型
+可以指定类型
 
 ```typescript
 import { makeHttpRequest } from '@midwayjs/core';
