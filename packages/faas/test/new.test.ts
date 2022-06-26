@@ -239,4 +239,15 @@ describe('test/new.test.ts', () => {
     await closeApp(app);
     mm.restore();
   });
+
+  it('should test middleware return value and body not empty', async () => {
+    const starter = await createNewStarter('base-app-middleware-return-body');
+
+    const result = await createHttpRequest(starter)
+      .get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('{"code":0,"msg":"ok","data":null}');
+
+    await closeApp(starter);
+  });
 });

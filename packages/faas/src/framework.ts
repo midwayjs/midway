@@ -340,6 +340,11 @@ export class MidwayFaaSFramework extends BaseFramework<
           context.body = data = data + '';
         }
 
+        // middleware return value and will be got 204 status
+        if (context.status === 204 && (context.body !== undefined || true)) {
+          context.status = 200;
+        }
+
         return {
           isBase64Encoded: encoded,
           statusCode: context.status,

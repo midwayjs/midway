@@ -1,7 +1,7 @@
 import { Framework, Application } from '../src';
 import * as FaaS from '../src';
 import { join } from 'path';
-import { close, create, createFunctionApp } from '@midwayjs/mock';
+import { close, create, createFunctionApp } from '../../mock/src';
 import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
 
 const originReady = FaaS.Configuration.prototype.init;
@@ -23,10 +23,12 @@ export async function creatStarter(name, options = {}): Promise<Framework> {
 }
 
 export async function createNewStarter(name, options = {}): Promise<Application> {
-  const app = await createFunctionApp<Framework>(join(__dirname, 'fixtures', name), Object.assign({
+  const basePath = join(__dirname, 'fixtures', name);
+  const app = await createFunctionApp<Framework>(basePath, Object.assign({
     starter: new BootstrapStarter(),
     imports: [
-      require('../src')
+      require('../src'),
+      require(`${basePath}/src`)
     ]
   }, options));
   return app;
