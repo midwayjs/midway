@@ -227,6 +227,10 @@ export class MidwayFaaSFramework extends BaseFramework<
               );
               if (isHttpFunction && result !== undefined) {
                 ctx.body = result;
+                // middleware return value and will be got 204 status
+                if (ctx.status === 204 && (ctx.body !== undefined || true)) {
+                  ctx.status = 200;
+                }
               }
               return result;
             },
