@@ -33,6 +33,33 @@ jobs:
         ports:
           - 5672/tcp
         options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
+      zoo_keeper:
+        image: bitnami/zookeeper
+        ports:
+          - 2181:2181
+        env:
+          ALLOW_ANONYMOUS_LOGIN: yes
+        options: >-
+          --health-cmd "echo mntr | nc -w 2 -q 2 localhost 2181"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      kafka:
+        image: bitnami/kafka
+        ports:
+          - 9092:9092
+        options: >-
+          --health-cmd "kafka-broker-api-versions.sh --version"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          KAFKA_CFG_KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+          ALLOW_PLAINTEXT_LISTENER: yes
+          KAFKA_CFG_LISTENERS: "CLIENT://:9092,INTERNAL://:9093"
+          KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://localhost:9092,INTERNAL://kafka:9093"
+          KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,INTERNAL:PLAINTEXT"
+          KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INTERNAL
 
     steps:
     - name: Git checkout
