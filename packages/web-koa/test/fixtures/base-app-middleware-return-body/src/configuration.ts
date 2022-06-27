@@ -11,6 +11,16 @@ export class HomeController {
   async home() {
     return null;
   }
+
+  @Get('/undefined')
+  async rUndefined() {
+    return undefined;
+  }
+
+  @Get('/null')
+  async rNull() {
+    return null;
+  }
 }
 
 @Configuration({

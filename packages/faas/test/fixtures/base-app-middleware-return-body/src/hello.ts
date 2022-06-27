@@ -21,4 +21,18 @@ export class HelloService {
   async handler() {
     return null;
   }
+
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, {
+    path: '/undefined'
+  })
+  async rUndefined() {
+    return undefined;
+  }
+
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, {
+    path: '/null'
+  })
+  async rNull() {
+    return null;
+  }
 }

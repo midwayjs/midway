@@ -385,6 +385,16 @@ describe('/test/feature.test.ts', () => {
       .get('/');
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('{"code":0,"msg":"ok","data":null}');
+
+    const result1 = await createHttpRequest(app)
+      .get('/undefined');
+    expect(result1.status).toEqual(200);
+    expect(result1.text).toEqual('{"code":0,"msg":"ok"}');
+
+    const result2 = await createHttpRequest(app)
+      .get('/null');
+    expect(result2.status).toEqual(200);
+    expect(result2.text).toEqual('{"code":0,"msg":"ok","data":null}');
     await closeApp(app);
   });
 });
