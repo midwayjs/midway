@@ -226,7 +226,12 @@ export class MidwayFaaSFramework extends BaseFramework<
                 isHttpFunction
               );
               if (isHttpFunction && result !== undefined) {
-                ctx.body = result;
+                if (result === null) {
+                  // 这样设置可以绕过 koa 的 _explicitStatus 赋值机制
+                  (ctx.response as any)._body = null;
+                } else {
+                  ctx.body = result;
+                }
               }
               return result;
             },
@@ -290,9 +295,17 @@ export class MidwayFaaSFramework extends BaseFramework<
                   isHttpFunction
                 );
                 if (isHttpFunction && result !== undefined) {
-                  ctx.body = result;
+                  if (result === null) {
+                    // 这样设置可以绕过 koa 的 _explicitStatus 赋值机制
+                    (ctx.response as any)._body = null;
+                  } else {
+                    ctx.body = result;
+                  }
                 }
-                return result;
+                // http 靠 ctx.body，否则会出现状态码不正确的问题
+                if (!isHttpFunction) {
+                  return result;
+                }
               },
             ],
             this.app
@@ -338,6 +351,16 @@ export class MidwayFaaSFramework extends BaseFramework<
           }
           // set data to string
           context.body = data = data + '';
+        }
+
+        // middleware return value and will be got 204 status
+        if (
+          context.body === undefined &&
+          !context.response._explicitStatus &&
+          context._matchedRoute
+        ) {
+          // 如果进了路由，重新赋值，防止 404
+          context.body = undefined;
         }
 
         return {

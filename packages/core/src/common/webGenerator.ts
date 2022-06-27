@@ -49,11 +49,13 @@ export abstract class WebControllerGenerator<
       }
 
       if (result !== undefined) {
-        ctx.body = result;
-      }
-
-      if (ctx.body === undefined && !(ctx.response as any)._explicitStatus) {
-        ctx.body = undefined;
+        if (result === null) {
+          // 这样设置可以绕过 koa 的 _explicitStatus 赋值机制
+          ctx.response._body = null;
+          ctx.response._midwayControllerNullBody = true;
+        } else {
+          ctx.body = result;
+        }
       }
 
       // implement response decorator

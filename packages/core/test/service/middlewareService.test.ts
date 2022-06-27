@@ -319,7 +319,6 @@ describe('/test/services/middlewareService.test.ts', () => {
     });
   });
 
-
   describe('test middlewareService', () => {
     it('middleware service should be ok', async () => {
 
@@ -444,6 +443,60 @@ describe('/test/services/middlewareService.test.ts', () => {
     });
   });
 
+  describe('test middleware return empty value', function () {
+
+    let middlewareService = null;
+
+    beforeEach(async () => {
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+    });
+
+    it('should test return undefined and get origin ctx.body value', async () => {
+      const fn = await middlewareService.compose([async (ctx, next) => {
+        return undefined
+      }]);
+      expect(await fn({}, () => {})).toEqual(undefined);
+      expect(await fn({body: ''}, () => {})).toEqual('');
+      expect(await fn({body: 1}, () => {})).toEqual(1);
+      expect(await fn({body: false}, () => {})).toEqual(false);
+      expect(await fn({body: 0}, () => {})).toEqual(0);
+    });
+
+    it('should test return null and body will be set', async () => {
+      const fn = await middlewareService.compose([async (ctx, next) => {
+        return null
+      }]);
+      expect(await fn({}, () => {})).toEqual(null);
+      expect(await fn({body: ''}, () => {})).toEqual(null);
+      expect(await fn({body: 1}, () => {})).toEqual(null);
+      expect(await fn({body: false}, () => {})).toEqual(null);
+      expect(await fn({body: 0}, () => {})).toEqual(null);
+    });
+
+    it('should test return false and body will be set', async () => {
+      const fn = await middlewareService.compose([async (ctx, next) => {
+        return false;
+      }]);
+      expect(await fn({}, () => {})).toEqual(false);
+      expect(await fn({body: ''}, () => {})).toEqual(false);
+      expect(await fn({body: 1}, () => {})).toEqual(false);
+      expect(await fn({body: false}, () => {})).toEqual(false);
+      expect(await fn({body: 0}, () => {})).toEqual(false);
+    });
+
+    it('should test return 0 and body will be set', async () => {
+      const fn = await middlewareService.compose([async (ctx, next) => {
+        return 0;
+      }]);
+      expect(await fn({}, () => {})).toEqual(0);
+      expect(await fn({body: ''}, () => {})).toEqual(0);
+      expect(await fn({body: 1}, () => {})).toEqual(0);
+      expect(await fn({body: false}, () => {})).toEqual(0);
+      expect(await fn({body: 0}, () => {})).toEqual(0);
+    });
+  });
 });
 
 function wait (ms) {

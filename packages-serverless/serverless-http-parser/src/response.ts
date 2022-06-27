@@ -9,7 +9,7 @@ import * as vary from 'vary';
 
 export const response = {
   _explicitStatus: false,
-  _body: null,
+  _body: undefined,
   res: null,
   ctx: null,
 
