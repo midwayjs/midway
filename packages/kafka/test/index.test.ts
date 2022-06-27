@@ -11,7 +11,7 @@ describe('/test/index.test.ts', () => {
     const producer = await createKafkaProducer({
       kafkaConfig: {
         clientId: 'my-app',
-        brokers: [process.env.KAFKA_BROKERS as string || 'localhost:9093'],
+        brokers: [process.env.KAFKA_BROKERS as string || 'localhost:9092'],
       },
       mock: false,
     });
