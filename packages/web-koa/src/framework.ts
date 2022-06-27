@@ -105,9 +105,14 @@ export class MidwayKoaFramework extends BaseFramework<
       await (
         await this.applyMiddleware(notFound)
       )(ctx, next);
-      // middleware return value and will be got 204 status
-      if (ctx.status === 204 && (ctx.body !== undefined || true)) {
-        ctx.status = 200;
+
+      if (
+        ctx.body === undefined &&
+        !ctx.response._explicitStatus &&
+        ctx._matchedRoute
+      ) {
+        // 如果进了路由，重新赋值，防止 404
+        ctx.body = undefined;
       }
     };
     this.app.use(midwayRootMiddleware);

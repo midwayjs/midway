@@ -384,7 +384,7 @@ describe('/test/feature.test.ts', () => {
     const result = await createHttpRequest(app)
       .get('/');
     expect(result.status).toEqual(200);
-    expect(result.text).toEqual('{"code":0,"msg":"ok"}');
+    expect(result.text).toEqual('{"code":0,"msg":"ok","data":null}');
     await closeApp(app);
   });
 });

@@ -98,22 +98,37 @@ export class MidwayWebFramework extends BaseFramework<
     }
 
     // not found middleware
-    const notFound = async (ctx, next) => {
+    const midwayRouterNotFound = async (ctx, next) => {
       await next();
       if (!ctx._matchedRoute && ctx.body === undefined) {
         throw new httpError.NotFoundError(`${ctx.path} Not Found`);
       }
     };
+    const bodyPatch = async (ctx, next) => {
+      await next();
+      if (
+        ctx.body === undefined &&
+        !ctx.response._explicitStatus &&
+        ctx._matchedRoute
+      ) {
+        // 如果进了路由，重新赋值，防止 404
+        ctx.body = undefined;
+      }
+      if (
+        ctx.response._midwayControllerNullBody &&
+        ctx.body &&
+        ctx.status === 204
+      ) {
+        ctx.status = 200;
+      }
+    };
     // insert error handler
     const midwayRootMiddleware = async (ctx, next) => {
       // this.app.createAnonymousContext(ctx);
+      this.middlewareManager.insertAfter(bodyPatch, 'notfound');
       await (
-        await this.applyMiddleware(notFound)
+        await this.applyMiddleware(midwayRouterNotFound)
       )(ctx as any, next);
-      // middleware return value and will be got 204 status
-      if (ctx.status === 204 && (ctx.body !== undefined || true)) {
-        ctx.status = 200;
-      }
     };
     this.app.use(midwayRootMiddleware);
     this.webRouterService = await this.applicationContext.getAsync(

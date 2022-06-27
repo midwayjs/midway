@@ -96,11 +96,15 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
                 index,
               } as any)
             ).then(result => {
-              // need to set body
-              if (context['body'] && !result) {
-                result = context['body'];
-              } else if (result && context['body'] !== result) {
+              /**
+               * 1、return 和 ctx.body，return 的优先级更高
+               * 2、如果 result 有值（非 undefined），则不管什么情况，都会覆盖当前 body，注意，这里有可能赋值 null，导致 status 为 204，会在中间件处进行修正
+               * 3、如果 result 没值，且 ctx.body 已经赋值，则向 result 赋值
+               */
+              if (result !== undefined) {
                 context['body'] = result;
+              } else if (context['body'] !== undefined) {
+                result = context['body'];
               }
               return result;
             });
