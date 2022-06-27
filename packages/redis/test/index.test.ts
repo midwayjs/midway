@@ -45,4 +45,17 @@ describe('/test/index.test.ts', () => {
     await close(app);
   });
 
+  it('support custom command defination', async () => {
+    const app = await createLightApp(join(__dirname, './fixtures/base-app-single-client'));
+    const redisService = await app.getApplicationContext().getAsync(RedisService);
+    redisService.defineCommand('myecho', {
+      numberOfKeys: 2,
+      lua: 'return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}',
+    });
+    // @ts-ignore
+    const result = await redisService.myecho('k1', 'k2', 'a1', 'a2');
+    expect(result).toEqual(['k1', 'k2', 'a1', 'a2']);
+    await close(app);
+  });
+
 });

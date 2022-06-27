@@ -10,6 +10,7 @@ import {
 import {
   ServiceFactory,
   delegateTargetAllPrototypeMethod,
+  delegateTargetMethod,
 } from '@midwayjs/core';
 import Redis from 'ioredis';
 import * as assert from 'assert';
@@ -119,3 +120,15 @@ export interface RedisService extends Redis {
 }
 
 delegateTargetAllPrototypeMethod(RedisService, Redis);
+
+RedisService.prototype.defineCommand = function (
+  name: string,
+  definition: {
+    lua: string;
+    numberOfKeys?: number;
+    readOnly?: boolean;
+  }
+) {
+  this.instance.defineCommand(name, definition);
+  delegateTargetMethod(RedisService, [name]);
+};
