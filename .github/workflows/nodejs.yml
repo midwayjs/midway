@@ -33,7 +33,7 @@ jobs:
         ports:
           - 5672/tcp
         options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
-      zoo_keeper:
+      zookeeper:
         image: bitnami/zookeeper
         ports:
           - 2181:2181
