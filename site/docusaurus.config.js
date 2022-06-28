@@ -73,7 +73,12 @@ const config = {
           //   position: 'right',
           // },
           {
-            label: 'Node 地下铁',
+            label: '开源送礼',
+            href: 'https://survey.taobao.com/apps/zhiliao/pJ3zng9Iv',
+            position: 'right',
+          },
+          {
+            label: '线下沙龙',
             href: 'https://subway.midwayjs.org/',
             position: 'right',
           },
