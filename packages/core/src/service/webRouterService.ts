@@ -22,7 +22,11 @@ import {
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import { joinURLPath } from '../util';
-import { MidwayCommonError, MidwayDuplicateRouteError } from '../error';
+import {
+  MidwayCommonError,
+  MidwayDuplicateControllerOptionsError,
+  MidwayDuplicateRouteError,
+} from '../error';
 import * as util from 'util';
 import { getCurrentMainFramework } from '../util/contextUtil';
 import { MidwayContainer } from '../context/container';
@@ -256,6 +260,18 @@ export class MidwayWebRouterService {
         controllerId,
         routerModule: controllerClz,
       });
+    } else {
+      // 不同的 controller，可能会有相同的 prefix，一旦 options 不同，就要报错
+      if (middleware) {
+        const originRoute = this.routesPriority.filter(el => {
+          return el.prefix === prefix;
+        })[0];
+        throw new MidwayDuplicateControllerOptionsError(
+          prefix,
+          controllerId,
+          originRoute.controllerId
+        );
+      }
     }
 
     // set ignorePrefix
