@@ -28,12 +28,12 @@ export class CodeDyeConfiguration {
         app.getMiddleware().insertFirst(CodeDyeMW);
       });
     // 将ioc内的代码进行包裹
-    for(const [key, value] of container.registry) {
+    for (const [key, value] of container.registry) {
       if (!value?.path || !value.srcPath) {
         continue;
       }
       value.path = codeDye(value.path, [value.srcPath || key]);
-      container.registry[key] =value;
+      container.registry[key] = value;
     }
   }
 }

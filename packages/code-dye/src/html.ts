@@ -2,32 +2,42 @@ export const foreach = (info, start, pi, level) => {
   const timeUse = info.end.time - info.start.time;
   const timeDiff = info.start.time - start;
   const paths = info.paths.filter(path => {
-    return !path.startsWith('/')
+    return !path.startsWith('/');
   });
   return `
     <div class="item">
-      <div class="info" style="padding-left: ${(level-1) * 24}px">
+      <div class="info" style="padding-left: ${(level - 1) * 24}px">
         <div class="infoText">${paths.join(' / ')}</div>
         <div class="moreInfo">
-          <div class="infoBtn">入参<div class="infoCard"><pre>${JSON.stringify(info.start.args, null, 2)}</pre></div></div>
-          <div class="infoBtn">返回值<div class="infoCard"><pre>${JSON.stringify(info.end.result, null, 2)}</pre></div></div>
+          <div class="infoBtn">入参<div class="infoCard"><pre>${JSON.stringify(
+            info.start.args,
+            null,
+            2
+          )}</pre></div></div>
+          <div class="infoBtn">返回值<div class="infoCard"><pre>${JSON.stringify(
+            info.end.result,
+            null,
+            2
+          )}</pre></div></div>
         </div>
       </div>
       <div class="timeContainer">
-        <div class="time" style="width:${timeUse/pi}px;left: ${timeDiff/pi}px"><div class="timeValue">${timeUse} ms</div></div>
+        <div class="time" style="width:${timeUse / pi}px;left: ${
+    timeDiff / pi
+  }px"><div class="timeValue">${timeUse} ms</div></div>
       </div>
       
     </div>
     <div class="child">
-      <div class="childLine" style="left: ${(level-1) * 24 + 12}px"></div>
-      ${
-        info.call.map(info => {
-          return foreach(info, start, pi, level + 1)
-        }).join('')
-      }
+      <div class="childLine" style="left: ${(level - 1) * 24 + 12}px"></div>
+      ${info.call
+        .map(info => {
+          return foreach(info, start, pi, level + 1);
+        })
+        .join('')}
       </div>
-  `
-}
+  `;
+};
 
 export const toHTML = info => {
   const timeDiff = info.end.time - info.start.time;
@@ -122,10 +132,14 @@ export const toHTML = info => {
   </style>
   <h1>Midway CodeDye</h1><hr />
   <div>调用链路总耗时 ${timeDiff}ms<div>
-  <div>调用结果:<br /><pre>${JSON.stringify(info.end.result, null, 2)}</pre></div>
+  <div>调用结果:<br /><pre>${JSON.stringify(
+    info.end.result,
+    null,
+    2
+  )}</pre></div>
   <hr />
   <div style="padding: 12px;">
   ${foreach(info, info.start.time, pi, 1)}</div>
   <hr /><a href="https://www.midwayjs.org/">Powered by Midway.js</a>
-  `
-}
+  `;
+};

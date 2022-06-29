@@ -5,7 +5,6 @@ import { asyncRunWrapper } from './reqInfo';
 
 @Middleware()
 export class CodeDyeMW {
-
   @Config('codeDye')
   codeDye: CodeDyeOptions;
 
@@ -23,9 +22,15 @@ export class CodeDyeMW {
 
   check(request) {
     let outputType;
-    if (this.codeDye.matchQueryKey && request.query[this.codeDye.matchQueryKey]) {
+    if (
+      this.codeDye.matchQueryKey &&
+      request.query[this.codeDye.matchQueryKey]
+    ) {
       outputType = request.query[this.codeDye.matchQueryKey];
-    } else if (this.codeDye.matchHeaderKey && request.headers[this.codeDye.matchHeaderKey]) {
+    } else if (
+      this.codeDye.matchHeaderKey &&
+      request.headers[this.codeDye.matchHeaderKey]
+    ) {
       outputType = request.headers[this.codeDye.matchQueryKey];
     }
     if (!outputType) {
@@ -37,29 +42,32 @@ export class CodeDyeMW {
   async compatibleMiddleware(request, response, next) {
     const reqInfo = {
       call: [],
-    }
+    };
     const outputType = this.check(request);
     if (!outputType) {
-      return next()
+      return next();
     }
     return asyncRunWrapper(this.codeDye, reqInfo, async () => {
-      const res= await next();
-      const reqInfoJSON = JSON.stringify(reqInfo, (key, value) => {
-        if (key === 'codeDyeConfig' || key === 'codeDyeParent') {
-          return;
-        }
-        return value;
-      }, 0);
+      const res = await next();
+      const reqInfoJSON = JSON.stringify(
+        reqInfo,
+        (key, value) => {
+          if (key === 'codeDyeConfig' || key === 'codeDyeParent') {
+            return;
+          }
+          return value;
+        },
+        0
+      );
       if (outputType === 'log') {
-        console.log(reqInfoJSON)
+        console.log(reqInfoJSON);
       } else if (outputType === 'html') {
-        response.set('Content-Type', 'text/html')
-        return toHTML(reqInfo.call[0])
+        response.set('Content-Type', 'text/html');
+        return toHTML(reqInfo.call[0]);
       } else if (outputType === 'json') {
         return reqInfoJSON;
       }
       return res;
     });
   }
-
 }
