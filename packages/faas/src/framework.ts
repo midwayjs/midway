@@ -35,6 +35,9 @@ import {
   HTTPResponse,
 } from '@midwayjs/serverless-http-parser';
 import * as http from 'http';
+import { types } from 'util';
+import { isUint8Array } from 'util/types';
+const { isAnyArrayBuffer } = types;
 
 const LOCK_KEY = '_faas_starter_start_key';
 
@@ -331,14 +334,14 @@ export class MidwayFaaSFramework extends BaseFramework<
             context.type = 'text/plain';
           }
           context.body = data;
-        } else if (Buffer.isBuffer(data)) {
+        } else if (isAnyArrayBuffer(data) || isUint8Array(data)) {
           encoded = true;
           if (!context.type) {
             context.type = 'application/octet-stream';
           }
 
           // data is reserved as buffer
-          context.body = data.toString('base64');
+          context.body = Buffer.from(data).toString('base64');
         } else if (typeof data === 'object') {
           if (!context.type) {
             context.type = 'application/json';
