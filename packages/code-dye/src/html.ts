@@ -121,8 +121,10 @@ export const toHTML = info => {
   }
   </style>
   <h1>Midway CodeDye</h1><hr />
+  <div>调用链路总耗时 ${timeDiff}ms<div>
+  <div>调用结果:<br /><pre>${JSON.stringify(info.end.result, null, 2)}</pre></div>
+  <hr />
   <div style="padding: 12px;">
-  调用链路总耗时 ${timeDiff}ms<br />
   ${foreach(info, info.start.time, pi, 1)}</div>
   <hr /><a href="https://www.midwayjs.org/">Powered by Midway.js</a>
   `

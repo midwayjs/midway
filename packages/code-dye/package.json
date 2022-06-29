@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/code-dye",
   "version": "3.4.0-beta.2",
-  "description": "Midway Component for Cross Domain",
+  "description": "Midway Code Dye Component",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
