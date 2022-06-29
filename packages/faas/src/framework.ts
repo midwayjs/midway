@@ -36,9 +36,8 @@ import {
 } from '@midwayjs/serverless-http-parser';
 import * as http from 'http';
 import { types } from 'util';
-import { isUint8Array } from 'util/types';
-const { isAnyArrayBuffer } = types;
 
+const { isAnyArrayBuffer, isUint8Array } = types;
 const LOCK_KEY = '_faas_starter_start_key';
 
 @Framework()
