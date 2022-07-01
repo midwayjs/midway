@@ -146,3 +146,34 @@ export default {
 | buffer  | prod 为 true，其余为 false                      | 使用 buffer 字符返回                                         |
 
 更多配置，请参考  [koa-static-cache](https://github.com/koajs/static-cache) 。
+
+
+
+## 常见问题
+
+### 1、函数下路由未生效
+
+函数路由需要显式配置才能生效，一般来说，会添加一个通配的路由用于静态文件，如 `/*`，或者 `/public/*`。
+
+```typescript
+import {
+  Provide,
+  ServerlessTrigger,
+  ServerlessTriggerType,
+} from '@midwayjs/decorator';
+import { Context } from '@midwayjs/faas';
+
+@Provide()
+export class HelloHTTPService {
+
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, {
+    path: '/public/*',
+    method: 'get',
+  })
+  async handleStaticFile() {
+    // 这个函数可以没有方法体，只是为了让网关注册一个额外的路由
+	}
+}
+
+```
+
