@@ -201,6 +201,15 @@ describe('/test/service/webRouterService.test.ts', function () {
       await expect(collector.getFlattenRouterTable()).rejects.toThrow('Duplicate router')
     });
 
+    it('should test duplicate controller prefix and options', async () => {
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        '../fixtures/app-with-duplicate-controller-options/src'
+      ));
+      const collector = await framework.getApplicationContext().getAsync(MidwayWebRouterService);
+      await expect(collector.getFlattenRouterTable()).rejects.toThrow('duplicated controller options')
+    });
+
     it('should sort param', function () {
       const collector = new MidwayWebRouterService();
       const result = collector.sortRouter(require('./router').routerList1);

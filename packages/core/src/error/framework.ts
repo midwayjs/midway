@@ -18,6 +18,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   INCONSISTENT_VERSION: 10013,
   INVALID_CONFIG: 10014,
   DUPLICATE_CLASS_NAME: 10015,
+  DUPLICATE_CONTROLLER_PREFIX_OPTIONS: 10016,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -156,6 +157,19 @@ export class MidwayDuplicateClassNameError extends MidwayError {
     super(
       `"${className}" duplicated between "${existPath}" and "${existPathOther}"`,
       FrameworkErrorEnum.DUPLICATE_CLASS_NAME
+    );
+  }
+}
+
+export class MidwayDuplicateControllerOptionsError extends MidwayError {
+  constructor(
+    prefix: string,
+    existController: string,
+    existControllerOther: string
+  ) {
+    super(
+      `"Prefix ${prefix}" with duplicated controller options between "${existController}" and "${existControllerOther}"`,
+      FrameworkErrorEnum.DUPLICATE_CONTROLLER_PREFIX_OPTIONS
     );
   }
 }
