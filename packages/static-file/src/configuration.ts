@@ -15,6 +15,16 @@ export class StaticFileConfiguration {
   @Inject()
   applicationManager: MidwayApplicationManager;
 
+  async onConfigLoad() {
+    if (this.applicationManager.getApplication('faas')) {
+      return {
+        staticFile: {
+          buffer: true,
+        },
+      };
+    }
+  }
+
   async onReady() {
     this.applicationManager
       .getApplications(['koa', 'faas', 'egg'])
