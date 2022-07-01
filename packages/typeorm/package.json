@@ -13,7 +13,7 @@
     "@midwayjs/decorator": "^3.4.0-beta.2",
     "@midwayjs/mock": "^3.4.0-beta.2",
     "sqlite3": "5.0.8",
-    "typeorm": "0.3.6"
+    "typeorm": "0.3.7"
   },
   "author": {
     "name": "czy88840616",
