@@ -419,7 +419,7 @@ export type MiddlewareRespond<CTX, R, N> = (
   context: CTX,
   nextOrRes?: N extends true ? R : NextFunction,
   next?: N
-) => Promise<{ result: any; error: Error | undefined }>;
+) => Promise<any>;
 
 /**
  * Common Exception Filter definition
