@@ -78,6 +78,7 @@ export interface IWebMiddleware {
 
 export interface ServerlessStarterOptions extends IMidwayBootstrapOptions {
   initializeMethodName?: string;
+  handlerName?: string;
   createAdapter?: () => Promise<{
     close();
     createAppHook(app?);
