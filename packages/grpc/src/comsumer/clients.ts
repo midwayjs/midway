@@ -47,7 +47,8 @@ export class GRPCClients extends Map {
           const serviceName = definition.replace(`${cfg.package}.`, '');
           const connectionService = new packageProto[serviceName](
             cfg.url,
-            credentials.createInsecure()
+            credentials.createInsecure(),
+            cfg.clientOptions
           );
           for (const methodName of Object.keys(packageDefinition[definition])) {
             const originMethod = connectionService[methodName];
