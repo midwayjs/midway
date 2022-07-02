@@ -4,7 +4,7 @@ import { UserModel } from '../model/user';
 
 export const sequelize = {
   dataSource: {
-    default: {
+    custom: {
       dialect: 'sqlite',
       storage: path.join(__dirname, '../../', 'database.sqlite'),
       sync: true,

@@ -3,7 +3,6 @@ import {
   CONTROLLER_KEY,
   ControllerOption,
   FaaSMetadata,
-  FUNC_KEY,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
@@ -14,7 +13,6 @@ import {
   RouterOption,
   Scope,
   ScopeEnum,
-  SERVERLESS_FUNC_KEY,
   ServerlessTriggerType,
   Types,
   WEB_RESPONSE_KEY,
@@ -143,11 +141,16 @@ export interface RouterCollectorOptions {
 export class MidwayWebRouterService {
   private isReady = false;
   protected routes = new Map<string, RouterInfo[]>();
-  private routesPriority: RouterPriority[] = [];
+  protected routesPriority: RouterPriority[] = [];
 
   constructor(readonly options: RouterCollectorOptions = {}) {}
 
-  private async analyze() {
+  protected async analyze() {
+    this.analyzeController();
+    this.sortPrefixAndRouter();
+  }
+
+  protected analyzeController() {
     const controllerModules = listModule(CONTROLLER_KEY);
 
     for (const module of controllerModules) {
@@ -161,14 +164,9 @@ export class MidwayWebRouterService {
         this.options.includeFunctionRouter
       );
     }
+  }
 
-    if (this.options.includeFunctionRouter) {
-      const fnModules = listModule(FUNC_KEY);
-      for (const module of fnModules) {
-        this.collectFunctionRoute(module, this.options.includeFunctionRouter);
-      }
-    }
-
+  protected sortPrefixAndRouter() {
     // filter empty prefix
     this.routesPriority = this.routesPriority.filter(item => {
       const prefixList = this.routes.get(item.prefix);
@@ -190,26 +188,6 @@ export class MidwayWebRouterService {
     this.routesPriority = this.routesPriority.sort((routeA, routeB) => {
       return routeB.prefix.length - routeA.prefix.length;
     });
-
-    // format function router meta
-    if (this.options.includeFunctionRouter) {
-      // requestMethod all transform to other method
-      for (const routerInfo of this.routes.values()) {
-        for (const info of routerInfo) {
-          if (info.requestMethod === 'all') {
-            info.functionTriggerMetadata.method = [
-              'get',
-              'post',
-              'put',
-              'delete',
-              'head',
-              'patch',
-              'options',
-            ];
-          }
-        }
-      }
-    }
   }
 
   /**
@@ -364,126 +342,6 @@ export class MidwayWebRouterService {
     );
   }
 
-  protected collectFunctionRoute(module, functionMeta = false) {
-    // serverlessTrigger metadata
-    const webRouterInfo: Array<FaaSMetadata.TriggerMetadata> = getClassMetadata(
-      FUNC_KEY,
-      module
-    );
-
-    const controllerId = getProviderName(module);
-    const id = getProviderUUId(module);
-
-    const prefix = '/';
-
-    if (!this.routes.has(prefix)) {
-      this.routes.set(prefix, []);
-      this.routesPriority.push({
-        prefix,
-        priority: -999,
-        middleware: [],
-        routerOptions: {},
-        controllerId,
-        routerModule: module,
-      });
-    }
-
-    for (const webRouter of webRouterInfo) {
-      // 新的 @ServerlessTrigger 写法
-      if (webRouter['metadata']?.['path']) {
-        const routeArgsInfo =
-          getPropertyDataFromClass(
-            WEB_ROUTER_PARAM_KEY,
-            module,
-            webRouter['methodName']
-          ) || [];
-
-        const routerResponseData =
-          getPropertyMetadata(
-            WEB_RESPONSE_KEY,
-            module,
-            webRouter['methodName']
-          ) || [];
-        // 新 http/api gateway 函数
-        const data: RouterInfo = {
-          id,
-          prefix,
-          routerName: '',
-          url: webRouter['metadata']['path'],
-          requestMethod: webRouter['metadata']?.['method'] ?? 'get',
-          method: webRouter['methodName'],
-          description: '',
-          summary: '',
-          handlerName: `${controllerId}.${webRouter['methodName']}`,
-          funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
-          controllerId,
-          middleware: webRouter['metadata']?.['middleware'] || [],
-          controllerMiddleware: [],
-          requestMetadata: routeArgsInfo,
-          responseMetadata: routerResponseData,
-        };
-        if (functionMeta) {
-          const functionMeta =
-            getPropertyMetadata(
-              SERVERLESS_FUNC_KEY,
-              module,
-              webRouter['methodName']
-            ) || {};
-          const functionName =
-            functionMeta['functionName'] ??
-            webRouter['functionName'] ??
-            createFunctionName(module, webRouter['methodName']);
-          data.functionName = functionName;
-          data.functionTriggerName = webRouter['type'];
-          data.functionTriggerMetadata = webRouter['metadata'];
-          data.functionMetadata = {
-            functionName,
-            ...functionMeta,
-          };
-        }
-        this.checkDuplicateAndPush(prefix, data);
-      } else {
-        if (functionMeta) {
-          const functionMeta =
-            getPropertyMetadata(
-              SERVERLESS_FUNC_KEY,
-              module,
-              webRouter['methodName']
-            ) || {};
-          const functionName =
-            functionMeta['functionName'] ??
-            webRouter['functionName'] ??
-            createFunctionName(module, webRouter['methodName']);
-          // 其他类型的函数
-          this.checkDuplicateAndPush(prefix, {
-            id,
-            prefix,
-            routerName: '',
-            url: '',
-            requestMethod: '',
-            method: webRouter['methodName'],
-            description: '',
-            summary: '',
-            handlerName: `${controllerId}.${webRouter['methodName']}`,
-            funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
-            controllerId,
-            middleware: webRouter['metadata']?.['middleware'] || [],
-            controllerMiddleware: [],
-            requestMetadata: [],
-            responseMetadata: [],
-            functionName,
-            functionTriggerName: webRouter['type'],
-            functionTriggerMetadata: webRouter['metadata'],
-            functionMetadata: {
-              functionName,
-              ...functionMeta,
-            },
-          });
-        }
-      }
-    }
-  }
-
   public sortRouter(urlMatchList: RouterInfo[]) {
     // 1. 绝对路径规则优先级最高如 /ab/cb/e
     // 2. 星号只能出现最后且必须在/后面，如 /ab/cb/**
@@ -581,7 +439,7 @@ export class MidwayWebRouterService {
     return routeArr;
   }
 
-  private checkDuplicateAndPush(prefix, routerInfo: RouterInfo) {
+  protected checkDuplicateAndPush(prefix, routerInfo: RouterInfo) {
     const prefixList = this.routes.get(prefix);
     const matched = prefixList.filter(item => {
       return (
@@ -600,10 +458,6 @@ export class MidwayWebRouterService {
     }
     prefixList.push(routerInfo);
   }
-}
-
-function createFunctionName(target, functionName) {
-  return getProviderName(target).replace(/[:#]/g, '-') + '-' + functionName;
 }
 
 /**

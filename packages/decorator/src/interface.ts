@@ -130,6 +130,10 @@ export namespace FaaSMetadata {
      * deploy or not
      */
     isDeploy?: boolean;
+    /**
+     * function handler name, like 'index.handler'
+     */
+    handlerName?: string;
   }
 
   interface TriggerCommonOptions {
@@ -216,7 +220,7 @@ export namespace FaaSMetadata {
   export interface TriggerMetadata {
     type: ServerlessTriggerType;
     functionName?: string;
-    methodName: string,
+    methodName?: string,
     metadata: EventTriggerUnionOptions;
   }
 
