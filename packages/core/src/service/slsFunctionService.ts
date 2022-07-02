@@ -23,9 +23,9 @@ import {
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MidwayServerlessFunctionService extends MidwayWebRouterService {
-  constructor(readonly options: RouterCollectorOptions) {
+  constructor(readonly options: RouterCollectorOptions = {}) {
     super(
-      Object.assign(options, {
+      Object.assign({}, options, {
         includeFunctionRouter: true,
       })
     );
@@ -183,21 +183,35 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
   public addServerlessFunction(
     func: (...args) => Promise<any>,
     triggerOptions: FaaSMetadata.TriggerMetadata,
-    functionOptions: FaaSMetadata.ServerlessFunctionOptions
+    functionOptions: FaaSMetadata.ServerlessFunctionOptions = {}
   ) {
+    const prefix = '/';
+
+    if (!this.routes.has(prefix)) {
+      this.routes.set(prefix, []);
+      this.routesPriority.push({
+        prefix,
+        priority: -999,
+        middleware: [],
+        routerOptions: {},
+        controllerId: undefined,
+        routerModule: module,
+      });
+    }
+
     const functionName =
       triggerOptions.functionName ?? functionOptions.functionName;
-    this.checkDuplicateAndPush('/', {
+    this.checkDuplicateAndPush(prefix, {
       id: null,
       method: func,
-      url: triggerOptions.metadata['path'],
-      requestMethod: triggerOptions.metadata['method'],
+      url: triggerOptions.metadata['path'] || '',
+      requestMethod: triggerOptions.metadata['method'] || '',
       description: '',
       summary: '',
       handlerName: functionOptions.handlerName,
       funcHandlerName: '',
       controllerId: '',
-      middleware: triggerOptions.metadata?.middleware,
+      middleware: triggerOptions.metadata?.middleware || [],
       controllerMiddleware: [],
       requestMetadata: [],
       responseMetadata: [],

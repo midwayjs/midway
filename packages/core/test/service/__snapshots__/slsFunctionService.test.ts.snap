@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/service/slsFunction.test.ts should test dynamic add function 1`] = `
+Array [
+  Object {
+    "_category": 2,
+    "_level": 2,
+    "_paramString": "",
+    "_pureRouter": "/api/hello",
+    "_weight": 2,
+    "controllerId": "",
+    "controllerMiddleware": Array [],
+    "description": "",
+    "funcHandlerName": "",
+    "functionMetadata": Object {
+      "functionName": "hello",
+    },
+    "functionName": "hello",
+    "functionTriggerMetadata": Object {
+      "method": "get",
+      "path": "/api/hello",
+    },
+    "functionTriggerName": undefined,
+    "handlerName": undefined,
+    "id": null,
+    "method": [Function],
+    "middleware": Array [],
+    "requestMetadata": Array [],
+    "requestMethod": "get",
+    "responseMetadata": Array [],
+    "summary": "",
+    "url": "/api/hello",
+  },
+  Object {
+    "_category": 2,
+    "_level": 0,
+    "_paramString": "",
+    "_pureRouter": "",
+    "_weight": 0,
+    "controllerId": "",
+    "controllerMiddleware": Array [],
+    "description": "",
+    "funcHandlerName": "",
+    "functionMetadata": Object {
+      "functionName": "hsf",
+    },
+    "functionName": "hsf",
+    "functionTriggerMetadata": Object {
+      "name": "customHSF",
+    },
+    "functionTriggerName": "customHSF",
+    "handlerName": undefined,
+    "id": null,
+    "method": [Function],
+    "middleware": Array [],
+    "requestMetadata": Array [],
+    "requestMethod": "",
+    "responseMetadata": Array [],
+    "summary": "",
+    "url": "",
+  },
+]
+`;

@@ -220,6 +220,7 @@ export namespace FaaSMetadata {
   export interface TriggerMetadata {
     type: ServerlessTriggerType;
     functionName?: string;
+    handlerName?: string;
     methodName?: string,
     metadata: EventTriggerUnionOptions;
   }

@@ -39,6 +39,7 @@ export {
   MidwayWebRouterService,
   WebRouterCollector,
 } from './service/webRouterService';
+export { MidwayServerlessFunctionService } from './service/slsFunctionService';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './common/serviceFactory';
