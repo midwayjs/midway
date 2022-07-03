@@ -1,4 +1,11 @@
-import { Config, Init, Provide, Scope, Inject, ScopeEnum } from '@midwayjs/decorator';
+import {
+  Config,
+  Init,
+  Provide,
+  Scope,
+  Inject,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import { DataSourceManager } from '@midwayjs/core';
 import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
 
