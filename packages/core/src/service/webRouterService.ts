@@ -1,5 +1,4 @@
 import {
-  bindContainer,
   CONTROLLER_KEY,
   ControllerOption,
   FaaSMetadata,
@@ -26,9 +25,6 @@ import {
   MidwayDuplicateRouteError,
 } from '../error';
 import * as util from 'util';
-import { getCurrentMainFramework } from '../util/contextUtil';
-import { MidwayContainer } from '../context/container';
-import { DirectoryFileDetector } from '../common/fileDetector';
 
 const debug = util.debuglog('midway:debug');
 
@@ -457,56 +453,5 @@ export class MidwayWebRouterService {
       );
     }
     prefixList.push(routerInfo);
-  }
-}
-
-/**
- * @deprecated use built-in MidwayWebRouterService first
- */
-export class WebRouterCollector {
-  private baseDir: string;
-  private options: RouterCollectorOptions;
-  private proxy: MidwayWebRouterService;
-
-  constructor(baseDir = '', options: RouterCollectorOptions = {}) {
-    this.baseDir = baseDir;
-    this.options = options;
-  }
-
-  protected async init() {
-    if (!this.proxy) {
-      if (this.baseDir) {
-        const container = new MidwayContainer();
-        bindContainer(container);
-        container.setFileDetector(
-          new DirectoryFileDetector({
-            loadDir: this.baseDir,
-          })
-        );
-        await container.ready();
-      }
-      if (getCurrentMainFramework()) {
-        this.proxy = await getCurrentMainFramework()
-          .getApplicationContext()
-          .getAsync(MidwayWebRouterService, [this.options]);
-      } else {
-        this.proxy = new MidwayWebRouterService(this.options);
-      }
-    }
-  }
-
-  async getRoutePriorityList(): Promise<RouterPriority[]> {
-    await this.init();
-    return this.proxy.getRoutePriorityList();
-  }
-
-  async getRouterTable(): Promise<Map<string, RouterInfo[]>> {
-    await this.init();
-    return this.proxy.getRouterTable();
-  }
-
-  async getFlattenRouterTable(): Promise<RouterInfo[]> {
-    await this.init();
-    return this.proxy.getFlattenRouterTable();
   }
 }

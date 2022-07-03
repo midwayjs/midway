@@ -5,7 +5,6 @@
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/bootstrap": "^3.4.0-beta.3",
-    "@midwayjs/core": "^3.4.0-beta.3",
     "@midwayjs/faas": "^3.4.0-beta.3",
     "@midwayjs/faas-typings": "^3.3.5",
     "@midwayjs/gateway-common-http": "^1.2.41",
@@ -14,6 +13,7 @@
     "express": "4.17.3"
   },
   "devDependencies": {
+    "@midwayjs/core": "^3.4.0-beta.3",
     "@midwayjs/decorator": "^3.4.0-beta.3",
     "@midwayjs/faas-middleware-upload": "0.0.7",
     "@midwayjs/mock": "^3.4.0-beta.3",

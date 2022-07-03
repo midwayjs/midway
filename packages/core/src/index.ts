@@ -37,9 +37,11 @@ export {
   RouterPriority,
   RouterCollectorOptions,
   MidwayWebRouterService,
-  WebRouterCollector,
 } from './service/webRouterService';
-export { MidwayServerlessFunctionService } from './service/slsFunctionService';
+export {
+  MidwayServerlessFunctionService,
+  WebRouterCollector,
+} from './service/slsFunctionService';
 export { DataSourceManager } from './common/dataSourceManager';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
