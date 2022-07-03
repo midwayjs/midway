@@ -5,7 +5,10 @@ export const grpc = {
     {
       url: 'localhost:6565',
       protoPath: join(__dirname, '../../../proto/helloworld.proto'),
-      package: 'helloworld'
+      package: 'helloworld',
+      clientOptions: {
+        'grpc.keepalive_time_ms': 5000,
+      }
     }
   ]
 }
