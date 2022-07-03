@@ -208,8 +208,9 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
       requestMethod: triggerOptions.metadata['method'] || '',
       description: '',
       summary: '',
-      handlerName: functionOptions.handlerName,
-      funcHandlerName: '',
+      handlerName: '',
+      funcHandlerName:
+        triggerOptions.handlerName || functionOptions.handlerName,
       controllerId: '',
       middleware: triggerOptions.metadata?.middleware || [],
       controllerMiddleware: [],

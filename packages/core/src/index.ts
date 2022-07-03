@@ -40,10 +40,10 @@ export {
   WebRouterCollector,
 } from './service/webRouterService';
 export { MidwayServerlessFunctionService } from './service/slsFunctionService';
+export { DataSourceManager } from './common/dataSourceManager';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './common/serviceFactory';
-export * from './common/dataSourceManager';
 export * from './common/dataListener';
 export * from './common/fileDetector';
 export * from './common/webGenerator';

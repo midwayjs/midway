@@ -3,6 +3,7 @@ import {
   Config,
   Init,
   Scope,
+  Inject,
   ScopeEnum,
   ApplicationContext,
 } from '@midwayjs/decorator';
@@ -18,9 +19,12 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
   @ApplicationContext()
   applicationContext: IMidwayContainer;
 
+  @Inject()
+  baseDir: string;
+
   @Init()
   async init() {
-    await this.initDataSource(this.typeormConfig);
+    await this.initDataSource(this.typeormConfig, this.baseDir);
   }
 
   getName(): string {

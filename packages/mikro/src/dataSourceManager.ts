@@ -1,4 +1,4 @@
-import { Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Config, Init, Provide, Scope, Inject, ScopeEnum } from '@midwayjs/decorator';
 import { DataSourceManager } from '@midwayjs/core';
 import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
 
@@ -10,9 +10,12 @@ export class MikroDataSourceManager extends DataSourceManager<
   @Config('mikro')
   mikroConfig;
 
+  @Inject()
+  baseDir: string;
+
   @Init()
   async init() {
-    await this.initDataSource(this.mikroConfig);
+    await this.initDataSource(this.mikroConfig, this.baseDir);
   }
 
   getName(): string {

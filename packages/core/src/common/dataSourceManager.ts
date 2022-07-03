@@ -3,20 +3,40 @@
  */
 import { extend } from '../util/extend';
 import { MidwayParameterError } from '../error';
+import { run } from '@midwayjs/glob';
+import { join } from 'path';
+import { Types } from '@midwayjs/decorator';
+
+const DEFAULT_PATTERN = ['**/**.ts', '**/**.js'];
 
 export abstract class DataSourceManager<T> {
   protected dataSource: Map<string, T> = new Map();
   protected options = {};
 
-  protected async initDataSource(options: any = {}): Promise<void> {
+  protected async initDataSource(options: any, appDir: string): Promise<void> {
     this.options = options;
     if (options.dataSource) {
       for (const dataSourceName in options.dataSource) {
+        const dataSourceOptions = options.dataSource[dataSourceName];
+        if (dataSourceOptions['entities']) {
+          const entities = new Set();
+          // loop entities and glob files to model
+          for (const entity of dataSourceOptions['entities']) {
+            if (typeof entity === 'string') {
+              // string will be glob file
+              const models = globModels(entity, appDir);
+              for (const model of models) {
+                entities.add(model);
+              }
+            } else {
+              // model will be add to array
+              entities.add(entity);
+            }
+          }
+          dataSourceOptions['entities'] = Array.from(entities);
+        }
         // create data source
-        await this.createInstance(
-          options.dataSource[dataSourceName],
-          dataSourceName
-        );
+        await this.createInstance(dataSourceOptions, dataSourceName);
       }
     } else {
       throw new MidwayParameterError(
@@ -77,5 +97,29 @@ export abstract class DataSourceManager<T> {
     for (const value of this.dataSource.values()) {
       await this.destroyDataSource(value);
     }
+    this.dataSource.clear();
   }
+}
+
+export function globModels(globString: string, appDir: string) {
+  const cwd = join(appDir, globString);
+  const models = [];
+  // string will be glob file
+  const files = run(DEFAULT_PATTERN, {
+    cwd,
+  });
+  for (const file of files) {
+    const exports = require(file);
+    if (Types.isClass(exports)) {
+      models.push(exports);
+    } else {
+      for (const m in exports) {
+        const module = exports[m];
+        if (Types.isClass(module)) {
+          models.push(module);
+        }
+      }
+    }
+  }
+  return models;
 }

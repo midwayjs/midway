@@ -4,6 +4,7 @@ import {
   Logger,
   Provide,
   Scope,
+  Inject,
   ScopeEnum,
   listModule,
 } from '@midwayjs/decorator';
@@ -19,6 +20,9 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
   @Logger('coreLogger')
   coreLogger: ILogger;
 
+  @Inject()
+  baseDir: string;
+
   @Init()
   async init() {
     if (this.sequelizeConfig.options) {
@@ -31,7 +35,7 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
         default: this.sequelizeConfig.options,
       };
     }
-    await this.initDataSource(this.sequelizeConfig);
+    await this.initDataSource(this.sequelizeConfig, this.baseDir);
   }
 
   getName(): string {
