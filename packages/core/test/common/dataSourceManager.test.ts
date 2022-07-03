@@ -66,6 +66,9 @@ describe('test/common/dataSourceManager.test.ts', () => {
 
     expect(await instance.isConnected('default')).toBeFalsy();
 
+    expect(instance.getDataSourceNameByModel(EntityB)).toEqual('default');
+    expect(instance.getDataSourceNameByModel(EntityA)).toEqual('test');
+
     await instance.stop();
     expect(instance.getDataSourceNames()).toEqual([]);
   });

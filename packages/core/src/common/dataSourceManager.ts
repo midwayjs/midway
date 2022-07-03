@@ -12,6 +12,7 @@ const DEFAULT_PATTERN = ['**/**.ts', '**/**.js'];
 export abstract class DataSourceManager<T> {
   protected dataSource: Map<string, T> = new Map();
   protected options = {};
+  protected modelMapping = new WeakMap();
 
   protected async initDataSource(options: any, appDir: string): Promise<void> {
     this.options = options;
@@ -27,10 +28,12 @@ export abstract class DataSourceManager<T> {
               const models = globModels(entity, appDir);
               for (const model of models) {
                 entities.add(model);
+                this.modelMapping.set(model, dataSourceName);
               }
             } else {
               // model will be add to array
               entities.add(entity);
+              this.modelMapping.set(entity, dataSourceName);
             }
           }
           dataSourceOptions['entities'] = Array.from(entities);
@@ -83,6 +86,14 @@ export abstract class DataSourceManager<T> {
       }
       return client;
     }
+  }
+
+  /**
+   * get data source name by model or repository
+   * @param modelOrRepository
+   */
+  public getDataSourceNameByModel(modelOrRepository: any): string | undefined {
+    return this.modelMapping.get(modelOrRepository);
   }
 
   public abstract getName(): string;

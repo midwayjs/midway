@@ -36,7 +36,10 @@ function annotate(target, options: any = {}) {
 
 export const ENTITY_MODEL_KEY = 'sequelize:entity_model_key';
 
-export function InjectRepository(modelKey: any, connectionName = 'default') {
+export function InjectRepository(
+  modelKey: { new (): Model<any, any> },
+  connectionName?: string
+) {
   return createCustomPropertyDecorator(ENTITY_MODEL_KEY, {
     modelKey,
     connectionName,

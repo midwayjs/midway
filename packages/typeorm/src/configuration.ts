@@ -7,7 +7,7 @@ import {
 import { App, Configuration, Init, Inject } from '@midwayjs/decorator';
 import { ORM_MODEL_KEY } from './decorator';
 import { TypeORMDataSourceManager } from './dataSourceManager';
-import { useContainer } from 'typeorm';
+import { useContainer, EntityTarget } from 'typeorm';
 
 @Configuration({
   importConfigs: [
@@ -35,12 +35,15 @@ export class OrmConfiguration implements ILifeCycle {
       (
         propertyName,
         meta: {
-          modelKey: string;
-          connectionName: string;
+          modelKey: EntityTarget<unknown>;
+          connectionName?: string;
         }
       ) => {
         return this.dataSourceManager
-          .getDataSource(meta.connectionName)
+          .getDataSource(
+            meta.connectionName ||
+              this.dataSourceManager.getDataSourceNameByModel(meta.modelKey)
+          )
           .getRepository(meta.modelKey);
       }
     );

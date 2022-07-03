@@ -7,6 +7,7 @@ import {
 import { App, Configuration, Init, Inject } from '@midwayjs/decorator';
 import { ENTITY_MODEL_KEY } from './decorator';
 import { MikroDataSourceManager } from './dataSourceManager';
+import { EntityName } from '@mikro-orm/core';
 
 @Configuration({
   importConfigs: [
@@ -34,12 +35,15 @@ export class MikroConfiguration implements ILifeCycle {
       (
         propertyName,
         meta: {
-          modelKey: string;
-          connectionName: string;
+          modelKey: EntityName<any>;
+          connectionName?: string;
         }
       ) => {
         return this.dataSourceManager
-          .getDataSource(meta.connectionName)
+          .getDataSource(
+            meta.connectionName ||
+              this.dataSourceManager.getDataSourceNameByModel(meta.modelKey)
+          )
           .em.getRepository(meta.modelKey);
       }
     );
