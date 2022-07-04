@@ -1,4 +1,3 @@
-
 export interface CodeDyeOptions {
   enable: boolean;
   matchHeaderKey: string;
