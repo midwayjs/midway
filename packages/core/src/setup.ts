@@ -26,6 +26,7 @@ import {
 import * as util from 'util';
 import { join } from 'path';
 import { loggers } from '@midwayjs/logger';
+import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 const debug = util.debuglog('midway:debug');
 
 /**
@@ -141,6 +142,7 @@ export function prepareGlobalApplicationContext(
   applicationContext.bindClass(MidwayLifeCycleService);
   applicationContext.bindClass(MidwayMockService);
   applicationContext.bindClass(MidwayWebRouterService);
+  applicationContext.bindClass(MidwayServerlessFunctionService);
 
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {

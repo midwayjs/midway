@@ -35,3 +35,24 @@ Object {
   "port": "3306",
 }
 `;
+
+exports[`test/common/dataSourceManager.test.ts should test with glob model 1`] = `
+Object {
+  "dialect": "mysql",
+  "entities": Array [
+    [Function],
+    [Function],
+    [Function],
+    [Function],
+    [Function],
+  ],
+  "entitiesLength": 5,
+  "host": "localhost",
+  "pool": Object {
+    "idle": 10000,
+    "max": 5,
+    "min": 0,
+  },
+  "port": "3306",
+}
+`;

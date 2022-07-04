@@ -2,6 +2,7 @@ import { Config, Configuration, Init, Inject } from '@midwayjs/decorator';
 import { SequelizeDataSourceManager } from './dataSourceManager';
 import { IMidwayContainer, MidwayDecoratorService } from '@midwayjs/core';
 import { ENTITY_MODEL_KEY } from './decorator';
+import { Model } from 'sequelize-typescript';
 
 @Configuration({
   namespace: 'sequelize',
@@ -29,13 +30,16 @@ export class SequelizeConfiguration {
       (
         propertyName,
         meta: {
-          modelKey: string;
-          connectionName: string;
+          modelKey: { new (): Model<any, any> };
+          connectionName?: string;
         }
       ) => {
         return this.dataSourceManager
-          .getDataSource(meta.connectionName)
-          .getRepository(meta.modelKey as any);
+          .getDataSource(
+            meta.connectionName ||
+              this.dataSourceManager.getDataSourceNameByModel(meta.modelKey)
+          )
+          .getRepository(meta.modelKey);
       }
     );
   }
