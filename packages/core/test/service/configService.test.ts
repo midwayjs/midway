@@ -106,12 +106,29 @@ describe('/test/service/configService.test.ts', () => {
 
   it('invalid config', async () => {
     const cfg: any = await createConfigService()
-    const configFile = resolve(join(__dirname, './fixtures/invalid_case', 'config.default'));
+    let configFile = resolve(join(__dirname, './fixtures/invalid_case', 'case1.fail'));
+    let err;
     try {
       await cfg.loadConfig(configFile);
     } catch (error) {
-      expect(error).toBeInstanceOf(MidwayInvalidConfigError)
+      err = error;
     }
+    expect(err).toBeInstanceOf(MidwayInvalidConfigError)
+
+    configFile = resolve(join(__dirname, './fixtures/invalid_case', 'case2.ok'));
+    await cfg.loadConfig(configFile);
+
+    configFile = resolve(join(__dirname, './fixtures/invalid_case', 'case3.ok'));
+    await cfg.loadConfig(configFile);
+
+    configFile = resolve(join(__dirname, './fixtures/invalid_case', 'case4.ok'));
+    await cfg.loadConfig(configFile);
+
+    configFile = resolve(join(__dirname, './fixtures/invalid_case', 'case5.ok'));
+    await cfg.loadConfig(configFile);
+
+    configFile = resolve(join(__dirname, './fixtures/invalid_case', 'case6.ok'));
+    await cfg.loadConfig(configFile);
   })
 
   it('should compatible old production', async () => {

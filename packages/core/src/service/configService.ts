@@ -202,13 +202,18 @@ export class MidwayConfigService implements IConfigService {
         ? require(configFilename)
         : configFilename;
 
-    if (exports && exports.default) {
-      if (Object.keys(exports).length > 1) {
-        throw new MidwayInvalidConfigError(
-          `${configFilename} should not have both a default export and named export`
-        );
+    // if es module
+    if (exports && exports.__esModule) {
+      if (exports && exports.default) {
+        if (Object.keys(exports).length > 1) {
+          throw new MidwayInvalidConfigError(
+            `${configFilename} should not have both a default export and named export`
+          );
+        }
+        exports = exports.default;
       }
-      exports = exports.default;
+    } else {
+      console.log(exports);
     }
 
     return exports;
