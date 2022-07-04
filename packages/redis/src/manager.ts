@@ -40,9 +40,8 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
 
       config.nodes.forEach(client => {
         assert(
-          client.host &&
-            client.port &&
-            `[midway:redis] 'host: ${client.host}', 'port: ${client.port}' are required on config`
+          client.host && client.port,
+          `[midway:redis] 'host: ${client.host}', 'port: ${client.port}' are required on config`
         );
       });
       this.logger.info('[midway:redis] cluster connecting');
