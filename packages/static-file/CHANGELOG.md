@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.4](https://github.com/midwayjs/midway/compare/v3.4.0-beta.3...v3.4.0-beta.4) (2022-07-04)
+
+
+### Bug Fixes
+
+* return buffer in serverless environment ([#2085](https://github.com/midwayjs/midway/issues/2085)) ([ef4f70a](https://github.com/midwayjs/midway/commit/ef4f70ac20f8c7dc05165947114349aa991eda56))
+
+
+
+
+
 ## [3.3.9](https://github.com/midwayjs/midway/compare/v3.3.8...v3.3.9) (2022-05-25)
 
 **Note:** Version bump only for package @midwayjs/static-file

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mock",
-  "version": "3.4.0-beta.3",
+  "version": "3.4.0-beta.4",
   "description": "create your test app from midway framework",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -26,15 +26,15 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.4.0-beta.3",
-    "@midwayjs/decorator": "^3.4.0-beta.3",
+    "@midwayjs/core": "^3.4.0-beta.4",
+    "@midwayjs/decorator": "^3.4.0-beta.4",
     "@midwayjs/logger": "^2.15.0",
     "@types/amqplib": "0.8.2",
     "amqplib": "0.10.0",
+    "kafkajs": "1.16.0",
     "socket.io": "4.4.1",
     "socket.io-client": "4.4.1",
-    "ws": "8.5.0",
-    "kafkajs": "1.16.0"
+    "ws": "8.5.0"
   },
   "dependencies": {
     "@types/supertest": "2.0.12",

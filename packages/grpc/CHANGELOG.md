@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.4](https://github.com/midwayjs/midway/compare/v3.4.0-beta.3...v3.4.0-beta.4) (2022-07-04)
+
+
+### Bug Fixes
+
+* missing client options in grpc ([#2087](https://github.com/midwayjs/midway/issues/2087)) ([be99f10](https://github.com/midwayjs/midway/commit/be99f10f20084932663f76e34e3fb9e55ebaa71e))
+
+
+
+
+
 ## [3.3.10](https://github.com/midwayjs/midway/compare/v3.3.9...v3.3.10) (2022-05-26)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.4](https://github.com/midwayjs/midway/compare/v3.4.0-beta.3...v3.4.0-beta.4) (2022-07-04)
+
+
+### Features
+
+* add kafka ([#2062](https://github.com/midwayjs/midway/issues/2062)) ([a83003b](https://github.com/midwayjs/midway/commit/a83003bf0db86d640b60e45ee6cbf71e656008a0))
+
+
+
+
+
 ## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
 
 **Note:** Version bump only for package @midwayjs/mock
