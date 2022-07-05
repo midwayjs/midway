@@ -1,30 +1,27 @@
 # @midwayjs/task
 
 ## 简介
-midwayjs/task是为了能解决任务系列的模块，例如分布式定时任务、延迟任务调度。例如订单2小时后失效、每日定时的数据处理等工作。
+
+midwayjs/task 是为了能解决任务系列的模块，例如分布式定时任务、延迟任务调度。例如订单 2 小时后失效、每日定时的数据处理等工作。
 
 ## 安装方法
 
 ```bash
-tnpm install @midwayjs/task -S
+npm install @midwayjs/task -S
 ```
 
 ## 使用方法
 
-在Configuration.ts导入子组件
+在 Configuration.ts 导入子组件
 
 ```typescript
-
 import * as task from '@midwayjs/task';
 
 @Configuration({
   imports: [task],
-  importConfigs: [
-    join(__dirname, 'config')
-  ]
+  importConfigs: [join(__dirname, 'config')],
 })
-export class AutoConfiguration{
-}
+export class AutoConfiguration {}
 ```
 
 配置：
@@ -37,10 +34,10 @@ export const taskConfig = {
   prefix: 'midway-task',
   defaultJobOptions: {
     repeat: {
-      tz: "Asia/Shanghai"
-    }
-  }
-}
+      tz: 'Asia/Shanghai',
+    },
+  },
+};
 ```
 
 ## 业务代码编写方式
@@ -55,10 +52,10 @@ export class UserService {
 
   // 例如下面是每分钟执行一次，并且是分布式任务
   @Task({
-    repeat: { cron: '* * * * *'}
+    repeat: { cron: '* * * * *' },
   })
-  async test(){
-    console.log(this.helloService.getName())
+  async test() {
+    console.log(this.helloService.getName());
   }
 }
 ```
@@ -73,8 +70,8 @@ export class UserService {
 
   // 例如下面是每分钟执行一次
   @TaskLocal('* * * * *')
-  async test(){
-    console.log(this.helloService.getName())
+  async test() {
+    console.log(this.helloService.getName());
   }
 }
 ```
@@ -89,8 +86,8 @@ export class UserService {
 
   // 例如下面是每分钟执行一次
   @TaskLocal('* * * * *')
-  async test(){
-    console.log(this.helloService.getName())
+  async test() {
+    console.log(this.helloService.getName());
   }
 }
 ```
@@ -98,15 +95,13 @@ export class UserService {
 让用户定义任务
 
 ```typescript
-
 @Queue()
 @Provide()
-export class HelloTask{
-
+export class HelloTask {
   @Inject()
   service;
 
-  async execute(params){
+  async execute(params) {
     console.log(params);
   }
 }
@@ -114,25 +109,26 @@ export class HelloTask{
 
 ```typescript
 import { QueueService } from '@midwayjs/task';
-@Provide()
-export class UserTask{
 
+@Provide()
+export class UserTask {
   @Inject()
   service;
 
   @Inject()
   queueService: QueueService;
 
-  async execute(params){
+  async execute(params) {
     // 3秒后触发分布式任务调度。
-    const xxx = this.queueService.execute(HelloTask, params, {delay: 3000});
+    const xxx = this.queueService.execute(HelloTask, params, { delay: 3000 });
   }
 }
-
 ```
+
 ## 其他
 
-关于task任务的配置：
+关于 task 任务的配置：
+
 ```
 *    *    *    *    *    *
 ┬    ┬    ┬    ┬    ┬    ┬

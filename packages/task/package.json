@@ -28,12 +28,12 @@
     "@midwayjs/koa": "^3.4.0-beta.4",
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/mock": "^3.4.0-beta.4",
-    "@types/bull": "3.15.8",
     "@types/cron": "1.7.3"
   },
   "dependencies": {
     "bull": "^4.0.0",
-    "cron": "^1.8.2"
+    "cron": "^1.8.2",
+    "@types/bull": "3.15.8"
   },
   "engines": {
     "node": ">=12"
