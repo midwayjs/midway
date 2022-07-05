@@ -4,7 +4,7 @@ import {
   MODULE_TASK_TASK_LOCAL_OPTIONS,
 } from '../../constant';
 
-export function TaskLocal(options) {
+export function TaskLocal(options): MethodDecorator {
   return function (
     target: any,
     propertyKey: string,

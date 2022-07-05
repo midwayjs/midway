@@ -1,7 +1,7 @@
 import { saveModule, attachClassMetadata } from '../../';
 import { MODULE_TASK_KEY, MODULE_TASK_METADATA } from '../../constant';
 
-export function Task(options) {
+export function Task(options): MethodDecorator {
   return function (
     target: any,
     propertyKey: string,
