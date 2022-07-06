@@ -212,8 +212,6 @@ export class MidwayConfigService implements IConfigService {
         }
         exports = exports.default;
       }
-    } else {
-      console.log(exports);
     }
 
     return exports;

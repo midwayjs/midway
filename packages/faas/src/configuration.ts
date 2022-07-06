@@ -70,7 +70,9 @@ export class FaaSConfiguration {
 
   async onServerReady() {
     if (!this.framework.isEnable()) {
+      // just in legacy local dev and test
       await this.framework.run();
     }
+    await this.framework.loadFunction();
   }
 }

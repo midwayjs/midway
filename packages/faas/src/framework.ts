@@ -11,7 +11,6 @@ import {
   ContextMiddlewareManager,
   FunctionMiddleware,
   IMidwayBootstrapOptions,
-  initializeGlobalApplicationContext,
   MidwayEnvironmentService,
   MidwayFrameworkType,
   MidwayMiddlewareService,
@@ -61,6 +60,8 @@ export class MidwayFaaSFramework extends BaseFramework<
   private serverlessFunctionService: MidwayServerlessFunctionService;
   protected httpMiddlewareManager = this.createMiddlewareManager();
   protected eventMiddlewareManager = this.createMiddlewareManager();
+  private legacyVersion = false;
+  private loadedFunction = false;
 
   @Inject()
   environmentService: MidwayEnvironmentService;
@@ -88,6 +89,11 @@ export class MidwayFaaSFramework extends BaseFramework<
     }
     this.applicationAdapter =
       this.configurationOptions.applicationAdapter || ({} as any);
+
+    if (this.applicationAdapter.getApplication) {
+      this.legacyVersion = true;
+    }
+
     this.app =
       this.applicationAdapter.getApplication?.() ||
       (new HttpApplication() as unknown as Application);
@@ -153,29 +159,38 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   public async run() {
-    return this.lock.sureOnce(async () => {
-      // set app keys
-      this.app['keys'] = this.configService.getConfiguration('keys') ?? '';
-      // store all http function entry
-      this.serverlessFunctionService = await this.applicationContext.getAsync(
-        MidwayServerlessFunctionService
-      );
-      const functionList =
-        await this.serverlessFunctionService.getFunctionList();
-      for (const funcInfo of functionList) {
-        // store handler
-        this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
-        if (funcInfo.url) {
-          // store router
-          this.serverlessRoutes.push({
-            matchPattern: pathToRegexp(funcInfo.url, [], { end: false }),
-            funcInfo: funcInfo,
-          });
-        }
-      }
+    if (this.legacyVersion) {
+      return this.loadFunction();
+    }
+  }
 
-      this.respond = this.app.callback();
-    }, LOCK_KEY);
+  public async loadFunction() {
+    if (!this.loadedFunction) {
+      this.loadedFunction = true;
+      return this.lock.sureOnce(async () => {
+        // set app keys
+        this.app['keys'] = this.configService.getConfiguration('keys') ?? '';
+        // store all http function entry
+        this.serverlessFunctionService = await this.applicationContext.getAsync(
+          MidwayServerlessFunctionService
+        );
+        const functionList =
+          await this.serverlessFunctionService.getFunctionList();
+        for (const funcInfo of functionList) {
+          // store handler
+          this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
+          if (funcInfo.url) {
+            // store router
+            this.serverlessRoutes.push({
+              matchPattern: pathToRegexp(funcInfo.url, [], { end: false }),
+              funcInfo: funcInfo,
+            });
+          }
+        }
+
+        this.respond = this.app.callback();
+      }, LOCK_KEY);
+    }
   }
 
   public getFrameworkType(): MidwayFrameworkType {
@@ -421,39 +436,46 @@ export class MidwayFaaSFramework extends BaseFramework<
     args,
     isHttpFunction: boolean
   ) {
-    const funModule = await context.requestContext.getAsync(
-      routerInfo.controllerId
-    );
-    const handlerName =
-      this.getFunctionHandler(context, args, funModule, routerInfo.method) ||
-      this.defaultHandlerMethod;
-    if (funModule[handlerName]) {
-      // invoke real method
-      const result = await funModule[handlerName](...args);
-      // implement response decorator
-      const routerResponseData = routerInfo.responseMetadata;
-      if (isHttpFunction) {
-        for (const routerRes of routerResponseData) {
-          switch (routerRes.type) {
-            case WEB_RESPONSE_HTTP_CODE:
-              context.status = routerRes.code;
-              break;
-            case WEB_RESPONSE_HEADER:
-              for (const key in routerRes?.setHeaders || {}) {
-                context.set(key, routerRes.setHeaders[key]);
-              }
-              break;
-            case WEB_RESPONSE_CONTENT_TYPE:
-              context.type = routerRes.contentType;
-              break;
-            case WEB_RESPONSE_REDIRECT:
-              context.status = routerRes.code;
-              context.redirect(routerRes.url);
-              return;
+    if (typeof routerInfo.method !== 'string') {
+      if (!isHttpFunction) {
+        args.unshift(context);
+      }
+      return routerInfo.method(...args);
+    } else {
+      const funModule = await context.requestContext.getAsync(
+        routerInfo.controllerId
+      );
+      const handlerName =
+        this.getFunctionHandler(context, args, funModule, routerInfo.method) ||
+        this.defaultHandlerMethod;
+      if (funModule[handlerName]) {
+        // invoke real method
+        const result = await funModule[handlerName](...args);
+        // implement response decorator
+        const routerResponseData = routerInfo.responseMetadata;
+        if (isHttpFunction) {
+          for (const routerRes of routerResponseData) {
+            switch (routerRes.type) {
+              case WEB_RESPONSE_HTTP_CODE:
+                context.status = routerRes.code;
+                break;
+              case WEB_RESPONSE_HEADER:
+                for (const key in routerRes?.setHeaders || {}) {
+                  context.set(key, routerRes.setHeaders[key]);
+                }
+                break;
+              case WEB_RESPONSE_CONTENT_TYPE:
+                context.type = routerRes.contentType;
+                break;
+              case WEB_RESPONSE_REDIRECT:
+                context.status = routerRes.code;
+                context.redirect(routerRes.url);
+                return;
+            }
           }
         }
+        return result;
       }
-      return result;
     }
   }
 
@@ -515,15 +537,3 @@ export class MidwayFaaSFramework extends BaseFramework<
     return Array.from(this.funMappingStore.keys());
   }
 }
-
-export const createModuleServerlessFramework = async (
-  globalOption: Omit<IMidwayBootstrapOptions, 'applicationContext'> &
-    IFaaSConfigurationOptions
-) => {
-  const applicationContext = await initializeGlobalApplicationContext({
-    ...globalOption,
-    baseDir: '',
-    appDir: '',
-  });
-  return applicationContext.get(MidwayFaaSFramework);
-};

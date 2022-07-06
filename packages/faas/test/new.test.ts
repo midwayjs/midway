@@ -260,4 +260,28 @@ describe('test/new.test.ts', () => {
 
     await closeApp(starter);
   });
+
+  it('should test dynamic function', async () => {
+    const starter = await createNewStarter('base-app-dynamic-function');
+
+    let result = await createHttpRequest(starter)
+      .get('/api/user')
+      .query({
+        name: 'zhangting',
+      });
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world,zhangting');
+
+    const handler = await starter.getTriggerFunction('event.handler');
+    result = await handler({}, {
+      isHttpFunction: false,
+      originEvent: {
+        text: 'zhangting',
+      },
+      originContext: {}
+    });
+    expect(result).toEqual('zhangtinghello world');
+
+    await closeApp(starter);
+  });
 });
