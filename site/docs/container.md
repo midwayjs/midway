@@ -776,10 +776,22 @@ export class AutoConfiguration {
 
 
 
-### 动态获取服务等实例
-
+### 动态获取实例
 
 拿到 **依赖注入容器 **或者 **请求链路的依赖 **注入容器之后，才可以通过容器的 API 获取到对象。
+
+我们可以使用标准的依赖注入容器 API 来获取实例。
+
+```typescript
+// 全局容器，获取的是单例
+const userSerivce = await applicationContext.getAsync(UserService);
+
+// 请求作用域容器，获取请求作用域实例
+const userSerivce = await ctx.requestContext.getAsync(UserService);
+```
+
+我们可以在任意能获取依赖注入容器的地方使用，比如中间件中。
+
 ```typescript
 import { Middleware, ApplicationContext } from '@midwayjs/decorator';
 import { NextFunction, Context } from '@midwayjs/koa';
@@ -824,6 +836,35 @@ export class ReportMiddleware implements IMiddleware<Context, Response, NextFunc
   }
 }
 ```
+
+
+
+### 传递构造器参数
+
+在个别场景下，我们可以通过 `getAsync` 获取实例的时候，传递构造器的参数。普通装饰器模式无法做到，仅在 API 形式下可用。
+
+```typescript
+@Provide()
+class UserService {
+  constructor(private readonly type) {}
+  
+  getUser() {
+    // this.type => student
+  }
+}
+
+// 全局容器，获取的是单例
+const userSerivce = await applicationContext.getAsync(UserService, [
+  'student', // 构造器参数，会 apply 到构造器中
+]);
+
+// 请求作用域容器，获取请求作用域实例
+const userSerivce = await ctx.requestContext.getAsync(UserService, [
+  'student'
+]);
+```
+
+注意，构造器不能使用注入形式传递实例，只能传递固定的值。
 
 
 

@@ -60,7 +60,7 @@ export class ContainerLifeCycle {
 
 
 
-### 2、对象形式加载（推荐）
+### 2、对象形式加载
 
 从 Midway v3 开始，我们将以标准的对象加载方式作为主推的配置引入形式。
 
