@@ -397,4 +397,12 @@ describe('/test/feature.test.ts', () => {
     expect(result2.text).toEqual('{"code":0,"msg":"ok","data":null}');
     await closeApp(app);
   });
+
+  it('should test add dynamic router', async () => {
+    const app = await creatApp('base-app-dynamic-router');
+    const result = await createHttpRequest(app)
+      .get('/api/user');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world123');
+  });
 });

@@ -106,13 +106,7 @@ export interface RouterInfo {
 
 export type DynamicRouterInfo = Omit<
   RouterInfo,
-  | 'id'
-  | 'url'
-  | 'prefix'
-  | 'method'
-  | 'controllerId'
-  | 'controllerMiddleware'
-  | 'responseMetadata'
+  'id' | 'method' | 'controllerId' | 'controllerMiddleware' | 'responseMetadata'
 >;
 
 export interface RouterPriority {
@@ -325,15 +319,27 @@ export class MidwayWebRouterService {
    * @param routerInfoOption
    */
   public addRouter(
-    routerPath: string | RegExp,
     routerFunction: (...args) => void,
     routerInfoOption: DynamicRouterInfo
   ) {
+    const prefix = routerInfoOption.prefix || '';
+
+    if (!this.routes.has(prefix)) {
+      this.routes.set(prefix, []);
+      this.routesPriority.push({
+        prefix,
+        priority: -999,
+        middleware: [],
+        routerOptions: {},
+        controllerId: undefined,
+        routerModule: undefined,
+      });
+    }
+
     this.checkDuplicateAndPush(
-      '/',
+      prefix,
       Object.assign(routerInfoOption, {
         method: routerFunction,
-        url: routerPath,
       })
     );
   }

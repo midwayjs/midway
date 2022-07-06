@@ -165,7 +165,10 @@ export abstract class WebControllerGenerator<
 
         // apply controller from request context
         // eslint-disable-next-line prefer-spread
-        newRouter[routeInfo.requestMethod].apply(newRouter, routerArgs);
+        newRouter[routeInfo.requestMethod.toLowerCase()].apply(
+          newRouter,
+          routerArgs
+        );
       }
 
       routerHandler && routerHandler(newRouter);
