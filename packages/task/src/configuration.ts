@@ -15,7 +15,7 @@ export class TaskConfiguration implements ILifeCycle {
   @Inject()
   framework: TaskFramework;
 
-  async onReady() {
+  async onServerReady() {
     await this.framework.loadTask();
     await this.framework.loadLocalTask();
     await this.framework.loadQueue();
