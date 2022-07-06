@@ -46,10 +46,10 @@ export class MongooseDataSourceManager extends DataSourceManager<mongoose.Connec
   }
 
   protected async createDataSource(config: any, name: string) {
-    const connection = await mongoose.createConnection(
+    const connection = (await mongoose.createConnection(
       config.uri,
       config.options
-    );
+    )) as any;
     connection.on('error', err => {
       err.message = `[midway:mongoose] ${err.message}`;
       this.logger.error(err);
