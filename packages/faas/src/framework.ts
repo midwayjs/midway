@@ -15,7 +15,6 @@ import {
   MidwayFrameworkType,
   MidwayMiddlewareService,
   MidwayServerlessFunctionService,
-  pathToRegexp,
   RouterInfo,
 } from '@midwayjs/core';
 import {
@@ -53,7 +52,6 @@ export class MidwayFaaSFramework extends BaseFramework<
   private isReplaceLogger =
     process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
   private developmentRun = false;
-  private serverlessRoutes = [];
   private server: http.Server;
   private respond: (req, res, respond) => void;
   private applicationAdapter: IFaaSConfigurationOptions['applicationAdapter'];
@@ -179,13 +177,6 @@ export class MidwayFaaSFramework extends BaseFramework<
         for (const funcInfo of functionList) {
           // store handler
           this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
-          if (funcInfo.url) {
-            // store router
-            this.serverlessRoutes.push({
-              matchPattern: pathToRegexp(funcInfo.url, [], { end: false }),
-              funcInfo: funcInfo,
-            });
-          }
         }
 
         this.respond = this.app.callback();
@@ -268,15 +259,10 @@ export class MidwayFaaSFramework extends BaseFramework<
     return async (context, options: HandlerOptions) => {
       const isHttpFunction = options.isHttpFunction;
       if (!funOptions && isHttpFunction) {
-        for (const item of this.serverlessRoutes) {
-          if (
-            context.method === item.funcInfo['requestMethod'].toUpperCase() &&
-            item.matchPattern.test(context.path)
-          ) {
-            funOptions = item.funcInfo;
-            break;
-          }
-        }
+        funOptions = await this.serverlessFunctionService.getMatchedRouterInfo(
+          context.path,
+          context.method
+        );
       }
       if (!funOptions) {
         throw new Error(`function handler = ${handlerMapping} not found`);

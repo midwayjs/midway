@@ -25,6 +25,7 @@ import {
   MidwayDuplicateRouteError,
 } from '../error';
 import * as util from 'util';
+import { pathToRegexp } from '../util/pathToRegexp';
 
 const debug = util.debuglog('midway:debug');
 
@@ -102,6 +103,11 @@ export interface RouterInfo {
    * serverless function metadata
    */
   functionMetadata?: any;
+
+  /**
+   * pattern after path-regexp compile
+   */
+  urlCompiledPattern?: RegExp;
 }
 
 export type DynamicRouterInfo = Omit<
@@ -132,6 +138,8 @@ export class MidwayWebRouterService {
   private isReady = false;
   protected routes = new Map<string, RouterInfo[]>();
   protected routesPriority: RouterPriority[] = [];
+  private cachedFlattenRouteList;
+  private includeCompileUrlPattern = false;
 
   constructor(readonly options: RouterCollectorOptions = {}) {}
 
@@ -429,7 +437,26 @@ export class MidwayWebRouterService {
     return this.routes;
   }
 
-  public async getFlattenRouterTable(): Promise<RouterInfo[]> {
+  public async getFlattenRouterTable(
+    options: {
+      compileUrlPattern?: boolean;
+      noCache?: boolean;
+    } = {}
+  ): Promise<RouterInfo[]> {
+    if (this.cachedFlattenRouteList && !options.noCache) {
+      if (options.compileUrlPattern && !this.includeCompileUrlPattern) {
+        this.includeCompileUrlPattern = true;
+        // attach match pattern function
+        for (const item of this.cachedFlattenRouteList) {
+          if (item.url) {
+            item.urlCompiledPattern = pathToRegexp(item.url, [], {
+              end: false,
+            });
+          }
+        }
+      }
+      return this.cachedFlattenRouteList;
+    }
     if (!this.isReady) {
       await this.analyze();
       this.isReady = true;
@@ -438,7 +465,39 @@ export class MidwayWebRouterService {
     for (const routerPriority of this.routesPriority) {
       routeArr = routeArr.concat(this.routes.get(routerPriority.prefix));
     }
+    if (options.compileUrlPattern) {
+      this.includeCompileUrlPattern = true;
+      // attach match pattern function
+      for (const item of routeArr) {
+        item.urlCompiledPattern = pathToRegexp(item.url, [], {
+          end: false,
+        });
+      }
+    }
+    this.cachedFlattenRouteList = routeArr;
     return routeArr;
+  }
+
+  public async getMatchedRouterInfo(
+    routerUrl: string,
+    method: string
+  ): Promise<RouterInfo | undefined> {
+    const routes = await this.getFlattenRouterTable({
+      compileUrlPattern: true,
+    });
+    let matchedRouterInfo;
+    for (const item of routes) {
+      if (item.urlCompiledPattern) {
+        if (
+          method.toUpperCase() === item['requestMethod'].toUpperCase() &&
+          item.urlCompiledPattern.test(routerUrl)
+        ) {
+          matchedRouterInfo = item;
+          break;
+        }
+      }
+    }
+    return matchedRouterInfo;
   }
 
   protected checkDuplicateAndPush(prefix, routerInfo: RouterInfo) {

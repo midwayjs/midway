@@ -35,12 +35,19 @@ describe('/test/service/webRouterService.test.ts', function () {
     midwayWebRouterService.addRouter(async (ctx) => {
       return 'hello world';
     }, {
-      url: '/abc/dddd/efg',
+      url: '/abc/dddd/*',
       requestMethod: 'GET',
     });
 
-    const routes1 = await midwayWebRouterService.getFlattenRouterTable();
+    const routes1 = await midwayWebRouterService.getFlattenRouterTable({
+      noCache: true,
+      compileUrlPattern: true,
+    });
     expect(routes1.length).toEqual(15);
+
+    const matchedRouterInfo = await midwayWebRouterService.getMatchedRouterInfo('/abc/ddd/efg', 'GET');
+    delete matchedRouterInfo.id;
+    expect(matchedRouterInfo).toMatchSnapshot();
   });
 
   it('should test duplicate controller prefix and options', async () => {
