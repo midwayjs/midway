@@ -24,8 +24,9 @@ function isEmptyFile(p: string) {
 }
 
 const levelTransform = level => {
+  // egg 自定义日志，不设置 level，默认是 info
   if (!level) {
-    return undefined;
+    return 'info';
   }
   switch (level) {
     case 'NONE':
