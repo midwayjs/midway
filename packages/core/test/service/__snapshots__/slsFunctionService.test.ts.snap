@@ -30,6 +30,7 @@ Array [
     "responseMetadata": Array [],
     "summary": "",
     "url": "/api/hello",
+    "urlCompiledPattern": /\\^\\\\/api\\\\/hello\\(\\?:\\\\/\\(\\?=\\$\\)\\)\\?\\(\\?=\\\\/\\|\\$\\)/i,
   },
   Object {
     "_category": 2,
@@ -58,6 +59,7 @@ Array [
     "responseMetadata": Array [],
     "summary": "",
     "url": "",
+    "urlCompiledPattern": /\\^\\(\\?:\\\\/\\(\\?=\\$\\)\\)\\?\\(\\?=\\\\/\\|\\$\\)/i,
   },
 ]
 `;

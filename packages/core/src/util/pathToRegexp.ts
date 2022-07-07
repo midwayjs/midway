@@ -279,6 +279,12 @@ function tokensToRegExp(tokens, keys, options) {
   return attachKeys(new RegExp('^' + route, flags(options)), keys);
 }
 
+export interface PathToRegexpOptions {
+  end?: boolean;
+  strict?: boolean;
+  delimiter?: string;
+  sensitive?: boolean;
+}
 /**
  * Normalize the given path string, returning a regular expression.
  *
@@ -291,7 +297,16 @@ function tokensToRegExp(tokens, keys, options) {
  * @param  {Object=}               options
  * @return {!RegExp}
  */
-export function pathToRegexp(path, keys, options) {
+export function pathToRegexp(
+  path: string | RegExp | Array<string>,
+  options?: PathToRegexpOptions
+): RegExp;
+export function pathToRegexp(
+  path: string | RegExp | Array<string>,
+  keys: Array<string>,
+  options?: PathToRegexpOptions
+): RegExp;
+export function pathToRegexp(path: any, keys: any, options?: any): RegExp {
   if (!Array.isArray(keys)) {
     options = /** @type {!Object} */ keys || options;
     keys = [];

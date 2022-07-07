@@ -14,3 +14,33 @@ Array [
   },
 ]
 `;
+
+exports[`/test/service/webRouterService.test.ts should test generate router and flatten router 1`] = `
+Object {
+  "_category": 2,
+  "_level": 1,
+  "_paramString": "",
+  "_pureRouter": "/",
+  "_weight": 0,
+  "controllerId": "apiController",
+  "controllerMiddleware": Array [],
+  "description": "",
+  "funcHandlerName": "apiController.home",
+  "handlerName": "apiController.home",
+  "method": "home",
+  "middleware": Array [],
+  "prefix": "/",
+  "requestMetadata": Array [],
+  "requestMethod": "get",
+  "responseMetadata": Array [
+    Object {
+      "code": 201,
+      "type": "web:response_http_code",
+    },
+  ],
+  "routerName": "",
+  "summary": "",
+  "url": "/",
+  "urlCompiledPattern": /\\^\\(\\?:\\\\/\\(\\?=\\$\\)\\)\\?\\(\\?=\\\\/\\|\\$\\)/i,
+}
+`;

@@ -182,7 +182,9 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
   }
 
   public async getFunctionList(): Promise<RouterInfo[]> {
-    return this.getFlattenRouterTable();
+    return this.getFlattenRouterTable({
+      compileUrlPattern: true,
+    });
   }
 
   public addServerlessFunction(
