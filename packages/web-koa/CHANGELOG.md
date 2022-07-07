@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.5](https://github.com/midwayjs/midway/compare/v3.4.0-beta.4...v3.4.0-beta.5) (2022-07-07)
+
+
+### Bug Fixes
+
+*  koa dynamic router case ([#2094](https://github.com/midwayjs/midway/issues/2094)) ([646ee6e](https://github.com/midwayjs/midway/commit/646ee6e95995136b7795c1f821a7b6e74ffdbbcd))
+
+
+
+
+
 # [3.4.0-beta.4](https://github.com/midwayjs/midway/compare/v3.4.0-beta.3...v3.4.0-beta.4) (2022-07-04)
 
 **Note:** Version bump only for package @midwayjs/koa
