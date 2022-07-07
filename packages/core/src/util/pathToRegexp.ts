@@ -280,9 +280,25 @@ function tokensToRegExp(tokens, keys, options) {
 }
 
 export interface PathToRegexpOptions {
+  /**
+   * When true the regexp will match from the beginning of the string. (default: true)
+   */
+  start?: boolean;
+  /**
+   * When true the regexp will match to the end of the string. (default: true)
+   */
   end?: boolean;
+  /**
+   * When true the regexp won't allow an optional trailing delimiter to match. (default: false)
+   */
   strict?: boolean;
+  /**
+   * The default delimiter for segments, e.g. [^/#?] for :named patterns. (default: '/#?')
+   */
   delimiter?: string;
+  /**
+   * When true the regexp will be case sensitive. (default: false)
+   */
   sensitive?: boolean;
 }
 /**

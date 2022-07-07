@@ -469,9 +469,7 @@ export class MidwayWebRouterService {
       this.includeCompileUrlPattern = true;
       // attach match pattern function
       for (const item of routeArr) {
-        item.urlCompiledPattern = pathToRegexp(item.url, [], {
-          end: false,
-        });
+        item.urlCompiledPattern = pathToRegexp(item.url);
       }
     }
     this.cachedFlattenRouteList = routeArr;
