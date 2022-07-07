@@ -190,7 +190,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
     triggerOptions: FaaSMetadata.TriggerMetadata,
     functionOptions: FaaSMetadata.ServerlessFunctionOptions = {}
   ) {
-    const prefix = '/';
+    const prefix = '';
 
     if (!this.routes.has(prefix)) {
       this.routes.set(prefix, []);
@@ -200,7 +200,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
         middleware: [],
         routerOptions: {},
         controllerId: undefined,
-        routerModule: module,
+        routerModule: undefined,
       });
     }
 

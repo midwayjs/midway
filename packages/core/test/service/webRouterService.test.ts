@@ -4,6 +4,19 @@ import { MidwayContainer, MidwayWebRouterService } from '../../src';
 import { bindContainer, clearAllModule } from '@midwayjs/decorator';
 
 describe('/test/service/webRouterService.test.ts', function () {
+
+  it('should test add router first', async () => {
+    const collector = new MidwayWebRouterService();
+    collector.addRouter(async (ctx) => {
+      return 'hello world';
+    }, {
+      url: '/abc/dddd/efg',
+      requestMethod: 'GET',
+    });
+    const result = await collector.getFlattenRouterTable();
+    expect(result).toMatchSnapshot();
+  });
+
   it('should test generate router and flatten router', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,
@@ -19,9 +32,10 @@ describe('/test/service/webRouterService.test.ts', function () {
     const routes = await midwayWebRouterService.getFlattenRouterTable();
     expect(routes.length).toEqual(14);
 
-    midwayWebRouterService.addRouter('/abc/dddd/efg', async (ctx) => {
+    midwayWebRouterService.addRouter(async (ctx) => {
       return 'hello world';
     }, {
+      url: '/abc/dddd/efg',
       requestMethod: 'GET',
     });
 
@@ -111,4 +125,5 @@ describe('/test/service/webRouterService.test.ts', function () {
     expect(result1[0].url).toEqual('/hello');
     expect(result1[1].url).toEqual('/:slot');
   });
+
 });

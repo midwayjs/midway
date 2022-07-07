@@ -62,6 +62,9 @@ export interface IFaaSConfigurationOptions extends IConfigurationOptions {
   config?: object;
   initializeContext?: object;
   applicationAdapter?: {
+    /**
+     * @deprecated
+     */
     getApplication(): Application;
     getFunctionName(): string;
     getFunctionServiceName(): string;
