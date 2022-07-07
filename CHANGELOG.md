@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.6](https://github.com/midwayjs/midway/compare/v3.4.0-beta.5...v3.4.0-beta.6) (2022-07-07)
+
+
+### Features
+
+* add matched method in router service ([#2098](https://github.com/midwayjs/midway/issues/2098)) ([6c00665](https://github.com/midwayjs/midway/commit/6c006656d06587deee808160d536d785412f0c6d))
+
+
+
+
+
 # [3.4.0-beta.5](https://github.com/midwayjs/midway/compare/v3.4.0-beta.4...v3.4.0-beta.5) (2022-07-07)
 
 

@@ -1,17 +1,17 @@
 {
   "name": "@midwayjs/fc-starter",
-  "version": "3.4.0-beta.5",
+  "version": "3.4.0-beta.6",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas": "^3.4.0-beta.5",
+    "@midwayjs/faas": "^3.4.0-beta.6",
     "raw-body": "2.5.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.4.0-beta.5",
-    "@midwayjs/decorator": "^3.4.0-beta.5",
-    "@midwayjs/runtime-mock": "^3.4.0-beta.5",
-    "@midwayjs/serverless-http-parser": "^3.4.0-beta.5"
+    "@midwayjs/core": "^3.4.0-beta.6",
+    "@midwayjs/decorator": "^3.4.0-beta.6",
+    "@midwayjs/runtime-mock": "^3.4.0-beta.6",
+    "@midwayjs/serverless-http-parser": "^3.4.0-beta.6"
   },
   "engines": {
     "node": ">=12"

@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/otel",
   "description": "midway open telemetry component",
-  "version": "3.4.0-beta.5",
+  "version": "3.4.0-beta.6",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -10,10 +10,10 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.4.0-beta.5",
-    "@midwayjs/decorator": "^3.4.0-beta.5",
-    "@midwayjs/koa": "^3.4.0-beta.5",
-    "@midwayjs/mock": "^3.4.0-beta.5",
+    "@midwayjs/core": "^3.4.0-beta.6",
+    "@midwayjs/decorator": "^3.4.0-beta.6",
+    "@midwayjs/koa": "^3.4.0-beta.6",
+    "@midwayjs/mock": "^3.4.0-beta.6",
     "@opentelemetry/core": "^1.0.1",
     "@opentelemetry/sdk-trace-base": "^1.0.1",
     "@opentelemetry/sdk-trace-node": "^1.0.1"
