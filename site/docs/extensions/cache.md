@@ -224,7 +224,7 @@ export default {
 
 
 :::danger
-**再次注意⚠️：使用 redis 的作为 cache 的时候，代码里面慎用 reset 方法，因为会把整个 redis 给 flushdb，简称数据清空。**
+**再次注意⚠️：使用 redis 作为 cache 的时候，代码里面慎用 reset 方法，因为会把整个 redis 给 flushdb，简称数据清空。**
 :::
 
 
