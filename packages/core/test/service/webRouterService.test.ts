@@ -17,6 +17,40 @@ describe('/test/service/webRouterService.test.ts', function () {
     expect(result).toMatchSnapshot();
   });
 
+  it('should test add router match', async () => {
+    const collector = new MidwayWebRouterService();
+    collector.addRouter(async (ctx) => {
+      return 'hello world';
+    }, {
+      url: '/',
+      requestMethod: 'GET',
+    });
+    collector.addRouter(async (ctx) => {
+      return 'hello world';
+    }, {
+      url: '/abc/dddd/*',
+      requestMethod: 'GET',
+    });
+    let routeInfo = await collector.getMatchedRouterInfo('/api', 'get');
+    expect(routeInfo).toBeUndefined();
+
+    routeInfo = await collector.getMatchedRouterInfo('/abc/dddd/efg', 'GET');
+    expect(routeInfo.url).toEqual('/abc/dddd/*');
+
+    collector.addRouter(async (ctx) => {
+      return 'hello world';
+    }, {
+      url: '/*',
+      requestMethod: 'GET',
+    });
+    await collector.getFlattenRouterTable({
+      compileUrlPattern: true,
+      noCache: true
+    });
+    routeInfo = await collector.getMatchedRouterInfo('/api', 'get');
+    expect(routeInfo.url).toEqual('/*')
+  });
+
   it('should test generate router and flatten router', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,
@@ -45,7 +79,7 @@ describe('/test/service/webRouterService.test.ts', function () {
     });
     expect(routes1.length).toEqual(15);
 
-    const matchedRouterInfo = await midwayWebRouterService.getMatchedRouterInfo('/abc/ddd/efg', 'GET');
+    const matchedRouterInfo = await midwayWebRouterService.getMatchedRouterInfo('/abc/dddd/efg', 'GET');
     delete matchedRouterInfo.id;
     expect(matchedRouterInfo).toMatchSnapshot();
   });

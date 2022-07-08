@@ -331,12 +331,15 @@ export class MidwayWebRouterService {
     routerInfoOption: DynamicRouterInfo
   ) {
     const prefix = routerInfoOption.prefix || '';
+    routerInfoOption.requestMethod = (
+      routerInfoOption.requestMethod || 'GET'
+    ).toUpperCase();
 
     if (!this.routes.has(prefix)) {
       this.routes.set(prefix, []);
       this.routesPriority.push({
         prefix,
-        priority: -999,
+        priority: 0,
         middleware: [],
         routerOptions: {},
         controllerId: undefined,
@@ -449,9 +452,7 @@ export class MidwayWebRouterService {
         // attach match pattern function
         for (const item of this.cachedFlattenRouteList) {
           if (item.url) {
-            item.urlCompiledPattern = pathToRegexp(item.url, [], {
-              end: false,
-            });
+            item.urlCompiledPattern = pathToRegexp(item.url);
           }
         }
       }
