@@ -13,7 +13,7 @@
     "@midwayjs/core": "^3.4.0-beta.6",
     "@midwayjs/decorator": "^3.4.0-beta.6",
     "@midwayjs/mock": "^3.4.0-beta.6",
-    "@types/express-session": "1.17.4",
+    "@types/express-session": "1.17.5",
     "memorystore": "1.6.7"
   },
   "dependencies": {
