@@ -520,7 +520,7 @@ export class SwaggerExplorer {
         if (param.in === 'query') {
           p.allowEmptyValue = param.allowEmptyValue || false;
         }
-        if (param.example) {
+        if (typeof param.example !== undefined) {
           p.example = param.example;
         }
         if (param.examples) {
@@ -631,7 +631,7 @@ export class SwaggerExplorer {
       Object.keys(props).forEach(key => {
         const metadata = props[key].metadata;
 
-        if (metadata?.example) {
+        if (typeof metadata?.example !== undefined) {
           if (!tt.example) {
             tt.example = {};
           }
