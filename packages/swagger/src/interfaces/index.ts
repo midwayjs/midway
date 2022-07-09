@@ -393,4 +393,23 @@ export interface SwaggerOptions {
    * 可以使用 1-xxx、2-xxx、3-xxx 来定义 tag
    */
   tagSortable?: boolean;
+  /**
+   * UI 展示中需要用到的配置
+   * 可以参考 https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md#display
+   */
+  displayOptions?: {
+    deepLinking?: boolean;
+    displayOperationId?: boolean;
+    defaultModelsExpandDepth?: number;
+    defaultModelExpandDepth?: number;
+    defaultModelRendering?: 'example' | 'model';
+    displayRequestDuration?: boolean;
+    docExpansion?: 'list' | 'full' | 'none';
+    filter?: boolean | string;
+    maxDisplayedTags?: number;
+    showExtensions?: boolean;
+    showCommonExtensions?: boolean;
+    useUnsafeMarkdown?: boolean;
+    tryItOutEnabled?: boolean;
+  };
 }
