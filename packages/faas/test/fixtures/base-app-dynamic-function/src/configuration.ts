@@ -25,6 +25,30 @@ export class AutoConfiguration {
       }
     });
 
+    this.serverlessFunctionService.addServerlessFunction(async (ctx) => {
+      return 'hello world,' + ctx.params['userId'];
+    }, {
+      handlerName: 'user.handler',
+      functionName: 'index2',
+      type: ServerlessTriggerType.HTTP,
+      metadata: {
+        path: '/api/user/:userId',
+        method: 'get',
+      }
+    });
+
+    this.serverlessFunctionService.addServerlessFunction(async (ctx) => {
+      return 'hello world,' + ctx.request.body['userId'];
+    }, {
+      handlerName: 'user_push.handler',
+      functionName: 'index3',
+      type: ServerlessTriggerType.HTTP,
+      metadata: {
+        path: '/api/user',
+        method: 'post',
+      }
+    });
+
     this.serverlessFunctionService.addServerlessFunction(async (ctx, event) => {
       return event.text + 'hello world';
     }, {

@@ -8,6 +8,8 @@ Array [
     "_paramString": "",
     "_pureRouter": "/abc/dddd/efg",
     "_weight": 3,
+    "fullUrl": "/abc/dddd/efg",
+    "fullUrlFlattenString": "/abc/dddd/efg",
     "method": [Function],
     "requestMethod": "GET",
     "url": "/abc/dddd/efg",
@@ -17,9 +19,11 @@ Array [
 
 exports[`/test/service/webRouterService.test.ts should test generate router and flatten router 1`] = `
 Object {
+  "fullUrl": "/abc/dddd/*",
+  "fullUrlCompiledRegexp": /\\^\\\\/abc\\\\/dddd\\(\\?:\\\\/\\(\\.\\*\\)\\)\\[\\\\/#\\\\\\?\\]\\?\\$/i,
+  "fullUrlFlattenString": "/abc/dddd/(.*)",
   "method": [Function],
   "requestMethod": "GET",
   "url": "/abc/dddd/*",
-  "urlCompiledPattern": /\\^\\\\/abc\\\\/dddd\\\\/\\(\\(\\?:\\.\\*\\)\\)\\(\\?:\\\\/\\(\\?=\\$\\)\\)\\?\\$/i,
 }
 `;

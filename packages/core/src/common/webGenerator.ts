@@ -139,6 +139,7 @@ export abstract class WebControllerGenerator<
         }
 
         if (this.app.getFrameworkType() === MidwayFrameworkType.WEB_KOA) {
+          // egg use path-to-regexp v1 but koa use v6
           if (typeof routeInfo.url === 'string' && /\*$/.test(routeInfo.url)) {
             routeInfo.url = routeInfo.url.replace('*', '(.*)');
           }

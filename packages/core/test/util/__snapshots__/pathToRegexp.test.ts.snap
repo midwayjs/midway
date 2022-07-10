@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/util/pathToRegexp.test.ts should test 1`] = `
+Object {
+  "index": 0,
+  "params": Object {
+    "id": "123",
+  },
+  "path": "/user/123",
+}
+`;
+
+exports[`/test/util/pathToRegexp.test.ts should test 2`] = `false`;
+
+exports[`/test/util/pathToRegexp.test.ts should test 3`] = `
+Object {
+  "index": 0,
+  "params": Object {
+    "id": "café",
+  },
+  "path": "/user/caf%C3%A9",
+}
+`;
+
+exports[`/test/util/pathToRegexp.test.ts should test match 1`] = `
+Object {
+  "index": 0,
+  "params": Object {
+    "id": "123",
+  },
+  "path": "/user/123",
+}
+`;
+
+exports[`/test/util/pathToRegexp.test.ts should test match 2`] = `false`;
+
+exports[`/test/util/pathToRegexp.test.ts should test match 3`] = `
+Object {
+  "index": 0,
+  "params": Object {
+    "id": "café",
+  },
+  "path": "/user/caf%C3%A9",
+}
+`;

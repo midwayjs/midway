@@ -2,7 +2,7 @@ import { dirname, resolve, sep, posix } from 'path';
 import { readFileSync } from 'fs';
 import { debuglog } from 'util';
 import * as transformer from 'class-transformer';
-import { pathToRegexp } from './pathToRegexp';
+import { PathToRegexpUtil } from './pathToRegexp';
 import { MidwayCommonError } from '../error';
 import { FunctionMiddleware } from '../interface';
 
@@ -259,7 +259,7 @@ export function toPathMatch(pattern) {
     return ctx => pattern;
   }
   if (typeof pattern === 'string') {
-    const reg = pathToRegexp(pattern, [], { end: false });
+    const reg = PathToRegexpUtil.toRegexp(pattern.replace('*', '(.*)'));
     if (reg.global) reg.lastIndex = 0;
     return ctx => reg.test(ctx.path);
   }

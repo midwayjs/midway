@@ -16,6 +16,7 @@ import {
   MidwayMiddlewareService,
   MidwayServerlessFunctionService,
   RouterInfo,
+  PathToRegexpUtil,
 } from '@midwayjs/core';
 import {
   Framework,
@@ -263,6 +264,12 @@ export class MidwayFaaSFramework extends BaseFramework<
           context.path,
           context.method
         );
+        if (funOptions) {
+          const matchRes = PathToRegexpUtil.match(
+            funOptions.fullUrlFlattenString
+          )(context.path);
+          context.req.pathParameters = matchRes['params'] || {};
+        }
       }
       if (!funOptions) {
         throw new Error(`function handler = ${handlerMapping} not found`);
