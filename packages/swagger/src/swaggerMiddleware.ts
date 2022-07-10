@@ -129,11 +129,9 @@ export class SwaggerMiddleware
   replaceInfo(content: string): string {
     let str = `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json'),\n validatorUrl: null,`;
     if (this.swaggerConfig.displayOptions) {
-      Object
-        .keys(this.swaggerConfig.displayOptions)
-        .forEach(key => {
-          str += `\n${key}: ${this.swaggerConfig.displayOptions[key]},`;
-        });
+      Object.keys(this.swaggerConfig.displayOptions).forEach(key => {
+        str += `\n${key}: ${this.swaggerConfig.displayOptions[key]},`;
+      });
     }
     return content.replace(
       '"https://petstore.swagger.io/v2/swagger.json",',
