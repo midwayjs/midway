@@ -520,7 +520,7 @@ export class SwaggerExplorer {
         if (param.in === 'query') {
           p.allowEmptyValue = param.allowEmptyValue || false;
         }
-        if (param.example) {
+        if (typeof param.example !== undefined) {
           p.example = param.example;
         }
         if (param.examples) {
@@ -559,13 +559,22 @@ export class SwaggerExplorer {
             }
 
             if (param.isArray) {
+              let ref;
+              if (p?.schema?.$ref) {
+                ref = p.schema.$ref;
+              }
+
               p.schema = {
                 type: 'array',
                 items: {
-                  type: p?.schema?.$ref ?? convertSchemaType(param.type),
                   format: param.format,
                 },
               };
+              if (ref) {
+                p.schema.items.$ref = ref;
+              } else {
+                p.schema.items.type = convertSchemaType(param.type);
+              }
             } else {
               if (!p.schema) {
                 p.schema = {
@@ -622,7 +631,7 @@ export class SwaggerExplorer {
       Object.keys(props).forEach(key => {
         const metadata = props[key].metadata;
 
-        if (metadata?.example) {
+        if (typeof metadata?.example !== undefined) {
           if (!tt.example) {
             tt.example = {};
           }

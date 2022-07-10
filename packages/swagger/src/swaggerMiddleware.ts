@@ -16,6 +16,7 @@ import {
 } from '@midwayjs/decorator';
 import { readFileSync } from 'fs';
 import { join, extname } from 'path';
+import type { SwaggerOptions } from './interfaces';
 import { SwaggerExplorer } from './swaggerExplorer';
 
 @Provide()
@@ -24,7 +25,7 @@ export class SwaggerMiddleware
   implements IMiddleware<IMidwayContext, NextFunction, unknown>
 {
   @Config('swagger')
-  private swaggerConfig: any;
+  private swaggerConfig: SwaggerOptions;
 
   private swaggerUiAssetPath: string;
 
@@ -126,9 +127,15 @@ export class SwaggerMiddleware
   }
 
   replaceInfo(content: string): string {
+    let str = `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json'),\n validatorUrl: null,`;
+    if (this.swaggerConfig.displayOptions) {
+      Object.keys(this.swaggerConfig.displayOptions).forEach(key => {
+        str += `\n${key}: ${this.swaggerConfig.displayOptions[key]},`;
+      });
+    }
     return content.replace(
       '"https://petstore.swagger.io/v2/swagger.json",',
-      `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json'),\n validatorUrl: null,`
+      str
     );
   }
 
