@@ -97,6 +97,7 @@ export class HomeController {
 ```typescript
 // src/config/config.default.ts
 import { uploadWhiteList } from '@midwayjs/upload';
+import { tmpdir } from 'os';
 
 export default {
   // ...
