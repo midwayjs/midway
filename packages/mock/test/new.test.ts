@@ -18,6 +18,7 @@ import { join } from 'path';
 import { existsSync } from 'fs';
 import { MidwayContainer, MidwayMockService } from '@midwayjs/core';
 import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
+import { createBootstrap } from '../src/creator';
 
 describe('/test/new.test.ts', () => {
   it('should test create app with framework and with new mode', async () => {
@@ -121,5 +122,19 @@ describe('/test/new.test.ts', () => {
     await container.getAsync(MidwayMockService, [container]);
     expect(new BBB().invoke).toEqual('midway');
     expect(b['ccc']).toEqual('ab');
+  });
+
+  it('should test with entry file', async () => {
+    const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'));
+    const app = bootstrap.getApp('koa');
+
+    const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
+    expect(result.status).toBe(200);
+    expect(result.text).toBe('hello world, harry');
+    console.log('start close');
+    await bootstrap.close({
+      sleep: 2000
+    });
+    console.log('close complete');
   });
 });

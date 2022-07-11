@@ -40,7 +40,9 @@ export class BootstrapStarter {
     return this.applicationContext;
   }
 
-  public async run() {}
+  public async run() {
+    this.applicationContext = await this.init();
+  }
 
   public async stop() {
     await destroyGlobalApplicationContext(this.applicationContext);
@@ -120,11 +122,11 @@ export class Bootstrap {
     this.unhandledRejectionHandler = this.unhandledRejectionHandler.bind(this);
     process.on('unhandledRejection', this.unhandledRejectionHandler);
 
-    this.applicationContext = await this.getStarter().init();
     return this.getStarter()
       .run()
       .then(() => {
         this.logger.info('[midway:bootstrap] current app started');
+        global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
       })
       .catch(err => {
         this.logger.error(err);
@@ -140,6 +142,7 @@ export class Bootstrap {
       this.unhandledRejectionHandler
     );
     this.reset();
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
   }
 
   static reset() {
