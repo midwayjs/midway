@@ -231,7 +231,6 @@ export async function createFunctionApp<
   }
 
   if (options.starter) {
-    options.exportAllHandler = true;
     options.appDir = baseDir;
     debug(`[mock]: Create app, appDir="${options.appDir}"`);
     process.env.MIDWAY_TS_MODE = 'true';

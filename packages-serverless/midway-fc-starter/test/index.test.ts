@@ -46,7 +46,6 @@ describe('/test/index.test.ts', () => {
     const starter = start({
       baseDir: join(__dirname, './fixtures/base-app/src'),
       appDir: join(__dirname, './fixtures/base-app'),
-      exportAllHandler: true,
     });
 
     await starter['initializer'](createContext('event'));

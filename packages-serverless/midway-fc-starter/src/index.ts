@@ -211,13 +211,8 @@ export class BootstrapStarter {
           }
         });
 
-        if (options.exportAllHandler) {
-          for (const handlerName of framework.getAllHandlerNames()) {
-            exports[handlerName.split('.')[1]] = handlerWrapper;
-          }
-        } else {
-          const handlerMethodName = context.function.handler.split('.')[1];
-          exports[handlerMethodName] = handlerWrapper;
+        for (const handlerName of framework.getAllHandlerNames()) {
+          exports[handlerName.split('.')[1]] = handlerWrapper;
         }
 
         options.performance?.end();

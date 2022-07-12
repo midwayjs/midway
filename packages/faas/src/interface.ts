@@ -90,5 +90,4 @@ export interface ServerlessStarterOptions extends IMidwayBootstrapOptions {
     mark(label: string);
     end();
   };
-  exportAllHandler?: boolean;
 }
