@@ -395,8 +395,11 @@ class BootstrapAppStarter {
       sleep?: number;
     } = {}
   ) {
-    const { Bootstrap } = require('@midwayjs/bootstrap');
-    await Bootstrap.stop();
+    // eslint-disable-next-line node/no-extraneous-require
+    const BootstrapModule = safeRequire('@midwayjs/bootstrap');
+    if (BootstrapModule?.Bootstrap) {
+      await BootstrapModule.Bootstrap.stop();
+    }
     if (options.sleep > 0) {
       await sleep(options.sleep);
     } else {
