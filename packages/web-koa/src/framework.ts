@@ -223,7 +223,11 @@ export class MidwayKoaFramework extends BaseFramework<
   }
 
   public async beforeStop() {
-    this.server.close();
+    if (this.server) {
+      new Promise(resolve => {
+        this.server.close(resolve);
+      });
+    }
   }
 
   public getFrameworkType(): MidwayFrameworkType {

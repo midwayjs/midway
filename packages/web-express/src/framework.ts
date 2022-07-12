@@ -378,7 +378,11 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public async beforeStop() {
-    this.server.close();
+    if (this.server) {
+      new Promise(resolve => {
+        this.server.close(resolve);
+      });
+    }
   }
 
   public getServer() {

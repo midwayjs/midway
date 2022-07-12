@@ -500,6 +500,14 @@ export class MidwayFaaSFramework extends BaseFramework<
     return this.server;
   }
 
+  public async beforeStop() {
+    if (this.server) {
+      new Promise(resolve => {
+        this.server.close(resolve);
+      });
+    }
+  }
+
   protected async createHttpContext(req, res) {
     return new Promise(resolve => {
       this.respond(req, res, resolve);
