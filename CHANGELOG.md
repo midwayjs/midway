@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.7](https://github.com/midwayjs/midway/compare/v3.4.0-beta.6...v3.4.0-beta.7) (2022-07-12)
+
+
+### Bug Fixes
+
+* egg default custom logger level ([#2099](https://github.com/midwayjs/midway/issues/2099)) ([7b8c4ba](https://github.com/midwayjs/midway/commit/7b8c4ba14d3233777366e643dbd91d1aaca07101))
+* regexp for root path match ([#2105](https://github.com/midwayjs/midway/issues/2105)) ([97ccc03](https://github.com/midwayjs/midway/commit/97ccc0391cd1436ef5106a7e35f0d81dca4477dd))
+
+
+### Features
+
+* add display options and fix array bug ([#2103](https://github.com/midwayjs/midway/issues/2103)) ([4f8e06d](https://github.com/midwayjs/midway/commit/4f8e06d98e1c14f4403b87ccddf90a2bb81b4862))
+* support socket connection and message middleware ([#1984](https://github.com/midwayjs/midway/issues/1984)) ([886d0bf](https://github.com/midwayjs/midway/commit/886d0bf6b47aecf870df15853d4ba82256c08858))
+
+
+
+
+
 # [3.4.0-beta.6](https://github.com/midwayjs/midway/compare/v3.4.0-beta.5...v3.4.0-beta.6) (2022-07-07)
 
 
