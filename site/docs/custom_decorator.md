@@ -220,9 +220,10 @@ export function MemoryCache(key?: string): PropertyDecorator {
 在装饰器的方法执行之前（一般在初始化的地方）去实现。实现装饰器，我们需要用到内置的 `MidwayDecoratorService` 服务。
 
 ```typescript
-import { Configuration, Inject, Init, MidwayDecoratorService } from '@midwayjs/decorator';
+import { Configuration, Inject, Init } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { MEMORY_CACHE_KEY, MemoryStore } from 'decorator/memoryCache.decorator';
+import { MidwayDecoratorService } from '@midwayjs/core';
 
 @Configuration({
   imports: [koa],
