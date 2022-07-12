@@ -48,6 +48,10 @@ export class BootstrapStarter {
     await destroyGlobalApplicationContext(this.applicationContext);
   }
 
+  public getApplicationContext() {
+    return this.applicationContext;
+  }
+
   protected getBaseDir() {
     if (this.globalOptions.baseDir) {
       return this.globalOptions.baseDir;
@@ -64,7 +68,6 @@ export class Bootstrap {
   private static starter: BootstrapStarter;
   private static logger: IMidwayLogger;
   private static configured = false;
-  private static applicationContext: IMidwayContainer;
 
   /**
    * set global configuration for midway
@@ -203,6 +206,6 @@ export class Bootstrap {
   }
 
   static getApplicationContext(): IMidwayContainer {
-    return this.applicationContext;
+    return this.getStarter().getApplicationContext();
   }
 }
