@@ -32,7 +32,7 @@
     "fs-extra": "10.0.1"
   },
   "dependencies": {
-    "@koa/router": "^10.0.0",
+    "@koa/router": "^11.0.0",
     "@midwayjs/cookies": "^1.0.2",
     "@midwayjs/core": "^3.4.0-beta.8",
     "@midwayjs/session": "^3.4.0-beta.8",
