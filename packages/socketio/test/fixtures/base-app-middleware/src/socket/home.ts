@@ -7,7 +7,7 @@ import {
 import { Context } from '../../../../../src';
 
 @WSController('/', { middleware: []})
-export class APIController {
+export class APIController1 {
   @Inject()
   ctx: Context;
 

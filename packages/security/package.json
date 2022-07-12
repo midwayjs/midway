@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/security",
-  "version": "3.4.0-beta.6",
+  "version": "3.4.0-beta.8",
   "description": "Midway Security Component",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -30,13 +30,13 @@
     "xss": "^1.0.11"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.4.0-beta.6",
-    "@midwayjs/decorator": "^3.4.0-beta.6",
-    "@midwayjs/express": "^3.4.0-beta.6",
-    "@midwayjs/faas": "^3.4.0-beta.6",
-    "@midwayjs/koa": "^3.4.0-beta.6",
-    "@midwayjs/mock": "^3.4.0-beta.6",
-    "@midwayjs/serverless-app": "^3.4.0-beta.6",
-    "@midwayjs/web": "^3.4.0-beta.6"
+    "@midwayjs/core": "^3.4.0-beta.8",
+    "@midwayjs/decorator": "^3.4.0-beta.8",
+    "@midwayjs/express": "^3.4.0-beta.8",
+    "@midwayjs/faas": "^3.4.0-beta.8",
+    "@midwayjs/koa": "^3.4.0-beta.8",
+    "@midwayjs/mock": "^3.4.0-beta.8",
+    "@midwayjs/serverless-app": "^3.4.0-beta.8",
+    "@midwayjs/web": "^3.4.0-beta.8"
   }
 }
