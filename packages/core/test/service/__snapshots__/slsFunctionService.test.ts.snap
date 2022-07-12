@@ -11,6 +11,9 @@ Array [
     "controllerId": "",
     "controllerMiddleware": Array [],
     "description": "",
+    "fullUrl": "/api/hello",
+    "fullUrlCompiledRegexp": /\\^\\\\/api\\\\/hello\\[\\\\/#\\\\\\?\\]\\?\\$/i,
+    "fullUrlFlattenString": "/api/hello",
     "funcHandlerName": "index.hello",
     "functionMetadata": Object {
       "functionName": "hello",
@@ -30,7 +33,6 @@ Array [
     "responseMetadata": Array [],
     "summary": "",
     "url": "/api/hello",
-    "urlCompiledPattern": /\\^\\\\/api\\\\/hello\\(\\?:\\\\/\\(\\?=\\$\\)\\)\\?\\(\\?=\\\\/\\|\\$\\)/i,
   },
   Object {
     "_category": 2,
@@ -59,7 +61,6 @@ Array [
     "responseMetadata": Array [],
     "summary": "",
     "url": "",
-    "urlCompiledPattern": /\\^\\(\\?:\\\\/\\(\\?=\\$\\)\\)\\?\\(\\?=\\\\/\\|\\$\\)/i,
   },
 ]
 `;
@@ -77,6 +78,8 @@ Array [
       "auth",
     ],
     "description": "",
+    "fullUrl": "/api",
+    "fullUrlFlattenString": "/api",
     "funcHandlerName": "apiController.homeSet",
     "handlerName": "apiController.homeSet",
     "method": "homeSet",
@@ -100,6 +103,8 @@ Array [
     "controllerId": "helloHttpService",
     "controllerMiddleware": Array [],
     "description": "",
+    "fullUrl": "/upload",
+    "fullUrlFlattenString": "/upload",
     "funcHandlerName": "helloHttpService.upload",
     "functionMetadata": Object {
       "functionName": "helloHttpService-upload",
@@ -135,6 +140,8 @@ Array [
     "controllerId": "helloHttpService",
     "controllerMiddleware": Array [],
     "description": "",
+    "fullUrl": "/update",
+    "fullUrlFlattenString": "/update",
     "funcHandlerName": "helloHttpService.invoke",
     "functionMetadata": Object {
       "functionName": "helloHttpService-invoke",
@@ -170,6 +177,8 @@ Array [
     "controllerId": "helloHttpService",
     "controllerMiddleware": Array [],
     "description": "",
+    "fullUrl": "/invoke",
+    "fullUrlFlattenString": "/invoke",
     "funcHandlerName": "helloHttpService.invoke",
     "functionMetadata": Object {
       "functionName": "helloHttpService-invoke",

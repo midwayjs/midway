@@ -1,6 +1,5 @@
-import { Controller, Get, Provide, Query } from '@midwayjs/decorator';
+import { Controller, Get, Query } from '@midwayjs/decorator';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 

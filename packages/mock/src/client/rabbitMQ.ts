@@ -1,4 +1,4 @@
-import { Channel, Options } from 'amqplib';
+import type { Channel, Options } from 'amqplib';
 
 const queues = {};
 const exchanges = {};

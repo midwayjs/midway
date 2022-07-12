@@ -19,6 +19,18 @@ describe('test/new.test.ts', () => {
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('hello world,zhangting');
 
+    result = await createHttpRequest(starter)
+      .get('/api/user/zhangting');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world,zhangting');
+
+    result = await createHttpRequest(starter)
+      .post('/api/user').send({
+        userId: 'zhangting',
+      })
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world,zhangting');
+
     const handler = await starter.getTriggerFunction('event.handler');
     result = await handler({}, {
       isHttpFunction: false,

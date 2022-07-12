@@ -25,7 +25,7 @@ import {
   MidwayDuplicateRouteError,
 } from '../error';
 import * as util from 'util';
-import { pathToRegexp } from '../util/pathToRegexp';
+import { PathToRegexpUtil } from '../util/pathToRegexp';
 
 const debug = util.debuglog('midway:debug');
 
@@ -58,6 +58,9 @@ export interface RouterInfo {
    * router description
    */
   description?: string;
+  /**
+   * @deprecated
+   */
   summary?: string;
   /**
    * router handler function key，for IoC container load
@@ -105,9 +108,19 @@ export interface RouterInfo {
   functionMetadata?: any;
 
   /**
+   * url with prefix
+   */
+  fullUrl?: string;
+
+  /**
    * pattern after path-regexp compile
    */
-  urlCompiledPattern?: RegExp;
+  fullUrlCompiledRegexp?: RegExp;
+
+  /**
+   * url after wildcard and can be path-to-regexp by path-to-regexp v6
+   */
+  fullUrlFlattenString?: string;
 }
 
 export type DynamicRouterInfo = Omit<
@@ -331,12 +344,15 @@ export class MidwayWebRouterService {
     routerInfoOption: DynamicRouterInfo
   ) {
     const prefix = routerInfoOption.prefix || '';
+    routerInfoOption.requestMethod = (
+      routerInfoOption.requestMethod || 'GET'
+    ).toUpperCase();
 
     if (!this.routes.has(prefix)) {
       this.routes.set(prefix, []);
       this.routesPriority.push({
         prefix,
-        priority: -999,
+        priority: 0,
         middleware: [],
         routerOptions: {},
         controllerId: undefined,
@@ -448,10 +464,10 @@ export class MidwayWebRouterService {
         this.includeCompileUrlPattern = true;
         // attach match pattern function
         for (const item of this.cachedFlattenRouteList) {
-          if (item.url) {
-            item.urlCompiledPattern = pathToRegexp(item.url, [], {
-              end: false,
-            });
+          if (item.fullUrlFlattenString) {
+            item.fullUrlCompiledRegexp = PathToRegexpUtil.toRegexp(
+              item.fullUrlFlattenString
+            );
           }
         }
       }
@@ -469,9 +485,11 @@ export class MidwayWebRouterService {
       this.includeCompileUrlPattern = true;
       // attach match pattern function
       for (const item of routeArr) {
-        item.urlCompiledPattern = pathToRegexp(item.url, [], {
-          end: false,
-        });
+        if (item.fullUrlFlattenString) {
+          item.fullUrlCompiledRegexp = PathToRegexpUtil.toRegexp(
+            item.fullUrlFlattenString
+          );
+        }
       }
     }
     this.cachedFlattenRouteList = routeArr;
@@ -487,10 +505,10 @@ export class MidwayWebRouterService {
     });
     let matchedRouterInfo;
     for (const item of routes) {
-      if (item.urlCompiledPattern) {
+      if (item.fullUrlCompiledRegexp) {
         if (
           method.toUpperCase() === item['requestMethod'].toUpperCase() &&
-          item.urlCompiledPattern.test(routerUrl)
+          item.fullUrlCompiledRegexp.test(routerUrl)
         ) {
           matchedRouterInfo = item;
           break;
@@ -516,6 +534,22 @@ export class MidwayWebRouterService {
         `${matched[0].handlerName}`,
         `${routerInfo.handlerName}`
       );
+    }
+    // format url
+    if (
+      !routerInfo.fullUrlFlattenString &&
+      routerInfo.url &&
+      typeof routerInfo.url === 'string'
+    ) {
+      routerInfo.fullUrl = joinURLPath(prefix, routerInfo.url);
+      if (/\*$/.test(routerInfo.fullUrl)) {
+        routerInfo.fullUrlFlattenString = routerInfo.fullUrl.replace(
+          '*',
+          '(.*)'
+        );
+      } else {
+        routerInfo.fullUrlFlattenString = routerInfo.fullUrl;
+      }
     }
     prefixList.push(routerInfo);
   }

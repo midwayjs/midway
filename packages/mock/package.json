@@ -19,7 +19,8 @@
   ],
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "ssl"
   ],
   "engines": {
     "node": ">=12"

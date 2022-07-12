@@ -12,8 +12,9 @@ import {
   MidwayCommonError,
   MidwayApplicationManager,
   MidwayConfigService,
+  getCurrentApplicationContext,
 } from '@midwayjs/core';
-import { isAbsolute, join } from 'path';
+import { isAbsolute, join, resolve } from 'path';
 import { remove } from 'fs-extra';
 import { CONFIGURATION_KEY, Framework, sleep } from '@midwayjs/decorator';
 import { clearAllLoggers } from '@midwayjs/logger';
@@ -27,12 +28,21 @@ import {
 import { debuglog } from 'util';
 import { existsSync, readFileSync } from 'fs';
 import * as http from 'http';
+import * as https from 'https';
 import * as yaml from 'js-yaml';
 import * as getRawBody from 'raw-body';
 
 const debug = debuglog('midway:debug');
 
 process.setMaxListeners(0);
+
+function formatPath(baseDir, p) {
+  if (isAbsolute(p)) {
+    return p;
+  } else {
+    return resolve(baseDir, p);
+  }
+}
 
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
@@ -65,6 +75,31 @@ export async function create<
   } else if (appDir) {
     options.baseDir = `${appDir}/src`;
     safeRequire(join(`${options.baseDir}`, 'interface'));
+  }
+
+  if (options.entryFile) {
+    // start from entry file, like bootstrap.js
+    options.entryFile = formatPath(appDir, options.entryFile);
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
+    // set app in @midwayjs/bootstrap
+    require(options.entryFile);
+
+    await new Promise<void>((resolve, reject) => {
+      const timeoutHandler = setTimeout(() => {
+        clearInterval(internalHandler);
+        reject(new Error('[midway]: bootstrap timeout'));
+      }, options.bootstrapTimeout || 30 * 1000);
+      const internalHandler = setInterval(() => {
+        if (global['MIDWAY_BOOTSTRAP_APP_READY'] === true) {
+          clearInterval(internalHandler);
+          clearTimeout(timeoutHandler);
+          resolve();
+        } else {
+          debug('[mock]: bootstrap not ready and wait next check');
+        }
+      }, 200);
+    });
+    return;
   }
 
   if (!options.imports && customFramework) {
@@ -281,7 +316,18 @@ export async function createFunctionApp<
 
     if (customPort) {
       await new Promise<void>(resolve => {
-        const server = http.createServer(app.callback2());
+        let server: http.Server | https.Server;
+        if (this.configurationOptions.ssl) {
+          server = require('https').createServer(
+            {
+              key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
+              cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+            },
+            app.callback2()
+          );
+        } else {
+          server = require('http').createServer(app.callback2());
+        }
         server.listen(customPort);
         process.env.MIDWAY_HTTP_PORT = String(customPort);
         (app as any).server = server;
@@ -337,6 +383,31 @@ class LightFramework extends BaseFramework<any, any, any, any, any> {
   }
 }
 
+class BootstrapAppStarter {
+  getApp(type: MidwayFrameworkType | string): IMidwayApplication<any> {
+    const applicationContext = getCurrentApplicationContext();
+    const applicationManager = applicationContext.get(MidwayApplicationManager);
+    return applicationManager.getApplication(type);
+  }
+
+  async close(
+    options: {
+      sleep?: number;
+    } = {}
+  ) {
+    // eslint-disable-next-line node/no-extraneous-require
+    const BootstrapModule = safeRequire('@midwayjs/bootstrap');
+    if (BootstrapModule?.Bootstrap) {
+      await BootstrapModule.Bootstrap.stop();
+    }
+    if (options.sleep > 0) {
+      await sleep(options.sleep);
+    } else {
+      await sleep(50);
+    }
+  }
+}
+
 /**
  * Create a real project but not ready or a virtual project
  * @param baseDir
@@ -364,4 +435,13 @@ export async function createLightApp(
       options?.imports
     ),
   });
+}
+
+export async function createBootstrap(
+  entryFile: string
+): Promise<BootstrapAppStarter> {
+  await create(undefined, {
+    entryFile,
+  });
+  return new BootstrapAppStarter();
 }

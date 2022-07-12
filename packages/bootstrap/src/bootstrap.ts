@@ -40,10 +40,16 @@ export class BootstrapStarter {
     return this.applicationContext;
   }
 
-  public async run() {}
+  public async run() {
+    this.applicationContext = await this.init();
+  }
 
   public async stop() {
     await destroyGlobalApplicationContext(this.applicationContext);
+  }
+
+  public getApplicationContext() {
+    return this.applicationContext;
   }
 
   protected getBaseDir() {
@@ -62,7 +68,6 @@ export class Bootstrap {
   private static starter: BootstrapStarter;
   private static logger: IMidwayLogger;
   private static configured = false;
-  private static applicationContext: IMidwayContainer;
 
   /**
    * set global configuration for midway
@@ -120,11 +125,11 @@ export class Bootstrap {
     this.unhandledRejectionHandler = this.unhandledRejectionHandler.bind(this);
     process.on('unhandledRejection', this.unhandledRejectionHandler);
 
-    this.applicationContext = await this.getStarter().init();
     return this.getStarter()
       .run()
       .then(() => {
         this.logger.info('[midway:bootstrap] current app started');
+        global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
       })
       .catch(err => {
         this.logger.error(err);
@@ -140,6 +145,7 @@ export class Bootstrap {
       this.unhandledRejectionHandler
     );
     this.reset();
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
   }
 
   static reset() {
@@ -200,6 +206,6 @@ export class Bootstrap {
   }
 
   static getApplicationContext(): IMidwayContainer {
-    return this.applicationContext;
+    return this.getStarter().getApplicationContext();
   }
 }

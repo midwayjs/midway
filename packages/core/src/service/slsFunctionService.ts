@@ -198,7 +198,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
       this.routes.set(prefix, []);
       this.routesPriority.push({
         prefix,
-        priority: -999,
+        priority: 0,
         middleware: [],
         routerOptions: {},
         controllerId: undefined,

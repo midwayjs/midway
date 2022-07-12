@@ -19,7 +19,7 @@ describe('/test/util/path-matching.test.ts', () => {
   describe('match', () => {
     it('support string', () => {
       const fn = match({ match: '/api' });
-      assert(fn({ path: '/api/hello' }) === true);
+      assert(fn({ path: '/api/hello' }) === false);
       assert(fn({ path: '/api/' }) === true);
       assert(fn({ path: '/api' }) === true);
       assert(fn({ path: '/api1/hello' }) === false);
@@ -68,7 +68,7 @@ describe('/test/util/path-matching.test.ts', () => {
       assert(fn({ path: '/api1/hello' }) === true);
       assert(fn({ path: '/api1' }) === true);
       assert(fn({ path: '/v1/api1' }) === false);
-      assert(fn({ path: '/ajax/hello' }) === true);
+      assert(fn({ path: '/ajax/hello' }) === false);
       assert(fn({ path: '/foo' }) === true);
     });
   });
@@ -76,7 +76,7 @@ describe('/test/util/path-matching.test.ts', () => {
   describe('ignore', () => {
     it('support string', () => {
       const fn = match({ ignore: '/api' });
-      assert(fn({ path: '/api/hello' }) === false);
+      assert(fn({ path: '/api/hello' }) === true);
       assert(fn({ path: '/api/' }) === false);
       assert(fn({ path: '/api' }) === false);
       assert(fn({ path: '/api1/hello' }) === true);
@@ -125,7 +125,7 @@ describe('/test/util/path-matching.test.ts', () => {
       assert(fn({ path: '/api1/hello' }) === false);
       assert(fn({ path: '/api1' }) === false);
       assert(fn({ path: '/v1/api1' }) === true);
-      assert(fn({ path: '/ajax/hello' }) === false);
+      assert(fn({ path: '/ajax/hello' }) === true);
       assert(fn({ path: '/foo' }) === false);
     });
   });
