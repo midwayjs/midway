@@ -40,6 +40,10 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
         >(fn as any);
         if (classMiddleware) {
           fn = await classMiddleware.resolve(app);
+          if (!fn) {
+            // for middleware enabled
+            continue;
+          }
           if (!classMiddleware.match && !classMiddleware.ignore) {
             if (!fn.name) {
               (fn as any)._name = classMiddleware.constructor.name;
