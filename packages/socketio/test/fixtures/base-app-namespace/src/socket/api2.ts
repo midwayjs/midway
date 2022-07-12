@@ -8,13 +8,13 @@ import {
   WSEmit,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
-import { IMidwaySocketIOContext } from '../../../../../src';
+import { Context } from '../../../../../src';
 
 @Provide()
 @WSController('/test2')
 export class API2Controller {
   @Inject()
-  ctx: IMidwaySocketIOContext;
+  ctx: Context;
 
   @Inject()
   userService: UserService;

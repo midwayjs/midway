@@ -3,31 +3,48 @@ import {
   OnWSConnection,
   OnWSDisConnection,
   OnWSMessage,
-  Provide,
   WSController,
   WSEmit,
 } from '@midwayjs/decorator';
-import { UserService } from '../service/user';
-import { IMidwaySocketIOContext } from '../../../../../src';
+import { Context } from '../../../../../src';
+import {
+  ControllerMiddleware,
+  NamespaceConnectionMiddleware,
+  NamespacePacketMiddleware, NamespacePacketMiddleware2
+} from '../middleware/conn.middleware';
 
-@Provide()
-@WSController('/', { middleware: []})
+@WSController('/api', { middleware: [ControllerMiddleware]})
 export class APIController {
   @Inject()
-  ctx: IMidwaySocketIOContext;
+  ctx: Context;
 
-  @Inject()
-  userService: UserService;
-
-  @OnWSConnection()
+  @OnWSConnection({
+    middleware: [NamespaceConnectionMiddleware]
+  })
   init() {
-    console.log(`namespace / got a connection ${this.ctx.id}`);
+    console.log(`namespace ${this.ctx.nsp.name} / got a connection ${this.ctx.id}`);
   }
 
-  @OnWSMessage('my')
+  @OnWSMessage('my', {
+    middleware: [NamespacePacketMiddleware]
+  })
   @WSEmit('ok')
   async gotMyMessage(data1, data2, data3) {
-    return { name: 'harry', result: data1 + data2 + data3 };
+    return {
+      name: 'harry111',
+      result: this.ctx.getAttr('result'),
+    };
+  }
+
+  @OnWSMessage('my1', {
+    middleware: [NamespacePacketMiddleware2]
+  })
+  @WSEmit('ok1')
+  async gotMyMessage1(data1, data2, data3) {
+    return {
+      name: 'harry222',
+      result: this.ctx.getAttr('result'),
+    };
   }
 
   @OnWSDisConnection()

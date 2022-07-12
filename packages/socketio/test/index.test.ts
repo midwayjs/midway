@@ -174,4 +174,56 @@ describe('/test/index.test.ts', () => {
 
     await client.close();
   });
+
+  it('should test create socket and with middleware', async () => {
+    const app = await createServer('base-app-middleware');
+    const client1 = await createSocketIOClient({
+      port: 3000,
+      namespace: '/',
+    });
+
+    const gotEvent = once(client1, 'ok');
+    client1.send('my');
+    const [data] = await gotEvent;
+    expect(data.result).toEqual(3);
+
+    const client2 = await createSocketIOClient({
+      port: 3000,
+      namespace: '/api',
+    });
+
+    const gotEvent2 = once(client2, 'ok');
+    client2.send('my');
+    const [result] = await gotEvent2;
+    expect(result.result).toEqual(15);
+
+    const gotEvent3 = once(client2, 'ok1');
+    client2.send('my1');
+    const [result2] = await gotEvent3;
+    expect(result2.result).toEqual(26);
+
+    await sleep();
+
+    await client1.close();
+    await client2.close();
+    await closeApp(app);
+  });
+
+  it('should test create socket and with filter', async () => {
+    const app = await createServer('base-app-filter');
+    const client1 = await createSocketIOClient({
+      port: 3000,
+      namespace: '/',
+    });
+
+    const gotEvent = once(client1, 'ok');
+    client1.send('my');
+    const [data] = await gotEvent;
+    expect(data).toEqual('packet error');
+
+    await sleep();
+
+    await client1.close();
+    await closeApp(app);
+  });
 });

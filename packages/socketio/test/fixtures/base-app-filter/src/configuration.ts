@@ -1,8 +1,15 @@
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App, Catch } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
-import { Application } from '../../../../src';
-import { ConnectionMiddleware, PacketMiddleware } from './middleware/conn.middleware';
+import { Application, Context } from '../../../../src';
+import { PacketMiddleware } from './middleware/conn.middleware';
 
+@Catch()
+export class DefaultFilter {
+  async catch(err: Error, ctx: Context) {
+    console.log(ctx.id);
+    return err.message;
+  }
+}
 
 @Configuration({
   imports: [
@@ -24,7 +31,7 @@ export class AutoConfiguration implements ILifeCycle {
   app: Application;
 
   async onReady() {
-    this.app.useConnectionMiddleware(ConnectionMiddleware);
     this.app.useMiddleware(PacketMiddleware);
+    this.app.useFilter(DefaultFilter)
   }
 }

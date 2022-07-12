@@ -252,9 +252,129 @@ export class HelloSocketController {
 ```
 上面的代码，我们的方法返回值 hello world，将自动发送给客户端监听的 `myEventResult` 事件。
 
-## 本地测试
 
-### 配置测试端口
+
+## Socket 中间件
+
+Socket 中的中间件的写法和 [Web 中间件 ](../middleware)相似，但是加载的时机略有不同。
+
+由于 Socket 有连接和接收消息两个阶段，所以中间件以此分为几类。
+
+- 全局 Connection 中间件，会对所有 namespace 下的 connection 生效
+- 全局 Message 中间件，会对所有 namespace 下的 message 生效
+- Controller 中间件，会对单个 namespace 下的 connection 和 message 生效
+- Connection 中间件，会对单个 namespace 下的 connection 生消息
+- Message 中间件，会对单个 namespace 下的 message 生效
+
+### 中间件写法
+
+注意，中间件必须通过 `return` 返回结果。
+
+```typescript
+// src/middleware/socket.middleware.ts
+import { Middleware } from '@midwayjs/decorator';
+import { Context, NextFunction } from '@midwayjs/socketio';
+
+@Middleware()
+export class SocketMiddleware {
+  resolve() {
+    return async (ctx: Context, next: NextFunction) => {
+      // ...
+      return await next();
+    }
+  }
+}
+
+```
+
+
+
+### 全局中间件
+
+和 Web 中间件类似，通过 `socket.io` 的 app 实例，注册中间件。
+
+```typescript
+import * as socketio from '@midwayjs/socketio';
+
+@Configuration({
+  imports: [
+    socketio
+  ],
+  // ...
+})
+export class AutoConfiguration {
+
+  @App('socketIO')
+  app: Application;
+
+  async onReady() {
+    // 可以注册全局 connection 中间件
+    this.app.useConnectionMiddleware(SocketMiddleware);
+    // 也可以注册全局 Message 中间件
+    this.app.useMiddleware(SocketMiddleware);
+  }
+}
+
+```
+
+
+
+### Namespace 中的中间件
+
+通过装饰器，注册不同阶段的中间件。
+
+比如 Namespace 级别的中间件，会对单个 namespace 下的 connection 和 message 生效。
+
+```typescript
+// ...
+
+// Namespace 级别的中间件
+@WSController('/api', { middleware: [SocketMiddleware]})
+export class APIController {
+}
+
+```
+
+Connection 中间件，在连接时生效。
+
+```typescript
+// ...
+
+@WSController('/api')
+export class APIController {
+  
+  // Connection 触发时的中间件
+  @OnWSConnection({
+    middleware: [SocketMiddleware]
+  })
+  init() {
+    // ...
+  }
+}
+```
+
+Message 中间件，接收到特定消息时生效。
+
+```typescript
+// ...
+
+@WSController('/api')
+export class APIController {
+  
+  // Message 触发时的中间件
+  @OnWSMessage('my', {
+    middleware: [SocketMiddleware]
+  })
+  @WSEmit('ok')
+  async gotMyMessage() {
+    // ...
+  }
+}
+```
+
+
+
+## 本地测试
 
 由于 socket.io 框架可以独立启动（依附于默认的 http 服务，也可以和其他 midway 框架一起启动）。
 
@@ -471,6 +591,7 @@ describe('/test/index.test.ts', () => {
 ```
 
 
+
 ## 常见的消息和广播
 
 
@@ -574,12 +695,12 @@ const sockets = await app.in(theSocketId).fetchSockets();
 
 ```typescript
 import { Application as SocketApplication } from '@midwayjs/socketio';
-import { Controller, App, MidwayFrameworkType } from '@midwayjs/decorator';
+import { Controller, App } from '@midwayjs/decorator';
 
 @Controller()
 export class UserController {
 
-  @App(MidwayFrameworkType.WS_IO)
+  @App('socketIO')
   socketApp: SocketApplication;
 }
 ```
@@ -592,12 +713,12 @@ export class UserController {
 
 ```typescript
 import { Application as SocketApplication } from '@midwayjs/socketio';
-import { Provide, Controller, App, Get, MidwayFrameworkType } from '@midwayjs/decorator';
+import { Provide, Controller, App, Get } from '@midwayjs/decorator';
 
 @Controller()
 export class UserController {
 
-  @App(MidwayFrameworkType.WS_IO)
+  @App('socketIO')
   socketApp: SocketApplication;
 
   @Get()
@@ -612,9 +733,9 @@ export class UserController {
 
 
 
-## 配置
+## Socket 部署
 
-### 默认配置
+### Socket 服务端口
 
 `@midwayjs/socketio` 的配置样例如下：
 
@@ -628,7 +749,7 @@ export default {
 }
 ```
 
-当 `@midwayjs/socketio` 和其他 `@midwayjs/web` ， `@midwayjs/koa` ， `@midwayjs/express` 同时启用时，可以复用端口。
+当 `@midwayjs/socketio` 和其他 `@midwayjs/web` ， `@midwayjs/koa` ， `@midwayjs/express` 同时启用时，可以复用http 端口。
 
 ```typescript
 // src/config/config.default
@@ -643,7 +764,37 @@ export default {
 }
 ```
 
-其余属性描述如下：
+
+
+### Nginx 配置
+
+一般来说，我们的 Node.js 服务前都会有 Nginx 等类似的反向代理服务，这里以 Nginx 的配置为例。
+
+```nginx
+http {
+  server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $host;
+
+      proxy_pass http://localhost:7001;
+
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+    }
+  }
+}
+```
+
+
+
+## 配置
+
+### 可用配置
 
 | 属性           | 类型   | 描述                                                         |
 | --- | --- | --- |

@@ -60,4 +60,20 @@ describe('/test/index.test.ts', () => {
     await client2.close();
     await closeApp(app);
   });
+
+
+  it('should test create socket and with filter', async () => {
+    const app = await createServer('base-app-filter');
+    const client = await createWebSocketClient(`ws://localhost:3000`);
+
+    client.send(1);
+    const gotEvent = once(client, 'message');
+    const [data] = await gotEvent;
+    expect(data.toString()).toEqual('packet error');
+
+    await sleep();
+
+    await client.close();
+    await closeApp(app);
+  });
 });
