@@ -561,7 +561,7 @@ export class HeroService implements hero.HeroService {
   @Inject()
   grpcClients: Clients;
 
-  greeterService: helloworld.Greeter;
+  greeterService: helloworld.GreeterClient;
 
   @Init()
   async init() {
