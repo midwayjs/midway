@@ -317,7 +317,7 @@ export async function createFunctionApp<
     if (customPort) {
       await new Promise<void>(resolve => {
         let server: http.Server | https.Server;
-        if (this.configurationOptions.ssl) {
+        if (options.ssl) {
           server = require('https').createServer(
             {
               key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
