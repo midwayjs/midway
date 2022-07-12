@@ -56,6 +56,11 @@ export * from './common/filterManager';
 export * from './common/applicationManager';
 export * from './setup';
 export * from './error';
+export {
+  AsyncContextManager,
+  ASYNC_ROOT_CONTEXT,
+  AsyncContext,
+} from './util/asyncContextManager';
 
 /**
  * proxy

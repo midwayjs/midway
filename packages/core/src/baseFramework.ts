@@ -11,6 +11,7 @@ import {
   CommonMiddleware,
   MiddlewareRespond,
   REQUEST_CTX_LOGGER_CACHE_KEY,
+  ASYNC_CONTEXT_KEY,
 } from './interface';
 import { Inject, Destroy, Init } from '@midwayjs/decorator';
 import {
@@ -30,6 +31,10 @@ import { FilterManager } from './common/filterManager';
 import { MidwayMockService } from './service/mockService';
 
 import * as util from 'util';
+import {
+  ASYNC_ROOT_CONTEXT,
+  AsyncContextManager,
+} from './util/asyncContextManager';
 const debug = util.debuglog('midway:debug');
 
 export abstract class BaseFramework<
@@ -336,20 +341,30 @@ export abstract class BaseFramework<
   public async applyMiddleware<R, N>(
     lastMiddleware?: CommonMiddleware<CTX, R, N>
   ): Promise<MiddlewareRespond<CTX, R, N>> {
+    const contextManager = this.configService.getConfiguration(
+      'core.contextManager'
+    ) as AsyncContextManager;
     if (!this.composeMiddleware) {
       this.middlewareManager.insertFirst((async (ctx: any, next: any) => {
-        this.mockService.applyContextMocks(this.app, ctx);
-        let returnResult = undefined;
-        try {
-          const result = await next();
-          returnResult = await this.filterManager.runResultFilter(result, ctx);
-        } catch (err) {
-          returnResult = await this.filterManager.runErrorFilter(err, ctx);
-        }
-        if (returnResult.error) {
-          throw returnResult.error;
-        }
-        return returnResult.result;
+        // warp with context manager
+        const rootContext = ASYNC_ROOT_CONTEXT.setValue(ASYNC_CONTEXT_KEY, ctx);
+        return await contextManager.with(rootContext, async () => {
+          this.mockService.applyContextMocks(this.app, ctx);
+          let returnResult = undefined;
+          try {
+            const result = await next();
+            returnResult = await this.filterManager.runResultFilter(
+              result,
+              ctx
+            );
+          } catch (err) {
+            returnResult = await this.filterManager.runErrorFilter(err, ctx);
+          }
+          if (returnResult.error) {
+            throw returnResult.error;
+          }
+          return returnResult.result;
+        });
       }) as any);
       debug(
         `[core]: Compose middleware = [${this.middlewareManager.getNames()}]`

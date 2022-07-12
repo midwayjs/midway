@@ -6,6 +6,10 @@ import {
 import { getCurrentEnvironment, isDevelopmentEnvironment } from '../util/';
 import { join } from 'path';
 import type { LoggerOptions } from '@midwayjs/logger';
+import {
+  AsyncContextManager,
+  NoopContextManager,
+} from '../util/asyncContextManager';
 
 export default (
   appInfo: MidwayAppInfo
@@ -14,10 +18,16 @@ export default (
   debug?: {
     recordConfigMergeOrder?: boolean;
   };
+  core?: {
+    contextManager?: AsyncContextManager;
+  };
 } => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   const logRoot = process.env[MIDWAY_LOGGER_WRITEABLE_DIR] ?? appInfo.root;
   return {
+    core: {
+      contextManager: new NoopContextManager(),
+    },
     midwayLogger: {
       default: {
         dir: join(logRoot, 'logs', appInfo.name),
