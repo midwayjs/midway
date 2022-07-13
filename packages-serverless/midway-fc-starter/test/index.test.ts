@@ -14,8 +14,8 @@ function makeRequest(opts) {
 }
 
 function start(options) {
-  const starter = new BootstrapStarter();
-  return starter.start(options);
+  const starter = new BootstrapStarter(options);
+  return starter.start();
 }
 
 function createContext(handlerName: string) {
