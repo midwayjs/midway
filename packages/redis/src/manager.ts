@@ -74,12 +74,15 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
       client = new Redis(config);
     }
 
-    client.on('connect', () => {
-      this.logger.info('[midway:redis] client connect success');
-    });
-    client.on('error', err => {
-      this.logger.error('[midway:redis] client error: %s', err);
-      this.logger.error(err);
+    await new Promise<void>((resolve, reject) => {
+      client.on('connect', () => {
+        this.logger.info('[midway:redis] client connect success');
+        resolve();
+      });
+      client.on('error', err => {
+        this.logger.error('[midway:redis] client error: %s', err);
+        reject(err);
+      });
     });
 
     return client;

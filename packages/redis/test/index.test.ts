@@ -58,4 +58,10 @@ describe('/test/index.test.ts', () => {
     await close(app);
   });
 
+  it('should fail when unable to connect redis', async () => {
+    await expect(createLightApp(join(__dirname, './fixtures/base-app-bad-client')))
+      .rejects
+      .toThrow('connect ETIMEDOUT');
+  });
+
 });
