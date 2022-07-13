@@ -16,7 +16,7 @@ function isOutputError() {
 }
 
 export class BootstrapStarter extends AbstractBootstrapStarter {
-  start() {
+  onStart() {
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = 'production';
     }

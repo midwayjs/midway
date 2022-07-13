@@ -16,7 +16,7 @@ describe('/test/starter.test.ts', () => {
         }
       }
 
-      start(): any {
+      onStart(): any {
         const exports = {};
 
         exports['initializer'] = async context => {

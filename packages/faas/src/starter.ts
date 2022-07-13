@@ -7,7 +7,7 @@ import {
 export abstract class AbstractBootstrapStarter {
   protected applicationContext;
   protected framework;
-  constructor(readonly options: ServerlessStarterOptions = {}) {}
+  constructor(protected options: ServerlessStarterOptions = {}) {}
 
   public getApplicationContext() {
     return this.applicationContext;
@@ -15,6 +15,11 @@ export abstract class AbstractBootstrapStarter {
 
   public async close() {
     await this.onClose();
+  }
+
+  public start(options?: ServerlessStarterOptions) {
+    this.options = Object.assign(this.options, options);
+    return this.onStart();
   }
 
   public async initFramework(applicationAdapter: Record<string, any>) {
@@ -39,7 +44,7 @@ export abstract class AbstractBootstrapStarter {
     this.options.performance?.mark('frameworkStartTime');
   }
 
-  abstract start(): any;
+  abstract onStart(): any;
   abstract onInit(...args: unknown[]);
   abstract onRequest(...args: unknown[]);
   abstract onClose();
