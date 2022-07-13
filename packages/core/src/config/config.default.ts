@@ -9,7 +9,7 @@ import type { LoggerOptions } from '@midwayjs/logger';
 import {
   AsyncContextManager,
   NoopContextManager,
-} from '../util/asyncContextManager';
+} from '../common/asyncContextManager';
 
 export default (
   appInfo: MidwayAppInfo

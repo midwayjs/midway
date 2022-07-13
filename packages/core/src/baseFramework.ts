@@ -34,7 +34,7 @@ import * as util from 'util';
 import {
   ASYNC_ROOT_CONTEXT,
   AsyncContextManager,
-} from './util/asyncContextManager';
+} from './common/asyncContextManager';
 const debug = util.debuglog('midway:debug');
 
 export abstract class BaseFramework<

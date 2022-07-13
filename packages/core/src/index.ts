@@ -60,7 +60,7 @@ export {
   AsyncContextManager,
   ASYNC_ROOT_CONTEXT,
   AsyncContext,
-} from './util/asyncContextManager';
+} from './common/asyncContextManager';
 
 /**
  * proxy

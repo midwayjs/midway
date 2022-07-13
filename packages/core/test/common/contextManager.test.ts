@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { NoopContextManager, ASYNC_ROOT_CONTEXT } from '../../src/util/asyncContextManager';
+import { NoopContextManager, ASYNC_ROOT_CONTEXT } from '../../src/common/asyncContextManager';
 
 /** Get a key to uniquely identify a context value */
 function createContextKey(description: string) {
