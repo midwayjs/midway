@@ -1,5 +1,6 @@
 import { ServerlessStarterOptions } from './interface';
 import {
+  IMidwayBootstrapOptions,
   initializeGlobalApplicationContext,
   MidwayFrameworkService,
 } from '@midwayjs/core';
@@ -22,20 +23,13 @@ export abstract class AbstractBootstrapStarter {
     return this.onStart();
   }
 
-  public async initFramework(applicationAdapter: Record<string, any>) {
+  public async initFramework(bootstrapOptions: IMidwayBootstrapOptions = {}) {
     // init midway
-    const applicationContext = (this.applicationContext =
-      await initializeGlobalApplicationContext(
-        Object.assign(this.options, {
-          globalConfig: {
-            faas: {
-              applicationAdapter,
-            },
-          },
-        })
-      ));
+    this.applicationContext = await initializeGlobalApplicationContext(
+      bootstrapOptions
+    );
 
-    const midwayFrameworkService = applicationContext.get(
+    const midwayFrameworkService = this.applicationContext.get(
       MidwayFrameworkService
     );
     this.framework = midwayFrameworkService.getMainFramework();

@@ -441,6 +441,26 @@ describe('/test/services/middlewareService.test.ts', () => {
 
       expect(result).toEqual('dddabchello world');
     });
+
+    it('should ignore when resolve not return function', async () => {
+      @Provide()
+      class TestMiddleware {
+        resolve() {
+          return undefined;
+        }
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: ''}, () => {
+        return 'end';
+      });
+      expect(result).toEqual('end');
+    });
   });
 
   describe('test middleware return empty value', function () {
@@ -496,6 +516,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       expect(await fn({body: false}, () => {})).toEqual(0);
       expect(await fn({body: 0}, () => {})).toEqual(0);
     });
+
   });
 });
 

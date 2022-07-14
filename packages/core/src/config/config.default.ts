@@ -14,10 +14,16 @@ export default (
   debug?: {
     recordConfigMergeOrder?: boolean;
   };
+  asyncContextManager: {
+    enable: boolean;
+  };
 } => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   const logRoot = process.env[MIDWAY_LOGGER_WRITEABLE_DIR] ?? appInfo.root;
   return {
+    asyncContextManager: {
+      enable: false,
+    },
     midwayLogger: {
       default: {
         dir: join(logRoot, 'logs', appInfo.name),

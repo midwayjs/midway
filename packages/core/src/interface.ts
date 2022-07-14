@@ -9,6 +9,7 @@ import { ILogger, LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
 import { ContextMiddlewareManager } from './common/middlewareManager';
 import _default from './config/config.default';
+import { AsyncContextManager } from './common/asyncContextManager';
 
 export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
@@ -564,6 +565,7 @@ export interface IMidwayBootstrapOptions {
   globalConfig?:
     | Array<{ [environmentName: string]: Record<string, any> }>
     | Record<string, any>;
+  asyncContextManager?: AsyncContextManager;
 }
 
 export interface IConfigurationOptions {
@@ -624,3 +626,5 @@ export interface MidwayAppInfo {
 export interface MidwayConfig extends FileConfigOption<typeof _default> {
   [customConfigKey: string]: unknown;
 }
+
+export const ASYNC_CONTEXT_KEY = Symbol('ASYNC_CONTEXT_KEY');

@@ -20,6 +20,9 @@
     "dist/**/*.d.ts"
   ],
   "license": "MIT",
+  "dependencies": {
+    "@midwayjs/async-hooks-context-manager": "^3.4.0-beta.8"
+  },
   "devDependencies": {
     "@midwayjs/core": "^3.4.0-beta.8",
     "@midwayjs/decorator": "^3.4.0-beta.8",

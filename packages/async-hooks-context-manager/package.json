@@ -1,0 +1,34 @@
+{
+  "name": "@midwayjs/async-hooks-context-manager",
+  "version": "3.4.0-beta.8",
+  "description": "midway async hooks context manager",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
+  },
+  "keywords": [
+    "midway",
+    "async",
+    "context manager"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^3.4.0-beta.8"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  },
+  "engines": {
+    "node": ">=12.17.0"
+  },
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+}
