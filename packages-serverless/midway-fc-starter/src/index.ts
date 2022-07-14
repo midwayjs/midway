@@ -67,8 +67,6 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
     for (const handlerName of this.framework.getAllHandlerNames()) {
       exports[handlerName.split('.')[1]] = handlerWrapper;
     }
-
-    this.options.performance?.end();
   }
 
   async onRequest(event, context, oldContext) {

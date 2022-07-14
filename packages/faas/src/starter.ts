@@ -23,8 +23,6 @@ export abstract class AbstractBootstrapStarter {
   }
 
   public async initFramework(applicationAdapter: Record<string, any>) {
-    this.options.performance?.mark('starterRuntimeStartTime');
-
     // init midway
     const applicationContext = (this.applicationContext =
       await initializeGlobalApplicationContext(
@@ -41,7 +39,6 @@ export abstract class AbstractBootstrapStarter {
       MidwayFrameworkService
     );
     this.framework = midwayFrameworkService.getMainFramework();
-    this.options.performance?.mark('frameworkStartTime');
   }
 
   abstract onStart(): any;
