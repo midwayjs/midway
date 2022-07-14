@@ -6,6 +6,7 @@ import {
 } from '@midwayjs/core';
 import { join } from 'path';
 import { IMidwayLogger, MidwayBaseLogger } from '@midwayjs/logger';
+import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 
 export function isTypeScriptEnvironment() {
   const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
@@ -36,6 +37,7 @@ export class BootstrapStarter {
       ...this.globalOptions,
       appDir: this.appDir,
       baseDir: this.baseDir,
+      asyncContextManager: createContextManager(),
     });
     return this.applicationContext;
   }

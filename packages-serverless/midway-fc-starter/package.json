@@ -4,6 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "@midwayjs/async-hooks-context-manager": "^3.4.0-beta.8",
     "@midwayjs/faas": "^3.4.0-beta.8",
     "raw-body": "2.5.1"
   },

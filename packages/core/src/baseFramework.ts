@@ -34,6 +34,7 @@ import * as util from 'util';
 import {
   ASYNC_ROOT_CONTEXT,
   AsyncContextManager,
+  NoopContextManager,
 } from './common/asyncContextManager';
 const debug = util.debuglog('midway:debug');
 
@@ -55,6 +56,7 @@ export abstract class BaseFramework<
   protected middlewareManager = this.createMiddlewareManager();
   protected filterManager = this.createFilterManager();
   protected composeMiddleware = null;
+  protected bootstrapOptions: IMidwayBootstrapOptions;
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -94,6 +96,7 @@ export abstract class BaseFramework<
   }
 
   public async initialize(options?: IMidwayBootstrapOptions): Promise<void> {
+    this.bootstrapOptions = options;
     await this.beforeContainerInitialize(options);
     await this.containerInitialize(options);
     await this.afterContainerInitialize(options);
@@ -341,9 +344,18 @@ export abstract class BaseFramework<
   public async applyMiddleware<R, N>(
     lastMiddleware?: CommonMiddleware<CTX, R, N>
   ): Promise<MiddlewareRespond<CTX, R, N>> {
-    const contextManager = this.configService.getConfiguration(
-      'core.contextManager'
-    ) as AsyncContextManager;
+    const asyncContextManagerEnabled =
+      this.configService.getConfiguration('asyncContextManager.enable') ||
+      false;
+
+    const contextManager: AsyncContextManager = asyncContextManagerEnabled
+      ? this.bootstrapOptions?.contextManager || new NoopContextManager()
+      : new NoopContextManager();
+
+    if (asyncContextManagerEnabled) {
+      contextManager.enable();
+    }
+
     if (!this.composeMiddleware) {
       this.middlewareManager.insertFirst((async (ctx: any, next: any) => {
         // warp with context manager

@@ -6,6 +6,7 @@ import {
 } from '@midwayjs/faas';
 import * as getRawBody from 'raw-body';
 import { IncomingMessage } from 'http';
+import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 
 function isOutputError() {
   return (
@@ -60,7 +61,14 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
       },
     } as IFaaSConfigurationOptions;
 
-    await this.initFramework(applicationAdapter);
+    await this.initFramework({
+      globalConfig: {
+        faas: {
+          applicationAdapter,
+        },
+      },
+      asyncContextManager: createContextManager(),
+    });
 
     const handlerWrapper = wrapAsync(this.onRequest.bind(this));
 

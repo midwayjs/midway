@@ -31,6 +31,7 @@ import * as http from 'http';
 import * as https from 'https';
 import * as yaml from 'js-yaml';
 import * as getRawBody from 'raw-body';
+import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 
 const debug = debuglog('midway:debug');
 
@@ -145,6 +146,7 @@ export async function create<
   await initializeGlobalApplicationContext({
     ...options,
     appDir,
+    asyncContextManager: createContextManager(),
     imports: []
       .concat(options.imports)
       .concat(
