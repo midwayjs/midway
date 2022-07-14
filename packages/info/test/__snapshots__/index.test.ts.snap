@@ -3,7 +3,7 @@
 exports[`test/index.test.ts should test get config and filter secret 1`] = `
 Object {
   "info": Object {
-    "core": "{\\"contextManager\\":{}}",
+    "asyncContextManager": "{\\"enable\\":false}",
     "cos": "{\\"default\\":{\\"SecretId\\":\\"df******af\\",\\"SecretKey\\":\\"te******vc\\",\\"SecurityToken\\":\\"fj*********af\\"}}",
     "debug": "{\\"recordConfigMergeOrder\\":true}",
     "info": "{\\"title\\":\\"Midway Info\\",\\"infoPath\\":\\"/_info\\",\\"hiddenKey\\":[\\"k***\\",\\"****\\",\\"*****n\\",\\"********\\",\\"p****\\"]}",
