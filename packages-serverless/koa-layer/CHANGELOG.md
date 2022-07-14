@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.9](https://github.com/midwayjs/midway/compare/v3.4.0-beta.8...v3.4.0-beta.9) (2022-07-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @koa/router to v11 ([#2111](https://github.com/midwayjs/midway/issues/2111)) ([0f6b34e](https://github.com/midwayjs/midway/commit/0f6b34e964a1bfc98ddf020878b43af99557291d))
+
+
+
+
+
 # [3.4.0-beta.8](https://github.com/midwayjs/midway/compare/v3.4.0-beta.7...v3.4.0-beta.8) (2022-07-12)
 
 **Note:** Version bump only for package @midwayjs/koa-layer

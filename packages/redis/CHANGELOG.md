@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.9](https://github.com/midwayjs/midway/compare/v3.4.0-beta.8...v3.4.0-beta.9) (2022-07-14)
+
+
+### Bug Fixes
+
+* use redis client before it's ready, most likely to occur during unit test ([#2102](https://github.com/midwayjs/midway/issues/2102)) ([3f4f0cd](https://github.com/midwayjs/midway/commit/3f4f0cdd5d74c5b7f6c39edfeb453accd6ec0fa3))
+
+
+
+
+
 # [3.4.0-beta.8](https://github.com/midwayjs/midway/compare/v3.4.0-beta.7...v3.4.0-beta.8) (2022-07-12)
 
 **Note:** Version bump only for package @midwayjs/redis

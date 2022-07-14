@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.9](https://github.com/midwayjs/midway/compare/v3.4.0-beta.8...v3.4.0-beta.9) (2022-07-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @koa/router to v11 ([#2111](https://github.com/midwayjs/midway/issues/2111)) ([0f6b34e](https://github.com/midwayjs/midway/commit/0f6b34e964a1bfc98ddf020878b43af99557291d))
+* faas close server ([#2113](https://github.com/midwayjs/midway/issues/2113)) ([f627f27](https://github.com/midwayjs/midway/commit/f627f27c0a6afb6f1e4a04a68ae96ef6d579ed3f))
+* ignore middleware can't return in resolve ([#2112](https://github.com/midwayjs/midway/issues/2112)) ([ec018a3](https://github.com/midwayjs/midway/commit/ec018a3365b06c1cc809e014afede0a24ce1dd74))
+* use redis client before it's ready, most likely to occur during unit test ([#2102](https://github.com/midwayjs/midway/issues/2102)) ([3f4f0cd](https://github.com/midwayjs/midway/commit/3f4f0cdd5d74c5b7f6c39edfeb453accd6ec0fa3))
+* when `resolve` return null, the current loop should end, otherwi… ([#2114](https://github.com/midwayjs/midway/issues/2114)) ([cae3c8b](https://github.com/midwayjs/midway/commit/cae3c8b325d57b1da982eec55216eceaf4596cf9))
+
+
+### Features
+
+* add context manager with middleware ([#2116](https://github.com/midwayjs/midway/issues/2116)) ([99ba506](https://github.com/midwayjs/midway/commit/99ba506b82b1061af26bf333892ae90b654a7b31))
+
+
+
+
+
 # [3.4.0-beta.8](https://github.com/midwayjs/midway/compare/v3.4.0-beta.7...v3.4.0-beta.8) (2022-07-12)
 
 

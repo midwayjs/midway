@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.9](https://github.com/midwayjs/midway/compare/v3.4.0-beta.8...v3.4.0-beta.9) (2022-07-14)
+
+
+### Bug Fixes
+
+* faas close server ([#2113](https://github.com/midwayjs/midway/issues/2113)) ([f627f27](https://github.com/midwayjs/midway/commit/f627f27c0a6afb6f1e4a04a68ae96ef6d579ed3f))
+
+
+
+
+
 # [3.4.0-beta.8](https://github.com/midwayjs/midway/compare/v3.4.0-beta.7...v3.4.0-beta.8) (2022-07-12)
 
 **Note:** Version bump only for package @midwayjs/express
