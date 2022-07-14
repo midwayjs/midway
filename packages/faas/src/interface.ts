@@ -82,6 +82,8 @@ export interface IWebMiddleware {
 export interface ServerlessStarterOptions extends IMidwayBootstrapOptions {
   initializeMethodName?: string;
   handlerName?: string;
+  aggregationHandlerName?: string;
+  handlerNameMapping?: (handlerName: string, ...args: unknown[]) => [string, ...unknown[]];
   createAdapter?: () => Promise<{
     close();
     createAppHook(app?);
@@ -90,5 +92,4 @@ export interface ServerlessStarterOptions extends IMidwayBootstrapOptions {
     mark(label: string);
     end();
   };
-  exportAllHandler?: boolean;
 }

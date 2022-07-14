@@ -14,8 +14,8 @@ function makeRequest(opts) {
 }
 
 function start(options) {
-  const starter = new BootstrapStarter();
-  return starter.start(options);
+  const starter = new BootstrapStarter(options);
+  return starter.start();
 }
 
 function createContext(handlerName: string) {
@@ -46,7 +46,6 @@ describe('/test/index.test.ts', () => {
     const starter = start({
       baseDir: join(__dirname, './fixtures/base-app/src'),
       appDir: join(__dirname, './fixtures/base-app'),
-      exportAllHandler: true,
     });
 
     await starter['initializer'](createContext('event'));

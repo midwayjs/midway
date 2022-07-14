@@ -382,7 +382,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   public async wrapHttpRequest(
-    req: http.IncomingMessage,
+    req: http.IncomingMessage | Record<string, any>,
     res?: http.ServerResponse
   ) {
     const newReq = res ? new HTTPRequest(req, res) : req;
