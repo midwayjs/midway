@@ -68,6 +68,7 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
         },
       },
       asyncContextManager: createContextManager(),
+      ...this.options,
     });
 
     const handlerWrapper = wrapAsync(this.onRequest.bind(this));
