@@ -27,7 +27,7 @@
     "@midwayjs/decorator": "^3.4.0-beta.9",
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/mock": "^3.4.0-beta.9",
-    "@types/koa": "2.13.4",
+    "@types/koa": "2.13.5",
     "@types/koa-router": "7.4.4",
     "fs-extra": "10.0.1"
   },
