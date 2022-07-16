@@ -12,7 +12,7 @@
     "@midwayjs/core": "^3.4.0-beta.9",
     "@midwayjs/decorator": "^3.4.0-beta.9",
     "@midwayjs/mock": "^3.4.0-beta.9",
-    "sqlite3": "5.0.8",
+    "sqlite3": "5.0.9",
     "typeorm": "0.3.7"
   },
   "author": {
