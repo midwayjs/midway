@@ -12,6 +12,7 @@ import {
   MiddlewareRespond,
   REQUEST_CTX_LOGGER_CACHE_KEY,
   ASYNC_CONTEXT_KEY,
+  ASYNC_CONTEXT_MANAGER_KEY,
 } from './interface';
 import { Inject, Destroy, Init } from '@midwayjs/decorator';
 import {
@@ -57,6 +58,7 @@ export abstract class BaseFramework<
   protected filterManager = this.createFilterManager();
   protected composeMiddleware = null;
   protected bootstrapOptions: IMidwayBootstrapOptions;
+  protected asyncContextManager: AsyncContextManager;
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -344,22 +346,31 @@ export abstract class BaseFramework<
   public async applyMiddleware<R, N>(
     lastMiddleware?: CommonMiddleware<CTX, R, N>
   ): Promise<MiddlewareRespond<CTX, R, N>> {
-    const asyncContextManagerEnabled =
-      this.configService.getConfiguration('asyncContextManager.enable') ||
-      false;
+    if (!this.applicationContext.hasObject(ASYNC_CONTEXT_MANAGER_KEY)) {
+      const asyncContextManagerEnabled =
+        this.configService.getConfiguration('asyncContextManager.enable') ||
+        false;
 
-    const contextManager: AsyncContextManager = asyncContextManagerEnabled
-      ? this.bootstrapOptions?.contextManager || new NoopContextManager()
-      : new NoopContextManager();
+      const contextManager: AsyncContextManager = asyncContextManagerEnabled
+        ? this.bootstrapOptions?.contextManager || new NoopContextManager()
+        : new NoopContextManager();
 
-    if (asyncContextManagerEnabled) {
-      contextManager.enable();
+      if (asyncContextManagerEnabled) {
+        contextManager.enable();
+      }
+      this.applicationContext.registerObject(
+        ASYNC_CONTEXT_MANAGER_KEY,
+        contextManager
+      );
     }
 
     if (!this.composeMiddleware) {
       this.middlewareManager.insertFirst((async (ctx: any, next: any) => {
         // warp with context manager
         const rootContext = ASYNC_ROOT_CONTEXT.setValue(ASYNC_CONTEXT_KEY, ctx);
+        const contextManager: AsyncContextManager = this.applicationContext.get(
+          ASYNC_CONTEXT_MANAGER_KEY
+        );
         return await contextManager.with(rootContext, async () => {
           this.mockService.applyContextMocks(this.app, ctx);
           let returnResult = undefined;
