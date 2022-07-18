@@ -16,7 +16,7 @@
     "sqlite3": "5.0.9"
   },
   "dependencies": {
-    "sequelize": "6.21.2",
+    "sequelize": "6.21.3",
     "sequelize-typescript": "^2.1.0"
   },
   "keywords": [
