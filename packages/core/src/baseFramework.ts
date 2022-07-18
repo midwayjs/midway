@@ -352,7 +352,7 @@ export abstract class BaseFramework<
         false;
 
       const contextManager: AsyncContextManager = asyncContextManagerEnabled
-        ? this.bootstrapOptions?.contextManager || new NoopContextManager()
+        ? this.bootstrapOptions?.asyncContextManager || new NoopContextManager()
         : new NoopContextManager();
 
       if (asyncContextManagerEnabled) {
