@@ -10,11 +10,12 @@ import {
   MidwayRequestContainer,
   MidwayDecoratorService,
   MidwayMiddlewareService,
-  ContextMiddlewareManager,
+  ContextMiddlewareManager, getCurrentAsyncContextManager, ASYNC_CONTEXT_MANAGER_KEY,
 } from '../src';
 import { createLightFramework } from './util';
 import sinon = require('sinon');
 import { IMidwayApplication } from '../dist';
+import { NoopContextManager } from '../dist/common/asyncContextManager';
 
 @Provide()
 class TestModule {
@@ -477,6 +478,10 @@ describe('/test/baseFramework.test.ts', () => {
     expect(getCurrentMainFramework()).toEqual(framework);
     expect(getCurrentApplicationContext()).toEqual(appCtx);
     expect(getCurrentMainApp()).toEqual(framework.getApplication());
+
+    // set first
+    appCtx.registerObject(ASYNC_CONTEXT_MANAGER_KEY, new NoopContextManager());
+    expect(getCurrentAsyncContextManager()).toBeDefined();
 
     mm.restore();
   });

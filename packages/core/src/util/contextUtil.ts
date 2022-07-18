@@ -4,7 +4,9 @@ import {
   IMidwayContainer,
   IMidwayFramework,
   IMidwayContext,
+  ASYNC_CONTEXT_MANAGER_KEY,
 } from '../interface';
+import { AsyncContextManager } from '../common/asyncContextManager';
 
 export const getCurrentApplicationContext = (): IMidwayContainer => {
   return global['MIDWAY_APPLICATION_CONTEXT'];
@@ -24,4 +26,8 @@ export const getCurrentMainApp = <APP extends IMidwayApplication>(): APP => {
     return framework.getApplication() as APP;
   }
   return undefined;
+};
+
+export const getCurrentAsyncContextManager = (): AsyncContextManager => {
+  return getCurrentApplicationContext().get(ASYNC_CONTEXT_MANAGER_KEY);
 };

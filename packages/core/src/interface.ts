@@ -628,3 +628,4 @@ export interface MidwayConfig extends FileConfigOption<typeof _default> {
 }
 
 export const ASYNC_CONTEXT_KEY = Symbol('ASYNC_CONTEXT_KEY');
+export const ASYNC_CONTEXT_MANAGER_KEY = 'MIDWAY_ASYNC_CONTEXT_MANAGER_KEY';
