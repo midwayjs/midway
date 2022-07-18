@@ -1,6 +1,5 @@
 import { App, Configuration, Provide } from '@midwayjs/decorator';
-import * as passport from 'passport';
-import { PassportMiddleware, PassportStrategy, CustomStrategy } from '../../../../src';
+import { PassportMiddleware, PassportStrategy, CustomStrategy, AuthenticateOptions } from '../../../../src';
 import * as path from 'path';
 import * as LocalStrategy from 'passport-local';
 import * as express from '@midwayjs/express';
@@ -20,9 +19,8 @@ export class MyStrategy extends PassportStrategy(LocalStrategy.Strategy) {
 @Provide('local')
 export class AuthMiddleware extends PassportMiddleware(MyStrategy) {
 
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions {
     return {
-      successRedirect: '/',
       failureRedirect: '/login',
     }
   }

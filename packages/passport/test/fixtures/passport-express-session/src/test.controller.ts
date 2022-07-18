@@ -6,7 +6,7 @@ export class TestPackagesController {
   @Inject()
   req;
 
-  @Get('/local-passport', )
+  @Get('/local-passport')
   async localPassport() {
     if (
       this.req.user?.username === 'admin' &&

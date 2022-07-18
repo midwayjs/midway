@@ -4,7 +4,6 @@ import { join } from 'path';
 describe('/test/index.test.ts', () => {
   describe('Express passport', () => {
     it('basic local auth', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express'),
         {},
@@ -24,12 +23,10 @@ describe('/test/index.test.ts', () => {
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('success');
 
-      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
       await close(app);
     });
 
     it('passport with session', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-session'),
         {},
@@ -58,12 +55,10 @@ describe('/test/index.test.ts', () => {
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('success');
 
-      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
       await close(app);
     });
 
     it('jwt passport with express', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
       let token;
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-jwt'),

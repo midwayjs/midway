@@ -1,15 +1,43 @@
-import * as passport from 'passport';
-import { App, Config, Init } from '@midwayjs/decorator';
-import { getPassport, isExpressMode } from '../util';
-import { AbstractPassportMiddleware, AbstractStrategy } from '../interface';
+import { App, Config, Init, Inject } from '@midwayjs/decorator';
+import {
+  AbstractPassportMiddleware,
+  AbstractStrategy,
+  AuthenticateOptions,
+} from '../interface';
 import { httpError } from '@midwayjs/core';
+import { PassportAuthenticator } from '../passport/authenticator';
+import { Strategy } from '../passport/strategy';
+import * as http from 'http';
+import { create as createReqMock } from '../proxy/framework/request';
+
+// const op = (isExpress: boolean) => {
+//   if (isExpress) {
+//     return {
+//       redirect() {
+//         return {
+//           status: 302,
+//           text: 'Redirecting to <a href=\"/\">/</a>.',
+//         };
+//       }
+//     }
+//   } else {
+//     return {
+//       redirect(ctx) {
+//         ctx.redirect();
+//       }
+//     }
+//   }
+// }
 
 export function PassportStrategy(
-  Strategy: new (...args) => passport.Strategy,
+  Strategy: new (...args) => Strategy,
   name?: string
 ): new (...args) => AbstractStrategy {
   abstract class InnerStrategyAbstractClass extends AbstractStrategy {
     private strategy;
+
+    @Inject()
+    passport: PassportAuthenticator;
 
     @Init()
     async init() {
@@ -29,22 +57,21 @@ export function PassportStrategy(
 
       this.strategy = new Strategy(this.getStrategyOptions(), cb);
 
-      const passport = getPassport() as passport.PassportStatic;
       if (name) {
-        passport.use(name, this.strategy);
+        this.passport.use(name, this.strategy);
       } else {
-        passport.use(this.strategy);
+        this.passport.use(this.strategy);
       }
       if (this['serializeUser']) {
-        passport.serializeUser(this['serializeUser']);
+        this.passport.serializeUser(this['serializeUser']);
       }
 
       if (this['deserializeUser']) {
-        passport.deserializeUser(this['deserializeUser']);
+        this.passport.deserializeUser(this['deserializeUser']);
       }
 
       if (this['transformAuthInfo']) {
-        passport.transformAuthInfo(this['transformAuthInfo']);
+        this.passport.transformAuthInfo(this['transformAuthInfo']);
       }
     }
 
@@ -52,6 +79,7 @@ export function PassportStrategy(
       return this.strategy;
     }
   }
+
   return InnerStrategyAbstractClass as any;
 }
 
@@ -67,95 +95,114 @@ export function PassportMiddleware(
     @App()
     app;
 
+    @Inject()
+    passport: PassportAuthenticator;
+
     resolve() {
-      if (isExpressMode()) {
-        return async function passportMiddleware(req, res, next) {
-          return this.authenticate(await this.getAuthenticateOptions())(
-            req,
-            res,
-            next
-          );
-        }.bind(this);
-      } else {
-        return async function passportMiddleware(ctx, next) {
-          return this.authenticate(await this.getAuthenticateOptions())(
-            ctx,
-            next
-          );
-        }.bind(this);
-      }
+      return this.authenticate(this.getAuthenticateOptions());
     }
 
-    getAuthenticateOptions():
-      | Promise<passport.AuthenticateOptions>
-      | passport.AuthenticateOptions {
+    getAuthenticateOptions(): AuthenticateOptions {
       return undefined;
     }
 
-    authenticate(options: passport.AuthenticateOptions): any {
+    authenticate(options: AuthenticateOptions): any {
       if (!Array.isArray(strategy)) {
         strategy = [strategy];
       }
 
-      if (isExpressMode()) {
-        return async (req, res, next) => {
+      if (this.passport.isExpressMode()) {
+        return async function passportAuthenticate(req, res, next) {
+          // init req method
+          this.attachRequestMethod(req);
+
           // merge options with default options
           const authOptions = {
             ...this.passportConfig,
             ...options,
           };
 
-          if (authOptions.session && req.session[authOptions.userProperty]) {
-            req[authOptions.userProperty] =
-              req.session[authOptions.userProperty];
+          const strategyList = [];
+          for (const strategySingle of strategy as StrategyClass[]) {
+            // got strategy
+            const strategyInstance = await this.app
+              .getApplicationContext()
+              .getAsync(strategySingle);
+            strategyList.push(strategyInstance.getStrategy());
           }
-          // ignore user has exists
-          if (req[authOptions.userProperty]) {
-            next();
-          } else {
-            const passport = getPassport() as passport.PassportStatic;
-            const strategyList = [];
-            for (const strategySingle of strategy as StrategyClass[]) {
-              // got strategy
-              const strategyInstance = await this.app
-                .getApplicationContext()
-                .getAsync(strategySingle);
-              strategyList.push(strategyInstance.getStrategy());
-            }
 
-            const user = await new Promise<any>((resolve, reject) => {
-              // authenticate
-              passport.authenticate(
-                strategyList,
-                authOptions,
-                (err, user, info, status) => {
-                  if (err) {
-                    reject(err);
-                  } else {
-                    resolve(user);
-                  }
-                }
-              )(req, res, err => (err ? reject(err) : resolve(0)));
-            });
-            if (user) {
-              req[authOptions.userProperty] = user;
-              if (authOptions.session) {
-                req.logIn(user, options, next);
-                return;
-              }
-            } else {
-              if (options.failureRedirect) {
-                res.redirect(options.failureRedirect);
-                return;
-              } else {
-                throw new httpError.UnauthorizedError();
-              }
-            }
-            next();
+          // authenticate
+          const authenticate = this.passport.authenticate(
+            strategyList,
+            authOptions
+          );
+
+          const authenticateResult = await authenticate(req);
+
+          // success
+          if (authenticateResult.successResult) {
+            await this.onceSucceed(
+              options,
+              authenticateResult.successResult.user,
+              authenticateResult.successResult.info,
+              req,
+              res
+            );
+          } else if (authenticateResult.redirectResult) {
+            // redirect
+            res.statusCode = authenticateResult.redirectResult.status || 302;
+            res.setHeader('Location', authenticateResult.redirectResult.url);
+            res.setHeader('Content-Length', '0');
+            res.end();
+            return;
+          } else {
+            this.allFailed(options, authenticateResult.failResult, req, res);
           }
-        };
+          next();
+        }.bind(this);
       } else {
-        return async function bbb(ctx, next) {
+        return async function passportAuthenticate(ctx, next) {
+          // init req method
+          this.attachRequestMethod(ctx.req);
+          // koa <-> connect compatibility:
+          const userProperty = this.passport.getUserProperty();
+          // check ctx.req has the userProperty
+          // eslint-disable-next-line no-prototype-builtins
+          if (!ctx.req.hasOwnProperty(userProperty)) {
+            Object.defineProperty(ctx.req, userProperty, {
+              enumerable: true,
+              get: function () {
+                return ctx.state[userProperty];
+              },
+              set: function (val) {
+                ctx.state[userProperty] = val;
+              },
+            });
+          }
+
+          // create mock object for express' req object
+          const req = createReqMock(ctx, userProperty);
+
+          // add Promise-based login method
+          const login = req.login;
+          ctx.login = ctx.logIn = function (user, options) {
+            return new Promise<void>((resolve, reject) => {
+              // fix session manager missing
+              if (!req._sessionManager) {
+                req._sessionManager = passport._sm;
+              }
+              login.call(req, user, options, err => {
+                if (err) reject(err);
+                else resolve();
+              });
+            });
+          };
+
+          // add aliases for passport's request extensions to Koa's context
+          ctx.logout = ctx.logOut = req.logout.bind(req);
+          ctx.isAuthenticated = req.isAuthenticated.bind(req);
+          ctx.isUnauthenticated = req.isUnauthenticated.bind(req);
+
           // merge options with default options
           const authOptions = {
             ...this.passportConfig,
@@ -174,7 +221,6 @@ export function PassportMiddleware(
           if (ctx.state[authOptions.userProperty]) {
             await next();
           } else {
-            const passport = getPassport() as passport.PassportStatic;
             const strategyList = [];
             for (const strategySingle of strategy as StrategyClass[]) {
               // got strategy
@@ -183,43 +229,94 @@ export function PassportMiddleware(
                 .getAsync(strategySingle);
               strategyList.push(strategyInstance.getStrategy());
             }
-            try {
-              const user = await new Promise<any>((resolve, reject) => {
-                // authenticate
-                passport.authenticate(
-                  strategyList,
-                  authOptions,
-                  (err, user, info, status) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(user);
-                    }
-                  }
-                )(ctx, err => (err ? reject(err) : resolve(0)));
-              });
-              if (user) {
-                ctx.state[authOptions.userProperty] = user;
-                if (authOptions.session) {
-                  // save to ctx.session.passport
-                  await ctx.login(user, options);
-                }
-                if (options.successRedirect) {
-                  ctx.redirect(options.successRedirect);
-                  return;
-                }
+
+            // authenticate
+            const authenticate = this.passport.authenticate(
+              strategyList,
+              authOptions
+            );
+
+            const authenticateResult = await authenticate(ctx.req);
+
+            // success
+            if (authenticateResult.successResult) {
+              await this.onceSucceed(
+                options,
+                authenticateResult.successResult.user,
+                authenticateResult.successResult.info,
+                ctx.req,
+                ctx.res
+              );
+              // ctx.state[authOptions.userProperty] = user;
+              // if (authOptions.session) {
+              //   // save to ctx.session.passport
+              //   await ctx.login(user, options);
+              // }
+              // if (options.successRedirect) {
+              //   ctx.redirect(options.successRedirect);
+              //   return;
+              // }
+            } else if (authenticateResult.redirectResult) {
+              // redirect
+              ctx.status = authenticateResult.redirectResult.status || 302;
+              ctx.set('Location', authenticateResult.redirectResult.url);
+              ctx.set('Content-Length', '0');
+              return;
+            } else {
+              this.allFailed(
+                options,
+                authenticateResult.failResult,
+                ctx.req,
+                ctx.res
+              );
+              // fail
+              if (options.failureRedirect) {
+                ctx.redirect(options.failureRedirect);
+                return;
               } else {
-                if (options.failureRedirect) {
-                  ctx.redirect(options.failureRedirect);
-                  return;
-                } else {
-                  throw new httpError.UnauthorizedError();
-                }
+                throw new httpError.UnauthorizedError();
               }
-              await next();
-            } catch (err) {
-              ctx.throw(err);
             }
+
+            // try {
+            //   const user = await new Promise<any>((resolve, reject) => {
+            //     // authenticate
+            //     this.passport.authenticate(
+            //       strategyList,
+            //       authOptions,
+            //       (err, user, info, status) => {
+            //         if (err) {
+            //           reject(err);
+            //         } else {
+            //           resolve(user);
+            //         }
+            //       }
+            //     )(ctx, err => (err ? reject(err) : resolve(0)));
+            //   });
+            //   if (user) {
+            //     ctx.state[authOptions.userProperty] = user;
+            //     if (authOptions.session) {
+            //       // save to ctx.session.passport
+            //       await ctx.login(user, options);
+            //     }
+            //     if (options.successRedirect) {
+            //       ctx.redirect(options.successRedirect);
+            //       return;
+            //     }
+            //   } else {
+            //     if (options.failureRedirect) {
+            //       ctx.redirect(options.failureRedirect);
+            //       return;
+            //     } else {
+            //       throw new httpError.UnauthorizedError();
+            //     }
+            //   }
+            //   await next();
+            // } catch (err) {
+            //   ctx.throw(err);
+            // }
+
+            await next();
           }
         }.bind(this);
       }
@@ -228,6 +325,207 @@ export function PassportMiddleware(
     static getName() {
       return 'passport';
     }
+
+    protected async onceSucceed(options, user, info, req, res) {
+      let msg;
+      if (options.successFlash) {
+        let flash: any = options.successFlash;
+        if (typeof flash === 'string') {
+          flash = { type: 'success', message: flash };
+        }
+        flash.type = flash.type || 'success';
+
+        const type = flash.type || info.type || 'success';
+        msg = flash.message || info.message || info;
+        if (typeof msg === 'string') {
+          req.flash(type, msg);
+        }
+      }
+      if (options.successMessage) {
+        msg = options.successMessage;
+        if (typeof msg === 'boolean') {
+          msg = info.message || info;
+        }
+        if (typeof msg === 'string') {
+          req.session.messages = req.session.messages || [];
+          req.session.messages.push(msg);
+        }
+      }
+      if (options.assignProperty) {
+        req[options.assignProperty] = user;
+        return;
+      }
+
+      await req.logIn(user, options);
+
+      if (options.authInfo !== false) {
+        await new Promise<void>((resolve, reject) => {
+          this.passport.transformAuthInfo(info, req, (err, tinfo) => {
+            if (err) {
+              reject(err);
+            } else {
+              req.authInfo = tinfo;
+              resolve();
+            }
+          });
+        });
+      }
+      if (options.successReturnToOrRedirect) {
+        let url = options.successReturnToOrRedirect;
+        if (req.session && req.session.returnTo) {
+          url = req.session.returnTo;
+          delete req.session.returnTo;
+        }
+        res.redirect(url);
+      }
+      if (options.successRedirect) {
+        res.redirect(options.successRedirect);
+      }
+    }
+
+    protected allFailed(
+      options,
+      failResult: { failures: Array<{ challenge: string; status: number }> },
+      req,
+      res
+    ) {
+      // Strategies are ordered by priority.  For the purpose of flashing a
+      // message, the first failure will be displayed.
+      let failure = failResult.failures[0] || ({} as any),
+        challenge = failure?.challenge || {},
+        msg;
+
+      if (options.failureFlash) {
+        let flash: any = options.failureFlash;
+        if (typeof flash === 'string') {
+          flash = { type: 'error', message: flash };
+        }
+        flash.type = flash.type || 'error';
+
+        const type = flash.type || challenge.type || 'error';
+        msg = flash.message || challenge.message || challenge;
+        if (typeof msg === 'string') {
+          // TODO
+          req.flash(type, msg);
+        }
+      }
+      if (options.failureMessage) {
+        msg = options.failureMessage;
+        if (typeof msg === 'boolean') {
+          msg = challenge.message || challenge;
+        }
+        if (typeof msg === 'string') {
+          // TODO
+          req.session.messages = req.session.messages || [];
+          req.session.messages.push(msg);
+        }
+      }
+      if (options.failureRedirect) {
+        // TODO
+        return res.redirect(options.failureRedirect);
+      }
+
+      // When failure handling is not delegated to the application, the default
+      // is to respond with 401 Unauthorized.  Note that the WWW-Authenticate
+      // header will be set according to the strategies in use (see
+      // actions#fail).  If multiple strategies failed, each of their challenges
+      // will be included in the response.
+      const rchallenge = [];
+      let rstatus, status;
+
+      for (let j = 0, len = failResult.failures.length; j < len; j++) {
+        failure = failResult.failures[j];
+        challenge = failure.challenge;
+        status = failure.status;
+
+        rstatus = rstatus || status;
+        if (typeof challenge === 'string') {
+          rchallenge.push(challenge);
+        }
+      }
+
+      res.statusCode = rstatus || 401;
+      // eslint-disable-next-line eqeqeq
+      if (res.statusCode === 401 && rchallenge.length) {
+        // TODO
+        res.setHeader('WWW-Authenticate', rchallenge);
+      }
+      if (options.failWithError) {
+        throw new httpError.UnauthorizedError();
+      }
+      // TODO
+      res.end(http.STATUS_CODES[res.statusCode]);
+    }
+
+    protected attachRequestMethod(req) {
+      // init req method
+      req.login = req.logIn = (
+        user,
+        options?: {
+          session?: boolean;
+          keepSessionInfo?: boolean;
+        },
+        done?
+      ) => {
+        if (typeof options === 'function') {
+          done = options;
+          options = {};
+        }
+        options = options || {};
+
+        const property = this.passport.getUserProperty();
+        req[property] = user;
+        if (this.passport.isEnableSession()) {
+          return this.passport.logInToSession(req, user).catch(err => {
+            req[property] = null;
+            if (done) {
+              done(err);
+            } else {
+              throw err;
+            }
+          });
+        } else {
+          return Promise.resolve().then(() => {
+            if (done) {
+              done();
+            }
+          });
+        }
+      };
+
+      req.logout = req.logOut = (options, done?) => {
+        if (typeof options === 'function') {
+          done = options;
+          options = {};
+        }
+        options = options || {};
+
+        req[this.passport.getUserProperty()] = null;
+        if (this.passport.isEnableSession()) {
+          return this.passport.logOutFromSession(req, options).catch(err => {
+            if (done) {
+              done(err);
+            } else {
+              throw err;
+            }
+          });
+        } else {
+          return Promise.resolve().then(() => {
+            if (done) {
+              done();
+            }
+          });
+        }
+      };
+      req.isAuthenticated = () => {
+        const property = this.passport.getUserProperty();
+        return !!this[property];
+      };
+      req.isUnauthenticated = () => {
+        return !req.isAuthenticated();
+      };
+    }
   }
+
   return InnerPassportMiddleware as any;
 }

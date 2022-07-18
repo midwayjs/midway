@@ -134,7 +134,7 @@ function getObject(ctx, key) {
 
 const IncomingMessageExt = require('passport/lib/http/request');
 
-exports.create = function (ctx, userProperty) {
+export function create(ctx, userProperty) {
   const req = Object.create(ctx.request, properties);
 
   Object.defineProperty(req, userProperty, {
@@ -163,4 +163,4 @@ exports.create = function (ctx, userProperty) {
   req.isUnauthenticated = IncomingMessageExt.isUnauthenticated;
 
   return req;
-};
+}
