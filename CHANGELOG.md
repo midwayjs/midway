@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.10](https://github.com/midwayjs/midway/compare/v3.4.0-beta.9...v3.4.0-beta.10) (2022-07-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ws to v8.8.1 ([#2125](https://github.com/midwayjs/midway/issues/2125)) ([fabf2a4](https://github.com/midwayjs/midway/commit/fabf2a4b773c3c132043592c5e1ec7cb57f7dae0))
+
+
+### Features
+
+* add get current context manager global method ([#2129](https://github.com/midwayjs/midway/issues/2129)) ([2ac829f](https://github.com/midwayjs/midway/commit/2ac829fe4cb26851a21a211d17d9bfc2195beab6))
+
+
+
+
+
 # [3.4.0-beta.9](https://github.com/midwayjs/midway/compare/v3.4.0-beta.8...v3.4.0-beta.9) (2022-07-14)
 
 
