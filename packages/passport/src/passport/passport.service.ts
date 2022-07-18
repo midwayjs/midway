@@ -5,10 +5,10 @@ import {
   AuthenticateOptions,
 } from '../interface';
 import { httpError } from '@midwayjs/core';
-import { PassportAuthenticator } from '../passport/authenticator';
-import { Strategy } from '../passport/strategy';
+import { PassportAuthenticator } from './authenticator';
+import { Strategy } from './strategy';
 import * as http from 'http';
-import { create as createReqMock } from '../proxy/framework/request';
+import { create as createReqMock } from './request';
 
 // const op = (isExpress: boolean) => {
 //   if (isExpress) {
@@ -141,13 +141,16 @@ export function PassportMiddleware(
 
           // success
           if (authenticateResult.successResult) {
-            await this.onceSucceed(
+            const breakNext = await this.onceSucceed(
               options,
               authenticateResult.successResult.user,
               authenticateResult.successResult.info,
               req,
               res
             );
+            if (breakNext) {
+              return;
+            }
           } else if (authenticateResult.redirectResult) {
             // redirect
             res.statusCode = authenticateResult.redirectResult.status || 302;
@@ -162,35 +165,17 @@ export function PassportMiddleware(
         }.bind(this);
       } else {
         return async function passportAuthenticate(ctx, next) {
-          // init req method
-          this.attachRequestMethod(ctx.req);
           // koa <-> connect compatibility:
           const userProperty = this.passport.getUserProperty();
-          // check ctx.req has the userProperty
-          // eslint-disable-next-line no-prototype-builtins
-          if (!ctx.req.hasOwnProperty(userProperty)) {
-            Object.defineProperty(ctx.req, userProperty, {
-              enumerable: true,
-              get: function () {
-                return ctx.state[userProperty];
-              },
-              set: function (val) {
-                ctx.state[userProperty] = val;
-              },
-            });
-          }
-
           // create mock object for express' req object
           const req = createReqMock(ctx, userProperty);
+          // init req method
+          this.attachRequestMethod(req);
 
           // add Promise-based login method
           const login = req.login;
           ctx.login = ctx.logIn = function (user, options) {
             return new Promise<void>((resolve, reject) => {
-              // fix session manager missing
-              if (!req._sessionManager) {
-                req._sessionManager = passport._sm;
-              }
               login.call(req, user, options, err => {
                 if (err) reject(err);
                 else resolve();
@@ -209,115 +194,47 @@ export function PassportMiddleware(
             ...options,
           };
 
-          if (
-            authOptions.session &&
-            ctx.session.passport &&
-            ctx.session.passport[authOptions.userProperty]
-          ) {
-            ctx.state[authOptions.userProperty] =
-              ctx.session.passport[authOptions.userProperty];
+          const strategyList = [];
+          for (const strategySingle of strategy as StrategyClass[]) {
+            // got strategy
+            const strategyInstance = await this.app
+              .getApplicationContext()
+              .getAsync(strategySingle);
+            strategyList.push(strategyInstance.getStrategy());
           }
-          // ignore user has exists
-          if (ctx.state[authOptions.userProperty]) {
-            await next();
-          } else {
-            const strategyList = [];
-            for (const strategySingle of strategy as StrategyClass[]) {
-              // got strategy
-              const strategyInstance = await this.app
-                .getApplicationContext()
-                .getAsync(strategySingle);
-              strategyList.push(strategyInstance.getStrategy());
-            }
 
-            // authenticate
-            const authenticate = this.passport.authenticate(
-              strategyList,
-              authOptions
+          // authenticate
+          const authenticate = this.passport.authenticate(
+            strategyList,
+            authOptions
+          );
+
+          const authenticateResult = await authenticate(req);
+
+          // success
+          if (authenticateResult.successResult) {
+            const breakNext = await this.onceSucceed(
+              options,
+              authenticateResult.successResult.user,
+              authenticateResult.successResult.info,
+              req,
+              ctx
             );
-
-            const authenticateResult = await authenticate(ctx.req);
-
-            // success
-            if (authenticateResult.successResult) {
-              await this.onceSucceed(
-                options,
-                authenticateResult.successResult.user,
-                authenticateResult.successResult.info,
-                ctx.req,
-                ctx.res
-              );
-              // ctx.state[authOptions.userProperty] = user;
-              // if (authOptions.session) {
-              //   // save to ctx.session.passport
-              //   await ctx.login(user, options);
-              // }
-              // if (options.successRedirect) {
-              //   ctx.redirect(options.successRedirect);
-              //   return;
-              // }
-            } else if (authenticateResult.redirectResult) {
-              // redirect
-              ctx.status = authenticateResult.redirectResult.status || 302;
-              ctx.set('Location', authenticateResult.redirectResult.url);
-              ctx.set('Content-Length', '0');
+            if (breakNext) {
               return;
-            } else {
-              this.allFailed(
-                options,
-                authenticateResult.failResult,
-                ctx.req,
-                ctx.res
-              );
-              // fail
-              if (options.failureRedirect) {
-                ctx.redirect(options.failureRedirect);
-                return;
-              } else {
-                throw new httpError.UnauthorizedError();
-              }
             }
-
-            // try {
-            //   const user = await new Promise<any>((resolve, reject) => {
-            //     // authenticate
-            //     this.passport.authenticate(
-            //       strategyList,
-            //       authOptions,
-            //       (err, user, info, status) => {
-            //         if (err) {
-            //           reject(err);
-            //         } else {
-            //           resolve(user);
-            //         }
-            //       }
-            //     )(ctx, err => (err ? reject(err) : resolve(0)));
-            //   });
-            //   if (user) {
-            //     ctx.state[authOptions.userProperty] = user;
-            //     if (authOptions.session) {
-            //       // save to ctx.session.passport
-            //       await ctx.login(user, options);
-            //     }
-            //     if (options.successRedirect) {
-            //       ctx.redirect(options.successRedirect);
-            //       return;
-            //     }
-            //   } else {
-            //     if (options.failureRedirect) {
-            //       ctx.redirect(options.failureRedirect);
-            //       return;
-            //     } else {
-            //       throw new httpError.UnauthorizedError();
-            //     }
-            //   }
-            //   await next();
-            // } catch (err) {
-            //   ctx.throw(err);
-            // }
-
-            await next();
+          } else if (authenticateResult.redirectResult) {
+            // redirect
+            ctx.status = authenticateResult.redirectResult.status || 302;
+            ctx.set('Location', authenticateResult.redirectResult.url);
+            ctx.set('Content-Length', '0');
+            return;
+          } else {
+            this.allFailed(options, authenticateResult.failResult, req, ctx);
+            return;
           }
+
+          await next();
         }.bind(this);
       }
     }
@@ -326,7 +243,13 @@ export function PassportMiddleware(
       return 'passport';
     }
 
-    protected async onceSucceed(options, user, info, req, res) {
+    protected async onceSucceed(
+      options,
+      user,
+      info,
+      req,
+      res
+    ): Promise<boolean> {
       let msg;
       if (options.successFlash) {
         let flash: any = options.successFlash;
@@ -377,9 +300,11 @@ export function PassportMiddleware(
           delete req.session.returnTo;
         }
         res.redirect(url);
+        return true;
       }
       if (options.successRedirect) {
         res.redirect(options.successRedirect);
+        return true;
       }
     }
 

@@ -120,7 +120,9 @@ export class PassportAuthenticator {
       let shouldBreak = false;
       let successResult, redirectResult;
 
-      for (const strategy of strategies) {
+      for (const strategy of []
+        .concat(Array.from(this.strategies.values()))
+        .concat(strategies)) {
         if (shouldBreak) {
           break;
         }
@@ -203,7 +205,6 @@ export class PassportAuthenticator {
            * @api public
            */
           strategy.pass = function () {
-            shouldBreak = true;
             resolve();
           };
 

@@ -61,10 +61,11 @@ export class SessionStrategy extends Strategy {
         }
         if (!user) {
           delete req.session[this.options.sessionUserProperty].user;
+          this.pass();
         } else {
-          req[this.options.userProperty] = user;
+          this.success(user);
         }
-        this.pass();
+
         if (paused) {
           paused.resume();
         }

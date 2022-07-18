@@ -132,35 +132,20 @@ function getObject(ctx, key) {
   return undefined;
 }
 
-const IncomingMessageExt = require('passport/lib/http/request');
-
 export function create(ctx, userProperty) {
   const req = Object.create(ctx.request, properties);
 
-  Object.defineProperty(req, userProperty, {
-    enumerable: true,
-    get: function () {
-      return ctx.state[userProperty];
-    },
-    set: function (val) {
-      ctx.state[userProperty] = val;
-    },
-  });
-
-  Object.defineProperty(req, 'ctx', {
-    enumerable: true,
-    get: function () {
-      return ctx;
-    },
-  });
-
-  // add passport http.IncomingMessage extensions
-  req.login = IncomingMessageExt.logIn;
-  req.logIn = IncomingMessageExt.logIn;
-  req.logout = IncomingMessageExt.logOut;
-  req.logOut = IncomingMessageExt.logOut;
-  req.isAuthenticated = IncomingMessageExt.isAuthenticated;
-  req.isUnauthenticated = IncomingMessageExt.isUnauthenticated;
+  if (!ctx.state.hasOwnProperty(userProperty)) {
+    Object.defineProperty(ctx.state, userProperty, {
+      enumerable: true,
+      get: function () {
+        return req[userProperty];
+      },
+      set: function (val) {
+        req[userProperty] = val;
+      },
+    });
+  }
 
   return req;
 }

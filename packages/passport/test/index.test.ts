@@ -77,7 +77,6 @@ describe('/test/index.test.ts', () => {
       expect(result.text).toEqual('success');
 
       await close(app);
-      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
     });
   });
 
@@ -99,8 +98,8 @@ describe('/test/index.test.ts', () => {
         .get('/')
         .query({ username: 'admin', password: '123' })
 
-      expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
 
       result = await request
         .get('/')
@@ -132,14 +131,14 @@ describe('/test/index.test.ts', () => {
         .get('/')
         .query({ username: 'admin', password: '123' })
 
-      expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
 
       result = await request
         .get('/')
         .set({
           cookie: result.headers['set-cookie']
-        })
+        });
 
       expect(result.status).toEqual(200);
 
