@@ -3,7 +3,7 @@ title: 静态资源（Static File）
 ---
 
 静态资源一般用来托管前端文件（js/css/html/png）等。
-​
+
 
 ## 在 @midwayjs/web 使用
 
@@ -15,7 +15,7 @@ exports.static = true;
 ```
 
 egg-static 插件基于 [koa-static-cache](https://github.com/koajs/static-cache) 模块，支持其所有的配置。
-​
+
 
 插件默认的 config 配置为：
 
@@ -39,7 +39,7 @@ $ npm i koa-static-cache --save
 ```
 
 然后在 `configuration.ts` 中直接加入中间件即可。
-​
+
 
 下面的示例，我们将资源目录放到了项目目录下的 public 目录中。
 
@@ -103,7 +103,7 @@ http://localhost:3000/hello.html
 :::caution
 注意：Express 相对于静态目录查找文件，因此静态目录的名称不是此 URL 的一部分。
 :::
-​
+
 
 如果你想修改路由，可以通过下面的 API。
 
@@ -112,7 +112,7 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 ```
 
 更多配置，请参考 [express 文档](https://expressjs.com/en/starter/hello-world.html)。
-​
+
 
 ## 在 Serverless 场景使用
 
@@ -154,7 +154,7 @@ export class AutoConfiguration {
 ```
 
 在 **非高密度场景**下（普通函数），需要提供一个 `/*` 的路由函数，否则不会进入函数逻辑（自然就走不到中间件中）。
-​
+
 
 比如，为了中间件可进入，我们增加一个空的 `Get /public/*` 的路由即可（写 `public/*` 的目的是防止其他非 public 静态资源的路由走到这个函数）。
 

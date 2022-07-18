@@ -137,7 +137,6 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 
 
 **默认配置**
-**​**
 
 默认的配置，我们约定为 `default` 属性。
 
@@ -150,11 +149,9 @@ export const httpClient = {
 };
 ```
 
-**​**
 
 ### 单个实例
 
-**​**
 
 **单个配置**
 

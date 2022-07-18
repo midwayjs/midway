@@ -342,12 +342,10 @@ export class ReportInfo implements IMethodAspect {
 如果多个拦截器（切面）同时针对一个方法做操作，可能会出现顺序错乱的问题，如果在两个文件中，这个顺序是随机的。
 
 `@Aspect`  的第三个参数用于指定拦截器的优先级，默认为 0，数字越大，优先级越高，即先被注册到方法上，**先注册的方法会被后调用，**即洋葱模型**。**
-**​**
 
 以下面的代码作为示例。 `MyAspect2`  的优先级高于 `MyAspect1` ，所以会优先注册。示意图如下，整个拦截流程分为两部分，先是注册，后是执行。
 
 **注册流程**
-**​**
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1600919962582-e0715385-828e-48c0-9b47-47a2b7018a18.png#height=497&id=WZ6J3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=497&originWidth=924&originalType=binary&ratio=1&size=38903&status=done&style=none&width=924" width="924" />
 

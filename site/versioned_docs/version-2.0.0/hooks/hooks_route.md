@@ -62,7 +62,7 @@ functionsRule:
 我们会将目录下 `index.ts` 文件，作为根路由。
 
 - `/lambda/index.ts`  → `/`
-- `/lambda/about/index.ts` →  `/about`​
+- `/lambda/about/index.ts` →  `/about`
 
 ## 嵌套路由
 

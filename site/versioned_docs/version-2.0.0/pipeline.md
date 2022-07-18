@@ -13,15 +13,15 @@ title: 代码流程控制
 `IValveHandler`  就是具体的任务阶段执行单位。整个 IPipelineHandler 执行方式可以是 parallel、series、concat、waterfall (很熟悉是吧？我们参考了 [async](https://github.com/caolan/async) 库提供的方法能力命名)。
 
 Pipeline 执行时期的上下文 IPipelineContext 可以用来存储 Pipeline 入参、上一次 IValveHandler 实例的执行结果、上一次的中间产物等等，提供了非常大的灵活性。
-​
 
-​
+
+
 
 ## 类型定义
 
 ### IPipelineHandler
 
-​
+
 
 ```typescript
 interface IPipelineHandler {
@@ -53,12 +53,12 @@ interface IPipelineHandler {
 }
 ```
 
-​
+
 
 - 白名单机制
   使用 Pipeline 装饰器时，如果填写了数组参数，那么方法执行函数中的 valves 入参只能是装饰器数组参数中的项。当然，valves 是可选项，不填默认就以装饰器数组参数为准。例如，`@Pipeline(['a', 'b', 'c'])` 那么 series 等执行函数中可选参数 `opts.valves` 数组必须是 `['a', 'b', 'c']` 或者其子集，如果不填则以 `['a', 'b', 'c']`   逻辑顺序来执行。
 
-​
+
 
 ### 返回结果
 
@@ -224,7 +224,7 @@ class ErrorFeeds implements IValveHandler {
 
 ### parallel
 
-​
+
 
 通过该方法执行的结果，最终返回的是一个 object 对象，且每个 IValveHandler 实现 alias 作为对象返回值的 key
 
@@ -279,7 +279,7 @@ class StageTest {
 
 ### concat
 
-​
+
 
 执行方式同 parallel 只不过最终返回结果 result 是一个数组
 
@@ -334,7 +334,7 @@ class StageTest {
 
 ### series
 
-​
+
 
 这里 series 是串行执行，按照 Pipeline 装饰器参数顺序，一个一个执行下去，且 IPipelienContext 中的 prev 就是前一个 valve，current 是当前，next 即下一个即将执行的 valve
 
@@ -357,7 +357,7 @@ class StageTest {
 
 ### concatSeries
 
-​
+
 
 原理同 series，只不过返回结果是一个数组
 
@@ -380,10 +380,10 @@ class StageTest {
 
 ### waterfall
 
-​
+
 
 串行执行，最终只返回最后一个 valve 执行结果
-​
+
 
 ```typescript
 @Provide()

@@ -3,22 +3,22 @@ title: 对象存储（OSS）
 ---
 
 阿里云对象存储服务（Object Storage Service，简称 OSS），是阿里云提供的海量、安全、低成本、高可靠的云存储服务。其数据设计持久性不低于 99.999999999%，服务设计可用性不低于 99.99%。具有与平台无关的 RESTful API 接口，您可以在任何应用、任何时间、任何地点存储和访问任意类型的数据。
-​
+
 
 `@midwayjs/oss` 组件就是在 midway 体系下用于对接 OSS 服务的 sdk。
-​
 
-​
+
+
 
 ## 前置条件
 
 使用 OSS 组件，你需要提前申请一个 OSS Bucket。Bucket 是 OSS 的存储库的概念，你的文件都将存储在这个库里。
-​
+
 
 - OSS 对象存储官网：[https://www.aliyun.com/product/oss](https://www.aliyun.com/product/oss)
 - 什么是对象存储：[https://www.alibabacloud.com/help/zh/doc-detail/31817.htm](https://www.alibabacloud.com/help/zh/doc-detail/31817.htm)
 
-​
+
 
 ## 安装依赖
 
@@ -49,18 +49,18 @@ import { join } from 'path';
 export class ContainerLifeCycle {}
 ```
 
-​
+
 
 ## 配置 OSS
 
 OSS 组件需要配置后才能使用。需要填写 OSS 的 bucket、accessKeyId、accessKeySecret 等必要信息。
-​
+
 
 支持普通 oss 客户端和 oss 集群客户端，基于 [ali-oss](https://github.com/ali-sdk/ali-oss/) 这个包。
-​
+
 
 比如：
-​
+
 
 **普通的 oss bucket 配置**
 
@@ -78,7 +78,6 @@ export const oss = {
 ```
 
 **集群（cluster） 模式的 oss bucket 配置，需要配置多个**
-**​**
 
 ```typescript
 // need to config all bucket information under cluster
@@ -137,7 +136,7 @@ export class UserService {
 }
 ```
 
-​
+
 
 如果配置的是 STS 模式，客户端可以使用 `OSSSTSService` 。
 
@@ -161,10 +160,10 @@ export class UserService {
 }
 ```
 
-​
+
 
 更多的 OSS 客户端 API，请查看 [OSS 文档](https://github.com/ali-sdk/ali-oss)。
-​
+
 
 ## 使用多个 OSS Bucket
 

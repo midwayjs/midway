@@ -245,7 +245,7 @@ export class BookService {
 为了避免组件的业务代码和其他的业务代码冲突，组件在导出的时候加入了作用域的概念。默认的作用域为 npm 包名，即 `package.json`  中的 `name`  字段。
 
 可以在 `@Configuration`  装饰器中的 `namespace`  字段修改。
-​
+
 
 > 后续我们将弱化作用域的概念
 

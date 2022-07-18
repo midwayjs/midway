@@ -5,14 +5,14 @@ title: MongoDB
 在这一章节中，我们选择 [Typegoose](https://github.com/typegoose/typegoose) 作为基础的 MongoDB ORM 库。就如同他描述的那样 " Define Mongoose models using TypeScript classes"，和 TypeScript 结合的很不错。
 
 简单的来说，Typegoose 使用 TypeScript 编写 Mongoose 模型的 “包装器”，它的大部分能力还是由 [mongoose](https://www.npmjs.com/package/mongoose) 库来提供的。
-​
+
 
 也可以直接选择 [mongoose](https://www.npmjs.com/package/mongoose) 库来使用，我们会分别描述。
 
 ## Mongoose 版本依赖
 
 mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关系，如下，请务必注意。
-​
+
 
 - MongoDB Server 2.4.x: mongoose ^3.8 or 4.x
 - MongoDB Server 2.6.x: mongoose ^3.8.8 or 4.x
@@ -25,17 +25,16 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 - MongoDB Server 4.4.x: mongoose ^5.10.0
 - MongoDB Server 5.x: mongoose ^6.0.0
 
-​
+
 
 **mongoose 相关的依赖比较复杂，且对应不同的版本，现阶段，我们使用的主要是 mongoose v5 和 v6。**
-**​**
 
 :::info
 从 mongoose@v5.11.0 开始，mongoose 官方支持了定义，所以不再需要安装 @types/mongoose 依赖包。
 :::
 
 安装包依赖版本如下：
-​
+
 
 **支持 MongoDB Server 5.x**
 
@@ -47,7 +46,6 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 ```
 
 **支持 MongoDB Server 4.4.x**
-**​**
 
 以下版本不需要安装额外定义包。
 
@@ -58,7 +56,7 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
   },
 ```
 
-​
+
 
 以下版本需要安装额外定义包（不推荐）。
 
@@ -74,12 +72,9 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
  }
 ```
 
-**​**
 
 其余的 MongoDB 安装模块类似，未测。
-**​**
 
-**​**
 
 ## 使用 Typegoose
 
@@ -212,7 +207,7 @@ export class TestService {
 ### 5、多库的情况
 
 首先配置多个连接。
-​
+
 
 在 `src/config/config.default.ts`  中加入连接的配置，`default` 代表了默认的连接。
 
@@ -291,7 +286,7 @@ export class TestService {
 ## 直接使用 mongoose
 
 mongoose 组件是 typegoose 的基础组件，有时候我们可以直接使用它。
-​
+
 
 ### 1、安装组件
 
@@ -322,7 +317,7 @@ export class ContainerConfiguration {}
 ### 2、配置
 
 和 typegoose 相同，或者说 typegoose 使用的就是 mongoose 的配置。
-​
+
 
 单库：
 
@@ -430,13 +425,13 @@ export class TestService {
 ### 1、E002: You are using a NodeJS Version below 12.22.0
 
 在新版本 @typegoose/typegoose (v8, v9) 中增加了 Node 版本的校验，如果你的 Node.js 版本低于 v12.22.0，就会出现这个提示。
-​
+
 
 普通情况下，请升级 Node.js 到这个版本以上即可解决。
-​
+
 
 在特殊场景下，比如 Serverless 无法修改 Node.js 版本且版本低于 v12.22 的情况下，由于 v12 版本子版本其实都可以，可以通过临时修改 process.version 绕过。
-​
+
 
 ```typescript
 // src/configuration.ts

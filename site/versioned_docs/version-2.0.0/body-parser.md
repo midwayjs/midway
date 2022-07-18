@@ -3,17 +3,17 @@ title: BodyParser
 ---
 
 Bodyparser 一般用来对 post 请求的请求体进行解析，是比较常用的 Web 中间件之一。
-​
+
 
 HTTP 协议中并不建议在通过 GET、HEAD 方法访问时传递 body，所以我们无法在 GET、HEAD 方法中按照此方法获取到内容。
 
 ## 在 @midwayjs/web 使用
 
 `@midwayjs/web` 默认使用了 Egg.js 基础框架，其中自带了 bodyparser 中间件。我们只需要把需要获取 body 数据的中间件 **放在 Egg.js 框架默认的中间件之后 **即可。
-​
+
 
 我们这里需要使用 Egg.js 自己的中间件配置方式，在 `src/config/config.{env}.ts` 中编写。
-​
+
 
 我们举个例子，编写一个我们自己的中间件。
 
@@ -67,7 +67,7 @@ export const bodyParser = {
 ```
 
 一般来说我们最经常调整的配置项就是变更解析时允许的最大长度，可以在 `src/config/config.default.ts` 中覆盖框架的默认值。
-​
+
 
 比如可以设置到 1m。
 
@@ -80,18 +80,18 @@ export const bodyParser = {
 ```
 
 更多配置可以查看 [koa-bodyparser](https://github.com/koajs/bodyparser) 文档。
-​
+
 
 ## 在 @midwayjs/koa 使用
 
 koa 中可以直接引入 [koa-bodyparser](https://github.com/koajs/bodyparser) 。
-​
+
 
 ```bash
 $ npm i koa-bodyparser --save
 ```
 
-​
+
 
 比如下面的示例：
 
@@ -114,7 +114,7 @@ export class ContainerLifeCycle implements ILifeCycle {
 ```
 
 更多配置可以查看 [koa-bodyparser](https://github.com/koajs/bodyparser) 文档。
-​
+
 
 ## 在 @midwayjs/express 使用
 
@@ -150,9 +150,9 @@ export class AutoConfiguration {
 ## 在 Serverless 下使用
 
 在 Serverless 场景已经默认集成了 bodyparser，用户无需引入其他模块。
-​
+
 
 这个解析行为是固定的，无法修改，并且最大的解析文件大小为 2M。
-​
+
 
 body 数据可以通过 `ctx.request.body` 拿到。

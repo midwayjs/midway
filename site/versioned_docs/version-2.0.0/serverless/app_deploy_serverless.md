@@ -20,21 +20,20 @@ Midway Serverless 从 v1.1 版本开始提供了一套应用迁移到  Serverle
 - 2、复用函数的运行时适配能力，可以和函数享受同样稳定的能力，这套适配能力由 Midway Serverless 本身提供，**代码开源，也方便排查和定位问题**，或者增强能力
 - 3、Midway Serverless 这套能力比较通用，私有化部署或者**适配其他应用框架非常容易**
 
-**​**
 
 ## 迁移方案和纯函数的区别
 
 迁移方案使用的是传统的应用代码，在部署时使用的是固定的 HTTP 触发器模式，无法在项目中添加其他触发器。
-​
+
 
 迁移方案通过一套中间的代理层（Proxy Layer），将函数的入参转换为传统请求到原函数，而纯函数不经过这层代理，所以性能会比迁移方案高。
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1623937490756-27bcb3d0-8d61-49af-a1f1-0efe72b5c1dc.png#clientId=ub2750586-4d72-4&from=paste&height=542&id=u06931f71&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1084&originWidth=2290&originalType=binary&ratio=2&size=120683&status=done&style=none&taskId=u4f359237-b2d5-46ad-9dfa-42fd42375fa&width=1145" width="1145" />
 
-​
+
 
 如需纯函数，可以新起一个纯函数项目。
-​
+
 
 迁移方案绑定的是 `/*` 的路由，和纯函数可以共享一个域名。
 

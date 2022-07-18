@@ -33,7 +33,7 @@ export class ContainerLifeCycle {}
 ## 配置
 
 比如：
-​
+
 
 **单客户端配置**
 
@@ -64,7 +64,7 @@ export const cos = {
 ```
 
 更多参数可以查看 [cos-nodejs-sdk-v5](https://github.com/tencentyun/cos-nodejs-sdk-v5) 文档。
-​
+
 
 ## 使用 COS 服务
 
@@ -91,7 +91,7 @@ export class UserService {
 }
 ```
 
-​
+
 
 可以使用 `COSServiceFactory` 获取不同的实例。
 

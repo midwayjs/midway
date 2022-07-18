@@ -634,7 +634,7 @@ app.engine.generateId = (req) => {
 ### 服务端/客户端没连上，没响应
 
 1、端口服务端和客户端一致
-​
+
 
 ```typescript
 const { Framework } = require('@midwayjs/socketio');

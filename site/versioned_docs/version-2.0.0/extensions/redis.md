@@ -14,7 +14,7 @@ $ npm i @types/ioredis --save-dev			// 安装到 dev 依赖
 ```
 
 如果发现 RedisService 没有方法定义，请务必检查此项。
-​
+
 
 ## 引入组件
 
@@ -37,7 +37,7 @@ export class ContainerLifeCycle {}
 ## 配置 Redis
 
 比如：
-​
+
 
 **单客户端配置**
 
@@ -96,7 +96,6 @@ export const redis = {
 };
 ```
 
-**​**
 
 **多个客户端配置，需要配置多个**
 
@@ -121,7 +120,7 @@ export const redis = {
 ```
 
 更多参数可以查看 [ioredis 文档](https://github.com/luin/ioredis/blob/master/API.md#new_Redis_new)。
-​
+
 
 ## 使用 Redis 服务
 
@@ -145,7 +144,7 @@ export class UserService {
 }
 ```
 
-​
+
 
 可以使用 `RedisServiceFactory` 获取不同的实例。
 

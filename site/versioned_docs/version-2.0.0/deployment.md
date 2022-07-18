@@ -25,7 +25,7 @@ Midway 提供了一个轻量的启动器，用于启动你的应用。我们为�
 - 1、使用 `--ts`  指定 TypeScript（ts-node）环境启动
 - 2、使用内置的（@midwayjs/mock 的 createApp）创建一个**匹配当前框架 **的服务，并返回 app
 
-​
+
 
 在命令行运行下面的命令即可执行。
 
@@ -102,12 +102,12 @@ const currentFramework = [
 |         |                         |                          |
 
 **3、环境的变化**
-​
+
 
 服务器环境，一般使用 `NODE_ENV=production` ，很多库都会在这个环境下提供性能更好的方式，例如启用缓存，报错处理等。
 
 **4、日志文件**
-​
+
 
 一般服务器环境，日志不再打印到项目的 logs 目录下，而是其他不会受到项目更新影响的目录，比如 `home/admin/logs` 等等，这样固定的目录，也方便其他工具采集日志。
 
@@ -137,7 +137,7 @@ const currentFramework = [
 :::
 
 一般来说，部署构建的环境和本地开发的环境是两套，我们推荐在一个干净的环境中构建你的应用。
-​
+
 
 下面的代码，是一个示例脚本，你可以保存为 `build.sh`  执行。
 
@@ -172,19 +172,19 @@ $ npm prune --production														# 移除开发依赖
 ### 打包压缩
 
 构建完成后，你可以简单的打包压缩，上传到待发布的环境。
-​
 
-​
+
+
 
 ### 上传和解压
 
 有很多种方式可以上传到服务器，比如常见的 `ssh/FTP/git`  等。也可以使用 [OSS](https://www.aliyun.com/product/oss) 等在线服务进行中转。
-​
+
 
 ### 启动方式一：使用纯 Node.js 或者 pm2 等工具启动
 
 Midway 构建出来的项目是单进程的，不管是采用 `fork`  模式还是 `cluster`  模式，单进程的代码总是很容易的兼容到不同的体系中，因此非常容易被社区现有的 pm2/forever 等工具所加载，
-​
+
 
 我们这里以 pm2 来演示如何部署。
 
@@ -380,7 +380,7 @@ deployType: egg ## 部署的应用类型
 - 3、还有一些，请参考 [**应用迁移 faq**](https://www.yuque.com/midwayjs/faas/migrate_faq)
 
 如需发布到腾讯云环境，请查看 [**发布到腾讯云**](deploy_to_tencent)。
-​
+
 
 另外这里还有一些 [**常见问题**](deploy_aliyun_faq)，请查阅。
 
@@ -439,16 +439,16 @@ $ docker run -itd -P helloworld
 <img src="https://cdn.nlark.com/yuque/0/2020/png/187105/1608882559686-031bcf0d-2185-42cd-a838-80f008777395.png#height=94&id=dfag9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=188&originWidth=578&originalType=binary&ratio=1&size=24488&status=done&style=none&width=289" width="289" />
 
 关于别的推送到 dockerhub 或者 docker 的 registry，可以大家搜索对应的方法。
-​
 
-**优化**​
+
+**优化**
 我们看到前面我们打出来的镜像有 1 个多 G，可优化的地方：
 1、我们可以采用更精简的 docker image 的基础镜像：例如 node:12-alpine，
 2、其中的源码最终也打在了镜像中，其实这块我们可以不需要。
-​
+
 
 然后我们同时结合 docker 的 multistage 功能，这个功能请注意要在 Docker 17.05 版本之后才能使用。
-​
+
 
 ```dockerfile
 FROM node:12 AS build
@@ -489,12 +489,10 @@ CMD ["npm", "run", "start"]
 在 docker 部署的基础上，还可以结合 docker-compose 部署一些跟自己服务相关的服务。
 
 **步骤一**
-**​**
 
 按照 Docker 方式部署的方式新增 dockerfile
 
 **步骤二**
-**​**
 
 新增 docker-compose.yml 文件，内容如下：（此处我们模拟我们的 midway 项目需要使用 redis）
 
@@ -512,7 +510,6 @@ services:
 ```
 
 **步骤三：构建**
-**​**
 
 使用命令：
 

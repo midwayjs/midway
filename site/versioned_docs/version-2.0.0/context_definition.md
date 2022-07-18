@@ -2,7 +2,7 @@
 title: 扩展上下文定义
 ---
 
-​
+
 
 在某些场景下，需要扩展上下文 ctx 属性，比如 Web 场景下中间件，我们可以往上附加一些方法或者属性。
 
@@ -25,11 +25,11 @@ export class ReportMiddleware implements IWebMiddleware {
 ```
 
 但是由于 TypeScript 模块定义的关系，我们无法往现有的模块上去附加定义，所以我们使用了一种新的方法来扩展。
-​
+
 
 ## 项目中扩展定义
 
-​
+
 
 你可以在 `src/interface.ts` 通过下面的代码，在项目中扩展 Midway 通用的 Context。
 

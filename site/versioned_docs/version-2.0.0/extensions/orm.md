@@ -300,7 +300,7 @@ name: string;
 ```
 
 此外还有有几种特殊的列类型可以使用：
-​
+
 
 - `@CreateDateColumn` 是一个特殊列，自动为实体插入日期。
 - `@UpdateDateColumn` 是一个特殊列，在每次调用实体管理器或存储库的 save 时，自动更新实体日期。
@@ -486,7 +486,7 @@ export class PhotoService {
 ```
 
 现在，ID = 1 的 Photo 将从数据库中删除。
-​
+
 
 此外还有软删除的方法。
 
@@ -1122,9 +1122,9 @@ export async function getPhoto() {
 - 如果你已有表结构，想自动创建 Entity，使用 [生成器](typeorm_generator)
 - 如果已经有 Entity 代码，想创建表结构请使用配置中的 `synchronize: true` 。
 
-​
 
-​
+
+
 
 ## 常见问题
 
@@ -1141,7 +1141,7 @@ sudo sysctl -w net.inet.tcp.sack=0
 ### 关于 mysql 时间列的当前时区展示
 
 如果使用 `@UpdateDateColumn` 和 `@CreateDateColumn` 列，一般情况下，数据库中保存的是 UTC 时间，如果你希望返回当前时区的时间，可以使用下面的方式。
-​
+
 
 在配置时，开启时间转字符串的选项。
 
@@ -1175,10 +1175,10 @@ export class Photo {
 ```
 
 这样，输出的时间字段就是当前的时区了。
-​
+
 
 效果如下：
-​
+
 
 **配置前：**
 
@@ -1197,10 +1197,9 @@ gmtCreate: '2021-12-13 11:49:43'
 ### 关于时间列的默认值
 
 如果使用 `@UpdateDateColumn` 和 `@CreateDateColumn` 列，那么注意，typeorm 是在建表语句中自动添加了默认值，如果表是用户自建的，该字段会由于没有默认值而写入 00:00:00 的时间。
-​
+
 
 解决方案有两个 **1、修改表的默认值** 或者 **2、修改代码中列的默认值**
-**​**
 
 **如果不想修改表，而想修改代码，请参考下面的代码。**
 
@@ -1218,4 +1217,4 @@ createdOn: Date;
 modifiedOn: Date;
 ```
 
-​
+

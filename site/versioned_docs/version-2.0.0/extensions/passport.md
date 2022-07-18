@@ -3,7 +3,7 @@ title: Passport
 ---
 
 身份验证是大多数 Web 应用程序的重要组成部分。因此 Midway 封装了目前 Node.js 中最流行的 Passport 库。
-​
+
 
 Passport 是通过称为策略的可扩展插件进行身份验证请求。Passport 不挂载路由或假设任何特定的数据库，这最大限度地提高了灵活性并允许开发人员做出应用程序级别的决策。
 
@@ -20,10 +20,10 @@ $ npm i @types/passport --save-dev
 
 ## 使用
 
-​
+
 
 这里我们以本地认证，和 JWT 作为演示，这里用到了另一个 JWT 组件。
-​
+
 
 首先
 
@@ -44,7 +44,7 @@ export class ContainerLifeCycle implements ILifeCycle {}
 
 ### e.g. 本地策略
 
-​
+
 
 我们可以通过 `@CustomStrategy` 和派生 `PassportStrategy`来 自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
 
@@ -233,7 +233,7 @@ curl http://127.0.0.1:7001/passport/jwt -H "Authorization: Bearer xxxxxxxxxxxxxx
 ## 自定义其他策略
 
 `@midwayjs/passport` 支持自定义[其他策略](http://www.passportjs.org/packages/)，这里以 Github OAuth 为例。
-​
+
 
 首先需要安装相应的 passport 库。
 
@@ -241,7 +241,7 @@ curl http://127.0.0.1:7001/passport/jwt -H "Authorization: Bearer xxxxxxxxxxxxxx
 $ npm i passport-github --save
 ```
 
-​
+
 
 编写如下策略代码：
 
@@ -301,9 +301,9 @@ export class AuthController {
 }
 ```
 
-​
 
-​
+
+
 
 ## 一些相关资料
 

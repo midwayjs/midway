@@ -3,7 +3,7 @@ title: 进程共享（ProcessAgent）
 ---
 
 midway 封装了 `@midwayjs/process-agent` 用来解决 node 场景中，多进程部分场景数据进程间数据不一致，或者无法指定 master 进程执行某个方法。
-​
+
 
 举例：
 
@@ -19,7 +19,7 @@ midway 封装了 `@midwayjs/process-agent` 用来解决 node 场景中，多进�
 $ npm install @midwayjs/process-agent@2 -S
 ```
 
-​
+
 
 `configuration.ts` 使用方法：
 
@@ -34,7 +34,7 @@ export class ContainerLifeCycle {}
 
 ## 使用方法
 
-​
+
 
 业务代码 UserService：
 
@@ -83,24 +83,24 @@ export class TestService {
 ## 效果描述
 
 假设采用 pm2 或者 egg-script 等多进程方式启动，假设这是个请求
-​
+
 
 首先：
 
 - 1、设置 setData
 - 2、然后获取 getData
 
-​
+
 
 如果没有 RunInPrimary 这个装饰器，那请求可能落在进程 2，或者进程 3，那可能没有获取更新的 data。
-​
+
 
 所以 RunInPrimary 能确保这个函数执行能落到主进程去。
-​
 
-​
+
+
 
 ## 功能征集
 
 如果有其他类似相关功能，觉得可以放在这个包里面的，欢迎在评论区，或者 [issue](https://github.com/midwayjs/midway/issues) 里面帮忙提一下，我们会跟大家一起讨论和实现。
-​
+

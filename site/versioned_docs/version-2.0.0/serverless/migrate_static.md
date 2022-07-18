@@ -134,7 +134,7 @@ package:
 
 ### rewrite 路由
 
-​
+
 
 有时候，我们希望将一些特定的路由，都访问到特定的文件上，比如将所有的路由请求，都转向到 `/index.html` ，然后让前端路由处理。
 
@@ -155,10 +155,10 @@ package:
 ```
 
 此 rewrite 可以写多个，规则同 [koa-rewrite](https://github.com/koajs/rewrite)。
-​
+
 
 如果要排除某些目录，可以使用 `@not` 取反语法。
-​
+
 
 比如，排除 static 目录。
 
@@ -171,16 +171,16 @@ deployType:
       '@not /static/(.*)': /index.html
 ```
 
-​
 
-​
 
-​
+
+
+
 
 ### 修改部署的函数名
 
 可以通过 name 字段。
-​
+
 
 ```yaml
 service: my-static-demo  			## 应用发布到云平台的名字

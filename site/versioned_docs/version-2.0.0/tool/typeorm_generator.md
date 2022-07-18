@@ -3,10 +3,10 @@ title: TypeORM Model Generator
 ---
 
 感谢社区用户 @youtiao66 提供此模块。
-​
+
 
 通过该工具，你可以快速创建 for Midway 的 TypeORM Model。
-​
+
 
 ## 使用
 

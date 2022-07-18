@@ -3,7 +3,7 @@ title: 模板渲染
 ---
 
 本组件用于在 midway 体系使用服务端渲染 ejs，nunjucks 模板。
-​
+
 
 ## 使用 ejs
 
@@ -15,7 +15,7 @@ title: 模板渲染
 $ npm i @midwayjs/view-ejs@2 --save
 ```
 
-​
+
 
 ### 引入组件
 
@@ -52,10 +52,10 @@ export const ejs = {};
 
 ### 使用
 
-​
+
 
 注意，默认的 view 目录为 `${appRoot}/view` ，在其中创建一个 `hello.ejs` 文件。
-​
+
 
 目录结构如下：
 
@@ -79,7 +79,7 @@ export const ejs = {};
 hello <%= data %>
 ```
 
-​
+
 
 在 Controller 中渲染。
 
@@ -112,7 +112,7 @@ export class HomeController {
 $ npm i @midwayjs/view-nunjucks --save
 ```
 
-​
+
 
 2、引入组件，在 `configuration.ts`  中导入：
 
@@ -142,7 +142,7 @@ export const view = {
 };
 ```
 
-​
+
 
 4、在 view 目录增加模板
 
@@ -151,7 +151,7 @@ export const view = {
 hi, {{ user }}
 ```
 
-​
+
 
 在 Controller 中渲染。
 
@@ -173,7 +173,7 @@ export class HomeController {
 ```
 
 访问后会输出 `hi, midway` 。
-​
+
 
 如果有自定义 filter 的需求，可以在入口处增加，比如下面增加了一个名为 `hello` 的 filter。
 
@@ -220,12 +220,12 @@ await ctx.render('test.nj', { name: 'midway' });
 ```
 
 也会输出 `hi, midway` 。
-​
+
 
 ## 注意事项
 
 如需在 egg(@midwayjs/web) 场景下使用，请在 `plugint.ts` 中关闭 view 和其相关插件。
-​
+
 
 ```typescript
 import { EggPlugin } from 'egg';
@@ -235,7 +235,7 @@ export default {
 } as EggPlugin;
 ```
 
-​
+
 
 否则会出现下面类似的错误。
 

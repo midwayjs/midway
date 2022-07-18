@@ -74,7 +74,7 @@ export default async (message: string) => {
 单函数中间件即只针对单个函数生效的 Web 中间件。
 
 在 Midway Hooks 中，可以通过 `withController` 来支持单函数级别的中间件。
-​
+
 
 > 使用函数中间件
 

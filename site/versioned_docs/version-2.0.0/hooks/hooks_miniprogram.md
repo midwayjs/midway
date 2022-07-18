@@ -17,13 +17,13 @@ npm init rax
 ```
 
 选择 App -> 小程序云开发一体化应用即可。
-​
+
 
 ## 本地开发
 
 > 以微信小程序开发为例
 
-​
+
 
 项目创建完成后，进入项目根目录。
 
@@ -51,16 +51,16 @@ npm init rax
 ### 本地启动
 
 运行如下命令。
-​
+
 
 ```java
 npm start
 ```
 
-​
+
 
 本地服务启动后将输出以下日志。
-​
+
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/98602/1630379551910-f8a43b3b-0017-4aad-b5f8-5eca9056f4df.png#clientId=uae0cc9ff-b84a-4&from=paste&height=326&id=uc1e5095d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=326&originWidth=981&originalType=binary&ratio=1&size=56255&status=done&style=stroke&taskId=u26c58d5b-51ea-487b-906f-0484e4bd264&width=981" width="981" />
 
@@ -72,7 +72,7 @@ npm start
 - src/cloud：云开发目录
 - src/cloud/functions：云函数目录
 
-​
+
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/98602/1630379466121-ef63511d-4a9a-441a-846d-6c80912f3bd8.png#clientId=uae0cc9ff-b84a-4&from=paste&height=1124&id=lhHzc&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1124&originWidth=2272&originalType=binary&ratio=1&size=363965&status=done&style=stroke&taskId=uf9b75197-be74-4d6d-b23d-4142578e747&width=2272" width="2272" />
 
@@ -83,12 +83,12 @@ npm start
 <img src="https://cdn.nlark.com/yuque/0/2021/png/98602/1630381124950-fd510d0e-fd14-42e3-a01a-6efa92be1ea2.png#clientId=u5ad910ea-f37d-4&from=paste&height=909&id=ufe8e37e3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=909&originWidth=1708&originalType=binary&ratio=1&size=125292&status=done&style=none&taskId=ud11606b5-14a1-42d3-9cd2-f09afba9eeb&width=1708" width="1708" />
 
 你可以在此处预览项目，并进行函数的部署与发布工作。
-​
+
 
 ### 开发函数
 
 使用 Midway Hooks 可以方便的开发云函数。
-​
+
 
 > 以获取 OpenId 为例。
 
@@ -102,7 +102,7 @@ export const getOpenId = async () => {
 };
 ```
 
-​
+
 
 > 前端调用代码（需要提前安装 rax-use-async-effect 依赖）
 
@@ -138,20 +138,20 @@ export default function Home() {
 }
 ```
 
-​
+
 
 Midway Hooks 相关的语法和文档可参考：
-[介绍](/docs/hooks/intro?view=doc_embed)​
+[介绍](/docs/hooks/intro?view=doc_embed)
 
 ### 函数部署
 
 云开发的函数需要部署后才能调用，你可以在生成的 cloudfunctions 目录下，通过右键点击上传部署函数。
-​
+
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/98602/1630381168629-1871ca82-65b7-45d4-9625-3b3cb12327b8.png#clientId=u5ad910ea-f37d-4&from=paste&height=220&id=u9070ab28&margin=%5Bobject%20Object%5D&name=image.png&originHeight=220&originWidth=611&originalType=binary&ratio=1&size=42440&status=done&style=none&taskId=u87382ca9-543b-4541-8748-12e0e7eb4be&width=611" width="611" />
 
 部署完成后重新编译项目即可查看函数运行结果，更多的云开发指导，可以参考官方文档：
-​
+
 
 ### 本地调试
 
@@ -164,7 +164,7 @@ Midway Hooks 相关的语法和文档可参考：
 ## 项目部署
 
 在完成开发后，即可开始发布小程序，后续参考云开发平台的发布文档即可。
-​
+
 
 小程序发布：
-​
+

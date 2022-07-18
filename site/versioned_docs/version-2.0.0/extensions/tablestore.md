@@ -10,7 +10,7 @@ title: TableStore
 $ npm i @midwayjs/tablestore@2 --save
 ```
 
-​
+
 
 ## 引入组件
 
@@ -33,7 +33,7 @@ export class ContainerLifeCycle {}
 ## 配置
 
 比如：
-​
+
 
 **单客户端配置**
 
@@ -76,7 +76,7 @@ export const tableStore = {
 ```
 
 更多参数可以查看 [aliyun tablestore sdk](https://github.com/aliyun/aliyun-tablestore-nodejs-sdk) 文档。
-​
+
 
 ## 使用 TableStore 服务
 
@@ -97,7 +97,7 @@ export class UserService {
 }
 ```
 
-​
+
 
 可以使用 `TableStoreServiceFactory` 获取不同的实例。
 

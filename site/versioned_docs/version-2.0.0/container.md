@@ -719,7 +719,7 @@ export const getGlobalConfig = () => {
 ## 面向接口编程
 
 Midway 也可以基于接口进行注入，但是由于 Typescirpt 编译后会移除接口类型，不如使用类作为定义好用。
-​
+
 
 比如，我们定义一个接口，以及它的实现类。
 
@@ -760,10 +760,10 @@ export class PaymentService {
 ```
 
 由于接口类型会被移除，Midway 只能通过 `@Inject` 装饰器的 **参数** 或者 **属性名** 类来匹配注入的对象信息，类似 Java Spring 中的 `Autowire by name` 。
-​
+
 
 上述就是 **静态 **的面向接口注入的方式。
-​
+
 
 如果需要动态，也和 [动态函数注入](动态函数注入) 描述的一致，注入方法来使用。
 

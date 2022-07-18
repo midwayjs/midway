@@ -37,9 +37,9 @@ export class ContainerLifeCycle {}
 ```
 
 然后在业务代码中即可注入使用。
-​
 
-​
+
+
 
 ## 使用服务
 
@@ -99,7 +99,7 @@ export const axios = {
 ```
 
 具体的参数可以参考 [axios global config](https://github.com/axios/axios#config-defaults)。
-​
+
 
 ## 配置全局拦截器
 

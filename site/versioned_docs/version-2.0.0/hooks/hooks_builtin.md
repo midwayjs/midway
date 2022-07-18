@@ -4,7 +4,6 @@ title: 内置 Hooks
 
 ## useContext
 
-**​**
 
 ```typescript
 const ctx = useContext();

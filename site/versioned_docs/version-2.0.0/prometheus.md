@@ -129,7 +129,7 @@ scrape_configs:
 ]
 ```
 
-​
+
 
 然后我们启动 `docker-compose.yml`   文件，
 
@@ -187,7 +187,7 @@ $ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 这样开发者可以运维自己的 Node 程序了，例如，是否最近引入了一个 NPM 包导致了什么内存泄漏的情况，是否最近有应用重启的情况了。
 
 当然还能支持其他的自定义操作。
-​
+
 
 ## Socket-io 场景
 
@@ -219,7 +219,7 @@ export class ContainerLifeCycle {}
 
 一共新增 8 个指标。
 后续会提供 Grafana 的模版 ID 给大家使用。
-​
+
 
 ## 功能介绍
 

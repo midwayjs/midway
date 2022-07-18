@@ -182,13 +182,13 @@ export const cache = {
 ## 相关文档
 
 由于 Midway Cache 是基于 cache-manager 封装，所以相关资料用户也可以查询：[cache-manger](https://www.npmjs.com/package/cache-manager)。
-​
+
 
 ## 常见问题
 
 ### 1、set 和 get 无法得到相同值？
 
 用户使用了 cache 模块，默认是内存式的，例如在本地用 dev 模式，由于是单进程的，那 set 和 get 最终能达到相同的值。但是用户部署到服务器上面后，由于会有多 worker，相当于第一次请求，落在进程 1 上，然后第二次落在进程 2 上，这样获得到空了。
-​
+
 
 解决办法：参考 其他 Cache 的章节，配置 store 为分布式的，例如 redis 的 store 等方式。

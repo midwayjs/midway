@@ -129,7 +129,7 @@ export class ContainerLifeCycle {}
 ### 2、对象形式加载
 
 在特殊场景下，比如希望 bundle/package 等和目录结构无关的需求，可以使用标准的模块加载方式来加载配置。
-​
+
 
 ```typescript
 // src/configuration.ts
@@ -493,7 +493,7 @@ export default (appInfo: EggAppInfo) => {
 export const keys = '12345';
 ```
 
-​
+
 
 `export const` 定义的值会被忽略。
 
@@ -510,12 +510,12 @@ export const anotherKey = '54321';
 ```
 
 位于后面的配置将会被忽略。
-​
+
 
 ### 3、配置没有生效
 
 可能性很多，排查思路如下：
-​
+
 
 - 1、检查 configuration 文件中是否显式配置 `importConfigs` 相关的文件或者目录
 - 2、检查应用启动的环境，是否和配置文件一致，比如 prod 的配置肯定不会在 local 出现

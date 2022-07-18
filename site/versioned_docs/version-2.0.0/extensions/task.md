@@ -123,7 +123,7 @@ export class HelloTask {
 }
 ```
 
-​
+
 
 触发：
 
@@ -147,7 +147,7 @@ export class UserTask {
 ```
 
 这样，就相当于是 3 秒后，触发 HelloTask 这个任务。
-​
+
 
 #### 设置进度
 
@@ -156,7 +156,7 @@ export class UserTask {
 <img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1620884757992-fb18a58f-9e56-4eda-92d9-68965df73e8a.png#clientId=uecb893ec-cfee-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=342&id=ubf7a3918&margin=%5Bobject%20Object%5D&name=image.png&originHeight=454&originWidth=576&originalType=binary&ratio=1&rotation=0&showTitle=false&size=29448&status=done&style=none&taskId=uffac1111-2306-44ac-bd3e-906503e1764&title=&width=434" width="434" />
 
 相当于第二个参数，将 bull 的 job 传递给了用户。用户可以通过 job.progress 来设置进度。
-​
+
 
 然后查询进度：
 
@@ -184,11 +184,11 @@ let job = await this.queueService.getClassQueue(TestJob).getJob(id);
 ```
 
 然后 job 上面有类似停止的方法，或者查看进度的方法。
-​
+
 
 ### 启动就触发
 
-​
+
 
 有朋友由于只有一台机器，希望重启后立马能执行一下对应的定时任务。
 
@@ -223,10 +223,10 @@ export class ContainerConfiguration implements ILifeCycle {
 - midway-task.log
 - midway-task-error.log
 
-​
+
 
 分别在 task、localTask、queue 触发开始和结束的时候会打印对应的日志。
-​
+
 
 分布式的 Task 触发日志：
 
@@ -250,7 +250,7 @@ logger.info(`local task start.`);
 logger.info(`local task end.`);
 ```
 
-​
+
 
 任务队列的触发日志：
 
@@ -263,7 +263,7 @@ logger.info(`queue process start.`);
 logger.info(`queue process end.`);
 ```
 
-​
+
 
 ### 排查问题链路：
 
@@ -271,7 +271,7 @@ logger.info(`queue process end.`);
 
 用户可以搜索这个相同的 id，找到同一次请求的日志。
 为了方便用户在自己的业务代码中串联对应的日志，我在 ctx 上面挂了 traceId 变量。
-​
+
 
 例如异常情况：
 当异常的时候，
@@ -288,15 +288,15 @@ logger.info(`queue process end.`);
 <img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1626929496543-7d79db19-622f-4f99-a2fd-60b7f00bd57d.png#clientId=u8f28ddc7-5bc1-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=163&id=DM3xz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=326&originWidth=2034&originalType=binary&ratio=1&rotation=0&showTitle=false&size=691391&status=done&style=none&taskId=ucd8b1d59-b13d-4fc4-81e2-2d4f43bab7b&title=&width=1017" width="1017" />
 
 相当于 ctrl + f 搜索相同的 traceId 即可。
-​
+
 
 ### traceId
 
 localTask 则是自己生成了一个 uuid 的 id 作为 traceId。
-​
+
 
 task 和 queue 则采用 job 的 id 作为 traceId。
-​
+
 
 ### 业务内部的代码
 
@@ -344,7 +344,7 @@ export class QueueTask {
 }
 ```
 
-​
+
 
 打印的日志
 
@@ -354,9 +354,9 @@ export class QueueTask {
 2021-07-30 13:00:13,102 INFO 5577 [Queue][12][QueueTask] queue process end.
 ```
 
-​
 
-​
+
+
 
 ## 其他
 
@@ -379,11 +379,11 @@ export class QueueTask {
 常见表达式：
 
 
-- 每隔 5 秒执行一次：_/5 _ \* \* \* ?
-- 每隔 1 分钟执行一次：0 _/1 _ \* \* ?
-- 每小时的 20 分执行一次：0 20 \* \* \* ?
-- 每天 0 点执行一次：0 0 0 \* \* ?
-- 每天的两点 35 分执行一次：0 35 2 \* \* ?
+- 每隔5秒执行一次：`*/5 * * * * *`
+- 每隔1分钟执行一次：`0 */1 * * * *`
+- 每小时的20分执行一次：`0 20 * * * *`
+- 每天 0 点执行一次：`0 0 0 * * *`
+- 每天的两点35分执行一次：`0 35 2 * * *`
 
 
 

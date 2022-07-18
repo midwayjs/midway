@@ -78,16 +78,16 @@ Bootstrap.load(web).run();
 ## 编写自定义 Framework
 
 一般用户使用现成的 Framework 即可，自定义组件也能满足大部分的场景。
-​
+
 
 但是在特殊情况下，比如团队需要额外扩展，或者固定一些能力，同时不希望每个使用者额外修改代码，这个时候就需要完全自定义框架（Framework）的功能。
-​
+
 
 除了完全重写框架之外，用户也可以基于现有的 koa/express/gRPC 等框架编写属于自己的 Framework。下面我们就来解释如何扩展。
 
 ### 基于现有框架扩展
 
-​
+
 
 这里以扩展 `@midwayjs/koa`  为例。大部分的情况，我们都只需要修改 `applicationInitialize`  方法。
 

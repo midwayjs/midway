@@ -4,10 +4,10 @@ title: WebSocket
 
 [ws](https://www.npmjs.com/package/ws) 模块是 Node 端的一个 WebSocket 协议的实现，该协议允许客户端(一般是浏览器)持久化和服务端的连接.
 这种可以持续连接的特性使得 WebScoket 特别适合用于适合用于游戏或者聊天室等使用场景。
-​
+
 
 Midway 提供了对 [ws](https://www.npmjs.com/package/ws) 模块的支持和封装，能够简单的创建一个 WebSocket 服务。
-​
+
 
 ## 安装依赖
 
@@ -18,7 +18,7 @@ $ npm i @midwayjs/ws --save
 $ npm i @types/ws --save-dev
 ```
 
-​
+
 
 ## 目录结构
 
@@ -118,7 +118,7 @@ export class HelloSocketController {
 ```
 
 通过 `@OnWSDisConnection` 装饰器，在客户端断连时，做一些额外处理。
-​
+
 
 ## 本地测试
 
@@ -226,7 +226,7 @@ it('should test create websocket app', async () => {
 ```
 
 两种写法效果相同，按自己理解的写就行。
-​
+
 
 ## 启动服务
 
@@ -272,7 +272,7 @@ Bootstrap.load(webSocketFramework).run();
 | server                                                        | httpServer | 可选，当传递 port 时，可以指定一个已经存在的 webServer |
 
 更多的启动选项，请参考 [ws 文档](https://github.com/websockets/ws)。
-​
+
 
 ## 接入已有的 HTTP 服务
 

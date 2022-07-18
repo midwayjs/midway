@@ -56,10 +56,10 @@ error TS6133: 'app' is declared but its value is never read.
 ```
 
 原因为开启了 TS 的对象未使用检查，如果声明了但是没有使用就会报错。
-​
+
 
 处理方法：
-​
+
 
 第一种：移除未定义的变量
 
@@ -73,15 +73,15 @@ error TS6133: 'app' is declared but its value is never read.
 }
 ```
 
-​
+
 
 ## tsconfig 中定义 typings 不生效
 
 在 tsconfig.json 中，如果定义了 typeRoots，且定义了 include，如果 include 中不包含 typeRoot 中的内容，则会在 dev/build 时报错。
-​
+
 
 此为 ts/ts-node 的问题，issue 见 [#782](https://github.com/TypeStrong/ts-node/issues/782) [#22217](https://github.com/microsoft/TypeScript/issues/22217)
-​
+
 
 比如：
 

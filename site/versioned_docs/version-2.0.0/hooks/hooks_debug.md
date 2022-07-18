@@ -7,7 +7,7 @@ title: 本地调试
 ### JavaScript Debug Terminal
 
 在 VSCode 中创建 JavaScript Debug Terminal。
-​
+
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/98602/1622789601759-d2634846-49f7-4487-be6f-0dc9e5f80082.png#clientId=u3a1b2f6d-ebe0-4&from=paste&height=192&id=p5BOe&margin=%5Bobject%20Object%5D&name=image.png&originHeight=192&originWidth=375&originalType=binary&size=31856&status=done&style=none&taskId=u7286159b-9369-4d17-8a6a-c43a6f52556&width=375" width="375" />
 

@@ -358,10 +358,10 @@ provider:
 ## functions
 
 一个 functions 结构中包含多个 函数（function）。每个函数是一个对象（function）结构。
-​
+
 
 functions 中的字段和结构，在 midway v2 开始已经变为 `@ServerlessFunction` 和 `@ServerlessTrigger` 装饰器，下面的参数只是原始的描述。
-​
+
 
 ### functions/function 结构
 

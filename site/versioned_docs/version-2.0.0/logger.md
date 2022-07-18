@@ -9,7 +9,7 @@ title: 日志
 Midway 为不同场景提供了一套统一的日志接入方式。通过 `@midwayjs/logger`  包导出的方法，可以方便的接入不同场景的日志系统。
 
 Midway 的日志系统基于社区的 [winston](https://github.com/winstonjs/winston)，是现在社区非常受欢迎的日志库。
-​
+
 
 ## 普通使用
 
@@ -45,7 +45,7 @@ export class HelloController {
 ```
 
 访问后，我们能在两个地方看到日志输出：
-​
+
 
 - console 栏看到输出。
 - 日志目录的 midway-app.log 文件中。
@@ -362,7 +362,7 @@ export class UserService {
 winston 的日志等级分为下面几类，日志等级依次降低（数字越大，等级越低）：
 
 ```typescript
-const levels = { 
+const levels = {
   none: 0,
   error: 1,
   trace: 2,

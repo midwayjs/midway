@@ -99,7 +99,7 @@ export class Photo extends Model {
 ```
 
 使用 Entity:
-​
+
 
 查询列表
 
@@ -205,9 +205,9 @@ export class HomeController {
 ```
 
 关于 OP 的更多用法：[https://sequelize.org/v5/manual/querying.html](https://sequelize.org/v5/manual/querying.html)
-​
 
-​
+
+
 
 如果遇到比较复杂的，可以使用 raw query 方法：
 [https://sequelize.org/v5/manual/raw-queries.html](https://sequelize.org/v5/manual/raw-queries.html)

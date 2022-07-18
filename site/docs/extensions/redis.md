@@ -15,11 +15,10 @@
 
 ## 安装依赖
 
+`@midwayjs/redis` 是主要的功能包。
 
-`@midwayjs/redis` 是主要的功能包，`@types/ioredis` 是 定义包。
 ```bash
 $ npm i @midwayjs/redis@3 --save
-$ npm i @types/ioredis --save-dev			// 安装到 dev 依赖
 ```
 或者在 `package.json` 中增加如下依赖后，重新安装。
 
@@ -28,21 +27,11 @@ $ npm i @types/ioredis --save-dev			// 安装到 dev 依赖
   "dependencies": {
     "@midwayjs/redis": "^3.0.0",
     // ...
-  },
-  "devDependencies": {
-    "@types/ioredis": "^4.28.7",
-    // ...
   }
 }
 ```
 
 
-
-:::info
-
-如果发现 RedisService 没有方法定义，请务必检查此项。
-
-:::
 
 
 ## 引入组件
@@ -121,14 +110,15 @@ export default {
       nodes: [{
         host: 'host',
         port: 'port',
-        password: 'password',
-        db: 'db',
       },{
         host: 'host',
         port: 'port',
-        password: 'password',
-        db: 'db',
-      },
+      }],
+      redisOptions: {
+        family: '',
+        password: 'xxxx',
+        db: 'xxx'
+      }
     }
   },
 }

@@ -3,14 +3,14 @@ title: gRPC
 ---
 
 gRPC 是一个高性能、通用的开源 RPC 框架，其由 Google 主要面向移动应用开发并基于 HTTP/2 协议标准而设计，基于 ProtoBuf(Protocol Buffers) 序列化协议开发，且支持众多开发语言。
-​
+
 
 本篇内容演示了如何在 Midway 体系下，提供 gRPC 服务，以及调用 gRPC 服务的方法。
 
 Midway 当前采用了最新的 gRPC 官方推荐的 [@grpc/grpc-js](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js) 进行开发，并提供了一些工具包，用于快速发布服务和调用服务。
 
 我们使用的模块为 `@midwayjs/grpc` ，既是一个框架（可以独立发布服务），又是一个组件（可以接入其它框架调用 gRPC 服务）。
-​
+
 
 ## 创建示例
 
@@ -82,7 +82,7 @@ message HelloReply {
 ```
 
 proto3 表示的是第三版的 protobuf 协议，是 gRPC 目前推荐的版本，“语法简单，功能更全”。
-​
+
 
 我们可以用 `service`  格式，定义服务体，其中可以包含方法。同时，我们可以更加细致的通过 `message`  描述服务具体的请求参数和响应参数。
 
@@ -91,7 +91,7 @@ proto3 表示的是第三版的 protobuf 协议，是 gRPC 目前推荐的版本
 :::info
 大家会看到，这和 Java 中的 Class 非常相像，每个结构就相当于 Java 中的一个类。
 :::
-​
+
 
 ### 编写 proto 文件
 
@@ -123,7 +123,7 @@ message HelloReply {
 我们定义了一个名为 `Greeter`  的服务，包含一个 `HelloRequest`  结构的请求体，以及返回 `HelloReply`  结构的响应体。
 
 接下去，我们将对这个服务给大家做演示。
-​
+
 
 ### 生成代码定义
 
@@ -136,7 +136,7 @@ $ npm i @midwayjs/grpc-helper --save-dev
 ```
 
 grpc-helper 工具的作用，是将用户提供的 proto 文件，生成对应可读的 ts interface 文件。
-​
+
 
 我们可以添加一个脚本，方便这个过程。
 
@@ -194,9 +194,9 @@ export namespace helloworld {
 :::info
 每当 proto 文件被修改时，就需要重新生成对应的服务定义，然后将对应的方法实现。
 :::
-​
 
-​
+
+
 
 ## 提供 gRPC 服务（Provider）
 
@@ -292,7 +292,7 @@ Bootstrap.load(grpcService).run();
 | credentials | ServerCredentials | 可选，服务凭证，值参考[这里](https://grpc.github.io/grpc/node/grpc.ServerCredentials.html)，默认值为 ServerCredentials.createInsecure() |
 
 services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 服务。每个 service 的结构为：
-​
+
 
 | protoPath | string | 必选，proto 文件的绝对路径 |
 | --------- | ------ | -------------------------- |
@@ -301,14 +301,14 @@ services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 
 
 ### 编写单元测试
 
-​
+
 
 `@midwayjs/grpc`  库提供了一个 `createGRPCConsumer`  方法，用于实时调用客户端，一般我们用这个方法做测试。
 
 :::caution
 这个方法每次调用会实时连接，不建议将该方法用在生产环境。
 :::
-​
+
 
 在测试中写法如下。
 
@@ -349,7 +349,7 @@ describe('test/index.test.ts', () => {
 });
 ```
 
-​
+
 
 ## 调用 gRPC 服务（Consumer）
 

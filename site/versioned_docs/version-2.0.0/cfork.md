@@ -3,16 +3,16 @@ title: 使用 cfork
 ---
 
 很多同学没有听过 cfork，cfork 库是 egg-scripts 中用于启动主进程的库，是 egg 使用的基础库之一，他的功能是启动进程，并维持多个进程的保活。
-​
+
 
 文档在此：[https://github.com/node-modules/cfork](https://github.com/node-modules/cfork)
-​
+
 
 由于 bootstrap.js 的特性，有时候不是很适合 pm2 来部署（比如集团内部，全局不安装，需要 API 启动）。
-​
+
 
 我们可以新增一个 `server.js` 用来做主进程的入口，将 `bootstrap.js` 作为每个子进程的启动入口。
-​
+
 
 ```javascript
 // server.js

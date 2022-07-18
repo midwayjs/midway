@@ -121,18 +121,18 @@ export class ContainerConfiguration implements ILifeCycle {
 > 目前仅有 Koa / Express 支持。
 
 上面展示了通过 `config.default.ts` 注入配置的能力，你也可以通过 `@Config` 的方式将配置注入到 `ContainerConfiguration` 类中进行配置。
-​
 
-​
+
+
 
 ## 定制 GraphQL 中间件
 
 定制 GraphQL 中间件的成本实际上非常低的，不到 100 行代码即可实现：
 
-> 示例参考 [koa-app-sample](https://github.com/LinbuduLab/apollo-server-midway/blob/main/packages/koa-app-sample/src/middlewares/extend.ts)​
+> 示例参考 [koa-app-sample](https://github.com/LinbuduLab/apollo-server-midway/blob/main/packages/koa-app-sample/src/middlewares/extend.ts)
 
 以下示例以 Koa 为例
-​
+
 
 首先定义中间件
 
@@ -263,18 +263,18 @@ export class ContainerConfiguration implements ILifeCycle {
 
 ## 注意事项
 
-​
+
 
 - TypeGraphQL 支持使用外部 IoC 容器，因此你可以在 Resolver Class 中自然的使用 Midway 的依赖注入体系，但请确保使 `Resolver` 类中使用了 `Provide` 装饰器。在 Serverless 中， 容器来自于请求上下文，即`context.requestContext`，而在 Node 应用中，容器来自于应用上下文，即 `app.getApplicationContext`。
 - 你也可以使用 `resolvers: [path.resolve(this.app.getBaseDir(), "resolvers/*")]` 的形式一次性加载所有指定目录下的 resolver，但注意的是，请关闭 `tsconfig.json` 中的 `declaration` `inlineSourceMap` `sourceMap` 选项，避免 `.d.ts` 与 `.js.map` 文件以及 `inlineSourceMap` 被错误的进行读取而导致报错。
   - 对于集团内部用户，由于 FaaS 默认的构建器强制要求 sourceMap 启用，你可以直接导入 Resolver 类或使用 `resolvers/${ process.env.NODE_ENV === 'development' ? '*.ts' : '*.js' }` 加载。
 
-​
+
 
 ## 自动生成 TypeGraphQL 类型定义
 
 对于从 RESTFul API 迁移，或已有确定的接口文件格式，你可以使用 [json-type-graphql](https://github.com/LinbuduLab/json-to-type-graphql) 这个库（与 Apollo-Server-Midway 是同一个作者）来进行一些自动化的代码生成，最简单的使用如图所示：
-​
+
 
 ```typescript
 import transformer from 'json-type-graphql';
@@ -292,7 +292,7 @@ import path from 'path';
 })();
 ```
 
-​
+
 
 以上代码会生成这样一个文件：
 
@@ -309,10 +309,10 @@ export class Root {
 }
 ```
 
-​
+
 
 目前，json-to-type-graphql 提供了以下能力：
-​
+
 
 - 使用对象、JSON 文件或者是 URL 作为数据源
 - 支持自定义的预处理器（pre-processer）、后处理器（post-processer）来 hook 进入执行逻辑内部
@@ -320,9 +320,9 @@ export class Root {
 - 支持对具有父子关系的 Class 进行排序，如`P-C1-C11-C12-C2-C21-C3-C31`.
 - 支持 Class 名的前缀与后缀配置，支持 TypeGraphQL `@Field()` 装饰器的 ReturnType
 
-​
 
-​
+
+
 
 如果你在使用 Prisma 作为 ORM，你也可以使用 [typegraphql-prisma](https://github.com/MichalLytek/typegraphql-prisma) 这个库（来自于 TypeGraphQL 作者）来从 Prisma Schema 生成 TypeGraphQL Class、Resolver。
 
@@ -369,7 +369,7 @@ export class Root {
   - `enable`：是否启用
   - `sort`：是否进行词法排序（`lexicographicSortSchema`）
 
-​
+
 
 ### 配置类型定义
 
