@@ -186,5 +186,17 @@ describe('/test/index.test.ts', () => {
 
       await close(app);
     });
+
+    it('should test with open id', async () => {
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-koa-openid'),
+        {},
+      );
+      let result = await createHttpRequest(app).get('/');
+      expect(result.status).toEqual(302);
+      expect(result.headers['location']).toMatch('https://g1openid.crcc.cn/oauth/authorize');
+
+      await close(app);
+    });
   });
 });
