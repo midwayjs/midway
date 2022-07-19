@@ -176,6 +176,7 @@ export class UserDTO {
 // src/controller/home.ts
 import { Controller, Get, Provide } from "@midwayjs/decorator";
 import { UserDTO } from './dto/user';
+import { Validate } from '@midwayjs/validate';
 
 @Controller('/api/user')
 export class HomeController {
