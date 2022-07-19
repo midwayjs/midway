@@ -34,7 +34,7 @@
     "passport-jwt": "4.0.0",
     "passport-local": "1.0.0"
   },
-  "peerDependencies": {
+  "dependencies": {
     "pause": "0.0.1"
   }
 }

@@ -10,25 +10,6 @@ import { Strategy } from './strategy';
 import * as http from 'http';
 import { create as createReqMock } from './request';
 
-// const op = (isExpress: boolean) => {
-//   if (isExpress) {
-//     return {
-//       redirect() {
-//         return {
-//           status: 302,
-//           text: 'Redirecting to <a href=\"/\">/</a>.',
-//         };
-//       }
-//     }
-//   } else {
-//     return {
-//       redirect(ctx) {
-//         ctx.redirect();
-//       }
-//     }
-//   }
-// }
-
 export function PassportStrategy(
   Strategy: new (...args) => Strategy,
   name?: string
