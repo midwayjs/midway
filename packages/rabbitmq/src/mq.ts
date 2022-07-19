@@ -43,18 +43,22 @@ export class RabbitMQServer
   async connect(url, socketOptions) {
     try {
       this.connection = await amqp.connect(url, socketOptions);
-      this.connection.on('connect', () => {
-        this.logger.info('Message Queue connected!');
-      });
-      this.connection.on('disconnect', err => {
-        if (err) {
-          if (err.err) {
-            err = err.err as any;
+      await new Promise<void>((resolve, reject) => {
+        this.connection.on('connect', () => {
+          this.logger.info('Message Queue connected!');
+          resolve();
+        });
+        this.connection.on('error', err => {
+          if (err) {
+            if (err.err) {
+              err = err.err as any;
+            }
+            this.logger.error('Message Queue disconnected', err);
+          } else {
+            this.logger.info('Message Queue disconnected!');
           }
-          this.logger.error('Message Queue disconnected', err);
-        } else {
-          this.logger.info('Message Queue disconnected!');
-        }
+          reject(err);
+        });
       });
     } catch (error) {
       this.logger.error('Message Queue connect fail', error);
