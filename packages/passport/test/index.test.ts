@@ -4,7 +4,6 @@ import { join } from 'path';
 describe('/test/index.test.ts', () => {
   describe('Express passport', () => {
     it('basic local auth', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express'),
         {},
@@ -24,12 +23,10 @@ describe('/test/index.test.ts', () => {
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('success');
 
-      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
       await close(app);
     });
 
     it('passport with session', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-session'),
         {},
@@ -58,12 +55,10 @@ describe('/test/index.test.ts', () => {
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('success');
 
-      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
       await close(app);
     });
 
     it('jwt passport with express', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
       let token;
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-jwt'),
@@ -82,7 +77,6 @@ describe('/test/index.test.ts', () => {
       expect(result.text).toEqual('success');
 
       await close(app);
-      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
     });
   });
 
@@ -104,8 +98,8 @@ describe('/test/index.test.ts', () => {
         .get('/')
         .query({ username: 'admin', password: '123' })
 
-      expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
 
       result = await request
         .get('/')
@@ -137,14 +131,14 @@ describe('/test/index.test.ts', () => {
         .get('/')
         .query({ username: 'admin', password: '123' })
 
-      expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
 
       result = await request
         .get('/')
         .set({
           cookie: result.headers['set-cookie']
-        })
+        });
 
       expect(result.status).toEqual(200);
 
@@ -189,6 +183,18 @@ describe('/test/index.test.ts', () => {
 
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('success');
+
+      await close(app);
+    });
+
+    it('should test with open id', async () => {
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-koa-openid'),
+        {},
+      );
+      let result = await createHttpRequest(app).get('/');
+      expect(result.status).toEqual(302);
+      expect(result.headers['location']).toMatch('https://g1openid.crcc.cn/oauth/authorize');
 
       await close(app);
     });

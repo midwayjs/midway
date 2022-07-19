@@ -1,10 +1,10 @@
-import * as passport from 'passport';
+import { AuthenticateOptions } from './dist/index';
 
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    passport?: passport.AuthenticateOptions;
+    passport?: AuthenticateOptions;
   }
 }
 

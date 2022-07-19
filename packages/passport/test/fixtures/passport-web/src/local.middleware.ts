@@ -7,7 +7,6 @@ import { CustomStrategy } from './local.strategy';
 export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
   getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
     return {
-      successRedirect: '/',
       failureRedirect: '/login'
     }
   }

@@ -1,3 +1,5 @@
+import { STATUS_CODES } from 'http';
+
 interface ErrorOption {
   cause?: Error;
   status?: number;
@@ -62,7 +64,7 @@ export class MidwayError extends Error {
   }
 }
 
-export type ResOrMessage = string | { message: string };
+export type ResOrMessage = string | { message: string } | undefined;
 
 export class MidwayHttpError extends MidwayError {
   status: number;
@@ -75,13 +77,17 @@ export class MidwayHttpError extends MidwayError {
     options?: ErrorOption
   );
   constructor(
-    resOrMessage: any,
+    resOrMessage: string | { message: string } | undefined,
     status: number,
     code?: string,
     options?: ErrorOption
   ) {
     super(
-      typeof resOrMessage === 'string' ? resOrMessage : resOrMessage.message,
+      resOrMessage
+        ? typeof resOrMessage === 'string'
+          ? resOrMessage
+          : resOrMessage.message
+        : STATUS_CODES[status],
       code ?? String(status),
       options
     );

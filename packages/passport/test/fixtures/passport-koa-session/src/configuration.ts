@@ -5,8 +5,8 @@ import {
   PassportMiddleware,
   PassportStrategy,
   CustomStrategy as Strategy,
+  AuthenticateOptions,
 } from '../../../../src';
-import * as passport from 'passport';
 import * as koa from '@midwayjs/koa';
 
 @Strategy()
@@ -39,10 +39,9 @@ export class CustomStrategy extends PassportStrategy(
 @Provide()
 export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
   getAuthenticateOptions():
-    | Promise<passport.AuthenticateOptions>
-    | passport.AuthenticateOptions {
+    | Promise<AuthenticateOptions>
+    | AuthenticateOptions {
     return {
-      successRedirect: '/',
       failureRedirect: '/login',
     };
   }
