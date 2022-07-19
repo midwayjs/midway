@@ -2,7 +2,7 @@ import { fork } from 'child_process';
 import { join } from 'path';
 import { sleep } from '@midwayjs/decorator';
 import * as request from 'request';
-import * as socketClient from 'socket.io-client';
+import { io as socketClient } from 'socket.io-client';
 
 describe('/test/bootstrap.test.ts', () => {
   it('should bootstrap multi framework', async () => {
