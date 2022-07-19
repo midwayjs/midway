@@ -128,7 +128,7 @@ export class ContainerLifeCycle {
 
 ```typescript
 // src/dto/user.ts
-import { Rule, RuleType } from "@midwayjs/validate";
+import { Rule, RuleType } from '@midwayjs/validate';
 
 export class UserDTO {
   @Rule(RuleType.number().required())
@@ -174,9 +174,9 @@ export class UserDTO {
 
 ```typescript
 // src/controller/home.ts
-import { Controller, Get, Provide } from "@midwayjs/decorator";
-import { UserDTO } from './dto/user';
+import { Controller, Get, Provide } from '@midwayjs/decorator';
 import { Validate } from '@midwayjs/validate';
+import { UserDTO } from './dto/user';
 
 @Controller('/api/user')
 export class HomeController {
@@ -245,7 +245,7 @@ Midway 支持每个校验的 Class 中的属性依旧是一个对象。
 我们给 `UserDTO` 增加一个属性 `school` ，并且赋予一个 `SchoolDTO` 类型。
 
 ```typescript
-import { Rule, RuleType } from "@midwayjs/validate";
+import { Rule, RuleType } from '@midwayjs/validate';
 
 export class SchoolDTO {
   @Rule(RuleType.string().required())
@@ -288,7 +288,7 @@ Midway 支持校验继承方式，满足开发者抽离通用的对象属性的�
 例如我们下面  `CommonUserDTO` 抽离接口的通用的一些属性，然后 `UserDTO` 作为特殊接口需要的特定参数。
 
 ```typescript
-import { Rule, RuleType } from "@midwayjs/validate";
+import { Rule, RuleType } from '@midwayjs/validate';
 
 export class CommonUserDTO {
   @Rule(RuleType.string().required())
@@ -328,7 +328,7 @@ Midway 提供了 `PickDto` 和 `OmitDto` 两个方法根据现有的的 DTO 类�
 
 ```typescript
 // src/dto/user.ts
-import { Rule, RuleType, PickDto } from "@midwayjs/validate";
+import { Rule, RuleType, PickDto } from '@midwayjs/validate';
 
 export class UserDTO {
   @Rule(RuleType.number().required())
