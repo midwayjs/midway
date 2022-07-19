@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mikro",
-  "version": "3.4.0-beta.10",
+  "version": "3.4.0-beta.11",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -9,9 +9,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.4.0-beta.10",
-    "@midwayjs/decorator": "^3.4.0-beta.10",
-    "@midwayjs/mock": "^3.4.0-beta.10",
+    "@midwayjs/core": "^3.4.0-beta.11",
+    "@midwayjs/decorator": "^3.4.0-beta.11",
+    "@midwayjs/mock": "^3.4.0-beta.11",
     "@mikro-orm/core": "5.2.3",
     "@mikro-orm/entity-generator": "5.2.3",
     "@mikro-orm/sql-highlighter": "1.0.1",

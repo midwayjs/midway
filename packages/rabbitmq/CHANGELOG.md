@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.11](https://github.com/midwayjs/midway/compare/v3.4.0-beta.10...v3.4.0-beta.11) (2022-07-19)
+
+
+### Bug Fixes
+
+* throw error when rabbitmq connect fail ([#2130](https://github.com/midwayjs/midway/issues/2130)) ([e7f55a8](https://github.com/midwayjs/midway/commit/e7f55a863583a3c641b2467799e1d80b1761ecce))
+
+
+
+
+
 # [3.4.0-beta.10](https://github.com/midwayjs/midway/compare/v3.4.0-beta.9...v3.4.0-beta.10) (2022-07-18)
 
 **Note:** Version bump only for package @midwayjs/rabbitmq

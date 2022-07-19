@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.11](https://github.com/midwayjs/midway/compare/v3.4.0-beta.10...v3.4.0-beta.11) (2022-07-19)
+
+
+### Bug Fixes
+
+* async context manager key ([099e4a0](https://github.com/midwayjs/midway/commit/099e4a0a03465b258671b2de48e64df6109b08a5))
+
+
+
+
+
 # [3.4.0-beta.10](https://github.com/midwayjs/midway/compare/v3.4.0-beta.9...v3.4.0-beta.10) (2022-07-18)
 
 

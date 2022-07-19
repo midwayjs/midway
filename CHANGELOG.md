@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0-beta.11](https://github.com/midwayjs/midway/compare/v3.4.0-beta.10...v3.4.0-beta.11) (2022-07-19)
+
+
+### Bug Fixes
+
+* async context manager key ([099e4a0](https://github.com/midwayjs/midway/commit/099e4a0a03465b258671b2de48e64df6109b08a5))
+* **deps:** update dependency sequelize to v6.21.3 ([#2124](https://github.com/midwayjs/midway/issues/2124)) ([ef05883](https://github.com/midwayjs/midway/commit/ef05883d698f2dc4797fdff75d05cec7790120b0))
+* throw error when rabbitmq connect fail ([#2130](https://github.com/midwayjs/midway/issues/2130)) ([e7f55a8](https://github.com/midwayjs/midway/commit/e7f55a863583a3c641b2467799e1d80b1761ecce))
+
+
+
+
+
 # [3.4.0-beta.10](https://github.com/midwayjs/midway/compare/v3.4.0-beta.9...v3.4.0-beta.10) (2022-07-18)
 
 
