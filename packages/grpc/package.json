@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.2.1",
-    "@grpc/proto-loader": "^0.6.0",
+    "@grpc/proto-loader": "^0.7.0",
     "@midwayjs/core": "^3.4.0-beta.11",
     "@midwayjs/logger": "^2.15.0"
   },

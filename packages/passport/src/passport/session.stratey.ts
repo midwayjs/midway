@@ -1,6 +1,6 @@
 import { Strategy } from './strategy';
 import { httpError } from '@midwayjs/core';
-import * as pause from 'pause';
+import { pause } from './pause';
 
 /**
  * `SessionStrategy` constructor.
