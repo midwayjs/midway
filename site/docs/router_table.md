@@ -14,7 +14,7 @@
 已默认实例化，可以直接注入使用。
 
 ```typescript
-import { MidwayWebRouterService } from '@midwayjs/core'
+import { MidwayWebRouterService, MidwayServerlessFunctionService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
 @Configuration({
@@ -163,7 +163,7 @@ export interface RouterInfo {
 
 ```typescript
 import { Middleware, Inject } from '@midwayjs/decorator';
-import { httpError } from '@midwayjs/core';
+import { httpError, MidwayWebRouterService } from '@midwayjs/core';
 
 @Middleware()
 export class AuthMiddleware {
@@ -446,7 +446,7 @@ export class DataController {
 
 ```typescript
 // src/configuration.ts
-import { MidwayWebRouterService } from '@midwayjs/core'
+import { MidwayWebRouterService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 import { DataController } from './controller/data.controller';
 
@@ -483,7 +483,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { MidwayWebRouterService } from '@midwayjs/core'
+import { MidwayWebRouterService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
 @Configuration({
@@ -526,7 +526,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { MidwayWebRouterService } from '@midwayjs/core'
+import { MidwayServerlessFunctionService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
 @Configuration({

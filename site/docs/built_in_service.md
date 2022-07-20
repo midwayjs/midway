@@ -492,7 +492,7 @@ Midway 内置的路由表服务，用于应用路由和函数的创建。
 可以通过注入获取。
 
 ```typescript
-import { MidwayWebRouterService } from '@midwayjs/core'
+import { MidwayWebRouterService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
 @Configuration({
@@ -518,11 +518,57 @@ API 如下
 
 | API                                               | 返回类型                           | 描述                                   |
 | ------------------------------------------------- | ---------------------------------- | -------------------------------------- |
-| addController(clzz, propertyName, value)          |                                    | 动态添加一个 Controller                |
-| addRouter(obj, key, value)                        |                                    | 动态添加一个路由函数                   |
+| addController(controllerClz, controllerOption)    |                                    | 动态添加一个 Controller                |
+| addRouter(routerFunction, routerInfoOption)       |                                    | 动态添加一个路由函数                   |
 | getRouterTable()                                  | Promise<Map<string, RouterInfo[]>> | 获取带层级的路由                       |
 | getFlattenRouterTable()                           | Promise<RouterInfo[]>              | 获取扁平化路由列表                     |
 | getRoutePriorityList()                            | Promise<RouterPriority[]>          | 获取路由前缀列表                       |
 | getMatchedRouterInfo(url: string, method: string) | Promise<RouterInfo \| undefined>   | 根据访问的路径，返回当前匹配的路由信息 |
 
 更多使用请参考 [Web 路由表](#router_table)。
+
+
+
+## MidwayServerlessFunctionService
+
+Midway 内置的函数信息服务，继承与 `MidwayWebRouterService` ，方法几乎相同。
+
+可以通过注入获取。
+
+```typescript
+import { MidwayServerlessFunctionService } from '@midwayjs/core';
+import { Configuration, Inject } from '@midawyjs/decorator';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  @Inject()
+  serverlessFunctionService: MidwayServerlessFunctionService;
+
+  async onReady() {
+		this.serverlessFunctionService.addServerlessFunction(async (ctx, event) => {
+      return 'hello world';
+    }, {
+      type: ServerlessTriggerType.HTTP,
+      metadata: {
+        method: 'get',
+        path: '/api/hello'
+      },
+      functionName: 'hello',
+      handlerName: 'index.hello',
+    });
+  }
+}
+
+```
+
+API 如下
+
+| API                                                        | 返回类型              | 描述             |
+| ---------------------------------------------------------- | --------------------- | ---------------- |
+| addServerlessFunction(fn, triggerOptions, functionOptions) |                       | 动态添加一个函数 |
+| getFunctionList()                                          | Promise<RouterInfo[]> | 获取所有函数列表 |
+
+更多使用请参考 [Web 路由表](#router_table)。
+
