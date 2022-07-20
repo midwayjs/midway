@@ -251,7 +251,7 @@ export class MidwayWebRouterService {
       });
     } else {
       // 不同的 controller，可能会有相同的 prefix，一旦 options 不同，就要报错
-      if (middleware) {
+      if (middleware && middleware.length > 0) {
         const originRoute = this.routesPriority.filter(el => {
           return el.prefix === prefix;
         })[0];

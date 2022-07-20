@@ -42,6 +42,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
   pattern: string | string[];
   ignore: string | string[];
   namespace: string;
+  conflictCheck: boolean;
 }> {
   private directoryFilterArray: ResolveFilter[] = [];
   private duplicateModuleCheckSet = new Map();
@@ -66,7 +67,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
 
       // 检查重复模块
       const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {
-        if (Types.isClass(module)) {
+        if (this.extraDetectorOptions.conflictCheck && Types.isClass(module)) {
           const name = getProviderName(module);
           if (name) {
             if (this.duplicateModuleCheckSet.has(name)) {

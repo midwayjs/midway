@@ -84,6 +84,15 @@ describe('/test/service/webRouterService.test.ts', function () {
     expect(matchedRouterInfo).toMatchSnapshot();
   });
 
+  it('should test duplicate controller and empty options will not throw', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      '../fixtures/app-with-duplicate-controller-not-throw/src'
+    ));
+    const collector = await framework.getApplicationContext().getAsync(MidwayWebRouterService);
+    expect(await collector.getFlattenRouterTable()).toBeDefined();
+  });
+
   it('should test duplicate controller prefix and options', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,
