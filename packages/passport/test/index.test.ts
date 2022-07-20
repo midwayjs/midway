@@ -26,6 +26,20 @@ describe('/test/index.test.ts', () => {
       await close(app);
     });
 
+    it('should test passport all fail', async () => {
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-express-fail'),
+        {},
+      );
+
+      const request = createHttpRequest(app);
+      let result = await request.get('/')
+
+      expect(result.status).toEqual(401);
+
+      await close(app);
+    });
+
     it('passport with session', async () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-session'),
@@ -141,6 +155,20 @@ describe('/test/index.test.ts', () => {
         });
 
       expect(result.status).toEqual(200);
+
+      await close(app);
+    });
+
+    it('should test passport all fail', async () => {
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-koa-fail'),
+        {},
+      );
+
+      const request = createHttpRequest(app);
+      let result = await request.get('/')
+
+      expect(result.status).toEqual(401);
 
       await close(app);
     });

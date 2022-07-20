@@ -1,5 +1,7 @@
+import type { ManagerOptions, SocketOptions, Socket } from 'socket.io-client';
+
 export interface MidwaySocketIOClientOptions
-  extends Partial<SocketIOClient.ConnectOpts> {
+  extends Partial<ManagerOptions & SocketOptions> {
   url?: string;
   protocol?: string;
   host?: string;
@@ -8,7 +10,7 @@ export interface MidwaySocketIOClientOptions
 }
 
 export class SocketIOWrapperClient {
-  private readonly socket: SocketIOClient.Socket;
+  private readonly socket: Socket;
   constructor(socket) {
     this.socket = socket;
   }

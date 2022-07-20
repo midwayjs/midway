@@ -7,7 +7,6 @@ import {
   savePropertyMetadata,
   MS_GRPC_METHOD_KEY,
   MS_DUBBO_METHOD_KEY,
-  MS_HSF_METHOD_KEY,
   MSProviderType,
   GRPCMetadata,
   Provide,
@@ -78,20 +77,6 @@ export function DubboMethod(methodName?: string): MethodDecorator {
   return (target, propertyName, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       MS_DUBBO_METHOD_KEY,
-      {
-        methodName: methodName || propertyName,
-      },
-      target
-    );
-
-    return descriptor;
-  };
-}
-
-export function HSFMethod(methodName?: string): MethodDecorator {
-  return (target, propertyName, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
-      MS_HSF_METHOD_KEY,
       {
         methodName: methodName || propertyName,
       },

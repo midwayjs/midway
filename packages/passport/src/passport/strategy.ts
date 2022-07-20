@@ -1,5 +1,5 @@
 import { IncomingMessage } from 'http';
-import { StrategyCreatedStatic } from '../interface';
+import { IPassportStrategy, StrategyCreatedStatic } from '../interface';
 
 export abstract class Strategy {
   name?: string | undefined;
@@ -9,4 +9,9 @@ export abstract class Strategy {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Strategy extends StrategyCreatedStatic {
   // empty
+}
+
+export abstract class AbstractStrategyWrapper implements IPassportStrategy {
+  abstract validate(...args): any;
+  abstract getStrategyOptions(): any;
 }
