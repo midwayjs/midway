@@ -2,7 +2,7 @@ import {
   Controller, Get,
 } from '@midwayjs/decorator';
 
-@Controller('/', { middleware: ['auth1']})
+@Controller()
 export class HelloTencentService {
   @Get('/tencent_invoke')
   async invoke() {}

@@ -88,9 +88,10 @@ class ContainerConfiguration {
           namespace = configurationOptions.namespace;
           this.namespaceList.push(namespace);
         }
-        if (configurationOptions.detectorOptions) {
-          this.detectorOptionsList.push(configurationOptions.detectorOptions);
-        }
+        this.detectorOptionsList.push({
+          conflictCheck: configurationOptions.conflictCheck,
+          ...configurationOptions.detectorOptions,
+        });
         debug(`[core]: load configuration in namespace="${namespace}"`);
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);

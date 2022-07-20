@@ -19,9 +19,6 @@ export interface InjectionConfigurationOptions {
     | Record<string, any>;
   namespace?: string;
   detectorOptions?: Record<string, any>;
-  /**
-   * @deprecated
-   */
   conflictCheck?: boolean;
 }
 
