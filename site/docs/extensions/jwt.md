@@ -153,6 +153,7 @@ export class JwtMiddleware {
           //将新token放入Authorization中返回给前端
           ctx.set('Authorization', newToken);
         }
+        await next();
       }
     };
   }
