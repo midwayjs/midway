@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/midwayjs/midway/compare/v3.4.0-beta.12...v3.4.0) (2022-07-20)
+
+**Note:** Version bump only for package @midwayjs/static-file
+
+
+
+
+
 # [3.4.0-beta.12](https://github.com/midwayjs/midway/compare/v3.4.0-beta.11...v3.4.0-beta.12) (2022-07-20)
 
 **Note:** Version bump only for package @midwayjs/static-file
