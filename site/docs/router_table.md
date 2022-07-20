@@ -2,15 +2,43 @@
 
 从 v2.8.0 开始，Midway 提供了内置的路由表能力，所有的 Web 框架都将使用这份路由表注册路由。
 
+从 v3.4.0 开始，路由服务将作为 Midway 内置服务提供。
+
 
 在应用启动，onReady 生命周期以及之后可用。
 
 
-## 创建路由表收集器
+
+## 获取路由表服务
+
+已默认实例化，可以直接注入使用。
+
 ```typescript
-import { WebRouterCollector } from '@midwayjs/core';
-const collector = new WebRouterCollector();
+import { MidwayWebRouterService } from '@midwayjs/core'
+import { Configuration, Inject } from '@midawyjs/decorator';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  @Inject()
+  webRouterService: MidwayWebRouterService;
+  
+  @Inject()
+  serverlessFunctionService: MidwayServerlessFunctionService;
+
+  async onReady() {
+    // Web 路由
+    const routes = await this.webRouterService.getFlattenRouterTable();
+    
+    // serverless 函数
+    const routes = await this.serverlessFunctionService.getFunctionList();
+  }
+}
 ```
+
+`MidwayServerlessFunctionService` 仅在 Serverless 场景下生效，方法和 `MidwayServerlessFunctionService` 几乎相同。
+
 
 
 ## 路由信息定义
@@ -127,8 +155,41 @@ export interface RouterInfo {
 
 
 
+## 当前匹配的路由
 
-## 获取扁平化路由列表
+通过 `getMatchedRouterInfo` 方法，我们可以知道当前的路由，匹配到哪个路由信息（RouterInfo），从而进一步处理，这个逻辑在鉴权等场景很有用。
+
+比如，在中间件中，我们可以在进入控制器之前提前判断。
+
+```typescript
+import { Middleware, Inject } from '@midwayjs/decorator';
+import { httpError } from '@midwayjs/core';
+
+@Middleware()
+export class AuthMiddleware {
+  @Inject()
+  webRouterService: MidwayWebRouterService;
+
+  resolve() {
+    return async (ctx, next) => {
+      // 查询当前路由是否在路由表中注册
+      const routeInfo = await this.webRouterService.getMatchedRouterInfo(ctx.path, ctx.method);
+      if (routeInfo) {
+        await next();
+      } else {
+				throw new httpError.NotFoundError();
+      }
+    }
+  }
+}
+```
+
+
+
+## 路由信息
+
+
+### 获取扁平化路由列表
 
 
 获取当前所有可注册到 HTTP 服务的路由列表（包括 @Func/@Controller，以及一切按照标准信息注册的自定义装饰器）。
@@ -145,7 +206,7 @@ async getFlattenRouterTable(): Promise<RouterInfo[]>
 
 获取路由表 API。
 ```typescript
-const result = await collector.getFlattenRouterTable();
+const result = await this.webRouterService.getFlattenRouterTable();
 ```
 输出示例：
 ```typescript
@@ -200,7 +261,7 @@ const result = await collector.getFlattenRouterTable();
 ```
 
 
-## 获取 Router 信息列表
+### 获取 Router 信息列表
 
 
 在 Midway 中，每个 Controller 对应一个 Router 对象，每个 Router 都会有一个路由前缀（prefix），在此之中的所有路由都会按照上面的规则进行排序。
@@ -277,7 +338,7 @@ const list = await collector.getRoutePriorityList();
 ```
 
 
-## 获取带层级的路由
+### 获取带层级的路由
 
 
 某些情况下，我们需要拿到带层级的路由，包括哪些路由在哪个控制器（Controller）下，这样能更好的创建路由。
@@ -336,3 +397,160 @@ Map(3) {
   ]
 }
 ```
+
+
+
+### 获取所有函数信息
+
+和 `getFlattenRouterTable` 相同，只是返回的内容多了函数部分的信息。
+
+定义：
+
+```typescript
+async getFunctionList(): Promise<RouterInfo[]>
+```
+
+
+获取函数路由表 API。
+
+```typescript
+const result = await this.serverlessFunctionService.getFunctionList();
+```
+
+
+
+
+
+## 添加路由
+
+### 动态添加 Web 控制器
+
+有些时候我们希望根据某些条件动态的添加一个控制器，就可以使用这个方法。
+
+首先，我们需要有一个控制器类，但是不使用 `@Controller` 装饰器修饰。
+
+```typescript
+import { Get, Provide } from '@midwayjs/decorator';
+
+// 注意这里未使用 @Controller 修饰
+@Provide()
+export class DataController {
+  @Get('/query_data')
+  async getData() {
+    return 'hello world';
+  }
+}
+```
+
+我们可以通过 `addController` 方法动态添加它。
+
+```typescript
+// src/configuration.ts
+import { MidwayWebRouterService } from '@midwayjs/core'
+import { Configuration, Inject } from '@midawyjs/decorator';
+import { DataController } from './controller/data.controller';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  @Inject()
+  webRouterService: MidwayWebRouterService;
+
+  async onReady() {
+    if (process.env.NODE_ENV === 'test') {
+      this.webRouterService.addController(DataController, {
+        prefix: '/test',
+        routerOptions: {
+          middleware: [ 
+            // ...
+          ]
+        }
+      });
+    }
+		// ...
+  }
+}
+```
+
+`addController` 的方法，第一个参数为类本身，第二个参数和 `@Controller` 装饰器参数相同。
+
+
+
+### 动态添加 Web 路由函数
+
+在某些场景下，用户可以直接动态添加方法。
+
+```typescript
+// src/configuration.ts
+import { MidwayWebRouterService } from '@midwayjs/core'
+import { Configuration, Inject } from '@midawyjs/decorator';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  @Inject()
+  webRouterService: MidwayWebRouterService;
+
+  async onReady() {
+    // koa/egg 格式
+    this.webRouterService.addRouter(async (ctx) => {
+      return 'hello world';
+    }, {
+      url: '/api/user',
+      requestMethod: 'GET',
+    });
+		// ...
+    
+    // express 格式
+    this.webRouterService.addRouter(async (req, res) => {
+      return 'hello world';
+    }, {
+      url: '/api/user',
+      requestMethod: 'GET',
+    });
+  }
+}
+```
+
+`addRouter` 的方法，第一个参数为路由方法体，第二个参数为路由的元数据。
+
+
+
+### 动态添加 Serverless 函数
+
+和添加动态 Web 路由类似，使用内置的 `MidwayServerlessFunctionService` 服务来添加。
+
+比如，添加一个 http 函数。
+
+```typescript
+// src/configuration.ts
+import { MidwayWebRouterService } from '@midwayjs/core'
+import { Configuration, Inject } from '@midawyjs/decorator';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  @Inject()
+  serverlessFunctionService: MidwayServerlessFunctionService;
+
+  async onReady() {
+    this.serverlessFunctionService.addServerlessFunction(async (ctx, event) => {
+      return 'hello world';
+    }, {
+      type: ServerlessTriggerType.HTTP,
+      metadata: {
+        method: 'get',
+        path: '/api/hello'
+      },
+      functionName: 'hello',
+      handlerName: 'index.hello',
+    });
+  }
+}
+```
+
+`metadata` 的信息和 @ServerlessTrigger 的参数相同。
+

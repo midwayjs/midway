@@ -228,6 +228,36 @@ export class ContainerConfiguration {
 
 
 
+## 派生异常处理
+
+默认情况下，异常只会进行绝对匹配。
+
+有时候我们需要去捕获所有的派生类，这个时候需要额外设置。
+
+```typescript
+import { Catch } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/koa';
+import { MidwayError } from '@midwayjs/core';
+
+class CustomError extends MidwayError {}
+
+class CustomError2 extends MidwayError {}
+
+// 这里会捕获所有的子类
+@Catch([MidwayError], {
+  matchPrototype: true
+})
+class TestFilter {
+  catch(err, ctx) {
+    // ...
+  }
+}
+```
+
+通过配置 `matchPrototype` 可以匹配所有的派生的类。
+
+
+
 ## 异常日志
 
 Midway 内置了默认的异常处理行为。

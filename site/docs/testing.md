@@ -384,6 +384,27 @@ export declare function close(
 - 2、 `cleanTempDir` 默认为 false，清理一些临时目录（比如 egg 生成的 run 目录）
 - 3、 `sleep` 默认为 50，单位毫秒，关闭  app 后延迟的时间（防止日志没有成功写入）
 
+## 使用 bootstrap 文件测试
+
+一般情况下，你无需用到 `bootstrap.js` 来测试。如果你希望直接使用 `bootstrap.js` 入口文件直接测试，那么可以在测试的时候传递入口文件信息。
+
+和 dev/test 启动不同的是，使用 `bootstrap.js` 启动是一个真实的服务，会同时运行多个框架，创建出多个框架的 app 实例。
+
+`@midwayjs/mock` 提供了 `createBootstrap` 方法做启动文件类型的测试。我们可以将入口文件 `bootstrap.js` 作为启动参数传入，这样 `createBootstrap` 方法会通过入口文件来启动代码。
+
+```typescript
+it('should GET /', async () => {
+  // create app
+  const bootstrap = await createBootstrap(join(process.cwd(), 'bootstrap.js'));
+  // 根据框架类型获取 app 实例
+  const app = bootstrap.getApp('koa');
+
+  // expect and test
+
+  // close bootstrap
+  await bootstrap.close();
+});
+```
 
 
 

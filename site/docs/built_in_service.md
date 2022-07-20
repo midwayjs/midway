@@ -22,7 +22,7 @@ import { CustomMiddleware } from './middleware/custom.middleware';
 @Configuration({
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   @Inject()
   applicationManager: MidwayApplicationManager;
 
@@ -482,3 +482,47 @@ export class AutoConfiguration {
 ```
 
 注意，这个 mock 行为是在所有中间件之前执行。
+
+
+
+## MidwayWebRouterService
+
+Midway 内置的路由表服务，用于应用路由和函数的创建。
+
+可以通过注入获取。
+
+```typescript
+import { MidwayWebRouterService } from '@midwayjs/core'
+import { Configuration, Inject } from '@midawyjs/decorator';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  @Inject()
+  webRouterService: MidwayWebRouterService;
+
+  async onReady() {
+		this.webRouterService.addRouter(async (ctx) => {
+      return 'hello world';
+    }, {
+      url: '/',
+      requestMethod: 'GET',
+    });
+  }
+}
+
+```
+
+API 如下
+
+| API                                               | 返回类型                           | 描述                                   |
+| ------------------------------------------------- | ---------------------------------- | -------------------------------------- |
+| addController(clzz, propertyName, value)          |                                    | 动态添加一个 Controller                |
+| addRouter(obj, key, value)                        |                                    | 动态添加一个路由函数                   |
+| getRouterTable()                                  | Promise<Map<string, RouterInfo[]>> | 获取带层级的路由                       |
+| getFlattenRouterTable()                           | Promise<RouterInfo[]>              | 获取扁平化路由列表                     |
+| getRoutePriorityList()                            | Promise<RouterPriority[]>          | 获取路由前缀列表                       |
+| getMatchedRouterInfo(url: string, method: string) | Promise<RouterInfo \| undefined>   | 根据访问的路径，返回当前匹配的路由信息 |
+
+更多使用请参考 [Web 路由表](#router_table)。

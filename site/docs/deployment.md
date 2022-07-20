@@ -27,12 +27,28 @@ Midway 提供了一个轻量的启动器，用于启动你的应用。我们为�
 - 2、使用内置的 API（@midwayjs/core 的 `initializeGlobalApplicationContext`）创建一个服务，不经过 `bootstrap.js`
 - 3、单进程运行
 
-
-
 在命令行运行下面的命令即可执行。
 ```bash
 $ npm run dev
 ```
+
+
+
+### 指定入口启动服务
+
+由于本地的 dev 命令普通情况下和 `bootstrap.js` 启动文件初始化参数不同，有些用户担心本地开发和线上开发不一致，比如测试链路等。
+
+这个时候我们可以直接传递一个入口文件给 `dev` 命令，直接使用入口文件启动服务。
+
+```json
+{
+  "script": {
+    "dev": "midway-bin dev --ts --entryFile=bootstrap.js"
+  }
+}
+```
+
+
 
 ## 部署到普通服务器
 

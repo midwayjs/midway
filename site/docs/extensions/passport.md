@@ -12,6 +12,8 @@ Passport是通过称为策略的可扩展插件进行身份验证请求。Passpo
 | @midwayjs/web     | ✅    |
 | @midwayjs/express | ✅    |
 
+从 v3.4.0 开始 Midway 自行维护 passport，将不再需要引入社区包和类型包。
+
 
 
 
@@ -22,8 +24,7 @@ Passport是通过称为策略的可扩展插件进行身份验证请求。Passpo
 
 ```bash
 ## 必选
-$ npm i @midwayjs/passport@3 passport --save
-$ npm i @types/passport --save-dev
+$ npm i @midwayjs/passport@3 --save
 
 ## 可选
 ## 下面安装本地策略
@@ -41,7 +42,6 @@ $ npm i passport-jwt --save
 {
   "dependencies": {
     "@midwayjs/passport": "^3.0.0",
-    "passport": "^0.5.2",
     // 本地策略
     "passport-local": "^1.0.0"
     // Jwt 策略
@@ -51,7 +51,6 @@ $ npm i passport-jwt --save
     // ...
   },
   "devDependencies": {
-    "@types/passport": "^1.0.7",
     // 本地策略
     "@types/passport-local": "^1.0.34",
     // Jwt 策略
@@ -92,6 +91,8 @@ import * as passport from '@midwayjs/passport';
 export class ContainerLifeCycle implements ILifeCycle {}
 
 ```
+
+
 ## 示例：本地策略
 
 我们可以通过 `@CustomStrategy` 和派生 `PassportStrategy` 来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
@@ -102,7 +103,7 @@ export class ContainerLifeCycle implements ILifeCycle {}
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
 import { Strategy } from 'passport-local';
 import { Repository } from 'typeorm';
-import { InjectEntityModel } from '@midwayjs/orm';
+import { InjectEntityModel } from '@midwayjs/typeorm';
 import { UserEntity } from './user';
 import * as bcrypt from 'bcrypt';
 
@@ -137,18 +138,15 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 // src/middleware/local.middleware.ts
 
 import { Inject, Middleware } from '@midwayjs/decorator';
-import { PassportMiddleware } from '@midwayjs/passport';
-import { Context } from '@midwayjs/express';
+import { PassportMiddleware, AuthenticateOptions } from '@midwayjs/passport';
 import { LocalStrategy } from './strategy/local.strategy.ts'
-import * as passport from 'passport';
 
 @Middleware()
 export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
   // 设置 AuthenticateOptions
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions {
     return {
       failureRedirect: '/login',
-      presetProperty: 'user'
     };
   }
 }
@@ -177,6 +175,8 @@ curl -X POST http://localhost:7001/passport/local -d '{"username": "demo", "pass
 
 结果 {"username": "demo", "password": "1234"}
 ```
+
+
 
 ## 示例：Jwt 策略
 
@@ -232,13 +232,12 @@ export class JwtStrategy extends PassportStrategy(
 // src/middleware/jwt.middleware.ts
 
 import { Middleware } from '@midwayjs/decorator';
-import { PassportMiddleware } from '@midwayjs/passport';
+import { PassportMiddleware, AuthenticateOptions } from '@midwayjs/passport';
 import { JwtStrategy } from '../strategy/jwt-strategy';
-import * as passport from 'passport';
 
 @Middleware()
 export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions {
     return {};
   }
 }
@@ -346,6 +345,18 @@ export class AuthController {
 }
 
 ```
+
+
+
+## 策略选项
+
+| 选项                | 类型    | 描述                                              |
+| ------------------- | ------- | ------------------------------------------------- |
+| failureRedirect     | string  | 失败跳转的 url                                    |
+| session             | boolean | 默认 true，开启后，会自动将用户信息设置到 session |
+| sessionUserProperty | string  | 设置到 session 上的 key，默认 user                |
+| userProperty        | string  | 设置到 ctx.state 或者 req 上的 key，默认 user     |
+| successRedirect     | string  | 用户认证成功后跳转的地址                          |
 
 
 
