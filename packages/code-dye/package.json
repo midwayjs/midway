@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/code-dye",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "Midway Code Dye Component",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -22,13 +22,13 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.4.0",
-    "@midwayjs/decorator": "^3.4.0",
-    "@midwayjs/express": "^3.4.0",
-    "@midwayjs/faas": "^3.4.0",
-    "@midwayjs/koa": "^3.4.0",
-    "@midwayjs/mock": "^3.4.0",
-    "@midwayjs/serverless-app": "^3.4.0",
-    "@midwayjs/web": "^3.4.0"
+    "@midwayjs/core": "^3.4.1",
+    "@midwayjs/decorator": "^3.4.1",
+    "@midwayjs/express": "^3.4.1",
+    "@midwayjs/faas": "^3.4.1",
+    "@midwayjs/koa": "^3.4.1",
+    "@midwayjs/mock": "^3.4.1",
+    "@midwayjs/serverless-app": "^3.4.1",
+    "@midwayjs/web": "^3.4.1"
   }
 }

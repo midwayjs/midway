@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.1](https://github.com/midwayjs/midway/compare/v3.4.0...v3.4.1) (2022-07-20)
+
+
+### Bug Fixes
+
+* class name and controller prefix conflict ([#2137](https://github.com/midwayjs/midway/issues/2137)) ([f6607ca](https://github.com/midwayjs/midway/commit/f6607cac43ff19cf669f03978817f13cc1da00fd))
+
+
+
+
+
 # [3.4.0](https://github.com/midwayjs/midway/compare/v3.4.0-beta.12...v3.4.0) (2022-07-20)
 
 **Note:** Version bump only for package @midwayjs/web
