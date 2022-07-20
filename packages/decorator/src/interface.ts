@@ -54,7 +54,6 @@ export interface ReflectResult {
 export enum MSProviderType {
   DUBBO = 'dubbo',
   GRPC = 'gRPC',
-  HSF = 'hsf',
 }
 
 export enum MSListenerType {

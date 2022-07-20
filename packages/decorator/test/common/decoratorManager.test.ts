@@ -210,4 +210,30 @@ describe('/test/common/decoratorManager.test.ts', () => {
     expect(getType('alias')).toEqual('AnotherCatDTO');
   });
 
+  it('should test save module with container', function () {
+    class Container {
+      store = new Map();
+      saveModule(key: string, module: any) {
+        this.store.set(key, module);
+      }
+
+      listModule(key) {
+        return this.store.get(key);
+      }
+
+      transformModule(map) {
+        for (const key of map.keys()) {
+          this.store.set(key, map.get(key));
+        }
+      }
+    }
+
+    const container = new Container();
+    const manager = new DecoratorManager();
+    manager.set('abc', '123');
+    manager.bindContainer(container);
+
+    expect(container.listModule('abc')).toEqual('123');
+  });
+
 });

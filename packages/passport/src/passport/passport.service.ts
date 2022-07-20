@@ -1,20 +1,15 @@
 import { App, Config, Init, Inject } from '@midwayjs/decorator';
-import {
-  AbstractPassportMiddleware,
-  AbstractStrategy,
-  AuthenticateOptions,
-} from '../interface';
+import { AbstractPassportMiddleware, AuthenticateOptions } from '../interface';
 import { httpError } from '@midwayjs/core';
 import { PassportAuthenticator } from './authenticator';
-import { Strategy } from './strategy';
-import * as http from 'http';
+import { AbstractStrategyWrapper, Strategy } from './strategy';
 import { create as createReqMock } from './request';
 
 export function PassportStrategy(
   Strategy: new (...args) => Strategy,
   name?: string
-): new (...args) => AbstractStrategy {
-  abstract class InnerStrategyAbstractClass extends AbstractStrategy {
+): new (...args) => AbstractStrategyWrapper {
+  abstract class InnerStrategyAbstractClass extends AbstractStrategyWrapper {
     private strategy;
 
     @Inject()
@@ -64,7 +59,7 @@ export function PassportStrategy(
   return InnerStrategyAbstractClass as any;
 }
 
-export type StrategyClass = new (...args) => AbstractStrategy;
+export type StrategyClass = new (...args) => AbstractStrategyWrapper;
 
 export function PassportMiddleware(
   strategy: StrategyClass | StrategyClass[]
@@ -140,7 +135,12 @@ export function PassportMiddleware(
             res.end();
             return;
           } else {
-            this.allFailed(options, authenticateResult.failResult, req, res);
+            try {
+              this.allFailed(options, authenticateResult.failResult, req, res);
+            } catch (err) {
+              next(err);
+              return;
+            }
           }
           next();
         }.bind(this);
@@ -211,7 +211,14 @@ export function PassportMiddleware(
             ctx.set('Content-Length', '0');
             return;
           } else {
-            this.allFailed(options, authenticateResult.failResult, req, ctx);
+            this.allFailed(options, authenticateResult.failResult, req, {
+              end(data) {
+                ctx.body = data;
+              },
+              redirect(url) {
+                ctx.redirect(url);
+              },
+            });
             return;
           }
 
@@ -225,26 +232,26 @@ export function PassportMiddleware(
     }
 
     protected async onceSucceed(
-      options,
+      options: AuthenticateOptions,
       user,
       info,
       req,
       res
     ): Promise<boolean> {
       let msg;
-      if (options.successFlash) {
-        let flash: any = options.successFlash;
-        if (typeof flash === 'string') {
-          flash = { type: 'success', message: flash };
-        }
-        flash.type = flash.type || 'success';
-
-        const type = flash.type || info.type || 'success';
-        msg = flash.message || info.message || info;
-        if (typeof msg === 'string') {
-          req.flash(type, msg);
-        }
-      }
+      // if (options.successFlash) {
+      //   let flash: any = options.successFlash;
+      //   if (typeof flash === 'string') {
+      //     flash = { type: 'success', message: flash };
+      //   }
+      //   flash.type = flash.type || 'success';
+      //
+      //   const type = flash.type || info.type || 'success';
+      //   msg = flash.message || info.message || info;
+      //   if (typeof msg === 'string') {
+      //     req.flash && req.flash(type, msg);
+      //   }
+      // }
       if (options.successMessage) {
         msg = options.successMessage;
         if (typeof msg === 'boolean') {
@@ -290,7 +297,7 @@ export function PassportMiddleware(
     }
 
     protected allFailed(
-      options,
+      options: AuthenticateOptions,
       failResult: { failures: Array<{ challenge: string; status: number }> },
       req,
       res
@@ -301,33 +308,30 @@ export function PassportMiddleware(
         challenge = failure?.challenge || {},
         msg;
 
-      if (options.failureFlash) {
-        let flash: any = options.failureFlash;
-        if (typeof flash === 'string') {
-          flash = { type: 'error', message: flash };
-        }
-        flash.type = flash.type || 'error';
-
-        const type = flash.type || challenge.type || 'error';
-        msg = flash.message || challenge.message || challenge;
-        if (typeof msg === 'string') {
-          // TODO
-          req.flash(type, msg);
-        }
-      }
+      // if (options.failureFlash) {
+      //   let flash: any = options.failureFlash;
+      //   if (typeof flash === 'string') {
+      //     flash = { type: 'error', message: flash };
+      //   }
+      //   flash.type = flash.type || 'error';
+      //
+      //   const type = flash.type || challenge.type || 'error';
+      //   msg = flash.message || challenge.message || challenge;
+      //   if (typeof msg === 'string') {
+      //     req.flash && req.flash(type, msg);
+      //   }
+      // }
       if (options.failureMessage) {
         msg = options.failureMessage;
         if (typeof msg === 'boolean') {
           msg = challenge.message || challenge;
         }
         if (typeof msg === 'string') {
-          // TODO
           req.session.messages = req.session.messages || [];
           req.session.messages.push(msg);
         }
       }
       if (options.failureRedirect) {
-        // TODO
         return res.redirect(options.failureRedirect);
       }
 
@@ -353,21 +357,20 @@ export function PassportMiddleware(
       res.statusCode = rstatus || 401;
       // eslint-disable-next-line eqeqeq
       if (res.statusCode === 401 && rchallenge.length) {
-        // TODO
         res.setHeader('WWW-Authenticate', rchallenge);
       }
-      if (options.failWithError) {
-        throw new httpError.UnauthorizedError();
-      }
-      // TODO
-      res.end(http.STATUS_CODES[res.statusCode]);
+      // if (options.failWithError) {
+      //   throw new httpError.UnauthorizedError();
+      // }
+
+      throw new httpError.UnauthorizedError();
     }
 
     protected attachRequestMethod(req) {
       // init req method
       req.login = req.logIn = (
         user,
-        options?: {
+        options: {
           session?: boolean;
           keepSessionInfo?: boolean;
         },

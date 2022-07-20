@@ -6,15 +6,21 @@ import {
   ScopeEnum,
   MSProviderType,
   Provider,
-  GRPCMetadata
+  GRPCMetadata,
+  GrpcMethod,
+  DubboMethod,
 } from '../../src';
 
 @Provider(MSProviderType.GRPC, { package: 'test' })
 class TestFun {
+  @GrpcMethod()
+  async invoke() {}
 }
 
 @Provider(MSProviderType.DUBBO)
 class TestFun1 {
+  @DubboMethod()
+  async invoke() {}
 }
 
 describe('/test/microservice/provider.test.ts', () => {

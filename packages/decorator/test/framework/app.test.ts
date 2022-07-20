@@ -2,11 +2,15 @@ import {
   App,
   getClassMetadata,
   INJECT_CUSTOM_PROPERTY,
+  ApplicationContext,
 } from '../../src';
 
 class Test {
   @App()
   hhh: any;
+
+  @ApplicationContext()
+  container: any;
 }
 
 describe('/test/framework/app.test.ts', () => {

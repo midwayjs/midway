@@ -243,7 +243,7 @@ export const request = {
   },
 
   get protocol() {
-    const proto = this.get('X-Forwarded-Proto');
+    const proto = this.get('x-real-scheme') || this.get('X-Forwarded-Proto');
     return proto ? proto.split(/\s*,\s*/, 1)[0] : 'http';
   },
 

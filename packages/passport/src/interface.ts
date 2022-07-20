@@ -3,13 +3,13 @@ import { IMiddleware } from '@midwayjs/core';
 export interface AuthenticateOptions {
   authInfo?: boolean | undefined;
   assignProperty?: string | undefined;
-  failureFlash?: string | boolean | undefined;
+  // failureFlash?: string | boolean | undefined;
   failureMessage?: boolean | string | undefined;
   failureRedirect?: string | undefined;
-  failWithError?: boolean | undefined;
+  // failWithError?: boolean | undefined;
   session?: boolean | undefined;
   scope?: string | string[] | undefined;
-  successFlash?: string | boolean | undefined;
+  // successFlash?: string | boolean | undefined;
   successMessage?: boolean | string | undefined;
   successRedirect?: string | undefined;
   successReturnToOrRedirect?: string | undefined;
@@ -26,11 +26,6 @@ export interface IPassportStrategy {
   serializeUser?(user: any, done: (err: any, id?: any) => void): void;
   deserializeUser?(id: any, done: (err: any, user?: any) => void): void;
   transformAuthInfo?(info: any, done: (err: any, info: any) => void): void;
-}
-
-export abstract class AbstractStrategy implements IPassportStrategy {
-  abstract validate(...args): any;
-  abstract getStrategyOptions(): any;
 }
 
 export interface IPassportMiddleware extends IMiddleware<any, any>{
