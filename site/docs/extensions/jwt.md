@@ -147,13 +147,13 @@ export class JwtMiddleware {
           await jwtService.verify(token, {
             complete: true,
           });
-          await next();
         } catch (error) {
           //token过期 生成新的token
           const newToken = getToken(user);
           //将新token放入Authorization中返回给前端
           ctx.set('Authorization', newToken);
         }
+        await next();
       }
     };
   }
