@@ -147,6 +147,7 @@ export class JwtMiddleware {
           await jwtService.verify(token, {
             complete: true,
           });
+          await next();
         } catch (error) {
           //token过期 生成新的token
           const newToken = getToken(user);
