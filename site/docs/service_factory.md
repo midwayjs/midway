@@ -174,10 +174,9 @@ export class UserService {
   serviceFactory: HTTPClientServiceFactory;
   
   async invoke() {
-    
     const httpClient = this.serviceFactory.get();
-   
   }
+}
 
 ```
 

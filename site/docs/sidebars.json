@@ -54,7 +54,8 @@
         "aspect",
         "pipeline",
         "service_factory",
-        "data_listener"
+        "data_listener",
+        "data_source"
       ]
     },
     {
