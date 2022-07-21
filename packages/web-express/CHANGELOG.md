@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.3](https://github.com/midwayjs/midway/compare/v3.4.2...v3.4.3) (2022-07-21)
+
+**Note:** Version bump only for package @midwayjs/express
+
+
+
+
+
 ## [3.4.1](https://github.com/midwayjs/midway/compare/v3.4.0...v3.4.1) (2022-07-20)
 
 **Note:** Version bump only for package @midwayjs/express

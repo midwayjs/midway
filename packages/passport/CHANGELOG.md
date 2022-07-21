@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.3](https://github.com/midwayjs/midway/compare/v3.4.2...v3.4.3) (2022-07-21)
+
+
+### Bug Fixes
+
+* throw error when authenticate ([#2141](https://github.com/midwayjs/midway/issues/2141)) ([730a282](https://github.com/midwayjs/midway/commit/730a28209162bb18b989cb783b54936a4bb747e0))
+
+
+
+
+
 ## [3.4.1](https://github.com/midwayjs/midway/compare/v3.4.0...v3.4.1) (2022-07-20)
 
 **Note:** Version bump only for package @midwayjs/passport

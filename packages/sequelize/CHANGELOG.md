@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.3](https://github.com/midwayjs/midway/compare/v3.4.2...v3.4.3) (2022-07-21)
+
+
+### Bug Fixes
+
+* sequelize typings and filter empty metadata([#2140](https://github.com/midwayjs/midway/issues/2140)) ([eaa360c](https://github.com/midwayjs/midway/commit/eaa360c028dca67d0df79efa61eed605d784c58d))
+
+
+
+
+
 ## [3.4.1](https://github.com/midwayjs/midway/compare/v3.4.0...v3.4.1) (2022-07-20)
 
 **Note:** Version bump only for package @midwayjs/sequelize
