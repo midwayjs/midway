@@ -57,7 +57,7 @@ export class FilterManager<
             filter,
             catchOptions: exceptionMetadata.catchOptions || {},
           });
-          if (exceptionMetadata.catchOptions['matchPrototype']) {
+          if (exceptionMetadata?.catchOptions['matchPrototype']) {
             this.protoMatchList.push(err => {
               if (err instanceof Exception) {
                 return Exception;
