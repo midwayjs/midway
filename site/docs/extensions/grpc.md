@@ -394,6 +394,34 @@ services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 
 
 
 
+### 提供安全证书
+
+可以通过 `credentials` 参数传递安全证书。
+
+```typescript
+// src/config/config.default
+import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
+import { ServerCredentials } from '@midwayjs/grpc';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const cert = readFileSync(join(__dirname, './cert/server.crt'));
+const pem = readFileSync(join(__dirname, './cert/server.pem'));
+const key = readFileSync(join(__dirname, './cert/server.key'));
+
+export default (appInfo: MidwayAppInfo): MidwayConfig => {
+  return {
+    // ...
+    grpcServer: {
+      // ...
+      credentials: ServerCredentials.createSsl(cert, [{ private_key: key, cert_chain: pem }]);
+    }
+  };
+}
+```
+
+
+
 ### 编写单元测试
 
 `@midwayjs/grpc` 库提供了一个 `createGRPCConsumer` 方法，用于实时调用客户端，一般我们用这个方法做测试。
@@ -711,9 +739,8 @@ export namespace math {
 服务端示例如下：
 ```typescript
 import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
-import { Context } from '@midwayjs/grpc';
+import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
-import { Metadata } from '@grpc/grpc-js';
 
 /**
  */
@@ -795,9 +822,8 @@ call.sendMessage({
 服务端示例如下：
 ```typescript
 import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
-import { Context } from '@midwayjs/grpc';
+import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
-import { Metadata } from '@grpc/grpc-js';
 
 /**
  */
@@ -857,9 +883,8 @@ const data = await service.addMany()
 服务端示例如下：
 ```typescript
 import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
-import { Context } from '@midwayjs/grpc';
+import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
-import { Metadata } from '@grpc/grpc-js';
 
 /**
  */
@@ -1010,8 +1035,7 @@ import {
   GrpcMethod,
 } from '@midwayjs/decorator';
 import { helloworld } from '../domain/helloworld';
-import { Metadata } from '@grpc/grpc-js';
-import { Context } from '@midwayjs/grpc';
+import { Context, Metadata } from '@midwayjs/grpc';
 
 /**
  * 实现 helloworld.Greeter 接口的服务
@@ -1041,7 +1065,7 @@ export class Greeter implements helloworld.Greeter {
 
 客户端通过方法的 options 参数传递元数据。
 ```typescript
-import { Metadata } from '@grpc/grpc-js';
+import { Metadata } from '@midwayjs/grpc';
 
 const meta = new Metadata();
 meta.add('key', 'value');
