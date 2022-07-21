@@ -98,6 +98,7 @@ export class HomeController {
 // src/config/config.default.ts
 import { uploadWhiteList } from '@midwayjs/upload';
 import { tmpdir } from 'os';
+import { join } from 'path';
 
 export default {
   // ...
