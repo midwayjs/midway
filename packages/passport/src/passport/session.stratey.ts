@@ -38,7 +38,7 @@ export class SessionStrategy extends Strategy {
    */
   authenticate(req, options) {
     if (!req.session) {
-      return new httpError.UnauthorizedError(
+      throw new httpError.UnauthorizedError(
         'Login sessions require session support，please enable it.'
       );
     }
@@ -57,7 +57,7 @@ export class SessionStrategy extends Strategy {
       const paused = options.pauseStream ? pause(req) : null;
       this._deserializeUser(su, req, (err, user) => {
         if (err) {
-          return new httpError.UnauthorizedError(err.message);
+          throw new httpError.UnauthorizedError(err.message);
         }
         if (!user) {
           delete req.session[this.options.sessionUserProperty].user;
