@@ -239,21 +239,7 @@ export class PassportAuthenticator {
     };
   }
 
-  public serializeUser(fn, req?, done?) {
-    if (typeof fn === 'function') {
-      return this._serializers.push(fn);
-    }
-
-    // private implementation that traverses the chain of serializers, attempting
-    // to serialize a user
-    const user = fn;
-
-    // For backwards compatibility
-    if (typeof req === 'function') {
-      done = req;
-      req = undefined;
-    }
-
+  public serializeUser(user, req, done) {
     const stack = this._serializers;
     (function pass(i, err, obj) {
       // serializers use 'pass' as an error to skip processing
@@ -300,21 +286,7 @@ export class PassportAuthenticator {
    *
    * @api public
    */
-  public deserializeUser(fn, req?, done?) {
-    if (typeof fn === 'function') {
-      return this._deserializers.push(fn);
-    }
-
-    // private implementation that traverses the chain of deserializers,
-    // attempting to deserialize a user
-    const obj = fn;
-
-    // For backwards compatibility
-    if (typeof req === 'function') {
-      done = req;
-      req = undefined;
-    }
-
+  public deserializeUser(obj, req, done) {
     const stack = this._deserializers;
     (function pass(i, err, user) {
       // deserializers use 'pass' as an error to skip processing
@@ -391,21 +363,7 @@ export class PassportAuthenticator {
    *
    * @api public
    */
-  public transformAuthInfo(fn, req?, done?) {
-    if (typeof fn === 'function') {
-      return this._infoTransformers.push(fn);
-    }
-
-    // private implementation that traverses the chain of transformers,
-    // attempting to transform auth info
-    const info = fn;
-
-    // For backwards compatibility
-    if (typeof req === 'function') {
-      done = req;
-      req = undefined;
-    }
-
+  public transformAuthInfo(info, req, done) {
     const stack = this._infoTransformers;
     (function pass(i, err, tinfo) {
       // transformers use 'pass' as an error to skip processing
@@ -508,5 +466,17 @@ export class PassportAuthenticator {
         });
       });
     });
+  }
+
+  public addSerializer(fn) {
+    this._serializers.push(fn);
+  }
+
+  public addDeserializer(fn) {
+    this._deserializers.push(fn);
+  }
+
+  public addInfoTransformer(fn) {
+    this._infoTransformers.push(fn);
   }
 }

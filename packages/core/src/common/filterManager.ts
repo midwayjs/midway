@@ -52,12 +52,13 @@ export class FilterManager<
       const filter = await applicationContext.getAsync(FilterClass);
       const exceptionMetadata = getClassMetadata(CATCH_KEY, FilterClass);
       if (exceptionMetadata && exceptionMetadata.catchTargets) {
+        exceptionMetadata.catchOptions = exceptionMetadata.catchOptions || {};
         for (const Exception of exceptionMetadata.catchTargets) {
           this.exceptionMap.set(Exception, {
             filter,
-            catchOptions: exceptionMetadata.catchOptions || {},
+            catchOptions: exceptionMetadata.catchOptions,
           });
-          if (exceptionMetadata?.catchOptions['matchPrototype']) {
+          if (exceptionMetadata.catchOptions['matchPrototype']) {
             this.protoMatchList.push(err => {
               if (err instanceof Exception) {
                 return Exception;

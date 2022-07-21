@@ -1,6 +1,6 @@
 import { App, Config, Init, Inject } from '@midwayjs/decorator';
 import { AbstractPassportMiddleware, AuthenticateOptions } from '../interface';
-import { httpError } from '@midwayjs/core';
+import { httpError, MidwayHttpError } from '@midwayjs/core';
 import { PassportAuthenticator } from './authenticator';
 import { AbstractStrategyWrapper, Strategy } from './strategy';
 import { create as createReqMock } from './request';
@@ -39,15 +39,15 @@ export function PassportStrategy(
         this.passport.use(this.strategy);
       }
       if (this['serializeUser']) {
-        this.passport.serializeUser(this['serializeUser']);
+        this.passport.addSerializer(this['serializeUser']);
       }
 
       if (this['deserializeUser']) {
-        this.passport.deserializeUser(this['deserializeUser']);
+        this.passport.addDeserializer(this['deserializeUser']);
       }
 
       if (this['transformAuthInfo']) {
-        this.passport.transformAuthInfo(this['transformAuthInfo']);
+        this.passport.addInfoTransformer(this['transformAuthInfo']);
       }
     }
 
@@ -113,7 +113,17 @@ export function PassportMiddleware(
             authOptions
           );
 
-          const authenticateResult = await authenticate(req);
+          let authenticateResult;
+          try {
+            authenticateResult = await authenticate(req);
+          } catch (err) {
+            if (err instanceof MidwayHttpError) {
+              throw err;
+            } else {
+              // 如果验证流程里有错误，抛出一个 500 错误
+              throw new httpError.InternalServerErrorError(err);
+            }
+          }
 
           // success
           if (authenticateResult.successResult) {
@@ -190,7 +200,17 @@ export function PassportMiddleware(
             authOptions
           );
 
-          const authenticateResult = await authenticate(req);
+          let authenticateResult;
+          try {
+            authenticateResult = await authenticate(req);
+          } catch (err) {
+            if (err instanceof MidwayHttpError) {
+              throw err;
+            } else {
+              // 如果验证流程里有错误，抛出一个 500 错误
+              throw new httpError.InternalServerErrorError(err);
+            }
+          }
 
           // success
           if (authenticateResult.successResult) {
