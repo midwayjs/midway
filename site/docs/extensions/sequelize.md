@@ -92,16 +92,18 @@ export default {
   // ...
   sequelize: {
     dataSource: {
-      database: 'test4',
-      username: 'root',
-      password: '123456',
-      host: '127.0.0.1', // 此处支持idb上面vipserver key的那种方式，也支持aliyun的地址。
-      port: 3306,
-      encrypt: false,
-      dialect: 'mysql',
-      define: { charset: 'utf8' },
-      timezone: '+08:00',
-      logging: console.log,
+      custom: {
+        database: 'test4',
+        username: 'root',
+        password: '123456',
+        host: '127.0.0.1', // 此处支持idb上面vipserver key的那种方式，也支持aliyun的地址。
+        port: 3306,
+        encrypt: false,
+        dialect: 'mysql',
+        define: { charset: 'utf8' },
+        timezone: '+08:00',
+        logging: console.log,
+      },
     },
     sync: false, // 本地的时候，可以通过sync: true直接createTable
   },
