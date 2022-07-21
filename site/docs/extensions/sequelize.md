@@ -92,7 +92,7 @@ export default {
   // ...
   sequelize: {
     dataSource: {
-      custom: {
+      default: {
         database: 'test4',
         username: 'root',
         password: '123456',
