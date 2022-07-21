@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.2](https://github.com/midwayjs/midway/compare/v3.4.1...v3.4.2) (2022-07-21)
+
+
+### Bug Fixes
+
+* export server credentials class & lock version ([#2138](https://github.com/midwayjs/midway/issues/2138)) ([5f48299](https://github.com/midwayjs/midway/commit/5f4829903de744b4b9343e8bc441b373d78d78ed))
+
+
+
+
+
 ## [3.4.1](https://github.com/midwayjs/midway/compare/v3.4.0...v3.4.1) (2022-07-20)
 
 
