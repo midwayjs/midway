@@ -641,6 +641,27 @@ export default {
 
 
 
+### favicon 设置
+
+默认情况下，浏览器会发起一个 `favicon.ico` 的请求。
+
+```typescript
+// src/config/config.default
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+export default {
+  // ...
+  siteFile: {
+    '/favicon.ico': readFileSync(join(__dirname, 'favicon.png')),
+  },
+}
+```
+
+
+
+如果开启了 `@midwayjs/static-file` 组件，那么会优先使用组件的静态文件托管。
+
 ### 修改上下文日志
 
 可以单独修改 egg 框架的上下文日志。

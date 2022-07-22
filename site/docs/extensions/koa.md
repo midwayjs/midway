@@ -244,6 +244,7 @@ export default {
 ```typescript
 // src/config/config.default
 import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export default {
   // ...
