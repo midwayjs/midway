@@ -4,6 +4,7 @@ export {
   createApp,
   createFunctionApp,
   createLightApp,
+  createBootstrap,
 } from './creator';
 export * from './client/index';
 export { transformFrameworkToConfiguration } from './utils';
