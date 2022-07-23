@@ -58,7 +58,7 @@ import * as processAgent from '@midwayjs/process-agent';
     processAgent
   ],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 
 ```

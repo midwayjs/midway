@@ -28,7 +28,7 @@
 - 2、不再使用 `BaseTable` 装饰器，而直接使用 `sequelize-typescript` 包导出的 `Table` 装饰器
 - 3、在 `src/config.default` 的 `sequelize` 部分配置调整，参考下面的数据源配置部分
   - 3.1 修改为数据源的形式 `sequelize.dataSource`
-  - 3.1 将实体模型在配置的 `entities` 字段中声明
+  - 3.2 将实体模型在数据源的 `entities` 字段中声明
 
 
 
@@ -575,5 +575,6 @@ export class HomeController {
 
 ## 其他
 
+- 上面的文档，翻译自 sequelize-typescript，更多 API ，请参考 [英文文档]((https://github.com/sequelize/sequelize-typescrip))
 - 一些 [案例](https://github.com/ddzyan/midway-practice)
 - 如果遇到比较复杂的，可以使用 [raw query 方法](https://sequelize.org/v5/manual/raw-queries.html)

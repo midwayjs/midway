@@ -61,7 +61,7 @@ import { join } from 'path';
   imports: [task],
   importConfigs: [join(__dirname, 'config')]
 })
-export class AutoConfiguration{
+export class MainConfiguration {
 }
 ```
 

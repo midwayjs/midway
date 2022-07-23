@@ -58,7 +58,7 @@ import { join } from 'path'
     join(__dirname, 'config')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 ### 配置
@@ -264,7 +264,7 @@ import { join } from 'path'
     join(__dirname, 'config')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -320,7 +320,7 @@ import { join } from 'path'
   imports: [view],
   importConfigs: [join(__dirname, 'config')]
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app;

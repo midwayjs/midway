@@ -2,7 +2,9 @@
 
 [TypeORM](https://github.com/typeorm/typeorm) 是 `node.js` 现有社区最成熟的对象关系映射器（`ORM` ）。Midway 和 TypeORM 搭配，使开发更简单。
 
-本文档是 v3.4.0 之后重写的新版本。
+:::tip
+本文档从 v3.4.0 版本起废弃。
+:::
 
 相关信息：
 
@@ -22,7 +24,7 @@
 
 
 ```bash
-$ npm i @midwayjs/typeorm@3 typeorm --save
+$ npm i @midwayjs/orm@3 typeorm --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -30,7 +32,7 @@ $ npm i @midwayjs/typeorm@3 typeorm --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/typeorm": "^3.0.0",
+    "@midwayjs/orm": "^3.0.0",
     "typeorm": "~0.3.0",
     // ...
   },
@@ -50,7 +52,7 @@ $ npm i @midwayjs/typeorm@3 typeorm --save
 ```typescript
 // configuration.ts
 import { Configuration } from '@midwayjs/decorator';
-import * as orm from '@midwayjs/typeorm';
+import * as orm from '@midwayjs/orm';
 import { join } from 'path';
 
 @Configuration({
@@ -73,6 +75,7 @@ export class ContainerConfiguratin {
 
 
 常用数据库驱动如下，选择你对应连接的数据库类型安装：
+
 ```bash
 # for MySQL or MariaDB，也可以使用 mysql2 替代
 npm install mysql --save
@@ -147,6 +150,7 @@ MyProject
 
 
 在示例中，需要一个实体，我们这里拿 `photo` 举例。新建 entity 目录，在其中添加实体文件 `photo.ts` ，一个简单的实体如下。
+
 ```typescript
 // entity/photo.ts
 export class Photo {
@@ -158,6 +162,7 @@ export class Photo {
   isPublished: boolean;
 }
 ```
+
 要注意，这里的实体文件的每一个属性，其实是和数据库表一一对应的，基于现有的数据库表，我们往上添加内容。
 
 
@@ -165,6 +170,7 @@ export class Photo {
 
 
 我们使用 `EntityModel` 来定义一个实体模型类。
+
 ```typescript
 // entity/photo.ts
 import { EntityModel } from '@midwayjs/orm';
@@ -179,12 +185,14 @@ export class Photo {
   isPublished: boolean;
 }
 ```
+
 :::caution
 注意，这里的 EntityModel 是 midway 做了封装的特殊装饰器，为了和 midway 更好的结合使用。请不要直接使用 typeorm 中的 Entity。
 :::
 
 
 如果表名和当前的实体名不同，可以在参数中指定。
+
 ```typescript
 // entity/photo.ts
 import { EntityModel } from '@midwayjs/orm';
@@ -284,10 +292,12 @@ export class Photo {
 
 }
 ```
+
 ### 5、创建自增主键列
 
 
 现在，如果要设置自增的 id 列，需要将 `@PrimaryColumn` 装饰器更改为 `@PrimaryGeneratedColumn`  装饰器：
+
 ```typescript
 // entity/photo.ts
 import { EntityModel } from '@midwayjs/orm';
@@ -357,6 +367,7 @@ export class Photo {
 
 
 示例，不同列名
+
 ```typescript
 @Column({
   length: 100,
@@ -392,6 +403,7 @@ name: string;
 
 
 然后在 `config.default.ts`  中配置数据库连接信息。
+
 ```typescript
 // src/config/config.default.ts
 export default {
@@ -411,10 +423,12 @@ export default {
   },
 }
 ```
+
 默认存储的是 utc 时间（推荐）。
 
 
 也可以配置时区（不建议）
+
 ```typescript
 // src/config/config.default.ts
 export default {
@@ -619,10 +633,12 @@ export class PhotoService {
   }
 }
 ```
+
 现在，ID = 1的 Photo 将从数据库中删除。
 
 
 此外还有软删除的方法。
+
 ```typescript
 await this.photoModel.softDelete(1);
 ```
@@ -764,6 +780,7 @@ export class PhotoMetadata {
   photo: Photo;
 }
 ```
+
 ```typescript
 import { EntityModel } from '@midwayjs/orm';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm";
@@ -778,6 +795,7 @@ export class Photo {
   metadata: PhotoMetadata;
 }
 ```
+
 `photo => photo.metadata` 是一个返回反向映射关系的函数。在这里，我们显式声明 Photo 类的 metadata 属性用于关联 PhotoMetadata。除了传递返回 photo 属性的函数外，您还可以直接将字符串传递给 `@OneToOne`  装饰器，例如 `“metadata”` 。但是我们使用了这种函数回调的方法来让我们的代码写法更简单。
 
 
@@ -810,6 +828,7 @@ export class PhotoService {
 }
 
 ```
+
 在这里，photos  的值是一个数组，包含了整个数据库的查询结果，并且每个 photo 对象都包含其关联的 metadata 属性。在[此文档](https://github.com/typeorm/typeorm/blob/master/docs/find-options.md)中了解有关 `Find Options` 的更多信息。
 
 
@@ -838,6 +857,7 @@ export class PhotoService {
   }
 }
 ```
+
 `QueryBuilder`允许创建和执行几乎任何复杂的 SQL 查询。使用 `QueryBuilder`  时，请像创建  SQL 查询一样思考。在此示例中，“photo”  和 “metadata” 是应用于所选 photos  的别名。您可以使用别名来访问所选数据的列和属性。
 
 
@@ -857,6 +877,7 @@ export class Photo {
   metadata: PhotoMetadata;
 }
 ```
+
 使用 `cascade` 允许我们现在不再单独保存 Photo 和 PhotoMetadata，由于级联选项，元数据对象将被自动保存。
 
 
@@ -909,6 +930,7 @@ export class PhotoService {
 
 
 让我们创建一个多对一/一对多关系。假设一张照片有一个作者，每个作者可以有很多照片。首先，让我们创建一个 Author 类：
+
 ```typescript
 import { EntityModel } from '@midwayjs/orm';
 import { Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from "typeorm";
@@ -927,10 +949,12 @@ export class Author {
   photos: Photo[];
 }
 ```
+
 `Author`  包含了一个反向关系。 `OneToMany`  和 `ManyToOne` 需要成对出现。
 
 
 现在，将关系的所有者添加到 Photo 实体中：
+
 ```typescript
 import { EntityModel } from '@midwayjs/orm';
 import { Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
@@ -962,7 +986,9 @@ export class Photo {
 | name        | varchar(255) |                            |
 +-------------+--------------+----------------------------+
 ```
+
 它还将修改 `photo` 表，添加新的 `author`  列并为其创建外键：
+
 ```
 +-------------+--------------+----------------------------+
 |                         photo                           |
@@ -1017,6 +1043,7 @@ export class Photo {
   albums: Album[];
 }
 ```
+
 运行应用程序后，ORM将创建一个 album_photos_photo_albums 联结表：
 
 
@@ -1075,7 +1102,9 @@ export class PhotoService {
   }
 }
 ```
+
 `loadedPhoto` 的值为：
+
 ```json
 {
   id: 1,
@@ -1111,6 +1140,7 @@ let photos = await this.photoModel
     .setParameters({ photoName: "My", bearName: "Mishka" })
     .getMany();
 ```
+
 该查询选择所有带有 “My” 或 “Mishka” 名称的已发布照片。它将从位置 5 开始返回结果（分页偏移），并且将仅选择 10 个结果（分页限制）。选择结果将按 ID 降序排列。该照片的相册将 left-Joined，元数据将自动关联。
 
 
@@ -1189,6 +1219,7 @@ export class EverythingSubscriber implements EntitySubscriberInterface {
 
 
 ## 高级功能
+
 ### 多数据库支持
 
 
@@ -1224,6 +1255,7 @@ export default {
 
 
 在使用时，需要指定模型归属于哪个连接（Connection）。
+
 ```typescript
 // entity/photo.ts
 import { InjectEntityModel } from '@midwayjs/orm';
@@ -1263,6 +1295,7 @@ export class Photo {
 
 
 ### 获取连接池
+
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
 import { getConnection } from 'typeorm';
@@ -1320,6 +1353,7 @@ export async function getPhoto() {
 
 
 一般是网络原因，如果本地出现，可以 ping 但是telnet不通，可以尝试执行如下命令：
+
 ```bash
 $ sudo sysctl -w net.inet.tcp.sack=0
 ```
@@ -1331,6 +1365,7 @@ $ sudo sysctl -w net.inet.tcp.sack=0
 
 
 在配置时，开启时间转字符串的选项。
+
 ```typescript
 // src/config/config.default.ts
 export default {
@@ -1344,6 +1379,7 @@ export default {
 
 
 实体中的时间列需要列类型。
+
 ```typescript
 @EntityModel()
 export class Photo {
@@ -1361,6 +1397,7 @@ export class Photo {
   gmtCreate: Date;
 }
 ```
+
 这样，输出的时间字段就是当前的时区了。
 
 
@@ -1368,11 +1405,14 @@ export class Photo {
 
 
 **配置前：**
+
 ```typescript
 gmtModified: 2021-12-13T03:49:43.000Z,
 gmtCreate: 2021-12-13T03:49:43.000Z
 ```
+
 **配置后：**
+
 ```typescript
 gmtModified: '2021-12-13 11:49:43',
 gmtCreate: '2021-12-13 11:49:43'
@@ -1391,6 +1431,7 @@ gmtCreate: '2021-12-13 11:49:43'
 
 
 **如果不想修改表，而想修改代码，请参考下面的代码。**
+
 ```typescript
 @Column({
   default: () => "NOW()",

@@ -88,7 +88,7 @@ import * as passport from '@midwayjs/passport';
   ],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle implements ILifeCycle {}
+export class MainConfiguration implements ILifeCycle {}
 
 ```
 

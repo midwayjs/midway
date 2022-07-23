@@ -55,7 +55,7 @@ import { join } from 'path';
   imports: [web],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: web.Application;
 

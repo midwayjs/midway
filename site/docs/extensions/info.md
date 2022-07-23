@@ -45,7 +45,7 @@ import * as info from '@midwayjs/info';
     info
   ]
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   //...
 }
 ```
@@ -66,7 +66,7 @@ import * as info from '@midwayjs/info';
     }
   ]
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   //...
 }
 ```

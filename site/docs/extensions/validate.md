@@ -105,7 +105,7 @@ import { join } from 'path';
   imports: [koa, validate],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 

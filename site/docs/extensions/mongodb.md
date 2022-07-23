@@ -131,7 +131,7 @@ import * as typegoose from '@midwayjs/typegoose';
   	join(__dirname, './config')
   ]
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
 
 }
 ```

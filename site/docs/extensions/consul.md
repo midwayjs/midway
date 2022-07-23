@@ -71,7 +71,7 @@ import * as consul from '@midwayjs/consul'
   ],
   importConfigs: [join(__dirname, 'config')]
 })
-export class ContainerConfiguration {}
+export class MainConfiguration {}
 ```
 
 

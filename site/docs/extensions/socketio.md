@@ -66,7 +66,7 @@ import * as socketio from '@midwayjs/socketio';
   imports: [socketio],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
 		// ...
   }
@@ -85,7 +85,7 @@ import * as socketio from '@midwayjs/socketio';
   imports: [koa, socketio],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
 		// ...
   }
