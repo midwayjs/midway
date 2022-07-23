@@ -1,0 +1,34 @@
+
+export interface INunjucksConfig {
+  /**
+   * controls if output with dangerous characters are escaped automatically.
+   */
+  autoescape: boolean;
+  /**
+   * throw errors when outputting a null/undefined value
+   */
+  throwOnUndefined: boolean;
+  /**
+   * automatically remove trailing newlines from a block/tag
+   */
+  trimBlocks: boolean;
+  /**
+   * automatically remove leading whitespace from a block/tag
+   */
+  lstripBlocks: boolean;
+  /**
+   * use a cache and recompile templates each time. false in local env.
+   */
+  cache: boolean;
+  /**
+   * defines the syntax for nunjucks tags.
+   */
+  tags?: {
+    blockStart?: string;
+    blockEnd?: string;
+    variableStart?: string;
+    variableEnd?: string;
+    commentStart?: string;
+    commentEnd?: string;
+  };
+};
