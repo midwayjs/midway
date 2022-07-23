@@ -7,15 +7,26 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import { Environment, FileSystemLoader, runtime } from 'nunjucks';
+import {
+  ConfigureOptions,
+  Environment,
+  FileSystemLoader,
+  ILoader,
+  runtime,
+  TemplateCallback,
+} from 'nunjucks';
+import { RenderOptions } from '@midwayjs/view';
 
 class MidwayNunjucksEnvironment extends Environment {
-  constructor(fileLoader, config) {
+  constructor(
+    fileLoader?: ILoader | ILoader[] | null,
+    config?: ConfigureOptions
+  ) {
     super(fileLoader, config);
 
     // http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine
     const originMemberLookup = runtime.memberLookup;
-    runtime.memberLookup = function (...args) {
+    runtime.memberLookup = function (...args: unknown[]) {
       const val = args[1];
       if (val === 'prototype' || val === 'constructor') return null;
       return originMemberLookup(...args);
@@ -26,7 +37,7 @@ class MidwayNunjucksEnvironment extends Environment {
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class NunjucksEnvironment {
-  protected nunjucksEnvironment;
+  protected nunjucksEnvironment: Environment;
 
   @App()
   protected app;
@@ -53,6 +64,7 @@ export class NunjucksEnvironment {
       trimBlocks: config.trimBlocks,
       lstripBlocks: config.lstripBlocks,
       tags: config.tags,
+      autoescape: config.autoescape,
     };
 
     const fileLoader = new FileSystemLoader(this.globalConfig.view.root, {
@@ -64,12 +76,26 @@ export class NunjucksEnvironment {
     );
   }
 
-  render(name, locals, cb) {
-    return this.nunjucksEnvironment.render(name, locals, cb);
+  render(
+    name: string,
+    context?: Record<string, any>,
+    callback?: TemplateCallback<string>
+  ) {
+    return this.nunjucksEnvironment.render(name, context, callback);
   }
 
-  renderString(tpl, locals, opts, cb) {
-    return this.nunjucksEnvironment.renderString(tpl, locals, opts, cb);
+  renderString(
+    tpl: string,
+    context?: Record<string, any>,
+    options?: RenderOptions,
+    callback?: TemplateCallback<string>
+  ) {
+    return this.nunjucksEnvironment.renderString(
+      tpl,
+      context,
+      options,
+      callback
+    );
   }
 
   addFilter(name: string, callback: (...args) => string) {
