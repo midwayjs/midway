@@ -1,4 +1,4 @@
-import { Column, Model, Table } from '../../../../../src';
+import { Column, Model, Table } from 'sequelize-typescript';
 
 @Table({
   tableName: 'hello'

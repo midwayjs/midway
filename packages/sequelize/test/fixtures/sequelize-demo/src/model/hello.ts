@@ -1,4 +1,5 @@
-import { Column, Model, BaseTable } from '../../../../../src';
+import { Column, Model } from 'sequelize-typescript';
+import { BaseTable } from '../../../../../src';
 
 @BaseTable({
   tableName: 'hello'

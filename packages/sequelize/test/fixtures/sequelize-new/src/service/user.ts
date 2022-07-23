@@ -1,7 +1,9 @@
 import { Provide } from '@midwayjs/decorator';
+import { Repository } from 'sequelize-typescript';
+
 import { HelloModel } from '../model/hello';
 import { UserModel } from '../model/user';
-import { Repository, InjectRepository } from '../../../../../src';
+import { InjectRepository } from '../../../../../src';
 
 @Provide()
 export class UserService {
