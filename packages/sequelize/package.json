@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/sequelize",
-  "version": "3.4.3",
+  "version": "3.4.4-beta.1",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
