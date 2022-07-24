@@ -48,7 +48,7 @@ import * as jwt from '@midwayjs/jwt';
     jwt,
   ],
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   async onReady(applicationContext: IMidwayContainer): Promise<void> {
     // 添加中间件
     this.app.useMiddleware([

@@ -3,9 +3,7 @@
 [TypeORM](https://github.com/typeorm/typeorm) 是 `node.js` 现有社区最成熟的对象关系映射器（`ORM` ）。Midway 和 TypeORM 搭配，使开发更简单。
 
 :::tip
-
-本模块是从 v3.4.0 开始为新版本，模块名有变化，历史写法兼容，如果查询历史文档，请参考 [这里](../legacy/orm)。
-
+本文档从 v3.4.0 版本起废弃。
 :::
 
 相关信息：
@@ -18,28 +16,15 @@
 
 
 
-## 和老写法的区别
-
-旧模块为 `@midwayjs/orm` ，新模块为 `@midwayjs/typeorm`，区别如下：
-
-- 1、包名不同
-- 2、在 `src/config.default` 的部分配置调整
-  - 2.1 配置文件中的 key 不同 （orm => typeorm）
-  - 2.2修改为数据源的形式 `typeorm.dataSource`
-  - 2.3 实体模型需要在数据源的 `entities` 字段中声明
-  - 2.4 Subscriber 需要在数据源的 `subscribers` 字段中声明
-- 3、不再使用 `EntityModel` 装饰器，直接使用 typeorm 提供的能力
-
-
 
 ## 安装组件
 
 
-安装 typeorm 组件，提供数据库 ORM 能力。
+安装 orm 组件，提供数据库 ORM 能力。
 
 
 ```bash
-$ npm i @midwayjs/typeorm@3 typeorm --save
+$ npm i @midwayjs/orm@3 typeorm --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -47,7 +32,7 @@ $ npm i @midwayjs/typeorm@3 typeorm --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/typeorm": "^3.0.0",
+    "@midwayjs/orm": "^3.0.0",
     "typeorm": "~0.3.0",
     // ...
   },
@@ -67,28 +52,30 @@ $ npm i @midwayjs/typeorm@3 typeorm --save
 ```typescript
 // configuration.ts
 import { Configuration } from '@midwayjs/decorator';
-import * as orm from '@midwayjs/typeorm';
+import * as orm from '@midwayjs/orm';
 import { join } from 'path';
 
 @Configuration({
   imports: [
     // ...
-    orm  														// 加载 typeorm 组件
+    orm  														// 加载 orm 组件
   ],
   importConfigs: [
   	join(__dirname, './config')
   ]
 })
-export class MainConfiguration {
+export class ContainerConfiguratin {
 
 }
 ```
+
 
 
 ## 安装数据库 Driver
 
 
 常用数据库驱动如下，选择你对应连接的数据库类型安装：
+
 ```bash
 # for MySQL or MariaDB，也可以使用 mysql2 替代
 npm install mysql --save
@@ -116,6 +103,8 @@ npm install mongodb --save
 :::info
 To make the** Oracle driver work**, you need to follow the installation instructions from [their](https://github.com/oracle/node-oracledb) site.
 :::
+
+
 
 
 ## 简单的目录结构
@@ -161,6 +150,7 @@ MyProject
 
 
 在示例中，需要一个实体，我们这里拿 `photo` 举例。新建 entity 目录，在其中添加实体文件 `photo.ts` ，一个简单的实体如下。
+
 ```typescript
 // entity/photo.ts
 export class Photo {
@@ -172,18 +162,20 @@ export class Photo {
   isPublished: boolean;
 }
 ```
+
 要注意，这里的实体文件的每一个属性，其实是和数据库表一一对应的，基于现有的数据库表，我们往上添加内容。
 
 
-### 2、定义实体模型
+### 2、添加实体模型装饰器
 
 
-我们使用 `Entity` 来定义一个实体模型类。
+我们使用 `EntityModel` 来定义一个实体模型类。
+
 ```typescript
 // entity/photo.ts
-import { Entity } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
 
-@Entity('photo')
+@EntityModel('photo')
 export class Photo {
   id: number;
   name: string;
@@ -194,12 +186,18 @@ export class Photo {
 }
 ```
 
+:::caution
+注意，这里的 EntityModel 是 midway 做了封装的特殊装饰器，为了和 midway 更好的结合使用。请不要直接使用 typeorm 中的 Entity。
+:::
+
+
 如果表名和当前的实体名不同，可以在参数中指定。
+
 ```typescript
 // entity/photo.ts
-import { Entity } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
 
-@Entity('photo_table_name')
+@EntityModel('photo_table_name')
 export class Photo {
   id: number;
   name: string;
@@ -222,9 +220,10 @@ export class Photo {
 
 ```typescript
 // entity/photo.ts
-import { Entity, Column } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
+import { Column } from 'typeorm';
 
-@Entity()
+@EntityModel()
 export class Photo {
 
   @Column()
@@ -267,9 +266,10 @@ export class Photo {
 
 ```typescript
 // entity/photo.ts
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
+import { Column, PrimaryColumn } from 'typeorm';
 
-@Entity()
+@EntityModel()
 export class Photo {
 
   @PrimaryColumn()
@@ -292,15 +292,18 @@ export class Photo {
 
 }
 ```
+
 ### 5、创建自增主键列
 
 
 现在，如果要设置自增的 id 列，需要将 `@PrimaryColumn` 装饰器更改为 `@PrimaryGeneratedColumn`  装饰器：
+
 ```typescript
 // entity/photo.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@EntityModel()
 export class Photo {
 
   @PrimaryGeneratedColumn()
@@ -333,9 +336,10 @@ export class Photo {
 
 ```typescript
 // entity/photo.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@EntityModel()
 export class Photo {
 
   @PrimaryGeneratedColumn()
@@ -363,6 +367,7 @@ export class Photo {
 
 
 示例，不同列名
+
 ```typescript
 @Column({
   length: 100,
@@ -391,56 +396,46 @@ name: string;
 
 
 
-### 7、配置连接信息和实体模型
+### 7、配置连接信息
 
 
 请参考 [配置](/docs/env_config) 章节，增加配置文件。
 
 
 然后在 `config.default.ts`  中配置数据库连接信息。
+
 ```typescript
 // src/config/config.default.ts
-import { Photo } from '../entity/photo';
-
 export default {
   // ...
-  typeorm: {
-    dataSource: {
-      default: {
-        /**
-         * 单数据库实例
-         */
-        type: 'mysql',
-        host: '',
-        port: 3306,
-        username: '',
-        password: '',
-        database: undefined,
-        synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true
-        logging: false,
-        
-        // 配置实体模型
-        entities: [Photo],
-      }
-    }
+  orm: {
+    /**
+     * 单数据库实例
+     */
+    type: 'mysql',
+    host: '',
+    port: 3306,
+    username: '',
+    password: '',
+    database: undefined,
+    synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true
+    logging: false,
   },
 }
 ```
-如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
 
-默认存储的是 utc 时间（推荐），也可以配置时区（不建议）
+默认存储的是 utc 时间（推荐）。
+
+
+也可以配置时区（不建议）
 
 ```typescript
 // src/config/config.default.ts
 export default {
   // ...
-  typeorm: {
-    dataSource: {
-      default: {
-        // ...
-        timezone: '+08:00',
-      }
-    }
+  orm: {
+    // ...
+  	timezone: '+08:00',
   },
 }
 ```
@@ -449,23 +444,18 @@ export default {
 这个 `type` 字段你可以使用其他的数据库类型，包括`mysql`, `mariadb`, `postgres`, `cockroachdb`, `sqlite`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
 
 
- 比如 sqlite，需要以下信息。
+ 比如 sqlite，则只需要以下信息。
 
 
 ```typescript
 // src/config/config.default.ts
 export default {
   // ...
-  typeorm: {
-    dataSource: {
-      default: {
-        type: 'sqlite',
-        database: path.join(__dirname, '../../test.sqlite'),
-        synchronize: true,
-        logging: true,
-        // ...
-      }
-    }
+  orm: {
+    type: 'sqlite',
+    database: path.join(__dirname, '../../test.sqlite'),
+    synchronize: true,
+    logging: true,
   },
 }
 ```
@@ -487,7 +477,7 @@ export default {
 
 ```typescript
 import { Provide } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
 
@@ -521,9 +511,11 @@ export class PhotoService {
 
 更多的查询参数，请查询 [find文档](https://github.com/typeorm/typeorm/blob/master/docs/zh_CN/find-options.md)。
 
+自 typeorm@0.3.0 起，查询 API 有所变化。
+
 ```typescript
 import { Provide } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
 
@@ -537,11 +529,13 @@ export class PhotoService {
   async findPhotos() {
 
     // find All
-    let allPhotos = await this.photoModel.find({});
+    let allPhotos = await this.photoModel.find();         //  v0.2.x
+    let allPhotos = await this.photoModel.find({});       //  v0.3.x
     console.log("All photos from the db: ", allPhotos);
 
     // find first
-    let firstPhoto = await this.photoModel.findOne({
+    let firstPhoto = await this.photoModel.findOne(1);
+    let firstPhoto = await this.photoModel.findOne({     //  v0.3.x
       where: {
         id: 1
       }
@@ -549,23 +543,35 @@ export class PhotoService {
     console.log("First photo from the db: ", firstPhoto);
 
     // find one by name
+    //  v0.2.x
+    let meAndBearsPhoto = await this.photoModel.findOne({ name: "Me and Bears" });
+    //  v0.3.x
     let meAndBearsPhoto = await this.photoModel.findOne({
       where: { name: "Me and Bears" }
     });
     console.log("Me and Bears photo from the db: ", meAndBearsPhoto);
 
     // find by views
+    //  v0.2.x
+    let allViewedPhotos = await this.photoModel.find({ views: 1 });
+    //  v0.3.x
     let allViewedPhotos = await this.photoModel.find({
       where: { views: 1 }
     });
     console.log("All viewed photos: ", allViewedPhotos);
 
+    //  v0.2.x
+    let allPublishedPhotos = await this.photoModel.find({ isPublished: true });
+    //  v0.3.x
     let allPublishedPhotos = await this.photoModel.find({
       where: { isPublished: true }
     });
     console.log("All published photos: ", allPublishedPhotos);
 
   	// find and get count
+    //  v0.2.x
+    let [allPhotos, photosCount] = await this.photoModel.findAndCount();
+    //  v0.3.x
     let [allPhotos, photosCount] = await this.photoModel.findAndCount({});
     console.log("All photos: ", allPhotos);
     console.log("Photos count: ", photosCount);
@@ -584,7 +590,7 @@ export class PhotoService {
 
 ```typescript
 import { Provide } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
 
@@ -610,7 +616,7 @@ export class PhotoService {
 
 ```typescript
 import { Provide } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
 
@@ -622,26 +628,19 @@ export class PhotoService {
 
   async updatePhoto() {
     /*...*/
-    let photoToRemove = await this.photoModel.findOne({
-      where: {
-        id: 1
-      }
-    });
-    
-    await photoToRemove.remove();
+    let photoToRemove = await this.photoModel.findOne(1);  // typeorm@0.2.x
+    await this.photoModel.remove(photoToRemove);
   }
 }
 ```
+
 现在，ID = 1的 Photo 将从数据库中删除。
 
 
 此外还有软删除的方法。
+
 ```typescript
-await this.photoModel.softDelete({
-  where: {
-    id: 1
-  }
-});
+await this.photoModel.softDelete(1);
 ```
 
 
@@ -652,10 +651,11 @@ await this.photoModel.softDelete({
 
 
 ```typescript
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { EntityModel } from '@midwayjs/orm';
 import { Photo } from "./photo";
 
-@Entity()
+@EntityModel()
 export class PhotoMetadata {
 
   @PrimaryGeneratedColumn()
@@ -712,8 +712,8 @@ export class PhotoMetadata {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
 import { Repository } from 'typeorm';
@@ -766,11 +766,11 @@ export class PhotoService {
 
 
 ```typescript
-import { Entity } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
 import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { Photo } from './photo';
 
-@Entity()
+@EntityModel()
 export class PhotoMetadata {
 
   /* ... other columns */
@@ -780,12 +780,13 @@ export class PhotoMetadata {
   photo: Photo;
 }
 ```
+
 ```typescript
-import { Entity } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm";
 import { PhotoMetadata } from './photoMetadata';
 
-@Entity()
+@EntityModel()
 export class Photo {
 
   /* ... other columns */
@@ -794,6 +795,7 @@ export class Photo {
   metadata: PhotoMetadata;
 }
 ```
+
 `photo => photo.metadata` 是一个返回反向映射关系的函数。在这里，我们显式声明 Photo 类的 metadata 属性用于关联 PhotoMetadata。除了传递返回 photo 属性的函数外，您还可以直接将字符串传递给 `@OneToOne`  装饰器，例如 `“metadata”` 。但是我们使用了这种函数回调的方法来让我们的代码写法更简单。
 
 
@@ -807,8 +809,8 @@ export class Photo {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
 
@@ -826,6 +828,7 @@ export class PhotoService {
 }
 
 ```
+
 在这里，photos  的值是一个数组，包含了整个数据库的查询结果，并且每个 photo 对象都包含其关联的 metadata 属性。在[此文档](https://github.com/typeorm/typeorm/blob/master/docs/find-options.md)中了解有关 `Find Options` 的更多信息。
 
 
@@ -833,8 +836,8 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
 
@@ -854,6 +857,7 @@ export class PhotoService {
   }
 }
 ```
+
 `QueryBuilder`允许创建和执行几乎任何复杂的 SQL 查询。使用 `QueryBuilder`  时，请像创建  SQL 查询一样思考。在此示例中，“photo”  和 “metadata” 是应用于所选 photos  的别名。您可以使用别名来访问所选数据的列和属性。
 
 
@@ -873,12 +877,13 @@ export class Photo {
   metadata: PhotoMetadata;
 }
 ```
+
 使用 `cascade` 允许我们现在不再单独保存 Photo 和 PhotoMetadata，由于级联选项，元数据对象将被自动保存。
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
 import { Repository } from 'typeorm';
@@ -925,12 +930,13 @@ export class PhotoService {
 
 
 让我们创建一个多对一/一对多关系。假设一张照片有一个作者，每个作者可以有很多照片。首先，让我们创建一个 Author 类：
+
 ```typescript
-import { Entity } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
 import { Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from "typeorm";
 import { Photo } from './entity/photo';
 
-@Entity()
+@EntityModel()
 export class Author {
 
   @PrimaryGeneratedColumn()
@@ -943,12 +949,14 @@ export class Author {
   photos: Photo[];
 }
 ```
+
 `Author`  包含了一个反向关系。 `OneToMany`  和 `ManyToOne` 需要成对出现。
 
 
 现在，将关系的所有者添加到 Photo 实体中：
+
 ```typescript
-import { Entity } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
 import { Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { PhotoMetadata } from "./photoMetadata";
 import { Author } from "./author";
@@ -978,7 +986,9 @@ export class Photo {
 | name        | varchar(255) |                            |
 +-------------+--------------+----------------------------+
 ```
+
 它还将修改 `photo` 表，添加新的 `author`  列并为其创建外键：
+
 ```
 +-------------+--------------+----------------------------+
 |                         photo                           |
@@ -1000,10 +1010,10 @@ export class Photo {
 
 
 ```typescript
-import { Entity } from 'typeorm';
+import { EntityModel } from '@midwayjs/orm';
 import { PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
 
-@Entity()
+@EntityModel()
 export class Album {
 
   @PrimaryGeneratedColumn()
@@ -1033,6 +1043,7 @@ export class Photo {
   albums: Album[];
 }
 ```
+
 运行应用程序后，ORM将创建一个 album_photos_photo_albums 联结表：
 
 
@@ -1050,8 +1061,8 @@ export class Photo {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
 import { Repository } from 'typeorm';
@@ -1091,7 +1102,9 @@ export class PhotoService {
   }
 }
 ```
+
 `loadedPhoto` 的值为：
+
 ```json
 {
   id: 1,
@@ -1127,6 +1140,7 @@ let photos = await this.photoModel
     .setParameters({ photoName: "My", bearName: "Mishka" })
     .getMany();
 ```
+
 该查询选择所有带有 “My” 或 “Mishka” 名称的已发布照片。它将从位置 5 开始返回结果（分页偏移），并且将仅选择 10 个结果（分页限制）。选择结果将按 ID 降序排列。该照片的相册将 left-Joined，元数据将自动关联。
 
 
@@ -1140,9 +1154,11 @@ typeorm 提供了一个事件订阅机制，方便在做一些数据库操作时
 
 
 ```typescript
-import { EventSubscriberModel } from '@midwayjs/typeorm';
+import { Provide } from '@midwayjs/decorator';
+import { EventSubscriberModel } from '@midwayjs/orm';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from 'typeorm';
 
+@Provide()
 @EventSubscriberModel()
 export class EverythingSubscriber implements EntitySubscriberInterface {
 
@@ -1198,59 +1214,40 @@ export class EverythingSubscriber implements EntitySubscriberInterface {
 }
 ```
 
+
 这个订阅类提供了一些常用的接口，用来在数据库操作时执行一些事情。
-
-同时，我们需要把订阅类加到配置中。
-
-```typescript
-// src/config/config.default.ts
-import { EverythingSubscriber } from '../event/subscriber';
-
-export default {
-  // ...
-  typeorm: {
-    dataSource: {
-      default: {
-        // ...
-        entities: [Photo],
-        // 传入订阅类
-        subscribers: [EverythingSubscriber]
-      }
-    }
-  },
-}
-```
-
-
 
 
 ## 高级功能
+
 ### 多数据库支持
 
 
-有时候，我们一个应用中会有多个数据库连接（Connection）的情况，这个时候会有多个配置。我们使用 DataSource 标准的 **对象的形式 **来定义配置。
+有时候，我们一个应用中会有多个数据库连接（Connection）的情况，这个时候会有多个配置。我们使用**对象的形式**来定义配置。
 
 
 比如下面定义了 `default` 和 `test` 两个数据库连接（Connection）。
 
 
 ```typescript
-import { join } from 'path';
+import {join} from 'path';
 
 export default {
-  typeorm: {
-    dataSource: {
-      default: {
-        type: 'sqlite',
-        database: join(__dirname, '../../default.sqlite'),
-        // ...
-      },
-      test: {
-        type: 'mysql',
-        host: '127.0.0.1',
-        port: 3306,
-        // ...
-      }
+  orm: {
+    default: {
+      type: 'sqlite',
+      database: join(__dirname, '../../default.sqlite'),
+      logging: true,
+    },
+    test: {
+      type: 'mysql',
+      host: '127.0.0.1',
+      port: 3306,
+      username: '*********',
+      password: '*********',
+      database: undefined,
+      synchronize: true,
+      logging: false,
     }
   }
 }
@@ -1258,9 +1255,10 @@ export default {
 
 
 在使用时，需要指定模型归属于哪个连接（Connection）。
+
 ```typescript
 // entity/photo.ts
-import { InjectEntityModel } from '@midwayjs/typeorm';
+import { InjectEntityModel } from '@midwayjs/orm';
 import { User } from './model/user';
 
 export class XXX {
@@ -1273,25 +1271,73 @@ export class XXX {
 ```
 
 
+同样的，在使用注入 Model 时，需要指定连接。
+
+
+```typescript
+// entity/photo.ts
+import { EntityModel } from '@midwayjs/orm';
+
+@EntityModel('photo', {
+	connectionName: 'test'
+})
+export class Photo {
+  id: number;
+  name: string;
+  description: string;
+  filename: string;
+  views: number;
+  isPublished: boolean;
+}
+```
+
 
 
 
 ### 获取连接池
+
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
+import { getConnection } from 'typeorm';
 
 @Configuration()
-export class MainConfiguration {
-
-  async onReady(container: IMidwayContainer) {
-    const dataSourceManager = await container.getAsync(TypeORMDataSourceManager);
-  	const conn = dataSourceManager.getDataSource('default');
-    console.log(dataSourceManager.isConnected(conn));
+export class AutoConfiguration {
+  async onReady() {
+  	const conn = getConnection('default');
+    console.log(conn.isConnected);
   }
 }
 ```
 
+
+### Hooks 场景支持
+
+
+针对函数式编程的场景，我们提供了简化的函数式写法。
+
+
+```typescript
+import { useEntityModel } from '@midwayjs/orm';
+import { Photo } from './entity/photo';
+
+export async function getPhoto() {
+  // get model
+  const photoModel = useEntityModel(Photo);
+
+  const photo = new Photo();
+  // create entity
+  photo.name = "Me and Bears";
+  photo.description = "I am near polar bears";
+  photo.filename = "photo-with-bears.jpg";
+  photo.views = 1;
+  photo.isPublished = true;
+
+  // find
+  const newPhoto = await photoModel.save(photo);
+
+  return 'hello world';
+}
+```
 
 
 ### 关于表结构同步
@@ -1300,8 +1346,6 @@ export class MainConfiguration {
 - 如果你已有表结构，想自动创建 Entity，使用 [生成器](../tool/typeorm_generator)
 - 如果已经有 Entity 代码，想创建表结构请使用配置中的  `synchronize:  true` 。
 
-
-
 ## 常见问题
 
 
@@ -1309,6 +1353,7 @@ export class MainConfiguration {
 
 
 一般是网络原因，如果本地出现，可以 ping 但是telnet不通，可以尝试执行如下命令：
+
 ```bash
 $ sudo sysctl -w net.inet.tcp.sack=0
 ```
@@ -1320,25 +1365,23 @@ $ sudo sysctl -w net.inet.tcp.sack=0
 
 
 在配置时，开启时间转字符串的选项。
+
 ```typescript
 // src/config/config.default.ts
 export default {
   // ...
   orm: {
-    dataSource: {
-      default: {
-        //...
-    		dateStrings: true,
-      }
-    }
+    //...
+    dateStrings: true,
   },
 }
 ```
 
 
 实体中的时间列需要列类型。
+
 ```typescript
-@Entity()
+@EntityModel()
 export class Photo {
   //...
   @UpdateDateColumn({
@@ -1354,10 +1397,12 @@ export class Photo {
   gmtCreate: Date;
 }
 ```
+
 这样，输出的时间字段就是当前的时区了。
 
 
 效果如下：
+
 
 **配置前：**
 
@@ -1365,7 +1410,9 @@ export class Photo {
 gmtModified: 2021-12-13T03:49:43.000Z,
 gmtCreate: 2021-12-13T03:49:43.000Z
 ```
+
 **配置后：**
+
 ```typescript
 gmtModified: '2021-12-13 11:49:43',
 gmtCreate: '2021-12-13 11:49:43'
@@ -1381,6 +1428,7 @@ gmtCreate: '2021-12-13 11:49:43'
 
 
 解决方案有两个 **1、修改表的默认值**  或者 **2、修改代码中列的默认值**
+
 
 **如果不想修改表，而想修改代码，请参考下面的代码。**
 
@@ -1411,13 +1459,9 @@ modifiedOn: Date;
 export default {
   // ...
   orm: {
-    dataSource: {
-      default: {
-        //...
-        type: 'mysql',
-        driver: require('mysql2'),
-      }
-    }
+    //...
+    type: 'mysql',
+    driver: require('mysql2'),
   },
 }
 ```

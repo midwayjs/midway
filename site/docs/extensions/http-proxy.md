@@ -49,7 +49,7 @@ import * as proxy from '@midwayjs/http-proxy';
     proxy
   ],
 })
-export class AutoConfiguration {}
+export class MainConfiguration {}
 ```
 
 

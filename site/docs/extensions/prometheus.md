@@ -51,7 +51,7 @@ import { join } from 'path';
   ],
   importConfigs: [join(__dirname, 'config')],
 })
-export class AutoConfiguration {}
+export class MainConfiguration {}
 ```
 
 启动我们的应用，此时访问的时候多了一个 `${host}:${port}/metrics` 。

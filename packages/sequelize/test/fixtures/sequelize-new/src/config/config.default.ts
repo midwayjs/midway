@@ -9,7 +9,7 @@ export const sequelize = {
       storage: path.join(__dirname, '../../', 'database.sqlite'),
       sync: true,
       entities: [HelloModel, UserModel],
-      repositoryMode: true,
+      // repositoryMode: true,
     }
   }
 }

@@ -400,7 +400,7 @@ export default {
   namespace: 'A'
   // ...
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
 
   async onReady(container) {
   	container.registerObject('aaa', 'bbb');
@@ -417,7 +417,7 @@ container.getAsync('A:aaa'); // => OK
   namespace: 'A'
   // ...
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
 
   async onReady(container) {
   	container.registerObject('aaa', 'bbb');

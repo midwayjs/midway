@@ -50,7 +50,7 @@ import * as upload from '@midwayjs/upload';
   ],
   // ...
 })
-export class AutoConfiguration {}
+export class MainConfiguration {}
 ```
 
 3、在代码中获取上传的文件

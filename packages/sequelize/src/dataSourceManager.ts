@@ -50,10 +50,12 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
     const entities = config['entities'];
     if (entities && entities.length > 0) {
       client.addModels(entities);
-    } else {
-      const entities = listModule('sequelize:core');
-      client.addModels(entities);
     }
+
+    // 兼容老写法，但是这里可能有问题，会添加到所有的数据源之中
+    const listEntities = listModule('sequelize:core');
+    client.addModels(listEntities);
+
     await client.authenticate();
 
     if (config.sync) {

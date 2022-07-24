@@ -61,7 +61,7 @@ import { join } from 'path';
   imports: [task],
   importConfigs: [join(__dirname, 'config')]
 })
-export class AutoConfiguration{
+export class MainConfiguration {
 }
 ```
 
@@ -106,8 +106,8 @@ export default {
   task: {
     // ioredis的配置 https://www.npmjs.com/package/ioredis
     redis: {
-      port: 6379, 
-      host: '127.0.0.1', 
+      port: 6379,
+      host: '127.0.0.1',
       password: 'foobared',
     },
     prefix: 'midway-task',						// 这些任务存储的 key，都是 midway-task 开头，以便区分用户原有redis 里面的配置。
@@ -200,7 +200,7 @@ import { QueueService } from '@midwayjs/task';
     join(__dirname, './config')
   ]
 })
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   async onReady(container: IMidwayContainer, app?: IMidwayBaseApplication<Context>): Promise<void> {
 
@@ -209,7 +209,7 @@ export class ContainerConfiguration implements ILifeCycle {
     // 此处第一个是你任务的类名，第二个任务的名字也就是装饰器Task的函数名
     let job: Queue = result.getQueueTask(`HelloTask`, 'task')
     // 表示立即执行。
-    job.add({}, {delay: 0, repeat: null}) 
+    job.add({}, {delay: 0, repeat: null})
 
     // LocalTask的启动后立马执行
     const result = await container.getAsync(QueueService);

@@ -31,7 +31,7 @@ import * as crossDomain from '@midwayjs/cross-domain';
     crossDomain
   ],
 })
-export class AutoConfiguration {}
+export class MainConfiguration {}
 ```
 
 

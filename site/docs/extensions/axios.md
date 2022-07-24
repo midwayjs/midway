@@ -211,7 +211,7 @@ import { join } from 'path'
     join(__dirname, 'config')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 

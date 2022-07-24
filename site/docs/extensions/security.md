@@ -46,7 +46,7 @@ import * as security from '@midwayjs/security';
     security
   ],
 })
-export class AutoConfiguration {}
+export class MainConfiguration {}
 ```
 
 ---

@@ -59,7 +59,7 @@ import * as ws from '@midwayjs/ws';
   imports: [ws],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
 		// ...
   }
@@ -79,7 +79,7 @@ import * as ws from '@midwayjs/ws';
   imports: [koa, ws],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
 		// ...
   }

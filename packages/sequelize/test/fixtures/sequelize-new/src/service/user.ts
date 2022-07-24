@@ -18,6 +18,12 @@ export class UserService {
     return result;
   }
 
+  async listWithModel() {
+    const result = await UserModel.findAll();
+    return result;
+  }
+
+
   async listHello() {
     const result = await this.helloRepository.findAll();
     return result;

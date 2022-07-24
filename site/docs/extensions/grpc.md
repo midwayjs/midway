@@ -80,7 +80,7 @@ import * as grpc from '@midwayjs/grpc';
   imports: [grpc],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
 		// ...
   }

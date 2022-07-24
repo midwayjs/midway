@@ -47,6 +47,10 @@ describe('/test/index.test.ts', () => {
     await userService.add();
     let result = await userService.list();
     expect(result.length).toBe(1);
+
+    result = await userService.listWithModel();
+    expect(result.length).toBe(1);
+
     await userService.delete();
     result = await userService.list();
     expect(result.length).toBe(0);
