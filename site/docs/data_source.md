@@ -203,7 +203,7 @@ this.mysqlDataSourceManager.isConnected('dataSource1')
 
 
 
-### 1、添加实体类
+### 1、显式关联实体类
 
 实体类一般是和表结构相同的类。
 
@@ -256,9 +256,13 @@ export const mysql = {
 
 每个数据源的 `entities` 配置，都可以添加各自的实体类。
 
-在某些情况下，我们也可以通过通配的路径来替代。
 
-比如：
+
+### 2、目录扫描关联实体
+
+在某些情况下，我们也可以通过通配的路径来替代，但是路径的写法不支持 [单文件构建部署](./deployment#单文件构建部署)（bundle模式）。
+
+我们可以和普通形式混用，比如：
 
 ```typescript
 // config.default.ts

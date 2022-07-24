@@ -426,10 +426,10 @@ export default {
   },
 }
 ```
-默认存储的是 utc 时间（推荐）。
+如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
 
+默认存储的是 utc 时间（推荐），也可以配置时区（不建议）
 
-也可以配置时区（不建议）
 ```typescript
 // src/config/config.default.ts
 export default {
@@ -449,7 +449,7 @@ export default {
 这个 `type` 字段你可以使用其他的数据库类型，包括`mysql`, `mariadb`, `postgres`, `cockroachdb`, `sqlite`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
 
 
- 比如 sqlite，则只需要以下信息。
+ 比如 sqlite，需要以下信息。
 
 
 ```typescript
@@ -463,6 +463,7 @@ export default {
         database: path.join(__dirname, '../../test.sqlite'),
         synchronize: true,
         logging: true,
+        // ...
       }
     }
   },

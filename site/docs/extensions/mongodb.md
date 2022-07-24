@@ -188,6 +188,8 @@ MyProject
 
 ### 3、创建实体文件
 
+比如在 `src/entity/user.ts` 中。
+
 
 ```typescript
 import { prop } from '@typegoose/typegoose';
@@ -225,6 +227,8 @@ const User = mongoose.model('User', userSchema);
 在 `src/config/config.default.ts` 中加入连接的配置。
 
 ```typescript
+import { User } from '../entity/user';
+
 export default {
   // ...
   mongoose: {
@@ -237,12 +241,15 @@ export default {
           user: '***********',
           pass: '***********'
         },
-        entities: []
+        // 关联实体
+        entities: [ User ]
       }
     }
   },
 }
 ```
+
+如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
 
 
 
