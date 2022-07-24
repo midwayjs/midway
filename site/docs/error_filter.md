@@ -124,7 +124,7 @@ import { InternalServerErrorFilter } from './filter/internal.filter';
     koa
   ],
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;
@@ -212,7 +212,7 @@ import { NotFoundFilter } from './filter/notfound.filter';
     koa
   ],
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;

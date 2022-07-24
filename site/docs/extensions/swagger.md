@@ -78,7 +78,7 @@ import * as swagger from '@midwayjs/swagger';
     }
   ]
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
 
 }
 ```

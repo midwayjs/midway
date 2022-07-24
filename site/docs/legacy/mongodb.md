@@ -14,27 +14,10 @@
 | 可用于 Serverless | ✅    |
 | 可用于一体化      | ✅    |
 
+
 :::tip
-
-当前模块从 v3.4.0 开始已经重构，历史写法兼容，如果查询历史文档，请参考 [这里](../legacy/mongodb)。
-
+本文档从 v3.4.0 版本起废弃。
 :::
-
-
-
-## 和老写法的区别
-
-如果想使用新版本的用法，请参考下面的流程，将老代码进行修改，新老代码请勿混用。
-
-升级方法：
-
-- 1、无需再使用 `EntityModel` 装饰器
-- 3、在 `src/config.default` 的 `mongoose` 部分配置调整，参考下面的数据源配置部分
-  - 3.1 修改为数据源的形式 `mongoose.dataSource`
-  - 3.2 将实体模型在数据源的 `entities` 字段中声明
-
-
-
 
 ## Mongoose 版本依赖
 
@@ -103,7 +86,6 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 其余的 MongoDB 安装模块类似，未测。
 
 
-
 ## 使用 Typegoose
 
 
@@ -156,11 +138,36 @@ export class MainConfiguration {
 }
 ```
 
+
 :::info
 在该组件中，midway 只是做了简单的配置规则化，并将其注入到初始化流程中。
 :::
 
-### 2、简单的目录结构
+
+### 2、配置连接信息
+
+
+在 `src/config/config.default.ts` 中加入连接的配置。
+
+```typescript
+export default {
+  // ...
+  mongoose: {
+    client: {
+      uri: 'mongodb://localhost:27017/test',
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: '***********',
+        pass: '***********'
+      }
+    }
+  },
+}
+```
+
+
+### 3、简单的目录结构
 
 
 我们以一个简单的项目举例，其他结构请自行参考。
@@ -185,13 +192,14 @@ MyProject
 在这里，我们的数据库实体主要放在 `entity` 目录（非强制），这只是一个简单的约定。
 
 
-
 ### 3、创建实体文件
 
 
 ```typescript
 import { prop } from '@typegoose/typegoose';
+import { EntityModel } from '@midwayjs/typegoose';
 
+@EntityModel()
 export class User {
   @prop()
   public name?: string;
@@ -216,37 +224,7 @@ const User = mongoose.model('User', userSchema);
 所以说，typegoose 只是简化了 model 的创建过程。
 :::
 
-
-
-
-### 4、配置连接信息
-
-
-在 `src/config/config.default.ts` 中加入连接的配置。
-
-```typescript
-export default {
-  // ...
-  mongoose: {
-    dataSource: {
-      default: {
-        uri: 'mongodb://localhost:27017/test',
-        options: {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          user: '***********',
-          pass: '***********'
-        },
-        entities: []
-      }
-    }
-  },
-}
-```
-
-
-
-### 5、引用实体，调用数据库
+### 4、引用实体，调用数据库
 
 
 示例代码如下：
@@ -275,11 +253,45 @@ export class TestService {
 ```
 
 
-### 6、多库的情况
+### 5、多库的情况
 
-首先定义多个实体。
 
+首先配置多个连接。
+
+
+在 `src/config/config.default.ts` 中加入连接的配置，`default` 代表了默认的连接。
 ```typescript
+export default {
+  // ...
+  mongoose: {
+    clients: {
+      default: {
+        uri: 'mongodb://localhost:27017/test',
+        options: {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          user: '***********',
+          pass: '***********'
+        }
+      },
+      db1: {
+        uri: 'mongodb://localhost:27017/test1',
+        options: {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          user: '***********',
+          pass: '***********'
+        }
+      }
+    }
+  },
+}
+```
+
+
+定义实例时使用固定的连接，比如：
+```typescript
+@EntityModel()								// 默认使用了 default 连接
 class User {
 
   @prop()
@@ -289,6 +301,9 @@ class User {
   public jobs?: string[];
 }
 
+@EntityModel({
+  connectionName: 'db1'				// 这里使用了 db1连接
+})
 class User2 {
 
   @prop()
@@ -300,52 +315,15 @@ class User2 {
 ```
 
 
-将实体配置到多个数据源。
-
-
-在 `src/config/config.default.ts` 中加入数据源的配置。
-```typescript
-import { User, User2 } from '../entity/user';
-
-export default {
-  // ...
-  mongoose: {
-    dataSource: {
-      default: {
-        uri: 'mongodb://localhost:27017/test',
-        options: {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          user: '***********',
-          pass: '***********'
-        },
-        entities: [ User ]
-      },
-      db1: {
-        uri: 'mongodb://localhost:27017/test1',
-        options: {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          user: '***********',
-          pass: '***********'
-        },
-        entities: [ User2 ]
-      }
-    }
-  },
-}
-```
-
-
-定义实例时使用固定的连接，比如：在使用时，注入特定的连接
+在使用时，注入特定的连接
 ```typescript
 @Provide()
 export class TestService{
 
-  @InjectEntityModel(User, 'default')
+  @InjectEntityModel(User)
   userModel: ReturnModelType<typeof User>;
 
-  @InjectEntityModel(User2, 'db1')
+  @InjectEntityModel(User2)
   user2Model: ReturnModelType<typeof User2>;
 
   async getTest(){
@@ -421,9 +399,8 @@ export class MainConfiguration {
 
 ### 2、配置
 
-和 typegoose 相同，或者说 typegoose 使用的就是 mongoose 的配置。
 
-不管是单库还是多库，数据源配置都是类似的。
+和 typegoose 相同，或者说 typegoose 使用的就是 mongoose 的配置。
 
 
 单库：
@@ -431,17 +408,15 @@ export class MainConfiguration {
 export default {
   // ...
   mongoose: {
-    dataSource: {
-      default: {
-        uri: 'mongodb://localhost:27017/test',
-        options: {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          user: '***********',
-          pass: '**********'
-        }
+    client: {
+      uri: 'mongodb://localhost:27017/test',
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: '***********',
+        pass: '**********'
       }
-    } 
+    }
   },
 }
 ```
@@ -450,7 +425,7 @@ export default {
 export default {
   // ...
   mongoose: {
-    dataSource: {
+    clients: {
       default: {
         uri: 'mongodb://localhost:27017/test',
         options: {
@@ -475,14 +450,13 @@ export default {
 ```
 
 
-
 ### 3、使用
 
 
 在只有一个默认连接或者直接使用 default 连接时，我们可以直接使用封装好的 `MongooseConnectionService` 对象来创建 model。
 ```typescript
 import { Provide, Inject } from '@midwayjs/decorator';
-import { MongooseDataSourceManager } from '@midwayjs/mongoose';
+import { MongooseConnectionService } from '@midwayjs/mongoose';
 import { Schema, Document } from 'mongoose';
 
 interface User extends Document {
@@ -495,12 +469,7 @@ interface User extends Document {
 export class TestService {
 
   @Inject()
-  dataSourceManager: MongooseDataSourceManager;
-  
-  @Init() {
-    // get default connection
-    this.conn = this.dataSourceManager.getDataSource('default');
-  }
+  conn: MongooseConnectionService;
 
   async invoke(){
     const schema = new Schema<User>({
@@ -521,6 +490,28 @@ export class TestService {
 ```
 
 
+如果配置了多个其他连接，请从工厂方法中获取连接后再使用。
+```typescript
+import { MongooseConnectionServiceFactory } from '@midwayjs/mongoose';
+import { Schema } from 'mongoose';
+
+@Provide()
+export class TestService {
+
+  @Inject()
+  connFactory: MongooseConnectionServiceFactory;
+
+  async invoke(){
+    // get db1 connection
+    const conn = this.connFactory.get('db1');
+
+    // get default connection
+    const defaultConn = this.connFactory.get('default');
+
+  }
+}
+
+```
 
 
 ## 常见问题

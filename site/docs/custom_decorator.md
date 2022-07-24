@@ -116,7 +116,7 @@ import { MODEL_KEY } from './decorator/model.decorator';
 @Configuration({
   imports: [koa],
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -179,7 +179,7 @@ import * as koa from '@midwayjs/koa';
 @Configuration({
   imports: [koa],
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -228,7 +228,7 @@ import { MidwayDecoratorService } from '@midwayjs/core';
 @Configuration({
   imports: [koa],
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -313,7 +313,7 @@ function formatDuring(value, formatUnit: string) {
 @Configuration({
   imports: [koa],
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -431,7 +431,7 @@ export function User(): MethodDecorator {
 @Configuration({
   imports: [koa],
 })
-export class ContainerConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -497,7 +497,7 @@ export class UserController {
 import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
 //...
 
-export class ContainerConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 

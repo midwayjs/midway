@@ -31,7 +31,7 @@ interface ILifeCycle {
    * 在依赖注入容器 ready 的时候执行
    */
   onReady(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
- 
+
   /**
    * 在应用服务启动后执行
    */
@@ -58,7 +58,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   async onConfigLoad(): Promise<void> {
     // 直接返回数据，会自动合并到配置中
@@ -91,7 +91,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
   @Inject()
   db: any;
 
@@ -99,7 +99,7 @@ export class ContainerConfiguration implements ILifeCycle {
     // 建立数据库连接
     await this.db.connect();
   }
-  
+
   async onStop(): Promise<void> {
 	// 关闭数据库连接
     await this.db.close();
@@ -121,8 +121,8 @@ import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as sequelize from 'sequelize';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
-  
+export class MainConfiguration implements ILifeCycle {
+
   async onReady(container: IMidwayContainer): Promise<void> {
     // 三方包对象
     container.registerObject('sequelize', sequelize);
@@ -139,7 +139,7 @@ export class IndexHandler {
 
   @Inject()
   sequelize;
-  
+
   async handler() {
   	console.log(this.sequelize);
   }
@@ -163,14 +163,14 @@ import * as koa from '@midwayjs/koa';
 @Configuration({
   imports: [koa]
 })
-export class ContainerConfiguration implements ILifeCycle {
-  
+export class MainConfiguration implements ILifeCycle {
+
   async onServerReady(container: IMidwayContainer): Promise<void> {
     // 获取到 koa 中暴露的 Framework
     const framework = await container.getAsync(koa.Framework);
     const server = framework.getServer();
     // ...
-    
+
   }
 }
 ```
@@ -190,7 +190,7 @@ import * as koa from '@midwayjs/koa';
 @Configuration({
   imports: [koa]
 })
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
   @Inject()
   db: any;
 
@@ -198,7 +198,7 @@ export class ContainerConfiguration implements ILifeCycle {
     // 建立数据库连接
     await this.db.connect();
   }
-  
+
   async onStop(): Promise<void> {
     // 关闭数据库连接
     await this.db.close();
@@ -239,7 +239,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, ObjectBeforeCreatedOptions } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   async onBeforeObjectCreated(Clzz: new (...args), options: ObjectBeforeCreatedOptions): Promise<void> {
     // ...
@@ -272,7 +272,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, ObjectCreatedOptions } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   async onObjectCreated(ins: any, options: ObjectCreatedOptions): Promise<void> {
     // ...
@@ -301,7 +301,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   async onObjectCreated(ins: any, options: ObjectInitOptions): Promise<void> {
     // 每个创建的对象都会添加一个 _name 的属性
@@ -319,7 +319,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   async onObjectCreated(ins: any, options: ObjectInitOptions): Promise<void> {
     // 之后每个创建的对象都会被替换为 { bbb: 'aaa' }
@@ -344,7 +344,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   async onObjectInit(ins: any, options: ObjectInitOptions): Promise<void> {
     // ...
@@ -382,7 +382,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, ObjectBeforeDestroyOptions } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   async onBeforeObjectDestroy(ins: any, options: ObjectBeforeDestroyOptions): Promise<void> {
     // ...

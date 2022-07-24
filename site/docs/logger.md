@@ -97,7 +97,7 @@ import { Configuration, Logger } from '@midwayjs/decorator';
 import { ILogger } from '@midwayjs/logger';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   @Logger()
   logger: ILogger;
@@ -124,7 +124,7 @@ export class ContainerConfiguration implements ILifeCycle {
 ```typescript
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   @Logger('coreLogger')
   logger: ILogger;
