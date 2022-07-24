@@ -1242,17 +1242,13 @@ export default {
       default: {
         type: 'sqlite',
         database: join(__dirname, '../../default.sqlite'),
-        logging: true,
+        // ...
       },
       test: {
         type: 'mysql',
         host: '127.0.0.1',
         port: 3306,
-        username: '*********',
-        password: '*********',
-        database: undefined,
-        synchronize: true,
-        logging: false,
+        // ...
       }
     }
   }
@@ -1292,37 +1288,6 @@ export class MainConfiguration {
   	const conn = dataSourceManager.getDataSource('default');
     console.log(dataSourceManager.isConnected(conn));
   }
-}
-```
-
-
-
-### Hooks 场景支持
-
-
-针对函数式编程的场景，我们提供了简化的函数式写法。
-
-
-```typescript
-import { useEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
-
-export async function getPhoto() {
-  // get model
-  const photoModel = useEntityModel(Photo);
-
-  const photo = new Photo();
-  // create entity
-  photo.name = "Me and Bears";
-  photo.description = "I am near polar bears";
-  photo.filename = "photo-with-bears.jpg";
-  photo.views = 1;
-  photo.isPublished = true;
-
-  // find
-  const newPhoto = await photoModel.save(photo);
-
-  return 'hello world';
 }
 ```
 
@@ -1393,8 +1358,8 @@ export class Photo {
 
 效果如下：
 
-
 **配置前：**
+
 ```typescript
 gmtModified: 2021-12-13T03:49:43.000Z,
 gmtCreate: 2021-12-13T03:49:43.000Z
@@ -1416,8 +1381,8 @@ gmtCreate: '2021-12-13 11:49:43'
 
 解决方案有两个 **1、修改表的默认值**  或者 **2、修改代码中列的默认值**
 
-
 **如果不想修改表，而想修改代码，请参考下面的代码。**
+
 ```typescript
 @Column({
   default: () => "NOW()",
