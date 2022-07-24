@@ -17,6 +17,7 @@ export interface InjectionConfigurationOptions {
   importConfigs?:
     | Array<{ [environmentName: string]: Record<string, any> }>
     | Record<string, any>;
+  importConfigFilter?: (config: Record<string, any>) => Record<string, any>;
   namespace?: string;
   detectorOptions?: Record<string, any>;
   conflictCheck?: boolean;

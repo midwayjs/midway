@@ -241,4 +241,26 @@ describe('/test/service/configService.test.ts', () => {
     assert.ok(cfg.getConfiguration().bb === 222);
     assert.ok(cfg.getConfiguration().cc === 222);
   });
+
+  it('should test config filter', async () => {
+    const cfg = await createConfigService();
+
+    cfg.addFilter((config) => {
+      if (config['bb']) {
+        config['bb'] = '111';
+      }
+      return config;
+    });
+
+    cfg.addObject({bb: 222});
+
+    await cfg.load();
+
+    expect(cfg.getConfiguration().bb).toEqual('111');
+
+    cfg.addObject({bb: 333, cc: 222});
+
+    expect(cfg.getConfiguration().bb).toEqual('111');
+    expect(cfg.getConfiguration().cc).toEqual(222);
+  });
 });

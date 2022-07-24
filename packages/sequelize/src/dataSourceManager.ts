@@ -25,16 +25,6 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
 
   @Init()
   async init() {
-    if (this.sequelizeConfig.options) {
-      this.coreLogger.warn(
-        '[midway:sequelize] sequelize.options is deprecated, please use new config format.'
-      );
-      this.sequelizeConfig.options.sync = this.sequelizeConfig.sync || false;
-      // legacy config
-      this.sequelizeConfig.dataSource = {
-        default: this.sequelizeConfig.options,
-      };
-    }
     await this.initDataSource(this.sequelizeConfig, this.baseDir);
   }
 

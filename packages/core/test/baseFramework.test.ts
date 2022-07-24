@@ -526,6 +526,16 @@ describe('/test/baseFramework.test.ts', () => {
     expect(config.e).toEqual(333);
   });
 
+  it('should test import config filter', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-config-filter/src'
+    ));
+
+    const config = framework.getConfiguration();
+    expect(config.hello).toEqual('123');
+  });
+
   it('should test autoload', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,

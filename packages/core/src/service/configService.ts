@@ -37,6 +37,9 @@ export class MidwayConfigService implements IConfigService {
   protected isReady = false;
   protected externalObject: Record<string, unknown>[] = [];
   protected appInfo: MidwayAppInfo;
+  protected configFilterList: Array<
+    (config: Record<string, any>) => Record<string, any> | undefined
+  > = [];
 
   @Inject()
   protected environmentService: MidwayEnvironmentService;
@@ -57,7 +60,7 @@ export class MidwayConfigService implements IConfigService {
     };
   }
 
-  add(configFilePaths: any[]) {
+  public add(configFilePaths: any[]) {
     for (const dir of configFilePaths) {
       if (typeof dir === 'string') {
         if (/\.\w+$/.test(dir)) {
@@ -93,8 +96,14 @@ export class MidwayConfigService implements IConfigService {
     }
   }
 
-  addObject(obj: Record<string, unknown>, reverse = false) {
+  public addObject(obj: Record<string, unknown>, reverse = false) {
     if (this.isReady) {
+      obj = this.runWithFilter(obj);
+
+      if (!obj) {
+        debug('[config]: Filter config and got undefined will be drop it');
+        return;
+      }
       this.configMergeOrder.push({
         env: 'default',
         extraPath: '',
@@ -128,7 +137,7 @@ export class MidwayConfigService implements IConfigService {
     return splits.pop();
   }
 
-  load() {
+  public load() {
     if (this.isReady) return;
     // get default
     const defaultSet = this.getEnvSet('default');
@@ -140,7 +149,7 @@ export class MidwayConfigService implements IConfigService {
     const target = {};
     const defaultSetLength = defaultSet.size;
     for (const [idx, filename] of [...defaultSet, ...currentEnvSet].entries()) {
-      let config = this.loadConfig(filename);
+      let config: Record<string, any> = this.loadConfig(filename);
       if (Types.isFunction(config)) {
         // eslint-disable-next-line prefer-spread
         config = config.apply(null, [this.appInfo, target]);
@@ -150,11 +159,19 @@ export class MidwayConfigService implements IConfigService {
         continue;
       }
 
+      config = this.runWithFilter(config);
+
+      if (!config) {
+        debug('[config]: Filter config and got undefined will be drop it');
+        continue;
+      }
+
       if (typeof filename === 'string') {
         debug('[config]: Loaded config %s, %j', filename, config);
       } else {
         debug('[config]: Loaded config %j', config);
       }
+
       this.configMergeOrder.push({
         env:
           idx < defaultSetLength
@@ -167,8 +184,9 @@ export class MidwayConfigService implements IConfigService {
       extend(true, target, config);
     }
     if (this.externalObject.length) {
-      for (const externalObject of this.externalObject) {
+      for (let externalObject of this.externalObject) {
         if (externalObject) {
+          externalObject = this.runWithFilter(externalObject);
           debug('[config]: Loaded external object %j', externalObject);
           extend(true, target, externalObject);
           this.configMergeOrder.push({
@@ -183,14 +201,14 @@ export class MidwayConfigService implements IConfigService {
     this.isReady = true;
   }
 
-  getConfiguration(configKey?: string) {
+  public getConfiguration(configKey?: string) {
     if (configKey) {
       return safelyGet(configKey, this.configuration);
     }
     return this.configuration;
   }
 
-  getConfigMergeOrder(): Array<ConfigMergeInfo> {
+  public getConfigMergeOrder(): Array<ConfigMergeInfo> {
     return this.configMergeOrder;
   }
 
@@ -217,11 +235,34 @@ export class MidwayConfigService implements IConfigService {
     return exports;
   }
 
-  clearAllConfig() {
+  public clearAllConfig() {
     this.configuration.clear();
   }
 
-  clearConfigMergeOrder() {
+  public clearConfigMergeOrder() {
     this.configMergeOrder.length = 0;
+  }
+
+  /**
+   * add a config filter
+   * @param filter
+   */
+  public addFilter(
+    filter: (config: Record<string, any>) => Record<string, any>
+  ) {
+    this.configFilterList.push(filter);
+  }
+
+  protected runWithFilter(config: Record<string, any>): Record<string, any> {
+    for (const filter of this.configFilterList) {
+      debug(
+        `[config]: Filter config by filter = "${
+          filter.name || 'anonymous filter'
+        }"`
+      );
+      config = filter(config);
+      debug('[config]: Filter config result = %j', config);
+    }
+    return config;
   }
 }
