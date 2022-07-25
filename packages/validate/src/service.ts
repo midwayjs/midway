@@ -127,9 +127,15 @@ export class ValidateService {
   public getSchema<T extends new (...args) => any>(
     ClzType: T
   ): ObjectSchema<any> {
-    const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
-    if (rules) {
-      return Joi.object(rules);
-    }
+    return getSchema(ClzType);
+  }
+}
+
+export function getSchema<T extends new (...args) => any>(
+  ClzType: T
+): ObjectSchema<any> {
+  const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
+  if (rules) {
+    return Joi.object(rules);
   }
 }
