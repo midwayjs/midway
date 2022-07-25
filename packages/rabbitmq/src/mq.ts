@@ -48,6 +48,7 @@ export class RabbitMQServer
           this.logger.info('Message Queue connected!');
           resolve();
         });
+
         this.connection.on('error', err => {
           if (err) {
             if (err.err) {
@@ -56,6 +57,15 @@ export class RabbitMQServer
             this.logger.error('Message Queue disconnected', err);
           } else {
             this.logger.info('Message Queue disconnected!');
+          }
+          reject(err);
+        });
+
+        this.connection.on('disconnect', err => {
+          if (err) {
+            if (err.err) {
+              err = err.err as any;
+            }
           }
           reject(err);
         });
