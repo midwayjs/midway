@@ -31,6 +31,10 @@ export function PassportStrategy(
         }
       };
 
+      Object.defineProperty(cb, 'length', {
+        value: this.validate.length + 1,
+      });
+
       this.strategy = new Strategy(this.getStrategyOptions(), cb);
 
       if (name) {
