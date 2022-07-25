@@ -40,13 +40,18 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    // init connection
-    await this.app.connect(
-      this.configurationOptions.url,
-      this.configurationOptions.socketOptions
-    );
-    await this.loadSubscriber();
-    this.logger.info('Rabbitmq server start success');
+    try {
+      // init connection
+      await this.app.connect(
+        this.configurationOptions.url,
+        this.configurationOptions.socketOptions
+      );
+      await this.loadSubscriber();
+      this.logger.info('Rabbitmq server start success');
+    } catch (error) {
+      this.app.closeConnection();
+      throw error;
+    }
   }
 
   protected async beforeStop(): Promise<void> {
