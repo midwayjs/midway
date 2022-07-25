@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/express-session",
   "description": "midway session component for express",
-  "version": "3.4.3",
+  "version": "3.4.4",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -10,9 +10,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.4.3",
-    "@midwayjs/decorator": "^3.4.1",
-    "@midwayjs/mock": "^3.4.3",
+    "@midwayjs/core": "^3.4.4",
+    "@midwayjs/decorator": "^3.4.4",
+    "@midwayjs/mock": "^3.4.4",
     "@types/express-session": "1.17.5",
     "memorystore": "1.6.7"
   },

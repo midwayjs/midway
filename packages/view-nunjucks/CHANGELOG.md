@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.4](https://github.com/midwayjs/midway/compare/v3.4.3...v3.4.4) (2022-07-25)
+
+
+### Bug Fixes
+
+* **view-nunjucks:** add autoescape config && add ts interface ([#2148](https://github.com/midwayjs/midway/issues/2148)) ([8d39739](https://github.com/midwayjs/midway/commit/8d39739eb99d9baa2d6da229352d90f18bf072d5))
+
+
+
+
+
 ## [3.4.3](https://github.com/midwayjs/midway/compare/v3.4.2...v3.4.3) (2022-07-21)
 
 **Note:** Version bump only for package @midwayjs/view-nunjucks

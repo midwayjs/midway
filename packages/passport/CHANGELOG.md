@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.4](https://github.com/midwayjs/midway/compare/v3.4.3...v3.4.4) (2022-07-25)
+
+
+### Bug Fixes
+
+* some passport strategy verify callback arguments length ([#2151](https://github.com/midwayjs/midway/issues/2151)) ([65c9025](https://github.com/midwayjs/midway/commit/65c9025a3b399d9d7e5061cecb30ad4943d337cd))
+
+
+
+
+
 ## [3.4.3](https://github.com/midwayjs/midway/compare/v3.4.2...v3.4.3) (2022-07-21)
 
 

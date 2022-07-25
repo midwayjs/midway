@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.4](https://github.com/midwayjs/midway/compare/v3.4.3...v3.4.4) (2022-07-25)
+
+
+### Bug Fixes
+
+* add config filter and modify sequelize & mongoose config ([#2150](https://github.com/midwayjs/midway/issues/2150)) ([5db3b9b](https://github.com/midwayjs/midway/commit/5db3b9b56b6eac393820acf9f089e6f8cdd6a8b6))
+* add createBootstrap export ([#2145](https://github.com/midwayjs/midway/issues/2145)) ([8bd9491](https://github.com/midwayjs/midway/commit/8bd94910af98496d17966d44f7a88ec28ecc9b95))
+
+
+
+
+
 ## [3.4.3](https://github.com/midwayjs/midway/compare/v3.4.2...v3.4.3) (2022-07-21)
 
 **Note:** Version bump only for package @midwayjs/mock
