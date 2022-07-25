@@ -1,5 +1,6 @@
 {
   "name": "@midwayjs/express-layer",
+  "private": true,
   "version": "3.4.4",
   "main": "index.js",
   "scripts": {
