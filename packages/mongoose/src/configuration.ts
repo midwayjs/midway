@@ -11,6 +11,22 @@ import { MongooseDataSourceManager } from './manager';
       },
     },
   ],
+  importConfigFilter: config => {
+    if (config['mongoose']) {
+      if (config['mongoose']['client']) {
+        config['mongoose']['dataSource'] =
+          config['mongoose']['dataSource'] || {};
+        config['mongoose']['dataSource']['default'] =
+          config['mongoose']['client'];
+        delete config['mongoose']['client'];
+      }
+      if (config['mongoose']['clients']) {
+        config['mongoose']['dataSource'] = config['mongoose']['clients'];
+        delete config['mongoose']['clients'];
+      }
+    }
+    return config;
+  },
 })
 export class MongooseConfiguration implements ILifeCycle {
   mongooseDataSourceManager: MongooseDataSourceManager;

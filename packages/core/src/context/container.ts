@@ -96,6 +96,7 @@ class ContainerConfiguration {
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);
         this.addImportConfigs(configurationOptions.importConfigs);
+        this.addImportConfigFilter(configurationOptions.importConfigFilter);
         this.bindConfigurationClass(configurationExport, namespace);
       }
     }
@@ -117,6 +118,14 @@ class ContainerConfiguration {
       } else {
         this.container.get(MidwayConfigService).addObject(importConfigs);
       }
+    }
+  }
+
+  addImportConfigFilter(
+    importConfigFilter: (config: Record<string, any>) => Record<string, any>
+  ) {
+    if (importConfigFilter) {
+      this.container.get(MidwayConfigService).addFilter(importConfigFilter);
     }
   }
 

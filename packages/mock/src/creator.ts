@@ -211,7 +211,7 @@ export async function createFunctionApp<
   Y = ReturnType<T['getApplication']>
 >(
   baseDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions,
+  options: MockAppConfigurationOptions = {},
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
   let starterName;
