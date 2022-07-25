@@ -1,5 +1,6 @@
 {
   "name": "@midwayjs/serverless-worker-starter",
+  "private": true,
   "version": "3.4.4",
   "main": "dist/index",
   "typings": "dist/index.d.ts",

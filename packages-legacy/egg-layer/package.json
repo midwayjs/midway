@@ -1,30 +1,33 @@
 {
-  "name": "@midwayjs/static-layer",
+  "name": "@midwayjs/egg-layer",
+  "private": true,
   "version": "3.4.4",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
-    "build": "ncc build index.js -o dist"
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
+  },
+  "dependencies": {
+    "request": "2.88.2"
   },
   "devDependencies": {
+    "@midwayjs/decorator": "^3.4.4",
     "@midwayjs/runtime-engine": "^3.4.4",
     "@midwayjs/runtime-mock": "^3.4.4",
     "@midwayjs/serverless-fc-starter": "^3.4.4",
     "@midwayjs/serverless-fc-trigger": "^3.4.4",
     "@midwayjs/serverless-scf-starter": "^3.4.4",
     "@midwayjs/serverless-scf-trigger": "^3.4.4",
-    "koa": "2.13.4",
-    "koa-static-cache": "5.1.4",
-    "path-to-regexp": "6.2.1",
-    "request": "2.88.2",
+    "@midwayjs/web": "^3.4.4",
+    "egg": "^2.28.0",
     "supertest": "6.2.4"
   },
   "engines": {
     "node": ">=12"
   },
   "files": [
-    "dist"
+    "framework",
+    "index.js"
   ],
   "repository": {
     "type": "git",

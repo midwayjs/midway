@@ -1,13 +1,12 @@
 {
-  "name": "@midwayjs/express-layer",
+  "name": "@midwayjs/static-layer",
+  "private": true,
   "version": "3.4.4",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
-  },
-  "dependencies": {
-    "request": "2.88.2"
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "build": "ncc build index.js -o dist"
   },
   "devDependencies": {
     "@midwayjs/runtime-engine": "^3.4.4",
@@ -16,15 +15,17 @@
     "@midwayjs/serverless-fc-trigger": "^3.4.4",
     "@midwayjs/serverless-scf-starter": "^3.4.4",
     "@midwayjs/serverless-scf-trigger": "^3.4.4",
-    "body-parser": "1.20.0",
-    "express": "4.18.1",
+    "koa": "2.13.4",
+    "koa-static-cache": "5.1.4",
+    "path-to-regexp": "6.2.1",
+    "request": "2.88.2",
     "supertest": "6.2.4"
   },
   "engines": {
     "node": ">=12"
   },
   "files": [
-    "index.js"
+    "dist"
   ],
   "repository": {
     "type": "git",
