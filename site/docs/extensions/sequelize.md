@@ -16,21 +16,17 @@
 | 可用于 Serverless | ✅  |
 | 可用于一体化      | ✅  |
 
-
-
 ## 和老写法的区别
 
 如果想使用新版本的用法，请参考下面的流程，将老代码进行修改，新老代码不能混用。
 
 升级方法：
 
-- 1、请在业务依赖中显示添加 `sequelize` 和 `sequelize-typescript` 
+- 1、请在业务依赖中显示添加 `sequelize` 和 `sequelize-typescript`
 - 2、不再使用 `BaseTable` 装饰器，而直接使用 `sequelize-typescript` 包导出的 `Table` 装饰器
 - 3、在 `src/config.default` 的 `sequelize` 部分配置调整，参考下面的数据源配置部分
   - 3.1 修改为数据源的形式 `sequelize.dataSource`
   - 3.2 将实体模型在数据源的 `entities` 字段中声明
-
-
 
 ## 安装依赖
 
@@ -53,8 +49,6 @@ $ npm i @midwayjs/sequelize@3 sequelize sequelize-typescript --save
   }
 }
 ```
-
-
 
 ## 安装数据库 Driver
 
@@ -86,7 +80,6 @@ npm install mongodb --save
 
 下面的文档，我们将以 `mysql2` 作为示例。
 
-
 ## 启用组件
 
 在 `src/configuration.ts` 文件中启用组件。
@@ -100,31 +93,32 @@ import * as sequelize from '@midwayjs/sequelize';
 @Configuration({
   imports: [
     // ...
-    sequelize
+    sequelize,
   ],
   importConfigs: [join(__dirname, './config')],
 })
 export class MainConfiguration implements ILifeCycle {
-	// ...
+  // ...
 }
 ```
 
-
-
 ## 模型定义
-
 
 ### 1、创建 Model（Entity）
 
-
 我们通过模型和数据库关联，在应用中的模型就是数据库表，在 Sequelize 中，模型是和实体绑定的，每一个实体（Entity) 文件，即是 Model，也是实体（Entity）。
-
 
 在示例中，需要一个实体，我们这里拿 `person` 举例。新建 entity 目录，在其中添加实体文件 `person.ts` ，一个简单的实体如下。
 
 ```typescript
 // src/entity/person.ts
-import { Table, Model, Column, Model, HasMany } from 'sequelize-typescript'
+import { Table, Model, Column, HasMany } from 'sequelize-typescript';
+
+@Table
+class Hobby extends Model {
+  @Column
+  name: string;
+}
 
 @Table
 class Person extends Model {
@@ -151,8 +145,6 @@ class Person extends Model {
 class Person extends Model {}
 ```
 
-
-
 ### 2、主键
 
 主键 (id) 将从基类 Model 继承。 一般来说主键是 Integer 类型并且是自增的。
@@ -162,7 +154,7 @@ class Person extends Model {}
 比如：
 
 ```typescript
-import { Table, Model, PrimaryKey } from 'sequelize-typescript'
+import { Table, Model, PrimaryKey } from 'sequelize-typescript';
 
 @Table
 class Person extends Model {
@@ -178,11 +170,11 @@ class Person extends Model {
 比如：
 
 ```typescript
-import { Table, Model, CreatedAt, UpdatedAt, DeletedAt } from 'sequelize-typescript'
+import { Table, Model, CreatedAt, UpdatedAt, DeletedAt } from 'sequelize-typescript';
 
 @Table
 class Person extends Model {
-	@CreatedAt
+  @CreatedAt
   creationDate: Date;
 
   @UpdatedAt
@@ -193,24 +185,22 @@ class Person extends Model {
 }
 ```
 
-| 装饰器       | 描述                                                         |
-| ------------ | ------------------------------------------------------------ |
-| `@CreatedAt` | 会设置 `timestamps=true` 和 `createdAt='creationDate'`       |
-| `@UpdatedAt` | 会设置 `timestamps=true` 和 `updatedAt='updatedOn'`          |
+| 装饰器       | 描述                                                                    |
+| ------------ | ----------------------------------------------------------------------- |
+| `@CreatedAt` | 会设置 `timestamps=true` 和 `createdAt='creationDate'`                  |
+| `@UpdatedAt` | 会设置 `timestamps=true` 和 `updatedAt='updatedOn'`                     |
 | `@DeletedAt` | 会设置 `timestamps=true`, `paranoid=true` 和 `deletedAt='deletionDate'` |
-
-
 
 ### 4、普通列
 
 @Column 装饰器用于标注普通列，可以在不传递任何参数的情况下使用。 但是因此需要能够自动推断 js 类型（详见[类型推断](https://github.com/sequelize/sequelize-typescript#type-inference)）。
 
 ```typescript
-import { Table, Model, Column } from 'sequelize-typescript'
+import { Table, Model, Column } from 'sequelize-typescript';
 
 @Table
 class Person extends Model {
-	@Column
+  @Column
   name: string;
 }
 ```
@@ -218,7 +208,7 @@ class Person extends Model {
 或者指定列类型。
 
 ```typescript
-import { Table, Column, DataType } from 'sequelize-typescript'
+import { Table, Column, DataType } from 'sequelize-typescript';
 
 @Table
 class Person extends Model {
@@ -245,13 +235,11 @@ class Person extends Model {
 }
 ```
 
-| 装饰器                               | 描述                                                         |
-| ------------------------------------ | ------------------------------------------------------------ |
+| 装饰器                               | 描述                                                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | `@Column`                            | 使用推导的 [dataType](https://sequelize.org/v5/manual/models-definition.html#data-types) 作为类型 |
-| `@Column(dataType: DataType)`        | 显式设置 [dataType](https://sequelize.org/v5/manual/models-definition.html#data-types) |
-| `@Column(options: AttributeOptions)` | 设置 [attribute options](https://sequelize.org/v5/manual/models-definition.html#configuration) |
-
-
+| `@Column(dataType: DataType)`        | 显式设置 [dataType](https://sequelize.org/v5/manual/models-definition.html#data-types)            |
+| `@Column(options: AttributeOptions)` | 设置 [attribute options](https://sequelize.org/v5/manual/models-definition.html#configuration)    |
 
 ## 数据源配置
 
@@ -260,7 +248,7 @@ class Person extends Model {
 ```typescript
 // src/config/config.default.ts
 
-import { Person } from '../entity/person'
+import { Person } from '../entity/person';
 
 export default {
   // ...
@@ -286,8 +274,6 @@ export default {
 
 如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
 
-
-
 ## 模型关联
 
 可以通过 `HasMany` 、`@HasOne` 、`@BelongsTo`、`@BelongsToMany` 和 `@ForeignKey` 装饰器在模型中直接描述关系。
@@ -295,7 +281,7 @@ export default {
 ### 一对多
 
 ```typescript
-import { Table, Model, Column, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript'
+import { Table, Model, Column, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 
 @Table
 export class Player extends Model {
@@ -328,19 +314,17 @@ export class Team extends Model {
 比如通过 `find` 查询。
 
 ```typescript
-const team = await Team.findOne({ include: [Player] })
+const team = await Team.findOne({ include: [Player] });
 
 team.players.forEach((player) => {
   console.log(`Player ${player.name}`);
-})
+});
 ```
-
-
 
 ### 多对多
 
 ```typescript
-import { Table, Model, Column, ForeignKey, BelongsToMany } from 'sequelize-typescript'
+import { Table, Model, Column, ForeignKey, BelongsToMany } from 'sequelize-typescript';
 
 @Table
 export class Book extends Model {
@@ -373,8 +357,6 @@ export class BookAuthor extends Model {
 books: Array<Book & {BookAuthor: BookAuthor}>;
 ```
 
-
-
 ### 一对一
 
 对于一对一，使用 `@HasOne(...)`（关系的外键存在于另一个模型上）和 `@BelongsTo(...)`（关系的外键存在于此模型上）。
@@ -392,8 +374,8 @@ export class Photo extends Model {
     comment: '用户Id',
   })
   userId: number;
-  
-  @BelongsTo(() => User) 
+
+  @BelongsTo(() => User)
   user: User;
 
   @Column({
@@ -408,8 +390,6 @@ export class User extends Model {
   name: string;
 }
 ```
-
-
 
 ## 静态操作方法
 
@@ -427,7 +407,7 @@ import { Person } from '../entity/person';
 export class PersonService {
   async createPerson() {
     const person = new Person({ name: 'bob', age: 99 });
-		await person.save();
+    await person.save();
   }
 }
 ```
@@ -443,25 +423,24 @@ export class PersonService {
   async updatePerson() {
     const person = await Person.findOne();
     // 更新
-    person.age = 100
-    await person.save()
-    
-    await Person.update({
-      name: 'bobby'
-    }, {
-      where: { id: 1 }
-    });
+    person.age = 100;
+    await person.save();
+
+    await Person.update(
+      {
+        name: 'bobby',
+      },
+      {
+        where: { id: 1 },
+      }
+    );
   }
 }
 ```
 
-
-
 ## Repository 模式
 
 Repository 模式可以将查找、创建等静态操作从模型定义中分离出来。它还支持与多个 sequelize 实例（多数据源）一起使用。
-
-
 
 ### 启动 Repository 模式
 
@@ -470,7 +449,7 @@ Repository 模式可以将查找、创建等静态操作从模型定义中分离
 ```typescript
 // src/config/config.default.ts
 
-import { Person } from '../entity/person'
+import { Person } from '../entity/person';
 
 export default {
   // ...
@@ -479,7 +458,7 @@ export default {
       default: {
         // ...
         entities: [Person],
-        
+
         // 多了这一个
         repositoryMode: true,
       },
@@ -491,11 +470,11 @@ export default {
 
 如果是多个数据源，务必在每个数据源都开启该属性，开启后，原有的静态操作方法不再可用。
 
-你需要使用  `Repository` 的操作方式。
+你需要使用 `Repository` 的操作方式。
 
 ### 使用 Repository 模式
 
-基本 API 和静态操作相同，Midway 对齐进行了一些简单包裹，使用  `InjectRepository` 装饰器可以在服务中注入 `Repository`。
+基本 API 和静态操作相同，Midway 对齐进行了一些简单包裹，使用 `InjectRepository` 装饰器可以在服务中注入 `Repository`。
 
 ```typescript
 import { Controller, Get } from '@midwayjs/decorator';
@@ -506,7 +485,6 @@ import { Op } from 'sequelize';
 
 @Controller('/')
 export class HomeController {
-
   @InjectRepository(User)
   userRepository: Repository<User>;
 
@@ -518,19 +496,18 @@ export class HomeController {
     // 查询
     let result = await this.photoRepository.findAll();
     console.log(result);
-    
+
     // 新增
     await this.photoRepository.create({
       name: '123',
     });
-    
+
     // 删除
     await this.photoRepository.destroy({
       where: {
         name: '123',
       },
     });
-    
 
     // 联合查询
     // SELECT * FROM photo WHERE name = "23" OR name = "34";
@@ -550,8 +527,6 @@ export class HomeController {
 
 关于 OP 的更多用法：[https://sequelize.org/v5/manual/querying.html](https://sequelize.org/v5/manual/querying.html)
 
-
-
 ### 多库的支持
 
 在 Repository 模式下，我们可以在 `InjectRepository` 参数中指定特定的数据源。
@@ -564,19 +539,15 @@ import { User } from '../entity/user';
 
 @Controller('/')
 export class HomeController {
-
   // 指定某个数据源
   @InjectRepository(User, 'default')
   userRepository: Repository<User>;
   // ...
-
 }
 ```
 
-
-
 ## 其他
 
-- 上面的文档，翻译自 sequelize-typescript，更多 API ，请参考 [英文文档]((https://github.com/sequelize/sequelize-typescrip))
+- 上面的文档，翻译自 sequelize-typescript，更多 API ，请参考 [英文文档](<(https://github.com/sequelize/sequelize-typescrip)>)
 - 一些 [案例](https://github.com/ddzyan/midway-practice)
 - 如果遇到比较复杂的，可以使用 [raw query 方法](https://sequelize.org/v5/manual/raw-queries.html)
