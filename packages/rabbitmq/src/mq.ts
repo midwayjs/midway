@@ -138,7 +138,7 @@ export class RabbitMQServer
     return channelWrapper.waitForConnect();
   }
 
-  protected async closeConnection() {
+  async closeConnection() {
     try {
       if (this.connection) {
         await this.connection.close();
