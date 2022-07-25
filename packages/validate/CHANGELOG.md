@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.5](https://github.com/midwayjs/midway/compare/v3.4.4...v3.4.5) (2022-07-25)
+
+
+### Bug Fixes
+
+* add getSchema method for validate ([#2155](https://github.com/midwayjs/midway/issues/2155)) ([aee9353](https://github.com/midwayjs/midway/commit/aee9353fb2c39f4996dff97b901a7b6d99f7cb9f))
+
+
+
+
+
 ## [3.4.4](https://github.com/midwayjs/midway/compare/v3.4.3...v3.4.4) (2022-07-25)
 
 **Note:** Version bump only for package @midwayjs/validate

@@ -34,21 +34,33 @@
   "@midwayjs/process-agent": "3.4.4",
   "@midwayjs/prometheus-socket-io": "3.4.4",
   "@midwayjs/prometheus": "3.4.4",
-  "@midwayjs/rabbitmq": "3.4.4",
+  "@midwayjs/rabbitmq": [
+    "3.4.4",
+    "3.4.5"
+  ],
   "@midwayjs/redis": "3.4.4",
   "@midwayjs/security": "3.4.4",
   "@midwayjs/sequelize": "3.4.4",
   "@midwayjs/session": "3.4.4",
   "@midwayjs/socketio": "3.4.4",
   "@midwayjs/static-file": "3.4.4",
-  "@midwayjs/swagger": "3.4.4",
+  "@midwayjs/swagger": [
+    "3.4.4",
+    "3.4.5"
+  ],
   "@midwayjs/tablestore": "3.4.4",
   "@midwayjs/task": "3.4.4",
   "@midwayjs/typegoose": "3.4.4",
   "@midwayjs/typeorm": "3.4.4",
   "@midwayjs/upload": "3.4.4",
-  "@midwayjs/validate": "3.4.4",
-  "@midwayjs/version": "3.4.4",
+  "@midwayjs/validate": [
+    "3.4.4",
+    "3.4.5"
+  ],
+  "@midwayjs/version": [
+    "3.4.4",
+    "3.4.5"
+  ],
   "@midwayjs/view-ejs": "3.4.4",
   "@midwayjs/view-nunjucks": "3.4.4",
   "@midwayjs/view": "3.4.4",
