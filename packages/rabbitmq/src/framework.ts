@@ -49,7 +49,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
       await this.loadSubscriber();
       this.logger.info('Rabbitmq server start success');
     } catch (error) {
-      this.app.closeConnection();
+      this.app.close();
       throw error;
     }
   }
