@@ -307,10 +307,39 @@ export class UserDTO extends CommonUserDTO {
 
 老版本需要在子类上面加，新版本不需要啦～
 
-
 :::info
 如果属性名相同，则取当前属性的规则进行校验，不会和父类合并。
 :::
+
+
+
+### 多类型校验
+
+从 v3.4.5 开始，Midway 支持某个属性的不同类型的校验。
+
+例如某个类型，既可以是可以普通类型，又可以是一个复杂类型。
+
+```typescript
+import { Rule, RuleType, getSchema } from '@midwayjs/validate';
+
+export class SchoolDTO {
+  @Rule(RuleType.string().required())
+  name: string;
+  @Rule(RuleType.string())
+  address: string;
+}
+
+export class UserDTO {
+
+  @Rule(RuleType.string().required())
+  name: string;
+  
+  @Rule(RuleType.alternatives([RuleType.string(), getSchema(SchoolDTO)]).required())
+  school: string | SchoolDTO;
+}
+```
+
+我们可以使用 `getSchema` 方法，从某个 DTO 拿到当前的 joi schema，从而进行复杂的逻辑处理。
 
 
 

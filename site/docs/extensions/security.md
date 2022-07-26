@@ -213,7 +213,7 @@ close 默认值 false，即设置为 1; mode=block
 // src/config/config.default
 export default {
   // ...
-  
+
   // 默认配置
   security: {
     csrf: {
@@ -317,7 +317,7 @@ HTTP 响应头 `Content-Security-Policy` 允许站点管理者控制指定的页
 
 ### noopen
 
-用于指定 `IE 8` 以上版本的用户不打开文件而直接保存文件。在下载对话框中不显示“打开”选项。
+用于指定 `IE 8` 以上版本的用户不打开文件而直接保存文件。在下载对话框中不显式“打开”选项。
 
 | 配置项 | 类型 | 作用描述 | 默认值 |
 | --- | --- | --- | --- |

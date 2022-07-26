@@ -22,7 +22,7 @@
 
 升级方法：
 
-- 1、请在业务依赖中显示添加 `sequelize` 和 `sequelize-typescript`
+- 1、请在业务依赖中显式添加 `sequelize` 和 `sequelize-typescript`
 - 2、不再使用 `BaseTable` 装饰器，而直接使用 `sequelize-typescript` 包导出的 `Table` 装饰器
 - 3、在 `src/config.default` 的 `sequelize` 部分配置调整，参考下面的数据源配置部分
   - 3.1 修改为数据源的形式 `sequelize.dataSource`
@@ -474,7 +474,7 @@ export default {
 
 ### 使用 Repository 模式
 
-基本 API 和静态操作相同，Midway 对齐进行了一些简单包裹，使用 `InjectRepository` 装饰器可以在服务中注入 `Repository`。
+基本 API 和静态操作相同，Midway 对其进行了一些简单包裹，使用 `InjectRepository` 装饰器可以在服务中注入 `Repository`。
 
 ```typescript
 import { Controller, Get } from '@midwayjs/decorator';
