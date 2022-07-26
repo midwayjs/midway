@@ -13,8 +13,8 @@ import * as util from 'util';
 const isOutputError = () => {
   return (
     process.env.SERVERLESS_OUTPUT_ERROR_STACK === 'true' ||
-    ['local', 'development'].includes(process.env.MIDWAY_SERVER_ENV) ||
-    ['local', 'development'].includes(process.env.NODE_ENV)
+    ['local', 'daily', 'development'].includes(process.env.MIDWAY_SERVER_ENV) ||
+    ['local', 'daily', 'development'].includes(process.env.NODE_ENV)
   );
 };
 
@@ -204,13 +204,14 @@ export class FCRuntime extends ServerlessLightRuntime {
             ctx.logger.error(err);
             if (res.send) {
               res.setStatusCode(500);
-              res.send(isOutputError() ? err.stack : 'Internal Server Error');
+              res.headers['content-type'] = 'text/plain';
+              res.send(isOutputError() ? '' + err : 'Internal Server Error');
             }
             return {
               isBase64Encoded: false,
               statusCode: 500,
               headers: {},
-              body: isOutputError() ? err.stack : 'Internal Server Error',
+              body: isOutputError() ? '' + err : 'Internal Server Error',
             };
           });
       },
