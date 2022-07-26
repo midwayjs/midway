@@ -78,16 +78,16 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
     return mysql.createConnection(config);
   }
 
-  getName() {
+  getName(): string {
     return 'mysql';
   }
   
-  async checkConnected(dataSource: mysql.Connection) {
+  async checkConnected(dataSource: mysql.Connection): Promise<boolean> {
     // 伪代码
     return dataSource.status === 'connected';
   }
   
-  async destroyDataSource(dataSource: mysql.Connection) {
+  async destroyDataSource(dataSource: mysql.Connection): Promise<void> {
     if (await this.checkConnected(dataSource)) {
       await dataSource.destroy();
     }
