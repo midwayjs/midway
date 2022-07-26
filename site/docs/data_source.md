@@ -66,8 +66,8 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
 由于是抽象类，我们需要实现其中的几个基本方法。
 
 ```typescript
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { DataSourceManager } from '@midwayjs/core';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import * as mysql from 'mysql2';
 
 @Provide()
