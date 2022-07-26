@@ -88,7 +88,7 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
   }
   
   async destroyDataSource(dataSource: mysql.Connection) {
-    if (this.checkConnected(dataSource)) {
+    if (await this.checkConnected(dataSource)) {
       await dataSource.destroy();
     }
   }
