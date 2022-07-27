@@ -66,8 +66,8 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
 由于是抽象类，我们需要实现其中的几个基本方法。
 
 ```typescript
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { DataSourceManager } from '@midwayjs/core';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import * as mysql from 'mysql2';
 
 @Provide()
@@ -78,17 +78,17 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
     return mysql.createConnection(config);
   }
 
-  getName() {
+  getName(): string {
     return 'mysql';
   }
   
-  async checkConnected(dataSource: mysql.Connection) {
+  async checkConnected(dataSource: mysql.Connection): Promise<boolean> {
     // 伪代码
     return dataSource.status === 'connected';
   }
   
-  async destroyDataSource(dataSource: mysql.Connection) {
-    if (this.checkConnected(dataSource)) {
+  async destroyDataSource(dataSource: mysql.Connection): Promise<void> {
+    if (await this.checkConnected(dataSource)) {
       await dataSource.destroy();
     }
   }
