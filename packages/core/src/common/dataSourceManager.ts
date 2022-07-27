@@ -9,16 +9,29 @@ import { Types } from '@midwayjs/decorator';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.js'];
 
-export abstract class DataSourceManager<T> {
-  protected dataSource: Map<string, T> = new Map();
+export interface DataSourceConfig<SourceName extends string = string> {
+  dataSource: DataSourceOptions<SourceName>;
+  [prop: string]: any;
+}
+export type DataSourceOptions<SourceName extends string = string> = Record<
+  SourceName,
+  any
+>;
+
+export abstract class DataSourceManager<T, SourceName extends string = string> {
+  protected dataSource: Map<SourceName, T> = new Map();
   protected options = {};
   protected modelMapping = new WeakMap();
 
-  protected async initDataSource(options: any, appDir: string): Promise<void> {
+  protected async initDataSource(
+    options: DataSourceConfig<SourceName>,
+    appDir: string
+  ): Promise<void> {
     this.options = options;
     if (options.dataSource) {
       for (const dataSourceName in options.dataSource) {
-        const dataSourceOptions = options.dataSource[dataSourceName];
+        const dataSourceOptions: DataSourceOptions<SourceName> =
+          options.dataSource[dataSourceName];
         if (dataSourceOptions['entities']) {
           const entities = new Set();
           // loop entities and glob files to model
@@ -52,7 +65,7 @@ export abstract class DataSourceManager<T> {
    * get a data source instance
    * @param dataSourceName
    */
-  public getDataSource(dataSourceName: string) {
+  public getDataSource(dataSourceName: SourceName) {
     return this.dataSource.get(dataSourceName);
   }
 
@@ -60,11 +73,11 @@ export abstract class DataSourceManager<T> {
    * check data source has exists
    * @param dataSourceName
    */
-  public hasDataSource(dataSourceName: string): boolean {
+  public hasDataSource(dataSourceName: SourceName): boolean {
     return this.dataSource.has(dataSourceName);
   }
 
-  public getDataSourceNames() {
+  public getDataSourceNames(): SourceName[] {
     return Array.from(this.dataSource.keys());
   }
 
@@ -72,11 +85,14 @@ export abstract class DataSourceManager<T> {
    * check the data source is connected
    * @param dataSourceName
    */
-  public async isConnected(dataSourceName: string): Promise<boolean> {
+  public async isConnected(dataSourceName: SourceName): Promise<boolean> {
     return this.checkConnected(this.getDataSource(dataSourceName));
   }
 
-  public async createInstance(config, clientName): Promise<T | void> {
+  public async createInstance(
+    config: DataSourceOptions<SourceName>,
+    clientName: SourceName
+  ): Promise<T | void> {
     // options.default will be merge in to options.clients[id]
     config = extend(true, {}, this.options['default'], config);
     const client = await this.createDataSource(config, clientName);
@@ -98,8 +114,8 @@ export abstract class DataSourceManager<T> {
 
   public abstract getName(): string;
   protected abstract createDataSource(
-    config,
-    dataSourceName: string
+    config: DataSourceOptions<SourceName>,
+    dataSourceName: SourceName
   ): Promise<T | void> | (T | void);
   protected abstract checkConnected(dataSource: T): Promise<boolean>;
   protected abstract destroyDataSource(dataSource: T): Promise<void>;
