@@ -81,6 +81,8 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
       });
       client.on('error', err => {
         this.logger.error('[midway:redis] client error: %s', err);
+        // 初始化连接失败，需要关闭连接
+        this.destroyClient(client);
         reject(err);
       });
     });
