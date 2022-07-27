@@ -140,7 +140,7 @@ $ npm i @midwayjs/typegoose@3 --save
 安装后需要手动在 `src/configuration.ts` 配置，代码如下。
 
 ```typescript
-// configuration.ts
+// src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 import * as typegoose from '@midwayjs/typegoose';
 
@@ -370,6 +370,40 @@ export class TestService{
 ```
 
 
+
+### 7、关于 schemaOptions
+
+Typegoose 预留了一个 `setGlobalOptions`  方法用来设置 [schemaOptions](https://typegoose.github.io/typegoose/docs/api/decorators/model-options#schemaoptions) 和一些其他全局性的 [配置](https://typegoose.github.io/typegoose/docs/api/decorators/model-options#options-1)。
+
+我们可以在项目启动时设置它。
+
+```typescript
+// srcconfiguration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as typegoose from '@midwayjs/typegoose';
+import * as Typegoose from '@typegoose/typegoose';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  async onReady() {
+    
+    Typegoose.setGlobalOptions({
+      schemaOptions: {
+        // ...
+      },
+      options: { allowMixed: Severity.ERROR }
+    });
+    // ...
+  }
+}
+```
+
+
+
+
+
 ## 直接使用 mongoose
 
 mongoose 组件是 typegoose 的基础组件，有时候我们可以直接使用它。
@@ -527,6 +561,8 @@ export class TestService {
 }
 
 ```
+
+
 
 
 
