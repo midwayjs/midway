@@ -80,6 +80,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
         resolve();
       });
       client.on('error', err => {
+        this.destroyClient(client);
         this.logger.error('[midway:redis] client error: %s', err);
         reject(err);
       });
