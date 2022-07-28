@@ -170,6 +170,11 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
     const modules = listModule(MODULE_TASK_QUEUE_KEY);
     const taskConfig = this.configService.getConfiguration('task');
     const config = JSON.parse(JSON.stringify(taskConfig));
+
+    if (taskConfig && taskConfig.createClient) {
+      config.createClient = taskConfig.createClient;
+    }
+
     const concurrency = config.concurrency || 1;
     delete config.defaultJobOptions.repeat;
     for (const module of modules) {
