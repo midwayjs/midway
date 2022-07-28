@@ -33,7 +33,8 @@
   },
   "dependencies": {
     "bull": "^4.0.0",
-    "cron": "^1.8.2"
+    "cron": "^1.8.2",
+    "lodash.clonedeep": "^4.5.0"
   },
   "engines": {
     "node": ">=12"

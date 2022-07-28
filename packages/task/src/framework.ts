@@ -22,6 +22,7 @@ import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { Application, Context, IQueue } from './interface';
 import { deprecatedOutput } from '@midwayjs/core';
+import * as deepClone from 'lodash.clonedeep';
 import { QueueService } from './service/queueService';
 
 @Framework()
@@ -169,7 +170,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   async loadQueue() {
     const modules = listModule(MODULE_TASK_QUEUE_KEY);
     const taskConfig = this.configService.getConfiguration('task');
-    const config = JSON.parse(JSON.stringify(taskConfig));
+    const config = deepClone(taskConfig);
     const concurrency = config.concurrency || 1;
     delete config.defaultJobOptions.repeat;
     for (const module of modules) {
