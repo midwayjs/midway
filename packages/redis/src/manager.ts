@@ -77,7 +77,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
     }
 
     client.on('reconnecting', (time: string) => {
-      this.logger.info('[midway:redis] client reconnecting %s', time);
+      this.logger.warm('[midway:redis] client reconnecting %s', time);
     });
 
     await new Promise<void>((resolve, reject) => {
