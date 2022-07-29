@@ -1,9 +1,13 @@
+import { relative } from 'node:path'
+
 import { DataSourceManager } from '../../src';
-import { DataSource, DataSourceConfig, DataSourceItem, globModels } from '../../src/common/dataSourceManager';
+import { DataSourceConfig, DataSourceItem, globModels } from '../../src/common/dataSourceManager';
 
-describe('test/common/dataSourceManager.test.ts', () => {
+const filename = relative(process.cwd(), __filename).replace(/\\/ug, '/')
 
-  const host = `schema://${Math.random().toString()}`;
+describe(filename, () => {
+
+  const host = 'foo';
   interface Dbh {
     host: string;
     entitiesLength: number;

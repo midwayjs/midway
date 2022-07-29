@@ -1,7 +1,11 @@
-import { DataSourceManager } from '../../src';
-import { DataSource, DataSourceConfig, DataSourceItem, globModels } from '../../src/common/dataSourceManager';
+import { relative } from 'node:path'
 
-describe('test/common/dataSourceManager.test.ts', () => {
+import { DataSourceManager } from '../../src';
+import { DataSourceConfig, DataSourceItem, globModels } from '../../src/common/dataSourceManager';
+
+const filename = relative(process.cwd(), __filename).replace(/\\/ug, '/')
+
+describe(filename, () => {
 
   class CustomDataSourceFactory<SourceName extends string> extends DataSourceManager<any, SourceName> {
     getName() {
