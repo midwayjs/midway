@@ -10,13 +10,16 @@ import { Types } from '@midwayjs/decorator';
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.js'];
 
 export interface DataSourceConfig<SourceName extends string = string> {
-  dataSource: DataSourceOptions<SourceName>;
+  dataSource: DataSource<SourceName>;
   [prop: string]: any;
 }
-export type DataSourceOptions<SourceName extends string = string> = Record<
+export type DataSource<SourceName extends string = string> = Record<
   SourceName,
-  any
+  DataSourceItem
 >;
+export interface DataSourceItem {
+  [prop: string]: any;
+}
 
 export abstract class DataSourceManager<T, SourceName extends string = string> {
   protected dataSource: Map<SourceName, T> = new Map();
@@ -30,7 +33,7 @@ export abstract class DataSourceManager<T, SourceName extends string = string> {
     this.options = options;
     if (options.dataSource) {
       for (const dataSourceName in options.dataSource) {
-        const dataSourceOptions: DataSourceOptions<SourceName> =
+        const dataSourceOptions: DataSourceItem =
           options.dataSource[dataSourceName];
         if (dataSourceOptions['entities']) {
           const entities = new Set();
@@ -92,7 +95,7 @@ export abstract class DataSourceManager<T, SourceName extends string = string> {
   }
 
   public async createInstance(
-    config: DataSourceOptions<SourceName>,
+    config: DataSourceItem,
     clientName: SourceName
   ): Promise<T | void> {
     // options.default will be merge in to options.clients[id]
@@ -116,7 +119,7 @@ export abstract class DataSourceManager<T, SourceName extends string = string> {
 
   public abstract getName(): string;
   protected abstract createDataSource(
-    config: DataSourceOptions<SourceName>,
+    config: DataSourceItem,
     dataSourceName: SourceName
   ): Promise<T | void> | (T | void);
   protected abstract checkConnected(dataSource: T): Promise<boolean>;
