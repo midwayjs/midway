@@ -44,6 +44,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
     for (const routerInfo of this.routes.values()) {
       for (const info of routerInfo) {
         if (info.requestMethod === 'all') {
+          info.functionTriggerMetadata = info.functionTriggerMetadata || {};
           info.functionTriggerMetadata.method = [
             'get',
             'post',
