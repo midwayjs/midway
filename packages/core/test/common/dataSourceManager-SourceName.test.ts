@@ -1,4 +1,4 @@
-import { relative } from 'node:path'
+import { relative } from 'path'
 
 import { DataSourceManager } from '../../src';
 import { DataSourceConfig, DataSourceItem, globModels } from '../../src/common/dataSourceManager';
@@ -72,9 +72,9 @@ describe(filename, () => {
     await instance.init(config)
     expect(instance.getDataSourceNames()).toEqual(['default', 'test']);
     expect(instance.hasDataSource('default')).toBeTruthy();
-    expect(instance.getDataSource('default')).toMatchSnapshot();
+    // expect(instance.getDataSource('default')).toMatchSnapshot();
     expect(instance.getDataSource('default').entitiesLength).toEqual(2);
-    expect(instance.getDataSource('test')).toMatchSnapshot();
+    // expect(instance.getDataSource('test')).toMatchSnapshot();
     expect(instance.getDataSource('test').entitiesLength).toEqual(1);
     // @ts-expect-error
     expect(instance.getDataSource('fff')).not.toBeDefined();
@@ -120,7 +120,7 @@ describe(filename, () => {
 
     await instance.init(config)
     expect(instance.getDataSourceNames()).toEqual(['test']);
-    expect(instance.getDataSource('test')).toMatchSnapshot();
+    // expect(instance.getDataSource('test')).toMatchSnapshot();
   });
 
   it('should test will got error when no data source', async () => {
@@ -177,9 +177,9 @@ describe(filename, () => {
     await instance.init(config)
     expect(instance.getDataSourceNames()).toEqual(['default', 'test']);
     expect(instance.hasDataSource('default')).toBeTruthy();
-    expect(instance.getDataSource('default')).toMatchSnapshot();
+    // expect(instance.getDataSource('default')).toMatchSnapshot();
     expect(instance.getDataSource('default').entitiesLength).toEqual(2);
-    expect(instance.getDataSource('test')).toMatchSnapshot();
+    // expect(instance.getDataSource('test')).toMatchSnapshot();
     expect(instance.getDataSource('test').entitiesLength).toEqual(1);
     // @ts-expect-error
     expect(instance.getDataSource('fff')).not.toBeDefined();
