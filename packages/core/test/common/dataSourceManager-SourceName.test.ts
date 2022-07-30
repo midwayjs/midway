@@ -2,7 +2,6 @@ import { relative } from 'path'
 
 import { DataSourceManager } from '../../src';
 import {
-  DataSource,
   DataSourceConfig,
   DataSourceItem,
   globModels,
