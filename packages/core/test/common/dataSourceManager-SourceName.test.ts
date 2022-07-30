@@ -1,13 +1,53 @@
 import { relative } from 'path'
 
 import { DataSourceManager } from '../../src';
-import { DataSourceConfig, DataSourceItem, globModels } from '../../src/common/dataSourceManager';
+import {
+  DataSource,
+  DataSourceConfig,
+  DataSourceItem,
+  globModels,
+} from '../../src/common/dataSourceManager';
 
 const filename = relative(process.cwd(), __filename).replace(/\\/ug, '/')
 
 describe(filename, () => {
 
-  class CustomDataSourceFactory<SourceName extends string> extends DataSourceManager<any, SourceName> {
+  class EntityA { }
+
+  class EntityB { }
+
+  type DataSourceName = 'default' | 'test'
+  type Config = DataSourceConfig<DataSourceName>
+
+  const config: Config = {
+    dataSource: {
+      default: {
+        host: 'localhost',    //数据库地址,默认本机
+        port: '3306',
+        dialect: 'mysql',
+        pool: {   //连接池设置
+          max: 5, //最大连接数
+          min: 0, //最小连接数
+          idle: 10000
+        },
+        entities: [EntityA, EntityB]
+      },
+      test: {
+        host: 'localhost',    //数据库地址,默认本机
+        port: '3306',
+        dialect: 'mysql',
+        pool: {   //连接池设置
+          max: 5, //最大连接数
+          min: 0, //最小连接数
+          idle: 10000
+        },
+        dataSourceGroup: 'bb',
+        entities: [EntityA]
+      }
+    },
+  }
+
+  class CustomDataSourceFactory<SourceName extends PropertyKey> extends DataSourceManager<any, SourceName> {
     getName() {
       return 'test';
     }
@@ -33,40 +73,9 @@ describe(filename, () => {
     }
   }
 
+
   it('should test base data source', async () => {
-    class EntityA {}
-
-    class EntityB {}
-
-    const config = {
-      dataSource: {
-        default: {
-          host: 'localhost',    //数据库地址,默认本机
-          port:'3306',
-          dialect: 'mysql',
-          pool: {   //连接池设置
-            max: 5, //最大连接数
-            min: 0, //最小连接数
-            idle: 10000
-          },
-          entities: [EntityA, EntityB]
-        },
-        test: {
-          host: 'localhost',    //数据库地址,默认本机
-          port:'3306',
-          dialect: 'mysql',
-          pool: {   //连接池设置
-            max: 5, //最大连接数
-            min: 0, //最小连接数
-            idle: 10000
-          },
-          dataSourceGroup: 'bb',
-          entities: [EntityA]
-        }
-      },
-    } as const
-
-    const instance = new CustomDataSourceFactory<keyof typeof config.dataSource>();
+    const instance = new CustomDataSourceFactory<DataSourceName>();
     expect(instance.getName()).toEqual('test');
 
     await instance.init(config)
@@ -115,7 +124,7 @@ describe(filename, () => {
       },
     }
 
-    const instance = new CustomDataSourceFactory<keyof typeof config.dataSource>();
+    const instance = new CustomDataSourceFactory<'test'>();
     expect(instance.getName()).toEqual('test');
 
     await instance.init(config)
@@ -137,41 +146,8 @@ describe(filename, () => {
   });
 
   it('should test base data source with types', async () => {
-    class EntityA {}
 
-    class EntityB {}
-
-    type Config = DataSourceConfig<'default' | 'test'>
-
-    const config: Config = {
-      dataSource: {
-        default: {
-          host: 'localhost',    //数据库地址,默认本机
-          port:'3306',
-          dialect: 'mysql',
-          pool: {   //连接池设置
-            max: 5, //最大连接数
-            min: 0, //最小连接数
-            idle: 10000
-          },
-          entities: [EntityA, EntityB]
-        },
-        test: {
-          host: 'localhost',    //数据库地址,默认本机
-          port:'3306',
-          dialect: 'mysql',
-          pool: {   //连接池设置
-            max: 5, //最大连接数
-            min: 0, //最小连接数
-            idle: 10000
-          },
-          dataSourceGroup: 'bb',
-          entities: [EntityA]
-        }
-      },
-    }
-
-    const instance = new CustomDataSourceFactory<keyof Config['dataSource']>();
+    const instance = new CustomDataSourceFactory<DataSourceName>();
     expect(instance.getName()).toEqual('test');
 
     await instance.init(config)

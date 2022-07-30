@@ -9,11 +9,11 @@ import { Types } from '@midwayjs/decorator';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.js'];
 
-export interface DataSourceConfig<SourceName extends string = string> {
+export interface DataSourceConfig<SourceName extends PropertyKey = string> {
   dataSource: DataSource<SourceName>;
   [prop: string]: any;
 }
-export type DataSource<SourceName extends string = string> = Record<
+export type DataSource<SourceName extends PropertyKey = string> = Record<
   SourceName,
   DataSourceItem
 >;
@@ -21,7 +21,10 @@ export interface DataSourceItem {
   [prop: string]: any;
 }
 
-export abstract class DataSourceManager<T, SourceName extends string = string> {
+export abstract class DataSourceManager<
+  T,
+  SourceName extends PropertyKey = string
+> {
   protected dataSource: Map<SourceName, T> = new Map();
   protected options = {};
   protected modelMapping = new WeakMap();
