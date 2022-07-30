@@ -102,7 +102,7 @@ export abstract class DataSourceManager<T> {
     dataSourceName: string
   ): Promise<T | void> | (T | void);
   protected abstract checkConnected(dataSource: T): Promise<boolean>;
-  protected async destroyDataSource(dataSource: T): Promise<void> {}
+  protected abstract destroyDataSource(dataSource: T): Promise<void>;
 
   public async stop(): Promise<void> {
     const arr = Array.from(this.dataSource.values());
