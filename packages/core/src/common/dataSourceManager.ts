@@ -71,9 +71,7 @@ export abstract class DataSourceManager<
    * get a data source instance
    * @param dataSourceName
    */
-  public getDataSource(
-    dataSourceName: SourceName
-  ): string extends SourceName ? T | undefined : T {
+  public getDataSource(dataSourceName: SourceName): T | undefined {
     return this.dataSource.get(dataSourceName);
   }
 

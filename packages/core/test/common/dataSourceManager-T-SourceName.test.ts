@@ -87,11 +87,11 @@ describe(filename, () => {
     expect(instance.getDataSourceNames()).toEqual(['default', 'test']);
     expect(instance.hasDataSource('default')).toBeTruthy();
     // expect(instance.getDataSource('default')).toMatchSnapshot();
-    expect(instance.getDataSource('default').entitiesLength).toEqual(2);
-    expect(instance.getDataSource('default').host).toEqual(host);
+    expect(instance.getDataSource('default')?.entitiesLength).toEqual(2);
+    expect(instance.getDataSource('default')?.host).toEqual(host);
     // expect(instance.getDataSource('test')).toMatchSnapshot();
-    expect(instance.getDataSource('test').entitiesLength).toEqual(1);
-    expect(instance.getDataSource('test').host).toEqual(host);
+    expect(instance.getDataSource('test')?.entitiesLength).toEqual(1);
+    expect(instance.getDataSource('test')?.host).toEqual(host);
     // @ts-expect-error
     expect(instance.getDataSource('fff')).not.toBeDefined();
 
@@ -161,9 +161,9 @@ describe(filename, () => {
     expect(instance.getDataSourceNames()).toEqual(['default', 'test']);
     expect(instance.hasDataSource('default')).toBeTruthy();
     // expect(instance.getDataSource('default')).toMatchSnapshot();
-    expect(instance.getDataSource('default').entitiesLength).toEqual(2);
+    expect(instance.getDataSource('default')?.entitiesLength).toEqual(2);
     // expect(instance.getDataSource('test')).toMatchSnapshot();
-    expect(instance.getDataSource('test').entitiesLength).toEqual(1);
+    expect(instance.getDataSource('test')?.entitiesLength).toEqual(1);
     // @ts-expect-error
     expect(instance.getDataSource('fff')).not.toBeDefined();
 
