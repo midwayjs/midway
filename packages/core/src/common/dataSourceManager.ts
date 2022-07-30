@@ -127,9 +127,12 @@ export abstract class DataSourceManager<
   protected abstract destroyDataSource(dataSource: T): Promise<void>;
 
   public async stop(): Promise<void> {
-    for (const value of this.dataSource.values()) {
-      await this.destroyDataSource(value);
-    }
+    const arr = Array.from(this.dataSource.values());
+    await Promise.all(
+      arr.map(dbh => {
+        return this.destroyDataSource(dbh);
+      })
+    );
     this.dataSource.clear();
   }
 }
