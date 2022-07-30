@@ -118,7 +118,7 @@ export abstract class DataSourceManager<
     return this.modelMapping.get(modelOrRepository);
   }
 
-  public abstract getName(): string;
+  public abstract getName(): SourceName;
   protected abstract createDataSource(
     config: DataSourceItem,
     dataSourceName: SourceName

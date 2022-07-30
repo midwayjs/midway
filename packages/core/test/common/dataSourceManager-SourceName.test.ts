@@ -48,7 +48,7 @@ describe(filename, () => {
 
   class CustomDataSourceFactory<SourceName extends PropertyKey> extends DataSourceManager<any, SourceName> {
     getName() {
-      return 'test';
+      return 'test' as SourceName;
     }
     async init(options: DataSourceConfig<SourceName>) {
       return super.initDataSource(options, __dirname);
