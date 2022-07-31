@@ -29,6 +29,6 @@
     "@midwayjs/decorator": "^3.4.4",
     "@midwayjs/mock": "^3.4.4",
     "@typegoose/typegoose": "9.10.1",
-    "mongoose": "6.4.5"
+    "mongoose": "6.5.0"
   }
 }
