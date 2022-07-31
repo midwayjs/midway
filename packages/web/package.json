@@ -33,7 +33,7 @@
     "@midwayjs/mock": "^3.4.4",
     "axios": "0.27.2",
     "dayjs": "1.11.4",
-    "egg-logger": "2.8.0",
+    "egg-logger": "2.9.0",
     "egg-mock": "4.2.1",
     "egg-scripts": "2.17.0",
     "egg-socket.io": "4.1.6",
