@@ -19,6 +19,10 @@ describe('test/common/dataSourceManager.test.ts', () => {
     protected async checkConnected(dataSource: any) {
       return false;
     }
+
+    protected async destroyDataSource(dataSource: any): Promise<void> {
+      return
+    }
   }
 
   it('should test base data source', async () => {
