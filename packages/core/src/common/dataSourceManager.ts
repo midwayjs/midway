@@ -10,7 +10,7 @@ import { Types } from '@midwayjs/decorator';
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.js'];
 
 export abstract class DataSourceManager<T> {
-  protected dataSource: Map<string, T> = new Map();
+  protected dataSource: Map<PropertyKey, T> = new Map();
   protected options = {};
   protected modelMapping = new WeakMap();
 
@@ -52,7 +52,7 @@ export abstract class DataSourceManager<T> {
    * get a data source instance
    * @param dataSourceName
    */
-  public getDataSource(dataSourceName: string) {
+  public getDataSource(dataSourceName: PropertyKey) {
     return this.dataSource.get(dataSourceName);
   }
 
@@ -60,7 +60,7 @@ export abstract class DataSourceManager<T> {
    * check data source has exists
    * @param dataSourceName
    */
-  public hasDataSource(dataSourceName: string): boolean {
+  public hasDataSource(dataSourceName: PropertyKey): boolean {
     return this.dataSource.has(dataSourceName);
   }
 
@@ -72,7 +72,7 @@ export abstract class DataSourceManager<T> {
    * check the data source is connected
    * @param dataSourceName
    */
-  public async isConnected(dataSourceName: string): Promise<boolean> {
+  public async isConnected(dataSourceName: PropertyKey): Promise<boolean> {
     return this.checkConnected(this.getDataSource(dataSourceName));
   }
 
@@ -92,14 +92,16 @@ export abstract class DataSourceManager<T> {
    * get data source name by model or repository
    * @param modelOrRepository
    */
-  public getDataSourceNameByModel(modelOrRepository: any): string | undefined {
+  public getDataSourceNameByModel(
+    modelOrRepository: any
+  ): PropertyKey | undefined {
     return this.modelMapping.get(modelOrRepository);
   }
 
   public abstract getName(): string;
   protected abstract createDataSource(
     config,
-    dataSourceName: string
+    dataSourceName: PropertyKey
   ): Promise<T | void> | (T | void);
   protected abstract checkConnected(dataSource: T): Promise<boolean>;
   protected abstract destroyDataSource(dataSource: T): Promise<void>;

@@ -11,7 +11,7 @@ describe('test/common/dataSourceManager.test.ts', () => {
       return super.initDataSource(options, __dirname);
     }
 
-    protected createDataSource(config, dataSourceName: string): any {
+    protected createDataSource(config, dataSourceName: PropertyKey): any {
       config.entitiesLength = config.entities.length;
       return config;
     }
@@ -77,6 +77,40 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(instance.getDataSourceNames()).toEqual([]);
   });
 
+  it('should test symbol dataSourceName', async () => {
+    class EntityA {}
+
+    const instance = new CustomDataSourceFactory();
+    expect(instance.getName()).toEqual('test');
+
+    const sym = Symbol.for('db2');
+
+    await instance.init({
+      dataSource: {
+        [sym]: {
+          host: 'localhost',    //数据库地址,默认本机
+          port:'3306',
+          dialect: 'mysql',
+          pool: {   //连接池设置
+            max: 5, //最大连接数
+            min: 0, //最小连接数
+            idle: 10000
+          },
+          dataSourceGroup: 'bb',
+          entities: [EntityA]
+        }
+      },
+    })
+    expect(instance.getDataSource(sym).entitiesLength).toEqual(1);
+    expect(instance.getDataSource('db2')).not.toBeDefined();
+
+    expect(instance.getDataSourceNameByModel(EntityA)).toEqual(sym);
+
+    await instance.stop();
+    expect(instance.getDataSourceNames()).toEqual([]);
+  });
+
+
   it('should test glob model', function () {
     let result = globModels('dd', __dirname);
     expect(result).toEqual([]);
@@ -109,6 +143,7 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(instance.getDataSourceNames()).toEqual(['test']);
     expect(instance.getDataSource('test')).toMatchSnapshot();
   });
+
 
   it('should test will got error when no data source', async () => {
     const instance = new CustomDataSourceFactory();
