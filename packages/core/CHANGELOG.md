@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.6](https://github.com/midwayjs/midway/compare/v3.4.5...v3.4.6) (2022-07-31)
+
+
+### Bug Fixes
+
+* sls metadata npe ([#2167](https://github.com/midwayjs/midway/issues/2167)) ([98bf8b5](https://github.com/midwayjs/midway/commit/98bf8b5ec4d47f69dd8e53dae9a702a9c550a9b1))
+
+
+### Performance Improvements
+
+* **core:** destroy connection concurrently within DataSourceManager.… ([#2169](https://github.com/midwayjs/midway/issues/2169)) ([53bcf65](https://github.com/midwayjs/midway/commit/53bcf65dc2699857a41a6400b4c04e0c46b30948))
+
+
+
+
+
 ## [3.4.4](https://github.com/midwayjs/midway/compare/v3.4.3...v3.4.4) (2022-07-25)
 
 

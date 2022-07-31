@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.6](https://github.com/midwayjs/midway/compare/v3.4.5...v3.4.6) (2022-07-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @grpc/grpc-js to v1.6.8 ([#2177](https://github.com/midwayjs/midway/issues/2177)) ([a8a8693](https://github.com/midwayjs/midway/commit/a8a86934ffe815458d2c4140d60589b3ef36b97e))
+* **deps:** update dependency tablestore to v5.2.0 ([#2179](https://github.com/midwayjs/midway/issues/2179)) ([17e7f9b](https://github.com/midwayjs/midway/commit/17e7f9b0707584a0ad10f593c4ec7f52f598cf54))
+* sls metadata npe ([#2167](https://github.com/midwayjs/midway/issues/2167)) ([98bf8b5](https://github.com/midwayjs/midway/commit/98bf8b5ec4d47f69dd8e53dae9a702a9c550a9b1))
+* **task:** createClient config missing ([#2163](https://github.com/midwayjs/midway/issues/2163)) ([129ce16](https://github.com/midwayjs/midway/commit/129ce1643201b36d10eac08a97dd6d99e35026aa))
+
+
+### Performance Improvements
+
+* **core:** destroy connection concurrently within DataSourceManager.… ([#2169](https://github.com/midwayjs/midway/issues/2169)) ([53bcf65](https://github.com/midwayjs/midway/commit/53bcf65dc2699857a41a6400b4c04e0c46b30948))
+
+
+
+
+
 ## [3.4.5](https://github.com/midwayjs/midway/compare/v3.4.4...v3.4.5) (2022-07-25)
 
 
