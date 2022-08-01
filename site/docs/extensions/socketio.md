@@ -422,8 +422,7 @@ import { createApp, close } from '@midwayjs/mock'
 import { Framework } from '@midwayjs/koa';
 
 describe('/test/index.test.ts', () => {
-
-	it('should create app and test socket.io', async () => {
+  it('should create app and test socket.io', async () => {
     const app = await createApp<Framework>();
 
     //...
@@ -459,8 +458,7 @@ import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 
 describe('/test/index.test.ts', () => {
-
-	it('should test create socket app', async () => {
+  it('should test create socket app', async () => {
 
     // 创建一个服务
     const app = await createApp<Framework>();
@@ -500,7 +498,7 @@ import { once } from 'events';
 
 describe('/test/index.test.ts', () => {
 
-	it('should test create socket app', async () => {
+  it('should test create socket app', async () => {
 
     // 创建一个服务
     const app = await createApp<Framework>();
@@ -562,7 +560,7 @@ import { once } from 'events';
 
 describe('/test/index.test.ts', () => {
 
-	it('should test create socket app', async () => {
+  it('should test create socket app', async () => {
 
     // 创建一个服务
     const app = await createApp<Framework>();

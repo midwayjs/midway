@@ -503,7 +503,7 @@ export class MainConfiguration {
   webRouterService: MidwayWebRouterService;
 
   async onReady() {
-		this.webRouterService.addRouter(async (ctx) => {
+    this.webRouterService.addRouter(async (ctx) => {
       return 'hello world';
     }, {
       url: '/',
@@ -547,7 +547,7 @@ export class MainConfiguration {
   serverlessFunctionService: MidwayServerlessFunctionService;
 
   async onReady() {
-		this.serverlessFunctionService.addServerlessFunction(async (ctx, event) => {
+    this.serverlessFunctionService.addServerlessFunction(async (ctx, event) => {
       return 'hello world';
     }, {
       type: ServerlessTriggerType.HTTP,

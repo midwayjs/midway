@@ -1110,7 +1110,7 @@ call.on('metadata', (meta) => {
 我们可以在调用服务时传递参数，单位毫秒。
 ```typescript
 const result = await service.sayHello({
-	timeout: 5000
+  timeout: 5000
 }).sendMessage({
   name: 'harry'
 });

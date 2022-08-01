@@ -172,7 +172,7 @@ export class HelloHTTPService {
   })
   async handleStaticFile() {
     // 这个函数可以没有方法体，只是为了让网关注册一个额外的路由
-	}
+  }
 }
 
 ```

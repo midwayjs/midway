@@ -6,10 +6,6 @@
 
 在Midway中，我们提供了订阅rabbitMQ的能力，专门来满足用户的这类需求。
 
-:::tip
-调整暂未完成，请等待完成后再使用。
-:::
-
 相关信息：
 
 **订阅服务**
@@ -66,7 +62,7 @@ $ npm i @types/amqplib --save-dev
 {
   "dependencies": {
     "@midwayjs/rabbitmq": "^3.0.0",
-    "amqplib": "^0.8.0",
+    "amqplib": "^0.10.1",
     // ...
   },
   "devDependencies": {

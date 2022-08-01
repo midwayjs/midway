@@ -177,7 +177,7 @@ export class AuthMiddleware {
       if (routeInfo) {
         await next();
       } else {
-				throw new httpError.NotFoundError();
+        throw new httpError.NotFoundError();
       }
     }
   }

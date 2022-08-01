@@ -226,7 +226,7 @@ import { Table, Model, Column, DataType } from 'sequelize-typescript'
 
 @Table
 class Person extends Model {
-	@Column({
+  @Column({
     type: DataType.FLOAT,
     comment: 'Some value',
     ...

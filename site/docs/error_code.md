@@ -2,23 +2,25 @@
 
 以下是框架内置的错误，随着时间推移，我们会不断增加。
 
-| 错误码       | 错误名                              | 错误描述                     |
-| ------------ | ----------------------------------- | ---------------------------- |
-| MIDWAY_10000 | 占位使用                            | 未知错误                     |
-| MIDWAY_10001 | MidwayCommonError                   | 未分类的错误                 |
-| MIDWAY_10002 | MidwayParameterError                | 参数类型错误                 |
-| MIDWAY_10003 | MidwayDefinitionNotFoundError       | 依赖注入定义未找到           |
-| MIDWAY_10004 | MidwayFeatureNoLongerSupportedError | 功能不再支持                 |
-| MIDWAY_10005 | MidwayFeatureNotImplementedError    | 功能未实现                   |
-| MIDWAY_10006 | MidwayConfigMissingError            | 配置项丢失                   |
-| MIDWAY_10007 | MidwayResolverMissingError          | 依赖注入属性 resovler 未找到 |
-| MIDWAY_10008 | MidwayDuplicateRouteError           | 路由重复                     |
-| MIDWAY_10009 | MidwayUseWrongMethodError           | 使用了错误的方法             |
-| MIDWAY_10010 | MidwaySingletonInjectRequestError   | 作用域混乱                   |
-| MIDWAY_10011 | MidwayMissingImportComponentError   | 组件未导入                   |
-| MIDWAY_10012 | MidwayUtilHttpClientTimeoutError    | http client 调用超时         |
-| MIDWAY_10013 | MidwayInconsistentVersionError      | 使用了不正确的依赖版本       |
-| MIDWAY_10014 | MidwayInvalidConfigError            | 无效的配置                   |
+| 错误码       | 错误名                                | 错误描述                     |
+| ------------ | ------------------------------------- | ---------------------------- |
+| MIDWAY_10000 | 占位使用                              | 未知错误                     |
+| MIDWAY_10001 | MidwayCommonError                     | 未分类的错误                 |
+| MIDWAY_10002 | MidwayParameterError                  | 参数类型错误                 |
+| MIDWAY_10003 | MidwayDefinitionNotFoundError         | 依赖注入定义未找到           |
+| MIDWAY_10004 | MidwayFeatureNoLongerSupportedError   | 功能不再支持                 |
+| MIDWAY_10005 | MidwayFeatureNotImplementedError      | 功能未实现                   |
+| MIDWAY_10006 | MidwayConfigMissingError              | 配置项丢失                   |
+| MIDWAY_10007 | MidwayResolverMissingError            | 依赖注入属性 resovler 未找到 |
+| MIDWAY_10008 | MidwayDuplicateRouteError             | 路由重复                     |
+| MIDWAY_10009 | MidwayUseWrongMethodError             | 使用了错误的方法             |
+| MIDWAY_10010 | MidwaySingletonInjectRequestError     | 作用域混乱                   |
+| MIDWAY_10011 | MidwayMissingImportComponentError     | 组件未导入                   |
+| MIDWAY_10012 | MidwayUtilHttpClientTimeoutError      | http client 调用超时         |
+| MIDWAY_10013 | MidwayInconsistentVersionError        | 使用了不正确的依赖版本       |
+| MIDWAY_10014 | MidwayInvalidConfigError              | 无效的配置                   |
+| MIDWAY_10015 | MidwayDuplicateClassNameError         | 重复的类名                   |
+| MIDWAY_10016 | MidwayDuplicateControllerOptionsError | 重复的控制器参数             |
 
 
 
@@ -241,6 +243,39 @@ export class UserService {}
 请勿两种导出方式混用。
 
 
+
+## MIDWAY_10015
+
+**问题描述**
+
+当启动开启了重复类名检查（conflictCheck），如果代码扫描时在依赖注入容器中发现相同的类名，则会抛出该错误。
+
+```typescript
+// src/configuration.ts
+@Configuration({
+  // ...
+  conflictCheck: true,
+})
+export class MainConfiguration {
+  // ...
+}
+```
+
+**解决方案**
+
+修改类名，或者关闭重复类名检查。
+
+
+
+## MIDWAY_10016
+
+**问题描述**
+
+当添加了不同的控制器，使用了相同的 `prefix`，并且添加了不同的 `options`，比如中间件，会抛出该错误。
+
+**解决方案**
+
+将相同 `prefix` 的控制器代码进行合并，或者移除所有的 `options`。
 
 
 

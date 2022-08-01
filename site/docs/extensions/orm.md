@@ -1281,7 +1281,9 @@ export class XXX {
 import { Configuration } from '@midwayjs/decorator';
 import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
 
-@Configuration()
+@Configuration({
+  // ...
+})
 export class MainConfiguration {
 
   async onReady(container: IMidwayContainer) {
@@ -1291,6 +1293,40 @@ export class MainConfiguration {
   }
 }
 ```
+
+
+
+### 事务
+
+typeorm 的事务需要先获取到数据源，然后开启事务。
+
+```typescript
+import { Provide, Inject } from '@midwayjs/decorator';
+import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
+import { UserDTO } from '../entity/user';
+
+@Provide()
+export class UserService {
+  
+  @Inject()
+  dataSourceManager: TypeORMDataSourceManager;
+  
+  async updateUser(user: UserDTO) {
+    
+    // get dataSource
+    const dataSource = this.dataSourceManager.getDataSource('default');
+    
+    // start transaction
+    await dataSource.transaction(async (transactionalEntityManager) => {
+      // run code
+      await transactionalEntityManager.save(user)
+    });
+  }
+  
+}
+```
+
+更多的细节，可以参考 [文档](https://github.com/typeorm/typeorm/blob/master/docs/transactions.md)。
 
 
 
@@ -1328,7 +1364,7 @@ export default {
     dataSource: {
       default: {
         //...
-    		dateStrings: true,
+        dateStrings: true,
       }
     }
   },

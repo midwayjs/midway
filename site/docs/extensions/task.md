@@ -202,7 +202,7 @@ import { QueueService } from '@midwayjs/task';
 })
 export class MainConfiguration implements ILifeCycle {
 
-  async onReady(container: IMidwayContainer, app?: IMidwayBaseApplication<Context>): Promise<void> {
+  async onServerReady(container: IMidwayContainer, app?: IMidwayBaseApplication<Context>): Promise<void> {
 
     // Task这块的启动后立马执行
     let result: QueueService = await container.getAsync(QueueService);
@@ -347,9 +347,9 @@ export default {
       appLogger: {
         // ...
       },
-			taskLog: {
+      taskLog: {
         disableConsole: false, // 是否禁用打印到控制台，默认禁用
-				level: 'warn', // 服务器默认warn
+        level: 'warn', // 服务器默认warn
         consoleLevel: 'warn',
       },
     }
@@ -361,7 +361,7 @@ export default {
 logger.info(`task start.`)
 
 // 异常情况：
-logger.error(`${e.stack}`)
+logger.error(err.stack)
 
 logger.info(`task end.`)
 ```

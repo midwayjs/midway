@@ -287,7 +287,7 @@ import { Framework } from '@midwayjs/koa';
 
 describe('/test/index.test.ts', () => {
 
-	it('should create app and test webSocket', async () => {
+  it('should create app and test webSocket', async () => {
     const app = await createApp<Framework>();
 
     //...
