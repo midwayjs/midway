@@ -23,7 +23,7 @@ export abstract class AbstractFileDetector<T> implements IFileDetector {
   }
 }
 
-const DEFAULT_GLOB_PATTERN = ['**/**.ts', '**/**.js'].concat(DEFAULT_PATTERN);
+const DEFAULT_GLOB_PATTERN = ['**/**.tsx'].concat(DEFAULT_PATTERN);
 const DEFAULT_IGNORE_PATTERN = [
   '**/logs/**',
   '**/run/**',
