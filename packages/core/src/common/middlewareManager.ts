@@ -219,7 +219,7 @@ export class ContextMiddlewareManager<
 
   public push(...items) {
     items.forEach(item => {
-      if (!this.getMiddlewareName(item)) {
+      if (typeof item !== 'string' && !this.getMiddlewareName(item)) {
         item._name = 'anonymous';
       }
     });
@@ -228,7 +228,7 @@ export class ContextMiddlewareManager<
 
   public unshift(...items): number {
     items.forEach(item => {
-      if (!this.getMiddlewareName(item)) {
+      if (typeof item !== 'string' && !this.getMiddlewareName(item)) {
         item._name = 'anonymous';
       }
     });
