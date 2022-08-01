@@ -629,3 +629,14 @@ export interface MidwayConfig extends FileConfigOption<typeof _default> {
 
 export const ASYNC_CONTEXT_KEY = Symbol('ASYNC_CONTEXT_KEY');
 export const ASYNC_CONTEXT_MANAGER_KEY = 'MIDWAY_ASYNC_CONTEXT_MANAGER_KEY';
+
+export const DEFAULT_PATTERN = [
+  '**/**.ts',
+  '**/**.js',
+  '**/**.mts',
+  '**/**.mjs',
+  '**/**.cts',
+  '**/**.cjs'
+];
+
+export const IGNORE_PATTERN = ['**/**.d.ts', '**/**.d.mts', '**/**.d.cts'];
