@@ -8,7 +8,7 @@ import { join } from 'path';
 import { Types } from '@midwayjs/decorator';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.js'];
-
+const IGNORE_PATTERN = ['**/**.d.ts'];
 export abstract class DataSourceManager<T> {
   protected dataSource: Map<string, T> = new Map();
   protected options = {};
@@ -121,6 +121,7 @@ export function globModels(globString: string, appDir: string) {
   // string will be glob file
   const files = run(DEFAULT_PATTERN, {
     cwd,
+    ignore: IGNORE_PATTERN,
   });
   for (const file of files) {
     const exports = require(file);
