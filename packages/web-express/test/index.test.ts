@@ -1,5 +1,5 @@
 import { closeApp, creatApp, createHttpRequest } from './utils';
-import { IMidwayExpressApplication, MidwayExpressMiddlewareService} from '../src';
+import { IMidwayExpressApplication, MidwayExpressMiddlewareService } from '../src';
 import { createLightApp } from '@midwayjs/mock';
 
 describe('/test/feature.test.ts', () => {
@@ -17,7 +17,7 @@ describe('/test/feature.test.ts', () => {
     it('test setHeader decorator', async () => {
       const result = await createHttpRequest(app)
         .get('/api/set_header')
-        .query({ name: 'harry' });
+        .query({name: 'harry'});
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('bbb');
       expect(result.headers['bbb']).toEqual('aaa');
@@ -31,7 +31,7 @@ describe('/test/feature.test.ts', () => {
     });
 
     it('test get method with return value', async () => {
-      const result = await createHttpRequest(app).get('/api/').query({ name: 'harry' });
+      const result = await createHttpRequest(app).get('/api/').query({name: 'harry'});
       expect(result.status).toBe(201);
       expect(result.text).toBe('hello world,harry');
     });
@@ -39,7 +39,7 @@ describe('/test/feature.test.ts', () => {
     it('test post json data', async () => {
       const result = await createHttpRequest(app).post('/api/').send({
         bbbbb: 222,
-      })
+      });
       expect(result.status).toBe(200);
       expect(result.text).toBe('222');
     });
@@ -300,5 +300,10 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should disable default middleware', async () => {
+    const app = await creatApp('base-app-disable');
+    expect(app.getMiddleware().getNames()).toEqual(['session', 'anonymous']);
+    await closeApp(app);
+  });
 
 });

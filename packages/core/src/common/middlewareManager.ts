@@ -217,6 +217,24 @@ export class ContextMiddlewareManager<
     }
   }
 
+  public push(...items) {
+    items.forEach(item => {
+      if (typeof item !== 'string' && !this.getMiddlewareName(item)) {
+        item._name = 'anonymous';
+      }
+    });
+    return super.push(...items);
+  }
+
+  public unshift(...items): number {
+    items.forEach(item => {
+      if (typeof item !== 'string' && !this.getMiddlewareName(item)) {
+        item._name = 'anonymous';
+      }
+    });
+    return super.unshift(...items);
+  }
+
   /**
    * get middleware name list
    */

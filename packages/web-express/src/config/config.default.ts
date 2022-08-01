@@ -30,9 +30,12 @@ export const express = {
 };
 
 export const cookieParser: {
+  enable?: boolean;
   secret?: string | string[];
   options?: CookieOptions;
-} = {};
+} = {
+  enable: true,
+};
 
 export const bodyParser: {
   enable?: boolean;

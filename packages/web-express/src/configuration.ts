@@ -54,15 +54,19 @@ export class ExpressConfiguration {
       this.configService.getConfiguration('keys');
     const cookieParserConfig =
       this.configService.getConfiguration('cookieParser');
-    // add cookie parser middleware
-    this.expressFramework
-      .getMiddleware()
-      .insertFirst(
-        cookieParser(
-          cookieParserConfig.secret ?? keys,
-          cookieParserConfig.options
-        )
-      );
+
+    if (cookieParserConfig.enable) {
+      // add cookie parser middleware
+      this.expressFramework
+        .getMiddleware()
+        .insertFirst(
+          cookieParser(
+            cookieParserConfig.secret ?? keys,
+            cookieParserConfig.options
+          )
+        );
+    }
+
     // add body parser
     const bodyparserConfig = this.configService.getConfiguration('bodyParser');
     if (bodyparserConfig.enable) {
