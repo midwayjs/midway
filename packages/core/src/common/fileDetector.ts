@@ -6,6 +6,7 @@ import {
 import { Types, ResolveFilter, getProviderName } from '@midwayjs/decorator';
 import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
+import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../interface';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
@@ -22,9 +23,8 @@ export abstract class AbstractFileDetector<T> implements IFileDetector {
   }
 }
 
-const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
+const DEFAULT_GLOB_PATTERN = ['**/**.tsx'].concat(DEFAULT_PATTERN);
 const DEFAULT_IGNORE_PATTERN = [
-  '**/**.d.ts',
   '**/logs/**',
   '**/run/**',
   '**/public/**',
@@ -35,7 +35,7 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/**.test.ts',
   '**/**.test.js',
   '**/__test__/**',
-];
+].concat(IGNORE_PATTERN);
 
 export class DirectoryFileDetector extends AbstractFileDetector<{
   loadDir: string | string[];
@@ -54,7 +54,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
 
     for (const dir of loadDirs) {
       const fileResults = run(
-        DEFAULT_PATTERN.concat(this.options.pattern || []).concat(
+        DEFAULT_GLOB_PATTERN.concat(this.options.pattern || []).concat(
           this.extraDetectorOptions.pattern || []
         ),
         {

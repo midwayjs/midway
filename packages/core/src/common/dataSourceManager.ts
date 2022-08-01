@@ -6,9 +6,8 @@ import { MidwayParameterError } from '../error';
 import { run } from '@midwayjs/glob';
 import { join } from 'path';
 import { Types } from '@midwayjs/decorator';
+import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../interface';
 
-const DEFAULT_PATTERN = ['**/**.ts', '**/**.js'];
-const IGNORE_PATTERN = ['**/**.d.ts'];
 export abstract class DataSourceManager<T> {
   protected dataSource: Map<string, T> = new Map();
   protected options = {};
