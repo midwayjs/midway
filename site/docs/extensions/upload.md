@@ -92,8 +92,14 @@ export class HomeController {
 }
 ```
 
+:::caution
+
+如果同时开启了 swagger 组件，请务必添加上传参数的类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错，更多请参考 swagger 的文件上传章节。
+
+:::
 
 ## 配置示例
+
 ```typescript
 // src/config/config.default.ts
 import { uploadWhiteList } from '@midwayjs/upload';
@@ -222,3 +228,4 @@ fetch('/api/upload', {
 ## Postman 测试示例
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01iv9ESW1uIShNiRjBF_!!6000000006014-2-tps-2086-1746.png)
+
