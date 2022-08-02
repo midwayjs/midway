@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.8](https://github.com/midwayjs/midway/compare/v3.4.7...v3.4.8) (2022-08-02)
+
+
+### Performance Improvements
+
+* add ctx attach hook ([#2189](https://github.com/midwayjs/midway/issues/2189)) ([04a5b3f](https://github.com/midwayjs/midway/commit/04a5b3f6e0cbfc251c115a486948b0c3401ba4df))
+
+
+
+
+
 ## [3.4.7](https://github.com/midwayjs/midway/compare/v3.4.6...v3.4.7) (2022-08-01)
 
 
