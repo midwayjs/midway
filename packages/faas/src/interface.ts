@@ -69,6 +69,7 @@ export interface IFaaSConfigurationOptions extends IConfigurationOptions {
     getFunctionName(): string;
     getFunctionServiceName(): string;
     runAppHook?(app: Application): void;
+    runContextHook?(ctx: Context): void;
   };
 }
 
