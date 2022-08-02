@@ -133,7 +133,7 @@ export default defineConfig({
 
 在你的 CI / CD 工作流中，需要针对以下文件做单独处理。
 
-- index.html：部署至单独的托管服务，如 Nginx / CDN 等，该服务只复杂静态页面渲染
+- index.html：部署至单独的托管服务，如 Nginx / CDN 等，该服务只负责静态页面渲染
 - 静态资源：部署至 CDN，如 Aliyun OSS 等，该服务可以提供静态资源的 CDN 加速
 - Api 服务：部署至你的服务器中
 
