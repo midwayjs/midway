@@ -61,16 +61,15 @@ export class MikroConfiguration implements ILifeCycle {
     this.dataSourceManager = await container.getAsync(MikroDataSourceManager);
 
     const names = this.dataSourceManager.getDataSourceNames();
-    if (names.length === 1) {
-      // 多个的话，不知道用哪个数据源，所以这里无法判断出来
+    const entityManagers = names.map(name => {
+      return this.dataSourceManager.getDataSource(name).em;
+    });
+    if (names.length > 0) {
       // create mikro request scope
       // https://mikro-orm.io/docs/identity-map
       this.applicationManager.getApplications().forEach(app => {
         app.useMiddleware(async (ctx, next) => {
-          return await RequestContext.createAsync(
-            this.dataSourceManager.getDataSource(names[0]).em,
-            next
-          );
+          return await RequestContext.createAsync(entityManagers, next);
         });
       });
     }
