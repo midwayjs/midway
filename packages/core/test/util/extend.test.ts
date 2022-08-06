@@ -560,4 +560,21 @@ describe('util/extend.test.ts', function () {
     );
   });
 
+  it('should test null merge', function () {
+    let r = extend(true, {
+      a: 1
+    }, {a: null});
+    expect(r.a).toBe(null);
+
+    r = extend(true, {
+      a: undefined
+    }, {a: null});
+    expect(r.a).toBe(null);
+
+    r = extend(true, {
+      a: null
+    }, {a: undefined});
+    expect(r.a).toBe(null);
+  });
+
 });
