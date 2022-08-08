@@ -108,6 +108,10 @@ export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
    * http global prefix
    */
   globalPrefix?: string;
+  /**
+   * http query parser mode, default is extended
+   */
+  queryParseMode?: 'simple' | 'extended';
 }
 
 /**

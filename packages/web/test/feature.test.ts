@@ -127,4 +127,24 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test query parser #2162', async () => {
+    const app = await creatApp('feature/base-app-query-parser');
+    let result = await createHttpRequest(app)
+      .get('/query_array')
+      .query({
+        appId: '31062',
+        flowId: '1330',
+        mixFlowInstIds: ['108015365', '108015366'],
+        flowInstIds: ['103137222', '103137223']
+      });
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(JSON.stringify({"appId":"31062","flowId":"1330","mixFlowInstIds":["108015365","108015366"],"flowInstIds":["103137222","103137223"]}));
+
+    result = await createHttpRequest(app)
+      .get('/query_array_duplicate?appId=123&appId=456');
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(JSON.stringify({"appId":["123","456"]}));
+  });
+
 });
