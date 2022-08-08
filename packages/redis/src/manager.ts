@@ -21,6 +21,8 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
   @Config('redis')
   redisConfig;
 
+  private isReady = false;
+
   @Init()
   async init() {
     await this.initClients(this.redisConfig);
@@ -74,13 +76,19 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
       client = new Redis(config);
     }
 
+    client.on('reconnecting', (time: string) => {
+      this.logger.warn('[midway:redis] client reconnecting %s', time);
+    });
+
     await new Promise<void>((resolve, reject) => {
       client.on('connect', () => {
+        this.isReady = true;
         this.logger.info('[midway:redis] client connect success');
         resolve();
       });
       client.on('error', err => {
         this.logger.error('[midway:redis] client error: %s', err);
+        if (!this.isReady) this.destroyClient(client);
         reject(err);
       });
     });
