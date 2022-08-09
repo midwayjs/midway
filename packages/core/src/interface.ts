@@ -603,7 +603,7 @@ export interface IMidwayFramework<
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
   getMiddleware(): ContextMiddlewareManager<CTX, ResOrNext, Next>;
   applyMiddleware(
-    lastMiddleware?: CommonMiddleware<CTX, ResOrNext, Next>
+    lastMiddleware?: CommonMiddlewareUnion<CTX, ResOrNext, Next>
   ): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
   useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>);
 }
