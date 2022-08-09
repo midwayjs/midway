@@ -75,16 +75,18 @@ export abstract class DataSourceManager<T> {
     return this.checkConnected(this.getDataSource(dataSourceName));
   }
 
-  public async createInstance(config, clientName): Promise<T | void> {
+  public async createInstance(
+    config,
+    clientName,
+    cacheInstance = true
+  ): Promise<T | void> {
     // options.default will be merge in to options.clients[id]
     config = extend(true, {}, this.options['default'], config);
     const client = await this.createDataSource(config, clientName);
-    if (client) {
-      if (clientName) {
-        this.dataSource.set(clientName, client);
-      }
-      return client;
+    if (cacheInstance && clientName && client) {
+      this.dataSource.set(clientName, client);
     }
+    return client;
   }
 
   /**
