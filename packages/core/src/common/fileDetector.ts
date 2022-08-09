@@ -3,7 +3,7 @@ import {
   IMidwayContainer,
   IObjectDefinition,
 } from '../interface';
-import { Types, ResolveFilter, getProviderName } from '@midwayjs/decorator';
+import { Types, getProviderName } from '@midwayjs/decorator';
 import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../interface';
@@ -38,13 +38,12 @@ const DEFAULT_IGNORE_PATTERN = [
 ].concat(IGNORE_PATTERN);
 
 export class DirectoryFileDetector extends AbstractFileDetector<{
-  loadDir: string | string[];
-  pattern: string | string[];
-  ignore: string | string[];
-  namespace: string;
-  conflictCheck: boolean;
+  loadDir?: string | string[];
+  pattern?: string | string[];
+  ignore?: string | string[];
+  namespace?: string;
+  conflictCheck?: boolean;
 }> {
-  private directoryFilterArray: ResolveFilter[] = [];
   private duplicateModuleCheckSet = new Map();
 
   run(container) {
@@ -67,7 +66,11 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
 
       // 检查重复模块
       const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {
-        if (this.extraDetectorOptions.conflictCheck && Types.isClass(module)) {
+        if (
+          (this.options.conflictCheck ||
+            this.extraDetectorOptions.conflictCheck) &&
+          Types.isClass(module)
+        ) {
           const name = getProviderName(module);
           if (name) {
             if (this.duplicateModuleCheckSet.has(name)) {
@@ -84,45 +87,14 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
       };
 
       for (const file of fileResults) {
-        if (this.directoryFilterArray.length) {
-          for (const resolveFilter of this.directoryFilterArray) {
-            if (typeof resolveFilter.pattern === 'string') {
-              if (file.includes(resolveFilter.pattern)) {
-                const exports = resolveFilter.ignoreRequire
-                  ? undefined
-                  : require(file);
-                resolveFilter.filter(exports, file, this);
-                continue;
-              }
-            } else if (Types.isRegExp(resolveFilter.pattern)) {
-              if ((resolveFilter.pattern as RegExp).test(file)) {
-                const exports = resolveFilter.ignoreRequire
-                  ? undefined
-                  : require(file);
-                resolveFilter.filter(exports, file, this);
-                continue;
-              }
-            }
-
-            const exports = require(file);
-            // add module to set
-            container.bindClass(exports, {
-              namespace: this.options.namespace,
-              srcPath: file,
-              createFrom: 'file',
-              bindHook: checkDuplicatedHandler,
-            });
-          }
-        } else {
-          const exports = require(file);
-          // add module to set
-          container.bindClass(exports, {
-            namespace: this.options.namespace,
-            srcPath: file,
-            createFrom: 'file',
-            bindHook: checkDuplicatedHandler,
-          });
-        }
+        const exports = require(file);
+        // add module to set
+        container.bindClass(exports, {
+          namespace: this.options.namespace,
+          srcPath: file,
+          createFrom: 'file',
+          bindHook: checkDuplicatedHandler,
+        });
       }
     }
 
@@ -132,8 +104,8 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
 }
 
 export class CustomModuleDetector extends AbstractFileDetector<{
-  modules: any[];
-  namespace: string;
+  modules?: any[];
+  namespace?: string;
 }> {
   run(container) {
     for (const module of this.options.modules) {
