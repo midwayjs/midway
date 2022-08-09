@@ -14,8 +14,8 @@ import {
 } from '../src';
 import { createLightFramework } from './util';
 import sinon = require('sinon');
-import { IMidwayApplication } from '../dist';
-import { NoopContextManager } from '../dist/common/asyncContextManager';
+import { IMidwayApplication } from '../src';
+import { NoopContextManager } from '../src/common/asyncContextManager';
 
 @Provide()
 class TestModule {
