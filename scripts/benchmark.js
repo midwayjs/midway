@@ -74,7 +74,12 @@ const cannon = () => {
 
   console.log('Running benchmark...');
   const results = await cannon();
-  console.log(console.log(`QPS:  ${results.requests.average}`));
+  console.log(`QPS:  ${results.requests.average}`);
+
+  if (results.requests.average < 3000) {
+    throw new Error('Benchmark failed, QPS is too low');
+  }
+
   await wait(10000);
 
   // 过 10s 采集一次内存
@@ -105,7 +110,12 @@ const cannon = () => {
   // 继续压测 30s
   console.log('Running benchmark 2...');
   const secondResult = await cannon();
-  console.log(console.log(`QPS:  ${secondResult.requests.average}`));
+  console.log(`QPS:  ${secondResult.requests.average}`);
+
+  if (results.requests.average < 3000) {
+    throw new Error('Benchmark failed, QPS is too low');
+  }
+
   await wait(10000);
 
   // 过 10s 采集一次内存
