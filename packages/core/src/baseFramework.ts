@@ -396,16 +396,15 @@ export abstract class BaseFramework<
         this.app
       );
       await this.filterManager.init(this.applicationContext);
-
-      if (lastMiddleware) {
-        lastMiddleware = Array.isArray(lastMiddleware)
-          ? lastMiddleware
-          : [lastMiddleware];
-        return await this.middlewareService.compose(
-          [this.composeMiddleware, ...lastMiddleware],
-          this.app
-        );
-      }
+    }
+    if (lastMiddleware) {
+      lastMiddleware = Array.isArray(lastMiddleware)
+        ? lastMiddleware
+        : [lastMiddleware];
+      return await this.middlewareService.compose(
+        [this.composeMiddleware, ...lastMiddleware],
+        this.app
+      );
     }
     return this.composeMiddleware;
   }
