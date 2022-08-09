@@ -110,25 +110,51 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(instance.getDataSource('test')).toMatchSnapshot();
   });
 
-  it('should createInstance() with cacheInstance: default true', async () => {
+  it('should createInstance() without cacheInstance (default true)', async () => {
     class EntityA {}
 
     const instance = new CustomDataSourceFactory();
     expect(instance.getName()).toEqual('test');
 
-    const name ='test'
-    await instance.createInstance({
-          host: 'localhost',    //数据库地址,默认本机
-          port:'3306',
-          dialect: 'mysql',
-          pool: {   //连接池设置
-            max: 5, //最大连接数
-            min: 0, //最小连接数
-            idle: 10000
-          },
-          entities: [EntityA, EntityA, '/abc']
-    }, name)
-    expect(instance.getDataSourceNames()).toEqual([name]);
+
+    const clientName ='test'
+    const config = {
+      host: 'localhost',    //数据库地址,默认本机
+      port: '3306',
+      dialect: 'mysql',
+      pool: {   //连接池设置
+        max: 5, //最大连接数
+        min: 0, //最小连接数
+        idle: 10000
+      },
+      entities: [EntityA, EntityA, '/abc']
+    }
+
+    await instance.createInstance(config, clientName)
+    expect(instance.getDataSourceNames()).toEqual([clientName]);
+  });
+
+  it('should createInstance() with cacheInstance: true', async () => {
+    class EntityA {}
+
+    const instance = new CustomDataSourceFactory();
+    expect(instance.getName()).toEqual('test');
+
+    const clientName ='test'
+    const config = {
+      host: 'localhost',    //数据库地址,默认本机
+      port: '3306',
+      dialect: 'mysql',
+      pool: {   //连接池设置
+        max: 5, //最大连接数
+        min: 0, //最小连接数
+        idle: 10000
+      },
+      entities: [EntityA, EntityA, '/abc']
+    }
+
+    await instance.createInstance(config, clientName, { cacheInstance: true })
+    expect(instance.getDataSourceNames()).toEqual([clientName]);
   });
 
   it('should createInstance() with cacheInstance: false', async () => {
@@ -137,20 +163,22 @@ describe('test/common/dataSourceManager.test.ts', () => {
     const instance = new CustomDataSourceFactory();
     expect(instance.getName()).toEqual('test');
 
-    const name ='test'
-    await instance.createInstance({
-          host: 'localhost',    //数据库地址,默认本机
-          port:'3306',
-          dialect: 'mysql',
-          pool: {   //连接池设置
-            max: 5, //最大连接数
-            min: 0, //最小连接数
-            idle: 10000
-          },
-          entities: [EntityA, EntityA, '/abc']
-    }, name, false)
-    expect(instance.getDataSourceNames()).not.toEqual([name]);
-    expect(instance.getDataSource(name)).toBeUndefined();
+    const clientName ='test'
+    const config = {
+      host: 'localhost',    //数据库地址,默认本机
+      port: '3306',
+      dialect: 'mysql',
+      pool: {   //连接池设置
+        max: 5, //最大连接数
+        min: 0, //最小连接数
+        idle: 10000
+      },
+      entities: [EntityA, EntityA, '/abc']
+    }
+
+    await instance.createInstance(config, clientName, { cacheInstance: false })
+    expect(instance.getDataSourceNames()).not.toEqual([clientName]);
+    expect(instance.getDataSource(clientName)).toBeUndefined();
   });
 
   it('should test will got error when no data source', async () => {

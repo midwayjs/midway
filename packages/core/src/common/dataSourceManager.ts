@@ -38,7 +38,10 @@ export abstract class DataSourceManager<T> {
           dataSourceOptions['entities'] = Array.from(entities);
         }
         // create data source
-        await this.createInstance(dataSourceOptions, dataSourceName);
+        const opts: CreateInstanceOptions = {
+          cacheInstance: options.cacheInstance, // will default true
+        };
+        await this.createInstance(dataSourceOptions, dataSourceName, opts);
       }
     } else {
       throw new MidwayParameterError(
@@ -76,14 +79,19 @@ export abstract class DataSourceManager<T> {
   }
 
   public async createInstance(
-    config,
-    clientName,
-    cacheInstance = true
+    config: any,
+    clientName: any,
+    options?: CreateInstanceOptions
   ): Promise<T | void> {
+    const cache =
+      options && typeof options.cacheInstance === 'boolean'
+        ? options.cacheInstance
+        : true;
+
     // options.default will be merge in to options.clients[id]
-    config = extend(true, {}, this.options['default'], config);
-    const client = await this.createDataSource(config, clientName);
-    if (cacheInstance && clientName && client) {
+    const configNow = extend(true, {}, this.options['default'], config);
+    const client = await this.createDataSource(configNow, clientName);
+    if (cache && clientName && client) {
       this.dataSource.set(clientName, client);
     }
     return client;
@@ -138,4 +146,8 @@ export function globModels(globString: string, appDir: string) {
     }
   }
   return models;
+}
+
+export interface CreateInstanceOptions {
+  cacheInstance?: boolean | undefined;
 }
