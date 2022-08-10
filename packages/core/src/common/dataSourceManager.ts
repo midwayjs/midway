@@ -75,7 +75,8 @@ export abstract class DataSourceManager<T> {
    * @param dataSourceName
    */
   public async isConnected(dataSourceName: string): Promise<boolean> {
-    return this.checkConnected(this.getDataSource(dataSourceName));
+    const inst = this.getDataSource(dataSourceName);
+    return inst ? this.checkConnected(inst) : false;
   }
 
   public async createInstance(
