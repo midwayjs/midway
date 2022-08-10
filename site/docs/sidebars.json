@@ -117,7 +117,8 @@
         "extensions/cache",
         "extensions/oss",
         "extensions/cos",
-        "extensions/tablestore"
+        "extensions/tablestore",
+        "extensions/mikro"
       ]
     },
     {

@@ -559,13 +559,15 @@ export default {
 
 `@midwayjs/web`  所有参数如下：
 
-| port     | number  | 必填，启动的端口             |
-| -------- | ------- | ---------------------------- |
-| key      | string  | Buffer                       |
-| cert     | string  | Buffer                       |
-| ca       | string  | Buffer                       |
-| hostname | string  | 监听的 hostname，默认 127.1  |
-| http2    | boolean | 可选，http2 支持，默认 false |
+| 配置项         | 类型             | 描述                         |
+| -------------- | ---------------- | ---------------------------- |
+| port           | number           | 必填，启动的端口             |
+| key            | string           | Buffer                       |
+| cert           | string           | Buffer                       |
+| ca             | string           | Buffer                       |
+| hostname       | string           | 监听的 hostname，默认 127.1  |
+| http2          | boolean          | 可选，http2 支持，默认 false |
+| queryParseMode | simple\|extended | 默认为 extended              |
 
 以上的属性，对本地和使用 `bootstrap.js` 部署的应用生效。
 
@@ -676,6 +678,25 @@ export default {
     // ...
   },
 };
+```
+
+
+
+### Query 数组解析
+
+默认情况下，`ctx.query` 会解析为忽略数组的情况，而 `ctx.queries` 会严格的将所有的字段都变成数组。
+
+如果调整 `queryParseMode` ，则可以使 `ctx.query` 变为两者之间的结构（querystring 的结果）。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  egg: {
+    // ...
+    queryParseMode: 'simple',
+  },
+}
 ```
 
 
