@@ -345,25 +345,25 @@ export abstract class BaseFramework<
   public async applyMiddleware<R, N>(
     lastMiddleware?: CommonMiddlewareUnion<CTX, R, N>
   ): Promise<MiddlewareRespond<CTX, R, N>> {
-    if (!this.applicationContext.hasObject(ASYNC_CONTEXT_MANAGER_KEY)) {
-      const asyncContextManagerEnabled =
-        this.configService.getConfiguration('asyncContextManager.enable') ||
-        false;
-
-      const contextManager: AsyncContextManager = asyncContextManagerEnabled
-        ? this.bootstrapOptions?.asyncContextManager || new NoopContextManager()
-        : new NoopContextManager();
-
-      if (asyncContextManagerEnabled) {
-        contextManager.enable();
-      }
-      this.applicationContext.registerObject(
-        ASYNC_CONTEXT_MANAGER_KEY,
-        contextManager
-      );
-    }
-
     if (!this.composeMiddleware) {
+      if (!this.applicationContext.hasObject(ASYNC_CONTEXT_MANAGER_KEY)) {
+        const asyncContextManagerEnabled =
+          this.configService.getConfiguration('asyncContextManager.enable') ||
+          false;
+
+        const contextManager: AsyncContextManager = asyncContextManagerEnabled
+          ? this.bootstrapOptions?.asyncContextManager ||
+            new NoopContextManager()
+          : new NoopContextManager();
+
+        if (asyncContextManagerEnabled) {
+          contextManager.enable();
+        }
+        this.applicationContext.registerObject(
+          ASYNC_CONTEXT_MANAGER_KEY,
+          contextManager
+        );
+      }
       this.middlewareManager.insertFirst((async (ctx: any, next: any) => {
         // warp with context manager
         const rootContext = ASYNC_ROOT_CONTEXT.setValue(ASYNC_CONTEXT_KEY, ctx);
@@ -405,9 +405,8 @@ export abstract class BaseFramework<
         [this.composeMiddleware, ...lastMiddleware],
         this.app
       );
-    } else {
-      return this.composeMiddleware;
     }
+    return this.composeMiddleware;
   }
 
   public getLogger(name?: string) {
