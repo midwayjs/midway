@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
+
+
+### Bug Fixes
+
+* support mikro-orm multi entities manager in request context ([#2193](https://github.com/midwayjs/midway/issues/2193)) ([60f65b2](https://github.com/midwayjs/midway/commit/60f65b2caa77b6770af65d7a24fa8023f1bc2085))
+
+
+
+
+
 ## [3.4.7](https://github.com/midwayjs/midway/compare/v3.4.6...v3.4.7) (2022-08-01)
 
 **Note:** Version bump only for package @midwayjs/mikro
