@@ -23,7 +23,7 @@
     "email": "czy88840616@gmail.com"
   },
   "engines": {
-    "node": ">=15.14.0"
+    "node": ">=14.0.0"
   },
   "license": "MIT",
   "scripts": {
