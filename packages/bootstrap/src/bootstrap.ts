@@ -47,7 +47,9 @@ export class BootstrapStarter {
   }
 
   public async stop() {
-    await destroyGlobalApplicationContext(this.applicationContext);
+    if (this.applicationContext) {
+      await destroyGlobalApplicationContext(this.applicationContext);
+    }
   }
 
   public getApplicationContext() {
