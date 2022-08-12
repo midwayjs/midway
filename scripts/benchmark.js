@@ -56,7 +56,7 @@ const cannon = () => {
   console.log(`Current pid is ${child.pid}`);
   const firstMem = await collectMem();
   console.log(
-    `first memory（init）, rss=${format(firstMem.rss)}, heapUsed=${format(
+    `first memory (init), rss=${format(firstMem.rss)}, heapUsed=${format(
       firstMem.heapUsed
     )}`
   );
@@ -82,27 +82,27 @@ const cannon = () => {
 
   await wait(10000);
 
-  // 过 10s 采集一次内存
+  // get memory every 10s
   const secondMem = await collectMem();
   console.log(
-    `second memory（before gc), rss=${format(secondMem.rss)}, heapUsed=${format(
+    `second memory (before gc), rss=${format(secondMem.rss)}, heapUsed=${format(
       secondMem.heapUsed
     )}`
   );
 
   child.send({ action: 'gc' });
-  // 等 10s gc
+  // wait for GC
   await wait(10000);
 
-  // gc 后采集一次内存
+  // get memory after GC
   const thirdMem = await collectMem();
   console.log(
-    `third memory（after gc), rss=${format(thirdMem.rss)}, heapUsed =${format(
+    `third memory (after gc), rss=${format(thirdMem.rss)}, heapUsed =${format(
       thirdMem.heapUsed
     )}`
   );
 
-  // 第一次检查，gc 后和初始化持平
+  // memory after gc against before
   if (Math.abs(thirdMem.heapUsed / firstMem.heapUsed) > 1.1) {
     throw new Error('memory leak warning');
   }
@@ -121,7 +121,7 @@ const cannon = () => {
   // 过 10s 采集一次内存
   const fourthMem = await collectMem();
   console.log(
-    `fourth memory（before gc2), rss=${format(
+    `fourth memory (before gc2), rss=${format(
       fourthMem.rss
     )}, heapUsed=${format(fourthMem.heapUsed)}`
   );
@@ -133,7 +133,7 @@ const cannon = () => {
   // gc 后采集一次内存
   const fifthMem = await collectMem();
   console.log(
-    `fifth memory（after gc2), rss=${format(fifthMem.rss)}, heapUsed =${format(
+    `fifth memory (after gc2), rss=${format(fifthMem.rss)}, heapUsed =${format(
       fifthMem.heapUsed
     )}`
   );
