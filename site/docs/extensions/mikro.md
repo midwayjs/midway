@@ -234,7 +234,7 @@ export class BookController {
 
 ### 1、Node 版本
 
-Mikro-orm 对 Node 版本有一些限制，必须为 `>=15.14.0` ，所以 `@midwayjs/mikro` 组件的使用规则也如此。
+Mikro-orm 对 Node 版本有一些限制，必须为 `>=14.0.0` ，所以 `@midwayjs/mikro` 组件的使用规则也如此。
 
 
 
