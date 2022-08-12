@@ -23,22 +23,17 @@ export class KafkaConsumerServer
   }
 
   async connect(options: KafkaConfig, consumerOptions: ConsumerConfig) {
-    try {
-      this.connection = new Kafka(options).consumer(consumerOptions);
-      this.connection.on('consumer.connect', () => {
-        this.loggers.info('Kafka consumer connected!');
-      });
-      this.connection.on('consumer.disconnect', err => {
-        if (err) {
-          this.loggers.error('Kafka consumer disconnected', err);
-        } else {
-          this.loggers.info('Kafka consumer disconnected!');
-        }
-      });
-    } catch (error) {
-      this.loggers.error('Kafka consumer connect fail', error);
-      await this.closeConnection();
-    }
+    this.connection = new Kafka(options).consumer(consumerOptions);
+    this.connection.on('consumer.connect', () => {
+      this.loggers.info('Kafka consumer connected!');
+    });
+    this.connection.on('consumer.disconnect', err => {
+      if (err) {
+        this.loggers.error('Kafka consumer disconnected', err);
+      } else {
+        this.loggers.info('Kafka consumer disconnected!');
+      }
+    });
   }
 
   protected async closeConnection() {
