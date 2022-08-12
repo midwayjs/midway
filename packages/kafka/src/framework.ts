@@ -27,12 +27,17 @@ export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
   }
 
   public async run(): Promise<void> {
-    await this.app.connect(
-      this.configurationOptions.kafkaConfig,
-      this.configurationOptions.consumerConfig
-    );
-    await this.loadSubscriber();
-    this.logger.info('Kafka consumer server start success');
+    try {
+      await this.app.connect(
+        this.configurationOptions.kafkaConfig,
+        this.configurationOptions.consumerConfig
+      );
+      await this.loadSubscriber();
+      this.logger.info('Kafka consumer server start success');
+    } catch (error) {
+      this.logger.error('Kafka consumer connect fail', error);
+      await this.app.closeConnection();
+    }
   }
 
   private async loadSubscriber() {
