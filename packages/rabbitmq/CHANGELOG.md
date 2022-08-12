@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency amqp-connection-manager to v4.1.6 ([#2225](https://github.com/midwayjs/midway/issues/2225)) ([ff7506a](https://github.com/midwayjs/midway/commit/ff7506a7bb986409e8c9a85ea55a23a3d935bdf5))
+
+
+
+
+
 ## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
 
 

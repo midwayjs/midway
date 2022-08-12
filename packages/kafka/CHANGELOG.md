@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
+
+
+### Bug Fixes
+
+* catch kafaka start error ([#2230](https://github.com/midwayjs/midway/issues/2230)) ([60c7c41](https://github.com/midwayjs/midway/commit/60c7c41eaaaa062bf63ca1f938dd2cbd15bd2f7d))
+
+
+
+
+
 ## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
 
 **Note:** Version bump only for package @midwayjs/kafka

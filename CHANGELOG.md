@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
+
+
+### Bug Fixes
+
+* catch kafaka start error ([#2230](https://github.com/midwayjs/midway/issues/2230)) ([60c7c41](https://github.com/midwayjs/midway/commit/60c7c41eaaaa062bf63ca1f938dd2cbd15bd2f7d))
+* **deps:** update dependency @grpc/grpc-js to v1.6.9 ([#2223](https://github.com/midwayjs/midway/issues/2223)) ([e0c6d4d](https://github.com/midwayjs/midway/commit/e0c6d4d78410d38149d4347a3bfb270498ae5f14))
+* **deps:** update dependency amqp-connection-manager to v4.1.6 ([#2225](https://github.com/midwayjs/midway/issues/2225)) ([ff7506a](https://github.com/midwayjs/midway/commit/ff7506a7bb986409e8c9a85ea55a23a3d935bdf5))
+* revert node 14 supported ([#2219](https://github.com/midwayjs/midway/issues/2219)) ([08e4152](https://github.com/midwayjs/midway/commit/08e4152bb9530b699de4150c2494f04795348719))
+* stop duplicate invoke ([#2221](https://github.com/midwayjs/midway/issues/2221)) ([6bd3f57](https://github.com/midwayjs/midway/commit/6bd3f57dbd68742c5b789335b46e929b7f71c6c4))
+
+
+
+
+
 ## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
 
 

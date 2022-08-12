@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
+
+
+### Bug Fixes
+
+* revert node 14 supported ([#2219](https://github.com/midwayjs/midway/issues/2219)) ([08e4152](https://github.com/midwayjs/midway/commit/08e4152bb9530b699de4150c2494f04795348719))
+
+
+
+
+
 ## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
 
 

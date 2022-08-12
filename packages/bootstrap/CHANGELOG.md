@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
+
+
+### Bug Fixes
+
+* stop duplicate invoke ([#2221](https://github.com/midwayjs/midway/issues/2221)) ([6bd3f57](https://github.com/midwayjs/midway/commit/6bd3f57dbd68742c5b789335b46e929b7f71c6c4))
+
+
+
+
+
 ## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
 
 **Note:** Version bump only for package @midwayjs/bootstrap
