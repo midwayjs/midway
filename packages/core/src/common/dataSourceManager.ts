@@ -15,38 +15,38 @@ export abstract class DataSourceManager<T> {
 
   protected async initDataSource(options: any, appDir: string): Promise<void> {
     this.options = options;
-    if (options.dataSource) {
-      for (const dataSourceName in options.dataSource) {
-        const dataSourceOptions = options.dataSource[dataSourceName];
-        if (dataSourceOptions['entities']) {
-          const entities = new Set();
-          // loop entities and glob files to model
-          for (const entity of dataSourceOptions['entities']) {
-            if (typeof entity === 'string') {
-              // string will be glob file
-              const models = globModels(entity, appDir);
-              for (const model of models) {
-                entities.add(model);
-                this.modelMapping.set(model, dataSourceName);
-              }
-            } else {
-              // model will be add to array
-              entities.add(entity);
-              this.modelMapping.set(entity, dataSourceName);
-            }
-          }
-          dataSourceOptions['entities'] = Array.from(entities);
-        }
-        // create data source
-        const opts: CreateInstanceOptions = {
-          cacheInstance: options.cacheInstance, // will default true
-        };
-        await this.createInstance(dataSourceOptions, dataSourceName, opts);
-      }
-    } else {
+    if (!options.dataSource) {
       throw new MidwayParameterError(
         'DataSourceManager must set options.dataSource.'
       );
+    }
+
+    for (const dataSourceName in options.dataSource) {
+      const dataSourceOptions = options.dataSource[dataSourceName];
+      if (dataSourceOptions['entities']) {
+        const entities = new Set();
+        // loop entities and glob files to model
+        for (const entity of dataSourceOptions['entities']) {
+          if (typeof entity === 'string') {
+            // string will be glob file
+            const models = globModels(entity, appDir);
+            for (const model of models) {
+              entities.add(model);
+              this.modelMapping.set(model, dataSourceName);
+            }
+          } else {
+            // model will be add to array
+            entities.add(entity);
+            this.modelMapping.set(entity, dataSourceName);
+          }
+        }
+        dataSourceOptions['entities'] = Array.from(entities);
+      }
+      // create data source
+      const opts: CreateInstanceOptions = {
+        cacheInstance: options.cacheInstance, // will default true
+      };
+      await this.createInstance(dataSourceOptions, dataSourceName, opts);
     }
   }
 
