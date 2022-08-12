@@ -12,6 +12,7 @@ do
       echo ">>>>>> install dependency"
       echo ">>>>>>" $pkg
       npm install
+      npm run build
     fi
 done
 cd $cwd
