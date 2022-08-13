@@ -1,10 +1,7 @@
 import { KafkaConfig, Producer, ProducerConfig } from 'kafkajs';
 
 const connect = async () => ({
-  producer: () => {
-    // connect: () => {},
-    // disconnect: () =>{}
-  },
+  producer: () => {},
   cousumer: () => {},
 });
 

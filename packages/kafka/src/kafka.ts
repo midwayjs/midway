@@ -8,7 +8,7 @@ export class KafkaConsumerServer
   implements IKafkaApplication
 {
   protected loggers: ILogger;
-  protected connection: Consumer = null;
+  public connection: Consumer = null;
 
   constructor(options: any = {}) {
     super();
