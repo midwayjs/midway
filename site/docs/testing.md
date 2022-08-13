@@ -681,3 +681,9 @@ $ midway-bin test --ts --mocha -r tsconfig-paths/register
 :::info
 注意，由于 mocha 没有自带断言工具，需要使用其他如 assert，chai 等工具进行断言。
 :::
+
+
+
+## 关于 mock 数据
+
+模拟数据是一个可以在开发和测试中都通用的能力，更多请查看 [模拟数据](./mock)。

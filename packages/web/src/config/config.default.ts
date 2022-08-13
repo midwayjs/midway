@@ -43,6 +43,7 @@ export default appInfo => {
         ctx.url;
       return `${info.timestamp} ${info.LEVEL} ${info.pid} [${label}] ${info.message}`;
     },
+    queryParseMode: 'extended',
   };
 
   exports.pluginOverwrite = false;

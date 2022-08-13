@@ -14,8 +14,8 @@ import {
 } from '../src';
 import { createLightFramework } from './util';
 import sinon = require('sinon');
-import { IMidwayApplication } from '../dist';
-import { NoopContextManager } from '../dist/common/asyncContextManager';
+import { IMidwayApplication } from '../src';
+import { NoopContextManager } from '../src/common/asyncContextManager';
 
 @Provide()
 class TestModule {
@@ -631,9 +631,11 @@ describe('/test/baseFramework.test.ts', () => {
     framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
 
     // compose 一下，再同时插入一个
-    const fn = await framework.applyMiddleware(async (ctx, next: any) => {
+    const fn = await framework.applyMiddleware([async (ctx, next: any) => {
       return 'gogogo, ' + await next();
-    });
+    }, async (ctx, next: any) => {
+      return 'bbb, ' + await next();
+    }]);
 
     // 建一个新的
     const middlewareManager = new ContextMiddlewareManager();
@@ -650,7 +652,7 @@ describe('/test/baseFramework.test.ts', () => {
       {} as any
     );
 
-    expect(await composeMiddleware({})).toEqual('hello world gogogo, zhangting');
+    expect(await composeMiddleware({})).toEqual('hello world gogogo, bbb, zhangting');
   });
 
   it('load object config in configuration', async () => {

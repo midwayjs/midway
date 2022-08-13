@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
+
+**Note:** Version bump only for package @midwayjs/typeorm
+
+
+
+
+
+## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
+
+
+### Bug Fixes
+
+* typeorm config typings key ([#2192](https://github.com/midwayjs/midway/issues/2192)) ([6533942](https://github.com/midwayjs/midway/commit/6533942d88234234a3c7e5bcd877eb8c2200c7be))
+
+
+
+
+
 ## [3.4.7](https://github.com/midwayjs/midway/compare/v3.4.6...v3.4.7) (2022-08-01)
 
 **Note:** Version bump only for package @midwayjs/typeorm

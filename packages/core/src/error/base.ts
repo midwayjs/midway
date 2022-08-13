@@ -91,6 +91,9 @@ export class MidwayHttpError extends MidwayError {
       code ?? String(status),
       options
     );
+    if (resOrMessage && resOrMessage['stack']) {
+      this.stack = resOrMessage['stack'];
+    }
     this.status = status;
   }
 }

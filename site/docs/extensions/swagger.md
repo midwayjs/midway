@@ -412,9 +412,9 @@ async upload1(@Files() f: any[], @Fields() data: Cat) {
 }
 ```
 
-:::tip
+:::caution
 
-如需要 swagger 展示了，请务必添加类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错。
+如需 swagger 展示上传信息，请务必添加类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错。
 
 :::
 

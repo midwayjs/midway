@@ -46,6 +46,36 @@ Midway 的常用日志使用方法。
 
 上下文日志是关联框架上下文对象（Context） 的日志。
 
+我们可以通过 [获取到 ctx 对象](./req_res_app) 后，使用 `ctx.logger` 对象进行日志打印输出。
+
+比如：
+
+```typescript
+ctx.logger.info("hello world");
+ctx.logger.debug('debug info');
+ctx.logger.warn('WARNNING!!!!');
+
+// 错误日志记录，直接会将错误日志完整堆栈信息记录下来，并且输出到 errorLog 中
+// 为了保证异常可追踪，必须保证所有抛出的异常都是 Error 类型，因为只有 Error 类型才会带上堆栈信息，定位到问题。
+ctx.logger.error(new Error('custom error'));
+```
+
+在执行后，我们能在两个地方看到日志输出：
+
+
+- 控制台看到输出。
+- 日志目录的 midway-app.log 文件中
+
+
+输出结果：
+```text
+2021-07-22 14:50:59,388 INFO 7739 [-/::ffff:127.0.0.1/-/0ms GET /api/get_user] hello world
+```
+
+在注入的形式中，我们也可以直接使用 `@Inject() logger` 的形式来注入 `ctx.logger` ，和直接调用 `ctx.logger` 等价。
+
+比如：
+
 ```typescript
 import { Get, Inject, Controller, Provide } from '@midwayjs/decorator';
 import { ILogger } from '@midwayjs/logger';
@@ -61,29 +91,11 @@ export class HelloController {
 
   @Get("/")
   async hello(){
-    this.logger.info("hello world");
-    this.logger.debug('debug info');
-    this.logger.warn('WARNNING!!!!');
-
-    // 错误日志记录，直接会将错误日志完整堆栈信息记录下来，并且输出到 errorLog 中
-    // 为了保证异常可追踪，必须保证所有抛出的异常都是 Error 类型，因为只有 Error 类型才会带上堆栈信息，定位到问题。
-    this.logger.error(new Error('custom error'));
     // ...
 
     // this.logger === ctx.logger
   }
 }
-```
-访问后，我们能在两个地方看到日志输出：
-
-
-- 控制台看到输出。
-- 日志目录的 midway-app.log 文件中
-
-
-输出结果：
-```text
-2021-07-22 14:50:59,388 INFO 7739 [-/::ffff:127.0.0.1/-/0ms GET /api/get_user] hello world
 ```
 
 

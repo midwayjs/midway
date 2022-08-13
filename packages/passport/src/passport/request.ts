@@ -59,6 +59,7 @@ let keys = [
   'session',
   'body',
   'flash',
+  'query'
 ];
 
 // remove duplicates
@@ -79,7 +80,6 @@ const properties = {
           if (key === 'trust proxy') {
             return ctx.app.proxy;
           }
-
           return undefined;
         },
       };

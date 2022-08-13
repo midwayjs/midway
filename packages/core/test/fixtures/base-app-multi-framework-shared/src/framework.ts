@@ -1,5 +1,8 @@
 import { Framework, MidwayFrameworkType } from '@midwayjs/decorator';
-import { BaseFramework, CommonFilterUnion, CommonMiddleware, CommonMiddlewareUnion,
+import {
+  BaseFramework,
+  CommonFilterUnion,
+  CommonMiddlewareUnion,
   ContextMiddlewareManager,
   IMidwayApplication,
   IMidwayBootstrapOptions,
@@ -45,7 +48,7 @@ export class CustomThirdFramework implements IMidwayFramework<any, any, any, any
   isEnable(): boolean {
     return true;
   }
-  applyMiddleware(lastMiddleware?: CommonMiddleware<any, any, any>): Promise<MiddlewareRespond<any, any, any>> {
+  applyMiddleware(lastMiddleware?: CommonMiddlewareUnion<any, any, any>): Promise<MiddlewareRespond<any, any, any>> {
     throw new Error('Method not implemented.');
   }
   useMiddleware(Middleware: CommonMiddlewareUnion<any, any, any>) {

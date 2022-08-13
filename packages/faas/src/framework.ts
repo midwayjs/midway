@@ -277,6 +277,10 @@ export class MidwayFaaSFramework extends BaseFramework<
 
       context = this.getContext(context);
 
+      if (this.configurationOptions.applicationAdapter?.runContextHook) {
+        this.configurationOptions.applicationAdapter.runContextHook(context);
+      }
+
       const result = await (
         await this.applyMiddleware(async (ctx, next) => {
           const fn = await this.middlewareService.compose(

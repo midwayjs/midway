@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @grpc/grpc-js to v1.6.9 ([#2223](https://github.com/midwayjs/midway/issues/2223)) ([e0c6d4d](https://github.com/midwayjs/midway/commit/e0c6d4d78410d38149d4347a3bfb270498ae5f14))
+
+
+
+
+
+## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
+
+
+### Bug Fixes
+
+* **grpc:** 🐞 Uncaught TypeError: Cannot read properties… ([#2201](https://github.com/midwayjs/midway/issues/2201)) ([f5c993f](https://github.com/midwayjs/midway/commit/f5c993f29a788d0df30f41398cfbc71b5c41defa))
+
+
+
+
+
 ## [3.4.7](https://github.com/midwayjs/midway/compare/v3.4.6...v3.4.7) (2022-08-01)
 
 **Note:** Version bump only for package @midwayjs/grpc

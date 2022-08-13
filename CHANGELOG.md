@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
+
+
+### Bug Fixes
+
+* catch kafaka start error ([#2230](https://github.com/midwayjs/midway/issues/2230)) ([60c7c41](https://github.com/midwayjs/midway/commit/60c7c41eaaaa062bf63ca1f938dd2cbd15bd2f7d))
+* **deps:** update dependency @grpc/grpc-js to v1.6.9 ([#2223](https://github.com/midwayjs/midway/issues/2223)) ([e0c6d4d](https://github.com/midwayjs/midway/commit/e0c6d4d78410d38149d4347a3bfb270498ae5f14))
+* **deps:** update dependency amqp-connection-manager to v4.1.6 ([#2225](https://github.com/midwayjs/midway/issues/2225)) ([ff7506a](https://github.com/midwayjs/midway/commit/ff7506a7bb986409e8c9a85ea55a23a3d935bdf5))
+* revert node 14 supported ([#2219](https://github.com/midwayjs/midway/issues/2219)) ([08e4152](https://github.com/midwayjs/midway/commit/08e4152bb9530b699de4150c2494f04795348719))
+* stop duplicate invoke ([#2221](https://github.com/midwayjs/midway/issues/2221)) ([6bd3f57](https://github.com/midwayjs/midway/commit/6bd3f57dbd68742c5b789335b46e929b7f71c6c4))
+
+
+
+
+
+## [3.4.9](https://github.com/midwayjs/midway/compare/v3.4.8...v3.4.9) (2022-08-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency amqp-connection-manager to v4.1.4 ([#2206](https://github.com/midwayjs/midway/issues/2206)) ([c80e85f](https://github.com/midwayjs/midway/commit/c80e85f47288b3dfff93a29404187a9b15e8963e))
+* **deps:** update dependency tablestore to v5.2.1 ([#2197](https://github.com/midwayjs/midway/issues/2197)) ([7b6f3b5](https://github.com/midwayjs/midway/commit/7b6f3b587dc2bdf429c1f50f6af723b2d5b2431b))
+* **grpc:** 🐞 Uncaught TypeError: Cannot read properties… ([#2201](https://github.com/midwayjs/midway/issues/2201)) ([f5c993f](https://github.com/midwayjs/midway/commit/f5c993f29a788d0df30f41398cfbc71b5c41defa))
+* middleware repeat execute in request ([#2210](https://github.com/midwayjs/midway/issues/2210)) ([0466046](https://github.com/midwayjs/midway/commit/0466046a8843168459bcd5dedee4d17bad83301d))
+* query parser with array ([#2207](https://github.com/midwayjs/midway/issues/2207)) ([94ddd69](https://github.com/midwayjs/midway/commit/94ddd691e2c0a8e06d88704d4e85a39443deef52))
+* super agent typings ([#2204](https://github.com/midwayjs/midway/issues/2204)) ([87572a6](https://github.com/midwayjs/midway/commit/87572a63ba8226c2380bfdd3252c271336f6bfeb))
+* support mikro-orm multi entities manager in request context ([#2193](https://github.com/midwayjs/midway/issues/2193)) ([60f65b2](https://github.com/midwayjs/midway/commit/60f65b2caa77b6770af65d7a24fa8023f1bc2085))
+* typeorm config typings key ([#2192](https://github.com/midwayjs/midway/issues/2192)) ([6533942](https://github.com/midwayjs/midway/commit/6533942d88234234a3c7e5bcd877eb8c2200c7be))
+
+
+### Features
+
+* **core:** createInstance() accepts 3rd param cacheInstance (default true) ([#2208](https://github.com/midwayjs/midway/issues/2208)) ([a9149c2](https://github.com/midwayjs/midway/commit/a9149c2ae49a60085c910d8daaf2224aeef92c67))
+
+
+### Performance Improvements
+
+* move body patch without middleware ([#2209](https://github.com/midwayjs/midway/issues/2209)) ([97c9301](https://github.com/midwayjs/midway/commit/97c930107c6fa93d8209516b15348c988848ca3d))
+
+
+
+
+
+## [3.4.8](https://github.com/midwayjs/midway/compare/v3.4.7...v3.4.8) (2022-08-02)
+
+
+### Performance Improvements
+
+* add ctx attach hook ([#2189](https://github.com/midwayjs/midway/issues/2189)) ([04a5b3f](https://github.com/midwayjs/midway/commit/04a5b3f6e0cbfc251c115a486948b0c3401ba4df))
+
+
+
+
+
 ## [3.4.7](https://github.com/midwayjs/midway/compare/v3.4.6...v3.4.7) (2022-08-01)
 
 

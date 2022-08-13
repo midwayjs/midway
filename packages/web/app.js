@@ -62,6 +62,27 @@ class AppBootHook {
       }
     }
 
+    const bodyPatch = async (ctx, next) => {
+      await next();
+      if (
+        ctx.body === undefined &&
+        !ctx.response._explicitStatus &&
+        ctx._matchedRoute
+      ) {
+        // 如果进了路由，重新赋值，防止 404
+        ctx.body = undefined;
+      }
+      if (
+        ctx.response._midwayControllerNullBody &&
+        ctx.body &&
+        ctx.status === 204
+      ) {
+        ctx.status = 200;
+      }
+    };
+
+    this.app.getMiddleware().insertAfter(bodyPatch, 'notfound');
+
     const eggRouterMiddleware = this.app.router.middleware();
     eggRouterMiddleware._name = 'eggRouterMiddleware';
     this.app.useMiddleware(eggRouterMiddleware);

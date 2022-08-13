@@ -243,6 +243,10 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   public async beforeStop() {
+    if (!this.server) {
+      return;
+    }
+
     await new Promise<void>(resolve => {
       const shutdownTimer = setTimeout(() => {
         this.server.forceShutdown();

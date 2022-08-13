@@ -136,8 +136,8 @@ export class UserService {
   cosServiceFactory: COSServiceFactory;
 
   async save() {
-    const redis1 = await this.cosServiceFactory.get('instance1');
-    const redis2 = await this.cosServiceFactory.get('instance3');
+    const cos1 = await this.cosServiceFactory.get('instance1');
+    const cos2 = await this.cosServiceFactory.get('instance3');
 
     //...
 

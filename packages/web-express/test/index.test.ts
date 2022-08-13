@@ -306,4 +306,23 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test req.query parse', function () {
+    const query = require('express/lib/middleware/query');
+    const queryMiddleware = query({});
+
+    // https://github.com/midwayjs/midway/issues/2162
+    const req = {
+      url: 'http://127.0.0.1:7001?mixFlowInstIds%5B%5D=108015365&flowInstIds%5B%5D=103137222',
+    } as any;
+    queryMiddleware(req, {}, () => {});
+    expect(req.query).toEqual({
+      'flowInstIds': [
+        '103137222'
+      ],
+      'mixFlowInstIds': [
+        '108015365'
+      ]
+    });
+  });
+
 });
