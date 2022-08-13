@@ -45,6 +45,7 @@ export abstract class DataSourceManager<T> {
       // create data source
       const opts: CreateInstanceOptions = {
         cacheInstance: options.cacheInstance, // will default true
+        validateConnection: options.validateConnection,
       };
       await this.createInstance(dataSourceOptions, dataSourceName, opts);
     }
@@ -88,13 +89,28 @@ export abstract class DataSourceManager<T> {
       options && typeof options.cacheInstance === 'boolean'
         ? options.cacheInstance
         : true;
+    const validateConnection = (options && options.validateConnection) || false;
 
-    // options.default will be merge in to options.clients[id]
+    // options.clients[id] will be merged with options.default
     const configNow = extend(true, {}, this.options['default'], config);
     const client = await this.createDataSource(configNow, clientName);
     if (cache && clientName && client) {
       this.dataSource.set(clientName, client);
     }
+
+    if (validateConnection) {
+      if (!client) {
+        throw new Error(
+          `[DataSourceManager] ${clientName} initialization failed.`
+        );
+      }
+
+      const connected = await this.checkConnected(client);
+      if (!connected) {
+        throw new Error(`[DataSourceManager] ${clientName} is not connected.`);
+      }
+    }
+
     return client;
   }
 
@@ -150,5 +166,12 @@ export function globModels(globString: string, appDir: string) {
 }
 
 export interface CreateInstanceOptions {
+  /**
+   * @default false
+   */
+  validateConnection?: boolean;
+  /**
+   * @default true
+   */
   cacheInstance?: boolean | undefined;
 }

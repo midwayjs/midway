@@ -13,6 +13,7 @@ on:
 
 jobs:
   build:
+    container: node:18-bullseye
     strategy:
       matrix:
         node-version: [12, 14, 16, 18]
@@ -59,6 +60,17 @@ jobs:
           KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
           KAFKA_ADVERTISED_PORT: 9092
 
+      postgres:
+        image: postgres:alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: db_ci_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
     - name: Git checkout
       uses: actions/checkout@v3
@@ -67,6 +79,26 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: Prepare
+      run: |
+        uname -a
+        export DEBIAN_FRONTEND=noninteractive
+        uname -a
+        apt-get update -qq --yes > /dev/null
+        apt-get install -qq --yes --no-install-recommends bash dnsutils git jq locales net-tools wget > /dev/null
+        apt-get install -qq --yes postgresql-client libpq-dev > /dev/null
+        uname -a
+        npm -v && node -v
+        git --version
+        openssl version
+        cat /etc/*release
+        locale -a
+        chmod a+w -R .
+        psql -V
+        netstat -tunpl
+        dig postgres
+
 
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.7.0
