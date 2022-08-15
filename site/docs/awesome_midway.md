@@ -6,10 +6,11 @@ title: Awesome Midway
 
 ### 微服务
 
-| 名称                                                                           | 作者   | 描述                      |
-| ------------------------------------------------------------------------------ | ------ | ------------------------- |
-| [@letscollab/midway-nacos](https://github.com/deskbtm-letscollab/midway-nacos) | Nawbc  | midway nacos 组件         |
-| [midway-elasticsearch](https://github.com/ddzyan/midway-elasticsearch)         | ddzyan | midway elasticsearch 组件 |
+| 名称                                                                           | 作者    | 描述                                |
+| ------------------------------------------------------------------------------ | ------- | ----------------------------------- |
+| [@letscollab/midway-nacos](https://github.com/deskbtm-letscollab/midway-nacos) | Nawbc   | midway nacos 组件                   |
+| [midway-elasticsearch](https://github.com/ddzyan/midway-elasticsearch)         | ddzyan  | midway elasticsearch 组件           |
+| [midway-apollo](https://github.com/helloHT/midway-apollo)                      | helloHT | midway 携程异步动态配置 apollo 组件 |
 
 ### swagger
 
