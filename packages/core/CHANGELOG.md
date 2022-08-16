@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.11](https://github.com/midwayjs/midway/compare/v3.4.10...v3.4.11) (2022-08-16)
+
+
+### Bug Fixes
+
+* IMiddleware interface ([#2242](https://github.com/midwayjs/midway/issues/2242)) ([1b435fb](https://github.com/midwayjs/midway/commit/1b435fb86f1ae141f2906b64c236fb8926c4c380))
+
+
+
+
+
 ## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
 
 **Note:** Version bump only for package @midwayjs/core

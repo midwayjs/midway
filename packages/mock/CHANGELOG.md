@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.11](https://github.com/midwayjs/midway/compare/v3.4.10...v3.4.11) (2022-08-16)
+
+
+### Features
+
+* **kafka:** update kafka framework & add test demo ([#2236](https://github.com/midwayjs/midway/issues/2236)) ([5eae117](https://github.com/midwayjs/midway/commit/5eae117dc302d1bd56d15564970441e1cd17b185))
+
+
+
+
+
 ## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
 
 **Note:** Version bump only for package @midwayjs/mock
