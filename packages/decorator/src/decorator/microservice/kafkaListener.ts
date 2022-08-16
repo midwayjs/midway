@@ -1,52 +1,29 @@
 import { MS_CONSUMER_KEY, attachPropertyDataToClass } from '../..';
 
+/**
+ * @deprecated Replaced by ConsumerSubscribeTopics
+ */
+export type ConsumerSubscribeTopic = {
+  fromBeginning?: boolean;
+};
+export type ConsumerSubscribeTopics = {
+  fromBeginning?: boolean;
+};
+
+export type ConsumerRunConfig = {
+  autoCommit?: boolean;
+  autoCommitInterval?: number | null;
+  autoCommitThreshold?: number | null;
+  eachBatchAutoResolve?: boolean;
+  partitionsConsumedConcurrently?: number;
+};
+
 export interface KafkaListenerOptions {
   propertyKey?: string;
   topic?: string;
-  // exchange?: string;
-  // /**
-  //  * queue options
-  //  */
-  // exclusive?: boolean;
-  // durable?: boolean;
-  // autoDelete?: boolean;
-  // messageTtl?: number;
-  // expires?: number;
-  // deadLetterExchange?: string;
-  // deadLetterRoutingKey?: string;
-  // maxLength?: number;
-  // maxPriority?: number;
-  // pattern?: string;
-  // /**
-  //  * prefetch
-  //  */
-  // prefetch?: number;
-  // /**
-  //  * router
-  //  */
-  // routingKey?: string;
-  // /**
-  //  * exchange options
-  //  */
-  // exchangeOptions?: {
-  //   type?: 'direct' | 'topic' | 'headers' | 'fanout' | 'match' | string;
-  //   durable?: boolean;
-  //   internal?: boolean;
-  //   autoDelete?: boolean;
-  //   alternateExchange?: string;
-  //   arguments?: any;
-  // };
-  // /**
-  //  * consumeOptions
-  //  */
-  // consumeOptions?: {
-  //   consumerTag?: string;
-  //   noLocal?: boolean;
-  //   noAck?: boolean;
-  //   exclusive?: boolean;
-  //   priority?: number;
-  //   arguments?: any;
-  // };
+
+  subscription?: ConsumerSubscribeTopics | ConsumerSubscribeTopic;
+  runConfig?: ConsumerRunConfig;
 }
 
 export function KafkaListener(

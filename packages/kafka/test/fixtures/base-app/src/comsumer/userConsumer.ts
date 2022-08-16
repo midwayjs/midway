@@ -15,6 +15,5 @@ export class UserConsumer {
   @KafkaListener('topic-test')
   async gotData(message: KafkaMessage) {
     this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
-    this.ctx.commitOffsets(message.offset);
   }
 }
