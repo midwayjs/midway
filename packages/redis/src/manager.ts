@@ -11,6 +11,7 @@ import {
   ServiceFactory,
   delegateTargetAllPrototypeMethod,
   delegateTargetMethod,
+  MidwayCommonError,
 } from '@midwayjs/core';
 import Redis from 'ioredis';
 import * as assert from 'assert';
@@ -107,12 +108,14 @@ export class RedisService implements Redis {
   @Inject()
   private serviceFactory: RedisServiceFactory;
 
-  // @ts-expect-error used
   private instance: Redis;
 
   @Init()
   async init() {
     this.instance = this.serviceFactory.get('default');
+    if (!this.instance) {
+      throw new MidwayCommonError('redis default instance not found.');
+    }
   }
 }
 

@@ -8,7 +8,11 @@ import {
 } from '@midwayjs/decorator';
 import * as OSS from 'ali-oss';
 import * as assert from 'assert';
-import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
+import {
+  ServiceFactory,
+  delegateTargetPrototypeMethod,
+  MidwayCommonError,
+} from '@midwayjs/core';
 import type {
   OSSServiceFactoryReturnType,
   MWOSSClusterOptions,
@@ -99,6 +103,9 @@ export class OSSSTSService implements OSS.STS {
   @Init()
   async init() {
     this.instance = this.serviceFactory.get('default');
+    if (!this.instance) {
+      throw new MidwayCommonError('oss default instance not found.');
+    }
   }
 
   async assumeRole(
