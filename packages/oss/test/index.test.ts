@@ -39,7 +39,7 @@ describe('/test/index.test.ts', () => {
       const app = await createLightApp(join(__dirname, './fixtures/base-app'));
       container = app.getApplicationContext();
 
-      const ossConfig = app.getConfig('oss').client;
+      const ossConfig = app.getConfig('oss').clients['default'];
       ossService = await container.getAsync(OSSService);
       const bucket = ossConfig.bucket;
       try {
