@@ -1,4 +1,3 @@
-import * as assert from 'assert';
 import { extend } from '../util/extend';
 
 /**
@@ -10,18 +9,16 @@ export abstract class ServiceFactory<T> {
 
   protected async initClients(options: any = {}): Promise<void> {
     this.options = options;
-    assert(
-      !(options.client && options.clients),
-      `midway:${this.getName()} can not set options.client and options.clients both`
-    );
 
-    // alias app[name] as client, but still support createInstance method
+    // merge options.client to options.clients['default']
     if (options.client) {
-      await this.createInstance(options.client, 'default');
-      return;
+      options.clients = options.clients || {};
+      options.clients['default'] = options.clients['default'] || {};
+      extend(true, options.clients['default'], options.client);
+      delete options.client;
     }
 
-    // multi client, use app[name].getInstance(id)
+    // multi client
     if (options.clients) {
       for (const id of Object.keys(options.clients)) {
         await this.createInstance(options.clients[id], id);

@@ -7,7 +7,7 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import { ServiceFactory } from '@midwayjs/core';
+import { MidwayCommonError, ServiceFactory } from '@midwayjs/core';
 import { AxiosHttpService } from './interface';
 
 @Provide()
@@ -57,6 +57,9 @@ export class HttpService implements AxiosHttpService {
   @Init()
   protected async init() {
     this.instance = this.serviceFactory.get('default');
+    if (!this.instance) {
+      throw new MidwayCommonError('axios default instance not found.');
+    }
   }
 
   getUri(config?: AxiosRequestConfig): string {
