@@ -2,13 +2,26 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction
+  NextFunction as BaseNextFunction,
 } from '@midwayjs/core';
-import { Server, ServerCredentials, Metadata, ServerDuplexStream, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall, ChannelOptions, ClientOptions } from '@grpc/grpc-js';
+import {
+  Requester,
+  Server,
+  ServerCredentials,
+  Metadata,
+  ServerDuplexStream,
+  ClientWritableStream,
+  ClientDuplexStream,
+  ClientReadableStream,
+  ClientUnaryCall,
+  ChannelOptions,
+  ClientOptions,
+} from '@grpc/grpc-js';
 
 export interface Context extends IMidwayContext<ServerDuplexStream<any, any>> {
   metadata: Metadata;
   method: string;
+  request: Requester;
 }
 export type IMidwayGRPCApplication = IMidwayApplication<Context, Server>;
 
@@ -72,7 +85,10 @@ export interface DefaultConfig extends IConfigurationOptions {
 }
 
 export interface IClientUnaryService<reqType, resType> {
-  sendMessage(reqData: reqType, handler?: (call: ClientUnaryCall) => void): Promise<resType>;
+  sendMessage(
+    reqData: reqType,
+    handler?: (call: ClientUnaryCall) => void
+  ): Promise<resType>;
   sendMessageWithCallback(content: reqType, callback): ClientUnaryCall;
 }
 
