@@ -257,10 +257,40 @@ describe('/test/service/configService.test.ts', () => {
     await cfg.load();
 
     expect(cfg.getConfiguration().bb).toEqual('111');
+  });
 
-    cfg.addObject({bb: 333, cc: 222});
+  it('should test config filter and test return undefined', async () => {
+    const cfg = await createConfigService();
 
-    expect(cfg.getConfiguration().bb).toEqual('111');
-    expect(cfg.getConfiguration().cc).toEqual(222);
+    cfg.addFilter((config) => {
+      if(config['key']) {
+        return undefined;
+      }
+      return config;
+    });
+
+    cfg.add([
+      {
+        default: {
+          key: 111,
+        }
+      }
+    ]);
+
+    await cfg.load();
+
+    cfg.addObject({bb: 222});
+
+    expect(cfg.getConfiguration().bb).toEqual(222);
+    expect(cfg.getConfiguration().key).toEqual(undefined);
+  });
+
+  it('should clear all config', async () => {
+    const cfg = new MidwayConfigService();
+    cfg['isReady'] = true;
+    cfg.addObject({bb: 222});
+    expect(Object.keys(cfg.getConfiguration()).length).toEqual(1);
+    cfg.clearAllConfig();
+    expect(Object.keys(cfg.getConfiguration()).length).toEqual(0);
   });
 });
