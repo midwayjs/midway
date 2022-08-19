@@ -53,7 +53,9 @@ describe('/test/index.test.ts', () => {
   it('should throw error when instance not found', async () => {
     await expect(async () => {
       const service = new MongooseConnectionService();
-      (service as any).serviceFactory = new Map();
+      (service as any).mongooseDataSourceManager = {
+        getDataSource() {}
+      }
       await service.init();
     }).rejects.toThrowError(/instance not found/);
   });
