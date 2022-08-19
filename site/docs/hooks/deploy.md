@@ -34,7 +34,7 @@ Api Server 部署可以参考：[启动和部署](https://midwayjs.org/docs/depl
 
 ![](https://img.alicdn.com/imgextra/i1/O1CN01GYtN9n1T2tbEXWOwf_!!6000000002325-2-tps-2064-648.png)
 
-## 静态资源部署至 CDN，后端托管 HTML & 提供接口
+### 静态资源部署至 CDN，后端托管 HTML & 提供接口
 
 这也是当前前端主流的部署模式。
 
