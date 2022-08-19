@@ -208,4 +208,12 @@ describe('/test/index.test.ts', () => {
 
     await close(app);
   });
+
+  it('should throw error when instance not found', async () => {
+    await expect(async () => {
+      const service = new OSSSTSService();
+      (service as any).serviceFactory = new Map();
+      await service.init();
+    }).rejects.toThrowError(/instance not found/);
+  });
 });

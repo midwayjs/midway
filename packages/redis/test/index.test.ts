@@ -64,4 +64,11 @@ describe('/test/index.test.ts', () => {
       .toThrow('connect ETIMEDOUT');
   });
 
+  it('should throw error when instance not found', async () => {
+    await expect(async () => {
+      const service = new RedisService();
+      (service as any).serviceFactory = new Map();
+      await service.init();
+    }).rejects.toThrowError(/instance not found/);
+  });
 });
