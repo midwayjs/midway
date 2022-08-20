@@ -914,15 +914,26 @@ export class HomeController {
 
 ## 全局路由前缀
 
-需要在配置中设置。
-
-比如：
+需要在`src/config/config.default`配置中设置。
+针对不同组件时,需添加在对应配置里。
+如使用egg作为上层时：
+```typescript
+// src/config/config.default.ts
+export default (appInfo: MidwayAppInfo) => {
+  return {
+    egg: { globalPrefix: '/v1' }
+  }
+});
+```
+使用koa作为上层时：
 
 ```typescript
 // src/config/config.default.ts
-export const koa = {
-  globalPrefix: '/v1'
-}
+export default (appInfo: MidwayAppInfo) => {
+  return {
+    koa: { globalPrefix: '/v1' }
+  }
+});
 ```
 
 配置后，所有的路由都会自动增加该前缀。
