@@ -4,12 +4,32 @@ import {
   IMidwayContext,
   NextFunction as BaseNextFunction
 } from '@midwayjs/core';
-import { Server, ServerCredentials, Metadata, ServerDuplexStream, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall, ChannelOptions, ClientOptions } from '@grpc/grpc-js';
+import {
+  Server,
+  ServerCredentials,
+  Metadata,
+  ClientWritableStream,
+  ClientDuplexStream,
+  ClientReadableStream,
+  ClientUnaryCall,
+  ChannelOptions,
+  ClientOptions,
+  ServerUnaryCall,
+  ServerReadableStream,
+  ServerWritableStream,
+  ServerDuplexStream,
+} from '@grpc/grpc-js';
 
-export interface Context extends IMidwayContext<ServerDuplexStream<any, any>> {
-  metadata: Metadata;
+type GrpcHandleCall<RequestType, ResponseType> =
+  Partial<ServerUnaryCall<RequestType, ResponseType> &
+    ServerReadableStream<RequestType, ResponseType> &
+    ServerWritableStream<RequestType, ResponseType> &
+    ServerDuplexStream<RequestType, ResponseType>>;
+
+export interface Context<RequestType = unknown, ResponseType = unknown> extends IMidwayContext<GrpcHandleCall<RequestType, ResponseType>> {
   method: string;
 }
+
 export type IMidwayGRPCApplication = IMidwayApplication<Context, Server>;
 
 export type Application = IMidwayGRPCApplication;
@@ -73,23 +93,29 @@ export interface DefaultConfig extends IConfigurationOptions {
 
 export interface IClientUnaryService<reqType, resType> {
   sendMessage(reqData: reqType, handler?: (call: ClientUnaryCall) => void): Promise<resType>;
+
   sendMessageWithCallback(content: reqType, callback): ClientUnaryCall;
 }
 
 export interface IClientReadableStreamService<reqType, resType> {
   sendMessage(reqData: reqType): Promise<resType[]>;
+
   getCall(): ClientReadableStream<resType>;
 }
 
 export interface IClientWritableStreamService<reqType, resType> {
   sendMessage(reqData: reqType): IClientWritableStreamService<reqType, resType>;
+
   end(): Promise<resType>;
+
   getCall(): ClientWritableStream<reqType>;
 }
 
 export interface IClientDuplexStreamService<reqType, resType> {
   sendMessage(reqData: reqType): Promise<resType>;
+
   getCall(): ClientDuplexStream<reqType, resType>;
+
   end(): void;
 }
 
