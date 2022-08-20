@@ -152,7 +152,7 @@
     },
     {
       "type": "category",
-      "label": "运维",
+      "label": "监控和启动",
       "collapsed": false,
       "collapsible": false,
       "items": [
@@ -280,11 +280,19 @@
     },
     {
       "type": "category",
+      "label": "运维",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "ops/ecs_start_err"
+      ]
+    },
+    {
+      "type": "category",
       "label": "常见问题",
       "collapsed": false,
       "collapsible": false,
       "items": [
-        "faq/ecs_start_err",
         "faq/framework_problem",
         "faq/git_problem",
         "faq/npm_problem",

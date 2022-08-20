@@ -161,7 +161,7 @@ Midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码�
 
 - 接口完全一致
 - 适配依赖注入写法，完整的类型定义
-- 方便框架串联依赖链路，排查问题
+- 方便实例管理和配置统一
 
 相关信息：
 
@@ -260,7 +260,7 @@ export class UserService {
 ### 配置默认 Axios 实例
 
 
-HttpService 实例等价于 `axios.create` ，所以可以有一些配置参数，我们可以在 `src/config.default.ts` 中配置它，配置完之后，所有组件创建出的的 axios 都会生效。
+HttpService 实例等价于 `axios.create` ，所以可以有一些配置参数，这些参数了 axios 本身的参数相同，我们可以在 `src/config.default.ts` 中配置它。
 
 
 比如：
@@ -284,12 +284,12 @@ export default {
         // `withCredentials` indicates whether or not cross-site Access-Control requests
         // should be made using credentials
         withCredentials: false, // default
-      }
+      },
     }
   }
 }
 ```
-具体的参数可以参考 [axios global config](https://github.com/axios/axios#config-defaults)。
+更多的参数可以参考 [axios global config](https://github.com/axios/axios#config-defaults)。
 
 
 
@@ -340,6 +340,8 @@ export class UserService {
 
 ### 配置全局拦截器
 
+如果使用的是默认的 Axios 实例，可以如下配置。
+
 ```javascript
 import { Configuration } from '@midwayjs/decorator';
 import * as axios from '@midwayjs/axios';
@@ -371,3 +373,37 @@ export class ContainerLifeCycle {
   }
 }
 ```
+
+如果要给其他实例配置，可以参考下面的代码。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as axios from '@midwayjs/axios';
+import { join } from 'path';
+import { IMidwayContainer } from '@midwayjs/core';
+
+@Configuration({
+  imports: [
+    axios		// 导入 axios 组件
+  ],
+  importConfigs: [
+    join(__dirname, 'config')
+  ]
+})
+export class ContainerLifeCycle {
+
+  async onReady(container: IMidwayContainer) {
+  	const httpServiceFactory = await container.getAsync(axios.HttpServiceFactory);
+    const customAxios = httpServiceFactory.get('customAxios');
+    customAxios.interceptors.request.use(
+      config => {
+        //...
+      },
+      error => {
+        //...
+      }
+    );
+  }
+}
+```
+
