@@ -7,7 +7,11 @@ import {
   ScopeEnum,
 } from '@midwayjs/decorator';
 import * as TableStore from 'tablestore';
-import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
+import {
+  ServiceFactory,
+  delegateTargetPrototypeMethod,
+  MidwayCommonError,
+} from '@midwayjs/core';
 import { TableStoreClient } from './interface';
 
 @Provide()
@@ -36,12 +40,14 @@ export class TableStoreService implements TableStoreClient {
   @Inject()
   private serviceFactory: TableStoreServiceFactory;
 
-  // @ts-expect-error used
-  private instance: OSS;
+  private instance: TableStoreClient;
 
   @Init()
   async init() {
     this.instance = this.serviceFactory.get('default');
+    if (!this.instance) {
+      throw new MidwayCommonError('TableStore default instance not found.');
+    }
   }
 }
 

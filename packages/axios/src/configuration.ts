@@ -10,6 +10,19 @@ import { HttpServiceFactory } from './serviceManager';
       },
     },
   ],
+  importConfigFilter: config => {
+    if (config['axios']) {
+      if (!config['axios']['clients'] || !config['axios']['client']) {
+        config['axios'] = {
+          default: {},
+          clients: {
+            default: config['axios'],
+          },
+        };
+      }
+    }
+    return config;
+  },
 })
 export class AxiosConfiguration {
   async onReady(container) {

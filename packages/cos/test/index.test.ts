@@ -21,4 +21,12 @@ describe('/test/index.test.ts', () => {
     expect(cosService).toBeDefined();
     await close(app);
   });
+
+  it('should throw error when instance not found', async () => {
+    await expect(async () => {
+      const service = new COSService();
+      (service as any).serviceFactory = new Map();
+      await service.init();
+    }).rejects.toThrowError(/instance not found/);
+  });
 });

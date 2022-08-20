@@ -33,7 +33,7 @@ export class MidwayConfigService implements IConfigService {
     unittest: 'test',
   };
   private configMergeOrder: Array<ConfigMergeInfo> = [];
-  protected configuration;
+  protected configuration = {};
   protected isReady = false;
   protected externalObject: Record<string, unknown>[] = [];
   protected appInfo: MidwayAppInfo;
@@ -187,6 +187,11 @@ export class MidwayConfigService implements IConfigService {
       for (let externalObject of this.externalObject) {
         if (externalObject) {
           externalObject = this.runWithFilter(externalObject);
+          if (!externalObject) {
+            debug('[config]: Filter config and got undefined will be drop it');
+            continue;
+          }
+
           debug('[config]: Loaded external object %j', externalObject);
           extend(true, target, externalObject);
           this.configMergeOrder.push({
@@ -236,7 +241,7 @@ export class MidwayConfigService implements IConfigService {
   }
 
   public clearAllConfig() {
-    this.configuration.clear();
+    this.configuration = {};
   }
 
   public clearConfigMergeOrder() {

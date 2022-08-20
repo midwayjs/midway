@@ -1,6 +1,6 @@
-import { MidwayError, registerErrorCode } from '../src';
+import { MidwayError, MidwayHttpError, registerErrorCode } from '../../src';
 
-describe('/test/error.test.ts', function () {
+describe('/test/error/error.test.ts', function () {
   it('should test base error', function () {
     expect(() => {
       throw new MidwayError('custom error');
@@ -45,5 +45,30 @@ describe('/test/error.test.ts', function () {
         A: 1000,
       } as const);
     }).toThrowError(MidwayError);
+  });
+
+  it('should test http error', function () {
+    expect(() => {
+      throw new MidwayHttpError('custom error', 302);
+    }).toThrowError(MidwayHttpError);
+  });
+
+  it('should test http error with err obj', function () {
+    const err = new Error('custom message');
+    expect(() => {
+      throw new MidwayHttpError(err, 302);
+    }).toThrowError(/custom message/);
+  });
+
+  it('should test with options', function () {
+    const cause = new Error('custom');
+    const err = new MidwayError('custom error', {
+      status: 10,
+      cause,
+    });
+
+    expect(() => {
+      throw err;
+    }).toThrowError(/custom error/);
   });
 });

@@ -39,7 +39,7 @@ describe('/test/index.test.ts', () => {
       const app = await createLightApp(join(__dirname, './fixtures/base-app'));
       container = app.getApplicationContext();
 
-      const ossConfig = app.getConfig('oss').client;
+      const ossConfig = app.getConfig('oss').clients['default'];
       ossService = await container.getAsync(OSSService);
       const bucket = ossConfig.bucket;
       try {
@@ -207,5 +207,13 @@ describe('/test/index.test.ts', () => {
     expect(list.objects).toBeDefined();
 
     await close(app);
+  });
+
+  it('should throw error when instance not found', async () => {
+    await expect(async () => {
+      const service = new OSSSTSService();
+      (service as any).serviceFactory = new Map();
+      await service.init();
+    }).rejects.toThrowError(/instance not found/);
   });
 });
