@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.12](https://github.com/midwayjs/midway/compare/v3.4.11...v3.4.12) (2022-08-20)
+
+
+### Bug Fixes
+
+* grpc context typings ([#2259](https://github.com/midwayjs/midway/issues/2259)) ([9449097](https://github.com/midwayjs/midway/commit/944909705413cebdfe0ae11301e8fd0e536c1edd))
+* service factory client & clients merge ([#2248](https://github.com/midwayjs/midway/issues/2248)) ([cfdee64](https://github.com/midwayjs/midway/commit/cfdee6449cb2770bc238e74fd754b783c331b822))
+
+
+
+
+
 ## [3.4.11](https://github.com/midwayjs/midway/compare/v3.4.10...v3.4.11) (2022-08-16)
 
 
