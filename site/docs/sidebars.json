@@ -284,6 +284,7 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
+        "faq/ecs_start_err",
         "faq/framework_problem",
         "faq/git_problem",
         "faq/npm_problem",
