@@ -7,7 +7,7 @@
       "collapsible": false,
       "items": [
         "intro",
-        "quickstart",
+        "quick_guide",
         "upgrade_v3"
       ]
     },
@@ -17,6 +17,7 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
+        "quickstart",
         "controller",
         "middleware",
         "req_res_app",
