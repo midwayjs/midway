@@ -28,6 +28,8 @@ $ npm run dev
 $ open http://localhost:7001
 ```
 
+同时，我们也提供了完整的实例，可以在 `npm init midway` 之后，选择 `quick-start` 项目，创建即可，方便对照学习。
+
 
 
 ## 编写 Controller
@@ -192,6 +194,8 @@ export class WeatherController {
 :::
 
 到这里，我们可以请求 `http://127.0.0.1:7001/weather?cityId=101010100` 查看返回的结果。
+
+你的第一个 Midway 接口已经开发完成了，你可以在前端代码中直接调用了，接下去，我们将利用这个接口完成一个服务端渲染的页面。
 
 
 
