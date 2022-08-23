@@ -43,15 +43,15 @@ export function PassportStrategy(
         this.passport.use(this.strategy);
       }
       if (this['serializeUser']) {
-        this.passport.addSerializer(this['serializeUser']);
+        this.passport.addSerializer(this['serializeUser'].bind(this));
       }
 
       if (this['deserializeUser']) {
-        this.passport.addDeserializer(this['deserializeUser']);
+        this.passport.addDeserializer(this['deserializeUser'].bind(this));
       }
 
       if (this['transformAuthInfo']) {
-        this.passport.addInfoTransformer(this['transformAuthInfo']);
+        this.passport.addInfoTransformer(this['transformAuthInfo'].bind(this));
       }
     }
 
