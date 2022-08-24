@@ -7,7 +7,7 @@
   "dependencies": {
     "@midwayjs/runtime-engine": "^3.4.4",
     "@midwayjs/serverless-http-parser": "^3.4.0",
-    "type-is": "^1.6.18"
+    "type-is": "1.6.18"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.4.12",
