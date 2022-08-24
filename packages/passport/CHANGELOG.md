@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.13](https://github.com/midwayjs/midway/compare/v3.4.12...v3.4.13) (2022-08-24)
+
+
+### Bug Fixes
+
+* passport strategy this missing ([#2264](https://github.com/midwayjs/midway/issues/2264)) ([2e5467a](https://github.com/midwayjs/midway/commit/2e5467a7c1cd4b7aa5574ddab624861dea54346b))
+
+
+
+
+
 ## [3.4.12](https://github.com/midwayjs/midway/compare/v3.4.11...v3.4.12) (2022-08-20)
 
 **Note:** Version bump only for package @midwayjs/passport
