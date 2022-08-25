@@ -194,8 +194,8 @@ export class UserService {
   redisServiceFactory: RedisServiceFactory;
 
   async save() {
-    const redis1 = await this.redisServiceFactory.get('instance1');
-    const redis2 = await this.redisServiceFactory.get('instance3');
+    const redis1 = this.redisServiceFactory.get('instance1');
+    const redis2 = this.redisServiceFactory.get('instance3');
 
     //...
 

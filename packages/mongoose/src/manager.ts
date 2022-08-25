@@ -2,6 +2,7 @@ import {
   DataSourceManager,
   delegateTargetMethod,
   delegateTargetProperties,
+  MidwayCommonError,
 } from '@midwayjs/core';
 import {
   Config,
@@ -128,12 +129,14 @@ export class MongooseConnectionService implements mongoose.Connection {
   @Inject()
   private mongooseDataSourceManager: MongooseDataSourceManager;
 
-  // @ts-expect-error used
   private instance: mongoose.Connection;
 
   @Init()
   async init() {
     this.instance = this.mongooseDataSourceManager.getDataSource('default');
+    if (!this.instance) {
+      throw new MidwayCommonError('mongoose default instance not found.');
+    }
   }
 }
 

@@ -173,43 +173,6 @@ describe('/test/service/configService.test.ts', () => {
     mm.restore()
   });
 
-  it('should compatible old test with object mode', async () => {
-    mm(process.env, 'MIDWAY_SERVER_ENV', 'test');
-    const cfg = await createConfigService();
-
-    cfg.add([
-      {
-        default: {
-          key: {
-            data: 123,
-          }
-        },
-        prod: {
-          bbb: {
-            data: 123,
-          }
-        },
-        unittest: {
-          bbb: {
-            data: 321
-          }
-        }
-      }
-    ]);
-
-    await cfg.load();
-
-    expect(cfg.getConfiguration()).toEqual({
-      key: {
-        data: 123,
-      },
-      bbb: {
-        data: 321,
-      }
-    })
-    mm.restore()
-  });
-
   it('should test config merge order', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'test');
     const cfg = await createConfigService();
@@ -257,10 +220,177 @@ describe('/test/service/configService.test.ts', () => {
     await cfg.load();
 
     expect(cfg.getConfiguration().bb).toEqual('111');
+  });
 
-    cfg.addObject({bb: 333, cc: 222});
+  it('should test config filter and test return undefined', async () => {
+    const cfg = await createConfigService();
 
-    expect(cfg.getConfiguration().bb).toEqual('111');
-    expect(cfg.getConfiguration().cc).toEqual(222);
+    cfg.addFilter((config) => {
+      if(config['key']) {
+        return undefined;
+      }
+      return config;
+    });
+
+    cfg.add([
+      {
+        default: {
+          key: 111,
+        }
+      }
+    ]);
+
+    await cfg.load();
+
+    cfg.addObject({bb: 222});
+
+    expect(cfg.getConfiguration().bb).toEqual(222);
+    expect(cfg.getConfiguration().key).toEqual(undefined);
+  });
+
+  it('should clear all config', async () => {
+    const cfg = new MidwayConfigService();
+    cfg['isReady'] = true;
+    cfg.addObject({bb: 222});
+    expect(Object.keys(cfg.getConfiguration()).length).toEqual(1);
+    cfg.clearAllConfig();
+    expect(Object.keys(cfg.getConfiguration()).length).toEqual(0);
+  });
+
+  it('should run prod and compatible old production in object mode', async () => {
+    // prod 不做合并
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'prod');
+    const cfg = await createConfigService();
+
+    cfg.add([
+      {
+        default: {
+          key: {
+            data: 123,
+          }
+        },
+        production: {
+          prod: {
+            data: 321,
+          }
+        },
+        prod: {
+          key: {
+            data: 567,
+          }
+        }
+      }
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.getConfiguration('key.data')).toEqual(567);
+    expect(cfg.getConfiguration('prod.data')).toEqual(undefined);
+    mm.restore()
+  });
+
+  it('should run production and compatible old production in object mode', async () => {
+    // production 做合并，且 prod 后于 production 合并
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'production');
+    const cfg = await createConfigService();
+
+    cfg.add([
+      {
+        default: {
+          key: {
+            data: 123,
+          }
+        },
+        production: {
+          prod: {
+            data: 321,
+          }
+        },
+        prod: {
+          prod: {
+            data: 888,
+          }
+        }
+      }
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.getConfiguration('key.data')).toEqual(123);
+    expect(cfg.getConfiguration('prod.data')).toEqual(888);
+    mm.restore()
+  });
+
+
+  it('should run test env compatible old test in object mode', async () => {
+    // test 做合并，unittest 后于 test 合并
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'test');
+    const cfg = await createConfigService();
+
+    cfg.add([
+      {
+        default: {
+          key: {
+            data: 123,
+          }
+        },
+        test: {
+          key: {
+            data: 321,
+          }
+        },
+        unittest: {
+          key: {
+            data: 567,
+          }
+        }
+      }
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.getConfiguration()).toEqual({
+      key: {
+        data: 567,
+      }
+    })
+    mm.restore()
+  });
+
+  it('should run unittest env compatible old test in object mode', async () => {
+    // unittest 不做合并
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'unittest');
+    const cfg = await createConfigService();
+
+    cfg.add([
+      {
+        default: {
+          key: {
+            data: 123,
+          }
+        },
+        test: {
+          key: {
+            data: 321,
+          },
+          test: 'bbb'
+        },
+        unittest: {
+          key: {
+            data: 567,
+          }
+        }
+      }
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.getConfiguration()).toEqual({
+      key: {
+        data: 567,
+      }
+    })
+    expect(cfg.getConfiguration('test')).toEqual(undefined);
+    mm.restore()
   });
 });

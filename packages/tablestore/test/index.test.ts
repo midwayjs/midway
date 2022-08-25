@@ -33,4 +33,12 @@ describe('/test/index.test.ts', () => {
     const condition1 = new Condition(RowExistenceExpectation.IGNORE, null);
     expect(condition1).toBeDefined();
   });
+
+  it('should throw error when instance not found', async () => {
+    await expect(async () => {
+      const service = new TableStoreService();
+      (service as any).serviceFactory = new Map();
+      await service.init();
+    }).rejects.toThrowError(/instance not found/);
+  });
 });

@@ -398,9 +398,9 @@ export type NextFunction = () => Promise<any>;
  * Common middleware definition
  */
 export interface IMiddleware<CTX, R, N = unknown> {
-  resolve: (app?: IMidwayApplication) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
-  match?: (ctx?: CTX) => boolean;
-  ignore?: (ctx?: CTX) => boolean;
+  resolve: (app: IMidwayApplication) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
+  match?: (ctx: CTX) => boolean;
+  ignore?: (ctx: CTX) => boolean;
 }
 export type FunctionMiddleware<CTX, R, N = unknown> = N extends true
   ? (req: CTX, res: R, next: N) => any

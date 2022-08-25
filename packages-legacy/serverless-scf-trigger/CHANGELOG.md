@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.13](https://github.com/midwayjs/midway/compare/v3.4.12...v3.4.13) (2022-08-24)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-trigger
+
+
+
+
+
+## [3.4.12](https://github.com/midwayjs/midway/compare/v3.4.11...v3.4.12) (2022-08-20)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-trigger
+
+
+
+
+
+## [3.4.11](https://github.com/midwayjs/midway/compare/v3.4.10...v3.4.11) (2022-08-16)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-trigger
+
+
+
+
+
 ## [3.4.10](https://github.com/midwayjs/midway/compare/v3.4.9...v3.4.10) (2022-08-12)
 
 **Note:** Version bump only for package @midwayjs/serverless-scf-trigger

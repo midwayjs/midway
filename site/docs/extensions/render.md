@@ -285,7 +285,7 @@ export default {
 
 4、在 view 目录增加模板
 ```typescript
-// view/test.ejs
+// view/test.nj
 hi, {{ user }}
 ```
 

@@ -7,7 +7,7 @@
       "collapsible": false,
       "items": [
         "intro",
-        "quickstart",
+        "quick_guide",
         "upgrade_v3"
       ]
     },
@@ -17,6 +17,7 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
+        "quickstart",
         "controller",
         "middleware",
         "req_res_app",
@@ -152,7 +153,7 @@
     },
     {
       "type": "category",
-      "label": "运维",
+      "label": "监控和启动",
       "collapsed": false,
       "collapsible": false,
       "items": [
@@ -276,6 +277,15 @@
         "tool/luckyeye",
         "tool/typeorm_generator",
         "tool/egg-ts-helper"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "运维",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "ops/ecs_start_err"
       ]
     },
     {

@@ -2,8 +2,10 @@ import {
   sendUnaryData,
   Server,
   ServerCredentials,
-  ServerUnaryCall,
   setLogger,
+  UntypedServiceImplementation,
+  UntypedHandleCall,
+  ServerUnaryCall,
 } from '@grpc/grpc-js';
 import {
   BaseFramework,
@@ -113,7 +115,7 @@ export class MidwayGRPCFramework extends BaseFramework<
         classMetadata.serviceName || Utils.pascalCase(providerName);
 
       if (serviceClassDefinition.has(classMetadata?.package)) {
-        const serviceInstance = {};
+        const serviceInstance = {} as UntypedServiceImplementation;
         const serviceDefinition: any = serviceClassDefinition.get(
           classMetadata.package
         )[`${classMetadata?.package}.${serviceName}`];
@@ -126,11 +128,11 @@ export class MidwayGRPCFramework extends BaseFramework<
 
         for (const method in serviceDefinition) {
           serviceInstance[method] = async (
-            call: ServerUnaryCall<any, any>,
+            call: Parameters<UntypedHandleCall>[0],
             callback?: sendUnaryData<any>
           ) => {
             // merge ctx and call
-            const ctx = call as any;
+            const ctx = call as Context;
             ctx.method = method;
             this.app.createAnonymousContext(ctx);
 
@@ -178,7 +180,7 @@ export class MidwayGRPCFramework extends BaseFramework<
                 service,
                 ctx,
                 callback,
-                data: call.request,
+                data: (call as ServerUnaryCall<any, any>).request,
                 grpcMethodData,
               });
             }

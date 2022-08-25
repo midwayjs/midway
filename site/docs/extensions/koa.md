@@ -165,7 +165,7 @@ export default {
 | ca           | string \| Buffer \| Array<Buffer\|Object> | 可选，Https ca                                          |
 | http2        | boolean                                   | 可选，http2 支持，默认 false                            |
 | proxy        | boolean                                   | 可选，是否开启代理，如果为 true 则对于 request 请求中的 host / protocol / ip分别优先从 Header 字段中 X-Forwarded-Host / X-Forwarded-Proto / X-Forwarded-For 获取，默认 false                            |
-| subdomainOffset        | number                                   | 可选，子域名的偏移量，，默认 2                            |
+| subdomainOffset        | number                                   | 可选，子域名的偏移量，默认 2                            |
 | proxyIpHeader        | string                                   | 可选，获取代理 ip 的字段名，默认为 X-Forwarded-For |
 | maxIpsCount        | number                                   | 可选，获取的 ips 最大数量，默认为 0（全部返回）|
 
