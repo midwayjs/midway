@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 路由和控制器
 
 在常见的 MVC 架构中，C 即代表控制器，控制器用于负责 **解析用户的输入，处理后返回相应的结果。**
@@ -234,10 +237,10 @@ import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
 export class UserController {
-  
+
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async getUser(): Promise<User> {
     const query = this.ctx.query;
@@ -325,10 +328,10 @@ import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
 export class UserController {
-  
+
   @Inject()
   ctx: Context;
-  
+
   @Post('/')
   async getUser(): Promise<User> {
     const body = this.ctx.request.body;
@@ -395,10 +398,10 @@ import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
 export class UserController {
-  
+
   @Inject()
   ctx: Context;
-  
+
   @Get('/:uid')
   async getUser(): Promise<User> {
     const params = this.ctx.params;
@@ -446,10 +449,10 @@ import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
 export class UserController {
-  
+
   @Inject()
   ctx: Context;
-  
+
   @Get('/:uid')
   async getUser(): Promise<User> {
     const cacheSetting = this.ctx.get('cache-control');
@@ -591,7 +594,7 @@ async getUser(@Query('id') id: boolean): Promise<User> {
 // class
 class UserDTO {
   name: string;
-  
+
   getName() {
     return this.name;
   }
@@ -647,16 +650,16 @@ export class HomeController {
   async home() {
     // 返回字符串
     return "Hello Midwayjs!";
-    
+
     // 返回 json
     return {
       a: 1,
       b: 2,
     };
-    
+
     // 返回 html
     return '<html><h1>Hello</h1></html>';
-    
+
     // 返回 stream
     return fs.createReadStream('./good.png');
   }
@@ -675,16 +678,16 @@ export class HomeController {
   async home() {
     // 返回字符串
     this.ctx.body = "Hello Midwayjs!";
-    
+
     // 返回 json
     this.ctx.body = {
       a: 1,
       b: 2,
     };
-    
+
     // 返回 html
     this.ctx.body = '<html><h1>Hello</h1></html>';
-    
+
     // 返回 stream
     this.ctx.body = fs.createReadStream('./good.png');
   }
@@ -731,7 +734,7 @@ import { Controller, Get, Inject } from "@midwayjs/decorator";
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     this.ctx.status = 201;
@@ -795,7 +798,7 @@ import { Controller, Get, Inject } from "@midwayjs/decorator";
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     this.ctx.set('x-bbb', '123');
@@ -850,7 +853,7 @@ import { Controller, Get, Inject } from "@midwayjs/decorator";
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     this.ctx.redirect('/login_check');
@@ -897,7 +900,7 @@ import { Controller, Get, Inject } from "@midwayjs/decorator";
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     this.ctx.type = 'html';
@@ -914,16 +917,47 @@ export class HomeController {
 
 ## 全局路由前缀
 
-需要在配置中设置。
+需要在 `src/config/config.default` 配置中设置。
 
-比如：
+注意，不同组件在不同的关键字配置下：
+
+<Tabs>
+<TabItem value="koa" label="koa">
 
 ```typescript
 // src/config/config.default.ts
-export const koa = {
-  globalPrefix: '/v1'
-}
+export default {
+  koa: {
+    globalPrefix: '/v1'
+  }
+};
 ```
+</TabItem>
+<TabItem value="egg" label="Egg.js">
+
+```typescript
+// src/config/config.default.ts
+export default {
+  egg: {
+    globalPrefix: '/v1'
+  }
+};
+```
+
+</TabItem>
+<TabItem value="express" label="Express">
+
+```typescript
+// src/config/config.default.ts
+export default {
+  express: {
+    globalPrefix: '/v1'
+  }
+};
+```
+
+</TabItem>
+</Tabs>
 
 配置后，所有的路由都会自动增加该前缀。
 
@@ -935,7 +969,7 @@ export const koa = {
 // 该 Controller 下所有路由都将忽略全局前缀
 @Controller('/api', {ignoreGlobalPrefix: true})
 export class HomeController {
-  // ,,,
+  // ...
 }
 ```
 

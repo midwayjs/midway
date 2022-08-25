@@ -59,18 +59,4 @@ describe('test/common/serviceFactory.test.ts', () => {
     });
     expect(instance.get('default')).toBeDefined();
   });
-
-  it('should config must with client or clients', async () => {
-    const instance = new TestServiceFactory();
-    let err;
-    try {
-      await instance.initClients({
-        client: {},
-        clients: {}
-      });
-    } catch (e) {
-      err = e;
-    }
-    expect(err).toBeDefined();
-  });
 });

@@ -161,7 +161,7 @@ Midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码�
 
 - 接口完全一致
 - 适配依赖注入写法，完整的类型定义
-- 方便框架串联依赖链路，排查问题
+- 方便实例管理和配置统一
 
 相关信息：
 
@@ -218,7 +218,8 @@ export class MainConfiguration {
 然后在业务代码中即可注入使用。
 
 
-### 使用服务
+
+### 使用默认 Axios 实例
 
 
 接口和 [axios](https://github.com/axios/axios) 一致。
@@ -255,10 +256,11 @@ export class UserService {
 ```
 
 
-### 配置 Axios
+
+### 配置默认 Axios 实例
 
 
-HttpService 实例等价于 `axios.create` ，所以可以有一些配置参数，我们可以在 `src/config.default.ts` 中配置它，配置完之后，全局的 axios 都会生效。
+HttpService 实例等价于 `axios.create` ，所以可以有一些配置参数，这些参数了 axios 本身的参数相同，我们可以在 `src/config.default.ts` 中配置它。
 
 
 比如：
@@ -266,23 +268,80 @@ HttpService 实例等价于 `axios.create` ，所以可以有一些配置参数�
 export default {
   // ...
   axios: {
-    baseURL: 'https://api.example.com',
-    // `headers` are custom headers to be sent
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
+    default: {
+      // 所有实例复用的配置
     },
-    timeout: 1000, // default is `0` (no timeout)
+    clients: {
+      // 默认实例的配置
+      default: {
+        baseURL: 'https://api.example.com',
+        // `headers` are custom headers to be sent
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        timeout: 1000, // default is `0` (no timeout)
 
-    // `withCredentials` indicates whether or not cross-site Access-Control requests
-    // should be made using credentials
-    withCredentials: false, // default
+        // `withCredentials` indicates whether or not cross-site Access-Control requests
+        // should be made using credentials
+        withCredentials: false, // default
+      },
+    }
   }
 }
 ```
-具体的参数可以参考 [axios global config](https://github.com/axios/axios#config-defaults)。
+更多的参数可以参考 [axios global config](https://github.com/axios/axios#config-defaults)。
+
+
+
+### 创建不同实例
+
+和其他的服务多实例相同，配置不同的 key 即可。
+
+```typescript
+export default {
+  // ...
+  axios: {
+    default: {
+      // 所有实例复用的配置
+    },
+    clients: {
+      default: {
+        // 默认实例
+      },
+      customAxios: {
+        // 自定义实例
+      }
+    }
+  }
+}
+```
+
+在使用时，使用实例工厂来来获取自定义实例。
+
+```typescript
+import { HttpServiceFactory } from '@midwayjs/axios';
+
+@Provide()
+export class UserService {
+
+  @Inject()
+  httpServiceFactory: HttpServiceFactory;
+
+  async invoke() {
+  	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
+    const customAxios = this.httpServiceFactory.get('customAxios');
+    const result = await customAxios.get(url);
+    // TODO resut
+  }
+}
+```
+
 
 
 ### 配置全局拦截器
+
+如果使用的是默认的 Axios 实例，可以如下配置。
+
 ```javascript
 import { Configuration } from '@midwayjs/decorator';
 import * as axios from '@midwayjs/axios';
@@ -314,3 +373,37 @@ export class ContainerLifeCycle {
   }
 }
 ```
+
+如果要给其他实例配置，可以参考下面的代码。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as axios from '@midwayjs/axios';
+import { join } from 'path';
+import { IMidwayContainer } from '@midwayjs/core';
+
+@Configuration({
+  imports: [
+    axios		// 导入 axios 组件
+  ],
+  importConfigs: [
+    join(__dirname, 'config')
+  ]
+})
+export class ContainerLifeCycle {
+
+  async onReady(container: IMidwayContainer) {
+  	const httpServiceFactory = await container.getAsync(axios.HttpServiceFactory);
+    const customAxios = httpServiceFactory.get('customAxios');
+    customAxios.interceptors.request.use(
+      config => {
+        //...
+      },
+      error => {
+        //...
+      }
+    );
+  }
+}
+```
+

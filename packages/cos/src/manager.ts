@@ -7,7 +7,11 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
+import {
+  ServiceFactory,
+  delegateTargetPrototypeMethod,
+  MidwayCommonError,
+} from '@midwayjs/core';
 import * as assert from 'assert';
 import * as COS from 'cos-nodejs-sdk-v5';
 
@@ -46,12 +50,14 @@ export class COSService implements COS {
   @Inject()
   private serviceFactory: COSServiceFactory;
 
-  // @ts-expect-error used
   private instance: COS;
 
   @Init()
   async init() {
     this.instance = this.serviceFactory.get('default');
+    if (!this.instance) {
+      throw new MidwayCommonError('cos default instance not found.');
+    }
   }
 }
 
