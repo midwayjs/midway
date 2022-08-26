@@ -11,8 +11,6 @@ import { ContextMiddlewareManager } from './common/middlewareManager';
 import _default from './config/config.default';
 import { AsyncContextManager } from './common/asyncContextManager';
 
-export { CreateInstanceOptions } from './common/dataSourceManager';
-
 export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
 };

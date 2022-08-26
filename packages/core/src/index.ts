@@ -42,7 +42,10 @@ export {
   MidwayServerlessFunctionService,
   WebRouterCollector,
 } from './service/slsFunctionService';
-export { DataSourceManager } from './common/dataSourceManager';
+export {
+  CreateInstanceOptions,
+  DataSourceManager,
+} from './common/dataSourceManager';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './common/serviceFactory';
