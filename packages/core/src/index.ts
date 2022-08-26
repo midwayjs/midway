@@ -52,6 +52,7 @@ export * from './common/webGenerator';
 export * from './common/middlewareManager';
 export * from './util/pathToRegexp';
 export * from './util/httpclient';
+export * from './util/retry';
 export * from './common/filterManager';
 export * from './common/applicationManager';
 export * from './setup';
