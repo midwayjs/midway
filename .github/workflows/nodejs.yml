@@ -79,27 +79,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Prepare
-      run: |
-        # chown -R 1001:121 "/github/home/.npm"
-        # uname -a
-        # export DEBIAN_FRONTEND=noninteractive
-        # uname -a
-        # apt-get update -qq --yes > /dev/null
-        # apt-get install -qq --yes --no-install-recommends bash dnsutils git jq locales net-tools wget > /dev/null
-        # apt-get install -qq --yes postgresql-client libpq-dev > /dev/null
-        # uname -a
-        # npm -v && node -v
-        # git --version
-        # openssl version
-        # cat /etc/*release
-        # locale -a
-        # chmod a+w -R .
-        # psql -V
-        # netstat -tunpl
-        # dig postgres
-
-
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.7.0
       with:
