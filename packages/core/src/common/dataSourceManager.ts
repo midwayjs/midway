@@ -2,7 +2,7 @@
  * 数据源管理器实现
  */
 import { extend } from '../util/extend';
-import { MidwayParameterError } from '../error';
+import { MidwayCommonError, MidwayParameterError } from '../error';
 import { run } from '@midwayjs/glob';
 import { join } from 'path';
 import { Types } from '@midwayjs/decorator';
@@ -17,7 +17,7 @@ export abstract class DataSourceManager<T> {
     this.options = options;
     if (!options.dataSource) {
       throw new MidwayParameterError(
-        'DataSourceManager must set options.dataSource.'
+        '[DataSourceManager] must set options.dataSource.'
       );
     }
 
@@ -100,14 +100,16 @@ export abstract class DataSourceManager<T> {
 
     if (validateConnection) {
       if (!client) {
-        throw new Error(
+        throw new MidwayCommonError(
           `[DataSourceManager] ${clientName} initialization failed.`
         );
       }
 
       const connected = await this.checkConnected(client);
       if (!connected) {
-        throw new Error(`[DataSourceManager] ${clientName} is not connected.`);
+        throw new MidwayCommonError(
+          `[DataSourceManager] ${clientName} is not connected.`
+        );
       }
     }
 
