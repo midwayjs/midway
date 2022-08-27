@@ -1,4 +1,4 @@
-import { MidwayInvokeRetryOverMaxTimeError, retryWithAsync, retryWith } from '../../src';
+import { MidwayRetryExceededMaxTimesError, retryWithAsync, retryWith } from '../../src';
 import { sleep } from '@midwayjs/decorator';
 
 describe('test/util/retry.test.ts', function () {
@@ -31,7 +31,7 @@ describe('test/util/retry.test.ts', function () {
 
       await expect(async () => {
         await fn('harry');
-      }).rejects.toThrowError(MidwayInvokeRetryOverMaxTimeError);
+      }).rejects.toThrowError(MidwayRetryExceededMaxTimesError);
     });
 
     it('should test retry invoke method with origin error', async () => {
@@ -62,7 +62,26 @@ describe('test/util/retry.test.ts', function () {
         await fn();
       }).rejects.toThrowError('anonymous');
     });
+
+    it('should test with retry interval', async () => {
+      let idx = 0;
+      const start = Date.now();
+      const fn = retryWithAsync(async () => {
+        if (idx++ < 2) {
+          throw new Error('error');
+        } else {
+          return 'ok';
+        }
+      } , 2, {
+        retryInterval: 1000
+      });
+
+      const result = await fn();
+      expect(result).toEqual('ok');
+      expect(Date.now() - start).toBeGreaterThanOrEqual(2000);
+    });
   });
+
   describe('wrap sync function', function () {
     it('should test retry invoke method with default retry number and fail', () => {
       const service = new TestService();
@@ -70,7 +89,7 @@ describe('test/util/retry.test.ts', function () {
 
       expect(() => {
         fn('harry');
-      }).toThrowError(MidwayInvokeRetryOverMaxTimeError);
+      }).toThrowError(MidwayRetryExceededMaxTimesError);
     });
 
     it('should test retry invoke method with origin error', () => {
