@@ -43,7 +43,7 @@ export {
   WebRouterCollector,
 } from './service/slsFunctionService';
 export {
-  CreateInstanceOptions,
+  CreateDataSourceInstanceOptions,
   DataSourceManager,
 } from './common/dataSourceManager';
 export * from './service/pipelineService';

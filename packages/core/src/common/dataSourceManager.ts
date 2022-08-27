@@ -43,7 +43,7 @@ export abstract class DataSourceManager<T> {
         dataSourceOptions['entities'] = Array.from(entities);
       }
       // create data source
-      const opts: CreateInstanceOptions = {
+      const opts: CreateDataSourceInstanceOptions = {
         cacheInstance: options.cacheInstance, // will default true
         validateConnection: options.validateConnection,
       };
@@ -83,7 +83,7 @@ export abstract class DataSourceManager<T> {
   public async createInstance(
     config: any,
     clientName: any,
-    options?: CreateInstanceOptions
+    options?: CreateDataSourceInstanceOptions
   ): Promise<T | void> {
     const cache =
       options && typeof options.cacheInstance === 'boolean'
@@ -167,7 +167,7 @@ export function globModels(globString: string, appDir: string) {
   return models;
 }
 
-export interface CreateInstanceOptions {
+export interface CreateDataSourceInstanceOptions {
   /**
    * @default false
    */
