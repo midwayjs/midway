@@ -7,7 +7,9 @@ import { HttpServiceFactory } from './serviceManager';
   importConfigs: [
     {
       default: {
-        axios: {},
+        axios: {
+          default: {},
+        },
       },
     },
   ],

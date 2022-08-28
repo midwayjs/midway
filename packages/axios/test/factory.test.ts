@@ -56,6 +56,11 @@ describe('/test/factory.test.ts', () => {
             test: {
               timeout: 1000,
               baseURL: 'https://www.midwayjs.org',
+              headers: {
+                common: {
+                  Authorization: 'Bearer test...',
+                },
+              },
             },
           },
         },
@@ -74,7 +79,7 @@ describe('/test/factory.test.ts', () => {
     expect(defaultConfig.headers.common['addHead']).toBe('xiaoqinvar');
     expect(testConfig.timeout).toBe(1000);
     expect(testConfig.baseURL).toBe('https://www.midwayjs.org');
-    expect(testConfig.headers.common['Authorization']).toBe('Bearer ...');
+    expect(testConfig.headers.common['Authorization']).toBe('Bearer test...');
     expect(testConfig.headers.common['addHead']).toBeUndefined();
   });
 

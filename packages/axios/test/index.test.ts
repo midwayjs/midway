@@ -10,11 +10,6 @@ describe('/test/index.test.ts', () => {
   beforeAll(async () => {
     app = await createLightApp('', {
       imports: [require(join(__dirname, '../src'))],
-      globalConfig: {
-        axios: {
-          default: {},
-        },
-      },
     });
     container = app.getApplicationContext();
     httpService = await container.getAsync(HttpService);
@@ -115,5 +110,20 @@ describe('/test/index.test.ts', () => {
     const searchResult = await httpService.get('/s?wd=test');
     expect(searchResult.status).toBe(200);
     expect(searchResult.data).toMatch('<!DOCTYPE html>');
+  });
+
+  // 使用httpService且配置文件为空axios配置
+  it('should test HttpService with axios config is nullable object', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {},
+      },
+    });
+    const httpService = await app.getApplicationContext().getAsync(HttpService);
+    const result = await httpService.get(
+      'https://api.github.com/users/octocat/orgs'
+    );
+    expect(result.status).toEqual(200);
   });
 });
