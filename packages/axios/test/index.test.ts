@@ -66,4 +66,54 @@ describe('/test/index.test.ts', () => {
     );
     expect(result.status).toEqual(200);
   });
+
+  /**
+   * 多配置下的HttpService测试
+   */
+  it('should test HttpService with single configuration', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          default: {
+            baseURL: 'https://www.baidu.com',
+          },
+        },
+      },
+    });
+
+    const httpService = await app.getApplicationContext().getAsync(HttpService);
+    const searchResult = await httpService.get('/s?wd=test');
+    expect(searchResult.status).toBe(200);
+    expect(searchResult.data).toMatch('<!DOCTYPE html>');
+  });
+
+  /**
+   * 多配置下的HttpService测试
+   */
+  it('should test HttpService with more configurations', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          default: {
+            baseURL: 'https://www.baidu.com',
+          },
+          clients: {
+            default: {
+              timeout: 2000,
+            },
+            test: {
+              timeout: 5000,
+            },
+          },
+        },
+      },
+    });
+
+    const httpService = await app.getApplicationContext().getAsync(HttpService);
+    const searchResult = await httpService.get('/s?wd=test');
+    expect(searchResult.status).toBe(200);
+    expect(searchResult.data).toMatch('<!DOCTYPE html>');
+  });
 });

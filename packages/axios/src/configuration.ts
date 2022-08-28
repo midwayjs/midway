@@ -1,4 +1,4 @@
-import { MidwayError } from '@midwayjs/core';
+import { MidwayConfigMissingError } from '@midwayjs/core';
 import { Configuration } from '@midwayjs/decorator';
 import { HttpServiceFactory } from './serviceManager';
 
@@ -13,9 +13,9 @@ import { HttpServiceFactory } from './serviceManager';
   ],
   importConfigFilter: config => {
     if (config['axios']) {
-      // 检查意外使用client书写错误
+      // 检查意外client书写错误
       if (!config['axios']['clients'] && config['axios']['client']) {
-        throw new MidwayError(
+        throw new MidwayConfigMissingError(
           'using clients replace client filed in axios config.'
         );
       }
