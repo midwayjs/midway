@@ -1,28 +1,168 @@
 import { join } from 'path';
-import { HttpServiceFactory, HttpService } from '../src';
+import { HttpService, HttpServiceFactory } from '../src';
 import { createLightApp } from '@midwayjs/mock';
 
 describe('/test/factory.test.ts', () => {
-
-  it('should test with factory', async () => {
+  // 工厂单例
+  it('should test with factory (add、override) single', async () => {
     const app = await createLightApp('', {
-      imports: [
-        require(join(__dirname, '../src'))
-      ],
+      imports: [require(join(__dirname, '../src'))],
       globalConfig: {
         axios: {
-          clients: {
-            default: {},
-            httpService2: {}
-          }
-        }
-      }
+          default: {
+            baseURL: 'https://www.xiaoqinvar.com',
+            headers: {
+              common: {
+                Authorization: 'Bearer ...',
+              },
+            },
+          },
+        },
+      },
     });
-    const httpService = await app.getApplicationContext().getAsync(HttpService);
+    const factory = await app
+      .getApplicationContext()
+      .getAsync(HttpServiceFactory);
+    const defaultAxios = factory.get();
+    const defaultConfig = defaultAxios.defaults;
+    expect(defaultConfig.baseURL).toBe('https://www.xiaoqinvar.com');
+    expect(defaultConfig.headers.common['Authorization']).toBe('Bearer ...');
+  });
 
-    expect(httpService).toBeDefined();
-    const httpServiceFactory = await app.getApplicationContext().getAsync(HttpServiceFactory);
-    const httpService2 = httpServiceFactory.get('httpService2');
-    expect(httpService).not.toEqual(httpService2);
+  // 工厂多例
+  it('should test with factory with more configurations', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          default: {
+            baseURL: 'https://www.abc.com',
+            headers: {
+              common: {
+                Authorization: 'Bearer ...',
+              },
+            },
+          },
+          clients: {
+            default: {
+              baseURL: 'https://www.taobao.com',
+              headers: {
+                common: {
+                  addHead: 'xiaoqinvar',
+                },
+              },
+              timeout: 10000,
+            },
+            test: {
+              timeout: 1000,
+              baseURL: 'https://www.midwayjs.org',
+            },
+          },
+        },
+      },
+    });
+    const factory = await app
+      .getApplicationContext()
+      .getAsync(HttpServiceFactory);
+    const defaultAxios = factory.get();
+    const testAxios = factory.get('test');
+    const defaultConfig = defaultAxios.defaults;
+    const testConfig = testAxios.defaults;
+    expect(defaultConfig.timeout).toBe(10000);
+    expect(defaultConfig.baseURL).toBe('https://www.taobao.com');
+    expect(defaultConfig.headers.common['Authorization']).toBe('Bearer ...');
+    expect(defaultConfig.headers.common['addHead']).toBe('xiaoqinvar');
+    expect(testConfig.timeout).toBe(1000);
+    expect(testConfig.baseURL).toBe('https://www.midwayjs.org');
+    expect(testConfig.headers.common['Authorization']).toBe('Bearer ...');
+    expect(testConfig.headers.common['addHead']).toBeUndefined();
+  });
+
+  // 使用使用client字段报错
+  it('should test with factory with use client field then throw error', async () => {
+    try {
+      await createLightApp('', {
+        imports: [require(join(__dirname, '../src'))],
+        globalConfig: {
+          axios: {
+            default: {
+              baseURL: 'https://www.abc.com',
+              headers: {
+                common: {
+                  Authorization: 'Bearer ...',
+                },
+              },
+            },
+            client: {
+              default: {
+                baseURL: 'https://www.taobao.com',
+                headers: {
+                  common: {
+                    addHead: 'xiaoqinvar',
+                  },
+                },
+                timeout: 10000,
+              },
+              test: {
+                timeout: 1000,
+                baseURL: 'https://www.midwayjs.org',
+              },
+            },
+          },
+        },
+      });
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+    }
+  });
+
+  /**
+   * 多配置下的HttpService测试
+   */
+  it('should test HttpService with single configuration', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          default: {
+            baseURL: 'https://www.baidu.com',
+          },
+        },
+      },
+    });
+
+    const httpService = await app.getApplicationContext().getAsync(HttpService);
+    const searchResult = await httpService.get('/s?wd=test');
+    expect(searchResult.status).toBe(200);
+    expect(searchResult.data).toMatch('<!DOCTYPE html>');
+  });
+
+  /**
+   * 多配置下的HttpService测试
+   */
+  it('should test HttpService with more configurations', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          default: {
+            baseURL: 'https://www.baidu.com',
+          },
+          clients: {
+            default: {
+              timeout: 2000,
+            },
+            test: {
+              timeout: 5000,
+            },
+          },
+        },
+      },
+    });
+
+    const httpService = await app.getApplicationContext().getAsync(HttpService);
+    const searchResult = await httpService.get('/s?wd=test');
+    expect(searchResult.status).toBe(200);
+    expect(searchResult.data).toMatch('<!DOCTYPE html>');
   });
 });

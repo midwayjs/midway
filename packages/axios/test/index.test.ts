@@ -3,13 +3,19 @@ import { HttpService } from '../src';
 import { createLightApp } from '@midwayjs/mock';
 
 describe('/test/index.test.ts', () => {
-
   let httpService: any;
   let container;
   let app;
 
   beforeAll(async () => {
-    app = await createLightApp(join(__dirname, './fixtures/base-app'));
+    app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          default: {},
+        },
+      },
+    });
     container = app.getApplicationContext();
     httpService = await container.getAsync(HttpService);
   });
@@ -22,7 +28,9 @@ describe('/test/index.test.ts', () => {
 
   it('should test context http service', async () => {
     const ctx = app.createAnonymousContext();
-    const httpServiceWithRequest = await ctx.requestContext.getAsync(HttpService);
+    const httpServiceWithRequest = await ctx.requestContext.getAsync(
+      HttpService
+    );
     expect(httpServiceWithRequest).toBeDefined();
     expect(httpServiceWithRequest).toEqual(httpService);
   });
@@ -41,9 +49,11 @@ describe('/test/index.test.ts', () => {
     ];
 
     for (const method of proxyMethods) {
-      const fn = jest.spyOn(httpService['instance'], method).mockImplementation(() => {
-        return 'hello world'
-      });
+      const fn = jest
+        .spyOn(httpService['instance'], method)
+        .mockImplementation(() => {
+          return 'hello world';
+        });
       httpService[method].call(httpService);
       expect(fn).toHaveBeenCalled();
       jest.restoreAllMocks();
@@ -51,7 +61,9 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test get method', async () => {
-    const result = await httpService.get('https://api.github.com/users/octocat/orgs');
+    const result = await httpService.get(
+      'https://api.github.com/users/octocat/orgs'
+    );
     expect(result.status).toEqual(200);
   });
 });
