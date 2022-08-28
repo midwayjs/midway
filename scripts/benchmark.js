@@ -76,6 +76,7 @@ const cannon = () => {
   const results = await cannon();
   console.log(`QPS:  ${results.requests.average}`);
 
+  // retry qps.
   if (results.requests.average < 3000) {
     throw new Error('Benchmark failed, QPS is too low');
   }
