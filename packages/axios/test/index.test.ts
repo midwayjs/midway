@@ -96,10 +96,10 @@ describe('/test/index.test.ts', () => {
           },
           clients: {
             default: {
-              timeout: 2000,
+              timeout: 5000,
             },
             test: {
-              timeout: 5000,
+              timeout: 10000,
             },
           },
         },
@@ -107,9 +107,10 @@ describe('/test/index.test.ts', () => {
     });
 
     const httpService = await app.getApplicationContext().getAsync(HttpService);
-    const searchResult = await httpService.get('/s?wd=test');
-    expect(searchResult.status).toBe(200);
-    expect(searchResult.data).toMatch('<!DOCTYPE html>');
+    const result = await httpService.get(
+      'https://api.github.com/users/octocat/orgs'
+    );
+    expect(result.status).toEqual(200);
   });
 
   // 使用httpService且配置文件为空axios配置
