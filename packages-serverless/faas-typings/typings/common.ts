@@ -327,11 +327,11 @@ export interface FaaSHTTPContext
   /**
    * It's a http request mock object, please don't use it directly.
    */
-  req: FaaSHTTPRequest;
+  req: any;
   /**
    * It's a http response mock object, please don't use it directly.
    */
-  res: FaaSHTTPResponse;
+  res: any;
   /**
    * FaaS http request object
    */
