@@ -13,8 +13,6 @@ import { HttpServiceFactory } from './serviceManager';
   ],
   importConfigFilter: config => {
     if (config['axios']) {
-      console.log(config['axios']);
-
       // 解决循环引用
       if (config['axios']['clients'] || config['axios']['default']) {
         return config;

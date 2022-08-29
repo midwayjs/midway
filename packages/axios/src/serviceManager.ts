@@ -32,7 +32,7 @@ export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
 
   protected async createClient(
     config: AxiosRequestConfig,
-    clientName: string
+    clientName: any
   ): Promise<AxiosInstance> {
     return axios.create(config);
   }
