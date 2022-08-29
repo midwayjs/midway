@@ -1,3 +1,4 @@
+// import { MidwayConfigMissingError } from '@midwayjs/core';
 import { Configuration } from '@midwayjs/decorator';
 import { HttpServiceFactory } from './serviceManager';
 
@@ -12,6 +13,12 @@ import { HttpServiceFactory } from './serviceManager';
   ],
   importConfigFilter: config => {
     if (config['axios']) {
+      // 解决循环引用
+      if (config['axios']['clients'] || config['axios']['default']) {
+        return config;
+      }
+
+      // 兼容older
       if (!config['axios']['clients'] || !config['axios']['client']) {
         config['axios'] = {
           default: {},
