@@ -33,13 +33,14 @@ export class BullFramework extends BaseFramework<Application, Context, any> {
         ...this.bullDefaultConfig,
         ...queueModuleMeta.queueOptions,
       };
-      // bind on error event
       this.addQueue(
         queueModule,
         queueModuleMeta.queueName,
         queueModuleMeta.concurrency,
         queueOptions
       );
+
+      // bind on error event
     }
   }
 
@@ -67,10 +68,29 @@ export class BullFramework extends BaseFramework<Application, Context, any> {
       });
 
       try {
-        await fn(ctx);
+        return Promise.resolve(await fn(ctx));
       } catch (err) {
         ctx.logger.error(err);
+        return Promise.reject(err);
       }
+    });
+
+    [
+      'OnQueueError',
+      'OnQueueWaiting',
+      'OnQueueActive',
+      'OnQueueStalled',
+      'OnQueueProgress',
+      'OnQueueCompleted',
+      'OnQueueFailed',
+      'OnQueuePaused',
+      'OnQueueResumed',
+      'OnQueueCleaned',
+      'OnQueueDrained',
+      'OnQueueRemoved',
+    ].forEach(event => {
+      queue.on(event, async (job, err) => {
+      });
     });
   }
 
