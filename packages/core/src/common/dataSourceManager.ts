@@ -85,20 +85,16 @@ export abstract class DataSourceManager<T> {
     clientName: any,
     options?: CreateDataSourceInstanceOptions
   ): Promise<T | void> {
-    const cache =
-      options && typeof options.cacheInstance === 'boolean'
-        ? options.cacheInstance
-        : true;
-    const validateConnection = (options && options.validateConnection) || false;
+    const opts = processCreateDataSourceInstanceOptions(options);
 
     // options.clients[id] will be merged with options.default
     const configNow = extend(true, {}, this.options['default'], config);
     const client = await this.createDataSource(configNow, clientName);
-    if (cache && clientName && client) {
+    if (opts.cacheInstance && clientName && client) {
       this.dataSource.set(clientName, client);
     }
 
-    if (validateConnection) {
+    if (opts.validateConnection) {
       if (!client) {
         throw new MidwayCommonError(
           `[DataSourceManager] ${clientName} initialization failed.`
@@ -176,4 +172,16 @@ export interface CreateDataSourceInstanceOptions {
    * @default true
    */
   cacheInstance?: boolean | undefined;
+}
+
+function processCreateDataSourceInstanceOptions(
+  options?: CreateDataSourceInstanceOptions
+): Required<NonNullable<CreateDataSourceInstanceOptions>> {
+  const opts: Required<NonNullable<CreateDataSourceInstanceOptions>> = {
+    cacheInstance: true,
+    validateConnection: false,
+    ...options,
+  };
+
+  return opts;
 }
