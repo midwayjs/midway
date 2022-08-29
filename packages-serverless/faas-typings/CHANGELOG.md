@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/midwayjs/midway/compare/v3.4.13...v3.5.0) (2022-08-29)
+
+
+### Bug Fixes
+
+* oss config typings ([#2277](https://github.com/midwayjs/midway/issues/2277)) ([f62e42a](https://github.com/midwayjs/midway/commit/f62e42abf18ff4df3b6d2f23189ec0a46db72c11))
+
+
+
+
+
 ## [3.3.5](https://github.com/midwayjs/midway/compare/v3.3.4...v3.3.5) (2022-04-27)
 
 

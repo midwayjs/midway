@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/midwayjs/midway/compare/v3.4.13...v3.5.0) (2022-08-29)
+
+
+### Bug Fixes
+
+* **axios:** fix @midway/axios more configuration instance problems ([#2273](https://github.com/midwayjs/midway/issues/2273)) ([edf9377](https://github.com/midwayjs/midway/commit/edf937753a1b290de77bea334a052b22adbb9684))
+* oss config typings ([#2277](https://github.com/midwayjs/midway/issues/2277)) ([f62e42a](https://github.com/midwayjs/midway/commit/f62e42abf18ff4df3b6d2f23189ec0a46db72c11))
+
+
+### Features
+
+* add retry wrapper for invoke some remote data ([#2271](https://github.com/midwayjs/midway/issues/2271)) ([1c47338](https://github.com/midwayjs/midway/commit/1c473386937293104369cc8e5727c5330de4f85c))
+* **core:** config option for validating database connection during initialization ([#2234](https://github.com/midwayjs/midway/issues/2234)) ([cf5d360](https://github.com/midwayjs/midway/commit/cf5d360d7300db12f12cc3e1ce67806ad082a7b1))
+
+
+
+
+
 ## [3.4.13](https://github.com/midwayjs/midway/compare/v3.4.12...v3.4.13) (2022-08-24)
 
 

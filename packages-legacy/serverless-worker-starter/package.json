@@ -1,16 +1,16 @@
 {
   "name": "@midwayjs/serverless-worker-starter",
   "private": true,
-  "version": "3.4.13",
+  "version": "3.5.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/runtime-engine": "^3.4.4",
-    "@midwayjs/serverless-http-parser": "^3.4.0",
+    "@midwayjs/serverless-http-parser": "^3.5.0",
     "type-is": "1.6.18"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.4.13",
+    "@midwayjs/core": "^3.5.0",
     "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/jest-environment-service-worker": "0.1.2",
     "@midwayjs/jsdom-service-worker": "0.1.1",

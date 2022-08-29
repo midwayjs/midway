@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/midwayjs/midway/compare/v3.4.13...v3.5.0) (2022-08-29)
+
+
+### Bug Fixes
+
+* **axios:** fix @midway/axios more configuration instance problems ([#2273](https://github.com/midwayjs/midway/issues/2273)) ([edf9377](https://github.com/midwayjs/midway/commit/edf937753a1b290de77bea334a052b22adbb9684))
+
+
+
+
+
 ## [3.4.13](https://github.com/midwayjs/midway/compare/v3.4.12...v3.4.13) (2022-08-24)
 
 **Note:** Version bump only for package @midwayjs/axios
