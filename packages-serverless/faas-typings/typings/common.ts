@@ -325,11 +325,11 @@ export interface FaaSHTTPContext
   extends ContextDelegatedRequest,
     ContextDelegatedResponse {
   /**
-   * Alias to this.request
+   * It's a http request mock object, please don't use it directly.
    */
   req: FaaSHTTPRequest;
   /**
-   * Alias to this.Response
+   * It's a http response mock object, please don't use it directly.
    */
   res: FaaSHTTPResponse;
   /**
