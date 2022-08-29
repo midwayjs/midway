@@ -1,7 +1,7 @@
 {
-  "name": "@midwayjs/task",
-  "version": "3.5.3",
-  "description": "midway component for task and schedule",
+  "name": "@midwayjs/bull",
+  "version": "3.4.13",
+  "description": "midway component for bull",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -13,6 +13,7 @@
     "midway",
     "IoC",
     "task",
+    "bull",
     "plugin"
   ],
   "author": "",
@@ -23,16 +24,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.5.3",
-    "@midwayjs/koa": "^3.5.3",
-    "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/mock": "^3.5.3",
-    "@types/bull": "3.15.9",
-    "@types/cron": "1.7.3"
+    "@midwayjs/core": "^3.4.13",
+    "@midwayjs/decorator": "^3.4.11",
+    "@midwayjs/mock": "^3.4.13"
   },
   "dependencies": {
     "bull": "4.8.5",
-    "cron": "^1.8.2"
+    "@types/bull": "3.15.9"
   },
   "engines": {
     "node": ">=12"

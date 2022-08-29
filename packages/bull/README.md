@@ -6,12 +6,12 @@ midwayjs/task是为了能解决任务系列的模块，例如分布式定时任�
 ## 安装方法
 
 ```bash
-npm install @midwayjs/task -S
+tnpm install @midwayjs/task -S
 ```
 
 ## 使用方法
 
-在 Configuration.ts 导入子组件
+在Configuration.ts导入子组件
 
 ```typescript
 
