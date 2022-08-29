@@ -63,7 +63,7 @@ describe('/test/index.test.ts', () => {
   });
 
   /**
-   * 多配置下的HttpService测试
+   * 单配置，default下的HttpService测试
    */
   it('should test HttpService with single configuration', async () => {
     const app = await createLightApp('', {
@@ -71,16 +71,15 @@ describe('/test/index.test.ts', () => {
       globalConfig: {
         axios: {
           default: {
-            baseURL: 'https://www.baidu.com',
+            baseURL: 'https://api.github.com/',
           },
         },
       },
     });
 
     const httpService = await app.getApplicationContext().getAsync(HttpService);
-    const searchResult = await httpService.get('/s?wd=test');
+    const searchResult = await httpService.get('/users/octocat/orgs');
     expect(searchResult.status).toBe(200);
-    expect(searchResult.data).toMatch('<!DOCTYPE html>');
   });
 
   /**
@@ -92,7 +91,7 @@ describe('/test/index.test.ts', () => {
       globalConfig: {
         axios: {
           default: {
-            baseURL: 'https://www.baidu.com',
+            baseURL: 'https://api.github.com/',
           },
           clients: {
             default: {
@@ -117,14 +116,31 @@ describe('/test/index.test.ts', () => {
   it('should test HttpService with axios config is nullable object', async () => {
     const app = await createLightApp('', {
       imports: [require(join(__dirname, '../src'))],
-      globalConfig: {
-        axios: {},
-      },
+      globalConfig: {},
     });
     const httpService = await app.getApplicationContext().getAsync(HttpService);
     const result = await httpService.get(
       'https://api.github.com/users/octocat/orgs'
     );
     expect(result.status).toEqual(200);
+  });
+
+  // 测试兼容旧版本的axios midway的配置
+  it('should test HttpService with client field、 clients field and axios older configuration.', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          baseURL: 'https://api.github.com/',
+          client: {
+            test: 'test',
+          },
+        },
+      },
+    });
+    const httpService = await app.getApplicationContext().getAsync(HttpService);
+    expect(httpService).toBeDefined();
+    const result = await httpService.get('users/octocat/orgs');
+    expect(result.status).toBe(200);
   });
 });

@@ -1,4 +1,4 @@
-import { MidwayConfigMissingError } from '@midwayjs/core';
+// import { MidwayConfigMissingError } from '@midwayjs/core';
 import { Configuration } from '@midwayjs/decorator';
 import { HttpServiceFactory } from './serviceManager';
 
@@ -7,27 +7,25 @@ import { HttpServiceFactory } from './serviceManager';
   importConfigs: [
     {
       default: {
-        axios: {
-          default: {},
-        },
+        axios: {},
       },
     },
   ],
   importConfigFilter: config => {
     if (config['axios']) {
-      // 检查意外client书写错误
-      if (!config['axios']['clients'] && config['axios']['client']) {
-        throw new MidwayConfigMissingError(
-          'using clients replace client filed in axios config.'
-        );
+      console.log(config['axios']);
+
+      // 解决循环引用
+      if (config['axios']['clients'] || config['axios']['default']) {
+        return config;
       }
 
-      // 不存在clients字段时，使用axios配置中的default字段作为clients：{default: {...}}
-      if (!config['axios']['clients']) {
+      // 兼容older
+      if (!config['axios']['clients'] || !config['axios']['client']) {
         config['axios'] = {
-          default: config['axios']['default'],
+          default: {},
           clients: {
-            default: config['axios']['default'],
+            default: config['axios'],
           },
         };
       }

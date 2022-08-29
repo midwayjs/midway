@@ -18,12 +18,21 @@ export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
 
   @Init()
   async init() {
-    const axiosConfig = this.axiosConfig;
+    let axiosConfig = this.axiosConfig;
+    if (!this.axiosConfig['clients']) {
+      axiosConfig = {
+        default: {},
+        clients: {
+          default: this.axiosConfig,
+        },
+      };
+    }
     await this.initClients(axiosConfig);
   }
 
   protected async createClient(
-    config: AxiosRequestConfig
+    config: AxiosRequestConfig,
+    clientName: string
   ): Promise<AxiosInstance> {
     return axios.create(config);
   }
