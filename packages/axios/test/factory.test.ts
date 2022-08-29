@@ -120,4 +120,29 @@ describe('/test/factory.test.ts', () => {
       expect(error).toBeInstanceOf(Error);
     }
   });
+
+  // 测试兼容旧版本的axios midway的配置
+  it('should test factory with old compatibility.', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          baseURL: 'https://api.github.com/',
+          client: {
+            test: 'test',
+          },
+        },
+      },
+    });
+    const factory = await app
+      .getApplicationContext()
+      .getAsync(HttpServiceFactory);
+    const axiosConfig = factory.axiosConfig.clients.default;
+    expect(axiosConfig['baseURL']).toBe('https://api.github.com/');
+    expect(axiosConfig['client']['test']).toBe('test');
+    const httpService = factory.get();
+    expect(httpService).toBeDefined();
+    const result = await httpService.get('users/octocat/orgs');
+    expect(result.status).toBe(200);
+  });
 });
