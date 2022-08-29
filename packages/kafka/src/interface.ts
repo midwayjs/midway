@@ -27,3 +27,12 @@ export type Application = IMidwayKafkaApplication;
 export interface Context extends IMidwayKafkaContext {}
 export type NextFunction = BaseNextFunction;
 export type DefaultConfig = string | Kafka;
+
+/**
+ * 客户端的相关配置，在midwayjs的自定义配置项
+ */
+export interface IMidwayConsumerConfig {
+  topic: string;
+  subscription: any;
+  runConfig: any;
+}
