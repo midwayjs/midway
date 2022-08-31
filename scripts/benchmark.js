@@ -81,7 +81,7 @@ const cannon = () => {
     throw new Error('Benchmark failed, QPS is too low');
   }
 
-  await wait(10);
+  await wait(15);
 
   // 过 10s 采集一次内存
   const secondMem = await collectMem();
@@ -92,7 +92,7 @@ const cannon = () => {
   );
 
   child.send({ action: 'gc' })
-  await wait(10);
+  await wait(15);
 
   // gc 后采集一次内存
   const thirdMem = await collectMem();
@@ -118,7 +118,7 @@ const cannon = () => {
     throw new Error('Benchmark failed, QPS is too low');
   }
 
-  await wait(10);
+  await wait(15);
 
   const fourthMem = await collectMem();
   console.log(
@@ -128,7 +128,7 @@ const cannon = () => {
   );
 
   child.send({ action: 'gc' });
-  await wait(10);
+  await wait(15);
 
   // gc 后采集一次内存
   const fifthMem = await collectMem();
