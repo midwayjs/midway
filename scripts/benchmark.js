@@ -3,9 +3,9 @@
 const { spawn } = require('child_process');
 const autocannon = require('autocannon');
 
-function wait(delay) {
+function wait(delaySec) {
   return new Promise(resolve => {
-    setTimeout(resolve, delay);
+    setTimeout(resolve, delaySec * 1000);
   });
 }
 
@@ -56,7 +56,7 @@ const cannon = () => {
   console.log(`Current pid is ${child.pid}`);
   const firstMem = await collectMem();
   console.log(
-    `first memory（init）, rss=${format(firstMem.rss)}, heapUsed=${format(
+    `  - first memory  (init  test), rss=${format(firstMem.rss)}, heapUsed=${format(
       firstMem.heapUsed
     )}`
   );
@@ -69,8 +69,8 @@ const cannon = () => {
     console.log(`Exited with code ${code} and signal ${signal}`);
   });
 
-  console.log('Waiting for to initialize after 10s...');
-  await wait(10000);
+  console.log('Initialization after 5s...');
+  await wait(5);
 
   console.log('Running benchmark...');
   const results = await cannon();
@@ -81,31 +81,32 @@ const cannon = () => {
     throw new Error('Benchmark failed, QPS is too low');
   }
 
-  await wait(10000);
+  await wait(15);
 
   // 过 10s 采集一次内存
   const secondMem = await collectMem();
   console.log(
-    `second memory（before gc), rss=${format(secondMem.rss)}, heapUsed=${format(
+    `  - second memory (before gc1), rss=${format(secondMem.rss)}, heapUsed=${format(
       secondMem.heapUsed
     )}`
   );
 
-  child.send({ action: 'gc' });
-  // 等 10s gc
-  await wait(10000);
+  child.send({ action: 'gc' })
+  await wait(15);
 
   // gc 后采集一次内存
   const thirdMem = await collectMem();
   console.log(
-    `third memory（after gc), rss=${format(thirdMem.rss)}, heapUsed =${format(
+    `  - third memory  (after  gc1), rss=${format(thirdMem.rss)}, heapUsed =${format(
       thirdMem.heapUsed
     )}`
   );
 
   // 第一次检查，gc 后和初始化持平
-  if (Math.abs(thirdMem.heapUsed / firstMem.heapUsed) > 1.1) {
-    throw new Error('memory leak warning');
+  const ratio1 = +Math.abs(thirdMem.heapUsed / firstMem.heapUsed).toFixed(2);
+  console.log(`ratio1: ${ratio1}`);
+  if (ratio1 > 1.1) {
+    throw new Error('memory leak warning')
   }
 
   // 继续压测 30s
@@ -117,31 +118,31 @@ const cannon = () => {
     throw new Error('Benchmark failed, QPS is too low');
   }
 
-  await wait(10000);
+  await wait(15);
 
-  // 过 10s 采集一次内存
   const fourthMem = await collectMem();
   console.log(
-    `fourth memory（before gc2), rss=${format(
+    `  - fourth memory (before gc2), rss=${format(
       fourthMem.rss
     )}, heapUsed=${format(fourthMem.heapUsed)}`
   );
 
   child.send({ action: 'gc' });
-  // 等 10s gc
-  await wait(10000);
+  await wait(15);
 
   // gc 后采集一次内存
   const fifthMem = await collectMem();
   console.log(
-    `fifth memory（after gc2), rss=${format(fifthMem.rss)}, heapUsed =${format(
+    `  - fifth  memory (after  gc2), rss=${format(fifthMem.rss)}, heapUsed =${format(
       fifthMem.heapUsed
     )}`
   );
 
   // 第二次检查，第二次 gc 中的堆内存和第一次 gc 持平，gc 前的数值不定，容错率大一些
-  if (Math.abs(fourthMem.heapUsed / secondMem.heapUsed) > 1.5) {
-    throw new Error('memory leak warning');
+  const ratio2 = +Math.abs(fourthMem.heapUsed / secondMem.heapUsed).toFixed(2);
+  console.log(`ratio2: ${ratio2}`);
+  if (ratio2 > 1.5) {
+    throw new Error('memory leak warning')
   }
 
   // 第三次检查，第三次 gc 之后和第一次 gc 结果持平
