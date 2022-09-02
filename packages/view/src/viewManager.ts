@@ -15,18 +15,19 @@ import { IViewEngine } from './interface';
 @Scope(ScopeEnum.Singleton)
 export class ViewManager extends Map {
   @App()
-  app;
+  protected app;
 
   @Config('view')
-  viewConfig;
+  protected viewConfig;
 
-  config;
+  protected config;
 
-  extMap = new Map();
-  fileMap = new Map();
+  protected extMap = new Map();
+  protected fileMap = new Map();
+  protected localsMap = {};
 
   @Init()
-  init() {
+  protected init() {
     this.config = this.viewConfig;
     const rootSet: Set<string> = new Set(Object.values(this.config.rootDir));
     if (this.config.root) {
@@ -59,7 +60,7 @@ export class ViewManager extends Map {
    * @param {String} name - the name of view engine
    * @param {Object} viewEngine - the class of view engine
    */
-  use(name: string, viewEngine: new (...args) => IViewEngine): void {
+  public use(name: string, viewEngine: new (...args) => IViewEngine): void {
     assert(name, 'name is required');
     assert(!this.has(name), `${name} has been registered`);
 
@@ -83,7 +84,7 @@ export class ViewManager extends Map {
    * @param {String} name - the given path name, it's relative to config.root
    * @return {String} filename - the full path
    */
-  async resolve(name: string): Promise<string> {
+  public async resolve(name: string): Promise<string> {
     const config = this.config;
 
     // check cache
@@ -100,6 +101,26 @@ export class ViewManager extends Map {
     // set cache
     this.fileMap.set(name, filename);
     return filename;
+  }
+
+  /**
+   * add a global data for all views
+   * @param key
+   * @param localValue
+   */
+  public addLocals(key, localValue) {
+    this.localsMap[key] = localValue;
+  }
+
+  /**
+   * get global locals data
+   */
+  public getLocals() {
+    return this.localsMap;
+  }
+
+  public findEngine(ext: string): string {
+    return this.extMap.get(ext);
   }
 }
 

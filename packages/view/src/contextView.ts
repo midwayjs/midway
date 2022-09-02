@@ -38,7 +38,7 @@ export class ContextView implements IViewEngine {
     let viewEngineName = options.viewEngine;
     if (!viewEngineName) {
       const ext = extname(filename);
-      viewEngineName = this.viewManager.extMap.get(ext);
+      viewEngineName = this.viewManager.findEngine(ext);
     }
     // use the default view engine that is configured if no matching above
     if (!viewEngineName) {
@@ -85,6 +85,7 @@ export class ContextView implements IViewEngine {
 
   private setLocals(locals) {
     return Object.assign(
+      this.viewManager.getLocals(),
       {
         ctx: this.ctx,
         request: this.ctx.request,
