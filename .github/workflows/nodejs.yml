@@ -59,6 +59,17 @@ jobs:
           KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
           KAFKA_ADVERTISED_PORT: 9092
 
+      postgres:
+        image: postgres:alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: db_ci_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
     - name: Git checkout
       uses: actions/checkout@v3

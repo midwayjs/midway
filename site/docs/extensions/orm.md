@@ -1360,7 +1360,7 @@ $ sudo sysctl -w net.inet.tcp.sack=0
 // src/config/config.default.ts
 export default {
   // ...
-  orm: {
+  typeorm: {
     dataSource: {
       default: {
         //...

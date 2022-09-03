@@ -319,9 +319,13 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 
 import { PassportMiddleware } from '@midwayjs/passport';
 import { Middleware } from '@midwayjs/decorator';
+import { GithubStrategy } from './github-strategy.ts';
 
 @Middleware()
-export class GithubPassportMiddleware extends PassportMiddleware {
+export class GithubPassportMiddleware extends PassportMiddleware(GithubStrategy) {
+  getAuthenticateOptions(): AuthenticateOptions | Promise<AuthenticateOptions> {
+    return {};
+  }
 }
 ```
 ```typescript

@@ -19,6 +19,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   INVALID_CONFIG: 10014,
   DUPLICATE_CLASS_NAME: 10015,
   DUPLICATE_CONTROLLER_PREFIX_OPTIONS: 10016,
+  RETRY_OVER_MAX_TIME: 10017,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -170,6 +171,18 @@ export class MidwayDuplicateControllerOptionsError extends MidwayError {
     super(
       `"Prefix ${prefix}" with duplicated controller options between "${existController}" and "${existControllerOther}"`,
       FrameworkErrorEnum.DUPLICATE_CONTROLLER_PREFIX_OPTIONS
+    );
+  }
+}
+
+export class MidwayRetryExceededMaxTimesError extends MidwayError {
+  constructor(methodName, times: number, err: Error) {
+    super(
+      `Invoke "${methodName}" retries exceeded the maximum number of times(${times}), error: ${err.message}`,
+      FrameworkErrorEnum.RETRY_OVER_MAX_TIME,
+      {
+        cause: err,
+      }
     );
   }
 }

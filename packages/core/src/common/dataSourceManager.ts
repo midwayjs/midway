@@ -2,7 +2,7 @@
  * 数据源管理器实现
  */
 import { extend } from '../util/extend';
-import { MidwayParameterError } from '../error';
+import { MidwayCommonError, MidwayParameterError } from '../error';
 import { run } from '@midwayjs/glob';
 import { join } from 'path';
 import { Types } from '@midwayjs/decorator';
@@ -17,7 +17,7 @@ export abstract class DataSourceManager<T> {
     this.options = options;
     if (!options.dataSource) {
       throw new MidwayParameterError(
-        'DataSourceManager must set options.dataSource.'
+        '[DataSourceManager] must set options.dataSource.'
       );
     }
 
@@ -43,8 +43,9 @@ export abstract class DataSourceManager<T> {
         dataSourceOptions['entities'] = Array.from(entities);
       }
       // create data source
-      const opts: CreateInstanceOptions = {
+      const opts: CreateDataSourceInstanceOptions = {
         cacheInstance: options.cacheInstance, // will default true
+        validateConnection: options.validateConnection,
       };
       await this.createInstance(dataSourceOptions, dataSourceName, opts);
     }
@@ -82,19 +83,36 @@ export abstract class DataSourceManager<T> {
   public async createInstance(
     config: any,
     clientName: any,
-    options?: CreateInstanceOptions
+    options?: CreateDataSourceInstanceOptions
   ): Promise<T | void> {
     const cache =
       options && typeof options.cacheInstance === 'boolean'
         ? options.cacheInstance
         : true;
+    const validateConnection = (options && options.validateConnection) || false;
 
-    // options.default will be merge in to options.clients[id]
+    // options.clients[id] will be merged with options.default
     const configNow = extend(true, {}, this.options['default'], config);
     const client = await this.createDataSource(configNow, clientName);
     if (cache && clientName && client) {
       this.dataSource.set(clientName, client);
     }
+
+    if (validateConnection) {
+      if (!client) {
+        throw new MidwayCommonError(
+          `[DataSourceManager] ${clientName} initialization failed.`
+        );
+      }
+
+      const connected = await this.checkConnected(client);
+      if (!connected) {
+        throw new MidwayCommonError(
+          `[DataSourceManager] ${clientName} is not connected.`
+        );
+      }
+    }
+
     return client;
   }
 
@@ -149,6 +167,13 @@ export function globModels(globString: string, appDir: string) {
   return models;
 }
 
-export interface CreateInstanceOptions {
+export interface CreateDataSourceInstanceOptions {
+  /**
+   * @default false
+   */
+  validateConnection?: boolean;
+  /**
+   * @default true
+   */
   cacheInstance?: boolean | undefined;
 }

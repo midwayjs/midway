@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "3.4.13",
+  "version": "3.5.0",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -25,6 +25,7 @@
     "koa": "2.13.4",
     "midway-test-component": "*",
     "mm": "3.2.0",
+    "pg": "^8.8.0",
     "raw-body": "2.5.1",
     "sinon": "14.0.0"
   },
