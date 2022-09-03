@@ -5,3 +5,4 @@ declare module '@midwayjs/core/dist/interface' {
     otel?: Record<string, any>;
   }
 }
+
