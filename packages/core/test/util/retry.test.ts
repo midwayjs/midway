@@ -25,6 +25,17 @@ describe('test/util/retry.test.ts', function () {
   }
 
   describe('wrap async function', function () {
+    it('should test anonymous function with this', async () => {
+      const originFn = async (a, b, c) => {
+        await sleep(100);
+        return a + b + c;
+      }
+      const retryFn = retryWithAsync(originFn);
+
+      expect(await retryFn('a', 'b', 'c')).toEqual('abc');
+    });
+
+
     it('should test retry invoke method with default retry number and fail', async () => {
       const service = new TestService();
       const fn = retryWithAsync(service.getUserAsync.bind(service))
@@ -36,8 +47,9 @@ describe('test/util/retry.test.ts', function () {
 
     it('should test retry invoke method with origin error', async () => {
       const service = new TestService();
-      const fn = retryWithAsync(service.getUserAsync.bind(service), 1, {
-        throwOriginError: true
+      const fn = retryWithAsync(service.getUserAsync, 1, {
+        throwOriginError: true,
+        receiver: service,
       });
 
       await expect(async () => {
@@ -47,7 +59,9 @@ describe('test/util/retry.test.ts', function () {
 
     it('should test retry invoke method and will be success', async () => {
       const service = new TestService();
-      const fn = retryWithAsync(service.getUserAsync.bind(service), 2);
+      const fn = retryWithAsync(service.getUserAsync, 2, {
+        receiver: service,
+      });
 
       const result = await fn('harry');
       expect(result).toEqual('hello harry');
@@ -83,6 +97,16 @@ describe('test/util/retry.test.ts', function () {
   });
 
   describe('wrap sync function', function () {
+
+    it('should test anonymous function with this',  () => {
+      const originFn = (a, b, c) => {
+        return a + b + c;
+      }
+      const retryFn = retryWith(originFn);
+
+      expect(retryFn('a', 'b', 'c')).toEqual('abc');
+    });
+
     it('should test retry invoke method with default retry number and fail', () => {
       const service = new TestService();
       const fn = retryWith(service.getUser.bind(service))
@@ -94,8 +118,9 @@ describe('test/util/retry.test.ts', function () {
 
     it('should test retry invoke method with origin error', () => {
       const service = new TestService();
-      const fn = retryWith(service.getUser.bind(service), 1, {
-        throwOriginError: true
+      const fn = retryWith(service.getUser, 1, {
+        throwOriginError: true,
+        receiver: service,
       });
 
       expect(() => {
@@ -105,7 +130,9 @@ describe('test/util/retry.test.ts', function () {
 
     it('should test retry invoke method and will be success', () => {
       const service = new TestService();
-      const fn = retryWith(service.getUser.bind(service), 2);
+      const fn = retryWith(service.getUser, 2, {
+        receiver: service,
+      });
 
       const result = fn('harry');
       expect(result).toEqual('hello harry');
