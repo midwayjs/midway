@@ -144,10 +144,19 @@ export abstract class DataSourceManager<T> {
 }
 
 export function globModels(globString: string, appDir: string) {
-  const cwd = join(appDir, globString);
+  let cwd;
+  const pattern = [...DEFAULT_PATTERN];
+
+  if (/\*/.test(globString)) {
+    cwd = appDir;
+    pattern.push(globString);
+  } else {
+    cwd = join(appDir, globString);
+  }
+
   const models = [];
   // string will be glob file
-  const files = run(DEFAULT_PATTERN, {
+  const files = run(pattern, {
     cwd,
     ignore: IGNORE_PATTERN,
   });
