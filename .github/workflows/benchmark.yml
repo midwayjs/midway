@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: ['lts/*']
 
     steps:
       - uses: actions/checkout@v3
@@ -25,8 +25,40 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm run bootstrap
-      - run: npm run build --if-present
+      - name: Cache
+        uses: actions/cache@v3
+        id: cache-lerna
+        env:
+          cache-name: cache-lerna
+        with:
+          path: |
+            node_modules
+            package-lock.json
+            packages/*/.eslintcache
+            packages/*/dist
+            packages/*/tsconfig.tsbuildinfo
+            packages/*/node_modules
+            packages/*/package-lock.json
+          key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-
+      - name: Inatall Dependencies
+        run: |
+          npm i --no-audit -g autocannon zx
+          # npm run purge # if you want to clean up the cache
+          npm i --no-audit
+          npm run bootstrap
+      - name: Build
+        run: |
+          sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
+          lerna run build --concurrency=2
       - run: npm run link
-      - run: ./scripts/benchmark.sh
+      - name: Benchmark application-koa-v3
+        timeout-minutes: 10
+        run: |
+          ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-koa-v3
+      - name: Benchmark application-web-v3
+        timeout-minutes: 10
+        run: |
+          ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-web-v3
+

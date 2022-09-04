@@ -16,7 +16,8 @@
     "ts-node": "10.7.0",
     "typedoc": "0.22.18",
     "typescript": "4.6.3",
-    "why-is-node-running": "2.2.2"
+    "why-is-node-running": "2.2.2",
+    "zx": "^7.0.8"
   },
   "scripts": {
     "test": "lerna run test",
