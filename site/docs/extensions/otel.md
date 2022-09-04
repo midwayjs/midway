@@ -225,6 +225,32 @@ const sdk = new opentelemetry.NodeSDK({
 
 
 
+### 阿里云 ARMS
+
+阿里云应用实时监控服务（[ARMS](https://www.aliyun.com/product/arms/)）已经支持了 open-telemetry 格式的指标，同时提供一个 sdk 进行接入。
+
+首先，安装 `opentelemetry-arms`。
+
+```bash
+# arms sdk
+$ npm install --save opentelemetry-arms
+```
+
+然后在启动时添加环境变量参数以及 `-r` 参数即可。
+
+```bash
+$ SERVICE_NAME=nodejs-opentelemetry-express AUTHENTICATION=****  ENDPOINT=grpc://**** node  -r opentelemetry-arms bootstrap.js
+```
+
+:::tip
+
+- 1、这种方式接入，无需在` bootstrap.js` 中添加代码。
+- 2、默认 sdk 仅提供了 http/express/koa 模块的链路支持，未包含其他 instrumentations，如有需求，可以拷贝源码至 `bootstrap.js` 中自定义。
+
+:::
+
+
+
 ## 装饰器支持
 
 Midway 针对用户侧的需求，添加一个装饰器用于增加链路节点。
