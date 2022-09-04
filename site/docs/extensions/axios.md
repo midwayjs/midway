@@ -66,15 +66,20 @@ import { makeHttpRequest } from '@midwayjs/core';
 
 const result = await makeHttpRequest('http://127.1:7001/', {
   method: 'POST',
+   headers: {
+    'Content-Type': 'application/json',
+  },
   data: {
     a: 1,
     b: 2
   },
   dataType: 'json',
+  contentType:'json', //发送的post 为json
 });
 
 // result.data ...
 ```
+
 
 设置请求超时时间。
 
