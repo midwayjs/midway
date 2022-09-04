@@ -5,7 +5,7 @@
 应用于支付和金融交易、实施跟踪和监控汽车等行业信息流动、捕获分析物联网数据等等。
 
 
-在Midway中，我们提供了订阅Kafka的能力，专门来满足用户的这类需求。
+在 Midway中，我们提供了订阅 Kafka 的能力，专门来满足用户的这类需求。
 
 相关信息：
 
@@ -152,7 +152,6 @@ export class UserConsumer {
     this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
   }
 }
-
 ```
 `@Consumer` 装饰器，提供消费者标识，并且它的参数，指定了某种消费框架的类型，比如，我们这里指定了 `MSListenerType.KFAKA` 这个类型，指的就是 kafka 类型。
 
@@ -194,15 +193,15 @@ import { MidwayConfig } from '@midwayjs/core';
 
 export default {
   // ...
-    kafka: {
-        kafkaConfig: {
-            clientId: 'my-app',
-            brokers: [process.env.KAFKA_URL || 'localhost:9092'],
-        },
-        consumerConfig: {
-            groupId: 'groupId-test'
-        }
+  kafka: {
+    kafkaConfig: {
+      clientId: 'my-app',
+      brokers: [process.env.KAFKA_URL || 'localhost:9092'],
     },
+    consumerConfig: {
+      groupId: 'groupId-test'
+    }
+  },
 } as MidwayConfig;
 ```
 
@@ -452,17 +451,17 @@ export class UserService {
   @Inject()
   kafkaService: KafkaService;
 
-	async invoke() {
+  async invoke() {
     // TODO
 
     // 发送消息
     const result = this.kafkaService.send({
-        topic: 'test',
-        messages: [
+      topic: 'test',
+      messages: [
         {
-            value: JSON.stringify(messageValue),
+          value: JSON.stringify(messageValue),
         },
-        ],
+      ],
     });
   }
 }

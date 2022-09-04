@@ -56,7 +56,8 @@
         "pipeline",
         "service_factory",
         "data_listener",
-        "data_source"
+        "data_source",
+        "retry"
       ]
     },
     {
@@ -148,7 +149,8 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
-        "extensions/rabbitmq"
+        "extensions/rabbitmq",
+        "extensions/kafka"
       ]
     },
     {
