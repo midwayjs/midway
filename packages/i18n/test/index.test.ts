@@ -297,6 +297,22 @@ describe('test/index.test.ts', () => {
       expect(result.headers['set-cookie']).toBeUndefined();
       await close(app);
     });
+
+    it('should test with request ctx.locals', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-koa-ctx-locals'
+      ));
+
+      const result = await createHttpRequest(app).get('/').query({
+        locale: 'zh_CN',
+        username: '世界',
+      });
+
+      expect(result.text).toEqual('你好 世界');
+
+      await close(app);
+    });
   });
 
   describe('i18n in express', function () {
@@ -391,6 +407,22 @@ describe('test/index.test.ts', () => {
 
       expect(result.text).toEqual('Hello 世界');
       expect(result.headers['set-cookie']).toBeUndefined();
+      await close(app);
+    });
+
+    it('should test with request req.locals', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-express-req-locals'
+      ));
+
+      const result = await createHttpRequest(app).get('/').query({
+        locale: 'zh_CN',
+        username: '世界',
+      });
+
+      expect(result.text).toEqual('你好 世界');
+
       await close(app);
     });
   });

@@ -88,6 +88,12 @@ export class MidwayKoaFramework extends BaseFramework<
       enumerable: true,
     });
 
+    Object.defineProperty(this.app.context, 'locals', {
+      get() {
+        return this.state;
+      },
+    });
+
     const onerrorConfig = this.configService.getConfiguration('onerror');
     setupOnError(this.app, onerrorConfig, this.logger);
 

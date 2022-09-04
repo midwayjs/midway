@@ -19,4 +19,5 @@ export const i18n: I18nOptions = {
       cookieMaxAge: FORMAT.MS.ONE_YEAR,
     },
   },
+  localsField: 'i18n',
 };
