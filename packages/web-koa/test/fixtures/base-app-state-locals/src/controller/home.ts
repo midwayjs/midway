@@ -12,8 +12,10 @@ export class APIController {
 
   @Get('/')
   async home() {
+    this.ctx.locals = {
+      b: 2,
+    }
     this.ctx.state['a'] = 1;
-    this.ctx.locals['b'] = 2;
 
     return {
       locals: this.ctx.locals,

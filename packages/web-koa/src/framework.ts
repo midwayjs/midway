@@ -92,6 +92,9 @@ export class MidwayKoaFramework extends BaseFramework<
       get() {
         return this.state;
       },
+      set(value) {
+        this.state = value;
+      },
     });
 
     const onerrorConfig = this.configService.getConfiguration('onerror');

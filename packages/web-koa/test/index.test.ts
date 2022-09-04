@@ -433,7 +433,7 @@ describe('/test/feature.test.ts', () => {
     let result = await createHttpRequest(app)
       .get('/');
     expect(result.status).toEqual(200);
-    expect(result.text).toEqual('{"locals":{"a":1,"b":2},"state":{"a":1,"b":2}}');
+    expect(result.text).toEqual('{"locals":{"b":2,"a":1},"state":{"b":2,"a":1}}');
 
     await closeApp(app);
   });
