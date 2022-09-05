@@ -145,12 +145,19 @@ export abstract class DataSourceManager<T> {
 
 export function globModels(globString: string, appDir: string) {
   let cwd;
-  const pattern = [...DEFAULT_PATTERN];
+  let pattern;
+
+  if (globString.endsWith('**')) {
+    // 去掉尾部的 **，因为 glob 会自动添加
+    globString = globString.slice(0, -2);
+  }
 
   if (/\*/.test(globString)) {
     cwd = appDir;
+    pattern = [...DEFAULT_PATTERN.map(p => join(globString, p))];
     pattern.push(globString);
   } else {
+    pattern = [...DEFAULT_PATTERN];
     cwd = join(appDir, globString);
   }
 
