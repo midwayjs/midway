@@ -218,7 +218,8 @@ custom:
 
 ```yaml
 custom:
-	customDomain: test.example.com
+	customDomain:
+    domainName: test.example.com
 ```
 
 如果自定义的域名，需要使用 https，那么在 云控制台 配置好 https 证书之后，需要将 customDomain 设置为 false，避免下次发布时重置成 http：

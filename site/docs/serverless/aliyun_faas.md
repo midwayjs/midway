@@ -639,8 +639,7 @@ provider:
   name: aliyun
 
 custom:
-  customDomain:
-    domainName: false ## 5.1 之后，把整段删除也可以
+  customDomain: false
 ```
 
 第二步，添加域名解析到你函数对应网关。
