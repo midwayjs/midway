@@ -13,6 +13,7 @@ export function retryWithAsync<T extends (...args) => Promise<unknown>>(
   options: {
     throwOriginError?: boolean;
     retryInterval?: number;
+    receiver?: any;
   } = {}
 ): (...args: Parameters<T>) => ReturnType<T> {
   let defaultRetry = retryTimes;
@@ -21,7 +22,7 @@ export function retryWithAsync<T extends (...args) => Promise<unknown>>(
   return (async (...args: Parameters<T>) => {
     do {
       try {
-        return await retryFn(...args);
+        return await retryFn.bind(options.receiver || this)(...args);
       } catch (err) {
         error = err;
       }
@@ -53,6 +54,7 @@ export function retryWith<T extends (...args) => unknown>(
   retryTimes = 1,
   options: {
     throwOriginError?: boolean;
+    receiver?: any;
   } = {}
 ): (...args: Parameters<T>) => ReturnType<T> {
   let defaultRetry = retryTimes;
@@ -61,7 +63,7 @@ export function retryWith<T extends (...args) => unknown>(
   return ((...args: Parameters<T>) => {
     do {
       try {
-        return retryFn(...args);
+        return retryFn.bind(options.receiver || this)(...args);
       } catch (err) {
         error = err;
       }
