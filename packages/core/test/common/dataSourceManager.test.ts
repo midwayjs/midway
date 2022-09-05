@@ -1,5 +1,6 @@
 import { DataSourceManager } from '../../src';
 import { globModels } from '../../src/common/dataSourceManager';
+import { join } from 'path';
 
 describe('test/common/dataSourceManager.test.ts', () => {
 
@@ -83,6 +84,11 @@ describe('test/common/dataSourceManager.test.ts', () => {
 
     result = globModels('abc', __dirname);
     expect(result.length).toEqual(4);
+  });
+
+  it('should test glob model with pattern string', function () {
+    let result = globModels('**/bcd/**', join(__dirname, 'glob_dir_pattern'));
+    expect(result.length).toEqual(1);
   });
 
   it('should test with glob model', async () => {
