@@ -404,6 +404,7 @@ describe('/test/feature.test.ts', () => {
       .get('/api/user');
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('hello world123');
+    await closeApp(app);
   });
 
   it('should test query parser', async () => {
@@ -424,5 +425,16 @@ describe('/test/feature.test.ts', () => {
 
     expect(result.status).toEqual(200);
     expect(result.text).toEqual(JSON.stringify({"appId":["123","456"]}));
+    await closeApp(app);
+  });
+
+  it('should test locals proxy state', async () => {
+    const app = await creatApp('base-app-state-locals');
+    let result = await createHttpRequest(app)
+      .get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('{"locals":{"b":2,"a":1},"state":{"b":2,"a":1}}');
+
+    await closeApp(app);
   });
 });

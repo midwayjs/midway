@@ -19,6 +19,7 @@ export interface I18nOptions {
   fallbacks: Record<string, any>;
   writeCookie: boolean;
   resolver:  RequestResolver | false,
+  localsField: string;
 }
 
 export const I18N_ATTR_KEY = 'i18n:locale';
