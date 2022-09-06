@@ -28,6 +28,7 @@ $ npm install --save @opentelemetry/api
 
 # Node.js 的 api 实现
 $ npm install --save @opentelemetry/sdk-node
+$ npm install --save @opentelemetry/resources @opentelemetry/semantic-conventions
 
 # 常用 Node.js 模块的埋点实现
 $ npm install --save @opentelemetry/auto-instrumentations-node
@@ -52,12 +53,18 @@ const process = require('process');
 const opentelemetry = require('@opentelemetry/sdk-node');
 const { ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-base');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
+const { Resource } = require('@opentelemetry/resources');
+const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions')
 
 // Midway 启动文件
 const { Bootstrap } = require('@midwayjs/bootstrap');
 
 // 初始化一个 open-telemetry 的 SDK
 const sdk = new opentelemetry.NodeSDK({
+  // 设置追踪服务名
+  resource: new Resource({
+    [SemanticResourceAttributes.SERVICE_NAME]: 'my-app',
+  }),
   // 配置当前的导出方式，比如这里配置了一个输出到控制台的，也可以配置其他的 Exporter，比如 Jaeger
   traceExporter: new ConsoleSpanExporter(),
   // 这里配置了默认自带的一些监控模块，比如 http 模块等
