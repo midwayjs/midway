@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/serverless-fc-starter",
   "private": true,
-  "version": "3.5.0",
+  "version": "3.5.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -9,7 +9,7 @@
     "@midwayjs/serverless-http-parser": "^3.5.0"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.5.0",
+    "@midwayjs/core": "^3.5.1",
     "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/runtime-mock": "^3.4.4",
     "raw-body": "2.5.1"

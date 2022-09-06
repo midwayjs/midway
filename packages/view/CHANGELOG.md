@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/midwayjs/midway/compare/v3.5.0...v3.5.1) (2022-09-06)
+
+
+### Features
+
+* support add locals and add case ([#2289](https://github.com/midwayjs/midway/issues/2289)) ([fc373d9](https://github.com/midwayjs/midway/commit/fc373d9ac4d2ae82c90cd476292012fae2f5fc2d))
+
+
+
+
+
 # [3.5.0](https://github.com/midwayjs/midway/compare/v3.4.13...v3.5.0) (2022-08-29)
 
 **Note:** Version bump only for package @midwayjs/view
