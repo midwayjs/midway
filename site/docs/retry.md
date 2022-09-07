@@ -78,8 +78,11 @@ export class UserService() {
   async getUserData(userId: string) {
     // wrap
     const getUserDataOrigin = retryWithAsync(
-      this.getUserDataFromRemote.bind(this) as typeof this.getUserDataFromRemote, 
-      2, 
+      this.getUserDataFromRemote, 
+      2,
+      {
+        receiver: this,
+      }
     );
 
     // invoke
@@ -91,6 +94,43 @@ export class UserService() {
   }
 }
 ```
+
+
+
+## this 绑定
+
+从 Midway v3.5.1 起，增加了一个 `receiver` 参数，用于在类的场景下绑定 this，用于处理：
+
+- 1、方法正确的 this 指向
+- 2、包裹方法定义的正确性
+
+```typescript
+// wrap
+const getUserDataOrigin = retryWithAsync(
+  this.getUserDataFromRemote, 
+  2,
+  {
+    receiver: this,	// 此参数用于处理 this 指向
+  }
+);
+```
+
+如果没有该参数，代码需要写成下面的样子才能绑定 this，同时返回的 `getUserDataOrigin` 方法的定义才正确。
+
+```typescript
+// wrap
+const getUserDataOrigin = retryWithAsync(
+  this.getUserDataFromRemote.bind(this) as typeof this.getUserDataFromRemote, 
+  2,
+  {
+    receiver: this,
+  }
+);
+
+
+```
+
+
 
 
 

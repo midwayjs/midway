@@ -260,9 +260,7 @@ export const mysql = {
 
 ### 2、目录扫描关联实体
 
-在某些情况下，我们也可以通过通配的路径来替代，但是路径的写法不支持 [单文件构建部署](./deployment#单文件构建部署)（bundle模式）。
-
-我们可以和普通形式混用，比如：
+在某些情况下，我们也可以通过通配的路径来替代，比如：
 
 ```typescript
 // config.default.ts
@@ -274,7 +272,12 @@ export const mysql = {
       host: 'localhost',
       user: 'root',
       database: 'test',
-      entities: [User, SimpleUser, '/abc']		// 以 initDataSource 方法的第二个参数作为相对路径查找
+      entities: [
+        User, 
+        SimpleUser, 
+        '/abc',			// 特定目录下
+        '**/abc/**'	// 仅获取包含 abc 字符的目录下的文件
+      ]		
     },
     // ...
   }
@@ -282,7 +285,14 @@ export const mysql = {
 }
 ```
 
-注意，这里和常见的 typeorm 等扫描路径不同，entities 的路径不需要写 `.ts`  后缀，否则部署时会找不到实体。
+:::caution
+
+注意
+
+- 1、填写目录字符串时，以 initDataSource 方法的第二个参数作为相对路径查找（这里和常见的 typeorm 等扫描路径不同，entities 的路径不需要写 `.ts`  后缀，否则部署时会找不到实体）
+- 2、路径的写法不支持 [单文件构建部署](./deployment#单文件构建部署)（bundle模式）
+
+:::
 
 
 
