@@ -10,7 +10,7 @@ Midway 提供了一个内置的异常处理器，负责处理应用程序中所�
 
 ## Http 异常
 
-在 Http 请求中，Midway 提供了通用的 `MidwayHttpError` 类型的异常，其继承与标准的 `MidwayError`。
+在 Http 请求中，Midway 提供了通用的 `MidwayHttpError` 类型的异常，其继承于标准的 `MidwayError`。
 
 ```typescript
 export class MidwayHttpError extends MidwayError {
