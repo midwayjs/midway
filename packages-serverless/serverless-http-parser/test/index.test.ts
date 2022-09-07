@@ -122,6 +122,13 @@ describe('test http parser', () => {
     // context.cookies.set('bbb', '11111');
     // context.cookies.set('ccc', '22');
     // assert(context.res.headers['set-cookie'].length === 2);
+
+    // ctx.locals
+    expect(context.locals).toEqual({});
+    context.locals = { a: 1 };
+    expect(context.state).toEqual({ a: 1 });
+    context.state['b'] = 2;
+    expect(context.locals).toEqual({ a: 1, b: 2 });
   });
 
   it('body should undefined when method not post', () => {

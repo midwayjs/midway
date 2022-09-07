@@ -40,6 +40,14 @@ export class Application extends EventEmitter {
     response.request = request;
     // context.originalUrl = request.originalUrl = req.url;
     context.state = {};
+    Object.defineProperty(context, 'locals', {
+      get() {
+        return context.state;
+      },
+      set(value) {
+        context.state = value;
+      },
+    });
     return context;
   }
 
