@@ -28,7 +28,6 @@ $ npm install --save @opentelemetry/api
 
 # Node.js 的 api 实现
 $ npm install --save @opentelemetry/sdk-node
-$ npm install --save @opentelemetry/resources @opentelemetry/semantic-conventions
 
 # 常用 Node.js 模块的埋点实现
 $ npm install --save @opentelemetry/auto-instrumentations-node
