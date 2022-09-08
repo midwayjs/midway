@@ -5,12 +5,6 @@ Object {
   "components": Object {
     "schemas": Object {
       "CodeLoginDTO": Object {
-        "example": Object {
-          "code": "0000",
-          "phone": "17755556666",
-          "site": "sport",
-          "uuid": "xxxx",
-        },
         "properties": Object {
           "code": Object {
             "description": "验证码",
@@ -39,11 +33,6 @@ Object {
         "type": "object",
       },
       "LoginDTO": Object {
-        "example": Object {
-          "password": "xxx",
-          "phone": "17755556666",
-          "site": "sport",
-        },
         "properties": Object {
           "password": Object {
             "description": "密码",
@@ -137,11 +126,6 @@ Object {
 
 exports[`/test/index.test.ts test swagger should get swagger json 1`] = `
 Object {
-  "example": Object {
-    "agedt": 1,
-    "breedtd": "Maine Coon",
-    "namedt": "Kitty",
-  },
   "properties": Object {
     "agedt": Object {
       "description": "The age of ttthe Cat",
@@ -165,11 +149,6 @@ Object {
 
 exports[`/test/index.test.ts test swagger should get swagger json 2`] = `
 Object {
-  "example": Object {
-    "aged": 1,
-    "breedd": "Maine Coon",
-    "named": "Kitty",
-  },
   "properties": Object {
     "aged": Object {
       "description": "The age of the Cat",
@@ -193,11 +172,6 @@ Object {
 
 exports[`/test/index.test.ts test swagger should get swagger json 3`] = `
 Object {
-  "example": Object {
-    "agea": 1,
-    "breeda": "Maine Coon",
-    "namea": "Kitty",
-  },
   "properties": Object {
     "agea": Object {
       "description": "The age of thaae Cat",
@@ -228,12 +202,6 @@ Object {
 
 exports[`/test/index.test.ts test swagger should get swagger json 4`] = `
 Object {
-  "example": Object {
-    "age": 1,
-    "agedata": "2022-12-12 11:11:11",
-    "breed": "Maine Coon",
-    "name": "Kitty",
-  },
   "properties": Object {
     "age": Object {
       "description": "The age of the Cat",
@@ -270,15 +238,6 @@ Object {
 
 exports[`/test/index.test.ts test swagger should get swagger json 5`] = `
 Object {
-  "example": Object {
-    "age": "1",
-    "agedata": "2022-12-12 11:11:11",
-    "breed": "bbbb",
-    "breeds": Array [
-      "1",
-    ],
-    "name": "Kitty",
-  },
   "properties": Object {
     "age": Object {
       "description": "The name of the Catage",
