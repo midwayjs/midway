@@ -81,4 +81,51 @@ describe('/test/parser.test.ts', function () {
     explorer.generatePath(CatController);
     expect(explorer.getData()).toMatchSnapshot();
   });
+
+  it('should test ref path generate', function () {
+    class NotificationDTO {
+      @ApiProperty({ example: '通知标题', description: 'title'})
+      title: string;
+
+      @ApiProperty({ example: '1', description: '这是 id'})
+      id: number;
+    }
+
+    @ApiExtraModel(NotificationDTO)
+    class NotificationPageListDTO {
+      @ApiProperty({ description: '列表数据', type: 'array', items: { $ref: getSchemaPath(NotificationDTO) } })
+      rows: NotificationDTO[]
+
+      @ApiProperty({ example: '999', description: '通知数量'})
+      count: number;
+    }
+    @ApiExtraModel(NotificationPageListDTO)
+    class UserDTO {
+      @ApiProperty({ example: 'Kitty', description: 'The name of the user'})
+      name: string;
+
+      @ApiProperty({ example: '1', description: 'The uid of the user'})
+      uid: number;
+
+      @ApiProperty({ description: 'The uid of the user', type: NotificationPageListDTO})
+      data: NotificationPageListDTO
+    }
+
+    @Controller('/api', { middleware: []})
+    class APIController {
+      @ApiResponse({
+        status: 200,
+        description: 'The found record',
+        type: UserDTO,
+      })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
 });

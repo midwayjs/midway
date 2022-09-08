@@ -690,12 +690,12 @@ export class SwaggerExplorer {
             tt.properties[key] = {
               type: 'array',
               items: {
-                $ref: '#components/schemas/' + currentType?.name,
+                $ref: '#/components/schemas/' + currentType?.name,
               },
             };
           } else {
             tt.properties[key] = {
-              $ref: '#components/schemas/' + currentType?.name,
+              $ref: '#/components/schemas/' + currentType?.name,
             };
           }
 
