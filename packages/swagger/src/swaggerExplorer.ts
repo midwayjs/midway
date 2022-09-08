@@ -125,7 +125,7 @@ export class SwaggerExplorer {
     return this.documentBuilder.build();
   }
 
-  private generatePath(target: Type) {
+  protected generatePath(target: Type) {
     this.parseExtraModel(target);
 
     const metaForMethods: any[] =
@@ -630,13 +630,6 @@ export class SwaggerExplorer {
     if (props) {
       Object.keys(props).forEach(key => {
         const metadata = props[key].metadata;
-
-        if (typeof metadata?.example !== undefined) {
-          if (!tt.example) {
-            tt.example = {};
-          }
-          tt.example[key] = metadata?.example;
-        }
         if (typeof metadata?.required !== undefined) {
           if (metadata?.required) {
             if (!tt.required) {
@@ -690,12 +683,12 @@ export class SwaggerExplorer {
             tt.properties[key] = {
               type: 'array',
               items: {
-                $ref: '#components/schemas/' + currentType?.name,
+                $ref: '#/components/schemas/' + currentType?.name,
               },
             };
           } else {
             tt.properties[key] = {
-              $ref: '#components/schemas/' + currentType?.name,
+              $ref: '#/components/schemas/' + currentType?.name,
             };
           }
 

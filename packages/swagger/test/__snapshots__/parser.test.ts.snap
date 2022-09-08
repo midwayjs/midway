@@ -1,0 +1,253 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/parser.test.ts should fix issue#2286 with array example 1`] = `
+Object {
+  "components": Object {
+    "schemas": Object {
+      "Cat": Object {
+        "properties": Object {
+          "catds": Object {
+            "description": "The breed of the Cat",
+            "items": Object {
+              "$ref": "#/components/schemas/Catd",
+            },
+            "type": "array",
+          },
+          "name": Object {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "format": undefined,
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "Catd": Object {
+        "properties": Object {
+          "aged": Object {
+            "description": "The age of the Cat",
+            "example": 1,
+            "format": undefined,
+            "type": "number",
+          },
+          "breedd": Object {
+            "description": "The breed of the Cat",
+            "example": "Maine Coon",
+            "format": undefined,
+            "type": "string",
+          },
+          "named": Object {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "format": undefined,
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": Object {
+    "contact": Object {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": Object {
+    "/api/update_user": Object {
+      "post": Object {
+        "description": undefined,
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/Cat",
+                },
+              },
+            },
+            "description": "The found record",
+          },
+        },
+        "summary": undefined,
+        "tags": Array [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": Array [],
+  "tags": Array [
+    Object {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`/test/parser.test.ts should test ref path generate 1`] = `
+Object {
+  "components": Object {
+    "schemas": Object {
+      "NotificationDTO": Object {
+        "properties": Object {
+          "id": Object {
+            "description": "这是 id",
+            "example": "1",
+            "format": undefined,
+            "type": "number",
+          },
+          "title": Object {
+            "description": "title",
+            "example": "通知标题",
+            "format": undefined,
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "NotificationPageListDTO": Object {
+        "properties": Object {
+          "count": Object {
+            "description": "通知数量",
+            "example": "999",
+            "format": undefined,
+            "type": "number",
+          },
+          "rows": Object {
+            "description": "列表数据",
+            "items": Object {
+              "$ref": "#/components/schemas/NotificationDTO",
+            },
+            "type": "array",
+          },
+        },
+        "type": "object",
+      },
+      "UserDTO": Object {
+        "properties": Object {
+          "data": Object {
+            "$ref": "#/components/schemas/NotificationPageListDTO",
+            "description": "The uid of the user",
+          },
+          "name": Object {
+            "description": "The name of the user",
+            "example": "Kitty",
+            "format": undefined,
+            "type": "string",
+          },
+          "uid": Object {
+            "description": "The uid of the user",
+            "example": "1",
+            "format": undefined,
+            "type": "number",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": Object {
+    "contact": Object {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": Object {
+    "/api/update_user": Object {
+      "post": Object {
+        "description": undefined,
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/UserDTO",
+                },
+              },
+            },
+            "description": "The found record",
+          },
+        },
+        "summary": undefined,
+        "tags": Array [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": Array [],
+  "tags": Array [
+    Object {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`/test/parser.test.ts should test simple case with example 1`] = `
+Object {
+  "components": Object {
+    "schemas": Object {
+      "Cat": Object {
+        "properties": Object {
+          "name": Object {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "format": undefined,
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": Object {
+    "contact": Object {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": Object {
+    "/api/update_user": Object {
+      "post": Object {
+        "description": undefined,
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/Cat",
+                },
+              },
+            },
+            "description": "The found record",
+          },
+        },
+        "summary": undefined,
+        "tags": Array [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": Array [],
+  "tags": Array [
+    Object {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
