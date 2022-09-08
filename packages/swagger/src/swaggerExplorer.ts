@@ -630,13 +630,6 @@ export class SwaggerExplorer {
     if (props) {
       Object.keys(props).forEach(key => {
         const metadata = props[key].metadata;
-
-        // if (typeof metadata?.example !== undefined) {
-        //   if (!tt.example) {
-        //     tt.example = {};
-        //   }
-        //   tt.example[key] = metadata?.example;
-        // }
         if (typeof metadata?.required !== undefined) {
           if (metadata?.required) {
             if (!tt.required) {
