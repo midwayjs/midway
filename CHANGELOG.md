@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.2](https://github.com/midwayjs/midway/compare/v3.5.1...v3.5.2) (2022-09-08)
+
+
+### Bug Fixes
+
+* ctx.locals missing in faas ([#2302](https://github.com/midwayjs/midway/issues/2302)) ([a0a5903](https://github.com/midwayjs/midway/commit/a0a59036e0a0e8b5f92b17829af3f79191c1ee91))
+* example missing in swagger ([#2305](https://github.com/midwayjs/midway/issues/2305)) ([8bc8fcc](https://github.com/midwayjs/midway/commit/8bc8fcc9467bcee1f7cd1cf609c93b918c96bc5a))
+
+
+
+
+
 ## [3.5.1](https://github.com/midwayjs/midway/compare/v3.5.0...v3.5.1) (2022-09-06)
 
 

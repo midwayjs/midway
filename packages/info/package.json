@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/info",
   "description": "midway info",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -18,8 +18,8 @@
     "@midwayjs/express": "^3.5.1",
     "@midwayjs/koa": "^3.5.1",
     "@midwayjs/mock": "^3.5.1",
-    "@midwayjs/serverless-fc-starter": "^3.5.1",
-    "@midwayjs/serverless-scf-starter": "^3.5.0"
+    "@midwayjs/serverless-fc-starter": "^3.5.2",
+    "@midwayjs/serverless-scf-starter": "^3.5.2"
   },
   "keywords": [
     "midway"

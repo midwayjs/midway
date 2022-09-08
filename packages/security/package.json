@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/security",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "description": "Midway Security Component",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -33,10 +33,10 @@
     "@midwayjs/core": "^3.5.1",
     "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/express": "^3.5.1",
-    "@midwayjs/faas": "^3.5.1",
+    "@midwayjs/faas": "^3.5.2",
     "@midwayjs/koa": "^3.5.1",
     "@midwayjs/mock": "^3.5.1",
-    "@midwayjs/serverless-app": "^3.5.1",
+    "@midwayjs/serverless-app": "^3.5.2",
     "@midwayjs/web": "^3.5.1"
   }
 }
