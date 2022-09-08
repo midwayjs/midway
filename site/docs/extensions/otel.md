@@ -28,10 +28,12 @@ $ npm install --save @opentelemetry/api
 
 # Node.js 的 api 实现
 $ npm install --save @opentelemetry/sdk-node
-$ npm install --save @opentelemetry/resources @opentelemetry/semantic-conventions
 
 # 常用 Node.js 模块的埋点实现
 $ npm install --save @opentelemetry/auto-instrumentations-node
+
+# jaeger 输出器
+$ npm install --save @opentelemetry/exporter-jaeger
 ```
 
 以上的包均为  [open-telemetry](https://opentelemetry.io/) 的官方包。
@@ -55,9 +57,16 @@ const { ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-base');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 const { Resource } = require('@opentelemetry/resources');
 const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions')
+const { JaegerExporter } = require('@opentelemetry/exporter-jaeger')
 
 // Midway 启动文件
 const { Bootstrap } = require('@midwayjs/bootstrap');
+
+// https://www.npmjs.com/package/@opentelemetry/exporter-jaeger
+const tracerAgentHost = process.env['TRACER_AGENT_HOST'] || '127.0.0.1'
+const jaegerExporter = new JaegerExporter({
+  host: tracerAgentHost,
+});
 
 // 初始化一个 open-telemetry 的 SDK
 const sdk = new opentelemetry.NodeSDK({
@@ -67,6 +76,9 @@ const sdk = new opentelemetry.NodeSDK({
   }),
   // 配置当前的导出方式，比如这里配置了一个输出到控制台的，也可以配置其他的 Exporter，比如 Jaeger
   traceExporter: new ConsoleSpanExporter(),
+  // 配置当前导出为 jaeger
+  // traceExporter: jaegerExporter,
+
   // 这里配置了默认自带的一些监控模块，比如 http 模块等
   // 若初始化时间很长，可注销此行，单独配置需要的 instrumentation 条目
   instrumentations: [getNodeAutoInstrumentations()]
