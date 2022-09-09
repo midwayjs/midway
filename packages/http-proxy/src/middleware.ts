@@ -48,7 +48,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
       ? `${forwarded}, ${ctx.ip}`
       : ctx.ip;
     reqHeaders['host'] = url.host;
-
+    delete reqHeaders['content-length'];
     const method = req.method.toUpperCase();
 
     const targetRes = res.res || res;
