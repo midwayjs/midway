@@ -36,6 +36,7 @@
     "@midwayjs/koa": "^3.5.1",
     "@midwayjs/mock": "^3.5.1",
     "@midwayjs/serverless-app": "^3.5.2",
-    "@midwayjs/web": "^3.5.1"
+    "@midwayjs/web": "^3.5.1",
+    "@types/axios": "^0.14.0"
   }
 }

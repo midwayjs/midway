@@ -31,6 +31,10 @@ import * as proxy from '../../../../src';
             d: {
               match: /.*?baidu.*$/,
               target: 'https://www.baidu.com/'
+            },
+            g: {
+              match: /.*?github.*$/,
+              target: 'https://www.github.com/'
             }
           }
         }
