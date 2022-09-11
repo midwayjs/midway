@@ -92,24 +92,45 @@ export class MainConfiguration {
 
 
 
-## 类型和参数
+## 数据类型
 
-Swagger 组件会识别各个 ```@Controller``` 中每个路由方法的 ```@Body()```、```@Query()```、```@Param()``` 装饰器，提取路由方法参数和类型。
+### 自动类型提取
 
-假设有一个方法：
+Swagger 组件会识别各个 `@Controller` 中每个路由方法的 `@Body()`、`@Query()`、`@Param()` 装饰器，提取路由方法参数和类型。
+
+比如下面的代码：
 
 ```typescript
-@Post('/:id', { summary: 'test'})
-async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
-  return this.catsService.create(createCatDto);
+@Get('/')
+async home(
+  @Query('uid') uid: number,
+  @Query('tid') tid: string,
+  @Query('isBoolean') isBoolean: boolean,
+) {
+    // ...
 }
 ```
 
-组件启动时会提取其中的两个参数：
+基础的布尔，字符串，数字类型展示效果如下：
 
-![swagger1](https://img.alicdn.com/imgextra/i1/O1CN012WJPrd22H6QQZuXqJ_!!6000000007094-0-tps-1672-796.jpg)
+![](https://img.alicdn.com/imgextra/i2/O1CN01KGk0B325xe6cV5HCo_!!6000000007593-2-tps-1110-854.png)
 
-图中可以看到 id，以及 request body 参数 Schema 为 CreateCatDto。其中 CreateCatDto 字段都是空的，我们提供了 ```@ApiProperty(...)``` 装饰器可以用来声明模型定义。
+
+
+### 类型和 Schema
+
+我们常在参数使用对象，并使用定义好的类作为类型，这个时候 swagger 组件也能自动识别，同时也能和普通的类型进行组合识别。
+
+比如下面的代码：
+
+```typescript
+@Post('/:id', { summary: 'test'})
+async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number) {
+  // ...
+}
+```
+
+`CreateCatDto` 类型的定义如下，我们使用 `ApiProperty` 将其中的每个属性都进行了定义。
 
 ```typescript
 import { ApiProperty } from "@midwayjs/swagger";
@@ -126,10 +147,59 @@ export class CreateCatDto {
 }
 ```
 
-Swagger UI 中展示：
-![swagger2](https://img.alicdn.com/imgextra/i3/O1CN013UI5Ha1JSrt84NApB_!!6000000001028-0-tps-1672-486.jpg)
+效果如下，组件会自动提取其中的两个参数：
 
-从代码中可以看到，我们对每个字段添加了 example、description，至于字段类型可以通过 ```design:type``` 来提取，当然也支持 ```@ApiProperty(...)``` 中通过 type 和 format 来定义。
+![swagger1](https://img.alicdn.com/imgextra/i2/O1CN01qpyb7k1uheVEFq8CI_!!6000000006069-2-tps-1220-1046.png)
+
+同时，由于在类中定义了每个属性的 example，会自动填入示例值。
+
+在 Swagger 中，每个类型都会有一个 `Schema` 来描述，我们已经定义了一个 `CreateCatDto` 的 Schema，看起来就像是下面的样子。
+
+注意，我们会重复用到这些 Schema。
+
+![swagger2](https://img.alicdn.com/imgextra/i2/O1CN01iZYONb1tAqW35GM3C_!!6000000005862-2-tps-1050-694.png)
+
+
+
+### 基础类型
+
+通过给 `@ApiProperty(...)` 装饰器中设置 type，我们可以定义常见的类型。
+
+大多数情况下，基础类型无需显式声明 `type` ，可自动识别。
+
+**字符串**
+
+```typescript
+@ApiProperty({ 
+  type: 'string',
+  // ...
+})
+name: string;
+```
+
+**布尔类型**
+
+```typescript
+@ApiProperty({ 
+  type: 'boolean', 
+  example: 'true',
+  // ...
+})
+isPure: boolean;
+```
+
+**数字类型**
+
+```typescript
+@ApiProperty({ 
+  type: 'number',
+  example: '1', 
+  description: 'The name of the Catage'
+})
+age: number;
+```
+
+此外，也可以使用 format 字段来定义更为精确的长度。
 
 ```typescript
 @ApiProperty({
@@ -141,16 +211,25 @@ Swagger UI 中展示：
 age: number;
 ```
 
-如果是数组类型，由于 ```design:type``` 不支持范型类型，我们可以配置 type 字段来定义。
+
+
+### 数组类型
+
+如果是数组类型，我们可以配置 type 字段来定义，同时通过 `items` 的 `type` 来指定类型。
 
 ```typescript
 @ApiProperty({
-  type: [String],
+  type: 'array',
+  items: {
+    type: 'string',
+  },
   example: ['1'],
   description: 'The name of the Catage'
 })
 breeds: string[];
 ```
+
+### 枚举类型
 
 如果是枚举类型，可以通过配置 enmu 字段来定义。
 
@@ -168,48 +247,94 @@ enum HelloWorld {
 hello: HelloWorld;
 ```
 
-Swagger UI 中展示：
+如果该字段在最顶层，展示效果如下：
+
 ![swagger3](https://img.alicdn.com/imgextra/i1/O1CN015M37MU1KgtdNfqsgp_!!6000000001194-0-tps-1406-426.jpg)
 
-### ApiExtraModel
-* 当不希望通过 type 来定义 model 类型时，我们可以通过在 Controller 中或者 Model Class 中加入 @ApiExtraModel 来增加额外的 schema 类型描述。
+
+
+### 复杂对象类型
+
+如果某个属性的类型是个现有的复杂类型，我们可以使用 `type` 来指定这个复杂的类型。
 
 ```typescript
-@ApiExtraModel(TestExtraModel)
-@Controller()
-class HelloController {
-  @Post('/:id', { summary: 'test'})
-  @ApiResponse({
-    status: 200,
-    content: {
-      'application/json': {
-        schema: {
-          properties: {
-            data: { '$ref': getSchemaPath(TestExtraModel)}
-          }
-        }
-      }
-    }
+export class Cat {
+  /**
+   * The name of the Catcomment
+   * @example Kitty
+   */
+  @ApiProperty({ example: 'Kitty', description: 'The name of the Cat'})
+  name: string;
+
+  @ApiProperty({ example: 1, description: 'The age of the Cat' })
+  age: number;
+
+  @ApiProperty({ example: '2022-12-12 11:11:11', description: 'The age of the CatDSate' })
+  agedata?: Date;
+
+  @ApiProperty({
+    example: 'Maine Coon',
+    description: 'The breed of the Cat',
   })
-  async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
-    return this.catsService.create(createCatDto);
-  }
+  breed: string;
 }
 
-// or
-@ApiExtraModel(TestExtraModel)
-class TestModel {
-  @ApiProperty({
-    item: {
-      $ref: getSchemaPath(TestExtraModel)
-    },
-    description: 'The name of the Catage'
+export class CreateCatDto {
+  
+  // ...
+
+  @ApiProperty({ 
+    type: Cat,	// 这里无需指定 example
   })
-  one: TestExtraModel;
+  related: Cat;
 }
 ```
 
-## 路由定义
+效果如下：
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01KADwTb1rkS4gJExuP_!!6000000005669-2-tps-1376-1070.png)
+
+
+
+### 复杂对象数组类型
+
+如果某个属性的类型是个复杂的数组类型，写法略有不同。
+
+除了 `type` 声明为 `array` 之外，由于 `items` 属性只支持字符串，我们需要使用 `getSchemaPath` 方法额外导入一个不同的类型。
+
+此外，如果 `Cat` 类型没有在其他属性的 `type` 字段中声明过，需要使用 `@ApiExtraModel` 装饰器额外声明引入外部类型。
+
+```typescript
+import { ApiProperty, getSchemaPath, ApiExtraModel } from '@midwayjs/swagger';
+
+class Cat {
+  // ...
+}
+
+@ApiExtraModel(Cat)
+export class CreateCatDto {
+  // ...
+
+  @ApiProperty({ 
+    type: 'array',
+    items: {
+      $ref: getSchemaPath(Cat),
+    }
+  })
+  relatedList: Cat[];
+}
+
+
+```
+
+效果如下：
+
+![](https://img.alicdn.com/imgextra/i1/O1CN01h4sQJ41dP0uq4fgi7_!!6000000003727-2-tps-1332-666.png)
+
+
+
+## 请求定义
+
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
 
 ### Query 定义
@@ -264,18 +389,73 @@ async upateUser(@Body() dto: UserDTO) {
 
 如需其他细节，请使用 `@ApiBody` 增强。
 
+### 文件上传定义
 
-
-## 路由标签
-Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则会默认归组到 default 下。可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
+使用 ```@ApiBody``` 设置 `contentType`
 
 ```typescript
-@ApiTags(['hello'])
-@Controller('/hello')
-export class HelloController {}
+@Post('/:id', { summary: 'test'})
+@ApiBody({
+  description: 'this is body',
+  contentType: BodyContentType.Multipart
+})
+@ApiParam({ description: 'this is id' })
+async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
+  return this.catsService.create(createCatDto);
+}
 ```
 
-## 请求 Header
+
+
+在 `CreateCatDto` 中使用 `@ApiProperty` 添加  `format`
+
+```typescript
+@ApiProperty({
+  type: 'string',
+  format: 'binary',
+  description: 'this is file test'
+})
+file: any;
+```
+
+Swagger UI 中展示：
+![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
+
+:::caution
+
+如需 swagger 展示上传信息，请务必添加类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错。
+
+:::
+
+兼容 Upload 组件，添加 ```@ApiBody()``` 装饰器描述
+
+```typescript
+@Post('/test')
+@ApiBody({ description: 'hello file' })
+@ApiBody({ description: 'hello fields', type: Cat })
+async upload(@File() f: any, @Fields() data: Cat) {
+  return null;
+}
+```
+
+Swagger UI 中展示：
+![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
+
+不添加 ```@ApiBody()``` 装饰器描述
+
+```typescript
+@Post('/test1')
+async upload1(@Files() f: any[], @Fields() data: Cat) {
+  return null;
+}
+```
+
+
+
+Swagger UI 中展示：
+![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
+
+### 请求 Header
 
 通过 ```@ApiHeader({...})``` 装饰器来定义 Header 参数。
 
@@ -289,7 +469,7 @@ export class HelloController {}
 export class HelloController {}
 ```
 
-## 请求 Response
+### 请求 Response
 
 可以使用 ```@ApiResponse({...})``` 来自定义请求 Response。
 
@@ -306,6 +486,7 @@ findOne(@Param('id') id: string, @Query('test') test: any): Cat {
 ```
 
 还提供了其他不需要设置 status 的装饰器：
+
 * ```@ApiOkResponse()```
 * ```@ApiCreatedResponse()```
 * ```@ApiAcceptedResponse()```
@@ -357,79 +538,67 @@ Swagger 还支持带前缀 ```x-``` 的扩展字段，可以使用 ```@ApiExtens
 @ApiExtension('x-hello', { hello: 'world' })
 ```
 
-
-
-## 文件上传
-
-使用 ```@ApiBody``` 设置 ```contentType```
+当不希望通过 type 来定义 model 类型时，我们可以通过在 Controller 中或者 Model Class 中加入 `@ApiExtraModel` 来增加额外的 `schema` 类型描述。
 
 ```typescript
-@Post('/:id', { summary: 'test'})
-@ApiBody({
-  description: 'this is body',
-  contentType: BodyContentType.Multipart
-})
-@ApiParam({ description: 'this is id' })
-async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
-  return this.catsService.create(createCatDto);
+@ApiExtraModel(TestExtraModel)
+@Controller()
+class HelloController {
+  @Post('/:id', { summary: 'test'})
+  @ApiResponse({
+    status: 200,
+    content: {
+      'application/json': {
+        schema: {
+          properties: {
+            data: { '$ref': getSchemaPath(TestExtraModel)}
+          }
+        }
+      }
+    }
+  })
+  async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
+    return this.catsService.create(createCatDto);
+  }
+}
+
+// or
+@ApiExtraModel(TestExtraModel)
+class TestModel {
+  @ApiProperty({
+    item: {
+      $ref: getSchemaPath(TestExtraModel)
+    },
+    description: 'The name of the Catage'
+  })
+  one: TestExtraModel;
 }
 ```
 
-在 ```CreateCatDto``` 中使用 ``` @ApiProperty ``` 添加 ```format```
+
+
+## 高级用法
+
+### 路由标签
+Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则会默认归组到 default 下。可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
 
 ```typescript
-@ApiProperty({
-  type: 'string',
-  format: 'binary',
-  description: 'this is file test'
-})
-file: any;
+@ApiTags(['hello'])
+@Controller('/hello')
+export class HelloController {}
 ```
 
-Swagger UI 中展示：
-![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
-
-兼容 Upload 组件，添加 ```@ApiBody()``` 装饰器描述
-
-```typescript
-@Post('/test')
-@ApiBody({ description: 'hello file' })
-@ApiBody({ description: 'hello fields', type: Cat })
-async upload(@File() f: any, @Fields() data: Cat) {
-  return null;
-}
-```
-
-Swagger UI 中展示：
-![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
-
-不添加 ```@ApiBody()``` 装饰器描述
-
-```typescript
-@Post('/test1')
-async upload1(@Files() f: any[], @Fields() data: Cat) {
-  return null;
-}
-```
-
-:::caution
-
-如需 swagger 展示上传信息，请务必添加类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错。
-
-:::
-
-Swagger UI 中展示：
-![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
 
 
-
-## 授权验证
+### 授权验证
 
 组件可以通过添加授权验证配置来设置验证方式，我们支持配置 ```basic```、```bearer```、```cookie```、```oauth2```、```apikey```、```custom```。
 
-### basic
 
-* 启用 basic 验证
+
+#### basic
+
+启用 basic 验证
 
 ```typescript
 // src/config/config.default.ts
@@ -443,16 +612,17 @@ export default {
 }
 ```
 
-* 关联 Controller
+关联 Controller
+
 ```typescript
 @ApiBasicAuth()
 @Controller('/hello')
 export class HelloController {}
 ```
 
-### bearer
+#### bearer
 
-* 启用 bearer 验证（bearerFormat 为 JWT）
+启用 bearer 验证（bearerFormat 为 JWT）
 
 ```typescript
 // src/config/config.default.ts
@@ -466,7 +636,7 @@ export default {
 }
 ```
 
-* 关联 Controller
+关联 Controller
 
 ```typescript
 @ApiBearerAuth()
@@ -474,9 +644,9 @@ export default {
 export class HelloController {}
 ```
 
-### oauth2
+#### oauth2
 
-* 启用 oauth2 验证
+启用 oauth2 验证
 
 ```typescript
 // src/config/config.default.ts
@@ -507,15 +677,16 @@ export default {
 }
 ```
 
-* 关联 Controller
+关联 Controller
+
 ```typescript
 @ApiOAuth2()
 @Controller('/hello')
 export class HelloController {}
 ```
 
-### cookie
-* 启用 cookie 验证
+#### cookie
+启用 cookie 验证
 
 ```typescript
 // src/config/config.default.ts
@@ -531,7 +702,7 @@ export default {
 }
 ```
 
-* 关联 Controller
+关联 Controller
 
 ```typescript
 @ApiCookieAuth('testforcookie')
@@ -539,9 +710,9 @@ export default {
 export class HelloController {}
 ```
 
-### apikey
+#### apikey
 
-* 启用 cookie 验证
+启用 cookie 验证
 
 ```typescript
 // src/config/config.default.ts
@@ -556,7 +727,7 @@ export default {
 }
 ```
 
-* 关联 Controller
+关联 Controller
 
 ```typescript
 @ApiSecurity('api_key')
@@ -564,9 +735,9 @@ export default {
 export class HelloController {}
 ```
 
-### custom
+#### custom 验证
 
-* 自定义验证方式，需要自己设计参数配置
+自定义验证方式，需要自己设计参数配置
 
 ```typescript
 // src/config/config.default.ts
@@ -582,7 +753,7 @@ export default {
 }
 ```
 
-* 关联 Controller
+关联 Controller
 
 ```typescript
 @ApiSecurity('mycustom')
