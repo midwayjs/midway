@@ -2,6 +2,7 @@ export interface HttpProxyStrategy {
   match?: RegExp;
   host?: string;
   target?: string;
+  proxyTimeout?: number;
   ignoreHeaders?: {
     [key: string]: boolean;
   }

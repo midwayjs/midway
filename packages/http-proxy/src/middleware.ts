@@ -48,7 +48,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
       ? `${forwarded}, ${ctx.ip}`
       : ctx.ip;
     reqHeaders['host'] = url.host;
-
+    delete reqHeaders['content-length'];
     const method = req.method.toUpperCase();
 
     const targetRes = res.res || res;
@@ -59,6 +59,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
       url: url.href,
       headers: reqHeaders,
       responseType: isStream ? 'stream' : 'arrayBuffer',
+      timeout: this.httpProxy.proxyTimeout || 0,
     };
     if (method === 'POST' || method === 'PUT') {
       reqOptions.data = req.body ?? ctx.request?.body;
