@@ -1,45 +1,41 @@
 import {
+  createCustomPropertyDecorator,
   Provide,
   saveClassMetadata,
   saveModule,
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import { BULL_QUEUE_KEY, BULL_REPEATABLE_QUEUE_KEY } from './constants';
-import { QueueOptions } from 'bull';
+import { BULL_QUEUE_KEY, BULL_PROCESSOR_KEY } from './constants';
+import { JobOptions } from 'bull';
 
-export function Queue(queueOptions?: QueueOptions): ClassDecorator;
-export function Queue(
-  queueName?: string,
-  queueOptions?: QueueOptions
+export function Processor(
+  queueName: string,
+  Options?: JobOptions
 ): ClassDecorator;
-export function Queue(
-  queueName?: string,
+export function Processor(
+  queueName: string,
   concurrency?: number,
-  queueOptions?: QueueOptions
+  jobOptions?: JobOptions
 ): ClassDecorator;
-export function Queue(
-  queueName?: any,
+export function Processor(
+  queueName: string,
   concurrency?: any,
-  queueOptions?: QueueOptions
+  jobOptions?: JobOptions
 ): ClassDecorator {
-  return function (target) {
-    if (typeof queueName !== 'string') {
-      queueOptions = queueName;
-      queueName = `${target.name}:execute`;
-      concurrency = 1;
-    }
+  return function (target: any) {
     if (typeof concurrency !== 'number') {
-      queueOptions = concurrency;
+      jobOptions = concurrency;
       concurrency = 1;
     }
-    saveModule(BULL_QUEUE_KEY, target);
+
+    saveModule(BULL_PROCESSOR_KEY, target);
     saveClassMetadata(
-      BULL_QUEUE_KEY,
+      BULL_PROCESSOR_KEY,
       {
         queueName,
-        queueOptions,
         concurrency,
+        jobOptions,
       },
       target
     );
@@ -48,42 +44,48 @@ export function Queue(
   };
 }
 
-export function RepeatableQueue(queueOptions?: QueueOptions): ClassDecorator;
-export function RepeatableQueue(
-  queueName?: string,
-  queueOptions?: QueueOptions
-): ClassDecorator;
-export function RepeatableQueue(
-  queueName?: string,
-  concurrency?: number,
-  queueOptions?: QueueOptions
-): ClassDecorator;
-export function RepeatableQueue(
-  queueName?: any,
-  concurrency?: any,
-  queueOptions?: QueueOptions
-): ClassDecorator {
-  return function (target) {
-    if (typeof queueName !== 'string') {
-      queueOptions = queueName;
-      queueName = `${target.name}:execute`;
-      concurrency = 1;
-    }
-    if (typeof concurrency !== 'number') {
-      queueOptions = concurrency;
-      concurrency = 1;
-    }
-    saveModule(BULL_REPEATABLE_QUEUE_KEY, target);
-    saveClassMetadata(
-      BULL_REPEATABLE_QUEUE_KEY,
-      {
-        queueName,
-        queueOptions,
-        concurrency,
-      },
-      target
-    );
-    Provide()(target);
-    Scope(ScopeEnum.Request)(target);
-  };
+export function InjectQueue(queueName: string): PropertyDecorator {
+  return createCustomPropertyDecorator(BULL_QUEUE_KEY, {
+    queueName,
+  });
 }
+//
+// export function Queue(queueOptions?: QueueOptions): ClassDecorator;
+// export function Queue(
+//   queueName?: string,
+//   queueOptions?: QueueOptions
+// ): ClassDecorator;
+// export function Queue(
+//   queueName?: string,
+//   concurrency?: number,
+//   queueOptions?: QueueOptions
+// ): ClassDecorator;
+// export function Queue(
+//   queueName?: any,
+//   concurrency?: any,
+//   queueOptions?: QueueOptions
+// ): ClassDecorator {
+//   return function (target) {
+//     if (typeof queueName !== 'string') {
+//       queueOptions = queueName;
+//       queueName = `${target.name}:execute`;
+//       concurrency = 1;
+//     }
+//     if (typeof concurrency !== 'number') {
+//       queueOptions = concurrency;
+//       concurrency = 1;
+//     }
+//     saveModule(BULL_QUEUE_KEY, target);
+//     saveClassMetadata(
+//       BULL_QUEUE_KEY,
+//       {
+//         queueName,
+//         queueOptions,
+//         concurrency,
+//       },
+//       target
+//     );
+//     Provide()(target);
+//     Scope(ScopeEnum.Singleton)(target);
+//   };
+// }

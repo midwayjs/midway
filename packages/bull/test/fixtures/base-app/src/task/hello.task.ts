@@ -1,12 +1,17 @@
-import { App, FORMAT, Provide, Task } from '@midwayjs/decorator';
+import { FORMAT, App} from '@midwayjs/decorator';
+import { IMidwayApplication } from '@midwayjs/core';
+import { IProcessor, Processor } from '../../../../../src';
 
-@Task()
-export class HelloTask {
+@Processor('HelloTask', {
+  repeat: {
+    cron: FORMAT.CRONTAB.EVERY_PER_5_SECOND
+  }
+})
+export class HelloTask implements IProcessor {
+  @App()
+  app: IMidwayApplication;
 
-  @Task({
-    repeat: { cron: FORMAT.CRONTAB.EVERY_PER_5_SECOND },
-  })
-  async task(){
-    this.app.getApplicationContext().registerObject(`task`, 'task');
+  async execute() {
+    this.app.setAttr(`task`, 'task');
   }
 }

@@ -1,9 +1,8 @@
-import { App, Inject, Provide, Queue } from "@midwayjs/decorator";
-import { Application } from "@midwayjs/koa";
+import { App, Inject } from "@midwayjs/decorator";
+import { Processor, Application } from '../../../../../src';
 
-@Queue()
-@Provide()
-export class QueueTask{
+@Processor('test')
+export class QueueTask {
 
   @App()
   app: Application;

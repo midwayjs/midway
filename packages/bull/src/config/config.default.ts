@@ -2,7 +2,7 @@ export const bull = {
   defaultQueueOptions: {
     prefix: 'midway-task',
   },
-  contextLoggerApplyLogger: 'bullLog',
+  contextLoggerApplyLogger: 'bullLogger',
   contextLoggerFormat: info => {
     const { jobId, triggerName } = info.ctx;
     return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${triggerName}] ${info.message}`;
@@ -11,9 +11,8 @@ export const bull = {
 
 export const midwayLogger = {
   clients: {
-    bullLog: {
+    bullLogger: {
       fileLogName: 'midway-bull.log',
-      disableConsole: true,
     },
   },
 };

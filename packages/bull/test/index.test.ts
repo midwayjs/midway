@@ -4,7 +4,7 @@ import { join } from 'path';
 import { sleep } from '@midwayjs/decorator';
 import * as TaskModule from '../src';
 
-describe(`midway task`, () => {
+describe(`/test/index.test.ts`, () => {
   let app: TaskModule.Application;
 
   beforeAll(async () => {
@@ -15,17 +15,11 @@ describe(`midway task`, () => {
     await close(app);
   });
 
-  it('local task', async () => {
-    await sleep(3 * 1000);
-    let res = app.getApplicationContext().get(`name`);
-    expect(res).toEqual(`taskLocal`)
-  })
-
-  it('task', async () => {
+  it('test auto repeat processor', async () => {
     await sleep(5 * 1000);
-    let res = app.getApplicationContext().get(`task`);
+    let res = app.getAttr(`task`);
     expect(res).toEqual(`task`)
-  })
+  });
 
   it('add task to queue', async () => {
     let ctx = app.createAnonymousContext();
@@ -37,7 +31,7 @@ describe(`midway task`, () => {
     (service as any).execute(QueueTask, params, {delay: 1000});
     await sleep(3 * 1000);
     expect(app.getApplicationContext().get(`queueConfig`)).toBe(JSON.stringify(params));
-  })
+  });
 
   it(`stop queue`, async () => {
     let ctx = app.createAnonymousContext();

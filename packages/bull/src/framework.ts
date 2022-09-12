@@ -1,4 +1,4 @@
-import { BaseFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
+import { BaseFramework, extend, IMidwayBootstrapOptions } from '@midwayjs/core';
 import {
   Framework,
   getClassMetadata,
@@ -7,59 +7,115 @@ import {
   listModule,
   Utils,
 } from '@midwayjs/decorator';
-import { Application, Context, IQueue } from './interface';
-import { BullQueueManager } from './queueManager';
-import { BULL_QUEUE_KEY } from './constants';
-import { QueueOptions } from 'bull';
+import {
+  Application,
+  Context,
+  IProcessor,
+  IQueue,
+  IQueueManager,
+} from './interface';
+import { Job, JobOptions, QueueOptions } from 'bull';
+import * as Bull from 'bull';
+import { BULL_PROCESSOR_KEY } from './constants';
+
+export class BullQueue extends Bull implements IQueue<Job> {
+  constructor(queueName: string, queueOptions: QueueOptions) {
+    super(queueName, queueOptions);
+  }
+
+  public async runJob(data: Record<string, any>, options?: JobOptions) {
+    return this.add(data || {}, options);
+  }
+
+  public getQueueName(): string {
+    return this.name;
+  }
+}
 
 @Framework()
-export class BullFramework extends BaseFramework<Application, Context, any> {
-  bullQueueManager: BullQueueManager;
-  bullDefaultConfig: any;
+export class BullFramework
+  extends BaseFramework<Application, Context, any>
+  implements IQueueManager<BullQueue, Job>
+{
+  private bullDefaultConfig: any;
+  private queueMap: Map<string, BullQueue> = new Map();
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as any;
-    this.bullQueueManager = await this.applicationContext.getAsync(
-      BullQueueManager
-    );
-    const queueList = listModule(BULL_QUEUE_KEY);
     this.bullDefaultConfig = this.configService.getConfiguration(
       'bull.defaultQueueOptions'
     );
+  }
 
-    for (const queueModule of queueList) {
-      const queueModuleMeta = getClassMetadata(BULL_QUEUE_KEY, queueModule);
-      const queueOptions = {
-        ...this.bullDefaultConfig,
-        ...queueModuleMeta.queueOptions,
+  configure() {
+    return this.configService.getConfiguration('bull');
+  }
+
+  getFrameworkName(): string {
+    return 'bull';
+  }
+
+  async run() {
+    const processorModules = listModule(BULL_PROCESSOR_KEY);
+    for (const mod of processorModules) {
+      const options = getClassMetadata(BULL_PROCESSOR_KEY, mod) as {
+        queueName: string;
+        concurrency: number;
+        jobOptions?: JobOptions;
       };
-      this.addQueue(
-        queueModule,
-        queueModuleMeta.queueName,
-        queueModuleMeta.concurrency,
-        queueOptions
-      );
-
-      // bind on error event
+      this.ensureQueue(options.queueName);
+      await this.addProcessor(mod, options.queueName, options.concurrency);
+      if (options.jobOptions?.repeat) {
+        await this.runJob(options.queueName, {}, options.jobOptions);
+      }
     }
   }
 
-  public addQueue(
-    queueModule: new (...args) => IQueue,
-    queueName: string,
-    concurrency: number,
-    queueOptions: QueueOptions
+  protected async beforeStop() {
+    // loop queueMap and stop all queue
+    for (const queue of this.queueMap.values()) {
+      await queue.close();
+    }
+  }
+
+  public createQueue(name: string, queueOptions: QueueOptions = {}) {
+    const queue = new BullQueue(
+      name,
+      extend(true, this.bullDefaultConfig, queueOptions)
+    );
+    this.queueMap.set(name, queue);
+    return queue;
+  }
+
+  public getQueue(name: string) {
+    return this.queueMap.get(name);
+  }
+
+  public ensureQueue(name: string) {
+    if (!this.queueMap.has(name)) {
+      this.createQueue(name);
+    }
+    return this.queueMap.get(name);
+  }
+
+  public async addProcessor(
+    processor: new (...args) => IProcessor,
+    queueName: string | BullQueue,
+    concurrency = 1
   ) {
-    const queue = this.bullQueueManager.createQueue(queueName, queueOptions);
+    const queue =
+      typeof queueName === 'string' ? this.queueMap.get(queueName) : queueName;
 
     queue.process(concurrency, async job => {
       const ctx = this.app.createAnonymousContext({
         jobId: job.id,
-        triggerName: getProviderName(queueModule),
-        triggerUUID: getProviderUUId(queueModule),
+        triggerName: getProviderName(job),
+        triggerUUID: getProviderUUId(job),
       });
 
-      const service = await ctx.requestContext.getAsync<IQueue>(queueModule);
+      const service = await ctx.requestContext.getAsync<IProcessor>(
+        processor as any
+      );
       const fn = await this.applyMiddleware(async ctx => {
         return await Utils.toAsyncFunction(service.execute.bind(service))(
           job.data,
@@ -74,39 +130,19 @@ export class BullFramework extends BaseFramework<Application, Context, any> {
         return Promise.reject(err);
       }
     });
-
-    [
-      'OnQueueError',
-      'OnQueueWaiting',
-      'OnQueueActive',
-      'OnQueueStalled',
-      'OnQueueProgress',
-      'OnQueueCompleted',
-      'OnQueueFailed',
-      'OnQueuePaused',
-      'OnQueueResumed',
-      'OnQueueCleaned',
-      'OnQueueDrained',
-      'OnQueueRemoved',
-    ].forEach(event => {
-      queue.on(event, async (job, err) => {
-      });
-    });
   }
 
-  configure() {
-    return this.configService.getConfiguration('bull');
+  async runJob(queueName: string, jobData: any, options?: JobOptions) {
+    const queue = this.queueMap.get(queueName);
+    if (queue) {
+      await queue.runJob(jobData, options);
+    }
   }
 
-  getFrameworkName(): string {
-    return 'bull';
-  }
-
-  async run() {
-    await this.bullQueueManager.start();
-  }
-
-  protected async beforeStop() {
-    await this.bullQueueManager.stop();
+  async getJob(queueName: string, jobName: string): Promise<Job> {
+    const queue = this.queueMap.get(queueName);
+    if (queue) {
+      return queue.getJob(jobName);
+    }
   }
 }

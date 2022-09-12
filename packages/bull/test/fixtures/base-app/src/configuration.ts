@@ -1,14 +1,18 @@
 import { Configuration } from '@midwayjs/decorator';
 import { join } from 'path';
-import * as task from '../../../../src';
+import * as bull from '../../../../src';
 
 @Configuration({
   imports: [
-    task
+    bull
   ],
   importConfigs: [
     join(__dirname, './config')
   ]
 })
 export class ContainerConfiguration {
+
+  async onReady() {
+
+  }
 }
