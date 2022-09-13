@@ -2,6 +2,7 @@
 
 pkgs=`find fixtures -maxdepth 1 -mindepth 1`
 cwd=`pwd`
+(cd .. && npm install)
 for pkg in $pkgs
 do
     cd $cwd
@@ -11,8 +12,8 @@ do
       rm -rf node_modules
       echo ">>>>>> install dependency"
       echo ">>>>>>" $pkg
-      cnpm i
-      npm run ready
+      npm install
+      npm run build
     fi
 done
 cd $cwd
