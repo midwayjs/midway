@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 import * as bull from '../../../../src';
 
 @Configuration({
@@ -7,6 +7,9 @@ import * as bull from '../../../../src';
   ],
 })
 export class ContainerConfiguration {
+
+  @Inject()
+  bullFramework: bull.Framework;
 
   async onReady() {
 

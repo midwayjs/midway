@@ -7,6 +7,7 @@ export const bull = {
     const { jobId, triggerName } = info.ctx;
     return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${triggerName}] ${info.message}`;
   },
+  defaultConcurrency: 1,
 };
 
 export const midwayLogger = {

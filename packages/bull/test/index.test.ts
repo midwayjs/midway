@@ -1,63 +1,60 @@
 import { createApp, close } from '@midwayjs/mock';
-import { QueueTask } from './fixtures/base-app/src/task/queue.task';
 import { join } from 'path';
 import { sleep } from '@midwayjs/decorator';
-import * as TaskModule from '../src';
+import * as bull from '../src';
 
 describe(`/test/index.test.ts`, () => {
-  let app: TaskModule.Application;
-
-  beforeAll(async () => {
-    app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, TaskModule);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
-
   it('test auto repeat processor', async () => {
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, bull);
+
     await sleep(5 * 1000);
     let res = app.getAttr(`task`);
-    expect(res).toEqual(`task`)
-  });
+    expect(res).toEqual(`task`);
 
-  it('add task to queue', async () => {
-    let ctx = app.createAnonymousContext();
-    expect(() => app.getApplicationContext().get(`queueConfig`)).toThrow();
-    let service = await ctx.requestContext.getAsync(`task:queueService`);
-    let params: any = {
-      name: 'stone-jin'
+    // run job
+    const bullFramework = app.getApplicationContext().get(bull.Framework);
+    const testQueue = bullFramework.getQueue('test');
+    expect(testQueue).toBeDefined();
+
+    const params = {
+      name: 'stone-jin',
     };
-    (service as any).execute(QueueTask, params, {delay: 1000});
-    await sleep(3 * 1000);
-    expect(app.getApplicationContext().get(`queueConfig`)).toBe(JSON.stringify(params));
-  });
+    const job = await testQueue?.runJob(params, { delay: 1000 });
+    expect(await job?.getState()).toEqual('delayed');
+    await sleep(1200);
+    expect(app.getAttr(`queueConfig`)).toBe(JSON.stringify(params));
+    expect(await job?.getState()).toEqual('completed');
 
-  it(`stop queue`, async () => {
-    let ctx = app.createAnonymousContext();
-    let service = await ctx.requestContext.getAsync(`task:queueService`);
-    expect((service as any).getClassQueue(QueueTask)).not.toBeNull();
-  });
-})
-
-describe('test another duplicated error', function () {
-  it('should throw error when start with duplicate task', async () => {
-    let error;
-    try {
-      await createApp(join(__dirname, 'fixtures', 'base-app-duplicate-task'), {}, TaskModule);
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-  });
-
-  it('should throw error when start with duplicate local task', async () => {
-    let error;
-    try {
-      await createApp(join(__dirname, 'fixtures', 'base-app-duplicate-local-task'), {}, TaskModule);
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
+    await close(app);
   });
 });
+
+// describe('test another duplicated error', function () {
+//   it('should throw error when start with duplicate task', async () => {
+//     let error;
+//     try {
+//       await createApp(
+//         join(__dirname, 'fixtures', 'base-app-duplicate-task'),
+//         {},
+//         TaskModule
+//       );
+//     } catch (err) {
+//       error = err;
+//     }
+//     expect(error).toBeDefined();
+//   });
+//
+//   it('should throw error when start with duplicate local task', async () => {
+//     let error;
+//     try {
+//       await createApp(
+//         join(__dirname, 'fixtures', 'base-app-duplicate-local-task'),
+//         {},
+//         TaskModule
+//       );
+//     } catch (err) {
+//       error = err;
+//     }
+//     expect(error).toBeDefined();
+//   });
+// });

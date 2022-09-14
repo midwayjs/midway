@@ -1,5 +1,5 @@
 import { IMidwayApplication, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
-import { JobId } from 'bull';
+import { JobId, Job } from 'bull';
 
 export interface IProcessor {
   execute(data: any);
@@ -23,6 +23,7 @@ export type NextFunction = BaseNextFunction;
 
 export interface Context extends IMidwayContext {
   jobId: JobId;
+  job: Job,
   triggerName: string;
   triggerUUID: string;
 }

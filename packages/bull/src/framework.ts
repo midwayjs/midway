@@ -37,13 +37,17 @@ export class BullFramework
   extends BaseFramework<Application, Context, any>
   implements IQueueManager<BullQueue, Job>
 {
-  private bullDefaultConfig: any;
+  private bullDefaultQueueConfig: Bull.QueueOptions;
+  private bullDefaultConcurrency: number;
   private queueMap: Map<string, BullQueue> = new Map();
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as any;
-    this.bullDefaultConfig = this.configService.getConfiguration(
+    this.bullDefaultQueueConfig = this.configService.getConfiguration(
       'bull.defaultQueueOptions'
+    );
+    this.bullDefaultConcurrency = this.configService.getConfiguration(
+      'bull.defaultConcurrency'
     );
   }
 
@@ -81,7 +85,7 @@ export class BullFramework
   public createQueue(name: string, queueOptions: QueueOptions = {}) {
     const queue = new BullQueue(
       name,
-      extend(true, this.bullDefaultConfig, queueOptions)
+      extend(true, this.bullDefaultQueueConfig, queueOptions)
     );
     this.queueMap.set(name, queue);
     return queue;
@@ -101,16 +105,17 @@ export class BullFramework
   public async addProcessor(
     processor: new (...args) => IProcessor,
     queueName: string | BullQueue,
-    concurrency = 1
+    concurrency?: number
   ) {
     const queue =
       typeof queueName === 'string' ? this.queueMap.get(queueName) : queueName;
 
-    queue.process(concurrency, async job => {
+    queue.process(concurrency ?? this.bullDefaultConcurrency, async job => {
       const ctx = this.app.createAnonymousContext({
         jobId: job.id,
-        triggerName: getProviderName(job),
-        triggerUUID: getProviderUUId(job),
+        job,
+        triggerName: getProviderName(processor),
+        triggerUUID: getProviderUUId(processor),
       });
 
       const service = await ctx.requestContext.getAsync<IProcessor>(
