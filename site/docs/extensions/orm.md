@@ -1446,7 +1446,7 @@ modifiedOn: Date;
 // src/config/config.default.ts
 export default {
   // ...
-  orm: {
+  typeorm: {
     dataSource: {
       default: {
         //...
