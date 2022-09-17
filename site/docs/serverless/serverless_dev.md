@@ -72,7 +72,7 @@ export class HelloHTTPService {
 这样，当我们在一个函数上，使用多个触发器时，就可以这样设置。
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessFunction, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
