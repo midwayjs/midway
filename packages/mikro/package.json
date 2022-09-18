@@ -12,10 +12,10 @@
     "@midwayjs/core": "^3.5.1",
     "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/mock": "^3.5.1",
-    "@mikro-orm/core": "5.4.0",
-    "@mikro-orm/entity-generator": "5.4.0",
+    "@mikro-orm/core": "5.4.2",
+    "@mikro-orm/entity-generator": "5.4.2",
     "@mikro-orm/sql-highlighter": "1.0.1",
-    "@mikro-orm/sqlite": "5.4.0",
+    "@mikro-orm/sqlite": "5.4.2",
     "sqlite3": "5.0.11"
   },
   "author": {
