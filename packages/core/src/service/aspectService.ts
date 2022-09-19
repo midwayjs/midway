@@ -50,10 +50,7 @@ export class MidwayAspectService {
     }
   }
 
-  private async addAspect(
-    aspectIns: IMethodAspect,
-    aspectData: AspectMetadata
-  ) {
+  public async addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata) {
     const module = aspectData.aspectTarget;
     const names = Object.getOwnPropertyNames(module.prototype);
     const isMatch = aspectData.match ? pm(aspectData.match) : () => true;
