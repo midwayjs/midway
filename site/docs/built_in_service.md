@@ -288,13 +288,13 @@ Midway 内置的拦截器服务，用于加载 `@Aspect` 相关的能力，自�
 
 ```typescript
 import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayLifeCycleService } from '@midwayjs/core';
+import { MidwayAspectService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
 
   @Inject()
-  lifeCycleService: MidwayLifeCycleService;
+  aspectService: MidwayAspectService;
 
   @Get('/')
   async home() {
