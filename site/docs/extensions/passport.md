@@ -1,7 +1,7 @@
-# 身份验证
+## 身份验证
 
-身份验证是大多数Web应用程序的重要组成部分。因此Midway封装了目前Nodejs中最流行的Passport库。
-Passport是通过称为策略的可扩展插件进行身份验证请求。Passport 不挂载路由或假设任何特定的数据库，这最大限度地提高了灵活性并允许开发人员做出应用程序级别的决策。
+身份验证是大多数Web应用程序的重要组成部分。因此 Midway 封装了目前 Nodejs 中最流行的 Passport 库。
+
 
 相关信息：
 
@@ -16,11 +16,21 @@ Passport是通过称为策略的可扩展插件进行身份验证请求。Passpo
 
 
 
+## 一些概念
 
-## 准备
+passport 是社区使用较多的身份验证库，通过称为策略的可扩展插件进行身份验证请求。Passport 不挂载路由或假设任何特定的数据库，这最大限度地提高了灵活性并允许开发人员做出应用程序级别的决策。
+
+它本身包含几个部分：
+
+- 1、验证的策略，比如 jwt 验证，github 验证，oauth 验证等，passport 最为丰富的也是这块
+- 2、执行策略之后，中间件的逻辑处理和配置，比如成功或者失败后的跳转，报错等
 
 
-1. 安装 `npm i @midwayjs/passport` 和相关依赖
+
+
+## 安装依赖
+
+安装 `npm i @midwayjs/passport` 和相关策略依赖。
 
 ```bash
 ## 必选
@@ -64,18 +74,15 @@ $ npm i passport-jwt --save
 
 
 
-## 使用
-
-这里我们以本地认证，和 Jwt 作为演示。
+## 启用组件
 
 
 首先启用组件。
 
 ```typescript
-// configuration.ts
+// src/configuration.ts
 
 import { join } from 'path';
-import * as jwt from '@midwayjs/jwt';
 import { ILifeCycle,} from '@midwayjs/core';
 import { Configuration } from '@midwayjs/decorator';
 import * as passport from '@midwayjs/passport';
@@ -83,7 +90,6 @@ import * as passport from '@midwayjs/passport';
 @Configuration({
   imports: [
     // ...
-    jwt,
     passport,
   ],
   importConfigs: [join(__dirname, './config')],
@@ -93,7 +99,12 @@ export class MainConfiguration implements ILifeCycle {}
 ```
 
 
-## 示例：本地策略
+
+## 策略示例
+
+这里我们以使用本地认证策略，和 Jwt 策略作为演示。
+
+### 示例：本地策略
 
 我们可以通过 `@CustomStrategy` 和派生 `PassportStrategy` 来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
 
@@ -132,6 +143,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 }
 
 ```
+:::tip
+
+注意：validate 方法是社区策略 verify 的 Promise 化替代方法，你无需在最后传递 callback 参数。
+
+:::
+
 使用派生 `PassportMiddleware`出一个中间件。
 
 ```typescript
@@ -178,12 +195,35 @@ curl -X POST http://localhost:7001/passport/local -d '{"username": "demo", "pass
 
 
 
-## 示例：Jwt 策略
+### 示例：Jwt 策略
 
 首先需要 **额外安装** 依赖和策略：
 
 ```bash
 $ npm i @midwayjs/jwt passport-jwt --save
+```
+
+额外启用 jwt 组件。
+
+```typescript
+// configuration.ts
+
+import { join } from 'path';
+import * as jwt from '@midwayjs/jwt';
+import { ILifeCycle,} from '@midwayjs/core';
+import { Configuration } from '@midwayjs/decorator';
+import * as passport from '@midwayjs/passport';
+
+@Configuration({
+  imports: [
+    // ...
+    jwt,
+    passport,
+  ],
+  importConfigs: [join(__dirname, './config')],
+})
+export class MainConfiguration implements ILifeCycle {}
+
 ```
 
 然后在配置中设置，默认未加密，请不要把敏感信息存放在 payload 中。
@@ -225,9 +265,13 @@ export class JwtStrategy extends PassportStrategy(
     };
   }
 }
-
-
 ```
+:::tip
+
+注意：validate 方法是社区策略 verify 的 Promise 化替代方法，你无需在最后传递 callback 参数。
+
+:::
+
 ```typescript
 // src/middleware/jwt.middleware.ts
 
