@@ -527,13 +527,35 @@ export class TestProcessor implements IProcessor {
 
 
 
-### 队列操作
+### 获取队列
 
 我们可以简单的根据队列名获取队列。
 
 ```typescript
  const testQueue = bullFramework.getQueue('test');
 ```
+
+也可以通过装饰器来获取。
+
+```typescript
+import { InjectQueue, IQueue } from '@midwayjs/bull';
+import { Provide } from '@midwayjs/decorator';
+
+@Provide()
+export class UserService {
+  @InjectQueue('test')
+  testQueue: IQueue;
+  
+  async invoke() {
+    await this.testQueue.pause();
+    // ...
+  }
+}
+```
+
+
+
+### 队列常用操作
 
 暂停队列。
 
