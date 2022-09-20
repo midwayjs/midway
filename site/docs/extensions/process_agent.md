@@ -18,6 +18,8 @@ midway 封装了 `@midwayjs/process-agent` 用来解决 node 场景中，多进�
 | 可用于标准项目    | ✅    |
 | 可用于 Serverless | ❌    |
 | 可用于一体化      | ✅    |
+| 包含独立主框架    | ❌    |
+| 包含独立日志      | ❌    |
 
 
 

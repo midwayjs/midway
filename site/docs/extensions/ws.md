@@ -3,10 +3,6 @@
 [ws](https://www.npmjs.com/package/ws) 模块是 Node 端的一个 WebSocket 协议的实现，该协议允许客户端(一般是浏览器)持久化和服务端的连接.
 这种可以持续连接的特性使得 WebSocket 特别适合用于适合用于游戏或者聊天室等使用场景。
 
-:::tip
-调整暂未完成，请等待完成后再使用。
-:::
-
 Midway 提供了对 [ws](https://www.npmjs.com/package/ws) 模块的支持和封装，能够简单的创建一个 WebSocket 服务。
 
 相关信息：
@@ -18,7 +14,8 @@ Midway 提供了对 [ws](https://www.npmjs.com/package/ws) 模块的支持和封
 | 可用于标准项目    | ✅    |
 | 可用于 Serverless | ❌    |
 | 可用于一体化      | ✅    |
-
+| 包含独立主框架    | ❌    |
+| 包含独立日志      | ❌    |
 
 
 

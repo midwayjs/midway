@@ -173,6 +173,8 @@ Midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码�
 | 可用于标准项目    | ✅    |
 | 可用于 Serverless | ✅    |
 | 可用于一体化      | ✅    |
+| 包含独立主框架    | ❌    |
+| 包含独立日志      | ❌    |
 
 
 

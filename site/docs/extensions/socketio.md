@@ -20,7 +20,8 @@ Midway 当前采用了最新的 [Socket.io (v4.0.0)](https://socket.io/docs/v4) 
 | 可用于标准项目    | ✅    |
 | 可用于 Serverless | ❌    |
 | 可用于一体化      | ✅    |
-
+| 包含独立主框架    | ✅    |
+| 包含独立日志      | ❌    |
 
 
 

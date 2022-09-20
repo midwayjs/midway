@@ -4,15 +4,23 @@
 
 示例如下：
 
--  平滑处理峰值。例如，如果用户可以在任意时间启动资源密集型任务，您可以将这些任务添加到队列中，而不是同步执行它们。然后，您可以让工作进程以受控方式从队列中提取任务。随着应用程序的扩展，您可以轻松添加新的队列消费者以扩展后端任务处理。 
-- 分解可能会阻塞 Node.js 事件循环的单一任务。例如，如果用户请求需要像音频转码这样的 CPU 密集型工作，您可以将此任务委托给其他进程，从而释放面向用户的进程以保持响应。 
-- 提供跨各种服务的可靠通信渠道。例如，您可以在一个进程或服务中排队任务（作业），并在另一个进程或服务中使用它们。在任何流程或服务的作业生命周期中完成、错误或其他状态更改时，您都可以收到通知（通过侦听状态事件）。当队列生产者或消费者失败时，它们的状态被保留，并且当节点重新启动时任务处理可以自动重新启动。
+-  平滑处理峰值。可以在任意时间启动资源密集型任务，然后将这些任务添加到队列中，而不是同步执行。让任务进程以受控方式从队列中提取任务。也可以轻松添加新的队列消费者以扩展后端任务处理。 
+- 分解可能会阻塞 Node.js 事件循环的单一任务。比如用户请求需要像音频转码这样的 CPU 密集型工作，就可以将此任务委托给其他进程，从而释放面向用户的进程以保持响应。 
+- 提供跨各种服务的可靠通信渠道。例如，您可以在一个进程或服务中排队任务（作业），并在另一个进程或服务中使用它们。在任何流程或服务的作业生命周期中完成、错误或其他状态更改时，您都可以收到通知（通过监听状态事件）。当队列生产者或消费者失败时，它们的状态被保留，并且当节点重新启动时任务处理可以自动重新启动。
 
 Midway 提供了 @midwayjs/bull 包作为 [Bull](https://github.com/OptimalBits/bull) 之上的抽象/包装器，[Bull](https://github.com/OptimalBits/bull) 是一种流行的、受良好支持的、高性能的基于 Node.js 的队列系统实现。该软件包可以轻松地将 Bull Queues 以 Nest 友好的方式集成到您的应用程序中。
 
-Bull 使用 Redis 来保存作业数据，因此您需要在系统上安装 Redis。因为它是 Redis 支持的，所以您的 Queue 架构可以是完全分布式的和平台无关的。例如，您可以在一个（或多个）节点上的 Nest 中运行一些 Queue 生产者、消费者和侦听器，而在其他网络节点上的其他 Node.js 平台上运行其他生产者、消费者和侦听器。
+Bull 使用 Redis 来保存作业数据，在使用 Redis 时，Queue 架构是完全分布式，和平台无关。例如，您可以在一个（或多个）节点（进程）中运行一些 Queue 生产者、消费者，而在其他节点上的运行其他生产者和消费者。
 
 本章介绍 @midwayjs/bull 包。我们还建议阅读 [Bull 文档](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md) 以了解更多背景和具体实施细节。
+
+:::tip
+
+原有任务调度 `@midwayjs/task` 模块废弃，如果查询历史文档，请参考 [这里](../legacy/sequelize)。
+
+:::
+
+
 
 相关信息：
 
@@ -21,6 +29,8 @@ Bull 使用 Redis 来保存作业数据，因此您需要在系统上安装 Redi
 | 可用于标准项目    | ✅    |
 | 可用于 Serverless | ❌    |
 | 可用于一体化      | ✅    |
+| 包含独立主框架    | ✅    |
+| 包含独立日志      | ✅    |
 
 
 
@@ -278,12 +288,12 @@ export class TestProcessor implements IProcessor {
 | delay            | number                | 等待可以处理此作业的时间量（毫秒）。请注意，为了获得准确的延迟，服务器和客户端都应该同步它们的时钟。 |
 | attempts         | number                | 在任务完成之前尝试尝试的总次数。                             |
 | repeat           | RepeatOpts            | 根据 cron 规范的重复任务配置，更多可以查看 [RepeatOpts](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md#queueadd)，以及下面的重复任务介绍。 |
-| backoff          | number` |`BackoffOpts | 任务失败时自动重试的回退设置。请参阅 [BackoffOpts](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md#queueadd)。 |
+| backoff          | number \| BackoffOpts | 任务失败时自动重试的回退设置。请参阅 [BackoffOpts](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md#queueadd)。 |
 | lifo             | boolean               | 如果为 true，则将任务添加到队列的右端而不是左端（默认为 false）。 |
 | timeout          | number                | 任务因超时错误而失败的毫秒数。                               |
-| jobId            | number` | `string     | 覆盖任务 id - 默认情况下，任务 id 是唯一整数，但您可以使用此设置覆盖它。如果您使用此选项，则由您来确保 jobId 是唯一的。如果您尝试添加一个 id 已经存在的任务，它将不会被添加。 |
-| removeOnComplete | boolean ` | `number   | 如果为 true，则在成功完成后删除任务。如果设置数字，则为指定要保留的任务数量。默认行为是任务信息保留在已完成列表中。 |
-| removeOnFail     | boolean ` |`number    | 如果为 true，则在所有尝试后都失败时删除任务。如果设置数字，指定要保留的任务数量。默认行为是将任务信息保留在失败列表中。 |
+| jobId            | number \| string      | 覆盖任务 id - 默认情况下，任务 id 是唯一整数，但您可以使用此设置覆盖它。如果您使用此选项，则由您来确保 jobId 是唯一的。如果您尝试添加一个 id 已经存在的任务，它将不会被添加。 |
+| removeOnComplete | boolean \| number     | 如果为 true，则在成功完成后删除任务。如果设置数字，则为指定要保留的任务数量。默认行为是任务信息保留在已完成列表中。 |
+| removeOnFail     | boolean \| number     | 如果为 true，则在所有尝试后都失败时删除任务。如果设置数字，指定要保留的任务数量。默认行为是将任务信息保留在失败列表中。 |
 | stackTraceLimit  | number                | 限制将在堆栈跟踪中记录的堆栈跟踪行的数量。                   |
 
 
