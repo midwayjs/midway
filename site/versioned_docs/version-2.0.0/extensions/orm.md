@@ -311,7 +311,7 @@ name: string;
 
 ### 7、配置连接信息
 
-请参考 [配置](env_config) 章节，增加配置文件。
+请参考 [配置](../env_config) 章节，增加配置文件。
 
 然后在 `config.default.ts`  中配置数据库连接信息。
 
