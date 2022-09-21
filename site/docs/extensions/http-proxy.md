@@ -4,14 +4,12 @@
 
 相关信息：
 
-| web 支持情况      |      |
-| ----------------- | ---- |
-| @midwayjs/koa     | ✅    |
-| @midwayjs/faas    | ✅    |
-| @midwayjs/web     | ✅    |
-| @midwayjs/express | ✅    |
-
-
+| web 支持情况      |     |
+| ----------------- | --- |
+| @midwayjs/koa     | ✅  |
+| @midwayjs/faas    | ✅  |
+| @midwayjs/web     | ✅  |
+| @midwayjs/express | ✅  |
 
 ## 安装依赖
 
@@ -24,7 +22,7 @@ $ npm i @midwayjs/http-proxy@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/http-proxy": "^3.0.0",
+    "@midwayjs/http-proxy": "^3.0.0"
     // ...
   },
   "devDependencies": {
@@ -32,8 +30,6 @@ $ npm i @midwayjs/http-proxy@3 --save
   }
 }
 ```
-
-
 
 ## 启用组件
 
@@ -46,13 +42,11 @@ import * as proxy from '@midwayjs/http-proxy';
 @Configuration({
   imports: [
     // ...other components
-    proxy
+    proxy,
   ],
 })
 export class MainConfiguration {}
 ```
-
-
 
 ## 配置
 
@@ -67,10 +61,12 @@ export interface HttpProxyConfig {
   host?: string;
   // 通过正则的表达式捕获组处理代理地址
   target?: string;
+  // 转发请求超时时间，默认为0不设置超时时间
+  proxyTimeout?: number;
   // 忽略代理请求转发的 header 中的字段
   ignoreHeaders?: {
     [key: string]: boolean;
-  }
+  };
 }
 ```
 
@@ -84,12 +80,10 @@ export interface HttpProxyConfig {
 export default {
   httpProxy: {
     match: /\/tfs\//,
-  	host: 'https://gw.alicdn.com',
-  }
-}
+    host: 'https://gw.alicdn.com',
+  },
+};
 ```
-
-
 
 多个代理配置
 
@@ -116,24 +110,20 @@ export default {
       // https://httpbin.org/
       match: /\/httpbin\/(.*)$/,
       target: 'https://httpbin.org/$1',
-    }
-  }
-}
+    },
+  },
+};
 ```
-
-
-
-
 
 ## 示例：使用 host 配置代理
 
 ```typescript
 export default {
-   httpProxy: {
+  httpProxy: {
     match: /\/tfs\//,
     host: 'https://gw.alicdn.com',
-  }
-}
+  },
+};
 ```
 
 当请求您的站点路径为： `https://yourdomain.com/tfs/test.png` 时，`match` 字段配置的正则表达式成功匹配，那么就将原始请求路径中的 `host` 部分 `https://yourdomain.com` 替换为配置的 `https://gw.alicdn.com`，从而发起代理请求到 `https://gw.alicdn.com/tfs/test.png`，并把响应结果返回给请求您站点的用户。
@@ -145,11 +135,8 @@ export default {
   httpProxy: {
     match: /\/httpbin\/(.*)$/,
     target: 'https://httpbin.org/$1',
-  }
-}
+  },
+};
 ```
 
-当请求您的站点路径为： `https://yourdomain.com/httpbin/get?name=midway` 时，`match` 字段配置的正则表达式成功匹配，同时正则的捕获组中有结果 `['get?name=midway']` ，那么就将原始请求路径中的 `$1` 部分替换为捕获组中的第1个数据（index: 0）的 `get?name=midway`，从而发起代理请求到 `https://httpbin.org/get?name=midway`，并把响应结果返回给请求您站点的用户。
-
-
-
+当请求您的站点路径为： `https://yourdomain.com/httpbin/get?name=midway` 时，`match` 字段配置的正则表达式成功匹配，同时正则的捕获组中有结果 `['get?name=midway']` ，那么就将原始请求路径中的 `$1` 部分替换为捕获组中的第 1 个数据（index: 0）的 `get?name=midway`，从而发起代理请求到 `https://httpbin.org/get?name=midway`，并把响应结果返回给请求您站点的用户。
