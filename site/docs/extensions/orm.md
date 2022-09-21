@@ -606,13 +606,11 @@ export class PhotoService {
 
   async updatePhoto() {
     /*...*/
-    let photoToRemove = await this.photoModel.findOne({
+    await this.photoModel.remove({
       where: {
         id: 1
       }
     });
-    
-    await photoToRemove.remove();
   }
 }
 ```
