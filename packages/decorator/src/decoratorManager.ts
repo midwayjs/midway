@@ -170,7 +170,9 @@ export class DecoratorManager extends Map implements IModuleStore {
           m.get(dataKey)[groupBy] = [data];
         }
       }
-    } else {
+    } else if(groupBy === undefined && groupMode==='multi' ){
+      m.get(dataKey).push(...data);
+    }else{
       m.get(dataKey).push(data);
     }
     Reflect.defineMetadata(metaKey, m, target);
