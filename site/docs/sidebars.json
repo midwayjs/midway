@@ -300,6 +300,7 @@
         "faq/git_problem",
         "faq/npm_problem",
         "faq/ts_problem",
+        "faq/alias_path",
         "how_to_install_nodejs",
         "how_to_update_midway",
         "midway_slow_problem"
