@@ -98,6 +98,7 @@ export default {
 ![postman](https://img.alicdn.com/imgextra/i4/O1CN01QCdTsN1S347SuzZU5_!!6000000002190-2-tps-1017-690.png)
 
 
+
 ## Cookie 和 Session
 
 `@midwayjs/koa` 默认封装了 `cookies` 解析和 `Session` 的支持，可以查看 [Cookies 和 Session](../cookie_session)。

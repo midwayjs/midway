@@ -346,6 +346,33 @@ export class AutoConfiguration {
 
 
 
+## BodyParser
+
+egg 自带  `bodyParser` 功能，默认会解析 `Post` 请求，自动识别 `json` 和 `form` 类型。
+
+如需 text 或者 xml，可以自行配置。
+
+默认的大小限制为 `1mb`，可以单独对每项配置大小。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  bodyParser: {
+    formLimit: '1mb',
+    jsonLimit: '1mb',
+    textLimit: '1mb',
+    xmlLimit: '1mb',
+  },
+}
+```
+
+注意，使用 Postman 做 Post 请求时的类型选择：
+
+![postman](https://img.alicdn.com/imgextra/i4/O1CN01QCdTsN1S347SuzZU5_!!6000000002190-2-tps-1017-690.png)
+
+
+
 
 ## 定时任务
 v3 开始请参考 [task 组件](./extesion/task) 。

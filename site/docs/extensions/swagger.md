@@ -577,6 +577,63 @@ class TestModel {
 }
 ```
 
+### 泛型返回数据
+
+Swagger 本身不支持泛型数据，泛型作为 Typescript 的一种类型，会在构建期抹掉，在运行时无法读取。
+
+我们可以用一些取巧的方式来定义。
+
+比如，我们需要将返回值增加一些通用的包裹结构。
+
+```typescript
+{
+  code: 200,
+  message: 'xxx',
+  data: any
+}
+```
+
+为此，我们可以编写一个方法，入参是返回的 data，返回一个包裹的类。
+
+```typescript
+export function SuccessWrapper<T extends Type>(ResourceCls: T) {
+  class Successed {
+    @ApiProperty({ description: '状态码' })
+    code: number;
+
+    @ApiProperty({ description: '消息' })
+    message: string;
+
+    @ApiProperty({ 
+      type: ResourceCls,
+    })
+    data: T;
+  }
+
+  return Successed;
+}
+```
+
+我们可以基于这个方法，来实现我们自己的返回类。
+
+```typescript
+class ViewCat extends SuccessVo(Cat) {}
+```
+
+在使用的时候，可以直接指定这个类即可。
+
+```typescript
+@Get('/:id')
+@ApiResponse({
+  status: 200,
+  description: 'The found record',
+  type: ViewCat,
+})
+findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
+  // ...
+}
+```
+
 
 
 ## 高级用法

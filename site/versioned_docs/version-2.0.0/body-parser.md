@@ -62,7 +62,6 @@ Egg.js 中默认的 bodyparer 库为 [koa-bodyparser](https://github.com/koajs/b
 // config.default
 export const bodyParser = {
   jsonLimit: '100k',
-  jsonLimit: '100k',
 };
 ```
 
@@ -74,7 +73,6 @@ export const bodyParser = {
 ```typescript
 // config.default
 export const bodyParser = {
-  jsonLimit: '1mb',
   jsonLimit: '1mb',
 };
 ```
