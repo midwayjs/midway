@@ -85,6 +85,7 @@ export class ContextView implements IViewEngine {
 
   private setLocals(locals) {
     return Object.assign(
+      {},
       this.viewManager.getLocals(),
       {
         ctx: this.ctx,
