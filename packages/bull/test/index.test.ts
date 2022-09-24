@@ -27,6 +27,16 @@ describe(`/test/index.test.ts`, () => {
 
     await close(app);
   });
+
+  it('test processor with redis', async () => {
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app-redis'), {}, bull);
+
+    await sleep(5 * 1000);
+
+    expect(app.getAttr(`task`)).toBe('task');
+
+    await close(app);
+  });
 });
 
 // describe('test another duplicated error', function () {

@@ -2,8 +2,6 @@ import { BaseFramework, extend, IMidwayBootstrapOptions } from '@midwayjs/core';
 import {
   Framework,
   getClassMetadata,
-  getProviderName,
-  getProviderUUId,
   listModule,
   Utils,
 } from '@midwayjs/decorator';
@@ -114,8 +112,7 @@ export class BullFramework
       const ctx = this.app.createAnonymousContext({
         jobId: job.id,
         job,
-        triggerName: getProviderName(processor),
-        triggerUUID: getProviderUUId(processor),
+        from: processor,
       });
 
       const service = await ctx.requestContext.getAsync<IProcessor>(

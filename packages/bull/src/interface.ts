@@ -23,7 +23,6 @@ export type NextFunction = BaseNextFunction;
 
 export interface Context extends IMidwayContext {
   jobId: JobId;
-  job: Job,
-  triggerName: string;
-  triggerUUID: string;
+  job: Job;
+  from: new (...args) => IProcessor;
 }
