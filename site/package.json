@@ -23,7 +23,7 @@
     "@mdx-js/react": "^1.6.21",
     "@react-hook/media-query": "^1.1.1",
     "@stitches/react": "^1.0.0",
-    "@svgr/webpack": "^5.5.0",
+    "@svgr/webpack": "^6.3.1",
     "@uiw/react-codesandbox": "^1.1.0",
     "axios": "^0.21.4",
     "clsx": "^1.1.1",
