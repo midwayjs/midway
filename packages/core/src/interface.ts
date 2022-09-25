@@ -1,15 +1,92 @@
-import {
-  ObjectIdentifier,
-  IManagedInstance,
-  IMethodAspect,
-  ScopeEnum,
-  FrameworkType,
-} from '@midwayjs/decorator';
-import { ILogger, LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
+import type { ILogger, LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
-import { ContextMiddlewareManager } from './common/middlewareManager';
 import _default from './config/config.default';
-import { AsyncContextManager } from './common/asyncContextManager';
+import type { ContextMiddlewareManager } from './common/middlewareManager';
+import type { AsyncContextManager } from './common/asyncContextManager';
+import type { IMethodAspect } from './decorator';
+
+export type MiddlewareParamArray = Array<string | any>;
+export type ObjectIdentifier = string | Symbol;
+export type GroupModeType = 'one' | 'multi';
+
+export enum ScopeEnum {
+  Singleton = 'Singleton',
+  Request = 'Request',
+  Prototype = 'Prototype',
+}
+
+export enum InjectModeEnum {
+  Identifier = 'Identifier',
+  Class = 'Class',
+  PropertyName = 'PropertyName',
+}
+
+/**
+ * 内部管理的属性、json、ref等解析实例存储
+ */
+export interface IManagedInstance {
+  type: string;
+  value?: any;
+  args?: any;
+}
+
+export interface ObjectDefinitionOptions {
+  isAsync?: boolean;
+  initMethod?: string;
+  destroyMethod?: string;
+  scope?: ScopeEnum;
+  constructorArgs?: any[];
+  namespace?: string;
+  srcPath?: string;
+  allowDowngrade?: boolean;
+}
+
+export interface TagPropsMetadata {
+  key: string | number | symbol;
+  value: any;
+  args?: any;
+}
+
+export interface TagClsMetadata {
+  id: string;
+  originName: string;
+  uuid: string;
+  name: string;
+}
+
+export interface ReflectResult {
+  [key: string]: any[];
+}
+
+export abstract class FrameworkType {
+  abstract name: string;
+}
+
+export class MidwayFrameworkType extends FrameworkType {
+  static WEB = new MidwayFrameworkType('@midwayjs/web');
+  static WEB_KOA = new MidwayFrameworkType('@midwayjs/web-koa');
+  static WEB_EXPRESS = new MidwayFrameworkType('@midwayjs/express');
+  static FAAS = new MidwayFrameworkType('@midwayjs/faas');
+  static MS_GRPC = new MidwayFrameworkType('@midwayjs/grpc');
+  static MS_RABBITMQ = new MidwayFrameworkType('@midwayjs/rabbitmq');
+  static MS_KAFKA = new MidwayFrameworkType('@midwayjs/kafka');
+  static WS_IO = new MidwayFrameworkType('@midwayjs/socketio');
+  static WS = new MidwayFrameworkType('@midwayjs/ws');
+  static SERVERLESS_APP = new MidwayFrameworkType('@midwayjs/serverless-app');
+  static CUSTOM = new MidwayFrameworkType('');
+  static EMPTY = new MidwayFrameworkType('empty');
+  static LIGHT = new MidwayFrameworkType('light');
+  static TASK = new MidwayFrameworkType('@midwayjs/task');
+  constructor(public name: string) {
+    super();
+  };
+}
+
+export interface IModuleStore {
+  listModule(key: string);
+  saveModule(key: string, module: any);
+  transformModule?(moduleMap: Map<string, Set<any>>);
+}
 
 export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
@@ -280,6 +357,7 @@ export type MethodHandlerFunction = (options: {
   propertyName: string;
   metadata: any;
 }) => IMethodAspect;
+
 export type ParameterHandlerFunction = (options: {
   target: new (...args) => any;
   propertyName: string;
