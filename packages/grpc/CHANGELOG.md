@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @grpc/grpc-js to v1.7.1 ([#2331](https://github.com/midwayjs/midway/issues/2331)) ([4a962dc](https://github.com/midwayjs/midway/commit/4a962dce8f3d2990fc3a2668b7e009b670f99166))
+* **deps:** update dependency @grpc/proto-loader to v0.7.3 ([#2327](https://github.com/midwayjs/midway/issues/2327)) ([d05dab5](https://github.com/midwayjs/midway/commit/d05dab5e9c2f73fc14d2bb82f61fb8e6bd52416f))
+
+
+
+
+
 ## [3.5.1](https://github.com/midwayjs/midway/compare/v3.5.0...v3.5.1) (2022-09-06)
 
 **Note:** Version bump only for package @midwayjs/grpc

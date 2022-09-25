@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
+
+
+### Bug Fixes
+
+* make addAspect public ([#2317](https://github.com/midwayjs/midway/issues/2317)) ([ded7a07](https://github.com/midwayjs/midway/commit/ded7a0798b4f94936f851b202e2406d6dd3902e6))
+
+
+
+
+
 ## [3.5.1](https://github.com/midwayjs/midway/compare/v3.5.0...v3.5.1) (2022-09-06)
 
 

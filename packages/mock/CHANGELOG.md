@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ws to v8.9.0 ([#2333](https://github.com/midwayjs/midway/issues/2333)) ([8a84a10](https://github.com/midwayjs/midway/commit/8a84a109b0a304c3f75db6cfb6dcf11e6d3edd78))
+
+
+
+
+
 ## [3.5.1](https://github.com/midwayjs/midway/compare/v3.5.0...v3.5.1) (2022-09-06)
 
 **Note:** Version bump only for package @midwayjs/mock

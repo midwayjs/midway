@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @grpc/grpc-js to v1.7.1 ([#2331](https://github.com/midwayjs/midway/issues/2331)) ([4a962dc](https://github.com/midwayjs/midway/commit/4a962dce8f3d2990fc3a2668b7e009b670f99166))
+* **deps:** update dependency @grpc/proto-loader to v0.7.3 ([#2327](https://github.com/midwayjs/midway/issues/2327)) ([d05dab5](https://github.com/midwayjs/midway/commit/d05dab5e9c2f73fc14d2bb82f61fb8e6bd52416f))
+* **deps:** update dependency sequelize to v6.23.1 ([#2332](https://github.com/midwayjs/midway/issues/2332)) ([2a5c6eb](https://github.com/midwayjs/midway/commit/2a5c6eb82394c4b1427e936da3525d999d459b4e))
+* **deps:** update dependency ws to v8.9.0 ([#2333](https://github.com/midwayjs/midway/issues/2333)) ([8a84a10](https://github.com/midwayjs/midway/commit/8a84a109b0a304c3f75db6cfb6dcf11e6d3edd78))
+* make addAspect public ([#2317](https://github.com/midwayjs/midway/issues/2317)) ([ded7a07](https://github.com/midwayjs/midway/commit/ded7a0798b4f94936f851b202e2406d6dd3902e6))
+* path parameters set ([#2314](https://github.com/midwayjs/midway/issues/2314)) ([cf1b441](https://github.com/midwayjs/midway/commit/cf1b441fa1d80894e69ea6ac3bd159f04a0c6ba5))
+* scripts in `benchmark/` ([#2310](https://github.com/midwayjs/midway/issues/2310)) ([a039d3d](https://github.com/midwayjs/midway/commit/a039d3d269311e42cbc15c4431508219351bb521))
+* **view:** fix setLocals ([#2321](https://github.com/midwayjs/midway/issues/2321)) ([72789a1](https://github.com/midwayjs/midway/commit/72789a114b1142674c1a8141c7af382538d92400))
+
+
+### Features
+
+* add proxyTimeout for httpProxy ([#2308](https://github.com/midwayjs/midway/issues/2308)) ([fb14118](https://github.com/midwayjs/midway/commit/fb141183223098534a075ab20bd3e2c366e40d4a))
+
+
+
+
+
 ## [3.5.2](https://github.com/midwayjs/midway/compare/v3.5.1...v3.5.2) (2022-09-08)
 
 

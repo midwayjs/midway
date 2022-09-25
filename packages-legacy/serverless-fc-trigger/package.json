@@ -1,18 +1,18 @@
 {
   "name": "@midwayjs/serverless-fc-trigger",
   "private": true,
-  "version": "3.5.2",
+  "version": "3.5.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/faas-typings": "^3.5.0",
     "@midwayjs/runtime-mock": "^3.4.4",
-    "@midwayjs/serverless-fc-starter": "^3.5.2",
+    "@midwayjs/serverless-fc-starter": "^3.5.3",
     "body-parser": "1.20.0",
     "express": "4.18.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.5.1",
+    "@midwayjs/core": "^3.5.3",
     "supertest": "6.2.4"
   },
   "engines": {

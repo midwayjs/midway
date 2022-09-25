@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
+
+
+### Features
+
+* add proxyTimeout for httpProxy ([#2308](https://github.com/midwayjs/midway/issues/2308)) ([fb14118](https://github.com/midwayjs/midway/commit/fb141183223098534a075ab20bd3e2c366e40d4a))
+
+
+
+
+
 ## [3.5.2](https://github.com/midwayjs/midway/compare/v3.5.1...v3.5.2) (2022-09-08)
 
 **Note:** Version bump only for package @midwayjs/http-proxy
