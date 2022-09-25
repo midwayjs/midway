@@ -30,15 +30,15 @@ describe('/test/index.test.ts', () => {
   it('should test context view', async () => {
     class CustomView {
       async render(name: string,
-                   locals?: Record<string, any>,
-                   options?: any) {
+        locals?: Record<string, any>,
+        options?: any) {
         return name;
       }
       async renderString(tpl: string,
-                         locals?: Record<string, any>,
-                         options?: any) {
-        const text = locals.b();
-        return tpl.replace('{{b}}', text);
+        locals?: Record<string, any>,
+        options?: any) {
+        const text = locals?.b();
+        return tpl.replace('{{b}}', text).replace('{{c}}', locals?.c)
       }
     }
     const manager = new ViewManager();
@@ -46,6 +46,7 @@ describe('/test/index.test.ts', () => {
     manager.addLocals('b', () => {
       return 'harry';
     });
+    manager.addLocals('c', [1, 2, 3])
 
     const view = new ContextView();
     view.viewManager = manager;
@@ -57,10 +58,18 @@ describe('/test/index.test.ts', () => {
       }
     };
 
-    const result = await view.renderString('hello {{b}}', {}, {
+    const result = await view.renderString('hello {{b}}, {{c}}', {}, {
       viewEngine: 'custom'
     });
 
-    expect(result).toEqual('hello harry');
+    expect(manager.getLocals()['c']).toEqual([1, 2, 3]);
+    expect(result).toEqual('hello harry, 1,2,3');
+
+    const localResutl = await view.renderString('hello {{b}}, {{c}}', {
+      c: [2, 3]
+    }, {
+      viewEngine: 'custom'
+    });
+    expect(localResutl).toEqual('hello harry, 2,3');
   });
 });
