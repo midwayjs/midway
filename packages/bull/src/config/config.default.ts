@@ -4,10 +4,11 @@ export const bull = {
   },
   contextLoggerApplyLogger: 'bullLogger',
   contextLoggerFormat: info => {
-    const { jobId, triggerName } = info.ctx;
-    return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${triggerName}] ${info.message}`;
+    const { jobId, from } = info.ctx;
+    return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}}] ${info.message}`;
   },
   defaultConcurrency: 1,
+  clearJobWhenStart: true,
 };
 
 export const midwayLogger = {

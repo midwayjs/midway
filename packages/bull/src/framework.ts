@@ -37,6 +37,7 @@ export class BullFramework
 {
   private bullDefaultQueueConfig: Bull.QueueOptions;
   private bullDefaultConcurrency: number;
+  private bullClearJobWhenStart: boolean;
   private queueMap: Map<string, BullQueue> = new Map();
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
@@ -46,6 +47,9 @@ export class BullFramework
     );
     this.bullDefaultConcurrency = this.configService.getConfiguration(
       'bull.defaultConcurrency'
+    );
+    this.bullClearJobWhenStart = this.configService.getConfiguration(
+      'bull.bullClearJobWhenStart'
     );
   }
 
@@ -66,6 +70,10 @@ export class BullFramework
         jobOptions?: JobOptions;
       };
       this.ensureQueue(options.queueName);
+      // clear old job when start
+      if (this.bullClearJobWhenStart) {
+        await this.queueMap.get(options.queueName).obliterate({ force: true });
+      }
       await this.addProcessor(mod, options.queueName, options.concurrency);
       if (options.jobOptions?.repeat) {
         await this.runJob(options.queueName, {}, options.jobOptions);
@@ -115,6 +123,8 @@ export class BullFramework
         from: processor,
       });
 
+      ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
+
       const service = await ctx.requestContext.getAsync<IProcessor>(
         processor as any
       );
@@ -126,7 +136,9 @@ export class BullFramework
       });
 
       try {
-        return Promise.resolve(await fn(ctx));
+        const result = await Promise.resolve(await fn(ctx));
+        ctx.logger.info(`complete process job ${job.id} from ${processor.name}`);
+        return result;
       } catch (err) {
         ctx.logger.error(err);
         return Promise.reject(err);
