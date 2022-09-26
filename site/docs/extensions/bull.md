@@ -255,6 +255,7 @@ export class MainConfiguration {
 export interface Context extends IMidwayContext {
   jobId: JobId;
   job: Job,
+  from: new (...args) => IProcessor;
 }
 ```
 
@@ -426,6 +427,106 @@ export default {
 ```
 
 配置了之后，所有的队列都将变为分布式队列。
+
+
+
+### 清理之前的任务
+
+在默认情况下，框架会自动清理前一次未调度的任务，保持每一次的任务队列为最新。如果在某些环境不需要清理，可以单独关闭。
+
+比如线上不需要清理：
+
+```typescript
+// src/config/config.prod.ts
+export default {
+  // ...
+  bull: {
+    clearJobWhenStart: false,
+  },
+}
+```
+
+:::tip
+
+如果不清理，如果前一次队列为 10s 执行，现在修改为 20s 执行，则两个定时都会存储在 Redis 中，导致代码重复执行。
+
+在日常的开发中，如果不清理，很容易出现代码重复执行这个问题。但是在集群部署的场景，多台服务器轮流重启的情况下，可能会导致定时任务被意外清理，请评估开关的时机。
+
+:::
+
+也可以在启动时手动进行清理。
+
+```typescript
+// src/configuration.ts
+import { Configuration, App, Inject } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+import { join } from 'path';
+import * as bull from '@midwayjs/bull';
+
+@Configuration({
+  imports: [koa, bull],
+  importConfigs: [join(__dirname, './config')],
+})
+export class ContainerLifeCycle {
+  @App()
+  app: koa.Application;
+
+  @Inject()
+  bullFramework: bull.Framework;
+
+  async onReady() {
+    // 在这个阶段，装饰器队列还未创建，使用 API 提前手动创建队列，装饰器会复用同名队列
+    const queue = this.bullFramework.createQueue('user');
+    // 通过队列手动执行清理
+    await queue.obliterate({ force: true });
+  }
+}
+```
+
+
+
+
+
+### 清理任务历史记录
+
+当开启 Redis 后，默认情况下，bull 会记录所有的成功和失败的任务 key，这可能会导致 redis 的 key 暴涨，我们可以配置成功或者失败后清理的选项。
+
+```typescript
+import { FORMAT } from '@midwayjs/decorator';
+import { IProcessor, Processor } from '@midwayjs/bull';
+
+@Processor('user', {
+  repeat: {
+    cron: FORMAT.CRONTAB.EVERY_MINUTE,
+  },
+  removeOnComplete: 10,	// 成功后移除任务记录，最多保留最近 10 条记录
+  removeOnFail: 20,	// 失败后移除任务记录
+})
+export class UserService implements IProcessor {
+  execute(data: any) {
+    // ...
+  }
+}
+
+```
+
+也可以在全局 config 中配置。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  bull: {
+    // 默认的任务配置
+    defaultJobOptions: {
+      // 保留 10 条记录
+      removeOnComplete: 10，
+    }
+  },
+}
+```
+
+
 
 
 
@@ -611,8 +712,8 @@ export default {
   bull: {
     // ...
     contextLoggerFormat: info => {
-      const { jobId, triggerName } = info.ctx;
-      return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${triggerName}] ${info.message}`;
+      const { jobId, from } = info.ctx;
+      return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}`;
     },
   }
 }
@@ -630,25 +731,6 @@ export default {
 
 原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步 @midwayjs/bull 的 key 命中了不同的 slot。
 
-临时的解决办法是 task 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
+解决办法是 task 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
 
-
-
-### 2、历史日志删除
-
-当每次 redis 执行完会日志信息记录在 redis 中，时间久了日志会很大，可以配置 `removeOnComplete` 使其在完成任务后删除。
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  bull: {
-    // 默认的任务配置
-    defaultJobOptions: {
-      // 保留 10 条记录
-      removeOnComplete: 10，
-    }
-  },
-}
-```
 
