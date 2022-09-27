@@ -28,7 +28,7 @@
 - 2、在 `src/config.default` 的部分配置调整
   - 2.1 配置文件中的 key 不同 （orm => typeorm）
   - 2.2修改为数据源的形式 `typeorm.dataSource`
-  - 2.3 实体模型需要在数据源的 `entities` 字段中声明
+  - 2.3 实体模型类或者实体模型类的路径,需要在数据源的 `entities` 字段中声明
   - 2.4 Subscriber 需要在数据源的 `subscribers` 字段中声明
 - 3、不再使用 `EntityModel` 装饰器，直接使用 typeorm 提供的能力
 
@@ -420,7 +420,7 @@ export default {
         synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true
         logging: false,
         
-        // 配置实体模型
+        // 配置实体模型 或者 entities: '/entity',
         entities: [Photo],
       }
     }
@@ -1460,4 +1460,14 @@ export default {
   },
 }
 ```
+
+ 
+
+
+###  Cannot read properties of undefined (reading 'getRepository')
+
+
+一般是配置不正确，可以考虑两房面的配置：
+ 1、检查config.default.ts,entities配置是否正确
+ 2、检查configuration.ts,确认是否引入orm
 
