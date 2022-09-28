@@ -53,6 +53,7 @@
       "label": "设计模式",
       "items": [
         "aspect",
+        "auto_run",
         "pipeline",
         "service_factory",
         "data_listener",
