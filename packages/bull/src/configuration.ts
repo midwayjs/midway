@@ -5,7 +5,7 @@ import { MidwayDecoratorService } from '@midwayjs/core';
 import { BULL_QUEUE_KEY } from './constants';
 
 @Configuration({
-  namespace: 'task',
+  namespace: 'bull',
   importConfigs: [
     {
       default: DefaultConfig,

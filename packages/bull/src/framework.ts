@@ -111,6 +111,10 @@ export class BullFramework
     return this.queueMap.get(name);
   }
 
+  public getQueueList() {
+    return Array.from(this.queueMap.values());
+  }
+
   public async addProcessor(
     processor: new (...args) => IProcessor,
     queueName: string | BullQueue,
@@ -149,14 +153,14 @@ export class BullFramework
     });
   }
 
-  async runJob(queueName: string, jobData: any, options?: JobOptions) {
+  public async runJob(queueName: string, jobData: any, options?: JobOptions) {
     const queue = this.queueMap.get(queueName);
     if (queue) {
       await queue.runJob(jobData, options);
     }
   }
 
-  async getJob(queueName: string, jobName: string): Promise<Job> {
+  public async getJob(queueName: string, jobName: string): Promise<Job> {
     const queue = this.queueMap.get(queueName);
     if (queue) {
       return queue.getJob(jobName);
