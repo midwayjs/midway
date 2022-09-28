@@ -2,6 +2,9 @@ export const bull = {
   defaultQueueOptions: {
     prefix: 'midway-task',
   },
+  defaultJobOptions: {
+    removeOnSuccess: true,
+  },
   contextLoggerApplyLogger: 'bullLogger',
   contextLoggerFormat: info => {
     const { jobId, from } = info.ctx;
