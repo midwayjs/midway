@@ -37,7 +37,7 @@ export class BullFramework
 {
   private bullDefaultQueueConfig: Bull.QueueOptions;
   private bullDefaultConcurrency: number;
-  private bullClearJobWhenStart: boolean;
+  private bullClearRepeatJobWhenStart: boolean;
   private queueMap: Map<string, BullQueue> = new Map();
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
@@ -48,8 +48,8 @@ export class BullFramework
     this.bullDefaultConcurrency = this.configService.getConfiguration(
       'bull.defaultConcurrency'
     );
-    this.bullClearJobWhenStart = this.configService.getConfiguration(
-      'bull.bullClearJobWhenStart'
+    this.bullClearRepeatJobWhenStart = this.configService.getConfiguration(
+      'bull.clearRepeatJobWhenStart'
     );
   }
 
@@ -69,10 +69,13 @@ export class BullFramework
         concurrency: number;
         jobOptions?: JobOptions;
       };
-      this.ensureQueue(options.queueName);
-      // clear old job when start
-      if (this.bullClearJobWhenStart) {
-        await this.queueMap.get(options.queueName).obliterate({ force: true });
+      const currentQueue = this.ensureQueue(options.queueName);
+      // clear old repeat job when start
+      if (this.bullClearRepeatJobWhenStart) {
+        const jobs = await currentQueue.getRepeatableJobs();
+        for (const job of jobs) {
+          await currentQueue.removeRepeatableByKey(job.key);
+        }
       }
       await this.addProcessor(mod, options.queueName, options.concurrency);
       if (options.jobOptions?.repeat) {

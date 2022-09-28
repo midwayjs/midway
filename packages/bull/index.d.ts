@@ -8,7 +8,7 @@ declare module '@midwayjs/core/dist/interface' {
       defaultQueueOptions?: bull.QueueOptions;
       defaultJobOptions?: bull.JobOptions;
       defaultConcurrency?: number;
-      clearJobWhenStart?: boolean;
+      clearRepeatJobWhenStart?: boolean;
     };
   }
 }

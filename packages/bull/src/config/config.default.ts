@@ -1,17 +1,18 @@
 export const bull = {
   defaultQueueOptions: {
-    prefix: 'midway-task',
+    prefix: '${midway-bull}',
   },
   defaultJobOptions: {
     removeOnSuccess: true,
+    removeOnFail: 10,
   },
+  defaultConcurrency: 1,
+  clearRepeatJobWhenStart: true,
   contextLoggerApplyLogger: 'bullLogger',
   contextLoggerFormat: info => {
     const { jobId, from } = info.ctx;
     return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}}] ${info.message}`;
   },
-  defaultConcurrency: 1,
-  clearJobWhenStart: true,
 };
 
 export const midwayLogger = {
