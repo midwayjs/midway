@@ -144,7 +144,9 @@ export class BullFramework
 
       try {
         const result = await Promise.resolve(await fn(ctx));
-        ctx.logger.info(`complete process job ${job.id} from ${processor.name}`);
+        ctx.logger.info(
+          `complete process job ${job.id} from ${processor.name}`
+        );
         return result;
       } catch (err) {
         ctx.logger.error(err);
