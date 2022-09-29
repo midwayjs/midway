@@ -49,7 +49,7 @@ $ npm i @midwayjs/mikro@3 @mikro-orm/core --save
   "dependencies": {
     // sqlite
     "@mikro-orm/sqlite": "^5.3.1",
-    
+
     // mysql
     "@mikro-orm/mysql": "^5.3.1",
   },
@@ -88,7 +88,7 @@ export class MainConfiguration {
 }
 ```
 
-## 
+##
 
 ## 基础使用
 
@@ -208,7 +208,7 @@ import { EntityRepository, QueryOrder, wrap } from '@mikro-orm/core';
 
 @Provide()
 export class BookController {
-  
+
   @InjectRepository(Book)
   bookRepository: EntityRepository<Book>;
 
@@ -216,7 +216,7 @@ export class BookController {
     const book = this.bookRepository.create({ title: 'b1', author: { name: 'a1', email: 'e1' } });
     wrap(book.author, true).__initialized = true;
     await this.bookRepository.persist(book).flush();
-    
+
     const findResult = await this.bookRepository.findAll({
       populate: ['author'],
       orderBy: { title: QueryOrder.DESC },
@@ -279,7 +279,7 @@ export default (appInfo) => {
 
 @Provide()
 export class BookController {
-  
+
   @InjectRepository(Book, 'custom1')
   bookRepository: EntityRepository<Book>;
 
