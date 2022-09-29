@@ -1,6 +1,6 @@
 export const bull = {
   defaultQueueOptions: {
-    prefix: '${midway-bull}',
+    prefix: '{midway-bull}',
   },
   defaultJobOptions: {
     removeOnSuccess: true,
