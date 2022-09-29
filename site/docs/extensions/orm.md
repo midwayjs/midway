@@ -1,6 +1,6 @@
 # TypeORM
 
-[TypeORM](https://github.com/typeorm/typeorm) 是 `node.js` 现有社区最成熟的对象关系映射器（`ORM` ）。Midway 和 TypeORM 搭配，使开发更简单。
+[TypeORM](https://github.com/typeorm/typeorm) 是 `node.js` 现有社区最成熟的对象关系映射器（`ORM` ）。本文介绍如何在 Midway 中使用 TypeORM 。
 
 :::tip
 
@@ -116,8 +116,13 @@ npm install mongodb --save
 ```
 
 :::info
-To make the** Oracle driver work**, you need to follow the installation instructions from [their](https://github.com/oracle/node-oracledb) site.
+
+-  Oracle driver 比较特殊，需要查看 [文档](https://github.com/oracle/node-oracledb) 
+- 不建议使用 typeorm 链接 mongodb，请使用 mongoose 组件
+
 :::
+
+
 
 
 ## 简单的目录结构
@@ -427,6 +432,14 @@ export default {
   },
 }
 ```
+:::tip
+
+如果使用的数据库已经有表结构同步的功能，比如云数据库，最好不要开启。如果一定要使用，synchronize 配置最好仅在开发阶段，或者第一次使用，避免造成一致性问题。
+
+:::
+
+
+
 如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
 
 
@@ -1346,7 +1359,7 @@ export class UserService {
 
 
 - 如果你已有表结构，想自动创建 Entity，使用 [生成器](../tool/typeorm_generator)
-- 如果已经有 Entity 代码，想创建表结构请使用配置中的  `synchronize:  true` 。
+- 如果已经有 Entity 代码，想创建表结构请使用配置中的  `synchronize:  true` 
 
 
 
