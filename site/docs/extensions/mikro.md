@@ -1,6 +1,6 @@
 # MikroORM
 
-本章节介绍用户如何在 midway 中使用 MikroORM。 MikroORM 是基于数据映射器、工作单元和身份映射模式的 Node.js 的 TypeScript ORM。它是 TypeORM 的绝佳替代品，从 TypeORM 迁移应该相当容易。
+本章节介绍用户如何在 midway 中使用 MikroORM。 MikroORM 是基于数据映射器、工作单元和身份映射模式的 Node.js 的 TypeScript ORM。
 
 MikroORM 的官网文档在 [这里](https://mikro-orm.io/docs)。
 
