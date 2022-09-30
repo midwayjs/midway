@@ -310,13 +310,6 @@ export class MidwayWebRouterService {
 
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
-        if (
-          resourceOptions.resourceFilter &&
-          !resourceOptions.resourceFilter(webRouter)
-        ) {
-          continue;
-        }
-
         const routeArgsInfo =
           getPropertyDataFromClass(
             WEB_ROUTER_PARAM_KEY,
@@ -361,6 +354,12 @@ export class MidwayWebRouterService {
           data.functionMetadata = {
             functionName: data.functionName,
           };
+        }
+        if (
+          resourceOptions.resourceFilter &&
+          !resourceOptions.resourceFilter(data)
+        ) {
+          continue;
         }
 
         this.checkDuplicateAndPush(data.prefix, data);
