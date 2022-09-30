@@ -214,8 +214,31 @@ export class MidwayWebRouterService {
   public addController(
     controllerClz: any,
     controllerOption: ControllerOption,
+    functionMeta?: boolean
+  );
+  public addController(
+    controllerClz: any,
+    controllerOption: ControllerOption,
+    resourceOptions?: {
+      resourceFilter: (routerInfo: RouterInfo) => boolean;
+    },
+    functionMeta?: boolean
+  );
+  public addController(
+    controllerClz: any,
+    controllerOption: ControllerOption,
+    resourceOptions: any = {},
     functionMeta = false
   ) {
+    if (resourceOptions && typeof resourceOptions === 'boolean') {
+      functionMeta = resourceOptions;
+      resourceOptions = undefined;
+    }
+
+    if (!resourceOptions) {
+      resourceOptions = {};
+    }
+
     const controllerId = getProviderName(controllerClz);
     debug(`[core]: Found Controller ${controllerId}.`);
     const id = getProviderUUId(controllerClz);
@@ -287,6 +310,13 @@ export class MidwayWebRouterService {
 
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
+        if (
+          resourceOptions.resourceFilter &&
+          !resourceOptions.resourceFilter(webRouter)
+        ) {
+          continue;
+        }
+
         const routeArgsInfo =
           getPropertyDataFromClass(
             WEB_ROUTER_PARAM_KEY,
@@ -340,7 +370,6 @@ export class MidwayWebRouterService {
 
   /**
    * dynamically add a route to root prefix
-   * @param routerPath
    * @param routerFunction
    * @param routerInfoOption
    */
