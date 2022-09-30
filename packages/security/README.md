@@ -67,7 +67,7 @@ export const security = {
 | 配置项 | 类型 | 作用描述 | 默认值 |
 | --- | --- | --- | --- |
 | enable | boolean | 是否开启 | true |
-| type | 'all' / 'any' / 'ctoken' / 'referer' | csrf 校验类型，all/any 等于 ctoken + referer | 'ctoken' 从query/header/body 中获取 csrf token |
+| type | 'all' / 'any' / 'ctoken' / 'referer' | csrf 校验类型，all/any 等于 ctoken + referer | 'ctoken' 从query/header/body 中获取 csrf token；'referer' 则可以通过 refererWhiteList 配置白名单 |
 | useSession | boolean | csrf token 是否存放在 session 中 | false，默认存放在 cookies 中 |
 | cookieName | string | token 在 cookie 中存放的 字段 | 'csrfToken' |
 | sessionName | string | token 在 session 中存放的 字段 | 'csrfToken' |
@@ -76,6 +76,10 @@ export const security = {
 | queryName | string | token 在 query 中存放的 字段 | '_csrf' |
 | refererWhiteList | Array<string> | 允许的来源白名单 | [] |
 
+#### 配置 refererWhiteList 不生效？
++ 原因一：refererWhiteList 中需要配置 referer 的 host 部分，例如 referer 为 `https://midway-demo.com:1234/docs`，则 refererWhiteList 中需要配置 `midway-demo.com:1234`。
++ 原因二：refererWhiteList 仅在 csrf 配置中 type 为 `referer` 的情况下生效，默认 type 为 `ctoken`，需要修改为 `referer`。
++ 原因三：发送的http请求中的 referer 字段不是一个标准的 url 地址（例如没有加上请求协议等），参考 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer) 文档
 
 ### xframe
 
