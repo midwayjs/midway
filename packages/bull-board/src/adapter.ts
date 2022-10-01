@@ -25,7 +25,10 @@ export class MidwayAdapter implements IServerAdapter {
     return this;
   }
 
-  public setStaticPath(staticsRoute: string, staticsPath: string): MidwayAdapter {
+  public setStaticPath(
+    staticsRoute: string,
+    staticsPath: string
+  ): MidwayAdapter {
     this.statics = { route: staticsRoute, path: staticsPath };
 
     return this;
@@ -36,7 +39,9 @@ export class MidwayAdapter implements IServerAdapter {
     return this;
   }
 
-  public setErrorHandler(handler: (error: Error) => ControllerHandlerReturnType) {
+  public setErrorHandler(
+    handler: (error: Error) => ControllerHandlerReturnType
+  ) {
     // this.errorHandler = handler;
     return this;
   }
@@ -87,7 +92,7 @@ export class MidwayAdapter implements IServerAdapter {
       return this.staticCache.get(filename);
     }
 
-    let content = readFileSync(filename, {
+    const content = readFileSync(filename, {
       encoding: 'utf-8',
     });
 
@@ -96,21 +101,28 @@ export class MidwayAdapter implements IServerAdapter {
   }
 
   public async renderView(filename) {
-    const basePath = this.basePath.endsWith('/') ? this.basePath : `${this.basePath}/`;
+    const basePath = this.basePath.endsWith('/')
+      ? this.basePath
+      : `${this.basePath}/`;
     if (filename === '/') {
       filename = 'index.ejs';
     }
     filename = join(this.viewPath, filename);
     return new Promise((resolve, reject) => {
-      ejs.renderFile(filename, { basePath, cache: true }, {
-        root: this.viewPath,
-      }, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
+      ejs.renderFile(
+        filename,
+        { basePath, cache: true },
+        {
+          root: this.viewPath,
+        },
+        (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
         }
-      });
+      );
     });
   }
 
@@ -123,7 +135,7 @@ export class MidwayAdapter implements IServerAdapter {
 
     return {
       status: response.status || 200,
-      body: response.body
+      body: response.body,
     };
   }
 }

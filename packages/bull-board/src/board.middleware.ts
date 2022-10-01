@@ -36,7 +36,7 @@ const MIME_MAP = {
   '.woff2': 'application/font-woff2',
   '.eot': 'application/vnd.ms-fontobject',
   '.otf': 'application/x-font-opentype',
-}
+};
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -81,12 +81,21 @@ export class BoardMiddleware
         let content;
         if (routePath.startsWith(this.serverAdapter.getStaticRoutes())) {
           content = await this.serverAdapter.renderStatic(routePath);
-        } else if (this.serverAdapter.getViewRoutes().indexOf(routePath) !== -1) {
+        } else if (
+          this.serverAdapter.getViewRoutes().indexOf(routePath) !== -1
+        ) {
           content = await this.serverAdapter.renderView(routePath);
         } else {
-          const matchRoute = this.serverAdapter.matchApiRoutes(req.method, routePath);
+          const matchRoute = this.serverAdapter.matchApiRoutes(
+            req.method,
+            routePath
+          );
           if (matchRoute) {
-            content = await this.serverAdapter.runAPI(matchRoute, req.params, req.query);
+            content = await this.serverAdapter.runAPI(
+              matchRoute,
+              req.params,
+              req.query
+            );
           }
         }
 
@@ -115,12 +124,21 @@ export class BoardMiddleware
         let content;
         if (routePath.startsWith(this.serverAdapter.getStaticRoutes())) {
           content = await this.serverAdapter.renderStatic(routePath);
-        } else if (this.serverAdapter.getViewRoutes().indexOf(routePath) !== -1) {
+        } else if (
+          this.serverAdapter.getViewRoutes().indexOf(routePath) !== -1
+        ) {
           content = await this.serverAdapter.renderView(routePath);
         } else {
-          const matchRoute = this.serverAdapter.matchApiRoutes((ctx as any).method, routePath);
+          const matchRoute = this.serverAdapter.matchApiRoutes(
+            (ctx as any).method,
+            routePath
+          );
           if (matchRoute) {
-            content = await this.serverAdapter.runAPI(matchRoute, (ctx as any).params, (ctx as any).query);
+            content = await this.serverAdapter.runAPI(
+              matchRoute,
+              (ctx as any).params,
+              (ctx as any).query
+            );
           }
         }
 

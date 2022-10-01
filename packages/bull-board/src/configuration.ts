@@ -27,12 +27,15 @@ export class BullBoardConfiguration {
   configService: MidwayConfigService;
 
   async onReady() {
-    const apps = this.applicationManager.getApplications(['express', 'egg', 'koa']);
+    const apps = this.applicationManager.getApplications([
+      'express',
+      'egg',
+      'koa',
+    ]);
     if (apps.length) {
       apps.forEach(app => {
         app.useMiddleware(BoardMiddleware);
       });
     }
   }
-
 }
