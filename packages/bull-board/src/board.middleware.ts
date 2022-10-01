@@ -93,7 +93,6 @@ export class BoardMiddleware
           if (matchRoute) {
             content = await this.serverAdapter.runAPI(
               matchRoute,
-              req.params,
               req.query
             );
           }
@@ -136,7 +135,6 @@ export class BoardMiddleware
           if (matchRoute) {
             content = await this.serverAdapter.runAPI(
               matchRoute,
-              (ctx as any).params,
               (ctx as any).query
             );
           }

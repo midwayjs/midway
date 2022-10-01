@@ -77,7 +77,11 @@ export class MidwayAdapter implements IServerAdapter {
       if (route.method !== method.toLowerCase()) {
         return false;
       }
-      return !!PathToRegexpUtil.match((route as any).regexpPattern)(url);
+      const result = PathToRegexpUtil.match(route.route, { decode: decodeURIComponent })(url);
+      if (result) {
+        (route as any).params = result.params;
+      }
+      return !!result;
     });
   }
 
@@ -126,16 +130,13 @@ export class MidwayAdapter implements IServerAdapter {
     });
   }
 
-  public async runAPI(route, params, query) {
+  public async runAPI(route, query) {
     const response = await route.handler({
       queues: this.bullBoardQueues as any,
-      params,
+      params: route.params,
       query,
     });
 
-    return {
-      status: response.status || 200,
-      body: response.body,
-    };
+    return response.body;
   }
 }
