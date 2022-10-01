@@ -20,10 +20,7 @@ describe(`/test/index.test.ts`, () => {
     result = await createHttpRequest(app).get('/ui/api/queues?activeQueue=&page=1&jobsPerPage=10');
     expect(result.status).toBe(200);
     expect(result.body).toEqual({
-      'body': {
-        'queues': []
-      },
-      'status': 200
+      "queues": []
     });
     expect(result.headers['content-type']).toMatch('application/json');
 
@@ -48,10 +45,7 @@ describe(`/test/index.test.ts`, () => {
     result = await createHttpRequest(app).get('/bull-board/api/queues?activeQueue=&page=1&jobsPerPage=10');
     expect(result.status).toBe(200);
     expect(result.body).toEqual({
-      'body': {
-        'queues': []
-      },
-      'status': 200
+      "queues": []
     });
     expect(result.headers['content-type']).toMatch('application/json');
 

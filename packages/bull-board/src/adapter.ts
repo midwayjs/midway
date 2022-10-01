@@ -77,7 +77,9 @@ export class MidwayAdapter implements IServerAdapter {
       if (route.method !== method.toLowerCase()) {
         return false;
       }
-      const result = PathToRegexpUtil.match(route.route, { decode: decodeURIComponent })(url);
+      const result = PathToRegexpUtil.match(route.route, {
+        decode: decodeURIComponent,
+      })(url);
       if (result) {
         (route as any).params = result.params;
       }

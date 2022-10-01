@@ -91,10 +91,7 @@ export class BoardMiddleware
             routePath
           );
           if (matchRoute) {
-            content = await this.serverAdapter.runAPI(
-              matchRoute,
-              req.query
-            );
+            content = await this.serverAdapter.runAPI(matchRoute, req.query);
           }
         }
 
