@@ -1,70 +1,60 @@
-import { createApp, close } from '@midwayjs/mock';
+import { createApp, close, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
-import { sleep } from '@midwayjs/decorator';
-import * as bull from '../src';
 
 describe(`/test/index.test.ts`, () => {
-  it('test auto repeat processor', async () => {
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, bull);
+  it('test ui in koa', async () => {
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app-koa'));
 
-    await sleep(5 * 1000);
-    let res = app.getAttr(`task`);
-    expect(res).toEqual(`task`);
+    // page
+    let result = await createHttpRequest(app).get('/ui');
+    expect(result.status).toBe(200);
+    expect(result.text).toMatch(/doctype html/);
+    expect(result.headers['content-type']).toMatch(/text\/html/);
 
-    // run job
-    const bullFramework = app.getApplicationContext().get(bull.Framework);
-    const testQueue = bullFramework.getQueue('test');
-    expect(testQueue).toBeDefined();
+    // resource
+    result = await createHttpRequest(app).get('/ui/static/images/logo.svg');
+    expect(result.status).toBe(200);
+    expect(result.headers['content-type']).toMatch(/image\/svg\+xml/);
 
-    const params = {
-      name: 'stone-jin',
-    };
-    const job = await testQueue?.runJob(params, { delay: 1000 });
-    expect(await job?.getState()).toEqual('delayed');
-    await sleep(1200);
-    expect(app.getAttr(`queueConfig`)).toBe(JSON.stringify(params));
-    expect(await job?.getState()).toEqual('completed');
+    // api
+    result = await createHttpRequest(app).get('/ui/api/queues?activeQueue=&page=1&jobsPerPage=10');
+    expect(result.status).toBe(200);
+    expect(result.body).toEqual({
+      'body': {
+        'queues': []
+      },
+      'status': 200
+    });
+    expect(result.headers['content-type']).toMatch('application/json');
 
     await close(app);
   });
 
-  it('test processor with redis', async () => {
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app-redis'), {}, bull);
+  it('test ui in express', async () => {
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app-express'));
 
-    await sleep(5 * 1000);
+    // page
+    let result = await createHttpRequest(app).get('/bull-board');
+    expect(result.status).toBe(200);
+    expect(result.text).toMatch(/doctype html/);
+    expect(result.headers['content-type']).toMatch(/text\/html/);
 
-    expect(app.getAttr(`task`)).toBe('task');
+    // resource
+    result = await createHttpRequest(app).get('/bull-board/static/images/logo.svg');
+    expect(result.status).toBe(200);
+    expect(result.headers['content-type']).toMatch(/image\/svg\+xml/);
+
+    // api
+    result = await createHttpRequest(app).get('/bull-board/api/queues?activeQueue=&page=1&jobsPerPage=10');
+    expect(result.status).toBe(200);
+    expect(result.body).toEqual({
+      'body': {
+        'queues': []
+      },
+      'status': 200
+    });
+    expect(result.headers['content-type']).toMatch('application/json');
 
     await close(app);
   });
 });
-
-// describe('test another duplicated error', function () {
-//   it('should throw error when start with duplicate task', async () => {
-//     let error;
-//     try {
-//       await createApp(
-//         join(__dirname, 'fixtures', 'base-app-duplicate-task'),
-//         {},
-//         TaskModule
-//       );
-//     } catch (err) {
-//       error = err;
-//     }
-//     expect(error).toBeDefined();
-//   });
-//
-//   it('should throw error when start with duplicate local task', async () => {
-//     let error;
-//     try {
-//       await createApp(
-//         join(__dirname, 'fixtures', 'base-app-duplicate-local-task'),
-//         {},
-//         TaskModule
-//       );
-//     } catch (err) {
-//       error = err;
-//     }
-//     expect(error).toBeDefined();
-//   });
-// });

@@ -1,4 +1,4 @@
-import { QueueAdapterOptions } from '@bull-board/api';
+import { QueueAdapterOptions } from '@bull-board/api/dist/typings/app';
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {

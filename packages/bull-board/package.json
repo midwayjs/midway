@@ -26,13 +26,15 @@
   "devDependencies": {
     "@midwayjs/core": "^3.4.13",
     "@midwayjs/decorator": "^3.4.11",
+    "@midwayjs/koa": "^3.5.3",
+    "@midwayjs/express": "^3.5.3",
     "@midwayjs/mock": "^3.4.13"
   },
   "dependencies": {
     "@bull-board/api": "4.3.1",
-    "@bull-board/express": "4.3.1",
-    "@bull-board/koa": "4.3.1",
-    "@midwayjs/bull": "^3.0.3"
+    "@bull-board/ui": "4.3.1",
+    "@midwayjs/bull": "^3.0.3",
+    "ejs": "3.1.8"
   },
   "engines": {
     "node": ">=12"
