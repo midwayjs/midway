@@ -3,7 +3,7 @@ export const bull = {
     prefix: '{midway-bull}',
   },
   defaultJobOptions: {
-    removeOnSuccess: true,
+    removeOnSuccess: 3,
     removeOnFail: 10,
   },
   defaultConcurrency: 1,
