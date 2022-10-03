@@ -429,6 +429,16 @@ export type CommonFilterUnion<CTX, R, N> =
   | (new (...args) => IFilter<CTX, R, N>)
   | Array<new (...args) => IFilter<CTX, R, N>>;
 
+/**
+ * Guard definition
+ */
+export interface IGuard<CTX> {
+  canActivate?(ctx: CTX, supplierClz: new (...args) => any, methodName: string): boolean | Promise<boolean>;
+}
+export type CommonGuardUnion<CTX> =
+  | (new (...args) => IGuard<CTX>)
+  | Array<new (...args) => IGuard<CTX>>;
+
 export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   /**
    * Get a base directory for project, with src or dist

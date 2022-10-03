@@ -11,7 +11,7 @@ import {
   MiddlewareRespond,
   REQUEST_CTX_LOGGER_CACHE_KEY,
   ASYNC_CONTEXT_KEY,
-  ASYNC_CONTEXT_MANAGER_KEY,
+  ASYNC_CONTEXT_MANAGER_KEY, CommonGuardUnion,
 } from './interface';
 import { Inject, Destroy, Init } from './decorator';
 import {
@@ -439,8 +439,12 @@ export abstract class BaseFramework<
     return this.middlewareManager;
   }
 
-  public useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>) {
-    return this.filterManager.useFilter(Filter);
+  public useFilter(filter: CommonFilterUnion<CTX, ResOrNext, Next>) {
+    return this.filterManager.useFilter(filter);
+  }
+
+  public useGuard(guard: CommonGuardUnion<CTX, ResOrNext, Next>) {
+    return this.guardManager;
   }
 
   protected createMiddlewareManager() {
@@ -448,6 +452,10 @@ export abstract class BaseFramework<
   }
 
   protected createFilterManager() {
+    return new FilterManager<CTX, ResOrNext, Next>();
+  }
+
+  protected createGuardManager() {
     return new FilterManager<CTX, ResOrNext, Next>();
   }
 }

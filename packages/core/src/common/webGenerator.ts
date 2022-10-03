@@ -35,6 +35,10 @@ export abstract class WebControllerGenerator<
    */
   public generateKoaController(routeInfo: RouterInfo) {
     return async (ctx, next) => {
+
+      // TODO Guard
+      this.app.getGuard().canActivate(ctx, routeInfo);
+
       const args = [ctx, next];
       let result;
       if (typeof routeInfo.method !== 'string') {
