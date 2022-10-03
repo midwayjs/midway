@@ -1,4 +1,4 @@
-import { Framework, MidwayFrameworkType } from '@midwayjs/decorator';
+import { Framework, MidwayFrameworkType } from '../../../../src';
 import {
   BaseFramework,
   CommonFilterUnion,

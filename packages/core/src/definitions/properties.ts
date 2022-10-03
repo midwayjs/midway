@@ -1,5 +1,4 @@
-import { ObjectIdentifier } from '@midwayjs/decorator';
-import { IProperties } from '../interface';
+import { IProperties, ObjectIdentifier } from '../interface';
 
 export class ObjectProperties
   extends Map<ObjectIdentifier, any>

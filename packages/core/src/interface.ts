@@ -58,6 +58,146 @@ export interface ReflectResult {
   [key: string]: any[];
 }
 
+export namespace FaaSMetadata {
+
+  export interface ServerlessFunctionOptions {
+    /**
+     * function name
+     */
+    functionName?: string;
+    /**
+     * function description
+     */
+    description?: string;
+    /**
+     * function memory size, unit: M
+     */
+    memorySize?: number;
+    /**
+     * function timeout value, unit: seconds
+     */
+    timeout?: number;
+    /**
+     * function init timeout, just for aliyun
+     */
+    initTimeout?: number;
+    /**
+     * function runtime, nodejs10, nodejs12, nodejs14
+     */
+    runtime?: string;
+    /**
+     * invoke concurrency, just for aliyun
+     */
+    concurrency?: number;
+    /**
+     * function invoke stage, like env, just for tencent
+     */
+    stage?: string;
+    /**
+     * environment variable, key-value
+     */
+    environment?: any;
+    /**
+     * deploy or not
+     */
+    isDeploy?: boolean;
+    /**
+     * function handler name, like 'index.handler'
+     */
+    handlerName?: string;
+  }
+
+  interface TriggerCommonOptions {
+    /**
+     * function name
+     */
+    functionName?: string;
+    /**
+     * serverless event name
+     */
+    name?: string;
+    /**
+     * function invoke role, just for aliyun
+     */
+    role?: string;
+    /**
+     * function publish version, just for aliyun
+     */
+    version?: string;
+    /**
+     * deploy or not
+     */
+    isDeploy?: boolean;
+    /**
+     * function middleware
+     */
+    middleware?: any[];
+  }
+
+  export interface EventTriggerOptions extends TriggerCommonOptions {
+
+  }
+
+  export interface HTTPTriggerOptions extends TriggerCommonOptions  {
+    path: string;
+    method?: 'get' | 'post' | 'delete' | 'put' | 'head' | 'patch' | 'all';
+  }
+
+  export interface APIGatewayTriggerOptions extends HTTPTriggerOptions  {
+  }
+
+  export interface OSTriggerOptions extends TriggerCommonOptions  {
+    bucket: string;
+    events: string | string[];
+    filter?: {
+      prefix: string;
+      suffix: string;
+    };
+  }
+
+  export interface LogTriggerOptions extends TriggerCommonOptions  {
+    source: string;
+    project: string;
+    log: string;
+    retryTime?: number;
+    interval?: number;
+  }
+
+  export interface TimerTriggerOptions extends TriggerCommonOptions  {
+    type: 'cron' | 'every' | 'interval';
+    value: string;
+    payload?: string;
+    enable?: boolean;
+  }
+
+  export interface MQTriggerOptions extends TriggerCommonOptions  {
+    topic: string;
+    tags?: string;
+    region?: string;
+    strategy?: 'BACKOFF_RETRY' | 'EXPONENTIAL_DECAY_RETRY';
+  }
+
+  export interface HSFTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export interface MTopTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export interface CDNTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export type EventTriggerUnionOptions = EventTriggerOptions | HTTPTriggerOptions | APIGatewayTriggerOptions | OSTriggerOptions | CDNTriggerOptions | LogTriggerOptions | TimerTriggerOptions | MQTriggerOptions | HSFTriggerOptions | MTopTriggerOptions;
+
+  export interface TriggerMetadata {
+    type: ServerlessTriggerType;
+    functionName?: string;
+    handlerName?: string;
+    methodName?: string,
+    metadata: EventTriggerUnionOptions;
+  }
+
+}
+
 export abstract class FrameworkType {
   abstract name: string;
 }
@@ -80,6 +220,20 @@ export class MidwayFrameworkType extends FrameworkType {
   constructor(public name: string) {
     super();
   };
+}
+
+export enum ServerlessTriggerType {
+  EVENT = 'event',
+  HTTP = 'http',
+  API_GATEWAY = 'apigw',
+  OS = 'os',
+  CDN = 'cdn',
+  LOG = 'log',
+  TIMER = 'timer',
+  MQ = 'mq',
+  KAFKA = 'kafka',
+  HSF = 'hsf',
+  MTOP = 'mtop',
 }
 
 export interface IModuleStore {

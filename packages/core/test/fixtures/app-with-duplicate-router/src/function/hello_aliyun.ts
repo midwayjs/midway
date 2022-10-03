@@ -1,4 +1,4 @@
-import { Inject, Provide, Query, ServerlessTrigger, ServerlessTriggerType, } from '@midwayjs/decorator';
+import { Inject, Provide, Query, ServerlessTrigger, ServerlessTriggerType, } from '../../../../../src';
 
 @Provide()
 export class HelloAliyunService {

@@ -1,4 +1,4 @@
-import { App, Configuration, MidwayFrameworkType } from '@midwayjs/decorator';
+import { App, Configuration, MidwayFrameworkType } from '../../../../src';
 
 let idx = {num: 0};
 let idx2 = {num: 0};

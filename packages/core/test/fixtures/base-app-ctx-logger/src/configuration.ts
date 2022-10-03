@@ -1,4 +1,4 @@
-import { Configuration, App, Logger } from '@midwayjs/decorator';
+import { Configuration, App, Logger } from '../../../../src';
 import { IMidwayApplication } from '../../../../src';
 import { ILogger } from '@midwayjs/logger';
 

@@ -1,4 +1,4 @@
-import { Config, Provide, ALL } from '@midwayjs/decorator';
+import { Config, Provide, ALL } from '../../../../src';
 
 @Provide()
 export class ConfigManager {

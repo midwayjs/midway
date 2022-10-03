@@ -9,7 +9,7 @@ import {
   Session,
   getClassMetadata,
   INJECT_CUSTOM_PARAM
-} from '../../../src/decorator';
+} from '../../../src';
 
 class Test {
   async doget(

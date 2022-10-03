@@ -1,5 +1,4 @@
-import { MidwayApplicationManager, BaseFramework } from '../../src';
-import { MidwayFrameworkType } from '@midwayjs/decorator';
+import { MidwayApplicationManager, BaseFramework, MidwayFrameworkType } from '../../src';
 
 describe('test/common/applicationManager.test.ts', () => {
   it('should test application manager', async () => {

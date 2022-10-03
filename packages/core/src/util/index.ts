@@ -433,6 +433,7 @@ export const Utils = {
   camelCase,
   pascalCase,
   randomUUID,
+  generateRandomId,
   toAsyncFunction,
   safeStringify,
   safeParse,

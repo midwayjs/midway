@@ -1,4 +1,4 @@
-import { listPreloadModule, Autoload } from '../../../src/decorator';
+import { listPreloadModule, Autoload } from '../../../src';
 
 describe('/test/annotation/autoload.test.ts', () => {
   it('test preload key in module', () => {

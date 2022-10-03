@@ -8,6 +8,10 @@ export const ASPECT_KEY = 'common:aspect';
 export const CATCH_KEY = 'common:catch';
 export const MATCH_KEY = 'common:match';
 
+// faas
+export const FUNC_KEY = 'faas:func';
+export const SERVERLESS_FUNC_KEY = 'faas:serverless:function';
+
 // web
 export const CONTROLLER_KEY = 'web:controller';
 export const WEB_ROUTER_KEY = 'web:router';

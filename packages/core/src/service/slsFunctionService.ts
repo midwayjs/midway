@@ -1,7 +1,5 @@
 import {
-  bindContainer,
-  FaaSMetadata,
-  FUNC_KEY,
+  bindContainer, FUNC_KEY,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
@@ -9,12 +7,10 @@ import {
   getProviderUUId,
   listModule,
   Provide,
-  Scope,
-  ScopeEnum,
-  SERVERLESS_FUNC_KEY,
+  Scope, SERVERLESS_FUNC_KEY,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_PARAM_KEY,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import {
   MidwayWebRouterService,
   RouterCollectorOptions,
@@ -24,6 +20,7 @@ import {
 import { MidwayContainer } from '../context/container';
 import { DirectoryFileDetector } from '../common/fileDetector';
 import { getCurrentMainFramework } from '../util/contextUtil';
+import { ScopeEnum, FaaSMetadata } from '../interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

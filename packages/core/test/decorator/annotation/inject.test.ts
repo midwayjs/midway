@@ -1,4 +1,4 @@
-import { Provide, Inject, getPropertyInject } from '../../../src/decorator';
+import { Provide, Inject, getPropertyInject } from '../../../src';
 
 @Provide()
 class InjectChild {

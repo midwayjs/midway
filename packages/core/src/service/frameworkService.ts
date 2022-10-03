@@ -8,14 +8,14 @@ import {
   Inject,
   listModule,
   LOGGER_KEY,
-  MidwayFrameworkType,
   PIPELINE_IDENTIFIER,
   PLUGIN_KEY,
   Provide,
   Scope,
-  ScopeEnum,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import {
+  ScopeEnum,
+  MidwayFrameworkType,
   IMidwayContainer,
   IMidwayFramework,
   REQUEST_OBJ_CTX_KEY,

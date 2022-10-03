@@ -1,7 +1,7 @@
 import {
   Controller,
   Get,
-} from '@midwayjs/decorator';
+} from '../../../src';
 
 // /api/ + /bbc
 @Controller('/', {})

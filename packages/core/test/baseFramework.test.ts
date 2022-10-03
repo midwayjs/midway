@@ -1,4 +1,3 @@
-import { APPLICATION_KEY, MidwayFrameworkType, Provide } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
 import * as mm from 'mm';
@@ -10,7 +9,12 @@ import {
   MidwayRequestContainer,
   MidwayDecoratorService,
   MidwayMiddlewareService,
-  ContextMiddlewareManager, getCurrentAsyncContextManager, ASYNC_CONTEXT_MANAGER_KEY,
+  ContextMiddlewareManager,
+  getCurrentAsyncContextManager,
+  ASYNC_CONTEXT_MANAGER_KEY,
+  APPLICATION_KEY,
+  MidwayFrameworkType,
+  Provide
 } from '../src';
 import { createLightFramework } from './util';
 import sinon = require('sinon');

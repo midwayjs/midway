@@ -1,4 +1,4 @@
-import { Aspect, ASPECT_KEY, IMethodAspect, JoinPoint, listModule } from '../../../src/decorator';
+import { Aspect, ASPECT_KEY, IMethodAspect, JoinPoint, listModule } from '../../../src';
 
 describe('/test/annotation/aspect.test.ts', () => {
   it('test inspect key in module', () => {

@@ -1,4 +1,4 @@
-import { Get, Controller } from '@midwayjs/decorator';
+import { Get, Controller } from '../../../../../src';
 
 @Controller()
 export class HelloAliyunService {

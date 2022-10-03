@@ -1,4 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '../../../../src';
 // import * as book from 'midway-test-component';
 import { BookService } from 'midway-test-component';
 

@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '../../../../../src';
 import path = require('path');
 const abPath = path.resolve(path.join(__dirname, './config/config.default'));
 @Configuration({

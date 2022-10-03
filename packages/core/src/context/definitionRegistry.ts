@@ -5,9 +5,9 @@ import {
   getProviderId,
   getProviderName,
   getProviderUUId,
-  ObjectIdentifier,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import {
+  ObjectIdentifier,
   IIdentifierRelationShip,
   IObjectDefinition,
   IObjectDefinitionRegistry,

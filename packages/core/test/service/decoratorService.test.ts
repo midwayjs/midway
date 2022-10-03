@@ -1,5 +1,4 @@
-import { MidwayAspectService, MidwayContainer, MidwayDecoratorService } from '../../src';
-import { createCustomMethodDecorator, createCustomParamDecorator, JoinPoint, Provide } from '@midwayjs/decorator';
+import { MidwayAspectService, MidwayContainer, MidwayDecoratorService, createCustomMethodDecorator, createCustomParamDecorator, JoinPoint, Provide } from '../../src';
 
 describe('/test/service/decoratorService.test.ts', () => {
   it('method decorator change method return value should be ok', async() => {

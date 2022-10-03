@@ -1,5 +1,4 @@
-import { MidwayRetryExceededMaxTimesError, retryWithAsync, retryWith } from '../../src';
-import { sleep } from '@midwayjs/decorator';
+import { MidwayRetryExceededMaxTimesError, retryWithAsync, retryWith, sleep } from '../../src';
 
 describe('test/util/retry.test.ts', function () {
 

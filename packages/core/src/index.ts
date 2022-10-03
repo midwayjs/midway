@@ -72,7 +72,7 @@ export * from './util/contextUtil';
 export * from './util/pathToRegexp';
 export * from './util/httpclient';
 export { retryWithAsync, retryWith } from './util/retry';
-export { Utils } from './util/index';
+export { sleep, Utils } from './util/index';
 export { Types } from './util/types';
 export { PathFileUtil } from './util/pathFileUtil';
 export { FileUtils } from './util/fs';

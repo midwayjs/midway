@@ -3,22 +3,17 @@ import {
   getClassMetadata,
   IComponentInfo,
   InjectionConfigurationOptions,
-  Types,
   listModule,
   MAIN_MODULE_KEY,
-  ObjectIdentifier,
   saveModule,
   saveProviderId,
-  ScopeEnum,
   getProviderUUId,
   getPropertyInject,
   getObjectDefinition,
   getClassExtendedMetadata,
   INJECT_CUSTOM_PROPERTY,
   getProviderName,
-  IModuleStore,
-  Utils,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
 import { ObjectDefinitionRegistry } from './definitionRegistry';
@@ -26,11 +21,14 @@ import {
   IFileDetector,
   IIdentifierRelationShip,
   IMidwayContainer,
+  IModuleStore,
   IObjectDefinition,
   IObjectDefinitionRegistry,
   ObjectContext,
+  ObjectIdentifier,
   ObjectLifeCycleEvent,
   REQUEST_CTX_KEY,
+  ScopeEnum,
 } from '../interface';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
@@ -44,6 +42,8 @@ import { MidwayConfigService } from '../service/configService';
 import * as EventEmitter from 'events';
 import { MidwayDefinitionNotFoundError } from '../error';
 import { extend } from '../util/extend';
+import { Types } from '../util/types';
+import { Utils } from '../util';
 
 const debug = util.debuglog('midway:debug');
 const debugBind = util.debuglog('midway:bind');

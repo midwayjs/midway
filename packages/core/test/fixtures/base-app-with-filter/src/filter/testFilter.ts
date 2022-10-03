@@ -1,8 +1,8 @@
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '../../../../../src';
 import { IMiddleware, IMidwayContext } from '../../../../../src';
 
 @Provide()
-export class TestFilter implements IMiddleware<IMidwayContext> {
+export class TestFilter implements IMiddleware<IMidwayContext, any> {
 
   resolve() {
     return async (ctx, next) => {

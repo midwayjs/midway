@@ -7,7 +7,7 @@ import {
   getClassMetadata,
   WEB_ROUTER_KEY,
   RequestMapping,
-} from '../../../src/decorator';
+} from '../../../src';
 
 class Test {
   @Get('/get', { routerName: 'get', middleware: ['hello'] })

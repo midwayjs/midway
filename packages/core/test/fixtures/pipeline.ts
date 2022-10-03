@@ -1,4 +1,4 @@
-import { Provide, Inject, Pipeline } from '@midwayjs/decorator';
+import { Provide, Inject, Pipeline } from '../../src';
 import { IMidwayContainer, IValveHandler, IPipelineContext, MidwayPipelineService, IPipelineHandler } from '../../src';
 
 class VideoDto {

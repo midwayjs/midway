@@ -4,18 +4,18 @@ import {
   Inject,
   Provide,
   Scope,
-  ScopeEnum,
   INJECT_CUSTOM_METHOD,
   APPLICATION_CONTEXT_KEY,
   INJECT_CUSTOM_PARAM,
   JoinPoint,
   getMethodParamTypes,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import {
   HandlerFunction,
   IMidwayContainer,
   MethodHandlerFunction,
   ParameterHandlerFunction,
+  ScopeEnum,
 } from '../interface';
 import { MidwayAspectService } from './aspectService';
 import { MidwayCommonError } from '../error';

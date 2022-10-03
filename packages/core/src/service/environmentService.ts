@@ -1,6 +1,6 @@
-import { IEnvironmentService } from '../interface';
+import { IEnvironmentService, ScopeEnum } from '../interface';
 import { isDevelopmentEnvironment, getCurrentEnvironment } from '../util';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope } from '../decorator';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

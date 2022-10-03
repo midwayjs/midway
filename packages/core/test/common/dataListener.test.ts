@@ -1,5 +1,4 @@
-import { DataListener, MidwayContainer } from '../../src';
-import { Provide, Scope, ScopeEnum, sleep } from '@midwayjs/decorator';
+import { DataListener, MidwayContainer, Provide, Scope, ScopeEnum, sleep } from '../../src';
 
 describe('test/common/dataListener.test.ts', () => {
 

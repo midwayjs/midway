@@ -1,4 +1,4 @@
-import { saveObjectDefinition } from '../';
+import { saveObjectDefinition } from '../decoratorManager';
 import { ScopeEnum } from '../../interface';
 
 export function Init(): MethodDecorator {

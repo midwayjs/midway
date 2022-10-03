@@ -1,6 +1,6 @@
 import { MidwayContainer } from './container';
 import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
-import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
+import { PIPELINE_IDENTIFIER } from '../decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private readonly applicationContext: IMidwayContainer;

@@ -1,7 +1,6 @@
 import {
   CONTROLLER_KEY,
   ControllerOption,
-  FaaSMetadata,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
@@ -11,13 +10,15 @@ import {
   Provide,
   RouterOption,
   Scope,
-  ScopeEnum,
-  ServerlessTriggerType,
-  Types,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-} from '@midwayjs/decorator';
+} from '../decorator';
+import {
+  ScopeEnum,
+  FaaSMetadata,
+  ServerlessTriggerType,
+} from '../interface';
 import { joinURLPath } from '../util';
 import {
   MidwayCommonError,
@@ -26,6 +27,7 @@ import {
 } from '../error';
 import * as util from 'util';
 import { PathToRegexpUtil } from '../util/pathToRegexp';
+import { Types } from '../util/types';
 
 const debug = util.debuglog('midway:debug');
 

@@ -1,9 +1,10 @@
-import { Destroy, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
   IMidwayApplication,
   IMidwayContainer,
   IMidwayContext,
+  ScopeEnum,
 } from '../interface';
+import { Destroy, Init, Provide, Scope } from '../decorator';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

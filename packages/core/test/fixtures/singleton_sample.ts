@@ -1,4 +1,4 @@
-import {Provide, Scope, Init, Inject, ScopeEnum} from '@midwayjs/decorator';
+import {Provide, Scope, Init, Inject, ScopeEnum} from '../../src';
 
 @Scope(ScopeEnum.Singleton)
 @Provide()

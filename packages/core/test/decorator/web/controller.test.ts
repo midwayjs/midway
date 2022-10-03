@@ -4,7 +4,7 @@ import {
   listModule,
   getClassMetadata,
   getObjectDefinition,
-} from '../../../src/decorator';
+} from '../../../src';
 import {
   ControllerOne,
   ControllerTwo,

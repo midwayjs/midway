@@ -7,6 +7,11 @@ import {
   MidwayLoggerService,
   MidwayDecoratorService,
   MidwayAspectService,
+  APPLICATION_KEY,
+  CONFIG_KEY,
+  PLUGIN_KEY,
+  INJECT_TAG,
+  getClassExtendedMetadata
 } from '../../src';
 import {
   Grandson,
@@ -18,7 +23,6 @@ import {
   Ninja,
   SubCustom
 } from '../fixtures/class_sample';
-import { APPLICATION_KEY, CONFIG_KEY, PLUGIN_KEY, INJECT_TAG, getClassExtendedMetadata } from '@midwayjs/decorator';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
 import { childAsyncFunction,

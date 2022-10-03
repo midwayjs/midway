@@ -2,8 +2,6 @@ import {
   IManagedInstance,
   ObjectIdentifier,
   ScopeEnum,
-} from '@midwayjs/decorator';
-import {
   IProperties,
   IObjectCreator,
   IObjectDefinition,

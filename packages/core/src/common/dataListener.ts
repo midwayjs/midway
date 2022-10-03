@@ -1,4 +1,4 @@
-import { Destroy, Init } from '@midwayjs/decorator';
+import { Destroy, Init } from '../decorator';
 
 export abstract class DataListener<T> {
   private innerData: T;

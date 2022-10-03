@@ -1,5 +1,5 @@
+import { sleep } from '.';
 import { MidwayRetryExceededMaxTimesError } from '../error';
-import { sleep } from '@midwayjs/decorator';
 
 /**
  * wrap async function with retry

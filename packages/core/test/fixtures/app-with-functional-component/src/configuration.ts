@@ -1,6 +1,5 @@
-import { createConfiguration } from '../../../../src'
+import { createConfiguration, sleep } from '../../../../src'
 import { createHooks } from './components/hooks';
-import { sleep } from '@midwayjs/decorator';
 
 export default createConfiguration({
   imports: [

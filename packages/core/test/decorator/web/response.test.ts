@@ -11,7 +11,7 @@ import {
   WEB_RESPONSE_KEY,
   WEB_RESPONSE_REDIRECT,
   WEB_RESPONSE_RENDER
-} from '../../../src/decorator';
+} from '../../../src';
 
 describe('/test/web/response.test.ts', function () {
 

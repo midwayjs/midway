@@ -1,4 +1,4 @@
-import { Configuration, getClassMetadata, CONFIGURATION_KEY } from '../../../src/decorator';
+import { Configuration, getClassMetadata, CONFIGURATION_KEY } from '../../../src';
 
 @Configuration({
   importConfigs: ['./config.default'],

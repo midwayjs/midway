@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '../../../../src';
 import { join } from 'path';
 
 @Configuration({

@@ -1,4 +1,4 @@
-import { Catch, getClassMetadata, Match, CATCH_KEY, MATCH_KEY } from '../../../src/decorator';
+import { Catch, getClassMetadata, Match, CATCH_KEY, MATCH_KEY } from '../../../src';
 
 class CustomError extends Error {}
 

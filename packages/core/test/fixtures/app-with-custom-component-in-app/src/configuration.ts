@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '../../../../src';
 import { ILifeCycle } from "../../../../src";
 import * as bookComponent from './components/book';
 

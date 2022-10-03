@@ -1,4 +1,4 @@
-import {  Controller, Get } from '@midwayjs/decorator';
+import {  Controller, Get } from '../../../src';
 
 @Controller('/')
 export class IndexController {

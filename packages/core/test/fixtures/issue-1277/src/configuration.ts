@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '../../../../src';
 import * as book from 'midway-test-component';
 
 @Configuration({

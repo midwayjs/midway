@@ -1,6 +1,5 @@
-import { WebRouterCollector } from '../../src';
+import { WebRouterCollector, clearAllModule } from '../../src';
 import { join } from 'path';
-import { clearAllModule } from '@midwayjs/decorator';
 
 describe('/test/common/webRouterCollector.test.ts', function () {
 

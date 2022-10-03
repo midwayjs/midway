@@ -1,5 +1,5 @@
 // src/configuration.ts
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '../../../../../src';
 
 @Configuration({
   imports: [],

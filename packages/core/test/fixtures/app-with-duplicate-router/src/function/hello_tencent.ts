@@ -4,7 +4,7 @@ import {
   ServerlessTrigger,
   ServerlessTriggerType,
   Body,
-} from '@midwayjs/decorator';
+} from '../../../../../src';
 
 @Provide()
 export class HelloTencentService {

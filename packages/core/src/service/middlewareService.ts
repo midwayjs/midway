@@ -1,13 +1,15 @@
-import { Provide, Scope, ScopeEnum, Types } from '@midwayjs/decorator';
+import { Provide, Scope } from '../decorator';
 import {
   CommonMiddleware,
   IMiddleware,
   IMidwayContainer,
   FunctionMiddleware,
   IMidwayApplication,
+  ScopeEnum,
 } from '../interface';
 import { MidwayCommonError, MidwayParameterError } from '../error';
 import { isIncludeProperty, pathMatching } from '../util';
+import { Types } from '../util/types';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

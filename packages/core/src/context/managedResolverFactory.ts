@@ -1,13 +1,11 @@
 /**
  * 管理对象解析构建
  */
+import { KEYS } from '../common/constants';
 import {
   IManagedInstance,
   InjectModeEnum,
   ObjectIdentifier,
-} from '@midwayjs/decorator';
-import { KEYS } from '../common/constants';
-import {
   IManagedResolver,
   IObjectDefinition,
   REQUEST_CTX_KEY,

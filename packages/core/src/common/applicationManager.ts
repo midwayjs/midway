@@ -1,5 +1,5 @@
-import { IMidwayApplication, IMidwayFramework } from '../interface';
-import { FrameworkType, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { FrameworkType, ScopeEnum, IMidwayApplication, IMidwayFramework } from '../interface';
+import { Provide, Scope } from '../decorator';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

@@ -1,5 +1,4 @@
-import { IObjectCreator, IObjectDefinition } from '../interface';
-import { ScopeEnum, ObjectIdentifier } from '@midwayjs/decorator';
+import { IObjectCreator, IObjectDefinition, ObjectIdentifier, ScopeEnum } from '../interface';
 import { ObjectProperties } from './properties';
 import { ObjectCreator } from './objectCreator';
 

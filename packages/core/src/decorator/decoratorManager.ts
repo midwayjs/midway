@@ -405,7 +405,7 @@ let manager = new DecoratorManager();
 if (typeof global === 'object') {
   if (global['MIDWAY_GLOBAL_DECORATOR_MANAGER']) {
     console.warn(
-      'DecoratorManager not singleton and please check @midwayjs/decorator version by "npm ls @midwayjs/decorator"'
+      'DecoratorManager not singleton and please check @midwayjs/core version by "npm ls @midwayjs/core"'
     );
     manager = global['MIDWAY_GLOBAL_DECORATOR_MANAGER'];
   } else {

@@ -1,5 +1,5 @@
 import { IMidwayApplication, IMidwayContainer } from '../interface';
-import { InjectionConfigurationOptions } from '@midwayjs/decorator';
+import { InjectionConfigurationOptions } from '../decorator';
 
 export class FunctionalConfiguration {
   private readyHandler;

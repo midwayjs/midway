@@ -1,4 +1,4 @@
-import { Config, Provide, Inject} from '@midwayjs/decorator';
+import { Config, Provide, Inject} from '../../../../../src';
 
 @Provide()
 export class ReplaceManagerTwo {

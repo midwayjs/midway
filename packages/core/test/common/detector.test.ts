@@ -1,6 +1,5 @@
-import { DirectoryFileDetector, MidwayDuplicateClassNameError, CustomModuleDetector } from '../../src';
+import { DirectoryFileDetector, MidwayDuplicateClassNameError, CustomModuleDetector, MidwayContainer } from '../../src';
 import { join } from 'path';
-import { MidwayContainer } from '../../dist';
 
 describe('test/common/detector.test.ts', function () {
   it('should test file detector', function () {

@@ -1,4 +1,4 @@
-import { Framework, FRAMEWORK_KEY, getObjectDefinition, listModule } from '../../../src/decorator';
+import { Framework, FRAMEWORK_KEY, getObjectDefinition, listModule } from '../../../src';
 
 @Framework()
 class CustomFramework {}

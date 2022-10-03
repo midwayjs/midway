@@ -1,4 +1,4 @@
-import { ILifeCycle, IMidwayContainer } from '../interface';
+import { ILifeCycle, IMidwayContainer, ScopeEnum } from '../interface';
 import {
   CONFIGURATION_KEY,
   Init,
@@ -6,8 +6,7 @@ import {
   listModule,
   Provide,
   Scope,
-  ScopeEnum,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import { MidwayFrameworkService } from './frameworkService';
 import { MidwayConfigService } from './configService';

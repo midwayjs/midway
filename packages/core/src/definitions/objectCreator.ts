@@ -1,6 +1,6 @@
-import { Types } from '@midwayjs/decorator';
 import { IObjectCreator, IObjectDefinition } from '../interface';
 import { MidwayUseWrongMethodError } from '../error';
+import { Types } from '../util/types';
 
 export class ObjectCreator implements IObjectCreator {
   protected definition: IObjectDefinition;

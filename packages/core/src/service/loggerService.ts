@@ -1,8 +1,8 @@
-import { Provide, Scope, ScopeEnum, Inject, Init } from '@midwayjs/decorator';
+import { Provide, Scope, Inject, Init } from '../decorator';
 import { MidwayConfigService } from './configService';
 import { ServiceFactory } from '../common/serviceFactory';
 import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
-import { IMidwayContainer } from '../interface';
+import { IMidwayContainer, ScopeEnum } from '../interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

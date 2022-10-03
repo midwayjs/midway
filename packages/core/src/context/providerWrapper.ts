@@ -1,5 +1,4 @@
-import { ObjectIdentifier, ScopeEnum } from '@midwayjs/decorator';
-import { IMidwayContainer } from '../interface';
+import { IMidwayContainer, ObjectIdentifier, ScopeEnum } from '../interface';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
 
 export function providerWrapper(

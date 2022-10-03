@@ -10,6 +10,9 @@ export * from './common/framework';
 export * from './common/filter';
 export * from './common/middleware';
 
+// faas
+export * from './faas/serverlessTrigger';
+
 // web
 export * from './web/controller';
 export * from './web/paramMapping';

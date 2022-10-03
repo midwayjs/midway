@@ -1,5 +1,5 @@
 import { FunctionDefinition } from '../../src/definitions/functionDefinition';
-import { ScopeEnum } from '@midwayjs/decorator';
+import { ScopeEnum } from '../../src';
 import sinon = require('sinon');
 
 describe('/test/definitions/functionDefinition.test.ts', () => {
