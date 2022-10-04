@@ -1,5 +1,8 @@
-import { Types, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import {
+  Types,
+  Provide,
+  Scope,
+  ScopeEnum,
   IMidwayContainer,
   MidwayCommonError,
   CommonMiddleware,

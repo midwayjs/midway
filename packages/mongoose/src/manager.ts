@@ -3,8 +3,6 @@ import {
   delegateTargetMethod,
   delegateTargetProperties,
   MidwayCommonError,
-} from '@midwayjs/core';
-import {
   Config,
   Init,
   Inject,

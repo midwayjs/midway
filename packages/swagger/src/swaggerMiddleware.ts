@@ -1,11 +1,9 @@
-import type {
+import {
   IMiddleware,
   IMidwayApplication,
   IMidwayContext,
   NextFunction,
-} from '@midwayjs/core';
-import { safeRequire } from '@midwayjs/core';
-import {
+  safeRequire,
   Config,
   Init,
   Inject,

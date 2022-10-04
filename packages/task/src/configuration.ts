@@ -1,5 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/core';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, Inject, ILifeCycle } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { TaskFramework } from './framework';
 

@@ -1,6 +1,9 @@
-import { Configuration, Inject } from '@midwayjs/core';
+import {
+  Configuration,
+  Inject,
+  MidwayApplicationManager,
+} from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
-import { MidwayApplicationManager } from '@midwayjs/core';
 import { CorsMiddleware } from './middleware/cors';
 @Configuration({
   namespace: 'cross-domain',

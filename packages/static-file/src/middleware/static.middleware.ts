@@ -5,8 +5,8 @@ import {
   Types,
   Logger,
   FileUtils,
+  MidwayMiddlewareService,
 } from '@midwayjs/core';
-import { MidwayMiddlewareService } from '@midwayjs/core';
 import * as assert from 'assert';
 import * as staticCache from 'koa-static-cache';
 import * as LRU from 'ylru';

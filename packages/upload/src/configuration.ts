@@ -1,6 +1,10 @@
-import { Config, Configuration, Inject } from '@midwayjs/core';
+import {
+  Config,
+  Configuration,
+  Inject,
+  MidwayApplicationManager,
+} from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
-import { MidwayApplicationManager } from '@midwayjs/core';
 import { UploadMiddleware } from './middleware';
 import {
   autoRemoveUploadTmpFile,

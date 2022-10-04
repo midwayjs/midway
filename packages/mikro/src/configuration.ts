@@ -4,8 +4,11 @@ import {
   IMidwayContainer,
   MidwayApplicationManager,
   MidwayDecoratorService,
+  App,
+  Configuration,
+  Init,
+  Inject,
 } from '@midwayjs/core';
-import { App, Configuration, Init, Inject } from '@midwayjs/core';
 import { ENTITY_MODEL_KEY } from './decorator';
 import { MikroDataSourceManager } from './dataSourceManager';
 import { EntityName, RequestContext } from '@mikro-orm/core';

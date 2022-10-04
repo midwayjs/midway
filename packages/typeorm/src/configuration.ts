@@ -3,8 +3,11 @@ import {
   IMidwayApplication,
   IMidwayContainer,
   MidwayDecoratorService,
+  App,
+  Configuration,
+  Init,
+  Inject,
 } from '@midwayjs/core';
-import { App, Configuration, Init, Inject } from '@midwayjs/core';
 import { ORM_MODEL_KEY } from './decorator';
 import { TypeORMDataSourceManager } from './dataSourceManager';
 import { useContainer, EntityTarget } from 'typeorm';

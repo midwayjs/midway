@@ -4,8 +4,8 @@ import {
   Configuration,
   Init,
   Logger,
+  IMidwayContainer,
 } from '@midwayjs/core';
-import { IMidwayContainer } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 import { setLogger } from '@grpc/grpc-js';
 import { GRPCClients } from './comsumer/clients';

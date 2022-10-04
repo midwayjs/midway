@@ -5,12 +5,12 @@ import {
   ScopeEnum,
   Config,
   Inject,
+  IMidwayContext,
 } from '@midwayjs/core';
 import { I18N_ATTR_KEY, TranslateOptions } from './interface';
 import * as pm from 'picomatch';
 import { I18nOptions } from './interface';
 import { formatLocale, formatWithArray, formatWithObject } from './utils';
-import { IMidwayContext } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

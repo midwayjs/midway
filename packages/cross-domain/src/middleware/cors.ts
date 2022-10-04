@@ -1,5 +1,9 @@
-import { Config, Middleware, MidwayFrameworkType } from '@midwayjs/core';
-import { IMiddleware } from '@midwayjs/core';
+import {
+  Config,
+  Middleware,
+  MidwayFrameworkType,
+  IMiddleware,
+} from '@midwayjs/core';
 import { CORSOptions } from '../interface';
 import * as vary from 'vary';
 @Middleware()

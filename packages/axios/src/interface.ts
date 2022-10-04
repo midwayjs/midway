@@ -4,8 +4,6 @@ import {
   AxiosInterceptorManager,
 } from 'axios';
 
-export const AXIOS_INSTANCE_KEY = 'axios:instance';
-
 export interface AxiosHttpService {
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>;

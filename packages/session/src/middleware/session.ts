@@ -5,8 +5,8 @@ import {
   Middleware,
   Types,
   Utils,
+  IMiddleware,
 } from '@midwayjs/core';
-import { IMiddleware } from '@midwayjs/core';
 import { SessionStoreManager } from '../lib/store';
 import { decode, encode } from '../lib/util';
 import * as assert from 'assert';

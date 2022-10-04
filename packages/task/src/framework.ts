@@ -2,8 +2,6 @@ import {
   BaseFramework,
   IMidwayBootstrapOptions,
   MidwayCommonError,
-} from '@midwayjs/core';
-import {
   Framework,
   getClassMetadata,
   getProviderName,
@@ -17,11 +15,11 @@ import {
   MODULE_TASK_TASK_LOCAL_KEY,
   MODULE_TASK_TASK_LOCAL_OPTIONS,
   Utils,
+  deprecatedOutput,
 } from '@midwayjs/core';
 import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { Application, Context, IQueue } from './interface';
-import { deprecatedOutput } from '@midwayjs/core';
 import { QueueService } from './service/queueService';
 
 @Framework()

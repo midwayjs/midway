@@ -5,13 +5,11 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/core';
-import * as TableStore from 'tablestore';
-import {
   ServiceFactory,
   delegateTargetPrototypeMethod,
   MidwayCommonError,
 } from '@midwayjs/core';
+import * as TableStore from 'tablestore';
 import { TableStoreClient } from './interface';
 
 @Provide()

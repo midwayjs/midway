@@ -1,5 +1,8 @@
-import { Config, Inject, Logger, Middleware } from '@midwayjs/core';
 import {
+  Config,
+  Inject,
+  Logger,
+  Middleware,
   IMiddleware,
   MidwayConfigMissingError,
   MidwayConfigService,

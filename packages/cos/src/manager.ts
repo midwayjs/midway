@@ -6,8 +6,6 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/core';
-import {
   ServiceFactory,
   delegateTargetPrototypeMethod,
   MidwayCommonError,

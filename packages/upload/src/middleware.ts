@@ -3,8 +3,9 @@ import {
   Logger,
   Middleware,
   MidwayFrameworkType,
+  IMiddleware,
+  IMidwayLogger,
 } from '@midwayjs/core';
-import { IMiddleware, IMidwayLogger } from '@midwayjs/core';
 import { resolve, extname } from 'path';
 import { promises } from 'fs';
 import { Readable, Stream } from 'stream';

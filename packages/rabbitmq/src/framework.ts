@@ -8,8 +8,8 @@ import {
   MSListenerType,
   RabbitMQListenerOptions,
   Framework,
+  BaseFramework,
 } from '@midwayjs/core';
-import { BaseFramework } from '@midwayjs/core';
 import {
   IMidwayRabbitMQApplication,
   IMidwayRabbitMQConfigurationOptions,

@@ -5,8 +5,8 @@ import {
   Scope,
   Inject,
   ScopeEnum,
+  DataSourceManager,
 } from '@midwayjs/core';
-import { DataSourceManager } from '@midwayjs/core';
 import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
 
 @Provide()

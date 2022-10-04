@@ -3,8 +3,9 @@ import {
   Inject,
   getMethodParamTypes,
   JoinPoint,
+  MidwayDecoratorService,
+  REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
-import { MidwayDecoratorService, REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
 import { VALIDATE_KEY } from './constants';
 import * as util from 'util';
 import * as DefaultConfig from './config/config.default';

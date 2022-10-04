@@ -10,9 +10,6 @@ import {
   CommonMiddlewareUnion,
   FunctionMiddleware,
   MidwayWebRouterService,
-} from '@midwayjs/core';
-
-import {
   Framework,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,

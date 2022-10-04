@@ -6,13 +6,11 @@ import {
   LOGGER_KEY,
   PLUGIN_KEY,
   WEB_ROUTER_PARAM_KEY,
-} from '@midwayjs/core';
-import { MidwayFaaSFramework } from './framework';
-import {
   extractKoaLikeValue,
   MidwayDecoratorService,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
+import { MidwayFaaSFramework } from './framework';
 import * as DefaultConfig from './config.default';
 
 @Configuration({

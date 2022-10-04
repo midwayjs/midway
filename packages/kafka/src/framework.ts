@@ -1,5 +1,5 @@
-import { BaseFramework } from '@midwayjs/core';
 import {
+  BaseFramework,
   ConsumerMetadata,
   Framework,
   getClassMetadata,

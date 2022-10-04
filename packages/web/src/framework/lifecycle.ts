@@ -3,8 +3,6 @@ import {
   IMidwayContainer,
   MidwayConfigService,
   MidwayFrameworkService,
-} from '@midwayjs/core';
-import {
   CONFIGURATION_KEY,
   Init,
   Inject,
@@ -13,8 +11,8 @@ import {
   Provide,
   Scope,
   ScopeEnum,
+  FunctionalConfiguration,
 } from '@midwayjs/core';
-import { FunctionalConfiguration } from '@midwayjs/core/dist/functional/configuration';
 import { debuglog } from 'util';
 const debug = debuglog('midway:debug');
 

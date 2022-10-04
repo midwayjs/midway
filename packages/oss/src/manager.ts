@@ -5,14 +5,12 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/core';
-import * as OSS from 'ali-oss';
-import * as assert from 'assert';
-import {
   ServiceFactory,
   delegateTargetPrototypeMethod,
   MidwayCommonError,
 } from '@midwayjs/core';
+import * as OSS from 'ali-oss';
+import * as assert from 'assert';
 import type {
   OSSServiceFactoryReturnType,
   MWOSSClusterOptions,

@@ -1,5 +1,5 @@
 import * as Consul from 'consul';
-import { ConsulOptions } from 'consul';
+import type { ConsulOptions } from 'consul';
 import RegisterOptions = Consul.Agent.Service.RegisterOptions;
 
 export interface IServiceBalancer {

@@ -17,8 +17,6 @@ import {
   MidwayServerlessFunctionService,
   RouterInfo,
   PathToRegexpUtil,
-} from '@midwayjs/core';
-import {
   Framework,
   Inject,
   WEB_RESPONSE_CONTENT_TYPE,
