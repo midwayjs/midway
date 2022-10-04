@@ -1,5 +1,5 @@
 import { Configuration } from '../../../../src';
-import * as book from 'midway-test-component';
+import * as book from '../../../../../../packages-resource/midway-test-component';
 
 @Configuration({
   imports: [

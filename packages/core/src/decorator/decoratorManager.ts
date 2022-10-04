@@ -7,7 +7,7 @@ import {
   ObjectIdentifier,
   TagClsMetadata,
   TagPropsMetadata,
-} from '../interface';
+} from './interface';
 import {
   INJECT_CUSTOM_METHOD,
   INJECT_CUSTOM_PARAM,

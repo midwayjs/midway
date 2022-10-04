@@ -4,8 +4,9 @@ import {
   CONTROLLER_KEY,
   Provide,
   Scope,
+  MiddlewareParamArray,
+  ScopeEnum,
 } from '../';
-import { MiddlewareParamArray, ScopeEnum } from '../../interface';
 
 export interface ControllerOption {
   prefix: string;

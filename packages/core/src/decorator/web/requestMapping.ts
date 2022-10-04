@@ -1,8 +1,7 @@
 /**
  * 'HEAD', 'OPTIONS', 'GET', 'PUT', 'PATCH', 'POST', 'DELETE' 封装
  */
-import { attachClassMetadata, WEB_ROUTER_KEY } from '../';
-import { MiddlewareParamArray } from '../../interface';
+import { attachClassMetadata, WEB_ROUTER_KEY, MiddlewareParamArray } from '../';
 
 export interface RouterOption {
   /**

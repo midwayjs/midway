@@ -1,5 +1,5 @@
 import { basename, join } from 'path';
-import { IConfigService, MidwayAppInfo, ScopeEnum } from '../interface';
+import { IConfigService, MidwayAppInfo } from '../interface';
 import { safelyGet } from '../util';
 import { readdirSync, statSync } from 'fs';
 import * as util from 'util';
@@ -7,7 +7,7 @@ import { MidwayEnvironmentService } from './environmentService';
 import { MidwayInformationService } from './informationService';
 import { extend } from '../util/extend';
 import { MidwayInvalidConfigError } from '../error';
-import { Init, Inject, Provide, Scope } from '../decorator';
+import { Init, Inject, Provide, Scope, ScopeEnum } from '../decorator';
 import { Types } from '../util/types';
 
 const debug = util.debuglog('midway:debug');

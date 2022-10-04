@@ -22,7 +22,6 @@
   "license": "MIT",
   "devDependencies": {
     "koa": "2.13.4",
-    "midway-test-component": "*",
     "mm": "3.2.0",
     "pg": "8.8.0",
     "raw-body": "2.5.1",

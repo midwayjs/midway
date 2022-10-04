@@ -3,9 +3,6 @@
  */
 import { KEYS } from '../common/constants';
 import {
-  IManagedInstance,
-  InjectModeEnum,
-  ObjectIdentifier,
   IManagedResolver,
   IObjectDefinition,
   REQUEST_CTX_KEY,
@@ -25,6 +22,11 @@ import {
   MidwaySingletonInjectRequestError,
   MidwayInconsistentVersionError,
 } from '../error';
+import {
+  IManagedInstance,
+  InjectModeEnum,
+  ObjectIdentifier,
+} from '../decorator';
 
 const debug = util.debuglog('midway:managedresolver');
 const debugLog = util.debuglog('midway:debug');

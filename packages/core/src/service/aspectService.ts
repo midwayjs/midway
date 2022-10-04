@@ -1,5 +1,5 @@
 import * as pm from 'picomatch';
-import { IMidwayContainer, ScopeEnum } from '../interface';
+import { IMidwayContainer } from '../interface';
 import {
   ASPECT_KEY,
   AspectMetadata,
@@ -8,7 +8,8 @@ import {
   JoinPoint,
   listModule,
   Provide,
-  Scope
+  Scope,
+  ScopeEnum,
 } from '../decorator';
 import { Types } from '../util/types';
 

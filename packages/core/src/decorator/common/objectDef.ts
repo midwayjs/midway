@@ -1,5 +1,5 @@
 import { saveObjectDefinition } from '../decoratorManager';
-import { ScopeEnum } from '../../interface';
+import { ScopeEnum } from '../interface';
 
 export function Init(): MethodDecorator {
   return function (target: any, propertyKey: string) {

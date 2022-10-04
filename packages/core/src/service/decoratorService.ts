@@ -9,13 +9,13 @@ import {
   INJECT_CUSTOM_PARAM,
   JoinPoint,
   getMethodParamTypes,
+  ScopeEnum,
 } from '../decorator';
 import {
   HandlerFunction,
   IMidwayContainer,
   MethodHandlerFunction,
   ParameterHandlerFunction,
-  ScopeEnum,
 } from '../interface';
 import { MidwayAspectService } from './aspectService';
 import { MidwayCommonError } from '../error';

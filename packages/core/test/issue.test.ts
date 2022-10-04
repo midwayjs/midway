@@ -1,4 +1,4 @@
-import { HomeController } from 'midway-test-component';
+import { HomeController } from '../../../packages-resource/midway-test-component';
 import { createLightFramework } from './util';
 import { join } from 'path';
 

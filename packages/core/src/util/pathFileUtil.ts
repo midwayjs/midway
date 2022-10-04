@@ -20,8 +20,8 @@ export function isPathEqual(one: string, two: string) {
 export function getFileContentSync(filePath: any, encoding?: BufferEncoding) {
   return typeof filePath === 'string'
     ? readFileSync(filePath, {
-      encoding,
-    })
+        encoding,
+      })
     : filePath;
 }
 

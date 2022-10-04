@@ -1,3 +1,5 @@
+export * from './interface';
+
 // common
 export * from './common/provide';
 export * from './common/inject';
@@ -22,3 +24,22 @@ export * from './web/response';
 // other
 export * from './constant';
 export * from './decoratorManager';
+
+// microservice
+export * from './microservice/consumer';
+export * from './microservice/provider';
+export * from './microservice/rabbitmqListener';
+export * from './microservice/kafkaListener';
+
+// rpc
+export * from './rpc/hsf';
+
+// task
+export * from './task/queue';
+export * from './task/task';
+export * from './task/taskLocal';
+export * from './task/schedule';
+
+// ws
+export * from './ws/webSocketController';
+export * from './ws/webSocketEvent';

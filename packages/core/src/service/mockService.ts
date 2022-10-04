@@ -2,9 +2,8 @@ import {
   IMidwayApplication,
   IMidwayContainer,
   IMidwayContext,
-  ScopeEnum,
 } from '../interface';
-import { Destroy, Init, Provide, Scope } from '../decorator';
+import { Destroy, Init, Provide, Scope, ScopeEnum } from '../decorator';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

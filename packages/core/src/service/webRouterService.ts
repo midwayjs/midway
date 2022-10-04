@@ -13,12 +13,10 @@ import {
   WEB_RESPONSE_KEY,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-} from '../decorator';
-import {
   ScopeEnum,
   FaaSMetadata,
   ServerlessTriggerType,
-} from '../interface';
+} from '../decorator';
 import { joinURLPath } from '../util';
 import {
   MidwayCommonError,

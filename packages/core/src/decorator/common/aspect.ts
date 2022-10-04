@@ -3,9 +3,9 @@ import {
   attachClassMetadata,
   Provide,
   saveModule,
+  ScopeEnum,
 } from '../';
 import { Scope } from './objectDef';
-import { ScopeEnum } from '../../interface';
 
 export interface JoinPoint {
   methodName: string;

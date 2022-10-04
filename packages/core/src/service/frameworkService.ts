@@ -12,10 +12,10 @@ import {
   PLUGIN_KEY,
   Provide,
   Scope,
-} from '../decorator';
-import {
   ScopeEnum,
   MidwayFrameworkType,
+} from '../decorator';
+import {
   IMidwayContainer,
   IMidwayFramework,
   REQUEST_OBJ_CTX_KEY,

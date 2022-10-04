@@ -1,5 +1,5 @@
 import { MidwayError, registerErrorCode } from './base';
-import { ObjectIdentifier } from '../interface';
+import { ObjectIdentifier } from '../decorator';
 
 export const FrameworkErrorEnum = registerErrorCode('midway', {
   UNKNOWN: 10000,

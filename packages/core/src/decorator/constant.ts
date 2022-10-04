@@ -2,6 +2,7 @@
 export const ALL = 'common:all_value_key';
 
 // common
+export const SCHEDULE_KEY = 'common:schedule';
 export const CONFIGURATION_KEY = 'common:configuration';
 export const FRAMEWORK_KEY = 'common:framework';
 export const ASPECT_KEY = 'common:aspect';
@@ -22,6 +23,33 @@ export const WEB_RESPONSE_REDIRECT = 'web:response_redirect';
 export const WEB_RESPONSE_HEADER = 'web:response_header';
 export const WEB_RESPONSE_CONTENT_TYPE = 'web:response_content_type';
 export const WEB_RESPONSE_RENDER = 'web:response_render';
+
+// task
+export const MODULE_TASK_KEY = 'task:task';
+export const MODULE_TASK_METADATA = 'task:task:options';
+export const MODULE_TASK_TASK_LOCAL_KEY = 'task:task:task_local';
+export const MODULE_TASK_TASK_LOCAL_OPTIONS = 'task:task:task_local:options';
+export const MODULE_TASK_QUEUE_KEY = 'task:task:queue';
+export const MODULE_TASK_QUEUE_OPTIONS = 'task:task:queue:options';
+
+// ws
+export const WS_CONTROLLER_KEY = 'ws:controller';
+export const WS_EVENT_KEY = 'ws:event';
+
+// RPC
+export const HSF_KEY = 'rpc:hsf';
+export const RPC_GRPC_KEY = 'rpc:grpc';
+export const RPC_DUBBO_KEY = 'rpc:dubbo';
+
+// microservice
+export const MS_CONSUMER_KEY = 'ms:consumer';
+export const MS_PRODUCER_KEY = 'ms:producer';
+export const MS_PROVIDER_KEY = 'ms:provider';
+
+// rpc method
+export const MS_GRPC_METHOD_KEY = 'ms:grpc:method';
+export const MS_DUBBO_METHOD_KEY = 'ms:dubbo:method';
+export const MS_HSF_METHOD_KEY = 'ms:hsf:method';
 
 // framework
 export const CONFIG_KEY = 'config';
@@ -45,6 +73,12 @@ export const INJECT_CUSTOM_PROPERTY = 'inject_custom_property';
 export const INJECT_CUSTOM_METHOD = 'inject_custom_method';
 // The name inject custom param decorator with resolver
 export const INJECT_CUSTOM_PARAM = 'inject_custom_param';
+//
+// // used to store constructor arguments tags
+// export const TAGGED = 'injection:tagged';
+//
+// // used to store class properties tags
+// export const TAGGED_PROP = 'injection:tagged_props';
 
 // used to store class to be injected
 export const TAGGED_CLS = 'injection:tagged_class';
