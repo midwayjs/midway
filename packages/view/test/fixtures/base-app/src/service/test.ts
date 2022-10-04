@@ -1,4 +1,4 @@
-import { Provide, Scope, ScopeEnum, Init } from "@midwayjs/decorator";
+import { Provide, Scope, ScopeEnum, Init } from '@midwayjs/core';
 import { getModelForClass, prop, ReturnModelType } from '@typegoose/typegoose';
 
 class User {

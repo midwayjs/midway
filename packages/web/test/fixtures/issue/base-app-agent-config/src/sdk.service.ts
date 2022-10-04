@@ -1,5 +1,5 @@
 import { ILogger } from "@midwayjs/core";
-import { App, Config, Init, Logger, Provide, Scope, ScopeEnum } from "@midwayjs/decorator";
+import { App, Config, Init, Logger, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { Application } from "egg";
 
 @Scope(ScopeEnum.Singleton)

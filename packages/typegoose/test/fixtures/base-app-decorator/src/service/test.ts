@@ -1,4 +1,4 @@
-import { Provide, Scope, ScopeEnum } from "@midwayjs/decorator";
+import { Provide, Scope, ScopeEnum } from "@midwayjs/core";
 import { prop } from '@typegoose/typegoose';
 import { Model } from 'mongoose';
 import { EntityModel, InjectEntityModel } from '../../../../../src';

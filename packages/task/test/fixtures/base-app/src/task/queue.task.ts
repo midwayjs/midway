@@ -1,4 +1,4 @@
-import { App, Inject, Provide, Queue } from "@midwayjs/decorator";
+import { App, Inject, Provide, Queue } from '@midwayjs/core';
 import { Application } from "@midwayjs/koa";
 
 @Queue()
