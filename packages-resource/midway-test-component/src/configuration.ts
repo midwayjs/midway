@@ -4,10 +4,6 @@ import { join } from 'path';
 
 @Configuration({
   namespace: 'book',
-  importConfigs: [
-    join(__dirname, 'config')
-  ]
+  importConfigs: [join(__dirname, 'config')],
 })
-export class MainConfiguration {
-
-}
+export class MainConfiguration {}

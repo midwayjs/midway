@@ -6,7 +6,6 @@ import { Schedule, Inject, CommonSchedule } from '@midwayjs/core';
   type: 'worker', // 指定某一个 worker 执行
 })
 export class HelloCron implements CommonSchedule {
-
   @Inject()
   ctx: any;
 

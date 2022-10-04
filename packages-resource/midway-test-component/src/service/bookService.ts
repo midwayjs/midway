@@ -3,7 +3,6 @@ import * as crypto from 'crypto';
 
 @Provide()
 export class BookService {
-
   @Inject()
   ctx;
 
@@ -14,6 +13,6 @@ export class BookService {
       data: 'hello world',
       query: this.ctx.query,
       randomId: this.rid,
-    }
+    };
   }
 }
