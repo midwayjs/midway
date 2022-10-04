@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.5.3",
+    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/faas-middleware-upload": "0.0.7",
     "@midwayjs/mock": "^3.5.3",
     "@midwayjs/serverless-fc-starter": "^3.5.3",
