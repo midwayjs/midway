@@ -11,6 +11,7 @@
     "request": "2.88.2"
   },
   "devDependencies": {
+    "@midwayjs/core": "^3.5.3",
     "@midwayjs/runtime-engine": "^3.4.4",
     "@midwayjs/runtime-mock": "^3.4.4",
     "@midwayjs/serverless-fc-starter": "^3.5.3",
