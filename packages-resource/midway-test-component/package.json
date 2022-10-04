@@ -1,5 +1,6 @@
 {
   "name": "midway-test-component-new",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
