@@ -1,8 +1,4 @@
-import {
-  Config,
-  Configuration,
-  MidwayFrameworkType,
-} from '@midwayjs/core';
+import { Config, Configuration, MidwayFrameworkType } from '@midwayjs/core';
 import {
   ILifeCycle,
   IMidwayApplication,

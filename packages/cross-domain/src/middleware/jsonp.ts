@@ -1,9 +1,4 @@
-import {
-  Config,
-  Middleware,
-  MidwayFrameworkType,
-  Match,
-} from '@midwayjs/core';
+import { Config, Middleware, MidwayFrameworkType, Match } from '@midwayjs/core';
 import { IMiddleware } from '@midwayjs/core';
 import { JSONPService } from '../jsonp';
 import { JSONPCSRFError } from '../error';
