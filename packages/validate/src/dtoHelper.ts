@@ -1,7 +1,7 @@
 import {
   getClassExtendedMetadata,
   saveClassMetadata,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { RULES_KEY } from './constants';
 
 export interface Dto<T> extends Function {

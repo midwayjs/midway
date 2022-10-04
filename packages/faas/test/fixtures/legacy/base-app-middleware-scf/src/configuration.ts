@@ -1,4 +1,4 @@
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import { TestMiddleware } from './mw/test';
 
 @Configuration({

@@ -6,7 +6,7 @@ import {
   ScopeEnum,
   Inject,
   Init,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { RULES_KEY } from './constants';
 import * as Joi from 'joi';

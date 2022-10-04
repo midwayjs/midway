@@ -6,7 +6,7 @@ import {
   Provide,
   WSController,
   WSEmit,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { UserService } from '../service/user';
 import { Context } from '../../../../../src';
 

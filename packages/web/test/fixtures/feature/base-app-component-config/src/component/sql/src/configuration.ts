@@ -1,5 +1,5 @@
 // src/configuration.ts
-import { Configuration, Config, App } from '@midwayjs/decorator';
+import { Configuration, Config, App } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({

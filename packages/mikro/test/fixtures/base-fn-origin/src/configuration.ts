@@ -1,4 +1,4 @@
-import { App, Configuration, Inject } from '@midwayjs/decorator';
+import { App, Configuration, Inject } from '@midwayjs/core';
 import * as mikro from '../../../../src';
 import { join } from 'path';
 import { InjectRepository } from '../../../../src';

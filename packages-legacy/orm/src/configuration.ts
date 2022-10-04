@@ -12,7 +12,7 @@ import {
   Init,
   Inject,
   listModule,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import {
   Connection,
   createConnection,

@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 import * as faas from '@midwayjs/faas';

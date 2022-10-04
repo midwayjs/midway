@@ -10,7 +10,7 @@ import {
   SetHeader,
   Logger,
   Headers,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { UserService } from '../service/user';
 import { Context } from '../../../../../src';
 import { Response } from 'express';

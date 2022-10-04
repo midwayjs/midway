@@ -1,6 +1,6 @@
 import * as ejs from 'ejs';
 import { IViewEngine, RenderOptions, ViewManager } from '@midwayjs/view';
-import { Config, Inject, Provide } from '@midwayjs/decorator';
+import { Config, Inject, Provide } from '@midwayjs/core';
 
 @Provide()
 export class EjsView implements IViewEngine {

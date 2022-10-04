@@ -1,4 +1,4 @@
-import { createCustomPropertyDecorator } from '@midwayjs/decorator';
+import { createCustomPropertyDecorator } from '@midwayjs/core';
 import { EntityName } from '@mikro-orm/core';
 
 export const ENTITY_MODEL_KEY = 'mikro:entity_model_key';

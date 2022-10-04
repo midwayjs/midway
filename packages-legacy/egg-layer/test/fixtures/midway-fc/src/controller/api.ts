@@ -7,7 +7,7 @@ import {
   ContentType,
   Param,
   Get,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { UserService } from '../service/user';
 
 @Provide()

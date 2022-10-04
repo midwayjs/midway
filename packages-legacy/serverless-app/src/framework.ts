@@ -20,7 +20,7 @@ import {
 } from '@midwayjs/serverless-spec-builder';
 import { createExpressGateway } from '@midwayjs/gateway-common-http';
 import { Framework as FaaSFramework, Context } from '@midwayjs/faas';
-import { Inject, Framework } from '@midwayjs/decorator';
+import { Inject, Framework } from '@midwayjs/core';
 import { start3 } from './start';
 
 @Framework()

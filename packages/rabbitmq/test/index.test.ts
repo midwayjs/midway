@@ -1,7 +1,7 @@
 import { createRabbitMQProducer } from '@midwayjs/mock';
 import { closeApp, creatApp } from './utils';
 import { loggers } from '@midwayjs/logger';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 
 loggers.updateConsoleLevel('silly');
 

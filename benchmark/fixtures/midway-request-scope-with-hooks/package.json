@@ -6,7 +6,6 @@
   "dependencies": {
     "@midwayjs/bootstrap": "beta",
     "@midwayjs/core": "beta",
-    "@midwayjs/decorator": "beta",
     "@midwayjs/koa": "beta",
     "@midwayjs/orm": "beta",
     "@opentelemetry/api": "1.0.4",

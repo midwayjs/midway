@@ -5,7 +5,7 @@ import {
   OnWSConnection,
   Inject,
   WSEmit,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { SocketRequestEvent, SocketResponseEvent } from '../interface';
 import { Context } from '@midwayjs/socketio';
 

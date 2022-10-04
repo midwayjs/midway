@@ -1,4 +1,4 @@
-import { Inject, Provide, Config, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Inject, Provide, Config, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { UserManager } from './lib/userManager';
 import assert = require('assert');
 

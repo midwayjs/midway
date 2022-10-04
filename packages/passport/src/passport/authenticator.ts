@@ -5,7 +5,7 @@ import {
   Init,
   Config,
   ApplicationContext,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { SessionStrategy } from './session.stratey';
 import { AuthenticateOptions } from '../interface';
 import { Strategy } from './strategy';

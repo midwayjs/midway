@@ -1,4 +1,4 @@
-import { createCustomPropertyDecorator } from '@midwayjs/decorator';
+import { createCustomPropertyDecorator } from '@midwayjs/core';
 import { ENTITY_MODEL_KEY } from '../interface';
 
 export function InjectEntityModel(modelKey: any) {

@@ -1,4 +1,4 @@
-import { ALL, App, Config, Configuration, Inject, MidwayFrameworkType } from '@midwayjs/decorator';
+import { ALL, App, Config, Configuration, Inject, MidwayFrameworkType } from '@midwayjs/core';
 import { join } from 'path';
 import * as assert from 'assert';
 import { RemoteConfigService } from './service/remoteConfigService';

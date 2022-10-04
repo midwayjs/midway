@@ -1,4 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import { InfoMiddleware } from './middleware/info.middleware';
 import { MidwayApplicationManager } from '@midwayjs/core';
 import * as DefaultConfig from './config.default';

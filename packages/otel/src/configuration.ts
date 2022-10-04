@@ -1,4 +1,4 @@
-import { Configuration, Inject, JoinPoint } from '@midwayjs/decorator';
+import { Configuration, Inject, JoinPoint } from '@midwayjs/core';
 import { MidwayDecoratorService } from '@midwayjs/core';
 import { TRACE_KEY } from './decorator/tracer.decorator';
 import { TraceService } from './service';

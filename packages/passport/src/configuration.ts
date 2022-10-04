@@ -1,4 +1,4 @@
-import { Inject, Configuration } from '@midwayjs/decorator';
+import { Inject, Configuration } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import {
   IMidwayContainer,

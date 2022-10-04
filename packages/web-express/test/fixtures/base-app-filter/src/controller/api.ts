@@ -3,7 +3,7 @@ import {
   Post,
   Inject,
   Body,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context } from '../../../../../src';
 
 class DataDTO {

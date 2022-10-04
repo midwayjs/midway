@@ -1,4 +1,4 @@
-import { Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import * as cacheManager from 'cache-manager';
 
 @Provide()

@@ -1,4 +1,4 @@
-import { Configuration, Controller, Fields, Inject, Post, sleep, File } from '@midwayjs/decorator';
+import { Configuration, Controller, Fields, Inject, Post, sleep, File } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { createWriteStream } from 'fs'
 import { join } from 'path';

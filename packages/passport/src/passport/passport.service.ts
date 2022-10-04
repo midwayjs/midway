@@ -1,4 +1,4 @@
-import { App, Config, Init, Inject } from '@midwayjs/decorator';
+import { App, Config, Init, Inject } from '@midwayjs/core';
 import { AbstractPassportMiddleware, AuthenticateOptions } from '../interface';
 import { httpError, MidwayHttpError } from '@midwayjs/core';
 import { PassportAuthenticator } from './authenticator';

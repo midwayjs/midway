@@ -3,7 +3,7 @@ import {
   Logger,
   Middleware,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { IMiddleware, IMidwayLogger } from '@midwayjs/core';
 import { HttpProxyConfig, HttpProxyStrategy } from './interface';
 import axios from 'axios';

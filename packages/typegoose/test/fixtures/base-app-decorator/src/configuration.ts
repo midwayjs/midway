@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as typegoose from '../../../../src';
 import { join } from 'path'
 import { TestService } from './service/test';

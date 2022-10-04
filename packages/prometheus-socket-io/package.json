@@ -24,7 +24,6 @@
   "devDependencies": {
     "@midwayjs/bootstrap": "^3.5.3",
     "@midwayjs/core": "^3.5.3",
-    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/koa": "^3.5.3",
     "@midwayjs/mock": "^3.5.3",
     "@midwayjs/prometheus": "^3.5.3",

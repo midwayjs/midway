@@ -1,5 +1,5 @@
 import { MidwayContainer } from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { JwtService } from './jwt';
 
 @Configuration({

@@ -1,5 +1,5 @@
 import { Trace, TraceService } from '../../../../src';
-import { Inject, Provide, sleep } from '@midwayjs/decorator';
+import { Inject, Provide, sleep } from '@midwayjs/core';
 
 @Provide()
 export class UserService {

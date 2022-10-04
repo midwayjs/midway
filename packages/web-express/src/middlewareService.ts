@@ -1,4 +1,4 @@
-import { Types, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Types, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import {
   IMidwayContainer,
   MidwayCommonError,

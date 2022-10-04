@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import { MongooseDataSourceManager } from './manager';
 

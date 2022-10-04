@@ -1,6 +1,6 @@
 import { EventSubscriberModel } from '../../../../src';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from 'typeorm';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 @EventSubscriberModel({connectionName: 'test'})

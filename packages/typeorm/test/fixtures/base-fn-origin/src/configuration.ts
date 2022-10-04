@@ -1,4 +1,4 @@
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as orm from '../../../../src';
 import { join } from 'path';
 import { InjectEntityModel } from '../../../../src';

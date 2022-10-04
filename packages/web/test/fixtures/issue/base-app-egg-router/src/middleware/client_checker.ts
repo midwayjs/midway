@@ -1,4 +1,4 @@
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { IWebMiddleware, IMidwayWebNext } from '../../../../../../src';
 import { Context } from 'egg';
 

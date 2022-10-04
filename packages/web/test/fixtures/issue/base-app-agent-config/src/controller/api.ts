@@ -5,7 +5,7 @@ import {
   Inject,
   Query,
   HttpCode,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Provide()
 @Controller('/')

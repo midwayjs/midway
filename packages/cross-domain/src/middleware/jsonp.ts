@@ -3,7 +3,7 @@ import {
   Middleware,
   MidwayFrameworkType,
   Match,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { IMiddleware } from '@midwayjs/core';
 import { JSONPService } from '../jsonp';
 import { JSONPCSRFError } from '../error';

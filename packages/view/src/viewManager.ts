@@ -5,7 +5,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import * as assert from 'assert';
 import * as path from 'path';
 import { constants, existsSync, promises } from 'fs';

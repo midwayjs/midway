@@ -1,4 +1,4 @@
-import { Configuration, Controller, Fields, Files, Inject, Post, sleep } from '@midwayjs/decorator';
+import { Configuration, Controller, Fields, Files, Inject, Post, sleep } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { createWriteStream } from 'fs';
 import { join } from 'path';

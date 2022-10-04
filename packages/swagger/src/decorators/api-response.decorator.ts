@@ -7,7 +7,7 @@ import {
 } from '../interfaces';
 import { getTypeIsArrayTuple } from './helpers';
 import { HttpStatus } from '../common/httpStatus';
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 
 export interface ApiResponseMetadata
   extends Omit<ResponseObject, 'description'> {

@@ -3,7 +3,7 @@ import {
   Configuration,
   Inject,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Application as SocketApplication } from '@midwayjs/socketio';
 import { DataService } from '@midwayjs/prometheus';
 import * as prometheus from '@midwayjs/prometheus';

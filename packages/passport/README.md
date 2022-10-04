@@ -29,7 +29,7 @@ $ npm i @types/passport --save-dev
 import { join } from 'path';
 import * as jwt from '@midwayjs/jwt';
 import { ILifeCycle,} from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as passport from '@midwayjs/passport';
 
 @Configuration({
@@ -83,7 +83,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 ```typescript
 // local-middleware.ts
 
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { PassportMiddleware } from '@midwayjs/passport';
 import { Context } from '@midwayjs/express';
 
@@ -101,7 +101,7 @@ export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
 ```typescript
 // controller.ts
 
-import { Provide, Post, Inject, Controller } from '@midwayjs/decorator';
+import { Provide, Post, Inject, Controller } from '@midwayjs/core';
 
 @Provide()
 @Controller('/')
@@ -159,7 +159,7 @@ export class JwtStrategy extends PassportStrategy(
 ```typescript
 // jwt-middleware.ts
 
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { PassportMiddleware } from '@midwayjs/passport';
 import { JwtStrategy } from './strategy/jwt-strategy';
 
@@ -172,8 +172,8 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
 
 ```
 ```typescript
-import { Provide, Post, Inject } from '@midwayjs/decorator';
-import { Controller, Post } from '@midwayjs/decorator';
+import { Provide, Post, Inject } from '@midwayjs/core';
+import { Controller, Post } from '@midwayjs/core';
 import { Jwt } from '@midwayjs/jwt';
 
 @Provide()
@@ -251,7 +251,7 @@ export class GithubPassportMiddleware extends PassportMiddleware {
 ```typescript
 // controller.ts
 
-import { Provide, Get, Inject } from '@midwayjs/decorator';
+import { Provide, Get, Inject } from '@midwayjs/core';
 
 @Provide()
 @Controller('/oauth')

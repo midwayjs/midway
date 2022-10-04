@@ -10,7 +10,7 @@ import {
   Redirect,
   SetHeader,
   Logger,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Provide()
 @Controller('/api')

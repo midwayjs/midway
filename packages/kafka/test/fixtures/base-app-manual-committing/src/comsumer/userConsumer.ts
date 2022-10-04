@@ -1,4 +1,4 @@
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/decorator';
+import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
 import { Context, Application } from '../../../../../src';
 

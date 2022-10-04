@@ -6,7 +6,7 @@ import {
   Scope,
   ScopeEnum,
   Utils,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
 import {
   DefaultConfig,

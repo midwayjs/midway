@@ -13,7 +13,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { FunctionalConfiguration } from '@midwayjs/core/dist/functional/configuration';
 import { debuglog } from 'util';
 const debug = debuglog('midway:debug');

@@ -12,7 +12,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import * as mongoose from 'mongoose';
 
 @Provide()

@@ -1,4 +1,4 @@
-import { Catch, Configuration, Inject } from '@midwayjs/decorator';
+import { Catch, Configuration, Inject } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Catch()

@@ -1,5 +1,5 @@
 import { createApp, createHttpRequest, close } from '@midwayjs/mock';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 import { join } from 'path';
 import * as assert from 'assert';
 

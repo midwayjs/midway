@@ -1,4 +1,4 @@
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { TestMiddleware1, TestMiddleware2 } from '../middleware/test';
 
 @Provide()

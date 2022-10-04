@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import * as koa from '@midwayjs/koa';
 import * as orm from '@midwayjs/orm';

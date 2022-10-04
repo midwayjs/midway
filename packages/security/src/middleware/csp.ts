@@ -1,4 +1,4 @@
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { BaseMiddleware } from './base';
 import { parse } from 'platform';
 import { nanoid } from 'nanoid/non-secure';

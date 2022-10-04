@@ -1,4 +1,4 @@
-import { Config, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Config, Controller, Get, Provide } from '@midwayjs/core';
 
 @Provide()
 @Controller('/')

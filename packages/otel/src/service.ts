@@ -1,4 +1,4 @@
-import { App, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { App, Init, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { context, Span, SpanKind, trace } from '@opentelemetry/api';
 import { IMidwayApplication } from '@midwayjs/core';
 

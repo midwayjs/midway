@@ -1,4 +1,4 @@
-import { Provide, ServerlessTrigger, Inject, ServerlessTriggerType, ServerlessFunction } from '@midwayjs/decorator';
+import { Provide, ServerlessTrigger, Inject, ServerlessTriggerType, ServerlessFunction } from '@midwayjs/core';
 @Provide()
 export class HelloHttpService {
   @Inject()

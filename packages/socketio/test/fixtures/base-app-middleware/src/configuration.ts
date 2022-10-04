@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import { ILifeCycle } from '@midwayjs/core';
 import { Application } from '../../../../src';
 import { ConnectionMiddleware, PacketMiddleware } from './middleware/conn.middleware';

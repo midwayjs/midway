@@ -1,4 +1,4 @@
-import { Config, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Config, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import * as Client from 'prom-client';
 import { Master } from '../decorator/master';
 import * as PromClient from 'prom-client';

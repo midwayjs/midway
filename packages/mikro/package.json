@@ -10,7 +10,6 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.5.3",
-    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/mock": "^3.5.3",
     "@mikro-orm/core": "5.4.2",
     "@mikro-orm/entity-generator": "5.4.2",

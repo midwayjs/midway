@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { COSServiceFactory } from './manager';
 import * as defaultConfig from './config.default';
 

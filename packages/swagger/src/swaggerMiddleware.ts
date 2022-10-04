@@ -13,7 +13,7 @@ import {
   Scope,
   ScopeEnum,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { readFileSync } from 'fs';
 import { join, extname } from 'path';
 import type { SwaggerOptions } from './interfaces';

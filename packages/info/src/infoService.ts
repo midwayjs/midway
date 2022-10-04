@@ -6,7 +6,7 @@ import {
   ApplicationContext,
   Config,
   Init,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import {
   MidwayInformationService,
   IMidwayContainer,

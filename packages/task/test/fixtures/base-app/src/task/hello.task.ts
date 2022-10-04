@@ -1,4 +1,4 @@
-import { App, FORMAT, Provide, Task } from '@midwayjs/decorator';
+import { App, FORMAT, Provide, Task } from '@midwayjs/core';
 import { Application } from "@midwayjs/koa";
 import { TaskLocal } from "@midwayjs/decorator";
 

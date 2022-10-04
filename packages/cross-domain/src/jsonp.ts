@@ -1,4 +1,4 @@
-import { Provide, Inject, Config } from '@midwayjs/decorator';
+import { Provide, Inject, Config } from '@midwayjs/core';
 import { JSONPOptions } from './interface';
 @Provide()
 export class JSONPService {

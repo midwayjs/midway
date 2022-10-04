@@ -1,4 +1,4 @@
-import { Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { ConsulBalancer } from '../lib/balancer';
 import * as Consul from 'consul';
 import { IServiceBalancer, IConsulBalancer } from '../interface';

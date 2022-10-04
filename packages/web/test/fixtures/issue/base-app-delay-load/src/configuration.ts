@@ -1,4 +1,4 @@
-import { Configuration, sleep } from '@midwayjs/decorator';
+import { Configuration, sleep } from '@midwayjs/core';
 
 @Configuration({
 })

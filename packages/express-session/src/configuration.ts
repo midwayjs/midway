@@ -1,4 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { SessionMiddleware } from './middleware/session';
 import { ClassMiddleware, MidwayApplicationManager } from '@midwayjs/core';

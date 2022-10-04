@@ -4,7 +4,7 @@ import {
   Provide,
   ServerlessTrigger,
   ServerlessTriggerType
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { join } from 'path';
 import * as faas from '@midwayjs/faas';
 

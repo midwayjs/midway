@@ -1,4 +1,4 @@
-import { Configuration, App, Inject, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Configuration, App, Inject, ServerlessTriggerType } from '@midwayjs/core';
 import { MidwayServerlessFunctionService } from '@midwayjs/core';
 
 @Configuration({

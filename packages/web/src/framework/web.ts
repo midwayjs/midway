@@ -9,7 +9,7 @@ import {
   RouterInfo,
   WebControllerGenerator,
 } from '@midwayjs/core';
-import { Framework, Inject, MidwayFrameworkType } from '@midwayjs/decorator';
+import { Framework, Inject, MidwayFrameworkType } from '@midwayjs/core';
 import {
   IMidwayWebConfigurationOptions,
   Application,

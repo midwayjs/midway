@@ -1,13 +1,13 @@
 'use strict';
 
-import { ScopeEnum } from '@midwayjs/decorator';
+import { ScopeEnum } from '@midwayjs/core';
 import {
   Controller,
   Get,
   Inject,
   Provide,
   Scope,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Request)

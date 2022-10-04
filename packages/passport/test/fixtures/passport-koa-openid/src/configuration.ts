@@ -1,4 +1,4 @@
-import { Configuration, App, Provide } from '@midwayjs/decorator';
+import { Configuration, App, Provide } from '@midwayjs/core';
 import * as path from 'path';
 import { Strategy } from 'passport-openidconnect';
 

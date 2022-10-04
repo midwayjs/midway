@@ -1,4 +1,4 @@
-import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide, Query } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { PhotoService } from '../service/photo';
 import { UserService } from '../service/user';

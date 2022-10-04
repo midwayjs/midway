@@ -4,7 +4,7 @@ import {
   Inject,
   Init,
   WEB_ROUTER_PARAM_KEY,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { IMidwayWebApplication } from './interface';
 import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
 import { join } from 'path';

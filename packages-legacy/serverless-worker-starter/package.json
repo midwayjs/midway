@@ -11,7 +11,6 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.5.3",
-    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/jest-environment-service-worker": "0.1.2",
     "@midwayjs/jsdom-service-worker": "0.1.1",
     "@midwayjs/logger": "^2.15.0",

@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Provide } from '@midwayjs/core';
 import * as fs from 'fs';
 import * as path from 'path';
 

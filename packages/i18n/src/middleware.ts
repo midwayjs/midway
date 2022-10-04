@@ -4,7 +4,7 @@ import {
   Match,
   Middleware,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { I18N_ATTR_KEY, I18nOptions } from './interface';
 import { MidwayI18nService } from './i18nService';
 import { formatLocale } from './utils';

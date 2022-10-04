@@ -29,7 +29,7 @@ import {
   listModule,
   Framework,
   WSControllerOption,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Framework()
 export class MidwayWSFramework extends BaseFramework<

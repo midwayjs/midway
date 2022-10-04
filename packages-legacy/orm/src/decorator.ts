@@ -3,7 +3,7 @@ import {
   createCustomPropertyDecorator,
   saveClassMetadata,
   saveModule,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { getMetadataArgsStorage } from 'typeorm';
 import { ViewEntityOptions as BaseViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
 

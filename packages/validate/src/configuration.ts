@@ -3,7 +3,7 @@ import {
   Inject,
   getMethodParamTypes,
   JoinPoint,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { MidwayDecoratorService, REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
 import { VALIDATE_KEY } from './constants';
 import * as util from 'util';

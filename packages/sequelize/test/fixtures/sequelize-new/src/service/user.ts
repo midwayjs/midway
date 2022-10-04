@@ -1,4 +1,4 @@
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { Repository } from 'sequelize-typescript';
 
 import { HelloModel } from '../model/hello';

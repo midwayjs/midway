@@ -1,4 +1,4 @@
-import { GrpcMethod, MSProviderType, Provider, Provide, Inject, Init } from '@midwayjs/decorator';
+import { GrpcMethod, MSProviderType, Provider, Provide, Inject, Init } from '@midwayjs/core';
 import { helloworld, hero } from '../interface';
 import { Clients } from '../../../../../src';
 

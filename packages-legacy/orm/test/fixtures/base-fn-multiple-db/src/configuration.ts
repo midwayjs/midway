@@ -1,5 +1,5 @@
 import { IMidwayApplication } from '@midwayjs/core';
-import { App, Configuration, Inject } from '@midwayjs/decorator';
+import { App, Configuration, Inject } from '@midwayjs/core';
 import * as assert from 'assert';
 import { join } from 'path';
 import { getConnection, Repository } from 'typeorm';

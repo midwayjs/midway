@@ -2,9 +2,9 @@ import {
   IMidwayContainer,
   IMidwayFramework,
   safeRequire,
+  Configuration,
 } from '@midwayjs/core';
 import { ComponentModule } from './interface';
-import { Configuration } from '@midwayjs/decorator';
 import * as os from 'os';
 import * as assert from 'assert';
 

@@ -16,7 +16,7 @@ $ npm i @midwayjs/view-ejs --save
 First, import component in `src/configuration.ts`.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as view from '@midwayjs/view-ejs';
 import { join } from 'path'
 
@@ -51,7 +51,7 @@ export const ejs = {};
 In controller, you can call `ctx.render`.
 
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -98,7 +98,7 @@ Create a view engine class first, and implement render and renderString, if the 
 
 ```typescript
 // lib/view.ts
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class MyView {
@@ -138,7 +138,7 @@ After define a view engine, you can register it.
 
 ```typescript
 // src/configuration.ts
-import { Configuration, Inject, Provide } from '@midwayjs/decorator';
+import { Configuration, Inject, Provide } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as view from '@midwayjs/view';
 import { MyView } from './lib/my';
@@ -192,7 +192,7 @@ export const view = {
 };
 
 // controller
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')

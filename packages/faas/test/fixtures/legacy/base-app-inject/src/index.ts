@@ -1,5 +1,5 @@
-import { Inject, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
-import { Plugin, App } from '@midwayjs/decorator';
+import { Inject, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
+import { Plugin, App } from '@midwayjs/core';
 import * as assert from 'assert';
 
 @Provide()

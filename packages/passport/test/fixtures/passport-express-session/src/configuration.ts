@@ -1,4 +1,4 @@
-import { App, Configuration, Middleware } from '@midwayjs/decorator';
+import { App, Configuration, Middleware } from '@midwayjs/core';
 import * as passport from 'passport';
 import { PassportMiddleware, PassportStrategy, CustomStrategy as Strategy } from '../../../../src';
 import * as path from 'path';

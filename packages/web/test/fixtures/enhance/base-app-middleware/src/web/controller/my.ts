@@ -1,4 +1,4 @@
-import { Inject, Provide, Controller, Get, Post } from '@midwayjs/decorator';
+import { Inject, Provide, Controller, Get, Post } from '@midwayjs/core';
 
 const mw = async (ctx, next) => {
   ctx.home = ctx.home + '4444';

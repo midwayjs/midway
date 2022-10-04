@@ -1,4 +1,4 @@
-import { Config, Configuration, Inject } from '@midwayjs/decorator';
+import { Config, Configuration, Inject } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { MidwayApplicationManager } from '@midwayjs/core';
 import { CodeDyeMW } from './middleware';

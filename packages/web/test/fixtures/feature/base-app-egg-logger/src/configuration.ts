@@ -1,4 +1,4 @@
-import { Configuration, Logger, App } from '@midwayjs/decorator';
+import { Configuration, Logger, App } from '@midwayjs/core';
 import * as assert from 'assert';
 import { Application } from 'egg';
 import { join } from 'path';

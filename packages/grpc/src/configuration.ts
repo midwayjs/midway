@@ -4,7 +4,7 @@ import {
   Configuration,
   Init,
   Logger,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { IMidwayContainer } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 import { setLogger } from '@grpc/grpc-js';

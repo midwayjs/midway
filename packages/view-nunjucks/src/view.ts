@@ -1,4 +1,4 @@
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { IViewEngine, RenderOptions } from '@midwayjs/view';
 import { NunjucksEnvironment } from './engine';
 

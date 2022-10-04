@@ -27,7 +27,7 @@ import {
   MS_PROVIDER_KEY,
   MSProviderType,
   Utils,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import {
   Context,
   IMidwayGRPCApplication,

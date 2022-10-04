@@ -5,7 +5,7 @@
 import * as amqp from 'amqp-connection-manager';
 import { IRabbitMQApplication } from './interface';
 import { ConsumeMessage } from 'amqplib/properties';
-import { RabbitMQListenerOptions } from '@midwayjs/decorator';
+import { RabbitMQListenerOptions } from '@midwayjs/core';
 import type { Channel } from 'amqplib';
 import { ILogger } from '@midwayjs/logger';
 import { EventEmitter } from 'events';

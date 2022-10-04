@@ -1,7 +1,7 @@
 import {
   createCustomMethodDecorator,
   createCustomPropertyDecorator,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { DECORATORS } from '../constants';
 import type { Type } from '../interfaces';
 

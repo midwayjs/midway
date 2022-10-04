@@ -1,4 +1,4 @@
-import { App, Configuration, Inject } from '@midwayjs/decorator';
+import { App, Configuration, Inject } from '@midwayjs/core';
 import * as view from '../../../../src';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path'

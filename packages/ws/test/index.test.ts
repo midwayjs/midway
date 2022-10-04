@@ -1,5 +1,5 @@
 import { closeApp, createServer } from './utils';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 import { once } from 'events';
 import { createWebSocketClient } from '@midwayjs/mock';
 

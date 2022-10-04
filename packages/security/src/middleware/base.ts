@@ -1,4 +1,4 @@
-import { Config, MidwayFrameworkType } from '@midwayjs/decorator';
+import { Config, MidwayFrameworkType } from '@midwayjs/core';
 import { IMiddleware } from '@midwayjs/core';
 import { SecurityOptions } from '../interface';
 

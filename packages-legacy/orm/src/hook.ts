@@ -1,4 +1,4 @@
-import { saveModule } from '@midwayjs/decorator';
+import { saveModule } from '@midwayjs/core';
 import { Connection } from 'typeorm';
 import { ConnectionOptions } from './interface';
 

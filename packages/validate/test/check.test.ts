@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import * as Valid from '../src';
 
 import * as assert from 'assert';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 describe('/test/check.test.ts', () => {
   it('check with check', async () => {
     const app = await createLightApp('', {

@@ -1,4 +1,4 @@
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provide, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provide, Provider } from '@midwayjs/core';
 import { Context } from '../../../../../src';
 import { math } from '../interface';
 import { Metadata } from '@grpc/grpc-js';

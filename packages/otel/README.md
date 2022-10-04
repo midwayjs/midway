@@ -71,7 +71,7 @@ You can find more information at [opentelemetry-js](https://github.com/open-tele
 Enable component first.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as otel from '@midwayjs/otel';
 

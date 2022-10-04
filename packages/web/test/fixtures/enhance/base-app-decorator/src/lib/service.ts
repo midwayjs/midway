@@ -1,6 +1,6 @@
-import { Config, Plugin, Provide } from '@midwayjs/decorator';
+import { Config, Plugin, Provide } from '@midwayjs/core';
 import { IPipelineHandler } from '@midwayjs/core';
-import { Pipeline } from '@midwayjs/decorator';
+import { Pipeline } from '@midwayjs/core';
 
 @Provide()
 export class BaseService {

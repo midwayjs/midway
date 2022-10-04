@@ -3,7 +3,7 @@ import {
   Get,
   Provide,
   Inject,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { IMidwayKoaContext } from '../../../../../src';
 
 @Provide()

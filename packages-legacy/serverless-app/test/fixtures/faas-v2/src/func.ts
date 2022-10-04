@@ -7,7 +7,7 @@ import {
   ServerlessTrigger,
   ServerlessTriggerType,
   Headers
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Provide()
 export class FuncService {

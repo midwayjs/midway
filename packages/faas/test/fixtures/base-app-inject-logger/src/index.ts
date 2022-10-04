@@ -1,4 +1,4 @@
-import { Provide, App, Inject, Logger, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, App, Inject, Logger, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import * as assert from 'assert';
 
 @Provide()

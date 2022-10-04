@@ -14,7 +14,7 @@ import {
 } from '@midwayjs/core';
 import { Cookies } from '@midwayjs/cookies';
 
-import { Framework } from '@midwayjs/decorator';
+import { Framework } from '@midwayjs/core';
 import {
   IMidwayKoaApplication,
   IMidwayKoaConfigurationOptions,

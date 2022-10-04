@@ -6,7 +6,7 @@ import {
   LOGGER_KEY,
   PLUGIN_KEY,
   WEB_ROUTER_PARAM_KEY,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { MidwayFaaSFramework } from './framework';
 import {
   extractKoaLikeValue,

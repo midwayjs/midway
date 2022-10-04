@@ -1,4 +1,4 @@
-import { Provide, Plugin, Config, Logger } from '@midwayjs/decorator';
+import { Provide, Plugin, Config, Logger } from '@midwayjs/core';
 import * as assert from 'assert';
 
 @Provide()

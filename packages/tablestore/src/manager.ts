@@ -5,7 +5,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import * as TableStore from 'tablestore';
 import {
   ServiceFactory,

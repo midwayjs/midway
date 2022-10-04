@@ -44,7 +44,7 @@ You can use compatible session store [here](https://github.com/expressjs/session
 Let's give an example for [memorystore](https://github.com/roccomuso/memorystore).
 
 ```ts
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import * as session from '@midwayjs/express-session';
 import MemoryStore = require('memorystore');
 

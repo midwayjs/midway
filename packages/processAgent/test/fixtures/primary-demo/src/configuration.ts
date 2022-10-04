@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import { Application } from '@midwayjs/koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as primary from '../../../../src'

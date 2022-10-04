@@ -1,4 +1,4 @@
-import { App, Configuration, Middleware } from '@midwayjs/decorator';
+import { App, Configuration, Middleware } from '@midwayjs/core';
 import { join } from 'path';
 
 @Middleware()
