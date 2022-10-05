@@ -433,7 +433,7 @@ export type CommonFilterUnion<CTX, R, N> =
  * Guard definition
  */
 export interface IGuard<CTX = unknown> {
-  canActivate?(ctx: CTX, supplierClz: new (...args) => any, methodName: string): boolean | Promise<boolean>;
+  canActivate(ctx: CTX, supplierClz: new (...args) => any, methodName: string): boolean | Promise<boolean>;
 }
 
 export type CommonGuardUnion<CTX = unknown> =

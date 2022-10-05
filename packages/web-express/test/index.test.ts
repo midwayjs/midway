@@ -325,4 +325,15 @@ describe('/test/feature.test.ts', () => {
     });
   });
 
+  it('should test request with guard', async () => {
+    const app = await creatApp('base-app-guard');
+    let result = await createHttpRequest(app)
+      .get('/');
+    expect(result.text).toEqual('hello world');
+
+    result = await createHttpRequest(app)
+      .post('/api');
+    expect(result.status).toEqual(403);
+    await closeApp(app);
+  });
 });

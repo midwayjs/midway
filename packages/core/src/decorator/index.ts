@@ -11,6 +11,7 @@ export * from './common/objectDef';
 export * from './common/framework';
 export * from './common/filter';
 export * from './common/middleware';
+export * from './common/guard';
 
 // faas
 export * from './faas/serverlessTrigger';
