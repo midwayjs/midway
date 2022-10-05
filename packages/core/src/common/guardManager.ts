@@ -1,14 +1,9 @@
-import {
-  CommonGuardUnion,
-  IGuard,
-  IMidwayContext,
-} from '../interface';
+import { CommonGuardUnion, IGuard, IMidwayContext } from '../interface';
 import { getClassMetadata, getPropertyMetadata, GUARD_KEY } from '../decorator';
 
 export class GuardManager<
-  CTX extends IMidwayContext = IMidwayContext,
-  > extends Array<new (...args) => IGuard<any>> {
-
+  CTX extends IMidwayContext = IMidwayContext
+> extends Array<new (...args) => IGuard<any>> {
   public addGlobalGuard(guards: CommonGuardUnion<CTX>) {
     if (!Array.isArray(guards)) {
       this.push(guards);
@@ -17,7 +12,11 @@ export class GuardManager<
     }
   }
 
-  public async runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string) {
+  public async runGuard(
+    ctx: CTX,
+    supplierClz: new (...args) => any,
+    methodName: string
+  ) {
     // check global guard
     for (const Guard of this) {
       const guard = await ctx.requestContext.getAsync<IGuard<any>>(Guard);
@@ -40,7 +39,11 @@ export class GuardManager<
     }
 
     // check method Guard
-    const methodGuardList = getPropertyMetadata(GUARD_KEY, supplierClz, methodName);
+    const methodGuardList = getPropertyMetadata(
+      GUARD_KEY,
+      supplierClz,
+      methodName
+    );
     if (methodGuardList) {
       for (const Guard of methodGuardList) {
         const guard = await ctx.requestContext.getAsync<IGuard<any>>(Guard);

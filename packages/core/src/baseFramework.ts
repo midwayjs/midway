@@ -318,7 +318,7 @@ export abstract class BaseFramework<
 
       useGuard: (guard: CommonGuardUnion<CTX>) => {
         return this.useGuard(guard);
-      }
+      },
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];
@@ -461,7 +461,11 @@ export abstract class BaseFramework<
     return this.guardManager.addGlobalGuard(guards);
   }
 
-  public async runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean> {
+  public async runGuard(
+    ctx: CTX,
+    supplierClz: new (...args) => any,
+    methodName: string
+  ): Promise<boolean> {
     return this.guardManager.runGuard(ctx, supplierClz, methodName);
   }
 

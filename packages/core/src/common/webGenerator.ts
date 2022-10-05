@@ -15,7 +15,8 @@ import {
   RouterInfo,
   MidwayMiddlewareService,
   IMidwayApplication,
-  MidwayFrameworkType, httpError,
+  MidwayFrameworkType,
+  httpError,
 } from '../index';
 import * as util from 'util';
 
@@ -36,7 +37,9 @@ export abstract class WebControllerGenerator<
   public generateKoaController(routeInfo: RouterInfo) {
     return async (ctx, next) => {
       if (routeInfo.controllerClz && typeof routeInfo.method === 'string') {
-        const isPassed = await this.app.getFramework().runGuard(ctx, routeInfo.controllerClz, routeInfo.method);
+        const isPassed = await this.app
+          .getFramework()
+          .runGuard(ctx, routeInfo.controllerClz, routeInfo.method);
         if (!isPassed) {
           throw new httpError.ForbiddenError();
         }
