@@ -1,6 +1,6 @@
 import { createApp, close } from '@midwayjs/mock';
 import { join } from 'path';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 import * as bull from '../src';
 
 describe(`/test/index.test.ts`, () => {

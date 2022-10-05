@@ -1,4 +1,4 @@
-import { FORMAT, App} from '@midwayjs/decorator';
+import { FORMAT, App} from '@midwayjs/core';
 import { IMidwayApplication } from '@midwayjs/core';
 import { IProcessor, Processor } from '../../../../../src';
 

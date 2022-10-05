@@ -1,6 +1,10 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
 import * as bull from '@midwayjs/bull';
-import { MidwayApplicationManager, MidwayConfigService } from '@midwayjs/core';
+import {
+  Configuration,
+  Inject,
+  MidwayApplicationManager,
+  MidwayConfigService,
+} from '@midwayjs/core';
 import { BoardMiddleware } from './board.middleware';
 
 @Configuration({

@@ -1,4 +1,4 @@
-import { App, Inject } from '@midwayjs/decorator';
+import { App, Inject } from '@midwayjs/core';
 import { Processor, Application } from '../../../../../src';
 
 @Processor('test')

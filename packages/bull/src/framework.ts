@@ -1,10 +1,12 @@
-import { BaseFramework, extend, IMidwayBootstrapOptions } from '@midwayjs/core';
 import {
+  BaseFramework,
+  extend,
+  IMidwayBootstrapOptions,
   Framework,
   getClassMetadata,
   listModule,
   Utils,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import {
   Application,
   Context,

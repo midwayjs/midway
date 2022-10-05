@@ -1,7 +1,11 @@
-import { Configuration, Init, Inject } from '@midwayjs/decorator';
+import {
+  Configuration,
+  Init,
+  Inject,
+  MidwayDecoratorService,
+} from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { BullFramework } from './framework';
-import { MidwayDecoratorService } from '@midwayjs/core';
 import { BULL_QUEUE_KEY } from './constants';
 
 @Configuration({

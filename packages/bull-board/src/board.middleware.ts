@@ -3,8 +3,6 @@ import type {
   IMidwayApplication,
   IMidwayContext,
   NextFunction,
-} from '@midwayjs/core';
-import {
   Config,
   Init,
   Inject,
@@ -12,7 +10,7 @@ import {
   Scope,
   ScopeEnum,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { extname } from 'path';
 import * as bull from '@midwayjs/bull';
 import { createBullBoard } from '@bull-board/api';

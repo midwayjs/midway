@@ -5,7 +5,7 @@ import {
   saveModule,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { BULL_QUEUE_KEY, BULL_PROCESSOR_KEY } from './constants';
 import { JobOptions } from 'bull';
 

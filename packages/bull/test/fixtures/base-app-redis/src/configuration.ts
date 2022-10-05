@@ -1,4 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import * as bull from '../../../../src';
 
 @Configuration({
