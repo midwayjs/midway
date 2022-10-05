@@ -2,7 +2,7 @@ import {
   Configuration,
   App,
   Inject,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Framework } from '../../../../src';
 
 @Configuration({

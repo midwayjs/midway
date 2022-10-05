@@ -1,6 +1,12 @@
-import { Config, Configuration, Init, Inject } from '@midwayjs/decorator';
+import {
+  Config,
+  Configuration,
+  Init,
+  Inject,
+  IMidwayContainer,
+  MidwayDecoratorService,
+} from '@midwayjs/core';
 import { SequelizeDataSourceManager } from './dataSourceManager';
-import { IMidwayContainer, MidwayDecoratorService } from '@midwayjs/core';
 import { ENTITY_MODEL_KEY } from './decorator';
 import { Model } from 'sequelize-typescript';
 

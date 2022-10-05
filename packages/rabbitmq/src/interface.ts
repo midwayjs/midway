@@ -2,10 +2,10 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction
+  NextFunction as BaseNextFunction,
+  RabbitMQListenerOptions,
 } from '@midwayjs/core';
 import { ConsumeMessage, Options } from 'amqplib/properties';
-import { RabbitMQListenerOptions } from '@midwayjs/decorator';
 import type { ConfirmChannel, Channel, Options as AmqpOptions } from 'amqplib';
 
 export interface IRabbitMQApplication {

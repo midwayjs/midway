@@ -1,4 +1,4 @@
-import { App, Configuration, MidwayFrameworkType } from '@midwayjs/decorator';
+import { App, Configuration, MidwayFrameworkType } from '@midwayjs/core';
 import { ILifeCycle } from '@midwayjs/core';
 import { Application as SocketApplication } from '@midwayjs/socketio';
 import { join } from 'path';

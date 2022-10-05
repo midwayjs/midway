@@ -20,7 +20,7 @@ import {
   getPropertyType,
   RequestMethod,
   getClassExtendedMetadata,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { PathItemObject, Type } from './interfaces';
 import { DECORATORS } from './constants';
 import { DocumentBuilder } from './documentBuilder';

@@ -1,7 +1,6 @@
 import { createLightFramework, matchObjectPropertyInArray } from '../util';
 import * as path from 'path';
-import { MidwayServerlessFunctionService } from '../../src';
-import { ServerlessTriggerType } from '@midwayjs/decorator';
+import { MidwayServerlessFunctionService, ServerlessTriggerType } from '../../src';
 
 describe('/test/service/slsFunction.test.ts', function () {
 

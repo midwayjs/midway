@@ -1,4 +1,4 @@
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 import { DECORATORS } from '../constants';
 import { SecurityRequirementObject } from '../interfaces';
 

@@ -3,8 +3,9 @@ import {
   IMidwayContainer,
   MidwayApplicationManager,
   MidwayConfigService,
+  Inject,
+  Configuration,
 } from '@midwayjs/core';
-import { Inject, Configuration } from '@midwayjs/decorator';
 import { SwaggerExplorer, SwaggerMiddleware } from '.';
 import * as DefaultConfig from './config/config.default';
 

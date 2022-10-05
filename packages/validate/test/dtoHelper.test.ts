@@ -4,7 +4,7 @@ import {
   PickDto,
   OmitDto,
 } from '../src';
-import { getClassExtendedMetadata } from '@midwayjs/decorator';
+import { getClassExtendedMetadata } from '@midwayjs/core';
 import { RULES_KEY } from '../src/constants';
 
 class BaseDto {

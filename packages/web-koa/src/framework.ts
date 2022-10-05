@@ -11,10 +11,9 @@ import {
   MidwayConfigMissingError,
   httpError,
   MidwayWebRouterService,
+  Framework,
 } from '@midwayjs/core';
 import { Cookies } from '@midwayjs/cookies';
-
-import { Framework } from '@midwayjs/decorator';
 import {
   IMidwayKoaApplication,
   IMidwayKoaConfigurationOptions,

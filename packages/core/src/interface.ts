@@ -1,15 +1,10 @@
-import {
-  ObjectIdentifier,
-  IManagedInstance,
-  IMethodAspect,
-  ScopeEnum,
-  FrameworkType,
-} from '@midwayjs/decorator';
-import { ILogger, LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
+import type { ILogger, LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
-import { ContextMiddlewareManager } from './common/middlewareManager';
 import _default from './config/config.default';
-import { AsyncContextManager } from './common/asyncContextManager';
+import type { ContextMiddlewareManager } from './common/middlewareManager';
+import type { AsyncContextManager } from './common/asyncContextManager';
+import type { IManagedInstance, IMethodAspect, ObjectIdentifier } from './decorator';
+import { FrameworkType, ScopeEnum } from './decorator';
 
 export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
@@ -280,6 +275,7 @@ export type MethodHandlerFunction = (options: {
   propertyName: string;
   metadata: any;
 }) => IMethodAspect;
+
 export type ParameterHandlerFunction = (options: {
   target: new (...args) => any;
   propertyName: string;

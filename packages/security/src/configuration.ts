@@ -1,6 +1,10 @@
-import { Configuration, Inject, Config } from '@midwayjs/decorator';
+import {
+  Configuration,
+  Inject,
+  Config,
+  MidwayApplicationManager,
+} from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
-import { MidwayApplicationManager } from '@midwayjs/core';
 import { CSRFMiddleware } from './middleware/csrf.middleware';
 import { SecurityOptions } from './interface';
 import { XFrameMiddleware } from './middleware/xframe';

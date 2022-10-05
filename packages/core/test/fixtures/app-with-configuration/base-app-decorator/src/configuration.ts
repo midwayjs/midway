@@ -1,5 +1,5 @@
 import { ILifeCycle } from '../../../../../src';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '../../../../../src';
 
 @Configuration({
   imports: [

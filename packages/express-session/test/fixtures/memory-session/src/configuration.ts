@@ -1,4 +1,4 @@
-import { Configuration, Controller, Get, Inject } from '@midwayjs/decorator';
+import { Configuration, Controller, Get, Inject } from '@midwayjs/core';
 import * as express from '../../../../../web-express';
 import { SessionStoreManager } from '../../../../src';
 import MemoryStore = require('memorystore');

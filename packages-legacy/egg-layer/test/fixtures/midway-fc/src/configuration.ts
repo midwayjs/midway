@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 import * as Web from '../../../../../../packages/web';
 

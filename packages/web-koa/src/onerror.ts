@@ -7,7 +7,7 @@ import {
   escapeHtml,
   tpl,
 } from './utils';
-import { Utils } from '@midwayjs/decorator';
+import { Utils } from '@midwayjs/core';
 
 export function setupOnError(app, config, logger) {
   const errorOptions = Object.assign(

@@ -4,7 +4,7 @@ import {
   Provide,
   Inject,
   Query,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Provide()
 @Controller('/')

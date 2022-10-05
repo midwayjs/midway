@@ -1,6 +1,6 @@
 'use strict';
 
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import * as assert from 'assert';
 
 @Provide()

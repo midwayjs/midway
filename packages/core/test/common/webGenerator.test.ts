@@ -1,5 +1,4 @@
-import { WebControllerGenerator, RouterInfo, IMidwayApplication, MidwayWebRouterService, MidwayContainer, MidwayMiddlewareService } from '../../src';
-import { Get } from '@midwayjs/decorator';
+import { WebControllerGenerator, RouterInfo, IMidwayApplication, MidwayWebRouterService, MidwayContainer, MidwayMiddlewareService, Get } from '../../src';
 
 describe('test/common/web_generator.test.ts', function () {
   it('should test create generator', async () => {

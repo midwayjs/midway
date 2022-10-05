@@ -14,7 +14,7 @@ import {
   SERVERLESS_FUNC_KEY,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_PARAM_KEY,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import {
   MidwayWebRouterService,
   RouterCollectorOptions,

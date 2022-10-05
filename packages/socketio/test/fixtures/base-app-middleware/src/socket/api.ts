@@ -5,7 +5,7 @@ import {
   OnWSMessage,
   WSController,
   WSEmit,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context } from '../../../../../src';
 import {
   ControllerMiddleware,

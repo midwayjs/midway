@@ -9,7 +9,7 @@ import {
   Param,
   Post,
   Query
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import {
   ApiBasicAuth,
   ApiBearerAuth,

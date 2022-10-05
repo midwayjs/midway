@@ -1,4 +1,4 @@
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 import { VALIDATE_KEY } from '../constants';
 import * as Joi from 'joi';
 

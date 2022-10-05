@@ -1,14 +1,10 @@
 import {
-  IManagedInstance,
-  ObjectIdentifier,
-  ScopeEnum,
-} from '@midwayjs/decorator';
-import {
   IProperties,
   IObjectCreator,
   IObjectDefinition,
   IMidwayContainer,
 } from '../interface';
+import { IManagedInstance, ObjectIdentifier, ScopeEnum } from '../decorator';
 import { ObjectCreator } from './objectCreator';
 
 class FunctionWrapperCreator extends ObjectCreator {

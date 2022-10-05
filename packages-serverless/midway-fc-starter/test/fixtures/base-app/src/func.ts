@@ -1,4 +1,4 @@
-import { Provide, ServerlessTrigger, ServerlessTriggerType, Inject } from '@midwayjs/decorator';
+import { Provide, ServerlessTrigger, ServerlessTriggerType, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 import { deepStrictEqual } from 'assert';
 

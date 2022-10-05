@@ -1,4 +1,4 @@
-import { All, Configuration, Controller, Inject } from '@midwayjs/decorator';
+import { All, Configuration, Controller, Inject } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import * as proxy from '../../../../src';
 

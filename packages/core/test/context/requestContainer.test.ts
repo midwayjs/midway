@@ -2,9 +2,12 @@ import {
   MidwayContainer as Container,
   MidwayRequestContainer as RequestContainer,
   MidwaySingletonInjectRequestError,
-  REQUEST_OBJ_CTX_KEY
+  REQUEST_OBJ_CTX_KEY,
+  Inject,
+  Provide,
+  Scope,
+  ScopeEnum
 } from '../../src';
-import { Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
   AppService,
   AutoScaleService,

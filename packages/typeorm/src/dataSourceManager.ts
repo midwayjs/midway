@@ -6,8 +6,9 @@ import {
   Inject,
   ScopeEnum,
   ApplicationContext,
-} from '@midwayjs/decorator';
-import { DataSourceManager, IMidwayContainer } from '@midwayjs/core';
+  DataSourceManager,
+  IMidwayContainer,
+} from '@midwayjs/core';
 import { DataSource } from 'typeorm';
 
 @Provide()

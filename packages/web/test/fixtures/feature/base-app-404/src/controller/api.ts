@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Inject,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Controller('/')
 export class APIController {

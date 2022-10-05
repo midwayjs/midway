@@ -1,6 +1,6 @@
 import { Connection, DataSourceOptions } from 'typeorm';
 import { OrmConnectionHook, OrmHook } from '../../../../src';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 
 @OrmHook()

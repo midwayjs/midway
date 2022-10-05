@@ -1,6 +1,5 @@
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 
-@Provide()
 @Controller('/consul')
 export class ConsulController {
   @Get('/health/self/check')

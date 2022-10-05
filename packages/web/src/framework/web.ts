@@ -8,8 +8,10 @@ import {
   PathFileUtil,
   RouterInfo,
   WebControllerGenerator,
+  Framework,
+  Inject,
+  MidwayFrameworkType,
 } from '@midwayjs/core';
-import { Framework, Inject, MidwayFrameworkType } from '@midwayjs/decorator';
 import {
   IMidwayWebConfigurationOptions,
   Application,

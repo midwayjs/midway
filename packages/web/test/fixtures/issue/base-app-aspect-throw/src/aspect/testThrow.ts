@@ -1,4 +1,4 @@
-import { Aspect, IMethodAspect, JoinPoint, Provide } from '@midwayjs/decorator';
+import { Aspect, IMethodAspect, JoinPoint, Provide } from '@midwayjs/core';
 import { UserController } from '../controller/User';
 import * as assert from 'assert';
 

@@ -1,4 +1,4 @@
-import { Configuration, Controller, Get, Inject, Post } from '@midwayjs/decorator';
+import { Configuration, Controller, Get, Inject, Post } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { JSONPMiddleware, JSONPService } from '../../../../src/';
 

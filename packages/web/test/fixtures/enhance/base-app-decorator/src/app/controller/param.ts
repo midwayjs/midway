@@ -14,7 +14,7 @@ import {
   Headers,
   Queries,
   ALL
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 import * as path from 'path';
 import * as fs from 'fs';

@@ -1,4 +1,4 @@
-import { Provide, Controller, Get } from '@midwayjs/decorator';
+import { Provide, Controller, Get } from '@midwayjs/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/server';
 import App from '../../shared/App';

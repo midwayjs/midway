@@ -1,6 +1,6 @@
 import { attachClass, attachMethod, customCls, customMethod, preload, propertyKeyA, propertyKeyB } from './custom';
 import { ScopeEnum } from '../../../src';
-import { Provide, Scope } from '@midwayjs/decorator';
+import { Provide, Scope } from '../../../src';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

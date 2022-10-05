@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as passport from '../../../../../passport/src';
 import * as jwt from '@midwayjs/jwt';
 import * as path from 'path';

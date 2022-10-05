@@ -1,4 +1,4 @@
-import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/decorator';
+import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { UploadFileInfo } from '../../../../src';
 import { Readable } from 'stream';

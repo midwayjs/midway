@@ -1,5 +1,5 @@
 import { PassportMiddleware } from '../../../../src';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import * as passport from 'passport';
 import { CustomStrategy } from './local.strategy';
 

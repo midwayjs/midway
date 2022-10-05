@@ -1,4 +1,4 @@
-import { Config, Plugin, Logger, Provide, Inject } from '@midwayjs/decorator';
+import { Config, Plugin, Logger, Provide, Inject } from '../../../../../src';
 
 @Provide()
 export class BaseService {

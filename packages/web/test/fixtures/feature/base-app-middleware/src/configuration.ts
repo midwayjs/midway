@@ -1,4 +1,4 @@
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import { IMidwayWebApplication } from '../../../../../src';
 import * as custom from './component/src';
 import { join } from 'path';

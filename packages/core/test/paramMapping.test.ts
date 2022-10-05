@@ -1,5 +1,4 @@
-import { ALL, RouteParamTypes } from '@midwayjs/decorator';
-import { extractKoaLikeValue, extractExpressLikeValue } from '../src';
+import { extractKoaLikeValue, extractExpressLikeValue, ALL, RouteParamTypes } from '../src';
 
 describe('/test/web/paramMapping.test.ts', () => {
   it('extract koa value should be ok', async () => {

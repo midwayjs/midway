@@ -1,6 +1,5 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
-// import * as book from 'midway-test-component';
-import { BookService } from 'midway-test-component';
+import { Configuration, Inject } from '../../../../src';
+import { BookService } from '../../../../../../packages-resource/midway-test-component';
 
 @Configuration({
   imports: [],

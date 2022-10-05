@@ -1,4 +1,4 @@
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { BaseMiddleware } from './base';
 import * as escape from 'escape-html';
 import xss from 'xss';

@@ -1,4 +1,4 @@
-import { App, Provide, Scope, ScopeEnum, sleep } from '@midwayjs/decorator';
+import { App, Provide, Scope, ScopeEnum, sleep } from '@midwayjs/core';
 import { IMidwayApplication } from '@midwayjs/core';
 
 @Provide()

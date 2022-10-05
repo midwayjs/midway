@@ -1,4 +1,4 @@
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import sleep from '../../package/Sleep';
 import { Service } from '../../Service';
 

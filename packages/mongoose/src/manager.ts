@@ -3,8 +3,6 @@ import {
   delegateTargetMethod,
   delegateTargetProperties,
   MidwayCommonError,
-} from '@midwayjs/core';
-import {
   Config,
   Init,
   Inject,
@@ -12,7 +10,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import * as mongoose from 'mongoose';
 
 @Provide()

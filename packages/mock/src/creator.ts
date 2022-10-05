@@ -13,10 +13,12 @@ import {
   MidwayApplicationManager,
   MidwayConfigService,
   getCurrentApplicationContext,
+  CONFIGURATION_KEY,
+  Framework,
+  sleep,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { remove } from 'fs-extra';
-import { CONFIGURATION_KEY, Framework, sleep } from '@midwayjs/decorator';
 import { clearAllLoggers } from '@midwayjs/logger';
 import { ComponentModule, MockAppConfigurationOptions } from './interface';
 import {

@@ -1,4 +1,4 @@
-import { MSProviderType, Provider, Provide, Inject, GrpcMethod } from '@midwayjs/decorator';
+import { MSProviderType, Provider, Provide, Inject, GrpcMethod } from '@midwayjs/core';
 import { helloworld } from '../interface';
 import { ILogger } from '@midwayjs/logger';
 import { Context } from '../../../../../src';

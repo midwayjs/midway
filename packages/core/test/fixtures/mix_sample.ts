@@ -1,4 +1,4 @@
-import {Inject, Provide, Scope, ScopeEnum, Init} from '@midwayjs/decorator';
+import {Inject, Provide, Scope, ScopeEnum, Init} from '../../src';
 
 interface Engine {
   capacity;

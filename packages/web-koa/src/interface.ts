@@ -1,7 +1,7 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
-import { RouterParamValue } from '@midwayjs/decorator';
+import { RouterParamValue } from '@midwayjs/core';
 
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
 export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<DefaultState, IMidwayKoaContext> & {

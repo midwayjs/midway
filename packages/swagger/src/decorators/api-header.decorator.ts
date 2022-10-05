@@ -2,7 +2,7 @@ import { DECORATORS } from '../constants';
 import { SwaggerEnumType, ParameterObject, Type } from '../interfaces';
 import { getEnumType, getEnumValues } from '../common/enum.utils';
 import { createParamDecorator } from './helpers';
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 
 export interface ApiHeaderOptions extends Omit<ParameterObject, 'in'> {
   enum?: SwaggerEnumType;

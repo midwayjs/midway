@@ -3,7 +3,7 @@ import {
   OnWSMessage,
   Provide,
   WSController,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Provide()
 @WSController()

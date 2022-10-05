@@ -1,4 +1,4 @@
-import { Scope, Provide, Configuration, Controller, Get, ScopeEnum, Inject } from '@midwayjs/decorator';
+import { Scope, Provide, Configuration, Controller, Get, ScopeEnum, Inject } from '@midwayjs/core';
 import * as koa from '../../../../../web-koa';
 import { SessionStore, SessionStoreManager } from '../../../../';
 

@@ -1,6 +1,6 @@
 import { IMidwayContainer, providerWrapper } from '@midwayjs/core';
 import { CONNECTION_KEY, GetConnection } from '.';
-import { ScopeEnum } from '@midwayjs/decorator';
+import { ScopeEnum } from '@midwayjs/core';
 
 export function getRepository(context: IMidwayContainer, args?: any) {
   return clzz => {

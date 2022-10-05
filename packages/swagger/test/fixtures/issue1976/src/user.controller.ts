@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Post,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { CodeLoginDTO, LoginDTO } from './dto/login.dto';
 
 @Controller('/cats')

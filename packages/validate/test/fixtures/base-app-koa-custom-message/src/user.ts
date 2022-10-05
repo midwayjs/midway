@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@midwayjs/decorator';
+import { Controller, Post, Body } from '@midwayjs/core';
 import { Validate, Rule, RuleType } from '../../../../src';
 
 class UserDTO {

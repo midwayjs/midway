@@ -1,5 +1,9 @@
-import { Configuration, Inject, JoinPoint } from '@midwayjs/decorator';
-import { MidwayDecoratorService } from '@midwayjs/core';
+import {
+  Configuration,
+  Inject,
+  JoinPoint,
+  MidwayDecoratorService,
+} from '@midwayjs/core';
 import { TRACE_KEY } from './decorator/tracer.decorator';
 import { TraceService } from './service';
 import { SpanStatusCode } from '@opentelemetry/api';

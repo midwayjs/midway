@@ -1,4 +1,4 @@
-import {App, Config, Destroy, Init, Inject, Provide, Plugin} from '@midwayjs/decorator';
+import {App, Config, Destroy, Init, Inject, Provide, Plugin} from '../../src';
 
 export interface Warrior {
   katana1;

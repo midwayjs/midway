@@ -1,8 +1,6 @@
 import {
-  createConfiguration,
+  createConfiguration, Provide, Inject
 } from '../../../../../../../src';
-
-import { Provide, Inject } from '@midwayjs/decorator';
 
 @Provide()
 export class FunctionContainer {

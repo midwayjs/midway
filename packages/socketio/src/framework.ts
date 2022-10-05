@@ -24,7 +24,7 @@ import {
   getClassMetadata,
   listModule,
   Framework,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Framework()
 export class MidwaySocketIOFramework extends BaseFramework<

@@ -24,7 +24,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/mock": "^3.5.3",
     "@types/koa": "2.13.5",

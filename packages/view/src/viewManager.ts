@@ -1,11 +1,4 @@
-import {
-  App,
-  Config,
-  Init,
-  Provide,
-  Scope,
-  ScopeEnum,
-} from '@midwayjs/decorator';
+import { App, Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import * as assert from 'assert';
 import * as path from 'path';
 import { constants, existsSync, promises } from 'fs';

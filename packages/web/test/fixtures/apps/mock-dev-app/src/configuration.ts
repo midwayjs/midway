@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration({
   importConfigs: [

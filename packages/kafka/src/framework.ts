@@ -1,5 +1,5 @@
-import { BaseFramework } from '@midwayjs/core';
 import {
+  BaseFramework,
   ConsumerMetadata,
   Framework,
   getClassMetadata,
@@ -8,7 +8,7 @@ import {
   MidwayFrameworkType,
   MSListenerType,
   MS_CONSUMER_KEY,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import {
   IMidwayConsumerConfig,
   IMidwayKafkaApplication,

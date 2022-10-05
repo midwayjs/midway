@@ -3,7 +3,7 @@ import {
   Configuration,
   getClassMetadata,
   listModule,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { isPrimary, closeLock } from './utils/utils';
 import * as os from 'os';
 import * as path from 'path';

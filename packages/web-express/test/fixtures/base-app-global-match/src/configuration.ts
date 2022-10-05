@@ -1,4 +1,4 @@
-import { Configuration, App, Catch, Match } from '@midwayjs/decorator';
+import { Configuration, App, Catch, Match } from '@midwayjs/core';
 import { join } from 'path';
 import { IMidwayExpressApplication } from '../../../../src';
 

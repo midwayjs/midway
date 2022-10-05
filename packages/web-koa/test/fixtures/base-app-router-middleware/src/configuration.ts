@@ -1,4 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import { join } from 'path';
 import { Framework } from '../../../../src';
 import { TestMiddleware } from './middleware/test';

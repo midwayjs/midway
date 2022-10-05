@@ -8,9 +8,13 @@ import {
   MidwayFrameworkType,
   safeRequire,
   MidwayContainer,
+  Configuration,
+  CONFIGURATION_KEY,
+  Framework,
+  Inject,
+  sleep
 } from '../src';
 import { join } from 'path';
-import { Configuration, CONFIGURATION_KEY, Framework, Inject, sleep } from '@midwayjs/decorator';
 import * as http from 'http';
 import * as getRawBody from 'raw-body';
 

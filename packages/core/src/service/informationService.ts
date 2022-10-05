@@ -6,7 +6,7 @@ import {
   safeRequire,
 } from '../util';
 import { dirname, join } from 'path';
-import { Provide, Inject, Init, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Inject, Init, Scope, ScopeEnum } from '../decorator';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

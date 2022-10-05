@@ -1,5 +1,4 @@
-import { FilterManager, MidwayContainer, MidwayError } from '../../src';
-import { Catch, Match } from '@midwayjs/decorator';
+import { FilterManager, MidwayContainer, MidwayError, Catch, Match } from '../../src';
 
 describe('/test/common/filterManager.test.ts', function () {
   it('should test default error filter', async () => {

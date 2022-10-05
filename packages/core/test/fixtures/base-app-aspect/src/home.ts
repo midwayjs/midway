@@ -1,4 +1,4 @@
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '../../../../src';
 
 class Parent {
   ddd = 'ddd';

@@ -1,4 +1,4 @@
-import { Configuration, App, Plugin } from '@midwayjs/decorator';
+import { Configuration, App, Plugin } from '@midwayjs/core';
 import * as assert from 'assert';
 
 @Configuration({

@@ -1,6 +1,6 @@
-import { Logger } from '@midwayjs/decorator';
+import { Logger } from '@midwayjs/core';
 import { ILifeCycle, IMidwayContainer, IMidwayApplication } from '@midwayjs/core';
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 
 @Configuration({
   imports: [

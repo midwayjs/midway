@@ -4,7 +4,7 @@ import * as mm from 'mm';
 import { tmpdir } from 'os';
 import { existsSync } from 'fs';
 import { createLightFramework } from './util';
-import { clearAllModule } from '@midwayjs/decorator';
+import { clearAllModule } from '../src';
 
 describe('/test/logger.test.ts', () => {
   beforeEach(() => {

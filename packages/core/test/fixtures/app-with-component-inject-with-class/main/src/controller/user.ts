@@ -1,4 +1,4 @@
-import { Provide, Controller, Inject, Get } from '@midwayjs/decorator';
+import { Provide, Controller, Inject, Get } from '../../../../../../src';
 import { BookService, dynamicCacheServiceHandler } from '../../../book';
 import { BookServiceOne } from '../../../bookstr';
 

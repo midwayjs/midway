@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.5.3",
-    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/runtime-mock": "^3.4.4",
     "@midwayjs/serverless-http-parser": "^3.5.3"
   },

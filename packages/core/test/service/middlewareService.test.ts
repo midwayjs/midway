@@ -1,5 +1,4 @@
-import { MidwayMiddlewareService, MidwayContainer } from '../../src';
-import { Provide } from '@midwayjs/decorator';
+import { Provide, MidwayMiddlewareService, MidwayContainer } from '../../src';
 import * as assert from 'assert';
 
 describe('/test/services/middlewareService.test.ts', () => {

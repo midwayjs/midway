@@ -4,7 +4,7 @@ import {
   getClassMetadata,
   getPropertyType,
   saveClassMetadata,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { RULES_KEY } from '../constants';
 
 export interface RuleOptions {

@@ -19,7 +19,7 @@ import {
   LOGGER_KEY,
   PIPELINE_IDENTIFIER,
   PLUGIN_KEY,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { MidwayWebFramework } from './framework/web';
 import { debuglog } from 'util';
 

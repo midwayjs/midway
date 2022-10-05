@@ -4,7 +4,7 @@ import {
   Configuration,
   getClassMetadata,
   listModule,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import * as PromClient from 'prom-client';
 import { isMaster, closeLock } from './utils/utils';
 import * as os from 'os';

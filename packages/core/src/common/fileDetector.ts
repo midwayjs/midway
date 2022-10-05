@@ -3,10 +3,11 @@ import {
   IMidwayContainer,
   IObjectDefinition,
 } from '../interface';
-import { Types, getProviderName } from '@midwayjs/decorator';
+import { Types } from '../util/types';
 import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../interface';
+import { getProviderName } from '../decorator';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;

@@ -1,5 +1,5 @@
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 
 @Configuration({

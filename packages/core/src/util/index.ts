@@ -5,6 +5,11 @@ import * as transformer from 'class-transformer';
 import { PathToRegexpUtil } from './pathToRegexp';
 import { MidwayCommonError } from '../error';
 import { FunctionMiddleware } from '../interface';
+import { camelCase, pascalCase } from './camelCase';
+import { randomUUID } from './uuid';
+import { safeParse, safeStringify } from './flatted';
+import * as crypto from 'crypto';
+import { Types } from './types';
 
 const debug = debuglog('midway:container:util');
 
@@ -355,3 +360,81 @@ export function wrapAsync(handler) {
     }
   };
 }
+
+export function sleep(sleepTime = 1000) {
+  return new Promise<void>(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, sleepTime);
+  });
+}
+
+const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
+
+/**
+ * get parameter name from function
+ * @param func
+ */
+export function getParamNames(func): string[] {
+  const fnStr = func.toString().replace(STRIP_COMMENTS, '');
+  let result = fnStr
+    .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+    .split(',')
+    .map(content => {
+      return content.trim().replace(/\s?=.*$/, '');
+    });
+
+  if (result.length === 1 && result[0] === '') {
+    result = [];
+  }
+  return result;
+}
+
+/**
+ * generate a lightweight 32 bit random id, enough for ioc container
+ */
+export function generateRandomId(): string {
+  // => f9b327e70bbcf42494ccb28b2d98e00e
+  return crypto.randomBytes(16).toString('hex');
+}
+
+export function merge(target: any, src: any) {
+  if (!target) {
+    target = src;
+    src = null;
+  }
+  if (!target) {
+    return null;
+  }
+  if (Array.isArray(target)) {
+    return target.concat(src || []);
+  }
+  if (typeof target === 'object') {
+    return Object.assign({}, target, src);
+  }
+  throw new Error('can not merge meta that type of ' + typeof target);
+}
+
+export function toAsyncFunction<T extends (...args) => any>(
+  method: T
+): (...args: Parameters<T>) => Promise<ReturnType<T>> {
+  if (Types.isAsyncFunction(method)) {
+    return method as any;
+  } else {
+    return async function (...args) {
+      return Promise.resolve(method.call(this, ...args));
+    } as any;
+  }
+}
+
+export const Utils = {
+  sleep,
+  getParamNames,
+  camelCase,
+  pascalCase,
+  randomUUID,
+  generateRandomId,
+  toAsyncFunction,
+  safeStringify,
+  safeParse,
+};

@@ -1,4 +1,4 @@
-import { Autoload, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Autoload, Init, Provide, Scope, ScopeEnum } from '../../../../src';
 
 @Autoload()
 @Provide()

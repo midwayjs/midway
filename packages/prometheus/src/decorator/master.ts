@@ -1,4 +1,4 @@
-import { saveModule, attachClassMetadata } from '@midwayjs/decorator';
+import { saveModule, attachClassMetadata } from '@midwayjs/core';
 import * as request from 'request';
 import * as path from 'path';
 import * as os from 'os';

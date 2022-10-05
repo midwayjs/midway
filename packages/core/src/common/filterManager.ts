@@ -3,7 +3,7 @@ import {
   getClassMetadata,
   MATCH_KEY,
   MatchPattern,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import {
   CommonFilterUnion,
   IFilter,

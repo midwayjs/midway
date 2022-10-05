@@ -5,7 +5,7 @@ import {
   OnWSMessage,
   Provide,
   WSController,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { UserService } from '../service/user';
 import { IMidwayWSContext } from '../../../../../src';
 import * as assert from 'assert';

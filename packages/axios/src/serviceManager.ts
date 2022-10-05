@@ -6,8 +6,9 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
-import { MidwayCommonError, ServiceFactory } from '@midwayjs/core';
+  MidwayCommonError,
+  ServiceFactory,
+} from '@midwayjs/core';
 import { AxiosHttpService } from './interface';
 
 @Provide()

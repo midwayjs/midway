@@ -8,13 +8,13 @@ import {
   Inject,
   listModule,
   LOGGER_KEY,
-  MidwayFrameworkType,
   PIPELINE_IDENTIFIER,
   PLUGIN_KEY,
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+  MidwayFrameworkType,
+} from '../decorator';
 import {
   IMidwayContainer,
   IMidwayFramework,

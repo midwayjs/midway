@@ -1,4 +1,4 @@
-import { Inject, Provide, Init } from '@midwayjs/decorator';
+import { Inject, Provide, Init } from '../../src';
 
 export interface Engine {
   start(fuel: Fuel);

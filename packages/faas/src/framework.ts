@@ -17,15 +17,13 @@ import {
   MidwayServerlessFunctionService,
   RouterInfo,
   PathToRegexpUtil,
-} from '@midwayjs/core';
-import {
   Framework,
   Inject,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
 import {

@@ -1,6 +1,6 @@
 import { fork } from 'child_process';
 import { join } from 'path';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 import * as request from 'request';
 import { io as socketClient } from 'socket.io-client';
 

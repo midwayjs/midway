@@ -1,5 +1,8 @@
-import { Types, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
+  Types,
+  Provide,
+  Scope,
+  ScopeEnum,
   IMidwayContainer,
   MidwayCommonError,
   CommonMiddleware,

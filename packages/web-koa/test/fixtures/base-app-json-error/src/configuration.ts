@@ -1,4 +1,4 @@
-import { Configuration, Controller, Get, Inject } from '@midwayjs/decorator';
+import { Configuration, Controller, Get, Inject } from '@midwayjs/core';
 import { join } from 'path';
 import { Context } from '../../../../src';
 import { httpError } from '@midwayjs/core';

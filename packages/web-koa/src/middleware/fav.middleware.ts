@@ -1,4 +1,4 @@
-import { Config, Middleware } from '@midwayjs/decorator';
+import { Config, Middleware } from '@midwayjs/core';
 
 const path = require('path');
 const MAX_AGE = 'public, max-age=2592000'; // 30 days

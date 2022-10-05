@@ -8,7 +8,7 @@ import {
   Body,
   SetHeader,
   App
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { UserService } from '../service/user';
 
 @Provide()

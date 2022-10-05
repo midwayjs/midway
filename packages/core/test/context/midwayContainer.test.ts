@@ -10,10 +10,15 @@ import {
   MidwayInformationService,
   MidwayDecoratorService,
   MidwayAspectService,
+  APPLICATION_KEY,
+  clearAllModule,
+  CONFIG_KEY,
+  LOGGER_KEY,
+  PLUGIN_KEY,
+  Provide
 } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
-import { APPLICATION_KEY, clearAllModule, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY, Provide } from '@midwayjs/decorator';
 import * as assert from 'assert';
 
 function buildLoadDir(arr, baseDir) {

@@ -3,8 +3,6 @@ import {
   Init,
   Inject,
   WEB_ROUTER_PARAM_KEY,
-} from '@midwayjs/decorator';
-import {
   extractKoaLikeValue,
   MidwayConfigService,
   MidwayDecoratorService,

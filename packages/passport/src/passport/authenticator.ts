@@ -5,11 +5,12 @@ import {
   Init,
   Config,
   ApplicationContext,
-} from '@midwayjs/decorator';
+  extend,
+  IMidwayContainer,
+} from '@midwayjs/core';
 import { SessionStrategy } from './session.stratey';
 import { AuthenticateOptions } from '../interface';
 import { Strategy } from './strategy';
-import { extend, IMidwayContainer } from '@midwayjs/core';
 import { IncomingMessage } from 'http';
 
 @Provide()

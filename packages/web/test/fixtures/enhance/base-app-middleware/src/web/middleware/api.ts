@@ -1,4 +1,4 @@
-import { Config, Provide } from '@midwayjs/decorator';
+import { Config, Provide } from '@midwayjs/core';
 import { IWebMiddleware } from '../../../../../../../src';
 
 @Provide()

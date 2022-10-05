@@ -1,5 +1,5 @@
 import { IMidwayContainer } from '../interface';
-import { getProviderName, ObjectIdentifier } from '@midwayjs/decorator';
+import { getProviderName, ObjectIdentifier } from '../decorator';
 
 interface IPipelineInfo {
   /**

@@ -1,4 +1,4 @@
-import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject, Fields, Files } from '@midwayjs/decorator';
+import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject, Fields, Files } from '@midwayjs/core';
 import * as faas from '@midwayjs/faas';
 import * as upload from '../../../../src';
 import { Readable } from 'stream';

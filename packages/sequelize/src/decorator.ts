@@ -1,11 +1,10 @@
-import { createCustomPropertyDecorator } from '@midwayjs/decorator';
+import { createCustomPropertyDecorator, saveModule } from '@midwayjs/core';
 import {
   setModelName,
   addOptions,
   Model,
   TableOptions,
 } from 'sequelize-typescript';
-import { saveModule } from '@midwayjs/decorator';
 
 /**
  * @deprecated

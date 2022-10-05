@@ -1,4 +1,4 @@
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType, App } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType, App } from '@midwayjs/core';
 import { FC } from '@midwayjs/faas-typings';
 import * as assert from 'assert';
 import { Application } from '../../../../src';

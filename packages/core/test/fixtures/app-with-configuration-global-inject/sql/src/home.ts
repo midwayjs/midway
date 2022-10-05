@@ -1,4 +1,4 @@
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '../../../../../src';
 
 @Provide()
 export class Home {

@@ -13,7 +13,7 @@ import {
   ASYNC_CONTEXT_KEY,
   ASYNC_CONTEXT_MANAGER_KEY,
 } from './interface';
-import { Inject, Destroy, Init } from '@midwayjs/decorator';
+import { Inject, Destroy, Init } from './decorator';
 import {
   ILogger,
   LoggerOptions,

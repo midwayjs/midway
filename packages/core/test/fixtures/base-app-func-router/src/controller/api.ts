@@ -4,7 +4,7 @@ import {
   Provide,
   Inject,
   Logger,
-} from '@midwayjs/decorator';
+} from '../../../../../src';
 import { UserService } from '../service/user';
 
 @Provide()

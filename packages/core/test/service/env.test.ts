@@ -1,5 +1,5 @@
 import assert = require('assert');
-import { MidwayEnvironmentService } from '../../src/service/environmentService';
+import { MidwayEnvironmentService } from '../../src';
 
 describe('/test/services/env.test.ts', () => {
   it('environmentService should be ok', () => {

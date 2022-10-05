@@ -1,5 +1,4 @@
-import { Destroy, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { MidwayContainer, MidwayLoggerService, MidwayConfigService, MidwayEnvironmentService, MidwayInformationService } from '../src';
+import { Destroy, Init, Provide, Scope, ScopeEnum, MidwayContainer, MidwayLoggerService, MidwayConfigService, MidwayEnvironmentService, MidwayInformationService } from '../src';
 
 class Parent {}
 

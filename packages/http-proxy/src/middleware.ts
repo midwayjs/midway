@@ -3,8 +3,9 @@ import {
   Logger,
   Middleware,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
-import { IMiddleware, IMidwayLogger } from '@midwayjs/core';
+  IMiddleware,
+  IMidwayLogger,
+} from '@midwayjs/core';
 import { HttpProxyConfig, HttpProxyStrategy } from './interface';
 import axios from 'axios';
 

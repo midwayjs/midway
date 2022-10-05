@@ -1,4 +1,4 @@
-import { saveClassMetadata, saveModule } from '@midwayjs/decorator';
+import { saveClassMetadata, saveModule } from '@midwayjs/core';
 import { ENTITY_MODEL_KEY, EntityOptions } from '../interface';
 
 export function EntityModel(options?: EntityOptions): ClassDecorator {

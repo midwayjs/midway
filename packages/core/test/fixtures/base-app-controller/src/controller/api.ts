@@ -10,7 +10,7 @@ import {
   Redirect,
   SetHeader,
   Logger,
-} from '@midwayjs/decorator';
+} from '../../../../../src';
 import { UserService } from '../service/user';
 
 @Provide()

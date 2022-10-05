@@ -1,4 +1,4 @@
-import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import * as faas from '@midwayjs/faas';
 import * as proxy from '../../../../src';
 

@@ -1,5 +1,5 @@
 import { I18nOptions } from '../interface';
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 
 export const i18n: I18nOptions = {
   defaultLocale: 'en_US',

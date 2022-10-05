@@ -1,5 +1,5 @@
 import { ObjectDefinition } from '../../src/definitions/objectDefinition';
-import { ScopeEnum } from '@midwayjs/decorator';
+import { ScopeEnum } from '../../src';
 
 describe('/test/definitions/objectDefinition.test.ts', () => {
   it('definition should be ok', () => {

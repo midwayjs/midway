@@ -1,4 +1,4 @@
-import { Config, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Config, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import type {
   DecodeOptions,
   GetPublicKeyOrSecret,

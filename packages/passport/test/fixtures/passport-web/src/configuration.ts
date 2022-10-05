@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as passport from '../../../../src';
 import * as path from 'path';
 import * as egg from '@midwayjs/web';

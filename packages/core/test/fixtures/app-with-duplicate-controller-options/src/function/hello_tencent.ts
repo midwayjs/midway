@@ -1,6 +1,6 @@
 import {
   Controller, Get,
-} from '@midwayjs/decorator';
+} from '../../../../../src';
 
 @Controller('/', { middleware: ['auth1']})
 export class HelloTencentService {

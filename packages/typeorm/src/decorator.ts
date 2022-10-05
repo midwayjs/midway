@@ -3,7 +3,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { EntityTarget, EventSubscriber } from 'typeorm';
 
 export const ENTITY_MODEL_KEY = 'typeorm:entity_model_key';

@@ -1,5 +1,4 @@
-import { MidwayContainer } from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import { JwtService } from './jwt';
 
 @Configuration({
@@ -13,7 +12,7 @@ import { JwtService } from './jwt';
   ],
 })
 export class JwtConfiguration {
-  public async onReady(container: MidwayContainer) {
+  public async onReady(container: IMidwayContainer) {
     await container.getAsync(JwtService);
   }
 }

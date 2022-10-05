@@ -1,4 +1,4 @@
-import { Provide, Controller, Get, Inject } from '@midwayjs/decorator';
+import { Provide, Controller, Get, Inject } from '@midwayjs/core';
 import { JwtService } from '@midwayjs/jwt';
 import { JwtPassportMiddleware } from './jwt.middleware';
 

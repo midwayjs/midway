@@ -1,6 +1,7 @@
 import * as SocketIO from 'socket.io';
 import {
-  CommonMiddlewareUnion, ContextMiddlewareManager,
+  CommonMiddlewareUnion,
+  ContextMiddlewareManager,
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,

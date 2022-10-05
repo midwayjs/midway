@@ -1,5 +1,5 @@
 // src/service/bookService
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '../../../../../../../src';
 
 @Provide()
 export class BookService {

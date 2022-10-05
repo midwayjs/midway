@@ -6,16 +6,14 @@ import {
   Inject,
   listModule,
   App,
-} from '@midwayjs/decorator';
-import * as mongoose from '@midwayjs/mongoose';
-import { ENTITY_MODEL_KEY } from './interface';
-import { getModelForClass } from '@typegoose/typegoose';
-import * as mongo from 'mongoose';
-import {
   IMidwayApplication,
   IMidwayContainer,
   MidwayDecoratorService,
 } from '@midwayjs/core';
+import * as mongoose from '@midwayjs/mongoose';
+import { ENTITY_MODEL_KEY } from './interface';
+import { getModelForClass } from '@typegoose/typegoose';
+import * as mongo from 'mongoose';
 
 @Configuration({
   namespace: 'typegoose',

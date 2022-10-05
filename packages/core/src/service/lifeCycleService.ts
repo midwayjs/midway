@@ -7,7 +7,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
+} from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import { MidwayFrameworkService } from './frameworkService';
 import { MidwayConfigService } from './configService';

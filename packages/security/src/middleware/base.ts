@@ -1,5 +1,4 @@
-import { Config, MidwayFrameworkType } from '@midwayjs/decorator';
-import { IMiddleware } from '@midwayjs/core';
+import { Config, MidwayFrameworkType, IMiddleware } from '@midwayjs/core';
 import { SecurityOptions } from '../interface';
 
 export abstract class BaseMiddleware implements IMiddleware<any, any> {

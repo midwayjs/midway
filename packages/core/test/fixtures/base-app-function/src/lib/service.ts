@@ -4,7 +4,7 @@ import {
   Provide,
   Init,
   Inject,
-} from '@midwayjs/decorator';
+} from '../../../../../src';
 
 @Provide()
 export class A {

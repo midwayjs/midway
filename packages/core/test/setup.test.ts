@@ -1,12 +1,16 @@
 import { join } from 'path';
 import {
-  BaseFramework, destroyGlobalApplicationContext, IMidwayApplication,
+  BaseFramework,
+  destroyGlobalApplicationContext,
+  IMidwayApplication,
   IMidwayBootstrapOptions,
   initializeGlobalApplicationContext,
   MidwayConfigService,
-  MidwayFrameworkType
+  MidwayFrameworkType,
+  Configuration,
+  Framework,
+  Inject,
 } from '../src';
-import { Configuration, Framework, Inject } from '@midwayjs/decorator';
 
 describe('/test/setup.test.ts', () => {
   it('should test setup and config', async () => {

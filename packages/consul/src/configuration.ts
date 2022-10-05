@@ -2,8 +2,6 @@ import {
   Config,
   Configuration,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
-import {
   ILifeCycle,
   IMidwayApplication,
   IMidwayContainer,

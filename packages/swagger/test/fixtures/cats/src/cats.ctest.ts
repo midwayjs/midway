@@ -1,4 +1,4 @@
-import { Body, Controller, Fields, File, Files, Get, Inject, Param, Post, Query } from '@midwayjs/decorator';
+import { Body, Controller, Fields, File, Files, Get, Inject, Param, Post, Query } from '@midwayjs/core';
 import {
   ApiBasicAuth,
   ApiBearerAuth,

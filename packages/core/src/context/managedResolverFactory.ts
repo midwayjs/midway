@@ -1,11 +1,6 @@
 /**
  * 管理对象解析构建
  */
-import {
-  IManagedInstance,
-  InjectModeEnum,
-  ObjectIdentifier,
-} from '@midwayjs/decorator';
 import { KEYS } from '../common/constants';
 import {
   IManagedResolver,
@@ -27,6 +22,11 @@ import {
   MidwaySingletonInjectRequestError,
   MidwayInconsistentVersionError,
 } from '../error';
+import {
+  IManagedInstance,
+  InjectModeEnum,
+  ObjectIdentifier,
+} from '../decorator';
 
 const debug = util.debuglog('midway:managedresolver');
 const debugLog = util.debuglog('midway:debug');

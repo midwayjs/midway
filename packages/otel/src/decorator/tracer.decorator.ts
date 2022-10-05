@@ -1,4 +1,4 @@
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 
 export const TRACE_KEY = 'decorator:open_telemetry_key';
 

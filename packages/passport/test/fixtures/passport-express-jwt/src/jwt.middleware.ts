@@ -1,5 +1,5 @@
 import { PassportMiddleware } from '../../../../src';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { JwtStrategy } from './jwt.strategy';
 import * as passport from 'passport';
 

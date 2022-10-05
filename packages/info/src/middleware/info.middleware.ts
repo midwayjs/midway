@@ -3,7 +3,7 @@ import {
   Inject,
   Middleware,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { InfoService } from '../infoService';
 
 @Middleware()

@@ -1,5 +1,5 @@
 import { Loader } from './loader';
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '../../../src';
 
 @Provide()
 export class App {

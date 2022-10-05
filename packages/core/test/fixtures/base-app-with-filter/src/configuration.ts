@@ -1,4 +1,4 @@
-import { App, Configuration, MidwayFrameworkType } from '@midwayjs/decorator';
+import { App, Configuration, MidwayFrameworkType } from '../../../../src';
 import { IMidwayApplication } from '../../../../src';
 import { TestFilter, TestFilter2 } from './filter/testFilter';
 

@@ -6,8 +6,6 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-} from '@midwayjs/decorator';
-import {
   ServiceFactory,
   delegateTargetAllPrototypeMethod,
   delegateTargetMethod,

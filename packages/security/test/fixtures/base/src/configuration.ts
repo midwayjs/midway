@@ -1,4 +1,4 @@
-import { Configuration, Controller, Inject, Post, Get } from '@midwayjs/decorator';
+import { Configuration, Controller, Inject, Post, Get } from '@midwayjs/core';
 import * as framework from '${framework}';
 import * as defaultConcig from './config/config.default';
 

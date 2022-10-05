@@ -1,11 +1,9 @@
-import type {
+import {
   IMiddleware,
   IMidwayApplication,
   IMidwayContext,
   NextFunction,
-} from '@midwayjs/core';
-import { safeRequire } from '@midwayjs/core';
-import {
+  safeRequire,
   Config,
   Init,
   Inject,
@@ -13,7 +11,7 @@ import {
   Scope,
   ScopeEnum,
   MidwayFrameworkType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { readFileSync } from 'fs';
 import { join, extname } from 'path';
 import type { SwaggerOptions } from './interfaces';

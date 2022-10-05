@@ -1,5 +1,5 @@
 import { IMidwayContainer } from '../../src';
-import { Provide, Scope, Init, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, Init, ScopeEnum } from '../../src';
 
 export function testInjectFunction(context: IMidwayContainer) {
   const child: any = context.get('child');

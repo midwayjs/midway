@@ -5,6 +5,15 @@ import {
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
+  Types,
+  WS_CONTROLLER_KEY,
+  WS_EVENT_KEY,
+  WSEventInfo,
+  WSEventTypeEnum,
+  getClassMetadata,
+  listModule,
+  Framework,
+  WSControllerOption,
 } from '@midwayjs/core';
 import * as http from 'http';
 import { debuglog } from 'util';
@@ -19,17 +28,6 @@ import {
   NextFunction,
 } from './interface';
 import * as WebSocket from 'ws';
-import {
-  Types,
-  WS_CONTROLLER_KEY,
-  WS_EVENT_KEY,
-  WSEventInfo,
-  WSEventTypeEnum,
-  getClassMetadata,
-  listModule,
-  Framework,
-  WSControllerOption,
-} from '@midwayjs/decorator';
 
 @Framework()
 export class MidwayWSFramework extends BaseFramework<

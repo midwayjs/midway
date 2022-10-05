@@ -1,5 +1,4 @@
-// import { MidwayConfigMissingError } from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { HttpServiceFactory } from './serviceManager';
 
 @Configuration({

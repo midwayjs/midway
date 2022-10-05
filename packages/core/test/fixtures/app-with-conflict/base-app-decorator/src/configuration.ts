@@ -1,5 +1,4 @@
-import { ILifeCycle } from '../../../../../src';
-import { Configuration } from '@midwayjs/decorator';
+import { ILifeCycle, Configuration } from '../../../../../src';
 
 @Configuration({
   conflictCheck: true,

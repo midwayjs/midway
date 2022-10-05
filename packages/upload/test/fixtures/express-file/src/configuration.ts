@@ -1,4 +1,4 @@
-import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/decorator';
+import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import * as upload from '../../../../src';
 

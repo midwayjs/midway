@@ -1,4 +1,4 @@
-import {Controller, Get, Inject, Param, Provide} from "@midwayjs/decorator";
+import {Controller, Get, Inject, Param, Provide} from '@midwayjs/core';
 import {IConsulBalancer} from "../../../../../src";
 
 @Provide()

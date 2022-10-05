@@ -1,4 +1,4 @@
-import { Configuration, Controller, Get } from '@midwayjs/decorator';
+import { Configuration, Controller, Get } from '@midwayjs/core';
 import * as koa from '../../../../../web-koa';
 
 @Configuration({

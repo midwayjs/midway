@@ -22,7 +22,7 @@ import {
   bindContainer,
   clearBindContainer,
   listPreloadModule,
-} from '@midwayjs/decorator';
+} from './decorator';
 import * as util from 'util';
 import { join } from 'path';
 import { loggers } from '@midwayjs/logger';

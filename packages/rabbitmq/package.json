@@ -24,7 +24,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/mock": "^3.5.3",
     "@types/amqplib": "0.8.2",
     "amqplib": "0.10.3",

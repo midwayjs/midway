@@ -8,7 +8,8 @@ import {
   delegateTargetMethod,
   delegateTargetProperties,
   transformRequestObjectByType,
-  isIncludeProperty, delegateTargetAllPrototypeMethod
+  isIncludeProperty,
+  delegateTargetAllPrototypeMethod
 } from '../../src/util';
 import { PathFileUtil } from '../../src';
 import * as EventEmitter from 'events';

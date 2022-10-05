@@ -1,7 +1,7 @@
 import { createApp, close } from '@midwayjs/mock';
 import { QueueTask } from './fixtures/base-app/src/task/queue.task';
 import { join } from 'path';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 import * as TaskModule from '../src';
 
 describe(`midway task`, () => {

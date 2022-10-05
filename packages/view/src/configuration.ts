@@ -1,8 +1,11 @@
-import { Inject, Configuration } from '@midwayjs/decorator';
+import {
+  Inject,
+  Configuration,
+  MidwayApplicationManager,
+} from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 import { ViewManager } from './viewManager';
-import { MidwayApplicationManager } from '@midwayjs/core';
 import { ContextView } from './contextView';
 
 @Configuration({

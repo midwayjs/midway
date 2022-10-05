@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as consul from '../../../../src';
 import * as Koa from '@midwayjs/koa';
 import {

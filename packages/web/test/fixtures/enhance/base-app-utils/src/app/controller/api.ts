@@ -1,6 +1,6 @@
 'use strict';
 
-import { Inject, Provide, Config, Controller, Get } from '@midwayjs/decorator';
+import { Inject, Provide, Config, Controller, Get } from '@midwayjs/core';
 
 @Provide()
 export class BaseApi {

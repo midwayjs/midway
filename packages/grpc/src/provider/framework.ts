@@ -8,13 +8,6 @@ import {
   ServerUnaryCall,
 } from '@grpc/grpc-js';
 import {
-  BaseFramework,
-  IMidwayBootstrapOptions,
-  MidwayCommonError,
-  MidwayFrameworkType,
-} from '@midwayjs/core';
-
-import {
   Config,
   Framework,
   getClassMetadata,
@@ -27,7 +20,11 @@ import {
   MS_PROVIDER_KEY,
   MSProviderType,
   Utils,
-} from '@midwayjs/decorator';
+  BaseFramework,
+  IMidwayBootstrapOptions,
+  MidwayCommonError,
+  MidwayFrameworkType,
+} from '@midwayjs/core';
 import {
   Context,
   IMidwayGRPCApplication,

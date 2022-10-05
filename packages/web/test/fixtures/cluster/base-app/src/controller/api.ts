@@ -9,7 +9,7 @@ import {
   HttpCode,
   Redirect,
   SetHeader,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { UserService } from '../service/user';
 
 @Provide()

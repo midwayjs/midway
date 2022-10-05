@@ -1,4 +1,4 @@
-import { Provide, Inject, Controller, Get } from '@midwayjs/decorator';
+import { Provide, Inject, Controller, Get } from '@midwayjs/core';
 import { BaseService } from '../../lib/service';
 import { HelloService } from '../../lib/HelloService';
 

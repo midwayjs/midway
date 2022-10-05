@@ -1,7 +1,7 @@
 /**
  * fork from https://github.com/eggjs/extend2
  */
-import { Types } from '@midwayjs/decorator';
+import { Types } from './types';
 
 export function extend(...args): any {
   let options, name, src, copy, clone;

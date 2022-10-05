@@ -6,7 +6,7 @@ import {
   Provide,
   WSController,
   WSBroadCast,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { UserService } from '../service/user';
 import { IMidwayWSContext } from '../../../../../src';
 import * as assert from 'assert';

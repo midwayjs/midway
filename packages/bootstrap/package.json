@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.5.3",
-    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/socketio": "^3.5.3",
     "@midwayjs/web": "^3.5.3",

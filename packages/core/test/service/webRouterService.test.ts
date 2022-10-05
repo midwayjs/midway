@@ -1,7 +1,6 @@
 import { createLightFramework } from '../util';
 import * as path from 'path';
-import { MidwayContainer, MidwayWebRouterService } from '../../src';
-import { bindContainer, clearAllModule } from '@midwayjs/decorator';
+import { MidwayContainer, MidwayWebRouterService, bindContainer, clearAllModule } from '../../src';
 
 describe('/test/service/webRouterService.test.ts', function () {
 

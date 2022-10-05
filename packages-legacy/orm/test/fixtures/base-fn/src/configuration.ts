@@ -1,4 +1,4 @@
-import { App, Configuration, Inject } from '@midwayjs/decorator';
+import { App, Configuration, Inject } from '@midwayjs/core';
 import * as orm from '../../../../src';
 import { join } from 'path';
 import { getRepository, getCustomRepository, InjectEntityModel, useEntityModel } from '../../../../src';
@@ -57,7 +57,7 @@ export class ContainerConfiguration {
     assert.deepStrictEqual(users, newUsers);
 
     const newUser = this.getCustomRepo(UserRepository);
-    const ttu = (newUser as any).create(); 
+    const ttu = (newUser as any).create();
     ttu.name = 'ttt' + Date.now();
     await (newUser as any).createSave(ttu);
     const ret = await newUser.find({ name: ttu.name});

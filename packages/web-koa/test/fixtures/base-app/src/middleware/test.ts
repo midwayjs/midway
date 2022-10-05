@@ -1,4 +1,4 @@
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { FunctionMiddleware, IMiddleware } from '@midwayjs/core';
 import { Context } from '../../../../../src';
 import { Next } from 'koa';

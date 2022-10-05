@@ -5,7 +5,7 @@ import { extend } from '../util/extend';
 import { MidwayCommonError, MidwayParameterError } from '../error';
 import { run } from '@midwayjs/glob';
 import { join } from 'path';
-import { Types } from '@midwayjs/decorator';
+import { Types } from '../util/types';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../interface';
 
 export abstract class DataSourceManager<T> {

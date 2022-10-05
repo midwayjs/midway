@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.5.3",
-    "@midwayjs/decorator": "^3.4.11",
     "@midwayjs/express": "^3.5.3",
     "@midwayjs/koa": "^3.5.3",
     "@midwayjs/mock": "^3.5.3"

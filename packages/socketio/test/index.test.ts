@@ -1,7 +1,7 @@
 import { closeApp, createServer } from './utils';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 
 describe('/test/index.test.ts', () => {
   it('should test create socket app and use default namespace', async () => {

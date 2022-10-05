@@ -1,5 +1,5 @@
 import { ApiExtraModel, ApiProperty, ApiResponse, getSchemaPath, SwaggerExplorer, Type } from '../src';
-import { Controller, Post } from '@midwayjs/decorator';
+import { Controller, Post } from '@midwayjs/core';
 
 class CustomSwaggerExplorer extends SwaggerExplorer {
   generatePath(target: Type) {

@@ -13,7 +13,7 @@ import {
   RequestPath,
   RequestIP,
   Post,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 
 @Provide()
 @Controller('/param')

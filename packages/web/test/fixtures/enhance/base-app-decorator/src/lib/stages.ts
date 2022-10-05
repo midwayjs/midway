@@ -1,5 +1,5 @@
 import { IValveHandler, IPipelineContext } from '@midwayjs/core';
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 
 @Provide()
 export class StageOne implements IValveHandler {

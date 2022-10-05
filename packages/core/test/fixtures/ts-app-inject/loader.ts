@@ -1,4 +1,4 @@
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '../../../src';
 
 export interface Loader {
   getConfig();

@@ -1,4 +1,4 @@
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import { GlobalEventMiddleware, GlobalHttpMiddleware } from './test.middleware';
 
 @Configuration({

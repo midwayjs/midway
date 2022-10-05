@@ -2,7 +2,7 @@ import {
   Inject,
   OnWSMessage,
   WSController,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context } from '../../../../../src';
 
 @WSController('/', { middleware: []})

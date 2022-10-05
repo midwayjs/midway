@@ -7,8 +7,9 @@ import {
   Inject,
   ScopeEnum,
   listModule,
-} from '@midwayjs/decorator';
-import { DataSourceManager, ILogger } from '@midwayjs/core';
+  DataSourceManager,
+  ILogger,
+} from '@midwayjs/core';
 import { Sequelize } from 'sequelize-typescript';
 
 @Provide()

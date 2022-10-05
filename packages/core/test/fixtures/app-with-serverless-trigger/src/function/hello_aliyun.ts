@@ -5,7 +5,7 @@ import {
   ServerlessFunction,
   ServerlessTrigger,
   ServerlessTriggerType,
-} from '@midwayjs/decorator';
+} from '../../../../../src';
 
 @Provide()
 export class HelloAliyunService {

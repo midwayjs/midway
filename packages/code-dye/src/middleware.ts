@@ -1,4 +1,4 @@
-import { Middleware, Config, MidwayFrameworkType } from '@midwayjs/decorator';
+import { Middleware, Config, MidwayFrameworkType } from '@midwayjs/core';
 import { toHTML } from './html';
 import { CodeDyeOptions } from './interface';
 import { asyncRunWrapper } from './reqInfo';

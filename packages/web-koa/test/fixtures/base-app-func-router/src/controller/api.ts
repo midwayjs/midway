@@ -4,7 +4,7 @@ import {
   Provide,
   Inject,
   Logger,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { UserService } from '../service/user';
 import { IMidwayKoaContext } from '../../../../../src';
 
