@@ -1,4 +1,4 @@
-import { Framework, MidwayFrameworkType } from '../../../../src';
+import { CommonGuardUnion, Framework, MidwayFrameworkType } from '../../../../src';
 import {
   BaseFramework,
   CommonFilterUnion,
@@ -42,8 +42,14 @@ export class CustomTwoFramework extends LightFramework {
 
 @Framework()
 export class CustomThirdFramework implements IMidwayFramework<any, any, any, any, any> {
+  useGuard(guard: CommonGuardUnion<any>): void {
+    throw new Error('Method not implemented.');
+  }
+  runGuard(ctx: any, supplierClz: new (...args: any[]) => any, methodName: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
   getMiddleware(): ContextMiddlewareManager<any, any, any> {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
   isEnable(): boolean {
     return true;

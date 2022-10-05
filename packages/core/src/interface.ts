@@ -432,10 +432,11 @@ export type CommonFilterUnion<CTX, R, N> =
 /**
  * Guard definition
  */
-export interface IGuard<CTX> {
+export interface IGuard<CTX = unknown> {
   canActivate?(ctx: CTX, supplierClz: new (...args) => any, methodName: string): boolean | Promise<boolean>;
 }
-export type CommonGuardUnion<CTX> =
+
+export type CommonGuardUnion<CTX = unknown> =
   | (new (...args) => IGuard<CTX>)
   | Array<new (...args) => IGuard<CTX>>;
 
@@ -454,6 +455,11 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
    * Get a environment value, read from MIDWAY_SERVER_ENV
    */
   getEnv(): string;
+
+  /**
+   * get current related framework
+   */
+  getFramework(): IMidwayFramework<this, CTX, unknown>;
 
   /**
    * @deprecated
@@ -547,6 +553,12 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
    * @param Filter
    */
   useFilter<R, N>(Filter: CommonFilterUnion<CTX, R, N>): void;
+
+  /**
+   * add global guard
+   * @param guard
+   */
+  useGuard(guard: CommonGuardUnion<CTX>): void;
 }
 
 export type IMidwayApplication<
@@ -611,7 +623,9 @@ export interface IMidwayFramework<
   applyMiddleware(
     lastMiddleware?: CommonMiddlewareUnion<CTX, ResOrNext, Next>
   ): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
-  useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>);
+  useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>): void;
+  useGuard(guard: CommonGuardUnion<CTX>): void;
+  runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean>;
 }
 
 export const MIDWAY_LOGGER_WRITEABLE_DIR = 'MIDWAY_LOGGER_WRITEABLE_DIR';

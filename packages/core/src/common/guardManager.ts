@@ -1,44 +1,55 @@
 import {
-  getClassMetadata,
-} from '@midwayjs/decorator';
-import {
   CommonGuardUnion,
   IGuard,
-  IMidwayContainer,
   IMidwayContext,
 } from '../interface';
-import { ForbiddenError } from '../error/http';
+import { getClassMetadata, getPropertyMetadata, GUARD_KEY } from '../decorator';
 
 export class GuardManager<
   CTX extends IMidwayContext = IMidwayContext,
-  > {
-  private globalGuardList: Set<new (...args) => IGuard<CTX>> = new Set();
-  public async init(applicationContext: IMidwayContainer) {
-    // got global guard class
+  > extends Array<new (...args) => IGuard<any>> {
 
-  }
-
-  public addGlobalGuard(Guards: CommonGuardUnion<CTX>) {
-    if (!Array.isArray(Guards)) {
-      Guards = [Guards];
-    }
-    for (const Guard of Guards) {
-      this.globalGuardList.add(Guard);
+  public addGlobalGuard(guards: CommonGuardUnion<CTX>) {
+    if (!Array.isArray(guards)) {
+      this.push(guards);
+    } else {
+      this.push(...guards);
     }
   }
 
-  public async runGuards(ctx: CTX, supplierClz: new (...args) => any, methodName: string) {
+  public async runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string) {
     // check global guard
-    for (const Guard of this.globalGuardList) {
-      const guard = await ctx.requestContext.getAsync(Guard);
+    for (const Guard of this) {
+      const guard = await ctx.requestContext.getAsync<IGuard<any>>(Guard);
       const isPassed = await guard.canActivate(ctx, supplierClz, methodName);
       if (!isPassed) {
-        throw new ForbiddenError();
+        return false;
       }
     }
 
     // check class Guard
+    const classGuardList = getClassMetadata(GUARD_KEY, supplierClz);
+    if (classGuardList) {
+      for (const Guard of classGuardList) {
+        const guard = await ctx.requestContext.getAsync<IGuard<any>>(Guard);
+        const isPassed = await guard.canActivate(ctx, supplierClz, methodName);
+        if (!isPassed) {
+          return false;
+        }
+      }
+    }
 
     // check method Guard
+    const methodGuardList = getPropertyMetadata(GUARD_KEY, supplierClz, methodName);
+    if (methodGuardList) {
+      for (const Guard of methodGuardList) {
+        const guard = await ctx.requestContext.getAsync<IGuard<any>>(Guard);
+        const isPassed = await guard.canActivate(ctx, supplierClz, methodName);
+        if (!isPassed) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }

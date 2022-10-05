@@ -11,7 +11,8 @@ import {
   MiddlewareRespond,
   REQUEST_CTX_LOGGER_CACHE_KEY,
   ASYNC_CONTEXT_KEY,
-  ASYNC_CONTEXT_MANAGER_KEY, CommonGuardUnion,
+  ASYNC_CONTEXT_MANAGER_KEY,
+  CommonGuardUnion,
 } from './interface';
 import { Inject, Destroy, Init } from './decorator';
 import {
@@ -36,6 +37,7 @@ import {
   AsyncContextManager,
   NoopContextManager,
 } from './common/asyncContextManager';
+import { GuardManager } from './common/guardManager';
 const debug = util.debuglog('midway:debug');
 
 export abstract class BaseFramework<
@@ -55,6 +57,7 @@ export abstract class BaseFramework<
   protected contextLoggerFormat: LoggerContextFormat;
   protected middlewareManager = this.createMiddlewareManager();
   protected filterManager = this.createFilterManager();
+  protected guardManager = this.createGuardManager();
   protected composeMiddleware = null;
   protected bootstrapOptions: IMidwayBootstrapOptions;
   protected asyncContextManager: AsyncContextManager;
@@ -250,6 +253,10 @@ export abstract class BaseFramework<
         return this.createLogger(name, options);
       },
 
+      getFramework: () => {
+        return this;
+      },
+
       getProjectName: () => {
         return this.getProjectName();
       },
@@ -294,17 +301,24 @@ export abstract class BaseFramework<
       getAttr: <T>(key: string): T => {
         return this.getApplicationContext().getAttr(key);
       },
+
       useMiddleware: (
         middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>
       ) => {
         return this.useMiddleware(middleware);
       },
+
       getMiddleware: (): ContextMiddlewareManager<CTX, ResOrNext, Next> => {
         return this.getMiddleware();
       },
+
       useFilter: (Filter: CommonFilterUnion<CTX, ResOrNext, Next>) => {
         return this.useFilter(Filter);
       },
+
+      useGuard: (guard: CommonGuardUnion<CTX>) => {
+        return this.useGuard(guard);
+      }
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];
@@ -443,8 +457,12 @@ export abstract class BaseFramework<
     return this.filterManager.useFilter(filter);
   }
 
-  public useGuard(guard: CommonGuardUnion<CTX, ResOrNext, Next>) {
-    return this.guardManager;
+  public useGuard(guards: CommonGuardUnion<CTX>) {
+    return this.guardManager.addGlobalGuard(guards);
+  }
+
+  public async runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean> {
+    return this.guardManager.runGuard(ctx, supplierClz, methodName);
   }
 
   protected createMiddlewareManager() {
@@ -456,6 +474,6 @@ export abstract class BaseFramework<
   }
 
   protected createGuardManager() {
-    return new FilterManager<CTX, ResOrNext, Next>();
+    return new GuardManager<CTX>();
   }
 }

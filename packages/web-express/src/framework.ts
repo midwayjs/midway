@@ -219,6 +219,12 @@ export class MidwayExpressFramework extends BaseFramework<
    */
   protected generateController(routeInfo: RouterInfo): IRouterHandler<any> {
     return wrapAsyncHandler(async (req, res, next) => {
+      if (routeInfo.controllerClz && typeof routeInfo.method === 'string') {
+        const isPassed = await this.app.getFramework().runGuard(req, routeInfo.controllerClz, routeInfo.method);
+        if (!isPassed) {
+          throw new httpError.ForbiddenError();
+        }
+      }
       let result;
       if (typeof routeInfo.method !== 'string') {
         result = await routeInfo.method(req, res, next);
