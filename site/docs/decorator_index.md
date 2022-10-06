@@ -36,7 +36,7 @@ Midway 提供了很多装饰器能力，这些装饰器分布在不同的包，�
 | @Param             | Parameter    | 从参数获取 ctx.param                      |
 | @Headers           | Parameter    | 从参数获取 ctx.headers                    |
 | @File              | Parameter    | 从参数获取第一个上传文件                  |
-| @Files             | Parameter    | 从参数获取所以的上传文件                  |
+| @Files             | Parameter    | 从参数获取所有的上传文件                  |
 | @Fields            | Parameter    | 从参数获取表单 Field（上传时）            |
 | @Redirect          | Method       | 修改响应跳转                              |
 | @HttpCode          | Method       | 修改响应状态码                            |
