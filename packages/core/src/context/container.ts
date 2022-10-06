@@ -28,9 +28,8 @@ import {
   IObjectDefinitionRegistry,
   ObjectContext,
   ObjectLifeCycleEvent,
-  REQUEST_CTX_KEY,
 } from '../interface';
-import { FUNCTION_INJECT_KEY } from '../common/constants';
+import { FUNCTION_INJECT_KEY, REQUEST_CTX_KEY } from '../constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import {

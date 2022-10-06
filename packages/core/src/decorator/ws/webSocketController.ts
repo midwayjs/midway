@@ -6,7 +6,7 @@ import {
   Provide,
   Scope,
   MiddlewareParamArray,
-} from '../../';
+} from '../';
 
 export interface WSControllerOption {
   namespace: string;

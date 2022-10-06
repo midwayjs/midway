@@ -1,4 +1,4 @@
-import { saveModule, attachClassMetadata } from '../../';
+import { saveModule, attachClassMetadata } from '../';
 import {
   MODULE_TASK_TASK_LOCAL_KEY,
   MODULE_TASK_TASK_LOCAL_OPTIONS,

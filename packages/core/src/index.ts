@@ -3,7 +3,7 @@ export * from './context/container';
 export { MidwayRequestContainer } from './context/requestContainer';
 export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
-export * from './common/constants';
+export * from './constants';
 export {
   createConfiguration,
   FunctionalConfiguration,

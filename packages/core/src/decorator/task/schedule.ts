@@ -5,7 +5,7 @@ import {
   SCHEDULE_KEY,
   Provide,
   Scope,
-} from '../../';
+} from '../';
 
 export interface CommonSchedule {
   exec(ctx?);

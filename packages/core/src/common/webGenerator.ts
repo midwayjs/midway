@@ -5,20 +5,20 @@
  * @param routerResponseData
  */
 import {
+  MidwayFrameworkType,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
 } from '../decorator';
+import * as util from 'util';
+import { IMidwayApplication } from '../interface';
 import {
   MidwayWebRouterService,
   RouterInfo,
-  MidwayMiddlewareService,
-  IMidwayApplication,
-  MidwayFrameworkType,
-  httpError,
-} from '../index';
-import * as util from 'util';
+} from '../service/webRouterService';
+import { httpError } from '../error';
+import { MidwayMiddlewareService } from '../service/middlewareService';
 
 const debug = util.debuglog('midway:debug');
 

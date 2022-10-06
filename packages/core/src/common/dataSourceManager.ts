@@ -6,7 +6,7 @@ import { MidwayCommonError, MidwayParameterError } from '../error';
 import { run } from '@midwayjs/glob';
 import { join } from 'path';
 import { Types } from '../util/types';
-import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../interface';
+import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 
 export abstract class DataSourceManager<T> {
   protected dataSource: Map<string, T> = new Map();

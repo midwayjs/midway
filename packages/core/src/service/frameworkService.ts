@@ -15,11 +15,7 @@ import {
   ScopeEnum,
   MidwayFrameworkType,
 } from '../decorator';
-import {
-  IMidwayContainer,
-  IMidwayFramework,
-  REQUEST_OBJ_CTX_KEY,
-} from '../interface';
+import { IMidwayContainer, IMidwayFramework } from '../interface';
 import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';
 import { BaseFramework } from '../baseFramework';
@@ -29,6 +25,7 @@ import { MidwayAspectService } from './aspectService';
 import { MidwayApplicationManager } from '../common/applicationManager';
 import * as util from 'util';
 import { MidwayCommonError } from '../error';
+import { REQUEST_OBJ_CTX_KEY } from '../constants';
 
 const debug = util.debuglog('midway:debug');
 

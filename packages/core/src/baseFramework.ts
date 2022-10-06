@@ -9,11 +9,13 @@ import {
   MidwayProcessTypeEnum,
   CommonFilterUnion,
   MiddlewareRespond,
+  CommonGuardUnion,
+} from './interface';
+import {
   REQUEST_CTX_LOGGER_CACHE_KEY,
   ASYNC_CONTEXT_KEY,
   ASYNC_CONTEXT_MANAGER_KEY,
-  CommonGuardUnion,
-} from './interface';
+} from './constants';
 import { Inject, Destroy, Init } from './decorator';
 import {
   ILogger,
@@ -30,7 +32,6 @@ import { ContextMiddlewareManager } from './common/middlewareManager';
 import { MidwayMiddlewareService } from './service/middlewareService';
 import { FilterManager } from './common/filterManager';
 import { MidwayMockService } from './service/mockService';
-
 import * as util from 'util';
 import {
   ASYNC_ROOT_CONTEXT,

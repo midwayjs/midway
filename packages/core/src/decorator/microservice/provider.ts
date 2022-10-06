@@ -11,7 +11,7 @@ import {
   GRPCMetadata,
   Provide,
   Scope,
-} from '../../';
+} from '../';
 
 export function Provider(
   type: MSProviderType.GRPC,

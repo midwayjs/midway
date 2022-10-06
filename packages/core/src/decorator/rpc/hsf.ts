@@ -4,8 +4,8 @@ import {
   saveModule,
   HSF_KEY,
   Provide,
-} from '../../';
-import { Scope } from '../';
+  Scope,
+} from '../';
 
 export interface HSFOpts {
   interfaceName?: string;

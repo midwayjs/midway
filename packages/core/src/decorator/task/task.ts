@@ -1,4 +1,4 @@
-import { saveModule, attachClassMetadata } from '../../';
+import { saveModule, attachClassMetadata } from '../';
 import { MODULE_TASK_KEY, MODULE_TASK_METADATA } from '../constant';
 
 export function Task(options) {

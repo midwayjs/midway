@@ -1,8 +1,4 @@
-import {
-  WS_EVENT_KEY,
-  attachClassMetadata,
-  MiddlewareParamArray,
-} from '../../';
+import { WS_EVENT_KEY, attachClassMetadata, MiddlewareParamArray } from '../';
 
 export enum WSEventTypeEnum {
   ON_CONNECTION = 'ws:onConnection',

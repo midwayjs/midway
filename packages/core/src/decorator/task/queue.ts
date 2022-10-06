@@ -1,4 +1,4 @@
-import { saveModule, saveClassMetadata, Provide } from '../../';
+import { saveModule, saveClassMetadata, Provide } from '../';
 import { MODULE_TASK_QUEUE_KEY, MODULE_TASK_QUEUE_OPTIONS } from '../constant';
 
 export function Queue(options?: any): ClassDecorator {
