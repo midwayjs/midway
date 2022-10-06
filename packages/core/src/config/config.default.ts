@@ -1,23 +1,9 @@
-import {
-  MIDWAY_LOGGER_WRITEABLE_DIR,
-  MidwayAppInfo,
-  ServiceFactoryConfigOption,
-} from '../interface';
+import type { MidwayAppInfo, MidwayCoreDefaultConfig } from '../interface';
 import { getCurrentEnvironment, isDevelopmentEnvironment } from '../util/';
 import { join } from 'path';
-import type { LoggerOptions } from '@midwayjs/logger';
+import { MIDWAY_LOGGER_WRITEABLE_DIR } from '../constants';
 
-export default (
-  appInfo: MidwayAppInfo
-): {
-  midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
-  debug?: {
-    recordConfigMergeOrder?: boolean;
-  };
-  asyncContextManager: {
-    enable: boolean;
-  };
-} => {
+export default (appInfo: MidwayAppInfo): MidwayCoreDefaultConfig => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   const logRoot = process.env[MIDWAY_LOGGER_WRITEABLE_DIR] ?? appInfo.root;
   return {

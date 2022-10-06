@@ -73,6 +73,7 @@ Array [
     "_paramString": "",
     "_pureRouter": "/",
     "_weight": 0,
+    "controllerClz": [Function],
     "controllerId": "apiController",
     "controllerMiddleware": Array [
       "auth",

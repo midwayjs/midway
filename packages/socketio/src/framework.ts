@@ -4,6 +4,7 @@ import {
   ContextMiddlewareManager,
   HTTP_SERVER_KEY,
   MidwayFrameworkType,
+  MidwayInvokeForbiddenError,
 } from '@midwayjs/core';
 import { debuglog } from 'util';
 const debug = debuglog('midway:socket.io');
@@ -193,6 +194,15 @@ export class MidwaySocketIOFramework extends BaseFramework<
                         ...controllerMiddleware,
                         ...(wsEventInfo?.eventOptions?.middleware || []),
                         async (ctx, next) => {
+                          const isPassed = await this.app
+                            .getFramework()
+                            .runGuard(ctx, target, wsEventInfo.propertyName);
+                          if (!isPassed) {
+                            throw new MidwayInvokeForbiddenError(
+                              wsEventInfo.propertyName,
+                              target
+                            );
+                          }
                           // eslint-disable-next-line prefer-spread
                           return controller[wsEventInfo.propertyName].apply(
                             controller,

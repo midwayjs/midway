@@ -6,7 +6,7 @@ import {
 import { Types } from '../util/types';
 import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
-import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../interface';
+import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { getProviderName } from '../decorator';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {

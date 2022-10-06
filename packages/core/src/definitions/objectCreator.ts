@@ -1,4 +1,4 @@
-import { IObjectCreator, IObjectDefinition } from '../interface';
+import type { IObjectCreator, IObjectDefinition } from '../interface';
 import { MidwayUseWrongMethodError } from '../error';
 import { Types } from '../util/types';
 

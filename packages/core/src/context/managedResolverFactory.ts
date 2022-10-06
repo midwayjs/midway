@@ -1,12 +1,10 @@
 /**
  * 管理对象解析构建
  */
-import { KEYS } from '../common/constants';
+import { KEYS, REQUEST_CTX_KEY, REQUEST_OBJ_CTX_KEY } from '../constants';
 import {
   IManagedResolver,
   IObjectDefinition,
-  REQUEST_CTX_KEY,
-  REQUEST_OBJ_CTX_KEY,
   IManagedResolverFactoryCreateOptions,
   IMidwayContainer,
   ObjectLifeCycleEvent,

@@ -6,7 +6,7 @@ import {
   SERVERLESS_FUNC_KEY,
   saveModule,
   ServerlessTriggerType,
-} from '../../';
+} from '../';
 
 export function ServerlessFunction(
   options: FaaSMetadata.ServerlessFunctionOptions

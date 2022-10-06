@@ -24,6 +24,7 @@ import {
   IMidwayBootstrapOptions,
   MidwayCommonError,
   MidwayFrameworkType,
+  MidwayInvokeForbiddenError,
 } from '@midwayjs/core';
 import {
   Context,
@@ -133,9 +134,6 @@ export class MidwayGRPCFramework extends BaseFramework<
             ctx.method = method;
             this.app.createAnonymousContext(ctx);
 
-            // get service from request container
-            const service = await ctx.requestContext.getAsync(module);
-
             // get metadata from decorator
             const grpcMethodData: {
               methodName: string;
@@ -146,6 +144,16 @@ export class MidwayGRPCFramework extends BaseFramework<
               module,
               Utils.camelCase(method)
             );
+
+            const isPassed = await this.app
+              .getFramework()
+              .runGuard(ctx, module, ctx.method);
+            if (!isPassed) {
+              throw new MidwayInvokeForbiddenError(ctx.method, module);
+            }
+
+            // get service from request container
+            const service = await ctx.requestContext.getAsync(module);
 
             if (
               grpcMethodData.type === GrpcStreamTypeEnum.DUPLEX ||

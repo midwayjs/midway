@@ -6,7 +6,7 @@ import {
   Provide,
   Scope,
   MSListenerType,
-} from '../../';
+} from '../';
 
 export function Consumer(type: MSListenerType.MQTT): ClassDecorator;
 export function Consumer(

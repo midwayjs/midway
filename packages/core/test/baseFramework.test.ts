@@ -690,4 +690,15 @@ describe('/test/baseFramework.test.ts', () => {
     expect(ctxLogger1).toBeDefined();
     expect(ctxLogger1 === ctxLogger2).toBeTruthy();
   });
+
+  it('should test use guard', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-with-guard/src'
+    ));
+
+    const app = framework.getApplication() as IMidwayApplication;
+    expect(app.getAttr('invokeResult')).toEqual(true);
+    expect(app.getAttr('invoke2Result')).toEqual(false);
+  });
 });

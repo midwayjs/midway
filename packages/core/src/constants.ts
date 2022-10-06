@@ -1,9 +1,7 @@
-export const FUNCTION_INJECT_KEY = 'midway:function_inject_key';
 /**
  * 静态参数
  *
  */
-
 export const KEYS = {
   OBJECTS_ELEMENT: 'objects',
   OBJECT_ELEMENT: 'object',
@@ -52,3 +50,24 @@ export const VALUE_TYPE = {
   OBJECT: 'object', // 仅仅在解析时使用
   BOOLEAN: 'boolean',
 };
+
+export const FUNCTION_INJECT_KEY = 'midway:function_inject_key';
+export const MIDWAY_LOGGER_WRITEABLE_DIR = 'MIDWAY_LOGGER_WRITEABLE_DIR';
+export const REQUEST_CTX_KEY = 'ctx';
+export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
+export const HTTP_SERVER_KEY = '_midway_http_server';
+export const REQUEST_CTX_LOGGER_CACHE_KEY = '_midway_ctx_logger_cache';
+
+export const ASYNC_CONTEXT_KEY = Symbol('ASYNC_CONTEXT_KEY');
+export const ASYNC_CONTEXT_MANAGER_KEY = 'MIDWAY_ASYNC_CONTEXT_MANAGER_KEY';
+
+export const DEFAULT_PATTERN = [
+  '**/**.ts',
+  '**/**.js',
+  '**/**.mts',
+  '**/**.mjs',
+  '**/**.cts',
+  '**/**.cjs',
+];
+
+export const IGNORE_PATTERN = ['**/**.d.ts', '**/**.d.mts', '**/**.d.cts'];

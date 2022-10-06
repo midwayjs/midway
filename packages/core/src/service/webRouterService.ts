@@ -75,6 +75,10 @@ export interface RouterInfo {
    */
   controllerId?: string;
   /**
+   * controller class
+   */
+  controllerClz?: new (...args) => any;
+  /**
    * router middleware
    */
   middleware?: any[];
@@ -309,6 +313,7 @@ export class MidwayWebRouterService {
           handlerName: `${controllerId}.${webRouter.method}`,
           funcHandlerName: `${controllerId}.${webRouter.method}`,
           controllerId,
+          controllerClz,
           middleware: webRouter.middleware || [],
           controllerMiddleware: middleware || [],
           requestMetadata: routeArgsInfo,

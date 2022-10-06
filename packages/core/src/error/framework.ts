@@ -20,6 +20,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   DUPLICATE_CLASS_NAME: 10015,
   DUPLICATE_CONTROLLER_PREFIX_OPTIONS: 10016,
   RETRY_OVER_MAX_TIME: 10017,
+  INVOKE_METHOD_FORBIDDEN: 10018,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -97,7 +98,7 @@ export class MidwayInvalidConfigError extends MidwayError {
 export class MidwayResolverMissingError extends MidwayError {
   constructor(type: string) {
     super(
-      `${type} resolver is not exists!`,
+      `Resolver "${type}" is missing.`,
       FrameworkErrorEnum.MISSING_RESOLVER
     );
   }
@@ -183,6 +184,17 @@ export class MidwayRetryExceededMaxTimesError extends MidwayError {
       {
         cause: err,
       }
+    );
+  }
+}
+
+export class MidwayInvokeForbiddenError extends MidwayError {
+  constructor(methodName: string, module?: any) {
+    super(
+      `Invoke "${
+        module ? module.name : 'unknown'
+      }.${methodName}" is forbidden.`,
+      FrameworkErrorEnum.INVOKE_METHOD_FORBIDDEN
     );
   }
 }

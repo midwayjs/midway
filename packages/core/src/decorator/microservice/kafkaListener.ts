@@ -1,4 +1,4 @@
-import { MS_CONSUMER_KEY, attachPropertyDataToClass } from '../..';
+import { MS_CONSUMER_KEY, attachPropertyDataToClass } from '../';
 
 /**
  * @deprecated Replaced by ConsumerSubscribeTopics

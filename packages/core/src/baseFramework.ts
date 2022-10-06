@@ -9,10 +9,13 @@ import {
   MidwayProcessTypeEnum,
   CommonFilterUnion,
   MiddlewareRespond,
+  CommonGuardUnion,
+} from './interface';
+import {
   REQUEST_CTX_LOGGER_CACHE_KEY,
   ASYNC_CONTEXT_KEY,
   ASYNC_CONTEXT_MANAGER_KEY,
-} from './interface';
+} from './constants';
 import { Inject, Destroy, Init } from './decorator';
 import {
   ILogger,
@@ -29,13 +32,13 @@ import { ContextMiddlewareManager } from './common/middlewareManager';
 import { MidwayMiddlewareService } from './service/middlewareService';
 import { FilterManager } from './common/filterManager';
 import { MidwayMockService } from './service/mockService';
-
 import * as util from 'util';
 import {
   ASYNC_ROOT_CONTEXT,
   AsyncContextManager,
   NoopContextManager,
 } from './common/asyncContextManager';
+import { GuardManager } from './common/guardManager';
 const debug = util.debuglog('midway:debug');
 
 export abstract class BaseFramework<
@@ -55,6 +58,7 @@ export abstract class BaseFramework<
   protected contextLoggerFormat: LoggerContextFormat;
   protected middlewareManager = this.createMiddlewareManager();
   protected filterManager = this.createFilterManager();
+  protected guardManager = this.createGuardManager();
   protected composeMiddleware = null;
   protected bootstrapOptions: IMidwayBootstrapOptions;
   protected asyncContextManager: AsyncContextManager;
@@ -250,6 +254,10 @@ export abstract class BaseFramework<
         return this.createLogger(name, options);
       },
 
+      getFramework: () => {
+        return this;
+      },
+
       getProjectName: () => {
         return this.getProjectName();
       },
@@ -294,16 +302,23 @@ export abstract class BaseFramework<
       getAttr: <T>(key: string): T => {
         return this.getApplicationContext().getAttr(key);
       },
+
       useMiddleware: (
         middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>
       ) => {
         return this.useMiddleware(middleware);
       },
+
       getMiddleware: (): ContextMiddlewareManager<CTX, ResOrNext, Next> => {
         return this.getMiddleware();
       },
+
       useFilter: (Filter: CommonFilterUnion<CTX, ResOrNext, Next>) => {
         return this.useFilter(Filter);
+      },
+
+      useGuard: (guard: CommonGuardUnion<CTX>) => {
+        return this.useGuard(guard);
       },
     };
     for (const method of whiteList) {
@@ -439,8 +454,20 @@ export abstract class BaseFramework<
     return this.middlewareManager;
   }
 
-  public useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>) {
-    return this.filterManager.useFilter(Filter);
+  public useFilter(filter: CommonFilterUnion<CTX, ResOrNext, Next>) {
+    return this.filterManager.useFilter(filter);
+  }
+
+  public useGuard(guards: CommonGuardUnion<CTX>) {
+    return this.guardManager.addGlobalGuard(guards);
+  }
+
+  public async runGuard(
+    ctx: CTX,
+    supplierClz: new (...args) => any,
+    methodName: string
+  ): Promise<boolean> {
+    return this.guardManager.runGuard(ctx, supplierClz, methodName);
   }
 
   protected createMiddlewareManager() {
@@ -449,5 +476,9 @@ export abstract class BaseFramework<
 
   protected createFilterManager() {
     return new FilterManager<CTX, ResOrNext, Next>();
+  }
+
+  protected createGuardManager() {
+    return new GuardManager<CTX>();
   }
 }

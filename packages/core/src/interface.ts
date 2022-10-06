@@ -1,10 +1,18 @@
 import type { ILogger, LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
-import _default from './config/config.default';
-import type { ContextMiddlewareManager } from './common/middlewareManager';
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { IManagedInstance, IMethodAspect, ObjectIdentifier } from './decorator';
 import { FrameworkType, ScopeEnum } from './decorator';
+
+export interface MidwayCoreDefaultConfig {
+  midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
+  debug?: {
+    recordConfigMergeOrder?: boolean;
+  };
+  asyncContextManager: {
+    enable: boolean;
+  };
+}
 
 export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
@@ -253,11 +261,6 @@ export interface IManagedResolverFactoryCreateOptions {
   namespace?: string;
 }
 
-export const REQUEST_CTX_KEY = 'ctx';
-export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
-export const HTTP_SERVER_KEY = '_midway_http_server';
-export const REQUEST_CTX_LOGGER_CACHE_KEY = '_midway_ctx_logger_cache';
-
 export type HandlerFunction = (
   /**
    * decorator uuid key
@@ -429,6 +432,57 @@ export type CommonFilterUnion<CTX, R, N> =
   | (new (...args) => IFilter<CTX, R, N>)
   | Array<new (...args) => IFilter<CTX, R, N>>;
 
+/**
+ * Guard definition
+ */
+export interface IGuard<CTX = unknown> {
+  canActivate(ctx: CTX, supplierClz: new (...args) => any, methodName: string): boolean | Promise<boolean>;
+}
+
+export type CommonGuardUnion<CTX = unknown> =
+  | (new (...args) => IGuard<CTX>)
+  | Array<new (...args) => IGuard<CTX>>;
+
+export interface IMiddlewareManager<CTX, R, N> {
+  insertFirst(middleware: CommonMiddlewareUnion<CTX, R, N>): void;
+  insertLast(middleware: CommonMiddlewareUnion<CTX, R, N>): void;
+  insertBefore(
+    middleware: CommonMiddlewareUnion<CTX, R, N>,
+    idxOrBeforeMiddleware: CommonMiddleware<CTX, R, N> | string | number
+  ): void;
+  insertAfter(
+    middleware: CommonMiddlewareUnion<CTX, R, N>,
+    idxOrAfterMiddleware: CommonMiddleware<CTX, R, N> | string | number
+  ): void;
+  findAndInsertAfter(
+    middlewareOrName: CommonMiddleware<CTX, R, N> | string,
+    afterMiddleware: CommonMiddleware<CTX, R, N> | string | number
+  ): void;
+  findAndInsertBefore(
+    middlewareOrName: CommonMiddleware<CTX, R, N> | string,
+    beforeMiddleware: CommonMiddleware<CTX, R, N> | string | number
+  ): void;
+  findAndInsertFirst(
+    middlewareOrName: CommonMiddleware<CTX, R, N> | string
+  ): void;
+  findAndInsertLast(
+    middlewareOrName: CommonMiddleware<CTX, R, N> | string
+  ): void;
+  findItemIndex(
+    middlewareOrName: CommonMiddleware<CTX, R, N> | string | number
+  ): number;
+  findItem(
+    middlewareOrName: CommonMiddleware<CTX, R, N> | string | number
+  ): CommonMiddleware<CTX, R, N>;
+  getMiddlewareName(middleware: CommonMiddleware<CTX, R, N>): string;
+  remove(
+    middlewareOrNameOrIdx: CommonMiddleware<CTX, R, N> | string | number
+  ): CommonMiddleware<CTX, R, N>;
+  push(...items: CommonMiddleware<CTX, R, N>[]): number;
+  unshift(...items: CommonMiddleware<CTX, R, N>[]): number;
+  getNames(): string[];
+}
+
 export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   /**
    * Get a base directory for project, with src or dist
@@ -444,6 +498,11 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
    * Get a environment value, read from MIDWAY_SERVER_ENV
    */
   getEnv(): string;
+
+  /**
+   * get current related framework
+   */
+  getFramework(): IMidwayFramework<this, CTX, unknown>;
 
   /**
    * @deprecated
@@ -530,13 +589,19 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   /**
    * get global middleware
    */
-  getMiddleware<R, N>(): ContextMiddlewareManager<CTX, R, N>;
+  getMiddleware<R, N>(): IMiddlewareManager<CTX, R, N>;
 
   /**
    * add exception filter
    * @param Filter
    */
   useFilter<R, N>(Filter: CommonFilterUnion<CTX, R, N>): void;
+
+  /**
+   * add global guard
+   * @param guard
+   */
+  useGuard(guard: CommonGuardUnion<CTX>): void;
 }
 
 export type IMidwayApplication<
@@ -597,14 +662,16 @@ export interface IMidwayFramework<
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
-  getMiddleware(): ContextMiddlewareManager<CTX, ResOrNext, Next>;
+  getMiddleware(): IMiddlewareManager<CTX, ResOrNext, Next>;
   applyMiddleware(
     lastMiddleware?: CommonMiddlewareUnion<CTX, ResOrNext, Next>
   ): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
-  useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>);
+  useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>): void;
+  useGuard(guard: CommonGuardUnion<CTX>): void;
+  runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean>;
 }
 
-export const MIDWAY_LOGGER_WRITEABLE_DIR = 'MIDWAY_LOGGER_WRITEABLE_DIR';
+
 
 export interface MidwayAppInfo {
   pkg: Record<string, any>;
@@ -619,20 +686,6 @@ export interface MidwayAppInfo {
 /**
  * midway global config definition
  */
-export interface MidwayConfig extends FileConfigOption<typeof _default> {
+export interface MidwayConfig extends FileConfigOption<MidwayCoreDefaultConfig> {
   [customConfigKey: string]: unknown;
 }
-
-export const ASYNC_CONTEXT_KEY = Symbol('ASYNC_CONTEXT_KEY');
-export const ASYNC_CONTEXT_MANAGER_KEY = 'MIDWAY_ASYNC_CONTEXT_MANAGER_KEY';
-
-export const DEFAULT_PATTERN = [
-  '**/**.ts',
-  '**/**.js',
-  '**/**.mts',
-  '**/**.mjs',
-  '**/**.cts',
-  '**/**.cjs'
-];
-
-export const IGNORE_PATTERN = ['**/**.d.ts', '**/**.d.mts', '**/**.d.cts'];

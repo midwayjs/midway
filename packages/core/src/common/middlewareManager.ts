@@ -1,14 +1,14 @@
 import {
   CommonMiddleware,
   CommonMiddlewareUnion,
+  IMiddlewareManager,
   IMidwayContext,
 } from '../interface';
 
-export class ContextMiddlewareManager<
-  CTX extends IMidwayContext,
-  R,
-  N
-> extends Array<CommonMiddleware<CTX, R, N>> {
+export class ContextMiddlewareManager<CTX extends IMidwayContext, R, N>
+  extends Array<CommonMiddleware<CTX, R, N>>
+  implements IMiddlewareManager<CTX, R, N>
+{
   /**
    * insert a middleware or middleware array to first
    * @param middleware
