@@ -54,9 +54,9 @@ function unsafeStringify(arr, offset = 0) {
 /**
  * a easy uuid v4 generator
  */
-export function randomUUID(): string {
+export function randomUUID(force?: boolean): string {
   // node > v14.17
-  if (crypto['randomUUID']) {
+  if (!force && crypto['randomUUID']) {
     return crypto['randomUUID']();
   }
   const rnds = rng();

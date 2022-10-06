@@ -1,5 +1,5 @@
 import { MidwayError, registerErrorCode } from './base';
-import { getProviderName, ObjectIdentifier } from '../decorator';
+import { ObjectIdentifier } from '../decorator';
 
 export const FrameworkErrorEnum = registerErrorCode('midway', {
   UNKNOWN: 10000,
@@ -98,7 +98,7 @@ export class MidwayInvalidConfigError extends MidwayError {
 export class MidwayResolverMissingError extends MidwayError {
   constructor(type: string) {
     super(
-      `${type} resolver is not exists!`,
+      `Resolver "${type}" is missing.`,
       FrameworkErrorEnum.MISSING_RESOLVER
     );
   }
@@ -192,7 +192,7 @@ export class MidwayInvokeForbiddenError extends MidwayError {
   constructor(methodName: string, module?: any) {
     super(
       `Invoke "${
-        module ? getProviderName(module) : 'unknown'
+        module ? module.name : 'unknown'
       }.${methodName}" is forbidden.`,
       FrameworkErrorEnum.INVOKE_METHOD_FORBIDDEN
     );
