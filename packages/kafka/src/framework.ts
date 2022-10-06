@@ -64,7 +64,7 @@ export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
             runConfig: {},
           };
 
-          const comsumerParams = data
+          const consumerParams = data
             .map(value => {
               if (value[0].topic === midwayConsumerConfig.topic) {
                 return Object.assign(midwayConsumerConfig, value[0]);
@@ -72,8 +72,8 @@ export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
             })
             .filter(e => e && true);
 
-          if (comsumerParams && Object.keys(comsumerParams[0]).length > 0) {
-            return comsumerParams[0];
+          if (consumerParams && Object.keys(consumerParams[0]).length > 0) {
+            return consumerParams[0];
           }
           return midwayConsumerConfig;
         }
@@ -112,16 +112,17 @@ export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
                       } as unknown as IMidwayKafkaContext;
                       this.app.createAnonymousContext(ctx);
 
-                      const isPassed = await this.app
-                        .getFramework()
-                        .runGuard(ctx, module, propertyKey);
-                      if (!isPassed) {
-                        throw new MidwayInvokeForbiddenError(
-                          propertyKey,
-                          module
-                        );
+                      if (typeof propertyKey === 'string') {
+                        const isPassed = await this.app
+                          .getFramework()
+                          .runGuard(ctx, module, propertyKey);
+                        if (!isPassed) {
+                          throw new MidwayInvokeForbiddenError(
+                            propertyKey,
+                            module
+                          );
+                        }
                       }
-
                       const ins = await ctx.requestContext.getAsync(module);
                       const fn = await this.applyMiddleware(async () => {
                         return await ins[propertyKey].call(ins, message);
