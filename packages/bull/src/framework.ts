@@ -6,6 +6,7 @@ import {
   getClassMetadata,
   listModule,
   Utils,
+  MidwayInvokeForbiddenError,
 } from '@midwayjs/core';
 import {
   Application,
@@ -133,6 +134,13 @@ export class BullFramework
       });
 
       ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
+
+      const isPassed = await this.app
+        .getFramework()
+        .runGuard(ctx, processor, 'execute');
+      if (!isPassed) {
+        throw new MidwayInvokeForbiddenError('execute', processor);
+      }
 
       const service = await ctx.requestContext.getAsync<IProcessor>(
         processor as any
