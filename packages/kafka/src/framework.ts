@@ -8,6 +8,7 @@ import {
   MidwayFrameworkType,
   MSListenerType,
   MS_CONSUMER_KEY,
+  MidwayInvokeForbiddenError,
 } from '@midwayjs/core';
 import {
   IMidwayConsumerConfig,
@@ -110,6 +111,17 @@ export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
                         },
                       } as unknown as IMidwayKafkaContext;
                       this.app.createAnonymousContext(ctx);
+
+                      const isPassed = await this.app
+                        .getFramework()
+                        .runGuard(ctx, module, propertyKey);
+                      if (!isPassed) {
+                        throw new MidwayInvokeForbiddenError(
+                          propertyKey,
+                          module
+                        );
+                      }
+
                       const ins = await ctx.requestContext.getAsync(module);
                       const fn = await this.applyMiddleware(async () => {
                         return await ins[propertyKey].call(ins, message);

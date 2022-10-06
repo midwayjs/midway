@@ -23,6 +23,7 @@ import {
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
+  httpError,
 } from '@midwayjs/core';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
@@ -218,6 +219,18 @@ export class MidwayFaaSFramework extends BaseFramework<
             ...funOptions.controllerMiddleware,
             ...funOptions.middleware,
             async (ctx, next) => {
+              if (
+                funOptions.controllerClz &&
+                typeof funOptions.method === 'string'
+              ) {
+                const isPassed = await this.app
+                  .getFramework()
+                  .runGuard(ctx, funOptions.controllerClz, funOptions.method);
+                if (!isPassed) {
+                  throw new httpError.ForbiddenError();
+                }
+              }
+
               if (isHttpFunction) {
                 args = [ctx];
               }

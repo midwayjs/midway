@@ -28,5 +28,5 @@ export function Guard(): ClassDecorator {
   return target => {
     Provide()(target);
     Scope(ScopeEnum.Singleton)(target);
-  }
+  };
 }
