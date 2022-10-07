@@ -9,7 +9,9 @@ import { TypeORMAdapter } from './adapter';
   importConfigs: [
     {
       default: {
-        casbinTypeORM: {},
+        casbinTypeORM: {
+          dataSourceName: 'node-casbin-official',
+        },
       },
     },
   ],

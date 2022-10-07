@@ -10,5 +10,3 @@ export interface TypeORMAdapterConfig {
   dataSourceOption?: DataSourceOptions;
   customCasbinRuleEntity?: CasbinRuleConstructor;
 }
-
-export const DefaultTypeORMDataSourceName = 'node-casbin-official';

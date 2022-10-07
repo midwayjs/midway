@@ -1,3 +1,4 @@
+import '@midwayjs/view';
 import _default from './dist/config/config.default';
 export * from './dist/index';
 

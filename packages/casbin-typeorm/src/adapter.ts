@@ -18,7 +18,6 @@ import {
 import * as casbin from '@midwayjs/casbin';
 import {
   CasbinRuleConstructor,
-  DefaultTypeORMDataSourceName,
   GenericCasbinRule,
   TypeORMAdapterConfig,
 } from './interface';
@@ -46,7 +45,9 @@ export class TypeORMAdapter implements FilteredAdapter {
   @Init()
   protected async init() {
     if (
-      !this.typeORMDataSourceManager.hasDataSource(DefaultTypeORMDataSourceName)
+      !this.typeORMDataSourceManager.hasDataSource(
+        this.adapterConfig.dataSourceName
+      )
     ) {
       this.typeorm = (await this.typeORMDataSourceManager.createInstance(
         {
@@ -57,11 +58,11 @@ export class TypeORMAdapter implements FilteredAdapter {
             ),
           ],
         },
-        this.adapterConfig.dataSourceName || DefaultTypeORMDataSourceName
+        this.adapterConfig.dataSourceName
       )) as DataSource;
     } else {
       this.typeorm = this.typeORMDataSourceManager.getDataSource(
-        this.adapterConfig.dataSourceName || DefaultTypeORMDataSourceName
+        this.adapterConfig.dataSourceName
       ) as DataSource;
     }
   }
