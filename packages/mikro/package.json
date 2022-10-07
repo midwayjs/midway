@@ -15,7 +15,7 @@
     "@mikro-orm/entity-generator": "5.4.2",
     "@mikro-orm/sql-highlighter": "1.0.1",
     "@mikro-orm/sqlite": "5.4.2",
-    "sqlite3": "5.1.1"
+    "sqlite3": "5.1.2"
   },
   "author": {
     "name": "czy88840616",
