@@ -4,13 +4,13 @@ export enum AuthActionVerb {
   CREATE = 'create',
   UPDATE = 'update',
   DELETE = 'delete',
-  READ = 'read'
+  READ = 'read',
 }
 
 export enum AuthPossession {
   ANY = 'any',
   OWN = 'own',
-  OWN_ANY = 'own|any'
+  OWN_ANY = 'own|any',
 }
 
 export enum AuthAction {
@@ -24,5 +24,5 @@ export enum AuthAction {
   DELETE_OWN = 'delete:own',
 
   READ_ANY = 'read:any',
-  READ_OWN = 'read:own'
+  READ_OWN = 'read:own',
 }

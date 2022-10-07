@@ -514,7 +514,10 @@ export function getClassExtendedMetadata<T = any>(
  * @param decoratorNameKey
  * @param target
  */
-export function getClassMetadata<T = any>(decoratorNameKey: ObjectIdentifier, target): T {
+export function getClassMetadata<T = any>(
+  decoratorNameKey: ObjectIdentifier,
+  target
+): T {
   return manager.getMetadata(decoratorNameKey, target);
 }
 

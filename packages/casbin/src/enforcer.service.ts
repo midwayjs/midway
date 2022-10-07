@@ -5,9 +5,10 @@ import {
   delegateTargetAllPrototypeMethod,
   IMidwayContainer,
   Init,
+  Inject,
   Provide,
   Scope,
-  ScopeEnum
+  ScopeEnum,
 } from '@midwayjs/core';
 import { CasbinConfigOptions } from './interface';
 
@@ -18,11 +19,6 @@ export class CasbinAdapterManager {
 
   @ApplicationContext()
   applicationContext: IMidwayContainer;
-
-  @Init()
-  async init() {
-
-  }
 
   setAdapter(adapter: Adapter) {
     this.defaultAdapter = adapter;
@@ -41,12 +37,15 @@ export class CasbinEnforcerService {
   @Config('casbin')
   casbinConfig: CasbinConfigOptions;
 
-  @ApplicationContext()
-  applicationContext: IMidwayContainer;
+  @Inject()
+  adapterManager: CasbinAdapterManager;
 
   @Init()
   async init() {
-    this.instance = await newEnforcer(this.casbinConfig.modelPath, this.casbinConfig.policyAdapter);
+    this.instance = await newEnforcer(
+      this.casbinConfig.modelPath,
+      this.adapterManager.getAdapter() || this.casbinConfig.policyAdapter
+    );
   }
 
   getEnforcer(): Enforcer {

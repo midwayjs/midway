@@ -18,5 +18,5 @@ export function UsePermission(...permissions: Permission[]): MethodDecorator {
     });
 
     savePropertyMetadata(PERMISSIONS_METADATA_KEY, perms, target, propertyKey);
-  }
+  };
 }

@@ -1,5 +1,8 @@
 import { Configuration } from '@midwayjs/core';
-import { CasbinAdapterManager, CasbinEnforcerService } from './enforcer.service';
+import {
+  CasbinAdapterManager,
+  CasbinEnforcerService,
+} from './enforcer.service';
 
 @Configuration({
   namespace: 'casbin',
@@ -12,7 +15,6 @@ import { CasbinAdapterManager, CasbinEnforcerService } from './enforcer.service'
   ],
 })
 export class CasbinConfiguration {
-
   async onReady(container) {
     await container.getAsync(CasbinAdapterManager);
     await container.getAsync(CasbinEnforcerService);
