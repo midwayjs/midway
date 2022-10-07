@@ -1,8 +1,8 @@
 import { ClusterNode, ClusterOptions } from 'ioredis';
+import * as Redis from 'ioredis';
+import { RedisConfigOptions } from './dist';
 
 export * from './dist/index';
-
-import * as Redis from 'ioredis';
 
 // Single Redis
 // client: {
@@ -51,12 +51,6 @@ import * as Redis from 'ioredis';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    redis?: ServiceFactoryConfigOption<
-      | Redis.RedisOptions
-      | ({
-          cluster?: boolean;
-          nodes?: ClusterNode[];
-        } & ClusterOptions)
-    >;
+    redis?: ServiceFactoryConfigOption<RedisConfigOptions>;
   }
 }

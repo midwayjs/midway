@@ -10,15 +10,17 @@ import {
   delegateTargetAllPrototypeMethod,
   delegateTargetMethod,
   MidwayCommonError,
+  ServiceFactoryConfigOption,
 } from '@midwayjs/core';
 import Redis from 'ioredis';
 import * as assert from 'assert';
+import { RedisConfigOptions } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class RedisServiceFactory extends ServiceFactory<Redis> {
   @Config('redis')
-  redisConfig;
+  redisConfig: ServiceFactoryConfigOption<RedisConfigOptions>;
 
   @Init()
   async init() {
