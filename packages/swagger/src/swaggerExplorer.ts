@@ -288,8 +288,8 @@ export class SwaggerExplorer {
     }
     const parameters = [];
     opts[webRouter.requestMethod] = {
-      summary: operMeta?.metadata?.summary,
-      description: operMeta?.metadata?.description,
+      summary: operMeta?.metadata?.summary || webRouter.summary,
+      description: operMeta?.metadata?.description || webRouter.description,
       // operationId: `${webRouter.requestMethod}_${(operMeta?.metadata?.operationId || webRouter.method)}`,
       tags: operMeta?.metadata?.tags || [],
     };
