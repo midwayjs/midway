@@ -479,12 +479,12 @@ export function attachClassMetadata(
  * @param propertyName
  * @param useCache
  */
-export function getClassExtendedMetadata(
+export function getClassExtendedMetadata<T = any>(
   decoratorNameKey: ObjectIdentifier,
   target,
   propertyName?: string,
   useCache?: boolean
-) {
+): T {
   if (useCache === undefined) {
     useCache = true;
   }
@@ -514,7 +514,7 @@ export function getClassExtendedMetadata(
  * @param decoratorNameKey
  * @param target
  */
-export function getClassMetadata(decoratorNameKey: ObjectIdentifier, target) {
+export function getClassMetadata<T = any>(decoratorNameKey: ObjectIdentifier, target): T {
   return manager.getMetadata(decoratorNameKey, target);
 }
 
@@ -569,11 +569,11 @@ export function attachPropertyDataToClass(
  * @param target
  * @param propertyName
  */
-export function getPropertyDataFromClass(
+export function getPropertyDataFromClass<T = any>(
   decoratorNameKey: ObjectIdentifier,
   target,
   propertyName
-) {
+): T {
   return manager.getPropertyDataFromClass(
     decoratorNameKey,
     target,
@@ -631,11 +631,11 @@ export function attachPropertyMetadata(
  * @param target
  * @param propertyName
  */
-export function getPropertyMetadata(
+export function getPropertyMetadata<T = any>(
   decoratorNameKey: ObjectIdentifier,
   target,
   propertyName
-) {
+): T {
   return manager.getMetadata(decoratorNameKey, target, propertyName);
 }
 
