@@ -214,11 +214,36 @@ export class MidwayWebRouterService {
   public addController(
     controllerClz: any,
     controllerOption: ControllerOption,
+    functionMeta?: boolean
+  );
+  public addController(
+    controllerClz: any,
+    controllerOption: ControllerOption,
+    resourceOptions?: {
+      resourceFilter: (routerInfo: RouterInfo) => boolean;
+    },
+    functionMeta?: boolean
+  );
+  public addController(
+    controllerClz: any,
+    controllerOption: ControllerOption,
+    resourceOptions: any = {},
     functionMeta = false
   ) {
+    if (resourceOptions && typeof resourceOptions === 'boolean') {
+      functionMeta = resourceOptions;
+      resourceOptions = undefined;
+    }
+
+    if (!resourceOptions) {
+      resourceOptions = {};
+    }
+
     const controllerId = getProviderName(controllerClz);
     debug(`[core]: Found Controller ${controllerId}.`);
     const id = getProviderUUId(controllerClz);
+
+    controllerOption.routerOptions = controllerOption.routerOptions || {};
 
     let priority;
     // implement middleware in controller
@@ -332,6 +357,12 @@ export class MidwayWebRouterService {
             functionName: data.functionName,
           };
         }
+        if (
+          resourceOptions.resourceFilter &&
+          !resourceOptions.resourceFilter(data)
+        ) {
+          continue;
+        }
 
         this.checkDuplicateAndPush(data.prefix, data);
       }
@@ -340,7 +371,6 @@ export class MidwayWebRouterService {
 
   /**
    * dynamically add a route to root prefix
-   * @param routerPath
    * @param routerFunction
    * @param routerInfoOption
    */
