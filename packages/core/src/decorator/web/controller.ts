@@ -10,7 +10,7 @@ import {
 
 export interface ControllerOption {
   prefix: string;
-  routerOptions: {
+  routerOptions?: {
     sensitive?: boolean;
     middleware?: MiddlewareParamArray;
     alias?: string[];

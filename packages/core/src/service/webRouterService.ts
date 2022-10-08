@@ -243,6 +243,8 @@ export class MidwayWebRouterService {
     debug(`[core]: Found Controller ${controllerId}.`);
     const id = getProviderUUId(controllerClz);
 
+    controllerOption.routerOptions = controllerOption.routerOptions || {};
+
     let priority;
     // implement middleware in controller
     const middleware = controllerOption.routerOptions.middleware;
