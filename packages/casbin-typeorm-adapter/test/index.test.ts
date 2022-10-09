@@ -2,7 +2,7 @@ import { createApp, createHttpRequest } from '@midwayjs/mock';
 import { IMidwayApplication } from '@midwayjs/core';
 
 describe('/test/index.test.ts', () => {
-  it('should test read from redis', async () => {
+  it('should test read from typeorm', async () => {
     const app = await createApp('base-app') as IMidwayApplication;
     const response = await createHttpRequest(app).get('/?username=bob');
     expect(response.status).toEqual(403);
