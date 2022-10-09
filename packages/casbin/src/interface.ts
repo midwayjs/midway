@@ -1,10 +1,10 @@
 import { Adapter } from 'casbin';
 import { AuthActionVerb, AuthPossession } from './constants';
-import { IMidwayContext } from '@midwayjs/core';
+import { IMidwayContainer, IMidwayContext } from '@midwayjs/core';
 
 export interface CasbinConfigOptions {
   modelPath: string;
-  policyAdapter: string | Adapter;
+  policyAdapter: string | ((applicationContext: IMidwayContainer) => Adapter) | Adapter;
   usernameFromContext: (ctx: IMidwayContext) => string;
 }
 

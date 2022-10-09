@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/index.test.ts should test casbin api 1`] = `
+Array [
+  Array [
+    "alice",
+    "data1",
+    "read",
+  ],
+  Array [
+    "bob",
+    "data2",
+    "write",
+  ],
+]
+`;

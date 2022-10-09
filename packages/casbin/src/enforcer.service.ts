@@ -1,11 +1,10 @@
-import { newEnforcer, Enforcer, Adapter } from 'casbin';
+import { newEnforcer, Enforcer } from 'casbin';
 import {
   ApplicationContext,
   Config,
   delegateTargetAllPrototypeMethod,
   IMidwayContainer,
   Init,
-  Inject,
   Provide,
   Scope,
   ScopeEnum,
@@ -14,41 +13,29 @@ import { CasbinConfigOptions } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class CasbinAdapterManager {
-  private defaultAdapter: Adapter;
-
-  @ApplicationContext()
-  applicationContext: IMidwayContainer;
-
-  setAdapter(adapter: Adapter) {
-    this.defaultAdapter = adapter;
-  }
-
-  getAdapter() {
-    return this.defaultAdapter;
-  }
-}
-
-@Provide()
-@Scope(ScopeEnum.Singleton)
 export class CasbinEnforcerService {
   private instance: Enforcer;
 
   @Config('casbin')
-  casbinConfig: CasbinConfigOptions;
+  protected casbinConfig: CasbinConfigOptions;
 
-  @Inject()
-  adapterManager: CasbinAdapterManager;
+  @ApplicationContext()
+  applicationContext: IMidwayContainer;
 
   @Init()
-  async init() {
+  protected async init() {
+    if (typeof this.casbinConfig.policyAdapter === 'function') {
+      this.casbinConfig.policyAdapter = await this.casbinConfig.policyAdapter(
+        this.applicationContext
+      );
+    }
     this.instance = await newEnforcer(
       this.casbinConfig.modelPath,
-      this.adapterManager.getAdapter() || this.casbinConfig.policyAdapter
+      this.casbinConfig.policyAdapter
     );
   }
 
-  getEnforcer(): Enforcer {
+  public getEnforcer(): Enforcer {
     return this.instance;
   }
 }
@@ -58,4 +45,4 @@ export interface CasbinEnforcerService extends Enforcer {
   // empty
 }
 
-delegateTargetAllPrototypeMethod(CasbinEnforcerService, [Enforcer]);
+delegateTargetAllPrototypeMethod(CasbinEnforcerService, Enforcer);

@@ -1,26 +1,31 @@
 {
-  "name": "@midwayjs/casbin",
-  "description": "midway casbin component",
+  "name": "@midwayjs/casbin-typeorm-adapter",
+  "description": "midway casbin typeorm adapter",
   "version": "3.5.3",
   "main": "dist/index",
-  "typings": "index.d.ts",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "index.d.ts"
+    "dist/**/*.d.ts"
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.5.3",
     "@midwayjs/koa": "^3.5.3",
-    "@midwayjs/mock": "^3.5.3"
+    "@midwayjs/mock": "^3.5.3",
+    "casbin": "5.19.1",
+    "sqlite3": "5.1.2",
+    "typeorm": "0.3.10"
   },
   "dependencies": {
-    "casbin": "5.19.1"
+    "@midwayjs/casbin": "^3.5.3",
+    "@midwayjs/typeorm": "^3.5.3"
   },
   "keywords": [
     "midway",
-    "component",
-    "casbin"
+    "casbin",
+    "typeorm",
+    "adapter",
+    "typeorm-adapter"
   ],
   "author": "czy88840616 <czy88840616@gmail.com>",
   "license": "MIT",
