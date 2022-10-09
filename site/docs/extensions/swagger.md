@@ -172,7 +172,7 @@ export class CreateCatDto {
 **字符串**
 
 ```typescript
-@ApiProperty({ 
+@ApiProperty({
   type: 'string',
   // ...
 })
@@ -182,8 +182,8 @@ name: string;
 **布尔类型**
 
 ```typescript
-@ApiProperty({ 
-  type: 'boolean', 
+@ApiProperty({
+  type: 'boolean',
   example: 'true',
   // ...
 })
@@ -193,9 +193,9 @@ isPure: boolean;
 **数字类型**
 
 ```typescript
-@ApiProperty({ 
+@ApiProperty({
   type: 'number',
-  example: '1', 
+  example: '1',
   description: 'The name of the Catage'
 })
 age: number;
@@ -282,10 +282,10 @@ export class Cat {
 }
 
 export class CreateCatDto {
-  
+
   // ...
 
-  @ApiProperty({ 
+  @ApiProperty({
     type: Cat,	// 这里无需指定 example
   })
   related: Cat;
@@ -317,7 +317,7 @@ class Cat {
 export class CreateCatDto {
   // ...
 
-  @ApiProperty({ 
+  @ApiProperty({
     type: 'array',
     items: {
       $ref: getSchemaPath(Cat),
@@ -604,7 +604,7 @@ export function SuccessWrapper<T extends Type>(ResourceCls: T) {
     @ApiProperty({ description: '消息' })
     message: string;
 
-    @ApiProperty({ 
+    @ApiProperty({
       type: ResourceCls,
     })
     data: T;
@@ -964,3 +964,8 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
 | ```@ApiParam```             | Method            |
 | ```@ApiExtraModel```        | Controller/Model  |
 
+## 常见问题
+
+### `@Get` 等路由注解中的 `summary` 或者 `description` 不生效
+
+当存在 `@ApiOperation` 时候，将优先使用 `@ApiOperation` 中的 `summary` 或者 `description`，所以在 `@ApiOperation` 与 `@Get` 等路由注解中，只需要写一个即可。
