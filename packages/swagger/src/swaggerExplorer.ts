@@ -289,7 +289,10 @@ export class SwaggerExplorer {
     const parameters = [];
     opts[webRouter.requestMethod] = {
       summary: getNotEmptyValue(operMeta?.metadata?.summary, webRouter.summary),
-      description: getNotEmptyValue(operMeta?.metadata?.description, webRouter.description),
+      description: getNotEmptyValue(
+        operMeta?.metadata?.description,
+        webRouter.description
+      ),
       // operationId: `${webRouter.requestMethod}_${(operMeta?.metadata?.operationId || webRouter.method)}`,
       tags: operMeta?.metadata?.tags || [],
     };
