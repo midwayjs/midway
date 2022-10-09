@@ -288,8 +288,8 @@ export class SwaggerExplorer {
     }
     const parameters = [];
     opts[webRouter.requestMethod] = {
-      summary: operMeta?.metadata?.summary || webRouter.summary,
-      description: operMeta?.metadata?.description || webRouter.description,
+      summary: getNotEmptyValue(operMeta?.metadata?.summary, webRouter.summary),
+      description: getNotEmptyValue(operMeta?.metadata?.description, webRouter.description),
       // operationId: `${webRouter.requestMethod}_${(operMeta?.metadata?.operationId || webRouter.method)}`,
       tags: operMeta?.metadata?.tags || [],
     };
@@ -861,5 +861,13 @@ function convertSchemaType(value) {
       return 'string';
     default:
       return value;
+  }
+}
+
+function getNotEmptyValue(...args) {
+  for (const arg of args) {
+    if (arg) {
+      return arg;
+    }
   }
 }
