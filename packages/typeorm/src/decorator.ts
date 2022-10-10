@@ -12,7 +12,7 @@ export const ORM_MODEL_KEY = 'typeorm:orm_model_key';
 
 export function InjectEntityModel(
   modelKey: EntityTarget<unknown>,
-  connectionName?: string
+  connectionName: string = 'default'
 ) {
   return createCustomPropertyDecorator(ORM_MODEL_KEY, {
     modelKey,
