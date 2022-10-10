@@ -1,11 +1,25 @@
 import { transformRequestObjectByType } from './index';
-import { ALL, RouteParamTypes } from '../decorator';
+import { ALL, PipeTransform, RouteParamTypes } from '../decorator';
 
-export const extractKoaLikeValue = (key, data, paramType?) => {
+export async function callPipes(pipes: PipeTransform[], value: any) {
+  if (pipes && pipes.length) {
+    for (const pipe of pipes) {
+      value = await pipe.transform(value);
+    }
+  }
+  return value;
+}
+
+export const extractKoaLikeValue = (
+  key,
+  data,
+  paramType?,
+  pipes?: PipeTransform[]
+) => {
   if (ALL === data) {
     data = undefined;
   }
-  return function (ctx, next) {
+  return async function (ctx, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -15,14 +29,20 @@ export const extractKoaLikeValue = (key, data, paramType?) => {
           paramType
         );
       case RouteParamTypes.PARAM:
-        return transformRequestObjectByType(
-          data ? ctx.params[data] : ctx.params,
-          paramType
+        return await callPipes(
+          pipes,
+          transformRequestObjectByType(
+            data ? ctx.params[data] : ctx.params,
+            paramType
+          )
         );
       case RouteParamTypes.QUERY:
-        return transformRequestObjectByType(
-          data ? ctx.query[data] : ctx.query,
-          paramType
+        return await callPipes(
+          pipes,
+          transformRequestObjectByType(
+            data ? ctx.query[data] : ctx.query,
+            paramType
+          )
         );
       case RouteParamTypes.HEADERS:
         return transformRequestObjectByType(

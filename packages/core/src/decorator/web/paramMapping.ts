@@ -1,4 +1,8 @@
-import { createCustomParamDecorator, WEB_ROUTER_PARAM_KEY } from '../';
+import {
+  createCustomParamDecorator,
+  PipeTransform,
+  WEB_ROUTER_PARAM_KEY,
+} from '../';
 
 export enum RouteParamTypes {
   QUERY,
@@ -22,10 +26,11 @@ export interface RouterParamValue {
 }
 
 const createParamMapping = function (type: RouteParamTypes) {
-  return (propertyData?: any) => {
+  return (propertyData?: any, pipes?: PipeTransform[]) => {
     return createCustomParamDecorator(WEB_ROUTER_PARAM_KEY, {
       type,
       propertyData,
+      pipes,
     });
   };
 };
@@ -34,10 +39,10 @@ export const Session = (property?: string) =>
   createParamMapping(RouteParamTypes.SESSION)(property);
 export const Body = (property?: string) =>
   createParamMapping(RouteParamTypes.BODY)(property);
-export const Query = (property?: string) =>
-  createParamMapping(RouteParamTypes.QUERY)(property);
-export const Param = (property?: string) =>
-  createParamMapping(RouteParamTypes.PARAM)(property);
+export const Query = (property?: string, pipes?: PipeTransform[]) =>
+  createParamMapping(RouteParamTypes.QUERY)(property, pipes);
+export const Param = (property?: string, pipes?: PipeTransform[]) =>
+  createParamMapping(RouteParamTypes.PARAM)(property, pipes);
 export const Headers = (property?: string) =>
   createParamMapping(RouteParamTypes.HEADERS)(property);
 export const File = (property?: any) =>
