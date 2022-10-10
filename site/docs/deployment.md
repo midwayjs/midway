@@ -459,9 +459,13 @@ $ npm i @vercel/ncc --save-dev
 
 
 
-### 代码部分
+### 代码调整
 
-必须将项目引入的配置调整为 "对象模式"。
+有一些可能的调整，列举如下：
+
+#### 1、配置格式调整
+
+必须将项目引入的配置调整为 [对象模式](./env_config)。
 
 Midway 的官方组件都已经调整为该模式，如果有自己编写的组件，也请调整为该模式才能构建为单文件。
 
@@ -490,6 +494,44 @@ import * as LocalConfig from './config/config.local';
 export class ContainerLifeCycle {
 }
 ```
+
+
+
+#### 2、默认导出的情况
+
+由于 ncc 构建器的默认行为，请 **不要** 在依赖注入相关的代码中使用默认导出。
+
+比如：
+
+```typescript
+export default class UserSerivce {
+  // ...
+}
+```
+
+编译后会导致 `UserSerivce` 无法注入。
+
+
+
+#### 3、数据源 entities 相关的
+
+数据源依赖的扫描路径也是不支持的。
+
+```typescript
+export default {
+  typeorm: {
+    dataSource: {
+      default: {
+        // ...
+        entities: [
+          '/abc',			// 不支持
+        ]		
+      },
+  }
+}
+```
+
+如果 entities 特别多，可以编写一个 js 文件，扫描出 entities 后，生成一个文件到目录下，在每次构建时执行。
 
 
 
