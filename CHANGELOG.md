@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/midwayjs/midway/compare/v3.5.3...v3.6.0) (2022-10-10)
+
+
+### Bug Fixes
+
+* add default generic type to MikroConfigOptions ([#2342](https://github.com/midwayjs/midway/issues/2342)) ([d5fbab6](https://github.com/midwayjs/midway/commit/d5fbab666dabbae6fad0e0946b733ea73ac1a9d5))
+* **deps:** update dependency amqp-connection-manager to v4.1.7 ([#2354](https://github.com/midwayjs/midway/issues/2354)) ([79d4d5b](https://github.com/midwayjs/midway/commit/79d4d5bede926be2c00e21250f8edffca747d932))
+* **deps:** update dependency body-parser to v1.20.1 ([#2355](https://github.com/midwayjs/midway/issues/2355)) ([4cf6bda](https://github.com/midwayjs/midway/commit/4cf6bdaa8b10b4ae40598305e1df9ad29dd701ed))
+* **deps:** update dependency sequelize to v6.24.0 ([#2356](https://github.com/midwayjs/midway/issues/2356)) ([ecc43d0](https://github.com/midwayjs/midway/commit/ecc43d0b96ad7fcc6766831b6db0cb8ca204580c))
+
+
+### Features
+
+* add casbin module ([#2358](https://github.com/midwayjs/midway/issues/2358)) ([a7d2786](https://github.com/midwayjs/midway/commit/a7d27863b756dcf81abc4d7dedaf35c517c2c1e3))
+* add filter params for add controller ([#2359](https://github.com/midwayjs/midway/issues/2359)) ([1805011](https://github.com/midwayjs/midway/commit/1805011d3b2d86f04d6a887f4a86afb093a2a75f))
+* add guard ([#2345](https://github.com/midwayjs/midway/issues/2345)) ([1b952a1](https://github.com/midwayjs/midway/commit/1b952a1b09adbb88ff3cff9a2974eb1e37ce53a5))
+* add new bull component ([#2275](https://github.com/midwayjs/midway/issues/2275)) ([0a37b49](https://github.com/midwayjs/midway/commit/0a37b491720c5d5f0b98e9e42835ba263dd8b975))
+
+
+
+
+
 ## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
 
 

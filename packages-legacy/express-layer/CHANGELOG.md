@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/midwayjs/midway/compare/v3.5.3...v3.6.0) (2022-10-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency body-parser to v1.20.1 ([#2355](https://github.com/midwayjs/midway/issues/2355)) ([4cf6bda](https://github.com/midwayjs/midway/commit/4cf6bdaa8b10b4ae40598305e1df9ad29dd701ed))
+
+
+### Features
+
+* add guard ([#2345](https://github.com/midwayjs/midway/issues/2345)) ([1b952a1](https://github.com/midwayjs/midway/commit/1b952a1b09adbb88ff3cff9a2974eb1e37ce53a5))
+
+
+
+
+
 ## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
 
 **Note:** Version bump only for package @midwayjs/express-layer
