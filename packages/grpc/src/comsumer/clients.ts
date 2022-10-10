@@ -36,36 +36,41 @@ export class GRPCClients extends Map {
       return;
     }
     for (const cfg of this.grpcConfig['services']) {
-      const packageDefinition = await loadProto({
-        loaderOptions: cfg.loaderOptions,
-        protoPath: cfg.protoPath,
-      });
-      const allProto = loadPackageDefinition(packageDefinition);
-      const packageProto: any = finePackageProto(allProto, cfg.package);
-      for (const definition in packageDefinition) {
-        if (!packageDefinition[definition]['format']) {
-          const serviceName = definition.replace(`${cfg.package}.`, '');
-          const connectionService = new packageProto[serviceName](
-            cfg.url,
-            credentials.createInsecure(),
-            cfg.clientOptions
-          );
-          for (const methodName of Object.keys(packageDefinition[definition])) {
-            const originMethod = connectionService[methodName];
-            connectionService[methodName] = (
-              clientOptions: IClientOptions = {}
-            ) => {
-              return this.getClientRequestImpl(
-                connectionService,
-                originMethod,
-                clientOptions
-              );
-            };
-            connectionService[Utils.camelCase(methodName)] =
-              connectionService[methodName];
-          }
-          this.set(definition, connectionService);
+      await this.createClient(cfg);
+    }
+  }
+
+  async createClient<T>(options: IGRPCClientServiceOptions): Promise<T> {
+    const packageDefinition = await loadProto({
+      loaderOptions: options.loaderOptions,
+      protoPath: options.protoPath,
+    });
+    const allProto = loadPackageDefinition(packageDefinition);
+    const packageProto: any = finePackageProto(allProto, options.package);
+    for (const definition in packageDefinition) {
+      if (!packageDefinition[definition]['format']) {
+        const serviceName = definition.replace(`${options.package}.`, '');
+        const connectionService = new packageProto[serviceName](
+          options.url,
+          credentials.createInsecure(),
+          options.clientOptions
+        );
+        for (const methodName of Object.keys(packageDefinition[definition])) {
+          const originMethod = connectionService[methodName];
+          connectionService[methodName] = (
+            clientOptions: IClientOptions = {}
+          ) => {
+            return this.getClientRequestImpl(
+              connectionService,
+              originMethod,
+              clientOptions
+            );
+          };
+          connectionService[Utils.camelCase(methodName)] =
+            connectionService[methodName];
         }
+        this.set(definition, connectionService);
+        return connectionService;
       }
     }
   }
