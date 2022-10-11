@@ -149,7 +149,7 @@ class Person extends Model {
 class Person extends Model {}
 ```
 
-这些实体列也可以使用 [typeorm_generator](/docs/tool/sequelize_generator) 工具生成。
+这些实体列也可以使用 [sequelize_generator](/docs/tool/sequelize_generator) 工具生成。
 
 ### 2、主键
 
