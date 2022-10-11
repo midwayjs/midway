@@ -26,7 +26,14 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   @Logger()
   logger: IMidwayLogger;
 
+  private uploadWhiteListMap = {};
+
   resolve(app) {
+    if (Array.isArray(this.upload.whitelist)) {
+      for (const whiteExt of this.upload.whitelist) {
+        this.uploadWhiteListMap[whiteExt] = true;
+      }
+    }
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
       return async (req: any, res: any, next: any) => {
         return this.execUpload(req, req, res, next, true);
@@ -73,9 +80,11 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           req,
           boundary
         );
-        if (!this.checkExt(fileInfo.filename)) {
+        const ext = this.checkExt(fileInfo.filename);
+        if (!ext) {
           throw new MultipartInvalidFilenameError(fileInfo.filename);
         } else {
+          fileInfo._ext = ext as string;
           ctx.fields = fields;
           ctx.files = [fileInfo];
           return next();
@@ -103,9 +112,11 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     const requireId = `upload_${Date.now()}.${Math.random()}`;
     const files = data.files;
     const notCheckFile = files.find(fileInfo => {
-      if (!this.checkExt(fileInfo.filename)) {
+      const ext = this.checkExt(fileInfo.filename);
+      if (!ext) {
         return fileInfo;
       }
+      fileInfo._ext = ext;
     });
 
     if (notCheckFile) {
@@ -115,7 +126,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       files.map(async (file, index) => {
         const { data, filename } = file;
         if (mode === 'file') {
-          const ext = extname(filename);
+          const ext = file._ext || extname(filename);
           const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
           await writeFile(tmpFileName, data, 'binary');
           file.data = tmpFileName;
@@ -175,13 +186,16 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     return false;
   }
 
-  checkExt(filename): boolean {
-    const ext = extname(filename).toLowerCase();
-    const { whitelist } = this.upload;
-    if (!Array.isArray(whitelist)) {
-      return true;
+  checkExt(filename): string | boolean {
+    const lowerCaseFileNameList = filename.toLowerCase().split('.');
+    while (lowerCaseFileNameList.length) {
+      lowerCaseFileNameList.shift();
+      const curExt = `.${lowerCaseFileNameList.join('.')}`;
+      if (this.uploadWhiteListMap[curExt]) {
+        return curExt;
+      }
     }
-    return whitelist.includes(ext);
+    return false;
   }
 
   static getName() {
