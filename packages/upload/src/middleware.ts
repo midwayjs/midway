@@ -84,7 +84,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         if (!ext) {
           throw new MultipartInvalidFilenameError(fileInfo.filename);
         } else {
-          fileInfo._ext = ext as string;
+          fileInfo['_ext'] = ext as string;
           ctx.fields = fields;
           ctx.files = [fileInfo];
           return next();
@@ -116,7 +116,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       if (!ext) {
         return fileInfo;
       }
-      fileInfo._ext = ext;
+      fileInfo['_ext'] = ext;
     });
 
     if (notCheckFile) {
@@ -126,7 +126,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       files.map(async (file, index) => {
         const { data, filename } = file;
         if (mode === 'file') {
-          const ext = file._ext || extname(filename);
+          const ext = file['_ext'] || extname(filename);
           const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
           await writeFile(tmpFileName, data, 'binary');
           file.data = tmpFileName;

@@ -16,5 +16,4 @@ export interface UploadFileInfo<T> {
   fieldName: string;
   mimeType: string;
   data: T extends string ? string : Readable ;
-  _ext?: string;
 }
