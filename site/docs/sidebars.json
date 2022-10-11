@@ -5,11 +5,7 @@
       "label": "新手指南",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "intro",
-        "quick_guide",
-        "upgrade_v3"
-      ]
+      "items": ["intro", "quick_guide", "upgrade_v3"]
     },
     {
       "type": "category",
@@ -51,26 +47,12 @@
     {
       "type": "category",
       "label": "设计模式",
-      "items": [
-        "aspect",
-        "auto_run",
-        "pipeline",
-        "service_factory",
-        "data_listener",
-        "data_source",
-        "retry"
-      ]
+      "items": ["aspect", "auto_run", "pipeline", "service_factory", "data_listener", "data_source", "retry"]
     },
     {
       "type": "category",
       "label": "自定义",
-      "items": [
-        "context_definition",
-        "component_development",
-        "custom_decorator",
-        "custom_error",
-        "change_start_dir"
-      ]
+      "items": ["context_definition", "component_development", "custom_decorator", "custom_error", "change_start_dir"]
     }
   ],
   "component": [
@@ -129,43 +111,28 @@
       "label": "微服务",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "extensions/grpc",
-        "extensions/consul"
-      ]
+      "items": ["extensions/grpc", "extensions/consul"]
     },
     {
       "type": "category",
       "label": "WebSocket",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "extensions/socketio",
-        "extensions/ws"
-      ]
+      "items": ["extensions/socketio", "extensions/ws"]
     },
     {
       "type": "category",
       "label": "消息",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "extensions/rabbitmq",
-        "extensions/kafka"
-      ]
+      "items": ["extensions/rabbitmq", "extensions/kafka"]
     },
     {
       "type": "category",
       "label": "监控和启动",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "extensions/otel",
-        "extensions/pm2",
-        "extensions/cfork",
-        "extensions/alinode",
-        "extensions/prometheus"
-      ]
+      "items": ["extensions/otel", "extensions/pm2", "extensions/cfork", "extensions/alinode", "extensions/prometheus"]
     }
   ],
   "serverless": [
@@ -197,10 +164,7 @@
       "label": "平台触发器",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "serverless/aliyun_faas",
-        "serverless/tencent_faas"
-      ]
+      "items": ["serverless/aliyun_faas", "serverless/tencent_faas"]
     },
     {
       "type": "category",
@@ -253,19 +217,14 @@
       "label": "一体化",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "hooks/fullstack",
-        "hooks/client"
-      ]
+      "items": ["hooks/fullstack", "hooks/client"]
     },
     {
       "type": "category",
       "label": "进阶",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "hooks/deploy"
-      ]
+      "items": ["hooks/deploy"]
     }
   ],
   "other": [
@@ -279,6 +238,7 @@
         "tool/mwts",
         "tool/luckyeye",
         "tool/typeorm_generator",
+        "tool/sequelize_generator",
         "tool/egg-ts-helper"
       ]
     },
@@ -287,9 +247,7 @@
       "label": "运维",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "ops/ecs_start_err"
-      ]
+      "items": ["ops/ecs_start_err"]
     },
     {
       "type": "category",
@@ -312,11 +270,7 @@
       "label": "其他",
       "collapsed": false,
       "collapsible": false,
-      "items": [
-        "release_schedule",
-        "contributing",
-        "awesome_midway"
-      ]
+      "items": ["release_schedule", "contributing", "awesome_midway"]
     }
   ]
 }
