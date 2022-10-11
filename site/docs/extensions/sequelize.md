@@ -149,6 +149,8 @@ class Person extends Model {
 class Person extends Model {}
 ```
 
+这些实体列也可以使用 [typeorm_generator](/docs/tool/sequelize_generator) 工具生成。
+
 ### 2、主键
 
 主键 (id) 将从基类 Model 继承。 一般来说主键是 Integer 类型并且是自增的。
