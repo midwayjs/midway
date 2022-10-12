@@ -499,4 +499,39 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
 }
 ```
 
-上面的仅是正确逻辑返回的代码，如需错误的返回包裹，可以使用 [过滤器](./error_filter)
+上面的仅是正确逻辑返回的代码，如需错误的返回包裹，可以使用 [过滤器](./error_filter)。
+
+
+
+### 关于中间件返回 null 的情况
+
+在 koa/egg 下，如果中间件中返回 null 值，会使得状态码变为 204，需要在中间件中显式额外赋值状态码。
+
+```typescript
+import { IMiddleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/decorator';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
+
+  resolve() {
+    return async (ctx: Context, next: NextFunction) => {
+      const result = await next();
+      if (result === null) {
+        ctx.status = 200;
+      }
+      return {
+        code: 0,
+        msg: 'OK',
+        data: result,
+      }
+    };
+  }
+
+  match(ctx) {
+    return ctx.path.indexOf('/api') !== -1;
+  }
+}
+```
+
