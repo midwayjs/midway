@@ -80,10 +80,6 @@ export const parseFromReadableStream = (
 
         // 正在传输中的话
         if (isTransformFileData) {
-          if (lastChunk.length) {
-            chunk = Buffer.concat([lastChunk, chunk]);
-            lastChunk = emptyBuf;
-          }
           const newPreChunk = Buffer.concat([preChunk, chunk]);
           const newBlockIndex = bufferIndexOf(newPreChunk, bufferSeparator);
           // 存在新的块则代表已经结束了
@@ -142,7 +138,7 @@ export const parseFromReadableStream = (
           break;
         }
 
-        callback(null, emptyBuf);
+        callback(null, lastChunk);
       },
     });
     readStream.pipe(fileInfo.data as any);
