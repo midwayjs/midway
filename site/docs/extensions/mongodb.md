@@ -245,7 +245,9 @@ export default {
           user: '***********',
           pass: '***********'
         },
-        // 关联实体
+        // 关联实体,
+        // 如果配置目录,直接输入目录名称,例如entity entities: [ '../entity' ]
+        // 实体和目录可以同时存在 ['../entity', User]
         entities: [ User ]
       }
     }
@@ -348,15 +350,16 @@ export default {
 ```
 
 
-定义实例时使用固定的连接，比如：在使用时，注入特定的连接
+定义实例时使用固定的连接，
+在扫描dataSource配置Model会自动关联mongoose连接(getModelForClass(Model, { existingConnection: conn }))
 ```typescript
 @Provide()
 export class TestService{
 
-  @InjectEntityModel(User, 'default')
+  @InjectEntityModel(User)
   userModel: ReturnModelType<typeof User>;
 
-  @InjectEntityModel(User2, 'db1')
+  @InjectEntityModel(User2)
   user2Model: ReturnModelType<typeof User2>;
 
   async getTest(){
@@ -391,7 +394,7 @@ import * as Typegoose from '@typegoose/typegoose';
 })
 export class MainConfiguration {
   async onReady() {
-    
+
     Typegoose.setGlobalOptions({
       schemaOptions: {
         // ...
@@ -486,7 +489,7 @@ export default {
           pass: '**********'
         }
       }
-    } 
+    }
   },
 }
 ```
@@ -541,7 +544,7 @@ export class TestService {
 
   @Inject()
   dataSourceManager: MongooseDataSourceManager;
-  
+
   @Init() {
     // get default connection
     this.conn = this.dataSourceManager.getDataSource('default');
