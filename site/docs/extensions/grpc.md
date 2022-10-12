@@ -307,12 +307,11 @@ export namespace helloworld {
 ### 编写服务提供方（Provider）
 
 
-在 `src/provider` 目录中，我们创建 `greeter.ts` ，内容如下。
+在 `src/provider` 目录中，我们创建 `greeter.ts` ，内容如下
 ```typescript
 import {
   MSProviderType,
   Provider,
-  Provide,
   GrpcMethod,
 } from '@midwayjs/decorator';
 import { helloworld } from '../domain/helloworld';

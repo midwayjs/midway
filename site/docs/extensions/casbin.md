@@ -321,8 +321,8 @@ export class UserGuard extends IGuard {
 
 此外，`CasbinEnforcerService` 还有更多的 API，比如重新加载策略。
 
-```
-this.casbinEnforcerService.loadPolicy();
+```typescript
+await this.casbinEnforcerService.loadPolicy();
 ```
 
 
@@ -352,7 +352,7 @@ $ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
 import { Configuration } from '@midwayjs/decorator';
 import * as redis from '@midwayjs/redis';
 import * as casbin from '@midwayjs/casbin';
-import { join } from 'path'
+import { join } from 'path';
 
 @Configuration({
   imports: [
