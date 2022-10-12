@@ -405,10 +405,10 @@ export default (appInfo: MidwayAppInfo) => {
 
 ### TypeORM Adapter
 
-需要依赖 `@midwayjs/casbin-redis-typeorm` 包和 typeorm 组件。
+需要依赖 `@midwayjs/casbin-typeorm-adapter` 包和 typeorm 组件。
 
 ```
-$ npm i @midwayjs/casbin-redis-typeorm @midwayjs/typeorm --save
+$ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
 ```
 
 启用 typeorm 组件。
