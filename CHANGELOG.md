@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.6.1](https://github.com/midwayjs/midway/compare/v3.6.0...v3.6.1) (2022-10-13)
+
+
+### Bug Fixes
+
+* [#2309](https://github.com/midwayjs/midway/issues/2309) ([#2371](https://github.com/midwayjs/midway/issues/2371)) ([919242d](https://github.com/midwayjs/midway/commit/919242d1d7228caa0d450960113396627ce359db))
+* fix axios typings and upgrade to v1 ([#2379](https://github.com/midwayjs/midway/issues/2379)) ([f0666f0](https://github.com/midwayjs/midway/commit/f0666f03c1404b7d11e8b3e8da7082a35432fe48))
+
+
+
+
+
 # [3.6.0](https://github.com/midwayjs/midway/compare/v3.5.3...v3.6.0) (2022-10-10)
 
 

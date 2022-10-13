@@ -3,10 +3,19 @@
   "@midwayjs/fc-starter": "3.6.0",
   "@midwayjs/serverless-http-parser": "3.6.0",
   "@midwayjs/async-hooks-context-manager": "3.6.0",
-  "@midwayjs/axios": "3.6.0",
+  "@midwayjs/axios": [
+    "3.6.0",
+    "3.6.1"
+  ],
   "@midwayjs/bootstrap": "3.6.0",
-  "@midwayjs/bull-board": "3.6.0",
-  "@midwayjs/bull": "3.6.0",
+  "@midwayjs/bull-board": [
+    "3.6.0",
+    "3.6.1"
+  ],
+  "@midwayjs/bull": [
+    "3.6.0",
+    "3.6.1"
+  ],
   "@midwayjs/cache": "3.6.0",
   "@midwayjs/casbin-redis-adapter": "3.6.0",
   "@midwayjs/casbin-typeorm-adapter": "3.6.0",
@@ -46,9 +55,15 @@
   "@midwayjs/task": "3.6.0",
   "@midwayjs/typegoose": "3.6.0",
   "@midwayjs/typeorm": "3.6.0",
-  "@midwayjs/upload": "3.6.0",
+  "@midwayjs/upload": [
+    "3.6.0",
+    "3.6.1"
+  ],
   "@midwayjs/validate": "3.6.0",
-  "@midwayjs/version": "3.6.0",
+  "@midwayjs/version": [
+    "3.6.0",
+    "3.6.1"
+  ],
   "@midwayjs/view-ejs": "3.6.0",
   "@midwayjs/view-nunjucks": "3.6.0",
   "@midwayjs/view": "3.6.0",
