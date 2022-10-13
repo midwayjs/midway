@@ -110,21 +110,14 @@ export class DocumentBuilder {
       }
     }
 
-    // If the tag already exists, it is decided whether to add it or not according to the order of whether the description content exists.
-    // 如果 tag 已经存在，根据是否存在描述内容的先后顺序决定是否添加。
+    // If the tag already exists, do not add it.
+    // 如果 tag 已经存在，不进行添加。
     for (const tagItem of addTags) {
       const existsTags = this.document.tags.filter(
         tag => tag.name === tagItem.name
       );
-      const hasDescTags = existsTags.filter(
-        tag => tag.description && tag.description.length > 0
-      );
-      const lastDescTag =
-        hasDescTags.length > 0
-          ? hasDescTags[hasDescTags.length - 1]
-          : undefined;
 
-      if (!lastDescTag) {
+      if (existsTags.length === 0) {
         this.document.tags.push(tagItem);
       }
     }
