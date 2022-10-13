@@ -93,21 +93,42 @@ export class DocumentBuilder {
     description = '',
     externalDocs?: ExternalDocumentationObject
   ): this {
-    if (Array.isArray(name)) {
+    const addTags = [];
+    if (!Array.isArray(name)) {
+      addTags.push({
+        name,
+        description,
+        externalDocs,
+      });
+    } else {
       const arr = name as Array<string>;
       for (const s of arr) {
-        this.document.tags.push({
+        addTags.push({
           name: s,
           description: '',
         });
       }
-      return this;
     }
-    this.document.tags.push({
-      name,
-      description,
-      externalDocs,
-    });
+
+    // If the tag already exists, it is decided whether to add it or not according to the order of whether the description content exists.
+    // 如果 tag 已经存在，根据是否存在描述内容的先后顺序决定是否添加。
+    for (const tagItem of addTags) {
+      const existsTags = this.document.tags.filter(
+        tag => tag.name === tagItem.name
+      );
+      const hasDescTags = existsTags.filter(
+        tag => tag.description && tag.description.length > 0
+      );
+      const lastDescTag =
+        hasDescTags.length > 0
+          ? hasDescTags[hasDescTags.length - 1]
+          : undefined;
+
+      if (!lastDescTag) {
+        this.document.tags.push(tagItem);
+      }
+    }
+
     return this;
   }
 
