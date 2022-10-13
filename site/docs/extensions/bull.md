@@ -16,7 +16,7 @@ Bull 使用 Redis 来保存作业数据，在使用 Redis 时，Queue 架构是�
 
 :::tip
 
-从 v3.6.0 开始，原有任务调度 `@midwayjs/task` 模块废弃，如果查询历史文档，请参考 [这里](../legacy/sequelize)。
+从 v3.6.0 开始，原有任务调度 `@midwayjs/task` 模块废弃，如果查询历史文档，请参考 [这里](../legacy/task)。
 
 :::
 
