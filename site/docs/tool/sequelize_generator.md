@@ -17,7 +17,7 @@ npm i sequelize-auto-midway
 ```shell
 # 推荐
 # 请替换配置信息
-npx sequelize-auto-midway -h localhost -d yourDBname -u root -x yourPassword -p 13306  --dialect mysql -o ./models -t task --noInitModels true --caseModel c --caseProp c --caseFile c --indentation 1 -a ./additional.json
+npx sequelize-auto-midway -h localhost -d yourDBname -u root -x yourPassword -p 13306  --dialect mysql -o ./models --noInitModels true --caseModel c --caseProp c --caseFile c --indentation 1 -a ./additional.json
 ```
 
 additional.json
