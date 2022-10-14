@@ -1,0 +1,10 @@
+{
+  "sidebar.docsSidebar.category.Getting Started": {
+    "message": "开始上手",
+    "description": "The label for category Getting Started in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Guides": {
+    "message": "指南",
+    "description": "The label for category Guides in sidebar docsSidebar"
+  }
+}
