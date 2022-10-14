@@ -38,7 +38,7 @@
     "@midwayjs/mock": "^3.6.0"
   },
   "dependencies": {
-    "kafkajs": "2.2.0"
+    "kafkajs": "2.2.1"
   },
   "engines": {
     "node": ">=12"
