@@ -1,6 +1,4 @@
----
-title: 修改源码目录
----
+# Change Source Dir
 
 In some special scenarios, you can modify the `src` directory where the source code is located.
 

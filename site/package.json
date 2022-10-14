@@ -45,7 +45,7 @@
     "windups": "^1.1.9"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.0.0-beta.18",
+    "@docusaurus/module-type-aliases": "2.1.0",
     "@tsconfig/docusaurus": "^1.0.4",
     "@types/file-loader": "^5.0.1",
     "@types/fs-extra": "^9.0.12",
