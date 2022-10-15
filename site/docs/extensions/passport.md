@@ -243,7 +243,7 @@ export default {
 // src/strategy/jwt.strategy.ts
 
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import { Strategy, ExtractJwt } from 'passport.jwt';
 import { Config } from '@midwayjs/decorator';
 
 @CustomStrategy()
@@ -288,14 +288,13 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
 ```
 
 ```typescript
-import { Post, Inject, Controller, } from '@midwayjs/decorator';
-import { Context } from '@midwayjs/koa'
+import { Post, Inject, Controller } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/koa';
 import { JwtService } from '@midwayjs/jwt';
-import { JwtPassportMiddleware } from './middleware/jwt.middleware';
+import { JwtPassportMiddleware } from '../middleware/jwt.middleware';
 
 @Controller('/')
 export class JwtController {
-
   @Inject()
   jwt: JwtService;
 
