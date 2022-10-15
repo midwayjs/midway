@@ -103,7 +103,7 @@ export function Model(): ClassDecorator {
 }
 ```
 
-上面只是定了了这个装饰器，我们还要实现相应的功能，midway v2 开始有生命周期的概念，可以在 `configuration` 中的生命周期中执行。
+上面只是定义了这个装饰器，我们还要实现相应的功能，midway v2 开始有生命周期的概念，可以在 `configuration` 中的生命周期中执行。
 
 ```typescript
 // src/configuration.ts
