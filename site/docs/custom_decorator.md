@@ -80,7 +80,7 @@ Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依
 import { Scope, ScopeEnum, saveClassMetadata, saveModule, Provide } from '@midwayjs/decorator';
 
 // 提供一个唯一 key
-const MODEL_KEY = 'decorator:model';
+export const MODEL_KEY = 'decorator:model';
 
 export function Model(): ClassDecorator {
   return (target: any) => {
