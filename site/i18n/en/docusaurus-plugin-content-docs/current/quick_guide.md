@@ -210,7 +210,7 @@ We need to use the `@midwayjs/view-nunjucks` component here.
 You can install it using the following command.
 
 ```bash
-$ npm I @midwayjs/view-nunjucks --save
+$ npm i @midwayjs/view-nunjucks --save
 ```
 
 After the installation is complete, we enable the components in the `src/configuration.ts` file.

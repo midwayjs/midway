@@ -20,12 +20,12 @@ const result = await makeHttpRequest('http://127.1:7001/');
 // Buffer.isBuffer(result.data) => true
 ```
 
-null
+Get request, with Query, the return type is JSON.
 
 ```typescript
 import { makeHttpRequest } from '@midwayjs/core';
 
-const result = await makeHttpRequest('http://127.1:7001 /', {
+const result = await makeHttpRequest('http://127.1:7001/', {
   data: {
     a: 1
     B: 2
@@ -34,7 +34,7 @@ const result = await makeHttpRequest('http://127.1:7001 /', {
 });
 
 // typeof result.data => 'object'
-// result.data.url => /?a=1& B =2
+// result.data.url => /?a=1&b=2
 ```
 
 You can specify the type
@@ -42,7 +42,7 @@ You can specify the type
 ```typescript
 import { makeHttpRequest } from '@midwayjs/core';
 
-null
+const result = await makeHttpRequest('http://127.1:7001/', {
   method: 'GET',
   dataType: 'json',
 });
@@ -51,10 +51,10 @@ null
 Returns the text format.
 
 ```typescript
-null
+import { makeHttpRequest } from '@midwayjs/core';
 
-const result = await makeHttpRequest('http://127.1:7001 /', {
-  null
+const result = await makeHttpRequest('http://127.1:7001/', {
+  method: 'GET',
   dataType: 'text',
 });
 ```
@@ -64,7 +64,7 @@ POST requests and returns JSON.
 ```typescript
 import { makeHttpRequest } from '@midwayjs/core';
 
-const result = await makeHttpRequest('http://127.1:7001 /', {
+const result = await makeHttpRequest('http://127.1:7001/', {
   method: 'POST',
   data: {
     a: 1
@@ -86,11 +86,11 @@ import { makeHttpRequest } from '@midwayjs/core';
 let err;
 // Timeout will report an error, pay attention to catch
 try {
-  const result = await makeHttpRequest('http://127.1:7001 /', {
+  const result = await makeHttpRequest('http://127.1:7001/', {
     method: 'GET',
     dataType: 'text',
     timeout: 500
-  null
+  });
 } catch (e) {
   err = e;
 }
@@ -121,7 +121,7 @@ Same as method form parameters.
 import { HttpClient } from '@midwayjs/core';
 
 const httpclient = new HttpClient();
-const result = await httpclient.request('http://127.1:7001 /', {
+const result = await httpclient.request('http://127.1:7001/', {
   method: 'POST',
   data: {
     a: 1
@@ -137,13 +137,13 @@ const result = await httpclient.request('http://127.1:7001 /', {
 In the example form, you can reuse the created object, and you can bring some fixed parameters, such as header, with each request.
 
 ```typescript
-null
+import { HttpClient } from '@midwayjs/core';
 
-null
+const httpclient = new HttpClient({
   headers: {
-    'x-timeout ': ' 5'
+    'x-timeout': '5'
   },
-  null
+  method: 'POST',
   timeout: 2000
 });
 
@@ -182,15 +182,15 @@ Related information:
 ### Installation dependency
 
 ```bash
-$ npm I @midwayjs/axios@3 --save
+$ npm i @midwayjs/axios@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
 
 ```json
-null
+{
   "dependencies ": {
-    "@midwayjs/axios": "^3.0.0 ",
+    "@midwayjs/axios": "^3.0.0",
     // ...
   },
 }
@@ -233,7 +233,7 @@ The API is the same as [axios](https://github.com/axios/axios).
 ```typescript
 axios.request(config)
 axios.get(url[, config])
-null
+axios.delete(url[, config])
 axios.head(url[, config])
 axios.options(url[, config])
 axios.post(url[, data[, config]])
@@ -282,7 +282,7 @@ export default {
         baseURL: 'https://api.example.com',
         // 'headers' are custom headers to be sent
         headers: {
-          null
+          'X-Requested-With': 'XMLHttpRequest'
         },
         timeout: 1000, // default is '0' (no timeout)
 
@@ -292,7 +292,7 @@ export default {
       },
     }
   }
-null
+}
 ```
 For more information, see [axios global config](https://github.com/axios/axios#config-defaults).
 

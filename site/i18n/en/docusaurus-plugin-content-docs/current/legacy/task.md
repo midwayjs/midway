@@ -39,7 +39,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/task": "^3.0.0 ",
+    "@midwayjs/task": "^3.0.0",
     // ...
   },
   "devDependencies ": {

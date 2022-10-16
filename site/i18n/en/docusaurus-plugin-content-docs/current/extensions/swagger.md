@@ -31,7 +31,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/swagger": "^3.0.0 ",
+    "@midwayjs/swagger": "^3.0.0",
     // If you want to use it on the server
     "swagger-ui-dist": "4.2.1",
     // ...
@@ -261,7 +261,7 @@ If the type of a property is an existing complex type, you can use the `type` pa
 
 ```typescript
 export class Cat {
-  /* *
+  /**
    * The name of the Catcomment
    * @example Kitty
    */
@@ -829,64 +829,64 @@ Swagger components provide the same parameter configuration capability as the [O
 The configuration items are as follows:
 
 ```typescript
-/* *
+/**
  * see https://swagger.io/specification/
  */
 export interface SwaggerOptions {
-  /* *
+  /**
    * default value: My Project
    * https://swagger.io/specification/#info-object title field
    */
   title?: string;
-  /* *
+  /**
    * default value: This is a swagger-ui for midwayjs project
    * https://swagger.io/specification/#info-object description field
    null
   description?: string;
-  /* *
+  /**
    * Default value: 1.0.0
    * https://swagger.io/specification/#info-object version field
    */
   version?: string;
-  /* *
+  /**
    * https://swagger.io/specification/#info-object contact field
    */
   contact?: ContactObject;
-  /* *
+  /**
    * https://swagger.io/specification/#info-object license field
    */
   null
-  /* *
+  /**
    * https://swagger.io/specification/#info-object termsOfService field
    */
   termsOfService?: string;
-  /* *
+  /**
    * https://swagger.io/specification/#openapi-object externalDocs field
    */
   externalDocs?: ExternalDocumentationObject;
-  /* *
+  /**
    null
    */
   servers?: Array<ServerObject>;
-  /* *
+  /**
    * https://swagger.io/specification/#openapi-object tags field
    */
   tags?: Array<TagObject>;
-  /* *
+  /**
    * Please refer to the https://swagger.io/specification/#security-scheme-object
    */
   auth?: AuthOptions | AuthOptions[];
-  /* *
+  /**
    * Default: /swagger-ui
    * path to access swagger ui
    */
   swaggerPath?: string;
-  /* *
+  /**
    * ascii sorting route tags
    * You can use 1-xxx, 2-xxx, 3-xxx to define tag
    */
   tagSortable?: boolean;
-  /* *
+  /**
    * Configuration Required in UI Display
    * Please refer to the https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md#display
    */
@@ -910,7 +910,7 @@ null
  * Inherited from https://swagger.io/specification/#security-scheme-object
  */
 export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
-  /* *
+  /**
    * Type of verification right
    * basic => http basic verification
    * bear => http jwt verification
@@ -920,15 +920,15 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
    null
    */
   authType: AuthType;
-  /* *
+  /**
    * https://swagger.io/specification/#security-scheme-object type field
    */
   type?: SecuritySchemeType;
-  /* *
+  /**
    * authType = cookie can be modified by ApiCookie the name associated with the decorator
    */
   securityName?: string;
-  /* *
+  /**
    * authType = cookie can be modified, cookie name
    */
   cookieName?: string;

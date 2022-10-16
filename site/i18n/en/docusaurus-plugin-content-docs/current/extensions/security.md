@@ -18,7 +18,7 @@ Related information:
 1. Installation Dependence
 
 ```bash
-$ npm I @midwayjs/security --save
+$ npm i @midwayjs/security --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -26,7 +26,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/security": "^3.0.0 ",
+    "@midwayjs/security": "^3.0.0",
     // ...
   },
   "devDependencies ": {

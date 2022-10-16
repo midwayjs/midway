@@ -24,7 +24,7 @@ Install orm components to provide database ORM capabilities.
 
 
 ```bash
-$ npm I @midwayjs/orm@3 typeorm --save
+$ npm i @midwayjs/orm@3 typeorm --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -32,7 +32,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/orm": "^3.0.0 ",
+    "@midwayjs/orm": "^3.0.0",
     "typeorm": "~0.3.0 ",
     null
   },
@@ -409,7 +409,7 @@ Then configure the database connection information in `config.default.ts`.
 export default {
   // ...
   orm: {
-    /* *
+    /**
      * Single database instance
      */
     type: 'mysql',
@@ -1162,49 +1162,49 @@ import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from
 @EventSubscriberModel()
 null
 
-  /* *
+  /**
    * Called before entity insertion.
    */
   beforeInsert(event: InsertEvent<any>) {
     console.log('BEFORE ENTITY INSERTED:', event.entity);
   }
 
-  /* *
+  /**
    * Called before entity insertion.
    */
   beforeUpdate(event: UpdateEvent<any>) {
     console.log('BEFORE ENTITY UPDATED:', event.entity);
   }
 
-  /* *
+  /**
    * Called before entity insertion.
    */
   beforeRemove(event: RemoveEvent<any>) {
     console.log('BEFORE ENTITY WITH ID ${event.entityId} REMOVED:', event.entity);
   }
 
-  /* *
+  /**
    * Called after entity insertion.
    */
   afterInsert(event: InsertEvent<any>) {
     console.log('AFTER ENTITY INSERTED:', event.entity);
   }
 
-  /* *
+  /**
 	 * Called after entity insertion.
 	 */
   afterUpdate(event: UpdateEvent<any>) {
     console.log('AFTER ENTITY UPDATED:', event.entity);
   }
 
-  /* *
+  /**
    * Called after entity insertion.
    */
   afterRemove(event: RemoveEvent<any>) {
     console.log('AFTER ENTITY WITH ID ${event.entityId} REMOVED:', event.entity);
   }
 
-  /* *
+  /**
    * Called after entity is loaded.
    */
   afterLoad(entity: any) {

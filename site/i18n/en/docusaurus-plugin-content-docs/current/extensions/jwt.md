@@ -19,8 +19,8 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/jwt@3 --save
-$ npm I @types/jsonwebtoken --save-dev
+$ npm i @midwayjs/jwt@3 --save
+$ npm i @types/jsonwebtoken --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.

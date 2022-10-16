@@ -144,7 +144,7 @@ $ midway-bin cov --ts
 When using mocha for single-test coverage, you need to install the following additional dependencies.
 
 ```bash
-$ npm I mocha @types/mocha nyc --save-dev
+$ npm i mocha @types/mocha nyc --save-dev
 ```
 
 

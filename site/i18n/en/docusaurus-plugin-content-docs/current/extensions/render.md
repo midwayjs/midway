@@ -22,7 +22,7 @@ Related information:
 
 Select the corresponding template installation dependency.
 ```bash
-$ npm I @midwayjs/view-ejs@3 --save
+$ npm i @midwayjs/view-ejs@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -30,7 +30,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/view-ejs": "^3.0.0 ",
+    "@midwayjs/view-ejs": "^3.0.0",
     // ...
   },
   "devDependencies ": {
@@ -230,7 +230,7 @@ Similar to ejs, just introduce the corresponding components.
 
 1. Select the corresponding template installation dependency.
 ```bash
-$ npm I @midwayjs/view-nunjucks@3 --save
+$ npm i @midwayjs/view-nunjucks@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.

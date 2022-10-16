@@ -289,7 +289,7 @@ Midway adds a decorator to add link nodes to the needs of the user side.
 Install dependencies first.
 
 ```bash
-$ npm I @midwayjs/otel@3 --save
+$ npm i @midwayjs/otel@3 --save
 ```
 
 Enable the `tel` component.

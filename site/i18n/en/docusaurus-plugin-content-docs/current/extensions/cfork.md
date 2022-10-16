@@ -59,4 +59,4 @@ cfork ({
   });
 ```
 
-null``
+Finally, start `node server.js`.

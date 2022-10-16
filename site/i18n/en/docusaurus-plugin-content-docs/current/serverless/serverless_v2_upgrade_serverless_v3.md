@@ -27,8 +27,8 @@ Dependent package upgrade, related package upgrade to 3.0.
   },
   "devDependencies ": {
     "@midwayjs/cli": "^1.2.45 ",
-    "@midwayjs/mock": "^3.0.0 ",
-    "@midwayjs/serverless-app": "^3.0.0 ",
+    "@midwayjs/mock": "^3.0.0",
+    "@midwayjs/serverless-app": "^3.0.0",
     // ...
   }
 }

@@ -23,7 +23,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/prometheus": "^3.0.0 ",
+    "@midwayjs/prometheus": "^3.0.0",
     // ...
   },
   "devDependencies ": {

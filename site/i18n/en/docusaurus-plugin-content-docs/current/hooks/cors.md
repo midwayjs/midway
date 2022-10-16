@@ -39,7 +39,7 @@ export default createConfiguration ({
 The following [Configuration Items](https://github.com/koajs/cors#corsoptions) are supported:
 
 ```javascript
-/* *
+/**
  * CORS middleware
  *
  * @param {Object} [options]

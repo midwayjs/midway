@@ -36,7 +36,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/process-agent": "^3.0.0 ",
+    "@midwayjs/process-agent": "^3.0.0",
     // ...
   },
   "devDependencies ": {

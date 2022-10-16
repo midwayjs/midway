@@ -30,9 +30,9 @@ Related information:
 
 Or install Socket.io dependencies in existing projects.
 ```bash
-$ npm I @midwayjs/socketio@3 --save
+$ npm i @midwayjs/socketio@3 --save
 null
-$ npm I @types/socket.io-client socket.io-client --save-dev
+$ npm i @types/socket.io-client socket.io-client --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -40,7 +40,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/socket.io": "^3.0.0 ",
+    "@midwayjs/socket.io": "^3.0.0",
     // Client optional
     "socket.io-client": "^4.4.1 ",
     // ...
@@ -835,7 +835,7 @@ Socket.io has updated the original adapter package name. The current package nam
 The installation is as follows:
 
 ```bash
-$ npm I @socket.io/redis-adapter --save
+$ npm i @socket.io/redis-adapter --save
 ```
 
 

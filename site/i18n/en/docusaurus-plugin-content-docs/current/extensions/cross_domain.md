@@ -16,7 +16,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/cross-domain --save
+$ npm i @midwayjs/cross-domain --save
 ```
 
 ## Introducing components
@@ -26,7 +26,7 @@ Introducing components in `src/configuration.ts`,
 ```typescript
 import * as crossDomain from '@midwayjs/cross-domain';
 @Configuration ({
-  null
+  imports: [
     // ...other components
     crossDomain
   ],
@@ -35,7 +35,7 @@ export class MainConfiguration {}
 ```
 
 
-## null
+## CORS configuration
 
 CORS configuration can be performed in `src/config/config.default`.
 
@@ -44,16 +44,16 @@ CORS configuration can be performed in `src/config/config.default`.
 export default {
   // ...
   cors: {
-    credentials: false
+    credentials: false,
   },
-null
+}
 ```
 
 The available configurations are as follows:
 
 ```typescript
 export const cors = {
-  null
+	// Allow cross-domain methods, [default value] is GET, HEAD, PUT, POST, DELETE, PATCH
   allowMethods: string |string[];
   // Set the value of Access-Control-Allow-Origin, and [Default] will get the origin on the request header
   // It can also be configured as a callback method. The input parameter is request and the origin value needs to be returned.
@@ -69,7 +69,7 @@ export const cors = {
   credentials: boolean|Function;
   // Whether to write cross-domain header information to the headers attribute of the error pair when an error is reported, [default value] false
   keepHeadersOnError: boolean;
-  null
+	// set Access-Control-Max-Age
   maxAge: number;
 }
 ```

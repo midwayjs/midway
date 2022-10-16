@@ -22,7 +22,7 @@ Install mikro components to provide access to mikro-orm.
 
 
 ```bash
-$ npm I @midwayjs/mikro@3 @mikro-orm/core --save
+$ npm i @midwayjs/mikro@3 @mikro-orm/core --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -30,7 +30,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/mikro": "^3.0.0 ",
+    "@midwayjs/mikro": "^3.0.0",
     "@mikro-orm/core": "^5.3.1 ",
     // ...
   },

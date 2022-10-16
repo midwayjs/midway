@@ -18,7 +18,7 @@ Related information:
 1. Installation Dependence
 
 ```bash
-$ npm I @midwayjs/upload@3 --save
+$ npm i @midwayjs/upload@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -26,7 +26,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/upload": "^3.0.0 ",
+    "@midwayjs/upload": "^3.0.0",
     // ...
   },
   "devDependencies ": {

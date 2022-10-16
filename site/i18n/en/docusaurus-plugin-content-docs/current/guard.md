@@ -197,16 +197,17 @@ Write a guard for role authentication.
 ```typescript
 import { IMiddleware, Guard, IGuard, getPropertyMetadata } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
+import { ROLE_META_KEY } from '../decorator/role.decorator.ts';
 
 @Guard()
 export class AuthGuard implements IGuard<Context> {
-  async canActivate(context: Context, suppilerClz, methodName: string): Promise<boolean> {
+  async canActivate(context: Context, supplierClz, methodName: string): Promise<boolean> {
     // Get role information from class metadata
-    const roleNameList = getPropertyMetadata<string[]>(suppilerClz, methodName);
-    if (roleNameList && roleNameList.length && ctx.user.role) {
-      // Assume that the middleware has already obtained the user role information and saved it to ctx.user.role
+    const roleNameList = getPropertyMetadata<string[]>(ROLE_META_KEY, supplierClz, methodName);
+    if (roleNameList && roleNameList.length && context.user.role) {
+      // Assume that the middleware has already obtained the user role information and saved it to context.user.role
 			// Directly determine whether to change the role
-      return roleNameList.includes(ctx.user.role);
+      return roleNameList.includes(context.user.role);
     }
 
     return false;

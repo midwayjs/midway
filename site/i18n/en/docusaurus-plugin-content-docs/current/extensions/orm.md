@@ -49,7 +49,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/typeorm": "^3.0.0 ",
+    "@midwayjs/typeorm": "^3.0.0",
     "typeorm": "~0.3.0 ",
     // ...
   },
@@ -413,7 +413,7 @@ null
   typeorm: {
     dataSource: {
       null
-        /* *
+        /**
          * Single database instance
          */
         type: 'mysql',
@@ -1141,21 +1141,21 @@ import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from
 @EventSubscriberModel()
 export class EverythingSubscriber implements EntitySubscriberInterface {
 
-  /* *
+  /**
    * Called before entity insertion.
    */
   beforeInsert(event: InsertEvent<any>) {
     console.log('BEFORE ENTITY INSERTED:', event.entity);
   }
 
-  /* *
+  /**
    * Called before entity insertion.
    */
   beforeUpdate(event: UpdateEvent<any>) {
     console.log('BEFORE ENTITY UPDATED:', event.entity);
   }
 
-  /* *
+  /**
    * Called before entity insertion.
    */
   beforeRemove(event: RemoveEvent<any>) {
@@ -1169,21 +1169,21 @@ export class EverythingSubscriber implements EntitySubscriberInterface {
     console.log('AFTER ENTITY INSERTED:', event.entity);
   }
 
-  /* *
+  /**
 	 * Called after entity insertion.
 	 */
   afterUpdate(event: UpdateEvent<any>) {
     console.log('AFTER ENTITY UPDATED:', event.entity);
   }
 
-  /* *
+  /**
    * Called after entity insertion.
    */
   afterRemove(event: RemoveEvent<any>) {
     console.log('AFTER ENTITY WITH ID ${event.entityId} REMOVED:', event.entity);
   }
 
-  /* *
+  /**
    * Called after entity is loaded.
    */
   afterLoad(entity: any) {

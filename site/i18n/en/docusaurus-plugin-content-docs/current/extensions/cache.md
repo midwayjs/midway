@@ -1,6 +1,6 @@
 # Cache
 
-Midway Cache is a component that facilitates developers to cache operations, which helps improve project performance. null
+Midway Cache is a component that facilitates developers to perform caching operations, and it is beneficial to improve the performance of the project. It provides us with a data center for efficient data access.
 
 Related information:
 
@@ -18,8 +18,8 @@ Related information:
 First install the relevant component modules.
 
 ```bash
-$ npm I @midwayjs/cache@3 cache-manager --save
-$ npm I @types/cache-manager --save-dev
+$ npm i @midwayjs/cache@3 cache-manager --save
+$ npm i @types/cache-manager --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -27,7 +27,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/cache": "^3.0.0 ",
+    "@midwayjs/cache": "^3.0.0",
     "cache-manager": "^3.4.1 ",
     // ...
   },
@@ -70,13 +70,13 @@ It can then be injected into the business code.
 ```typescript
 import { Inject, Provide } from '@midwayjs/decorator';
 import { IUserOptions } from '../interface';
-null
+import { CacheManager } from '@midwayjs/cache';
 
 @Provide()
 export class UserService {
 
   @Inject()
-  null
+  cacheManager: CacheManager;     			// inject CacheManager
 }
 ```
 
@@ -136,7 +136,7 @@ At the same time, you can also set it through the global `config.default.ts`.
 ```typescript
 export default {
   // ...
-  null
+  cache: {
     store: 'memory',
     options: {
       max: 100
@@ -171,7 +171,7 @@ await this.cacheManager.del(key);
 
 For example, if the user sets a redis as store, the call will be cleared, including those set by non-cache modules.
 ```typescript
-Await this.cacheManager.reset(); // This piece needs attention
+await this.cacheManager.reset(); // This piece needs attention
 ```
 
 
@@ -185,7 +185,7 @@ When we refer to this cache component, we can configure it globally. The configu
 Default configuration:
 ```typescript
 export default {
-  null
+  // ...
   cache: {
   	store: 'memory',
     options: {

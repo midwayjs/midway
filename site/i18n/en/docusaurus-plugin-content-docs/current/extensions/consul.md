@@ -12,7 +12,7 @@ Related information:
 | Can be used for Serverless | ❌ |
 | Can be used for integration | ✅ |
 | Contains independent main frame | ❌ |
-| Contains independent logs | null |
+| Contains independent logs | ❌ |
 
 
 
@@ -30,8 +30,8 @@ The effect is as follows:
 First install consul components and types:
 
 ```bash
-$ npm I @midwayjs/consul@3 --save
-$ npm I @types/consul --save-dev
+$ npm i @midwayjs/consul@3 --save
+$ npm i @types/consul --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -39,9 +39,9 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/consul": "^3.0.0 ",
+    "@midwayjs/consul": "^3.0.0",
     // ...
-  null
+  },
   "devDependencies ": {
     "@types/consul": "^0.40.0 ",
     // ...
@@ -79,7 +79,7 @@ export class MainConfiguration {}
 
 ## Configuration
 
-null``
+Configure the `config.default.ts` file:
 
 ```typescript
 // src/config/config.default
@@ -197,7 +197,7 @@ The content of the output service is:
 At this time, we only need to connect to service B through Address and ServicePort, such as making http requests.
 
 
-null``
+If you need to query for unhealthy ones, the second parameter of the `select` method is passed the value of false:
 ```typescript
 import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
 import { BalancerService } from '@midwayjs/consul'
@@ -231,10 +231,9 @@ export class HomeController {
 
 At the same time, consul can also be used as a service configuration place, as follows:
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/decorator';
 import * as Consul from 'consul';
 
-null
 @Controller('/')
 export class HomeController {
 
@@ -243,7 +242,7 @@ export class HomeController {
 
   @Get('/')
   async home() {
-    null
+    await this.consul.kv.set(`name`, `juhai`)
     // let res = await this.consul.kv.get('name');
     // console.log(res);
     return 'Hello Midwayjs!';
@@ -272,7 +271,7 @@ export class ConfigService {
   config: any;
 
   @Init()
-  null
+  async init() {
     setInterval(()=> {
       this.consul.kv.get('name').then(res=> {
         this.config = res;
@@ -308,7 +307,7 @@ A total of the following methods are provided:
 ## Other instructions
 
 
-The advantage of this is that A- >B,B can also be expanded, and lanes can be isolated through tags. null And can be ServiceWeights to do the corresponding weight control.
+The advantage of this is that A->B, B can also be extended, and can be isolated by tags. For example, do unit isolation, etc. And the corresponding weight control can be done through ServiceWeights.
 
 
 Consul can also function as the configuration center of Key/Value. We will consider supporting this later.
@@ -323,9 +322,9 @@ docker run -itd -P consul
 ```
 Then run the `docker ps`
 ```bash
-➜ my_consul_app docker ps
-CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
-1b2d5b8771cb consul "docker-entrypoint.s…" 4 seconds ago Up 2 seconds 0.0.0.0:32782->8300/tcp, 0.0.0.0:32776->8301/udp, 0.0.0.0:32781->8301/tcp, 0.0.0.0:32775->8302/udp, 0.0.0.0:32780->8302/tcp, 0.0.0.0:32779->8500/tcp, 0.0.0.0:32774->8600/udp, 0.0.0.0:32778->8600/tcp cocky_wing
+➜  my_consul_app docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                                                                                                                                                                                    NAMES
+1b2d5b8771cb        consul              "docker-entrypoint.s…"   4 seconds ago       Up 2 seconds        0.0.0.0:32782->8300/tcp, 0.0.0.0:32776->8301/udp, 0.0.0.0:32781->8301/tcp, 0.0.0.0:32775->8302/udp, 0.0.0.0:32780->8302/tcp, 0.0.0.0:32779->8500/tcp, 0.0.0.0:32774->8600/udp, 0.0.0.0:32778->8600/tcp   cocky_wing
 ```
 Then we open the port corresponding to the 8500: (for example, in the above figure, my corresponding port is 32779)
 
@@ -339,7 +338,7 @@ Then the port in our `config.default.ts` is the 32779 port.
 
 
 
-## null
+## Offline service
 If you want to manually offline services that are not needed on the consul interface, you can use the following methods:
 ```typescript
 import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';

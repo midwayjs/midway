@@ -295,7 +295,7 @@ The task processor execution is in the request scope, which has a special Contex
 export interface Context extends IMidwayContext {
   jobId: JobId;
   job: Job,
-  from: new (.. .args) => IProcessor;
+  from: new (...args) => IProcessor;
 }
 ```
 

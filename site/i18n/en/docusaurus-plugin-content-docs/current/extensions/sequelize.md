@@ -35,7 +35,7 @@ Upgrade method:
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/sequelize@3 sequelize sequelize-typescript --save
+$ npm i @midwayjs/sequelize@3 sequelize sequelize-typescript --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -43,7 +43,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/sequelize": "^3.0.0 ",
+    "@midwayjs/sequelize": "^3.0.0",
     "sequelize": "^6.21.3 ",
     "sequelize-typescript": "^ 2.1.0"
     // ...

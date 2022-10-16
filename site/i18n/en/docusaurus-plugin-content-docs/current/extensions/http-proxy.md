@@ -14,7 +14,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/http-proxy@3 --save
+$ npm i @midwayjs/http-proxy@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.

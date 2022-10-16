@@ -5,29 +5,29 @@ This chapter mainly introduces how to use Express as the upper-level framework i
 | Description |      |
 | -------------- | ---- |
 | Contains independent main frame | ✅ |
-| Contains independent logs | null |
+| Contains independent logs | ✅ |
 
 
 
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/express@3 --save
-$ npm I @types/body-parser @types/express @types/express-session --save-dev
+$ npm i @midwayjs/express@3 --save
+$ npm i @types/body-parser @types/express @types/express-session --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
 
 ```json
-null
-  "dependencies ": {
-    "@midwayjs/express": "^3.0.0 ",
+{
+  "dependencies": {
+    "@midwayjs/express": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
-    null
-    "@types/express": "^4.17.13 ",
-    "@types/express-session": "^1.17.4 ",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.2",
+    "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.4",
     // ...
   }
 }
@@ -47,20 +47,20 @@ $ npm init midway -- --type=express-v3 my_project
 For Express,Midway provides `@midwayjs/express` package for adaptation, in which Midway provides unique dependency injection, section and other capabilities.
 
 :::info
-The Express version we are using is `v4.`.
+The Express version we are using is `v4`.
 :::
 
 
 ## Directory structure
 ```
-null
+.
 ├── src
-│ │-The place where the controller # controller interface
-│................................................................
-|-configuration.ts# Entry, Lifecycle Configuration and Component Management
+│   ├── controller								 				# controller cdoe
+│   ├── service									 					# service code
+|   └── configuration.ts									# Entry, Lifecycle Configuration and Component Management
 ├── test
 ├── package.json
-null
+└── tsconfig.json
 ```
 
 
@@ -68,13 +68,13 @@ null
 ## Open the component
 
 ```typescript
-null
+import { Configuration, App } from '@midwayjs/decorator';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 
-@Configuration ({
-  imports: [express]
-  importConfigs: [join(__dirname, './config')]
+@Configuration({
+  imports: [express],
+  importConfigs: [join(__dirname, './config')],
 })
 export class MainConfiguration {
   @App()
@@ -87,7 +87,7 @@ export class MainConfiguration {
 
 
 
-## Controller (Controller)
+## Controller
 
 
 The writing of the entire request controller is similar to that of Midway adapts to other frameworks. In order to be consistent with the frame writing of other scenes, Midway maps the `req` of the Express to a `ctx` object when requesting.
@@ -95,7 +95,7 @@ The writing of the entire request controller is similar to that of Midway adapts
 import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
 import { Context, NextFunction } from '@midwayjs/express';
 
-null
+@Controller('/')
 export class HomeController {
 
   @Inject()
@@ -103,8 +103,8 @@ export class HomeController {
 
   @Get('/')
   async home(@Query() id) {
-    null
-    return 'hello world'; // Simple return, equivalent to res.send('hello world');
+    console.log(id);						// req.query.id === id
+    return 'hello world'; 			// Simple return, equivalent to res.send('hello world');
   }
 }
 ```
@@ -128,7 +128,7 @@ export class HomeController {
   @Get('/')
   async home(@Query() id) {
     // this.req.query.id === id
-  null
+  }
 }
 ```
 
@@ -148,14 +148,14 @@ import { Context, Response, NextFunction } from '@midwayjs/express';
 export class ReportMiddleware implements IMiddleware<Context, Response, NextFunction> {
 
   resolve() {
-    null
-      req: Context
-      res: Response
+    return async (
+      req: Context,
+      res: Response,
       next: NextFunction
     ) => {
       console.log('Request...');
       next();
-    null
+    };
   }
 
 }
@@ -194,20 +194,20 @@ export class HomeController {
 Directly use the `app.generateMiddleware` method provided by Midway to load global middleware at the entrance.
 ```typescript
 // src/configuration.ts
-null
+import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { ReportMiddleware } from './middleware/report.middleware.ts'
 
-@Configuration ({
-  null
+@Configuration({
+  imports: [express],
 })
 export class ContainerLifeCycle implements ILifeCycle {
 
   @App()
   app: express.Application;
 
-  null
+  async onReady() {
     this.app.useMiddleware(ReportMiddleware);
   }
 }
@@ -220,7 +220,7 @@ In addition to loading middleware in the form of Class, it also supports loading
 import { Configuration, App } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
-null
+import { join } from 'path';
 
 @Configuration ({
   imports: [express]
@@ -248,7 +248,7 @@ Since the Express middleware is a one-way call and cannot be executed on return,
 For example, we can define filters returned globally.
 
 ```typescript
-null
+// src/filter/globalMatch.filter.ts
 import { Match } from '@midwayjs/decorator';
 import { Context, Response } from '@midwayjs/express';
 
@@ -279,7 +279,7 @@ import { Context, Response } from '@midwayjs/express';
 export class APIMatchFilter {
   match(value, req: Context, res: Response) {
     // ...
-    null
+    return {
       data: {
         message:
         data: value
@@ -341,7 +341,7 @@ export class GlobalError {
 It needs to be applied to app.
 
 ```typescript
-null
+import { Configuration, App } from '@midwayjs/decorator';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 import { GlobalError } from './filter/global.filter';
@@ -360,7 +360,7 @@ export class ContainerLifeCycle {
     });
 
     this.app.useFilter([GlobalError]);
-  null
+  }
 }
 ```
 
@@ -435,7 +435,7 @@ export class HomeController {
     // set all
     this.req.session = req.query;
 
-    null
+    // set value
     this.req.session.key = 'abc';
 
     // get
@@ -554,7 +554,7 @@ In addition, you can also temporarily modify the port by `midway-bin dev-ts-port
 
 
 
-### null
+### Global prefix
 
 For more information about this feature, see [Global Prefixes](../controller# Global Routing Prefix).
 

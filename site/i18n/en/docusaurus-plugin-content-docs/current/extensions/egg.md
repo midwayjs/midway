@@ -12,16 +12,16 @@ Midway can use EggJS as the upper-level Web framework. EggJS provides many commo
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/web@3 egg --save
-$ npm I @midwayjs/egg-ts-helper --save-dev
+$ npm i @midwayjs/web@3 egg --save
+$ npm i @midwayjs/egg-ts-helper --save-dev
 ```
 
 For the EggJS scenario, these packages are listed below.
 
 ```json
   "dependencies ": {
-    "@midwayjs/web": "^3.0.0 ",
-    "@midwayjs/decorator": "^3.0.0 ",
+    "@midwayjs/web": "^3.0.0",
+    "@midwayjs/decorator": "^3.0.0",
     "egg": "^2.0.0 ",
     "egg-scripts": "^2.10.0"
   },
@@ -35,13 +35,13 @@ For the EggJS scenario, these packages are listed below.
 | @midwayjs/decorator | **Required** ,Midway series universal decorator package |
 | egg | **Required** ,EggJS dependent package, and other capabilities such as definition. |
 | egg-scripts | **Optional** ,EggJS startup script |
-| null | **Optional** ,EggJS defines the generation tool. |
+| @midwayjs/egg-ts-helper | **Optional** ,EggJS defines the generation tool. |
 
 Examples can also be created directly using scaffolding.
 
 ```bash
 # npm v6
-null
+$ npm init midway --type=egg-v3 my_project
 
 # npm v7
 $ npm init midway -- --type=egg-v3 my_project
@@ -52,7 +52,7 @@ $ npm init midway -- --type=egg-v3 my_project
 ## Open the component
 
 ```typescript
-null
+import { Configuration, App } from '@midwayjs/decorator';
 import * as web from '@midwayjs/web';
 import { join } from 'path';
 
@@ -83,7 +83,7 @@ export class MainConfiguration {
 
 
 The entire architecture is as follows:
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/501408/1614842824740-fc0c1432-3ace-4f77-b51f-15212984b168.png#height=828&id=Lv3hN&margin=%5Bobject%20Object%5D&name=image.png&originHeight=828&originWidth=1716&originalType=binary&ratio=1&size=117877&status=done&style=none&width=1716)
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1614842824740-fc0c1432-3ace-4f77-b51f-15212984b168.png)
 
 
 ## Directory structure
@@ -91,36 +91,36 @@ The entire architecture is as follows:
 
 In addition to the directory structure provided by Midway, EggJS also has some special directory structures (immutable). The entire structure is as follows.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-| zip-app.ts ## EggJS Extended Worker Lifecycle File (optional)
-| |── agent.ts ## EggJS Extended Agent Lifecycle File (Optional)
-| ├ ─app## EggJS fixed root directory (optional)
-| │ │ ── public ## The default directory for EggJS static hosting plug-ins (available)
-| │ | |──reset.css
-| │ │ ──view (optional) ## The default directory for EggJS template rendering (available)
-| │ | └── home.tpl
-| │-extend (optional) ## EggJS extended directory (available)
-| │ │ ── helper.ts (optional)
-| │ │ ── request.ts (optional)
-| │ │ ── response.ts (optional)
-| │ │ ── context.ts (optional)
-| │ │ ── application.ts (optional)
-| │-agent.ts (optional)
-| │
-| ├── config
-| | ├── plugin.ts
-| | ├── config.default.ts
-| │ ├── config.prod.ts
-| | ├ ── config.test.ts (optional)
-| | ├ ── config.local.ts (optional)
-| |-config.unittest.ts (optional)
-│ │-controller ## Midway controller directory (recommended)
-│ │-service ## Midway service directory (recommended)
-null
+|   ├── app.ts 										 				## EggJS Extended Worker Lifecycle File (optional)
+|   ├── agent.ts								   				## EggJS Extended Agent Lifecycle File (Optional)
+|   ├── app																## EggJS fixed root directory (optional)
+|   │   ├── public		 								  	## The default directory for EggJS static hosting plug-ins (available)
+|   │   |   └── reset.css
+|   │   ├── view (optional)								## ## The default directory for EggJS template rendering (available)
+|   │   |   └── home.tpl
+|   │   └── extend (optional)							## EggJS 扩展目录（可配）
+|   │       ├── helper.ts (optional)
+|   │       ├── request.ts (optional)
+|   │       ├── response.ts (optional)
+|   │       ├── context.ts (optional)
+|   │       ├── application.ts (optional)
+|   │       └── agent.ts (optional)
+|   │
+|   ├── config
+|   |   ├── plugin.ts
+|   |   ├── config.default.ts
+|   │   ├── config.prod.ts
+|   |   ├── config.test.ts (可选)
+|   |   ├── config.local.ts (可选)
+|   |   └── config.unittest.ts (可选)
+│   ├── controller								 				## Midway controller directory (recommended)
+│   ├── service								     				## Midway service directory (recommended)
+│   └── schedule
 │
--typings ## EggJS defines the generation directory.
+├── typings                        				## EggJS defines the generation directory.
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -139,7 +139,7 @@ Since EggJS is a convention-based framework, the directory structure of the enti
 
 
 
-## null
+## Configuration Definition
 
 
 Midway provides the standard TS configuration writing of EggJS in the scaffold. The MidwayConfig includes the definition and attribute tips of the configuration in egg. The structure is as follows.
@@ -149,13 +149,13 @@ import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
 
 export default (appInfo: MidwayAppInfo) => {
   return {
-    null
+    // use for cookie sign key, should change to your own and keep security
     keys: appInfo.name + '_xxxx',
     egg: {
       port: 7001
     },
     // security: {
-    // csrf: false
+    //   csrf: false
     // },
   } as MidwayConfig;
 };
@@ -184,14 +184,14 @@ Note that the `baseDir` here is different from the `appDir` and EggJS applicatio
 
 
 
-## null
+## Using Egg plugin
 
-Plug-ins are one of EggJS's features. `@midwayjs/web` also supports EggJS's plug-in system, but in the case of Midway components, Midway components are used as much as possible.
+Plugin are one of EggJS's features. `@midwayjs/web` also supports EggJS's plug-in system, but in the case of Midway components, Midway components are used as much as possible.
 
 
 Plug-ins are generally reused by npm modules.
 ```bash
-$ npm I egg-mysql --save
+$ npm i egg-mysql --save
 ```
 Then, you must declare that it is enabled in the `src/config/plugin.js` of the application or framework.
 
@@ -201,7 +201,7 @@ If there is an `export default`, please write it in it.
 import { EggPlugin } from 'egg';
 export default {
   static: false, // default is true
-  null
+  mysql: {
     enable: true
     package: 'egg-mysql'
   }
@@ -223,7 +223,7 @@ After opening the plug-in, we can use the functions provided by the plug-in in t
 
 
 ```typescript
-null
+app.mysql.query(sql, values);			// Methods provided by egg
 ```
 In Midway, you can use `@App` to obtain the `app` object, and in the request scope, you can use `@Inject() ctx` to obtain the `ctx` object, so you can obtain the plug-in object by injection.
 
@@ -243,12 +243,12 @@ export class HomeController {
 
   @Get('/')
   async home() {
-  	This. app.mysql.query (SQL, values); //Call methods on app (if any)
-    This. ctx.mysql.query (SQL, values); //Call the method mounted on ctx (if any)
+  	This. app.mysql.query (SQL, values); // Call methods on app (if any)
+    This. ctx.mysql.query (SQL, values); // Call the method mounted on ctx (if any)
   }
 }
 ```
-null````
+In addition, you can directly inject plugins mounted by `app` through the `@Plugin` decorator. By default, if no parameters are passed, the property name will be used as the key.
 
 
 ```typescript
@@ -280,14 +280,14 @@ The middleware sample is as follows:
 ```typescript
 import { Middleware } from '@midwayjs/decorator';
 import { IMiddleware } from '@midwayjs/core';
-null
+import { Context, NextFunction } from '@midwayjs/web';
 
 @Middleware()
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
-  null
+  resolve() {
     return async (ctx: Context, next: NextFunction) => {
-      null
+      const startTime = Date.now();
       await next();
       console.log(Date.now() - startTime);
     };
@@ -297,11 +297,11 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 ```
 
 :::caution
-Attention
+Notice
 
-null``
+1. If you want to continue to use the traditional functional writing method of EggJS, you must put the file under `src/app/middleware`
 
-2. egg's built-in middleware has been integrated
+2. The built-in middleware that comes with egg has been integrated
 
 :::
 
@@ -382,7 +382,7 @@ To be compatible with the previous [egg scheduled tasks](https://eggjs.org/zh-cn
 First install `midway-schedule` dependencies.
 
 ```bash
-$ npm I midway-schedule --save
+$ npm i midway-schedule --save
 ```
 
 Add to the plug-in.
@@ -418,7 +418,7 @@ Any exception thrown in all processing methods (Middleware, Controller, Service)
 
 | Format of request requirements | Environment | errorPageUrl whether to configure | Return content |
 | --- | --- | --- | --- |
-| HTML & TEXT | local & unittest | - | null |
+| HTML & TEXT | local & unittest | - | Onerror comes with an error page that displays detailed error information |
 | HTML & TEXT | Other | Yes | Redirect to errorPageUrl |
 | HTML & TEXT | Other | No | onerror comes with a simple error page without error information (not recommended) |
 | JSON & JSONP | local & unittest | - | JSON object or corresponding JSONP format response with detailed error information |
@@ -454,17 +454,17 @@ Although MidwayJS do not want to mount the attribute directly to koa's Context a
 
 The file location is as follows.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ├── app
-│ │ └── extend
-│ │ ├── application.ts
-│ │ ├── context.ts
-│ │ ├── request.ts
-│ │ └── response.ts
-│ ├── config
-│ └── interface.ts
+│   ├── app
+│   │   └── extend
+│   │       ├── application.ts
+│   │       ├── context.ts
+│   │       ├── request.ts
+│   │       └── response.ts
+│   ├── config
+│   └── interface.ts
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -506,12 +506,12 @@ declare module 'egg '{
 
 ## Use egg-scripts deployment
 
-null``
+Since EggJS provides the default multi-process deployment tool `egg-scripts`, Midway also continues to support this method. If the upper layer is EggJS, this deployment method is recommended.
 
 First, in the dependency, ensure that the `egg-scripts` package is installed.
 
 ```bash
-$ npm I egg-scripts --save
+$ npm i egg-scripts --save
 ```
 
 
@@ -521,17 +521,17 @@ Add `npm scripts` to `package.json`:
 After the above code is built, use our `start` and `stop` commands to start and stop.
 
 ```json
-"scripts ": {
-    "start": "egg-scripts start --daemon --title=********* --framework=@midwayjs/web ",
-    "stop": "egg-scripts stop --title= *********",
-null
+"scripts": {
+    "start": "egg-scripts start --daemon --title=********* --framework=@midwayjs/web",
+    "stop": "egg-scripts stop --title=*********",
+}
 ```
 
 
 
 :::info
 
-`* * * * * * * *` is your project name.
+`*********` is your project name.
 :::
 
 > Note: `egg-scripts` has limited support for Windows systems, see [#22](https://github.com/eggjs/egg-scripts/pull/22).
@@ -541,14 +541,14 @@ null
 **Start Parameters**
 
 ```bash
-$egg-scripts start --port=7001 --daemon --title=egg-server-showcase
+$ egg-scripts start --port=7001 --daemon --title=egg-server-showcase
 ```
 
 Copy
 
-null
+As shown in the above example, the following parameters are supported:
 
-- `null`
+- ``--port=7001` Port number, the environment variable process.env.PORT will be read by default, if not passed, the framework's built-in port 7001 will be used.`
 - Whether `-- daemon` is allowed in the background mode without nohup. If Docker is used, it is recommended to run directly at the foreground.
 - `-- env = prod` running environment of the framework. By default, the environment variable process.env.EGG_SERVER_ENV will be read. If it is not passed, the built-in environment prod of the framework will be used.
 - `-- workers = 2` Number of Worker threads in the framework. By default, the number of app workers equivalent to the number of CPU cores will be created, which can make full use of CPU resources.
@@ -582,7 +582,7 @@ The original egg uses `EGG_SERVER_ENV` as an environmental sign, please use `MID
 ```typescript
 // src/config/config.default
 export default {
-  null
+  // ...
   egg: {
     port: 7001
   },
@@ -596,10 +596,10 @@ All parameters of `@midwayjs/web` are as follows:
 | port | number | Required, Started Port |
 | key | string | Buffer |
 | cert | string | Buffer |
-| null | string | Buffer |
+| ca | string | Buffer |
 | hostname | string | The hostname of the listener, the default 127.1 |
 | http2 | boolean | Optional, supported by http2, default false |
-| null | simple\|extended | The default is extended |
+| queryParseMode | simple\|extended | The default is extended |
 
 The above attributes are valid for applications deployed locally and using `bootstrap.js`.
 
@@ -621,7 +621,7 @@ For example, we changed it to `6001`:
 // src/config/config.default
 export default {
   // ...
-  null
+  egg: {
     port: 6001
   },
 }
@@ -684,7 +684,7 @@ By default, the browser will initiate a request to `favicon.ico`.
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-null
+export default {
   // ...
   siteFile: {
     '/favicon.ico': readFileSync(join(__dirname, 'favicon.png'))
@@ -698,7 +698,7 @@ If the `@midwayjs/static-file` component is turned on, static file hosting of th
 
 ### Modify context log
 
-null
+The context log of the egg framework can be modified individually.
 
 ```typescript
 export default {
@@ -706,7 +706,7 @@ export default {
     contextLoggerFormat: info => {
       const ctx = info.ctx;
       return '${info.timestamp} ${info.LEVEL} ${info.pid} [${ctx.userId} - ${Date.now() - ctx.startTime}ms ${ctx.method}] ${info.message}';
-    null
+    }
     // ...
   },
 };
@@ -734,7 +734,7 @@ export default {
 
 
 
-## null
+## Common problem
 ### 1. generate ts definition
 
 
@@ -755,10 +755,10 @@ Before writing code for the first time, you need to execute this command once to
 
 EggJS-generated definitions are in the `typings` directory.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
--src ## midway project source code
--typings ## EggJS defines the generation directory.
+├── src                            ## midway project source code
+├── typings                        ## EggJS defines the generation directory.
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -784,7 +784,7 @@ Under EggJS, the life cycle in `configuration.ts` **will only be loaded and exec
 In the post request, especially the first time, the user will find a csrf error. the reason is that [egg-security](https://github.com/eggjs/egg-security) is built into the security plug-in in the framework by default, and csrf verification is enabled by default.
 
 
-null[****](https://eggjs.org/zh-cn/core/security.html#%E5% AE %89%E5%85%A8%E5%A8%81%E8%83%81-csrf-%E7%9A%84%E9%98%B2%E8%8C%83)
+We can turn it off in the config, but better to go to [**Learn about it**](https://eggjs.org/en-us/core/security.html#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81-csrf-%E7%9A%84%E9%98%B2%E8%8C%83) and then make a selection.
 
 ```typescript
 export const security = {
@@ -802,7 +802,7 @@ Some egg plug-ins do not provide ts definitions, resulting in undeclared methods
 You can use any to bypass.
 
 ```typescript
-await (this.app as any).mysql.query( SQL);
+await (this.app as any).mysql.query(sql);
 ```
 
 Or you can add extended definitions by yourself.

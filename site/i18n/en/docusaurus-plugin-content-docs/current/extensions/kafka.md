@@ -55,8 +55,8 @@ Understanding Broker
 
 Midway provides the ability to subscribe to Kafka and can be deployed and used independently. Install the `@midwayjs/kafka` module and its definition.
 ```bash
-$ npm I @midwayjs/kafka --save
-$ npm I kafkajs --save
+$ npm i @midwayjs/kafka --save
+$ npm i kafkajs --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -64,7 +64,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/kafka": "^3.0.0 ",
+    "@midwayjs/kafka": "^3.0.0",
     "kafka": "^2.0.0 ",
     // ...
   }
@@ -381,7 +381,7 @@ Note: Midway currently does not use components to support message sending. The e
 
 
 ```bash
-$ npm I kafkajs --save
+$ npm i kafkajs --save
 ```
 
 

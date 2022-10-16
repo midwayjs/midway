@@ -32,15 +32,15 @@ To use OSS components, you need to apply for an OSS bucket in advance. Bucket is
 `@midwayjs/oss` is the main function package, and `@types/ali-oss` is the official definition package of oss.
 
 ```bash
-$ npm I @midwayjs/oss@3 --save
-$ npm I @types/ali-oss -- save-dev // install to dev dependency
+$ npm i @midwayjs/oss@3 --save
+$ npm i @types/ali-oss -- save-dev // install to dev dependency
 ```
 Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
   "dependencies ": {
-    "@midwayjs/oss": "^3.0.0 ",
+    "@midwayjs/oss": "^3.0.0",
     // ...
   },
   "devDependencies ": {

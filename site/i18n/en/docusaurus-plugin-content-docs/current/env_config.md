@@ -520,7 +520,7 @@ You can use the [API](./built_in_service#midwayconfigservice) provided by midway
 
 The community has some libraries, such as `dotenv`, which can load `.env` files and inject them into the environment, so as to put some keys in the environment, which can be directly used in Midway.
 ```bash
-$ npm I dotenv --save
+$ npm i dotenv --save
 ```
 We can initialize in entry points like `bootstrap.js` or `configuration` .
 ```

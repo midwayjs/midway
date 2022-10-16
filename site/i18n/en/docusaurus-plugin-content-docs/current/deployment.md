@@ -446,13 +446,13 @@ Single file construction has some pre-dependencies.
 
 ```bash
 ## Used to generate entry
-$ npm I @midwayjs/bundle-helper --save-dev
+$ npm i @midwayjs/bundle-helper --save-dev
 
 ## Used to build a single file
 ## Pack to Global
-$ npm I @vercel/ncc -g
+$ npm i @vercel/ncc -g
 ## Or install into the project
-$ npm I @vercel/ncc --save-dev
+$ npm i @vercel/ncc --save-dev
 ```
 
 

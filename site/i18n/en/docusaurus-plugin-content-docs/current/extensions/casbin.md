@@ -48,7 +48,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/casbin@3 --save
+$ npm i @midwayjs/casbin@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -56,7 +56,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/casbin": "^3.0.0 ",
+    "@midwayjs/casbin": "^3.0.0",
     // ...
   },
 }
@@ -161,7 +161,7 @@ export default (appInfo: MidwayAppInfo) => {
 
 
 
-## null
+## Authentication by decorator
 
 There are many forms to use Casbin, here with a decorator as an example.
 
@@ -235,7 +235,7 @@ export class HomeController {
 Use the `UsePermission` decorator to define the permissions required for routing.
 
 ```typescript
-null
+import { Controller, Get, UseGuard } from '@midwayjs/decorator';
 import { AuthActionVerb, AuthGuard, AuthPossession, UsePermission } from '@midwayjs/casbin';
 import { Resource } from './resouce';
 
@@ -343,7 +343,7 @@ Currently implemented adapters are:
 You need to rely on the `@midwayjs/casbin-redis-adapter` package and Redis components.
 
 ```
-$ npm I @midwayjs/casbin-redis-adapter @midwayjs/redis --save
+$ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
 ```
 
 enable the redis component.
@@ -352,7 +352,7 @@ enable the redis component.
 import { Configuration } from '@midwayjs/decorator';
 import * as redis from '@midwayjs/redis';
 import * as casbin from '@midwayjs/casbin';
-null
+import { join } from 'path';
 
 @Configuration ({
   imports: [
@@ -361,7 +361,7 @@ null
     casbin
   ],
   importConfigs: [
-    null
+    join(__dirname, 'config')
   ]
 })
 export class MainConfiguration {
@@ -373,7 +373,7 @@ Configure the Redis connection and casbin adapter.
 ```typescript
 import { MidwayAppInfo } from '@midwayjs/core';
 import { join } from 'path';
-null
+import { createAdapter } from '@midwayjs/casbin-redis-adapter';
 
 export default (appInfo: MidwayAppInfo) => {
   return {
@@ -408,7 +408,7 @@ export default (appInfo: MidwayAppInfo) => {
 You need to rely on `@midwayjs/casbin-typeorm-adapter` packages and typeorm components.
 
 ```
-$ npm I @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
+$ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
 ```
 
 Enable typeorm components.
@@ -417,10 +417,10 @@ Enable typeorm components.
 import { Configuration } from '@midwayjs/decorator';
 import * as typeorm from '@midwayjs/typeorm';
 import * as casbin from '@midwayjs/casbin';
-import { join } from 'path'
+import { join } from 'path';
 
 @Configuration ({
-  null
+  imports: [
     // ...
     typeorm
     casbin
@@ -442,26 +442,26 @@ import { CasbinRule, createAdapter } from '@midwayjs/casbin-typeorm-adapter';
 
 export default (appInfo: MidwayAppInfo) => {
   return {
-    null
+    // ...
     typeorm: {
       dataSource: {
         // Defines a connection for casbin
         node-casbin-official ': {
-          null
+          type: 'sqlite',
           synchronize: true
           database: join(appInfo.appDir, 'casbin.sqlite')
           // Note that Entity is explicitly introduced here.
           entities: [CasbinRule]
         }
       }
-    null
+    },
     casbin: {
       policyAdapter: createAdapter ({
         // The connection name above is configured
         dataSourceName: 'node-casbin-official'
       }),
       // ...
-    null
+    }
   };
 }
 ```

@@ -17,7 +17,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/cos@3 --save
+$ npm i @midwayjs/cos@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -25,8 +25,8 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/cos": "^3.0.0 ",
-    null
+    "@midwayjs/cos": "^3.0.0",
+    // ...
   },
 }
 ```
@@ -128,7 +128,7 @@ export class UserService {
 
 You can use `COSServiceFactory` to get different instances.
 ```typescript
-null
+import { COSServiceFactory } from '@midwayjs/cos';
 import { join } from 'path';
 
 @Provide()
@@ -139,7 +139,7 @@ export class UserService {
 
   async save() {
     const cos1 = await this.cosServiceFactory.get('instance1');
-    null
+    const cos2 = await this.cosServiceFactory.get('instance3');
 
     //...
 

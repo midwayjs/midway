@@ -16,8 +16,8 @@ The `@midwayjs/koa` package uses `koa @2` and integrates `@koa/router` as the ba
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/koa@3 --save
-$ npm I @types/koa --save-dev
+$ npm i @midwayjs/koa@3 --save
+$ npm i @types/koa --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -25,7 +25,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/koa": "^3.0.0 ",
+    "@midwayjs/koa": "^3.0.0",
     // ...
   },
   "devDependencies ": {

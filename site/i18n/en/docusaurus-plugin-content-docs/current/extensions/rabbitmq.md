@@ -52,9 +52,9 @@ Simply understand, messages are published to Exchange (switches) through Publish
 
 Midway provides the ability to subscribe to rabbitMQ and can be deployed and used independently. Install the `@midwayjs/rabbitmq` module and its definition.
 ```bash
-$ npm I @midwayjs/rabbitmq@3 --save
-$ npm I amqplib --save
-$ npm I @types/amqplib --save-dev
+$ npm i @midwayjs/rabbitmq@3 --save
+$ npm i amqplib --save
+$ npm i @types/amqplib --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -62,7 +62,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/rabbitmq": "^3.0.0 ",
+    "@midwayjs/rabbitmq": "^3.0.0",
     "amqplib": "^0.10.1 ",
     // ...
   },
@@ -341,7 +341,7 @@ The second parameter is an object, including queue, switch and other parameters.
 ```typescript
 export interface RabbitMQListenerOptions {
   exchange?: string;
-  /* *
+  /**
    * queue options
    */
   exclusive?: boolean;
@@ -354,15 +354,15 @@ export interface RabbitMQListenerOptions {
   maxLength?: number;
   maxPriority?: number;
   pattern?: string;
-  /* *
+  /**
    null
    */
   prefetch?: number;
-  /* *
+  /**
    * router
    */
   routingKey?: string;
-  /* *
+  /**
    * exchange options
    */
   exchangeOptions ?: {
@@ -373,7 +373,7 @@ export interface RabbitMQListenerOptions {
     alternateExchange?: string;
     arguments?: any;
   };
-  /* *
+  /**
    * consumeOptions
    */
   consumeOptions ?: {
@@ -471,7 +471,7 @@ await close(app);
 
 Create a direct exchange.
 ```typescript
-/* *
+/**
   * direct type messages, targeted filtering according to routerKey
   */
 const manager = await createRabbitMQProducer('tasks-direct', {
@@ -516,8 +516,8 @@ null
 
 
 ```bash
-$ npm I amqplib amqp-connection-manager --save
-$ npm I @types/amqplib --save-dev
+$ npm i amqplib amqp-connection-manager --save
+$ npm i @types/amqplib --save-dev
 ```
 
 

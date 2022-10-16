@@ -119,7 +119,7 @@ Install Typegoose components to provide access to MongoDB.
 
 **Please note that please check the first section to write/install mongoose and other related dependency packages in advance.**
 ```bash
-$ npm I @midwayjs/typegoose@3 --save
+$ npm i @midwayjs/typegoose@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -128,7 +128,7 @@ Or reinstall the following dependencies in `package.json`.
 {
   "dependencies ": {
     // Components
-    "@midwayjs/typegoose": "^3.0.0 ",
+    "@midwayjs/typegoose": "^3.0.0",
     // mongoose dependency in the previous section
   },
   "devDependencies ": {
@@ -421,7 +421,7 @@ mongoose component is the basic component of typegoose, sometimes we can use it 
 **Please note that please check the first section to write/install mongoose and other related dependency packages in advance.**
 
 ```bash
-$ npm I @midwayjs/mongoose --save
+$ npm i @midwayjs/mongoose --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -430,7 +430,7 @@ Or reinstall the following dependencies in `package.json`.
 null
   "dependencies ": {
     // Components
-    "@midwayjs/mongoose": "^3.0.0 ",
+    "@midwayjs/mongoose": "^3.0.0",
     // mongoose dependency in the previous section
   null
   null

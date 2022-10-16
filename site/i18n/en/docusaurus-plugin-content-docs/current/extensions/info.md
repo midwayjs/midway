@@ -16,7 +16,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm I @midwayjs/info@3 --save
+$ npm i @midwayjs/info@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -24,7 +24,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/info": "^3.0.0 ",
+    "@midwayjs/info": "^3.0.0",
     // ...
   },
 }

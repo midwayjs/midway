@@ -34,16 +34,16 @@ It itself contains several parts:
 
 ```bash
 ## Required
-$ npm I @midwayjs/passport@3 --save
+$ npm i @midwayjs/passport@3 --save
 
 ## Optional
 ## Install the local policy below
-$ npm I passport-local --save
-$ npm I @types/passport-local --save-dev
+$ npm i passport-local --save
+$ npm i @types/passport-local --save-dev
 ## Install Github policy below
-$ npm I passport-github --save
+$ npm i passport-github --save
 ## Install Jwt policy below
-$ npm I passport-jwt --save
+$ npm i passport-jwt --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -51,7 +51,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies ": {
-    "@midwayjs/passport": "^3.0.0 ",
+    "@midwayjs/passport": "^3.0.0",
     // Local policy
     "passport-local": "^1.0.0"
     // Jwt strategy
@@ -200,7 +200,7 @@ Results {"username": "demo", "password": "1234"}
 **Additional installation** of dependencies and policies is required first:
 
 ```bash
-$ npm I @midwayjs/jwt passport-jwt --save
+$ npm i @midwayjs/jwt passport-jwt --save
 ```
 
 Additional jwt components are enabled.
