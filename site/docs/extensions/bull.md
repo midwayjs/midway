@@ -16,7 +16,8 @@ Bull 使用 Redis 来保存作业数据，在使用 Redis 时，Queue 架构是�
 
 :::tip
 
-从 v3.6.0 开始，原有任务调度 `@midwayjs/task` 模块废弃，如果查询历史文档，请参考 [这里](../legacy/task)。
+- 1、从 v3.6.0 开始，原有任务调度 `@midwayjs/task` 模块废弃，如果查询历史文档，请参考 [这里](../legacy/task)。
+- 2、bull 是一个分布式任务管理系统，必须依赖 redis
 
 :::
 
@@ -84,6 +85,45 @@ Bull 将整个队列分为三个部分
 
 
 
+## 基础配置
+
+bull 是一个分布式任务管理器，强依赖于 redis，在 `config.default.ts` 文件中配置。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  bull: {
+    // 默认的队列配置
+    defaultQueueOptions: {
+      redis: `redis://127.0.0.1:32768`,
+    }
+  },
+}
+```
+
+有账号密码情况：
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  bull: {
+    defaultQueueOptions: {
+      redis: {
+        port: 6379,
+        host: '127.0.0.1',
+        password: 'foobared',
+      },
+    }
+  },
+}
+```
+
+所有的队列都会复用该配置。
+
+
+
 ## 编写任务处理器
 
 使用 `@Processor` 装饰器装饰一个类，用于快速定义一个任务处理器（这里我们不使用 Job，避免后续的歧义）。
@@ -105,6 +145,8 @@ export class TestProcessor implements IProcessor {
 ```
 
 在启动时，框架会自动查找并初始化上述处理器代码，同时自动创建一个名为 `test` 的 Queue。
+
+
 
 
 
@@ -382,51 +424,7 @@ FORMAT.CRONTAB.EVERY_MINUTE
 
 
 
-## 分布式任务
-
-上面的代码，我们都是运行时在每台机器的的每个进程上，如果需要分布式任务（每个任务只在特定进程中执行一次），则需要配置 Redis。
-
-
-
-### 配置分布式任务
-
-在 `config.default.ts` 文件中配置。
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  bull: {
-    // 默认的队列配置
-    defaultQueueOptions: {
-      redis: `redis://127.0.0.1:32768`,
-      // 这些任务存储的 key，都是 midway-task 开头，以便区分用户原有redis 里面的配置
-      prefix: 'midway-bull',
-    }
-  },
-}
-```
-
-有账号密码情况：
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  bull: {
-    defaultQueueOptions: {
-      redis: {
-        port: 6379,
-        host: '127.0.0.1',
-        password: 'foobared',
-      },
-      prefix: 'midway-bull',
-    }
-  },
-}
-```
-
-配置了之后，所有的队列都将变为分布式队列。
+## 高级配置
 
 
 
