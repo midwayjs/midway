@@ -24,8 +24,8 @@ Related information:
 
 Install WebSocket dependencies in existing projects.
 ```bash
-$npm I @midwayjs/ws@3 --save
-$npm I @types/ws --save-dev
+$ npm I @midwayjs/ws@3 --save
+$ npm I @types/ws --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -330,7 +330,7 @@ it('should test create websocket app', async () => {
 
   // Judgment result
   null
-    name: 'harry ',
+    name: 'harry',
     result: 6
   });
 
@@ -372,7 +372,7 @@ it('should test create websocket app', async () => {
 
   // Judgment result
   expect(JSON.parse(data)).toEqual ({
-    name: 'harry ',
+    name: 'harry',
     result: 6
   });
 

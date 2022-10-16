@@ -11,10 +11,10 @@ Midway provides a lot of decorator capabilities. These decorators are distribute
 | @Scope | Class | Specify scope |
 | @Init | Method | The method that is automatically executed when the annotation object is initialized. |
 | @Destroy | Method | The method performed when the annotation object is destroyed. |
-| @Async | Class | null |
-| @Autowire | Class | [Abandoned] The identification class is an automatic injection attribute |
+| @Async | Class | **[Deprecated]** Indicates that it is an asynchronous function |
+| @Autowire | Class | **[Deprecated]** The identification class is an automatic injection attribute |
 | @Autoload | Class | Allows classes to self-load execution |
-| @Configuration | null | Identifies a container entry configuration class |
+| @Configuration | Class | Identifies a container entry configuration class |
 | @Aspect | Class | Identification interceptor |
 | @Validate | Method | Identification method, need to be verified |
 | @Rule | Property | Check rules that identify DTO |
@@ -28,30 +28,30 @@ Midway provides a lot of decorator capabilities. These decorators are distribute
 | @Put | Method | Registered as a PUT type route |
 | @Patch | Method | Register as a PATCH type route |
 | @Options | Method | Register as a route of OPTIONS type |
-| @Head | Method | null |
-| @All | Method | null |
+| @Head | Method | Register as a route of type HEAD |
+| @All | Method | Register as a full-type route |
 | @Session | Parameter | Get ctx.session from parameter |
-| null | Parameter | null |
+| @Body | Parameter | Get ctx.request.body from parameters |
 | @Query | Parameter | Get ctx.query from parameter |
 | @Param | Parameter | Get ctx.param from parameter |
 | @Headers | Parameter | Get ctx.headers from parameter |
 | @File | Parameter | Get the first upload file from the parameter |
-| @Files | Parameter | null |
+| @Files | Parameter | Get all uploaded files from parameters |
 | @Fields | Parameter | Get Form Field from Parameters (when uploading) |
-| null | Method | Modify response jump |
+| @Redirect | Method | Modify response jump |
 | @HttpCode | Method | Modify the response status code |
 | @SetHeader | Method | Modify response header |
 | @ContentType | Method | Modify the Content-Type field in the response header |
-| null | null | Identified as an egg timed task |
+| @Schedule | Class | Identified as an egg timed task |
 | @Plugin | Property | Get egg plug-in |
-| null | Class | Exposed microservice providers (producers) |
+| @Provider | Class | Exposed microservice providers (producers) |
 | @Consumer | Class | Exposed microservice caller (consumer) |
-| @GrpcMethod | null | Identify exposed gRPC methods |
-| @Func | Class/Method | [Abandoned] is identified as a function entry |
-| @Handler | Method | [Abandoned] Cooperate with Marking Function |
+| @GrpcMethod | Method | Identify exposed gRPC methods |
+| @Func | Class/Method | **[Deprecated]**  is identified as a function entry |
+| @Handler | Method | **[Deprecated]**  Cooperate with Marking Function |
 | null | Method | Identifies a function trigger |
 | @Task | Method | Define a distributed task |
-| @TaskLocal | null | Define a local task |
+| @TaskLocal | Method | Define a local task |
 | null | Class | Define a self-triggered task |
 
 
@@ -60,7 +60,7 @@ Midway provides a lot of decorator capabilities. These decorators are distribute
 
 | Decorator | Modification position | Role |
 | --------------------- | -------- | ---------------- |
-| @EntityModel | null | Define an entity object |
+| @EntityModel | Class | Define an entity object |
 | @InjectEntityModel | Property | Inject an entity object |
 | @EventSubscriberModel | Class | Define event subscriptions |
 
@@ -92,7 +92,7 @@ Midway provides a lot of decorator capabilities. These decorators are distribute
 | `@ApiResponse` | Method |      |
 | `@ApiTags` | Controller/Method |      |
 | `@ApiExtension` | Method |      |
-| `null` | Controller |      |
+| `@ApiBasicAuth` | Controller |      |
 | `@ApiBearerAuth` | Controller |      |
 | `@ApiCookieAuth` | Controller |      |
 | `@ApiOAuth2` | Controller |      |

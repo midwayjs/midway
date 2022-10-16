@@ -17,13 +17,13 @@ For example:
 ```typescript
 import { Application, Context } from '@midwayjs/koa';
 import { Application, Context } from '@midwayjs/express';
-null
+import { Application, Context } from '@midwayjs/web';
 ```
 
 And non-Web framework, we have also maintained the same.
 
 ```typescript
-null
+import { Application, Context } from '@midwayjs/socketio';
 import { Application, Context } from '@midwayjs/grpc';
 import { Application, Context } from '@midwayjs/rabbitmq';
 ```
@@ -32,7 +32,7 @@ import { Application, Context } from '@midwayjs/rabbitmq';
 
 ## Application
 
-null Application object will contain some unified methods, which come from `IMidwayApplication` definitions.
+Application is the application object in a component, and may have different implementations in different components. The Application object will contain some unified methods, which are unified from the `IMidwayApplication` definition.
 
 ```typescript
 import { Application } from '@midwayjs/koa';
@@ -40,7 +40,7 @@ import { Application } from '@midwayjs/koa';
 
 
 
-### Acquisition method
+### How to get
 
 In all classes that depend on injection container management, the `@App()` decorator can be used to obtain the **current most important** Application.
 
@@ -233,7 +233,7 @@ In most cases, what users need is a temporary global data storage method, such a
 For this reason, Midway provides an API for global data access to solve such requirements.
 
 ```typescript
-this.app.setAttr('abc ', {
+this.app.setAttr('abc', {
   a: 1
   B: 2
 });
@@ -243,7 +243,7 @@ Get it in another place.
 
 ```typescript
 const value = this.app.getAttr('abc');
-null
+console.log(value);
 // { a: 1, B: 2}
 ```
 
@@ -259,10 +259,10 @@ The following API is a common attribute or interface for each context implementa
 
 
 
-### null
+### How to get
 
 
-In the * * default request scope * *, that is, in the controller (Controller) or common service (Service), we can use `@Inject` to inject the corresponding instance.
+In the **default request scope**, that is, in the controller (Controller) or common service (Service), we can use `@Inject` to inject the corresponding instance.
 
 
 for example, you can obtain the corresponding ctx instance in this way.
@@ -300,7 +300,7 @@ export class HomeController {
   ctx: Context;
 
   @Get('/')
-  null
+  async home() {
     ctx.logger.info(this.ctx === this[REQUEST_OBJ_CTX_KEY]);
     // => true
   }
@@ -346,7 +346,7 @@ this.ctx.startTime
 The method is the same as that used in `app`. The data of these methods is stored in the request link. As the request is destroyed, you can put some temporary data of the request in it.
 
 ```typescript
-this.ctx.setAttr('abc ', {
+this.ctx.setAttr('abc', {
   a: 1
   B: 2
 });

@@ -18,7 +18,7 @@ Related information:
 1. Installation Dependence
 
 ```bash
-$npm I @midwayjs/upload@3 --save
+$ npm I @midwayjs/upload@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -110,9 +110,9 @@ export default {
   // ...
   upload: {
     // mode: UploadMode. The default value is file, which is uploaded to the temporary directory of the server. You can configure it as stream.
-    mode: 'file ',
+    mode: 'file',
     // fileSize: string, the maximum size of the uploaded file, which is 10mb by default.
-    fileSize: '10mb ',
+    fileSize: '10mb',
     null
     whitelist: uploadWhiteList.filter(ext => ext !== '.pdf')
     // tmpdir: string, the temporary storage path of the uploaded file.
@@ -217,8 +217,8 @@ const fileInput = document.querySelector('#your-file-input');
 const formData = new FormData();
 formData.append('file', fileInput.files[0]);
 
-fetch('/api/upload ', {
-  method: 'POST ',
+fetch('/api/upload', {
+  method: 'POST',
   body: formData
 });
 ```

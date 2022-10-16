@@ -12,7 +12,7 @@ export class MidwayError extends Error {
 
 At this stage, all errors provided by Midway framework are instances thrown by this error class.
 
-null
+MidwayError includes several properties:
 
 - The name of the name error, such as Error,TypeError, etc., is the class name of the custom error in the custom error.
 - message error message
@@ -25,27 +25,27 @@ null
 We can use it by simply instantiating and throwing it out, such:
 
 ```typescript
-null
+import { MidwayError } from '@midwayjs/core';
 
 // ...
 
 async findAll() {
   throw new MidwayError('my custom error');
-null
+}
 ```
 
-null
+Some errors can also be customized in the business.
 
 In common, we will uniformly define exceptions into the error directory.
 
 ```
-null
+➜  my_midway_app tree
 .
 ├── src
-│ └── error
-│ ├── customA.error.ts
-│ └── customB.error.ts
-null
+│   └── error
+│       ├── customA.error.ts
+│       └── customB.error.ts
+├── test
 ├── package.json
 └── tsconfig.json
 ```
@@ -106,7 +106,7 @@ For example, within the framework, we have the following definition:
 ```typescript
 import { registerErrorCode } from '@midwayjs/core';
 
-export const FrameworkErrorEnum = registerErrorCode('midway ', {
+export const FrameworkErrorEnum = registerErrorCode('midway', {
   UNKNOWN: 10000
   COMMON: 10001
   PARAM_TYPE: 10002,
@@ -129,7 +129,7 @@ For example:
 FrameworkErrorEnum.UNKNOWN
 // => output: MIDWAY_10000
 
-null
+FrameworkErrorEnum.COMMON
 // => output: MIDWAY_10001
 ```
 
@@ -142,7 +142,7 @@ export class MidwayParameterError extends MidwayError {
   constructor(message?: string) {
     super(message ?? 'Parameter type not match', FrameworkErrorEnum.PARAM_TYPE);
   }
-null
+}
 
 // user code
 async findAll(data) {
@@ -157,7 +157,7 @@ async findAll(data) {
 // at APIController.findAll (....
 // at /Users/harry/project/midway-v3/packages/core/src/common/webGenerator.ts:38:57
 // at processTicksAndRejections (node:internal/process/task_queues:96:5) {
-// code: 'MIDWAY_10002 ',
+// code: 'MIDWAY_10002',
 // cause: undefined
 //}
 

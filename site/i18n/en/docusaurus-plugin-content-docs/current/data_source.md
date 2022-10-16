@@ -8,7 +8,7 @@ For this reason, Midway provides `DataSourceManager` abstraction to facilitate t
 
 Take `mysql2` as an example to implement a `mysql2` connection pool management class.
 
-null``
+The following is the official example of `mysql2`, as a preparatory work.
 
 ```typescript
 // get the client
@@ -16,14 +16,14 @@ const mysql = require('mysql2');
 
 // create the connection to database
 const connection = mysql.createConnection ({
-  host: 'localhost ',
-  user: 'root ',
+  host: 'localhost',
+  user: 'root',
   database: 'test'
 });
 
 // simple query
 connection.query (
-  'SELECT * FROM 'table' WHERE 'name' = "Page" AND 'age' > 45 ',
+  'SELECT * FROM `table` WHERE `name` = "Page" AND `age` > 45',
   function(err, results, fields) {
     console.log(results); // results contains rows returned by server
     console.log(fields); // fields contains extra meta data about results, if available
@@ -34,7 +34,7 @@ connection.query (
 Similar to service factories, we need to implement some fixed methods.
 
 - 1. Method of creating a data source
-- 2, check the connection method
+- 2. check the connection method
 
 
 
@@ -44,7 +44,7 @@ The data source manager is also a common export class in midway, for example, we
 
 
 
-### 1, to create a data source interface
+### 1. Create a data source interface
 
 We only need to inherit the built-in `DataSourceManager` class to implement a data source manager.
 
@@ -78,7 +78,7 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
     return mysql.createConnection(config);
   }
 
-  null
+  getName(): string {
     return 'mysql';
   }
 
@@ -104,7 +104,7 @@ You can use the `@Init` decorator and the `@Config` decorator to provide initial
 
 ```typescript
 import { Provide, Scope, ScopeEnum, Init, Config } from '@midwayjs/decorator';
-null
+import { DataSourceManager } from '@midwayjs/core';
 import * as mysql from 'mysql2';
 
 @Provide()
@@ -121,7 +121,7 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
   async init() {
     // It should be noted that the second parameter here needs to pass in an entity class scan address
     await this.initDataSource(this.mysqlConfig, this.baseDir);
-  null
+  }
 
   // ...
 }
@@ -138,18 +138,18 @@ For example:
 export const mysql = {
   dataSource: {
     dataSource1: {
-      host: 'localhost ',
-      user: 'root ',
+      host: 'localhost',
+      user: 'root',
       database: 'test'
     },
     dataSource2: {
-      host: 'localhost ',
-      user: 'root ',
+      host: 'localhost',
+      user: 'root',
       database: 'test'
     },
     dataSource3: {
-      host: 'localhost ',
-      user: 'root ',
+      host: 'localhost',
+      user: 'root',
       database: 'test'
     },
   }
@@ -161,13 +161,13 @@ Data sources are naturally designed for multiple instances. Unlike service facto
 
 
 
-## null
+## Get data source
 
 By injecting the data source manager, we can get the data source through the above methods.
 
 ```typescript
 import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager';
-null
+import { join } from 'path';
 
 @Provide()
 export class UserService {
@@ -191,7 +191,7 @@ In addition, there are some other methods.
 this.mysqlDataSourceManager.hasDataSource('dataSource1');
 // Get all data source names
 this.mysqlDataSourceManager.getDataSourceNames();
-null
+// Whether the data source is connected
 this.mysqlDataSourceManager.isConnected('dataSource1')
 ```
 
@@ -199,7 +199,7 @@ this.mysqlDataSourceManager.isConnected('dataSource1')
 
 ## Entity binding
 
-null Orm frameworks such as typeorm are all designed based on this.
+The most important part of the data source is the entity class, each data source can have its own entity class. For example, orm frameworks such as typeorm are designed based on this.
 
 
 
@@ -224,7 +224,7 @@ export class User {
   name: string;
 
   @Column()
-  null
+  age: number;
 }
 ```
 
@@ -238,15 +238,15 @@ export default {
   mysql: {
     dataSource: {
     dataSource1: {
-      host: 'localhost ',
-      user: 'root ',
-      database: 'test ',
+      host: 'localhost',
+      user: 'root',
+      database: 'test',
       entities: [User]
     },
     dataSource2: {
-      host: 'localhost ',
-      user: 'root ',
-      database: 'test ',
+      host: 'localhost',
+      user: 'root',
+      database: 'test',
       entities: [SimpleUser]
     },
     // ...
@@ -270,14 +270,14 @@ export default {
   mysql: {
     dataSource: {
     dataSource1: {
-      host: 'localhost ',
-      user: 'root ',
-      database: 'test ',
+      host: 'localhost',
+      user: 'root',
+      database: 'test',
       entities: [
         User
         SimpleUser
         '/abc', // under a specific directory
-        **/abc/** '// only get files in the directory containing abc characters
+        '**/abc/**', // only get files in the directory containing abc characters
       ]		
     },
     // ...
@@ -291,13 +291,13 @@ export default {
 Attention
 
 - 1. When filling in the directory string, use the second parameter of the initDataSource method as the relative path search (here is different from the common typeorm and other scanning paths, the entities path does not need to write the suffix `.ts`, otherwise the entity will not be found during deployment)
-- 2. The path cannot be written in [single file construction and deployment](null) (bundle mode).
+- 2. The path cannot be written in [single file construction and deployment](deployment#Single-file-build-deployment) (bundle mode).
 
 :::
 
 
 
-### null
+### 2. Obtain the data source according to the entity
 
 Generally, our API is on data source objects, such as `connection.query`.
 

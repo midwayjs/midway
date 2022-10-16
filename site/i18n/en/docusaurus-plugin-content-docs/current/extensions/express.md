@@ -12,8 +12,8 @@ This chapter mainly introduces how to use Express as the upper-level framework i
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/express@3 --save
-$npm I @types/body-parser @types/express @types/express-session --save-dev
+$ npm I @midwayjs/express@3 --save
+$ npm I @types/body-parser @types/express @types/express-session --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -37,10 +37,10 @@ Examples can also be created directly using scaffolding.
 
 ```bash
 # npm v6
-$npm init midway --type=express-v3 my_project
+$ npm init midway --type=express-v3 my_project
 
 # npm v7
-$npm init midway -- --type=express-v3 my_project
+$ npm init midway -- --type=express-v3 my_project
 ```
 
 
@@ -391,8 +391,8 @@ Set Cookie.
 
 ```typescript
 res.cookie (
-  'cookie-key ',
-  'cookie-value ',
+  'cookie-key',
+  'cookie-value',
   cookieOptions
 );
 ```
@@ -409,7 +409,7 @@ By default, `cookie-session` is used. The default configuration is as follows.
 // src/config/config.default
 export default {
   session: {
-    name: 'MW_SESS ',
+    name: 'MW_SESS',
     resave: true
     saveUninitialized: true
     cookie: {
@@ -468,21 +468,21 @@ export default {
   bodyParser: {
     json: {
       enable: true
-      limit: '1mb ',
+      limit: '1mb',
       strict: true
     },
     raw: {
       enable: false
-      limit: '1mb ',
+      limit: '1mb',
     },
     text: {
       enable: true
-      limit: '1mb ',
+      limit: '1mb',
     },
     urlencoded: {
       enable: true
       extended: false
-      limit: '1mb ',
+      limit: '1mb',
       parameterLimit: 1000
     },
   },

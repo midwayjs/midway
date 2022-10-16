@@ -24,7 +24,7 @@ Install orm components to provide database ORM capabilities.
 
 
 ```bash
-$npm I @midwayjs/orm@3 typeorm --save
+$ npm I @midwayjs/orm@3 typeorm --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -412,7 +412,7 @@ export default {
     /* *
      * Single database instance
      */
-    type: 'mysql ',
+    type: 'mysql',
     host: '',
     port: 3306
     username: '',
@@ -452,7 +452,7 @@ For example, sqlite only needs the following information.
 export default {
   // ...
   orm: {
-    type: 'sqlite ',
+    type: 'sqlite',
     database: path.join(__dirname, '../../test.sqlite')
     synchronize: true
     logging: true
@@ -501,7 +501,7 @@ export class PhotoService {
     const photoResult = await this.photoModel.save(photo);
 
     // save success
-    console.log('photo id = ', photoResult.id);
+    console.log('photo id =', photoResult.id);
   }
 }
 ```
@@ -1166,49 +1166,49 @@ null
    * Called before entity insertion.
    */
   beforeInsert(event: InsertEvent<any>) {
-    console.log('BEFORE ENTITY INSERTED: ', event.entity);
+    console.log('BEFORE ENTITY INSERTED:', event.entity);
   }
 
   /* *
    * Called before entity insertion.
    */
   beforeUpdate(event: UpdateEvent<any>) {
-    console.log('BEFORE ENTITY UPDATED: ', event.entity);
+    console.log('BEFORE ENTITY UPDATED:', event.entity);
   }
 
   /* *
    * Called before entity insertion.
    */
   beforeRemove(event: RemoveEvent<any>) {
-    console.log('BEFORE ENTITY WITH ID ${event.entityId} REMOVED: ', event.entity);
+    console.log('BEFORE ENTITY WITH ID ${event.entityId} REMOVED:', event.entity);
   }
 
   /* *
    * Called after entity insertion.
    */
   afterInsert(event: InsertEvent<any>) {
-    console.log('AFTER ENTITY INSERTED: ', event.entity);
+    console.log('AFTER ENTITY INSERTED:', event.entity);
   }
 
   /* *
 	 * Called after entity insertion.
 	 */
   afterUpdate(event: UpdateEvent<any>) {
-    console.log('AFTER ENTITY UPDATED: ', event.entity);
+    console.log('AFTER ENTITY UPDATED:', event.entity);
   }
 
   /* *
    * Called after entity insertion.
    */
   afterRemove(event: RemoveEvent<any>) {
-    console.log('AFTER ENTITY WITH ID ${event.entityId} REMOVED: ', event.entity);
+    console.log('AFTER ENTITY WITH ID ${event.entityId} REMOVED:', event.entity);
   }
 
   /* *
    * Called after entity is loaded.
    */
   afterLoad(entity: any) {
-    console.log('AFTER ENTITY LOADED: ', entity);
+    console.log('AFTER ENTITY LOADED:', entity);
   }
 
 }
@@ -1235,13 +1235,13 @@ import {join} from 'path';
 export default {
   orm: {
     default: {
-      type: 'sqlite ',
+      type: 'sqlite',
       database: join(__dirname, '../../default.sqlite')
       logging: true
     },
     test: {
-      type: 'mysql ',
-      host: '127.0.0.1 ',
+      type: 'mysql',
+      host: '127.0.0.1',
       port: 3306
       username: '*********',
       password: '*********',
@@ -1278,7 +1278,7 @@ Similarly, when using the injection Model, you need to specify the connection.
 // entity/photo.ts
 import { EntityModel } from '@midwayjs/orm';
 
-@EntityModel('photo ', {
+@EntityModel('photo', {
 	connectionName: 'test'
 })
 export class Photo {
@@ -1414,7 +1414,7 @@ gmtCreate: 2021-12-13T03:49:43.000Z
 **After configuration:**
 
 ```typescript
-gmtModified: '2021-12-13 11:49:43 ',
+gmtModified: '2021-12-13 11:49:43',
 gmtCreate: '2021-12-13 11:49:43'
 ```
 
@@ -1460,7 +1460,7 @@ export default {
   // ...
   orm: {
     //...
-    type: 'mysql ',
+    type: 'mysql',
     driver: require('mysql2')
   },
 }

@@ -6,17 +6,17 @@ Midway uses a lot of dependency injection features. Through the lightweight feat
 Dependency injection is a very important core in the Java Spring system, and we explain this capability in a simple way.
 
 
-null
+As an example, take the following function directory structure as an example.
 
 
 ```
 .
 ├── package.json
-null
-│ │-controller# controller directory
-│ │ └── user.controller.ts
-│-service# Service Directory
-null
+├── src
+│   ├── controller											# Controller directory
+│   │   └── user.controller.ts
+│   └── service			  									# Service Directory
+│       └── user.service.ts
 └── tsconfig.json
 ```
 
@@ -24,44 +24,44 @@ null
 In the above example, two files, `user.controller.ts` and `user.service.ts`, are provided.
 
 :::tip
-null``````
-null
+In the following example, in order to show the complete function, we will write a complete `@Provide` decorator, but in actual use, if there are other decorators (such as `@Controller`), `@Provide` can be used Omit.
+:::
 
 
 For the convenience of explanation, we merged it together, and the content is roughly as follows.
 
 
 ```typescript
-null
+import { Provide, Inject, Get } from '@midwayjs/decorator';
 
 // user.controller.ts
 @Provide() // Actually can be omitted
 @Controller()
 export class UserController {
 
-  null
+  @Inject()
   userService: UserService;
 
-  null
+  @Get('/')
   async get() {
     const user = await this.userService.getUser();
-    null
+    console.log(user);      // world
   }
 }
 
-null
+// user.service.ts
 @Provide()
-null
+export class UserService {
   async getUser() {
     return 'world';
-  null
+  }
 }
 
 ```
 
 Leaving aside all the decorators, you can see that this is the standard Class writing and there is no other extra content. This is also the core capability of Midway system and the most fascinating place to rely on injection.
 
-`null`****  `null`
+What `@Provide` does is tell the **dependency injection container** that I need to be loaded by the container. The `@Inject` decorator tells the container that I need to inject an instance into the property.
 
 Through the matching of these two decorators, we can easily get the instance object in any class, just like `this.userService` above.
 
@@ -76,7 +76,7 @@ Let's take the following pseudo code as an example. During the startup phase of 
 
 
 ```typescript
-/* * * * * The following is Midway's internal code * * * * */
+/***** The following is Midway's internal code *****/
 
 const container = new MidwayContainer();
 container.bind(UserController);
@@ -93,7 +93,7 @@ When requested, these Classes are dynamically instantiated and the assignment of
 
 
 ```typescript
-/***** The following is the dependency injection container pseudo code * * * * */
+/***** The following is the dependency injection container pseudo code *****/
 const userService = new UserService();
 const userController = new UserController();
 
@@ -108,7 +108,7 @@ MidwayContainer have `getAsync` methods for asynchronously processing the initia
 
 
 ```typescript
-/***** The following is the internal code of the dependency injection container * * * * */
+/***** The following is the internal code of the dependency injection container *****/
 
 // Automatic new UserService();
 // Automatic new UserController();
@@ -170,7 +170,7 @@ Note that all entry classes, such as Controller, are request scopes and do not s
 
 
 
-### singleton scope
+### Singleton scope
 
 After explicit configuration, the scope of a class can become a singleton scope. .
 
@@ -186,7 +186,7 @@ export class UserService {
 
 ```
 
-null****
+No matter how many times an instance of this class is obtained in the future, it will be the same instance under the same process.
 
 For example, based on the above singleton service, the following two injected `userService` attributes are the same instance:
 
@@ -214,7 +214,7 @@ export class B {
 
 By default, all classes written in the code are **request scope**.
 
-null
+In each protocol entry framework, a dependency injection container under the request scope is automatically created, and all created instances are bound to the context of the current protocol.
 
 For example:
 
@@ -231,11 +231,11 @@ Therefore, in the request scope, we can use `@Inject()` to inject the current ct
 import { Controller, Provide, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 
-null
+@Provide() // actually can be omitted
 @Controller('/user')
 export class UserController {
 
-  null
+  @Inject()
   ctx: Context;
   //...
 }
@@ -253,13 +253,13 @@ export class UserService {
 
   @Inject()
   ctx; // undefined
-  null
+  //...
 }
 ```
 
 
 
-### Scope Cure
+### Scope cache
 
 
 When the scope is set to a singleton (Singleton), the entire Class injected object has been fixed after the first instantiation, which means that the injected content in the singleton cannot be another scope.
@@ -299,7 +299,7 @@ The `DBManager` here is specially set to the request scope to demonstrate the sp
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01eAyxrC1xVEYzbNf9P_!!6000000006448-2-tps-1964-334.png)
 
 ```typescript
-null
+// This class is the default request scope (Request)
 @Provide()
 export class HomeController {
   @Inject()
@@ -353,7 +353,7 @@ export class UserService {
     const id = this.ctx.xxxx;
     // ctx not found, will throw error
   }
-null
+}
 
 // Middleware is a singleton
 @Middleware()
@@ -370,13 +370,13 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 }
 ```
 
-null````
+At this time, although `UserService` can be injected into the middleware normally, it is actually injected as a singleton object instead of an object in the request scope, which will cause `ctx` to be empty.
 
 The memory object diagram at this time is:
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01SwATKb1zUtVUCaQGj_!!6000000006718-2-tps-1292-574.png)
 
-`null`
+Instances of `UserService` become different objects, one is an instance of singleton invocation (singleton, excluding ctx), and the other is an instance of normal request-scoped invocation (request-scoped, including ctx).
 
 In order to avoid this situation, by default, when injecting such errors, the framework will automatically throw an error named `MidwaySingletonInjectRequestError` to prevent the program from executing.
 
@@ -390,7 +390,7 @@ import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 @Provide()
 @Scope(ScopeEnum.Request, { allowDowngrade: true })
 export class UserService {
-  null
+  @Inject()
   ctx: Context;
 
   async getUser() {
@@ -460,18 +460,18 @@ Default:
 - 1. `@Provide` will automatically generate a uuid as the dependency injection identifier
 - 2. `@Inject` searches for the uuid of the type.
 
-null
+If you want to get this uuid, you can use the following API.
 
 ```typescript
 import { getProviderUUId } from '@midwayjs/decorator';
 
-null
-null
+const uuid = getProviderUUId(B);
+// ...
 ```
 
 
 
-### Fixed name-based injection
+### Injection Based on fixed name
 
 ```typescript
 import { Provide, Inject } from '@midwayjs/decorator';
@@ -533,7 +533,7 @@ export class B implements IPay {
 At this time, if there is a service that needs to be injected, you can use the following explicit declaration.
 
 ```typescript
-null
+@Provide()
 export class PaymentService {
 
   @Inject('APay')
@@ -574,7 +574,7 @@ import { IMidwayContainer } from '@midwayjs/core';
 export class AutoConfiguration {
 
   async onReady(applicationContext: IMidwayContainer) {
-    null
+		// Add some global objects to the dependency injection container
   	applicationContext.registerObject('lodash', lodash);
   }
 }
@@ -609,11 +609,11 @@ Midway injects some values by default to facilitate direct business use.
 | ---------- | ---------- | ---------- | ------------------------------------------------------------ |
 | baseDir | string | Global | The src directory is developed locally, otherwise it is dist directory. |
 | appDir | string | Global | The root path of the application is generally process.cwd() |
-| ctx | object | Request link | The context type of the corresponding framework, such as the Context of Koa and EggJS, and the req of the Express. |
-| logger | object | Request link | Equivalent to ctx.logger |
-| req | object | Request link | Unique to Express |
-| res | object | Request link | Unique to Express |
-| socket | object | null | WebSocket scenes are unique |
+| ctx | object | Request | The context type of the corresponding framework, such as the Context of Koa and EggJS, and the req of the Express. |
+| logger | object | Request | Equivalent to ctx.logger |
+| req | object | Request | Unique to Express |
+| res | object | Request | Unique to Express |
+| socket | object | Request | WebSocket scenes are unique |
 
 ```typescript
 @Provide()
@@ -647,7 +647,7 @@ Simply put, in any scenario where you need to **dynamically obtain services thro
 
 ### Get from @ApplicationContext() decorator
 
-null
+In the new version, Midway provides a @ApplicationContext() decorator to get the dependency injection container.
 
 ```typescript
 import { ApplicationContext } from '@midwayjs/decorator';
@@ -659,7 +659,7 @@ export class BootApp {
   @ApplicationContext()
   applicationContext: IMidwayContainer; // You can also replace it with the app definition of the actual framework here.
 
-  null
+  async invoke() {
 
     // this.applicationContext
 
@@ -676,7 +676,7 @@ export class BootApp {
 Midway mounts the dependent injection container in two places, the app of the framework and the context Context of each request. Due to the different situations of different upper-level frameworks, let's list common examples here.
 
 
-null``
+For different upper-level frameworks, we provide a unified definition of `IMidwayApplication`. All upper-level framework apps will implement this interface, which is defined as follows.
 
 ```typescript
 export interface IMidwayApplication {
@@ -720,7 +720,7 @@ In addition to the common dependency injection container, Midway also provides a
 The dependency injection container of the request link is used to obtain the objects of the specific request scope. The objects obtained in this container are **bound to the request** and are associated with the current context. This means that **if the Class code is associated with the request, it must be obtained from the dependency injection container of the request link**.
 
 
-null
+The dependency injection container of the request link must be obtained from the request context object. The most common scenario is web middleware.
 
 
 ```typescript
@@ -761,13 +761,12 @@ In the life cycle of the code entry `configuration` file, we will also pass addi
 import { Configuration } from '@midwayjs/decorator';
 import { IMidwayContainer } from '@midwayjs/core';
 
-null
+@Configuration()
 export class AutoConfiguration {
   async onReady(applicationContext: IMidwayContainer) {
     // ...
   }
 }
-
 ```
 
 
@@ -803,7 +802,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
   @ApplicationContext()
   applicationContext: IMidwayContainer;
 
-  null
+  resolve() {
   	return async(ctx, next) => {
       // Specify a generic type, such as an interface
       const userService1 = await this.applicationContext.getAsync<UserService>(UserService);
@@ -814,12 +813,12 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
       const userService2 = await ctx.requestContext.getAsync<UserService>(UserService);
       await next();
     }
-  null
+  }
 }
 ```
 
 
-null
+In Express.
 ```typescript
 import { UserService, Middleware } from './service/user';
 import { NextFunction, Context, Response } from '@midwayjs/express';
@@ -849,7 +848,7 @@ class UserService {
   constructor(private readonly type) {}
 
   getUser() {
-    null
+    // this.type => student
   }
 }
 
@@ -860,7 +859,7 @@ const userSerivce = await applicationContext.getAsync(UserService, [
 
 // Request scope container, get the request scope instance.
 const userSerivce = await ctx.requestContext.getAsync(UserService, [
-  null
+  'student'
 ]);
 ```
 
@@ -904,7 +903,7 @@ Then you can define a dynamic service (factory) and return different implementat
 import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
 
 export async function dynamicCacheServiceHandler(container: IMidwayContainer) {
-  null
+	// Get global configuration from container API
   const config = container.getConfigService().getConfiguration();
   if (config['redis']['mode'] === 'local') {
     return await container.getAsync('localCacheService');
@@ -915,7 +914,7 @@ export async function dynamicCacheServiceHandler(container: IMidwayContainer) {
 
 providerWrapper ([
   {
-    id: 'dynamicCacheService ',
+    id: 'dynamicCacheService',
     provider: dynamicCacheServiceHandler
     Scope: ScopeEnum.Request, // is set to the request scope, then the container passed in above is the request scope container.
     // scope: ScopeEnum.Singleton, // can also be set to global scope, then the logic of the call will be cached
@@ -940,7 +939,7 @@ export class HomeController {
 
   @Get('/')
   async home() {
-    null
+    const data = await this.cacheService.getData();
     // ...
   }
 
@@ -953,7 +952,7 @@ By `providerWrapper`, we have wrapped an original function writing method, which
 
 :::info
 Note that dynamic methods must be exported before they are scanned by dependency injection. The default is the request scope (the Container obtained is the request scope container).
-null
+:::
 
 
 Since we can bind the dynamic method to the dependency injection container, we can also bind a callback method in, so that the obtained method can be executed, and we can determine the returned result based on the parameters of the business.
@@ -972,7 +971,7 @@ export function cacheServiceHandler(container: IMidwayContainer) {
 
 providerWrapper ([
   {
-    id: 'cacheServiceHandler ',
+    id: 'cacheServiceHandler',
     provider: cacheServiceHandler
     scope: ScopeEnum.Singleton
   }
@@ -987,7 +986,7 @@ export class HomeController {
   ctx: Context;
 
   @Inject('cacheServiceHandler')
-  null
+  getCacheService;
 
   @Get('/')
   async home() {
@@ -1007,8 +1006,8 @@ In some tool classes, you can obtain the global dependency injection container (
 ```typescript
 import { getCurrentApplicationContext } from '@midwayjs/core';
 
-null
-  null
+export const getService = async (serviceName) => {
+  return getCurrentApplicationContext().getAsync(serviceName);
 }
 ```
 
@@ -1027,7 +1026,7 @@ import { getCurrentMainApp } from '@midwayjs/core';
 
 export const getGlobalConfig = () => {
   return getCurrentMainApp().getConfig();
-null
+}
 ```
 
 
@@ -1048,7 +1047,7 @@ Simply put, the framework will recursively scan the ts/js files in the entire `s
 
 In general, we should not put non-ts files under src (such as front-end code). In special scenarios, we can ignore some directories and configure them in the `@Configuration` decorator.
 
-null
+An example is as follows:
 
 ```typescript
 // src/configuration.ts
@@ -1059,7 +1058,7 @@ import { App, Configuration, Logger } from '@midwayjs/decorator';
   // ...
   detectorOptions: {
     ignore: [
-      '**/web /**'
+      '**/web/**'
     ]
   }
 })
@@ -1099,7 +1098,7 @@ export class BaseService {
 
   @Init()
   async init() {
-    null
+    await new Promise(resolve => {
       setTimeout(() => {
         this.config.c = 10;
         resolve();
@@ -1139,7 +1138,7 @@ export class BaseService {
   config;
 
   @Destroy()
-  null
+  async stop() {
     // do something
   }
 }
@@ -1154,8 +1153,8 @@ export class BaseService {
 
 ### Error: Get Injection Property in Constructor
 
+Please do not get the injected attribute in the constructor * *, which will make the result undefined. The reason is that the properties injected by the decorator are assigned only after the instance is created (new). In this case, use the `@Init` decorator.
 
-* * Please do not get the injected attribute in the constructor * *, which will make the result undefined. The reason is that the properties injected by the decorator are assigned only after the instance is created (new). In this case, use the `@Init` decorator.
 ```typescript
 @Provide()
 export class UserService {

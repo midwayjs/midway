@@ -16,7 +16,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/info@3 --save
+$ npm I @midwayjs/info@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -95,7 +95,7 @@ For security, we can adjust the route of access.
 export default {
   // ...
   info: {
-    infoPath: '/_my_info ',
+    infoPath: '/_my_info',
   }
 }
 ```

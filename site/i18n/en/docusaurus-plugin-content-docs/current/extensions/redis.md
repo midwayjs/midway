@@ -19,7 +19,7 @@ Related information:
 `@midwayjs/redis` is the main function package.
 
 ```bash
-$npm I @midwayjs/redis@3 --save
+$ npm I @midwayjs/redis@3 --save
 ```
 Or reinstall the following dependencies in `package.json`.
 
@@ -91,7 +91,7 @@ export default {
         host: '127.0.0.1', // Sentinel host
       }],
       name: 'mymaster', // Master name
-      password: 'auth ',
+      password: 'auth',
       db: 0
     },
   },
@@ -109,15 +109,15 @@ export default {
     client: {
       cluster: true
       nodes: [{
-        host: 'host ',
-        port: 'port ',
+        host: 'host',
+        port: 'port',
       },{
-        host: 'host ',
+        host: 'host',
         null
       }],
       redisOptions: {
         family: '',
-        password: 'xxxx ',
+        password: 'xxxx',
         db: 'xxx'
       }
     }
@@ -134,16 +134,16 @@ null
 		// Multi Redis
     clients: {
       instance1: {
-        host: 'host ',
-        port: 'port ',
-        password: 'password ',
-        db: 'db ',
+        host: 'host',
+        port: 'port',
+        password: 'password',
+        db: 'db',
       },
       instance2: {
-        host: 'host ',
-        port: 'port ',
-        password: 'password ',
-        db: 'db ',
+        host: 'host',
+        port: 'port',
+        password: 'password',
+        db: 'db',
       },
     },
   },

@@ -8,7 +8,7 @@ In some cases, the lock version is not particularly easy to use, but there will 
 
 You can enter the following command.
 ```bash
-$npm config set package-lock false
+$ npm config set package-lock false
 ```
 
 ## 2. Maximum call stack size exceeded to report an error

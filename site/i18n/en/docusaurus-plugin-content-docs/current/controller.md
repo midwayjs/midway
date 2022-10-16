@@ -19,7 +19,7 @@ Common ones are:
 
 
 
-null
+Generally speaking, the controller is often used to verify, convert, and call complex business logic on the user's request parameters, assemble the data after getting the corresponding business results, and then return.
 
 
 In Midway, controllers **also carry routing capabilities**. Each controller can provide multiple routes, and different routes can perform different operations.
@@ -31,7 +31,7 @@ In the following example, we will demonstrate how to create a route in the contr
 ## Routing
 
 
-null`` Midway uses the `@Controller()` decorator to label the controller, where the decorator has an optional parameter for routing prefix (grouping), so that all routes under the controller will carry this prefix.
+Controller files are generally in the `src/controller` directory, where we can create controller files. Midway annotates controllers with the `@Controller()` decorator, where the decorator has an optional parameter for route prefix (grouping), so that all routes under this controller will carry this prefix.
 
 
 At the same time, Midway provides a method decorator for marking the type of request.
@@ -39,11 +39,11 @@ At the same time, Midway provides a method decorator for marking the type of req
 
 For example, we create a homepage controller to return a default`/`route.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ └── controller
-│ └── home.ts
+│   └── controller
+│       └── home.ts
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -63,7 +63,7 @@ export class HomeController {
 }
 
 ```
-`null`````````
+The `@Controller` decorator tells the framework that this is a class of type Web Controller, and the `@Get` decorator tells the framework that the decorated `home` method will be exposed as a `/` route, which can be accessed by ` GET` request to access.
 
 
 The whole method returns a string, and in the browser you will receive the response type of `text/plain` and a `200` status code.
@@ -119,14 +119,14 @@ Next, we will create an HTTP API about users. Similarly, we will create a `src/c
 
 Let's take the user type as an example, first add a user type, and we usually put the defined content in the `src/interface.ts` file.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-null
-│ │ ├── user.ts
-│ │ └── home.ts
-│ └── interface.ts
-null
+│   ├── controller
+│   │   ├── user.ts
+│   │   └── home.ts
+│   └── interface.ts
+├── test
 ├── package.json
 └── tsconfig.json
 ```
@@ -140,12 +140,12 @@ export interface User {
 ```
 Add a route prefix and the corresponding controller.
 ```typescript
-null
+// src/controller/user.ts
 
 import { Controller } from "@midwayjs/decorator";
 
 @Controller('/api/user')
-null
+export class UserController {
   // xxxx
 }
 
@@ -155,7 +155,7 @@ Next, we will call different processing logic for different request types. Excep
 
 
 
-### null
+### Decorator parameter conventions
 
 
 Midway adds a common decorator for dynamic values. Take the `@Query` decorator as an example. The `@Query` decorator obtains the query parameters in the URL and assigns them to the input parameters of the function. In the following example, the id is obtained from the query parameter of the route. If the URL is `/?id = 1`, the value of the id is 1. At the same time, the route returns an object of the `User` type.
@@ -191,8 +191,8 @@ The following are these decorators and the corresponding equivalent frame values
 | @Session(key?: string) | req.session / req.session [key] | ctx.session / ctx.session [key] |
 | @Param(key?: string) | req.params / req.params [key] | ctx.params / ctx.params [key] |
 | @Body(key?: string) | req.body / req.body [key] | ctx.request.body / ctx.request.body [key] |
-| @Query(key?: string) | req.query / req.query [key] | null[] |
-| @Queries(key?: string) | None | No/ctx.queries [key] |
+| @Query(key?: string) | req.query / req.query [key] | ctx.query / ctx.query[key] |
+| @Queries(key?: string) | - | -/ctx.queries [key] |
 | @Headers(name?: string) | req.headers / req.headers [name] | ctx.headers / ctx.headers [name] |
 
 :::caution
@@ -205,13 +205,15 @@ Queries will aggregate the same keys together and become an array. When the inte
 
 ### Query
 
-null`` The latter part is a Query String, which is often used to pass parameters in GET-type requests. For example
+The part after `?` in the URL is a Query String, which is often used to pass parameters in GET type requests. 
+
+For example
 
 ```
 GET /user?uid=1&sex=male
 ```
 
-is the parameter passed by the user.
+It is the parameter passed by the user.
 
 **Example: Get from Decorator**
 
@@ -245,8 +247,8 @@ export class UserController {
   async getUser(): Promise<User> {
     const query = this.ctx.query;
     // {
-    null
-    // sex: 'male ',
+    //   uid: '1',
+    // sex: 'male',
     //}
   }
 }
@@ -289,13 +291,13 @@ export class UserController {
 }
 ```
 
-**Example: Get the entire body * *
+**Example: Get the entire body**
 
 ```typescript
 // src/controller/user.ts
 // POST /user/ HTTP/1.1
 // Host: localhost:3000
-null
+// Content-Type: application/json; charset=UTF-8
 //
 // {"uid": "1", "name": "harry"}
 import { Controller, Post, Body } from "@midwayjs/decorator";
@@ -307,9 +309,9 @@ export class UserController {
     // user is equivalent to the entire body object of ctx.request.body
     // => output user
     // {
-    // uid: '1 ',
-    // name: 'harry ',
-    //}
+    //   uid: '1',
+    //   name: 'harry',
+    // }
   }
 }
 ```
@@ -327,7 +329,7 @@ import { Controller, Post, Inject } from "@midwayjs/decorator";
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
-null
+export class UserController {
 
   @Inject()
   ctx: Context;
@@ -336,8 +338,8 @@ null
   async getUser(): Promise<User> {
     const body = this.ctx.request.body;
     // {
-    // uid: '1 ',
-    // name: 'harry ',
+    // uid: '1',
+    // name: 'harry',
     //}
   }
 }
@@ -349,7 +351,7 @@ null
 Decorators can be used in combination.
 ```typescript
 @Post('/')
-null
+async updateUser(@Body() user: User, @Query('pageIdx') pageIdx: number): Promise<User> {
   // user gets it from body
   // pageIdx obtained from query
 }
@@ -379,7 +381,7 @@ If the route is declared in the `:xxx` format, you can use `ctx.params` to obtai
 // GET /user/1
 import { Controller, Get, Param } from "@midwayjs/decorator";
 
-null
+@Controller('/user')
 export class UserController {
   @Get('/:uid')
   async getUser(@Param('uid') uid: string): Promise<User> {
@@ -396,7 +398,7 @@ export class UserController {
 import { Controller, Get, Inject } from "@midwayjs/decorator";
 import { Context } from '@midwayjs/koa';
 
-null
+@Controller('/user')
 export class UserController {
 
   @Inject()
@@ -406,7 +408,7 @@ export class UserController {
   async getUser(): Promise<User> {
     const params = this.ctx.params;
     // {
-    // uid: '1 ',
+    // uid: '1',
     //}
   }
 }
@@ -490,7 +492,7 @@ export class HomeController {
 
 Although a cookie is only a header in HTTP, you can set multiple key-value pairs in the format of `foo = bar;foo1 = bar1;`.
 
-Cookie often plays a role in transmitting client identity information in Web applications. Therefore, there are many security-related configurations that cannot be ignored. The [Cookie](null) document describes the usage of cookies and security-related configuration items in detail.
+Cookie often plays a role in transmitting client identity information in Web applications. Therefore, there are many security-related configurations that cannot be ignored. The [Cookie](cookie_session#Default-Cookies) document describes the usage of cookies and security-related configuration items in detail.
 
 
 
@@ -553,7 +555,7 @@ There are also some more common parameter decorators and their corresponding met
 ```typescript
 @Post('/')
 async updateUser (
-  null
+  @Body('id') id: string,
   @RequestPath() p: string
   @RequestIP() ip: string): Promise<User> {
 
@@ -562,13 +564,13 @@ async updateUser (
 
 
 
-## null
+## Request parameter type conversion
 
-null
+If it is a simple type, Midway will automatically convert the parameter to the user-declared type.
 
 For example:
 
-null
+Number type
 
 ```ts
 @Get('/')
@@ -582,7 +584,7 @@ Boolean type
 - When the value is 0,"0", "false" is converted to false, and the rest return Boolean(value) values
 
 ```ts
-null
+@Get('/')
 async getUser(@Query('id') id: boolean): Promise<User> {
   console.log(typeof id) // boolean
 }
@@ -610,7 +612,7 @@ If you do not want to be converted, you can use Interface.
 
 ```typescript
 interface User {
-  null
+  name: string;
 }
 
 @Get('/')
@@ -654,7 +656,7 @@ export class HomeController {
     // Return json
     return {
       a: 1
-      B: 2
+      b: 2
     };
 
     // return html
@@ -681,8 +683,8 @@ export class HomeController {
 
     // Return JSON
     this.ctx.body = {
-      null
-      B: 2
+      a: 1,
+      b: 2,
     };
 
     // return html
@@ -690,7 +692,7 @@ export class HomeController {
 
     // Return to stream
     this.ctx.body = fs.createReadStream('./good.png');
-  null
+  }
 }
 ```
 
@@ -712,7 +714,7 @@ When sending an error, such as `4xx/5xx`, you can use [exception handling](error
 
 
 ```typescript
-null
+import { Controller, Get, HttpCode } from "@midwayjs/decorator";
 
 @Controller('/')
 export class HomeController {
@@ -765,7 +767,7 @@ export class HomeController {
   @SetHeader('x-bbb', '123')
   async home() {
     return "Hello Midwayjs!";
-  null
+  }
 }
 
 ```
@@ -780,8 +782,8 @@ export class HomeController {
 
   @Get('/')
   @SetHeader ({
-  	'x-bbb ': ' 123 ',
-    'x-ccc ': ' 234'
+  	'x-bbb ': '123',
+    'x-ccc ': '234'
   })
   async home() {
     return "Hello Midwayjs!";
@@ -813,7 +815,7 @@ The response header cannot be modified after the response flow is closed (after 
 
 ### Redirection
 
-If you need to simply redirect one route to another, you can use the `@Redirect` decorator.  `null```
+If you need to simply redirect a route to another route, you can use the `@Redirect` decorator. The parameters of the `@Redirect` decorator are a redirect URL and an optional status code. The default redirect status code is `302` .
 
 In addition, you can jump through the API.
 
@@ -851,7 +853,7 @@ import { Controller, Get, Inject } from "@midwayjs/decorator";
 
 @Controller('/')
 export class HomeController {
-  null
+  @Inject()
   ctx: Context;
 
   @Get('/')
@@ -949,9 +951,9 @@ export default {
 
 ```typescript
 // src/config/config.default.ts
-null
+export default {
   express: {
-    null
+    globalPrefix: '/v1'
   }
 };
 ```
@@ -995,7 +997,7 @@ export class HomeController {
 ## Routing priority
 
 
-null
+Midway has already sorted the routes uniformly, and the wildcard route will automatically reduce the priority and be loaded at the end.
 
 
 The rules are as follows:

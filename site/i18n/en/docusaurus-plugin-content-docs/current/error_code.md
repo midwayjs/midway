@@ -16,7 +16,7 @@ The following are the errors built into the framework, which will increase over 
 | MIDWAY_10009 | MidwayUseWrongMethodError | The wrong method was used |
 | MIDWAY_10010 | MidwaySingletonInjectRequestError | Scope confusion |
 | MIDWAY_10011 | MidwayMissingImportComponentError | Component not imported |
-| MIDWAY_10012 | null | http client call timed out |
+| MIDWAY_10012 | MidwayUtilHttpClientTimeoutError | http client call timed out |
 | MIDWAY_10013 | MidwayInconsistentVersionError | Incorrect dependency version used |
 | MIDWAY_10014 | MidwayInvalidConfigError | Invalid configuration |
 | MIDWAY_10015 | MidwayDuplicateClassNameError | Duplicate class name |
@@ -40,7 +40,7 @@ The error message shall prevail.
 
 **Problem Description**
 
-null
+The parameter of the method is passed in error, the type may be wrong or the parameter format is wrong.
 
 **Solution**
 
@@ -79,7 +79,7 @@ The general error report is similar to the following.
 userService in class HomeController is not valid in current context
 ```
 
-null````
+So, it means that the `userService` property in `HomeController` is not found in the container, you can follow this clue to troubleshoot.
 
 
 
@@ -171,7 +171,7 @@ export class UserService {}
 // ...
 @Provide()
 @Scope(ScopeEnum.Singleton)
-null
+export class LoginService {
   @Inject()
   userService: UserService;
 }

@@ -147,10 +147,10 @@ console.log(response); // Hello Midway!
 <TabItem value="mannual" label="手动调用">
 
 ```ts
-fetch('/api/say ', {
-  method: 'POST ',
+fetch('/api/say', {
+  method: 'POST',
   headers: {
-    'Content-Type': 'application/json ',
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify ({
     args: ['Midway']
@@ -315,9 +315,9 @@ console.log(response); // { token: '123456'}
 <TabItem value="mannual" label="手动调用">
 
 ```ts
-fetch('/auth ', {
+fetch('/auth', {
   headers: {
-    token: '123456 ',
+    token: '123456',
   },
 })
   .then((res) => res.json())

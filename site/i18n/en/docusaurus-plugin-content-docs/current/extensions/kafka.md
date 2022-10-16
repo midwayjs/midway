@@ -55,8 +55,8 @@ Understanding Broker
 
 Midway provides the ability to subscribe to Kafka and can be deployed and used independently. Install the `@midwayjs/kafka` module and its definition.
 ```bash
-$npm I @midwayjs/kafka --save
-$npm I kafkajs --save
+$ npm I @midwayjs/kafka --save
+$ npm I kafkajs --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -196,7 +196,7 @@ export default {
   // ...
   kafka: {
     kafkaConfig: {
-      clientId: 'my-app ',
+      clientId: 'my-app',
       brokers: [process.env.KAFKA_URL || 'localhost:9092']
     },
     consumerConfig: {
@@ -240,7 +240,7 @@ export class UserConsumer {
   @Inject()
   logger;
 
-  @KafkaListener('topic-test0 ', {
+  @KafkaListener('topic-test0', {
     subscription: {
       fromBeginning: false
     },
@@ -343,7 +343,7 @@ export class UserConsumer {
   @Inject()
   logger;
 
-  @KafkaListener('topic-test0 ', {
+  @KafkaListener('topic-test0', {
     subscription: {
       fromBeginning: false
     },
@@ -381,7 +381,7 @@ Note: Midway currently does not use components to support message sending. The e
 
 
 ```bash
-$npm I kafkajs --save
+$ npm I kafkajs --save
 ```
 
 
@@ -457,7 +457,7 @@ export class UserService {
 
     // Send a message
     const result = this.kafkaService.send ({
-      topic: 'test ',
+      topic: 'test',
       messages: [
         {
           value: JSON.stringify(messageValue)

@@ -16,8 +16,8 @@ export class HelloTencentService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.MQ, {
-    topic: 'test-topic ',
-    tags: 'bbb ',
+    topic: 'test-topic',
+    tags: 'bbb',
   })
   async handleCMQEvent(event: SCF.CMQEvent) {
     // xxx
@@ -44,7 +44,7 @@ Example:
 
 ```typescript
 @ServerlessTrigger(ServerlessTriggerType.MQ, {
-  topic: 'test-topic ',
+  topic: 'test-topic',
   region: 'cn-shanghai'
   strategy: 'BACKOFF_RETRY'
 })

@@ -6,7 +6,7 @@ Components are Midway's extension mechanism. We will develop reusable business c
 
 ## Enable components
 
-Components are generally multiplexed in the form of npm packets. Each component is a code package that can be `require` directly. null``
+Components are generally reused in the form of npm packages. Each component is a package of code that can be `required` directly. Let's take the `@midawyjs/validate` component as an example.
 
 First, add dependencies to the application.
 
@@ -52,7 +52,7 @@ import * as info from '@midwayjs/info';
       enabledEnvironment: ['local']
     },
   ],
-null
+})
 export class ContainerLifeCycle {}
 ```
 

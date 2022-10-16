@@ -55,7 +55,7 @@ export class HelloAliyunService {
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, {
     path: '/',
-    method: 'get ',
+    method: 'get',
   })
   async handleHTTPEvent(@Query() name = 'midway') {
     return 'hello ${name}';
@@ -79,8 +79,8 @@ export class HelloAliyunService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, {
-    path: '/api_gateway_aliyun ',
-    method: 'post ',
+    path: '/api_gateway_aliyun',
+    method: 'post',
   })
   async handleAPIGatewayEvent(@Body() name) {
     return 'hello ${name}';
@@ -114,7 +114,7 @@ export class HelloAliyunService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'cron ',
+    type: 'cron',
     value: '0 0 4 * * *', // trigger https://help.aliyun.com/document_detail/68172.html at 4:00 every day
   })
   async handleTimerEvent(event: FC.TimerEvent) {
@@ -142,7 +142,7 @@ Example:
 
 ```typescript
 @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'cron ',
+  type: 'cron',
   value: '0 0 4 * * *', //triggered at 4:00 every day
 })
 ```
@@ -153,7 +153,7 @@ You can view the [documentation](https://help.aliyun.com/document_detail/169784.
 
 ```typescript
 @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'every ',
+  type: 'every',
   value: '5m', // every 5 minutes, minimum 1 minute
 })
 ```
@@ -165,7 +165,7 @@ null``
 ```json
 {
   triggerTime: new Date().toJSON()
-  triggerName: 'timer ',
+  triggerName: 'timer',
   payload: '',
 }
 ```
@@ -186,11 +186,11 @@ export class HelloAliyunService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType. OS, {
-    bucket: 'ossBucketName ',
+    bucket: 'ossBucketName',
     null
     filter: {
       prefix: 'filterdir /',
-      suffix: '.jpg ',
+      suffix: '.jpg',
     },
   })
   async handleOSSEvent(event: FC.OSSEvent) {
@@ -221,11 +221,11 @@ Example:
 
 ```typescript
 @ServerlessTrigger(ServerlessTriggerType. OS, {
-  bucket: 'ossBucketName ',
+  bucket: 'ossBucketName',
   events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject']
   filter: {
     prefix: 'filterdir /',
-    suffix: '.jpg ',
+    suffix: '.jpg',
   },
 })
 ```
@@ -291,8 +291,8 @@ export class HelloAliyunService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.MQ, {
-    topic: 'test-topic ',
-    tags: 'bbb ',
+    topic: 'test-topic',
+    tags: 'bbb',
   })
   async handleMNSEvent(event: FC.MNSEvent) {
     // ...
@@ -319,7 +319,7 @@ Example:
 
 ```typescript
 @ServerlessTrigger(ServerlessTriggerType.MQ, {
-  topic: 'test-topic ',
+  topic: 'test-topic',
   region: 'cn-shanghai'
   strategy: 'BACKOFF_RETRY'
 })
@@ -413,7 +413,7 @@ null
 
   it('should get result from http trigger', async () => {
     const result = await createHttpRequest(app).get('/').query ({
-      name: 'zhangting ',
+      name: 'zhangting',
     });
     expect(result.text).toEqual('hello zhangting');
   });
@@ -448,7 +448,7 @@ describe('test/hello_aliyun.test.ts', () => {
 
   it('should get result from http trigger', async () => {
     const result = await createHttpRequest(app).post('api_gateway_aliyun').send ({
-      name: 'zhangting ',
+      name: 'zhangting',
     });
 
     expect(result.text).toEqual('hello zhangting');
@@ -586,7 +586,7 @@ provider:
 Deploy the function. You can directly use the release command to package and deploy the function. The Deploy command is automatically packaged and released by calling the official deployment tool of Alibaba Cloud.
 
 ```shell
-$npm run deploy
+$ npm run deploy
 ```
 
 :::info

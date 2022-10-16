@@ -1,4 +1,4 @@
-# Process control
+# Pipeline
 
 In some scenarios, we want to split a complete task into different stages, each stage of the execution of the logic is relatively independent, and at the same time can improve the overall execution efficiency through parallel or serial ways. In Midway, we have implemented an optimized Pipeline mode.
 
@@ -7,7 +7,7 @@ In some scenarios, we want to split a complete task into different stages, each 
 ## Pipeline
 
 
-In the Node.js Stream implementation, you can use `a.pipe (B).pipe(c).pipe(d)` to concatenate multiple Streams. however, the implementation of pipe, which can only be executed sequentially, may not meet different business scenarios.
+In the Node.js Stream implementation, you can use `a.pipe(b).pipe(c).pipe(d)` to concatenate multiple Streams. however, the implementation of pipe, which can only be executed sequentially, may not meet different business scenarios.
 
 
 In Midway, we use the `@Pipeline` decorator to create an instance that inherits and `IPipelineHandler` interfaces and can concatenate multiple `IValveHandler` instances for execution.
@@ -28,31 +28,31 @@ The context IPipelineContext of the Pipeline execution period can be used to sto
 
 ```typescript
 interface IPipelineHandler {
-  /* *
-   null
+  /**
+   * Parallel execution, using Promise.all
    * @param opts execution parameters
    */
   parallel<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
-  /* *
+  /**
    * Execute in parallel, and the final result is an array.
    * @param opts execution parameters
    */
   concat<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
-  /* *
+  /**
    * serial execution, using foreach await
    * @param opts execution parameters
    */
   series<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
-  null
+  /**
    * serial execution, using foreach await, the final result is an array
-   null
+	 * @param opts execution parameters
    */
   concatSeries<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
-  /* *
+  /**
    * Serially executed, but the former execution result will be taken as an input parameter and passed into the next execution. The valve result of the last execution will be returned
    * @param opts execution parameters
    */
-  null
+  waterfall<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
 }
 ```
 
@@ -68,32 +68,32 @@ interface IPipelineHandler {
 
 The types of IPipelineResult are as follows.
 ```typescript
-/* *
+/**
  * pipeline execution returns results
  */
 export interface IPipelineResult<T> {
-  /* *
+  /**
    * Success
    */
   success: boolean;
-  /* *
+  /**
    * Exception information (return if any)
    */
   error ?: {
-    /* *
+    /**
      * The anomaly is on that valve.
      */
     valveName?: string;
-    /* *
+    /**
      * Abnormal information
      */
     message?: string;
-    /* *
+    /**
      * Original Error
      */
     error?: Error;
   };
-  /* *
+  /**
    * Return results
    */
   result: T;
@@ -115,7 +115,7 @@ class AccountDto {
   nick: string;
   isFollow: boolean;
 }
-null
+class TabDto {
   tabId: string;
   title: string;
   index: number;
@@ -136,32 +136,32 @@ class TestService {
   // Returns the current login user information
   async getAccount(args: any): Promise<AccountDto> {
     return {
-      id: 'test_account_id ',
-      nick: 'test hello ',
+      id: 'test_account_id',
+      nick: 'test hello',
       isFollow: true
     };
   }
   // Return to the video list
   async getVideos(args: any): Promise<VideoDto[]> {
     return [{
-      null
-      videoUrl: 'https://www.taobao.com/xxx.mp4 ',
+      videoId: '123',
+      videoUrl: 'https://www.taobao.com/xxx.mp4',
       videoTitle: 'test 1 video'
     }, {
-      videoId: '234 ',
-      videoUrl: 'https://www.taobao.com/xxx234.mp4 ',
-      null
+      videoId: '234',
+      videoUrl: 'https://www.taobao.com/xxx234.mp4',
+      videoTitle: 'test 2 video'
     }, {
-      videoId: '456 ',
-      videoUrl: 'https://www.taobao.com/xxx456.mp4 ',
-      null
+      videoId: '456',
+      videoUrl: 'https://www.taobao.com/xxx456.mp4',
+      videoTitle: 'test 3 video'
     }];
   }
-  null
+// return to the tab page
   async getTab(args: any): Promise<TabDto> {
     return {
-      title: 'test tab ',
-      tabId: 'firstTab ',
+      title: 'test tab',
+      tabId: 'firstTab',
       index: 0
     };
   }
@@ -184,7 +184,7 @@ class VideoFeeds implements IValveHandler {
   }
 }
 // Return account information
-null
+@Provide()
 class AccountMap implements IValveHandler {
   alias = 'account';
 
@@ -198,13 +198,13 @@ class AccountMap implements IValveHandler {
   }
 }
 // Returns tab information
-null
+@Provide()
 class CrowFeeds implements IValveHandler {
   alias = 'tab';
   @Inject()
   service: TestService;
 
-  null
+  async invoke(ctx: IPipelineContext): Promise<TabDto> {
     // Get data execution logic
     return this.service.getTab(ctx.args);
   }
@@ -243,30 +243,30 @@ class StageTest {
     {
       // The key with the accountMap alias account as the return object
       account: {
-        id: 'test_account_id ',
-        nick: 'test hello ',
+        id: 'test_account_id',
+        nick: 'test hello',
         isFollow: true
       },
       // The videoFeeds alias video is used as the key of the return object.
       video: [
         {
-          videoId: '123 ',
-          videoUrl: 'https://www.taobao.com/xxx.mp4 ',
+          videoId: '123',
+          videoUrl: 'https://www.taobao.com/xxx.mp4',
           videoTitle: 'test 1 video'
         }, {
-          null
-          videoUrl: 'https://www.taobao.com/xxx234.mp4 ',
+          videoId: '234',
+          videoUrl: 'https://www.taobao.com/xxx234.mp4',
           videoTitle: 'test 2 video'
         }, {
-          videoId: '456 ',
-          videoUrl: 'https://www.taobao.com/xxx456.mp4 ',
+          videoId: '456',
+          videoUrl: 'https://www.taobao.com/xxx456.mp4',
           videoTitle: 'test 3 video'
         }
       ],
       // The crowFeeds alias tab is used as the key of the return object.
       tab: {
-        title: 'test tab ',
-        tabId: 'firstTab ',
+        title: 'test tab',
+        tabId: 'firstTab',
         index: 0
       }
     }
@@ -298,29 +298,29 @@ class StageTest {
     	// Take videoFeeds as the first return object
       [
         {
-          videoId: '123 ',
-          videoUrl: 'https://www.taobao.com/xxx.mp4 ',
+          videoId: '123',
+          videoUrl: 'https://www.taobao.com/xxx.mp4',
           videoTitle: 'test 1 video'
         }, {
-          videoId: '234 ',
-          videoUrl: 'https://www.taobao.com/xxx234.mp4 ',
+          videoId: '234',
+          videoUrl: 'https://www.taobao.com/xxx234.mp4',
           videoTitle: 'test 2 video'
         }, {
-          videoId: '456 ',
-          videoUrl: 'https://www.taobao.com/xxx456.mp4 ',
-          null
+          videoId: '456',
+          videoUrl: 'https://www.taobao.com/xxx456.mp4',
+          videoTitle: 'test 3 video'
         }
       ],
       // Take accountMap as the second return object
       {
-        id: 'test_account_id ',
-        null
+        id: 'test_account_id',
+        nick: 'test hello',
         isFollow: true
       },
       // Take crowFeeds as the third return object
       {
-        title: 'test tab ',
-        tabId: 'firstTab ',
+        title: 'test tab',
+        tabId: 'firstTab',
         index: 0
       }
     ]
@@ -330,7 +330,7 @@ class StageTest {
 ```
 
 
-### null
+### series
 
 
 Here, series is executed in serial, one by one according to the sequence of Pipeline decorator parameters, and the prev in the IPipelienContext is the previous valve, the current is the current, and next is the next valve to be executed.
@@ -363,14 +363,14 @@ class StageTest {
   stages: IPipelineHandler;
 
   async runConcatSeries(): Promise<any> {
-    null
+		// here serially execute videoFeeds, accountMap, crowdFeeds
     return this.stages.concatSeries<any> ({
       args: {aa: 123}
     });
 
     // The result returned here is an array that is assembled with the object returned by concat.
   }
-null
+}
 ```
 
 

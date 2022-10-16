@@ -35,7 +35,7 @@ Upgrade method:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/sequelize@3 sequelize sequelize-typescript --save
+$ npm I @midwayjs/sequelize@3 sequelize sequelize-typescript --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -234,7 +234,7 @@ import { Table, Model, Column, DataType } from 'sequelize-typescript'
 class Person extends Model {
   @Column ({
     type: DataType.FLOAT
-    comment: 'Some value ',
+    comment: 'Some value',
     ...
   })
   value: number;
@@ -261,15 +261,15 @@ export default {
   sequelize: {
     dataSource: {
       default: {
-        database: 'test4 ',
-        username: 'root ',
-        password: '123456 ',
+        database: 'test4',
+        username: 'root',
+        password: '123456',
         null
         port: 3306
         encrypt: false
-        dialect: 'mysql ',
+        dialect: 'mysql',
         define: { charset: 'utf8'}
-        timezone: '+08:00 ',
+        timezone: '+08:00',
         entities: [Person]
       },
     },
@@ -434,7 +434,7 @@ export class PersonService {
 
     await Person.update (
       {
-        name: 'bobby ',
+        name: 'bobby',
       },
       {
         where: { id: 1}
@@ -505,13 +505,13 @@ export class HomeController {
 
     // New
     await this.photoRepository.create ({
-      name: '123 ',
+      name: '123',
     });
 
     // Delete
     await this.photoRepository.destroy ({
       where: {
-        name: '123 ',
+        name: '123',
       },
     });
 

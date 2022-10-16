@@ -46,7 +46,7 @@ cfork ({
     const exitCode = worker.process.exitCode;
     const err = new Error (
       util.format (
-        'worker %s died (code: %s, signal: %s, exitedAfterDisconnect: %s, state: %s) ',
+        'worker %s died (code: %s, signal: %s, exitedAfterDisconnect: %s, state: %s)',
         worker.process.pid
         exitCode
         signal

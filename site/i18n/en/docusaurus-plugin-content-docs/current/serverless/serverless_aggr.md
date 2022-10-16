@@ -91,7 +91,7 @@ null
 The local development of HTTP functions is the same as that of traditional Web. Enter the following command.
 
 ```shell
-$npm run dev
+$ npm run dev
 null
 ```
 

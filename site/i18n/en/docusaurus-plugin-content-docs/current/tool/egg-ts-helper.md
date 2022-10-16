@@ -7,7 +7,7 @@ null Based on the above considerations, midway rewrote this package and provided
 The [@midwayjs/egg-ts-helper](https://github.com/midwayjs/egg-ts-helper) package provides the `ets` global command.
 
 ```bash
-$npm I @midwayjs/egg-ts-helper --save-dev
+$ npm I @midwayjs/egg-ts-helper --save-dev
 $ets
 ```
 

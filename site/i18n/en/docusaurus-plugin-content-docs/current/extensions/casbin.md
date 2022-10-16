@@ -48,7 +48,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/casbin@3 --save
+$ npm I @midwayjs/casbin@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -275,7 +275,7 @@ For example:
 ```typescript
 @UsePermissions ({
   action: AuthActionVerb.READ
-  resource: 'USER_ADDRESS ',
+  resource: 'USER_ADDRESS',
   possession: AuthPossession.ANY
 }, {
   action; AuthActionVerb.READ
@@ -343,7 +343,7 @@ Currently implemented adapters are:
 You need to rely on the `@midwayjs/casbin-redis-adapter` package and Redis components.
 
 ```
-$npm I @midwayjs/casbin-redis-adapter @midwayjs/redis --save
+$ npm I @midwayjs/casbin-redis-adapter @midwayjs/redis --save
 ```
 
 enable the redis component.
@@ -382,10 +382,10 @@ export default (appInfo: MidwayAppInfo) => {
       clients: {
         // Defines a connection for casbin
         node-casbin-official ': {
-          host: '127.0.0.1 ',
+          host: '127.0.0.1',
           port: 6379
           password: '',
-          db: '0 ',
+          db: '0',
         }
       }
     },
@@ -408,7 +408,7 @@ export default (appInfo: MidwayAppInfo) => {
 You need to rely on `@midwayjs/casbin-typeorm-adapter` packages and typeorm components.
 
 ```
-$npm I @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
+$ npm I @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
 ```
 
 Enable typeorm components.

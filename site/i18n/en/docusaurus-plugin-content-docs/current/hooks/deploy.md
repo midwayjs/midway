@@ -62,7 +62,7 @@ import { defineConfig } from '@midwayjs/hooks-kit';
 export default defineConfig ({
   vite: {
     plugins: [react()]
-    base: 'https://cdn.example.com ',
+    base: 'https://cdn.example.com',
   },
 });
 ```

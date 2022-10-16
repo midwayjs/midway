@@ -21,16 +21,16 @@ For example:
 import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { DataListener } from '@midwayjs/core';
 
-null
+@Provide()
 @Scope(ScopeEnum.Singleton)
-null
+export class MemoryDataListener extends DataListener<string> {
   // Initialize data
   initData() {
     return 'hello' + Date.now();
   }
 
   // Update data
-  null
+  onData(setData) {
     setInterval(() => {
       setData('hello' + Date.now());
     }, 1000);
@@ -57,7 +57,7 @@ import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { DataListener } from '@midwayjs/core';
 
 @Provide()
-null
+@Scope(ScopeEnum.Singleton)
 export class MemoryDataListener extends DataListener<string> {
   private intervalHandler;
 

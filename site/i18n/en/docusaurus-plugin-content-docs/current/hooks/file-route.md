@@ -53,7 +53,7 @@ export async function post (
   const ctx = useContext();
 
   return {
-    message: 'Hello ${name}! ',
+    message: 'Hello ${name}!',
     method: ctx.method
   };
 }
@@ -70,10 +70,10 @@ console.log(response.data); // { message: 'Hello Midway!', method: 'POST'}
 null
 
 ```ts
-fetch('/api/post ', {
-  method: 'POST ',
+fetch('/api/post', {
+  method: 'POST',
   headers: {
-    'Content-Type': 'application/json ',
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify ({
     args: ['Midway']
@@ -119,11 +119,11 @@ The configuration example is as follows:
 import { defineConfig } from '@midwayjs/hooks';
 
 export default defineConfig ({
-  source: './src/apis ',
+  source: './src/apis',
   routes: [
     {
-      baseDir: 'lambda ',
-      basePath: '/api ',
+      baseDir: 'lambda',
+      basePath: '/api',
     },
   ],
 });

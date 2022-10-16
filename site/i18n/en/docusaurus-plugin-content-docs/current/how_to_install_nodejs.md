@@ -6,7 +6,7 @@ Generally, you can download the corresponding installation package from the [Nod
 
 However, when you **develop on-premises**, you often need to quickly update or switch the version.
 
-null[](https://github.com/creationix/nvm)[](https://github.com/tj/n)[](https://github.com/jasongin/nvs)
+The community has solutions such as [nvm](https://github.com/creationix/nvm), [n](https://github.com/tj/n), etc. We recommend cross-platform [nvs](https:/ /github.com/jasongin/nvs).
 
 - nvs is cross-platform.
 - Nvs is written based on Node, and we can participate in maintenance.
@@ -28,9 +28,9 @@ null[](https://github.com/creationix/nvm)[](https://github.com/tj/n)[](https://g
 
 The project corresponding to Git Clone can be used.
 
-```
-$export NVS_HOME="$HOME/.nvs"
-$git clone https://github.com/jasongin/nvs --depth=1 "$NVS_HOME"
+```bash
+$ export NVS_HOME="$HOME/.nvs"
+$ git clone https://github.com/jasongin/nvs --depth=1 "$NVS_HOME"
 $ . "$NVS_HOME/nvs.sh" install
 ```
 
@@ -43,14 +43,14 @@ Visit [nvs/releases](https://github.com/jasongin/nvs/releases) to download the l
 
 ## Configure mirror address
 In China, due to reasons that everyone knows, it is necessary to modify the corresponding mirror address:
-```
-$nvs remote node https://npmmirror.com/mirrors/node/
-$nvs remote
-default node
-chakracore https://github.com/nodejs/node-chakracore/releases/
-chakracore-nightly https://nodejs.org/download/chakracore-nightly/
-nightly https://nodejs.org/download/nightly/
-node https://nodejs.org/dist/
+```bash
+$ nvs remote node https://npmmirror.com/mirrors/node/
+$ nvs remote
+default             node
+chakracore          https://github.com/nodejs/node-chakracore/releases/
+chakracore-nightly  https://nodejs.org/download/chakracore-nightly/
+nightly             https://nodejs.org/download/nightly/
+node                https://nodejs.org/dist/
 ```
 
 ---
@@ -59,20 +59,20 @@ node https://nodejs.org/dist/
 With the following command, you can easily install the latest LTS version of Node.js.
 ```bash
 # Install the latest LTS version
-$nvs add lts
+$ nvs add lts
 # Configure as default version
-$nvs link lts
+$ nvs link lts
 ```
 Install other versions:
 ```bash
 # Install other versions and try them
-null
+$ nvs add 12
 # View installed versions
-$nvs ls
+$ nvs ls
 # Switch version at current Shell
-$nvs use 12
+$ nvs use 12
 ```
-For more information, see `nvs -- help`.
+For more information, see `nvs --help`.
 
 ---
 
@@ -81,13 +81,13 @@ If you use `nvs`, the default `prefix` is the installation path of the currently
 One problem is that after switching versions, the previous installation of the global command module needs to be reinstalled, which is very inconvenient.
 The solution is to configure a unified global module installation path to `~/.npm-global`, as follows:
 ```bash
-$mkdir -p ~/.npm-global
-$npm config set prefix ~/.npm-global
+$ mkdir -p ~/.npm-global
+$ npm config set prefix ~/.npm-global
 ```
 You must also configure environment variables in the `~/.bashrc` or `~/.zshrc` file:
 ```bash
-$echo "export PATH=~/.npm-global/bin:$PATH" >> ~/.zshrc
-$source ~/.zshrc
+$ echo "export PATH=~/.npm-global/bin:$PATH" >> ~/.zshrc
+$ source ~/.zshrc
 ```
 
 ---

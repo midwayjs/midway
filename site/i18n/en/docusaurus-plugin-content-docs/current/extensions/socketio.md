@@ -30,9 +30,9 @@ Related information:
 
 Or install Socket.io dependencies in existing projects.
 ```bash
-$npm I @midwayjs/socketio@3 --save
+$ npm I @midwayjs/socketio@3 --save
 null
-$npm I @types/socket.io-client socket.io-client --save-dev
+$ npm I @types/socket.io-client socket.io-client --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -363,7 +363,7 @@ Message middleware that takes effect when a specific message is received.
 export class APIController {
 
   // Middleware when Message is triggered
-  @OnWSMessage('my ', {
+  @OnWSMessage('my', {
     middleware: [SocketMiddleware]
   })
   @WSEmit(' OK ')
@@ -444,7 +444,7 @@ If our server processing logic is as follows (returns the result of adding the d
 @WSEmit('myEventResult')
 async gotMessage(data1, data2, data3) {
   return {
-    name: 'harry ',
+    name: 'harry',
   	result: data1 + data2 + data3
   };
 }
@@ -478,7 +478,7 @@ describe('/test/index.test.ts', () => {
 
     // Judgment result
     expect(data).toEqual ({
-      name: 'harry ',
+      name: 'harry',
       result: 6
     });
 
@@ -517,7 +517,7 @@ describe('/test/index.test.ts', () => {
     const [data] = await gotEvent;
     // Judgment result
     expect(data).toEqual ({
-      name: 'harry ',
+      name: 'harry',
       result: 6
     });
 
@@ -547,7 +547,7 @@ For example, server code:
 @WSEmit('myEventResult')
 null
   return {
-    name: 'harry ',
+    name: 'harry',
   	result: data1 + data2 + data3
   };
 }
@@ -576,7 +576,7 @@ describe('/test/index.test.ts', () => {
 
     // Judgment result
     expect(data).toEqual ({
-      name: 'harry ',
+      name: 'harry',
       result: 6
     });
 
@@ -835,7 +835,7 @@ Socket.io has updated the original adapter package name. The current package nam
 The installation is as follows:
 
 ```bash
-$npm I @socket.io/redis-adapter --save
+$ npm I @socket.io/redis-adapter --save
 ```
 
 
@@ -917,7 +917,7 @@ export default {
 Consistent with the following ports.
 ```typescript
 // socket.io client
-const socket = io('************:7001 ', {
+const socket = io('************:7001', {
   //...
 });
 
@@ -941,7 +941,7 @@ Consistent with the path below
 
 ```typescript
 // socket.io client
-const socket = io('************:7001 ', {
+const socket = io('************:7001', {
   Path: '/testPath' // here is the path of the client
 });
 
@@ -968,7 +968,7 @@ Io ('*****:3000/test', {}); // Here is the namespace of the client
 
 // midway's socket.io test client
 const client = await createSocketIOClient ({
-  namespace: '/test ',
+  namespace: '/test',
 });
 ```
 

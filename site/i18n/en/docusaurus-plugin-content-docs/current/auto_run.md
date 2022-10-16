@@ -13,7 +13,7 @@ export class RedisErrorListener() {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-null
+export class DataSyncListener() {
   // ...
 }
 ```
@@ -26,16 +26,15 @@ In general, we will create an instance at startup by `getAsync` methods to make 
 // configuration.ts
 //...
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {
-  null
+  async onReady(container) {
     await container.getAsync(RedisErrorListerner);
     await container.getAsync(DataSyncListerner);
   }
 }
-
 ```
 
 In this way, once there is more code, there will be many necessary process codes in the onReady.
@@ -64,7 +63,7 @@ export class RedisErrorListener() {
 }
 ```
 
-null````
+This automatically initializes without using the `getAsync` method in `onReady` and executes the init method.
 
 
 

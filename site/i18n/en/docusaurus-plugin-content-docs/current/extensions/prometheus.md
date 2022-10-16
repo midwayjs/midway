@@ -15,7 +15,7 @@ The access effect is as follows:
 First install the indicator monitoring component provided by Midway:
 
 ```bash
-$npm install @midwayjs/prometheus -S
+$ npm install @midwayjs/prometheus -S
 ```
 
 Or reinstall the following dependencies in `package.json`.

@@ -36,7 +36,7 @@ describe('test/hello_aliyun.test.ts', () => {
 
   it('should get result from api gateway trigger', async () => {
     const result = await createHttpRequest(app).get('/').query ({
-      name: 'zhangting ',
+      name: 'zhangting',
     });
     expect(result.text).toEqual('hello zhangting');
   });
@@ -148,7 +148,7 @@ The `createTimerEvent` method here returns a data structure that matches the pla
 ```json
 {
   triggerTime: new Date().toJSON()
-  triggerName: 'timer ',
+  triggerName: 'timer',
   payload: '',
 }
 ```

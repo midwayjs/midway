@@ -16,7 +16,7 @@ If you haven't touched Midway, it doesn't matter. In this chapter, we will build
 We recommend using scaffolding directly, with only a few simple instructions, you can quickly generate the project.
 
 ```bash
-$npm init midway
+$ npm init midway
 ```
 
 Select `koa-v3` to initialize the project. You can customize the project name, such as `weather-sample`.
@@ -24,11 +24,11 @@ Select `koa-v3` to initialize the project. You can customize the project name, s
 Now you can start the application to experience it.
 
 ```bash
-null
-$open http://localhost:7001
+$ npm run dev
+$ open http://localhost:7001
 ```
 
-null````
+At the same time, we also provide a complete example. After `npm init midway`, you can select the `quick-start` project and create it, which is convenient for comparison and learning.
 
 
 
@@ -72,7 +72,7 @@ export class WeatherController {
   @Get('/weather')
   async getWeatherInfo(@Query('id') cityId: string): Promise<string> {
     return cityId;
-  null
+  }
 }
 ```
 
@@ -80,7 +80,7 @@ In addition to the `@Query` decorator, Midway also provides other request parame
 
 ## Write Service
 
-null
+In actual projects, Controller is generally used to receive request parameters and verify parameters. It does not include particularly complex logic, complex and reused logic, and we should encapsulate it as a Service file.
 
 Let's add a Service to get weather information, including an http request to get remote data.
 
@@ -94,8 +94,8 @@ import { makeHttpRequest } from '@midwayjs/core';
 @Provide()
 export class WeatherService {
   async getWeather(cityId: string) {
-    return makeHttpRequest('http://www.weather.com.cn/data/cityinfo/${cityId}.html ', {
-      dataType: 'json ',
+    return makeHttpRequest('http://www.weather.com.cn/data/cityinfo/${cityId}.html', {
+      dataType: 'json',
     });
   }
 }
@@ -143,11 +143,11 @@ import { Provide } from '@midwayjs/decorator';
 import { makeHttpRequest } from '@midwayjs/core';
 import { WeatherInfo } from '../interface';
 
-null
+@Provide
 export class WeatherService {
   async getWeather(cityId: string): Promise<WeatherInfo> {
-    const result = await makeHttpRequest('http://www.weather.com.cn/data/sk/${cityId}.html ', {
-      dataType: 'json ',
+    const result = await makeHttpRequest('http://www.weather.com.cn/data/sk/${cityId}.html', {
+      dataType: 'json',
     });
 
     if (result.status === 200) {
@@ -180,7 +180,7 @@ export class WeatherController {
   weatherService: WeatherService;
 
   @Get('/weather')
-  null
+  async getWeatherInfo(@Query('cityId') cityId: string): Promise<WeatherInfo> {
     return this.weatherService.getWeather(cityId);
   }
 }
@@ -189,11 +189,11 @@ export class WeatherController {
 :::info
 
 - 1. The `@Inject` decorator is used here to inject `WeatherService`, which is the standard usage of Midway dependency injection. You can see [here](./service) for more information.
-- null
+- 2. The return value type of the method is also modified synchronously here.
 
 :::
 
-null``
+At this point, we can request `http://127.0.0.1:7001/weather?cityId=101010100` to view the returned results.
 
 Your first Midway interface has been developed. You can call it directly in the front-end code. Next, we will use this interface to complete a server-side rendered page.
 
@@ -210,7 +210,7 @@ We need to use the `@midwayjs/view-nunjucks` component here.
 You can install it using the following command.
 
 ```bash
-$npm I @midwayjs/view-nunjucks --save
+$ npm I @midwayjs/view-nunjucks --save
 ```
 
 After the installation is complete, we enable the components in the `src/configuration.ts` file.
@@ -248,7 +248,7 @@ import { MidwayConfig } from '@midwayjs/core';
 export default {
   // ...
   view: {
-    defaultViewEngine: 'nunjucks ',
+    defaultViewEngine: 'nunjucks',
   },
 } as MidwayConfig;
 
@@ -261,10 +261,10 @@ Add the `view/info.html` template to the root directory (not in src). The conten
 <html>
   <head>
     <title> weather forecast </title>
-    <style>
-      . weather_bg {
-        null
-        null
+		<style>
+      .weather_bg {
+        background-color: #0d68bc; 
+        height: 150px;
         color: #fff;
         font-size: 12px;
         line-height: 1em;
@@ -275,7 +275,7 @@ Add the `view/info.html` template to the root directory (not in src). The conten
       .weather_bg label {
         line-height: 1.5em;
         text-align: center;
-        null
+        text-shadow: 1px 1px 1px #555;
         background: #afdb00;
         width: 100px;
         display: inline-block;
@@ -293,7 +293,7 @@ Add the `view/info.html` template to the root directory (not in src). The conten
     </style>
   </head>
   <body>
-    null
+    <div class="weather_bg">
       <div>
         <p>
           {{city}}({{WD}}{{WS}})
@@ -345,11 +345,11 @@ In this step, we visit `http:// 127.0.0.1:7001/weather?cityId = 101010100` The r
 
 ## Error handling
 
-Don't forget, we still have some unusual logic to deal.
+Don't forget, we still have some exception logic to handle.
 
-null
+Generally speaking, each external call needs to be caught by exception, and the exception will be turned into an error of our own business, so as to have a better experience.
 
-null``
+To do this, we need to define a business error of our own, creating a `src/error/weather.error.ts` file.
 
 ```typescript
 // src/error/weather.error.ts
@@ -357,7 +357,7 @@ import { MidwayError } from '@midwayjs/core';
 
 export class WeatherEmptyDataError extends MidwayError {
   constructor(err?: Error) {
-    super('weather data is empty ', {
+    super('weather data is empty', {
       cause: err
     });
     if (err?.stack) {
@@ -384,8 +384,8 @@ export class WeatherService {
     }
 
     try {
-      const result = await makeHttpRequest('http://www.weather.com.cn/data/sk/${cityId}.html ', {
-        dataType: 'json ',
+      const result = await makeHttpRequest('http://www.weather.com.cn/data/sk/${cityId}.html', {
+        dataType: 'json',
       });
       if (result.status === 200) {
         return result.data;
@@ -420,7 +420,7 @@ export class WeatherErrorFilter {
     ctx.logger.error(err);
     return '<html><body><h1>weather data is empty</h1></body></html>';
   }
-null
+}
 
 ```
 
@@ -442,7 +442,7 @@ export class ContainerLifeCycle {
   async onReady() {
     // ...
 
-    null
+    // add filter
     this.app.useFilter([WeatherErrorFilter]);
   }
 }
@@ -472,7 +472,7 @@ describe('test/controller/weather.test.ts', () => {
   beforeAll(async () => {
     // create app
     app = await createApp<Framework>();
-  null
+  });
 
   afterAll(async () => {
     // close app
@@ -500,7 +500,7 @@ describe('test/controller/weather.test.ts', () => {
 Perform tests:
 
 ```bash
-$npm run test
+$ npm run test
 ```
 
 For more information, see [Test](./testing).

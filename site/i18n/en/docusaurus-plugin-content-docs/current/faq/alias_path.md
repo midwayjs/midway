@@ -11,7 +11,7 @@ Tsc does not convert the module path of import when compiling ts into js, so whe
 The solution is to either use paths, or use paths to import some declarations instead of specific values, or use [tsconfig-paths](https://github.com/dividab/tsconfig-paths) to hook out the module path resolution logic in node to support paths in `tsconfig.json`.
 
 ```bash
-$npm I tsconfig-paths --save-dev
+$ npm I tsconfig-paths --save-dev
 ```
 
 The use tsconfig-paths can be introduced in `src/configuration.ts`.
@@ -37,8 +37,8 @@ In the test, due to Jest's special environment, alias needs to be processed agai
 
 ```typescript
 module.exports = {
-  preset: 'ts-jest ',
-  testEnvironment: 'node ',
+  preset: 'ts-jest',
+  testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>/test/fixtures']
   coveragePathIgnorePatterns: ['<rootDir>/test/']
   moduleNameMapper: {

@@ -34,16 +34,16 @@ It itself contains several parts:
 
 ```bash
 ## Required
-$npm I @midwayjs/passport@3 --save
+$ npm I @midwayjs/passport@3 --save
 
 ## Optional
 ## Install the local policy below
-$npm I passport-local --save
-$npm I @types/passport-local --save-dev
+$ npm I passport-local --save
+$ npm I @types/passport-local --save-dev
 ## Install Github policy below
-$npm I passport-github --save
+$ npm I passport-github --save
 ## Install Jwt policy below
-$npm I passport-jwt --save
+$ npm I passport-jwt --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -163,7 +163,7 @@ export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
   // Set AuthenticateOptions
   getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions {
     return {
-      failureRedirect: '/login ',
+      failureRedirect: '/login',
     };
   }
 }
@@ -179,7 +179,7 @@ export class LocalController {
 
   @Post('/passport/local', { middleware: [LocalPassportMiddleware] })
   async localPassport() {
-    console.log('local user: ', this.ctx.state.user);
+    console.log('local user:', this.ctx.state.user);
     return this.ctx.state.user;
   }
 }
@@ -200,7 +200,7 @@ Results {"username": "demo", "password": "1234"}
 **Additional installation** of dependencies and policies is required first:
 
 ```bash
-$npm I @midwayjs/jwt passport-jwt --save
+$ npm I @midwayjs/jwt passport-jwt --save
 ```
 
 Additional jwt components are enabled.
@@ -304,7 +304,7 @@ export class JwtController {
 
   @Post('/passport/jwt', { middleware: [JwtPassportMiddleware] })
   async jwtPassport() {
-    console.log('jwt user: ', this.ctx.state.user);
+    console.log('jwt user:', this.ctx.state.user);
     return this.ctx.state.user;
   null
 

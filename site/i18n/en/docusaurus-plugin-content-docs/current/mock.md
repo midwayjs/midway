@@ -69,7 +69,7 @@ it('should test create koa app with new mode with mock', async () => {
 Use `mockHeader` methods to simulate Header.
 
 ```typescript
-null
+import { mockHeader } from '@midwayjs/mock';
 
 it('should test create koa app with new mode with mock', async () => {
   const app = await createApp();
@@ -106,7 +106,7 @@ import { mockClassProperty } from '@midwayjs/mock';
 
 it('should test create koa app with new mode with mock', async () => {
 
-  mockClassProperty(UserService, 'data ', {
+  mockClassProperty(UserService, 'data', {
     bbb: 1
   });
   // userService.data => {bbb: 1}
@@ -136,7 +136,7 @@ it('should test create koa app with new mode with mock', async () => {
 
 ### Simulate common object properties
 
-null``
+Use the `mockProperty` method to mock object properties.
 
 ```typescript
 import { mockProperty } from '@midwayjs/mock';
@@ -159,7 +159,7 @@ import { mockProperty } from '@midwayjs/mock';
 
 it('should test create koa app with new mode with mock', async () => {
 
-  null
+  const a = {};
   mockProperty(a, 'getUser', async () => {
     return 'midway';
   });
@@ -167,7 +167,7 @@ it('should test create koa app with new mode with mock', async () => {
   // a.getUser() => 'midway'
 
   // ...
-null
+});
 ```
 
 
@@ -195,4 +195,4 @@ Midway provides standard MidwayMockService services for simulating data in code.
 
 Various simulation methods in `@midwayjs/mock` have all called this service at the bottom.
 
-For more information, see [Built-in services](null).
+For more information, see [Built-in services](./built_in_service#midwaymockservice).

@@ -7,7 +7,7 @@
 We usually install pm2 to the global.
 
 ```bash
-$npm install pm2 -g# command line installation pm2
+$ npm install pm2 -g# command line installation pm2
 ```
 
 ## Common commands

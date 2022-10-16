@@ -1,6 +1,4 @@
----
-title: 关于 Midway 启动慢的问题
----
+# 关于 Midway 启动慢的问题
 
 Midway 在本地开发时会使用 ts-node 实时扫描并 require 模块，如果 ts 文件太多（比如 200+）个，启动时可能会导致比较慢，在 Windows 下非 SSD 硬盘的情况下特别明显，导致 ts-node 的类型检查的 Server 频繁 fullGC，每个文件加载可能会达到 1-2s。
 
@@ -8,7 +6,7 @@ Midway 在本地开发时会使用 ts-node 实时扫描并 require 模块，如�
 
 如下图所示。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523014939-40121f9c-bc19-4f9e-a7e6-e744d409a9ea.png#height=486&id=JKv1L&margin=%5Bobject%20Object%5D&name=image.png&originHeight=972&originWidth=1488&originalType=binary&size=523362&status=done&style=none&width=744" width="744" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1601523014939-40121f9c-bc19-4f9e-a7e6-e744d409a9ea.png)
 
 ## 如何判断
 
@@ -16,11 +14,11 @@ Midway 在本地开发时会使用 ts-node 实时扫描并 require 模块，如�
 
 在临时目录中有一个 `ts-node-*` 的目录，删除即可（不知道临时目录的可以在命令行执行 `require('os').tmpdir()` 输出查看）。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523402032-7e9c162a-762e-4cba-82b4-8ae63fe37280.png#height=121&id=EOZnh&margin=%5Bobject%20Object%5D&name=image.png&originHeight=242&originWidth=960&originalType=binary&size=45718&status=done&style=none&width=480" width="480" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1601523402032-7e9c162a-762e-4cba-82b4-8ae63fe37280.png)
 
 删了下面类似的这个目录。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523340452-7924affe-96b5-4544-85b7-e41ace4206e8.png#height=255&id=fFggf&margin=%5Bobject%20Object%5D&name=image.png&originHeight=510&originWidth=1200&originalType=binary&size=86980&status=done&style=none&width=600" width="600" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1601523340452-7924affe-96b5-4544-85b7-e41ace4206e8.png)
 
 2、用 ts-node 启动 Midway
 
@@ -36,7 +34,7 @@ cross-env NODE_DEBUG=midway* NODE_ENV=local midway-bin dev --ts
 
 会出现每个文件的 require 时长，如果时间比较久一般就是了。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523470970-1812326a-39d9-4b39-af57-7723f80f6e17.png#height=471&id=OwZNU&margin=%5Bobject%20Object%5D&name=image.png&originHeight=942&originWidth=2176&originalType=binary&size=828844&status=done&style=none&width=1088" width="1088" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1601523470970-1812326a-39d9-4b39-af57-7723f80f6e17.png)
 
 ## 解决问题
 

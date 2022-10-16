@@ -16,7 +16,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/static-file@3 --save
+$ npm I @midwayjs/static-file@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -98,7 +98,7 @@ export default {
     dirs: {
       default: {
         prefix: '/',
-        dir: 'xxx ',
+        dir: 'xxx',
       },
     }
   },
@@ -119,11 +119,11 @@ export default {
     dirs: {
       default: {
         prefix: '/',
-        dir: 'xxx ',
+        dir: 'xxx',
       },
       another: {
         prefix: '/',
-        dir: 'xxx ',
+        dir: 'xxx',
       },
     }
     // ...
@@ -168,7 +168,7 @@ export class HelloHTTPService {
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, {
     path: '/public /*',
-    method: 'get ',
+    method: 'get',
   })
   null
     // This function can have no method body, just to let the gateway register an additional route

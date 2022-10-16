@@ -15,16 +15,16 @@ The framework provides extensible configuration functions, which can automatical
 
 You can customize the directory and put the configuration files of multiple environments in it. For example, the following common directory structures are used. For more information about the specific environment, see [Running environment](environment).
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ├── config
-│ │ ├── config.default.ts
-│ │ ├── config.prod.ts
-│ │ ├── config.unittest.ts
-│ │ └── config.local.ts
-│ ├── interface.ts
-│ └── service
+│   ├── config
+│   │   ├── config.default.ts
+│   │   ├── config.prod.ts
+│   │   ├── config.unittest.ts
+│   │   └── config.local.ts
+│   ├── interface.ts
+│   └── service
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -71,7 +71,7 @@ The configuration files of each environment **must be explicitly specified and a
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
-null
+import { join } from 'path';
 
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
@@ -105,7 +105,7 @@ Specifies that a directory is loaded. All `config.*.ts` in the directory are sca
 The rules for the configuration file are:
 
 
-- null``
+- 1. You can specify a directory, the traditional `src/config` directory is recommended, or you can specify a file
 - 2. file designation does not require TS suffix
 - 3. The configuration file **must be explicitly specified and added**.
 
@@ -114,13 +114,13 @@ The rules for the configuration file are:
 **Example: Specify a directory**
 
 ```typescript
-null
+// src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   importConfigs: [
-    join(__dirname, './config/')
+    join(__dirname, './config/'),
   ]
 })
 export class ContainerLifeCycle {
@@ -139,11 +139,11 @@ When you manually specify a batch of files, an error will be reported if the fil
 import { Configuration } from '@midwayjs/decorator';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   importConfigs: [
-    join(__dirname, './config/config.default')
-    join(__dirname, './config/config.local')
-    null
+    join(__dirname, './config/config.default'),
+    join(__dirname, './config/config.local'),
+    join(__dirname, './config/custom.local')		// You can use custom naming, as long as the middle part has an environment
   ]
 })
 export class ContainerLifeCycle {
@@ -206,13 +206,13 @@ The configuration of the components will be documented in this format.
 The configuration file format is object, for example:
 
 ```typescript
-null
+// src/config/config.default.ts
 import { MidwayConfig } from '@midwayjs/core';
 
 export default {
-  keys: '1639994056460_8009 ',
-  null
-    port: 7001
+  keys: '1639994056460_8009',
+  koa: {
+    port: 7001,
   },
 } as MidwayConfig;
 ```
@@ -230,7 +230,7 @@ import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
 
 export default (appInfo: MidwayAppInfo): MidwayConfig => {
   return {
-    keys: '1639994056460_8009 ',
+    keys: '1639994056460_8009',
     koa: {
       port: 7001
     },
@@ -272,13 +272,13 @@ For example, we have enabled the effect of the view component.
 
 Why not use the normal key export form and use the object?
 
-null
+1. If the user does not understand the configuration items, he still needs to check the document to understand the meaning of each item. Except that the first layer has a certain prompt function, the later level prompts have no obvious efficiency improvement.
 
 2. The form of key export has no advantage in the deep structure.
 
 3. Key export may be duplicated, but there will be no warning or error at the code level, which is difficult to troubleshoot. This object form is relatively friendly.
 
-null
+:::
 
 
 
@@ -312,9 +312,9 @@ For example, the following code will find the `config.default.*` and `config.loc
 import { Configuration } from '@midwayjs/decorator';
 import { join } from 'path';
 
-null
+@Configuration({
   importConfigs: [
-    join(__dirname, './config/')
+    join(__dirname, './config/'),
   ]
 })
 export class ContainerLifeCycle {
@@ -337,13 +337,13 @@ Except for the above table, the rest are values of `*.default.ts + *.{current en
 In addition, the configured merge uses the [extend2](https://github.com/eggjs/extend2) module for deep copy, [extend2](https://github.com/eggjs/extend2) fork from [extend](https://github.com/justmoon/node-extend), and there will be differences in array processing.
 
 ```javascript
-null
-  arr: [ 1, 2]
+const a = {
+  arr: [ 1, 2 ],
 };
-const B = {
-  arr: [ 3]
+const b = {
+  arr: [ 3 ],
 };
-extend(true, a, B);
+extend(true, a, b);
 // => { arr: [ 3 ] }
 ```
 According to the above example, the framework directly covers the array instead of merging.
@@ -369,10 +369,10 @@ import { Config } from '@midwayjs/decorator';
 export class IndexHandler {
 
   @Config('userService')
-  null
+  userConfig;
 
   async handler() {
-  	console.log(this.userConfig); // { appname: 'test'}
+  	console.log(this.userConfig);  // { appname: 'test'}
   }
 }
 ```
@@ -401,7 +401,7 @@ For example, the data source is:
 ```
 You can write complex fetch expressions to fetch values, as shown in the following example.
 ```typescript
-null
+import { Config } from '@midwayjs/decorator';
 
 export class IndexHandler {
 
@@ -409,10 +409,9 @@ export class IndexHandler {
   data;
 
   async handler() {
-  	null
+  	console.log(this.data);  // xxx
   }
 }
-
 ```
 
 
@@ -430,9 +429,9 @@ export class IndexHandler {
   allConfig;
 
   async handler() {
-  	console.log(this.allConfig); // { userService: { appname: 'test'}}
+  	console.log(this.allConfig);  // { userService: { appname: 'test'}}
   }
-null
+}
 ```
 
 
@@ -487,10 +486,10 @@ You can add configuration before starting the code.
 // bootstrap.js
 const { Bootstrap } = require('@midwayjs/bootstrap');
 Bootstrap
-  .configure ({
+  .configure({
   	globalConfig: {
       default: {
-        keys: 'abcde ',
+        keys: 'abcde',
         koa: {
           port: 7001
         }
@@ -500,7 +499,7 @@ Bootstrap
           port: null
         }
       }
-    null
+    }
   })
   .run();
 ```
@@ -519,11 +518,11 @@ You can use the [API](./built_in_service#midwayconfigservice) provided by midway
 ## Use environmental variables
 
 
-null````
+The community has some libraries, such as `dotenv`, which can load `.env` files and inject them into the environment, so as to put some keys in the environment, which can be directly used in Midway.
 ```bash
-$npm I dotenv --save
+$ npm I dotenv --save
 ```
-null``
+We can initialize in entry points like `bootstrap.js` or `configuration` .
 ```
 OSS_SECRET = 12345
 OSS_ACCESSKEY = 54321
@@ -537,7 +536,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 @Configuration ({
-  null
+  //...
 })
 export class AutoConfiguration {
   async onReady(container) {
@@ -574,7 +573,8 @@ There are many possibilities that the configuration does not take effect, and th
 ### 1. Get the value injected by @Config in the constructor (constructor)
 
 
-* * Please do not get the attribute injected by `@Config()` in the constructor * *, which will make the result undefined. The reason is that the properties injected by the decorator are assigned only after the instance is created (new). In this case, use the `@Init` decorator.
+**Please do not get the attribute injected by `@Config()` in the constructor**, which will make the result undefined. The reason is that the properties injected by the decorator are assigned only after the instance is created (new). In this case, use the `@Init` decorator.
+
 ```typescript
 @Provide()
 export class UserService {
@@ -605,7 +605,7 @@ export default (appInfo) => {
   const config = {};
 
   // xxx
-  null
+  return config;
 };
 
 export const keys = '12345';
@@ -621,7 +621,7 @@ The value defined by `export const` is ignored.
 
 ```typescript
 export default {
-  keys: '12345 ',
+  keys: '12345',
 }
 
 export const anotherKey = '54321';
@@ -636,12 +636,12 @@ If the `export =` parameter is mixed, the value of the `export =` parameter is i
 export = {
   a: 1
 }
-export const B = 2;
+export const b = 2;
 ```
 
 Compiled results:
 
 ```typescript
-export const B = 2;
+export const b = 2;
 ```
 

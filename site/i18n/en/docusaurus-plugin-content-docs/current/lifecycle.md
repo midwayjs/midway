@@ -22,22 +22,22 @@ The interface is defined as follows.
 
 ```typescript
 interface ILifeCycle {
-  /* *
+	/**
   * Execute after the application configuration is loaded
   */
   onConfigLoad?(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
 
-  /* *
+	/**
    * Execute when relying on the injection container ready
    */
   onReady(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
 
-  /* *
+	/**
    * Execute after the application service is started
    */
   onServerReady?(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
 
-   /* *
+ 	/**
    * Execute when the application stops
    */
   onStop?(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
@@ -79,7 +79,7 @@ onReady is a life cycle that is used in most scenarios.
 
 :::info
 Note that ready here refers to the dependency injection container ready, not the application ready, so you can make any extension to the application, such as adding middleware, connecting databases, etc.
-null
+:::
 
 
 We need to connect a database in advance during initialization. Since it is in the class, we can also inject the connection tool class of a database such as db through the `@Inject` decorator. This instance contains two functions, connect and close:
@@ -91,7 +91,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-null
+export class MainConfiguration implements ILifeCycle {
   @Inject()
   db: any;
 
@@ -108,7 +108,7 @@ null
 ```
 
 
-In this way, we can establish a database connection when the application starts, instead of creating it when the response is requested. null
+In this way, we can establish the database connection when the application starts, rather than creating it when the response is requested. At the same time, when the application is stopped, the database connection can also be closed gracefully.
 
 
 In addition, in this way, the default injected objects can be expanded.
@@ -116,7 +116,7 @@ In addition, in this way, the default injected objects can be expanded.
 
 ```typescript
 // src/configuration.ts
-null
+import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as sequelize from 'sequelize';
 
@@ -125,17 +125,17 @@ export class MainConfiguration implements ILifeCycle {
 
   async onReady(container: IMidwayContainer): Promise<void> {
     // Three-party package object
-    null
+    container.registerObject('sequelize', sequelize);
   }
 }
 ```
 
 
-null
+It can be directly injected into other classes.
 
 
 ```typescript
-null
+export class IndexHandler {
 
   @Inject()
   sequelize;
@@ -162,7 +162,7 @@ import * as koa from '@midwayjs/koa';
 
 @Configuration ({
   imports: [koa]
-null
+})
 export class MainConfiguration implements ILifeCycle {
 
   async onServerReady(container: IMidwayContainer): Promise<void> {
@@ -172,7 +172,7 @@ export class MainConfiguration implements ILifeCycle {
     // ...
 
   }
-null
+}
 ```
 
 
@@ -203,7 +203,7 @@ export class MainConfiguration implements ILifeCycle {
     // Close database connection
     await this.db.close();
   }
-null
+}
 ```
 
 
@@ -239,7 +239,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, ObjectBeforeCreatedOptions } from '@midwayjs/core';
 
 @Configuration()
-null
+export class MainConfiguration implements ILifeCycle {
 
   async onBeforeObjectCreated(Clzz: new (...args), options: ObjectBeforeCreatedOptions): Promise<void> {
     // ...
@@ -257,8 +257,8 @@ The parameters are as follows:
 | Property | Type | Description |
 | ----------------------- | ----------------- | ---------------- |
 | options.context | IMidwayContainer | Dependent injection container itself |
-| options.definition | IObjectDefinition | null |
-| options.constructorArgs | any [] | Constructor input parameter |
+| options.definition | IObjectDefinition | Object definition |
+| options.constructorArgs | any[] | Constructor input parameter |
 
 
 
@@ -267,11 +267,11 @@ The parameters are as follows:
 Execute after the object instance is created, this stage can replace the created object.
 
 ```typescript
-null
+// src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, ObjectCreatedOptions } from '@midwayjs/core';
 
-null
+@Configuration()
 export class MainConfiguration implements ILifeCycle {
 
   async onObjectCreated(ins: any, options: ObjectCreatedOptions): Promise<void> {
@@ -283,14 +283,14 @@ export class MainConfiguration implements ILifeCycle {
 There are two parameters in the entry parameter:
 
 - `ins` is the object created by the builder.
-- `null`
+- `options` some parameters
 
 The parameters are as follows:
 
 | Property | Type | Description |
 | ----------------------- | ------------------ | ------------------ |
 | options.context | IMidwayContainer | Dependent injection container itself |
-| options.definition | IObjectDefinition | null |
+| options.definition | IObjectDefinition | Object definition |
 | options.replaceCallback | (ins: any) => void | Callback method for object replacement |
 
 **Example: dynamically add attributes**
@@ -315,8 +315,8 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-null
-null
+import { Configuration } from '@midwayjs/decorator';
+import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -379,7 +379,7 @@ Execute before the object instance is destroyed.
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
-null
+import { ILifeCycle, IMidwayContainer, ObjectBeforeDestroyOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -393,7 +393,7 @@ export class MainConfiguration implements ILifeCycle {
 There are two parameters in the entry parameter:
 
 - `ins` is the object created by the builder.
-- `null`
+- `options` some parameters
 
 The parameters are as follows:
 

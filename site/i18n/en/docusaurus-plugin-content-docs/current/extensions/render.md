@@ -22,7 +22,7 @@ Related information:
 
 Select the corresponding template installation dependency.
 ```bash
-$npm I @midwayjs/view-ejs@3 --save
+$ npm I @midwayjs/view-ejs@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -119,8 +119,8 @@ export class HomeController {
 
   @Get('/')
   async render() {
-    await this.ctx.render('hello.ejs ', {
-      data: 'world ',
+    await this.ctx.render('hello.ejs', {
+      data: 'world',
     });
   }
 }
@@ -135,7 +135,7 @@ The default suffix is `.html`. In order to change the suffix to `.ejs`, we can a
 null
   // ...
   view: {
-    defaultExtension: '.ejs ',
+    defaultExtension: '.ejs',
     mapping: {
       '.ejs': 'ejs',
     },
@@ -157,7 +157,7 @@ export class HomeController {
   @Get('/')
   async render() {
     null
-      data: 'world ',
+      data: 'world',
     });
   }
 }
@@ -175,7 +175,7 @@ null``````
 export default {
   // ...
   view: {
-    defaultViewEngine: 'ejs ',
+    defaultViewEngine: 'ejs',
     mapping: {
       '.ejs': 'ejs',
     },
@@ -230,7 +230,7 @@ Similar to ejs, just introduce the corresponding components.
 
 1. Select the corresponding template installation dependency.
 ```bash
-$npm I @midwayjs/view-nunjucks@3 --save
+$ npm I @midwayjs/view-nunjucks@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -274,7 +274,7 @@ export class MainConfiguration {
 export default {
   // ...
   view: {
-    defaultViewEngine: 'nunjucks ',
+    defaultViewEngine: 'nunjucks',
     mapping: {
       '.nj': 'nunjucks',
     },

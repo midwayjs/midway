@@ -20,7 +20,7 @@ export class HelloTencentService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'cron ',
+    type: 'cron',
     value: '*/60 * * * * * *', // trigger every 60s
   })
   async handleTimerEvent(event: SCF.TimerEvent) {
@@ -60,7 +60,7 @@ Example:
 
 ```typescript
 @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'cron ',
+  type: 'cron',
   value: '0 0 4 * * *', //triggered at 4:00 every day
 })
 ```
@@ -73,8 +73,8 @@ The structure returned by the Timer message is as follows and is described in th
 {
   Message: '',
   Time: new Date().toJSON()
-  TriggerName: 'test ',
-  Type: 'Timer ',
+  TriggerName: 'test',
+  Type: 'Timer',
 }
 ```
 

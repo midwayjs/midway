@@ -43,8 +43,8 @@ You can specify the type
 import { makeHttpRequest } from '@midwayjs/core';
 
 null
-  method: 'GET ',
-  dataType: 'json ',
+  method: 'GET',
+  dataType: 'json',
 });
 ```
 
@@ -55,7 +55,7 @@ null
 
 const result = await makeHttpRequest('http://127.1:7001 /', {
   null
-  dataType: 'text ',
+  dataType: 'text',
 });
 ```
 
@@ -65,12 +65,12 @@ POST requests and returns JSON.
 import { makeHttpRequest } from '@midwayjs/core';
 
 const result = await makeHttpRequest('http://127.1:7001 /', {
-  method: 'POST ',
+  method: 'POST',
   data: {
     a: 1
     B: 2
   },
-  dataType: 'json ',
+  dataType: 'json',
   contentType:'json', // the post sent is json
 });
 
@@ -87,8 +87,8 @@ let err;
 // Timeout will report an error, pay attention to catch
 try {
   const result = await makeHttpRequest('http://127.1:7001 /', {
-    method: 'GET ',
-    dataType: 'text ',
+    method: 'GET',
+    dataType: 'text',
     timeout: 500
   null
 } catch (e) {
@@ -122,12 +122,12 @@ import { HttpClient } from '@midwayjs/core';
 
 const httpclient = new HttpClient();
 const result = await httpclient.request('http://127.1:7001 /', {
-  method: 'POST ',
+  method: 'POST',
   data: {
     a: 1
     B: 2
   },
-  dataType: 'json ',
+  dataType: 'json',
   contentType:'json', // the post sent is json
 });
 
@@ -182,7 +182,7 @@ Related information:
 ### Installation dependency
 
 ```bash
-$npm I @midwayjs/axios@3 --save
+$ npm I @midwayjs/axios@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -279,7 +279,7 @@ export default {
     clients: {
       // The configuration of the default instance.
       default: {
-        baseURL: 'https://api.example.com ',
+        baseURL: 'https://api.example.com',
         // 'headers' are custom headers to be sent
         headers: {
           null

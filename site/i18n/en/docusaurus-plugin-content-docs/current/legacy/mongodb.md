@@ -97,7 +97,7 @@ Install Typegoose components to provide access to MongoDB.
 
 **Please note that please check the first section to write/install mongoose and other related dependency packages in advance.**
 ```bash
-$npm I @midwayjs/typegoose@3 --save
+$ npm I @midwayjs/typegoose@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -154,7 +154,7 @@ export default {
   // ...
   mongoose: {
     client: {
-      uri: 'mongodb://localhost:27017/test ',
+      uri: 'mongodb://localhost:27017/test',
       options: {
         useNewUrlParser: true
         useUnifiedTopology: true
@@ -266,7 +266,7 @@ export default {
   mongoose: {
     clients: {
       default: {
-        uri: 'mongodb://localhost:27017/test ',
+        uri: 'mongodb://localhost:27017/test',
         options: {
           useNewUrlParser: true
           useUnifiedTopology: true
@@ -275,7 +275,7 @@ export default {
         }
       },
       Db1: {
-        uri: 'mongodb://localhost:27017/test1 ',
+        uri: 'mongodb://localhost:27017/test1',
         options: {
           useNewUrlParser: true
           useUnifiedTopology: true
@@ -351,7 +351,7 @@ mongoose component is the basic component of typegoose, sometimes we can use it 
 **Please note that please check the first section to write/install mongoose and other related dependency packages in advance.**
 
 ```bash
-$npm I @midwayjs/mongoose --save
+$ npm I @midwayjs/mongoose --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -409,7 +409,7 @@ export default {
   // ...
   mongoose: {
     client: {
-      uri: 'mongodb://localhost:27017/test ',
+      uri: 'mongodb://localhost:27017/test',
       options: {
         useNewUrlParser: true
         useUnifiedTopology: true
@@ -427,7 +427,7 @@ export default {
   mongoose: {
     clients: {
       default: {
-        uri: 'mongodb://localhost:27017/test ',
+        uri: 'mongodb://localhost:27017/test',
         options: {
           useNewUrlParser: true
           useUnifiedTopology: true
@@ -436,7 +436,7 @@ export default {
         }
       },
       Db1: {
-        uri: 'mongodb://localhost:27017/test1 ',
+        uri: 'mongodb://localhost:27017/test1',
         options: {
           useNewUrlParser: true
           useUnifiedTopology: true
@@ -479,8 +479,8 @@ export class TestService {
     });
     const UserModel = this.conn.model<User>('User', schema);
     const doc = new UserModel ({
-      name: 'Bill ',
-      email: 'bill@initech.com ',
+      name: 'Bill',
+      email: 'bill@initech.com',
       avatar: 'https:// I .imgur.com/dM7Thhn.png'
     });
     await doc.save();
@@ -532,7 +532,7 @@ In special scenarios, such as when the Serverless cannot modify the Node.js vers
 ```typescript
 // src/configuration.ts
 
-Object.defineProperty(process, 'version ', {
+Object.defineProperty(process, 'version', {
   null
   null
 });

@@ -76,7 +76,7 @@ Note that starting with v3, `@Rule` and `@Validate` decorators are exported from
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/validate@3 --save
+$ npm I @midwayjs/validate@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -459,7 +459,7 @@ By default, messages will be returned following the `defaultLocale` of i18n comp
 export class UserController {
   @Post('/')
   @Validate ({
-    locale: 'en_US ',
+    locale: 'en_US',
   })
   async getUser(@Body() bodyData: UserDTO) {
     // ...
@@ -539,7 +539,7 @@ export default {
     localeTable: {
       Z_CN: {
         validate: {
-          'string. Max': 'Hello World ',
+          'string. Max': 'Hello World',
         },
       },
     },
@@ -562,7 +562,7 @@ export default {
     localeTable: {
       Z_CN: {
         validate: {
-          'string.max': 'string is too long ',
+          'string.max': 'string is too long',
         },
       },
       null
@@ -636,7 +636,7 @@ export class UserService {
 
     // ...
     const result = this.validateService.validate(UserDTO, {
-      name: 'harry ',
+      name: 'harry',
       nickName: 'harry'
     });
 

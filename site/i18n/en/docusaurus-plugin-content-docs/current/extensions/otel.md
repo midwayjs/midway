@@ -24,16 +24,16 @@ The Tracing part of [open-telemetry](https://opentelemetry.io/) is currently Rel
 
 ```bash
 # Node.js api abstraction
-$npm install --save @opentelemetry/api
+$ npm install --save @opentelemetry/api
 
 Api implementation of# Node.js
-$npm install --save @opentelemetry/sdk-node
+$ npm install --save @opentelemetry/sdk-node
 
 # Common Node.js Module Buried Point Implementation
-$npm install --save @opentelemetry/auto-instrumentations-node
+$ npm install --save @opentelemetry/auto-instrumentations-node
 
 # jaeger output
-$npm install --save @opentelemetry/exporter-jaeger
+$ npm install --save @opentelemetry/exporter-jaeger
 ```
 
 The above packages are all official packages of [open-telemetry](https://opentelemetry.io/).
@@ -72,7 +72,7 @@ const jaegerExporter = new JaegerExporter ({
 const sdk = new opentelemetry.NodeSDK ({
   // Set the tracking service name
   resource: new Resource ({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'my-app ',
+    [SemanticResourceAttributes.SERVICE_NAME]: 'my-app',
   }),
   // Configure the current export method. For example, one output to the console is configured here, or other Exporter can be configured, such as Jaeger.
   traceExporter: new ConsoleSpanExporter()
@@ -221,7 +221,7 @@ Here, Jaeger Exporter is taken as an example, and other Exporter are similar.
 Add dependencies first.
 
 ```bash
-$npm install --save @opentelemetry/exporter-jaeger @opentelemetry/propagator-jaeger
+$ npm install --save @opentelemetry/exporter-jaeger @opentelemetry/propagator-jaeger
 ```
 
 Configure in the SDK.
@@ -237,7 +237,7 @@ const exporter = new JaegerExporter ({
   host: 'localhost', // optional
   port: 6832, // optional
   // OR you can use the HTTPSender as follows
-  // endpoint: 'http://localhost:14268/api/traces ',
+  // endpoint: 'http://localhost:14268/api/traces',
   maxPacketSize: 65000 // optional
 });
 
@@ -264,7 +264,7 @@ First, `opentelemetry-arms` is installed.
 
 ```bash
 # arms sdk
-$npm install --save opentelemetry-arms
+$ npm install --save opentelemetry-arms
 ```
 
 Then, add the environment variable and `-R` parameters at startup.
@@ -289,7 +289,7 @@ Midway adds a decorator to add link nodes to the needs of the user side.
 Install dependencies first.
 
 ```bash
-$npm I @midwayjs/otel@3 --save
+$ npm I @midwayjs/otel@3 --save
 ```
 
 Enable the `tel` component.

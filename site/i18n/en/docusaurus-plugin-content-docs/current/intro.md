@@ -1,7 +1,3 @@
----
-sidebar_position: 1
----
-
 # Introduction
 
 Midway is a Node.js framework developed by Alibaba-Taobao front-end architecture team based on the concept of gradual development. Through self-developed dependency injection containers and various upper-level modules, Midway combines solutions suitable for different scenarios.
@@ -58,7 +54,7 @@ export class HomeController {
   @Get('/')
   async home() {
     return {
-      message: 'Hello Midwayjs! ',
+      message: 'Hello Midwayjs!',
       query: this.ctx.ip
     }
   }
@@ -83,7 +79,7 @@ export default async function home () {
   const ctx = useContext<Context>()
 
   return {
-    message: 'Hello Midwayjs! ',
+    message: 'Hello Midwayjs!',
     query: ctx.ip
   }
 }

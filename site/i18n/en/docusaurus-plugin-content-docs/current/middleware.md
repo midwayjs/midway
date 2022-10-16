@@ -4,7 +4,7 @@ Web middleware is a function called **before** and after (partially).  Middlewar
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01h6hYvW1ogNexjJ3Nl_!!6000000005254-2-tps-2196-438.png)
 
 
-Different upper-level Web frameworks have different middleware forms. Midway standard middleware is based on the [onion circle model](https://eggjs.org/zh-cn/intro/egg-and-koa.html#midlleware). null
+Different upper-layer web frameworks have different middleware forms. Midway standard middleware is based on the [onion ring model](https://eggjs.org/zh-cn/intro/egg-and-koa.html#midlleware). Express, on the other hand, is a traditional queue model.
 
 
 Koa and EggJs can be executed** before and after the **controller. In Express, the middleware can **only be called before** the controller, which will be introduced separately in Express chapters.
@@ -20,19 +20,19 @@ For the following code, we will take `@midwayjs/koa` as an example.
 In general, we will write Web middleware in the `src/middleware` folder.
 
 
-Create a `src/middleware/report.middleware.ts`. null
+Create a `src/middleware/report.middleware.ts` . In this web middleware, we print the time when the controller (Controller) executes.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ├── controller
-│ │ ├── user.controller.ts
-│ │ └── home.controller.ts
-│ ├── interface.ts
-│ │-middleware ## middleware directory
-│ │ └── report.middleware.ts
-│ └── service
-│ └── user.service.ts
+│   ├── controller
+│   │   ├── user.controller.ts
+│   │   └── home.controller.ts
+│   ├── interface.ts
+│   ├── middleware                   ## middleare directory
+│   │   └── report.middleware.ts
+│   └── service
+│       └── user.service.ts
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -58,26 +58,26 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
       // Here you can get the return value of the next middleware or controller.
       const result = await next();
       // Logic executed after the controller
-      null
+      console.log(Date.now() - startTime);
       // Returns the result to the previous middleware
       return result;
     };
   }
 
-  null
+  static getName(): string {
     return 'report';
   }
 }
 ```
 
 
-Simply put, `await next()` represents the next logic to be executed, which is generally executed by the controller. Before and after execution, we can perform some printing and assignment operations, which is the biggest advantage of the onion ring model.
+In short, `await next()` represents the next logic to be executed, which generally represents the controller execution. Before and after execution, we can perform some printing and assignment operations, which is also the biggest advantage of the onion ring model.
 
 Note that Midway finishes the traditional onion model so that it can obtain the return value of the next middleware. At the same time, you can also return the result of this middleware to the previous middleware by using the `return` method.
 
 The static `getName` method here is used to specify the name of the middleware to facilitate troubleshooting.
 
-
+​	
 
 ## Use middleware
 
@@ -244,8 +244,8 @@ export async function fnMiddleware(ctx, next) {
 
 // src/configuration.ts
 import { App, Configuration } from '@midwayjs/decorator';
-null
-null
+import * as koa from '@midwayjs/koa';
+import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
 
 @Configuration ({
@@ -322,7 +322,7 @@ export async function fnMiddleware(ctx, next) {
 }
 ```
 
-null``
+If the third-party middleware exports an anonymous middleware function, you can use `_name` to add a name.
 
 ```typescript
 const fn = async (ctx, next) => {
@@ -353,12 +353,12 @@ export class AutoConfiguration {
   @App()
   app: koa.Application;
 
-  null
+  async onReady() {
     // add middleware
     this.app.useMiddleware([ReportMiddleware, fnMiddleware]);
 
     // output
-    null
+    console.log(this.app.getMiddleware().getNames());
     // => report, fnMiddleware
   }
 }
@@ -414,10 +414,10 @@ export class AutoConfiguration {
 
 
 
-### null
+### Get request scope instance in middleware
 
 
-Due to the particularity of the life cycle of Web middleware, it will be loaded (bound) to the route before the application request, so it cannot be associated with the request. The scope of the middleware class is **fixed as a singleton (Singleton** ).
+Due to the particularity of the life cycle of Web middleware, it will be loaded (bound) to the route before the application request, so it cannot be associated with the request. The scope of the middleware class is **fixed as a singleton (Singleton)**.
 
 
 Because **the middleware instance is a single instance**, the instances injected in the middleware are not bound to the request, **ctx cannot be obtained**, and `@Inject()` cannot be used to inject the instance of the request scope. Only the Singleton instances can be obtained.
@@ -457,8 +457,8 @@ import { NextFunction, Context } from '@midwayjs/koa';
 @Middleware()
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
-  null
-    null
+  resolve() {
+    return async (ctx: Context, next: NextFunction) => {
       const userService = await ctx.requestContext.getAsync<UserService>(UserService);
       // TODO userService.xxxx
       await next();
@@ -487,7 +487,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
       const result = await next();
       return {
         code: 0
-        msg: 'OK ',
+        msg: 'OK',
         data: result
       }
     };
@@ -515,7 +515,7 @@ import { NextFunction, Context } from '@midwayjs/koa';
 @Middleware()
 export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
 
-  null
+  resolve() {
     return async (ctx: Context, next: NextFunction) => {
       const result = await next();
       if (result === null) {
@@ -523,7 +523,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
       }
       return {
         code: 0
-        msg: 'OK ',
+        msg: 'OK',
         data: result
       }
     };

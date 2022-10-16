@@ -7,7 +7,7 @@ title: 介绍
 Midway Serverless is a Serverless framework for building Node.js cloud functions. help you significantly reduce maintenance costs and focus more on product development in the cloud-native era.
 
 - **Cross-cloud vendor:** One code can be quickly deployed across multiple cloud platforms without worrying that your product will be bound by the cloud vendor.
-- * * Cloud Integration: * * Provides multiple integrated development solutions with community front-end React, Vue, etc.
+- **Cloud Integration:** Provides multiple integrated development solutions with community front-end React, Vue, etc.
 - **Code Reuse:** Through the dependency injection capability of the framework, each part of the logical unit is naturally reusable and can be quickly and easily combined to generate complex applications.
 - **Traditional migration:** Through the runtime scalability of the framework, traditional applications such as Egg.js, Koa, and Express.js can be seamlessly migrated to cloud functions of various cloud vendors
 

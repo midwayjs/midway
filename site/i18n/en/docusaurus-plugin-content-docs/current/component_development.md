@@ -16,14 +16,14 @@ Starting from v3, the framework (Framework) has also become part of the componen
 ## Development component
 
 
-### null
+### Boilerplate
 
 ```bash
-null
-$npm init midway --type=component-v3 my_custom_component
+# npm v6
+$ npm init midway --type=component-v3 my_custom_component
 
 # npm v7
-$npm init midway -- --type=component-v3 my_custom_component
+$ npm init midway -- --type=component-v3 my_custom_component
 ```
 
 or `npm init midway`, select the `component-v3` template.
@@ -39,12 +39,12 @@ A recommended component directory structure is as follows.
 .
 ├── package.json
 ├── src
-│ │ ── index.ts // Entry export file
-│ │ ── configuration.ts // Component behavior configuration
-│-service // Logical Code
-│ └── bookService.ts
+│   ├── index.ts			 					// Entry export file
+│   ├── configuration.ts			 	// Component behavior configuration
+│   └── service                	// Logical Code
+│       └── bookService.ts
 ├── test
--index.d.ts // component extension definition
+├── index.d.ts                  //  component extension definition
 └── tsconfig.json
 ```
 
@@ -52,7 +52,7 @@ For components, the only specification is the `Configuration` attribute exported
 
 Generally speaking, our code is TypeScript standard directory structure, which is the same as Midway system.
 
-null``
+At the same time, it is an ordinary Node.js package, which needs to use the `src/index.ts` file as the entry to export the content
 
 Let's take a very simple example to demonstrate how to write a component.
 
@@ -68,13 +68,13 @@ The code and application are exactly the same.
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 
-@Configuration ({
+@Configuration({
   namespace: 'book'
 })
 export class BookConfiguration {
   async onReady() {
     // ...
-  null
+  }
 }
 ```
 
@@ -82,7 +82,7 @@ The only difference is that you need to add a `namespace` as the namespace for t
 
 The code for each component is a separate scope so that even if a class with the same name is exported, it will not conflict with other components.
 
-null[](lifecycle)
+It is the same as the [lifecycle extension](lifecycle) capability that is common to the entire Midway.
 
 
 
@@ -98,7 +98,7 @@ import { Provide } from '@midwayjs/decorator';
 export class BookService {
   async getBookById() {
     return {
-      data: 'hello world ',
+      data: 'hello world',
     }
   }
 }
@@ -120,14 +120,14 @@ import { Configuration } from '@midwayjs/decorator';
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 
-@Configuration ({
-  namespace: 'book ',
+@Configuration({
+  namespace: 'book',
   importConfigs: [
     {
-      default: DefaultConfig
+      default: DefaultConfig,
       local: LocalConfig
     }
-  null
+  ]
 })
 export class BookConfiguration {
   async onReady() {
@@ -163,14 +163,14 @@ At the same time, the `package.json` of the component is also modified.
 
 ```json
 {
-  "name ": "****",
-  "main": "dist/index.js ",
-  null
+  "name": "****",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",			// The type export file here uses the project root directory's
   // ...
-  null
-    null
-    "dist/**/*.d.ts ",
-    "index.d.ts" // This file needs to be brought with you when you publish it.
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"								// This file needs to be brought with you when you publish it.
   ],
 }
 ```
@@ -182,7 +182,7 @@ At the same time, the `package.json` of the component is also modified.
 The components and the application itself are slightly different, mainly in the following aspects.
 
 - 1. The code of the component needs to export a `Configuration` attribute, which must be a Class with a `@Configuration` decorator to configure the component's own capabilities
-- 2. All * * explicitly exported codes * * will be loaded by the dependent injection container. Simply put, all classes **decorated by decorators** need to be exported, including controllers, services, middleware, etc.
+- 2. All  **explicitly exported codes** will be loaded by the dependent injection container. Simply put, all classes **decorated by decorators** need to be exported, including controllers, services, middleware, etc.
 
 For example:
 
@@ -254,7 +254,7 @@ describe('/test/index.test.ts', () => {
 
 
 
-### Rely on other components
+### Depends on other components
 
 If a component depends on a class in another component and is the same as the application, it needs to be declared at the entrance, and the framework will load and handle the duplication in the order of the module.
 
@@ -268,7 +268,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as axios from '@midwayjs/axios';
 
 @Configuration ({
-  namespace: 'book ',
+  namespace: 'book',
   imports: [axios]
 })
 export class BookConfiguration {
@@ -278,7 +278,7 @@ export class BookConfiguration {
 }
 ```
 
-null
+There is also a case of weak dependencies, which do not need to be explicitly declared, but require additional judgment.
 
 ```typescript
 // src/configuration.ts
@@ -286,7 +286,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration ({
-  namespace: 'book ',
+  namespace: 'book',
 })
 export class BookConfiguration {
   async onReady(container: IMidwayContainer) {
@@ -330,7 +330,7 @@ If the main application does not explicitly rely on axios, the code execution is
 
 ### Development components in applications
 
-null[](https://github.com/lerna/lerna) If you want to develop a component in a non-lerna scenario, make sure that the component is in the `src` directory. Otherwise, the component may fail to be loaded.
+It is recommended to use [lerna](https://github.com/lerna/lerna) and enable lerna's hoist mode to write components. If you want to develop a component in a non-lerna scenario, make sure that the component is in the `src` directory. Otherwise, the component may fail to be loaded.
 
 #### Use lerna
 
@@ -338,16 +338,16 @@ Development using lerna is relatively simple, and the specific directory structu
 
 ```
 .
-null
+├── src
 ├── packages/
-│..............................................................
-│ │ └── package.json
-│..............................................................
-│ │ └── package.json
-│ Ch-component-C
-│ │ └── package.json
-│ └── web
-│ └── package.json
+│    ├── component-A
+│    │   └── package.json
+│    ├── component-B
+│    │   └── package.json
+│    ├── component-C
+│    │   └── package.json
+│    └── web
+│        └── package.json
 ├── lerna.json
 └── package.json
 ```
@@ -359,25 +359,25 @@ The following is a common component development method. The sample structure is 
 ```
 .
 ├── package.json
-│ ── src // source directory
-│ ├── components
-│ │ │ ── book // book component code
-│ │ │ ├── src
-│ │ │ │ ├── service
-│ │ │ │ │ └── bookService.ts
-│ │ │ │ ├── configuration.ts
-│ │ │ │ └── index.ts
-│ │ │ └── package.json
-│ │ │ │
-│ │ └── school
-│ │ ├── src
-│ │ │ │ │ ── service // school component code
-│ │ │ │ └── schoolService.ts
-│ │ │ └── configuration.ts
-│ │ └── package.json
-│ │ │
-│ │ ── configuration.ts // Application Behavior Profile
-│-controller // Application Routing Directory
+├── src																				 	// source directory
+│   ├── components
+│   │   ├── book                								// book component code
+│   │   │    ├── src
+│   │   │    │   ├── service
+│   │   │    │   │   └── bookService.ts
+│   │   │    │   ├── configuration.ts
+│   │   │    │   └── index.ts
+│   │   │    └── package.json
+│   │   │
+│   │   └── school
+│   │        ├── src
+│   │        │   ├── service                		// school component code
+│   │        │   │    └── schoolService.ts
+│   │        │   └── configuration.ts
+│   │        └── package.json
+│   │
+│   ├── configuration.ts			 // Application Behavior Profile
+│   └── controller             // Application Routing Directory
 ├── test
 └── tsconfig.json
 ```
@@ -386,7 +386,7 @@ Component behavior configuration.
 
 ```typescript
 // src/components/book/src/bookConfiguration.ts
-null
+import { Configuration } from '@midwayjs/decorator';
 
 @Configuration()
 export class BookConfiguration {}
@@ -401,7 +401,7 @@ export { BookConfiguration as Configuration } from './bookConfiguration/src';
 ```
 
 :::info
-null
+Note that the place quoted here is "./xxxx/src", because generally the main field in our package.json points to dist/index. If you want the code not to be modified, then the main field should point to src/index, and it will be published in Remember to modify it back to dist.
 
 The directory introduced by the component is pointed to src so that the save takes effect automatically (restart).
 :::
@@ -461,11 +461,11 @@ For the rest, if the component has specific capabilities, please refer to the do
 
 ### Component publishing
 
-null
+A component is an ordinary Node.js package that can be compiled and published to npm for distribution.
 
 ```bash
 ## Compile and publish the corresponding component
-$npm run build && npm publish
+$ npm run build && npm publish
 ```
 
 
@@ -488,12 +488,12 @@ For example:
 .
 ├── package.json
 ├── src
-│ │ ── index.ts // Entry export file
-│ │ ── configuration.ts // Component behavior configuration
-null
+│   ├── index.ts			 					// Entry export file
+│   ├── configuration.ts			 	// Component behavior configuration
+│   └── framework.ts            // Framework code
 │
 ├── test
--index.d.ts // component extension definition
+├── index.d.ts                  // Component extension definition
 └── tsconfig.json
 ```
 
@@ -525,7 +525,7 @@ export class MyKoaConfiguration {
 }
 ```
 
-null``
+Then, we can inject the framework exported by `@midwayjs/koa` for extension.
 
 ```typescript
 // src/configuration.ts
@@ -549,7 +549,7 @@ export class MyKoaConfiguration {
 
     // koa's own expansion capabilities, such as expansion context
     const app = this.framework.getApplication();
-    Object.defineProperty(app.context, 'user ', {
+    Object.defineProperty(app.context, 'user', {
       get() {
         // ...
         return 'xxx';
@@ -557,7 +557,7 @@ export class MyKoaConfiguration {
       enumerable: true
     });
     // ...
-  null
+  }
 
   async onServerReady() {
     const server = this.framework.getServer();
@@ -579,11 +579,11 @@ import { Configuration } from '@midwayjs/decorator';
 // Your own components
 import * as myKoa from '@midwayjs/my-koa';
 
-@Configuration ({
-  imports: [myKoa]
-null
+@Configuration({
+  imports: [myKoa],
+})
 export class MyConfiguration {
-  null
+  async onReady() {
     // ...
   }
 }
@@ -598,7 +598,7 @@ If you want to fully define your own components, such as different protocols, yo
 The frameworks all follow the `IMidwayFramewok` interface definitions and the following conventions.
 
 - Each framework has a separate start-stop process to be customized.
-- null````
+- Each framework needs to define its own independent `Application`, `Context`
 - Each framework can have its own independent middleware capabilities
 
 In order to simplify development, Midway provides a basic `BaseFramework` class for inheritance.
@@ -613,7 +613,7 @@ export interface Context extends IMidwayContext {
 }
 
 // Define Application
-null
+export interface Application extends IMidwayApplication<Context> {
   // ...
 }
 
@@ -628,7 +628,7 @@ export class MidwayCustomFramework extends BaseFramework<Application, Context, I
 
   // Process initialization configuration
   configure() {
-    null
+    // ...
   }
 
   // app initialization
@@ -636,7 +636,7 @@ export class MidwayCustomFramework extends BaseFramework<Application, Context, I
     // ...
   }
 
-  null
+  // Framework startup, such as listen
   async run() {
     // ...
   }
@@ -662,7 +662,7 @@ export interface IMidwayCustomConfigurationOptions extends IConfigurationOptions
   port: number;
 }
 
-null
+// Implement a custom framework that inherits the base framework
 export class MidwayCustomHTTPFramework extends BaseFramework<Application, Context, IMidwayCustomConfigurationOptions> {
 
   configure(): IMidwayCustomConfigurationOptions {
@@ -693,7 +693,7 @@ export class MidwayCustomHTTPFramework extends BaseFramework<Application, Contex
 
   async run() {
     // Startup parameters, only the HTTP port that is started is defined here.
-    null
+    if (this.configurationOptions.port) {
       new Promise<void>((resolve) => {
         this.app.listen(this.configurationOptions.port, () => {
           resolve();

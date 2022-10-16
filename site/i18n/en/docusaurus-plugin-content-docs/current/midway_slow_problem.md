@@ -1,6 +1,4 @@
----
-title: 关于 Midway 启动慢的问题
----
+# About the slow start of Midway
 
 Midway will use ts-node to scan and require modules in real time when developing locally. If there are too many ts files (such as 200 +), it may lead to slower startup, especially in the case of non-SSD hard disks under Windows, resulting in frequent fullGC of Server for ts-node type checking, and each file load may reach 1-2s.
 
@@ -8,7 +6,7 @@ Generally, Mac is SSD, so there is basically no problem, but Windows will appear
 
 As shown in the following figure.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523014939-40121f9c-bc19-4f9e-a7e6-e744d409a9ea.png#height=486&id=JKv1L&margin=%5Bobject%20Object%5D&name=image.png&originHeight=972&originWidth=1488&originalType=binary&size=523362&status=done&style=none&width=744" width="744" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1601523014939-40121f9c-bc19-4f9e-a7e6-e744d409a9ea.png)
 
 ## How to judge
 
@@ -16,11 +14,11 @@ As shown in the following figure.
 
 There is a directory of `ts-node-*` in the temporary directory, which can be deleted (if you do not know the temporary directory, you can execute the `require('OS').tmpdir()` output view on the command line).
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523402032-7e9c162a-762e-4cba-82b4-8ae63fe37280.png#height=121&id=EOZnh&margin=%5Bobject%20Object%5D&name=image.png&originHeight=242&originWidth=960&originalType=binary&size=45718&status=done&style=none&width=480" width="480" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1601523402032-7e9c162a-762e-4cba-82b4-8ae63fe37280.png)
 
 Deleted the following similar directory.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523340452-7924affe-96b5-4544-85b7-e41ace4206e8.png#height=255&id=fFggf&margin=%5Bobject%20Object%5D&name=image.png&originHeight=510&originWidth=1200&originalType=binary&size=86980&status=done&style=none&width=600" width="600" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1601523340452-7924affe-96b5-4544-85b7-e41ace4206e8.png)
 
 2. Start Midway with ts-node
 
@@ -36,9 +34,9 @@ cross-env NODE_DEBUG=midway* NODE_ENV=local midway-bin dev --ts
 
 The require duration of each file will appear, if the time is relatively long.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523470970-1812326a-39d9-4b39-af57-7723f80f6e17.png#height=471&id=OwZNU&margin=%5Bobject%20Object%5D&name=image.png&originHeight=942&originWidth=2176&originalType=binary&size=828844&status=done&style=none&width=1088" width="1088" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1601523470970-1812326a-39d9-4b39-af57-7723f80f6e17.png)
 
-## null
+## Solve the problem
 
 Since a Server will be started inside `TS_NODE_TYPE_CHECK`, when there are many special files, the type check will be done every require. If it causes serious startup impact, it is recommended to close it. **The cost is that the type check is not performed at the start of the runtime. Because there is a prompt in the editor, the check is not performed at the runtime.**
 

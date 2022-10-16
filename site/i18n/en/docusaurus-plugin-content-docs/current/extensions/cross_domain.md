@@ -16,7 +16,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/cross-domain --save
+$ npm I @midwayjs/cross-domain --save
 ```
 
 ## Introducing components
@@ -84,7 +84,7 @@ JSONP can be configured in `src/config/config.default`.
 export default {
   // ...
   jsonp: {
-    callback: 'jsonp ',
+    callback: 'jsonp',
     limit: 512
   },
 }

@@ -7,13 +7,13 @@ title: 开发函数
 Let's develop the first pure HTTP function to try to deploy it to the cloud environment (don't worry, functions now have a free quota, usually at no cost).
 
 ```bash
-$npm -v
+$ npm -v
 
 # if it is npm v6
-$npm init midway --type=faas-v3 my_midway_app
+$ npm init midway --type=faas-v3 my_midway_app
 
 # if it is npm v7
-$npm init midway -- --type=faas-v3 my_midway_app
+$ npm init midway -- --type=faas-v3 my_midway_app
 ```
 
 You can also run `npm init midway` and select `faas` scaffolding.
@@ -58,7 +58,7 @@ export class HelloHTTPService {
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, {
     path: '/',
-    method: 'get ',
+    method: 'get',
   })
   async handleHTTPEvent(@Query() name = 'midway') {
     return 'hello ${name}';
@@ -82,15 +82,15 @@ export class HelloServerlessService {
 
   // Multiple triggers for one function
   @ServerlessFunction ({
-    functionName: 'abcde ',
+    functionName: 'abcde',
   })
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'every ',
-    value: '5m ',
+    type: 'every',
+    value: '5m',
   })
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'every ',
-    value: '10m ',
+    type: 'every',
+    value: '10m',
   })
   async handleTimerEvent() {
     // TODO
@@ -132,8 +132,8 @@ For example, the name of the trigger is changed to abc.
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
     name: 'abc'
-    type: 'every ',
-    value: '5m ',
+    type: 'every',
+    value: '5m',
   })
 ```
 
@@ -149,7 +149,7 @@ For example:
 
 ```typescript
 @ServerlessFunction ({
-  functionName: 'abcde ',
+  functionName: 'abcde',
   initTimeout: 3, // initialization timeout, only valid for Aliyun fc, default 3s
   timeout: 3 // function execution timeout, default 3s
 })
@@ -160,7 +160,7 @@ For example:
 The local development of HTTP functions is the same as that of traditional Web. Enter the following command.
 
 ```shell
-$npm run dev
+$ npm run dev
 $open http://localhost:7001
 ```
 

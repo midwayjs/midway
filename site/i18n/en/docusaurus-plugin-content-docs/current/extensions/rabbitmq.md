@@ -52,9 +52,9 @@ Simply understand, messages are published to Exchange (switches) through Publish
 
 Midway provides the ability to subscribe to rabbitMQ and can be deployed and used independently. Install the `@midwayjs/rabbitmq` module and its definition.
 ```bash
-$npm I @midwayjs/rabbitmq@3 --save
-$npm I amqplib --save
-$npm I @types/amqplib --save-dev
+$ npm I @midwayjs/rabbitmq@3 --save
+$ npm I amqplib --save
+$ npm I @types/amqplib --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -242,10 +242,10 @@ export class UserConsumer {
   @Inject()
   logger;
 
-  @RabbitMQListener('abc ', {
-    exchange: 'logs ',
+  @RabbitMQListener('abc', {
+    exchange: 'logs',
     exchangeOptions: {
-      type: 'fanout ',
+      type: 'fanout',
       durable: false
     },
     exclusive: true
@@ -258,10 +258,10 @@ export class UserConsumer {
     // TODO
   }
 
-  @RabbitMQListener('bcd ', {
-    exchange: 'logs ',
+  @RabbitMQListener('bcd', {
+    exchange: 'logs',
     exchangeOptions: {
-      type: 'fanout ',
+      type: 'fanout',
       durable: false
     },
     exclusive: true
@@ -307,12 +307,12 @@ export class UserConsumer {
   logger;
 
   @RabbitMQListener ('', {
-    exchange: 'direct_logs ',
+    exchange: 'direct_logs',
     exchangeOptions: {
-      type: 'direct ',
+      type: 'direct',
       durable: false
     },
-    routingKey: 'direct_key ',
+    routingKey: 'direct_key',
     exclusive: true
     consumeOptions: {
       noAck: true
@@ -404,10 +404,10 @@ import { createRabbitMQProducer, close, creatApp } from '@midwayjs/mock';
 describe('/test/index.test.ts', () => {
   it('should test create message and get from app', async () => {
     // create a queue and channel
-    const channel = await createRabbitMQProducer('tasks ', {
+    const channel = await createRabbitMQProducer('tasks', {
       isConfirmChannel: true
       mock: false
-      url: 'amqp://localhost ',
+      url: 'amqp://localhost',
     });
 
     // send data to queue
@@ -430,10 +430,10 @@ describe('/test/index.test.ts', () => {
 
 Create a fanout exchange.
 ```typescript
-const manager = await createRabbitMQProducer('tasks-fanout ', {
+const manager = await createRabbitMQProducer('tasks-fanout', {
   isConfirmChannel: false
   mock: false
-  url: 'amqp://localhost ',
+  url: 'amqp://localhost',
 });
 
 // Name of the exchange
@@ -445,8 +445,8 @@ const msg = "Hello World!";
 manager.assertExchange(ex, 'fanout', { durable: false }) // 'fanout' will broadcast all messages to all the queues it knows
 
 // Start the service
-const app = await creatApp('base-app-fanout ', {
-  url: 'amqp://localhost ',
+const app = await creatApp('base-app-fanout', {
+  url: 'amqp://localhost',
   reconnectTime: 2000
 });
 
@@ -474,10 +474,10 @@ Create a direct exchange.
 /* *
   * direct type messages, targeted filtering according to routerKey
   */
-const manager = await createRabbitMQProducer('tasks-direct ', {
+const manager = await createRabbitMQProducer('tasks-direct', {
   isConfirmChannel: false
   mock: false
-  url: 'amqp://localhost ',
+  url: 'amqp://localhost',
 });
 
 // Name of the exchange
@@ -488,8 +488,8 @@ const msg = "Hello World!";
 // Declare Switch
 manager.assertExchange(ex, 'direct', { durable: false }) // 'fanout' will broadcast all messages to all the queues it knows
 
-const app = await creatApp('base-app-direct ', {
-  url: 'amqp://localhost ',
+const app = await creatApp('base-app-direct', {
+  url: 'amqp://localhost',
   reconnectTime: 2000
 });
 
@@ -516,8 +516,8 @@ null
 
 
 ```bash
-$npm I amqplib amqp-connection-manager --save
-$npm I @types/amqplib --save-dev
+$ npm I amqplib amqp-connection-manager --save
+$ npm I @types/amqplib --save-dev
 ```
 
 

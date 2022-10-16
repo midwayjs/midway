@@ -17,11 +17,11 @@ For example, when the following error occurs
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01dDNRZr1MBPewPo7Xg_!!6000000001396-2-tps-1196-317.png)
 
-2. The general reason is that the @midwayjs/core version that mock relies on does not have this method, which indicates that the version is wrong. It may be that the version is incorrectly referenced or the version is too low.
+2. The general reason is that the version of @midwayjs/core that mock depends on does not have this method, indicating that the version is incorrect. It may be that the version is incorrectly referenced, or the version may be too low.
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01HVMJKP1xNuFO2Wv73_!!6000000006432-2-tps-1055-135.png)
 
-null
+3. When a new component is installed, we find that there is more than one version instance of a package
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01jZxQu91YBCs0N9S9Y_!!6000000003020-2-tps-1133-43.png)
 
@@ -105,7 +105,7 @@ Because lerna packages have certain dependencies, for example, the modified pack
 For example, it is normal that the version of `@midwayjs/Web` is higher than that of `@midwayjs/core`.
 
 
-Midway submits a [@midwayjs/version](null) package at each conference, which contains each of our versions and all the package versions matched by that version. Please [visit here](https://github.com/midwayjs/midway/tree/2.x/packages/version/versions) to view it.
+Midway submits a [@midwayjs/version](https://www.npmjs.com/package/@midwayjs/version) package at each conference, which contains each of our versions and all the package versions matched by that version. Please [visit here](https://github.com/midwayjs/midway/tree/2.x/packages/version/versions) to view it.
 
 
 The file names in the directory are created according to the `@midwayjs/decorator version-@midwayjs/core version. json` rule. Each version corresponds to a JSON file.
@@ -123,52 +123,52 @@ If the file name of the combination of decorator and core is not found, or the v
 Examples of content are as follows:
 ```json
 {
-  "@midwayjs/egg-layer ": [
+  "@midwayjs/egg-layer": [
     "2.10.18",
     "2.10.19"
   ],
-  "@midwayjs/express-layer": "2.10.18 ",
-  "@midwayjs/faas-typings": "2.10.7 ",
-  "@midwayjs/koa-layer": "2.10.18 ",
-  "@midwayjs/runtime-engine": "2.10.14 ",
-  "@midwayjs/runtime-mock": "2.10.14 ",
-  "@midwayjs/serverless-app": "2.10.18 ",
-  "@midwayjs/serverless-aws-starter": "2.10.14 ",
-  "@midwayjs/serverless-fc-starter": "2.10.18 ",
-  null
-  "@midwayjs/serverless-http-parser": "2.10.7 ",
-  null
-  "@midwayjs/serverless-scf-trigger": "2.10.18 ",
-  "@midwayjs/static-layer": "2.10.18 ",
-  "@midwayjs/bootstrap": "2.10.18 ",
-  "@midwayjs/cache": "2.10.18 ",
-  "@midwayjs/consul": "2.10.18 ",
-  "@midwayjs/core": "2.10.18 ",
-  "@midwayjs/decorator": "2.10.18 ",
-  "@midwayjs/faas": "2.10.18 ",
-  "@midwayjs/grpc": "2.10.18 ",
-  "@midwayjs/logger": "2.10.18 ",
-  null
-  "midway ": [
+  "@midwayjs/express-layer": "2.10.18",
+  "@midwayjs/faas-typings": "2.10.7",
+  "@midwayjs/koa-layer": "2.10.18",
+  "@midwayjs/runtime-engine": "2.10.14",
+  "@midwayjs/runtime-mock": "2.10.14",
+  "@midwayjs/serverless-app": "2.10.18",
+  "@midwayjs/serverless-aws-starter": "2.10.14",
+  "@midwayjs/serverless-fc-starter": "2.10.18",
+  "@midwayjs/serverless-fc-trigger": "2.10.18",
+  "@midwayjs/serverless-http-parser": "2.10.7",
+  "@midwayjs/serverless-scf-starter": "2.10.14",
+  "@midwayjs/serverless-scf-trigger": "2.10.18",
+  "@midwayjs/static-layer": "2.10.18",
+  "@midwayjs/bootstrap": "2.10.18",
+  "@midwayjs/cache": "2.10.18",
+  "@midwayjs/consul": "2.10.18",
+  "@midwayjs/core": "2.10.18",
+  "@midwayjs/decorator": "2.10.18",
+  "@midwayjs/faas": "2.10.18",
+  "@midwayjs/grpc": "2.10.18",
+  "@midwayjs/logger": "2.10.18",
+  "midway-schedule": "2.10.18",
+  "midway": [
     "2.10.18",
     "2.10.19"
   ],
-  "@midwayjs/mock": "2.10.18 ",
-  "@midwayjs/prometheus": "2.10.18 ",
-  null
-  "@midwayjs/socketio": "2.10.18 ",
-  "@midwayjs/task ": [
+  "@midwayjs/mock": "2.10.18",
+  "@midwayjs/prometheus": "2.10.18",
+  "@midwayjs/rabbitmq": "2.10.18",
+  "@midwayjs/socketio": "2.10.18",
+  "@midwayjs/task": [
     "2.10.18",
     "2.10.19"
   ],
-  "@midwayjs/typegoose": "2.10.18 ",
-  "@midwayjs/version ": [
+  "@midwayjs/typegoose": "2.10.18",
+  "@midwayjs/version": [
     "2.10.18",
     "2.10.19"
   ],
-  "@midwayjs/express": "2.10.18 ",
-  "@midwayjs/koa": "2.10.18 ",
-  "@midwayjs/web ": [
+  "@midwayjs/express": "2.10.18",
+  "@midwayjs/koa": "2.10.18",
+  "@midwayjs/web": [
     "2.10.18",
     "2.10.19"
   ]

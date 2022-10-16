@@ -8,7 +8,7 @@
 
 In the following command, `npm ls` lists the dependency trees of a package under the project.
 ```bash
-$npm ls @midwayjs/decorator
+$ npm ls @midwayjs/decorator
 ```
 The ratio is shown in the following figure.
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01Td86gC1tQsKjRB8XU_!!6000000005897-2-tps-541-183.png)

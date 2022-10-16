@@ -1,6 +1,6 @@
 # Exception handling
 
-null When your application code throws an exception handling, the processor catches the exception and waits for the user to handle it.
+Midway provides a built-in exception handler that handles all unhandled exceptions in the application. When your application code throws an exception handler, the handler catches the exception and waits for the user to handle it.
 
 The execution position of the exception handler is behind the middleware, so it can intercept all errors thrown by the middleware and business.
 

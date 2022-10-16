@@ -40,8 +40,8 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/grpc@3 --save
-$npm I @midwayjs/grpc-helper --save-dev
+$ npm I @midwayjs/grpc@3 --save
+$ npm I @midwayjs/grpc-helper --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -230,7 +230,7 @@ The traditional gRPC framework requires users to manually write proto files, gen
 
 If there is no installation, you can install it first.
 ```bash
-$npm I @midwayjs/grpc-helper --save-dev
+$ npm I @midwayjs/grpc-helper --save-dev
 ```
 
 
@@ -365,11 +365,11 @@ export default (appInfo: MidwayAppInfo): MidwayConfig => {
       services: [
         {
           protoPath: join(appInfo.appDir, 'proto/hero.proto')
-          package: 'hero ',
+          package: 'hero',
         },
         {
           protoPath: join(appInfo.appDir, 'proto/helloworld.proto')
-          package: 'helloworld ',
+          package: 'helloworld',
         }
       ],
     }
@@ -447,7 +447,7 @@ describe('test/index.test.ts', () => {
 
     // Call service
     const service = await createGRPCConsumer<helloworld. GreeterClient> ({
-      package: 'helloworld ',
+      package: 'helloworld',
       null
       url: 'localhost:6565'
     });
@@ -493,7 +493,7 @@ export default (appInfo: MidwayAppInfo): MidwayConfig => {
     null
       services: [
         null
-          url: 'localhost:6565 ',
+          url: 'localhost:6565',
           protoPath: join(appInfo.appDir, 'proto/helloworld.proto')
           null
         },

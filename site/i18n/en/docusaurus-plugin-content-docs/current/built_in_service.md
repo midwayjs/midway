@@ -12,14 +12,14 @@ The following are some services built into the Midway dependency injection conta
 
 Midway's built-in application manager can be used to get all the Application.
 
-null
+It can be obtained by injection, such as adding the same middleware to different applications.
 
 ```typescript
 import { MidwayApplicationManager } from '@midwayjs/core'
 import { Configuration, Inject } from '@midawyjs/decorator';
 import { CustomMiddleware } from './middleware/custom.middleware';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {
@@ -34,21 +34,20 @@ export class MainConfiguration {
       });
   }
 }
-
 ```
 
 | API | return type | Description |
 | ------------------------------------ | -------------------- | ------------------------------------------------------ |
 | getFramework(namespace: string) | IMidwayFramework | Returns the framework specified by the parameter |
-| getApplication(namespace: string) | IMidwayApplication | null |
-| getApplications(namespace: string[]) | null[] | Returns multiple Application specified by the parameter |
+| getApplication(namespace: string) | IMidwayApplication | Returns the Application specified by the parameter |
+| getApplications(namespace: string[]) | IMidwayApplication[] | Returns multiple Application specified by the parameter |
 | getWebLikeApplication() | IMidwayApplication [] | Returns Application similar to Web scenarios (express/koa/egg/faas) |
 
 
 
 ## MidwayInformationService
 
-null
+Midway's built-in information service provides basic project data.
 
 It can be obtained by injection.
 
@@ -71,7 +70,7 @@ export class HomeController {
 
 Generally used to return user-related directories.
 
-| API | return type | Description |
+| API | Return type | Description |
 | ------------ | -------- | ------------------------------------------------------- |
 | getAppDir() | String | Return to the application root directory |
 | getBaseDir() | String | Returns the application code directory. By default, the local development is src and the server running is dist. |
@@ -88,10 +87,10 @@ Midway's built-in environmental services provide environmental settings and judg
 It can be obtained by injection.
 
 ```typescript
-null
+import { Inject, Controller, Get } from '@midwayjs/decorator';
 import { MidwayEnvironmentService } from '@midwayjs/core';
 
-null
+@Controller('/')
 export class HomeController {
 
   @Inject()
@@ -106,10 +105,10 @@ export class HomeController {
 
 Generally used to obtain the current environment, the API is as follows:
 
-| API | return type | Description |
+| API | Return type | Description |
 | ------------------------ | -------- | ------------------ |
 | getCurrentEnvironment() | String | Return to Apply Current Environment |
-| setCurrentEnvironment() |          | null |
+| setCurrentEnvironment() |          | Set current environment |
 | isDevelopmentEnvironment | Boolean | Judging whether it is a development environment |
 
 
@@ -139,7 +138,7 @@ export class HomeController {
 
 Generally used to obtain the current configuration, the API is as follows:
 
-| API | return type | Description |
+| API | Return type | Description |
 | ------------------ | -------- | ------------------------ |
 | addObject(obj) |          | Dynamically add configuration objects |
 | getConfiguration() | Object | Returns the currently merged configuration object |
@@ -165,14 +164,14 @@ export class HomeController {
 
   @Get('/')
   async home() {
-    null
+    // this.loggerService.getLogger('logger');
   }
 }
 ```
 
 Generally, it is used to obtain log objects. The API is as follows:
 
-| null | return type | Description |
+| API | Return type | Description |
 | ---------------------------- | -------- | ------------------------------ |
 | createInstance(name, config) | ILogger | Dynamically create a Logger instance |
 | getLogger(name) | ILogger | Returns a Logger instance based on the log name. |
@@ -181,7 +180,7 @@ Generally, it is used to obtain log objects. The API is as follows:
 
 ## MidwayFrameworkService
 
-null``
+Midway's built-in custom framework service, combined with the custom `@Framework` marked Class in the component, provides external services of different protocols.
 
 It can be obtained by injection.
 
@@ -218,7 +217,7 @@ Midway's built-in middleware processing service is used for the processing of se
 
 Midway's built-in custom decorator service is used to implement frame-level custom decorators, which are generally used when customizing frames.
 
-null
+It can be obtained by injection.
 
 ```typescript
 import { Inject, Controller, Get } from '@midwayjs/decorator';
@@ -263,7 +262,7 @@ export class HomeController {
 
   @Get('/')
   async home() {
-    // this.decoratorService.registerPropertyHandler(/* * omitted * */);
+    // this.decoratorService.registerPropertyHandler(/* omitted */);
   }
 }
 ```
@@ -298,14 +297,14 @@ export class HomeController {
 
   @Get('/')
   async home() {
-    // this.aspectService.interceptPrototypeMethod(/* * omitted * */);
+    // this.aspectService.interceptPrototypeMethod(/* omitted */);
   }
 }
 ```
 
 The API is as follows:
 
-| API | return type | Description |
+| API | Return type | Description |
 | ------------------------------------------------------------------------ | -------- | ---------------------------------------- |
 | addAspect(aspectInstance, aspectData) |          | Add an interceptor implementation |
 | interceptPrototypeMethod(Clazz, methodName, aspectObject: IMethodAspect) |          | The method on the interception prototype is added to the implementation of the interceptor. |
@@ -337,15 +336,15 @@ export class HomeController {
   mockService: MidwayMockService;
 
   @Get('/')
-  null
-    // this.mockService.mockProperty(/* * omitted * */);
+  async home() {
+    // this.mockService.mockProperty(/** 省略 **/);
   }
 }
 ```
 
 API is as follows
 
-| API | return type | Description |
+| API | Return type | Description |
 | -------------------------------------------- | -------- | ---------------------------------- |
 | mockClassProperty(clzz, propertyName, value) |          | Mock a property on a class (method) |
 | mockProperty(obj, key, value) |          | Mock a property (method) on a normal object |
@@ -389,7 +388,7 @@ class TestMockService {
     });
 
     // Simulation properties
-    this.mockService.mockClassProperty(UserService, 'data ', {
+    this.mockService.mockClassProperty(UserService, 'data', {
       bbb: '1'
     });
   }
@@ -507,7 +506,7 @@ export class MainConfiguration {
       return 'hello world';
     }, {
       url: '/',
-      requestMethod: 'GET ',
+      requestMethod: 'GET',
     });
   }
 }
@@ -516,7 +515,7 @@ export class MainConfiguration {
 
 API is as follows
 
-| API | return type | Description |
+| API | Return type | Description |
 | ------------------------------------------------- | ---------------------------------- | -------------------------------------- |
 | addController(controllerClz, controllerOption) |                                    | Dynamically add a Controller |
 | addRouter(routerFunction, routerInfoOption) |                                    | Dynamically add a routing function |
@@ -552,11 +551,11 @@ export class MainConfiguration {
     }, {
       type: ServerlessTriggerType.HTTP
       metadata: {
-        method: 'get ',
+        method: 'get',
         path: '/api/hello'
       },
-      functionName: 'hello ',
-      handlerName: 'index.hello ',
+      functionName: 'hello',
+      handlerName: 'index.hello',
     });
   }
 }
@@ -565,7 +564,7 @@ export class MainConfiguration {
 
 API is as follows
 
-| API | return type | Description |
+| API | Return type | Description |
 | ---------------------------------------------------------- | --------------------- | ---------------- |
 | addServerlessFunction(fn, triggerOptions, functionOptions) |                       | Dynamically add a function |
 | getFunctionList() | Promise<RouterInfo [] > | Get a list of all functions |

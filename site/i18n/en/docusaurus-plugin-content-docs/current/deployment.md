@@ -15,21 +15,21 @@ Here are two ways to use the `dev` command for local development.
 In local development, Midway provides a `dev` command startup framework in `package.json`, such:
 ```json
 {
-  "script ": {
-    null
+  "script": {
+    "dev": "midway-bin dev --ts"
   }
 }
 ```
 This is the most concise command, it has the following characteristics:
 
 
-- 1. Use `-- ts` to specify the TypeScript(ts-node) environment to start
+- 1. Use `--ts` to specify the TypeScript(ts-node) environment to start
 - 2. Use the built-in API(@midwayjs/core `initializeGlobalApplicationContext`) to create a service without `bootstrap.js`
 - 3. Single process operation
 
 Run the following command on the command line to execute.
 ```bash
-$npm run dev
+$ npm run dev
 ```
 
 
@@ -42,8 +42,8 @@ In this case, you can directly pass an entry file to the `dev` command and use t
 
 ```json
 {
-  "script ": {
-    null
+  "script": {
+    "dev": "midway-bin dev --ts --entryFile=bootstrap.js"
   }
 }
 ```
@@ -75,12 +75,10 @@ After the server is deployed, only the built `dist` directory is loaded, while t
 | appDir | Project root directory | Project root directory |
 | baseDir | src directory under the root directory of the project | dist directory under the root directory of the project |
 
+**3. Changes in the environment**
 
-**null**
 
-
-In the server environment, `NODE_ENV = production` is generally used. Many libraries will provide better performance methods in this environment, such as enabling caching, error reporting, etc.
-
+In the server environment, `NODE_ENV=production` is generally used. Many libraries will provide better performance methods in this environment, such as enabling caching, error reporting, etc.
 
 **4. Log files**
 
@@ -122,13 +120,13 @@ The following code is a sample script that you can save as `build.sh`.
 
 ```bash
 ## Server build (code downloaded)
-$npm install# installation and development period dependency
-$npm run build# build project
-$npm prune -- production# remove development dependencies
+$ npm install	# installation and development period dependency
+$ npm run build	# build project
+$ npm prune --production	# remove development dependencies
 
 ## Local build (dev dependency has been installed)
-$npm run build
-$npm prune -- production# remove development dependencies
+$ npm run build
+$ npm prune --production	# remove development dependencies
 ```
 
 :::info
@@ -138,14 +136,14 @@ General installation dependencies specify `NODE_ENV = production` or `npm instal
 
 After the build is completed, the `dist` directory of the Midway build product appears.
 ```bash
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ── dist # Midway build product catalog
-The node_modules # Node.js dependency package directory.
+├── dist                # Midway build product directory
+├── node_modules        # Node.js dependency package directory.
 ├── test
 ├── package.json
-null
+└── tsconfig.json
 ```
 
 
@@ -160,7 +158,7 @@ After the construction is completed, you can simply package and compress it and 
 ### Upload and decompress
 
 
-null`` You can also use online services such as [OSS](https://www.aliyun.com/product/oss) to transfer.
+There are many ways to upload to the server, such as the common `ssh/FTP/git` etc. You can also use online services such as [OSS](https://www.aliyun.com/product/oss) for transfer.
 
 
 ### Start the project
@@ -173,12 +171,12 @@ Here we use pm2 to demonstrate how to deploy.
 
 Projects generally need an entry file, for example, we create a `bootstrap.js` in the root directory as our deployment file.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ── dist # Midway build product catalog
+├── dist                # Midway build product directory
 ├── test
--bootstrap.js# Deployment Startup File
+├── bootstrap.js        # Deployment Startup File
 ├── package.json
 └── tsconfig.json
 ```
@@ -187,7 +185,7 @@ Projects generally need an entry file, for example, we create a `bootstrap.js` i
 Midway provides a simple way to meet the startup method of different scenarios. All we need to do is install the `@midwayjs/bootstrap` module provided by us (by default, it comes with it).
 
 ```bash
-$npm install @midwayjs/bootstrap --save
+$ npm install @midwayjs/bootstrap --save
 ```
 
 Then write the code in the entry file. Note that the code here uses `JavaScript`.
@@ -219,9 +217,9 @@ In most cases, it is not necessary to configure parameters in the Bootstrap, but
 ```typescript
 const { Bootstrap } = require('@midwayjs/bootstrap');
 Bootstrap
-  .configure ({
+  .configure({
   	imports: [/*...*/]
-  null
+  })
   .run();
 ```
 
@@ -244,17 +242,17 @@ Bootstrap
 ```typescript
 const { Bootstrap } = require('@midwayjs/bootstrap');
 Bootstrap
-  .configure ({
+  .configure({
   	globalConfig: {
       customKey: 'abc'
     }
-  null
-  null
+  })
+  .run();
 ```
 
 
 
-**Example**
+**Example, incoming sub-environment configuration**
 
 ```typescript
 const { Bootstrap } = require('@midwayjs/bootstrap');
@@ -273,7 +271,7 @@ Bootstrap
 
 
 
-## null
+## Deploy with Docker
 
 ### Write Dockerfile and build images
 
@@ -301,30 +299,30 @@ CMD ["npm", "run", "online"]
 ```
 
 
-null``````
+Step 2: Add `.dockerignore` file (similar to git ignore file), you can copy the content of `.gitignore` to `.dockerignore`
 
 
 Step 3: When using pm2 deployment, change the command to `pm2-runtime start`. For more information about pm2 deployment, see [pm2 container deployment instructions](https://www.npmjs.com/package/pm2#container-support).
 
 
-step 4: build a docker image
+Step 4: build a docker image
 
 ```bash
-$docker build -t helloworld.
+$ docker build -t helloworld.
 ```
 
 step 5: run docker image
 
 ```bash
-$docker run -itd -P helloworld
+$ docker run -itd -P helloworld
 ```
 
 The operation effect is as follows:
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608882492099-49160b6a-601c-4f08-ba65-b95a1335aedf.png#height=33&id=BtUCB&margin=%5Bobject%20Object%5D&name=image.png&originHeight=45&originWidth=1024&originalType=binary&ratio=1&size=33790&status=done&style=none&width=746)
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608882492099-49160b6a-601c-4f08-ba65-b95a1335aedf.png)
 
 Then the uppercase `-P` allows us to access `32791` ports because we are assigned a port by default (this `-P` is randomly assigned, and we can also use the `-p 7001:7001` to specify a specific port)
 
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608882559686-031bcf0d-2185-42cd-a838-80f008777395.png#height=94&id=dfag9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=188&originWidth=578&originalType=binary&ratio=1&size=24488&status=done&style=none&width=289)
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608882559686-031bcf0d-2185-42cd-a838-80f008777395.png)
 
 For other registry pushed to dockerhub or docker, you can search for the corresponding method.
 
@@ -343,7 +341,7 @@ FROM node:12 AS build
 
 WORKDIR /app
 
-null
+COPY . .
 
 RUN npm install
 
@@ -390,7 +388,7 @@ version: "3"
 services:
   web:
     build: .
-    null
+    ports:
       -"7001:7001"
     links:
       -redis
@@ -414,7 +412,7 @@ $docker-compose build
 $docker-compose up -d
 ```
 
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608884158660-02bd2d3c-08b4-4ecc-a4dd-a18d4b9d2c12.png#height=44&id=jWw4i&margin=%5Bobject%20Object%5D&name=image.png&originHeight=62&originWidth=1054&originalType=binary&ratio=1&size=47727&status=done&style=none&width=746)
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608884158660-02bd2d3c-08b4-4ecc-a4dd-a18d4b9d2c12.png)
 So how to use redis, for example, because docker-compose has added a redis and link.
 
 For more details about docker-compose, you can see how to use docker-compose online.
@@ -448,13 +446,13 @@ Single file construction has some pre-dependencies.
 
 ```bash
 ## Used to generate entry
-$npm I @midwayjs/bundle-helper --save-dev
+$ npm I @midwayjs/bundle-helper --save-dev
 
 ## Used to build a single file
 ## Pack to Global
-$npm I @vercel/ncc -g
+$ npm I @vercel/ncc -g
 ## Or install into the project
-$npm I @vercel/ncc --save-dev
+$ npm I @vercel/ncc --save-dev
 ```
 
 
@@ -492,7 +490,7 @@ import * as LocalConfig from './config/config.local';
   ]
 })
 export class ContainerLifeCycle {
-null
+}
 ```
 
 
@@ -504,9 +502,9 @@ Due to the default behavior of ncc builders, **do not** use default exports in c
 For example:
 
 ```typescript
-null
+export default class UserSerivce {
   // ...
-null
+}
 ```
 
 After compilation, the `UserSerivce` cannot be injected.
@@ -519,12 +517,12 @@ The scan path that the data source depends on is also not supported.
 
 ```typescript
 export default {
-  null
+  typeorm: {
     dataSource: {
       default: {
         // ...
         entities: [
-          /abc', // not supported
+          '/abc',			// not supported
         ]		
       },
   }
@@ -565,9 +563,9 @@ Bootstrap.configure ({
 Add the following script to `package.json`.
 
 ```json
-  "scripts ": {
+  "scripts": {
     // ...
-    "bundle": "bundle && npm run build && ncc build bootstrap.js -o build ",
+    "bundle": "bundle && npm run build && ncc build bootstrap.js -o build",
     "bundle_start": "NODE_ENV=production node ./build/index.js"
   },
 ```
@@ -583,7 +581,7 @@ Contains three parts
 Execute the command.
 
 ```bash
-$npm run bundle
+$ npm run bundle
 ```
 
 :::tip
@@ -597,7 +595,7 @@ note that there may be errors in the build process, such as incorrect ts definit
 Start the project.
 
 ```bash
-$npm run bundle_start
+$ npm run bundle_start
 ```
 
 If there is no problem in starting the access, then you can take the built directory and distribute it.

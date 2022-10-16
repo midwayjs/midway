@@ -111,8 +111,8 @@ export default {
     // ioredis configuration https://www.npmjs.com/package/ioredis
     redis: {
       port: 6379
-      host: '127.0.0.1 ',
-      password: 'foobared ',
+      host: '127.0.0.1',
+      password: 'foobared',
     },
     prefix: 'midway-task', // the keys stored in these tasks start with midway-task to distinguish the configurations in the user's original redis.
     defaultJobOptions: {
@@ -354,7 +354,7 @@ export default {
       null
         disableConsole: false, // whether to disable printing to the console, disabled by default
         null
-        consoleLevel: 'warn ',
+        consoleLevel: 'warn',
       },
     }
   },
@@ -514,9 +514,9 @@ export class UserService {
   async getUser(options: IUserOptions) {
     return {
       uid: options.uid
-      username: 'mockedName ',
-      phone: '12345678901 ',
-      email: 'xxx.xxx@xxx.com ',
+      username: 'mockedName',
+      phone: '12345678901',
+      email: 'xxx.xxx@xxx.com',
     };
   }
 

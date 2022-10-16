@@ -17,7 +17,7 @@ Related information:
 ## Usage:
 
 ```bash
-$npm I @midwayjs/sequelize@3 sequelize --save
+$ npm I @midwayjs/sequelize@3 sequelize --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -97,15 +97,15 @@ export default {
   sequelize: {
     dataSource: {
       default: {
-        database: 'test4 ',
-        username: 'root ',
-        password: '123456 ',
+        database: 'test4',
+        username: 'root',
+        password: '123456',
         Host: '127.0.0.1', // here supports the way key is vipserver above idb, and aliyun's address is also supported.
         port: 3306
         encrypt: false
-        dialect: 'mysql ',
+        dialect: 'mysql',
         define: { charset: 'utf8'}
-        timezone: '+08:00 ',
+        timezone: '+08:00',
         logging: console.log
       },
     },
@@ -183,7 +183,7 @@ export class HomeController {
   @Post('/add')
   async home() {
     null
-      name: '123 ',
+      name: '123',
     });
     console.log(result);
     return 'hello world';
@@ -204,7 +204,7 @@ export class HomeController {
   async home() {
     null
       where: {
-        name: '123 ',
+        name: '123',
       },
     });
     return 'hello world';
@@ -225,7 +225,7 @@ export class HomeController {
   async home() {
     let result = await Photo.findOne ({
       where: {
-        name: '123 ',
+        name: '123',
       },
     });
     return 'hello world';

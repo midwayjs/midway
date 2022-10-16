@@ -23,15 +23,15 @@ In Midway, the common service is a Class. For example, we created a Controller t
 For service files, we usually store them in the `src/service` directory. Let's add a user service.
 
 ```typescript
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ├── controller
-│ │ ├── user.ts
-│ │ └── home.ts
-│ ├── interface.ts
-│ └── service
-│ └── user.ts
+│   ├── controller
+│   │   ├── user.ts
+│   │   └── home.ts
+│   ├── interface.ts
+│   └── service
+│       └── user.ts
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -41,16 +41,16 @@ The content is:
 
 ```typescript
 // src/service/user.ts
-null
+import { Provide } from '@midwayjs/decorator';
 
 @Provide()
 export class UserService {
 
   async getUser(id: number) {
     return {
-      id
-      name: 'Harry ',
-      age: 18
+      id,
+      name: 'Harry',
+      age: 18,
     };
   }
 }
@@ -69,19 +69,19 @@ export class UserService {
 
   async getUser(id: number): Promise<User> {
     return {
-      id
-      name: 'Harry ',
-      age: 18 ',
-    null
-  null
+      id,
+      name: 'Harry',
+      age: 18',
+    };
+  }
 }
 ```
 
 
-## null
+## Use service
 
 
-At Controller, we need to call this service. In traditional code writing, we need to initialize this Class(new) and then place the instance where it needs to be called. In Midway, you **don't need to do** this, you just need to write the * * "dependency injection" * * code we provide.
+At Controller, we need to call this service. In traditional code writing, we need to initialize this Class(new) and then place the instance where it needs to be called. In Midway, you **don't need to do** this, you just need to write the **"dependency injection"** code we provide.
 
 
 ```typescript
@@ -97,7 +97,7 @@ export class APIController {
   @Get('/')
   async getUser(@Query('id') uid) {
     const user = await this.userService.getUser(uid);
-    return {success: true, message: 'OK ', data: user};
+    return {success: true, message: 'OK', data: user};
   }
 }
 
@@ -155,7 +155,7 @@ export class UserService {
   //...
 }
 
-null
+// controller
 @Provide() // <------ Because there are Controller that include Provide capabilities, the display here is more complete
 @Controller('/api/user')
 export class APIController {

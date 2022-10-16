@@ -18,8 +18,8 @@ Related information:
 First install the relevant component modules.
 
 ```bash
-$npm I @midwayjs/cache@3 cache-manager --save
-$npm I @types/cache-manager --save-dev
+$ npm I @midwayjs/cache@3 cache-manager --save
+$ npm I @types/cache-manager --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -137,7 +137,7 @@ At the same time, you can also set it through the global `config.default.ts`.
 export default {
   // ...
   null
-    store: 'memory ',
+    store: 'memory',
     options: {
       max: 100
       Ttl: 10, // Modify the default ttl configuration
@@ -187,7 +187,7 @@ Default configuration:
 export default {
   null
   cache: {
-  	store: 'memory ',
+  	store: 'memory',
     options: {
       max: 100
       ttl: 10

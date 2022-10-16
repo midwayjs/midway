@@ -1,4 +1,4 @@
-# AOP
+# Interceptors(AOP)
 
 We often have the need for global unified processing logic, such as unified processing errors, conversion formats, etc. Although Web middleware is available in Web scenarios, this capability cannot be used in other scenarios.
 
@@ -9,7 +9,7 @@ Interceptor is different from traditional Web middleware and decorator. It is th
 
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01DFfT1y1FC8xYeocrX_!!6000000000450-2-tps-823-133.png)
 
-## Use interceptor (section)
+## Using Interceptors (Aspects)
 
 
 The interceptor is usually placed in the `src/aspect` directory. Let's write an example of intercepting the controller (Controller) method. Create a `src/aspect/report.ts` file.
@@ -72,7 +72,7 @@ In the case of inheritance, the interceptor will not take effect on the methods 
 :::
 
 
-## Life cycle of tangent surface
+## Aspectable Lifecycle
 
 
 The method interceptor can intercept the whole method, and the way of interception includes several aspects.
@@ -260,7 +260,7 @@ export class ReportInfo implements IMethodAspect {
 ```
 
 
-## Asynchronous problem of facets
+## Aspects of Asynchronous Issues
 
 
 If the blocked method is asynchronous, in principle, all methods such as `before` should be asynchronous. Otherwise, all methods should be synchronous.
@@ -307,7 +307,7 @@ export class ReportInfo implements IMethodAspect {
 ## Apply to multiple classes
 
 
-The parameter of the `@Aspect` decorator can be an array. We can provide multiple classes. All methods **of these classes will be blocked. For example, we can apply the above interceptor to multiple Controller, so that every method of * * every Class * * will be intercepted.
+The parameter of the `@Aspect` decorator can be an array. We can provide multiple classes. All methods **of these classes will be blocked. For example, we can apply the above interceptor to multiple Controller, so that every method of **every Class** will be intercepted.
 
 
 ```typescript
@@ -324,7 +324,7 @@ export class ReportInfo implements IMethodAspect {
 ## Specific method matching
 
 
-null We provide some capabilities for matching methods.  The second parameter decorated by `@Aspect` is a string of a wildwith method. The rule used is [picomatch](https://github.com/micromatch/picomatch).
+In general, we only need to intercept a certain class-specific method. We provide some capabilities for matching methods.  The second parameter decorated by `@Aspect` is a string of a wildwith method. The rule used is [picomatch](https://github.com/micromatch/picomatch).
 
 
 Suppose our method is:
@@ -361,7 +361,7 @@ export class ReportInfo implements IMethodAspect {
 ```
 
 
-## section execution sequence
+## Aspect execution order
 
 
 If multiple interceptors (sections) operate on one method at the same time, there may be a problem of disorder of order. If in two files, this order is random.

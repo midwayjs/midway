@@ -18,7 +18,7 @@ Related information:
 1. Installation Dependence
 
 ```bash
-$npm I @midwayjs/security --save
+$ npm I @midwayjs/security --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -89,8 +89,8 @@ If CSRF is configured by default, the token is set in the Cookie. You can use JS
 
 ```js
 const csrftoken = Cookies.get('csrfToken');
-fetch('/api/post ', {
-  method: 'POST ',
+fetch('/api/post', {
+  method: 'POST',
   headers: {
     'x-csrf-token': csrftoken
   },
@@ -101,7 +101,7 @@ fetch('/api/post ', {
 By default, the framework contains the `CSRF token` in the `Cookie` file, which is easy to obtain when the front-end JS sends a request. However, cookies can be set for all subdomain names. Therefore, when our application cannot guarantee that all subdomain names are controlled, it may be at risk of being attacked by `CSRF` when stored in `cookies`. The framework provides a configuration item `useSession` to store token in the Session.
 
 
-When the `CSRF token` is stored in a `Cookie`, if a user switch occurs in the same browser, the new user will still use the old token (previously used by the user). This will bring certain security risks. Therefore, you must call `CTX. rotateCsrfSecret()` to refresh the `CSRF token` every time you log in. For example:
+When the `CSRF token` is stored in a `Cookie`, if a user switch occurs in the same browser, the new user will still use the old token (previously used by the user). This will bring certain security risks. Therefore, you must call `ctx.rotateCsrfSecret()` to refresh the `CSRF token` every time you log in. For example:
 
 
 ```js
@@ -219,18 +219,18 @@ export default {
   security: {
     csrf: {
       enable: true
-      type: 'ctoken ',
+      type: 'ctoken',
       useSession: false
-      cookieName: 'csrfToken ',
-      sessionName: 'csrfToken ',
-      headerName: 'x-csrf-token ',
-      bodyName: '_csrf ',
-      queryName: '_csrf ',
+      cookieName: 'csrfToken',
+      sessionName: 'csrfToken',
+      headerName: 'x-csrf-token',
+      bodyName: '_csrf',
+      queryName: '_csrf',
       refererWhiteList: []
     },
     xframe: {
       enable: true
-      value: 'SAMEORIGIN ',
+      value: 'SAMEORIGIN',
     },
     csp: {
       enable: false
@@ -248,7 +248,7 @@ export default {
     },
     xssProtection: {
       enable: true
-      value: '1; mode=block ',
+      value: '1; mode=block',
     },
   },
 }

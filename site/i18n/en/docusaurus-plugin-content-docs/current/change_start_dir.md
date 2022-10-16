@@ -10,7 +10,7 @@ Some restrictions:
 
 ## Modification of Source Code Directory
 
-null````
+Below, we will change the `src` directory to `server` as an example.
 
 ### dev development
 

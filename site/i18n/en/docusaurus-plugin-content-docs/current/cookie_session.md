@@ -14,8 +14,8 @@ Midway provides a `@midwayjs/cookies` module to manipulate Cookie.
 
 At the same time, in `@midwayjs/koa`, the method of directly reading and writing cookies from the context is provided by default.
 
-- `CTx. cookies.get(name, [options])` Cookie in Read Context Request
-- `CTx. cookies.set(name, value, [options])` writes cookie in context
+- `ctx.cookies.get(name, [options])` Cookie in Read Context Request
+- `ctx.cookies.set(name, value, [options])` writes cookie in context
 
 Examples are as follows:
 
@@ -48,7 +48,7 @@ Setting Cookie is actually done by setting a set-cookie header in the HTTP respo
 
 These options include:
 
-| Options | null | Description |
+| Options | Type | Description |
 | -------- | ------- | ------------------------------------------------------------ |
 | path | String | The path where the key-value pair takes effect. By default, the path is set to the root path (`/`). That is, all URLs under the current domain name can access this cookie.  |
 | domain | String | The domain name for which the key-value pair takes effect is not configured by default. It can be configured to be accessed only in the specified domain name.  |
@@ -74,13 +74,13 @@ import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
-null
+export class HomeController {
   @Inject()
   ctx: Context;
 
   @Get('/')
   async home() {
-    this.ctx.cookies.set('cid', 'hello world ', {
+    this.ctx.cookies.set('cid', 'hello world', {
       Domain: 'localhost', // write the domain name where the cookie is located
       Path: '/index', // the path where the cookie is written
       MaxAge: 10*60*1000, // cookie valid duration
@@ -99,8 +99,8 @@ If you want Cookie to be accessed and modified by js on the browser side:
 
 ```typescript
 ctx.cookies.set(key, value, {
-  httpOnly: false
-  signed: false
+  httpOnly: false,
+  signed: false,
 });
 ```
 
@@ -117,7 +117,7 @@ ctx.cookies.set(key, value, {
 
 ## Get Cookie
 
-Use the `CTX. cookies.get(key, options)` API to get Cookie.
+Use the `ctx.cookies.get(key, options)` API to get Cookie.
 
 Since the cookie in the HTTP request is transmitted in a header, the value of the corresponding key-value pair can be quickly obtained from the entire cookie through this method provided by the framework. When setting cookies above, we can set the `options.signed` and `options.encrypt` to sign or encrypt cookies, so the corresponding matching options should also be passed when obtaining cookies.
 
@@ -127,8 +127,8 @@ Since the cookie in the HTTP request is transmitted in a header, the value of th
 If you want to obtain a Cookie set by the frontend or other systems, you must specify the `signed` parameter to `false` to avoid that the value of the Cookie cannot be obtained.
 
 ```typescript
-ctx.cookies.get('frontend-cookie ', {
-  signed: false
+ctx.cookies.get('frontend-cookie', {
+  signed: false,
 });
 ```
 
@@ -143,7 +143,7 @@ The default scaffold will automatically generate a secret key in the configurati
 ```typescript
 // src/config/config.default
 export default {
-  keys: ['key1','key2']
+  keys: ['key1','key2'],
 }
 ```
 
@@ -178,36 +178,36 @@ export class HomeController {
     this.ctx.session.visited = ctx.session.visited? (ctx.session.visited + 1) : 1;
     // ...
   }
-null
+}
 ```
 
 The use of the Session is very intuitive. Just read it or modify it. If you want to delete it, assign it null directly:
 
-```
-null
+```typescript
+ctx.session = null;
 ```
 
-null****[](null)
+What needs **special attention** is: when setting the session attribute, you need to avoid the following situations (which will cause field loss, see [koa-session](https://github.com/koajs/session/blob/master/lib/session.js#L37-L47) source code)
 
-- null``
+- Do not start with `_`
 - The value cannot be `isNew`.
 
 ```
-//❌Wrong usage
+// ❌ Wrong usage
 ctx.session._visited = 1; // --> this field will be lost on the next request
 ctx.session.isNew = 'HeHe'; // --> is an internal keyword and should not be changed
 
-//✔The correct usage
-null
+// ✔️ The correct usage
+ctx.session.visited = 1; // --> no problem here
 ```
 
 The implementation of the Session is based on Cookie. By default, the content Session by the user is encrypted and stored directly in a field in the Cookie. Every time the user requests our website, he will bring this Cookie with him and we will use it after decryption by the server. The default configuration of the Session is as follows:
 
 ```typescript
 export default {
-  null
+  session: {
     MaxAge: 24*3600*1000, // 1 day
-    key: 'MW_SESS ',
+    key: 'MW_SESS',
     httpOnly: true
   },
   // ...
@@ -243,7 +243,7 @@ export class UserController {
     const user = await this.userService.loginAndGetUser(username, password);
 
     // Set Session
-    null
+    this.ctx.session.user = user;
     // If the user checked "Remember Me", set a 30-day expiration time.
     if (rememberMe) {
       this.ctx.session.maxAge = FORMAT.MS.ONE_DAY * 30;

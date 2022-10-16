@@ -50,9 +50,9 @@ Front-end call:
 import { createPost } from '../api/post';
 
 await createPost ({
-  title: 'Hello Midway ',
-  content: 'Hello Prisma ',
-  authorEmail: 'test@test.com ',
+  title: 'Hello Midway',
+  content: 'Hello Prisma',
+  authorEmail: 'test@test.com',
 });
 ```
 

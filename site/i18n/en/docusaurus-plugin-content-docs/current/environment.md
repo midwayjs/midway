@@ -13,18 +13,18 @@ Since `NODE_ENV` will be intercepted and injected by some toolkits in some cases
 We can specify it by adding environment variables at startup.
 
 ```bash
-MIDWAY_SERVER_ENV = prod npm start // first priority
-NODE_ENV = local npm start // second priority
+MIDWAY_SERVER_ENV=prod npm start // first priority
+NODE_ENV=local npm start // second priority
 ```
 In windows, you must use the [cross-env](null) module to achieve the same effect.
 ```bash
-cross-env MIDWAY_SERVER_ENV = prod npm start // first priority
-cross-env NODE_ENV = local npm start // second priority
+cross-env MIDWAY_SERVER_ENV=prod npm start // first priority
+cross-env NODE_ENV=local npm start // second priority
 ```
 
 
 
-## null
+## Get the environment in the code
 
 
 Midway provides the `getEnv()` method to obtain the environment for app objects. Midway handles different upper-level frameworks to ensure that the `getEnv()` method is available in different scenarios. .

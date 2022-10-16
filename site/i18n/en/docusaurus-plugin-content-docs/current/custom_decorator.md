@@ -3,7 +3,7 @@
 In the new version, Midway provides custom decorator capabilities supported by the framework, which includes several common functions:
 
 - Define inheritable attribute decorators
-- null
+- Define a wrappable method as a method decorator for interception
 - Define parameter decorators that modify parameters
 
 We take into account the current stage of decorators in the standard and subsequent risks. Midway provides a custom decorator method and its supporting capabilities to be implemented by the framework to avoid the problems caused by subsequent specification changes as much as possible.
@@ -13,17 +13,17 @@ In general, we recommend placing custom decorators in the `src/decorator` direct
 For example:
 
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ├── controller
-│ │ ├── user.controller.ts
-│ │ └── home.controller.ts
-│ ├── interface.ts
-│ │-decorator ## custom decorator
-│ │ └── user.decorator.ts
-│ └── service
-│ └── user.service.ts
+│   ├── controller
+│   │   ├── user.controller.ts
+│   │   └── home.controller.ts
+│   ├── interface.ts
+│   ├── decorator                   ## custom decorator
+│   │   └── user.decorator.ts
+│   └── service
+│       └── user.service.ts
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -47,7 +47,7 @@ Common extension APIs are:
 - Save meta information to class `saveClassMetadata`
 - `attachClassMetadata` additional meta information to class
 - `getClassMetadata` get meta information from class
-- `null`
+- `savePropertyDataToClass` saves the property's meta information to the class`
 - `attachPropertyDataToClass` meta-information for additional attributes to class
 - `getPropertyDataFromClass` get attribute meta information from class
 - `listPropertyDataFromClass` listing meta-information for all attributes saved on class
@@ -90,7 +90,7 @@ export function Model(): ClassDecorator {
     saveClassMetadata (
       MODEL_KEY,
       {
-        test: 'abc ',
+        test: 'abc',
       },
       target
     );
@@ -110,7 +110,7 @@ The above only decided on this decorator, and we also need to implement the corr
 
 import { listModule, Configuration, App, Inject } from '@midwayjs/decorator';
 import { join } from 'path';
-null
+import * as koa from '@midwayjs/koa';
 import { MODEL_KEY } from './decorator/model.decorator';
 
 @Configuration ({
@@ -170,7 +170,7 @@ export class MemoryStore extends Map {
   }
 }
 
-null
+// src/configuration.ts
 // The entry is instantiated and some data is saved.
 import { Configuration, App, Inject } from '@midwayjs/decorator';
 import { join } from 'path';
@@ -181,7 +181,7 @@ import * as koa from '@midwayjs/koa';
 })
 export class MainConfiguration {
   @App()
-  null
+  app: koa.Application;
 
   @Inject()
   store: MemoryStore;
@@ -239,13 +239,13 @@ export class MainConfiguration {
   decoratorService: MidwayDecoratorService;
 
   @Init()
-  null
+  async init() {
     // ...
 
     // Realize decorator
     this.decoratorService.registerPropertyHandler(MEMORY_CACHE_KEY, (propertyName, meta) => {
       return this.store.get(meta.key);
-    null
+    });
   }
 }
 ```
@@ -257,7 +257,7 @@ The `registerPropertyHandler` method contains two parameters, the first is the u
 Then we can use this decorator.
 
 ```typescript
-null
+import { MemoryCache } from 'decorator/memoryCache.decorator';
 
 // ...
 export class UserService {
@@ -267,7 +267,7 @@ export class UserService {
   async invoke() {
     console.log(this.cacheValue);
     // => 1
-  null
+  }
 }
 ```
 
@@ -279,7 +279,7 @@ Different from the decorator defined in the TypeScript, the method decorator pro
 
 Let's take the printing method execution time as an example.
 
-null
+Like property decorators, our definition and implementation are separate.
 
 The following is the section that defines the decorator method.
 
@@ -291,12 +291,12 @@ import { createCustomMethodDecorator } from '@midwayjs/decorator';
 export const LOGGING_KEY = 'decorator:logging_key';
 
 export function LoggingTime(formatUnit = 'ms'): MethodDecorator {
-  null
+	// We pass a parameter that modifies the display format
   return createCustomMethodDecorator(LOGGING_KEY, { formatUnit });
 }
 ```
 
-null``
+The implementation part also needs to use the framework's built-in `DecoratorService` service.
 
 ```typescript
 //...
@@ -304,11 +304,11 @@ null``
 function formatDuring(value, formatUnit: string) {
   // Return time formatting here
   if (formatUnit === 'ms') {
-    return '${value} ms';
-  null
+    return `${value} ms`;
+  } else if (formatUnit === 'min') {
     // return xxx
   }
-null
+}
 
 @Configuration ({
   imports: [koa]
@@ -321,13 +321,13 @@ export class MainConfiguration {
   decoratorService: MidwayDecoratorService;
 
   @Logger()
-  null
+  logger;
 
   async onReady() {
     // ...
 
     // Implementation method decorator
-    null
+    this.decoratorService.registerMethodHandler(LOGGING_KEY, (options) => {
       return {
         around: async (joinPoint: JoinPoint) => {
           // Get the formatting parameters
@@ -357,7 +357,7 @@ The first parameter of the `registerMethodHandler` method is the id defined by t
 
 | Parameters | Type | Description |
 | -------------------- | ------------- | ---------------------- |
-| options.target | null | The class in which the decorator is decorated. |
+| options.target | new (...args) | The class in which the decorator is decorated. |
 | options.propertyName | string | The name of the method where the decorator is decorated. |
 | options.metadata | {} | Parameters of the decorator itself |
 
@@ -407,7 +407,7 @@ Midway provides `createCustomParamDecorator` methods for creating custom paramet
 
 Parameter decorators are generally used to modify parameter values and preprocess data in advance. The decorators of request series such as `@Query` of Midway are implemented based on them.
 
-Like other decorators, our definition and implementation are separate. Let's take the user (CTX. user) in the parameter as an example.
+Like other decorators, our definition and implementation are separate. Let's take the user (ctx.user) in the parameter as an example.
 
 The following is the section that defines the decorator method.
 
@@ -431,7 +431,7 @@ The implementation part also needs to use the `DecoratorService` service built i
 @Configuration ({
   imports: [koa]
 })
-null
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -456,7 +456,7 @@ null
 
 The first parameter of the `registerParameterHandler` method is the id defined by the decorator, and the second parameter is the implementation of the callback. The parameter is the options object, including:
 
-| null | Type | Description |
+| Options | Type | Description |
 | ----------------------- | --------------- | ---------------------- |
 | options.target | new (...args) | The class in which the decorator is decorated. |
 | options.propertyName | string | The name of the method where the decorator is decorated. |
@@ -518,7 +518,7 @@ export class MainConfiguration {
           const instance = joinPoint.target;
           const ctx = instance[REQUEST_OBJ_CTX_KEY];
           // ctx.xxxx
-          null
+          // ...
         },
       };
     });

@@ -108,8 +108,8 @@ const input =
 const formdata = new FormData();
 formdata.append('file', input.files[0]);
 
-fetch('/api/upload ', {
-  method: 'POST ',
+fetch('/api/upload', {
+  method: 'POST',
   body: formdata
 })
   .then((res) => res.json())

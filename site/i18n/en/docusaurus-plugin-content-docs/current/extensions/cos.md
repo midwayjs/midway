@@ -17,7 +17,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/cos@3 --save
+$ npm I @midwayjs/cos@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -116,9 +116,9 @@ export class UserService {
 
   async invoke() {
     await this.cosService.sliceUploadFile ({
-      Bucket: 'test-1250000000 ',
-      Region: 'ap-guangzhou ',
-      Key: '1.zip ',
+      Bucket: 'test-1250000000',
+      Region: 'ap-guangzhou',
+      Key: '1.zip',
       FilePath: './1.zip'
     },
   }

@@ -16,14 +16,14 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm install @midwayjs/swagger@3 --save
-$npm install swagger-ui-dist --save-dev
+$ npm install @midwayjs/swagger@3 --save
+$ npm install swagger-ui-dist --save-dev
 ```
 
 If you want to output Swagger API pages on the server, you need to install the swagger-ui-dist into the dependency.
 
 ```bash
-$npm install swagger-ui-dist --save
+$ npm install swagger-ui-dist --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -173,7 +173,7 @@ In most cases, the underlying type can be automatically identified without expli
 
 ```typescript
 @ApiProperty ({
-  type: 'string ',
+  type: 'string',
   // ...
 })
 name: string;
@@ -183,8 +183,8 @@ name: string;
 
 ```typescript
 @ApiProperty ({
-  type: 'boolean ',
-  example: 'true ',
+  type: 'boolean',
+  example: 'true',
   // ...
 })
 isPure: boolean;
@@ -194,8 +194,8 @@ isPure: boolean;
 
 ```typescript
 @ApiProperty ({
-  type: 'number ',
-  example: '1 ',
+  type: 'number',
+  example: '1',
   description: 'The name of the Catage'
 })
 age: number;
@@ -205,9 +205,9 @@ In addition, you can also use the format field to define a more precise length.
 
 ```typescript
 @ApiProperty ({
-  type: 'integer ',
-  format: 'int32 ',
-  example: '1 ',
+  type: 'integer',
+  format: 'int32',
+  example: '1',
   description: 'The name of the Catage'
 })
 age: number;
@@ -221,9 +221,9 @@ If the array type is an array type, you can configure the type field and use the
 
 ```typescript
 @ApiProperty ({
-  type: 'array ',
+  type: 'array',
   items: {
-    type: 'string ',
+    type: 'string',
   },
   example: ['1']
   null
@@ -237,9 +237,9 @@ If it is an enumeration type, it can be defined by configuring the enmu field.
 
 ```typescript
 enum HelloWorld {
-  One = 'One ',
-  Two = 'Two ',
-  Three = 'Three ',
+  One = 'One',
+  Two = 'Two',
+  Three = 'Three',
 }
 
 @ApiProperty ({
@@ -275,8 +275,8 @@ export class Cat {
   agedata?: Date;
 
   @ApiProperty ({
-    example: 'Maine Coon ',
-    description: 'The breed of the Cat ',
+    example: 'Maine Coon',
+    description: 'The breed of the Cat',
   })
   breed: string;
 }
@@ -318,7 +318,7 @@ export class CreateCatDto {
   // ...
 
   @ApiProperty ({
-    type: 'array ',
+    type: 'array',
     items: {
       $ref: getSchemaPath(Cat)
     }
@@ -398,7 +398,7 @@ Set `contentType` with ```@ApiBody```
 ```typescript
 @Post('/:id', { summary: 'test'})
 @ApiBody ({
-  description: 'this is body ',
+  description: 'this is body',
   contentType: BodyContentType.Multipart
 })
 @ApiParam({ description: 'this is id' })
@@ -413,8 +413,8 @@ Use `@ApiProperty` to add `format` in `CreateCatDto`
 
 ```typescript
 @ApiProperty ({
-  type: 'string ',
-  format: 'binary ',
+  type: 'string',
+  format: 'binary',
   description: 'this is file test'
 })
 file: any;
@@ -463,7 +463,7 @@ The Header parameter is defined by the ```@ApiHeader({...})``` decorator.
 
 ```typescript
 null
-  name: 'x-test-one ',
+  name: 'x-test-one',
   description: 'this is test one'
 })
 @ApiTags(['hello'])
@@ -479,7 +479,7 @@ export class HelloController {}
 @Get('/:id')
 @ApiResponse ({
   status: 200
-  description: 'The found record ',
+  description: 'The found record',
   type: Cat
 })
 findOne(@Param('id') id: string, @Query('test') test: any): Cat {
@@ -527,8 +527,8 @@ export class Cat {
   age: number;
 
   @ApiProperty ({
-    example: 'Maine Coon ',
-    description: 'The breed of the Cat ',
+    example: 'Maine Coon',
+    description: 'The breed of the Cat',
   })
   breed: string;
 }
@@ -588,7 +588,7 @@ For example, we need to add some common package structure to the return value.
 ```typescript
 {
   code: 200
-  message: 'xxx ',
+  message: 'xxx',
   null
 }
 ```
@@ -626,7 +626,7 @@ When using, you can directly specify this class.
 @Get('/:id')
 @ApiResponse ({
   status: 200
-  description: 'The found record ',
+  description: 'The found record',
   type: ViewCat
 })
 findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
@@ -665,7 +665,7 @@ export default {
   // ...
   swagger: {
     auth: {
-      authType: 'basic ',
+      authType: 'basic',
     },
   },
 }
@@ -689,7 +689,7 @@ null
   // ...
   swagger: {
     auth: {
-      authType: 'bearer ',
+      authType: 'bearer',
     },
   },
 }
@@ -713,20 +713,20 @@ export default {
   // ...
   swagger: {
     auth: {
-      authType: 'oauth2 ',
+      authType: 'oauth2',
       flows: {
         implicit: {
-          authorizationUrl: 'http://example.org/api/oauth/dialog ',
+          authorizationUrl: 'http://example.org/api/oauth/dialog',
           scopes: {
-            'write:pets': 'modify pets in your account ',
+            'write:pets': 'modify pets in your account',
             'read:pets': 'read your pets'
           }
         },
         authorizationCode: {
-          authorizationUrl: 'https://example.com/api/oauth/dialog ',
-          tokenUrl: 'https://example.com/api/oauth/token ',
+          authorizationUrl: 'https://example.com/api/oauth/dialog',
+          tokenUrl: 'https://example.com/api/oauth/token',
           scopes: {
-            'write:pets': 'modify pets in your account ',
+            'write:pets': 'modify pets in your account',
             null
           }
         },
@@ -753,9 +753,9 @@ export default {
   // ...
   swagger: {
     auth: {
-      authType: 'cookie ',
-      securityName: 'testforcookie ',
-      cookieName: 'connect.sid ',
+      authType: 'cookie',
+      securityName: 'testforcookie',
+      cookieName: 'connect.sid',
     },
   },
 }
@@ -779,7 +779,7 @@ export default {
   // ...
   swagger: {
     auth: {
-      authType: 'apikey ',
+      authType: 'apikey',
     	name: 'api_key'
     },
   },
@@ -804,7 +804,7 @@ export default {
   // ...
   swagger: {
     auth: {
-      authType: 'custom ',
+      authType: 'custom',
       name: 'mycustom'
       // ...
     },

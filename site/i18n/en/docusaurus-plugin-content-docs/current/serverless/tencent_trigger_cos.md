@@ -21,11 +21,11 @@ export class HelloTencentService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType. OS, {
-    bucket: 'cli-appid.cos.ap-beijing.myqcloud.com ',
+    bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
     null
     filter: {
       prefix: 'filterdir /',
-      suffix: '.jpg ',
+      suffix: '.jpg',
     },
   })
   async handleCOSEvent(event: SCF.COSEvent) {
@@ -52,11 +52,11 @@ Example:
 
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType. OS, {
-    bucket: 'cli-appid.cos.ap-beijing.myqcloud.com ',
+    bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
     events: 'cos:ObjectCreated :*,
     filter: {
       prefix: 'filterdir /',
-      suffix: '.jpg ',
+      suffix: '.jpg',
     },
   })
 ```

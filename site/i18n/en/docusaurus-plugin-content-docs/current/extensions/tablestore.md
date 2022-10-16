@@ -16,7 +16,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/tablestore@3 --save
+$ npm I @midwayjs/tablestore@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -69,10 +69,10 @@ export default {
   // ...
   tableStore: {
     client: {
-      accessKeyId: '<your access key id> ',
-      secretAccessKey: '<your access key secret> ',
+      accessKeyId: '<your access key id>',
+      secretAccessKey: '<your access key secret>',
       stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html */
-      endpoint: '<your endpoint> ',
+      endpoint: '<your endpoint>',
       instancename: '<your instance name>'
     },
   },
@@ -89,17 +89,17 @@ export default {
   tableStore: {
     null
       Db1: {
-        accessKeyId: '<your access key id> ',
-        secretAccessKey: '<your access key secret> ',
+        accessKeyId: '<your access key id>',
+        secretAccessKey: '<your access key secret>',
         stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html */
-        endpoint: '<your endpoint> ',
+        endpoint: '<your endpoint>',
         instancename: '<your instance name>'
       },
       db2: {
-        accessKeyId: '<your access key id> ',
-        secretAccessKey: '<your access key secret> ',
+        accessKeyId: '<your access key id>',
+        secretAccessKey: '<your access key secret>',
         stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html */
-        endpoint: '<your endpoint> ',
+        endpoint: '<your endpoint>',
         instancename: '<your instance name>'
       },
     },

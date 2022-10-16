@@ -79,7 +79,7 @@ Debugging can be performed after the code breakpoint.
 
 ## Debugging in Chrome
 
-null````````
+If you use vim or other code editors, you can use this method, through the `dev` command of `@midwayjs/cli`, add the `--debug` parameter to enable debug mode, you can use `chrome devtools` for single-step code debugging :
 
 ![69456694-513D-4388-B52F-001562D4A520.png](https://img.alicdn.com/imgextra/i1/O1CN01jovior1pQBGiH8ao3_!!6000000005354-2-tps-1462-633.png)
 You can use `chrome:// inspect/` to open the `nodejs devtools` for breakpoint debugging:

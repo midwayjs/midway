@@ -12,8 +12,8 @@ Midway can use EggJS as the upper-level Web framework. EggJS provides many commo
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/web@3 egg --save
-$npm I @midwayjs/egg-ts-helper --save-dev
+$ npm I @midwayjs/web@3 egg --save
+$ npm I @midwayjs/egg-ts-helper --save-dev
 ```
 
 For the EggJS scenario, these packages are listed below.
@@ -44,7 +44,7 @@ Examples can also be created directly using scaffolding.
 null
 
 # npm v7
-$npm init midway -- --type=egg-v3 my_project
+$ npm init midway -- --type=egg-v3 my_project
 ```
 
 
@@ -150,7 +150,7 @@ import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
 export default (appInfo: MidwayAppInfo) => {
   return {
     null
-    keys: appInfo.name + '_xxxx ',
+    keys: appInfo.name + '_xxxx',
     egg: {
       port: 7001
     },
@@ -191,7 +191,7 @@ Plug-ins are one of EggJS's features. `@midwayjs/web` also supports EggJS's plug
 
 Plug-ins are generally reused by npm modules.
 ```bash
-$npm I egg-mysql --save
+$ npm I egg-mysql --save
 ```
 Then, you must declare that it is enabled in the `src/config/plugin.js` of the application or framework.
 
@@ -214,7 +214,7 @@ If there is no `export default`, you can export it directly.
 // Use mysql plug-in
 export const mysql = {
   enable: true
-  package: 'egg-mysql ',
+  package: 'egg-mysql',
 };
 ```
 
@@ -359,10 +359,10 @@ The default size is limited to `1mb`. You can set the size of each item separate
 export default {
   // ...
   bodyParser: {
-    formLimit: '1mb ',
-    jsonLimit: '1mb ',
-    textLimit: '1mb ',
-    xmlLimit: '1mb ',
+    formLimit: '1mb',
+    jsonLimit: '1mb',
+    textLimit: '1mb',
+    xmlLimit: '1mb',
   },
 }
 ```
@@ -382,7 +382,7 @@ To be compatible with the previous [egg scheduled tasks](https://eggjs.org/zh-cn
 First install `midway-schedule` dependencies.
 
 ```bash
-$npm I midway-schedule --save
+$ npm I midway-schedule --save
 ```
 
 Add to the plug-in.
@@ -436,7 +436,7 @@ In `src/config/config.default.ts`
 module.exports = {
   onerror: {
     // When an exception occurs on the online page, redirect to this page
-    errorPageUrl: '/50x.html ',
+    errorPageUrl: '/50x.html',
   },
 };
 ```
@@ -511,7 +511,7 @@ null``
 First, in the dependency, ensure that the `egg-scripts` package is installed.
 
 ```bash
-$npm I egg-scripts --save
+$ npm I egg-scripts --save
 ```
 
 
@@ -716,7 +716,7 @@ export default {
 
 ### Query array parsing
 
-By default, `CTX. query` parses to ignore arrays, while `CTX. queries` strictly turns all fields into arrays.
+By default, `ctx.query` parses to ignore arrays, while `ctx.queries` strictly turns all fields into arrays.
 
 If you adjust the `queryParseMode`, you can make `ctx.query` a structure between the two (the result of the querystring).
 
@@ -726,7 +726,7 @@ export default {
   // ...
   egg: {
     // ...
-    queryParseMode: 'simple ',
+    queryParseMode: 'simple',
   },
 }
 ```
@@ -740,7 +740,7 @@ export default {
 
 Midway provides the `@midwayjs/egg-ts-Hepler` toolkit for quickly generating the definitions that EggJS depends on when developing.
 ```bash
-$npm install @midwayjs/egg-ts-helper --save-dev
+$ npm install @midwayjs/egg-ts-helper --save-dev
 ```
 Add the corresponding `ets` command to `package.json`. Generally speaking, we will add it before the dev command to ensure the correctness of the code.
 ```json

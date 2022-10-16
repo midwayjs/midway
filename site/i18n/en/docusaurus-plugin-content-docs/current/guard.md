@@ -21,17 +21,17 @@ In general, you can write a guard in the `src/guard` folder.
 Create a `src/guard/auth.guard.ts` to verify whether the route can be accessed by the user.
 
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ├── controller
-│ │ ├── user.controller.ts
-│ │ └── home.controller.ts
-│ ├── interface.ts
-│ ├── guard
-│ │ └── auth.guard.ts
-│ └── service
-null
+│   ├── controller
+│   │   ├── user.controller.ts
+│   │   └── home.controller.ts
+│   ├── interface.ts
+│   ├── guard
+│   │   └── auth.guard.ts
+│   └── service
+│       └── user.service.ts
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -65,7 +65,7 @@ Note that currently only class Controller can use guards.
 
 ## Use guards
 
-null
+Guards can be applied to different frameworks, under http, can be applied to globals, controllers and methods.
 
 
 
@@ -81,7 +81,7 @@ import { AuthGuard } from '../guard/auth.guard';
 
 @UseGuard(AuthGuard)
 @Controller('/')
-null
+export class HomeController {
 
 }
 ```
@@ -123,7 +123,7 @@ import { App, Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { AuthGuard } from './guard/auth.guard';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
   // ...
 })
@@ -133,17 +133,16 @@ export class AutoConfiguration {
   app: koa.Application;
 
   async onReady() {
-    null
+    this.app.useGuard(AuthGuard);
   }
 }
-
 ```
 
 In the same way, multiple guards can be added.
 
 ```typescript
 async onReady() {
-  null
+  this.app.useGuard([AuthGuard, Auth2Guard]);
 }
 ```
 
@@ -161,8 +160,8 @@ import { Context } from '@midwayjs/koa';
 
 @Guard()
 export class AuthGuard implements IGuard<Context> {
-  null
-    null
+  async canActivate(context: Context, suppilerClz, methodName: string): Promise<boolean> {
+    // ...
     if (methodName ==='xxx') {
       throw new httpError.ForbiddenError();
     }
@@ -206,12 +205,12 @@ export class AuthGuard implements IGuard<Context> {
     const roleNameList = getPropertyMetadata<string[]>(suppilerClz, methodName);
     if (roleNameList && roleNameList.length && ctx.user.role) {
       // Assume that the middleware has already obtained the user role information and saved it to ctx.user.role
-      null
+			// Directly determine whether to change the role
       return roleNameList.includes(ctx.user.role);
     }
 
     return false;
-  null
+  }
 }
 ```
 

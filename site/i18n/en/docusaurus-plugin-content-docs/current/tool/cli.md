@@ -32,7 +32,7 @@ $mw dev
 ### **Standard Start**
 
 ```bash
-$midway-bin dev --ts
+$ midway-bin dev --ts
 ```
 
 ### **Modify the startup port**
@@ -40,7 +40,7 @@ $midway-bin dev --ts
 For HTTP scenarios, `-p` or `-- port` can temporarily modify the port.
 
 ```bash
-$midway-bin dev --ts --port=7002
+$ midway-bin dev --ts --port=7002
 ```
 
 ### **Modify the startup path**
@@ -48,7 +48,7 @@ $midway-bin dev --ts --port=7002
 Specify the root directory of the application, usually the folder where the package.json is located, and the default is process.cwd()
 
 ```shell
-$midway-bin dev --ts --baseDir=./app
+$ midway-bin dev --ts --baseDir=./app
 ```
 
 ### **Modify the source code path of ts**
@@ -56,7 +56,7 @@ $midway-bin dev --ts --baseDir=./app
 specifies the ts code directory, which is automatically analyzed by default.
 
 ```shell
-$midway-bin dev --ts --sourceDir=./app/src
+$ midway-bin dev --ts --sourceDir=./app/src
 ```
 
 ### **Faster startup method**
@@ -65,10 +65,10 @@ null
 
 ```shell
 // Use ts-node fast dev mode
-$midway-bin dev --ts --fast
+$ midway-bin dev --ts --fast
 
 // Use swc's fast dev mode
-$midway-bin dev --ts --fast=swc
+$ midway-bin dev --ts --fast=swc
 ```
 
 ### Monitoring file changes
@@ -77,7 +77,7 @@ $midway-bin dev --ts --fast=swc
 
 ```shell
 // Specify multiple files, separated by commas
-$midway-bin dev --ts --watchFile=./a.txt,./ B .txt
+$ midway-bin dev --ts --watchFile=./a.txt,./ B .txt
 
 // Specify multiple folders and files separated by commas
 null
@@ -114,7 +114,7 @@ If you use `vscode`, you can use the js debug terminal of vscode to execute the 
 Start the test with the current directory. By default, the jest tool is used. You can use the -- mocha parameter to specify mocha.
 
 ```bash
-$midway-bin test --ts
+$ midway-bin test --ts
   -c, -- cov gets code test coverage
   -f, -- file specifies a test file, such as./test/index.test.ts
   -- ts TS mode running single test
@@ -138,13 +138,13 @@ If the TypeScript path alias is used in the project, please refer to: [Test](../
 Start the test with the current directory and output the coverage information. By default, the jest tool is used. You can use the -- mocha parameter to specify mocha.
 
 ```bash
-$midway-bin cov --ts
+$ midway-bin cov --ts
 ```
 
 When using mocha for single-test coverage, you need to install the following additional dependencies.
 
 ```bash
-$npm I mocha @types/mocha nyc --save-dev
+$ npm I mocha @types/mocha nyc --save-dev
 ```
 
 
@@ -154,7 +154,7 @@ $npm I mocha @types/mocha nyc --save-dev
 Automatically analyze the problems in the code and give repair suggestions.
 
 ```bash
-$midway-bin check
+$ midway-bin check
 ```
 
 Verification of `32` issues has been provided.
@@ -168,7 +168,7 @@ Use mwcc(tsc) to compile ts code, which is suitable for standard projects. Pleas
 
 
 ```bash
-$midway-bin build -c
+$ midway-bin build -c
 
   -c, -- clean Cleanup Build Results Directory
   -- srcDir source code directory, default src
@@ -188,7 +188,7 @@ Executing the deploy command automatically executes the package.
 
 
 ```bash
-$midway-bin deploy
+$ midway-bin deploy
 
   -Y, -- yes The confirmation released is yes
   -- resetConfig reset release configuration, AK/AK/Region, etc.
@@ -264,7 +264,7 @@ midway-bin deploy --access=default-2
 Applicable to Serverless project construction
 
 ```bash
-$midway-bin package
+$ midway-bin package
   -- npm npm client, the default is to automatically identify and add registry
   -sourceDir the directory where the source code is located, which will be automatically analyzed by default.
   -buildDir build result target directory
@@ -370,7 +370,7 @@ List of declaration cycles for package commands:
  'cleanup', // Clean up the build directory
  'installDevDep', // installation and development period dependency
  CopyFile', // copy file: package.include and shared content
- 'compile ', //
+ 'compile', //
  'emit', // compile function' package:after:tscompile'
  'analysisCode', // analysis code
  'copyStaticFile', // Copy static files in src to the dist directory, such as html, etc.

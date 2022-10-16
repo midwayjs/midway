@@ -83,7 +83,7 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 We need to inject a configuration, for example, we use `httpClient` as the configuration of this service.
 ```typescript
 // config.default.ts
-null
+export const httpClient = {
 	// ...
 }
 ```
@@ -122,7 +122,7 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 
 `createClient` method only defines the method of creating objects, and we also need to define the structure of the configuration.
 
-null
+The structure of the configuration is divided into several parts:
 
 - 1. The default configuration, that is, the configuration in which all objects can be reused
 - 2. Configuration required by a single instance
@@ -131,7 +131,6 @@ null
 
 
 Let's explain separately,
-
 
 **Default Configuration**
 
@@ -147,7 +146,7 @@ export const httpClient = {
 ```
 
 
-### single instance
+### Single instance
 
 
 **Single Configuration**
@@ -169,11 +168,11 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-
+  
   @Inject()
-  null
-
-  null
+  serviceFactory: HTTPClientServiceFactory;
+  
+  async invoke() {
     const httpClient = this.serviceFactory.get();
   }
 }
@@ -197,7 +196,7 @@ export const httpClient = {
     },
     bbb: {
     	baseUrl: ''
-    null
+    }
   }
 }
 ```
@@ -208,15 +207,15 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-
+  
   @Inject()
   serviceFactory: HTTPClientServiceFactory;
-
+  
   async invoke() {
-
+    
     const aaaInstance = this.serviceFactory.get('aaa');
-    null
-
+    // ...
+        
     const bbbInstance = this.serviceFactory.get('bbb');
     // ...
 
@@ -225,7 +224,7 @@ export class UserService {
 ```
 
 
-### dynamically create an instance
+### Dynamically create an instance
 
 
 Instances can also be obtained dynamically through `createInstance` methods of the base class.
@@ -243,7 +242,7 @@ import { join } from 'path';
 @Provide()
 export class UserService {
 
-  null
+  @Inject()
   serviceFactory: HTTPClientServiceFactory;
 
   async invoke() {

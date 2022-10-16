@@ -15,11 +15,11 @@ It has been instantiated by default and can be used by direct injection.
 
 ```typescript
 import { MidwayWebRouterService, MidwayServerlessFunctionService } from '@midwayjs/core';
-null
+import { Configuration, Inject } from '@midawyjs/decorator';
 
 @Configuration ({
   // ...
-null
+})
 export class MainConfiguration {
   @Inject()
   webRouterService: MidwayWebRouterService;
@@ -50,55 +50,55 @@ Each routing information is represented by a `RouterInfo` definition and contain
 The definition is as follows:
 ```typescript
 export interface RouterInfo {
-  /* *
+  /**
    * router prefix
    */
   prefix: string;
-  /* *
+  /**
    * router alias name
    */
   routerName: string;
-  /* *
+  /**
    * router path, without prefix
    */
   url: string | RegExp;
-  /* *
+  /**
    * request method for http, like get/post/delete
    */
   requestMethod: string;
-  /* *
-   null
+  /**
+   * invoke function method
    */
   method: string;
   description: string;
   summary: string;
-  /* *
-   * router handler function key,for IoC container load
+  /**
+   * router handler function key，for IoC container load
    */
   handlerName: string;
-  /* *
-   * serverless func load key
+  /**
+   *  serverless func load key
    */
   funcHandlerName: string;
-  /* *
+  /**
    * controller provideId
    */
   controllerId: string;
-  /* *
+  /**
    * router middleware
    */
   middleware: any[];
-  /* *
+  /**
    * controller middleware in this router
    */
   controllerMiddleware: any[];
-  /* *
+  /**
    * request args metadata
    */
   requestMetadata: any[];
-  /* *
+  /**
    * response data metadata
-   null
+   */
   responseMetadata: any[];
 }
 ```
@@ -106,12 +106,12 @@ export interface RouterInfo {
 | --- | --- | --- |
 | prefix | string | Routing prefix, such as/or/api, the part written by the user on the @Controller decorator |
 | routerName | string | Route name |
-| url | string | null |
+| url | string | The part of the route that removes the route prefix is also the part that the user writes on decorators such as @Get |
 | requestMethod | string | Get/post/delete/put/all, etc. |
 | method | string | The method name on the class actually called |
 | description | string | Description, parameters on the route decorator |
 | summary | string | Summary, parameters on the routing decorator |
-| handlerName | string | null |
+| handlerName | string | Equivalent to controllerId.method |
 | funcHandlerName | string | handler name written in @Func |
 | controllerId | string | controller dependent injection container key(providerId) |
 | middleware | string [] | Routing middleware string array |
@@ -129,17 +129,11 @@ In the past, we need to pay attention to the loading sequence of routes. For exa
 
 The rules are as follows:
 
-
--
-   1. Absolute path rules have the highest priority, such as `/AB/cb/e`
--
-   2. The asterisk can only appear last and must be followed by/, for example, `/AB/cb/**`.
--
-   3. If both the absolute path and the general configuration can match a path, the absolute rule has a high priority.
--
-   4. If multiple wilddata matches a path, the longest rule matches. For example, `/AB/**` and `/AB/cd/**` hit `/AB/cd/**` when matching `/AB/cd/f`.
--
-   5. If both`/`and `/*` match/, but`/`has a higher priority than `/*`
+- 1. Absolute path rules have the highest priority such as `/ab/cb/e`
+- 2. The asterisk can only appear at the end and must be after /, such as `/ab/cb/**`
+- 3. If both the absolute path and the wildcard match a path, the absolute rule has a higher priority
+- 4. When there are multiple wildcards that can match a path, the longest rule matches, such as `/ab/**` and `/ab/cd/**` when matching `/ab/cd/f` `/ab/cd/**`
+- 5. If both `/` and `/*` can match / , but `/` takes precedence over `/*`
 
 
 This rule is also consistent with the routing rules of the functions under the Serverless.
@@ -183,7 +177,7 @@ export class AuthMiddleware {
         await next();
       } else {
         throw new httpError.NotFoundError();
-      null
+      }
     }
   }
 }
@@ -211,55 +205,55 @@ async getFlattenRouterTable(): Promise<RouterInfo[]>
 
 Gets the routing table API.
 ```typescript
-null
+const result = await this.webRouterService.getFlattenRouterTable();
 ```
 Output example:
 ```typescript
 [
   {
-    "prefix ": "/",
-    "routerName ": "",
-    "url": "/set_header ",
-    "requestMethod": "get ",
-    "method": "homeSet ",
-    "description ": "",
-    "summary ": "",
-    "handlerName": "apiController.homeSet ",
-    "funcHandlerName": "apiController.homeSet ",
-    "controllerId": "apiController ",
-    "middleware": []
-    "controllerMiddleware": []
-    "requestMetadata": []
-    "responseMetadata ": [
+    "prefix": "/",
+    "routerName": "",
+    "url": "/set_header",
+    "requestMethod": "get",
+    "method": "homeSet",
+    "description": "",
+    "summary": "",
+    "handlerName": "apiController.homeSet",
+    "funcHandlerName": "apiController.homeSet",
+    "controllerId": "apiController",
+    "middleware": [],
+    "controllerMiddleware": [],
+    "requestMetadata": [],
+    "responseMetadata": [
       {
-        "type": "web:response_header ",
-        "setHeaders ": {
+        "type": "web:response_header",
+        "setHeaders": {
           "ccc": "ddd"
         }
       },
       {
-        null
-        "setHeaders ": {
+        "type": "web:response_header",
+        "setHeaders": {
           "bbb": "aaa"
         }
       }
     ],
   },
   {
-    "prefix ": "/",
-    null
-    null
-    "requestMethod": "get ",
-    "method": "getCtxBody ",
-    "description ": "",
-    null
-    "handlerName": "apiController.getCtxBody ",
-    "funcHandlerName": "apiController.getCtxBody ",
-    null
-    "middleware": []
-    "controllerMiddleware": []
-    "requestMetadata": []
-    "responseMetadata": []
+    "prefix": "/",
+    "routerName": "",
+    "url": "/ctx-body",
+    "requestMethod": "get",
+    "method": "getCtxBody",
+    "description": "",
+    "summary": "",
+    "handlerName": "apiController.getCtxBody",
+    "funcHandlerName": "apiController.getCtxBody",
+    "controllerId": "apiController",
+    "middleware": [],
+    "controllerMiddleware": [],
+    "requestMetadata": [],
+    "responseMetadata": [],
   },
 	// ...
 ]
@@ -277,9 +271,9 @@ Router itself will also be sorted by prefix.
 
 Definition:
 ```typescript
-null
+export interface RouterPriority {
   prefix: string;
-  null
+  priority: number;
   middleware: any[];
   routerOptions: any;
   controllerId: string;
@@ -301,7 +295,7 @@ Router's data is relatively simple.
 
 
 
-null
+Get route table API.
 
 ```typescript
 const list = await collector.getRoutePriorityList();
@@ -310,31 +304,31 @@ Output example:
 ```typescript
 [
   {
-    "prefix": "/case ",
-    "priority": 0
-    "middleware": []
-    "routerOptions ": {
-      "middleware": []
+    "prefix": "/case",
+    "priority": 0,
+    "middleware": [],
+    "routerOptions": {
+      "middleware": [],
       "sensitive": true
     },
     "controllerId": "caseController"
   },
   {
-    "prefix": "/user ",
-    "priority": 0
-    null
-    "routerOptions ": {
-      "middleware": []
+    "prefix": "/user",
+    "priority": 0,
+    "middleware": [],
+    "routerOptions": {
+      "middleware": [],
       "sensitive": true
     },
     "controllerId": "userController"
   },
   {
-    "prefix ": "/",
-    "priority": -999
-    "middleware": []
-    "routerOptions ": {
-      "middleware": []
+    "prefix": "/",
+    "priority": -999,
+    "middleware": [],
+    "routerOptions": {
+      "middleware": [],
       "sensitive": true
     },
     "controllerId": "apiController"
@@ -352,7 +346,7 @@ In some cases, we need to get hierarchical routes, including which routes are un
 Midway also provides a method for obtaining hierarchical routing tables. The hierarchy is automatically sorted from high to low by priority.
 
 
-null
+Definition:
 ```typescript
 async getRouterTable(): Promise<Map<string, RouterInfo[]>>
 ```
@@ -369,34 +363,34 @@ Map(3) {
     {
       prefix: '/',
       routerName: '',
-      url: '/set_header ',
-      null
-      method: 'homeSet ',
+      url: '/set_header',
+      requestMethod: 'get',
+      method: 'homeSet',
       description: '',
       summary: '',
-      handlerName: 'apiController.homeSet ',
-      funcHandlerName: 'apiController.homeSet ',
-      null
-      middleware: []
-      controllerMiddleware: []
-      null
-      responseMetadata: [Array]
+      handlerName: 'apiController.homeSet',
+      funcHandlerName: 'apiController.homeSet',
+      controllerId: 'apiController',
+      middleware: [],
+      controllerMiddleware: [],
+      requestMetadata: [],
+      responseMetadata: [Array],
     },
     {
       prefix: '/',
       routerName: '',
-      url: '/ctx-body ',
-      requestMethod: 'get ',
-      method: 'getCtxBody ',
+      url: '/ctx-body',
+      requestMethod: 'get',
+      method: 'getCtxBody',
       description: '',
       summary: '',
-      handlerName: 'apiController.getCtxBody ',
-      funcHandlerName: 'apiController.getCtxBody ',
-      controllerId: 'apiController ',
-      middleware: []
-      controllerMiddleware: []
-      requestMetadata: []
-      responseMetadata: []
+      handlerName: 'apiController.getCtxBody',
+      funcHandlerName: 'apiController.getCtxBody',
+      controllerId: 'apiController',
+      middleware: [],
+      controllerMiddleware: [],
+      requestMetadata: [],
+      responseMetadata: [],
     },
     // ...
   ]
@@ -428,7 +422,7 @@ const result = await this.serverlessFunctionService.getFunctionList();
 
 ## Add route
 
-### null
+### Dynamically add web controllers
 
 Sometimes we want to dynamically add a controller according to certain conditions, we can use this method.
 
@@ -455,7 +449,7 @@ import { MidwayWebRouterService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 import { DataController } from './controller/data.controller';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {
@@ -465,16 +459,16 @@ export class MainConfiguration {
   async onReady() {
     if (process.env.NODE_ENV === 'test') {
       this.webRouterService.addController(DataController, {
-        prefix: '/test ',
+        prefix: '/test',
         routerOptions: {
-          middleware: [
-            null
+          middleware: [ 
+            // ...
           ]
         }
-      null
+      });
     }
 		// ...
-  null
+  }
 }
 ```
 
@@ -482,16 +476,16 @@ The `addController` method, the first parameter is the class itself, and the sec
 
 
 
-### null
+### Dynamically add web routing functions
 
 In some scenarios, users can add methods directly and dynamically.
 
 ```typescript
-null
+// src/configuration.ts
 import { MidwayWebRouterService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {
@@ -499,27 +493,27 @@ export class MainConfiguration {
   webRouterService: MidwayWebRouterService;
 
   async onReady() {
-    null
+    // koa/egg format
     this.webRouterService.addRouter(async (ctx) => {
-      null
+      return 'hello world';
     }, {
-      url: '/api/user ',
-      requestMethod: 'GET ',
+      url: '/api/user',
+      requestMethod: 'GET',
     });
 		// ...
-
+    
     // express format
     this.webRouterService.addRouter(async (req, res) => {
       return 'hello world';
     }, {
-      url: '/api/user ',
-      requestMethod: 'GET ',
+      url: '/api/user',
+      requestMethod: 'GET',
     });
   }
 }
 ```
 
-`null`
+The method of `addRouter`, the first parameter is the route method body, and the second parameter is the metadata of the route.
 
 
 
@@ -534,24 +528,24 @@ For example, add an http function.
 import { MidwayServerlessFunctionService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {
   @Inject()
   serverlessFunctionService: MidwayServerlessFunctionService;
 
-  null
-    null
-      null
+  async onReady() {
+    this.serverlessFunctionService.addServerlessFunction(async (ctx, event) => {
+      return 'hello world';
     }, {
-      type: ServerlessTriggerType.HTTP
+      type: ServerlessTriggerType.HTTP,
       metadata: {
-        method: 'get ',
+        method: 'get',
         path: '/api/hello'
       },
-      functionName: 'hello ',
-      handlerName: 'index.hello ',
+      functionName: 'hello',
+      handlerName: 'index.hello',
     });
   }
 }

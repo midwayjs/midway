@@ -15,7 +15,7 @@ Midway Serverless already supports deployment to various Serverless cloud platfo
 Mainly `@midwayjs/bootstrap` and `@midwayjs/serverless-app` packages.
 
 ```bash
-$npm I @midwayjs/bootstrap @midwayjs/serverless-app --save
+$ npm I @midwayjs/bootstrap @midwayjs/serverless-app --save
 ```
 
 `@midwayjs/bootstrap` is used to start the upper layer framework of Midway. `@midwayjs/serverless-app` is used to wrap the original function code into actual application running. It is also one of the upper layer Framework of Midway.

@@ -16,8 +16,8 @@ export class HelloTencentService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, {
-    path: '/api_gateway_tencent ',
-    method: 'post ',
+    path: '/api_gateway_tencent',
+    method: 'post',
   })
   async handleAPIGatewayEvent(@Body() name) {
     return 'hello ${name}';
@@ -50,7 +50,7 @@ describe('test/hello_tencent.test.ts', () => {
 
   it('should get result from http trigger', async () => {
     const result = await createHttpRequest(app).post('api_gateway_tencent').send ({
-      name: 'zhangting ',
+      name: 'zhangting',
     });
 
     expect(result.text).toEqual('hello zhangting');

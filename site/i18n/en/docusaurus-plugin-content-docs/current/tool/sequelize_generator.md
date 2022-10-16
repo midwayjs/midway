@@ -35,13 +35,13 @@ null
 null
 
 null
-  tableName: 'task ',
+  tableName: 'task',
   timestamps: false
   indexes: [
     {
-      name: 'PRIMARY ',
+      name: 'PRIMARY',
       null
-      using: 'BTREE ',
+      using: 'BTREE',
       fields: [{ name: 'task_id' }]
     },
   ],
@@ -52,7 +52,7 @@ export class TaskEntity extends Model {
     type: DataType.INTEGER.UNSIGNED
     allowNull: false
     primaryKey: true
-    field: 'task_id ',
+    field: 'task_id',
   })
   taskId: number;
 
@@ -61,7 +61,7 @@ export class TaskEntity extends Model {
     null
     null
     null
-    field: 'app_id ',
+    field: 'app_id',
   })
   null
 
@@ -93,7 +93,7 @@ export class TaskEntity extends Model {
     type: DataType.DATE
     allowNull: true
     comment: 'Task Start Time',
-    field: 'start_time ',
+    field: 'start_time',
   })
   null
 
@@ -101,7 +101,7 @@ export class TaskEntity extends Model {
     type: DataType.DATE
     allowNull: true
     comment: 'Mission End Time',
-    field: 'end_time ',
+    field: 'end_time',
   })
   endTime: string;
 

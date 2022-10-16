@@ -30,8 +30,8 @@ The effect is as follows:
 First install consul components and types:
 
 ```bash
-$npm I @midwayjs/consul@3 --save
-$npm I @types/consul --save-dev
+$ npm I @midwayjs/consul@3 --save
+$ npm I @types/consul --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -92,15 +92,15 @@ export default {
       // Apply normal offline anti-registration
       deregister: true
       // consul server service address
-      host: '192.168.0.10 ',
+      host: '192.168.0.10',
       // consul server service port
       port: 8500
       // Policy for invoking the service (random is selected by default)
-      strategy: 'random ',
+      strategy: 'random',
     },
     service: {
       // This is the address of the current midway application.
-      address: '127.0.0.1 ',
+      address: '127.0.0.1',
       // The port of the current midway application
       port: 7001
       // Use for lane isolation, etc.

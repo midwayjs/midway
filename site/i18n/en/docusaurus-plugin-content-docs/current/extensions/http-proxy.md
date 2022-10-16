@@ -14,7 +14,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/http-proxy@3 --save
+$ npm I @midwayjs/http-proxy@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -80,7 +80,7 @@ Single proxy configuration
 export default {
   httpProxy: {
     match: /\/tfs \//,
-    host: 'https://gw.alicdn.com ',
+    host: 'https://gw.alicdn.com',
   },
 };
 ```
@@ -99,7 +99,7 @@ export default {
     null
       // https://gw.alicdn.com/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png
       match: /\/tfs \//,
-      host: 'https://gw.alicdn.com ',
+      host: 'https://gw.alicdn.com',
     },
     g: {
       // https://g.alicdn.com/mtb/lib-mtop/2.6.1/mtop.js
@@ -109,7 +109,7 @@ export default {
     httpBin: {
       // https://httpbin.org/
       match: /\/httpbin\/(.*)$ /,
-      target: 'https://httpbin.org/$1 ',
+      target: 'https://httpbin.org/$1',
     },
   },
 null
@@ -121,7 +121,7 @@ null
 export default {
   httpProxy: {
     match: /\/tfs \//,
-    host: 'https://gw.alicdn.com ',
+    host: 'https://gw.alicdn.com',
   },
 };
 ```
@@ -134,7 +134,7 @@ If the request is `https:// yourdomain.com/tfs/test.png`, the regular expression
 export default {
   httpProxy: {
     match: /\/httpbin\/(.*)$ /,
-    target: 'https://httpbin.org/$1 ',
+    target: 'https://httpbin.org/$1',
   },
 };
 ```

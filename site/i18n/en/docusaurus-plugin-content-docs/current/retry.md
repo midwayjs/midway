@@ -2,7 +2,7 @@
 
 Starting from Midway v3.5.0, method custom retry logic is supported.
 
-null``
+Many times, we need to use `try` multiple times to wrap the function and handle errors on some method calls that are prone to failure or asynchronous.
 
 For example:
 
@@ -19,7 +19,7 @@ async function invoke(id) {
 async invokeNew() {
   let error;
   try {
-    null
+    return await invoke(1);
   } catch(err) {
     error = err;
   }
@@ -30,7 +30,7 @@ async invokeNew() {
     error = err;
   }
 
-  null
+  if (error) {
     // ....
   }
 }
@@ -75,10 +75,10 @@ import { retryWithAsync } from '@midwayjs/core';
 
 export class UserService() {
 
-  null
+  async getUserData(userId: string) {
     // wrap
-    const getUserDataOrigin = retryWithAsync (
-      null
+    const getUserDataOrigin = retryWithAsync(
+      this.getUserDataFromRemote, 
       2,
       {
         receiver: this
@@ -106,7 +106,7 @@ Starting from Midway v3.5.1, a `receiver` parameter has been added to bind this 
 
 ```typescript
 // wrap
-const getUserDataOrigin = retryWithAsync (
+const getUserDataOrigin = retryWithAsync(
   this.getUserDataFromRemote
   2,
   {
@@ -119,8 +119,8 @@ If there is no such parameter, the code needs to be written as follows to bind t
 
 ```typescript
 // wrap
-const getUserDataOrigin = retryWithAsync (
-  null
+const getUserDataOrigin = retryWithAsync(
+  this.getUserDataFromRemote.bind(this) as typeof this.getUserDataFromRemote, 
   2,
   {
     receiver: this
@@ -175,7 +175,7 @@ By default, if the number of retries is exceeded, the `MidwayRetryExceededMaxTim
 The `MidwayRetryExceededMaxTimesError` is the default exception of the framework, which can be captured and combed by the error filter, or the original exception can be handled from its attributes.
 
 ```typescript
-null
+import { retryWithAsync, MidwayRetryExceededMaxTimesError } from '@midwayjs/core';
 
 async function invoke() {
   // The default call, plus two retries, can be executed up to three times.
@@ -202,6 +202,6 @@ For example:
 ```typescript
 const invokeNew = retryWithAsync(invoke, 2, {
   throwOriginError: true
-null
+});
 ```
 

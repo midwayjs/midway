@@ -24,8 +24,8 @@ export class HelloTencentService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, {
-    path: '/api_gateway_tencent ',
-    method: 'post ',
+    path: '/api_gateway_tencent',
+    method: 'post',
   })
   async handleAPIGatewayEvent(@Body() name) {
     return 'hello ${name}';
@@ -55,7 +55,7 @@ export class HelloTencentService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'cron ',
+    type: 'cron',
     value: '*/60 * * * * * *', // trigger every 60s
   })
   async handleTimerEvent(event: SCF.TimerEvent) {
@@ -92,7 +92,7 @@ Example:
 
 ```typescript
 @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'cron ',
+  type: 'cron',
   value: '0 0 4 * * *', //triggered at 4:00 every day
 })
 ```
@@ -105,8 +105,8 @@ The structure returned by the Timer message is as follows and is described in th
 {
   Message: '',
   Time: new Date().toJSON()
-  TriggerName: 'test ',
-  Type: 'Timer ',
+  TriggerName: 'test',
+  Type: 'Timer',
 }
 ```
 
@@ -131,11 +131,11 @@ export class HelloTencentService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType. OS, {
-    bucket: 'cli-appid.cos.ap-beijing.myqcloud.com ',
+    bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
     events: 'cos:ObjectCreated :*,
     filter: {
       prefix: 'filterdir /',
-      suffix: '.jpg ',
+      suffix: '.jpg',
     },
   })
   async handleCOSEvent(event: SCF.COSEvent) {
@@ -162,11 +162,11 @@ Example:
 
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType. OS, {
-    bucket: 'cli-appid.cos.ap-beijing.myqcloud.com ',
+    bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
     events: 'cos:ObjectCreated :*,
     filter: {
       prefix: 'filterdir /',
-      suffix: '.jpg ',
+      suffix: '.jpg',
     },
   })
 ```
@@ -234,8 +234,8 @@ export class HelloTencentService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.MQ, {
-    topic: 'test-topic ',
-    tags: 'bbb ',
+    topic: 'test-topic',
+    tags: 'bbb',
   })
   async handleCMQEvent(event: SCF.CMQEvent) {
     // xxx
@@ -260,7 +260,7 @@ Example:
 
 ```typescript
 @ServerlessTrigger(ServerlessTriggerType.MQ, {
-  topic: 'test-topic ',
+  topic: 'test-topic',
   region: 'cn-shanghai'
   strategy: 'BACKOFF_RETRY'
 })
@@ -329,7 +329,7 @@ describe('test/hello_tencent.test.ts', () => {
 
   it('should get result from http trigger', async () => {
     const result = await createHttpRequest(app).post('api_gateway_tencent').send ({
-      name: 'zhangting ',
+      name: 'zhangting',
     });
 
     expect(result.text).toEqual('hello zhangting');

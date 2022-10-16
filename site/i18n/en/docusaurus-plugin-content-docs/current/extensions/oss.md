@@ -32,8 +32,8 @@ To use OSS components, you need to apply for an OSS bucket in advance. Bucket is
 `@midwayjs/oss` is the main function package, and `@types/ali-oss` is the official definition package of oss.
 
 ```bash
-$npm I @midwayjs/oss@3 --save
-$npm I @types/ali-oss -- save-dev // install to dev dependency
+$ npm I @midwayjs/oss@3 --save
+$ npm I @types/ali-oss -- save-dev // install to dev dependency
 ```
 Or reinstall the following dependencies in `package.json`.
 
@@ -102,11 +102,11 @@ export default {
   oss: {
     // normal oss bucket
     client: {
-      accessKeyId: 'your access key ',
-      accessKeySecret: 'your access secret ',
-      bucket: 'your bucket name ',
-      endpoint: 'oss-cn-hongkong.aliyuncs.com ',
-      timeout: '60s ',
+      accessKeyId: 'your access key',
+      accessKeySecret: 'your access secret',
+      bucket: 'your bucket name',
+      endpoint: 'oss-cn-hongkong.aliyuncs.com',
+      timeout: '60s',
     },
   },
 }
@@ -123,16 +123,16 @@ export default {
     // need to config all bucket information under cluster
     client: {
       clusters: [{
-        endpoint: 'host1 ',
-        accessKeyId: 'id1 ',
-        accessKeySecret: 'secret1 ',
+        endpoint: 'host1',
+        accessKeyId: 'id1',
+        accessKeySecret: 'secret1',
       }, {
-        endpoint: 'host2 ',
-        accessKeyId: 'id2 ',
-        accessKeySecret: 'secret2 ',
+        endpoint: 'host2',
+        accessKeyId: 'id2',
+        accessKeySecret: 'secret2',
       }],
       schedule: 'masterSlave', //default is 'roundRobin'
-      timeout: '60s ',
+      timeout: '60s',
     null
   },
 }
@@ -147,8 +147,8 @@ export default {
     // if config.sts == true, oss will create STS client
     client: {
       sts: true
-      accessKeyId: 'your access key ',
-      accessKeySecret: 'your access secret ',
+      accessKeyId: 'your access key',
+      accessKeySecret: 'your access secret',
     },
   },
 }
@@ -217,7 +217,7 @@ export default {
   oss: {
     clients: {
       bucket1: {
-        bucket: 'bucket1 ',
+        bucket: 'bucket1',
         null
       },
       bucket2: {
@@ -234,7 +234,7 @@ export default {
   },
   // other custom config
   null
-    bucket: 'bucket3 ',
+    bucket: 'bucket3',
     // ...
   },
 }

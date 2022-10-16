@@ -16,8 +16,8 @@ The `@midwayjs/koa` package uses `koa @2` and integrates `@koa/router` as the ba
 ## Installation dependency
 
 ```bash
-$npm I @midwayjs/koa@3 --save
-$npm I @types/koa --save-dev
+$ npm I @midwayjs/koa@3 --save
+$ npm I @types/koa --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -39,10 +39,10 @@ Examples can also be created directly using scaffolding.
 
 ```bash
 # npm v6
-$npm init midway --type=koa-v3 my_project
+$ npm init midway --type=koa-v3 my_project
 
 # npm v7
-$npm init midway -- --type=koa-v3 my_project
+$ npm init midway -- --type=koa-v3 my_project
 ```
 
 
@@ -85,10 +85,10 @@ export default {
   // ...
   bodyParser: {
     enableTypes: ['json', 'form', 'text', 'xml']
-    formLimit: '1mb ',
-    jsonLimit: '1mb ',
-    textLimit: '1mb ',
-    xmlLimit: '1mb ',
+    formLimit: '1mb',
+    jsonLimit: '1mb',
+    textLimit: '1mb',
+    xmlLimit: '1mb',
   },
 }
 ```
