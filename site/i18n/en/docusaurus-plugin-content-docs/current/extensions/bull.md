@@ -1,51 +1,52 @@
-# Task queue
+# Task Queues
 
-Queues are a powerful design pattern that helps you meet common application extension and performance challenges. Some of the problems that queues can help you solve.
+Queues are a powerful design pattern that can help you meet common application scaling and performance challenges. Some of the problems queues can help you solve.
 
-Examples are as follows:
+Examples are as follows.
 
-- Smoothing processing peaks. You can start resource-intensive tasks at any time and then add these tasks to the queue instead of executing them synchronously. null You can also easily add new queue consumers to extend back-end task processing.
-- Decompose a single task that may block the Node.js event loop. For example, if a user requests CPU-intensive work such as audio transcoding, this task can be delegated to other processes, thus releasing user-oriented processes to maintain response.
-- Provide reliable communication channels across various services. null You can be notified (by listening to status events) when you complete, error, or other status changes during the job lifecycle of any process or service. When queue producers or consumers fail, their state is preserved, and task processing can be automatically restarted when the node restarts.
+- Smoothing out peaks. You can start resource-intensive tasks at any time and then add them to a queue instead of executing them synchronously. Let task processes pull tasks from the queue in a controlled manner. It is also easy to add new queue consumers to extend back-end task processing.
+- Decompose single tasks that might block the Node.js event loop. For example, if a user request requires CPU-intensive work like audio transcoding, this task can be delegated to another process, freeing up the user-facing process to maintain a response.
+- Provide reliable communication channels across various services. For example, you can queue tasks (jobs) in one process or service and use them in another process or service. You can receive notifications (by listening for status events) when a job completes, errors, or other status changes during the job lifecycle of any process or service. When a queue producer or consumer fails, their state is retained and job processing can be automatically restarted when the node is restarted.
 
-Midway provides @midwayjs/Bull package as an abstraction/wrapper on [Bull](https://github.com/OptimalBits/bull). [Bull](https://github.com/OptimalBits/bull) is a popular, well-supported and high-performance implementation of Node.js-based queue system. This software package can easily integrate Bull Queues into your application in a Nest-friendly way.
+Midway provides the @midwayjs/bull package as an abstraction/wrapper on top of [Bull](https://github.com/OptimalBits/bull), a popular, well-supported, high performance NPP-based application. well-supported, high-performance implementation of the Node.js-based queueing system. This package makes it easy to integrate Bull Queues into your application in a Nest-friendly way.
 
-Bull uses Redis to save job data. When using Redis, the Queue architecture is completely distributed and has nothing to do with the platform. For example, you can run some Queue producers and consumers in one (or more) nodes (processes) and other producers and consumers on other nodes.
+Bull uses Redis to hold job data, and when using Redis, the Queue architecture is fully distributed and platform independent. For example, you can run some Queue producers, consumers in one (or more) nodes (processes), and other producers and consumers on other nodes.
 
 This chapter introduces the @midwayjs/bull package. We also recommend reading the [Bull documentation](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md) for more background and implementation details.
 
 :::tip
 
-Starting from v3.6.0, the original task scheduling module `@midwayjs/task` is abandoned. if you query historical documents, please refer to [here](../legacy/task).
+- 1. As of v3.6.0, the original task scheduling `@midwayjs/task` module is deprecated, so if you check the history documentation, please refer to [here](. /legacy/task).
+- 2. bull is a distributed task management system and must rely on redis
 
 :::
 
 
 
-Related information:
+Related information.
 
-| Description |      |
+| description | |
 | ----------------- | ---- |
-| null | ✅ |
-| Can be used for Serverless | ❌ |
-| Can be used for integration | ✅ |
-| Contains independent main frame | null |
-| Contains independent logs | ✅ |
+| Available for standard projects | ✅ |
+| Available for Serverless | ❌ |
+| Available for Integration | ✅ |
+| Include standalone mainframe | ✅ |
+| Includes standalone logging | ✅ |
 
 
 
-## Installation Components
+## Installing components
 
 ```bash
-$npm I @midwayjs/bull@3 --save
+$ npm i @midwayjs/bull@3 --save
 ```
 
-Or reinstall the following dependencies in `package.json`.
+Or reinstall it after adding the following dependencies to ``package.json``.
 
 ```json
 {
-  "dependencies ": {
-    "@midwayjs/bull": "^3.0.0 ",
+  "dependencies": {
+    "@midwayjs/bull": "^3.0.0",
     // ...
   },
 }
@@ -53,7 +54,7 @@ Or reinstall the following dependencies in `package.json`.
 
 
 
-## Use components
+## Using components
 
 Configure the bull component into the code.
 
@@ -68,7 +69,7 @@ import * as bull from '@midwayjs/bull';
   ]
 })
 export class MainConfiguration {
-  //...
+  // ...
 }
 ```
 
@@ -78,19 +79,58 @@ export class MainConfiguration {
 
 Bull divides the entire queue into three parts
 
-- 1. Queue queue, management task
-- 2. Job, each task object can start and stop the task.
-- 3. Processor, task processing, actual logic execution
+- 1, Queue queue, which manages tasks
+- 2, Job, each task object, you can start and stop control of the task
+- 3、Processor, task processing, the actual logical execution part
 
 
 
-## Write a task processor
+## Basic configuration
 
-Use the `@Processor` decorator to decorate a class to quickly define a task processor (here we do not use Job to avoid subsequent ambiguity).
+bull is a distributed task manager with a strong dependency on redis, configured in the ``config.default.ts`` file.
 
-`@Processor` the decorator needs to pass the name of a Queue. When the frame starts, if there is no queue named `test`, it will be created automatically.
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  bull: {
+    // default queue configuration
+    defaultQueueOptions: {
+    	redis: 'redis://127.0.0.1:32768',
+    }
+  },
+}
+```
 
-For example, write the following code in the `src/queue/test.queue.ts` file.
+With account password case.
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  bull: {
+    defaultQueueOptions: {
+      redis: {
+        port: 6379,
+        host: '127.0.0.1',
+        password: 'foobared',
+      },
+    }
+  },
+}
+```
+
+All queues will reuse this configuration.
+
+
+
+## Writing task processors
+
+Use the `@Processor` decorator to decorate a class for quickly defining a task processor (we don't use Job here to avoid subsequent ambiguity).
+
+The `@Processor` decorator needs to be passed the name of a Queue (queue) that will be created automatically when the framework starts if there is no queue named `test`.
+
+For example, we write the following code in the `src/queue/test.queue.ts` file.
 
 ```typescript
 // src/queue/test.queue.ts
@@ -104,27 +144,29 @@ export class TestProcessor implements IProcessor {
 }
 ```
 
-When starting, the framework automatically searches for and initializes the processor code, and automatically creates a queue named `test`.
+At startup, the framework automatically finds and initializes the above processor code, and automatically creates a Queue named `test`.
 
 
 
-## Perform tasks
-
-After defining the Processor, we also need to execute it manually because we do not specify how the Processor will be executed.
-
-By obtaining the corresponding queue, we can easily perform the task.
 
 
+## Executing tasks
 
-### Manually perform tasks
+After defining the Processor, we need to execute it manually since it is not specified how to execute it.
 
-For example, we can execute it after the project starts.
+By getting the corresponding queue, we can easily execute the task.
+
+
+
+### Executing tasks manually
+
+For example, we can execute it after the project is started.
 
 ```typescript
 import { Configuration, Inject } from '@midwayjs/decorator';
 import * as bull from '@midwayjs/bull';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     bull
@@ -133,14 +175,14 @@ import * as bull from '@midwayjs/bull';
 export class MainConfiguration {
 
   @Inject()
-  bullFramework: bull.Framework;
+  bullFramework: bull;
 
   //...
 
   async onServerReady() {
-    // Get Processor related queues
+    // Get the Processor-related queue
     const testQueue = this.bullFramework.getQueue('test');
-    // Perform this task immediately
+    // Execute this task immediately
     await testQueue?.runJob();
   }
 }
@@ -148,33 +190,33 @@ export class MainConfiguration {
 
 
 
-### null
+### Adding execution parameters
 
-We can also attach some default parameters when executing.
+We can also attach some default parameters to the execution.
 
 ```typescript
 @Processor('test')
-null
+export class TestProcessor implements IProcessor {
   async execute(params) {
     // params.aaa => 1
   }
 }
 
 
-null
+// invoke
 const testQueue = this.bullFramework.getQueue('test');
-// Perform this task immediately
-await testQueue?.runJob ({
-  aaa: 1
-  bbb: 2
+// Execute this task immediately
+await testQueue?.runJob({
+  aaa: 1,
+  bbb: 2,
 });
 ```
 
 
 
-### Task Status and Management
+### Task status and management
 
-After you run `runJob`, you can obtain a `Job` object.
+After executing `runJob`, we can get a `Job` object.
 
 ```typescript
 // invoke
@@ -182,50 +224,50 @@ const testQueue = this.bullFramework.getQueue('test');
 const job = await testQueue?.runJob();
 ```
 
-Through this Job object, we can do progress management.
+With this Job object, we can do progress management.
 
 ```typescript
 // Update progress
 await job.progress(60);
-// Get progress
+// Get the progress
 const progress = await job.process();
 // => 60
 ```
 
-Gets the task status.
+Gets the job status.
 
 ```typescript
 const state = await job.getState();
-// state => 'delayed' delay status
-// state => 'completed' completion status
+// state => 'delayed' Delayed state
+// state => 'completed' completed state
 ```
 
-null[](https://github.com/OptimalBits/bull/blob/develop/REFERENCE.md)
+For more Job API, please see [documentation](https://github.com/OptimalBits/bull/blob/develop/REFERENCE.md).
 
 
 
 ### Delayed execution
 
-There are also some additional options when performing tasks.
+There are also some additional options when executing tasks.
 
-For example, delay 1s execution.
+For example, delay execution by 1s.
 
 ```typescript
 const testQueue = this.bullFramework.getQueue('test');
-// Perform this task immediately
+// Execute this task immediately
 await testQueue?.runJob({}, { delay: 1000 });
 ```
 
 
 
-### Middleware and Error Handling
+### Middleware and error handling
 
-Bull components contain Framework that can be started independently and have their own App objects and Context structures.
+The Bull component contains a framework that can be started independently, with its own App object and Context structure.
 
-We can configure independent middleware and error filters for bull's App.
+We can configure separate middleware and error filters for bull's App.
 
 ```typescript
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     bull
@@ -239,27 +281,25 @@ export class MainConfiguration {
   //...
 
   async onReady() {
-    This. bullApp.useMiddleare( /* middleware */);
-    This. bullApp.useFilter( /* filter */);
+    this.bullApp.useMiddleare( /*middleware*/);
+    this.bullApp.useFilter( /*filter*/);
   }
 }
 ```
 
-
-
 ### Context
 
-Task processor execution is in the request scope, which has a special Context object structure.
+The task processor execution is in the request scope, which has a special Context object structure.
 
 ```typescript
 export interface Context extends IMidwayContext {
   jobId: JobId;
-  job: Job
-  from: new (...args) => IProcessor;
+  job: Job,
+  from: new (.. .args) => IProcessor;
 }
 ```
 
-We can access the current Job object directly from ctx.
+We can access the current Job object directly from the ctx.
 
 ```typescript
 // src/queue/test.queue.ts
@@ -281,34 +321,34 @@ export class TestProcessor implements IProcessor {
 
 ### More task options
 
-In addition to the delay above, there are more execution options.
+In addition to the above delay, there are more execution options.
 
-| Options | Type | Description |
+| options | type | description |
 | ---------------- | --------------------- | ------------------------------------------------------------ |
-| priority | number | Optional priority value. The range is from 1 (highest priority) to MAX_INT (lowest priority). Please note that the use priority has a slight impact on performance, so please use it with caution.  |
-| delay | number | The amount of time (in milliseconds) to wait for this job to be processed. Please note that in order to obtain accurate delay, both the server and the client should synchronize their clocks.  |
-| attempts | number | The total number of attempts before the task is completed.  |
-| repeat | RepeatOpts | According to the repeated task configuration of cron specification, you can view more [RepeatOpts](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md#queueadd) and the following introduction of repeated tasks.  |
-| backoff | number \| BackoffOpts | Rollback setting for automatic retry when a task fails. See [BackoffOpts](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md#queueadd).  |
-| lifo | boolean | If true, the task is added to the right end of the queue instead of the left end (false by default).  |
-| timeout | number | The number of milliseconds in which the task failed due to a timeout error.  |
-| jobId | number \| string | Overwrite task id-By default, the task id is a unique integer, but you can override it with this setting. If you use this option, it is up to you to ensure that jobId is unique. If you try to add a task with an id that already exists, it will not be added.  |
-| removeOnComplete | boolean \| number | If true, the task is deleted after successful completion. If you set a number, specify the number of tasks to keep. The default behavior is that task information remains in the completed list.  |
-| removeOnFail | boolean \| number | If true, the task is deleted when all attempts fail. If you set a number, specify the number of tasks to keep. The default behavior is to keep task information in the failure list.  |
-| stackTraceLimit | number | Limit the number of stack trace rows that will be recorded in the stack trace.  |
+| priority | number | The optional priority value. The range is from 1 (highest priority) to MAX_INT (lowest priority). Note that using priority has a slight performance impact, so please use it with caution. | delay
+| delay | number | The amount of time (in milliseconds) to wait for this job to be processed. Note that both the server and the client should synchronize their clocks in order to get an accurate delay. | attempts
+| attempts | number | The total number of attempts before the job completes.                             |Repeat
+| repeat | RepeatOpts | Repeat task configuration according to the cron specification, see [RepeatOpts](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md#queueadd) for more information, and the following Repeat tasks are described below. |backoff
+| backoff | number \| BackoffOpts | Backoff settings for automatic retries on task failure. See [BackoffOpts](https://github.com/OptimalBits/bull/blob/master/REFERENCE.md#queueadd). | lifo
+| lifo | boolean | If true, add the task to the right end of the queue instead of the left end (default is false). | timeout
+| timeout | number | The number of milliseconds for which the task failed due to a timeout error.                               |jobId
+| jobId | number \| string | Override job id - By default, the job id is a unique integer, but you can use this setting to override it. If you use this option, it is up to you to ensure that the jobId is unique. If you try to add a job with an id that already exists, it will not be added. | removeOnComplete
+| removeOnComplete | boolean \| number | If true, removes the job upon successful completion. If set to number, the number of tasks to keep for the specified task. The default behavior is to keep the task information in the completed list. |
+| removeOnFail | boolean \| number | If true, removes the task if it fails after all attempts. If set to number, specify the number of tasks to keep. The default behavior is to keep the task information in the failed list. |
+| stackTraceLimit | number | Limits the number of stack trace lines that will be recorded in the stack trace.                   | ##
 
 
 
-## Repeated tasks
+## Repeatedly executed tasks
 
-In addition to manual execution, we can also quickly configure the repeated execution of tasks by `@Processor` the parameters of the decorator.
+In addition to manual execution, we can also quickly configure repeated execution of tasks with the ``@Processor`` decorator parameter.
 
 ```typescript
 import { Processor, IProcessor } from '@midwayjs/bull';
 import { FORMAT } from '@midwayjs/decorator';
 
-null
-  null
+@Processor('test', {
+  repeat: {
     cron: FORMAT.CRONTAB.EVERY_PER_5_SECOND
   }
 })
@@ -326,33 +366,33 @@ export class TestProcessor implements IProcessor {
 
 ## Common Cron expressions
 
-Regarding Cron expressions, the format is as follows.
+For Cron expressions, the format is as follows.
 
 ```typescript
-* * * * * *
-│
-│ │ │ │ │ │ │ |
-│ │ │ │ │ └ day of week (0 - 7) (0 or 7 is Sun)
-│ │ │ │ └───── month (1 - 12)
-│ │ │ └────────── day of month (1 - 31)
-│ │ └─────────────── hour (0 - 23)
-│ └──────────────────── minute (0 - 59)
+*    *    *    *    *    *
+┬    ┬    ┬    ┬    ┬    ┬
+│    │    │    │    │    |
+│    │    │    │    │    └ day of week (0 - 7) (0 or 7 is Sun)
+│    │    │    │    └───── month (1 - 12)
+│    │    │    └────────── day of month (1 - 31)
+│    │    └─────────────── hour (0 - 23)
+│    └──────────────────── minute (0 - 59)
 └───────────────────────── second (0 - 59, optional)
 ```
 
 
 
-Common expressions:
+Common expressions.
 
-- run every 5 seconds: `*/5 * * * *`
-- run every 1 minute: `0 */1 * * *`
-- run every 20 minutes per hour: `0 20 * * *`
-- run every day at 0 o'clock: `0 0 0 * *`
-- Execute every day at 2:35: `0 35 2 * *`
+- Execute every 5 seconds: `*/5 * * * * * *`
+- Execute every 1 minute: `0 */1 * * * * * `
+- Once every hour at 20 minutes: `0 20 * * * * * `
+- Once a day at 0:00: `0 0 0 * * * *`
+- Once a day at 2:35: `0 35 2 * * * *`
 
 You can use the [online tool](https://cron.qqe2.com/) to confirm the time of the next execution.
 
-Midway provides some commonly used expressions on the frame side for everyone to use in `@midwayjs/decorator`.
+Midway provides some common expressions on the framework side in `@midwayjs/decorator` for your use.
 
 ```typescript
 import { FORMAT } from '@midwayjs/decorator';
@@ -365,98 +405,53 @@ FORMAT.CRONTAB.EVERY_MINUTE
 
 There are some other expressions built in.
 
-| Expression | corresponding time |
+| expression | corresponding time |
 | ------------------------------ | --------------- |
-| CRONTAB.EVERY_SECOND | Every second |
-| CRONTAB.EVERY_MINUTE | Every minute |
-| CRONTAB.EVERY_HOUR | Every hour on the hour |
-| CRONTAB.EVERY_DAY | 0 o'clock every day |
-| CRONTAB.EVERY_DAY_ZERO_FIFTEEN | At 0:15 every day |
-| null | At 1: 15 every day |
-| CRONTAB.EVERY_PER_5_SECOND | Every 5 seconds |
-| CRONTAB.EVERY_PER_10_SECOND | Every 10 seconds |
-| CRONTAB.EVERY_PER_30_SECOND | Every 30 seconds |
-| CRONTAB.EVERY_PER_5_MINUTE | Every 5 minutes |
-| CRONTAB.EVERY_PER_10_MINUTE | Every 10 minutes |
-| CRONTAB.EVERY_PER_30_MINUTE | Every 30 minutes |
+| CRONTAB.EVERY_SECOND | per second |
+| CRONTAB.EVERY_MINUTE | per minute |
+| CRONTAB.EVERY_HOUR | Hourly
+| EVERY_DAY | Every day at 0:00 |
+| EVERY_DAY_ZERO_FIFTEEN | 0:15 PM per day |
+| EVERY_DAY_ONE_FIFTEEN | 1:15 PM per day
+| EVERY_PER_5_SECOND | every 5 seconds
+| EVERY_PER_10_SECOND | every 10 seconds |
+| EVERY_PER_30_SECOND | every 30 seconds |
+| CRONTAB.EVERY_PER_5_MINUTE | every 5 minutes |
+| EVERY_PER_10_MINUTE | every 10 minutes |
+| EVERY_PER_30_MINUTE | every 30 minutes |
 
 
 
-## Distributed task
-
-In the above code, we all run on each process of each machine. If you need distributed tasks (each task is executed only once in a specific process), you need to configure Redis.
-
-
-
-### Configure distributed tasks
-
-Configure in the `config.default.ts` file.
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  bull: {
-    // Default queue configuration
-    null
-      redis: 'redis://127.0.0.1:32768 ',
-      // The keys stored in these tasks start with midway-task to distinguish the configurations in the user's original redis.
-      prefix: 'midway-bull ',
-    }
-  },
-}
-```
-
-Account password:
-
-```typescript
-// src/config/config.default.ts
-export default {
-  null
-  bull: {
-    null
-      redis: {
-        port: 6379
-        host: '127.0.0.1 ',
-        password: 'foobared ',
-      },
-      prefix: 'midway-bull ',
-    }
-  null
-}
-```
-
-null
-
+## Advanced Configuration
 
 
 ### Clean up previous tasks
 
-By default, the framework automatically clears the **duplicate execution tasks** that were not scheduled for the previous time, keeping the queue of the duplicate execution tasks up to date. If cleaning is not required in some environments, it can be shut down separately.
+By default, the framework automatically cleans up any previously unscheduled **repeating tasks**, keeping the queue of repeating tasks up to date for each one. If you don't need to clean up in some environments, you can turn it off separately.
 
-For example, you don't need to clean up repetitions:
+For example, you do not need to clean up duplicates of.
 
 ```typescript
 // src/config/config.prod.ts
 export default {
   // ...
   bull: {
-    clearRepeatJobWhenStart: false
+    clearRepeatJobWhenStart: false,
   },
 }
 ```
 
 :::tip
 
-If it is not cleaned up, if the previous queue was executed for 10s and is now changed to 20s, both timings will be stored in Redis, causing the code to execute repeatedly.
+If you don't clean up, if the previous queue is executed at 10s and now it is modified to 20s, both timings will be stored in Redis, resulting in duplicate code execution.
 
-In daily development, if you don't clean up, it is easy to have the problem of code repeated execution. However, in the cluster deployment scenario, when multiple servers restart in turn, scheduled tasks may be accidentally cleaned up. Please evaluate the timing of the switch.
+In daily development, if you do not clean up, it is easy to have this problem of repeated code execution. However, in a cluster deployment scenario, where multiple servers are restarted in turn, it may cause the timing task to be cleaned up accidentally, please evaluate the timing of the switch.
 
 :::
 
 
 
-You can also manually clean up all tasks at startup.
+It is also possible to clean up all tasks manually at startup.
 
 ```typescript
 // src/configuration.ts
@@ -465,21 +460,21 @@ import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 import * as bull from '@midwayjs/bull';
 
-@Configuration ({
-  imports: [koa, bull]
-  importConfigs: [join(__dirname, './config')]
+@Configuration({
+  imports: [koa, bull],
+  importConfigs: [join(__dirname, '. /config')],
 })
 export class ContainerLifeCycle {
   @App()
-  app: koa.Application;
+  app: koa;
 
   @Inject()
-  bullFramework: bull.Framework;
+  bullFramework: bull;
 
   async onReady() {
-    // At this stage, the decorator queue has not been created yet. Use API to manually create the queue in advance, and the decorator will reuse the queue with the same name.
+    // At this stage, the decorator queue has not been created yet, use the API to create the queue manually in advance, the decorator will reuse the queue with the same name
     const queue = this.bullFramework.createQueue('user');
-    // Manually perform cleanup through the queue
+    // perform cleanup manually via queue
     await queue.obliterate({ force: true });
   }
 }
@@ -489,16 +484,16 @@ export class ContainerLifeCycle {
 
 
 
-### Clean up task history
+### Clearing task history
 
-When Redis is turned on, by default, bull will record all successful and failed task keys, which may cause the key of redis to skyrocket. We can configure the option of cleaning up after success or failure.
+When Redis is turned on, by default, bull will record all successful and failed task keys, which may cause a key spike in redis, we can configure the option to clean up after success or failure.
 
 By default
 
-- There are 3 task records kept when successful.
-- Failed to retain 10 task records
+- 3 task records are kept on success
+- 10 task records are retained on failure
 
-It can also be configured by parameters.
+This can also be configured via parameters.
 
 For example, in the decorator configuration.
 
@@ -506,12 +501,12 @@ For example, in the decorator configuration.
 import { FORMAT } from '@midwayjs/decorator';
 import { IProcessor, Processor } from '@midwayjs/bull';
 
-@Processor('user ', {
+@Processor('user', {
   repeat: {
-    cron: FORMAT.CRONTAB.EVERY_MINUTE
+    cron: FORMAT.CRONTAB.EVERY_MINUTE,
   },
-  removeOnComplete: 3, // Remove the task record after success, and keep the latest 3 records at most
-  null
+  removeOnComplete: 3, // remove task records after success, keep up to 3 recent records
+  removeOnFail: 10, // remove task records after failure
 })
 export class UserService implements IProcessor {
   execute(data: any) {
@@ -521,17 +516,17 @@ export class UserService implements IProcessor {
 
 ```
 
-You can also configure it in global config.
+Can also be configured in the global config.
 
 ```typescript
 // src/config/config.default.ts
 export default {
   // ...
   bull: {
-    // Default task configuration
+    // default job configuration
     defaultJobOptions: {
       // Keep 10 records
-      removeOnComplete: 10
+      removeOnComplete: 10.
     }
   },
 }
@@ -541,11 +536,11 @@ export default {
 
 
 
-### Redis cluster
+### Redis Clustering
 
-You can use the `createClient` method provided by bull to access a custom redis instance, so that you can access the Redis cluster.
+You can use the `createClient` method provided by bull to access custom redis instances so you can access Redis clusters.
 
-For example:
+For example.
 
 ```typescript
 // src/config/config.default
@@ -553,20 +548,20 @@ import Redis from 'ioredis';
 
 const clusterOptions = {
   enableReadyCheck: false, // must be false
-  retryDelayOnClusterDown: 300
-  retryDelayOnFailover: 1000
-  retryDelayOnTryAgain: 3000
-  slotsRefreshTimeout: 10000
+  retryDelayOnClusterDown: 300,
+  retryDelayOnFailover: 1000,
+  retryDelayOnTryAgain: 3000,
+  slotsRefreshTimeout: 10000,
   maxRetriesPerRequest: null // must be null
 }
 
-const redisClientInstance = new Redis.Cluster ([
-  {
-    null
+const redisClientInstance = new Redis.
+  Cluster([
+    port: 7000,
     host: '127.0.0.1'
   },
   {
-    port: 7002
+    port: 7002,
     host: '127.0.0.1'
   },
 ], clusterOptions);
@@ -574,11 +569,11 @@ const redisClientInstance = new Redis.Cluster ([
 export default {
   bull: {
     defaultQueueOptions: {
-      null
+      createClient: (type, opts) => {
         return redisClientInstance;
       },
-      // The keys stored in these tasks are all at the same beginning, so as to distinguish the configurations in the user's original redis.
-    	prefix: '{midway-bull} ',
+      // The keys stored for these tasks all start with the same key to distinguish the user's original redis configuration
+    	prefix: '{midway-bull}',
     },
   }
 }
@@ -586,21 +581,21 @@ export default {
 
 
 
-## Queue management
+## Queue Management
 
-Queues are cheap. Each Job will bind a queue. In some cases, we can also manage the queue manually.
+Queues are inexpensive, each Job is bound to a queue, and in some cases we can also manage queues manually by performing operations on them.
 
 
 
-### Create queue manually
+### Manual queue creation
 
-In addition to simply defining queues using the `@Processor`, we can also create them using the API.
+In addition to simply defining a queue using `@Processor`, we can also create it using the API.
 
 ```typescript
 import { Configuration, Inject } from '@midwayjs/decorator';
 import * as bull from '@midwayjs/bull';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     bull
@@ -612,13 +607,13 @@ export class MainConfiguration {
   bullFramework: bull.Framework;
 
   async onReady() {
-    const testQueue = bullFramework.createQueue('test ', {
+    const testQueue = bullFramework.createQueue('test', {
       redis: {
-        port: 6379
-        host: '127.0.0.1 ',
-        password: 'foobared ',
+        port: 6379,
+        host: '127.0.0.1',
+        password: 'foobared',
       },
-      prefix: '{midway-bull} ',
+      prefix: '{midway-bull}',
     });
 
     // ...
@@ -626,12 +621,12 @@ export class MainConfiguration {
 }
 ```
 
-After the queue is manually created by `createQueue`, the queue will still be saved automatically. If the `@Processor` uses the queue name at startup, the created queue will be automatically used.
+After creating a queue manually with `createQueue`, the queue will still be saved automatically. If the queue name is used by `@Processor` at startup, the already created queue is automatically used.
 
-For example:
+For example.
 
 ```typescript
-// The queue with the same name created manually above will be used automatically.
+// will automatically use the queue with the same name created manually above
 @Processor('test')
 export class TestProcessor implements IProcessor {
   async execute(params) {
@@ -641,7 +636,7 @@ export class TestProcessor implements IProcessor {
 
 
 
-### Get queue
+### Get the queue
 
 We can simply get the queue based on the queue name.
 
@@ -649,29 +644,29 @@ We can simply get the queue based on the queue name.
  const testQueue = bullFramework.getQueue('test');
 ```
 
-It can also be obtained through the decorator.
+You can also get it through a decorator.
 
 ```typescript
 import { InjectQueue, IQueue } from '@midwayjs/bull';
-null
+import { Provide } from '@midwayjs/decorator';
 
 @Provide()
 export class UserService {
   @InjectQueue('test')
   testQueue: IQueue;
 
-  null
+  async invoke() {
     await this.testQueue.pause();
     // ...
   }
-null
+}
 ```
 
 
 
-### Common queue operations
+### Queue common operations
 
-null
+Suspend the queue.
 
 ```typescript
 await testQueue.pause();
@@ -688,22 +683,22 @@ Queue events.
 ```typescript
 // Local events pass the job instance...
 testQueue.on('progress', function (job, progress) {
-  console.log('Job ${job.id} is ${progress * 100}% ready!');
+  console.log(`Job ${job.id} is ${progress * 100}% ready!`);
 });
 
 testQueue.on('completed', function (job, result) {
-  console.log('Job ${job.id} completed! Result: ${result}');
+  console.log(`Job ${job.id} completed! Result: ${result}`);
   job.remove();
 });
 ```
 
-For more information about the full queue API, see [here](https://github.com/OptimalBits/bull/blob/develop/REFERENCE.md).
+See [here](https://github.com/OptimalBits/bull/blob/develop/REFERENCE.md) for the full queue API.
 
 
 
-## Component log
+## Component logging
 
-The widget has its own logs. By default, `ctx.logger` is recorded in `midway-bull.log`.
+The component has its own log, which by default will be `ctx.logger` in `midway-bull.log`.
 
 We can configure this logger object separately.
 
@@ -712,13 +707,13 @@ export default {
   midwayLogger: {
     // ...
     bullLogger: {
-      fileLogName: 'midway-bull.log ',
+      fileLogName: 'midway-bull.log',
     },
   }
 }
 ```
 
-The output format of this log can also be configured separately.
+The output format of this log, we can also configure separately.
 
 ```typescript
 export default {
@@ -726,7 +721,7 @@ export default {
     // ...
     contextLoggerFormat: info => {
       const { jobId, from } = info.ctx;
-      return '${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}';
+      return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}`;
     },
   }
 }
@@ -736,20 +731,20 @@ export default {
 
 ## Bull UI
 
-In distributed scenarios, we can use Bull UI to simplify management.
+In a distributed scenario, we can leverage the Bull UI to simplify management.
 
-Similar to bull components, it needs to be installed and enabled independently.
+Similar to the bull component, it needs to be installed and enabled independently.
 
 ```bash
-$npm I @midwayjs/bull-board@3 --save
+$ npm i @midwayjs/bull-board@3 --save
 ```
 
-Or reinstall the following dependencies in `package.json`.
+Or reinstall it after adding the following dependencies to ``package.json``.
 
 ```json
 {
-  "dependencies ": {
-    "@midwayjs/bull-board": "^3.0.0 ",
+  "dependencies": {
+    "@midwayjs/bull-board": "^3.0.0",
     // ...
   },
 }
@@ -762,32 +757,32 @@ import { Configuration } from '@midwayjs/decorator';
 import * as bull from '@midwayjs/bull';
 import * as bullBoard from '@midwayjs/bull-board';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
-    bull
-    bullBoard
+    bull,
+    bullBoard,
   ]
 })
 export class MainConfiguration {
   //...
-null
+}
 ```
 
-The default access path is `http:// 127.1:7001/ui`.
+The default access path is: `http://127.1:7001/ui`.
 
-The effect is as follows:
+The effect is as follows.
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01j4wEFb1UacPxA06gs_!!6000000002534-2-tps-1932-1136.png)
 
-The underlying path can be modified through configuration.
+The base path can be modified by configuration.
 
 ```typescript
-null
+// src/config/config.prod.ts
 export default {
   // ...
-  null
-    basePath: '/ui ',
+  bullBoard: {
+    basePath: '/ui',
   },
 }
 ```
@@ -796,15 +791,15 @@ export default {
 
 
 
-## Frequently Asked Questions
+## Common problems
 
 ### 1. EVALSHA error
 
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01KfjCKT1yypmNPDkIL_!!6000000006648-2-tps-3540-102.png)
 
-This problem is basically clear. The problem will appear on the cluster version of redis.
+This problem is basically clear, the problem will appear on the clustered version of redis.
 
-The reason is that redis will hash the key to determine the stored slot. In this step of the cluster, the key @midwayjs/bull hit a different slot.
+The reason is that redis does hash on the key to determine the storage slot, and the key of @midwayjs/bull hits a different slot in this step under the cluster.
 
-The solution is to use the prefix configuration in the task to include {}, and force redis to calculate only the hash in {}, for example, `prefix: '{midway-task}'`.
+The workaround is to include {} in the prefix configuration of the task and force redis to only calculate the hash in {}, e.g. `prefix: '{midway-task}'`.
 
