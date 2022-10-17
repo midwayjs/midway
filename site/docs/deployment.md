@@ -205,7 +205,7 @@ Bootstrap.run();
 
 这个时候，你已经可以直接使用 `NODE_ENV=production node bootstrap.js` 来启动代码了，也可以使用 pm2 来执行启动。
 
-我们一般推荐使用工具使用工具来启动 Node.js 项目，下面有一些文档可以进阶阅读。
+我们一般推荐使用工具来启动 Node.js 项目，下面有一些文档可以进阶阅读。
 
 - [pm2 使用文档](extensions/pm2)
 - [cfork 使用文档](extensions/cfork)
@@ -297,7 +297,7 @@ RUN npm run build
 # 如果端口更换，这边可以更新一下
 EXPOSE 7001
 
-CMD ["npm", "run", "online"]
+CMD ["npm", "run", "start"]
 ```
 
 
