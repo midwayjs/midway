@@ -1,0 +1,35 @@
+{
+  "name": "@midwayjs/verification-code",
+  "version": "3.6.1",
+  "description": "Midway Component for Verification Code",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mini-svg-data-uri": "^1.4.4",
+    "nanoid": "^3.3.4",
+    "svg-captcha": "^1.4.0",
+    "@midwayjs/cache": "^3.6.0"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "^3.6.0",
+    "@midwayjs/koa": "^3.6.0",
+    "@midwayjs/mock": "^3.6.0"
+  }
+}
