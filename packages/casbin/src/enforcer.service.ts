@@ -29,10 +29,23 @@ export class CasbinEnforcerService {
         this.applicationContext
       );
     }
+
+    if (typeof this.casbinConfig.policyWatcher === 'function') {
+      this.casbinConfig.policyWatcher = await this.casbinConfig.policyWatcher(
+        this.applicationContext
+      );
+    }
+
     this.instance = await newEnforcer(
       this.casbinConfig.modelPath,
       this.casbinConfig.policyAdapter
     );
+
+    if (this.casbinConfig.policyWatcher) {
+      this.instance.setWatcher(this.casbinConfig.policyWatcher);
+      // notify all enforcer instances
+      await this.watcher.update();
+    }
   }
 
   public getEnforcer(): Enforcer {
