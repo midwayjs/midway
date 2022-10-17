@@ -43,8 +43,6 @@ export class CasbinEnforcerService {
 
     if (this.casbinConfig.policyWatcher) {
       this.instance.setWatcher(this.casbinConfig.policyWatcher);
-      // notify all enforcer instances
-      await this.watcher.update();
     }
   }
 
