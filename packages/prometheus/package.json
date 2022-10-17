@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/prometheus",
-  "version": "3.6.0",
+  "version": "3.6.1-beta.0",
   "description": "midway component for prometheus",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -26,7 +26,8 @@
     "@midwayjs/core": "^3.6.0",
     "@midwayjs/koa": "^3.6.0",
     "@midwayjs/mock": "^3.6.0",
-    "@types/request": "2.48.8"
+    "@types/request": "2.48.8",
+    "typescript": "4.5.4"
   },
   "dependencies": {
     "prom-client": "^14.0.0",
