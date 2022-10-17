@@ -1,4 +1,4 @@
-import { Configuration, Controller, Inject, Post } from '@midwayjs/core';
+import { Configuration, Controller, Inject, Post, Get } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { VerificationCodeService } from '../../../../src';
 
@@ -30,7 +30,8 @@ export class HomeController {
   @Post('/text')
   async text() {
     const { text } = this.ctx.request.body;
-    return this.verificationCodeService.set(text);
+    const id = await this.verificationCodeService.set(text);
+    return { id };
   }
 
   @Post('/check')
@@ -42,5 +43,15 @@ export class HomeController {
   @Get('/img')
   async img() {
     return this.verificationCodeService.image();
+  }
+
+  @Get('/formula')
+  async formula() {
+    return this.verificationCodeService.formula();
+  }
+
+  @Get('/text')
+  async textCode() {
+    return this.verificationCodeService.text();
   }
 }

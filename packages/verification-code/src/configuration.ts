@@ -3,9 +3,7 @@ import * as cacheComponent from '@midwayjs/cache';
 import * as DefaultConfig from './config/config.default';
 @Configuration({
   namespace: 'verification-code',
-  imports: [
-    cacheComponent
-  ],
+  imports: [cacheComponent],
   importConfigs: [
     {
       default: DefaultConfig,
