@@ -326,7 +326,9 @@ $ docker run -itd -P helloworld
 
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608882559686-031bcf0d-2185-42cd-a838-80f008777395.png#height=94&id=dfag9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=188&originWidth=578&originalType=binary&ratio=1&size=24488&status=done&style=none&width=289)
 
-关于别的推送到 dockerhub 或者 docker 的 registry，可以大家搜索对应的方法。
+后续：发布 docker 镜像
+* 推送构建好的镜像到DockerHub，请参考[官方文档](https://docs.docker.com/get-started/04_sharing_app/)
+* 推送到自建的镜像仓库（以Harbor为例），请参考[Harbor文档](https://goharbor.io/docs/2.5.0/working-with-projects/working-with-images/pulling-pushing-images/)
 
 
 **优化**
