@@ -1,5 +1,6 @@
 import { closeApp, creatApp, createHttpRequest } from './utils';
 import { IMidwayKoaApplication } from '../src';
+import { makeHttpRequest } from '@midwayjs/core';
 
 describe('/test/feature.test.ts', () => {
 
@@ -435,6 +436,26 @@ describe('/test/feature.test.ts', () => {
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('{"locals":{"b":2,"a":1},"state":{"b":2,"a":1}}');
 
+    await closeApp(app);
+  });
+
+  it('should test set server timeout', async () => {
+    const app = await creatApp('base-app-server-timeout') as any;
+    const server = app.getFramework().getServer();
+    await server.listen(0);
+
+    let err;
+    try {
+      await makeHttpRequest('http://localhost:' + server.address().port + '/timeout', {
+        method: 'GET',
+        dataType: 'text',
+      });
+    } catch (e) {
+      err = e;
+    }
+
+    expect(err.message).toMatch(/socket hang up/);
+    await server.close();
     await closeApp(app);
   });
 });

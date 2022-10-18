@@ -22,6 +22,7 @@ export const koa = {
       ctx.url;
     return `${info.timestamp} ${info.LEVEL} ${info.pid} [${label}] ${info.message}`;
   },
+  serverTimeout: 2 * 60 * 1000,
 };
 
 /**
