@@ -153,10 +153,8 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
       }
     }
 
-    const triggerFunction = this.framework.getTriggerFunction(handlerName);
-
     try {
-      const result = await triggerFunction(ctx, {
+      const result = await this.framework(ctx, handlerName, {
         isHttpFunction: isHTTPMode || isApiGateway,
         originEvent: event,
         originContext: context,
