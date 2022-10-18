@@ -2,30 +2,29 @@
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的通用验证码组件，支持 `图片验证码`、`计算表达式` 等类型验证码。
 
-您也可以通过此组件，来实现 `短信验证码`、`邮件验证码` 等验证能力。
 
-+ 
+您也可以通过此组件，来实现 `短信验证码`、`邮件验证码` 等验证能力。
 
 ### Usage
 
 1. 安装依赖
-```shell
-tnpm i @midwayjs/verification-code --save
+```bash
+$ npm i @midwayjs/verification-code@3 --save
 ```
 2. 在 configuration 中引入组件,
-```ts
-import * as VerufucationCode from '@midwayjs/verification-code';
+```typescript
+import * as vc from '@midwayjs/verification-code';
 @Configuration({
   imports: [
     // ...other components
-    VerufucationCode
+    vc
   ],
 })
 export class AutoConfiguration {}
 ```
 
 3. 在代码中使用
-```ts
+```typescript
 import { VerificationCodeService } from '@midwayjs/verification-code';
 @Controller('/')
 export class HomeController {
@@ -100,7 +99,7 @@ export class HomeController {
 ```
 
 ### 配置
-```ts
+```typescript
 interface VerificationCodeOptions {
   // 干扰线条的数量，默认 1 条
   noise?: number;
@@ -163,3 +162,12 @@ export const verificationCode: VerificationCodeOptions = {
   idPrefix: 'midway:vc',
 }
 ```
+
+## 效果
+
+### 图片验证码
+![图片验证码](https://gw.alicdn.com/imgextra/i4/O1CN014cEzLH23vEniOgoyp_!!6000000007317-2-tps-120-40.png)
+
+### 计算表达式
+
+ ![计算表达式](https://gw.alicdn.com/imgextra/i4/O1CN01u3Mj0q24lRx1md9pX_!!6000000007431-2-tps-120-40.png)
