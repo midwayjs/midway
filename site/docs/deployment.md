@@ -375,19 +375,21 @@ CMD ["npm", "run", "start"]
 
 ### 结合 Docker-Compose 运行
 
-在 docker 部署的基础上，还可以结合 docker-compose 部署一些跟自己服务相关的服务。
+在 docker 部署的基础上，还可以结合 docker-compose 配置项目依赖的服务，实现快速部署整个项目。
+下面以midway结合redis为例，使用 docker-compose 快速部署整个项目。
 
 
-**步骤一**
+**步骤一：编写Dockerfile**
 
-按照 Docker 方式部署的方式新增 dockerfile
+按照上文使用 Docker 部署的方式[编写Dockerfile](deployment#编写-dockerfile构建镜像)
 
 
-**步骤二**
+**步骤二：编写docker-compose.yml**
 
-新增 `docker-compose.yml` 文件，内容如下：（此处我们模拟我们的 midway 项目需要使用redis）
+新增 `docker-compose.yml` 文件，内容如下：（此处模拟我们的 midway 项目需要使用redis）
 
 ```yaml
+# 项目的根目录，与Dockerfile文件同级
 version: "3"
 services:
   web:
@@ -396,13 +398,34 @@ services:
       - "7001:7001"
     links:
       - redis
+    depends_on:
+      - redis
   redis:
     image: redis
 
 ```
 
+**步骤三：修改配置**
 
-**步骤三：构建**
+修改redis的配置文件，内容如下：（ 配置redis，请参考[redis组件](extensions/redis) ）
+
+```javascript
+// src/config/config.default.ts
+export default {
+ // ...
+  redis: {
+    client: {
+      port: 6379, // redis容器的端口
+      host: "redis", // 这里与docker-compose.yml文件中的redis服务名称一致
+      password: "", //默认没有密码，请自行修改为redis容器配置的密码
+      db: 0,
+    },
+  },
+}
+
+```
+
+**步骤四：构建**
 
 使用命令：
 
@@ -410,16 +433,17 @@ services:
 $ docker-compose build
 ```
 
-**步骤四：运行**
+**步骤五：运行**
 
 ```bash
 $ docker-compose up -d
 ```
 
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608884158660-02bd2d3c-08b4-4ecc-a4dd-a18d4b9d2c12.png#height=44&id=jWw4i&margin=%5Bobject%20Object%5D&name=image.png&originHeight=62&originWidth=1054&originalType=binary&ratio=1&size=47727&status=done&style=none&width=746)
-那么redis比如怎么用，因为 docker-compose 里面加了一个 redis，并且 link 了。
 
-关于更多关于 docker-compose 的详情，可以查看网上关于 docker-compose 的使用方法。
+**后续**
+
+更多关于 docker-compose ，请参考[官方文档](https://docs.docker.com/compose/)
 
 
 
