@@ -7,6 +7,16 @@ Object {
       "impl": true,
       "key": "web:router_param",
       "metadata": Object {
+        "propertyData": [Function],
+        "type": 12,
+      },
+      "parameterIndex": 7,
+      "propertyName": "doget",
+    },
+    Object {
+      "impl": true,
+      "key": "web:router_param",
+      "metadata": Object {
         "propertyData": "common:all_value_key",
         "type": 4,
       },
