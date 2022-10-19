@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@types/jest": "28.1.8",
-    "@types/node": "16.11.65",
+    "@types/node": "16.11.68",
     "@vercel/ncc": "0.34.0",
     "autocannon": "7.10.0",
     "jest": "28.1.3",
