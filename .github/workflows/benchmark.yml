@@ -42,7 +42,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-
-      - name: Inatall Dependencies
+      - name: Install Dependencies
         run: |
           npm i --no-audit -g autocannon zx
           # npm run purge # if you want to clean up the cache
