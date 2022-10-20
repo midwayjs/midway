@@ -262,7 +262,9 @@ export async function createFunctionApp<
 
     // new mode
     const exports = options.starter.start(options);
-    await exports[options.initializeMethodName || 'initializer']();
+    await exports[options.initializeMethodName || 'initializer'](
+      options['initializeContext'] || {}
+    );
     const appCtx = options.starter.getApplicationContext();
 
     const configService = appCtx.get(MidwayConfigService) as any;
