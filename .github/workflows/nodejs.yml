@@ -100,6 +100,7 @@ jobs:
       if: steps.cache-lerna.outputs.cache-hit != 'true'
       run: |
         npm install && npm install codecov
+        npm i --no-audit -g @vercel/ncc
         npm run bootstrap
     - name: Install Dependencies2
       run: |
