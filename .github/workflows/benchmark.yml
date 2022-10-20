@@ -49,7 +49,7 @@ jobs:
           npm run bootstrap
       - name: Install Dependencies2
         run: |
-          npm i --no-audit -g @vercel/ncc
+          npm i --no-audit -g autocannon zx @vercel/ncc
           npm run bootstrap
 
       - name: Build

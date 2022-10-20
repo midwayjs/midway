@@ -105,7 +105,6 @@ jobs:
       run: |
         npm i --no-audit -g @vercel/ncc
         npm --no-audit i codecov
-        npm run bootstrap
 
     - name: Build
       run: |
