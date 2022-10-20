@@ -9,15 +9,15 @@
 
 1. 安装依赖
 ```bash
-$ npm i @midwayjs/verification-code@3 --save
+$ npm i @midwayjs/captcha@3 --save
 ```
 2. 在 configuration 中引入组件,
 ```typescript
-import * as vc from '@midwayjs/verification-code';
+import * as captcha from '@midwayjs/captcha';
 @Configuration({
   imports: [
     // ...other components
-    vc
+    captcha
   ],
 })
 export class AutoConfiguration {}
@@ -25,7 +25,7 @@ export class AutoConfiguration {}
 
 3. 在代码中使用
 ```typescript
-import { VerificationCodeService } from '@midwayjs/verification-code';
+import { CaptchaService } from '@midwayjs/captcha';
 @Controller('/')
 export class HomeController {
 
@@ -33,12 +33,12 @@ export class HomeController {
   ctx;
 
   @Inject()
-  verificationService: VerificationCodeService;
+  captchaService: CaptchaService;
 
   // 示例：获取图像验证码
-  @Get('/get-image-verification-code')
-  async getImageVerificationCode() {
-    const { id, imageBase64 } = await this.verificationService.image({ width: 120, height: 40 });
+  @Get('/get-image-captcha')
+  async getImageCaptcha() {
+    const { id, imageBase64 } = await this.captchaService.image({ width: 120, height: 40 });
     return {
       id,          // 验证码 id
       imageBase64, // 验证码 SVG 图片的 base64 数据，可以直接放入前端的 img 标签内
@@ -46,9 +46,9 @@ export class HomeController {
   }
 
   // 示例：获取计算表达式验证码
-  @Get('/get-formula-verification-code')
-  async getFormulaVerificationCode() {
-    const { id, imageBase64 } = await this.verificationService.formula({ noise: 1 });
+  @Get('/get-formula-captcha')
+  async getFormulaCaptcha() {
+    const { id, imageBase64 } = await this.captchaService.formula({ noise: 1 });
     return {
       id,          // 验证码 id
       imageBase64, // 验证码 SVG 图片的 base64 数据，可以直接放入前端的 img 标签内
@@ -56,10 +56,10 @@ export class HomeController {
   }
 
   // 验证验证码是否正确
-  @Post('/check-verification-code')
-  async getVerificationCode() {
+  @Post('/check-captcha')
+  async getCaptcha() {
     const { id, answer } = this.ctx.request.body;
-    const passed: boolean = await this.verificationService.check(id, answer);
+    const passed: boolean = await this.captchaService.check(id, answer);
     if (passed) {
       return 'passed';
     }
@@ -70,7 +70,7 @@ export class HomeController {
   @Post('/sms-code')
   async sendSMSCode() {
     // 验证验证码是否正确
-    const { id, text: code } = await this.verificationService.text({ size: 4 });
+    const { id, text: code } = await this.captchaService.text({ size: 4 });
     await sendSMS(18888888888, code);
     return { id }
   }
@@ -79,7 +79,7 @@ export class HomeController {
   @Post('/email-code')
   async sendEmailCode() {
     // 验证验证码是否正确
-    const { id, text: code } = await this.verificationService.text({ type: 'number'});
+    const { id, text: code } = await this.captchaService.text({ type: 'number'});
     await sendEmail('admin@example.com', code);
     return { id }
   }
@@ -88,9 +88,9 @@ export class HomeController {
   @Get('/test-text')
   async testText() {
     // 存入内容，获取验证码id
-    const id: string = await this.verificationService.set('123abc');
+    const id: string = await this.captchaService.set('123abc');
     // 根据验证码id，校验内容是否正确
-    const passed: boolean = await this.verificationService.check(id, '123abc');
+    const passed: boolean = await this.captchaService.check(id, '123abc');
     return {
       passed: passed === true,
     }
@@ -100,7 +100,7 @@ export class HomeController {
 
 ### 配置
 ```typescript
-interface VerificationCodeOptions {
+interface CaptchaOptions {
   // 干扰线条的数量，默认 1 条
   noise?: number;
   // 宽度，默认为 120 像素
@@ -148,16 +148,16 @@ interface VerificationCodeOptions {
   idPrefix: 'midway:vc',
 }
 
-export const verificationCode: VerificationCodeOptions = {
+export const captcha: CaptchaOptions = {
   size: 4,
   noise: 1,
   width: 120,
   height: 40,
-  image: {      // 会合并 verificationCode 的 size 等配置
+  image: {      // 会合并 captcha 的 size 等配置
     type: 'mixed',
   },
-  formula: {},  // 会合并 verificationCode 的 size 等配置
-  text: {},     // 会合并 verificationCode 的 size 等配置
+  formula: {},  // 会合并 captcha 的 size 等配置
+  text: {},     // 会合并 captcha 的 size 等配置
   expirationTime: 3600,
   idPrefix: 'midway:vc',
 }

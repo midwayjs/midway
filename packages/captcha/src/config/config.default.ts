@@ -1,6 +1,6 @@
-import { VerificationCodeOptions } from '../interface';
+import { CaptchaOptions } from '../interface';
 
-export const verificationCode: VerificationCodeOptions = {
+export const captcha: CaptchaOptions = {
   size: 4,
   noise: 1,
   width: 120,

@@ -4,29 +4,29 @@ import * as svgCaptcha from 'svg-captcha';
 import * as svgBase64 from 'mini-svg-data-uri';
 import { nanoid } from 'nanoid';
 import {
-  FormulaVerificationCodeOptions,
-  ImageVerificationCodeOptions,
-  TextVerificationCodeOptions,
-  VerificationCodeOptions,
+  FormulaCaptchaOptions,
+  ImageCaptchaOptions,
+  TextCaptchaOptions,
+  CaptchaOptions,
 } from './interface';
 import { letters, numbers } from './constants';
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class VerificationCodeService {
+export class CaptchaService {
   @Inject()
   cacheManager: CacheManager;
 
-  @Config('verificationCode')
-  verificationCode: VerificationCodeOptions;
+  @Config('captcha')
+  captcha: CaptchaOptions;
 
-  async image(options?: ImageVerificationCodeOptions): Promise<{
+  async image(options?: ImageCaptchaOptions): Promise<{
     id: string;
     imageBase64: string;
   }> {
     const { width, height, type } = Object.assign(
       {},
-      this.verificationCode,
-      this.verificationCode.image,
+      this.captcha,
+      this.captcha.image,
       options
     );
     let ignoreChars = '';
@@ -48,11 +48,11 @@ export class VerificationCodeService {
     return { id, imageBase64 };
   }
 
-  async formula(options?: FormulaVerificationCodeOptions) {
+  async formula(options?: FormulaCaptchaOptions) {
     const { width, height } = Object.assign(
       {},
-      this.verificationCode,
-      this.verificationCode.formula,
+      this.captcha,
+      this.captcha.formula,
       options
     );
     const { data, text } = svgCaptcha.createMathExpr({
@@ -64,14 +64,14 @@ export class VerificationCodeService {
     return { id, imageBase64 };
   }
 
-  async text(options?: TextVerificationCodeOptions): Promise<{
+  async text(options?: TextCaptchaOptions): Promise<{
     id: string;
     text: string;
   }> {
     const textOptions = Object.assign(
       {},
-      this.verificationCode,
-      this.verificationCode.text,
+      this.captcha,
+      this.captcha.text,
       options
     );
     let chars = '';
@@ -99,7 +99,7 @@ export class VerificationCodeService {
     await this.cacheManager.set(
       this.getStoreId(id),
       (text || '').toLowerCase(),
-      { ttl: this.verificationCode.expirationTime }
+      { ttl: this.captcha.expirationTime }
     );
     return id;
   }
@@ -118,6 +118,6 @@ export class VerificationCodeService {
   }
 
   private getStoreId(id: string): string {
-    return `${this.verificationCode}:${id}`;
+    return `${this.captcha}:${id}`;
   }
 }

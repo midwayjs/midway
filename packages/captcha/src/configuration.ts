@@ -2,7 +2,7 @@ import { Configuration } from '@midwayjs/core';
 import * as cacheComponent from '@midwayjs/cache';
 import * as DefaultConfig from './config/config.default';
 @Configuration({
-  namespace: 'verification-code',
+  namespace: 'captcha',
   imports: [cacheComponent],
   importConfigs: [
     {
@@ -10,4 +10,4 @@ import * as DefaultConfig from './config/config.default';
     },
   ],
 })
-export class VerificationCodeConfiguration {}
+export class CaptchaConfiguration {}

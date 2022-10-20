@@ -107,7 +107,7 @@
         "extensions/static_file",
         "extensions/cross_domain",
         "extensions/http-proxy",
-        "extensions/verification_code"
+        "extensions/captcha"
       ]
     },
     {

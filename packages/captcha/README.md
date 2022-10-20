@@ -1,4 +1,4 @@
-# midway verification code module
+# midway captcha(verification code) module
 
 this is a sub package for midway.
 

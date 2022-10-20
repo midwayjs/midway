@@ -1,6 +1,6 @@
 import { Configuration, Controller, Inject, Post, Get } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
-import { VerificationCodeService } from '../../../../src';
+import { CaptchaService } from '../../../../src';
 
 @Configuration({
   imports: [
@@ -25,33 +25,33 @@ export class HomeController {
   ctx;
 
   @Inject()
-  verificationCodeService: VerificationCodeService;
+  captchaService: CaptchaService;
 
   @Post('/text')
   async text() {
     const { text } = this.ctx.request.body;
-    const id = await this.verificationCodeService.set(text);
+    const id = await this.captchaService.set(text);
     return { id };
   }
 
   @Post('/check')
   async check() {
     const { id, code } = this.ctx.request.body;
-    return this.verificationCodeService.check(id, code);
+    return this.captchaService.check(id, code);
   }
 
   @Get('/img')
   async img() {
-    return this.verificationCodeService.image();
+    return this.captchaService.image();
   }
 
   @Get('/formula')
   async formula() {
-    return this.verificationCodeService.formula();
+    return this.captchaService.formula();
   }
 
   @Get('/text')
   async textCode() {
-    return this.verificationCodeService.text();
+    return this.captchaService.text();
   }
 }
