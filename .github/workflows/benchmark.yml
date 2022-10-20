@@ -45,12 +45,11 @@ jobs:
       - name: Install Dependencies
         if: steps.cache-lerna.outputs.cache-hit != 'true'
         run: |
-          npm install && npm install codecov
-          npm i --no-audit -g @vercel/ncc
+          npm install
           npm run bootstrap
       - name: Install Dependencies2
         run: |
-          npm --no-audit i codecov
+          npm i --no-audit -g @vercel/ncc
           npm run bootstrap
 
       - name: Build
