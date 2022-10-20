@@ -29,25 +29,30 @@ jobs:
         uses: actions/cache@v3
         id: cache-lerna
         env:
-          cache-name: cache-lerna
+          cache-name: cache-lerna-packages
         with:
           path: |
             node_modules
             package-lock.json
-            packages/*/.eslintcache
-            packages/*/dist
-            packages/*/tsconfig.tsbuildinfo
-            packages/*/node_modules
-            packages/*/package-lock.json
+            */*/.eslintcache
+            */*/node_modules
+            */*/dist
+            */*/tsconfig.tsbuildinfo
+            */*/package-lock.json
           key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-
       - name: Install Dependencies
+        if: steps.cache-lerna.outputs.cache-hit != 'true'
         run: |
-          npm i --no-audit -g autocannon zx
-          # npm run purge # if you want to clean up the cache
-          npm i --no-audit
+          npm install && npm install codecov
+          npm i --no-audit -g @vercel/ncc
           npm run bootstrap
+      - name: Install Dependencies2
+        run: |
+          npm --no-audit i codecov
+          npm run bootstrap
+
       - name: Build
         run: |
           sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
