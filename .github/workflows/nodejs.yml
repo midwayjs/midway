@@ -96,6 +96,15 @@ jobs:
         key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-
+    - name: Install Dependencies
+      if: steps.cache-lerna.outputs.cache-hit != 'true'
+      run: |
+        npm install && npm install codecov
+        npm run bootstrap
+    - name: Install Dependencies2
+      run: |
+        npm --no-audit i codecov
+        npm run bootstrap
 
     - name: Build
       run: |
@@ -107,7 +116,6 @@ jobs:
       with:
         mongodb-version: 4.2
 
-    - run: npm install codecov
     - run: npm run cov
       env:
         RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
