@@ -1,4 +1,4 @@
-name: Legacy package CI
+name: Pre Check
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
       - '*.md'
 
 jobs:
-  build:
+  lint:
     timeout-minutes: 60
     strategy:
       matrix:
@@ -85,9 +85,14 @@ jobs:
       with:
         mongodb-version: 4.2
 
-    - run: npm install && npm install codecov
+    - run: npm install
     - run: npm run bootstrap
     - run: npm run build --if-present
+    - run: npm run lint
+    - run: npm run lint:cycle
+
+  test_legacy:
+    steps:
     - run: npm run test_legacy
       env:
         RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
@@ -100,24 +105,3 @@ jobs:
         ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
         ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
         ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-
-#
-#   build-windows:
-#     runs-on: windows-latest
-#
-#     strategy:
-#       matrix:
-#         node-version: [12, 14.x]
-#
-#     steps:
-#     - uses: actions/checkout@v2
-#     - name: Use Node.js ${{ matrix.node-version }}
-#       uses: actions/setup-node@v1
-#       with:
-#         node-version: ${{ matrix.node-version }}
-#     - run: npm install
-#     - run: npm run bootstrap
-#     - run: npm run build --if-present
-#     - run: npm run cov
