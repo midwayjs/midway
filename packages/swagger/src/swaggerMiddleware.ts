@@ -12,7 +12,7 @@ import {
   ScopeEnum,
   MidwayFrameworkType,
 } from '@midwayjs/core';
-import { readFileSync } from 'fs';
+import { readFileSync, createReadStream } from 'fs';
 import { join, extname } from 'path';
 import type { SwaggerOptions } from './interfaces';
 import { SwaggerExplorer } from './swaggerExplorer';
@@ -75,6 +75,7 @@ export class SwaggerMiddleware
         } else if (ext === '.css') {
           res.type('text/css');
         } else if (ext === '.png') {
+          content = createReadStream(join(this.swaggerUiAssetPath, lastName))
           res.type('image/png');
         }
 
@@ -116,6 +117,7 @@ export class SwaggerMiddleware
         } else if (ext === '.css') {
           (ctx as any).set('Content-Type', 'text/css');
         } else if (ext === '.png') {
+          content = createReadStream(join(this.swaggerUiAssetPath, lastName))
           (ctx as any).set('Content-Type', 'image/png');
         }
 
