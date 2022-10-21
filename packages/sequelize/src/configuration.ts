@@ -54,6 +54,7 @@ export class SequelizeConfiguration {
         return this.dataSourceManager
           .getDataSource(
             meta.connectionName ||
+              this.dataSourceManager.getDefaultDataSourceName() ||
               this.dataSourceManager.getDataSourceNameByModel(meta.modelKey)
           )
           .getRepository(meta.modelKey);
