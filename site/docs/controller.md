@@ -618,6 +618,24 @@ async getUser(@Query() query: User): Promise<User> {
   // ...
 }
 ```
+### 参数过滤 & 参数转换
+路由方法参数装饰器支持传递第二个参数 pipes，通过自行实现 `PipeTransform` 接口，可以实现参数过滤和参数转换。
+
+```typescript
+class NumberParsePipe implements PipeTransform {
+  transform(value: any, metadata: ArgumentMetadata) {
+    return Number(value);
+  }
+}
+
+class TestControler {
+  @Get('/')
+  test(@Query('id', [NumberParsePipe]) id: number) {
+    console.log(typeof id); // number
+  }
+}
+```
+
 
 
 

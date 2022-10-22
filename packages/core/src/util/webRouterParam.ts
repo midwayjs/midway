@@ -1,5 +1,5 @@
-import { transformRequestObjectByType } from './index';
 import { ALL, PipeTransform, RouteParamTypes } from '../decorator';
+import { transformRequestObjectByType } from './index';
 
 export async function callPipes(pipes: PipeTransform[], value: any) {
   if (pipes && pipes.length) {
@@ -19,7 +19,8 @@ export const extractKoaLikeValue = (
   if (ALL === data) {
     data = undefined;
   }
-  return async function (ctx, next) {
+
+  const value = async function (ctx, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -29,20 +30,14 @@ export const extractKoaLikeValue = (
           paramType
         );
       case RouteParamTypes.PARAM:
-        return await callPipes(
-          pipes,
-          transformRequestObjectByType(
-            data ? ctx.params[data] : ctx.params,
-            paramType
-          )
+        return transformRequestObjectByType(
+          data ? ctx.params[data] : ctx.params,
+          paramType
         );
       case RouteParamTypes.QUERY:
-        return await callPipes(
-          pipes,
-          transformRequestObjectByType(
-            data ? ctx.query[data] : ctx.query,
-            paramType
-          )
+        return transformRequestObjectByType(
+          data ? ctx.query[data] : ctx.query,
+          paramType
         );
       case RouteParamTypes.HEADERS:
         return transformRequestObjectByType(
@@ -92,13 +87,23 @@ export const extractKoaLikeValue = (
         return null;
     }
   };
+
+  return async function (ctx, next) {
+    const result = await value(ctx, next);
+    return await callPipes(pipes, result);
+  };
 };
 
-export const extractExpressLikeValue = (key, data, paramType?) => {
+export const extractExpressLikeValue = (
+  key,
+  data,
+  paramType?,
+  pipes?: PipeTransform[]
+) => {
   if (ALL === data) {
     data = undefined;
   }
-  return function (req, res, next) {
+  const value = (req, res, next) => {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -152,5 +157,10 @@ export const extractExpressLikeValue = (key, data, paramType?) => {
       default:
         return null;
     }
+  };
+
+  return async function (req, res, next) {
+    const result = await value(req, res, next);
+    return await callPipes(pipes, result);
   };
 };

@@ -35,24 +35,24 @@ const createParamMapping = function (type: RouteParamTypes) {
   };
 };
 
-export const Session = (property?: string) =>
+export const Session = (property?: string, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.SESSION)(property);
-export const Body = (property?: string) =>
+export const Body = (property?: string, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.BODY)(property);
 export const Query = (property?: string, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.QUERY)(property, pipes);
 export const Param = (property?: string, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.PARAM)(property, pipes);
-export const Headers = (property?: string) =>
+export const Headers = (property?: string, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.HEADERS)(property);
-export const File = (property?: any) =>
+export const File = (property?: any, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.FILESTREAM)(property);
-export const Files = (property?: any) =>
+export const Files = (property?: any, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.FILESSTREAM)(property);
 export const RequestPath = () =>
   createParamMapping(RouteParamTypes.REQUEST_PATH)();
 export const RequestIP = () => createParamMapping(RouteParamTypes.REQUEST_IP)();
-export const Queries = (property?: string) =>
+export const Queries = (property?: string, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.QUERIES)(property);
-export const Fields = (property?: string) =>
+export const Fields = (property?: string, pipes?: PipeTransform[]) =>
   createParamMapping(RouteParamTypes.FIELDS)(property);
