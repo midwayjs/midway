@@ -90,7 +90,7 @@ export const extractKoaLikeValue = (
 
   return async function (ctx, next) {
     const result = await value(ctx, next);
-    return await callPipes(pipes, result);
+    return await callPipes(pipes || [], result);
   };
 };
 
@@ -161,6 +161,6 @@ export const extractExpressLikeValue = (
 
   return async function (req, res, next) {
     const result = await value(req, res, next);
-    return await callPipes(pipes, result);
+    return await callPipes(pipes || [], result);
   };
 };
