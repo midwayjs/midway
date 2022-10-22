@@ -24,6 +24,6 @@
   "devDependencies": {
     "@midwayjs/core": "^3.6.0",
     "@midwayjs/mock": "^3.6.0",
-    "mongoose": "6.6.5"
+    "mongoose": "6.6.7"
   }
 }
