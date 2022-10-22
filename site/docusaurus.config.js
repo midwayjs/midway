@@ -68,10 +68,10 @@ const config = {
             dropdownActiveClassDisabled: true,
             position: 'right',
           },
-          {
-            type: 'localeDropdown',
-            position: 'right',
-          },
+          // {
+          //   type: 'localeDropdown',
+          //   position: 'right',
+          // },
           {
             label: '开源送礼',
             href: 'https://survey.taobao.com/apps/zhiliao/pJ3zng9Iv',
