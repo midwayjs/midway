@@ -45,6 +45,7 @@ export class OrmConfiguration implements ILifeCycle {
         return this.dataSourceManager
           .getDataSource(
             meta.connectionName ||
+              this.dataSourceManager.getDefaultDataSourceName() ||
               this.dataSourceManager.getDataSourceNameByModel(meta.modelKey)
           )
           .getRepository(meta.modelKey);

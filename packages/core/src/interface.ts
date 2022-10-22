@@ -28,6 +28,7 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
 
 export type DataSourceManagerConfigOption<OPTIONS> = {
   default?: PowerPartial<OPTIONS>;
+  defaultDataSourceName?: string;
   dataSource?: {
     [key: string]: PowerPartial<{
       entities: any[],
