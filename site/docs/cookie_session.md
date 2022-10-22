@@ -183,7 +183,7 @@ export class HomeController {
 
 Session 的使用方法非常直观，直接读取它或者修改它就可以了，如果要删除它，直接将它赋值为 null：
 
-```
+```typescript
 ctx.session = null;
 ```
 

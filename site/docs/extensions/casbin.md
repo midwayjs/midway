@@ -417,7 +417,7 @@ $ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
 import { Configuration } from '@midwayjs/decorator';
 import * as typeorm from '@midwayjs/typeorm';
 import * as casbin from '@midwayjs/casbin';
-import { join } from 'path'
+import { join } from 'path';
 
 @Configuration({
   imports: [
