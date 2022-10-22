@@ -80,7 +80,7 @@ Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依
 import { Scope, ScopeEnum, saveClassMetadata, saveModule, Provide } from '@midwayjs/decorator';
 
 // 提供一个唯一 key
-const MODEL_KEY = 'decorator:model';
+export const MODEL_KEY = 'decorator:model';
 
 export function Model(): ClassDecorator {
   return (target: any) => {
@@ -103,7 +103,7 @@ export function Model(): ClassDecorator {
 }
 ```
 
-上面只是定了了这个装饰器，我们还要实现相应的功能，midway v2 开始有生命周期的概念，可以在 `configuration` 中的生命周期中执行。
+上面只是定义了这个装饰器，我们还要实现相应的功能，midway v2 开始有生命周期的概念，可以在 `configuration` 中的生命周期中执行。
 
 ```typescript
 // src/configuration.ts

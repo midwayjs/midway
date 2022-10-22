@@ -91,17 +91,20 @@ export default {
       register: true,
       // 应用正常下线反注册
       deregister: true,
-      // consul server 主机
-      host: '192.168.0.10',				// 此处修改 consul server 的地址
-      // consul server 端口
-      port: 8500,									// 端口也需要进行修改
+      // consul server 服务地址
+      host: '192.168.0.10',
+      // consul server 服务端口
+      port: 8500,
       // 调用服务的策略(默认选取 random 具有随机性)
       strategy: 'random',
     },
     service: {
-      address: '127.0.0.1',				// 此处是当前这个 midway 应用的地址
-      port: 7001,									// midway应用的端口
-      tags: ['tag1', 'tag2'],			// 做泳道隔离等使用
+      // 此处是当前这个 midway 应用的地址
+      address: '127.0.0.1',
+      // 当前 midway 应用的端口
+      port: 7001,
+      // 做泳道隔离等使用
+      tags: ['tag1', 'tag2'],			
       name: 'my-midway-project'
       // others consul service definition
     }
@@ -109,8 +112,7 @@ export default {
 }
 ```
 
-然后启动 midway 项目，然后同时打开我们 consul server 的 ui 地址：
-就呈现了如下效果：
+打开我们 consul server 的 ui 地址，效果如下：
 
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01QI7A1d1dU3ECG8QxQ_!!6000000003738-2-tps-1500-471.png)
 
@@ -229,10 +231,9 @@ export class HomeController {
 
 同时 consul 也能作为一个服务配置的地方，如下代码：
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/decorator';
 import * as Consul from 'consul';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -252,7 +253,7 @@ export class HomeController {
 我们调用 `kv.set` 方法，我们可以设置对应的配置，通过 `kv.get`  方法可以拿到对应的配置。
 
 
-注意：在代码中，有同学出现，在每次请求中去 get 对应的配置，这时你的 QPS 多少对 consul server 的压力。
+注意：在代码中，有同学出现，在每次请求中去 get 对应的配置，这时你的 QPS 多少对 Consul server 的压力。
 
 
 所以在QPS比较大的情况，可以如下处理：
@@ -270,7 +271,7 @@ export class ConfigService {
   config: any;
 
   @Init()
-  async init(){
+  async init() {
     setInterval(()=>{
       this.consul.kv.get(`name`).then(res=>{
         this.config = res;
@@ -285,7 +286,7 @@ export class ConfigService {
 }
 
 ```
-上面的代码，相当于定时去获取对应的配置，当每个请求进来的时候，获取 Scope 为 ScopeEnum.Singleton 服务的 `getConfig` 方法，这样每5s一次获取请求，就减少了对服务的压力。
+上面的代码，相当于定时去获取对应的配置，当每个请求进来的时候，获取 Scope 为 ScopeEnum.Singleton 服务的 `getConfig` 方法，这样每 5s 一次获取请求，就减少了对服务的压力。
 
 Consul 界面上如下图：
 
@@ -309,7 +310,7 @@ Consul 界面上如下图：
 这样的好处，就是 A->B，B 也可以进行扩展，并且可以通过 tags 做泳道隔离。例如做单元隔离等。并且可以通过 ServiceWeights 做对应的权重控制。
 
 
-consul 还能做 Key/Value 的配置中心的作用，这个后续我们考虑支持。
+Consul 还能做 Key/Value 的配置中心的作用，这个后续我们考虑支持。
 
 
 ## 搭建 Consul 测试服务

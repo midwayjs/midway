@@ -52,6 +52,7 @@ export class MikroConfiguration implements ILifeCycle {
           return this.dataSourceManager
             .getDataSource(
               meta.connectionName ||
+                this.dataSourceManager.getDefaultDataSourceName() ||
                 this.dataSourceManager.getDataSourceNameByModel(meta.modelKey)
             )
             .em.getRepository(meta.modelKey);

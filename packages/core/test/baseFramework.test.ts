@@ -16,7 +16,7 @@ import {
   MidwayFrameworkType,
   Provide
 } from '../src';
-import { createLightFramework } from './util';
+import { createFramework, createLightFramework } from './util';
 import sinon = require('sinon');
 import { IMidwayApplication } from '../src';
 import { NoopContextManager } from '../src/common/asyncContextManager';
@@ -700,5 +700,16 @@ describe('/test/baseFramework.test.ts', () => {
     const app = framework.getApplication() as IMidwayApplication;
     expect(app.getAttr('invokeResult')).toEqual(true);
     expect(app.getAttr('invoke2Result')).toEqual(false);
+  });
+
+  it('should test throw framework sequence error', async () => {
+    const applicationContext = await createFramework(path.join(
+      __dirname,
+      './fixtures/app-with-multi-framework-sequence-error/src'
+    ));
+
+    const midwayFrameworkService = applicationContext.get(MidwayFrameworkService);
+
+    console.log(midwayFrameworkService.getMainFramework());
   });
 });

@@ -4,8 +4,8 @@
 
 示例如下：
 
--  平滑处理峰值。可以在任意时间启动资源密集型任务，然后将这些任务添加到队列中，而不是同步执行。让任务进程以受控方式从队列中提取任务。也可以轻松添加新的队列消费者以扩展后端任务处理。 
-- 分解可能会阻塞 Node.js 事件循环的单一任务。比如用户请求需要像音频转码这样的 CPU 密集型工作，就可以将此任务委托给其他进程，从而释放面向用户的进程以保持响应。 
+-  平滑处理峰值。可以在任意时间启动资源密集型任务，然后将这些任务添加到队列中，而不是同步执行。让任务进程以受控方式从队列中提取任务。也可以轻松添加新的队列消费者以扩展后端任务处理。
+- 分解可能会阻塞 Node.js 事件循环的单一任务。比如用户请求需要像音频转码这样的 CPU 密集型工作，就可以将此任务委托给其他进程，从而释放面向用户的进程以保持响应。
 - 提供跨各种服务的可靠通信渠道。例如，您可以在一个进程或服务中排队任务（作业），并在另一个进程或服务中使用它们。在任何流程或服务的作业生命周期中完成、错误或其他状态更改时，您都可以收到通知（通过监听状态事件）。当队列生产者或消费者失败时，它们的状态被保留，并且当节点重新启动时任务处理可以自动重新启动。
 
 Midway 提供了 @midwayjs/bull 包作为 [Bull](https://github.com/OptimalBits/bull) 之上的抽象/包装器，[Bull](https://github.com/OptimalBits/bull) 是一种流行的、受良好支持的、高性能的基于 Node.js 的队列系统实现。该软件包可以轻松地将 Bull Queues 以 Nest 友好的方式集成到您的应用程序中。
@@ -16,7 +16,8 @@ Bull 使用 Redis 来保存作业数据，在使用 Redis 时，Queue 架构是�
 
 :::tip
 
-原有任务调度 `@midwayjs/task` 模块废弃，如果查询历史文档，请参考 [这里](../legacy/sequelize)。
+- 1、从 v3.6.0 开始，原有任务调度 `@midwayjs/task` 模块废弃，如果查询历史文档，请参考 [这里](../legacy/task)。
+- 2、bull 是一个分布式任务管理系统，必须依赖 redis
 
 :::
 
@@ -84,6 +85,45 @@ Bull 将整个队列分为三个部分
 
 
 
+## 基础配置
+
+bull 是一个分布式任务管理器，强依赖于 redis，在 `config.default.ts` 文件中配置。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  bull: {
+    // 默认的队列配置
+    defaultQueueOptions: {
+      redis: `redis://127.0.0.1:32768`,
+    }
+  },
+}
+```
+
+有账号密码情况：
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  bull: {
+    defaultQueueOptions: {
+      redis: {
+        port: 6379,
+        host: '127.0.0.1',
+        password: 'foobared',
+      },
+    }
+  },
+}
+```
+
+所有的队列都会复用该配置。
+
+
+
 ## 编写任务处理器
 
 使用 `@Processor` 装饰器装饰一个类，用于快速定义一个任务处理器（这里我们不使用 Job，避免后续的歧义）。
@@ -105,6 +145,8 @@ export class TestProcessor implements IProcessor {
 ```
 
 在启动时，框架会自动查找并初始化上述处理器代码，同时自动创建一个名为 `test` 的 Queue。
+
+
 
 
 
@@ -131,12 +173,12 @@ import * as bull from '@midwayjs/bull';
   ]
 })
 export class MainConfiguration {
-  
+
   @Inject()
   bullFramework: bull.Framework;
-  
+
   //...
-  
+
   async onServerReady() {
     // 获取 Processor 相关的队列
     const testQueue = this.bullFramework.getQueue('test');
@@ -232,12 +274,12 @@ Bull 组件包含可以独立启动的 Framework，有着自己的 App 对象和
   ]
 })
 export class MainConfiguration {
-  
+
   @App('bull')
   bullApp: bull.Application;
-  
+
   //...
-  
+
   async onReady() {
     this.bullApp.useMiddleare( /*中间件*/);
     this.bullApp.useFilter( /*过滤器*/);
@@ -267,10 +309,10 @@ import { Processor, IProcessor, Context } from '@midwayjs/bull';
 
 @Processor('test')
 export class TestProcessor implements IProcessor {
-  
+
   @Inject()
   ctx: Context;
-  
+
   async execute() {
     // ctx.jobId => xxxx
   }
@@ -382,66 +424,22 @@ FORMAT.CRONTAB.EVERY_MINUTE
 
 
 
-## 分布式任务
-
-上面的代码，我们都是运行时在每台机器的的每个进程上，如果需要分布式任务（每个任务只在特定进程中执行一次），则需要配置 Redis。
-
-
-
-### 配置分布式任务
-
-在 `config.default.ts` 文件中配置。
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  bull: {
-    // 默认的队列配置
-    defaultQueueOptions: {
-      redis: `redis://127.0.0.1:32768`,
-      // 这些任务存储的 key，都是 midway-task 开头，以便区分用户原有redis 里面的配置
-      prefix: 'midway-task',  
-    }
-  },
-}
-```
-
-有账号密码情况：
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  bull: {
-    defaultQueueOptions: {
-      redis: {
-        port: 6379,
-        host: '127.0.0.1',
-        password: 'foobared',
-      },
-      prefix: 'midway-task',  
-    }
-  },
-}
-```
-
-配置了之后，所有的队列都将变为分布式队列。
+## 高级配置
 
 
 
 ### 清理之前的任务
 
-在默认情况下，框架会自动清理前一次未调度的任务，保持每一次的任务队列为最新。如果在某些环境不需要清理，可以单独关闭。
+在默认情况下，框架会自动清理前一次未调度的 **重复执行任务**，保持每一次的重复执行的任务队列为最新。如果在某些环境不需要清理，可以单独关闭。
 
-比如线上不需要清理：
+比如你不需要清理重复：
 
 ```typescript
 // src/config/config.prod.ts
 export default {
   // ...
   bull: {
-    clearJobWhenStart: false,
+    clearRepeatJobWhenStart: false,
   },
 }
 ```
@@ -454,7 +452,9 @@ export default {
 
 :::
 
-也可以在启动时手动进行清理。
+
+
+也可以在启动时手动清理所有任务。
 
 ```typescript
 // src/configuration.ts
@@ -491,6 +491,15 @@ export class ContainerLifeCycle {
 
 当开启 Redis 后，默认情况下，bull 会记录所有的成功和失败的任务 key，这可能会导致 redis 的 key 暴涨，我们可以配置成功或者失败后清理的选项。
 
+默认情况下
+
+- 成功时保留的任务记录为 3 条
+- 失败保留的任务记录为 10 条
+
+也可以通过参数进行配置。
+
+比如在装饰器配置。
+
 ```typescript
 import { FORMAT } from '@midwayjs/decorator';
 import { IProcessor, Processor } from '@midwayjs/bull';
@@ -499,8 +508,8 @@ import { IProcessor, Processor } from '@midwayjs/bull';
   repeat: {
     cron: FORMAT.CRONTAB.EVERY_MINUTE,
   },
-  removeOnComplete: 10,	// 成功后移除任务记录，最多保留最近 10 条记录
-  removeOnFail: 20,	// 失败后移除任务记录
+  removeOnComplete: 3,	// 成功后移除任务记录，最多保留最近 3 条记录
+  removeOnFail: 10,	// 失败后移除任务记录
 })
 export class UserService implements IProcessor {
   execute(data: any) {
@@ -562,11 +571,13 @@ const redisClientInstance = new Redis.Cluster([
 
 export default {
   bull: {
-    createClient: (type, opts) => {
-      return redisClientInstance;
+    defaultQueueOptions: {
+      createClient: (type, opts) => {
+        return redisClientInstance;
+      },
+      // 这些任务存储的 key，都是相同开头，以便区分用户原有 redis 里面的配置
+    	prefix: '{midway-bull}',
     },
-    // 这些任务存储的key，都是相同开头，以便区分用户原有redis里面的配置
-    prefix: '{midway-task}',
   }
 }
 ```
@@ -594,10 +605,10 @@ import * as bull from '@midwayjs/bull';
   ]
 })
 export class MainConfiguration {
-  
+
   @Inject()
   bullFramework: bull.Framework;
-  
+
   async onReady() {
     const testQueue = bullFramework.createQueue('test', {
       redis: {
@@ -605,9 +616,9 @@ export class MainConfiguration {
         host: '127.0.0.1',
         password: 'foobared',
       },
-      prefix: 'midway-task',  
+      prefix: '{midway-bull}',
     });
-    
+
     // ...
   }
 }
@@ -646,7 +657,7 @@ import { Provide } from '@midwayjs/decorator';
 export class UserService {
   @InjectQueue('test')
   testQueue: IQueue;
-  
+
   async invoke() {
     await this.testQueue.pause();
     // ...
@@ -721,6 +732,68 @@ export default {
 
 
 
+## Bull UI
+
+在分布式场景中，我们可以资利用 Bull UI 来简化管理。
+
+和 bull 组件类似，需要独立安装和启用。
+
+```bash
+$ npm i @midwayjs/bull-board@3 --save
+```
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/bull-board": "^3.0.0",
+    // ...
+  },
+}
+```
+
+将 bull-board 组件配置到代码中。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as bull from '@midwayjs/bull';
+import * as bullBoard from '@midwayjs/bull-board';
+
+@Configuration({
+  imports: [
+    // ...
+    bull,
+    bullBoard,
+  ]
+})
+export class MainConfiguration {
+  //...
+}
+```
+
+默认的访问路径为：`http://127.1:7001/ui`。
+
+效果如下：
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01j4wEFb1UacPxA06gs_!!6000000002534-2-tps-1932-1136.png)
+
+可以通过配置进行基础路径的修改。
+
+```typescript
+// src/config/config.prod.ts
+export default {
+  // ...
+  bullBoard: {
+    basePath: '/ui',
+  },
+}
+```
+
+
+
+
+
 ## 常见问题
 
 ### 1、EVALSHA错误
@@ -732,5 +805,4 @@ export default {
 原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步 @midwayjs/bull 的 key 命中了不同的 slot。
 
 解决办法是 task 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
-
 

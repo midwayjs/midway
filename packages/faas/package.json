@@ -1,19 +1,19 @@
 {
   "name": "@midwayjs/faas",
-  "version": "3.5.3",
+  "version": "3.6.0",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/core": "^3.5.3",
-    "@midwayjs/faas-typings": "^3.5.0",
+    "@midwayjs/core": "^3.6.0",
+    "@midwayjs/faas-typings": "^3.6.0",
     "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/serverless-http-parser": "^3.5.3",
+    "@midwayjs/serverless-http-parser": "^3.6.0",
     "@midwayjs/simple-lock": "^1.1.4"
   },
   "devDependencies": {
-    "@midwayjs/mock": "^3.5.3",
-    "@midwayjs/serverless-fc-starter": "^3.5.3",
-    "@midwayjs/serverless-scf-starter": "^3.5.3",
+    "@midwayjs/mock": "^3.6.0",
+    "@midwayjs/serverless-fc-starter": "^3.6.0",
+    "@midwayjs/serverless-scf-starter": "^3.6.0",
     "mm": "3.2.0"
   },
   "engines": {

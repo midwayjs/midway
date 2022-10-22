@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/midwayjs/midway/compare/v3.5.3...v3.6.0) (2022-10-10)
+
+
+### Bug Fixes
+
+* add default generic type to MikroConfigOptions ([#2342](https://github.com/midwayjs/midway/issues/2342)) ([d5fbab6](https://github.com/midwayjs/midway/commit/d5fbab666dabbae6fad0e0946b733ea73ac1a9d5))
+
+
+### Features
+
+* add guard ([#2345](https://github.com/midwayjs/midway/issues/2345)) ([1b952a1](https://github.com/midwayjs/midway/commit/1b952a1b09adbb88ff3cff9a2974eb1e37ce53a5))
+
+
+
+
+
 ## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
 
 **Note:** Version bump only for package @midwayjs/mikro

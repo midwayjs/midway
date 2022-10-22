@@ -83,7 +83,7 @@ export class MainConfiguration {
 
 
 整个架构如下:
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/501408/1614842824740-fc0c1432-3ace-4f77-b51f-15212984b168.png#height=828&id=Lv3hN&margin=%5Bobject%20Object%5D&name=image.png&originHeight=828&originWidth=1716&originalType=binary&ratio=1&size=117877&status=done&style=none&width=1716)
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1614842824740-fc0c1432-3ace-4f77-b51f-15212984b168.png)
 
 
 ## 目录结构

@@ -1,18 +1,18 @@
 {
   "name": "@midwayjs/serverless-fc-trigger",
   "private": true,
-  "version": "3.5.3",
+  "version": "3.6.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas-typings": "^3.5.0",
-    "@midwayjs/runtime-mock": "^3.4.4",
-    "@midwayjs/serverless-fc-starter": "^3.5.3",
+    "@midwayjs/faas-typings": "^3.6.0",
+    "@midwayjs/runtime-mock": "^3.6.0",
+    "@midwayjs/serverless-fc-starter": "^3.6.0",
     "body-parser": "1.20.1",
-    "express": "4.18.1"
+    "express": "4.18.2"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.5.3",
+    "@midwayjs/core": "^3.6.0",
     "supertest": "6.2.4"
   },
   "engines": {
@@ -24,8 +24,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --forceExit"
   },
   "repository": {
     "type": "git",

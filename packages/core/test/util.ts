@@ -12,7 +12,7 @@ import {
   CONFIGURATION_KEY,
   Framework,
   Inject,
-  sleep
+  sleep, IMidwayContainer
 } from '../src';
 import { join } from 'path';
 import * as http from 'http';
@@ -140,6 +140,37 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
   });
 
   return container.get(EmptyFramework);
+}
+
+export async function createFramework(baseDir: string = '', globalConfig: any = {}): Promise<IMidwayContainer> {
+  const container = new MidwayContainer();
+  const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
+  // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
+  container.onBeforeBind(target => {
+    bindModuleMap.set(target, true);
+  });
+
+  const originMethod = container.listModule;
+
+  container.listModule = key => {
+    const modules = originMethod.call(container, key);
+    if (key === CONFIGURATION_KEY) {
+      return modules;
+    }
+
+    return modules.filter((module: any) => {
+      return bindModuleMap.has(module);
+    });
+  };
+
+  return initializeGlobalApplicationContext({
+    baseDir,
+    imports: [
+      safeRequire(join(baseDir, 'configuration'))
+    ],
+    applicationContext: container,
+    globalConfig,
+  });
 }
 
 export async function createHttpServer(options?: {

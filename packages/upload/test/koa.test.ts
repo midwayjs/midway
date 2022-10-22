@@ -1,6 +1,7 @@
 import { createHttpRequest, close, createApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
+import { statSync } from 'fs';
 
 describe('test/koa.test.ts', function () {
 
@@ -24,10 +25,29 @@ describe('test/koa.test.ts', function () {
         .attach('file2', pdfPath)
         .expect(200)
         .then(async response => {
+          const stat = statSync(pdfPath);
+          assert(response.body.size === stat.size);
           assert(response.body.files.length === 1);
           assert(response.body.files[0].filename === 'test.pdf');
           assert(response.body.fields.name === 'form');
           assert(response.body.fields.name2 === 'form2');
+        });
+    });
+
+    it('upload stream mode 3kb', async () => {
+      // fix: issue#2309
+      // 实际上 supertest 无法模拟出来效果
+      const pdfPath = join(__dirname, 'fixtures/3kb.png');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .attach('file', pdfPath)
+        .field('name', 'form')
+        .expect(200)
+        .then(async response => {
+          const stat = statSync(pdfPath);
+          assert(response.body.size === stat.size);
+          assert(response.body.files.length === 1);
+          assert(response.body.files[0].filename === '3kb.png');
         });
     });
 
@@ -69,6 +89,21 @@ describe('test/koa.test.ts', function () {
           assert(response.body.files[1].mimeType === 'application/pdf');
           assert(response.body.fields.name === 'form');
           assert(response.body.fields.name2 === 'form2');
+        });
+    });
+
+    it('upload file type .tar.gz', async () => {
+      const path = join(__dirname, 'fixtures/1.tar.gz');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', path)
+        .expect(200)
+        .then(async response => {
+          const stat = statSync(path);
+          assert(response.body.size === stat.size);
+          assert(response.body.files[0].data.endsWith('.tar.gz'));
         });
     });
     

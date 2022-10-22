@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/midwayjs/midway/compare/v3.5.3...v3.6.0) (2022-10-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sequelize to v6.24.0 ([#2356](https://github.com/midwayjs/midway/issues/2356)) ([ecc43d0](https://github.com/midwayjs/midway/commit/ecc43d0b96ad7fcc6766831b6db0cb8ca204580c))
+
+
+### Features
+
+* add guard ([#2345](https://github.com/midwayjs/midway/issues/2345)) ([1b952a1](https://github.com/midwayjs/midway/commit/1b952a1b09adbb88ff3cff9a2974eb1e37ce53a5))
+
+
+
+
+
 ## [3.5.3](https://github.com/midwayjs/midway/compare/v3.5.2...v3.5.3) (2022-09-25)
 
 

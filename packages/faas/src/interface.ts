@@ -48,8 +48,8 @@ export type IMidwayFaaSApplication = IMidwayApplication<Context, {
   getFunctionServiceName(): string;
 
   useEventMiddleware(middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>): void;
-  getEventMiddleware: ContextMiddlewareManager<Context, NextFunction, undefined>;
-  getTriggerFunction(handler: string): (context, options: HandlerOptions) => Promise<any>;
+  getEventMiddleware(): ContextMiddlewareManager<Context, NextFunction, undefined>;
+  getTriggerFunction(context, handler: string, options: HandlerOptions): Promise<any>;
   getServerlessInstance<T>(serviceClass: T): Promise<T>;
 }> & ServerlessHttpApplication;
 

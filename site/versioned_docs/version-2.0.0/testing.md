@@ -604,7 +604,7 @@ module.exports = {
 };
 ```
 
-注意，这里使用的 alias 前缀是 @ 符号，如果是其他的 alias 名，请自行修改。
+注意，这里使用的 alias 前缀是 @符号，如果是其他的 alias 名，请自行修改。
 
 ## 使用 mocha 替代 jest
 

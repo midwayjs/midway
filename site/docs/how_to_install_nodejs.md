@@ -28,7 +28,7 @@
 
 通过 Git Clone 对应的项目即可。
 
-```
+```bash
 $ export NVS_HOME="$HOME/.nvs"
 $ git clone https://github.com/jasongin/nvs --depth=1 "$NVS_HOME"
 $ . "$NVS_HOME/nvs.sh" install
@@ -43,7 +43,7 @@ $ . "$NVS_HOME/nvs.sh" install
 
 ## 配置镜像地址
 在国内由于大家都懂的原因，需要把对应的镜像地址修改下：
-```
+```bash
 $ nvs remote node https://npmmirror.com/mirrors/node/
 $ nvs remote
 default             node

@@ -23,6 +23,7 @@
         "req_res_app",
         "service",
         "error_filter",
+        "guard",
         "midway_component",
         "deployment"
       ]
@@ -85,7 +86,7 @@
         "extensions/info",
         "extensions/validate",
         "extensions/swagger",
-        "extensions/task",
+        "extensions/bull",
         "extensions/jwt"
       ]
     },
@@ -102,6 +103,7 @@
         "extensions/render",
         "extensions/upload",
         "extensions/passport",
+        "extensions/casbin",
         "extensions/static_file",
         "extensions/cross_domain",
         "extensions/http-proxy"
@@ -279,6 +281,7 @@
         "tool/mwts",
         "tool/luckyeye",
         "tool/typeorm_generator",
+        "tool/sequelize_generator",
         "tool/egg-ts-helper"
       ]
     },

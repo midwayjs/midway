@@ -35,7 +35,7 @@ const debug = util.debuglog('midway:debug');
  */
 export async function initializeGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
-) {
+): Promise<IMidwayContainer> {
   const applicationContext = prepareGlobalApplicationContext(globalOptions);
 
   // init logger

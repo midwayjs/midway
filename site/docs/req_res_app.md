@@ -284,6 +284,29 @@ export class HomeController {
 }
 ```
 
+除了显式声明外，在拦截器或者装饰器设计的时候，由于我们无法得知用户是否写了 ctx 属性，还可以通过内置的 `REQUEST_OBJ_CTX_KEY` 字段来获取。
+
+比如：
+
+```typescript
+import { Inject, Controller, Get } from '@midwayjs/decorator';
+import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
+
+@Controller('/')
+export class HomeController {
+  
+  @Inject()
+  ctx: Context;
+
+  @Get('/')
+  async home() {
+    ctx.logger.info(this.ctx === this[REQUEST_OBJ_CTX_KEY]);
+    // => true
+  }
+}
+```
+
 
 
 ### requestContext
@@ -347,5 +370,4 @@ console.log(value);
 this.ctx.getLogger('custom');
 // => custom logger
 ```
-
 

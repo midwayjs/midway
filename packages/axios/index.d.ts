@@ -4,6 +4,6 @@ export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    axios?: AxiosRequestConfig;
+    axios?: ServiceFactoryConfigOption<AxiosRequestConfig> & AxiosRequestConfig;
   }
 }

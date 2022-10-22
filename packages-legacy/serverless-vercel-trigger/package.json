@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/serverless-vercel-trigger",
   "private": true,
-  "version": "3.4.4",
+  "version": "3.6.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-mock": "^3.4.4"
+    "@midwayjs/runtime-mock": "^3.6.0"
   },
   "engines": {
     "node": ">=12"
@@ -16,8 +16,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --forceExit"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,21 @@
+{
+  "name": "midway-test-inner-component",
+  "private": true,
+  "version": "3.6.0",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^3.6.0"
+  }
+}

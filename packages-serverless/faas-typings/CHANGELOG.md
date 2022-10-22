@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/midwayjs/midway/compare/v3.5.3...v3.6.0) (2022-10-10)
+
+**Note:** Version bump only for package @midwayjs/faas-typings
+
+
+
+
+
 # [3.5.0](https://github.com/midwayjs/midway/compare/v3.4.13...v3.5.0) (2022-08-29)
 
 

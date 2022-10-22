@@ -1,7 +1,7 @@
 import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
-import { UploadFileInfo } from '../../../../src';
-import { Readable } from 'stream';
+import { UploadFileInfo, uploadWhiteList } from '../../../../src';
+import { statSync } from 'fs';
 
 @Configuration({
   imports: [
@@ -14,6 +14,9 @@ import { Readable } from 'stream';
         keys: ["test"],
         upload: {
           mode: 'file',
+          whitelist: uploadWhiteList.filter(ext => {
+            return ext !== '.gz';
+          }).concat('.tar.gz')
         }
       }
     }
@@ -29,8 +32,10 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload(@Fields() fields, @Files() files: UploadFileInfo<Readable>[]) {
+  async upload(@Fields() fields, @Files() files: UploadFileInfo<string>[]) {
+    const stat = statSync(files[0].data);
     return {
+      size: stat.size,
       files,
       fields
     }

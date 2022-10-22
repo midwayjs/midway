@@ -234,8 +234,9 @@ export class User {
 // config.default.ts
 import { User, SimpleUser } from '../entity/user.entity';
 
-export const mysql = {
-  dataSource: {
+export default {
+  mysql: {
+    dataSource: {
     dataSource1: {
       host: 'localhost',
       user: 'root',
@@ -250,7 +251,6 @@ export const mysql = {
     },
     // ...
   }
-  // 其他配置
 }
 ```
 
@@ -266,8 +266,9 @@ export const mysql = {
 // config.default.ts
 import { User, SimpleUser } from '../entity/user.entity';
 
-export const mysql = {
-  dataSource: {
+export default {
+  mysql: {
+    dataSource: {
     dataSource1: {
       host: 'localhost',
       user: 'root',
@@ -280,8 +281,8 @@ export const mysql = {
       ]		
     },
     // ...
+    // ...
   }
-  // 其他配置
 }
 ```
 

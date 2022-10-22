@@ -1344,7 +1344,7 @@ export class UserService {
     // start transaction
     await dataSource.transaction(async (transactionalEntityManager) => {
       // run code
-      await transactionalEntityManager.save(user)
+      await transactionalEntityManager.save(UserDTO, user);
     });
   }
   
