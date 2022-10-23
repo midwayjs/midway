@@ -10,7 +10,7 @@ Only pure `@midwayjs/koa`, `@midwayjs/express`, `@midwayjs/web` projects (pure H
 
 ## @midway/koa
 
-The Serverless environment refers to the function environment such as Aliyun FC and Tengxun Cloud. Midway can deploy existing Web projects as Serverless applications. Here, deploy to Alibaba Cloud Function Compute as an example.
+The Serverless environment refers to the function environment such as Aliyun FC and Tencent Cloud. Midway can deploy existing Web projects as Serverless applications. Here, deploy to Alibaba Cloud Function Compute as an example.
 
 
 1. Add the `f.yml` file to the root directory of your project.
@@ -20,7 +20,7 @@ The Serverless environment refers to the function environment such as Aliyun FC 
 .
 ├── src
 ├── dist
--f.yml # Midway Serverless deployment profile
+├── f.yml  								# Midway Serverless deployment profile
 ├── package.json
 └── tsconfig.json
 ```
@@ -29,7 +29,7 @@ The Serverless environment refers to the function environment such as Aliyun FC 
 service: my-midway-app ## the name of the application published to the cloud platform, generally refers to the application name
 
 provider:
-  null
+	name: aliyun
 
 deployType:
   type: koa ## application type to be deployed
@@ -64,12 +64,12 @@ module.exports = async () => {
 Add the following paragraph to `package.json` to automatically execute `npm run build` when publishing.
 
 ```json
-  "midway-integration ": {
-    "lifecycle ": {
+  "midway-integration": {
+    "lifecycle": {
       "before:package:cleanup": "npm run build"
     }
   },
-	"scripts ": {
+	"scripts": {
   	"deploy": "midway-bin deploy"
   }
 ```
@@ -91,7 +91,7 @@ For more detailed release documents, please refer to the [**Serverless release F
 .
 ├── src
 ├── dist
--f.yml # Midway Serverless deployment profile
+├── f.yml  								# Midway Serverless deployment profile
 ├── package.json
 └── tsconfig.json
 ```
@@ -123,7 +123,7 @@ module.exports = async () => {
   await Bootstrap.run();
   // Get the dependency injection container
   const container = Bootstrap.getApplicationContext();
-  null
+  // Get express framework
   const framework = container.get(WebFramework);
   // Return app object
   return framework.getApplication();
@@ -136,12 +136,12 @@ Add the following paragraph to `package.json` to automatically execute `npm run 
 
 ```json
 {
-  "midway-integration ": {
-    "lifecycle ": {
+  "midway-integration": {
+    "lifecycle": {
       "before:package:cleanup": "npm run build"
     }
   },
-	"scripts ": {
+	"scripts": {
   	"deploy": "midway-bin deploy"
   }
 }
@@ -160,7 +160,7 @@ For more detailed release documents, please refer to the [**Serverless release F
 1. Add the `f.yml` file to the root directory of the code. The simplest content is as follows.
 
 ```yaml
-null
+service: my-egg-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -196,7 +196,7 @@ const { join } = require('path');
 module.exports = async (options) => {
   // Load the framework and execute
   await Bootstrap
-    .configure ({
+    .configure({
       appDir: __dirname
       baseDir: join(__dirname, './dist')
       ...options
@@ -219,16 +219,16 @@ module.exports = async (options) => {
   "name": "xxxxxx ",
   "version": "xxxx ",
   .....
-  "scripts ": {
+  "scripts": {
 		"deploy": "midway-bin deploy ",
   	....
 	},
-  "midway-integration ": {
-    "lifecycle ": {
+  "midway-integration": {
+    "lifecycle": {
       "before:package:cleanup": "npm run build"
     }
   },
-	"egg ": {
+	"egg": {
   	"framework": "@midwayjs/web"
   }
 }
@@ -252,12 +252,12 @@ In the current migration scheme, some default configurations are added for bette
 
 ```typescript
 // config.default
-const OS = require(' OS ');
+const os = require('os');
 exports.logger = {
-  dir: OS .tmpdir()
+  dir: os.tmpdir()
 };
 
-exports.rundir = OS .tmpdir();
+exports.rundir = os.tmpdir();
 
 exports.static = {
   buffer: true
@@ -286,7 +286,7 @@ If you need a static plug-in, **open it manually** and **make sure that the** `a
 If the `public` directory is in the root directory, configure the `package.include` field in `f.yml`.
 
 ```yaml
-service: name of my-egg-demo ## application published to cloud platform
+service: my-egg-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -308,11 +308,11 @@ In the `package.json` configuration Scripts script and dev dependency `@midwayjs
 
 ```json
 {
-  "devDependencies ": {
+  "devDependencies": {
     "@midwayjs/cli": "^1.2.36"
     ...
   },
-  "scripts ": {
+  "scripts": {
     "deploy": "midway-bin deploy ",
     ...
   }
@@ -323,7 +323,7 @@ Or use a different npm package to accelerate.
 
 ```bash
 {
-  "scripts ": {
+  "scripts": {
     "deploy": "midway-bin deploy --npm=cnpm ",
     ...
   }
@@ -346,7 +346,7 @@ $npx midway-bin deploy --npm=cnpm ## deploy by cnpm
 You can use the name field.
 
 ```yaml
-service: name of my-demo ## application published to cloud platform
+service: my-egg-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -362,11 +362,11 @@ aggregation fields do not take effect when using deployType.
 
 
 
-### ariyun
+### Aliyun
 
 By default, it is published as an http trigger. If you need an API gateway, you can modify and configure the functions structure in the format of f.yml. At the same time, configure the route `/*` at the API gateway to transfer to this function.
 
-### Tengxun cloud
+### Tencent cloud
 
 By default, it is published as an API gateway trigger and the gateway route is automatically configured.
 

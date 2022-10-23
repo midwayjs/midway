@@ -1,8 +1,6 @@
----
-title: COS 触发器（对象存储）
----
+# COS Triggers (Object Storage)
 
-COS is a service used by Tengxun Cloud to store some resource files.
+COS is a service used by Tencent Cloud to store some resource files.
 
 ## Usage
 
@@ -22,7 +20,7 @@ export class HelloTencentService {
 
   @ServerlessTrigger(ServerlessTriggerType. OS, {
     bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
-    null
+    events: 'cos:ObjectCreated:*',
     filter: {
       prefix: 'filterdir /',
       suffix: '.jpg',
@@ -34,7 +32,7 @@ export class HelloTencentService {
 }
 ```
 
-null``
+Run `npm run deploy`.
 
 ## COS trigger configuration
 
@@ -53,7 +51,7 @@ Example:
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType. OS, {
     bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
-    events: 'cos:ObjectCreated :*,
+    events: 'cos:ObjectCreated:*',
     filter: {
       prefix: 'filterdir /',
       suffix: '.jpg',
@@ -67,40 +65,40 @@ The structure returned by COS messages is as follows, which is described in the 
 
 ```json
 {
-  "Records ": [
+  "Records": [
     {
-      "cos ": {
+      "cos": {
         "cosSchemaVersion": "1.0 ",
-        "cosObject ": {
+        "cosObject": {
           "url": "http://testpic-1253970026.cos.ap-chengdu.myqcloud.com/testfile ",
-          "meta ": {
+          "meta": {
             "x-cos-request-id": "NWMxOWY4MGFfMjViMjU4NjRfMTUyMV8yNzhhZjM =",
-            "Content-Type ": ""
+            "Content-Type": ""
           },
-          "vid ": "",
-          "key ": "",
+          "vid": "",
+          "key": "",
           "size": 1029
         },
-        "cosBucket ": {
+        "cosBucket": {
           "region": "cd ",
           "name": "testpic ",
           "appid": "1253970026"
         },
         "cosNotificationId": "unkown"
       },
-      "event ": {
+      "event": {
         "eventName": "cos:ObjectCreated :*",
         "eventVersion": "1.0 ",
         "eventTime": 1545205770
         "eventSource": "qcs::cos ",
-        "requestParameters ": {
+        "requestParameters": {
           "requestSourceIP": "192.168.15.101 ",
-          "requestHeaders ": {
-            "Authorization ": "****************"
+          "requestHeaders": {
+            "Authorization": "****************"
           }
         },
         "eventQueue": "qcs:0:lambda:cd:appid/1253970026:default.printevent.$LATEST ",
-        "reservedInfo ": "",
+        "reservedInfo": "",
         "reqid": 179398952
       }
     }
@@ -108,7 +106,7 @@ The structure returned by COS messages is as follows, which is described in the 
 }
 ```
 
-## Local development
+
 
 ## Local development
 
@@ -141,7 +139,7 @@ describe('test/hello_tencent.test.ts', () => {
     await close(app);
   });
 
-  null
+  it('should get result from timer trigger', async () => {
     expect(await instance.handleCOSEvent(createCOSEvent())).toEqual('hello world');
   });
 });

@@ -1,8 +1,6 @@
----
-title: API 网关（HTTP）
----
+# API Gateway（HTTP）
 
-API Gateway is similar to HTTP functions in Tengxun Cloud Function System, through which we publish functions as HTTP services.
+API Gateway is similar to HTTP functions in Tencent Cloud Function System, through which we publish functions as HTTP services.
 
 ## Usage
 
@@ -49,7 +47,7 @@ describe('test/hello_tencent.test.ts', () => {
   });
 
   it('should get result from http trigger', async () => {
-    const result = await createHttpRequest(app).post('api_gateway_tencent').send ({
+    const result = await createHttpRequest(app).post('api_gateway_tencent').send({
       name: 'zhangting',
     });
 

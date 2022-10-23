@@ -1,6 +1,4 @@
----
-title: f.yml 定义
----
+# f.yml definition
 
 ## Overview
 
@@ -44,24 +42,24 @@ functions:
       -http:
           path: /foo
           method:
-            -GET
-            -POST
+            - GET
+            - POST
   hello2:
     handler: entry.handler2
     events:
       -http:
           path: /foo
           method:
-            -GET
-            -POST
+            - GET
+            - POST
   hello3:
     handler: test.handler2
     events:
       -http:
           path: /foo
           method:
-            -GET
-            -POST
+            - GET
+            - POST
 
 layers:
   test:
@@ -94,10 +92,10 @@ Due to the large number of fields, the following table counts all currently supp
 | provider.description | √ |             |         |     |
 | provider.role | √ | √ |         |     |
 | provider.environment | √ | √ |         |     |
-| null |            | √ |         |     |
+| provider.serviceId |            | √ |         |     |
 | provider.vpcConfig | √ |             |         |     |
-| null | √ |             |         |     |
-| null | √ |             |         |     |
+| provider.vpcConfig.vpcId | √ |             |         |     |
+| provider.vpcConfig.vSwitchIds | √ |             |         |     |
 | provider.vpcConfig.securityGroupId | √ |             |         |     |
 | provider.internetAccess | √ |             |         |     |
 | provider.policies | √ |             |         |     |
@@ -132,7 +130,7 @@ Due to the large number of fields, the following table counts all currently supp
 | functions. [fnName] .events. [http] .role | √ |             |         |     |
 | functions. [fnName] .events. [http] .vesion | √ |             |         |     |
 |                                                      |            |             |         |     |
-| null[][] | √ | √ |         |     |
+| functions.[fnName].events.[http]  [][] | √ | √ |         |     |
 | functions. [fnName] .events. [apigw] .method | ○ Attachment 1 | √ |         |     |
 | functions. [fnName] .events. [apigw] .path | ○ | √ |         |     |
 | functions. [fnName] .events. [apigw] .serviceId |            | √ |         |     |
@@ -152,7 +150,7 @@ Due to the large number of fields, the following table counts all currently supp
 | functions. [fnName] .events. [mq] .name | √ |             |         |     |
 | functions. [fnName] .events. [mq] .topic | √ | √ |         |     |
 | functions. [fnName] .events. [mq] .strategy | √ |             |         |     |
-| null[][] | √ |             |         |     |
+| functions.[fnName].events.[mq].tags[][] | √ |             |         |     |
 | functions. [fnName] .events. [mq] .region | √ |             |         |     |
 | functions. [fnName] .events. [mq] .role | √ |             |         |     |
 | functions. [fnName] .events. [mq] .version | √ |             |         |     |
@@ -248,7 +246,7 @@ export interface ProviderStructure {
   serviceId?: string;
   vpcConfig ?: {
     vpcId: string;
-    null
+    vSwitchIds: string[];
     securityGroupId: string;
   };
   internetAccess?: boolean;
@@ -262,7 +260,7 @@ export interface ProviderStructure {
     | {
         userId: number;
         groupId: number;
-        null
+        mountPoints: Array<{
           serverAddr: string;
           mountDir: string;
         }>;
@@ -275,29 +273,30 @@ export interface ProviderStructure {
 | **ProviderStructure** | Type | Default | Description |
 | --------------------- | ---- | ------- | ----------- |
 | name | `aliyun` \| `tencent` | - | Required, platform information that can be published will be added later. |
-| null | Aliyun: nodejs6, nodejs8, nodejs10, nodejs12<br/>: nodejs6, nodejs8, nodejs10 | Aliyun: nodejs12<br/>: Tengxun Cloud: nodejs10 | Required, runtime of function |
+| runtime | Aliyun: nodejs6, nodejs8, nodejs10, nodejs12<br/>: nodejs6, nodejs8, nodejs10 | Aliyun: nodejs12<br/>: Tencent Cloud: nodejs10 | Required, runtime of function |
 | stage | string | - | Global published environment |
-| region | string | - | Tengxun Cloud has special deployment areas, such as ap-shanghai |
-| timeout | number | 3 | null |
+| region | string | - | Tencent Cloud has special deployment areas, such as ap-shanghai |
+| timeout | number | 3 | Timeout time, unit "seconds" |
 | initTimeout | Number | 3 | Aliyun field, global initialization function timeout, in seconds |
 | memorySize | number | 128 | Memory limit size, unit m |
 | description | string | - | Description |
 | role | string | - | role, the event source will use this role to trigger function execution, please ensure that the role has the permission to call the function.  |
 | environment | object | - | Global environment variable |
-| serviceId | string | - | Gateway service Id, currently only used by Tengxun Cloud |
+| serviceId | string | - | Gateway service Id, currently only used by Tencent Cloud |
 | vpcConfig | object | - | Alibaba Cloud fields. vpcConfig include `vpcId`, `vSwitchIds`, and `securityGroupId` attributes. |
 | internetAccess | boolean | - | the alibaba cloud field indicates whether the service can access the internet.  |
 | policies | string \| string [] | - | Aliyun field, the name of the RAM policies or RAM policy document that the function requires, will be attached to the default role of the function. If the Role property is set, the property is ignored.  |
 | logConfig | object | - | alibaba cloud field, log storage service configuration for function execution.  |
-| nasConfig | 'auto' \| object | - | null The configurable attributes of the Nas configuration object include `UserId`, `GroupId`, and `MountPoints`.  |
+| nasConfig | 'auto' \| object | - | Alibaba Cloud field, the Nas configuration object is used to specify the Nas shared file system that the function can access. The configurable properties of the Nas configuration object include: `UserId`, `GroupId`, `MountPoints`. |
 
 :::info
-We have mapped the Node.js Runtime version of Tengxun Cloud, and the corresponding relationship is as follows:
+We have mapped the Node.js Runtime version of Tencent Cloud, and the corresponding relationship is as follows:
 
 - nodejs10 -> Node.js10.15
 - nodejs8 -> Node.js8.9
 - node.js6 -> Node.js6.10
-   :::
+
+:::
 
 ### Example
 
@@ -379,17 +378,17 @@ The structure of a single function is as follows:
 
 | **FunctionStructure** |                      |                                                                                                               |
 | ----------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------- |
-| null | string | Required. The entry file is divided by ".". The **entry file name** is specified in the first half and the **entry function name** is specified in the second half.  |
+| name | string | Required. The entry file is divided by ".". The **entry file name** is specified in the first half and the **entry function name** is specified in the second half.  |
 | name | string | Function name |
 | description | string | Description |
 | memorySize | string | Memory limit size, unit m, if not configured, default provider.memorySize |
 | timeout | number | Timeout, in seconds,  |
-| If not configured, provider is taken by default. timeout |
+| If not configured, provider is taken by default. timeout |||
 | runtime | number | When the function is assigned to run separately, the same provider.runtime |
 | initTimeout | number | alibaba cloud field, initialization function timeout, unit seconds, default 3 |
 | environment | object | Function-level environment variables |
 | concurrency | number | Aliyun field, which sets the concurrency of an instance for a function (minimum 1, maximum 100), indicating how many requests a single function instance can handle at the same time. The default value is 1 |
-| stage | string | Tengxun cloud field, the environment in which the function is published. |
+| stage | string | Tencent cloud field, the environment in which the function is published. |
 | events | EventStructureType [] | Event, function trigger |
 |                                     |                      |                                                                                                               |
 |                                     |                      |                                                                                                               |
@@ -486,10 +485,10 @@ Events is an **object array** composed of different events (triggers). The key o
 | method | string | exposed http methods, such as get/post |
 | role | string | This role is used to trigger function execution |
 | version | string | Alibaba Cloud field, service version, default "LATEST".  |
-| serviceId | string | Tengxun cloud field, gateway Id |
-| cors | boolean | Tengxun cloud field, whether to open gateway CORS |
+| serviceId | string | Tencent cloud field, gateway Id |
+| cors | boolean | Tencent cloud field, whether to open gateway CORS |
 | timeout | number | Service timeout |
-| integratedResponse | boolean | Tengxun cloud field, whether to turn on integration corresponding, default true |
+| integratedResponse | boolean | Tencent cloud field, whether to turn on integration corresponding, default true |
 |                        |           |                                         |
 | **APIGatewayEvent** |           |                                         |
 | Same as HTTPEvent |           |                                         |
@@ -532,13 +531,13 @@ functions:
   hello1:
     handler: index.handler1
     events:
-      -http: # http trigger
+      - http: # http trigger
           path: /foo
           method: get
   hello3:
     handler: index.handler3
     events:
-      -mq:
+      - mq:
         	topic: mytopic
 ```
 
@@ -549,9 +548,9 @@ functions:
   hello1:
     handler: index.handler1
     events:
-      -http:
+      - http:
           path: /foo
-          Method: get,post // Aliyun supports multiple at the same time, Tencent only supports single
+          Method: get,post # Aliyun supports multiple at the same time, Tencent only supports single
 ```
 
 ```yaml
@@ -559,9 +558,9 @@ functions:
   hello1:
     handler: index.handler1
     events:
-      -http:
+      - http:
           path: /foo
-          method: all // all method
+          method: all # all method
 ```
 
 timer example
@@ -576,7 +575,7 @@ functions:
   hello3:
     handler: bbbbbb
     events:
-      -timer:
+      - timer:
           type: 'cron'
           value: '0 0 8 * * *'
           payload: 'test'
@@ -617,20 +616,20 @@ layers:
 
 ## package
 
-null
+Used to control packaging, include or ignore certain files, and specify the name of the final product to be packaged.
 
 ### Example
 
 ```yaml
 package: # Package Configuration
   include: # Package contains a list of files, which defaults to package.json, built code, and dependencies.
-  	-resource /*
+  	- resource /*
   exclude: # Package and Reject File List
-  	-test /*
-  artifact: code.zip# packaged compressed package file name
+  	- test /*
+  artifact: code.zip # packaged compressed package file name
 ```
 
-## null
+## Aggregation
 
 Set the structure of the aggregation deployment and specify that some functions are aggregated together and deployed as a new function.
 
@@ -638,19 +637,19 @@ Set the structure of the aggregation deployment and specify that some functions 
 
 ```yaml
 aggregation: # Aggregate deployment, please see the Aggregate Deployment section for details
-  null
+  index: # Aggregate Deployment Aggregate Name
     deployOrigin: false# whether to deploy the original method
     functions: # Aggregate deployment method list, higher than functionsPattern priority
-      null
-      -hello
+			- index # Aggregate deployment method name
+      - hello
     functionsPattern: # Aggregate deployment method matching rule, invalid when configuring functions
-      -'render * '# uses micromatch matching rules, that is, any function that starts with render
-      -'! render2'
+      - 'render*' # uses micromatch matching rules, that is, any function that starts with render
+      - '!render2'
 ```
 
 ## resource
 
-null
+Resource information configuration that each sub-project depends on.
 
 :::info
 Not used for the time being, as a reserved item.

@@ -20,12 +20,12 @@ Dependent package upgrade, related package upgrade to 3.0.
 
 ```json
 {
-  "dependencies ": {
-    "@midwayjs/core": "^3.0.0"
-    "@midwayjs/decorator": "^3.0.0"
+  "dependencies": {
+    "@midwayjs/core": "^3.0.0",
+    "@midwayjs/decorator": "^3.0.0",
   	"@midwayjs/faas": "^3.0.0"
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@midwayjs/cli": "^1.2.45 ",
     "@midwayjs/mock": "^3.0.0",
     "@midwayjs/serverless-app": "^3.0.0",
@@ -44,7 +44,7 @@ For example, provide faas as the main framework.
 // src/configuration
 import * as faas from '@midwayjs/faas';
 
-null
+@Configuration({
   // ...
   imports: [
     faas

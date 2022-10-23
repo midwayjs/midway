@@ -756,7 +756,7 @@ class CustomTransport extends EmptyTransport {
 We can initialize, add it to logger, or set level for Transport separately.
 
 ```typescript
-const customTransport = new CustomTransport ({
+const customTransport = new CustomTransport({
   level: 'warn',
 });
 

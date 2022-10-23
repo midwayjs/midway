@@ -1,6 +1,4 @@
----
-title: Timer 触发器（定时任务）
----
+# Timer trigger (timed task)
 
 A timed task trigger is used to periodically execute a function. Tencent Cloud Timer Trigger currently only supports cron format.
 
@@ -115,4 +113,3 @@ describe('test/hello_tencent.test.ts', () => {
 });
 ```
 
-##

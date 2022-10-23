@@ -1,6 +1,4 @@
----
-title: 文件上传
----
+# 文件上传
 
 Midway Hooks 提供了 `@midwayjs/hooks-upload` 并配合 `@midwayjs/upload` 来实现纯函数 + 一体化项目中的文件上传功能。
 

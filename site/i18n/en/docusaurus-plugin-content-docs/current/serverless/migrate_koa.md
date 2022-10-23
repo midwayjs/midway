@@ -7,7 +7,7 @@ Midway Serverless provides a general application migration scheme, which can pub
 Add the `f.yml` file to the root directory of the code.
 
 ```yaml
-null
+service: my-koa-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -64,7 +64,7 @@ const app = new Koa();
 // app.listen(3000);
 
 // Export the default app
-null
+module.exports = async () => {
   // do some async method, like db connect
   return app;
 };
@@ -75,13 +75,13 @@ null
 If you want to build a copied directory in the root directory of the project, such as the `public` directory of static files, configure the `package.include` field in `f.yml`.
 
 ```yaml
-service: name of my-egg-demo ## application published to cloud platform
+service: my-koa-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
 
 deployType:
-  null
+  type: koa               ## Deployed Application Type
   version: 3.0.0
 
 package:
@@ -97,11 +97,11 @@ In the `package.json` configuration Scripts script and dev dependency `@midwayjs
 
 ```json
 {
-  null
+  "devDependencies": {
     "@midwayjs/cli": "^1.2.36"
     ...
   },
-  "scripts ": {
+  "scripts": {
     "deploy": "midway-bin deploy ",
     ...
   }
@@ -112,7 +112,7 @@ Or use a different npm package to accelerate.
 
 ```bash
 {
-  "scripts ": {
+  "scripts": {
     "deploy": "midway-bin deploy --npm=cnpm ",
     ...
   }
@@ -122,29 +122,29 @@ Or use a different npm package to accelerate.
 You can also execute commands separately.
 
 ```bash
-null
-$npx midway-bin deploy --npm=cnpm ## deploy by cnpm
+$ npx midway-bin deploy										## deploy by npm
+$ npx midway-bin deploy --npm=cnpm ## deploy by cnpm
 ```
 
 ## Default
 
-### ariyun
+### Aliyun
 
 
 By default, it is published as an http trigger. If you need an API gateway, you can modify and configure the functions structure according to the format of f.yml. At the same time, you need to configure routes on the platform.
 
-### Tengxun cloud
+### Tencent cloud
 
 
 By default, it is published as an API gateway trigger and the gateway route is automatically configured.
 
 
-### null
+### Modify the deployed function name
 
 You can use the name field.
 
 ```yaml
-service: name of my-demo ## application published to cloud platform
+service: my-demo 
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc

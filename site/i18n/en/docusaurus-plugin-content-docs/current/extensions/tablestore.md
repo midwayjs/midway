@@ -9,7 +9,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -23,11 +23,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/tablestore": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -44,7 +44,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as tablestore from '@midwayjs/tablestore';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     tablestore // Import tablestore Components
   ],
@@ -79,16 +79,15 @@ export default {
 }
 ```
 
-
-**null**
+**Multiple client configuration, need to configure multiple**
 
 ```typescript
 // src/config/config.default
 export default {
   // ...
   tableStore: {
-    null
-      Db1: {
+    clients: {
+      db1: {
         accessKeyId: '<your access key id>',
         secretAccessKey: '<your access key secret>',
         stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html */
@@ -106,7 +105,7 @@ export default {
   },
 }
 ```
-null[](https://github.com/aliyun/aliyun-tablestore-nodejs-sdk)
+For more parameters, please refer to the [aliyun tablestore sdk](https://github.com/aliyun/aliyun-tablestore-nodejs-sdk) document.
 
 
 ## Use TableStore service
@@ -114,23 +113,23 @@ null[](https://github.com/aliyun/aliyun-tablestore-nodejs-sdk)
 
 We can inject it into any code.
 ```typescript
-null
+import { Provide, Controller, Inject, Get } from '@midwayjs/decorator';
 import { TableStoreService } from '@midwayjs/tablestore';
 
 @Provide()
 export class UserService {
 
-  null
+  @Inject()
   tableStoreService: TableStoreService;
 
-  null
+  async invoke() {
     await this.tableStoreService.putRow(params);
   }
 }
 ```
 
 
-null``
+Different instances can be obtained using `TableStoreServiceFactory`.
 ```typescript
 import { TableStoreServiceFactory } from '@midwayjs/tablestore';
 import { join } from 'path';
@@ -138,8 +137,8 @@ import { join } from 'path';
 @Provide()
 export class UserService {
 
-  null
-  null
+  @Inject()
+  tableStoreServiceFactory: TableStoreServiceFactory;
 
   async save() {
     const db1 = await this.tableStoreServiceFactory.get('db1');
@@ -170,9 +169,9 @@ export class UserService {
   @Inject()
   tableStoreService: TableStoreService;
 
-  null
+  async getInfo() {
 
-    const data = await tableStoreService.getRow ({
+    const data = await tableStoreService.getRow({
       tableName: "sampleTable ",
       primaryKey: [{ 'gid': Long.fromNumber(20013) }, { 'uid': Long.fromNumber(20013) }]
       columnFilter: condition

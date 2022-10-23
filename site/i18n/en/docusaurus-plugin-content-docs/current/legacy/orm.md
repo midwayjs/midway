@@ -31,12 +31,12 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/orm": "^3.0.0",
     "typeorm": "~0.3.0 ",
-    null
+    // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -44,7 +44,7 @@ Or reinstall the following dependencies in `package.json`.
 
 
 
-## null
+## Enable component
 
 
 Introducing orm components in `src/configuration.ts`, an example is as follows.
@@ -55,7 +55,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as orm from '@midwayjs/orm';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     orm // load orm components
@@ -82,7 +82,7 @@ npm install mysql --save
 npm install mysql2 --save
 
 # for PostgreSQL or CockroachDB
-null
+npm install pg --save
 
 # for SQLite
 npm install sqlite3 --save
@@ -100,7 +100,7 @@ npm install oracledb --save
 npm install mongodb --save
 ```
 
-null
+:::info
 To make the** Oracle driver work**, you need to follow the installation instructions from [their](https://github.com/oracle/node-oracledb) site.
 :::
 
@@ -115,14 +115,14 @@ Let's take a simple project as an example. Please refer to other structures your
 
 ```
 MyProject
-The src // TS root directory
-│ ├── config
-│ │ │ ── config.default.ts // Application Profile
-│ │ ── entity // entity (database Model) directory
-│ │ │-Photo. TS // entity file
-│ │ └── photoMetadata.ts
-│ │ ── configuration.ts // Midway configuration file
-│-service // Other Service Catalog
+├── src              							// TS root directory
+│   ├── config
+│   │   └── config.default.ts 		// Application Profile
+│   ├── entity       							// entity (database Model) directory
+│   │   └── photo.ts  					  // entity file
+│   │   └── photoMetadata.ts
+│   ├── configuration.ts     			// Midway configuration file
+│   └── service      							// Other service directory
 ├── .gitignore
 ├── package.json
 ├── README.md
@@ -146,7 +146,7 @@ Next, we will take mysql as an example.
 ### 1. Create Model
 
 
-null
+We associate the model with the database. The model in the application is the database table. In TypeORM, the model is bound to the entity. Each Entity file is a Model and an Entity.
 
 
 In the example, you need an entity. Let's take `photo` as an example. Create an entity directory and add the entity file `photo.ts` to the entity directory. A simple entity is as follows.
@@ -215,12 +215,12 @@ These entity columns can also be generated using [typeorm_generator](/docs/tool/
 ### 3. Add database columns
 
 
-null``
+Attributes are decorated with the `@Column` decorator provided by typeorm, and each attribute corresponds to a column.
 
 
 ```typescript
 // entity/photo.ts
-null
+import { EntityModel } from '@midwayjs/orm';
 import { Column } from 'typeorm';
 
 @EntityModel()
@@ -242,7 +242,7 @@ export class Photo {
   views: number;
 
   @Column()
-  null
+  isPublished: boolean;
 
 }
 ```
@@ -345,7 +345,7 @@ export class Photo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column ({
+  @Column({
   	length: 100
   })
   name: string;
@@ -369,7 +369,7 @@ export class Photo {
 Example, different column names
 
 ```typescript
-@Column ({
+@Column({
   length: 100
   name: 'custom_name'
 })
@@ -399,7 +399,7 @@ The column type is database-specific. You can set any column type supported by t
 ### 7. Configure connection information
 
 
-null[](/docs/env_config)
+Please refer to the [Configuration](/docs/env_config) chapter to add configuration files.
 
 
 Then configure the database connection information in `config.default.ts`.
@@ -435,7 +435,7 @@ export default {
   // ...
   orm: {
     // ...
-  	null
+  	timezone: '+08:00',
   },
 }
 ```
@@ -472,7 +472,7 @@ Note: synchronize fields are used to synchronize table structures. It is not saf
 In common Midway files, use the `@InjectEntityModel` decorator to inject our configured Model. All we need to do is:
 
 
-- null
+- 1. Create entity objects
 - 2. Execute the `save()`
 
 ```typescript
@@ -511,7 +511,7 @@ export class PhotoService {
 
 For more information, see [find documentation](https://github.com/typeorm/typeorm/blob/master/docs/zh_CN/find-options.md).
 
-null
+The query API has changed since typeorm@0.3.0.
 
 ```typescript
 import { Provide } from '@midwayjs/decorator';
@@ -531,7 +531,7 @@ export class PhotoService {
     // find All
     let allPhotos = await this.photoModel.find(); // v0.2.x
     let allPhotos = await this.photoModel.find({}); // v0.3.x
-    null
+    console.log("All photos from the db: ", allPhotos);
 
     // find first
     let firstPhoto = await this.photoModel.findOne(1);
@@ -546,7 +546,7 @@ export class PhotoService {
     // v0.2.x
     let meAndBearsPhoto = await this.photoModel.findOne({ name: "Me and Bears" });
     // v0.3.x
-    null
+    let meAndBearsPhoto = await this.photoModel.findOne({
       where: { name: "Me and Bears"}
     });
     console.log("Me and Bears photo from the db: ", meAndBearsPhoto);
@@ -555,15 +555,15 @@ export class PhotoService {
     // v0.2.x
     let allViewedPhotos = await this.photoModel.find({ views: 1 });
     // v0.3.x
-    let allViewedPhotos = await this.photoModel.find ({
+    let allViewedPhotos = await this.photoModel.find({
       where: { views: 1}
     });
     console.log("All viewed photos: ", allViewedPhotos);
 
     // v0.2.x
-    null
+    let allViewedPhotos = await this.photoModel.find({ views: 1 });
     // v0.3.x
-    let allPublishedPhotos = await this.photoModel.find ({
+    let allPublishedPhotos = await this.photoModel.find({
       where: { isPublished: true}
     });
     console.log("All published photos: ", allPublishedPhotos);
@@ -603,7 +603,7 @@ export class PhotoService {
   async updatePhoto() {
 
     let photoToUpdate = await this.photoModel.findOne(1);
-    null
+    photoToUpdate.name = "Me, my friends and polar bears";
 
     await this.photoModel.save(photoToUpdate);
   }
@@ -651,7 +651,7 @@ Let's create a one-to-one relationship with another class. Let's create a new cl
 
 
 ```typescript
-null
+import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { EntityModel } from '@midwayjs/orm';
 import { Photo } from "./photo";
 
@@ -694,17 +694,17 @@ We also added an `@JoinColumn` decorator, which indicates that this side of the 
 
 
 ```
-+----------------------------
-| photo_metadata |
-+----------------------------
-| id | int(11) | PRIMARY KEY AUTO_INCREMENT |
-| height | int(11) | |
-| width | int(11) | |
-| comment | varchar(255) | |
-| compressed | boolean | |
-| orientation | varchar(255) | |
-| photoId | int(11) | FOREIGN KEY |
-+----------------------------
++-------------+--------------+----------------------------+
+|                     photo_metadata                      |
++-------------+--------------+----------------------------+
+| id          | int(11)      | PRIMARY KEY AUTO_INCREMENT |
+| height      | int(11)      |                            |
+| width       | int(11)      |                            |
+| comment     | varchar(255) |                            |
+| compressed  | boolean      |                            |
+| orientation | varchar(255) |                            |
+| photoId     | int(11)      | FOREIGN KEY                |
++-------------+--------------+----------------------------+
 ```
 
 
@@ -733,8 +733,8 @@ export class PhotoService {
     let photo = new Photo();
     photo.name = "Me and Bears";
     photo.description = "I am near polar bears";
-    null
-    null
+    photo.filename = "photo-with-bears.jpg";
+    photo.isPublished = true;
 
     // create a photo metadata
     let metadata = new PhotoMetadata();
@@ -753,7 +753,7 @@ export class PhotoService {
     await this.photoMetadataModel.save(metadata);
 
     // done
-    null
+    console.log("Metadata is saved, and relation between metadata and photo is created in the database too");
   }
 }
 ```
@@ -773,7 +773,7 @@ import { Photo } from './photo';
 @EntityModel()
 export class PhotoMetadata {
 
-  null
+  /* ... other columns */
 
   @OneToOne(type => Photo, photo => photo.metadata)
   @JoinColumn()
@@ -783,7 +783,7 @@ export class PhotoMetadata {
 
 ```typescript
 import { EntityModel } from '@midwayjs/orm';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { PhotoMetadata } from './photoMetadata';
 
 @EntityModel()
@@ -796,7 +796,7 @@ export class Photo {
 }
 ```
 
-`Photo => photo.metadata` is a function that returns a reverse mapping relationship. Here, we explicitly declare that metadata properties of the Photo class are used to associate PhotoMetadata. null```` But we used this function callback method to make our code writing simpler.
+`photo => photo.metadata` is a function that returns a reverse mapping relationship. Here, we explicitly declare the metadata property of the Photo class to associate PhotoMetadata. In addition to passing functions that return the photo property, you can also pass strings directly to the `@OneToOne` decorator, such as `"metadata"` . But we use this method of function callback to make our code writing easier.
 
 
 Note that the `@JoinColumn` decorator will only be used on one side of the relationship map. No matter which side of this decorator you place, you are the owner of the relationship. The owner of the relationship contains columns with foreign keys in the database.
@@ -805,7 +805,7 @@ Note that the `@JoinColumn` decorator will only be used on one side of the relat
 ### 14. Load objects and their dependencies
 
 
-Now, let's try to load Photo and PhotoMetadata together in a single query. There are two ways to do this, using the `find *` method or using the `QueryBuilder` function. Let's first use the `find *` method.  `null`````
+Now, let's try to load out Photo and PhotoMetadata together in a single query. There are two ways to do this, using the `find *` method or using the `QueryBuilder` function. Let's use the `find *` method first. The `find*` methods allow you to specify objects using the `FindOneOptions` / `FindManyOptions` interfaces.
 
 
 ```typescript
@@ -821,7 +821,7 @@ export class PhotoService {
   photoModel: Repository<Photo>;
 
   // find
-  null
+  async findPhoto() {
 		/*...*/
     let photos = await this.photoModel.find({ relations: [ 'metadata' ] }); // typeorm@0.2.x
   }
@@ -829,7 +829,7 @@ export class PhotoService {
 
 ```
 
-null Learn more about the `Find Options` in [this document](https://github.com/typeorm/typeorm/blob/master/docs/find-options.md).
+Here, the value of photos is an array containing the query results for the entire database, and each photo object contains its associated metadata property. Learn more about `Find Options` in [this documentation](https://github.com/typeorm/typeorm/blob/master/docs/find-options.md).
 
 
 `Find Options` is simple, but if you need more complex queries, you should use `QueryBuilder` instead.  `QueryBuilder` allows more complex queries to be used in an elegant way.
@@ -872,7 +872,7 @@ export class Photo {
   /// ... other columns
 
   @OneToOne(type => PhotoMetadata, metadata => metadata.photo, {
-    null
+    cascade: true,
   })
   metadata: PhotoMetadata;
 }
@@ -917,7 +917,7 @@ export class PhotoService {
     await this.photoModel.save(photo);
 
     // done
-    null
+    console.log("Photo is saved, photo metadata is saved too");
   }
 }
 ```
@@ -979,27 +979,27 @@ After the application is run, ORM creates the `author` table:
 
 
 ```
-+----------------------------
-| author |
-null
-| id | int(11) | PRIMARY KEY AUTO_INCREMENT |
-| name | varchar(255) | |
-+----------------------------
++-------------+--------------+----------------------------+
+|                          author                         |
++-------------+--------------+----------------------------+
+| id          | int(11)      | PRIMARY KEY AUTO_INCREMENT |
+| name        | varchar(255) |                            |
++-------------+--------------+----------------------------+
 ```
 
 It also modifies the `photo` table, adds a new `author` column, and creates a foreign key for it:
 
 ```
-+----------------------------
-| photo |
-+----------------------------
-| id | int(11) | PRIMARY KEY AUTO_INCREMENT |
-| name | varchar(255) | |
-| description | varchar(255) | |
-| filename | varchar(255) | |
-| isPublished | boolean | |
-| authorId | int(11) | FOREIGN KEY |
-+----------------------------
++-------------+--------------+----------------------------+
+|                         photo                           |
++-------------+--------------+----------------------------+
+| id          | int(11)      | PRIMARY KEY AUTO_INCREMENT |
+| name        | varchar(255) |                            |
+| description | varchar(255) |                            |
+| filename    | varchar(255) |                            |
+| isPublished | boolean      |                            |
+| authorId    | int(11)      | FOREIGN KEY                |
++-------------+--------------+----------------------------+
 ```
 
 
@@ -1048,12 +1048,12 @@ After running the application, ORM will create a album_photos_photo_albums join 
 
 
 ```
-+----------------------------
-| album_photos_photo_albums |
-+----------------------------
-| album_id | int(11) | PRIMARY KEY FOREIGN KEY |
-| photo_id | int(11) | PRIMARY KEY FOREIGN KEY |
-+----------------------------
++-------------+--------------+----------------------------+
+|                album_photos_photo_albums                |
++-------------+--------------+----------------------------+
+| album_id    | int(11)      | PRIMARY KEY FOREIGN KEY    |
+| photo_id    | int(11)      | PRIMARY KEY FOREIGN KEY    |
++-------------+--------------+----------------------------+
 ```
 
 
@@ -1099,7 +1099,7 @@ export class PhotoService {
     // now our photo is saved and albums are attached to it
     // now lets load them:
     const loadedPhoto = await this.photoModel.findOne(1, { relations: ["albums"] }); // typeorm@0.2.x
-  null
+  }
 }
 ```
 
@@ -1160,7 +1160,7 @@ import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from
 
 @Provide()
 @EventSubscriberModel()
-null
+export class EverythingSubscriber implements EntitySubscriberInterface {
 
   /**
    * Called before entity insertion.
@@ -1297,7 +1297,7 @@ export class Photo {
 ### Get connection pool
 
 ```typescript
-null
+import { Configuration } from '@midwayjs/decorator';
 import { getConnection } from 'typeorm';
 
 @Configuration()
@@ -1384,13 +1384,13 @@ The time column in the entity requires a column type.
 @EntityModel()
 export class Photo {
   //...
-  null
+  @UpdateDateColumn({
     name: "gmt_modified ",
     type: 'timestamp'
   })
   gmtModified: Date;
 
-  @CreateDateColumn ({
+  @CreateDateColumn({
     name: "gmt_create ",
     type: 'timestamp'
   })
@@ -1401,7 +1401,7 @@ export class Photo {
 In this way, the output time field is the current time zone.
 
 
-null
+The effect is as follows:
 
 
 **Before configuring:**
@@ -1429,20 +1429,19 @@ If the `@UpdateDateColumn` and `@CreateDateColumn` columns are used, note that t
 
 There are two solutions: **1. Modify the default value of a table** or **2. Modify the default value of a column in the code**
 
-
-**null**
+**If you don't want to modify the table, but want to modify the code, please refer to the code below. **
 
 ```typescript
-@Column ({
+@Column({
   default: () => "NOW() ",
   type: 'timestamp'
 })
 createdOn: Date;
 
-@Column ({
+@Column({
   default: () => "NOW() ",
   type: 'timestamp'
-null
+})
 modifiedOn: Date;
 ```
 

@@ -25,10 +25,11 @@ Midway 当前采用了最新的 [Socket.io (v4.0.0)](https://socket.io/docs/v4) 
 
 
 
-## 创建示例
+## 安装依赖
 
 
-或者在现有项目中安装 Socket.io 的依赖。
+在现有项目中安装 Socket.io 的依赖。
+
 ```bash
 $ npm i @midwayjs/socketio@3 --save
 ## 客户端可选

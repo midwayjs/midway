@@ -27,7 +27,7 @@ In order for tsc compilation to find the source directory, it is necessary to mo
 ```typescript
 {
   "compileOnSave": true
-  "compilerOptions ": {
+  "compilerOptions": {
     // ...
     "rootDir": "server"
   },
@@ -48,7 +48,7 @@ Modify the `outDir` field in the `tsconfig.json`.
 ```typescript
 {
   "compileOnSave": true
-  "compilerOptions ": {
+  "compilerOptions": {
     // ...
     "outDir": "build"
   },
@@ -73,7 +73,7 @@ const { Bootstrap } = require('@midwayjs/bootstrap');
 
 // configure method is required to configure baseDir
 Bootstrap
-  .configure ({
+  .configure({
     baseDir: join(__dirname, 'build')
   })
   .run();

@@ -1,6 +1,4 @@
----
-title: 默认错误行为
----
+# 默认错误行为
 
 ## 错误值处理
 
@@ -49,7 +47,7 @@ async invoke() {
 
 如图所示。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1625205528496-96f7d2b8-d728-4f04-82f4-f2617e00720b.png#clientId=uf90c84ad-5af6-4&from=paste&height=184&id=u9c48573b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=184&originWidth=533&originalType=binary&ratio=1&size=7090&status=done&style=none&taskId=u9ff827c3-41a4-4b19-bedb-83ee598cc4e&width=533" width="533" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1625205528496-96f7d2b8-d728-4f04-82f4-f2617e00720b.png)
 
 
 

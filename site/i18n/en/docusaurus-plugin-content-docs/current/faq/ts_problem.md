@@ -14,7 +14,7 @@ You can turn off dependency package checking at `tsconfig.json`.
 
 ```typescript
 {
-  "compilerOptions ": {
+  "compilerOptions": {
     "skipLibCheck": true
   },
 }
@@ -72,7 +72,7 @@ The first: remove undefined variables
 The second: remove tsconfig.json's inspection rules
 ```json
 {
-  "compilerOptions ": {
+  "compilerOptions": {
     "noUnusedLocals": false
   },
 }
@@ -90,17 +90,17 @@ This is a ts/ts-node problem. For issue, see [#782](https://github.com/TypeStron
 
 For example:
 ```json
-"typeRoots ": [
-    "./node_modules/@types ",
-    "./typings"
-  ],
-  "include ": [
-    "src ",
-    "typings"
-  ],
-  "exclude ": [
-    "dist ",
-    "node_modules"
-  ],
+"typeRoots": [
+  "./node_modules/@types ",
+  "./typings"
+],
+"include": [
+  "src ",
+  "typings"
+],
+"exclude": [
+  "dist ",
+  "node_modules"
+],
 ```
 As mentioned above, if the typings is not written in the include, the definition cannot be found in dev/build and an error will be reported.

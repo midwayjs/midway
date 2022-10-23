@@ -47,7 +47,7 @@ Then we can configure this file (directory) in `src/configuration.ts`, and the f
 import { Configuration } from '@midwayjs/decorator';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   importConfigs: [
     join(__dirname, './config/')
   ]
@@ -76,7 +76,7 @@ import { join } from 'path';
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 
-@Configuration ({
+@Configuration({
   importConfigs: [
     {
       default: DefaultConfig
@@ -171,7 +171,7 @@ For example, the directory structure is as follows (note the `customConfig.defau
 import { Configuration } from '@midwayjs/decorator';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   importConfigs: [
     join(__dirname, './config/')
     join(__dirname, '../customConfig.default')
@@ -390,9 +390,9 @@ For example, the data source is:
 
 ```json
 {
-  "userService ": {
-  	"appname ": {
-      "test ": {
+  "userService": {
+  	"appname": {
+      "test": {
       	"data": "xxx"
       }
     }
@@ -454,7 +454,7 @@ import { IMidwayContainer } from '@midwayjs/core';
 import { join } from 'path';
 Import {RemoteConfigService } from '../service/remote'; // Custom Get Remote Configuration Service
 
-@Configuration ({
+@Configuration({
   importConfigs: [
     join(__dirname, './config/')
   ]
@@ -535,7 +535,7 @@ import * as dotenv from 'dotenv';
 // load .env file in process.cwd
 dotenv.config();
 
-@Configuration ({
+@Configuration({
   //...
 })
 export class AutoConfiguration {

@@ -5,6 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
+    "start_en": "docusaurus start --locale en",
     "build": "node ./lib/example2sandbox.js && docusaurus build",
     "update-hooks-docs": "degit https://github.com/midwayjs/hooks/docs ./docs/hooks --force",
     "format:docs": "prettier docs/*.md --write",

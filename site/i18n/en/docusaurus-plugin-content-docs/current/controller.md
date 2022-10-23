@@ -781,7 +781,7 @@ import { Controller, Get, SetHeader } from "@midwayjs/decorator";
 export class HomeController {
 
   @Get('/')
-  @SetHeader ({
+  @SetHeader({
   	'x-bbb ': '123',
     'x-ccc ': '234'
   })

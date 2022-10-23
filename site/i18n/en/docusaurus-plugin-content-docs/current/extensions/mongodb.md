@@ -1,6 +1,6 @@
 # MongoDB
 
-In this chapter, we choose [Typegoose](https://github.com/typegoose/typegoose) as the MongoDB ORM library based on it. null
+In this chapter, we choose [Typegoose](https://github.com/typegoose/typegoose) as the base MongoDB ORM library. As he describes "Define Mongoose models using TypeScript classes", it works well with TypeScript.
 
 Simply put, Typegoose using TypeScript "wrappers" to write Mongoose models, most of its capabilities are provided by [mongoose](https://www.npmjs.com/package/mongoose) libraries.
 
@@ -13,7 +13,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -71,7 +71,7 @@ The installation package depends on the following version:
 **Support MongoDB Server 5.x**
 
 ```json
-  "dependencies ": {
+  "dependencies": {
     "mongoose": "^6.0.7 ",
     "@typegoose/typegoose": "9.0.0", // This dependency needs to be installed using typegoose
   },
@@ -81,9 +81,9 @@ The installation package depends on the following version:
 **Support MongoDB Server 4.4.x**
 
 
-null
+The following versions do not require additional definition packages to be installed.
 ```json
-  "dependencies ": {
+  "dependencies": {
     "mongoose": "^5.13.3 ",
     "@typegoose/typegoose": "8.0.0", // This dependency needs to be installed using typegoose
   },
@@ -92,19 +92,19 @@ null
 
 The following versions require additional definition packages to be installed (not recommended).
 ```json
- "dependencies ": {
+ "dependencies": {
     "mongodb": "3.6.3", // The version is written inside the mongoose
     "mongoose": "~5.10.18 ",
     "@typegoose/typegoose": "7.0.0", // This dependency needs to be installed using typegoose
  },
- "devDependencies ": {
+ "devDependencies": {
     "@types/mongodb": "3.6.3", // this version can only be used
     "@types/mongoose": "~5.10.3 ",
  }
 ```
 
 
-null
+The rest of the MongoDB installation modules are similar and not tested.
 
 
 
@@ -126,12 +126,12 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     // Components
     "@midwayjs/typegoose": "^3.0.0",
     // mongoose dependency in the previous section
   },
-  "devDependencies ": {
+  "devDependencies": {
     // mongoose dependency in the previous section
     // ...
   }
@@ -140,14 +140,14 @@ Or reinstall the following dependencies in `package.json`.
 
 
 
-null``
+After installation, you need to manually configure it in `src/configuration.ts`, the code is as follows.
 
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 import * as typegoose from '@midwayjs/typegoose';
 
-@Configuration ({
+@Configuration({
   imports: [
     typegoose // Load typegoose Components
   ],
@@ -167,18 +167,18 @@ In this component, midway just makes a simple configuration regularization and i
 ### 2. Simple directory structure
 
 
-null
+We take a simple project as an example, please refer to other structures.
 
 
-```
+```text
 MyProject
-The src // TS root directory
-│ ├── config
-│ │ │ ── config.default.ts // Application Profile
-│ │ ── entity // entity (database Model) directory
-│ │ │ ── user.ts // entity file
-│ │ ── configuration.ts // Midway configuration file
-│-service // Other Service Catalog
+├── src              							// TS root directory
+│   ├── config
+│   │   └── config.default.ts 		// Application Profile
+│   ├── entity       							// entity (database Model) directory
+│   │   └── user.ts  					  	// entity file
+│   ├── configuration.ts     			// Midway configuration file
+│   └── service      							// Other service directory
 ├── .gitignore
 ├── package.json
 ├── README.md
@@ -210,7 +210,7 @@ export class User {
 Equivalent to the following code that uses the mongoose
 
 ```typescript
-const userSchema = new mongoose.Schema ({
+const userSchema = new mongoose.Schema({
   name: String
   jobs: [{ type: String }]
 });
@@ -242,12 +242,10 @@ export default {
         options: {
           useNewUrlParser: true
           useUnifiedTopology: true
-          null
+          user: '***********',
           pass: '***********'
         },
-        // Associated Entities,
-        null
-        // Entity and directory can exist at the same time ['../entity', User]
+        // Associated Entities
         entities: [ User]
       }
     }
@@ -271,7 +269,7 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { User } from '../entity/user';
 
 @Provide()
-null
+export class TestService {
 
   @InjectEntityModel(User)
   userModel: ReturnModelType<typeof User>;
@@ -331,16 +329,16 @@ export default {
           useUnifiedTopology: true
           user: '***********',
           pass: '***********'
-        null
+        },
         entities: [ User]
       },
-      Db1: {
+      db1: {
         uri: 'mongodb://localhost:27017/test1',
         options: {
           useNewUrlParser: true
           useUnifiedTopology: true
-          null
-          null
+          user: '***********',
+          pass: '***********'
         },
         entities: [ User2]
       }
@@ -350,8 +348,7 @@ export default {
 ```
 
 
-Use fixed connections when defining instances,
-Configuring Model dataSource scanning automatically associates mongoose connections (getModelForClass(Model, { existingConnection: conn }))
+Use a fixed connection when defining an instance, and configure the Model to automatically associate the mongoose connection when scanning the dataSource (`getModelForClass(Model, { existingConnection: conn })`).
 ```typescript
 @Provide()
 export class TestService {
@@ -389,13 +386,13 @@ import { Configuration } from '@midwayjs/decorator';
 import * as typegoose from '@midwayjs/typegoose';
 import * as Typegoose from '@typegoose/typegoose';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {
   async onReady() {
 
-    Typegoose.setGlobalOptions ({
+    Typegoose.setGlobalOptions({
       schemaOptions: {
         // ...
       },
@@ -421,21 +418,21 @@ mongoose component is the basic component of typegoose, sometimes we can use it 
 **Please note that please check the first section to write/install mongoose and other related dependency packages in advance.**
 
 ```bash
-$ npm i @midwayjs/mongoose --save
+$ npm i @midwayjs/mongoose@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
 
 ```json
-null
-  "dependencies ": {
+{
+  "dependencies": {
     // Components
     "@midwayjs/mongoose": "^3.0.0",
     // mongoose dependency in the previous section
-  null
-  null
+  },
+  "devDependencies": {
     // mongoose dependency in the previous section
-    null
+    // ...
   }
 }
 ```
@@ -451,9 +448,9 @@ After installation, you need to manually configure `src/configuration.ts`. The c
 import { Configuration } from '@midwayjs/decorator';
 import * as mongoose from '@midwayjs/mongoose';
 
-@Configuration ({
+@Configuration({
   imports: [
-    null
+    mongoose  											// enable mongoose component
   ],
   importConfigs: [
   	join(__dirname, './config')
@@ -489,9 +486,9 @@ export default {
           pass: '**********'
         }
       }
-    null
+    }
   },
-null
+}
 ```
 Multi-library:
 ```typescript
@@ -508,7 +505,7 @@ export default {
           pass: '***********'
         }
       },
-      Db1: {
+      db1: {
         uri: 'mongodb://localhost:27017/test1',
         options: {
           useNewUrlParser: true
@@ -551,13 +548,13 @@ export class TestService {
   }
 
   async invoke() {
-    const schema = new Schema<User> ({
+    const schema = new Schema<User>({
       name: { type: String, required: true}
       email: { type: String, required: true}
       avatar: String
     });
     const UserModel = this.conn.model<User>('User', schema);
-    null
+    const doc = new UserModel({
       name: 'Bill',
       email: 'bill@initech.com',
       avatar: 'https:// I .imgur.com/dM7Thhn.png'
@@ -589,11 +586,11 @@ In special scenarios, such as when the Serverless cannot modify the Node.js vers
 
 
 ```typescript
-null
+// src/configuration.ts
 
 Object.defineProperty(process, 'version', {
   value: 'v12.22.0',
-  null
+  }
 });
 
 // other code

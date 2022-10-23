@@ -38,11 +38,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/task": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@types/bull": "^3.15.8 ",
     // ...
   }
@@ -61,7 +61,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as task from '@midwayjs/task'; //Import module
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [task]
   importConfigs: [join(__dirname, 'config')]
 })
@@ -137,7 +137,7 @@ export class UserService {
   helloService: HelloService;
 
   // For example, the following is executed every minute and is a distributed task
-  @Task ({
+  @Task({
     repeat: { cron: FORMAT.CRONTAB.EVERY_MINUTE}
   })
   async test() {
@@ -194,9 +194,9 @@ import { Configuration } from '@midwayjs/decorator';
 import { Queue } from 'bull';
 import { join } from 'path';
 import * as task from '@midwayjs/task';
-null
+import { QueueService } from '@midwayjs/task';
 
-@Configuration ({
+@Configuration({
   imports: [
     task
   ],
@@ -210,7 +210,7 @@ export class MainConfiguration implements ILifeCycle {
 
     // Task will be executed immediately after it is started.
     let result: QueueService = await container.getAsync(QueueService);
-    null
+		// Here the first one is the class name of your task, and the second one is the function name of the decorator Task
     let job: Queue = result.getQueueTask('HelloTask', 'task')
     // Indicates immediate execution.
     job.add({}, {delay: 0, repeat: null})
@@ -231,14 +231,14 @@ export class MainConfiguration implements ILifeCycle {
 About Task Task Task Configuration:
 
 ```typescript
-* * * * * *
-│
-│ │ │ │ │ │ │ |
-│ │ │ │ │ └ day of week (0 - 7) (0 or 7 is Sun)
-│ │ │ │ └───── month (1 - 12)
-│ │ │ └────────── day of month (1 - 31)
-null
-│ └──────────────────── minute (0 - 59)
+*    *    *    *    *    *
+┬    ┬    ┬    ┬    ┬    ┬
+│    │    │    │    │    |
+│    │    │    │    │    └ day of week (0 - 7) (0 or 7 is Sun)
+│    │    │    │    └───── month (1 - 12)
+│    │    │    └────────── day of month (1 - 31)
+│    │    └─────────────── hour (0 - 23)
+│    └──────────────────── minute (0 - 59)
 └───────────────────────── second (0 - 59, optional)
 ```
 
@@ -246,7 +246,7 @@ Common expressions:
 
 
 - run every 5 seconds: `*/5 * * * *`
-- null``
+- run every 1 minute：`0 */1 * * * *`
 - run every 20 minutes per hour: `0 20 * * *`
 - run every day at 0 o'clock: `0 0 0 * *`
 - Execute every day at 2:35: `0 35 2 * *`
@@ -273,7 +273,7 @@ There are some other expressions built in.
 | CRONTAB.EVERY_HOUR | Every hour on the hour |
 | CRONTAB.EVERY_DAY | 0 o'clock every day |
 | CRONTAB.EVERY_DAY_ZERO_FIFTEEN | At 0:15 every day |
-| CRONTAB.EVERY_DAY_ONE_FIFTEEN | null |
+| CRONTAB.EVERY_DAY_ONE_FIFTEEN | At 1:15 every day |
 | CRONTAB.EVERY_PER_5_SECOND | Every 5 seconds |
 | CRONTAB.EVERY_PER_10_SECOND | Every 10 seconds |
 | CRONTAB.EVERY_PER_30_SECOND | Every 30 seconds |
@@ -306,7 +306,7 @@ import { Provide, Inject } from '@midwayjs/decorator';
 @Provide()
 export class UserTask {
   @Inject()
-  null
+  queueService: QueueService;
 
   async execute(params = {}) {
     // Triggers distributed task scheduling after 3 seconds.
@@ -335,7 +335,7 @@ On the Midway Task Component, two logs have been added:
 
 The corresponding logs are printed when the task, localTask, and queue trigger starts and ends respectively.
 
-null
+Basic configuration of task log:
 ```typescript
 // src/config/config.default.ts
 import { MidwayConfig } from '@midwayjs/core';
@@ -351,9 +351,9 @@ export default {
       appLogger: {
         // ...
       },
-      null
+      taskLog: {
         disableConsole: false, // whether to disable printing to the console, disabled by default
-        null
+        level: 'warn',
         consoleLevel: 'warn',
       },
     }
@@ -422,7 +422,7 @@ import { Application } from "@midwayjs/koa";
 export class QueueTask {
 
   @App()
-  null
+  app: Application;
 
   @Inject()
   logger;
@@ -445,7 +445,7 @@ export class QueueTask {
   @App()
   app: Application;
 
-  null
+  @Inject()
   ctx;
 
   async execute(params) {
@@ -468,7 +468,7 @@ Printed log
 
 ## Local timed task
 
-null
+Unlike distributed tasks, local timed tasks do not need to rely on and configure Redis, and can only do single-process tasks, that is, each process of each machine will be executed.
 
 ```typescript
 import { Provide, Inject, TaskLocal, FORMAT } from '@midwayjs/decorator';
@@ -520,7 +520,7 @@ export class UserService {
     };
   }
 
-  @Task ({
+  @Task({
     repeat: { cron: '* * * * * *'}
     removeOnComplete: true // added a line of this
   })

@@ -20,12 +20,12 @@ We can add a `server.js` as the portal for the main process and use `bootstrap.j
 const cfork = require('cfork');
 const util = require('util');
 const path = require('path');
-const OS = require(' OS ');
+const os = require('os');
 
 // Get cpu cores
-const cpuNumbers = OS .cpus().length;
+const cpuNumbers = os.cpus().length;
 
-cfork ({
+cfork({
   exec: path.join(__dirname, './bootstrap.js')
   count: cpuNumbers
 })

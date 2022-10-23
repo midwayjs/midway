@@ -11,7 +11,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ❌ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -38,11 +38,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/consul": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@types/consul": "^0.40.0 ",
     // ...
   }
@@ -65,7 +65,7 @@ Or reinstall the following dependencies in `package.json`.
 ```typescript
 import * as consul from '@midwayjs/consul'
 
-@Configuration ({
+@Configuration({
   imports: [
     // ..
     consul

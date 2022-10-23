@@ -64,14 +64,14 @@ const { Bootstrap } = require('@midwayjs/bootstrap');
 
 // https://www.npmjs.com/package/@opentelemetry/exporter-jaeger
 const tracerAgentHost = process.env['TRACER_AGENT_HOST'] || '127.0.0.1'
-const jaegerExporter = new JaegerExporter ({
+const jaegerExporter = new JaegerExporter({
   host: tracerAgentHost
 });
 
 // Initialize an open-telemetry SDK
-const sdk = new opentelemetry.NodeSDK ({
+const sdk = new opentelemetry.NodeSDK({
   // Set the tracking service name
-  resource: new Resource ({
+  resource: new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: 'my-app',
   }),
   // Configure the current export method. For example, one output to the console is configured here, or other Exporter can be configured, such as Jaeger.
@@ -116,7 +116,7 @@ const { ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-base');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 
 // Initialize an open-telemetry SDK
-const sdk = new opentelemetry.NodeSDK ({
+const sdk = new opentelemetry.NodeSDK({
   // Configure the current export method. For example, one output to the console is configured here, or other Exporter can be configured, such as Jaeger.
   traceExporter: new ConsoleSpanExporter()
   // Some monitoring modules provided by default are configured here, such as http module, etc.
@@ -142,7 +142,7 @@ Modify the startup command in the `package.json`.
 ```json
 {
   // ...
-  null
+  "scripts": {
     "start": "egg-scripts start --daemon --title=**** --framework=@midwayjs/web --require=./otel.js ",
   },
 }
@@ -155,7 +155,7 @@ Modify the startup command in the `package.json`.
 For example, the `package.json` file
 ```json
 {
-  "scripts ": {
+  "scripts": {
     "start": "cross-env NODE_ENV=local midway-bin dev --ts --entryFile=bootstrap.js"
   }
 }
@@ -202,7 +202,7 @@ const { RedisInstrumentation } = require('@opentelemetry/instrumentation-redis')
 // ...
 
 // Initialize an open-telemetry SDK
-const sdk = new opentelemetry.NodeSDK ({
+const sdk = new opentelemetry.NodeSDK({
   // ...
 
   // This is only an added example. If auto-instrumentations-node is used, the following instrumentation are already included
@@ -231,7 +231,7 @@ const { JaegerExporter } = require('@opentelemetry/exporter-jaeger');
 const { JaegerPropagator } = require('@opentelemetry/propagator-jaeger');
 // ...
 
-const exporter = new JaegerExporter ({
+const exporter = new JaegerExporter({
   tags: [], // optional
   // You can use the default UDPSender
   host: 'localhost', // optional
@@ -242,7 +242,7 @@ const exporter = new JaegerExporter ({
 });
 
 // Initialize an open-telemetry SDK
-const sdk = new opentelemetry.NodeSDK ({
+const sdk = new opentelemetry.NodeSDK({
   traceExporter: exporter
   textMapPropagator: new JaegerPropagator()
   // ...
@@ -258,7 +258,7 @@ For specific parameters, please refer:
 
 ### Alibaba Cloud ARMS
 
-null[](https://www.aliyun.com/product/arms/)
+Alibaba Cloud Application Real-Time Monitoring Service ([ARMS](https://www.aliyun.com/product/arms/)) already supports indicators in open-telemetry format, and provides an sdk for access.
 
 First, `opentelemetry-arms` is installed.
 
@@ -298,7 +298,7 @@ Enable the `tel` component.
 import { Configuration } from '@midwayjs/decorator';
 import * as otel from '@midwayjs/otel';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     otel

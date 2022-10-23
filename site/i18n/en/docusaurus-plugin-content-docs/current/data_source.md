@@ -15,7 +15,7 @@ The following is the official example of `mysql2`, as a preparatory work.
 const mysql = require('mysql2');
 
 // create the connection to database
-const connection = mysql.createConnection ({
+const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   database: 'test'
@@ -276,8 +276,8 @@ export default {
       entities: [
         User
         SimpleUser
-        '/abc', // under a specific directory
-        '**/abc/**', // only get files in the directory containing abc characters
+        './entity', 	// under a specific directory
+        '**/abc/**', 	// only get files in the directory containing abc characters
       ]		
     },
     // ...
@@ -290,8 +290,9 @@ export default {
 
 Attention
 
-- 1. When filling in the directory string, use the second parameter of the initDataSource method as the relative path search (here is different from the common typeorm and other scanning paths, the entities path does not need to write the suffix `.ts`, otherwise the entity will not be found during deployment)
-- 2. The path cannot be written in [single file construction and deployment](deployment#Single-file-build-deployment) (bundle mode).
+- 1. When filling in the directory string, use the second parameter of the initDataSource method as the relative path to search, the default is baseDir (src or dist)
+- 2. here is different from the common typeorm and other scanning paths, the entities path does not need to write the suffix `.ts`, otherwise the entity will not be found during deployment
+- 3. The path cannot be written in [single file construction and deployment](deployment#Single-file-build-deployment) (bundle mode).
 
 :::
 

@@ -1,6 +1,4 @@
----
-title: Introduction
----
+# Introduction
 
 Midway Hooks is a functional full stack framework that supports four core features: "Zero" Api & Type Safety & Full Stack Kit & Powerful Backend.
 

@@ -234,7 +234,7 @@ class StageTest {
 
   async runParallel(): Promise<any> {
     // The videoFeeds, accountMap and crowFeeds are executed concurrently here.
-    return this.stages.parallel<any> ({
+    return this.stages.parallel<any>({
       args: {aa: 123}
     });
 
@@ -288,7 +288,7 @@ class StageTest {
 
   async runConcat(): Promise<any> {
     // The videoFeeds, accountMap and crowFeeds are executed concurrently here.
-    return this.stages.concat<any> ({
+    return this.stages.concat<any>({
       args: {aa: 123}
     });
 
@@ -342,7 +342,7 @@ class StageTest {
 
   async runSeries(): Promise<any> {
     // Here the serial execution videoFeeds, accountMap, crowFeeds
-    return this.stages.series<any> ({
+    return this.stages.series<any>({
       args: {aa: 123}
     });
 
@@ -364,7 +364,7 @@ class StageTest {
 
   async runConcatSeries(): Promise<any> {
 		// here serially execute videoFeeds, accountMap, crowdFeeds
-    return this.stages.concatSeries<any> ({
+    return this.stages.concatSeries<any>({
       args: {aa: 123}
     });
 
@@ -437,7 +437,7 @@ class StageTest {
 
   async runStagesWaterfall(): Promise<any> {
     // This is executed in serial mode. You can see that the verification is performed in the stageTwo, and the prevValue is the result of stageOne execution.
-    return this.stages.waterfall<any> ({
+    return this.stages.waterfall<any>({
       args: {aa: 123}
     });
   }

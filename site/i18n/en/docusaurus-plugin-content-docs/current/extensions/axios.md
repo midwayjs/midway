@@ -173,7 +173,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -189,7 +189,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/axios": "^3.0.0",
     // ...
   },
@@ -208,7 +208,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as axios from '@midwayjs/axios';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     axios // import axios components
   ],
@@ -353,7 +353,7 @@ import * as axios from '@midwayjs/axios';
 import { join } from 'path';
 import { IMidwayContainer } from '@midwayjs/core';
 
-@Configuration ({
+@Configuration({
   imports: [
     axios // import axios components
   ],
@@ -387,7 +387,7 @@ import * as axios from '@midwayjs/axios';
 import { join } from 'path';
 import { IMidwayContainer } from '@midwayjs/core';
 
-@Configuration ({
+@Configuration({
   imports: [
     axios // import axios components
   ],

@@ -25,7 +25,7 @@ Introducing components in `src/configuration.ts`,
 
 ```typescript
 import * as crossDomain from '@midwayjs/cross-domain';
-@Configuration ({
+@Configuration({
   imports: [
     // ...other components
     crossDomain

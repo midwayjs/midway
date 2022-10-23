@@ -24,12 +24,12 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  null
+  "dependencies": {
     "@midwayjs/sequelize": "^3.0.0",
     "sequelize": "^6.13.0"
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -74,7 +74,7 @@ import { Application } from 'egg';
 import { join } from 'path';
 import * as sequelize from '@midwayjs/sequelize';
 
-@Configuration ({
+@Configuration({
   imports: [sequelize]
   importConfigs: [join(__dirname, './config')]
 })
@@ -109,7 +109,7 @@ export default {
         logging: console.log
       },
     },
-    Sync: false, // local, you can directly createTable it through sync: true
+    sync: false, // local, you can directly createTable it through sync: true
   },
 };
 ```
@@ -126,13 +126,13 @@ import { User } from './User';
 @BaseTable
 export class Photo extends Model {
   @ForeignKey(() => User)
-  @Column ({
+  @Column({
     comment: 'User Id',
   })
   userId: number;
   @BelongsTo(() => User) user: User;
 
-  @Column ({
+  @Column({
     comment: 'name',
   })
   name: string;
@@ -167,7 +167,7 @@ export class HomeController {
     let result = await Photo.findAll();
     console.log(result);
     return 'hello world';
-  null
+  }
 }
 ```
 
@@ -182,7 +182,7 @@ import { Photo } from '../entity/Photo';
 export class HomeController {
   @Post('/add')
   async home() {
-    null
+    let result = await Photo.create({
       name: '123',
     });
     console.log(result);
@@ -202,7 +202,7 @@ import { Photo } from '../entity/Photo';
 export class HomeController {
   @Post('/delete')
   async home() {
-    null
+    await Photo.destroy({
       where: {
         name: '123',
       },
@@ -223,7 +223,7 @@ import { Photo } from '../entity/Photo';
 export class HomeController {
   @Post('/delete')
   async home() {
-    let result = await Photo.findOne ({
+    let result = await Photo.findOne({
       where: {
         name: '123',
       },
@@ -246,9 +246,9 @@ export class HomeController {
   @Get('/')
   async home() {
     // SELECT * FROM photo WHERE name = "23" OR name = "34";
-    let result = await Photo.findAll ({
+    let result = await Photo.findAll({
       where: {
-        null
+        [Op.or]: [{ name: '23' }, { name: '34' }],
       },
     });
     console.log(result);

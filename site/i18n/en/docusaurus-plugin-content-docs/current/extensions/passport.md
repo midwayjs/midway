@@ -16,7 +16,7 @@ Starting from v3.4.0, Midway maintains its own passport and will no longer need 
 
 
 
-## null
+## Some concepts
 
 The passport is that the community uses more authentication libraries to make authentication requests through extensible plug-ins called policies. Passport routing is not mounted or any specific database is assumed, this maximizes flexibility and allows developers to make application-level decisions.
 
@@ -50,7 +50,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/passport": "^3.0.0",
     // Local policy
     "passport-local": "^1.0.0"
@@ -60,7 +60,7 @@ Or reinstall the following dependencies in `package.json`.
     "passport-github": "1.1.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // Local policy
     "@types/passport-local": "^1.0.34 ",
     // Jwt strategy
@@ -87,7 +87,7 @@ import { ILifeCycle,} from '@midwayjs/core';
 import { Configuration } from '@midwayjs/decorator';
 import * as passport from '@midwayjs/passport';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     passport
@@ -100,7 +100,7 @@ export class MainConfiguration implements ILifeCycle {}
 
 
 
-## null
+## Policy example
 
 Here we use the local authentication strategy and the Jwt strategy as a demonstration.
 
@@ -130,7 +130,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       throw new Error('error password '+ username);
     }
 
-    null
+    return {
       username
       password
     };
@@ -209,12 +209,12 @@ Additional jwt components are enabled.
 // configuration.ts
 
 import { join } from 'path';
-null
+import * as jwt from '@midwayjs/jwt';
 import { ILifeCycle,} from '@midwayjs/core';
 import { Configuration } from '@midwayjs/decorator';
 import * as passport from '@midwayjs/passport';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     jwt
@@ -232,7 +232,7 @@ Then set in the configuration, the default is not encrypted, please do not store
 // src/config/config.default.ts
 export default {
   // ...
-  null
+  jwt: {
     secret: 'xxxxxxxxxxxxxx', // fs.readFileSync('xxxxx.key')
     expiresIn: '2d' // https://github.com/vercel/ms
   },
@@ -266,7 +266,7 @@ export class JwtStrategy extends PassportStrategy (
   }
 }
 ```
-null
+:::tip
 
 Note: validate method is an Promise alternative to community policy verify. You don't need to pass callback parameters at the end.
 
@@ -306,10 +306,10 @@ export class JwtController {
   async jwtPassport() {
     console.log('jwt user:', this.ctx.state.user);
     return this.ctx.state.user;
-  null
+  }
 
   @Post('/jwt')
-  null
+  async genJwt() {
     return {
       t: await this.jwt.sign({ msg: 'Hello Midway' })
     };

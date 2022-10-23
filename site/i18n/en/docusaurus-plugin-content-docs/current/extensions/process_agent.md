@@ -15,11 +15,11 @@ Related information:
 
 | Description |      |
 | ----------------- | ---- |
-| null | ✅ |
-| null | ❌ |
+| Can be used for standard projects | ✅ |
+| Can be used for Serverless | ❌ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
-| null | ❌ |
+| Contains independent main framework | ❌ |
+| Contains independent logs | ❌ |
 
 
 
@@ -35,11 +35,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/process-agent": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -54,7 +54,7 @@ Usage of `configuration.ts`:
 ```typescript
 import * as processAgent from '@midwayjs/process-agent';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     processAgent

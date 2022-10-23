@@ -15,7 +15,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -41,19 +41,19 @@ Install typeorm components to provide database ORM capability.
 
 
 ```bash
-null
+$ npm i @midwayjs/typeorm@3 typeorm --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/typeorm": "^3.0.0",
     "typeorm": "~0.3.0 ",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -72,10 +72,10 @@ import { Configuration } from '@midwayjs/decorator';
 import * as orm from '@midwayjs/typeorm';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
-    null
+    orm,							// enable typeorm component
   ],
   importConfigs: [
   	join(__dirname, './config')
@@ -109,7 +109,7 @@ npm install mssql --save
 npm install SQL .js --save
 
 # for Oracle
-null
+npm install oracledb --save
 
 # for MongoDB(experimental)
 npm install mongodb --save
@@ -128,19 +128,19 @@ npm install mongodb --save
 ## Simple directory structure
 
 
-null
+We take a simple project as an example, please refer to other structures.
 
 
 ```
 MyProject
-The src // TS root directory
-null
-│ │ │ ── config.default.ts // Application Profile
-│ │ ── entity // entity (database Model) directory
-│ │ │-photo.ts // entity file
-│ │ └── photoMetadata.ts
-│ │ ── configuration.ts // Midway configuration file
-│-service // Other Service Catalog
+├── src              							// TS root directory
+│   ├── config
+│   │   └── config.default.ts 		// Application Profile
+│   ├── entity       							// entity (database Model) directory
+│   │   └── photo.ts  					  // entity file
+│   │   └── photoMetadata.ts
+│   ├── configuration.ts     			// Midway configuration file
+│   └── service      							// Other service directory
 ├── .gitignore
 ├── package.json
 ├── README.md
@@ -170,7 +170,7 @@ We associate with the database through the model. The model in the application i
 In the example, you need an entity. Let's take `photo` as an example. Create an entity directory and add the entity file `photo.ts` to the entity directory. A simple entity is as follows.
 ```typescript
 // entity/photo.ts
-null
+export class Photo {
   id: number;
   name: string;
   description: string;
@@ -279,14 +279,14 @@ import { Entity, Column, PrimaryColumn } from 'typeorm';
 @Entity()
 export class Photo {
 
-  null
+  @PrimaryColumn()
   id: number;
 
   @Column()
   name: string;
 
   @Column()
-  null
+  description: string;
 
   @Column()
   filename: string;
@@ -299,7 +299,7 @@ export class Photo {
 
 }
 ```
-### null
+### 5. Create an auto-incrementing primary key column
 
 
 Now, if you want to set the self-increasing id column, you need to change the `@PrimaryColumn` decorator to the `@PrimaryGeneratedColumn` decorator:
@@ -348,7 +348,7 @@ export class Photo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column ({
+  @Column({
   	length: 100
   })
   name: string;
@@ -370,7 +370,7 @@ export class Photo {
 
 Example, different column names
 ```typescript
-@Column ({
+@Column({
   length: 100
   name: 'custom_name'
 })
@@ -378,7 +378,7 @@ name: string;
 ```
 
 
-null
+Example, different column names
 
 
 - `@CreateDateColumn` is a special column that automatically inserts dates for entities.
@@ -386,7 +386,7 @@ null
 - The `@VersionColumn` is a special column that automatically increases the entity version (increment number) each time the entity manager or save of the repository is called.
 - `@DeleteDateColumn` is a special column that automatically sets the deletion time of the entity when soft-delete is called.
 
-The column type is database-specific. You can set any column type supported by the database. For more information about supported column types, see [here](null).
+The column type is database-specific. You can set any column type supported by the database. For more information about supported column types, see [here](https://github.com/typeorm/typeorm/blob/master/docs/entities.md#column-types).
 
 :::tip
 
@@ -408,11 +408,11 @@ Then configure the database connection information in `config.default.ts`.
 // src/config/config.default.ts
 import { Photo } from '../entity/photo';
 
-null
+export default {
   // ...
   typeorm: {
     dataSource: {
-      null
+      default: {
         /**
          * Single database instance
          */
@@ -422,7 +422,7 @@ null
         username: '',
         password: '',
         database: undefined
-        null
+        synchronize: false,		// If it is used for the first time, there is no table, and there is a need for synchronization, you can write true
         logging: false
 
         // Configure the entity model or entities: '/entity',
@@ -538,7 +538,7 @@ export class PhotoService {
     console.log("All photos from the db: ", allPhotos);
 
     // find first
-    let firstPhoto = await this.photoModel.findOne ({
+    let firstPhoto = await this.photoModel.findOne({
       where: {
         id: 1
       }
@@ -546,18 +546,18 @@ export class PhotoService {
     console.log("First photo from the db: ", firstPhoto);
 
     // find one by name
-    let meAndBearsPhoto = await this.photoModel.findOne ({
+    let meAndBearsPhoto = await this.photoModel.findOne({
       where: { name: "Me and Bears"}
     });
     console.log("Me and Bears photo from the db: ", meAndBearsPhoto);
 
     // find by views
-    let allViewedPhotos = await this.photoModel.find ({
+    let allViewedPhotos = await this.photoModel.find({
       where: { views: 1}
     });
     console.log("All viewed photos: ", allViewedPhotos);
 
-    let allPublishedPhotos = await this.photoModel.find ({
+    let allPublishedPhotos = await this.photoModel.find({
       where: { isPublished: true}
     });
     console.log("All published photos: ", allPublishedPhotos);
@@ -619,7 +619,7 @@ export class PhotoService {
 
   async updatePhoto() {
     /*...*/
-    await this.photoModel.remove ({
+    await this.photoModel.remove({
       where: {
         id: 1
       }
@@ -632,7 +632,7 @@ Now, Photo with ID = 1 will be deleted from the database.
 
 There is also a soft deletion method.
 ```typescript
-await this.photoModel.softDelete ({
+await this.photoModel.softDelete({
   where: {
     id: 1
   }
@@ -659,7 +659,7 @@ export class PhotoMetadata {
   @Column("int")
   height: number;
 
-  null
+  @Column("int")
   width: number;
 
   @Column()
@@ -689,17 +689,17 @@ We also added an `@JoinColumn` decorator, which indicates that this side of the 
 
 
 ```
-+----------------------------
-| photo_metadata |
-+----------------------------
-| id | int(11) | PRIMARY KEY AUTO_INCREMENT |
-| height | int(11) | |
-| width | int(11) | |
-null
-| compressed | boolean | |
-| orientation | varchar(255) | |
-| photoId | int(11) | FOREIGN KEY |
-+----------------------------
++-------------+--------------+----------------------------+
+|                     photo_metadata                      |
++-------------+--------------+----------------------------+
+| id          | int(11)      | PRIMARY KEY AUTO_INCREMENT |
+| height      | int(11)      |                            |
+| width       | int(11)      |                            |
+| comment     | varchar(255) |                            |
+| compressed  | boolean      |                            |
+| orientation | varchar(255) |                            |
+| photoId     | int(11)      | FOREIGN KEY                |
++-------------+--------------+----------------------------+
 ```
 
 
@@ -741,7 +741,7 @@ export class PhotoService {
     metadata.photo = photo; // this way we connect them
 
 
-    null
+    // first we should save a photo
     await this.photoModel.save(photo);
 
     // photo is saved. Now we need to save a photo metadata
@@ -817,7 +817,7 @@ export class PhotoService {
   async findPhoto() {
 		/*...*/
     let photos = await this.photoModel.find({ relations: [ 'metadata' ] }); // typeorm@0.2.x
-  null
+  }
 }
 
 ```
@@ -875,7 +875,7 @@ Using `cascade` allows us to no longer save Photo and PhotoMetadata separately n
 import { Provide, Inject } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
-null
+import { PhotoMetadata } from './entity/photoMetadata';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -907,7 +907,7 @@ export class PhotoService {
     await this.photoModel.save(photo);
 
     // done
-    null
+    console.log("Photo is saved, photo metadata is saved too");
   }
 }
 ```
@@ -966,37 +966,36 @@ After the application is run, ORM creates the `author` table:
 
 
 ```
-+----------------------------
-| author |
-+----------------------------
-| id | int(11) | PRIMARY KEY AUTO_INCREMENT |
-| name | varchar(255) | |
-+----------------------------
++-------------+--------------+----------------------------+
+|                          author                         |
++-------------+--------------+----------------------------+
+| id          | int(11)      | PRIMARY KEY AUTO_INCREMENT |
+| name        | varchar(255) |                            |
++-------------+--------------+----------------------------+
 ```
 It also modifies the `photo` table, adds a new `author` column, and creates a foreign key for it:
 ```
-+----------------------------
-| photo |
-+----------------------------
-| id | int(11) | PRIMARY KEY AUTO_INCREMENT |
-| name | varchar(255) | |
-| description | varchar(255) | |
-| filename | varchar(255) | |
-| isPublished | boolean | |
-| authorId | int(11) | FOREIGN KEY |
-+----------------------------
++-------------+--------------+----------------------------+
+|                         photo                           |
++-------------+--------------+----------------------------+
+| id          | int(11)      | PRIMARY KEY AUTO_INCREMENT |
+| name        | varchar(255) |                            |
+| description | varchar(255) |                            |
+| filename    | varchar(255) |                            |
+| isPublished | boolean      |                            |
+| authorId    | int(11)      | FOREIGN KEY                |
++-------------+--------------+----------------------------+
 ```
 
 
-### null
+### 17. Create many-to-many associations
 
 
 Let's create a many-to-one/many-to-many relationship. Suppose a photo can be in many albums, and each album can contain many photos. Let's create an `Album` class.
 
 
 ```typescript
-import { Entity } from 'typeorm';
-null
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
 
 @Entity()
 export class Album {
@@ -1032,12 +1031,12 @@ After running the application, ORM will create a album_photos_photo_albums join 
 
 
 ```
-+----------------------------
-| album_photos_photo_albums |
-+----------------------------
-| album_id | int(11) | PRIMARY KEY FOREIGN KEY |
-| photo_id | int(11) | PRIMARY KEY FOREIGN KEY |
-+----------------------------
++-------------+--------------+----------------------------+
+|                album_photos_photo_albums                |
++-------------+--------------+----------------------------+
+| album_id    | int(11)      | PRIMARY KEY FOREIGN KEY    |
+| photo_id    | int(11)      | PRIMARY KEY FOREIGN KEY    |
++-------------+--------------+----------------------------+
 ```
 
 
@@ -1097,7 +1096,7 @@ The `loadedPhoto` value is:
     id: 1
     name: "Bears"
   }, {
-    null
+    id: 2,
     name: "Me"
   }]
 }
@@ -1162,7 +1161,7 @@ export class EverythingSubscriber implements EntitySubscriberInterface {
     console.log('BEFORE ENTITY WITH ID ${event.entityId} REMOVED:', event.entity);
   }
 
-  null
+  /**
    * Called after entity insertion.
    */
   afterInsert(event: InsertEvent<any>) {
@@ -1230,7 +1229,7 @@ For example, the following defines two database connections (Connection), `defau
 
 
 ```typescript
-null
+import { join } from 'path';
 
 export default {
   typeorm: {
@@ -1277,7 +1276,7 @@ The `transformer` parameters of the column decorator can be used to process entr
 
 ```typescript
 import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-null
+import * as dayjs from 'dayjs';
 
 const dateTransformer = {
   from: (value: Date | number) => {
@@ -1290,7 +1289,7 @@ const dateTransformer = {
 export class Photo {
   // ...
 
-  @CreateDateColumn ({
+  @CreateDateColumn({
     type: 'timestamp',
     transformer: dateTransformer
   })
@@ -1306,7 +1305,7 @@ export class Photo {
 import { Configuration } from '@midwayjs/decorator';
 import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {
@@ -1316,7 +1315,7 @@ export class MainConfiguration {
   	const conn = dataSourceManager.getDataSource('default');
     console.log(dataSourceManager.isConnected(conn));
   }
-null
+}
 ```
 
 
@@ -1359,7 +1358,7 @@ For more information, see [Documentation](https://github.com/typeorm/typeorm/blo
 
 
 - If you already have a table structure, you want to automatically create an Entity and use the [Generator](../tool/typeorm_generator)
-- null``
+- If you already have Entity code and want to create a table structure please use `synchronize: true` in the configuration
 
 
 
@@ -1386,14 +1385,13 @@ For example, the default time zone is the system UTC time, which can be adjusted
 
 ```text
 mysql> show global variables like '%time_zone%';
-+ ------------------ ------------
-| Variable_name | Value |
-+ ------------------ ------------
-| system_time_zone | UTC |
-| time_zone | SYSTEM |
-+ ------------------ ------------
++------------------+--------+
+| Variable_name    | Value  |
++------------------+--------+
+| system_time_zone | UTC    |
+| time_zone        | SYSTEM |
++------------------+--------+
 2 rows in set (0.05 sec)
-
 ```
 
 **2. Check the environment where the service code is deployed.**
@@ -1404,7 +1402,7 @@ Try to be consistent with the environment where the database is located. If not,
 export default {
   typeorm: {
     dataSource: {
-      null
+      default: {
         type: 'mysql',
         // ...
         timezone: '+08:00',
@@ -1421,7 +1419,7 @@ export default {
 The configuration dateStrings enables mysql to return the return time in the DATETIME format.
 
 ```typescript
-null
+// src/config/config.default.ts
 export default {
   // ...
   typeorm: {
@@ -1438,7 +1436,7 @@ export default {
 
 The effect is as follows:
 
-**null**
+**Before configuration:**
 
 ```typescript
 gmtModified: 2021-12-13T03:49:43.000Z
@@ -1454,9 +1452,9 @@ gmtCreate: '2021-12-13 11:49:43'
 
 ### Install mysql and mysql2 at the same time
 
-null
+When you have both mysql and mysql2 in node_modules, typeorm will automatically load mysql instead of mysql2.
 
-null
+If you need to use mysql2 at this time, please specify the driver.
 
 ```typescript
 // src/config/config.default.ts

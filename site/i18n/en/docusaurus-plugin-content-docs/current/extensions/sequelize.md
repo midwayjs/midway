@@ -2,7 +2,7 @@
 
 This document describes how to use Sequelize in Midway.
 
-null
+:::tip
 
 The current module has been reconfigured since v3.4.0, and the historical writing method is compatible. For more information about how to query historical documents, see [here](../legacy/sequelize).
 
@@ -10,12 +10,12 @@ The current module has been reconfigured since v3.4.0, and the historical writin
 
 Related information:
 
-| null |     |
+| Description |     |
 | ----------------- | --- |
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -42,13 +42,13 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/sequelize": "^3.0.0",
     "sequelize": "^6.21.3 ",
     "sequelize-typescript": "^ 2.1.0"
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -67,7 +67,7 @@ npm install mysql2 --save
 npm install pg --save
 
 # for SQLite
-null
+npm install sqlite3 --save
 
 # for Microsoft SQL Server
 npm install mssql --save
@@ -94,7 +94,7 @@ import { ILifeCycle } from '@midwayjs/core';
 import { join } from 'path';
 import * as sequelize from '@midwayjs/sequelize';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     sequelize
@@ -125,7 +125,7 @@ class Hobby extends Model {
 }
 
 @Table
-null
+class Person extends Model {
   @Column
   name: string;
 
@@ -142,7 +142,7 @@ Note that each attribute of the entity file here is actually one-to-one correspo
 The `@Table` decorator can be used without passing any parameters. For more information, see [Define options](https://sequelize.org/v5/manual/models-definition.html#configuration).
 
 ```typescript
-@Table ({
+@Table({
   timestamps: true
   ...
 })
@@ -173,7 +173,7 @@ class Person extends Model {
 
 Mainly refers to `@CreatedAt`, `@UpdatedAt`, `@DeletedAt` columns marked by a single decorator.
 
-null
+for example:
 
 ```typescript
 import { Table, Model, CreatedAt, UpdatedAt, DeletedAt } from 'sequelize-typescript';
@@ -188,7 +188,7 @@ class Person extends Model {
 
   @DeletedAt
   deletionDate: Date;
-null
+}
 ```
 
 | Decorator | Description |
@@ -232,7 +232,7 @@ import { Table, Model, Column, DataType } from 'sequelize-typescript'
 
 @Table
 class Person extends Model {
-  @Column ({
+  @Column({
     type: DataType.FLOAT
     comment: 'Some value',
     ...
@@ -264,7 +264,7 @@ export default {
         database: 'test4',
         username: 'root',
         password: '123456',
-        null
+        host: '127.0.0.1',
         port: 3306
         encrypt: false
         dialect: 'mysql',
@@ -273,14 +273,14 @@ export default {
         entities: [Person]
       },
     },
-    null
+     }
   },
 };
 ```
 
 For more information, see [Data source management](../data_source).
 
-## null
+## Model association
 
 Relationships can be directly described in the model through `HasMany`, `@HasOne`, `@BelongsTo`, `@BelongsToMany`, and `@ForeignKey` decorators.
 
@@ -303,7 +303,7 @@ export class Player extends Model {
 
   @BelongsTo(() => Team)
   team: Team;
-null
+}
 
 @Table
 export class Team extends Model {
@@ -320,7 +320,7 @@ export class Team extends Model {
 For example, you can use `find` to query.
 
 ```typescript
-null
+const team = await Team.findOne({ include: [Player] });
 
 team.players.forEach((player) => {
   console.log('Player ${player.name}');
@@ -332,17 +332,17 @@ team.players.forEach((player) => {
 ```typescript
 import { Table, Model, Column, ForeignKey, BelongsToMany } from 'sequelize-typescript';
 
-null
+@Table
 export class Book extends Model {
   @BelongsToMany(() => Author, () => BookAuthor)
-  null
+  }
 }
 
 @Table
 export class Author extends Model {
   @BelongsToMany(() => Book, () => BookAuthor)
   books: Book[];
-null
+}
 
 @Table
 export class BookAuthor extends Model {
@@ -376,7 +376,7 @@ import { User } from './User';
 @Table
 export class Photo extends Model {
   @ForeignKey(() => User)
-  @Column ({
+  @Column({
     comment: 'User Id',
   })
   userId: number;
@@ -384,7 +384,7 @@ export class Photo extends Model {
   @BelongsTo(() => User)
   user: User;
 
-  null
+  @Column({
     Comment: 'name',
   })
   name: string;
@@ -406,7 +406,7 @@ If it is a single data source, you can use the following static method.
 Where it needs to be called, use the entity model to operate.
 
 ```typescript
-null
+import { Provide } from '@midwayjs/decorator';
 import { Person } from '../entity/person';
 
 @Provide()
@@ -438,13 +438,13 @@ export class PersonService {
       },
       {
         where: { id: 1}
-      null
+      }
     );
   }
 }
 ```
 
-## null
+## Repository Mode
 
 Repository mode can separate static operations such as lookup and creation from the model definition. It also supports use with multiple sequelize instances (multiple data sources).
 
@@ -458,7 +458,7 @@ Same as data source configuration, except that there is one more attribute.
 import { Person } from '../entity/person';
 
 export default {
-  null
+  // ...
   sequelize: {
     dataSource: {
       default: {
@@ -504,12 +504,12 @@ export class HomeController {
     console.log(result);
 
     // New
-    await this.photoRepository.create ({
+    await this.photoRepository.create({
       name: '123',
     });
 
     // Delete
-    await this.photoRepository.destroy ({
+    await this.photoRepository.destroy({
       where: {
         name: '123',
       },
@@ -517,7 +517,7 @@ export class HomeController {
 
     // Joint query
     // SELECT * FROM photo WHERE name = "23" OR name = "34";
-    let result = await this.photoRepository.findAll ({
+    let result = await this.photoRepository.findAll({
       where: {
         [Op.or]: [{ name: '23' }, { name: '34' }]
       },
@@ -525,7 +525,7 @@ export class HomeController {
     // => result
 
     // even table query
-    null
+    let result = await this.userRepository.findAll({ include: [Photo] });
     // => result
   }
 }
@@ -538,8 +538,8 @@ More ways to use OP: [https:// sequelize.org/v5/manual/querying.html](https://se
 In Repository mode, we can specify a specific data source in the `InjectRepository` parameters.
 
 ```typescript
-null
-null
+import { Controller } from '@midwayjs/decorator';
+import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
 

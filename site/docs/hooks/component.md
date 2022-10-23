@@ -1,6 +1,4 @@
----
-title: 使用 Midway 组件
----
+# 使用 Midway 组件
 
 Midway 提供了一系列的组件，包含 Cache / Http / Redis 等。
 而在 Midway Hooks 中，我们可以直接使用 Midway 组件，来快速实现功能。

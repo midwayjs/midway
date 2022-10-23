@@ -1,5 +1,6 @@
 import React from 'react'
 import { styled } from '../styled'
+import Translate from '@docusaurus/Translate';
 
 type FeatureProps = {
   icon: string
@@ -79,7 +80,7 @@ function Feature(props: FeatureProps) {
     <FeatureContainer isMiddle={props.isMiddle}>
       <Icon className={`iconfont ${props.icon}`} />
       <Title>{props.title}</Title>
-      <Description>{props.description}</Description>
+      <Description><Translate id={`homepage.feature.desc.${props.title}`}>{props.description}</Translate></Description>
     </FeatureContainer>
   )
 }

@@ -1,6 +1,4 @@
----
-title: 部署
----
+# 部署
 
 Midway Hooks 支持 Api Server 与一体化两种模式。
 

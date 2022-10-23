@@ -1,6 +1,4 @@
----
-title: Hooks
----
+# Hooks
 
 Midway Hooks can use the `Hooks` function to obtain the runtime context.
 
@@ -25,7 +23,7 @@ export default Api(Get(), async () => {
 });
 ```
 
-null
+Invalid example:
 
 ```ts
 import { useContext } from '@midwayjs/hooks';

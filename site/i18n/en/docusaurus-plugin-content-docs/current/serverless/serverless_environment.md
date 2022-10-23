@@ -5,7 +5,7 @@ In Serverless scenarios, because the environment is different from the tradition
 For example, the following command can only take effect locally, not on the server.
 
 ```bash
-$NODE_ENV midway-bin deploy // Wrong writing, only valid locally
+$ NODE_ENV midway-bin deploy // Wrong writing, only valid locally
 ```
 
 We need special ways to make the function container receive the environment as well.
@@ -17,7 +17,7 @@ To distinguish from common environment variables, environment variables deployed
 For example:
 
 ```bash
-$UDEV_NODE_ENV=prod midway-bin deploy
+$ UDEV_NODE_ENV=prod midway-bin deploy
 ```
 
 At this time, the platform will receive an environment variable named `NODE_ENV` and `prod`.

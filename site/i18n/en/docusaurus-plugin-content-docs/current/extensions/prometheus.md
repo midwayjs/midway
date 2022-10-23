@@ -8,28 +8,28 @@ This article introduces how Midway accesses Grafana + Prometheus.
 
 The access effect is as follows:
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617259935548-a2df4339-3229-4391-bd3d-4ba8e6979d4d.png#height=498&id=KoiiE&margin=%5Bobject%20Object%5D&name=image.png&originHeight=996&originWidth=1914&originalType=binary&ratio=1&size=969345&status=done&style=none&width=957" width="957" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1617259935548-a2df4339-3229-4391-bd3d-4ba8e6979d4d.png)
 
 ## Installation dependency
 
 First install the indicator monitoring component provided by Midway:
 
 ```bash
-$ npm install @midwayjs/prometheus -S
+$ npm install @midwayjs/prometheus@3 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/prometheus": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
-null
+}
 ```
 
 
@@ -44,7 +44,7 @@ import { Configuration } from '@midwayjs/decorator';
 Import * as prometheus from '@midwayjs/prometheus'; // Import module
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     prometheus
@@ -62,7 +62,7 @@ Prometheus the monitoring data is obtained based on HTTP, please load any framew
 
 Access interface, return as follows, the contents are the current indicators.
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617260048533-4f725824-9471-40c9-be8b-6dcbf27d9cca.png#height=997&id=DIl0G&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1994&originWidth=2276&originalType=binary&ratio=1&size=1070956&status=done&style=none&width=1138" width="1138" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1617260048533-4f725824-9471-40c9-be8b-6dcbf27d9cca.png)
 
 ## Other configurations
 
@@ -107,16 +107,16 @@ services:
     image: prom/prometheus
     restart: always
     volumes:
-      -./prometheus_data:/prometheus_data:rw
-      -./prometheus.yml:/etc/prometheus/prometheus.yml
-      -./targets.json:/etc/prometheus/targets.json
+      - ./prometheus_data:/prometheus_data:rw
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./targets.json:/etc/prometheus/targets.json
     command:
-      -'--storage.tsdb.path=/prometheus_data'
-      -'--config.file=/etc/prometheus/prometheus.yml'
-      -'--storage.tsdb.retention=10d'
-      -'--web.enable-lifecycle'
+      - '--storage.tsdb.path=/prometheus_data'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention=10d'
+      - '--web.enable-lifecycle'
     ports:
-      -'9090:9090'
+      - '9090:9090'
 ```
 
 The `prometheus.yml` file is as follows:
@@ -126,14 +126,14 @@ global:
   scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
   evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
 scrape_configs:
-  -job_name: 'node'
+  - job_name: 'node'
     file_sd_configs:
-      -refresh_interval: 1m
+      - refresh_interval: 1m
         files:
-          -'/etc/prometheus/targets.json'
-  -job_name: 'prometheus'
+          - '/etc/prometheus/targets.json'
+  - job_name: 'prometheus'
     static_configs:
-      null
+      - targets: ['localhost:9090']
 ```
 
 Then, the collected `targets.json` is as follows: `${ip}` in the following file is replaced with the ip address of the server where the Node.js application is located.
@@ -142,7 +142,7 @@ Then, the collected `targets.json` is as follows: `${ip}` in the following file 
 [
   {
     "targets": ["${ip}:7001"]
-    null
+    "labels": {
       "env": "prod ",
       "job": "api"
     }
@@ -155,7 +155,7 @@ Then, the collected `targets.json` is as follows: `${ip}` in the following file 
 Then we start the `docker-compose.yml` file,
 
 ```bash
-$docker-compose up
+$ docker-compose up
 ```
 
 At this point, Prometheus will already pull the indicator data of our Node application.
@@ -164,14 +164,14 @@ What to do if you want to update target:
 After modifying this targets.json file, it is hot loaded by the prometheus reload method.
 The method is as follows:
 
-```typescript
-Curl-X POST http://${prometheus ip}:9090/-/reload
+```bash
+$ curl-X POST http://${prometheus ip}:9090/-/reload
 ```
 
 Then we can check the prometheus page or confirm whether it takes effect. The interface address is:
 
-```typescript
-Http: //${prometheus ip}:9090/classic/targets
+```text
+http://${prometheus ip}:9090/classic/targets
 ```
 
 The next step is how to show the collected data.
@@ -183,7 +183,7 @@ We can use Grafana to show our data.
 Here we simply use Docker to build a Grafana:
 
 ```bash
-$docker run -d --name=grafana -p 3000:3000 grafana/grafana
+$ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 ```
 
 Then we visit 127.0.0.1:3000, and the default account password is admin:admin.
@@ -214,8 +214,8 @@ Of course, it can also support other custom operations.
 
 Usage:
 
-```typescript
-npm install @midwayjs/prometheus-socket-io -S
+```bash
+$ npm install @midwayjs/prometheus-socket-io@3 --save
 ```
 
 Usage:
@@ -226,8 +226,8 @@ import { join } from 'path';
 import * as prometheus from '@midwayjs/prometheus';
 import * as prometheusSocketIo from '@midwayjs/prometheus-socket-io';
 
-@Configuration ({
-  null
+@Configuration({
+  imports: [prometheus, prometheusSocketIo],
   importConfigs: [join(__dirname, './config')]
 })
 export class ContainerLifeCycle {}

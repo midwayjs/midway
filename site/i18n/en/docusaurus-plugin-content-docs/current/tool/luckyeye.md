@@ -1,6 +1,4 @@
----
-title: 检查工具
----
+# Check tool
 
 Midway provides some checking tools for common errors to facilitate users to quickly debug them. The `@midwayjs/luckyeye` package provides some basic inspection rules, which can quickly troubleshoot problems with the new version of Midway.
 
@@ -17,7 +15,7 @@ npm I @midwayjs/luckyeye --save-dev
 In general, we will add it to a check script, such:
 
 ```json
-"scripts ": {
+"scripts": {
   // ......
   "check": "luckyeye"
 },
@@ -29,7 +27,7 @@ Add the following paragraph to `package.json`.
 
 ```json
 "midway-luckyeye": {
-  "packages ": [
+  "packages": [
     "midway_v2"
   ]
 },
@@ -47,7 +45,7 @@ npm run check
 
 The execution effect is as follows.
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1610983986151-79c54e7c-3ff0-4f94-98bc-359dda0fa694.png#align=left&display=inline&height=464&margin=%5Bobject%20Object%5D&name=image.png&originHeight=928&originWidth=1234&size=155051&status=done&style=none&width=617" width="617" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1610983986151-79c54e7c-3ff0-4f94-98bc-359dda0fa694.png)
 
 ## Custom rule package
 

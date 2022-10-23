@@ -11,8 +11,8 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
-| Contains independent logs | null |
+| Contains independent main framework | ❌ |
+| Contains independent logs | ❌ |
 
 
 
@@ -27,11 +27,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/jwt": "^3.0.0"
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     null
   }
 }
@@ -46,7 +46,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { IMidwayContainer } from '@midwayjs/core';
 import * as jwt from '@midwayjs/jwt';
 
-@Configuration ({
+@Configuration({
   null
     // ...
     jwt
@@ -174,7 +174,7 @@ import { Configuration, App } from '@midwayjs/decorator';
 import { IMidwayContainer, IMidwayApplication} from '@midwayjs/core';
 null
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     jwt

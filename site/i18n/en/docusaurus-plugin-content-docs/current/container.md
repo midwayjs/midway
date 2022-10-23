@@ -1054,7 +1054,7 @@ An example is as follows:
 import { App, Configuration, Logger } from '@midwayjs/decorator';
 // ...
 
-@Configuration ({
+@Configuration({
   // ...
   detectorOptions: {
     ignore: [

@@ -1,6 +1,4 @@
----
-title: 文件上传
----
+# File Upload
 
 Midway Hooks provides `@midwayjs/hooks-upload` and cooperates with `@midwayjs/upload` to realize file upload function in pure function + integrated project.
 
@@ -26,7 +24,7 @@ import * as Koa from '@midwayjs/koa';
 /**
  * setup midway server
  */
-export default createConfiguration ({
+export default createConfiguration({
   imports: [
     Koa
     hooks()
@@ -70,7 +68,7 @@ function Form() {
   ) => {
     e.preventDefault();
     const files = { images: file };
-    const response = await upload ({
+    const response = await upload({
       files
     });
     console.log(response);

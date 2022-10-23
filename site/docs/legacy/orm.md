@@ -651,7 +651,7 @@ await this.photoModel.softDelete(1);
 
 
 ```typescript
-import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { EntityModel } from '@midwayjs/orm';
 import { Photo } from "./photo";
 
@@ -783,7 +783,7 @@ export class PhotoMetadata {
 
 ```typescript
 import { EntityModel } from '@midwayjs/orm';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { PhotoMetadata } from './photoMetadata';
 
 @EntityModel()

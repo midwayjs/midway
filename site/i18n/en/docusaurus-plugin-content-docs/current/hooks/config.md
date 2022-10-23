@@ -1,6 +1,4 @@
----
-title: 项目配置
----
+# Project configuration
 
 You can configure the project by using the `midway.config.ts` parameter in the root directory of the project.
 
@@ -34,7 +32,7 @@ Examples:
 import react from '@vitejs/plugin-react';
 import { defineConfig } from '@midwayjs/hooks-kit';
 
-export default defineConfig ({
+export default defineConfig({
   vite: {
     plugins: [react()]
   },

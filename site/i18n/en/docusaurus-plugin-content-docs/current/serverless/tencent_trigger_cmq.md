@@ -1,6 +1,4 @@
----
-title: CMQ 触发器（消息队列）
----
+# CMQ trigger (message queue)
 
 CMQ(mq) triggers subscribe to Tencent Cloud's message queue service.
 
@@ -28,7 +26,7 @@ export class HelloTencentService {
 After `f deploy`.
 
 :::info
-Note that under Tengxun Cloud, the default message queue format provided by midway faas is JSON
+Note that under Tencent Cloud, the default message queue format provided by midway faas is JSON
 :::
 
 ## CMS trigger configuration
@@ -36,7 +34,7 @@ Note that under Tengxun Cloud, the default message queue format provided by midw
 | Attribute name | Type | Description |
 | ------ | ------ | -------------------------------------------------------------- |
 | topic | string | topic for receiving messages |
-| tags | null | optional, which describes the tags of message filtering in the subscription (only messages with consistent tags will be pushed) |
+| tags | string | optional, which describes the tags of message filtering in the subscription (only messages with consistent tags will be pushed) |
 
 Example:
 
@@ -56,12 +54,12 @@ The structure returned by CMQ messages is as follows and is described in the typ
 
 ```json
 {
-  "Records ": [
+  "Records": [
     {
-      "CMQ ": {
+      "CMQ": {
         "type": "topic ",
-        null
-        null
+        "topicOwner": 1567,
+        "topicName": "testtopic",
         "subscriptionName": "xxxxxx ",
         "publishTime": "1970-01-01T00:00:00.000Z ",
         "msgId": "123345346 ",

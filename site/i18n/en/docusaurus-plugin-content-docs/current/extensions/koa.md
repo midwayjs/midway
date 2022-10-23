@@ -8,8 +8,8 @@ The `@midwayjs/koa` package uses `koa @2` and integrates `@koa/router` as the ba
 
 | Description |      |
 | -------------- | ---- |
-| Contains independent main frame | ✅ |
-| Contains independent logs | null |
+| Contains independent main framework | ✅ |
+| Contains independent logs | ✅ |
 
 
 
@@ -24,11 +24,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/koa": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@types/koa": "^2.13.4 ",
     // ...
   }
@@ -47,20 +47,20 @@ $ npm init midway -- --type=koa-v3 my_project
 
 
 
-## Open the component
+## Enable component
 
 ```typescript
 import { Configuration, App } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
   importConfigs: [join(__dirname, './config')]
 })
 export class MainConfiguration {
   @App()
-  null
+  app: koa.Application;
 
   async onReady() {
 		// ...
@@ -73,7 +73,7 @@ export class MainConfiguration {
 
 ## BodyParser
 
-`null`````````
+`@midwayjs/koa` has its own `bodyParser` function, which will parse `Post` requests by default and automatically recognize `json` and `form` types.
 
 If you need text or xml, you can configure it yourself.
 
@@ -119,7 +119,7 @@ For example, we extend in `configuration.ts` to provide a `render()` method.
 import { App, Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 
-@Configuration ({
+@Configuration({
 	// ...
 })
 export class AutoConfiguration {
@@ -133,7 +133,7 @@ export class AutoConfiguration {
           // ...
         },
       },
-    null
+    });
   }
 }
 ```
@@ -157,7 +157,7 @@ export default {
   koa: {
     port: 7001
   },
-null
+}
 ```
 
 All attributes are described as follows:
@@ -166,15 +166,15 @@ All attributes are described as follows:
 | ------------ | ----------------------------------------- | ------------------------------------------------------- |
 | port | Number | Optional, port to start |
 | globalPrefix | string | optional. the global http prefix |
-| keys | string [] | Optional, Cookies signature, if the upper layer does not write keys, you can also set it here |
-| hostname | null | Optional. The hostname to listen to. Default 127.1 |
+| keys | string[] | Optional, Cookies signature, if the upper layer does not write keys, you can also set it here |
+| hostname | string | Optional. The hostname to listen to. Default 127.1 |
 | Key | string \| Buffer \| Array<Buffer\|Object> | Optional, Https key, server private key |
 | cert | string \| Buffer \| Array<Buffer\|Object> | Optional, Https cert, server certificate |
 | ca | string \| Buffer \| Array<Buffer\|Object> | Optional, Https ca |
-| null | boolean | Optional, supported by http2, default false |
+| http2 | boolean | Optional, supported by http2, default false |
 | proxy | boolean | Optional. Whether to enable the proxy. If true, the host / protocol / ip in the request request is obtained from the X-Forwarded-Host / X-Forwarded-Proto / X-Forwarded-For in the Header field. The default value is false |
-| null | number | optional, the offset of the subdomain name, default 2. |
-| null | string | optional. obtains the field name of the proxy ip address. the default value is X-Forwarded-For |
+| subdomainOffset | number | optional, the offset of the subdomain name, default 2. |
+| proxyIpHeader | string | optional. obtains the field name of the proxy ip address. the default value is X-Forwarded-For |
 | maxIpsCount | number | optional. the maximum number of ips obtained, which is 0 by default. |
 
 
@@ -188,7 +188,7 @@ For example, we changed it to `6001`:
 ```typescript
 // src/config/config.default
 export default {
-  null
+  // ...
   koa: {
     port: 6001
   },
@@ -233,7 +233,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 export default {
-  null
+  // ...
   koa: {
     key: join(__dirname, '../ssl/ssl.key')
     cert: join(__dirname, '../ssl/ssl.pem')

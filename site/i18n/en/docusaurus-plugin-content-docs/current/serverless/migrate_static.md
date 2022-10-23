@@ -1,6 +1,6 @@
 # Static website hosting
 
-This solution is applicable to hosting pure front-end projects (React, vue, etc.) to Serverless platforms (Aliyun, Tengxun, etc.).
+This solution is applicable to hosting pure front-end projects (React, vue, etc.) to Serverless platforms (Aliyun, Tencent, etc.).
 
 Common scenes include hosting company official website, personal homepage, blog, etc.
 
@@ -9,7 +9,7 @@ Common scenes include hosting company official website, personal homepage, blog,
 Add the following `F. yml` to any static project:
 
 ```yaml
-service: name of my-static-demo ## application published to cloud platform
+service: my-static-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -37,11 +37,11 @@ Add dev dependency `@midwayjs/cli`.
 
 ```json
 {
-  "devDependencies ": {
+  "devDependencies": {
     "@midwayjs/cli": "^1.2.36"
   	...
   },
-  "scripts ": {
+  "scripts": {
     "deploy": "npm run build && midway-bin deploy --skipBuild"
   }
 }
@@ -53,7 +53,7 @@ Or use a different npm package to accelerate.
 
 ```bash
 {
-  "scripts ": {
+  "scripts": {
     "deploy": "npm run build && midway-bin deploy --skipBuild --npm=cnpm ",
     ...
   }
@@ -61,7 +61,7 @@ Or use a different npm package to accelerate.
 ```
 
 :::info
-The-skipBuild parameter is used here to skip the construction of the function.  `null`
+The `--skipBuild` parameter is used here to skip the build of the function. `npm run build` connects to the front-end build command.
 :::
 
 By default, the `build` directory is used as the managed root directory. When you access the`/`route, the `/index.html` is automatically searched.
@@ -78,7 +78,7 @@ In addition to the default configuration, we can do some additional configuratio
 ### Modify managed directory
 
 ```yaml
-service: name of my-static-demo ## application published to cloud platform
+service: my-static-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -87,18 +87,18 @@ deployType:
   type: static
   version: 3.0.0
   config:
-  	null
+  	rootDir: public          ## hosting directory becomes public
 
 package:
   include: the directory to be copied by public ## changes with the configured managed Directory
 ```
 
-### null
+### Modify managed prefix
 
 Sometimes a unified route prefix is required for deployment, such as `/api/*`.
 
 ```yaml
-service: name of my-static-demo ## application published to cloud platform
+service: my-static-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -120,7 +120,7 @@ In this way, all/_will become/api/_.
 Ordinary routes are based on managed directory structures and files. If a file that does not exist is accessed, a 404 is returned. We can specify a 404 page.
 
 ```yaml
-service: name of my-static-demo ## application published to cloud platform
+service: my-static-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -128,7 +128,7 @@ provider:
 deployType:
   type: static
   version: 3.0.0
-  null
+  config
   	notFoundUrl: /404.html
 
 package:
@@ -142,7 +142,7 @@ package:
 Sometimes, we want to access some specific routes to a specific file. For example, we want to transfer all route requests to `/index.html`, and then let the front-end route process.
 
 ```yaml
-service: name of my-static-demo ## application published to cloud platform
+service: my-static-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -184,7 +184,7 @@ You can use the name field.
 
 
 ```yaml
-service: name of my-static-demo ## application published to cloud platform
+service: my-static-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc

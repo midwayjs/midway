@@ -10,15 +10,15 @@ The `f.yml` file is added to the root directory of the code. The simplest conten
 Service: Name of My-egg-Demo## Application published to cloud platform
 
 provider:
-  name: aliyun ## cloud platform, aliyun,tencent, etc
+  name: aliyun 		## cloud platform, aliyun,tencent, etc
 
 deployType:
-  type: the type of the application deployed by the egg ##
+  type: egg 			## Deployed application type
   version: 3.0.0
 
 package:
   include:
-    -public ## If there is a static file directory, it will be automatically copied here.
+    -public 			## If there is a static file directory, it will be automatically copied here.
   exclude:
     -package-lock.json ## Ignore package-lock.json files
 
@@ -40,8 +40,8 @@ If it is a egg-ts project, you can use the release hook provided by us to automa
   "name": "xxxxxx ",
   "version": "xxxx ",
   .....
-  "midway-integration ": {
-    "lifecycle ": {
+  "midway-integration": {
+    "lifecycle": {
       "before:package:cleanup": "npm run tsc"
     }
   }
@@ -56,11 +56,11 @@ In the `package.json` configuration Scripts script and dev dependency `@midwayjs
 
 ```json
 {
-  "devDependencies ": {
+  "devDependencies": {
     "@midwayjs/cli": "^1.2.36"
     ...
   },
-  "scripts ": {
+  "scripts": {
     "deploy": "midway-bin deploy ",
     ...
   }
@@ -71,7 +71,7 @@ Or use a different npm package to accelerate.
 
 ```bash
 {
-  "scripts ": {
+  "scripts": {
     "deploy": "midway-bin deploy --npm=cnpm ",
     ...
   }
@@ -115,12 +115,12 @@ In the current migration scheme, some default configurations are added for bette
 
 ```typescript
 // config.default
-const OS = require(' OS ');
+const os = require('os');
 exports.logger = {
-  dir: OS .tmpdir()
+  dir: os.tmpdir()
 };
 
-exports.rundir = OS .tmpdir();
+exports.rundir = os.tmpdir();
 
 exports.static = {
   buffer: true
@@ -160,7 +160,7 @@ package:
 
 By default, it is published as an http trigger. If you need an API gateway, you can modify and configure the functions structure in the format of f.yml. At the same time, configure the route `/*` at the API gateway to transfer to this function.
 
-### Tengxun cloud
+### Tencent cloud
 
 By default, it is published as an API gateway trigger and the gateway route is automatically configured.
 

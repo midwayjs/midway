@@ -1,6 +1,4 @@
----
-title: 全栈套件
----
+# Full stack kit
 
 In Midway Hooks, we provide `@midwayjs/hooks-kit` to quickly develop full stack applications. At present, we provide the following templates that can be used directly:
 
@@ -14,10 +12,10 @@ In projects that use `@midwayjs/hooks-kit`, hooks executables can be used in npm
 
 ```json
 {
-  "scripts ": {
+  "scripts": {
     "dev": "hooks dev", // start the development server
     "start": "hooks start", // start the production server, please make sure you have run' npm run build' before using it'
-    null
+    "build": "hooks build" // Build the product for production
   }
 }
 ```

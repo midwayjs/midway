@@ -119,7 +119,7 @@ import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 import { InternalServerErrorFilter } from './filter/internal.filter';
 
-@Configuration ({
+@Configuration({
   imports: [
     koa
   ],
@@ -207,7 +207,7 @@ import * as koa from '@midwayjs/koa';
 import { DefaultErrorFilter } from './filter/default.filter';
 import { NotFoundFilter } from './filter/notfound.filter';
 
-@Configuration ({
+@Configuration({
   imports: [
     koa
   ],

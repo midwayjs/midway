@@ -1,6 +1,4 @@
----
-title: 测试函数
----
+# Test function
 
 ## Functions of HTTP classes
 
@@ -35,7 +33,7 @@ describe('test/hello_aliyun.test.ts', () => {
   });
 
   it('should get result from api gateway trigger', async () => {
-    const result = await createHttpRequest(app).get('/').query ({
+    const result = await createHttpRequest(app).get('/').query({
       name: 'zhangting',
     });
     expect(result.text).toEqual('hello zhangting');
@@ -86,7 +84,7 @@ Midway provides a platform tool class for quickly creating test data.
 Existing platform tool classes include:
 | @midwayjs/serverless-fc-trigger | Aliyun Trigger Simulation |
 | --- | --- |
-| @midwayjs/serverless-sfc-trigger | Tengxun Cloud Trigger Simulation |
+| @midwayjs/serverless-sfc-trigger | Tencent Cloud Trigger Simulation |
 
 These tool classes provide some methods for quickly creating initialization data.
 
@@ -120,7 +118,7 @@ describe('test/hello_aliyun.test.ts', () => {
   beforeAll(async () => {
     // Create function app
     app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext ({
+      initContext: createInitializeContext({
         accountId: 'xxxxxxx', // data can be adjusted according to the structure
       }),
     });
@@ -157,7 +155,7 @@ Similarly, we can pass parameters for coverage.
 
 ```json
  // Call the function method and pass in the parameters.
-await instance.handleTimer(createTimerEvent ({
+await instance.handleTimer(createTimerEvent({
 	// ...
 });
 ```

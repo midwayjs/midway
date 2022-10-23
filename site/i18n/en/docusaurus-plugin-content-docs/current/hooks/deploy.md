@@ -1,6 +1,4 @@
----
-title: 部署
----
+# Deployment
 
 Midway Hooks supports Api Server and integration.
 
@@ -59,7 +57,7 @@ You can specify the public domain name of static resources by setting the `site.
 import react from '@vitejs/plugin-react';
 import { defineConfig } from '@midwayjs/hooks-kit';
 
-export default defineConfig ({
+export default defineConfig({
   vite: {
     plugins: [react()]
     base: 'https://cdn.example.com',
@@ -77,16 +75,16 @@ As follows:
 
 ```
 dist
-_client
-│ ├── assets
-│ │ ├── index.85bb4f15.js
-│ │ │ │ ── index.b779b14d.css
-│ │ └── vendor.346bc0da.js
-│ │ ── index.html
-│ │ ── logo.png
-│ └── manifest.json
-_serve
-│ └── index.js
+├── _client
+│   ├── assets
+│   │   ├── index.85bb4f15.js
+│   │   ├── index.b779b14d.css
+│   │   └── vendor.346bc0da.js
+│   ├── index.html
+│   ├── logo.png
+│   └── manifest.json
+├── _serve
+│   └── index.js
 ├── book.js
 ├── configuration.js
 ├── date.js
@@ -121,13 +119,13 @@ The deployment workflow is as follows:
 
 #### Full stack suite deployment guide
 
-null``
+The index.html hosting capability of the full-stack kit needs to be disabled by default. In this case, the full-stack kit will not generate the hosting function of `index.html` during construction, and only provide Api services.
 
 ```ts
 import { defineConfig } from '@midwayjs/hooks-kit';
 
-export default defineConfig ({
-  static: false
+export default defineConfig({
+  static: false,
 });
 ```
 

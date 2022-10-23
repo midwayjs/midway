@@ -1,6 +1,4 @@
----
-title: 聚合部署
----
+# Aggregate deployment
 
 Midway provides an aggregate deployment method for HTTP scenarios. Similar to traditional Web applications, Midway deploys multiple routes in the same function container during deployment, which can save cold start time and cost.
 
@@ -11,19 +9,19 @@ Aggregation deployment mode is particularly suitable for traditional mid-backgro
 Create a code example of an aggregate deployment.
 
 :::caution
-null
+We have not yet prepared the aggregated deployment solution for v3.
 :::
 
 ## Directory structure
 
-null``
+The following is the most concise structure of a function, the core will include a `f.yml` standardized function file, and the project structure of TypeScript.
 
 ```bash
 .
--F. yml# standardized spec file
-package.json# Project Dependency
+├── f.yml           # standardized spec file
+├── package.json    # Project Dependency
 ├── src
-null
+│   └── index.ts    # Function entry
 └── tsconfig.json
 ```
 
@@ -36,7 +34,7 @@ Let's take a brief look at the contents of the document.
 
 ## Function file
 
-null``
+Let's first take a look at the function file. The traditional function is a `function`. In order to be more in line with the midway system and use our dependency injection, here it is turned into a Class.
 
 Like traditional applications, we still use the `@Controller` decorator to develop aggregated HTTP functions.
 
@@ -46,44 +44,44 @@ The following code exposes three routes. In aggregate deployment mode, only one 
 import { Inject, Provide, Controller, Get, Post } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/faas';
 
-null
+@Provide()
 @Controller('/')
-null
-  null
+export class APIService {
+  @Inject()
   ctx: Context;
 
-  null
+  @Get('/')
   async hello() {
     return 'Hello Midwayjs';
   }
 
-  null
+  @Get('/get')
   async get() {
     return this.ctx.query;
   }
 
-  null
-  null
+  @Post('/post')
+  async post() {
     return this.ctx.method;
   }
 }
 ```
 
-## null
+## Function definition file
 
-`null`
+`f.yml` is the definition file of the function. Through this file, files that can be recognized by different platforms are generated during construction. The contents of the files in the example are as follows.
 
 ```yaml
 service:
-  name: the name of the midway-faas-examples ## function group, which can be understood as the application name.
+  name: midway-faas-examples ## The function group name, which can be understood as the application name
 
 provider:
-  null
+  name: aliyun ## Released platform, here is Alibaba Cloud
 
-null
-  null
-    functionsPattern: ## Matching Function Rules
-      null
+aggregation: ## Use Aggregate Mode Deployment for HTTP Functions
+  all: ## deployed function name
+    functionsPattern: ## matching function rules
+      - '*'
 ```
 
 ## Local development
@@ -92,10 +90,10 @@ The local development of HTTP functions is the same as that of traditional Web. 
 
 ```shell
 $ npm run dev
-null
+$ open http://localhost:7001
 ```
 
-Midway will start the HTTP server, open the browser, access `[http:// 127.0.0.1:7001](http:// 127.0.0.1:7001)`, and the browser will print the `Hello midwayjs` information.
+Midway will start the HTTP server, open the browser, access `[http://127.0.0.1:7001](http://127.0.0.1:7001)`, and the browser will print the `Hello midwayjs` information.
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1615045887650-73a90be7-1d49-4024-82c4-fd6b5192e75e.png#height=384&id=JCH29&margin=%5Bobject%20Object%5D&name=image.png&originHeight=768&originWidth=1268&originalType=binary&ratio=1&size=85174&status=done&style=none&width=634" width="634" />
 
@@ -135,7 +133,7 @@ describe('test/index.test.ts', () => {
     assert.deepStrictEqual(result2.status, 200);
     assert.deepStrictEqual(result2.body.name, '123');
 
-    null
+    // close app
     await close(app);
   });
 });
@@ -164,7 +162,7 @@ In the case of `@Controller` decorator, the generated function name rule is `pro
 For example:
 
 ```typescript
-@Provide('userService') // <-takes this name, if not, the default is the hump form of the class name
+@Provide('userService') // <--- takes this name, if not, the default is the hump form of the class name
 @Controller('/api')
 export class UserService {
   @Get('/get/:id')
@@ -183,12 +181,12 @@ The following is the generated YAML pseudo code (actually due to aggregate deplo
 functions:
 	userService_getUser:
   	events:
-    	-http:
+    	- http:
           method: get
           path: /get/[:id]
   userService_createUser:
   	events:
-    	-http:
+    	- http:
           method: post
           path: /create
 ```

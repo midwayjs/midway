@@ -1,4 +1,13 @@
 {
+  "homepage.feature.desc.Reliable & Fast": {
+    "message": "Choose to use an elegant dependency injection architecture or a functional programming model for higher development efficiency"
+  },
+  "homepage.feature.desc.API & Fullstack": {
+    "message": "Not only supports the development of API services, but also provides the industry's first integrated full-stack development model"
+  },
+  "homepage.feature.desc.Progressive": {
+    "message": "Progressive design, providing upgrade solutions from basic to entry-level to enterprise-level, solving application maintenance and expansion problems"
+  },
   "theme.ErrorPageContent.title": {
     "message": "Cette page a planté.",
     "description": "The title of the fallback page when the page crashed"

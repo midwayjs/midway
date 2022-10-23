@@ -252,7 +252,7 @@ When duplicate class name checking is started (conflictCheck), the error will be
 
 ```typescript
 // src/configuration.ts
-@Configuration ({
+@Configuration({
   // ...
   conflictCheck: true
 })

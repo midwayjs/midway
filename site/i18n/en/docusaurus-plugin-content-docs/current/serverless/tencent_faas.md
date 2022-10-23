@@ -1,9 +1,9 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Tengxun cloud SCF
+# Tencent cloud SCF
 
-null You only need to write the core code in the language supported by the platform and set the conditions under which the code runs to run the code flexibly and safely on the Tengxun cloud infrastructure. Cloud functions are ideal computing platforms for real-time file processing and data processing.
+Serverless Cloud Function (SCF) is a serverless execution environment provided by Tencent Cloud for enterprises and developers to help you run code without purchasing and managing servers. You only need to write the core code in the language supported by the platform and set the conditions under which the code runs to run the code flexibly and safely on the Tencent cloud infrastructure. Cloud functions are ideal computing platforms for real-time file processing and data processing.
 
 The following are common methods for using and testing function triggers.
 
@@ -12,7 +12,7 @@ The following are common methods for using and testing function triggers.
 <Tabs>
 <TabItem value="http" label="API 网关">
 
-API Gateway is similar to HTTP functions in Tengxun Cloud Function System, through which we publish functions as HTTP services.
+API Gateway is similar to HTTP functions in Tencent Cloud Function System, through which we publish functions as HTTP services.
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
@@ -114,7 +114,7 @@ The structure returned by the Timer message is as follows and is described in th
 
 <TabItem value="cos" label="COS">
 
-COS is a service used by Tengxun Cloud to store some resource files.
+COS is a service used by Tencent Cloud to store some resource files.
 
 ```typescript
 import {
@@ -177,40 +177,40 @@ The structure returned by COS messages is as follows, which is described in the 
 
 ```json
 {
-  "Records ": [
+  "Records": [
     {
-      "cos ": {
+      "cos": {
         "cosSchemaVersion": "1.0 ",
-        "cosObject ": {
+        "cosObject": {
           "url": "http://testpic-1253970026.cos.ap-chengdu.myqcloud.com/testfile ",
-          "meta ": {
+          "meta": {
             "x-cos-request-id": "NWMxOWY4MGFfMjViMjU4NjRfMTUyMV8yNzhhZjM =",
-            "Content-Type ": ""
+            "Content-Type": ""
           },
-          "vid ": "",
-          "key ": "",
+          "vid": "",
+          "key": "",
           "size": 1029
         },
-        "cosBucket ": {
+        "cosBucket": {
           "region": "cd ",
           "name": "testpic ",
           "appid": "1253970026"
         },
         "cosNotificationId": "unkown"
       },
-      "event ": {
+      "event": {
         "eventName": "cos:ObjectCreated :*",
         "eventVersion": "1.0 ",
         "eventTime": 1545205770
         "eventSource": "qcs::cos ",
-        "requestParameters ": {
+        "requestParameters": {
           "requestSourceIP": "192.168.15.101 ",
-          "requestHeaders ": {
-            "Authorization ": "****************"
+          "requestHeaders": {
+            "Authorization": "****************"
           }
         },
         "eventQueue": "qcs:0:lambda:cd:appid/1253970026:default.printevent.$LATEST ",
-        "reservedInfo ": "",
+        "reservedInfo": "",
         "reqid": 179398952
       }
     }
@@ -244,7 +244,7 @@ export class HelloTencentService {
 ```
 
 :::info
-Note that under Tengxun Cloud, the default message queue format provided by midway faas is JSON
+Note that under Tencent Cloud, the default message queue format provided by midway faas is JSON
 :::
 
 **CMS Trigger Configuration**
@@ -272,9 +272,9 @@ The structure returned by CMQ messages is as follows and is described in the typ
 
 ```json
 {
-  "Records ": [
+  "Records": [
     {
-      "CMQ ": {
+      "CMQ": {
         "type": "topic ",
         "topicOwner": 1567
         "topicName": "testtopic ",
@@ -328,7 +328,7 @@ describe('test/hello_tencent.test.ts', () => {
   });
 
   it('should get result from http trigger', async () => {
-    const result = await createHttpRequest(app).post('api_gateway_tencent').send ({
+    const result = await createHttpRequest(app).post('api_gateway_tencent').send({
       name: 'zhangting',
     });
 
@@ -448,7 +448,7 @@ describe('test/hello_tencent.test.ts', () => {
 
 </Tabs>
 
-## Published to Tengxun Cloud SCF
+## Published to Tencent Cloud SCF
 
 Make sure it is `tencent` at the `provider` paragraph of `f.yml` in the project root directory.
 
@@ -484,7 +484,7 @@ provider:
 
 Multiplex HTTP gateway
 
-Tengxun Cloud will create a new gateway binding every time HTTP type is deployed. For development, we can reuse the same id
+Tencent Cloud will create a new gateway binding every time HTTP type is deployed. For development, we can reuse the same id
 
 ```yaml
 service:
@@ -497,7 +497,7 @@ provider:
 
 For more information, see [DIP](deploy_tencent_faq#NGqUs).
 
-Run `npm run deploy`. The Deploy command is automatically packaged and released by calling the official deployment tool of Tengxun Cloud.
+Run `npm run deploy`. The Deploy command is automatically packaged and released by calling the official deployment tool of Tencent Cloud.
 
 The video flow is as follows:
 
@@ -509,7 +509,7 @@ The video flow is as follows:
 
 ### 1. User authentication
 
-When Tengxun Cloud is deployed, if it is the first deployment, the console will display the corresponding two-dimensional code, and the authentication can be completed by scanning the code. The configuration will be reused by default for a single project.
+When Tencent Cloud is deployed, if it is the first deployment, the console will display the corresponding two-dimensional code, and the authentication can be completed by scanning the code. The configuration will be reused by default for a single project.
 
 The authentication file is stored in the `.env` file in the root directory of the deployment. If you want to modify the file, you can delete the file and scan the code again.
 
@@ -528,7 +528,7 @@ If you want to use a RAM user to publish a RAM user, you can view the [RAM user 
 
 ### 2. Release area switching
 
-Tengxun cloud configuration supports publishing to different regions.
+Tencent cloud configuration supports publishing to different regions.
 
 ```yaml
 service: fc-qinyue-test
@@ -554,7 +554,7 @@ For the complete list of regions, see [Tencent Cloud documentation](https://clou
 
 ### 3. Reuse API Gateway
 
-If the HTTP function is officially released, Tengxun Cloud will automatically create a serviceId that identifies the Gateway every time it is released, and there will be many in the long run. In order to reuse each time, it is better to record the serviceId to reuse the following codes after the first release (or apply for a good gateway in advance).
+If the HTTP function is officially released, Tencent Cloud will automatically create a serviceId that identifies the Gateway every time it is released, and there will be many in the long run. In order to reuse each time, it is better to record the serviceId to reuse the following codes after the first release (or apply for a good gateway in advance).
 
 ```yaml
 service: fc-qinyue-test
@@ -603,13 +603,13 @@ Configure a custom path mapping, such as mapping`/`to the official publishing en
 
 ### 5. Additional Billing
 
-When using local tools, due to the SDK provided by Tengxun Cloud, a COS Bucket may be created for the storage of code packages. As COS is used for payment, a certain fee will be incurred. Please pay attention to your COS situation in time to avoid deduction.
+When using local tools, due to the SDK provided by Tencent Cloud, a COS Bucket may be created for the storage of code packages. As COS is used for payment, a certain fee will be incurred. Please pay attention to your COS situation in time to avoid deduction.
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1606803155279-51e71ffa-6e9a-4ab9-812b-19003d45483c.png#height=460&id=DRD5n&margin=%5Bobject%20Object%5D&name=image.png&originHeight=460&originWidth=1196&originalType=binary&size=60856&status=done&style=none&width=1196" width="1196" />
 
-### 6. Delete Tengxun Cloud Gateway Service
+### 6. Delete Tencent Cloud Gateway Service
 
-After trying out the Tengxun cloud service for a period of time, many examples of non-reused gateways will appear because API gateways are not reused every time, as follows.
+After trying out the Tencent cloud service for a period of time, many examples of non-reused gateways will appear because API gateways are not reused every time, as follows.
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588749300990-34089754-5fe2-4fb9-942a-0f9f0abc6984.png#height=1226&id=Jo9cX&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1226&originWidth=2778&originalType=binary&size=261243&status=done&style=none&width=2778" width="2778" />
 

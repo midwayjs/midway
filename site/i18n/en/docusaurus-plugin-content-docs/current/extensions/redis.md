@@ -9,7 +9,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -25,9 +25,9 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/redis": "^3.0.0",
-    null
+    // ...
   }
 }
 ```
@@ -41,10 +41,10 @@ Or reinstall the following dependencies in `package.json`.
 First, introduce components and import them in `src/configuration.ts`:
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-null
+import * as redis from '@midwayjs/redis';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     redis // import redis components
@@ -71,7 +71,7 @@ export default {
   // ...
   redis: {
     client: {
-      null
+      port: 6379, // Redis port
       host: "127.0.0.1", // Redis host
       password: "auth ",
       db: 0
@@ -81,7 +81,7 @@ export default {
 ```
 **Sentinel configuration**
 ```typescript
-null
+// src/config/config.default.ts
 export default {
   // ...
   redis: {
@@ -113,7 +113,7 @@ export default {
         port: 'port',
       },{
         host: 'host',
-        null
+        port: 'port',
       }],
       redisOptions: {
         family: '',
@@ -128,7 +128,7 @@ export default {
 **Configure multiple clients.**
 ```typescript
 // src/config/config.default.ts
-null
+export default {
   // ...
   redis: {
 		// Multi Redis
@@ -174,7 +174,7 @@ export class UserService {
     // Set the expiration time in seconds.
     await this.redisService.set('foo', 'bar', 'EX', 10);
 
-    null
+    // get data
     const result = await this.redisService.get('foo');
 
    // result => bar

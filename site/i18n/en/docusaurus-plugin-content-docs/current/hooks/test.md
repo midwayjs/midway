@@ -1,6 +1,4 @@
----
-title: 测试
----
+# Testing
 
 In Midway Hooks, we can quickly test the Http interface.
 

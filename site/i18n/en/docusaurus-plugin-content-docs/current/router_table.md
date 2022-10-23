@@ -17,7 +17,7 @@ It has been instantiated by default and can be used by direct injection.
 import { MidwayWebRouterService, MidwayServerlessFunctionService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {

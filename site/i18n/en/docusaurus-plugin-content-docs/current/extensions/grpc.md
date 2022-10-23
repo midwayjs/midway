@@ -32,7 +32,7 @@ Related information:
 
 | Description |      |
 | -------------------- | ---- |
-| Can be used independently as the main frame | ✅ |
+| Can be used independently as the main framework | ✅ |
 | Middleware can be added independently | ✅ |
 
 
@@ -48,11 +48,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/grpc": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@midwayjs/grpc-helper": "^1.0.0 ",
     // ...
   }
@@ -76,7 +76,7 @@ Whether it is providing a service or invoking a service, you need to open the co
 import { Configuration } from '@midwayjs/decorator';
 import * as grpc from '@midwayjs/grpc';
 
-@Configuration ({
+@Configuration({
   imports: [grpc]
   // ...
 })
@@ -96,7 +96,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import * as grpc from '@midwayjs/grpc';
 
-@Configuration ({
+@Configuration({
   imports: [koa, grpc]
   // ...
 })
@@ -240,7 +240,7 @@ The function of the grpc-helper tool is to generate the corresponding readable t
 We can add a script to facilitate this process.
 ```json
 {
-	"scripts ": {
+	"scripts": {
      "generate": "tsproto --path proto --output src/domain"
   }
 }
@@ -445,13 +445,13 @@ describe('test/index.test.ts', () => {
     const app = await createApp<Framework>();
 
     // Call service
-    const service = await createGRPCConsumer<helloworld. GreeterClient> ({
+    const service = await createGRPCConsumer<helloworld. GreeterClient>({
       package: 'helloworld',
       protoPath: join(baseDir, 'proto', 'helloworld.proto'),
       url: 'localhost:6565'
     });
 
-    const result = await service.sayHello().sendMessage ({
+    const result = await service.sayHello().sendMessage({
       name: 'harry'
     });
 
@@ -554,7 +554,7 @@ export class UserService {
 
     // Call service
     const result = await greeterService.sayHello()
-    	.sendMessage ({
+    	.sendMessage({
         name: 'harry'
       });
 
@@ -601,7 +601,7 @@ export class HeroService implements hero.HeroService {
   async findOne(data) {
     // Call service
     const result = await greeterService.sayHello()
-    	.sendMessage ({
+    	.sendMessage({
         name: 'harry'
       });
 
@@ -750,13 +750,13 @@ export class Math implements math.Math {
 
   @GrpcMethod({type: GrpcStreamTypeEnum.WRITEABLE })
   async sumMany(args: math.AddArgs) {
-    this.ctx.write ({
+    this.ctx.write({
       num: 1 + args.num
     });
-    this.ctx.write ({
+    this.ctx.write({
       num: 2 + args.num
     });
-    this.ctx.write ({
+    this.ctx.write({
       num: 3 + args.num
     });
 
@@ -783,7 +783,7 @@ Promise writing method, it will wait for the server data to return before proces
 ```typescript
 // Server push
 let total = 0;
-let result = await service.sumMany().sendMessage ({
+let result = await service.sumMany().sendMessage({
   num: 1
 });
 
@@ -804,7 +804,7 @@ call.on('data', data => {
 	// do something
 });
 
-call.sendMessage ({
+call.sendMessage({
   num: 1
 });
 
@@ -894,7 +894,7 @@ export class Math implements math.Math {
 
   @GrpcMethod({type: GrpcStreamTypeEnum.DUPLEX, onEnd: 'duplexEnd' })
   async addMore(message: math.AddArgs) {
-    this.ctx.write ({
+    this.ctx.write({
       id: message.id
       num: message.num +10
     });
@@ -986,7 +986,7 @@ const result4 = await new Promise<number>((resolve, reject) => {
   let total = 0;
 
   // First call and return
-  t.sendMessage ({
+  t.sendMessage({
     num: 2
   })
     .then(res => {
@@ -996,7 +996,7 @@ const result4 = await new Promise<number>((resolve, reject) => {
     .catch(err => console.error(err));
 
   // Second call and return
-  t.sendMessage ({
+  t.sendMessage({
     num: 5
   }).then(res => {
       expect(res.num).toEqual(15);
@@ -1013,7 +1013,7 @@ const result4 = await new Promise<number>((resolve, reject) => {
 The default ID is `id`. If the server definition is different, you can change it.
 ```typescript
 // Ensure sequential bidirectional flow
-const t = service.addMore ({
+const t = service.addMore({
   messageKey: 'uid'
 });
 ```
@@ -1068,9 +1068,9 @@ import { Metadata } from '@midwayjs/grpc';
 const meta = new Metadata();
 meta.add('key', 'value');
 
-const result = await service.sayHello ({
+const result = await service.sayHello({
   metadata: meta
-}).sendMessage ({
+}).sendMessage({
   name: 'harry'
 });
 ```
@@ -1081,7 +1081,7 @@ Getting metadata is relatively cumbersome.
 
 Ordinary unary calls (UnaryCall) require `sendMessageWithCallback` methods to obtain metadata.
 ```typescript
-const call = service.sayHello().sendMessageWithCallback ({
+const call = service.sayHello().sendMessageWithCallback({
   name: 'zhangting'
 }, (err) => {
   if (err) {
@@ -1107,9 +1107,9 @@ call.on('metadata', (meta) => {
 
 We can pass parameters in milliseconds when calling the service.
 ```typescript
-const result = await service.sayHello ({
+const result = await service.sayHello({
   timeout: 5000
-}).sendMessage ({
+}).sendMessage({
   name: 'harry'
 });
 ```

@@ -1,6 +1,4 @@
----
-title: Prisma ORM
----
+# Prisma ORM
 
 In Midway Hooks, we recommend that you use [Prisma](https://prisma.io/) to build databases and achieve the goal of static type security.
 
@@ -46,7 +44,7 @@ Create a prisma file under the src/api of the project, and use the following cod
 ```ts
 import { PrismaClient } from '@prisma/client';
 
-null
+export const prisma =
   new PrismaClient();
 ```
 
@@ -74,8 +72,8 @@ import {
 import { prisma } from './prisma';
 
 export default Api(Get(), async () => {
-  null
-    await prisma.post.findMany ({
+  const posts =
+    await prisma.post.findMany({
       where: { published: true}
       include: { author: true}
     });
@@ -88,7 +86,7 @@ Integrated call:
 ```ts
 import fetchFeeds from '../api/feeds';
 
-null
+fetchFeeds().then((feeds) => {
   console.log(feeds);
 });
 ```
@@ -123,7 +121,7 @@ export const signUp = Api (
     email: string
   ) => {
     const result =
-      await prisma.user.create ({
+      await prisma.user.create({
         data: {
           name
           email
@@ -139,7 +137,7 @@ Integrated call:
 ```ts
 import { signUp } from '../api/feeds';
 
-signUp('John', 'test@test.com').then (
+signUp('John', 'test@test.com').then(
   (user) => {
     console.log(user);
   }

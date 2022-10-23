@@ -77,7 +77,7 @@ module.exports = async () => {
 If you want to build a copied directory in the root directory of the project, such as the `public` directory of static files, configure the `package.include` field in `f.yml`.
 
 ```yaml
-service: name of my-egg-demo ## application published to cloud platform
+service: my-express-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
@@ -88,7 +88,7 @@ deployType:
 
 package:
   include:
-    null
+    - public                 ## Written here will be automatically packaged
   exclude:
     -package-lock.json ## Ignore package-lock.json files
 ```
@@ -99,11 +99,11 @@ In the `package.json` configuration Scripts script and dev dependency `@midwayjs
 
 ```json
 {
-  "devDependencies ": {
+  "devDependencies": {
     "@midwayjs/cli": "^1.2.36"
     ...
   },
-  "scripts ": {
+  "scripts": {
     "deploy": "midway-bin deploy ",
     ...
   }
@@ -114,7 +114,7 @@ Or use a different npm package to accelerate.
 
 ```bash
 {
-  "scripts ": {
+  "scripts": {
     "deploy": "midway-bin deploy --npm=cnpm ",
     ...
   }
@@ -134,7 +134,7 @@ $npx midway-bin deploy --npm=cnpm ## deploy by cnpm
 
 By default, it is published as an http trigger. If you need an API gateway, you can modify and configure the functions structure according to the format of f.yml. At the same time, you need to configure routes on the platform.
 
-### Tengxun cloud
+### Tencent cloud
 
 By default, it is published as an API gateway trigger and the gateway route is automatically configured.
 
@@ -144,7 +144,7 @@ By default, it is published as an API gateway trigger and the gateway route is a
 You can use the name field.
 
 ```yaml
-service: name of my-demo ## application published to cloud platform
+service: my-express-demo
 
 provider:
   name: aliyun ## cloud platform, aliyun,tencent, etc
