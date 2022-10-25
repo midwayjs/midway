@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`/test/service/webRouterService.test.ts should test add router first 1`] = `
-Array [
-  Object {
+[
+  {
     "_category": 2,
     "_level": 3,
     "_paramString": "",
@@ -18,7 +18,7 @@ Array [
 `;
 
 exports[`/test/service/webRouterService.test.ts should test generate router and flatten router 1`] = `
-Object {
+{
   "fullUrl": "/abc/dddd/*",
   "fullUrlCompiledRegexp": /\\^\\\\/abc\\\\/dddd\\(\\?:\\\\/\\(\\.\\*\\)\\)\\[\\\\/#\\\\\\?\\]\\?\\$/i,
   "fullUrlFlattenString": "/abc/dddd/(.*)",

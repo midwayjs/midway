@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`test/index.test.ts should test get config and filter secret 1`] = `
-Object {
-  "info": Object {
+{
+  "info": {
     "asyncContextManager": "{\\"enable\\":false}",
     "cos": "{\\"default\\":{\\"SecretId\\":\\"df******af\\",\\"SecretKey\\":\\"te******vc\\",\\"SecurityToken\\":\\"fj*********af\\"}}",
     "debug": "{\\"recordConfigMergeOrder\\":true}",

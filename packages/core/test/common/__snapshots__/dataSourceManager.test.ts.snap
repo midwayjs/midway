@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`test/common/dataSourceManager.test.ts should test base data source 1`] = `
-Object {
+{
   "dialect": "mysql",
-  "entities": Array [
+  "entities": [
     [Function],
     [Function],
   ],
   "entitiesLength": 2,
   "host": "localhost",
-  "pool": Object {
+  "pool": {
     "idle": 10000,
     "max": 5,
     "min": 0,
@@ -19,15 +19,15 @@ Object {
 `;
 
 exports[`test/common/dataSourceManager.test.ts should test base data source 2`] = `
-Object {
+{
   "dataSourceGroup": "bb",
   "dialect": "mysql",
-  "entities": Array [
+  "entities": [
     [Function],
   ],
   "entitiesLength": 1,
   "host": "localhost",
-  "pool": Object {
+  "pool": {
     "idle": 10000,
     "max": 5,
     "min": 0,
@@ -37,9 +37,9 @@ Object {
 `;
 
 exports[`test/common/dataSourceManager.test.ts should test with glob model 1`] = `
-Object {
+{
   "dialect": "mysql",
-  "entities": Array [
+  "entities": [
     [Function],
     [Function],
     [Function],
@@ -48,7 +48,7 @@ Object {
   ],
   "entitiesLength": 5,
   "host": "localhost",
-  "pool": Object {
+  "pool": {
     "idle": 10000,
     "max": 5,
     "min": 0,
