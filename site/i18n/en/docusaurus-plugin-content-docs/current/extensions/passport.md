@@ -277,7 +277,7 @@ Note: validate method is an Promise alternative to community policy verify. You 
 
 import { Middleware } from '@midwayjs/decorator';
 import { PassportMiddleware, AuthenticateOptions } from '@midwayjs/passport';
-import { JwtStrategy } from '../strategy/jwt-strategy';
+import { JwtStrategy } from '../strategy/jwt.strategy';
 
 @Middleware()
 export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
@@ -288,10 +288,10 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
 ```
 
 ```typescript
-import { Post, Inject, Controller, } from '@midwayjs/decorator';
-import { Context } from '@midwayjs/koa'
+import { Post, Inject, Controller } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/koa';
 import { JwtService } from '@midwayjs/jwt';
-import { JwtPassportMiddleware } from './middleware/jwt.middleware';
+import { JwtPassportMiddleware } from '../middleware/jwt.middleware';
 
 @Controller('/')
 export class JwtController {
