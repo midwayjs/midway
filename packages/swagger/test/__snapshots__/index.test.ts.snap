@@ -216,19 +216,19 @@ exports[`/test/index.test.ts test swagger should get swagger json 4`] = `
       "format": "date",
       "type": "string",
     },
-    "breed": Object {
+    "breed": {
       "description": "The breed of the Cat",
       "example": "Maine Coon",
       "type": "string",
     },
-    "catds": Object {
+    "catds": {
       "description": "The breed of the Cat",
-      "items": Object {
+      "items": {
         "$ref": "#/components/schemas/Catd",
       },
       "type": "array",
     },
-    "name": Object {
+    "name": {
       "description": "The name of the Cat",
       "example": "Kitty",
       "type": "string",
@@ -239,9 +239,9 @@ exports[`/test/index.test.ts test swagger should get swagger json 4`] = `
 `;
 
 exports[`/test/index.test.ts test swagger should get swagger json 5`] = `
-Object {
-  "properties": Object {
-    "age": Object {
+{
+  "properties": {
+    "age": {
       "description": "The name of the Catage",
       "example": "1",
       "maxItems": 1,
@@ -250,30 +250,30 @@ Object {
       "maximum": 10,
       "type": "number",
     },
-    "agedata": Object {
+    "agedata": {
       "description": "The age of the CatDSate",
       "example": "2022-12-12 11:11:11",
       "format": "date",
       "type": "string",
     },
-    "breed": Object {
+    "breed": {
       "description": "The name of the Catbreed",
       "example": "bbbb",
       "type": "string",
     },
-    "breeds": Object {
+    "breeds": {
       "description": "The name of the Catage",
       "example": [
         "1",
       ],
-      "items": Object {
+      "items": {
         "type": "string",
       },
       "nullable": true,
       "type": "array",
       "uniqueItems": true,
     },
-    "hello": Object {
+    "hello": {
       "enum": [
         "One",
         "Two",
@@ -281,7 +281,7 @@ Object {
       ],
       "type": "string",
     },
-    "name": Object {
+    "name": {
       "description": "The name of the Catname",
       "example": "Kitty",
       "format": "binary",
@@ -293,23 +293,23 @@ Object {
 `;
 
 exports[`/test/index.test.ts test swagger should get swagger json 6`] = `
-Object {
-  "get": Object {
+{
+  "get": {
     "parameters": [
-      Object {
+      {
         "in": "header",
         "name": "x-test-one",
-        "schema": Object {
+        "schema": {
           "type": "string",
         },
       },
-      Object {
+      {
         "allowEmptyValue": false,
         "explode": true,
         "in": "query",
         "name": "aa",
         "required": true,
-        "schema": Object {
+        "schema": {
           "enum": [
             "One",
             "Two",
@@ -319,13 +319,13 @@ Object {
         },
         "style": "form",
       },
-      Object {
+      {
         "allowEmptyValue": false,
         "explode": true,
         "in": "query",
         "name": "test",
         "required": true,
-        "schema": Object {
+        "schema": {
           "enum": [
             "One",
             "Two",
@@ -335,24 +335,24 @@ Object {
         },
         "style": "form",
       },
-      Object {
+      {
         "description": "hello world id number",
         "example": 12,
         "explode": false,
         "in": "path",
         "name": "id",
         "required": true,
-        "schema": Object {
+        "schema": {
           "type": "string",
         },
         "style": "simple",
       },
     ],
-    "responses": Object {
-      "200": Object {
-        "content": Object {
-          "application/json": Object {
-            "schema": Object {
+    "responses": {
+      "200": {
+        "content": {
+          "application/json": {
+            "schema": {
               "$ref": "#/components/schemas/Cat",
             },
           },
@@ -361,10 +361,10 @@ Object {
       },
     },
     "security": [
-      Object {
+      {
         "ttt": [],
       },
-      Object {
+      {
         "bbb": [],
       },
     ],
@@ -372,37 +372,37 @@ Object {
       "2-国家测试",
       "sss",
     ],
-    "x-hello": Object {
+    "x-hello": {
       "hello": "world",
     },
   },
-  "post": Object {
+  "post": {
     "parameters": [
-      Object {
+      {
         "in": "header",
         "name": "x-test-one",
-        "schema": Object {
+        "schema": {
           "type": "string",
         },
       },
-      Object {
+      {
         "description": "hello world id number",
         "example": 12,
         "explode": false,
         "in": "path",
         "name": "id",
         "required": true,
-        "schema": Object {
+        "schema": {
           "format": "int32",
           "type": "number",
         },
         "style": "simple",
       },
     ],
-    "requestBody": Object {
-      "content": Object {
-        "application/octet-stream": Object {
-          "schema": Object {
+    "requestBody": {
+      "content": {
+        "application/octet-stream": {
+          "schema": {
             "format": "binary",
             "type": "string",
           },
@@ -411,29 +411,29 @@ Object {
       "description": "hello world",
       "required": true,
     },
-    "responses": Object {
-      "200": Object {
-        "content": Object {
-          "application/json": Object {
-            "schema": Object {
+    "responses": {
+      "200": {
+        "content": {
+          "application/json": {
+            "schema": {
               "$ref": "#/components/schemas/Cat",
             },
           },
         },
         "description": "成功了",
       },
-      "403": Object {
+      "403": {
         "description": "Forbidden.",
       },
-      "404": Object {
+      "404": {
         "description": "NotFound.",
       },
     },
     "security": [
-      Object {
+      {
         "ttt": [],
       },
-      Object {
+      {
         "bbb": [],
       },
     ],
