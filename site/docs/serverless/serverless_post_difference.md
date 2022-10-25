@@ -1,6 +1,4 @@
----
-title: Serverless 触发器 POST 情况差异
----
+# Serverless 触发器 POST 情况差异
 
 ## 阿里云 API 网关
 
@@ -10,7 +8,7 @@ title: Serverless 触发器 POST 情况差异
 
 网关配置如下。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593175823751-f9b305fc-ddeb-4b04-ba13-481a616be260.png#height=536&id=R8Ber&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1072&originWidth=1560&originalType=binary&size=138055&status=done&style=none&width=780" width="780" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593175823751-f9b305fc-ddeb-4b04-ba13-481a616be260.png)
 
 网关透传的 event 特征为有 `body` 字段以及 `isBase64Encoded` 为 true，解码比较容易，直接解 base64 即可。
 
@@ -94,7 +92,7 @@ ctx.request.body; // {"c":"b"}   => object
 
 Postman 模拟请求如下：
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593188653464-2a5659de-40ad-4611-ba86-f5754c7d4425.png#height=684&id=hkVhi&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1368&originWidth=1316&originalType=binary&size=178770&status=done&style=none&width=658" width="658" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593188653464-2a5659de-40ad-4611-ba86-f5754c7d4425.png)
 
 函数拿到的 event 值如下。
 
@@ -129,7 +127,7 @@ ctx.request.body; // {"c":"b"}   => object
 
 网关配置选择入参映射之后，body 数据类型有两种选择。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593186831907-7975c65c-aee5-4f96-9ae4-ffaeee66c7dd.png#height=179&id=KonHW&margin=%5Bobject%20Object%5D&name=image.png&originHeight=358&originWidth=1112&originalType=binary&size=117003&status=done&style=none&width=556" width="556" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593186831907-7975c65c-aee5-4f96-9ae4-ffaeee66c7dd.png)
 
 一旦选了映射，整个函数拿到的 Headers 中就 **没有了 content-type**。
 
@@ -177,7 +175,7 @@ return {
 
 字符串格式。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593321679770-a7609684-ec5e-4f93-99f2-d346ed79c1fa.png#height=426&id=ny1FQ&margin=%5Bobject%20Object%5D&name=image.png&originHeight=426&originWidth=1154&originalType=binary&size=33111&status=done&style=none&width=1154" width="1154" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593321679770-a7609684-ec5e-4f93-99f2-d346ed79c1fa.png)
 
 ```typescript
 ctx.request.body; // "bbb"   => string
@@ -185,7 +183,7 @@ ctx.request.body; // "bbb"   => string
 
 JSON 格式
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593321730423-f9b2860f-7902-4f3a-81cf-bfbcfd4ee57f.png#height=431&id=Vz8q7&margin=%5Bobject%20Object%5D&name=image.png&originHeight=431&originWidth=1074&originalType=binary&size=34435&status=done&style=none&width=1074" width="1074" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593321730423-f9b2860f-7902-4f3a-81cf-bfbcfd4ee57f.png)
 
 ```typescript
 ctx.request.body; // {"b":"c"}   => object
@@ -193,7 +191,7 @@ ctx.request.body; // {"b":"c"}   => object
 
 ### 表单（application/x-www-form-urlencoded)
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593321823455-23ec3970-35a5-4746-8995-d9146eaa4ab0.png#height=387&id=qxW8I&margin=%5Bobject%20Object%5D&name=image.png&originHeight=387&originWidth=1310&originalType=binary&size=36914&status=done&style=none&width=1310" width="1310" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593321823455-23ec3970-35a5-4746-8995-d9146eaa4ab0.png)
 
 ```typescript
 ctx.request.body; // {"b":"c"}   => object
@@ -223,7 +221,7 @@ return {
 
 字符串格式，正常解析。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593323223487-c4e5f365-b500-4a2d-85e3-45bd4aba4653.png#height=1094&id=BcYdP&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1094&originWidth=1486&originalType=binary&size=79437&status=done&style=none&width=1486" width="1486" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593323223487-c4e5f365-b500-4a2d-85e3-45bd4aba4653.png)
 
 ```typescript
 ctx.request.body; // "bbb"   => string
@@ -231,7 +229,7 @@ ctx.request.body; // "bbb"   => string
 
 JSON 格式，能正常解析。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593323187488-e7b4e32e-4195-404d-b309-ba436c3f5f8e.png#height=1072&id=Wf7Tf&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1072&originWidth=1312&originalType=binary&size=76807&status=done&style=none&width=1312" width="1312" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593323187488-e7b4e32e-4195-404d-b309-ba436c3f5f8e.png)
 
 ```typescript
 ctx.request.body; // {"c":"b"}   => object
@@ -241,7 +239,7 @@ ctx.request.body; // {"c":"b"}   => object
 
 正常解析为 JSON。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593323279728-983fd844-f37d-419b-90f3-f96d1ee8236d.png#height=686&id=nOyZ8&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=1556&originalType=binary&size=75708&status=done&style=none&width=1556" width="1556" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593323279728-983fd844-f37d-419b-90f3-f96d1ee8236d.png)
 
 ```typescript
 ctx.request.body; // {"c":"b"}   => object

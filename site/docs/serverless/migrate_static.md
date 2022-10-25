@@ -61,7 +61,7 @@ custom:
 ```
 
 :::info
-这里使用 --skipBuild 参数是为了跳过函数的构建。 `npm run build` 对接前端的构建命令。
+这里使用 `--skipBuild` 参数是为了跳过函数的构建。 `npm run build` 对接前端的构建命令。
 :::
 
 默认情况下，会使用 `build` 目录作为托管根目录，访问 `/` 路由时，会自动查找 `/index.html`。

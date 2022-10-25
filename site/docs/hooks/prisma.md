@@ -1,6 +1,4 @@
----
-title: Prisma ORM
----
+# Prisma ORM
 
 在 Midway Hooks 中，我们推荐使用 [Prisma](https://prisma.io/) 来构建数据库，并实现我们静态类型安全的目标。
 

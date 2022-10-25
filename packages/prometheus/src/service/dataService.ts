@@ -83,6 +83,16 @@ export class DataService {
   }
 
   @Master()
+  async observe(name, labels, value) {
+    this.userDefinedMetrics[name]
+      .labels(
+        ...labels,
+        ...(Object.values(this.prometheusConfig.labels) as string[])
+      )
+      .observe(value);
+  }
+
+  @Master()
   async set(name, value) {
     this.userDefinedMetrics[name].set(
       { ...this.prometheusConfig.labels },

@@ -231,10 +231,9 @@ export class HomeController {
 
 同时 consul 也能作为一个服务配置的地方，如下代码：
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/decorator';
 import * as Consul from 'consul';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -272,7 +271,7 @@ export class ConfigService {
   config: any;
 
   @Init()
-  async init(){
+  async init() {
     setInterval(()=>{
       this.consul.kv.get(`name`).then(res=>{
         this.config = res;

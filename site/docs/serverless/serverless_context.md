@@ -1,6 +1,4 @@
----
-title: 函数上下文
----
+# 函数上下文
 
 ## Event 转换
 
@@ -140,7 +138,7 @@ ctx.set('X-FaaS-Duration', 2100);
 ctx.status = 404;
 ```
 
-###
+
 
 ### Request aliases
 
@@ -163,7 +161,7 @@ ctx.status = 404;
 - `ctx.type=`
 - `ctx.set()`alias to `response.setHeader`
 
-##
+
 
 ## FaaSHTTPRequest
 

@@ -1,0 +1,106 @@
+{
+  "version.label": {
+    "message": "3.0.0",
+    "description": "The label for version current"
+  },
+  "sidebar.common.category.新手指南": {
+    "message": "Quick Guide",
+    "description": "The label for category 新手指南 in sidebar common"
+  },
+  "sidebar.common.category.基础": {
+    "message": "Fundamentals",
+    "description": "The label for category 基础 in sidebar common"
+  },
+  "sidebar.common.category.进阶": {
+    "message": "Advanced",
+    "description": "The label for category 进阶 in sidebar common"
+  },
+  "sidebar.common.category.设计模式": {
+    "message": "Design Patterns",
+    "description": "The label for category 设计模式 in sidebar common"
+  },
+  "sidebar.common.category.自定义": {
+    "message": "Customize",
+    "description": "The label for category 自定义 in sidebar common"
+  },
+  "sidebar.component.category.通用": {
+    "message": "Common",
+    "description": "The label for category 通用 in sidebar component"
+  },
+  "sidebar.component.category.Http 服务": {
+    "message": "Http Service",
+    "description": "The label for category Http 服务 in sidebar component"
+  },
+  "sidebar.component.category.数据存储": {
+    "message": "Data Storage",
+    "description": "The label for category 数据存储 in sidebar component"
+  },
+  "sidebar.component.category.微服务": {
+    "message": "MicroService",
+    "description": "The label for category 微服务 in sidebar component"
+  },
+  "sidebar.component.category.WebSocket": {
+    "message": "WebSocket",
+    "description": "The label for category WebSocket in sidebar component"
+  },
+  "sidebar.component.category.消息": {
+    "message": "Message",
+    "description": "The label for category 消息 in sidebar component"
+  },
+  "sidebar.component.category.监控和启动": {
+    "message": "Monitor And Bootstrap",
+    "description": "The label for category 监控和启动 in sidebar component"
+  },
+  "sidebar.serverless.category.基础": {
+    "message": "Base",
+    "description": "The label for category 基础 in sidebar serverless"
+  },
+  "sidebar.serverless.category.平台触发器": {
+    "message": "Trigger",
+    "description": "The label for category 平台触发器 in sidebar serverless"
+  },
+  "sidebar.serverless.category.应用部署到弹性容器": {
+    "message": "Application Migrate",
+    "description": "The label for category 应用部署到弹性容器 in sidebar serverless"
+  },
+  "sidebar.serverless.doc.介绍": {
+    "message": "Introduce",
+    "description": "The label for the doc item 介绍 in sidebar serverless, linking to the doc serverless/serverless_intro"
+  },
+  "sidebar.serverless.doc.Serverless 触发器 POST 情况差异": {
+    "message": "Serverless trigger POST case differences",
+    "description": "The label for the doc item Serverless 触发器 POST 情况差异 in sidebar serverless, linking to the doc serverless/serverless_post_difference"
+  },
+  "sidebar.hooks.category.基础功能": {
+    "message": "Fundamentals",
+    "description": "The label for category 基础功能 in sidebar hooks"
+  },
+  "sidebar.hooks.category.一体化": {
+    "message": "Integration",
+    "description": "The label for category 一体化 in sidebar hooks"
+  },
+  "sidebar.hooks.category.进阶": {
+    "message": "Advanced",
+    "description": "The label for category 进阶 in sidebar hooks"
+  },
+  "sidebar.hooks.doc.介绍": {
+    "message": "Introduce",
+    "description": "The label for the doc item 介绍 in sidebar hooks, linking to the doc hooks/intro"
+  },
+  "sidebar.other.category.工具": {
+    "message": "Tools",
+    "description": "The label for category 工具 in sidebar other"
+  },
+  "sidebar.other.category.运维": {
+    "message": "OPS",
+    "description": "The label for category 运维 in sidebar other"
+  },
+  "sidebar.other.category.常见问题": {
+    "message": "Common problem",
+    "description": "The label for category 常见问题 in sidebar other"
+  },
+  "sidebar.other.category.其他": {
+    "message": "Other",
+    "description": "The label for category 其他 in sidebar other"
+  }
+}

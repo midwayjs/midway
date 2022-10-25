@@ -680,6 +680,10 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return this.namespaceSet.has(ns);
   }
 
+  getNamespaceList() {
+    return Array.from(this.namespaceSet);
+  }
+
   hasDefinition(identifier: ObjectIdentifier) {
     return this.registry.hasDefinition(identifier);
   }

@@ -1,6 +1,4 @@
----
-title: Lint 工具、规则和格式化
----
+# Lint 工具、规则和格式化
 
 Midway 的框架和业务代码都是由 TypeScript 编写的，默认 Midway 提供了一套默认的 lint、编辑器以及格式化规则，用于更方便的进行开发和测试。
 
@@ -68,20 +66,20 @@ module.exports = {
 
 第一步，安装 Prettier 插件。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1618042429530-177c3636-aefc-419d-8d3a-5258cad13631.png#align=left&display=inline&height=536&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1072&originWidth=800&size=114476&status=done&style=none&width=400" width="400" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618042429530-177c3636-aefc-419d-8d3a-5258cad13631.png)
 
 打开配置，搜索 “save”，找到右侧的 "Format On Save"，勾选即可。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1618042494782-71b6cc3c-18ae-4344-987b-ec82084f2dd8.png#align=left&display=inline&height=788&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1576&originWidth=2370&size=341414&status=done&style=none&width=1185" width="1185" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618042494782-71b6cc3c-18ae-4344-987b-ec82084f2dd8.png)
 
 如果保存文件没有效果，一般是编辑器有多个格式化方式，可以右键进行默认选择。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1618125271116-845e8452-0f7b-46a9-a28a-388f2db9c5e3.png#align=left&display=inline&height=458&margin=%5Bobject%20Object%5D&name=image.png&originHeight=916&originWidth=564&size=102932&status=done&style=none&width=282" width="282" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125271116-845e8452-0f7b-46a9-a28a-388f2db9c5e3.png)
 
 选择 “配置默认格式化程序”。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1618125381302-d3fe30c1-e56d-43f8-ada2-6e315f4ff2c4.png#align=left&display=inline&height=144&margin=%5Bobject%20Object%5D&name=image.png&originHeight=288&originWidth=990&size=37986&status=done&style=none&width=495" width="495" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125381302-d3fe30c1-e56d-43f8-ada2-6e315f4ff2c4.png)
 
 选择 Prettier 即可。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1618125423564-8e46b0f8-f422-4e3d-a805-3b0a1db037f8.png#align=left&display=inline&height=104&margin=%5Bobject%20Object%5D&name=image.png&originHeight=208&originWidth=1074&size=35043&status=done&style=none&width=537" width="537" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125423564-8e46b0f8-f422-4e3d-a805-3b0a1db037f8.png)

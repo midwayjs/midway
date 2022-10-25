@@ -91,16 +91,16 @@ error TS6133: 'app' is declared but its value is never read.
 比如：
 ```json
 "typeRoots": [
-    "./node_modules/@types",
-    "./typings"
-  ],
-  "include": [
-    "src",
-    "typings"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ],
+  "./node_modules/@types",
+  "./typings"
+],
+"include": [
+  "src",
+  "typings"
+],
+"exclude": [
+  "dist",
+  "node_modules"
+],
 ```
 上述，如果 include 中不写 typings，则会在 dev/build 时找不到定义而报错。

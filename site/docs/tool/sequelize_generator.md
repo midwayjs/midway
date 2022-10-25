@@ -8,13 +8,13 @@ forked from [sequelize/sequelize-auto](https://github.com/sequelize/sequelize-au
 
 ## Installation
 
-```shell
-npm i sequelize-auto-midway
+```bash
+$ npm i sequelize-auto-midway
 ```
 
 ## Usage
 
-```shell
+```bash
 # 推荐
 # 请替换配置信息
 npx sequelize-auto-midway -h localhost -d yourDBname -u root -x yourPassword -p 13306  --dialect mysql -o ./models --noInitModels true --caseModel c --caseProp c --caseFile c --indentation 1 -a ./additional.json
@@ -147,7 +147,7 @@ export class TaskEntity extends Model {
 
 Use `npx sequelize-auto-midway --help` to see all available parameters with their descriptions. Some basic parameters below:
 
-```shell
+```bash
 Usage: npx sequelize-auto-midway -h <host> -d <database> -p [port] -u <user> -x
 [password] -e [engine]
 

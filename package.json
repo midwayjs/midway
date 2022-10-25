@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@types/jest": "28.1.8",
-    "@types/node": "16.11.65",
+    "@types/node": "16.11.68",
     "@vercel/ncc": "0.34.0",
     "autocannon": "7.10.0",
     "jest": "28.1.3",
@@ -14,15 +14,16 @@
     "tree-kill": "1.2.2",
     "ts-jest": "28.0.8",
     "ts-node": "10.9.1",
-    "typedoc": "0.23.16",
+    "typedoc": "0.23.17",
     "typescript": "4.8.4",
     "why-is-node-running": "2.2.2",
-    "zx": "7.1.0"
+    "zx": "7.1.1"
   },
   "scripts": {
     "test": "lerna run test",
     "link": "lerna run link",
     "cov": "lerna run cov --concurrency 2 --stream",
+    "test_legacy": "lerna run test --concurrency 2 --stream --scope={$(lerna list --all --parseable --toposort --long | grep packages-legacy | sed -E \"s/[^:]+:([^:]+).+/\\1/\" | paste -d , -s -)}",
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules",
     "reset": "npm run purge && npm i && npm run ci",

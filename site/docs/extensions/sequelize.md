@@ -273,12 +273,14 @@ export default {
         entities: [Person],
       },
     },
-    sync: false, // 本地的时候，可以通过sync: true直接createTable
+    sync: false, // 本地的时候，可以通过 sync: true 直接 createTable
   },
 };
 ```
 
 如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
+
+
 
 ## 模型关联
 

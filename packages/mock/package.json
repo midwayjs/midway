@@ -31,9 +31,9 @@
     "@midwayjs/logger": "^2.15.0",
     "@types/amqplib": "0.8.2",
     "amqplib": "0.10.3",
-    "kafkajs": "2.2.1",
-    "socket.io": "4.5.2",
-    "socket.io-client": "4.5.2",
+    "kafkajs": "2.2.2",
+    "socket.io": "4.5.3",
+    "socket.io-client": "4.5.3",
     "ws": "8.9.0"
   },
   "dependencies": {
@@ -43,7 +43,7 @@
     "fs-extra": "10.0.1",
     "js-yaml": "4.1.0",
     "raw-body": "2.5.1",
-    "supertest": "6.2.4"
+    "supertest": "6.3.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

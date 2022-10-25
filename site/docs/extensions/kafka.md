@@ -31,16 +31,16 @@
 
 理解Producer（生产者）
 
-* 发布消息到一个主题或多个topic(主题)。
+* 发布消息到一个主题或多个 topic (主题)。
 
-理解Consumer（主题消费者）
-* 订阅一个或者多个topic,并处理产生的信息。
+理解 Consumer（主题消费者）
+* 订阅一个或者多个 topic,并处理产生的信息。
 
-理解Stream API
-* 充当一个流处理器，从1个或多个topic消费输入流，并生产一个输出流到1个或多个输出topic，有效地将输入流转换到输出流。
+理解 Stream API
+* 充当一个流处理器，从 1 个或多个 topic 消费输入流，并生产一个输出流到1个或多个输出 topic，有效地将输入流转换到输出流。
 
-理解Broker
-* 已发布的消息保存在一组服务器中，称之为Kafka集群。集群中的每一个服务器都是一个代理（Broker）。 消费者可以订阅一个或多个主题（topic），并从Broker拉数据，从而消费这些已发布的消息。
+理解 Broker
+* 已发布的消息保存在一组服务器中，称之为 Kafka 集群。集群中的每一个服务器都是一个代理（Broker）。 消费者可以订阅一个或多个主题（topic），并从Broker拉数据，从而消费这些已发布的消息。
 
 
 ![image.png](https://kafka.apache.org/images/streams-and-tables-p1_p4.png)

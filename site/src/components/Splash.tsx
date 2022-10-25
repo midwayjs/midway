@@ -163,7 +163,7 @@ export function Splash() {
         </Button>
         <Button type="secondary" href="https://github.com/midwayjs/midway" target="_blank">
           <Icon className="iconfont icon-github-fill" />
-          Github
+          GitHub
         </Button>
       </ButtonGroup>
       <StarContainer>
