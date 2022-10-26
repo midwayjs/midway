@@ -1,6 +1,5 @@
----
-title: midwayjs/cli
----
+# midwayjs/cli
+
 `@midwayjs/cli` 是新版本的 Midway 体系工具链，和 Serverless，以及原应用的工具链进行了整合。
 
 
@@ -88,7 +87,7 @@ $ midway-bin dev --ts --watchFile=./test,./b.txt
 
 ```shell
 // 指定多个文件扩展名，使用英文逗号分隔
-midway-bin dev --ts --watchExt=.js,.html
+$ midway-bin dev --ts --watchExt=.js,.html
 ```
 
 

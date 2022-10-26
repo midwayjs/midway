@@ -28,6 +28,7 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
 
 export type DataSourceManagerConfigOption<OPTIONS> = {
   default?: PowerPartial<OPTIONS>;
+  defaultDataSourceName?: string;
   dataSource?: {
     [key: string]: PowerPartial<{
       entities: any[],
@@ -304,6 +305,7 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
   registerObject(identifier: ObjectIdentifier, target: any);
   load(module?: any);
   hasNamespace(namespace: string): boolean;
+  getNamespaceList(): string[];
   hasDefinition(identifier: ObjectIdentifier);
   hasObject(identifier: ObjectIdentifier);
   bind<T>(target: T, options?: Partial<IObjectDefinition>): void;

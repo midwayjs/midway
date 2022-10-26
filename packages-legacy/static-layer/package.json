@@ -4,8 +4,7 @@
   "version": "3.6.0",
   "main": "dist/index.js",
   "scripts": {
-    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --forceExit",
     "build": "ncc build index.js -o dist"
   },
   "devDependencies": {
@@ -19,7 +18,7 @@
     "koa-static-cache": "5.1.4",
     "path-to-regexp": "6.2.1",
     "request": "2.88.2",
-    "supertest": "6.2.4"
+    "supertest": "6.3.0"
   },
   "engines": {
     "node": ">=12"

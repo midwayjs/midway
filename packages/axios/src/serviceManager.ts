@@ -1,4 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import * as axios from 'axios';
 import {
   Config,
   Init,
@@ -35,7 +36,7 @@ export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
     config: AxiosRequestConfig,
     clientName: any
   ): Promise<AxiosInstance> {
-    return axios.create(config);
+    return (axios as any).create(config);
   }
 
   getName(): string {

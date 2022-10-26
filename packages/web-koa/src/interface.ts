@@ -72,6 +72,14 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * Max IPs read from proxy IP header, default to 0 (means infinity)
    */
   maxIpsCount?: number;
+  /**
+   * server timeout in milliseconds, default to 2 minutes.
+   *
+   * for special request, just use `ctx.req.setTimeout(ms)`
+   *
+   * @see https://nodejs.org/api/http.html#http_server_timeout
+   */
+  serverTimeout?: number;
 }
 
 export type MiddlewareParamArray = Array<

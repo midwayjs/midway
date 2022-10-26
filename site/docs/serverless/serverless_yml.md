@@ -1,6 +1,4 @@
----
-title: f.yml 定义
----
+# f.yml 定义
 
 ## 概述
 
@@ -86,7 +84,7 @@ custom:
 | provider.name                                        | √          | √           |         |     |
 | provider.runtime                                     | √          | √           |         |     |
 | provider.stage                                       |            | √           |         |     |
-| provider.region                                      |            | √           |         |     |
+| provider.region                                      | √          | √           |         |     |
 | provider.credentials                                 |            | √           |         |     |
 | provider.timeout                                     | √          | √           |         |     |
 | provider.initTimeout                                 | √          |             |         |     |

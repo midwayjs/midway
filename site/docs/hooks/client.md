@@ -1,6 +1,4 @@
----
-title: 前端请求客户端
----
+# 前端请求客户端
 
 在 Midway Hooks 的全栈应用中，我们使用 `@midwayjs/rpc` 作为默认的请求客户端。所有生成的接口都会通过 `@midwayjs/rpc` 来调用服务端。
 

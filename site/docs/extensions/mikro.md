@@ -88,7 +88,6 @@ export class MainConfiguration {
 }
 ```
 
-##
 
 ## 基础使用
 
@@ -194,6 +193,8 @@ export default (appInfo) => {
 
 ```
 
+如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
+
 
 
 ### 调用 Repository
@@ -250,7 +251,6 @@ Mikro-orm 内部查询有一个 [Identity Map](https://mikro-orm.io/docs/identit
 和其他数据库一样，Midway 支持多数据源的配置。
 
 ```typescript
-
 // src/config/config.default
 import { Author, BaseEntity, Book, BookTag, Publisher } from '../entity';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';

@@ -1,0 +1,38 @@
+{
+  "version.label": {
+    "message": "1.0.0",
+    "description": "The label for version 1.0.0"
+  },
+  "sidebar.common.category.新手指南": {
+    "message": "新手指南",
+    "description": "The label for category 新手指南 in sidebar common"
+  },
+  "sidebar.common.category.基础": {
+    "message": "基础",
+    "description": "The label for category 基础 in sidebar common"
+  },
+  "sidebar.common.category.高级": {
+    "message": "高级",
+    "description": "The label for category 高级 in sidebar common"
+  },
+  "sidebar.common.category.常见问题": {
+    "message": "常见问题",
+    "description": "The label for category 常见问题 in sidebar common"
+  },
+  "sidebar.component.category.通用": {
+    "message": "通用",
+    "description": "The label for category 通用 in sidebar component"
+  },
+  "sidebar.serverless.doc.介绍": {
+    "message": "介绍",
+    "description": "The label for the doc item 介绍 in sidebar serverless, linking to the doc serverless/serverless_intro"
+  },
+  "sidebar.hooks.doc.介绍": {
+    "message": "介绍",
+    "description": "The label for the doc item 介绍 in sidebar hooks, linking to the doc hooks/hooks_intro"
+  },
+  "sidebar.other.category.工具": {
+    "message": "工具",
+    "description": "The label for category 工具 in sidebar other"
+  }
+}

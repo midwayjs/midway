@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.6.0",
-    "@midwayjs/runtime-mock": "^3.6.0",
     "@midwayjs/serverless-http-parser": "^3.6.0"
   },
   "engines": {

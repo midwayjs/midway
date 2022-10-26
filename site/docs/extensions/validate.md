@@ -562,12 +562,12 @@ export default {
     localeTable: {
       zh_CN: {
         validate: {
-          'string.max': 'string is too long',
+          'string.max': '字符超长',
         },
       },
       en_US: {
         validate: {
-          'string.max': '字符超长',
+          'string.max': 'string is too long',
         },
       },
     },

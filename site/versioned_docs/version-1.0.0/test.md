@@ -44,7 +44,7 @@ test
 ```bash
 npm test
 
-> unittest-example@ test /Users/harry/midwayj/examples/unittest
+> unittest-example@test /Users/harry/midwayj/examples/unittest
 > midway-bin test --ts
 
   test/hello.test.ts

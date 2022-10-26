@@ -11,7 +11,7 @@
     "@midwayjs/gateway-common-http": "^1.2.41",
     "@midwayjs/serverless-spec-builder": "^1.2.41",
     "body-parser": "1.20.1",
-    "express": "4.18.1"
+    "express": "4.18.2"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.6.0",
@@ -35,8 +35,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --forceExit"
   },
   "repository": {
     "type": "git",

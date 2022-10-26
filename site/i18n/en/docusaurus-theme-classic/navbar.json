@@ -1,0 +1,34 @@
+{
+  "title": {
+    "message": "Midway",
+    "description": "The title in the navbar"
+  },
+  "item.label.标准项目": {
+    "message": "Standard Project",
+    "description": "Navbar item with label 标准项目"
+  },
+  "item.label.函数式 & 一体化": {
+    "message": "Functional & Integration",
+    "description": "Navbar item with label 函数式 & 一体化"
+  },
+  "item.label.Serverless": {
+    "message": "Serverless",
+    "description": "Navbar item with label Serverless"
+  },
+  "item.label.组件 & 扩展": {
+    "message": "Components & Extensions",
+    "description": "Navbar item with label 组件 & 扩展"
+  },
+  "item.label.工具 & 其他": {
+    "message": "Tools & Others",
+    "description": "Navbar item with label 工具 & 其他"
+  },
+  "item.label.开源送礼": {
+    "message": "Open source gift",
+    "description": "Navbar item with label 开源送礼"
+  },
+  "item.label.线下沙龙": {
+    "message": "offline salon",
+    "description": "Navbar item with label 线下沙龙"
+  }
+}

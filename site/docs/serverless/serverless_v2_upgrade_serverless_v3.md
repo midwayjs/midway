@@ -21,8 +21,8 @@ v3 版本的函数我们仍在调整，主要为部署生成的入口部分和�
 ```json
 {
   "dependencies": {
-    "@midwayjs/core": "^3.0.0"
-    "@midwayjs/decorator": "^3.0.0"
+    "@midwayjs/core": "^3.0.0",
+    "@midwayjs/decorator": "^3.0.0",
   	"@midwayjs/faas": "^3.0.0"
   },
   "devDependencies": {

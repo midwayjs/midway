@@ -7,7 +7,7 @@ import {
   IMidwayLogger,
 } from '@midwayjs/core';
 import { HttpProxyConfig, HttpProxyStrategy } from './interface';
-import axios from 'axios';
+import * as axios from 'axios';
 
 @Middleware()
 export class HttpProxyMiddleware implements IMiddleware<any, any> {
@@ -78,7 +78,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
           .join('&');
       }
     }
-    const proxyResponse = await axios(reqOptions).catch(err => {
+    const proxyResponse = await (axios as any)(reqOptions).catch(err => {
       if (!err || !err.response) {
         throw err || new Error('proxy unknown error');
       }

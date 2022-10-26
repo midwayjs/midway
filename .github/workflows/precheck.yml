@@ -1,0 +1,104 @@
+name: Pre Check
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'site/**'
+      - '*.md'
+  pull_request:
+    paths-ignore:
+      - 'site/**'
+      - '*.md'
+
+jobs:
+  lintAndTestLegacy:
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        node-version: ['lts/*']
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+      rabbitmq:
+        image: rabbitmq:latest
+        ports:
+          - 5672/tcp
+        options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
+      zookeeper:
+        image: wurstmeister/zookeeper
+        ports:
+          - 2181:2181
+        env:
+          ALLOW_ANONYMOUS_LOGIN: yes
+        options: >-
+          --health-cmd "echo mntr | nc -w 2 -q 2 localhost 2181"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      kafka:
+        image: wurstmeister/kafka
+        ports:
+          - 9092:9092
+        options: >-
+          --health-cmd "kafka-broker-api-versions.sh --version"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092    ## 修改:宿主机IP
+          KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+          KAFKA_ADVERTISED_PORT: 9092
+
+      postgres:
+        image: postgres:alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: db_ci_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.8.0
+      with:
+        mongodb-version: 4.2
+
+    - run: npm install
+    - run: npm run bootstrap
+    - run: npm run build --if-present
+    - run: npm run lint
+    - run: npm run lint:cycle
+    - run: npm run test_legacy
+      env:
+       RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
+       ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
+       ALI_SDK_OSS_ENDPOINT: ${{ secrets.ALI_SDK_OSS_ENDPOINT }}
+       ALI_SDK_OSS_ID: ${{ secrets.ALI_SDK_OSS_ID }}
+       ALI_SDK_OSS_SECRET: ${{ secrets.ALI_SDK_OSS_SECRET }}
+       ALI_SDK_OSS_BUCKET: ${{ secrets.ALI_SDK_OSS_BUCKET }}
+       ALI_SDK_STS_ID: ${{ secrets.ALI_SDK_STS_ID }}
+       ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
+       ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
+       ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}

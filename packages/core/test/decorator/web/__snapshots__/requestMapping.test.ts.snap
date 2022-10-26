@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`/test/web/requestMapping.test.ts requestMapping decorator should be ok 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "ignoreGlobalPrefix": false,
     "method": "doGet",
-    "middleware": Array [
+    "middleware": [
       "hello",
     ],
     "path": "/get",
@@ -14,11 +14,11 @@ Array [
     "routerName": "get",
     "summary": "",
   },
-  Object {
+  {
     "description": "",
     "ignoreGlobalPrefix": false,
     "method": "doPost",
-    "middleware": Array [
+    "middleware": [
       "hello",
     ],
     "path": "/get",
@@ -26,11 +26,11 @@ Array [
     "routerName": "post",
     "summary": "test post method",
   },
-  Object {
+  {
     "description": "test option method",
     "ignoreGlobalPrefix": false,
     "method": "doOptions",
-    "middleware": Array [
+    "middleware": [
       "hello",
     ],
     "path": "/get",
@@ -38,11 +38,11 @@ Array [
     "routerName": "options",
     "summary": "",
   },
-  Object {
+  {
     "description": "",
     "ignoreGlobalPrefix": false,
     "method": "doHead",
-    "middleware": Array [
+    "middleware": [
       "hello",
     ],
     "path": "/get",
@@ -50,7 +50,7 @@ Array [
     "routerName": "head",
     "summary": "",
   },
-  Object {
+  {
     "description": "",
     "ignoreGlobalPrefix": false,
     "method": "doAll",
@@ -64,11 +64,11 @@ Array [
 `;
 
 exports[`/test/web/requestMapping.test.ts requestMapping decorator should be ok 2`] = `
-Object {
+{
   "description": "",
   "ignoreGlobalPrefix": false,
   "method": "ttt",
-  "middleware": Array [],
+  "middleware": [],
   "path": "/",
   "requestMethod": "get",
   "routerName": null,
@@ -77,7 +77,7 @@ Object {
 `;
 
 exports[`/test/web/requestMapping.test.ts requestMapping decorator should be ok 3`] = `
-Object {
+{
   "description": "",
   "ignoreGlobalPrefix": false,
   "method": "ttt",

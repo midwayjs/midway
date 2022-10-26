@@ -1,6 +1,4 @@
----
-title: API 网关（HTTP）
----
+# API 网关（HTTP）
 
 API 网关在腾讯云函数体系中类似于 HTTP 函数，我们通过它将函数发布为 HTTP 服务。
 

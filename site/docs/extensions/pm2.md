@@ -23,7 +23,7 @@ $ pm2 logs			# 查看服务的输出日志
 
 比如， `pm2 list`，就会以表格显示。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1616560437389-b193a0d0-b463-49f1-a347-8dec20e7504d.png#align=left&display=inline&height=310&margin=%5Bobject%20Object%5D&name=image.png&originHeight=310&originWidth=1065&size=165090&status=done&style=none&width=1065" width="1065" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1616560437389-b193a0d0-b463-49f1-a347-8dec20e7504d.png)
 
 pm2 的服务都有一个数组 id，你可以用 id 快速操作它。
 
@@ -66,7 +66,7 @@ $ NODE_ENV=production pm2 start ./bootstrap.js --name midway_app -i 4
 
 效果如下：
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1616562075255-088155ee-7c4f-4eae-b5c5-db826f78b519.png#align=left&display=inline&height=189&margin=%5Bobject%20Object%5D&name=image.png&originHeight=189&originWidth=1008&size=48357&status=done&style=none&width=1008" width="1008" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1616562075255-088155ee-7c4f-4eae-b5c5-db826f78b519.png)
 
 ## Docker 容器启动
 

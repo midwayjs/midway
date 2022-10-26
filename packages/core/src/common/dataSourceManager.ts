@@ -141,6 +141,10 @@ export abstract class DataSourceManager<T> {
     );
     this.dataSource.clear();
   }
+
+  public getDefaultDataSourceName(): string {
+    return this.options['defaultDataSourceName'];
+  }
 }
 
 export function globModels(globString: string, appDir: string) {

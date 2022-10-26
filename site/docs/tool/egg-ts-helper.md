@@ -33,9 +33,9 @@ $ ets
     │		├── request.d.ts
     │		├── response.d.ts
     │		├── application.d.ts
-    │ └── context.d.ts
+    │   └── context.d.ts
     ├── app
-    │ └── index.d.ts
+    │   └── index.d.ts
     └── config
         ├── index.d.ts
         └── plugin.d.ts

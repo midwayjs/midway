@@ -1,0 +1,422 @@
+{
+  "version.label": {
+    "message": "2.0.0",
+    "description": "The label for version 2.0.0"
+  },
+  "sidebar.common.category.新手指南": {
+    "message": "新手指南",
+    "description": "The label for category 新手指南 in sidebar common"
+  },
+  "sidebar.common.category.Web 技术": {
+    "message": "Web 技术",
+    "description": "The label for category Web 技术 in sidebar common"
+  },
+  "sidebar.common.category.Web 框架": {
+    "message": "Web 框架",
+    "description": "The label for category Web 框架 in sidebar common"
+  },
+  "sidebar.common.category.WebSocket": {
+    "message": "WebSocket",
+    "description": "The label for category WebSocket in sidebar common"
+  },
+  "sidebar.common.category.通用能力": {
+    "message": "通用能力",
+    "description": "The label for category 通用能力 in sidebar common"
+  },
+  "sidebar.common.category.自定义": {
+    "message": "自定义",
+    "description": "The label for category 自定义 in sidebar common"
+  },
+  "sidebar.common.category.升级": {
+    "message": "升级",
+    "description": "The label for category 升级 in sidebar common"
+  },
+  "sidebar.common.doc.测试": {
+    "message": "测试",
+    "description": "The label for the doc item 测试 in sidebar common, linking to the doc testing"
+  },
+  "sidebar.common.doc.本地调试": {
+    "message": "本地调试",
+    "description": "The label for the doc item 本地调试 in sidebar common, linking to the doc debugger"
+  },
+  "sidebar.common.doc.依赖注入": {
+    "message": "依赖注入",
+    "description": "The label for the doc item 依赖注入 in sidebar common, linking to the doc container"
+  },
+  "sidebar.common.doc.运行环境": {
+    "message": "运行环境",
+    "description": "The label for the doc item 运行环境 in sidebar common, linking to the doc environment"
+  },
+  "sidebar.common.doc.多环境配置": {
+    "message": "多环境配置",
+    "description": "The label for the doc item 多环境配置 in sidebar common, linking to the doc env_config"
+  },
+  "sidebar.common.doc.使用组件": {
+    "message": "使用组件",
+    "description": "The label for the doc item 使用组件 in sidebar common, linking to the doc midway_component"
+  },
+  "sidebar.common.doc.生命周期": {
+    "message": "生命周期",
+    "description": "The label for the doc item 生命周期 in sidebar common, linking to the doc lifecycle"
+  },
+  "sidebar.common.doc.日志": {
+    "message": "日志",
+    "description": "The label for the doc item 日志 in sidebar common, linking to the doc logger"
+  },
+  "sidebar.common.doc.方法拦截器（切面）": {
+    "message": "方法拦截器（切面）",
+    "description": "The label for the doc item 方法拦截器（切面） in sidebar common, linking to the doc aspect"
+  },
+  "sidebar.common.doc.代码流程控制": {
+    "message": "代码流程控制",
+    "description": "The label for the doc item 代码流程控制 in sidebar common, linking to the doc pipeline"
+  },
+  "sidebar.common.doc.现有装饰器索引": {
+    "message": "现有装饰器索引",
+    "description": "The label for the doc item 现有装饰器索引 in sidebar common, linking to the doc decorator_index"
+  },
+  "sidebar.common.doc.组件开发": {
+    "message": "组件开发",
+    "description": "The label for the doc item 组件开发 in sidebar common, linking to the doc component_development"
+  },
+  "sidebar.common.doc.多框架研发": {
+    "message": "多框架研发",
+    "description": "The label for the doc item 多框架研发 in sidebar common, linking to the doc multi_framework_start"
+  },
+  "sidebar.common.doc.框架扩展": {
+    "message": "框架扩展",
+    "description": "The label for the doc item 框架扩展 in sidebar common, linking to the doc framework_development"
+  },
+  "sidebar.common.doc.扩展上下文定义": {
+    "message": "扩展上下文定义",
+    "description": "The label for the doc item 扩展上下文定义 in sidebar common, linking to the doc context_definition"
+  },
+  "sidebar.common.doc.Web 路由表": {
+    "message": "Web 路由表",
+    "description": "The label for the doc item Web 路由表 in sidebar common, linking to the doc router_table"
+  },
+  "sidebar.common.doc.服务工厂": {
+    "message": "服务工厂",
+    "description": "The label for the doc item 服务工厂 in sidebar common, linking to the doc service_factory"
+  },
+  "sidebar.common.doc.自定义 EggJS 框架接入": {
+    "message": "自定义 EggJS 框架接入",
+    "description": "The label for the doc item 自定义 EggJS 框架接入 in sidebar common, linking to the doc custom_eggjs"
+  },
+  "sidebar.common.doc.高级装饰器 API": {
+    "message": "高级装饰器 API",
+    "description": "The label for the doc item 高级装饰器 API in sidebar common, linking to the doc decorator_api"
+  },
+  "sidebar.common.doc.修改源码目录": {
+    "message": "修改源码目录",
+    "description": "The label for the doc item 修改源码目录 in sidebar common, linking to the doc change_start_dir"
+  },
+  "sidebar.common.doc.示例列表": {
+    "message": "示例列表",
+    "description": "The label for the doc item 示例列表 in sidebar common, linking to the doc sample"
+  },
+  "sidebar.common.doc.从 Midway v1 升级到 v2": {
+    "message": "从 Midway v1 升级到 v2",
+    "description": "The label for the doc item 从 Midway v1 升级到 v2 in sidebar common, linking to the doc v1_upgrade_v2"
+  },
+  "sidebar.hooks.category.函数式": {
+    "message": "函数式",
+    "description": "The label for category 函数式 in sidebar hooks"
+  },
+  "sidebar.hooks.category.一体化": {
+    "message": "一体化",
+    "description": "The label for category 一体化 in sidebar hooks"
+  },
+  "sidebar.hooks.doc.介绍": {
+    "message": "介绍",
+    "description": "The label for the doc item 介绍 in sidebar hooks, linking to the doc hooks/intro"
+  },
+  "sidebar.hooks.doc.接口开发 & 前端调用": {
+    "message": "接口开发 & 前端调用",
+    "description": "The label for the doc item 接口开发 & 前端调用 in sidebar hooks, linking to the doc hooks/hooks_api"
+  },
+  "sidebar.hooks.doc.Hooks 语法": {
+    "message": "Hooks 语法",
+    "description": "The label for the doc item Hooks 语法 in sidebar hooks, linking to the doc hooks/hooks_syntax"
+  },
+  "sidebar.hooks.doc.内置 Hooks": {
+    "message": "内置 Hooks",
+    "description": "The label for the doc item 内置 Hooks in sidebar hooks, linking to the doc hooks/hooks_builtin"
+  },
+  "sidebar.hooks.doc.路由": {
+    "message": "路由",
+    "description": "The label for the doc item 路由 in sidebar hooks, linking to the doc hooks/hooks_route"
+  },
+  "sidebar.hooks.doc.Web 中间件": {
+    "message": "Web 中间件",
+    "description": "The label for the doc item Web 中间件 in sidebar hooks, linking to the doc hooks/hooks_middleware"
+  },
+  "sidebar.hooks.doc.运行时配置 & Hooks 组件": {
+    "message": "运行时配置 & Hooks 组件",
+    "description": "The label for the doc item 运行时配置 & Hooks 组件 in sidebar hooks, linking to the doc hooks/hooks_component"
+  },
+  "sidebar.hooks.doc.本地调试": {
+    "message": "本地调试",
+    "description": "The label for the doc item 本地调试 in sidebar hooks, linking to the doc hooks/hooks_debug"
+  },
+  "sidebar.hooks.doc.纯接口项目增加 Hooks 支持": {
+    "message": "纯接口项目增加 Hooks 支持",
+    "description": "The label for the doc item 纯接口项目增加 Hooks 支持 in sidebar hooks, linking to the doc hooks/hooks_bff"
+  },
+  "sidebar.hooks.doc.项目初始化": {
+    "message": "项目初始化",
+    "description": "The label for the doc item 项目初始化 in sidebar hooks, linking to the doc hooks/hooks_create"
+  },
+  "sidebar.hooks.doc.自定义前端 SDK": {
+    "message": "自定义前端 SDK",
+    "description": "The label for the doc item 自定义前端 SDK in sidebar hooks, linking to the doc hooks/hooks_custom_request"
+  },
+  "sidebar.hooks.doc.OSS 文件上传": {
+    "message": "OSS 文件上传",
+    "description": "The label for the doc item OSS 文件上传 in sidebar hooks, linking to the doc hooks/oss_upload"
+  },
+  "sidebar.hooks.doc.小程序一体化": {
+    "message": "小程序一体化",
+    "description": "The label for the doc item 小程序一体化 in sidebar hooks, linking to the doc hooks/hooks_miniprogram"
+  },
+  "sidebar.hooks.doc.非 Serverless 环境使用一体化": {
+    "message": "非 Serverless 环境使用一体化",
+    "description": "The label for the doc item 非 Serverless 环境使用一体化 in sidebar hooks, linking to the doc hooks/application_integration"
+  },
+  "sidebar.component.category.通用": {
+    "message": "通用",
+    "description": "The label for category 通用 in sidebar component"
+  },
+  "sidebar.component.category.微服务": {
+    "message": "微服务",
+    "description": "The label for category 微服务 in sidebar component"
+  },
+  "sidebar.component.category.运维": {
+    "message": "运维",
+    "description": "The label for category 运维 in sidebar component"
+  },
+  "sidebar.component.doc.HTTP 请求（Axios）": {
+    "message": "HTTP 请求（Axios）",
+    "description": "The label for the doc item HTTP 请求（Axios） in sidebar component, linking to the doc extensions/axios"
+  },
+  "sidebar.component.doc.模板渲染": {
+    "message": "模板渲染",
+    "description": "The label for the doc item 模板渲染 in sidebar component, linking to the doc extensions/render"
+  },
+  "sidebar.component.doc.Passport": {
+    "message": "Passport",
+    "description": "The label for the doc item Passport in sidebar component, linking to the doc extensions/passport"
+  },
+  "sidebar.component.doc.Database（TypeORM)": {
+    "message": "Database（TypeORM)",
+    "description": "The label for the doc item Database（TypeORM) in sidebar component, linking to the doc extensions/orm"
+  },
+  "sidebar.component.doc.Sequelize": {
+    "message": "Sequelize",
+    "description": "The label for the doc item Sequelize in sidebar component, linking to the doc extensions/sequelize"
+  },
+  "sidebar.component.doc.MongoDB": {
+    "message": "MongoDB",
+    "description": "The label for the doc item MongoDB in sidebar component, linking to the doc extensions/mongo"
+  },
+  "sidebar.component.doc.Redis": {
+    "message": "Redis",
+    "description": "The label for the doc item Redis in sidebar component, linking to the doc extensions/redis"
+  },
+  "sidebar.component.doc.GraphQL": {
+    "message": "GraphQL",
+    "description": "The label for the doc item GraphQL in sidebar component, linking to the doc extensions/graphql"
+  },
+  "sidebar.component.doc.缓存（Cache）": {
+    "message": "缓存（Cache）",
+    "description": "The label for the doc item 缓存（Cache） in sidebar component, linking to the doc extensions/cache"
+  },
+  "sidebar.component.doc.任务调度（Task）": {
+    "message": "任务调度（Task）",
+    "description": "The label for the doc item 任务调度（Task） in sidebar component, linking to the doc extensions/task"
+  },
+  "sidebar.component.doc.Swagger": {
+    "message": "Swagger",
+    "description": "The label for the doc item Swagger in sidebar component, linking to the doc extensions/swagger"
+  },
+  "sidebar.component.doc.对象存储（OSS）": {
+    "message": "对象存储（OSS）",
+    "description": "The label for the doc item 对象存储（OSS） in sidebar component, linking to the doc extensions/oss"
+  },
+  "sidebar.component.doc.对象存储（COS）": {
+    "message": "对象存储（COS）",
+    "description": "The label for the doc item 对象存储（COS） in sidebar component, linking to the doc extensions/cos"
+  },
+  "sidebar.component.doc.TableStore": {
+    "message": "TableStore",
+    "description": "The label for the doc item TableStore in sidebar component, linking to the doc extensions/tablestore"
+  },
+  "sidebar.component.doc.gRPC": {
+    "message": "gRPC",
+    "description": "The label for the doc item gRPC in sidebar component, linking to the doc extensions/grpc"
+  },
+  "sidebar.component.doc.RabbitMQ": {
+    "message": "RabbitMQ",
+    "description": "The label for the doc item RabbitMQ in sidebar component, linking to the doc extensions/rabbitmq"
+  },
+  "sidebar.component.doc.Consul": {
+    "message": "Consul",
+    "description": "The label for the doc item Consul in sidebar component, linking to the doc extensions/consul"
+  },
+  "sidebar.component.doc.使用 pm2": {
+    "message": "使用 pm2",
+    "description": "The label for the doc item 使用 pm2 in sidebar component, linking to the doc pm2"
+  },
+  "sidebar.component.doc.使用 cfork": {
+    "message": "使用 cfork",
+    "description": "The label for the doc item 使用 cfork in sidebar component, linking to the doc cfork"
+  },
+  "sidebar.component.doc.接入 Alinode": {
+    "message": "接入 Alinode",
+    "description": "The label for the doc item 接入 Alinode in sidebar component, linking to the doc alinode"
+  },
+  "sidebar.component.doc.接入 Prometheus": {
+    "message": "接入 Prometheus",
+    "description": "The label for the doc item 接入 Prometheus in sidebar component, linking to the doc prometheus"
+  },
+  "sidebar.Serverless.category.基础": {
+    "message": "基础",
+    "description": "The label for category 基础 in sidebar Serverless"
+  },
+  "sidebar.Serverless.category.平台能力：阿里云 FC": {
+    "message": "平台能力：阿里云 FC",
+    "description": "The label for category 平台能力：阿里云 FC in sidebar Serverless"
+  },
+  "sidebar.Serverless.category.平台能力：腾讯云 SCF": {
+    "message": "平台能力：腾讯云 SCF",
+    "description": "The label for category 平台能力：腾讯云 SCF in sidebar Serverless"
+  },
+  "sidebar.Serverless.category.应用部署到 Serverless 环境": {
+    "message": "应用部署到 Serverless 环境",
+    "description": "The label for category 应用部署到 Serverless 环境 in sidebar Serverless"
+  },
+  "sidebar.Serverless.category.迁移和升级": {
+    "message": "迁移和升级",
+    "description": "The label for category 迁移和升级 in sidebar Serverless"
+  },
+  "sidebar.Serverless.doc.介绍": {
+    "message": "介绍",
+    "description": "The label for the doc item 介绍 in sidebar Serverless, linking to the doc serverless/serverless_intro"
+  },
+  "sidebar.Serverless.doc.开发函数": {
+    "message": "开发函数",
+    "description": "The label for the doc item 开发函数 in sidebar Serverless, linking to the doc serverless/serverless_dev"
+  },
+  "sidebar.Serverless.doc.测试函数": {
+    "message": "测试函数",
+    "description": "The label for the doc item 测试函数 in sidebar Serverless, linking to the doc serverless/serverless_testing"
+  },
+  "sidebar.Serverless.doc.聚合部署": {
+    "message": "聚合部署",
+    "description": "The label for the doc item 聚合部署 in sidebar Serverless, linking to the doc serverless/serverless_aggr"
+  },
+  "sidebar.Serverless.doc.函数上下文": {
+    "message": "函数上下文",
+    "description": "The label for the doc item 函数上下文 in sidebar Serverless, linking to the doc serverless/serverless_context"
+  },
+  "sidebar.Serverless.doc.f.yml 定义": {
+    "message": "f.yml 定义",
+    "description": "The label for the doc item f.yml 定义 in sidebar Serverless, linking to the doc serverless/serverless_yml"
+  },
+  "sidebar.Serverless.doc.部署环境": {
+    "message": "部署环境",
+    "description": "The label for the doc item 部署环境 in sidebar Serverless, linking to the doc serverless/serverless_environment"
+  },
+  "sidebar.Serverless.doc.默认错误行为": {
+    "message": "默认错误行为",
+    "description": "The label for the doc item 默认错误行为 in sidebar Serverless, linking to the doc serverless/serverless_error"
+  },
+  "sidebar.Serverless.doc.事件触发器（Event）": {
+    "message": "事件触发器（Event）",
+    "description": "The label for the doc item 事件触发器（Event） in sidebar Serverless, linking to the doc serverless/aliyun_trigger_event"
+  },
+  "sidebar.Serverless.doc.HTTP 触发器": {
+    "message": "HTTP 触发器",
+    "description": "The label for the doc item HTTP 触发器 in sidebar Serverless, linking to the doc serverless/aliyun_trigger_http"
+  },
+  "sidebar.Serverless.doc.API 网关": {
+    "message": "API 网关",
+    "description": "The label for the doc item API 网关 in sidebar Serverless, linking to the doc serverless/aliyun_trigger_apigw"
+  },
+  "sidebar.Serverless.doc.Timer 触发器（定时任务）": {
+    "message": "Timer 触发器（定时任务）",
+    "description": "The label for the doc item Timer 触发器（定时任务） in sidebar Serverless, linking to the doc serverless/tencent_trigger_timer"
+  },
+  "sidebar.Serverless.doc.OSS 触发器（对象存储）": {
+    "message": "OSS 触发器（对象存储）",
+    "description": "The label for the doc item OSS 触发器（对象存储） in sidebar Serverless, linking to the doc serverless/aliyun_trigger_oss"
+  },
+  "sidebar.Serverless.doc.MNS 触发器（消息队列）": {
+    "message": "MNS 触发器（消息队列）",
+    "description": "The label for the doc item MNS 触发器（消息队列） in sidebar Serverless, linking to the doc serverless/aliyun_trigger_mns"
+  },
+  "sidebar.Serverless.doc.发布到阿里云 FC": {
+    "message": "发布到阿里云 FC",
+    "description": "The label for the doc item 发布到阿里云 FC in sidebar Serverless, linking to the doc serverless/deploy_to_aliyun"
+  },
+  "sidebar.Serverless.doc.阿里云发布 FAQ": {
+    "message": "阿里云发布 FAQ",
+    "description": "The label for the doc item 阿里云发布 FAQ in sidebar Serverless, linking to the doc serverless/deploy_aliyun_faq"
+  },
+  "sidebar.Serverless.doc.API 网关（HTTP）": {
+    "message": "API 网关（HTTP）",
+    "description": "The label for the doc item API 网关（HTTP） in sidebar Serverless, linking to the doc serverless/tencent_trigger_apigw"
+  },
+  "sidebar.Serverless.doc.COS 触发器（对象存储）": {
+    "message": "COS 触发器（对象存储）",
+    "description": "The label for the doc item COS 触发器（对象存储） in sidebar Serverless, linking to the doc serverless/tencent_trigger_cos"
+  },
+  "sidebar.Serverless.doc.CMQ 触发器（消息队列）": {
+    "message": "CMQ 触发器（消息队列）",
+    "description": "The label for the doc item CMQ 触发器（消息队列） in sidebar Serverless, linking to the doc serverless/tencent_trigger_cmq"
+  },
+  "sidebar.Serverless.doc.发布到腾讯云 SCF": {
+    "message": "发布到腾讯云 SCF",
+    "description": "The label for the doc item 发布到腾讯云 SCF in sidebar Serverless, linking to the doc serverless/deploy_to_tencent"
+  },
+  "sidebar.Serverless.doc.腾讯云发布 FAQ": {
+    "message": "腾讯云发布 FAQ",
+    "description": "The label for the doc item 腾讯云发布 FAQ in sidebar Serverless, linking to the doc serverless/deploy_tencent_faq"
+  },
+  "sidebar.Serverless.doc.应用迁移方案说明": {
+    "message": "应用迁移方案说明",
+    "description": "The label for the doc item 应用迁移方案说明 in sidebar Serverless, linking to the doc serverless/app_deploy_serverless"
+  },
+  "sidebar.Serverless.doc.Koa 应用迁移": {
+    "message": "Koa 应用迁移",
+    "description": "The label for the doc item Koa 应用迁移 in sidebar Serverless, linking to the doc serverless/migrate_koa"
+  },
+  "sidebar.Serverless.doc.Express 应用迁移": {
+    "message": "Express 应用迁移",
+    "description": "The label for the doc item Express 应用迁移 in sidebar Serverless, linking to the doc serverless/migrate_express"
+  },
+  "sidebar.Serverless.doc.Egg/Midway 应用迁移": {
+    "message": "Egg/Midway 应用迁移",
+    "description": "The label for the doc item Egg/Midway 应用迁移 in sidebar Serverless, linking to the doc serverless/migrate_egg"
+  },
+  "sidebar.Serverless.doc.静态网站托管": {
+    "message": "静态网站托管",
+    "description": "The label for the doc item 静态网站托管 in sidebar Serverless, linking to the doc serverless/migrate_static"
+  },
+  "sidebar.Serverless.doc.从 Serverless v1 迁移到 v2": {
+    "message": "从 Serverless v1 迁移到 v2",
+    "description": "The label for the doc item 从 Serverless v1 迁移到 v2 in sidebar Serverless, linking to the doc serverless/serverless_v1_upgrade_serverless_v2"
+  },
+  "sidebar.other.category.工具": {
+    "message": "工具",
+    "description": "The label for category 工具 in sidebar other"
+  },
+  "sidebar.other.category.常见问题": {
+    "message": "常见问题",
+    "description": "The label for category 常见问题 in sidebar other"
+  },
+  "sidebar.other.category.其他": {
+    "message": "其他",
+    "description": "The label for category 其他 in sidebar other"
+  }
+}

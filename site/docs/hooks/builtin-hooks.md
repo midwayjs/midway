@@ -1,6 +1,4 @@
----
-title: Hooks
----
+# Hooks
 
 Midway Hooks 可以通过使用 `Hooks` 函数来获取运行时上下文。
 

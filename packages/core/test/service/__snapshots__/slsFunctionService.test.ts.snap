@@ -1,25 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`/test/service/slsFunction.test.ts should test dynamic add function 1`] = `
-Array [
-  Object {
+[
+  {
     "_category": 2,
     "_level": 2,
     "_paramString": "",
     "_pureRouter": "/api/hello",
     "_weight": 2,
     "controllerId": "",
-    "controllerMiddleware": Array [],
+    "controllerMiddleware": [],
     "description": "",
     "fullUrl": "/api/hello",
     "fullUrlCompiledRegexp": /\\^\\\\/api\\\\/hello\\[\\\\/#\\\\\\?\\]\\?\\$/i,
     "fullUrlFlattenString": "/api/hello",
     "funcHandlerName": "index.hello",
-    "functionMetadata": Object {
+    "functionMetadata": {
       "functionName": "hello",
     },
     "functionName": "hello",
-    "functionTriggerMetadata": Object {
+    "functionTriggerMetadata": {
       "method": "get",
       "path": "/api/hello",
     },
@@ -27,38 +27,38 @@ Array [
     "handlerName": "",
     "id": null,
     "method": [Function],
-    "middleware": Array [],
-    "requestMetadata": Array [],
+    "middleware": [],
+    "requestMetadata": [],
     "requestMethod": "get",
-    "responseMetadata": Array [],
+    "responseMetadata": [],
     "summary": "",
     "url": "/api/hello",
   },
-  Object {
+  {
     "_category": 2,
     "_level": 0,
     "_paramString": "",
     "_pureRouter": "",
     "_weight": 0,
     "controllerId": "",
-    "controllerMiddleware": Array [],
+    "controllerMiddleware": [],
     "description": "",
     "funcHandlerName": "index.hsf",
-    "functionMetadata": Object {
+    "functionMetadata": {
       "functionName": "hsf",
     },
     "functionName": "hsf",
-    "functionTriggerMetadata": Object {
+    "functionTriggerMetadata": {
       "name": "customHSF",
     },
     "functionTriggerName": "customHSF",
     "handlerName": "",
     "id": null,
     "method": [Function],
-    "middleware": Array [],
-    "requestMetadata": Array [],
+    "middleware": [],
+    "requestMetadata": [],
     "requestMethod": "",
-    "responseMetadata": Array [],
+    "responseMetadata": [],
     "summary": "",
     "url": "",
   },
@@ -66,8 +66,8 @@ Array [
 `;
 
 exports[`/test/service/slsFunction.test.ts should test with function router 1`] = `
-Array [
-  Object {
+[
+  {
     "_category": 2,
     "_level": 1,
     "_paramString": "",
@@ -75,7 +75,7 @@ Array [
     "_weight": 0,
     "controllerClz": [Function],
     "controllerId": "apiController",
-    "controllerMiddleware": Array [
+    "controllerMiddleware": [
       "auth",
     ],
     "description": "",
@@ -84,36 +84,36 @@ Array [
     "funcHandlerName": "apiController.homeSet",
     "handlerName": "apiController.homeSet",
     "method": "homeSet",
-    "middleware": Array [
+    "middleware": [
       "auth2",
     ],
     "prefix": "/api",
-    "requestMetadata": Array [],
+    "requestMetadata": [],
     "requestMethod": "get",
-    "responseMetadata": Array [],
+    "responseMetadata": [],
     "routerName": "",
     "summary": "",
     "url": "/",
   },
-  Object {
+  {
     "_category": 2,
     "_level": 1,
     "_paramString": "",
     "_pureRouter": "/upload",
     "_weight": 1,
     "controllerId": "helloHttpService",
-    "controllerMiddleware": Array [],
+    "controllerMiddleware": [],
     "description": "",
     "fullUrl": "/upload",
     "fullUrlFlattenString": "/upload",
     "funcHandlerName": "helloHttpService.upload",
-    "functionMetadata": Object {
+    "functionMetadata": {
       "functionName": "helloHttpService-upload",
     },
     "functionName": "helloHttpService-upload",
-    "functionTriggerMetadata": Object {
+    "functionTriggerMetadata": {
       "method": "get",
-      "middleware": Array [
+      "middleware": [
         "fmw:upload",
       ],
       "path": "/upload",
@@ -121,36 +121,36 @@ Array [
     "functionTriggerName": "http",
     "handlerName": "helloHttpService.upload",
     "method": "upload",
-    "middleware": Array [
+    "middleware": [
       "fmw:upload",
     ],
     "prefix": "/",
-    "requestMetadata": Array [],
+    "requestMetadata": [],
     "requestMethod": "get",
-    "responseMetadata": Array [],
+    "responseMetadata": [],
     "routerName": "",
     "summary": "",
     "url": "/upload",
   },
-  Object {
+  {
     "_category": 2,
     "_level": 1,
     "_paramString": "",
     "_pureRouter": "/update",
     "_weight": 1,
     "controllerId": "helloHttpService",
-    "controllerMiddleware": Array [],
+    "controllerMiddleware": [],
     "description": "",
     "fullUrl": "/update",
     "fullUrlFlattenString": "/update",
     "funcHandlerName": "helloHttpService.invoke",
-    "functionMetadata": Object {
+    "functionMetadata": {
       "functionName": "helloHttpService-invoke",
     },
     "functionName": "helloHttpService-invoke",
-    "functionTriggerMetadata": Object {
+    "functionTriggerMetadata": {
       "method": "post",
-      "middleware": Array [
+      "middleware": [
         "auth",
       ],
       "path": "/update",
@@ -158,91 +158,91 @@ Array [
     "functionTriggerName": "apigw",
     "handlerName": "helloHttpService.invoke",
     "method": "invoke",
-    "middleware": Array [
+    "middleware": [
       "auth",
     ],
     "prefix": "/",
-    "requestMetadata": Array [],
+    "requestMetadata": [],
     "requestMethod": "post",
-    "responseMetadata": Array [],
+    "responseMetadata": [],
     "routerName": "",
     "summary": "",
     "url": "/update",
   },
-  Object {
+  {
     "_category": 2,
     "_level": 1,
     "_paramString": "",
     "_pureRouter": "/invoke",
     "_weight": 1,
     "controllerId": "helloHttpService",
-    "controllerMiddleware": Array [],
+    "controllerMiddleware": [],
     "description": "",
     "fullUrl": "/invoke",
     "fullUrlFlattenString": "/invoke",
     "funcHandlerName": "helloHttpService.invoke",
-    "functionMetadata": Object {
+    "functionMetadata": {
       "functionName": "helloHttpService-invoke",
     },
     "functionName": "helloHttpService-invoke",
-    "functionTriggerMetadata": Object {
+    "functionTriggerMetadata": {
       "method": "get",
       "path": "/invoke",
     },
     "functionTriggerName": "http",
     "handlerName": "helloHttpService.invoke",
     "method": "invoke",
-    "middleware": Array [],
+    "middleware": [],
     "prefix": "/",
-    "requestMetadata": Array [],
+    "requestMetadata": [],
     "requestMethod": "get",
-    "responseMetadata": Array [],
+    "responseMetadata": [],
     "routerName": "",
     "summary": "",
     "url": "/invoke",
   },
-  Object {
+  {
     "_category": 2,
     "_level": 0,
     "_paramString": "",
     "_pureRouter": "",
     "_weight": 0,
     "controllerId": "helloHttpService",
-    "controllerMiddleware": Array [],
+    "controllerMiddleware": [],
     "description": "",
     "funcHandlerName": "helloHttpService.upload",
-    "functionMetadata": Object {
+    "functionMetadata": {
       "functionName": "helloHttpService-upload",
     },
     "functionName": "helloHttpService-upload",
-    "functionTriggerMetadata": Object {},
+    "functionTriggerMetadata": {},
     "functionTriggerName": "hsf",
     "handlerName": "helloHttpService.upload",
     "method": "upload",
-    "middleware": Array [],
+    "middleware": [],
     "prefix": "/",
-    "requestMetadata": Array [],
+    "requestMetadata": [],
     "requestMethod": "",
-    "responseMetadata": Array [],
+    "responseMetadata": [],
     "routerName": "",
     "summary": "",
     "url": "",
   },
-  Object {
+  {
     "_category": 2,
     "_level": 0,
     "_paramString": "",
     "_pureRouter": "",
     "_weight": 0,
     "controllerId": "helloHttpService",
-    "controllerMiddleware": Array [],
+    "controllerMiddleware": [],
     "description": "",
     "funcHandlerName": "helloHttpService.invoke",
-    "functionMetadata": Object {
+    "functionMetadata": {
       "functionName": "helloHttpService-invoke",
     },
     "functionName": "helloHttpService-invoke",
-    "functionTriggerMetadata": Object {
+    "functionTriggerMetadata": {
       "payload": "",
       "type": "every",
       "value": "5m",
@@ -250,11 +250,11 @@ Array [
     "functionTriggerName": "timer",
     "handlerName": "helloHttpService.invoke",
     "method": "invoke",
-    "middleware": Array [],
+    "middleware": [],
     "prefix": "/",
-    "requestMetadata": Array [],
+    "requestMetadata": [],
     "requestMethod": "",
-    "responseMetadata": Array [],
+    "responseMetadata": [],
     "routerName": "",
     "summary": "",
     "url": "",
