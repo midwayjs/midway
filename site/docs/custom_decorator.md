@@ -470,27 +470,22 @@ export class MainConfiguration {
 ```typescript
 // ...
 export class UserController {
-  async invoke(@User() user: string) {
-    console.log(user);
-    // => xxx
+
+  @Inject()
+  userService: UserService;
+
+  @Inject()
+  ctx: Context;
+
+  async getUser() {
+    return await this.getUser(ctx);
   }
 }
-```
 
-### 另一种实现方式
-
-```typescript
-import { createParamDecorator } from '@midwayjs/core';
-
-// 实现装饰器
-export const Token = createParamDecorator((ctx) => {
-  return ctx.headers.token;
-});
-
-// 使用装饰器
-export class UserController {
-  async invoke(@Token() token: string) {
-    console.log(token);
+export class UserService {
+  async getUser(@User() user: string) {
+    console.log(user);
+    // => xxx
   }
 }
 ```

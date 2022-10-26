@@ -1,7 +1,7 @@
 import {
   ALL,
   Body,
-  createParamDecorator,
+  createRequestParamDecorator,
   File,
   Files,
   getClassMetadata,
@@ -13,7 +13,7 @@ import {
 } from '../../../src';
 
 function Token() {
-  return createParamDecorator(ctx => {
+  return createRequestParamDecorator(ctx => {
     return ctx.request.headers.token;
   });
 }

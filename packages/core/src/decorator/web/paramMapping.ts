@@ -32,20 +32,20 @@ const createParamMapping = function (type: RouteParamTypes) {
   };
 };
 
-export declare type KoaCustomParamDecorator<T = unknown> = (
+export declare type KoaLikeCustomParamDecorator<T = unknown> = (
   ctx: IMidwayContext
 ) => T | Promise<T>;
 
-export declare type ExpressCustomParamDecorator<T = unknown> = (
+export declare type ExpressLikeCustomParamDecorator<T = unknown> = (
   req,
   res
 ) => T | Promise<T>;
 
 export declare type CustomParamDecorator<T = unknown> =
-  | KoaCustomParamDecorator<T>
-  | ExpressCustomParamDecorator<T>;
+  | KoaLikeCustomParamDecorator<T>
+  | ExpressLikeCustomParamDecorator<T>;
 
-export const createParamDecorator = function (transform: CustomParamDecorator) {
+export const createRequestParamDecorator = function (transform: CustomParamDecorator) {
   return createParamMapping(RouteParamTypes.CUSTOM)(transform);
 };
 
