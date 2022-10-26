@@ -160,7 +160,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
 })
 export class MainConfiguration implements ILifeCycle {
@@ -187,7 +187,7 @@ import { Configuration } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
 })
 export class MainConfiguration implements ILifeCycle {
@@ -323,7 +323,7 @@ export class MainConfiguration implements ILifeCycle {
 
   async onObjectCreated(ins: any, options: ObjectInitOptions): Promise<void> {
     // Each created object will be replaced with {bbb: 'aaa'}
-    options.replaceCallback ({
+    options.replaceCallback({
       bbb: 'aaa'
     });
 

@@ -1,6 +1,4 @@
----
-title: 跨域 CORS
----
+# 跨域 CORS
 
 在 Midway Hooks 中，可以通过 [@koa/cors](https://github.com/koajs/cors) 来配置跨域功能。
 

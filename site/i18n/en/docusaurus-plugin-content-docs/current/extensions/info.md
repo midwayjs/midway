@@ -9,8 +9,8 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
-| Contains independent logs | null |
+| Contains independent main framework | ❌ |
+| Contains independent logs | ❌ |
 
 
 ## Installation dependency
@@ -23,7 +23,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/info": "^3.0.0",
     // ...
   },
@@ -40,7 +40,7 @@ Configure the info component into the code.
 import { Configuration } from '@midwayjs/decorator';
 import * as info from '@midwayjs/info';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     info
@@ -58,7 +58,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import * as info from '@midwayjs/info';
 
-@Configuration ({
+@Configuration({
   imports: [
     koa
     {
@@ -78,7 +78,7 @@ export class MainConfiguration {
 
 By default, the info component automatically adds a middleware to the Http scenario, which can be accessed by using `/_info`.
 
-null
+By default, key information such as system, process, and configuration is displayed.
 
 The effect is as follows:
 
@@ -114,15 +114,15 @@ import { DefaultHiddenKey } from '@midwayjs/info';
 
 export default {
   // ...
-  null
-    null
+  info: {
+    hiddenKey: DefaultHiddenKey.concat(['*abc', '*def', '*bbb*']),
   }
 }
 ```
 
 
 
-## null
+## API
 
 The info component provides `InfoService` by default for use in non-Http or custom scenarios.
 

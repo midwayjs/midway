@@ -113,7 +113,7 @@ import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 import { MODEL_KEY } from './decorator/model.decorator';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
 })
 export class MainConfiguration {
@@ -176,7 +176,7 @@ import { Configuration, App, Inject } from '@midwayjs/decorator';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
 })
 export class MainConfiguration {
@@ -225,7 +225,7 @@ import * as koa from '@midwayjs/koa';
 import { MEMORY_CACHE_KEY, MemoryStore } from 'decorator/memoryCache.decorator';
 import { MidwayDecoratorService } from '@midwayjs/core';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
 })
 export class MainConfiguration {
@@ -310,7 +310,7 @@ function formatDuring(value, formatUnit: string) {
   }
 }
 
-@Configuration ({
+@Configuration({
   imports: [koa]
 })
 export class MainConfiguration {
@@ -428,7 +428,7 @@ The implementation part also needs to use the `DecoratorService` service built i
 ```typescript
 //...
 
-@Configuration ({
+@Configuration({
   imports: [koa]
 })
 export class MainConfiguration {

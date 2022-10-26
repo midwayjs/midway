@@ -41,7 +41,7 @@ You only need to configure the `scripts.test` on the `package.json`.
 
 ```json
 {
-  "scripts ": {
+  "scripts": {
     "test": "midway-bin test --ts"
   }
 }
@@ -229,7 +229,7 @@ Pass the header header.
 ```typescript
 const result = await createHttpRequest(app)
   .get('/set_header')
-	.set ({
+	.set({
   	'x-bbb ': ' 123'
   })
   .query({ name: 'harry' });
@@ -580,12 +580,12 @@ Set launch.json in the folder. vscode
 ```json
 {
   "version": "0.0.1 ",
-  "configurations ": [
+  "configurations": [
     {
       "name": "Debug Jest Tests ",
       "type": "node ",
       "request": "launch ",
-      "runtimeArgs ": [
+      "runtimeArgs": [
         "--inspect-brk ",
         "--require=ts-node/register ",
         "${workspaceRoot}/node_modules/.bin/jest ",

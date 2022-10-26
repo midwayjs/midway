@@ -83,6 +83,8 @@ export const extractKoaLikeValue = (
         }
       case RouteParamTypes.FIELDS:
         return data ? ctx.fields[data] : ctx.fields;
+      case RouteParamTypes.CUSTOM:
+        return data ? data(ctx) : undefined;
       default:
         return null;
     }
@@ -154,6 +156,8 @@ export const extractExpressLikeValue = (
         }
       case RouteParamTypes.FIELDS:
         return data ? req.fields[data] : req.fields;
+      case RouteParamTypes.CUSTOM:
+        return data ? data(req, res) : undefined;
       default:
         return null;
     }

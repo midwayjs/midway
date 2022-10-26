@@ -1,6 +1,4 @@
----
-title: 前端请求客户端
----
+# Front-end request client
 
 In Midway Hooks' full stack application, we use `@midwayjs/rpc` as the default request client. All generated interfaces call the server through `@midwayjs/rpc`.
 
@@ -53,7 +51,7 @@ The basic URL of the request. Default value:`/`.
 ```ts
 import { setupHttpClient } from '@midwayjs/rpc';
 
-setupHttpClient ({
+setupHttpClient({
   baseURL:
     process.env.NODE_ENV ===
     'development'
@@ -69,7 +67,7 @@ Default value: `false`. For more information, see [MDN](https://developer.mozill
 ```ts
 import { setupHttpClient } from '@midwayjs/rpc';
 
-setupHttpClient ({
+setupHttpClient({
   withCredentials: true
 });
 ```
@@ -89,7 +87,7 @@ const fetcher: Fetcher = async (
   req
   options
 ) => {
-  const response = await axios ({
+  const response = await axios({
     method: req.method
     url: req.url
     data: req.data
@@ -107,7 +105,7 @@ setupHttpClient({ fetcher });
 
 ### middleware: Middleware []
 
-null``
+In `@midwayjs/rpc`, we can set up middleware for printing parameters, return value handling errors, etc.
 
 Take printing the address and return value of the current request as an example:
 
@@ -126,7 +124,7 @@ const logger: Middleware = async (
   );
 };
 
-setupHttpClient ({
+setupHttpClient({
   middleware: [logger]
 });
 ```
@@ -162,7 +160,7 @@ const ErrorHandler: Middleware = async (
   }
 };
 
-setupHttpClient ({
+setupHttpClient({
   middleware: [ErrorHandler]
 });
 ```

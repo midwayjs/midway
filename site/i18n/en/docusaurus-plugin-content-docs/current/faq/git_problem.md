@@ -15,8 +15,8 @@ For this reason, we 'd better turn off the default case of git.
 The following command.
 
 ```bash
-$git config core.ignorecase false ## takes effect for the current project
-$git config -- global -- add core.ignorecase false ## takes effect globally
+$ git config core.ignorecase false ## takes effect for the current project
+$ git config --global --add core.ignorecase false ## takes effect globally
 ```
 
 
@@ -55,7 +55,7 @@ The solution is as follows:
 
 Set global git text line breaks
 ```bash
-$git config --global core.autocrlf false
+$ git config --global core.autocrlf false
 ```
 Note: After git global configuration, you need to pull the code again.
 
@@ -67,7 +67,7 @@ In the lower-right corner of the editor, manually change `CRLF` to `LF`
 This method can only modify the line break of the current file, using vscode to create a new file line break is also `CRLF`, you can add the following configuration in `settings.json`
 
 ```
-"files.eol": "\n ",
+"files.eol": "\n",
 ```
 
 

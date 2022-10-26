@@ -102,7 +102,7 @@ Since Midway project is TypeScript written, we compile it before deployment. In 
 ```json
 // package.json
 {
-  "scripts ": {
+  "scripts": {
     "build": "midway-bin build -c"
   },
 }
@@ -257,7 +257,7 @@ Bootstrap
 ```typescript
 const { Bootstrap } = require('@midwayjs/bootstrap');
 Bootstrap
-  .configure ({
+  .configure({
   	globalConfig: [{
       default: {/*...*/}
       unittest: {/*...*/}
@@ -481,7 +481,7 @@ import { join } from 'path';
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 
-@Configuration ({
+@Configuration({
   importConfigs: [
     {
       default: DefaultConfig
@@ -549,7 +549,7 @@ Modify the `bootstrap.js` of the entry to the following code.
 const { Bootstrap } = require('@midwayjs/bootstrap');
 
 // Explicitly introduce user code as a component
-Bootstrap.configure ({
+Bootstrap.configure({
   // The reference here is the compiled entry, and the local development does not take this file.
   imports: require('./dist/index')
   // Disable directory scanning for dependent injection

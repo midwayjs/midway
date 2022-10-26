@@ -9,7 +9,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -26,12 +26,12 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/cache": "^3.0.0",
     "cache-manager": "^3.4.1 ",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@types/cache-manager": "^3.4.0 ",
     // ...
   }
@@ -52,7 +52,7 @@ import { Configuration, App } from '@midwayjs/decorator';
 import * as cache from '@midwayjs/cache';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     cache // import cache component

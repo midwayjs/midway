@@ -1,6 +1,4 @@
----
-title: 使用 Midway 组件
----
+# Using Midway Components
 
 Midway provides a series of components, including Cache / Http / Redis, etc.
 In Midway Hooks, we can directly use Midway components to quickly implement functions.
@@ -20,12 +18,12 @@ import * as Koa from '@midwayjs/koa';
 import { join } from 'path';
 import * as cache from '@midwayjs/cache';
 
-export default createConfiguration ({
+export default createConfiguration({
   imports: [cache, Koa, Hooks()]
   importConfigs: [
     join(__dirname, 'config')
   ],
-null
+});
 ```
 
 You can import components through `imports` and `importConfigs` configuration files.

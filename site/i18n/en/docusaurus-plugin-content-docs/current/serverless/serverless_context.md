@@ -1,6 +1,4 @@
----
-title: 函数上下文
----
+# Function Context
 
 ## Event conversion
 
@@ -13,7 +11,7 @@ import { Context } from '@midwayjs/faas';
 import { Provide } from '@midwayjs/decorator';
 
 @Provide()
-null
+export class Index {
 
   @Inject()
   ctx: Context;
@@ -38,7 +36,7 @@ export class Index {
   ctx: Context;
 
   @ServerlessTrigger(...)
-	null
+	async handler() {
     // The following two writing methods are the same
 		// this.ctx.body = 'hello world';
     return 'hello world';
@@ -115,7 +113,7 @@ HTTP Request object simulated by FaaS.
 
 HTTP Response object simulated by FaaS.
 
-### null
+### **ctx.params**
 
 The proxy is `request.pathParameters` and is available under http triggers (Aliyun) and API gateway triggers.
 
@@ -140,7 +138,7 @@ Sets the return status code, which represents the `response.statusCode` from.
 ctx.status = 404;
 ```
 
-###
+
 
 ### Request aliases
 
@@ -163,7 +161,7 @@ The attributes listed below are from the [Response](#kfTOD) object proxy
 - `ctx.type=`
 - `ctx.set()` alias to `response.setHeader`
 
-##
+
 
 ## FaaSHTTPRequest
 

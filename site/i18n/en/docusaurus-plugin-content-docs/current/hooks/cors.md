@@ -1,6 +1,4 @@
----
-title: 跨域 CORS
----
+# Cross-domain CORS
 
 In Midway Hooks, you can use [@koa/cors](https://github.com/koajs/cors) to configure the cross-border function.
 
@@ -22,10 +20,10 @@ import {
 import * as Koa from '@midwayjs/koa';
 import cors from '@koa/cors';
 
-export default createConfiguration ({
+export default createConfiguration({
   imports: [
     Koa
-    hooks ({
+    hooks({
       // highlight-start
       middleware: [
         cors({ origin: '*' })

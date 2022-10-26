@@ -12,9 +12,9 @@ Related information:
 | Description |      |
 | ----------------- | ---- |
 | Can be used for standard projects | ✅ |
-| Can be used for Serverless | null |
+| Can be used for Serverless | ❌ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -32,27 +32,27 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/ws": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@types/ws": "^8.2.2 ",
-    null
+    // ...
   }
 }
 ```
 
 ## Open the component
 
-`@midwayjs/ws` can be used as an independent main frame.
+`@midwayjs/ws` can be used as an independent main framework.
 
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 import * as ws from '@midwayjs/ws';
 
-@Configuration ({
+@Configuration({
   imports: [ws]
   // ...
 })
@@ -72,7 +72,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
-@Configuration ({
+@Configuration({
   imports: [koa, ws]
   // ...
 })
@@ -94,12 +94,12 @@ The following is the basic directory structure of WebSocket project. Similar to 
 .
 ├── package.json
 ├── src
-│ │-configuration.ts ## entry configuration file
-│ ├── interface.ts
-│-socket ## ws service file
-│ └── hello.controller.ts
+│   ├── configuration.ts          ## entry configuration file
+│   ├── interface.ts
+│   └── socket                    ## ws service file
+│       └── hello.controller.ts
 ├── test
--bootstrap.js ## service startup portal
+├── bootstrap.js                  ## service startup portal
 └── tsconfig.json
 ```
 
@@ -160,7 +160,7 @@ export class HelloSocketController {
   async gotMessage(data) {
     return { name: 'harry', result: parseInt(data) +5 };
   }
-null
+}
 
 ```
 
@@ -260,10 +260,10 @@ export default {
   koa: {
     port: null
   },
-  null
+  webSocket
     port: 3000
   },
-null
+}
 ```
 
 :::tip
@@ -279,12 +279,12 @@ Like other Midway testing methods, we use `createApp` to start the project.
 
 ```typescript
 import { createApp, close } from '@midwayjs/mock'
-// The Framework definition used here is subject to the main frame.
+// The Framework definition used here is subject to the main framework.
 import { Framework } from '@midwayjs/koa';
 
 describe('/test/index.test.ts', () => {
 
-  null
+  it('should create app and test webSocket', async () => {
     const app = await createApp<Framework>();
 
     //...
@@ -329,7 +329,7 @@ it('should test create websocket app', async () => {
   });
 
   // Judgment result
-  null
+  expect(JSON.parse(result)).toEqual({
     name: 'harry',
     result: 6
   });
@@ -371,7 +371,7 @@ it('should test create websocket app', async () => {
   let [data] = await gotEvent;
 
   // Judgment result
-  expect(JSON.parse(data)).toEqual ({
+  expect(JSON.parse(data)).toEqual({
     name: 'harry',
     result: 6
   });
@@ -400,7 +400,7 @@ The configuration sample of `@midwayjs/ws` is as follows:
 // src/config/config.default
 export default {
   // ...
-  null
+  webSocket: {
     port: 7001
   },
 }

@@ -1,14 +1,13 @@
----
-title: midwayjs/cli
----
+# midwayjs/cli
+
 `@midwayjs/cli` is a new version of Midway system tool chain, which is integrated with Serverless and the original application tool chain.
 
 
 ## Foundation entrance
 
-`null`  `midway-bin` and `MW` commands.
+`@midwayjs/cli` provides two entry commands. `midway-bin` and `mw` commands.
 
-When `@midwayjs/CLI` is installed in the global system, the `MW` command is used, such as `MW Dev`. When installing the cli tool in a project, we usually use the `midway-bin` command, but remember that the two commands are the same.
+When `@midwayjs/CLI` is installed in the global system, the `mw` command is used, such as `mw Dev`. When installing the cli tool in a project, we usually use the `midway-bin` command, but remember that the two commands are the same.
 
 
 
@@ -17,7 +16,7 @@ When `@midwayjs/CLI` is installed in the global system, the `MW` command is used
 Start the local development command with the current directory.
 
 ```bash
-$mw dev
+$ mw dev
   -- baseDir the application directory, usually the folder where package.json is located, and the default is process.cwd()
   -sourceDir ts code directory, automatically analyzed by default
   -p, -- port dev listens on the port, default to 7001
@@ -61,13 +60,13 @@ $ midway-bin dev --ts --sourceDir=./app/src
 
 ### **Faster startup method**
 
-null
+The default startup method is ts-node, which will be slower when the number of files is particularly large. You can switch to a new compilation method such as swc.
 
 ```shell
 // Use ts-node fast dev mode
 $ midway-bin dev --ts --fast
 
-// Use swc's fast dev mode
+// Use swc fast dev mode
 $ midway-bin dev --ts --fast=swc
 ```
 
@@ -77,10 +76,10 @@ $ midway-bin dev --ts --fast=swc
 
 ```shell
 // Specify multiple files, separated by commas
-$ midway-bin dev --ts --watchFile=./a.txt,./ B .txt
+$ midway-bin dev --ts --watchFile=./a.txt,./b.txt
 
 // Specify multiple folders and files separated by commas
-null
+$ midway-bin dev --ts --watchFile=./test,./b.txt
 ```
 
 
@@ -88,7 +87,7 @@ null
 
 ```shell
 // Specify multiple file extensions separated by commas
-midway-bin dev --ts --watchExt=.js,.html
+$ midway-bin dev --ts --watchExt=.js,.html
 ```
 
 
@@ -327,7 +326,7 @@ experimentalFeatures:
 ### 2. removeUselessFiles
 Removing a large number of invalid files, such as `LICENSE`, `*.ts.map`, and `**/test/` files, can effectively reduce the size of the build package.
 ```yaml
-null
+experimentalFeatures:
 	removeUselessFiles: true
 ```
 
@@ -354,8 +353,8 @@ For example, add custom logic after the package command `installDevDep`:
 
 ```bash
 {
-	"midway-integration ": {
-  	"lifecycle ": {
+	"midway-integration": {
+  	"lifecycle": {
     	"after:package:installDevDep": "npm run build"
     }
   }
@@ -411,7 +410,7 @@ Code reference for plug-ins:
 ```typescript
 // src/index.ts
 
-null
+import { BasePlugin } from '@midwayjs/command-core';
 
 export class TestLalalaPlugin extends BasePlugin {
   commands = {
@@ -419,7 +418,7 @@ export class TestLalalaPlugin extends BasePlugin {
       Usage: 'custom command',
       lifecycleEvents: [
         'a', // Custom Lifecycle
-        'B',
+        'b',
       ],
       // Not yet
       options: {
@@ -432,7 +431,7 @@ export class TestLalalaPlugin extends BasePlugin {
   };
 
   hooks = {
-    null
+		// Add the command lifecycle extension in the current plugin
     // the life cycle of the lalala command
    	'lalala:a': async () => {
 
@@ -442,7 +441,7 @@ export class TestLalalaPlugin extends BasePlugin {
       // Get the parameters entered by the user.
       this.core.cli.log(this.core.options);
 
-      null
+      // f.yml content
       this.core.cli.log(this.core.service);
 
       // Only the output under the-V parameter

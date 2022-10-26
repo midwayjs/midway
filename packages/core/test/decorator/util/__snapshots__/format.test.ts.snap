@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`/test/util/format.test.ts should test crontab 1`] = `
-Object {
+{
   "EVERY_DAY": "0 0 0 * * *",
   "EVERY_DAY_ONE_FIFTEEN": "0 15 1 * * *",
   "EVERY_DAY_ZERO_FIFTEEN": "0 15 0 * * *",

@@ -1,6 +1,4 @@
----
-title: 发布到腾讯云 SCF
----
+# Publish to Tencent Cloud SCF
 
 ## Configuration
 
@@ -11,7 +9,7 @@ service:
   name: midway-faas-examples
 
 provider:
-  null
+  name: tencent
 ```
 
 Configuration runtime
@@ -29,16 +27,16 @@ Configuration function timeout
 
 ```yaml
 service:
-  null
+  name: midway-faas-examples
 
 provider:
   name: tencent
-  Timeout: 60# Unit Seconds
+  Timeout: 60 # Unit Seconds
 ```
 
 Multiplex HTTP gateway
 
-Tengxun Cloud will create a new gateway binding every time HTTP type is deployed. For development, we can reuse the same id
+Tencent Cloud will create a new gateway binding every time HTTP type is deployed. For development, we can reuse the same id
 
 ```yaml
 service:
@@ -53,7 +51,7 @@ For more information, see [DIP](deploy_tencent_faq#NGqUs).
 
 ## Deployment
 
-Run `npm run deploy`. The Deploy command is automatically packaged and released by calling the official deployment tool of Tengxun Cloud.
+Run `npm run deploy`. The Deploy command is automatically packaged and released by calling the official deployment tool of Tencent Cloud.
 
 The video flow is as follows:
 

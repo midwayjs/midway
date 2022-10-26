@@ -16,7 +16,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ❌ |
 | Can be used for integration | ✅ |
-| null | ✅ |
+| Contains independent main framework | ✅ |
 | Contains independent logs | ❌ |
 
 
@@ -40,14 +40,14 @@ Understand Stream API
 * Act as a stream processor, consume input streams from one or more topics, and produce an output stream to one or more output topics, effectively converting the input stream to the output stream.
 
 Understanding Broker
-* Published messages are stored in a group of servers called Kafka clusters. Each server in the cluster is a broker.  null
+* Published messages are kept in a group of servers, called a Kafka cluster. Each server in the cluster is a broker. Consumers can consume these published messages by subscribing to one or more topics and pulling data from the Broker.
 
 
 ![image.png](https://kafka.apache.org/images/streams-and-tables-p1_p4.png)
 
 
 
-## Consumer (Consumer) Usage
+## Consumer  Usage
 
 
 ### Installation dependency
@@ -55,7 +55,7 @@ Understanding Broker
 
 Midway provides the ability to subscribe to Kafka and can be deployed and used independently. Install the `@midwayjs/kafka` module and its definition.
 ```bash
-$ npm i @midwayjs/kafka --save
+$ npm i @midwayjs/kafka@3 --save
 $ npm i kafkajs --save
 ```
 
@@ -63,7 +63,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/kafka": "^3.0.0",
     "kafka": "^2.0.0 ",
     // ...
@@ -73,14 +73,14 @@ Or reinstall the following dependencies in `package.json`.
 
 ## Open the component
 
-`@midwayjs/kafka` can be used as an independent main frame.
+`@midwayjs/kafka` can be used as an independent main framework.
 
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
-null
+import * as kafka from '@midwayjs/kafka';
 
-@Configuration ({
+@Configuration({
   imports: [
     Kafka
   ],
@@ -97,11 +97,11 @@ It can also be attached to other main frameworks, such as `@midwayjs/koa`.
 
 ```typescript
 // src/configuration.ts
-null
+import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import * as kafka from '@midwayjs/kafka';
 
-@Configuration ({
+@Configuration({
   imports: [
     koa
     kafka
@@ -112,7 +112,7 @@ export class ContainerLifeCycle {
   async onReady() {
         // ...
   }
-null
+}
 ```
 
 ### Directory structure
@@ -126,16 +126,16 @@ We usually put consumers in consumer catalogues. For example, `src/consumer/user
 ➜ my_midway_app tree
 .
 ├── src
-│ ├── consumer
-│ │ └── user.consumer.ts
-│ ├── interface.ts
-│ └── service
-│ └── user.service.ts
+│   ├── consumer
+│   │   └── user.consumer.ts
+│   ├── interface.ts
+│   └── service
+│       └── user.service.ts
 ├── test
 ├── package.json
 └── tsconfig.json
 ```
-null
+The code example is as follows.
 
 ```typescript
 @Provide()
@@ -154,7 +154,7 @@ export class UserConsumer {
   }
 }
 ```
-`null```
+The `@Consumer` decorator provides the consumer identifier, and its parameters specify the type of a certain consumption framework. For example, here we specify the `MSListenerType.KFAKA` type, which refers to the kafka type.
 
 
 The class that identifies the `@Consumer` can bind a topic after using the `@KafkaListener` decorator for the method.
@@ -211,10 +211,10 @@ More configurations (see https://kafka.js.org/docs/consuming for more detailed c
 | Property | Description |
 | --- | --- |
 | kafkaConfig | Kafka connection information |
-| null | Specify client ID |
-| -brokers | Kafka cluster brokers |
+| - clientId | Specify client ID |
+| - brokers | Kafka cluster brokers |
 | consumerConfig | Consumer Configuration |
-| null | Packet ID |
+| - groupId | Packet ID |
 
 
 
@@ -292,7 +292,7 @@ export class UserConsumer {
 
   @KafkaListener('topic-test2')
   async gotData2(message: KafkaMessage) {
-    null
+    console.info('gotData2 info');
     this.logger.info('test output =>', message.offset + '' + message.key + '' + message.value.toString('utf8'));
     this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
   }
@@ -368,16 +368,16 @@ export class UserConsumer {
 
 
 
-## Producer (Producer) Usage Method
+## Producer Usage Method
 
 
-null
+The producer (Producer) is also the message producer in the first section. In short, it will create a client and send messages to the Kafka service.
 
 
 Note: Midway currently does not use components to support message sending. The example shown here is only the writing method of pure SDK in Midway.
 
 
-### null
+### Install dependencies
 
 
 ```bash
@@ -385,7 +385,7 @@ $ npm i kafkajs --save
 ```
 
 
-### null
+### Call the service to send a message
 
 
 For example, we add a `Kafka. ts` file under the service file.
@@ -407,7 +407,7 @@ const { Kafka } = require('kafkajs');
 @Scope(ScopeEnum.Singleton) // Singleton singleton, globally unique (process level)
 export class KafkaService {
   @Config('kafka')
-  null
+  kafkaConfig: any;
 
   private connection;
   private producer;
@@ -416,10 +416,10 @@ export class KafkaService {
   async connect() {
     // To create a connection, you can put the configuration in Config and inject it into it.
     const { brokers, clientId, producerConfig = {} } = this.kafkaConfig;
-    const client = new Kafka ({
+    const client = new Kafka({
       clientId: clientId
       brokers: brokers
-    null
+    });
     this.producer = client.producer(producerConfig);
     this.connection = await this.producer.connect();
   }
@@ -456,13 +456,13 @@ export class UserService {
     // TODO
 
     // Send a message
-    const result = this.kafkaService.send ({
+    const result = this.kafkaService.send({
       topic: 'test',
       messages: [
         {
           value: JSON.stringify(messageValue)
         },
-      null
+      ],
     });
   }
 }

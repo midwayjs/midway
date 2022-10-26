@@ -1,6 +1,6 @@
 # RabbitMQ
 
-null
+In the architecture of a complex system, there will be microservices responsible for processing message queues, as shown in the following figure: service A is responsible for generating messages to the message queue, while service B is responsible for consuming tasks in the message queue.
 
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01SYMbCz1moVSVLl7S2_!!6000000005001-2-tps-646-251.png)
 
@@ -15,8 +15,8 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ❌ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ✅ |
-| Contains independent logs | null |
+| Contains independent main framework | ✅ |
+| Contains independent logs | ❌ |
 
 
 
@@ -61,12 +61,12 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/rabbitmq": "^3.0.0",
     "amqplib": "^0.10.1 ",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@types/amqplib": "^0.8.2 ",
     // ...
   }
@@ -82,7 +82,7 @@ Or reinstall the following dependencies in `package.json`.
 import { Configuration } from '@midwayjs/decorator';
 import * as rabbitmq from '@midwayjs/rabbitmq';
 
-@Configuration ({
+@Configuration({
   imports: [
     rabbitmq
   ],
@@ -95,7 +95,7 @@ export class MainConfiguration {
 }
 ```
 
-null``
+It can also be attached to other mainframes, such as `@midwayjs/koa` .
 
 ```typescript
 // src/configuration.ts
@@ -103,14 +103,14 @@ import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import * as rabbitmq from '@midwayjs/rabbitmq';
 
-@Configuration ({
+@Configuration({
   imports: [
     koa
     rabbitmq
   ],
   // ...
 })
-null
+export class ContainerLifeCycle {
   async onReady() {
         // ...
   }
@@ -125,14 +125,14 @@ We generally divide capabilities into producers and consumers, and subscriptions
 
 We usually put consumers in consumer catalogues. For example, `src/consumer/userConsumer.ts`.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│ ├── consumer
-│ │ └── user.consumer.ts
-│ ├── interface.ts
-│ └── service
-│ └── user.service.ts
+│   ├── consumer
+│   │   └── user.consumer.ts
+│   ├── interface.ts
+│   └── service
+│       └── user.service.ts
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -193,7 +193,7 @@ import { Context } from '@midwayjs/rabbitmq';
 
 ### Configure consumers
 
-null
+We need to specify the address of rabbitmq in the configuration.
 
 ```typescript
 // src/config/config.default
@@ -226,7 +226,7 @@ That is, all Queues subscribing to the switch will receive messages.
 
 For example, we have added two Queue and subscribed to the same switch.
 ```typescript
-null
+import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
 import { Context, Application } from '@midwayjs/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
 
@@ -250,7 +250,7 @@ export class UserConsumer {
     },
     exclusive: true
     consumeOptions: {
-      null
+      noAck: true,
     }
   })
   async gotData(msg: ConsumeMessage) {
@@ -355,7 +355,7 @@ export interface RabbitMQListenerOptions {
   maxPriority?: number;
   pattern?: string;
   /**
-   null
+   * prefetch
    */
   prefetch?: number;
   /**
@@ -383,7 +383,7 @@ export interface RabbitMQListenerOptions {
     exclusive?: boolean;
     priority?: number;
     arguments?: any;
-  null
+  }
 }
 ```
 
@@ -503,13 +503,13 @@ await close(app);
 ```
 
 
-## Producer (Producer) Usage Method
+## Producer  Usage Method
 
 
 The producer (Producer), that is, the message producer in the first section, simply creates a client to send the message to the RabbitMQ service.
 
 
-null
+Note: Currently Midway does not use components to support message sending, the examples shown here are just written in Midway using pure SDK.
 
 
 ### Installation dependency
@@ -526,7 +526,7 @@ $ npm i @types/amqplib --save-dev
 
 For example, we add a `rabbitmq.ts` file under the service file.
 ```typescript
-null
+import { Provide, Scope, ScopeEnum, Init, Autoload, Destroy } from '@midwayjs/decorator';
 import * as amqp from 'amqp-connection-manager'
 
 @Autoload()
@@ -544,24 +544,24 @@ export class RabbitmqService {
     this.connection = await amqp.connect('amqp://localhost');
 
     // Create channel
-    this.channelWrapper = this.connection.createChannel ({
+    this.channelWrapper = this.connection.createChannel({
       json: true
       setup: function(channel) {
         return Promise.all ([
           // Binding queue
         	channel.assertQueue("tasks", { durable: true })
-        null
+        ]);
       }
     });
   }
 
   // Send a message
   public async sendToQueue(queueName: string, data: any) {
-  	null
+  	return this.channelWrapper.sendToQueue(queueName, data);
   }
 
   @Destroy()
-  null
+  async close() {
   	await this.channelWrapper.close();
     await this.connection.close();
   }

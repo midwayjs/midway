@@ -1,6 +1,4 @@
----
-title: Serverless 触发器 POST 情况差异
----
+# Serverless trigger POST case differences
 
 ## alibaba cloud API gateway
 
@@ -10,7 +8,7 @@ Alibaba Cloud API Gateway supports different types of POST requests.
 
 The gateway configuration is as follows.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593175823751-f9b305fc-ddeb-4b04-ba13-481a616be260.png#height=536&id=R8Ber&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1072&originWidth=1560&originalType=binary&size=138055&status=done&style=none&width=780" width="780" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593175823751-f9b305fc-ddeb-4b04-ba13-481a616be260.png)
 
 The event feature of gateway pass-through has a `body` field and the `isBase64Encoded` is true. It is easy to decode and directly solve base64.
 
@@ -25,7 +23,7 @@ The following event is the simplest pass-through example. Because the `content-t
 ```json
 {
   "body": "eyJjIjoiYiJ9 ",
-  "headers ": {
+  "headers": {
     "x-ca-dashboard-action": "DEBUG ",
     "x-ca-dashboard-uid": "125087",
     "x-ca-stage": "RELEASE ",
@@ -38,7 +36,7 @@ The following event is the simplest pass-through example. Because the `content-t
   "httpMethod": "POST ",
   "isBase64Encoded": true
   "path": "/api/321 ",
-  "pathParameters ": {
+  "pathParameters": {
     "userId": "321"
   },
   "queryParameters": {}
@@ -58,7 +56,7 @@ If the `content-type` is `application/json`, the framework is considered to be J
 ```json
 {
   "body": "eyJjIjoiYiJ9 ",
-  "headers ": {
+  "headers": {
     "X-Ca-Dashboard-Action": "DEBUG ",
     "X-Ca-Dashboard-Uid": "125087",
     "X-Ca-Stage": "RELEASE ",
@@ -71,7 +69,7 @@ If the `content-type` is `application/json`, the framework is considered to be J
   "httpMethod": "POST ",
   "isBase64Encoded": true
   "path": "/api/321 ",
-  "pathParameters ": {
+  "pathParameters": {
     "userId": "321"
   },
   "queryParameters": {}
@@ -94,25 +92,25 @@ In the API gateway side test, keeping the "in-reference pass", it seems to have 
 
 The Postman simulation request is as follows:
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593188653464-2a5659de-40ad-4611-ba86-f5754c7d4425.png#height=684&id=hkVhi&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1368&originWidth=1316&originalType=binary&size=178770&status=done&style=none&width=658" width="658" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593188653464-2a5659de-40ad-4611-ba86-f5754c7d4425.png)
 
 The event value obtained by the function is as follows.
 
 ```json
 {
-  "body": "{\"c\":\" B \"} ",
-  "headers ": {
-    "accept ": "*/*",
-    "cache-control": "no-cache ",
-    "user-agent": "PostmanRuntime/7.24.1 ",
-    "postman-token": "feb51b11-9103-463a-92ff-73076d37b683 ",
-    "accept-encoding": "gzip, deflate, br ",
+  "body": "{\"c\":\" B \"}",
+  "headers": {
+    "accept": "*/*",
+    "cache-control": "no-cache",
+    "user-agent": "PostmanRuntime/7.24.1",
+    "postman-token": "feb51b11-9103-463a-92ff-73076d37b683",
+    "accept-encoding": "gzip, deflate, br",
     "content-type": "application/x-www-form-urlencoded"
   },
-  "httpMethod": "POST ",
+  "httpMethod": "POST",
   "isBase64Encoded": false
   "path": "/api/321 ",
-  "pathParameters ": {
+  "pathParameters": {
     "userId": "321"
   },
   "queryParameters": {}
@@ -129,7 +127,7 @@ ctx.request.body; // {"c":" B "} => object
 
 After the gateway configuration selects input parameter mapping, there are two types of body data.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593186831907-7975c65c-aee5-4f96-9ae4-ffaeee66c7dd.png#height=179&id=KonHW&margin=%5Bobject%20Object%5D&name=image.png&originHeight=358&originWidth=1112&originalType=binary&size=117003&status=done&style=none&width=556" width="556" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593186831907-7975c65c-aee5-4f96-9ae4-ffaeee66c7dd.png)
 
 Once the mapping is selected, there is **no content-type** in the Headers the entire function gets.
 
@@ -138,7 +136,7 @@ At this time, the return event of the gateway is
 ```json
 {
   "body": "eyJjIjoiYiJ9 ",
-  "headers ": {
+  "headers": {
     "X-Ca-Dashboard-Action": "DEBUG ",
     "X-Ca-Dashboard-Uid": "111111",
     "X-Ca-Dashboard-Role": "USER"
@@ -146,7 +144,7 @@ At this time, the return event of the gateway is
   "httpMethod": "POST ",
   "isBase64Encoded": true
   "path": "/api/321 ",
-  "pathParameters ": {
+  "pathParameters": {
     "userId": "321"
   },
   "queryParameters": {}
@@ -177,7 +175,7 @@ return {
 
 String format.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593321679770-a7609684-ec5e-4f93-99f2-d346ed79c1fa.png#height=426&id=ny1FQ&margin=%5Bobject%20Object%5D&name=image.png&originHeight=426&originWidth=1154&originalType=binary&size=33111&status=done&style=none&width=1154" width="1154" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593321679770-a7609684-ec5e-4f93-99f2-d346ed79c1fa.png)
 
 ```typescript
 ctx.request.body; // "bbb" => string
@@ -185,27 +183,27 @@ ctx.request.body; // "bbb" => string
 
 JSON format
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593321730423-f9b2860f-7902-4f3a-81cf-bfbcfd4ee57f.png#height=431&id=Vz8q7&margin=%5Bobject%20Object%5D&name=image.png&originHeight=431&originWidth=1074&originalType=binary&size=34435&status=done&style=none&width=1074" width="1074" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593321730423-f9b2860f-7902-4f3a-81cf-bfbcfd4ee57f.png)
 
 ```typescript
-ctx.request.body; // {" B ":"c"} => object
+ctx.request.body; // {" B":"c"} => object
 ```
 
 ### Form (application/x-www-form-urlencoded)
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593321823455-23ec3970-35a5-4746-8995-d9146eaa4ab0.png#height=387&id=qxW8I&margin=%5Bobject%20Object%5D&name=image.png&originHeight=387&originWidth=1310&originalType=binary&size=36914&status=done&style=none&width=1310" width="1310" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593321823455-23ec3970-35a5-4746-8995-d9146eaa4ab0.png)
 
 ```typescript
-ctx.request.body; // {" B ":"c"} => object
+ctx.request.body; // {" B":"c"} => object
 ```
 
 ### File upload (Binary)
 
 Not yet supported
 
-## Tengxun Cloud Gateway
+## Tencent Cloud Gateway
 
-Tengxun Cloud provides a separate gateway.
+Tencent Cloud provides a separate gateway.
 
 ### Ordinary POST(application/json)
 
@@ -223,7 +221,7 @@ Use Postman requests.
 
 string format, normal parsing.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593323223487-c4e5f365-b500-4a2d-85e3-45bd4aba4653.png#height=1094&id=BcYdP&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1094&originWidth=1486&originalType=binary&size=79437&status=done&style=none&width=1486" width="1486" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593323223487-c4e5f365-b500-4a2d-85e3-45bd4aba4653.png)
 
 ```typescript
 ctx.request.body; // "bbb" => string
@@ -231,7 +229,8 @@ ctx.request.body; // "bbb" => string
 
 JSON format, can be parsed normally.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593323187488-e7b4e32e-4195-404d-b309-ba436c3f5f8e.png#height=1072&id=Wf7Tf&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1072&originWidth=1312&originalType=binary&size=76807&status=done&style=none&width=1312" width="1312" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593323187488-e7b4e32e-4195-404d-b309-ba436c3f5f8e.png)
+
 
 ```typescript
 ctx.request.body; // {"c":" B "} => object
@@ -241,7 +240,7 @@ ctx.request.body; // {"c":" B "} => object
 
 Normal parses to JSON.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1593323279728-983fd844-f37d-419b-90f3-f96d1ee8236d.png#height=686&id=nOyZ8&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=1556&originalType=binary&size=75708&status=done&style=none&width=1556" width="1556" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1593323279728-983fd844-f37d-419b-90f3-f96d1ee8236d.png)
 
 ```typescript
 ctx.request.body; // {"c":" B "} => object

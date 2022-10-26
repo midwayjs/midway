@@ -6,7 +6,7 @@ Related information:
 
 | Web support |      |
 | ----------------- | ---- |
-| @midwayjs/koa | null |
+| @midwayjs/koa | ✅ |
 | @midwayjs/faas | ✅ |
 | @midwayjs/web | ✅ |
 | @midwayjs/express | ❌ |
@@ -29,11 +29,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/view-ejs": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -46,11 +46,11 @@ Or reinstall the following dependencies in `package.json`.
 
 First, introduce components and import them in `configuration.ts`:
 ```typescript
-null
+import { Configuration } from '@midwayjs/decorator';
 import * as view from '@midwayjs/view-ejs';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     View // import ejs components
   ],
@@ -86,15 +86,15 @@ Note that the default view directory is `${appDir}/view`. Create a `hello.ejs` f
 
 The directory structure is as follows:
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
-│-controller ## Controller Directory
-│ └── home.ts
--view ## template directory
-null
+│   └── controller                 ## Controller directory
+│       └── home.ts
+├── view                           ## Template directory
+│   └── hello.ejs
 ├── test
-null
+├── package.json
 └── tsconfig.json
 ```
 
@@ -108,7 +108,7 @@ hello <%= data %>
 
 Rendering in Controller.
 ```typescript
-null
+import { Inject, Provide } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -132,7 +132,7 @@ The default suffix is `.html`. In order to change the suffix to `.ejs`, we can a
 
 ```typescript
 // src/config/config.default.ts
-null
+export default {
   // ...
   view: {
     defaultExtension: '.ejs',
@@ -156,7 +156,7 @@ export class HomeController {
 
   @Get('/')
   async render() {
-    null
+    await this.ctx.render('hello', {
       data: 'world',
     });
   }
@@ -168,7 +168,7 @@ export class HomeController {
 
 We can set the default rendering engine by `defaultViewEngine`.
 
-null``````
+Its role is to use the engine specified by the `defaultViewEngine` field to render when the template suffix encountered, such as `.html` is not found in the `mapping` field of the configuration.
 
 ```typescript
 // src/config/config.default.ts
@@ -237,11 +237,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
-    null
+  "dependencies": {
+    "@midwayjs/view-nunjucks": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -256,9 +256,9 @@ import { Configuration } from '@midwayjs/decorator';
 import * as view from '@midwayjs/view-nunjucks';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
-    View // import nunjucks components
+    view // import nunjucks components
   ],
   importConfigs: [
     join(__dirname, 'config')
@@ -286,7 +286,7 @@ export default {
 4. Add templates to the view directory
 ```typescript
 // view/test.nj
-hi, {{ user}}
+hi, {{ user }}
 ```
 
 
@@ -304,7 +304,7 @@ export class HomeController {
   @Get('/')
   async render() {
     await ctx.render('test.nj', { user: 'midway' });
-  null
+  }
 }
 ```
 After the access, `hi, midway` is output.
@@ -316,7 +316,7 @@ import { App, Configuration, Inject } from '@midwayjs/decorator';
 import * as view from '@midwayjs/view-nunjucks';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [view]
   importConfigs: [join(__dirname, 'config')]
 })
@@ -326,7 +326,7 @@ export class MainConfiguration {
   app;
 
   @Inject()
-  null
+  env: view.NunjucksEnvironment;
 
   async onReady() {
     this.env.addFilter('hello', (str) => {
@@ -364,7 +364,7 @@ import { Provide, Config } from '@midwayjs/decorator';
 import { IViewEngine } from '@midwayjs/view';
 
 @Provide()
-null
+export class MyView implements IViewEngine {
 
   @Config('xxxx')
   viewConfig;
@@ -412,13 +412,13 @@ import * as koa from '@midwayjs/koa';
 import * as view from '@midwayjs/view';
 import { MyView } from './lib/my';
 
-@Configuration ({
+@Configuration({
   imports: [koa, view]
   importConfigs: [join(__dirname, 'config')]
 })
 export class AutoConfiguration {
 
-  null
+  @Inject()
   viewManager: view.ViewManager;
 
   async onReady() {

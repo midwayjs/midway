@@ -40,7 +40,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -55,7 +55,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/casbin": "^3.0.0",
     // ...
   },
@@ -74,7 +74,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     casbin
@@ -243,7 +243,7 @@ import { Resource } from './resouce';
 export class HomeController {
 
   @UseGuard(AuthGuard)
-  @UsePermission ({
+  @UsePermission({
     action: AuthActionVerb.READ
     resource: Resource.USER_ROLES
     possession: AuthPossession.ANY
@@ -273,7 +273,7 @@ Multiple permissions can be defined at the same time, but the route can only be 
 For example:
 
 ```typescript
-@UsePermissions ({
+@UsePermissions({
   action: AuthActionVerb.READ
   resource: 'USER_ADDRESS',
   possession: AuthPossession.ANY
@@ -354,7 +354,7 @@ import * as redis from '@midwayjs/redis';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     redis
@@ -390,7 +390,7 @@ export default (appInfo: MidwayAppInfo) => {
       }
     },
     casbin: {
-      policyAdapter: createAdapter ({
+      policyAdapter: createAdapter({
         // The connection name above is configured
         clientName: 'node-casbin-official'
       }),
@@ -419,7 +419,7 @@ import * as typeorm from '@midwayjs/typeorm';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     typeorm
@@ -456,7 +456,7 @@ export default (appInfo: MidwayAppInfo) => {
       }
     },
     casbin: {
-      policyAdapter: createAdapter ({
+      policyAdapter: createAdapter({
         // The connection name above is configured
         dataSourceName: 'node-casbin-official'
       }),

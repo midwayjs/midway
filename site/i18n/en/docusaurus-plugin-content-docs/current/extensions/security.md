@@ -1,4 +1,4 @@
-# Safety
+# Security
 
 It is a common security component applicable to multiple frameworks such as `@midwayjs/faas`, `@midwayjs/web`, `@midwayjs/koa`, and `@midwayjs/express`. It supports multiple security policies such as `csrf` and `xss`.
 
@@ -25,11 +25,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/security": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -40,8 +40,8 @@ Or reinstall the following dependencies in `package.json`.
 2. Introduce components into the configuration
 
 ```typescript
-null
-@Configuration ({
+import * as security from '@midwayjs/security';
+@Configuration({
   imports: [
     // ...other components
     security
@@ -120,7 +120,7 @@ export class HomeController {
     this.ctx.rotateCsrfSecret();
     return { success: true };
   }
-null
+}
 ```
 
 ### II. XSS
@@ -199,7 +199,7 @@ This feature is enabled by default. You can use the `noopen: {enable: false}` co
 The IE8 automatic sniffing mime function is disabled and turned off by default (it can be configured by `nosniff: {enable: true}` ). For example, text/plain is rendered as text/html, especially when the content of serve on this site is not necessarily trusted.
 
 **X-XSS-Protection**
-null``
+Some XSS detection and prevention provided by IE, enabled by default (can be disabled by `xssProtection: {enable: false}` configuration)
 
 The default value of close is false, that is, set to 1; mode = block
 
@@ -215,7 +215,7 @@ The default configuration is as follows:
 export default {
   // ...
 
-  null
+  // default configuration
   security: {
     csrf: {
       enable: true
@@ -259,7 +259,7 @@ export default {
 
 | Configuration Item | Type | Description of action | Default |
 | --- | --- | --- | --- |
-| enable | null | null | true |
+| enable | boolean | Whether to open | true |
 | type | 'all' / 'any' / 'ctoken' / 'referer' | Csrf check type, all/any equals ctoken + referer | 'ctoken' gets csrf token from query/header/body;;'referer' can configure the whitelist by refererWhiteList |
 | useSession | boolean | Is CSRF token stored in session | False, stored in cookies by default |
 | cookieName | string | The field where the token is stored in the cookie. | 'csrfToken' |
@@ -290,7 +290,7 @@ There are three possible values for `X-Frame-Options`:
 | Configuration Item | Type | Description of action | Default |
 | --- | --- | --- | --- |
 | enable | boolean | Whether to open | true |
-| null | string | X-Frame-Options value | 'SAMEORIGIN' |
+| value | string | X-Frame-Options value | 'SAMEORIGIN' |
 
 
 

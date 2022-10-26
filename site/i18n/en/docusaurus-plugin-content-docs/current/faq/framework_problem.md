@@ -2,7 +2,6 @@
 
 ## Multiple @midwayjs/decorator warnings
 
-
 `@midwayjs/decorator` Package Generally speaking, npm will allow the same dependency to have an instance in the node_modules, and the rest of the modules will be linked to the node_modules/@midwayjs/decorator through a soft link.
 
 
@@ -31,16 +30,15 @@ For example, the above figure may be npm install used in a single module instead
 We can gradually investigate according to the following ideas:
 
 
-- null
+- 1. Contains different versions of decorator packages (for example, package-lock lock packages, or depend on hard-coded versions)
 - 2. The hoist mode of lerna is not used correctly (for example, the above figure may be the npm install used in a single module instead of lerna installation)
 
 
 
-## null
+## xxx is not valid in current context
 
 
 This is when the class associated with an attribute in the dependency injection container cannot be found in the dependency injection container. This error may be recursive and deeper.
-
 
 For example:
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01sTvqNX1NiDcoiyS2a_!!6000000001603-2-tps-1053-141.png)

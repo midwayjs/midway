@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`/test/faas/fun.test.ts fun decorator should be ok 1`] = `
-Array [
-  Object {
-    "metadata": Object {
+[
+  {
+    "metadata": {
       "type": "every",
       "value": "5m",
     },
     "methodName": "invoke",
     "type": "timer",
   },
-  Object {
-    "metadata": Object {
+  {
+    "metadata": {
       "bucket": "",
       "events": "",
-      "filter": Object {
+      "filter": {
         "prefix": "",
         "suffix": "",
       },
@@ -22,8 +22,8 @@ Array [
     "methodName": "invoke",
     "type": "os",
   },
-  Object {
-    "metadata": Object {
+  {
+    "metadata": {
       "region": "",
       "strategy": "BACKOFF_RETRY",
       "tags": "",
@@ -32,8 +32,8 @@ Array [
     "methodName": "invoke",
     "type": "mq",
   },
-  Object {
-    "metadata": Object {
+  {
+    "metadata": {
       "log": "",
       "project": "",
       "source": "",
@@ -41,36 +41,36 @@ Array [
     "methodName": "invoke",
     "type": "log",
   },
-  Object {
-    "metadata": Object {},
+  {
+    "metadata": {},
     "methodName": "invoke",
     "type": "cdn",
   },
-  Object {
-    "metadata": Object {},
+  {
+    "metadata": {},
     "methodName": "invoke",
     "type": "event",
   },
-  Object {
-    "metadata": Object {},
+  {
+    "metadata": {},
     "methodName": "invoke",
     "type": "hsf",
   },
-  Object {
-    "metadata": Object {},
+  {
+    "metadata": {},
     "methodName": "invoke",
     "type": "mtop",
   },
-  Object {
-    "metadata": Object {
+  {
+    "metadata": {
       "method": "get",
       "path": "/",
     },
     "methodName": "invoke",
     "type": "apigw",
   },
-  Object {
-    "metadata": Object {
+  {
+    "metadata": {
       "method": "get",
       "path": "/",
     },

@@ -1,6 +1,4 @@
----
-title: Timer 触发器（定时任务）
----
+# Timer 触发器（定时任务）
 
 定时任务触发器用于定时执行一个函数。腾讯云 Timer 触发器目前只支持 cron 格式。
 
@@ -114,5 +112,3 @@ describe('test/hello_tencent.test.ts', () => {
   });
 });
 ```
-
-##

@@ -1,10 +1,8 @@
----
-title: 腾讯云发布 FAQ
----
+# Tencent Cloud releases FAQ
 
 ## User authentication
 
-When Tengxun Cloud is deployed, if it is the first deployment, the console will display the corresponding two-dimensional code, and the authentication can be completed by scanning the code. The configuration will be reused by default for a single project.
+When Tencent Cloud is deployed, if it is the first deployment, the console will display the corresponding two-dimensional code, and the authentication can be completed by scanning the code. The configuration will be reused by default for a single project.
 
 The authentication file is stored in the `.env` file in the root directory of the deployment. If you want to modify the file, you can delete the file and scan the code again.
 
@@ -19,11 +17,11 @@ TENCENT_TOKEN = xxxxx# temporary token
 
 If you want to use a RAM user to publish a RAM user, you can view the [RAM user permissions](https://cloud.tencent.com/document/product/1154/43006).
 
-##
+
 
 ## Publishing area switching
 
-Tengxun cloud configuration supports publishing to different regions.
+Tencent cloud configuration supports publishing to different regions.
 
 ```yaml
 service: fc-qinyue-test
@@ -45,11 +43,11 @@ Common region values are:
 
 For the complete list of regions, see [Tencent Cloud documentation](https://cloud.tencent.com/document/api/583/17238).
 
-##
 
-## null
 
-If the HTTP function is officially released, Tengxun Cloud will automatically create a serviceId that identifies the Gateway every time it is released, and there will be many in the long run. In order to reuse each time, it is better to record the serviceId to reuse the following codes after the first release (or apply for a good gateway in advance).
+## Reuse API Gateway
+
+If the HTTP function is officially released, Tencent Cloud will automatically create a serviceId that identifies the Gateway every time it is released, and there will be many in the long run. In order to reuse each time, it is better to record the serviceId to reuse the following codes after the first release (or apply for a good gateway in advance).
 
 ```yaml
 service: fc-qinyue-test
@@ -98,13 +96,13 @@ Configure a custom path mapping, such as mapping`/`to the official publishing en
 
 ## Additional billing
 
-When using local tools, due to the SDK provided by Tengxun Cloud, a COS Bucket may be created for the storage of code packages. As COS is used for payment, a certain fee will be incurred. Please pay attention to your COS situation in time to avoid deduction.
+When using local tools, due to the SDK provided by Tencent Cloud, a COS Bucket may be created for the storage of code packages. As COS is used for payment, a certain fee will be incurred. Please pay attention to your COS situation in time to avoid deduction.
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1606803155279-51e71ffa-6e9a-4ab9-812b-19003d45483c.png#height=460&id=DRD5n&margin=%5Bobject%20Object%5D&name=image.png&originHeight=460&originWidth=1196&originalType=binary&size=60856&status=done&style=none&width=1196" width="1196" />
 
 ## **Delete Tencent Gateway**
 
-After trying out the Tengxun cloud service for a period of time, many examples of non-reused gateways will appear because API gateways are not reused every time, as follows.
+After trying out the Tencent cloud service for a period of time, many examples of non-reused gateways will appear because API gateways are not reused every time, as follows.
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588749300990-34089754-5fe2-4fb9-942a-0f9f0abc6984.png#height=1226&id=Jo9cX&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1226&originWidth=2778&originalType=binary&size=261243&status=done&style=none&width=2778" width="2778" />
 

@@ -23,11 +23,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/static-file": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -46,7 +46,7 @@ import * as koa from '@midwayjs/koa';
 import * as staticFile from '@midwayjs/static-file';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     koa
     staticFile
@@ -72,8 +72,8 @@ For example:
 .
 ├── src
 ├── public
-| ├ ── index.html
-│ └── hello.js
+|   ├── index.html
+│   └── hello.js
 │
 ├── test
 ├── package.json
@@ -140,12 +140,12 @@ All [koa-static-cache](https://github.com/koajs/static-cache) configurations are
 | Attribute name | Default | Description |
 | ------- | ----------------------------------------------- | ------------------------------------------------------------ |
 | dirs | {"default": {prefix: "/public", "dir": "xxxx"}} | Managed directories, in order to support multiple directories, are objects. <br />In addition to the default, other keys can be added at will, and the object values in dirs will be merged with the external default values. |
-| dynamic | null | Load files dynamically instead of caching after initialization reading. |
+| dynamic | true | Load files dynamically instead of caching after initialization reading. |
 | preload | false | Whether the cache is being initialized |
 | maxAge | Prod is 31536000, others are 0 | Maximum cache time |
 | buffer | Prod is true and the rest is false | Use buffer character to return |
 
-null[](https://github.com/koajs/static-cache)
+For more configuration, please refer to [koa-static-cache](https://github.com/koajs/static-cache) .
 
 
 
@@ -167,10 +167,10 @@ import { Context } from '@midwayjs/faas';
 export class HelloHTTPService {
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, {
-    path: '/public /*',
+    path: '/public/*',
     method: 'get',
   })
-  null
+  async handleStaticFile() {
     // This function can have no method body, just to let the gateway register an additional route
   }
 }

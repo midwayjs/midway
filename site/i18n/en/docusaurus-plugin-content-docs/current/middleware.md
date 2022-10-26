@@ -145,7 +145,7 @@ import { App, Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
   // ...
 })
@@ -248,7 +248,7 @@ import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
   // ...
 })
@@ -344,7 +344,7 @@ import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
   // ...
 })
@@ -383,7 +383,7 @@ import { App, Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 
-@Configuration ({
+@Configuration({
   imports: [koa]
   // ...
 })

@@ -145,7 +145,7 @@ export default {
 | maxAge  | prod 为 31536000，其他为 0                      | 缓存的最大时间                                               |
 | buffer  | prod 为 true，其余为 false                      | 使用 buffer 字符返回                                         |
 
-更多配置，请参考  [koa-static-cache](https://github.com/koajs/static-cache) 。
+更多配置，请参考 [koa-static-cache](https://github.com/koajs/static-cache) 。
 
 
 

@@ -133,7 +133,7 @@ export class HelloAliyunService {
 | payload | string | Optional, a fixed passed value, rarely used |
 
 :::info
-null
+Note that FC uses UTC time, which is different from the traditional Chinese time zone.
 :::
 
 Example:
@@ -160,7 +160,7 @@ You can view the [documentation](https://help.aliyun.com/document_detail/169784.
 
 **Event structure**
 
-null``
+The structure returned by the Timer message is as follows, described in the `FC.TimerEvent` type.
 
 ```json
 {
@@ -187,7 +187,7 @@ export class HelloAliyunService {
 
   @ServerlessTrigger(ServerlessTriggerType. OS, {
     bucket: 'ossBucketName',
-    null
+    events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
     filter: {
       prefix: 'filterdir /',
       suffix: '.jpg',
@@ -236,20 +236,20 @@ The structure of OSS messages returned is as follows, which is described in the 
 
 ```json
 {
-  "events ": [
+  "events": [
     {
       "eventName": "ObjectCreated:PutObject ",
       "eventSource": "acs:oss ",
       "eventTime": "2017-04-21T12:46:37.000Z ",
       "eventVersion": "1.0 ",
-      "oss ": {
-        "bucket ": {
+      "oss": {
+        "bucket": {
           "arn": "acs:oss:cn-shanghai:123456789:bucketname ",
           "name": "testbucket ",
           "ownerIdentity": "123456789 ",
-          "virtualBucket ": ""
+          "virtualBucket": ""
         },
-        "object ": {
+        "object": {
           "deltaSize": 122539
           "eTag": "688A7BF4F233DC9C88A80BF985AB7329 ",
           "key": "image/a.jpg ",
@@ -259,13 +259,13 @@ The structure of OSS messages returned is as follows, which is described in the 
         "ruleId": "9adac8e253828f4f7c0466d941fa3db81161e853"
       },
       "region": "cn-shanghai ",
-      "requestParameters ": {
+      "requestParameters": {
         "sourceIPAddress": "140.205.128.221"
       },
-      "responseElements ": {
+      "responseElements": {
         "requestId": "58F9FF2D3DF792092E12044C"
       },
-      "userIdentity ": {
+      "userIdentity": {
         "principalId": "123456789"
       }
     }
@@ -396,7 +396,7 @@ import { Framework } from '@midwayjs/serverless-app';
 import { createInitializeContext } from '@midwayjs/serverless-fc-trigger';
 import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
 
-null
+describe('test/hello_aliyun.test.ts', () => {
   let app: Application;
   let instance: HelloAliyunService;
 
@@ -412,7 +412,7 @@ null
   });
 
   it('should get result from http trigger', async () => {
-    const result = await createHttpRequest(app).get('/').query ({
+    const result = await createHttpRequest(app).get('/').query({
       name: 'zhangting',
     });
     expect(result.text).toEqual('hello zhangting');
@@ -447,7 +447,7 @@ describe('test/hello_aliyun.test.ts', () => {
   });
 
   it('should get result from http trigger', async () => {
-    const result = await createHttpRequest(app).post('api_gateway_aliyun').send ({
+    const result = await createHttpRequest(app).post('api_gateway_aliyun').send({
       name: 'zhangting',
     });
 
@@ -763,7 +763,7 @@ Examples are as follows:
 ```typescript
 endpoint: ***************
 api_version: '2016-08-15'
-null
+access_key_id: ***************
 access_key_secret: * * * * * * * * * * * * * * *
 security_token: ''
 debug: false

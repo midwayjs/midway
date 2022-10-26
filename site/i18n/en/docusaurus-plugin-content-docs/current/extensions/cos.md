@@ -1,4 +1,4 @@
-# Tengxun Cloud Object Storage (COS)
+# Tencent Cloud Object Storage (COS)
 
 This article describes how to use midway to access Tencent Cloud COS.
 
@@ -9,7 +9,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -24,7 +24,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/cos": "^3.0.0",
     // ...
   },
@@ -43,7 +43,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as cos from '@midwayjs/cos';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     cos // import cos components
@@ -115,7 +115,7 @@ export class UserService {
   cosService: COSService;
 
   async invoke() {
-    await this.cosService.sliceUploadFile ({
+    await this.cosService.sliceUploadFile({
       Bucket: 'test-1250000000',
       Region: 'ap-guangzhou',
       Key: '1.zip',

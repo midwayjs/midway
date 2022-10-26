@@ -248,7 +248,7 @@ export class UserService {
   async invoke() {
 
     // config.bucket3 and config.default will be merged
-    let customHttpClient = await this.serviceFactory.createInstance ({
+    let customHttpClient = await this.serviceFactory.createInstance({
     	baseUrl: 'xxxxx'
     }, 'custom');
 

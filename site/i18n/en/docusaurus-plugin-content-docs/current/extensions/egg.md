@@ -4,7 +4,7 @@ Midway can use EggJS as the upper-level Web framework. EggJS provides many commo
 
 | Description |      |
 | ----------------- | ---- |
-| Contains independent main frame | ✅ |
+| Contains independent main framework | ✅ |
 | Contains independent logs | ✅ |
 
 
@@ -19,13 +19,13 @@ $ npm i @midwayjs/egg-ts-helper --save-dev
 For the EggJS scenario, these packages are listed below.
 
 ```json
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/web": "^3.0.0",
     "@midwayjs/decorator": "^3.0.0",
     "egg": "^2.0.0 ",
     "egg-scripts": "^2.10.0"
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@midwayjs/egg-ts-helper": "^1.0.1 ",
   },
 ```
@@ -56,7 +56,7 @@ import { Configuration, App } from '@midwayjs/decorator';
 import * as web from '@midwayjs/web';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [web]
   importConfigs: [join(__dirname, './config')]
 })
@@ -313,7 +313,7 @@ import { App, Configuration } from '@midwayjs/decorator';
 import * as egg from '@midwayjs/web';
 import { ReportMiddleware } from './middleware/user.middleware';
 
-@Configuration ({
+@Configuration({
   imports: [egg]
   // ...
 })
@@ -744,7 +744,7 @@ $ npm install @midwayjs/egg-ts-helper --save-dev
 ```
 Add the corresponding `ets` command to `package.json`. Generally speaking, we will add it before the dev command to ensure the correctness of the code.
 ```json
-  "scripts ": {
+  "scripts": {
     "dev": "cross-env ets && cross-env NODE_ENV=local midway-bin dev --ts ",
   },
 ```

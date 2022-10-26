@@ -1,6 +1,4 @@
----
-title: 接口开发
----
+# API Development
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -105,7 +103,7 @@ At the same time, we can also set Header by `SetHeader()`.
 | `Head(path?: string)` | Accept HEAD request |
 | `Options(path?: string)` | Accept OPTIONS request |
 
-## null
+## Request
 
 ### Pass parameter Data
 
@@ -152,7 +150,7 @@ fetch('/api/say', {
   headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify ({
+  body: JSON.stringify({
     args: ['Midway']
   }),
 })
@@ -200,7 +198,7 @@ Front-end call
 
 ```ts
 import getArticles from './api';
-const response = await getArticles ({
+const response = await getArticles({
   query: { page: '0', limit: '10'}
 });
 console.log(response); // { page: '0', limit: '10'}
@@ -245,14 +243,14 @@ export default Api (
 );
 ```
 
-null
+Front-end call
 
 <Tabs>
 <TabItem value="fullstack" label="全栈应用">
 
 ```ts
-null
-const response = await getArticle ({
+import getArticle from './api/article';
+const response = await getArticle({
   params: { id: '100'}
 });
 console.log(response); // { article: '100'}
@@ -297,14 +295,14 @@ export default Api (
 );
 ```
 
-null
+Front-end call
 
 <Tabs>
 <TabItem value="fullstack" label="全栈应用">
 
 ```ts
 import getAuth from './api/auth';
-const response = await getAuth ({
+const response = await getAuth({
   headers: { token: '123456'}
 });
 console.log(response); // { token: '123456'}

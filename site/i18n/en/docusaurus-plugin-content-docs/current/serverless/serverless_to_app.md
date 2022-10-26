@@ -1,6 +1,6 @@
 # Serverless functions are deployed as applications
 
-Midway Serverless already supports deployment to various Serverless cloud platforms in v1.0 version, such as Aliyun FC, Tengxun Cloud SCF, etc. Starting from v2.0 version, existing Serverless functions are supported to be deployed on your private server in application mode.
+Midway Serverless already supports deployment to various Serverless cloud platforms in v1.0 version, such as Aliyun FC, Tencent Cloud SCF, etc. Starting from v2.0 version, existing Serverless functions are supported to be deployed on your private server in application mode.
 
 ## premise
 
@@ -8,7 +8,7 @@ Midway Serverless already supports deployment to various Serverless cloud platfo
 
 ## Use
 
-####
+
 
 ### 1. Installation application deployment dependency
 
@@ -28,7 +28,7 @@ Add the `bootstrap.js` file to the root directory of the project with the follow
 // bootstrap.js
 const { Bootstrap } = require('@midwayjs/bootstrap');
 const { Framework } = require('@midwayjs/serverless-app');
-const app = new Framework().configure ({
+const app = new Framework().configure({
   port: 7001
 });
 
@@ -41,7 +41,7 @@ You can add the `start` command to the `package.json` to facilitate startup.
 
 ```json
 {
-  "scripts ": {
+  "scripts": {
     "start": "NODE_ENV=production node bootstrap.js"
   }
 }

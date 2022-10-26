@@ -8,14 +8,14 @@ Grafana 是一个开源的度量分析与可视化套件。纯 Javascript 开发
 
 接入效果如下：
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617259935548-a2df4339-3229-4391-bd3d-4ba8e6979d4d.png#height=498&id=KoiiE&margin=%5Bobject%20Object%5D&name=image.png&originHeight=996&originWidth=1914&originalType=binary&ratio=1&size=969345&status=done&style=none&width=957" width="957" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1617259935548-a2df4339-3229-4391-bd3d-4ba8e6979d4d.png)
 
 ## 安装依赖
 
 首先安装 Midway 提供的指标监控组件：
 
 ```bash
-$ npm install @midwayjs/prometheus -S
+$ npm install @midwayjs/prometheus@3 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -62,7 +62,7 @@ Prometheus 基于 HTTP 获取监控数据，请加载 web/koa/express 任一框�
 
 访问接口，返回如下，里面的内容是当前的指标。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617260048533-4f725824-9471-40c9-be8b-6dcbf27d9cca.png#height=997&id=DIl0G&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1994&originWidth=2276&originalType=binary&ratio=1&size=1070956&status=done&style=none&width=1138" width="1138" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1617260048533-4f725824-9471-40c9-be8b-6dcbf27d9cca.png)
 
 ## 其他配置
 
@@ -164,13 +164,13 @@ $ docker-compose up
 修改了这个 targets.json 文件后，通过 prometheus 的 reload 方法进行热加载。
 方法如下：
 
-```typescript
-curl -X POST http://${prometheus的ip}:9090/-/reload
+```bash
+$ curl -X POST http://${prometheus的ip}:9090/-/reload
 ```
 
 然后我们可以查看 prometheus 的页面也可以确认是否生效，界面地址：
 
-```typescript
+```text
 http://${prometheus的ip}:9090/classic/targets
 ```
 
@@ -214,8 +214,8 @@ $ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 
 使用方法：
 
-```typescript
-npm install @midwayjs/prometheus-socket-io -S
+```bash
+$ npm install @midwayjs/prometheus-socket-io@3 --save
 ```
 
 使用方法：

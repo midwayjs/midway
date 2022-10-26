@@ -20,18 +20,18 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ❌ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ✅ |
+| Contains independent main framework | ✅ |
 | Contains independent logs | ❌ |
 
 
 
-## Create an example
+## Install dependency
 
 
-Or install Socket.io dependencies in existing projects.
+Install Socket.io dependencies in existing projects.
 ```bash
 $ npm i @midwayjs/socketio@3 --save
-null
+## optional dependencies
 $ npm i @types/socket.io-client socket.io-client --save-dev
 ```
 
@@ -39,13 +39,13 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/socket.io": "^3.0.0",
     // Client optional
     "socket.io-client": "^4.4.1 ",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // Client optional
     "@types/socket.io-client": "^1.4.36 ",
     // ...
@@ -57,17 +57,17 @@ Or reinstall the following dependencies in `package.json`.
 
 ## Open the component
 
-`@midwayjs/socket.io` can be used as an independent main frame.
+`@midwayjs/socket.io` can be used as an independent main framework.
 
 ```typescript
-null
-null
+import { Configuration } from '@midwayjs/decorator';
+import * as socketio from '@midwayjs/socketio';
 
-@Configuration ({
+@Configuration({
   imports: [socketio]
   // ...
-null
-null
+})
+export class MainConfiguration {
   async onReady() {
 		// ...
   }
@@ -82,7 +82,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import * as socketio from '@midwayjs/socketio';
 
-@Configuration ({
+@Configuration({
   imports: [koa, socketio]
   // ...
 })
@@ -106,12 +106,12 @@ The following is the basic directory structure of the Socket.io project. Similar
 .
 ├── package.json
 ├── src
-│ │-configuration.ts ## entry configuration file
-│ ├── interface.ts
-│-socket ## socket.io service file
-│ └── hello.controller.ts
+│   ├── configuration.ts          ## entry configuration file
+│   ├── interface.ts
+│   └── socket                  	## socket.io service file
+│       └── hello.controller.ts
 ├── test
--bootstrap.js ## service startup Portal
+├── bootstrap.js                  ## service startup Portal
 └── tsconfig.json
 ```
 
@@ -172,9 +172,9 @@ export class HelloController {
 ```
 The input of `@WSController` refers to the Namespace (non-path) of each Socket. If no Namespace is provided, each Socket.io will automatically create a`/`Namespace and put all client connections into it.
 
-null
+:::info
 The namespace here supports strings and regularization.
-null
+:::
 
 
 When the Namespace has a client connection, a `connection` event will be triggered. We can use the `@OnWSConnection()` decorator in the code to decorate a method. When each client connects to the Namespace for the first time, the method will be automatically called.
@@ -191,7 +191,7 @@ export class HelloSocketController {
   @OnWSConnection()
   async onConnectionMethod() {
     console.log('on client connect', this.ctx.id);
-  null
+  }
 }
 
 ```
@@ -228,7 +228,7 @@ Note that since Socket.io can pass multiple data in one event, the parameters he
   @OnWSMessage('myEvent')
   async gotMessage(data1, data2, data3) {
     // ...
-  null
+  }
 ```
 After the data is obtained, the data is processed through business logic, and then the result is returned to the client. When returned, we also send it to the client through another event.
 
@@ -255,13 +255,13 @@ The above code, our method returns the value Hello World, which will be automati
 
 
 
-## null
+## Socket Middleware
 
 The middleware in Socket is written similarly to the [Web middleware](../middleware), but the timing of loading is slightly different.
 
 Since Socket has two stages of connecting and receiving messages, middleware is divided into several categories.
 
-- null
+- The global Connection middleware will take effect on connections under all namespaces
 - The global Message middleware will take effect for all message under the namespace.
 - Controller middleware will take effect on connection and message under a single namespace.
 - Connection middleware generates messages for connection under a single namespace.
@@ -269,10 +269,10 @@ Since Socket has two stages of connecting and receiving messages, middleware is 
 
 ### Middleware writing
 
-null``
+Note that the middleware must return the result via `return`.
 
 ```typescript
-null
+// src/middleware/socket.middleware.ts
 import { Middleware } from '@midwayjs/decorator';
 import { Context, NextFunction } from '@midwayjs/socketio';
 
@@ -297,15 +297,15 @@ Similar to web middleware, use the `socket.io` app instance to register middlewa
 ```typescript
 import * as socketio from '@midwayjs/socketio';
 
-@Configuration ({
+@Configuration({
   imports: [
     socketio
-  null
+  ],
   // ...
 })
 export class AutoConfiguration {
 
-  null
+  @App('socketIO')
   app: Application;
 
   async onReady() {
@@ -339,13 +339,13 @@ export class APIController {
 Connection middleware, which takes effect when connected.
 
 ```typescript
-null
+// ...
 
 @WSController('/api')
 export class APIController {
 
   // Middleware when Connection is triggered
-  @OnWSConnection ({
+  @OnWSConnection({
     middleware: [SocketMiddleware]
   })
   init() {
@@ -366,8 +366,8 @@ export class APIController {
   @OnWSMessage('my', {
     middleware: [SocketMiddleware]
   })
-  @WSEmit(' OK ')
-  null
+  @WSEmit('ok')
+  async gotMyMessage() {
     // ...
   }
 }
@@ -398,9 +398,9 @@ When starting as a sub-framework (for example, and http, because http does not s
 export default {
   // ...
   koa: {
-    null
+    port: null,
   },
-  null
+  socketIO
     port: 3000
   },
 }
@@ -418,8 +418,8 @@ Like other Midway testing methods, we use `createApp` to start the project.
 
 
 ```typescript
-null
-// The Framework definition used here is subject to the main frame.
+import { createApp, close } from '@midwayjs/mock'
+// The Framework definition used here is subject to the main framework.
 import { Framework } from '@midwayjs/koa';
 
 describe('/test/index.test.ts', () => {
@@ -465,19 +465,19 @@ describe('/test/index.test.ts', () => {
     const app = await createApp<Framework>();
 
     // Create a corresponding client
-    const client = await createSocketIOClient ({
+    const client = await createSocketIOClient({
       port: 3000
     });
 
     // Return the result
     const data = await new Promise(resolve => {
-      null
+      client.on('myEventResult', resolve);
       // Send event
       client.send('myEvent', 1, 2, 3);
     });
 
     // Judgment result
-    expect(data).toEqual ({
+    expect(data).toEqual({
       name: 'harry',
       result: 6
     });
@@ -504,19 +504,19 @@ describe('/test/index.test.ts', () => {
     // Create a service
     const app = await createApp<Framework>();
 
-    null
-    const client = await createSocketIOClient ({
+    // create a client
+    const client = await createSocketIOClient({
       port: 3000
     });
 
     // Monitor with promise writing of events
-    null
+    const gotEvent = once(client, 'myEventResult');
     // Send event
     client.send('myEvent', 1, 2, 3);
     // Waiting for return
     const [data] = await gotEvent;
     // Judgment result
-    expect(data).toEqual ({
+    expect(data).toEqual({
       name: 'harry',
       result: 6
     });
@@ -527,7 +527,7 @@ describe('/test/index.test.ts', () => {
     await close(app);
   });
 
-null
+}
 ```
 The two writing methods have the same effect, just write as you understand.
 
@@ -545,7 +545,7 @@ For example, server code:
 ```typescript
 @OnWSMessage('myEvent')
 @WSEmit('myEventResult')
-null
+async gotMessage(data1, data2, data3) {
   return {
     name: 'harry',
   	result: data1 + data2 + data3
@@ -567,7 +567,7 @@ describe('/test/index.test.ts', () => {
     const app = await createApp<Framework>();
 
     // Create a corresponding client
-    const client = await createSocketIOClient ({
+    const client = await createSocketIOClient({
       port: 3000
     });
 
@@ -575,7 +575,7 @@ describe('/test/index.test.ts', () => {
     const data = await client.sendWithAck('myEvent', 1, 2, 3);
 
     // Judgment result
-    expect(data).toEqual ({
+    expect(data).toEqual({
       name: 'harry',
       result: 6
     });
@@ -667,7 +667,7 @@ The code created by the traditional Socket.io server is as follows:
 const io = require("socket.io")(3000);
 
 io.on("connection", socket => {
-  null
+  }
 });
 ```
 
@@ -701,7 +701,7 @@ export class UserController {
 
   @App('socketIO')
   socketApp: SocketApplication;
-null
+}
 ```
 
 
@@ -725,7 +725,7 @@ export class UserController {
   	// Broadcast the connection under/
   	this.socketApp.of('/').emit('hi', 'everyone');
   }
-null
+}
 ```
 
 For more io API, please refer to the [Socket.io Server instance documentation](https://socket.io/docs/v4/server-instance/).
@@ -754,13 +754,13 @@ HTTP ports can be reused when `@midwayjs/socketio` and other `@midwayjs/Web`, `@
 // src/config/config.default
 export default {
   // ...
-  null
+  koa: {
     port: 7001
   },
   socketIO: {
     // No configuration here
   },
-null
+}
 ```
 
 
@@ -777,7 +777,7 @@ http {
 
     location / {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      null
+      proxy_set_header Host $host;
 
       proxy_pass http://localhost:7001;
 
@@ -922,7 +922,7 @@ const socket = io('************:7001', {
 });
 
 // midway's socket.io test client
-const client = await createSocketIOClient ({
+const client = await createSocketIOClient({
   port: 7001
 });
 ```
@@ -946,7 +946,7 @@ const socket = io('************:7001', {
 });
 
 // Midway's Socket. io test client
-const client = await createSocketIOClient ({
+const client = await createSocketIOClient({
   path: '/testPath'
 });
 ```
@@ -963,11 +963,11 @@ export class HelloController {
 
 // socket.io client
 const io = require("socket.io-client")
-Io ('*****:3000/test', {}); // Here is the namespace of the client
+io('*****:3000/test', {}); // Here is the namespace of the client
 
 
 // midway's socket.io test client
-const client = await createSocketIOClient ({
+const client = await createSocketIOClient({
   namespace: '/test',
 });
 ```

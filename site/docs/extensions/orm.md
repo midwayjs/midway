@@ -438,9 +438,9 @@ export default {
 
 :::
 
-
-
 如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
+
+
 
 
  `type` 字段你可以使用其他的数据库类型，包括`mysql`, `mariadb`, `postgres`, `cockroachdb`, `sqlite`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
@@ -995,8 +995,7 @@ export class Photo {
 
 
 ```typescript
-import { Entity } from 'typeorm';
-import { PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
 
 @Entity()
 export class Album {

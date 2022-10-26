@@ -318,7 +318,7 @@ class User2 {
 在使用时，注入特定的连接
 ```typescript
 @Provide()
-export class TestService{
+export class TestService {
 
   @InjectEntityModel(User)
   userModel: ReturnModelType<typeof User>;

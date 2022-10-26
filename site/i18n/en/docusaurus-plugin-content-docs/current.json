@@ -68,39 +68,39 @@
     "description": "The label for the doc item 介绍 in sidebar serverless, linking to the doc serverless/serverless_intro"
   },
   "sidebar.serverless.doc.Serverless 触发器 POST 情况差异": {
-    "message": "Serverless 触发器 POST 情况差异",
+    "message": "Serverless trigger POST case differences",
     "description": "The label for the doc item Serverless 触发器 POST 情况差异 in sidebar serverless, linking to the doc serverless/serverless_post_difference"
   },
   "sidebar.hooks.category.基础功能": {
-    "message": "基础功能",
+    "message": "Fundamentals",
     "description": "The label for category 基础功能 in sidebar hooks"
   },
   "sidebar.hooks.category.一体化": {
-    "message": "一体化",
+    "message": "Integration",
     "description": "The label for category 一体化 in sidebar hooks"
   },
   "sidebar.hooks.category.进阶": {
-    "message": "进阶",
+    "message": "Advanced",
     "description": "The label for category 进阶 in sidebar hooks"
   },
   "sidebar.hooks.doc.介绍": {
-    "message": "介绍",
+    "message": "Introduce",
     "description": "The label for the doc item 介绍 in sidebar hooks, linking to the doc hooks/intro"
   },
   "sidebar.other.category.工具": {
-    "message": "工具",
+    "message": "Tools",
     "description": "The label for category 工具 in sidebar other"
   },
   "sidebar.other.category.运维": {
-    "message": "运维",
+    "message": "OPS",
     "description": "The label for category 运维 in sidebar other"
   },
   "sidebar.other.category.常见问题": {
-    "message": "常见问题",
+    "message": "Common problem",
     "description": "The label for category 常见问题 in sidebar other"
   },
   "sidebar.other.category.其他": {
-    "message": "其他",
+    "message": "Other",
     "description": "The label for category 其他 in sidebar other"
   }
 }

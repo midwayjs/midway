@@ -219,7 +219,7 @@ After the installation is complete, we enable the components in the `src/configu
 // ...
 import * as view from '@midwayjs/view-nunjucks';
 
-@Configuration ({
+@Configuration({
   imports: [
     koa
     // ...
@@ -432,7 +432,7 @@ import * as koa from '@midwayjs/koa';
 import { WeatherErrorFilter } from './filter/weather.filter';
 // ...
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class ContainerLifeCycle {

@@ -13,7 +13,7 @@ First, add dependencies to the application.
 ```json
 // package.json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/validate": "^3.0.0"
   }
 }
@@ -26,7 +26,7 @@ We need to enable this component in the code. Midway's component loading capabil
 import { Configuration } from '@midwayjs/decorator';
 import * as validate from '@midwayjs/validate';
 
-@Configuration ({
+@Configuration({
   imports: [validate]
 })
 export class ContainerLifeCycle {}
@@ -45,7 +45,7 @@ For example, the commonly used `info` component can be enabled only in the local
 import { Configuration } from '@midwayjs/decorator';
 import * as info from '@midwayjs/info';
 
-@Configuration ({
+@Configuration({
   imports: [
     {
       component: info

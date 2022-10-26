@@ -25,11 +25,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/upload": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -43,12 +43,12 @@ Or reinstall the following dependencies in `package.json`.
 import { Configuration } from '@midwayjs/decorator';
 import * as upload from '@midwayjs/upload';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...other components
     upload
   ],
-  null
+  }
 })
 export class MainConfiguration {}
 ```
@@ -85,7 +85,7 @@ export class HomeController {
 
     */
     return {
-      null
+      files,
       fields
     }
   }
@@ -98,7 +98,7 @@ If the swagger component is enabled at the same time, be sure to add the type of
 
 :::
 
-## null
+## Configuration example
 
 ```typescript
 // src/config/config.default.ts
@@ -113,13 +113,13 @@ export default {
     mode: 'file',
     // fileSize: string, the maximum size of the uploaded file, which is 10mb by default.
     fileSize: '10mb',
-    null
+    // whitelist: string[], file extension whitelist
     whitelist: uploadWhiteList.filter(ext => ext !== '.pdf')
     // tmpdir: string, the temporary storage path of the uploaded file.
     tmpdir: join(tmpdir(), 'midway-upload-files')
     // cleanTimeout: number, how long after the uploaded file is automatically deleted in the temporary directory, the default is 5 minutes
     cleanTimeout: 5*60*1000
-    // base64: boolean, sets whether the original body is in base64 format. The default value is false, which is generally used for compatibility with Tengxun Cloud.
+    // base64: boolean, sets whether the original body is in base64 format. The default value is false, which is generally used for compatibility with Tencent Cloud.
     base64: false
   },
 }
@@ -168,7 +168,7 @@ Configure the suffix of the uploaded file. If you configure `null`, the suffix o
 '.svg',
 '.js',
 '.jsx',
-null
+'.json',
 '.css',
 '.less',
 '.html',

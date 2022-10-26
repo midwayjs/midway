@@ -9,8 +9,8 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
-| Contains independent logs | null |
+| Contains independent main framework | ❌ |
+| Contains independent logs | ❌ |
 
 
 
@@ -22,17 +22,17 @@ The most commonly used parameter check is the controller (Controller), and you c
 Let's take the user used in the controller (Controller) as an example.
 
 ```typescript
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
-null
-│ ├── controller
-│ │ └── user.ts
-│ ├── interface.ts
-│ └── service
-│ └── user.ts
+├── src
+│   ├── controller
+│   │   └── user.ts
+│   ├── interface.ts
+│   └── service
+│       └── user.ts
 ├── test
 ├── package.json
-null
+└── tsconfig.json
 ```
 
 Under normal circumstances, we obtain all post results from the `body` and perform some verifications.
@@ -83,11 +83,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/validate": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -103,16 +103,16 @@ import * as koa from '@midwayjs/koa';
 import * as validate from '@midwayjs/validate';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [koa, validate]
   importConfigs: [join(__dirname, './config')]
 })
 export class MainConfiguration {
-  null
+  @App()
   app: koa.Application;
 
   async onReady() {
-    null
+    // ...
   }
 }
 ```
@@ -139,7 +139,7 @@ export class UserDTO {
   @Rule(RuleType.string().required())
   firstName: string;
 
-  null
+  @Rule(RuleType.string().max(10))
   lastName: string;
 
   @Rule(RuleType.number().max(60))
@@ -160,16 +160,15 @@ This User Class provides three attributes and their corresponding verification r
 
 The `@Rule` decorator is used to **modify the attributes** that need to be verified. Its parameters are a chain method of verification rules provided by the `RuleType` object.
 
-null
+:::info
 The `RuleType` here is the joi object itself.
 :::
-
 
 [joi](https://joi.dev/api/) provides a lot of verification types. You can also verify fields in objects and arrays, such as `RuleType.string().email()` commonly used for strings, and regular check for `RuleType.string().pattern(/xxxx/)`. You can query API documents of [joi](https://joi.dev/api/).
 
 
 
-## null
+## Check parameters
 
 
 After defining the type, it can be directly used in the business code, and the `@Validate` decorator is required to turn on the verification capability.
@@ -373,7 +372,7 @@ export class UserDTO {
 
   @Rule(RuleType.number().max(60))
   age: number;
-null
+}
 
 // Inherit a new DTO
 export class SimpleUserDTO extends PickDto(UserDTO, ['firstName', 'lastName']) {}
@@ -419,7 +418,7 @@ export class UserDTO {
 }
 
 // Define your department's specifications or commonly used ones in a document yourself.
-null
+const maxString = (length)=> RuleType.string().max(length);
 
 export class UserDTO {
 
@@ -458,7 +457,7 @@ By default, messages will be returned following the `defaultLocale` of i18n comp
 @Controller('/user')
 export class UserController {
   @Post('/')
-  @Validate ({
+  @Validate({
     locale: 'en_US',
   })
   async getUser(@Body() bodyData: UserDTO) {
@@ -492,11 +491,11 @@ For example:
 
 ```typescript
 // src/config/config.default.ts
-null
+export default {
   // ...
-  I18n: {
+  i18n: {
     // Add translation
-    Zh_TW: {
+    zh_TW: {
       validate: require('../../locales/zh_TW.json')
     },
   }
@@ -534,10 +533,10 @@ By configuring the `validate` multilingual text table of the i18n component, you
 // src/config/config.default.ts
 export default {
   // ...
-  I18n: {
+  i18n: {
     // Put your translated text here
     localeTable: {
-      Z_CN: {
+      zh_CN: {
         validate: {
           'string. Max': 'Hello World',
         },
@@ -557,18 +556,18 @@ Since these texts distinguish languages, they need to be handled carefully, for 
 // src/config/config.default.ts
 export default {
   // ...
-  I18n: {
+  i18n: {
     // Put your translated text here
     localeTable: {
-      Z_CN: {
+      zh_CN: {
+        validate: {
+          'string.max': '字符超长',
+        },
+      },
+      en_US: {
         validate: {
           'string.max': 'string is too long',
         },
-      },
-      null
-        validate: {
-          null
-        null
       },
     },
   }
@@ -587,11 +586,11 @@ For example:
 // src/config/config.default.ts
 export default {
   // ...
-  I18n: {
+  i18n: {
     localeTable: {
       // Replace Chinese translation
-      Z_CN: {
-        null
+      zh_CN: {
+        validate: require('../../locales/custom.json'),
       },
     },
   }
@@ -610,7 +609,7 @@ We can do some configuration for validate components.
 | ----------------- | ----------------------------- | ------------------------------------------------------------ |
 | errorStatus | number | When the verification error occurs, the returned Http status code takes effect in the http scenario. The default 422 |
 | locale | string | The default language for verifying the error text. Currently, there are two languages: `en_US` and `zh_CN`. The default language is `en_US`. |
-| validationOptions | Joi's ValidationOptions options | null[](https://joi.dev/api/?v=17.6.0#anyvalidatevalue-options)  |
+| validationOptions | Joi's ValidationOptions options | Commonly used options are allowUnknown, stripUnknown and other options. If configured, the global validation allows undefined fields to appear. For more information, please see joi's [ValidationOptions option](https://joi.dev/api/?v= 17.6.0#anyvalidatevalue-options). |
 
 
 
@@ -665,7 +664,7 @@ export default {
       allowUnknown: true, // global takes effect
   	}
   }
-null
+}
 ```
 
 Or on the decorator.
@@ -675,7 +674,7 @@ Or on the decorator.
 export class HomeController {
 
   @Post('/')
-  @Validate ({
+  @Validate({
     validationOptions: {
       allowUnknown: true
     }
@@ -711,7 +710,7 @@ Or on the decorator.
 export class HomeController {
 
   @Post('/')
-  @Validate ({
+  @Validate({
     validationOptions: {
       stripUnknown: true
     }

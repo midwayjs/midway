@@ -564,6 +564,28 @@ async updateUser (
 
 
 
+### Custom request parameter decorator
+
+You can quickly create custom request parameter decorators with `createRequestParamDecorator`.
+
+```typescript
+import { createRequestParamDecorator } from '@midwayjs/core';
+
+// Implement decorator
+export const Token = createRequestParamDecorator(ctx => {
+  return ctx.headers.token;
+});
+
+// Use decorator
+export class UserController {
+  async invoke(@Token() token: string) {
+    console.log(token);
+  }
+}
+```
+
+
+
 ## Request parameter type conversion
 
 If it is a simple type, Midway will automatically convert the parameter to the user-declared type.
@@ -781,7 +803,7 @@ import { Controller, Get, SetHeader } from "@midwayjs/decorator";
 export class HomeController {
 
   @Get('/')
-  @SetHeader ({
+  @SetHeader({
   	'x-bbb ': '123',
     'x-ccc ': '234'
   })

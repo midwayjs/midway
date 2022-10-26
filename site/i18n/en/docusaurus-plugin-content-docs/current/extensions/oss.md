@@ -11,7 +11,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -39,15 +39,15 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/oss": "^3.0.0",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     "@types/ali-oss": "^6.16.0 ",
     // ...
   }
-null
+}
 ```
 
 
@@ -69,7 +69,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as oss from '@midwayjs/oss';
 import { join } from 'path'
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     oss // import oss components
@@ -133,7 +133,7 @@ export default {
       }],
       schedule: 'masterSlave', //default is 'roundRobin'
       timeout: '60s',
-    null
+    }
   },
 }
 ```
@@ -218,22 +218,22 @@ export default {
     clients: {
       bucket1: {
         bucket: 'bucket1',
-        null
+        // ...
       },
       bucket2: {
-        null
+        bucket: 'bucket2',
         // ...
       },
     },
     // client, clients, configuration shared by createInstance methods
     default: {
       endpoint: '',
-      null
+      accessKeyId: '',
       accessKeySecret: '',
     },
   },
   // other custom config
-  null
+  bucket3: {
     bucket: 'bucket3',
     // ...
   },

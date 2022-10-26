@@ -1,6 +1,4 @@
----
-title: Web 中间件
----
+# Web Middleware
 
 Midway Hooks supports defining Web middleware through function + `useContext()`.
 
@@ -45,11 +43,11 @@ import {
 import logger from './logger';
 
 // Global Middleware
-export default createConfiguration ({
+export default createConfiguration({
   imports: [
     // highlight-start
-    hooks ({
-      null
+    hooks({
+      middleware: [logger],
     }),
     // highlight-end
   ],
@@ -120,9 +118,9 @@ import logger from './logger';
 import cors from '@koa/cors';
 
 // Global Middleware
-export default createConfiguration ({
+export default createConfiguration({
   imports: [
-    hooks ({
+    hooks({
       // highlight-start
       middleware: [logger, cors()]
       // highlight-end

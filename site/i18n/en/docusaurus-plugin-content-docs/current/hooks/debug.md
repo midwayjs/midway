@@ -1,6 +1,4 @@
----
-title: 调试
----
+# Debug
 
 Thanks to the support of the editor, we can quickly debug the application locally.
 

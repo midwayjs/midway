@@ -8,7 +8,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ❌ |
 | Can be used for integration | ❌ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -30,13 +30,13 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/swagger": "^3.0.0",
     // If you want to use it on the server
     "swagger-ui-dist": "4.2.1",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // If you don't want to use it on the server
     "swagger-ui-dist": "4.2.1",
     // ...
@@ -54,9 +54,9 @@ Add components to ```configuration.ts```.
 import { Configuration } from '@midwayjs/decorator';
 import * as swagger from '@midwayjs/swagger';
 
-@Configuration ({
+@Configuration({
   imports: [
-    null
+    // ...
     swagger
   ]
 })
@@ -71,7 +71,7 @@ You can configure the enabled environment, for example, the following code refer
 import { Configuration } from '@midwayjs/decorator';
 import * as swagger from '@midwayjs/swagger';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     {
@@ -82,7 +82,7 @@ import * as swagger from '@midwayjs/swagger';
 })
 export class MainConfiguration {
 
-null
+}
 ```
 
 Then start the project and access the address:
@@ -119,7 +119,7 @@ The basic Boolean, string, and numeric types are displayed as follows:
 
 
 
-### null
+### Types and schema
 
 We often use objects in parameters and use defined classes as types. At this time, swagger components can also be automatically identified, and can also be combined with common types for identification.
 
@@ -127,7 +127,7 @@ For example, the following code:
 
 ```typescript
 @Post('/:id', { summary: 'test'})
-null
+async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number) {
   // ...
 }
 ```
@@ -172,7 +172,7 @@ In most cases, the underlying type can be automatically identified without expli
 **String**
 
 ```typescript
-@ApiProperty ({
+@ApiProperty({
   type: 'string',
   // ...
 })
@@ -182,7 +182,7 @@ name: string;
 **Boolean**
 
 ```typescript
-@ApiProperty ({
+@ApiProperty({
   type: 'boolean',
   example: 'true',
   // ...
@@ -193,7 +193,7 @@ isPure: boolean;
 **Number Type**
 
 ```typescript
-@ApiProperty ({
+@ApiProperty({
   type: 'number',
   example: '1',
   description: 'The name of the Catage'
@@ -204,7 +204,7 @@ age: number;
 In addition, you can also use the format field to define a more precise length.
 
 ```typescript
-@ApiProperty ({
+@ApiProperty({
   type: 'integer',
   format: 'int32',
   example: '1',
@@ -220,13 +220,13 @@ age: number;
 If the array type is an array type, you can configure the type field and use the `type` of the `items` to specify the type.
 
 ```typescript
-@ApiProperty ({
+@ApiProperty({
   type: 'array',
   items: {
     type: 'string',
   },
   example: ['1']
-  null
+  }
 })
 breeds: string[];
 ```
@@ -242,7 +242,7 @@ enum HelloWorld {
   Three = 'Three',
 }
 
-@ApiProperty ({
+@ApiProperty({
   enum: ['One', 'Two', 'Three']
   description: 'The name of the Catage'
 })
@@ -274,7 +274,7 @@ export class Cat {
   @ApiProperty({ example: '2022-12-12 11:11:11', description: 'The age of the CatDSate' })
   agedata?: Date;
 
-  @ApiProperty ({
+  @ApiProperty({
     example: 'Maine Coon',
     description: 'The breed of the Cat',
   })
@@ -285,7 +285,7 @@ export class CreateCatDto {
 
   // ...
 
-  @ApiProperty ({
+  @ApiProperty({
     Type: Cat, // There is no need to specify example here.
   })
   related: Cat;
@@ -317,7 +317,7 @@ class Cat {
 export class CreateCatDto {
   // ...
 
-  @ApiProperty ({
+  @ApiProperty({
     type: 'array',
     items: {
       $ref: getSchemaPath(Cat)
@@ -352,7 +352,7 @@ async getUser(@Query('name') name: string) {
 }
 ```
 
-null``````
+If `@Query` is in the form of an object, you need to specify a name parameter in `@ApiQuery`, and the object type needs to be used with `@ApiProperty`, otherwise the form will become read-only.
 
 ```typescript
 export class UserDTO {
@@ -361,12 +361,12 @@ export class UserDTO {
 }
 
 @Get('/get_user')
-@ApiQuery ({
+@ApiQuery({
   name: 'query'
 })
 async getUser(@Query() dto: UserDTO) {
-  null
-null
+  // ...
+}
 ```
 
 
@@ -375,7 +375,7 @@ null
 
 Use `@ApiBody` to define Body data.
 
-`null```
+The `@Body` object type needs to be used with `@ApiProperty`.
 
 ```typescript
 export class UserDTO {
@@ -391,13 +391,13 @@ async upateUser(@Body() dto: UserDTO) {
 
 For additional details, please use `@ApiBody` enhancement.
 
-### null
+### File upload definition
 
 Set `contentType` with ```@ApiBody```
 
 ```typescript
 @Post('/:id', { summary: 'test'})
-@ApiBody ({
+@ApiBody({
   description: 'this is body',
   contentType: BodyContentType.Multipart
 })
@@ -412,7 +412,7 @@ async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promi
 Use `@ApiProperty` to add `format` in `CreateCatDto`
 
 ```typescript
-@ApiProperty ({
+@ApiProperty({
   type: 'string',
   format: 'binary',
   description: 'this is file test'
@@ -436,7 +436,7 @@ Compatible with Upload components, add ```@ApiBody()``` decorator description
 @ApiBody({ description: 'hello file' })
 @ApiBody({ description: 'hello fields', type: Cat })
 async upload(@File() f: any, @Fields() data: Cat) {
-  return null;
+  // ...
 }
 ```
 
@@ -448,7 +448,7 @@ Do not add ```@ApiBody()``` decorator description
 ```typescript
 @Post('/test1')
 async upload1(@Files() f: any[], @Fields() data: Cat) {
-  return null;
+  // ...
 }
 ```
 
@@ -462,7 +462,7 @@ The Swagger UI shows:
 The Header parameter is defined by the ```@ApiHeader({...})``` decorator.
 
 ```typescript
-null
+@ApiHeader({
   name: 'x-test-one',
   description: 'this is test one'
 })
@@ -477,7 +477,7 @@ export class HelloController {}
 
 ```typescript
 @Get('/:id')
-@ApiResponse ({
+@ApiResponse({
   status: 200
   description: 'The found record',
   type: Cat
@@ -521,12 +521,12 @@ import { ApiProperty } from '@midwayjs/swagger';
 
 export class Cat {
   @ApiProperty({ example: 'Kitty', description: 'The name of the Cat'})
-  null
+  name: string;
 
   @ApiProperty({ example: 1, description: 'The age of the Cat' })
   age: number;
 
-  @ApiProperty ({
+  @ApiProperty({
     example: 'Maine Coon',
     description: 'The breed of the Cat',
   })
@@ -547,7 +547,7 @@ When you do not want to define the model type by type, we can add additional `sc
 @Controller()
 class HelloController {
   @Post('/:id', { summary: 'test'})
-  @ApiResponse ({
+  @ApiResponse({
     status: 200
     content: {
       'application/json ': {
@@ -567,7 +567,7 @@ class HelloController {
 // or
 @ApiExtraModel(TestExtraModel)
 class TestModel {
-  @ApiProperty ({
+  @ApiProperty({
     item: {
       $ref: getSchemaPath(TestExtraModel)
     },
@@ -587,9 +587,9 @@ For example, we need to add some common package structure to the return value.
 
 ```typescript
 {
-  code: 200
+  code: 200,
   message: 'xxx',
-  null
+  data: any
 }
 ```
 
@@ -604,7 +604,7 @@ export function SuccessWrapper<T extends Type>(ResourceCls: T) {
     @ApiProperty({ description: 'message'})
     message: string;
 
-    @ApiProperty ({
+    @ApiProperty({
       type: ResourceCls
     })
     data: T;
@@ -624,7 +624,7 @@ When using, you can directly specify this class.
 
 ```typescript
 @Get('/:id')
-@ApiResponse ({
+@ApiResponse({
   status: 200
   description: 'The found record',
   type: ViewCat
@@ -679,13 +679,13 @@ Association Controller
 export class HelloController {}
 ```
 
-#### null
+#### **bearer**
 
-null
+启用 bearer 验证（bearerFormat 为 JWT）
 
 ```typescript
 // src/config/config.default.ts
-null
+export default {
   // ...
   swagger: {
     auth: {
@@ -727,7 +727,7 @@ export default {
           tokenUrl: 'https://example.com/api/oauth/token',
           scopes: {
             'write:pets': 'modify pets in your account',
-            null
+            'read:pets': 'read your pets'
           }
         },
       },
@@ -774,7 +774,7 @@ export class HelloController {}
 Enable cookie authentication
 
 ```typescript
-null
+// src/config/config.default.ts
 export default {
   // ...
   swagger: {
@@ -841,7 +841,7 @@ export interface SwaggerOptions {
   /**
    * default value: This is a swagger-ui for midwayjs project
    * https://swagger.io/specification/#info-object description field
-   null
+   */
   description?: string;
   /**
    * Default value: 1.0.0
@@ -855,7 +855,7 @@ export interface SwaggerOptions {
   /**
    * https://swagger.io/specification/#info-object license field
    */
-  null
+  license?: LicenseObject;
   /**
    * https://swagger.io/specification/#info-object termsOfService field
    */
@@ -865,7 +865,7 @@ export interface SwaggerOptions {
    */
   externalDocs?: ExternalDocumentationObject;
   /**
-   null
+   * https://swagger.io/specification/#openapi-object servers 字段
    */
   servers?: Array<ServerObject>;
   /**
@@ -905,8 +905,8 @@ export interface SwaggerOptions {
     useUnsafeMarkdown?: boolean;
     tryItOutEnabled?: boolean;
   };
-null
-null
+}
+/**
  * Inherited from https://swagger.io/specification/#security-scheme-object
  */
 export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
@@ -917,7 +917,7 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
    * cookie => cookie verification
    * oauth2 => use oauth2
    * apikey => apiKey
-   null
+   * custom => custom type
    */
   authType: AuthType;
   /**
@@ -956,8 +956,8 @@ All decorators of the component refer to the design of [@nestjs/swagger](https:/
 | ```@ApiResponse``` | Method |
 | ```@ApiTags``` | Controller/Method |
 | ```@ApiExtension``` | Method |
-| ```@ApiBasicAuth``` | null |
-| ```@ApiBearerAuth``` | null |
+| ```@ApiBasicAuth``` | Controller |
+| ```@ApiBearerAuth``` | Controller |
 | ```@ApiCookieAuth``` | Controller |
 | ```@ApiOAuth2``` | Controller |
 | ```@ApiSecurity``` | Controller |

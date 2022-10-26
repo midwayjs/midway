@@ -82,7 +82,7 @@ import { ILifeCycle } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
-@Configuration ({
+@Configuration({
   imports: [koa, ws]
 })
 export class MainConfiguration implements ILifeCycle {
@@ -107,7 +107,7 @@ import { ILifeCycle } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
-@Configuration ({
+@Configuration({
   imports: [koa, ws]
 })
 export class MainConfiguration implements ILifeCycle {

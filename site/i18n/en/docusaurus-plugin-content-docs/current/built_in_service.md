@@ -494,7 +494,7 @@ It can be obtained by injection.
 import { MidwayWebRouterService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {
@@ -538,7 +538,7 @@ It can be obtained by injection.
 import { MidwayServerlessFunctionService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midawyjs/decorator';
 
-@Configuration ({
+@Configuration({
   // ...
 })
 export class MainConfiguration {

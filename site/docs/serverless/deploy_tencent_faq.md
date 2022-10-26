@@ -1,6 +1,4 @@
----
-title: 腾讯云发布 FAQ
----
+# 腾讯云发布 FAQ
 
 ## 用户鉴权
 
@@ -19,7 +17,7 @@ TENCENT_TOKEN=xxxxx       #临时 token
 
 如果需要使用子账号发布，请查询 [子账号权限配置文档](https://cloud.tencent.com/document/product/1154/43006)。
 
-##
+
 
 ## 发布区域切换
 
@@ -45,7 +43,7 @@ provider:
 
 完整的地区列表请查看 [腾讯云文档](https://cloud.tencent.com/document/api/583/17238)。
 
-##
+
 
 ## 复用 API 网关
 

@@ -21,11 +21,11 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/http-proxy": "^3.0.0"
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -39,10 +39,10 @@ Introduce components in `src/configuration.ts`
 // ...
 import * as proxy from '@midwayjs/http-proxy';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...other components
-    null
+    proxy,
   ],
 })
 export class MainConfiguration {}
@@ -53,7 +53,7 @@ export class MainConfiguration {}
 The proxy configuration is defined as follows:
 
 ```typescript
-null
+// proxy configuration type
 export interface HttpProxyConfig {
   // Match the URL regular expression to be represented
   match: RegExp;
@@ -96,7 +96,7 @@ export default {
     // Some multiplexed values for each policy will be merged with the following policies.
   },
   strategy: {
-    null
+    gw: {
       // https://gw.alicdn.com/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png
       match: /\/tfs \//,
       host: 'https://gw.alicdn.com',
@@ -104,7 +104,7 @@ export default {
     g: {
       // https://g.alicdn.com/mtb/lib-mtop/2.6.1/mtop.js
       match: /\/bdimg\/(.*)$ /,
-      null
+      target: 'https://sm.bdimg.com/$1',
     },
     httpBin: {
       // https://httpbin.org/
@@ -112,7 +112,7 @@ export default {
       target: 'https://httpbin.org/$1',
     },
   },
-null
+};
 ```
 
 ## Example: Configuring Agents Using host

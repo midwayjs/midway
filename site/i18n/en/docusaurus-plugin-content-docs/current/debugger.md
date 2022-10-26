@@ -30,20 +30,20 @@ Copy the following.
     // Hover to view a description of an existing attribute.
     // For more information, please visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0 ",
-    "configurations ": [{
+    "configurations": [{
         "name": "Midway Local ",
         "type": "node ",
         "request": "launch ",
         "cwd": "${workspaceRoot} ",
         "runtimeExecutable": "npm ",
-        "windows ": {
+        "windows": {
             "runtimeExecutable": "npm.cmd"
         },
-        "runtimeArgs ": [
+        "runtimeArgs": [
             "run ",
             "dev"
         ],
-        "env ": {
+        "env": {
             "NODE_ENV": "local"
         },
         "console": "integratedTerminal ",

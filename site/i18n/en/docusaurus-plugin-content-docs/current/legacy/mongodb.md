@@ -1,6 +1,6 @@
 # MongoDB
 
-In this chapter, we choose [Typegoose](null) as the MongoDB ORM library based on it. As he described, "Define Mongoose models using TypeScript classes" is very well combined with TypeScript.
+In this chapter, we choose [Typegoose](https://github.com/typegoose/typegoose) as the MongoDB ORM library based on it. As he described, "Define Mongoose models using TypeScript classes" is very well combined with TypeScript.
 
 Simply put, Typegoose using TypeScript "wrappers" to write Mongoose models, most of its capabilities are provided by [mongoose](https://www.npmjs.com/package/mongoose) libraries.
 
@@ -50,7 +50,7 @@ The installation package depends on the following version:
 **Support MongoDB Server 5.x**
 
 ```json
-  "dependencies ": {
+  "dependencies": {
     "mongoose": "^6.0.7 ",
     "@typegoose/typegoose": "9.0.0", // This dependency needs to be installed using typegoose
   },
@@ -62,21 +62,21 @@ The installation package depends on the following version:
 
 The following versions do not require additional definition packages to be installed.
 ```json
-  "dependencies ": {
+  "dependencies": {
     "mongoose": "^5.13.3 ",
-    null
+    "@typegoose/typegoose": "^8.0.0",   // This dependency needs to be installed using typegoose
   },
 ```
 
 
 The following versions require additional definition packages to be installed (not recommended).
 ```json
- "dependencies ": {
+ "dependencies": {
     "mongodb": "3.6.3", // The version is written inside the mongoose
     "mongoose": "~5.10.18 ",
     "@typegoose/typegoose": "7.0.0", // This dependency needs to be installed using typegoose
  },
- "devDependencies ": {
+ "devDependencies": {
     "@types/mongodb": "3.6.3", // this version can only be used
     "@types/mongoose": "~5.10.3 ",
  }
@@ -104,12 +104,12 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     // Components
     "@midwayjs/typegoose": "^3.0.0",
     // mongoose dependency in the previous section
   },
-  "devDependencies ": {
+  "devDependencies": {
     // mongoose dependency in the previous section
     // ...
   }
@@ -121,16 +121,16 @@ Or reinstall the following dependencies in `package.json`.
 After installation, you need to manually configure `src/configuration.ts`. The code is as follows.
 
 ```typescript
-null
+// configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 import * as typegoose from '@midwayjs/typegoose';
 
-@Configuration ({
+@Configuration({
   imports: [
     typegoose // Load typegoose Components
   ],
   importConfigs: [
-  	null
+  	join(__dirname, './config')
   ]
 })
 export class MainConfiguration {
@@ -167,7 +167,7 @@ export default {
 ```
 
 
-### null
+### 3. Simple directory structure
 
 
 Let's take a simple project as an example. Please refer to other structures yourself.
@@ -175,13 +175,13 @@ Let's take a simple project as an example. Please refer to other structures your
 
 ```
 MyProject
-The src // TS root directory
-│ ├── config
-│ │ │ ── config.default.ts // Application Profile
-│ │ ── entity // entity (database Model) directory
-│ │ │ ── user.ts // entity file
-│ │ ── configuration. TS // Midway configuration file
-│-service // Other Service Catalog
+├── src              							// TS root directory
+│   ├── config
+│   │   └── config.default.ts 		// Application Profile
+│   ├── entity       							// entity (database Model) directory
+│   │   └── user.ts  					  	// entity file
+│   ├── configuration.ts     			// Midway configuration file
+│   └── service      							// Other Service directory
 ├── .gitignore
 ├── package.json
 ├── README.md
@@ -192,7 +192,7 @@ The src // TS root directory
 Here, our database entities are mainly located in the `entity` directory (non-mandatory). This is a simple convention.
 
 
-### null
+### 3. Create an entity file
 
 
 ```typescript
@@ -201,7 +201,7 @@ import { EntityModel } from '@midwayjs/typegoose';
 
 @EntityModel()
 export class User {
-  null
+  @prop()
   public name?: string;
 
   @prop({ type: () => [String] })
@@ -212,7 +212,7 @@ export class User {
 Equivalent to the following code that uses the Mongoose
 
 ```typescript
-const userSchema = new mongoose.Schema ({
+const userSchema = new mongoose.Schema({
   name: String
   jobs: [{ type: String }]
 });
@@ -285,7 +285,7 @@ export default {
       }
     }
   },
-null
+}
 ```
 
 
@@ -301,7 +301,7 @@ class User {
   public jobs?: string[];
 }
 
-@EntityModel ({
+@EntityModel({
   connectionName: 'db1' // db1 connection is used here
 })
 class User2 {
@@ -318,7 +318,7 @@ class User2 {
 When in use, inject specific connections
 ```typescript
 @Provide()
-null
+export class TestService {
 
   @InjectEntityModel(User)
   userModel: ReturnModelType<typeof User>;
@@ -345,8 +345,7 @@ null
 mongoose component is the basic component of typegoose, sometimes we can use it directly.
 
 
-### null
-
+### 1. Install components
 
 **Please note that please check the first section to write/install mongoose and other related dependency packages in advance.**
 
@@ -358,12 +357,12 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     // Components
     "@midwayjs/mongoose": "^3.0.0",
     // mongoose dependency in the previous section
   },
-  "devDependencies ": {
+  "devDependencies": {
     // mongoose dependency in the previous section
     // ...
   }
@@ -379,9 +378,9 @@ After installation, you need to manually configure `src/configuration.ts`. The c
 ```typescript
 // configuration.ts
 import { Configuration } from '@midwayjs/decorator';
-null
+import * as mongoose from '@midwayjs/mongoose';
 
-@Configuration ({
+@Configuration({
   imports: [
     mongoose // Load mongoose Components
   ],
@@ -418,7 +417,7 @@ export default {
       }
     }
   },
-null
+}
 ```
 Multi-library:
 ```typescript
@@ -472,13 +471,13 @@ export class TestService {
   conn: MongooseConnectionService;
 
   async invoke() {
-    const schema = new Schema<User> ({
+    const schema = new Schema<User>({
       name: { type: String, required: true}
       email: { type: String, required: true}
       avatar: String
     });
     const UserModel = this.conn.model<User>('User', schema);
-    const doc = new UserModel ({
+    const doc = new UserModel({
       name: 'Bill',
       email: 'bill@initech.com',
       avatar: 'https:// I .imgur.com/dM7Thhn.png'
@@ -533,8 +532,8 @@ In special scenarios, such as when the Serverless cannot modify the Node.js vers
 // src/configuration.ts
 
 Object.defineProperty(process, 'version', {
-  null
-  null
+  value: 'v12.22.0',
+  writable: true,
 });
 
 // other code

@@ -1,6 +1,4 @@
----
-title: Web 中间件
----
+# Web 中间件
 
 Midway Hooks 支持通过函数 + `useContext()` 来定义 Web 中间件。
 

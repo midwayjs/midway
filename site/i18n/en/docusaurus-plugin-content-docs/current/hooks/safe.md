@@ -1,6 +1,4 @@
----
-title: 静态类型安全 + 运行时安全
----
+# Static type safety + runtime safety
 
 Using the [Validate](./validate.md) checker provided by [Prisma](./prisma.md) and `@midwayjs/hooks`, a type security + runtime security link from front-end to back-end to database can be realized.
 
@@ -15,20 +13,20 @@ import {
 import { prisma } from './prisma';
 import { z } from 'zod';
 
-const PostSchema = z.object ({
+const PostSchema = z.object({
   title: z.string().min(1)
   content: z.string().min(1)
   authorEmail: z.string().email()
 });
 
-export const createPost = Api (
+export const createPost = Api(
   Post('/api/post')
   Validate(PostSchema)
   async (
     post: z.infer<typeof PostSchema>
   ) => {
     const result =
-      await prisma.post.create ({
+      await prisma.post.create({
         data: {
           title: post.title
           content: post.content
@@ -49,7 +47,7 @@ Front-end call:
 ```ts
 import { createPost } from '../api/post';
 
-await createPost ({
+await createPost({
   title: 'Hello Midway',
   content: 'Hello Prisma',
   authorEmail: 'test@test.com',

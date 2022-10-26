@@ -2,20 +2,20 @@
 
 For scenarios where midway supports Egg.js, the original [egg-ts-helper](https://github.com/whxaxes/egg-ts-helper) package is rewritten, and the original TS and AST analysis dependencies are removed.
 
-null Based on the above considerations, midway rewrote this package and provided egg definition in the simplest way.
+The ts v3 environment that the original package depends on depends on the egg directory structure, considering many possibilities, it will not be used in the midway scenario. Based on the above considerations, midway rewrites this package to provide egg definitions in the simplest way.
 
 The [@midwayjs/egg-ts-helper](https://github.com/midwayjs/egg-ts-helper) package provides the `ets` global command.
 
 ```bash
 $ npm i @midwayjs/egg-ts-helper --save-dev
-$ets
+$ ets
 ```
 
 Usually we will add it to the development command.
 
 ```json
-  "scripts ": {
-    "dev": "cross-env ets && cross-env NODE_ENV=local midway-bin dev --ts ",
+  "scripts": {
+    "dev": "cross-env ets && cross-env NODE_ENV=local midway-bin dev --ts \",
   },
 ```
 
@@ -33,9 +33,9 @@ Finally, a `typings` directory will be generated in the project root directory w
     │		├── request.d.ts
     │		├── response.d.ts
     │		├── application.d.ts
-    │ └── context.d.ts
+    │   └── context.d.ts
     ├── app
-    │ └── index.d.ts
+    │   └── index.d.ts
     └── config
         ├── index.d.ts
         └── plugin.d.ts

@@ -38,7 +38,7 @@ export async function makeHttpRequest(
   const client = whatwgUrl.protocol === 'https:' ? https : http;
   const contentType: MimeType = options.contentType;
   const dataType: MimeType = options.dataType;
-  const method = options.method || 'GET';
+  const method = (options.method || 'GET').toUpperCase();
   const timeout = options.timeout || 5000;
 
   const headers = {

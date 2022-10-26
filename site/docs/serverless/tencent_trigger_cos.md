@@ -1,6 +1,4 @@
----
-title: COS 触发器（对象存储）
----
+# COS 触发器（对象存储）
 
 COS 是腾讯云用于存储一些资源文件的服务。
 
@@ -22,7 +20,7 @@ export class HelloTencentService {
 
   @ServerlessTrigger(ServerlessTriggerType.OS, {
     bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
-    events: 'cos:ObjectCreated:*,
+    events: 'cos:ObjectCreated:*',
     filter: {
       prefix: 'filterdir/',
       suffix: '.jpg',
@@ -53,7 +51,7 @@ export class HelloTencentService {
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType.OS, {
     bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
-    events: 'cos:ObjectCreated:*,
+    events: 'cos:ObjectCreated:*',
     filter: {
       prefix: 'filterdir/',
       suffix: '.jpg',
@@ -107,8 +105,6 @@ COS 消息返回的结构如下，在 `SCF.COSEvent` 类型中有描述。
   ]
 }
 ```
-
-## 本地开发
 
 ## 本地开发
 

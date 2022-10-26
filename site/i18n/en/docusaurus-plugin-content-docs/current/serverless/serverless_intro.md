@@ -1,8 +1,6 @@
----
-title: 介绍
----
+# Introduce
 
-## What Serverless Midway Can Do
+## What Midway Serverless Can Do
 
 Midway Serverless is a Serverless framework for building Node.js cloud functions. help you significantly reduce maintenance costs and focus more on product development in the cloud-native era.
 
@@ -70,7 +68,7 @@ The English name is Runtime, which specifically refers to the environment in whi
 
 ### Publishing platform
 
-The platform finally carried by the function is now the most common in the community such as Aliyun FC, Tengxun Cloud SCF,AWS Lambda, etc.
+The platform finally carried by the function is now the most common in the community such as Aliyun FC, Tencent Cloud SCF,AWS Lambda, etc.
 
 ### Layer
 

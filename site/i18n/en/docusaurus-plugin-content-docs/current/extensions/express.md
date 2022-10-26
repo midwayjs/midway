@@ -4,7 +4,7 @@ This chapter mainly introduces how to use Express as the upper-level framework i
 
 | Description |      |
 | -------------- | ---- |
-| Contains independent main frame | ✅ |
+| Contains independent main framework | ✅ |
 | Contains independent logs | ✅ |
 
 
@@ -222,7 +222,7 @@ import { ILifeCycle } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [express]
 })
 export class ContainerLifeCycle implements ILifeCycle {
@@ -298,7 +298,7 @@ import { join } from 'path';
 import { APIMatchFilter } from './filter/api.filter';
 import { GlobalMatchFilter } from 'filter/globalMatch.filter';
 
-@Configuration ({
+@Configuration({
   imports: [express]
   importConfigs: [join(__dirname, './config')]
 })
@@ -346,7 +346,7 @@ import * as express from '@midwayjs/express';
 import { join } from 'path';
 import { GlobalError } from './filter/global.filter';
 
-@Configuration ({
+@Configuration({
   imports: [express]
   importConfigs: [join(__dirname, './config')]
 })

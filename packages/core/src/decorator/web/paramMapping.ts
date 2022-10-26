@@ -3,6 +3,7 @@ import {
   PipeTransform,
   WEB_ROUTER_PARAM_KEY,
 } from '../';
+import { IMidwayContext } from '../../interface';
 
 export enum RouteParamTypes {
   QUERY,
@@ -17,6 +18,7 @@ export enum RouteParamTypes {
   REQUEST_IP,
   QUERIES,
   FIELDS,
+  CUSTOM,
 }
 
 export interface RouterParamValue {
@@ -33,6 +35,23 @@ const createParamMapping = function (type: RouteParamTypes) {
       pipes,
     });
   };
+};
+
+export declare type KoaLikeCustomParamDecorator<T = unknown> = (
+  ctx: IMidwayContext
+) => T | Promise<T>;
+
+export declare type ExpressLikeCustomParamDecorator<T = unknown> = (
+  req,
+  res
+) => T | Promise<T>;
+
+export declare type CustomParamDecorator<T = unknown> =
+  | KoaLikeCustomParamDecorator<T>
+  | ExpressLikeCustomParamDecorator<T>;
+
+export const createRequestParamDecorator = function (transform: CustomParamDecorator) {
+  return createParamMapping(RouteParamTypes.CUSTOM)(transform);
 };
 
 export const Session = (property?: string, pipes?: PipeTransform[]) =>

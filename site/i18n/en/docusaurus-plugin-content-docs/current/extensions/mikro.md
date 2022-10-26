@@ -11,7 +11,7 @@ Related information:
 | Can be used for standard projects | ✅ |
 | Can be used for Serverless | ✅ |
 | Can be used for integration | ✅ |
-| Contains independent main frame | ❌ |
+| Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
 
 
@@ -29,12 +29,12 @@ Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/mikro": "^3.0.0",
     "@mikro-orm/core": "^5.3.1 ",
     // ...
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -46,14 +46,14 @@ For example:
 
 ```typescript
 {
-  "dependencies ": {
+  "dependencies": {
     // sqlite
     "@mikro-orm/sqlite": "^5.3.1 ",
 
     // mysql
     "@mikro-orm/mysql": "^5.3.1 ",
   },
-  "devDependencies ": {
+  "devDependencies": {
     // ...
   }
 }
@@ -74,7 +74,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as mikro from '@midwayjs/mikro';
 import { join } from 'path';
 
-@Configuration ({
+@Configuration({
   imports: [
     // ...
     Mikro // load mikro components
@@ -88,7 +88,7 @@ export class MainConfiguration {
 }
 ```
 
-##
+
 
 ## Basic use
 
@@ -107,7 +107,7 @@ For more information about Entity code, see [Example](https://github.com/midwayj
 Entity that defines the basis.
 
 ```typescript
-null
+// src/entity/BaseEntity.ts
 import { PrimaryKey, Property } from '@mikro-orm/core';
 
 export abstract class BaseEntity {
@@ -166,7 +166,7 @@ export class Book extends BaseEntity {
 
 
 
-### null
+### Configure the data source
 
 ```typescript
 
@@ -194,6 +194,8 @@ export default (appInfo) => {
 
 ```
 
+For association in the form of a directory scan, please refer to [Data Source Management](../data_source).
+
 
 
 ### Call Repository
@@ -217,14 +219,14 @@ export class BookController {
     wrap(book.author, true).__initialized = true;
     await this.bookRepository.persist(book).flush();
 
-    const findResult = await this.bookRepository.findAll ({
+    const findResult = await this.bookRepository.findAll({
       populate: ['author']
       orderBy: { title: QueryOrder.DESC}
       limit: 20
     });
 
   }
-null
+}
 ```
 
 
@@ -250,19 +252,18 @@ Mikro-orm internal query has a concept of [Identity Map](https://mikro-orm.io/do
 Like other databases, Midway supports the configuration of multiple data sources.
 
 ```typescript
-
-null
+// src/config/config.default
 import { Author, BaseEntity, Book, BookTag, Publisher } from '../entity';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
-null
+import { join } from 'path';
 
 export default (appInfo) => {
-  null
+  return {
     mikro: {
       dataSource: {
         custom1: {
           // ...
-        null
+        },
         custom2: {
           // ...
         }
@@ -285,7 +286,7 @@ export class BookController {
 
   async findBookAndQuery() {
     // ...
-  null
+  }
 }
 ```
 

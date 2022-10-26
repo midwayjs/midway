@@ -267,7 +267,7 @@ For example:
 import { Configuration } from '@midwayjs/decorator';
 import * as axios from '@midwayjs/axios';
 
-@Configuration ({
+@Configuration({
   namespace: 'book',
   imports: [axios]
 })
@@ -285,7 +285,7 @@ There is also a case of weak dependencies, which do not need to be explicitly de
 import { Configuration } from '@midwayjs/decorator';
 import { IMidwayContainer } from '@midwayjs/core';
 
-@Configuration ({
+@Configuration({
   namespace: 'book',
 })
 export class BookConfiguration {
@@ -304,7 +304,7 @@ Increase dependency.
 ```json
 // package.json
 {
-  "dependencies ": {
+  "dependencies": {
     "@midwayjs/axios": "xxxx"
   }
 }
@@ -419,8 +419,8 @@ First, add dependencies to the application.
 ```json
 // package.json
 {
-  "dependencies ": {
-    "midway-component-book ": "*"
+  "dependencies": {
+    "midway-component-book": "*"
   }
 }
 ```
@@ -432,7 +432,7 @@ This component is then introduced in the application (function).
 import { Configuration } from '@midwayjs/decorator';
 import * as book from 'midway-component-book';
 
-@Configuration ({
+@Configuration({
   imports: [book]
 })
 export class ContainerLifeCycle {}
@@ -514,7 +514,7 @@ First, create a custom component, which is the same as a common application. Bec
 import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 
-@Configuration ({
+@Configuration({
   namespace: 'myKoa'
   imports: [koa]
 })
@@ -532,7 +532,7 @@ Then, we can inject the framework exported by `@midwayjs/koa` for extension.
 import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 
-@Configuration ({
+@Configuration({
   namespace: 'myKoa'
   imports: [koa]
 })

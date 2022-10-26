@@ -39,7 +39,7 @@ For example:
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01fctCcQ2191p8aMfDd_!!6000000006941-2-tps-1623-295.png)
 
 
-Solution: Add the `-- legacy-peer-deps` parameter to npm I.
+Solution: Add the `--legacy-peer-deps` parameter to npm I.
 
 
 Reason: The test framework Jest relies on jsdom,npm7 will automatically install the canvas package that its peerDependencies depends on, and the installation and compilation of canvas requires a python3 environment.

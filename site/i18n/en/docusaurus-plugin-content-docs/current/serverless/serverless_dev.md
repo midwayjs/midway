@@ -1,6 +1,4 @@
----
-title: 开发函数
----
+# Development function
 
 ## Initialization code
 
@@ -24,11 +22,11 @@ The following is the simplest structure of a function. The core will include a s
 
 ```bash
 .
--f.yml# standardized spec file
-package.json# Project Dependency
+├── f.yml           	# standardized spec file
+├── package.json    	# Project Dependency
 ├── src
-│ └── function
-│-hello.ts ## function file
+│   └── function
+│       └── hello.ts	# function file
 └── tsconfig.json
 ```
 
@@ -81,7 +79,7 @@ export class HelloServerlessService {
   ctx: Context;
 
   // Multiple triggers for one function
-  @ServerlessFunction ({
+  @ServerlessFunction({
     functionName: 'abcde',
   })
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
@@ -118,7 +116,7 @@ custom:
     domainName: auto ## due to the release of HTTP service, domain names are automatically generated here and can be bound separately in the future.
 ```
 
-###
+
 
 ## Trigger decorator parameters
 
@@ -148,7 +146,7 @@ The function trigger is consistent with the [f.yml definition](/docs/serverless_
 For example:
 
 ```typescript
-@ServerlessFunction ({
+@ServerlessFunction({
   functionName: 'abcde',
   initTimeout: 3, // initialization timeout, only valid for Aliyun fc, default 3s
   timeout: 3 // function execution timeout, default 3s
@@ -159,9 +157,9 @@ For example:
 
 The local development of HTTP functions is the same as that of traditional Web. Enter the following command.
 
-```shell
+```bash
 $ npm run dev
-$open http://localhost:7001
+$ open http://localhost:7001
 ```
 
 Midway will start the HTTP server, open the browser, access [http:// 127.0.0.1:7001](http://127.0.0.1:7001), and the browser will print the `Hello midwayjs` information.
@@ -172,8 +170,8 @@ Midway will start the HTTP server, open the browser, access [http:// 127.0.0.1:7
 
 Deploy functions. You can use the release command to package and deploy functions:
 
-```shell
-null
+```bash
+$ npm run deploy
 ```
 
 :::info
@@ -182,28 +180,28 @@ If you enter the wrong information, you can re-execute the `npx midway-bin deplo
 
 Here, we use the Alibaba Cloud FC platform to demonstrate. For more information about how to deploy to Tencent Cloud, see [Tencent Cloud Deployment](deploy_to_tencent).
 
-null``````
+Alibaba Cloud deployment needs to configure `accountId`, `accountKey`, `accountSecret` for the first time
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654967-11e1bcbd-5a56-4239-99e1-5a1472ad49fd.png#height=514&id=cd07s&margin=%5Bobject%20Object%5D&originHeight=514&originWidth=1152&originalType=binary&ratio=1&size=0&status=done&style=none&width=1152" width="1152" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654967-11e1bcbd-5a56-4239-99e1-5a1472ad49fd.png)
 
 For related configuration, please refer to the picture below:
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654949-9c14958c-3aff-403a-b89b-d03a3a95cd18.png#height=696&id=XCMN7&margin=%5Bobject%20Object%5D&originHeight=696&originWidth=1832&originalType=binary&ratio=1&size=0&status=done&style=none&width=1832" width="1832" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654949-9c14958c-3aff-403a-b89b-d03a3a95cd18.png)
 
 Click [Security Settings](https://account.console.aliyun.com/#/secure).
 
 ---
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654950-19a811c5-2cf3-4843-a619-cfd744430fae.png#height=184&id=H5HaQ&margin=%5Bobject%20Object%5D&originHeight=592&originWidth=2406&originalType=binary&ratio=1&size=0&status=done&style=none&width=746" width="746" />
+![](https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654950-19a811c5-2cf3-4843-a619-cfd744430fae.png)
 
 Click the [AccessKey page](https://usercenter.console.aliyun.com/#/manage/ak) of Alibaba Cloud.
 
 The overall deployment effect is as follows:
 
-<img src="https://cdn.nlark.com/yuque/0/2021/svg/501408/1618722302423-d7d159b3-45b0-4a93-a2b1-daf50f46bc9f.svg#clientId=ude874b22-3d94-4&from=ui&id=w8IDi&margin=%5Bobject%20Object%5D&originHeight=1015&originWidth=1620&originalType=binary&ratio=1&size=458083&status=done&style=none&taskId=u53dbfdb6-ec4e-4b4e-866d-ab578d3839a" width="undefined" />
+![](https://cdn.nlark.com/yuque/0/2021/svg/501408/1618722302423-d7d159b3-45b0-4a93-a2b1-daf50f46bc9f.svg)
 
 after publishing, obtain the current url from the console to access it.
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1618722353090-bf9e0061-ea62-46a2-a77e-57236a4e4024.png#clientId=ude874b22-3d94-4&from=paste&height=361&id=u7afbff35&margin=%5Bobject%20Object%5D&originHeight=722&originWidth=2084&originalType=binary&ratio=1&size=156355&status=done&style=none&taskId=u39af502c-85b3-4eeb-b387-a5d70448c89&width=1042" width="1042" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618722353090-bf9e0061-ea62-46a2-a77e-57236a4e4024.png)
 
 Since the automatic domain name is turned on, Aliyun will add a temporary domain name for development and debugging free of charge, and then you can bind the new domain name yourself.

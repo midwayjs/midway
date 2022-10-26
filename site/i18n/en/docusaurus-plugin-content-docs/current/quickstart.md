@@ -116,7 +116,7 @@ Midway will start the HTTP server, open the browser, access `http:// 127.0.0.1:7
 If you need to modify the development startup port, you can modify it in the scripts paragraph of the `package.json`, such as 6001:
 
 ```typescript
-"scripts ": {
+"scripts": {
   //...
   "dev": "cross-env NODE_ENV=local midway-bin dev --ts --port=6001",
 },
