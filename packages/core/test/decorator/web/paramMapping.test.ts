@@ -1,15 +1,22 @@
 import {
   ALL,
   Body,
+  createParamDecorator,
   File,
   Files,
+  getClassMetadata,
   Headers,
+  INJECT_CUSTOM_PARAM,
   Param,
   Query,
   Session,
-  getClassMetadata,
-  INJECT_CUSTOM_PARAM
 } from '../../../src';
+
+function Token() {
+  return createParamDecorator(ctx => {
+    return ctx.request.headers.token;
+  });
+}
 
 class Test {
   async doget(
@@ -19,7 +26,8 @@ class Test {
     @Headers('tt') tt: any,
     @File({ requireFile: true }) f: any,
     @Files() files: any,
-    @Session(ALL) bb: any
+    @Session(ALL) bb: any,
+    @Token() token: any
   ) {}
 }
 

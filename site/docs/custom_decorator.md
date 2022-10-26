@@ -477,6 +477,25 @@ export class UserController {
 }
 ```
 
+### 另一种实现方式
+
+```typescript
+import { createParamDecorator } from '@midwayjs/core';
+
+// 实现装饰器
+export const Token = createParamDecorator((ctx) => {
+  return ctx.headers.token;
+});
+
+// 使用装饰器
+export class UserController {
+  async invoke(@Token() token: string) {
+    console.log(token);
+  }
+}
+```
+
+
 :::tip
 
 注意，为了方法调用的正确性，如果参数装饰器中报错，框架会使用原始的参数来调用方法，不会直接抛出异常。

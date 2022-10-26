@@ -7,6 +7,16 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "impl": true,
       "key": "web:router_param",
       "metadata": {
+        "propertyData": [Function],
+        "type": 12,
+      },
+      "parameterIndex": 7,
+      "propertyName": "doget",
+    },
+    {
+      "impl": true,
+      "key": "web:router_param",
+      "metadata": {
         "propertyData": "common:all_value_key",
         "type": 4,
       },
