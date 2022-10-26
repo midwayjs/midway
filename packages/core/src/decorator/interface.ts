@@ -274,3 +274,5 @@ export interface IModuleStore {
 export interface PipeTransform<T = any, R = any> {
   transform(value: T): R;
 }
+
+export type PipeTransformFunction<T = any, R = any> = (value: T) => R;

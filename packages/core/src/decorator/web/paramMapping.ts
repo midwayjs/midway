@@ -1,6 +1,7 @@
 import {
   createCustomParamDecorator,
   PipeTransform,
+  PipeTransformFunction,
   WEB_ROUTER_PARAM_KEY,
 } from '../';
 import { IMidwayContext } from '../../interface';
@@ -28,7 +29,10 @@ export interface RouterParamValue {
 }
 
 const createParamMapping = function (type: RouteParamTypes) {
-  return (propertyData?: any, pipes?: PipeTransform[]) => {
+  return (
+    propertyData?: any,
+    pipes?: Array<PipeTransform | PipeTransformFunction>
+  ) => {
     return createCustomParamDecorator(WEB_ROUTER_PARAM_KEY, {
       type,
       propertyData,
@@ -50,28 +54,30 @@ export declare type CustomParamDecorator<T = unknown> =
   | KoaLikeCustomParamDecorator<T>
   | ExpressLikeCustomParamDecorator<T>;
 
-export const createRequestParamDecorator = function (transform: CustomParamDecorator) {
+export const createRequestParamDecorator = function (
+  transform: CustomParamDecorator
+) {
   return createParamMapping(RouteParamTypes.CUSTOM)(transform);
 };
 
-export const Session = (property?: string, pipes?: PipeTransform[]) =>
+export const Session = (property?: string) =>
   createParamMapping(RouteParamTypes.SESSION)(property);
-export const Body = (property?: string, pipes?: PipeTransform[]) =>
+export const Body = (property?: string) =>
   createParamMapping(RouteParamTypes.BODY)(property);
-export const Query = (property?: string, pipes?: PipeTransform[]) =>
-  createParamMapping(RouteParamTypes.QUERY)(property, pipes);
-export const Param = (property?: string, pipes?: PipeTransform[]) =>
-  createParamMapping(RouteParamTypes.PARAM)(property, pipes);
-export const Headers = (property?: string, pipes?: PipeTransform[]) =>
+export const Query = (property?: string) =>
+  createParamMapping(RouteParamTypes.QUERY)(property);
+export const Param = (property?: string) =>
+  createParamMapping(RouteParamTypes.PARAM)(property);
+export const Headers = (property?: string) =>
   createParamMapping(RouteParamTypes.HEADERS)(property);
-export const File = (property?: any, pipes?: PipeTransform[]) =>
+export const File = (property?: any) =>
   createParamMapping(RouteParamTypes.FILESTREAM)(property);
-export const Files = (property?: any, pipes?: PipeTransform[]) =>
+export const Files = (property?: any) =>
   createParamMapping(RouteParamTypes.FILESSTREAM)(property);
 export const RequestPath = () =>
   createParamMapping(RouteParamTypes.REQUEST_PATH)();
 export const RequestIP = () => createParamMapping(RouteParamTypes.REQUEST_IP)();
-export const Queries = (property?: string, pipes?: PipeTransform[]) =>
+export const Queries = (property?: string) =>
   createParamMapping(RouteParamTypes.QUERIES)(property);
-export const Fields = (property?: string, pipes?: PipeTransform[]) =>
+export const Fields = (property?: string) =>
   createParamMapping(RouteParamTypes.FIELDS)(property);

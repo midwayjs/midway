@@ -1,10 +1,22 @@
-import { ALL, PipeTransform, RouteParamTypes } from '../decorator';
+import {
+  ALL,
+  PipeTransform,
+  PipeTransformFunction,
+  RouteParamTypes,
+} from '../decorator';
 import { transformRequestObjectByType } from './index';
 
-export async function callPipes(pipes: PipeTransform[], value: any) {
+export async function callPipes(
+  pipes: Array<PipeTransform | PipeTransformFunction>,
+  value: any
+) {
   if (pipes && pipes.length) {
     for (const pipe of pipes) {
-      value = await pipe.transform(value);
+      if ('transform' in pipe) {
+        value = await pipe.transform(value);
+      } else {
+        value = await pipe(value);
+      }
     }
   }
   return value;
