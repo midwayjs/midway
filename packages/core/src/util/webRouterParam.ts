@@ -1,11 +1,26 @@
-import { ALL, RouteParamTypes } from '../decorator';
+import { ALL, PipeTransform, RouteParamTypes } from '../decorator';
 import { transformRequestObjectByType } from './index';
 
-export const extractKoaLikeValue = (key, data, paramType?) => {
+export async function callPipes(pipes: PipeTransform[], value: any) {
+  if (pipes && pipes.length) {
+    for (const pipe of pipes) {
+      value = await pipe.transform(value);
+    }
+  }
+  return value;
+}
+
+export const extractKoaLikeValue = (
+  key,
+  data,
+  paramType?,
+  pipes?: PipeTransform[]
+) => {
   if (ALL === data) {
     data = undefined;
   }
-  return function (ctx, next) {
+
+  const value = async function (ctx, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -74,13 +89,23 @@ export const extractKoaLikeValue = (key, data, paramType?) => {
         return null;
     }
   };
+
+  return async function (ctx, next) {
+    const result = await value(ctx, next);
+    return await callPipes(pipes || [], result);
+  };
 };
 
-export const extractExpressLikeValue = (key, data, paramType?) => {
+export const extractExpressLikeValue = (
+  key,
+  data,
+  paramType?,
+  pipes?: PipeTransform[]
+) => {
   if (ALL === data) {
     data = undefined;
   }
-  return function (req, res, next) {
+  const value = (req, res, next) => {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -136,5 +161,10 @@ export const extractExpressLikeValue = (key, data, paramType?) => {
       default:
         return null;
     }
+  };
+
+  return async function (req, res, next) {
+    const result = await value(req, res, next);
+    return await callPipes(pipes || [], result);
   };
 };
