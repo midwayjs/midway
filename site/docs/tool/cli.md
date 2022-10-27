@@ -57,8 +57,8 @@ $ midway-bin dev --ts --baseDir=./app
 ```shell
 $ midway-bin dev --ts --sourceDir=./app/src
 ```
-### **修改tsconfig.json的位置**
-通过设置[TS_NODE_PROJECT环境变量](https://github.com/TypeStrong/ts-node#project)来指定tsconfig.json的位置
+### **修改 tsconfig.json 的位置**
+通过设置 [TS_NODE_PROJECT](https://github.com/TypeStrong/ts-node#project) 环境变量来指定tsconfig.json的位置。
 ```shell
 $ cross-env TS_NODE_PROJECT=./tsconfig.dev.json midway-bin dev -ts
 ```

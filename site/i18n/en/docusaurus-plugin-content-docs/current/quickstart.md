@@ -127,7 +127,7 @@ If you need to modify the development startup port, you can modify it in the scr
 ### Python compilation error
 
 :::caution
-1. Executing `npm install/I` command under node15/npm7 to install dependency may cause Python compilation errors
+1. Executing `npm install/i` command under node15/npm7 to install dependency may cause Python compilation errors
 
 **Projects created using npm init midway will automatically install dependencies without this problem.**
 

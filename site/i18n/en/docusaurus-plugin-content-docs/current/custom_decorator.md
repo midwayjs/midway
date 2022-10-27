@@ -198,7 +198,7 @@ export class MainConfiguration {
 
 Let's implement a simple `@MemoryCache()` decorator. The implementation of the property decorator is divided into two parts:
 
-- 1, define a decorator method, generally only save metadata
+- 1. define a decorator method, generally only save metadata
 - 2. Define an implementation before the decorator logic is executed
 
 The following is the section that defines the decorator method.
@@ -418,7 +418,7 @@ import { createCustomParamDecorator } from '@midwayjs/decorator';
 // Unique id inside the decorator
 export const USER_KEY = 'decorator:user_key';
 
-export function User(): MethodDecorator {
+export function User(): ParameterDecorator {
   return createCustomParamDecorator(USER_KEY, {});
 }
 ```

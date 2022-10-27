@@ -58,6 +58,15 @@ specifies the ts code directory, which is automatically analyzed by default.
 $ midway-bin dev --ts --sourceDir=./app/src
 ```
 
+
+
+### Change tsconfig position
+Specify the location of tsconfig.json by setting [TS_NODE_PROJECT](https://github.com/TypeStrong/ts-node#project).
+
+```shell
+$ cross-env TS_NODE_PROJECT=./tsconfig.dev.json midway-bin dev -ts
+```
+
 ### **Faster startup method**
 
 The default startup method is ts-node, which will be slower when the number of files is particularly large. You can switch to a new compilation method such as swc.
