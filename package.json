@@ -14,7 +14,7 @@
     "tree-kill": "1.2.2",
     "ts-jest": "29.0.3",
     "ts-node": "10.9.1",
-    "typedoc": "0.23.17",
+    "typedoc": "0.23.19",
     "typescript": "4.8.4",
     "why-is-node-running": "2.2.2",
     "zx": "7.1.1"
