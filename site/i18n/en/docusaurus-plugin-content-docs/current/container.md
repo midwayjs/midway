@@ -540,7 +540,7 @@ export class PaymentService {
   payService: IPay; // Note that the type here is an interface, and the type information will be removed after compilation.
 
   async orderGood() {
-    await this.payService.payMonety();
+    await this.payService.payMoney();
   }
 
 }

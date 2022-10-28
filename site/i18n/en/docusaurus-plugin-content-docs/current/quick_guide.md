@@ -507,7 +507,7 @@ For more information, see [Test](./testing).
 
 :::info
 
-- 1. During jest test, use a single file as a unit and use `beforeAlll` and `afterAll` to control the start and stop of app
+- 1. During jest test, use a single file as a unit and use `beforeAll` and `afterAll` to control the start and stop of app
 - 2. Use `createHttpRequest` to create a test request
 - 3. Use expect to assert whether the returned results meet expectations.
 
