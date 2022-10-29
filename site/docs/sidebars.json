@@ -106,7 +106,8 @@
         "extensions/casbin",
         "extensions/static_file",
         "extensions/cross_domain",
-        "extensions/http-proxy"
+        "extensions/http-proxy",
+        "extensions/captcha"
       ]
     },
     {
