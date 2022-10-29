@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@bull-board/api": "4.6.1",
-    "@bull-board/ui": "4.6.0",
+    "@bull-board/ui": "4.6.1",
     "@midwayjs/bull": "^3.6.1",
     "ejs": "3.1.8"
   },
