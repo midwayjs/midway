@@ -5,8 +5,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [3.7.0](https://github.com/midwayjs/midway/compare/v3.6.1...v3.7.0) (2022-10-29)
 
-**Note:** Version bump only for package midway-test-component-new
+### Features
 
-# [3.6.0](https://github.com/midwayjs/midway/compare/v3.5.3...v3.6.0) (2022-10-10)
-
-**Note:** Version bump only for package midway-test-component-new
+- verification code ([#2402](https://github.com/midwayjs/midway/issues/2402)) ([e96cf0a](https://github.com/midwayjs/midway/commit/e96cf0aa2de21b15cc69009df371834b3db22d47))
