@@ -67,7 +67,7 @@ $ npm i @midwayjs/casbin@3 --save
 ## 启用组件
 
 
-首先，引入 组件，在 `configuration.ts` 中导入：
+首先，引入组件，在 `configuration.ts` 中导入：
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';

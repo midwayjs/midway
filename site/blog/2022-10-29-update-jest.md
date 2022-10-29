@@ -7,6 +7,8 @@ tags: [更新, jest]
 
 最近由于 axios 组件的升级，会出现下面的报错。
 
+![](https://img.alicdn.com/imgextra/i2/O1CN01G4Ze0F1qVxwcNwYeF_!!6000000005502-2-tps-2080-1158.png)
+
 原因为脚手架自带的 jest v26 不支持 package.json 中的 `exports` 逻辑。
 
 解决方法：

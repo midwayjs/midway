@@ -1,29 +1,54 @@
-## 验证码
+# 验证码
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的通用验证码组件，支持 `图片验证码`、`计算表达式` 等类型验证码。
 
+您也可以通过此组件，来实现 `短信验证码`、`邮件验证码` 等验证能力，但是注意，本组件本身不含发送短信、邮件功能。
 
-您也可以通过此组件，来实现 `短信验证码`、`邮件验证码` 等验证能力。
+相关信息：
 
-### Usage
+| 描述              |      |
+| ----------------- | ---- |
+| 可用于标准项目    | ✅    |
+| 可用于 Serverless | ✅    |
+| 可用于一体化      | ✅    |
+| 包含独立主框架    | ❌    |
+| 包含独立日志      | ❌    |
 
-1. 安装依赖
+## 安装依赖
+
 ```bash
 $ npm i @midwayjs/captcha@3 --save
 ```
-2. 在 configuration 中引入组件,
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/captcha": "^3.0.0",
+    // ...
+  },
+}
+```
+
+## 启用组件
+
+在 `src/configuration.ts` 中引入组件。
+
 ```typescript
 import * as captcha from '@midwayjs/captcha';
+
 @Configuration({
   imports: [
     // ...other components
     captcha
   ],
 })
-export class AutoConfiguration {}
+export class MainConfiguration {}
 ```
 
-3. 在代码中使用
+## 调用服务
+
 ```typescript
 import { CaptchaService } from '@midwayjs/captcha';
 @Controller('/')
@@ -98,7 +123,8 @@ export class HomeController {
 }
 ```
 
-### 配置
+## 可用配置
+
 ```typescript
 interface CaptchaOptions {
   // 干扰线条的数量，默认 1 条
@@ -165,9 +191,10 @@ export const captcha: CaptchaOptions = {
 
 ## 效果
 
-### 图片验证码
+**图片验证码**
+
 ![图片验证码](https://gw.alicdn.com/imgextra/i4/O1CN014cEzLH23vEniOgoyp_!!6000000007317-2-tps-120-40.png)
 
-### 计算表达式
+**计算表达式**
 
  ![计算表达式](https://gw.alicdn.com/imgextra/i4/O1CN01u3Mj0q24lRx1md9pX_!!6000000007431-2-tps-120-40.png)

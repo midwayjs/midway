@@ -1,29 +1,18 @@
 ---
-slug: jest_update
-title: Jest v29 更新
+slug: core-decorator-merge
+title: core 和 decorator 包合并的影响
 authors: [harry]
-tags: [更新, jest]
+tags: [decorator, core]
 ---
 
-最近由于 axios 组件的升级，会出现下面的报错。
+从 v3.6.0 开始，Midway 在代码层面将 `@midwayjs/decorator` 中的代码迁移到了 `@midwayjs/core` 中，未来 `@midwayjs/decorator` 包将逐步减少使用。
 
-原因为脚手架自带的 jest v26 不支持 package.json 中的 `exports` 逻辑。
+`@midwayjs/decorator` 中的代码全部从 `@midwayjs/core` 中代理出来，代码层面保持向下兼容。
 
-解决方法：
+最近发现有些用户会出现类似下面的报错：
 
-- 1、将 `package.json` 中的 jest 版本从 v26 更新为 v29
-- 2、将 `@midwayjs/cli` 的版本升级为 `1.3.16` 版本以上，也可以升级到 `2.0`
+![](https://img.alicdn.com/imgextra/i3/O1CN01ZUf1P31oSBRQlBEhv_!!6000000005223-0-tps-3148-554.jpg)
 
-示例如下：
+原因为 v2 的版本使用了 v3 的组件，v2 和 v3 的组件不保证能完全兼容，请在安装时做好区分。
 
-```json
-{
-  "devDependencies": {
-    "@midwayjs/cli": "^2.0.1",
-    "@types/jest": "^29.2.0",
-    "jest": "^29.2.2",
-    "ts-jest": "^29.0.3",
-    // ...
-  }
-}
-```
+解决方案：使用 v2 版本的组件。

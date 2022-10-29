@@ -21,3 +21,4 @@ midway_benchmark_app
 *.sqlite
 .env
 docs-api
+site/changelog
