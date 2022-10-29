@@ -26,8 +26,6 @@
   "devDependencies": {
     "@midwayjs/core": "^3.8.0",
     "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/socketio": "^3.8.0",
-    "@midwayjs/web": "^3.8.0",
     "request": "2.88.2",
     "socket.io-client": "4.5.3"
   },
