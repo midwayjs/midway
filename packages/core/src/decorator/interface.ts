@@ -64,9 +64,8 @@ export enum MSListenerType {
 }
 
 export namespace ConsumerMetadata {
-
   export interface ConsumerMetadata {
-    type: MSListenerType,
+    type: MSListenerType;
     metadata: any;
   }
 }
@@ -81,13 +80,12 @@ export namespace GRPCMetadata {
   }
 
   export interface ProviderMetadata {
-    type: MSProviderType,
-    metadata: ProviderOptions
+    type: MSProviderType;
+    metadata: ProviderOptions;
   }
 }
 
 export namespace FaaSMetadata {
-
   export interface ServerlessFunctionOptions {
     /**
      * function name
@@ -162,19 +160,16 @@ export namespace FaaSMetadata {
     middleware?: any[];
   }
 
-  export interface EventTriggerOptions extends TriggerCommonOptions {
+  export interface EventTriggerOptions extends TriggerCommonOptions {}
 
-  }
-
-  export interface HTTPTriggerOptions extends TriggerCommonOptions  {
+  export interface HTTPTriggerOptions extends TriggerCommonOptions {
     path: string;
     method?: 'get' | 'post' | 'delete' | 'put' | 'head' | 'patch' | 'all';
   }
 
-  export interface APIGatewayTriggerOptions extends HTTPTriggerOptions  {
-  }
+  export interface APIGatewayTriggerOptions extends HTTPTriggerOptions {}
 
-  export interface OSTriggerOptions extends TriggerCommonOptions  {
+  export interface OSTriggerOptions extends TriggerCommonOptions {
     bucket: string;
     events: string | string[];
     filter?: {
@@ -183,7 +178,7 @@ export namespace FaaSMetadata {
     };
   }
 
-  export interface LogTriggerOptions extends TriggerCommonOptions  {
+  export interface LogTriggerOptions extends TriggerCommonOptions {
     source: string;
     project: string;
     log: string;
@@ -191,39 +186,45 @@ export namespace FaaSMetadata {
     interval?: number;
   }
 
-  export interface TimerTriggerOptions extends TriggerCommonOptions  {
+  export interface TimerTriggerOptions extends TriggerCommonOptions {
     type: 'cron' | 'every' | 'interval';
     value: string;
     payload?: string;
     enable?: boolean;
   }
 
-  export interface MQTriggerOptions extends TriggerCommonOptions  {
+  export interface MQTriggerOptions extends TriggerCommonOptions {
     topic: string;
     tags?: string;
     region?: string;
     strategy?: 'BACKOFF_RETRY' | 'EXPONENTIAL_DECAY_RETRY';
   }
 
-  export interface HSFTriggerOptions extends TriggerCommonOptions  {
-  }
+  export interface HSFTriggerOptions extends TriggerCommonOptions {}
 
-  export interface MTopTriggerOptions extends TriggerCommonOptions  {
-  }
+  export interface MTopTriggerOptions extends TriggerCommonOptions {}
 
-  export interface CDNTriggerOptions extends TriggerCommonOptions  {
-  }
+  export interface CDNTriggerOptions extends TriggerCommonOptions {}
 
-  export type EventTriggerUnionOptions = EventTriggerOptions | HTTPTriggerOptions | APIGatewayTriggerOptions | OSTriggerOptions | CDNTriggerOptions | LogTriggerOptions | TimerTriggerOptions | MQTriggerOptions | HSFTriggerOptions | MTopTriggerOptions;
+  export type EventTriggerUnionOptions =
+    | EventTriggerOptions
+    | HTTPTriggerOptions
+    | APIGatewayTriggerOptions
+    | OSTriggerOptions
+    | CDNTriggerOptions
+    | LogTriggerOptions
+    | TimerTriggerOptions
+    | MQTriggerOptions
+    | HSFTriggerOptions
+    | MTopTriggerOptions;
 
   export interface TriggerMetadata {
     type: ServerlessTriggerType;
     functionName?: string;
     handlerName?: string;
-    methodName?: string,
+    methodName?: string;
     metadata: EventTriggerUnionOptions;
   }
-
 }
 
 export abstract class FrameworkType {
@@ -247,7 +248,7 @@ export class MidwayFrameworkType extends FrameworkType {
   static TASK = new MidwayFrameworkType('@midwayjs/task');
   constructor(public name: string) {
     super();
-  };
+  }
 }
 
 export enum ServerlessTriggerType {
@@ -269,3 +270,9 @@ export interface IModuleStore {
   saveModule(key: string, module: any);
   transformModule?(moduleMap: Map<string, Set<any>>);
 }
+
+export interface PipeTransform<T = any, R = any> {
+  transform(value: T): R;
+}
+
+export type PipeTransformFunction<T = any, R = any> = (value: T) => R;

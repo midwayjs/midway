@@ -470,12 +470,26 @@ export class MainConfiguration {
 ```typescript
 // ...
 export class UserController {
-  async invoke(@User() user: string) {
+
+  @Inject()
+  userService: UserService;
+
+  @Inject()
+  ctx: Context;
+
+  async getUser() {
+    return await this.getUser(ctx);
+  }
+}
+
+export class UserService {
+  async getUser(@User() user: string) {
     console.log(user);
     // => xxx
   }
 }
 ```
+
 
 :::tip
 
