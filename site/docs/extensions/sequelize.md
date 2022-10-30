@@ -275,7 +275,7 @@ export default {
         // 本地的时候，可以通过 sync: true 直接 createTable
         sync: false,
       },
-      
+
       // 第二个数据源
       default2: {
         // ...
@@ -562,7 +562,6 @@ export class HomeController {
   // ...
 }
 ```
-
 
 
 ## 高级功能
