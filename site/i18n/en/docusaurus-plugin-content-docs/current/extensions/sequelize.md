@@ -281,8 +281,6 @@ export default {
          // ...
        },
      },
-     // You can use this to specify the default data source when there are multiple data sources
-     defaultDataSourceName: 'default',
    },
 };
 ```
@@ -563,7 +561,81 @@ export class HomeController {
 
 
 
-## common problem
+## Advanced Features
+
+### Data source synchronization configuration
+
+sequelize can add the sync parameter when synchronizing the data source.
+
+```typescript
+export default {
+  // ...
+  sequelize: {
+    dataSource: {
+      default: {
+        sync: true,
+        syncOptions: {
+          force: false,
+          alter: true,
+        },
+      },
+    },
+    // You can use this to specify the default data source when there are multiple data sources
+    defaultDataSourceName: 'default',
+  },
+};
+```
+
+
+
+### Specify the default data source
+
+When including multiple data sources, you can specify a default data source.
+
+```typescript
+export default {
+  // ...
+  sequelize: {
+    dataSource: {
+      default1: {
+        // ...
+      },
+      default2: {
+        // ...
+      },
+    },
+    // You can use this to specify the default data source when there are multiple data sources
+    defaultDataSourceName: 'default1',
+  },
+};
+```
+
+
+
+### Get data source
+
+The data source is the created sequelize object, which we can obtain by injecting the built-in data source manager.
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { SequelizeDataSourceManager } from '@midwayjs/sequelize';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+
+  async onReady(container: IMidwayContainer) {
+    const dataSourceManager = await container.getAsync(SequelizeDataSourceManager);
+    const conn = dataSourceManager.getDataSource('default');
+    await conn.authenticate();
+  }
+}
+```
+
+
+
+## Common problem
 
 ### 1. Dialect needs to be explicitly supplied as of v4.0.0
 

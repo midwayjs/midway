@@ -281,8 +281,6 @@ export default {
         // ...
       },
     },
-    // 多个数据源时可以用这个指定默认的数据源
-    defaultDataSourceName: 'default',
   },
 };
 ```
@@ -562,6 +560,78 @@ export class HomeController {
   @InjectRepository(User, 'default')
   userRepository: Repository<User>;
   // ...
+}
+```
+
+
+
+## 高级功能
+
+### 数据源同步配置
+
+sequelize 在同步数据源时可以添加 sync 的参数。
+
+```typescript
+export default {
+  // ...
+  sequelize: {
+    dataSource: {
+      default: {
+        sync: true,
+        syncOptions: {
+          force: false,
+          alter: true,
+        },
+      },
+    },
+    // 多个数据源时可以用这个指定默认的数据源
+    defaultDataSourceName: 'default',
+  },
+};
+```
+
+### 指定默认数据源
+
+在包含多个数据源时，可以指定默认的数据源。
+
+```typescript
+export default {
+  // ...
+  sequelize: {
+    dataSource: {
+      default1: {
+        // ...
+      },
+      default2: {
+        // ...
+      },
+    },
+    // 多个数据源时可以用这个指定默认的数据源
+    defaultDataSourceName: 'default1',
+  },
+};
+```
+
+
+
+### 获取数据源
+
+数据源即创建出的 sequelize 对象，我们可以通过注入内置的数据源管理器来获取。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { SequelizeDataSourceManager } from '@midwayjs/sequelize';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+
+  async onReady(container: IMidwayContainer) {
+    const dataSourceManager = await container.getAsync(SequelizeDataSourceManager);
+    const conn = dataSourceManager.getDataSource('default');
+    await conn.authenticate();
+  }
 }
 ```
 
