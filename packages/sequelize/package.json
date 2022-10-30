@@ -12,11 +12,9 @@
     "@midwayjs/core": "^3.7.0",
     "@midwayjs/koa": "^3.7.1",
     "@midwayjs/mock": "^3.7.1",
-    "sqlite3": "5.1.2"
-  },
-  "dependencies": {
+    "sqlite3": "5.1.2",
     "sequelize": "6.25.3",
-    "sequelize-typescript": "^2.1.0"
+    "sequelize-typescript": "2.1.5"
   },
   "keywords": [
     "midway",
