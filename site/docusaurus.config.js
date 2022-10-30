@@ -86,6 +86,7 @@ const config = {
           alt: 'midway logo',
           src: 'img/logo.svg',
         },
+        hideOnScroll: true,
         items: [
           ...require('./lib/navbar'),
           {
@@ -98,14 +99,19 @@ const config = {
             position: 'right',
           },
           {
-            label: '开源送礼',
-            href: 'https://survey.taobao.com/apps/zhiliao/pJ3zng9Iv',
+            type: 'dropdown',
+            label: '社区活动',
             position: 'right',
-          },
-          {
-            label: '线下沙龙',
-            href: 'https://subway.midwayjs.org/',
-            position: 'right',
+            items: [
+              {
+                label: '开源送礼',
+                href: 'https://survey.taobao.com/apps/zhiliao/pJ3zng9Iv',
+              },
+              {
+                label: '线下沙龙',
+                href: 'https://subway.midwayjs.org/',
+              },
+            ],
           },
           {
             href: 'https://github.com/midwayjs/midway',
