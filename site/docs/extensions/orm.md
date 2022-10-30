@@ -1478,8 +1478,8 @@ export default {
 
 ###  Cannot read properties of undefined (reading 'getRepository')
 
-
 一般是配置不正确，可以考虑两方面的配置：
- 1、检查config.default.ts,entities配置是否正确
- 2、检查configuration.ts,确认是否引入orm
+
+- 1、检查 `config.default.ts` 中的 `entities` 配置是否正确
+- 2、检查 `configuration.ts` 文件，确认是否引入 orm
 

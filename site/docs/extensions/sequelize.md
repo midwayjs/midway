@@ -260,6 +260,7 @@ export default {
   // ...
   sequelize: {
     dataSource: {
+      // 第一个数据源，数据源的名字可以完全自定义
       default: {
         database: 'test4',
         username: 'root',
@@ -271,9 +272,17 @@ export default {
         define: { charset: 'utf8' },
         timezone: '+08:00',
         entities: [Person],
+        // 本地的时候，可以通过 sync: true 直接 createTable
+        sync: false,
+      },
+      
+      // 第二个数据源
+      default2: {
+        // ...
       },
     },
-    sync: false, // 本地的时候，可以通过 sync: true 直接 createTable
+    // 多个数据源时可以用这个指定默认的数据源
+    defaultDataSourceName: 'default',
   },
 };
 ```
@@ -398,6 +407,8 @@ export class User extends Model {
   name: string;
 }
 ```
+
+
 
 ## 静态操作方法
 
@@ -553,6 +564,16 @@ export class HomeController {
   // ...
 }
 ```
+
+
+
+## 常见问题
+
+### 1、Dialect needs to be explicitly supplied as of v4.0.0
+
+原因为配置中数据源没有指定 `dialect` 字段，确认数据源的结构，格式以及配置合并的结果。
+
+
 
 ## 其他
 

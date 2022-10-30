@@ -286,7 +286,7 @@ export class TestService {
 ```
 
 
-### 6, multi-library situation
+### 6, Multi-dataSource situation
 
 First define multiple entities.
 

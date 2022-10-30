@@ -247,7 +247,7 @@ Mikro-orm internal query has a concept of [Identity Map](https://mikro-orm.io/do
 
 
 
-### 3. Multi-library support
+### 3. Multi-dataSource support
 
 Like other databases, Midway supports the configuration of multiple data sources.
 

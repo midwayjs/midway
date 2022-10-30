@@ -1219,7 +1219,7 @@ export default {
 
 
 ## Advanced features
-### Multi-database support
+### Multi-dataSource support
 
 
 Sometimes, we have multiple database connections (Connection) in an application, and there will be multiple configurations at this time. We use the DataSource standard form of **object** to define the configuration.
@@ -1477,8 +1477,8 @@ export default {
 
 ### Cannot read properties of undefined (reading 'getRepository')
 
+Generally, the configuration is incorrect, and two configurations can be considered.
 
-Generally, the configuration is incorrect, and the configuration of two rooms can be considered:
-1. Check config.default.ts to entities whether the configuration is correct
-2. check configuration.ts to confirm whether orm is introduced
+- 1. Check whether the `entities` configuration in `config.default.ts` is correct
+- 2. Check the `configuration.ts` file to confirm whether orm is imported
 

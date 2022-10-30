@@ -257,24 +257,33 @@ In the new version, we have enabled the [data source mechanism](../data_source) 
 import { Person } from '../entity/person';
 
 export default {
-  // ...
-  sequelize: {
-    dataSource: {
-      default: {
-        database: 'test4',
-        username: 'root',
-        password: '123456',
-        host: '127.0.0.1',
-        port: 3306
-        encrypt: false
-        dialect: 'mysql',
-        define: { charset: 'utf8'}
-        timezone: '+08:00',
-        entities: [Person]
-      },
-    },
-     }
-  },
+   // ...
+   sequelize: {
+     dataSource: {
+       // The first data source, the name of the data source can be completely customized
+       default: {
+         database: 'test4',
+         username: 'root',
+         password: '123456',
+         host: '127.0.0.1',
+         port: 3306,
+         encrypt: false,
+         dialect: 'mysql',
+         define: { charset: 'utf8' },
+         timezone: '+08:00',
+         entities: [Person],
+         // Locally, you can createTable directly through sync: true
+         sync: false,
+       },
+      
+       // second data source
+       default2: {
+         // ...
+       },
+     },
+     // You can use this to specify the default data source when there are multiple data sources
+     defaultDataSourceName: 'default',
+   },
 };
 ```
 
@@ -533,7 +542,7 @@ export class HomeController {
 
 More ways to use OP: [https:// sequelize.org/v5/manual/querying.html](https://sequelize.org/v5/manual/querying.html)
 
-### Multi-library support
+### Multi-dataSource support
 
 In Repository mode, we can specify a specific data source in the `InjectRepository` parameters.
 
@@ -551,6 +560,16 @@ export class HomeController {
   // ...
 }
 ```
+
+
+
+## common problem
+
+### 1. Dialect needs to be explicitly supplied as of v4.0.0
+
+The reason is that the data source in the configuration does not specify the `dialect` field, which confirms the structure, format of the data source and the result of the configuration merging.
+
+
 
 ## Other
 
