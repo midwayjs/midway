@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 3.7.1 (2022-10-30)
+
+#### :bug: Bug Fix
+* `validate`
+  * [#2459](https://github.com/midwayjs/midway/pull/2459) fix: validate with custom options will override global config ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `sequelize`
+  * [#2458](https://github.com/midwayjs/midway/pull/2458) fix: add config sync options ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- yc6 ([@zane0904](https://github.com/zane0904))
+
+
 ## 3.7.0 (2022-10-29)
 
 ### Bug Fixes

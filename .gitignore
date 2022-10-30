@@ -22,3 +22,4 @@ midway_benchmark_app
 .env
 docs-api
 site/changelog
+.changelog
