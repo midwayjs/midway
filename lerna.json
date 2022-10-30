@@ -20,7 +20,6 @@
       "ignoreChanges": ["*.md", "**/test/**", "jest.config.js", "jest.setup.js"]
     },
     "version": {
-      "createRelease": "github",
       "forcePublish": "@midwayjs/version"
     }
   },
