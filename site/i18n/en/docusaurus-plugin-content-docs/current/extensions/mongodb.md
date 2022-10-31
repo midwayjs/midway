@@ -526,7 +526,7 @@ export default {
 
 When there is only one default connection or the default connection is directly used, we can directly use the encapsulated `MongooseConnectionService` object to create the model.
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject, Init } from '@midwayjs/decorator';
 import { MongooseDataSourceManager } from '@midwayjs/mongoose';
 import { Schema, Document } from 'mongoose';
 
@@ -542,7 +542,8 @@ export class TestService {
   @Inject()
   dataSourceManager: MongooseDataSourceManager;
 
-  @Init() {
+  @Init()
+  async init() {
     // get default connection
     this.conn = this.dataSourceManager.getDataSource('default');
   }

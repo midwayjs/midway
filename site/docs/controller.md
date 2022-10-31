@@ -570,9 +570,11 @@ async updateUser(
 import { createRequestParamDecorator } from '@midwayjs/core';
 
 // 实现装饰器
-export const Token = createRequestParamDecorator(ctx => {
-  return ctx.headers.token;
-});
+export const Token = () => {
+  return createRequestParamDecorator(ctx => {
+    return ctx.headers.token;
+  });
+};
 
 // 使用装饰器
 export class UserController {

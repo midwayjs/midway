@@ -1300,7 +1300,34 @@ export class Photo {
 
 
 
-### Get connection pool
+### Specify the default data source
+
+When including multiple data sources, you can specify a default data source.
+
+```typescript
+export default {
+  // ...
+  typeorm: {
+    dataSource: {
+      default1: {
+        // ...
+      },
+      default2: {
+        // ...
+      },
+    },
+    // 多个数据源时可以用这个指定默认的数据源
+    defaultDataSourceName: 'default1',
+  },
+};
+```
+
+
+
+### Get data source
+
+The data source is the DataSource object of TypeORM created, which we can obtain by injecting the built-in data source manager.
+
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
 import { TypeORMDataSourceManager } from '@midwayjs/typeorm';

@@ -176,7 +176,7 @@ All attributes are described as follows:
 | subdomainOffset | number | optional, the offset of the subdomain name, default 2. |
 | proxyIpHeader | string | optional. obtains the field name of the proxy ip address. the default value is X-Forwarded-For |
 | maxIpsCount | number | optional. the maximum number of ips obtained, which is 0 by default. |
-
+| serverTimeout | number | Optional, server-side timeout configuration, unit seconds. |
 
 
 ### Modify port

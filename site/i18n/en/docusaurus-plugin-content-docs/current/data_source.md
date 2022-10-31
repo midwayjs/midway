@@ -38,7 +38,7 @@ Similar to service factories, we need to implement some fixed methods.
 
 
 
-## Implement a data source manager
+## Implement data source manager
 
 The data source manager is also a common export class in midway, for example, we can also put it in `src/manager/mysqlDataSourceManager.ts`.
 
@@ -161,40 +161,6 @@ Data sources are naturally designed for multiple instances. Unlike service facto
 
 
 
-## Get data source
-
-By injecting the data source manager, we can get the data source through the above methods.
-
-```typescript
-import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager';
-import { join } from 'path';
-
-@Provide()
-export class UserService {
-
-  @Inject()
-  mysqlDataSourceManager: MySqlDataSourceManager;
-
-  async invoke() {
-
-    const dataSource = this.mysqlDataSourceManager.getDataSource('dataSource1');
-    // TODO
-
-  }
-}
-```
-
-In addition, there are some other methods.
-
-```typescript
-// Whether the data source exists
-this.mysqlDataSourceManager.hasDataSource('dataSource1');
-// Get all data source names
-this.mysqlDataSourceManager.getDataSourceNames();
-// Whether the data source is connected
-this.mysqlDataSourceManager.isConnected('dataSource1')
-```
-
 
 
 ## Entity binding
@@ -237,19 +203,20 @@ import { User, SimpleUser } from '../entity/user.entity';
 export default {
   mysql: {
     dataSource: {
-    dataSource1: {
-      host: 'localhost',
-      user: 'root',
-      database: 'test',
-      entities: [User]
-    },
-    dataSource2: {
-      host: 'localhost',
-      user: 'root',
-      database: 'test',
-      entities: [SimpleUser]
-    },
-    // ...
+      dataSource1: {
+        host: 'localhost',
+        user: 'root',
+        database: 'test',
+        entities: [User]
+      },
+      dataSource2: {
+        host: 'localhost',
+        user: 'root',
+        database: 'test',
+        entities: [SimpleUser]
+      },
+      // ...
+    }
   }
 }
 ```
@@ -269,19 +236,20 @@ import { User, SimpleUser } from '../entity/user.entity';
 export default {
   mysql: {
     dataSource: {
-    dataSource1: {
-      host: 'localhost',
-      user: 'root',
-      database: 'test',
-      entities: [
-        User
-        SimpleUser
-        './entity', 	// under a specific directory
-        '**/abc/**', 	// only get files in the directory containing abc characters
-      ]		
-    },
-    // ...
-    // ...
+      dataSource1: {
+        host: 'localhost',
+        user: 'root',
+        database: 'test',
+        entities: [
+          User
+          SimpleUser
+          './entity', 	// under a specific directory
+          '**/abc/**', 	// only get files in the directory containing abc characters
+        ]		
+      },
+      // ...
+      // ...
+    }
   }
 }
 ```
@@ -335,7 +303,62 @@ import { SimpleUser } from '../entity/user.entity';
 class UserService {
   @InjectEntityModel(SimpleUser, 'dataSource2')
   userModel;
-
 }
+```
+
+The default data source can also be specified explicitly via the `defaultDataSourceName` configuration.
+
+```typescript
+// config.default.ts
+export const mysql = {
+  dataSource: {
+    dataSource1: {
+      // ...
+    },
+    dataSource2: {
+      // ...
+    },
+    dataSource3: {
+      // ...
+    },
+  }
+  defaultDataSourceName: 'dataSource2',
+}
+```
+
+
+
+## Get data source
+
+By injecting the data source manager, we can get the data source through the above methods.
+
+```typescript
+import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager';
+import { join } from 'path';
+
+@Provide()
+export class UserService {
+
+  @Inject()
+  mysqlDataSourceManager: MySqlDataSourceManager;
+
+  async invoke() {
+
+    const dataSource = this.mysqlDataSourceManager.getDataSource('dataSource1');
+    // TODO
+
+  }
+}
+```
+
+In addition, there are some other methods.
+
+```typescript
+// Whether the data source exists
+this.mysqlDataSourceManager.hasDataSource('dataSource1');
+// Get all data source names
+this.mysqlDataSourceManager.getDataSourceNames();
+// Whether the data source is connected
+this.mysqlDataSourceManager.isConnected('dataSource1')
 ```
 

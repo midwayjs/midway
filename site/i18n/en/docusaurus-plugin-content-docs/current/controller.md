@@ -205,7 +205,7 @@ Queries will aggregate the same keys together and become an array. When the inte
 
 ### Query
 
-The part after `?` in the URL is a Query String, which is often used to pass parameters in GET type requests. 
+The part after `?` in the URL is a Query String, which is often used to pass parameters in GET type requests.
 
 For example
 
@@ -572,9 +572,11 @@ You can quickly create custom request parameter decorators with `createRequestPa
 import { createRequestParamDecorator } from '@midwayjs/core';
 
 // Implement decorator
-export const Token = createRequestParamDecorator(ctx => {
-  return ctx.headers.token;
-});
+export const Token = () => {
+  return createRequestParamDecorator(ctx => {
+    return ctx.headers.token;
+  });
+};
 
 // Use decorator
 export class UserController {

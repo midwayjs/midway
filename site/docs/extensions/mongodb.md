@@ -527,7 +527,7 @@ export default {
 
 在只有一个默认连接或者直接使用 default 连接时，我们可以直接使用封装好的 `MongooseConnectionService` 对象来创建 model。
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject, Init } from '@midwayjs/decorator';
 import { MongooseDataSourceManager } from '@midwayjs/mongoose';
 import { Schema, Document } from 'mongoose';
 
@@ -543,7 +543,8 @@ export class TestService {
   @Inject()
   dataSourceManager: MongooseDataSourceManager;
 
-  @Init() {
+  @Init()
+  async init() {
     // get default connection
     this.conn = this.dataSourceManager.getDataSource('default');
   }
