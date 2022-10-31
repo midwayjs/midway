@@ -136,10 +136,14 @@ export class MidwayFaaSFramework extends BaseFramework<
       getEventMiddleware: () => {
         return this.getEventMiddleware();
       },
-      getServerlessInstance: <T>(serviceClass: T): Promise<T> => {
-        return this.app
-          .createAnonymousContext()
-          .requestContext.getAsync(serviceClass);
+      getServerlessInstance: <T>(serviceClass: {
+        new (...args): T;
+      }): Promise<T> => {
+        const context = this.app.createAnonymousContext();
+        if (this.configurationOptions.applicationAdapter?.runContextHook) {
+          this.configurationOptions.applicationAdapter.runContextHook(context);
+        }
+        return context.requestContext.getAsync(serviceClass);
       },
       getTriggerFunction: (
         context,

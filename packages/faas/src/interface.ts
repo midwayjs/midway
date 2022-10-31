@@ -21,7 +21,9 @@ export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
 /**
  * @deprecated
  */
-export type FaaSMiddleware = ((context: Context, next: () => Promise<any>) => any) | string;
+export type FaaSMiddleware =
+  | ((context: Context, next: () => Promise<any>) => any)
+  | string;
 
 export interface HandlerOptions {
   isHttpFunction: boolean;
@@ -29,29 +31,43 @@ export interface HandlerOptions {
   originContext: any;
 }
 
-export type IMidwayFaaSApplication = IMidwayApplication<Context, {
-  getInitializeContext();
-  use(middleware: FaaSMiddleware);
-  /**
-   * @deprecated
-   * @param middlewareId
-   */
-  generateMiddleware(middlewareId: any): Promise<FaaSMiddleware>;
+export type IMidwayFaaSApplication = IMidwayApplication<
+  Context,
+  {
+    getInitializeContext();
+    use(middleware: FaaSMiddleware);
+    /**
+     * @deprecated
+     * @param middlewareId
+     */
+    generateMiddleware(middlewareId: any): Promise<FaaSMiddleware>;
 
-  /**
-   * Get function name in serverless environment
-   */
-  getFunctionName(): string;
-  /**
-   * Get function service name in serverless environment
-   */
-  getFunctionServiceName(): string;
+    /**
+     * Get function name in serverless environment
+     */
+    getFunctionName(): string;
+    /**
+     * Get function service name in serverless environment
+     */
+    getFunctionServiceName(): string;
 
-  useEventMiddleware(middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>): void;
-  getEventMiddleware(): ContextMiddlewareManager<Context, NextFunction, undefined>;
-  getTriggerFunction(context, handler: string, options: HandlerOptions): Promise<any>;
-  getServerlessInstance<T>(serviceClass: T): Promise<T>;
-}> & ServerlessHttpApplication;
+    useEventMiddleware(
+      middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>
+    ): void;
+    getEventMiddleware(): ContextMiddlewareManager<
+      Context,
+      NextFunction,
+      undefined
+    >;
+    getTriggerFunction(
+      context,
+      handler: string,
+      options: HandlerOptions
+    ): Promise<any>;
+    getServerlessInstance<T>(serviceClass: { new (...args): T }): Promise<T>;
+  }
+> &
+  ServerlessHttpApplication;
 
 export interface Application extends IMidwayFaaSApplication {}
 
@@ -84,7 +100,10 @@ export interface ServerlessStarterOptions extends IMidwayBootstrapOptions {
   initializeMethodName?: string;
   handlerName?: string;
   aggregationHandlerName?: string;
-  handlerNameMapping?: (handlerName: string, ...args: unknown[]) => [string, ...unknown[]];
+  handlerNameMapping?: (
+    handlerName: string,
+    ...args: unknown[]
+  ) => [string, ...unknown[]];
   createAdapter?: () => Promise<{
     close();
     createAppHook(app?);
