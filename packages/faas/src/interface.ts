@@ -7,6 +7,7 @@ import {
   CommonMiddlewareUnion,
   ContextMiddlewareManager,
   IMidwayBootstrapOptions,
+  ObjectIdentifier,
 } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import { ILogger } from '@midwayjs/logger';
@@ -64,7 +65,9 @@ export type IMidwayFaaSApplication = IMidwayApplication<
       handler: string,
       options: HandlerOptions
     ): Promise<any>;
-    getServerlessInstance<T>(serviceClass: { new (...args): T }): Promise<T>;
+    getServerlessInstance<T>(
+      serviceClass: ObjectIdentifier | { new (...args): T }
+    ): Promise<T>;
   }
 > &
   ServerlessHttpApplication;

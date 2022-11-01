@@ -24,6 +24,7 @@ import {
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
   httpError,
+  ObjectIdentifier,
 } from '@midwayjs/core';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
@@ -136,9 +137,13 @@ export class MidwayFaaSFramework extends BaseFramework<
       getEventMiddleware: () => {
         return this.getEventMiddleware();
       },
-      getServerlessInstance: <T>(serviceClass: {
-        new (...args): T;
-      }): Promise<T> => {
+      getServerlessInstance: <T>(
+        serviceClass:
+          | ObjectIdentifier
+          | {
+              new (...args): T;
+            }
+      ): Promise<T> => {
         const context = this.app.createAnonymousContext();
         if (this.configurationOptions.applicationAdapter?.runContextHook) {
           this.configurationOptions.applicationAdapter.runContextHook(context);
