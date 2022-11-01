@@ -5,6 +5,10 @@ class CustomSwaggerExplorer extends SwaggerExplorer {
   generatePath(target: Type) {
     return super.generatePath(target);
   }
+
+  parseClzz(clz) {
+    return super.parseClzz(clz);
+  }
 }
 
 describe('/test/parser.test.ts', function () {
@@ -127,5 +131,15 @@ describe('/test/parser.test.ts', function () {
     const explorer = new CustomSwaggerExplorer();
     explorer.generatePath(APIController);
     expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test specify type', function () {
+    class NotificationDTO {
+      @ApiProperty({ type: 'string' })
+      id: number;
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    expect(explorer.parseClzz(NotificationDTO)).toMatchSnapshot();
   });
 });

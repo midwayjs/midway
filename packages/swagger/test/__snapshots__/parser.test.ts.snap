@@ -251,3 +251,15 @@ exports[`/test/parser.test.ts should test simple case with example 1`] = `
   ],
 }
 `;
+
+exports[`/test/parser.test.ts should test specify type 1`] = `
+{
+  "properties": {
+    "id": {
+      "format": undefined,
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
