@@ -185,6 +185,48 @@ http://${prometheus的ip}:9090/classic/targets
 ```bash
 $ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 ```
+或将grafana和prometheus放在一起用docker-compose统一管理, 将grafana添加到docker-compose.yml, 如下：
+```
+version: '2.2'
+services:
+  tapi:
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - ./prometheus_data:/prometheus_data:rw
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./targets.json:/etc/prometheus/targets.json
+    command:
+      - '--storage.tsdb.path=/prometheus_data'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention=10d'
+      - '--web.enable-lifecycle'
+    ports:
+      - '9090:9090'
+  // highlight-start
+  grafana:
+    image: grafana/grafana
+    container_name: "grafana0"
+    ports:
+      - "3000:3000"
+    restart: always
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "./grafana_data:/var/lib/grafana"
+      - "./grafana_log:/var/log/grafana"
+      - "./grafana_data/crypto_data:/crypto_data"
+    // highlight-end
+```
+重启docker-compose.yml文件
+```bash
+docker-compose restart
+```
+<img src="https://cdn.nlark.com/yuque/0/2022/png/525744/1667300763153-5ee476a7-00ff-4899-92ba-5985995b4862.png" width="748">
 
 然后我们访问 127.0.0.1:3000，默认账号密码：admin:admin。
 然后访问后如下效果：
