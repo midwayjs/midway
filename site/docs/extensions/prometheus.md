@@ -197,8 +197,8 @@ services:
     image: prom/prometheus
     restart: always
     volumes:
-      - ./prometheus_data:/prometheus_data:rw
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_data:/prometheus_data:rw  # prometheus Data mapping directory
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml # prometheus Configuration mapping file
       - ./targets.json:/etc/prometheus/targets.json
     command:
       - '--storage.tsdb.path=/prometheus_data'
@@ -215,11 +215,8 @@ services:
       - "3000:3000"
     restart: always
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
-      - "/etc/timezone:/etc/timezone:ro"
-      - "./grafana_data:/var/lib/grafana"
-      - "./grafana_log:/var/log/grafana"
-      - "./grafana_data/crypto_data:/crypto_data"
+      - "./grafana_data:/var/lib/grafana" # grafana data mapping directory
+      - "./grafana_log:/var/log/grafana"  # grafana log mapping directory
     // highlight-end
 ```
 重启docker-compose.yml文件
@@ -228,7 +225,7 @@ docker-compose restart
 ```
 <img src="https://cdn.nlark.com/yuque/0/2022/png/525744/1667300763153-5ee476a7-00ff-4899-92ba-5985995b4862.png" width="748">
 
-然后我们访问 127.0.0.1:3000，默认账号密码：admin:admin。
+完成以上任意一种, 然后我们访问 127.0.0.1:3000，默认账号密码：admin:admin。
 然后访问后如下效果：
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617260561047-c2643a69-6258-491b-937d-9bfc4558252f.png#height=346&id=yNdWZ&margin=%5Bobject%20Object%5D&name=image.png&originHeight=692&originWidth=1496&originalType=binary&ratio=1&size=551202&status=done&style=none&width=748" width="748" />
