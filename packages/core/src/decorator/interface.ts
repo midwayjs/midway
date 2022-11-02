@@ -246,6 +246,7 @@ export class MidwayFrameworkType extends FrameworkType {
   static EMPTY = new MidwayFrameworkType('empty');
   static LIGHT = new MidwayFrameworkType('light');
   static TASK = new MidwayFrameworkType('@midwayjs/task');
+  static BULL = new MidwayFrameworkType('@midwayjs/bull');
   constructor(public name: string) {
     super();
   }

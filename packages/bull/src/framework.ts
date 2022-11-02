@@ -7,6 +7,7 @@ import {
   listModule,
   Utils,
   MidwayInvokeForbiddenError,
+  MidwayFrameworkType,
 } from '@midwayjs/core';
 import {
   Application,
@@ -62,6 +63,10 @@ export class BullFramework
 
   getFrameworkName(): string {
     return 'bull';
+  }
+
+  public getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.BULL;
   }
 
   async run() {
