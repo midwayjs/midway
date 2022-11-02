@@ -4,19 +4,11 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Wed, 02 Nov 2022 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 30 Oct 2022 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2022 Facebook, Inc.</copyright>
-        <item>
-            <title><![CDATA[3.7.2]]></title>
-            <link>https://midwayjs.org/changelog/3.7.2</link>
-            <guid>/3.7.2</guid>
-            <pubDate>Wed, 02 Nov 2022 20:00:00 GMT</pubDate>
-            <description><![CDATA[Bug Fix]]></description>
-            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>swagger</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2466" target="_blank" rel="noopener noreferrer">#2466</a> fix: type property replace ts type (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a class="hash-link" href="#-documentation" title="标题的直接链接">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/2465" target="_blank" rel="noopener noreferrer">#2465</a> docs: Add grafana to docker-compose.yml (<a href="https://github.com/zhangbowy" target="_blank" rel="noopener noreferrer">@zhangbowy</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="标题的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>zhangbowy (<a href="https://github.com/zhangbowy" target="_blank" rel="noopener noreferrer">@zhangbowy</a>)</li></ul>]]></content:encoded>
-        </item>
         <item>
             <title><![CDATA[3.7.1]]></title>
             <link>https://midwayjs.org/changelog/3.7.1</link>

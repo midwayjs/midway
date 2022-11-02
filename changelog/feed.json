@@ -5,19 +5,6 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
-            "id": "/3.7.2",
-            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>swagger</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2466\" target=\"_blank\" rel=\"noopener noreferrer\">#2466</a> fix: type property replace ts type (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-documentation\">📝 Documentation<a class=\"hash-link\" href=\"#-documentation\" title=\"标题的直接链接\">​</a></h2><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2465\" target=\"_blank\" rel=\"noopener noreferrer\">#2465</a> docs: Add grafana to docker-compose.yml (<a href=\"https://github.com/zhangbowy\" target=\"_blank\" rel=\"noopener noreferrer\">@zhangbowy</a>)</li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-2\">Committers: 2<a class=\"hash-link\" href=\"#committers-2\" title=\"标题的直接链接\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li><li>zhangbowy (<a href=\"https://github.com/zhangbowy\" target=\"_blank\" rel=\"noopener noreferrer\">@zhangbowy</a>)</li></ul>",
-            "url": "https://midwayjs.org/changelog/3.7.2",
-            "title": "3.7.2",
-            "summary": "Bug Fix",
-            "date_modified": "2022-11-02T20:00:00.000Z",
-            "author": {
-                "name": "Harry Chen",
-                "url": "https://github.com/czy88840616"
-            },
-            "tags": []
-        },
-        {
             "id": "/3.7.1",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>validate</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2459\" target=\"_blank\" rel=\"noopener noreferrer\">#2459</a> fix: validate with custom options will override global config (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-polish\">💅 Polish<a class=\"hash-link\" href=\"#-polish\" title=\"标题的直接链接\">​</a></h2><ul><li><code>sequelize</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2458\" target=\"_blank\" rel=\"noopener noreferrer\">#2458</a> fix: add config sync options (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-2\">Committers: 2<a class=\"hash-link\" href=\"#committers-2\" title=\"标题的直接链接\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li><li>yc6 (<a href=\"https://github.com/zane0904\" target=\"_blank\" rel=\"noopener noreferrer\">@zane0904</a>)</li></ul>",
             "url": "https://midwayjs.org/changelog/3.7.1",
