@@ -176,6 +176,8 @@ http://${prometheus的ip}:9090/classic/targets
 
 接下来就是如何展示这些采集到的数据了。
 
+
+
 ## 数据展示
 
 我们可以借助 Grafana 来展示我们的数据。
@@ -185,8 +187,11 @@ http://${prometheus的ip}:9090/classic/targets
 ```bash
 $ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 ```
-或将grafana和prometheus放在一起用docker-compose统一管理, 将grafana添加到docker-compose.yml, 如下：
-```
+也可以将 grafana 和 prometheus 放在一起使用 docker-compose 统一管理。
+
+将 grafana 添加到 `docker-compose.yml`, 示例如下：
+
+```yaml
 version: '2.2'
 services:
   tapi:
@@ -219,30 +224,34 @@ services:
       - "./grafana_log:/var/log/grafana"  # grafana log mapping directory
     // highlight-end
 ```
-重启docker-compose.yml文件
+重启 `docker-compose.yml` 文件
+
 ```bash
 docker-compose restart
 ```
-<img src="https://cdn.nlark.com/yuque/0/2022/png/525744/1667300763153-5ee476a7-00ff-4899-92ba-5985995b4862.png" width="748">
+![](https://cdn.nlark.com/yuque/0/2022/png/525744/1667300763153-5ee476a7-00ff-4899-92ba-5985995b4862.png)
 
 完成以上任意一种, 然后我们访问 127.0.0.1:3000，默认账号密码：admin:admin。
-然后访问后如下效果：
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617260561047-c2643a69-6258-491b-937d-9bfc4558252f.png#height=346&id=yNdWZ&margin=%5Bobject%20Object%5D&name=image.png&originHeight=692&originWidth=1496&originalType=binary&ratio=1&size=551202&status=done&style=none&width=748" width="748" />
+访问后效果如下：
+
+
+
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1617260561047-c2643a69-6258-491b-937d-9bfc4558252f.png)
 
 然后我们让 Grafana 接入我们的 Prometheus 数据源：
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617260581029-1e2e06a8-3054-4ad8-96b5-d50ab9bb1612.png#height=286&id=atAvT&margin=%5Bobject%20Object%5D&name=image.png&originHeight=572&originWidth=1490&originalType=binary&ratio=1&size=169944&status=done&style=none&width=745" width="745" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1617260581029-1e2e06a8-3054-4ad8-96b5-d50ab9bb1612.png)
 
 然后我们点击 Grafana 添加图表：
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1620725466020-28793a78-c03b-48fa-bf16-0c9c8ecc1a94.png#clientId=u070308fc-4e5d-4&from=paste&height=741&id=uce167575&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1482&originWidth=2626&originalType=binary&ratio=1&size=310590&status=done&style=none&taskId=uedd61eb7-8e61-488f-963f-f70adb9a651&width=1313" width="1313" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1620725466020-28793a78-c03b-48fa-bf16-0c9c8ecc1a94.png)
 
 这边 ID 选择 14403，然后点击 load，然后点击下一步，然后点击 import 后，就能看到我们刚刚接入的效果了。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1620725497338-a32a8982-d51f-4e74-b511-dc10a7c66d80.png#clientId=u070308fc-4e5d-4&from=paste&height=996&id=uba6ac1f0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1992&originWidth=3836&originalType=binary&ratio=1&size=1951604&status=done&style=none&taskId=ua7c2fc08-0633-4614-9af0-5bf2da800ef&width=1918" width="1918" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1620725497338-a32a8982-d51f-4e74-b511-dc10a7c66d80.png)
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1620725514630-4f654f10-ef3a-41f7-b403-02832d3ef7d8.png#clientId=u070308fc-4e5d-4&from=paste&height=998&id=u27a3ae30&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1996&originWidth=3830&originalType=binary&ratio=1&size=2201307&status=done&style=none&taskId=ucee30610-4c1f-4fa8-82fd-a952d5aa9e1&width=1915" width="1915" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1620725514630-4f654f10-ef3a-41f7-b403-02832d3ef7d8.png)
 
 这样开发者可以运维自己的 Node 程序了，例如，是否最近引入了一个 NPM 包导致了什么内存泄漏的情况，是否最近有应用重启的情况了。
 
@@ -274,7 +283,7 @@ export class ContainerLifeCycle {}
 
 然后在/metrics 这边就能看到 socket-io 的数据了。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1631090438583-d925c13c-371a-4037-9f53-edaa34580aab.png#clientId=u24adff00-2245-4&from=paste&height=459&id=u2862ab6b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=918&originWidth=1470&originalType=binary&ratio=1&size=481525&status=done&style=none&taskId=ua4ce06b2-a75d-4e4a-8bd9-c94496dca33&width=735" width="735" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1631090438583-d925c13c-371a-4037-9f53-edaa34580aab.png)
 
 一共新增 8 个指标。
 后续会提供 Grafana 的模版 ID 给大家使用。

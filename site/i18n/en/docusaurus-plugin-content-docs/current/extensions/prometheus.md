@@ -92,7 +92,7 @@ The components we introduced earlier in Midway are mainly to add indicator modul
 
 If the developer's department already has Prometheus + grafana, it only needs to report the application's indicator address to PE or through the interface. Here we assume that everyone has no Prometheus + grafana, and then follow the following description.
 
-## Build Prometheus
+## Deploy Prometheus
 
 Here we use docker-compose to build Prometheus. The docker-compose.yml file is as follows:
 
@@ -176,6 +176,8 @@ http://${prometheus ip}:9090/classic/targets
 
 The next step is how to show the collected data.
 
+
+
 ## Data presentation
 
 We can use Grafana to show our data.
@@ -186,24 +188,70 @@ Here we simply use Docker to build a Grafana:
 $ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 ```
 
-Then we visit 127.0.0.1:3000, and the default account password is admin:admin.
-Then visit the following effect:
+You can also put grafana and prometheus together and use docker-compose for unified management.
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617260561047-c2643a69-6258-491b-937d-9bfc4558252f.png#height=346&id=yNdWZ&margin=%5Bobject%20Object%5D&name=image.png&originHeight=692&originWidth=1496&originalType=binary&ratio=1&size=551202&status=done&style=none&width=748" width="748" />
+Add grafana to `docker-compose.yml`, example:
+
+```yaml
+version: '2.2'
+services:
+  tapi:
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - ./prometheus_data:/prometheus_data:rw  # prometheus Data mapping directory
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml # prometheus Configuration mapping file
+      - ./targets.json:/etc/prometheus/targets.json
+    command:
+      - '--storage.tsdb.path=/prometheus_data'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention=10d'
+      - '--web.enable-lifecycle'
+    ports:
+      - '9090:9090'
+  // highlight-start
+  grafana:
+    image: grafana/grafana
+    container_name: "grafana0"
+    ports:
+      - "3000:3000"
+    restart: always
+    volumes:
+      - "./grafana_data:/var/lib/grafana" # grafana data mapping directory
+      - "./grafana_log:/var/log/grafana"  # grafana log mapping directory
+    // highlight-end
+```
+
+Restart the `docker-compose.yml` file
+
+```bash
+docker-compose restart
+```
+![](https://cdn.nlark.com/yuque/0/2022/png/525744/1667300763153-5ee476a7-00ff-4899-92ba-5985995b4862.png)
+
+Complete any of the above, and then we access 127.0.0.1:3000, the default account password: admin:admin.
+
+After the visit, the effect is as follows:
+
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1617260561047-c2643a69-6258-491b-937d-9bfc4558252f.png)
 
 Then we let Grafana access our Prometheus data sources:
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617260581029-1e2e06a8-3054-4ad8-96b5-d50ab9bb1612.png#height=286&id=atAvT&margin=%5Bobject%20Object%5D&name=image.png&originHeight=572&originWidth=1490&originalType=binary&ratio=1&size=169944&status=done&style=none&width=745" width="745" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1617260581029-1e2e06a8-3054-4ad8-96b5-d50ab9bb1612.png)
 
 Then we click Grafana to add the chart:
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1620725466020-28793a78-c03b-48fa-bf16-0c9c8ecc1a94.png#clientId=u070308fc-4e5d-4&from=paste&height=741&id=uce167575&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1482&originWidth=2626&originalType=binary&ratio=1&size=310590&status=done&style=none&taskId=uedd61eb7-8e61-488f-963f-f70adb9a651&width=1313" width="1313" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1620725466020-28793a78-c03b-48fa-bf16-0c9c8ecc1a94.png)
 
 Select 14403 ID here, then click load, then click Next, and then click import to see the effect we have just accessed.
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1620725497338-a32a8982-d51f-4e74-b511-dc10a7c66d80.png#clientId=u070308fc-4e5d-4&from=paste&height=996&id=uba6ac1f0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1992&originWidth=3836&originalType=binary&ratio=1&size=1951604&status=done&style=none&taskId=ua7c2fc08-0633-4614-9af0-5bf2da800ef&width=1918" width="1918" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1620725497338-a32a8982-d51f-4e74-b511-dc10a7c66d80.png)
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1620725514630-4f654f10-ef3a-41f7-b403-02832d3ef7d8.png#clientId=u070308fc-4e5d-4&from=paste&height=998&id=u27a3ae30&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1996&originWidth=3830&originalType=binary&ratio=1&size=2201307&status=done&style=none&taskId=ucee30610-4c1f-4fa8-82fd-a952d5aa9e1&width=1915" width="1915" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1620725514630-4f654f10-ef3a-41f7-b403-02832d3ef7d8.png)
 
 In this way, developers can operate and operate their own Node programs, for example, whether an NPM package has recently been introduced to cause any memory leakage, and whether there has been an application restart recently.
 
@@ -235,7 +283,7 @@ export class ContainerLifeCycle {}
 
 Then you can see the socket-io data on the/metrics side.
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1631090438583-d925c13c-371a-4037-9f53-edaa34580aab.png#clientId=u24adff00-2245-4&from=paste&height=459&id=u2862ab6b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=918&originWidth=1470&originalType=binary&ratio=1&size=481525&status=done&style=none&taskId=ua4ce06b2-a75d-4e4a-8bd9-c94496dca33&width=735" width="735" />
+![](https://cdn.nlark.com/yuque/0/2021/png/187105/1631090438583-d925c13c-371a-4037-9f53-edaa34580aab.png)
 
 A total of 8 new indicators have been added.
 The Grafana template ID will be provided for everyone to use later.

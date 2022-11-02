@@ -3,7 +3,9 @@ name: site sync
 on:
   push:
     branches: [main]
-    paths: [site/**]
+    paths:
+      - site/**
+      - CHANGELOG.md
   # repository_dispatch:
   #   types: [update-hooks-docs]
 
