@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 3.7.2 (2022-11-02)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#2466](https://github.com/midwayjs/midway/pull/2466) fix: type property replace ts type ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2465](https://github.com/midwayjs/midway/pull/2465) docs: Add grafana to docker-compose.yml ([@zhangbowy](https://github.com/zhangbowy))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- zhangbowy ([@zhangbowy](https://github.com/zhangbowy))
+
+
 ## 3.7.1 (2022-10-30)
 
 #### :bug: Bug Fix
