@@ -131,6 +131,85 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
+      footer: {
+        style: 'dark',
+        links: [
+          {
+            title: 'Learn',
+            items: [
+              {
+                label: 'Introduction',
+                to: 'docs/intro',
+              },
+              {
+                label: 'Quick Start',
+                to: 'docs/quick_guide',
+              },
+              {
+                label: 'Migration from v2 to v3',
+                to: 'docs/upgrade_v3',
+              },
+            ],
+          },
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'Bilibili',
+                href: 'https://space.bilibili.com/1746017680',
+              },
+              {
+                label: 'Zhihu',
+                to: 'https://zhuanlan.zhihu.com/midwayjs',
+              },
+            ],
+          },
+          {
+            title: 'More',
+            items: [
+              {
+                label: 'Blog',
+                to: 'blog',
+              },
+              {
+                label: 'Changelog',
+                to: '/changelog',
+              },
+              {
+                label: 'GitHub Issue',
+                href: 'https://github.com/midwayjs/midway',
+              },
+              // {
+              //   label: 'Twitter',
+              //   href: 'https://twitter.com/docusaurus',
+              // },
+            ],
+          },
+          {
+            title: 'Link',
+            items: [
+              {
+                label: 'Taobao FED',
+                href: 'https://fed.taobao.org/',
+              },
+              {
+                label: 'ICE',
+                href: 'https://ice.work/',
+              },
+              {
+                label: 'CNode',
+                href: 'https://cnodejs.org/',
+              },
+            ],
+          },
+        ],
+        // logo: {
+        //   alt: 'Alibaba Open Source Logo',
+        //   src: 'https://img.alicdn.com/imgextra/i1/O1CN014B9spq1xrDad6enpX_!!6000000006496-2-tps-240-58.png',
+        //   href: 'https://opensource.alibaba.com/',
+        // },
+        copyright: `Copyright © ${new Date().getFullYear()} Alibaba Group. Built with Docusaurus.`,
+      },
     }),
 };
 

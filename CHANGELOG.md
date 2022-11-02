@@ -1,9 +1,7 @@
 # Change Log
 
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
-
-## 3.7.2 (2022-11-02)
+123
+v3.7.2## 3.7.2 (2022-11-02)
 
 #### :bug: Bug Fix
 * `swagger`
