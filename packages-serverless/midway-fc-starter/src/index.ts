@@ -7,6 +7,9 @@ import {
 import * as getRawBody from 'raw-body';
 import { IncomingMessage } from 'http';
 import { createContextManager } from '@midwayjs/async-hooks-context-manager';
+import { mockContext } from './mock';
+
+export * from './mock';
 
 function isOutputError() {
   return (
@@ -51,7 +54,7 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
     return exports;
   }
 
-  async onInit(context: FC.InitializeContext, exports) {
+  async onInit(context: FC.InitializeContext = mockContext(), exports) {
     const applicationAdapter = {
       getFunctionName() {
         return context.function.name;

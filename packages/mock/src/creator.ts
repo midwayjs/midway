@@ -263,7 +263,7 @@ export async function createFunctionApp<
     // new mode
     const exports = options.starter.start(options);
     await exports[options.initializeMethodName || 'initializer'](
-      options['initializeContext'] || {}
+      options['initializeContext']
     );
     const appCtx = options.starter.getApplicationContext();
 

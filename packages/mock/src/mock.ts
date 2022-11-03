@@ -24,7 +24,11 @@ function getMockService(app?): MidwayMockService {
   return mockService;
 }
 
-export function mockSession(app: IMidwayApplication, key: string, value: any) {
+export function mockSession(
+  app: IMidwayApplication<any>,
+  key: string,
+  value: any
+) {
   const mockService = getMockService(app);
   mockService.mockContext(app, (ctx: any) => {
     if (!ctx.session) {
@@ -35,7 +39,7 @@ export function mockSession(app: IMidwayApplication, key: string, value: any) {
 }
 
 export function mockHeader(
-  app: IMidwayApplication,
+  app: IMidwayApplication<any>,
   headerKey: string,
   headerValue: string
 ) {
@@ -77,7 +81,7 @@ export function restoreAllMocks() {
 }
 
 export function mockContext(
-  app: IMidwayApplication,
+  app: IMidwayApplication<any>,
   key: string | ((ctx: IMidwayContext) => void),
   value?: PropertyDescriptor | any
 ) {
