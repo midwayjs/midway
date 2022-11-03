@@ -5,7 +5,7 @@ authors: [harry]
 tags: [更新, jest]
 ---
 
-最近由于 axios 组件的升级，会出现下面的报错。
+最近由于 axios 组件的升级，可能在单测时会出现下面的报错。
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01G4Ze0F1qVxwcNwYeF_!!6000000005502-2-tps-2080-1158.png)
 
