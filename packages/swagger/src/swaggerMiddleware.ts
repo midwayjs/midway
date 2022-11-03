@@ -58,13 +58,14 @@ export class SwaggerMiddleware
           lastName = 'index.html';
         }
 
-        let content = readFileSync(join(this.swaggerUiAssetPath, lastName), {
-          encoding: 'utf-8',
-        });
+        let content: Buffer | string = readFileSync(
+          join(this.swaggerUiAssetPath, lastName)
+        );
         if (
           lastName === 'index.html' ||
           lastName === 'swagger-initializer.js'
         ) {
+          content = content.toString('utf8');
           content = this.replaceInfo(content);
         }
         const ext = extname(lastName);
@@ -99,13 +100,14 @@ export class SwaggerMiddleware
           lastName = 'index.html';
         }
 
-        let content = readFileSync(join(this.swaggerUiAssetPath, lastName), {
-          encoding: 'utf-8',
-        });
+        let content: Buffer | string = readFileSync(
+          join(this.swaggerUiAssetPath, lastName)
+        );
         if (
           lastName === 'index.html' ||
           lastName === 'swagger-initializer.js'
         ) {
+          content = content.toString('utf8');
           content = this.replaceInfo(content);
         }
         const ext = extname(lastName);
