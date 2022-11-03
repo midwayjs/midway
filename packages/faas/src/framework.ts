@@ -25,6 +25,7 @@ import {
   WEB_RESPONSE_REDIRECT,
   httpError,
   ObjectIdentifier,
+  getProviderUUId,
 } from '@midwayjs/core';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
@@ -137,18 +138,52 @@ export class MidwayFaaSFramework extends BaseFramework<
       getEventMiddleware: () => {
         return this.getEventMiddleware();
       },
-      getServerlessInstance: <T>(
+      getServerlessInstance: async <T>(
         serviceClass:
           | ObjectIdentifier
           | {
               new (...args): T;
-            }
+            },
+        customContext = {}
       ): Promise<T> => {
-        const context = this.app.createAnonymousContext();
-        if (this.configurationOptions.applicationAdapter?.runContextHook) {
-          this.configurationOptions.applicationAdapter.runContextHook(context);
-        }
-        return context.requestContext.getAsync(serviceClass);
+        const instance = new Proxy(
+          {},
+          {
+            get: (target, prop) => {
+              let funcInfo;
+              if (typeof serviceClass === 'string') {
+                funcInfo = this.funMappingStore.get(
+                  `${serviceClass}.${prop as string}`
+                );
+              } else {
+                funcInfo = Array.from(this.funMappingStore.values()).find(
+                  item => {
+                    return (
+                      item.id === getProviderUUId(serviceClass) &&
+                      item.method === prop
+                    );
+                  }
+                );
+              }
+
+              if (funcInfo) {
+                return async (...args) => {
+                  const context = this.app.createAnonymousContext();
+                  return this.getTriggerFunction(
+                    context,
+                    funcInfo.funcHandlerName,
+                    {
+                      isHttpFunction: false,
+                      originContext: customContext,
+                      originEvent: args[0],
+                    }
+                  );
+                };
+              }
+            },
+          }
+        ) as T;
+        return instance;
       },
       getTriggerFunction: (
         context,

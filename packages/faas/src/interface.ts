@@ -66,7 +66,8 @@ export type IMidwayFaaSApplication = IMidwayApplication<
       options: HandlerOptions
     ): Promise<any>;
     getServerlessInstance<T>(
-      serviceClass: ObjectIdentifier | { new (...args): T }
+      serviceClass: ObjectIdentifier | { new (...args): T },
+      customContext?: any
     ): Promise<T>;
   }
 > &

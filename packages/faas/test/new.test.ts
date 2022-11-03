@@ -258,7 +258,7 @@ describe('test/new.test.ts', () => {
       text: 'abc',
     });
 
-    expect(result).toEqual('hello eventundefined');
+    expect(result).toEqual('hello event3abc');
 
     // test event middleware
     result = await app.getTriggerFunction(
@@ -272,7 +272,7 @@ describe('test/new.test.ts', () => {
       }
     });
 
-    expect(result).toEqual('hello event3');
+    expect(result).toEqual('hello event3abc');
 
     // test http
     result = await createHttpRequest(app).get('/test').query({
