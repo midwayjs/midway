@@ -1,5 +1,22 @@
 # Change Log
 
+
+## v3.7.3 (2022-11-03)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#2469](https://github.com/midwayjs/midway/pull/2469) fix: swagger ui favicon output ([@czy88840616](https://github.com/czy88840616))
+* `faas`, `mock`
+  * [#2464](https://github.com/midwayjs/midway/pull/2464) fix: getServerlessInstance add ctx hook ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2470](https://github.com/midwayjs/midway/pull/2470) docs: update deployment.md ([@kukudelaomao](https://github.com/kukudelaomao))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- 酷酷的老猫 ([@kukudelaomao](https://github.com/kukudelaomao))
+
+
 ## 3.7.2 (2022-11-02)
 
 #### :bug: Bug Fix

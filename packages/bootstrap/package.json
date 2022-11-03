@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bootstrap",
-  "version": "3.7.1",
+  "version": "3.7.3",
   "description": "midwayjs bootstrap",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -26,8 +26,8 @@
   "devDependencies": {
     "@midwayjs/core": "^3.7.0",
     "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/socketio": "^3.7.1",
-    "@midwayjs/web": "^3.7.1",
+    "@midwayjs/socketio": "^3.7.3",
+    "@midwayjs/web": "^3.7.3",
     "request": "2.88.2",
     "socket.io-client": "4.5.3"
   },
