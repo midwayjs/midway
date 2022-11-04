@@ -85,6 +85,11 @@ jobs:
         with:
           mongodb-version: 4.2
 
+      - run: curl -L https://github.com/coreos/etcd/releases/download/${{ matrix.etcd-version }}/etcd-${{ matrix.etcd-version }}-linux-amd64.tar.gz -o /tmp/etcd-${{ matrix.etcd-version }}-linux-amd64.tar.gz
+      - run: mkdir -p /tmp/etcd
+      - run: tar xzvf /tmp/etcd-${{ matrix.etcd-version }}-linux-amd64.tar.gz -C /tmp/etcd --strip-components=1
+      - run: /tmp/etcd/etcd --advertise-client-urls https://127.0.0.1:2379 --listen-client-urls https://127.0.0.1:2379 --cert-file ${{ github.workspace }}/src/test/certs/certs/etcd0.localhost.crt --key-file ${{ github.workspace }}/src/test/certs/private/etcd0.localhost.key > /dev/null &
+
       - run: npm install && npm install codecov
       - run: npm run bootstrap
       - run: npm run build --if-present
