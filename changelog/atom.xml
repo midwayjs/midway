@@ -9,9 +9,9 @@
     <icon>https://midwayjs.org/img/logo.svg</icon>
     <rights>Copyright © 2022 Facebook, Inc.</rights>
     <entry>
-        <title type="html"><![CDATA[v3.7.3]]></title>
-        <id>/v3.7.3</id>
-        <link href="https://midwayjs.org/changelog/v3.7.3"/>
+        <title type="html"><![CDATA[3.7.3]]></title>
+        <id>/3.7.3</id>
+        <link href="https://midwayjs.org/changelog/3.7.3"/>
         <updated>2022-11-03T20:00:00.000Z</updated>
         <summary type="html"><![CDATA[Bug Fix]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>swagger</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2469" target="_blank" rel="noopener noreferrer">#2469</a> fix: swagger ui favicon output (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>faas</code>, <code>mock</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2464" target="_blank" rel="noopener noreferrer">#2464</a> fix: getServerlessInstance add ctx hook (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a class="hash-link" href="#-documentation" title="标题的直接链接">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/2470" target="_blank" rel="noopener noreferrer">#2470</a> docs: update deployment.md (<a href="https://github.com/kukudelaomao" target="_blank" rel="noopener noreferrer">@kukudelaomao</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="标题的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>酷酷的老猫 (<a href="https://github.com/kukudelaomao" target="_blank" rel="noopener noreferrer">@kukudelaomao</a>)</li></ul>]]></content>
