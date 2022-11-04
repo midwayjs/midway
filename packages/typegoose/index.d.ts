@@ -1,2 +1,2 @@
-export * from '@midwayjs/mongoose';
+import '@midwayjs/mongoose';
 export * from './dist/index';
