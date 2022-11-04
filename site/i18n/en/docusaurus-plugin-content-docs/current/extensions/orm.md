@@ -386,6 +386,17 @@ Example, different column names
 - The `@VersionColumn` is a special column that automatically increases the entity version (increment number) each time the entity manager or save of the repository is called.
 - `@DeleteDateColumn` is a special column that automatically sets the deletion time of the entity when soft-delete is called.
 
+For example:
+
+```typescript
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  createdDate: Date;
+```
+
+
+
 The column type is database-specific. You can set any column type supported by the database. For more information about supported column types, see [here](https://github.com/typeorm/typeorm/blob/master/docs/entities.md#column-types).
 
 :::tip
@@ -1443,7 +1454,7 @@ export default {
 
 ### Time column returns string
 
-The configuration dateStrings enables mysql to return the return time in the DATETIME format.
+Configuring dateStrings can make mysql return time in DATETIME format, which is only valid for mysql.
 
 ```typescript
 // src/config/config.default.ts
@@ -1459,6 +1470,16 @@ export default {
   },
 }
 ```
+
+Entity return types can be adjusted if `@CreateDateColumn` and `@UpdateDateColumn` are used.
+
+```typescript
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  createdDate: string;
+```
+
 
 
 The effect is as follows:
