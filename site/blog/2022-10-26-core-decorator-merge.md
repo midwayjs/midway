@@ -21,7 +21,7 @@ tags: [decorator, core]
 
 由于 core 的版本依旧在 `3.6.0` 以下，但是组件依赖了最新版本 core 的 API，从而报错。
 
-我们在文档 [如何更新 Midway](./docs/how_to_update_midway) 中有描述，请不要单独升级某个组件包。
+我们在文档 [如何更新 Midway](../docs/how_to_update_midway) 中有描述，请不要单独升级某个组件包。
 
 解决方案有两个：
 
