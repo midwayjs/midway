@@ -26,10 +26,10 @@
     "@midwayjs/express": "^3.7.3",
     "@midwayjs/koa": "^3.7.3",
     "@midwayjs/mock": "^3.7.3",
-    "@midwayjs/web": "^3.7.3",
-    "@types/jsonwebtoken": "8.5.9"
+    "@midwayjs/web": "^3.7.3"
   },
   "dependencies": {
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "8.5.1",
+    "@types/jsonwebtoken": "8.5.9"
   }
 }

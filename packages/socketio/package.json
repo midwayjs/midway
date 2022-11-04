@@ -37,7 +37,7 @@
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "http://github.com/midwayjs/midway.git"
+    "url": "https://github.com/midwayjs/midway.git"
   },
   "engines": {
     "node": ">=12"
