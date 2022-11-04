@@ -177,3 +177,27 @@ export class HelloHTTPService {
 
 ```
 
+
+
+### 2、默认 index.html
+
+由于  [koa-static-cache](https://github.com/koajs/static-cache)  不支持默认 `index.html` 的配置，可以通过它的 alias 功能来解决。
+
+可以配置把 `/` 指向到 `/index.html` 即可，不支持通配和正则。
+
+```typescript
+export default {
+  // ...
+  staticFile: {
+    dirs: {
+      default: {
+        prefix: '/',
+        alias: {
+          '/': '/index.html',
+        },
+      },
+    },
+    // ...
+  },
+}
+```

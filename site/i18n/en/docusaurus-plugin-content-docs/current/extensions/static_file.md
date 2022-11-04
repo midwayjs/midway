@@ -177,3 +177,27 @@ export class HelloHTTPService {
 
 ```
 
+
+
+### 2. Default index.html
+
+Since [koa-static-cache](https://github.com/koajs/static-cache) does not support the default `index.html` configuration, it can be solved by its alias function.
+
+You can configure `/` to point to `/index.html`. Wildcards and regular expressions are not supported.
+
+```typescript
+export default {
+   // ...
+   staticFile: {
+     dirs: {
+       default: {
+         prefix: '/',
+         alias: {
+           '/': '/index.html',
+         },
+       },
+     },
+     // ...
+   },
+}
+````
