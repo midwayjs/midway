@@ -40,8 +40,8 @@
     "fs-extra": "10.0.1",
     "mm": "3.2.0",
     "pedding": "1.1.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
