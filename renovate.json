@@ -4,6 +4,10 @@
   ],
   "ignoreDeps": [
     "egg",
+    "egg-mock",
+    "egg-cluster",
+    "react",
+    "react-dom",
     "@midwayjs/cookies",
     "@midwayjs/logger",
     "@midwayjs/gateway-common-http",
