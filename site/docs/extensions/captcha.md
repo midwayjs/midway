@@ -189,6 +189,9 @@ export const captcha: CaptchaOptions = {
 }
 ```
 
+验证码的内容存储基于 `@midwayjs/cache`，默认是在 `memory` 中存储，如果要替换为 `redis` 或其他服务，请参照 `@midwayjs/cache` 的[文档](/docs/extensions/cache），对 cache 进行配置。
+
+
 ## 效果
 
 **图片验证码**
