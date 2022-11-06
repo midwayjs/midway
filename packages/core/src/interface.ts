@@ -24,6 +24,7 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
   clients?: {
     [key: string]: PowerPartial<OPTIONS>;
   };
+  defaultClientName?: string;
 };
 
 export type DataSourceManagerConfigOption<OPTIONS> = {
