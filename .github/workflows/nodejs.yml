@@ -72,23 +72,16 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
       etcd:
-        image: gcr.io/etcd-development/etcd:v3.4.22
+        image: bitnami/etcd
         ports:
           - 2379:2379
           - 2380:2380
         options: >-
-          --name s1
-          --data-dir /etcd-data
-          --listen-client-urls http://0.0.0.0:2379
-          --advertise-client-urls http://0.0.0.0:2379
-          --listen-peer-urls http://0.0.0.0:2380
-          --initial-advertise-peer-urls http://0.0.0.0:2380
-          --initial-cluster s1=http://0.0.0.0:2380
-          --initial-cluster-token tkn
-          --initial-cluster-state new
-          --log-level info
-          --logger zap
-          --log-outputs stderr
+          --name Etcd-server
+          --publish 2379:2379
+          --publish 2380:2380
+          --env ALLOW_NONE_AUTHENTICATION=yes
+          --env ETCD_ADVERTISE_CLIENT_URLS=http://etcd-server:2379
 
     steps:
       - name: Git checkout
