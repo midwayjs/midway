@@ -50,7 +50,7 @@ import { retryWithAsync } from '@midwayjs/core';
 async function invoke() {
   // 默认调用，加上重试两次，最多执行三次
   const invokeNew = retryWithAsync(invoke, 2);
-  
+
   try {
     return await invokeNew(1);
   } catch(err) {
@@ -73,12 +73,12 @@ async function invoke() {
 ```typescript
 import { retryWithAsync } from '@midwayjs/core';
 
-export class UserService() {
-  
+export class UserService {
+
   async getUserData(userId: string) {
     // wrap
     const getUserDataOrigin = retryWithAsync(
-      this.getUserDataFromRemote, 
+      this.getUserDataFromRemote,
       2,
       {
         receiver: this,
@@ -88,7 +88,7 @@ export class UserService() {
     // invoke
     return getUserDataOrigin(userId);
   }
-  
+
   async getUserDataFromRemote(userId: string) {
     // get data from remote
   }
@@ -107,7 +107,7 @@ export class UserService() {
 ```typescript
 // wrap
 const getUserDataOrigin = retryWithAsync(
-  this.getUserDataFromRemote, 
+  this.getUserDataFromRemote,
   2,
   {
     receiver: this,	// 此参数用于处理 this 指向
@@ -120,7 +120,7 @@ const getUserDataOrigin = retryWithAsync(
 ```typescript
 // wrap
 const getUserDataOrigin = retryWithAsync(
-  this.getUserDataFromRemote.bind(this) as typeof this.getUserDataFromRemote, 
+  this.getUserDataFromRemote.bind(this) as typeof this.getUserDataFromRemote,
   2,
   {
     receiver: this,
@@ -156,7 +156,7 @@ const getUserDataOrigin = retryWithAsync(
 
 ```typescript
 const invokeNew = retryWithAsync(invoke, 2, {
-  retryInterval： 2000，	// 执行失败后，2s 后继续重试
+  retryInterval: 2000，	// 执行失败后，2s 后继续重试
 });
 ```
 
@@ -180,7 +180,7 @@ import { retryWithAsync, MidwayRetryExceededMaxTimesError } from '@midwayjs/core
 async function invoke() {
   // 默认调用，加上重试两次，最多执行三次
   const invokeNew = retryWithAsync(invoke, 2);
-  
+
   try {
     return await invokeNew(1);
   } catch(err) {
@@ -201,7 +201,7 @@ async invokeNew() {
 
 ```typescript
 const invokeNew = retryWithAsync(invoke, 2, {
-  throwOriginError： true,
+  throwOriginError: true,
 });
 ```
 

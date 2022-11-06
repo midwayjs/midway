@@ -73,12 +73,12 @@ Examples are as follows:
 ```typescript
 import { retryWithAsync } from '@midwayjs/core';
 
-export class UserService() {
+export class UserService {
 
   async getUserData(userId: string) {
     // wrap
     const getUserDataOrigin = retryWithAsync(
-      this.getUserDataFromRemote, 
+      this.getUserDataFromRemote,
       2,
       {
         receiver: this
@@ -107,7 +107,7 @@ Starting from Midway v3.5.1, a `receiver` parameter has been added to bind this 
 ```typescript
 // wrap
 const getUserDataOrigin = retryWithAsync(
-  this.getUserDataFromRemote
+  this.getUserDataFromRemote,
   2,
   {
     receiver: this, // This parameter is used to handle this pointing
@@ -120,7 +120,7 @@ If there is no such parameter, the code needs to be written as follows to bind t
 ```typescript
 // wrap
 const getUserDataOrigin = retryWithAsync(
-  this.getUserDataFromRemote.bind(this) as typeof this.getUserDataFromRemote, 
+  this.getUserDataFromRemote.bind(this) as typeof this.getUserDataFromRemote,
   2,
   {
     receiver: this

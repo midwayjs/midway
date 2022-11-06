@@ -7,13 +7,13 @@ For example, we have some logic that needs to be executed in advance, one for li
 ```typescript
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class RedisErrorListener() {
+export class RedisErrorListener {
   // ...
 }
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class DataSyncListener() {
+export class DataSyncListener {
   // ...
 }
 ```
@@ -48,11 +48,11 @@ If the code is not coupled to the main process and belongs to independent logic,
 For example:
 
 ```typescript
-import { Autolaod, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Autoload, Scope, ScopeEnum } from '@midwayjs/decorator';
 
-@Autolaod()
+@Autoload()
 @Scope(ScopeEnum.Singleton)
-export class RedisErrorListener() {
+export class RedisErrorListener {
   @Init()
   async init() {
     const redis = new Redis();
