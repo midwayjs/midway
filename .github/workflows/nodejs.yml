@@ -73,9 +73,6 @@ jobs:
 
       etcd:
         image: bitnami/etcd
-        ports:
-          - 2379:2379
-          - 2380:2380
         options: >-
           --name Etcd-server
           --publish 2379:2379
