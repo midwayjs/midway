@@ -71,6 +71,25 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+      etcd:
+        image: gcr.io/etcd-development/etcd:v3.4.22
+        ports:
+          - 2379:2379
+          - 2380:2380
+        options: >-
+          --name s1
+          --data-dir /etcd-data
+          --listen-client-urls http://0.0.0.0:2379
+          --advertise-client-urls http://0.0.0.0:2379
+          --listen-peer-urls http://0.0.0.0:2380
+          --initial-advertise-peer-urls http://0.0.0.0:2380
+          --initial-cluster s1=http://0.0.0.0:2380
+          --initial-cluster-token tkn
+          --initial-cluster-state new
+          --log-level info
+          --logger zap
+          --log-outputs stderr
+
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
@@ -84,11 +103,6 @@ jobs:
         uses: supercharge/mongodb-github-action@1.8.0
         with:
           mongodb-version: 4.2
-
-      - run: curl -L https://github.com/coreos/etcd/releases/download/${{ matrix.etcd-version }}/etcd-${{ matrix.etcd-version }}-linux-amd64.tar.gz -o /tmp/etcd-${{ matrix.etcd-version }}-linux-amd64.tar.gz
-      - run: mkdir -p /tmp/etcd
-      - run: tar xzvf /tmp/etcd-${{ matrix.etcd-version }}-linux-amd64.tar.gz -C /tmp/etcd --strip-components=1
-      - run: /tmp/etcd/etcd --advertise-client-urls https://127.0.0.1:2379 --listen-client-urls https://127.0.0.1:2379 > /dev/null &
 
       - run: npm install && npm install codecov
       - run: npm run bootstrap
