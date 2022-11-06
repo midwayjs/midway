@@ -1,30 +1,38 @@
-import { join } from 'path';
-import { COSService } from '../src';
+import * as etcd from '../src';
 import { close, createLightApp } from '@midwayjs/mock';
-
-if (process.env.GITHUB_JOB && !process.env.TENCENT_COS_SECRET_ID) {
-  // pr 环境
-  describe('/test/index.test.ts', () => {
-    it('should skip pr', function () {
-      console.log('skip in pr');
-    });
-  });
-  // @ts-ignore
-  return;
-}
+import { ETCDService } from '../src';
 
 describe('/test/index.test.ts', () => {
 
   it('test single client', async () => {
-    const app = await createLightApp(join(__dirname, './fixtures/base-app-single-client'));
-    const cosService = await app.getApplicationContext().getAsync(COSService);
-    expect(cosService).toBeDefined();
+    const app = await createLightApp('', {
+      imports: [etcd],
+      globalConfig: {
+        etcd: {
+          client: {
+            hosts: ['127.0.0.1:2379'],
+          }
+        }
+      }
+    });
+    const etcdService = await app.getApplicationContext().getAsync(etcd.ETCDService);
+    expect(etcdService).toBeDefined();
+
+    await etcdService.put('foo').value('bar');
+
+    const fooValue = await etcdService.get('foo').string();
+    console.log('foo was:', fooValue);
+
+    const allFValues = await etcdService.getAll().prefix('f').keys();
+    console.log('all our keys starting with "f":', allFValues);
+
+    await etcdService.delete().all();
     await close(app);
   });
 
   it('should throw error when instance not found', async () => {
     await expect(async () => {
-      const service = new COSService();
+      const service = new ETCDService();
       (service as any).serviceFactory = new Map();
       await service.init();
     }).rejects.toThrowError(/instance not found/);

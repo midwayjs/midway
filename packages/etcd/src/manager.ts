@@ -7,8 +7,8 @@ import {
   Scope,
   ScopeEnum,
   ServiceFactory,
-  delegateTargetPrototypeMethod,
   MidwayCommonError,
+  delegateTargetAllPrototypeMethod,
 } from '@midwayjs/core';
 import { Etcd3, IOptions } from 'etcd3';
 
@@ -62,4 +62,4 @@ export interface ETCDService extends Etcd3 {
   // empty
 }
 
-delegateTargetPrototypeMethod(ETCDService, [Etcd3]);
+delegateTargetAllPrototypeMethod(ETCDService, Etcd3);
