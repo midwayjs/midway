@@ -11,6 +11,14 @@ import { CaptchaService } from '../../../../src';
     {
       default: {
         keys: ["test"],
+        captcha: {
+          default: {
+            noise: 4,
+          },
+          image: {
+            size: 6,
+          }
+        }
       }
     }
   ]

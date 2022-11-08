@@ -23,9 +23,10 @@ export class CaptchaService {
     id: string;
     imageBase64: string;
   }> {
-    const { width, height, type } = Object.assign(
+    const { width, height, type, size, noise } = Object.assign(
       {},
       this.captcha,
+      this.captcha.default,
       this.captcha.image,
       options
     );
@@ -42,6 +43,8 @@ export class CaptchaService {
       ignoreChars,
       width,
       height,
+      size,
+      noise,
     });
     const id = await this.set(text);
     const imageBase64 = svgBase64(data);
@@ -49,15 +52,17 @@ export class CaptchaService {
   }
 
   async formula(options?: FormulaCaptchaOptions) {
-    const { width, height } = Object.assign(
+    const { width, height, noise } = Object.assign(
       {},
       this.captcha,
+      this.captcha.default,
       this.captcha.formula,
       options
     );
     const { data, text } = svgCaptcha.createMathExpr({
       width,
       height,
+      noise,
     });
     const id = await this.set(text);
     const imageBase64 = svgBase64(data);
@@ -71,6 +76,7 @@ export class CaptchaService {
     const textOptions = Object.assign(
       {},
       this.captcha,
+      this.captcha.default,
       this.captcha.text,
       options
     );
