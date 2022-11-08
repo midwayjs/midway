@@ -10,6 +10,7 @@
 | [midway-elasticsearch][midway-elasticsearch]         | ddzyan      | midway elasticsearch 组件           |
 | [midway-apollo][midway-apollo]                       | helloHT     | midway 携程异步动态配置 apollo 组件 |
 | [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway OpenTelemetry 组件           |
+| [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件           |
 
 ## swagger
 
