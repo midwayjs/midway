@@ -129,7 +129,7 @@ custom:
 
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    name: 'abc'
+    name: 'abc',
     type: 'every',
     value: '5m',
   })

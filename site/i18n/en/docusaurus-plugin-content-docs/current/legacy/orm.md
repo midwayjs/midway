@@ -1217,6 +1217,64 @@ export class EverythingSubscriber implements EntitySubscriberInterface {
 
 This subscription class provides some common interfaces to perform some things during database operations.
 
+### 20. OrmConnectionHook
+
+In versions prior to 3.4.0 (not included), the Midway package provided a Hook mechanism for monitoring database connection and disconnection events; the code is as follows.
+
+```typescript
+import { Provide } from '@midwayjs/decorator';
+import { OrmConnectionHook, OrmHook } from '@midwayjs/orm';
+import { Connection, ConnectionOptions } from 'typeorm';
+
+@Provide()
+@OrmHook()
+export class OrmConnectionListener implements OrmConnectionHook {
+  /**
+   * Called before connection create
+   * @param opts
+   * @returns
+   */
+  async beforeCreate(opts?: ConnectionOptions): Promise<ConnectionOptions> {
+    console.log('BEFORE CONNECTION CREATE');
+    return opts;
+  }
+
+  /**
+   * Called after connection create
+   * @param conn
+   * @param opts
+   * @returns
+   */
+  async afterCreate(conn?: Connection, opts?: ConnectionOptions): Promise<Connection> {
+    console.log('AFTER CONNECTION CREATE');
+    return conn;
+  }
+
+  /**
+   * Called before connection close
+   * @param conn
+   * @param connectionName
+   * @returns
+   */
+  async beforeClose(conn?: Connection, connectionName?: string): Promise<Connection> {
+    console.log('BEFORE CONNECTION CLOSE');
+    return conn;
+  }
+
+  /**
+   * Called after connection close
+   * @param conn
+   * @returns
+   */
+  async afterClose(conn?: Connection): Promise<Connection> {
+    console.log('AFTER CONNECTION CLOSE');
+    return conn;
+  }
+}
+```
+
+
+
 
 ## Advanced features
 

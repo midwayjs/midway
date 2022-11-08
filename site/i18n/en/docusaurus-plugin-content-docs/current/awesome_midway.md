@@ -10,7 +10,7 @@ The following lists high-quality community projects related to Midwayjs
 | [midway-elasticsearch][midway-elasticsearch] | ddzyan | Mi1dway elasticsearch component |
 | [midway-apollo][midway-apollo] | helloHT | Midway Ctrip Asynchronous Dynamic Configuration apollo Components |
 | [@mwcp/otel][@mwcp/otel] | waitingsong | midway OpenTelemetry component |
-
+| [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler current limiting component |
 ## swagger
 
 | Name | Author | Description |

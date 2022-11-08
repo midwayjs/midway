@@ -123,13 +123,13 @@ custom:
 The `@ServerlessTrigger` decorator is used to define different triggers. Its parameters are each trigger information and common trigger parameters.
 
 
-The trigger is consistent with the [f.yml definition](/docs/serverless_yml#YoMeC). please refer to the [interface](https://github.com/midwayjs/midway/blob/2.x/packages/decorator/src/interface.ts#L141) of each trigger for the current definition.
+The trigger is consistent with the [f.yml definition](/docs/serverless_yml). please refer to the [interface](https://github.com/midwayjs/midway/blob/2.x/packages/decorator/src/interface.ts#L141) of each trigger for the current definition.
 
 For example, the name of the trigger is changed to abc.
 
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    name: 'abc'
+    name: 'abc',
     type: 'every',
     value: '5m',
   })
