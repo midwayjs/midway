@@ -4,7 +4,7 @@ import { IMidwayContainer, IMidwayContext } from '@midwayjs/core';
 
 export interface CasbinConfigOptions {
   modelPath: string;
-  policyAdapter: string | ((applicationContext: IMidwayContainer) => Adapter) | Adapter;
+  policyAdapter: string | ((applicationContext: IMidwayContainer) => Promise<Adapter>) | Adapter;
   usernameFromContext: (ctx: IMidwayContext) => string;
 }
 
