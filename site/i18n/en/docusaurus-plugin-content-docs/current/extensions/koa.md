@@ -97,7 +97,18 @@ Note that the type selection when using Postman for Post requests:
 
 ![postman](https://img.alicdn.com/imgextra/i4/O1CN01QCdTsN1S347SuzZU5_!!6000000002190-2-tps-1017-690.png)
 
+Disable bodyParser middleware。
 
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  bodyParser: {
+    enable: false,
+    // ...
+  },
+}
+```
 
 ## Cookie and Session
 
@@ -263,6 +274,19 @@ export default {
 ```
 
 If the `@midwayjs/static-file` component is turned on, static file hosting of the component will be preferred.
+
+Disable middleware。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  siteFile: {
+    enable: false,
+    // ...
+  },
+}
+```
 
 ### Modify context log
 
