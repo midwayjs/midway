@@ -1,6 +1,33 @@
 # Change Log
 
 
+## v3.7.4 (2022-11-08)
+
+#### :bug: Bug Fix
+* `captcha`
+  * [#2483](https://github.com/midwayjs/midway/pull/2483) fix: noise and size support ([@echosoar](https://github.com/echosoar))
+* `casbin`
+  * [#2486](https://github.com/midwayjs/midway/pull/2486) fix: policyAdapter promise typings ([@czy88840616](https://github.com/czy88840616))
+* `typegoose`
+  * [#2477](https://github.com/midwayjs/midway/pull/2477) fix: duplicate mongoose import ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `bull`
+  * [#2485](https://github.com/midwayjs/midway/pull/2485) chore: add job typings export ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2487](https://github.com/midwayjs/midway/pull/2487) docs(site): add a throttler like @nestjs/throttler to awesome_midway.md ([@larryzhuo](https://github.com/larryzhuo))
+* [#2479](https://github.com/midwayjs/midway/pull/2479) docs(orm):  add OrmConnectionHook example for legacy orm.md ([@larryzhuo](https://github.com/larryzhuo))
+* [#2478](https://github.com/midwayjs/midway/pull/2478) docs: fix serverless_yml link path ([@isaced](https://github.com/isaced))
+
+#### Committers: 4
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- isaced ([@isaced](https://github.com/isaced))
+- larry zhuo ([@larryzhuo](https://github.com/larryzhuo))
+
+
+
 ## 3.7.3 (2022-11-03)
 
 #### :bug: Bug Fix
