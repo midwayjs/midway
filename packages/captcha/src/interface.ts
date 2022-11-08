@@ -9,6 +9,7 @@ interface BaseCaptchaOptions {
 }
 
 export interface CaptchaOptions extends BaseCaptchaOptions {
+  default?: BaseCaptchaOptions;
   image?: ImageCaptchaOptions;
   formula?: FormulaCaptchaOptions;
   text?: TextCaptchaOptions;

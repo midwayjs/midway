@@ -26,6 +26,7 @@ export class CaptchaService {
     const { width, height, type, size, noise } = Object.assign(
       {},
       this.captcha,
+      this.captcha.default,
       this.captcha.image,
       options
     );
@@ -54,6 +55,7 @@ export class CaptchaService {
     const { width, height, noise } = Object.assign(
       {},
       this.captcha,
+      this.captcha.default,
       this.captcha.formula,
       options
     );
@@ -74,6 +76,7 @@ export class CaptchaService {
     const textOptions = Object.assign(
       {},
       this.captcha,
+      this.captcha.default,
       this.captcha.text,
       options
     );

@@ -129,13 +129,15 @@ export class HomeController {
 
 ```typescript
 interface CaptchaOptions {
-  // The number of interference lines, the default is 1
-  noise?: number;
-  // width, default is 120px
-  width?: number;
-  // width, default is 40px
-  height?: number;
-  // Graphic verification code configuration, the graphic contains some characters
+  default?: { // default config
+    // The number of interference lines, the default is 1
+    noise?: number;
+    // width, default is 120px
+    width?: number;
+    // width, default is 40px
+    height?: number;
+    // Graphic verification code configuration, the graphic contains some characters
+  },
   image?: {
     // Verification code character length, default 4 characters
     size?: number;
@@ -177,17 +179,78 @@ interface CaptchaOptions {
 }
 
 export const captcha: CaptchaOptions = {
-  size: 4,
-  noise: 1,
-  width: 120,
-  height: 40,
-  image: { // Will merge captcha size and other configurations
+  default: { // default config
+    size: 4,
+    noise: 1,
+    width: 120,
+    height: 40,
+  },
+  image: { // Will merge default configuration
     type: 'mixed',
   },
-  formula: {}, // Will merge captcha's size and other configurations
-  text: {}, // Will merge captcha size and other configurations
+  formula: {}, // Will merge default configuration
+  text: {}, // Will merge default configuration
   expirationTime: 3600,
   idPrefix: 'midway:vc',
+}
+```
+
+### Configuration Example 1
+
+Get an image captcha code containing `5 pure English letters`. The image's width  is `200` pixels, the height is `50` pixels, and it contains `3` noise lines.
+
+Because the configuration of the image captcha code(`image`) will be merged with the `default` configuration, so you can only modify the `default` configuration:
+
+```typescript
+export const captcha: CaptchaOptions = {
+  default: {
+    size: 5,
+    noise: 3,
+    width: 200,
+    height: 50
+  },
+  image: {
+    type: 'letter'
+  }
+}
+```
+Of course, you can also configure the width, height, etc. in the `image` configuration, `without` modifying the default configuration to achieve the `same` effect：
+```typescript
+export const captcha: CaptchaOptions = {
+  image: {
+    size: 5,
+    noise: 3,
+    width: 200,
+    height: 50
+    type: 'letter'
+  }
+}
+```
+
+### Configuration Example 2
+
+Get a formula captcha code, which width  is `100` pixels, the height is `60` pixels, and it contains `2` noise lines.
+
+Because the configuration of the formula captcha codewill be merged with the `default` configuration, so you can only modify the `default` configuration:
+
+```typescript
+export const captcha: CaptchaOptions = {
+  default: {
+    noise: 2,
+    width: 100,
+    height: 60
+  },
+}
+```
+Of course, you can also configure the width, height, etc. in the `formula` configuration, `without` modifying the default configuration to achieve the `same` effect:
+
+```typescript
+export const captcha: CaptchaOptions = {
+  formula: {
+    noise: 2,
+    width: 100,
+    height: 60
+  }
 }
 ```
 

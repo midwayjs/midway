@@ -127,13 +127,17 @@ export class HomeController {
 
 ```typescript
 interface CaptchaOptions {
-  // 干扰线条的数量，默认 1 条
-  noise?: number;
-  // 宽度，默认为 120 像素
-  width?: number;
-  // 宽度，默认为 40 像素
-  height?: number;
-  // 图形验证码配置，图形中包含一些字符
+  default?: { // 默认配置
+    // 验证码字符长度，默认 4 个字符
+    size?: number;
+    // 干扰线条的数量，默认 1 条
+    noise?: number;
+    // 宽度，默认为 120 像素
+    width?: number;
+    // 宽度，默认为 40 像素
+    height?: number;
+    // 图形验证码配置，图形中包含一些字符
+  },
   image?: {
     // 验证码字符长度，默认 4 个字符
     size?: number;
@@ -162,7 +166,7 @@ interface CaptchaOptions {
   text?: {
     // 验证码字符长度，默认 4 个字符
     size?: number;
-    // 图像验证码中的字符类型，默认为 'mixed'
+    // 文本验证码中的字符类型，默认为 'mixed'
     // - 'mixed' 表示 0-9、A-Z 和 a-z
     // - 'letter' 表示 A-Z 和 a-z
     // - 'number' 表示 0-9
@@ -175,21 +179,85 @@ interface CaptchaOptions {
 }
 
 export const captcha: CaptchaOptions = {
-  size: 4,
-  noise: 1,
-  width: 120,
-  height: 40,
-  image: {      // 会合并 captcha 的 size 等配置
+  default: { // 默认配置
+    size: 4,
+    noise: 1,
+    width: 120,
+    height: 40,
+  },
+  image: {      // 最终会合并 default 配置
     type: 'mixed',
   },
-  formula: {},  // 会合并 captcha 的 size 等配置
-  text: {},     // 会合并 captcha 的 size 等配置
+  formula: {},  // 最终会合并 default 配置
+  text: {},     // 最终会合并 default 配置
   expirationTime: 3600,
   idPrefix: 'midway:vc',
 }
 ```
+### 配置示例一
 
-验证码的内容存储基于 `@midwayjs/cache`，默认是在 `memory` 中存储，如果要替换为 `redis` 或其他服务，请参照 `@midwayjs/cache` 的[文档](/docs/extensions/cache），对 cache 进行配置。
+获取一个 包含 `5个纯英文字母` 的图像验证码，图像宽度 `200` 像素，高度 `50` 像素，并且包含 `3` 条干扰线。
+
+因为图像验证码的配置 `image`， 会与 `default` 配置进行合并，所以可以只修改 `default` 配置：
+
+```typescript
+export const captcha: CaptchaOptions = {
+  default: {
+    size: 5,
+    noise: 3,
+    width: 200,
+    height: 50
+  },
+  image: {
+    type: 'letter'
+  }
+}
+```
+当然，也可以 `不` 修改 `default` 配置，将宽度、高度等在 `image` 配置项中进行配置，取得 `同样`的效果：
+```typescript
+export const captcha: CaptchaOptions = {
+  image: {
+    size: 5,
+    noise: 3,
+    width: 200,
+    height: 50
+    type: 'letter'
+  }
+}
+```
+
+### 配置示例二
+
+获取一个图像宽度 `100` 像素，高度 `60` 像素，并且包含 `2` 条干扰线的计算表达式验证码。
+
+因为计算表达式验证码的配置 `formula` ，会与 `default` 配置合并，所以可以只修改 `default` 配置：
+
+```typescript
+export const captcha: CaptchaOptions = {
+  default: {
+    noise: 2,
+    width: 100,
+    height: 60
+  },
+}
+```
+当然，也可以 `不` 修改 `default` 配置，将宽度、高度等在 `formula` 配置项中进行配置，取得 `同样`的效果：
+```typescript
+export const captcha: CaptchaOptions = {
+  formula: {
+    noise: 2,
+    width: 100,
+    height: 60
+  }
+}
+```
+
+
+## 组件依赖
+
+验证码的内容存储基于 `@midwayjs/cache` 组件，默认是在 `memory` 中存储，如果要替换为 `redis` 或其他服务，请参照 `@midwayjs/cache` 的[文档](/docs/extensions/cache），对 cache 进行配置。
+
+`@midwayjs/cache` 组件已在 `@midwayjs/captcha` 组件 `package.json` 的 `dependencies` 中，无需额外再次安装。
 
 
 ## 效果

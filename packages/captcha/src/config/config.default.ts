@@ -1,10 +1,12 @@
 import { CaptchaOptions } from '../interface';
 
 export const captcha: CaptchaOptions = {
-  size: 4,
-  noise: 1,
-  width: 120,
-  height: 40,
+  default: {
+    size: 4,
+    noise: 1,
+    width: 120,
+    height: 40,
+  },
   image: {
     type: 'mixed',
   },
