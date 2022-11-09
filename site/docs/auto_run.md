@@ -38,7 +38,7 @@ export class MainConfiguration {
 
 ```
 
-这样一旦代码多了，onReady 中会出现许多必要流程的代码。
+这样一旦代码多了，onReady 中会出现许多非必要流程的代码。
 
 
 
