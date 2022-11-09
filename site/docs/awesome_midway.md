@@ -59,3 +59,4 @@
 [midway-boot]: https://github.com/bestaone/midway-boot
 [midway-vue3-ssr]: https://github.com/lqsong/midway-vue3-ssr
 [midway-learn]: https://github.com/hbsjmsjwj/midway-learn.git
+[midway-throttler]: https://github.com/larryzhuo/midway-throttler
