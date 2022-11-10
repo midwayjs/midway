@@ -24,8 +24,8 @@ export class BullQueue extends Bull implements IQueue<Job> {
     super(queueName, queueOptions);
   }
 
-  public async runJob(data: Record<string, any>, options?: JobOptions) {
-    return this.add(data || {}, options);
+  public async runJob(data: any, options?: JobOptions): Promise<Job> {
+    return this.add(data || {}, options) as unknown as Job;
   }
 
   public getQueueName(): string {
@@ -165,10 +165,14 @@ export class BullFramework
     });
   }
 
-  public async runJob(queueName: string, jobData: any, options?: JobOptions) {
+  public async runJob(
+    queueName: string,
+    jobData: any,
+    options?: JobOptions
+  ): Promise<Job | undefined> {
     const queue = this.queueMap.get(queueName);
     if (queue) {
-      await queue.runJob(jobData, options);
+      return await queue.runJob(jobData, options);
     }
   }
 

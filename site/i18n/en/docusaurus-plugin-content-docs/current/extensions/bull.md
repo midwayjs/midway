@@ -647,13 +647,13 @@ We can simply get the queue based on the queue name.
 You can also get it through a decorator.
 
 ```typescript
-import { InjectQueue, IQueue } from '@midwayjs/bull';
+import { InjectQueue, BullQueue } from '@midwayjs/bull';
 import { Provide } from '@midwayjs/decorator';
 
 @Provide()
 export class UserService {
   @InjectQueue('test')
-  testQueue: IQueue;
+  testQueue: BullQueue;
 
   async invoke() {
     await this.testQueue.pause();

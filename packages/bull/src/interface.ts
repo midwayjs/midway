@@ -6,13 +6,13 @@ export interface IProcessor {
 }
 
 export interface IQueue<Job> {
-  runJob(data: Record<string, any>, options?: unknown);
+  runJob(data: Record<string, any>, options?: unknown): Promise<Job>;
   getJob(name: string): Promise<Job>;
   getQueueName(): string;
 }
 
 export interface IQueueManager<Queue extends IQueue<Job>, Job> {
-  runJob(queueName: string, jobData: any, options?: unknown);
+  runJob(queueName: string, jobData: any, options?: unknown): Promise<Job|undefined>;
   getJob(queueName: string, jobName: string): Promise<Job>;
   createQueue(queueName: string, queueOptions?: unknown): Queue;
   getQueue(queueName: string): Queue;

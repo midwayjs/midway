@@ -650,13 +650,13 @@ export class TestProcessor implements IProcessor {
 也可以通过装饰器来获取。
 
 ```typescript
-import { InjectQueue, IQueue } from '@midwayjs/bull';
+import { InjectQueue, BullQueue } from '@midwayjs/bull';
 import { Provide } from '@midwayjs/decorator';
 
 @Provide()
 export class UserService {
   @InjectQueue('test')
-  testQueue: IQueue;
+  testQueue: BullQueue;
 
   async invoke() {
     await this.testQueue.pause();
