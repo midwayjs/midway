@@ -401,6 +401,9 @@ export class MidwayWebRouterService {
         method: routerFunction,
       })
     );
+
+    // sort again
+    this.sortPrefixAndRouter();
   }
 
   public sortRouter(urlMatchList: RouterInfo[]) {

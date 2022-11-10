@@ -185,4 +185,13 @@ describe('/test/service/webRouterService.test.ts', function () {
     expect(result1[1].url).toEqual('/:slot');
   });
 
+  it('fix issue 2319', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      '../fixtures/issue-2319/src'
+    ));
+    const collector = await framework.getApplicationContext().getAsync(MidwayWebRouterService);
+    console.log(await collector.getFlattenRouterTable());
+  });
+
 });
