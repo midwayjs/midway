@@ -58,7 +58,9 @@ export class HttpService implements AxiosHttpService {
 
   @Init()
   protected async init() {
-    this.instance = this.serviceFactory.get(this.serviceFactory.getDefaultClientName?.() || 'default');
+    this.instance = this.serviceFactory.get(
+      this.serviceFactory.getDefaultClientName?.() || 'default'
+    );
     if (!this.instance) {
       throw new MidwayCommonError('axios default instance not found.');
     }

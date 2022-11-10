@@ -112,7 +112,9 @@ export class RedisService implements Redis {
 
   @Init()
   async init() {
-    this.instance = this.serviceFactory.get(this.serviceFactory.getDefaultClientName?.() || 'default');
+    this.instance = this.serviceFactory.get(
+      this.serviceFactory.getDefaultClientName?.() || 'default'
+    );
     if (!this.instance) {
       throw new MidwayCommonError('redis default instance not found.');
     }
