@@ -14,7 +14,8 @@ export default (appInfo) => {
           debug: true,
           allowGlobalContext: true,
         }
-      }
+      },
+      defaultDataSourceName: 'default',
     }
   }
 }
