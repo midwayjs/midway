@@ -114,10 +114,7 @@ For more information, see [How to install the Node.js environment](how_to_instal
 
 There will be enthusiastic friends in the group and new versions will be released and pushed.
 
-- DingTalk (left picture): scan the code to join the answering group (apply to join, automatically pass)
-- WeChat (right): Due to the limitation of WeChat group, you can first add a small assistant (note midway plus group) and then pull to WeChat group.
-
-![image.png](https://img.alicdn.com/imgextra/i4/O1CN01LW04Ah1EFWHjVLu7s_!!6000000000322-0-tps-1658-1010.jpg)
+![image.png](https://img.alicdn.com/imgextra/i3/O1CN01F2EYhK1t290OXO4am_!!6000000005843-0-tps-3916-3220.jpg)
 
 
 

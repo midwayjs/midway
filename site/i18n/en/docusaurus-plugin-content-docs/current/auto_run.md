@@ -37,7 +37,7 @@ export class MainConfiguration {
 }
 ```
 
-In this way, once there is more code, there will be many necessary process codes in the onReady.
+In this way, once there is more code, there will be many unnecessary process codes in onReady.
 
 
 
