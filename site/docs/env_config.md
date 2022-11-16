@@ -468,6 +468,24 @@ export class ContainerLifeCycle {
     const remoteConfig = await remoteConfigService.getData();
 
     // 这里的返回值会和全局的 config 做合并
+    // const remoteConfig = {
+    //   typeorm: {
+    //     dataSource: {
+    //       default: {
+    //         type: "mysql",
+    //         host: "localhost",
+    //         port: 3306,
+    //         username: "root",
+    //         password: "123456",
+    //         database: "admin",
+    //         synchronize: false,
+    //         logging: false,
+    //         entities: "/**/**.entity.ts",
+    //         dateStrings: true
+    //       }
+    //     }
+    //   }
+    // }
     return remoteConfig;
   }
 }
