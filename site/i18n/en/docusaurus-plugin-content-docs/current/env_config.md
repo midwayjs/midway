@@ -467,9 +467,7 @@ export class ContainerLifeCycle {
     const remoteConfig = await remoteConfigService.getData();
 
     // The return value here will be merged with the global config
-    return {
-    	data: remoteConfig
-    };
+    return remoteConfig;
   }
 }
 ```

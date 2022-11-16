@@ -468,9 +468,7 @@ export class ContainerLifeCycle {
     const remoteConfig = await remoteConfigService.getData();
 
     // 这里的返回值会和全局的 config 做合并
-    return {
-    	data: remoteConfig
-    };
+    return remoteConfig;
   }
 }
 ```
