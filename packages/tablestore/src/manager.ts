@@ -42,7 +42,9 @@ export class TableStoreService implements TableStoreClient {
 
   @Init()
   async init() {
-    this.instance = this.serviceFactory.get('default');
+    this.instance = this.serviceFactory.get(
+      this.serviceFactory.getDefaultClientName?.() || 'default'
+    );
     if (!this.instance) {
       throw new MidwayCommonError('TableStore default instance not found.');
     }
