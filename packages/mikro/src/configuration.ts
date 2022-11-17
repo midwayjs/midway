@@ -9,7 +9,7 @@ import {
   Init,
   Inject,
 } from '@midwayjs/core';
-import { ENTITY_MODEL_KEY } from './decorator';
+import { DATA_SOURCE_KEY, ENTITY_MODEL_KEY } from './decorator';
 import { MikroDataSourceManager } from './dataSourceManager';
 import { EntityName, RequestContext } from '@mikro-orm/core';
 
@@ -57,6 +57,21 @@ export class MikroConfiguration implements ILifeCycle {
             )
             .em.getRepository(meta.modelKey);
         }
+      }
+    );
+
+    this.decoratorService.registerPropertyHandler(
+      DATA_SOURCE_KEY,
+      (
+        propertyName,
+        meta: {
+          dataSourceName?: string;
+        }
+      ) => {
+        return this.dataSourceManager.getDataSource(
+          meta.dataSourceName ||
+            this.dataSourceManager.getDefaultDataSourceName()
+        );
       }
     );
   }

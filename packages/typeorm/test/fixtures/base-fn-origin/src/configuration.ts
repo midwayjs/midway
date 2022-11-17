@@ -1,9 +1,9 @@
 import { App, Configuration } from '@midwayjs/core';
 import * as orm from '../../../../src';
 import { join } from 'path';
-import { InjectEntityModel } from '../../../../src';
+import { InjectDataSource, InjectEntityModel } from '../../../../src';
 import { OriginUser, User } from './entity/user';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { IMidwayApplication } from '@midwayjs/core';
 
 @Configuration({
@@ -18,10 +18,20 @@ export class ContainerConfiguration {
   @InjectEntityModel(User)
   userModel: Repository<User>;
 
+  @InjectDataSource()
+  defaultDataSource: DataSource;
+
+  @InjectDataSource('default')
+  namedDataSource: DataSource;
+
   @App()
   app: IMidwayApplication;
 
   async onReady() {
+
+    expect(this.defaultDataSource).toBeDefined();
+    expect(this.defaultDataSource).toEqual(this.namedDataSource);
+
     const u = new User();
     u.name = 'oneuser1';
     const uu = await this.userModel.save(u);

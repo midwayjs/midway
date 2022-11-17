@@ -7,7 +7,7 @@ import {
   MidwayDecoratorService,
 } from '@midwayjs/core';
 import { SequelizeDataSourceManager } from './dataSourceManager';
-import { ENTITY_MODEL_KEY } from './decorator';
+import { DATA_SOURCE_KEY, ENTITY_MODEL_KEY } from './decorator';
 import { Model } from 'sequelize-typescript';
 
 @Configuration({
@@ -58,6 +58,21 @@ export class SequelizeConfiguration {
               this.dataSourceManager.getDataSourceNameByModel(meta.modelKey)
           )
           .getRepository(meta.modelKey);
+      }
+    );
+
+    this.decoratorService.registerPropertyHandler(
+      DATA_SOURCE_KEY,
+      (
+        propertyName,
+        meta: {
+          dataSourceName?: string;
+        }
+      ) => {
+        return this.dataSourceManager.getDataSource(
+          meta.dataSourceName ||
+            this.dataSourceManager.getDefaultDataSourceName()
+        );
       }
     );
   }
