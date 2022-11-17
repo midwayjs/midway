@@ -296,11 +296,15 @@ export async function createFunctionApp<
         const ctx = await framework.wrapHttpRequest(req);
 
         // create event and invoke
-        const result = await framework.getTriggerFunction(ctx, url.pathname, {
-          isHttpFunction: true,
-          originEvent: req,
-          originContext: {},
-        });
+        const result = await framework.invokeTriggerFunction(
+          ctx,
+          url.pathname,
+          {
+            isHttpFunction: true,
+            originEvent: req,
+            originContext: {},
+          }
+        );
         const { statusCode, headers, body } = result as any;
         if (res.headersSent) {
           return;
