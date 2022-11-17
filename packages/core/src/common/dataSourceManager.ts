@@ -159,7 +159,6 @@ export function globModels(globString: string, appDir: string) {
   if (/\*/.test(globString)) {
     cwd = appDir;
     pattern = [...DEFAULT_PATTERN.map(p => join(globString, p))];
-    pattern.push(globString);
   } else {
     pattern = [...DEFAULT_PATTERN];
     cwd = join(appDir, globString);
