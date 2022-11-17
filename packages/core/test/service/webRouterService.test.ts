@@ -44,10 +44,21 @@ describe('/test/service/webRouterService.test.ts', function () {
     });
     await collector.getFlattenRouterTable({
       compileUrlPattern: true,
-      noCache: true
     });
     routeInfo = await collector.getMatchedRouterInfo('/api', 'get');
     expect(routeInfo.url).toEqual('/*')
+  });
+
+  it('fix issue 2319', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      '../fixtures/issue-2319/src'
+    ));
+    const collector = await framework.getApplicationContext().getAsync('midwayWebRouterService') as any;
+    const fullUrls = (await collector.getFlattenRouterTable()).map(item => {
+      return item.fullUrl;
+    });
+    expect(fullUrls).toMatchSnapshot();
   });
 
   it('should test generate router and flatten router', async () => {
@@ -73,7 +84,6 @@ describe('/test/service/webRouterService.test.ts', function () {
     });
 
     const routes1 = await midwayWebRouterService.getFlattenRouterTable({
-      noCache: true,
       compileUrlPattern: true,
     });
     expect(routes1.length).toEqual(15);
@@ -183,15 +193,6 @@ describe('/test/service/webRouterService.test.ts', function () {
     const result1 = collector.sortRouter(require('./router').routerList6);
     expect(result1[0].url).toEqual('/hello');
     expect(result1[1].url).toEqual('/:slot');
-  });
-
-  it('fix issue 2319', async () => {
-    const framework = await createLightFramework(path.join(
-      __dirname,
-      '../fixtures/issue-2319/src'
-    ));
-    const collector = await framework.getApplicationContext().getAsync(MidwayWebRouterService);
-    console.log(await collector.getFlattenRouterTable());
   });
 
 });

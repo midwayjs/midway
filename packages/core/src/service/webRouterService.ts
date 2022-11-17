@@ -155,8 +155,6 @@ export class MidwayWebRouterService {
   private isReady = false;
   protected routes = new Map<string, RouterInfo[]>();
   protected routesPriority: RouterPriority[] = [];
-  private cachedFlattenRouteList;
-  private includeCompileUrlPattern = false;
 
   constructor(readonly options: RouterCollectorOptions = {}) {}
 
@@ -494,23 +492,8 @@ export class MidwayWebRouterService {
   public async getFlattenRouterTable(
     options: {
       compileUrlPattern?: boolean;
-      noCache?: boolean;
     } = {}
   ): Promise<RouterInfo[]> {
-    if (this.cachedFlattenRouteList && !options.noCache) {
-      if (options.compileUrlPattern && !this.includeCompileUrlPattern) {
-        this.includeCompileUrlPattern = true;
-        // attach match pattern function
-        for (const item of this.cachedFlattenRouteList) {
-          if (item.fullUrlFlattenString) {
-            item.fullUrlCompiledRegexp = PathToRegexpUtil.toRegexp(
-              item.fullUrlFlattenString
-            );
-          }
-        }
-      }
-      return this.cachedFlattenRouteList;
-    }
     if (!this.isReady) {
       await this.analyze();
       this.isReady = true;
@@ -520,7 +503,6 @@ export class MidwayWebRouterService {
       routeArr = routeArr.concat(this.routes.get(routerPriority.prefix));
     }
     if (options.compileUrlPattern) {
-      this.includeCompileUrlPattern = true;
       // attach match pattern function
       for (const item of routeArr) {
         if (item.fullUrlFlattenString) {
@@ -530,7 +512,6 @@ export class MidwayWebRouterService {
         }
       }
     }
-    this.cachedFlattenRouteList = routeArr;
     return routeArr;
   }
 

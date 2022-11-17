@@ -22,6 +22,7 @@ export class ContainerLifeCycle {
   webRouterService: MidwayWebRouterService;
 
   async onReady() {
+    await this.webRouterService.getFlattenRouterTable();
     this.webRouterService.addRouter(
       ctx => {
         ctx.body = 'test';
