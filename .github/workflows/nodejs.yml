@@ -71,6 +71,15 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+      etcd:
+        image: bitnami/etcd
+        options: >-
+          --name Etcd-server
+          --publish 2379:2379
+          --publish 2380:2380
+          --env ALLOW_NONE_AUTHENTICATION=yes
+          --env ETCD_ADVERTISE_CLIENT_URLS=http://etcd-server:2379
+
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
