@@ -4,12 +4,6 @@ const ToString = Function.prototype.toString;
 const hasOwn = Object.prototype.hasOwnProperty;
 const toStr = Object.prototype.toString;
 
-function fnBody(fn) {
-  return ToString.call(fn)
-    .replace(/^[^{]*{\s*/, '')
-    .replace(/\s*}[^}]*$/, '');
-}
-
 export function isString(value) {
   return typeof value === 'string';
 }
@@ -22,13 +16,6 @@ export function isClass(fn) {
   if (/^class[\s{]/.test(ToString.call(fn))) {
     return true;
   }
-
-  // babel.js classCallCheck() & inlined
-  const body = fnBody(fn);
-  return (
-    /classCallCheck\(/.test(body) ||
-    /TypeError\("Cannot call a class as a function"\)/.test(body)
-  );
 }
 
 export function isAsyncFunction(value) {
