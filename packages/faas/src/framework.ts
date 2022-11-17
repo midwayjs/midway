@@ -169,7 +169,7 @@ export class MidwayFaaSFramework extends BaseFramework<
               if (funcInfo) {
                 return async (...args) => {
                   const context = this.app.createAnonymousContext();
-                  return this.getTriggerFunction(
+                  return this.invokeTriggerFunction(
                     context,
                     funcInfo.funcHandlerName,
                     {
@@ -185,12 +185,12 @@ export class MidwayFaaSFramework extends BaseFramework<
         ) as T;
         return instance;
       },
-      getTriggerFunction: (
+      invokeTriggerFunction: (
         context,
         handlerMapping: string,
         options: HandlerOptions
       ) => {
-        return this.getTriggerFunction(context, handlerMapping, options);
+        return this.invokeTriggerFunction(context, handlerMapping, options);
       },
     });
     // hack use method
@@ -313,7 +313,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     };
   }
 
-  public async getTriggerFunction(
+  public async invokeTriggerFunction(
     context,
     handlerMapping: string,
     options: HandlerOptions

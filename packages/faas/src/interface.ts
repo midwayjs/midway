@@ -60,7 +60,7 @@ export type IMidwayFaaSApplication = IMidwayApplication<
       NextFunction,
       undefined
     >;
-    getTriggerFunction(
+    invokeTriggerFunction(
       context,
       handler: string,
       options: HandlerOptions

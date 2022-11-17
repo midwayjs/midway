@@ -31,7 +31,7 @@ describe('test/new.test.ts', () => {
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('hello world,zhangting');
 
-    result = await starter.getTriggerFunction({}, 'event.handler', {
+    result = await starter.invokeTriggerFunction({}, 'event.handler', {
       isHttpFunction: false,
       originEvent: {
         text: 'zhangting',
@@ -45,7 +45,7 @@ describe('test/new.test.ts', () => {
 
   it('invoke handler by default name', async () => {
     const starter = await createNewStarter('base-app');
-    const data = await starter.getTriggerFunction(
+    const data = await starter.invokeTriggerFunction(
       {
         text: 'hello',
       },
@@ -62,7 +62,7 @@ describe('test/new.test.ts', () => {
   it('invoke different handler use @Handler', async () => {
     const starter = await createNewStarter('base-app-handler');
     assert(
-      (await starter.getTriggerFunction(
+      (await starter.invokeTriggerFunction(
         {
           text: 'hello',
         },
@@ -75,7 +75,7 @@ describe('test/new.test.ts', () => {
       )) === 'ahello'
     );
     assert(
-      (await starter.getTriggerFunction(
+      (await starter.invokeTriggerFunction(
         {
           text: 'hello',
           originContext: {},
@@ -95,7 +95,7 @@ describe('test/new.test.ts', () => {
   it('use default handler and new handler', async () => {
     const starter = await createNewStarter('base-app-handler2');
     assert(
-      (await starter.getTriggerFunction(
+      (await starter.invokeTriggerFunction(
         {
           text: 'hello',
           originContext: {},
@@ -110,7 +110,7 @@ describe('test/new.test.ts', () => {
       )) === 'defaultahello'
     );
     assert(
-      (await starter.getTriggerFunction(
+      (await starter.invokeTriggerFunction(
         {
           text: 'hello',
           originContext: {},
@@ -125,7 +125,7 @@ describe('test/new.test.ts', () => {
       )) === 'abhello'
     );
     assert(
-      (await starter.getTriggerFunction({},'indexService.get', {
+      (await starter.invokeTriggerFunction({},'indexService.get', {
         isHttpFunction: false,
         originEvent: undefined,
         originContext: undefined
@@ -137,7 +137,7 @@ describe('test/new.test.ts', () => {
 
   it('invoke handler by another name', async () => {
     const starter = await createNewStarter('base-app-route');
-    const data = await starter.getTriggerFunction(
+    const data = await starter.invokeTriggerFunction(
       {
         text: 'hello',
         originContext: {},
@@ -169,7 +169,7 @@ describe('test/new.test.ts', () => {
 
   it('use new decorator and use function middleware', async () => {
     const starter = await createNewStarter('base-app-new');
-    const data = await starter.getTriggerFunction(
+    const data = await starter.invokeTriggerFunction(
       {
         text: 'hello',
         originContext: {},
@@ -193,7 +193,7 @@ describe('test/new.test.ts', () => {
       applicationAdapter: runtime,
     });
 
-    const data = await starter.getTriggerFunction(
+    const data = await starter.invokeTriggerFunction(
       {
         text: 'hello',
         httpMethod: 'GET',
@@ -213,7 +213,7 @@ describe('test/new.test.ts', () => {
 
   it('invoke controller handler', async () => {
     const starter = await createNewStarter('base-app-controller');
-    let data = await starter.getTriggerFunction(
+    let data = await starter.invokeTriggerFunction(
       {
         text: 'hello',
         originContext: {},
@@ -261,7 +261,7 @@ describe('test/new.test.ts', () => {
     expect(result).toEqual('hello event3abc');
 
     // test event middleware
-    result = await app.getTriggerFunction(
+    result = await app.invokeTriggerFunction(
       {},
       'helloService.handler',
       {
