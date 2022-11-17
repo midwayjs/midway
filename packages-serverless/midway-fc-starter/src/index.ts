@@ -157,11 +157,15 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
     }
 
     try {
-      const result = await this.framework.invokeTriggerFunction(ctx, handlerName, {
-        isHttpFunction: isHTTPMode || isApiGateway,
-        originEvent: event,
-        originContext: context,
-      });
+      const result = await this.framework.invokeTriggerFunction(
+        ctx,
+        handlerName,
+        {
+          isHttpFunction: isHTTPMode || isApiGateway,
+          originEvent: event,
+          originContext: context,
+        }
+      );
       if (isHTTPMode || isApiGateway) {
         const { isBase64Encoded, statusCode, headers, body } = result;
 
