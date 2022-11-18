@@ -9,7 +9,10 @@
     "bootstrap": {
       "hoist": true,
       "noCi": true,
-      "npmClientArgs": ["--no-package-lock", "--legacy-peer-deps"],
+      "npmClientArgs": [
+        "--no-package-lock",
+        "--legacy-peer-deps"
+      ],
       "nohoist": [
         "@midwayjs/faas-middleware-upload",
         "midway-test-component",
@@ -43,5 +46,5 @@
     "cacheDir": ".changelog"
   },
   "npmClient": "npm",
-  "version": "3.7.4"
+  "version": "3.8.0"
 }

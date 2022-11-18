@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/serverless-worker-starter",
   "private": true,
-  "version": "3.7.0",
+  "version": "3.8.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -10,7 +10,7 @@
     "type-is": "1.6.18"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.7.0",
+    "@midwayjs/core": "^3.8.0",
     "@midwayjs/jest-environment-service-worker": "0.1.2",
     "@midwayjs/jsdom-service-worker": "0.1.1",
     "@midwayjs/logger": "^2.15.0",

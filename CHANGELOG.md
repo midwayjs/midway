@@ -1,6 +1,40 @@
 # Change Log
 
 
+## v3.8.0 (2022-11-18)
+
+#### :rocket: New Feature
+* `etcd`
+  * [#2481](https://github.com/midwayjs/midway/pull/2481) feat: add etcd component ([@czy88840616](https://github.com/czy88840616))
+* `axios`, `core`, `cos`, `oss`, `redis`, `tablestore`
+  * [#2482](https://github.com/midwayjs/midway/pull/2482) feat: serviceFactory support default client name ([@czy88840616](https://github.com/czy88840616))
+* `core`, `mikro`, `sequelize`, `typeorm`
+  * [#2498](https://github.com/midwayjs/midway/pull/2498) feat: add injectDataSource for mikro/typeorm/sequelize ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `core`
+  * [#2505](https://github.com/midwayjs/midway/pull/2505) fix: windows entity glob and Closes [#2488](https://github.com/midwayjs/midway/issues/2488) ([@czy88840616](https://github.com/czy88840616))
+  * [#2504](https://github.com/midwayjs/midway/pull/2504) fix: remove router cache and fix issue #2319 ([@czy88840616](https://github.com/czy88840616))
+* `bull`
+  * [#2493](https://github.com/midwayjs/midway/pull/2493) fix: bull exports and typings ([@czy88840616](https://github.com/czy88840616))
+
+#### :running_woman: Performance
+* `core`
+  * [#2506](https://github.com/midwayjs/midway/pull/2506) perf: remove babel isClass check ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2502](https://github.com/midwayjs/midway/pull/2502) docs: fix remoteConfig in Life Cycle ([@haitaodesign](https://github.com/haitaodesign))
+* [#2491](https://github.com/midwayjs/midway/pull/2491) docs(site): update auto_run.md ([@cave-](https://github.com/cave-))
+* [#2489](https://github.com/midwayjs/midway/pull/2489) docs(site): fix midway-throttler url link in awesome_midway.md ([@larryzhuo](https://github.com/larryzhuo))
+
+#### Committers: 4
+- Haitao Lee ([@haitaodesign](https://github.com/haitaodesign))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@cave-](https://github.com/cave-)
+- larry zhuo ([@larryzhuo](https://github.com/larryzhuo))
+
+
+
 ## 3.7.4 (2022-11-08)
 
 #### :bug: Bug Fix
