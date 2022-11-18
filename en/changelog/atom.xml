@@ -2,12 +2,36 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2022-11-08T20:00:00.000Z</updated>
+    <updated>2022-11-18T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2022 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.8.0]]></title>
+        <id>/v3.8.0</id>
+        <link href="https://midwayjs.org/en/changelog/v3.8.0"/>
+        <updated>2022-11-18T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[New Feature]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-new-feature">🚀 New Feature<a class="hash-link" href="#-new-feature" title="Lien direct vers le titre">​</a></h2><ul><li><code>etcd</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2481" target="_blank" rel="noopener noreferrer">#2481</a> feat: add etcd component (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>axios</code>, <code>core</code>, <code>cos</code>, <code>oss</code>, <code>redis</code>, <code>tablestore</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2482" target="_blank" rel="noopener noreferrer">#2482</a> feat: serviceFactory support default client name (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>core</code>, <code>mikro</code>, <code>sequelize</code>, <code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2498" target="_blank" rel="noopener noreferrer">#2498</a> feat: add injectDataSource for mikro/typeorm/sequelize (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2505" target="_blank" rel="noopener noreferrer">#2505</a> fix: windows entity glob and Closes <a href="https://github.com/midwayjs/midway/issues/2488" target="_blank" rel="noopener noreferrer">#2488</a> (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li><a href="https://github.com/midwayjs/midway/pull/2504" target="_blank" rel="noopener noreferrer">#2504</a> fix: remove router cache and fix issue #2319 (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>bull</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2493" target="_blank" rel="noopener noreferrer">#2493</a> fix: bull exports and typings (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="️-performance">🏃‍♂️ Performance<a class="hash-link" href="#️-performance" title="Lien direct vers le titre">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2506" target="_blank" rel="noopener noreferrer">#2506</a> perf: remove babel isClass check (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a class="hash-link" href="#-documentation" title="Lien direct vers le titre">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/2502" target="_blank" rel="noopener noreferrer">#2502</a> docs: fix remoteConfig in Life Cycle (<a href="https://github.com/haitaodesign" target="_blank" rel="noopener noreferrer">@haitaodesign</a>)</li><li><a href="https://github.com/midwayjs/midway/pull/2491" target="_blank" rel="noopener noreferrer">#2491</a> docs(site): update auto_run.md (<a href="https://github.com/cave-" target="_blank" rel="noopener noreferrer">@cave-</a>)</li><li><a href="https://github.com/midwayjs/midway/pull/2489" target="_blank" rel="noopener noreferrer">#2489</a> docs(site): fix midway-throttler url link in awesome_midway.md (<a href="https://github.com/larryzhuo" target="_blank" rel="noopener noreferrer">@larryzhuo</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-4">Committers: 4<a class="hash-link" href="#committers-4" title="Lien direct vers le titre">​</a></h2><ul><li>Haitao Lee (<a href="https://github.com/haitaodesign" target="_blank" rel="noopener noreferrer">@haitaodesign</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li><a href="https://github.com/cave-" target="_blank" rel="noopener noreferrer">@cave-</a></li><li>larry zhuo (<a href="https://github.com/larryzhuo" target="_blank" rel="noopener noreferrer">@larryzhuo</a>)</li></ul>]]></content>
+        <author>
+            <name>cave-</name>
+            <uri>https://github.com/cave-</uri>
+        </author>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>Haitao Lee</name>
+            <uri>https://github.com/haitaodesign</uri>
+        </author>
+        <author>
+            <name>larry zhuo</name>
+            <uri>https://github.com/larryzhuo</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[3.7.4]]></title>
         <id>/3.7.4</id>
