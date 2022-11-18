@@ -63,6 +63,13 @@ const config = {
           lastVersion: 'current',
           sidebarCollapsed: false,
         },
+        blog: {
+          // routeBasePath: '/',
+          path: 'blog',
+          postsPerPage: 5,
+          blogSidebarCount: 'ALL',
+          blogSidebarTitle: 'All our posts',
+        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
