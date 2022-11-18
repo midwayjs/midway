@@ -31,7 +31,7 @@
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/mock": "^3.7.3",
     "dayjs": "1.11.6",
-    "egg-logger": "2.9.0",
+    "egg-logger": "2.9.1",
     "egg-mock": "4.2.1",
     "egg-scripts": "2.17.0",
     "egg-socket.io": "4.1.6",
