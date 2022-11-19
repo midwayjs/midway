@@ -77,6 +77,9 @@ const result = await makeHttpRequest('http://127.1:7001/', {
 // result.data...
 ```
 
+:::caution
+Note, please do not return the result object directly in the request. The result object is a standard httpResponse, which cannot be directly serialized in most scenarios, and an object loop error will be thrown.
+:::
 
 Set the request timeout time.
 

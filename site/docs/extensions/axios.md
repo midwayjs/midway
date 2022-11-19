@@ -77,6 +77,9 @@ const result = await makeHttpRequest('http://127.1:7001/', {
 // result.data ...
 ```
 
+:::caution
+注意，请不要在请求中直接返回 result 对象，resut 对象是标准的 httpResponse，在大部分场景下无法被直接序列化，会抛出对象循环的错误。
+:::
 
 设置请求超时时间。
 

@@ -633,7 +633,31 @@ export class MainConfiguration {
 }
 ```
 
+Starting with v3.8.0, it is also possible to inject via a decorator.
 
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { InjectDataSource } from '@midwayjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
+
+@Configuration({
+   //...
+})
+export class MainConfiguration {
+  
+   // Inject the default data source
+   @InjectDataSource()
+   defaultDataSource: Sequelize;
+  
+   // inject custom data source
+   @InjectDataSource('default1')
+   customDataSource: Sequelize;
+
+   async onReady(container: IMidwayContainer) {
+     //...
+   }
+}
+```
 
 ## Common problem
 

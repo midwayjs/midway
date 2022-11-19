@@ -134,7 +134,8 @@
       "collapsible": false,
       "items": [
         "extensions/grpc",
-        "extensions/consul"
+        "extensions/consul",
+        "extensions/etcd"
       ]
     },
     {

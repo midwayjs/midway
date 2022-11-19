@@ -117,6 +117,7 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 `initClients` 方法是基类中实现的，它需要传递一个完整的用户配置，并循环调用 `createClient` 来创建对象，保存到内存中。
 
 
+
 ## 获取实例
 
 
@@ -260,3 +261,136 @@ export class UserService {
 }
 ```
 `createInstance` 方法的第一个参数是配置，如果动态调用的时候，可以手动传参，第二个参数是一个字符串名称，如果传入了名称，创建完的实例将会保存到内存中，后续可以从服务工厂中再次获取。
+
+
+
+## 实例配置合并逻辑
+
+在实际代码运行时，即使是单实例，配置一个 `client`，也会在内存中将配置变换为 `clients`。
+
+比如下面的代码：
+
+```typescript
+// config.default.ts
+export const httpClient = {
+  client: {
+  	baseUrl: ''
+  }
+}
+```
+
+在内存中会变为：
+
+```typescript
+// config.default.ts
+export const httpClient = {
+  clients: {
+    default: {
+      baseUrl: ''
+    }
+  }
+}
+```
+
+会多出一个名为 `default` 的默认实例，服务工厂会以 `clients` 的配置进行初始化。
+
+
+
+## 默认实例代理（可选）
+
+如果用户每次使用时，都通过 `serviceFactory` 去获取，会非常的繁琐，对于最常用的默认实例，可以提供一个代理类，使其代理所有的目标实例方法。
+
+```typescript
+import { ServiceFactory, MidwayCommonError, delegateTargetAllPrototypeMethod } from '@midwayjs/core';
+import { Provide, Scope, ScopeEnum, Init } from '@midwayjs/decorator';
+
+// ...
+export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
+  // ...
+}
+
+// 下面是默认代理类
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class HTTPClientService implements HTTPClient {
+  @Inject()
+  private serviceFactory: HTTPClientServiceFactory;
+
+  // 这个属性用于保存实际的实例
+  private instance: HTTPClient;
+
+  @Init()
+  async init() {
+    // 在初始化阶段，从工厂拿到默认实例
+    this.instance = this.serviceFactory.get(
+      this.serviceFactory.getDefaultClientName() || 'default'
+    );
+    if (!this.instance) {
+      throw new MidwayCommonError('http client default instance not found.');
+    }
+  }
+}
+
+// 下面这段代码，用于默认实例类的 ts 定义正确被继承
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface HTTPClientService extends HTTPClient {
+  // empty
+}
+
+// 下面这段代码，用于默认实例类的实现可以被代理
+delegateTargetAllPrototypeMethod(HTTPClientService, HTTPClient);
+
+```
+
+通过上面的代码，我们就可以直接使用 `HTTPClientService` ，而无需从 `HTTPClientServiceFactory` 获取默认实例。
+
+`delegateTargetAllPrototypeMethod` 是 Midway 提供的代理实例方法的工具方法。
+
+此外，还有一些其他可用的工具方法，列举如下：
+
+- `delegateTargetAllPrototypeMethod` 用于代理目标所有的原型方法，包括原型链，不包括构造器和内部隐藏方法
+- `delegateTargetPrototypeMethod` 用于代理目标所有的原型方法，不包括构造器和内部隐藏方法
+- `delegateTargetMethod` 代理目标上指定的方法
+
+
+
+## 修改默认实例名
+
+默认情况下，默认的实例名为 `default` ，默认的实例代理内部会根据该实例进行代理。
+
+假如用户没有配置 `default` 实例，或者希望修改默认实例，用户通过配置修改。
+
+```typescript
+// config.default.ts
+export const httpClient = {
+  clients: {
+    default: {
+      baseUrl: ''
+    },
+    default2: {
+      baseUrl: ''
+    }
+  },
+  defaultClientName: 'default2',
+}
+```
+
+在默认的实例代理中，会通过 `this.serviceFactory.getDefaultClientName()` 来获取这个值。
+
+```typescript
+import { HTTPClientService } from './service/httpClientServiceFactory';
+import { join } from 'path';
+
+@Provide()
+export class UserService {
+  
+  @Inject()
+  httpClientService: HTTPClientService;
+  
+  async invoke() {
+		// this.httpClientService 中指向的是 default2
+  }
+}
+```
+

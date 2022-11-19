@@ -229,6 +229,56 @@ export class BookController {
 }
 ```
 
+## Advanced Features
+
+### Get data source
+
+The data source is the created data source object, which we can obtain by injecting the built-in data source manager.
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { MikroDataSourceManager } from '@midwayjs/mikro';
+
+@Configuration({
+  //...
+})
+export class MainConfiguration {
+
+  async onReady(container: IMidwayContainer) {
+    const dataSourceManager = await container. getAsync(MikroDataSourceManager);
+    const orm = dataSourceManager.getDataSource('default');
+    const connection = orm.em.getConnection();
+    //...
+  }
+}
+```
+
+Starting with v3.8.0, it is also possible to inject via a decorator.
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { InjectDataSource } from '@midwayjs/mikro';
+import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
+
+@Configuration({
+  //...
+})
+export class MainConfiguration {
+  
+  // Inject the default data source
+  @InjectDataSource()
+  defaultDataSource: MikroORM<IDatabaseDriver<Connection>>;
+  
+  // inject custom data source
+  @InjectDataSource('default1')
+  customDataSource: MikroORM<IDatabaseDriver<Connection>>;
+
+  async onReady(container: IMidwayContainer) {
+    //...
+  }
+}
+```
+
 
 
 ## Frequently Asked Questions

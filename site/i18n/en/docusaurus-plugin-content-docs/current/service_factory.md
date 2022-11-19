@@ -259,3 +259,135 @@ export class UserService {
 }
 ```
 The first parameter of the `createInstance` method is configuration. If you call dynamically, you can manually pass the parameter. The second parameter is a string name. If the name is passed in, the created instance will be saved in memory and can be obtained from the service factory again later.
+
+
+
+## Instance configuration merge logic
+
+When the actual code is running, even if it is a single instance, configuring a `client` will transform the configuration into `clients` in memory.
+
+For example the following code:
+
+```typescript
+// config.default.ts
+export const httpClient = {
+  client: {
+  baseUrl: ''
+  }
+}
+```
+
+in memory becomes:
+
+```typescript
+// config.default.ts
+export const httpClient = {
+  clients: {
+    default: {
+      baseUrl: ''
+    }
+  }
+}
+```
+
+There will be an extra default instance called `default`, and the service factory will be initialized with the configuration of `clients`.
+
+
+
+## Default instance proxy (optional)
+
+It will be very cumbersome if the user needs to obtain it through `serviceFactory` every time they use it. For the most commonly used default instance, a proxy class can be provided to make it proxy all the target instance methods.
+
+```typescript
+import { ServiceFactory, MidwayCommonError, delegateTargetAllPrototypeMethod } from '@midwayjs/core';
+import { Provide, Scope, ScopeEnum, Init } from '@midwayjs/decorator';
+
+//...
+export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
+  //...
+}
+
+// The following is the default proxy class
+@Provide()
+@Scope(ScopeEnum. Singleton)
+export class HTTPClientService implements HTTPClient {
+  @Inject()
+  private serviceFactory: HTTPClientServiceFactory;
+
+  // This property is used to hold the actual instance
+  private instance: HTTPClient;
+
+  @Init()
+  async init() {
+    // In the initialization phase, get the default instance from the factory
+    this.instance = this.serviceFactory.get(
+      this.serviceFactory.getDefaultClientName() || 'default'
+    );
+    if (!this. instance) {
+      throw new MidwayCommonError('http client default instance not found.');
+    }
+  }
+}
+
+// In the code below, the ts definition for the default instance class is correctly inherited
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface HTTPClientService extends HTTPClient {
+  //empty
+}
+
+// The following code, for the implementation of the default instance class can be proxied
+delegateTargetAllPrototypeMethod(HTTPClientService, HTTPClient);
+
+```
+
+With the above code, we can use `HTTPClientService` directly without getting the default instance from `HTTPClientServiceFactory`.
+
+`delegateTargetAllPrototypeMethod` is a utility method provided by Midway to delegate instance methods.
+
+In addition, there are some other available tool methods, listed below:
+
+- `delegateTargetAllPrototypeMethod` is used to delegate all prototype methods of the target, including the prototype chain, excluding constructors and internal hidden methods
+- `delegateTargetPrototypeMethod` is used to delegate all prototype methods of the target, excluding constructors and inner hidden methods
+- `delegateTargetMethod` specifies the method on the proxy target
+
+
+
+## Modify the default instance name
+
+By default, the default instance name is `default`, and the default instance proxy will be proxied internally based on this instance.
+
+If the user does not configure the `default` instance, or wants to modify the default instance, the user can modify it through configuration.
+
+```typescript
+// config.default.ts
+export const httpClient = {
+  clients: {
+    default: {
+      baseUrl: ''
+    },
+    default2: {
+      baseUrl: ''
+    }
+  },
+  defaultClientName: 'default2',
+}
+```
+
+In the default instance proxy, this value will be obtained through `this.serviceFactory.getDefaultClientName()`.
+
+```typescript
+import { HTTPClientService } from './service/httpClientServiceFactory';
+import { join } from 'path';
+
+@Provide()
+export class UserService {
+  
+  @Inject()
+  httpClientService: HTTPClientService;
+  
+  async invoke() {
+    // this.httpClientService points to default2
+  }
+}
+```

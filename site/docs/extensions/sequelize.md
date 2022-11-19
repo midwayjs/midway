@@ -634,6 +634,32 @@ export class MainConfiguration {
 }
 ```
 
+从 v3.8.0 开始，也可以通过装饰器注入。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { InjectDataSource } from '@midwayjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  
+  // 注入默认数据源
+  @InjectDataSource()
+  defaultDataSource: Sequelize;
+  
+  // 注入自定义数据源
+  @InjectDataSource('default1')
+  customDataSource: Sequelize;
+
+  async onReady(container: IMidwayContainer) {
+    // ...
+  }
+}
+```
+
 
 
 ## 常见问题

@@ -28,12 +28,10 @@ To use OSS components, you need to apply for an OSS bucket in advance. Bucket is
 
 ## Installation dependency
 
-
-`@midwayjs/oss` is the main function package, and `@types/ali-oss` is the official definition package of oss.
+`@midwayjs/oss` is the main function package of oss.
 
 ```bash
 $ npm i @midwayjs/oss@3 --save
-$ npm i @types/ali-oss -- save-dev // install to dev dependency
 ```
 Or reinstall the following dependencies in `package.json`.
 
@@ -42,21 +40,11 @@ Or reinstall the following dependencies in `package.json`.
   "dependencies": {
     "@midwayjs/oss": "^3.0.0",
     // ...
-  },
-  "devDependencies": {
-    "@types/ali-oss": "^6.16.0 ",
-    // ...
   }
 }
 ```
 
 
-
-:::info
-
-If you find that there is no method definition in the OSSService, be sure to check this item.
-
-:::
 
 
 ## Introducing components
@@ -138,7 +126,7 @@ export default {
 }
 ```
 
-**sts**
+**STS**
 ```typescript
 // src/config/config.default
 export default {
