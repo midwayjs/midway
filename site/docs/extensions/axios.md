@@ -78,7 +78,7 @@ const result = await makeHttpRequest('http://127.1:7001/', {
 ```
 
 :::caution
-注意，请不要在请求中直接返回 result 对象，resut 对象是标准的 httpResponse，在大部分场景下无法被直接序列化，会抛出对象循环的错误。
+注意，请不要在请求中直接返回 result 对象，result 对象是标准的 httpResponse，在大部分场景下无法被直接序列化，会抛出对象循环的错误。
 :::
 
 设置请求超时时间。
@@ -258,7 +258,7 @@ export class UserService {
   async invoke() {
   	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
     const result = await this.httpService.get(url);
-    // TODO resut
+    // TODO result
   }
 }
 ```
@@ -339,7 +339,7 @@ export class UserService {
   	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
     const customAxios = this.httpServiceFactory.get('customAxios');
     const result = await customAxios.get(url);
-    // TODO resut
+    // TODO result
   }
 }
 ```

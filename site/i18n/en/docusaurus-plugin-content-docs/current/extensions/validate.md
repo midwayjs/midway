@@ -640,7 +640,7 @@ export class UserService {
     });
 
     // Failed to return to re. Error
-    // Successfully returned resut.value
+    // Successfully returned result.value
   }
 }
 ```

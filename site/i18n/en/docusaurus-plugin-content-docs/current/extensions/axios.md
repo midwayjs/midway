@@ -258,7 +258,7 @@ export class UserService {
   async invoke() {
   	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
     const result = await this.httpService.get(url);
-    // TODO resut
+    // TODO result
   }
 }
 ```
@@ -339,7 +339,7 @@ export class UserService {
   	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
     const customAxios = this.httpServiceFactory.get('customAxios');
     const result = await customAxios.get(url);
-    // TODO resut
+    // TODO result
   }
 }
 ```

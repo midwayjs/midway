@@ -335,7 +335,7 @@ export class UserDTO {
 
   @Rule(RuleType.string().required())
   name: string;
-  
+
   @Rule(RuleType.alternatives([RuleType.string(), getSchema(SchoolDTO)]).required())
   school: string | SchoolDTO;
 }
@@ -640,8 +640,8 @@ export class UserService {
       nickName: 'harry'
     });
 
-    // 失败返回 resut.error
-    // 成功返回 resut.value
+    // 失败返回 result.error
+    // 成功返回 result.value
   }
 }
 ```
