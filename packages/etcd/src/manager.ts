@@ -51,7 +51,7 @@ export class ETCDService implements Etcd3 {
   @Init()
   async init() {
     this.instance = this.serviceFactory.get(
-      this.serviceFactory.getDefaultClientName() || 'default'
+      this.serviceFactory.getDefaultClientName?.() || 'default'
     );
     if (!this.instance) {
       throw new MidwayCommonError('etcd default instance not found.');
