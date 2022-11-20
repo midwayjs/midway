@@ -4,13 +4,14 @@ The following lists high-quality community projects related to Midwayjs
 
 ## Microservices
 
-| Name                                         | Author      | Description                                                       |
-| -------------------------------------------- | ----------- | ----------------------------------------------------------------- |
-| [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                            |
-| [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                   |
-| [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components |
-| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway OpenTelemetry component                                    |
-| [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                       |
+| Name                                         | Author      | Description                                                                                                                            |
+| -------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                                                                                                 |
+| [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                                                                                        |
+| [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components                                                                      |
+| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway OpenTelemetry component                                                                                                         |
+| [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `@Transactional` decorator, intergrated [OpenTelemetry] trace |
+| [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                                                                                            |
 ## swagger
 
 | Name                                   | Author | Description             |
@@ -49,6 +50,7 @@ Welcome everyone to contribute to the community, edit this page and add your fav
 [midway-apollo]: https://github.com/helloHT/midway-apollo
 [@letscollab/midway-nacos]: https://github.com/deskbtm-letscollab/midway-nacos
 [@mwcp/otel]: https://github.com/waitingsong/midway-components/tree/main/packages/otel
+[@mwcp/kmore]: https://github.com/waitingsong/kmore
 
 [midwayjs-knife4j2]: https://github.com/fangbao-0418/midway/tree/master/packages/swagger
 [yuntian001/midway-vite-view]: https://github.com/yuntian001/midway-vite-view
@@ -59,3 +61,6 @@ Welcome everyone to contribute to the community, edit this page and add your fav
 [midway-vue3-ssr]: https://github.com/lqsong/midway-vue3-ssr
 [midway-learn]: https://github.com/hbsjmsjwj/midway-learn.git
 [midway-throttler]: https://github.com/larryzhuo/midway-throttler
+
+[Knex]: https://knexjs.org/
+[OpenTelemetry]: https://github.com/open-telemetry
