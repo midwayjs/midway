@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.8.1 (2022-11-20)
+
+#### :bug: Bug Fix
+* `etcd`
+  * [#2512](https://github.com/midwayjs/midway/pull/2512) fix: etcd support default instance name ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.8.0 (2022-11-18)
 
 #### :rocket: New Feature

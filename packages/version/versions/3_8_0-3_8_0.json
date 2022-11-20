@@ -18,7 +18,10 @@
   "@midwayjs/cos": "3.8.0",
   "@midwayjs/cross-domain": "3.8.0",
   "@midwayjs/decorator": "3.8.0",
-  "@midwayjs/etcd": "3.8.0",
+  "@midwayjs/etcd": [
+    "3.8.0",
+    "3.8.1"
+  ],
   "@midwayjs/express-session": "3.8.0",
   "@midwayjs/faas": "3.8.0",
   "@midwayjs/grpc": "3.8.0",
@@ -49,7 +52,10 @@
   "@midwayjs/typeorm": "3.8.0",
   "@midwayjs/upload": "3.8.0",
   "@midwayjs/validate": "3.8.0",
-  "@midwayjs/version": "3.8.0",
+  "@midwayjs/version": [
+    "3.8.0",
+    "3.8.1"
+  ],
   "@midwayjs/view-ejs": "3.8.0",
   "@midwayjs/view-nunjucks": "3.8.0",
   "@midwayjs/view": "3.8.0",
