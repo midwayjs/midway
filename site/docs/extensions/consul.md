@@ -94,7 +94,7 @@ export default {
       // consul server 服务地址
       host: '192.168.0.10',
       // consul server 服务端口
-      port: 8500,
+      port: '8500',
       // 调用服务的策略(默认选取 random 具有随机性)
       strategy: 'random',
     },
