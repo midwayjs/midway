@@ -15,7 +15,7 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
 
   constructor(
     readonly applicationContext: IMidwayContainer,
-    readonly globalOptions
+    readonly globalOptions = {}
   ) {
     super();
   }
