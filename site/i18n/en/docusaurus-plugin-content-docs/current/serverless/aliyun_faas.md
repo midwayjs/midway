@@ -721,13 +721,13 @@ Note that the scheduled task is triggered by the gateway and will not be affecte
 
 ### 5. Revised AccessKey
 
-Sometimes, we fill in a wrong accessKey or other regional options on the first release. We provide a modifiable parameter to clean up the last error on the release.
+Sometimes, we fill in a wrong `AccessKey` or other regional options on the first release. We provide a modifiable parameter to clean up the last error on the release.
 
 ```bash
 midway-bin deploy --resetConfig
 ```
 
-If you only want to adjust specific fields, you can go to the `~/.fcli/config.yaml` file and modify and save them.
+Enter default when prompted `Please create alias for key pair. If not, please enter to skip`, otherwise the current AccessKey will not be used. If you only want to adjust specific fields, you can enter the `~/.s/access.yaml` file, modify and save directly.
 
 ### 6. CLI Releases Red Tips
 

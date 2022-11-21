@@ -94,7 +94,7 @@ export default {
       // consul server service address
       host: '192.168.0.10',
       // consul server service port
-      port: 8500
+      port: '8500',
       // Policy for invoking the service (random is selected by default)
       strategy: 'random',
     },
