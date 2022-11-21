@@ -8,7 +8,7 @@ Examples are as follows.
 - Decompose single tasks that might block the Node.js event loop. For example, if a user request requires CPU-intensive work like audio transcoding, this task can be delegated to another process, freeing up the user-facing process to maintain a response.
 - Provide reliable communication channels across various services. For example, you can queue tasks (jobs) in one process or service and use them in another process or service. You can receive notifications (by listening for status events) when a job completes, errors, or other status changes during the job lifecycle of any process or service. When a queue producer or consumer fails, their state is retained and job processing can be automatically restarted when the node is restarted.
 
-Midway provides the @midwayjs/bull package as an abstraction/wrapper on top of [Bull](https://github.com/OptimalBits/bull), a popular, well-supported, high performance NPP-based application. well-supported, high-performance implementation of the Node.js-based queueing system. This package makes it easy to integrate Bull Queues into your application in a Nest-friendly way.
+Midway provides the @midwayjs/bull package as an abstraction/wrapper on top of [Bull](https://github.com/OptimalBits/bull), a popular, well-supported, high performance NPP-based application. well-supported, high-performance implementation of the Node.js-based queueing system. This package makes it easy to integrate Bull Queues into your application.
 
 Bull uses Redis to hold job data, and when using Redis, the Queue architecture is fully distributed and platform independent. For example, you can run some Queue producers, consumers in one (or more) nodes (processes), and other producers and consumers on other nodes.
 
