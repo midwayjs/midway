@@ -856,7 +856,7 @@ const subClient = pubClient.duplicate();
 export default {
   // ...
   socketIO: {
-    adapter: redisAdapter(pubClient, subClient)
+    adapter: createAdapter(pubClient, subClient)
   },
 }
 ```

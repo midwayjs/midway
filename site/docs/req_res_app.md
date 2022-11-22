@@ -114,7 +114,7 @@ export class MainConfiguration implements ILifeCycle {
   @App()
   koaApp: koa.Application;
 
-  @App(MidwayFrameworkType.WS)
+  @App('webSocket')
   wsApp: ws.Application;
 
   async onReady() {
@@ -125,6 +125,25 @@ export class MainConfiguration implements ILifeCycle {
 ```
 
 非主要的 Application，需要通过 `@App()` 装饰器的参数或者 [ApplicationManager](./built_in_service#midwayapplicationmanager) 来获取。
+
+ `@App()` 装饰器的参数为组件的 `namespace`。
+
+常见的 namespace 如下：
+
+| Package            | Namespace |
+| ------------------ | --------- |
+| @midwayjs/web      | egg       |
+| @midwayjs/koa      | koa       |
+| @midwayjs/express  | express   |
+| @midwayjs/grpc     | gRPC      |
+| @midwayjs/ws       | webSocket |
+| @midwayjs/socketio | socketIO  |
+| @midwayjs/faas     | faas      |
+| @midwayjs/kafka    | kafka     |
+| @midwayjs/rabbitmq | rabbitMQ  |
+| @midwayjs/bull     | bull      |
+
+
 
 ### getAppDir
 

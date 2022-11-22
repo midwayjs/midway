@@ -126,6 +126,25 @@ export class MainConfiguration implements ILifeCycle {
 
 Non-primary Application need to be obtained through the parameters or [ApplicationManager](./built_in_service#midwayapplicationmanager) of the `@App()` decorator.
 
+The parameter of the `@App()` decorator is the `namespace` of the component.
+
+Common namespaces are as follows:
+
+| Package            | Namespace |
+| ------------------ | --------- |
+| @midwayjs/web      | egg       |
+| @midwayjs/koa      | koa       |
+| @midwayjs/express  | express   |
+| @midwayjs/grpc     | gRPC      |
+| @midwayjs/ws       | webSocket |
+| @midwayjs/socketio | socketIO  |
+| @midwayjs/faas     | faas      |
+| @midwayjs/kafka    | kafka     |
+| @midwayjs/rabbitmq | rabbitMQ  |
+| @midwayjs/bull     | bull      |
+
+
+
 ### getAppDir
 
 Used to get the project root directory path.
