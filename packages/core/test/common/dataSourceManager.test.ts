@@ -1,5 +1,5 @@
 import { DataSourceManager } from '../../src';
-import { globModels } from '../../src/common/dataSourceManager';
+import { globModels, formatGlobString } from '../../src/common/dataSourceManager';
 import { join } from 'path';
 
 describe('test/common/dataSourceManager.test.ts', () => {
@@ -217,3 +217,50 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(instance.getDefaultDataSourceName()).toEqual('abc');
   });
 });
+
+describe('test global pattern', () => {
+  it('should test parse global string', function () {
+    expect(formatGlobString('./entity')).toEqual([
+      '/entity/**/**.ts',
+      '/entity/**/**.js',
+      '/entity/**/**.mts',
+      '/entity/**/**.mjs',
+      '/entity/**/**.cts',
+      '/entity/**/**.cjs'
+    ]);
+
+    expect(formatGlobString('**/entity')).toEqual([
+      '**/entity/**/**.ts',
+      '**/entity/**/**.js',
+      '**/entity/**/**.mts',
+      '**/entity/**/**.mjs',
+      '**/entity/**/**.cts',
+      '**/entity/**/**.cjs'
+    ]);
+
+    expect(formatGlobString('entity')).toEqual([
+      '/entity/**/**.ts',
+      '/entity/**/**.js',
+      '/entity/**/**.mts',
+      '/entity/**/**.mjs',
+      '/entity/**/**.cts',
+      '/entity/**/**.cjs'
+    ]);
+
+    expect(formatGlobString('**/abc/**')).toEqual([
+      '**/abc/**',
+    ]);
+
+    expect(formatGlobString('**/entity/**.entity.ts')).toEqual([
+      '**/entity/**.entity.ts',
+    ]);
+
+    expect(formatGlobString('entity/abc.ts')).toEqual([
+      '/entity/abc.ts',
+    ]);
+
+    expect(formatGlobString('**/**/entity/*.entity.{j,t}s')).toEqual([
+      '**/**/entity/*.entity.{j,t}s'
+    ]);
+  });
+})
