@@ -15,21 +15,21 @@ const preserveCamelCase = (string, toLowerCase, toUpperCase) => {
   let isLastCharUpper = false;
   let isLastLastCharUpper = false;
 
-  for (let i = 0; i < string.length; i++) {
-    const character = string[i];
+  for (let index = 0; index < string.length; index++) {
+    const character = string[index];
 
     if (isLastCharLower && UPPERCASE.test(character)) {
-      string = string.slice(0, i) + '-' + string.slice(i);
+      string = string.slice(0, index) + '-' + string.slice(index);
       isLastCharLower = false;
       isLastLastCharUpper = isLastCharUpper;
       isLastCharUpper = true;
-      i++;
+      index++;
     } else if (
       isLastCharUpper &&
       isLastLastCharUpper &&
       LOWERCASE.test(character)
     ) {
-      string = string.slice(0, i - 1) + '-' + string.slice(i - 1);
+      string = string.slice(0, index - 1) + '-' + string.slice(index - 1);
       isLastLastCharUpper = isLastCharUpper;
       isLastCharUpper = false;
       isLastCharLower = true;
@@ -79,6 +79,9 @@ function camelCaseOrigin(
   const toUpperCase = string => string.toUpperCase();
 
   if (input.length === 1) {
+    if (SEPARATORS.test(input)) {
+      return '';
+    }
     return options.pascalCase ? toUpperCase(input) : toLowerCase(input);
   }
 
