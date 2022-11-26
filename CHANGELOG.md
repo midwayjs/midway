@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v3.8.2 (2022-11-26)
+
+#### :bug: Bug Fix
+* `sequelize`
+  * [#2525](https://github.com/midwayjs/midway/pull/2525) fix: sequelize inject data source forgot to export ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `swagger`
+  * [#2518](https://github.com/midwayjs/midway/pull/2518) fix: swagger global prefix without path ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2516](https://github.com/midwayjs/midway/pull/2516) docs: update the configuration description of AccessKey ([@yantze](https://github.com/yantze))
+* [#2515](https://github.com/midwayjs/midway/pull/2515) docs(site): update awesome_midway.md ([@waitingsong](https://github.com/waitingsong))
+* [#2514](https://github.com/midwayjs/midway/pull/2514) doc(consul.md): fix port type error ([@xnng](https://github.com/xnng))
+
+#### Committers: 4
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@xnng](https://github.com/xnng)
+- waiting ([@waitingsong](https://github.com/waitingsong))
+- zhi ([@yantze](https://github.com/yantze))
+
+
+
 ## v3.8.1 (2022-11-20)
 
 #### :bug: Bug Fix
