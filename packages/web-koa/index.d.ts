@@ -34,7 +34,7 @@ declare module '@midwayjs/core/dist/interface' {
 
 declare module 'koa' {
   interface Request {
-    body?: any;
+    body?: unknown;
     rawBody: string;
   }
   interface Context {
