@@ -69,9 +69,9 @@ export class BootstrapStarter {
 }
 
 export class Bootstrap {
-  private static starter: BootstrapStarter;
-  private static logger: IMidwayLogger;
-  private static configured = false;
+  protected static starter: BootstrapStarter;
+  protected static logger: IMidwayLogger;
+  protected static configured = false;
 
   /**
    * set global configuration for midway
@@ -101,7 +101,7 @@ export class Bootstrap {
     return this;
   }
 
-  private static getStarter() {
+  static getStarter() {
     if (!this.starter) {
       this.starter = new BootstrapStarter();
     }

@@ -1,5 +1,7 @@
+export * from './interface';
 export {
   isTypeScriptEnvironment,
   Bootstrap,
   BootstrapStarter,
-} from './bootstrap';
+} from './bootstrap/bootstrap';
+export { ClusterBootstrap, ClusterBootstrapStarter } from './bootstrap/cluster';
