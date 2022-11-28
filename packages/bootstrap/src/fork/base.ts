@@ -1,9 +1,10 @@
-import cluster, { ClusterSettings, Worker } from 'cluster';
+import { Worker } from 'cluster';
+const cluster = require('cluster');
 import * as os from 'os';
 import * as util from 'util';
 import { logDate } from '../util';
 import { EventEmitter } from 'events';
-import { ForkOptions } from '../interface';
+import { ClusterOptions, ForkOptions } from '../interface';
 
 export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
   private reforks = [];
@@ -139,7 +140,6 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
    * unexpectedExit default handler
    */
   protected onUnexpected(worker: T, code, signal) {
-    const exitCode = worker.process.exitCode;
     // eslint-disable-next-line no-prototype-builtins
     const propertyName = worker.hasOwnProperty('exitedAfterDisconnect')
       ? 'exitedAfterDisconnect'
@@ -148,7 +148,7 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
       util.format(
         'worker:%s died unexpected (code: %s, signal: %s, %s: %s, state: %s)',
         this.getWorkerPid(worker),
-        exitCode,
+        code,
         signal,
         propertyName,
         worker[propertyName],
@@ -181,6 +181,20 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
     );
   }
 
+  protected async killWorker(worker, timeout) {
+    // kill process, if SIGTERM not work, try SIGKILL
+    worker.kill('SIGTERM');
+    // await Promise.race([
+    //   awaitEvent(worker, 'exit'),
+    //   sleep(timeout),
+    // ]);
+    if (worker.killed) return;
+    // SIGKILL: http://man7.org/linux/man-pages/man7/signal.7.html
+    // worker: https://github.com/nodejs/node/blob/master/lib/internal/cluster/worker.js#L22
+    // subProcess.kill is wrapped to subProcess.destroy, it will wait to disconnected.
+    (worker.process || worker).kill('SIGKILL');
+  }
+
   abstract createWorker(oldWorker?: T): T;
   abstract bindWorkerDisconnect(listener: (worker: T) => void): void;
   abstract bindWorkerExit(listener: (worker: T, code, signal) => void): void;
@@ -189,10 +203,8 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
   abstract close();
 }
 
-type ClusterOptions = ForkOptions & ClusterSettings;
-
 export class ClusterFork extends AbstractFork<Worker, ClusterOptions> {
-  protected constructor(readonly options: ClusterOptions = {}) {
+  constructor(readonly options: ClusterOptions = {}) {
     super(options);
     options.args = options.args || [];
     options.execArgv = options.execArgv || [];
@@ -220,8 +232,8 @@ export class ClusterFork extends AbstractFork<Worker, ClusterOptions> {
       options.args = args;
     }
   }
-  createWorker(oldWorker) {
-    const options = oldWorker['_clusterSettings'];
+  createWorker(oldWorker?) {
+    const options = oldWorker?.['_clusterSettings'] || this.options;
     if (options) {
       if (cluster['setupPrimary']) {
         cluster['setupPrimary'](options);
@@ -250,9 +262,9 @@ export class ClusterFork extends AbstractFork<Worker, ClusterOptions> {
     return worker.isDead();
   }
 
-  public async close() {
+  public async close(timeout = 1000) {
     for (const worker of Object.values(cluster.workers)) {
-      worker.kill();
+      await this.killWorker(worker, timeout);
     }
   }
 }

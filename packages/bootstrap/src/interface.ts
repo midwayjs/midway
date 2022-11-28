@@ -1,5 +1,6 @@
 import type { IMidwayBootstrapOptions } from '@midwayjs/core';
 import type { IMidwayLogger } from '@midwayjs/logger';
+import { ClusterSettings } from 'cluster';
 
 export interface ForkOptions {
   /**
@@ -20,4 +21,6 @@ export interface ForkOptions {
   logger?: IMidwayLogger | Console;
 }
 
-export type ClusterBootstrapOptions = IMidwayBootstrapOptions & Omit<ForkOptions, 'logger'>;
+export type ClusterOptions = ForkOptions & ClusterSettings;
+
+export type ClusterBootstrapOptions = IMidwayBootstrapOptions & ClusterOptions;
