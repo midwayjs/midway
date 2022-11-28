@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.8.3 (2022-11-28)
+
+#### :bug: Bug Fix
+* `mikro`, `sequelize`, `typeorm`
+  * [#2538](https://github.com/midwayjs/midway/pull/2538) fix: data source find sequence ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.8.2 (2022-11-26)
 
 #### :bug: Bug Fix

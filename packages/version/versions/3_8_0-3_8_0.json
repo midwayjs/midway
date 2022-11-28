@@ -10,7 +10,10 @@
   "@midwayjs/cache": "3.8.0",
   "@midwayjs/captcha": "3.8.0",
   "@midwayjs/casbin-redis-adapter": "3.8.0",
-  "@midwayjs/casbin-typeorm-adapter": "3.8.0",
+  "@midwayjs/casbin-typeorm-adapter": [
+    "3.8.0",
+    "3.8.3"
+  ],
   "@midwayjs/casbin": "3.8.0",
   "@midwayjs/code-dye": "3.8.0",
   "@midwayjs/consul": "3.8.0",
@@ -30,7 +33,10 @@
   "@midwayjs/info": "3.8.0",
   "@midwayjs/jwt": "3.8.0",
   "@midwayjs/kafka": "3.8.0",
-  "@midwayjs/mikro": "3.8.0",
+  "@midwayjs/mikro": [
+    "3.8.0",
+    "3.8.3"
+  ],
   "@midwayjs/mock": "3.8.0",
   "@midwayjs/mongoose": "3.8.0",
   "@midwayjs/oss": "3.8.0",
@@ -44,7 +50,8 @@
   "@midwayjs/security": "3.8.0",
   "@midwayjs/sequelize": [
     "3.8.0",
-    "3.8.2"
+    "3.8.2",
+    "3.8.3"
   ],
   "@midwayjs/session": "3.8.0",
   "@midwayjs/socketio": "3.8.0",
@@ -55,13 +62,17 @@
   ],
   "@midwayjs/tablestore": "3.8.0",
   "@midwayjs/typegoose": "3.8.0",
-  "@midwayjs/typeorm": "3.8.0",
+  "@midwayjs/typeorm": [
+    "3.8.0",
+    "3.8.3"
+  ],
   "@midwayjs/upload": "3.8.0",
   "@midwayjs/validate": "3.8.0",
   "@midwayjs/version": [
     "3.8.0",
     "3.8.1",
-    "3.8.2"
+    "3.8.2",
+    "3.8.3"
   ],
   "@midwayjs/view-ejs": "3.8.0",
   "@midwayjs/view-nunjucks": "3.8.0",
