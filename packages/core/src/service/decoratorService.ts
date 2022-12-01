@@ -65,7 +65,7 @@ export class MidwayDecoratorService {
                   `Method Decorator "${key}" handler not found, please register first.`
                 );
               }
-              return this.methodDecoratorMap.get(key)({
+              return methodDecoratorHandler({
                 target: Clzz,
                 propertyName,
                 metadata,
@@ -96,14 +96,20 @@ export class MidwayDecoratorService {
                 // joinPoint.args
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
-                  const { propertyName, key, metadata, parameterIndex, impl } =
-                    meta;
+                  const {
+                    propertyName,
+                    key,
+                    metadata,
+                    parameterIndex,
+                    impl,
+                  } = meta;
                   if (!impl) {
                     continue;
                   }
 
-                  const parameterDecoratorHandler =
-                    this.parameterDecoratorMap.get(key);
+                  const parameterDecoratorHandler = this.parameterDecoratorMap.get(
+                    key
+                  );
                   if (!parameterDecoratorHandler) {
                     throw new MidwayCommonError(
                       `Parameter Decorator "${key}" handler not found, please register first.`
