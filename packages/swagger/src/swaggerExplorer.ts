@@ -333,7 +333,7 @@ export class SwaggerExplorer {
         if (p.in === 'query') {
           // 如果@Query()装饰的 是一个对象，则把该对象的子属性作为多个@Query参数
           const schema = this.documentBuilder.getSchema(currentType.name);
-          for (const pName in schema.properties) {
+          Object.keys(schema.properties).forEach(pName => {
             const ppt: any = schema.properties[pName];
             const pp = {
               name: pName,
@@ -341,7 +341,7 @@ export class SwaggerExplorer {
             };
             this.parseFromParamsToP({ metadata: ppt }, pp);
             parameters.push(pp);
-          }
+          });
           continue;
         } else {
           p.schema = {
