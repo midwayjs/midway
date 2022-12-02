@@ -3,11 +3,11 @@
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
-    "@types/jest": "29.2.1",
+    "@types/jest": "29.2.3",
     "@types/node": "16.11.68",
     "@vercel/ncc": "0.34.0",
     "autocannon": "7.10.0",
-    "jest": "29.2.2",
+    "jest": "29.3.1",
     "lerna": "6.0.3",
     "lerna-changelog": "2.2.0",
     "madge": "5.0.1",
