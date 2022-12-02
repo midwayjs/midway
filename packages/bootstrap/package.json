@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@midwayjs/async-hooks-context-manager": "^3.8.0",
-    "@midwayjs/event-bus": "0.0.1"
+    "@midwayjs/event-bus": "0.0.8"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.8.0",
@@ -30,7 +30,8 @@
     "@midwayjs/socketio": "^3.8.0",
     "@midwayjs/web": "^3.8.0",
     "request": "2.88.2",
-    "socket.io-client": "4.5.3"
+    "socket.io-client": "4.5.3",
+    "@socket.io/sticky": "1.0.2"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
@@ -38,7 +39,7 @@
     "url": "https://github.com/midwayjs/midway.git"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=12.11.0"
   },
   "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
 }

@@ -1,17 +1,24 @@
-import { Worker } from 'cluster';
-const cluster = require('cluster');
 import * as os from 'os';
 import * as util from 'util';
-import { logDate } from '../util';
-import { EventEmitter } from 'events';
-import { ClusterOptions, ForkOptions } from '../interface';
+import { logDate, sleep } from '../util';
+import { EventEmitter, once } from 'events';
+import { ForkOptions } from '../interface';
+import type { IEventBus, EventBusOptions } from '@midwayjs/event-bus';
+import { debuglog } from 'util';
+const debug = debuglog('midway:bootstrap');
 
-export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
+export abstract class AbstractForkManager<
+  T,
+  ClusterOptions extends ForkOptions
+> {
   private reforks = [];
   private disconnectCount = 0;
   private unexpectedCount = 0;
   private disconnects = {};
   private hub = new EventEmitter();
+  protected workers: Map<string, T> = new Map();
+  protected eventBus: IEventBus<T>;
+  private isClosing = false;
 
   protected constructor(readonly options: ClusterOptions) {
     options.count = options.count || os.cpus().length - 1;
@@ -19,36 +26,86 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
     options.limit = options.limit || 60;
     options.duration = options.duration || 60000; // 1 min
     options.logger = options.logger || console;
+    options.workerInitTimeout = options.workerInitTimeout || 30000;
+    this.eventBus = this.createEventBus({
+      initTimeout: options.workerInitTimeout,
+    });
   }
 
   public async start() {
+    debug('Start manager with options: %j', this.options);
     this.bindWorkerDisconnect(worker => {
+      debug(
+        ' - worker(%s): trigger event = disconnect',
+        this.getWorkerId(worker)
+      );
+      const log =
+        this.options.logger[worker['disableRefork'] ? 'info' : 'error'];
       this.disconnectCount++;
       const isDead = this.isWorkerDead(worker);
 
       if (isDead) {
+        debug(' - worker(%s): worker is dead', this.getWorkerId(worker));
         // worker has terminated before disconnect
         this.options.logger.info(
           "[%s] [bootstrap:master:%s] don't fork, because worker:%s exit event emit before disconnect",
           logDate(),
           process.pid,
-          this.getWorkerPid(worker)
+          this.getWorkerId(worker)
         );
         return;
       }
 
-      this.disconnects[this.getWorkerPid(worker)] = logDate();
+      if (worker['disableRefork']) {
+        debug(
+          ' - worker(%s): worker is disableRefork(maybe terminated by master)',
+          this.getWorkerId(worker)
+        );
+        // worker has terminated by master
+        log(
+          "[%s] [bootstrap:master:%s] don't fork, because worker:%s will be kill soon",
+          logDate(),
+          process.pid,
+          this.getWorkerId(worker)
+        );
+        return;
+      }
+
+      this.disconnects[this.getWorkerId(worker)] = logDate();
       this.tryToRefork(worker);
     });
 
     this.bindWorkerExit((worker, code, signal) => {
-      const isExpected = !!this.disconnects[this.getWorkerPid(worker)];
+      debug(' - worker(%s): trigger event = exit', this.getWorkerId(worker));
+      // remove worker
+      // this.workers.delete(worker);
+      if (worker['disableRefork']) {
+        return;
+      }
+
+      const isExpected = !!this.disconnects[this.getWorkerId(worker)];
+      debug(
+        ' - worker(%s): isExpected=%s',
+        this.getWorkerId(worker),
+        isExpected
+      );
 
       if (isExpected) {
-        delete this.disconnects[this.getWorkerPid(worker)];
+        delete this.disconnects[this.getWorkerId(worker)];
         // worker disconnect first, exit expected
         return;
       }
+
+      debug(
+        ' - worker(%s): isWorkerDead=%s',
+        this.getWorkerId(worker),
+        this.isWorkerDead(worker)
+      );
+      if (this.isWorkerDead(worker)) {
+        return;
+      }
+
+      debug(' - worker(%s): unexpectedCount will add');
 
       this.unexpectedCount++;
       this.tryToRefork(worker);
@@ -66,21 +123,36 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
     });
 
     for (let i = 0; i < this.options.count; i++) {
-      this.createWorker();
+      const w = this.createWorker();
+      debug(' - worker(%s) created', this.getWorkerId(w));
+      this.eventBus.addWorker(w);
+      this.workers.set(this.getWorkerId(w), w);
     }
+
+    await this.eventBus.start();
   }
 
   protected tryToRefork(oldWorker: T) {
     if (this.allowRefork()) {
+      debug(
+        ' - worker(%s): allow refork and will fork new',
+        this.getWorkerId(oldWorker)
+      );
       const newWorker = this.createWorker(oldWorker);
+      this.workers.set(this.getWorkerId(newWorker), newWorker);
       this.options.logger.info(
         '[%s] [bootstrap:master:%s] new worker:%s fork (state: %s)',
         logDate(),
         process.pid,
-        this.getWorkerPid(newWorker),
+        this.getWorkerId(newWorker),
         newWorker['state']
       );
+      this.eventBus.addWorker(newWorker);
     } else {
+      debug(
+        ' - worker(%s): forbidden refork and will stop',
+        this.getWorkerId(oldWorker)
+      );
       this.options.logger.info(
         "[%s] [bootstrap:master:%s] don't fork new work (refork: %s)",
         logDate(),
@@ -94,7 +166,7 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
    * allow refork
    */
   protected allowRefork() {
-    if (!this.options.refork) {
+    if (!this.options.refork || this.isClosing) {
       return false;
     }
 
@@ -122,14 +194,14 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
     if (!err) {
       return;
     }
-    console.error(
+    this.options.logger.error(
       '[%s] [bootstrap:master:%s] master uncaughtException: %s',
       logDate(),
       process.pid,
       err.stack
     );
-    console.error(err);
-    console.error(
+    this.options.logger.error(err);
+    this.options.logger.error(
       '(total %d disconnect, %d unexpected exit)',
       this.disconnectCount,
       this.unexpectedCount
@@ -147,7 +219,7 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
     const err = new Error(
       util.format(
         'worker:%s died unexpected (code: %s, signal: %s, %s: %s, state: %s)',
-        this.getWorkerPid(worker),
+        this.getWorkerId(worker),
         code,
         signal,
         propertyName,
@@ -157,7 +229,7 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
     );
     err.name = 'WorkerDiedUnexpectedError';
 
-    console.error(
+    this.options.logger.error(
       '[%s] [bootstrap:master:%s] (total %d disconnect, %d unexpected exit) %s',
       logDate(),
       process.pid,
@@ -172,7 +244,7 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
    */
 
   protected onReachReforkLimit() {
-    console.error(
+    this.options.logger.error(
       '[%s] [bootstrap:master:%s] worker died too fast (total %d disconnect, %d unexpected exit)',
       logDate(),
       process.pid,
@@ -183,11 +255,9 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
 
   protected async killWorker(worker, timeout) {
     // kill process, if SIGTERM not work, try SIGKILL
-    worker.kill('SIGTERM');
-    // await Promise.race([
-    //   awaitEvent(worker, 'exit'),
-    //   sleep(timeout),
-    // ]);
+    await this.closeWorker(worker);
+
+    await Promise.race([once(worker, 'exit'), sleep(timeout)]);
     if (worker.killed) return;
     // SIGKILL: http://man7.org/linux/man-pages/man7/signal.7.html
     // worker: https://github.com/nodejs/node/blob/master/lib/internal/cluster/worker.js#L22
@@ -195,76 +265,34 @@ export abstract class AbstractFork<T, ClusterOptions extends ForkOptions> {
     (worker.process || worker).kill('SIGKILL');
   }
 
-  abstract createWorker(oldWorker?: T): T;
-  abstract bindWorkerDisconnect(listener: (worker: T) => void): void;
-  abstract bindWorkerExit(listener: (worker: T, code, signal) => void): void;
-  abstract getWorkerPid(worker: T): string;
-  abstract isWorkerDead(worker: T): boolean;
-  abstract close();
-}
-
-export class ClusterFork extends AbstractFork<Worker, ClusterOptions> {
-  constructor(readonly options: ClusterOptions = {}) {
-    super(options);
-    options.args = options.args || [];
-    options.execArgv = options.execArgv || [];
-
-    // https://github.com/gotwarlost/istanbul#multiple-process-usage
-    if (process.env.running_under_istanbul) {
-      // use coverage for forked process
-      // disabled reporting and output for child process
-      // enable pid in child process coverage filename
-      let args = [
-        'cover',
-        '--report',
-        'none',
-        '--print',
-        'none',
-        '--include-pid',
-        options.exec,
-      ];
-      if (options.args && options.args.length > 0) {
-        args.push('--');
-        args = args.concat(options.args);
-      }
-
-      options.exec = './node_modules/.bin/istanbul';
-      options.args = args;
-    }
-  }
-  createWorker(oldWorker?) {
-    const options = oldWorker?.['_clusterSettings'] || this.options;
-    if (options) {
-      if (cluster['setupPrimary']) {
-        cluster['setupPrimary'](options);
-      } else if (cluster['setupMaster']) {
-        cluster['setupMaster'](options);
-      }
-    }
-    const worker = cluster.fork();
-    worker['_clusterSettings'] = cluster.settings;
-    return worker;
-  }
-
-  bindWorkerDisconnect(listener: (worker: Worker) => void) {
-    cluster.on('disconnect', listener);
-  }
-
-  bindWorkerExit(listener: (worker: Worker, code, signal) => void) {
-    cluster.on('exit', listener);
-  }
-
-  getWorkerPid(worker: Worker) {
-    return String(worker.process.pid);
-  }
-
-  isWorkerDead(worker: Worker) {
-    return worker.isDead();
-  }
-
-  public async close(timeout = 1000) {
-    for (const worker of Object.values(cluster.workers)) {
+  public async close(timeout = 2000) {
+    debug('run close');
+    this.isClosing = true;
+    await this.eventBus.stop();
+    for (const worker of this.workers.values()) {
+      worker['disableRefork'] = true;
       await this.killWorker(worker, timeout);
     }
   }
+
+  public hasWorker(workerId: string): boolean {
+    return this.workers.has(workerId);
+  }
+
+  public getWorker(workerId: string): T {
+    return this.workers.get(workerId);
+  }
+
+  public getWorkerIds(): string[] {
+    return Array.from(this.workers.keys());
+  }
+
+  abstract createWorker(oldWorker?: T): T;
+  abstract bindWorkerDisconnect(listener: (worker: T) => void): void;
+  abstract bindWorkerExit(listener: (worker: T, code, signal) => void): void;
+  abstract getWorkerId(worker: T): string;
+  abstract isWorkerDead(worker: T): boolean;
+  abstract closeWorker(worker: T);
+  abstract createEventBus(eventBusOptions: EventBusOptions): IEventBus<T>;
+  abstract isPrimary(): boolean;
 }

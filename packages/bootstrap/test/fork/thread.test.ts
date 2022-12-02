@@ -1,4 +1,4 @@
-import { ClusterManager } from '../../src';
+import { ThreadManager } from '../../src';
 import { join } from 'path';
 import * as request from 'request';
 import { sleep } from '../../src/util';
@@ -16,11 +16,12 @@ function fetch(url) {
   })
 }
 
-describe('/test/fork/cp.test.ts', () => {
-  it('should test cluster fork and close', async () => {
-    const clusterFork = new ClusterManager({
-      exec: join(__dirname, 'case-cp/worker-1.ts'),
+describe('/test/fork/thread.test.ts', () => {
+  it('should test thread fork and close', async () => {
+    const clusterFork = new ThreadManager({
+      exec: join(__dirname, 'case-thread/worker-1.ts'),
       count: 2,
+      limit: 2
     });
 
     await clusterFork.start();
@@ -30,9 +31,9 @@ describe('/test/fork/cp.test.ts', () => {
     expect(Object.keys(cluster.workers).length).toEqual(0);
   });
 
-  it('should test cluster fork and auto re-fork', async () => {
-    const clusterFork = new ClusterManager({
-      exec: join(__dirname, 'case-cp/worker-2.ts'),
+  it('should test thread fork and auto re-fork', async () => {
+    const clusterFork = new ThreadManager({
+      exec: join(__dirname, 'case-thread/worker-2.ts'),
       count: 1,
     });
 
@@ -59,9 +60,9 @@ describe('/test/fork/cp.test.ts', () => {
     });
   });
 
-  it('should test cluster fork and re-fork to limit', async () => {
-    const clusterFork = new ClusterManager({
-      exec: join(__dirname, 'case-cp/worker-3.ts'),
+  it('should test thread fork and re-fork to limit', async () => {
+    const clusterFork = new ThreadManager({
+      exec: join(__dirname, 'case-thread/worker-3.ts'),
       count: 1,
       limit: 2
     });
@@ -71,14 +72,12 @@ describe('/test/fork/cp.test.ts', () => {
     await sleep(500);
 
     try {
-      console.log('----curl 1');
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
 
     await sleep(500);
 
     try {
-      console.log('----curl 2');
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
 
@@ -86,13 +85,12 @@ describe('/test/fork/cp.test.ts', () => {
 
     let error;
     try {
-      console.log('----curl 3');
       await fetch('http://127.0.0.1:8000');
     } catch (err) {
       error = err;
     }
 
-    expect(error.name).toBeDefined();
+    expect(error).toBeDefined();
 
     await sleep(2000);
 
