@@ -9,8 +9,9 @@ The following lists high-quality community projects related to Midwayjs
 | [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                                                                                                 |
 | [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                                                                                        |
 | [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components                                                                      |
-| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway OpenTelemetry component                                                                                                         |
+| [@mwcp/cache][@mwcp/cache]                   | waitingsong | midway Cache Component supports `@Cacheable` `@CacheEvict` decorators                                                                  |
 | [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `@Transactional` decorator, intergrated [OpenTelemetry] trace |
+| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component                                                                                                       |
 | [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                                                                                            |
 ## swagger
 
@@ -49,8 +50,9 @@ Welcome everyone to contribute to the community, edit this page and add your fav
 [midway-elasticsearch]: https://github.com/ddzyan/midway-elasticsearch
 [midway-apollo]: https://github.com/helloHT/midway-apollo
 [@letscollab/midway-nacos]: https://github.com/deskbtm-letscollab/midway-nacos
-[@mwcp/otel]: https://github.com/waitingsong/midway-components/tree/main/packages/otel
 [@mwcp/kmore]: https://github.com/waitingsong/kmore
+[@mwcp/cache]: https://github.com/waitingsong/midway-components/tree/main/packages/cache
+[@mwcp/otel]: https://github.com/waitingsong/midway-components/tree/main/packages/otel
 
 [midwayjs-knife4j2]: https://github.com/fangbao-0418/midway/tree/master/packages/swagger
 [yuntian001/midway-vite-view]: https://github.com/yuntian001/midway-vite-view
