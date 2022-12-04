@@ -98,6 +98,8 @@ describe('/test/fork/cp.test.ts', () => {
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
 
+    await sleep(1000);
+
     let error;
     try {
       console.log('----curl 3');
