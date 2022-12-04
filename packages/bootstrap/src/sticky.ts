@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto';
 
 const randomId = () => randomBytes(8).toString('hex');
 
-export const setupStickyMaster = (httpServer, opts = {}) => {
+export function setupStickyMaster(httpServer, opts = {}) {
   const options = {
     loadBalancingMethod: 'least-connection', // either "random", "round-robin" or "least-connection"
     ...opts,
@@ -115,9 +115,9 @@ export const setupStickyMaster = (httpServer, opts = {}) => {
         break;
     }
   });
-};
+}
 
-export const setupWorker = (io: any) => {
+export function setupWorker(io: any) {
   // store connections that may receive multiple chunks
   const sockets = new Map();
 
@@ -164,4 +164,4 @@ export const setupWorker = (io: any) => {
       );
     });
   });
-};
+}
