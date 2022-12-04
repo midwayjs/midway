@@ -89,6 +89,18 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Cache
+        uses: actions/cache@v3
+        id: cache-lerna
+        env:
+          cache-name: cache-lerna
+        with:
+          path: |
+            node_modules/.cache/nx
+          key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ matrix.node }}-
+
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.8.0
         with:
