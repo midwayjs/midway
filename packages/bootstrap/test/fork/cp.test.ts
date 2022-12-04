@@ -40,15 +40,25 @@ describe('/test/fork/cp.test.ts', () => {
 
     await sleep(500);
 
+    expect(clusterFork.getWorkerIds().length).toEqual(1);
+    const currentPid = clusterFork.getWorkerIds()[0];
+    console.log('currentPid=', currentPid);
+
     try {
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
 
-    await sleep(1000);
+    await new Promise<void>((resolve) => {
+      clusterFork['eventBus'].subscribeOnce(message => {
+        resolve();
+      }, {
+        topic: 'ready'
+      })
+    });
 
     expect(await fetch('http://127.0.0.1:8000')).toEqual('hello world');
 
-    // expect(Object.keys(cluster.workers).length).toEqual(1);
+    expect(clusterFork.getWorkerIds().length).toEqual(1);
 
     await new Promise<void>((resolve) => {
       setTimeout(async () => {
@@ -75,14 +85,18 @@ describe('/test/fork/cp.test.ts', () => {
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
 
-    await sleep(1000);
+    await new Promise<void>((resolve) => {
+      clusterFork['eventBus'].subscribeOnce(message => {
+        resolve();
+      }, {
+        topic: 'ready'
+      })
+    });
 
     try {
       console.log('----curl 2');
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
-
-    await sleep(1000);
 
     let error;
     try {

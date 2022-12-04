@@ -78,7 +78,7 @@ export abstract class AbstractForkManager<
     this.bindWorkerExit((worker, code, signal) => {
       debug(' - worker(%s): trigger event = exit', this.getWorkerId(worker));
       // remove worker
-      // this.workers.delete(worker);
+      this.workers.delete(this.getWorkerId(worker));
       if (worker['disableRefork']) {
         return;
       }
