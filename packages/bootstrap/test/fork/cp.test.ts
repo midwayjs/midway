@@ -44,7 +44,7 @@ describe('/test/fork/cp.test.ts', () => {
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
 
-    await sleep(500);
+    await sleep(1000);
 
     expect(await fetch('http://127.0.0.1:8000')).toEqual('hello world');
 
@@ -75,14 +75,14 @@ describe('/test/fork/cp.test.ts', () => {
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
 
-    await sleep(500);
+    await sleep(1000);
 
     try {
       console.log('----curl 2');
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
 
-    await sleep(500);
+    await sleep(1000);
 
     let error;
     try {
