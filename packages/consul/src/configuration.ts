@@ -68,6 +68,7 @@ export class ConsulConfiguration implements ILifeCycle {
 
       config.check =
         config.check ||
+        // @ts-ignore '{ tcp?: string; ....}' and 'boolean' have no overlap.
         (config.check === false
           ? void 0
           : app.getFrameworkType() === MidwayFrameworkType.WEB
