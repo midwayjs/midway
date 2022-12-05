@@ -125,7 +125,7 @@ jobs:
           sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
           lerna run build --concurrency=2
 
-      - run: npm run lint
+      # - run: npm run lint
       - run: npm run lint:cycle
       - run: npm run cov
         env:
