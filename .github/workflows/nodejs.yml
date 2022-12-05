@@ -89,14 +89,44 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Cache
+        uses: actions/cache@v3
+        id: cache-lerna
+        env:
+          cache-name: cache-lerna
+        with:
+          path: |
+            node_modules
+            node_modules/.cache/nx
+            package-lock.json
+            packages/*/.eslintcache
+            packages/*/dist
+            packages/*/tsconfig.tsbuildinfo
+            packages/*/node_modules
+            packages/*/package-lock.json
+          key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ matrix.node-version }}-
+
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.8.0
         with:
           mongodb-version: 4.2
 
-      - run: npm install && npm install codecov
-      - run: npm run bootstrap
-      - run: npm run build --if-present
+      - name: Inatall Dependencies
+        run: |
+          npm i --no-audit -g @vercel/ncc
+          # npm run purge # if you want to clean up the cache
+          npm i --no-audit && npm --no-audit i codecov
+          npm run bootstrap
+
+      - name: Build
+        run: |
+          sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
+          lerna run build --concurrency=2
+
+      - run: npm run lint
+      - run: npm run lint:cycle
       - run: npm run cov
         env:
           RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
