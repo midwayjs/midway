@@ -617,7 +617,7 @@ export function SuccessWrapper<T extends Type>(ResourceCls: T) {
 We can implement our own return class based on this method.
 
 ```typescript
-class ViewCat extends SuccessVo(Cat) {}
+class ViewCat extends SuccessWrapper(Cat) {}
 ```
 
 When using, you can directly specify this class.
