@@ -119,11 +119,13 @@ jobs:
           # npm run purge # if you want to clean up the cache
           npm i --no-audit && npm --no-audit i codecov
           npm run bootstrap
+          ls -al node_modules/.cache/nx
 
       - name: Build
         run: |
           sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
           lerna run build --concurrency=2
+          ls -al node_modules/.cache/nx
 
       # - run: npm run lint
       - run: npm run lint:cycle
