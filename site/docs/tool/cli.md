@@ -2,6 +2,7 @@
 
 `@midwayjs/cli` 是新版本的 Midway 体系工具链，和 Serverless，以及原应用的工具链进行了整合。
 
+> @midwayjs/cli 的更新日志，请参考：https://www.yuque.com/midwayjs/report/cli-report
 
 ## 基础入口
 
@@ -300,6 +301,8 @@ midway-bin deploy --function=a,b,c
 
 默认拷贝的内容包含 `后端代码文件夹` （一般为 `src` 、faas前后端一体化一般为 `src/apis`）内的所有非 `.ts` 后缀的文件，以及 `项目根目录` 下的以 `.js`、`.json`、`.yml` 为扩展名的所有文件和 `config` 、`app` 文件夹内的所有文件。
 
+同时，以 `.` 开通的文件不会被默认打包，如 `.env`、`src/.env`，即便其目录在打包列表中，也不会被打包，如需打包，也需要单独在 `f.yml` 的 `package` 中的 `include` 来特殊指定。
+
 如果要拷贝额外的文件，可以通过在 `f.yml` 文件中添加 `package`字段 中的 `include` 来指定，可以配置文件名，也可以通过 `fast-glob` [语法↗](https://github.com/mrmlnc/fast-glob#pattern-syntax) 匹配，使用示例如下：
 
 ```cpp
@@ -312,9 +315,10 @@ package:
     - a/b/c.js		# 项目根目录下的 a 目录下的 b 目录下的 c.js 文件
     - a/b/c.json	# 项目根目录下的 a 目录下的 b 目录下的 c.js 文件
     - xxx/**/*.js	# 项目根目录下的 xxx 目录下的所有 js 文件
+    - src/.env.prod	# 项目代码下的 dot env 文件
 ```
 
-
+更多打包示例，可以参考 [@midwayjs/cli 的单元测试](https://github.com/midwayjs/cli/blob/9bb3ef034b01fcf8bd0863b58e5f1a4ee4f67fe4/packages/cli-plugin-package/test/zip.test.ts#L16)
 
 ## 实验性功能
 
