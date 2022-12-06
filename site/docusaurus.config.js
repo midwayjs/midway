@@ -20,7 +20,32 @@ const config = {
     defaultLocale: 'zh-cn',
     locales: ['zh-cn', 'en'],
   },
-  plugins: ['./lib/plugin.js'],
+  plugins: [
+    [
+      require.resolve('./src/plugins/changelog/index.js'),
+      {
+        blogTitle: 'Midway changelog',
+        blogDescription:
+          'Keep yourself up-to-date about new features in every release',
+        blogSidebarCount: 'ALL',
+        blogSidebarTitle: 'Changelog',
+        routeBasePath: '/changelog',
+        showReadingTime: false,
+        postsPerPage: 20,
+        archiveBasePath: null,
+        authorsMapPath: 'authors.json',
+        feedOptions: {
+          type: 'all',
+          title: 'Midway changelog',
+          description:
+            'Keep yourself up-to-date about new features in every release',
+          copyright: `Copyright © ${new Date().getFullYear()} Facebook, Inc.`,
+          language: 'en',
+        },
+      },
+    ],
+    './lib/plugin.js'
+  ],
   presets: [
     [
       'classic',
@@ -37,6 +62,13 @@ const config = {
           },
           lastVersion: 'current',
           sidebarCollapsed: false,
+        },
+        blog: {
+          // routeBasePath: '/',
+          path: 'blog',
+          postsPerPage: 5,
+          blogSidebarCount: 'ALL',
+          blogSidebarTitle: 'All our posts',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -61,6 +93,7 @@ const config = {
           alt: 'midway logo',
           src: 'img/logo.svg',
         },
+        hideOnScroll: true,
         items: [
           ...require('./lib/navbar'),
           {
@@ -68,19 +101,24 @@ const config = {
             dropdownActiveClassDisabled: true,
             position: 'right',
           },
-          // {
-          //   type: 'localeDropdown',
-          //   position: 'right',
-          // },
           {
-            label: '开源送礼',
-            href: 'https://survey.taobao.com/apps/zhiliao/pJ3zng9Iv',
+            type: 'localeDropdown',
             position: 'right',
           },
           {
-            label: '线下沙龙',
-            href: 'https://subway.midwayjs.org/',
+            type: 'dropdown',
+            label: '社区活动',
             position: 'right',
+            items: [
+              {
+                label: '开源送礼',
+                href: 'https://survey.taobao.com/apps/zhiliao/pJ3zng9Iv',
+              },
+              {
+                label: '线下沙龙',
+                href: 'https://subway.midwayjs.org/',
+              },
+            ],
           },
           {
             href: 'https://github.com/midwayjs/midway',
@@ -99,6 +137,85 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+      },
+      footer: {
+        style: 'dark',
+        links: [
+          {
+            title: 'Learn',
+            items: [
+              {
+                label: 'Introduction',
+                to: 'docs/intro',
+              },
+              {
+                label: 'Quick Start',
+                to: 'docs/quick_guide',
+              },
+              {
+                label: 'Migration from v2 to v3',
+                to: 'docs/upgrade_v3',
+              },
+            ],
+          },
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'Bilibili',
+                href: 'https://space.bilibili.com/1746017680',
+              },
+              {
+                label: 'Zhihu',
+                to: 'https://zhuanlan.zhihu.com/midwayjs',
+              },
+            ],
+          },
+          {
+            title: 'More',
+            items: [
+              {
+                label: 'Blog',
+                to: 'blog',
+              },
+              {
+                label: 'Changelog',
+                to: '/changelog',
+              },
+              {
+                label: 'GitHub Issue',
+                href: 'https://github.com/midwayjs/midway',
+              },
+              // {
+              //   label: 'Twitter',
+              //   href: 'https://twitter.com/docusaurus',
+              // },
+            ],
+          },
+          {
+            title: 'Link',
+            items: [
+              {
+                label: 'Taobao FED',
+                href: 'https://fed.taobao.org/',
+              },
+              {
+                label: 'ICE',
+                href: 'https://ice.work/',
+              },
+              {
+                label: 'CNode',
+                href: 'https://cnodejs.org/',
+              },
+            ],
+          },
+        ],
+        // logo: {
+        //   alt: 'Alibaba Open Source Logo',
+        //   src: 'https://img.alicdn.com/imgextra/i1/O1CN014B9spq1xrDad6enpX_!!6000000006496-2-tps-240-58.png',
+        //   href: 'https://opensource.alibaba.com/',
+        // },
+        copyright: `Copyright © ${new Date().getFullYear()} Alibaba Group. Built with Docusaurus.`,
       },
     }),
 };

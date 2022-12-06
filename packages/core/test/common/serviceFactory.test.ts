@@ -59,4 +59,13 @@ describe('test/common/serviceFactory.test.ts', () => {
     });
     expect(instance.get('default')).toBeDefined();
   });
+
+  it('should test default name', async () => {
+    const instance = new TestServiceFactory();
+    await instance.initClients({
+      defaultClientName: 'abc',
+      clients: {}
+    })
+    expect(instance.getDefaultClientName()).toEqual('abc');
+  });
 });

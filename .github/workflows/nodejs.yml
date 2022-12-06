@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        node-version: [12, 14, 16, 18]
+        node-version: [14, 16, 18]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     services:
@@ -71,39 +71,46 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+      etcd:
+        image: bitnami/etcd
+        options: >-
+          --name Etcd-server
+          --publish 2379:2379
+          --publish 2380:2380
+          --env ALLOW_NONE_AUTHENTICATION=yes
+          --env ETCD_ADVERTISE_CLIENT_URLS=http://etcd-server:2379
+
     steps:
-    - name: Git checkout
-      uses: actions/checkout@v3
+      - name: Git checkout
+        uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.8.0
-      with:
-        mongodb-version: 4.2
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: 4.2
 
-    - run: npm install && npm install codecov
-    - run: npm run bootstrap
-    - run: npm run build --if-present
-    - run: npm run lint
-    - run: npm run lint:cycle
-    - run: npm run cov
-      env:
-        RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
-        ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
-        ALI_SDK_OSS_ENDPOINT: ${{ secrets.ALI_SDK_OSS_ENDPOINT }}
-        ALI_SDK_OSS_ID: ${{ secrets.ALI_SDK_OSS_ID }}
-        ALI_SDK_OSS_SECRET: ${{ secrets.ALI_SDK_OSS_SECRET }}
-        ALI_SDK_OSS_BUCKET: ${{ secrets.ALI_SDK_OSS_BUCKET }}
-        ALI_SDK_STS_ID: ${{ secrets.ALI_SDK_STS_ID }}
-        ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
-        ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
-        ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      - run: npm install && npm install codecov
+      - run: npm run bootstrap
+      - run: npm run build --if-present
+      - run: npm run cov
+        env:
+          RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
+          ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
+          ALI_SDK_OSS_ENDPOINT: ${{ secrets.ALI_SDK_OSS_ENDPOINT }}
+          ALI_SDK_OSS_ID: ${{ secrets.ALI_SDK_OSS_ID }}
+          ALI_SDK_OSS_SECRET: ${{ secrets.ALI_SDK_OSS_SECRET }}
+          ALI_SDK_OSS_BUCKET: ${{ secrets.ALI_SDK_OSS_BUCKET }}
+          ALI_SDK_STS_ID: ${{ secrets.ALI_SDK_STS_ID }}
+          ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
+          ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
+          ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
 
 #
 #   build-windows:

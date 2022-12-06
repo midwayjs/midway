@@ -15,7 +15,8 @@ export default (appInfo) => {
           entities: [Message, User, OriginUser],
           subscribers: [EverythingSubscriber]
         }
-      }
+      },
+      defaultDataSourceName: 'default',
     }
   }
 }

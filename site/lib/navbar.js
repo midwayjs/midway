@@ -8,7 +8,7 @@ module.exports = [
   {
     "type": "doc",
     "docId": "hooks/intro",
-    "label": "函数式 & 一体化",
+    "label": "一体化",
     "position": "left"
   },
   {
@@ -20,13 +20,18 @@ module.exports = [
   {
     "type": "doc",
     "docId": "extensions/axios",
-    "label": "组件 & 扩展",
+    "label": "组件",
     "position": "left"
   },
   {
     "type": "doc",
     "docId": "tool/cli",
-    "label": "工具 & 其他",
+    "label": "其他",
     "position": "left"
-  }
+  },
+  {
+    to: 'blog',
+    label: 'Blog',
+    position: 'left'
+  },
 ]

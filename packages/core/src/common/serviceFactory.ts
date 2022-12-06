@@ -15,7 +15,6 @@ export abstract class ServiceFactory<T> {
       options.clients = options.clients || {};
       options.clients['default'] = options.clients['default'] || {};
       extend(true, options.clients['default'], options.client);
-      delete options.client;
     }
 
     // multi client
@@ -57,5 +56,9 @@ export abstract class ServiceFactory<T> {
     for (const value of this.clients.values()) {
       await this.destroyClient(value);
     }
+  }
+
+  public getDefaultClientName(): string {
+    return this.options['defaultClientName'];
   }
 }

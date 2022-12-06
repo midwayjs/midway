@@ -94,7 +94,7 @@ export default {
       // consul server 服务地址
       host: '192.168.0.10',
       // consul server 服务端口
-      port: 8500,
+      port: '8500',
       // 调用服务的策略(默认选取 random 具有随机性)
       strategy: 'random',
     },
@@ -231,10 +231,9 @@ export class HomeController {
 
 同时 consul 也能作为一个服务配置的地方，如下代码：
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/decorator';
 import * as Consul from 'consul';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -272,7 +271,7 @@ export class ConfigService {
   config: any;
 
   @Init()
-  async init(){
+  async init() {
     setInterval(()=>{
       this.consul.kv.get(`name`).then(res=>{
         this.config = res;

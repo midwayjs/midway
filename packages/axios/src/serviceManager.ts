@@ -1,4 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import * as axios from 'axios';
 import {
   Config,
   Init,
@@ -35,7 +36,7 @@ export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
     config: AxiosRequestConfig,
     clientName: any
   ): Promise<AxiosInstance> {
-    return axios.create(config);
+    return (axios as any).create(config);
   }
 
   getName(): string {
@@ -57,7 +58,9 @@ export class HttpService implements AxiosHttpService {
 
   @Init()
   protected async init() {
-    this.instance = this.serviceFactory.get('default');
+    this.instance = this.serviceFactory.get(
+      this.serviceFactory.getDefaultClientName?.() || 'default'
+    );
     if (!this.instance) {
       throw new MidwayCommonError('axios default instance not found.');
     }

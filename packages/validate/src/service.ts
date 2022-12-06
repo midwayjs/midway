@@ -46,41 +46,9 @@ export class ValidateService {
       locale?: string;
       validationOptions?: Joi.ValidationOptions;
     } = {}
-  ): Joi.ValidationResult<T> {
-    options.validationOptions = options.validationOptions || {};
-    options.validationOptions.errors = options.validationOptions.errors || {};
-    options.validationOptions.errors.language = formatLocale(
-      this.i18nService.getAvailableLocale(
-        options.validationOptions.errors.language ||
-          options.locale ||
-          this.i18nConfig.defaultLocale,
-        'validate'
-      )
-    );
-
-    const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
-    if (rules) {
-      const schema = Joi.object(rules);
-      const result = schema.validate(
-        value,
-        Object.assign(
-          this.validateConfig.validationOptions ?? {},
-          {
-            messages: this.messages,
-          },
-          options.validationOptions ?? {}
-        )
-      );
-      if (result.error) {
-        throw new MidwayValidationError(
-          result.error.message,
-          options?.errorStatus ?? this.validateConfig.errorStatus,
-          result.error
-        );
-      } else {
-        return result;
-      }
-    }
+  ): Joi.ValidationResult<T> | undefined {
+    const objectSchema = this.getSchema(ClzType);
+    return this.validateWithSchema(objectSchema, value, options);
   }
 
   public validateWithSchema<T>(
@@ -91,7 +59,11 @@ export class ValidateService {
       locale?: string;
       validationOptions?: Joi.ValidationOptions;
     } = {}
-  ): Joi.ValidationResult<T> {
+  ): Joi.ValidationResult<T> | undefined {
+    if (!schema) {
+      return undefined;
+    }
+
     options.validationOptions = options.validationOptions || {};
     options.validationOptions.errors = options.validationOptions.errors || {};
     options.validationOptions.errors.language = formatLocale(
@@ -106,6 +78,7 @@ export class ValidateService {
     const result = schema.validate(
       value,
       Object.assign(
+        {},
         this.validateConfig.validationOptions ?? {},
         {
           messages: this.messages,

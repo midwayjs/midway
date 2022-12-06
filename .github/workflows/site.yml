@@ -3,9 +3,11 @@ name: site sync
 on:
   push:
     branches: [main]
-    paths: [site/**]
-  repository_dispatch:
-    types: [update-hooks-docs]
+    paths:
+      - site/**
+      - CHANGELOG.md
+  # repository_dispatch:
+  #   types: [update-hooks-docs]
 
 jobs:
   build:

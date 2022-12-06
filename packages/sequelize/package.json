@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/sequelize",
-  "version": "3.6.0",
+  "version": "3.8.3",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -9,14 +9,12 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.6.0",
-    "@midwayjs/koa": "^3.6.0",
-    "@midwayjs/mock": "^3.6.0",
+    "@midwayjs/core": "^3.8.0",
+    "@midwayjs/koa": "^3.8.0",
+    "@midwayjs/mock": "^3.8.0",
+    "sequelize": "6.25.8",
+    "sequelize-typescript": "2.1.5",
     "sqlite3": "5.1.2"
-  },
-  "dependencies": {
-    "sequelize": "6.24.0",
-    "sequelize-typescript": "^2.1.0"
   },
   "keywords": [
     "midway",
@@ -38,6 +36,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/midwayjs/midway.git"
+    "url": "https://github.com/midwayjs/midway.git"
   }
 }

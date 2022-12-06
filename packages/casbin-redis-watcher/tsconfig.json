@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "noFallthroughCasesInSwitch": false
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "noImplicitThis": false
+}

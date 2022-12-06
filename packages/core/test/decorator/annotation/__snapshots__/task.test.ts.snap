@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`/test/annotation/task.test.ts test task decorator 1`] = `
-Array [
-  Object {
+[
+  {
     "name": "CustomFramework",
-    "options": Object {
-      "repeat": Object {
+    "options": {
+      "repeat": {
         "cron": "0 * * * * *",
       },
     },
@@ -16,8 +16,8 @@ Array [
 `;
 
 exports[`/test/annotation/task.test.ts test task decorator 2`] = `
-Array [
-  Object {
+[
+  {
     "options": "0 * * * * *",
     "propertyKey": "runLocalTask",
     "value": [Function],

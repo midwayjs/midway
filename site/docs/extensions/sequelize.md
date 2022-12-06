@@ -260,6 +260,7 @@ export default {
   // ...
   sequelize: {
     dataSource: {
+      // 第一个数据源，数据源的名字可以完全自定义
       default: {
         database: 'test4',
         username: 'root',
@@ -271,14 +272,22 @@ export default {
         define: { charset: 'utf8' },
         timezone: '+08:00',
         entities: [Person],
+        // 本地的时候，可以通过 sync: true 直接 createTable
+        sync: false,
+      },
+
+      // 第二个数据源
+      default2: {
+        // ...
       },
     },
-    sync: false, // 本地的时候，可以通过sync: true直接createTable
   },
 };
 ```
 
 如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
+
+
 
 ## 模型关联
 
@@ -396,6 +405,8 @@ export class User extends Model {
   name: string;
 }
 ```
+
+
 
 ## 静态操作方法
 
@@ -551,6 +562,113 @@ export class HomeController {
   // ...
 }
 ```
+
+
+## 高级功能
+
+### 数据源同步配置
+
+sequelize 在同步数据源时可以添加 sync 的参数。
+
+```typescript
+export default {
+  // ...
+  sequelize: {
+    dataSource: {
+      default: {
+        sync: true,
+        syncOptions: {
+          force: false,
+          alter: true,
+        },
+      },
+    },
+    // 多个数据源时可以用这个指定默认的数据源
+    defaultDataSourceName: 'default',
+  },
+};
+```
+
+### 指定默认数据源
+
+在包含多个数据源时，可以指定默认的数据源。
+
+```typescript
+export default {
+  // ...
+  sequelize: {
+    dataSource: {
+      default1: {
+        // ...
+      },
+      default2: {
+        // ...
+      },
+    },
+    // 多个数据源时可以用这个指定默认的数据源
+    defaultDataSourceName: 'default1',
+  },
+};
+```
+
+
+
+### 获取数据源
+
+数据源即创建出的 sequelize 对象，我们可以通过注入内置的数据源管理器来获取。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { SequelizeDataSourceManager } from '@midwayjs/sequelize';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+
+  async onReady(container: IMidwayContainer) {
+    const dataSourceManager = await container.getAsync(SequelizeDataSourceManager);
+    const conn = dataSourceManager.getDataSource('default');
+    await conn.authenticate();
+  }
+}
+```
+
+从 v3.8.0 开始，也可以通过装饰器注入。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { InjectDataSource } from '@midwayjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  
+  // 注入默认数据源
+  @InjectDataSource()
+  defaultDataSource: Sequelize;
+  
+  // 注入自定义数据源
+  @InjectDataSource('default1')
+  customDataSource: Sequelize;
+
+  async onReady(container: IMidwayContainer) {
+    // ...
+  }
+}
+```
+
+
+
+## 常见问题
+
+### 1、Dialect needs to be explicitly supplied as of v4.0.0
+
+原因为配置中数据源没有指定 `dialect` 字段，确认数据源的结构，格式以及配置合并的结果。
+
+
 
 ## 其他
 

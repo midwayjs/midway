@@ -721,13 +721,13 @@ provider:
 
 ### 5、修改 AccessKey
 
-有时候，我们在第一次发布时会填错一个 accessKey，或者其他区域选项，我们提供了一个 可以修改的参数，用于在发布时清理上次错误的选项。
+有时候，我们在第一次发布时会填错一个 AccessKey，或者其他区域选项，我们提供了一个 可以修改的参数，用于在发布时清理上次错误的选项。
 
 ```bash
 midway-bin deploy --resetConfig
 ```
 
-如果只希望调整特定字段，可以进入 `~/.fcli/config.yaml` 文件中，直接修改保存。
+这里提示 `Please create alias for key pair. If not, please enter to skip` 时输入 default，否则不会使用当前的 AccessKey。如果只希望调整特定字段，可以进入 `~/.s/access.yaml` 文件中，直接修改保存。
 
 ### 6、CLI 发布红色提示
 

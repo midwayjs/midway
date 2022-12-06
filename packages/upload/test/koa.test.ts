@@ -106,7 +106,7 @@ describe('test/koa.test.ts', function () {
           assert(response.body.files[0].data.endsWith('.tar.gz'));
         });
     });
-    
+
     it('upload unsupport ext file using file', async () => {
       const filePath = join(__dirname, 'fixtures/1.test');
       const request = await createHttpRequest(app);
@@ -117,5 +117,21 @@ describe('test/koa.test.ts', function () {
         .expect(400);
     });
 
+  });
+
+  describe('test null set', function () {
+    it('upload test ext set null', async () => {
+      const appDir = join(__dirname, 'fixtures/koa-ext-null');
+      const app = await createApp(appDir);
+      const filePath = join(__dirname, 'fixtures/1.test');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', filePath)
+        .expect(200);
+
+      await close(app);
+    });
   });
 });

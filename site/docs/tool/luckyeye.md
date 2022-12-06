@@ -1,6 +1,4 @@
----
-title: 检查工具
----
+# 检查工具
 
 Midway 为常见的错误提供了一些检查工具，以方便用户快速排错。`@midwayjs/luckyeye` 包提供了一些基础的检查规则，配合 Midway 新版本可以快速排查问题。
 
@@ -47,7 +45,7 @@ npm run check
 
 执行效果如下。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1610983986151-79c54e7c-3ff0-4f94-98bc-359dda0fa694.png#align=left&display=inline&height=464&margin=%5Bobject%20Object%5D&name=image.png&originHeight=928&originWidth=1234&size=155051&status=done&style=none&width=617" width="617" />
+![](https://cdn.nlark.com/yuque/0/2021/png/501408/1610983986151-79c54e7c-3ff0-4f94-98bc-359dda0fa694.png)
 
 ## 自定义规则包
 

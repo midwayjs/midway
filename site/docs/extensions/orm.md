@@ -386,6 +386,15 @@ name: string;
 - `@VersionColumn` 是一个特殊列，在每次调用实体管理器或存储库的save时自动增长实体版本（增量编号）。
 - `@DeleteDateColumn` 是一个特殊列，会在调用 soft-delete（软删除）时自动设置实体的删除时间。
 
+比如：
+
+```typescript
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  createdDate: Date;
+```
+
 列类型是特定于数据库的。您可以设置数据库支持的任何列类型。有关支持的列类型的更多信息，请参见[此处](https://github.com/typeorm/typeorm/blob/master/docs/entities.md#column-types)。
 
 :::tip
@@ -438,9 +447,9 @@ export default {
 
 :::
 
-
-
 如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
+
+
 
 
  `type` 字段你可以使用其他的数据库类型，包括`mysql`, `mariadb`, `postgres`, `cockroachdb`, `sqlite`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
@@ -995,8 +1004,7 @@ export class Photo {
 
 
 ```typescript
-import { Entity } from 'typeorm';
-import { PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
 
 @Entity()
 export class Album {
@@ -1301,7 +1309,34 @@ export class Photo {
 
 
 
-### 获取连接池
+### 指定默认数据源
+
+在包含多个数据源时，可以指定默认的数据源。
+
+```typescript
+export default {
+  // ...
+  typeorm: {
+    dataSource: {
+      default1: {
+        // ...
+      },
+      default2: {
+        // ...
+      },
+    },
+    // 多个数据源时可以用这个指定默认的数据源
+    defaultDataSourceName: 'default1',
+  },
+};
+```
+
+
+
+### 获取数据源
+
+数据源即创建出的 DataSource 对象，我们可以通过注入内置的数据源管理器来获取。
+
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
 import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
@@ -1315,6 +1350,32 @@ export class MainConfiguration {
     const dataSourceManager = await container.getAsync(TypeORMDataSourceManager);
   	const conn = dataSourceManager.getDataSource('default');
     console.log(dataSourceManager.isConnected(conn));
+  }
+}
+```
+
+从 v3.8.0 开始，也可以通过装饰器注入。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { InjectDataSource } from '@midwayjs/typeorm';
+import { DataSource } from 'typeorm';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  
+  // 注入默认数据源
+  @InjectDataSource()
+  defaultDataSource: DataSource;
+  
+  // 注入自定义数据源
+  @InjectDataSource('default1')
+  customDataSource: DataSource;
+
+  async onReady(container: IMidwayContainer) {
+    // ...
   }
 }
 ```
@@ -1418,7 +1479,7 @@ export default {
 
 ### 时间列返回字符串
 
-配置 dateStrings 可以使 mysql 返回时间按 DATETIME 格式返回。
+配置 dateStrings 可以使 mysql 返回时间按 DATETIME 格式返回，只对 mysql 生效。
 
 ```typescript
 // src/config/config.default.ts
@@ -1435,6 +1496,16 @@ export default {
 }
 ```
 
+如果使用了 `@CreateDateColumn` 和 `@UpdateDateColumn` ，可以调整实体返回类型。
+
+```typescript
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  createdDate: string;
+```
+
+
 
 效果如下：
 
@@ -1445,8 +1516,9 @@ gmtModified: 2021-12-13T03:49:43.000Z,
 gmtCreate: 2021-12-13T03:49:43.000Z
 ```
 **配置后：**
+
 ```typescript
-gmtModified: '2021-12-13 11:49:43',
+gmtModified: '2021-12-13 11:49:43.725949',
 gmtCreate: '2021-12-13 11:49:43'
 ```
 
@@ -1479,8 +1551,8 @@ export default {
 
 ###  Cannot read properties of undefined (reading 'getRepository')
 
+一般是配置不正确，可以考虑两方面的配置：
 
-一般是配置不正确，可以考虑两房面的配置：
- 1、检查config.default.ts,entities配置是否正确
- 2、检查configuration.ts,确认是否引入orm
+- 1、检查 `config.default.ts` 中的 `entities` 配置是否正确
+- 2、检查 `configuration.ts` 文件，确认是否引入 orm
 

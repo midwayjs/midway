@@ -1,17 +1,17 @@
 import {
   Configuration,
+  extractExpressLikeValue,
   Init,
   Inject,
-  WEB_ROUTER_PARAM_KEY,
-  extractExpressLikeValue,
   MidwayConfigService,
   MidwayDecoratorService,
+  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/core';
 import * as session from '@midwayjs/express-session';
-import { MidwayExpressFramework } from './framework';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as DefaultConfig from './config/config.default';
+import { MidwayExpressFramework } from './framework';
 
 @Configuration({
   namespace: 'express',
@@ -40,7 +40,8 @@ export class ExpressConfiguration {
         return extractExpressLikeValue(
           options.metadata.type,
           options.metadata.propertyData,
-          options.originParamType
+          options.originParamType,
+          options.metadata?.pipes
         )(options.originArgs[0], options.originArgs[1], options.originArgs[2]);
       }
     );

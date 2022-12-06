@@ -28,12 +28,10 @@
 
 ## 安装依赖
 
-
-`@midwayjs/oss` 是主要的功能包，`@types/ali-oss` 是 oss 的官方定义包。
+`@midwayjs/oss` 是主要的功能包。
 
 ```bash
 $ npm i @midwayjs/oss@3 --save
-$ npm i @types/ali-oss --save-dev			// 安装到 dev 依赖
 ```
 或者在 `package.json` 中增加如下依赖后，重新安装。
 
@@ -43,20 +41,10 @@ $ npm i @types/ali-oss --save-dev			// 安装到 dev 依赖
     "@midwayjs/oss": "^3.0.0",
     // ...
   },
-  "devDependencies": {
-    "@types/ali-oss": "^6.16.0",
-    // ...
-  }
 }
 ```
 
 
-
-:::info
-
-如果发现 OSSService 没有方法定义，请务必检查此项。
-
-:::
 
 
 ## 引入组件
@@ -138,7 +126,7 @@ export default {
 }
 ```
 
-**sts 模式**
+**STS 模式**
 ```typescript
 // src/config/config.default
 export default {
@@ -169,7 +157,6 @@ export class UserService {
   ossService: OSSService;
 
   async saveFile() {
-
 
     const localFile = join(__dirname, 'test.log');
     const result = await this.ossService.put('/test/test.log', localFile);

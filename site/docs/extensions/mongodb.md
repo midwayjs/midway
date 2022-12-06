@@ -170,7 +170,7 @@ export class MainConfiguration {
 我们以一个简单的项目举例，其他结构请自行参考。
 
 
-```
+```text
 MyProject
 ├── src              							// TS 根目录
 │   ├── config
@@ -245,9 +245,7 @@ export default {
           user: '***********',
           pass: '***********'
         },
-        // 关联实体,
-        // 如果配置目录,直接输入目录名称,例如entity entities: [ '../entity' ]
-        // 实体和目录可以同时存在 ['../entity', User]
+        // 关联实体
         entities: [ User ]
       }
     }
@@ -350,8 +348,8 @@ export default {
 ```
 
 
-定义实例时使用固定的连接，
-在扫描dataSource配置Model会自动关联mongoose连接(getModelForClass(Model, { existingConnection: conn }))
+定义实例时使用固定的连接，在扫描 dataSource 配置 Model 会自动关联 mongoose连接(`getModelForClass(Model, { existingConnection: conn })`)。
+
 ```typescript
 @Provide()
 export class TestService{
@@ -421,7 +419,7 @@ mongoose 组件是 typegoose 的基础组件，有时候我们可以直接使用
 **请务必注意，请查看第一小节提前编写/安装 mongoose 等相关依赖包。**
 
 ```bash
-$ npm i @midwayjs/mongoose --save
+$ npm i @midwayjs/mongoose@3 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -529,7 +527,7 @@ export default {
 
 在只有一个默认连接或者直接使用 default 连接时，我们可以直接使用封装好的 `MongooseConnectionService` 对象来创建 model。
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject, Init } from '@midwayjs/decorator';
 import { MongooseDataSourceManager } from '@midwayjs/mongoose';
 import { Schema, Document } from 'mongoose';
 
@@ -545,7 +543,8 @@ export class TestService {
   @Inject()
   dataSourceManager: MongooseDataSourceManager;
 
-  @Init() {
+  @Init()
+  async init() {
     // get default connection
     this.conn = this.dataSourceManager.getDataSource('default');
   }

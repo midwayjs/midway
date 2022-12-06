@@ -4,13 +4,8 @@ import { IMidwayContainer, IMidwayContext } from '@midwayjs/core';
 
 export interface CasbinConfigOptions {
   modelPath: string;
-  policyAdapter:
-    | string
-    | ((applicationContext: IMidwayContainer) => Adapter | Promise<Adapter>)
-    | Adapter;
-  policyWatcher?:
-    | ((applicationContext: IMidwayContainer) => Watcher | Promise<Watcher>)
-    | Watcher;
+  policyAdapter: string | ((applicationContext: IMidwayContainer) => Promise<Adapter>) | Adapter;
+  policyWatcher?: ((applicationContext: IMidwayContainer) => Promise<Watcher>) | Watcher;
   usernameFromContext: (ctx: IMidwayContext) => string;
 }
 

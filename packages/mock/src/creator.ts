@@ -262,7 +262,9 @@ export async function createFunctionApp<
 
     // new mode
     const exports = options.starter.start(options);
-    await exports[options.initializeMethodName || 'initializer']();
+    await exports[options.initializeMethodName || 'initializer'](
+      options['initializeContext']
+    );
     const appCtx = options.starter.getApplicationContext();
 
     const configService = appCtx.get(MidwayConfigService) as any;
@@ -294,12 +296,15 @@ export async function createFunctionApp<
         const ctx = await framework.wrapHttpRequest(req);
 
         // create event and invoke
-        const func = framework.getTriggerFunction(url.pathname);
-        const result = await func(ctx, {
-          isHttpFunction: true,
-          originEvent: req,
-          originContext: {},
-        });
+        const result = await framework.invokeTriggerFunction(
+          ctx,
+          url.pathname,
+          {
+            isHttpFunction: true,
+            originEvent: req,
+            originContext: {},
+          }
+        );
         const { statusCode, headers, body } = result as any;
         if (res.headersSent) {
           return;

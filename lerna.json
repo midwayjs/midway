@@ -21,6 +21,7 @@
     },
     "publish": {
       "ignoreChanges": [
+        "package.json",
         "*.md",
         "**/test/**",
         "jest.config.js",
@@ -28,11 +29,22 @@
       ]
     },
     "version": {
-      "conventionalCommits": true,
-      "createRelease": "github",
       "forcePublish": "@midwayjs/version"
     }
   },
+  "changelog": {
+    "repo": "midwayjs/midway",
+    "labels": {
+      "pr: breaking change": ":boom: Breaking Change",
+      "pr: new feature": ":rocket: New Feature",
+      "pr: bug fix": ":bug: Bug Fix",
+      "pr: performance": ":running_woman: Performance",
+      "pr: polish": ":nail_care: Polish",
+      "pr: documentation": ":memo: Documentation",
+      "pr: maintenance": ":wrench: Maintenance"
+    },
+    "cacheDir": ".changelog"
+  },
   "npmClient": "npm",
-  "version": "3.6.1"
+  "version": "3.8.3"
 }

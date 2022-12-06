@@ -24,6 +24,8 @@ import {
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
   httpError,
+  ObjectIdentifier,
+  getProviderUUId,
 } from '@midwayjs/core';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
@@ -136,13 +138,59 @@ export class MidwayFaaSFramework extends BaseFramework<
       getEventMiddleware: () => {
         return this.getEventMiddleware();
       },
-      getServerlessInstance: <T>(serviceClass: T): Promise<T> => {
-        return this.app
-          .createAnonymousContext()
-          .requestContext.getAsync(serviceClass);
+      getServerlessInstance: async <T>(
+        serviceClass:
+          | ObjectIdentifier
+          | {
+              new (...args): T;
+            },
+        customContext = {}
+      ): Promise<T> => {
+        const instance = new Proxy(
+          {},
+          {
+            get: (target, prop) => {
+              let funcInfo;
+              if (typeof serviceClass === 'string') {
+                funcInfo = this.funMappingStore.get(
+                  `${serviceClass}.${prop as string}`
+                );
+              } else {
+                funcInfo = Array.from(this.funMappingStore.values()).find(
+                  item => {
+                    return (
+                      item.id === getProviderUUId(serviceClass) &&
+                      item.method === prop
+                    );
+                  }
+                );
+              }
+
+              if (funcInfo) {
+                return async (...args) => {
+                  const context = this.app.createAnonymousContext();
+                  return this.invokeTriggerFunction(
+                    context,
+                    funcInfo.funcHandlerName,
+                    {
+                      isHttpFunction: false,
+                      originContext: customContext,
+                      originEvent: args[0],
+                    }
+                  );
+                };
+              }
+            },
+          }
+        ) as T;
+        return instance;
       },
-      getTriggerFunction: (handlerMapping: string) => {
-        return this.getTriggerFunction(handlerMapping);
+      invokeTriggerFunction: (
+        context,
+        handlerMapping: string,
+        options: HandlerOptions
+      ) => {
+        return this.invokeTriggerFunction(context, handlerMapping, options);
       },
     });
     // hack use method
@@ -265,135 +313,137 @@ export class MidwayFaaSFramework extends BaseFramework<
     };
   }
 
-  public getTriggerFunction(handlerMapping: string) {
+  public async invokeTriggerFunction(
+    context,
+    handlerMapping: string,
+    options: HandlerOptions
+  ) {
     let funOptions: RouterInfo = this.funMappingStore.get(handlerMapping);
 
-    return async (context, options: HandlerOptions) => {
-      const isHttpFunction = options.isHttpFunction;
-      if (!funOptions && isHttpFunction) {
-        funOptions = await this.serverlessFunctionService.getMatchedRouterInfo(
-          context.path,
-          context.method
-        );
-        if (funOptions) {
-          const matchRes = PathToRegexpUtil.match(
-            funOptions.fullUrlFlattenString
-          )(context.path);
-          context.req.pathParameters = matchRes['params'] || {};
-        }
+    const isHttpFunction = options.isHttpFunction;
+    if (!funOptions && isHttpFunction) {
+      funOptions = await this.serverlessFunctionService.getMatchedRouterInfo(
+        context.path,
+        context.method
+      );
+      if (funOptions) {
+        const matchRes = PathToRegexpUtil.match(
+          funOptions.fullUrlFlattenString
+        )(context.path);
+        context.req.pathParameters = matchRes['params'] || {};
       }
-      if (!funOptions) {
-        throw new Error(`function handler = ${handlerMapping} not found`);
-      }
+    }
+    if (!funOptions) {
+      throw new Error(`function handler = ${handlerMapping} not found`);
+    }
 
-      context = this.getContext(context);
+    context = this.getContext(context);
 
-      if (this.configurationOptions.applicationAdapter?.runContextHook) {
-        this.configurationOptions.applicationAdapter.runContextHook(context);
-      }
+    if (this.configurationOptions.applicationAdapter?.runContextHook) {
+      this.configurationOptions.applicationAdapter.runContextHook(context);
+    }
 
-      const result = await (
-        await this.applyMiddleware(async (ctx, next) => {
-          const fn = await this.middlewareService.compose(
-            [
-              ...(isHttpFunction
-                ? this.httpMiddlewareManager
-                : this.eventMiddlewareManager),
-              ...funOptions.controllerMiddleware,
-              ...funOptions.middleware,
-              async (ctx, next) => {
-                let args;
-                if (isHttpFunction) {
-                  args = [ctx];
+    const result = await (
+      await this.applyMiddleware(async (ctx, next) => {
+        const fn = await this.middlewareService.compose(
+          [
+            ...(isHttpFunction
+              ? this.httpMiddlewareManager
+              : this.eventMiddlewareManager),
+            ...funOptions.controllerMiddleware,
+            ...funOptions.middleware,
+            async (ctx, next) => {
+              let args;
+              if (isHttpFunction) {
+                args = [ctx];
+              } else {
+                args = [options.originEvent, options.originContext];
+              }
+              // invoke handler
+              const result = await this.invokeHandler(
+                funOptions,
+                ctx,
+                args,
+                isHttpFunction
+              );
+              if (isHttpFunction && result !== undefined) {
+                if (result === null) {
+                  // 这样设置可以绕过 koa 的 _explicitStatus 赋值机制
+                  (ctx.response as any)._body = null;
                 } else {
-                  args = [options.originEvent, options.originContext];
+                  ctx.body = result;
                 }
-                // invoke handler
-                const result = await this.invokeHandler(
-                  funOptions,
-                  ctx,
-                  args,
-                  isHttpFunction
-                );
-                if (isHttpFunction && result !== undefined) {
-                  if (result === null) {
-                    // 这样设置可以绕过 koa 的 _explicitStatus 赋值机制
-                    (ctx.response as any)._body = null;
-                  } else {
-                    ctx.body = result;
-                  }
-                }
-                // http 靠 ctx.body，否则会出现状态码不正确的问题
-                if (!isHttpFunction) {
-                  return result;
-                }
-              },
-            ],
-            this.app
-          );
-          return await fn(ctx as Context, next);
-        })
-      )(context);
+              }
+              // http 靠 ctx.body，否则会出现状态码不正确的问题
+              if (!isHttpFunction) {
+                return result;
+              }
+            },
+          ],
+          this.app
+        );
+        return await fn(ctx as Context, next);
+      })
+    )(context);
 
-      if (isHttpFunction) {
-        if (!context.response?._explicitStatus) {
-          if (context.body === null || context.body === 'undefined') {
-            context.body = '';
-            context.type = 'text';
-            context.status = 204;
-          }
+    if (isHttpFunction) {
+      if (!context.response?._explicitStatus) {
+        if (context.body === null || context.body === 'undefined') {
+          context.body = '';
+          context.type = 'text';
+          context.status = 204;
         }
-
-        let encoded = false;
-
-        let data = context.body;
-        if (typeof data === 'string') {
-          if (!context.type) {
-            context.type = 'text/plain';
-          }
-          context.body = data;
-        } else if (isAnyArrayBuffer(data) || isUint8Array(data)) {
-          encoded = true;
-          if (!context.type) {
-            context.type = 'application/octet-stream';
-          }
-
-          // data is reserved as buffer
-          context.body = Buffer.from(data).toString('base64');
-        } else if (typeof data === 'object') {
-          if (!context.type) {
-            context.type = 'application/json';
-          }
-          // set data to string
-          context.body = data = JSON.stringify(data);
-        } else {
-          if (!context.type) {
-            context.type = 'text/plain';
-          }
-          // set data to string
-          context.body = data = data + '';
-        }
-
-        // middleware return value and will be got 204 status
-        if (
-          context.body === undefined &&
-          !context.response._explicitStatus &&
-          context._matchedRoute
-        ) {
-          // 如果进了路由，重新赋值，防止 404
-          context.body = undefined;
-        }
-
-        return {
-          isBase64Encoded: encoded,
-          statusCode: context.status,
-          headers: context.res.headers,
-          body: context.body,
-        };
-      } else {
-        return result;
       }
-    };
+
+      let encoded = false;
+
+      const data = context.body;
+      if (typeof data === 'string') {
+        if (!context.type) {
+          context.type = 'text/plain';
+        }
+        context.body = data;
+      } else if (isAnyArrayBuffer(data) || isUint8Array(data)) {
+        encoded = true;
+        if (!context.type) {
+          context.type = 'application/octet-stream';
+        }
+
+        // data is reserved as buffer
+        context.body = Buffer.from(data).toString('base64');
+      } else if (typeof data === 'object') {
+        if (!context.type) {
+          context.type = 'application/json';
+        }
+        // set data to string
+        context.body = JSON.stringify(data);
+      } else {
+        if (!context.type) {
+          context.type = 'text/plain';
+        }
+        // set data to string
+        context.body = data + '';
+      }
+
+      // middleware return value and will be got 204 status
+      if (
+        context.body === undefined &&
+        !context.response._explicitStatus &&
+        context._matchedRoute
+      ) {
+        // 如果进了路由，重新赋值，防止 404
+        context.body = undefined;
+      }
+
+      return {
+        isBase64Encoded: encoded,
+        statusCode: context.status,
+        headers: context.res.headers,
+        body: context.body,
+      };
+    } else {
+      return result;
+    }
   }
 
   public async wrapHttpRequest(

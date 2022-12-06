@@ -98,6 +98,19 @@ export default {
 ![postman](https://img.alicdn.com/imgextra/i4/O1CN01QCdTsN1S347SuzZU5_!!6000000002190-2-tps-1017-690.png)
 
 
+关闭 bodyParser 中间件。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  bodyParser: {
+    enable: false,
+    // ...
+  },
+}
+```
+
 
 ## Cookie 和 Session
 
@@ -176,6 +189,7 @@ export default {
 | subdomainOffset        | number                                   | 可选，子域名的偏移量，默认 2                            |
 | proxyIpHeader        | string                                   | 可选，获取代理 ip 的字段名，默认为 X-Forwarded-For |
 | maxIpsCount        | number                                   | 可选，获取的 ips 最大数量，默认为 0（全部返回）|
+| serverTimeout | number | 可选，服务端超时配置，单位秒。 |
 
 
 
@@ -263,6 +277,19 @@ export default {
 ```
 
 如果开启了 `@midwayjs/static-file`  组件，那么会优先使用组件的静态文件托管。
+
+关闭中间件。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  siteFile: {
+    enable: false,
+    // ...
+  },
+}
+```
 
 ### 修改上下文日志
 

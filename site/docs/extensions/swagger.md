@@ -436,7 +436,7 @@ Swagger UI 中展示：
 @ApiBody({ description: 'hello file' })
 @ApiBody({ description: 'hello fields', type: Cat })
 async upload(@File() f: any, @Fields() data: Cat) {
-  return null;
+  // ...
 }
 ```
 
@@ -448,7 +448,7 @@ Swagger UI 中展示：
 ```typescript
 @Post('/test1')
 async upload1(@Files() f: any[], @Fields() data: Cat) {
-  return null;
+  // ...
 }
 ```
 
@@ -617,7 +617,7 @@ export function SuccessWrapper<T extends Type>(ResourceCls: T) {
 我们可以基于这个方法，来实现我们自己的返回类。
 
 ```typescript
-class ViewCat extends SuccessVo(Cat) {}
+class ViewCat extends SuccessWrapper(Cat) {}
 ```
 
 在使用的时候，可以直接指定这个类即可。

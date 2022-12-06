@@ -12,6 +12,7 @@ export abstract class DataSourceManager<T> {
   protected dataSource: Map<string, T> = new Map();
   protected options = {};
   protected modelMapping = new WeakMap();
+  private innerDefaultDataSourceName: string;
 
   protected async initDataSource(options: any, appDir: string): Promise<void> {
     this.options = options;
@@ -141,6 +142,21 @@ export abstract class DataSourceManager<T> {
     );
     this.dataSource.clear();
   }
+
+  public getDefaultDataSourceName(): string {
+    if (this.innerDefaultDataSourceName === undefined) {
+      if (this.options['defaultDataSourceName']) {
+        this.innerDefaultDataSourceName = this.options['defaultDataSourceName'];
+      } else if (this.dataSource.size === 1) {
+        // Set the default source name when there is only one data source
+        this.innerDefaultDataSourceName = Array.from(this.dataSource.keys())[0];
+      } else {
+        // Set empty string for cache
+        this.innerDefaultDataSourceName = '';
+      }
+    }
+    return this.innerDefaultDataSourceName;
+  }
 }
 
 export function globModels(globString: string, appDir: string) {
@@ -155,7 +171,6 @@ export function globModels(globString: string, appDir: string) {
   if (/\*/.test(globString)) {
     cwd = appDir;
     pattern = [...DEFAULT_PATTERN.map(p => join(globString, p))];
-    pattern.push(globString);
   } else {
     pattern = [...DEFAULT_PATTERN];
     cwd = join(appDir, globString);

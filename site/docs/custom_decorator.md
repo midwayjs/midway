@@ -418,7 +418,7 @@ import { createCustomParamDecorator } from '@midwayjs/decorator';
 // 装饰器内部的唯一 id
 export const USER_KEY = 'decorator:user_key';
 
-export function User(): MethodDecorator {
+export function User(): ParameterDecorator {
   return createCustomParamDecorator(USER_KEY, {});
 }
 ```
@@ -470,12 +470,26 @@ export class MainConfiguration {
 ```typescript
 // ...
 export class UserController {
-  async invoke(@User() user: string) {
+
+  @Inject()
+  userService: UserService;
+
+  @Inject()
+  ctx: Context;
+
+  async getUser() {
+    return await this.getUser(ctx);
+  }
+}
+
+export class UserService {
+  async getUser(@User() user: string) {
     console.log(user);
     // => xxx
   }
 }
 ```
+
 
 :::tip
 

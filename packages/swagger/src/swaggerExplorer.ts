@@ -617,7 +617,7 @@ export class SwaggerExplorer {
    * 解析类型的 ApiProperty
    * @param clzz
    */
-  private parseClzz(clzz: Type) {
+  protected parseClzz(clzz: Type) {
     if (this.documentBuilder.getSchema(clzz.name)) {
       return;
     }
@@ -716,7 +716,7 @@ export class SwaggerExplorer {
             delete metadata.items;
           } else {
             tt.properties[key] = {
-              type: getPropertyType(clzz.prototype, key).name,
+              type: currentType ?? getPropertyType(clzz.prototype, key).name,
               format: metadata?.format,
             };
 
@@ -739,6 +739,9 @@ export class SwaggerExplorer {
     this.documentBuilder.addSchema({
       [clzz.name]: tt,
     });
+
+    // just for test
+    return tt;
   }
   /**
    * 授权验证

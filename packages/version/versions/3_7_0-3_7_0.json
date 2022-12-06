@@ -1,0 +1,278 @@
+{
+  "@midwayjs/faas-typings": "3.6.0",
+  "@midwayjs/fc-starter": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/serverless-http-parser": "3.6.0",
+  "@midwayjs/async-hooks-context-manager": "3.7.0",
+  "@midwayjs/axios": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/bootstrap": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/bull-board": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3",
+    "3.7.4"
+  ],
+  "@midwayjs/bull": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3",
+    "3.7.4"
+  ],
+  "@midwayjs/cache": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/captcha": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3",
+    "3.7.4"
+  ],
+  "@midwayjs/casbin-redis-adapter": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3",
+    "3.7.4"
+  ],
+  "@midwayjs/casbin-typeorm-adapter": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3",
+    "3.7.4"
+  ],
+  "@midwayjs/casbin": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3",
+    "3.7.4"
+  ],
+  "@midwayjs/code-dye": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/consul": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/core": "3.7.0",
+  "@midwayjs/cos": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/cross-domain": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/decorator": "3.7.0",
+  "@midwayjs/express-session": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/faas": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/grpc": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/http-proxy": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/i18n": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/info": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/jwt": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/kafka": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/mikro": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/mock": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/mongoose": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/oss": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/otel": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/passport": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/process-agent": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/prometheus-socket-io": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/prometheus": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/rabbitmq": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/redis": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/security": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/sequelize": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.2",
+    "3.7.3"
+  ],
+  "@midwayjs/session": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/socketio": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/static-file": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/swagger": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.2",
+    "3.7.3"
+  ],
+  "@midwayjs/tablestore": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/typegoose": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3",
+    "3.7.4"
+  ],
+  "@midwayjs/typeorm": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/upload": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/validate": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/version": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.2",
+    "3.7.3",
+    "3.7.4"
+  ],
+  "@midwayjs/view-ejs": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/view-nunjucks": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/view": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/express": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/koa": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/web": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ],
+  "@midwayjs/ws": [
+    "3.7.0",
+    "3.7.1",
+    "3.7.3"
+  ]
+}

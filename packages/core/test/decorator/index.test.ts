@@ -24,6 +24,12 @@ describe('test', () => {
       }
     }
 
+    function MethodF(): MethodDecorator {
+      return (target, propertyKey, descriptor) => {
+        console.log('F method decorator', target.constructor, propertyKey);
+      }
+    }
+
     function ParamD(): ParameterDecorator {
       return (target, propertyKey, parameterIndex) => {
         console.log('D param decorator', target.constructor, propertyKey, parameterIndex);
@@ -44,6 +50,7 @@ describe('test', () => {
       abc;
 
       @MethodC()
+      @MethodF()
       async invoke(@ParamD() @ParamE() type: number, @ParamD() user: string) {
 
       }

@@ -67,7 +67,7 @@ $ npm i @midwayjs/casbin@3 --save
 ## 启用组件
 
 
-首先，引入 组件，在 `configuration.ts` 中导入：
+首先，引入组件，在 `configuration.ts` 中导入：
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
@@ -417,7 +417,7 @@ $ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
 import { Configuration } from '@midwayjs/decorator';
 import * as typeorm from '@midwayjs/typeorm';
 import * as casbin from '@midwayjs/casbin';
-import { join } from 'path'
+import { join } from 'path';
 
 @Configuration({
   imports: [

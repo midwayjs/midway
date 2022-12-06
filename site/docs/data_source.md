@@ -38,7 +38,7 @@ connection.query(
 
 
 
-## 实现一个数据源管理器
+## 实现数据源管理器
 
 数据源管理器在 midway 中也是一个普通的导出类，比如我们也可以把他放到 `src/manager/mysqlDataSourceManager.ts` 中。
 
@@ -161,42 +161,6 @@ export const mysql = {
 
 
 
-## 获取数据源
-
-通过注入数据源管理器，我们可以通过其上面的方法来拿到数据源。
-
-```typescript
-import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager`;
-import { join } from 'path';
-
-@Provide()
-export class UserService {
-  
-  @Inject()
-  mysqlDataSourceManager: MySqlDataSourceManager;
-  
-  async invoke() {
-    
-    const dataSource = this.mysqlDataSourceManager.getDataSource('dataSource1');
-    // TODO
-   
-  }
-}
-```
-
-此外，还有一些其他方法。
-
-```typescript
-// 数据源是否存在
-this.mysqlDataSourceManager.hasDataSource('dataSource1');
-// 获取所有的数据源名
-this.mysqlDataSourceManager.getDataSourceNames();
-// 数据源是否连接
-this.mysqlDataSourceManager.isConnected('dataSource1')
-```
-
-
-
 ## 实体绑定
 
 数据源最重要的一环是实体类，每个数据源都可以拥有自己的实体类。比如 typeorm 等 orm 框架，都是基于此来设计的。
@@ -237,19 +201,20 @@ import { User, SimpleUser } from '../entity/user.entity';
 export default {
   mysql: {
     dataSource: {
-    dataSource1: {
-      host: 'localhost',
-      user: 'root',
-      database: 'test',
-      entities: [User]
-    },
-    dataSource2: {
-      host: 'localhost',
-      user: 'root',
-      database: 'test',
-      entities: [SimpleUser]
-    },
-    // ...
+      dataSource1: {
+        host: 'localhost',
+        user: 'root',
+        database: 'test',
+        entities: [User]
+      },
+      dataSource2: {
+        host: 'localhost',
+        user: 'root',
+        database: 'test',
+        entities: [SimpleUser]
+      },
+      // ...
+    }
   }
 }
 ```
@@ -269,19 +234,20 @@ import { User, SimpleUser } from '../entity/user.entity';
 export default {
   mysql: {
     dataSource: {
-    dataSource1: {
-      host: 'localhost',
-      user: 'root',
-      database: 'test',
-      entities: [
-        User, 
-        SimpleUser, 
-        '/abc',			// 特定目录下
-        '**/abc/**'	// 仅获取包含 abc 字符的目录下的文件
-      ]		
-    },
-    // ...
-    // ...
+      dataSource1: {
+        host: 'localhost',
+        user: 'root',
+        database: 'test',
+        entities: [
+          User, 
+          SimpleUser, 
+          './entity',			// 特定目录下
+          '**/abc/**'			// 仅获取包含 abc 字符的目录下的文件
+        ]
+      },
+      // ...
+      // ...
+    }
   }
 }
 ```
@@ -290,8 +256,9 @@ export default {
 
 注意
 
-- 1、填写目录字符串时，以 initDataSource 方法的第二个参数作为相对路径查找（这里和常见的 typeorm 等扫描路径不同，entities 的路径不需要写 `.ts`  后缀，否则部署时会找不到实体）
-- 2、路径的写法不支持 [单文件构建部署](./deployment#单文件构建部署)（bundle模式）
+- 1、填写目录字符串时，以 initDataSource 方法的第二个参数作为相对路径查找，默认为 baseDir（src 或者 dist）
+- 2、和常见的 typeorm 等扫描路径不同，entities 的路径不需要写 `.ts`  后缀，否则部署时会找不到实体
+- 3、路径的写法不支持 [单文件构建部署](./deployment#单文件构建部署)（bundle模式）
 
 :::
 
@@ -336,5 +303,61 @@ class UserService {
   userModel;
   
 }
+```
+
+也可以通过 `defaultDataSourceName` 配置显式指定默认的数据源。
+
+```typescript
+// config.default.ts
+export const mysql = {
+  dataSource: {
+    dataSource1: {
+      // ...
+    },
+    dataSource2: {
+      // ...
+    },
+    dataSource3: {
+      // ...
+    },
+  }
+  defaultDataSourceName: 'dataSource2',
+}
+```
+
+
+
+## 获取数据源
+
+通过注入数据源管理器，我们可以通过其上面的方法来拿到数据源。
+
+```typescript
+import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager`;
+import { join } from 'path';
+
+@Provide()
+export class UserService {
+  
+  @Inject()
+  mysqlDataSourceManager: MySqlDataSourceManager;
+  
+  async invoke() {
+    
+    const dataSource = this.mysqlDataSourceManager.getDataSource('dataSource1');
+    // TODO
+   
+  }
+}
+```
+
+此外，还有一些其他方法。
+
+```typescript
+// 数据源是否存在
+this.mysqlDataSourceManager.hasDataSource('dataSource1');
+// 获取所有的数据源名
+this.mysqlDataSourceManager.getDataSourceNames();
+// 数据源是否连接
+this.mysqlDataSourceManager.isConnected('dataSource1')
 ```
 

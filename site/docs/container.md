@@ -540,7 +540,7 @@ export class PaymentService {
   payService: IPay;         // 注意，这里的类型是接口，编译后类型信息会被移除
 
   async orderGood() {
-    await this.payService.payMonety();
+    await this.payService.payMoney();
   }
 
 }

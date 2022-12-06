@@ -507,7 +507,7 @@ $ npm run test
 
 :::info
 
-- 1、jest 测试时，以单文件作为单位，使用 `beforeAlll` 和 `afterAll` 控制 app 的启停
+- 1、jest 测试时，以单文件作为单位，使用 `beforeAll` 和 `afterAll` 控制 app 的启停
 - 2、使用 `createHttpRequest` 来创建一个测试请求
 - 3、使用 expect 来断言返回的结果是否符合预期
 

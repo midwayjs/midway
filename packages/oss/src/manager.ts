@@ -78,7 +78,9 @@ export class OSSService implements OSS {
 
   @Init()
   async init() {
-    this.instance = this.serviceFactory.get('default');
+    this.instance = this.serviceFactory.get(
+      this.serviceFactory.getDefaultClientName?.() || 'default'
+    );
     if (!this.instance) {
       throw new MidwayCommonError('oss default instance not found.');
     }
@@ -102,7 +104,9 @@ export class OSSSTSService implements OSS.STS {
 
   @Init()
   async init() {
-    this.instance = this.serviceFactory.get('default');
+    this.instance = this.serviceFactory.get(
+      this.serviceFactory.getDefaultClientName?.() || 'default'
+    );
     if (!this.instance) {
       throw new MidwayCommonError('oss sts default instance not found.');
     }

@@ -1,11 +1,38 @@
+import {
+  ALL,
+  PipeTransform,
+  PipeTransformFunction,
+  RouteParamTypes,
+} from '../decorator';
 import { transformRequestObjectByType } from './index';
-import { ALL, RouteParamTypes } from '../decorator';
 
-export const extractKoaLikeValue = (key, data, paramType?) => {
+export async function callPipes(
+  pipes: Array<PipeTransform | PipeTransformFunction>,
+  value: any
+) {
+  if (pipes && pipes.length) {
+    for (const pipe of pipes) {
+      if ('transform' in pipe) {
+        value = await pipe.transform(value);
+      } else {
+        value = await pipe(value);
+      }
+    }
+  }
+  return value;
+}
+
+export const extractKoaLikeValue = (
+  key,
+  data,
+  paramType?,
+  pipes?: PipeTransform[]
+) => {
   if (ALL === data) {
     data = undefined;
   }
-  return function (ctx, next) {
+
+  const value = async function (ctx, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -68,17 +95,29 @@ export const extractKoaLikeValue = (key, data, paramType?) => {
         }
       case RouteParamTypes.FIELDS:
         return data ? ctx.fields[data] : ctx.fields;
+      case RouteParamTypes.CUSTOM:
+        return data ? data(ctx) : undefined;
       default:
         return null;
     }
   };
+
+  return async function (ctx, next) {
+    const result = await value(ctx, next);
+    return await callPipes(pipes || [], result);
+  };
 };
 
-export const extractExpressLikeValue = (key, data, paramType?) => {
+export const extractExpressLikeValue = (
+  key,
+  data,
+  paramType?,
+  pipes?: PipeTransform[]
+) => {
   if (ALL === data) {
     data = undefined;
   }
-  return function (req, res, next) {
+  const value = (req, res, next) => {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -129,8 +168,15 @@ export const extractExpressLikeValue = (key, data, paramType?) => {
         }
       case RouteParamTypes.FIELDS:
         return data ? req.fields[data] : req.fields;
+      case RouteParamTypes.CUSTOM:
+        return data ? data(req, res) : undefined;
       default:
         return null;
     }
+  };
+
+  return async function (req, res, next) {
+    const result = await value(req, res, next);
+    return await callPipes(pipes || [], result);
   };
 };

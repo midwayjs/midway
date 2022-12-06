@@ -191,7 +191,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     while (lowerCaseFileNameList.length) {
       lowerCaseFileNameList.shift();
       const curExt = `.${lowerCaseFileNameList.join('.')}`;
-      if (this.uploadWhiteListMap[curExt]) {
+      if (this.upload.whitelist === null || this.uploadWhiteListMap[curExt]) {
         return curExt;
       }
     }

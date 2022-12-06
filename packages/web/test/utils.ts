@@ -1,10 +1,10 @@
 import * as Web from '../src';
 import { join } from 'path';
-import { createApp, close } from '@midwayjs/mock';
+import { close, createApp } from '@midwayjs/mock';
 import { existsSync, readFileSync } from 'fs';
 import { remove } from 'fs-extra';
-import axios from 'axios';
 import { fork } from 'child_process';
+import { makeHttpRequest } from '@midwayjs/core';
 
 const logDir = join(__dirname, '../logs');
 process.env.NODE_LOG_DIR = logDir;
@@ -86,10 +86,8 @@ export const matchContentTimes = (p: string, matchString: string | RegExp) => {
 }
 
 export async function createHttpClient(url, options = {}) {
-  const result = await axios.request({
-    url,
-    ...options
+  return await makeHttpRequest(url, {
+    dataType: 'json',
+    ...options,
   });
-
-  return result;
 }

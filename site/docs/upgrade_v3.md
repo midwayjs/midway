@@ -411,7 +411,7 @@ container.getAsync('A:aaa'); // => OK
 ```
 
 
-新，组件入口
+新组件入口
 ```typescript
 @Configuration({
   namespace: 'A'

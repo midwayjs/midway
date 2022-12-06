@@ -161,10 +161,21 @@ export class MidwayFrameworkService {
         this.globalFrameworkList.push(frameworkInstance);
       }
 
-      const nsSet = this.applicationContext['namespaceSet'] as Set<string>;
       let mainNs;
-      if (nsSet.size > 0) {
-        [mainNs] = nsSet;
+
+      /**
+       * 这里处理引入组件的顺序，在主框架之前是否包含其他的 framework
+       * 1、装饰器的顺序和 import 的写的顺序有关
+       * 2、主框架和 configuration 中的配置加载顺序有关
+       * 3、两者不符合的话，App 装饰器获取的 app 会不一致，导致中间件等无法正常使用
+       */
+      const namespaceList = this.applicationContext.getNamespaceList();
+      for (const namespace of namespaceList) {
+        const framework = this.applicationManager.getApplication(namespace);
+        if (framework) {
+          mainNs = namespace;
+          break;
+        }
       }
 
       global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =

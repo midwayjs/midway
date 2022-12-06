@@ -1,33 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] = `
-Object {
-  "doget": Array [
-    Object {
+{
+  "doget": [
+    {
       "impl": true,
       "key": "web:router_param",
-      "metadata": Object {
+      "metadata": {
+        "pipes": undefined,
         "propertyData": "common:all_value_key",
         "type": 4,
       },
       "parameterIndex": 6,
       "propertyName": "doget",
     },
-    Object {
+    {
       "impl": true,
       "key": "web:router_param",
-      "metadata": Object {
+      "metadata": {
+        "pipes": undefined,
         "propertyData": undefined,
         "type": 6,
       },
       "parameterIndex": 5,
       "propertyName": "doget",
     },
-    Object {
+    {
       "impl": true,
       "key": "web:router_param",
-      "metadata": Object {
-        "propertyData": Object {
+      "metadata": {
+        "pipes": undefined,
+        "propertyData": {
           "requireFile": true,
         },
         "type": 5,
@@ -35,40 +38,44 @@ Object {
       "parameterIndex": 4,
       "propertyName": "doget",
     },
-    Object {
+    {
       "impl": true,
       "key": "web:router_param",
-      "metadata": Object {
+      "metadata": {
+        "pipes": undefined,
         "propertyData": "tt",
         "type": 3,
       },
       "parameterIndex": 3,
       "propertyName": "doget",
     },
-    Object {
+    {
       "impl": true,
       "key": "web:router_param",
-      "metadata": Object {
+      "metadata": {
+        "pipes": undefined,
         "propertyData": "body",
         "type": 1,
       },
       "parameterIndex": 2,
       "propertyName": "doget",
     },
-    Object {
+    {
       "impl": true,
       "key": "web:router_param",
-      "metadata": Object {
+      "metadata": {
+        "pipes": undefined,
         "propertyData": "bb",
         "type": 0,
       },
       "parameterIndex": 1,
       "propertyName": "doget",
     },
-    Object {
+    {
       "impl": true,
       "key": "web:router_param",
-      "metadata": Object {
+      "metadata": {
+        "pipes": undefined,
         "propertyData": "aa",
         "type": 2,
       },

@@ -198,4 +198,22 @@ describe('test/common/dataSourceManager.test.ts', () => {
 
     expect(e).toBeDefined();
   });
+
+  it('should test default name', async () => {
+    const instance = new CustomDataSourceFactory();
+    await instance.init({
+      defaultDataSourceName: 'abc',
+      dataSource: {}
+    })
+    expect(instance.getDefaultDataSourceName()).toEqual('abc');
+  });
+
+  it('should test default name when there is only one data source', async () => {
+    let instance = new CustomDataSourceFactory();
+    expect(instance.getDefaultDataSourceName()).toEqual('');
+    expect(instance.getDefaultDataSourceName()).toEqual('');
+    instance = new CustomDataSourceFactory();
+    instance['dataSource'].set('abc', {});
+    expect(instance.getDefaultDataSourceName()).toEqual('abc');
+  });
 });

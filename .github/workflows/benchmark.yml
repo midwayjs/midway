@@ -1,11 +1,13 @@
-name: Node.js benchmark CI
+name: Midway memory leak check
 
 on:
   push:
+    branches: [main]
     paths-ignore:
       - 'site/**'
       - '*.md'
   pull_request:
+    branches: [main]
     paths-ignore:
       - 'site/**'
       - '*.md'
@@ -42,7 +44,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-
-      - name: Inatall Dependencies
+      - name: Install Dependencies
         run: |
           npm i --no-audit -g autocannon zx
           # npm run purge # if you want to clean up the cache
@@ -57,8 +59,8 @@ jobs:
         timeout-minutes: 10
         run: |
           ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-koa-v3
-      - name: Benchmark application-web-v3
-        timeout-minutes: 10
-        run: |
-          ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-web-v3
+#      - name: Benchmark application-web-v3
+#        timeout-minutes: 10
+#        run: |
+#          ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-web-v3
 

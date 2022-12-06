@@ -8,7 +8,7 @@
 - 分解可能会阻塞 Node.js 事件循环的单一任务。比如用户请求需要像音频转码这样的 CPU 密集型工作，就可以将此任务委托给其他进程，从而释放面向用户的进程以保持响应。
 - 提供跨各种服务的可靠通信渠道。例如，您可以在一个进程或服务中排队任务（作业），并在另一个进程或服务中使用它们。在任何流程或服务的作业生命周期中完成、错误或其他状态更改时，您都可以收到通知（通过监听状态事件）。当队列生产者或消费者失败时，它们的状态被保留，并且当节点重新启动时任务处理可以自动重新启动。
 
-Midway 提供了 @midwayjs/bull 包作为 [Bull](https://github.com/OptimalBits/bull) 之上的抽象/包装器，[Bull](https://github.com/OptimalBits/bull) 是一种流行的、受良好支持的、高性能的基于 Node.js 的队列系统实现。该软件包可以轻松地将 Bull Queues 以 Nest 友好的方式集成到您的应用程序中。
+Midway 提供了 @midwayjs/bull 包作为 [Bull](https://github.com/OptimalBits/bull) 之上的抽象/包装器，[Bull](https://github.com/OptimalBits/bull) 是一种流行的、受良好支持的、高性能的基于 Node.js 的队列系统实现。该软件包可以轻松地将 Bull Queues 以友好的方式集成到您的应用程序中。
 
 Bull 使用 Redis 来保存作业数据，在使用 Redis 时，Queue 架构是完全分布式，和平台无关。例如，您可以在一个（或多个）节点（进程）中运行一些 Queue 生产者、消费者，而在其他节点上的运行其他生产者和消费者。
 
@@ -650,13 +650,13 @@ export class TestProcessor implements IProcessor {
 也可以通过装饰器来获取。
 
 ```typescript
-import { InjectQueue, IQueue } from '@midwayjs/bull';
+import { InjectQueue, BullQueue } from '@midwayjs/bull';
 import { Provide } from '@midwayjs/decorator';
 
 @Provide()
 export class UserService {
   @InjectQueue('test')
-  testQueue: IQueue;
+  testQueue: BullQueue;
 
   async invoke() {
     await this.testQueue.pause();

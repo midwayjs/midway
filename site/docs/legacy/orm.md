@@ -651,7 +651,7 @@ await this.photoModel.softDelete(1);
 
 
 ```typescript
-import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { EntityModel } from '@midwayjs/orm';
 import { Photo } from "./photo";
 
@@ -783,7 +783,7 @@ export class PhotoMetadata {
 
 ```typescript
 import { EntityModel } from '@midwayjs/orm';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { PhotoMetadata } from './photoMetadata';
 
 @EntityModel()
@@ -1216,6 +1216,62 @@ export class EverythingSubscriber implements EntitySubscriberInterface {
 
 
 这个订阅类提供了一些常用的接口，用来在数据库操作时执行一些事情。
+
+### 20、OrmConnectionHook
+
+在 3.4.0（不包含） 之前的版本中， Midway 封装提供了一种 Hook 机制，用于监听数据库连接与断连事件；代码如下。
+
+```typescript
+import { Provide } from '@midwayjs/decorator';
+import { OrmConnectionHook, OrmHook } from '@midwayjs/orm';
+import { Connection, ConnectionOptions } from 'typeorm';
+
+@Provide()
+@OrmHook()
+export class OrmConnectionListener implements OrmConnectionHook {
+  /**
+   * Called before connection create
+   * @param opts
+   * @returns
+   */
+  async beforeCreate(opts?: ConnectionOptions): Promise<ConnectionOptions> {
+    console.log('BEFORE CONNECTION CREATE');
+    return opts;
+  }
+
+  /**
+   * Called after connection create
+   * @param conn
+   * @param opts
+   * @returns
+   */
+  async afterCreate(conn?: Connection, opts?: ConnectionOptions): Promise<Connection> {
+    console.log('AFTER CONNECTION CREATE');
+    return conn;
+  }
+
+  /**
+   * Called before connection close
+   * @param conn
+   * @param connectionName
+   * @returns
+   */
+  async beforeClose(conn?: Connection, connectionName?: string): Promise<Connection> {
+    console.log('BEFORE CONNECTION CLOSE');
+    return conn;
+  }
+
+  /**
+   * Called after connection close
+   * @param conn
+   * @returns
+   */
+  async afterClose(conn?: Connection): Promise<Connection> {
+    console.log('AFTER CONNECTION CLOSE');
+    return conn;
+  }
+}
+```
 
 
 ## 高级功能

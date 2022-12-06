@@ -1,6 +1,5 @@
----
-title: midwayjs/cli
----
+# midwayjs/cli
+
 `@midwayjs/cli` 是新版本的 Midway 体系工具链，和 Serverless，以及原应用的工具链进行了整合。
 
 
@@ -58,6 +57,11 @@ $ midway-bin dev --ts --baseDir=./app
 ```shell
 $ midway-bin dev --ts --sourceDir=./app/src
 ```
+### **修改 tsconfig.json 的位置**
+通过设置 [TS_NODE_PROJECT](https://github.com/TypeStrong/ts-node#project) 环境变量来指定tsconfig.json的位置。
+```shell
+$ cross-env TS_NODE_PROJECT=./tsconfig.dev.json midway-bin dev -ts
+```
 
 ### **更快的启动方式**
 
@@ -88,7 +92,7 @@ $ midway-bin dev --ts --watchFile=./test,./b.txt
 
 ```shell
 // 指定多个文件扩展名，使用英文逗号分隔
-midway-bin dev --ts --watchExt=.js,.html
+$ midway-bin dev --ts --watchExt=.js,.html
 ```
 
 

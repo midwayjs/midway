@@ -7,13 +7,13 @@
 ```typescript
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class RedisErrorListener() {
+export class RedisErrorListener {
   // ...
 }
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class DataSyncListener() {
+export class DataSyncListener {
   // ...
 }
 ```
@@ -38,7 +38,7 @@ export class MainConfiguration {
 
 ```
 
-这样一旦代码多了，onReady 中会出现许多必要流程的代码。
+这样一旦代码多了，onReady 中会出现许多非必要流程的代码。
 
 
 
@@ -49,11 +49,11 @@ export class MainConfiguration {
 比如：
 
 ```typescript
-import { Autolaod, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Autoload, Scope, ScopeEnum } from '@midwayjs/decorator';
 
-@Autolaod()
+@Autoload()
 @Scope(ScopeEnum.Singleton)
-export class RedisErrorListener() {
+export class RedisErrorListener {
   @Init()
   async init() {
     const redis = new Redis();

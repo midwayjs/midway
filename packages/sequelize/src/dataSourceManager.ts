@@ -50,7 +50,7 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
     await client.authenticate();
 
     if (config.sync) {
-      await client.sync();
+      await client.sync(config.syncOptions);
     }
 
     this.coreLogger.info('[midway:sequelize] connecting and start');

@@ -11,7 +11,8 @@ export const sequelize = {
       entities: [HelloModel, UserModel],
       // repositoryMode: true,
     }
-  }
+  },
+  defaultDataSourceName: 'custom',
 }
 
 export const koa = {

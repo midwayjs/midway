@@ -88,7 +88,6 @@ export class MainConfiguration {
 }
 ```
 
-##
 
 ## 基础使用
 
@@ -194,6 +193,8 @@ export default (appInfo) => {
 
 ```
 
+如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
+
 
 
 ### 调用 Repository
@@ -229,6 +230,58 @@ export class BookController {
 
 
 
+## 高级功能
+
+### 获取数据源
+
+数据源即创建出的数据源对象，我们可以通过注入内置的数据源管理器来获取。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { MikroDataSourceManager } from '@midwayjs/mikro';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+
+  async onReady(container: IMidwayContainer) {
+    const dataSourceManager = await container.getAsync(MikroDataSourceManager);
+    const orm = dataSourceManager.getDataSource('default');
+    const connection = orm.em.getConnection();
+    // ...
+  }
+}
+```
+
+从 v3.8.0 开始，也可以通过装饰器注入。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import { InjectDataSource } from '@midwayjs/mikro';
+import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  
+  // 注入默认数据源
+  @InjectDataSource()
+  defaultDataSource: MikroORM<IDatabaseDriver<Connection>>;
+  
+  // 注入自定义数据源
+  @InjectDataSource('default1')
+  customDataSource: MikroORM<IDatabaseDriver<Connection>>;
+
+  async onReady(container: IMidwayContainer) {
+    // ...
+  }
+}
+```
+
+
+
 ## 常见问题
 
 
@@ -250,7 +303,6 @@ Mikro-orm 内部查询有一个 [Identity Map](https://mikro-orm.io/docs/identit
 和其他数据库一样，Midway 支持多数据源的配置。
 
 ```typescript
-
 // src/config/config.default
 import { Author, BaseEntity, Book, BookTag, Publisher } from '../entity';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';

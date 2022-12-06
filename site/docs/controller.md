@@ -562,6 +562,31 @@ async updateUser(
 
 
 
+### 自定义请求参数装饰器
+
+你可以快速通过`createRequestParamDecorator` 创建自定义请求参数装饰器。
+
+```typescript
+import { createRequestParamDecorator } from '@midwayjs/core';
+
+// 实现装饰器
+export const Token = () => {
+  return createRequestParamDecorator(ctx => {
+    return ctx.headers.token;
+  });
+};
+
+// 使用装饰器
+export class UserController {
+  async invoke(@Token() token: string) {
+    console.log(token);
+  }
+}
+```
+
+
+
+
 ## 请求参数类型转换
 
 如果是简单类型，Midway 会自动将参数转换为用户声明的类型。

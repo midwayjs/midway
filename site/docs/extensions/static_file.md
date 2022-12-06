@@ -145,7 +145,7 @@ export default {
 | maxAge  | prod 为 31536000，其他为 0                      | 缓存的最大时间                                               |
 | buffer  | prod 为 true，其余为 false                      | 使用 buffer 字符返回                                         |
 
-更多配置，请参考  [koa-static-cache](https://github.com/koajs/static-cache) 。
+更多配置，请参考 [koa-static-cache](https://github.com/koajs/static-cache) 。
 
 
 
@@ -177,3 +177,27 @@ export class HelloHTTPService {
 
 ```
 
+
+
+### 2、默认 index.html
+
+由于  [koa-static-cache](https://github.com/koajs/static-cache)  不支持默认 `index.html` 的配置，可以通过它的 alias 功能来解决。
+
+可以配置把 `/` 指向到 `/index.html` 即可，不支持通配和正则。
+
+```typescript
+export default {
+  // ...
+  staticFile: {
+    dirs: {
+      default: {
+        prefix: '/',
+        alias: {
+          '/': '/index.html',
+        },
+      },
+    },
+    // ...
+  },
+}
+```
