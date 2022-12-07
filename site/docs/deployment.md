@@ -281,7 +281,7 @@ Bootstrap
 步骤一：在当前目录下新增Dockerfile
 
 ```dockerfile
-FROM node:12
+FROM node:18
 
 WORKDIR /app
 
@@ -334,14 +334,14 @@ $ docker run -itd -P helloworld
 **优化**
 
 我们看到前面我们打出来的镜像有1个多G，可优化的地方：
-- 1、我们可以采用更精简的 docker image 的基础镜像：例如 node:12-alpine，
+- 1、我们可以采用更精简的 docker image 的基础镜像：例如 node:18-alpine，
 - 2、其中的源码最终也打在了镜像中，其实这块我们可以不需要。
 
 我们可以同时结合 docker 的 multistage 功能来做一些优化，这个功能请注意要在 `Docker 17.05` 版本之后才能使用。
 
 
 ```dockerfile
-FROM node:12 AS build
+FROM node:18 AS build
 
 WORKDIR /app
 
@@ -351,11 +351,13 @@ RUN npm install
 
 RUN npm run build
 
-FROM node:12-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
 COPY --from=build /app/dist ./dist
+# 把源代码复制过去， 以便报错能报对行
+COPY --from=build /app/src ./src
 COPY --from=build /app/bootstrap.js ./
 COPY --from=build /app/package.json ./
 
@@ -551,7 +553,7 @@ export default {
         // ...
         entities: [
           '/abc',			// 不支持
-        ]		
+        ]
       },
   }
 }
