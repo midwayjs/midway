@@ -88,6 +88,11 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     const ignoreHeaders = {
       'transfer-encoding': true,
     };
+    if (isStream) {
+      // axios does not set this real data length in stream mode
+      // but it decompresses the data, resulting in the wrong data length
+      ignoreHeaders['content-length'] = true;
+    }
     Object.keys(proxyResponse.headers).forEach(key => {
       if (ignoreHeaders[key.toLowerCase()]) {
         return;
