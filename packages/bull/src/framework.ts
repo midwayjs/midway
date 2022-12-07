@@ -99,7 +99,7 @@ export class BullFramework
   public createQueue(name: string, queueOptions: QueueOptions = {}) {
     const queue = new BullQueue(
       name,
-      extend(true, this.bullDefaultQueueConfig, queueOptions)
+      extend(true, {}, this.bullDefaultQueueConfig, queueOptions)
     );
     this.queueMap.set(name, queue);
     return queue;
