@@ -68,7 +68,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
         `[midway:redis] 'host: ${config.host}', 'port: ${config.port}' are required on config`
       );
       this.logger.info(
-        '[midway:redis] server connecting redis://:***@%s:%s/%s',
+        '[midway:redis] server connecting redis://:***@%s:%s',
         config.host,
         config.port
       );
