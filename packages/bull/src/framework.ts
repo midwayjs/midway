@@ -72,7 +72,9 @@ export class BullFramework
         concurrency: number;
         jobOptions?: JobOptions;
       };
-      const currentQueue = this.ensureQueue(options.queueName);
+      const currentQueue = this.ensureQueue(options.queueName, {
+        defaultJobOptions: options.jobOptions,
+      });
       // clear old repeat job when start
       if (this.bullClearRepeatJobWhenStart) {
         const jobs = await currentQueue.getRepeatableJobs();
@@ -97,7 +99,7 @@ export class BullFramework
   public createQueue(name: string, queueOptions: QueueOptions = {}) {
     const queue = new BullQueue(
       name,
-      extend(true, this.bullDefaultQueueConfig, queueOptions)
+      extend(true, {}, this.bullDefaultQueueConfig, queueOptions)
     );
     this.queueMap.set(name, queue);
     return queue;
@@ -107,9 +109,9 @@ export class BullFramework
     return this.queueMap.get(name);
   }
 
-  public ensureQueue(name: string) {
+  public ensureQueue(name: string, queueOptions: QueueOptions = {}) {
     if (!this.queueMap.has(name)) {
-      this.createQueue(name);
+      this.createQueue(name, queueOptions);
     }
     return this.queueMap.get(name);
   }

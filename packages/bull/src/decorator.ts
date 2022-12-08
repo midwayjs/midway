@@ -11,7 +11,7 @@ import { JobOptions } from 'bull';
 
 export function Processor(
   queueName: string,
-  Options?: JobOptions
+  jobOptions?: JobOptions
 ): ClassDecorator;
 export function Processor(
   queueName: string,
