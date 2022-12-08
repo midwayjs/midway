@@ -31,5 +31,11 @@ export const httpProxy = {
   host: 'http://127.0.0.1',
   match: /\/assets\/(.*)/,
   target: 'http://127.0.0.1/$1',
+
+  //额外的axios请求config, 会照搬过去
+  extReqOptions:{
+    //用来设置不校验https的ssl
+    httpsAgent: new https.Agent({ rejectUnauthorized: false })
+  }
 }
 ```

@@ -56,6 +56,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     const isStream = targetRes.on && targetRes.writable;
 
     const reqOptions: any = {
+      ...(this.httpProxy.extReqOptions || {}),
       method,
       url: url.href,
       headers: reqHeaders,
