@@ -674,8 +674,6 @@ export interface IMidwayFramework<
   runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean>;
 }
 
-
-
 export interface MidwayAppInfo {
   pkg: Record<string, any>;
   name: string;
@@ -691,4 +689,13 @@ export interface MidwayAppInfo {
  */
 export interface MidwayConfig extends FileConfigOption<MidwayCoreDefaultConfig> {
   [customConfigKey: string]: unknown;
+}
+
+export interface IServiceFactory<Client> {
+  get(clientId: string): Client;
+  has(clientId: string): boolean;
+  createInstance(config: any, clientId?: string): Promise<Client | undefined>;
+  getName(): string;
+  stop(): Promise<void>;
+  getDefaultClientName(): string;
 }

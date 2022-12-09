@@ -14,8 +14,13 @@ import {
   Scope,
   ScopeEnum,
   MidwayFrameworkType,
+  FACTORY_SERVICE_CLIENT_KEY,
 } from '../decorator';
-import { IMidwayContainer, IMidwayFramework } from '../interface';
+import {
+  IMidwayContainer,
+  IMidwayFramework,
+  IServiceFactory,
+} from '../interface';
 import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';
 import { BaseFramework } from '../baseFramework';
@@ -24,7 +29,7 @@ import { MidwayDecoratorService } from './decoratorService';
 import { MidwayAspectService } from './aspectService';
 import { MidwayApplicationManager } from '../common/applicationManager';
 import * as util from 'util';
-import { MidwayCommonError } from '../error';
+import { MidwayCommonError, MidwayParameterError } from '../error';
 import { REQUEST_OBJ_CTX_KEY } from '../constants';
 
 const debug = util.debuglog('midway:debug');
@@ -111,6 +116,33 @@ export class MidwayFrameworkService {
       PLUGIN_KEY,
       (propertyName, meta) => {
         return this.getMainApp()[meta.identifier ?? propertyName];
+      }
+    );
+
+    this.decoratorService.registerPropertyHandler(
+      FACTORY_SERVICE_CLIENT_KEY,
+      (
+        propertyName,
+        meta: {
+          serviceFactoryClz: new (...args) => IServiceFactory<unknown>;
+          clientName: string;
+        }
+      ) => {
+        const factory = this.applicationContext.get(meta.serviceFactoryClz);
+        const clientName = meta.clientName || factory.getDefaultClientName();
+        if (clientName && factory.has(clientName)) {
+          return factory.get(clientName);
+        } else {
+          if (!clientName) {
+            throw new MidwayParameterError(
+              `Please set clientName or options.defaultClientName for ${meta.serviceFactoryClz.name}).`
+            );
+          } else {
+            throw new MidwayParameterError(
+              `ClientName(${clientName} not found in ${meta.serviceFactoryClz.name}).`
+            );
+          }
+        }
       }
     );
 
