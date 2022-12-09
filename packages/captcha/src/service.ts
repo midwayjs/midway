@@ -124,6 +124,9 @@ export class CaptchaService {
   }
 
   private getStoreId(id: string): string {
-    return `${this.captcha}:${id}`;
+    if (!this.captcha.idPrefix) {
+      return id;
+    }
+    return `${this.captcha.idPrefix}:${id}`;
   }
 }
