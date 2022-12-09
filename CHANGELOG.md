@@ -1,6 +1,26 @@
 # Change Log
 
 
+## v3.8.4 (2022-12-09)
+
+#### :bug: Bug Fix
+* `captcha`
+  * [#2566](https://github.com/midwayjs/midway/pull/2566) fix: captcha store prefix ([@echosoar](https://github.com/echosoar))
+* `bull`
+  * [#2526](https://github.com/midwayjs/midway/pull/2526) fix: add default job options when create queue ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2557](https://github.com/midwayjs/midway/pull/2557) docs: update docker deploy ([@huangapple](https://github.com/huangapple))
+* [#2549](https://github.com/midwayjs/midway/pull/2549) docs(site): update awesome_midway.md ([@waitingsong](https://github.com/waitingsong))
+
+#### Committers: 4
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@huangapple](https://github.com/huangapple)
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.8.3 (2022-11-28)
 
 #### :bug: Bug Fix
