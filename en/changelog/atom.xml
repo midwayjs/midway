@@ -2,12 +2,36 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2022-11-28T20:00:00.000Z</updated>
+    <updated>2022-12-09T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2022 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.8.4]]></title>
+        <id>/v3.8.4</id>
+        <link href="https://midwayjs.org/en/changelog/v3.8.4"/>
+        <updated>2022-12-09T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>captcha</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2566" target="_blank" rel="noopener noreferrer">#2566</a> fix: captcha store prefix (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li></ul></li><li><code>bull</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2526" target="_blank" rel="noopener noreferrer">#2526</a> fix: add default job options when create queue (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a class="hash-link" href="#-documentation" title="Lien direct vers le titre">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/2557" target="_blank" rel="noopener noreferrer">#2557</a> docs: update docker deploy (<a href="https://github.com/huangapple" target="_blank" rel="noopener noreferrer">@huangapple</a>)</li><li><a href="https://github.com/midwayjs/midway/pull/2549" target="_blank" rel="noopener noreferrer">#2549</a> docs(site): update awesome_midway.md (<a href="https://github.com/waitingsong" target="_blank" rel="noopener noreferrer">@waitingsong</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-4">Committers: 4<a class="hash-link" href="#committers-4" title="Lien direct vers le titre">​</a></h2><ul><li>Gao Yang (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li><a href="https://github.com/huangapple" target="_blank" rel="noopener noreferrer">@huangapple</a></li><li>waiting (<a href="https://github.com/waitingsong" target="_blank" rel="noopener noreferrer">@waitingsong</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>Gao Yang</name>
+            <uri>https://github.com/echosoar</uri>
+        </author>
+        <author>
+            <name>huangapple</name>
+            <uri>https://github.com/huangapple</uri>
+        </author>
+        <author>
+            <name>waiting</name>
+            <uri>https://github.com/waitingsong</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.8.3]]></title>
         <id>/v3.8.3</id>

@@ -5,6 +5,19 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "/v3.8.4",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>captcha</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2566\" target=\"_blank\" rel=\"noopener noreferrer\">#2566</a> fix: captcha store prefix (<a href=\"https://github.com/echosoar\" target=\"_blank\" rel=\"noopener noreferrer\">@echosoar</a>)</li></ul></li><li><code>bull</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2526\" target=\"_blank\" rel=\"noopener noreferrer\">#2526</a> fix: add default job options when create queue (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-documentation\">📝 Documentation<a class=\"hash-link\" href=\"#-documentation\" title=\"标题的直接链接\">​</a></h2><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2557\" target=\"_blank\" rel=\"noopener noreferrer\">#2557</a> docs: update docker deploy (<a href=\"https://github.com/huangapple\" target=\"_blank\" rel=\"noopener noreferrer\">@huangapple</a>)</li><li><a href=\"https://github.com/midwayjs/midway/pull/2549\" target=\"_blank\" rel=\"noopener noreferrer\">#2549</a> docs(site): update awesome_midway.md (<a href=\"https://github.com/waitingsong\" target=\"_blank\" rel=\"noopener noreferrer\">@waitingsong</a>)</li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-4\">Committers: 4<a class=\"hash-link\" href=\"#committers-4\" title=\"标题的直接链接\">​</a></h2><ul><li>Gao Yang (<a href=\"https://github.com/echosoar\" target=\"_blank\" rel=\"noopener noreferrer\">@echosoar</a>)</li><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li><li><a href=\"https://github.com/huangapple\" target=\"_blank\" rel=\"noopener noreferrer\">@huangapple</a></li><li>waiting (<a href=\"https://github.com/waitingsong\" target=\"_blank\" rel=\"noopener noreferrer\">@waitingsong</a>)</li></ul>",
+            "url": "https://midwayjs.org/changelog/v3.8.4",
+            "title": "v3.8.4",
+            "summary": "Bug Fix",
+            "date_modified": "2022-12-09T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
             "id": "/v3.8.3",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>mikro</code>, <code>sequelize</code>, <code>typeorm</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2538\" target=\"_blank\" rel=\"noopener noreferrer\">#2538</a> fix: data source find sequence (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a class=\"hash-link\" href=\"#committers-1\" title=\"标题的直接链接\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
             "url": "https://midwayjs.org/changelog/v3.8.3",
