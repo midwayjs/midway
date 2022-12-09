@@ -19,6 +19,20 @@ export const httpProxy = {
     d: {
       match: /.*?baidu.*$/,
       target: 'https://www.baidu.com/'
+    },
+    e: {
+      match: /\/canredirects\//,
+      target: "https://aliyun.com/"
+    },
+    f: {
+      match: /\/noredirects\//,
+      target: "https://aliyun.com/",
+      //额外的axios请求config, 会照搬过去
+      extReqOptions: {
+        // `maxRedirects` defines the maximum number of redirects to follow in node.js.
+        // If set to 0, no redirects will be followed.
+        maxRedirects: 0
+      }
     }
   },
 };

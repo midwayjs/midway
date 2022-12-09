@@ -2,12 +2,16 @@ import { createApp, createHttpRequest, close } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as nock from 'nock';
+
 describe('test/web.test.ts', function () {
   let app;
   beforeAll(async () => {
-    nock('https://gw.alicdn.com').get('/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png?version=123').reply(200, '123', {'content-type': 'image/png'});
-    nock('https://www.baidu.com').get('/').reply(200, '<html>123</html>', {'content-type': 'text/html'});
-    nock('https://sm.bdimg.com').get('/static/wiseindex/amd_modules/@searchfe/assert_3ed54c3.js').reply(200, '123', {'content-type': 'application/x-javascript'});
+    nock('https://gw.alicdn.com').get('/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png?version=123').reply(200, '123', { 'content-type': 'image/png' });
+    nock('https://www.baidu.com').get('/').reply(200, '<html>123</html>', { 'content-type': 'text/html' });
+    //奇怪， 同一个链接只能用一次， 再用nock会报404
+    nock('https://www.baidu.com').get('/1234').reply(200, '<html>1234</html>', { 'content-type': 'text/html' });
+    nock('https://www.baidu.com').get('/5678').reply(200, '<html>5678</html>', { 'content-type': 'text/html' });
+    nock('https://sm.bdimg.com').get('/static/wiseindex/amd_modules/@searchfe/assert_3ed54c3.js').reply(200, '123', { 'content-type': 'application/x-javascript' });
     nock('https://httpbin.org')
       .persist()
       .get('/get?name=midway').reply(200, {
@@ -18,7 +22,7 @@ describe('test/web.test.ts', function () {
         "Host": "httpbin.org",
       },
       "url": "https://httpbin.org/get?name=midway"
-    }, {'content-type': 'application/json'})
+    }, { 'content-type': 'application/json' })
       .post('/post').reply(200, function (uri, requestBody) {
       const body = {
         'headers': {
@@ -37,7 +41,15 @@ describe('test/web.test.ts', function () {
         body.data = JSON.stringify(requestBody);
       }
       return body;
-    }, {'content-type': 'application/json'});
+    }, { 'content-type': 'application/json' });
+    nock('https://aliyun.com').get('/1234').reply(302, '<html>123</html>', {
+      'content-type': 'text/html',
+      Location: "https://www.baidu.com/1234"
+    });
+    nock('https://aliyun.com').get('/5678').reply(302, '<html>456</html>', {
+      'content-type': 'text/html',
+      Location: "https://www.baidu.com/5678"
+    });
     const appDir = join(__dirname, 'fixtures/web');
     app = await createApp(appDir);
   })
@@ -96,14 +108,14 @@ describe('test/web.test.ts', function () {
   it('post json to httpbin', async () => {
     const request = await createHttpRequest(app);
     await request.post('/httpbin/post')
-      .send({name: 'midway'})
+      .send({ name: 'midway' })
       .set('Accept', 'application/json')
       .expect(200)
       .then(async response => {
         assert(response.status === 200)
         assert(response.body.url === 'https://httpbin.org/post');
         assert(response.body.headers['Content-Type'] === 'application/json');
-        assert(response.body.data === JSON.stringify({ name: 'midway'}));
+        assert(response.body.data === JSON.stringify({ name: 'midway' }));
       });
   });
 
@@ -121,4 +133,22 @@ describe('test/web.test.ts', function () {
         assert(response.body.form.name === 'midway');
       });
   });
+  it('canredirects', async () => {
+    const request = await createHttpRequest(app);
+    await request.get('/canredirects/1234')
+      .expect(200).then(async response => {
+
+        assert(response.text === "<html>1234</html>")
+      });
+  });
+
+  // 这个不懂为啥不支持
+  // it('noredirects', async () => {
+  //   const request = await createHttpRequest(app);
+  //   await request.get('/noredirects/5678')
+  //     .expect(302).then(async response => {
+  //       assert(response.text === "<html>456</html>")
+  //     });
+  // });
+
 });
