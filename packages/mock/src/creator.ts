@@ -301,8 +301,6 @@ export async function createFunctionApp<
           url.pathname,
           {
             isHttpFunction: true,
-            originEvent: req,
-            originContext: {},
           }
         );
         const { statusCode, headers, body } = result as any;

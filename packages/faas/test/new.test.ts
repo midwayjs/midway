@@ -31,12 +31,13 @@ describe('test/new.test.ts', () => {
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('hello world,zhangting');
 
-    result = await starter.invokeTriggerFunction({}, 'event.handler', {
-      isHttpFunction: false,
+    result = await starter.invokeTriggerFunction({
       originEvent: {
         text: 'zhangting',
       },
       originContext: {}
+    }, 'event.handler', {
+      isHttpFunction: false,
     });
     expect(result).toEqual('zhangtinghello world');
 
@@ -48,12 +49,12 @@ describe('test/new.test.ts', () => {
     const data = await starter.invokeTriggerFunction(
       {
         text: 'hello',
+        originContext: {},
+        originEvent: { text: 'a' },
       },
       'helloService.handler',
       {
         isHttpFunction: false,
-        originContext: {},
-        originEvent: { text: 'a' },
       }
     );
     expect(data).toEqual('ahello');
@@ -65,12 +66,12 @@ describe('test/new.test.ts', () => {
       (await starter.invokeTriggerFunction(
         {
           text: 'hello',
+          originContext: {},
+          originEvent:  { text: 'a' }
         },
         'indexService.handler',
         {
           isHttpFunction: false,
-          originContext: {},
-          originEvent:  { text: 'a' }
         }
       )) === 'ahello'
     );
@@ -79,13 +80,11 @@ describe('test/new.test.ts', () => {
         {
           text: 'hello',
           originContext: {},
-          originEvent: {},
+          originEvent:  { text: 'a' }
         },
         'indexService.getList',
         {
           isHttpFunction: false,
-          originContext: {},
-          originEvent:  { text: 'a' }
         }
       )) === 'ahello'
     );
@@ -99,13 +98,11 @@ describe('test/new.test.ts', () => {
         {
           text: 'hello',
           originContext: {},
-          originEvent: {},
+          originEvent:  { text: 'a' }
         },
         'indexService.handler',
         {
           isHttpFunction: false,
-          originContext: {},
-          originEvent:  { text: 'a' }
         }
       )) === 'defaultahello'
     );
@@ -114,21 +111,17 @@ describe('test/new.test.ts', () => {
         {
           text: 'hello',
           originContext: {},
-          originEvent: {},
+          originEvent:  { text: 'ab' }
         },
         'indexService.getList',
         {
           isHttpFunction: false,
-          originContext: {},
-          originEvent:  { text: 'ab' }
         }
       )) === 'abhello'
     );
     assert(
       (await starter.invokeTriggerFunction({},'indexService.get', {
         isHttpFunction: false,
-        originEvent: undefined,
-        originContext: undefined
       })) ===
         'hello'
     );
@@ -141,13 +134,11 @@ describe('test/new.test.ts', () => {
       {
         text: 'hello',
         originContext: {},
-        originEvent: {},
+        originEvent:  { text: 'ab' }
       },
       'helloService.handler',
       {
         isHttpFunction: false,
-        originContext: {},
-        originEvent:  { text: 'ab' }
       }
     );
     assert(data === 'abhello');
@@ -173,13 +164,11 @@ describe('test/new.test.ts', () => {
       {
         text: 'hello',
         originContext: {},
-        originEvent: {},
+        originEvent:  { text: 'ab' }
       },
       'helloService.handler',
       {
         isHttpFunction: false,
-        originContext: {},
-        originEvent:  { text: 'ab' }
       }
     );
     expect(data).toEqual('abhelloextra data');
@@ -198,13 +187,11 @@ describe('test/new.test.ts', () => {
         text: 'hello',
         httpMethod: 'GET',
         headers: {},
-        requestContext: {},
+        originEvent:  { text: 'a' }
       },
       'helloService.handler',
       {
         isHttpFunction: false,
-        originContext: {},
-        originEvent:  { text: 'a' }
       });
 
     assert(data.body === 'hello world');
@@ -217,13 +204,11 @@ describe('test/new.test.ts', () => {
       {
         text: 'hello',
         originContext: {},
-        originEvent: {},
+        originEvent:  { text: 'a' }
       },
       'helloService.handler',
       {
         isHttpFunction: false,
-        originContext: {},
-        originEvent:  { text: 'a' }
       }
     );
     expect(data).toEqual('ahello');
@@ -262,14 +247,15 @@ describe('test/new.test.ts', () => {
 
     // test event middleware
     result = await app.invokeTriggerFunction(
-      {},
+      {
+        originContext: {},
+        originEvent: {
+          text: 'abc',
+        }
+      },
       'helloService.handler',
       {
       isHttpFunction: false,
-      originContext: {},
-      originEvent: {
-        text: 'abc',
-      }
     });
 
     expect(result).toEqual('hello event3abc');

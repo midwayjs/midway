@@ -168,14 +168,15 @@ export class MidwayFaaSFramework extends BaseFramework<
 
               if (funcInfo) {
                 return async (...args) => {
-                  const context = this.app.createAnonymousContext();
+                  const context = this.app.createAnonymousContext({
+                    originContext: customContext,
+                    originEvent: args[0],
+                  });
                   return this.invokeTriggerFunction(
                     context,
                     funcInfo.funcHandlerName,
                     {
                       isHttpFunction: false,
-                      originContext: customContext,
-                      originEvent: args[0],
                     }
                   );
                 };
@@ -357,7 +358,7 @@ export class MidwayFaaSFramework extends BaseFramework<
               if (isHttpFunction) {
                 args = [ctx];
               } else {
-                args = [options.originEvent, options.originContext];
+                args = [ctx.originEvent, ctx.originContext];
               }
               // invoke handler
               const result = await this.invokeHandler(

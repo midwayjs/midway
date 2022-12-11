@@ -102,6 +102,21 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
       }
     }
 
+    let handlerName = oldContext?.function.handler || context.function.handler;
+
+    // 聚合部署的情况
+    if (this.options.aggregationHandlerName) {
+      if (this.options.handlerNameMapping) {
+        [handlerName, event, context, oldContext] =
+          this.options.handlerNameMapping(
+            handlerName,
+            event,
+            context,
+            oldContext
+          );
+      }
+    }
+
     let ctx;
     if (isHTTPMode) {
       (event as any).getOriginContext = () => {
@@ -139,31 +154,12 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
       };
     }
 
-    let handlerName = oldContext?.function.handler || context.function.handler;
-
-    // 聚合部署的情况
-    if (this.options.aggregationHandlerName) {
-      if (this.options.handlerNameMapping) {
-        [handlerName, event, context, oldContext] =
-          this.options.handlerNameMapping(
-            handlerName,
-            event,
-            context,
-            oldContext
-          );
-      } else if (isHTTPMode) {
-        handlerName = ctx.path;
-      }
-    }
-
     try {
       const result = await this.framework.invokeTriggerFunction(
         ctx,
         handlerName,
         {
           isHttpFunction: isHTTPMode || isApiGateway,
-          originEvent: event,
-          originContext: context,
         }
       );
       if (isHTTPMode || isApiGateway) {
