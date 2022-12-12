@@ -12,7 +12,7 @@ describe('/test/cluster.test.ts', () => {
     });
 
     it('test setHeader decorator', async () => {
-      const result = await createHttpClient('http://127.0.0.1:8080/set_header', {
+      const result = await createHttpClient('http://127.0.0.1:8081/set_header', {
         method: 'get',
         params: { name: 'harry' },
         dataType: 'text',
@@ -24,14 +24,14 @@ describe('/test/cluster.test.ts', () => {
     });
 
     it('test get status 204', async () => {
-      const result = await createHttpClient('http://127.0.0.1:8080/204', {
+      const result = await createHttpClient('http://127.0.0.1:8081/204', {
         dataType: 'text',
       });
       expect(result.status).toEqual(204);
     });
 
     it('test get method with return value', async () => {
-      const result = await createHttpClient('http://127.0.0.1:8080/', {
+      const result = await createHttpClient('http://127.0.0.1:8081/', {
         method: 'get',
         data: { name: 'harry' },
         dataType: 'text',
@@ -41,14 +41,14 @@ describe('/test/cluster.test.ts', () => {
     });
 
     it('test get method with redirect', async () => {
-      const result = await createHttpClient('http://127.0.0.1:8080/login', {
+      const result = await createHttpClient('http://127.0.0.1:8081/login', {
         dataType: 'text',
       });
       expect(result.status).toEqual(302);
     });
 
     it('test get data with ctx.body', async () => {
-      const result = await createHttpClient('http://127.0.0.1:8080/ctx-body', {
+      const result = await createHttpClient('http://127.0.0.1:8081/ctx-body', {
         dataType: 'text',
       });
       expect(result.data).toEqual('ctx-body');

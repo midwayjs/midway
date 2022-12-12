@@ -13,7 +13,7 @@ process.chdir(dir);
 startCluster({
   baseDir: dir,
   workers: 1,
-  port: 8080,
+  port: 8081,
   framework: join(__dirname, '../src'),
   typescript: true,
   require: 'ts-node/register'
