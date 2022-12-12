@@ -712,4 +712,23 @@ describe('/test/baseFramework.test.ts', () => {
 
     console.log(midwayFrameworkService.getMainFramework());
   });
+
+  it('should test injectClient for serviceFactory', async () => {
+    const applicationContext = await createFramework(path.join(
+      __dirname,
+      './fixtures/base-app-service-factory-inject/src'
+    ));
+
+    const a = await applicationContext.getAsync<any>('a');
+    expect(() => {
+      a.invokeA();
+    }).toThrow(/Please set clientName/);
+
+    expect(a.invokeB()['data']).toEqual('default1');
+    expect(a.invokeC()['data']).toEqual('default2');
+
+    expect(() => {
+      a.invokeD();
+    }).toThrow(/custom1 not found/);
+  });
 });
