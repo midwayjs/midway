@@ -13,7 +13,7 @@
     "@midwayjs/core": "^3.8.0",
     "@midwayjs/mock": "^3.8.0",
     "sqlite3": "5.1.2",
-    "typeorm": "0.3.10"
+    "typeorm": "0.3.11"
   },
   "author": {
     "name": "Kurten Chan",

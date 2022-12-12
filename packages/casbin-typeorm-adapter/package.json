@@ -14,7 +14,7 @@
     "@midwayjs/mock": "^3.8.0",
     "casbin": "5.19.1",
     "sqlite3": "5.1.2",
-    "typeorm": "0.3.10"
+    "typeorm": "0.3.11"
   },
   "dependencies": {
     "@midwayjs/casbin": "^3.8.0",
