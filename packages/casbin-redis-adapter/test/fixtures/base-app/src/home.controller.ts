@@ -1,10 +1,13 @@
 // home controller
-import { Controller, Get, UseGuard } from '@midwayjs/core';
-import { AuthActionVerb, AuthGuard, AuthPossession, UsePermission } from '@midwayjs/casbin';
+import { Controller, Get, Inject, UseGuard } from '@midwayjs/core';
+import { AuthActionVerb, AuthGuard, AuthPossession, CasbinEnforcerService, UsePermission } from '@midwayjs/casbin';
 import { Resource } from './resouce';
 
 @Controller('/')
 export class HomeController {
+
+  @Inject()
+  casbinEnforcerService: CasbinEnforcerService;
 
   @UseGuard(AuthGuard)
   @UsePermission({
@@ -15,5 +18,10 @@ export class HomeController {
   @Get('/')
   async index() {
     return 'Hello World';
+  }
+
+  @Get('/add')
+  async add() {
+    await this.casbinEnforcerService.addRoleForUser('zhangting', 'manager');
   }
 }
