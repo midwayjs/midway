@@ -14,7 +14,7 @@ export const KEYS = {
   PROPS_ELEMENT: 'props',
   PROP_ELEMENT: 'prop',
   SET_ELEMENT: 'set',
-  CONSTRUCTORARG_ELEMENT: 'constructor-arg',
+  CONSTRUCTOR_ARG_ELEMENT: 'constructor-arg',
   REF_ELEMENT: 'ref',
   JSON_ELEMENT: 'json',
   CONFIGURATION_ELEMENT: 'configuration',
@@ -38,17 +38,6 @@ export const KEYS = {
   AROUND_ELEMENT: 'around',
   EXPRESSION_ATTRIBUTE: 'expression',
   EXECUTE_ATTRIBUTE: 'execute',
-};
-
-export const VALUE_TYPE = {
-  STRING: 'string',
-  DATE: 'date',
-  NUMBER: 'number',
-  INTEGER: 'int',
-  TEMPLATE: 'template',
-  MANAGED: 'managed',
-  OBJECT: 'object', // 仅仅在解析时使用
-  BOOLEAN: 'boolean',
 };
 
 export const FUNCTION_INJECT_KEY = 'midway:function_inject_key';
