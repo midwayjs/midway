@@ -275,7 +275,8 @@ export async function createFunctionApp<
     const app = appManager.getApplication(MidwayFrameworkType.FAAS);
 
     const faasConfig = configService.getConfiguration('faas') ?? {};
-    const customPort = process.env.MIDWAY_HTTP_PORT ?? faasConfig['port'];
+    const customPort =
+      process.env.MIDWAY_HTTP_PORT ?? faasConfig['port'] ?? options['port'];
 
     app.callback2 = () => {
       // mock a real http server response for local dev
@@ -301,8 +302,6 @@ export async function createFunctionApp<
           url.pathname,
           {
             isHttpFunction: true,
-            originEvent: req,
-            originContext: {},
           }
         );
         const { statusCode, headers, body } = result as any;

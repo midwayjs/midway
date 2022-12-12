@@ -28,8 +28,6 @@ export type FaaSMiddleware =
 
 export interface HandlerOptions {
   isHttpFunction: boolean;
-  originEvent: any;
-  originContext: any;
 }
 
 export type IMidwayFaaSApplication = IMidwayApplication<
