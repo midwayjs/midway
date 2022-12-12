@@ -4,7 +4,7 @@
 import { extend } from '../util/extend';
 import { MidwayCommonError, MidwayParameterError } from '../error';
 import { run } from '@midwayjs/glob';
-import { join } from 'path';
+import { join, parse } from 'path';
 import { Types } from '../util/types';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 
@@ -159,27 +159,28 @@ export abstract class DataSourceManager<T> {
   }
 }
 
-export function globModels(globString: string, appDir: string) {
-  let cwd;
+export function formatGlobString(globString: string): string[] {
   let pattern;
 
-  if (globString.endsWith('**')) {
-    // 去掉尾部的 **，因为 glob 会自动添加
-    globString = globString.slice(0, -2);
+  if (!/^\*/.test(globString)) {
+    globString = '/' + globString;
   }
-
-  if (/\*/.test(globString)) {
-    cwd = appDir;
-    pattern = [...DEFAULT_PATTERN.map(p => join(globString, p))];
+  const parsePattern = parse(globString);
+  if (parsePattern.base && (/\*/.test(parsePattern.base) || parsePattern.ext)) {
+    pattern = [globString];
   } else {
-    pattern = [...DEFAULT_PATTERN];
-    cwd = join(appDir, globString);
+    pattern = [...DEFAULT_PATTERN.map(p => join(globString, p))];
   }
+  return pattern;
+}
+
+export function globModels(globString: string, appDir: string) {
+  const pattern = formatGlobString(globString);
 
   const models = [];
   // string will be glob file
   const files = run(pattern, {
-    cwd,
+    cwd: appDir,
     ignore: IGNORE_PATTERN,
   });
   for (const file of files) {
