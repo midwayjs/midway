@@ -55,17 +55,21 @@ const levelTransform = level => {
 
 function checkEggLoggerExistsAndBackup(dir, fileName) {
   const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
-  if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
-    // 如果是空文件，则直接删了，否则加入备份队列
-    if (isEmptyFile(file)) {
-      // midway 的软链在 windows 底下也不会创建出来，在 windows 底下就不做文件删除了
-      if (!isWindows) {
-        unlinkSync(file);
+  try {
+    if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
+      // 如果是空文件，则直接删了，否则加入备份队列
+      if (isEmptyFile(file)) {
+        // midway 的软链在 windows 底下也不会创建出来，在 windows 底下就不做文件删除了
+        if (!isWindows) {
+          unlinkSync(file);
+        }
+      } else {
+        const timeFormat = getCurrentDateString();
+        renameSync(file, file + '.' + timeFormat + '_eggjs_bak');
       }
-    } else {
-      const timeFormat = getCurrentDateString();
-      renameSync(file, file + '.' + timeFormat + '_eggjs_bak');
     }
+  } catch (err) {
+    // ignore
   }
 }
 
