@@ -120,13 +120,13 @@ The following code is a sample script that you can save as `build.sh`.
 
 ```bash
 ## Server build (code downloaded)
-$ npm install	# installation and development period dependency
-$ npm run build	# build project
-$ npm prune --production	# remove development dependencies
+$ npm install             # installation and development period dependency
+$ npm run build           # build project
+$ npm prune --production  # remove development dependencies
 
 ## Local build (dev dependency has been installed)
 $ npm run build
-$ npm prune --production	# remove development dependencies
+$ npm prune --production  # remove development dependencies
 ```
 
 :::info
@@ -135,7 +135,7 @@ General installation dependencies specify `NODE_ENV = production` or `npm instal
 
 
 After the build is completed, the `dist` directory of the Midway build product appears.
-```bash
+```text
 ➜  my_midway_app tree
 .
 ├── src
@@ -279,7 +279,7 @@ Bootstrap
 Step 1: Add a Dockerfile to the current directory
 
 ```dockerfile
-FROM node:12
+FROM node:18
 
 WORKDIR /app
 
@@ -330,14 +330,14 @@ For other registry pushed to dockerhub or docker, you can search for the corresp
 **Optimization**
 
 We can see that the mirror image we typed in front has more than 1g, which can be optimized:
-- 1. We can use a simpler basic image of docker image: for example, node:12-alpine,
+- 1. We can use a simpler basic image of docker image: for example, node:18-alpine,
 - 2. The source code was finally typed in the mirror image. In fact, we don't need this one.
 
 We can also combine the multistage functions of docker to do some optimization. Please note that this function can only be used after `Docker 17.05`.
 
 
 ```dockerfile
-FROM node:12 AS build
+FROM node:18 AS build
 
 WORKDIR /app
 
@@ -347,10 +347,12 @@ RUN npm install
 
 RUN npm run build
 
-FROM node:12-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
+# Copy the source code and the error can be reported to the right line
+COPY --from=build /app/src ./src
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/bootstrap.js ./
 COPY --from=build /app/package.json ./
@@ -523,7 +525,7 @@ export default {
         // ...
         entities: [
           '/abc',			// not supported
-        ]		
+        ]
       },
   }
 }
