@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[41301],{49939:e=>{e.exports=JSON.parse('{"permalink":"/en/changelog/page/16","page":16,"postsPerPage":20,"totalPages":16,"totalCount":308,"previousPage":"/en/changelog/page/15","blogDescription":"Keep yourself up-to-date about new features in every release","blogTitle":"Midway changelog"}')}}]);
