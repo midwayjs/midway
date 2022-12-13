@@ -241,8 +241,12 @@ export default {
         entities: [
           User, 
           SimpleUser, 
-          './entity',			// 特定目录下
-          '**/abc/**'			// 仅获取包含 abc 字符的目录下的文件
+          'entity',             // 特定目录（等价于目录通配，推荐）
+          '**/abc/**',          // 仅获取包含 abc 字符的目录下的文件
+          'abc/**/*.ts',				// 特定目录 + 通配
+          'abc/*.entity.ts',    // 匹配后缀
+          '**/*.entity.ts',     // 通配加后缀匹配
+          '**/*.{j,t}s',        // 后缀匹配
         ]
       },
       // ...
@@ -257,8 +261,8 @@ export default {
 注意
 
 - 1、填写目录字符串时，以 initDataSource 方法的第二个参数作为相对路径查找，默认为 baseDir（src 或者 dist）
-- 2、和常见的 typeorm 等扫描路径不同，entities 的路径不需要写 `.ts`  后缀，否则部署时会找不到实体
-- 3、路径的写法不支持 [单文件构建部署](./deployment#单文件构建部署)（bundle模式）
+- 2、和常见的 typeorm 等扫描路径不同，entities 的路径推荐不写 `.ts`  后缀，否则部署时会找不到实体
+- 3、字符串路径的写法不支持 [单文件构建部署](./deployment#单文件构建部署)（bundle模式）
 
 :::
 
