@@ -24,14 +24,15 @@ export class BootstrapStarter {
   private applicationContext: IMidwayContainer;
   private eventBus: IEventBus<any>;
 
-  public configure(options: IMidwayBootstrapOptions) {
+  public configure(options: IMidwayBootstrapOptions = {}) {
     this.globalOptions = options;
     return this;
   }
 
   public async init() {
-    this.appDir = this.globalOptions.appDir || process.cwd();
-    this.baseDir = this.getBaseDir();
+    this.appDir = this.globalOptions.appDir =
+      this.globalOptions.appDir || process.cwd();
+    this.baseDir = this.globalOptions.baseDir = this.getBaseDir();
 
     if (process.env['MIDWAY_FORK_MODE']) {
       if (process.env['MIDWAY_FORK_MODE'] === 'cluster') {
@@ -46,10 +47,8 @@ export class BootstrapStarter {
     }
 
     this.applicationContext = await initializeGlobalApplicationContext({
-      ...this.globalOptions,
-      appDir: this.appDir,
-      baseDir: this.baseDir,
       asyncContextManager: createContextManager(),
+      ...this.globalOptions,
     });
     return this.applicationContext;
   }

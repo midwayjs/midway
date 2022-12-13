@@ -35,6 +35,7 @@ export {
 } from './common/dataSourceManager';
 export * from './service/pipelineService';
 
+export * from './common/loggerFactory';
 export * from './common/serviceFactory';
 export * from './common/dataListener';
 export * from './common/fileDetector';

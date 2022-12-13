@@ -1,8 +1,16 @@
-import type { ILogger, LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
+import type { LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
 import type { AsyncContextManager } from './common/asyncContextManager';
+import type { LoggerFactory } from './common/loggerFactory';
 import type { IManagedInstance, IMethodAspect, ObjectIdentifier } from './decorator';
 import { FrameworkType, ScopeEnum } from './decorator';
+
+export interface ILogger {
+  info(msg: any, ...args: any[]): void;
+  debug(msg: any, ...args: any[]): void;
+  error(msg: any, ...args: any[]): void;
+  warn(msg: any, ...args: any[]): void;
+}
 
 export interface MidwayCoreDefaultConfig {
   midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
@@ -630,6 +638,7 @@ export interface IMidwayBootstrapOptions {
     | Array<{ [environmentName: string]: Record<string, any> }>
     | Record<string, any>;
   asyncContextManager?: AsyncContextManager;
+  loggerFactory?: LoggerFactory<any, any>;
 }
 
 export interface IConfigurationOptions {
