@@ -65,7 +65,7 @@ export class MidwayDecoratorService {
                   `Method Decorator "${key}" handler not found, please register first.`
                 );
               }
-              return this.methodDecoratorMap.get(key)({
+              return methodDecoratorHandler({
                 target: Clzz,
                 propertyName,
                 metadata,

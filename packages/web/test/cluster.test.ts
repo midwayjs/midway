@@ -1,6 +1,6 @@
 import { closeCuster, createCluster, createHttpClient } from './utils';
 
-describe('/test/cluster.test.ts', () => {
+describe.skip('/test/cluster.test.ts', () => {
   describe('test new decorator', () => {
     let master;
     beforeAll(async () => {
