@@ -243,7 +243,7 @@ export default {
           SimpleUser, 
           'entity',             // 特定目录（等价于目录通配，推荐）
           '**/abc/**',          // 仅获取包含 abc 字符的目录下的文件
-          'abc/**/*.ts',				// 特定目录 + 通配
+          'abc/**/*.ts',        // 特定目录 + 通配
           'abc/*.entity.ts',    // 匹配后缀
           '**/*.entity.ts',     // 通配加后缀匹配
           '**/*.{j,t}s',        // 后缀匹配
