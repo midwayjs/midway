@@ -1,6 +1,35 @@
 # Change Log
 
 
+## v3.9.0 (2022-12-13)
+
+#### :rocket: New Feature
+* `bootstrap`
+  * [#2551](https://github.com/midwayjs/midway/pull/2551) feat: support socket.io sticky session ([@czy88840616](https://github.com/czy88840616))
+* `casbin-redis-adapter`, `casbin`, `core`, `redis`
+  * [#2560](https://github.com/midwayjs/midway/pull/2560) feat: support casbin watcher ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#2574](https://github.com/midwayjs/midway/pull/2574) feat: add @injectClient for service factory ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `core`
+  * [#2533](https://github.com/midwayjs/midway/pull/2533) fix: glob support more wildcard string ([@czy88840616](https://github.com/czy88840616))
+* `web`
+  * [#2573](https://github.com/midwayjs/midway/pull/2573) fix: ignore backup egg logger error ([@czy88840616](https://github.com/czy88840616))
+* `faas`, `mock`
+  * [#2576](https://github.com/midwayjs/midway/pull/2576) fix: event not format in faas ([@czy88840616](https://github.com/czy88840616))
+
+#### :wrench: Maintenance
+* `core`
+  * [#2534](https://github.com/midwayjs/midway/pull/2534) chore: sync code from https://github.com/midwayjs/fork-dep-monitor/pu… ([@czy88840616](https://github.com/czy88840616))
+* `web-koa`
+  * [#2535](https://github.com/midwayjs/midway/pull/2535) chore: sync code from https://github.com/midwayjs/fork-dep-monitor/pu… ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.8.4 (2022-12-09)
 
 #### :bug: Bug Fix
