@@ -19,6 +19,7 @@ export abstract class AbstractForkManager<
   protected workers: Map<string, T> = new Map();
   protected eventBus: IEventBus<T>;
   private isClosing = false;
+  private exitListener: () => void;
 
   protected constructor(readonly options: ClusterOptions) {
     options.count = options.count || os.cpus().length - 1;
@@ -267,13 +268,17 @@ export abstract class AbstractForkManager<
     (worker.process || worker).kill('SIGKILL');
   }
 
-  public async close(timeout = 2000) {
+  public async stop(timeout = 2000) {
     debug('run close');
     this.isClosing = true;
     await this.eventBus.stop();
     for (const worker of this.workers.values()) {
       worker['disableRefork'] = true;
       await this.killWorker(worker, timeout);
+    }
+
+    if (this.exitListener) {
+      await this.exitListener();
     }
   }
 
@@ -289,6 +294,10 @@ export abstract class AbstractForkManager<
     return Array.from(this.workers.keys());
   }
 
+  public onStop(exitListener) {
+    this.exitListener = exitListener;
+  }
+
   protected bindClose() {
     // kill(2) Ctrl-C
     process.once('SIGINT', this.onSignal.bind(this, 'SIGINT'));
@@ -296,7 +305,7 @@ export abstract class AbstractForkManager<
     process.once('SIGQUIT', this.onSignal.bind(this, 'SIGQUIT'));
     // kill(15) default
     process.once('SIGTERM', this.onSignal.bind(this, 'SIGTERM'));
-    process.once('exit', this.onExit.bind(this));
+    process.once('exit', this.onMasterExit.bind(this));
   }
 
   /**
@@ -310,7 +319,7 @@ export abstract class AbstractForkManager<
         signal
       );
       try {
-        await this.close();
+        await this.stop();
         this.options.logger.info(
           '[bootstrap:master] close done, exiting with code:0'
         );
@@ -326,7 +335,7 @@ export abstract class AbstractForkManager<
    * on bootstrap process exit
    * @param code
    */
-  private onExit(code) {
+  private onMasterExit(code) {
     this.options.logger.info('[bootstrap:master] exit with code:%s', code);
   }
 
