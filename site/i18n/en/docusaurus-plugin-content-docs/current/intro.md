@@ -94,9 +94,15 @@ Please install Node.js environment and npm in advance to run Midway. cnpm can be
 
 
 - Operating system: supports macOS,Linux,Windows
-- Running environment: We recommend that you select [LTS](http://nodejs.org/). The minimum requirement is **12.x**.
+- Running environment: We recommend that you select [LTS](http://nodejs.org/). The minimum requirement is **12.11.0**.
 
+After continuous iteration, Midway's version requirements are as follows:
 
+| Midway Version | Node Version |
+| -------------- | ------------ |
+| >=v3.9.0       | >= v12.11.0  |
+| < 3.9.0        | >= v12.0.0   |
+| > 2.0.0        | >= v10.0.0   |
 
 For more information, see [How to install the Node.js environment](how_to_install_nodejs).
 

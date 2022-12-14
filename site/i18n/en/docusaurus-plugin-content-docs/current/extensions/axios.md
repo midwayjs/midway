@@ -324,21 +324,21 @@ export default {
 }
 ```
 
-When using, use the instance factory to obtain a custom instance.
+The usage is as follows:
 
 ```typescript
-import { HttpServiceFactory } from '@midwayjs/axios';
+import { HttpServiceFactory, HttpService } from '@midwayjs/axios';
+import { InjectClient } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
 
-  @Inject()
-  httpServiceFactory: HttpServiceFactory;
+  @InjectClient(HttpServiceFactory, 'customAxios')
+  customAxios: HttpService;
 
   async invoke() {
   	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
-    const customAxios = this.httpServiceFactory.get('customAxios');
-    const result = await customAxios.get(url);
+    const result = await this.customAxios.get(url);
     // TODO result
   }
 }

@@ -224,6 +224,53 @@ export class UserService {
 ```
 
 
+
+### Decorator gets instance
+
+Starting from v3.9.0, ServiceFactory has added an `@InjectClient` decorator to facilitate the selection of injection when multiple clients are involved.
+
+```typescript
+import { HTTPClientServiceFactory } from './service/httpClientServiceFactory';
+import { join } from 'path';
+import { InjectClient } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+  
+   @InjectClient(HTTPClientServiceFactory, 'aaa')
+   aaaInstance: HTTPClientServiceFactory;
+  
+   @InjectClient(HTTPClientServiceFactory, 'bbb')
+   bbbInstance: HTTPClientServiceFactory;
+  
+   async invoke() {
+     // this.aaaInstance.xxx
+// this.bbbInstance.xxx
+     //...
+   }
+}
+```
+
+The `@InjectClient` decorator is used to quickly inject multiple instances of `ServiceFactory` derived implementations, and all classes that extend `ServiceFactory` can be used.
+
+The decorator takes two parameters, defined as follows:
+
+```typescript
+export function InjectClient(
+   serviceFactoryClz: new (...args) => IServiceFactory<unknown>,
+   clientName?: string
+) {
+   //...
+}
+```
+
+| Parameters        | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| serviceFactoryClz | Required, the derived class of `ServiceFactory`, from which the decorator will get the lookup instance. |
+| clientName        | Optional, if not filled, the default instance name `defaultClientName` configuration item in the configuration will be searched by default. |
+
+
+
 ### Dynamically create an instance
 
 

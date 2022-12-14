@@ -94,9 +94,15 @@ Midway 运行请预先安装 Node.js 环境和 npm，在国内可以使用 cnpm�
 
 
 - 操作系统：支持 macOS，Linux，Windows
-- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 **12.x**。
+- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 **12.11.0**。
 
+在经过不断迭代之后，Midway 的版本要求如下：
 
+| Midway 版本 | Node 版本   |
+| ----------- | ----------- |
+| >=v3.9.0    | >= v12.11.0 |
+| < 3.9.0     | >= v12.0.0  |
+| > 2.0.0     | >= v10.0.0  |
 
 如果需要帮助，请参考 [如何安装 Node.js 环境](how_to_install_nodejs)。
 

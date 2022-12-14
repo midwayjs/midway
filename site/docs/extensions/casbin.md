@@ -342,7 +342,7 @@ await this.casbinEnforcerService.loadPolicy();
 
 需要依赖 `@midwayjs/casbin-redis-adapter` 包和 redis 组件。
 
-```
+```bash
 $ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
 ```
 
@@ -466,3 +466,80 @@ export default (appInfo: MidwayAppInfo) => {
 }
 ```
 
+
+
+## 监视器
+
+使用分布式消息系统，例如 [etcd](https://github.com/coreos/etcd) 来保持多个Casbin执行器实例之间的一致性。 因此，我们的用户可以同时使用多个Casbin 执行器来处理大量的权限检查请求。
+
+Midway 当前只提供一种 Redis 更新策略，如有其他需求，可以给我们提交 issue。
+
+### Redis Watcher
+
+需要依赖 `@midwayjs/casbin-redis-adapter` 包和 redis 组件。
+
+```bash
+$ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
+```
+
+启用 redis 组件。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as redis from '@midwayjs/redis';
+import * as casbin from '@midwayjs/casbin';
+import { join } from 'path';
+
+@Configuration({
+  imports: [
+    // ...
+    redis,
+    casbin,
+  ],
+  // ...
+})
+export class MainConfiguration {
+}
+```
+
+使用示例：
+
+```typescript
+import { MidwayAppInfo } from '@midwayjs/core';
+import { join } from 'path';
+import { createAdapter, createWatcher } from '@midwayjs/casbin-redis-adapter';
+
+export default (appInfo: MidwayAppInfo) => {
+  return {
+    // ...
+    redis: {
+      clients: {
+        'node-casbin-official': {
+          host: '127.0.0.1',
+          port: 6379,
+          db: '0',
+        },
+        'node-casbin-sub': {
+          host: '127.0.0.1',
+          port: 6379,
+          db: '0',
+        }
+      }
+    },
+    casbin: {
+      // ...
+      policyAdapter: createAdapter({
+        clientName: 'node-casbin-official'
+      }),
+      policyWatcher: createWatcher({
+        pubClientName: 'node-casbin-official',
+        subClientName: 'node-casbin-sub',
+      })
+    },
+  };
+}
+```
+
+注意，pub/sub 连接需要不同的客户端，上面代码定义了两个客户端。
+
+pub 客户端可以和普通 Redis 客户端连接复用，而 sub 需要一个独立的客户端。

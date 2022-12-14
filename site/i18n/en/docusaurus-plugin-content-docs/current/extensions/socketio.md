@@ -864,6 +864,109 @@ By running Socket.io using the `@socket.io/redis-adapter` adapter, you can run m
 
 In addition, there are some special APIs on the Adapter, which can be viewed in [documents](https://github.com/socketio/socket.io-redis-adapter#api).
 
+## Sticky session
+
+Since Node.js often uses multi-process (cluster) mode at startup, if the same session (sid) cannot access the same process multiple times, socket.io will report an error.
+
+There are two solutions.
+
+
+
+### Use the WebSocket protocol
+
+The easiest way is to only enable the WebSocket protocol (disable long polling), so that the above problems can be circumvented.
+
+You need to configure both server and client.
+
+```typescript
+// Server
+export default {
+   //...
+   socketIO: {
+     //...
+     transports: ['websocket'],
+   },
+}
+
+// client
+const socket = io("http://127.0.0.1:7001", {
+   transports: ['websocket']
+});
+```
+
+
+
+### Adjust the process model
+
+This is a relatively complicated method, but in the scenario of pm2 deployment, it is the only solution to support both sticky sessions and polling support.
+
+The first step is to disable the ports enabled in the configuration, such as:
+
+```typescript
+// src/config/config.default
+export default {
+   koa: {
+     // port: 7001,
+   },
+   socketIO: {
+     //...
+   },
+};
+
+```
+
+If development needs, you can add the port in `config.local`, or directly add the port in the scripts of `package.json`.
+
+```json
+"scripts": {
+   "dev": "cross-env NODE_ENV=local midway-bin dev --ts --port=7001",
+},
+```
+
+
+
+In the second step, adjust the content of your `bootstrap.js` file to the following code.
+
+```typescript
+const { Bootstrap, ClusterManager, setupStickyMaster } = require('@midwayjs/bootstrap');
+const http = require('http');
+
+// Create a process manager to handle child processes
+const clusterManager = new ClusterManager({
+   exec: __filename,
+   count: 4,
+   sticky: true, // enable sticky session support
+});
+
+if (clusterManager. isPrimary()) {
+   // The main process starts an http server to monitor
+   const httpServer = http. createServer();
+   setupStickyMaster(httpServer);
+
+   // start child process
+   clusterManager.start().then(() => {
+     // listening port
+     httpServer.listen(7001);
+     console.log('main process is ok');
+   });
+
+   clusterManager.onStop(async () => {
+     // close http server when stopped
+     await httpServer. close();
+   });
+} else {
+   // subprocess logic
+   Bootstrap
+     .run()
+     .then(() => {
+       console.log('child is ready');
+     });
+}
+
+```
+
+When pm2 starts, there is no need to specify the `-i` parameter to start the worker, directly `pm2 --name=xxx ./bootstrap.js` to make it start only one process.
+
 
 
 

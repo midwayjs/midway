@@ -204,3 +204,24 @@ export class UserService {
 }
 ```
 
+It can also be obtained through decorators.
+
+```typescript
+import { RedisServiceFactory } from '@midwayjs/redis';
+import { InjectClient } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+
+  @InjectClient(RedisServiceFactory, 'instance1')
+  redis1: RedisService;
+  
+  @InjectClient(RedisServiceFactory, 'instance3')
+  redis2: RedisService;
+
+  async save() {
+    //...
+  }
+}
+```
+

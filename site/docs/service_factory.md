@@ -226,6 +226,53 @@ export class UserService {
 ```
 
 
+
+### 装饰器获取实例
+
+从 v3.9.0 开始，ServiceFactory 添加了一个 `@InjectClient` 装饰器，方便在多客户端的的时候选择注入。
+
+```typescript
+import { HTTPClientServiceFactory } from './service/httpClientServiceFactory';
+import { join } from 'path';
+import { InjectClient } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+  
+  @InjectClient(HTTPClientServiceFactory, 'aaa')
+  aaaInstance: HTTPClientServiceFactory;
+  
+  @InjectClient(HTTPClientServiceFactory, 'bbb')
+  bbbInstance: HTTPClientServiceFactory;
+  
+  async invoke() {
+    // this.aaaInstance.xxx
+		// this.bbbInstance.xxx
+    // ...
+  }
+}
+```
+
+`@InjectClient` 装饰器用于快速注入 `ServiceFactory` 派生实现的多实例，所有扩展与 `ServiceFactory` 的类，都能使用。
+
+装饰器包含两个参数，定义如下：
+
+```typescript
+export function InjectClient(
+  serviceFactoryClz: new (...args) => IServiceFactory<unknown>,
+  clientName?: string
+) {
+  // ...
+}
+```
+
+| 参数              | 描述                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| serviceFactoryClz | 必填，`ServiceFactory` 的派生类，装饰器会从中获取查找实例。  |
+| clientName        | 可选，如果不填，默认会查找配置中的默认实例名 `defaultClientName` 配置项。 |
+
+
+
 ### 动态创建实例
 
 

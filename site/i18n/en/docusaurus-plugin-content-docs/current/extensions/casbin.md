@@ -466,3 +466,80 @@ export default (appInfo: MidwayAppInfo) => {
 }
 ```
 
+
+
+## Monitor
+
+Use a distributed messaging system such as [etcd](https://github.com/coreos/etcd) to maintain consistency across multiple Casbin executor instances. Therefore, our users can use multiple Casbin executors at the same time to handle a large number of permission checking requests.
+
+Midway currently only provides one Redis update strategy. If you have other needs, you can submit an issue to us.
+
+### Redis Watcher
+
+It needs to depend on `@midwayjs/casbin-redis-adapter` package and redis component.
+
+```bash
+$ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
+```
+
+Enable the redis component.
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as redis from '@midwayjs/redis';
+import * as casbin from '@midwayjs/casbin';
+import { join } from 'path';
+
+@Configuration({
+  imports: [
+    // ...
+    redis,
+    casbin,
+  ],
+  // ...
+})
+export class MainConfiguration {
+}
+```
+
+Example usage:
+
+```typescript
+import { MidwayAppInfo } from '@midwayjs/core';
+import { join } from 'path';
+import { createAdapter, createWatcher } from '@midwayjs/casbin-redis-adapter';
+
+export default (appInfo: MidwayAppInfo) => {
+  return {
+    // ...
+    redis: {
+      clients: {
+        'node-casbin-official': {
+          host: '127.0.0.1',
+          port: 6379,
+          db: '0',
+        },
+        'node-casbin-sub': {
+          host: '127.0.0.1',
+          port: 6379,
+          db: '0',
+        }
+      }
+    },
+    casbin: {
+      // ...
+      policyAdapter: createAdapter({
+        clientName: 'node-casbin-official'
+      }),
+      policyWatcher: createWatcher({
+        pubClientName: 'node-casbin-official',
+        subClientName: 'node-casbin-sub',
+      })
+    },
+  };
+}
+```
+
+Note that pub/sub connections require different clients, the code above defines two clients.
+
+The pub client can be reused with common Redis client connections, while the sub requires an independent client.
