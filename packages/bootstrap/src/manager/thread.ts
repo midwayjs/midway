@@ -5,7 +5,7 @@ import { ThreadEventBus } from '@midwayjs/event-bus';
 import { isTypeScriptEnvironment } from '../util';
 
 export class ThreadManager extends AbstractForkManager<Worker, ThreadOptions> {
-  private exitListener;
+  private workerExitListener;
   constructor(readonly options: ThreadOptions = {}) {
     super(options);
     options.argv = options.argv || [];
@@ -39,7 +39,7 @@ export class ThreadManager extends AbstractForkManager<Worker, ThreadOptions> {
     }
 
     w.on('exit', code => {
-      this.exitListener(w, code);
+      this.workerExitListener(w, code);
     });
 
     return w;
@@ -50,7 +50,7 @@ export class ThreadManager extends AbstractForkManager<Worker, ThreadOptions> {
   }
 
   bindWorkerExit(listener: (worker: Worker, code, signal) => void) {
-    this.exitListener = listener;
+    this.workerExitListener = listener;
   }
 
   getWorkerId(worker: Worker) {

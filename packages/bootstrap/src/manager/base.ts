@@ -19,6 +19,7 @@ export abstract class AbstractForkManager<
   protected workers: Map<string, T> = new Map();
   protected eventBus: IEventBus<T>;
   private isClosing = false;
+  private exitListener: () => void;
 
   protected constructor(readonly options: ClusterOptions) {
     options.count = options.count || os.cpus().length - 1;
@@ -111,6 +112,8 @@ export abstract class AbstractForkManager<
       this.tryToRefork(worker);
       this.onUnexpected(worker, code, signal);
     });
+
+    this.bindClose();
 
     this.hub.on('reachReforkLimit', this.onReachReforkLimit.bind(this));
 
@@ -265,13 +268,17 @@ export abstract class AbstractForkManager<
     (worker.process || worker).kill('SIGKILL');
   }
 
-  public async close(timeout = 2000) {
+  public async stop(timeout = 2000) {
     debug('run close');
     this.isClosing = true;
     await this.eventBus.stop();
     for (const worker of this.workers.values()) {
       worker['disableRefork'] = true;
       await this.killWorker(worker, timeout);
+    }
+
+    if (this.exitListener) {
+      await this.exitListener();
     }
   }
 
@@ -285,6 +292,51 @@ export abstract class AbstractForkManager<
 
   public getWorkerIds(): string[] {
     return Array.from(this.workers.keys());
+  }
+
+  public onStop(exitListener) {
+    this.exitListener = exitListener;
+  }
+
+  protected bindClose() {
+    // kill(2) Ctrl-C
+    process.once('SIGINT', this.onSignal.bind(this, 'SIGINT'));
+    // kill(3) Ctrl-\
+    process.once('SIGQUIT', this.onSignal.bind(this, 'SIGQUIT'));
+    // kill(15) default
+    process.once('SIGTERM', this.onSignal.bind(this, 'SIGTERM'));
+    process.once('exit', this.onMasterExit.bind(this));
+  }
+
+  /**
+   * on bootstrap receive a exit signal
+   * @param signal
+   */
+  private async onSignal(signal) {
+    if (!this.isClosing) {
+      this.options.logger.info(
+        '[bootstrap:master] receive signal %s, closing',
+        signal
+      );
+      try {
+        await this.stop();
+        this.options.logger.info(
+          '[bootstrap:master] close done, exiting with code:0'
+        );
+        process.exit(0);
+      } catch (err) {
+        this.options.logger.error('[midway:master] close with error: ', err);
+        process.exit(1);
+      }
+    }
+  }
+
+  /**
+   * on bootstrap process exit
+   * @param code
+   */
+  private onMasterExit(code) {
+    this.options.logger.info('[bootstrap:master] exit with code:%s', code);
   }
 
   abstract createWorker(oldWorker?: T): T;

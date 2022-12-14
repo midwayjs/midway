@@ -3,8 +3,8 @@ import { join } from 'path';
 import * as assert from 'assert';
 import { RemoteConfigService } from './service/remoteConfigService';
 import { getCurrentApplicationContext, getCurrentMainFramework, ILifeCycle, IMidwayApplication } from '@midwayjs/core';
-import * as Web from '@midwayjs/web';
-import * as SocketIO from '@midwayjs/socketio';
+import * as Web from '../../../../../web';
+import * as SocketIO from '../../../../../socketio';
 
 @Configuration({
   importConfigs: [
