@@ -22,7 +22,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/bootstrap": "^3.9.0",
     "@midwayjs/core": "^3.9.0",
     "@midwayjs/koa": "^3.9.0",
     "@midwayjs/mock": "^3.9.0",
