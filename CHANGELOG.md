@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.9.1 (2022-12-14)
+
+#### :nail_care: Polish
+* `bootstrap`
+  * [#2580](https://github.com/midwayjs/midway/pull/2580) chore: add cluster exit binding ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.9.0 (2022-12-13)
 
 #### :rocket: New Feature

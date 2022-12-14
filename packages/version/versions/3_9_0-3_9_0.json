@@ -4,7 +4,10 @@
   "@midwayjs/serverless-http-parser": "3.6.0",
   "@midwayjs/async-hooks-context-manager": "3.9.0",
   "@midwayjs/axios": "3.9.0",
-  "@midwayjs/bootstrap": "3.9.0",
+  "@midwayjs/bootstrap": [
+    "3.9.0",
+    "3.9.1"
+  ],
   "@midwayjs/bull-board": "3.9.0",
   "@midwayjs/bull": "3.9.0",
   "@midwayjs/cache": "3.9.0",
@@ -12,17 +15,26 @@
   "@midwayjs/casbin-redis-adapter": "3.9.0",
   "@midwayjs/casbin-typeorm-adapter": "3.9.0",
   "@midwayjs/casbin": "3.9.0",
-  "@midwayjs/code-dye": "3.9.0",
+  "@midwayjs/code-dye": [
+    "3.9.0",
+    "3.9.1"
+  ],
   "@midwayjs/consul": "3.9.0",
   "@midwayjs/core": "3.9.0",
   "@midwayjs/cos": "3.9.0",
-  "@midwayjs/cross-domain": "3.9.0",
+  "@midwayjs/cross-domain": [
+    "3.9.0",
+    "3.9.1"
+  ],
   "@midwayjs/decorator": "3.9.0",
   "@midwayjs/etcd": "3.9.0",
   "@midwayjs/express-session": "3.9.0",
   "@midwayjs/faas": "3.9.0",
   "@midwayjs/grpc": "3.9.0",
-  "@midwayjs/http-proxy": "3.9.0",
+  "@midwayjs/http-proxy": [
+    "3.9.0",
+    "3.9.1"
+  ],
   "@midwayjs/i18n": "3.9.0",
   "@midwayjs/info": "3.9.0",
   "@midwayjs/jwt": "3.9.0",
@@ -38,18 +50,30 @@
   "@midwayjs/prometheus": "3.9.0",
   "@midwayjs/rabbitmq": "3.9.0",
   "@midwayjs/redis": "3.9.0",
-  "@midwayjs/security": "3.9.0",
+  "@midwayjs/security": [
+    "3.9.0",
+    "3.9.1"
+  ],
   "@midwayjs/sequelize": "3.9.0",
   "@midwayjs/session": "3.9.0",
   "@midwayjs/socketio": "3.9.0",
-  "@midwayjs/static-file": "3.9.0",
+  "@midwayjs/static-file": [
+    "3.9.0",
+    "3.9.1"
+  ],
   "@midwayjs/swagger": "3.9.0",
   "@midwayjs/tablestore": "3.9.0",
   "@midwayjs/typegoose": "3.9.0",
   "@midwayjs/typeorm": "3.9.0",
-  "@midwayjs/upload": "3.9.0",
+  "@midwayjs/upload": [
+    "3.9.0",
+    "3.9.1"
+  ],
   "@midwayjs/validate": "3.9.0",
-  "@midwayjs/version": "3.9.0",
+  "@midwayjs/version": [
+    "3.9.0",
+    "3.9.1"
+  ],
   "@midwayjs/view-ejs": "3.9.0",
   "@midwayjs/view-nunjucks": "3.9.0",
   "@midwayjs/view": "3.9.0",
