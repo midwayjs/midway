@@ -25,7 +25,7 @@ describe('/test/fork/cp.test.ts', () => {
 
     await clusterFork.start();
     await sleep(2000);
-    await clusterFork.close();
+    await clusterFork.stop();
 
     expect(Object.keys(cluster.workers).length).toEqual(0);
   });
@@ -63,7 +63,7 @@ describe('/test/fork/cp.test.ts', () => {
     await new Promise<void>((resolve) => {
       setTimeout(async () => {
         console.log('end');
-        await clusterFork.close();
+        await clusterFork.stop();
         resolve();
       }, 2000);
     });
@@ -112,6 +112,6 @@ describe('/test/fork/cp.test.ts', () => {
 
     await sleep(2000);
 
-    await clusterFork.close();
+    await clusterFork.stop();
   });
 });
