@@ -509,7 +509,7 @@ import { IProcessor, Processor } from '@midwayjs/bull';
     cron: FORMAT.CRONTAB.EVERY_MINUTE,
   },
   removeOnComplete: 3,	// 成功后移除任务记录，最多保留最近 3 条记录
-  removeOnFail: 10,	// 失败后移除任务记录
+  removeOnFail: 10,	    // 失败后移除任务记录
 })
 export class UserService implements IProcessor {
   execute(data: any) {
@@ -526,11 +526,13 @@ export class UserService implements IProcessor {
 export default {
   // ...
   bull: {
-    // 默认的任务配置
-    defaultJobOptions: {
-      // 保留 10 条记录
-      removeOnComplete: 10，
-    }
+    defaultQueueOptions: {
+      // 默认的任务配置
+      defaultJobOptions: {
+        // 保留 10 条记录
+        removeOnComplete: 10,
+      },
+    },
   },
 }
 ```
@@ -576,7 +578,7 @@ export default {
         return redisClientInstance;
       },
       // 这些任务存储的 key，都是相同开头，以便区分用户原有 redis 里面的配置
-    	prefix: '{midway-bull}',
+      prefix: '{midway-bull}',
     },
   }
 }

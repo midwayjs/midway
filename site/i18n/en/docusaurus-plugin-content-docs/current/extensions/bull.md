@@ -506,7 +506,7 @@ import { IProcessor, Processor } from '@midwayjs/bull';
     cron: FORMAT.CRONTAB.EVERY_MINUTE,
   },
   removeOnComplete: 3, // remove task records after success, keep up to 3 recent records
-  removeOnFail: 10, // remove task records after failure
+  removeOnFail: 10,   // remove task records after failure
 })
 export class UserService implements IProcessor {
   execute(data: any) {
@@ -523,11 +523,13 @@ Can also be configured in the global config.
 export default {
   // ...
   bull: {
-    // default job configuration
-    defaultJobOptions: {
-      // Keep 10 records
-      removeOnComplete: 10.
-    }
+    defaultQueueOptions: {
+      // default job configuration
+      defaultJobOptions: {
+        // Keep 10 records
+        removeOnComplete: 10,
+      },
+    },
   },
 }
 ```
@@ -573,7 +575,7 @@ export default {
         return redisClientInstance;
       },
       // The keys stored for these tasks all start with the same key to distinguish the user's original redis configuration
-    	prefix: '{midway-bull}',
+      prefix: '{midway-bull}',
     },
   }
 }
