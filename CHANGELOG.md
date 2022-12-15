@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.9.2 (2022-12-15)
+
+#### :bug: Bug Fix
+* `bull`
+  * [#2582](https://github.com/midwayjs/midway/pull/2582) fix: merge queue options and job options ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.9.1 (2022-12-14)
 
 #### :nail_care: Polish
