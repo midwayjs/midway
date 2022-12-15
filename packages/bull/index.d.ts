@@ -7,7 +7,6 @@ declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
     bull?: {
       defaultQueueOptions?: bull.QueueOptions;
-      defaultJobOptions?: bull.JobOptions;
       defaultConcurrency?: number;
       clearRepeatJobWhenStart?: boolean;
     };

@@ -1,10 +1,10 @@
 export const bull = {
   defaultQueueOptions: {
     prefix: '{midway-bull}',
-  },
-  defaultJobOptions: {
-    removeOnSuccess: 3,
-    removeOnFail: 10,
+    defaultJobOptions: {
+      removeOnComplete: 3,
+      removeOnFail: 10,
+    },
   },
   defaultConcurrency: 1,
   clearRepeatJobWhenStart: true,
