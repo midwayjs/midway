@@ -5,6 +5,19 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "/v3.9.2",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>bull</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2582\" target=\"_blank\" rel=\"noopener noreferrer\">#2582</a> fix: merge queue options and job options (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a class=\"hash-link\" href=\"#committers-1\" title=\"标题的直接链接\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
+            "url": "https://midwayjs.org/changelog/v3.9.2",
+            "title": "v3.9.2",
+            "summary": "Bug Fix",
+            "date_modified": "2022-12-15T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
             "id": "/v3.9.1",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-polish\">💅 Polish<a class=\"hash-link\" href=\"#-polish\" title=\"标题的直接链接\">​</a></h2><ul><li><code>bootstrap</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2580\" target=\"_blank\" rel=\"noopener noreferrer\">#2580</a> chore: add cluster exit binding (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a class=\"hash-link\" href=\"#committers-1\" title=\"标题的直接链接\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
             "url": "https://midwayjs.org/changelog/v3.9.1",
