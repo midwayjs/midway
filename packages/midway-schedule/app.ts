@@ -11,7 +11,7 @@ import * as decorator from '@midwayjs/decorator';
 
 function findProvideId(module) {
   return decorator['getProviderName']
-    ? decorator?.getProviderUUId(module)
+    ? decorator?.['getProviderName'](module)
     : getProviderId(module);
 }
 

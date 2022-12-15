@@ -1,6 +1,6 @@
 {
   "name": "midway-schedule",
-  "version": "2.14.7",
+  "version": "2.15.0",
   "description": "",
   "main": "index.js",
   "eggPlugin": {
@@ -31,5 +31,6 @@
     "agent.js",
     "app.js"
   ],
-  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708",
+  "repository": "git@github.com:midwayjs/midway.git"
 }
