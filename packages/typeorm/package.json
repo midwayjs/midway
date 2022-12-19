@@ -3,9 +3,13 @@
   "version": "3.9.0",
   "main": "dist/index",
   "typings": "index.d.ts",
+  "bin": {
+    "mwtypeorm": "./cli.js"
+  },
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
+    "cli.js",
     "index.d.ts"
   ],
   "devDependencies": {
