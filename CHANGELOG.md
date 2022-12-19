@@ -1,6 +1,22 @@
 # Change Log
 
 
+## v3.9.3 (2022-12-19)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#2547](https://github.com/midwayjs/midway/pull/2547) fix: swagger query object ([@lhcn](https://github.com/lhcn))
+
+#### :nail_care: Polish
+* `axios`, `typeorm`
+  * [#2587](https://github.com/midwayjs/midway/pull/2587) feat: support typeorm migrate cli ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- imlh.cn ([@lhcn](https://github.com/lhcn))
+
+
+
 ## v3.9.2 (2022-12-15)
 
 #### :bug: Bug Fix
