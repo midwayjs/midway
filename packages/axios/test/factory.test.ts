@@ -1,8 +1,21 @@
 import { join } from 'path';
 import { HttpServiceFactory } from '../src';
 import { createLightApp } from '@midwayjs/mock';
+import * as nock from 'nock';
 
 describe('/test/factory.test.ts', () => {
+
+  beforeAll(async () => {
+    nock('https://api.github.com')
+      .persist()
+      .get('/users/octocat/orgs')
+      .reply(200, []);
+  });
+
+  afterAll(() => {
+    nock.restore();
+  });
+
   // 工厂单例
   it('should test with factory (add、override) single', async () => {
     const app = await createLightApp('', {

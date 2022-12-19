@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { HttpService } from '../src';
 import { createLightApp } from '@midwayjs/mock';
+import * as nock from 'nock';
 
 describe('/test/index.test.ts', () => {
   let httpService: any;
@@ -8,11 +9,19 @@ describe('/test/index.test.ts', () => {
   let app;
 
   beforeAll(async () => {
+    nock('https://api.github.com')
+      .persist()
+      .get('/users/octocat/orgs')
+      .reply(200, []);
     app = await createLightApp('', {
       imports: [require(join(__dirname, '../src'))],
     });
     container = app.getApplicationContext();
     httpService = await container.getAsync(HttpService);
+  });
+
+  afterAll(() => {
+    nock.restore();
   });
 
   it('should test http service singleton', async () => {
