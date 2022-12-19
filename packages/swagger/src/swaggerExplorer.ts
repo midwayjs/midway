@@ -330,9 +330,24 @@ export class SwaggerExplorer {
       if (Types.isClass(currentType)) {
         this.parseClzz(currentType);
 
-        p.schema = {
-          $ref: '#/components/schemas/' + currentType.name,
-        };
+        if (p.in === 'query') {
+          // 如果@Query()装饰的 是一个对象，则把该对象的子属性作为多个@Query参数
+          const schema = this.documentBuilder.getSchema(currentType.name);
+          Object.keys(schema.properties).forEach(pName => {
+            const ppt: any = schema.properties[pName];
+            const pp = {
+              name: pName,
+              in: p.in,
+            };
+            this.parseFromParamsToP({ metadata: ppt }, pp);
+            parameters.push(pp);
+          });
+          continue;
+        } else {
+          p.schema = {
+            $ref: '#/components/schemas/' + currentType.name,
+          };
+        }
       } else {
         p.schema = {
           type: convertSchemaType(currentType?.name ?? currentType),
