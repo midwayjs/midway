@@ -36,6 +36,9 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
     config: any,
     dataSourceName: string
   ): Promise<DataSource> {
+    if (config['migrations']) {
+      delete config['migrations'];
+    }
     const dataSource = new DataSource(config);
     await dataSource.initialize();
     return dataSource;

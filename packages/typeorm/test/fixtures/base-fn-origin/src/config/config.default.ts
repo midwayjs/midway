@@ -13,7 +13,10 @@ export default (appInfo) => {
           database: join(__dirname, '../../test.sqlite'),
           logging: true,
           entities: [Message, User, OriginUser],
-          subscribers: [EverythingSubscriber]
+          subscribers: [EverythingSubscriber],
+          migrations: [
+            '*/migration/*.ts'
+          ],
         }
       },
       defaultDataSourceName: 'default',
