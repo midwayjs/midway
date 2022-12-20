@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.9.5 (2022-12-20)
+
+#### :bug: Bug Fix
+* `typeorm`
+  * [#2590](https://github.com/midwayjs/midway/pull/2590) fix: ignore migrate options for typeorm running ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.9.4 (2022-12-20)
 
 #### :bug: Bug Fix

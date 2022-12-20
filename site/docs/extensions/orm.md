@@ -1416,12 +1416,44 @@ export class UserService {
 
 
 
+### CLI
+
+TypeORM 默认提供了一个 CLI，用来创建 entity，migration 等，更多文档请查看 [这里](https://github.com/typeorm/typeorm/blob/master/docs/zh_CN/using-cli.md)。
+
+由于 TypeORM 的默认配置和 Midway 不同，我们提供了一个简单的修改版本，用于适配 Midway 的数据源配置。
+
+检查安装情况：
+
+```bash
+$ npx mwtypeorm -h
+```
+
+常用的命令有
+
+ **创建空 Entity**
+
+将会创建一个 `src/entity/User.ts` 文件。
+
+```bash
+$ npx mwtypeorm entity:create src/entity/User
+```
+
+**创建 Migration**
+
+将会根据现有数据源生成一个 `src/migration/******-photo.ts` 文件。
+
+```bash
+$ npx mwtypeorm migration:generate -d ./src/config/config.default.ts src/migration/photo
+```
+
+
+
 ### 关于表结构同步
 
 
 - 如果你已有表结构，想自动创建 Entity，使用 [生成器](../tool/typeorm_generator)
 - 如果已经有 Entity 代码，想创建表结构请使用配置中的  `synchronize:  true` ，注意可能会丢失数据
-- 如果已经上线，但是又修改了表结构，可以使用 migration
+- 如果已经上线，但是又修改了表结构，可以使用 CLI 中的 `migration:generate`
 
 
 
