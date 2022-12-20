@@ -17,6 +17,14 @@ import { useContainer, EntityTarget } from 'typeorm';
     {
       default: {
         typeorm: {},
+        midwayLogger: {
+          clients: {
+            typeormLogger: {
+              fileLogName: 'typeorm.log',
+              enableError: false,
+            },
+          },
+        },
       },
     },
   ],
