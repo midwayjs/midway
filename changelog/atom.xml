@@ -9,10 +9,22 @@
     <icon>https://midwayjs.org/img/logo.svg</icon>
     <rights>Copyright © 2022 Facebook, Inc.</rights>
     <entry>
+        <title type="html"><![CDATA[v3.9.6]]></title>
+        <id>/v3.9.6</id>
+        <link href="https://midwayjs.org/changelog/v3.9.6"/>
+        <updated>2022-12-20T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>cross-domain</code>, <code>http-proxy</code>, <code>static-file</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2592" target="_blank" rel="noopener noreferrer">#2592</a> fix: static with cors (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="标题的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[v3.9.5]]></title>
         <id>/v3.9.5</id>
         <link href="https://midwayjs.org/changelog/v3.9.5"/>
-        <updated>2022-12-20T20:00:00.000Z</updated>
+        <updated>2022-12-20T19:00:00.000Z</updated>
         <summary type="html"><![CDATA[Bug Fix]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2590" target="_blank" rel="noopener noreferrer">#2590</a> fix: ignore migrate options for typeorm running (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="标题的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
         <author>
@@ -24,7 +36,7 @@
         <title type="html"><![CDATA[v3.9.4]]></title>
         <id>/v3.9.4</id>
         <link href="https://midwayjs.org/changelog/v3.9.4"/>
-        <updated>2022-12-20T19:00:00.000Z</updated>
+        <updated>2022-12-20T18:00:00.000Z</updated>
         <summary type="html"><![CDATA[Bug Fix]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2588" target="_blank" rel="noopener noreferrer">#2588</a> fix: add ts-node run in migrate (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="标题的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
         <author>

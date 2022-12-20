@@ -5,12 +5,25 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "/v3.9.6",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>cross-domain</code>, <code>http-proxy</code>, <code>static-file</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2592\" target=\"_blank\" rel=\"noopener noreferrer\">#2592</a> fix: static with cors (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a class=\"hash-link\" href=\"#committers-1\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
+            "url": "https://midwayjs.org/en/changelog/v3.9.6",
+            "title": "v3.9.6",
+            "summary": "Bug Fix",
+            "date_modified": "2022-12-20T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
             "id": "/v3.9.5",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>typeorm</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2590\" target=\"_blank\" rel=\"noopener noreferrer\">#2590</a> fix: ignore migrate options for typeorm running (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a class=\"hash-link\" href=\"#committers-1\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
             "url": "https://midwayjs.org/en/changelog/v3.9.5",
             "title": "v3.9.5",
             "summary": "Bug Fix",
-            "date_modified": "2022-12-20T20:00:00.000Z",
+            "date_modified": "2022-12-20T19:00:00.000Z",
             "author": {
                 "name": "Harry Chen",
                 "url": "https://github.com/czy88840616"
@@ -23,7 +36,7 @@
             "url": "https://midwayjs.org/en/changelog/v3.9.4",
             "title": "v3.9.4",
             "summary": "Bug Fix",
-            "date_modified": "2022-12-20T19:00:00.000Z",
+            "date_modified": "2022-12-20T18:00:00.000Z",
             "author": {
                 "name": "Harry Chen",
                 "url": "https://github.com/czy88840616"
