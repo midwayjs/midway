@@ -119,4 +119,8 @@ export class CorsMiddleware implements IMiddleware<any, any> {
       throw err;
     }
   }
+
+  static getName(): string {
+    return 'cors';
+  }
 }

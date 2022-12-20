@@ -49,4 +49,8 @@ export class JSONPMiddleware implements IMiddleware<any, any> {
     }
     return await next();
   }
+
+  static getName(): string {
+    return 'jsonp';
+  }
 }

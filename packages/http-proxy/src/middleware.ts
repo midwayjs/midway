@@ -150,4 +150,8 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
       }
     }
   }
+
+  static getName() {
+    return 'http-proxy';
+  }
 }
