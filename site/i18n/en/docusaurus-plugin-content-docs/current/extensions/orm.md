@@ -1416,11 +1416,65 @@ For more information, see [Documentation](https://github.com/typeorm/typeorm/blo
 
 
 
+### CLI
+
+TypeORM provides a CLI by default to create entity, migration, etc. For more documents, please see [here](https://github.com/typeorm/typeorm/blob/master/docs/using-cli.md) .
+
+Since the default configuration of TypeORM is different from Midway, we provide a simple modified version to adapt to Midway's data source configuration.
+
+Check the installation:
+
+```bash
+$ npx mwtypeorm -h
+```
+
+Commonly used commands are
+
+  **Create Empty Entity**
+
+A `src/entity/User.ts` file will be created.
+
+```bash
+$ npx mwtypeorm entity:create src/entity/User
+```
+
+**Create Migration**
+
+A `src/migration/******-photo.ts` file will be generated based on the existing data source.
+
+For example, the configuration is as follows:
+
+```typescript
+export default {
+   typeorm: {
+     dataSource: {
+       'default': {
+         //...
+         entities: [
+           '*/entity/*.entity{.ts,.js}'
+         ],
+         migrations: [
+           '*/migration/*.ts'
+         ],
+       },
+   },
+}
+```
+
+You can execute the following command to generate a migration file for the modified Entity.
+
+```bash
+$ npx mwtypeorm migration:generate -d ./src/config/config.default.ts src/migration/photo
+```
+
+
+
 ### About Table Structure Synchronization
 
 
 - If you already have a table structure, you want to automatically create an Entity and use the [Generator](../tool/typeorm_generator)
-- If you already have Entity code and want to create a table structure please use `synchronize: true` in the configuration
+- If you already have Entity code, if you want to create a table structure, please use `synchronize: true` in the configuration, be aware that data may be lost
+- If it is already online, but the table structure has been modified, you can use `migration:generate` in the CLI
 
 
 

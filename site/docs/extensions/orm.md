@@ -1442,6 +1442,27 @@ $ npx mwtypeorm entity:create src/entity/User
 
 将会根据现有数据源生成一个 `src/migration/******-photo.ts` 文件。
 
+比如配置如下：
+
+```typescript
+export default {
+  typeorm: {
+    dataSource: {
+      'default': {
+        // ...
+        entities: [
+          '*/entity/*.entity{.ts,.js}'
+        ],
+        migrations: [
+          '*/migration/*.ts'
+        ],
+      },
+  },
+}
+```
+
+可以执行下面的命令，将修改后的 Entity 生成迁移文件。
+
 ```bash
 $ npx mwtypeorm migration:generate -d ./src/config/config.default.ts src/migration/photo
 ```
