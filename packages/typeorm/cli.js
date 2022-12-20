@@ -30,13 +30,14 @@ CommandUtils.loadDataSource = async function (dataSourceFilePath) {
           dataSourceFileExports.dataSource[
             dataSourceFileExports['defaultClientName'] || 'default'
           ];
+
+        return new DataSource(dataSourceFileExports);
+      } else {
+        console.log(
+          '[midway:typeorm] Not found dataSource options and run origin loadDataSource method'
+        );
+        return originLoadDataSource(dataSourceFilePath);
       }
-      return new DataSource(dataSourceFileExports);
-    } else {
-      console.log(
-        '[midway:typeorm] Not found dataSource options and run origin loadDataSource method'
-      );
-      return originLoadDataSource(dataSourceFilePath);
     }
   } catch (err) {
     throw new Error(
