@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/static-file",
   "description": "midway static file component",
-  "version": "3.9.1",
+  "version": "3.9.6",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [

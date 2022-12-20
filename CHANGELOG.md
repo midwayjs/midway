@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.9.6 (2022-12-20)
+
+#### :bug: Bug Fix
+* `cross-domain`, `http-proxy`, `static-file`
+  * [#2592](https://github.com/midwayjs/midway/pull/2592) fix: static with cors ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.9.5 (2022-12-20)
 
 #### :bug: Bug Fix

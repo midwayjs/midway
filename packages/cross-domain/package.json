@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cross-domain",
-  "version": "3.9.1",
+  "version": "3.9.6",
   "description": "Midway Component for Cross Domain",
   "main": "dist/index.js",
   "typings": "index.d.ts",
