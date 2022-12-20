@@ -1420,7 +1420,8 @@ export class UserService {
 
 
 - 如果你已有表结构，想自动创建 Entity，使用 [生成器](../tool/typeorm_generator)
-- 如果已经有 Entity 代码，想创建表结构请使用配置中的  `synchronize:  true` 
+- 如果已经有 Entity 代码，想创建表结构请使用配置中的  `synchronize:  true` ，注意可能会丢失数据
+- 如果已经上线，但是又修改了表结构，可以使用 migration
 
 
 

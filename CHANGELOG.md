@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.9.4 (2022-12-20)
+
+#### :bug: Bug Fix
+* `typeorm`
+  * [#2588](https://github.com/midwayjs/midway/pull/2588) fix: add ts-node run in migrate ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.9.3 (2022-12-19)
 
 #### :bug: Bug Fix
