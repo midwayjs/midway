@@ -1,5 +1,6 @@
 import {
-  Configuration, IMidwayContainer,
+  Configuration,
+  IMidwayContainer,
   Inject,
   MidwayApplicationManager,
 } from '@midwayjs/core';
