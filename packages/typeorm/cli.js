@@ -9,6 +9,8 @@ const ImportUtils = require('typeorm/util/ImportUtils');
 // eslint-disable-next-line node/no-unpublished-require
 const { DataSource } = require('typeorm');
 
+const originLoadDataSource = CommandUtils.loadDataSource;
+
 CommandUtils.loadDataSource = async function (dataSourceFilePath) {
   try {
     let dataSourceFileExports = await ImportUtils.importOrRequireFile(
@@ -28,8 +30,14 @@ CommandUtils.loadDataSource = async function (dataSourceFilePath) {
           dataSourceFileExports.dataSource[
             dataSourceFileExports['defaultClientName'] || 'default'
           ];
+
+        return new DataSource(dataSourceFileExports);
+      } else {
+        console.log(
+          '[midway:typeorm] Not found dataSource options and run origin loadDataSource method'
+        );
+        return originLoadDataSource(dataSourceFilePath);
       }
-      return new DataSource(dataSourceFileExports);
     }
   } catch (err) {
     throw new Error(
@@ -39,4 +47,4 @@ CommandUtils.loadDataSource = async function (dataSourceFilePath) {
 };
 
 // eslint-disable-next-line node/no-unpublished-require
-require('typeorm/cli');
+require('typeorm/cli-ts-node-commonjs');
