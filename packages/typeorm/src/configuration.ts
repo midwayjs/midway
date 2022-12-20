@@ -20,8 +20,9 @@ import { useContainer, EntityTarget } from 'typeorm';
         midwayLogger: {
           clients: {
             typeormLogger: {
-              fileLogName: 'typeorm.log',
+              fileLogName: 'midway-typeorm.log',
               enableError: false,
+              level: 'info',
             },
           },
         },
