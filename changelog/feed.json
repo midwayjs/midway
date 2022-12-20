@@ -5,6 +5,19 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "/v3.9.4",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>typeorm</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2588\" target=\"_blank\" rel=\"noopener noreferrer\">#2588</a> fix: add ts-node run in migrate (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a class=\"hash-link\" href=\"#committers-1\" title=\"标题的直接链接\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
+            "url": "https://midwayjs.org/changelog/v3.9.4",
+            "title": "v3.9.4",
+            "summary": "Bug Fix",
+            "date_modified": "2022-12-20T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
             "id": "/v3.9.3",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>swagger</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2547\" target=\"_blank\" rel=\"noopener noreferrer\">#2547</a> fix: swagger query object (<a href=\"https://github.com/lhcn\" target=\"_blank\" rel=\"noopener noreferrer\">@lhcn</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-polish\">💅 Polish<a class=\"hash-link\" href=\"#-polish\" title=\"标题的直接链接\">​</a></h2><ul><li><code>axios</code>, <code>typeorm</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2587\" target=\"_blank\" rel=\"noopener noreferrer\">#2587</a> feat: support typeorm migrate cli (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-2\">Committers: 2<a class=\"hash-link\" href=\"#committers-2\" title=\"标题的直接链接\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li><li>imlh.cn (<a href=\"https://github.com/lhcn\" target=\"_blank\" rel=\"noopener noreferrer\">@lhcn</a>)</li></ul>",
             "url": "https://midwayjs.org/changelog/v3.9.3",
