@@ -243,7 +243,7 @@ export default {
         entities: [
           User
           SimpleUser
-           'entity', // specific directory (equivalent to directory wildcard, recommended)
+           'entity', // specific directory (equivalent to directory wildcard)
            '**/abc/**', // Only get files in directories containing abc characters
            'abc/**/*.ts', // specific directory + wildcard
            'abc/*.entity.ts', // match suffix
@@ -263,7 +263,7 @@ export default {
 Attention
 
 - 1. When filling in the directory string, use the second parameter of the initDataSource method as a relative path search, and the default is baseDir (src or dist)
-- 2. Unlike common scan paths such as typeorm, it is recommended not to write the `.ts` suffix in the path of entities, otherwise the entity will not be found during deployment
+- 2. If the suffix is matched, the path of entities should include the js and ts suffixes, otherwise the entity will not be found after compilation
 - 3. The writing method of the string path does not support [single-file build deployment](./deployment#single-file build deployment) (bundle mode)
 
 :::

@@ -431,11 +431,16 @@ export default {
         username: '',
         password: '',
         database: undefined,
-        synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true
+        synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
         logging: false,
         
-        // 配置实体模型 或者 entities: '/entity',
+        // 配置实体模型
         entities: [Photo],
+        
+        // 或者扫描形式
+        entities: [
+          '*/entity/*.entity{.ts,.js}'
+        ]
       }
     }
   },
@@ -1466,6 +1471,12 @@ export default {
 ```bash
 $ npx mwtypeorm migration:generate -d ./src/config/config.default.ts src/migration/photo
 ```
+
+:::caution
+
+注意：上面的 entities 配置由于需要再 CLI 和 Midway 间复用，采用了两者都支持的扫描写法。
+
+:::
 
 
 

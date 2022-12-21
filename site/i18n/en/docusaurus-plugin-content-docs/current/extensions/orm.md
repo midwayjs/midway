@@ -436,8 +436,13 @@ export default {
         synchronize: false,		// If it is used for the first time, there is no table, and there is a need for synchronization, you can write true
         logging: false
 
-        // Configure the entity model or entities: '/entity',
-        entities: [Photo]
+        // Configure the entity model
+        entities: [Photo],
+      
+        // or scan format
+        entities: [
+          '*/entity/*.entity{.ts,.js}'
+        ]
       }
     }
   },
@@ -1466,6 +1471,12 @@ You can execute the following command to generate a migration file for the modif
 ```bash
 $ npx mwtypeorm migration:generate -d ./src/config/config.default.ts src/migration/photo
 ```
+
+:::caution
+
+Note: Since the above entities configuration needs to be reused between CLI and Midway, the scanning method supported by both is adopted.
+
+:::
 
 
 
