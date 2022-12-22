@@ -45,6 +45,9 @@ export class BullFramework
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as any;
+  }
+
+  public loadConfig() {
     this.bullDefaultQueueConfig = this.configService.getConfiguration(
       'bull.defaultQueueOptions'
     );
