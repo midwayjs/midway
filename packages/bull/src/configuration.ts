@@ -37,4 +37,8 @@ export class BullConfiguration {
       }
     );
   }
+
+  async onReady() {
+    this.framework.loadConfig();
+  }
 }
