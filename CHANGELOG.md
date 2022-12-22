@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.9.7 (2022-12-22)
+
+#### :bug: Bug Fix
+* `bull`
+  * [#2594](https://github.com/midwayjs/midway/pull/2594) fix: bull read new config after config load ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.9.6 (2022-12-20)
 
 #### :bug: Bug Fix
