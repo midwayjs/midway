@@ -15,7 +15,7 @@
     "@midwayjs/mock": "^3.9.0"
   },
   "dependencies": {
-    "casbin": "5.19.1"
+    "casbin": "5.19.3"
   },
   "keywords": [
     "midway",
