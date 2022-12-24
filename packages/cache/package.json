@@ -32,7 +32,7 @@
     "@midwayjs/mock": "^3.9.0"
   },
   "dependencies": {
-    "@types/cache-manager": "3.4.2",
+    "@types/cache-manager": "3.4.3",
     "cache-manager": "3.6.3"
   }
 }
