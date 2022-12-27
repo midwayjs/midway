@@ -335,6 +335,47 @@ export class CreateCatDto {
 
 
 
+### 循环依赖
+
+当类之间具有循环依赖关系时，请使用惰性函数提供类型信息。
+
+比如 `type` 字段的循环。
+
+```typescript
+class Photo {
+  // ...
+  @ApiProperty({
+    type: () => Album
+  })
+  album: Album;
+}
+class Album {
+  // ...
+  @ApiProperty({
+    type: () => Photo
+  })
+  photo: Photo;
+}
+```
+
+`getSchemaPath` 也可以使用。
+
+```typescript
+export class CreateCatDto {
+  // ...
+
+  @ApiProperty({
+    type: 'array',
+    items: {
+      $ref: () => getSchemaPath(Cat)
+    }
+  })
+  relatedList: Cat[];
+}
+```
+
+
+
 ## 请求定义
 
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
@@ -646,6 +687,30 @@ Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则�
 @Controller('/hello')
 export class HelloController {}
 ```
+
+可以通过配置给 Tag 添加描述。
+
+```typescript
+// src/config/config.default.ts
+
+export default {
+  swagger: {
+    tags: [
+      {
+        name: 'api',
+        description: 'API Document'
+      },
+      {
+        name: 'hello',
+        description: 'Other Router'
+      },
+    ]
+  }
+}
+
+```
+
+
 
 
 
@@ -963,6 +1028,8 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
 | ```@ApiSecurity```          | Controller        |
 | ```@ApiParam```             | Method            |
 | ```@ApiExtraModel```        | Controller/Model  |
+
+
 
 ## 常见问题
 

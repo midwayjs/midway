@@ -335,6 +335,49 @@ The effect is as follows:
 
 
 
+### Circular dependencies
+
+When you have circular dependencies between classes, use lazy functions to provide type information.
+
+For example looping over the `type` field.
+
+```typescript
+class Photo {
+  // ...
+  @ApiProperty({
+    type: () => Album
+  })
+  album: Album;
+}
+class Album {
+  // ...
+  @ApiProperty({
+    type: () => Photo
+  })
+  photo: Photo;
+}
+```
+
+`getSchemaPath` can also be used.
+
+```typescript
+export class CreateCatDto {
+  // ...
+
+  @ApiProperty({
+    type: 'array',
+    items: {
+      $ref: () => getSchemaPath(Cat)
+    }
+  })
+  relatedList: Cat[];
+}
+```
+
+
+
+
+
 ## Request definition
 
 The paths defined by the [OpenAPI](https://swagger.io/specification/) are each routing path, and each routing path has the definition of HTTP methods, such as GET, POST, DELETE, PUT, etc.
@@ -646,6 +689,30 @@ Swagger labels paths. If no labels are defined in the Controller, they are group
 @Controller('/hello')
 export class HelloController {}
 ```
+
+A description can be added to Tag through configuration.
+
+```typescript
+// src/config/config.default.ts
+
+export default {
+  swagger: {
+    tags: [
+      {
+        name: 'api',
+        description: 'API Document'
+      },
+      {
+        name: 'hello',
+        description: 'Other Router'
+      },
+    ]
+  }
+}
+
+```
+
+
 
 
 
