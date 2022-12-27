@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.9.8 (2022-12-27)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#2602](https://github.com/midwayjs/midway/pull/2602) fix: use lazy function to provide type ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.9.7 (2022-12-22)
 
 #### :bug: Bug Fix
