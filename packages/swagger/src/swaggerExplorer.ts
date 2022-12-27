@@ -716,7 +716,9 @@ export class SwaggerExplorer {
             // 没有配置类型则认为自己配置了 items 内容
             if (!currentType) {
               if (metadata?.items?.['$ref']) {
-                metadata.items['$ref'] = parseTypeSchema(metadata.items['$ref']);
+                metadata.items['$ref'] = parseTypeSchema(
+                  metadata.items['$ref']
+                );
               }
 
               tt.properties[key] = {
