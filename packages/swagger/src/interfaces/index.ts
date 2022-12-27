@@ -191,7 +191,7 @@ export interface TagObject {
 export type ExamplesObject = Record<string, ExampleObject | ReferenceObject>;
 
 export interface ReferenceObject {
-  $ref: string;
+  $ref: string | (() => string);
 }
 
 export interface SchemaObject {
