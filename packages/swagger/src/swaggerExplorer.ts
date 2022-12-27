@@ -634,7 +634,7 @@ export class SwaggerExplorer {
    */
   protected parseClzz(clzz: Type) {
     if (this.documentBuilder.getSchema(clzz.name)) {
-      return;
+      return this.documentBuilder.getSchema(clzz.name);
     }
     this.parseExtraModel(clzz);
 
@@ -683,7 +683,7 @@ export class SwaggerExplorer {
           return;
         }
         let isArray = false;
-        let currentType = metadata?.type;
+        let currentType = parseTypeSchema(metadata?.type);
 
         delete metadata?.type;
 
@@ -715,6 +715,12 @@ export class SwaggerExplorer {
           if (isArray) {
             // 没有配置类型则认为自己配置了 items 内容
             if (!currentType) {
+              if (metadata?.items?.['$ref']) {
+                metadata.items['$ref'] = parseTypeSchema(
+                  metadata.items['$ref']
+                );
+              }
+
               tt.properties[key] = {
                 type: 'array',
                 items: metadata?.items,
@@ -891,4 +897,11 @@ function getNotEmptyValue(...args) {
       return arg;
     }
   }
+}
+
+function parseTypeSchema(ref) {
+  if (typeof ref === 'function' && !Types.isClass(ref)) {
+    ref = ref();
+  }
+  return ref;
 }

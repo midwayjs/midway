@@ -142,4 +142,79 @@ describe('/test/parser.test.ts', function () {
     const explorer = new CustomSwaggerExplorer();
     expect(explorer.parseClzz(NotificationDTO)).toMatchSnapshot();
   });
+
+
+  it('should parse ref schema with function', function () {
+    class Photo {
+      @ApiProperty()
+      id: number;
+
+      @ApiProperty()
+      name: string;
+
+      @ApiProperty({
+        type: 'array',
+        items: {
+          $ref: () => {
+            return getSchemaPath(Album)
+          },
+        }
+      })
+      albums: Album[];
+    }
+    class Album {
+      @ApiProperty()
+      id: number;
+
+      @ApiProperty()
+      name: string;
+
+      @ApiProperty({
+        type: 'array',
+        items: {
+          $ref: () => {
+            return getSchemaPath(Photo)
+          },
+        }
+      })
+      photos: Photo[];
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
+    expect(explorer.parseClzz(Album)).toMatchSnapshot();
+  });
+
+  it('should parse type with function', function () {
+    class Photo {
+      @ApiProperty()
+      id: number;
+
+      @ApiProperty()
+      name: string;
+
+      @ApiProperty({
+        type: () => {
+          return Album;
+        }
+      })
+      album: any;
+    }
+    class Album {
+      @ApiProperty()
+      id: number;
+
+      @ApiProperty()
+      name: string;
+
+      @ApiProperty({
+        type: Photo
+      })
+      photo: Photo;
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
+    expect(explorer.parseClzz(Album)).toMatchSnapshot();
+  });
 });

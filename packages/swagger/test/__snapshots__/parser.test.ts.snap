@@ -89,6 +89,88 @@ exports[`/test/parser.test.ts should fix issue#2286 with array example 1`] = `
 }
 `;
 
+exports[`/test/parser.test.ts should parse ref schema with function 1`] = `
+{
+  "properties": {
+    "albums": {
+      "items": {
+        "$ref": "#/components/schemas/Album",
+      },
+      "type": "array",
+    },
+    "id": {
+      "format": undefined,
+      "type": "number",
+    },
+    "name": {
+      "format": undefined,
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should parse ref schema with function 2`] = `
+{
+  "properties": {
+    "id": {
+      "format": undefined,
+      "type": "number",
+    },
+    "name": {
+      "format": undefined,
+      "type": "string",
+    },
+    "photos": {
+      "items": {
+        "$ref": "#/components/schemas/Photo",
+      },
+      "type": "array",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should parse type with function 1`] = `
+{
+  "properties": {
+    "album": {
+      "$ref": "#/components/schemas/Album",
+    },
+    "id": {
+      "format": undefined,
+      "type": "number",
+    },
+    "name": {
+      "format": undefined,
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should parse type with function 2`] = `
+{
+  "properties": {
+    "id": {
+      "format": undefined,
+      "type": "number",
+    },
+    "name": {
+      "format": undefined,
+      "type": "string",
+    },
+    "photo": {
+      "$ref": "#/components/schemas/Photo",
+    },
+  },
+  "type": "object",
+}
+`;
+
 exports[`/test/parser.test.ts should test ref path generate 1`] = `
 {
   "components": {
