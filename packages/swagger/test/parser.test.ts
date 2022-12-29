@@ -155,9 +155,7 @@ describe('/test/parser.test.ts', function () {
       @ApiProperty({
         type: 'array',
         items: {
-          $ref: () => {
-            return getSchemaPath(Album)
-          },
+          $ref: () => getSchemaPath(Album),
         }
       })
       albums: Album[];
@@ -172,9 +170,7 @@ describe('/test/parser.test.ts', function () {
       @ApiProperty({
         type: 'array',
         items: {
-          $ref: () => {
-            return getSchemaPath(Photo)
-          },
+          $ref: () => getSchemaPath(Photo),
         }
       })
       photos: Photo[];
