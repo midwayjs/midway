@@ -59,6 +59,11 @@ exports[`/test/faas/fun.test.ts fun decorator should be ok 1`] = `
   {
     "metadata": {},
     "methodName": "invoke",
+    "type": "ssr",
+  },
+  {
+    "metadata": {},
+    "methodName": "invoke",
     "type": "mtop",
   },
   {

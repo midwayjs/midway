@@ -204,6 +204,8 @@ export namespace FaaSMetadata {
 
   export interface MTopTriggerOptions extends TriggerCommonOptions {}
 
+  export interface SSRTriggerOptions extends TriggerCommonOptions {}
+
   export interface CDNTriggerOptions extends TriggerCommonOptions {}
 
   export type EventTriggerUnionOptions =
@@ -216,7 +218,8 @@ export namespace FaaSMetadata {
     | TimerTriggerOptions
     | MQTriggerOptions
     | HSFTriggerOptions
-    | MTopTriggerOptions;
+    | MTopTriggerOptions
+    | SSRTriggerOptions;
 
   export interface TriggerMetadata {
     type: ServerlessTriggerType;
@@ -263,6 +266,7 @@ export enum ServerlessTriggerType {
   KAFKA = 'kafka',
   HSF = 'hsf',
   MTOP = 'mtop',
+  SSR = 'ssr',
 }
 
 export interface IModuleStore {

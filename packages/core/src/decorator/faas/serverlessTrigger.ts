@@ -53,6 +53,10 @@ export function ServerlessTrigger(
   metadata?: FaaSMetadata.MTopTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
+  type: ServerlessTriggerType.SSR,
+  metadata?: FaaSMetadata.SSRTriggerOptions
+): MethodDecorator;
+export function ServerlessTrigger(
   type: ServerlessTriggerType.EVENT,
   metadata?: FaaSMetadata.EventTriggerOptions
 ): MethodDecorator;

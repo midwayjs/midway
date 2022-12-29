@@ -16,6 +16,7 @@ class TestFun1 {
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { method: 'get', path: '/' })
   @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, { method: 'get', path: '/' })
   @ServerlessTrigger(ServerlessTriggerType.MTOP)
+  @ServerlessTrigger(ServerlessTriggerType.SSR)
   @ServerlessTrigger(ServerlessTriggerType.HSF)
   @ServerlessTrigger(ServerlessTriggerType.EVENT)
   @ServerlessTrigger(ServerlessTriggerType.CDN)
