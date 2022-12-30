@@ -17,5 +17,6 @@
     "@opentelemetry/sdk-trace-node"
   ],
   "ignorePaths": ["**/fixtures/**", "**/example/**", "**/site/**", "**/benchmark/**"],
-  "schedule": ["before 3am on Friday"]
+  "schedule": ["before 3am on Friday"],
+  "labels": ["pr: dependencies"]
 }
