@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.9.0",
-    "supertest": "6.3.0"
+    "supertest": "6.3.3"
   },
   "engines": {
     "node": ">=12"
