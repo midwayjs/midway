@@ -126,6 +126,108 @@ exports[`/test/index.test.ts should fix issue1976 1`] = `
 }
 `;
 
+exports[`/test/index.test.ts should fix issue2603 1`] = `
+{
+  "components": {
+    "schemas": {
+      "RoleVO": {
+        "properties": {
+          "roleId": {
+            "type": "number",
+          },
+          "users": {
+            "items": {
+              "$ref": "#/components/schemas/UserVO",
+            },
+            "type": "array",
+          },
+        },
+        "type": "object",
+      },
+      "UserVO": {
+        "properties": {
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/RoleVO",
+            },
+            "type": "array",
+          },
+          "userId": {
+            "type": "number",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "This is a swagger-ui for midwayjs project",
+    "title": "My Project",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_role": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleVO",
+                },
+              },
+            },
+            "description": "",
+          },
+        },
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/get_user": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "uid",
+            "required": false,
+            "schema": {
+              "type": "number",
+            },
+          },
+        ],
+        "responses": {
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserVO",
+                },
+              },
+            },
+            "description": "",
+          },
+        },
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "name": "api",
+    },
+  ],
+}
+`;
+
 exports[`/test/index.test.ts test swagger should get swagger json 1`] = `
 {
   "properties": {

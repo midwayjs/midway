@@ -59,4 +59,14 @@ describe('/test/index.test.ts', () => {
     console.log(JSON.stringify(body));
     await close(app);
   });
+
+  it('should fix issue2603', async () => {
+    const app = await createApp(join(__dirname, 'fixtures/issue2603'), {});
+    const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+    expect(result.type).toEqual('application/json');
+    const body = result.body;
+    expect(body).toMatchSnapshot();
+    console.log(JSON.stringify(body));
+    await close(app);
+  });
 });
