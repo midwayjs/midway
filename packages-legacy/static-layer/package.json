@@ -18,7 +18,7 @@
     "koa-static-cache": "5.1.4",
     "path-to-regexp": "6.2.1",
     "request": "2.88.2",
-    "supertest": "6.3.0"
+    "supertest": "6.3.3"
   },
   "engines": {
     "node": ">=12"
