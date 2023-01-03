@@ -87,9 +87,9 @@ export class MidwayLifeCycleService {
 
   public async stop() {
     // stop lifecycle
-    const cycles = listModule(CONFIGURATION_KEY);
+    const cycles = listModule(CONFIGURATION_KEY) || [];
 
-    for (const cycle of cycles) {
+    for (const cycle of cycles.reverse()) {
       let inst;
       if (cycle.target instanceof FunctionalConfiguration) {
         // 函数式写法
