@@ -27,7 +27,7 @@ export default appInfo => {
       const ctx = info.ctx;
       // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
       const userId = ctx.userId || '-';
-      const traceId = (ctx.tracer && ctx.tracer.traceId) || '-';
+      const traceId = ctx.traceId ?? ctx.tracer?.traceId ?? '-';
       const use = Date.now() - ctx.startTime;
       const label =
         userId +
