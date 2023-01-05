@@ -41,7 +41,8 @@
       "pr: performance": ":running_woman: Performance",
       "pr: polish": ":nail_care: Polish",
       "pr: documentation": ":memo: Documentation",
-      "pr: maintenance": ":wrench: Maintenance"
+      "pr: maintenance": ":wrench: Maintenance",
+      "pr: dependencies": ":package: Dependencies"
     },
     "cacheDir": ".changelog"
   },

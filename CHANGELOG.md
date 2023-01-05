@@ -7,8 +7,51 @@
 * `web-express`, `web-koa`, `web`
   * [#2629](https://github.com/midwayjs/midway/pull/2629) fix: use ctx.traceId with otel ([@czy88840616](https://github.com/czy88840616))
 
+#### :package: Dependencies
+* `mikro`
+  * [#2638](https://github.com/midwayjs/midway/pull/2638) chore(deps): update mikro-orm monorepo to v5.6.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2613](https://github.com/midwayjs/midway/pull/2613) chore(deps): update mikro-orm monorepo to v5.6.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2633](https://github.com/midwayjs/midway/pull/2633) chore(deps): update dependency @types/jest to v29.2.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2616](https://github.com/midwayjs/midway/pull/2616) chore(deps): update dependency @types/node to v16.18.11 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2619](https://github.com/midwayjs/midway/pull/2619) chore(deps): update dependency lerna to v6.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2617](https://github.com/midwayjs/midway/pull/2617) chore(deps): update dependency @vercel/ncc to v0.36.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#2635](https://github.com/midwayjs/midway/pull/2635) fix(deps): update dependency @grpc/grpc-js to v1.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `web-koa`
+  * [#2636](https://github.com/midwayjs/midway/pull/2636) fix(deps): update dependency koa to v2.14.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `rabbitmq`
+  * [#2634](https://github.com/midwayjs/midway/pull/2634) fix(deps): update dependency amqp-connection-manager to v4.1.10 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#2637](https://github.com/midwayjs/midway/pull/2637) fix(deps): update dependency ws to v8.11.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#2632](https://github.com/midwayjs/midway/pull/2632) fix(deps): update dependency casbin to v5.20.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`, `mock`, `rabbitmq`, `socketio`, `web-express`, `web-koa`, `web`, `ws`
+  * [#2618](https://github.com/midwayjs/midway/pull/2618) chore(deps): update dependency fs-extra to v10.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `rabbitmq`
+  * [#2615](https://github.com/midwayjs/midway/pull/2615) chore(deps): update dependency @types/amqplib to v0.10.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#2612](https://github.com/midwayjs/midway/pull/2612) fix(deps): update socket.io packages to v4.5.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#2620](https://github.com/midwayjs/midway/pull/2620) chore(deps): update dependency mongoose to v6.8.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `sequelize`
+  * [#2621](https://github.com/midwayjs/midway/pull/2621) chore(deps): update dependency sequelize to v6.28.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `typegoose`
+  * [#2614](https://github.com/midwayjs/midway/pull/2614) chore(deps): update dependency @typegoose/typegoose to v9.13.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`
+  * [#2610](https://github.com/midwayjs/midway/pull/2610) fix(deps): update dependency supertest to v6.3.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#2611](https://github.com/midwayjs/midway/pull/2611) fix(deps): update dependency tablestore to v5.3.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#2609](https://github.com/midwayjs/midway/pull/2609) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.11.19 ([@renovate[bot]](https://github.com/apps/renovate))
+* `passport`
+  * [#2608](https://github.com/midwayjs/midway/pull/2608) chore(deps): update dependency passport-jwt to v4.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#2604](https://github.com/midwayjs/midway/pull/2604) fix(deps): update dependency axios to v1.2.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
 #### Committers: 1
 - Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
 
 
 
@@ -17,6 +60,14 @@
 #### :bug: Bug Fix
 * `swagger`
   * [#2602](https://github.com/midwayjs/midway/pull/2602) fix: use lazy function to provide type ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `bull`
+  * [#2598](https://github.com/midwayjs/midway/pull/2598) fix(deps): update dependency bull to v4.10.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cache`
+  * [#2597](https://github.com/midwayjs/midway/pull/2597) fix(deps): update dependency @types/cache-manager to v3.4.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#2599](https://github.com/midwayjs/midway/pull/2599) fix(deps): update dependency casbin to v5.19.3 ([@renovate[bot]](https://github.com/apps/renovate))
 
 #### Committers: 1
 - Harry Chen ([@czy88840616](https://github.com/czy88840616))
