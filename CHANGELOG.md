@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.9.9 (2023-01-05)
+
+#### :bug: Bug Fix
+* `web-express`, `web-koa`, `web`
+  * [#2629](https://github.com/midwayjs/midway/pull/2629) fix: use ctx.traceId with otel ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.9.8 (2022-12-27)
 
 #### :bug: Bug Fix

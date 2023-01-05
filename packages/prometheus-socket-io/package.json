@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/prometheus-socket-io",
-  "version": "3.9.0",
+  "version": "3.9.9",
   "description": "midway component for prometheus",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -23,11 +23,11 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^3.9.0",
-    "@midwayjs/koa": "^3.9.0",
+    "@midwayjs/koa": "^3.9.9",
     "@midwayjs/mock": "^3.9.0",
-    "@midwayjs/prometheus": "^3.9.0",
+    "@midwayjs/prometheus": "^3.9.9",
     "@midwayjs/socketio": "^3.9.0",
-    "@midwayjs/web": "^3.9.0"
+    "@midwayjs/web": "^3.9.9"
   },
   "engines": {
     "node": ">=12"

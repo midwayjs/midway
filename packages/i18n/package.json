@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/i18n",
   "description": "midway i18n component",
-  "version": "3.9.0",
+  "version": "3.9.9",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.9.0",
-    "@midwayjs/express": "^3.9.0",
-    "@midwayjs/koa": "^3.9.0",
+    "@midwayjs/express": "^3.9.9",
+    "@midwayjs/koa": "^3.9.9",
     "@midwayjs/mock": "^3.9.0"
   },
   "keywords": [
