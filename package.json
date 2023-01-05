@@ -3,7 +3,7 @@
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
-    "@types/jest": "29.2.4",
+    "@types/jest": "29.2.5",
     "@types/node": "16.18.11",
     "@vercel/ncc": "0.36.0",
     "autocannon": "7.10.0",
