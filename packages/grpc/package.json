@@ -25,7 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/mock": "^3.9.0",
-    "fs-extra": "10.0.1"
+    "fs-extra": "10.1.0"
   },
   "dependencies": {
     "@grpc/grpc-js": "1.7.3",
