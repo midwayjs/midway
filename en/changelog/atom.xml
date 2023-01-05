@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2022-12-27T20:00:00.000Z</updated>
+    <updated>2023-01-05T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
-    <rights>Copyright © 2022 Facebook, Inc.</rights>
+    <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.9.9]]></title>
+        <id>/v3.9.9</id>
+        <link href="https://midwayjs.org/en/changelog/v3.9.9"/>
+        <updated>2023-01-05T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>web-express</code>, <code>web-koa</code>, <code>web</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2629" target="_blank" rel="noopener noreferrer">#2629</a> fix: use ctx.traceId with otel (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.9.8]]></title>
         <id>/v3.9.8</id>

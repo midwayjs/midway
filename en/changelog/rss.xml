@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Tue, 27 Dec 2022 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 05 Jan 2023 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
-        <copyright>Copyright © 2022 Facebook, Inc.</copyright>
+        <copyright>Copyright © 2023 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.9.9]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.9.9</link>
+            <guid>/v3.9.9</guid>
+            <pubDate>Thu, 05 Jan 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>web-express</code>, <code>web-koa</code>, <code>web</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2629" target="_blank" rel="noopener noreferrer">#2629</a> fix: use ctx.traceId with otel (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.9.8]]></title>
             <link>https://midwayjs.org/en/changelog/v3.9.8</link>
