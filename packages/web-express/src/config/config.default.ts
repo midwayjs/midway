@@ -11,7 +11,7 @@ export const express = {
     const req = info.ctx;
     // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
     const userId = req?.['session']?.['userId'] || '-';
-    const traceId = '-';
+    const traceId = req.traceId ?? '-';
     const use = Date.now() - info.ctx.startTime;
     const label =
       userId +
