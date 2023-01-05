@@ -204,7 +204,7 @@ describe('/test/parser.test.ts', function () {
       name: string;
 
       @ApiProperty({
-        type: Photo
+        type: Photo,
       })
       photo: Photo;
     }
@@ -212,5 +212,44 @@ describe('/test/parser.test.ts', function () {
     const explorer = new CustomSwaggerExplorer();
     expect(explorer.parseClzz(Photo)).toMatchSnapshot();
     expect(explorer.parseClzz(Album)).toMatchSnapshot();
+  });
+
+  it('should test multi-type in property', function () {
+    class Album {
+      @ApiProperty()
+      id: number;
+
+      @ApiProperty()
+      name: string;
+    }
+    class Photo {
+      @ApiProperty({
+        oneOf: [
+          { type: 'string' },
+          {
+            type: 'array',
+            items: {
+              type: 'string'
+            }
+          }
+        ]
+      })
+      name: string | string[];
+
+      @ApiProperty({
+        oneOf: [
+          { type: Album},
+          {
+            type: 'array',
+            items: {
+              type: () => Album,
+            }
+          }
+        ]
+      })
+      album: Album | Album[];
+    }
+    const explorer = new CustomSwaggerExplorer();
+    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
   });
 });

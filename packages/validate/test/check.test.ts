@@ -1,4 +1,4 @@
-import { Validate, Rule, RuleType } from '../src';
+import { Validate, Rule, RuleType, getSchema, OmitDto } from '../src';
 import { createLightApp, close } from '@midwayjs/mock';
 import * as Joi from 'joi';
 import * as Valid from '../src';
@@ -411,4 +411,29 @@ describe('/test/check.test.ts', () => {
 
     await close(app);
   });
+
+  it('test cascade with extends check', () => {
+
+    class SchoolDTO {
+      @Rule(RuleType.string().required())
+      name: string;
+      @Rule(RuleType.string())
+      address: string;
+    }
+
+    class NewSchoolDTO extends OmitDto(SchoolDTO, ['address']) {}
+
+    class UserDTO {
+      @Rule(RuleType.array().items(getSchema(NewSchoolDTO)))
+      schoolList: NewSchoolDTO[];
+    }
+
+    const schema = getSchema(UserDTO);
+    const result = schema.validate({
+      schoolList: [{
+        address: 'abc'
+      }]
+    });
+    console.log(result);
+  })
 });

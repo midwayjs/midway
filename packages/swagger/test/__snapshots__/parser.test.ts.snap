@@ -171,6 +171,41 @@ exports[`/test/parser.test.ts should parse type with function 2`] = `
 }
 `;
 
+exports[`/test/parser.test.ts should test multi-type in property 1`] = `
+{
+  "properties": {
+    "album": {
+      "oneOf": [
+        {
+          "$ref": "#/components/schemas/Album",
+        },
+        {
+          "items": {
+            "$ref": "#/components/schemas/Album",
+          },
+          "type": "array",
+        },
+      ],
+    },
+    "name": {
+      "oneOf": [
+        {
+          "format": undefined,
+          "type": "string",
+        },
+        {
+          "items": {
+            "type": "string",
+          },
+          "type": "array",
+        },
+      ],
+    },
+  },
+  "type": "object",
+}
+`;
+
 exports[`/test/parser.test.ts should test ref path generate 1`] = `
 {
   "components": {
