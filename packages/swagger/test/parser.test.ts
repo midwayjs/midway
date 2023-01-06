@@ -252,4 +252,20 @@ describe('/test/parser.test.ts', function () {
     const explorer = new CustomSwaggerExplorer();
     expect(explorer.parseClzz(Photo)).toMatchSnapshot();
   });
+
+  it('should parse base type', function () {
+    class Cat {
+      @ApiProperty({
+        type: [String],
+        example: ['1'],
+        description: 'The name of the Catage',
+        nullable: true,
+        uniqueItems: true,
+      })
+      breeds: string[];
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    expect(explorer.parseClzz(Cat)).toMatchSnapshot();
+  });
 });

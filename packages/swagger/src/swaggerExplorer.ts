@@ -1022,8 +1022,17 @@ function getNotEmptyValue(...args) {
 }
 
 function parseTypeSchema(ref) {
-  if (typeof ref === 'function' && !Types.isClass(ref)) {
-    ref = ref();
+  switch (ref) {
+    case String:
+      return 'string';
+    case Number:
+      return 'number';
+    case Boolean:
+      return 'boolean';
+    default:
+      if (typeof ref === 'function' && !Types.isClass(ref)) {
+        ref = ref();
+      }
+      return ref;
   }
-  return ref;
 }
