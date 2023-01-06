@@ -3,6 +3,11 @@
 exports[`/test/faas/fun.test.ts fun decorator should be ok 1`] = `
 [
   {
+    "metadata": {},
+    "methodName": "invoke",
+    "type": "customTrigger",
+  },
+  {
     "metadata": {
       "type": "every",
       "value": "5m",
@@ -57,7 +62,10 @@ exports[`/test/faas/fun.test.ts fun decorator should be ok 1`] = `
     "type": "hsf",
   },
   {
-    "metadata": {},
+    "metadata": {
+      "method": "get",
+      "path": "/",
+    },
     "methodName": "invoke",
     "type": "ssr",
   },

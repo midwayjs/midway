@@ -204,7 +204,7 @@ export namespace FaaSMetadata {
 
   export interface MTopTriggerOptions extends TriggerCommonOptions {}
 
-  export interface SSRTriggerOptions extends TriggerCommonOptions {}
+  export interface SSRTriggerOptions extends HTTPTriggerOptions {}
 
   export interface CDNTriggerOptions extends TriggerCommonOptions {}
 
@@ -222,7 +222,7 @@ export namespace FaaSMetadata {
     | SSRTriggerOptions;
 
   export interface TriggerMetadata {
-    type: ServerlessTriggerType;
+    type: ServerlessTriggerType | string;
     functionName?: string;
     handlerName?: string;
     methodName?: string;

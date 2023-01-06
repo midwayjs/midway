@@ -16,7 +16,7 @@ class TestFun1 {
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { method: 'get', path: '/' })
   @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, { method: 'get', path: '/' })
   @ServerlessTrigger(ServerlessTriggerType.MTOP)
-  @ServerlessTrigger(ServerlessTriggerType.SSR)
+  @ServerlessTrigger(ServerlessTriggerType.SSR, { method: 'get', path: '/' })
   @ServerlessTrigger(ServerlessTriggerType.HSF)
   @ServerlessTrigger(ServerlessTriggerType.EVENT)
   @ServerlessTrigger(ServerlessTriggerType.CDN)
@@ -43,6 +43,7 @@ class TestFun1 {
     type: 'every',
     value: '5m',
   })
+  @ServerlessTrigger('customTrigger')
   invoke() {
   }
 }
