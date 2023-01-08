@@ -293,4 +293,28 @@ describe('test/new.test.ts', () => {
     await closeApp(starter);
   });
 
+  it('should test event decorator', async () => {
+    const starter = await createNewStarter('base-app-event-decorator');
+
+    const result = await starter.invokeTriggerFunction(
+      {
+        originContext: {},
+        originEvent: {}
+      },
+      'helloService.handler',
+      {
+        isHttpFunction: false,
+      });
+
+    expect(result).toEqual({
+      text: 'a',
+    });
+
+    const result2 = await createHttpRequest(starter)
+      .get('/test');
+    expect(result2.status).toEqual(200);
+    expect(result2.text).toEqual('{"text":"a"}');
+
+    await closeApp(starter);
+  });
 });
