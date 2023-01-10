@@ -64,9 +64,8 @@ export function setupStickyMaster(httpServer, opts = {}) {
     };
 
     socket.on('data', (buffer: Buffer) => {
-      const encoding =
-        buffer.indexOf(Buffer.from('POST')) === 0 ? 'base64' : 'utf-8';
-      const data = buffer.toString(encoding);
+      let encoding: any = 'utf-8';
+      let data = buffer.toString(encoding);
       if (workerId && connectionId) {
         cluster.workers[workerId].send(
           { type: 'sticky:http-chunk', data, encoding, connectionId },
@@ -81,6 +80,11 @@ export function setupStickyMaster(httpServer, opts = {}) {
           .substring(0, data.indexOf('\r\n\r\n'))
           .includes('pgrade: websocket')
       );
+      // avoid binary data toString error
+      if (data.startsWith('POST') && data.includes('multipart/form-data')) {
+        encoding = 'base64';
+        data = buffer.toString('base64');
+      }
       socket.pause();
       if (mayHaveMultipleChunks) {
         connectionId = randomId();

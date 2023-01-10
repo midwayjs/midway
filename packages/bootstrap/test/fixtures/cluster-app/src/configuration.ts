@@ -4,6 +4,7 @@ import * as assert from 'assert';
 import { RemoteConfigService } from './service/remoteConfigService';
 import { getCurrentApplicationContext, getCurrentMainFramework, ILifeCycle, IMidwayApplication } from '@midwayjs/core';
 import * as Web from '../../../../../web';
+import * as Upload from '../../../../../upload';
 import * as SocketIO from '../../../../../socketio';
 
 @Configuration({
@@ -13,6 +14,7 @@ import * as SocketIO from '../../../../../socketio';
   imports: [
     Web,
     SocketIO,
+    Upload,
   ]
 })
 export class AutoConfiguration implements ILifeCycle {

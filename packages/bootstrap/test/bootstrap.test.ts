@@ -87,6 +87,20 @@ describe('/test/bootstrap.test.ts', () => {
     });
     expect(httpResult).toEqual('hello world');
 
+    // test http upload
+    console.log('---start test http upload');
+    const httpUploadResult: any = await new Promise<string>(resolve => {
+      let req = request.post(`http://localhost:8080/upload`, (error, response, body) => {
+        resolve(JSON.parse(body));
+      });
+      const form = req.form();
+      form.append('file', '<FILE_DATA>', {
+        filename: 'test.txt',
+        contentType: 'text/plain'
+      });
+    });
+    expect(httpUploadResult.files[0].filename === "test.txt");
+
     console.log('---start test socket.io');
 
     // test socket.io
