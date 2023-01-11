@@ -89,6 +89,26 @@ exports[`/test/parser.test.ts should fix issue#2286 with array example 1`] = `
 }
 `;
 
+exports[`/test/parser.test.ts should parse base type 1`] = `
+{
+  "properties": {
+    "breeds": {
+      "description": "The name of the Catage",
+      "example": [
+        "1",
+      ],
+      "items": {
+        "type": "string",
+      },
+      "nullable": true,
+      "type": "array",
+      "uniqueItems": true,
+    },
+  },
+  "type": "object",
+}
+`;
+
 exports[`/test/parser.test.ts should parse ref schema with function 1`] = `
 {
   "properties": {
@@ -165,6 +185,41 @@ exports[`/test/parser.test.ts should parse type with function 2`] = `
     },
     "photo": {
       "$ref": "#/components/schemas/Photo",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should test multi-type in property 1`] = `
+{
+  "properties": {
+    "album": {
+      "oneOf": [
+        {
+          "$ref": "#/components/schemas/Album",
+        },
+        {
+          "items": {
+            "$ref": "#/components/schemas/Album",
+          },
+          "type": "array",
+        },
+      ],
+    },
+    "name": {
+      "oneOf": [
+        {
+          "format": undefined,
+          "type": "string",
+        },
+        {
+          "items": {
+            "type": "string",
+          },
+          "type": "array",
+        },
+      ],
     },
   },
   "type": "object",

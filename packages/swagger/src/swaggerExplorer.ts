@@ -628,6 +628,117 @@ export class SwaggerExplorer {
       }
     }
   }
+
+  protected parseSubPropertyType(metadata: any) {
+    let typeMeta;
+    if (metadata?.enum) {
+      typeMeta = {
+        type: metadata?.type,
+        enum: metadata?.enum,
+        default: metadata?.default,
+      };
+
+      if (metadata?.description) {
+        typeMeta.description = metadata?.description;
+      }
+      return typeMeta;
+    }
+
+    if (metadata?.items?.enum) {
+      typeMeta = {
+        type: metadata?.type,
+        items: metadata?.items,
+        default: metadata?.default,
+      };
+
+      if (metadata?.description) {
+        typeMeta.description = metadata?.description;
+      }
+      return typeMeta;
+    }
+
+    let isArray = false;
+    let currentType = parseTypeSchema(metadata?.type);
+
+    delete metadata?.type;
+
+    if (currentType === 'array') {
+      isArray = true;
+      currentType = parseTypeSchema(metadata?.items?.type);
+
+      delete metadata?.items.type;
+    }
+
+    if (metadata?.oneOf) {
+      typeMeta = {
+        oneOf: [],
+      };
+      metadata?.oneOf.forEach((item: any) => {
+        typeMeta.push(this.parseSubPropertyType(item));
+      });
+      delete metadata?.oneOf;
+    }
+
+    if (Types.isClass(currentType)) {
+      this.parseClzz(currentType);
+
+      if (isArray) {
+        typeMeta = {
+          type: 'array',
+          items: {
+            $ref: '#/components/schemas/' + currentType?.name,
+          },
+        };
+      } else {
+        typeMeta = {
+          $ref: '#/components/schemas/' + currentType?.name,
+        };
+      }
+
+      delete metadata.items;
+    } else {
+      if (isArray) {
+        // 没有配置类型则认为自己配置了 items 内容
+        if (!currentType) {
+          if (metadata?.items?.['$ref']) {
+            metadata.items['$ref'] = parseTypeSchema(metadata.items['$ref']);
+          }
+
+          typeMeta = {
+            type: 'array',
+            items: metadata?.items,
+          };
+        } else {
+          typeMeta = {
+            type: 'array',
+            items: {
+              type: convertSchemaType(currentType?.name || currentType),
+            },
+          };
+        }
+
+        delete metadata.items;
+      } else {
+        typeMeta = {
+          type: currentType,
+          format: metadata?.format,
+        };
+
+        // Date 类型支持
+        if (typeMeta.type === 'Date') {
+          typeMeta.type = 'string';
+          if (!typeMeta.format) {
+            typeMeta.format = 'date';
+          }
+        }
+
+        delete metadata.format;
+      }
+    }
+
+    return Object.assign(typeMeta, metadata);
+  }
+
   /**
    * 解析类型的 ApiProperty
    * @param clzz
@@ -689,9 +800,20 @@ export class SwaggerExplorer {
 
         if (currentType === 'array') {
           isArray = true;
-          currentType = metadata?.items?.type;
+          currentType = parseTypeSchema(metadata?.items?.type);
 
           delete metadata?.items.type;
+        }
+
+        if (metadata?.oneOf) {
+          tt.properties[key] = {
+            oneOf: [],
+          };
+          metadata?.oneOf.forEach((meta: any) => {
+            tt.properties[key].oneOf.push(this.parseSubPropertyType(meta));
+          });
+          delete metadata?.oneOf;
+          return;
         }
 
         if (Types.isClass(currentType)) {
@@ -900,8 +1022,17 @@ function getNotEmptyValue(...args) {
 }
 
 function parseTypeSchema(ref) {
-  if (typeof ref === 'function' && !Types.isClass(ref)) {
-    ref = ref();
+  switch (ref) {
+    case String:
+      return 'string';
+    case Number:
+      return 'number';
+    case Boolean:
+      return 'boolean';
+    default:
+      if (typeof ref === 'function' && !Types.isClass(ref)) {
+        ref = ref();
+      }
+      return ref;
   }
-  return ref;
 }
