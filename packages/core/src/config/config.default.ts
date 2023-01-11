@@ -13,12 +13,13 @@ export default (appInfo: MidwayAppInfo): MidwayCoreDefaultConfig => {
     midwayLogger: {
       default: {
         dir: join(logRoot, 'logs', appInfo.name),
-        level: isDevelopment ? 'info' : 'warn',
+        level: 'info',
         consoleLevel: isDevelopment ? 'info' : 'warn',
         auditFileDir: '.audit',
       },
       clients: {
         coreLogger: {
+          level: isDevelopment ? 'info' : 'warn',
           fileLogName: 'midway-core.log',
         },
         appLogger: {
