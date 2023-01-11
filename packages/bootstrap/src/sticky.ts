@@ -63,11 +63,12 @@ export function setupStickyMaster(httpServer, opts = {}) {
       }
     };
 
-    socket.on('data', buffer => {
-      const data = buffer.toString();
+    socket.on('data', (buffer: Buffer) => {
+      let encoding: any = 'utf-8';
+      let data = buffer.toString(encoding);
       if (workerId && connectionId) {
         cluster.workers[workerId].send(
-          { type: 'sticky:http-chunk', data, connectionId },
+          { type: 'sticky:http-chunk', data, encoding, connectionId },
           sendCallback
         );
         return;
@@ -79,12 +80,17 @@ export function setupStickyMaster(httpServer, opts = {}) {
           .substring(0, data.indexOf('\r\n\r\n'))
           .includes('pgrade: websocket')
       );
+      // avoid binary data toString error
+      if (data.startsWith('POST') && data.includes('multipart/form-data')) {
+        encoding = 'base64';
+        data = buffer.toString('base64');
+      }
       socket.pause();
       if (mayHaveMultipleChunks) {
         connectionId = randomId();
       }
       cluster.workers[workerId].send(
-        { type: 'sticky:connection', data, connectionId },
+        { type: 'sticky:connection', data, encoding, connectionId },
         socket,
         {
           keepOpen: mayHaveMultipleChunks,
@@ -121,36 +127,39 @@ export function setupWorker(io: any) {
   // store connections that may receive multiple chunks
   const sockets = new Map();
 
-  process.on('message', ({ type, data, connectionId }, socket: any) => {
-    switch (type) {
-      case 'sticky:connection':
-        if (!socket) {
-          // might happen if the socket is closed during the transfer to the worker
-          // see https://nodejs.org/api/child_process.html#child_process_example_sending_a_socket_object
-          return;
-        }
-        io.httpServer.emit('connection', socket); // inject connection
-        socket.emit('data', Buffer.from(data)); // republish first chunk
-        socket.resume();
+  process.on(
+    'message',
+    ({ type, data, encoding, connectionId }, socket: any) => {
+      switch (type) {
+        case 'sticky:connection':
+          if (!socket) {
+            // might happen if the socket is closed during the transfer to the worker
+            // see https://nodejs.org/api/child_process.html#child_process_example_sending_a_socket_object
+            return;
+          }
+          io.httpServer.emit('connection', socket); // inject connection
+          socket.emit('data', Buffer.from(data, encoding)); // republish first chunk
+          socket.resume();
 
-        if (connectionId) {
-          sockets.set(connectionId, socket);
+          if (connectionId) {
+            sockets.set(connectionId, socket);
 
-          socket.on('close', () => {
-            sockets.delete(connectionId);
-          });
-        }
+            socket.on('close', () => {
+              sockets.delete(connectionId);
+            });
+          }
 
-        break;
+          break;
 
-      case 'sticky:http-chunk': {
-        const socket = sockets.get(connectionId);
-        if (socket) {
-          socket.emit('data', Buffer.from(data));
+        case 'sticky:http-chunk': {
+          const socket = sockets.get(connectionId);
+          if (socket) {
+            socket.emit('data', Buffer.from(data, encoding));
+          }
         }
       }
     }
-  });
+  );
 
   const ignoreError = () => {}; // the next request will fail anyway
 
