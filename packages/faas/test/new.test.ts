@@ -301,7 +301,7 @@ describe('test/new.test.ts', () => {
         originContext: {},
         originEvent: {}
       },
-      'helloService.handler',
+      'helloEventService.handler',
       {
         isHttpFunction: false,
       });
@@ -311,7 +311,7 @@ describe('test/new.test.ts', () => {
     });
 
     const result2 = await createHttpRequest(starter)
-      .get('/test');
+      .get('/test_event');
     expect(result2.status).toEqual(200);
     expect(result2.text).toEqual('{"text":"a"}');
 

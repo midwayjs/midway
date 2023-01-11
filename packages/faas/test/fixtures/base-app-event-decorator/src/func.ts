@@ -3,7 +3,7 @@ import { App } from '@midwayjs/core';
 import { Context, Event } from '../../../../src';
 
 @Provide()
-export class HelloService {
+export class HelloEventService {
   @Inject()
   ctx: Context; // context
 
@@ -15,7 +15,7 @@ export class HelloService {
   }
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, {
-    path: '/test',
+    path: '/test_event',
   })
   async getHandler(@Event() event) {
     return event;

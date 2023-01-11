@@ -1,7 +1,7 @@
 import { AbstractBootstrapStarter } from '../src';
 
 describe('/test/starter.test.ts', () => {
-  it('should run', async () => {
+  it('should run with starter', async () => {
     class CustomStarter extends AbstractBootstrapStarter {
       onClose() {
       }
