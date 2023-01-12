@@ -47,7 +47,7 @@ import { Context } from '@midwayjs/koa';
 
 @Guard()
 export class AuthGuard implements IGuard<Context> {
-  async canActivate(context: Context, suppilerClz, methodName: string): Promise<boolean> {
+  async canActivate(context: Context, supplierClz, methodName: string): Promise<boolean> {
     // ...
   }
 }
@@ -161,7 +161,7 @@ import { Context } from '@midwayjs/koa';
 
 @Guard()
 export class AuthGuard implements IGuard<Context> {
-  async canActivate(context: Context, suppilerClz, methodName: string): Promise<boolean> {
+  async canActivate(context: Context, supplierClz, methodName: string): Promise<boolean> {
     // ...
     if (methodName ==='xxx') {
       throw new httpError.ForbiddenError();
