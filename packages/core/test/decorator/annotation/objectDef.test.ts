@@ -1,4 +1,4 @@
-import { Destroy, getObjectDefinition, Init, Scope, ScopeEnum } from '../../../src';
+import { Destroy, getObjectDefinition, Init, Scope, ScopeEnum, Singleton } from '../../../src';
 
 class Parent {}
 
@@ -16,6 +16,9 @@ class TestOne {}
 
 @Scope(ScopeEnum.Request, { allowDowngrade: true})
 class TestOne1 {}
+
+@Singleton()
+class TestTwo {}
 
 describe('/test/annotation/objectDef.test.ts', () => {
   it('objectDef decorator should be ok', () => {
@@ -35,6 +38,11 @@ describe('/test/annotation/objectDef.test.ts', () => {
     expect(def1).toStrictEqual({
       scope: ScopeEnum.Request,
       allowDowngrade: true,
+    });
+
+    const def2 = getObjectDefinition(TestTwo);
+    expect(def2).toStrictEqual({
+      scope: ScopeEnum.Singleton,
     });
   });
 });

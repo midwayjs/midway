@@ -62,6 +62,7 @@ export abstract class BaseFramework<
   protected composeMiddleware = null;
   protected bootstrapOptions: IMidwayBootstrapOptions;
   protected asyncContextManager: AsyncContextManager;
+  private namespace: string;
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -320,6 +321,10 @@ export abstract class BaseFramework<
       useGuard: (guard: CommonGuardUnion<CTX>) => {
         return this.useGuard(guard);
       },
+
+      getNamespace: () => {
+        return this.getNamespace();
+      },
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];
@@ -480,5 +485,13 @@ export abstract class BaseFramework<
 
   protected createGuardManager() {
     return new GuardManager<CTX>();
+  }
+
+  public setNamespace(namespace: string) {
+    this.namespace = namespace;
+  }
+
+  public getNamespace() {
+    return this.namespace;
   }
 }

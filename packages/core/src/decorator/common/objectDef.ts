@@ -1,5 +1,6 @@
 import { saveObjectDefinition } from '../decoratorManager';
 import { ScopeEnum } from '../interface';
+import { Provide } from './provide';
 
 export function Init(): MethodDecorator {
   return function (target: any, propertyKey: string) {
@@ -21,5 +22,12 @@ export function Scope(
 ): ClassDecorator {
   return function (target: any): void {
     saveObjectDefinition(target, { scope, ...scopeOptions });
+  };
+}
+
+export function Singleton(): ClassDecorator {
+  return function (target: any): void {
+    Scope(ScopeEnum.Singleton)(target);
+    Provide()(target);
   };
 }
