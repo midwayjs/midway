@@ -5,14 +5,32 @@ import {
   JoinPoint,
   MidwayDecoratorService,
   REQUEST_OBJ_CTX_KEY,
+  Pipe,
+  WEB_ROUTER_PARAM_KEY,
+  IMidwayContainer,
+  PipeTransform,
 } from '@midwayjs/core';
 import { VALIDATE_KEY } from './constants';
-import * as util from 'util';
 import * as DefaultConfig from './config/config.default';
 import { ValidateService } from './service';
 import * as i18n from '@midwayjs/i18n';
+import * as Joi from 'joi';
 
-const debug = util.debuglog('midway:debug');
+@Pipe()
+export class ValidationPipe implements PipeTransform {
+  @Inject()
+  protected validateService: ValidateService;
+  transform(value: any) {
+    const result = this.validateService.validateWithSchema(
+      Joi.string().required(),
+      value
+    );
+    if (result && result.value) {
+      return result.value;
+    }
+    return value;
+  }
+}
 
 @Configuration({
   namespace: 'validate',
@@ -30,8 +48,9 @@ export class ValidateConfiguration {
   @Inject()
   validateService: ValidateService;
 
-  async onReady() {
-    debug(`[midway:validate] Register @validate "${VALIDATE_KEY}" handler"`);
+  async onReady(container: IMidwayContainer) {
+    await container.getAsync(ValidationPipe);
+
     this.decoratorService.registerMethodHandler(VALIDATE_KEY, options => {
       // get param types from method
       const paramTypes = getMethodParamTypes(
@@ -64,5 +83,10 @@ export class ValidateConfiguration {
         },
       };
     });
+
+    // register web param default pipe
+    this.decoratorService.registerParameterPipes(WEB_ROUTER_PARAM_KEY, [
+      ValidationPipe,
+    ]);
   }
 }

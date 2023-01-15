@@ -10,6 +10,9 @@ import {
   JoinPoint,
   getMethodParamTypes,
   ScopeEnum,
+  ParamDecoratorOptions,
+  PipeUnionTransform,
+  PipeTransform,
 } from '../decorator';
 import {
   HandlerFunction,
@@ -18,8 +21,9 @@ import {
   ParameterHandlerFunction,
 } from '../interface';
 import { MidwayAspectService } from './aspectService';
-import { MidwayCommonError } from '../error';
+import { MidwayCommonError, MidwayParameterError } from '../error';
 import * as util from 'util';
+import { isClass } from '../util/types';
 
 const debug = util.debuglog('midway:debug');
 
@@ -29,6 +33,8 @@ export class MidwayDecoratorService {
   private propertyHandlerMap = new Map<string, HandlerFunction>();
   private methodDecoratorMap: Map<string, (...args) => any> = new Map();
   private parameterDecoratorMap: Map<string, (...args) => any> = new Map();
+  private parameterDecoratorPipes: Map<string, PipeUnionTransform[]> =
+    new Map();
 
   @Inject()
   private aspectService: MidwayAspectService;
@@ -83,6 +89,7 @@ export class MidwayDecoratorService {
           propertyName: string;
           metadata: any;
           impl: boolean;
+          options: ParamDecoratorOptions;
         }>;
       } = getClassMetadata(INJECT_CUSTOM_PARAM, Clzz);
 
@@ -96,8 +103,14 @@ export class MidwayDecoratorService {
                 // joinPoint.args
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
-                  const { propertyName, key, metadata, parameterIndex, impl } =
-                    meta;
+                  const {
+                    propertyName,
+                    key,
+                    metadata,
+                    parameterIndex,
+                    impl,
+                    options,
+                  } = meta;
                   if (!impl) {
                     continue;
                   }
@@ -110,6 +123,7 @@ export class MidwayDecoratorService {
                     );
                   }
                   const paramTypes = getMethodParamTypes(Clzz, propertyName);
+                  let skipPipes = false;
                   try {
                     newArgs[parameterIndex] = await parameterDecoratorHandler({
                       metadata,
@@ -120,9 +134,45 @@ export class MidwayDecoratorService {
                       originParamType: paramTypes[parameterIndex],
                     });
                   } catch (err) {
-                    // ignore
-                    debug(
-                      `[core]: Parameter decorator throw error and use origin args, ${err.stack}`
+                    skipPipes = true;
+                    if (options?.throwError === true) {
+                      throw err;
+                    } else {
+                      // ignore
+                      debug(
+                        `[core]: Parameter decorator throw error and use origin args, ${err.stack}`
+                      );
+                    }
+                  }
+
+                  if (skipPipes) {
+                    continue;
+                  }
+
+                  const pipes = [
+                    ...(this.parameterDecoratorPipes.get(key) || []),
+                    ...(options?.pipes || []),
+                  ];
+                  for (const pipe of pipes) {
+                    let transform;
+                    if ('transform' in pipe) {
+                      transform = pipe['transform'];
+                    } else if (typeof pipe === 'function') {
+                      transform = pipe;
+                    } else if (isClass(pipe)) {
+                      const ins =
+                        await this.applicationContext.getAsync<PipeTransform>(
+                          pipe as any
+                        );
+                      transform = ins.transform;
+                    } else {
+                      throw new MidwayParameterError(
+                        'Pipe must be a function or implement PipeTransform interface'
+                      );
+                    }
+                    newArgs[parameterIndex] = await transform(
+                      newArgs[parameterIndex],
+                      options
                     );
                   }
                 }
@@ -179,6 +229,16 @@ export class MidwayDecoratorService {
   ) {
     debug(`[core]: Register parameter decorator key="${decoratorKey}"`);
     this.parameterDecoratorMap.set(decoratorKey, fn);
+  }
+
+  public registerParameterPipes(
+    decoratorKey: string,
+    pipes: PipeUnionTransform[]
+  ) {
+    if (!this.parameterDecoratorPipes.has(decoratorKey)) {
+      this.parameterDecoratorPipes.set(decoratorKey, []);
+    }
+    this.parameterDecoratorPipes.get(decoratorKey).concat(pipes);
   }
 
   /**

@@ -5,6 +5,7 @@ import {
   InjectModeEnum,
   ObjectDefinitionOptions,
   ObjectIdentifier,
+  ParamDecoratorOptions,
   TagClsMetadata,
   TagPropsMetadata,
 } from './interface';
@@ -991,10 +992,10 @@ export function createCustomMethodDecorator(
 export function createCustomParamDecorator(
   decoratorKey: string,
   metadata: any,
-  impl = true
+  impl = true,
+  options: ParamDecoratorOptions = {}
 ): ParameterDecorator {
   return function (target: any, propertyName: string, parameterIndex: number) {
-    // const parameterName = getParamNames(target[methodName])[parameterIndex];
     attachClassMetadata(
       INJECT_CUSTOM_PARAM,
       {
@@ -1003,6 +1004,7 @@ export function createCustomParamDecorator(
         propertyName,
         metadata,
         impl,
+        options,
       },
       target,
       propertyName,

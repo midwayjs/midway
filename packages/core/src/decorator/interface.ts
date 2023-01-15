@@ -280,3 +280,10 @@ export interface PipeTransform<T = any, R = any> {
 }
 
 export type PipeTransformFunction<T = any, R = any> = (value: T) => R;
+
+export type PipeUnionTransform<T = any, R = any> = PipeTransform<T, R> | (new (...args) => PipeTransform<T, R>) | PipeTransformFunction<T, R>;
+
+export interface ParamDecoratorOptions {
+  throwError?: boolean;
+  pipes?: PipeUnionTransform<any, any>[];
+}
