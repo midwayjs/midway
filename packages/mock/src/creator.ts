@@ -20,7 +20,7 @@ import {
   getProviderUUId,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
-import { remove } from 'fs-extra';
+import { unlink } from 'fs/promises';
 import { clearAllLoggers } from '@midwayjs/logger';
 import { ComponentModule, MockAppConfigurationOptions } from './interface';
 import {
@@ -203,11 +203,11 @@ export async function close<T extends IMidwayApplication<any>>(
   if (isTestEnvironment()) {
     // clean first
     if (options.cleanLogsDir && !isWin32()) {
-      await remove(join(app.getAppDir(), 'logs'));
+      await unlink(join(app.getAppDir(), 'logs'));
     }
     if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
       if (options.cleanTempDir && !isWin32()) {
-        await remove(join(app.getAppDir(), 'run'));
+        await unlink(join(app.getAppDir(), 'run'));
       }
     }
     if (options.sleep > 0) {
@@ -249,15 +249,22 @@ export async function createFunctionApp<
     debug(`[mock]: Create app, appDir="${options.appDir}"`);
     process.env.MIDWAY_TS_MODE = 'true';
 
-    // 处理测试的 fixtures
-    if (!isAbsolute(options.appDir)) {
-      options.appDir = join(process.cwd(), 'test', 'fixtures', options.appDir);
-    }
+    if (options.appDir) {
+      // 处理测试的 fixtures
+      if (!isAbsolute(options.appDir)) {
+        options.appDir = join(
+          process.cwd(),
+          'test',
+          'fixtures',
+          options.appDir
+        );
+      }
 
-    if (!existsSync(options.appDir)) {
-      throw new MidwayCommonError(
-        `Path "${options.appDir}" not exists, please check it.`
-      );
+      if (!existsSync(options.appDir)) {
+        throw new MidwayCommonError(
+          `Path "${options.appDir}" not exists, please check it.`
+        );
+      }
     }
 
     clearAllLoggers();
