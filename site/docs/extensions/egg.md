@@ -375,7 +375,7 @@ export default {
 
 
 ## 定时任务
-v3 开始请参考 [task 组件](./extesion/task) 。
+v3 开始请参考 [bull 组件](./bull) 。
 
 如需兼容之前的 [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html) ，请照下列方法。
 

@@ -609,7 +609,11 @@ export class PhotoService {
 
   async updatePhoto() {
 
-    let photoToUpdate = await this.photoModel.findOne(1);
+    let photoToUpdate = await this.photoModel.findOne({
+      where: {
+        id: 1,
+      },
+    });
     photoToUpdate.name = "Me, my friends and polar bears";
 
     await this.photoModel.save(photoToUpdate);
@@ -635,11 +639,8 @@ export class PhotoService {
 
   async updatePhoto() {
     /*...*/
-    await this.photoModel.remove({
-      where: {
-        id: 1
-      }
-    });
+    await repository.photoModel(photo);
+		await repository.photoModel([photo1, photo2, photo3]);
   }
 }
 ```
@@ -648,11 +649,9 @@ Now, Photo with ID = 1 will be deleted from the database.
 
 There is also a soft deletion method.
 ```typescript
-await this.photoModel.softDelete({
-  where: {
-    id: 1
-  }
-});
+await this.photoModel.softDelete(1);
+// And You can restore it using restore;
+await this.photoModel.restore(1);
 ```
 
 
@@ -1230,6 +1229,12 @@ export default {
   },
 }
 ```
+
+
+
+## Repository API
+
+For more APIs, please check [official website documentation](https://github.com/typeorm/typeorm/blob/master/docs/repository-api.md).
 
 
 

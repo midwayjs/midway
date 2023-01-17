@@ -607,7 +607,11 @@ export class PhotoService {
 
   async updatePhoto() {
 
-    let photoToUpdate = await this.photoModel.findOne(1);
+    let photoToUpdate = await this.photoModel.findOne({
+      where: {
+        id: 1,
+      },
+    });
     photoToUpdate.name = "Me, my friends and polar bears";
 
     await this.photoModel.save(photoToUpdate);
@@ -633,11 +637,8 @@ export class PhotoService {
 
   async updatePhoto() {
     /*...*/
-    await this.photoModel.remove({
-      where: {
-        id: 1
-      }
-    });
+    await repository.photoModel(photo);
+		await repository.photoModel([photo1, photo2, photo3]);
   }
 }
 ```
@@ -646,11 +647,9 @@ export class PhotoService {
 
 此外还有软删除的方法。
 ```typescript
-await this.photoModel.softDelete({
-  where: {
-    id: 1
-  }
-});
+await this.photoModel.softDelete(1);
+// 使用 restore 方法恢复;
+await this.photoModel.restore(1);
 ```
 
 
@@ -1228,6 +1227,12 @@ export default {
   },
 }
 ```
+
+
+
+## Repository API
+
+更多 API 请查看 [官网文档](https://github.com/typeorm/typeorm/blob/master/docs/repository-api.md)。
 
 
 

@@ -374,8 +374,8 @@ Note that the type selection when using Postman for Post requests:
 
 
 
-## Timed task
-For more information about the start of v3, see [task components](./extesion/task).
+## Schedule
+For more information about the start of v3, see [bull components](./bull).
 
 To be compatible with the previous [egg scheduled tasks](https://eggjs.org/zh-cn/basics/schedule.html), follow the following steps.
 
