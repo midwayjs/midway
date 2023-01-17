@@ -20,13 +20,13 @@ import {
   getProviderUUId,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
-import { unlink } from 'fs/promises';
 import { clearAllLoggers } from '@midwayjs/logger';
 import { ComponentModule, MockAppConfigurationOptions } from './interface';
 import {
   findFirstExistModule,
   isTestEnvironment,
   isWin32,
+  removeFile,
   transformFrameworkToConfiguration,
 } from './utils';
 import { debuglog } from 'util';
@@ -203,11 +203,11 @@ export async function close<T extends IMidwayApplication<any>>(
   if (isTestEnvironment()) {
     // clean first
     if (options.cleanLogsDir && !isWin32()) {
-      await unlink(join(app.getAppDir(), 'logs'));
+      await removeFile(join(app.getAppDir(), 'logs'));
     }
     if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
       if (options.cleanTempDir && !isWin32()) {
-        await unlink(join(app.getAppDir(), 'run'));
+        await removeFile(join(app.getAppDir(), 'run'));
       }
     }
     if (options.sleep > 0) {

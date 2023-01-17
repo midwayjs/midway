@@ -7,6 +7,7 @@ import {
 import { ComponentModule } from './interface';
 import * as os from 'os';
 import * as assert from 'assert';
+import { access, unlink, constants } from 'fs/promises';
 
 export function isTestEnvironment() {
   const testEnv = ['test', 'unittest'];
@@ -76,4 +77,13 @@ export function transformFrameworkToConfiguration<
     Configuration: CustomConfiguration,
     Framework,
   };
+}
+
+export async function removeFile(file: string) {
+  try {
+    await access(file, constants.W_OK);
+    await unlink(file);
+  } catch {
+    // ignore
+  }
 }
