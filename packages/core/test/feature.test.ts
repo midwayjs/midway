@@ -31,4 +31,17 @@ describe('/test/feature.test.ts', () => {
       framework.getApplicationContext().get('controllerA')
     }).toThrowError(MidwayDefinitionNotFoundError);
   });
+
+  it('should test onStop sequence in lifecycle', async () => {
+    process.env.RUN_READY_FLAG = '';
+    process.env.RUN_STOP_FLAG = '';
+    const framework = await createLightFramework(join(
+      __dirname,
+      './fixtures/base-app-configuration-stop-reverse/src'
+    ));
+
+    expect(process.env.RUN_READY_FLAG).toEqual('b');
+    await framework.stop();
+    expect(process.env.RUN_STOP_FLAG).toEqual('a');
+  });
 });
