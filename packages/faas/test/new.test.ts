@@ -317,4 +317,25 @@ describe('test/new.test.ts', () => {
 
     await closeApp(starter);
   });
+
+  it('should test custom http response ', async () => {
+    const starter = await createNewStarter('base-app-custom-response');
+
+    const result = await starter.invokeTriggerFunction(
+      {
+        originContext: {},
+        originEvent: {}
+      },
+      'helloEventService.handler',
+      {
+        isHttpFunction: true,
+        isCustomHttpResponse: true,
+      });
+
+    expect(result).toEqual({
+      text: 'a',
+    });
+
+    await closeApp(starter);
+  });
 });
