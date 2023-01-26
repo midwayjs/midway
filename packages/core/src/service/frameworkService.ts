@@ -171,6 +171,7 @@ export class MidwayFrameworkService {
           // app init
           await frameworkInstance.initialize({
             applicationContext: this.applicationContext,
+            namespace: frameworkInstance.getNamespace(),
             ...this.globalOptions,
           });
 
@@ -186,6 +187,9 @@ export class MidwayFrameworkService {
         const definition = this.applicationContext.registry.getDefinition(
           getProviderUUId(frameworkClz)
         );
+        // set framework namespace here
+        frameworkInstance.setNamespace(definition?.namespace);
+        // link framework to application manager
         this.applicationManager.addFramework(
           definition?.namespace ?? frameworkInstance.getFrameworkName(),
           frameworkInstance

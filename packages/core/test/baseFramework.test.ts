@@ -35,6 +35,14 @@ describe('/test/baseFramework.test.ts', () => {
     appCtx.bind(TestModule);
     const module: any = await appCtx.getAsync('testModule');
     assert(module.test() === 'hello');
+
+    // test namespace
+    const ns = framework.getNamespace();
+    expect(ns).toEqual('empty');
+
+    // set namespace
+    framework.setNamespace('test');
+    expect(framework.getNamespace()).toEqual('test');
   });
 
   it('should load configuration', async () => {

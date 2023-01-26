@@ -613,6 +613,11 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
    * @param guard
    */
   useGuard(guard: CommonGuardUnion<CTX>): void;
+
+  /**
+   * get current namespace
+   */
+  getNamespace(): string;
 }
 
 export type IMidwayApplication<
@@ -681,6 +686,8 @@ export interface IMidwayFramework<
   useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>): void;
   useGuard(guard: CommonGuardUnion<CTX>): void;
   runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean>;
+  getNamespace(): string;
+  setNamespace(namespace: string): void;
 }
 
 export interface MidwayAppInfo {

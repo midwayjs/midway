@@ -134,4 +134,11 @@ export class CustomThirdFramework implements IMidwayFramework<any, any, any, any
   stop(): Promise<void> {
     return Promise.resolve(undefined);
   }
+
+  getNamespace(): string {
+    return '';
+  }
+
+  setNamespace(namespace: string): void {
+  }
 }
