@@ -40,7 +40,6 @@
     "@midwayjs/async-hooks-context-manager": "^3.9.0",
     "@types/superagent": "4.1.14",
     "@types/supertest": "2.0.12",
-    "fs-extra": "10.1.0",
     "js-yaml": "4.1.0",
     "raw-body": "2.5.1",
     "supertest": "6.3.3"

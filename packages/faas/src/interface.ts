@@ -34,13 +34,15 @@ export type IMidwayFaaSApplication = IMidwayApplication<
   Context,
   {
     getInitializeContext();
+    /**
+     * @deprecated use useMiddleware instead
+     */
     use(middleware: FaaSMiddleware);
     /**
      * @deprecated
      * @param middlewareId
      */
     generateMiddleware(middlewareId: any): Promise<FaaSMiddleware>;
-
     /**
      * Get function name in serverless environment
      */
@@ -65,7 +67,7 @@ export type IMidwayFaaSApplication = IMidwayApplication<
     ): Promise<any>;
     getServerlessInstance<T>(
       serviceClass: ObjectIdentifier | { new (...args): T },
-      customContext?: any
+      customContext?: Record<string, any>
     ): Promise<T>;
   }
 > &

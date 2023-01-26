@@ -35,6 +35,12 @@ export abstract class AbstractBootstrapStarter {
     this.framework = midwayFrameworkService.getMainFramework();
   }
 
+  protected createDefaultMockHttpEvent() {}
+
+  protected createDefaultMockEvent() {}
+
+  protected createDefaultMockContext() {}
+
   abstract onStart(): any;
   abstract onInit(...args: unknown[]);
   abstract onRequest(...args: unknown[]);

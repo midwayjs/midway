@@ -16,15 +16,17 @@ import {
   CONFIGURATION_KEY,
   Framework,
   sleep,
+  ObjectIdentifier,
+  getProviderUUId,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
-import { remove } from 'fs-extra';
 import { clearAllLoggers } from '@midwayjs/logger';
 import { ComponentModule, MockAppConfigurationOptions } from './interface';
 import {
   findFirstExistModule,
   isTestEnvironment,
   isWin32,
+  removeFile,
   transformFrameworkToConfiguration,
 } from './utils';
 import { debuglog } from 'util';
@@ -201,11 +203,11 @@ export async function close<T extends IMidwayApplication<any>>(
   if (isTestEnvironment()) {
     // clean first
     if (options.cleanLogsDir && !isWin32()) {
-      await remove(join(app.getAppDir(), 'logs'));
+      await removeFile(join(app.getAppDir(), 'logs'));
     }
     if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
       if (options.cleanTempDir && !isWin32()) {
-        await remove(join(app.getAppDir(), 'run'));
+        await removeFile(join(app.getAppDir(), 'run'));
       }
     }
     if (options.sleep > 0) {
@@ -247,15 +249,22 @@ export async function createFunctionApp<
     debug(`[mock]: Create app, appDir="${options.appDir}"`);
     process.env.MIDWAY_TS_MODE = 'true';
 
-    // 处理测试的 fixtures
-    if (!isAbsolute(options.appDir)) {
-      options.appDir = join(process.cwd(), 'test', 'fixtures', options.appDir);
-    }
+    if (options.appDir) {
+      // 处理测试的 fixtures
+      if (!isAbsolute(options.appDir)) {
+        options.appDir = join(
+          process.cwd(),
+          'test',
+          'fixtures',
+          options.appDir
+        );
+      }
 
-    if (!existsSync(options.appDir)) {
-      throw new MidwayCommonError(
-        `Path "${options.appDir}" not exists, please check it.`
-      );
+      if (!existsSync(options.appDir)) {
+        throw new MidwayCommonError(
+          `Path "${options.appDir}" not exists, please check it.`
+        );
+      }
     }
 
     clearAllLoggers();
@@ -302,6 +311,14 @@ export async function createFunctionApp<
             limit: '10mb',
           });
         }
+
+        req.getOriginEvent = () => {
+          return options.starter?.createDefaultMockHttpEvent() || {};
+        };
+        req.getOriginContext = () => {
+          return options.starter?.createDefaultMockContext() || {};
+        };
+
         const ctx = await framework.wrapHttpRequest(req);
 
         // create event and invoke
@@ -327,6 +344,59 @@ export async function createFunctionApp<
         // http trigger only support `Buffer` or a `string` or a `stream.Readable`
         res.end(body);
       };
+    };
+
+    app.getServerlessInstance = async (
+      serviceClass:
+        | ObjectIdentifier
+        | {
+            new (...args): T;
+          },
+      customContext = {}
+    ) => {
+      const instance = new Proxy(
+        {},
+        {
+          get: (target, prop) => {
+            let funcInfo;
+            if (typeof serviceClass === 'string') {
+              funcInfo = framework['funMappingStore'].get(
+                `${serviceClass}.${prop as string}`
+              );
+            } else {
+              funcInfo = Array.from(framework['funMappingStore'].values()).find(
+                (item: any) => {
+                  return (
+                    item.id === getProviderUUId(serviceClass) &&
+                    item.method === prop
+                  );
+                }
+              );
+            }
+
+            if (funcInfo) {
+              return async (...args) => {
+                const context = app.createAnonymousContext({
+                  originContext:
+                    customContext ??
+                    options.starter?.createDefaultMockContext() ??
+                    {},
+                  originEvent:
+                    args[0] ?? options.starter?.createDefaultMockEvent() ?? {},
+                });
+                return framework.invokeTriggerFunction(
+                  context,
+                  funcInfo.funcHandlerName,
+                  {
+                    isHttpFunction: false,
+                  }
+                );
+              };
+            }
+          },
+        }
+      ) as T;
+      return instance;
     };
 
     if (customPort) {

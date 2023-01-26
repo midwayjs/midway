@@ -54,7 +54,10 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
     return exports;
   }
 
-  async onInit(context: FC.InitializeContext = mockContext(), exports) {
+  async onInit(
+    context: FC.InitializeContext = this.createDefaultMockContext(),
+    exports
+  ) {
     const applicationAdapter = {
       getFunctionName() {
         return context.function.name;
@@ -239,4 +242,8 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
   }
 
   async onClose() {}
+
+  protected createDefaultMockContext() {
+    return mockContext();
+  }
 }
