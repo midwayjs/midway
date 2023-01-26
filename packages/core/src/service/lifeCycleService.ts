@@ -28,7 +28,11 @@ export class MidwayLifeCycleService {
   @Init()
   protected async init() {
     // run lifecycle
-    const cycles = listModule(CONFIGURATION_KEY);
+    const cycles = listModule(CONFIGURATION_KEY) as Array<{
+      target: any;
+      namespace: string;
+      instance?: any;
+    }>;
 
     debug(`[core]: Found Configuration length = ${cycles.length}`);
 
@@ -39,7 +43,7 @@ export class MidwayLifeCycleService {
         cycle.instance = cycle.target;
       } else {
         // 普通类写法
-        debug(`[core]: Lifecycle run ${cycle.target.name} init`);
+        debug(`[core]: Lifecycle run ${cycle.namespace} init`);
         cycle.instance = await this.applicationContext.getAsync<ILifeCycle>(
           cycle.target
         );
