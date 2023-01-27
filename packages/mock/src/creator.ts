@@ -295,56 +295,61 @@ export async function createFunctionApp<
     const customPort =
       process.env.MIDWAY_HTTP_PORT ?? faasConfig['port'] ?? options['port'];
 
-    app.callback2 = () => {
-      // mock a real http server response for local dev
-      return async (req, res) => {
-        const url = new URL(req.url, `http://${req.headers.host}`);
-        req.query = Object.fromEntries(url.searchParams);
-        req.path = url.pathname;
-        // 如果需要解析body并且body是个stream，函数网关不会接受比 10m 更大的文件了
-        if (
-          ['post', 'put', 'delete'].indexOf(req.method.toLowerCase()) !== -1 &&
-          !(req as any).body &&
-          typeof req.on === 'function'
-        ) {
-          (req as any).body = await getRawBody(req, {
-            limit: '10mb',
-          });
-        }
-
-        req.getOriginEvent = () => {
-          return options.starter?.createDefaultMockHttpEvent() || {};
-        };
-        req.getOriginContext = () => {
-          return options.starter?.createDefaultMockContext() || {};
-        };
-
-        const ctx = await framework.wrapHttpRequest(req);
-
-        // create event and invoke
-        const result = await framework.invokeTriggerFunction(
-          ctx,
-          url.pathname,
-          {
-            isHttpFunction: true,
+    if (options.starter.callback2) {
+      app.callback2 = options.starter.callback2;
+    } else {
+      app.callback2 = () => {
+        // mock a real http server response for local dev
+        return async (req, res) => {
+          const url = new URL(req.url, `http://${req.headers.host}`);
+          req.query = Object.fromEntries(url.searchParams);
+          req.path = url.pathname;
+          // 如果需要解析body并且body是个stream，函数网关不会接受比 10m 更大的文件了
+          if (
+            ['post', 'put', 'delete'].indexOf(req.method.toLowerCase()) !==
+              -1 &&
+            !(req as any).body &&
+            typeof req.on === 'function'
+          ) {
+            (req as any).body = await getRawBody(req, {
+              limit: '10mb',
+            });
           }
-        );
-        const { statusCode, headers, body } = result as any;
-        if (res.headersSent) {
-          return;
-        }
 
-        for (const key in headers) {
-          res.setHeader(key, headers[key]);
-        }
-        if (res.statusCode !== statusCode) {
-          res.statusCode = statusCode;
-        }
+          req.getOriginEvent = () => {
+            return options.starter?.createDefaultMockHttpEvent() || {};
+          };
+          req.getOriginContext = () => {
+            return options.starter?.createDefaultMockContext() || {};
+          };
 
-        // http trigger only support `Buffer` or a `string` or a `stream.Readable`
-        res.end(body);
+          const ctx = await framework.wrapHttpRequest(req);
+
+          // create event and invoke
+          const result = await framework.invokeTriggerFunction(
+            ctx,
+            url.pathname,
+            {
+              isHttpFunction: true,
+            }
+          );
+          const { statusCode, headers, body } = result as any;
+          if (res.headersSent) {
+            return;
+          }
+
+          for (const key in headers) {
+            res.setHeader(key, headers[key]);
+          }
+          if (res.statusCode !== statusCode) {
+            res.statusCode = statusCode;
+          }
+
+          // http trigger only support `Buffer` or a `string` or a `stream.Readable`
+          res.end(body);
+        };
       };
-    };
+    }
 
     app.getServerlessInstance = async (
       serviceClass:

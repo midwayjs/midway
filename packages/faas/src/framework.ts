@@ -4,6 +4,7 @@ import {
   Application,
   NextFunction,
   HandlerOptions,
+  HttpResponseFormat,
 } from './interface';
 import {
   BaseFramework,
@@ -344,63 +345,70 @@ export class MidwayFaaSFramework extends BaseFramework<
     )(context);
 
     if (isHttpFunction) {
-      if (!context.response?._explicitStatus) {
-        if (context.body === null || context.body === 'undefined') {
-          context.body = '';
-          context.type = 'text';
-          context.status = 204;
-        }
-      }
-
-      let encoded = false;
-
-      const data = context.body;
-      if (typeof data === 'string') {
-        if (!context.type) {
-          context.type = 'text/plain';
-        }
-        context.body = data;
-      } else if (isAnyArrayBuffer(data) || isUint8Array(data)) {
-        encoded = true;
-        if (!context.type) {
-          context.type = 'application/octet-stream';
-        }
-
-        // data is reserved as buffer
-        context.body = Buffer.from(data).toString('base64');
-      } else if (typeof data === 'object') {
-        if (!context.type) {
-          context.type = 'application/json';
-        }
-        // set data to string
-        context.body = JSON.stringify(data);
+      if (options.isCustomHttpResponse) {
+        return context.body;
       } else {
-        if (!context.type) {
-          context.type = 'text/plain';
-        }
-        // set data to string
-        context.body = data + '';
+        return this.formatHttpResponse(context);
       }
-
-      // middleware return value and will be got 204 status
-      if (
-        context.body === undefined &&
-        !context.response._explicitStatus &&
-        context._matchedRoute
-      ) {
-        // 如果进了路由，重新赋值，防止 404
-        context.body = undefined;
-      }
-
-      return {
-        isBase64Encoded: encoded,
-        statusCode: context.status,
-        headers: context.res.headers,
-        body: context.body,
-      };
     } else {
       return result;
     }
+  }
+
+  public formatHttpResponse(context): HttpResponseFormat {
+    if (!context.response?._explicitStatus) {
+      if (context.body === null || context.body === 'undefined') {
+        context.body = '';
+        context.type = 'text';
+        context.status = 204;
+      }
+    }
+    let encoded = false;
+
+    const data = context.body;
+    if (typeof data === 'string') {
+      if (!context.type) {
+        context.type = 'text/plain';
+      }
+      context.body = data;
+    } else if (isAnyArrayBuffer(data) || isUint8Array(data)) {
+      encoded = true;
+      if (!context.type) {
+        context.type = 'application/octet-stream';
+      }
+
+      // data is reserved as buffer
+      context.body = Buffer.from(data).toString('base64');
+    } else if (typeof data === 'object') {
+      if (!context.type) {
+        context.type = 'application/json';
+      }
+      // set data to string
+      context.body = JSON.stringify(data);
+    } else {
+      if (!context.type) {
+        context.type = 'text/plain';
+      }
+      // set data to string
+      context.body = data + '';
+    }
+
+    // middleware return value and will be got 204 status
+    if (
+      context.body === undefined &&
+      !context.response._explicitStatus &&
+      context._matchedRoute
+    ) {
+      // 如果进了路由，重新赋值，防止 404
+      context.body = undefined;
+    }
+
+    return {
+      isBase64Encoded: encoded,
+      statusCode: context.status,
+      headers: context.res.headers,
+      body: context.body,
+    };
   }
 
   public async wrapHttpRequest(

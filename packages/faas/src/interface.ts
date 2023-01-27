@@ -27,7 +27,8 @@ export type FaaSMiddleware =
   | string;
 
 export interface HandlerOptions {
-  isHttpFunction: boolean;
+  isHttpFunction?: boolean;
+  isCustomHttpResponse?: boolean;
 }
 
 export type IMidwayFaaSApplication = IMidwayApplication<
@@ -116,4 +117,11 @@ export interface ServerlessStarterOptions extends IMidwayBootstrapOptions {
     mark(label: string);
     end();
   };
+}
+
+export interface HttpResponseFormat<T = unknown> {
+  isBase64Encoded: boolean;
+  statusCode: number;
+  headers: Record<string, string>;
+  body: T;
 }
