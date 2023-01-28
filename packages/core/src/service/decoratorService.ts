@@ -88,7 +88,6 @@ export class MidwayDecoratorService {
           parameterIndex: number;
           propertyName: string;
           metadata: any;
-          impl: boolean;
           options: ParamDecoratorOptions;
         }>;
       } = getClassMetadata(INJECT_CUSTOM_PARAM, Clzz);
@@ -108,10 +107,9 @@ export class MidwayDecoratorService {
                     key,
                     metadata,
                     parameterIndex,
-                    impl,
                     options,
                   } = meta;
-                  if (!impl) {
+                  if (!options.impl) {
                     continue;
                   }
 
@@ -157,14 +155,14 @@ export class MidwayDecoratorService {
                     let transform;
                     if ('transform' in pipe) {
                       transform = pipe['transform'];
-                    } else if (typeof pipe === 'function') {
-                      transform = pipe;
                     } else if (isClass(pipe)) {
                       const ins =
                         await this.applicationContext.getAsync<PipeTransform>(
                           pipe as any
                         );
-                      transform = ins.transform;
+                      transform = ins.transform.bind(ins);
+                    } else if (typeof pipe === 'function') {
+                      transform = pipe;
                     } else {
                       throw new MidwayParameterError(
                         'Pipe must be a function or implement PipeTransform interface'
@@ -238,7 +236,10 @@ export class MidwayDecoratorService {
     if (!this.parameterDecoratorPipes.has(decoratorKey)) {
       this.parameterDecoratorPipes.set(decoratorKey, []);
     }
-    this.parameterDecoratorPipes.get(decoratorKey).concat(pipes);
+    this.parameterDecoratorPipes.set(
+      decoratorKey,
+      this.parameterDecoratorPipes.get(decoratorKey).concat(pipes)
+    );
   }
 
   /**

@@ -1,6 +1,7 @@
 import { DataSourceManager } from '../../src';
 import { globModels, formatGlobString } from '../../src/common/dataSourceManager';
 import { join } from 'path';
+import * as assert from 'assert';
 
 describe('test/common/dataSourceManager.test.ts', () => {
 
@@ -288,4 +289,168 @@ describe('test global pattern', () => {
       '**/**/entity/*.entity.{j,t}s'
     ]);
   });
-})
+});
+
+describe('test validate connection and checked it', () => {
+
+  const fakePort = 54321;
+
+  class MockClient {
+
+    constructor(protected config) {
+    }
+
+    connect() {
+      return true;
+    }
+
+    async query() {
+      if (this.config.port !== fakePort) {
+        return {
+          rows: [
+            {
+              time: Date.now(),
+            }
+          ]
+        };
+      }
+      throw new Error(`connect ECONNREFUSED ${this.config.host || '127.0.0.1'}:${this.config.port}`);
+    }
+
+    end() {
+    }
+  }
+
+  class CustomDataSourceFactory extends DataSourceManager<any> {
+    getName() {
+      return 'test';
+    }
+
+    async init(options) {
+      return super.initDataSource(options, __dirname);
+    }
+
+    protected async createDataSource(config, dataSourceName: string): Promise<any> {
+      assert(config);
+      config.entitiesLength = 0;
+      // to skip real connection action
+      if (config.port === fakePort) {
+        return config;
+      }
+      const client = new MockClient(config);
+      await client.connect();
+      return client;
+    }
+
+    protected async checkConnected(dataSource: any): Promise<boolean> {
+      if (!dataSource || typeof dataSource.query !== 'function') {
+        return false;
+      }
+      const ret = await dataSource.query('SELECT CURRENT_TIMESTAMP as time').then(res => res?.rows[0]);
+      console.log({ret});
+      return ret && ret.time ? true : false;
+    }
+
+    protected async destroyDataSource(dataSource: any): Promise<void> {
+      return dataSource.end();
+    }
+  }
+
+  const clientName = 'test';
+  const configDefault = {
+    host: '127.0.0.1',
+    port: 5432,
+    user: 'postgres',
+    password: 'postgres',
+    database: 'db_ci_test',
+  };
+
+  describe('should DataSourceInitOptions.validateConnection work', () => {
+    it('default (false)', async () => {
+      const instance = new CustomDataSourceFactory();
+      expect(instance.getName()).toEqual('test');
+
+      const config = {
+        ...configDefault,
+      };
+
+      await instance.createInstance(config, clientName);
+      expect(instance.getDataSourceNames()).toEqual([clientName]);
+    });
+
+    it('false', async () => {
+      const instance = new CustomDataSourceFactory();
+      expect(instance.getName()).toEqual('test');
+
+      const config = {
+        ...configDefault,
+      };
+
+      await instance.createInstance(config, clientName, {validateConnection: false});
+      expect(instance.getDataSourceNames()).toEqual([clientName]);
+    });
+
+    it('true', async () => {
+      const instance = new CustomDataSourceFactory();
+      expect(instance.getName()).toEqual('test');
+
+      const config = {
+        ...configDefault,
+      };
+
+      await instance.createInstance(config, clientName, {validateConnection: true});
+      expect(instance.getDataSourceNames()).toEqual([clientName]);
+    });
+  });
+
+
+  describe('should DataSourceInitOptions.validateConnection work with wrong connection config', () => {
+    it('default (false)', async () => {
+      const instance = new CustomDataSourceFactory();
+      expect(instance.getName()).toEqual('test');
+
+      const clientName = 'test';
+      const config = {
+        ...configDefault,
+        port: fakePort
+      };
+
+      await instance.createInstance(config, clientName);
+      expect(instance.getDataSourceNames()).toEqual([clientName]);
+    });
+
+    it('false', async () => {
+      const instance = new CustomDataSourceFactory();
+      expect(instance.getName()).toEqual('test');
+
+      const config = {
+        ...configDefault,
+        port: fakePort
+      };
+
+      await instance.createInstance(config, clientName, {validateConnection: false});
+      expect(instance.getDataSourceNames()).toEqual([clientName]);
+    });
+
+    it('true', async () => {
+      const instance = new CustomDataSourceFactory();
+      expect(instance.getName()).toEqual('test');
+
+      const config = {
+        ...configDefault,
+        port: fakePort
+      };
+
+      try {
+        await instance.createInstance(config, clientName, {validateConnection: true});
+      } catch (ex) {
+        assert(ex instanceof Error);
+        assert(ex.message.includes(clientName));
+        assert(ex.message.includes('not connected'));
+        return;
+      }
+      assert(false, 'should throw error but not');
+    });
+  });
+
+});

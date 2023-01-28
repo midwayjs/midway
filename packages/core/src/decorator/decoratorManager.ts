@@ -987,14 +987,19 @@ export function createCustomMethodDecorator(
  *
  * @param decoratorKey
  * @param metadata
- * @param impl default true, configuration need decoratorService.registerMethodHandler
+ * @param options
  */
 export function createCustomParamDecorator(
   decoratorKey: string,
   metadata: any,
-  impl = true,
-  options: ParamDecoratorOptions = {}
+  implOrOptions: boolean | ParamDecoratorOptions = { impl: true }
 ): ParameterDecorator {
+  if (typeof implOrOptions === 'boolean') {
+    implOrOptions = { impl: implOrOptions } as ParamDecoratorOptions;
+  }
+  if (implOrOptions.impl === undefined) {
+    implOrOptions.impl = true;
+  }
   return function (target: any, propertyName: string, parameterIndex: number) {
     attachClassMetadata(
       INJECT_CUSTOM_PARAM,
@@ -1003,8 +1008,7 @@ export function createCustomParamDecorator(
         parameterIndex,
         propertyName,
         metadata,
-        impl,
-        options,
+        options: implOrOptions,
       },
       target,
       propertyName,
