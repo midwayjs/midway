@@ -88,11 +88,7 @@ abstract class ParsePipe extends AbstractValidationPipe {
 }
 
 @Pipe()
-export class DefaultValidPipe extends ParsePipe {
-  getSchema(): Joi.AnySchema<any> {
-    return Joi.any().required();
-  }
-}
+export class DefaultValidPipe extends ParsePipe {}
 
 @Pipe()
 export class ParseIntPipe extends ParsePipe {

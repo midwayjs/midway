@@ -7,14 +7,14 @@ import {
   Valid,
   ParseIntPipe,
   ParseFloatPipe,
-  ParseBoolPipe
+  ParseBoolPipe, DefaultValuePipe, DefaultValidPipe, AbstractValidationPipe, ValidateService
 } from '../src';
 import { createLightApp, close } from '@midwayjs/mock';
 import * as Joi from 'joi';
 import * as valid from '../src';
 
 import * as assert from 'assert';
-import { createCustomParamDecorator, Provide } from '@midwayjs/core';
+import { createCustomParamDecorator, Provide, TransformOptions } from '@midwayjs/core';
 describe('/test/check.test.ts', () => {
   it('check with check', async () => {
     const app = await createLightApp('', {
@@ -480,6 +480,120 @@ describe('/test/check.test.ts', () => {
   });
 
   describe('test pipe', () => {
+    it('should test getSchema', function () {
+      const pipe = new DefaultValidPipe();
+      expect(pipe['getSchema']()).toBeUndefined();
+    });
+
+    it('should test AbstractValidationPipe', async () => {
+
+      class UserDTO {
+        @Rule(RuleType.number().max(10))
+        age: number;
+      }
+
+      const validateService = new ValidateService();
+      validateService['i18nService'] = {
+        getAvailableLocale() {
+          return 'en-US';
+        }
+      } as any;
+
+      validateService['i18nConfig'] = {
+        defaultLocale: 'en-US'
+      }
+
+      validateService['validateConfig'] = {};
+      class CustomValidationPipe extends AbstractValidationPipe {
+        transform(value: any, options: TransformOptions) {}
+      }
+
+      const pipe = new CustomValidationPipe();
+      pipe['validateService'] = validateService;
+
+      // number
+      let result = pipe.validate(1, {
+        metaType: {
+          isBaseType: true,
+          originDesign: Number,
+          name: 'number',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual(1);
+
+      // string
+      result = pipe.validate('bbb', {
+        metaType: {
+          isBaseType: true,
+          originDesign: String,
+          name: 'string',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual('bbb');
+
+      // boolean
+      result = pipe.validate(true, {
+        metaType: {
+          isBaseType: true,
+          originDesign: Boolean,
+          name: 'boolean',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual(true);
+
+      // object
+      result = pipe.validate({data: 1}, {
+        metaType: {
+          isBaseType: false,
+          originDesign: Object,
+          name: 'object',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual({data: 1});
+
+      // DTO
+      result = pipe.validate({age: '10'}, {
+        metaType: {
+          isBaseType: false,
+          originDesign: UserDTO,
+          name: 'UserDTO',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual({age: 10});
+
+      result = pipe.validateWithSchema(1, {
+        metaType: {
+          isBaseType: true,
+          originDesign: Number,
+          name: 'number',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      }, undefined);
+
+      expect(result).toEqual(1);
+    });
 
     it('should test ParseIntPipe', async () => {
 
@@ -573,7 +687,6 @@ describe('/test/check.test.ts', () => {
     });
 
     it('should test ParseBoolPipe', async () => {
-
       function TestPipe(pipe: any) {
         return createCustomParamDecorator('testPipe', '', {
           impl: false,
@@ -625,6 +738,32 @@ describe('/test/check.test.ts', () => {
 
       expect(error.message).toMatch("\"value\" must be a boolean");
 
+      await close(app);
+    });
+
+    it('should test DefaultValuePipe', async () => {
+      function TestPipe(pipe: any) {
+        return createCustomParamDecorator('testPipe', '', {
+          impl: false,
+          pipes: [pipe]
+        });
+      }
+
+      const app = await createLightApp('', {
+        imports: [valid]
+      });
+
+      @Provide()
+      class Hello {
+        async test(@TestPipe(new DefaultValuePipe('bbb')) data?: string, @TestPipe(new DefaultValuePipe('bbb')) data1?: string) {
+          return data + data1;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      expect(await hello.test('ppp')).toEqual('pppbbb');
       await close(app);
     });
   });

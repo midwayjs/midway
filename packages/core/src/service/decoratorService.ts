@@ -165,7 +165,7 @@ export class MidwayDecoratorService {
                   for (const pipe of pipes) {
                     let transform;
                     if ('transform' in pipe) {
-                      transform = pipe['transform'];
+                      transform = pipe['transform'].bind(pipe);
                     } else if (isClass(pipe)) {
                       const ins =
                         await this.applicationContext.getAsync<PipeTransform>(
