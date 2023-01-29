@@ -1,4 +1,5 @@
-import { Scope, Provide, ScopeEnum } from '../';
+import { Scope, Provide } from '../';
+import { ScopeEnum } from '../../interface';
 
 export function Middleware(): ClassDecorator {
   return (target: any) => {

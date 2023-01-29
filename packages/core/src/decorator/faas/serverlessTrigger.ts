@@ -1,12 +1,11 @@
 import {
   attachClassMetadata,
   savePropertyMetadata,
-  FaaSMetadata,
   FUNC_KEY,
   SERVERLESS_FUNC_KEY,
   saveModule,
-  ServerlessTriggerType,
 } from '../';
+import { FaaSMetadata, ServerlessTriggerType } from '../../interface';
 
 export function ServerlessFunction(
   options: FaaSMetadata.ServerlessFunctionOptions

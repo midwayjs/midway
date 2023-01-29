@@ -5,14 +5,13 @@
  * @param routerResponseData
  */
 import {
-  MidwayFrameworkType,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
 } from '../decorator';
 import * as util from 'util';
-import { IMidwayApplication } from '../interface';
+import { IMidwayApplication, MidwayFrameworkType } from '../interface';
 import {
   MidwayWebRouterService,
   RouterInfo,

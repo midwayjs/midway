@@ -1,36 +1,22 @@
 import {
   Configuration,
   Inject,
-  getMethodParamTypes,
-  JoinPoint,
   MidwayDecoratorService,
-  REQUEST_OBJ_CTX_KEY,
-  Pipe,
   WEB_ROUTER_PARAM_KEY,
   IMidwayContainer,
-  PipeTransform,
+  Init,
 } from '@midwayjs/core';
-import { VALIDATE_KEY } from './constants';
 import * as DefaultConfig from './config/config.default';
 import { ValidateService } from './service';
 import * as i18n from '@midwayjs/i18n';
-import * as Joi from 'joi';
-
-@Pipe()
-export class ValidationPipe implements PipeTransform {
-  @Inject()
-  protected validateService: ValidateService;
-  transform(value: any) {
-    const result = this.validateService.validateWithSchema(
-      Joi.string().required(),
-      value
-    );
-    if (result && result.value) {
-      return result.value;
-    }
-    return value;
-  }
-}
+import {
+  DefaultValidPipe,
+  ParseBoolPipe,
+  ParseFloatPipe,
+  ParseIntPipe,
+  ValidationPipe,
+} from './pipe';
+import { VALID_KEY } from './constants';
 
 @Configuration({
   namespace: 'validate',
@@ -48,41 +34,35 @@ export class ValidateConfiguration {
   @Inject()
   validateService: ValidateService;
 
+  @Init()
+  async init() {
+    this.decoratorService.registerParameterHandler(
+      VALID_KEY,
+      ({ parameterIndex, originParamType, originArgs, metadata }) => {
+        if (!metadata.schema) {
+          metadata.schema = this.validateService.getSchema(originParamType);
+        }
+        return originArgs[parameterIndex];
+      }
+    );
+  }
+
   async onReady(container: IMidwayContainer) {
     await container.getAsync(ValidationPipe);
+    await container.getAsync(ParseIntPipe);
+    await container.getAsync(ParseBoolPipe);
+    await container.getAsync(ParseFloatPipe);
+    await container.getAsync(DefaultValidPipe);
 
-    this.decoratorService.registerMethodHandler(VALIDATE_KEY, options => {
-      // get param types from method
-      const paramTypes = getMethodParamTypes(
-        options.target,
-        options.propertyName
-      );
-
-      const validateOptions = options.metadata?.options;
-
-      // add aspect method
-      return {
-        before: (joinPoint: JoinPoint) => {
-          for (let i = 0; i < paramTypes.length; i++) {
-            if (!validateOptions.locale) {
-              const maybeCtx = joinPoint.target[REQUEST_OBJ_CTX_KEY];
-              if (maybeCtx && maybeCtx.getAttr) {
-                validateOptions.locale = maybeCtx.getAttr(i18n.I18N_ATTR_KEY);
-              }
-            }
-            const item = paramTypes[i];
-            const result = this.validateService.validate(
-              item,
-              joinPoint.args[i],
-              validateOptions
-            );
-            if (result && result.value) {
-              joinPoint.args[i] = result.value;
-            }
-          }
-        },
-      };
-    });
+    this.decoratorService.registerParameterHandler(
+      VALID_KEY,
+      ({ parameterIndex, originParamType, originArgs, metadata }) => {
+        if (!metadata.schema) {
+          metadata.schema = this.validateService.getSchema(originParamType);
+        }
+        return originArgs[parameterIndex];
+      }
+    );
 
     // register web param default pipe
     this.decoratorService.registerParameterPipes(WEB_ROUTER_PARAM_KEY, [

@@ -8,6 +8,9 @@ import {
   IManagedResolverFactoryCreateOptions,
   IMidwayContainer,
   ObjectLifeCycleEvent,
+  IManagedInstance,
+  InjectModeEnum,
+  ObjectIdentifier,
 } from '../interface';
 
 import * as util from 'util';
@@ -20,11 +23,6 @@ import {
   MidwaySingletonInjectRequestError,
   MidwayInconsistentVersionError,
 } from '../error';
-import {
-  IManagedInstance,
-  InjectModeEnum,
-  ObjectIdentifier,
-} from '../decorator';
 
 const debug = util.debuglog('midway:managedresolver');
 const debugLog = util.debuglog('midway:debug');

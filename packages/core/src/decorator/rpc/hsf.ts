@@ -1,11 +1,5 @@
-import {
-  ScopeEnum,
-  saveClassMetadata,
-  saveModule,
-  HSF_KEY,
-  Provide,
-  Scope,
-} from '../';
+import { saveClassMetadata, saveModule, HSF_KEY, Provide, Scope } from '../';
+import { ScopeEnum } from '../../interface';
 
 export interface HSFOpts {
   interfaceName?: string;
@@ -15,6 +9,7 @@ export interface HSFOpts {
 }
 
 /**
+ * @Deprecated
  * @param hsfOption
  * @constructor
  */

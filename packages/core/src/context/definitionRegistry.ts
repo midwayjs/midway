@@ -1,16 +1,12 @@
 /**
  * Object Definition Registry 实现
  */
-import {
-  getProviderId,
-  getProviderName,
-  getProviderUUId,
-  ObjectIdentifier,
-} from '../decorator';
+import { getProviderId, getProviderName, getProviderUUId } from '../decorator';
 import {
   IIdentifierRelationShip,
   IObjectDefinition,
   IObjectDefinitionRegistry,
+  ObjectIdentifier,
 } from '../interface';
 
 const PREFIX = '_id_default_';

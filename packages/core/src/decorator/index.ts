@@ -1,5 +1,3 @@
-export * from './interface';
-
 // common
 export * from './common/provide';
 export * from './common/inject';

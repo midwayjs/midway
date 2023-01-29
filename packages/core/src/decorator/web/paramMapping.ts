@@ -1,9 +1,5 @@
-import {
-  createCustomParamDecorator,
-  PipeUnionTransform,
-  WEB_ROUTER_PARAM_KEY,
-} from '../';
-import { IMidwayContext } from '../../interface';
+import { createCustomParamDecorator, WEB_ROUTER_PARAM_KEY } from '../';
+import { IMidwayContext, PipeUnionTransform } from '../../interface';
 
 export enum RouteParamTypes {
   QUERY,

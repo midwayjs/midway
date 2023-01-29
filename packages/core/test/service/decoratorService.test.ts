@@ -357,7 +357,7 @@ describe('/test/service/decoratorService.test.ts', () => {
       class TestPipe implements PipeTransform {
         private prefix = 'midway ';
 
-        transform(value: string) {
+        transform(value: string, options) {
           return this.prefix + value + ' pipe';
         }
       }

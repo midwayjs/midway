@@ -7,18 +7,20 @@ import {
   INJECT_CUSTOM_METHOD,
   APPLICATION_CONTEXT_KEY,
   INJECT_CUSTOM_PARAM,
-  JoinPoint,
   getMethodParamTypes,
-  ScopeEnum,
-  ParamDecoratorOptions,
-  PipeUnionTransform,
-  PipeTransform,
+  transformTypeFromTSDesign,
 } from '../decorator';
 import {
   HandlerFunction,
   IMidwayContainer,
   MethodHandlerFunction,
   ParameterHandlerFunction,
+  JoinPoint,
+  ScopeEnum,
+  ParamDecoratorOptions,
+  MethodDecoratorOptions,
+  PipeUnionTransform,
+  PipeTransform,
 } from '../interface';
 import { MidwayAspectService } from './aspectService';
 import { MidwayCommonError, MidwayParameterError } from '../error';
@@ -50,14 +52,14 @@ export class MidwayDecoratorService {
         propertyName: string;
         key: string;
         metadata: any;
-        impl: boolean;
+        options: MethodDecoratorOptions;
       }> = getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
 
       if (methodDecoratorMetadataList) {
         // loop it, save this order for decorator run
         for (const meta of methodDecoratorMetadataList) {
-          const { propertyName, key, metadata, impl } = meta;
-          if (!impl) {
+          const { propertyName, key, metadata, options } = meta;
+          if (!options.impl) {
             continue;
           }
           // add aspect implementation first
@@ -109,17 +111,26 @@ export class MidwayDecoratorService {
                     parameterIndex,
                     options,
                   } = meta;
-                  if (!options.impl) {
-                    continue;
+
+                  let parameterDecoratorHandler;
+                  if (options.impl) {
+                    parameterDecoratorHandler =
+                      this.parameterDecoratorMap.get(key);
+                    if (!parameterDecoratorHandler) {
+                      throw new MidwayCommonError(
+                        `Parameter Decorator "${key}" handler not found, please register first.`
+                      );
+                    }
+                  } else {
+                    // set default handler
+                    parameterDecoratorHandler = async ({
+                      parameterIndex,
+                      originArgs,
+                    }) => {
+                      return originArgs[parameterIndex];
+                    };
                   }
 
-                  const parameterDecoratorHandler =
-                    this.parameterDecoratorMap.get(key);
-                  if (!parameterDecoratorHandler) {
-                    throw new MidwayCommonError(
-                      `Parameter Decorator "${key}" handler not found, please register first.`
-                    );
-                  }
                   const paramTypes = getMethodParamTypes(Clzz, propertyName);
                   let skipPipes = false;
                   try {
@@ -170,7 +181,14 @@ export class MidwayDecoratorService {
                     }
                     newArgs[parameterIndex] = await transform(
                       newArgs[parameterIndex],
-                      options
+                      {
+                        metaType: transformTypeFromTSDesign(
+                          paramTypes[parameterIndex]
+                        ),
+                        metadata,
+                        target: joinPoint.target,
+                        methodName: joinPoint.methodName,
+                      }
                     );
                   }
                 }

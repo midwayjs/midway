@@ -2,8 +2,7 @@ import {
   createCustomPropertyDecorator,
   savePropertyInject,
 } from '../decoratorManager';
-import { ObjectIdentifier } from '../interface';
-import { IServiceFactory } from '../../interface';
+import { IServiceFactory, ObjectIdentifier } from '../../interface';
 import { FACTORY_SERVICE_CLIENT_KEY } from '../constant';
 
 export function Inject(identifier?: ObjectIdentifier) {

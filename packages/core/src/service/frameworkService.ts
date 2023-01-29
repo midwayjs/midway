@@ -12,14 +12,14 @@ import {
   PLUGIN_KEY,
   Provide,
   Scope,
-  ScopeEnum,
-  MidwayFrameworkType,
   FACTORY_SERVICE_CLIENT_KEY,
 } from '../decorator';
 import {
   IMidwayContainer,
   IMidwayFramework,
   IServiceFactory,
+  ScopeEnum,
+  MidwayFrameworkType,
 } from '../interface';
 import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';

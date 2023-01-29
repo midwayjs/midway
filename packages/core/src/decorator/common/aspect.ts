@@ -1,32 +1,6 @@
-import {
-  ASPECT_KEY,
-  attachClassMetadata,
-  Provide,
-  saveModule,
-  ScopeEnum,
-} from '../';
+import { ASPECT_KEY, attachClassMetadata, Provide, saveModule } from '../';
 import { Scope } from './objectDef';
-
-export interface JoinPoint {
-  methodName: string;
-  target: any;
-  args: any[];
-  proceed?(...args: any[]): any;
-}
-
-export interface AspectMetadata {
-  aspectTarget: any;
-  match?: string | (() => boolean);
-  priority?: number;
-}
-
-export interface IMethodAspect {
-  after?(joinPoint: JoinPoint, result: any, error: Error);
-  afterReturn?(joinPoint: JoinPoint, result: any): any;
-  afterThrow?(joinPoint: JoinPoint, error: Error): void;
-  before?(joinPoint: JoinPoint): void;
-  around?(joinPoint: JoinPoint): any;
-}
+import { ScopeEnum } from '../../interface';
 
 export function Aspect(
   aspectTarget: any | any[],
