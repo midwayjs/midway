@@ -1,5 +1,4 @@
 import {
-  ScopeEnum,
   saveClassMetadata,
   saveModule,
   MS_PROVIDER_KEY,
@@ -7,11 +6,10 @@ import {
   savePropertyMetadata,
   MS_GRPC_METHOD_KEY,
   MS_DUBBO_METHOD_KEY,
-  MSProviderType,
-  GRPCMetadata,
   Provide,
   Scope,
 } from '../';
+import { GRPCMetadata, MSProviderType, ScopeEnum } from '../../interface';
 
 export function Provider(
   type: MSProviderType.GRPC,

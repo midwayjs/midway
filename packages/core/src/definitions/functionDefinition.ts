@@ -3,8 +3,10 @@ import {
   IObjectCreator,
   IObjectDefinition,
   IMidwayContainer,
+  IManagedInstance,
+  ObjectIdentifier,
+  ScopeEnum,
 } from '../interface';
-import { IManagedInstance, ObjectIdentifier, ScopeEnum } from '../decorator';
 import { ObjectCreator } from './objectCreator';
 
 class FunctionWrapperCreator extends ObjectCreator {

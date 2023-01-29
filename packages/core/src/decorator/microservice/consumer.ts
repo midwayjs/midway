@@ -1,12 +1,11 @@
 import {
-  ScopeEnum,
   saveClassMetadata,
   saveModule,
   MS_CONSUMER_KEY,
   Provide,
   Scope,
-  MSListenerType,
 } from '../';
+import { MSListenerType, ScopeEnum } from '../../interface';
 
 export function Consumer(type: MSListenerType.MQTT): ClassDecorator;
 export function Consumer(

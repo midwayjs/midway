@@ -2,7 +2,7 @@ import { Get, getMethodParamTypes } from '../../src';
 
 describe('/test/decoratorManager.test.ts', () => {
 
-  it('should test', function () {
+  it('should test getMethodParamTypes', function () {
     const obj = {ccc: 'd'}
     class D {}
     class A {
@@ -18,4 +18,5 @@ describe('/test/decoratorManager.test.ts', () => {
     const paramTypes2 = getMethodParamTypes(A, 'invoke2');
     expect(paramTypes2.length).toEqual(4);
   });
+
 });

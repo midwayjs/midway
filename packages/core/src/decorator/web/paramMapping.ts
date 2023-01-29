@@ -1,10 +1,5 @@
-import {
-  createCustomParamDecorator,
-  PipeTransform,
-  PipeTransformFunction,
-  WEB_ROUTER_PARAM_KEY,
-} from '../';
-import { IMidwayContext } from '../../interface';
+import { createCustomParamDecorator, WEB_ROUTER_PARAM_KEY } from '../';
+import { IMidwayContext, PipeUnionTransform } from '../../interface';
 
 export enum RouteParamTypes {
   QUERY,
@@ -29,10 +24,7 @@ export interface RouterParamValue {
 }
 
 const createParamMapping = function (type: RouteParamTypes) {
-  return (
-    propertyData?: any,
-    pipes?: Array<PipeTransform | PipeTransformFunction>
-  ) => {
+  return (propertyData?: any, pipes?: Array<PipeUnionTransform>) => {
     return createCustomParamDecorator(WEB_ROUTER_PARAM_KEY, {
       type,
       propertyData,

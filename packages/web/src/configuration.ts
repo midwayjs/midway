@@ -35,8 +35,7 @@ export class EggConfiguration {
         return extractKoaLikeValue(
           options.metadata.type,
           options.metadata.propertyData,
-          options.originParamType,
-          options.metadata?.pipes
+          options.originParamType
         )(options.originArgs[0], options.originArgs[1]);
       }
     );

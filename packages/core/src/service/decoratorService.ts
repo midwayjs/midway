@@ -7,19 +7,25 @@ import {
   INJECT_CUSTOM_METHOD,
   APPLICATION_CONTEXT_KEY,
   INJECT_CUSTOM_PARAM,
-  JoinPoint,
   getMethodParamTypes,
-  ScopeEnum,
+  transformTypeFromTSDesign,
 } from '../decorator';
 import {
   HandlerFunction,
   IMidwayContainer,
   MethodHandlerFunction,
   ParameterHandlerFunction,
+  JoinPoint,
+  ScopeEnum,
+  ParamDecoratorOptions,
+  MethodDecoratorOptions,
+  PipeUnionTransform,
+  PipeTransform,
 } from '../interface';
 import { MidwayAspectService } from './aspectService';
-import { MidwayCommonError } from '../error';
+import { MidwayCommonError, MidwayParameterError } from '../error';
 import * as util from 'util';
+import { isClass } from '../util/types';
 
 const debug = util.debuglog('midway:debug');
 
@@ -29,6 +35,8 @@ export class MidwayDecoratorService {
   private propertyHandlerMap = new Map<string, HandlerFunction>();
   private methodDecoratorMap: Map<string, (...args) => any> = new Map();
   private parameterDecoratorMap: Map<string, (...args) => any> = new Map();
+  private parameterDecoratorPipes: Map<string, PipeUnionTransform[]> =
+    new Map();
 
   @Inject()
   private aspectService: MidwayAspectService;
@@ -44,14 +52,14 @@ export class MidwayDecoratorService {
         propertyName: string;
         key: string;
         metadata: any;
-        impl: boolean;
+        options: MethodDecoratorOptions;
       }> = getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
 
       if (methodDecoratorMetadataList) {
         // loop it, save this order for decorator run
         for (const meta of methodDecoratorMetadataList) {
-          const { propertyName, key, metadata, impl } = meta;
-          if (!impl) {
+          const { propertyName, key, metadata, options } = meta;
+          if (!options.impl) {
             continue;
           }
           // add aspect implementation first
@@ -82,7 +90,7 @@ export class MidwayDecoratorService {
           parameterIndex: number;
           propertyName: string;
           metadata: any;
-          impl: boolean;
+          options: ParamDecoratorOptions;
         }>;
       } = getClassMetadata(INJECT_CUSTOM_PARAM, Clzz);
 
@@ -96,20 +104,35 @@ export class MidwayDecoratorService {
                 // joinPoint.args
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
-                  const { propertyName, key, metadata, parameterIndex, impl } =
-                    meta;
-                  if (!impl) {
-                    continue;
+                  const {
+                    propertyName,
+                    key,
+                    metadata,
+                    parameterIndex,
+                    options,
+                  } = meta;
+
+                  let parameterDecoratorHandler;
+                  if (options.impl) {
+                    parameterDecoratorHandler =
+                      this.parameterDecoratorMap.get(key);
+                    if (!parameterDecoratorHandler) {
+                      throw new MidwayCommonError(
+                        `Parameter Decorator "${key}" handler not found, please register first.`
+                      );
+                    }
+                  } else {
+                    // set default handler
+                    parameterDecoratorHandler = async ({
+                      parameterIndex,
+                      originArgs,
+                    }) => {
+                      return originArgs[parameterIndex];
+                    };
                   }
 
-                  const parameterDecoratorHandler =
-                    this.parameterDecoratorMap.get(key);
-                  if (!parameterDecoratorHandler) {
-                    throw new MidwayCommonError(
-                      `Parameter Decorator "${key}" handler not found, please register first.`
-                    );
-                  }
                   const paramTypes = getMethodParamTypes(Clzz, propertyName);
+                  let skipPipes = false;
                   try {
                     newArgs[parameterIndex] = await parameterDecoratorHandler({
                       metadata,
@@ -120,9 +143,52 @@ export class MidwayDecoratorService {
                       originParamType: paramTypes[parameterIndex],
                     });
                   } catch (err) {
-                    // ignore
-                    debug(
-                      `[core]: Parameter decorator throw error and use origin args, ${err.stack}`
+                    skipPipes = true;
+                    if (options?.throwError === true) {
+                      throw err;
+                    } else {
+                      // ignore
+                      debug(
+                        `[core]: Parameter decorator throw error and use origin args, ${err.stack}`
+                      );
+                    }
+                  }
+
+                  if (skipPipes) {
+                    continue;
+                  }
+
+                  const pipes = [
+                    ...(this.parameterDecoratorPipes.get(key) || []),
+                    ...(options?.pipes || []),
+                  ];
+                  for (const pipe of pipes) {
+                    let transform;
+                    if ('transform' in pipe) {
+                      transform = pipe['transform'].bind(pipe);
+                    } else if (isClass(pipe)) {
+                      const ins =
+                        await this.applicationContext.getAsync<PipeTransform>(
+                          pipe as any
+                        );
+                      transform = ins.transform.bind(ins);
+                    } else if (typeof pipe === 'function') {
+                      transform = pipe;
+                    } else {
+                      throw new MidwayParameterError(
+                        'Pipe must be a function or implement PipeTransform interface'
+                      );
+                    }
+                    newArgs[parameterIndex] = await transform(
+                      newArgs[parameterIndex],
+                      {
+                        metaType: transformTypeFromTSDesign(
+                          paramTypes[parameterIndex]
+                        ),
+                        metadata,
+                        target: joinPoint.target,
+                        methodName: joinPoint.methodName,
+                      }
                     );
                   }
                 }
@@ -179,6 +245,19 @@ export class MidwayDecoratorService {
   ) {
     debug(`[core]: Register parameter decorator key="${decoratorKey}"`);
     this.parameterDecoratorMap.set(decoratorKey, fn);
+  }
+
+  public registerParameterPipes(
+    decoratorKey: string,
+    pipes: PipeUnionTransform[]
+  ) {
+    if (!this.parameterDecoratorPipes.has(decoratorKey)) {
+      this.parameterDecoratorPipes.set(decoratorKey, []);
+    }
+    this.parameterDecoratorPipes.set(
+      decoratorKey,
+      this.parameterDecoratorPipes.get(decoratorKey).concat(pipes)
+    );
   }
 
   /**

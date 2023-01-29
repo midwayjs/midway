@@ -1,4 +1,4 @@
-import { createCustomMethodDecorator } from '@midwayjs/core';
+import { savePropertyMetadata } from '@midwayjs/core';
 import { VALIDATE_KEY } from '../constants';
 import * as Joi from 'joi';
 
@@ -9,7 +9,7 @@ export interface ValidateOptions {
 }
 
 export function Validate(options: ValidateOptions = {}) {
-  return createCustomMethodDecorator(VALIDATE_KEY, {
-    options,
-  });
+  return (target, methodName, descriptor) => {
+    savePropertyMetadata(VALIDATE_KEY, options, target, methodName);
+  };
 }

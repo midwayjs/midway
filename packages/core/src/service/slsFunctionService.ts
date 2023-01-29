@@ -1,6 +1,5 @@
 import {
   bindContainer,
-  FaaSMetadata,
   FUNC_KEY,
   getClassMetadata,
   getPropertyDataFromClass,
@@ -10,7 +9,6 @@ import {
   listModule,
   Provide,
   Scope,
-  ScopeEnum,
   SERVERLESS_FUNC_KEY,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_PARAM_KEY,
@@ -24,6 +22,7 @@ import {
 import { MidwayContainer } from '../context/container';
 import { DirectoryFileDetector } from '../common/fileDetector';
 import { getCurrentMainFramework } from '../util/contextUtil';
+import { FaaSMetadata, ScopeEnum } from '../interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

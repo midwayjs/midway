@@ -4,29 +4,32 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
 {
   "doget": [
     {
-      "impl": true,
       "key": "web:router_param",
       "metadata": {
         "pipes": undefined,
         "propertyData": "common:all_value_key",
         "type": 4,
       },
+      "options": {
+        "impl": true,
+      },
       "parameterIndex": 6,
       "propertyName": "doget",
     },
     {
-      "impl": true,
       "key": "web:router_param",
       "metadata": {
         "pipes": undefined,
         "propertyData": undefined,
         "type": 6,
       },
+      "options": {
+        "impl": true,
+      },
       "parameterIndex": 5,
       "propertyName": "doget",
     },
     {
-      "impl": true,
       "key": "web:router_param",
       "metadata": {
         "pipes": undefined,
@@ -35,49 +38,60 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
         },
         "type": 5,
       },
+      "options": {
+        "impl": true,
+      },
       "parameterIndex": 4,
       "propertyName": "doget",
     },
     {
-      "impl": true,
       "key": "web:router_param",
       "metadata": {
         "pipes": undefined,
         "propertyData": "tt",
         "type": 3,
       },
+      "options": {
+        "impl": true,
+      },
       "parameterIndex": 3,
       "propertyName": "doget",
     },
     {
-      "impl": true,
       "key": "web:router_param",
       "metadata": {
         "pipes": undefined,
         "propertyData": "body",
         "type": 1,
       },
+      "options": {
+        "impl": true,
+      },
       "parameterIndex": 2,
       "propertyName": "doget",
     },
     {
-      "impl": true,
       "key": "web:router_param",
       "metadata": {
         "pipes": undefined,
         "propertyData": "bb",
         "type": 0,
       },
+      "options": {
+        "impl": true,
+      },
       "parameterIndex": 1,
       "propertyName": "doget",
     },
     {
-      "impl": true,
       "key": "web:router_param",
       "metadata": {
         "pipes": undefined,
         "propertyData": "aa",
         "type": 2,
+      },
+      "options": {
+        "impl": true,
       },
       "parameterIndex": 0,
       "propertyName": "doget",

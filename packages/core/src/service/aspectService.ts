@@ -1,15 +1,17 @@
 import * as pm from 'picomatch';
-import { IMidwayContainer } from '../interface';
 import {
-  ASPECT_KEY,
+  IMidwayContainer,
   AspectMetadata,
-  getClassMetadata,
   IMethodAspect,
   JoinPoint,
+  ScopeEnum,
+} from '../interface';
+import {
+  ASPECT_KEY,
+  getClassMetadata,
   listModule,
   Provide,
   Scope,
-  ScopeEnum,
 } from '../decorator';
 import { Types } from '../util/types';
 

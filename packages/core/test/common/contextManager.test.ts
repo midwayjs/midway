@@ -53,6 +53,11 @@ describe('NoopContextManager', () => {
           ASYNC_ROOT_CONTEXT,
           'should not have context'
         );
+
+        assert.strictEqual(test.getValue(key), 1);
+        const newCtx =  test.deleteValue(key);
+        assert.strictEqual(newCtx.getValue(key), undefined);
+
         return done();
       });
     });

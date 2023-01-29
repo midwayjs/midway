@@ -13,9 +13,6 @@ import {
   WEB_RESPONSE_KEY,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-  ScopeEnum,
-  FaaSMetadata,
-  ServerlessTriggerType,
 } from '../decorator';
 import { joinURLPath } from '../util';
 import {
@@ -26,6 +23,7 @@ import {
 import * as util from 'util';
 import { PathToRegexpUtil } from '../util/pathToRegexp';
 import { Types } from '../util/types';
+import { ServerlessTriggerType, ScopeEnum, FaaSMetadata } from '../interface';
 
 const debug = util.debuglog('midway:debug');
 

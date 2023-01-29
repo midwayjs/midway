@@ -1,5 +1,10 @@
-import { IMidwayApplication, IMidwayFramework } from '../interface';
-import { FrameworkType, ScopeEnum, Provide, Scope } from '../decorator';
+import {
+  IMidwayApplication,
+  IMidwayFramework,
+  FrameworkType,
+  ScopeEnum,
+} from '../interface';
+import { Provide, Scope } from '../decorator';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

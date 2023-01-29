@@ -24,7 +24,6 @@
   "devDependencies": {
     "koa": "2.14.1",
     "mm": "3.2.1",
-    "pg": "8.8.0",
     "raw-body": "2.5.1",
     "sinon": "14.0.2"
   },

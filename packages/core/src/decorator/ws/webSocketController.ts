@@ -1,12 +1,11 @@
 import {
-  ScopeEnum,
   saveClassMetadata,
   saveModule,
   WS_CONTROLLER_KEY,
   Provide,
   Scope,
-  MiddlewareParamArray,
 } from '../';
+import { ScopeEnum, MiddlewareParamArray } from '../../interface';
 
 export interface WSControllerOption {
   namespace: string;

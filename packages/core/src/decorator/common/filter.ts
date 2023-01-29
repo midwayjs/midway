@@ -2,7 +2,7 @@ import { saveClassMetadata } from '../decoratorManager';
 import { CATCH_KEY, MATCH_KEY } from '../constant';
 import { Scope } from './objectDef';
 import { Provide } from './provide';
-import { ScopeEnum } from '../interface';
+import { ScopeEnum } from '../../interface';
 
 export function Catch(
   catchTarget?: any | any[],

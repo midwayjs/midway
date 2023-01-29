@@ -13,9 +13,6 @@ import {
   getClassExtendedMetadata,
   INJECT_CUSTOM_PROPERTY,
   getProviderName,
-  ScopeEnum,
-  IModuleStore,
-  ObjectIdentifier,
 } from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -24,10 +21,13 @@ import {
   IFileDetector,
   IIdentifierRelationShip,
   IMidwayContainer,
+  IModuleStore,
   IObjectDefinition,
   IObjectDefinitionRegistry,
   ObjectContext,
+  ObjectIdentifier,
   ObjectLifeCycleEvent,
+  ScopeEnum,
 } from '../interface';
 import { FUNCTION_INJECT_KEY, REQUEST_CTX_KEY } from '../constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';

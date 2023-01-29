@@ -9,9 +9,8 @@ import {
   LOGGER_KEY,
   createCustomPropertyDecorator,
   APPLICATION_CONTEXT_KEY,
-  ScopeEnum,
-  FrameworkType,
 } from '../';
+import { FrameworkType, ScopeEnum } from '../../interface';
 
 export function Framework(): ClassDecorator {
   return (target: any) => {

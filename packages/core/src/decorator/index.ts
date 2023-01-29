@@ -1,5 +1,3 @@
-export * from './interface';
-
 // common
 export * from './common/provide';
 export * from './common/inject';
@@ -12,6 +10,7 @@ export * from './common/framework';
 export * from './common/filter';
 export * from './common/middleware';
 export * from './common/guard';
+export * from './common/pipe';
 
 // faas
 export * from './faas/serverlessTrigger';

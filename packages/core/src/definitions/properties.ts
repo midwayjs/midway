@@ -1,5 +1,4 @@
-import { IProperties } from '../interface';
-import { ObjectIdentifier } from '../decorator';
+import { IProperties, ObjectIdentifier } from '../interface';
 
 export class ObjectProperties
   extends Map<ObjectIdentifier, any>

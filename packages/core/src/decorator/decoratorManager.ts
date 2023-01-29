@@ -3,11 +3,14 @@ import {
   GroupModeType,
   IModuleStore,
   InjectModeEnum,
+  MethodDecoratorOptions,
   ObjectDefinitionOptions,
   ObjectIdentifier,
+  ParamDecoratorOptions,
   TagClsMetadata,
   TagPropsMetadata,
-} from './interface';
+  TSDesignType,
+} from '../interface';
 import {
   INJECT_CUSTOM_METHOD,
   INJECT_CUSTOM_PARAM,
@@ -710,13 +713,7 @@ export function clearAllModule() {
   return manager.clear();
 }
 
-export interface TSDesignType {
-  name: string;
-  originDesign: any;
-  isBaseType: boolean;
-}
-
-function transformTypeFromTSDesign(designFn): TSDesignType {
+export function transformTypeFromTSDesign(designFn): TSDesignType {
   if (isNullOrUndefined(designFn)) {
     return { name: 'undefined', isBaseType: true, originDesign: designFn };
   }
@@ -967,8 +964,14 @@ export function createCustomPropertyDecorator(
 export function createCustomMethodDecorator(
   decoratorKey: string,
   metadata: any,
-  impl = true
+  implOrOptions: boolean | MethodDecoratorOptions = { impl: true }
 ): MethodDecorator {
+  if (typeof implOrOptions === 'boolean') {
+    implOrOptions = { impl: implOrOptions } as MethodDecoratorOptions;
+  }
+  if (implOrOptions.impl === undefined) {
+    implOrOptions.impl = true;
+  }
   return function (target: any, propertyName: string, descriptor) {
     attachClassMetadata(
       INJECT_CUSTOM_METHOD,
@@ -976,7 +979,7 @@ export function createCustomMethodDecorator(
         propertyName,
         key: decoratorKey,
         metadata,
-        impl,
+        options: implOrOptions,
       },
       target
     );
@@ -986,15 +989,20 @@ export function createCustomMethodDecorator(
  *
  * @param decoratorKey
  * @param metadata
- * @param impl default true, configuration need decoratorService.registerMethodHandler
+ * @param options
  */
 export function createCustomParamDecorator(
   decoratorKey: string,
   metadata: any,
-  impl = true
+  implOrOptions: boolean | ParamDecoratorOptions = { impl: true }
 ): ParameterDecorator {
+  if (typeof implOrOptions === 'boolean') {
+    implOrOptions = { impl: implOrOptions } as ParamDecoratorOptions;
+  }
+  if (implOrOptions.impl === undefined) {
+    implOrOptions.impl = true;
+  }
   return function (target: any, propertyName: string, parameterIndex: number) {
-    // const parameterName = getParamNames(target[methodName])[parameterIndex];
     attachClassMetadata(
       INJECT_CUSTOM_PARAM,
       {
@@ -1002,7 +1010,7 @@ export function createCustomParamDecorator(
         parameterIndex,
         propertyName,
         metadata,
-        impl,
+        options: implOrOptions,
       },
       target,
       propertyName,

@@ -1,14 +1,24 @@
-import { Validate, Rule, RuleType, getSchema, OmitDto } from '../src';
+import {
+  Validate,
+  Rule,
+  RuleType,
+  getSchema,
+  OmitDto,
+  Valid,
+  ParseIntPipe,
+  ParseFloatPipe,
+  ParseBoolPipe, DefaultValuePipe, DefaultValidPipe, AbstractValidationPipe, ValidateService
+} from '../src';
 import { createLightApp, close } from '@midwayjs/mock';
 import * as Joi from 'joi';
-import * as Valid from '../src';
+import * as valid from '../src';
 
 import * as assert from 'assert';
-import { Provide } from '@midwayjs/core';
+import { createCustomParamDecorator, Provide, TransformOptions } from '@midwayjs/core';
 describe('/test/check.test.ts', () => {
   it('check with check', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
 
     class TO {
@@ -16,19 +26,18 @@ describe('/test/check.test.ts', () => {
     }
 
     @Rule(TO)
-    class UserDTO extends TO{
+    class UserDTO extends TO {
       @Rule(RuleType.number().max(10))
       age: number;
     }
 
     @Rule(UserDTO)
-    class HelloDTO extends UserDTO{
+    class HelloDTO extends UserDTO {
     }
 
     @Provide()
     class Hello {
-      @Validate()
-      school(a, data: HelloDTO) {
+      school(a, @Valid() data: HelloDTO) {
         return data;
       }
     }
@@ -46,20 +55,20 @@ describe('/test/check.test.ts', () => {
 
   it('check with check with extends', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
     class TO{
 
     }
 
     @Rule(TO)
-    class UserDTO extends TO{
+    class UserDTO extends TO {
       @Rule(RuleType.number().max(10))
       age: number;
     }
 
     @Rule(UserDTO)
-    class HelloDTO extends UserDTO{
+    class HelloDTO extends UserDTO {
 
       @Rule(RuleType.number().min(4))
       age: number;
@@ -67,8 +76,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      @Validate()
-      school(a, data: HelloDTO) {
+      school(a, @Valid() data: HelloDTO) {
         return data;
       }
     }
@@ -79,11 +87,13 @@ describe('/test/check.test.ts', () => {
     const hello = await app.getApplicationContext().getAsync(Hello);
     const result = hello.school(1, user);
     assert.deepEqual(result, user);
+
+    await close(app);
   });
 
   it('check with check with options', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
@@ -100,8 +110,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      @Validate()
-      school(a, data: UserDTO) {
+      school(a, @Valid() data: UserDTO) {
         return data;
       }
     }
@@ -112,11 +121,13 @@ describe('/test/check.test.ts', () => {
     const hello = await app.getApplicationContext().getAsync(Hello);
     const result = hello.school(1, user);
     assert.deepEqual(result, user);
+
+    await close(app);
   });
 
   it('check with check with array', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
 
     class WorldDTO {
@@ -134,8 +145,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      @Validate()
-      school(a, data: UserDTO) {
+      async school(a, @Valid() data: UserDTO) {
         return data;
       }
     }
@@ -150,13 +160,20 @@ describe('/test/check.test.ts', () => {
 
     app.getApplicationContext().bind(Hello);
     const hello = await app.getApplicationContext().getAsync(Hello);
-    expect(()=> hello.school(1, user)).toThrow();
+
+    let error;
+    try {
+      await hello.school(1, user);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toMatch(/"world\[1\].age" must be less than or equal to 20/);
     await close(app);
   });
 
   it.skip('check with check and transform object', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
     class UserDTO {
       @Rule(RuleType.number().max(10))
@@ -194,11 +211,13 @@ describe('/test/check.test.ts', () => {
     const result = hello.school(1, user);
     expect(result.getName()).toEqual('Johny Cage');
     assert.deepEqual(result, user);
+
+    await close(app);
   });
 
-  it('check with no check', async () => {
+  it('check with no @Validate decorator', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
     class UserDTO {
       @Rule(RuleType.number().max(10))
@@ -207,7 +226,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      school(a, data: UserDTO) {
+      async school(a, @Valid() data: UserDTO) {
         return data;
       }
     }
@@ -216,13 +235,22 @@ describe('/test/check.test.ts', () => {
     };
     app.getApplicationContext().bind(Hello);
     const hello = await app.getApplicationContext().getAsync(Hello);
-    const result = hello.school(1, user);
-    assert.deepEqual(result, user);
+
+    let error;
+    try {
+      await hello.school(1, user);
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error.message).toMatch(/"age" must be less than or equal to 10/);
+
+    await close(app);
   });
 
   it('check with check when vo have two level', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
@@ -239,8 +267,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      @Validate()
-      school(a, data: UserDTO) {
+      school(a, @Valid() data: UserDTO) {
         return data;
       }
     }
@@ -254,11 +281,13 @@ describe('/test/check.test.ts', () => {
     const hello = await app.getApplicationContext().getAsync(Hello);
     const result = hello.school(1, user);
     assert.deepEqual(result, user);
+
+    await close(app);
   });
 
   it('check with check when vo have two level not equal', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
@@ -275,8 +304,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      @Validate()
-      school(a, data: UserDTO) {
+      async school(a, @Valid() data: UserDTO) {
         return data;
       }
     }
@@ -288,14 +316,21 @@ describe('/test/check.test.ts', () => {
     };
     app.getApplicationContext().bind(Hello);
     const hello = await app.getApplicationContext().getAsync(Hello);
-    expect(() => {
-      hello.school(1, user);
-    }).toThrow(Error);
+
+    let error;
+    try {
+      await hello.school(1, user);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toMatch(/"world.age" must be less than or equal to 20/);
+
+    await close(app);
   });
 
   it('check with check when two level and array and not equal', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
@@ -312,8 +347,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      @Validate()
-      school(a, data: UserDTO) {
+      async school(a, @Valid() data: UserDTO) {
         return data;
       }
     }
@@ -327,14 +361,21 @@ describe('/test/check.test.ts', () => {
     };
     app.getApplicationContext().bind(Hello);
     const hello = await app.getApplicationContext().getAsync(Hello);
-    expect(() => {
-      hello.school(1, user);
-    }).toThrow(Error);
+
+    let error;
+    try {
+      await hello.school(1, user);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toMatch(/"worlds\[0\].age" must be less than or equal to 20/);
+
+    await close(app);
   });
 
   it.skip('should transform string to number', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
     class UserNewDTO {
       @Rule(RuleType.number().required())
@@ -343,8 +384,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      @Validate()
-      school(user: UserNewDTO) {
+      school(@Valid() user: UserNewDTO) {
         return user;
       }
     }
@@ -354,6 +394,8 @@ describe('/test/check.test.ts', () => {
       id: '555'
     } as any)
     expect(typeof data.id).toEqual('number');
+
+    await close(app);
   });
 
   it('should test joi transform type', function () {
@@ -368,7 +410,7 @@ describe('/test/check.test.ts', () => {
 
   it('should test global validate config', async () => {
     const app = await createLightApp('', {
-      imports: [Valid]
+      imports: [valid]
     });
 
     class UserDTO {
@@ -384,7 +426,7 @@ describe('/test/check.test.ts', () => {
         },
         errorStatus: 400
       })
-      school(data: UserDTO) {
+      async school(@Valid() data: UserDTO) {
         return data;
       }
     }
@@ -393,7 +435,7 @@ describe('/test/check.test.ts', () => {
 
     let error;
     try {
-      hello.school({
+      await hello.school({
         age: 11
       });
     } catch (err) {
@@ -403,7 +445,7 @@ describe('/test/check.test.ts', () => {
     expect(error).toBeDefined();
     expect(error.status).toEqual(400);
 
-    const result = hello.school({
+    const result = await hello.school({
       age: 1,
       name: 'hello',
     } as any);
@@ -435,5 +477,294 @@ describe('/test/check.test.ts', () => {
       }]
     });
     console.log(result);
-  })
+  });
+
+  describe('test pipe', () => {
+    it('should test getSchema', function () {
+      const pipe = new DefaultValidPipe();
+      expect(pipe['getSchema']()).toBeUndefined();
+    });
+
+    it('should test AbstractValidationPipe', async () => {
+
+      class UserDTO {
+        @Rule(RuleType.number().max(10))
+        age: number;
+      }
+
+      const validateService = new ValidateService();
+      validateService['i18nService'] = {
+        getAvailableLocale() {
+          return 'en-US';
+        }
+      } as any;
+
+      validateService['i18nConfig'] = {
+        defaultLocale: 'en-US'
+      }
+
+      validateService['validateConfig'] = {};
+      class CustomValidationPipe extends AbstractValidationPipe {
+        transform(value: any, options: TransformOptions) {}
+      }
+
+      const pipe = new CustomValidationPipe();
+      pipe['validateService'] = validateService;
+
+      // number
+      let result = pipe.validate(1, {
+        metaType: {
+          isBaseType: true,
+          originDesign: Number,
+          name: 'number',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual(1);
+
+      // string
+      result = pipe.validate('bbb', {
+        metaType: {
+          isBaseType: true,
+          originDesign: String,
+          name: 'string',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual('bbb');
+
+      // boolean
+      result = pipe.validate(true, {
+        metaType: {
+          isBaseType: true,
+          originDesign: Boolean,
+          name: 'boolean',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual(true);
+
+      // object
+      result = pipe.validate({data: 1}, {
+        metaType: {
+          isBaseType: false,
+          originDesign: Object,
+          name: 'object',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual({data: 1});
+
+      // DTO
+      result = pipe.validate({age: '10'}, {
+        metaType: {
+          isBaseType: false,
+          originDesign: UserDTO,
+          name: 'UserDTO',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      });
+
+      expect(result).toEqual({age: 10});
+
+      result = pipe.validateWithSchema(1, {
+        metaType: {
+          isBaseType: true,
+          originDesign: Number,
+          name: 'number',
+        },
+        metadata: {},
+        target: {},
+        methodName: 'test',
+      }, undefined);
+
+      expect(result).toEqual(1);
+    });
+
+    it('should test ParseIntPipe', async () => {
+
+      function TestPipe(pipe: any) {
+        return createCustomParamDecorator('testPipe', '', {
+          impl: false,
+          pipes: [pipe]
+        });
+      }
+
+      const app = await createLightApp('', {
+        imports: [valid]
+      });
+
+      @Provide()
+      class Hello {
+        async test(@TestPipe(ParseIntPipe) data: number) {
+          return data;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      expect(await hello.test('1' as any)).toEqual(1);
+      expect(await hello.test(-1)).toEqual(-1);
+      let error;
+      try {
+        await hello.test(1.1);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" must be an integer");
+
+      try {
+        await hello.test(null);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" must be a number");
+
+      await close(app);
+    });
+
+    it('should test ParseFloatPipe', async () => {
+
+      function TestPipe(pipe: any) {
+        return createCustomParamDecorator('testPipe', '', {
+          impl: false,
+          pipes: [pipe]
+        });
+      }
+
+      const app = await createLightApp('', {
+        imports: [valid]
+      });
+
+      @Provide()
+      class Hello {
+        async test(@TestPipe(ParseFloatPipe) data: number) {
+          return data;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      expect(await hello.test('1.1' as any)).toEqual(1.1);
+      expect(await hello.test(-1)).toEqual(-1);
+      expect(await hello.test(1.1)).toEqual(1.1);
+      let error;
+      try {
+        await hello.test('1.1n' as any);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" must be a number");
+
+      try {
+        await hello.test(null);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" must be a number");
+
+      await close(app);
+    });
+
+    it('should test ParseBoolPipe', async () => {
+      function TestPipe(pipe: any) {
+        return createCustomParamDecorator('testPipe', '', {
+          impl: false,
+          pipes: [pipe]
+        });
+      }
+
+      const app = await createLightApp('', {
+        imports: [valid]
+      });
+
+      @Provide()
+      class Hello {
+        async test(@TestPipe(ParseBoolPipe) data: boolean) {
+          return data;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      expect(await hello.test('true' as any)).toEqual(true);
+      expect(await hello.test('false' as any)).toEqual(false);
+      expect(await hello.test(true)).toEqual(true);
+      expect(await hello.test(false)).toEqual(false);
+
+      let error;
+      try {
+        await hello.test('0' as any);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" must be a boolean");
+
+      try {
+        await hello.test(1 as any);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" must be a boolean");
+
+      try {
+        await hello.test(null);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" must be a boolean");
+
+      await close(app);
+    });
+
+    it('should test DefaultValuePipe', async () => {
+      function TestPipe(pipe: any) {
+        return createCustomParamDecorator('testPipe', '', {
+          impl: false,
+          pipes: [pipe]
+        });
+      }
+
+      const app = await createLightApp('', {
+        imports: [valid]
+      });
+
+      @Provide()
+      class Hello {
+        async test(@TestPipe(new DefaultValuePipe('bbb')) data?: string, @TestPipe(new DefaultValuePipe('bbb')) data1?: string) {
+          return data + data1;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      expect(await hello.test('ppp')).toEqual('pppbbb');
+      await close(app);
+    });
+  });
 });

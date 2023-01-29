@@ -1,6 +1,5 @@
-import { IMidwayContainer } from '../interface';
+import { IMidwayContainer, ObjectIdentifier, ScopeEnum } from '../interface';
 import { FUNCTION_INJECT_KEY } from '../constants';
-import { ObjectIdentifier, ScopeEnum } from '../decorator';
 
 export function providerWrapper(
   wrapperInfo: Array<{

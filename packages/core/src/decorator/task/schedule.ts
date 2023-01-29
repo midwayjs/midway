@@ -1,11 +1,11 @@
 import {
-  ScopeEnum,
   saveClassMetadata,
   saveModule,
   SCHEDULE_KEY,
   Provide,
   Scope,
 } from '../';
+import { ScopeEnum } from '../../interface';
 
 export interface CommonSchedule {
   exec(ctx?);

@@ -12,7 +12,7 @@ import { RULES_KEY } from './constants';
 import * as Joi from 'joi';
 import { MidwayI18nServiceSingleton, formatLocale } from '@midwayjs/i18n';
 import { MidwayValidationError } from './error';
-import { ObjectSchema } from 'joi';
+import { ObjectSchema, AnySchema } from 'joi';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -52,7 +52,7 @@ export class ValidateService {
   }
 
   public validateWithSchema<T>(
-    schema: ObjectSchema<any>,
+    schema: AnySchema<T>,
     value: any,
     options: {
       errorStatus?: number;

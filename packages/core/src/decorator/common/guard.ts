@@ -1,9 +1,8 @@
 import { saveClassMetadata, savePropertyMetadata } from '../decoratorManager';
-import { CommonGuardUnion } from '../../interface';
+import { CommonGuardUnion, ScopeEnum } from '../../interface';
 import { GUARD_KEY } from '../constant';
 import { Provide } from './provide';
 import { Scope } from './objectDef';
-import { ScopeEnum } from '../interface';
 
 export function UseGuard(
   guardOrArr: CommonGuardUnion
