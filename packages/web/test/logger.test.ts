@@ -164,7 +164,7 @@ describe('test/logger.test.js', () => {
 
     expect((app.logger as any).fileTransport.level).toEqual('debug');
     expect((app.logger as any).consoleTransport.level).toEqual('info');
-    expect((app.coreLogger as any).fileTransport.level).toEqual('debug');
+    expect((app.coreLogger as any).fileTransport.level).toEqual('info');
     expect((app.coreLogger as any).consoleTransport.level).toEqual('info');
 
     // 由于 egg 默认设置了 disableConsoleAfterReady，所以控制台还是看不到这个输出
