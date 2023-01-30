@@ -1,4 +1,4 @@
-import { Framework, IMidwayKafkaApplication, IMidwayKafkaConfigurationOptions } from '../src';
+import { Framework, IMidwayKafkaApplication } from '../src';
 import * as kafka from '../src';
 import { join } from 'path';
 import { close, createApp } from '@midwayjs/mock';
@@ -8,7 +8,7 @@ import { close, createApp } from '@midwayjs/mock';
  * @param name
  * @param options
  */
-export async function creatApp(name: string, options?: IMidwayKafkaConfigurationOptions): Promise<IMidwayKafkaApplication> {
+export async function creatApp(name: string, options?: any): Promise<IMidwayKafkaApplication> {
   return createApp<Framework>(join(__dirname, 'fixtures', name), options, kafka);
 }
 

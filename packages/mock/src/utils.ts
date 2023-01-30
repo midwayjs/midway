@@ -87,3 +87,29 @@ export async function removeFile(file: string) {
     // ignore
   }
 }
+
+export function mergeGlobalConfig(
+  globalConfig,
+  newConfigObject: Record<string, any>
+) {
+  if (globalConfig) {
+    if (Array.isArray(globalConfig)) {
+      globalConfig.push({
+        default: {
+          ...newConfigObject,
+        },
+      });
+    } else {
+      globalConfig = {
+        ...newConfigObject,
+        ...globalConfig,
+      };
+    }
+  } else {
+    globalConfig = {
+      ...newConfigObject,
+    };
+  }
+
+  return globalConfig;
+}

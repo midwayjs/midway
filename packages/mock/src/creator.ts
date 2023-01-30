@@ -26,6 +26,7 @@ import {
   findFirstExistModule,
   isTestEnvironment,
   isWin32,
+  mergeGlobalConfig,
   removeFile,
   transformFrameworkToConfiguration,
 } from './utils';
@@ -115,6 +116,24 @@ export async function create<
     if (customFramework?.['Configuration']) {
       options.imports = customFramework;
       customFramework = customFramework['Framework'];
+    }
+
+    if (options.ssl) {
+      const sslConfig = {
+        koa: {
+          key: join(__dirname, '../ssl/ssl.key'),
+          cert: join(__dirname, '../ssl/ssl.pem'),
+        },
+        egg: {
+          key: join(__dirname, '../ssl/ssl.key'),
+          cert: join(__dirname, '../ssl/ssl.pem'),
+        },
+        express: {
+          key: join(__dirname, '../ssl/ssl.key'),
+          cert: join(__dirname, '../ssl/ssl.pem'),
+        },
+      };
+      options.globalConfig = mergeGlobalConfig(options.globalConfig, sslConfig);
     }
 
     const container = new MidwayContainer();
