@@ -137,8 +137,8 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
         data.functionTriggerName = webRouter['type'];
         data.functionTriggerMetadata = webRouter['metadata'];
         data.functionMetadata = {
-          functionName,
           ...functionMeta,
+          functionName,
         };
         this.checkDuplicateAndPush(prefix, data);
       } else {
