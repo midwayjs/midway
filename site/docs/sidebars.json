@@ -41,6 +41,7 @@
         "environment",
         "env_config",
         "lifecycle",
+        "pipe",
         "logger",
         "cookie_session",
         "built_in_service",
