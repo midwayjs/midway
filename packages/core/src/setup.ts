@@ -62,6 +62,9 @@ export async function initializeGlobalApplicationContext(
     applicationContext,
   ]);
 
+  // mock support
+  await applicationContext.get(MidwayMockService, [applicationContext]);
+
   // some preload module init
   const modules = listPreloadModule();
   for (const module of modules) {

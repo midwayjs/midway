@@ -9,6 +9,7 @@ export const ASPECT_KEY = 'common:aspect';
 export const CATCH_KEY = 'common:catch';
 export const MATCH_KEY = 'common:match';
 export const GUARD_KEY = 'common:guard';
+export const MOCK_KEY = 'common:mock';
 export const FACTORY_SERVICE_CLIENT_KEY = 'common:service_factory:client';
 
 // faas

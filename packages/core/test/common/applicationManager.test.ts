@@ -1,8 +1,9 @@
-import { MidwayApplicationManager, BaseFramework, MidwayFrameworkType } from '../../src';
+import { MidwayApplicationManager, BaseFramework, MidwayFrameworkType, MidwayMockService } from '../../src';
 
 describe('test/common/applicationManager.test.ts', () => {
   it('should test application manager', async () => {
     const manager = new MidwayApplicationManager();
+    const mockService = new MidwayMockService({} as any);
 
     class CustomFramework1 extends BaseFramework<any, any, any> {
       applicationInitialize(options): any {
@@ -23,6 +24,7 @@ describe('test/common/applicationManager.test.ts', () => {
     }
 
     const framework = new CustomFramework1({} as any);
+    framework.mockService = mockService;
     await framework.initialize();
 
     manager.addFramework('test', framework);

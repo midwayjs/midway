@@ -115,6 +115,8 @@ export abstract class BaseFramework<
     await this.applicationInitialize(options);
     await this.containerReady(options);
     await this.afterContainerReady(options);
+
+    await this.mockService.runSimulatorAppSetup(this.app);
   }
 
   /**
@@ -197,6 +199,7 @@ export abstract class BaseFramework<
 
   @Destroy()
   public async stop(): Promise<void> {
+    await this.mockService.runSimulatorAppTearDown(this.app);
     await this.beforeStop();
   }
 
@@ -391,6 +394,8 @@ export abstract class BaseFramework<
           ASYNC_CONTEXT_MANAGER_KEY
         );
         return await contextManager.with(rootContext, async () => {
+          // run simulator context setup
+          await this.mockService.runSimulatorContextSetup(ctx, this.app);
           this.mockService.applyContextMocks(this.app, ctx);
           let returnResult = undefined;
           try {
@@ -401,6 +406,9 @@ export abstract class BaseFramework<
             );
           } catch (err) {
             returnResult = await this.filterManager.runErrorFilter(err, ctx);
+          } finally {
+            // run simulator context teardown
+            await this.mockService.runSimulatorContextTearDown(ctx, this.app);
           }
           if (returnResult.error) {
             throw returnResult.error;

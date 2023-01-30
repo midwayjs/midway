@@ -11,6 +11,7 @@ export * from './common/filter';
 export * from './common/middleware';
 export * from './common/guard';
 export * from './common/pipe';
+export * from './common/mock';
 
 // faas
 export * from './faas/serverlessTrigger';
