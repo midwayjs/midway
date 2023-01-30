@@ -1,7 +1,6 @@
 import {
   Config,
   Configuration,
-  MidwayFrameworkType,
   ILifeCycle,
   IMidwayApplication,
   IMidwayContainer,
@@ -66,11 +65,8 @@ export class ConsulConfiguration implements ILifeCycle {
       config.name = config.name || app.getProjectName();
       config.id = config.id || `${config.name}:${address}:${port}`;
 
-      config.check =
-        config.check ||
-        (config.check === false
-          ? void 0
-          : app.getFrameworkType() === MidwayFrameworkType.WEB
+      if (!config.check && (config.check as any) !== false) {
+        config.check = ['egg', 'koa', 'express'].includes(app.getNamespace())
           ? {
               http: `http://${address}:${port}/consul/health/self/check`,
               interval: '3s',
@@ -78,7 +74,8 @@ export class ConsulConfiguration implements ILifeCycle {
           : {
               tcp: `${address}:${port}`,
               interval: '3s',
-            });
+            };
+      }
 
       Object.assign(this.consulRegisterConfig, config);
 
