@@ -8,8 +8,10 @@ import {
   ApplicationContext,
   DataSourceManager,
   IMidwayContainer,
+  MidwayLoggerService,
 } from '@midwayjs/core';
 import { DataSource } from 'typeorm';
+import { TypeORMLogger } from './logger';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -22,6 +24,9 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
 
   @Inject()
   baseDir: string;
+
+  @Inject()
+  loggerService: MidwayLoggerService;
 
   @Init()
   async init() {
@@ -38,6 +43,11 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
   ): Promise<DataSource> {
     if (config['migrations']) {
       delete config['migrations'];
+    }
+    if (!config['logger']) {
+      config['logger'] = new TypeORMLogger(
+        this.loggerService.getLogger('typeormLogger')
+      );
     }
     const dataSource = new DataSource(config);
     await dataSource.initialize();

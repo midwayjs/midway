@@ -13,6 +13,8 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
 
   private loggerFactory: LoggerFactory<any, any>;
 
+  private lazyLoggerConfigMap: Map<string, any> = new Map();
+
   constructor(
     readonly applicationContext: IMidwayContainer,
     readonly globalOptions = {}
@@ -21,9 +23,9 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   }
 
   @Init()
-  protected init() {
+  protected async init() {
     this.loggerFactory = this.globalOptions['loggerFactory'] || loggers;
-    this.initClients(this.configService.getConfiguration('midwayLogger'));
+    await this.initClients(this.configService.getConfiguration('midwayLogger'));
     // alias inject logger
     this.applicationContext?.registerObject(
       'logger',
@@ -32,7 +34,12 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   }
 
   protected createClient(config, name?: string) {
-    this.loggerFactory.createLogger(name, config);
+    if (!config.lazyLoad) {
+      this.loggerFactory.createLogger(name, config);
+    } else {
+      delete config['lazyLoad'];
+      this.lazyLoggerConfigMap.set(name, config);
+    }
   }
 
   getName() {
@@ -44,6 +51,16 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   }
 
   public getLogger(name: string) {
+    const logger = this.loggerFactory.getLogger(name);
+    if (logger) {
+      return logger;
+    }
+
+    if (this.lazyLoggerConfigMap.has(name)) {
+      // try to lazy init
+      this.createClient(this.lazyLoggerConfigMap.get(name), name);
+      this.lazyLoggerConfigMap.delete(name);
+    }
     return this.loggerFactory.getLogger(name);
   }
 
