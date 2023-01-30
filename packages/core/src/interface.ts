@@ -346,7 +346,9 @@ export interface ILogger {
 }
 
 export interface MidwayCoreDefaultConfig {
-  midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
+  midwayLogger?: ServiceFactoryConfigOption<LoggerOptions & {
+    lazyLoad?: boolean;
+  }>;
   debug?: {
     recordConfigMergeOrder?: boolean;
   };

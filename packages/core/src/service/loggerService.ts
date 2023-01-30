@@ -21,9 +21,9 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   }
 
   @Init()
-  protected init() {
+  protected async init() {
     this.loggerFactory = this.globalOptions['loggerFactory'] || loggers;
-    this.initClients(this.configService.getConfiguration('midwayLogger'));
+    await this.initClients(this.configService.getConfiguration('midwayLogger'));
     // alias inject logger
     this.applicationContext?.registerObject(
       'logger',
