@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-http-parser",
-  "version": "3.6.0",
+  "version": "3.10.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

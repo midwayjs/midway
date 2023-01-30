@@ -1,6 +1,109 @@
 # Change Log
 
 
+## v3.10.0 (2023-01-30)
+
+#### :boom: Breaking Change
+* `consul`, `core`
+  * [#2688](https://github.com/midwayjs/midway/pull/2688) fix(deps): update dependency consul to v1 ([@czy88840616](https://github.com/czy88840616))
+* `bull`, `core`, `decorator`, `faas`, `info`, `validate`, `web-express`, `web-koa`, `web`
+  * [#2656](https://github.com/midwayjs/midway/pull/2656) feat: add pipes for parameter decorator ([@czy88840616](https://github.com/czy88840616))
+* `jwt`
+  * [#2595](https://github.com/midwayjs/midway/pull/2595) fix(deps): update dependency jsonwebtoken to v9 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `typegoose`
+  * [#2642](https://github.com/midwayjs/midway/pull/2642) chore(deps): update dependency @typegoose/typegoose to v10 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### :rocket: New Feature
+* `core`
+  * [#2687](https://github.com/midwayjs/midway/pull/2687) feat: add simulator ([@czy88840616](https://github.com/czy88840616))
+  * [#2654](https://github.com/midwayjs/midway/pull/2654) feat: add @Singleton and get namespace api ([@czy88840616](https://github.com/czy88840616))
+* `core`, `typeorm`
+  * [#2591](https://github.com/midwayjs/midway/pull/2591) feat: add typeorm logger and logger lazy create ([@czy88840616](https://github.com/czy88840616))
+* `kafka`, `mock`
+  * [#2679](https://github.com/midwayjs/midway/pull/2679) feat: support app enable ssl in dev mode ([@czy88840616](https://github.com/czy88840616))
+* `bull`, `core`, `decorator`, `faas`, `info`, `validate`, `web-express`, `web-koa`, `web`
+  * [#2656](https://github.com/midwayjs/midway/pull/2656) feat: add pipes for parameter decorator ([@czy88840616](https://github.com/czy88840616))
+* `faas`, `mock`
+  * [#2672](https://github.com/midwayjs/midway/pull/2672) feat: add custom response args ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `core`
+  * [#2626](https://github.com/midwayjs/midway/pull/2626) fix: run stop lifecycle with reverse ([@czy88840616](https://github.com/czy88840616))
+* `bootstrap`
+  * [#2644](https://github.com/midwayjs/midway/pull/2644) fix: sticky post ([@echosoar](https://github.com/echosoar))
+* `swagger`, `validate`
+  * [#2640](https://github.com/midwayjs/midway/pull/2640) fix: swagger one of with type ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `core`
+  * [#2646](https://github.com/midwayjs/midway/pull/2646) chore: change level for default logger level ([@czy88840616](https://github.com/czy88840616))
+* `core`, `faas`, `mock`
+  * [#2606](https://github.com/midwayjs/midway/pull/2606) feat: add ssr and custom trigger ([@czy88840616](https://github.com/czy88840616))
+* `mock`
+  * [#2643](https://github.com/midwayjs/midway/pull/2643) fix: output error when running test in jest environment ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2653](https://github.com/midwayjs/midway/pull/2653) docs(site): update guard.md ([@Sakuraine](https://github.com/Sakuraine))
+
+#### :package: Dependencies
+* `consul`, `core`
+  * [#2688](https://github.com/midwayjs/midway/pull/2688) fix(deps): update dependency consul to v1 ([@czy88840616](https://github.com/czy88840616))
+* `jwt`
+  * [#2685](https://github.com/midwayjs/midway/pull/2685) fix(deps): update dependency @types/jsonwebtoken to v9 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2595](https://github.com/midwayjs/midway/pull/2595) fix(deps): update dependency jsonwebtoken to v9 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2683](https://github.com/midwayjs/midway/pull/2683) chore(deps): update dependency madge to v6 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2680](https://github.com/midwayjs/midway/pull/2680) chore(deps): update jest monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2678](https://github.com/midwayjs/midway/pull/2678) chore(deps): update dependency madge to v5.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2673](https://github.com/midwayjs/midway/pull/2673) chore(deps): update dependency @vercel/ncc to v0.36.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2662](https://github.com/midwayjs/midway/pull/2662) chore(deps): update dependency ts-jest to v29.0.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2659](https://github.com/midwayjs/midway/pull/2659) chore(deps): update dependency @types/jest to v29.2.6 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2660](https://github.com/midwayjs/midway/pull/2660) chore(deps): update dependency lerna to v6.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2649](https://github.com/midwayjs/midway/pull/2649) chore(deps): update dependency @midwayjs/jest-environment-service-worker to v0.1.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2647](https://github.com/midwayjs/midway/pull/2647) chore(deps): update dependency typedoc to v0.23.24 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2650](https://github.com/midwayjs/midway/pull/2650) chore(deps): update dependency @midwayjs/jsdom-service-worker to v0.1.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2639](https://github.com/midwayjs/midway/pull/2639) chore(deps): update dependency @types/node to v18 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2641](https://github.com/midwayjs/midway/pull/2641) chore(deps): update dependency lerna to v6.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#2684](https://github.com/midwayjs/midway/pull/2684) chore(deps): update dependency sinon to v15 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `redis`
+  * [#2681](https://github.com/midwayjs/midway/pull/2681) fix(deps): update dependency ioredis to v5.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2667](https://github.com/midwayjs/midway/pull/2667) fix(deps): update dependency ioredis to v5.2.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `typegoose`
+  * [#2676](https://github.com/midwayjs/midway/pull/2676) chore(deps): update dependency @typegoose/typegoose to v10.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2642](https://github.com/midwayjs/midway/pull/2642) chore(deps): update dependency @typegoose/typegoose to v10 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#2675](https://github.com/midwayjs/midway/pull/2675) fix(deps): update dependency axios to v1.2.6 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2665](https://github.com/midwayjs/midway/pull/2665) fix(deps): update dependency axios to v1.2.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#2677](https://github.com/midwayjs/midway/pull/2677) chore(deps): update dependency mongoose to v6.9.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2661](https://github.com/midwayjs/midway/pull/2661) chore(deps): update dependency mongoose to v6.8.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2652](https://github.com/midwayjs/midway/pull/2652) chore(deps): update dependency mongoose to v6.8.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#2670](https://github.com/midwayjs/midway/pull/2670) chore(deps): update dependency @types/express to v4.17.16 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#2671](https://github.com/midwayjs/midway/pull/2671) chore(deps): update mikro-orm monorepo to v5.6.8 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2663](https://github.com/midwayjs/midway/pull/2663) chore(deps): update mikro-orm monorepo to v5.6.7 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2648](https://github.com/midwayjs/midway/pull/2648) chore(deps): update mikro-orm monorepo to v5.6.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#2674](https://github.com/midwayjs/midway/pull/2674) fix(deps): update dependency @grpc/grpc-js to v1.8.7 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2664](https://github.com/midwayjs/midway/pull/2664) fix(deps): update dependency @grpc/grpc-js to v1.8.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `consul`
+  * [#2668](https://github.com/midwayjs/midway/pull/2668) chore(deps): update dependency nock to v13.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#2669](https://github.com/midwayjs/midway/pull/2669) fix(deps): update dependency ws to v8.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#2666](https://github.com/midwayjs/midway/pull/2666) fix(deps): update dependency casbin to v5.21.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `passport`
+  * [#2651](https://github.com/midwayjs/midway/pull/2651) chore(deps): update dependency @types/passport-local to v1.0.35 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- iNE ([@Sakuraine](https://github.com/Sakuraine))
+
+
+
 ## v3.9.9 (2023-01-05)
 
 #### :bug: Bug Fix

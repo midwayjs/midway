@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bull",
-  "version": "3.9.7",
+  "version": "3.10.0",
   "description": "midway component for bull",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -24,8 +24,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.9.0",
-    "@midwayjs/mock": "^3.9.0"
+    "@midwayjs/core": "^3.10.0",
+    "@midwayjs/mock": "^3.10.0"
   },
   "dependencies": {
     "bull": "4.10.2"
