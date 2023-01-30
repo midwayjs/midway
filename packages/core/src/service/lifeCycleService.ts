@@ -11,6 +11,7 @@ import { FunctionalConfiguration } from '../functional/configuration';
 import { MidwayFrameworkService } from './frameworkService';
 import { MidwayConfigService } from './configService';
 import { debuglog } from 'util';
+import { MidwayMockService } from './mockService';
 const debug = debuglog('midway:debug');
 
 @Provide()
@@ -22,10 +23,16 @@ export class MidwayLifeCycleService {
   @Inject()
   protected configService: MidwayConfigService;
 
+  @Inject()
+  protected mockService: MidwayMockService;
+
   constructor(readonly applicationContext: IMidwayContainer) {}
 
   @Init()
   protected async init() {
+    // exec simulator init
+    await this.mockService.initSimulation();
+
     // run lifecycle
     const cycles = listModule(CONFIGURATION_KEY) as Array<{
       target: any;
@@ -73,6 +80,8 @@ export class MidwayLifeCycleService {
       }
     );
 
+    await this.mockService.runSimulatorSetup();
+
     // exec onReady()
     await this.runContainerLifeCycle(lifecycleInstanceList, 'onReady');
 
@@ -89,6 +98,7 @@ export class MidwayLifeCycleService {
   }
 
   public async stop() {
+    await this.mockService.runSimulatorTearDown();
     // stop lifecycle
     const cycles = listModule(CONFIGURATION_KEY) || [];
 

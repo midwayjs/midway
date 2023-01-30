@@ -1050,3 +1050,13 @@ export interface IServiceFactory<Client> {
   stop(): Promise<void>;
   getDefaultClientName(): string;
 }
+
+export interface ISimulation {
+  setup?(): Promise<void>;
+  tearDown?(): Promise<void>;
+  appSetup?(app: IMidwayApplication): Promise<void>;
+  contextSetup?(ctx: IMidwayContext, app: IMidwayApplication): Promise<void>;
+  contextTearDown?(ctx: IMidwayContext, app: IMidwayApplication): Promise<void>;
+  appTearDown?(app: IMidwayApplication): Promise<void>;
+  enableCondition(): boolean | Promise<boolean>;
+}
