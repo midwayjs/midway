@@ -18,7 +18,7 @@
     "nock": "13.3.0"
   },
   "dependencies": {
-    "consul": "^0.40.0"
+    "consul": "^1.0.0"
   },
   "keywords": [
     "consul"
