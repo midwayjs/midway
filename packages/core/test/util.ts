@@ -161,7 +161,7 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
     loggerFactory: new MidwayLoggerFactory(),
   });
 
-  return container.get(EmptyFramework);
+  return container.getAsync(EmptyFramework as any);
 }
 
 export async function createFramework(baseDir: string = '', globalConfig: any = {}): Promise<IMidwayContainer> {

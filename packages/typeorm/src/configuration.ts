@@ -20,6 +20,7 @@ import { useContainer, EntityTarget } from 'typeorm';
         midwayLogger: {
           clients: {
             typeormLogger: {
+              lazyLoad: true,
               fileLogName: 'midway-typeorm.log',
               enableError: false,
               level: 'info',
