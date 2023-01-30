@@ -10,7 +10,7 @@ export class ConsulProvider {
   constructor(providerOptions: IConsulProviderInfoOptions) {
     // should be, ignore config
     providerOptions.promisify = true;
-    this.consul = Consul(providerOptions);
+    this.consul = new Consul(providerOptions);
   }
 
   getConsul(): Consul.Consul {
