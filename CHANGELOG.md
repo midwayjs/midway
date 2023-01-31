@@ -1,6 +1,22 @@
 # Change Log
 
 
+## v3.10.4 (2023-01-31)
+
+#### :bug: Bug Fix
+* `core`, `mock`
+  * [#2694](https://github.com/midwayjs/midway/pull/2694) fix: missing pipes args in web param ([@czy88840616](https://github.com/czy88840616))
+
+#### :wrench: Maintenance
+* `core`
+  * [#2693](https://github.com/midwayjs/midway/pull/2693) chore(core): add type DecoratorMetaData for custom decorator ([@waitingsong](https://github.com/waitingsong))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.10.3 (2023-01-31)
 
 #### :bug: Bug Fix
