@@ -8,6 +8,8 @@ describe('test/koa.test.ts', function () {
   beforeAll(async () => {
     nock('https://gw.alicdn.com').get('/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png?version=123').reply(200, '123', {'content-type': 'image/png'});
     nock('https://www.baidu.com').get('/').reply(200, '<html>123</html>', {'content-type': 'text/html'});
+    nock('https://www.baidu.com').get('/link?url=dXnGnrTKHV5EBpYuOj5Febx_pVXwbaONJvOSBOev6VO&wd=&eqid=da62137f000db74500000005638f3778').reply(200, `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta content="always" name="referrer"><script>try{if(window.opener&&window.opener.bds&&window.opener.bds.pdc&&window.opener.bds.pdc.sendLinkLog){window.opener.bds.pdc.sendLinkLog();}}catch(e) {};var timeout = 0;if(/bdlksmp/.test(window.location.href)){var reg = /bdlksmp=([^=&]+)/,matches = window.location.href.match(reg);timeout = matches[1] ? matches[1] : 0};setTimeout(function(){window.location.replace("https://nodejs.org/")},timeout);window.opener=null;</script>
+    <noscript><META http-equiv="refresh" content="0;URL='https://nodejs.org/'"></noscript>`, {'content-type': 'text/html', 'content-encoding': 'br'});
     nock('https://sm.bdimg.com').get('/static/wiseindex/amd_modules/@searchfe/assert_3ed54c3.js').reply(200, '123', {'content-type': 'application/x-javascript'});
     nock('https://httpbin.org')
       .persist()
