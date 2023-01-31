@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/casbin-typeorm-adapter",
   "description": "midway casbin typeorm adapter",
-  "version": "3.10.4",
+  "version": "3.10.5",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
@@ -9,16 +9,16 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.10.4",
-    "@midwayjs/koa": "^3.10.4",
-    "@midwayjs/mock": "^3.10.4",
+    "@midwayjs/core": "^3.10.5",
+    "@midwayjs/koa": "^3.10.5",
+    "@midwayjs/mock": "^3.10.5",
     "casbin": "5.21.0",
     "sqlite3": "5.1.4",
     "typeorm": "0.3.11"
   },
   "dependencies": {
-    "@midwayjs/casbin": "^3.10.4",
-    "@midwayjs/typeorm": "^3.10.4"
+    "@midwayjs/casbin": "^3.10.5",
+    "@midwayjs/typeorm": "^3.10.5"
   },
   "keywords": [
     "midway",

@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.10.5 (2023-01-31)
+
+#### :bug: Bug Fix
+* `core`, `decorator`, `validate`
+  * [#2695](https://github.com/midwayjs/midway/pull/2695) fix: web param set wrong pipe position ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.4 (2023-01-31)
 
 #### :bug: Bug Fix
