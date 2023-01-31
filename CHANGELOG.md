@@ -1,6 +1,23 @@
 # Change Log
 
 
+## v3.10.2 (2023-01-31)
+
+#### :bug: Bug Fix
+* `typeorm`
+  * [#2690](https://github.com/midwayjs/midway/pull/2690) fix: create default logger when typeorm logger set undefined ([@czy88840616](https://github.com/czy88840616))
+* `http-proxy`, `upload`
+  * [#2563](https://github.com/midwayjs/midway/pull/2563) fix: remove content-length when proxy stream ([@echosoar](https://github.com/echosoar))
+
+#### :package: Dependencies
+* [#2622](https://github.com/midwayjs/midway/pull/2622) chore(deps): update dependency typescript to v4.9.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.1 (2023-01-31)
 
 #### :bug: Bug Fix
