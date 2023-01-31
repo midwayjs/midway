@@ -5,12 +5,25 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "/v3.10.3",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>core</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2691\" target=\"_blank\" rel=\"noopener noreferrer\">#2691</a> fix(core): variable options may undefined when use custom decorator (<a href=\"https://github.com/waitingsong\" target=\"_blank\" rel=\"noopener noreferrer\">@waitingsong</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a class=\"hash-link\" href=\"#committers-1\" title=\"标题的直接链接\">​</a></h2><ul><li>waiting (<a href=\"https://github.com/waitingsong\" target=\"_blank\" rel=\"noopener noreferrer\">@waitingsong</a>)</li></ul>",
+            "url": "https://midwayjs.org/changelog/v3.10.3",
+            "title": "v3.10.3",
+            "summary": "Bug Fix",
+            "date_modified": "2023-01-31T20:00:00.000Z",
+            "author": {
+                "name": "waiting",
+                "url": "https://github.com/waitingsong"
+            },
+            "tags": []
+        },
+        {
             "id": "/v3.10.2",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>typeorm</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2690\" target=\"_blank\" rel=\"noopener noreferrer\">#2690</a> fix: create default logger when typeorm logger set undefined (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li><li><code>http-proxy</code>, <code>upload</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2563\" target=\"_blank\" rel=\"noopener noreferrer\">#2563</a> fix: remove content-length when proxy stream (<a href=\"https://github.com/echosoar\" target=\"_blank\" rel=\"noopener noreferrer\">@echosoar</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-dependencies\">📦 Dependencies<a class=\"hash-link\" href=\"#-dependencies\" title=\"标题的直接链接\">​</a></h2><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2622\" target=\"_blank\" rel=\"noopener noreferrer\">#2622</a> chore(deps): update dependency typescript to v4.9.5 (<a href=\"https://github.com/apps/renovate\" target=\"_blank\" rel=\"noopener noreferrer\">@renovate[bot]</a>)</li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-2\">Committers: 2<a class=\"hash-link\" href=\"#committers-2\" title=\"标题的直接链接\">​</a></h2><ul><li>Gao Yang (<a href=\"https://github.com/echosoar\" target=\"_blank\" rel=\"noopener noreferrer\">@echosoar</a>)</li><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
             "url": "https://midwayjs.org/changelog/v3.10.2",
             "title": "v3.10.2",
             "summary": "Bug Fix",
-            "date_modified": "2023-01-31T20:00:00.000Z",
+            "date_modified": "2023-01-31T19:00:00.000Z",
             "author": {
                 "name": "Harry Chen",
                 "url": "https://github.com/czy88840616"
@@ -23,7 +36,7 @@
             "url": "https://midwayjs.org/changelog/v3.10.1",
             "title": "v3.10.1",
             "summary": "Bug Fix",
-            "date_modified": "2023-01-31T19:00:00.000Z",
+            "date_modified": "2023-01-31T18:00:00.000Z",
             "author": {
                 "name": "Harry Chen",
                 "url": "https://github.com/czy88840616"

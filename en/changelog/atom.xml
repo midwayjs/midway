@@ -9,10 +9,22 @@
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
     <entry>
+        <title type="html"><![CDATA[v3.10.3]]></title>
+        <id>/v3.10.3</id>
+        <link href="https://midwayjs.org/en/changelog/v3.10.3"/>
+        <updated>2023-01-31T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2691" target="_blank" rel="noopener noreferrer">#2691</a> fix(core): variable options may undefined when use custom decorator (<a href="https://github.com/waitingsong" target="_blank" rel="noopener noreferrer">@waitingsong</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="Lien direct vers le titre">​</a></h2><ul><li>waiting (<a href="https://github.com/waitingsong" target="_blank" rel="noopener noreferrer">@waitingsong</a>)</li></ul>]]></content>
+        <author>
+            <name>waiting</name>
+            <uri>https://github.com/waitingsong</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[v3.10.2]]></title>
         <id>/v3.10.2</id>
         <link href="https://midwayjs.org/en/changelog/v3.10.2"/>
-        <updated>2023-01-31T20:00:00.000Z</updated>
+        <updated>2023-01-31T19:00:00.000Z</updated>
         <summary type="html"><![CDATA[Bug Fix]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2690" target="_blank" rel="noopener noreferrer">#2690</a> fix: create default logger when typeorm logger set undefined (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>http-proxy</code>, <code>upload</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2563" target="_blank" rel="noopener noreferrer">#2563</a> fix: remove content-length when proxy stream (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a class="hash-link" href="#-dependencies" title="Lien direct vers le titre">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/2622" target="_blank" rel="noopener noreferrer">#2622</a> chore(deps): update dependency typescript to v4.9.5 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="Lien direct vers le titre">​</a></h2><ul><li>Gao Yang (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
         <author>
@@ -28,7 +40,7 @@
         <title type="html"><![CDATA[v3.10.1]]></title>
         <id>/v3.10.1</id>
         <link href="https://midwayjs.org/en/changelog/v3.10.1"/>
-        <updated>2023-01-31T19:00:00.000Z</updated>
+        <updated>2023-01-31T18:00:00.000Z</updated>
         <summary type="html"><![CDATA[Bug Fix]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2689" target="_blank" rel="noopener noreferrer">#2689</a> fix: logger async and egg will be start error with cluster mode (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
         <author>
