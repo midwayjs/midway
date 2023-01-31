@@ -333,7 +333,7 @@ export interface DecoratorMetaData<T = any> {
   /** decorator key */
   key: string;
   metadata: T;
-  options: MethodDecoratorOptions;
+  options: MethodDecoratorOptions | undefined;
 }
 export interface MethodDecoratorOptions {
   impl?: boolean;
