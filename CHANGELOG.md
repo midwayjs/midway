@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.10.1 (2023-01-31)
+
+#### :bug: Bug Fix
+* `core`
+  * [#2689](https://github.com/midwayjs/midway/pull/2689) fix: logger async and egg will be start error with cluster mode ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.0 (2023-01-30)
 
 #### :boom: Breaking Change
