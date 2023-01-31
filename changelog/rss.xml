@@ -10,10 +10,18 @@
         <language>en</language>
         <copyright>Copyright © 2023 Facebook, Inc.</copyright>
         <item>
+            <title><![CDATA[v3.10.4]]></title>
+            <link>https://midwayjs.org/changelog/v3.10.4</link>
+            <guid>/v3.10.4</guid>
+            <pubDate>Tue, 31 Jan 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>core</code>, <code>mock</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2694" target="_blank" rel="noopener noreferrer">#2694</a> fix: missing pipes args in web param (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-maintenance">🔧 Maintenance<a class="hash-link" href="#-maintenance" title="标题的直接链接">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2693" target="_blank" rel="noopener noreferrer">#2693</a> chore(core): add type DecoratorMetaData for custom decorator (<a href="https://github.com/waitingsong" target="_blank" rel="noopener noreferrer">@waitingsong</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="标题的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>waiting (<a href="https://github.com/waitingsong" target="_blank" rel="noopener noreferrer">@waitingsong</a>)</li></ul>]]></content:encoded>
+        </item>
+        <item>
             <title><![CDATA[v3.10.3]]></title>
             <link>https://midwayjs.org/changelog/v3.10.3</link>
             <guid>/v3.10.3</guid>
-            <pubDate>Tue, 31 Jan 2023 20:00:00 GMT</pubDate>
+            <pubDate>Tue, 31 Jan 2023 19:00:00 GMT</pubDate>
             <description><![CDATA[Bug Fix]]></description>
             <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2691" target="_blank" rel="noopener noreferrer">#2691</a> fix(core): variable options may undefined when use custom decorator (<a href="https://github.com/waitingsong" target="_blank" rel="noopener noreferrer">@waitingsong</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="标题的直接链接">​</a></h2><ul><li>waiting (<a href="https://github.com/waitingsong" target="_blank" rel="noopener noreferrer">@waitingsong</a>)</li></ul>]]></content:encoded>
         </item>
@@ -21,7 +29,7 @@
             <title><![CDATA[v3.10.2]]></title>
             <link>https://midwayjs.org/changelog/v3.10.2</link>
             <guid>/v3.10.2</guid>
-            <pubDate>Tue, 31 Jan 2023 19:00:00 GMT</pubDate>
+            <pubDate>Tue, 31 Jan 2023 18:00:00 GMT</pubDate>
             <description><![CDATA[Bug Fix]]></description>
             <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2690" target="_blank" rel="noopener noreferrer">#2690</a> fix: create default logger when typeorm logger set undefined (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>http-proxy</code>, <code>upload</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2563" target="_blank" rel="noopener noreferrer">#2563</a> fix: remove content-length when proxy stream (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a class="hash-link" href="#-dependencies" title="标题的直接链接">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/2622" target="_blank" rel="noopener noreferrer">#2622</a> chore(deps): update dependency typescript to v4.9.5 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="标题的直接链接">​</a></h2><ul><li>Gao Yang (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
         </item>
@@ -29,7 +37,7 @@
             <title><![CDATA[v3.10.1]]></title>
             <link>https://midwayjs.org/changelog/v3.10.1</link>
             <guid>/v3.10.1</guid>
-            <pubDate>Tue, 31 Jan 2023 18:00:00 GMT</pubDate>
+            <pubDate>Tue, 31 Jan 2023 17:00:00 GMT</pubDate>
             <description><![CDATA[Bug Fix]]></description>
             <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2689" target="_blank" rel="noopener noreferrer">#2689</a> fix: logger async and egg will be start error with cluster mode (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="标题的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
         </item>

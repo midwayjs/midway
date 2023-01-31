@@ -5,12 +5,25 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "/v3.10.4",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>core</code>, <code>mock</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2694\" target=\"_blank\" rel=\"noopener noreferrer\">#2694</a> fix: missing pipes args in web param (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-maintenance\">🔧 Maintenance<a class=\"hash-link\" href=\"#-maintenance\" title=\"标题的直接链接\">​</a></h2><ul><li><code>core</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2693\" target=\"_blank\" rel=\"noopener noreferrer\">#2693</a> chore(core): add type DecoratorMetaData for custom decorator (<a href=\"https://github.com/waitingsong\" target=\"_blank\" rel=\"noopener noreferrer\">@waitingsong</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-2\">Committers: 2<a class=\"hash-link\" href=\"#committers-2\" title=\"标题的直接链接\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li><li>waiting (<a href=\"https://github.com/waitingsong\" target=\"_blank\" rel=\"noopener noreferrer\">@waitingsong</a>)</li></ul>",
+            "url": "https://midwayjs.org/changelog/v3.10.4",
+            "title": "v3.10.4",
+            "summary": "Bug Fix",
+            "date_modified": "2023-01-31T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
             "id": "/v3.10.3",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a class=\"hash-link\" href=\"#-bug-fix\" title=\"标题的直接链接\">​</a></h2><ul><li><code>core</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/2691\" target=\"_blank\" rel=\"noopener noreferrer\">#2691</a> fix(core): variable options may undefined when use custom decorator (<a href=\"https://github.com/waitingsong\" target=\"_blank\" rel=\"noopener noreferrer\">@waitingsong</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a class=\"hash-link\" href=\"#committers-1\" title=\"标题的直接链接\">​</a></h2><ul><li>waiting (<a href=\"https://github.com/waitingsong\" target=\"_blank\" rel=\"noopener noreferrer\">@waitingsong</a>)</li></ul>",
             "url": "https://midwayjs.org/changelog/v3.10.3",
             "title": "v3.10.3",
             "summary": "Bug Fix",
-            "date_modified": "2023-01-31T20:00:00.000Z",
+            "date_modified": "2023-01-31T19:00:00.000Z",
             "author": {
                 "name": "waiting",
                 "url": "https://github.com/waitingsong"
@@ -23,7 +36,7 @@
             "url": "https://midwayjs.org/changelog/v3.10.2",
             "title": "v3.10.2",
             "summary": "Bug Fix",
-            "date_modified": "2023-01-31T19:00:00.000Z",
+            "date_modified": "2023-01-31T18:00:00.000Z",
             "author": {
                 "name": "Harry Chen",
                 "url": "https://github.com/czy88840616"
@@ -36,7 +49,7 @@
             "url": "https://midwayjs.org/changelog/v3.10.1",
             "title": "v3.10.1",
             "summary": "Bug Fix",
-            "date_modified": "2023-01-31T18:00:00.000Z",
+            "date_modified": "2023-01-31T17:00:00.000Z",
             "author": {
                 "name": "Harry Chen",
                 "url": "https://github.com/czy88840616"
