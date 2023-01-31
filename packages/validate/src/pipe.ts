@@ -88,7 +88,7 @@ abstract class ParsePipe extends AbstractValidationPipe {
 }
 
 @Pipe()
-export class DefaultValidPipe extends ParsePipe {}
+export class DecoratorValidPipe extends ParsePipe {}
 
 @Pipe()
 export class ParseIntPipe extends ParsePipe {

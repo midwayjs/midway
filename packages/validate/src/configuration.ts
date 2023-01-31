@@ -10,7 +10,7 @@ import * as DefaultConfig from './config/config.default';
 import { ValidateService } from './service';
 import * as i18n from '@midwayjs/i18n';
 import {
-  DefaultValidPipe,
+  DecoratorValidPipe,
   ParseBoolPipe,
   ParseFloatPipe,
   ParseIntPipe,
@@ -52,7 +52,7 @@ export class ValidateConfiguration {
     await container.getAsync(ParseIntPipe);
     await container.getAsync(ParseBoolPipe);
     await container.getAsync(ParseFloatPipe);
-    await container.getAsync(DefaultValidPipe);
+    await container.getAsync(DecoratorValidPipe);
 
     this.decoratorService.registerParameterHandler(
       VALID_KEY,

@@ -1,7 +1,7 @@
 import { createCustomParamDecorator } from '@midwayjs/core';
 import { AnySchema } from 'joi';
 import { VALID_KEY } from '../constants';
-import { DefaultValidPipe } from '../pipe';
+import { DecoratorValidPipe } from '../pipe';
 
 export function Valid(schema?: AnySchema<any>) {
   return createCustomParamDecorator(
@@ -10,7 +10,7 @@ export function Valid(schema?: AnySchema<any>) {
       schema,
     },
     {
-      pipes: [DefaultValidPipe],
+      pipes: [DecoratorValidPipe],
     }
   );
 }
