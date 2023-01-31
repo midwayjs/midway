@@ -8,25 +8,34 @@ import {
   Headers,
   INJECT_CUSTOM_PARAM,
   Param,
+  Pipe,
+  PipeTransform,
   Query,
   Session,
 } from '../../../src';
 
+@Pipe()
+export class TestPipe implements PipeTransform {
+  transform(value: any) {
+    return value;
+  }
+}
+
 function Token() {
   return createRequestParamDecorator(ctx => {
     return ctx.request.headers.token;
-  });
+  }, [TestPipe]);
 }
 
 class Test {
   async doget(
-    @Param('aa') aa: any,
-    @Query('bb') query: any,
-    @Body('body') body: any,
-    @Headers('tt') tt: any,
-    @File({ requireFile: true }) f: any,
+    @Param('aa', [TestPipe]) aa: any,
+    @Query('bb', [TestPipe]) query: any,
+    @Body('body', [TestPipe]) body: any,
+    @Headers('tt', [TestPipe]) tt: any,
+    @File({ requireFile: true }, [TestPipe]) f: any,
     @Files() files: any,
-    @Session(ALL) bb: any,
+    @Session(ALL, [TestPipe]) bb: any,
     @Token() token: any
   ) {}
 }

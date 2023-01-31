@@ -11,14 +11,14 @@ import {
   transformTypeFromTSDesign,
 } from '../decorator';
 import {
-  DecoratorMetaData,
+  MethodDecoratorMetaData,
+  ParameterDecoratorMetaData,
   HandlerFunction,
   IMidwayContainer,
   MethodHandlerFunction,
   ParameterHandlerFunction,
   JoinPoint,
   ScopeEnum,
-  ParamDecoratorOptions,
   PipeUnionTransform,
   PipeTransform,
 } from '../interface';
@@ -48,10 +48,8 @@ export class MidwayDecoratorService {
     // add custom method decorator listener
     this.applicationContext.onBeforeBind(Clzz => {
       // find custom method decorator metadata, include method decorator information array
-      const methodDecoratorMetadataList: DecoratorMetaData[] = getClassMetadata(
-        INJECT_CUSTOM_METHOD,
-        Clzz
-      );
+      const methodDecoratorMetadataList: MethodDecoratorMetaData[] =
+        getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
 
       if (methodDecoratorMetadataList) {
         // loop it, save this order for decorator run
@@ -83,13 +81,7 @@ export class MidwayDecoratorService {
 
       // find custom param decorator metadata
       const parameterDecoratorMetadata: {
-        [methodName: string]: Array<{
-          key: string;
-          parameterIndex: number;
-          propertyName: string;
-          metadata: any;
-          options: ParamDecoratorOptions;
-        }>;
+        [methodName: string]: Array<ParameterDecoratorMetaData>;
       } = getClassMetadata(INJECT_CUSTOM_PARAM, Clzz);
 
       if (parameterDecoratorMetadata) {
