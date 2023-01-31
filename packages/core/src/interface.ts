@@ -329,11 +329,11 @@ export type PipeTransformFunction<T = any, R = any> = (value: T) => R;
 export type PipeUnionTransform<T = any, R = any> = PipeTransform<T, R> | (new (...args) => PipeTransform<T, R>) | PipeTransformFunction<T, R>;
 
 export interface DecoratorMetaData<T = any> {
-  propertyName: string
+  propertyName: string;
   /** decorator key */
-  key: string
-  metadata: T
-  options: MethodDecoratorOptions
+  key: string;
+  metadata: T;
+  options: MethodDecoratorOptions;
 }
 export interface MethodDecoratorOptions {
   impl?: boolean;
