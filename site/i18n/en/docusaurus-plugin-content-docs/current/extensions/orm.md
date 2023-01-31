@@ -1062,7 +1062,7 @@ Now, let's insert albums and photos into the database:
 import { Provide, Inject } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
-import { PhotoMetadata } from './entity/photoMetadata';
+import { Album } from './entity/Album';
 import { Repository } from 'typeorm';
 
 @Provide()

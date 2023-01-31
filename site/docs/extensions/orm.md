@@ -1060,7 +1060,7 @@ export class Photo {
 import { Provide, Inject } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
-import { PhotoMetadata } from './entity/photoMetadata';
+import { Album } from './entity/album';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -1388,6 +1388,44 @@ export class MainConfiguration {
     // ...
   }
 }
+```
+
+
+
+### 日志
+
+数据源在未配置日志对象时，组件会自动创建一个 `typeormLogger`，用于保存执行的 SQL 信息，方便排查问题和 SQL 审核。
+
+默认配置为：
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      typeormLogger: {
+        fileLogName: 'midway-typeorm.log',
+        enableError: false,
+        level: 'info',
+      },
+    },
+  }
+}
+```
+
+我们可以使用普通日志的配置方式进行调整，如果不希望生成日志，可以配置关闭。
+
+```typescript
+export default {
+  // ...
+  typeorm: {
+    dataSource: {
+      default: {
+        // ...
+        logger: false,
+      }
+    },
+  },
+};
 ```
 
 

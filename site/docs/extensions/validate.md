@@ -177,14 +177,12 @@ export class UserDTO {
 ```typescript
 // src/controller/home.ts
 import { Controller, Get, Provide } from '@midwayjs/decorator';
-import { Validate } from '@midwayjs/validate';
 import { UserDTO } from './dto/user';
 
 @Controller('/api/user')
 export class HomeController {
 
   @Post('/')
-  @Validate()
   async updateUser(@Body() user: UserDTO ) {
     // user.id
   }
@@ -202,11 +200,191 @@ ValidationError: "id" is required
 同时，由于定义了 `id` 的类型，在拿到字符串的情况下，会自动将 id 变为数字。
 
 ```typescript
-@Validate()
 async updateUser(@Body() user: UserDTO ) {
   // typeof user.id === 'number'
 }
 ```
+
+如果需要对方法级别单独配置信息，可以使用 `@Validate` 装饰器，比如单独配置错误状态。
+
+```typescript
+// src/controller/home.ts
+import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Validate } from '@midwayjs/validate';
+import { UserDTO } from './dto/user';
+
+@Controller('/api/user')
+export class HomeController {
+
+  @Post('/')
+  @Validate({
+    errorStatus: 422,
+  })
+  async updateUser(@Body() user: UserDTO ) {
+    // user.id
+  }
+}
+```
+
+一般情况下，使用全局默认配置即可。
+
+
+
+## 校验管道
+
+如果你的参数是基础类型，比如 `number`, `string`, `boolean`，则可以使用组件提供的管道进行校验。
+
+默认的 Web 参数装饰器都可以在第二个参数传入管道。
+
+比如：
+
+```typescript
+import { ParseIntPipe } from '@midwayjs/validate';
+
+@Controller('/api/user')
+export class HomeController {
+
+  @Post('/update_age')
+  async updateAge(@Body('age', [ParseIntPipe]) age: number ) {
+    // ...
+  }
+}
+```
+
+`ParseIntPipe` 管道可以将字符串，数字数据转换为数字，这样从请求参数获取到的 `age` 字段则会通过管道的校验并转换为数字格式。
+
+可以使用 的内置管道有：
+
+* `ParseIntPipe`
+* `ParseFloatPipe`
+* `ParseBoolPipe`
+* `DefaultValuePipe`
+
+
+
+`ParseIntPipe` 用于将参数转为整形数字。
+
+```typescript
+import { ParseIntPipe } from '@midwayjs/validate';
+
+// ...
+async update(@Body('age', [ParseIntPipe]) age: number) {
+  return age;
+}
+
+update({ age: '12'} ); => 12
+update({ age: '12.2'} ); => Error
+update({ age: 'abc'} ); => Error
+```
+
+`ParseFloatPipe` 用于将参数转为浮点型数字数字。
+
+```typescript
+import { ParseFloatPipe } from '@midwayjs/validate';
+
+// ...
+async update(@Body('size', [ParseFloatPipe]) size: number) {
+  return size;
+}
+
+update({ size: '12.2'} ); => 12.2
+update({ size: '12'} ); => 12
+```
+
+`ParseBoolPipe` 用于将参数转为布尔值。
+
+```typescript
+import { ParseBoolPipe } from '@midwayjs/validate';
+
+// ...
+async update(@Body('isMale', [ParseBoolPipe]) isMale: boolean) {
+  return isMale;
+}
+
+update({ isMale: 'true'} ); => true
+update({ isMale: '0'} ); => Error
+```
+
+`DefaultValuePipe` 用于设定默认值。
+
+```typescript
+import { DefaultValuePipe } from '@midwayjs/validate';
+
+// ...
+async update(@Body('nickName', [new DefaultValuePipe('anonymous')]) nickName: string) {
+  return nickName;
+}
+
+update({ isMale: undefined} ); => 'anonymous'
+```
+
+
+
+在非 Web 场景下，没有 `@Body` 等 Web 类装饰器的情况下，也可以使用 `@Valid` 装饰器来进行校验。
+
+比如在服务中：
+
+```typescript
+import { ParseIntPipe } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+  async updateUser(@Valid() user: UserDTO ) {
+    // ...
+  }
+}
+```
+
+如果参数不是 DTO，不存在规则，也可以通过参数传递一个 Joi 格式的校验规则。
+
+```typescript
+import { ParseIntPipe, Rule } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+  async updateUser(@Valid(RuleType.number().required()) userAge: number ) {
+    // ...
+  }
+}
+```
+
+
+
+## 自定义管道
+
+如果默认的管道不满足需求，可以通过继承，快速实现一个自定义校验管道，组件已经提供了一个 `ParsePipe` 类用于快速编写。
+
+```typescript
+import { Pipe } from '@midwayjs/Pipe';
+import { ParsePipe, RuleType } from '@midwayjs/validate';
+
+@Pipe()
+export class ParseCustomDataPipe extends ParsePipe {
+  getSchema(): RuleType.AnySchema<any> {
+    // ...
+  }
+}
+```
+
+`getSchema` 方法用于返回一个符合 `Joi` 格式的校验规则。
+
+比如 `ParseIntPipe` 的代码如下，管道执行时会自动获取这个 schema 进行校验，并在校验成功后将值返回。
+
+```typescript
+import { Pipe } from '@midwayjs/Pipe';
+import { ParsePipe, RuleType } from '@midwayjs/validate';
+
+@Pipe()
+export class ParseIntPipe extends ParsePipe {
+  getSchema() {
+    return RuleType.number().integer().required();
+  }
+}
+```
+
+
 
 
 
@@ -353,7 +531,6 @@ export class UserDTO {
 
 Midway 提供了 `PickDto` 和 `OmitDto` 两个方法根据现有的的 DTO 类型创建新的 DTO。
 
-
 `PickDto` 用于从现有的 DTO 中获取一些属性，变成新的 DTO，而 `OmitDto` 用于将其中某些属性剔除，比如：
 
 
@@ -439,6 +616,8 @@ export class UserDTO {
   info2: string;
 }
 ```
+
+
 
 
 

@@ -176,7 +176,7 @@ export class UserService {
 
 ```typescript
 // service
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -205,6 +205,17 @@ export class B {
   @Inject()
   userService: UserService
   //...
+}
+```
+
+在 v3.10 版本之后，可以使的单例装饰器来替代原来的写法。
+
+```typescript
+import { Singleton } from '@midwayjs/core';
+
+@Singleton()
+class UserService {
+  // ...
 }
 ```
 

@@ -268,6 +268,21 @@ console.log(value);
 
 
 
+### getNamespace
+
+通过 `getNamespace` API ，可以获取到当前 app 归属的组件的 [框架的类型](#main-application)（即组件的 `namespace`）。
+
+比如在 `koa` 组件中。
+
+```typescript
+this.app.getNamespace();
+// 'koa'
+```
+
+
+
+
+
 ## Context
 
 Context 是一个**请求级别的对象**，在每一次收到用户请求时，框架会实例化一个 Context 对象，
