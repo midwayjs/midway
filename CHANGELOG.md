@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.10.3 (2023-01-31)
+
+#### :bug: Bug Fix
+* `core`
+  * [#2691](https://github.com/midwayjs/midway/pull/2691) fix(core): variable options may undefined when use custom decorator ([@waitingsong](https://github.com/waitingsong))
+
+#### Committers: 1
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.10.2 (2023-01-31)
 
 #### :bug: Bug Fix
