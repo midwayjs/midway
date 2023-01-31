@@ -11,6 +11,7 @@ import {
   transformTypeFromTSDesign,
 } from '../decorator';
 import {
+  DecoratorMetaData,
   HandlerFunction,
   IMidwayContainer,
   MethodHandlerFunction,
@@ -18,7 +19,6 @@ import {
   JoinPoint,
   ScopeEnum,
   ParamDecoratorOptions,
-  MethodDecoratorOptions,
   PipeUnionTransform,
   PipeTransform,
 } from '../interface';
@@ -48,12 +48,10 @@ export class MidwayDecoratorService {
     // add custom method decorator listener
     this.applicationContext.onBeforeBind(Clzz => {
       // find custom method decorator metadata, include method decorator information array
-      const methodDecoratorMetadataList: Array<{
-        propertyName: string;
-        key: string;
-        metadata: any;
-        options: MethodDecoratorOptions;
-      }> = getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
+      const methodDecoratorMetadataList: DecoratorMetaData[] = getClassMetadata(
+        INJECT_CUSTOM_METHOD,
+        Clzz
+      );
 
       if (methodDecoratorMetadataList) {
         // loop it, save this order for decorator run
