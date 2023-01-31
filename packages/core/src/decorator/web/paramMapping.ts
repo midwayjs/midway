@@ -25,11 +25,16 @@ export interface RouterParamValue {
 
 const createParamMapping = function (type: RouteParamTypes) {
   return (propertyData?: any, pipes?: Array<PipeUnionTransform>) => {
-    return createCustomParamDecorator(WEB_ROUTER_PARAM_KEY, {
-      type,
-      propertyData,
-      pipes,
-    });
+    return createCustomParamDecorator(
+      WEB_ROUTER_PARAM_KEY,
+      {
+        type,
+        propertyData,
+      },
+      {
+        pipes,
+      }
+    );
   };
 };
 

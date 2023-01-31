@@ -7,7 +7,7 @@ import {
   Valid,
   ParseIntPipe,
   ParseFloatPipe,
-  ParseBoolPipe, DefaultValuePipe, DefaultValidPipe, AbstractValidationPipe, ValidateService
+  ParseBoolPipe, DefaultValuePipe, DecoratorValidPipe, AbstractValidationPipe, ValidateService
 } from '../src';
 import { createLightApp, close } from '@midwayjs/mock';
 import * as Joi from 'joi';
@@ -481,7 +481,7 @@ describe('/test/check.test.ts', () => {
 
   describe('test pipe', () => {
     it('should test getSchema', function () {
-      const pipe = new DefaultValidPipe();
+      const pipe = new DecoratorValidPipe();
       expect(pipe['getSchema']()).toBeUndefined();
     });
 
