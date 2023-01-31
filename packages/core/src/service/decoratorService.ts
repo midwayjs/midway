@@ -59,7 +59,7 @@ export class MidwayDecoratorService {
         // loop it, save this order for decorator run
         for (const meta of methodDecoratorMetadataList) {
           const { propertyName, key, metadata, options } = meta;
-          if (!options.impl) {
+          if (!options || !options.impl) {
             continue;
           }
           // add aspect implementation first
@@ -113,7 +113,7 @@ export class MidwayDecoratorService {
                   } = meta;
 
                   let parameterDecoratorHandler;
-                  if (options.impl) {
+                  if (options && options.impl) {
                     parameterDecoratorHandler =
                       this.parameterDecoratorMap.get(key);
                     if (!parameterDecoratorHandler) {
