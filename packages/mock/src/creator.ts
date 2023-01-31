@@ -315,7 +315,7 @@ export async function createFunctionApp<
       process.env.MIDWAY_HTTP_PORT ?? faasConfig['port'] ?? options['port'];
 
     if (options.starter.callback2) {
-      app.callback2 = options.starter.callback2;
+      app.callback2 = options.starter.callback2.bind(options.starter);
     } else {
       app.callback2 = () => {
         // mock a real http server response for local dev
