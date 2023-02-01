@@ -42,7 +42,7 @@ describe('test/express.test.ts', function () {
       .expect(res => {
         assert(!res.headers['access-control-allow-origin']);
       })
-      .expect(200)
+      .expect(200);
   });
 
   it('jsonp callback', async () => {
@@ -51,6 +51,11 @@ describe('test/express.test.ts', function () {
       .post('/jsonp?callback=fn')
       .expect(200)
       .expect('x-content-type-options', 'nosniff')
-      .expect(`/**/ typeof callback === 'function' && callback({"test":123});`)
+      .expect(`/**/ typeof callback === 'function' && callback({"test":123});`);
+  });
+
+  it('jsonp callback ignore', async () => {
+    const request = await createHttpRequest(app);
+    await request.post('/jsonp').expect(200).expect({ test: 123 });
   });
 });

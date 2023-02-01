@@ -8,7 +8,7 @@ describe('test/koa.test.ts', function () {
     try {
       app = await createApp(appDir);
     } catch (e) {
-      console.log("e", e);
+      console.log('e', e);
     }
   });
 
@@ -49,14 +49,17 @@ describe('test/koa.test.ts', function () {
       .expect(200);
   });
 
-
   it('jsonp callback', async () => {
     const request = await createHttpRequest(app);
     await request
       .post('/jsonp?callback=fn')
       .expect(200)
       .expect('x-content-type-options', 'nosniff')
-      .expect(`/**/ typeof callback === 'function' && callback({"test":123});`)
+      .expect(`/**/ typeof callback === 'function' && callback({"test":123});`);
+  });
 
+  it('jsonp callback ignore', async () => {
+    const request = await createHttpRequest(app);
+    await request.post('/jsonp').expect(200).expect({ test: 123 });
   });
 });
