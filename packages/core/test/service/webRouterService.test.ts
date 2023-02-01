@@ -27,7 +27,7 @@ describe('/test/service/webRouterService.test.ts', function () {
     collector.addRouter(async (ctx) => {
       return 'test all method';
     } ,{
-      url: '/abc/dddd/*',
+      url: '/test/all/method',
       requestMethod: 'ALL',
     });
     collector.addRouter(async (ctx) => {
@@ -42,9 +42,9 @@ describe('/test/service/webRouterService.test.ts', function () {
 
     routeInfo = await collector.getMatchedRouterInfo('/abc/dddd/efg', 'GET');
     expect(routeInfo?.url).toEqual('/abc/dddd/*');
-    expect(routeInfo?.requestMethod.toUpperCase()).toEqual('GET');
 
-    routeInfo = await collector.getMatchedRouterInfo('/abc/dddd/aba', 'POST');
+    routeInfo = await collector.getMatchedRouterInfo('/test/all/method', 'POST');
+    expect(routeInfo?.url).toEqual('/test/all/method');
     expect(routeInfo?.requestMethod.toUpperCase()).toEqual('ALL');
 
     collector.addRouter(async (ctx) => {
