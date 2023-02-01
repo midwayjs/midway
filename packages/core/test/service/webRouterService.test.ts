@@ -25,16 +25,27 @@ describe('/test/service/webRouterService.test.ts', function () {
       requestMethod: 'GET',
     });
     collector.addRouter(async (ctx) => {
+      return 'test all method';
+    } ,{
+      url: '/abc/dddd/*',
+      requestMethod: 'ALL',
+    });
+    collector.addRouter(async (ctx) => {
       return 'hello world';
     }, {
       url: '/abc/dddd/*',
       requestMethod: 'GET',
     });
+   
     let routeInfo = await collector.getMatchedRouterInfo('/api', 'get');
     expect(routeInfo).toBeUndefined();
 
     routeInfo = await collector.getMatchedRouterInfo('/abc/dddd/efg', 'GET');
-    expect(routeInfo.url).toEqual('/abc/dddd/*');
+    expect(routeInfo?.url).toEqual('/abc/dddd/*');
+    expect(routeInfo?.requestMethod.toUpperCase()).toEqual('GET');
+
+    routeInfo = await collector.getMatchedRouterInfo('/abc/dddd/aba', 'POST');
+    expect(routeInfo?.requestMethod.toUpperCase()).toEqual('ALL');
 
     collector.addRouter(async (ctx) => {
       return 'hello world';

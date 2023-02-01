@@ -523,8 +523,10 @@ export class MidwayWebRouterService {
     let matchedRouterInfo;
     for (const item of routes) {
       if (item.fullUrlCompiledRegexp) {
+        const itemRequestMethod = item['requestMethod'].toUpperCase();
         if (
-          method.toUpperCase() === item['requestMethod'].toUpperCase() &&
+          ('ALL' === itemRequestMethod ||
+            method.toUpperCase() === itemRequestMethod) &&
           item.fullUrlCompiledRegexp.test(routerUrl)
         ) {
           matchedRouterInfo = item;
