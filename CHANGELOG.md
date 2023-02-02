@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v3.10.6 (2023-02-02)
+
+#### :bug: Bug Fix
+* `core`
+  * [#2697](https://github.com/midwayjs/midway/pull/2697) fix: RouterService match router method all ([@luckyscript](https://github.com/luckyscript))
+* `core`, `validate`
+  * [#2703](https://github.com/midwayjs/midway/pull/2703) fix: @valid with other decorator ([@czy88840616](https://github.com/czy88840616))
+* `typeorm`
+  * [#2704](https://github.com/midwayjs/midway/pull/2704) fix: typeorm logging property ([@czy88840616](https://github.com/czy88840616))
+* `cross-domain`
+  * [#2699](https://github.com/midwayjs/midway/pull/2699) fix: repair the impact of JSONP on normal requests(#2692) ([@abnerCrack](https://github.com/abnerCrack))
+
+#### :nail_care: Polish
+* `otel`
+  * [#2701](https://github.com/midwayjs/midway/pull/2701) feat: add ctx.traceId ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 3
+- C ([@abnerCrack](https://github.com/abnerCrack))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- 下雨就像弹钢琴 ([@luckyscript](https://github.com/luckyscript))
+
+
+
 ## v3.10.5 (2023-01-31)
 
 #### :bug: Bug Fix

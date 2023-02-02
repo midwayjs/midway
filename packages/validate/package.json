@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/validate",
-  "version": "3.10.5",
+  "version": "3.10.6",
   "description": "Midway Component for mongoose",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -23,13 +23,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/i18n": "^3.10.5",
+    "@midwayjs/i18n": "^3.10.6",
     "joi": "^17.2.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.10.5",
-    "@midwayjs/express": "^3.10.5",
-    "@midwayjs/koa": "^3.10.5",
-    "@midwayjs/mock": "^3.10.5"
+    "@midwayjs/core": "^3.10.6",
+    "@midwayjs/express": "^3.10.6",
+    "@midwayjs/koa": "^3.10.6",
+    "@midwayjs/mock": "^3.10.6"
   }
 }
