@@ -44,7 +44,7 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
     if (config['migrations']) {
       delete config['migrations'];
     }
-    if (config['logger'] === undefined) {
+    if (config['logging'] === undefined) {
       config['logger'] = new TypeORMLogger(
         this.loggerService.getLogger('typeormLogger')
       );
