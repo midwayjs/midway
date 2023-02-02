@@ -2,12 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-01-31T20:00:00.000Z</updated>
+    <updated>2023-02-02T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.10.6]]></title>
+        <id>/v3.10.6</id>
+        <link href="https://midwayjs.org/en/changelog/v3.10.6"/>
+        <updated>2023-02-02T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2697" target="_blank" rel="noopener noreferrer">#2697</a> fix: RouterService match router method all (<a href="https://github.com/luckyscript" target="_blank" rel="noopener noreferrer">@luckyscript</a>)</li></ul></li><li><code>core</code>, <code>validate</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2703" target="_blank" rel="noopener noreferrer">#2703</a> fix: @valid with other decorator (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2704" target="_blank" rel="noopener noreferrer">#2704</a> fix: typeorm logging property (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>cross-domain</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2699" target="_blank" rel="noopener noreferrer">#2699</a> fix: repair the impact of JSONP on normal requests(#2692) (<a href="https://github.com/abnerCrack" target="_blank" rel="noopener noreferrer">@abnerCrack</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-polish">💅 Polish<a class="hash-link" href="#-polish" title="Lien direct vers le titre">​</a></h2><ul><li><code>otel</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2701" target="_blank" rel="noopener noreferrer">#2701</a> feat: add ctx.traceId (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-3">Committers: 3<a class="hash-link" href="#committers-3" title="Lien direct vers le titre">​</a></h2><ul><li>C (<a href="https://github.com/abnerCrack" target="_blank" rel="noopener noreferrer">@abnerCrack</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>下雨就像弹钢琴 (<a href="https://github.com/luckyscript" target="_blank" rel="noopener noreferrer">@luckyscript</a>)</li></ul>]]></content>
+        <author>
+            <name>C</name>
+            <uri>https://github.com/abnerCrack</uri>
+        </author>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>下雨就像弹钢琴</name>
+            <uri>https://github.com/luckyscript</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.10.5]]></title>
         <id>/v3.10.5</id>

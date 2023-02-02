@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Tue, 31 Jan 2023 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 02 Feb 2023 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2023 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.10.6]]></title>
+            <link>https://midwayjs.org/changelog/v3.10.6</link>
+            <guid>/v3.10.6</guid>
+            <pubDate>Thu, 02 Feb 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2697" target="_blank" rel="noopener noreferrer">#2697</a> fix: RouterService match router method all (<a href="https://github.com/luckyscript" target="_blank" rel="noopener noreferrer">@luckyscript</a>)</li></ul></li><li><code>core</code>, <code>validate</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2703" target="_blank" rel="noopener noreferrer">#2703</a> fix: @valid with other decorator (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2704" target="_blank" rel="noopener noreferrer">#2704</a> fix: typeorm logging property (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>cross-domain</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2699" target="_blank" rel="noopener noreferrer">#2699</a> fix: repair the impact of JSONP on normal requests(#2692) (<a href="https://github.com/abnerCrack" target="_blank" rel="noopener noreferrer">@abnerCrack</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-polish">💅 Polish<a class="hash-link" href="#-polish" title="标题的直接链接">​</a></h2><ul><li><code>otel</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2701" target="_blank" rel="noopener noreferrer">#2701</a> feat: add ctx.traceId (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-3">Committers: 3<a class="hash-link" href="#committers-3" title="标题的直接链接">​</a></h2><ul><li>C (<a href="https://github.com/abnerCrack" target="_blank" rel="noopener noreferrer">@abnerCrack</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>下雨就像弹钢琴 (<a href="https://github.com/luckyscript" target="_blank" rel="noopener noreferrer">@luckyscript</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.10.5]]></title>
             <link>https://midwayjs.org/changelog/v3.10.5</link>
