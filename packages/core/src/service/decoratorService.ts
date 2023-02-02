@@ -129,7 +129,7 @@ export class MidwayDecoratorService {
                       propertyName,
                       parameterIndex,
                       target: Clzz,
-                      originArgs: joinPoint.args,
+                      originArgs: newArgs,
                       originParamType: paramTypes[parameterIndex],
                     });
                   } catch (err) {
