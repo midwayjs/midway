@@ -26,7 +26,7 @@ export class TraceService {
   }
 
   getTraceId() {
-    return this.getCurrentSpan().spanContext().traceId;
+    return this.getCurrentSpan()?.spanContext().traceId;
   }
 
   createSpan(name: string, callback: (span: Span) => unknown) {

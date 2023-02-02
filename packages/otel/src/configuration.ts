@@ -2,6 +2,7 @@ import {
   Configuration,
   Inject,
   JoinPoint,
+  MidwayApplicationManager,
   MidwayDecoratorService,
 } from '@midwayjs/core';
 import { TRACE_KEY } from './decorator/tracer.decorator';
@@ -17,6 +18,9 @@ export class OtelConfiguration {
 
   @Inject()
   traceService: TraceService;
+
+  @Inject()
+  applicationManager: MidwayApplicationManager;
 
   async onReady() {
     this.decoratorService.registerMethodHandler(TRACE_KEY, options => {
@@ -48,5 +52,17 @@ export class OtelConfiguration {
         },
       };
     });
+
+    const apps = this.applicationManager.getApplications(['egg', 'koa']);
+
+    for (const app of apps) {
+      Object.defineProperties((app as any).context, {
+        traceId: {
+          get: () => {
+            return this.traceService.getTraceId();
+          },
+        },
+      });
+    }
   }
 }

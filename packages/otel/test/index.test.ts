@@ -1,7 +1,7 @@
 import { SimpleSpanProcessor, InMemorySpanExporter} from '@opentelemetry/sdk-trace-base';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { join } from 'path';
-import { createApp, close } from '@midwayjs/mock';
+import { createApp, close, createHttpRequest } from '@midwayjs/mock';
 import { UserService } from './fixtures/base-app/src/user.service';
 
 describe('/test/index.test.ts', () => {
@@ -18,6 +18,9 @@ describe('/test/index.test.ts', () => {
     expect(data).toEqual({
       test: 1
     });
+
+    const res = await createHttpRequest(app).get('/');
+    expect(res.text).toBeDefined();
 
     let error;
 

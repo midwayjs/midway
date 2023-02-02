@@ -1,5 +1,16 @@
 import { Trace, TraceService } from '../../../../src';
-import { Inject, Provide, sleep } from '@midwayjs/core';
+import { Controller, Get, Inject, Provide, sleep } from '@midwayjs/core';
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx;
+
+  @Get('/')
+  getTraceId() {
+    return this.ctx.traceId;
+  }
+}
 
 @Provide()
 export class UserService {
