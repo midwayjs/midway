@@ -7,7 +7,11 @@ import {
   Valid,
   ParseIntPipe,
   ParseFloatPipe,
-  ParseBoolPipe, DefaultValuePipe, DecoratorValidPipe, AbstractValidationPipe, ValidateService
+  ParseBoolPipe,
+  DefaultValuePipe,
+  DecoratorValidPipe,
+  AbstractValidationPipe,
+  ValidateService
 } from '../src';
 import { createLightApp, close } from '@midwayjs/mock';
 import * as Joi from 'joi';
@@ -21,9 +25,7 @@ describe('/test/check.test.ts', () => {
       imports: [valid]
     });
 
-    class TO {
-
-    }
+    class TO {}
 
     @Rule(TO)
     class UserDTO extends TO {
@@ -57,11 +59,8 @@ describe('/test/check.test.ts', () => {
     const app = await createLightApp('', {
       imports: [valid]
     });
-    class TO{
+    class TO {}
 
-    }
-
-    @Rule(TO)
     class UserDTO extends TO {
       @Rule(RuleType.number().max(10))
       age: number;
@@ -479,6 +478,55 @@ describe('/test/check.test.ts', () => {
     console.log(result);
   });
 
+  it.skip('should support extends schema for class and property', async () => {
+    @Rule(getSchema(UserDTO).or('name', 'nickName'))
+    class UserDTO {
+      @Rule(RuleType.string())
+      name?: string;
+      @Rule(RuleType.string())
+      nickName?: string;
+    }
+
+    class Child extends UserDTO {}
+
+    // @Rule(getSchema(SubChild).and('name', 'nickName'))
+    // class SubChild extends Child {}
+
+    const app = await createLightApp('', {
+      imports: [valid]
+    });
+
+    // @Provide()
+    // class Hello {
+    //   async test(@Valid() user: UserDTO) {
+    //     return user;
+    //   }
+    //
+    //   async testChild(@Valid() user: Child) {
+    //     return user;
+    //   }
+    //
+    //   async testSubChild(@Valid() user: SubChild) {
+    //     return user;
+    //   }
+    // }
+
+    const a = getSchema(UserDTO);
+    a.validate;
+    expect(getSchema(UserDTO)).toBeDefined();
+    expect(getSchema(UserDTO).validate({name: 'abc'}).value).toEqual({name: 'abc'});
+    expect(getSchema(UserDTO).validate({}).error.message).toMatch('contain at least one of [name, nickName]');
+
+    expect(getSchema(Child)).toBeDefined();
+    const schema = getSchema(Child);
+    expect(schema.validate({name: 'abc'}).value).toEqual({name: 'abc'});
+    expect(getSchema(Child).validate({}).error.message).toMatch('contain at least one of [name, nickName]');
+
+    // console.log(getSchema(SubChild));
+
+    await close(app);
+  });
+
   describe('test pipe', () => {
     it('should test getSchema', function () {
       const pipe = new DecoratorValidPipe();
@@ -764,6 +812,110 @@ describe('/test/check.test.ts', () => {
       const hello = await app.getApplicationContext().getAsync(Hello);
 
       expect(await hello.test('ppp')).toEqual('pppbbb');
+      await close(app);
+    });
+
+    it('should test @Valid with other decorator', async () => {
+      function TestPipe(pipe: any) {
+        return createCustomParamDecorator('testPipe', '', {
+          impl: false,
+          pipes: [pipe]
+        });
+      }
+
+      const app = await createLightApp('', {
+        imports: [valid]
+      });
+
+      @Provide()
+      class Hello {
+        async test(@Valid(RuleType.string().min(3).max(4)) @TestPipe(new DefaultValuePipe('bbb')) data?: string) {
+          return data;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      expect(await hello.test()).toEqual('bbb');
+
+
+      let error;
+      try {
+        await hello.test('hello world');
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" length must be less than or equal to 4 characters long");
+      await close(app);
+    });
+
+    it('should test @Validate can change valid pipe', async () => {
+      const app = await createLightApp('', {
+        imports: [valid]
+      });
+
+      @Provide()
+      class Hello {
+        @Validate({
+          errorStatus: 401,
+        })
+        async test(@Valid(RuleType.string().min(3).max(4)) data?: string) {
+          return data;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      let error;
+      try {
+        await hello.test('hello world');
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.status).toEqual(401);
+      await close(app);
+    });
+
+    it('should test @Valid with DTO schema', async () => {
+      class UserDTO {
+        @Rule(RuleType.string())
+        name?: string;
+        @Rule(RuleType.string())
+        nickName?: string;
+      }
+
+      const app = await createLightApp('', {
+        imports: [valid]
+      });
+
+      @Provide()
+      class Hello {
+        async test(@Valid(getSchema(UserDTO).or('name', 'nickName')) user: UserDTO) {
+          return user;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      expect(await hello.test({
+        name: 'hello world',
+      })).toEqual({
+        name: 'hello world',
+      })
+
+      let error;
+      try {
+        await hello.test({});
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toMatch("\"value\" must contain at least one of [name, nickName]");
       await close(app);
     });
   });
