@@ -7,7 +7,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "key": "web:router_param",
       "metadata": {
         "propertyData": [Function],
-        "type": 12,
+        "type": "custom",
       },
       "options": {
         "impl": true,
@@ -15,14 +15,44 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
           [Function],
         ],
       },
-      "parameterIndex": 7,
+      "parameterIndex": 9,
       "propertyName": "doget",
     },
     {
       "key": "web:router_param",
       "metadata": {
         "propertyData": "common:all_value_key",
-        "type": 4,
+        "type": "session",
+      },
+      "options": {
+        "impl": true,
+        "pipes": [
+          [Function],
+        ],
+      },
+      "parameterIndex": 8,
+      "propertyName": "doget",
+    },
+    {
+      "key": "web:router_param",
+      "metadata": {
+        "propertyData": undefined,
+        "type": "files_stream",
+      },
+      "options": {
+        "impl": true,
+        "pipes": undefined,
+      },
+      "parameterIndex": 7,
+      "propertyName": "doget",
+    },
+    {
+      "key": "web:router_param",
+      "metadata": {
+        "propertyData": {
+          "requireFile": true,
+        },
+        "type": "file_stream",
       },
       "options": {
         "impl": true,
@@ -36,12 +66,14 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
     {
       "key": "web:router_param",
       "metadata": {
-        "propertyData": undefined,
-        "type": 6,
+        "propertyData": "tt",
+        "type": "headers",
       },
       "options": {
         "impl": true,
-        "pipes": undefined,
+        "pipes": [
+          [Function],
+        ],
       },
       "parameterIndex": 5,
       "propertyName": "doget",
@@ -49,10 +81,8 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
     {
       "key": "web:router_param",
       "metadata": {
-        "propertyData": {
-          "requireFile": true,
-        },
-        "type": 5,
+        "propertyData": "body",
+        "type": "body",
       },
       "options": {
         "impl": true,
@@ -66,8 +96,8 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
     {
       "key": "web:router_param",
       "metadata": {
-        "propertyData": "tt",
-        "type": 3,
+        "propertyData": "bb",
+        "type": "query",
       },
       "options": {
         "impl": true,
@@ -81,14 +111,12 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
     {
       "key": "web:router_param",
       "metadata": {
-        "propertyData": "body",
-        "type": 1,
+        "propertyData": "dd",
+        "type": "query",
       },
       "options": {
         "impl": true,
-        "pipes": [
-          [Function],
-        ],
+        "pipes": undefined,
       },
       "parameterIndex": 2,
       "propertyName": "doget",
@@ -96,8 +124,8 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
     {
       "key": "web:router_param",
       "metadata": {
-        "propertyData": "bb",
-        "type": 0,
+        "propertyData": "aa",
+        "type": "param",
       },
       "options": {
         "impl": true,
@@ -111,14 +139,12 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
     {
       "key": "web:router_param",
       "metadata": {
-        "propertyData": "aa",
-        "type": 2,
+        "propertyData": "cc",
+        "type": "param",
       },
       "options": {
         "impl": true,
-        "pipes": [
-          [Function],
-        ],
+        "pipes": undefined,
       },
       "parameterIndex": 0,
       "propertyName": "doget",

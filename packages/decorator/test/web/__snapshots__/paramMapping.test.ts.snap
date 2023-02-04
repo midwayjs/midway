@@ -7,7 +7,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "key": "web:router_param",
       "metadata": {
         "propertyData": "common:all_value_key",
-        "type": 4,
+        "type": "session",
       },
       "options": {
         "impl": true,
@@ -20,7 +20,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "key": "web:router_param",
       "metadata": {
         "propertyData": undefined,
-        "type": 6,
+        "type": "files_stream",
       },
       "options": {
         "impl": true,
@@ -35,7 +35,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
         "propertyData": {
           "requireFile": true,
         },
-        "type": 5,
+        "type": "file_stream",
       },
       "options": {
         "impl": true,
@@ -48,7 +48,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "key": "web:router_param",
       "metadata": {
         "propertyData": "tt",
-        "type": 3,
+        "type": "headers",
       },
       "options": {
         "impl": true,
@@ -61,7 +61,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "key": "web:router_param",
       "metadata": {
         "propertyData": "body",
-        "type": 1,
+        "type": "body",
       },
       "options": {
         "impl": true,
@@ -74,7 +74,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "key": "web:router_param",
       "metadata": {
         "propertyData": "bb",
-        "type": 0,
+        "type": "query",
       },
       "options": {
         "impl": true,
@@ -87,7 +87,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "key": "web:router_param",
       "metadata": {
         "propertyData": "aa",
-        "type": 2,
+        "type": "param",
       },
       "options": {
         "impl": true,

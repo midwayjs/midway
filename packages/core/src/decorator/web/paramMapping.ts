@@ -2,19 +2,19 @@ import { createCustomParamDecorator, WEB_ROUTER_PARAM_KEY } from '../';
 import { IMidwayContext, PipeUnionTransform } from '../../interface';
 
 export enum RouteParamTypes {
-  QUERY,
-  BODY,
-  PARAM,
-  HEADERS,
-  SESSION,
-  FILESTREAM,
-  FILESSTREAM,
-  NEXT,
-  REQUEST_PATH,
-  REQUEST_IP,
-  QUERIES,
-  FIELDS,
-  CUSTOM,
+  QUERY = 'query',
+  BODY = 'body',
+  PARAM = 'param',
+  HEADERS = 'headers',
+  SESSION = 'session',
+  FILESTREAM = 'file_stream',
+  FILESSTREAM = 'files_stream',
+  NEXT = 'next',
+  REQUEST_PATH = 'request_path',
+  REQUEST_IP = 'request_ip',
+  QUERIES = 'queries',
+  FIELDS = 'fields',
+  CUSTOM = 'custom',
 }
 
 export interface RouterParamValue {
@@ -24,7 +24,12 @@ export interface RouterParamValue {
 }
 
 const createParamMapping = function (type: RouteParamTypes) {
-  return (propertyData?: any, pipes?: Array<PipeUnionTransform>) => {
+  return (propertyOrPipes?: any, pipes?: Array<PipeUnionTransform>) => {
+    let propertyData = propertyOrPipes;
+    if (Array.isArray(propertyOrPipes) && pipes === undefined) {
+      pipes = propertyOrPipes;
+      propertyData = undefined;
+    }
     return createCustomParamDecorator(
       WEB_ROUTER_PARAM_KEY,
       {
@@ -58,24 +63,39 @@ export const createRequestParamDecorator = function (
   return createParamMapping(RouteParamTypes.CUSTOM)(transform, pipes);
 };
 
-export const Session = (property?: string, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.SESSION)(property, pipes);
-export const Body = (property?: string, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.BODY)(property, pipes);
-export const Query = (property?: string, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.QUERY)(property, pipes);
-export const Param = (property?: string, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.PARAM)(property, pipes);
-export const Headers = (property?: string, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.HEADERS)(property, pipes);
-export const File = (property?: any, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.FILESTREAM)(property, pipes);
-export const Files = (property?: any, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.FILESSTREAM)(property, pipes);
-export const RequestPath = () =>
-  createParamMapping(RouteParamTypes.REQUEST_PATH)();
-export const RequestIP = () => createParamMapping(RouteParamTypes.REQUEST_IP)();
-export const Queries = (property?: string, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.QUERIES)(property, pipes);
-export const Fields = (property?: string, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.FIELDS)(property, pipes);
+export const Session = (
+  propertyOrPipes?: string | PipeUnionTransform[],
+  pipes?: PipeUnionTransform[]
+) => createParamMapping(RouteParamTypes.SESSION)(propertyOrPipes, pipes);
+export const Body = (
+  propertyOrPipes?: string | PipeUnionTransform[],
+  pipes?: PipeUnionTransform[]
+) => createParamMapping(RouteParamTypes.BODY)(propertyOrPipes, pipes);
+export const Query = (
+  propertyOrPipes?: string | PipeUnionTransform[],
+  pipes?: PipeUnionTransform[]
+) => createParamMapping(RouteParamTypes.QUERY)(propertyOrPipes, pipes);
+export const Param = (
+  propertyOrPipes?: string | PipeUnionTransform[],
+  pipes?: PipeUnionTransform[]
+) => createParamMapping(RouteParamTypes.PARAM)(propertyOrPipes, pipes);
+export const Headers = (
+  propertyOrPipes?: string | PipeUnionTransform[],
+  pipes?: PipeUnionTransform[]
+) => createParamMapping(RouteParamTypes.HEADERS)(propertyOrPipes, pipes);
+export const File = (propertyOrPipes?: any, pipes?: PipeUnionTransform[]) =>
+  createParamMapping(RouteParamTypes.FILESTREAM)(propertyOrPipes, pipes);
+export const Files = (propertyOrPipes?: any, pipes?: PipeUnionTransform[]) =>
+  createParamMapping(RouteParamTypes.FILESSTREAM)(propertyOrPipes, pipes);
+export const RequestPath = (pipes?: PipeUnionTransform[]) =>
+  createParamMapping(RouteParamTypes.REQUEST_PATH)(undefined, pipes);
+export const RequestIP = (pipes?: PipeUnionTransform[]) =>
+  createParamMapping(RouteParamTypes.REQUEST_IP)(undefined, pipes);
+export const Queries = (
+  propertyOrPipes?: string | PipeUnionTransform[],
+  pipes?: PipeUnionTransform[]
+) => createParamMapping(RouteParamTypes.QUERIES)(propertyOrPipes, pipes);
+export const Fields = (
+  propertyOrPipes?: string | PipeUnionTransform[],
+  pipes?: PipeUnionTransform[]
+) => createParamMapping(RouteParamTypes.FIELDS)(propertyOrPipes, pipes);

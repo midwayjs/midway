@@ -29,7 +29,9 @@ function Token() {
 
 class Test {
   async doget(
+    @Param('cc', ) cc: any,
     @Param('aa', [TestPipe]) aa: any,
+    @Query('dd') dd: any,
     @Query('bb', [TestPipe]) query: any,
     @Body('body', [TestPipe]) body: any,
     @Headers('tt', [TestPipe]) tt: any,
