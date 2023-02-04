@@ -15,6 +15,7 @@
     <a href="#backers"><img src="https://opencollective.com/midway/backers/badge.svg" alt="Backers on Open Collective"></a> <a href="#sponsors"><img src="https://opencollective.com/midway/sponsors/badge.svg" alt="Sponsors on Open Collective"></a>
     <a href="https://gitpod.io/#https://github.com/midwayjs/midway"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
     <a href="https://github.com/midwayjs/mwts"><img src="https://img.shields.io/badge/code%20style-midwayjs-brightgreen.svg" alt="Code Style: MidwayJS"></a>
+    <a href="https://opensource.alibaba.com/contribution_leaderboard/details?projectValue=midway"><img src="https://img.shields.io/badge/Midway-Check%20Your%20Contribution-orange" alt="Leaderboard">
 </p>
 
 
