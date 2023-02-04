@@ -268,6 +268,19 @@ console.log(value);
 
 
 
+### getNamespace
+
+Through the `getNamespace` API, you can get the [framework type](#main-application) of the component to which the current app belongs (that is, the `namespace` of the component).
+
+For example in the `koa` component.
+
+```typescript
+this.app.getNamespace();
+// 'koa'
+```
+
+
+
 ## Context
 
 A Context is a **request-level object**. Each time a user request is received, the framework instantiates a Context object,

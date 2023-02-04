@@ -1,4 +1,4 @@
-# 管道（Pipe）
+# 管道
 
 管道是参数装饰器的内部机制，可以在参数装饰器逻辑之后执行一些自定义代码，一般用于以下的场景：
 
@@ -136,7 +136,7 @@ export class CutPipe implements PipeTransform {
 
 ```typescript
 class UserService {
-  async invoke(@RegValid(/^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/, CutPipe) phoneNumber: string) {
+  async invoke(@RegValid(/\d{11}/, CutPipe) phoneNumber: string) {
     return phoneNumber;
   }
 }
@@ -181,7 +181,7 @@ export class MainConfiguration {
 
 ```typescript
 class UserService {
-  async invoke(@RegValid(/^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/) phoneNumber: string) {
+  async invoke(@RegValid(/\d{11}/) phoneNumber: string) {
     return phoneNumber;
   }
 }

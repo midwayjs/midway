@@ -176,14 +176,12 @@ After defining the type, it can be directly used in the business code, and the `
 ```typescript
 // src/controller/home.ts
 import { Controller, Get, Provide } from '@midwayjs/decorator';
-import { Validate } from '@midwayjs/validate';
 import { UserDTO } from './dto/user';
 
 @Controller('/api/user')
 export class HomeController {
 
   @Post('/')
-  @Validate()
   async updateUser(@Body() user: UserDTO ) {
     // user.id
   }
@@ -201,9 +199,189 @@ ValidationError: "id" is required
 In addition, because the type of `id` is defined, the id is automatically changed to a number when a string is obtained.
 
 ```typescript
-@Validate()
 async updateUser(@Body() user: UserDTO ) {
   // typeof user.id === 'number'
+}
+```
+
+
+
+If you need to configure information separately at the method level, you can use the `@Validate` decorator, such as configuring the error status separately.
+
+```typescript
+// src/controller/home.ts
+import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Validate } from '@midwayjs/validate';
+import { UserDTO } from './dto/user';
+
+@Controller('/api/user')
+export class HomeController {
+
+   @Post('/')
+   @Validate({
+     errorStatus: 422,
+   })
+   async updateUser(@Body() user: UserDTO ) {
+     // user.id
+   }
+}
+```
+
+In general, use the global default configuration.
+
+
+
+## Validate pipeline
+
+If your parameters are basic types, such as `number`, `string`, `boolean`, you can use the pipeline provided by the component for validation.
+
+The default web parameter decorators can all be piped as the second argument.
+
+for example:
+
+```typescript
+import { ParseIntPipe } from '@midwayjs/validate';
+
+@Controller('/api/user')
+export class HomeController {
+
+   @Post('/update_age')
+   async updateAge(@Body('age', [ParseIntPipe]) age: number ) {
+     //...
+   }
+}
+```
+
+The `ParseIntPipe` pipeline can convert strings and numeric data into numbers, so that the `age` field obtained from the request parameters will pass the validation of the pipeline and be converted into a numeric format.
+
+The built-in pipelines that can be used are:
+
+* `ParseIntPipe`
+* `ParseFloatPipe`
+* `ParseBoolPipe`
+* `DefaultValuePipe`
+
+
+
+`ParseIntPipe` is used to convert an argument to an integer.
+
+```typescript
+import { ParseIntPipe } from '@midwayjs/validate';
+
+//...
+async update(@Body('age', [ParseIntPipe]) age: number) {
+   return age;
+}
+
+update({ age: '12'} ); => 12
+update({ age: '12.2'} ); => Error
+update({ age: 'abc'} ); => Error
+```
+
+`ParseFloatPipe` is used to convert the parameter to a floating point number.
+
+```typescript
+import { ParseFloatPipe } from '@midwayjs/validate';
+
+//...
+async update(@Body('size', [ParseFloatPipe]) size: number) {
+   return size;
+}
+
+update({ size: '12.2'} ); => 12.2
+update({ size: '12'} ); => 12
+```
+
+`ParseBoolPipe` is used to convert parameters to boolean values.
+
+```typescript
+import { ParseBoolPipe } from '@midwayjs/validate';
+
+//...
+async update(@Body('isMale', [ParseBoolPipe]) isMale: boolean) {
+   return isMale;
+}
+
+update({ isMale: 'true'} ); => true
+update({ isMale: '0'} ); => Error
+```
+
+`DefaultValuePipe` is used to set the default value.
+
+```typescript
+import { DefaultValuePipe } from '@midwayjs/validate';
+
+//...
+async update(@Body('nickName', [new DefaultValuePipe('anonymous')]) nickName: string) {
+   return nickName;
+}
+
+update({ isMale: undefined} ); => 'anonymous'
+```
+
+
+
+In non-Web scenarios, if there is no web class decorator such as `@Body`, you can also use the `@Valid` decorator for validation.
+
+For example in a service:
+
+```typescript
+import { ParseIntPipe } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+   async updateUser(@Valid() user: UserDTO ) {
+     //...
+   }
+}
+```
+
+If the parameter is not DTO, there is no rule, and a validation rule in Joi format can also be passed through the parameter.
+
+```typescript
+import { ParseIntPipe, Rule } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+   async updateUser(@Valid(RuleType. number(). required()) userAge: number ) {
+     //...
+   }
+}
+```
+
+
+
+## Custom validate pipeline
+
+If the default pipeline does not meet the requirements, you can quickly implement a custom validation pipeline through inheritance. The component has provided a `ParsePipe` class for quick writing.
+
+```typescript
+import { Pipe } from '@midwayjs/Pipe';
+import { ParsePipe, RuleType } from '@midwayjs/validate';
+
+@Pipe()
+export class ParseCustomDataPipe extends ParsePipe {
+   getSchema(): RuleType. AnySchema<any> {
+     //...
+   }
+}
+```
+
+`getSchema` method is used to return a validation rule conforming to `Joi` format.
+
+For example, the code of `ParseIntPipe` is as follows. When the pipeline is executed, the schema will be automatically obtained for verification, and the value will be returned after the verification is successful.
+
+```typescript
+import { Pipe } from '@midwayjs/Pipe';
+import { ParsePipe, RuleType } from '@midwayjs/validate';
+
+@Pipe()
+export class ParseIntPipe extends ParsePipe {
+   getSchema() {
+     return RuleType.number().integer().required();
+   }
 }
 ```
 

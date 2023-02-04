@@ -380,14 +380,14 @@ In Midway, different log levels can be configured for different output behaviors
 
 
 
-### The default level of the frame
+### The default level of the framework
 
 
 In Midway, it has its own default log level.
 
 
 - In the development environment (local,test,unittest), the text and console log levels are unified to `info`.
-- In the server environment (except for the development environment), to reduce the number of logs, the log level is `warn`.
+- In the server environment (except the development environment), in order to reduce the number of logs, the log level of `coreLogger` is `warn`, while other logs are `info`.
 
 
 

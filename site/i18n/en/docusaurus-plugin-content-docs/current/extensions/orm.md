@@ -621,8 +621,9 @@ export class PhotoService {
 }
 ```
 
-
 ### 11. Delete data
+
+`remove` is used to remove the given entity or array of entities. `delete` is used to delete by a given ID or condition.
 
 
 ```typescript
@@ -639,8 +640,21 @@ export class PhotoService {
 
   async updatePhoto() {
     /*...*/
-    await repository.photoModel(photo);
-		await repository.photoModel([photo1, photo2, photo3]);
+    const photo = await this.photoModel.findOne({
+      where: {
+        id: 1,
+      },
+    });
+    
+    // Remove by entity
+    await this.photoModel.remove(photo)
+    // Delete multiple entities
+    await this.photoModel.remove([photo1, photo2, photo3]);
+    
+    // Delete by ID
+    await this.photoModel.delete(1);
+    await this.photoModel.delete([1, 2, 3]);
+    await this.photoModel.delete({ name: "Timber" });
   }
 }
 ```
@@ -858,9 +872,9 @@ export class PhotoService {
   async findPhoto() {
 		/*...*/
     let photos = await this.photoModel
-            .createQueryBuilder('photo')
-            .innerJoinAndSelect('photo.metadata', 'metadata')
-            .getMany();
+      .createQueryBuilder('photo')
+      .innerJoinAndSelect('photo.metadata', 'metadata')
+      .getMany();
   }
 }
 ```
@@ -1391,6 +1405,50 @@ export class MainConfiguration {
    }
 }
 ```
+
+
+
+### Logging
+
+When the data source does not configure a log object, the component will automatically create a `typeormLogger` to save the executed SQL information, which is convenient for troubleshooting and SQL audit.
+
+The default configuration is:
+
+```typescript
+export default {
+   midwayLogger: {
+     clients: {
+       typeormLogger: {
+         fileLogName: 'midway-typeorm.log',
+         enableError: false,
+         level: 'info',
+       },
+     },
+   }
+}
+```
+
+We can use the normal log configuration method to make adjustments. If you do not want to generate logs, you can configure them to close.
+
+```typescript
+export default {
+  // ...
+  typeorm: {
+    default: {
+      // All data sources closed
+      logging: false,
+    },
+    dataSource: {
+      default: {
+        // Single data source closed
+        logging: false,
+      },
+    },
+  },
+};
+```
+
+
 
 ### Transaction
 

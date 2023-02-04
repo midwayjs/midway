@@ -619,8 +619,9 @@ export class PhotoService {
 }
 ```
 
-
 ### 11、删除数据
+
+`remove` 用于删除给定的实体或实体数组。`delete` 用于按给定的 ID 或者条件删除。
 
 
 ```typescript
@@ -637,8 +638,21 @@ export class PhotoService {
 
   async updatePhoto() {
     /*...*/
-    await repository.photoModel(photo);
-		await repository.photoModel([photo1, photo2, photo3]);
+    const photo = await this.photoModel.findOne({
+      where: {
+        id: 1,
+      },
+    });
+    
+    // 删除单个
+    await this.photoModel.remove(photo)
+    // 删除多个
+    await this.photoModel.remove([photo1, photo2, photo3]);
+    
+    // 按 id 删除
+    await this.photoModel.delete(1);
+    await this.photoModel.delete([1, 2, 3]);
+    await this.photoModel.delete({ name: "Timber" });
   }
 }
 ```
@@ -856,9 +870,9 @@ export class PhotoService {
   async findPhoto() {
 		/*...*/
     let photos = await this.photoModel
-            .createQueryBuilder('photo')
-            .innerJoinAndSelect('photo.metadata', 'metadata')
-            .getMany();
+      .createQueryBuilder('photo')
+      .innerJoinAndSelect('photo.metadata', 'metadata')
+      .getMany();
   }
 }
 ```
@@ -1418,11 +1432,15 @@ export default {
 export default {
   // ...
   typeorm: {
+    default: {
+      // 所有数据源关闭
+      logging: false,
+    },
     dataSource: {
       default: {
-        // ...
-        logger: false,
-      }
+        // 单个数据源关闭
+        logging: false,
+      },
     },
   },
 };

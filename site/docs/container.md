@@ -208,7 +208,7 @@ export class B {
 }
 ```
 
-在 v3.10 版本之后，可以使的单例装饰器来替代原来的写法。
+在 v3.10 版本之后，可以使的单例装饰器来简化原来的写法。
 
 ```typescript
 import { Singleton } from '@midwayjs/core';

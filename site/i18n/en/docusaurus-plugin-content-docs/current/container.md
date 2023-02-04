@@ -176,7 +176,7 @@ After explicit configuration, the scope of a class can become a singleton scope.
 
 ```typescript
 // service
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -208,7 +208,16 @@ export class B {
 }
 ```
 
+After the v3.10 version, the singleton decorator can be used to simplify the original writing.
 
+```typescript
+import { Singleton } from '@midwayjs/core';
+
+@Singleton()
+class UserService {
+   //...
+}
+```
 
 ### Request scope
 
