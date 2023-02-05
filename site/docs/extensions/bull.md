@@ -59,7 +59,7 @@ $ npm i @midwayjs/bull@3 --save
 将 bull 组件配置到代码中。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as bull from '@midwayjs/bull';
 
 @Configuration({
@@ -163,7 +163,7 @@ export class TestProcessor implements IProcessor {
 比如，我们可以在项目启动后执行。
 
 ```typescript
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import * as bull from '@midwayjs/bull';
 
 @Configuration({
@@ -347,7 +347,7 @@ export class TestProcessor implements IProcessor {
 
 ```typescript
 import { Processor, IProcessor } from '@midwayjs/bull';
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 
 @Processor('test', {
   repeat: {
@@ -394,10 +394,10 @@ export class TestProcessor implements IProcessor {
 
 可以使用 [在线工具](https://cron.qqe2.com/) 执行确认下一次执行的时间。
 
-Midway 在框架侧提供了一些常用的表达式，放在 `@midwayjs/decorator` 中供大家使用。
+Midway 在框架侧提供了一些常用的表达式，放在 `@midwayjs/core` 中供大家使用。
 
 ```typescript
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 
 // 每分钟执行的 cron 表达式
 FORMAT.CRONTAB.EVERY_MINUTE
@@ -458,7 +458,7 @@ export default {
 
 ```typescript
 // src/configuration.ts
-import { Configuration, App, Inject } from '@midwayjs/decorator';
+import { Configuration, App, Inject } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 import * as bull from '@midwayjs/bull';
@@ -501,7 +501,7 @@ export class ContainerLifeCycle {
 比如在装饰器配置。
 
 ```typescript
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 import { IProcessor, Processor } from '@midwayjs/bull';
 
 @Processor('user', {
@@ -597,7 +597,7 @@ export default {
 除了使用 `@Processor` 简单定义队列，我们还可以使用 API 进行创建。
 
 ```typescript
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import * as bull from '@midwayjs/bull';
 
 @Configuration({
@@ -653,7 +653,7 @@ export class TestProcessor implements IProcessor {
 
 ```typescript
 import { InjectQueue, BullQueue } from '@midwayjs/bull';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
@@ -758,7 +758,7 @@ $ npm i @midwayjs/bull-board@3 --save
 将 bull-board 组件配置到代码中。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as bull from '@midwayjs/bull';
 import * as bullBoard from '@midwayjs/bull-board';
 

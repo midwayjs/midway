@@ -70,7 +70,7 @@ $ npm i @midwayjs/casbin@3 --save
 首先，引入组件，在 `configuration.ts` 中导入：
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path'
 
@@ -213,7 +213,7 @@ export default (appInfo: MidwayAppInfo) => {
 比如，我们只在下面的 `findAllUsers` 方法上开启鉴权，`AuthGuard` 是 `@midwayjs/casbin` 提供的守卫，可以直接使用。
 
 ```typescript
-import { Controller, Get, UseGuard } from '@midwayjs/decorator';
+import { Controller, Get, UseGuard } from '@midwayjs/core';
 import { AuthGuard } from '@midwayjs/casbin';
 import { Resource } from './resouce';
 
@@ -235,7 +235,7 @@ export class HomeController {
 使用 `UsePermission` 装饰器定义路由需要的权限。
 
 ```typescript
-import { Controller, Get, UseGuard } from '@midwayjs/decorator';
+import { Controller, Get, UseGuard } from '@midwayjs/core';
 import { AuthActionVerb, AuthGuard, AuthPossession, UsePermission } from '@midwayjs/casbin';
 import { Resource } from './resouce';
 
@@ -268,7 +268,7 @@ export class HomeController {
 - `possession` 是一个 `AuthPossession` 枚举
 - `isOwn` 是一个接受`Context`（守卫 `canActivate`的参数）作为唯一参数并返回布尔值的函数。 `AuthZGuard` 使用它来确定用户是否是资源的所有者。 如果未定义，将使用返回 `false` 的默认函数。
 
-可以同时定义多个权限，但只有当所有权限都满足时，才能访问该路由。 
+可以同时定义多个权限，但只有当所有权限都满足时，才能访问该路由。
 
 比如：
 
@@ -302,10 +302,10 @@ import { Guard, IGuard } from '@midwayjs/core';
 
 @Guard()
 export class UserGuard extends IGuard {
-  
+
   @Inject()
   casbinEnforcerService: CasbinEnforcerService;
-  
+
   async canActivate(ctx, clz, methodName) {
     // 用户登录了，并且是特定的方法，则检查权限
     if (ctx.user && methodName === 'findAllUsers') {
@@ -349,7 +349,7 @@ $ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
 启用 redis 组件。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as redis from '@midwayjs/redis';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path';
@@ -414,7 +414,7 @@ $ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
 启用 typeorm 组件。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as typeorm from '@midwayjs/typeorm';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path';
@@ -485,7 +485,7 @@ $ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
 启用 redis 组件。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as redis from '@midwayjs/redis';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path';

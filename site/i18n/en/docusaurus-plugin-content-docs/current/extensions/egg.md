@@ -21,7 +21,7 @@ For the EggJS scenario, these packages are listed below.
 ```json
   "dependencies": {
     "@midwayjs/web": "^3.0.0",
-    "@midwayjs/decorator": "^3.0.0",
+    "@midwayjs/core": "^3.0.0",
     "egg": "^2.0.0 ",
     "egg-scripts": "^2.10.0"
   },
@@ -30,12 +30,12 @@ For the EggJS scenario, these packages are listed below.
   },
 ```
 
-| @midwayjs/web | **Required** ,Midway EggJS adaptation layer |
-| ----------------------- | ------------------------------------------ |
-| @midwayjs/decorator | **Required** ,Midway series universal decorator package |
+| @midwayjs/web | **Required** ,Midway EggJS adaptation layer                                       |
+| ----------------------- |-----------------------------------------------------------------------------------|
+| @midwayjs/core | **Required** ,Midway core package                                                 |
 | egg | **Required** ,EggJS dependent package, and other capabilities such as definition. |
-| egg-scripts | **Optional** ,EggJS startup script |
-| @midwayjs/egg-ts-helper | **Optional** ,EggJS defines the generation tool. |
+| egg-scripts | **Optional** ,EggJS startup script                                                |
+| @midwayjs/egg-ts-helper | **Optional** ,EggJS defines the generation tool.                                  |
 
 Examples can also be created directly using scaffolding.
 
@@ -52,7 +52,7 @@ $ npm init midway -- --type=egg-v3 my_project
 ## Open the component
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as web from '@midwayjs/web';
 import { join } from 'path';
 
@@ -229,8 +229,8 @@ In Midway, you can use `@App` to obtain the `app` object, and in the request sco
 
 
 ```typescript
-import { Provide, Inject, Get } from '@midwayjs/decorator';
-import { Application, Context } from 'egg';
+import { Provide, Inject, Get } from '@midwayjs/core';
+import { Application, Context } from '@midwayjs/web';
 
 @Provide()
 export class HomeController {
@@ -252,7 +252,7 @@ In addition, you can directly inject plugins mounted by `app` through the `@Plug
 
 
 ```typescript
-import { Provide, Get, Plugin } from '@midwayjs/decorator';
+import { Provide, Get, Plugin } from '@midwayjs/core';
 
 @Provide()
 export class HomeController {
@@ -278,8 +278,7 @@ The middleware sample is as follows:
 
 
 ```typescript
-import { Middleware } from '@midwayjs/decorator';
-import { IMiddleware } from '@midwayjs/core';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/web';
 
 @Middleware()
@@ -309,7 +308,7 @@ Application Middleware.
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as egg from '@midwayjs/web';
 import { ReportMiddleware } from './middleware/user.middleware';
 

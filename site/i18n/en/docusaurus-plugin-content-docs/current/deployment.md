@@ -477,7 +477,7 @@ Midway v2/v3 both support configuration loading in "object mode.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 import * as DefaultConfig from './config/config.default';

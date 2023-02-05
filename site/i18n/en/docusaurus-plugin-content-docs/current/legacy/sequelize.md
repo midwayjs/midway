@@ -68,9 +68,8 @@ npm install mongodb --save
 In the configuration.ts file
 
 ```typescript
-import { App, Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
-import { Application } from 'egg';
+import { App, Configuration, ILifeCycle } from '@midwayjs/core';
+import { Application } from '@midwayjs/web';
 import { join } from 'path';
 import * as sequelize from '@midwayjs/sequelize';
 
@@ -156,7 +155,7 @@ export class User extends Model {
 #### Query list
 
 ```typescript
-import { Config, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Config, Controller, Get, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -174,7 +173,7 @@ export class HomeController {
 Add data:
 
 ```typescript
-import { Controller, Post, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -194,7 +193,7 @@ export class HomeController {
 #### Delete:
 
 ```typescript
-import { Controller, Post, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -215,7 +214,7 @@ export class HomeController {
 #### Find individual:
 
 ```typescript
-import { Controller, Post, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -236,7 +235,7 @@ export class HomeController {
 #### Joint enquiries:
 
 ```typescript
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 import { Op } from 'sequelize';
 
@@ -260,7 +259,7 @@ export class HomeController {
 #### table query
 
 ```typescript
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { User } from '../entity/User';
 import { Photo } from '../entity/Photo';
 

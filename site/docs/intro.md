@@ -42,7 +42,7 @@ Midway 支持面向对象的编程范式，为应用提供更优雅的架构。
 下面是基于面向对象，开发路由的示例。
 ```typescript
 // src/controller/home.ts
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')

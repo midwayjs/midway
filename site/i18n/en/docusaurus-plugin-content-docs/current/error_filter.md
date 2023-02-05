@@ -77,8 +77,7 @@ We can place this type of exception handler in the `filter` directory, such as `
 
 ```typescript
 // src/filter/internal.filter.ts
-import { Catch } from '@midwayjs/decorator';
-import { httpError, MidwayHttpError } from '@midwayjs/core';
+import { Catch, httpError, MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch(httpError.InternalServerErrorError)
@@ -97,7 +96,7 @@ If you do not write parameters, all errors will be captured, whether HttpError o
 
 ```typescript
 // src/filter/all.filter.ts
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
@@ -114,7 +113,7 @@ We can apply the error handling filter in `src/configuration.ts`. Since the para
 
 ```typescript
 // src/configuration.ts
-import { Configuration, App, Catch } from '@midwayjs/decorator';
+import { Configuration, App, Catch } from '@midwayjs/core';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 import { InternalServerErrorFilter } from './filter/internal.filter';
@@ -152,8 +151,7 @@ For example, jump to a page, or return a specific result:
 
 ```typescript
 // src/filter/notfound.filter.ts
-import { Catch } from '@midwayjs/decorator';
-import { httpError, MidwayHttpError } from '@midwayjs/core';
+import { Catch, httpError, MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch(httpError.NotFoundError)
@@ -181,7 +179,7 @@ For example, capture all errors and return a specific JSON structure, as shown i
 ```typescript
 // src/filter/default.filter.ts
 
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
@@ -201,7 +199,7 @@ export class DefaultErrorFilter {
 We can apply the error handling filter in `src/configuration.ts`. Since the parameters can be arrays, we can apply multiple error processors.
 
 ```typescript
-import { Configuration, App, Catch } from '@midwayjs/decorator';
+import { Configuration, App, Catch } from '@midwayjs/core';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 import { DefaultErrorFilter } from './filter/default.filter';
@@ -235,9 +233,8 @@ By default, exceptions only make absolute matches.
 Sometimes we need to capture all derived classes, this time we need additional settings.
 
 ```typescript
-import { Catch } from '@midwayjs/decorator';
+import { Catch, MidwayError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
-import { MidwayError } from '@midwayjs/core';
 
 class CustomError extends MidwayError {}
 
@@ -269,7 +266,7 @@ Conversely, if the exception handler is customized, the error will be regarded a
 You can print the log in the exception handler yourself.
 
 ```typescript
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()

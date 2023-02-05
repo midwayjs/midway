@@ -47,7 +47,7 @@ In all classes that depend on injection container management, the `@App()` decor
 For example:
 
 ```typescript
-import { App, Controller, Get } from '@midwayjs/decorator';
+import { App, Controller, Get } from '@midwayjs/core';
 import { Application } from '@midwayjs/koa';
 
 @Controller('/')
@@ -77,8 +77,7 @@ For example, the **Main Application** is the Application instance in the followi
 ```typescript
 // src/configuration.ts
 
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
@@ -102,8 +101,7 @@ For example, when multiple export Application components need to load middleware
 ```typescript
 // src/configuration.ts
 
-import { Configuration, MidwayFrameworkType } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
@@ -114,7 +112,7 @@ export class MainConfiguration implements ILifeCycle {
   @App()
   koaApp: koa.Application;
 
-  @App(MidwayFrameworkType.WS)
+  @App('webSocket')
   wsApp: ws.Application;
 
   async onReady() {
@@ -226,17 +224,6 @@ this.app.getCoreLogger();
 
 
 
-### getFrameworkType
-
-Gets the current frame type.
-
-```typescript
-this.app.getFrameworkType();
-// => MidwayFrameworkType.WEB_KOA
-```
-
-
-
 ### getProjectName
 
 The project name is obtained from the `package.json`.
@@ -300,7 +287,7 @@ In the **default request scope**, that is, in the controller (Controller) or com
 for example, you can obtain the corresponding ctx instance in this way.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
+import { Inject, Controller, Get } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -321,8 +308,7 @@ In addition to explicit declarations, when the interceptor or decorator is desig
 For example:
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
+import { Inject, Controller, Get, REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')

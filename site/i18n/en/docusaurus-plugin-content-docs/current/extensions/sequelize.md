@@ -89,8 +89,7 @@ In the following example, `mysql2` is used as an example.
 Enable components in the `src/configuration.ts` file.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import { join } from 'path';
 import * as sequelize from '@midwayjs/sequelize';
 
@@ -275,7 +274,7 @@ export default {
          // Locally, you can createTable directly through sync: true
          sync: false,
        },
-      
+
        // second data source
        default2: {
          // ...
@@ -413,7 +412,7 @@ If it is a single data source, you can use the following static method.
 Where it needs to be called, use the entity model to operate.
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { Person } from '../entity/person';
 
 @Provide()
@@ -428,7 +427,7 @@ export class PersonService {
 ### Find and update
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { Person } from '../entity/person';
 
 @Provide()
@@ -490,7 +489,7 @@ You need to use the `Repository` operation method.
 The basic API is the same as the static operation. Midway has made some simple packages to it. The `InjectRepository` decorator can be used to inject `Repository` into the service.
 
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
@@ -545,7 +544,7 @@ More ways to use OP: [https:// sequelize.org/v5/manual/querying.html](https://se
 In Repository mode, we can specify a specific data source in the `InjectRepository` parameters.
 
 ```typescript
-import { Controller } from '@midwayjs/decorator';
+import { Controller } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
@@ -617,7 +616,7 @@ export default {
 The data source is the created sequelize object, which we can obtain by injecting the built-in data source manager.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { SequelizeDataSourceManager } from '@midwayjs/sequelize';
 
 @Configuration({
@@ -636,7 +635,7 @@ export class MainConfiguration {
 Starting with v3.8.0, it is also possible to inject via a decorator.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { InjectDataSource } from '@midwayjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 
@@ -644,11 +643,11 @@ import { Sequelize } from 'sequelize-typescript';
    //...
 })
 export class MainConfiguration {
-  
+
    // Inject the default data source
    @InjectDataSource()
    defaultDataSource: Sequelize;
-  
+
    // inject custom data source
    @InjectDataSource('default1')
    customDataSource: Sequelize;

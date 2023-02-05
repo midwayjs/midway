@@ -104,7 +104,7 @@ export default {
       // 当前 midway 应用的端口
       port: 7001,
       // 做泳道隔离等使用
-      tags: ['tag1', 'tag2'],			
+      tags: ['tag1', 'tag2'],
       name: 'my-midway-project'
       // others consul service definition
     }
@@ -139,7 +139,7 @@ export default {
 
 此处为了方便理解，我们模拟查询刚刚注册的成功的服务：
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Provide } from '@midwayjs/core';
 import { BalancerService } from '@midwayjs/consul'
 
 @Provide()
@@ -199,7 +199,7 @@ export class HomeController {
 
 如果需要查询不健康的，则 `select` 方法的第二个参数传入 false 值：
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Provide } from '@midwayjs/core';
 import { BalancerService } from '@midwayjs/consul'
 
 @Provide()
@@ -231,7 +231,7 @@ export class HomeController {
 
 同时 consul 也能作为一个服务配置的地方，如下代码：
 ```typescript
-import { Controller, Get, Inject } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/core';
 import * as Consul from 'consul';
 
 @Controller('/')
@@ -258,7 +258,7 @@ export class HomeController {
 
 所以在QPS比较大的情况，可以如下处理：
 ```typescript
-import { Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import * as Consul from 'consul';
 
 @Provide()
@@ -341,7 +341,7 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 ## 下线服务
 如果想要手动将consul界面上不需要的服务给下线掉，可以通过下面的方法：
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Provide } from '@midwayjs/core';
 import * as Consul from 'consul'
 
 @Provide()

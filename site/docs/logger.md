@@ -77,7 +77,7 @@ ctx.logger.error(new Error('custom error'));
 比如：
 
 ```typescript
-import { Get, Inject, Controller, Provide } from '@midwayjs/decorator';
+import { Get, Inject, Controller, Provide } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 
 @Controller()
@@ -105,7 +105,7 @@ export class HelloController {
 如果我们想做一些应用级别的日志记录，如记录启动阶段的一些数据信息，可以通过 App Logger 来完成。
 
 ```typescript
-import { Configuration, Logger } from '@midwayjs/decorator';
+import { Configuration, Logger } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 
 @Configuration()
@@ -275,7 +275,7 @@ logger.info('%j', a);										// 直接占位符输出整个 json
 
 默认的情况，用户应该使用最简单的 `ILogger` 定义。
 ```typescript
-import { Provide, Logger } from '@midwayjs/decorator';
+import { Provide, Logger } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 
 @Provide()
@@ -299,7 +299,7 @@ export class UserService {
 
 
 ```typescript
-import { Provide, Logger } from '@midwayjs/decorator';
+import { Provide, Logger } from '@midwayjs/core';
 import { IMidwayLogger } from '@midwayjs/logger';
 
 @Provide()
@@ -604,7 +604,7 @@ const contextLogger = customLogger.createContextLogger(ctx);
 `@Inject` 只能注入默认的上下文日志，我们可以通过 `ctx.getLogger` 方法获取其他 **自定义日志** 对应的 **上下文日志**。上下文日志和 ctx 关联，同一个上下文会相同的 key 会获取到同一个日志对象，当 ctx 被销毁，日志对象也会被回收。
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { IMidwayLogger } from '@midwayjs/logger';
 import { Context } from '@midwayjs/koa';
 
@@ -786,8 +786,7 @@ class CustomTransport extends EmptyTransport {
 
 ```typescript
 import { EmptyTransport, IMidwayLogger } from '@midwayjs/logger';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { MidwayLoggerService } from '@midwayjs/core';
+import { MidwayLoggerService, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum)

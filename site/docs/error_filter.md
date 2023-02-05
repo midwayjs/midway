@@ -77,8 +77,7 @@ async findAll() {
 
 ```typescript
 // src/filter/internal.filter.ts
-import { Catch } from '@midwayjs/decorator';
-import { httpError, MidwayHttpError } from '@midwayjs/core';
+import { Catch, httpError, MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch(httpError.InternalServerErrorError)
@@ -97,7 +96,7 @@ export class InternalServerErrorFilter {
 
 ```typescript
 // src/filter/all.filter.ts
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
@@ -114,7 +113,7 @@ export class AllErrorFilter {
 
 ```typescript
 // src/configuration.ts
-import { Configuration, App, Catch } from '@midwayjs/decorator';
+import { Configuration, App, Catch } from '@midwayjs/core';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 import { InternalServerErrorFilter } from './filter/internal.filter';
@@ -152,8 +151,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/filter/notfound.filter.ts
-import { Catch } from '@midwayjs/decorator';
-import { httpError, MidwayHttpError } from '@midwayjs/core';
+import { Catch, httpError, MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch(httpError.NotFoundError)
@@ -181,7 +179,7 @@ export class NotFoundFilter {
 ```typescript
 // src/filter/default.filter.ts
 
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
@@ -201,7 +199,7 @@ export class DefaultErrorFilter {
 我们可以在 `src/configuration.ts` 中将错误处理过滤器应用上，由于参数可以是数组，我们可以应用多个错误处理器。
 
 ```typescript
-import { Configuration, App, Catch } from '@midwayjs/decorator';
+import { Configuration, App, Catch } from '@midwayjs/core';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 import { DefaultErrorFilter } from './filter/default.filter';
@@ -235,9 +233,8 @@ export class MainConfiguration {
 有时候我们需要去捕获所有的派生类，这个时候需要额外设置。
 
 ```typescript
-import { Catch } from '@midwayjs/decorator';
+import { Catch, MidwayError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
-import { MidwayError } from '@midwayjs/core';
 
 class CustomError extends MidwayError {}
 
@@ -269,7 +266,7 @@ Midway 内置了默认的异常处理行为。
 你可以自行在异常处理器中打印日志。
 
 ```typescript
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()

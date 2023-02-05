@@ -18,7 +18,7 @@ Midway 提供了 `DataListener` 的抽象，用于方便的创建这种模式的
 
 ```typescript
 // src/listener/memory.listner.ts
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { DataListener } from '@midwayjs/core';
 
 @Provide()
@@ -53,14 +53,13 @@ export class MemoryDataListener extends DataListener<string> {
 
 ```typescript
 // src/listener/memory.listner.ts
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { DataListener } from '@midwayjs/core';
+import { Provide, Scope, ScopeEnum, DataListener } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MemoryDataListener extends DataListener<string> {
   private intervalHandler;
-  
+
   // 初始化数据
   initData() {
     return 'hello' + Date.now();
@@ -72,14 +71,14 @@ export class MemoryDataListener extends DataListener<string> {
       setData('hello' + Date.now());
     }, 1000);
   }
-  
+
   // 清理资源
   async destroyListener() {
     // 关闭定时器
     clearInterval(this.intervalHandler);
     // 其他清理, close sdk 等等
   }
-  
+
 }
 ```
 
@@ -92,15 +91,15 @@ export class MemoryDataListener extends DataListener<string> {
 比如：
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { MemoryDataListener } from '../listener/memory.listner.ts';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   memoryDataListener: MemoryDataListener;
-  
+
   async getUserHelloData() {
     const helloData = await this.memoryDataListener.getData();
     // helloData => helloxxxxxxxx

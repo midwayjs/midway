@@ -144,7 +144,7 @@ After installation, you need to manually configure it in `src/configuration.ts`,
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as typegoose from '@midwayjs/typegoose';
 
 @Configuration({
@@ -263,7 +263,7 @@ For more information, see [Data source management](../data_source).
 The sample code is as follows:
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { User } from '../entity/user';
@@ -382,7 +382,7 @@ We can set it up when the project starts.
 
 ```typescript
 // srcconfiguration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as typegoose from '@midwayjs/typegoose';
 import * as Typegoose from '@typegoose/typegoose';
 
@@ -445,7 +445,7 @@ Or reinstall the following dependencies in `package.json`.
 After installation, you need to manually configure `src/configuration.ts`. The code is as follows.
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as mongoose from '@midwayjs/mongoose';
 
 @Configuration({
@@ -526,7 +526,7 @@ export default {
 
 When there is only one default connection or the default connection is directly used, we can directly use the encapsulated `MongooseConnectionService` object to create the model.
 ```typescript
-import { Provide, Inject, Init } from '@midwayjs/decorator';
+import { Provide, Inject, Init } from '@midwayjs/core';
 import { MongooseDataSourceManager } from '@midwayjs/mongoose';
 import { Schema, Document } from 'mongoose';
 

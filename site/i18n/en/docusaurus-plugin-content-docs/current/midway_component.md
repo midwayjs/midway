@@ -23,7 +23,7 @@ We need to enable this component in the code. Midway's component loading capabil
 
 ```typescript
 // src/configuration.ts of application or function
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as validate from '@midwayjs/validate';
 
 @Configuration({
@@ -42,13 +42,13 @@ For example, the commonly used `info` component can be enabled only in the local
 
 ```typescript
 // src/configuration.ts of application or function
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as info from '@midwayjs/info';
 
 @Configuration({
   imports: [
     {
-      component: info
+      component: info,
       enabledEnvironment: ['local']
     },
   ],

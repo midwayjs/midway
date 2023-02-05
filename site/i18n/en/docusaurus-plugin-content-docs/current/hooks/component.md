@@ -5,13 +5,13 @@ In Midway Hooks, we can directly use Midway components to quickly implement func
 
 ## Introducing components
 
-Midway Hooks uses `createConfiguration()` in `configuration.ts` to configure the project, and its Api is consistent with the `@Configuration()` provided by `@midwayjs/decorator`.
+Midway Hooks uses `createConfiguration()` in `configuration.ts` to configure the project, and its Api is consistent with the `@Configuration()` provided by `@midwayjs/core`.
 
 Take the `@midwayjs/cache` component as an example:
 
 ```ts
 import {
-  createConfiguration
+  createConfiguration,
   hooks
 } from '@midwayjs/hooks';
 import * as Koa from '@midwayjs/koa';
@@ -19,7 +19,7 @@ import { join } from 'path';
 import * as cache from '@midwayjs/cache';
 
 export default createConfiguration({
-  imports: [cache, Koa, Hooks()]
+  imports: [cache, Koa, Hooks()],
   importConfigs: [
     join(__dirname, 'config')
   ],
@@ -36,8 +36,8 @@ In Midway Hooks, you can get instances of classes at runtime through the `useInj
 
 ```ts
 import {
-  Api
-  Get
+  Api,
+  Get,
   useInject
 } from '@midwayjs/hooks';
 import { CacheManager } from '@midwayjs/cache';

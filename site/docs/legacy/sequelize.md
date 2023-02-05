@@ -68,9 +68,8 @@ npm install mongodb --save
 在 configuration.ts 文件中
 
 ```typescript
-import { App, Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
-import { Application } from 'egg';
+import { App, Configuration, ILifeCycle } from '@midwayjs/core';
+import { Application } from '@midwayjs/web';
 import { join } from 'path';
 import * as sequelize from '@midwayjs/sequelize';
 
@@ -156,7 +155,7 @@ export class User extends Model {
 #### 查询列表
 
 ```typescript
-import { Config, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Config, Controller, Get, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -174,7 +173,7 @@ export class HomeController {
 增加数据：
 
 ```typescript
-import { Controller, Post, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -194,7 +193,7 @@ export class HomeController {
 #### 删除：
 
 ```typescript
-import { Controller, Post, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -215,7 +214,7 @@ export class HomeController {
 #### 查找单个：
 
 ```typescript
-import { Controller, Post, Provide } from '@midwayjs/decorator';
+import { Controller, Post, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 
 @Provide()
@@ -236,7 +235,7 @@ export class HomeController {
 #### 联合查询：
 
 ```typescript
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { Photo } from '../entity/Photo';
 import { Op } from 'sequelize';
 
@@ -260,7 +259,7 @@ export class HomeController {
 #### 连表查询
 
 ```typescript
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { User } from '../entity/User';
 import { Photo } from '../entity/Photo';
 

@@ -14,8 +14,7 @@ Available at application startup, onReady lifecycle, and thereafter.
 It has been instantiated by default and can be used by direct injection.
 
 ```typescript
-import { MidwayWebRouterService, MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { MidwayWebRouterService, MidwayServerlessFunctionService, Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -143,7 +142,7 @@ It is simply understood as "clear routes have the highest priority, long routes 
 
 
 For example, the priority of sorting is as follows (high to low):
-```typescript
+```text
 /api/invoke/abc
 /api/invoke /*
 /api/abc
@@ -161,8 +160,7 @@ Through `getMatchedRouterInfo` method, we can know the current route and which r
 For example, in middleware, we can judge in advance before entering the controller.
 
 ```typescript
-import { Middleware, Inject } from '@midwayjs/decorator';
-import { httpError, MidwayWebRouterService } from '@midwayjs/core';
+import { Middleware, Inject, httpError, MidwayWebRouterService } from '@midwayjs/core';
 
 @Middleware()
 export class AuthMiddleware {
@@ -429,7 +427,7 @@ Sometimes we want to dynamically add a controller according to certain condition
 First, we need to have a controller class, but do not use the `@Controller` decorator.
 
 ```typescript
-import { Get, Provide } from '@midwayjs/decorator';
+import { Get, Provide } from '@midwayjs/core';
 
 // Note that @Controller decoration is not used here
 @Provide()
@@ -445,8 +443,7 @@ We can add it dynamically by `addController` method.
 
 ```typescript
 // src/configuration.ts
-import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { MidwayWebRouterService, Configuration, Inject } from '@midwayjs/core';
 import { DataController } from './controller/data.controller';
 
 @Configuration({
@@ -461,7 +458,7 @@ export class MainConfiguration {
       this.webRouterService.addController(DataController, {
         prefix: '/test',
         routerOptions: {
-          middleware: [ 
+          middleware: [
             // ...
           ]
         }
@@ -482,8 +479,7 @@ In some scenarios, users can add methods directly and dynamically.
 
 ```typescript
 // src/configuration.ts
-import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { MidwayWebRouterService, Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -501,7 +497,7 @@ export class MainConfiguration {
       requestMethod: 'GET',
     });
 		// ...
-    
+
     // express format
     this.webRouterService.addRouter(async (req, res) => {
       return 'hello world';
@@ -525,8 +521,7 @@ For example, add an http function.
 
 ```typescript
 // src/configuration.ts
-import { MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { MidwayServerlessFunctionService, Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...

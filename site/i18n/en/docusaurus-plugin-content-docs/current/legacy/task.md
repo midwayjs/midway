@@ -57,12 +57,12 @@ In `configuration.ts`, introduce this component:
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as task from '@midwayjs/task'; //Import module
 import { join } from 'path';
 
 @Configuration({
-  imports: [task]
+  imports: [task],
   importConfigs: [join(__dirname, 'config')]
 })
 export class MainConfiguration {
@@ -129,7 +129,7 @@ export default {
 ### Code usage
 
 ```typescript
-import { Provide, Inject, Task, FORMAT } from '@midwayjs/decorator';
+import { Provide, Inject, Task, FORMAT } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
@@ -159,7 +159,7 @@ Then query the progress:
 
 ```typescript
 import { QueueService } from '@midwayjs/task';
-import { Provide, Controller, Get } from '@midwayjs/decorator';
+import { Provide, Controller, Get } from '@midwayjs/core';
 
 @Controller()
 export class HelloController {
@@ -189,8 +189,7 @@ Then there is a similar way to stop or check the progress on the job.
 Some friends hope to perform the corresponding timing tasks immediately after restarting because there is only one machine.
 
 ```typescript
-import { Context, ILifeCycle, IMidwayBaseApplication, IMidwayContainer } from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, Context, ILifeCycle, IMidwayBaseApplication, IMidwayContainer } from '@midwayjs/core';
 import { Queue } from 'bull';
 import { join } from 'path';
 import * as task from '@midwayjs/task';
@@ -217,7 +216,7 @@ export class MainConfiguration implements ILifeCycle {
 
     // The LocalTask will be executed immediately after it is started.
     const result = await container.getAsync(QueueService);
-    Let job = result.getLocalTask('HelloTask', 'task'); //Parameter 1: Class Name Parameter 2: Function Name TaskLocal by Decorator
+    let job = result.getLocalTask('HelloTask', 'task'); //Parameter 1: Class Name Parameter 2: Function Name TaskLocal by Decorator
     job(); // indicates immediate execution
   }
 }
@@ -230,7 +229,7 @@ export class MainConfiguration implements ILifeCycle {
 
 About Task Task Task Configuration:
 
-```typescript
+```text
 *    *    *    *    *    *
 ┬    ┬    ┬    ┬    ┬    ┬
 │    │    │    │    │    |
@@ -255,10 +254,10 @@ You can use the [online tool](https://cron.qqe2.com/) to confirm the time of the
 
 
 
-Midway provides some commonly used expressions on the frame side for everyone to use in `@midwayjs/decorator`.
+Midway provides some commonly used expressions on the frame side for everyone to use in `@midwayjs/core`.
 
 ```typescript
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 
 // cron expressions executed per minute
 FORMAT.CRONTAB.EVERY_MINUTE
@@ -287,7 +286,7 @@ There are some other expressions built in.
 
 The definition of a task, through the `@Queue` decorator, defines a task class, which must contain an `async execute()` method.
 ```typescript
-import { Provide, Inject, Queue } from '@midwayjs/decorator';
+import { Provide, Inject, Queue } from '@midwayjs/core';
 
 @Queue()
 export class HelloTask {
@@ -301,7 +300,7 @@ export class HelloTask {
 Trigger:
 ```typescript
 import { QueueService } from '@midwayjs/task';
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 
 @Provide()
 export class UserTask {
@@ -415,7 +414,7 @@ Task and queue use the ID of the job as the traceId.
 
 In the service, you can inject logger through inject or inject ctx to get logger variables.
 ```typescript
-import { App, Inject, Provide, Queue } from "@midwayjs/decorator";
+import { App, Inject, Provide, Queue } from '@midwayjs/core';
 import { Application } from "@midwayjs/koa";
 
 @Queue()
@@ -436,7 +435,7 @@ export class QueueTask {
 ```
 or
 ```typescript
-import { App, Inject, Provide, Queue } from "@midwayjs/decorator";
+import { App, Inject, Provide, Queue } from '@midwayjs/core';
 import { Application } from "@midwayjs/koa";
 
 @Queue()
@@ -471,7 +470,7 @@ Printed log
 Unlike distributed tasks, local timed tasks do not need to rely on and configure Redis, and can only do single-process tasks, that is, each process of each machine will be executed.
 
 ```typescript
-import { Provide, Inject, TaskLocal, FORMAT } from '@midwayjs/decorator';
+import { Provide, Inject, TaskLocal, FORMAT } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
@@ -506,7 +505,7 @@ This problem is basically clear. The problem will appear on the cluster version 
 
 When Redis is executed every time, he will have a log, so how to delete it after completion:
 ```typescript
-import { Provide, Task } from '@midwayjs/decorator';
+import { Provide, Task } from '@midwayjs/core';
 import { IUserOptions } from '../interface';
 
 @Provide()

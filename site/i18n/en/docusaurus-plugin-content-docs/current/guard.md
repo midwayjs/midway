@@ -76,7 +76,7 @@ After writing the guard, we need to apply it to each controller route.
 Using `UseGuard` decorators, we can apply them to classes and methods.
 
 ```typescript
-import { Controller } from '@midwayjs/decorator';
+import { Controller } from '@midwayjs/core';
 import { AuthGuard } from '../guard/auth.guard';
 
 @UseGuard(AuthGuard)
@@ -90,7 +90,7 @@ export class HomeController {
 Midway also provides middleware parameters on route decorators such as `@Get` and `@Post` to facilitate middleware interception of a single route.
 
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 import { AuthGuard } from '../guard/auth.guard';
 
@@ -119,7 +119,7 @@ We need to join the guard list of the current framework before the application s
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { AuthGuard } from './guard/auth.guard';
 
@@ -218,7 +218,7 @@ export class AuthGuard implements IGuard<Context> {
 Use this guard on the route.
 
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 import { AuthGuard } from '../guard/auth.guard';
 

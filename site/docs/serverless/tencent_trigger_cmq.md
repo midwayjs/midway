@@ -5,7 +5,7 @@ CMQ（mq） 触发器，订阅的是腾讯云的消息队列服务。
 ## 使用方式
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()

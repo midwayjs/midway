@@ -21,7 +21,7 @@ Publish functions that do not contain triggers. This is the simplest type. You c
 Bind the event trigger by `@ServerlessTrigger` the decorator directly in the code.
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, FC } from '@midwayjs/faas';
 
 @Provide()
@@ -45,7 +45,7 @@ Alibaba Cloud's HTTP triggers are different from other platforms. They are anoth
 Bind HTTP triggers by `@ServerlessTrigger` decorators directly in code.
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -70,7 +70,7 @@ export class HelloAliyunService {
 API Gateway is special in the Alibaba Cloud function system. It is similar to creating a trigger-free function that is bound to a specific path through the platform gateway.
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -105,7 +105,7 @@ Warm reminder, please close the trigger in time after testing the function and e
 :::
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, FC } from '@midwayjs/faas';
 
 @Provide()
@@ -177,7 +177,7 @@ The structure returned by the Timer message is as follows, described in the `FC.
 OSS is used to store some resource files and is a resource storage product of Alibaba Cloud.  When a file is created and updated in OSS, the corresponding function will be triggered and executed.
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, FC } from '@midwayjs/faas';
 
 @Provide()
@@ -282,7 +282,7 @@ Please note that Alibaba Cloud Message Queue will incur certain fees for Topic a
 :::
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, FC } from '@midwayjs/faas';
 
 @Provide()

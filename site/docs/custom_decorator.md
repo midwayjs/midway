@@ -31,7 +31,7 @@
 
 ## 装饰器 API
 
-Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依赖注入容器，实现扫描和扩展，这些 API 方法我们都从 `@midwayjs/decorator` 包进行导出。
+Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依赖注入容器，实现扫描和扩展，这些 API 方法我们都从 `@midwayjs/core` 包进行导出。
 
 通过装饰器高级 API，我们可以自定义装饰器，并且将元数据附加其中，内部的各种装饰器都是通过该能力实现的。
 
@@ -77,7 +77,7 @@ Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依
 首先创建一个装饰器文件，比如 `src/decorator/model.decorator.ts` 。
 
 ```typescript
-import { Scope, ScopeEnum, saveClassMetadata, saveModule, Provide } from '@midwayjs/decorator';
+import { Scope, ScopeEnum, saveClassMetadata, saveModule, Provide } from '@midwayjs/core';
 
 // 提供一个唯一 key
 export const MODEL_KEY = 'decorator:model';
@@ -108,8 +108,7 @@ export function Model(): ClassDecorator {
 ```typescript
 // src/configuration.ts
 
-import { listModule, Configuration, App, Inject } from '@midwayjs/decorator';
-import { join } from 'path';
+import { listModule, Configuration, App, Inject } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { MODEL_KEY } from './decorator/model.decorator';
 
@@ -156,7 +155,7 @@ Midway 提供了 `createCustomPropertyDecorator` 方法，用于创建自定义�
 
 ```typescript
 // 简单的缓存类
-import { Configuration, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Configuration, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -172,8 +171,7 @@ export class MemoryStore extends Map {
 
 // src/configuration.ts
 // 入口实例化，并保存一些数据
-import { Configuration, App, Inject } from '@midwayjs/decorator';
-import { join } from 'path';
+import { Configuration, App, Inject } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
@@ -205,7 +203,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/decorator/memoryCache.decorator.ts
-import { createCustomPropertyDecorator } from '@midwayjs/decorator';
+import { createCustomPropertyDecorator } from '@midwayjs/core';
 
 // 装饰器内部的唯一 id
 export const MEMORY_CACHE_KEY = 'decorator:memory_cache_key';
@@ -220,10 +218,9 @@ export function MemoryCache(key?: string): PropertyDecorator {
 在装饰器的方法执行之前（一般在初始化的地方）去实现。实现装饰器，我们需要用到内置的 `MidwayDecoratorService` 服务。
 
 ```typescript
-import { Configuration, Inject, Init } from '@midwayjs/decorator';
+import { Configuration, Inject, Init, MidwayDecoratorService } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { MEMORY_CACHE_KEY, MemoryStore } from 'decorator/memoryCache.decorator';
-import { MidwayDecoratorService } from '@midwayjs/core';
 
 @Configuration({
   imports: [koa],
@@ -285,7 +282,7 @@ Midway 提供了 `createCustomMethodDecorator` 方法，用于创建自定义方
 
 ```typescript
 // src/decorator/logging.decorator.ts
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 
 // 装饰器内部的唯一 id
 export const LOGGING_KEY = 'decorator:logging_key';
@@ -390,7 +387,7 @@ export class UserService {
 
 ```typescript
 // src/decorator/logging.decorator.ts
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 
 // 装饰器内部的唯一 id
 export const LOGGING_KEY = 'decorator:logging_key';
@@ -413,7 +410,7 @@ Midway 提供了 `createCustomParamDecorator` 方法，用于创建自定义参�
 
 ```typescript
 // src/decorator/logging.decorator.ts
-import { createCustomParamDecorator } from '@midwayjs/decorator';
+import { createCustomParamDecorator } from '@midwayjs/core';
 
 // 装饰器内部的唯一 id
 export const USER_KEY = 'decorator:user_key';

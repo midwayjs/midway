@@ -23,14 +23,14 @@ The interceptor is usually placed in the `src/aspect` directory. Let's write an 
 │   │   └── report.ts
 │   └── controller                ## Web Controller Directory
 │       └── home.ts
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -45,7 +45,7 @@ export class HomeController {
 
 The content is as follows:
 ```typescript
-import { Aspect, IMethodAspect, JoinPoint } from '@midwayjs/decorator';
+import { Aspect, IMethodAspect, JoinPoint } from '@midwayjs/core';
 import { HomeController } from '../controller/home';
 
 @Aspect(HomeController)
@@ -98,7 +98,7 @@ A simple understanding is as follows;
 
 ```javascript
 try {
-    // before  
+    // before
     // around or invokeMethod
     // afterReturn
 } catch(err) {
@@ -333,7 +333,7 @@ Suppose our method is:
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get } from "@midwayjs/decorator";
+import { Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -342,7 +342,7 @@ export class HomeController {
   async hello1() {
     return "Hello Midwayjs!";
   }
-  
+
   @Get('/2')
   async hello2() {
     return "Hello Midwayjs, too!";

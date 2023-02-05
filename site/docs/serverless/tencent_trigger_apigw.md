@@ -5,7 +5,7 @@ API 网关在腾讯云函数体系中类似于 HTTP 函数，我们通过它将�
 ## 使用方式
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()

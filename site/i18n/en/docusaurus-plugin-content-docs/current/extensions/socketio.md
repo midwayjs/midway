@@ -60,7 +60,7 @@ Or reinstall the following dependencies in `package.json`.
 `@midwayjs/socket.io` can be used as an independent main framework.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as socketio from '@midwayjs/socketio';
 
 @Configuration({
@@ -78,7 +78,7 @@ export class MainConfiguration {
 It can also be attached to other main frameworks, such as `@midwayjs/koa`.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as socketio from '@midwayjs/socketio';
 
@@ -179,7 +179,7 @@ The namespace here supports strings and regularization.
 
 When the Namespace has a client connection, a `connection` event will be triggered. We can use the `@OnWSConnection()` decorator in the code to decorate a method. When each client connects to the Namespace for the first time, the method will be automatically called.
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/socketio';
 
 @WSController('/')
@@ -207,7 +207,7 @@ The ctx here is equivalent to the socket instance.
 
 Socket.io obtains data by monitoring events. Midway provides a `@OnWSMessage()` decorator to format the received event. Every time the client sends an event, the modified method will be executed.
 ```typescript
-import { WSController, Provide, OnWSMessage, Inject } from '@midwayjs/decorator';
+import { WSController, Provide, OnWSMessage, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/socketio';
 
 @WSController('/')
@@ -235,7 +235,7 @@ After the data is obtained, the data is processed through business logic, and th
 
 The `@WSEmit` decorator returns the return value of the method to the client.
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/socketio';
 
 @WSController('/')
@@ -273,7 +273,7 @@ Note that the middleware must return the result via `return`.
 
 ```typescript
 // src/middleware/socket.middleware.ts
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/socketio';
 
 @Middleware()
@@ -599,7 +599,7 @@ The following code example:
 
 ```typescript
 import { Context, Application } from '@midwayjs/socketio';
-import { WSController, OnWSMessage, WSEmit, App, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSMessage, WSEmit, App, Inject } from '@midwayjs/core';
 
 @WSController('/')
 export class HelloSocketController {
@@ -694,7 +694,7 @@ Under multiple frameworks, the main framework is generally a Web framework. We c
 
 ```typescript
 import { Application as SocketApplication } from '@midwayjs/socketio';
-import { Controller, App } from '@midwayjs/decorator';
+import { Controller, App } from '@midwayjs/core';
 
 @Controller()
 export class UserController {
@@ -712,7 +712,7 @@ For example, an HTTP request is called to broadcast to all clients under a speci
 
 ```typescript
 import { Application as SocketApplication } from '@midwayjs/socketio';
-import { Provide, Controller, App, Get } from '@midwayjs/decorator';
+import { Provide, Controller, App, Get } from '@midwayjs/core';
 
 @Controller()
 export class UserController {

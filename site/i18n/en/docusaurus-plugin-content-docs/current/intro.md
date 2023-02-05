@@ -42,7 +42,7 @@ Midway supports the object-oriented programming paradigm and provides a more ele
 The following is an example of developing routes based on object-oriented.
 ```typescript
 // src/controller/home.ts
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')

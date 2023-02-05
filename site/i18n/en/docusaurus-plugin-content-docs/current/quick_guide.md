@@ -41,7 +41,7 @@ Among the files created by scaffolding, we already have some files, and we tempo
 In the `controller` directory, create a new `src/controller/weather.controller.ts` file with the following contents.
 
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class WeatherController {
@@ -65,7 +65,7 @@ In the example, we need a URL parameter to dynamically show the weather in diffe
 You can add the `@Query` decorator to obtain the parameters on the URL.
 
 ```typescript
-import { Controller, Get, Query } from '@midwayjs/decorator';
+import { Controller, Get, Query } from '@midwayjs/core';
 
 @Controller('/')
 export class WeatherController {
@@ -88,8 +88,7 @@ The code is as follows:
 
 ```typescript
 // src/service/weather.service.ts
-import { Provide } from '@midwayjs/decorator';
-import { makeHttpRequest } from '@midwayjs/core';
+import { Provide, makeHttpRequest } from '@midwayjs/core';
 
 @Provide()
 export class WeatherService {
@@ -139,8 +138,7 @@ export interface WeatherInfo {
 In this way, we can mark in the Service.
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
-import { makeHttpRequest } from '@midwayjs/core';
+import { Provide, makeHttpRequest } from '@midwayjs/core';
 import { WeatherInfo } from '../interface';
 
 @Provide
@@ -169,7 +167,7 @@ export class WeatherService {
 At the same time, we revised the previous Controller file.
 
 ```typescript
-import { Controller, Get, Inject, Query } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Query } from '@midwayjs/core';
 import { WeatherInfo } from '../interface';
 import { WeatherService } from '../service/weather.service';
 
@@ -263,7 +261,7 @@ Add the `view/info.html` template to the root directory (not in src). The conten
     <title> weather forecast </title>
 		<style>
       .weather_bg {
-        background-color: #0d68bc; 
+        background-color: #0d68bc;
         height: 150px;
         color: #fff;
         font-size: 12px;
@@ -316,7 +314,7 @@ At the same time, we adjust the Controller code and change the returned JSON int
 
 ```typescript
 // src/controller/weather.controller.ts
-import { Controller, Get, Inject, Query } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Query } from '@midwayjs/core';
 import { WeatherService } from '../service/weather.service';
 import { Context } from '@midwayjs/koa';
 
@@ -371,8 +369,7 @@ Then, we adjust the Service code to throw an exception.
 
 ```typescript
 // src/service/weather.service.ts
-import { Provide } from '@midwayjs/decorator';
-import { makeHttpRequest } from '@midwayjs/core';
+import { Provide, makeHttpRequest } from '@midwayjs/core';
 import { WeatherInfo } from '../interface';
 import { WeatherEmptyDataError } from '../error/weather.error';
 
@@ -410,7 +407,7 @@ The error handler can complete this function. We need to create a `src/filter/we
 
 ```typescript
 //src/filter/weather.filter.ts
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { WeatherEmptyDataError } from '../error/weather.error';
 
@@ -427,7 +424,7 @@ export class WeatherErrorFilter {
 It is then applied to the current framework.
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { WeatherErrorFilter } from './filter/weather.filter';
 // ...

@@ -48,7 +48,7 @@ Midway provides a unified API for different cache stores. By default, a data cen
 First, the Cache component is introduced and imported in the `configuration.ts`:
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as cache from '@midwayjs/cache';
 import { join } from 'path'
 
@@ -68,7 +68,7 @@ export class MainConfiguration {
 It can then be injected into the business code.
 
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { IUserOptions } from '../interface';
 import { CacheManager } from '@midwayjs/cache';
 
@@ -84,7 +84,7 @@ Set through the provided API to obtain cached data.
 
 
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { IUserOptions } from '../interface';
 import { CacheManager } from '@midwayjs/cache';
 

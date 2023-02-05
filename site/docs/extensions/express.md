@@ -68,7 +68,7 @@ $ npm init midway -- --type=express-v3 my_project
 ## 开启组件
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 
@@ -92,7 +92,7 @@ export class MainConfiguration {
 
 整个请求控制器的写法和 Midway 适配其他框架的类似。为了和其他场景的框架写法一致，在请求的时候，Midway 将 Express 的 `req` 映射为 `ctx` 对象。
 ```typescript
-import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide, Query } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/express';
 
 @Controller('/')
@@ -110,7 +110,7 @@ export class HomeController {
 ```
 你也可以额外注入 `req` 和 `res` 。
 ```typescript
-import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide, Query } from '@midwayjs/core';
 import { Context, Response, NextFunction } from '@midwayjs/express';
 
 @Controller('/')
@@ -141,7 +141,7 @@ Express 的中间件写法比较特殊，它的参数不同。
 
 
 ```typescript
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { Context, Response, NextFunction } from '@midwayjs/express';
 
 @Middleware()
@@ -175,7 +175,7 @@ Express 中的 next 方法，用于调用到下一个中间件，指的注意的
 
 
 ```typescript
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 
 @Controller('/', { middleware: [ ReportMiddleware ]})			// controller 级别的中间件
 export class HomeController {
@@ -194,8 +194,7 @@ export class HomeController {
 直接使用 Midway 提供的 `app.generateMiddleware` 方法，在入口处加载全局中间件。
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { ReportMiddleware } from './middleware/report.middleware.ts'
 
@@ -217,8 +216,7 @@ export class ContainerLifeCycle implements ILifeCycle {
 除了加载 Class 形式的中间件外，也支持加载传统的 Express 中间件。
 ```typescript
 // src/configuration.ts
-import { Configuration, App } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle, App } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 
@@ -249,7 +247,7 @@ export class ContainerLifeCycle implements ILifeCycle {
 
 ```typescript
 // src/filter/globalMatch.filter.ts
-import { Match } from '@midwayjs/decorator';
+import { Match } from '@midwayjs/core';
 import { Context, Response } from '@midwayjs/express';
 
 @Match()
@@ -270,7 +268,7 @@ export class GlobalMatchFilter {
 
 ```typescript
 // src/filter/api.filter.ts
-import { Match } from '@midwayjs/decorator';
+import { Match } from '@midwayjs/core';
 import { Context, Response } from '@midwayjs/express';
 
 @Match((ctx: Context, res: Response) => {
@@ -292,7 +290,7 @@ export class APIMatchFilter {
 需要应用到 app 中。
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 import { APIMatchFilter } from './filter/api.filter';
@@ -322,7 +320,7 @@ export class ContainerLifeCycle {
 和普通的项目相同，使用错误过滤器，但是参数略有不同。
 
 ```typescript
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context, Response } from '@midwayjs/express';
 
 @Catch()
@@ -341,7 +339,7 @@ export class GlobalError {
 需要应用到 app 中。
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 import { GlobalError } from './filter/global.filter';

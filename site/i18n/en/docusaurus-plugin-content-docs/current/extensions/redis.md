@@ -40,7 +40,7 @@ Or reinstall the following dependencies in `package.json`.
 
 First, introduce components and import them in `src/configuration.ts`:
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as redis from '@midwayjs/redis';
 import { join } from 'path'
 
@@ -157,7 +157,7 @@ The [ioredis document](https://github.com/luin/ioredis/blob/master/API.md#new_Re
 
 We can inject it into any code.
 ```typescript
-import { Provide, Controller, Inject, Get } from '@midwayjs/decorator';
+import { Provide, Controller, Inject, Get } from '@midwayjs/core';
 import { RedisService } from '@midwayjs/redis';
 
 @Provide()
@@ -215,7 +215,7 @@ export class UserService {
 
   @InjectClient(RedisServiceFactory, 'instance1')
   redis1: RedisService;
-  
+
   @InjectClient(RedisServiceFactory, 'instance3')
   redis2: RedisService;
 

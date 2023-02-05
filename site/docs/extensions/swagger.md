@@ -51,7 +51,7 @@ $ npm install swagger-ui-dist --save
 在 ```configuration.ts``` 中增加组件。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as swagger from '@midwayjs/swagger';
 
 @Configuration({
@@ -68,7 +68,7 @@ export class MainConfiguration {
 可以配置启用的环境，比如下面的代码指的是“只在 local 环境下启用”。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as swagger from '@midwayjs/swagger';
 
 @Configuration({

@@ -48,7 +48,7 @@ Midway 为不同的 cache 存储提供了统一的 API。默认内置了一个�
 首先，引入 Cache 组件，在 `configuration.ts` 中导入：
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as cache from '@midwayjs/cache';
 import { join } from 'path'
 
@@ -68,7 +68,7 @@ export class MainConfiguration {
 然后在业务代码中即可注入使用。
 
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { IUserOptions } from '../interface';
 import { CacheManager } from '@midwayjs/cache';
 
@@ -84,7 +84,7 @@ export class UserService {
 
 
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { IUserOptions } from '../interface';
 import { CacheManager } from '@midwayjs/cache';
 

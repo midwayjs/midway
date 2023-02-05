@@ -207,7 +207,7 @@ Or reinstall the following dependencies in `package.json`.
 First, introduce components and import them in `configuration.ts`:
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as axios from '@midwayjs/axios';
 import { join } from 'path'
 
@@ -351,10 +351,9 @@ export class UserService {
 If you are using the default Axios instance, you can configure it as follows.
 
 ```javascript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import * as axios from '@midwayjs/axios';
 import { join } from 'path';
-import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
   imports: [
@@ -385,10 +384,9 @@ export class ContainerLifeCycle {
 If you want to configure other instances, you can refer to the following code.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import * as axios from '@midwayjs/axios';
 import { join } from 'path';
-import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
   imports: [

@@ -70,7 +70,7 @@ $ npm i @midwayjs/mikro@3 @mikro-orm/core --save
 
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as mikro from '@midwayjs/mikro';
 import { join } from 'path';
 
@@ -203,7 +203,7 @@ export default (appInfo) => {
 
 ```typescript
 import { Book } from './entity';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/mikro';
 import { EntityRepository, QueryOrder, wrap } from '@mikro-orm/core';
 
@@ -237,7 +237,7 @@ export class BookController {
 数据源即创建出的数据源对象，我们可以通过注入内置的数据源管理器来获取。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { MikroDataSourceManager } from '@midwayjs/mikro';
 
 @Configuration({
@@ -257,7 +257,7 @@ export class MainConfiguration {
 从 v3.8.0 开始，也可以通过装饰器注入。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { InjectDataSource } from '@midwayjs/mikro';
 import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
 
@@ -265,11 +265,11 @@ import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
   // ...
 })
 export class MainConfiguration {
-  
+
   // 注入默认数据源
   @InjectDataSource()
   defaultDataSource: MikroORM<IDatabaseDriver<Connection>>;
-  
+
   // 注入自定义数据源
   @InjectDataSource('default1')
   customDataSource: MikroORM<IDatabaseDriver<Connection>>;

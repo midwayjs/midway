@@ -5,7 +5,7 @@ API Gateway is similar to HTTP functions in Tencent Cloud Function System, throu
 ## Usage
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()

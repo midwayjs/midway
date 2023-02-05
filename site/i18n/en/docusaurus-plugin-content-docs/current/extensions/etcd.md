@@ -43,7 +43,7 @@ Or add the following dependencies in `package.json` and reinstall.
 First, import the component, import it in `configuration.ts`:
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as etcd from '@midwayjs/etcd';
 import { join } from 'path'
 
@@ -85,7 +85,7 @@ export default {
 After the configuration is complete, we can use it in the code.
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { ETCDService } from '@midwayjs/etcd';
 import { join } from 'path';
 
@@ -146,7 +146,7 @@ export default {
 ## Get multiple instances
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { ETCDServiceFactory } from '@midwayjs/etcd';
 import { join } from 'path';
 
@@ -159,7 +159,7 @@ export class UserService {
   async invoke() {
     const instance1 = this.etcdServiceFactory.get('instance1');
     //...
-    
+
     const instance2 = this.etcdServiceFactory.get('instance2');
     //...
   }
@@ -171,7 +171,7 @@ export class UserService {
 ## Create instance dynamically
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { ETCDServiceFactory } from '@midwayjs/etcd';
 import { join } from 'path';
 

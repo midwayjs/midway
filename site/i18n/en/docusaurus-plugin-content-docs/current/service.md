@@ -22,7 +22,7 @@ In Midway, the common service is a Class. For example, we created a Controller t
 
 For service files, we usually store them in the `src/service` directory. Let's add a user service.
 
-```typescript
+```text
 ➜  my_midway_app tree
 .
 ├── src
@@ -41,7 +41,7 @@ The content is:
 
 ```typescript
 // src/service/user.ts
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
@@ -61,7 +61,7 @@ Except for an `@Provide` decorator, the structure of the entire service is exact
 We also added a User definition before, which can also be used directly here.
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { User } from '../interface';
 
 @Provide()
@@ -85,7 +85,7 @@ At Controller, we need to call this service. In traditional code writing, we nee
 
 
 ```typescript
-import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide, Query } from '@midwayjs/core';
 import { UserService } from '../service/user';
 
 @Controller('/api/user')

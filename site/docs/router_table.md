@@ -14,8 +14,7 @@
 已默认实例化，可以直接注入使用。
 
 ```typescript
-import { MidwayWebRouterService, MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject, MidwayWebRouterService, MidwayServerlessFunctionService } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -23,14 +22,14 @@ import { Configuration, Inject } from '@midawyjs/decorator';
 export class MainConfiguration {
   @Inject()
   webRouterService: MidwayWebRouterService;
-  
+
   @Inject()
   serverlessFunctionService: MidwayServerlessFunctionService;
 
   async onReady() {
     // Web 路由
     const routes = await this.webRouterService.getFlattenRouterTable();
-    
+
     // serverless 函数
     const routes = await this.serverlessFunctionService.getFunctionList();
   }
@@ -162,8 +161,7 @@ export interface RouterInfo {
 比如，在中间件中，我们可以在进入控制器之前提前判断。
 
 ```typescript
-import { Middleware, Inject } from '@midwayjs/decorator';
-import { httpError, MidwayWebRouterService } from '@midwayjs/core';
+import { Middleware, Inject, httpError, MidwayWebRouterService } from '@midwayjs/core';
 
 @Middleware()
 export class AuthMiddleware {
@@ -430,7 +428,7 @@ const result = await this.serverlessFunctionService.getFunctionList();
 首先，我们需要有一个控制器类，但是不使用 `@Controller` 装饰器修饰。
 
 ```typescript
-import { Get, Provide } from '@midwayjs/decorator';
+import { Get, Provide } from '@midwayjs/core';
 
 // 注意这里未使用 @Controller 修饰
 @Provide()
@@ -462,7 +460,7 @@ export class MainConfiguration {
       this.webRouterService.addController(DataController, {
         prefix: '/test',
         routerOptions: {
-          middleware: [ 
+          middleware: [
             // ...
           ]
         }
@@ -502,7 +500,7 @@ export class MainConfiguration {
       requestMethod: 'GET',
     });
 		// ...
-    
+
     // express 格式
     this.webRouterService.addRouter(async (req, res) => {
       return 'hello world';

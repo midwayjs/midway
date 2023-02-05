@@ -70,7 +70,7 @@ Or reinstall the following dependencies in `package.json`.
 First, introduce components and import them in `configuration.ts`:
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path'
 
@@ -213,7 +213,7 @@ Decorator authentication depends on guards, which can be turned on globally or o
 For example, we only enable authentication on the following `findAllUsers` methods, `AuthGuard` the guards provided by `@midwayjs/casbin`, which can be used directly.
 
 ```typescript
-import { Controller, Get, UseGuard } from '@midwayjs/decorator';
+import { Controller, Get, UseGuard } from '@midwayjs/core';
 import { AuthGuard } from '@midwayjs/casbin';
 import { Resource } from './resouce';
 
@@ -235,7 +235,7 @@ export class HomeController {
 Use the `UsePermission` decorator to define the permissions required for routing.
 
 ```typescript
-import { Controller, Get, UseGuard } from '@midwayjs/decorator';
+import { Controller, Get, UseGuard } from '@midwayjs/core';
 import { AuthActionVerb, AuthGuard, AuthPossession, UsePermission } from '@midwayjs/casbin';
 import { Resource } from './resouce';
 
@@ -349,7 +349,7 @@ $ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
 enable the redis component.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as redis from '@midwayjs/redis';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path';
@@ -414,7 +414,7 @@ $ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
 Enable typeorm components.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as typeorm from '@midwayjs/typeorm';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path';
@@ -485,7 +485,7 @@ $ npm i @midwayjs/casbin-redis-adapter @midwayjs/redis --save
 Enable the redis component.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as redis from '@midwayjs/redis';
 import * as casbin from '@midwayjs/casbin';
 import { join } from 'path';

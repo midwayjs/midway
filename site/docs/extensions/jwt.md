@@ -20,7 +20,6 @@ Midway 提供了 jwt 组件，简单提供了一些 jwt 相关的 API，可以�
 
 ```bash
 $ npm i @midwayjs/jwt@3 --save
-$ npm i @types/jsonwebtoken --save-dev
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -31,9 +30,6 @@ $ npm i @types/jsonwebtoken --save-dev
     "@midwayjs/jwt": "^3.0.0"
     // ...
   },
-  "devDependencies": {
-    "@types/jsonwebtoken": "^8.5.8"
-  }
 }
 ```
 
@@ -42,7 +38,7 @@ $ npm i @types/jsonwebtoken --save-dev
 将 jwt 组件配置到代码中。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import { IMidwayContainer } from '@midwayjs/core';
 import * as jwt from '@midwayjs/jwt';
 
@@ -79,7 +75,7 @@ export default {
 Midway 将 jwt 常用 API 提供为同步和异步两种形式。
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { JwtService } from '@midwayjs/jwt';
 
 @Provide()
@@ -110,9 +106,8 @@ export class UserService {
 ```typescript
 // src/middleware/jwt.middleware
 
-import { Inject, Middleware } from '@midwayjs/decorator';
+import { Inject, Middleware, httpError } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/koa';
-import { httpError } from '@midwayjs/core';
 import { JwtService } from '@midwayjs/jwt';
 
 @Middleware()
@@ -170,8 +165,7 @@ export class JwtMiddleware {
 ```typescript
 // src/configuration.ts
 
-import { Configuration, App } from '@midwayjs/decorator';
-import { IMidwayContainer, IMidwayApplication} from '@midwayjs/core';
+import { Configuration, App, IMidwayContainer, IMidwayApplication} from '@midwayjs/core';
 import * as jwt from '@midwayjs/jwt';
 
 @Configuration({

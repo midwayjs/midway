@@ -21,7 +21,7 @@ The most commonly used parameter check is the controller (Controller), and you c
 
 Let's take the user used in the controller (Controller) as an example.
 
-```typescript
+```text
 ➜  my_midway_app tree
 .
 ├── src
@@ -47,14 +47,14 @@ export interface User {
 }
 
 // src/controller/home.ts
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 
 @Controller('/api/user')
 export class HomeController {
 
   @Post('/')
   async updateUser(@Body() user: User ) {
-    if (! user.id || typeof user.id! = = 'number') {
+    if ( !user.id || typeof user.id !== 'number') {
     	throw new Error('id error');
     }
 
@@ -98,13 +98,13 @@ Or reinstall the following dependencies in `package.json`.
 Add components to `configuration.ts`.
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as validate from '@midwayjs/validate';
 import { join } from 'path';
 
 @Configuration({
-  imports: [koa, validate]
+  imports: [koa, validate],
   importConfigs: [join(__dirname, './config')]
 })
 export class MainConfiguration {
@@ -175,7 +175,7 @@ After defining the type, it can be directly used in the business code, and the `
 
 ```typescript
 // src/controller/home.ts
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { UserDTO } from './dto/user';
 
 @Controller('/api/user')
@@ -210,7 +210,7 @@ If you need to configure information separately at the method level, you can use
 
 ```typescript
 // src/controller/home.ts
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { Validate } from '@midwayjs/validate';
 import { UserDTO } from './dto/user';
 
@@ -908,7 +908,7 @@ For example:
 
 ```typescript
 // src/filter/validate.filter
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { MidwayValidationError } from '@midwayjs/validate';
 import { Context } from '@midwayjs/koa';
 

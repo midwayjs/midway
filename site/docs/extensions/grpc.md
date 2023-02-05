@@ -73,7 +73,7 @@ $ npm i @midwayjs/grpc-helper --save-dev
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as grpc from '@midwayjs/grpc';
 
 @Configuration({
@@ -92,7 +92,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as grpc from '@midwayjs/grpc';
 
@@ -313,7 +313,7 @@ import {
   MSProviderType,
   Provider,
   GrpcMethod,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld } from '../domain/helloworld';
 
 /**
@@ -518,7 +518,7 @@ export default (appInfo: MidwayAppInfo): MidwayConfig => {
 import {
   Provide,
   Inject,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld, hero } from '../interface';
 import { Clients } from '@midwayjs/grpc';
 
@@ -538,7 +538,7 @@ export class UserService {
 import {
   Provide,
   Inject,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld, hero } from '../interface';
 import { Clients } from '@midwayjs/grpc';
 
@@ -578,7 +578,7 @@ import {
   Provider,
   Inject,
   Init,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld, hero } from '../interface';
 import { Clients } from '@midwayjs/grpc';
 
@@ -737,7 +737,7 @@ export namespace math {
 
 服务端示例如下：
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/core';
 import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
 
@@ -820,7 +820,7 @@ call.sendMessage({
 
 服务端示例如下：
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/core';
 import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
 
@@ -881,7 +881,7 @@ const data = await service.addMany()
 
 服务端示例如下：
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/core';
 import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
 
@@ -1032,7 +1032,7 @@ import {
   MSProviderType,
   Provider,
   GrpcMethod,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld } from '../domain/helloworld';
 import { Context, Metadata } from '@midwayjs/grpc';
 

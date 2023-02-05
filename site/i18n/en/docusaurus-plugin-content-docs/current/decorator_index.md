@@ -2,7 +2,7 @@
 
 Midway provides a lot of decorator capabilities. These decorators are distributed in different packages and also provide different functions. This chapter provides a quick check list.
 
-## @midwayjs/decorator
+## @midwayjs/core
 
 | Decorator | Modification position | Description |
 | ------------------ | ------------ | ----------------------------------------- |
@@ -56,7 +56,7 @@ Midway provides a lot of decorator capabilities. These decorators are distribute
 
 
 
-## @midwayjs/orm
+## @midwayjs/typeorm
 
 | Decorator | Modification position | Role |
 | --------------------- | -------- | ---------------- |

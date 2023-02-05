@@ -122,7 +122,7 @@ $ npm i @midwayjs/typegoose@3 --save
 
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as typegoose from '@midwayjs/typegoose';
 
 @Configuration({
@@ -230,7 +230,7 @@ const User = mongoose.model('User', userSchema);
 示例代码如下：
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { User } from '../entity/user';
@@ -378,7 +378,7 @@ $ npm i @midwayjs/mongoose --save
 安装后需要手动在 `src/configuration.ts` 配置，代码如下。
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as mongoose from '@midwayjs/mongoose';
 
 @Configuration({
@@ -455,7 +455,7 @@ export default {
 
 在只有一个默认连接或者直接使用 default 连接时，我们可以直接使用封装好的 `MongooseConnectionService` 对象来创建 model。
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { MongooseConnectionService } from '@midwayjs/mongoose';
 import { Schema, Document } from 'mongoose';
 

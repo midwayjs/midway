@@ -37,7 +37,7 @@ $ npm i @midwayjs/info@3 --save
 将 info 组件配置到代码中。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as info from '@midwayjs/info';
 
 @Configuration({
@@ -54,7 +54,7 @@ export class MainConfiguration {
 在有些情况下，为了不想让应用信息透出，我们指定在特殊环境下生效。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as info from '@midwayjs/info';
 
@@ -129,7 +129,7 @@ info 组件默认提供了 `InfoService` 用于在非 Http 或是自定义的场
 比如：
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InfoService } from '@midwayjs/info';
 
 @Provide()

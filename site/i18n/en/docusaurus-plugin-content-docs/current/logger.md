@@ -77,7 +77,7 @@ In the injection form, you can also use `@Inject() logger` to inject `ctx.logger
 For example:
 
 ```typescript
-import { Get, Inject, Controller, Provide } from '@midwayjs/decorator';
+import { Get, Inject, Controller, Provide } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 
 @Controller()
@@ -105,7 +105,7 @@ export class HelloController {
 If we want to do some application-level logging, such as recording some data information during the startup phase, we can do it through App Logger.
 
 ```typescript
-import { Configuration, Logger } from '@midwayjs/decorator';
+import { Configuration, Logger } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 
 @Configuration()
@@ -275,7 +275,7 @@ Although the `write` method is available on every logger, we only provide it in 
 
 By default, users should use the simplest `ILogger` definition.
 ```typescript
-import { Provide, Logger } from '@midwayjs/decorator';
+import { Provide, Logger } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 
 @Provide()
@@ -299,7 +299,7 @@ In some scenarios, we need more complex definitions, such as modifying log attri
 
 
 ```typescript
-import { Provide, Logger } from '@midwayjs/decorator';
+import { Provide, Logger } from '@midwayjs/core';
 import { IMidwayLogger } from '@midwayjs/logger';
 
 @Provide()
@@ -604,7 +604,7 @@ const contextLogger = customLogger.createContextLogger(ctx);
 `@Inject` can only inject the default context logs. You can use the `ctx.getLogger` method to obtain the **context logs** corresponding to other **custom logs**. the context log is associated with ctx, and the same key in the same context will obtain the same log object. when ctx is destroyed, the log object will also be recycled.
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { IMidwayLogger } from '@midwayjs/logger';
 import { Context } from '@midwayjs/koa';
 
@@ -786,7 +786,7 @@ We can also use dependency injection to define Transport.
 
 ```typescript
 import { EmptyTransport, IMidwayLogger } from '@midwayjs/logger';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { MidwayLoggerService } from '@midwayjs/core';
 
 @Provide()

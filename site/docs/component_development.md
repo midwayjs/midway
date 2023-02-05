@@ -7,7 +7,7 @@
 
 组件可以本地加载，也可以打包到一起发布成一个 npm 包。组件可以在 midway v3/Serverless 中使用。你可以将复用的业务代码，或者功能模块都放到组件中进行维护。几乎所有的 Midway 通用能力都可以在组件中使用，包括但不限于配置，生命周期，控制器，拦截器等。
 
-设计组件的时候尽可能的面向所有的上层框架场景，所以我们尽可能只依赖 `@midwayjs/core` 和 `@midwayjs/decorator` 。
+设计组件的时候尽可能的面向所有的上层框架场景，所以我们尽可能只依赖 `@midwayjs/core` 。
 
 从 v3 开始，框架（Framework）也变为组件的一部分，使用方式和组件保持统一。
 
@@ -66,7 +66,7 @@ $ npm init midway -- --type=component-v3 my_custom_component
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'book'
@@ -92,7 +92,7 @@ export class BookConfiguration {
 
 ```typescript
 // src/service/book.service.ts
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class BookService {
@@ -105,7 +105,7 @@ export class BookService {
 ```
 
 :::info
-一个组件不会依赖明确的上层框架，为了达到在不同场景复用的目的，只会依赖通用的 `@midwayjs/core` 和 `@midwayjs/decorator`
+一个组件不会依赖明确的上层框架，为了达到在不同场景复用的目的，只会依赖通用的 `@midwayjs/core`。
 :::
 
 
@@ -116,7 +116,7 @@ export class BookService {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 
@@ -264,7 +264,7 @@ describe('/test/index.test.ts', () => {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as axios from '@midwayjs/axios';
 
 @Configuration({
@@ -282,8 +282,7 @@ export class BookConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'book',
@@ -386,7 +385,7 @@ export * from './dist/index';
 
 ```typescript
 // src/components/book/src/bookConfiguration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration()
 export class BookConfiguration {}
@@ -429,7 +428,7 @@ export { BookConfiguration as Configuration } from './bookConfiguration/src`;
 
 ```typescript
 // 应用或者函数的 src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as book from 'midway-component-book';
 
 @Configuration({
@@ -443,7 +442,7 @@ export class ContainerLifeCycle {}
 直接引入组件的类注入。
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { BookService } from 'midway-component-book';
 
 @Provide()
@@ -511,11 +510,11 @@ $ npm run build && npm publish
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
-  namespace: 'myKoa'
+  namespace: 'myKoa',
   imports: [koa]
 })
 export class MyKoaConfiguration {
@@ -529,11 +528,11 @@ export class MyKoaConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
-  namespace: 'myKoa'
+  namespace: 'myKoa',
   imports: [koa]
 })
 export class MyKoaConfiguration {
@@ -575,7 +574,7 @@ export class MyKoaConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 // 你自己的组件
 import * as myKoa from '@midwayjs/my-koa';
 
@@ -604,8 +603,7 @@ export class MyConfiguration {
 为了简化开发，Midway 提供了一个基础的 `BaseFramework` 类供继承。
 
 ```typescript
-import { Framework } from '@midwayjs/decorator';
-import { BaseFramework, IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { Framework, BaseFramework, IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 
 // 定义 Context
 export interface Context extends IMidwayContext {

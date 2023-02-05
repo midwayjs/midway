@@ -68,7 +68,7 @@ $ npm i @midwayjs/typeorm@3 typeorm --save
 
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as orm from '@midwayjs/typeorm';
 import { join } from 'path';
 
@@ -117,7 +117,7 @@ npm install mongodb --save
 
 :::info
 
--  Oracle driver 比较特殊，需要查看 [文档](https://github.com/oracle/node-oracledb) 
+-  Oracle driver 比较特殊，需要查看 [文档](https://github.com/oracle/node-oracledb)
 - 不建议使用 typeorm 链接 mongodb，请使用 mongoose 组件
 
 :::
@@ -433,10 +433,10 @@ export default {
         database: undefined,
         synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
         logging: false,
-        
+
         // 配置实体模型
         entities: [Photo],
-        
+
         // 或者扫描形式
         entities: [
           '*/entity/*.entity{.ts,.js}'
@@ -497,7 +497,7 @@ export default {
 - 2、执行 `save()`
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -533,7 +533,7 @@ export class PhotoService {
 更多的查询参数，请查询 [find文档](https://github.com/typeorm/typeorm/blob/master/docs/zh_CN/find-options.md)。
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -594,7 +594,7 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -625,7 +625,7 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -643,12 +643,12 @@ export class PhotoService {
         id: 1,
       },
     });
-    
+
     // 删除单个
     await this.photoModel.remove(photo)
     // 删除多个
     await this.photoModel.remove([photo1, photo2, photo3]);
-    
+
     // 按 id 删除
     await this.photoModel.delete(1);
     await this.photoModel.delete([1, 2, 3]);
@@ -734,7 +734,7 @@ export class PhotoMetadata {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -829,7 +829,7 @@ export class Photo {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
@@ -855,7 +855,7 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
@@ -899,7 +899,7 @@ export class Photo {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -1071,7 +1071,7 @@ export class Photo {
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { Album } from './entity/album';
@@ -1362,7 +1362,7 @@ export default {
 数据源即创建出的 DataSource 对象，我们可以通过注入内置的数据源管理器来获取。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
 
 @Configuration({
@@ -1381,7 +1381,7 @@ export class MainConfiguration {
 从 v3.8.0 开始，也可以通过装饰器注入。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { InjectDataSource } from '@midwayjs/typeorm';
 import { DataSource } from 'typeorm';
 
@@ -1389,11 +1389,11 @@ import { DataSource } from 'typeorm';
   // ...
 })
 export class MainConfiguration {
-  
+
   // 注入默认数据源
   @InjectDataSource()
   defaultDataSource: DataSource;
-  
+
   // 注入自定义数据源
   @InjectDataSource('default1')
   customDataSource: DataSource;
@@ -1453,28 +1453,28 @@ export default {
 typeorm 的事务需要先获取到数据源，然后开启事务。
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
 import { UserDTO } from '../entity/user';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   dataSourceManager: TypeORMDataSourceManager;
-  
+
   async updateUser(user: UserDTO) {
-    
+
     // get dataSource
     const dataSource = this.dataSourceManager.getDataSource('default');
-    
+
     // start transaction
     await dataSource.transaction(async (transactionalEntityManager) => {
       // run code
       await transactionalEntityManager.save(UserDTO, user);
     });
   }
-  
+
 }
 ```
 
@@ -1672,7 +1672,7 @@ export default {
 }
 ```
 
- 
+
 
 
 ###  Cannot read properties of undefined (reading 'getRepository')

@@ -41,7 +41,7 @@ $ open http://localhost:7001
 在 `controller` 目录中，新建一个 `src/controller/weather.controller.ts` 文件，内容如下。
 
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class WeatherController {
@@ -65,7 +65,7 @@ export class WeatherController {
 通过添加 `@Query` 装饰器，我们可以获取到 URL 上的参数。
 
 ```typescript
-import { Controller, Get, Query } from '@midwayjs/decorator';
+import { Controller, Get, Query } from '@midwayjs/core';
 
 @Controller('/')
 export class WeatherController {
@@ -88,8 +88,7 @@ export class WeatherController {
 
 ```typescript
 // src/service/weather.service.ts
-import { Provide } from '@midwayjs/decorator';
-import { makeHttpRequest } from '@midwayjs/core';
+import { Provide, makeHttpRequest } from '@midwayjs/core';
 
 @Provide()
 export class WeatherService {
@@ -139,8 +138,7 @@ export interface WeatherInfo {
 这样，我们就可以在 Service 中进行标注了。
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
-import { makeHttpRequest } from '@midwayjs/core';
+import { Provide, makeHttpRequest } from '@midwayjs/core';
 import { WeatherInfo } from '../interface';
 
 @Provide()
@@ -169,7 +167,7 @@ export class WeatherService {
 同时，我们修改下之前的 Controller 文件。
 
 ```typescript
-import { Controller, Get, Inject, Query } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Query } from '@midwayjs/core';
 import { WeatherInfo } from '../interface';
 import { WeatherService } from '../service/weather.service';
 
@@ -263,7 +261,7 @@ export default {
     <title>天气预报</title>
     <style>
       .weather_bg {
-        background-color: #0d68bc; 
+        background-color: #0d68bc;
         height: 150px;
         color: #fff;
         font-size: 12px;
@@ -316,7 +314,7 @@ export default {
 
 ```typescript
 // src/controller/weather.controller.ts
-import { Controller, Get, Inject, Query } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Query } from '@midwayjs/core';
 import { WeatherService } from '../service/weather.service';
 import { Context } from '@midwayjs/koa';
 
@@ -371,8 +369,7 @@ export class WeatherEmptyDataError extends MidwayError {
 
 ```typescript
 // src/service/weather.service.ts
-import { Provide } from '@midwayjs/decorator';
-import { makeHttpRequest } from '@midwayjs/core';
+import { Provide, makeHttpRequest } from '@midwayjs/core';
 import { WeatherInfo } from '../interface';
 import { WeatherEmptyDataError } from '../error/weather.error';
 
@@ -410,7 +407,7 @@ export class WeatherService {
 
 ```typescript
 //src/filter/weather.filter.ts
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { WeatherEmptyDataError } from '../error/weather.error';
 
@@ -427,7 +424,7 @@ export class WeatherErrorFilter {
 然后应用到当前的框架中。
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { WeatherErrorFilter } from './filter/weather.filter';
 // ...

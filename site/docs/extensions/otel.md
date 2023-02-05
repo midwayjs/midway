@@ -282,9 +282,9 @@ $ SERVICE_NAME=nodejs-opentelemetry-express AUTHENTICATION=****  ENDPOINT=grpc:/
 
 
 
-## 装饰器支持
+## 框架能力支持
 
-Midway 针对用户侧的需求，添加一个装饰器用于增加链路节点。
+注意，组件只是包裹了 otel 的接口，如果不需要下述接口使用，无需安装本组件
 
 先安装依赖。
 
@@ -295,7 +295,7 @@ $ npm i @midwayjs/otel@3 --save
 启用 `otel` 组件。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as otel from '@midwayjs/otel';
 
 @Configuration({
@@ -307,6 +307,24 @@ import * as otel from '@midwayjs/otel';
 export class MainConfiguration {
 }
 ```
+
+
+
+### ctx.traceId
+
+组件提供了 `ctx.traceId` 字段。
+
+你可以在支持的组件下进行获取（egg/koa）。
+
+```typescript
+ctx.traceId => *****
+```
+
+
+
+### 装饰器支持
+
+Midway 针对用户侧的需求，添加一个装饰器用于增加链路节点。
 
 Otel 组件提供了一个 @Trace 装饰器，可以添加在方法上。
 

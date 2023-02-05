@@ -2,7 +2,7 @@
 
 从 v3.6.0 开始，Midway 提供守卫能力。
 
-守卫会根据运行时出现的某些条件（例如权限，角色，访问控制列表等）来确定给定的请求是否由路由处理程序处理。 
+守卫会根据运行时出现的某些条件（例如权限，角色，访问控制列表等）来确定给定的请求是否由路由处理程序处理。
 
 普通的应用程序中，一般会在中间件中处理这些逻辑，但是中间件的逻辑过于通用，同时也无法很优雅的去和路由方法进行结合，为此我们在中间件之后，进入路由方法之前设计了守卫，可以方便的进行方法鉴权等处理。
 
@@ -53,7 +53,7 @@ export class AuthGuard implements IGuard<Context> {
 }
 ```
 
-`canActivate` 方法用于在请求中验证是否可以访问后续的方法，当返回 true 时，后续的方法会被执行，当 `canActivate` 返回 false 时，会抛出 403 错误码。 
+`canActivate` 方法用于在请求中验证是否可以访问后续的方法，当返回 true 时，后续的方法会被执行，当 `canActivate` 返回 false 时，会抛出 403 错误码。
 
 :::tip
 
@@ -71,12 +71,12 @@ export class AuthGuard implements IGuard<Context> {
 
 ### 路由守卫
 
-在写完守卫之后，我们需要把它应用到各个控制器路由之上。 
+在写完守卫之后，我们需要把它应用到各个控制器路由之上。
 
 使用 `UseGuard` 装饰器，我们可以应用到类和方法上。
 
 ```typescript
-import { Controller } from '@midwayjs/decorator';
+import { Controller } from '@midwayjs/core';
 import { AuthGuard } from '../guard/auth.guard';
 
 @UseGuard(AuthGuard)
@@ -90,7 +90,7 @@ export class HomeController {
 Midway 同时也在 `@Get` 、 `@Post` 等路由装饰器上都提供了 middleware 参数，方便对单个路由做中间件拦截。
 
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 import { AuthGuard } from '../guard/auth.guard';
 
@@ -119,7 +119,7 @@ export class HomeController {
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { AuthGuard } from './guard/auth.guard';
 
@@ -210,7 +210,7 @@ export class AuthGuard implements IGuard<Context> {
       // 直接判断是否包含该角色
       return roleNameList.includes(context.user.role);
     }
-    
+
     return false;
   }
 }
@@ -219,7 +219,7 @@ export class AuthGuard implements IGuard<Context> {
 在路由上使用该守卫。
 
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 import { AuthGuard } from '../guard/auth.guard';
 

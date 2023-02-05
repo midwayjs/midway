@@ -207,7 +207,7 @@ $ npm i @midwayjs/axios@3 --save
 首先，引入 组件，在 `configuration.ts` 中导入：
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as axios from '@midwayjs/axios';
 import { join } from 'path'
 
@@ -351,10 +351,9 @@ export class UserService {
 如果使用的是默认的 Axios 实例，可以如下配置。
 
 ```javascript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import * as axios from '@midwayjs/axios';
 import { join } from 'path';
-import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
   imports: [
@@ -385,10 +384,9 @@ export class ContainerLifeCycle {
 如果要给其他实例配置，可以参考下面的代码。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import * as axios from '@midwayjs/axios';
 import { join } from 'path';
-import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
   imports: [

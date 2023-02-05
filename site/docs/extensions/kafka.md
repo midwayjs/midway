@@ -77,7 +77,7 @@ $ npm i kafkajs --save
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as kafka from '@midwayjs/kafka';
 
 @Configuration({
@@ -97,7 +97,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as kafka from '@midwayjs/kafka';
 
@@ -223,7 +223,7 @@ export default {
 手动提交设置，组件默认是自动提交。
 
 ```typescript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/decorator';
+import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
 import { Context, Application } from '../../../../../src';
 
@@ -266,7 +266,7 @@ export class UserConsumer {
 订阅的 topic1 和 topic2， 两个主题的消费都会被调用。
 
 ```typescript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/decorator';
+import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
 import { Context, Application } from '../../../../../src';
 
@@ -326,7 +326,7 @@ export interface KafkaListenerOptions {
 
 创建一个手动提交，设置消费者在开始获取消息时将使用最新提交的偏移量`fromBeginning: false`，设置运行时的提交方式为手动提交`autoCommit: false`
 ```typeScript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/decorator';
+import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
 import { Context, Application } from '../../../../../src';
 
@@ -398,7 +398,7 @@ import {
   Autoload,
   Destroy,
   Config,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { ProducerRecord } from 'kafkajs';
 const { Kafka } = require('kafkajs');
 

@@ -43,8 +43,7 @@ Midway 使用 `@Middleware` 装饰器标识中间件，完整的中间件示例�
 
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -105,7 +104,7 @@ Web 中间件在写完之后，需要应用到请求流程之中。
 
 在写完中间件之后，我们需要把它应用到各个控制器路由之上。 `@Controller` 装饰器的第二个参数，可以让我们方便的在某个路由分组之上添加中间件。
 ```typescript
-import { Controller } from '@midwayjs/decorator';
+import { Controller } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 
 @Controller('/', { middleware: [ ReportMiddleware ] })
@@ -117,7 +116,7 @@ export class HomeController {
 
 Midway 同时也在 `@Get` 、 `@Post` 等路由装饰器上都提供了 middleware 参数，方便对单个路由做中间件拦截。
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 
 @Controller('/')
@@ -141,7 +140,7 @@ export class HomeController {
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 
@@ -173,8 +172,7 @@ async onReady() {
 在中间件执行时，我们可以添加路由忽略的逻辑。
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -202,8 +200,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 同理，也可以添加匹配的路由，只有匹配到的路由才会执行该中间件。`ignore` 和 `match` 同时只有一个会生效。
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -243,7 +240,7 @@ export async function fnMiddleware(ctx, next) {
 
 
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
@@ -339,7 +336,7 @@ fn._name = 'fnMiddleware';
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
@@ -379,7 +376,7 @@ Midway 提供了 `insert` 系列的 API，方便用户快速调整中间件。
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 
@@ -426,8 +423,7 @@ export class AutoConfiguration {
 比如，**下面的代码是错误的。**
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -450,8 +446,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 如果要获取请求作用域的实例，可以使用从请求作用域容器 `ctx.requestContext` 中获取，如下面的方法。
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -475,8 +470,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 我们可以增加一个类似下面的中间件代码。
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -508,8 +502,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
 在 koa/egg 下，如果中间件中返回 null 值，会使得状态码变为 204，需要在中间件中显式额外赋值状态码。
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()

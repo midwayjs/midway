@@ -40,7 +40,7 @@ $ npm i @midwayjs/upload@3 --save
 2、在 configuration 文件中引入组件
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as upload from '@midwayjs/upload';
 
 @Configuration({
@@ -56,7 +56,7 @@ export class MainConfiguration {}
 3、在代码中获取上传的文件
 
 ```typescript
-import { Controller, Inject, Post, Files, Fields } from '@midwayjs/decorator';
+import { Controller, Inject, Post, Files, Fields } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {

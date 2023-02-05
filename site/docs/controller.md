@@ -51,7 +51,7 @@ import TabItem from '@theme/TabItem';
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -78,7 +78,7 @@ export class HomeController {
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get, Post } from '@midwayjs/decorator';
+import { Controller, Get, Post } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -142,7 +142,7 @@ export interface User {
 ```typescript
 // src/controller/user.ts
 
-import { Controller } from "@midwayjs/decorator";
+import { Controller } from "@midwayjs/core";
 
 @Controller('/api/user')
 export class UserController {
@@ -162,7 +162,7 @@ Midway 添加了常见的动态取值的装饰器，我们以 `@Query` 装饰器
 ```typescript
 // src/controller/user.ts
 
-import { Controller, Get, Query } from "@midwayjs/decorator";
+import { Controller, Get, Query } from "@midwayjs/core";
 
 @Controller('/api/user')
 export class UserController {
@@ -217,7 +217,7 @@ GET /user?uid=1&sex=male
 
 ```typescript
 // src/controller/user.ts
-import { Controller, Get, Query } from "@midwayjs/decorator";
+import { Controller, Get, Query } from "@midwayjs/core";
 
 @Controller('/user')
 export class UserController {
@@ -232,7 +232,7 @@ export class UserController {
 
 ```typescript
 // src/controller/user.ts
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from "@midwayjs/core";
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
@@ -278,7 +278,7 @@ export class UserController {
 // Content-Type: application/json; charset=UTF-8
 //
 // {"uid": "1", "name": "harry"}
-import { Controller, Post, Body } from "@midwayjs/decorator";
+import { Controller, Post, Body } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -298,7 +298,7 @@ export class UserController {
 // Content-Type: application/json; charset=UTF-8
 //
 // {"uid": "1", "name": "harry"}
-import { Controller, Post, Body } from "@midwayjs/decorator";
+import { Controller, Post, Body } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -323,7 +323,7 @@ export class UserController {
 // Content-Type: application/json; charset=UTF-8
 //
 // {"uid": "1", "name": "harry"}
-import { Controller, Post, Inject } from "@midwayjs/decorator";
+import { Controller, Post, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
@@ -377,7 +377,7 @@ async updateUser(@Body() user: User, @Query('pageIdx') pageIdx: number): Promise
 ```typescript
 // src/controller/user.ts
 // GET /user/1
-import { Controller, Get, Param } from "@midwayjs/decorator";
+import { Controller, Get, Param } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -393,7 +393,7 @@ export class UserController {
 ```typescript
 // src/controller/user.ts
 // GET /user/1
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
@@ -427,7 +427,7 @@ export class UserController {
 ```typescript
 // src/controller/user.ts
 // GET /user/1
-import { Controller, Get, Headers } from "@midwayjs/decorator";
+import { Controller, Get, Headers } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -444,7 +444,7 @@ export class UserController {
 ```typescript
 // src/controller/user.ts
 // GET /user/1
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
@@ -470,7 +470,7 @@ HTTP 请求都是无状态的，但是我们的 Web 应用通常都需要知道�
 通过 `ctx.cookies`，我们可以在 Controller 中便捷、安全的设置和读取 Cookie。
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -501,7 +501,7 @@ Cookie 在 Web 应用中经常承担了传递客户端身份信息的作用，�
 框架内置了 [Session](https://github.com/midwayjs/midway/tree/main/packages/session) 插件，给我们提供了 `ctx.session` 来访问或者修改当前用户 Session 。
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -664,7 +664,7 @@ async getUser(@Query() query: User): Promise<User> {
 在 Midway 中你可以简单的使用 `return` 来返回数据。
 
 ```typescript
-import { Controller, Get, HttpCode } from "@midwayjs/decorator";
+import { Controller, Get, HttpCode } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -694,7 +694,7 @@ export class HomeController {
 也可以使用 koa 原生的 API。
 
 ```typescript
-import { Controller, Get, HttpCode } from "@midwayjs/decorator";
+import { Controller, Get, HttpCode } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -737,7 +737,7 @@ export class HomeController {
 
 
 ```typescript
-import { Controller, Get, HttpCode } from "@midwayjs/decorator";
+import { Controller, Get, HttpCode } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -753,7 +753,7 @@ export class HomeController {
 **示例：使用 API**
 
 ```typescript
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -781,7 +781,7 @@ Midway 提供 `@SetHeader` 装饰器或者通过 API 来简单的设置自定义
 **示例：使用装饰器**
 
 ```typescript
-import { Controller, Get, SetHeader } from "@midwayjs/decorator";
+import { Controller, Get, SetHeader } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -798,7 +798,7 @@ export class HomeController {
 
 
 ```typescript
-import { Controller, Get, SetHeader } from "@midwayjs/decorator";
+import { Controller, Get, SetHeader } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -817,7 +817,7 @@ export class HomeController {
 **示例：使用 API**
 
 ```typescript
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -846,7 +846,7 @@ export class HomeController {
 
 
 ```typescript
-import { Controller, Get, Redirect } from "@midwayjs/decorator";
+import { Controller, Get, Redirect } from '@midwayjs/core';
 
 @Controller('/')
 export class LoginController {
@@ -872,7 +872,7 @@ export class LoginController {
 **示例：使用 API**
 
 ```typescript
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -904,7 +904,7 @@ export class HomeController {
 
 
 ```typescript
-import { Controller, Get, ContentType } from "@midwayjs/decorator";
+import { Controller, Get, ContentType } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -919,7 +919,7 @@ export class HomeController {
 **示例：使用 API**
 
 ```typescript
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {

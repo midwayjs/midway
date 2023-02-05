@@ -79,7 +79,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as rabbitmq from '@midwayjs/rabbitmq';
 
 @Configuration({
@@ -99,13 +99,13 @@ It can also be attached to other mainframes, such as `@midwayjs/koa` .
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as rabbitmq from '@midwayjs/rabbitmq';
 
 @Configuration({
   imports: [
-    koa
+    koa,
     rabbitmq
   ],
   // ...
@@ -140,7 +140,7 @@ We usually put consumers in consumer catalogues. For example, `src/consumer/user
 The code example is as follows.
 
 ```typescript
-import { Consumer, MSListenerType, RabbitMQListener, Inject } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
 
@@ -226,7 +226,7 @@ That is, all Queues subscribing to the switch will receive messages.
 
 For example, we have added two Queue and subscribed to the same switch.
 ```typescript
-import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/core';
 import { Context, Application } from '@midwayjs/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
 
@@ -248,7 +248,7 @@ export class UserConsumer {
       type: 'fanout',
       durable: false
     },
-    exclusive: true
+    exclusive: true,
     consumeOptions: {
       noAck: true,
     }
@@ -290,7 +290,7 @@ Direct Exchange is the RabbitMQ default Exchange that routes messages based enti
 
 In the following sample code, we do not fill in Queue Name, only add a routingKey, and the switch type is direct.
 ```typescript
-import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/core';
 import { Context, Application } from '../../../../../src';
 import { ConsumeMessage } from 'amqplib';
 
@@ -313,7 +313,7 @@ export class UserConsumer {
       durable: false
     },
     routingKey: 'direct_key',
-    exclusive: true
+    exclusive: true,
     consumeOptions: {
       noAck: true
     }
@@ -526,7 +526,7 @@ $ npm i @types/amqplib --save-dev
 
 For example, we add a `rabbitmq.ts` file under the service file.
 ```typescript
-import { Provide, Scope, ScopeEnum, Init, Autoload, Destroy } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum, Init, Autoload, Destroy } from '@midwayjs/core';
 import * as amqp from 'amqp-connection-manager'
 
 @Autoload()
@@ -545,7 +545,7 @@ export class RabbitmqService {
 
     // Create channel
     this.channelWrapper = this.connection.createChannel({
-      json: true
+      json: true,
       setup: function(channel) {
         return Promise.all ([
           // Binding queue

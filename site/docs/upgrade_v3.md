@@ -447,7 +447,7 @@ export class CustomKoaFramework extends BaseFramework {
 ```
 新
 ```typescript
-import { Framework } from '@midwayjs/decorator';
+import { Framework } from '@midwayjs/core';
 
 @Framework()
 export class CustomKoaFramework extends BaseFramework {
@@ -461,7 +461,7 @@ export class CustomKoaFramework extends BaseFramework {
 
 你可以在 configuration 中使用生命周期，和组件相同。`run` 方法将在新增的 `onServerReady` 这个生命周期显式调用执行。
 ```typescript
-import { Configuration,Inject } from '@midwayjs/decorator';
+import { Configuration,Inject } from '@midwayjs/core';
 import { MidwayKoaFramework } from './framework';
 
 @Configuration({
@@ -487,7 +487,7 @@ export class KoaConfiguration {
 
 
 ```typescript
-import { Framework } from '@midwayjs/decorator';
+import { Framework } from '@midwayjs/core';
 
 @Framework()
 export class CustomKoaFramework extends BaseFramework {
@@ -517,7 +517,7 @@ export class CustomKoaFramework extends BaseFramework {
 这样在外面使用时也可以判断。
 
 ```typescript
-import { Configuration,Inject } from '@midwayjs/decorator';
+import { Configuration,Inject } from '@midwayjs/core';
 import { MidwayKoaFramework } from './framework';
 
 @Configuration({

@@ -41,7 +41,7 @@ Like traditional applications, we still use the `@Controller` decorator to devel
 The following code exposes three routes. In aggregate deployment mode, only one HTTP function is deployed:
 
 ```typescript
-import { Inject, Provide, Controller, Get, Post } from '@midwayjs/decorator';
+import { Inject, Provide, Controller, Get, Post } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()

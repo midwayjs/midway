@@ -3,7 +3,7 @@
 由于 TS 的静态类型分析，我们并不推荐动态去挂载某些属性，动态的挂载会导致 TS 的类型处理非常困难。在某些特殊场景下，如果需要扩展上下文 ctx 属性，比如 Web 场景下中间件，我们可以往上附加一些方法或者属性。
 
 ```typescript
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Middleware()

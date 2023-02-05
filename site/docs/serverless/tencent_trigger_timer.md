@@ -9,7 +9,7 @@
 ## 使用方式
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()

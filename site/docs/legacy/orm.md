@@ -51,7 +51,7 @@ $ npm i @midwayjs/orm@3 typeorm --save
 
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as orm from '@midwayjs/orm';
 import { join } from 'path';
 
@@ -476,7 +476,7 @@ export default {
 - 2、执行 `save()`
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -514,7 +514,7 @@ export class PhotoService {
 自 typeorm@0.3.0 起，查询 API 有所变化。
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -589,7 +589,7 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -615,7 +615,7 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -712,7 +712,7 @@ export class PhotoMetadata {
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -809,7 +809,7 @@ export class Photo {
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
@@ -836,7 +836,7 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
@@ -882,7 +882,7 @@ export class Photo {
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -1061,7 +1061,7 @@ export class Photo {
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -1154,7 +1154,7 @@ typeorm 提供了一个事件订阅机制，方便在做一些数据库操作时
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { EventSubscriberModel } from '@midwayjs/orm';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from 'typeorm';
 
@@ -1222,7 +1222,7 @@ export class EverythingSubscriber implements EntitySubscriberInterface {
 在 3.4.0（不包含） 之前的版本中， Midway 封装提供了一种 Hook 机制，用于监听数据库连接与断连事件；代码如下。
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { OrmConnectionHook, OrmHook } from '@midwayjs/orm';
 import { Connection, ConnectionOptions } from 'typeorm';
 
@@ -1353,7 +1353,7 @@ export class Photo {
 ### 获取连接池
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { getConnection } from 'typeorm';
 
 @Configuration()

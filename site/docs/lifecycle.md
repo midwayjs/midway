@@ -54,8 +54,7 @@ interface ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -87,8 +86,7 @@ onReady 是一个大部分场景下都会使用到的生命周期。
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -116,8 +114,7 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as sequelize from 'sequelize';
 
 @Configuration()
@@ -156,8 +153,7 @@ export class IndexHandler {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
@@ -183,8 +179,7 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
@@ -235,8 +230,7 @@ export interface IObjectLifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectBeforeCreatedOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectBeforeCreatedOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -268,8 +262,7 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectCreatedOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectCreatedOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -297,8 +290,7 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -315,8 +307,7 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -340,8 +331,7 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -378,8 +368,7 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectBeforeDestroyOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectBeforeDestroyOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {

@@ -21,7 +21,7 @@ import TabItem from '@theme/TabItem';
 通过直接在代码中的 `@ServerlessTrigger` 装饰器绑定事件触发器。
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, FC } from '@midwayjs/faas';
 
 @Provide()
@@ -45,7 +45,7 @@ export class HelloAliyunService {
 通过直接在代码中的 `@ServerlessTrigger` 装饰器绑定 HTTP 触发器。
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -70,7 +70,7 @@ export class HelloAliyunService {
 API 网关在阿里云函数体系中比较特殊，他类似于创建一个无触发器函数，通过平台网关的绑定到特定的路径上。
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -105,7 +105,7 @@ export class HelloAliyunService {
 :::
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, FC } from '@midwayjs/faas';
 
 @Provide()
@@ -177,7 +177,7 @@ Timer 消息返回的结构如下，在 `FC.TimerEvent` 类型中有描述。
 OSS 用于存储一些资源文件，是阿里云的资源存储产品。 当 OSS 中有文件创建，更新，对应的函数就会被触发而执行。
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, FC } from '@midwayjs/faas';
 
 @Provide()
@@ -282,7 +282,7 @@ OSS 消息返回的结构如下，在 `FC.OSSEvent` 类型中有描述。
 :::
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, FC } from '@midwayjs/faas';
 
 @Provide()

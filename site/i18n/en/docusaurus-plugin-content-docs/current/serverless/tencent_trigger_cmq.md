@@ -5,7 +5,7 @@ CMQ(mq) triggers subscribe to Tencent Cloud's message queue service.
 ## Usage
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()

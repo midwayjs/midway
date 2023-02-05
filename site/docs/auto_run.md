@@ -49,7 +49,7 @@ export class MainConfiguration {
 比如：
 
 ```typescript
-import { Autoload, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Autoload, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Autoload()
 @Scope(ScopeEnum.Singleton)

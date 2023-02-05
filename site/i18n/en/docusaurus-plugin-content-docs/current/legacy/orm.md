@@ -51,7 +51,7 @@ Introducing orm components in `src/configuration.ts`, an example is as follows.
 
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as orm from '@midwayjs/orm';
 import { join } from 'path';
 
@@ -476,7 +476,7 @@ In common Midway files, use the `@InjectEntityModel` decorator to inject our con
 - 2. Execute the `save()`
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -514,7 +514,7 @@ For more information, see [find documentation](https://github.com/typeorm/typeor
 The query API has changed since typeorm@0.3.0.
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -589,7 +589,7 @@ Now, let's load a photo from the database, update it and save it.
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -615,7 +615,7 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -712,7 +712,7 @@ Next we will associate them in the code.
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -809,7 +809,7 @@ Now, let's try to load out Photo and PhotoMetadata together in a single query. T
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
@@ -836,7 +836,7 @@ Here, the value of photos is an array containing the query results for the entir
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
@@ -882,7 +882,7 @@ Using `cascade` allows us to no longer save Photo and PhotoMetadata separately n
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -1061,7 +1061,7 @@ Now, let's insert albums and photos into the database:
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide, Inject, Func } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -1154,7 +1154,7 @@ typeorm provides an event subscription mechanism to facilitate log output when d
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { EventSubscriberModel } from '@midwayjs/orm';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from 'typeorm';
 
@@ -1222,7 +1222,7 @@ This subscription class provides some common interfaces to perform some things d
 In versions prior to 3.4.0 (not included), the Midway package provided a Hook mechanism for monitoring database connection and disconnection events; the code is as follows.
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { OrmConnectionHook, OrmHook } from '@midwayjs/orm';
 import { Connection, ConnectionOptions } from 'typeorm';
 
@@ -1355,7 +1355,7 @@ export class Photo {
 ### Get connection pool
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { getConnection } from 'typeorm';
 
 @Configuration()

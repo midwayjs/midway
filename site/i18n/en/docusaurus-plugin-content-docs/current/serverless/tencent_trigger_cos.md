@@ -6,11 +6,11 @@ COS is a service used by Tencent Cloud to store some resource files.
 
 ```typescript
 import {
-  Provide
-  Inject
-  ServerlessTrigger
+  Provide,
+  Inject,
+  ServerlessTrigger,
   ServerlessTriggerType
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()

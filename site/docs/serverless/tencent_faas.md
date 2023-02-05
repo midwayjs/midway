@@ -15,7 +15,7 @@ import TabItem from '@theme/TabItem';
 API 网关在腾讯云函数体系中类似于 HTTP 函数，我们通过它将函数发布为 HTTP 服务。
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -46,7 +46,7 @@ export class HelloTencentService {
 :::
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()
@@ -122,7 +122,7 @@ import {
   Inject,
   ServerlessTrigger,
   ServerlessTriggerType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()
@@ -225,7 +225,7 @@ COS 消息返回的结构如下，在 `SCF.COSEvent` 类型中有描述。
 CMQ（mq） 触发器，订阅的是腾讯云的消息队列服务。
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()

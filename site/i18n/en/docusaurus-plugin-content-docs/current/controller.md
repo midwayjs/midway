@@ -38,7 +38,8 @@ At the same time, Midway provides a method decorator for marking the type of req
 
 
 For example, we create a homepage controller to return a default`/`route.
-```
+
+```text
 ➜  my_midway_app tree
 .
 ├── src
@@ -48,10 +49,11 @@ For example, we create a homepage controller to return a default`/`route.
 ├── package.json
 └── tsconfig.json
 ```
+
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -78,7 +80,7 @@ In the preceding example, you have created a **GET** route. In general, we will 
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get, Post } from '@midwayjs/decorator';
+import { Controller, Get, Post } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -142,7 +144,7 @@ Add a route prefix and the corresponding controller.
 ```typescript
 // src/controller/user.ts
 
-import { Controller } from "@midwayjs/decorator";
+import { Controller } from '@midwayjs/core';
 
 @Controller('/api/user')
 export class UserController {
@@ -162,7 +164,7 @@ Midway adds a common decorator for dynamic values. Take the `@Query` decorator a
 ```typescript
 // src/controller/user.ts
 
-import { Controller, Get, Query } from "@midwayjs/decorator";
+import { Controller, Get, Query } from '@midwayjs/core';
 
 @Controller('/api/user')
 export class UserController {
@@ -219,7 +221,7 @@ It is the parameter passed by the user.
 
 ```typescript
 // src/controller/user.ts
-import { Controller, Get, Query } from "@midwayjs/decorator";
+import { Controller, Get, Query } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -234,7 +236,7 @@ export class UserController {
 
 ```typescript
 // src/controller/user.ts
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
@@ -280,7 +282,7 @@ The framework has built-in [bodyParser](https://github.com/koajs/bodyparser) mid
 // Content-Type: application/json; charset=UTF-8
 //
 // {"uid": "1", "name": "harry"}
-import { Controller, Post, Body } from "@midwayjs/decorator";
+import { Controller, Post, Body } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -300,7 +302,7 @@ export class UserController {
 // Content-Type: application/json; charset=UTF-8
 //
 // {"uid": "1", "name": "harry"}
-import { Controller, Post, Body } from "@midwayjs/decorator";
+import { Controller, Post, Body } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -325,7 +327,7 @@ export class UserController {
 // Content-Type: application/json; charset=UTF-8
 //
 // {"uid": "1", "name": "harry"}
-import { Controller, Post, Inject } from "@midwayjs/decorator";
+import { Controller, Post, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
@@ -379,7 +381,7 @@ If the route is declared in the `:xxx` format, you can use `ctx.params` to obtai
 ```typescript
 // src/controller/user.ts
 // GET /user/1
-import { Controller, Get, Param } from "@midwayjs/decorator";
+import { Controller, Get, Param } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -395,7 +397,7 @@ export class UserController {
 ```typescript
 // src/controller/user.ts
 // GET /user/1
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
@@ -429,7 +431,7 @@ In addition to getting parameters from the URL and request body, many parameters
 ```typescript
 // src/controller/user.ts
 // GET /user/1
-import { Controller, Get, Headers } from "@midwayjs/decorator";
+import { Controller, Get, Headers } from '@midwayjs/core';
 
 @Controller('/user')
 export class UserController {
@@ -446,7 +448,7 @@ export class UserController {
 ```typescript
 // src/controller/user.ts
 // GET /user/1
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')
@@ -472,7 +474,7 @@ HTTP requests are stateless, but our Web applications usually need to know who i
 `ctx.cookies` allows us to set and read Cookie conveniently and safely in our Controller.
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -503,7 +505,7 @@ Through Cookie, we can set a Session for each user to store information related 
 The framework has built-in [Session](https://github.com/midwayjs/midway/tree/main/packages/session) plug-ins, which provide us with `ctx.session` to access or modify the current user Session.
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -665,7 +667,7 @@ Most of the data is sent to the requester through the body. Like the body in the
 In Midway, you can simply use `return` to return data.
 
 ```typescript
-import { Controller, Get, HttpCode } from "@midwayjs/decorator";
+import { Controller, Get, HttpCode } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -695,7 +697,7 @@ export class HomeController {
 You can also use koa's native API.
 
 ```typescript
-import { Controller, Get, HttpCode } from "@midwayjs/decorator";
+import { Controller, Get, HttpCode } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -738,7 +740,7 @@ When sending an error, such as `4xx/5xx`, you can use [exception handling](error
 
 
 ```typescript
-import { Controller, Get, HttpCode } from "@midwayjs/decorator";
+import { Controller, Get, HttpCode } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -754,7 +756,7 @@ export class HomeController {
 **Example: API operation**
 
 ```typescript
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -782,7 +784,7 @@ Midway provides a `@SetHeader` decorator or an API to simply set up a custom res
 **Example: Using a Decorator**
 
 ```typescript
-import { Controller, Get, SetHeader } from "@midwayjs/decorator";
+import { Controller, Get, SetHeader } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -799,7 +801,7 @@ When there are multiple response headers that need to be modified, you can direc
 
 
 ```typescript
-import { Controller, Get, SetHeader } from "@midwayjs/decorator";
+import { Controller, Get, SetHeader } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -818,7 +820,7 @@ export class HomeController {
 **Example: API operation**
 
 ```typescript
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -847,7 +849,7 @@ In addition, you can jump through the API.
 
 
 ```typescript
-import { Controller, Get, Redirect } from "@midwayjs/decorator";
+import { Controller, Get, Redirect } from '@midwayjs/core';
 
 @Controller('/')
 export class LoginController {
@@ -873,7 +875,7 @@ export class LoginController {
 **Example: API operation**
 
 ```typescript
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -905,7 +907,7 @@ In addition, it can also be set through API.
 
 
 ```typescript
-import { Controller, Get, ContentType } from "@midwayjs/decorator";
+import { Controller, Get, ContentType } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -920,7 +922,7 @@ export class HomeController {
 **Example: API operation**
 
 ```typescript
-import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Controller, Get, Inject } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {

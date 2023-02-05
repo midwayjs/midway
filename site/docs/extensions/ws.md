@@ -49,7 +49,7 @@ $ npm i @types/ws --save-dev
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as ws from '@midwayjs/ws';
 
 @Configuration({
@@ -68,7 +68,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
@@ -109,7 +109,7 @@ export class MainConfiguration {
 
 Midway 通过 `@WSController` 装饰器定义 WebSocket 服务。
 ```typescript
-import { WSController } from '@midwayjs/decorator';
+import { WSController } from '@midwayjs/core';
 
 @WSController()
 export class HelloSocketController {
@@ -118,7 +118,7 @@ export class HelloSocketController {
 ```
 当有客户端连接时，会触发 `connection` 事件，我们在代码中可以使用 `@OnWSConnection()` 装饰器来修饰一个方法，当每个客户端第一次连接服务时，将自动调用该方法。
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/ws';
 import * as http from 'http';
 
@@ -147,7 +147,7 @@ export class HelloSocketController {
 
 WebSocket 是通过事件的监听方式来获取数据。Midway 提供了 `@OnWSMessage()` 装饰器来格式化接收到的事件，每次客户端发送事件，被修饰的方法都将被执行。
 ```typescript
-import { WSController, OnWSMessage, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSMessage, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/ws';
 
 @WSController()
@@ -167,7 +167,7 @@ export class HelloSocketController {
 
 我们可以通过 `@WSBroadCast` 装饰器将消息发送到所有连接的客户端上。
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/ws';
 
 @WSController()
@@ -198,7 +198,7 @@ export class HelloSocketController {
 该组件提供的 App 即为 WebSocket Server 实例本身，我们可以如下获取。
 
 ```typescript
-import { Controller, App } from '@midwayjs/decorator';
+import { Controller, App } from '@midwayjs/core';
 import { Application } from '@midwayjs/ws';
 
 @Controller()
@@ -212,7 +212,7 @@ export class HomeController {
 比如，我们可以在其他 Controller 或者 Service 中广播消息。
 
 ```typescript
-import { Controller, App } from '@midwayjs/decorator';
+import { Controller, App } from '@midwayjs/core';
 import { Application } from '@midwayjs/ws';
 
 @Controller()
@@ -220,7 +220,7 @@ export class HomeController {
 
   @App('webSocket')
   wsApp: Application;
-  
+
   async invoke() {
     this.wsApp.clients.forEach(ws => {
       // ws.send('something');
@@ -304,7 +304,7 @@ describe('/test/index.test.ts', () => {
 比如：
 ```typescript
 import { createApp, close, createWebSocketClient } from '@midwayjs/mock';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 
 // ... 省略 describe
 
@@ -348,7 +348,7 @@ it('should test create websocket app', async () => {
 
 使用 node 自带的 `events` 模块的 `once` 方法来优化，就会变成下面的代码。
 ```typescript
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 import { once } from 'events';
 import { createApp, close, createWebSocketClient } from '@midwayjs/mock';
 

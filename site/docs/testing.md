@@ -258,7 +258,7 @@ const result = await createHttpRequest(app)
 
 ```typescript
 // src/service/user.ts
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class UserService {

@@ -77,7 +77,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as kafka from '@midwayjs/kafka';
 
 @Configuration({
@@ -97,13 +97,13 @@ It can also be attached to other main frameworks, such as `@midwayjs/koa`.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as kafka from '@midwayjs/kafka';
 
 @Configuration({
   imports: [
-    koa
+    koa,
     kafka
   ],
   // ...
@@ -223,7 +223,7 @@ More configurations (see https://kafka.js.org/docs/consuming for more detailed c
 Manually submit settings. By default, components submit automatically.
 
 ```typescript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/decorator';
+import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
 import { Context, Application } from '../../../../../src';
 
@@ -266,7 +266,7 @@ export class UserConsumer {
 the subscription of topic1 and topic2, and the consumption of both topics are called.
 
 ```typescript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/decorator';
+import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
 import { Context, Application } from '../../../../../src';
 
@@ -326,7 +326,7 @@ export interface KafkaListenerOptions {
 
 Create a manual submission, set the offset of the latest submission to be used by the consumer when starting to get the message `fromBeginning: false`, and set the submission method at runtime to manual submission `autoCommit: false`
 ```typeScript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/decorator';
+import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
 import { Context, Application } from '../../../../../src';
 
@@ -391,14 +391,14 @@ $ npm i kafkajs --save
 For example, we add a `Kafka. ts` file under the service file.
 ```typescript
 import {
-  Provide
-  Scope
-  ScopeEnum
-  Init
-  Autoload
-  Destroy
-  Config
-} from '@midwayjs/decorator';
+  Provide,
+  Scope,
+  ScopeEnum,
+  Init,
+  Autoload,
+  Destroy,
+  Config,
+} from '@midwayjs/core';
 import { ProducerRecord } from 'kafkajs';
 const { Kafka } = require('kafkajs');
 

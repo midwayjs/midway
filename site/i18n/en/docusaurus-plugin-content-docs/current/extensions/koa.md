@@ -50,7 +50,7 @@ $ npm init midway -- --type=koa-v3 my_project
 ## Enable component
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 
@@ -127,7 +127,7 @@ If you really want to extend the Context, you can use koa's own API.
 For example, we extend in `configuration.ts` to provide a `render()` method.
 
 ```typescript
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({

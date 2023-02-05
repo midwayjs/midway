@@ -10,7 +10,7 @@ import {
   Inject,
   ServerlessTrigger,
   ServerlessTriggerType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()

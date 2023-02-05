@@ -42,8 +42,7 @@ The service factory is also a common export class in midway. As a member of the 
 
 We only need to inherit it, and at the same time, the general service factory is a single case.
 ```typescript
-import { ServiceFactory } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { ServiceFactory, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -53,8 +52,7 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 ```
 Since it is an abstract class, we need to implement two of these methods.
 ```typescript
-import { ServiceFactory } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { ServiceFactory, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -89,8 +87,7 @@ export const httpClient = {
 ```
 Then inject it into the service factory. At the same time, we also need to call the method of creating multiple instances during initialization.
 ```typescript
-import { ServiceFactory } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { ServiceFactory, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -168,10 +165,10 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   serviceFactory: HTTPClientServiceFactory;
-  
+
   async invoke() {
     const httpClient = this.serviceFactory.get();
   }
@@ -207,15 +204,15 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   serviceFactory: HTTPClientServiceFactory;
-  
+
   async invoke() {
-    
+
     const aaaInstance = this.serviceFactory.get('aaa');
     // ...
-        
+
     const bbbInstance = this.serviceFactory.get('bbb');
     // ...
 
@@ -236,13 +233,13 @@ import { InjectClient } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
-  
+
    @InjectClient(HTTPClientServiceFactory, 'aaa')
    aaaInstance: HTTPClientServiceFactory;
-  
+
    @InjectClient(HTTPClientServiceFactory, 'bbb')
    bbbInstance: HTTPClientServiceFactory;
-  
+
    async invoke() {
      // this.aaaInstance.xxx
 // this.bbbInstance.xxx
@@ -346,8 +343,15 @@ There will be an extra default instance called `default`, and the service factor
 It will be very cumbersome if the user needs to obtain it through `serviceFactory` every time they use it. For the most commonly used default instance, a proxy class can be provided to make it proxy all the target instance methods.
 
 ```typescript
-import { ServiceFactory, MidwayCommonError, delegateTargetAllPrototypeMethod } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum, Init } from '@midwayjs/decorator';
+import {
+  ServiceFactory,
+  MidwayCommonError,
+  delegateTargetAllPrototypeMethod,
+  Provide,
+  Scope,
+  ScopeEnum,
+  Init
+} from '@midwayjs/core';
 
 //...
 export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
@@ -429,10 +433,10 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   httpClientService: HTTPClientService;
-  
+
   async invoke() {
     // this.httpClientService points to default2
   }

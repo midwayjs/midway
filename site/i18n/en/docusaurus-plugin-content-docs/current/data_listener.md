@@ -18,8 +18,7 @@ For example:
 
 ```typescript
 // src/listener/memory.listner.ts
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { DataListener } from '@midwayjs/core';
+import { DataListener, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -53,8 +52,7 @@ For example, in the above sample code, we need to turn off the timer.
 
 ```typescript
 // src/listener/memory.listner.ts
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { DataListener } from '@midwayjs/core';
+import { DataListener, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -92,7 +90,7 @@ We can use it in any code to obtain the current data through `getData` methods i
 For example:
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { MemoryDataListener } from '../listener/memory.listner.ts';
 
 @Provide()

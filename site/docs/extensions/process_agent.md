@@ -69,7 +69,7 @@ export class MainConfiguration {
 业务代码 UserService：
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { TestService } from './test';
 
 @Provide()
@@ -88,7 +88,7 @@ export class UserService {
 然后调用 testService 的时候，希望只在主进程执行：
 
 ```typescript
-import { Provide, Scope, ScopeEnum } from "@midwayjs/decorator";
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { RunInPrimary } from '@midwayjs/process-agent';
 
 @Provide()

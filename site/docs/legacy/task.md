@@ -57,7 +57,7 @@ $ npm install @midwayjs/task@3 @types/bull --save
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as task from '@midwayjs/task';   // 导入模块
 import { join } from 'path';
 
@@ -129,7 +129,7 @@ export default {
 ### 代码使用
 
 ```typescript
-import { Provide, Inject, Task, FORMAT } from '@midwayjs/decorator';
+import { Provide, Inject, Task, FORMAT } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
@@ -159,7 +159,7 @@ export class UserService {
 
 ```typescript
 import { QueueService } from '@midwayjs/task';
-import { Provide, Controller, Get } from '@midwayjs/decorator';
+import { Provide, Controller, Get } from '@midwayjs/core';
 
 @Controller()
 export class HelloController{
@@ -189,8 +189,7 @@ let job = await this.queueService.getClassQueue(TestJob).getJob(id)
 有朋友由于只有一台机器，希望重启后立马能执行一下对应的定时任务。
 
 ```typescript
-import { Context, ILifeCycle, IMidwayBaseApplication, IMidwayContainer } from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, Context, ILifeCycle, IMidwayBaseApplication, IMidwayContainer } from '@midwayjs/core';
 import { Queue } from 'bull';
 import { join } from 'path';
 import * as task from '@midwayjs/task';
@@ -258,7 +257,7 @@ export class MainConfiguration implements ILifeCycle {
 Midway 在框架侧提供了一些常用的表达式，放在 `@midwayjs/decorator` 中供大家使用。
 
 ```typescript
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 
 // 每分钟执行的 cron 表达式
 FORMAT.CRONTAB.EVERY_MINUTE
@@ -287,7 +286,7 @@ FORMAT.CRONTAB.EVERY_MINUTE
 
 任务的定义，通过 `@Queue` 装饰器，定义一个任务类，必须含有一个 `async execute()` 方法。
 ```typescript
-import { Provide, Inject, Queue } from '@midwayjs/decorator';
+import { Provide, Inject, Queue } from '@midwayjs/core';
 
 @Queue()
 export class HelloTask{
@@ -301,7 +300,7 @@ export class HelloTask{
 触发：
 ```typescript
 import { QueueService } from '@midwayjs/task';
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 
 @Provide()
 export class UserTask{
@@ -415,7 +414,7 @@ task 和 queue 则采用 job 的 id 作为 traceId。
 
 在 service 内可以通过 inject 注入 logger，或者注入 ctx 拿 logger 变量
 ```typescript
-import { App, Inject, Provide, Queue } from "@midwayjs/decorator";
+import { App, Inject, Provide, Queue } from '@midwayjs/core';
 import { Application } from "@midwayjs/koa";
 
 @Queue()
@@ -436,7 +435,7 @@ export class QueueTask{
 ```
 或者
 ```typescript
-import { App, Inject, Provide, Queue } from "@midwayjs/decorator";
+import { App, Inject, Provide, Queue } from '@midwayjs/core';
 import { Application } from "@midwayjs/koa";
 
 @Queue()
@@ -471,7 +470,7 @@ export class QueueTask{
 本地定时任务和分布式任务不同，无需依赖和配置 Redis，只能做到单进程的事情，即每台机器的每个进程都会被执行。
 
 ```typescript
-import { Provide, Inject, TaskLocal, FORMAT } from '@midwayjs/decorator';
+import { Provide, Inject, TaskLocal, FORMAT } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
@@ -506,7 +505,7 @@ export class UserService {
 
 当每次redis执行完他会有日志，那么如何让其在完成后删除：
 ```typescript
-import { Provide, Task } from '@midwayjs/decorator';
+import { Provide, Task } from '@midwayjs/core';
 import { IUserOptions } from '../interface';
 
 @Provide()

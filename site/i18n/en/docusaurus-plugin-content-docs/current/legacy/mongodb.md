@@ -122,7 +122,7 @@ After installation, you need to manually configure `src/configuration.ts`. The c
 
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as typegoose from '@midwayjs/typegoose';
 
 @Configuration({
@@ -230,7 +230,7 @@ Therefore, typegoose just simplify the process of creating model.
 The sample code is as follows:
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { User } from '../entity/user';
@@ -377,7 +377,7 @@ Or reinstall the following dependencies in `package.json`.
 After installation, you need to manually configure `src/configuration.ts`. The code is as follows.
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as mongoose from '@midwayjs/mongoose';
 
 @Configuration({
@@ -454,7 +454,7 @@ export default {
 
 When there is only one default connection or the default connection is directly used, we can directly use the encapsulated `MongooseConnectionService` object to create the model.
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { MongooseConnectionService } from '@midwayjs/mongoose';
 import { Schema, Document } from 'mongoose';
 

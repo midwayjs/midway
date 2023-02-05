@@ -43,7 +43,7 @@ $ npm i @midwayjs/etcd@3 --save
 首先，引入 组件，在 `configuration.ts` 中导入：
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as etcd from '@midwayjs/etcd';
 import { join } from 'path'
 
@@ -85,7 +85,7 @@ export default {
 配置完成后，我们就可以在代码中使用了。
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { ETCDService } from '@midwayjs/etcd';
 import { join } from 'path';
 
@@ -146,7 +146,7 @@ export default {
 ## 多实例获取
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { ETCDServiceFactory } from '@midwayjs/etcd';
 import { join } from 'path';
 
@@ -159,7 +159,7 @@ export class UserService {
   async invoke() {
     const instance1 = this.etcdServiceFactory.get('instance1');
     // ...
-    
+
     const instance2 = this.etcdServiceFactory.get('instance2');
     // ...
   }
@@ -171,7 +171,7 @@ export class UserService {
 ## 动态创建实例
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { ETCDServiceFactory } from '@midwayjs/etcd';
 import { join } from 'path';
 

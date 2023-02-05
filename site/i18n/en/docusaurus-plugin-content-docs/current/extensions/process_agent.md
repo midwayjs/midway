@@ -69,7 +69,7 @@ export class MainConfiguration {
 Business code UserService:
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { TestService } from './test';
 
 @Provide()
@@ -88,7 +88,7 @@ export class UserService {
 Then when calling the testService, it is hoped that it will only be executed in the main process:
 
 ```typescript
-import { Provide, Scope, ScopeEnum } from "@midwayjs/decorator";
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { RunInPrimary } from '@midwayjs/process-agent';
 
 @Provide()

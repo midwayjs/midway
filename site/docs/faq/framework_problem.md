@@ -1,14 +1,14 @@
 # 常见框架问题
 
-## 多个 @midwayjs/decorator 警告
+## 多个 @midwayjs/core 警告
 
 
-`@midwayjs/decorator` 包一般来说，npm 会让相同的依赖在 node_modules 存在一份实例，其余的模块都会通过软链（link）链接到 node_modules/@midwayjs/decorator。
+`@midwayjs/core` 包一般来说，npm 会让相同的依赖在 node_modules 存在一份实例，其余的模块都会通过软链（link）链接到 node_modules/@midwayjs/core。
 
 
 我们会用到下面的命令，`npm ls` 会列出项目底下某个包的依赖树。
 ```bash
-$ npm ls @midwayjs/decorator
+$ npm ls @midwayjs/core
 ```
 比如下图所示。
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01Td86gC1tQsKjRB8XU_!!6000000005897-2-tps-541-183.png)

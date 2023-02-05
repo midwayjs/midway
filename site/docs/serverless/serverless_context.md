@@ -8,7 +8,7 @@ Midway Serverless 针对不同平台的情况，进行了入参包裹，同时�
 
 ```typescript
 import { Context } from '@midwayjs/faas';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class Index {
@@ -27,7 +27,7 @@ HTTP 、API 网关触发器场景：
 
 ```typescript
 import { Context } from '@midwayjs/faas';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class Index {

@@ -41,7 +41,7 @@ $ npm i @midwayjs/static-file@3 --save
 首先，引入 组件，在 `configuration.ts` 中导入：
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as staticFile from '@midwayjs/static-file';
 import { join } from 'path'
@@ -160,7 +160,7 @@ import {
   Provide,
   ServerlessTrigger,
   ServerlessTriggerType,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()

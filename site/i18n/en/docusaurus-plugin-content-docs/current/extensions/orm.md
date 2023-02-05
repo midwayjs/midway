@@ -68,7 +68,7 @@ Introducing orm components in `src/configuration.ts`, an example is as follows.
 
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as orm from '@midwayjs/typeorm';
 import { join } from 'path';
 
@@ -429,16 +429,16 @@ export default {
          */
         type: 'mysql',
         host: '',
-        port: 3306
+        port: 3306,
         username: '',
         password: '',
-        database: undefined
+        database: undefined,
         synchronize: false,		// If it is used for the first time, there is no table, and there is a need for synchronization, you can write true
-        logging: false
+        logging: false,
 
         // Configure the entity model
         entities: [Photo],
-      
+
         // or scan format
         entities: [
           '*/entity/*.entity{.ts,.js}'
@@ -499,7 +499,7 @@ In common Midway files, use the `@InjectEntityModel` decorator to inject our con
 - 2. Execute the `save()`
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -535,7 +535,7 @@ export class PhotoService {
 For more information, see [find documentation](https://github.com/typeorm/typeorm/blob/master/docs/zh_CN/find-options.md).
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -596,7 +596,7 @@ Now, let's load a photo from the database, update it and save it.
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -627,7 +627,7 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
@@ -645,12 +645,12 @@ export class PhotoService {
         id: 1,
       },
     });
-    
+
     // Remove by entity
     await this.photoModel.remove(photo)
     // Delete multiple entities
     await this.photoModel.remove([photo1, photo2, photo3]);
-    
+
     // Delete by ID
     await this.photoModel.delete(1);
     await this.photoModel.delete([1, 2, 3]);
@@ -736,7 +736,7 @@ Next we will associate them in the code.
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -831,7 +831,7 @@ Now, let's try to load Photo and PhotoMetadata together in a single query. There
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
@@ -857,7 +857,7 @@ Here, the value of photos is an array that contains the query results of the ent
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { Repository } from 'typeorm';
@@ -901,7 +901,7 @@ Using `cascade` allows us to no longer save Photo and PhotoMetadata separately n
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { PhotoMetadata } from './entity/photoMetadata';
@@ -1073,7 +1073,7 @@ Now, let's insert albums and photos into the database:
 
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Photo } from './entity/photo';
 import { Album } from './entity/Album';
@@ -1364,7 +1364,7 @@ export default {
 The data source is the DataSource object of TypeORM created, which we can obtain by injecting the built-in data source manager.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
 
 @Configuration({
@@ -1383,7 +1383,7 @@ export class MainConfiguration {
 Starting with v3.8.0, it is also possible to inject via a decorator.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { InjectDataSource } from '@midwayjs/typeorm';
 import { DataSource } from 'typeorm';
 
@@ -1391,11 +1391,11 @@ import { DataSource } from 'typeorm';
    //...
 })
 export class MainConfiguration {
-  
+
    // Inject the default data source
    @InjectDataSource()
    defaultDataSource: DataSource;
-  
+
    // inject custom data source
    @InjectDataSource('default1')
    customDataSource: DataSource;
@@ -1455,7 +1455,7 @@ export default {
 The typeorm transaction needs to get the data source first and then open the transaction.
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { TypeORMDataSourceManager } from '@midwayjs/typeorm';
 import { UserDTO } from '../entity/user';
 

@@ -23,14 +23,14 @@ Midway 设计了一套通用的方法拦截器（切面），用于在不同场�
 │   │   └── report.ts
 │   └── controller                ## Web Controller 目录
 │       └── home.ts
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -45,7 +45,7 @@ export class HomeController {
 
 内容如下：
 ```typescript
-import { Aspect, IMethodAspect, JoinPoint } from '@midwayjs/decorator';
+import { Aspect, IMethodAspect, JoinPoint } from '@midwayjs/core';
 import { HomeController } from '../controller/home';
 
 @Aspect(HomeController)
@@ -96,7 +96,7 @@ export interface IMethodAspect {
 简单理解如下；
 ```javascript
 try {
-    // before  
+    // before
     // around or invokeMethod
     // afterReturn
 } catch(err){
@@ -269,7 +269,7 @@ export class HomeController {
 
   @Get('/')
   async home() {			// 这里是异步的，则下面的 before 是异步的
-    
+
   }
 }
 
@@ -277,7 +277,7 @@ export class HomeController {
 @Aspect(HomeController, 'home')
 export class ReportInfo implements IMethodAspect {
   async before(point: JoinPoint) {
-   
+
   }
 }
 
@@ -289,7 +289,7 @@ export class HomeController {
 
   @Get('/')
   home() {		// 这里是同步的，则下面的 before 也是同步的
-    
+
   }
 }
 
@@ -297,7 +297,7 @@ export class HomeController {
 @Aspect(HomeController, 'home')
 export class ReportInfo implements IMethodAspect {
   before(point: JoinPoint) {
-   
+
   }
 }
 
@@ -311,9 +311,9 @@ export class ReportInfo implements IMethodAspect {
 ```typescript
 @Aspect([HomeController, APIController])
 export class ReportInfo implements IMethodAspect {
-  
+
   async before(point: JoinPoint) {
-    
+
   }
 }
 ```
@@ -331,7 +331,7 @@ export class ReportInfo implements IMethodAspect {
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get } from "@midwayjs/decorator";
+import { Controller, Get } from "@midwayjs/core";
 
 @Controller('/')
 export class HomeController {
@@ -340,7 +340,7 @@ export class HomeController {
   async hello1() {
     return "Hello Midwayjs!";
   }
-  
+
   @Get('/2')
   async hello2() {
     return "Hello Midwayjs, too!";

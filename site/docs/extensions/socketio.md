@@ -61,7 +61,7 @@ $ npm i @types/socket.io-client socket.io-client --save-dev
 `@midwayjs/socket.io` 可以作为独立主框架使用。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as socketio from '@midwayjs/socketio';
 
 @Configuration({
@@ -79,7 +79,7 @@ export class MainConfiguration {
 也可以附加在其他的主框架下，比如 `@midwayjs/koa` 。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as socketio from '@midwayjs/socketio';
 
@@ -180,7 +180,7 @@ export class HelloController {
 
 当 Namespace 有客户端连接时，会触发 `connection` 事件，我们在代码中可以使用 `@OnWSConnection()` 装饰器来修饰一个方法，当每个客户端第一次连接到该 Namespace 时，将自动调用该方法。
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/socketio';
 
 @WSController('/')
@@ -208,7 +208,7 @@ export class HelloSocketController {
 
 Socket.io 是通过事件的监听方式来获取数据。Midway 提供了 `@OnWSMessage()` 装饰器来格式化接收到的事件，每次客户端发送事件，被修饰的方法都将被执行。
 ```typescript
-import { WSController, Provide, OnWSMessage, Inject } from '@midwayjs/decorator';
+import { WSController, Provide, OnWSMessage, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/socketio';
 
 @WSController('/')
@@ -236,7 +236,7 @@ export class HelloSocketController {
 
 通过 `@WSEmit` 装饰器来将方法的返回值返回给客户端。
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/socketio';
 
 @WSController('/')
@@ -274,7 +274,7 @@ Socket 中的中间件的写法和 [Web 中间件 ](../middleware)相似，但�
 
 ```typescript
 // src/middleware/socket.middleware.ts
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/socketio';
 
 @Middleware()
@@ -344,7 +344,7 @@ Connection 中间件，在连接时生效。
 
 @WSController('/api')
 export class APIController {
-  
+
   // Connection 触发时的中间件
   @OnWSConnection({
     middleware: [SocketMiddleware]
@@ -362,7 +362,7 @@ Message 中间件，接收到特定消息时生效。
 
 @WSController('/api')
 export class APIController {
-  
+
   // Message 触发时的中间件
   @OnWSMessage('my', {
     middleware: [SocketMiddleware]
@@ -600,7 +600,7 @@ describe('/test/index.test.ts', () => {
 
 ```typescript
 import { Context, Application } from '@midwayjs/socketio';
-import { WSController, OnWSMessage, WSEmit, App, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSMessage, WSEmit, App, Inject } from '@midwayjs/core';
 
 @WSController('/')
 export class HelloSocketController {
@@ -695,7 +695,7 @@ const sockets = await app.in(theSocketId).fetchSockets();
 
 ```typescript
 import { Application as SocketApplication } from '@midwayjs/socketio';
-import { Controller, App } from '@midwayjs/decorator';
+import { Controller, App } from '@midwayjs/core';
 
 @Controller()
 export class UserController {
@@ -713,7 +713,7 @@ export class UserController {
 
 ```typescript
 import { Application as SocketApplication } from '@midwayjs/socketio';
-import { Provide, Controller, App, Get } from '@midwayjs/decorator';
+import { Provide, Controller, App, Get } from '@midwayjs/core';
 
 @Controller()
 export class UserController {

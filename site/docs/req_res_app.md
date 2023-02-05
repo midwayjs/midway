@@ -47,7 +47,7 @@ import { Application } from '@midwayjs/koa';
 比如：
 
 ```typescript
-import { App, Controller, Get } from '@midwayjs/decorator';
+import { App, Controller, Get } from '@midwayjs/core';
 import { Application } from '@midwayjs/koa';
 
 @Controller('/')
@@ -77,8 +77,7 @@ Midway 应用对外暴露的协议是组件带来的，每个组件都会暴露�
 ```typescript
 // src/configuration.ts
 
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
@@ -102,8 +101,7 @@ export class MainConfiguration implements ILifeCycle {
 ```typescript
 // src/configuration.ts
 
-import { Configuration, MidwayFrameworkType } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
@@ -226,17 +224,6 @@ this.app.getCoreLogger();
 
 
 
-### getFrameworkType
-
-获取当前框架类型。
-
-```typescript
-this.app.getFrameworkType();
-// => MidwayFrameworkType.WEB_KOA
-```
-
-
-
 ### getProjectName
 
 获取项目名，一般从 `package.json` 中获取。
@@ -302,7 +289,7 @@ Context 是一个**请求级别的对象**，在每一次收到用户请求时�
 比如可以这样获取到对应的 ctx 实例。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
+import { Inject, Controller, Get } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -323,13 +310,12 @@ export class HomeController {
 比如：
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
+import { Inject, Controller, Get, REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
 export class HomeController {
-  
+
   @Inject()
   ctx: Context;
 

@@ -8,7 +8,7 @@ Normal trigger scenario:
 
 ```typescript
 import { Context } from '@midwayjs/faas';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class Index {
@@ -27,7 +27,7 @@ HTTP and API gateway trigger scenarios:
 
 ```typescript
 import { Context } from '@midwayjs/faas';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class Index {

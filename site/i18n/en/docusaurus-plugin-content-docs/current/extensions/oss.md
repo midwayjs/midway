@@ -53,7 +53,7 @@ Or reinstall the following dependencies in `package.json`.
 First, introduce components and import them in `configuration.ts`:
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as oss from '@midwayjs/oss';
 import { join } from 'path'
 

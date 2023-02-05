@@ -20,7 +20,7 @@ At the same time, in `@midwayjs/koa`, the method of directly reading and writing
 Examples are as follows:
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -70,7 +70,7 @@ When setting a cookie, we need to consider whether the cookie needs to be acquir
 Example:
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -161,7 +161,7 @@ If we want to update the key of the Cookie, but we don't want the Cookie previou
 The default `@midwayjs/koa` has built-in Session components and provides us with `ctx.session` to access or modify the current user Session.
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -225,7 +225,7 @@ It can be seen that these parameters are cookie parameters except `key`. `key` r
 Although one of the Session configurations is maxAge, it can only set the validity period of the Session globally. We can often see the option box to **remember me** on the login page of some websites. After checking, the validity period of the login user's Session can be longer. This Session effective time setting for a specific user can be implemented by `ctx.session.maxAge =`.
 
 ```typescript
-import { Inject, Controller, Post, Body, Provide, FORMAT } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Body, Provide, FORMAT } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { UserService } from './service/user.service';
 

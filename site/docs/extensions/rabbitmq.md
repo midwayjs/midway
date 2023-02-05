@@ -79,7 +79,7 @@ $ npm i @types/amqplib --save-dev
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as rabbitmq from '@midwayjs/rabbitmq';
 
 @Configuration({
@@ -99,7 +99,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as rabbitmq from '@midwayjs/rabbitmq';
 
@@ -140,7 +140,7 @@ export class ContainerLifeCycle {
 代码示例如下。
 
 ```typescript
-import { Consumer, MSListenerType, RabbitMQListener, Inject } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
 
@@ -226,7 +226,7 @@ Fanout 是一种特定的交换机，如果满足匹配（binding），就往 Ex
 
 比如，下面我们添加了两个 Queue，订阅了相同的交换机。
 ```typescript
-import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/core';
 import { Context, Application } from '@midwayjs/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
 
@@ -290,7 +290,7 @@ Direct Exchange 是 RabbitMQ 默认的 Exchange，完全根据 RoutingKey 来路
 
 下面的示例代码，我们不填写 Queue Name，只添加一个 routingKey，交换机类型为 direct。
 ```typescript
-import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/core';
 import { Context, Application } from '../../../../../src';
 import { ConsumeMessage } from 'amqplib';
 
@@ -526,7 +526,7 @@ $ npm i @types/amqplib --save-dev
 
 比如，我们在 service 文件下，新增一个 `rabbitmq.ts` 文件。
 ```typescript
-import { Provide, Scope, ScopeEnum, Init, Autoload, Destroy } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum, Init, Autoload, Destroy } from '@midwayjs/core';
 import * as amqp from 'amqp-connection-manager'
 
 @Autoload()

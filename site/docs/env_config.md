@@ -44,7 +44,7 @@
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -70,7 +70,7 @@ export class ContainerLifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 import * as DefaultConfig from './config/config.default';
@@ -115,7 +115,7 @@ export class ContainerLifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -136,7 +136,7 @@ export class ContainerLifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -168,7 +168,7 @@ export class ContainerLifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -309,7 +309,7 @@ Midway 提供了 `MidwayConfig` 作为统一的配置项定义，所有的组件
 比如，下面的代码在 `local` 环境会查找 `config.default.*` 和 `config.local.*` 文件，如果在其他环境，则只会查找 `config.default.*` 和 `config.{当前环境}.*` ，如果文件不存在，则不会加载，也不会报错。
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -364,7 +364,7 @@ Midway 会将配置都保存在内部的配置服务中，整个结构是一个�
 
 
 ```typescript
-import { Config } from '@midwayjs/decorator';
+import { Config } from '@midwayjs/core';
 
 export class IndexHandler {
 
@@ -401,7 +401,7 @@ export class IndexHandler {
 ```
 则可以写复杂的获取表达式来获取值，示例如下。
 ```typescript
-import { Config } from '@midwayjs/decorator';
+import { Config } from '@midwayjs/core';
 
 export class IndexHandler {
 
@@ -422,7 +422,7 @@ export class IndexHandler {
 
 也可以通过 `ALL` 这个特殊属性，来获取整个配置的对象。
 ```typescript
-import { Config, ALL } from '@midwayjs/decorator';
+import { Config, ALL } from '@midwayjs/core';
 
 export class IndexHandler {
 
@@ -450,8 +450,7 @@ midway 新增了一个异步配置加载的生命周期，可以在配置加载�
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import { join } from 'path';
 import { RemoteConfigService } from '../service/remote'; // 自定义的获取远端配置服务
 
@@ -546,7 +545,7 @@ OSS_ACCESSKEY=54321
 ```
 我们可以在入口中初始化，比如 `bootstrap.js` 或者 `configuration` 。
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as dotenv from 'dotenv';
 
 // load .env file in process.cwd

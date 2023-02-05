@@ -46,7 +46,7 @@ $ npm init midway -- --type=faas-v3 my_midway_app
 通过 `@ServerlessTrigger` 装饰器，我们将方法标注为一个 HTTP 接口，并且标示 `path` 和 `method` 属性。
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -70,7 +70,7 @@ export class HelloHTTPService {
 这样，当我们在一个函数上，使用多个触发器时，就可以这样设置。
 
 ```typescript
-import { Provide, Inject, ServerlessFunction, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessFunction, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()

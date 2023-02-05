@@ -47,7 +47,7 @@ export interface User {
 }
 
 // src/controller/home.ts
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 
 @Controller('/api/user')
 export class HomeController {
@@ -98,7 +98,7 @@ $ npm i @midwayjs/validate@3 --save
 在 `configuration.ts` 中增加组件。
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as validate from '@midwayjs/validate';
 import { join } from 'path';
@@ -176,7 +176,7 @@ export class UserDTO {
 
 ```typescript
 // src/controller/home.ts
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { UserDTO } from './dto/user';
 
 @Controller('/api/user')
@@ -209,7 +209,7 @@ async updateUser(@Body() user: UserDTO ) {
 
 ```typescript
 // src/controller/home.ts
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 import { Validate } from '@midwayjs/validate';
 import { UserDTO } from './dto/user';
 
@@ -910,7 +910,7 @@ export class HomeController {
 
 ```typescript
 // src/filter/validate.filter
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { MidwayValidationError } from '@midwayjs/validate';
 import { Context } from '@midwayjs/koa';
 

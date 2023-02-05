@@ -54,8 +54,7 @@ For example.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -87,8 +86,7 @@ We need to connect a database in advance during initialization. Since it is in t
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -116,8 +114,7 @@ In addition, in this way, the default injected objects can be expanded.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as sequelize from 'sequelize';
 
 @Configuration()
@@ -156,8 +153,7 @@ Let's take `@midwayjs/koa` as an example to get its Server at startup.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
@@ -183,8 +179,7 @@ We can clean up some resources at this stage, such as closing the connection.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
@@ -235,8 +230,7 @@ Before the business object instance is created, some objects inside the framewor
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectBeforeCreatedOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectBeforeCreatedOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -268,8 +262,7 @@ Execute after the object instance is created, this stage can replace the created
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectCreatedOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectCreatedOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -297,8 +290,7 @@ The parameters are as follows:
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -315,8 +307,7 @@ export class MainConfiguration implements ILifeCycle {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -340,8 +331,7 @@ Execute after the asynchronous initialization method is executed after the objec
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectInitOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
@@ -378,8 +368,7 @@ Execute before the object instance is destroyed.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectBeforeDestroyOptions } from '@midwayjs/core';
+import { Configuration, ILifeCycle, IMidwayContainer, ObjectBeforeDestroyOptions } from '@midwayjs/core';
 
 @Configuration()
 export class MainConfiguration implements ILifeCycle {

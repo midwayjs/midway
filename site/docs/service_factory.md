@@ -42,8 +42,7 @@ const httpClient = new HTTPClient(config);
 
 我们只需要继承它，同时，一般服务工厂为单例。
 ```typescript
-import { ServiceFactory } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { ServiceFactory, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -53,13 +52,12 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 ```
 由于是抽象类，我们需要实现其中的两个方法。
 ```typescript
-import { ServiceFactory } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { ServiceFactory, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
-  
+
   // 创建单个实例
   protected createClient(config: any): any {
     return new HTTPClient(config);
@@ -89,21 +87,20 @@ export const httpClient = {
 ```
 然后注入到服务工厂中，同时，我们还需要在初始化时，调用创建多个实例的方法。
 ```typescript
-import { ServiceFactory } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { ServiceFactory, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
-  
+
   @Config('httpClient')
   httpClientConfig;
-  
+
   @Init()
   async init() {
     await this.initClients(this.httpClientConfig);
   }
-  
+
   protected createClient(config: any): any {
     // 创建实例
     return new HTTPClient(config);
@@ -170,10 +167,10 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   serviceFactory: HTTPClientServiceFactory;
-  
+
   async invoke() {
     const httpClient = this.serviceFactory.get();
   }
@@ -209,15 +206,15 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   serviceFactory: HTTPClientServiceFactory;
-  
+
   async invoke() {
-    
+
     const aaaInstance = this.serviceFactory.get('aaa');
     // ...
-        
+
     const bbbInstance = this.serviceFactory.get('bbb');
     // ...
 
@@ -238,13 +235,13 @@ import { InjectClient } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
-  
+
   @InjectClient(HTTPClientServiceFactory, 'aaa')
   aaaInstance: HTTPClientServiceFactory;
-  
+
   @InjectClient(HTTPClientServiceFactory, 'bbb')
   bbbInstance: HTTPClientServiceFactory;
-  
+
   async invoke() {
     // this.aaaInstance.xxx
 		// this.bbbInstance.xxx
@@ -290,20 +287,20 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   serviceFactory: HTTPClientServiceFactory;
-  
+
   async invoke() {
-    
+
     // 会合并 config.bucket3 和 config.default
     let customHttpClient = await this.serviceFactory.createInstance({
     	baseUrl: 'xxxxx'
     }, 'custom');
-    
+
     // 传了名字之后也可以从 factory 中获取
     customHttpClient = this.serviceFactory.get('custom');
-   
+
   }
 }
 ```
@@ -348,8 +345,15 @@ export const httpClient = {
 如果用户每次使用时，都通过 `serviceFactory` 去获取，会非常的繁琐，对于最常用的默认实例，可以提供一个代理类，使其代理所有的目标实例方法。
 
 ```typescript
-import { ServiceFactory, MidwayCommonError, delegateTargetAllPrototypeMethod } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum, Init } from '@midwayjs/decorator';
+import {
+  Provide,
+  Scope,
+  ScopeEnum,
+  Init,
+  ServiceFactory,
+  MidwayCommonError,
+  delegateTargetAllPrototypeMethod
+} from '@midwayjs/core';
 
 // ...
 export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
@@ -431,10 +435,10 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   httpClientService: HTTPClientService;
-  
+
   async invoke() {
 		// this.httpClientService 中指向的是 default2
   }

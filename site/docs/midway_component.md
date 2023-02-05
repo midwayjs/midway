@@ -23,7 +23,7 @@
 
 ```typescript
 // 应用或者函数的 src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as validate from '@midwayjs/validate';
 
 @Configuration({
@@ -42,7 +42,7 @@ export class ContainerLifeCycle {}
 
 ```typescript
 // 应用或者函数的 src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as info from '@midwayjs/info';
 
 @Configuration({

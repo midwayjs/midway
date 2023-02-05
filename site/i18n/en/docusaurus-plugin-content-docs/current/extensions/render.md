@@ -46,7 +46,7 @@ Or reinstall the following dependencies in `package.json`.
 
 First, introduce components and import them in `configuration.ts`:
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as view from '@midwayjs/view-ejs';
 import { join } from 'path'
 
@@ -108,7 +108,7 @@ hello <%= data %>
 
 Rendering in Controller.
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -252,7 +252,7 @@ Or reinstall the following dependencies in `package.json`.
 2. Introduce components and import them in `configuration.ts`:
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as view from '@midwayjs/view-nunjucks';
 import { join } from 'path'
 
@@ -292,7 +292,7 @@ hi, {{ user }}
 
 Rendering in Controller.
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -312,12 +312,12 @@ After the access, `hi, midway` is output.
 
 If you need a custom filter, you can add it at the entrance. For example, a filter named `hello` is added below.
 ```typescript
-import { App, Configuration, Inject } from '@midwayjs/decorator';
+import { App, Configuration, Inject } from '@midwayjs/core';
 import * as view from '@midwayjs/view-nunjucks';
 import { join } from 'path'
 
 @Configuration({
-  imports: [view]
+  imports: [view],
   importConfigs: [join(__dirname, 'config')]
 })
 export class MainConfiguration {
@@ -360,7 +360,7 @@ First, you need to create a template engine class for request scope, which will 
 
 ```typescript
 // lib/view.ts
-import { Provide, Config } from '@midwayjs/decorator';
+import { Provide, Config } from '@midwayjs/core';
 import { IViewEngine } from '@midwayjs/view';
 
 @Provide()
@@ -373,9 +373,9 @@ export class MyView implements IViewEngine {
     return myengine.render(name, locals, options);
   }
 
-  async renderString(tpl: string
-    locals?: Record<string, any>
-    options?: RenderOptions) {
+  async renderString(tpl: string,
+     locals?: Record<string, any>,
+     options?: RenderOptions) {
 
     throw new Error('not implement');
   }
@@ -407,13 +407,13 @@ By introducing `ViewManager`, we can use the `use` method to register a custom t
 
 ```typescript
 // src/configuration.ts
-import { Configuration, Inject, Provide } from '@midwayjs/decorator';
+import { Configuration, Inject, Provide } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as view from '@midwayjs/view';
 import { MyView } from './lib/my';
 
 @Configuration({
-  imports: [koa, view]
+  imports: [koa, view],
   importConfigs: [join(__dirname, 'config')]
 })
 export class AutoConfiguration {
@@ -433,7 +433,7 @@ export class AutoConfiguration {
 ## Precautions
 
 
-To use in egg(@midwayjs/web) scenarios, close view and its related plug-ins in `plugint.ts`.
+To use in egg(@midwayjs/web) scenarios, close view and its related plug-ins in `plugin.ts`.
 
 
 ```typescript

@@ -51,8 +51,7 @@ We only need to inherit the built-in `DataSourceManager` class to implement a da
 `DataSourceManager` contain a generic type, you need to declare the data type of the data source.
 
 ```typescript
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { DataSourceManager } from '@midwayjs/core';
+import { DataSourceManager, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import * as mysql from 'mysql2';
 
 @Provide()
@@ -66,8 +65,7 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
 Since it is an abstract class, we need to implement several basic methods.
 
 ```typescript
-import { DataSourceManager } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { DataSourceManager, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import * as mysql from 'mysql2';
 
 @Provide()
@@ -103,8 +101,7 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
 You can use the `@Init` decorator and the `@Config` decorator to provide initialization configurations.
 
 ```typescript
-import { Provide, Scope, ScopeEnum, Init, Config } from '@midwayjs/decorator';
-import { DataSourceManager } from '@midwayjs/core';
+import { DataSourceManager, Provide, Scope, ScopeEnum, Init, Config } from '@midwayjs/core';
 import * as mysql from 'mysql2';
 
 @Provide()
@@ -249,7 +246,7 @@ export default {
            'abc/*.entity.ts', // match suffix
            '**/*.entity.ts', // wildcard plus suffix match
            '**/*.{j,t}s', // suffix match
-        ]		
+        ]
       },
       // ...
       // ...

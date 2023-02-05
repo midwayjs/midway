@@ -21,7 +21,7 @@ $ npm i @midwayjs/egg-ts-helper --save-dev
 ```json
   "dependencies": {
     "@midwayjs/web": "^3.0.0",
-    "@midwayjs/decorator": "^3.0.0",
+    "@midwayjs/core": "^3.0.0",
     "egg": "^2.0.0",
     "egg-scripts": "^2.10.0"
   },
@@ -30,12 +30,12 @@ $ npm i @midwayjs/egg-ts-helper --save-dev
   },
 ```
 
-| @midwayjs/web           | **必须**，Midway EggJS 适配层              |
-| ----------------------- | ------------------------------------------ |
-| @midwayjs/decorator     | **必须**，Midway 系列通用的装饰器包        |
+| @midwayjs/web           | **必须**，Midway EggJS 适配层    |
+|-------------------------|----------------------------|
+| @midwayjs/core          | **必须**，Midway 核心包          |
 | egg                     | **必须**，EggJS 依赖包，提供定义等其他能力 |
-| egg-scripts             | **可选**，EggJS 启动脚本                   |
-| @midwayjs/egg-ts-helper | **可选**，EggJS 定义生成工具               |
+| egg-scripts             | **可选**，EggJS 启动脚本          |
+| @midwayjs/egg-ts-helper | **可选**，EggJS 定义生成工具        |
 
 也可以直接使用脚手架创建示例。
 
@@ -52,7 +52,7 @@ $ npm init midway -- --type=egg-v3 my_project
 ## 开启组件
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as web from '@midwayjs/web';
 import { join } from 'path';
 
@@ -229,8 +229,8 @@ app.mysql.query(sql, values);			// egg 提供的方法
 
 
 ```typescript
-import { Provide, Inject, Get } from '@midwayjs/decorator';
-import { Application, Context } from 'egg';
+import { Provide, Inject, Get } from '@midwayjs/core';
+import { Application, Context } from '@midwayjs/web';
 
 @Provide()
 export class HomeController {
@@ -252,7 +252,7 @@ export class HomeController {
 
 
 ```typescript
-import { Provide, Get, Plugin } from '@midwayjs/decorator';
+import { Provide, Get, Plugin } from '@midwayjs/core';
 
 @Provide()
 export class HomeController {
@@ -278,8 +278,7 @@ export class HomeController {
 
 
 ```typescript
-import { Middleware } from '@midwayjs/decorator';
-import { IMiddleware } from '@midwayjs/core';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/web';
 
 @Middleware()
@@ -309,7 +308,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as egg from '@midwayjs/web';
 import { ReportMiddleware } from './middleware/user.middleware';
 

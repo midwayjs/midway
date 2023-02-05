@@ -70,7 +70,7 @@ The mikro component is introduced in `src/configuration.ts`, as an example.
 
 ```typescript
 // configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as mikro from '@midwayjs/mikro';
 import { join } from 'path';
 
@@ -204,7 +204,7 @@ Use `InjectRepository` injection `repository` objects in business code to perfor
 
 ```typescript
 import { Book } from './entity';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/mikro';
 import { EntityRepository, QueryOrder, wrap } from '@mikro-orm/core';
 
@@ -236,7 +236,7 @@ export class BookController {
 The data source is the created data source object, which we can obtain by injecting the built-in data source manager.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { MikroDataSourceManager } from '@midwayjs/mikro';
 
 @Configuration({
@@ -256,7 +256,7 @@ export class MainConfiguration {
 Starting with v3.8.0, it is also possible to inject via a decorator.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { InjectDataSource } from '@midwayjs/mikro';
 import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
 
@@ -264,11 +264,11 @@ import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
   //...
 })
 export class MainConfiguration {
-  
+
   // Inject the default data source
   @InjectDataSource()
   defaultDataSource: MikroORM<IDatabaseDriver<Connection>>;
-  
+
   // inject custom data source
   @InjectDataSource('default1')
   customDataSource: MikroORM<IDatabaseDriver<Connection>>;

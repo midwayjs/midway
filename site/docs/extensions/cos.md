@@ -39,7 +39,7 @@ $ npm i @midwayjs/cos@3 --save
 首先，引入 组件，在 `configuration.ts` 中导入：
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as cos from '@midwayjs/cos';
 import { join } from 'path'
 
@@ -105,7 +105,7 @@ export default {
 
 我们可以在任意的代码中注入使用。
 ```typescript
-import { Provide, Controller, Inject, Get } from '@midwayjs/decorator';
+import { Provide, Controller, Inject, Get } from '@midwayjs/core';
 import { COSService } from '@midwayjs/cos';
 
 @Provide()

@@ -51,8 +51,7 @@ connection.query(
 `DataSourceManager` 包含一个泛型类型，需要声明该数据源的数据类型。
 
 ```typescript
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { DataSourceManager } from '@midwayjs/core';
+import { Provide, Scope, ScopeEnum, DataSourceManager } from '@midwayjs/core';
 import * as mysql from 'mysql2';
 
 @Provide()
@@ -66,8 +65,7 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
 由于是抽象类，我们需要实现其中的几个基本方法。
 
 ```typescript
-import { DataSourceManager } from '@midwayjs/core';
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum, DataSourceManager } from '@midwayjs/core';
 import * as mysql from 'mysql2';
 
 @Provide()
@@ -81,12 +79,12 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
   getName(): string {
     return 'mysql';
   }
-  
+
   async checkConnected(dataSource: mysql.Connection): Promise<boolean> {
     // 伪代码
     return dataSource.status === 'connected';
   }
-  
+
   async destroyDataSource(dataSource: mysql.Connection): Promise<void> {
     if (await this.checkConnected(dataSource)) {
       await dataSource.destroy();
@@ -103,14 +101,13 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
 我们可以利用 `@Init` 装饰器和 `@Config` 装饰器提供初始化配置。
 
 ```typescript
-import { Provide, Scope, ScopeEnum, Init, Config } from '@midwayjs/decorator';
-import { DataSourceManager } from '@midwayjs/core';
+import { Provide, Scope, ScopeEnum, Init, Config, DataSourceManager } from '@midwayjs/core';
 import * as mysql from 'mysql2';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> {
-  
+
   @Config('mysql')
   mysqlConfig;
 
@@ -186,7 +183,7 @@ export class SimpleUser {
 export class User {
   @Column()
   name: string;
-  
+
   @Column()
   age: number;
 }
@@ -239,8 +236,8 @@ export default {
         user: 'root',
         database: 'test',
         entities: [
-          User, 
-          SimpleUser, 
+          User,
+          SimpleUser,
           'entity',             // 特定目录（等价于目录通配）
           '**/abc/**',          // 仅获取包含 abc 字符的目录下的文件
           'abc/**/*.ts',        // 特定目录 + 通配
@@ -282,7 +279,7 @@ class UserService {
   // 这里一般会注入一个实体类对应的 Model，包含增删改查方法
   @InjectEntityModel(SimpleUser)
   userModel;
-  
+
 }
 ```
 
@@ -305,7 +302,7 @@ import { SimpleUser } from '../entity/user.entity';
 class UserService {
   @InjectEntityModel(SimpleUser, 'dataSource2')
   userModel;
-  
+
 }
 ```
 
@@ -336,20 +333,20 @@ export const mysql = {
 通过注入数据源管理器，我们可以通过其上面的方法来拿到数据源。
 
 ```typescript
-import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager`;
+import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager';
 import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   mysqlDataSourceManager: MySqlDataSourceManager;
-  
+
   async invoke() {
-    
+
     const dataSource = this.mysqlDataSourceManager.getDataSource('dataSource1');
     // TODO
-   
+
   }
 }
 ```

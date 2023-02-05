@@ -20,7 +20,6 @@ Related information:
 
 ```bash
 $ npm i @midwayjs/jwt@3 --save
-$ npm i @types/jsonwebtoken --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -31,9 +30,6 @@ Or reinstall the following dependencies in `package.json`.
     "@midwayjs/jwt": "^3.0.0"
     // ...
   },
-  "devDependencies": {
-    null
-  }
 }
 ```
 
@@ -42,14 +38,14 @@ Or reinstall the following dependencies in `package.json`.
 Configure jwt components into the code.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import { IMidwayContainer } from '@midwayjs/core';
 import * as jwt from '@midwayjs/jwt';
 
 @Configuration({
-  null
+  imports: [
     // ...
-    jwt
+    jwt,
   ],
 })
 export class MainConfiguration {
@@ -65,7 +61,7 @@ Then set in the configuration, the default is not encrypted.
 // src/config/config.default.ts
 export default {
   // ...
-  null
+  jwt: {
     secret: 'xxxxxxxxxxxxxx', // fs.readFileSync('xxxxx.key')
     expiresIn: '2d', // https://github.com/vercel/ms
   },
@@ -79,7 +75,7 @@ for more configurations, see the ts definition.
 Midway provides jwt common API as synchronous and asynchronous.
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { JwtService } from '@midwayjs/jwt';
 
 @Provide()
@@ -89,7 +85,7 @@ export class UserService {
 
   async invoke() {
     // Synchronization API
-    null
+    this.jwtService.signSync(payload, secretOrPrivateKey, options);
     this.jwtService.verifySync(token, secretOrPublicKey, options);
     this.jwtService.decodeSync(token, options);
 
@@ -110,9 +106,8 @@ In general, jwt will also cooperate with middleware to complete authentication. 
 ```typescript
 // src/middleware/jwt.middleware
 
-import { Inject, Middleware } from '@midwayjs/decorator';
+import { Inject, Middleware, httpError } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/koa';
-import { httpError } from '@midwayjs/core';
 import { JwtService } from '@midwayjs/jwt';
 
 @Middleware()
@@ -129,17 +124,17 @@ export class JwtMiddleware {
       // Judge whether there is verification information
       if (! ctx.headers['authorization']) {
         throw new httpError.UnauthorizedError();
-      null
+      }
       // Get verification information from header
       const parts = ctx.get('authorization').trim().split(' ');
 
-      if (parts.length! = = 2) {
+      if (parts.length !== 2) {
         throw new httpError.UnauthorizedError();
       }
 
       const [scheme, token] = parts;
 
-      if (/^Bearer$/ I .test(scheme)) {
+      if (/^Bearer$/i.test(scheme)) {
         try {
           // jwt.verify that token is valid.
           await jwtService.verify(token, {
@@ -152,14 +147,14 @@ export class JwtMiddleware {
           ctx.set('Authorization', newToken);
         }
         await next();
-      null
+      }
     };
   }
 
   // Configure route addresses that ignore authentication
   public match(ctx: Context): boolean {
-    const ignore = ctx.path.indexOf('/api/admin/login')! = = -1;
-    return! ignore;
+    const ignore = ctx.path.indexOf('/api/admin/login') !== -1;
+    return !ignore;
   }
 }
 ```
@@ -168,11 +163,10 @@ Then enable middleware at the portal.
 
 
 ```typescript
-null
+// src/configuration.ts
 
-import { Configuration, App } from '@midwayjs/decorator';
-import { IMidwayContainer, IMidwayApplication} from '@midwayjs/core';
-null
+import { Configuration, App, IMidwayContainer, IMidwayApplication} from '@midwayjs/core';
+import * as jwt from '@midwayjs/jwt';
 
 @Configuration({
   imports: [
@@ -182,7 +176,7 @@ null
 })
 export class MainConfiguration {
 
-  null
+  @App()
   app: IMidwayApplication;
 
   async onReady(applicationContext: IMidwayContainer): Promise<void> {

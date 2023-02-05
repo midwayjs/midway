@@ -40,7 +40,7 @@ Or reinstall the following dependencies in `package.json`.
 
 First, introduce components and import them in `configuration.ts`:
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as tablestore from '@midwayjs/tablestore';
 import { join } from 'path'
 
@@ -113,7 +113,7 @@ For more parameters, please refer to the [aliyun tablestore sdk](https://github.
 
 We can inject it into any code.
 ```typescript
-import { Provide, Controller, Inject, Get } from '@midwayjs/decorator';
+import { Provide, Controller, Inject, Get } from '@midwayjs/core';
 import { TableStoreService } from '@midwayjs/tablestore';
 
 @Provide()

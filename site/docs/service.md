@@ -41,7 +41,7 @@
 
 ```typescript
 // src/service/user.ts
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
@@ -61,7 +61,7 @@ export class UserService {
 之前我们还增加了一个 User 定义，这里也可以直接使用。
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { User } from '../interface';
 
 @Provide()
@@ -85,7 +85,7 @@ export class UserService {
 
 
 ```typescript
-import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide, Query } from '@midwayjs/core';
 import { UserService } from '../service/user';
 
 @Controller('/api/user')

@@ -40,7 +40,7 @@ Or reinstall the following dependencies in `package.json`.
 2. Introduce components into configuration files
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as upload from '@midwayjs/upload';
 
 @Configuration({
@@ -48,7 +48,7 @@ import * as upload from '@midwayjs/upload';
     // ...other components
     upload
   ],
-  }
+  // ...
 })
 export class MainConfiguration {}
 ```
@@ -56,7 +56,7 @@ export class MainConfiguration {}
 3. Get the uploaded file in the code
 
 ```typescript
-import { Controller, Inject, Post, Files, Fields } from '@midwayjs/decorator';
+import { Controller, Inject, Post, Files, Fields } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {

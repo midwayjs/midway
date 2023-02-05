@@ -31,7 +31,7 @@ For example:
 
 ## Decorator API
 
-Midway has a set of standard decorator management API, which is used to inject decorator docking dependencies into containers for scanning and expansion. We export these API methods from the `@midwayjs/decorator` package.
+Midway has a set of standard decorator management API, which is used to inject decorator docking dependencies into containers for scanning and expansion. We export these API methods from the `@midwayjs/core` package.
 
 Through the decorator advanced API, we can customize the decorator and attach metadata to it. The various decorators inside are realized through this capability.
 
@@ -77,7 +77,7 @@ Let's take an example, define a class decorator @Model, identify class as a mode
 First create a decorator file, such as `src/decorator/model.decorator.ts`.
 
 ```typescript
-import { Scope, ScopeEnum, saveClassMetadata, saveModule, Provide } from '@midwayjs/decorator';
+import { Scope, ScopeEnum, saveClassMetadata, saveModule, Provide } from '@midwayjs/core';
 
 // Provide a unique key
 const MODEL_KEY = 'decorator:model';
@@ -108,7 +108,7 @@ The above only decided on this decorator, and we also need to implement the corr
 ```typescript
 // src/configuration.ts
 
-import { listModule, Configuration, App, Inject } from '@midwayjs/decorator';
+import { listModule, Configuration, App, Inject } from '@midwayjs/core';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 import { MODEL_KEY } from './decorator/model.decorator';
@@ -156,7 +156,7 @@ Let's take an example. If there is a memory cache now, our property decorator is
 
 ```typescript
 // Simple cache class
-import { Configuration, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Configuration, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -172,7 +172,7 @@ export class MemoryStore extends Map {
 
 // src/configuration.ts
 // The entry is instantiated and some data is saved.
-import { Configuration, App, Inject } from '@midwayjs/decorator';
+import { Configuration, App, Inject } from '@midwayjs/core';
 import { join } from 'path';
 import * as koa from '@midwayjs/koa';
 
@@ -205,7 +205,7 @@ The following is the section that defines the decorator method.
 
 ```typescript
 // src/decorator/memoryCache.decorator.ts
-import { createCustomPropertyDecorator } from '@midwayjs/decorator';
+import { createCustomPropertyDecorator } from '@midwayjs/core';
 
 // Unique id inside the decorator
 export const MEMORY_CACHE_KEY = 'decorator:memory_cache_key';
@@ -220,7 +220,7 @@ export function MemoryCache(key?: string): PropertyDecorator {
 It is implemented before the decorator's method is executed (usually at the initialization place). To realize the decorator, we need to use the built-in `MidwayDecoratorService` service.
 
 ```typescript
-import { Configuration, Inject, Init } from '@midwayjs/decorator';
+import { Configuration, Inject, Init } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { MEMORY_CACHE_KEY, MemoryStore } from 'decorator/memoryCache.decorator';
 import { MidwayDecoratorService } from '@midwayjs/core';
@@ -285,7 +285,7 @@ The following is the section that defines the decorator method.
 
 ```typescript
 // src/decorator/logging.decorator.ts
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 
 // Unique id inside the decorator
 export const LOGGING_KEY = 'decorator:logging_key';
@@ -390,7 +390,7 @@ You can add an impl parameter when defining the decorator.
 
 ```typescript
 // src/decorator/logging.decorator.ts
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator } from '@midwayjs/core';
 
 // Unique id inside the decorator
 export const LOGGING_KEY = 'decorator:logging_key';
@@ -413,7 +413,7 @@ The following is the section that defines the decorator method.
 
 ```typescript
 // src/decorator/logging.decorator.ts
-import { createCustomParamDecorator } from '@midwayjs/decorator';
+import { createCustomParamDecorator } from '@midwayjs/core';
 
 // Unique id inside the decorator
 export const USER_KEY = 'decorator:user_key';

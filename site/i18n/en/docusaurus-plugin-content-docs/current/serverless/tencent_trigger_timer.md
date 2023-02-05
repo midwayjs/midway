@@ -9,7 +9,7 @@ Warm reminder, please close the trigger in time after testing the function and e
 ## Usage
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()

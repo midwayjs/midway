@@ -7,7 +7,7 @@ A component (Component) is a reusable and multi-frame module package, which is g
 
 Components can be loaded locally or packaged together and published into an npm package. Components can be used in midway v3/Serverless. You can put reusable business codes or functional modules into components for maintenance. Almost all Midway general capabilities can be used in components, including but not limited to configuration, life cycle, controller, interceptor, etc.
 
-When designing components, we should face all upper-level frame scenarios as much as possible, so we only rely on `@midwayjs/core` and `@midwayjs/decorator` as much as possible.
+When designing components, we should face all upper-level frame scenarios as much as possible, so we only rely on `@midwayjs/core` as much as possible.
 
 Starting from v3, the framework (Framework) has also become part of the component, and the usage and component are unified.
 
@@ -66,7 +66,7 @@ The code and application are exactly the same.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'book'
@@ -92,7 +92,7 @@ Same as the application, write the class export, and the dependent injection con
 
 ```typescript
 // src/service/book.service.ts
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class BookService {
@@ -105,7 +105,7 @@ export class BookService {
 ```
 
 :::info
-A component does not rely on a clear upper-level framework. In order to reuse in different scenarios, it only depends on the common `@midwayjs/core` and `@midwayjs/decorator`
+A component does not rely on a clear upper-level framework. In order to reuse in different scenarios, it only depends on the common `@midwayjs/core`.
 :::
 
 
@@ -116,7 +116,7 @@ The configuration is the same as that of the application. For more information, 
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 
@@ -264,7 +264,7 @@ For example:
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as axios from '@midwayjs/axios';
 
 @Configuration({
@@ -282,7 +282,7 @@ There is also a case of weak dependencies, which do not need to be explicitly de
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
@@ -386,7 +386,7 @@ Component behavior configuration.
 
 ```typescript
 // src/components/book/src/bookConfiguration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration()
 export class BookConfiguration {}
@@ -429,7 +429,7 @@ This component is then introduced in the application (function).
 
 ```typescript
 // src/configuration.ts of application or function
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as book from 'midway-component-book';
 
 @Configuration({
@@ -443,7 +443,7 @@ At this point, our preparations have been completed and we will start to use the
 Class injection that directly introduces components.
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 import { BookService } from 'midway-component-book';
 
 @Provide()
@@ -511,11 +511,11 @@ First, create a custom component, which is the same as a common application. Bec
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
-  namespace: 'myKoa'
+  namespace: 'myKoa',
   imports: [koa]
 })
 export class MyKoaConfiguration {
@@ -529,11 +529,11 @@ Then, we can inject the framework exported by `@midwayjs/koa` for extension.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({
-  namespace: 'myKoa'
+  namespace: 'myKoa',
   imports: [koa]
 })
 export class MyKoaConfiguration {
@@ -575,7 +575,7 @@ After the component is released, such as `@midwayjs/my-koa`, the business can di
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 // Your own components
 import * as myKoa from '@midwayjs/my-koa';
 
@@ -604,7 +604,7 @@ The frameworks all follow the `IMidwayFramewok` interface definitions and the fo
 In order to simplify development, Midway provides a basic `BaseFramework` class for inheritance.
 
 ```typescript
-import { Framework } from '@midwayjs/decorator';
+import { Framework } from '@midwayjs/core';
 import { BaseFramework, IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 
 // Define Context
@@ -712,9 +712,9 @@ Finally, we just need to export the Framework as agreed.
 
 ```typescript
 export {
-  Application
-  Context
-  MidwayCustomHTTPFramework as Framework
+  Application,
+  Context,
+  MidwayCustomHTTPFramework as Framework,
   IMidwayCustomConfigurationOptions
 } from './custom';
 ```

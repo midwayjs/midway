@@ -20,7 +20,7 @@ Midway 提供了 `@midwayjs/cookies` 模块来操作 Cookie。
 示例如下：
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -70,7 +70,7 @@ export class HomeController {
 示例：
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -161,7 +161,7 @@ keys 默认是一个字符串，可以分隔配置多个 key。Cookie 在使用�
 默认的 `@midwayjs/koa` ，内置了 Session 组件，给我们提供了 `ctx.session` 来访问或者修改当前用户 Session 。
 
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -225,7 +225,7 @@ export default {
 虽然在 Session 的配置中有一项是 maxAge，但是它只能全局设置 Session 的有效期，我们经常可以在一些网站的登陆页上看到有 **记住我** 的选项框，勾选之后可以让登陆用户的 Session 有效期更长。这种针对特定用户的 Session 有效时间设置我们可以通过 `ctx.session.maxAge=` 来实现。
 
 ```typescript
-import { Inject, Controller, Post, Body, Provide, FORMAT } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Body, Provide, FORMAT } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { UserService } from './service/user.service';
 

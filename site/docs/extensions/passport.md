@@ -75,7 +75,7 @@ $ npm i passport-jwt --save
 
 import { join } from 'path';
 import { ILifeCycle } from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as passport from '@midwayjs/passport';
 
 @Configuration({
@@ -142,7 +142,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 ```typescript
 // src/middleware/local.middleware.ts
 
-import { Inject, Middleware } from '@midwayjs/decorator';
+import { Inject, Middleware } from '@midwayjs/core';
 import { PassportMiddleware, AuthenticateOptions } from '@midwayjs/passport';
 import { LocalStrategy } from './strategy/local.strategy.ts';
 
@@ -159,7 +159,7 @@ export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
 
 ```typescript
 // src/controller.ts
-import { Post, Inject, Controller } from '@midwayjs/decorator';
+import { Post, Inject, Controller } from '@midwayjs/core';
 import { LocalPassportMiddleware } from './middleware/local.middleware.ts';
 
 @Controller('/')
@@ -195,8 +195,7 @@ $ npm i @midwayjs/jwt passport-jwt --save
 
 import { join } from 'path';
 import * as jwt from '@midwayjs/jwt';
-import { ILifeCycle } from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import * as passport from '@midwayjs/passport';
 
 @Configuration({
@@ -228,7 +227,7 @@ export default {
 
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { Config } from '@midwayjs/decorator';
+import { Config } from '@midwayjs/core';
 
 @CustomStrategy()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -257,7 +256,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 ```typescript
 // src/middleware/jwt.middleware.ts
 
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { PassportMiddleware, AuthenticateOptions } from '@midwayjs/passport';
 import { JwtStrategy } from '../strategy/jwt.strategy';
 
@@ -270,7 +269,7 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
 ```
 
 ```typescript
-import { Post, Inject, Controller } from '@midwayjs/decorator';
+import { Post, Inject, Controller } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { JwtService } from '@midwayjs/jwt';
 import { JwtPassportMiddleware } from '../middleware/jwt.middleware';
@@ -345,7 +344,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 // src/middleware/github.middleware.ts
 
 import { AuthenticateOptions, PassportMiddleware } from '@midwayjs/passport';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { GithubStrategy } from './githubStrategy';
 
 @Middleware()
@@ -359,7 +358,7 @@ export class GithubPassportMiddleware extends PassportMiddleware(GithubStrategy)
 ```typescript
 // src/controller/auth.controller.ts
 
-import { Controller, Get, Inject } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/core';
 import { GithubPassportMiddleware } from '../../middleware/github';
 
 @Controller('/oauth')
@@ -412,7 +411,7 @@ export default {
 
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
 import { Repository } from 'typeorm';
-import { InjectEntityModel } from '@midwayjs/orm';
+import { InjectEntityModel } from '@midwayjs/typeorm';
 import { UserEntity } from './user';
 import * as bcrypt from 'bcrypt';
 

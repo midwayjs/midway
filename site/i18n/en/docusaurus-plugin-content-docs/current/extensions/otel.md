@@ -280,11 +280,9 @@ $SERVICE_NAME=nodejs-opentelemetry-express AUTHENTICATION=**** ENDPOINT=grpc://*
 
 :::
 
+## Framework capability support
 
-
-## Decorator support
-
-Midway adds a decorator to add link nodes to the needs of the user side.
+Note that the component only wraps the interface of otel, if you don’t need the following interface to use, you don’t need to install this component
 
 Install dependencies first.
 
@@ -292,21 +290,37 @@ Install dependencies first.
 $ npm i @midwayjs/otel@3 --save
 ```
 
-Enable the `tel` component.
+Enable the `otel` component.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as otel from '@midwayjs/otel';
 
 @Configuration({
-  imports: [
-    // ...
-    otel
-  ]
+   imports: [
+     //...
+     otel
+   ]
 })
 export class MainConfiguration {
 }
 ```
+
+
+
+### ctx.traceId
+
+The component provides `ctx.traceId` field.
+
+You can get it under supported components (egg/koa).
+
+```typescript
+ctx.traceId => *****
+```
+
+### Decorator support
+
+Midway adds a decorator to add link nodes to the needs of the user side.
 
 The Otel component provides an @Trace decorator that can be added to the method.
 

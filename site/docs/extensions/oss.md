@@ -53,7 +53,7 @@ $ npm i @midwayjs/oss@3 --save
 首先，引入 组件，在 `configuration.ts` 中导入：
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as oss from '@midwayjs/oss';
 import { join } from 'path'
 

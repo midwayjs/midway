@@ -388,7 +388,7 @@ export default {
 ### RegisterObject in the component no longer adds namespace
 
 
-During component development, the namespace prefix is ​​no longer added.
+During component development, the namespace prefix is no longer added.
 
 
 old, component entry
@@ -445,7 +445,7 @@ export class CustomKoaFramework extends BaseFramework {
 ```
 new
 ```typescript
-import { Framework } from '@midwayjs/decorator';
+import { Framework } from '@midwayjs/core';
 
 @Framework()
 export class CustomKoaFramework extends BaseFramework {
@@ -460,7 +460,7 @@ export class CustomKoaFramework extends BaseFramework {
 You can use lifecycles in configuration, same as components. The `run` method will be called and executed explicitly during the newly added `onServerReady` lifecycle.
 
 ```typescript
-import { Configuration,Inject } from '@midwayjs/decorator';
+import { Configuration,Inject } from '@midwayjs/core';
 import { MidwayKoaFramework } from './framework';
 
 @Configuration({
@@ -486,7 +486,7 @@ export class KoaConfiguration {
 
 
 ```typescript
-import { Framework } from '@midwayjs/decorator';
+import { Framework } from '@midwayjs/core';
 
 @Framework()
 export class CustomKoaFramework extends BaseFramework {
@@ -516,7 +516,7 @@ export class CustomKoaFramework extends BaseFramework {
 This can also be judged when used outside.
 
 ```typescript
-import { Configuration,Inject } from '@midwayjs/decorator';
+import { Configuration,Inject } from '@midwayjs/core';
 import { MidwayKoaFramework } from './framework';
 
 @Configuration({

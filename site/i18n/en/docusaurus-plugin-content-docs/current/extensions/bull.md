@@ -59,7 +59,7 @@ Or reinstall it after adding the following dependencies to ``package.json``.
 Configure the bull component into the code.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as bull from '@midwayjs/bull';
 
 @Configuration({
@@ -163,7 +163,7 @@ By getting the corresponding queue, we can easily execute the task.
 For example, we can execute it after the project is started.
 
 ```typescript
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import * as bull from '@midwayjs/bull';
 
 @Configuration({
@@ -345,7 +345,7 @@ In addition to manual execution, we can also quickly configure repeated executio
 
 ```typescript
 import { Processor, IProcessor } from '@midwayjs/bull';
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 
 @Processor('test', {
   repeat: {
@@ -392,10 +392,10 @@ Common expressions.
 
 You can use the [online tool](https://cron.qqe2.com/) to confirm the time of the next execution.
 
-Midway provides some common expressions on the framework side in `@midwayjs/decorator` for your use.
+Midway provides some common expressions on the framework side in `@midwayjs/core` for your use.
 
 ```typescript
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 
 // cron expressions executed per minute
 FORMAT.CRONTAB.EVERY_MINUTE
@@ -455,7 +455,7 @@ It is also possible to clean up all tasks manually at startup.
 
 ```typescript
 // src/configuration.ts
-import { Configuration, App, Inject } from '@midwayjs/decorator';
+import { Configuration, App, Inject } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 import * as bull from '@midwayjs/bull';
@@ -498,7 +498,7 @@ This can also be configured via parameters.
 For example, in the decorator configuration.
 
 ```typescript
-import { FORMAT } from '@midwayjs/decorator';
+import { FORMAT } from '@midwayjs/core';
 import { IProcessor, Processor } from '@midwayjs/bull';
 
 @Processor('user', {
@@ -594,7 +594,7 @@ Queues are inexpensive, each Job is bound to a queue, and in some cases we can a
 In addition to simply defining a queue using `@Processor`, we can also create it using the API.
 
 ```typescript
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/core';
 import * as bull from '@midwayjs/bull';
 
 @Configuration({
@@ -650,7 +650,7 @@ You can also get it through a decorator.
 
 ```typescript
 import { InjectQueue, BullQueue } from '@midwayjs/bull';
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
@@ -755,7 +755,7 @@ Or reinstall it after adding the following dependencies to ``package.json``.
 Configure the bull-board component into the code.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as bull from '@midwayjs/bull';
 import * as bullBoard from '@midwayjs/bull-board';
 

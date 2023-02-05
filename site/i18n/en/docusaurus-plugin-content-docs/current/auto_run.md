@@ -48,7 +48,7 @@ If the code is not coupled to the main process and belongs to independent logic,
 For example:
 
 ```typescript
-import { Autoload, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Autoload, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Autoload()
 @Scope(ScopeEnum.Singleton)

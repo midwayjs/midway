@@ -44,7 +44,7 @@ Then we can configure this file (directory) in `src/configuration.ts`, and the f
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -70,7 +70,7 @@ The configuration files of each environment **must be explicitly specified and a
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 import * as DefaultConfig from './config/config.default';
@@ -115,7 +115,7 @@ The rules for the configuration file are:
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -136,7 +136,7 @@ When you manually specify a batch of files, an error will be reported if the fil
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -168,7 +168,7 @@ For example, the directory structure is as follows (note the `customConfig.defau
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -309,7 +309,7 @@ By default, the `**/config.defaut.ts` file and the `**/config.{environment}.ts` 
 For example, the following code will find the `config.default.*` and `config.local.*` files in the `local` environment. If the file is in other environments, only `config.default.*` and `config.{current environment}.*` will be found. If the file does not exist, it will not be loaded or an error will be reported.
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -364,7 +364,7 @@ By default, it is obtained from the configuration object based on the string par
 
 
 ```typescript
-import { Config } from '@midwayjs/decorator';
+import { Config } from '@midwayjs/core';
 
 export class IndexHandler {
 
@@ -401,7 +401,7 @@ For example, the data source is:
 ```
 You can write complex fetch expressions to fetch values, as shown in the following example.
 ```typescript
-import { Config } from '@midwayjs/decorator';
+import { Config } from '@midwayjs/core';
 
 export class IndexHandler {
 
@@ -421,7 +421,7 @@ export class IndexHandler {
 
 You can also use the `ALL` attribute to obtain the entire configured object.
 ```typescript
-import { Config, ALL } from '@midwayjs/decorator';
+import { Config, ALL } from '@midwayjs/core';
 
 export class IndexHandler {
 
@@ -449,10 +449,9 @@ midway adds an asynchronous configuration loading lifecycle that can be executed
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
+import { Configuration, IMidwayContainer, IMidwayContainer } from '@midwayjs/core';
 import { join } from 'path';
-Import {RemoteConfigService } from '../service/remote'; // Custom Get Remote Configuration Service
+import { RemoteConfigService } from '../service/remote'; // Custom Get Remote Configuration Service
 
 @Configuration({
   importConfigs: [
@@ -545,7 +544,7 @@ OSS_ACCESSKEY = 54321
 ```
 We can initialize in the portal, such as `bootstrap.js` or `configuration`.
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as dotenv from 'dotenv';
 
 // load .env file in process.cwd

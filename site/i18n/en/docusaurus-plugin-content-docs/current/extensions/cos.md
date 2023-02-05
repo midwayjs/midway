@@ -39,7 +39,7 @@ Or reinstall the following dependencies in `package.json`.
 First, introduce components and import them in `configuration.ts`:
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as cos from '@midwayjs/cos';
 import { join } from 'path'
 
@@ -105,7 +105,7 @@ For more parameters, see the [cos-nodejs-sdk-v5](https://github.com/tencentyun/c
 
 We can inject it into any code.
 ```typescript
-import { Provide, Controller, Inject, Get } from '@midwayjs/decorator';
+import { Provide, Controller, Inject, Get } from '@midwayjs/core';
 import { COSService } from '@midwayjs/cos';
 
 @Provide()

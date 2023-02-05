@@ -51,7 +51,7 @@ Or reinstall the following dependencies in `package.json`.
 Add components to ```configuration.ts```.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as swagger from '@midwayjs/swagger';
 
 @Configuration({
@@ -68,7 +68,7 @@ export class MainConfiguration {
 You can configure the enabled environment, for example, the following code refers to "only enabled in local environment".
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as swagger from '@midwayjs/swagger';
 
 @Configuration({

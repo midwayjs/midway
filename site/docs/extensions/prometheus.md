@@ -40,7 +40,7 @@ $ npm install @midwayjs/prometheus@3 --save
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as prometheus from '@midwayjs/prometheus'; // 导入模块
 import { join } from 'path';
 
@@ -269,7 +269,7 @@ $ npm install @midwayjs/prometheus-socket-io@3 --save
 使用方法：
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 import * as prometheus from '@midwayjs/prometheus';
 import * as prometheusSocketIo from '@midwayjs/prometheus-socket-io';

@@ -41,7 +41,7 @@ v3 的聚合部署方案我们暂未准备好。
 如下代码，我们暴露了三个路由，在聚合部署模式下，会只部署成一个 HTTP 函数：
 
 ```typescript
-import { Inject, Provide, Controller, Get, Post } from '@midwayjs/decorator';
+import { Inject, Provide, Controller, Get, Post } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()

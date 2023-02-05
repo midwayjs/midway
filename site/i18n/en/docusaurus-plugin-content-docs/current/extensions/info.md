@@ -37,7 +37,7 @@ Or reinstall the following dependencies in `package.json`.
 Configure the info component into the code.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as info from '@midwayjs/info';
 
 @Configuration({
@@ -54,7 +54,7 @@ export class MainConfiguration {
 In some cases, in order not to let the application information out, we specify that it will take effect in a special environment.
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as info from '@midwayjs/info';
 
@@ -129,7 +129,7 @@ The info component provides `InfoService` by default for use in non-Http or cust
 For example:
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { InfoService } from '@midwayjs/info';
 
 @Provide()

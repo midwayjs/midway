@@ -3,7 +3,7 @@
 Due to static type analysis of TS, we do not recommend dynamically mounting certain attributes. Dynamic mounting will make it very difficult to process TS types. In some special scenarios, if you need to extend the context ctx attribute, such as the middleware in the Web scenario, we can add some methods or attributes.
 
 ```typescript
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Middleware()

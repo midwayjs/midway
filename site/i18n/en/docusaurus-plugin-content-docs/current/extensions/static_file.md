@@ -41,7 +41,7 @@ Or reinstall the following dependencies in `package.json`.
 First, introduce components and import them in `configuration.ts`:
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as staticFile from '@midwayjs/static-file';
 import { join } from 'path'
@@ -157,10 +157,10 @@ Function routes need to be explicitly configured to take effect. Generally, a wi
 
 ```typescript
 import {
-  Provide
-  ServerlessTrigger
+  Provide,
+  ServerlessTrigger,
   ServerlessTriggerType
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()

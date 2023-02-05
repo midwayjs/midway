@@ -46,7 +46,7 @@ $ npm i @midwayjs/view-ejs@3 --save
 
 首先，引入组件，在 `configuration.ts` 中导入：
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as view from '@midwayjs/view-ejs';
 import { join } from 'path'
 
@@ -108,7 +108,7 @@ hello <%= data %>
 
 在 Controller 中渲染。
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -252,7 +252,7 @@ $ npm i @midwayjs/view-nunjucks@3 --save
 2、引入组件，在 `configuration.ts` 中导入：
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as view from '@midwayjs/view-nunjucks';
 import { join } from 'path'
 
@@ -292,7 +292,7 @@ hi, {{ user }}
 
 在 Controller 中渲染。
 ```typescript
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/')
@@ -312,7 +312,7 @@ export class HomeController {
 
 如果有自定义 filter 的需求，可以在入口处增加，比如下面增加了一个名为 `hello` 的 filter。
 ```typescript
-import { App, Configuration, Inject } from '@midwayjs/decorator';
+import { App, Configuration, Inject } from '@midwayjs/core';
 import * as view from '@midwayjs/view-nunjucks';
 import { join } from 'path'
 
@@ -360,7 +360,7 @@ await ctx.render('test.nj', { name: 'midway' });
 
 ```typescript
 // lib/view.ts
-import { Provide, Config } from '@midwayjs/decorator';
+import { Provide, Config } from '@midwayjs/core';
 import { IViewEngine } from '@midwayjs/view';
 
 @Provide()
@@ -407,7 +407,7 @@ export class MyView implements IViewEngine {
 
 ```typescript
 // src/configuration.ts
-import { Configuration, Inject, Provide } from '@midwayjs/decorator';
+import { Configuration, Inject, Provide } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as view from '@midwayjs/view';
 import { MyView } from './lib/my';
@@ -433,7 +433,7 @@ export class AutoConfiguration {
 ## 注意事项
 
 
-如需在 egg(@midwayjs/web) 场景下使用，请在 `plugint.ts` 中关闭 view 和其相关插件。
+如需在 egg(@midwayjs/web) 场景下使用，请在 `plugin.ts` 中关闭 view 和其相关插件。
 
 
 ```typescript

@@ -50,7 +50,7 @@ $ npm init midway -- --type=koa-v3 my_project
 ## 开启组件
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 
@@ -129,7 +129,7 @@ export default {
 比如，我们在 `configuration.ts` 中做扩展提供了一个 `render()` 方法。
 
 ```typescript
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 
 @Configuration({

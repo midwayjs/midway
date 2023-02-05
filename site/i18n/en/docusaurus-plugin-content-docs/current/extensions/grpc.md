@@ -73,7 +73,7 @@ Whether it is providing a service or invoking a service, you need to open the co
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as grpc from '@midwayjs/grpc';
 
 @Configuration({
@@ -92,7 +92,7 @@ It can also be attached to other main frameworks, such as `@midwayjs/Koa`.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as grpc from '@midwayjs/grpc';
 
@@ -309,10 +309,10 @@ Whenever The proto file is modified, the corresponding service definition needs 
 In the `src/provider` directory, we create `greeter.ts` as follows
 ```typescript
 import {
-  MSProviderType
-  Provider
+  MSProviderType,
+  Provider,
   GrpcMethod
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld } from '../domain/helloworld';
 
 /**
@@ -517,7 +517,7 @@ For example:
 import {
   Provide,
   Inject,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld, hero } from '../interface';
 import { Clients } from '@midwayjs/grpc';
 
@@ -537,7 +537,7 @@ We get the client instance of the other service through the `clients` and call i
 import {
   Provide,
   Inject,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld, hero } from '../interface';
 import { Clients } from '@midwayjs/grpc';
 
@@ -577,7 +577,7 @@ import {
   Provider,
   Inject,
   Init,
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld, hero } from '../interface';
 import { Clients } from '@midwayjs/grpc';
 
@@ -736,7 +736,7 @@ The available types are:
 
 The server example is as follows:
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/core';
 import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
 
@@ -819,7 +819,7 @@ The client calls multiple times, the server receives data multiple times, and re
 
 The server example is as follows:
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/core';
 import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
 
@@ -880,7 +880,7 @@ The client can call multiple times, and the server can also receive multiple dat
 
 The server example is as follows:
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/core';
 import { Context, Metadata } from '@midwayjs/grpc';
 import { math } from '../interface';
 
@@ -1028,10 +1028,10 @@ The metadata of gRPC is equivalent to the HTTP context.
 The server returns metadata through the `ctx.sendMetadata` method, and can also obtain the metadata passed by the client through `ctx.metadata`.
 ```typescript
 import {
-  MSProviderType
-  Provider
+  MSProviderType,
+  Provider,
   GrpcMethod
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { helloworld } from '../domain/helloworld';
 import { Context, Metadata } from '@midwayjs/grpc';
 

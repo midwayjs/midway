@@ -68,7 +68,7 @@ The Express version we are using is `v4`.
 ## Open the component
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 
@@ -92,7 +92,7 @@ export class MainConfiguration {
 
 The writing of the entire request controller is similar to that of Midway adapts to other frameworks. In order to be consistent with the frame writing of other scenes, Midway maps the `req` of the Express to a `ctx` object when requesting.
 ```typescript
-import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide, Query } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/express';
 
 @Controller('/')
@@ -110,7 +110,7 @@ export class HomeController {
 ```
 You can also add `req` and `res`.
 ```typescript
-import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Get, Provide, Query } from '@midwayjs/core';
 import { Context, Response, NextFunction } from '@midwayjs/express';
 
 @Controller('/')
@@ -141,7 +141,7 @@ Express middleware is written in a special way, and its parameters are different
 
 
 ```typescript
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/core';
 import { Context, Response, NextFunction } from '@midwayjs/express';
 
 @Middleware()
@@ -175,7 +175,7 @@ We can apply the middleware written above to a single Controller or to a single 
 
 
 ```typescript
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Provide } from '@midwayjs/core';
 
 @Controller('/', { middleware: [ ReportMiddleware ]}) // controller-level middleware
 export class HomeController {
@@ -194,8 +194,7 @@ export class HomeController {
 Directly use the `app.generateMiddleware` method provided by Midway to load global middleware at the entrance.
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { ReportMiddleware } from './middleware/report.middleware.ts'
 
@@ -217,8 +216,7 @@ export class ContainerLifeCycle implements ILifeCycle {
 In addition to loading middleware in the form of Class, it also supports loading traditional Express middleware.
 ```typescript
 // src/configuration.ts
-import { Configuration, App } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, App, ILifeCycle } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 
@@ -249,7 +247,7 @@ For example, we can define filters returned globally.
 
 ```typescript
 // src/filter/globalMatch.filter.ts
-import { Match } from '@midwayjs/decorator';
+import { Match } from '@midwayjs/core';
 import { Context, Response } from '@midwayjs/express';
 
 @Match()
@@ -270,7 +268,7 @@ You can also match a specific route for return.
 
 ```typescript
 // src/filter/api.filter.ts
-import { Match } from '@midwayjs/decorator';
+import { Match } from '@midwayjs/core';
 import { Context, Response } from '@midwayjs/express';
 
 @Match((ctx: Context, res: Response) => {
@@ -292,14 +290,14 @@ export class APIMatchFilter {
 It needs to be applied to app.
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 import { APIMatchFilter } from './filter/api.filter';
 import { GlobalMatchFilter } from 'filter/globalMatch.filter';
 
 @Configuration({
-  imports: [express]
+  imports: [express],
   importConfigs: [join(__dirname, './config')]
 })
 export class ContainerLifeCycle {
@@ -322,7 +320,7 @@ Note that such filters are matched and executed in the order in which they are a
 Same as ordinary items, using error filters, but the parameters are slightly different.
 
 ```typescript
-import { Catch } from '@midwayjs/decorator';
+import { Catch } from '@midwayjs/core';
 import { Context, Response } from '@midwayjs/express';
 
 @Catch()
@@ -341,7 +339,7 @@ export class GlobalError {
 It needs to be applied to app.
 
 ```typescript
-import { Configuration, App } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import { join } from 'path';
 import { GlobalError } from './filter/global.filter';

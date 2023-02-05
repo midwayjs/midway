@@ -32,7 +32,7 @@ Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量�
 
 
 ```typescript
-import { Provide, Inject, Get } from '@midwayjs/decorator';
+import { Provide, Inject, Get } from '@midwayjs/core';
 
 // user.controller.ts
 @Provide()	// 实际可省略
@@ -153,7 +153,7 @@ await userController.handler();  // output 'world'
 
 ```typescript
 // service
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -239,7 +239,7 @@ class UserService {
 所以在请求作用域中，我们可以通过 `@Inject()` 来注入当前的 ctx 对象。
 
 ```typescript
-import { Controller, Provide, Inject } from '@midwayjs/decorator';
+import { Controller, Provide, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Provide()	// 实际可省略
@@ -396,7 +396,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 并在其中做好 `ctx` 的空对象判断。
 
 ```typescript
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Request, { allowDowngrade: true })
@@ -416,8 +416,7 @@ export class UserService {
 当然，如果只是误写，那可以使用动态的获取方式，使得作用域统一。
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -443,7 +442,7 @@ Midway 支持多种方式的注入。
 导出一个 Class，注入的类型使用 Class，这是最简单的注入方式，大部分的业务和组件都是使用这样的方式。
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 
 @Provide()               // <------ 暴露一个 Class
 export class B {
@@ -474,7 +473,7 @@ Midway 会自动使用 B 作为 b 这个属性的类型，在容器中实例化�
 如果要获取这个 uuid，可以使用下面的 API。
 
 ```typescript
-import { getProviderUUId } from '@midwayjs/decorator';
+import { getProviderUUId } from '@midwayjs/core';
 
 const uuid = getProviderUUId(B);
 // ...
@@ -485,7 +484,7 @@ const uuid = getProviderUUId(B);
 ### 基于固定名字的注入
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 
 @Provide('bbbb')        // <------ 暴露一个 Class
 export class B {
@@ -578,8 +577,7 @@ export class PaymentService {
 ```typescript
 // src/configuration.ts
 import * as lodash from 'lodash';
-import { Configuration } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class AutoConfiguration {
@@ -661,7 +659,7 @@ export class BaseService {
 在新版本中，Midway 提供了一个 @ApplicationContext() 的装饰器，用来获取依赖注入容器。
 
 ```typescript
-import { ApplicationContext } from '@midwayjs/decorator';
+import { ApplicationContext, IMidwayContainer } from '@midwayjs/core';
 import { IMidwayContainer } from '@midwayjs/core';
 
 @Provide()
@@ -705,8 +703,7 @@ const container = app.getApplicationContext();
 配合 `@App` 装饰器，我们可以方便的在任意地方拿到当前运行的 app 实例。
 
 ```typescript
-import { App } from '@midwayjs/decorator';
-import { IMidwayApplication } from '@midwayjs/core';
+import { App, IMidwayApplication } from '@midwayjs/core';
 
 @Provide()
 export class BootApp {
@@ -769,8 +766,7 @@ export class ReportMiddleware {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class AutoConfiguration {
@@ -804,9 +800,8 @@ const userSerivce = await ctx.requestContext.getAsync(UserService);
 我们可以在任意能获取依赖注入容器的地方使用，比如中间件中。
 
 ```typescript
-import { Middleware, ApplicationContext } from '@midwayjs/decorator';
+import { Middleware, ApplicationContext, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
-import { IMiddleware } from '@midwayjs/core';
 import { UserService } from './service/user.service';
 
 @Middleware()
@@ -858,7 +853,7 @@ export class ReportMiddleware implements IMiddleware<Context, Response, NextFunc
 @Provide()
 class UserService {
   constructor(private readonly type) {}
-  
+
   getUser() {
     // this.type => student
   }
@@ -1063,7 +1058,7 @@ Midway 在启动过程中会自动扫描整个项目目录，自动处理这个�
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration, Logger } from '@midwayjs/decorator';
+import { App, Configuration, Logger } from '@midwayjs/core';
 // ...
 
 @Configuration({

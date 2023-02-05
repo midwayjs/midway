@@ -505,7 +505,7 @@ Midway v2/v3 均支持配置以 "对象模式" 加载。
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 import * as DefaultConfig from './config/config.default';

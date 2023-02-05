@@ -15,8 +15,7 @@ Midway's built-in application manager can be used to get all the Application.
 It can be obtained by injection, such as adding the same middleware to different applications.
 
 ```typescript
-import { MidwayApplicationManager } from '@midwayjs/core'
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { MidwayApplicationManager, Configuration, Inject } from '@midwayjs/core';
 import { CustomMiddleware } from './middleware/custom.middleware';
 
 @Configuration({
@@ -52,8 +51,7 @@ Midway's built-in information service provides basic project data.
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayInformationService } from '@midwayjs/core';
+import { MidwayInformationService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -87,8 +85,7 @@ Midway's built-in environmental services provide environmental settings and judg
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayEnvironmentService } from '@midwayjs/core';
+import { MidwayEnvironmentService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -120,8 +117,7 @@ Midway's built-in multi-environment configuration service provides the loading a
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayConfigService } from '@midwayjs/core';
+import { MidwayConfigService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -153,8 +149,7 @@ The built-in log service of Midway provides API operations such as log creation 
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayLoggerService } from '@midwayjs/core';
+import { MidwayLoggerService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -185,8 +180,7 @@ Midway's built-in custom framework service, combined with the custom `@Framework
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayFrameworkService } from '@midwayjs/core';
+import { MidwayFrameworkService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -220,8 +214,7 @@ Midway's built-in custom decorator service is used to implement frame-level cust
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayMiddlewareService } from '@midwayjs/core';
+import { MidwayMiddlewareService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -251,8 +244,7 @@ Midway's built-in custom decorator service is used to implement custom decorator
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayDecoratorService } from '@midwayjs/core';
+import { MidwayDecoratorService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -286,8 +278,7 @@ Midway's built-in interceptor service is used to load `@Aspect` related capabili
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayAspectService } from '@midwayjs/core';
+import { MidwayAspectService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -326,8 +317,7 @@ Midway's built-in data simulation service is used to simulate data during develo
 It can be obtained by injection.
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Inject, Controller, Get } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -373,8 +363,7 @@ We can also simulate in code.
 
 ```typescript
 
-import { Provide, Inject } from '@middwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Provide, Inject } from '@midwayjs/core';
 
 @Provide()
 class TestMockService {
@@ -402,8 +391,7 @@ class TestMockService {
 Use `mockProperty` methods to simulate the properties of objects.
 
 ```typescript
-import { Provide, Inject } from '@middwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Provide, Inject } from '@midwayjs/core';
 
 @Provide()
 class TestMockService {
@@ -435,8 +423,7 @@ Since Midway's Context is associated with app, app instances need to be passed i
 `mockContext` methods are used to simulate the context.
 
 ```typescript
-import { Configuration, App } from '@middwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
 export class AutoConfiguration {
@@ -458,8 +445,7 @@ export class AutoConfiguration {
 If your data is complex or logical, you can also use the callback form.
 
 ```typescript
-import { Configuration, App } from '@middwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
 export class AutoConfiguration {
@@ -491,8 +477,7 @@ Midway's built-in routing table service is used to apply routing and function cr
 It can be obtained by injection.
 
 ```typescript
-import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { MidwayWebRouterService, Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -535,8 +520,7 @@ Midway's built-in function information service inherits and `MidwayWebRouterServ
 It can be obtained by injection.
 
 ```typescript
-import { MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { MidwayServerlessFunctionService, Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -549,7 +533,7 @@ export class MainConfiguration {
     this.serverlessFunctionService.addServerlessFunction(async (ctx, event) => {
       return 'hello world';
     }, {
-      type: ServerlessTriggerType.HTTP
+      type: ServerlessTriggerType.HTTP,
       metadata: {
         method: 'get',
         path: '/api/hello'

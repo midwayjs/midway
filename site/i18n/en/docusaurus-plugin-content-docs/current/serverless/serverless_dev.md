@@ -46,7 +46,7 @@ Let's first look at the function file. The traditional function is a `function`.
 With the `@ServerlessTrigger` decorator, we label the method as an HTTP interface and mark the `path` and `method` attributes.
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -70,7 +70,7 @@ In addition to triggers, we can also use the `@ServerlessFunction` decorator to 
 In this way, when we use multiple triggers on a function, we can set it like this.
 
 ```typescript
-import { Provide, Inject, ServerlessFunction, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessFunction, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()

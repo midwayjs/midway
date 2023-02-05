@@ -15,7 +15,7 @@ The following are common methods for using and testing function triggers.
 API Gateway is similar to HTTP functions in Tencent Cloud Function System, through which we publish functions as HTTP services.
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -46,7 +46,7 @@ Warm reminder, please close the trigger in time after testing the function and e
 :::
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()
@@ -118,11 +118,11 @@ COS is a service used by Tencent Cloud to store some resource files.
 
 ```typescript
 import {
-  Provide
-  Inject
-  ServerlessTrigger
+  Provide,
+  Inject,
+  ServerlessTrigger,
   ServerlessTriggerType
-} from '@midwayjs/decorator';
+} from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()
@@ -132,7 +132,7 @@ export class HelloTencentService {
 
   @ServerlessTrigger(ServerlessTriggerType. OS, {
     bucket: 'cli-appid.cos.ap-beijing.myqcloud.com',
-    events: 'cos:ObjectCreated :*,
+    events: 'cos:ObjectCreated :*',
     filter: {
       prefix: 'filterdir /',
       suffix: '.jpg',
@@ -225,7 +225,7 @@ The structure returned by COS messages is as follows, which is described in the 
 CMQ(mq) triggers subscribe to Tencent Cloud's message queue service.
 
 ```typescript
-import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context, SCF } from '@midwayjs/faas';
 
 @Provide()

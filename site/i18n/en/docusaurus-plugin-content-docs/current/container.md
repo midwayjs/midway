@@ -32,7 +32,7 @@ For the convenience of explanation, we merged it together, and the content is ro
 
 
 ```typescript
-import { Provide, Inject, Get } from '@midwayjs/decorator';
+import { Provide, Inject, Get } from '@midwayjs/core';
 
 // user.controller.ts
 @Provide() // Actually can be omitted
@@ -153,7 +153,7 @@ If we need to define one object as the other two scopes, additional configuratio
 
 ```typescript
 // service
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -237,7 +237,7 @@ The default is the request scope for the purpose of associating with the request
 Therefore, in the request scope, we can use `@Inject()` to inject the current ctx object.
 
 ```typescript
-import { Controller, Provide, Inject } from '@midwayjs/decorator';
+import { Controller, Provide, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Provide() // actually can be omitted
@@ -394,7 +394,7 @@ If the user understands the risks involved and explicitly needs to call the requ
 In the `ctx` field, determine the empty object.
 
 ```typescript
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Request, { allowDowngrade: true })
@@ -414,8 +414,7 @@ export class UserService {
 Of course, if it is just a mistake, then you can use dynamic acquisition methods to make the scope uniform.
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -441,7 +440,7 @@ Midway supports injection in many ways.
 Export a Class, the type of injection uses Class, which is the simplest way to inject, and most businesses and components use this way.
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 
 @Provide() // <------ Expose a Class
 export class B {
@@ -472,7 +471,7 @@ Default:
 If you want to get this uuid, you can use the following API.
 
 ```typescript
-import { getProviderUUId } from '@midwayjs/decorator';
+import { getProviderUUId } from '@midwayjs/core';
 
 const uuid = getProviderUUId(B);
 // ...
@@ -483,7 +482,7 @@ const uuid = getProviderUUId(B);
 ### Injection Based on fixed name
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/core';
 
 @Provide ('BBB') // <------ Expose a Class
 export class B {
@@ -576,8 +575,7 @@ A **dependency injection identifier** is required to facilitate injection in oth
 ```typescript
 // src/configuration.ts
 import * as lodash from 'lodash';
-import { Configuration } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class AutoConfiguration {
@@ -659,8 +657,7 @@ Simply put, in any scenario where you need to **dynamically obtain services thro
 In the new version, Midway provides a @ApplicationContext() decorator to get the dependency injection container.
 
 ```typescript
-import { ApplicationContext } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
+import { ApplicationContext, IMidwayContainer } from '@midwayjs/core';
 
 @Provide()
 export class BootApp {
@@ -703,8 +700,7 @@ const container = app.getApplicationContext();
 With the `@App` decorator, you can easily access the currently running app instance anywhere.
 
 ```typescript
-import { App } from '@midwayjs/decorator';
-import { IMidwayApplication } from '@midwayjs/core';
+import { App, IMidwayApplication } from '@midwayjs/core';
 
 @Provide()
 export class BootApp {
@@ -767,8 +763,7 @@ In the life cycle of the code entry `configuration` file, we will also pass addi
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { IMidwayContainer } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class AutoConfiguration {
@@ -801,9 +796,8 @@ const userSerivce = await ctx.requestContext.getAsync(UserService);
 We can use it wherever we can get dependent injection containers, such as in middleware.
 
 ```typescript
-import { Middleware, ApplicationContext } from '@midwayjs/decorator';
+import { Middleware, ApplicationContext, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
-import { IMiddleware } from '@midwayjs/core';
 import { UserService } from './service/user.service';
 
 @Middleware()
@@ -1060,7 +1054,7 @@ An example is as follows:
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration, Logger } from '@midwayjs/decorator';
+import { App, Configuration, Logger } from '@midwayjs/core';
 // ...
 
 @Configuration({

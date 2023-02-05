@@ -53,8 +53,7 @@ Midway 内置的信息服务，提供基础的项目数据。
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayInformationService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayInformationService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -88,8 +87,7 @@ Midway 内置的环境服务，提供环境设置和判断。
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayEnvironmentService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayEnvironmentService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -121,8 +119,7 @@ Midway 内置的多环境配置服务，提供配置的加载，获取，它也�
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayConfigService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayConfigService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -154,8 +151,7 @@ Midway 内置的日志服务，提供日志创建，获取等 API，它也是 `@
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayLoggerService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayLoggerService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -186,8 +182,7 @@ Midway 内置的自定义框架服务，配合组件中自定义的 `@Framework`
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayFrameworkService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayFrameworkService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -221,8 +216,7 @@ Midway 内置的自定义装饰器服务，用于实现框架层面的自定义�
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayMiddlewareService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayMiddlewareService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -252,8 +246,7 @@ Midway 内置的自定义装饰器服务，用于实现框架层面的自定义�
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayDecoratorService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayDecoratorService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -287,8 +280,7 @@ Midway 内置的拦截器服务，用于加载 `@Aspect` 相关的能力，自�
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayAspectService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayAspectService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -327,8 +319,7 @@ Midway 内置的数据模拟服务，用于在开发和单测时模拟数据。
 可以通过注入获取。
 
 ```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { Inject, Controller, Get, MidwayMockService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -374,8 +365,7 @@ export class UserService {
 
 ```typescript
 
-import { Provide, Inject } from '@middwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Provide, Inject } from '@midwayjs/core';
 
 @Provide()
 class TestMockService {
@@ -403,8 +393,7 @@ class TestMockService {
 使用 `mockProperty` 方法来模拟对象的属性。
 
 ```typescript
-import { Provide, Inject } from '@middwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Provide, Inject } from '@midwayjs/core';
 
 @Provide()
 class TestMockService {
@@ -436,8 +425,7 @@ class TestMockService {
 使用 `mockContext` 方法来模拟上下文。
 
 ```typescript
-import { Configuration, App } from '@middwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
 export class AutoConfiguration {
@@ -459,8 +447,7 @@ export class AutoConfiguration {
 如果你的数据比较复杂，或者带有逻辑，也可以使用回调形式。
 
 ```typescript
-import { Configuration, App } from '@middwayjs/decorator';
-import { MidwayMockService } from '@midwayjs/core';
+import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
 export class AutoConfiguration {

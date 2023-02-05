@@ -40,8 +40,8 @@ In `configuration.ts`, introduce this component:
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-Import * as prometheus from '@midwayjs/prometheus'; // Import module
+import { Configuration } from '@midwayjs/core';
+import * as prometheus from '@midwayjs/prometheus'; // Import module
 import { join } from 'path';
 
 @Configuration({
@@ -269,7 +269,7 @@ $ npm install @midwayjs/prometheus-socket-io@3 --save
 Usage:
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 import * as prometheus from '@midwayjs/prometheus';
 import * as prometheusSocketIo from '@midwayjs/prometheus-socket-io';

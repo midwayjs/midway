@@ -89,8 +89,7 @@ npm install mongodb --save
 在 `src/configuration.ts` 文件中启用组件。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { Configuration, ILifeCycle } from '@midwayjs/core';
 import { join } from 'path';
 import * as sequelize from '@midwayjs/sequelize';
 
@@ -417,7 +416,7 @@ export class User extends Model {
 在需要调用的地方，使用实体模型来操作。
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { Person } from '../entity/person';
 
 @Provide()
@@ -432,7 +431,7 @@ export class PersonService {
 ### 查找和更新
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/core';
 import { Person } from '../entity/person';
 
 @Provide()
@@ -494,7 +493,7 @@ export default {
 基本 API 和静态操作相同，Midway 对其进行了一些简单包裹，使用 `InjectRepository` 装饰器可以在服务中注入 `Repository`。
 
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
@@ -549,7 +548,7 @@ export class HomeController {
 在 Repository 模式下，我们可以在 `InjectRepository` 参数中指定特定的数据源。
 
 ```typescript
-import { Controller } from '@midwayjs/decorator';
+import { Controller } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
@@ -618,7 +617,7 @@ export default {
 数据源即创建出的 sequelize 对象，我们可以通过注入内置的数据源管理器来获取。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { SequelizeDataSourceManager } from '@midwayjs/sequelize';
 
 @Configuration({
@@ -637,7 +636,7 @@ export class MainConfiguration {
 从 v3.8.0 开始，也可以通过装饰器注入。
 
 ```typescript
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import { InjectDataSource } from '@midwayjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 
@@ -645,11 +644,11 @@ import { Sequelize } from 'sequelize-typescript';
   // ...
 })
 export class MainConfiguration {
-  
+
   // 注入默认数据源
   @InjectDataSource()
   defaultDataSource: Sequelize;
-  
+
   // 注入自定义数据源
   @InjectDataSource('default1')
   customDataSource: Sequelize;

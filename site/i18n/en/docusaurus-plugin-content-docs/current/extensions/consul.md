@@ -102,9 +102,9 @@ export default {
       // This is the address of the current midway application.
       address: '127.0.0.1',
       // The port of the current midway application
-      port: 7001
+      port: 7001,
       // Use for lane isolation, etc.
-      tags: ['tag1', 'tag2']			
+      tags: ['tag1', 'tag2'],
       name: 'my-midway-project'
       // others consul service definition
     }
@@ -139,7 +139,7 @@ For example, as client A, we need to call the interface of service B. Then we fi
 
 Here, for the convenience of understanding, we simulate the successful service that has just been registered:
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Provide } from '@midwayjs/core';
 import { BalancerService } from '@midwayjs/consul'
 
 @Provide()
@@ -199,7 +199,7 @@ At this time, we only need to connect to service B through Address and ServicePo
 
 If you need to query for unhealthy ones, the second parameter of the `select` method is passed the value of false:
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Provide } from '@midwayjs/core';
 import { BalancerService } from '@midwayjs/consul'
 
 @Provide()
@@ -231,7 +231,7 @@ export class HomeController {
 
 At the same time, consul can also be used as a service configuration place, as follows:
 ```typescript
-import { Controller, Get, Inject } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/core';
 import * as Consul from 'consul';
 
 @Controller('/')
@@ -258,7 +258,7 @@ Note: In the code, some students appear and get the corresponding configuration 
 
 Therefore, in the case of large QPS, it can be handled as follows:
 ```typescript
-import { Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import * as Consul from 'consul';
 
 @Provide()
@@ -341,7 +341,7 @@ Then the port in our `config.default.ts` is the 32779 port.
 ## Offline service
 If you want to manually offline services that are not needed on the consul interface, you can use the following methods:
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Provide } from '@midwayjs/core';
 import * as Consul from 'consul'
 
 @Provide()

@@ -43,8 +43,7 @@ Midway uses the `@Middleware` decorator to identify the middleware. The complete
 
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -77,7 +76,6 @@ Note that Midway finishes the traditional onion model so that it can obtain the 
 
 The static `getName` method here is used to specify the name of the middleware to facilitate troubleshooting.
 
-​	
 
 ## Use middleware
 
@@ -105,7 +103,7 @@ The relationship between them is generally:
 
 After writing the middleware, we need to apply it to each controller route.  `@Controller` the second parameter of the decorator, which allows us to easily add middleware to a routing group.
 ```typescript
-import { Controller } from '@midwayjs/decorator';
+import { Controller } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 
 @Controller('/', { middleware: [ ReportMiddleware ] })
@@ -117,7 +115,7 @@ export class HomeController {
 
 Midway also provides middleware parameters on route decorators such as `@Get` and `@Post` to facilitate middleware interception of a single route.
 ```typescript
-import { Controller, Get } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 
 @Controller('/')
@@ -141,7 +139,7 @@ We need to add middleware to the middleware list of the current framework before
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 
@@ -173,8 +171,7 @@ async onReady() {
 When middleware is executed, we can add logic that routes ignore.
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -202,8 +199,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 Similarly, you can also add matching routes. Only matching routes will execute the middleware. The `ignore` and `match` only take effect.
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -243,7 +239,7 @@ export async function fnMiddleware(ctx, next) {
 
 
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
@@ -339,7 +335,7 @@ We can use `getMiddleware().getNames()` to obtain all middleware names in the cu
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
@@ -379,7 +375,7 @@ We need to use the `getMiddleware()` method to obtain the middleware list and th
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 
@@ -426,8 +422,7 @@ Because **the middleware instance is a single instance**, the instances injected
 For example, **the following code is wrong.**
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -450,8 +445,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 If you want to get an instance of the request scope, you can use the method obtained from the request scope container `ctx.requestContext`, as follows.
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -475,8 +469,7 @@ For example, all data returned in the `/api` uses a unified structure to reduce 
 We can add a middleware code similar to the following.
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -486,7 +479,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
     return async (ctx: Context, next: NextFunction) => {
       const result = await next();
       return {
-        code: 0
+        code: 0,
         msg: 'OK',
         data: result
       }
@@ -494,7 +487,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
   }
 
   match(ctx) {
-    return ctx.path.indexOf('/api')! = = -1;
+    return ctx.path.indexOf('/api') !== -1;
   }
 }
 ```
@@ -508,8 +501,7 @@ The preceding code is only the code that is returned with the correct logic. If 
 under koa/egg, if a null value is returned in the middleware, the status code will become 204, and the status code needs to be explicitly assigned to the middleware.
 
 ```typescript
-import { IMiddleware } from '@midwayjs/core';
-import { Middleware } from '@midwayjs/decorator';
+import { Middleware, IMiddleware } from '@midwayjs/core';
 import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
@@ -522,7 +514,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
         ctx.status = 200;
       }
       return {
-        code: 0
+        code: 0,
         msg: 'OK',
         data: result
       }
@@ -530,7 +522,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
   }
 
   match(ctx) {
-    return ctx.path.indexOf('/api')! = = -1;
+    return ctx.path.indexOf('/api') !== -1;
   }
 }
 ```

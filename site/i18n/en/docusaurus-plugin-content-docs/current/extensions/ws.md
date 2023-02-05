@@ -37,7 +37,7 @@ Or reinstall the following dependencies in `package.json`.
     // ...
   },
   "devDependencies": {
-    "@types/ws": "^8.2.2 ",
+    "@types/ws": "^8.2.2",
     // ...
   }
 }
@@ -49,7 +49,7 @@ Or reinstall the following dependencies in `package.json`.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as ws from '@midwayjs/ws';
 
 @Configuration({
@@ -68,7 +68,7 @@ It can also be attached to other main frameworks, such as `@midwayjs/koa`.
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
@@ -109,7 +109,7 @@ The following is the basic directory structure of WebSocket project. Similar to 
 
 Midway defines WebSocket services through the `@WSController` decorator.
 ```typescript
-import { WSController } from '@midwayjs/decorator';
+import { WSController } from '@midwayjs/core';
 
 @WSController()
 export class HelloSocketController {
@@ -118,7 +118,7 @@ export class HelloSocketController {
 ```
 When there is a client connection, `connection` event will be triggered. We can use the `@OnWSConnection()` decorator in the code to decorate a method. When each client connects to the service for the first time, the method will be automatically called.
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/ws';
 import * as http from 'http';
 
@@ -147,7 +147,7 @@ The ctx here is equivalent to the WebSocket instance.
 
 The WebSocket is to obtain data by monitoring events. Midway provides a `@OnWSMessage()` decorator to format the received event. Every time the client sends an event, the modified method will be executed.
 ```typescript
-import { WSController, OnWSMessage, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSMessage, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/ws';
 
 @WSController()
@@ -167,7 +167,7 @@ export class HelloSocketController {
 
 We can send messages to all connected clients through the `@WSBroadCast` decorator.
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/ws';
 
 @WSController()
@@ -198,7 +198,7 @@ With the `@OnWSDisConnection` decorator, do some extra processing when the clien
 The App provided by this component is the WebSocket Server instance itself, which can be obtained as follows.
 
 ```typescript
-import { Controller, App } from '@midwayjs/decorator';
+import { Controller, App } from '@midwayjs/core';
 import { Application } from '@midwayjs/ws';
 
 @Controller()
@@ -212,7 +212,7 @@ export class HomeController {
 For example, we can broadcast messages in other Controller or Service.
 
 ```typescript
-import { Controller, App } from '@midwayjs/decorator';
+import { Controller, App } from '@midwayjs/core';
 import { Application } from '@midwayjs/ws';
 
 @Controller()
@@ -304,7 +304,7 @@ You can use `ws` to test. You can also use the `ws` module-based test client pro
 For example:
 ```typescript
 import { createApp, close, createWebSocketClient } from '@midwayjs/mock';
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 
 //... omit describe
 
@@ -348,7 +348,7 @@ it('should test create websocket app', async () => {
 
 Use the `once` method of the `events` module that comes with node to optimize the code.
 ```typescript
-import { sleep } from '@midwayjs/decorator';
+import { sleep } from '@midwayjs/core';
 import { once } from 'events';
 import { createApp, close, createWebSocketClient } from '@midwayjs/mock';
 
