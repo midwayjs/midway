@@ -1,6 +1,16 @@
 # Introduction
 
-Midway Hooks is a functional full stack framework that supports four core features: "Zero" Api & Type Safety & Full Stack Kit & Powerful Backend.
+Midway's integrated solution is a full-stack framework based on Midway Hooks as the main function, supporting four core features: "zero" Api & type safety & full-stack suite & powerful backend.
+
+
+
+## Differences from standard projects
+
+
+
+The integrated solution is based on the standard project, and a front-end adaptation layer is extended on top of it. While reusing all the standard project capabilities, it can also seamlessly cooperate with the front-end development, that is, in the project, both the front-end code, which in turn has Node code.
+
+
 
 ## Feature introduction
 
