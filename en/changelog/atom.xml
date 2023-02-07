@@ -2,12 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-02-02T20:00:00.000Z</updated>
+    <updated>2023-02-07T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.10.7]]></title>
+        <id>/v3.10.7</id>
+        <link href="https://midwayjs.org/en/changelog/v3.10.7"/>
+        <updated>2023-02-07T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>validate</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2714" target="_blank" rel="noopener noreferrer">#2714</a> fix(validate): export ParsePipe from pipe.ts (<a href="https://github.com/savoygu" target="_blank" rel="noopener noreferrer">@savoygu</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-polish">💅 Polish<a class="hash-link" href="#-polish" title="Lien direct vers le titre">​</a></h2><ul><li><code>core</code>, <code>decorator</code>, <code>faas</code>, <code>validate</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2708" target="_blank" rel="noopener noreferrer">#2708</a> feat: add web param optional (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a class="hash-link" href="#-dependencies" title="Lien direct vers le titre">​</a></h2><ul><li>Other<ul><li><a href="https://github.com/midwayjs/midway/pull/2715" target="_blank" rel="noopener noreferrer">#2715</a> docs(site): update validate.md (<a href="https://github.com/savoygu" target="_blank" rel="noopener noreferrer">@savoygu</a>)</li></ul></li><li><code>bull</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2712" target="_blank" rel="noopener noreferrer">#2712</a> fix(deps): update dependency bull to v4.10.3 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>typegoose</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2709" target="_blank" rel="noopener noreferrer">#2709</a> chore(deps): update dependency @typegoose/typegoose to v10.1.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>web-express</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2710" target="_blank" rel="noopener noreferrer">#2710</a> chore(deps): update dependency @types/express to v4.17.17 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>axios</code>, <code>http-proxy</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2705" target="_blank" rel="noopener noreferrer">#2705</a> fix(deps): update dependency axios to v1.3.2 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>casbin-redis-adapter</code>, <code>casbin-typeorm-adapter</code>, <code>casbin</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2706" target="_blank" rel="noopener noreferrer">#2706</a> fix(deps): update dependency casbin to v5.23.2 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-3">Committers: 3<a class="hash-link" href="#committers-3" title="Lien direct vers le titre">​</a></h2><ul><li>Frank Zhao (<a href="https://github.com/frank-zsy" target="_blank" rel="noopener noreferrer">@frank-zsy</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>huel129 (<a href="https://github.com/savoygu" target="_blank" rel="noopener noreferrer">@savoygu</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>Frank Zhao</name>
+            <uri>https://github.com/frank-zsy</uri>
+        </author>
+        <author>
+            <name>huel129</name>
+            <uri>https://github.com/savoygu</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.10.6]]></title>
         <id>/v3.10.6</id>
