@@ -358,7 +358,7 @@ export class UserService {
 If the default pipeline does not meet the requirements, you can quickly implement a custom validation pipeline through inheritance. The component has provided a `ParsePipe` class for quick writing.
 
 ```typescript
-import { Pipe } from '@midwayjs/Pipe';
+import { Pipe } from '@midwayjs/core';
 import { ParsePipe, RuleType } from '@midwayjs/validate';
 
 @Pipe()
@@ -374,7 +374,7 @@ export class ParseCustomDataPipe extends ParsePipe {
 For example, the code of `ParseIntPipe` is as follows. When the pipeline is executed, the schema will be automatically obtained for verification, and the value will be returned after the verification is successful.
 
 ```typescript
-import { Pipe } from '@midwayjs/Pipe';
+import { Pipe } from '@midwayjs/core';
 import { ParsePipe, RuleType } from '@midwayjs/validate';
 
 @Pipe()
