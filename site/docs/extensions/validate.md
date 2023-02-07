@@ -357,7 +357,7 @@ export class UserService {
 如果默认的管道不满足需求，可以通过继承，快速实现一个自定义校验管道，组件已经提供了一个 `ParsePipe` 类用于快速编写。
 
 ```typescript
-import { Pipe } from '@midwayjs/Pipe';
+import { Pipe } from '@midwayjs/core';
 import { ParsePipe, RuleType } from '@midwayjs/validate';
 
 @Pipe()
@@ -373,7 +373,7 @@ export class ParseCustomDataPipe extends ParsePipe {
 比如 `ParseIntPipe` 的代码如下，管道执行时会自动获取这个 schema 进行校验，并在校验成功后将值返回。
 
 ```typescript
-import { Pipe } from '@midwayjs/Pipe';
+import { Pipe } from '@midwayjs/core';
 import { ParsePipe, RuleType } from '@midwayjs/validate';
 
 @Pipe()
