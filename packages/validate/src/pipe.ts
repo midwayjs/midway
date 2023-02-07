@@ -77,7 +77,7 @@ export class ValidationPipe extends AbstractValidationPipe {
   }
 }
 
-abstract class ParsePipe extends AbstractValidationPipe {
+export abstract class ParsePipe extends AbstractValidationPipe {
   transform(value: any, options: TransformOptions) {
     return this.validateWithSchema(
       value,
