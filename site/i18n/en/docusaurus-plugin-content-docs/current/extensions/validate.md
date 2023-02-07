@@ -924,3 +924,19 @@ export class ValidateErrorFilter {
 }
 ```
 
+
+
+### 4. Temporarily disable global verification
+
+After the component is enabled, as long as the parameter uses DTO, it will be automatically verified. If a parameter does not need to be verified temporarily, you can use the following writing method.
+
+```typescript
+@Controller('/api/user')
+export class HomeController {
+
+  @Post('/')
+  async updateUser(@Body() user: Partial<UserDTO> ) {
+  }
+}
+```
+

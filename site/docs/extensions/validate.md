@@ -926,3 +926,19 @@ export class ValidateErrorFilter {
 }
 ```
 
+
+
+### 4、临时禁用全局校验
+
+开启组件后，只要参数使用了 DTO，就会自动被校验，如果某个参数临时无需验证，可以使用下面的写法。
+
+```typescript
+@Controller('/api/user')
+export class HomeController {
+
+  @Post('/')
+  async updateUser(@Body() user: Partial<UserDTO> ) {
+  }
+}
+```
+
