@@ -8,7 +8,7 @@ export interface Dto<T> extends Function {
 export function PickDto<T, K extends keyof T>(
   dto: Dto<T>,
   keys: K[]
-): Dto<Pick<T, (typeof keys)[number]>> {
+): Dto<Pick<T, typeof keys[number]>> {
   const pickedDto: any = function () {};
   pickedDto.prototype = dto.prototype;
   const fatherRule = getClassExtendedMetadata(RULES_KEY, dto);
@@ -19,13 +19,13 @@ export function PickDto<T, K extends keyof T>(
     }
   }
   saveClassMetadata(RULES_KEY, pickedRule, pickedDto);
-  return pickedDto as Dto<Pick<T, (typeof keys)[number]>>;
+  return pickedDto as Dto<Pick<T, typeof keys[number]>>;
 }
 
 export function OmitDto<T, K extends keyof T>(
   dto: Dto<T>,
   keys: K[]
-): Dto<Omit<T, (typeof keys)[number]>> {
+): Dto<Omit<T, typeof keys[number]>> {
   const pickedDto: any = function () {};
   pickedDto.prototype = dto.prototype;
   const fatherRule = getClassExtendedMetadata(RULES_KEY, dto);
@@ -34,5 +34,5 @@ export function OmitDto<T, K extends keyof T>(
     delete pickedRule[key];
   }
   saveClassMetadata(RULES_KEY, pickedRule, pickedDto);
-  return pickedDto as Dto<Omit<T, (typeof keys)[number]>>;
+  return pickedDto as Dto<Omit<T, typeof keys[number]>>;
 }

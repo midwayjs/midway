@@ -5,6 +5,7 @@ import {
 } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { CorsMiddleware } from './middleware/cors';
+import { ContextJSONPMiddleware } from './middleware/jsonp';
 @Configuration({
   namespace: 'cross-domain',
   importConfigs: [
@@ -22,6 +23,7 @@ export class CrossDomainConfiguration {
       .getApplications(['koa', 'faas', 'express', 'egg'])
       .forEach(app => {
         app.useMiddleware(CorsMiddleware);
+        app.useMiddleware(ContextJSONPMiddleware);
       });
   }
 }

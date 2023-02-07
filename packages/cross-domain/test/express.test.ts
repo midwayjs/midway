@@ -48,9 +48,9 @@ describe('test/express.test.ts', function () {
   it('jsonp callback', async () => {
     const request = await createHttpRequest(app);
     await request
-      .post('/jsonp?callback=fn')
+      .post('/jsonp?jsonp=fn')
       .expect(200)
       .expect('x-content-type-options', 'nosniff')
-      .expect(`/**/ typeof callback === 'function' && callback({"test":123});`)
+      .expect(`/**/ typeof fn === 'function' && fn({"test":123});`)
   });
 });

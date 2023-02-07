@@ -1,6 +1,7 @@
 import { Configuration, Controller, Get, Inject, Post } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
-import { JSONPMiddleware, JSONPService } from '../../../../src/index';
+import { JSONPService } from '../../../../src/index';
+import { JSONPMiddleware } from '../../../../src/index';
 
 @Configuration({
   imports: [
