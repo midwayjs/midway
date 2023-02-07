@@ -1,6 +1,37 @@
 # Change Log
 
 
+## v3.10.7 (2023-02-07)
+
+#### :bug: Bug Fix
+* `validate`
+  * [#2714](https://github.com/midwayjs/midway/pull/2714) fix(validate): export ParsePipe from pipe.ts ([@savoygu](https://github.com/savoygu))
+
+#### :nail_care: Polish
+* `core`, `decorator`, `faas`, `validate`
+  * [#2708](https://github.com/midwayjs/midway/pull/2708) feat: add web param optional ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* Other
+  * [#2715](https://github.com/midwayjs/midway/pull/2715) docs(site): update validate.md ([@savoygu](https://github.com/savoygu))
+* `bull`
+  * [#2712](https://github.com/midwayjs/midway/pull/2712) fix(deps): update dependency bull to v4.10.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `typegoose`
+  * [#2709](https://github.com/midwayjs/midway/pull/2709) chore(deps): update dependency @typegoose/typegoose to v10.1.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#2710](https://github.com/midwayjs/midway/pull/2710) chore(deps): update dependency @types/express to v4.17.17 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#2705](https://github.com/midwayjs/midway/pull/2705) fix(deps): update dependency axios to v1.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#2706](https://github.com/midwayjs/midway/pull/2706) fix(deps): update dependency casbin to v5.23.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Frank Zhao ([@frank-zsy](https://github.com/frank-zsy))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- huel129 ([@savoygu](https://github.com/savoygu))
+
+
+
 ## v3.10.6 (2023-02-02)
 
 #### :bug: Bug Fix
