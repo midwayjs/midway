@@ -7,3 +7,27 @@ declare module '@midwayjs/core/dist/interface' {
     jsonp?: Partial<JSONPOptions>;
   }
 }
+
+declare module '@midwayjs/koa/dist/interface' {
+  interface Context {
+    jsonp: (body: any, config?: JSONPOptions) => string;
+  }
+}
+
+declare module '@midwayjs/web/dist/interface' {
+  interface Context {
+    jsonp: (body: any, config?: JSONPOptions) => string;
+  }
+}
+
+declare module '@midwayjs/faas/dist/interface' {
+  interface Context {
+    jsonp: (body: any, config?: JSONPOptions) => string;
+  }
+}
+
+declare module '@midwayjs/express/dist/interface' {
+  interface Context {
+    jsonp: (body: any, config?: JSONPOptions) => string;
+  }
+}
