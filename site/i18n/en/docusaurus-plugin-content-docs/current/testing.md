@@ -152,14 +152,7 @@ describe('test/controller/home.test.ts', () => {
 
   beforeAll(async () => {
     // Create app only once and can be reused.
-    try {
-      // Because the error of Jest will be ignored in the BeforeAll phase, a layer of catch is required.
-      // refs: https://github.com/facebook/jest/issues/8688
-      app = await createApp<Framework>();
-    } catch(err) {
-    	console.error('test beforeAll error', err);
-      throw err;
-    }
+    app = await createApp<Framework>();
   });
 
   afterAll(async () => {

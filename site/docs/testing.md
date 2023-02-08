@@ -152,14 +152,7 @@ describe('test/controller/home.test.ts', () => {
 
   beforeAll(async () => {
     // 只创建一次 app，可以复用
-    try {
-      // 由于Jest在BeforeAll阶段的error会忽略，所以需要包一层catch
-      // refs: https://github.com/facebook/jest/issues/8688
-      app = await createApp<Framework>();
-    } catch(err) {
-    	console.error('test beforeAll error', err);
-      throw err;
-    }
+    app = await createApp<Framework>();
   });
 
   afterAll(async () => {
