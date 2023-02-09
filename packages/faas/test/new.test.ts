@@ -338,4 +338,24 @@ describe('test/new.test.ts', () => {
 
     await closeApp(starter);
   });
+
+  it('should support buffer response', async () => {
+    const starter = await createNewStarter('base-app-response-buffer');
+
+    const result = await starter.invokeTriggerFunction(
+      {
+        originContext: {},
+        originEvent: {},
+        res: {}
+      },
+      'helloEventService.handler',
+      {
+        isHttpFunction: true,
+        supportBufferResponse: true,
+      });
+
+    expect(Buffer.isBuffer(result.body)).toBeTruthy();
+
+    await closeApp(starter);
+  });
 });

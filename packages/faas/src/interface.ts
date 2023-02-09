@@ -26,7 +26,12 @@ export type FaaSMiddleware =
   | ((context: Context, next: () => Promise<any>) => any)
   | string;
 
-export interface HandlerOptions {
+
+export interface FormatResponseOptions {
+  supportBufferResponse?: boolean;
+}
+
+export interface HandlerOptions extends FormatResponseOptions {
   isHttpFunction?: boolean;
   isCustomHttpResponse?: boolean;
 }
