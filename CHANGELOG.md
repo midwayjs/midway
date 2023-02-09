@@ -1,6 +1,20 @@
 # Change Log
 
 
+## v3.10.8 (2023-02-09)
+
+#### :nail_care: Polish
+* `cross-domain`
+  * [#2713](https://github.com/midwayjs/midway/pull/2713) fix: add ctx.jsonp for  cross-domain ([@echosoar](https://github.com/echosoar))
+* `faas`
+  * [#2717](https://github.com/midwayjs/midway/pull/2717) feat: support buffer response ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 2
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.7 (2023-02-07)
 
 #### :bug: Bug Fix
