@@ -348,14 +348,19 @@ export class MidwayFaaSFramework extends BaseFramework<
       if (options.isCustomHttpResponse) {
         return context.body;
       } else {
-        return this.formatHttpResponse(context);
+        return this.formatHttpResponse(context, options);
       }
     } else {
       return result;
     }
   }
 
-  public formatHttpResponse(context): HttpResponseFormat {
+  public formatHttpResponse(
+    context,
+    options: {
+      supportBufferResponse?: boolean;
+    } = {}
+  ): HttpResponseFormat {
     if (!context.response?._explicitStatus) {
       if (context.body === null || context.body === 'undefined') {
         context.body = '';
@@ -372,13 +377,16 @@ export class MidwayFaaSFramework extends BaseFramework<
       }
       context.body = data;
     } else if (isAnyArrayBuffer(data) || isUint8Array(data)) {
-      encoded = true;
       if (!context.type) {
         context.type = 'application/octet-stream';
       }
-
-      // data is reserved as buffer
-      context.body = Buffer.from(data).toString('base64');
+      if (options.supportBufferResponse) {
+        context.body = data;
+      } else {
+        encoded = true;
+        // data is reserved as buffer
+        context.body = Buffer.from(data).toString('base64');
+      }
     } else if (typeof data === 'object') {
       if (!context.type) {
         context.type = 'application/json';

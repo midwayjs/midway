@@ -4,10 +4,11 @@ import {
   initializeGlobalApplicationContext,
   MidwayFrameworkService,
 } from '@midwayjs/core';
+import { MidwayFaaSFramework } from './framework';
 
 export abstract class AbstractBootstrapStarter {
   protected applicationContext;
-  protected framework;
+  protected framework: MidwayFaaSFramework;
   constructor(protected options: ServerlessStarterOptions = {}) {}
 
   public getApplicationContext() {
