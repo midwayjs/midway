@@ -54,3 +54,28 @@ export class JSONPMiddleware implements IMiddleware<any, any> {
     return 'jsonp';
   }
 }
+
+@Middleware()
+export class ContextJSONPMiddleware implements IMiddleware<any, any> {
+  resolve(app) {
+    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+      return async (req: any, res: any, next: any) => {
+        return this.compatibleMiddleware(req, next);
+      };
+    } else {
+      return async (ctx, next) => {
+        return this.compatibleMiddleware(ctx, next);
+      };
+    }
+  }
+
+  async compatibleMiddleware(context, next) {
+    const jsonpService = await context.requestContext.getAsync(JSONPService);
+    context.jsonp = jsonpService.jsonp.bind(jsonpService);
+    return await next();
+  }
+
+  static getName(): string {
+    return 'context-jsonp';
+  }
+}
