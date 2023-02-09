@@ -7,7 +7,8 @@ import {
 import { ComponentModule } from './interface';
 import * as os from 'os';
 import * as assert from 'assert';
-import { access, unlink, constants } from 'fs/promises';
+import { promises } from 'fs';
+const { access, unlink, constants } = promises;
 
 export function isTestEnvironment() {
   const testEnv = ['test', 'unittest'];
