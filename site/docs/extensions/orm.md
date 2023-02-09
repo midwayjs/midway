@@ -439,7 +439,7 @@ export default {
 
         // 或者扫描形式
         entities: [
-          '*/entity/*.entity{.ts,.js}'
+          '**/entity/*.entity{.ts,.js}'
         ]
       }
     }
@@ -1517,10 +1517,10 @@ export default {
       'default': {
         // ...
         entities: [
-          '*/entity/*.entity{.ts,.js}'
+          '**/entity/*.entity{.ts,.js}'
         ],
         migrations: [
-          '*/migration/*.ts'
+          '**/migration/*.ts'
         ],
       },
   },

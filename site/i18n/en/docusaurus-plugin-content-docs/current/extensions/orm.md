@@ -441,7 +441,7 @@ export default {
 
         // or scan format
         entities: [
-          '*/entity/*.entity{.ts,.js}'
+          '**/entity/*.entity{.ts,.js}'
         ]
       }
     }
@@ -1519,10 +1519,10 @@ export default {
        'default': {
          //...
          entities: [
-           '*/entity/*.entity{.ts,.js}'
+           '**/entity/*.entity{.ts,.js}'
          ],
          migrations: [
-           '*/migration/*.ts'
+           '**/migration/*.ts'
          ],
        },
    },
