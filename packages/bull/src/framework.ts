@@ -75,9 +75,7 @@ export class BullFramework
         concurrency: number;
         jobOptions?: JobOptions;
       };
-      const currentQueue = this.ensureQueue(options.queueName, {
-        defaultJobOptions: options.jobOptions,
-      });
+      const currentQueue = this.ensureQueue(options.queueName);
       // clear old repeat job when start
       if (this.bullClearRepeatJobWhenStart) {
         const jobs = await currentQueue.getRepeatableJobs();
