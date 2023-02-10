@@ -28,7 +28,7 @@
     "@midwayjs/mock": "^3.10.7"
   },
   "dependencies": {
-    "bull": "4.10.3"
+    "bull": "4.10.4"
   },
   "engines": {
     "node": ">=12"
