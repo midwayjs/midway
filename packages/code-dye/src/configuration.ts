@@ -23,9 +23,6 @@ export class CodeDyeConfiguration {
   codeDye;
 
   async onReady(container) {
-    if (!this.codeDye.enable) {
-      return;
-    }
     this.applicationManager
       .getApplications(['koa', 'faas', 'express', 'egg'])
       .forEach(app => {
