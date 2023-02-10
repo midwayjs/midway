@@ -54,7 +54,7 @@ async findAll() {
 
 ```typescript
 // src/error/custom.error.ts
-import { HttpStatus } from '@midwayjs/core';
+import { MidwayError } from '@midwayjs/core';
 
 export class CustomError extends MidwayError {
   constructor() {
