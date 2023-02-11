@@ -90,7 +90,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.8.0
+        uses: supercharge/mongodb-github-action@v1.9.0
         with:
           mongodb-version: 4.2
 
