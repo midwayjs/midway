@@ -76,7 +76,7 @@ export class BullFramework
         jobOptions?: JobOptions;
       };
 
-      const { repeat, delay, ...otherOptions } = options.jobOptions;
+      const { repeat, delay, ...otherOptions } = options?.jobOptions ?? {};
 
       const currentQueue = this.ensureQueue(options.queueName, {
         defaultJobOptions: otherOptions,
