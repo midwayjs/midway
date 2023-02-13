@@ -1,6 +1,51 @@
 # Change Log
 
 
+## v3.10.9 (2023-02-13)
+
+#### :bug: Bug Fix
+* `bull`
+  * [#2720](https://github.com/midwayjs/midway/pull/2720) fix: bull add default job options in decorator will be overriding args ([@czy88840616](https://github.com/czy88840616))
+* `core`, `faas`
+  * [#2732](https://github.com/midwayjs/midway/pull/2732) fix: func name set ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `code-dye`
+  * [#2728](https://github.com/midwayjs/midway/pull/2728) chore: update codedye ([@echosoar](https://github.com/echosoar))
+* `core`
+  * [#2733](https://github.com/midwayjs/midway/pull/2733) chore: add generalization type ([@czy88840616](https://github.com/czy88840616))
+* `mock`
+  * [#2719](https://github.com/midwayjs/midway/pull/2719) fix: node 12 fs promise ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2731](https://github.com/midwayjs/midway/pull/2731) docs: fix pipe valid ([@ddzyan](https://github.com/ddzyan))
+* [#2727](https://github.com/midwayjs/midway/pull/2727) doc:custom_error.md fix import ([@4xii](https://github.com/4xii))
+
+#### :package: Dependencies
+* `mikro`
+  * [#2730](https://github.com/midwayjs/midway/pull/2730) chore(deps): update mikro-orm monorepo to v5.6.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2729](https://github.com/midwayjs/midway/pull/2729) chore(deps): update supercharge/mongodb-github-action action to v1.9.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2721](https://github.com/midwayjs/midway/pull/2721) chore(deps): update dependency jest to v29.4.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `typeorm`
+  * [#2723](https://github.com/midwayjs/midway/pull/2723) chore(deps): update dependency typeorm to v0.3.12 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#2724](https://github.com/midwayjs/midway/pull/2724) fix(deps): update dependency @grpc/grpc-js to v1.8.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#2725](https://github.com/midwayjs/midway/pull/2725) fix(deps): update dependency bull to v4.10.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#2726](https://github.com/midwayjs/midway/pull/2726) fix(deps): update socket.io packages to v4.6.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#2722](https://github.com/midwayjs/midway/pull/2722) chore(deps): update dependency mongoose to v6.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 4
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- 世新 ([@4xii](https://github.com/4xii))
+- 孺子牛 ([@ddzyan](https://github.com/ddzyan))
+
+
+
 ## v3.10.8 (2023-02-09)
 
 #### :nail_care: Polish

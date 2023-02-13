@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/view-nunjucks",
-  "version": "3.10.7",
+  "version": "3.10.9",
   "description": "Midway Component for nunjucks render",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -28,12 +28,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/view": "^3.10.7",
+    "@midwayjs/view": "^3.10.9",
     "nunjucks": "^3.2.2"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.10.7",
-    "@midwayjs/koa": "^3.10.7",
-    "@midwayjs/mock": "^3.10.7"
+    "@midwayjs/core": "^3.10.9",
+    "@midwayjs/koa": "^3.10.9",
+    "@midwayjs/mock": "^3.10.9"
   }
 }
