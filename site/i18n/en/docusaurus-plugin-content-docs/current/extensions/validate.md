@@ -326,7 +326,7 @@ In non-Web scenarios, if there is no web class decorator such as `@Body`, you ca
 For example in a service:
 
 ```typescript
-import { ParseIntPipe } from '@midwayjs/validate';
+import { Valid } from '@midwayjs/validate';
 import { Provide } from '@midwayjs/core';
 
 @Provide()
@@ -340,7 +340,7 @@ export class UserService {
 If the parameter is not DTO, there is no rule, and a validation rule in Joi format can also be passed through the parameter.
 
 ```typescript
-import { ParseIntPipe, Rule } from '@midwayjs/validate';
+import { Valid, RuleType } from '@midwayjs/validate';
 import { Provide } from '@midwayjs/core';
 
 @Provide()
@@ -443,14 +443,13 @@ export class UserDTO {
   @Rule(RuleType.string().max(10))
   lastName: string;
 
-  // The SchoolDTO is passed in here as the verification parameter, and the required field is the default,
-  // If the user does not want required, @Rule(SchoolDTO, {required: false})
-  @Rule(SchoolDTO)
+  // Complex object
+  @Rule(getSchema(SchoolDTO).required())
   school: SchoolDTO;
 
-  // If it is an array, as long as it is written as follows, the decorator here will judge whether the type is an array, and only this class type can be applied.
-  @Rule(SchoolDTO)
-  xxxx: SchoolDTO[];
+  // Object array.
+  @Rule(RuleType.array().items(getSchema(SchoolDTO)).required())
+  schoolList: SchoolDTO[];
 }
 ```
 

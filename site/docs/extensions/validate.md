@@ -393,7 +393,7 @@ Midway 支持每个校验的 Class 中的属性依旧是一个对象。
 我们给 `UserDTO` 增加一个属性 `school` ，并且赋予一个 `SchoolDTO` 类型。
 
 ```typescript
-import { Rule, RuleType } from '@midwayjs/validate';
+import { Rule, RuleType, getSchema } from '@midwayjs/validate';
 
 export class SchoolDTO {
   @Rule(RuleType.string().required())
@@ -412,14 +412,13 @@ export class UserDTO {
   @Rule(RuleType.string().max(10))
   lastName: string;
 
-  // 这里传入 SchoolDTO 作为校验参数，此时会默认是required字段，
-  // 如果用户不想要required，则@Rule(SchoolDTO, {required: false})
-  @Rule(SchoolDTO)
+  // 复杂对象
+  @Rule(getSchema(SchoolDTO).required())
   school: SchoolDTO;
 
-  // 如果是数组，则也只要下面这样写，这边装饰器会判断类型是否是数组，只能适用这种class类型
-  @Rule(SchoolDTO)
-  xxxx: SchoolDTO[];
+  // 对象数组
+  @Rule(RuleType.array().items(getSchema(SchoolDTO)).required())
+  schoolList: SchoolDTO[];
 }
 ```
 
