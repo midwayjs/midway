@@ -10,6 +10,7 @@ import {
   safelyGet,
   safeRequire,
   extend,
+  listModule,
   MidwayFrameworkService,
   HTTP_SERVER_KEY,
 } from '@midwayjs/core';
@@ -20,6 +21,7 @@ import { EggRouter as Router } from '@eggjs/router';
 import { debuglog } from 'util';
 import { MidwayWebLifeCycleService } from './framework/lifecycle';
 import { MidwayWebFramework } from './framework/web';
+import { RUN_IN_AGENT_KEY } from './interface';
 const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
@@ -304,6 +306,13 @@ export const createAgentWorkerLoader = () => {
         debug('[egg]: start "initializeAgentApplicationContext"');
         await initializeAgentApplicationContext(this.app);
         super.load();
+
+        debug('[egg]: start runAgent decorator');
+        const runInAgentModules = listModule(RUN_IN_AGENT_KEY);
+        for (const module of runInAgentModules) {
+          await this.app.applicationContext.getAsync(module);
+        }
+
         debug('[egg]: agent load run complete');
       });
     }

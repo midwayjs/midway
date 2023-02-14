@@ -22,6 +22,7 @@ import {
 } from '@midwayjs/core';
 import { MidwayWebFramework } from './framework/web';
 import { debuglog } from 'util';
+import { EGG_AGENT_APP_KEY } from './interface';
 
 const debug = debuglog('midway:debug');
 
@@ -101,15 +102,23 @@ export async function initializeAgentApplicationContext(agent) {
   );
   agentFramework.overwriteApplication('agent');
 
+  // init decorator service
+  const decoratorService = getCurrentApplicationContext().get(
+    MidwayDecoratorService
+  );
+
+  // register @Logger decorator handler
+  decoratorService.registerPropertyHandler(
+    EGG_AGENT_APP_KEY,
+    (propertyName, meta) => {
+      return agent;
+    }
+  );
+
   if (process.env['EGG_CLUSTER_MODE'] === 'true') {
     // init aop support
     const aspectService =
       getCurrentApplicationContext().get(MidwayAspectService);
-
-    // init decorator service
-    const decoratorService = getCurrentApplicationContext().get(
-      MidwayDecoratorService
-    );
 
     const configService =
       getCurrentApplicationContext().get(MidwayConfigService);
