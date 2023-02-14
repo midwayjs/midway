@@ -34,6 +34,45 @@ describe('/test/service/slsFunction.test.ts', function () {
     expect(typeof result[0].method).toEqual('function');
   });
 
+  it('should test set correct function name', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      '../fixtures/app-with-function-name/src'
+    ));
+
+    const midwayServerlessFunctionService = framework.getApplicationContext().get(MidwayServerlessFunctionService);
+
+    midwayServerlessFunctionService.addServerlessFunction(async (ctx, event) => {
+      return 'hello world';
+    }, {
+      type: ServerlessTriggerType.HTTP,
+      metadata: {
+        method: 'get',
+        path: '/api/hello'
+      },
+      functionName: 'hello111',
+      handlerName: 'index.hello',
+    });
+
+    const result = {
+      'localTest.hello1': 'aaa1',
+      'localTest.hello2': 'localTest-hello2',
+      'localTest.hello3': 'aaa3',
+      'localTest.hello4': 'aaa4',
+      'index.hello': 'hello111'
+    }
+
+    const collector = await framework.getApplicationContext().getAsync(MidwayServerlessFunctionService);
+    const fnList = await collector.getFunctionList();
+    let size = 0;
+    for(const fn of fnList) {
+      if (result[fn.funcHandlerName] && fn.functionName === result[fn.funcHandlerName]) {
+        size++;
+      }
+    }
+    expect(size).toEqual(Object.keys(result).length);
+  });
+
   it('should test with function router', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,
@@ -83,45 +122,6 @@ describe('/test/service/slsFunction.test.ts', function () {
     ));
     const collector = await framework.getApplicationContext().getAsync(MidwayServerlessFunctionService);
     await expect(collector.getFunctionList()).rejects.toThrow('Duplicate router')
-  });
-
-  it('should test set correct function name', async () => {
-    const framework = await createLightFramework(path.join(
-      __dirname,
-      '../fixtures/app-with-serverless-trigger/src'
-    ));
-
-    const midwayServerlessFunctionService = framework.getApplicationContext().get(MidwayServerlessFunctionService);
-
-    midwayServerlessFunctionService.addServerlessFunction(async (ctx, event) => {
-      return 'hello world';
-    }, {
-      type: ServerlessTriggerType.HTTP,
-      metadata: {
-        method: 'get',
-        path: '/api/hello'
-      },
-      functionName: 'hello111',
-      handlerName: 'index.hello',
-    });
-
-    const result = {
-      'localTest.hello1': 'aaa1',
-      'localTest.hello2': 'localTest-hello2',
-      'localTest.hello3': 'aaa3',
-      'localTest.hello4': 'aaa4',
-      'index.hello': 'hello111'
-    }
-
-    const collector = await framework.getApplicationContext().getAsync(MidwayServerlessFunctionService);
-    const fnList = await collector.getFunctionList();
-    let size = 0;
-    for(const fn of fnList) {
-      if (result[fn.funcHandlerName] && fn.functionName === result[fn.funcHandlerName]) {
-        size++;
-      }
-    }
-    expect(size).toEqual(Object.keys(result).length);
   });
 
 });
