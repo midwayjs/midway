@@ -146,6 +146,7 @@ describe('/test/feature.test.ts', () => {
 
     expect(result.status).toEqual(200);
     expect(result.text).toEqual(JSON.stringify({"appId":["123","456"]}));
+    await closeApp(app);
   });
 
   it('should test runInAgent decorator with egg', async () => {
