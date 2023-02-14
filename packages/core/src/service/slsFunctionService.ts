@@ -150,7 +150,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
           ) || {};
         const functionName =
           functionMeta['functionName'] ??
-          webRouter['functionName'] ??
+          webRouter?.['metadata']?.['functionName'] ??
           createFunctionName(module, webRouter['methodName']);
         // 其他类型的函数
         this.checkDuplicateAndPush(prefix, {

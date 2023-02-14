@@ -1,7 +1,8 @@
 import { closeApp, creatApp, createHttpRequest, matchContentTimes, sleep } from './utils';
 import { IMidwayWebApplication } from '../src';
 import { join } from 'path';
-import { remove } from 'fs-extra';
+import { remove, existsSync } from 'fs-extra';
+import { readFileSync } from 'fs';
 
 describe('/test/feature.test.ts', () => {
   describe('test new decorator', () => {
@@ -147,4 +148,15 @@ describe('/test/feature.test.ts', () => {
     expect(result.text).toEqual(JSON.stringify({"appId":["123","456"]}));
   });
 
+  it('should test runInAgent decorator with egg', async () => {
+    const resultFile = join(__dirname, 'fixtures/feature/base-app-run-in-agent', '.result');
+    await remove(resultFile);
+    expect(existsSync(resultFile)).toBeFalsy();
+
+    const app = await creatApp('feature/base-app-run-in-agent');
+    expect(existsSync(resultFile)).toBeTruthy();
+
+    expect(readFileSync(resultFile, {encoding: 'utf8'})).toEqual('success');
+    await closeApp(app);
+  });
 });
