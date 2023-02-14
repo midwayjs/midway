@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.10.10 (2023-02-14)
+
+#### :bug: Bug Fix
+* `core`, `web`
+  * [#2734](https://github.com/midwayjs/midway/pull/2734) fix: function meta name ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.9 (2023-02-13)
 
 #### :bug: Bug Fix
