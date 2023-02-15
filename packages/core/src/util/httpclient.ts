@@ -24,15 +24,15 @@ interface IOptions {
   timeout?: number;
 }
 
-export interface IResponse extends http.IncomingMessage {
+export interface IResponse<ResType = any> extends http.IncomingMessage {
   status: number;
-  data: Buffer | string | any;
+  data: Buffer | string | ResType;
 }
 
-export async function makeHttpRequest(
+export async function makeHttpRequest<ResType>(
   url: string,
   options: IOptions = {}
-): Promise<IResponse> {
+): Promise<IResponse<ResType>> {
   debug(`request '${url}'`);
   const whatwgUrl = new URL(url);
   const client = whatwgUrl.protocol === 'https:' ? https : http;

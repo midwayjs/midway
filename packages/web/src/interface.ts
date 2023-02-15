@@ -9,6 +9,9 @@ import {
 import { DefaultState, Middleware } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 
+export const RUN_IN_AGENT_KEY = 'egg:run_in_agent';
+export const EGG_AGENT_APP_KEY = 'egg_agent_app';
+
 export interface IMidwayWebBaseApplication {
   applicationContext: IMidwayContainer;
   getLogger(name?: string): ILogger;

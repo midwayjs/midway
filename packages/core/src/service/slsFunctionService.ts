@@ -131,14 +131,14 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
           ) || {};
         const functionName =
           functionMeta['functionName'] ??
-          webRouter['functionName'] ??
+          webRouter?.['metadata']?.['functionName'] ??
           createFunctionName(module, webRouter['methodName']);
         data.functionName = functionName;
         data.functionTriggerName = webRouter['type'];
         data.functionTriggerMetadata = webRouter['metadata'];
         data.functionMetadata = {
-          ...functionMeta,
           functionName,
+          ...functionMeta,
         };
         this.checkDuplicateAndPush(prefix, data);
       } else {
@@ -150,7 +150,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
           ) || {};
         const functionName =
           functionMeta['functionName'] ??
-          webRouter['functionName'] ??
+          webRouter?.['metadata']?.['functionName'] ??
           createFunctionName(module, webRouter['methodName']);
         // 其他类型的函数
         this.checkDuplicateAndPush(prefix, {
