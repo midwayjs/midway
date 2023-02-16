@@ -2,9 +2,9 @@ import {
   Config,
   Logger,
   Middleware,
-  MidwayFrameworkType,
   IMiddleware,
   IMidwayLogger,
+  IMidwayApplication,
 } from '@midwayjs/core';
 import { HttpProxyConfig, HttpProxyStrategy } from './interface';
 import * as axios from 'axios';
@@ -17,20 +17,21 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
   @Logger()
   logger: IMidwayLogger;
 
-  resolve(app) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+  resolve(app: IMidwayApplication) {
+    if (app.getNamespace() === 'express') {
       return async (req: any, res: any, next: any) => {
-        return this.execProxy(req, req, res, next, true);
+        return this.execProxy(req, req, res, next, false);
       };
     } else {
+      const isServerless = app.getNamespace() === 'faas';
       return async (ctx, next) => {
         const req = ctx.request?.req || ctx.request;
-        return this.execProxy(ctx, req, ctx, next, false);
+        return this.execProxy(ctx, req, ctx, next, isServerless);
       };
     }
   }
 
-  async execProxy(ctx, req, res, next, isExpress) {
+  async execProxy(ctx, req, res, next, isServerless) {
     const proxyInfo = this.getProxyList(ctx.url);
     if (!proxyInfo) {
       return next();
@@ -53,13 +54,13 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     const method = req.method.toUpperCase();
 
     const targetRes = res.res || res;
-    const isStream = targetRes.on && targetRes.writable;
+    const isSupportStream = !isServerless && targetRes.on && targetRes.writable;
 
     const reqOptions: any = {
       method,
       url: url.href,
       headers: reqHeaders,
-      responseType: isStream ? 'stream' : 'arrayBuffer',
+      responseType: isSupportStream ? 'stream' : 'arrayBuffer',
       timeout: this.httpProxy.proxyTimeout || 0,
     };
     if (method === 'POST' || method === 'PUT') {
@@ -88,7 +89,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     const ignoreHeaders = {
       'transfer-encoding': true,
     };
-    if (isStream) {
+    if (isSupportStream) {
       // axios does not set this real data length in stream mode
       // but it decompresses the data, resulting in the wrong data length
       ignoreHeaders['content-length'] = true;
@@ -100,7 +101,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
       res.set(key, proxyResponse.headers[key]);
     });
     res.status = proxyResponse.status;
-    if (isStream) {
+    if (isSupportStream) {
       await new Promise(resolve => {
         proxyResponse.data.on('finish', () => {
           if (targetRes.end) {

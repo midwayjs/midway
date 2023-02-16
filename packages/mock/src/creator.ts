@@ -184,7 +184,14 @@ export async function create<
       return container.getAsync(customFramework as any);
     } else {
       const frameworkService = await container.getAsync(MidwayFrameworkService);
-      return frameworkService.getMainFramework() as T;
+      const mainFramework = frameworkService.getMainFramework() as T;
+      if (mainFramework) {
+        return mainFramework;
+      } else {
+        throw new Error(
+          'Can not get main framework, please check your configuration.ts.'
+        );
+      }
     }
   } catch (err) {
     // catch for jest beforeAll can't throw error

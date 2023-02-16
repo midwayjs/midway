@@ -11,7 +11,7 @@ import {
 } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import { ILogger } from '@midwayjs/logger';
-import { Application as ServerlessHttpApplication } from '@midwayjs/serverless-http-parser';
+import { Application as ServerlessHttpApplication, HttpResponseOptions } from '@midwayjs/serverless-http-parser';
 
 export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
   logger: ILogger;
@@ -130,3 +130,5 @@ export interface HttpResponseFormat<T = unknown> {
   headers: Record<string, string>;
   body: T;
 }
+
+export interface wrapHttpRequestOptions extends HttpResponseOptions {}

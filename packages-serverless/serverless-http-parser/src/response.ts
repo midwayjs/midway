@@ -412,5 +412,9 @@ export const response = {
     return only(this, ['status', 'message', 'header']);
   },
 
-  end() {},
+  end() {
+    if (this.res.end) {
+      this.res.end();
+    }
+  },
 };

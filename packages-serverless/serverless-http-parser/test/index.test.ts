@@ -2,8 +2,10 @@ import * as assert from 'assert';
 import { Application, HTTPRequest, HTTPResponse } from '../src';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import * as mm from 'mm';
+import { createReadStream, createWriteStream, readFileSync } from 'fs';
+import { join } from 'path';
 
-describe('test http parser', () => {
+describe('/test/index.test.ts', () => {
   it('should parser tencent apigw event', () => {
     const app = new Application();
     const req = new HTTPRequest(
@@ -630,6 +632,91 @@ describe('test http parser', () => {
         // got err
       }
       assert('run here');
+    });
+  });
+
+  describe('test stream', () => {
+    it('should test return with no write impl', function () {
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/scf_apigw.json'),
+        require('./resource/scf_ctx.json')
+      );
+      const res = new HTTPResponse();
+      const context = app.createContext(req, res);
+
+      let err;
+      try {
+        context.res.write('abc');
+        context.res.write('bcd');
+        context.res.end();
+      } catch (error) {
+        err = error;
+      }
+      expect(err.message).toMatch(/Current platform not support/);
+    });
+
+    it('should test return with stream impl', async () => {
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/scf_apigw.json'),
+        require('./resource/scf_ctx.json')
+      );
+
+      const stream = createWriteStream(join(__dirname, 'test.txt'), {
+        flags: 'w',
+      });
+      const res = new HTTPResponse({
+        writeableImpl: stream,
+      });
+      const context = app.createContext(req, res);
+      await new Promise<void>((resolve, reject) => {
+        stream.on('finish', () => {
+          const data = readFileSync(join(__dirname, 'test.txt'), 'utf8');
+          try {
+            expect(data).toBe('abcbcdefg');
+          } catch (err) {
+            reject(err);
+          }
+          resolve()
+        });
+
+        context.res.write('abc');
+        context.res.write('bcd');
+        context.res.end('efg');
+      });
+    });
+
+    it('should test pipe', async () => {
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/scf_apigw.json'),
+        require('./resource/scf_ctx.json')
+      );
+
+      const sourcePath = join(__dirname, 'resource/source.json');
+      const demoFile = join(__dirname, 'test.txt');
+      const readStream = createReadStream(sourcePath);
+      const stream = createWriteStream(demoFile, {
+        flags: 'w',
+      });
+
+      const res = new HTTPResponse({
+        writeableImpl: stream,
+      });
+      const context = app.createContext(req, res);
+      await new Promise<void>((resolve, reject) => {
+        stream.on('finish', () => {
+          const data = readFileSync(demoFile, 'utf8');
+          try {
+            expect(data).toMatch('abc');
+          } catch (err) {
+            reject(err);
+          }
+          resolve()
+        });
+        readStream.pipe(context.res);
+      });
     });
   });
 });
