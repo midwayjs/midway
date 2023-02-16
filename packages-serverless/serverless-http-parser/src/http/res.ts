@@ -61,12 +61,4 @@ export class HTTPResponse extends Writable {
     super.end(chunk, encoding, cb);
     return this;
   }
-
-  // _final(callback: (error?: Error | null | undefined) => void): void {
-  //   if (!this.options.writeableImpl) {
-  //     throw new Error('Current platform not support return value by stream.');
-  //   }
-  //   this.options.writeableImpl.end();
-  //   callback();
-  // }
 }

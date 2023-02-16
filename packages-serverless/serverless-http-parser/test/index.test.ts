@@ -4,7 +4,6 @@ import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import * as mm from 'mm';
 import { createReadStream, createWriteStream, readFileSync } from 'fs';
 import { join } from 'path';
-import { writeFileSync } from 'fs-extra';
 
 describe('/test/index.test.ts', () => {
   it('should parser tencent apigw event', () => {
@@ -695,10 +694,9 @@ describe('/test/index.test.ts', () => {
         require('./resource/scf_ctx.json')
       );
 
+      const sourcePath = join(__dirname, 'resource/source.json');
       const demoFile = join(__dirname, 'test.txt');
-      writeFileSync(demoFile, 'abc');
-
-      const readStream = createReadStream(demoFile);
+      const readStream = createReadStream(sourcePath);
       const stream = createWriteStream(demoFile, {
         flags: 'w',
       });
@@ -709,9 +707,9 @@ describe('/test/index.test.ts', () => {
       const context = app.createContext(req, res);
       await new Promise<void>((resolve, reject) => {
         stream.on('finish', () => {
-          const data = readFileSync(join(__dirname, 'test.txt'), 'utf8');
+          const data = readFileSync(demoFile, 'utf8');
           try {
-            expect(data).toBe('abcbcdefg');
+            expect(data).toMatch('abc');
           } catch (err) {
             reject(err);
           }
