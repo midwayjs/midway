@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.10.11 (2023-02-16)
+
+#### :nail_care: Polish
+* `faas`, `http-proxy`, `mock`
+  * [#2738](https://github.com/midwayjs/midway/pull/2738) feat: support stream response ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.10 (2023-02-14)
 
 #### :bug: Bug Fix

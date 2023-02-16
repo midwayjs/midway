@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/consul",
   "description": "midway consul",
-  "version": "3.10.10",
+  "version": "3.10.11",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -11,8 +11,8 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.10.10",
-    "@midwayjs/koa": "^3.10.10",
-    "@midwayjs/mock": "^3.10.10",
+    "@midwayjs/koa": "^3.10.11",
+    "@midwayjs/mock": "^3.10.11",
     "@types/consul": "0.40.0",
     "@types/sinon": "10.0.13",
     "nock": "13.3.0"

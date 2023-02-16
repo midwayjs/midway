@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/captcha",
-  "version": "3.10.10",
+  "version": "3.10.11",
   "description": "Midway Component for Captcha(Verification Code)",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -22,14 +22,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/cache": "^3.10.10",
+    "@midwayjs/cache": "^3.10.11",
     "mini-svg-data-uri": "1.4.4",
     "nanoid": "3.3.4",
     "svg-captcha": "1.4.0"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.10.10",
-    "@midwayjs/koa": "^3.10.10",
-    "@midwayjs/mock": "^3.10.10"
+    "@midwayjs/koa": "^3.10.11",
+    "@midwayjs/mock": "^3.10.11"
   }
 }
