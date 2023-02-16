@@ -289,6 +289,17 @@ export class MidwayFaaSFramework extends BaseFramework<
           funOptions.fullUrlFlattenString
         )(context.path);
         context.req.pathParameters = matchRes['params'] || {};
+      } else {
+        // options request pass throuth to middleware
+        if (context.method?.toLowerCase() === 'options') {
+          funOptions = {
+            url: context.path,
+            method: 'options',
+            requestMethod: 'options',
+            controllerMiddleware: [],
+            middleware: [],
+          };
+        }
       }
     }
     if (!funOptions) {
