@@ -5,6 +5,7 @@ import {
   NextFunction,
   HandlerOptions,
   HttpResponseFormat,
+  wrapHttpRequestOptions,
 } from './interface';
 import {
   BaseFramework,
@@ -421,10 +422,11 @@ export class MidwayFaaSFramework extends BaseFramework<
 
   public async wrapHttpRequest(
     req: http.IncomingMessage | Record<string, any>,
-    res?: http.ServerResponse | Record<string, any>
+    res?: http.ServerResponse | Record<string, any>,
+    options?: wrapHttpRequestOptions
   ) {
     const newReq = res ? new HTTPRequest(req, res) : req;
-    const newRes = new HTTPResponse();
+    const newRes = new HTTPResponse(options);
     return this.createHttpContext(newReq, newRes);
   }
 
