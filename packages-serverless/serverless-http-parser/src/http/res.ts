@@ -55,9 +55,6 @@ export class HTTPResponse extends Writable {
   end(chunk: any, cb?: () => void): this;
   end(chunk: any, encoding: BufferEncoding, cb?: () => void): this;
   end(chunk?: any, encoding?: any, cb?: any): this {
-    if (!this.options.writeableImpl) {
-      throw new Error('Current platform not support return value by stream.');
-    }
     super.end(chunk, encoding, cb);
     return this;
   }
