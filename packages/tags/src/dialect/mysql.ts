@@ -64,8 +64,7 @@ export class MysqlDialect implements ITagDialect {
     // relationship table
     await this.checkOrCreateTable(
       this.buildTableName(MysqlTableName.Relationship),
-      '`tid` BIGINT unsigned NOT NULL,',
-      '`oid` BIGINT unsigned NOT NULL,'
+      ['`tid` BIGINT unsigned NOT NULL,', '`oid` BIGINT unsigned NOT NULL,']
     );
   }
 
