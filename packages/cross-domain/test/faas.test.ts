@@ -17,7 +17,7 @@ describe('test/faas.test.ts', function () {
     await close(app);
   });
 
-  it.only('options', async () => {
+  it('options', async () => {
     const request = await createHttpRequest(app);
     await request
       .options('/cors')
