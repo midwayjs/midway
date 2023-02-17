@@ -28,6 +28,7 @@
     "@midwayjs/koa": "^3.10.10",
     "@midwayjs/mock": "^3.10.10",
     "@midwayjs/serverless-app": "^3.10.10",
-    "@midwayjs/web": "^3.10.10"
+    "@midwayjs/web": "^3.10.10",
+    "mysql2": "^2.3.3"
   }
 }
