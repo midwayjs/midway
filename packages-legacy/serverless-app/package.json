@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/serverless-app",
   "private": true,
-  "version": "3.10.11",
+  "version": "3.10.12",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/bootstrap": "^3.10.10",
-    "@midwayjs/faas": "^3.10.11",
+    "@midwayjs/faas": "^3.10.12",
     "@midwayjs/faas-typings": "^3.10.11",
     "@midwayjs/gateway-common-http": "^1.2.41",
     "@midwayjs/serverless-spec-builder": "^1.2.41",
