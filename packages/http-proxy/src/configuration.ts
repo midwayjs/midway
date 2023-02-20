@@ -8,7 +8,7 @@ import * as DefaultConfig from './config/config.default';
 import { HttpProxyMiddleware } from './middleware';
 
 @Configuration({
-  namespace: 'upload',
+  namespace: 'http-proxy',
   importConfigs: [
     {
       default: DefaultConfig,
