@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@midwayjs/i18n": "^3.10.11",
-    "joi": "^17.2.1"
+    "joi": "17.7.1"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.10.10",
