@@ -3,6 +3,7 @@ export * from './http';
 export * from './apiGateway';
 export * from './oss';
 export * from './sls';
+export * from './mns';
 export * from './cdn';
 export * from './timer';
 export * from './base';
