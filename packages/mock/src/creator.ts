@@ -359,7 +359,7 @@ export async function createFunctionApp<
               isHttpFunction: true,
             }
           );
-          const { statusCode, headers, body } = result as any;
+          const { statusCode, headers, body, isBase64Encoded } = result as any;
           if (res.headersSent) {
             return;
           }
@@ -372,7 +372,11 @@ export async function createFunctionApp<
           }
 
           // http trigger only support `Buffer` or a `string` or a `stream.Readable`
-          res.end(body);
+          if (isBase64Encoded && typeof body === 'string') {
+            res.end(Buffer.from(body, 'base64'));
+          } else {
+            res.end(body);
+          }
         };
       };
     }
