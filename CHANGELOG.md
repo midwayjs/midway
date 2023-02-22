@@ -1,6 +1,20 @@
 # Change Log
 
 
+## v3.10.13 (2023-02-22)
+
+#### :bug: Bug Fix
+* Other
+  * [#2758](https://github.com/midwayjs/midway/pull/2758) chore: add context.streaming api for streaming api ([@czy88840616](https://github.com/czy88840616))
+* `mock`
+  * [#2757](https://github.com/midwayjs/midway/pull/2757) fix: mock buffer base64 response ([@echosoar](https://github.com/echosoar))
+
+#### Committers: 2
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.12 (2023-02-20)
 
 #### :bug: Bug Fix
