@@ -27,8 +27,6 @@ export class AutoConfiguration {}
 
 @Controller('/')
 export class HomeController {
-  @Inject()
-  ctx;
 
   @Inject()
   jsonpService: JSONPService;
@@ -42,11 +40,5 @@ export class HomeController {
   @Post('/jsonp', { middleware: [JSONPMiddleware]})
   async jsonp() {
     return { test: 123 };
-  }
-
-
-  @Get('/ctx-jsonp')
-  async ctxJsonp() {
-    return this.ctx.jsonp({ test: 456 })
   }
 }

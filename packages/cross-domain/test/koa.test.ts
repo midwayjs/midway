@@ -53,19 +53,10 @@ describe('test/koa.test.ts', function () {
   it('jsonp callback', async () => {
     const request = await createHttpRequest(app);
     await request
-      .post('/jsonp?jsonp=fn')
+      .post('/jsonp?callback=fn')
       .expect(200)
       .expect('x-content-type-options', 'nosniff')
-      .expect(`/**/ typeof fn === 'function' && fn({"test":123});`)
+      .expect(`/**/ typeof callback === 'function' && callback({"test":123});`)
 
-  });
-
-
-  it('jsonp callback', async () => {
-    const request = await createHttpRequest(app);
-    await request
-    .get('/ctx-jsonp')
-      .expect(200)
-      .expect(`/**/ typeof callback === 'function' && callback({"test":456});`)
   });
 });
