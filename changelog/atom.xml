@@ -2,12 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-02-20T20:00:00.000Z</updated>
+    <updated>2023-02-22T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.10.13]]></title>
+        <id>/v3.10.13</id>
+        <link href="https://midwayjs.org/changelog/v3.10.13"/>
+        <updated>2023-02-22T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="标题的直接链接">​</a></h2><ul><li>Other<ul><li><a href="https://github.com/midwayjs/midway/pull/2758" target="_blank" rel="noopener noreferrer">#2758</a> chore: add context.streaming api for streaming api (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>mock</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2757" target="_blank" rel="noopener noreferrer">#2757</a> fix: mock buffer base64 response (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="标题的直接链接">​</a></h2><ul><li>Gao Yang (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>Gao Yang</name>
+            <uri>https://github.com/echosoar</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.10.12]]></title>
         <id>/v3.10.12</id>

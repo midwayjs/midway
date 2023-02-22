@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Mon, 20 Feb 2023 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 22 Feb 2023 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2023 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.10.13]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.10.13</link>
+            <guid>/v3.10.13</guid>
+            <pubDate>Wed, 22 Feb 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li>Other<ul><li><a href="https://github.com/midwayjs/midway/pull/2758" target="_blank" rel="noopener noreferrer">#2758</a> chore: add context.streaming api for streaming api (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>mock</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2757" target="_blank" rel="noopener noreferrer">#2757</a> fix: mock buffer base64 response (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="Lien direct vers le titre">​</a></h2><ul><li>Gao Yang (<a href="https://github.com/echosoar" target="_blank" rel="noopener noreferrer">@echosoar</a>)</li><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.10.12]]></title>
             <link>https://midwayjs.org/en/changelog/v3.10.12</link>
