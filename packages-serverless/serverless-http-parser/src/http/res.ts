@@ -1,6 +1,7 @@
 import { Writable } from 'stream';
 import { HttpResponseOptions } from '../interface';
 export class HTTPResponse extends Writable {
+  private _streaming: boolean;
   constructor(readonly options: HttpResponseOptions = {}) {
     super();
     if (options.writeableImpl) {
@@ -44,9 +45,7 @@ export class HTTPResponse extends Writable {
     encoding: BufferEncoding,
     callback: (error?: Error | null | undefined) => void
   ): void {
-    if (!this.options.writeableImpl) {
-      throw new Error('Current platform not support return value by stream.');
-    }
+    this.checkStreaming();
     this.options.writeableImpl.write(chunk, encoding);
     callback();
   }
@@ -55,10 +54,26 @@ export class HTTPResponse extends Writable {
   end(chunk: any, cb?: () => void): this;
   end(chunk: any, encoding: BufferEncoding, cb?: () => void): this;
   end(chunk?: any, encoding?: any, cb?: any): this {
+    this.checkStreaming();
+    super.end(chunk, encoding, cb);
+    return this;
+  }
+
+  private checkStreaming() {
+    if (!this._streaming) {
+      throw new Error('Please set ctx.streaming = true before write stream.');
+    }
+
     if (!this.options.writeableImpl) {
       throw new Error('Current platform not support return value by stream.');
     }
-    super.end(chunk, encoding, cb);
-    return this;
+  }
+
+  get streaming() {
+    return this._streaming;
+  }
+
+  set streaming(isStream: boolean) {
+    this._streaming = isStream;
   }
 }

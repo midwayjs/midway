@@ -279,6 +279,15 @@ interface ContextDelegatedResponse {
    *    this.redirect('http://google.com');
    */
   redirect(url: string, alt?: string): void;
+
+  /**
+   * Get/Set streaming response.
+   *
+   *     this.streaming = true;
+   *
+   * @api public
+   */
+  streaming: boolean;
 }
 
 export interface FaaSHTTPResponse

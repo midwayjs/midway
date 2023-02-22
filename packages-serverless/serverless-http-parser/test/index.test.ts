@@ -647,6 +647,7 @@ describe('/test/index.test.ts', () => {
 
       let err;
       try {
+        context.streaming = true;
         context.res.write('abc');
         context.res.write('bcd');
         context.res.end();
@@ -681,6 +682,7 @@ describe('/test/index.test.ts', () => {
           resolve()
         });
 
+        context.streaming = true;
         context.res.write('abc');
         context.res.write('bcd');
         context.res.end('efg');
@@ -705,6 +707,7 @@ describe('/test/index.test.ts', () => {
         writeableImpl: stream,
       });
       const context = app.createContext(req, res);
+      context.streaming = true;
       await new Promise<void>((resolve, reject) => {
         stream.on('finish', () => {
           const data = readFileSync(demoFile, 'utf8');
