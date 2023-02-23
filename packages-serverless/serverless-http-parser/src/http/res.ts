@@ -45,6 +45,7 @@ export class HTTPResponse extends Writable {
     encoding: BufferEncoding,
     callback: (error?: Error | null | undefined) => void
   ): void {
+    this._streaming = true;
     this.checkStreaming();
     this.options.writeableImpl.write(chunk, encoding);
     callback();
@@ -60,10 +61,6 @@ export class HTTPResponse extends Writable {
   }
 
   private checkStreaming() {
-    if (!this._streaming) {
-      throw new Error('Please set ctx.streaming = true before write stream.');
-    }
-
     if (!this.options.writeableImpl) {
       throw new Error('Current platform not support return value by stream.');
     }
