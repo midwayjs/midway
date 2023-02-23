@@ -14,7 +14,7 @@ describe('mysql.test.ts', () => {
   afterAll(async () => {
     await close(app);
   })
-  it('new tag', async () => {
+  it.only('new tag', async () => {
     const tagService = tagManager.get('new-tag');
     const tag1Result = await tagService.new({
       name: 'test1',
