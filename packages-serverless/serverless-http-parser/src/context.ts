@@ -261,4 +261,12 @@ export const context = {
   set cookies(_cookies) {
     this[COOKIES] = _cookies;
   },
+
+  get streaming() {
+    return this.res.streaming;
+  },
+
+  set streaming(isStream: boolean) {
+    this.res.streaming = isStream;
+  },
 };

@@ -80,7 +80,7 @@ export class CorsMiddleware implements IMiddleware<any, any> {
       } else {
         response.status = 204;
       }
-      return;
+      return '';
     }
     const headersSet = {};
 

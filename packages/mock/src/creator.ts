@@ -184,7 +184,14 @@ export async function create<
       return container.getAsync(customFramework as any);
     } else {
       const frameworkService = await container.getAsync(MidwayFrameworkService);
-      return frameworkService.getMainFramework() as T;
+      const mainFramework = frameworkService.getMainFramework() as T;
+      if (mainFramework) {
+        return mainFramework;
+      } else {
+        throw new Error(
+          'Can not get main framework, please check your configuration.ts.'
+        );
+      }
     }
   } catch (err) {
     // catch for jest beforeAll can't throw error
@@ -352,7 +359,7 @@ export async function createFunctionApp<
               isHttpFunction: true,
             }
           );
-          const { statusCode, headers, body } = result as any;
+          const { statusCode, headers, body, isBase64Encoded } = result as any;
           if (res.headersSent) {
             return;
           }
@@ -365,7 +372,11 @@ export async function createFunctionApp<
           }
 
           // http trigger only support `Buffer` or a `string` or a `stream.Readable`
-          res.end(body);
+          if (isBase64Encoded && typeof body === 'string') {
+            res.end(Buffer.from(body, 'base64'));
+          } else {
+            res.end(body);
+          }
         };
       };
     }

@@ -1,6 +1,76 @@
 # Change Log
 
 
+## v3.10.14 (2023-02-23)
+
+#### :bug: Bug Fix
+* [#2759](https://github.com/midwayjs/midway/pull/2759) fix: set streaming property first ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.10.13 (2023-02-22)
+
+#### :bug: Bug Fix
+* Other
+  * [#2758](https://github.com/midwayjs/midway/pull/2758) chore: add context.streaming api for streaming api ([@czy88840616](https://github.com/czy88840616))
+* `mock`
+  * [#2757](https://github.com/midwayjs/midway/pull/2757) fix: mock buffer base64 response ([@echosoar](https://github.com/echosoar))
+
+#### Committers: 2
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.10.12 (2023-02-20)
+
+#### :bug: Bug Fix
+* `cross-domain`, `faas`
+  * [#2739](https://github.com/midwayjs/midway/pull/2739) fix: cross domain with options request ([@echosoar](https://github.com/echosoar))
+* `http-proxy`
+  * [#2748](https://github.com/midwayjs/midway/pull/2748) fix: wrong proxy namespace ([@czy88840616](https://github.com/czy88840616))
+* `validate`
+  * [#2747](https://github.com/midwayjs/midway/pull/2747) fix: joi version for node 12/14 ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `axios`, `http-proxy`
+  * [#2749](https://github.com/midwayjs/midway/pull/2749) fix(deps): update dependency axios to v1.3.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#2754](https://github.com/midwayjs/midway/pull/2754) fix(deps): update dependency @grpc/proto-loader to v0.7.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2753](https://github.com/midwayjs/midway/pull/2753) fix(deps): update dependency @grpc/grpc-js to v1.8.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#2752](https://github.com/midwayjs/midway/pull/2752) chore(deps): update mikro-orm monorepo to v5.6.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2751](https://github.com/midwayjs/midway/pull/2751) chore(deps): update dependency typedoc to v0.23.25 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2711](https://github.com/midwayjs/midway/pull/2711) chore(deps): update dependency @types/node to v18.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2744](https://github.com/midwayjs/midway/pull/2744) chore(deps): update dependency jest to v29.4.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `redis`
+  * [#2750](https://github.com/midwayjs/midway/pull/2750) fix(deps): update dependency ioredis to v5.3.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#2745](https://github.com/midwayjs/midway/pull/2745) chore(deps): update dependency mongoose to v6.9.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `express-session`
+  * [#2743](https://github.com/midwayjs/midway/pull/2743) chore(deps): update dependency @types/express-session to v1.17.6 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.10.11 (2023-02-16)
+
+#### :nail_care: Polish
+* `faas`, `http-proxy`, `mock`
+  * [#2738](https://github.com/midwayjs/midway/pull/2738) feat: support stream response ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.10 (2023-02-14)
 
 #### :bug: Bug Fix

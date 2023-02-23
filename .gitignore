@@ -23,3 +23,4 @@ midway_benchmark_app
 docs-api
 site/changelog
 .changelog
+**/test/*.txt

@@ -71,3 +71,10 @@ export interface SCFContext {
 }
 
 export type GatewayEvent = FCAPIGatewayEvent & SCFAPIGatewayEvent & FCHTTPEvent;
+
+export interface HttpResponseOptions {
+  writeableImpl?: {
+    write: (chunk: any, encoding?: string) => void;
+    end: (chunk?: any, encoding?: string) => void;
+  }
+}

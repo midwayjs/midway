@@ -1,6 +1,7 @@
 import { FC } from './fc';
 import { SCF } from './scf';
 import { Cookies } from '@midwayjs/cookies';
+import { Writable } from 'stream';
 
 interface ContextDelegatedRequest {
   /**
@@ -278,9 +279,20 @@ interface ContextDelegatedResponse {
    *    this.redirect('http://google.com');
    */
   redirect(url: string, alt?: string): void;
+
+  /**
+   * Get/Set streaming response.
+   *
+   *     this.streaming = true;
+   *
+   * @api public
+   */
+  streaming: boolean;
 }
 
-export interface FaaSHTTPResponse extends ContextDelegatedResponse {
+export interface FaaSHTTPResponse
+  extends ContextDelegatedResponse,
+    Pick<Writable, 'write' | 'end'> {
   /**
    * Return response header.
    */
