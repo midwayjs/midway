@@ -1,6 +1,16 @@
 # Change Log
 
 
+## v3.10.14 (2023-02-23)
+
+#### :bug: Bug Fix
+* [#2759](https://github.com/midwayjs/midway/pull/2759) fix: set streaming property first ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.10.13 (2023-02-22)
 
 #### :bug: Bug Fix
