@@ -52,7 +52,7 @@ export async function initializeGlobalApplicationContext(
   }
 
   // mock support
-  await applicationContext.get(MidwayMockService, [applicationContext]);
+  await applicationContext.getAsync(MidwayMockService, [applicationContext]);
 
   // framework/config/plugin/logger/app decorator support
   await applicationContext.getAsync(MidwayFrameworkService, [
