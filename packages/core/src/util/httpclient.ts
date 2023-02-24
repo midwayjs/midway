@@ -29,6 +29,14 @@ export interface IResponse<ResType = any> extends http.IncomingMessage {
   data: Buffer | string | ResType;
 }
 
+function isHeaderExists(headers, headerKey: string): boolean {
+  return (
+    headers[headerKey] ||
+    headers[headerKey.toLowerCase()] ||
+    headers[headerKey.toUpperCase()]
+  );
+}
+
 export async function makeHttpRequest<ResType>(
   url: string,
   options: IOptions = {}
@@ -55,8 +63,12 @@ export async function makeHttpRequest<ResType>(
   } else if (options.data) {
     data = Buffer.from(JSON.stringify(options.data));
 
-    headers['Content-Type'] = mimeMap[contentType] || mimeMap.octet;
-    headers['Content-Length'] = data.byteLength;
+    if (!isHeaderExists(headers, 'Content-Type')) {
+      headers['Content-Type'] = mimeMap[contentType] || mimeMap.octet;
+    }
+    if (!isHeaderExists(headers, 'Content-Length')) {
+      headers['Content-Length'] = data.byteLength;
+    }
   }
 
   return new Promise((resolve, reject) => {
