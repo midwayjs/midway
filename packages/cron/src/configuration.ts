@@ -1,4 +1,9 @@
-import { Configuration, Init, Inject, MidwayDecoratorService } from '@midwayjs/core';
+import {
+  Configuration,
+  Init,
+  Inject,
+  MidwayDecoratorService,
+} from '@midwayjs/core';
 import { CronFramework } from './framework';
 import { CRON_JOB_KEY } from './constants';
 import { JobNameOrClz } from './interface';
