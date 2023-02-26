@@ -12,7 +12,7 @@ export interface IJob {
   /**
    * The function to fire at the specified time. If an onComplete callback was provided, onTick will receive it as an argument. onTick may call onComplete when it has finished its work.
    */
-  onTick(data: any);
+  onTick();
 
   /**
    * A function that will fire when the job is stopped with job.stop(), and may also be called by onTick at the end of each run.
