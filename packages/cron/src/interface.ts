@@ -17,7 +17,7 @@ export interface IJob {
   /**
    * A function that will fire when the job is stopped with job.stop(), and may also be called by onTick at the end of each run.
    */
-  onComplete?();
+  onComplete?(result: any);
 }
 
 export type JobNameOrClz = string | (new (...args) => IJob);

@@ -84,7 +84,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
             job: this,
           });
 
-          // ctx.logger.info(`start job ${job.id} from ${name.name}`);
+          ctx.logger.info(`start job ${name.name}`);
 
           const isPassed = await self.app
             .getFramework()
@@ -100,20 +100,15 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
 
           try {
             const result = await Promise.resolve(await fn(ctx));
-            // ctx.logger.info(`complete process job ${job.id} from ${name.name}`);
+            ctx.logger.info(`complete job ${name.name}`);
+            await service.onComplete?.(result);
             return result;
           } catch (err) {
             ctx.logger.error(err);
-            return Promise.reject(err);
           }
         })().catch(err => {
           self.logger.error(`error in job from ${name.name}: ${err}`);
-          // onComplete(err);
         });
-
-        jobOptions.onComplete = () => {
-          console.log('job complete');
-        };
       };
     }
     const job = new CronJob(jobOptions as CronJobParameters);

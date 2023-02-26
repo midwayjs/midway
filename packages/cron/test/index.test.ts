@@ -11,4 +11,10 @@ describe(`/test/index.test.ts`, () => {
     expect(res).toEqual(1);
     await close(app);
   });
+
+  it('test job throw error and running next', async () => {
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app-err'), {}, cron);
+    await sleep(5 * 1000);
+    await close(app);
+  });
 });
