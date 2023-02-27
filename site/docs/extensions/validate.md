@@ -6,11 +6,11 @@
 
 | 描述              |     |
 | ----------------- | --- |
-| 可用于标准项目    | ✅  |
-| 可用于 Serverless | ✅  |
-| 可用于一体化      | ✅  |
-| 包含独立主框架    | ❌  |
-| 包含独立日志      | ❌  |
+| 可用于标准项目    | ✅   |
+| 可用于 Serverless | ✅   |
+| 可用于一体化      | ✅   |
+| 包含独立主框架    | ❌   |
+| 包含独立日志      | ❌   |
 
 ## 背景
 
@@ -384,6 +384,12 @@ RuleType.array().min(10); // 数组，最小长度为 10
 RuleType.array().length(10); // 数组，长度为 10
 
 RuleType.string().allow(''); // 非必填字段传入空字符串
+
+export enum DeviceType {
+  iOS = 'ios',
+  Android = 'android',
+}
+RuleType.string().valid(...Object.values(DeviceType)) // 根据枚举值校验
 ```
 
 ### 级联校验
