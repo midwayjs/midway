@@ -153,6 +153,30 @@ However, this cannot directly allow the Context to include Typescript Definition
 
 
 
+## Get Http Server
+
+In some special cases, you need to get the original Http Server, we can get it after the server starts.
+
+```typescript
+import { App, Configuration } from '@midwayjs/core';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+	// ...
+})
+export class AutoConfiguration {
+  @Inject()
+  framework: koa.Framework;
+
+  async onServerReady(container) {
+    const server = this.framework.getServer();
+    // ...
+  }
+}
+```
+
+
+
 ## Configuration
 
 
