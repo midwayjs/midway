@@ -89,7 +89,8 @@
         "extensions/swagger",
         "extensions/bull",
         "extensions/jwt",
-        "extensions/code_dye"
+        "extensions/code_dye",
+        "extensions/tags"
       ]
     },
     {
