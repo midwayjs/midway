@@ -171,7 +171,7 @@ The `RuleType` here is the joi object itself.
 ## Check parameters
 
 
-After defining the type, it can be directly used in the business code, and the `@Validate` decorator is required to turn on the verification capability.
+After defining the type, it can be directly used in the business code.
 
 ```typescript
 // src/controller/home.ts
