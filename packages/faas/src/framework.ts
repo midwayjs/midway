@@ -398,6 +398,7 @@ export class MidwayFaaSFramework extends BaseFramework<
         encoded = true;
         // data is reserved as buffer
         context.body = Buffer.from(data).toString('base64');
+        context.length = data.byteLength;
       }
     } else if (typeof data === 'object') {
       if (!context.type) {
