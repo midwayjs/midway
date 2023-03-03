@@ -34,7 +34,7 @@
     "kafkajs": "2.2.4",
     "socket.io": "4.6.0",
     "socket.io-client": "4.6.0",
-    "ws": "8.12.0"
+    "ws": "8.12.1"
   },
   "dependencies": {
     "@midwayjs/async-hooks-context-manager": "^3.10.10",
