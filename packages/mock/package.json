@@ -41,7 +41,7 @@
     "@types/superagent": "4.1.14",
     "@types/supertest": "2.0.12",
     "js-yaml": "4.1.0",
-    "raw-body": "2.5.1",
+    "raw-body": "2.5.2",
     "supertest": "6.3.3"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

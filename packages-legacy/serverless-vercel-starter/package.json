@@ -12,7 +12,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.10.10",
     "@midwayjs/runtime-mock": "^3.7.0",
-    "raw-body": "2.5.1"
+    "raw-body": "2.5.2"
   },
   "engines": {
     "node": ">=12"
