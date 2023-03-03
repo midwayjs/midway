@@ -11,10 +11,10 @@
   "devDependencies": {
     "@midwayjs/core": "^3.10.10",
     "@midwayjs/mock": "^3.10.13",
-    "@mikro-orm/core": "5.6.11",
-    "@mikro-orm/entity-generator": "5.6.11",
+    "@mikro-orm/core": "5.6.13",
+    "@mikro-orm/entity-generator": "5.6.13",
     "@mikro-orm/sql-highlighter": "1.0.1",
-    "@mikro-orm/sqlite": "5.6.11",
+    "@mikro-orm/sqlite": "5.6.13",
     "sqlite3": "5.1.4"
   },
   "author": {
