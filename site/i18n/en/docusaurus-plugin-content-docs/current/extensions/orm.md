@@ -133,14 +133,14 @@ We take a simple project as an example, please refer to other structures.
 
 ```
 MyProject
-├── src              							// TS root directory
+├── src              							    // TS root directory
 │   ├── config
-│   │   └── config.default.ts 		// Application Profile
-│   ├── entity       							// entity (database Model) directory
-│   │   └── photo.ts  					  // entity file
+│   │   └── config.default.ts 		    // Application Profile
+│   ├── entity       							    // entity (database Model) directory
+│   │   └── photo.entity.ts  					// entity file
 │   │   └── photoMetadata.ts
-│   ├── configuration.ts     			// Midway configuration file
-│   └── service      							// Other service directory
+│   ├── configuration.ts     			    // Midway configuration file
+│   └── service      							    // Other service directory
 ├── .gitignore
 ├── package.json
 ├── README.md
@@ -167,9 +167,9 @@ Next, we will take mysql as an example.
 We associate with the database through the model. The model in the application is the database table. In the TypeORM, the model is bound to the entity. Each Entity file is a Model and an Entity.
 
 
-In the example, you need an entity. Let's take `photo` as an example. Create an entity directory and add the entity file `photo.ts` to the entity directory. A simple entity is as follows.
+In the example, you need an entity. Let's take `photo` as an example. Create an entity directory and add the entity file `photo.entity.ts` to the entity directory. A simple entity is as follows.
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 export class Photo {
   id: number;
   name: string;
@@ -187,7 +187,7 @@ Note that each attribute of the entity file here is actually one-to-one correspo
 
 `Entity` is used to define an entity model class.
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity } from 'typeorm';
 
 @Entity('photo')
@@ -203,7 +203,7 @@ export class Photo {
 
 If the table name is different from the current entity name, you can specify it in the parameter.
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity } from 'typeorm';
 
 @Entity('photo_table_name')
@@ -228,7 +228,7 @@ The properties are modified by the `@Column` decorator provided by the typeorm, 
 
 
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity, Column } from 'typeorm';
 
 @Entity()
@@ -273,7 +273,7 @@ Each entity must have at least one primary key column. To make a column a primar
 
 
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
@@ -304,7 +304,7 @@ export class Photo {
 
 Now, if you want to set the self-increasing id column, you need to change the `@PrimaryColumn` decorator to the `@PrimaryGeneratedColumn` decorator:
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -339,7 +339,7 @@ Next, let's adjust the data type. By default, strings map to types similar to `v
 
 
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -371,7 +371,7 @@ export class Photo {
 Example, different column names
 ```typescript
 @Column({
-  length: 100
+  length: 100,
   name: 'custom_name'
 })
 name: string;
@@ -417,7 +417,7 @@ For more information, see [Configuration](/docs/env_config).
 Then configure the database connection information in `config.default.ts`.
 ```typescript
 // src/config/config.default.ts
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 
 export default {
   // ...
@@ -428,10 +428,10 @@ export default {
          * Single database instance
          */
         type: 'mysql',
-        host: '',
+        host: '*******',
         port: 3306,
-        username: '',
-        password: '',
+        username: '*******',
+        password: '*******',
         database: undefined,
         synchronize: false,		// If it is used for the first time, there is no table, and there is a need for synchronization, you can write true
         logging: false,
@@ -474,7 +474,7 @@ export default {
       default: {
         type: 'sqlite',
         database: path.join(__dirname, '../../test.sqlite')
-        synchronize: true
+        synchronize: true,
         logging: true
         // ...
       }
@@ -501,7 +501,7 @@ In common Midway files, use the `@InjectEntityModel` decorator to inject our con
 ```typescript
 import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -537,7 +537,7 @@ For more information, see [find documentation](https://github.com/typeorm/typeor
 ```typescript
 import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -598,7 +598,7 @@ Now, let's load a photo from the database, update it and save it.
 ```typescript
 import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -629,7 +629,7 @@ export class PhotoService {
 ```typescript
 import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -676,8 +676,8 @@ Let's create a one-to-one relationship with another class. Let's create a new cl
 
 
 ```typescript
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
-import { Photo } from "./photo";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Photo } from './photo';
 
 @Entity()
 export class PhotoMetadata {
@@ -738,8 +738,8 @@ Next we will associate them in the code.
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
-import { PhotoMetadata } from './entity/photoMetadata';
+import { Photo } from './entity/photo.entity';
+import { PhotoMetadata } from './entity/photoMetadata.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -792,7 +792,7 @@ Relational mapping can be one-way or two-way. When the relationship between Phot
 ```typescript
 import { Entity } from 'typeorm';
 import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { Photo } from './photo';
+import { Photo } from './photo.entity';
 
 @Entity()
 export class PhotoMetadata {
@@ -806,8 +806,8 @@ export class PhotoMetadata {
 ```
 ```typescript
 import { Entity } from 'typeorm';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm";
-import { PhotoMetadata } from './photoMetadata';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { PhotoMetadata } from './photoMetadata.entity';
 
 @Entity()
 export class Photo {
@@ -833,7 +833,7 @@ Now, let's try to load Photo and PhotoMetadata together in a single query. There
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
+import { Photo } from './entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -859,7 +859,7 @@ Here, the value of photos is an array that contains the query results of the ent
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
+import { Photo } from './entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -903,8 +903,8 @@ Using `cascade` allows us to no longer save Photo and PhotoMetadata separately n
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
-import { PhotoMetadata } from './entity/photoMetadata';
+import { Photo } from './entity/photo.entity';
+import { PhotoMetadata } from './entity/photoMetadata.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -951,8 +951,8 @@ Note that we now set the metadata of Photo instead of setting the Photo attribut
 Let's create a many-to-one/one-to-many relationship. Suppose a photo has an author, and each author can have many photos. First, let's create an Author class:
 ```typescript
 import { Entity } from 'typeorm';
-import { Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from "typeorm";
-import { Photo } from './entity/photo';
+import { Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
+import { Photo } from './entity/photo.entity';
 
 @Entity()
 export class Author {
@@ -973,9 +973,9 @@ export class Author {
 Now, add the owner of the relationship to the Photo entity:
 ```typescript
 import { Entity } from 'typeorm';
-import { Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { PhotoMetadata } from "./photoMetadata";
-import { Author } from "./author";
+import { Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { PhotoMetadata } from './photoMetadata.entity';
+import { Author } from './author.entity';
 
 @Entity()
 export class Photo {
@@ -1024,7 +1024,7 @@ Let's create a many-to-one/many-to-many relationship. Suppose a photo can be in 
 
 
 ```typescript
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
 export class Album {
@@ -1075,8 +1075,8 @@ Now, let's insert albums and photos into the database:
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
-import { Album } from './entity/Album';
+import { Photo } from './entity/photo.entity';
+import { Album } from './entity/album.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -1117,12 +1117,12 @@ export class PhotoService {
 The `loadedPhoto` value is:
 ```json
 {
-  id: 1
+  id: 1,
   name: "Me and Bears ",
   description: "I am near polar bears ",
   filename: "photo-with-bears.jpg ",
   albums: [{
-    id: 1
+    id: 1,
     name: "Bears"
   }, {
     id: 2,
@@ -1235,7 +1235,7 @@ export default {
     dataSource: {
       default: {
         // ...
-        entities: [Photo]
+        entities: [Photo],
         // Incoming subscription class
         subscribers: [EverythingSubscriber]
       }
@@ -1288,9 +1288,8 @@ export default {
 
 In use, you need to specify which connection (Connection) the model belongs.
 ```typescript
-// entity/photo.ts
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { User } from './model/user';
+import { User } from './entity/user.entity';
 
 export class XXX {
 
@@ -1508,7 +1507,7 @@ $ npx mwtypeorm entity:create src/entity/User
 
 **Create Migration**
 
-A `src/migration/******-photo.ts` file will be generated based on the existing data source.
+A `src/migration/******-photo.entity.ts` file will be generated based on the existing data source.
 
 For example, the configuration is as follows:
 
