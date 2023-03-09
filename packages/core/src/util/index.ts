@@ -11,7 +11,7 @@ import { safeParse, safeStringify } from './flatted';
 import * as crypto from 'crypto';
 import { Types } from './types';
 
-const debug = debuglog('midway:container:util');
+const debug = debuglog('midway:debug');
 
 /**
  * @since 2.0.0
@@ -47,7 +47,7 @@ export const safeRequire = (p, enabledCache = true) => {
       return JSON.parse(content);
     }
   } catch (err) {
-    debug(`SafeRequire Warning, message = ${err.message}`);
+    debug(`[core]: SafeRequire Warning\n\n${err.message}\n`);
     return undefined;
   }
 };

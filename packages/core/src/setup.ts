@@ -28,6 +28,11 @@ import { join } from 'path';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 const debug = util.debuglog('midway:debug');
 
+let stepIdx = 1;
+function printStepDebugInfo(stepInfo: string) {
+  debug(`\n\nStep ${stepIdx++}: ${stepInfo}\n`);
+}
+
 /**
  * midway framework main entry, this method bootstrap all service and framework.
  * @param globalOptions
@@ -36,6 +41,8 @@ export async function initializeGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ): Promise<IMidwayContainer> {
   const applicationContext = prepareGlobalApplicationContext(globalOptions);
+
+  printStepDebugInfo('Init logger');
 
   // init logger
   const loggerService = await applicationContext.getAsync(MidwayLoggerService, [
@@ -51,19 +58,27 @@ export async function initializeGlobalApplicationContext(
     );
   }
 
+  printStepDebugInfo('Init framework');
+
   // framework/config/plugin/logger/app decorator support
   await applicationContext.getAsync(MidwayFrameworkService, [
     applicationContext,
     globalOptions,
   ]);
 
+  printStepDebugInfo('Init lifecycle');
+
   // lifecycle support
   await applicationContext.getAsync(MidwayLifeCycleService, [
     applicationContext,
   ]);
 
+  printStepDebugInfo('Init MidwayMockService');
+
   // mock support
   await applicationContext.get(MidwayMockService, [applicationContext]);
+
+  printStepDebugInfo('Init preload modules');
 
   // some preload module init
   const modules = listPreloadModule();
@@ -71,6 +86,8 @@ export async function initializeGlobalApplicationContext(
     // preload init context
     await applicationContext.getAsync(module);
   }
+
+  printStepDebugInfo('End of initialize and start');
 
   return applicationContext;
 }
@@ -101,6 +118,8 @@ export async function destroyGlobalApplicationContext(
 export function prepareGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ) {
+  printStepDebugInfo('Ready to create applicationContext');
+
   debug('[core]: start "initializeGlobalApplicationContext"');
   debug(`[core]: bootstrap options = ${util.inspect(globalOptions)}`);
   const appDir = globalOptions.appDir ?? '';
@@ -119,6 +138,8 @@ export function prepareGlobalApplicationContext(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
+  printStepDebugInfo('Ready module detector');
+
   if (globalOptions.moduleDetector !== false) {
     if (
       globalOptions.moduleDetector === undefined ||
@@ -135,6 +156,8 @@ export function prepareGlobalApplicationContext(
     }
   }
 
+  printStepDebugInfo('Binding inner service');
+
   // bind inner service
   applicationContext.bindClass(MidwayEnvironmentService);
   applicationContext.bindClass(MidwayInformationService);
@@ -150,12 +173,18 @@ export function prepareGlobalApplicationContext(
   applicationContext.bindClass(MidwayWebRouterService);
   applicationContext.bindClass(MidwayServerlessFunctionService);
 
+  printStepDebugInfo('Binding preload module');
+
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
     for (const preloadModule of globalOptions.preloadModules) {
       applicationContext.bindClass(preloadModule);
     }
   }
+
+  printStepDebugInfo(
+    'Init MidwayConfigService, MidwayAspectService and MidwayDecoratorService'
+  );
 
   // init default config
   const configService = applicationContext.get(MidwayConfigService);
@@ -170,6 +199,10 @@ export function prepareGlobalApplicationContext(
 
   // init decorator service
   applicationContext.get(MidwayDecoratorService, [applicationContext]);
+
+  printStepDebugInfo(
+    'Load imports(component) and user code configuration module'
+  );
 
   if (!globalOptions.imports) {
     globalOptions.imports = [
@@ -186,6 +219,8 @@ export function prepareGlobalApplicationContext(
     }
   }
 
+  printStepDebugInfo('Run applicationContext ready method');
+
   // bind user code module
   applicationContext.ready();
 
@@ -196,6 +231,8 @@ export function prepareGlobalApplicationContext(
       configService.addObject(globalOptions.globalConfig);
     }
   }
+
+  printStepDebugInfo('Load config file');
 
   // merge config
   configService.load();
