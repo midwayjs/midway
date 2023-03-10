@@ -57,7 +57,7 @@ export async function initializeGlobalApplicationContext(
       loggerService.getLogger('appLogger')
     );
   }
-  
+
   printStepDebugInfo('Init MidwayMockService');
 
   // mock support
