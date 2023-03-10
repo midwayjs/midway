@@ -6,11 +6,11 @@
 
 | 描述              |     |
 | ----------------- | --- |
-| 可用于标准项目    | ✅  |
-| 可用于 Serverless | ✅  |
-| 可用于一体化      | ✅  |
-| 包含独立主框架    | ❌  |
-| 包含独立日志      | ❌  |
+| 可用于标准项目    | ✅   |
+| 可用于 Serverless | ✅   |
+| 可用于一体化      | ✅   |
+| 包含独立主框架    | ❌   |
+| 包含独立日志      | ❌   |
 
 ## 背景
 
@@ -64,7 +64,7 @@ export class HomeController {
 
 如果每个方法都需要这么校验，会非常的繁琐。
 
-针对这种情况，Midway 提供了 Validate 组件。 配合 `@Validate` 和 `@Rule` 装饰器，用来**快速定义校验的规则**，帮助用户**减少这些重复的代码**。
+针对这种情况，Midway 提供了 Validate 组件。 配合 `@Validate` 和 `@Rule` 装饰器，用来 **快速定义校验的规则**，帮助用户 **减少这些重复的代码**。
 
 注意，从 v3 开始，`@Rule` 和 `@Validate` 装饰器从 `@midwayjs/validate` 中导出。
 
@@ -156,9 +156,11 @@ export class UserDTO {
 
 [joi](https://joi.dev/api/) 提供了非常多的校验类型，还可以对对象和数组中的字段做校验，还有例如字符串常用的 `RuleType.string().email()` ，以及 `RuleType.string().pattern(/xxxx/)` 正则校验等，具体可以查询 [joi](https://joi.dev/api/) 的 API 文档。
 
+
+
 ## 校验参数
 
-定义完类型之后，就可以直接在业务代码中使用了，开启校验能力还需要 `@Validate` 装饰器。
+定义完类型之后，就可以直接在业务代码中使用了。
 
 ```typescript
 // src/controller/home.ts
@@ -384,6 +386,12 @@ RuleType.array().min(10); // 数组，最小长度为 10
 RuleType.array().length(10); // 数组，长度为 10
 
 RuleType.string().allow(''); // 非必填字段传入空字符串
+
+export enum DeviceType {
+  iOS = 'ios',
+  Android = 'android',
+}
+RuleType.string().valid(...Object.values(DeviceType)) // 根据枚举值校验
 ```
 
 ### 级联校验
@@ -569,6 +577,8 @@ export class UserDTO {
 在 Validate 中，同时依赖了 [i18n](./i18n) 组件来实现校验消息的国际化。
 
 默认情况下，提供了 `en_US` 和 `zh_CN` 两种校验的翻译文本，所以在请求失败时，会返回当前浏览器访问所指定的语言。
+
+
 
 ### 通过装饰器指定语言
 

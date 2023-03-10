@@ -133,14 +133,14 @@ npm install mongodb --save
 
 ```
 MyProject
-├── src              							// TS 根目录
+├── src              							    // TS 根目录
 │   ├── config
-│   │   └── config.default.ts 		// 应用配置文件
-│   ├── entity       							// 实体（数据库 Model) 目录
-│   │   └── photo.ts  					  // 实体文件
-│   │   └── photoMetadata.ts
-│   ├── configuration.ts     			// Midway 配置文件
-│   └── service      							// 其他的服务目录
+│   │   └── config.default.ts 		    // 应用配置文件
+│   ├── entity       							    // 实体（数据库 Model) 目录
+│   │   └── photo.entity.ts  					// 实体文件
+│   │   └── photoMetadata.entity.ts
+│   ├── configuration.ts     			    // Midway 配置文件
+│   └── service      							    // 其他的服务目录
 ├── .gitignore
 ├── package.json
 ├── README.md
@@ -167,9 +167,9 @@ MyProject
 我们通过模型和数据库关联，在应用中的模型就是数据库表，在 TypeORM 中，模型是和实体绑定的，每一个实体（Entity) 文件，即是 Model，也是实体（Entity）。
 
 
-在示例中，需要一个实体，我们这里拿 `photo` 举例。新建 entity 目录，在其中添加实体文件 `photo.ts` ，一个简单的实体如下。
+在示例中，需要一个实体，我们这里拿 `photo` 举例。新建 entity 目录，在其中添加实体文件 `photo.entity.ts` ，一个简单的实体如下。
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 export class Photo {
   id: number;
   name: string;
@@ -187,7 +187,7 @@ export class Photo {
 
 我们使用 `Entity` 来定义一个实体模型类。
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity } from 'typeorm';
 
 @Entity('photo')
@@ -203,7 +203,7 @@ export class Photo {
 
 如果表名和当前的实体名不同，可以在参数中指定。
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity } from 'typeorm';
 
 @Entity('photo_table_name')
@@ -228,7 +228,7 @@ export class Photo {
 
 
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity, Column } from 'typeorm';
 
 @Entity()
@@ -273,7 +273,7 @@ export class Photo {
 
 
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
@@ -304,7 +304,7 @@ export class Photo {
 
 现在，如果要设置自增的 id 列，需要将 `@PrimaryColumn` 装饰器更改为 `@PrimaryGeneratedColumn`  装饰器：
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -339,7 +339,7 @@ export class Photo {
 
 
 ```typescript
-// entity/photo.ts
+// entity/photo.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -415,7 +415,7 @@ name: string;
 然后在 `config.default.ts`  中配置数据库连接信息。
 ```typescript
 // src/config/config.default.ts
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 
 export default {
   // ...
@@ -426,10 +426,10 @@ export default {
          * 单数据库实例
          */
         type: 'mysql',
-        host: '',
+        host: '*******',
         port: 3306,
-        username: '',
-        password: '',
+        username: '*******',
+        password: '*******',
         database: undefined,
         synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
         logging: false,
@@ -499,7 +499,7 @@ export default {
 ```typescript
 import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -535,7 +535,7 @@ export class PhotoService {
 ```typescript
 import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -596,7 +596,7 @@ export class PhotoService {
 ```typescript
 import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -627,7 +627,7 @@ export class PhotoService {
 ```typescript
 import { Provide } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from '../entity/photo';
+import { Photo } from '../entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -670,12 +670,12 @@ await this.photoModel.restore(1);
 ### 12、创建一对一关联
 
 
-让我们与另一个类创建一对一的关系。让我们在 `entity/photoMetadata.ts`  中创建一个新类。这个类包含 photo 的其他元信息。
+让我们与另一个类创建一对一的关系。让我们在 `entity/photoMetadata.entity.ts`  中创建一个新类。这个类包含 photo 的其他元信息。
 
 
 ```typescript
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
-import { Photo } from "./photo";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Photo } from './photo.entity';
 
 @Entity()
 export class PhotoMetadata {
@@ -736,8 +736,8 @@ export class PhotoMetadata {
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
-import { PhotoMetadata } from './entity/photoMetadata';
+import { Photo } from './entity/photo.entity';
+import { PhotoMetadata } from './entity/photoMetadata.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -804,8 +804,8 @@ export class PhotoMetadata {
 ```
 ```typescript
 import { Entity } from 'typeorm';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm";
-import { PhotoMetadata } from './photoMetadata';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { PhotoMetadata } from './photoMetadata.entity';
 
 @Entity()
 export class Photo {
@@ -831,7 +831,7 @@ export class Photo {
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
+import { Photo } from './entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -857,7 +857,7 @@ export class PhotoService {
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
+import { Photo } from './entity/photo.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -901,8 +901,8 @@ export class Photo {
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
-import { PhotoMetadata } from './entity/photoMetadata';
+import { Photo } from './entity/photo.entity';
+import { PhotoMetadata } from './entity/photoMetadata.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -949,8 +949,8 @@ export class PhotoService {
 让我们创建一个多对一/一对多关系。假设一张照片有一个作者，每个作者可以有很多照片。首先，让我们创建一个 Author 类：
 ```typescript
 import { Entity } from 'typeorm';
-import { Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from "typeorm";
-import { Photo } from './entity/photo';
+import { Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
+import { Photo } from './entity/photo.entity';
 
 @Entity()
 export class Author {
@@ -971,9 +971,9 @@ export class Author {
 现在，将关系的所有者添加到 Photo 实体中：
 ```typescript
 import { Entity } from 'typeorm';
-import { Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { PhotoMetadata } from "./photoMetadata";
-import { Author } from "./author";
+import { Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { PhotoMetadata } from './photoMetadata.entity';
+import { Author } from './author.entity';
 
 @Entity()
 export class Photo {
@@ -1022,7 +1022,7 @@ export class Photo {
 
 
 ```typescript
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
 export class Album {
@@ -1073,8 +1073,8 @@ export class Photo {
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Photo } from './entity/photo';
-import { Album } from './entity/album';
+import { Photo } from './entity/photo.entity';
+import { Album } from './entity/album.entity';
 import { Repository } from 'typeorm';
 
 @Provide()
@@ -1286,9 +1286,8 @@ export default {
 
 在使用时，需要指定模型归属于哪个连接（Connection）。
 ```typescript
-// entity/photo.ts
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { User } from './model/user';
+import { User } from './entity/user.entity';
 
 export class XXX {
 
@@ -1506,7 +1505,7 @@ $ npx mwtypeorm entity:create src/entity/User
 
 **创建 Migration**
 
-将会根据现有数据源生成一个 `src/migration/******-photo.ts` 文件。
+将会根据现有数据源生成一个 `src/migration/******-photo.entity.ts` 文件。
 
 比如配置如下：
 

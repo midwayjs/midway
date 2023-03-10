@@ -46,6 +46,7 @@ import { Utils } from '../util';
 
 const debug = util.debuglog('midway:debug');
 const debugBind = util.debuglog('midway:bind');
+const debugSpaceLength = 9;
 
 class ContainerConfiguration {
   private loadedMap = new WeakMap();
@@ -387,7 +388,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
     for (const p in props) {
       const propertyMeta = props[p];
-      debugBind(`  inject properties => [${JSON.stringify(propertyMeta)}]`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}inject properties => [${JSON.stringify(
+          propertyMeta
+        )}]`
+      );
       const refManaged = new ManagedReference();
       refManaged.args = propertyMeta.args;
       refManaged.name = propertyMeta.value as any;
@@ -415,22 +420,36 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     const objDefOptions = getObjectDefinition(target) ?? {};
 
     if (objDefOptions.initMethod) {
-      debugBind(`  register initMethod = ${objDefOptions.initMethod}`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}register initMethod = ${
+          objDefOptions.initMethod
+        }`
+      );
       definition.initMethod = objDefOptions.initMethod;
     }
 
     if (objDefOptions.destroyMethod) {
-      debugBind(`  register destroyMethod = ${objDefOptions.destroyMethod}`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}register destroyMethod = ${
+          objDefOptions.destroyMethod
+        }`
+      );
       definition.destroyMethod = objDefOptions.destroyMethod;
     }
 
     if (objDefOptions.scope) {
-      debugBind(`  register scope = ${objDefOptions.scope}`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}register scope = ${objDefOptions.scope}`
+      );
       definition.scope = objDefOptions.scope;
     }
 
     if (objDefOptions.allowDowngrade) {
-      debugBind(`  register allowDowngrade = ${objDefOptions.allowDowngrade}`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}register allowDowngrade = ${
+          objDefOptions.allowDowngrade
+        }`
+      );
       definition.allowDowngrade = objDefOptions.allowDowngrade;
     }
 

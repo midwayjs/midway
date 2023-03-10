@@ -155,6 +155,32 @@ export class AutoConfiguration {
 
 
 
+## 获取 Http Server
+
+在一些特殊情况下，你需要获取到原始的 Http Server，我们可以在服务器启动后获取。
+
+```typescript
+import { App, Configuration } from '@midwayjs/core';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+	// ...
+})
+export class AutoConfiguration {
+  @Inject()
+  framework: koa.Framework;
+
+  async onServerReady(container) {
+    const server = this.framework.getServer();
+    // ...
+  }
+}
+```
+
+
+
+
+
 ## 配置
 
 
@@ -306,3 +332,4 @@ export default {
   },
 };
 ```
+
