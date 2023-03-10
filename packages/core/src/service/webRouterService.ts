@@ -65,7 +65,7 @@ export interface RouterInfo {
    */
   handlerName?: string;
   /**
-   *  serverless func load key
+   *  serverless func load key, will be override by @ServerlessTrigger and @ServerlessFunction
    */
   funcHandlerName?: string;
   /**
@@ -93,7 +93,7 @@ export interface RouterInfo {
    */
   responseMetadata?: any[];
   /**
-   * serverless function name
+   * serverless function name, will be override by @ServerlessTrigger and @ServerlessFunction
    */
   functionName?: string;
   /**
