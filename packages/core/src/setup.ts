@@ -58,6 +58,11 @@ export async function initializeGlobalApplicationContext(
     );
   }
 
+  printStepDebugInfo('Init MidwayMockService');
+
+  // mock support
+  await applicationContext.getAsync(MidwayMockService, [applicationContext]);
+
   printStepDebugInfo('Init framework');
 
   // framework/config/plugin/logger/app decorator support
@@ -72,11 +77,6 @@ export async function initializeGlobalApplicationContext(
   await applicationContext.getAsync(MidwayLifeCycleService, [
     applicationContext,
   ]);
-
-  printStepDebugInfo('Init MidwayMockService');
-
-  // mock support
-  await applicationContext.get(MidwayMockService, [applicationContext]);
 
   printStepDebugInfo('Init preload modules');
 
