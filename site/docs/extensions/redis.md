@@ -42,7 +42,7 @@ $ npm i @midwayjs/redis@3 --save
 ```typescript
 import { Configuration } from '@midwayjs/core';
 import * as redis from '@midwayjs/redis';
-import { join } from 'path'
+import { join } from 'path';
 
 @Configuration({
   imports: [
@@ -51,7 +51,7 @@ import { join } from 'path'
   ],
   importConfigs: [
     join(__dirname, 'config')
-  ]
+  ],
 })
 export class MainConfiguration {
 }
@@ -59,9 +59,6 @@ export class MainConfiguration {
 
 
 ## 配置 Redis
-
-
-比如：
 
 
 **单客户端配置**
@@ -207,7 +204,7 @@ export class UserService {
 也可以通过装饰器获取。
 
 ```typescript
-import { RedisServiceFactory } from '@midwayjs/redis';
+import { RedisServiceFactory, RedisService } from '@midwayjs/redis';
 import { InjectClient } from '@midwayjs/core';
 
 @Provide()
