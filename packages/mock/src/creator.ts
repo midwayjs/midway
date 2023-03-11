@@ -248,10 +248,30 @@ export async function createFunctionApp<
   T extends IMidwayFramework<any, any, any, any, any>,
   Y = ReturnType<T['getApplication']>
 >(
-  baseDir: string = process.cwd(),
-  options: MockAppConfigurationOptions = {},
+  options: MockAppConfigurationOptions,
+  customFrameworkModule?: { new (...args): T } | ComponentModule
+): Promise<Y>;
+export async function createFunctionApp<
+  T extends IMidwayFramework<any, any, any, any, any>,
+  Y = ReturnType<T['getApplication']>
+>(
+  baseDir: string,
+  options: MockAppConfigurationOptions,
+  customFrameworkModule?: { new (...args): T } | ComponentModule
+): Promise<Y>;
+export async function createFunctionApp<
+  T extends IMidwayFramework<any, any, any, any, any>,
+  Y = ReturnType<T['getApplication']>
+>(
+  baseDir?: string | MockAppConfigurationOptions,
+  options?: MockAppConfigurationOptions,
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
+  if (typeof baseDir !== 'string') {
+    options = baseDir;
+    baseDir = process.cwd();
+  }
+
   let starterName;
   if (!options.starter) {
     // load yaml
