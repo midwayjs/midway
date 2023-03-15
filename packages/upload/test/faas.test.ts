@@ -32,6 +32,21 @@ describe('test/faas.test.ts', function () {
       });
 
   });
+
+  it('upload file mode not match', async () => {
+    const imagePath = join(__dirname, 'fixtures/1.jpg');
+    const request = await createHttpRequest(app);
+    await request.post('/xxxx')
+      .field('name', 'form')
+      .attach('file', imagePath)
+      .expect(200)
+      .then(async response => {
+        assert(response.body.ignore);
+        assert(!response.body.files);
+        assert(!response.body.fields);
+      });
+  });
+
   it('upload file mode and auto clean', async () => {
     const imagePath = join(__dirname, 'fixtures/1.jpg');
     const request = await createHttpRequest(app);

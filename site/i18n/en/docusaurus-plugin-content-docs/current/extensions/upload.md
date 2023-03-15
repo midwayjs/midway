@@ -121,6 +121,8 @@ export default {
     cleanTimeout: 5*60*1000
     // base64: boolean, sets whether the original body is in base64 format. The default value is false, which is generally used for compatibility with Tencent Cloud.
     base64: false
+    // Parse the file information in body only when matching the path to/api/upload
+    match: /\/api\/upload/,
   },
 }
 
@@ -186,7 +188,38 @@ Configure the suffix of the uploaded file. If you configure `null`, the suffix o
 
 You can obtain the default suffix whitelist from the `uploadWhiteList` exported in the `@midwayjs/upload` package.
 
+:::caution
+When `whitelist` is configured as `null`, you need to pay attention to the risk of security vulnerabilities. Users may upload webshells such as `.php`, `.asp`, etc.
+:::
 
+
+## Configure allow (match) or ignore (ignore) upload paths
+
+When the upload component is enabled, when the `method` of the request is one of `POST/PUT/DELETE/PATCH`, if it is judged that `headers['content-type']` of the request contains `multipart/form-data` and When `boundary` is set, it will `**automatically enter**` upload file parsing logic.
+
+This will cause: If the user may manually analyze the request information of the website, manually call any interface such as `post`, and upload a file, it will trigger the parsing logic of the `upload` component, and create a file in the temporary directory Temporary cache of uploaded files creates unnecessary load on the website server, and may affect the normal business logic processing of the server in severe cases.
+
+Therefore, you can add `match` or `ignore` configuration to the configuration to set which api paths are allowed to upload.
+
+Both `match` and `ignore` can be configured as: "a `regular expression` that matches the request path" or "a `callback function` whose parameter is the request path and needs to return a boolean value", for example:
+```typescript
+
+export default {
+   //...
+   upload: {
+     //...
+     match: /\/api\/upload/,
+     ignore: path => {
+       return path. endsWith('update');
+     }
+   },
+}
+
+```
+
+If `match` and `ignore` are configured `at the same time`, and both successfully match the same path, `match` has a higher priority.
+
+If `none` is configured with `match` and `ignore`, when the user request header and data match an uploaded file, it will automatically enter the uploaded file parsing logic.
 
 ## Temporary Documents and Cleanup
 

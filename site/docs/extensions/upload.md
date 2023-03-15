@@ -121,6 +121,8 @@ export default {
     cleanTimeout: 5 * 60 * 1000,
     // base64: boolean，设置原始body是否是base64格式，默认为false，一般用于腾讯云的兼容
     base64: false,
+    // 仅在匹配路径到 /api/upload 的时候去解析 body 中的文件信息
+    match: /\/api\/upload/,
   },
 }
 
@@ -152,9 +154,9 @@ export default {
 
 
 
-## 配置上传白名单
+## 配置上传白名单 whitelist
 
-配置允许上传的文件后缀名，配置 `null` 则不校验后缀名，如果上传的文件后缀不匹配，会响应 `400` error，默认值如下：
+通过 `whitelist` 属性，配置允许上传的文件后缀名，配置 `null` 则不校验后缀名，如果上传的文件后缀不匹配，会响应 `400` error，默认值如下：
 ```ts
 '.jpg',
 '.jpeg',
@@ -186,6 +188,38 @@ export default {
 
 可以通过 `@midwayjs/upload` 包中导出的 `uploadWhiteList` 获取到默认的后缀名白名单。
 
+:::caution
+在 `whitelist` 配置为 `null` 时，需要注意造成的安全漏洞风险，用户可能会上传 `.php`、`.asp` 等 webshell
+:::
+
+
+## 配置 允许(match) 或 忽略(ignore)的上传路径
+
+当开启了 upload 组件后，当请求的 `method` 为 `POST/PUT/DELETE/PATCH` 之一时，如果判断请求的 `headers['content-type']` 中包含 `multipart/form-data` 及 `boundary` 时，将会 `**自动进入**` 上传文件解析逻辑。
+
+这会造成：如果用户可能手动分析了网站的请求信息，手动调用任一一个 `post` 等类型的接口，将一个文件进行上传，就会触发 `upload` 组件的解析逻辑，在临时目录创建临时的已上传文件缓存，对网站服务器产生不必要的负荷，严重时可能会影响服务器正常业务逻辑处理。
+
+所以，您可以在配置中添加 `match` 或 `ignore` 配置，来设置哪些 api 路径是允许进行上传的。
+
+`match` 和 `ignore` 都可以配置为：“匹配请求路径的 `正则表达式`” 或 “参数为请求路径的 `回调函数`，需要返回一个布尔值”，例如：
+```typescript
+
+export default {
+  // ...
+  upload: {
+    // ...
+    match: /\/api\/upload/, 
+    ignore: path => {
+      return path.endsWith('update');
+    }
+  },
+}
+
+```
+
+如果`同时`配置 `match` 和 `ignore`，且都成功匹配到了同一个路径，则 `match` 的优先级更高。
+
+如果`都不`配置 `match` 和 `ignore`，则当用户请求头和数据符合一个上传的文件时，自动进入上传文件解析逻辑。
 
 
 ## 临时文件与清理

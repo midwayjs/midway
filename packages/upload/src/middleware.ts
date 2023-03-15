@@ -48,6 +48,10 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
   async execUpload(ctx, req, res, next, isExpress) {
     const { mode, tmpdir, fileSize } = this.upload;
+    const passed = this.checkMatchOrIgnore(ctx.path);
+    if (!passed) {
+      return next();
+    }
     const boundary = this.getUploadBoundary(req);
     if (!boundary) {
       return next();
@@ -200,5 +204,25 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
   static getName() {
     return 'upload';
+  }
+
+  checkMatchOrIgnore(path = ''): boolean {
+    // if no matching rule, the default is passed, otherwise is not passed
+    let passed = !this.upload.match;
+    if (this.upload.ignore) {
+      if (this.upload.ignore instanceof RegExp) {
+        passed = !this.upload.ignore.test(path);
+      } else if (typeof this.upload.ignore === 'function') {
+        passed = !this.upload.ignore(path);
+      }
+    }
+    if (this.upload.match) {
+      if (this.upload.match instanceof RegExp) {
+        passed = this.upload.match.test(path);
+      } else if (typeof this.upload.match === 'function') {
+        passed = this.upload.match(path);
+      }
+    }
+    return passed;
   }
 }
