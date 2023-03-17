@@ -14,7 +14,7 @@
     "@midwayjs/mock": "^3.10.15",
     "sequelize": "6.29.3",
     "sequelize-typescript": "2.1.5",
-    "sqlite3": "5.1.4"
+    "sqlite3": "5.1.5"
   },
   "keywords": [
     "midway",
