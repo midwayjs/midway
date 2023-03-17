@@ -21,9 +21,9 @@
 
 ## Description
 
-Midway is a Node.js framework for building Serverless Services, traditional server-side applications, microservices and small programs.It written by typescript, which uses the IoC injection mechanism to decouple the business logic of the application and make the development of large Node.js application easier and more natural.
+Midway is a Node.js framework for building Serverless Services, traditional server-side applications, microservices and small programs. It written by typescript, which uses the IoC injection mechanism to decouple the business logic of the application and make the development of large Node.js application easier and more natural.
 
-Midway can use koa, express or EggJS as the basic web framework. It also provides basic solutions for independent use such as Socket.io, GRPC, Dubbo.js, and RabbitMQ.
+Midway can use koa, express or EggJS as the basic web framework. It also provides basic solutions for independent use such as Socket.io, gRPC, Dubbo.js, and RabbitMQ.
 
 In addition, Midway is also a Node.js serverless framework for front-end/full-stack developers. Build applications for the next decade. It can run on AWS, Alibaba Cloud, Tencent Cloud and traditional VM/container. Easily integrate with React and Vue. 🌈
 
