@@ -110,7 +110,7 @@ In addition, Midway is also a Node.js serverless framework for front-end/full-st
 
 ## Examples
 
-See [midway-examples](https://github.com/midwayjs/midway-examples)
+See [midway-examples](https://github.com/midwayjs/midway-examples).
 
 ## Issues
 
