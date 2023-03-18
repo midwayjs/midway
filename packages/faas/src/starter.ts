@@ -42,7 +42,7 @@ export abstract class AbstractBootstrapStarter {
 
   protected createDefaultMockContext() {}
 
-  abstract onStart(): any;
+  abstract onStart(): unknown;
   abstract onInit(...args: unknown[]);
   abstract onRequest(...args: unknown[]);
   abstract onClose();
