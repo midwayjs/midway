@@ -479,6 +479,13 @@ export async function createFunctionApp<
   }
 }
 
+export async function createRoutingWorker(starterExports: {
+  start: Function;
+  close: Function;
+}) {
+  return createFunctionApp();
+}
+
 /**
  * 一个全量的空框架
  */
