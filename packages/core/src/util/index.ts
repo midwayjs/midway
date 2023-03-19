@@ -4,7 +4,7 @@ import { debuglog } from 'util';
 import * as transformer from 'class-transformer';
 import { PathToRegexpUtil } from './pathToRegexp';
 import { MidwayCommonError } from '../error';
-import { FunctionMiddleware } from '../interface';
+import { FunctionMiddleware, IgnoreMatcher } from '../interface';
 import { camelCase, pascalCase } from './camelCase';
 import { randomUUID } from './uuid';
 import { safeParse, safeStringify } from './flatted';
@@ -284,7 +284,11 @@ export function toPathMatch(pattern) {
   );
 }
 
-export function pathMatching(options) {
+export function pathMatching(options: {
+  match?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  ignore?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  thisResolver?: any;
+}) {
   options = options || {};
   if (options.match && options.ignore)
     throw new MidwayCommonError(
@@ -292,9 +296,36 @@ export function pathMatching(options) {
     );
   if (!options.match && !options.ignore) return () => true;
 
+  if (options.match && !Array.isArray(options.match)) {
+    options.match = [options.match];
+  }
+
+  if (options.ignore && !Array.isArray(options.ignore)) {
+    options.ignore = [options.ignore];
+  }
+
+  const createMatch = (ignoreMatcherArr: IgnoreMatcher<any>[]) => {
+    const matchedArr = ignoreMatcherArr.map(item => {
+      if (options.thisResolver) {
+        return toPathMatch(item).bind(options.thisResolver);
+      }
+      return toPathMatch(item);
+    });
+
+    return ctx => {
+      for (let i = 0; i < matchedArr.length; i++) {
+        const matched = matchedArr[i](ctx);
+        if (matched) {
+          return true;
+        }
+      }
+      return false;
+    };
+  };
+
   const matchFn = options.match
-    ? toPathMatch(options.match)
-    : toPathMatch(options.ignore);
+    ? createMatch(options.match as IgnoreMatcher<any>[])
+    : createMatch(options.ignore as IgnoreMatcher<any>[]);
 
   return function pathMatch(ctx?) {
     const matched = matchFn(ctx);

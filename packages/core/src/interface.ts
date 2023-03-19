@@ -754,13 +754,15 @@ export type IMidwayContext<FrameworkContext = unknown> = Context &
   FrameworkContext;
 export type NextFunction = () => Promise<any>;
 
+export type IgnoreMatcher<CTX> = string | RegExp | ((ctx: CTX) => boolean);
+
 /**
  * Common middleware definition
  */
 export interface IMiddleware<CTX, R, N = unknown> {
   resolve: (app: IMidwayApplication) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
-  match?: (ctx: CTX) => boolean;
-  ignore?: (ctx: CTX) => boolean;
+  match?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
+  ignore?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
 }
 export type FunctionMiddleware<CTX, R, N = unknown> = N extends true
   ? (req: CTX, res: R, next: N) => any
