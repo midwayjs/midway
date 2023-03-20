@@ -64,7 +64,7 @@ $ npm uninstall @midwayjs/faas-cli -g
 
 常见定义变更。
 
-原有的 `IFaaSApplication` 变为 `Application` ，和应用一致从 `@midawyjs/faas` 包获取。
+原有的 `IFaaSApplication` 变为 `Application` ，和应用一致从 `@midwayjs/faas` 包获取。
 
 ```typescript
 import { Application, Context } from '@midwayjs/faas';

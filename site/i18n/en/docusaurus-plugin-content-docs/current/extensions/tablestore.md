@@ -161,7 +161,7 @@ import {
   SingleColumnCondition
   LogicalOperator
   ComparatorType
-} from '@midawyjs/tablestore';
+} from '@midwayjs/tablestore';
 
 @Provide()
 export class UserService {

@@ -16,7 +16,7 @@ Midway 内置的应用管理器，可以使用它获取到所有的 Application�
 
 ```typescript
 import { MidwayApplicationManager } from '@midwayjs/core'
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 import { CustomMiddleware } from './middleware/custom.middleware';
 
 @Configuration({
@@ -480,7 +480,7 @@ Midway 内置的路由表服务，用于应用路由和函数的创建。
 
 ```typescript
 import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 
 @Configuration({
   // ...
@@ -524,7 +524,7 @@ Midway 内置的函数信息服务，继承与 `MidwayWebRouterService` ，方�
 
 ```typescript
 import { MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 
 @Configuration({
   // ...
