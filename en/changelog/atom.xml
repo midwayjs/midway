@@ -2,12 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-03-10T20:00:00.000Z</updated>
+    <updated>2023-03-21T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.10.16]]></title>
+        <id>/v3.10.16</id>
+        <link href="https://midwayjs.org/en/changelog/v3.10.16"/>
+        <updated>2023-03-21T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>web</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2807" target="_blank" rel="noopener noreferrer">#2807</a> fix: egg missing export decorator (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a class="hash-link" href="#-dependencies" title="Lien direct vers le titre">​</a></h2><ul><li><code>typegoose</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2798" target="_blank" rel="noopener noreferrer">#2798</a> chore(deps): update dependency @typegoose/typegoose to v10.3.2 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>casbin-typeorm-adapter</code>, <code>mikro</code>, <code>sequelize</code>, <code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2795" target="_blank" rel="noopener noreferrer">#2795</a> chore(deps): update dependency sqlite3 to v5.1.5 <!-- -->[security]<!-- --> (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>mongoose</code>, <code>typegoose</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2801" target="_blank" rel="noopener noreferrer">#2801</a> chore(deps): update dependency mongoose to v6.10.3 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>sequelize</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2802" target="_blank" rel="noopener noreferrer">#2802</a> chore(deps): update dependency sequelize to v6.29.3 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>Umuoy (<a href="https://github.com/umuoy1" target="_blank" rel="noopener noreferrer">@umuoy1</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>Umuoy</name>
+            <uri>https://github.com/umuoy1</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.10.15]]></title>
         <id>/v3.10.15</id>

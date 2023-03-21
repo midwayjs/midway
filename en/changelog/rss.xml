@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Fri, 10 Mar 2023 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 21 Mar 2023 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2023 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.10.16]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.10.16</link>
+            <guid>/v3.10.16</guid>
+            <pubDate>Tue, 21 Mar 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>web</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2807" target="_blank" rel="noopener noreferrer">#2807</a> fix: egg missing export decorator (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a class="hash-link" href="#-dependencies" title="Lien direct vers le titre">​</a></h2><ul><li><code>typegoose</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2798" target="_blank" rel="noopener noreferrer">#2798</a> chore(deps): update dependency @typegoose/typegoose to v10.3.2 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>casbin-typeorm-adapter</code>, <code>mikro</code>, <code>sequelize</code>, <code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2795" target="_blank" rel="noopener noreferrer">#2795</a> chore(deps): update dependency sqlite3 to v5.1.5 <!-- -->[security]<!-- --> (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>mongoose</code>, <code>typegoose</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2801" target="_blank" rel="noopener noreferrer">#2801</a> chore(deps): update dependency mongoose to v6.10.3 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>sequelize</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2802" target="_blank" rel="noopener noreferrer">#2802</a> chore(deps): update dependency sequelize to v6.29.3 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a class="hash-link" href="#committers-2" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>Umuoy (<a href="https://github.com/umuoy1" target="_blank" rel="noopener noreferrer">@umuoy1</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.10.15]]></title>
             <link>https://midwayjs.org/en/changelog/v3.10.15</link>
