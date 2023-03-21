@@ -1,6 +1,28 @@
 # Change Log
 
 
+## v3.10.16 (2023-03-21)
+
+#### :bug: Bug Fix
+* `web`
+  * [#2807](https://github.com/midwayjs/midway/pull/2807) fix: egg missing export decorator ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `typegoose`
+  * [#2798](https://github.com/midwayjs/midway/pull/2798) chore(deps): update dependency @typegoose/typegoose to v10.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `mikro`, `sequelize`, `typeorm`
+  * [#2795](https://github.com/midwayjs/midway/pull/2795) chore(deps): update dependency sqlite3 to v5.1.5 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#2801](https://github.com/midwayjs/midway/pull/2801) chore(deps): update dependency mongoose to v6.10.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `sequelize`
+  * [#2802](https://github.com/midwayjs/midway/pull/2802) chore(deps): update dependency sequelize to v6.29.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Umuoy ([@umuoy1](https://github.com/umuoy1))
+
+
+
 ## v3.10.15 (2023-03-10)
 
 #### :bug: Bug Fix
