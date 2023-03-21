@@ -11,6 +11,7 @@ export {
 } from './base';
 export { Application, Agent } from './application';
 export { EggConfiguration as Configuration } from './configuration';
+export * from './decorator';
 export function startCluster(serverConfig, callback?) {
   if (!serverConfig['require']) {
     serverConfig['require'] = [];
