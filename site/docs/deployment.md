@@ -464,15 +464,11 @@ Midway 从 v3 开始支持将项目构建为单文件。
 - 入口处 `importConfigs` 使用的路径形式引入配置的应用，组件
 - 未显式依赖的包，或者包里有基于约定的文件
 
-:::info
 
-当前，还处于测试阶段。
-
-:::
 
 ### 前置依赖
 
-单文件构建有一些前置依赖条件。
+单文件构建有一些前置依赖需要安装。
 
 ```bash
 ## 用于生成入口
@@ -481,7 +477,7 @@ $ npm i @midwayjs/bundle-helper --save-dev
 ## 用于构建单文件
 ## 装到全局
 $ npm i @vercel/ncc -g
-## 或者装到项目
+## 或者装到项目（推荐）
 $ npm i @vercel/ncc --save-dev
 ```
 
@@ -541,7 +537,7 @@ export default class UserSerivce {
 
 
 
-#### 3、数据源 entities 相关的
+#### 3、数据源 entities 相关
 
 数据源依赖的扫描路径也是不支持的。
 
@@ -563,15 +559,7 @@ export default {
 
 
 
-### 构建流程
-
-单文件构建的编译需要几个步骤：
-
-- 1、准备单文件构建入口
-- 2、将项目 ts 文件构建为 js
-- 3、使用额外编译器，将所有的 js 文件打包成一个文件
-
-**步骤一**
+### 修改入口文件
 
 修改入口 `bootstrap.js`  为下列代码。
 
@@ -588,9 +576,16 @@ Bootstrap.configure({
 
 ```
 
-**步骤二**
 
-`package.json` 中增加下面的脚本。
+
+### 构建
+
+单文件构建的编译需要几个步骤：
+
+- 1、将项目 ts 文件构建为 js
+- 2、使用额外编译器，将所有的 js 文件打包成一个文件
+
+我们可以将上面的流程编写为下面的两条命令，放在 `package.json` 的 `scripts` 字段中。
 
 ```json
   "scripts": {
@@ -602,13 +597,13 @@ Bootstrap.configure({
 
 包含三个部分
 
-- `bundle` 是将所有的项目代码以组件的形式导出，并生成一个 `src/index.ts` 文件
+- `bundle` 是将所有的项目代码以组件的形式导出，并生成一个 `src/index.ts` 文件，该命令是 `@midwayjs/bundle-helper` 提供的
 - `npm run buid` 是基础的 ts 项目构建，将 `src/**/*.ts` 构建为 `dist/**/*.js`
 - `ncc build bootstrap.js -o build` 以 `bootstrap.js` 为入口构建为一个单文件，最终生成到 `build/index.js`
 
-**步骤三**
 
-执行命令。
+
+编写完成后，执行命令。
 
 ```bash
 $ npm run bundle
@@ -620,15 +615,122 @@ $ npm run bundle
 
 :::
 
-**步骤四**
-
-启动项目。
+编译完成后，启动项目。
 
 ```bash
 $ npm run bundle_start
 ```
 
 如果启动访问没问题，那么你就可以拿着构建的 build 目录做分发了。
+
+
+
+## 二进制文件部署
+
+将 Node.js 打包为一个单独的可执行文件，部署时直接拷贝执行即可，这种方式包含了 node 运行时，业务代码，有利于保护知识产权。
+
+常见的将 Node.js 打包为可执行文件的工具有 `pkg`、`nexe`、`node-packer`、`enclose` 等，下面我们将以最为常见的 `pkg` 包作为示例。
+
+
+
+### 前置依赖
+
+二进制文件部署有一些前置依赖需要安装。
+
+```bash
+## 用于生成入口
+$ npm i @midwayjs/bundle-helper --save-dev
+
+## 用于构建二进制文件
+## 装到全局
+$ npm i pkg -g
+## 或者装到项目（推荐）
+$ npm i pkg --save-dev
+```
+
+
+
+### 代码调整
+
+和 [单文件构建部署](./deployment#单文件构建部署) 的调整相同，请参考上面的文档。
+
+
+
+### 修改入口文件
+
+和 [单文件构建部署](./deployment#单文件构建部署) 的调整相同，请参考上面的文档。
+
+
+
+### 构建
+
+首先需要对 pkg 进行配置，主要内容在 `package.json` 的 `bin` 和 `pkg` 字段下。
+
+- `bin` 我们指定为入口文件，即 `bootstrap.js` 
+- `pkg.scripts` 构建后的目录，使用了 glob 的语法包括了 `dist` 下的所有 js 文件
+- `pkg.asserts` 如果有一些静态资源文件，可以在这里配置
+- `pkg.targets` 构建的平台产物，是下列选项的组合（示例中我指定了 mac + node18）：
+  - **nodeRange** (node8), node10, node12, node14, node16 or latest
+  - **platform** alpine, linux, linuxstatic, win, macos, (freebsd)
+  - **arch** x64, arm64, (armv6, armv7)
+- `pkg.outputPath` 构建产物的地址，为了和 ts 输出分开，我们选择了 build 目录
+
+
+
+`package.json` 参考示例：
+
+```json
+{
+  "name": "my-midway-project",
+  // ...
+  "devDependencies": {
+    // ...
+    "@midwayjs/bundle-helper": "^1.2.0",
+    "pkg": "^5.8.1"
+  },
+  "scripts": {
+    // ...
+    "build": "midway-bin build -c",
+    "pkg": "pkg . -d > build/pkg.log",
+    "bundle": "bundle && npm run build"
+  },
+  "bin": "./bootstrap.js",
+  "pkg": {
+    "scripts": "dist/**/*.js",
+    "assets": [],
+    "targets": [
+      "node18-macos-arm64"
+    ],
+    "outputPath": "build"
+  },
+  // ...
+}
+
+```
+
+更为细节的部分请参考 [pkg文档](https://github.com/vercel/pkg)。
+
+:::tip
+
+上面的实例中，pkg 命令的 `-d` 参数是为了输出调试信息到特定文件，可以自行删减。
+
+:::
+
+
+
+二进制文件构建的编译需要几个步骤：
+
+- 1、生成 `src/index.ts` 入口文件，将项目 ts 文件构建为 js
+- 2、使用 pkg，生成特定平台的构建产物
+
+我们可以执行命令。
+
+```bash
+$ npm run bundle
+$ npm run pkg
+```
+
+正确的话，我们可以在 `build` 目录下看到一个 `my-midway-project` 文件（我们的 `package.json` 的 `name` 字段），双击它即可执行。
 
 
 
