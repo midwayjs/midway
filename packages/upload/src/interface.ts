@@ -13,6 +13,7 @@ export interface UploadOptions {
   base64?: boolean; // 上传的body是否为base64，例如腾讯云的apigw
   ignore?:  PathCondition; // 忽略哪些路径
   match?: PathCondition; // 匹配那些路径，优先级高于 ignore
+  fileTypeList?: [`.${string}`, string][] | null;
 }
 
 

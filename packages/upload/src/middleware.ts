@@ -6,16 +6,21 @@ import {
   IMiddleware,
   IMidwayLogger,
 } from '@midwayjs/core';
-import { resolve, extname } from 'path';
+import { resolve } from 'path';
 import { promises } from 'fs';
 import { Readable, Stream } from 'stream';
 import {
+  EXT_KEY,
   MultipartInvalidFilenameError,
+  MultipartInvalidFileTypeError,
   UploadFileInfo,
   UploadOptions,
 } from '.';
 import { parseFromReadableStream, parseMultipart } from './parse';
 import * as getRawBody from 'raw-body';
+import { fileTypeFromBuffer } from 'file-type';
+import { formatExt } from './utils';
+
 const { unlink, writeFile } = promises;
 
 @Middleware()
@@ -26,12 +31,18 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   @Logger()
   logger: IMidwayLogger;
 
-  private uploadWhiteListMap = {};
+  private uploadWhiteListMap = new Map<string, string>();
+  private uploadFileTypeMap = new Map<string, string>();
 
   resolve(app) {
     if (Array.isArray(this.upload.whitelist)) {
       for (const whiteExt of this.upload.whitelist) {
-        this.uploadWhiteListMap[whiteExt] = true;
+        this.uploadWhiteListMap.set(whiteExt, whiteExt);
+      }
+    }
+    if (Array.isArray(this.upload.fileTypeList)) {
+      for (const [ext, mime] of this.upload.fileTypeList) {
+        this.uploadWhiteListMap.set(ext, mime);
       }
     }
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
@@ -84,11 +95,11 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           req,
           boundary
         );
-        const ext = this.checkExt(fileInfo.filename);
+        const ext = this.checkAndGetExt(fileInfo.filename);
         if (!ext) {
           throw new MultipartInvalidFilenameError(fileInfo.filename);
         } else {
-          fileInfo['_ext'] = ext as string;
+          fileInfo[EXT_KEY] = ext as string;
           ctx.fields = fields;
           ctx.files = [fileInfo];
           return next();
@@ -115,22 +126,26 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     ctx.fields = data.fields;
     const requireId = `upload_${Date.now()}.${Math.random()}`;
     const files = data.files;
-    const notCheckFile = files.find(fileInfo => {
-      const ext = this.checkExt(fileInfo.filename);
+    for (const fileInfo of files) {
+      const ext = this.checkAndGetExt(fileInfo.filename);
       if (!ext) {
-        return fileInfo;
+        throw new MultipartInvalidFilenameError(fileInfo.filename);
       }
-      fileInfo['_ext'] = ext;
-    });
+      const { passed, mime } = await this.checkFileType(
+        ext as string,
+        fileInfo.data
+      );
+      if (!passed) {
+        throw new MultipartInvalidFileTypeError(fileInfo.filename, mime);
+      }
 
-    if (notCheckFile) {
-      throw new MultipartInvalidFilenameError(notCheckFile.filename);
+      fileInfo[EXT_KEY] = ext;
     }
     ctx.files = await Promise.all(
       files.map(async (file, index) => {
-        const { data, filename } = file;
+        const { data } = file;
         if (mode === 'file') {
-          const ext = file['_ext'] || extname(filename);
+          const ext = file[EXT_KEY];
           const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
           await writeFile(tmpFileName, data, 'binary');
           file.data = tmpFileName;
@@ -190,16 +205,44 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     return false;
   }
 
-  checkExt(filename): string | boolean {
+  // check extentions
+  checkAndGetExt(filename): string | boolean {
     const lowerCaseFileNameList = filename.toLowerCase().split('.');
     while (lowerCaseFileNameList.length) {
       lowerCaseFileNameList.shift();
       const curExt = `.${lowerCaseFileNameList.join('.')}`;
-      if (this.upload.whitelist === null || this.uploadWhiteListMap[curExt]) {
-        return curExt;
+      if (this.upload.whitelist === null) {
+        return formatExt(curExt);
+      }
+      if (this.uploadWhiteListMap.has(curExt)) {
+        // Avoid the presence of hidden characters and return extensions in the white list.
+        return this.uploadWhiteListMap.get(curExt);
       }
     }
     return false;
+  }
+
+  // check file-type
+  async checkFileType(
+    ext: string,
+    data: Buffer
+  ): Promise<{ passed: boolean; mime?: string }> {
+    // fileType == null, pass check
+    if (!this.upload.fileTypeList?.length) {
+      return { passed: true };
+    }
+    const mime = this.uploadFileTypeMap.get(ext);
+    if (!mime) {
+      return { passed: false, mime: ext };
+    }
+    const typeInfo = await fileTypeFromBuffer(data);
+    if (!typeInfo) {
+      return { passed: false, mime };
+    }
+    return {
+      passed: `.${typeInfo.ext}` === ext && mime === typeInfo.mime,
+      mime,
+    };
   }
 
   static getName() {
