@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "file-type": "^17",
+    "file-type": "^16",
     "raw-body": "2.5.2"
   },
   "devDependencies": {

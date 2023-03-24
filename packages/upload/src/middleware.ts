@@ -18,7 +18,7 @@ import {
 } from '.';
 import { parseFromReadableStream, parseMultipart } from './parse';
 import * as getRawBody from 'raw-body';
-import { fileTypeFromBuffer } from 'file-type';
+import { fromBuffer } from 'file-type';
 import { formatExt } from './utils';
 
 const { unlink, writeFile } = promises;
@@ -235,7 +235,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     if (!mime) {
       return { passed: false, mime: ext };
     }
-    const typeInfo = await fileTypeFromBuffer(data);
+    const typeInfo = await fromBuffer(data);
     if (!typeInfo) {
       return { passed: false, mime };
     }
