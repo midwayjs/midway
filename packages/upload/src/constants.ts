@@ -33,7 +33,7 @@ export const uploadWhiteList = [
 ];
 
 // https://mimetype.io/
-export const uploadFileMap = [
+export const uploadFileTypeList = [
   ['.jpg', 'image/jpeg'],
   ['.jpeg', 'image/jpeg'],
   ['.png', 'image/png'],

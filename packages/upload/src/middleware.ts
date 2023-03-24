@@ -32,7 +32,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   logger: IMidwayLogger;
 
   private uploadWhiteListMap = new Map<string, string>();
-  private uploadFileTypeMap = new Map<string, string>();
+  private uploadFileTypeMap = new Map<string, string[]>();
 
   resolve(app) {
     if (Array.isArray(this.upload.whitelist)) {
@@ -40,9 +40,9 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         this.uploadWhiteListMap.set(whiteExt, whiteExt);
       }
     }
-    if (Array.isArray(this.upload.fileTypeList)) {
-      for (const [ext, mime] of this.upload.fileTypeList) {
-        this.uploadWhiteListMap.set(ext, mime);
+    if (Array.isArray(this.upload.fileTypeWhiteList)) {
+      for (const [ext, ...mime] of this.upload.fileTypeWhiteList) {
+        this.uploadFileTypeMap.set(ext, mime);
       }
     }
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
@@ -131,12 +131,16 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       if (!ext) {
         throw new MultipartInvalidFilenameError(fileInfo.filename);
       }
-      const { passed, mime } = await this.checkFileType(
+      const { passed, mime, current } = await this.checkFileType(
         ext as string,
         fileInfo.data
       );
       if (!passed) {
-        throw new MultipartInvalidFileTypeError(fileInfo.filename, mime);
+        throw new MultipartInvalidFileTypeError(
+          fileInfo.filename,
+          current,
+          mime
+        );
       }
 
       fileInfo[EXT_KEY] = ext;
@@ -226,22 +230,28 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   async checkFileType(
     ext: string,
     data: Buffer
-  ): Promise<{ passed: boolean; mime?: string }> {
+  ): Promise<{ passed: boolean; mime?: string; current?: string }> {
     // fileType == null, pass check
-    if (!this.upload.fileTypeList?.length) {
+    if (!this.upload.fileTypeWhiteList?.length) {
       return { passed: true };
     }
+
     const mime = this.uploadFileTypeMap.get(ext);
     if (!mime) {
       return { passed: false, mime: ext };
     }
+    if (!mime.length) {
+      return { passed: true };
+    }
     const typeInfo = await fromBuffer(data);
     if (!typeInfo) {
-      return { passed: false, mime };
+      return { passed: false, mime: mime.join('、') };
     }
+    const findMime = mime.find(mimeItem => mimeItem === typeInfo.mime);
     return {
-      passed: `.${typeInfo.ext}` === ext && mime === typeInfo.mime,
-      mime,
+      passed: !!findMime,
+      mime: mime.join('、'),
+      current: typeInfo.mime,
     };
   }
 

@@ -7,9 +7,11 @@ export class MultipartInvalidFilenameError extends httpError.BadRequestError {
 }
 
 export class MultipartInvalidFileTypeError extends httpError.BadRequestError {
-  constructor(filename: string, type: string) {
+  constructor(filename: string, currentType: string, type: string) {
     super(
-      `Invalid upload file type, ${filename} type is not ${type} , please check it`
+      `Invalid upload file type, ${filename} type(${
+        currentType || 'unknown'
+      }) is not ${type} , please check it`
     );
   }
 }
