@@ -15,7 +15,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.10.15",
     "@midwayjs/mock": "^3.10.15",
-    "sqlite3": "5.1.5",
+    "sqlite3": "5.1.6",
     "typeorm": "0.3.12"
   },
   "author": {
