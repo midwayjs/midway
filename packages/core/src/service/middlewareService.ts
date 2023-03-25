@@ -57,9 +57,11 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
           } else {
             // wrap ignore and match
             const mw = fn;
+
             const match = pathMatching({
-              match: classMiddleware.match?.bind(classMiddleware),
-              ignore: classMiddleware.ignore?.bind(classMiddleware),
+              match: classMiddleware.match,
+              ignore: classMiddleware.ignore,
+              thisResolver: classMiddleware,
             });
             (fn as any) = (ctx, next, options) => {
               if (!match(ctx)) return next();
