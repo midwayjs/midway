@@ -12,7 +12,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.10.15",
     "@midwayjs/mock": "^3.10.15",
-    "@types/express-session": "1.17.6",
+    "@types/express-session": "1.17.7",
     "memorystore": "1.6.7"
   },
   "dependencies": {
