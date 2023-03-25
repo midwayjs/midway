@@ -1,4 +1,4 @@
-import { Readable } from "stream";
+import { Readable } from 'stream';
 import { IgnoreMatcher } from '@midwayjs/core';
 
 export type UploadMode = 'stream' | 'file';
