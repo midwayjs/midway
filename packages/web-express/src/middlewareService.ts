@@ -50,7 +50,7 @@ export class MidwayExpressMiddlewareService {
           !this.applicationContext.hasDefinition(fn)
         ) {
           throw new MidwayCommonError(
-            'Middleware definition not found in midway container'
+            `Middleware definition of "${fn}" not found in midway container`
           );
         }
         const classMiddleware =
@@ -76,6 +76,7 @@ export class MidwayExpressMiddlewareService {
             const match = pathMatching({
               match: classMiddleware.match,
               ignore: classMiddleware.ignore,
+              thisResolver: classMiddleware,
             });
             fn = (req, res, next) => {
               if (!match(req)) return next();

@@ -2,9 +2,11 @@ import {
   Config,
   Logger,
   Middleware,
+  Init,
   MidwayFrameworkType,
   IMiddleware,
   IMidwayLogger,
+  IgnoreMatcher,
 } from '@midwayjs/core';
 import { resolve } from 'path';
 import { promises } from 'fs';
@@ -26,22 +28,33 @@ const { unlink, writeFile } = promises;
 @Middleware()
 export class UploadMiddleware implements IMiddleware<any, any> {
   @Config('upload')
-  upload: UploadOptions;
+  uploadConfig: UploadOptions;
 
   @Logger()
   logger: IMidwayLogger;
 
   private uploadWhiteListMap = new Map<string, string>();
   private uploadFileTypeMap = new Map<string, string[]>();
+  match: IgnoreMatcher<any>[];
+  ignore: IgnoreMatcher<any>[];
+
+  @Init()
+  async init() {
+    if (this.uploadConfig.match) {
+      this.match = [].concat(this.uploadConfig.match || []);
+    } else {
+      this.ignore = [].concat(this.uploadConfig.ignore || []);
+    }
+  }
 
   resolve(app) {
-    if (Array.isArray(this.upload.whitelist)) {
-      for (const whiteExt of this.upload.whitelist) {
+    if (Array.isArray(this.uploadConfig.whitelist)) {
+      for (const whiteExt of this.uploadConfig.whitelist) {
         this.uploadWhiteListMap.set(whiteExt, whiteExt);
       }
     }
-    if (Array.isArray(this.upload.fileTypeWhiteList)) {
-      for (const [ext, ...mime] of this.upload.fileTypeWhiteList) {
+    if (Array.isArray(this.uploadConfig.fileTypeWhiteList)) {
+      for (const [ext, ...mime] of this.uploadConfig.fileTypeWhiteList) {
         this.uploadFileTypeMap.set(ext, mime);
       }
     }
@@ -58,11 +71,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   }
 
   async execUpload(ctx, req, res, next, isExpress) {
-    const { mode, tmpdir, fileSize } = this.upload;
-    const passed = this.checkMatchOrIgnore(ctx.path);
-    if (!passed) {
-      return next();
-    }
+    const { mode, tmpdir, fileSize } = this.uploadConfig;
     const boundary = this.getUploadBoundary(req);
     if (!boundary) {
       return next();
@@ -118,7 +127,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       body = req.body;
     }
 
-    const data = await parseMultipart(body, boundary, this.upload);
+    const data = await parseMultipart(body, boundary, this.uploadConfig);
     if (!data) {
       return next();
     }
@@ -215,7 +224,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     while (lowerCaseFileNameList.length) {
       lowerCaseFileNameList.shift();
       const curExt = `.${lowerCaseFileNameList.join('.')}`;
-      if (this.upload.whitelist === null) {
+      if (this.uploadConfig.whitelist === null) {
         return formatExt(curExt);
       }
       if (this.uploadWhiteListMap.has(curExt)) {
@@ -232,7 +241,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     data: Buffer
   ): Promise<{ passed: boolean; mime?: string; current?: string }> {
     // fileType == null, pass check
-    if (!this.upload.fileTypeWhiteList?.length) {
+    if (!this.uploadConfig.fileTypeWhiteList?.length) {
       return { passed: true };
     }
 
@@ -257,25 +266,5 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
   static getName() {
     return 'upload';
-  }
-
-  checkMatchOrIgnore(path = ''): boolean {
-    // if no matching rule, the default is passed, otherwise is not passed
-    let passed = !this.upload.match;
-    if (this.upload.ignore) {
-      if (this.upload.ignore instanceof RegExp) {
-        passed = !this.upload.ignore.test(path);
-      } else if (typeof this.upload.ignore === 'function') {
-        passed = !this.upload.ignore(path);
-      }
-    }
-    if (this.upload.match) {
-      if (this.upload.match instanceof RegExp) {
-        passed = this.upload.match.test(path);
-      } else if (typeof this.upload.match === 'function') {
-        passed = this.upload.match(path);
-      }
-    }
-    return passed;
   }
 }

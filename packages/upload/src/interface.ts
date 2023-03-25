@@ -1,8 +1,7 @@
 import { Readable } from "stream";
+import { IgnoreMatcher } from '@midwayjs/core';
 
 export type UploadMode = 'stream' | 'file';
-type PathConditionFunctoin = (path: string) => boolean;
-type PathCondition = RegExp | PathConditionFunctoin;
 
 export interface UploadOptions {
   /**
@@ -32,11 +31,11 @@ export interface UploadOptions {
   /**
    * Which paths to ignore
    */
-  ignore?:  PathCondition;
+  ignore?:  IgnoreMatcher<any> | IgnoreMatcher<any>[];
   /**
    * Match those paths with higher priority than ignore
    */
-  match?: PathCondition;
+  match?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
   fileTypeWhiteList?: string[][] | null;
 }
 
