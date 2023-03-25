@@ -18,5 +18,12 @@
   ],
   "ignorePaths": ["**/fixtures/**", "**/example/**", "**/site/**", "**/benchmark/**"],
   "schedule": ["before 3am on Friday"],
-  "labels": ["pr: dependencies"]
+  "labels": ["pr: dependencies"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchPackagePatterns": ["lint", "prettier"],
+      "automerge": true,
+    }
+  ]
 }
