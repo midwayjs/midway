@@ -1,6 +1,6 @@
 import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
-import { UploadFileInfo, uploadWhiteList, uploadFileTypeList } from '../../../../src';
+import { UploadFileInfo, uploadWhiteList, DefaultUploadFileMimeType } from '../../../../src';
 import { statSync } from 'fs';
 
 @Configuration({
@@ -15,7 +15,10 @@ import { statSync } from 'fs';
         upload: {
           mode: 'file',
           whitelist: uploadWhiteList.concat('.more'),
-          fileTypeWhiteList: uploadFileTypeList.concat([[`.more`, 'image/jpeg', 'image/png']]),
+          mimeTypeWhiteList: {
+            ...DefaultUploadFileMimeType,
+            '.more': ['image/jpeg', 'image/png']
+          },
         }
       }
     }

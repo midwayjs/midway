@@ -36,7 +36,10 @@ export interface UploadOptions {
    * Match those paths with higher priority than ignore
    */
   match?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
-  fileTypeWhiteList?: string[][] | null;
+  /**
+   * Mime type white list
+   */
+  mimeTypeWhiteList?: Record<string, string | string[]>;
 }
 
 

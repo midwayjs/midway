@@ -1,21 +1,19 @@
 # File Upload
 
-Universal upload component for `@midwayjs/faas`, `@midwayjs/web`, `@midwayjs/koa` and `@midwayjs/express` multiple frameworks, supports `file` (server temporary file), `stream` (Stream) Multiple modes.
+Universal upload component for `@midwayjs/faas`, `@midwayjs/web`, `@midwayjs/koa` and `@midwayjs/express` multiple frameworks, supports `file` (server temporary file) and `stream` (stream) two modes.
 
 Related Information:
 
-| web support | |
+| web support       |      |
 | ----------------- | ---- |
-| @midwayjs/koa | ✅ |
-| @midwayjs/faas | ✅ |
-| @midwayjs/web | ✅ |
-| @midwayjs/express | ✅ |
+| @midwayjs/koa     | ✅    |
+| @midwayjs/faas    | ✅    |
+| @midwayjs/web     | ✅    |
+| @midwayjs/express | ✅    |
 
 
 
-## use
-
-1. Installation dependencies
+## Install dependencies
 
 ```bash
 $ npm i @midwayjs/upload@3 --save
@@ -37,7 +35,7 @@ Or add the following dependencies in `package.json` and reinstall.
 
 
 
-2. Introduce components in the configuration file
+## Enable component
 
 ```typescript
 import { Configuration } from '@midwayjs/core';
@@ -98,7 +96,11 @@ If the swagger component is enabled at the same time, please be sure to add the 
 
 :::
 
-## Configuration example
+## configuration
+
+### default allocation
+
+The default configuration is as follows, and generally does not need to be modified.
 
 ```typescript
 // src/config/config.default.ts
@@ -130,7 +132,7 @@ export default {
 
 
 
-## upload mode - file
+### Upload mode - file
 
 `file` is the default and recommended by the framework.
 
@@ -142,7 +144,7 @@ When using the file mode, it supports uploading multiple files at the same time,
 
 
 
-:::warn
+:::caution
 
 When the `file` mode is adopted, since the upload component will match according to the `method` of the request and some of the iconic content in `headers` when receiving the request, if it is considered to be a file upload request, the request will be Parse and `write` the files in it to the temporary cache directory of the server. You can set the path that allows parsing files through `match` or `ignore` configuration of this component.
 
@@ -153,7 +155,9 @@ You can check the section `Configuring the upload path to allow (match) or ignor
 :::
 
 
-## upload mode - stream
+
+
+### Upload mode - stream
 
 Configure upload mode as `stream` string, or use `UploadMode.Stream` exported by `@midwayjs/upload` package to configure.
 
@@ -168,11 +172,11 @@ In addition, the stream mode `will not` generate temporary files on the server, 
 
 
 
-## Configure upload whitelist whitelist
+### Upload whitelist
 
 Through the `whitelist` attribute, configure the file extensions that are allowed to be uploaded. If `null` is configured, the extensions will not be verified.
 
-:::warn
+:::caution
 
 If the configuration is `null`, the suffix name of the uploaded file will not be verified. If the file upload mode (mode=file) is adopted, it may be used by attackers to upload `.php`, `.asp` and other suffixes The WebShell implements the attack behavior.
 
@@ -182,6 +186,7 @@ Of course, since the `@midwayjs/upload` component will `rerandomly generate` the
 
 
 If the uploaded file suffix does not match, a `400` error will be responded, and the default values are as follows:
+
 ```ts
 '.jpg',
 '.jpeg',
@@ -215,39 +220,13 @@ The default suffix whitelist can be obtained through the `uploadWhiteList` expor
 
 In addition, midway upload component, in order to avoid some `malicious users`, uses some technical means to `forge` some extensions that can be truncated, so it will filter the binary data of the obtained extensions, and only support `0x2e` (that is, the English dot `.`), `0x30-0x39` (that is, the number `0-9`), `0x61-0x7a` (that is, the lowercase letters `a-z`) are used as extensions, and other characters will be Automatically ignored.
 
-## Configure allow (match) or ignore (ignore) upload paths
 
-When the upload component is enabled, when the `method` of the request is one of `POST/PUT/DELETE/PATCH`, if it is judged that `headers['content-type']` of the request contains `multipart/form-data` and When `boundary` is set, it will `**automatically enter**` upload file parsing logic.
 
-This will cause: If the user may manually analyze the request information of the website, manually call any interface such as `post`, and upload a file, it will trigger the parsing logic of the `upload` component, and create a file in the temporary directory The temporary cache of uploaded files will generate unnecessary `load` on the website server, and may `affect` the normal business logic processing of the server in severe cases.
-
-Therefore, you can add `match` or `ignore` configuration to the configuration to set which api paths are allowed to upload.
-
-Both `match` and `ignore` can be configured as: "a `regular expression` that matches the request path" or "a `callback function` whose parameter is the request path and needs to return a boolean value", for example:
-```typescript
-
-export default {
-   //...
-   upload: {
-     //...
-     match: /\/api\/upload/,
-     ignore: path => {
-       return path. endsWith('update');
-     }
-   },
-}
-
-```
-
-If `match` and `ignore` are configured `at the same time`, and both successfully match the same path, `match` has a higher priority.
-
-If `none` is configured with `match` and `ignore`, when the user request header and data match an uploaded file, it will automatically enter the uploaded file parsing logic.
-
-## Detect the type of the uploaded file through MIME, and only allow the file upload of the load rule
+### MIME type checking
 
 Some `malicious users` will try to modify the extension of `.php` and other WebShells to `.jpg` to bypass the whitelist filtering rules based on the extension. In some server environments, this jpg file will still be used as PHP scripts to execute, pose a security risk.
 
-Therefore, the `@midwayjs/upload` component provides the `fileTypeWhiteList` configuration parameter **【Please note that this parameter has no default value setting, that is, no verification by default】**, you can set the allowed file MIME format through this configuration, A rule is a `secondary array` consisting of an array `[extension, mime, [...moreMime]]`, for example:
+Therefore, the `@midwayjs/upload` component provides the `mimeTypeWhiteList` configuration parameter **【Please note that this parameter has no default value setting, that is, no verification by default】**, you can set the allowed file MIME format through this configuration, A rule is a `secondary array` consisting of an array `[extension, mime, [...moreMime]]`, for example:
 
 ```typescript
 // src/config/config.default.ts
@@ -259,26 +238,26 @@ export default {
      // extension whitelist
      whitelist: uploadWhiteList,
      // Only the following file types are allowed to be uploaded
-     fileTypeWhiteList: [
-       ['.jpg', 'image/jpeg'],
+     mimeTypeWhiteList: {
+       '.jpg': 'image/jpeg',
        // Multiple MIME types can also be set, for example, the following files that allow the .jpeg suffix are jpg or png
-       ['.jpeg', 'image/jpeg', 'image/png'],
-       ['.png', 'image/png'],
-       ['.gif', 'image/gif'],
-       ['.bmp', 'image/bmp'],
-       ['.wbmp', 'image/vnd.wap.wbmp'],
-       ['.webp', 'image/webp'],
-       ['.psd', 'image/vnd.adobe.photoshop'],
-     ]
+       '.jpeg': ['image/jpeg', 'image/png'],
+       // other types
+       '.gif': 'image/gif',
+       '.bmp': 'image/bmp',
+       '.wbmp': 'image/vnd.wap.wbmp',
+       '.webp': 'image/webp',
+     }
    },
 }
 ```
 
-You can also use the `uploadFileTypeList` variable provided by the `@midwayjs/upload` component as the default MIME validation rule, which provides common file extensions such as `.jpg`, `.png`, `.psd` MIME data:
+
+You can also use the `DefaultUploadFileMimeType` variable provided by the `@midwayjs/upload` component as the default MIME validation rule, which provides commonly used `.jpg`, `.png`, `.psd` and other file extensions MIME data:
 
 ```typescript
 // src/config/config.default.ts
-import { uploadWhiteList, uploadFileTypeList } from '@midwayjs/upload';
+import { uploadWhiteList, DefaultUploadFileMimeType } from '@midwayjs/upload';
 export default {
    //...
    upload: {
@@ -286,7 +265,7 @@ export default {
      // extension whitelist
      whitelist: uploadWhiteList,
      // Only the following file types are allowed to be uploaded
-     fileTypeWhiteList: uploadFileTypeList,
+     mimeTypeWhiteList: DefaultUploadFileMimeType,
    },
 }
 ```
@@ -297,9 +276,23 @@ You can query the file format and corresponding MIME mapping through `https://mi
 
 The MIME type verification rule is only applicable to the file upload mode `mode=file`, and after setting this verification rule, since the file content needs to be read for matching, the upload performance will be slightly affected.
 
-However, we still recommend that you set the `fileTypeWhiteList` parameter when conditions permit, which will improve your application security.
+However, we still recommend that you set the `mimeTypeWhiteList` parameter if possible, which will improve your application security.
 
 :::
+
+
+
+### Configure match or ignore
+
+When the upload component is enabled, when the `method` of the request is one of `POST/PUT/DELETE/PATCH`, if it is judged that `headers['content-type']` of the request contains `multipart/form-data` and When `boundary` is set, it will `**automatically enter**` upload file parsing logic.
+
+This will cause: If the user may manually analyze the request information of the website, manually call any interface such as `post`, and upload a file, it will trigger the parsing logic of the `upload` component, and create a file in the temporary directory The temporary cache of uploaded files will generate unnecessary `load` on the website server, and may `affect` the normal business logic processing of the server in severe cases.
+
+Therefore, you can add `match` or `ignore` configuration to the configuration to set which api paths are allowed to upload.
+
+
+
+
 
 
 ## Temporary files and cleanup
@@ -311,14 +304,17 @@ You can control the automatic temporary file cleanup time by using `cleanTimeout
 
 You can also actively clean up the temporary files uploaded by the current request by calling `await ctx.cleanupRequestFiles()` in the code.
 
-## safety warning
+
+
+## Safety warning
 
 1. Please pay attention to whether to enable `extension whitelist` (whiteList), if the extension whitelist is set to `null`, it may be used by attackers to upload `.php`, `.asp` and other WebShells.
 2. Please pay attention to whether to set `match` or `ignore` rules, otherwise common `POST/PUT` and other interfaces may be exploited by attackers, resulting in increased server load and large space occupation.
 3. Please pay attention to whether to set the `file type rule` (fileTypeWhiteList), otherwise the attacker may forge the file type to upload.
 
 
-## front-end file upload example
+
+## Front-end file upload example
 
 ### 1. The form of html form
 
@@ -331,6 +327,7 @@ You can also actively clean up the temporary files uploaded by the current reque
 ```
 
 ### 2. Fetch FormData method
+
 ```js
 const fileInput = document. querySelector('#your-file-input');
 const formData = new FormData();
@@ -341,6 +338,7 @@ fetch('/api/upload', {
    body: formData,
 });
 ```
+
 
 
 ## Postman test example

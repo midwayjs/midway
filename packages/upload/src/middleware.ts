@@ -34,7 +34,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   logger: IMidwayLogger;
 
   private uploadWhiteListMap = new Map<string, string>();
-  private uploadFileTypeMap = new Map<string, string[]>();
+  private uploadFileMimeTypeMap = new Map<string, string[]>();
   match: IgnoreMatcher<any>[];
   ignore: IgnoreMatcher<any>[];
 
@@ -53,9 +53,10 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         this.uploadWhiteListMap.set(whiteExt, whiteExt);
       }
     }
-    if (Array.isArray(this.uploadConfig.fileTypeWhiteList)) {
-      for (const [ext, ...mime] of this.uploadConfig.fileTypeWhiteList) {
-        this.uploadFileTypeMap.set(ext, mime);
+    if (this.uploadConfig.mimeTypeWhiteList) {
+      for (const ext in this.uploadConfig.mimeTypeWhiteList) {
+        const mime = [].concat(this.uploadConfig.mimeTypeWhiteList[ext]);
+        this.uploadFileMimeTypeMap.set(ext, mime);
       }
     }
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
@@ -241,11 +242,11 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     data: Buffer
   ): Promise<{ passed: boolean; mime?: string; current?: string }> {
     // fileType == null, pass check
-    if (!this.uploadConfig.fileTypeWhiteList?.length) {
+    if (!this.uploadConfig.mimeTypeWhiteList) {
       return { passed: true };
     }
 
-    const mime = this.uploadFileTypeMap.get(ext);
+    const mime = this.uploadFileMimeTypeMap.get(ext);
     if (!mime) {
       return { passed: false, mime: ext };
     }
