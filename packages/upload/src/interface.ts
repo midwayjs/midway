@@ -5,14 +5,38 @@ type PathConditionFunctoin = (path: string) => boolean;
 type PathCondition = RegExp | PathConditionFunctoin;
 
 export interface UploadOptions {
+  /**
+   * Upload mode, default is `file`
+   */
   mode?: UploadMode,
-  fileSize?: string;   // Max file size (in bytes), default is `10mb`
-  whitelist?: string[] | null; // The white ext file names, default is `null`
-  tmpdir?: string; // 临时文件目录
-  cleanTimeout?: number; // 临时文件自动清理时间
-  base64?: boolean; // 上传的body是否为base64，例如腾讯云的apigw
-  ignore?:  PathCondition; // 忽略哪些路径
-  match?: PathCondition; // 匹配那些路径，优先级高于 ignore
+  /**
+   * Max file size (in bytes), default is `10mb`
+   */
+  fileSize?: string;
+  /**
+   * The white ext file names
+   */
+  whitelist?: string[] | null;
+  /**
+   * Temporary file directory
+   */
+  tmpdir?: string;
+  /**
+   * Temporary file automatic cleanup time, default is 5 minutes
+   */
+  cleanTimeout?: number;
+  /**
+   * Whether the uploaded body is base64, for example, apigw of Tencent Cloud
+   */
+  base64?: boolean;
+  /**
+   * Which paths to ignore
+   */
+  ignore?:  PathCondition;
+  /**
+   * Match those paths with higher priority than ignore
+   */
+  match?: PathCondition;
   fileTypeWhiteList?: string[][] | null;
 }
 
