@@ -33,7 +33,7 @@
     "@bull-board/api": "4.6.4",
     "@bull-board/ui": "4.6.4",
     "@midwayjs/bull": "^3.10.15",
-    "ejs": "3.1.8"
+    "ejs": "3.1.9"
   },
   "engines": {
     "node": ">=12"
