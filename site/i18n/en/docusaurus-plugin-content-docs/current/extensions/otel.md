@@ -86,11 +86,6 @@ const sdk = new opentelemetry.NodeSDK({
 
 // Initialize the SDK and start the Midway framework after successful startup.
 sdk.start()
-  .then(() => {
-    return Bootstrap
-      .configure(/**/)
-      .run();
-  });
 
 // When the process is closed, data collection is closed at the same time
 process.on('SIGTERM', () => {
@@ -99,6 +94,10 @@ process.on('SIGTERM', () => {
     .catch((error) => console.log('Error terminating tracing', error))
     .finally(() => process.exit(0));
 });
+
+Bootstrap
+  .configure(/**/)
+  .run();
 ```
 
 
