@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cron",
-  "version": "3.10.14",
+  "version": "3.11.0",
   "description": "Midway Component for Cron",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -26,11 +26,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "cron": "2.3.0",
-    "@types/cron": "2.0.1"
+    "@types/cron": "2.0.1",
+    "cron": "2.3.0"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.10.10",
-    "@midwayjs/mock": "^3.10.13"
+    "@midwayjs/core": "^3.11.0",
+    "@midwayjs/mock": "^3.11.0"
   }
 }
