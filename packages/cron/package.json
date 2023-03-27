@@ -26,8 +26,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "cron": "2.2.0",
-    "@types/cron": "2.0.0"
+    "cron": "2.3.0",
+    "@types/cron": "2.0.1"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.10.10",
