@@ -1,6 +1,62 @@
 # Change Log
 
 
+## v3.11.0 (2023-03-27)
+
+#### :rocket: New Feature
+* `tags`, `upload`
+  * [#2740](https://github.com/midwayjs/midway/pull/2740) feat: tags component ([@echosoar](https://github.com/echosoar))
+* `cron`
+  * [#2771](https://github.com/midwayjs/midway/pull/2771) feat: add cron component ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#2805](https://github.com/midwayjs/midway/pull/2805) feat: support match and ignore property with array ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `cron`
+  * [#2831](https://github.com/midwayjs/midway/pull/2831) fix(deps): update dependency cron to v2.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#2832](https://github.com/midwayjs/midway/pull/2832) fix(deps): update dependency joi to v17.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#2833](https://github.com/midwayjs/midway/pull/2833) fix(deps): update dependency koa-bodyparser to v4.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `captcha`, `security`
+  * [#2828](https://github.com/midwayjs/midway/pull/2828) fix(deps): update dependency nanoid to v3.3.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#2829](https://github.com/midwayjs/midway/pull/2829) fix(deps): update dependency tablestore to v5.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`, `view-ejs`
+  * [#2827](https://github.com/midwayjs/midway/pull/2827) fix(deps): update dependency ejs to v3.1.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#2830](https://github.com/midwayjs/midway/pull/2830) fix(deps): update dependency ws to v8.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#2823](https://github.com/midwayjs/midway/pull/2823) fix(deps): update dependency @grpc/grpc-js to v1.8.13 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2824](https://github.com/midwayjs/midway/pull/2824) fix(deps): update dependency @grpc/proto-loader to v0.7.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `sequelize`
+  * [#2819](https://github.com/midwayjs/midway/pull/2819) chore(deps): update dependency sequelize to v6.30.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#2820](https://github.com/midwayjs/midway/pull/2820) chore(deps): update dependency swagger-ui-dist to v4.18.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#2817](https://github.com/midwayjs/midway/pull/2817) chore(deps): update mikro-orm monorepo to v5.6.15 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2818](https://github.com/midwayjs/midway/pull/2818) chore(deps): update dependency @types/jest to v29.5.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2816](https://github.com/midwayjs/midway/pull/2816) chore(deps): update dependency typedoc to v0.23.28 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2799](https://github.com/midwayjs/midway/pull/2799) chore(deps): update dependency @types/node to v18.15.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* `typegoose`
+  * [#2810](https://github.com/midwayjs/midway/pull/2810) chore(deps): update dependency @typegoose/typegoose to v10.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `mikro`, `sequelize`, `typeorm`
+  * [#2815](https://github.com/midwayjs/midway/pull/2815) chore(deps): update dependency sqlite3 to v5.1.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `express-session`
+  * [#2811](https://github.com/midwayjs/midway/pull/2811) chore(deps): update dependency @types/express-session to v1.17.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#2812](https://github.com/midwayjs/midway/pull/2812) chore(deps): update dependency mongoose to v6.10.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#2813](https://github.com/midwayjs/midway/pull/2813) chore(deps): update dependency sinon to v15.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.10.16 (2023-03-21)
 
 #### :bug: Bug Fix
