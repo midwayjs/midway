@@ -315,12 +315,12 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
   }
 
-  protected loadDefinitions() {
+  protected async loadDefinitions() {
     if (!this.isLoad) {
       this.load();
     }
     // load project file
-    this.fileDetector?.run(this);
+    await this.fileDetector?.run(this);
   }
 
   bindClass(exports, options?: Partial<IObjectDefinition>) {
@@ -533,8 +533,8 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     this.registry.clearAll();
   }
 
-  ready(): void {
-    this.loadDefinitions();
+  async ready() {
+    await this.loadDefinitions();
   }
 
   get<T>(

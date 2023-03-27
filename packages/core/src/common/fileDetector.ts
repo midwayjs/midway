@@ -8,6 +8,17 @@ import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { getProviderName } from '../decorator';
+import { extname, join } from 'path';
+import { readFileSync } from 'fs';
+
+async function loadModule(modulePath, type: 'commonjs' | 'module') {
+  const ext = extname(modulePath);
+  if (ext === '.mjs' || type === 'module') {
+    return await import(modulePath);
+  } else {
+    return require(modulePath);
+  }
+}
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
@@ -47,10 +58,15 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
 }> {
   private duplicateModuleCheckSet = new Map();
 
-  run(container) {
+  async run(container) {
     const loadDirs = []
       .concat(this.options.loadDir || [])
       .concat(this.extraDetectorOptions.loadDir || []);
+
+    const packagePath = join(container.get('appDir'), 'package.json');
+    const packageData = readFileSync(packagePath, 'utf8');
+    const packageJson = JSON.parse(packageData);
+    const type = packageJson.type || 'commonjs';
 
     for (const dir of loadDirs) {
       const fileResults = run(
@@ -88,7 +104,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
       };
 
       for (const file of fileResults) {
-        const exports = require(file);
+        const exports = loadModule(file, type);
         // add module to set
         container.bindClass(exports, {
           namespace: this.options.namespace,
@@ -108,7 +124,7 @@ export class CustomModuleDetector extends AbstractFileDetector<{
   modules?: any[];
   namespace?: string;
 }> {
-  run(container) {
+  async run(container) {
     for (const module of this.options.modules) {
       container.bindClass(module, {
         namespace: this.options.namespace,
