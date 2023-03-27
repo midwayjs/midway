@@ -1,6 +1,84 @@
 # Change Log
 
 
+## v3.10.16 (2023-03-21)
+
+#### :bug: Bug Fix
+* `web`
+  * [#2807](https://github.com/midwayjs/midway/pull/2807) fix: egg missing export decorator ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `typegoose`
+  * [#2798](https://github.com/midwayjs/midway/pull/2798) chore(deps): update dependency @typegoose/typegoose to v10.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `mikro`, `sequelize`, `typeorm`
+  * [#2795](https://github.com/midwayjs/midway/pull/2795) chore(deps): update dependency sqlite3 to v5.1.5 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#2801](https://github.com/midwayjs/midway/pull/2801) chore(deps): update dependency mongoose to v6.10.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `sequelize`
+  * [#2802](https://github.com/midwayjs/midway/pull/2802) chore(deps): update dependency sequelize to v6.29.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Umuoy ([@umuoy1](https://github.com/umuoy1))
+
+
+
+## v3.10.15 (2023-03-10)
+
+#### :bug: Bug Fix
+* `core`
+  * [#2764](https://github.com/midwayjs/midway/pull/2764) fix: mock service inited will be before lifecycle ([@czy88840616](https://github.com/czy88840616))
+  * [#2765](https://github.com/midwayjs/midway/pull/2765) fix: content-type set by headers options ([@czy88840616](https://github.com/czy88840616))
+  * [#2793](https://github.com/midwayjs/midway/pull/2793) fix: wrong handler name with decorator ([@czy88840616](https://github.com/czy88840616))
+* `faas`
+  * [#2761](https://github.com/midwayjs/midway/pull/2761) fix: faas content length ([@echosoar](https://github.com/echosoar))
+
+#### :memo: Documentation
+* [#2773](https://github.com/midwayjs/midway/pull/2773) docs(site): update validate.md ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* Other
+  * [#2791](https://github.com/midwayjs/midway/pull/2791) chore(deps): update dependency @types/node to v18.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2792](https://github.com/midwayjs/midway/pull/2792) chore(deps): update dependency jest to v29.5.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2785](https://github.com/midwayjs/midway/pull/2785) chore(deps): update dependency lerna to v6.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2762](https://github.com/midwayjs/midway/pull/2762) chore(deps): update dependency @types/node to v18.14.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2778](https://github.com/midwayjs/midway/pull/2778) chore(deps): update dependency typedoc to v0.23.26 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2772](https://github.com/midwayjs/midway/pull/2772) fix(deps): update dependency cron to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#2789](https://github.com/midwayjs/midway/pull/2789) chore(deps): update dependency mongoose to v6.10.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2786](https://github.com/midwayjs/midway/pull/2786) chore(deps): update dependency mongoose to v6.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `sequelize`
+  * [#2790](https://github.com/midwayjs/midway/pull/2790) chore(deps): update dependency sequelize to v6.29.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2760](https://github.com/midwayjs/midway/pull/2760) chore(deps): update dependency sequelize to v6.29.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#2767](https://github.com/midwayjs/midway/pull/2767) fix(deps): update dependency @grpc/grpc-js to v1.8.12 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2763](https://github.com/midwayjs/midway/pull/2763) fix(deps): update dependency @grpc/grpc-js to v1.8.10 ([@renovate[bot]](https://github.com/apps/renovate))
+* `typegoose`
+  * [#2784](https://github.com/midwayjs/midway/pull/2784) chore(deps): update dependency @typegoose/typegoose to v10.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#2779](https://github.com/midwayjs/midway/pull/2779) chore(deps): update mikro-orm monorepo to v5.6.13 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `mock`, `upload`
+  * [#2781](https://github.com/midwayjs/midway/pull/2781) fix(deps): update dependency raw-body to v2.5.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#2783](https://github.com/midwayjs/midway/pull/2783) fix(deps): update socket.io packages to v4.6.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#2782](https://github.com/midwayjs/midway/pull/2782) fix(deps): update dependency ws to v8.12.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `kafka`, `mock`
+  * [#2777](https://github.com/midwayjs/midway/pull/2777) chore(deps): update dependency kafkajs to v2.2.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `rabbitmq`
+  * [#2768](https://github.com/midwayjs/midway/pull/2768) fix(deps): update dependency amqp-connection-manager to v4.1.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#2769](https://github.com/midwayjs/midway/pull/2769) fix(deps): update dependency axios to v1.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#2770](https://github.com/midwayjs/midway/pull/2770) fix(deps): update dependency body-parser to v1.20.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.10.14 (2023-02-23)
 
 #### :bug: Bug Fix

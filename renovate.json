@@ -18,5 +18,14 @@
   ],
   "ignorePaths": ["**/fixtures/**", "**/example/**", "**/site/**", "**/benchmark/**"],
   "schedule": ["before 3am on Friday"],
-  "labels": ["pr: dependencies"]
+  "labels": ["pr: dependencies"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    }
+  ]
 }

@@ -44,7 +44,7 @@ midway 内部有一套标准的装饰器管理器，用来所有装饰器对接 
 创建一个装饰器文件，比如 `src/decorator/model` 。
 
 ```typescript
-import { scope, ScopeEnum, saveClassMetadata, saveModule } from 'midawy';
+import { scope, ScopeEnum, saveClassMetadata, saveModule } from 'midway';
 
 const MODEL_KEY = 'decorator:model';
 

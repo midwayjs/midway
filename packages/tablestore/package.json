@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/tablestore",
   "description": "midway tablestore component",
-  "version": "3.10.13",
+  "version": "3.10.15",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -10,12 +10,12 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.10.10",
-    "@midwayjs/mock": "^3.10.13"
+    "@midwayjs/core": "^3.10.15",
+    "@midwayjs/mock": "^3.10.15"
   },
   "dependencies": {
     "int64-buffer": "1.0.1",
-    "tablestore": "5.3.1"
+    "tablestore": "5.4.1"
   },
   "keywords": [
     "aliyun",

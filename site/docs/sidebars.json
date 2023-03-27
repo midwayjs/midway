@@ -163,11 +163,12 @@
     },
     {
       "type": "category",
-      "label": "监控和启动",
+      "label": "运维",
       "collapsed": false,
       "collapsible": false,
       "items": [
         "extensions/otel",
+        "extensions/code_dye",
         "extensions/pm2",
         "extensions/cfork",
         "extensions/alinode",

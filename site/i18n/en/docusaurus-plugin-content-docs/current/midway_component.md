@@ -6,7 +6,7 @@ Components are Midway's extension mechanism. We will develop reusable business c
 
 ## Enable components
 
-Components are generally reused in the form of npm packages. Each component is a package of code that can be `required` directly. Let's take the `@midawyjs/validate` component as an example.
+Components are generally reused in the form of npm packages. Each component is a package of code that can be `required` directly. Let's take the `@midwayjs/validate` component as an example.
 
 First, add dependencies to the application.
 

@@ -42,7 +42,7 @@ First, introduce components and import them in `src/configuration.ts`:
 ```typescript
 import { Configuration } from '@midwayjs/core';
 import * as redis from '@midwayjs/redis';
-import { join } from 'path'
+import { join } from 'path';
 
 @Configuration({
   imports: [
@@ -51,7 +51,7 @@ import { join } from 'path'
   ],
   importConfigs: [
     join(__dirname, 'config')
-  ]
+  ],
 })
 export class MainConfiguration {
 }
@@ -59,9 +59,6 @@ export class MainConfiguration {
 
 
 ## Configure Redis
-
-
-For example:
 
 
 **Single-client configuration**
@@ -207,7 +204,7 @@ export class UserService {
 It can also be obtained through decorators.
 
 ```typescript
-import { RedisServiceFactory } from '@midwayjs/redis';
+import { RedisServiceFactory, RedisService } from '@midwayjs/redis';
 import { InjectClient } from '@midwayjs/core';
 
 @Provide()

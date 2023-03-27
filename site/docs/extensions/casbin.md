@@ -133,7 +133,7 @@ g, roles_list, role
 g, role_permissions, role
 ```
 
-将其保存在项目根目录的 `basic_policy.conf` 文件中。
+将其保存在项目根目录的 `basic_policy.csv` 文件中。
 
 
 

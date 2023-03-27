@@ -133,7 +133,7 @@ g, roles_list, role
 g, role_permissions, role
 ```
 
-Save it in the `basic_policy.conf` file in the project root directory.
+Save it in the `basic_policy.csv` file in the project root directory.
 
 
 

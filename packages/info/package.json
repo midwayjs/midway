@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/info",
   "description": "midway info",
-  "version": "3.10.14",
+  "version": "3.10.15",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -13,11 +13,11 @@
     "picomatch": "2.3.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.10.10",
-    "@midwayjs/express": "^3.10.13",
-    "@midwayjs/koa": "^3.10.13",
-    "@midwayjs/mock": "^3.10.13",
-    "@midwayjs/serverless-fc-starter": "^3.10.14",
+    "@midwayjs/core": "^3.10.15",
+    "@midwayjs/express": "^3.10.15",
+    "@midwayjs/koa": "^3.10.15",
+    "@midwayjs/mock": "^3.10.15",
+    "@midwayjs/serverless-fc-starter": "^3.10.15",
     "@midwayjs/serverless-scf-starter": "^3.10.14"
   },
   "keywords": [
