@@ -48,11 +48,6 @@ const sdk = new opentelemetry.NodeSDK({
 // initialize the SDK and register with the OpenTelemetry API
 // this enables the API to record telemetry
 sdk.start()
-  .then(() => {
-    return Bootstrap
-      .configure(/**/)
-      .run();
-  });
 
 // gracefully shut down the SDK on process exit
 process.on('SIGTERM', () => {
@@ -61,6 +56,11 @@ process.on('SIGTERM', () => {
     .catch((error) => console.log('Error terminating tracing', error))
     .finally(() => process.exit(0));
 });
+
+Bootstrap
+  .configure(/**/)
+  .run();
+
 ```
 
 You can find more information at [opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)
