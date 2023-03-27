@@ -2,36 +2,61 @@ import {
   Config,
   Logger,
   Middleware,
+  Init,
   MidwayFrameworkType,
   IMiddleware,
   IMidwayLogger,
+  IgnoreMatcher,
 } from '@midwayjs/core';
-import { resolve, extname } from 'path';
+import { resolve } from 'path';
 import { promises } from 'fs';
 import { Readable, Stream } from 'stream';
 import {
+  EXT_KEY,
   MultipartInvalidFilenameError,
+  MultipartInvalidFileTypeError,
   UploadFileInfo,
   UploadOptions,
 } from '.';
 import { parseFromReadableStream, parseMultipart } from './parse';
 import * as getRawBody from 'raw-body';
+import { fromBuffer } from 'file-type';
+import { formatExt } from './utils';
+
 const { unlink, writeFile } = promises;
 
 @Middleware()
 export class UploadMiddleware implements IMiddleware<any, any> {
   @Config('upload')
-  upload: UploadOptions;
+  uploadConfig: UploadOptions;
 
   @Logger()
   logger: IMidwayLogger;
 
-  private uploadWhiteListMap = {};
+  private uploadWhiteListMap = new Map<string, string>();
+  private uploadFileMimeTypeMap = new Map<string, string[]>();
+  match: IgnoreMatcher<any>[];
+  ignore: IgnoreMatcher<any>[];
+
+  @Init()
+  async init() {
+    if (this.uploadConfig.match) {
+      this.match = [].concat(this.uploadConfig.match || []);
+    } else {
+      this.ignore = [].concat(this.uploadConfig.ignore || []);
+    }
+  }
 
   resolve(app) {
-    if (Array.isArray(this.upload.whitelist)) {
-      for (const whiteExt of this.upload.whitelist) {
-        this.uploadWhiteListMap[whiteExt] = true;
+    if (Array.isArray(this.uploadConfig.whitelist)) {
+      for (const whiteExt of this.uploadConfig.whitelist) {
+        this.uploadWhiteListMap.set(whiteExt, whiteExt);
+      }
+    }
+    if (this.uploadConfig.mimeTypeWhiteList) {
+      for (const ext in this.uploadConfig.mimeTypeWhiteList) {
+        const mime = [].concat(this.uploadConfig.mimeTypeWhiteList[ext]);
+        this.uploadFileMimeTypeMap.set(ext, mime);
       }
     }
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
@@ -47,7 +72,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   }
 
   async execUpload(ctx, req, res, next, isExpress) {
-    const { mode, tmpdir, fileSize } = this.upload;
+    const { mode, tmpdir, fileSize } = this.uploadConfig;
     const boundary = this.getUploadBoundary(req);
     if (!boundary) {
       return next();
@@ -80,11 +105,11 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           req,
           boundary
         );
-        const ext = this.checkExt(fileInfo.filename);
+        const ext = this.checkAndGetExt(fileInfo.filename);
         if (!ext) {
           throw new MultipartInvalidFilenameError(fileInfo.filename);
         } else {
-          fileInfo['_ext'] = ext as string;
+          fileInfo[EXT_KEY] = ext as string;
           ctx.fields = fields;
           ctx.files = [fileInfo];
           return next();
@@ -103,7 +128,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       body = req.body;
     }
 
-    const data = await parseMultipart(body, boundary, this.upload);
+    const data = await parseMultipart(body, boundary, this.uploadConfig);
     if (!data) {
       return next();
     }
@@ -111,22 +136,30 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     ctx.fields = data.fields;
     const requireId = `upload_${Date.now()}.${Math.random()}`;
     const files = data.files;
-    const notCheckFile = files.find(fileInfo => {
-      const ext = this.checkExt(fileInfo.filename);
+    for (const fileInfo of files) {
+      const ext = this.checkAndGetExt(fileInfo.filename);
       if (!ext) {
-        return fileInfo;
+        throw new MultipartInvalidFilenameError(fileInfo.filename);
       }
-      fileInfo['_ext'] = ext;
-    });
+      const { passed, mime, current } = await this.checkFileType(
+        ext as string,
+        fileInfo.data
+      );
+      if (!passed) {
+        throw new MultipartInvalidFileTypeError(
+          fileInfo.filename,
+          current,
+          mime
+        );
+      }
 
-    if (notCheckFile) {
-      throw new MultipartInvalidFilenameError(notCheckFile.filename);
+      fileInfo[EXT_KEY] = ext;
     }
     ctx.files = await Promise.all(
       files.map(async (file, index) => {
-        const { data, filename } = file;
+        const { data } = file;
         if (mode === 'file') {
-          const ext = file['_ext'] || extname(filename);
+          const ext = file[EXT_KEY];
           const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
           await writeFile(tmpFileName, data, 'binary');
           file.data = tmpFileName;
@@ -186,16 +219,50 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     return false;
   }
 
-  checkExt(filename): string | boolean {
+  // check extentions
+  checkAndGetExt(filename): string | boolean {
     const lowerCaseFileNameList = filename.toLowerCase().split('.');
     while (lowerCaseFileNameList.length) {
       lowerCaseFileNameList.shift();
       const curExt = `.${lowerCaseFileNameList.join('.')}`;
-      if (this.upload.whitelist === null || this.uploadWhiteListMap[curExt]) {
-        return curExt;
+      if (this.uploadConfig.whitelist === null) {
+        return formatExt(curExt);
+      }
+      if (this.uploadWhiteListMap.has(curExt)) {
+        // Avoid the presence of hidden characters and return extensions in the white list.
+        return this.uploadWhiteListMap.get(curExt);
       }
     }
     return false;
+  }
+
+  // check file-type
+  async checkFileType(
+    ext: string,
+    data: Buffer
+  ): Promise<{ passed: boolean; mime?: string; current?: string }> {
+    // fileType == null, pass check
+    if (!this.uploadConfig.mimeTypeWhiteList) {
+      return { passed: true };
+    }
+
+    const mime = this.uploadFileMimeTypeMap.get(ext);
+    if (!mime) {
+      return { passed: false, mime: ext };
+    }
+    if (!mime.length) {
+      return { passed: true };
+    }
+    const typeInfo = await fromBuffer(data);
+    if (!typeInfo) {
+      return { passed: false, mime: mime.join('、') };
+    }
+    const findMime = mime.find(mimeItem => mimeItem === typeInfo.mime);
+    return {
+      passed: !!findMime,
+      mime: mime.join('、'),
+      current: typeInfo.mime,
+    };
   }
 
   static getName() {

@@ -1,15 +1,48 @@
-import { Readable } from "stream";
+import { Readable } from 'stream';
+import { IgnoreMatcher } from '@midwayjs/core';
 
 export type UploadMode = 'stream' | 'file';
 
 export interface UploadOptions {
+  /**
+   * Upload mode, default is `file`
+   */
   mode?: UploadMode,
-  fileSize?: string;   // Max file size (in bytes), default is `10mb`
-  whitelist?: string[] | null; // The white ext file names, default is `null`
-  tmpdir?: string; // 临时文件目录
-  cleanTimeout?: number; // 临时文件自动清理时间
-  base64?: boolean; // 上传的body是否为base64，例如腾讯云的apigw
+  /**
+   * Max file size (in bytes), default is `10mb`
+   */
+  fileSize?: string;
+  /**
+   * The white ext file names
+   */
+  whitelist?: string[] | null;
+  /**
+   * Temporary file directory
+   */
+  tmpdir?: string;
+  /**
+   * Temporary file automatic cleanup time, default is 5 minutes
+   */
+  cleanTimeout?: number;
+  /**
+   * Whether the uploaded body is base64, for example, apigw of Tencent Cloud
+   */
+  base64?: boolean;
+  /**
+   * Which paths to ignore
+   */
+  ignore?:  IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  /**
+   * Match those paths with higher priority than ignore
+   */
+  match?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  /**
+   * Mime type white list
+   */
+  mimeTypeWhiteList?: Record<string, string | string[]>;
 }
+
+
 
 export interface UploadFileInfo<T> {
   filename: string;
