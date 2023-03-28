@@ -26,7 +26,7 @@
   "devDependencies": {
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/mock": "^3.11.0",
-    "@types/koa": "2.13.5",
+    "@types/koa": "2.13.6",
     "@types/koa-router": "7.4.4",
     "fs-extra": "10.1.0"
   },
