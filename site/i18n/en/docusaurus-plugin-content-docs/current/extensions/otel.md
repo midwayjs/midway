@@ -52,10 +52,8 @@ If you use `bootstrap.js` deployment, you can add it to the top of the `bootstra
 
 ```typescript
 const process = require('process');
-const opentelemetry = require('@opentelemetry/sdk-node');
-const { ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-base');
+const { NodeSDK, node, resources } = require('@opentelemetry/sdk-node');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
-const { Resource } = require('@opentelemetry/resources');
 const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions')
 const { JaegerExporter } = require('@opentelemetry/exporter-jaeger')
 
@@ -69,13 +67,13 @@ const jaegerExporter = new JaegerExporter({
 });
 
 // Initialize an open-telemetry SDK
-const sdk = new opentelemetry.NodeSDK({
+const sdk = new NodeSDK({
   // Set the tracking service name
-  resource: new Resource({
+  resource: new resources.Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: 'my-app',
   }),
   // Configure the current export method. For example, one output to the console is configured here, or other Exporter can be configured, such as Jaeger.
-  traceExporter: new ConsoleSpanExporter()
+  traceExporter: new node.ConsoleSpanExporter(),
   // configure the current export as jaeger
   // traceExporter: jaegerExporter
 
@@ -110,22 +108,20 @@ Add a `tel.js` file to the root directory. The content is as follows.
 
 ```javascript
 const process = require('process');
-const opentelemetry = require('@opentelemetry/sdk-node');
-const { ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-base');
+const { NodeSDK, node, resources } = require('@opentelemetry/sdk-node');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 
 // Initialize an open-telemetry SDK
-const sdk = new opentelemetry.NodeSDK({
+const sdk = new NodeSDK({
   // Configure the current export method. For example, one output to the console is configured here, or other Exporter can be configured, such as Jaeger.
-  traceExporter: new ConsoleSpanExporter()
+  traceExporter: new node.ConsoleSpanExporter(),
   // Some monitoring modules provided by default are configured here, such as http module, etc.
   instrumentations: [getNodeAutoInstrumentations()]
 });
 
 // Initialize SDK
 sdk.start()
-  .then(() => console.log('Tracing initialized'))
-  .catch((error) => console.log('Error initializing tracing', error));
+
 
 // When the process is closed, data collection is closed at the same time
 process.on('SIGTERM', () => {
@@ -201,7 +197,7 @@ const { RedisInstrumentation } = require('@opentelemetry/instrumentation-redis')
 // ...
 
 // Initialize an open-telemetry SDK
-const sdk = new opentelemetry.NodeSDK({
+const sdk = new NodeSDK({
   // ...
 
   // This is only an added example. If auto-instrumentations-node is used, the following instrumentation are already included
@@ -241,7 +237,7 @@ const exporter = new JaegerExporter({
 });
 
 // Initialize an open-telemetry SDK
-const sdk = new opentelemetry.NodeSDK({
+const sdk = new NodeSDK({
   traceExporter: exporter
   textMapPropagator: new JaegerPropagator()
   // ...
