@@ -27,18 +27,16 @@ you can add at `bootstrap.js`.
 
 ```typescript
 const process = require('process');
-const opentelemetry = require('@opentelemetry/sdk-node');
+const { NodeSDK, node, resources } = require('@opentelemetry/sdk-node');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
-const { ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-base');
-const { Resource } = require('@opentelemetry/resources');
 const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
 const { Bootstrap } = require('@midwayjs/bootstrap');
 
 // configure the SDK to export telemetry data to the console
 // enable all auto-instrumentations from the meta package
-const traceExporter = new ConsoleSpanExporter();
-const sdk = new opentelemetry.NodeSDK({
-  resource: new Resource({
+const traceExporter = new node.ConsoleSpanExporter();
+const sdk = new NodeSDK({
+  resource: new resources.Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: 'my-service',
   }),
   traceExporter,
