@@ -126,7 +126,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
               debug(
                 `[middleware]: out ${middlewareName} +${
                   Date.now() - startTime
-                } with body ${result}`
+                } with body`
               );
               return result;
             });
