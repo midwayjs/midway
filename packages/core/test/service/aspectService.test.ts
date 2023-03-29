@@ -1,3 +1,5 @@
+import * as assert from 'assert';
+
 import { MidwayAspectService, MidwayContainer } from '../../src';
 
 describe('/test/service/aspectService.test.ts', () => {
@@ -31,6 +33,7 @@ describe('/test/service/aspectService.test.ts', () => {
     aspectService.interceptPrototypeMethod(A, 'invokeAsyncMethod', {
       around: async (joinPoint) => {
         console.log('before1');
+        assert(joinPoint.proceedIsAsyncFunction === true, 'proceedIsAsyncFunction should be true')
         const result = await joinPoint.proceed(...joinPoint.args);
         console.log('after1');
         return result + ' midway 2.0';
@@ -40,6 +43,7 @@ describe('/test/service/aspectService.test.ts', () => {
     aspectService.interceptPrototypeMethod(A, 'invokeAsyncMethod', {
       around: async (joinPoint) => {
         console.log('before2');
+        assert(joinPoint.proceedIsAsyncFunction === true, 'proceedIsAsyncFunction should be true')
         const result = await joinPoint.proceed(...joinPoint.args);
         console.log('after2');
         return result + ' midway 3.0';
@@ -49,6 +53,7 @@ describe('/test/service/aspectService.test.ts', () => {
     // test before
     aspectService.interceptPrototypeMethod(A, 'invokeMethod', {
       before: (joinPoint) => {
+        assert(joinPoint.proceedIsAsyncFunction === false, 'proceedIsAsyncFunction should be false')
         joinPoint.args = [3, 4];
       }
     });
@@ -56,6 +61,7 @@ describe('/test/service/aspectService.test.ts', () => {
     let err;
     aspectService.interceptPrototypeMethod(A, 'gotError', {
       afterThrow: (joinPoint, error) => {
+        assert(joinPoint.proceedIsAsyncFunction === false, 'proceedIsAsyncFunction should be false')
         err = error;
       }
     });
