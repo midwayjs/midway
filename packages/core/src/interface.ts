@@ -279,7 +279,7 @@ export interface JoinPoint {
   target: any;
   args: any[];
   proceed?(...args: any[]): any;
-  proceedIsAsyncFunction?: boolean | undefined;
+  proceedIsAsyncFunction?: boolean;
 }
 
 export interface AspectMetadata {
