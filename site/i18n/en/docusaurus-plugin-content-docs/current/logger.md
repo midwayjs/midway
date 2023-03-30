@@ -817,6 +817,34 @@ export class AutoConfiguration {
 
 
 
+### Lazy initialization
+
+The log can be initialized lazily using the `lazyLoad` configuration.
+
+for example:
+
+```typescript
+export default {
+   midwayLogger: {
+     clients: {
+       customLoggerA: {
+         level: 'DEBUG',
+       },
+       customLoggerB: {
+         lazyLoad: true,
+       },
+     }
+     //...
+   },
+} as MidwayConfig;
+```
+
+`customLoggerA` will be initialized immediately when the framework starts, and `customLoggerB` will be initialized when the business actually uses `getLogger` or `@Logger` injection for the first time.
+
+This feature is very suitable for dynamically creating logs, but configurations want to be merged together.
+
+
+
 ## Frequently Asked Questions
 
 
