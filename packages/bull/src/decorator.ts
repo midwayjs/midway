@@ -6,29 +6,32 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/core';
-import { BULL_QUEUE_KEY, BULL_PROCESSOR_KEY } from './constants';
-import { JobOptions } from 'bull';
+import { JobOptions, QueueOptions } from 'bull';
+import { BULL_PROCESSOR_KEY, BULL_QUEUE_KEY } from './constants';
 
 export function Processor(
   queueName: string,
-  jobOptions?: JobOptions
+  jobOptions?: JobOptions,
+  queueOptions?: QueueOptions,
 ): ClassDecorator;
 export function Processor(
   queueName: string,
   concurrency?: number,
-  jobOptions?: JobOptions
+  jobOptions?: JobOptions,
+  queueOptions?: QueueOptions,
 ): ClassDecorator;
 export function Processor(
   queueName: string,
-  concurrency?: any,
-  jobOptions?: JobOptions
+  concurrency?: number | JobOptions,
+  jobOptions?: JobOptions | QueueOptions,
+  queueOptions?: JobOptions | QueueOptions,
 ): ClassDecorator {
   return function (target: any) {
     if (typeof concurrency !== 'number') {
-      jobOptions = concurrency;
+      queueOptions = { ...jobOptions };
+      jobOptions = { ...concurrency };
       concurrency = 1;
     }
-
     saveModule(BULL_PROCESSOR_KEY, target);
     saveClassMetadata(
       BULL_PROCESSOR_KEY,
@@ -36,8 +39,9 @@ export function Processor(
         queueName,
         concurrency,
         jobOptions,
+        queueOptions,
       },
-      target
+      target,
     );
     Provide()(target);
     Scope(ScopeEnum.Request)(target);
