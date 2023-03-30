@@ -74,7 +74,7 @@ export class BullFramework
         queueName: string;
         concurrency: number;
         jobOptions?: JobOptions;
-        queueOptions?: QueueOptions,
+        queueOptions?: QueueOptions
       };
 
       const { repeat, delay, ...otherOptions } = options.jobOptions ?? {};

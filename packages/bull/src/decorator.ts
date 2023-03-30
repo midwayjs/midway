@@ -12,19 +12,19 @@ import { BULL_PROCESSOR_KEY, BULL_QUEUE_KEY } from './constants';
 export function Processor(
   queueName: string,
   jobOptions?: JobOptions,
-  queueOptions?: QueueOptions,
+  queueOptions?: QueueOptions
 ): ClassDecorator;
 export function Processor(
   queueName: string,
   concurrency?: number,
   jobOptions?: JobOptions,
-  queueOptions?: QueueOptions,
+  queueOptions?: QueueOptions
 ): ClassDecorator;
 export function Processor(
   queueName: string,
   concurrency?: number | JobOptions,
   jobOptions?: JobOptions | QueueOptions,
-  queueOptions?: JobOptions | QueueOptions,
+  queueOptions?: JobOptions | QueueOptions
 ): ClassDecorator {
   return function (target: any) {
     if (typeof concurrency !== 'number') {
@@ -41,7 +41,7 @@ export function Processor(
         jobOptions,
         queueOptions,
       },
-      target,
+      target
     );
     Provide()(target);
     Scope(ScopeEnum.Request)(target);
