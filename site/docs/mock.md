@@ -196,3 +196,194 @@ Midway 提供了标准的 MidwayMockService 服务，用于在代码中进行模
  `@midwayjs/mock` 中的各种模拟方法，底层皆调用了此服务。
 
 具体 API 请参考 [内置服务](./built_in_service#midwaymockservice)
+
+
+
+## 开发期 Mock
+
+每当后端服务没有上线，或者在开发阶段为准备好数据的时候，就需要用到开发期模拟的能力。
+
+
+
+### 编写模拟类
+
+一般情况下，我们会在 `src/mock` 文件夹中编写开发期使用的模拟数据，我们的模拟行为实际是一段逻辑代码。
+
+:::tip
+
+不要对模拟数据放在代码中不习惯，事实上它是逻辑的一部分。
+
+:::
+
+我们举个例子，假如现在有一个获取 Index 数据的服务，但是服务还未开发完毕，我们只能编写模拟代码。
+
+```typescript
+// src/service/indexData.service.ts
+import { Singleton, makeHttpRequest, Singleton } from '@midwayjs/core';
+
+@Singleton()
+export class IndexDataService {
+  
+  @Config('index')
+  indexConfig: {indexUrl: string};
+
+  private indexData;
+
+  async load() {
+    // 从远端获取数据
+    this.indexData = await this.fetchIndex(this.indexConfig.indexUrl);
+  }
+  
+  public getData() {
+    if (!this.indexData) {
+      // 数据不存在，就加载一次
+      this.load();
+    }
+    return this.indexData;
+  }
+
+  async fetchIndex(url) {
+    return makeHttpRequest<Record<string, any>>(url, {
+      method: 'GET',
+      dataType: 'json',
+    });
+  }
+}
+```
+
+:::tip
+
+上面的代码，故意抽离了 `fetchIndex` 方法，用来方便后续的模拟行为。
+
+:::
+
+当接口未开发完毕的时候，我们本地开发就很困难，常见的做法是定义一份 JSON 数据，
+
+比如，创建一个 `src/mock/indexData.mock.ts` ，用于初始化的服务接口模拟。
+
+```typescript
+// src/mock/indexData.mock.ts
+import { Mock, ISimulation } from '@midwayjs/core';
+
+@Mock()
+export class IndexDataMock implements ISimulation {
+}
+```
+
+`@Mock` 用于代表它是一个模拟类，用于模拟一些业务行为，`ISimulation` 是需要业务实现的一些接口。
+
+比如，我们要模拟接口的数据。
+
+```typescript
+// src/mock/indexData.mock.ts
+import { App, IMidwayApplication, Inject, Mock, ISimulation, MidwayMockService } from '@midwayjs/core';
+import { IndexDataService } from '../service/indexData.service';
+
+@Mock()
+export class IndexDataMock implements ISimulation {
+
+  @App()
+  app: IMidwayApplication;
+
+  @Inject()
+  mockService: MidwayMockService;
+
+  async setup(): Promise<void> {
+    // 使用 MidwayMockService API 模拟属性
+    this.mockService.mockClassProperty(IndexDataService, 'fetchIndex', async (url) => {
+      // 根据逻辑返回不同的数据
+      if (/current/.test(url)) {
+        return {
+          data: require('./resource/current.json'),
+        };
+      } else if (/v7/.test(url)) {
+        return {
+          data: require('./resource/v7.json'),
+        };
+      } else if (/v6/.test(url)) {
+        return {
+          data: require('./resource/v6.json'),
+        };
+      }
+    });
+  }
+
+  enableCondition(): boolean | Promise<boolean> {
+    // 模拟类启用的条件
+    return ['local', 'unittest'].includes(this.app.getEnv());
+  }
+}
+```
+
+上面的代码中，`enableCondition` 是必须实现的方法，代表当前模拟类的启用条件，比如上面的代码仅在 `local` 和 `unittest` 环境下生效。
+
+
+
+### 模拟时机
+
+模拟类包含一些模拟的时机，都已经定义在 `ISimulation` 接口中，比如：
+
+```typescript
+export interface ISimulation {
+  /**
+   * 最开始的模拟时机，在生命周期 onConfigLoad 之后执行
+   */
+  setup?(): Promise<void>;
+  /**
+   * 在生命周期关闭时执行，一般用于数据清理
+   */
+  tearDown?(): Promise<void>;
+  /**
+   * 在每种框架初始化时执行，会传递当前框架的 app
+   */
+  appSetup?(app: IMidwayApplication): Promise<void>;
+  /**
+   * 在每种框架的请求开始时执行，会传递当前框架的 app 和 ctx
+   */
+  contextSetup?(ctx: IMidwayContext, app: IMidwayApplication): Promise<void>;
+  /**
+   * 每种框架的请求结束时执行，在错误处理之后
+   */
+  contextTearDown?(ctx: IMidwayContext, app: IMidwayApplication): Promise<void>;
+  /**
+   * 每种框架的停止时执行
+   */
+  appTearDown?(app: IMidwayApplication): Promise<void>;
+  enableCondition(): boolean | Promise<boolean>;
+}
+```
+
+基于上面的接口，我们实现非常自由的模拟逻辑。
+
+
+
+比如，在不同的框架上添加不同的中间件。
+
+```typescript
+import { App, IMidwayApplication, Mock, ISimulation } from '@midwayjs/core';
+
+@Mock()
+export class InitDataMock implements ISimulation {
+
+  @App()
+  app: IMidwayApplication;
+
+  async appSetup(app: IMidwayApplication): Promise<void> {
+    // 针对不同的框架类型，添加不同的测试中间件
+    if (app.getNamespace() === 'koa') {
+      app.useMiddleware(/*...*/);
+      app.useFilter(/*...*/);
+    }
+    
+    if (app.getNamespace() === 'bull') {
+      app.useMiddleware(/*...*/);
+      app.useFilter(/*...*/);
+    }
+  }
+
+  enableCondition(): boolean | Promise<boolean> {
+    return ['local', 'unittest'].includes(this.app.getEnv());
+  }
+}
+```
+

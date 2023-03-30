@@ -816,6 +816,34 @@ export class AutoConfiguration {
 
 
 
+### 延迟初始化
+
+可以使用 `lazyLoad` 配置让日志延迟初始化。
+
+比如：
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      customLoggerA: {
+        level: 'DEBUG',
+      },
+      customLoggerB: {
+        lazyLoad: true,
+      },
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+`customLoggerA` 会在框架启动时立即初始化，而 `customLoggerB` 会在业务实际第一次使用 `getLogger` 或者 `@Logger` 注入时才被初始化。
+
+这个功能非常适合动态化创建日志，但是配置却希望合并到一起的场景。
+
+
+
 ## 常见问题
 
 

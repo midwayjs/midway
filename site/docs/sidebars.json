@@ -88,9 +88,7 @@
         "extensions/validate",
         "extensions/swagger",
         "extensions/bull",
-        "extensions/jwt",
-        "extensions/code_dye",
-        "extensions/tags"
+        "extensions/jwt"
       ]
     },
     {
@@ -127,7 +125,8 @@
         "extensions/oss",
         "extensions/cos",
         "extensions/tablestore",
-        "extensions/mikro"
+        "extensions/mikro",
+        "extensions/tags"
       ]
     },
     {
