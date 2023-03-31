@@ -248,10 +248,15 @@ export async function createFunctionApp<
   T extends IMidwayFramework<any, any, any, any, any>,
   Y = ReturnType<T['getApplication']>
 >(
-  baseDir: string = process.cwd(),
+  baseDir?: string | MockAppConfigurationOptions,
   options: MockAppConfigurationOptions = {},
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
+  if (typeof baseDir === 'object') {
+    options = baseDir;
+    baseDir = options.appDir || process.cwd();
+  }
+
   let starterName;
   if (!options.starter) {
     // load yaml
@@ -477,13 +482,6 @@ export async function createFunctionApp<
     const appManager = appCtx.get(MidwayApplicationManager);
     return appManager.getApplication(MidwayFrameworkType.SERVERLESS_APP);
   }
-}
-
-export async function createRoutingWorker(starterExports: {
-  start: Function;
-  close: Function;
-}) {
-  return createFunctionApp();
 }
 
 /**
