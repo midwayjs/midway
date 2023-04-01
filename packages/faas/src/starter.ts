@@ -11,7 +11,7 @@ export abstract class AbstractBootstrapStarter {
   protected framework: MidwayFaaSFramework;
   constructor(protected options: ServerlessStarterOptions = {}) {}
 
-  private isStarted = false;
+  private startedExports: Record<string, any>;
 
   public getApplicationContext() {
     return this.applicationContext;
@@ -22,11 +22,11 @@ export abstract class AbstractBootstrapStarter {
   }
 
   public start(options?: ServerlessStarterOptions) {
-    if (!this.isStarted) {
+    if (!this.startedExports) {
       this.options = Object.assign(this.options, options);
-      this.onStart();
-      this.isStarted = true;
+      this.startedExports = this.onStart();
     }
+    return this.startedExports;
   }
 
   public async initFramework(bootstrapOptions: IMidwayBootstrapOptions = {}) {
