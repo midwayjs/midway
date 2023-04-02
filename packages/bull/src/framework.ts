@@ -74,11 +74,13 @@ export class BullFramework
         queueName: string;
         concurrency: number;
         jobOptions?: JobOptions;
+        queueOptions?: QueueOptions;
       };
 
       const { repeat, delay, ...otherOptions } = options.jobOptions ?? {};
-
+      const queueOptions = options.queueOptions ?? {};
       const currentQueue = this.ensureQueue(options.queueName, {
+        ...queueOptions,
         defaultJobOptions: otherOptions,
       });
       // clear old repeat job when start
