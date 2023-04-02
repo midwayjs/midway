@@ -10,6 +10,8 @@ import {
 import { MidwayCommonError, MidwayParameterError } from '../error';
 import { isIncludeProperty, pathMatching } from '../util';
 import { Types } from '../util/types';
+import { debuglog } from 'util';
+const debug = debuglog('midway:debug');
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -99,6 +101,11 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
         let fn = (newMiddlewareArr as Array<FunctionMiddleware<T, R, N>>)[i];
         if (i === newMiddlewareArr.length) fn = next;
         if (!fn) return Promise.resolve();
+        const middlewareName = `${name ? `${name}.` : ''}${index} ${
+          (fn as any)._name || fn.name || 'anonymous'
+        }`;
+        const startTime = Date.now();
+        debug(`[middleware]: in ${middlewareName} +0`);
         try {
           if (supportBody) {
             return Promise.resolve(
@@ -116,6 +123,11 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
               } else if (context['body'] !== undefined) {
                 result = context['body'];
               }
+              debug(
+                `[middleware]: out ${middlewareName} +${
+                  Date.now() - startTime
+                } with body`
+              );
               return result;
             });
           } else {
@@ -123,9 +135,19 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
               fn(context, dispatch.bind(null, i + 1), {
                 index,
               } as any)
-            );
+            ).then(result => {
+              debug(
+                `[middleware]: out ${middlewareName} +${Date.now() - startTime}`
+              );
+              return result;
+            });
           }
         } catch (err) {
+          debug(
+            `[middleware]: out ${middlewareName} +${
+              Date.now() - startTime
+            } with err ${err.message}`
+          );
           return Promise.reject(err);
         }
       }
