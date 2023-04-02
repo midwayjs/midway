@@ -97,6 +97,7 @@ export class MidwayAspectService {
           target: this,
           args: args,
           proceed: newProceed,
+          proceedIsAsyncFunction: true,
         } as JoinPoint;
 
         if (typeof aspectObject === 'function') {
@@ -140,6 +141,7 @@ export class MidwayAspectService {
           target: this,
           args: args,
           proceed: newProceed,
+          proceedIsAsyncFunction: false,
         } as JoinPoint;
 
         if (typeof aspectObject === 'function') {
