@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/oss",
   "description": "midway oss component",
-  "version": "3.11.0",
+  "version": "3.11.1",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -10,8 +10,8 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.11.0",
-    "@midwayjs/mock": "^3.11.0",
+    "@midwayjs/core": "^3.11.1",
+    "@midwayjs/mock": "^3.11.1",
     "dotenv": "16.0.3"
   },
   "dependencies": {

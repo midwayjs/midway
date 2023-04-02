@@ -1,6 +1,41 @@
 # Change Log
 
 
+## v3.11.1 (2023-04-02)
+
+#### :bug: Bug Fix
+* `socketio`
+  * [#2850](https://github.com/midwayjs/midway/pull/2850) fix: fixed missing initial messages (#2847) ([@ghostoy](https://github.com/ghostoy))
+
+#### :nail_care: Polish
+* `bull`
+  * [#2842](https://github.com/midwayjs/midway/pull/2842) feat: add queueOptions to the @Processor decorator ([@developeryvan](https://github.com/developeryvan))
+* `core`
+  * [#2841](https://github.com/midwayjs/midway/pull/2841) chore(core): add boolean property JoinPoint['proceedIsAsyncFunction'] ([@waitingsong](https://github.com/waitingsong))
+
+#### :memo: Documentation
+* Other
+  * [#2840](https://github.com/midwayjs/midway/pull/2840) docs: update kafka disconnect ([@wangyi12358](https://github.com/wangyi12358))
+* `otel`
+  * [#2826](https://github.com/midwayjs/midway/pull/2826) chore(otel): bump and clean dependencies ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* `otel`
+  * [#2848](https://github.com/midwayjs/midway/pull/2848) chore(deps): update dependency @opentelemetry/sdk-node to ^0.37.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#2826](https://github.com/midwayjs/midway/pull/2826) chore(otel): bump and clean dependencies ([@waitingsong](https://github.com/waitingsong))
+* `swagger`
+  * [#2844](https://github.com/midwayjs/midway/pull/2844) chore(deps): update dependency swagger-ui-dist to v4.18.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 6
+- Cong Liu ([@ghostoy](https://github.com/ghostoy))
+- DeveloperYvan ([@developeryvan](https://github.com/developeryvan))
+- Gao Yang ([@echosoar](https://github.com/echosoar))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Thirteen ([@wangyi12358](https://github.com/wangyi12358))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.11.0 (2023-03-27)
 
 #### :rocket: New Feature
