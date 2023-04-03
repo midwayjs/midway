@@ -65,8 +65,16 @@ The mongoose is also related to the version of MongoDB Server used by your serve
 From mongoose@v5.11.0 on, mongoose the definition is officially supported, there is no need to install the @types/mongoose dependency package.
 :::
 
-
 The installation package depends on the following version:
+
+**Support MongoDB Server 6.x**
+
+```json
+  "dependencies": {
+    "mongoose": "^7.0.0",
+    "@typegoose/typegoose": "^10.0.0",		// This dependency needs to be installed using typegoose
+  },
+```
 
 **Support MongoDB Server 5.x**
 

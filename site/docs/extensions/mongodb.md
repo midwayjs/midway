@@ -65,8 +65,16 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 从 mongoose@v5.11.0 开始，mongoose 官方支持了定义，所以不再需要安装 @types/mongoose 依赖包。
 :::
 
-
 安装包依赖版本如下：
+
+**支持 MongoDB Server 6.x**
+
+```json
+  "dependencies": {
+    "mongoose": "^7.0.0",
+    "@typegoose/typegoose": "^10.0.0",		// 使用 typegoose 需要安装此依赖
+  },
+```
 
 **支持 MongoDB Server 5.x**
 

@@ -167,6 +167,8 @@ async onReady() {
 }
 ```
 
+
+
 ## 忽略和匹配路由
 
 在中间件执行时，我们可以添加路由忽略的逻辑。
@@ -224,6 +226,30 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
   }
 }
 ```
+
+除此之外，`match` 和 `ignore`  还可以是普通字符串或者正则，以及他们的数组形式。
+
+```typescript
+import { Middleware, IMiddleware } from '@midwayjs/core';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+  // 字符串
+  match = '/api/index';
+  
+  // 正则
+  match = /^\/api/;
+  
+  // 数组
+  match = ['/api/index', '/api/user', /^\/openapi/, ctx => {
+    if (ctx.path === '/api/index') {
+      return true;
+    }
+  }];
+}
+```
+
 
 
 ## 函数中间件

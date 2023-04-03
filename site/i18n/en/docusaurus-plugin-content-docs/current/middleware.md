@@ -224,6 +224,30 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 }
 ```
 
+In addition, `match` and `ignore` can also be ordinary strings or regular expressions, and their array forms.
+
+```typescript
+import { Middleware, IMiddleware } from '@midwayjs/core';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+   // string
+   match = '/api/index';
+  
+   // regular
+   match = /^\/api/;
+  
+   // array
+   match = ['/api/index', '/api/user', /^\/openapi/, ctx => {
+     if (ctx.path === '/api/index') {
+       return true;
+     }
+   }];
+}
+```
+
+
 
 ## Function middleware
 
