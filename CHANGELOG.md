@@ -1,6 +1,21 @@
 # Change Log
 
 
+## v3.11.2 (2023-04-03)
+
+#### :bug: Bug Fix
+* `socketio`
+  * [#2854](https://github.com/midwayjs/midway/pull/2854) fix: fixed duplicated OnWSConnection ([@ghostoy](https://github.com/ghostoy))
+
+#### :package: Dependencies
+* `mongoose`, `typegoose`
+  * [#2856](https://github.com/midwayjs/midway/pull/2856) chore(deps): update mongoose monorepo (major) ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Cong Liu ([@ghostoy](https://github.com/ghostoy))
+
+
+
 ## v3.11.1 (2023-04-02)
 
 #### :bug: Bug Fix

@@ -35,14 +35,20 @@
   "@midwayjs/otel": "3.11.1",
   "@midwayjs/passport": "3.11.1",
   "@midwayjs/process-agent": "3.11.1",
-  "@midwayjs/prometheus-socket-io": "3.11.1",
+  "@midwayjs/prometheus-socket-io": [
+    "3.11.1",
+    "3.11.2"
+  ],
   "@midwayjs/prometheus": "3.11.1",
   "@midwayjs/rabbitmq": "3.11.1",
   "@midwayjs/redis": "3.11.1",
   "@midwayjs/security": "3.11.1",
   "@midwayjs/sequelize": "3.11.1",
   "@midwayjs/session": "3.11.1",
-  "@midwayjs/socketio": "3.11.1",
+  "@midwayjs/socketio": [
+    "3.11.1",
+    "3.11.2"
+  ],
   "@midwayjs/static-file": "3.11.1",
   "@midwayjs/swagger": "3.11.1",
   "@midwayjs/tablestore": "3.11.1",
@@ -51,7 +57,10 @@
   "@midwayjs/typeorm": "3.11.1",
   "@midwayjs/upload": "3.11.1",
   "@midwayjs/validate": "3.11.1",
-  "@midwayjs/version": "3.11.1",
+  "@midwayjs/version": [
+    "3.11.1",
+    "3.11.2"
+  ],
   "@midwayjs/view-ejs": "3.11.1",
   "@midwayjs/view-nunjucks": "3.11.1",
   "@midwayjs/view": "3.11.1",

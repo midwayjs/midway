@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/socketio",
-  "version": "3.11.1",
+  "version": "3.11.2",
   "description": "Midway Web Framework for socket.io",
   "main": "dist/index",
   "typings": "index.d.ts",
