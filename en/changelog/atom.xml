@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-04-02T20:00:00.000Z</updated>
+    <updated>2023-04-03T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.11.2]]></title>
+        <id>/v3.11.2</id>
+        <link href="https://midwayjs.org/en/changelog/v3.11.2"/>
+        <updated>2023-04-03T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a class="hash-link" href="#-bug-fix" title="Lien direct vers le titre">​</a></h2><ul><li><code>socketio</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2854" target="_blank" rel="noopener noreferrer">#2854</a> fix: fixed duplicated OnWSConnection (<a href="https://github.com/ghostoy" target="_blank" rel="noopener noreferrer">@ghostoy</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a class="hash-link" href="#-dependencies" title="Lien direct vers le titre">​</a></h2><ul><li><code>mongoose</code>, <code>typegoose</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2856" target="_blank" rel="noopener noreferrer">#2856</a> chore(deps): update mongoose monorepo (major) (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a class="hash-link" href="#committers-1" title="Lien direct vers le titre">​</a></h2><ul><li>Cong Liu (<a href="https://github.com/ghostoy" target="_blank" rel="noopener noreferrer">@ghostoy</a>)</li></ul>]]></content>
+        <author>
+            <name>Cong Liu</name>
+            <uri>https://github.com/ghostoy</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.11.1]]></title>
         <id>/v3.11.1</id>
