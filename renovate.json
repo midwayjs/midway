@@ -28,6 +28,13 @@
       "automerge": true,
       "automergeType": "pr",
       "platformAutomerge": true
+    },
+    {
+      "groupName": "mongoose monorepo",
+      "matchPackageNames": [
+        "mongoose",
+        "@typegoose/typegoose"
+      ]
     }
   ]
 }
