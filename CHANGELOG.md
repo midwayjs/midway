@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.11.3 (2023-04-03)
+
+#### :bug: Bug Fix
+* `mock`
+  * [#2857](https://github.com/midwayjs/midway/pull/2857) fix: change for support worker ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2858](https://github.com/midwayjs/midway/pull/2858) docs(site): update awesome_midway.md ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#2859](https://github.com/midwayjs/midway/pull/2859) fix(deps): update dependency casbin to v5.26.1  ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.11.2 (2023-04-03)
 
 #### :bug: Bug Fix
