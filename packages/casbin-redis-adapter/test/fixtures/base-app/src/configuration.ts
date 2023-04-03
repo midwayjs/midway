@@ -27,6 +27,7 @@ export class ContainerConfiguration {
   @Init()
   async init() {
     let e = new Enforcer();
+    e['fs'] = require('fs');
     await e.initWithFile(
       join(__dirname, '../basic_model.conf'),
       join(__dirname, '../basic_policy.csv'),
