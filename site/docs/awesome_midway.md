@@ -9,9 +9,9 @@
 | [@letscollab/midway-nacos][@letscollab/midway-nacos] | Nawbc       | midway nacos 组件                                                                                                               |
 | [midway-elasticsearch][midway-elasticsearch]         | ddzyan      | midway elasticsearch 组件                                                                                                       |
 | [midway-apollo][midway-apollo]                       | helloHT     | midway 携程异步动态配置 apollo 组件                                                                                             |
-| [@mwcp/cache][@mwcp/cache]                           | waitingsong | midway Cache 组件 支持 `Cacheable`, `CacheEvict`, `CachePut` 装饰器                                                             |
+| [@mwcp/cache][@mwcp/cache]                           | waitingsong | midway Cache 增强组件 支持 `Cacheable`, `CacheEvict`, `CachePut` 装饰器 并支持[传入泛型参数获得方法入参类型][cache-generics-cn] |
 | [@mwcp/kmore][@mwcp/kmore]                           | waitingsong | midway 数据库组件 基于 [Knex]，通过 `Transactional` 装饰器支持声明式事务，支持自动分页、智能连表，集成 [OpenTelemetry] 链路追踪 |
-| [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 组件 支持 `Trace` 装饰器                                                                                 |
+| [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 增强组件 支持 `Trace` 装饰器  并支持[传入泛型参数获得方法入参类型][otel-generics-cn]                     |
 | [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件                                                                                                       |
 
 ## swagger
@@ -54,6 +54,10 @@
 [@mwcp/kmore]: https://github.com/waitingsong/kmore
 [@mwcp/cache]: https://github.com/waitingsong/midway-components/tree/main/packages/cache
 [@mwcp/otel]: https://github.com/waitingsong/midway-components/tree/main/packages/otel
+[otel-generics]: https://github.com/waitingsong/midway-components/tree/main/packages/otel#auto-parameter-type-of-keygenerator-from-generics
+[otel-generics-cn]: https://github.com/waitingsong/midway-components/blob/main/packages/otel/README.zh-CN.md#%E4%BB%8E%E6%B3%9B%E5%9E%8B%E5%8F%82%E6%95%B0%E8%87%AA%E5%8A%A8%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E5%8F%82%E6%95%B0%E7%B1%BB%E5%9E%8B
+[cache-generics]: https://github.com/waitingsong/midway-components/tree/main/packages/cache#auto-parameter-type-of-keygenerator-from-generics
+[cache-generics-cn]: https://github.com/waitingsong/midway-components/blob/main/packages/cache/README.zh-CN.md#%E4%BB%8E%E6%B3%9B%E5%9E%8B%E5%8F%82%E6%95%B0%E8%87%AA%E5%8A%A8%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E5%8F%82%E6%95%B0%E7%B1%BB%E5%9E%8B
 
 [midwayjs-knife4j2]: https://github.com/fangbao-0418/midway/tree/master/packages/swagger
 [yuntian001/midway-vite-view]: https://github.com/yuntian001/midway-vite-view
