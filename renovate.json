@@ -35,6 +35,14 @@
         "mongoose",
         "@typegoose/typegoose"
       ]
+    },
+    {
+      "groupName": "bull monorepo",
+      "matchPackageNames": [
+        "bull",
+        "@bull-board/api",
+        "@bull-board/ui"
+      ]
     }
   ]
 }
