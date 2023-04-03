@@ -201,7 +201,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
       );
 
       if (wsRestEventInfos.length) {
-        for (const wsEventInfo of wsEventInfos) {
+        for (const wsEventInfo of wsRestEventInfos) {
           methodMap[wsEventInfo.propertyName] = methodMap[
             wsEventInfo.propertyName
           ] || { responseEvents: [] };
