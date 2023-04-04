@@ -250,6 +250,31 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 }
 ```
 
+我们也可以在初始化阶段对属性进行修改，比如：
+
+```typescript
+import { Middleware, IMiddleware } from '@midwayjs/core';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+  
+  // 某个中间件的配置
+  @Config('report')
+  reportConfig;
+  
+  @Init()
+  async init() {
+    // 动态合并一些规则
+    if (this.reportConfig.match) {
+      this.match = ['/api/index', '/api/user'].concat(this.reportConfig.match);
+    } else if (this.reportConfig.ignore) {
+      this.match = [].concat(this.reportConfig.ignore);
+    }
+  }
+}
+```
+
 
 
 ## 函数中间件

@@ -247,6 +247,31 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 }
 ```
 
+We can also modify properties during the initialization phase, such as:
+
+```typescript
+import { Middleware, IMiddleware } from '@midwayjs/core';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+  
+   // Configuration of a middleware
+   @Config('report')
+   reportConfig;
+  
+   @Init()
+   async init() {
+     // merge some rules dynamically
+     if (this. reportConfig. match) {
+       this.match = ['/api/index', '/api/user'].concat(this.reportConfig.match);
+     } else if (this. reportConfig. ignore) {
+       this.match = [].concat(this.reportConfig.ignore);
+     }
+   }
+}
+```
+
 
 
 ## Function middleware
