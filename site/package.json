@@ -9,7 +9,7 @@
     "build": "node ./lib/example2sandbox.js && docusaurus build",
     "format:docs": "prettier docs/*.md --write",
     "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy && ./scripts/archive.sh",
+    "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
