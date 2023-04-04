@@ -24,6 +24,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install zip
+        run: sudo apt-get install zip
       - uses: redkubes/docusaurus-deploy-action@master
         with:
           source-folder: site
