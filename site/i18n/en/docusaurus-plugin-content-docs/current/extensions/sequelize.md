@@ -494,6 +494,7 @@ import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
 import { Op } from 'sequelize';
+import { Repository } from 'sequelize-typescript';
 
 @Controller('/')
 export class HomeController {
@@ -548,6 +549,7 @@ import { Controller } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
+import { Repository } from 'sequelize-typescript';
 
 @Controller('/')
 export class HomeController {
