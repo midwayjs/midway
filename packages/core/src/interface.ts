@@ -418,7 +418,28 @@ export type Writable<T> = {
  * Lifecycle Definition
  * 生命周期定义
  */
-export interface ILifeCycle extends Partial<IObjectLifeCycle> {
+export interface ILifeCycle {
+  onBeforeBind?(
+    Clzz: any,
+    options: ObjectBeforeBindOptions
+  ): Promise<void>;
+  onBeforeObjectCreated?(
+    Clzz: any,
+    options: ObjectBeforeCreatedOptions
+  ): Promise<void>;
+  onObjectCreated?<T>(
+    ins: T,
+    options: ObjectCreatedOptions<T>
+  ): Promise<void>;
+  onObjectInit?(
+    ins: any,
+    options: ObjectInitOptions
+  ): Promise<void>;
+  onBeforeObjectDestroy?(
+    ins: any,
+    options: ObjectBeforeDestroyOptions
+  ): Promise<void>;
+
   onConfigLoad?(
     container: IMidwayContainer,
     mainApp?: IMidwayApplication
