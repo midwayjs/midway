@@ -147,7 +147,7 @@ import { ReportMiddleware } from './middleware/user.middleware';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;
@@ -234,10 +234,10 @@ import { NextFunction, Context } from '@midwayjs/koa';
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
    // string
    match = '/api/index';
-  
+
    // regular
    match = /^\/api/;
-  
+
    // array
    match = ['/api/index', '/api/user', /^\/openapi/, ctx => {
      if (ctx.path === '/api/index') {
@@ -255,11 +255,11 @@ import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
-  
+
    // Configuration of a middleware
    @Config('report')
    reportConfig;
-  
+
    @Init()
    async init() {
      // merge some rules dynamically
@@ -297,7 +297,7 @@ import { fnMiddleware } from './middleware/another.middleware';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;
@@ -393,7 +393,7 @@ import { fnMiddleware } from './middleware/another.middleware';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;
@@ -432,7 +432,7 @@ import { ReportMiddleware } from './middleware/user.middleware';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;

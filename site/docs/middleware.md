@@ -148,7 +148,7 @@ import { ReportMiddleware } from './middleware/user.middleware';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;
@@ -237,10 +237,10 @@ import { NextFunction, Context } from '@midwayjs/koa';
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
   // 字符串
   match = '/api/index';
-  
+
   // 正则
   match = /^\/api/;
-  
+
   // 数组
   match = ['/api/index', '/api/user', /^\/openapi/, ctx => {
     if (ctx.path === '/api/index') {
@@ -258,11 +258,11 @@ import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
-  
+
   // 某个中间件的配置
   @Config('report')
   reportConfig;
-  
+
   @Init()
   async init() {
     // 动态合并一些规则
@@ -300,7 +300,7 @@ import { fnMiddleware } from './middleware/another.middleware';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;
@@ -396,7 +396,7 @@ import { fnMiddleware } from './middleware/another.middleware';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;
@@ -435,7 +435,7 @@ import { ReportMiddleware } from './middleware/user.middleware';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;

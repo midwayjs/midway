@@ -426,7 +426,7 @@ Since Midway's Context is associated with app, app instances need to be passed i
 import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
-export class AutoConfiguration {
+export class MainConfiguration {
   @Inject()
   mockService: MidwayMockService;
 
@@ -448,7 +448,7 @@ If your data is complex or logical, you can also use the callback form.
 import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
-export class AutoConfiguration {
+export class MainConfiguration {
   @Inject()
   mockService: MidwayMockService;
 

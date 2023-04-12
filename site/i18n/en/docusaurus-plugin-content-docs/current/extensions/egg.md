@@ -316,7 +316,7 @@ import { ReportMiddleware } from './middleware/user.middleware';
   imports: [egg]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: egg.Application;

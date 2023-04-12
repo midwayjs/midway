@@ -304,7 +304,7 @@ import * as socketio from '@midwayjs/socketio';
   ],
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App('socketIO')
   app: Application;

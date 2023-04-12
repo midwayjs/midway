@@ -800,7 +800,7 @@ export class CustomTransport extends EmptyTransport {
 
 // src/configuration.ts
 @Configuration(/*...*/)
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -851,7 +851,7 @@ This feature is very suitable for dynamically creating logs, but configurations 
 
 ### 1. The server environment log is not output
 
-For the server environment, the default log level is warn, that is, logger.warn will print out. please check the "log level" section.
+For the server environment, the default log level is warn, that is, `logger.warn` will print out. please check the "log level" section.
 
 We do not recommend printing too many logs in the server environment, only printing the necessary content, too much log output affects performance, but also affects the rapid positioning problem.
 

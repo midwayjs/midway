@@ -604,7 +604,7 @@ Object.defineProperty(process, 'version', {
 
 // other code
 
-export class AutoConfiguration {}
+export class MainConfiguration {}
 ```
 
 

@@ -554,7 +554,7 @@ dotenv.config();
 @Configuration({
   //...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   async onReady(container) {
 
   }

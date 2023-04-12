@@ -578,7 +578,7 @@ import * as lodash from 'lodash';
 import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-export class AutoConfiguration {
+export class MainConfiguration {
 
   async onReady(applicationContext: IMidwayContainer) {
 		// Add some global objects to the dependency injection container
@@ -766,7 +766,7 @@ In the life cycle of the code entry `configuration` file, we will also pass addi
 import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-export class AutoConfiguration {
+export class MainConfiguration {
   async onReady(applicationContext: IMidwayContainer) {
     // ...
   }
@@ -903,11 +903,11 @@ Then you can define a dynamic service (factory) and return different implementat
 ```typescript
 // src/service/dynamicCacheService.ts
 
-import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
+import { providerWrapper, IMidwayContainer, MidwayConfigService } from '@midwayjs/core';
 
 export async function dynamicCacheServiceHandler(container: IMidwayContainer) {
 	// Get global configuration from container API
-  const config = container.getConfigService().getConfiguration();
+  const config = container.get(MidwayConfigService).getConfiguration();
   if (config['redis']['mode'] === 'local') {
     return await container.getAsync('localCacheService');
   } else {

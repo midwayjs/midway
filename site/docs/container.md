@@ -580,7 +580,7 @@ import * as lodash from 'lodash';
 import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-export class AutoConfiguration {
+export class MainConfiguration {
 
   async onReady(applicationContext: IMidwayContainer) {
     // 向依赖注入容器中添加一些全局对象
@@ -769,7 +769,7 @@ export class ReportMiddleware {
 import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-export class AutoConfiguration {
+export class MainConfiguration {
   async onReady(applicationContext: IMidwayContainer) {
     // ...
   }
@@ -907,11 +907,11 @@ export class RemoteCacheService implements ICacheService {
 ```typescript
 // src/service/dynamicCacheService.ts
 
-import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
+import { providerWrapper, IMidwayContainer, MidwayConfigService } from '@midwayjs/core';
 
 export async function dynamicCacheServiceHandler(container: IMidwayContainer) {
   // 从容器 API 获取全局配置
-  const config = container.getConfigService().getConfiguration();
+  const config = container.get(MidwayConfigService).getConfiguration();
   if (config['redis']['mode'] === 'local') {
     return await container.getAsync('localCacheService');
   } else {

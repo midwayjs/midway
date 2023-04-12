@@ -416,7 +416,7 @@ import { MyView } from './lib/my';
   imports: [koa, view],
   importConfigs: [join(__dirname, 'config')]
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @Inject()
   viewManager: view.ViewManager;

@@ -428,7 +428,7 @@ class TestMockService {
 import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
-export class AutoConfiguration {
+export class MainConfiguration {
   @Inject()
   mockService: MidwayMockService;
 
@@ -450,7 +450,7 @@ export class AutoConfiguration {
 import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
-export class AutoConfiguration {
+export class MainConfiguration {
   @Inject()
   mockService: MidwayMockService;
 

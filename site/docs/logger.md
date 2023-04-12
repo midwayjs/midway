@@ -799,7 +799,7 @@ export class CustomTransport extends EmptyTransport {
 
 // src/configuration.ts
 @Configuration(/*...*/)
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -850,7 +850,7 @@ export default {
 
 ### 1、服务器环境日志不输出
 
-服务器环境，默认日志等级为 warn，即 `logger.warn 才会打印输出，请查看 ”日志等级“ 部分。
+服务器环境，默认日志等级为 warn，即 `logger.warn` 才会打印输出，请查看 ”日志等级“ 部分。
 
 我们不推荐在服务器环境打印太多的日志，只打印必须的内容，过多的日志输出影响性能，也影响快速定位问题。
 

@@ -1359,7 +1359,7 @@ import { Configuration } from '@midwayjs/core';
 import { getConnection } from 'typeorm';
 
 @Configuration()
-export class AutoConfiguration {
+export class MainConfiguration {
   async onReady() {
   	const conn = getConnection('default');
     console.log(conn.isConnected);

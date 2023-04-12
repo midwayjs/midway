@@ -340,7 +340,7 @@ const mysql = require('mysql2');
      tags
    ],
 })
-export class AutoConfiguration {
+export class MainConfiguration {
    connection;
 
    @Config()

@@ -135,7 +135,7 @@ import * as koa from '@midwayjs/koa';
 @Configuration({
 	// ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -166,7 +166,7 @@ import * as koa from '@midwayjs/koa';
 @Configuration({
 	// ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   @Inject()
   framework: koa.Framework;
 
