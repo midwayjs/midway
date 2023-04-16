@@ -15,7 +15,7 @@ const server = http.createServer((req, res) => {
   bus.start();
   bus.publish('ready', {
     topic: 'ready'
-  })
+  });
 });
 
 process.on('SIGINT', () => {

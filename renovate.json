@@ -11,10 +11,7 @@
     "@midwayjs/cookies",
     "@midwayjs/logger",
     "@midwayjs/gateway-common-http",
-    "@midwayjs/serverless-spec-builder",
-    "@opentelemetry/core",
-    "@opentelemetry/sdk-trace-base",
-    "@opentelemetry/sdk-trace-node"
+    "@midwayjs/serverless-spec-builder"
   ],
   "ignorePaths": ["**/fixtures/**", "**/example/**", "**/site/**", "**/benchmark/**"],
   "schedule": ["before 3am on Friday"],
@@ -42,6 +39,14 @@
         "bull",
         "@bull-board/api",
         "@bull-board/ui"
+      ]
+    },
+    {
+      "group": "otel",
+      "matchPackageNames": [
+        "@opentelemetry/api",
+        "@opentelemetry/sdk-trace-base",
+        "@opentelemetry/sdk-trace-node"
       ]
     }
   ]
