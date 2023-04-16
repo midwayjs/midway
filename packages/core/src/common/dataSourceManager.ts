@@ -82,6 +82,11 @@ export abstract class DataSourceManager<T> {
           }
         }
         dataSourceOptions['entities'] = Array.from(entities);
+        if (appDirOrOptions.logger) {
+          appDirOrOptions.logger.debug(
+            `Load ${dataSourceOptions['entities'].length} models from ${dataSourceName}.`
+          );
+        }
       }
       // create data source
       const opts: CreateDataSourceInstanceOptions = {

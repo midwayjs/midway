@@ -41,7 +41,10 @@ export class MongooseDataSourceManager extends DataSourceManager<mongoose.Connec
       );
       this.config.dataSource = this.config.clients;
     }
-    await this.initDataSource(this.config, this.baseDir);
+    await this.initDataSource(this.config, {
+      appDir: this.baseDir,
+      logger: this.logger,
+    });
   }
 
   protected async createDataSource(config: any, name: string) {

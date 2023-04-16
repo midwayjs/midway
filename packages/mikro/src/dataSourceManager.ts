@@ -5,7 +5,7 @@ import {
   Scope,
   Inject,
   ScopeEnum,
-  DataSourceManager,
+  DataSourceManager, Logger,
 } from '@midwayjs/core';
 import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
 
@@ -20,9 +20,15 @@ export class MikroDataSourceManager extends DataSourceManager<
   @Inject()
   baseDir: string;
 
+  @Logger('coreLogger')
+  logger;
+
   @Init()
   async init() {
-    await this.initDataSource(this.mikroConfig, this.baseDir);
+    await this.initDataSource(this.mikroConfig, {
+      appDir: this.baseDir,
+      logger: this.logger,
+    });
   }
 
   getName(): string {
