@@ -44,6 +44,14 @@ describe('/test/fork/cp.test.ts', () => {
     const currentPid = clusterFork.getWorkerIds()[0];
     console.log('currentPid=', currentPid);
 
+    await new Promise<void>((resolve) => {
+      clusterFork['eventBus'].subscribeOnce(message => {
+        resolve();
+      }, {
+        topic: 'ready'
+      })
+    });
+
     try {
       await fetch('http://127.0.0.1:8000/error');
     } catch (err) {}
@@ -79,6 +87,14 @@ describe('/test/fork/cp.test.ts', () => {
     await clusterFork.start();
 
     await sleep(500);
+
+    await new Promise<void>((resolve) => {
+      clusterFork['eventBus'].subscribeOnce(message => {
+        resolve();
+      }, {
+        topic: 'ready'
+      })
+    });
 
     try {
       console.log('----curl 1');

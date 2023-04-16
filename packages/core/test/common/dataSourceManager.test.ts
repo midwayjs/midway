@@ -84,7 +84,7 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(result).toEqual([]);
 
     result = globModels('abc', __dirname);
-    expect(result.length).toEqual(4);
+    expect(result.length).toEqual(6);
   });
 
   it('should test with glob model', async () => {
@@ -220,6 +220,9 @@ describe('test/common/dataSourceManager.test.ts', () => {
     result = globModels('abc/*.ts', __dirname);
     expect(result.length).toEqual(4);
 
+    result = globModels('/abc', __dirname);
+    expect(result.length).toEqual(6);
+
     result = globModels('abc/a.ts', __dirname);
     expect(result.length).toEqual(2);
 
@@ -246,6 +249,15 @@ describe('test/common/dataSourceManager.test.ts', () => {
 
 describe('test global pattern', () => {
   it('should test parse global string', function () {
+    expect(formatGlobString('/entity')).toEqual([
+      '/entity/**/**.ts',
+      '/entity/**/**.js',
+      '/entity/**/**.mts',
+      '/entity/**/**.mjs',
+      '/entity/**/**.cts',
+      '/entity/**/**.cjs'
+    ]);
+
     expect(formatGlobString('./entity')).toEqual([
       '/entity/**/**.ts',
       '/entity/**/**.js',
