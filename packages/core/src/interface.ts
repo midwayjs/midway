@@ -3,6 +3,51 @@ import * as EventEmitter from 'events';
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
 
+export type PowerPartial<T> = {
+  [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
+};
+
+/**
+ * Make object property writeable
+ */
+export type Writable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
+/**
+ * Utility type that adds a `fn` parameter to each method in the input type `T`,
+ * transforming the original method's parameter types and return type into a function type.
+ *
+ * @example
+ * // Input:
+ * interface MyInterface {
+ *   method1(a: string, b: number): boolean;
+ *   method2(x: Foo, y: Bar): void;
+ * }
+ *
+ * // Output:
+ * interface MyInterfaceWithFn {
+ *   method1(fn: (a: string, b: number) => boolean): void;
+ *   method2(fn: (x: Foo, y: Bar) => void): void;
+ * }
+ */
+export type WithFn<T> = {
+  [K in keyof T]: T[K] extends (...args: infer P) => infer R
+    ? (fn: (...args: P) => R) => void
+    : T[K];
+};
+
+/**
+ * Transform an object type `T` with methods that have function-type parameters
+ * to a new object type with the same methods, but with the parameters
+ * extracted as separate properties.
+ */
+export type WithoutFn<T> = {
+  [K in keyof T]: T[K] extends (arg: any, ...args: any[]) => any
+    ? (...args: Parameters<T[K]>) => ReturnType<T[K]>
+    : T[K];
+};
+
 export type MiddlewareParamArray = Array<string | any>;
 export type ObjectIdentifier = string | Symbol;
 export type GroupModeType = 'one' | 'multi';
@@ -373,10 +418,6 @@ export interface MidwayCoreDefaultConfig {
   };
 }
 
-export type PowerPartial<T> = {
-  [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
-};
-
 export type ServiceFactoryConfigOption<OPTIONS> = {
   default?: PowerPartial<OPTIONS>;
   client?: PowerPartial<OPTIONS>;
@@ -407,12 +448,6 @@ export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T>
   ? Pick<ConfigType<T>, K>
   : ConfigType<T>;
 
-/**
- * Make object property writeable
- */
-export type Writable<T> = {
-  -readonly [P in keyof T]: T[P];
-};
 
 /**
  * Lifecycle Definition
@@ -503,15 +538,11 @@ export interface ObjectBeforeDestroyOptions extends ObjectLifeCycleOptions {}
  * 对象生命周期
  */
 export interface IObjectLifeCycle {
-  onBeforeBind(fn: (Clzz: any, options: ObjectBeforeBindOptions) => void);
-  onBeforeObjectCreated(
-    fn: (Clzz: any, options: ObjectBeforeCreatedOptions) => void
-  );
-  onObjectCreated<T>(fn: (ins: T, options: ObjectCreatedOptions<T>) => void);
-  onObjectInit<T>(fn: (ins: T, options: ObjectInitOptions) => void);
-  onBeforeObjectDestroy<T>(
-    fn: (ins: T, options: ObjectBeforeDestroyOptions) => void
-  );
+  onBeforeBind(Clzz: any, options: ObjectBeforeBindOptions): void;
+  onBeforeObjectCreated(Clzz: any, options: ObjectBeforeCreatedOptions): void;
+  onObjectCreated<T>(ins: T, options: ObjectCreatedOptions<T>): void;
+  onObjectInit<T>(ins: T, options: ObjectInitOptions): void;
+  onBeforeObjectDestroy<T>(ins: T, options: ObjectBeforeDestroyOptions): void;
 }
 
 /**
@@ -656,7 +687,7 @@ export interface IIdentifierRelationShip {
   getRelation(id: ObjectIdentifier): string;
 }
 
-export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
+export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycle> {
   parent: IMidwayContainer;
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;

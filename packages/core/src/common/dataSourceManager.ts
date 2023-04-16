@@ -7,7 +7,8 @@ import { run } from '@midwayjs/glob';
 import { join, parse } from 'path';
 import { Types } from '../util/types';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
-import { ILogger } from '../interface';
+import { debuglog } from 'util';
+const debug = debuglog('midway:debug');
 
 export interface CreateDataSourceInstanceOptions {
   /**
@@ -45,7 +46,6 @@ export abstract class DataSourceManager<T> {
     appDirOrOptions:
       | {
           appDir: string;
-          logger?: ILogger;
         }
       | string
   ): Promise<void> {
@@ -82,11 +82,9 @@ export abstract class DataSourceManager<T> {
           }
         }
         dataSourceOptions['entities'] = Array.from(entities);
-        if (appDirOrOptions.logger) {
-          appDirOrOptions.logger.debug(
-            `Load ${dataSourceOptions['entities'].length} models from ${dataSourceName}.`
-          );
-        }
+        debug(
+          `[core]: DataManager load ${dataSourceOptions['entities'].length} models from ${dataSourceName}.`
+        );
       }
       // create data source
       const opts: CreateDataSourceInstanceOptions = {

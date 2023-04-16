@@ -84,7 +84,7 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(result).toEqual([]);
 
     result = globModels('abc', __dirname);
-    expect(result.length).toEqual(4);
+    expect(result.length).toEqual(6);
   });
 
   it('should test with glob model', async () => {

@@ -8,7 +8,7 @@ import {
   ApplicationContext,
   DataSourceManager,
   IMidwayContainer,
-  MidwayLoggerService, Logger,
+  MidwayLoggerService,
 } from '@midwayjs/core';
 import { DataSource } from 'typeorm';
 import { TypeORMLogger } from './logger';
@@ -28,15 +28,9 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
   @Inject()
   loggerService: MidwayLoggerService;
 
-  @Logger('coreLogger')
-  logger;
-
   @Init()
   async init() {
-    await this.initDataSource(this.typeormConfig, {
-      appDir: this.baseDir,
-      logger: this.logger,
-    });
+    await this.initDataSource(this.typeormConfig, this.baseDir);
   }
 
   getName(): string {

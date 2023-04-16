@@ -1,1 +1,1 @@
-export default class EntityD {}
+export default class EntityPPD {}
