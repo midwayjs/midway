@@ -12,7 +12,7 @@ const config = {
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.svg',
-  organizationName: 'midwayjs', // Usually your GitHub org/user name.
+  organizationName: 'midwayjs', // Usually your GitHub org/username.
   projectName: 'midway', // Usually your repo name.
   stylesheets: ['//at.alicdn.com/t/font_2797741_dnh1sm1jan.css'],
   i18n: {
@@ -41,6 +41,16 @@ const config = {
           copyright: `Copyright © ${new Date().getFullYear()} Facebook, Inc.`,
           language: 'en',
         },
+      },
+    ],
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        tsconfig: '../tsconfig.json',
+        frontmatter: {
+          pagination_prev: null,
+          pagination_next: null
+        }
       },
     ],
     './lib/plugin.js'

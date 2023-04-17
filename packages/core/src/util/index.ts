@@ -53,6 +53,7 @@ export const safeRequire = (p, enabledCache = true) => {
 };
 
 /**
+ *  @example
  *  safelyGet(['a','b'],{a: {b: 2}})  // => 2
  *  safelyGet(['a','b'],{c: {b: 2}})  // => undefined
  *  safelyGet(['a','1'],{a: {"1": 2}})  // => 2
