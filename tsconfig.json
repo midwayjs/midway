@@ -80,7 +80,6 @@
       "packages/ws"
     ],
     "readme": "none",
-    "out": "docs-api",
     "exclude": [
       "**/dist/**",
       "**/build/**",
@@ -89,11 +88,6 @@
       "**/*.spec.ts"
     ],
     "excludePrivate": true,
-    "sidebar": {
-      "categoryLabel": "API XYZ",
-      "collapsed": false,
-      "position": 0,
-      "fullNames": true
-    }
+    "excludeExternals": true
   }
 }

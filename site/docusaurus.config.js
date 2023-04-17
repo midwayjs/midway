@@ -50,6 +50,10 @@ const config = {
         frontmatter: {
           pagination_prev: null,
           pagination_next: null
+        },
+        sidebar: {
+          autoConfiguration: true,
+          position: 0
         }
       },
     ],
