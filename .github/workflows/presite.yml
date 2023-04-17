@@ -1,6 +1,13 @@
 name: Check site dependencies before deploy
 
 on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - site/**
+      - CHANGELOG.md
+      - package.json
   pull_request:
     branches-ignore:
       - main
