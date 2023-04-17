@@ -14,7 +14,7 @@
     "@midwayjs/koa": "^3.11.3",
     "@midwayjs/mock": "^3.11.3",
     "@types/consul": "0.40.0",
-    "@types/sinon": "10.0.13",
+    "@types/sinon": "10.0.14",
     "nock": "13.3.0"
   },
   "dependencies": {
