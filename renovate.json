@@ -42,7 +42,7 @@
       ]
     },
     {
-      "group": "otel",
+      "groupName": "otel",
       "matchPackageNames": [
         "@opentelemetry/api",
         "@opentelemetry/sdk-trace-base",
