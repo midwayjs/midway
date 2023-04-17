@@ -150,5 +150,22 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
       "propertyName": "doget",
     },
   ],
+  "dogetError": [
+    {
+      "key": "web:router_param",
+      "metadata": {
+        "propertyData": [Function],
+        "type": "custom",
+      },
+      "options": {
+        "impl": true,
+        "pipes": [
+          [Function],
+        ],
+      },
+      "parameterIndex": 0,
+      "propertyName": "dogetError",
+    },
+  ],
 }
 `;
