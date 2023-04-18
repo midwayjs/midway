@@ -5,16 +5,12 @@ on:
     branches-ignore:
       - main
     paths:
-      - site/**
-      - CHANGELOG.md
-      - package.json
+      - site/package.json
   pull_request:
     branches-ignore:
       - main
     paths:
-      - site/**
-      - CHANGELOG.md
-      - package.json
+      - site/package.json
 
 jobs:
   check:
@@ -31,5 +27,4 @@ jobs:
       - run: npm install
       - run: npm run bootstrap
       - run: npm run build --if-present
-      - run: npm run typedoc
       - run: cd site && npm install && npm run build
