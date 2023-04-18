@@ -219,7 +219,7 @@ import * as view from '@midwayjs/view-nunjucks';
 
 @Configuration({
   imports: [
-    koa
+    koa,
     // ...
     view
   ],
@@ -450,6 +450,83 @@ In this way, when `WeatherEmptyDataError` error is obtained in each request, the
 For more information about exception handling, see [Document](./error_filter).
 
 
+
+## Data Simulation
+
+When writing code, our interface is often still in the unusable stage. In order to minimize the impact, we can use simulated data instead.
+
+For example, our weather interface can be simulated locally and in the test environment.
+
+We need to create a `src/mock/data.mock.ts` file with the following content:
+
+```typescript
+// src/mock/data.mock.ts
+import {
+   Mock,
+   ISimulation,
+   apps,
+   Inject,
+   IMidwayApplication,
+   MidwayMockService,
+} from '@midwayjs/core';
+import { WeatherService } from '../service/weather.service';
+
+@Mock()
+export class WeatherDataMock implements ISimulation {
+   @App()
+   app: IMidwayApplication;
+
+   @Inject()
+   mockService: MidwayMockService;
+
+   async setup(): Promise<void> {
+     const originMethod = WeatherService.prototype.getWeather;
+     this.mockService.mockClassProperty(
+       WeatherService,
+       'getWeather',
+       async cityId => {
+         if (cityId === '101010100') {
+           return {
+             weatherinfo: {
+               city: 'Beijing',
+               cityid: '101010100',
+               temp: '27.9',
+               WD: 'South Wind',
+               WS: 'Less than level 3',
+               SD: '28%',
+               AP: '1002hPa',
+               njd: 'No live broadcast yet',
+               WSE: '<3',
+               time: '17:55',
+               sm: '2.1',
+               isRadar: '1',
+               Radar: 'JC_RADAR_AZ9010_JB',
+             },
+           };
+         } else {
+           return originMethod.apply(this, [cityId]);
+         }
+       }
+     );
+   }
+
+   enableCondition(): boolean | Promise<boolean> {
+     // Conditions for the mock class to be enabled
+     return ['local', 'test', 'unittest']. includes(this. app. getEnv());
+   }
+}
+
+```
+
+The `WeatherDataMock` class is used to simulate weather data, and the `setup` method is used for the actual initialization simulation. Among them, we use the `mockClassProperty` method of the built-in `MidwayMockService` to simulate the `getWeather` method of `WeatherService` Lose.
+
+In the simulation process, we only processed the data of a single city, and the others still followed the original interface.
+
+`enableCondition` is used to identify the scenarios in which this mock class takes effect. For example, the code above only takes effect locally and in the test environment.
+
+In this way, when developing and testing locally, the data we request `101010100` will be intercepted and returned directly, and will not be affected after deployment to the server environment.
+
+There are more interfaces available for data mocking, please refer to [documentation](./mock).
 
 ## Unit test
 
