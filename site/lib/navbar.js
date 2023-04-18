@@ -30,6 +30,11 @@ module.exports = [
     "position": "left"
   },
   {
+    to: 'api',
+    label: 'API',
+    position: 'left',
+  },
+  {
     to: 'blog',
     label: 'Blog',
     position: 'left'

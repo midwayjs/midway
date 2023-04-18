@@ -3,6 +3,7 @@
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
+    "@nrwl/tao": "15.5.2",
     "@types/jest": "29.5.0",
     "@types/node": "18.15.11",
     "@vercel/ncc": "0.36.1",
@@ -12,15 +13,14 @@
     "lerna-changelog": "2.2.0",
     "madge": "6.0.0",
     "mwts": "1.3.0",
+    "nx": "15.5.2",
     "tree-kill": "1.2.2",
     "ts-jest": "29.1.0",
     "ts-node": "10.9.1",
-    "typedoc": "0.24.4",
+    "typedoc": "^0.24.4",
     "typescript": "4.9.5",
     "why-is-node-running": "2.2.2",
-    "zx": "7.2.1",
-    "nx": "15.5.2",
-    "@nrwl/tao": "15.5.2"
+    "zx": "7.2.1"
   },
   "scripts": {
     "test": "lerna run test",
@@ -42,7 +42,6 @@
     "lint": "lerna exec mwts check",
     "lint:cycle": "lerna exec --ignore @midwayjs/version --ignore @midwayjs/faas-typings --ignore @midwayjs/*-layer --ignore @midwayjs/core -- madge --circular --extensions ts src",
     "lint:fix": "lerna exec mwts fix",
-    "typedoc": "typedoc",
     "changelog": "lerna-changelog"
   },
   "keywords": [
