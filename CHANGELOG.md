@@ -1,6 +1,42 @@
 # Change Log
 
 
+## v3.11.4 (2023-04-18)
+
+#### :bug: Bug Fix
+* `bootstrap`, `core`, `otel`
+  * [#2885](https://github.com/midwayjs/midway/pull/2885) fix:  bootstrap test case ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `async-hooks-context-manager`, `axios`, `bootstrap`, `bull-board`, `bull`, `cache`, `captcha`, `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `decorator`, `etcd`, `express-session`, `faas`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `mikro`, `mock`, `mongoose`, `oss`, `otel`, `passport`, `processAgent`, `prometheus-socket-io`, `prometheus`, `rabbitmq`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `typegoose`, `typeorm`, `upload`, `validate`, `view-ejs`, `view-nunjucks`, `view`, `web-express`, `web-koa`, `web`, `ws`
+  * [#2887](https://github.com/midwayjs/midway/pull/2887) feat: support options for custom request decorator ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* `async-hooks-context-manager`, `axios`, `bootstrap`, `bull-board`, `bull`, `cache`, `captcha`, `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `decorator`, `etcd`, `express-session`, `faas`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `mikro`, `mock`, `mongoose`, `oss`, `otel`, `passport`, `processAgent`, `prometheus-socket-io`, `prometheus`, `rabbitmq`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `typegoose`, `typeorm`, `upload`, `validate`, `view-ejs`, `view-nunjucks`, `view`, `web-express`, `web-koa`, `web`, `ws`
+  * [#2887](https://github.com/midwayjs/midway/pull/2887) feat: support options for custom request decorator ([@czy88840616](https://github.com/czy88840616))
+* Other
+  * [#2867](https://github.com/midwayjs/midway/pull/2867) docs(site): update quickstart.md ([@lhx6538665](https://github.com/lhx6538665))
+
+#### :package: Dependencies
+* `grpc`
+  * [#2876](https://github.com/midwayjs/midway/pull/2876) fix(deps): update dependency @grpc/grpc-js to v1.8.14 ([@renovate[bot]](https://github.com/apps/renovate))
+* `rabbitmq`
+  * [#2877](https://github.com/midwayjs/midway/pull/2877) fix(deps): update dependency amqp-connection-manager to v4.1.12 ([@renovate[bot]](https://github.com/apps/renovate))
+* `async-hooks-context-manager`, `axios`, `bootstrap`, `bull-board`, `bull`, `cache`, `captcha`, `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `decorator`, `etcd`, `express-session`, `faas`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `mikro`, `mock`, `mongoose`, `oss`, `otel`, `passport`, `processAgent`, `prometheus-socket-io`, `prometheus`, `rabbitmq`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `typegoose`, `typeorm`, `upload`, `validate`, `view-ejs`, `view-nunjucks`, `view`, `web-express`, `web-koa`, `web`, `ws`
+  * [#2887](https://github.com/midwayjs/midway/pull/2887) feat: support options for custom request decorator ([@czy88840616](https://github.com/czy88840616))
+* `sequelize`
+  * [#2869](https://github.com/midwayjs/midway/pull/2869) chore(deps): update dependency sequelize to v6.31.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2866](https://github.com/midwayjs/midway/pull/2866) chore(deps): update dependency typedoc to v0.24.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `typegoose`
+  * [#2882](https://github.com/midwayjs/midway/pull/2882) chore(deps): update dependency @typegoose/typegoose to v11.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- 刘宏玺 ([@lhx6538665](https://github.com/lhx6538665))
+
+
+
 ## v3.11.3 (2023-04-03)
 
 #### :bug: Bug Fix
