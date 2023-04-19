@@ -310,7 +310,7 @@ export class IndexDataMock implements ISimulation {
 
   enableCondition(): boolean | Promise<boolean> {
     // 模拟类启用的条件
-    return ['local', 'unittest'].includes(this.app.getEnv());
+    return ['local', 'test', 'unittest'].includes(this.app.getEnv());
   }
 }
 ```
@@ -382,7 +382,7 @@ export class InitDataMock implements ISimulation {
   }
 
   enableCondition(): boolean | Promise<boolean> {
-    return ['local', 'unittest'].includes(this.app.getEnv());
+    return ['local', 'test', 'unittest'].includes(this.app.getEnv());
   }
 }
 ```
