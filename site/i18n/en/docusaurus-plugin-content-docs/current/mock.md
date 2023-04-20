@@ -315,7 +315,7 @@ export class IndexDataMock implements ISimulation {
 }
 ```
 
-In the above code, `enableCondition` is a method that must be implemented, which represents the enabling condition of the current simulation class. For example, the above code only takes effect in the `local` and `unittest` environments.
+In the above code, `enableCondition` is a method that must be implemented, which represents the enabling condition of the current simulation class. For example, the above code only takes effect in `local`, `test` and `unittest` environments.
 
 
 
@@ -349,13 +349,14 @@ export interface ISimulation {
     * Executed when each frame is stopped
     */
    appTearDown?(app: IMidwayApplication): Promise<void>;
+   /**
+    * The execution conditions of the simulation are generally a specific environment or a specific framework
+    */
    enableCondition(): boolean | Promise<boolean>;
 }
 ```
 
 Based on the above interface, we implement very free simulation logic.
-
-
 
 For example, add different middleware on different frameworks.
 

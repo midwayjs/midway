@@ -315,7 +315,7 @@ export class IndexDataMock implements ISimulation {
 }
 ```
 
-上面的代码中，`enableCondition` 是必须实现的方法，代表当前模拟类的启用条件，比如上面的代码仅在 `local` 和 `unittest` 环境下生效。
+上面的代码中，`enableCondition` 是必须实现的方法，代表当前模拟类的启用条件，比如上面的代码仅在 `local` ，`test` 和 `unittest` 环境下生效。
 
 
 
@@ -349,13 +349,14 @@ export interface ISimulation {
    * 每种框架的停止时执行
    */
   appTearDown?(app: IMidwayApplication): Promise<void>;
+  /**
+   * 模拟的执行条件，一般是特定环境，或者特定框架下
+   */
   enableCondition(): boolean | Promise<boolean>;
 }
 ```
 
 基于上面的接口，我们实现非常自由的模拟逻辑。
-
-
 
 比如，在不同的框架上添加不同的中间件。
 
