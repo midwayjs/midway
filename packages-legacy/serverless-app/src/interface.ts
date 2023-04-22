@@ -11,6 +11,7 @@ export interface Application extends FaaSApplication {
 export interface IServerlessAppOptions extends IConfigurationOptions {
   port?: string | number;
   ssl?: boolean;
+  https?: { key: string; cert: string };
   initContext?: any;
   bodyParserLimit?: string;
 }

@@ -4,6 +4,7 @@ import {
   IMidwayContext,
   MidwayCommonError,
   MidwayFrameworkType,
+  PathFileUtil,
 } from '@midwayjs/core';
 import { Application, IServerlessAppOptions } from './interface';
 import { Server } from 'net';
@@ -304,11 +305,26 @@ export class ServerlessAppFramework extends BaseFramework<
       process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
     if (customPort) {
       if (this.configurationOptions.ssl) {
+        let key = readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8');
+        let cert = readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8');
+
+        if (
+          this.configurationOptions.https &&
+          this.configurationOptions.https.key &&
+          this.configurationOptions.https.cert
+        ) {
+          key = PathFileUtil.getFileContentSync(
+            this.configurationOptions.https.key,
+            'utf8'
+          );
+          cert = PathFileUtil.getFileContentSync(
+            this.configurationOptions.https.cert,
+            'utf8'
+          );
+        }
+
         this.server = require('https').createServer(
-          {
-            key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
-            cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
-          },
+          { key, cert },
           this.httpServerApp
         );
       } else {
