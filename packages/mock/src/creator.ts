@@ -254,11 +254,14 @@ export async function createFunctionApp<
 ): Promise<Y> {
   if (typeof baseDir === 'object') {
     options = baseDir;
-    baseDir = options.appDir || process.cwd();
+    baseDir = options.appDir || '';
   }
 
   let starterName;
   if (!options.starter) {
+    if (!baseDir) {
+      baseDir = process.cwd();
+    }
     // load yaml
     try {
       const doc = yaml.load(readFileSync(join(baseDir, 'f.yml'), 'utf8'));
