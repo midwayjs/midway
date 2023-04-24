@@ -15,7 +15,7 @@ const mimeMap = {
   octet: 'application/octet-stream',
 };
 
-interface IOptions {
+interface IOptions extends https.RequestOptions {
   method?: MethodType;
   headers?: any;
   contentType?: MimeType;
@@ -44,10 +44,14 @@ export async function makeHttpRequest<ResType>(
   debug(`request '${url}'`);
   const whatwgUrl = new URL(url);
   const client = whatwgUrl.protocol === 'https:' ? https : http;
-  const contentType: MimeType = options.contentType;
-  const dataType: MimeType = options.dataType;
-  const method = (options.method || 'GET').toUpperCase();
-  const timeout = options.timeout || 5000;
+  options.method = (options.method || 'GET').toUpperCase() as MethodType;
+  const {
+    contentType,
+    dataType,
+    method,
+    timeout = 5000,
+    ...otherOptions
+  } = options;
 
   const headers = {
     Accept: mimeMap[dataType] || mimeMap.octet,
@@ -77,6 +81,7 @@ export async function makeHttpRequest<ResType>(
       {
         method,
         headers,
+        ...otherOptions,
       },
       res => {
         res.setTimeout(timeout, () => {
