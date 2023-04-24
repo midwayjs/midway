@@ -479,6 +479,18 @@ Timeout - Async callback was not invoked within the 5000 ms timeout specified by
 ```
 jest 默认时间为 **5000ms（5秒钟）**，我们可以将它调整到更多。
 
+可以通过在 `package.json` 启动时修改。
+
+```javascript
+// jest.setup.js
+{
+  "scripts": {
+    "test": "midway-bin test --ts --testTimeout=30000"
+  }
+}
+```
+
+这里的 `testTimeout` 是 jest 的启动参数。
 
 我们可以在 `jest.setup.js` 文件中写入下面的代码，对 jest 超时时间做调整。
 
