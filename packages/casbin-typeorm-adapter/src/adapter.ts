@@ -88,7 +88,7 @@ export class TypeORMAdapter extends BaseAdapter<GenericCasbinRule> {
     newestPolicies?: GenericCasbinRule[]
   ): Promise<void> {
     await this.getRepository().delete({
-      ...removePolicy,
+      ...(removePolicy as any),
     });
   }
 }
