@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Tue, 18 Apr 2023 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 25 Apr 2023 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2023 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.11.5]]></title>
+            <link>https://midwayjs.org/changelog/v3.11.5</link>
+            <guid>https://midwayjs.org/changelog/v3.11.5</guid>
+            <pubDate>Tue, 25 Apr 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="🐛 Bug Fix的直接链接" title="🐛 Bug Fix的直接链接">​</a></h2><ul><li><code>mock</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2905" target="_blank" rel="noopener noreferrer">#2905</a> fix: createServerlessApp baseDir with undefined (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>casbin-typeorm-adapter</code>, <code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2907" target="_blank" rel="noopener noreferrer">#2907</a> fix: compatible typeorm objectId changes (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-polish">💅 Polish<a href="#-polish" class="hash-link" aria-label="💅 Polish的直接链接" title="💅 Polish的直接链接">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/2899" target="_blank" rel="noopener noreferrer">#2899</a> feat: support app enable ssl custom certificate in dev mode (<a href="https://github.com/Steppenwolf1900" target="_blank" rel="noopener noreferrer">@Steppenwolf1900</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a href="#committers-2" class="hash-link" aria-label="Committers: 2的直接链接" title="Committers: 2的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li><a href="https://github.com/Steppenwolf1900" target="_blank" rel="noopener noreferrer">@Steppenwolf1900</a></li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.11.4]]></title>
             <link>https://midwayjs.org/changelog/v3.11.4</link>
