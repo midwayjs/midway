@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/jwt",
   "description": "midway jwt component",
-  "version": "3.11.4",
+  "version": "3.11.5",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -23,10 +23,10 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^3.11.4",
-    "@midwayjs/express": "^3.11.4",
-    "@midwayjs/koa": "^3.11.4",
-    "@midwayjs/mock": "^3.11.4",
-    "@midwayjs/web": "^3.11.4"
+    "@midwayjs/express": "^3.11.5",
+    "@midwayjs/koa": "^3.11.5",
+    "@midwayjs/mock": "^3.11.5",
+    "@midwayjs/web": "^3.11.5"
   },
   "dependencies": {
     "@types/jsonwebtoken": "9.0.1",

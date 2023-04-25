@@ -1,6 +1,23 @@
 # Change Log
 
 
+## v3.11.5 (2023-04-25)
+
+#### :bug: Bug Fix
+* `mock`
+  * [#2905](https://github.com/midwayjs/midway/pull/2905) fix: createServerlessApp baseDir with undefined ([@czy88840616](https://github.com/czy88840616))
+* `casbin-typeorm-adapter`, `typeorm`
+  * [#2907](https://github.com/midwayjs/midway/pull/2907) fix: compatible typeorm objectId changes ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* [#2899](https://github.com/midwayjs/midway/pull/2899) feat: support app enable ssl custom certificate in dev mode ([@Steppenwolf1900](https://github.com/Steppenwolf1900))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@Steppenwolf1900](https://github.com/Steppenwolf1900)
+
+
+
 ## v3.11.4 (2023-04-18)
 
 #### :bug: Bug Fix
