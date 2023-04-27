@@ -8,7 +8,7 @@ import {
 import { FaaSMetadata, ServerlessTriggerType } from '../../interface';
 
 export function ServerlessFunction(
-  options: FaaSMetadata.ServerlessFunctionOptions
+  options: FaaSMetadata.ServerlessFunctionOptions & Record<string, any>
 ): MethodDecorator {
   return (target, key, descriptor) => {
     savePropertyMetadata(SERVERLESS_FUNC_KEY, options, target, key);
