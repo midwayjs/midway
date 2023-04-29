@@ -50,4 +50,15 @@ if (existsSync(versionFile)) {
 
 const versionEntryFile = join(__dirname, '../packages/version/index.js');
 // generate timestamp
-writeFileSync(versionEntryFile, `console.log('${Date.now()}');\n`);
+writeFileSync(
+  versionEntryFile,
+  `module.exports = ${JSON.stringify(
+    {
+      decorator: result['@midwayjs/decorator'],
+      core: result['@midwayjs/core'],
+      timestamp: Date.now(),
+    },
+    null,
+    2
+  )};\n`
+);
