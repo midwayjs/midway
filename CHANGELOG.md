@@ -1,6 +1,26 @@
 # Change Log
 
 
+## v3.11.6 (2023-04-29)
+
+#### :nail_care: Polish
+* `core`
+  * [#2915](https://github.com/midwayjs/midway/pull/2915) chore: support serverless function options any ([@czy88840616](https://github.com/czy88840616))
+  * [#2906](https://github.com/midwayjs/midway/pull/2906) feat: add more http options ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `typegoose`
+  * [#2926](https://github.com/midwayjs/midway/pull/2926) chore(deps): update dependency @typegoose/typegoose to v11.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#2921](https://github.com/midwayjs/midway/pull/2921) fix(deps): update dependency @types/jsonwebtoken to v9.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2919](https://github.com/midwayjs/midway/pull/2919) chore(deps): update nrwl monorepo to v15.9.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.11.5 (2023-04-25)
 
 #### :bug: Bug Fix
