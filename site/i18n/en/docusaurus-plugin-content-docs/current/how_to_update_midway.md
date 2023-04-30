@@ -39,8 +39,62 @@ For example, when the following error occurs
 
 
 
+## Check package version exception
 
-## General item update
+You can use the following command to execute in the project root directory to check.
+
+```bash
+$ npx midway-version
+```
+
+If the project is a dependency of pnpm installation, please use the following command.
+
+```bash
+$ pnpx midway-version
+```
+
+
+
+## Update version using tools
+
+You can use the following command to execute the update prompt in the project root directory.
+
+```bash
+$ npx midway-version -u
+```
+
+If the project is a dependency of pnpm installation, please use the following command.
+
+```bash
+$ pnpx midway-version -u
+```
+
+If you want to write updates to `package.json`, please use the following command.
+
+```bash
+$ npx midway-version -u -w
+```
+
+If the project is a dependency of pnpm installation, please use the following command.
+
+```bash
+$ pnpx midway-version -u -w
+```
+
+:::tip
+
+After dependency updates are written to `package.json`, please reinstall dependencies.
+
+:::
+
+
+
+## Manually update the version
+
+
+
+
+### General item update
 
 
 For projects that normally use npm/yarn, please follow the following procedure for upgrading
@@ -57,7 +111,7 @@ For projects that normally use npm/yarn, please follow the following procedure f
 
 
 
-## Lerna project update
+### Lerna project update
 
 
 If you use lerna to develop a project, due to the existence of hoist mode, please follow the following procedure (take lerna3 as an example)
