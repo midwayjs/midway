@@ -1034,7 +1034,9 @@ export const getGlobalConfig = () => {
 
 
 
-## Automatic binding
+## Start Behavior
+
+### Automatic scan binding
 
 As mentioned above, after the container is initialized, we will bind the existing class registration to the container.
 
@@ -1047,6 +1049,8 @@ container.bind(UserService);
 Midway will automatically scan the entire project directory during the startup process and automatically process this behavior, so that the user does not need to manually perform binding operations.
 
 Simply put, the framework will recursively scan the ts/js files in the entire `src` directory by default, and then perform require operations. When the file is exported as a class and explicitly or implicitly contains the `@Provide()` decorator, it will execute the `container.bind` logic.
+
+### Ignore scanning
 
 In general, we should not put non-ts files under src (such as front-end code). In special scenarios, we can ignore some directories and configure them in the `@Configuration` decorator.
 
@@ -1148,6 +1152,34 @@ export class BaseService {
 ```
 
 
+
+## Context object in request scope
+
+For objects created in the request scope, the framework will mount a context object on the object, even if the object does not explicitly declare `@Inject() ctx`, the current context object can be obtained.
+
+```typescript
+import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
+
+@Provide()
+export class UserManager {
+   //...
+}
+
+@Provide()
+export class UserService {
+   //...
+  
+   @Inject()
+   userManager: UserManager;
+  
+   async invoke() {
+     const ctx = this. userManager[REQUEST_OBJ_CTX_KEY];
+     //...
+   }
+}
+```
+
+This feature is useful in [Interceptor](./aspect) or [Custom Method Decorator](./custom_decorator).
 
 
 

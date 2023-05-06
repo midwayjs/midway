@@ -36,7 +36,7 @@ export class MainConfiguration {
 }
 ```
 
-`MidwayServerlessFunctionService` 仅在 Serverless 场景下生效，方法和 `MidwayServerlessFunctionService` 几乎相同。
+`MidwayServerlessFunctionService` 仅在 Serverless 场景下生效，方法和 `MidwayWebRouterService` 几乎相同。
 
 
 

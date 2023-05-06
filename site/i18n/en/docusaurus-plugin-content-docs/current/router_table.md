@@ -36,7 +36,7 @@ export class MainConfiguration {
 }
 ```
 
-The `MidwayServerlessFunctionService` only takes effect in Serverless scenarios, and the methods and `MidwayServerlessFunctionService` are almost the same.
+The `MidwayServerlessFunctionService` only takes effect in Serverless scenarios, and the methods and `MidwayWebRouterService` are almost the same.
 
 
 

@@ -1038,7 +1038,9 @@ export const getGlobalConfig = () => {
 
 
 
-## 自动绑定
+## 启动行为
+
+### 自动扫描绑定
 
 上面提到，在容器初始化之后，我们会将现有的 class 注册绑定到容器中。
 
@@ -1051,6 +1053,10 @@ container.bind(UserService);
 Midway 在启动过程中会自动扫描整个项目目录，自动处理这个行为，使得用户无需手动执行绑定的操作。
 
 简单的来说，框架默认会递归扫描整个 `src` 目录下的 ts/js 文件，然后进行 require 操作，当文件导出的为 class，且显式或隐式包含 `@Provide()` 装饰器时，会执行 `container.bind` 逻辑。
+
+
+
+### 忽略扫描
 
 一般情况下，我们不应该把非 ts 文件放在 src 下（比如前端代码），特殊场景下，我们可以忽略某些目录，可以在 `@Configuration` 装饰器中配置。
 
@@ -1152,6 +1158,34 @@ export class BaseService {
 ```
 
 
+
+## 请求作用域中的上下文对象
+
+在请求作用域创建的对象，框架会在对象上挂载一个上下文对象，即使对象未显式声明 `@Inject() ctx` 也能获取当前上下文对象。
+
+```typescript
+import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
+
+@Provide()
+export class UserManager {
+  // ...
+}
+
+@Provide()
+export class UserService {
+  // ...
+  
+  @Inject()
+  userManager: UserManager;
+  
+  async invoke() {
+    const ctx = this.userManager[REQUEST_OBJ_CTX_KEY];
+    // ...
+  }
+}
+```
+
+这个特性在 [拦截器](./aspect) 或者 [自定义方法装饰器](./custom_decorator) 中很有用。
 
 
 
