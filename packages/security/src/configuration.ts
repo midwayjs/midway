@@ -5,7 +5,7 @@ import {
   MidwayApplicationManager,
 } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
-import { CSRFMiddleware } from './middleware/csrf.middleware';
+import { Csrf } from './middleware/csrf';
 import { SecurityOptions } from './interface';
 import { XFrameMiddleware } from './middleware/xframe';
 import { HSTSMiddleware } from './middleware/hsts';
@@ -35,9 +35,8 @@ export class SecurityConfiguration {
       .forEach(app => {
         app.useMiddleware(SecurityHelper);
         if (this.security.csrf?.enable) {
-          app.useMiddleware(CSRFMiddleware);
+          app.useMiddleware(Csrf);
         }
-
         if (this.security.csp?.enable) {
           app.useMiddleware(CSPMiddleware);
         }

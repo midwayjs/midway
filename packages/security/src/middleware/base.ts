@@ -1,9 +1,27 @@
-import { Config, MidwayFrameworkType, IMiddleware } from '@midwayjs/core';
+import {
+  Config,
+  MidwayFrameworkType,
+  IMiddleware,
+  Init,
+  IgnoreMatcher,
+} from '@midwayjs/core';
 import { SecurityOptions } from '../interface';
 
 export abstract class BaseMiddleware implements IMiddleware<any, any> {
   @Config('security')
   security: SecurityOptions;
+  match: IgnoreMatcher<any>[];
+  ignore: IgnoreMatcher<any>[];
+
+  @Init()
+  async init() {
+    // 动态合并一些规则
+    if (this.security?.[this.securityName()]?.match) {
+      this.match = this.security[this.securityName()].match;
+    } else if (this.security?.[this.securityName()]?.ignore) {
+      this.ignore = this.security[this.securityName()].ignore;
+    }
+  }
 
   resolve(app) {
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
@@ -18,4 +36,5 @@ export abstract class BaseMiddleware implements IMiddleware<any, any> {
   }
 
   abstract compatibleMiddleware(context, req, res, next);
+  abstract securityName(): string;
 }

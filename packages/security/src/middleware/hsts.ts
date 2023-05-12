@@ -12,4 +12,7 @@ export class HSTSMiddleware extends BaseMiddleware {
     res.set('strict-transport-security', val);
     return result;
   }
+  securityName() {
+    return 'hsts';
+  }
 }

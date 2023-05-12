@@ -8,7 +8,7 @@ const _CSRF_SECRET = Symbol('midway-security#_CSRF_SECRET');
 const NEW_CSRF_SECRET = Symbol('midway-security#NEW_CSRF_SECRET');
 const tokens = new CsrfTokens();
 @Middleware()
-export class CSRFMiddleware extends BaseMiddleware {
+export class Csrf extends BaseMiddleware {
   async compatibleMiddleware(context, req, res, next) {
     context.assertCsrf = () => {
       this.assertCsrf(context, req);
@@ -153,5 +153,8 @@ export class CSRFMiddleware extends BaseMiddleware {
         }
       }
     }
+  }
+  securityName() {
+    return 'csrf';
   }
 }

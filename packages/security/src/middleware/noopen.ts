@@ -8,4 +8,7 @@ export class NoOpenMiddleware extends BaseMiddleware {
     res.set('x-download-options', 'noopen');
     return result;
   }
+  securityName() {
+    return 'noopen';
+  }
 }

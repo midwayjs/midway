@@ -9,4 +9,8 @@ export class XFrameMiddleware extends BaseMiddleware {
     res.set('x-frame-options', value);
     return result;
   }
+
+  securityName() {
+    return 'xframe';
+  }
 }

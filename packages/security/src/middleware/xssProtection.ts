@@ -8,4 +8,8 @@ export class XSSProtectionMiddleware extends BaseMiddleware {
     res.set('x-xss-protection', this.security.xssProtection.value);
     return result;
   }
+
+  securityName() {
+    return 'xssProtection';
+  }
 }
