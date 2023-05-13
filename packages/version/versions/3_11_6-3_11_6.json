@@ -39,7 +39,10 @@
   "@midwayjs/prometheus": "3.11.6",
   "@midwayjs/rabbitmq": "3.11.6",
   "@midwayjs/redis": "3.11.6",
-  "@midwayjs/security": "3.11.6",
+  "@midwayjs/security": [
+    "3.11.6",
+    "3.11.7"
+  ],
   "@midwayjs/sequelize": "3.11.6",
   "@midwayjs/session": "3.11.6",
   "@midwayjs/socketio": "3.11.6",
@@ -51,7 +54,10 @@
   "@midwayjs/typeorm": "3.11.6",
   "@midwayjs/upload": "3.11.6",
   "@midwayjs/validate": "3.11.6",
-  "@midwayjs/version": "3.11.6",
+  "@midwayjs/version": [
+    "3.11.6",
+    "3.11.7"
+  ],
   "@midwayjs/view-ejs": "3.11.6",
   "@midwayjs/view-nunjucks": "3.11.6",
   "@midwayjs/view": "3.11.6",

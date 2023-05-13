@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.11.7 (2023-05-13)
+
+#### :package: Dependencies
+* `rabbitmq`
+  * [#2935](https://github.com/midwayjs/midway/pull/2935) fix(deps): update dependency amqp-connection-manager to v4.1.13 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#2952](https://github.com/midwayjs/midway/pull/2952) fix(deps): update dependency joi to v17.9.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `redis`
+  * [#2951](https://github.com/midwayjs/midway/pull/2951) fix(deps): update dependency ioredis to v5.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#2931](https://github.com/midwayjs/midway/pull/2931) chore(deps): update mikro-orm monorepo to v5.7.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2932](https://github.com/midwayjs/midway/pull/2932) chore(deps): update dependency autocannon to v7.11.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.11.6 (2023-04-29)
 
 #### :nail_care: Polish
