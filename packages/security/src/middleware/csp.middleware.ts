@@ -70,4 +70,8 @@ export class CSPMiddleware extends BaseMiddleware {
     res.set('x-csp-nonce', context.nonce);
     return result;
   }
+
+  securityName() {
+    return 'csp';
+  }
 }

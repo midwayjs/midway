@@ -1,14 +1,25 @@
-import { Middleware } from '@midwayjs/core';
-import { BaseMiddleware } from './base';
+import { IMiddleware, Middleware, MidwayFrameworkType } from '@midwayjs/core';
 import * as escape from 'escape-html';
-import xss from 'xss';
+import { filterXSS } from 'xss';
 
 @Middleware()
-export class SecurityHelper extends BaseMiddleware {
+export class SecurityHelper implements IMiddleware<any, any> {
+  resolve(app) {
+    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+      return async (req: any, res, next) => {
+        return this.compatibleMiddleware(req, req, res, next);
+      };
+    } else {
+      return async (ctx, next) => {
+        return this.compatibleMiddleware(ctx, ctx.request, ctx, next);
+      };
+    }
+  }
+
   async compatibleMiddleware(context, req, res, next) {
     context.security = {
       escape,
-      html: (htmlCode: string) => xss(htmlCode),
+      html: (htmlCode: string) => filterXSS(htmlCode),
       js: safeJS,
       json: safeJSON,
     };
@@ -16,6 +27,7 @@ export class SecurityHelper extends BaseMiddleware {
     return next();
   }
 }
+
 const MATCH_VULNERABLE_REGEXP = /[\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]/;
 const BASIC_ALPHABETS = new Set(
   'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')

@@ -11,4 +11,7 @@ export class NoSniffMiddleware extends BaseMiddleware {
     res.set('x-content-type-options', 'nosniff');
     return result;
   }
+  securityName() {
+    return 'nosniff';
+  }
 }

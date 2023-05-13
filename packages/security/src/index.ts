@@ -1,10 +1,10 @@
 export { SecurityConfiguration as Configuration } from './configuration';
 export * from './interface';
 export * from './middleware/csrf.middleware';
-export * from './middleware/xframe';
-export * from './middleware/hsts';
-export * from './middleware/noopen';
-export * from './middleware/nosniff';
-export * from './middleware/xssProtection';
-export * from './middleware/csp';
+export * from './middleware/xframe.middleware';
+export * from './middleware/hsts.middleware';
+export * from './middleware/noopen.middleware';
+export * from './middleware/nosniff.middleware';
+export * from './middleware/xssProtection.middleware';
+export * from './middleware/csp.middleware';
 export * from './middleware/helper';
