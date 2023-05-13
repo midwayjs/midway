@@ -1,13 +1,13 @@
 import { IgnoreMatcher } from '@midwayjs/core';
 
 export interface SecurityOptions {
-  csrf: Partial<SecurityCSRFOptions & IgnoreMatcher<any>>;
-  csp: Partial<SecurityCSPOptions & IgnoreMatcher<any>>;
-  xframe: Partial<SecurityXFrameOptions & IgnoreMatcher<any>>;
-  hsts: Partial<SecurityHSTSOptions & IgnoreMatcher<any>>;
-  noopen: Partial<SecurityEnableOptions & IgnoreMatcher<any>>;
-  nosniff: Partial<SecurityEnableOptions & IgnoreMatcher<any>>;
-  xssProtection: Partial<SecurityXSSProtectionOptions & IgnoreMatcher<any>>;
+  csrf: Partial<SecurityCSRFOptions>;
+  csp: Partial<SecurityCSPOptions>;
+  xframe: Partial<SecurityXFrameOptions>;
+  hsts: Partial<SecurityHSTSOptions>;
+  noopen: Partial<SecurityEnableOptions>;
+  nosniff: Partial<SecurityEnableOptions>;
+  xssProtection: Partial<SecurityXSSProtectionOptions>;
 }
 
 export interface SecurityCSRFOptions extends SecurityEnableOptions {
@@ -45,8 +45,8 @@ export interface SecurityCSPOptions extends SecurityEnableOptions {
 }
 export interface SecurityEnableOptions {
   enable: boolean;
+  match?: IgnoreMatcher<any> | IgnoreMatcher<any> [];
+  ignore?: IgnoreMatcher<any> | IgnoreMatcher<any> [];
 }
-
-
 
 export type SecurityCSRFType = 'all' | 'any' | 'ctoken' | 'referer';
