@@ -292,6 +292,9 @@ export abstract class BaseFramework<
         ctx.getAttr = <T>(key: string): T => {
           return ctx.requestContext.getAttr(key);
         };
+        ctx.getApp = () => {
+          return this.getApplication();
+        };
         return ctx;
       },
 
