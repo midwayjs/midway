@@ -32,7 +32,8 @@ import {
 import {
   CONTAINER_OBJ_SCOPE,
   FUNCTION_INJECT_KEY,
-  REQUEST_CTX_KEY, SINGLETON_CONTAINER_CTX,
+  REQUEST_CTX_KEY,
+  SINGLETON_CONTAINER_CTX,
 } from '../constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
