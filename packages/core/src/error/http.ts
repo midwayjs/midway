@@ -88,6 +88,14 @@ export class ForbiddenError extends MidwayHttpError {
 }
 
 /**
+ * 405 http error, Means that the server can only generate an answer which the client doesn't accept.
+ */
+export class MethodNotAllowedError extends MidwayHttpError {
+  constructor(resOrMessage?: ResOrMessage) {
+    super(resOrMessage, HttpStatus.METHOD_NOT_ALLOWED);
+  }
+}
+/**
  * 406 http error, Means that the server can only generate an answer which the client doesn't accept.
  */
 export class NotAcceptableError extends MidwayHttpError {
@@ -197,6 +205,7 @@ export const httpError = {
   UnauthorizedError,
   NotFoundError,
   ForbiddenError,
+  MethodNotAllowedError,
   NotAcceptableError,
   RequestTimeoutError,
   ConflictError,

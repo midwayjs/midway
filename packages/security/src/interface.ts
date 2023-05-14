@@ -1,4 +1,6 @@
 import { IgnoreMatcher } from '@midwayjs/core';
+import { ALLOWED_POLICIES_ENUM } from './constants';
+import type { CookieSetOptions } from '@midwayjs/cookies';
 
 export interface SecurityOptions {
   /**
@@ -32,10 +34,19 @@ export interface SecurityOptions {
    */
   nosniff: Partial<SecurityEnableOptions>;
   /**
-   * whether enable IE8 XSS Filter, default is open
+   * whether enable IE8 XSS Filter
    * default enable
    */
   xssProtection: Partial<SecurityXSSProtectionOptions>;
+  /**
+   * whether enable Referrer-Policy
+   * default not enable and value equals no-referrer-when-downgrade
+   */
+  referrerPolicy: Partial<SecurityReferrerPolicyOptions>;
+  /**
+   * whether enable methodnoallow
+   */
+  methodnoallow: Partial<SecurityMethodNoAllowOptions>;
 }
 
 export interface SecurityCSRFOptions extends SecurityEnableOptions {
@@ -65,7 +76,11 @@ export interface SecurityCSRFOptions extends SecurityEnableOptions {
    */
   queryName: string;
   refererWhiteList: string[];
+  /**
+   * @deprecated use cookieOptions.domain
+   */
   cookieDomain: (context: any) => string;
+  cookieOptions: CookieSetOptions;
 }
 
 export interface SecurityXFrameOptions extends SecurityEnableOptions {
@@ -88,6 +103,13 @@ export interface SecurityCSPOptions extends SecurityEnableOptions {
   reportOnly: boolean;
   supportIE: boolean;
 }
+
+export interface SecurityReferrerPolicyOptions extends SecurityEnableOptions {
+  value: typeof ALLOWED_POLICIES_ENUM[number];
+}
+
+export interface SecurityMethodNoAllowOptions extends SecurityEnableOptions {}
+
 export interface SecurityEnableOptions {
   enable: boolean;
   match?: IgnoreMatcher<any> | IgnoreMatcher<any> [];

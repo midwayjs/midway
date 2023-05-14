@@ -451,5 +451,31 @@ describe('test/csrf.test.ts', function () {
     });
   });
 
+  describe('csrf-cookieOptions', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, `fixtures/csrf-tmp/csrf-cookieOptions`);
+      const config = join(appDir, 'src/config/config.default.ts');
+      const configuration = join(appDir, 'src/configuration.ts');
+      if (existsSync(appDir)) {
+        await remove(appDir);
+      }
+      await copy(csrfBase, appDir);
+      await remove(join(appDir, 'f.yml'));
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {cookieOptions: {httpOnly: true}}};`);
+      app = await createApp(appDir);
+    });
 
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('post with csrf token set to query using session', async () => {
+      const request = await createHttpRequest(app);
+      const response = await request.get('/csrf').expect(200).set('Host', 'abc.aaaa.ddd.string.com');
+      assert(response.text);
+      expect(response.headers['set-cookie'][0]).toMatch(/csrfToken=[\w\-]+; path=\/; httponly/);
+    });
+  });
 });

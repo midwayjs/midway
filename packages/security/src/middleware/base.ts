@@ -24,15 +24,21 @@ export abstract class BaseMiddleware implements IMiddleware<any, any> {
   }
 
   resolve(app) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
-      return async (req: any, res, next) => {
-        return this.compatibleMiddleware(req, req, res, next);
-      };
-    } else {
-      return async (ctx, next) => {
-        return this.compatibleMiddleware(ctx, ctx.request, ctx, next);
-      };
+    if (this.security?.[this.securityName()]?.enable) {
+      if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+        return async (req: any, res, next) => {
+          return this.compatibleMiddleware(req, req, res, next);
+        };
+      } else {
+        return async (ctx, next) => {
+          return this.compatibleMiddleware(ctx, ctx.request, ctx, next);
+        };
+      }
     }
+  }
+
+  protected getSecurityPolicyConfig() {
+    return this.security?.[this.securityName()] || {};
   }
 
   abstract compatibleMiddleware(context, req, res, next);
