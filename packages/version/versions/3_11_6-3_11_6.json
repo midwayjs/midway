@@ -10,7 +10,10 @@
   "@midwayjs/cache": "3.11.6",
   "@midwayjs/captcha": "3.11.6",
   "@midwayjs/casbin-redis-adapter": "3.11.6",
-  "@midwayjs/casbin-typeorm-adapter": "3.11.6",
+  "@midwayjs/casbin-typeorm-adapter": [
+    "3.11.6",
+    "3.11.8"
+  ],
   "@midwayjs/casbin": "3.11.6",
   "@midwayjs/code-dye": "3.11.6",
   "@midwayjs/consul": "3.11.6",
@@ -51,12 +54,16 @@
   "@midwayjs/tablestore": "3.11.6",
   "@midwayjs/tags": "3.11.6",
   "@midwayjs/typegoose": "3.11.6",
-  "@midwayjs/typeorm": "3.11.6",
+  "@midwayjs/typeorm": [
+    "3.11.6",
+    "3.11.8"
+  ],
   "@midwayjs/upload": "3.11.6",
   "@midwayjs/validate": "3.11.6",
   "@midwayjs/version": [
     "3.11.6",
-    "3.11.7"
+    "3.11.7",
+    "3.11.8"
   ],
   "@midwayjs/view-ejs": "3.11.6",
   "@midwayjs/view-nunjucks": "3.11.6",

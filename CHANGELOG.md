@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.11.8 (2023-05-15)
+
+#### :bug: Bug Fix
+* `typeorm`
+  * [#2964](https://github.com/midwayjs/midway/pull/2964) fix: model get different repository by type ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `consul`
+  * [#2960](https://github.com/midwayjs/midway/pull/2960) chore(deps): update dependency @types/sinon to v10.0.15 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#2959](https://github.com/midwayjs/midway/pull/2959) chore(deps): update mikro-orm monorepo to v5.7.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#2958](https://github.com/midwayjs/midway/pull/2958) chore(deps): update dependency @types/node to v18.16.9 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.11.7 (2023-05-13)
 
 #### :package: Dependencies
