@@ -15,7 +15,7 @@
     "@midwayjs/core": "^3.11.6"
   },
   "devDependencies": {
-    "mm": "3.2.2"
+    "mm": "3.2.3"
   },
   "keywords": [
     "midway",
