@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Sat, 13 May 2023 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 15 May 2023 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2023 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.11.8]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.11.8</link>
+            <guid>https://midwayjs.org/en/changelog/v3.11.8</guid>
+            <pubDate>Mon, 15 May 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>typeorm</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2964" target="_blank" rel="noopener noreferrer">#2964</a> fix: model get different repository by type (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>consul</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2960" target="_blank" rel="noopener noreferrer">#2960</a> chore(deps): update dependency @types/sinon to v10.0.15 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>mikro</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2959" target="_blank" rel="noopener noreferrer">#2959</a> chore(deps): update mikro-orm monorepo to v5.7.6 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li>Other<ul><li><a href="https://github.com/midwayjs/midway/pull/2958" target="_blank" rel="noopener noreferrer">#2958</a> chore(deps): update dependency @types/node to v18.16.9 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.11.7]]></title>
             <link>https://midwayjs.org/en/changelog/v3.11.7</link>
