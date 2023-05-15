@@ -3,14 +3,22 @@ import {
   IMidwayApplication,
   IMidwayContainer,
   MidwayDecoratorService,
+  MidwayCommonError,
   App,
   Configuration,
   Init,
   Inject,
+  getPropertyType,
 } from '@midwayjs/core';
 import { ORM_DATA_SOURCE_KEY, ORM_MODEL_KEY } from './decorator';
 import { TypeORMDataSourceManager } from './dataSourceManager';
-import { useContainer, EntityTarget } from 'typeorm';
+import {
+  useContainer,
+  EntityTarget,
+  TreeRepository,
+  MongoRepository,
+  Repository,
+} from 'typeorm';
 
 @Configuration({
   importConfigs: [
@@ -50,15 +58,29 @@ export class OrmConfiguration implements ILifeCycle {
         meta: {
           modelKey: EntityTarget<unknown>;
           connectionName?: string;
-        }
+        },
+        instance
       ) => {
-        return this.dataSourceManager
-          .getDataSource(
-            meta.connectionName ||
-              this.dataSourceManager.getDataSourceNameByModel(meta.modelKey) ||
-              this.dataSourceManager.getDefaultDataSourceName()
-          )
-          .getRepository(meta.modelKey);
+        const dataSource = this.dataSourceManager.getDataSource(
+          meta.connectionName ||
+            this.dataSourceManager.getDataSourceNameByModel(meta.modelKey) ||
+            this.dataSourceManager.getDefaultDataSourceName()
+        );
+        if (!dataSource) {
+          throw new MidwayCommonError(
+            `DataSource ${meta.connectionName} not found with current model ${meta.modelKey}, please check it.`
+          );
+        }
+        const type = getPropertyType(instance, propertyName);
+        if (type.originDesign === Repository) {
+          return dataSource.getRepository(meta.modelKey);
+        } else if (type.originDesign === TreeRepository) {
+          return dataSource.getTreeRepository(meta.modelKey);
+        } else if (type.originDesign === MongoRepository) {
+          return dataSource.getMongoRepository(meta.modelKey);
+        } else {
+          return dataSource.getRepository(meta.modelKey);
+        }
       }
     );
 
