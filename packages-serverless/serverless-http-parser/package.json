@@ -19,7 +19,7 @@
     "vary": "^1.1.2"
   },
   "devDependencies": {
-    "mm": "3.2.2"
+    "mm": "3.2.3"
   },
   "engines": {
     "node": ">=12"
