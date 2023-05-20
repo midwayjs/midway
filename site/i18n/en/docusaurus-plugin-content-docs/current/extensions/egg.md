@@ -479,13 +479,13 @@ export default {
 ```
 ### Add extended definition
 
-Context please use Midway to extend, please check the [extended context definition](https://midwayjs.org/docs/context_definition).
+Context please use Midway to extend, please check the [extended context definition](/docs/context_definition).
 
 
 For the rest, please expand in `src/interface.ts`.
 ```typescript
 // src/interface.ts
-declare module 'egg '{
+declare module 'egg' {
   interface Request {
     // ...
   }
@@ -521,8 +521,8 @@ After the above code is built, use our `start` and `stop` commands to start and 
 
 ```json
 "scripts": {
-    "start": "egg-scripts start --daemon --title=********* --framework=@midwayjs/web",
-    "stop": "egg-scripts stop --title=*********",
+  "start": "egg-scripts start --daemon --title=********* --framework=@midwayjs/web",
+  "stop": "egg-scripts stop --title=*********",
 }
 ```
 
@@ -548,14 +548,14 @@ Copy
 As shown in the above example, the following parameters are supported:
 
 - ``--port=7001` Port number, the environment variable process.env.PORT will be read by default, if not passed, the framework's built-in port 7001 will be used.`
-- Whether `-- daemon` is allowed in the background mode without nohup. If Docker is used, it is recommended to run directly at the foreground.
-- `-- env = prod` running environment of the framework. By default, the environment variable process.env.EGG_SERVER_ENV will be read. If it is not passed, the built-in environment prod of the framework will be used.
-- `-- workers = 2` Number of Worker threads in the framework. By default, the number of app workers equivalent to the number of CPU cores will be created, which can make full use of CPU resources.
-- `-- title = egg-server-showcase` is used to facilitate grep in ps processes. the default value is egg-server-${appname}.
-- `-- framework = yadan` If the application uses a [custom framework](https://eggjs.org/zh-cn/advanced/framework.html), you can configure the egg.framework of the package.json or specify this parameter.
-- `-- ignore-stderr`.
-- `-- https.key` specifies the full path of the key file that is required for HTTPS.
-- `-- https.cert` specifies the full path of the certificate file required for HTTPS.
+- Whether `--daemon` is allowed in the background mode without nohup. If Docker is used, it is recommended to run directly at the foreground.
+- `--env=prod` running environment of the framework. By default, the environment variable process.env.EGG_SERVER_ENV will be read. If it is not passed, the built-in environment prod of the framework will be used.
+- `--workers=2` Number of Worker threads in the framework. By default, the number of app workers equivalent to the number of CPU cores will be created, which can make full use of CPU resources.
+- `--title=egg-server-showcase` is used to facilitate grep in ps processes. the default value is egg-server-${appname}.
+- `--framework=yadan` If the application uses a [custom framework](https://eggjs.org/zh-cn/advanced/framework.html), you can configure the egg.framework of the package.json or specify this parameter.
+- `--ignore-stderr`.
+- `--https.key` specifies the full path of the key file that is required for HTTPS.
+- `--https.cert` specifies the full path of the certificate file required for HTTPS.
 - All [egg-cluster](https://github.com/eggjs/egg-cluster) Options support transparent transmission, such as -- port, etc.
 
 For more parameters, see the [egg-scripts](https://github.com/eggjs/egg-scripts) and [egg-cluster](https://github.com/eggjs/egg-cluster) documents.

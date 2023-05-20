@@ -15,18 +15,16 @@
 
 ## 开发组件
 
-
 ### 脚手架
 
-```bash
-# npm v6
-$ npm init midway --type=component-v3 my_custom_component
+只需执行下面的脚本，模板列表中选择 `component-v3` 模板，即可快速生成示例组件。
 
-# npm v7
-$ npm init midway -- --type=component-v3 my_custom_component
+```bash
+$ npm init midway
 ```
 
-或者 `npm init midway`，选择 `component-v3` 模板。
+注意 [Node.js 环境要求](/docs/intro#环境准备工作)。
+
 
 
 ### 组件目录

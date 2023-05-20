@@ -4,7 +4,7 @@ Midway Hooks 支持 Api Server 与一体化两种模式。
 
 ## Api Server 部署
 
-Api Server 部署可以参考：[启动和部署](https://midwayjs.org/docs/deployment)。
+Api Server 部署可以参考：[启动和部署](/docs/deployment)。
 
 如果使用单文件部署，可以参考示例：[hooks-api-bundle-starter](https://github.com/midwayjs/hooks/blob/main/examples/api-bundle/readme.md)
 

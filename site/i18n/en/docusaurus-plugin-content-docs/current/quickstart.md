@@ -26,7 +26,7 @@ Use `npm init midway` to view the complete list of scaffolds. After a project is
 $ npm init midway
 ```
 
-For a v3 project, select `koa-v3`.
+For a v3 project, select `koa-v3`, pay attention to [Node.js environment requirements](/docs/intro#environmental-preparation).
 
 The example will create a directory structure similar to the following, where the simplest Midway project example is as follows.
 

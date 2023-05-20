@@ -98,11 +98,11 @@ Please install Node.js environment and npm in advance to run Midway. cnpm can be
 
 After continuous iteration, Midway's version requirements are as follows:
 
-| Midway Version | Node Version |
-| -------------- | ------------ |
-| >=v3.9.0       | >= v12.11.0  |
-| < 3.9.0        | >= v12.0.0   |
-| > 2.0.0        | >= v10.0.0   |
+| Midway Version | Development environment Node.js version requirements | Deployment environment Node.js version requirements |
+| -------------- | ---------------------------------------------------- | --------------------------------------------------- |
+| >=v3.9.0       | >= v14, LTS version recommended                      | >= v12.11.0                                         |
+| 3.0.0 ~ 3.9.0  | >= v12, LTS version recommended                      | >= v12.0.0                                          |
+| 2.x            | >= v12, LTS version recommended                      | >= v10.0.0                                          |
 
 For more information, see [How to install the Node.js environment](how_to_install_nodejs).
 

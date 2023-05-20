@@ -1,4 +1,4 @@
-# pipeline
+# Pipeline
 
 The pipeline is the internal mechanism of the parameter decorator, which can execute some custom code after the parameter decorator logic, and is generally used in the following scenarios:
 

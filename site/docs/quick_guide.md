@@ -7,7 +7,7 @@
 ## 环境准备
 
 - 操作系统：支持 macOS，Linux，Windows
-- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 12.x。
+- 运行环境：[Node.js 环境要求](/docs/intro#环境准备工作)
 
 
 

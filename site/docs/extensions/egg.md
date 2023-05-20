@@ -479,7 +479,7 @@ export default {
 ```
 ### 增加扩展定义
 
-Context 请使用 Midway 的方式来扩展，请查看 [扩展上下文定义](https://midwayjs.org/docs/context_definition)。
+Context 请使用 Midway 的方式来扩展，请查看 [扩展上下文定义](/docs/context_definition)。
 
 
 其余的部分，沿用 egg 的方式，请在 `src/interface.ts` 中扩展。

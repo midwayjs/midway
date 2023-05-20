@@ -15,18 +15,15 @@ Starting from v3, the framework (Framework) has also become part of the componen
 
 ## Development component
 
-
 ### Boilerplate
 
-```bash
-# npm v6
-$ npm init midway --type=component-v3 my_custom_component
+Just execute the script below and select the `component-v3` template in the template list to quickly generate a sample component.
 
-# npm v7
-$ npm init midway -- --type=component-v3 my_custom_component
+```bash
+$ npm init midway
 ```
 
-or `npm init midway`, select the `component-v3` template.
+Note [Node.js environment requirements](/docs/intro#environmental-preparation).
 
 
 ### Component directory

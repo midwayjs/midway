@@ -7,7 +7,7 @@ If you haven't touched Midway, it doesn't matter. In this chapter, we will build
 ## Environmental preparation
 
 - Operating system: supports macOS,Linux,Windows
-- Running environment: We recommend that you select [LTS](http://nodejs.org/). The minimum requirement is 12.x.
+- Running environment: [Node.js environment requirements](/docs/intro#environmental-preparation).
 
 
 
