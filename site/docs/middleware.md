@@ -563,7 +563,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
     return async (ctx: Context, next: NextFunction) => {
       const result = await next();
       if (result === null) {
-        ctx.status = 200;
+        ctx.status = 204;
       }
       return {
         code: 0,
