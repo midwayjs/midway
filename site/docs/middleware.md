@@ -550,7 +550,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
 
 ### 关于中间件返回 null 的情况
 
-在 koa/egg 下，如果中间件中返回 null 值，会使得状态码变为 204，需要在中间件中显式额外赋值状态码。
+在 koa/egg 下，如果中间件中返回 null 值，会使得状态码变为 204，如果需要返回其他状态码（如 200），需要在中间件中显式额外赋值状态码。
 
 ```typescript
 import { Middleware, IMiddleware } from '@midwayjs/core';
