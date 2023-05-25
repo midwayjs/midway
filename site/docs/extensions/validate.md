@@ -297,7 +297,7 @@ async update(@Body('nickName', [new DefaultValuePipe('anonymous')]) nickName: st
   return nickName;
 }
 
-update({ isMale: undefined} ); => 'anonymous'
+update({ nickName: undefined} ); => 'anonymous'
 ```
 
 在非 Web 场景下，没有 `@Body` 等 Web 类装饰器的情况下，也可以使用 `@Valid` 装饰器来进行校验。
