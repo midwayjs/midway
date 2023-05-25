@@ -546,7 +546,7 @@ export interface SearchQuery {
   offset: number;
   limit: number;
   getTotalCount?: boolean;
-  token?: string;
+  token?: Buffer | string | null;
   sort?: {
     sorters: SearchIndexSorter[];
   };
