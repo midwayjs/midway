@@ -316,7 +316,7 @@ async update(@Body('nickName', [new DefaultValuePipe('anonymous')]) nickName: st
    return nickName;
 }
 
-update({ isMale: undefined} ); => 'anonymous'
+update({ nickName: undefined} ); => 'anonymous'
 ```
 
 

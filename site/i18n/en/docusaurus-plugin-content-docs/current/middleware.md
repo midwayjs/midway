@@ -547,7 +547,7 @@ The preceding code is only the code that is returned with the correct logic. If 
 
 ### About the case where middleware returns null
 
-under koa/egg, if a null value is returned in the middleware, the status code will become 204, and the status code needs to be explicitly assigned to the middleware.
+Under koa/egg, if the middleware returns a null value, the status code will change to 204. If you need to return other status codes (such as 200), you need to explicitly assign additional status codes in the middleware.
 
 ```typescript
 import { Middleware, IMiddleware } from '@midwayjs/core';
