@@ -142,6 +142,7 @@ After the build is completed, the `dist` directory of the Midway build product a
 ├── dist                # Midway build product directory
 ├── node_modules        # Node.js dependency package directory.
 ├── test
+├── bootstrap.js        # Deployment Startup File
 ├── package.json
 └── tsconfig.json
 ```
@@ -151,6 +152,12 @@ After the build is completed, the `dist` directory of the Midway build product a
 
 
 After the construction is completed, you can simply package and compress it and upload it to the environment to be released.
+
+:::caution
+
+Generally speaking, the files or directories that must be included in the server operation are `package.json`, `bootstrap.js`, `dist`, `node_modules`.
+
+:::
 
 
 

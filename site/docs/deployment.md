@@ -144,6 +144,7 @@ $ npm prune --production  # 移除开发依赖
 ├── dist                # Midway 构建产物目录
 ├── node_modules        # Node.js 依赖包目录
 ├── test
+├── bootstrap.js				# 部署启动文件
 ├── package.json
 └── tsconfig.json
 ```
@@ -153,6 +154,12 @@ $ npm prune --production  # 移除开发依赖
 
 
 构建完成后，你可以简单的打包压缩，上传到待发布的环境。
+
+:::caution
+
+一般来说服务器运行必须包含的文件或者目录有 `package.json`，`bootstrap.js`，`dist`，`node_modules`。
+
+:::
 
 
 
