@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/otel",
   "description": "midway open telemetry component",
-  "version": "3.11.6",
+  "version": "3.11.9",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -11,8 +11,8 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.11.6",
-    "@midwayjs/koa": "^3.11.6",
-    "@midwayjs/mock": "^3.11.6",
+    "@midwayjs/koa": "^3.11.9",
+    "@midwayjs/mock": "^3.11.9",
     "@opentelemetry/sdk-node": "0.39.1"
   },
   "dependencies": {

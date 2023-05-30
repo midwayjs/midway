@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa",
-  "version": "3.11.6",
+  "version": "3.11.9",
   "description": "Midway Web Framework for KOA",
   "main": "dist/index",
   "typings": "index.d.ts",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/mock": "^3.11.6",
+    "@midwayjs/mock": "^3.11.9",
     "@types/koa": "2.13.6",
     "@types/koa-router": "7.4.4",
     "fs-extra": "10.1.0"
@@ -34,7 +34,7 @@
     "@koa/router": "^11.0.0",
     "@midwayjs/cookies": "^1.0.2",
     "@midwayjs/core": "^3.11.6",
-    "@midwayjs/session": "^3.11.6",
+    "@midwayjs/session": "^3.11.9",
     "koa": "2.14.1",
     "koa-bodyparser": "4.4.0"
   },

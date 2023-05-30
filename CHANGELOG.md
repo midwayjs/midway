@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v3.11.9 (2023-05-30)
+
+#### :nail_care: Polish
+* `faas`, `mock`
+  * [#2996](https://github.com/midwayjs/midway/pull/2996) feat: support new faas v3 entry ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#2986](https://github.com/midwayjs/midway/pull/2986) docs:  fix validate.md  defaultValuePipe  variable name error ([@RainManGO](https://github.com/RainManGO))
+* [#2983](https://github.com/midwayjs/midway/pull/2983) docs: update Prisma env var for downloading engines ([@Jolg42](https://github.com/Jolg42))
+
+#### :package: Dependencies
+* `grpc`
+  * [#2934](https://github.com/midwayjs/midway/pull/2934) fix(deps): update dependency @grpc/proto-loader to v0.7.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cron`
+  * [#2992](https://github.com/midwayjs/midway/pull/2992) fix(deps): update dependency cron to v2.3.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Joël Galeran ([@Jolg42](https://github.com/Jolg42))
+- Zy ([@RainManGO](https://github.com/RainManGO))
+
+
+
 ## v3.11.8 (2023-05-15)
 
 #### :bug: Bug Fix
