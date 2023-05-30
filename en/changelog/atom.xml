@@ -2,12 +2,32 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-05-15T20:00:00.000Z</updated>
+    <updated>2023-05-30T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.11.9]]></title>
+        <id>https://midwayjs.org/en/changelog/v3.11.9</id>
+        <link href="https://midwayjs.org/en/changelog/v3.11.9"/>
+        <updated>2023-05-30T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Polish]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-polish">💅 Polish<a href="#-polish" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>faas</code>, <code>mock</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2996" target="_blank" rel="noopener noreferrer">#2996</a> feat: support new faas v3 entry (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a href="#-documentation" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/2986" target="_blank" rel="noopener noreferrer">#2986</a> docs:  fix validate.md  defaultValuePipe  variable name error (<a href="https://github.com/RainManGO" target="_blank" rel="noopener noreferrer">@RainManGO</a>)</li><li><a href="https://github.com/midwayjs/midway/pull/2983" target="_blank" rel="noopener noreferrer">#2983</a> docs: update Prisma env var for downloading engines (<a href="https://github.com/Jolg42" target="_blank" rel="noopener noreferrer">@Jolg42</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>grpc</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2934" target="_blank" rel="noopener noreferrer">#2934</a> fix(deps): update dependency @grpc/proto-loader to v0.7.7 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>cron</code><ul><li><a href="https://github.com/midwayjs/midway/pull/2992" target="_blank" rel="noopener noreferrer">#2992</a> fix(deps): update dependency cron to v2.3.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-3">Committers: 3<a href="#committers-3" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>Joël Galeran (<a href="https://github.com/Jolg42" target="_blank" rel="noopener noreferrer">@Jolg42</a>)</li><li>Zy (<a href="https://github.com/RainManGO" target="_blank" rel="noopener noreferrer">@RainManGO</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>Joël Galeran</name>
+            <uri>https://github.com/Jolg42</uri>
+        </author>
+        <author>
+            <name>Zy</name>
+            <uri>https://github.com/RainManGO</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.11.8]]></title>
         <id>https://midwayjs.org/en/changelog/v3.11.8</id>
