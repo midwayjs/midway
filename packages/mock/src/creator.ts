@@ -577,10 +577,15 @@ export async function createLightApp(
 export async function createBootstrap(
   entryFile: string,
   options: MockAppConfigurationOptions = {}
-): Promise<BootstrapAppStarter> {
+): Promise<{ close: (...args) => void }> {
   if (safeRequire('@midwayjs/faas')) {
     options.entryFile = entryFile;
-    return createFunctionApp(process.cwd(), options);
+    const app = await createFunctionApp(process.cwd(), options);
+    return {
+      close: async () => {
+        return close(app);
+      },
+    };
   } else {
     await create(undefined, {
       entryFile,
