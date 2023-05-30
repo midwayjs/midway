@@ -137,4 +137,14 @@ describe('/test/new.test.ts', () => {
     });
     console.log('close complete');
   });
+
+  it('should test entry file with faas v3', async () => {
+    const app = await createFunctionApp(join(__dirname, 'fixtures/base-faas-without-yaml'), {
+      entryFile: 'index.js'
+    });
+    const result = await createHttpRequest(app).get('/event').query({ name: 'harry' });
+    expect(result.status).toBe(200);
+    expect(result.text).toBe('hello world, harry');
+    await close(app);
+  });
 });

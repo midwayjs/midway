@@ -257,7 +257,16 @@ export async function createFunctionApp<
     baseDir = options.appDir || '';
   }
 
+  // v3 新的处理 bootstrap 过来的 faas 入口
+  if (options.entryFile) {
+    const exportModules: {
+      getStarter: () => { close: () => void; start: (...args) => any };
+    } = require(join(baseDir, options.entryFile));
+    options.starter = exportModules.getStarter();
+  }
+
   let starterName;
+  // 老的 f.yml 逻辑
   if (!options.starter) {
     if (!baseDir) {
       baseDir = process.cwd();
@@ -566,10 +575,16 @@ export async function createLightApp(
 }
 
 export async function createBootstrap(
-  entryFile: string
+  entryFile: string,
+  options: MockAppConfigurationOptions = {}
 ): Promise<BootstrapAppStarter> {
-  await create(undefined, {
-    entryFile,
-  });
-  return new BootstrapAppStarter();
+  if (safeRequire('@midwayjs/faas')) {
+    options.entryFile = entryFile;
+    return createFunctionApp(process.cwd(), options);
+  } else {
+    await create(undefined, {
+      entryFile,
+    });
+    return new BootstrapAppStarter();
+  }
 }

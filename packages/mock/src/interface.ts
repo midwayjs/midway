@@ -4,6 +4,7 @@ export interface MockAppConfigurationOptions extends IMidwayBootstrapOptions {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
   ssl?: boolean;
+  entryFile?: string;
 }
 
 export type ComponentModule = {
