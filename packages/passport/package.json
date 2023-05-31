@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/passport",
   "description": "midway passport component",
-  "version": "3.11.9",
+  "version": "3.11.10",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -23,11 +23,11 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^3.11.6",
-    "@midwayjs/express": "^3.11.9",
-    "@midwayjs/jwt": "^3.11.9",
-    "@midwayjs/koa": "^3.11.9",
-    "@midwayjs/mock": "^3.11.9",
-    "@midwayjs/web": "^3.11.9",
+    "@midwayjs/express": "^3.11.10",
+    "@midwayjs/jwt": "^3.11.10",
+    "@midwayjs/koa": "^3.11.10",
+    "@midwayjs/mock": "^3.11.10",
+    "@midwayjs/web": "^3.11.10",
     "@types/passport-local": "1.0.35",
     "express-session": "1.17.3",
     "passport-jwt": "4.0.1",

@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/serverless-app",
   "private": true,
-  "version": "3.11.9",
+  "version": "3.11.10",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/bootstrap": "^3.11.6",
-    "@midwayjs/faas": "^3.11.9",
+    "@midwayjs/faas": "^3.11.10",
     "@midwayjs/faas-typings": "^3.10.13",
     "@midwayjs/gateway-common-http": "^1.2.41",
     "@midwayjs/serverless-spec-builder": "^1.2.41",
@@ -17,7 +17,7 @@
     "@midwayjs/core": "^3.11.6",
     "@midwayjs/decorator": "^3.11.6",
     "@midwayjs/faas-middleware-upload": "0.0.7",
-    "@midwayjs/mock": "^3.11.9",
+    "@midwayjs/mock": "^3.11.10",
     "@midwayjs/serverless-fc-starter": "^3.11.6",
     "@midwayjs/serverless-fc-trigger": "^3.11.6",
     "@midwayjs/serverless-scf-starter": "^3.10.14",

@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.11.10 (2023-05-31)
+
+#### :bug: Bug Fix
+* `mock`
+  * [#3000](https://github.com/midwayjs/midway/pull/3000) fix: bootstrap close entry ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.11.9 (2023-05-30)
 
 #### :nail_care: Polish
