@@ -21,7 +21,11 @@ import {
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers } from '@midwayjs/logger';
-import { ComponentModule, MockAppConfigurationOptions } from './interface';
+import {
+  ComponentModule,
+  MockAppConfigurationOptions,
+  IBootstrapAppStarter,
+} from './interface';
 import {
   findFirstExistModule,
   isTestEnvironment,
@@ -213,8 +217,8 @@ export async function createApp<
   return framework.getApplication();
 }
 
-export async function close<T extends IMidwayApplication<any>>(
-  app: T,
+export async function close(
+  app: IMidwayApplication<any> | { close: (...args) => void },
   options?: {
     cleanLogsDir?: boolean;
     cleanTempDir?: boolean;
@@ -222,24 +226,32 @@ export async function close<T extends IMidwayApplication<any>>(
   }
 ) {
   if (!app) return;
-  debug(`[mock]: Closing app, appDir=${app.getAppDir()}`);
-  options = options || {};
+  if (
+    app instanceof BootstrapAppStarter ||
+    typeof app['close'] === 'function'
+  ) {
+    await app['close'](options);
+  } else {
+    app = app as IMidwayApplication<any>;
+    debug(`[mock]: Closing app, appDir=${app.getAppDir()}`);
+    options = options || {};
 
-  await destroyGlobalApplicationContext(app.getApplicationContext());
-  if (isTestEnvironment()) {
-    // clean first
-    if (options.cleanLogsDir && !isWin32()) {
-      await removeFile(join(app.getAppDir(), 'logs'));
-    }
-    if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
-      if (options.cleanTempDir && !isWin32()) {
-        await removeFile(join(app.getAppDir(), 'run'));
+    await destroyGlobalApplicationContext(app.getApplicationContext());
+    if (isTestEnvironment()) {
+      // clean first
+      if (options.cleanLogsDir && !isWin32()) {
+        await removeFile(join(app.getAppDir(), 'logs'));
       }
-    }
-    if (options.sleep > 0) {
-      await sleep(options.sleep);
-    } else {
-      await sleep(50);
+      if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
+        if (options.cleanTempDir && !isWin32()) {
+          await removeFile(join(app.getAppDir(), 'run'));
+        }
+      }
+      if (options.sleep > 0) {
+        await sleep(options.sleep);
+      } else {
+        await sleep(50);
+      }
     }
   }
 }
@@ -520,7 +532,7 @@ class LightFramework extends BaseFramework<any, any, any, any, any> {
   }
 }
 
-class BootstrapAppStarter {
+class BootstrapAppStarter implements IBootstrapAppStarter {
   getApp(type: MidwayFrameworkType | string): IMidwayApplication<any> {
     const applicationContext = getCurrentApplicationContext();
     const applicationManager = applicationContext.get(MidwayApplicationManager);
@@ -577,7 +589,7 @@ export async function createLightApp(
 export async function createBootstrap(
   entryFile: string,
   options: MockAppConfigurationOptions = {}
-): Promise<{ close: (...args) => void }> {
+): Promise<IBootstrapAppStarter> {
   if (safeRequire('@midwayjs/faas')) {
     options.entryFile = entryFile;
     const app = await createFunctionApp(process.cwd(), options);
