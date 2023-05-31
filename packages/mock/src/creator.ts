@@ -228,7 +228,7 @@ export async function close(
   if (!app) return;
   if (
     app instanceof BootstrapAppStarter ||
-    typeof app['close'] === 'function'
+    (typeof app['close'] === 'function' && !app['getConfig'])
   ) {
     await app['close'](options);
   } else {
