@@ -32,8 +32,8 @@
     "@types/amqplib": "0.10.1",
     "amqplib": "0.10.3",
     "kafkajs": "2.2.4",
-    "socket.io": "4.6.1",
-    "socket.io-client": "4.6.1",
+    "socket.io": "4.6.2",
+    "socket.io-client": "4.6.2",
     "ws": "8.13.0"
   },
   "dependencies": {
