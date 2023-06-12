@@ -24,7 +24,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/mock": "^3.11.10",
-    "@types/ws": "8.5.4",
+    "@types/ws": "8.5.5",
     "fs-extra": "10.1.0"
   },
   "dependencies": {
