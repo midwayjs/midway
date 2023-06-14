@@ -1,6 +1,44 @@
 # Change Log
 
 
+## v3.11.11 (2023-06-14)
+
+#### :bug: Bug Fix
+* `core`
+  * [#3025](https://github.com/midwayjs/midway/pull/3025) fix: listener init data typings ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `code-dye`
+  * [#3021](https://github.com/midwayjs/midway/pull/3021) feat(code-dye): outputType-html support show not end async call ([@sumy7](https://github.com/sumy7))
+
+#### :memo: Documentation
+* [#3024](https://github.com/midwayjs/midway/pull/3024) docs: update quick_guide.md ([@whale2002](https://github.com/whale2002))
+
+#### :package: Dependencies
+* `oss`
+  * [#2974](https://github.com/midwayjs/midway/pull/2974) fix(deps): update dependency @types/ali-oss to v6.16.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3020](https://github.com/midwayjs/midway/pull/3020) chore(deps): update dependency mongoose to v7.2.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3018](https://github.com/midwayjs/midway/pull/3018) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.12.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3017](https://github.com/midwayjs/midway/pull/3017) fix(deps): update dependency @grpc/grpc-js to v1.8.15 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#3006](https://github.com/midwayjs/midway/pull/3006) fix(deps): update socket.io packages to v4.6.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3009](https://github.com/midwayjs/midway/pull/3009) chore(deps): update dependency madge to v6.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#3008](https://github.com/midwayjs/midway/pull/3008) chore(deps): update dependency dayjs to v1.11.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3007](https://github.com/midwayjs/midway/pull/3007) fix(deps): update dependency axios to v1.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- sumy ([@sumy7](https://github.com/sumy7))
+- 林轩 ([@whale2002](https://github.com/whale2002))
+
+
+
 ## v3.11.10 (2023-05-31)
 
 #### :bug: Bug Fix

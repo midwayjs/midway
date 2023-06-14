@@ -1,15 +1,15 @@
 {
   "name": "@midwayjs/fc-starter",
-  "version": "3.11.10",
+  "version": "3.11.11",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/async-hooks-context-manager": "^3.11.6",
-    "@midwayjs/faas": "^3.11.10",
+    "@midwayjs/async-hooks-context-manager": "^3.11.11",
+    "@midwayjs/faas": "^3.11.11",
     "raw-body": "2.5.2"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.11.6",
+    "@midwayjs/core": "^3.11.11",
     "@midwayjs/serverless-http-parser": "^3.10.14"
   },
   "engines": {

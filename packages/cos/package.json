@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/cos",
   "description": "midway cos component",
-  "version": "3.11.10",
+  "version": "3.11.11",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -10,8 +10,8 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.11.6",
-    "@midwayjs/mock": "^3.11.10",
+    "@midwayjs/core": "^3.11.11",
+    "@midwayjs/mock": "^3.11.11",
     "dotenv": "16.1.4"
   },
   "dependencies": {

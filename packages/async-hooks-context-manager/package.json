@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/async-hooks-context-manager",
-  "version": "3.11.6",
+  "version": "3.11.11",
   "description": "midway async hooks context manager",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -20,7 +20,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.11.6"
+    "@midwayjs/core": "^3.11.11"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

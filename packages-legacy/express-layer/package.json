@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/express-layer",
   "private": true,
-  "version": "3.11.6",
+  "version": "3.11.11",
   "main": "index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --forceExit"
@@ -12,10 +12,10 @@
   "devDependencies": {
     "@midwayjs/runtime-engine": "^3.7.0",
     "@midwayjs/runtime-mock": "^3.7.0",
-    "@midwayjs/serverless-fc-starter": "^3.11.6",
-    "@midwayjs/serverless-fc-trigger": "^3.11.6",
+    "@midwayjs/serverless-fc-starter": "^3.11.11",
+    "@midwayjs/serverless-fc-trigger": "^3.11.11",
     "@midwayjs/serverless-scf-starter": "^3.10.14",
-    "@midwayjs/serverless-scf-trigger": "^3.11.6",
+    "@midwayjs/serverless-scf-trigger": "^3.11.11",
     "body-parser": "1.20.2",
     "express": "4.18.2",
     "supertest": "6.3.3"
