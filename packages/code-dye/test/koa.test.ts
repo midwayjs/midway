@@ -8,7 +8,7 @@ describe('test/koa.test.ts', function () {
     try {
       app = await createApp(appDir);
     } catch (e) {
-      console.log("e", e);
+      console.log('e', e);
     }
   });
 
@@ -18,9 +18,15 @@ describe('test/koa.test.ts', function () {
 
   it('json', async () => {
     const request = await createHttpRequest(app);
-    const res = await request.get('/test?codeDye=json').then(res => res.text)
+    const res = await request.get('/test?codeDye=json').then(res => res.text);
     const json = JSON.parse(res);
-    assert(json.call[0].call[1].paths[2] === '[async func] firstName')
-    assert(json.call[0].call[1].end.result === 'test')
+    assert(json.call[0].call[3].paths[2] === '[async func] firstName');
+    assert(json.call[0].call[3].end.result === 'test');
+  });
+
+  it('html', async () => {
+    const request = await createHttpRequest(app);
+    const res = await request.get('/test?codeDye=html').then(res => res.text);
+    assert(res && res.length > 0);
   });
 });
