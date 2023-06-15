@@ -251,7 +251,7 @@ export interface Context extends IMidwayContext {
 
 ## 组件日志
 
-件有着自己的日志，默认会将 `ctx.logger` 记录在 `midway-bull.log` 中。
+组件有着自己的日志，默认会将 `ctx.logger` 记录在 `midway-cron.log` 中。
 
 我们可以单独配置这个 logger 对象。
 
