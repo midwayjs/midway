@@ -25,7 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/mock": "^3.11.11",
-    "fs-extra": "10.1.0",
+    "fs-extra": "11.1.1",
     "socket.io-client": "4.6.2"
   },
   "dependencies": {
