@@ -251,7 +251,7 @@ The `CronJob` type here comes from the `node-cron` package.
 
 ## Component log
 
-By default, the `ctx.logger` will be recorded in `midway-bull.log`.
+By default, the `ctx.logger` will be recorded in `midway-cron.log`.
 
 We can configure this logger object individually.
 
