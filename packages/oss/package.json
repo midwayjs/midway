@@ -12,7 +12,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.11.11",
     "@midwayjs/mock": "^3.11.11",
-    "dotenv": "16.3.0"
+    "dotenv": "16.3.1"
   },
   "dependencies": {
     "@types/ali-oss": "6.16.8",
