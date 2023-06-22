@@ -8,8 +8,7 @@ import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { getProviderName } from '../decorator';
-import { extname, join } from 'path';
-import { readFileSync } from 'fs';
+import { extname } from 'path';
 
 async function loadModule(modulePath, type: 'commonjs' | 'module') {
   const ext = extname(modulePath);
@@ -28,7 +27,7 @@ export abstract class AbstractFileDetector<T> implements IFileDetector {
     this.extraDetectorOptions = {} as T;
   }
 
-  abstract run(container: IMidwayContainer);
+  abstract run(container: IMidwayContainer): void | Promise<void>;
 
   setExtraDetectorOptions(detectorOptions: T) {
     this.extraDetectorOptions = detectorOptions;
@@ -49,7 +48,10 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/__test__/**',
 ].concat(IGNORE_PATTERN);
 
-export class DirectoryFileDetector extends AbstractFileDetector<{
+/**
+ * CommonJS module loader
+ */
+export class CommonJSFileDetector extends AbstractFileDetector<{
   loadDir?: string | string[];
   pattern?: string | string[];
   ignore?: string | string[];
@@ -59,14 +61,9 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
   private duplicateModuleCheckSet = new Map();
 
   async run(container) {
-    const loadDirs = []
-      .concat(this.options.loadDir || [])
-      .concat(this.extraDetectorOptions.loadDir || []);
-
-    const packagePath = join(container.get('appDir'), 'package.json');
-    const packageData = readFileSync(packagePath, 'utf8');
-    const packageJson = JSON.parse(packageData);
-    const type = packageJson.type || 'commonjs';
+    const loadDirs = [].concat(
+      this.options.loadDir ?? container.get('baseDir')
+    );
 
     for (const dir of loadDirs) {
       const fileResults = run(
@@ -104,7 +101,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
       };
 
       for (const file of fileResults) {
-        const exports = loadModule(file, type);
+        const exports = await loadModule(file, this.getType());
         // add module to set
         container.bindClass(exports, {
           namespace: this.options.namespace,
@@ -117,6 +114,19 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
 
     // check end
     this.duplicateModuleCheckSet.clear();
+  }
+
+  getType(): 'commonjs' | 'module' {
+    return 'commonjs';
+  }
+}
+
+/**
+ * ES module loader
+ */
+export class ESModuleFileDetector extends CommonJSFileDetector {
+  getType(): 'commonjs' | 'module' {
+    return 'module';
   }
 }
 

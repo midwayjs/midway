@@ -130,7 +130,7 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
     Configuration: EmptyConfiguration,
   }];
   if (baseDir) {
-    imports.push(safeRequire(join(baseDir, 'configuration')));
+    imports.unshift(safeRequire(join(baseDir, 'configuration')));
   }
 
   const container = new MidwayContainer();

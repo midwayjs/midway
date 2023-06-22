@@ -2,7 +2,7 @@ import * as path from 'path';
 import {
   MidwayContainer,
   MidwayRequestContainer,
-  DirectoryFileDetector,
+  CommonJSFileDetector,
   MidwayLoggerService,
   MidwayConfigService,
   MidwayEnvironmentService,
@@ -15,7 +15,7 @@ import {
   CONFIG_KEY,
   LOGGER_KEY,
   PLUGIN_KEY,
-  Provide
+  Provide,
 } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
@@ -38,7 +38,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should create new loader', async () => {
     const container = new MidwayContainer();
-    container.setFileDetector(new DirectoryFileDetector({
+    container.setFileDetector(new CommonJSFileDetector({
       loadDir: buildLoadDir(['app', 'lib', '../test_other'], path.join(__dirname, '../fixtures/base-app/src')),
     }));
     await container.ready();
@@ -47,7 +47,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should load ts file and use config, plugin decorator', async () => {
     const container = new MidwayContainer();
-    container.setFileDetector(new DirectoryFileDetector({
+    container.setFileDetector(new CommonJSFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-decorator/src')
     }));
 
@@ -102,7 +102,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should load ts file and bindapp success', async () => {
     const container = new MidwayContainer();
-    container.setFileDetector(new DirectoryFileDetector({
+    container.setFileDetector(new CommonJSFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-forbindapp/src')
     }));
 
@@ -155,7 +155,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('load ts file support constructor inject', async () => {
     const container = new MidwayContainer();
-    container.setFileDetector(new DirectoryFileDetector({
+    container.setFileDetector(new CommonJSFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-constructor/src'),
     }));
     container.bind(MidwayFrameworkService);
@@ -200,7 +200,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should auto load function file and inject by function name', async () => {
     const container = new MidwayContainer();
-    container.setFileDetector(new DirectoryFileDetector({
+    container.setFileDetector(new CommonJSFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-function/src'),
     }));
     container.bind(MidwayFrameworkService);
@@ -242,7 +242,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should scan app dir and inject automatic', async () => {
     const container = new MidwayContainer();
-    container.setFileDetector(new DirectoryFileDetector({
+    container.setFileDetector(new CommonJSFileDetector({
       loadDir: path.join(__dirname, '../fixtures/ts-app-inject')
     }));
 

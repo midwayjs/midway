@@ -1,5 +1,5 @@
 import {
-  DirectoryFileDetector,
+  CommonJSFileDetector,
   MidwayConfigService,
   MidwayContainer,
   MidwayEnvironmentService,
@@ -26,6 +26,7 @@ import {
 import * as util from 'util';
 import { join } from 'path';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
+import { isPromise } from './util/types';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -40,7 +41,9 @@ function printStepDebugInfo(stepInfo: string) {
 export async function initializeGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ): Promise<IMidwayContainer> {
-  const applicationContext = prepareGlobalApplicationContext(globalOptions);
+  const applicationContext = await prepareGlobalApplicationContext(
+    globalOptions
+  );
 
   printStepDebugInfo('Init logger');
 
@@ -141,13 +144,9 @@ export function prepareGlobalApplicationContext(
   printStepDebugInfo('Ready module detector');
 
   if (globalOptions.moduleDetector !== false) {
-    if (
-      globalOptions.moduleDetector === undefined ||
-      globalOptions.moduleDetector === 'file'
-    ) {
+    if (globalOptions.moduleDetector === undefined) {
       applicationContext.setFileDetector(
-        new DirectoryFileDetector({
-          loadDir: baseDir,
+        new CommonJSFileDetector({
           ignore: globalOptions.ignore ?? [],
         })
       );
@@ -210,35 +209,38 @@ export function prepareGlobalApplicationContext(
     ];
   }
 
-  for (const configurationModule of []
-    .concat(globalOptions.imports)
-    .concat(globalOptions.configurationModule)) {
-    // load configuration and component
-    if (configurationModule) {
-      applicationContext.load(configurationModule);
-    }
-  }
+  applicationContext.load(
+    [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
+  );
 
   printStepDebugInfo('Run applicationContext ready method');
 
-  // bind user code module
-  applicationContext.ready();
-
-  if (globalOptions.globalConfig) {
-    if (Array.isArray(globalOptions.globalConfig)) {
-      configService.add(globalOptions.globalConfig);
-    } else {
-      configService.addObject(globalOptions.globalConfig);
+  function afterLoad() {
+    if (globalOptions.globalConfig) {
+      if (Array.isArray(globalOptions.globalConfig)) {
+        configService.add(globalOptions.globalConfig);
+      } else {
+        configService.addObject(globalOptions.globalConfig);
+      }
     }
+
+    printStepDebugInfo('Load config file');
+
+    // merge config
+    configService.load();
+    debug('[core]: Current config = %j', configService.getConfiguration());
+
+    // middleware support
+    applicationContext.get(MidwayMiddlewareService, [applicationContext]);
+    return applicationContext;
   }
 
-  printStepDebugInfo('Load config file');
+  // bind user code module
+  const readyDefer = applicationContext.ready();
 
-  // merge config
-  configService.load();
-  debug('[core]: Current config = %j', configService.getConfiguration());
-
-  // middleware support
-  applicationContext.get(MidwayMiddlewareService, [applicationContext]);
-  return applicationContext;
+  if (isPromise(readyDefer)) {
+    return (readyDefer as unknown as Promise<IMidwayContainer>).then(afterLoad);
+  } else {
+    return afterLoad();
+  }
 }
