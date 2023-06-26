@@ -142,6 +142,7 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 
 
 **原因**：测试框架 Jest 依赖 jsdom，其依赖了已废弃的模块 request，目前jsdom尚未解决此问题，我们会持续进行跟踪，相关问题参看：[https://github.com/jsdom/jsdom/issues/2792](https://github.com/jsdom/jsdom/issues/2792)
+**后续**：jsdom已经不再使用废弃的 request 模块，详情参看：[https://github.com/jsdom/jsdom/pull/3092](https://github.com/jsdom/jsdom/pull/3092)
 :::
 
 ### windows eslint 报错
