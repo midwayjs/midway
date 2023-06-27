@@ -53,6 +53,51 @@ export const safeRequire = (p, enabledCache = true) => {
 };
 
 /**
+ * load module, and it can be chosen commonjs or esm mode
+ * @param p
+ * @param options
+ * @since 3.12.0
+ */
+export const loadModule = async (
+  p: string,
+  options: {
+    enableCache?: boolean;
+    loadMode?: 'commonjs' | 'esm';
+    safeLoad?: boolean;
+  } = {}
+) => {
+  options.enableCache = options.enableCache ?? true;
+  options.safeLoad = options.safeLoad ?? false;
+  options.loadMode = options.loadMode ?? 'commonjs';
+
+  if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
+    p = resolve(dirname(module.parent.filename), p);
+  }
+
+  try {
+    if (options.enableCache) {
+      if (options.loadMode === 'commonjs') {
+        return require(p);
+      } else {
+        return await import(p);
+      }
+    } else {
+      const content = readFileSync(p, {
+        encoding: 'utf-8',
+      });
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    if (!options.safeLoad) {
+      throw err;
+    } else {
+      debug(`[core]: SafeLoadModule Warning\n\n${err.message}\n`);
+      return undefined;
+    }
+  }
+};
+
+/**
  *  @example
  *  safelyGet(['a','b'],{a: {b: 2}})  // => 2
  *  safelyGet(['a','b'],{c: {b: 2}})  // => undefined

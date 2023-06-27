@@ -60,6 +60,7 @@ export * from './decorator/constant';
 export {
   safelyGet,
   safeRequire,
+  loadModule,
   delegateTargetPrototypeMethod,
   delegateTargetMethod,
   delegateTargetProperties,

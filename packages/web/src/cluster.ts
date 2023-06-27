@@ -1,4 +1,4 @@
-import { prepareGlobalApplicationContext } from '@midwayjs/core';
+import { prepareGlobalApplicationContextSync } from '@midwayjs/core';
 import { join } from 'path';
 import { isTypeScriptEnvironment } from './utils';
 import { debuglog } from 'util';
@@ -27,10 +27,16 @@ if (isTypeScriptEnvironment()) {
   baseDir = join(appDir, 'dist');
 }
 
-prepareGlobalApplicationContext({
+prepareGlobalApplicationContextSync({
   appDir,
   baseDir,
-  ignore: ['**/app/extend/**', '**/app/public/**'],
+  ignore: [
+    '**/app/extend/**',
+    '**/app/public/**',
+    '**/app/view/**',
+    '**/app/views/**',
+    '**/app/extend/**',
+  ],
 });
 
 if (!isAgent) {

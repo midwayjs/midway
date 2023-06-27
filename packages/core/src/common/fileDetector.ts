@@ -8,21 +8,19 @@ import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { getProviderName } from '../decorator';
-import { extname } from 'path';
 
-async function loadModule(modulePath, type: 'commonjs' | 'module') {
-  const ext = extname(modulePath);
-  if (ext === '.mjs' || type === 'module') {
-    return await import(modulePath);
-  } else {
+async function requireModule(modulePath, type: 'commonjs' | 'module') {
+  if (type === 'commonjs') {
     return require(modulePath);
+  } else {
+    return await import(modulePath);
   }
 }
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
   extraDetectorOptions: T;
-  constructor(options) {
+  constructor(options?: T) {
     this.options = options;
     this.extraDetectorOptions = {} as T;
   }
@@ -39,9 +37,6 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/logs/**',
   '**/run/**',
   '**/public/**',
-  '**/app/view/**',
-  '**/app/views/**',
-  '**/app/extend/**',
   '**/node_modules/**',
   '**/**.test.ts',
   '**/**.test.js',
@@ -61,6 +56,7 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
   private duplicateModuleCheckSet = new Map();
 
   async run(container) {
+    this.options = this.options || {};
     const loadDirs = [].concat(
       this.options.loadDir ?? container.get('baseDir')
     );
@@ -101,7 +97,7 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
       };
 
       for (const file of fileResults) {
-        const exports = await loadModule(file, this.getType());
+        const exports = await requireModule(file, this.getType());
         // add module to set
         container.bindClass(exports, {
           namespace: this.options.namespace,
