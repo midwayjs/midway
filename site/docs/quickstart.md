@@ -127,7 +127,7 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 ### Python 的编译错误
 
 :::caution
-1、在 node15/npm7 下执行 `npm install/i` 命令安装依赖可能会有 Python 编译错误
+在 node15/npm7 下执行 `npm install/i` 命令安装依赖可能会有 Python 编译错误
 
 **使用 npm init midway 创建的项目会自动安装依赖，无此问题。**
 
@@ -135,17 +135,8 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 **原因**：测试框架 Jest 依赖 jsdom，npm7 会自动安装其 peerDependencies 中依赖的 canvas 包， 而 canvas 的安装编译需要有python3环境。
 :::
 
-### Deprecated 提示
-
-:::caution
-2、在安装依赖时会有 npm warn: deprecated 输出
-
-
-**原因**：测试框架 Jest 依赖 jsdom，其依赖了已废弃的模块 request，目前jsdom尚未解决此问题，我们会持续进行跟踪，相关问题参看：[https://github.com/jsdom/jsdom/issues/2792](https://github.com/jsdom/jsdom/issues/2792)
-:::
-
 ### windows eslint 报错
 
 :::caution
-3、windows 可能会碰到 eslint 报错的问题，请关注 [windows 下换行问题](faq/git_problem#XCAgm)。
+Windows 可能会碰到 eslint 报错的问题，请关注 [windows 下换行问题](faq/git_problem#XCAgm)。
 :::
