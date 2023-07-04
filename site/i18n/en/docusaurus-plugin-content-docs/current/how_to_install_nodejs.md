@@ -13,7 +13,7 @@ The community has solutions such as [nvm](https://github.com/creationix/nvm), [n
 
 
 
-> Friendly reminder: both Node 6.x and 8.x will end LTS support this year. please upgrade to 10.x as soon as possible.
+> Friendly reminder: both Node 12.x and 14.x run into EOL. please upgrade to 16 or 18 as soon as possible.
 > [https://github.com/nodejs/Release](https://github.com/nodejs/Release)
 
 

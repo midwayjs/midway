@@ -13,7 +13,7 @@
 
 
 
-> 友情提示：Node 6.x 和 8.x 都将在今年结束 LTS 的支持，请尽快升级到 10.x 。
+> 友情提示：Node 12.x 和 14.x 分别于2022和2023年4月结束生命期（EOL），请尽快升级到 16 或者 18 。
 > [https://github.com/nodejs/Release](https://github.com/nodejs/Release)
 
 
