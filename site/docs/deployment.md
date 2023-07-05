@@ -522,7 +522,7 @@ import * as LocalConfig from './config/config.local';
     }
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -673,7 +673,7 @@ $ npm i pkg --save-dev
 
 首先需要对 pkg 进行配置，主要内容在 `package.json` 的 `bin` 和 `pkg` 字段下。
 
-- `bin` 我们指定为入口文件，即 `bootstrap.js` 
+- `bin` 我们指定为入口文件，即 `bootstrap.js`
 - `pkg.scripts` 构建后的目录，使用了 glob 的语法包括了 `dist` 下的所有 js 文件
 - `pkg.asserts` 如果有一些静态资源文件，可以在这里配置
 - `pkg.targets` 构建的平台产物，是下列选项的组合（示例中我指定了 mac + node18）：

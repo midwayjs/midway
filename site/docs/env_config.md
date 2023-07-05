@@ -52,7 +52,7 @@ import { join } from 'path';
     join(__dirname, './config/'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -84,7 +84,7 @@ import * as LocalConfig from './config/config.local';
     }
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 `importConfigs` 中的数组中传递配置对象，每个对象的 key 为环境，值为环境对应的配置值，midway 在启动中会根据环境来加载对应的配置。
@@ -123,7 +123,7 @@ import { join } from 'path';
     join(__dirname, './config/'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -146,7 +146,7 @@ import { join } from 'path';
     join(__dirname, './config/custom.local')		// 可以使用自定义的命名，只要中间部分带环境就行
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -177,7 +177,7 @@ import { join } from 'path';
     join(__dirname, '../customConfig.default'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -317,7 +317,7 @@ import { join } from 'path';
     join(__dirname, './config/'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -459,7 +459,7 @@ import { RemoteConfigService } from '../service/remote'; // 自定义的获取�
     join(__dirname, './config/'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 
   async onConfigLoad(container: IMidwayContainer) {
     // 这里你可以修改全局配置

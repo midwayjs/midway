@@ -494,7 +494,7 @@ import * as LocalConfig from './config/config.local';
      }
    ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 

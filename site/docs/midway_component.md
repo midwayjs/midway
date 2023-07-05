@@ -29,7 +29,7 @@ import * as validate from '@midwayjs/validate';
 @Configuration({
   imports: [validate],
 })
-export class ContainerLifeCycle {}
+export class MainConfiguration {}
 ```
 
 
@@ -53,7 +53,7 @@ import * as info from '@midwayjs/info';
     },
   ],
 })
-export class ContainerLifeCycle {}
+export class MainConfiguration {}
 ```
 
 - `component` 用于指定组件对象，组件对象必须包含一个 `Configuration` 导出的属性

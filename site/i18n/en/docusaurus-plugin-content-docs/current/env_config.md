@@ -52,7 +52,7 @@ import { join } from 'path';
     join(__dirname, './config/')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -84,7 +84,7 @@ import * as LocalConfig from './config/config.local';
     }
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 The array in the `importConfigs` passes configuration objects. The key of each object is the environment, and the value is the configuration value corresponding to the environment. midway loads the corresponding configuration according to the environment during startup.
@@ -123,7 +123,7 @@ import { join } from 'path';
     join(__dirname, './config/'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -146,7 +146,7 @@ import { join } from 'path';
     join(__dirname, './config/custom.local')		// You can use custom naming, as long as the middle part has an environment
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -177,7 +177,7 @@ import { join } from 'path';
     join(__dirname, '../customConfig.default')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -317,7 +317,7 @@ import { join } from 'path';
     join(__dirname, './config/'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -458,7 +458,7 @@ import { RemoteConfigService } from '../service/remote'; // Custom Get Remote Co
     join(__dirname, './config/')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 
   async onConfigLoad(container: IMidwayContainer) {
     // Here you can modify the global configuration

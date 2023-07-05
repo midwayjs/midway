@@ -432,7 +432,7 @@ import * as book from 'midway-component-book';
 @Configuration({
   imports: [book],
 })
-export class ContainerLifeCycle {}
+export class MainConfiguration {}
 ```
 
 至此，我们的准备工作就做完了，下面开始使用。

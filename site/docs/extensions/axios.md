@@ -363,7 +363,7 @@ import { join } from 'path';
     join(__dirname, 'config')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 
   async onReady(container: IMidwayContainer) {
   	const httpService = await container.getAsync(axios.HttpService);
@@ -396,7 +396,7 @@ import { join } from 'path';
     join(__dirname, 'config')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 
   async onReady(container: IMidwayContainer) {
   	const httpServiceFactory = await container.getAsync(axios.HttpServiceFactory);
