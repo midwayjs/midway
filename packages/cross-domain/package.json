@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "vary": "^1.1.2"
+    "vary": "1.1.2"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.11.15",
