@@ -86,7 +86,6 @@ jobs:
         mongodb-version: 4.2
 
     - run: npm install
-    - run: npm run bootstrap
     - run: npm run build --if-present
     - run: npm run lint
     - run: npm run lint:cycle
