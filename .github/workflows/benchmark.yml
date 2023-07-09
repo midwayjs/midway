@@ -49,7 +49,6 @@ jobs:
           npm i --no-audit -g autocannon zx
           # npm run purge # if you want to clean up the cache
           npm i --no-audit
-          npm run bootstrap
       - name: Build
         run: |
           sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json

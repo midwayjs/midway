@@ -25,6 +25,7 @@ import {
   ComponentModule,
   MockAppConfigurationOptions,
   IBootstrapAppStarter,
+  MockBootstrapOptions,
 } from './interface';
 import {
   findFirstExistModule,
@@ -57,12 +58,17 @@ function formatPath(baseDir, p) {
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
-  appDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions,
+  appDir: string | MockAppConfigurationOptions,
+  options: MockAppConfigurationOptions = {},
   customFramework?: { new (...args): T } | ComponentModule
 ): Promise<T> {
   debug(`[mock]: Create app, appDir="${appDir}"`);
   process.env.MIDWAY_TS_MODE = 'true';
+
+  if (typeof appDir === 'object') {
+    options = appDir;
+    appDir = options.appDir || '';
+  }
 
   try {
     if (appDir) {
@@ -76,6 +82,8 @@ export async function create<
           `Path "${appDir}" not exists, please check it.`
         );
       }
+    } else {
+      appDir = process.cwd();
     }
 
     clearAllLoggers();
@@ -273,7 +281,7 @@ export async function createFunctionApp<
   if (options.entryFile) {
     const exportModules: {
       getStarter: () => { close: () => void; start: (...args) => any };
-    } = require(join(baseDir, options.entryFile));
+    } = require(formatPath(baseDir, options.entryFile));
     options.starter = exportModules.getStarter();
   }
 
@@ -588,9 +596,13 @@ export async function createLightApp(
 
 export async function createBootstrap(
   entryFile: string,
-  options: MockAppConfigurationOptions = {}
+  options: MockBootstrapOptions = {}
 ): Promise<IBootstrapAppStarter> {
-  if (safeRequire('@midwayjs/faas')) {
+  if (!options.bootstrapMode) {
+    options.bootstrapMode = safeRequire('@midwayjs/faas') ? 'faas' : 'app';
+  }
+
+  if (options.bootstrapMode === 'faas') {
     options.entryFile = entryFile;
     const app = await createFunctionApp(process.cwd(), options);
     return {

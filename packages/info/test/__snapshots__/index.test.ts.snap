@@ -8,7 +8,6 @@ exports[`test/index.test.ts should test get config and filter secret 1`] = `
     "debug": "{"recordConfigMergeOrder":true}",
     "info": "{"title":"Midway Info","infoPath":"/_info","hiddenKey":["k***","****","*****n","********","p****"]}",
     "keys": "["1*******5"]",
-    "midwayLogger": "{"default":{"dir":"logs","level":"info","consoleLevel":"info","auditFileDir":".audit","disableFile":true,"disableError":true},"clients":{"coreLogger":{"level":"info","fileLogName":"midway-core.log"},"appLogger":{"fileLogName":"midway-app.log","aliasName":"logger"}}}",
     "oss": "{"clients":{"default":{"accessKeyId":"123","accessKeySecret":"f*****f"}}}",
   },
   "type": "Midway Config",
