@@ -65,7 +65,7 @@
     "type": "opencollective",
     "url": "https://opencollective.com/midway"
   },
-  "workspaces":[
+  "workspaces": [
     "packages/*",
     "packages-serverless/*",
     "packages-legacy/*",
