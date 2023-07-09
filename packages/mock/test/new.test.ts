@@ -125,7 +125,9 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test with entry file', async () => {
-    const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'));
+    const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'), {
+      bootstrapMode: 'app',
+    });
     const app = bootstrap.getApp('koa');
 
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });

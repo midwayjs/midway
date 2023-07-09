@@ -4,7 +4,11 @@ export interface MockAppConfigurationOptions extends IMidwayBootstrapOptions {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
   ssl?: boolean;
+}
+
+export interface MockBootstrapOptions extends MockAppConfigurationOptions {
   entryFile?: string;
+  bootstrapMode?: 'faas' | 'app';
 }
 
 export type ComponentModule = {
