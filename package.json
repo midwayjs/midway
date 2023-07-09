@@ -23,6 +23,7 @@
     "zx": "7.2.3"
   },
   "scripts": {
+    "install_npm": "sh scripts/install_npm.sh",
     "test": "lerna run test",
     "link": "lerna run link",
     "cov": "lerna run cov --concurrency 2 --stream",

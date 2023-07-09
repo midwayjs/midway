@@ -94,6 +94,7 @@ jobs:
         with:
           mongodb-version: 4.2
 
+      - run: npm run install_npm
       - run: npm install && npm install codecov
       - run: npm run build --if-present
       - run: npm run cov
