@@ -1,6 +1,35 @@
 # Change Log
 
 
+## v3.11.12 (2023-07-09)
+
+#### :memo: Documentation
+* [#3058](https://github.com/midwayjs/midway/pull/3058) docs(site): update how_to_install_nodejs.md ([@waitingsong](https://github.com/waitingsong))
+* [#3051](https://github.com/midwayjs/midway/pull/3051) docs: update quickstart.md ([@yemangran](https://github.com/yemangran))
+* [#3034](https://github.com/midwayjs/midway/pull/3034) docs: change cron logger default fileLogName ([@sumy7](https://github.com/sumy7))
+
+#### :package: Dependencies
+* `info`, `mock`
+  * [#3070](https://github.com/midwayjs/midway/pull/3070) chore: update lerna to v7 ([@czy88840616](https://github.com/czy88840616))
+* `jwt`
+  * [#3067](https://github.com/midwayjs/midway/pull/3067) fix(deps): update dependency jsonwebtoken to v9.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3046](https://github.com/midwayjs/midway/pull/3046) fix(deps): update dependency @grpc/grpc-js to v1.8.17 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#3053](https://github.com/midwayjs/midway/pull/3053) fix(deps): update socket.io packages to v4.7.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3033](https://github.com/midwayjs/midway/pull/3033) chore(deps): update mongoose monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`, `rabbitmq`, `socketio`, `web-express`, `web-koa`, `web`, `ws`
+  * [#3036](https://github.com/midwayjs/midway/pull/3036) chore(deps): update dependency fs-extra to v11 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 4
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@yemangran](https://github.com/yemangran)
+- sumy ([@sumy7](https://github.com/sumy7))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.11.11 (2023-06-14)
 
 #### :bug: Bug Fix
