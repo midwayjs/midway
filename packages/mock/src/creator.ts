@@ -24,7 +24,8 @@ import { clearAllLoggers } from '@midwayjs/logger';
 import {
   ComponentModule,
   MockAppConfigurationOptions,
-  IBootstrapAppStarter, MockBootstrapOptions,
+  IBootstrapAppStarter,
+  MockBootstrapOptions,
 } from './interface';
 import {
   findFirstExistModule,
