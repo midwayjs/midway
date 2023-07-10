@@ -60,11 +60,11 @@ export class ConsulConfiguration implements ILifeCycle {
   ): Promise<void> {
     const config = this.consulRegisterConfig;
     const { address, port } = this.consulRegisterConfig;
-
+    // 把原始的 consul 对象注入到容器
+    container.registerObject('consul:consul', this.consulProvider.getConsul());
     if (this.shouldBeRegisterMe) {
       config.name = config.name || app.getProjectName();
       config.id = config.id || `${config.name}:${address}:${port}`;
-
       if (!config.check && (config.check as any) !== false) {
         config.check = ['egg', 'koa', 'express'].includes(app.getNamespace())
           ? {
@@ -76,14 +76,7 @@ export class ConsulConfiguration implements ILifeCycle {
               interval: '3s',
             };
       }
-
       Object.assign(this.consulRegisterConfig, config);
-
-      // 把原始的 consul 对象注入到容器
-      container.registerObject(
-        'consul:consul',
-        this.consulProvider.getConsul()
-      );
       await this.consulProvider.registerService(this.consulRegisterConfig);
     }
   }
@@ -95,10 +88,7 @@ export class ConsulConfiguration implements ILifeCycle {
     await this.registerConsul(container, app);
   }
 
-  async onStop(
-    container: IMidwayContainer,
-    app?: IMidwayApplication
-  ): Promise<void> {
+  async onStop(): Promise<void> {
     if (
       this.consulProviderConfig.register &&
       this.consulProviderConfig.deregister
