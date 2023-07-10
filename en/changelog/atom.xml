@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-07-09T20:00:00.000Z</updated>
+    <updated>2023-07-10T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.11.13]]></title>
+        <id>https://midwayjs.org/en/changelog/v3.11.13</id>
+        <link href="https://midwayjs.org/en/changelog/v3.11.13"/>
+        <updated>2023-07-10T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>consul</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3069" target="_blank" rel="noopener noreferrer">#3069</a> fix(consul): Adjust the application registration logic to obtain consul instances when client does not register  (<a href="https://github.com/flyingCrp" target="_blank" rel="noopener noreferrer">@flyingCrp</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>flyingCrp (<a href="https://github.com/flyingCrp" target="_blank" rel="noopener noreferrer">@flyingCrp</a>)</li></ul>]]></content>
+        <author>
+            <name>flyingCrp</name>
+            <uri>https://github.com/flyingCrp</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.11.12]]></title>
         <id>https://midwayjs.org/en/changelog/v3.11.12</id>

@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Sun, 09 Jul 2023 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 10 Jul 2023 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2023 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.11.13]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.11.13</link>
+            <guid>https://midwayjs.org/en/changelog/v3.11.13</guid>
+            <pubDate>Mon, 10 Jul 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>consul</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3069" target="_blank" rel="noopener noreferrer">#3069</a> fix(consul): Adjust the application registration logic to obtain consul instances when client does not register  (<a href="https://github.com/flyingCrp" target="_blank" rel="noopener noreferrer">@flyingCrp</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>flyingCrp (<a href="https://github.com/flyingCrp" target="_blank" rel="noopener noreferrer">@flyingCrp</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.11.12]]></title>
             <link>https://midwayjs.org/en/changelog/v3.11.12</link>
