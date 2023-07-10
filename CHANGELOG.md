@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.11.13 (2023-07-10)
+
+#### :bug: Bug Fix
+* `consul`
+  * [#3069](https://github.com/midwayjs/midway/pull/3069) fix(consul): Adjust the application registration logic to obtain consul instances when client does not register  ([@flyingCrp](https://github.com/flyingCrp))
+
+#### Committers: 1
+- flyingCrp ([@flyingCrp](https://github.com/flyingCrp))
+
+
+
 ## v3.11.12 (2023-07-09)
 
 #### :memo: Documentation
