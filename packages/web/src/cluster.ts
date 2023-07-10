@@ -30,13 +30,7 @@ if (isTypeScriptEnvironment()) {
 prepareGlobalApplicationContextSync({
   appDir,
   baseDir,
-  ignore: [
-    '**/app/extend/**',
-    '**/app/public/**',
-    '**/app/view/**',
-    '**/app/views/**',
-    '**/app/extend/**',
-  ],
+  ignore: ['**/app/extend/**', '**/app/public/**'],
 });
 
 if (!isAgent) {
