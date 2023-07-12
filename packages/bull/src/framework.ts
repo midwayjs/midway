@@ -16,7 +16,7 @@ import {
   IQueueManager,
 } from './interface';
 import { Job, JobOptions, QueueOptions } from 'bull';
-import * as Bull from 'bull';
+import Bull = require('bull');
 import { BULL_PROCESSOR_KEY } from './constants';
 
 export class BullQueue extends Bull implements IQueue<Job> {
