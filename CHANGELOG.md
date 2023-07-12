@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.11.14 (2023-07-12)
+
+#### :bug: Bug Fix
+* `bull`
+  * [#3077](https://github.com/midwayjs/midway/pull/3077) fix: bull typings in interop mode ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.11.13 (2023-07-10)
 
 #### :bug: Bug Fix
