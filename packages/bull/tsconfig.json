@@ -3,8 +3,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
-    "esModuleInterop": true
+    "outDir": "dist"
   },
   "include": [
     "./src/**/*.ts"
