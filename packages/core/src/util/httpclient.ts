@@ -50,12 +50,13 @@ export async function makeHttpRequest<ResType>(
     dataType,
     method,
     timeout = 5000,
+    headers: customHeaders,
     ...otherOptions
   } = options;
 
   const headers = {
     Accept: mimeMap[dataType] || mimeMap.octet,
-    ...options.headers,
+    ...customHeaders,
   };
 
   let data;
