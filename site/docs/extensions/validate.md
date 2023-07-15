@@ -214,6 +214,44 @@ export class HomeController {
 
 一般情况下，使用全局默认配置即可。
 
+
+
+## 非 Web 场景校验
+
+在非 Web 场景下，没有 `@Body` 等 Web 类装饰器的情况下，也可以使用 `@Valid` 装饰器来进行校验。
+
+比如在服务中：
+
+```typescript
+import { Valid } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+import { UserDTO } from './dto/user';
+
+@Provide()
+export class UserService {
+  async updateUser(@Valid() user: UserDTO) {
+    // ...
+  }
+}
+```
+
+如果参数不是 DTO，不存在规则，也可以通过参数传递一个 Joi 格式的校验规则。
+
+```typescript
+import { Valid, RuleType } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+  async updateUser(@Valid(RuleType.number().required()) userAge: number) {
+    // ...
+  }
+}
+```
+
+
+
 ## 校验管道
 
 如果你的参数是基础类型，比如 `number`, `string`, `boolean`，则可以使用组件提供的管道进行校验。
@@ -300,37 +338,7 @@ async update(@Body('nickName', [new DefaultValuePipe('anonymous')]) nickName: st
 update({ nickName: undefined} ); => 'anonymous'
 ```
 
-在非 Web 场景下，没有 `@Body` 等 Web 类装饰器的情况下，也可以使用 `@Valid` 装饰器来进行校验。
 
-比如在服务中：
-
-```typescript
-import { Valid } from '@midwayjs/validate';
-import { Provide } from '@midwayjs/core';
-
-import { UserDTO } from './dto/user';
-
-@Provide()
-export class UserService {
-  async updateUser(@Valid() user: UserDTO) {
-    // ...
-  }
-}
-```
-
-如果参数不是 DTO，不存在规则，也可以通过参数传递一个 Joi 格式的校验规则。
-
-```typescript
-import { Valid, RuleType } from '@midwayjs/validate';
-import { Provide } from '@midwayjs/core';
-
-@Provide()
-export class UserService {
-  async updateUser(@Valid(RuleType.number().required()) userAge: number) {
-    // ...
-  }
-}
-```
 
 ## 自定义校验管道
 

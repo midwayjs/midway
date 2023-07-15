@@ -229,6 +229,38 @@ export class HomeController {
 
 In general, use the global default configuration.
 
+## Validation for non-web
+
+In non-Web scenarios, if there is no web class decorator such as `@Body`, you can also use the `@Valid` decorator for validation.
+
+For example in a service:
+
+```typescript
+import { Valid } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+   async updateUser(@Valid() user: UserDTO ) {
+     //...
+   }
+}
+```
+
+If the parameter is not DTO, there is no rule, and a validation rule in Joi format can also be passed through the parameter.
+
+```typescript
+import { Valid, RuleType } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+   async updateUser(@Valid(RuleType. number(). required()) userAge: number ) {
+     //...
+   }
+}
+```
+
 
 
 ## Validate pipeline
@@ -317,38 +349,6 @@ async update(@Body('nickName', [new DefaultValuePipe('anonymous')]) nickName: st
 }
 
 update({ nickName: undefined} ); => 'anonymous'
-```
-
-
-
-In non-Web scenarios, if there is no web class decorator such as `@Body`, you can also use the `@Valid` decorator for validation.
-
-For example in a service:
-
-```typescript
-import { Valid } from '@midwayjs/validate';
-import { Provide } from '@midwayjs/core';
-
-@Provide()
-export class UserService {
-   async updateUser(@Valid() user: UserDTO ) {
-     //...
-   }
-}
-```
-
-If the parameter is not DTO, there is no rule, and a validation rule in Joi format can also be passed through the parameter.
-
-```typescript
-import { Valid, RuleType } from '@midwayjs/validate';
-import { Provide } from '@midwayjs/core';
-
-@Provide()
-export class UserService {
-   async updateUser(@Valid(RuleType. number(). required()) userAge: number ) {
-     //...
-   }
-}
 ```
 
 
