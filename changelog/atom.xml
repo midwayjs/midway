@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-07-12T20:00:00.000Z</updated>
+    <updated>2023-07-16T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.11.15]]></title>
+        <id>https://midwayjs.org/changelog/v3.11.15</id>
+        <link href="https://midwayjs.org/changelog/v3.11.15"/>
+        <updated>2023-07-16T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="🐛 Bug Fix的直接链接" title="🐛 Bug Fix的直接链接">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3076" target="_blank" rel="noopener noreferrer">#3076</a> fix: makeHttpRequest failed when post with custom headers (<a href="https://github.com/leemotive" target="_blank" rel="noopener noreferrer">@leemotive</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="📦 Dependencies的直接链接" title="📦 Dependencies的直接链接">​</a></h2><ul><li><code>web-koa</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3047" target="_blank" rel="noopener noreferrer">#3047</a> fix(deps): update dependency koa-bodyparser to v4.4.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>grpc</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3082" target="_blank" rel="noopener noreferrer">#3082</a> fix(deps): update dependency @grpc/grpc-js to v1.8.18 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li><li><a href="https://github.com/midwayjs/midway/pull/3083" target="_blank" rel="noopener noreferrer">#3083</a> fix(deps): update dependency @grpc/proto-loader to v0.7.8 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Committers: 1的直接链接" title="Committers: 1的直接链接">​</a></h2><ul><li><a href="https://github.com/leemotive" target="_blank" rel="noopener noreferrer">@leemotive</a></li></ul>]]></content>
+        <author>
+            <name>leemotive</name>
+            <uri>https://github.com/leemotive</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.11.14]]></title>
         <id>https://midwayjs.org/changelog/v3.11.14</id>
