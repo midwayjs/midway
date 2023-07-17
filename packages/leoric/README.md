@@ -27,8 +27,12 @@ export default () => {
     leoric: {
       dataSource: {
         default: {
-          baseDir: path.join(__dirname, '../model'),
-          // among other database configurations
+          dialect: 'sqlite',
+          database: path.join(__dirname, '../../', 'database.sqlite'),
+          sync: true,
+          models: [
+            '**/models/*{.ts,.js}'
+          ]
         },
       },
     },

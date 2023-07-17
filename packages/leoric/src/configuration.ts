@@ -10,7 +10,7 @@ import { LeoricDataSourceManager } from './dataSourceManager';
 import { DATA_SOURCE_KEY, MODEL_KEY } from './decorator';
 
 @Configuration({
-  namespace: 'model',
+  namespace: 'leoric',
   importConfigs: [{ default: DefaultConfig }],
 })
 export class LeoricConfiguration {
@@ -18,8 +18,6 @@ export class LeoricConfiguration {
   decoratorService: MidwayDecoratorService;
 
   dataSourceManager: LeoricDataSourceManager;
-
-  async onConfigLoad() {}
 
   @Init()
   async init() {

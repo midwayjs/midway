@@ -5,13 +5,9 @@ export const leoric = {
     custom: {
       dialect: 'sqlite',
       database: path.join(__dirname, '../../', 'database.sqlite'),
-      baseDir: path.join(__dirname, '../model'),
+      models: ['**/model/*{.ts,.js}'],
       sync: true,
     },
   },
   defaultDataSourceName: 'custom',
-}
-
-export const koa = {
-  keys: ['123']
 }

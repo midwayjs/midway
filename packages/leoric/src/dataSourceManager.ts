@@ -8,36 +8,18 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-  listModule,
 } from '@midwayjs/core';
-import Realm, { isBone } from 'leoric';
-import path from 'path';
-import fs from 'fs/promises';
-
-async function loadModels(baseDir: string) {
-  if (!baseDir || typeof baseDir !== 'string') {
-    throw new Error(`Unexpected models dir (${baseDir})`);
-  }
-  const entries = await fs.readdir(baseDir, { withFileTypes: true });
-  const models = [];
-
-  for (const entry of entries) {
-    const extname = path.extname(entry.name);
-    if (entry.isFile() && ['.js', '.mjs', '.ts', '.mts'].includes(extname)) {
-      const exports = require(path.join(baseDir, entry.name));
-      const model = exports.__esModule ? exports.default : exports;
-      if (isBone(model)) models.push(model);
-    }
-  }
-
-  return models;
-}
+import Realm, { ConnectOptions, isBone } from 'leoric';
+import { LeoricConfigOption } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class LeoricDataSourceManager extends DataSourceManager<Realm> {
+export class LeoricDataSourceManager extends DataSourceManager<
+  Realm,
+  ConnectOptions
+> {
   @Config('leoric')
-  leoricConfig;
+  leoricConfig: LeoricConfigOption;
 
   @Logger('coreLogger')
   coreLogger: ILogger;
@@ -47,7 +29,10 @@ export class LeoricDataSourceManager extends DataSourceManager<Realm> {
 
   @Init()
   async init() {
-    await this.initDataSource(this.leoricConfig, this.baseDir);
+    await this.initDataSource(this.leoricConfig, {
+      baseDir: this.baseDir,
+      entitiesConfigKey: 'models',
+    });
   }
 
   getName(): string {
@@ -58,11 +43,11 @@ export class LeoricDataSourceManager extends DataSourceManager<Realm> {
     config: any,
     dataSourceName: string
   ): Promise<Realm> {
-    const { baseDir, sync, ...options } = config;
-    let { models = [] } = config;
-    if (models.length === 0) models = listModule('leoric:bone');
-    if (models.length === 0) models = await loadModels(baseDir);
-    const realm = new Realm({ ...options, models });
+    const { sync, models, ...options } = config;
+    const realm = new Realm({
+      ...options,
+      models: models.filter(el => isBone(el)),
+    });
     await realm.connect();
     this.coreLogger.info('[midway:leoric] connecting and start');
     if (sync) await realm.sync();

@@ -1,8 +1,8 @@
-import { createApp, close } from '@midwayjs/mock';
-import { Framework, IMidwayKoaApplication } from '@midwayjs/koa';
+import { close, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
 import { UserService } from './fixtures/basic/src/service/user';
+import { IMidwayApplication } from '@midwayjs/core';
 
 function cleanFile(file) {
   if (existsSync(file)) {
@@ -11,14 +11,10 @@ function cleanFile(file) {
 }
 
 describe('test/index.test.ts', () => {
-  let app: IMidwayKoaApplication;
+  let app: IMidwayApplication;
   beforeAll(async () => {
     cleanFile(join(__dirname, 'fixtures/basic', 'database.sqlite'));
-    app = await createApp(
-      join(__dirname, 'fixtures', 'basic'),
-      {},
-      Framework
-    );
+    app = await createLightApp(join(__dirname, 'fixtures', 'basic'));
   });
 
   afterAll(async () => {

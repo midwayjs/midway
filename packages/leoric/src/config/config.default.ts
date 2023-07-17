@@ -3,7 +3,6 @@ export default {
     default: {
       baseDir: 'src/model',
       migrations: 'src/migrations',
-
       define: {
         underscored: true,
       },
