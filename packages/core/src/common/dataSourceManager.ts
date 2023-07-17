@@ -14,7 +14,7 @@ const debug = debuglog('midway:debug');
 
 export abstract class DataSourceManager<
   T,
-  ConnectionOpts extends Record<string, any>
+  ConnectionOpts extends Record<string, any> = Record<string, any>
 > {
   protected dataSource: Map<string, T> = new Map();
   protected options: DataSourceManagerConfigOption<ConnectionOpts> = {};
