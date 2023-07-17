@@ -1,6 +1,24 @@
 # Change Log
 
 
+## v3.11.15 (2023-07-16)
+
+#### :bug: Bug Fix
+* `core`
+  * [#3076](https://github.com/midwayjs/midway/pull/3076) fix: makeHttpRequest failed when post with custom headers ([@leemotive](https://github.com/leemotive))
+
+#### :package: Dependencies
+* `web-koa`
+  * [#3047](https://github.com/midwayjs/midway/pull/3047) fix(deps): update dependency koa-bodyparser to v4.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3082](https://github.com/midwayjs/midway/pull/3082) fix(deps): update dependency @grpc/grpc-js to v1.8.18 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3083](https://github.com/midwayjs/midway/pull/3083) fix(deps): update dependency @grpc/proto-loader to v0.7.8 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@leemotive](https://github.com/leemotive)
+
+
+
 ## v3.11.14 (2023-07-12)
 
 #### :bug: Bug Fix
