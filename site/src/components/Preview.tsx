@@ -189,7 +189,7 @@ export function PreviewClassSyntax() {
   return (
     <PreviewContainer
       title="Preview - Class Syntax"
-      subtitle="Use IoC + Decorator to provide better architecture"
+      subtitle="Use IoC + Decorator to provide better Architecture"
       background="light"
       demo={ClassDemo}
       features={ClassSyntaxFeatures}
