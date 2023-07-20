@@ -29,6 +29,8 @@
 └── tsconfig.json
 ```
 
+
+
 ## 装饰器 API
 
 Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依赖注入容器，实现扫描和扩展，这些 API 方法我们都从 `@midwayjs/core` 包进行导出。
@@ -67,6 +69,8 @@ Midway 内部有一套标准的装饰器管理 API，用来将装饰器对接依
 - `getMethodParamTypes` 获取某个方法的参数类型，等价于 `Reflect.getMetadata(design:paramtypes)`
 - `getPropertyType` 获取某个属性的类型，等价于 `Reflect.getMetadata(design:type)`
 - `getMethodReturnTypes` 获取方法返回值类型，等价于 `Reflect.getMetadata(design:returntype)`
+
+
 
 ## 类装饰器
 
@@ -144,6 +148,8 @@ export class UserModel {
   // ...
 }
 ```
+
+
 
 ## 属性装饰器
 
@@ -268,6 +274,8 @@ export class UserService {
 }
 ```
 
+
+
 ## 方法装饰器
 
 Midway 提供了 `createCustomMethodDecorator` 方法，用于创建自定义方法装饰器。
@@ -377,6 +385,14 @@ export class UserService {
 // output => Method "getUser" invoke during 4ms
 ```
 
+:::caution
+
+注意，被装饰的方法必须为 async 方法。
+
+:::
+
+
+
 ## 无需实现的方法装饰器
 
 默认情况下，自定义的方法装饰器必须有一个实现，否则运行期会报错。
@@ -402,7 +418,7 @@ export function LoggingTime(): MethodDecorator {
 
 Midway 提供了 `createCustomParamDecorator` 方法，用于创建自定义参数装饰器。
 
-参数装饰器，一般用于修改参数值，提前预处理数据等，Midway 的 `@Query `等请求系列的装饰器都基于其实现。
+参数装饰器，一般用于修改参数值，提前预处理数据等，Midway 的 `@Query` 等请求系列的装饰器都基于其实现。
 
 和其他装饰器相同，我们的定义与实现是分离的，我们以获取参数中的用户（ctx.user）来举例。
 
@@ -495,6 +511,14 @@ export class UserService {
 你可以在开启 `NODE_DEBUG=midway:debug` 环境变量时找到这个错误。
 
 :::
+
+:::caution
+
+注意，被装饰的方法必须为 async 方法。
+
+:::
+
+
 
 ## 方法装饰器获取上下文
 
