@@ -44,13 +44,19 @@ midway 项目的依赖使用 lerna 发布，**请不要**：
 你可以使用下面的命令在项目根目录执行进行检查。
 
 ```bash
+# 社区用户
 $ npx midway-version
+# 内部用户
+$ tnpx @ali/midway-version
 ```
 
 如果项目为 pnpm 安装的依赖，请使用下面的命令。
 
 ```bash
+# 社区用户
 $ pnpx midway-version
+# 内部用户
+$ pnpx @ali/midway-version
 ```
 
 
@@ -60,30 +66,42 @@ $ pnpx midway-version
 你可以使用下面的命令在项目根目录执行进行更新提示。
 
 ```bash
+# 社区用户
 $ npx midway-version -u
+# 内部用户
+$ tnpx @ali/midway-version -u
 ```
 
 如果项目为 pnpm 安装的依赖，请使用下面的命令。
 
 ```bash
+# 社区用户
 $ pnpx midway-version -u
+# 内部用户
+$ pnpx @ali/midway-version -u
 ```
 
 如果你希望将更新写入到 `package.json` 中，请使用下面的命令。
 
 ```bash
+# 社区用户
 $ npx midway-version -u -w
+# 内部用户
+$ tnpx @ali/midway-version -u -w
 ```
 
 如果项目为 pnpm 安装的依赖，请使用下面的命令。
 
 ```bash
+# 社区用户
 $ pnpx midway-version -u -w
+# 内部用户
+$ pnpx @ali/midway-version -u -w
 ```
 
 :::tip
 
-依赖更新写入 `package.json` 后，请重新安装依赖。
+更新的版本会写入 `package.json` 和 `package-lock.json`，并需要重新安装依赖。
 
 :::
 
