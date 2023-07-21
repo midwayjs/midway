@@ -29,6 +29,6 @@
     "@midwayjs/mock": "^3.11.15",
     "@midwayjs/serverless-app": "^3.11.15",
     "@midwayjs/web": "^3.11.15",
-    "mysql2": "^2.3.3"
+    "mysql2": "^3.0.0"
   }
 }
