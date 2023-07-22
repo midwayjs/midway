@@ -249,7 +249,7 @@ The `CronJob` type here comes from the `node-cron` package.
 
 
 
-## Component log
+## Component logger
 
 By default, the `ctx.logger` will be recorded in `midway-cron.log`.
 
@@ -268,3 +268,21 @@ export default {
    }
 }
 ```
+
+
+
+## Global configuration
+
+Some global configurations can be made for the Job, which will be merged with the configuration of each Job.
+
+```typescript
+export default {
+   cron: {
+     defaultCronJobOptions: {
+       //...
+     }
+   }
+}
+```
+
+Please refer to [CronJobParameters](https://github.com/kelektiv/node-cron/blob/main/lib/job.js#L51) for `defaultCronJobOptions` configuration items here
