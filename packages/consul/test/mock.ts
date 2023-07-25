@@ -40,4 +40,9 @@ export function mockConsulAPI() {
   nockObj.persist().put('/v1/kv/key1').reply(200);
   nockObj.persist().delete('/v1/kv/key1').reply(200);
   nockObj.persist().get('/v1/kv/key1').reply(200, [kvKey1]);
+  nockObj.persist().get('/v1/kv/invalid?keys=true').reply(404, []);
+  nockObj
+    .persist()
+    .get('/v1/kv/key1?keys=true')
+    .reply(200, ['key1/1', 'key1/2']);
 }

@@ -13,7 +13,7 @@ import * as Consul from 'consul';
 import { IConsulOptions, IService, IServiceHealth } from './interface';
 
 export class MidwayConsulError extends MidwayError {
-  constructor(message?: string) {
+  constructor(message: string) {
     super(message);
   }
 }
@@ -146,7 +146,7 @@ export class ConsulService {
   async kvGet(key: string, options?: Consul.Kv.GetOptions): Promise<IKvKey> {
     const opt = options || {};
     try {
-      return this.instance.kv.get({ ...opt, key });
+      return await this.instance.kv.get({ ...opt, key });
     } catch (e) {
       throw new MidwayConsulError(e.message);
     }

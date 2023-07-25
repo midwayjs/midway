@@ -104,5 +104,14 @@ describe('/test/consule.test.ts', () => {
         expect(e).toBeInstanceOf(MidwayError);
       }
     });
+    it('should query key', async () => {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
+      const fail = await consulSrv.kvKeys('invalid');
+      expect(fail.length).toEqual(0);
+      const pass = await consulSrv.kvKeys('key1');
+      expect(pass.length).toEqual(2);
+    });
   });
 });
