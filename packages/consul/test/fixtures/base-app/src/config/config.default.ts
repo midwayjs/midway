@@ -1,20 +1,20 @@
+import { IConsulOptions } from '../../../../../src';
+
 export default {
   keys: 'midwayjs-consul-test',
-
   consul: {
-    provider: {
-      register: true,
-      deregister: true,
-      // see consul.framework.ts plz
-      host: 'mock.consul.server',
-      // host: '127.0.0.1',
-      port: 8500,
-      strategy: 'random',
-    },
-    service: {
+    deregister: true,
+    register: {
+      name: 'consul-demo',
       address: '127.0.0.1',
       port: 7001,
-      tags: ["midwayjs-consul-test"],
-    }
-  }
-}
+    },
+    options: {
+      host: 'mock.consul.server',
+      port: '8500',
+      defaults: {
+        token: '123213',
+      },
+    },
+  } as IConsulOptions,
+};
