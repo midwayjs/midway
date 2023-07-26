@@ -14,6 +14,7 @@ export function mockConsulAPI() {
 
   // 注册服务
   nockObj.persist().put('/v1/agent/service/register').reply(200);
+  nockObj.persist().put('/v1/agent/service/register?dc=dc1').reply(200);
 
   // 反注册服务
   nockObj

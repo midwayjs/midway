@@ -8,6 +8,7 @@ export default {
       name: 'consul-demo',
       address: '192.168.101.114',
       port: 7001,
+      dc: 'dc1',
     },
     options: {
       host: '192.168.120.133',

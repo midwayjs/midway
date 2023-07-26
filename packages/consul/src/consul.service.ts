@@ -103,7 +103,7 @@ export class ConsulService {
     const iServices = Object.values(list);
     if (!iServices.length) {
       throw new MidwayConsulError(
-        `2no available service instance named ${serviceName}`
+        `no available service instance named ${serviceName}`
       );
     }
     const services = dc
@@ -113,6 +113,11 @@ export class ConsulService {
       : iServices.filter(info => {
           return info.Service === serviceName;
         });
+    if (!services.length) {
+      throw new MidwayConsulError(
+        `no available service instance named ${serviceName} in ${dc}`
+      );
+    }
     return this.selectRandomService(services);
   }
 

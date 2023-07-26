@@ -11,6 +11,7 @@ export default {
       name: 'consul-demo',
       address: '127.0.0.1',
       port: 7001,
+      dc: 'dc1',
     },
     options: {
       host: 'mock.consul.server',
