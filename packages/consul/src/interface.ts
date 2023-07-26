@@ -1,5 +1,5 @@
-import { ConsulOptions } from 'consul';
 import * as Consul from 'consul';
+import { ConsulOptions } from 'consul';
 
 /**
  * consul configuration of midwayjs
@@ -46,22 +46,61 @@ export interface IServiceHealth {
 }
 
 /**
- * the service information
- *
- * @see [agent-list-services]{@link https://developer.hashicorp.com/consul/api-docs/agent/service#sample-response}
+ * List Nodes for Service
+ * @see [List Nodes for Service](https://developer.hashicorp.com/consul/api-docs/catalog#sample-response-3)
  */
-export interface IService {
+export interface IServiceNode {
   ID: string;
-  Service: string;
-  Tags: any[];
-  TaggedAddresses: {
-    [keys: string]: { Address: string; Port: number };
-  };
-  Meta: { [props: string]: any };
-  Namespace: string;
-  Port: number;
+  Node: string;
   Address: string;
-  EnableTagOverride: boolean;
   Datacenter: string;
-  Weights: { Passing: number; Warning: number };
+  TaggedAddresses: {
+    lan: string;
+    wan: string;
+  };
+  NodeMeta: { [key: string]: string };
+  CreateIndex: number;
+  ModifyIndex: number;
+  ServiceAddress: string;
+  ServiceEnableTagOverride: boolean;
+  ServiceID: string;
+  ServiceName: string;
+  ServicePort: number;
+  ServiceMeta: { [key: string]: string };
+  ServiceTaggedAddresses: {
+    lan: { address: string; port: number };
+    wan: { address: string; port: number };
+  };
+  ServiceTags: Array<string>;
+  ServiceProxy: {
+    DestinationServiceName: string;
+    DestinationServiceID: string;
+    LocalServiceAddress: string;
+    LocalServicePort: number;
+    Config: string;
+    Upstreams: string;
+  };
+  ServiceConnect: {
+    Native: boolean;
+    Proxy: string;
+  };
+  Namespace: string;
 }
+
+// noinspection JSUnusedGlobalSymbols
+/**
+ * @see [consul.kv.get]{@link https://github.com/silas/node-consul#consulkvgetoptions}
+ */
+export type TKvGet = {
+  CreateIndex: number;
+  ModifyIndex: number;
+  LockIndex: number;
+  Key: string;
+  Flags: number;
+  Value: string;
+};
+// noinspection JSUnusedGlobalSymbols
+/**
+ * @see [consul.kv.keys]{@link https://github.com/silas/node-consul#consulkvkeysoptions}
+ */
+export type TKvKeys = Array<string>;

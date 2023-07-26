@@ -10,7 +10,7 @@ import {
   Singleton,
 } from '@midwayjs/core';
 import * as Consul from 'consul';
-import { IConsulOptions, IService, IServiceHealth } from './interface';
+import { IConsulOptions, IServiceHealth, IServiceNode } from './interface';
 
 export class MidwayConsulError extends MidwayError {
   constructor(message: string) {
@@ -61,15 +61,15 @@ export class ConsulService {
             ttl: '30s',
           };
         }
+        const serviceName = name || this.infoSrv.getPkg().name;
         this.serviceId = id;
         if (!this.serviceId) {
-          const serviceName = name || this.infoSrv.getPkg().name;
           this.serviceId = `${serviceName}:${address}:${port}`;
-          Object.assign(register, {
-            id: this.serviceId,
-            name: serviceName,
-          });
         }
+        Object.assign(register, {
+          id: this.serviceId,
+          name: serviceName,
+        });
         await this.instance.agent.service.register(register);
       }
     } catch (e) {
@@ -77,57 +77,69 @@ export class ConsulService {
     }
   }
 
-  private async loadService(
-    serviceName: string,
-    dc?: string
-  ): Promise<IService> {
-    const result: Array<IServiceHealth> = await this.instance.health.checks(
-      serviceName
-    );
-    if (!result.length) {
-      throw new MidwayConsulError(
-        `no available service instance named ${serviceName}`
-      );
-    }
-    const availableIns: Array<IServiceHealth> = result.filter(
-      service => service.Status === 'passing'
-    );
-    if (!availableIns.length) {
-      throw new MidwayConsulError(
-        `${serviceName} The health status of services is abnormal`
-      );
-    }
-    const list = (await this.instance.agent.service.list()) as {
-      [props: string]: IService;
-    };
-    const iServices = Object.values(list);
-    if (!iServices.length) {
-      throw new MidwayConsulError(
-        `no available service instance named ${serviceName}`
-      );
-    }
-    const services = dc
-      ? iServices.filter(info => {
-          return info.Service === serviceName && info.Datacenter === dc;
-        })
-      : iServices.filter(info => {
-          return info.Service === serviceName;
-        });
+  private async loadAllService(
+    options: Consul.Catalog.Service.NodesOptions
+  ): Promise<Array<IServiceNode>> {
+    const services: Array<IServiceNode> =
+      await this.instance.catalog.service.nodes(options);
     if (!services.length) {
       throw new MidwayConsulError(
-        `no available service instance named ${serviceName} in ${dc}`
+        `no available service instance named ${options.service}`
       );
     }
-    return this.selectRandomService(services);
+    return services;
   }
 
   /**
    * Select an available service instance by name and datacenter
    * @param {string} serviceName the service name
-   * @param {string} dc datacenter
+   * @param {Consul.Catalog.Service.NodesOptions} options the NodesOptions
    */
-  async select(serviceName: string, dc?: string) {
-    return this.loadService(serviceName, dc);
+  async select(
+    serviceName: string,
+    options?: Omit<Consul.Catalog.Service.NodesOptions, 'service'>
+  ) {
+    const checkOpt = options || {};
+    let checkedArr: Array<IServiceHealth>;
+    try {
+      checkedArr = await this.instance.health.checks({
+        ...checkOpt,
+        service: serviceName,
+      });
+    } catch (e) {
+      if (e?.response?.statusCode === 404) {
+        checkedArr = [];
+      } else {
+        throw new MidwayConsulError(e.message);
+      }
+    }
+    if (!checkedArr.length) {
+      throw new MidwayConsulError(
+        `no available service instance named ${serviceName}`
+      );
+    }
+    const passed: Array<IServiceHealth> = checkedArr.filter(
+      service => service.Status === 'passing'
+    );
+    if (!passed.length) {
+      throw new MidwayConsulError(
+        `The health status of services ${serviceName}  is abnormal`
+      );
+    }
+    const opt = options || {};
+    const allNodes = await this.loadAllService({
+      ...opt,
+      service: serviceName,
+    });
+    const matched = allNodes.filter(r => {
+      return passed.some(a => a.ServiceID === r.ServiceID);
+    });
+    if (!matched.length) {
+      throw new MidwayConsulError(
+        `no available service instance named ${serviceName}`
+      );
+    }
+    return this.selectRandomService(matched) as IServiceNode;
   }
 
   @Destroy()

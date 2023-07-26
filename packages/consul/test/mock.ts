@@ -24,16 +24,18 @@ export function mockConsulAPI() {
     .reply(200);
 
   // 查询服务
+  nockObj.persist().get('/v1/catalog/service/consul-demo').reply(200, services);
   nockObj
     .persist()
-    .get('/v1/agent/services/consul-demo%3A127.0.0.1%3A7001')
+    .get('/v1/catalog/service/consul-demo?dc=dc1')
     .reply(200, services);
-  nockObj.persist().get('/v1/agent/services').reply(200, agentService);
+  nockObj.persist().get('/v1/catalog/service').reply(200, agentService);
 
   // 健康检查
+  nockObj.persist().get('/v1/health/checks/consul-demo').reply(200, checks);
   nockObj
     .persist()
-    .get('/v1/health/checks/consul-demo%3A127.0.0.1%3A7001')
+    .get('/v1/health/checks/consul-demo?dc=dc1')
     .reply(200, checks);
   nockObj.persist().get('/v1/health/checks/noexists').reply(200, []);
 }

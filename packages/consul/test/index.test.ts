@@ -3,10 +3,15 @@ import { IMidwayApplication, MidwayError } from '@midwayjs/core';
 import { join } from 'path';
 import * as nock from 'nock';
 import { mockConsulAPI } from './mock';
-import { ConsulService, IService, MidwayConsulError } from '../src';
+import { ConsulService, IServiceNode, MidwayConsulError } from '../src';
+
+const serviceName = 'consul-demo';
 
 describe('/test/consule.test.with.mock', () => {
   describe('test service', () => {
+    const host = '127.0.0.1';
+    const port = 7001;
+    const serviceId = `${serviceName}:${host}:${port}`;
     let app: IMidwayApplication;
 
     beforeAll(async () => {
@@ -29,7 +34,7 @@ describe('/test/consule.test.with.mock', () => {
         .getApplicationContext()
         .getAsync(ConsulService);
       const result = consulSrv.serviceId;
-      expect(result).toBe('consul-demo:127.0.0.1:7001');
+      expect(result).toBe(serviceId);
     });
     it('should throw MidwayConsulError when service unavailable', async function () {
       const consulSrv = await app
@@ -46,27 +51,24 @@ describe('/test/consule.test.with.mock', () => {
       const consulSrv = await app
         .getApplicationContext()
         .getAsync(ConsulService);
-      const result = await consulSrv.select('consul-demo:127.0.0.1:7001');
-      expect(result.Port).toBe(7001);
-      expect(result.Address).toBe('127.0.0.1');
+      const result = await consulSrv.select(serviceName);
+      expect(result.ServicePort).toBe(port);
+      expect(result.ServiceAddress || result.Address).toBe(host);
     });
     it('should Select Service with datacenter', async function () {
       const consulSrv = await app
         .getApplicationContext()
         .getAsync(ConsulService);
-      const result = await consulSrv.select(
-        'consul-demo:127.0.0.1:7001',
-        'dc1'
-      );
-      expect(result.Port).toBe(7001);
-      expect(result.Address).toBe('127.0.0.1');
+      const result = await consulSrv.select(serviceName, {
+        dc: 'dc1',
+      });
+      expect(result.ServicePort).toBe(port);
+      expect(result.ServiceAddress || result.Address).toBe(host);
       try {
-        const result = await consulSrv.select(
-          'consul-demo:127.0.0.1:7001',
-          'dc2'
-        );
-        expect(result.Port).toBe(7001);
-        expect(result.Address).toBe('127.0.0.1');
+        await consulSrv.select(serviceName, {
+          dc: 'dc2',
+        });
+        expect(true).toBe(false);
       } catch (e) {
         expect(e).toBeInstanceOf(MidwayConsulError);
       }
@@ -74,6 +76,9 @@ describe('/test/consule.test.with.mock', () => {
   });
 });
 describe('/test/consule.test.with.true.env', () => {
+  const host = '192.168.101.114';
+  const port = 7001;
+  const serviceId = `${serviceName}:${host}:${port}`;
   describe('test service', () => {
     let app: IMidwayApplication;
     beforeAll(async () => {
@@ -96,7 +101,7 @@ describe('/test/consule.test.with.true.env', () => {
         .getApplicationContext()
         .getAsync(ConsulService);
       const result = consulSrv.serviceId;
-      expect(result).toBe('consul-demo:192.168.101.114:7001');
+      expect(result).toBe(serviceId);
     });
     it('should throw MidwayConsulError when service unavailable', async function () {
       const consulSrv = await app
@@ -114,18 +119,18 @@ describe('/test/consule.test.with.true.env', () => {
         .getApplicationContext()
         .getAsync(ConsulService);
 
-      const result: IService = await new Promise((resolve, reject) => {
+      const result: IServiceNode = await new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            const result = await consulSrv.select('consul-demo');
+            const result = await consulSrv.select(serviceName);
             resolve(result);
           } catch (e) {
             reject(e);
           }
         }, 5000);
       });
-      expect(result.Port).toBe(7001);
-      expect(result.Address).toBe('192.168.101.114');
+      expect(result.ServicePort).toBe(port);
+      expect(result.ServiceAddress || result.Address).toBe(host);
     });
     it('should Select Service with datacenter', async function () {
       const consulSrv = await app
@@ -136,14 +141,17 @@ describe('/test/consule.test.with.true.env', () => {
           setTimeout(async () => {
             let result = { pass: false, fail: false };
             try {
-              const res = await consulSrv.select('consul-demo', 'dc1');
+              const res = await consulSrv.select(serviceName, {
+                dc: 'dc1',
+              });
               result.pass =
-                res.Port === 7001 && res.Address === '192.168.101.114';
+                res.ServicePort === port &&
+                (res.ServiceAddress || res.Address) === host;
             } catch (e) {
               result.pass = false;
             }
             try {
-              await consulSrv.select('consul-demo', 'invalid');
+              await consulSrv.select(serviceName, { dc: 'invalid' });
               result.fail = false;
             } catch (e) {
               result.fail = true;
