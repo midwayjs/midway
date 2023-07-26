@@ -2,12 +2,13 @@ import { ConsulOptions } from 'consul';
 import * as Consul from 'consul';
 
 /**
- * consul configuration of midway
+ * consul configuration of midwayjs
  */
 export interface IConsulOptions {
   /**
    * The Consul Original Configuration
-   * @see {@link https://github.com/silas/node-consul#consuloptions|consuloptions}
+   *
+   * @see [consuloptions]{@link https://github.com/silas/node-consul#consuloptions}
    */
   options: ConsulOptions;
   /**
@@ -16,14 +17,16 @@ export interface IConsulOptions {
   deregister: boolean;
   /**
    * The Service Registers Original Configuration
-   * @see {@link https://github.com/silas/node-consul#consulagentserviceregisteroptions|consulagentserviceregisteroptions}
+   *
+   *@see [consul.agent.service.register.options]{@link https://github.com/silas/node-consul#consulagentserviceregisteroptions}
    */
   register: Consul.Agent.Service.RegisterOptions;
 }
 
 /**
  * service status information
- * @see {@link https://developer.hashicorp.com/consul/api-docs/health#sample-response-1| health-list-checks-for-service}
+ *
+ *@see [health-list-checks-for-service]{@link https://developer.hashicorp.com/consul/api-docs/health#sample-response-1}
  */
 export interface IServiceHealth {
   Node: string;
@@ -44,20 +47,21 @@ export interface IServiceHealth {
 
 /**
  * the service information
- * @see {@link {https://developer.hashicorp.com/consul/api-docs/agent/service#sample-response| agent-list-services}}
+ *
+ * @see [agent-list-services]{@link https://developer.hashicorp.com/consul/api-docs/agent/service#sample-response}
  */
 export interface IService {
   ID: string;
   Service: string;
   Tags: any[];
-  Meta: { [props: string]: any };
-  Port: number;
-  Address: string;
-  SocketPath: string;
   TaggedAddresses: {
     [keys: string]: { Address: string; Port: number };
   };
-  Weights: { Passing: number; Warning: number };
+  Meta: { [props: string]: any };
+  Namespace: string;
+  Port: number;
+  Address: string;
   EnableTagOverride: boolean;
   Datacenter: string;
+  Weights: { Passing: number; Warning: number };
 }

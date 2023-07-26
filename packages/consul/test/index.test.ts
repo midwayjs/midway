@@ -3,9 +3,9 @@ import { IMidwayApplication, MidwayError } from '@midwayjs/core';
 import { join } from 'path';
 import * as nock from 'nock';
 import { mockConsulAPI } from './mock';
-import { ConsulService } from '../src';
+import { ConsulService, IService } from '../src';
 
-describe('/test/consule.test.ts', () => {
+describe('/test/consule.test.with.mock', () => {
   describe('test service', () => {
     let app: IMidwayApplication;
 
@@ -51,11 +51,11 @@ describe('/test/consule.test.ts', () => {
       expect(result.Address).toBe('127.0.0.1');
     });
   });
-  describe('test kv', () => {
+});
+describe('/test/consule.test.with.true.env', () => {
+  describe('test service', () => {
     let app: IMidwayApplication;
-
     beforeAll(async () => {
-      mockConsulAPI();
       app = await createApp(join(__dirname, 'fixtures', 'base-app'), {});
     });
 
@@ -63,55 +63,47 @@ describe('/test/consule.test.ts', () => {
       await close(app);
       nock.cleanAll();
     });
-    it('should set KV value', async () => {
-      const consulSrv = await app
-        .getApplicationContext()
-        .getAsync(ConsulService);
-      const result = await consulSrv.kvSet('key1', 'key1_value');
-      expect(result).toBe(undefined);
+
+    it('should GET /health', async () => {
+      const result = await createHttpRequest(app).get('/health');
+      expect(result.status).toBe(200);
+      expect(result.text).toBe('success');
     });
-    it('should get KV value and values', async () => {
+    it('should Register service', async function () {
       const consulSrv = await app
         .getApplicationContext()
         .getAsync(ConsulService);
-      const result = await consulSrv.kvGet('key1');
-      expect(result[0].Value).toBe('key1_value');
-      const resultValue = await consulSrv.kvGetValue('key1');
-      expect(resultValue).toBe('key1_value');
-      try {
-        await consulSrv.kvGet('invalid key');
-        expect(true).toBe(false);
-      } catch (e) {
-        expect(e).toBeInstanceOf(MidwayError);
-      }
-      try {
-        await consulSrv.kvGetValue('invalid key');
-        expect(true).toBe(false);
-      } catch (e) {
-        expect(e).toBeInstanceOf(MidwayError);
-      }
+      const result = consulSrv.serviceId;
+      expect(result).toBe('consul-demo:192.168.101.114:7001');
     });
-    it('should delete key', async () => {
+    it('should throw MidwayConsulError when service unavailable', async function () {
       const consulSrv = await app
         .getApplicationContext()
         .getAsync(ConsulService);
-      const pass = await consulSrv.kvDelete('key1');
-      expect(pass).toBe(true);
       try {
-        await consulSrv.kvDelete('invalid key');
+        await consulSrv.select('noexists');
         expect(true).toBe(false);
       } catch (e) {
         expect(e).toBeInstanceOf(MidwayError);
       }
     });
-    it('should query key', async () => {
+    it('should Select Service', async function () {
       const consulSrv = await app
         .getApplicationContext()
         .getAsync(ConsulService);
-      const fail = await consulSrv.kvKeys('invalid');
-      expect(fail.length).toEqual(0);
-      const pass = await consulSrv.kvKeys('key1');
-      expect(pass.length).toEqual(2);
+
+      const result: IService = await new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          try {
+            const result = await consulSrv.select('consul-demo');
+            resolve(result);
+          } catch (e) {
+            reject(e);
+          }
+        }, 5000);
+      });
+      expect(result.Port).toBe(7001);
+      expect(result.Address).toBe('192.168.101.114');
     });
   });
 });

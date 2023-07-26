@@ -18,15 +18,6 @@ export class MidwayConsulError extends MidwayError {
   }
 }
 
-type IKvKey = {
-  LockIndex: number;
-  Key: string;
-  Flags: number;
-  Value: string;
-  CreateIndex: number;
-  ModifyIndex: number;
-};
-
 @Provide()
 @Autoload()
 @Singleton()
@@ -112,7 +103,7 @@ export class ConsulService {
     const iServices = Object.values(list);
     if (!iServices.length) {
       throw new MidwayConsulError(
-        `no available service instance named ${serviceName}`
+        `2no available service instance named ${serviceName}`
       );
     }
     const services = dc
@@ -132,70 +123,6 @@ export class ConsulService {
    */
   async select(serviceName: string, dc?: string) {
     return this.loadService(serviceName, dc);
-  }
-
-  async kvSet(
-    key: string,
-    value: string | Buffer,
-    options?: Consul.Kv.SetOptions
-  ): Promise<boolean> {
-    const opt = options || {};
-    return this.instance.kv.set({ ...opt, key, value });
-  }
-
-  async kvGet(key: string, options?: Consul.Kv.GetOptions): Promise<IKvKey> {
-    const opt = options || {};
-    try {
-      return await this.instance.kv.get({ ...opt, key });
-    } catch (e) {
-      throw new MidwayConsulError(e.message);
-    }
-  }
-
-  async kvGetValue(
-    key: string,
-    options?: Consul.Kv.GetOptions
-  ): Promise<string> {
-    const opt = options || {};
-    try {
-      const result: Array<IKvKey> = await this.instance.kv.get({
-        ...opt,
-        key,
-      });
-      if (!result?.length) return undefined;
-      return result[0].Value;
-    } catch (e) {
-      throw new MidwayConsulError(e.message);
-    }
-  }
-
-  async kvKeys(
-    key: string,
-    options?: Consul.Kv.KeysOptions
-  ): Promise<Array<string>> {
-    try {
-      const opt = options || {};
-      return await this.instance.kv.keys({ ...opt, key });
-    } catch (e) {
-      const { statusCode, statusMessage } = e.response;
-      if (statusCode === 404) {
-        return [];
-      }
-      throw new MidwayConsulError(e.message || statusMessage);
-    }
-  }
-
-  async kvDelete(
-    key: string,
-    options?: Consul.Kv.DeleteOptions
-  ): Promise<boolean> {
-    const opt = options || {};
-    try {
-      await this.instance.kv.delete({ ...opt, key });
-      return true;
-    } catch (e) {
-      throw new MidwayConsulError(e.message);
-    }
   }
 
   @Destroy()

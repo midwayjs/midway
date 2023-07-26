@@ -1,5 +1,5 @@
 import * as nock from 'nock';
-import { agentService, checks, kvKey1, services } from './fixtures/mock.data';
+import { agentService, checks, services } from './fixtures/mock.data';
 
 /**
  * 自定义实现 mock consul 相关的 http API
@@ -35,14 +35,4 @@ export function mockConsulAPI() {
     .get('/v1/health/checks/consul-demo%3A127.0.0.1%3A7001')
     .reply(200, checks);
   nockObj.persist().get('/v1/health/checks/noexists').reply(200, []);
-
-  // kv设置
-  nockObj.persist().put('/v1/kv/key1').reply(200);
-  nockObj.persist().delete('/v1/kv/key1').reply(200);
-  nockObj.persist().get('/v1/kv/key1').reply(200, [kvKey1]);
-  nockObj.persist().get('/v1/kv/invalid?keys=true').reply(404, []);
-  nockObj
-    .persist()
-    .get('/v1/kv/key1?keys=true')
-    .reply(200, ['key1/1', 'key1/2']);
 }
