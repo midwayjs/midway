@@ -89,21 +89,21 @@ export default {
     options: {
       host: '127.0.0.1',
       port: '8500',
-      defaults:{
-          token:'566e93b6-0740-54ff-3a3a-ecb3f5479859'
-      }
+      defaults: {
+        token: '566e93b6-0740-54ff-3a3a-ecb3f5479859',
+      },
     },
     //{可选},默认为true,会在应用停止时自动反注册
     deregister: true,
   },
 };
 ```
+
 其中:
->`options`与[node-consul-初始化参数](https://github.com/silas/node-consul#common-method-call-options) 保持一致;
+
+> `options` 与 [node-consul-实例初始化](https://github.com/silas/node-consul#common-method-call-options) 保持一致;
 >
->`register`与[node-consul-注册参数](https://github.com/silas/node-consul#consulagentserviceregisteroptions) 保持一致;
-
-
+> `register` 与 [node-consul-服务注册](https://github.com/silas/node-consul#consulagentserviceregisteroptions) 保持一致;
 
 打开我们 consul server 的 ui 地址，效果如下：
 
@@ -150,55 +150,53 @@ export class HomeController {
 输出的 [service 结构](https://developer.hashicorp.com/consul/api-docs/catalog#sample-response-3)：
 
 ```json
-[
-  {
-    "ID": "40e4a748-2192-161a-0510-9bf59fe950b5",
-    "Node": "t2.320",
-    "Address": "192.168.10.10",
-    "Datacenter": "dc1",
-    "TaggedAddresses": {
-      "lan": "192.168.10.10",
-      "wan": "10.0.10.10"
+{
+  "ID": "40e4a748-2192-161a-0510-9bf59fe950b5",
+  "Node": "t2.320",
+  "Address": "192.168.10.10",
+  "Datacenter": "dc1",
+  "TaggedAddresses": {
+    "lan": "192.168.10.10",
+    "wan": "10.0.10.10"
+  },
+  "NodeMeta": {
+    "somekey": "somevalue"
+  },
+  "CreateIndex": 51,
+  "ModifyIndex": 51,
+  "ServiceAddress": "172.17.0.3",
+  "ServiceEnableTagOverride": false,
+  "ServiceID": "32a2a47f7992:nodea:5000",
+  "ServiceName": "web",
+  "ServicePort": 5000,
+  "ServiceMeta": {
+    "web_meta_value": "baz"
+  },
+  "ServiceTaggedAddresses": {
+    "lan": {
+      "address": "172.17.0.3",
+      "port": 5000
     },
-    "NodeMeta": {
-      "somekey": "somevalue"
-    },
-    "CreateIndex": 51,
-    "ModifyIndex": 51,
-    "ServiceAddress": "172.17.0.3",
-    "ServiceEnableTagOverride": false,
-    "ServiceID": "32a2a47f7992:nodea:5000",
-    "ServiceName": "web",
-    "ServicePort": 5000,
-    "ServiceMeta": {
-      "web_meta_value": "baz"
-    },
-    "ServiceTaggedAddresses": {
-      "lan": {
-        "address": "172.17.0.3",
-        "port": 5000
-      },
-      "wan": {
-        "address": "198.18.0.1",
-        "port": 512
-      }
-    },
-    "ServiceTags": ["prod"],
-    "ServiceProxy": {
-      "DestinationServiceName": "",
-      "DestinationServiceID": "",
-      "LocalServiceAddress": "",
-      "LocalServicePort": 0,
-      "Config": null,
-      "Upstreams": null
-    },
-    "ServiceConnect": {
-      "Native": false,
-      "Proxy": null
-    },
-    "Namespace": "default"
-  }
-]
+    "wan": {
+      "address": "198.18.0.1",
+      "port": 512
+    }
+  },
+  "ServiceTags": ["prod"],
+  "ServiceProxy": {
+    "DestinationServiceName": "",
+    "DestinationServiceID": "",
+    "LocalServiceAddress": "",
+    "LocalServicePort": 0,
+    "Config": null,
+    "Upstreams": null
+  },
+  "ServiceConnect": {
+    "Native": false,
+    "Proxy": null
+  },
+  "Namespace": "default"
+}
 ```
 
 此时，我们只要通过 `ServiceAddress` 和 `ServicePort` 去连接服务 B,如果`ServiceAddress`为空则应该使用`Address`,比如做 http 请求。
@@ -312,8 +310,8 @@ import { ConsulService } from '@midwayjs/consul';
 @Provide()
 @Controller('/')
 export class HomeController {
-    @Inject()
-    consulSrv: ConsulService;
+  @Inject()
+  consulSrv: ConsulService;
 
   @Get('/222')
   async home2() {
