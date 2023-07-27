@@ -9,8 +9,8 @@ import {
 } from '../../../../src';
 import { IMidwayApplication } from '@midwayjs/core';
 import { Book } from './entity';
-import { EntityManager, EntityRepository, QueryOrder } from '@mikro-orm/core';
-import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/sqlite';
+import { MikroORM, IDatabaseDriver, Connection, QueryOrder } from '@mikro-orm/core';
 
 @Configuration({
   imports: [mikro],
@@ -39,9 +39,8 @@ export class ContainerConfiguration {
     expect(this.defaultDataSource).toBeDefined();
     expect(this.defaultDataSource).toEqual(this.namedDataSource);
 
-    const orm = this.mikroDataSourceManager.getDataSource('default');
-    const connection = orm.em.getConnection();
-    await (connection as any).loadFile(join(__dirname, '../sqlite-schema.sql'));
+    const connection = this.em.getConnection();
+    await connection.loadFile(join(__dirname, '../sqlite-schema.sql'));
 
     const book = this.bookRepository.create({
       title: 'b1',
