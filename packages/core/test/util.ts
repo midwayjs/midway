@@ -209,11 +209,15 @@ export async function createHttpServer(options?: {
       }
       response.statusCode = 200;
       let body;
-      if (req.method === 'POST') {
+      if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
         body = await getRawBody(req, {
           encoding: true,
         });
         body = JSON.parse(body);
+      } else if (req.method === 'DELETE') {
+        response.statusCode = 204;
+        response.end('No Content');
+        return
       }
       if (/javascript/.test(req.headers['content-type'])) {
         response.setHeader('content-type', 'text/javascript');
