@@ -1,21 +1,20 @@
-import {close, createApp, createHttpRequest} from '@midwayjs/mock';
-import {IMidwayApplication} from '@midwayjs/core';
-import {IConsulBalancer} from '../src';
-import { mockConsulAPI } from './mock';
-import * as Consul from 'consul';
+import { close, createApp, createHttpRequest } from '@midwayjs/mock';
+import { IMidwayApplication, MidwayError } from '@midwayjs/core';
 import { join } from 'path';
 import * as nock from 'nock';
+import { mockConsulAPI } from './mock';
+import { ConsulService, IServiceNode, MidwayConsulError } from '../src';
 
-describe('/test/feature.test.ts', () => {
+const serviceName = 'consul-demo';
 
-  describe('test new features', () => {
-
+describe('/test/consule.test.with.mock', () => {
+  describe('test service', () => {
+    const host = '127.0.0.1';
+    const port = 7001;
+    const serviceId = `${serviceName}:${host}:${port}`;
     let app: IMidwayApplication;
 
     beforeAll(async () => {
-      // 如果使用真实的 server (consul agent --dev) 测试打开下面一行
-      // 同时记得修改配置中的 consul.provide.host 参数
-      // app = await createApp('base-app', {}, '@midwayjs/koa');
       mockConsulAPI();
       app = await createApp(join(__dirname, 'fixtures', 'base-app'), {});
     });
@@ -25,69 +24,144 @@ describe('/test/feature.test.ts', () => {
       nock.cleanAll();
     });
 
-    it('should provide health check route', async () => {
-      const result = await createHttpRequest(app)
-        .get('/consul/health/self/check');
+    it('should GET /health', async () => {
+      const result = await createHttpRequest(app).get('/health');
       expect(result.status).toBe(200);
-      expect(JSON.parse(result.text).status).toBe('success');
+      expect(result.text).toBe('success');
     });
-
-    it('should get balancer from ioc container', async () => {
-      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
-      expect(balancerService).toBeDefined();
+    it('should Register service', async function () {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
+      const result = consulSrv.serviceId;
+      expect(result).toBe(serviceId);
     });
-
-    it('should throw error when not imeplements balancer', async () => {
-      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
+    it('should throw MidwayConsulError when service unavailable', async function () {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
       try {
-        await balancerService.getServiceBalancer('noexists');
+        await consulSrv.select('noexists');
+        expect(true).toBe(false);
       } catch (e) {
-        expect(e).toBeDefined();
+        expect(e).toBeInstanceOf(MidwayError);
       }
     });
-
-    it('should throw error when lookup not exist service', async () => {
-      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
+    it('should Select Service', async function () {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
+      const result = await consulSrv.select(serviceName);
+      expect(result.ServicePort).toBe(port);
+      expect(result.ServiceAddress || result.Address).toBe(host);
+    });
+    it('should Select Service with datacenter', async function () {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
+      const result = await consulSrv.select(serviceName, {
+        dc: 'dc1',
+      });
+      expect(result.ServicePort).toBe(port);
+      expect(result.ServiceAddress || result.Address).toBe(host);
       try {
-        await balancerService.getServiceBalancer().select('noexists');
+        await consulSrv.select(serviceName, {
+          dc: 'dc2',
+        });
+        expect(true).toBe(false);
       } catch (e) {
-        expect(e).toBeDefined();
+        expect(e).toBeInstanceOf(MidwayConsulError);
       }
     });
-
-    it('should lookup consul service by name', async () => {
-      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
-      const service = await balancerService.getServiceBalancer().select(app.getProjectName(), false);
-      expect(service['ServiceAddress']).toBe('127.0.0.1');
-      expect(service['ServicePort']).toBe(7001);
-    });
-
-    it('should lookup consul service which check-passing', async () => {
-      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
-      const service = await balancerService.getServiceBalancer().select(app.getProjectName());
-      expect(service['ServiceAddress']).toBe('127.0.0.1');
-      expect(service['ServicePort']).toBe(7001);
-    });
-
-    it('should lookup consul service by balancer which injected', async () => {
-      const result = await createHttpRequest(app)
-        .get(`/test/balancer/lookup/${app.getProjectName()}`);
-      expect(result.status).toBe(200);
-      const service = JSON.parse(result.text);
-      expect(service['ServiceAddress']).toBe('127.0.0.1');
-      expect(service['ServicePort']).toBe(7001);
-    });
-
-    it('should get the origin consul object', async () => {
-      try {
-        const consul = await app.getApplicationContext().getAsync<Consul.Consul>('consul:consul');
-        expect(consul).toBeDefined();
-        expect(consul).toBeInstanceOf(Consul);
-      } catch (e) {
-        expect(e).not.toBeInstanceOf(Error);
-      }
-    });
-
   });
+});
+describe('/test/consule.test.with.true.env', () => {
+  const host = '192.168.101.114';
+  const port = 7001;
+  const serviceId = `${serviceName}:${host}:${port}`;
+  describe('test service', () => {
+    let app: IMidwayApplication;
+    beforeAll(async () => {
+      process.env.MIDWAY_SERVER_ENV = 'online';
+      app = await createApp(join(__dirname, 'fixtures', 'base-app'), {});
+    });
 
+    afterAll(async () => {
+      await close(app);
+      nock.cleanAll();
+    });
+
+    it('should GET /health', async () => {
+      const result = await createHttpRequest(app).get('/health');
+      expect(result.status).toBe(200);
+      expect(result.text).toBe('success');
+    });
+    it('should Register service', async function () {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
+      const result = consulSrv.serviceId;
+      expect(result).toBe(serviceId);
+    });
+    it('should throw MidwayConsulError when service unavailable', async function () {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
+      try {
+        await consulSrv.select('noexists');
+        expect(true).toBe(false);
+      } catch (e) {
+        expect(e).toBeInstanceOf(MidwayError);
+      }
+    });
+    it('should Select Service', async function () {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
+
+      const result: IServiceNode = await new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          try {
+            const result = await consulSrv.select(serviceName);
+            resolve(result);
+          } catch (e) {
+            reject(e);
+          }
+        }, 5000);
+      });
+      expect(result.ServicePort).toBe(port);
+      expect(result.ServiceAddress || result.Address).toBe(host);
+    });
+    it('should Select Service with datacenter', async function () {
+      const consulSrv = await app
+        .getApplicationContext()
+        .getAsync(ConsulService);
+      const result: { pass: boolean; fail: boolean } = await new Promise(
+        resolve => {
+          setTimeout(async () => {
+            let result = { pass: false, fail: false };
+            try {
+              const res = await consulSrv.select(serviceName, {
+                dc: 'dc1',
+              });
+              result.pass =
+                res.ServicePort === port &&
+                (res.ServiceAddress || res.Address) === host;
+            } catch (e) {
+              result.pass = false;
+            }
+            try {
+              await consulSrv.select(serviceName, { dc: 'invalid' });
+              result.fail = false;
+            } catch (e) {
+              result.fail = true;
+            }
+            resolve(result);
+          }, 4000);
+        }
+      );
+      expect(result.pass).toBe(true);
+      expect(result.fail).toBe(true);
+    });
+  });
 });
