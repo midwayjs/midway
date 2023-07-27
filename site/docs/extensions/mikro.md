@@ -197,38 +197,52 @@ export default (appInfo) => {
 
 
 
-### 调用 Repository
+### 增删查改
 
-在业务代码中使用 `InjectRepository` 注入 `repository` 对象，执行数据库操作。
+在业务代码中，可以使用`InjectRepository`注入`Repository`对象执行简单的查询操作。其它的增删改操作可以通过配合`EntityManger`的`persist`和`flush`接口来实现，使用`InjectEntityManager`可以直接注入`EntityManager`对象，也可以通过`repository.getEntityManager()`获取。
+
+:::caution
+
+从5.7版本开始，MikroORM将原来`Repository`上`persist`和`flush`等接口标为*弃用*，并计划在v6版本中[彻底移除](https://github.com/mikro-orm/mikro-orm/discussions/3989)，建议直接调用`EntityManager`上的相关接口。
+
+:::
 
 ```typescript
 import { Book } from './entity';
 import { Provide } from '@midwayjs/core';
-import { InjectRepository } from '@midwayjs/mikro';
-import { EntityRepository, QueryOrder, wrap } from '@mikro-orm/core';
+import { InjectEntityManager, InjectRepository } from '@midwayjs/mikro';
+import { QueryOrder } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/mysql'; // 需要使用数据库驱动对应的类来执行操作
 
 @Provide()
-export class BookController {
+export class BookService {
 
   @InjectRepository(Book)
   bookRepository: EntityRepository<Book>;
 
-  async findBookAndQuery() {
-    const book = this.bookRepository.create({ title: 'b1', author: { name: 'a1', email: 'e1' } });
-    wrap(book.author, true).__initialized = true;
-    await this.bookRepository.persist(book).flush();
+  @InjectEntityManager()
+  em: EntityManager;
 
-    const findResult = await this.bookRepository.findAll({
+  async queryByRepo() {
+    // 使用Repository查询
+    const books = await this.bookRepository.findAll({
       populate: ['author'],
       orderBy: { title: QueryOrder.DESC },
       limit: 20,
     });
+    return books;
+  }
 
+  async createBook() {
+    const book = new Book({ title: 'b1', author: { name: 'a1', email: 'e1' } });
+    // 标记保存Book
+    this.em.persist(book);
+    // 执行所有变更
+    await this.em.flush();
+    return book;
   }
 }
 ```
-
-
 
 ## 高级功能
 
