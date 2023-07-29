@@ -5,13 +5,24 @@ import {
   Inject,
   MidwayDecoratorService,
 } from '@midwayjs/core';
-import * as DefaultConfig from './config/config.default';
 import { LeoricDataSourceManager } from './dataSourceManager';
 import { DATA_SOURCE_KEY, MODEL_KEY } from './decorator';
+import { ClassLikeBone } from './interface';
+
+function getModelName(model: string | ClassLikeBone): string {
+  if (typeof model === 'string') return model;
+  return model.name;
+}
 
 @Configuration({
   namespace: 'leoric',
-  importConfigs: [{ default: DefaultConfig }],
+  importConfigs: [
+    {
+      default: {
+        leoric: {},
+      },
+    },
+  ],
 })
 export class LeoricConfiguration {
   @Inject()
@@ -23,12 +34,15 @@ export class LeoricConfiguration {
   async init() {
     this.decoratorService.registerPropertyHandler(
       MODEL_KEY,
-      (propertyName, meta: { modelName?: string; connectionName?: string }) => {
+      (
+        propertyName,
+        meta: { modelName?: string | ClassLikeBone; connectionName?: string }
+      ) => {
         return this.dataSourceManager.getDataSource(
           meta.connectionName ||
             this.dataSourceManager.getDataSourceNameByModel(meta.modelName) ||
             this.dataSourceManager.getDefaultDataSourceName()
-        ).models[meta.modelName];
+        ).models[getModelName(meta.modelName)];
       }
     );
 

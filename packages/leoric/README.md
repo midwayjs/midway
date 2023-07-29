@@ -48,7 +48,7 @@ import User from '../model/user';
 
 @Controller('/api/users')
 export class UserController {
-  @InjectModel()
+  @InjectModel(User)
   User: typeof User;
 
   @Get('/')

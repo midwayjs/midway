@@ -4,19 +4,18 @@ import { InjectModel } from '../../../../../src';
 
 @Provide()
 export class UserService {
-  @InjectModel()
+  @InjectModel(User)
   User: typeof User;
 
   async list() {
-    const result = await this.User.find();
-    return result;
+    return this.User.find();
   }
 
   async add(options) {
-    return await this.User.create(options);
+    return this.User.create(options);
   }
 
   async delete() {
-    return await this.User.remove({});
+    return this.User.remove({});
   }
 }

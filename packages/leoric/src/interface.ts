@@ -1,4 +1,6 @@
 import { DataSourceManagerConfigOption } from '@midwayjs/core';
-import { ConnectOptions } from 'leoric';
+import { Bone, ConnectOptions } from 'leoric';
 
 export type LeoricConfigOption = DataSourceManagerConfigOption<ConnectOptions, 'models'>;
+
+export type ClassLikeBone = new (...args) => Bone;
