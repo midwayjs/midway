@@ -7,7 +7,7 @@ import {
   IMidwayFramework,
   MidwayFrameworkService,
   MidwayFrameworkType,
-  safeRequire,
+  loadModule,
   MidwayContainer,
   MidwayCommonError,
   MidwayApplicationManager,
@@ -55,6 +55,16 @@ function formatPath(baseDir, p) {
   }
 }
 
+function getCurrentFileDir(loadMode: 'commonjs' | 'esm') {
+  if (loadMode === 'commonjs') {
+    return __dirname;
+  } else {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return new URL(import.meta.url).pathname;
+  }
+}
+
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
@@ -89,12 +99,6 @@ export async function create<
     clearAllLoggers();
 
     options = options || ({} as any);
-    if (options.baseDir) {
-      safeRequire(join(`${options.baseDir}`, 'interface'));
-    } else if (appDir) {
-      options.baseDir = `${appDir}/src`;
-      safeRequire(join(`${options.baseDir}`, 'interface'));
-    }
 
     if (options.entryFile) {
       // start from entry file, like bootstrap.js
@@ -121,8 +125,33 @@ export async function create<
       return;
     }
 
+    if (!options.fileLoadType) {
+      const pkgJSON = await loadModule(join(appDir, 'package.json'), {
+        safeLoad: true,
+        enableCache: false,
+      });
+
+      options.fileLoadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+    }
+
+    if (options.baseDir) {
+      await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
+        safeLoad: true,
+        loadMode: options.fileLoadMode,
+      });
+    } else if (appDir) {
+      options.baseDir = `${appDir}/src`;
+      await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
+        safeLoad: true,
+        loadMode: options.fileLoadMode,
+      });
+    }
+
     if (!options.imports && customFramework) {
-      options.imports = transformFrameworkToConfiguration(customFramework);
+      options.imports = await transformFrameworkToConfiguration(
+        customFramework,
+        options.fileLoadType
+      );
     }
 
     if (customFramework?.['Configuration']) {
@@ -131,18 +160,19 @@ export async function create<
     }
 
     if (options.ssl) {
+      const currentFileDir = getCurrentFileDir(options.fileLoadMode);
       const sslConfig = {
         koa: {
-          key: join(__dirname, '../ssl/ssl.key'),
-          cert: join(__dirname, '../ssl/ssl.pem'),
+          key: join(currentFileDir, '../ssl/ssl.key'),
+          cert: join(currentFileDir, '../ssl/ssl.pem'),
         },
         egg: {
-          key: join(__dirname, '../ssl/ssl.key'),
-          cert: join(__dirname, '../ssl/ssl.pem'),
+          key: join(currentFileDir, '../ssl/ssl.key'),
+          cert: join(currentFileDir, '../ssl/ssl.pem'),
         },
         express: {
-          key: join(__dirname, '../ssl/ssl.key'),
-          cert: join(__dirname, '../ssl/ssl.pem'),
+          key: join(currentFileDir, '../ssl/ssl.key'),
+          cert: join(currentFileDir, '../ssl/ssl.pem'),
         },
       };
       options.globalConfig = mergeGlobalConfig(options.globalConfig, sslConfig);
@@ -183,13 +213,14 @@ export async function create<
       ...options,
       appDir,
       asyncContextManager: createContextManager(),
-      imports: []
-        .concat(options.imports)
-        .concat(
-          options.baseDir
-            ? safeRequire(join(options.baseDir, 'configuration'))
-            : []
-        ),
+      imports: [].concat(options.imports).concat(
+        options.baseDir
+          ? await loadModule(join(options.baseDir, 'configuration.ts'), {
+              safeLoad: true,
+              loadMode: options.fileLoadMode,
+            })
+          : []
+      ),
     });
 
     if (customFramework) {
@@ -296,7 +327,7 @@ export async function createFunctionApp<
       const doc = yaml.load(readFileSync(join(baseDir, 'f.yml'), 'utf8'));
       starterName = doc?.['provider']?.['starter'];
       if (starterName) {
-        const m = safeRequire(starterName);
+        const m = await loadModule(starterName);
         if (m && m['BootstrapStarter']) {
           options.starter = new m['BootstrapStarter']();
         }
@@ -332,12 +363,25 @@ export async function createFunctionApp<
 
     clearAllLoggers();
 
+    const pkgJSON = await loadModule(join(options.appDir, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+
+    options.fileLoadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+
     options = options || ({} as any);
     if (options.baseDir) {
-      safeRequire(join(`${options.baseDir}`, 'interface'));
+      await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
+        safeLoad: true,
+        loadMode: options.fileLoadMode,
+      });
     } else if (options.appDir) {
       options.baseDir = `${options.appDir}/src`;
-      safeRequire(join(`${options.baseDir}`, 'interface'));
+      await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
+        safeLoad: true,
+        loadMode: options.fileLoadMode,
+      });
     }
 
     // new mode
@@ -475,10 +519,14 @@ export async function createFunctionApp<
       await new Promise<void>(resolve => {
         let server: http.Server | https.Server;
         if (options.ssl) {
+          const currentFileDir = getCurrentFileDir(options.fileLoadMode);
           server = require('https').createServer(
             {
-              key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
-              cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+              key: readFileSync(join(currentFileDir, '../ssl/ssl.key'), 'utf8'),
+              cert: readFileSync(
+                join(currentFileDir, '../ssl/ssl.pem'),
+                'utf8'
+              ),
             },
             app.callback2()
           );
@@ -500,7 +548,10 @@ export async function createFunctionApp<
         '@ali/serverless-app',
         '@midwayjs/serverless-app',
       ]);
-    const serverlessModule = transformFrameworkToConfiguration(customFramework);
+    const serverlessModule = await transformFrameworkToConfiguration(
+      customFramework,
+      options.fileLoadType
+    );
     if (serverlessModule) {
       if (options && options.imports) {
         options.imports.unshift(serverlessModule);
@@ -541,6 +592,7 @@ class LightFramework extends BaseFramework<any, any, any, any, any> {
 }
 
 class BootstrapAppStarter implements IBootstrapAppStarter {
+  constructor(protected options: MockBootstrapOptions) {}
   getApp(type: MidwayFrameworkType | string): IMidwayApplication<any> {
     const applicationContext = getCurrentApplicationContext();
     const applicationManager = applicationContext.get(MidwayApplicationManager);
@@ -553,7 +605,10 @@ class BootstrapAppStarter implements IBootstrapAppStarter {
     } = {}
   ) {
     // eslint-disable-next-line node/no-extraneous-require
-    const BootstrapModule = safeRequire('@midwayjs/bootstrap');
+    const BootstrapModule = await loadModule('@midwayjs/bootstrap', {
+      loadMode: this.options.fileLoadMode,
+      safeLoad: true,
+    });
     if (BootstrapModule?.Bootstrap) {
       await BootstrapModule.Bootstrap.stop();
     }
@@ -586,11 +641,25 @@ export async function createLightApp(
     },
     options.globalConfig ?? {}
   );
+
+  if (!options.fileLoadType) {
+    const cwd = process.cwd();
+    const pkgJSON = await loadModule(join(cwd, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+
+    options.fileLoadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+  }
+
   return createApp(baseDir, {
     ...options,
-    imports: [transformFrameworkToConfiguration(LightFramework)].concat(
-      options?.imports
-    ),
+    imports: [
+      await transformFrameworkToConfiguration(
+        LightFramework,
+        options.fileLoadType
+      ),
+    ].concat(options?.imports),
   });
 }
 
@@ -598,13 +667,16 @@ export async function createBootstrap(
   entryFile: string,
   options: MockBootstrapOptions = {}
 ): Promise<IBootstrapAppStarter> {
+  const cwd = process.cwd();
   if (!options.bootstrapMode) {
-    options.bootstrapMode = safeRequire('@midwayjs/faas') ? 'faas' : 'app';
+    options.bootstrapMode = existsSync(join(cwd, 'node_modules/@midwayjs/faas'))
+      ? 'faas'
+      : 'app';
   }
 
   if (options.bootstrapMode === 'faas') {
     options.entryFile = entryFile;
-    const app = await createFunctionApp(process.cwd(), options);
+    const app = await createFunctionApp(cwd, options);
     return {
       close: async () => {
         return close(app);
@@ -614,6 +686,6 @@ export async function createBootstrap(
     await create(undefined, {
       entryFile,
     });
-    return new BootstrapAppStarter();
+    return new BootstrapAppStarter(options);
   }
 }

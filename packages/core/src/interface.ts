@@ -1020,6 +1020,7 @@ export interface IMidwayBootstrapOptions {
    */
   configurationModule?: any | any[];
   imports?: any | any[];
+  fileLoadType?: 'esm' | 'commonjs';
   moduleDetector?: IFileDetector | false;
   logger?: boolean | ILogger;
   /**

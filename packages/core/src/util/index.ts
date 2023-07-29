@@ -79,7 +79,14 @@ export const loadModule = async (
       if (options.loadMode === 'commonjs') {
         return require(p);
       } else {
-        return await import(p);
+        // if json file, import need add options
+        if (p.endsWith('.json')) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return (await import(p, { assert: { type: 'json' } })).default;
+        } else {
+          return await import(p);
+        }
       }
     } else {
       const content = readFileSync(p, {
@@ -504,6 +511,15 @@ export function toAsyncFunction<T extends (...args) => any>(
   }
 }
 
+export function isTypeScriptEnvironment() {
+  const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
+  if ('false' === TS_MODE_PROCESS_FLAG) {
+    return false;
+  }
+  // eslint-disable-next-line node/no-deprecated-api
+  return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
+}
+
 export const Utils = {
   sleep,
   getParamNames,
@@ -514,4 +530,5 @@ export const Utils = {
   toAsyncFunction,
   safeStringify,
   safeParse,
+  isTypeScriptEnvironment,
 };

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "baseUrl": "./",
+    "esModuleInterop": true
+  },
+  "include": [
+    "*.mts",
+  ],
+  "ts-node": {
+    "esm": true,
+  }
+}

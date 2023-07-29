@@ -8,6 +8,7 @@ import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { getProviderName } from '../decorator';
+import { loadModule } from '../util';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
@@ -157,7 +158,9 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
       };
 
       for (const file of fileResults) {
-        const exports = await import(file);
+        const exports = await loadModule(file, {
+          loadMode: 'esm',
+        });
         // add module to set
         container.bindClass(exports, {
           namespace: this.options.namespace,

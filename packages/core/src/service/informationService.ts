@@ -3,7 +3,7 @@ import {
   getCurrentEnvironment,
   getUserHome,
   isDevelopmentEnvironment,
-  safeRequire,
+  loadModule,
 } from '../util';
 import { dirname, join } from 'path';
 import { Provide, Inject, Init, Scope } from '../decorator';
@@ -20,12 +20,15 @@ export class MidwayInformationService implements IInformationService {
   protected baseDir: string;
 
   @Init()
-  protected init() {
+  protected async init() {
     if (this.baseDir) {
       if (!this.appDir) {
         this.appDir = dirname(this.baseDir);
       }
-      this.pkg = safeRequire(join(this.appDir, 'package.json')) || {};
+      this.pkg =
+        (await loadModule(join(this.appDir, 'package.json'), {
+          safeLoad: true,
+        })) || {};
     } else {
       this.pkg = {};
     }

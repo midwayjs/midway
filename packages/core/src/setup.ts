@@ -14,10 +14,11 @@ import {
   MidwayApplicationManager,
   MidwayMockService,
   MidwayWebRouterService,
-  loadModule,
   ESModuleFileDetector,
   CommonJSFileDetector,
+  loadModule,
   safeRequire,
+  isTypeScriptEnvironment,
 } from './';
 import defaultConfig from './config/config.default';
 import {
@@ -144,33 +145,38 @@ export async function prepareGlobalApplicationContext(
 
   debug('[core]: set default file detector');
 
+  if (!globalOptions.fileLoadType) {
+    globalOptions.fileLoadType = 'commonjs';
+  }
+
   // set module detector
   if (globalOptions.moduleDetector !== false) {
-    const pkgJSON = await loadModule(join(appDir, 'package.json'), {
-      safeLoad: true,
-      enableCache: false,
-    });
-
-    const loadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
-    debug('[core]: module load mode = %s', loadMode);
+    debug('[core]: set file load mode = %s', globalOptions.fileLoadType);
 
     // set default entry file
     if (!globalOptions.imports) {
       globalOptions.imports = [
-        await loadModule(join(baseDir, 'configuration'), {
-          loadMode,
-          safeLoad: true,
-        }),
+        await loadModule(
+          join(
+            baseDir,
+            `configuration${isTypeScriptEnvironment() ? '.ts' : '.js'}`
+          ),
+          {
+            loadMode: globalOptions.fileLoadType,
+            safeLoad: true,
+          }
+        ),
       ];
     }
     if (globalOptions.moduleDetector === undefined) {
-      if (loadMode === 'esm') {
+      if (globalOptions.fileLoadType === 'esm') {
         applicationContext.setFileDetector(
           new ESModuleFileDetector({
             loadDir: baseDir,
             ignore: globalOptions.ignore ?? [],
           })
         );
+        globalOptions.fileLoadType = 'esm';
       } else {
         applicationContext.setFileDetector(
           new CommonJSFileDetector({

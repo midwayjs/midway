@@ -1,6 +1,8 @@
-import { prepareGlobalApplicationContextSync } from '@midwayjs/core';
+import {
+  prepareGlobalApplicationContextSync,
+  isTypeScriptEnvironment,
+} from '@midwayjs/core';
 import { join } from 'path';
-import { isTypeScriptEnvironment } from './utils';
 import { debuglog } from 'util';
 const debug = debuglog('midway:debug');
 

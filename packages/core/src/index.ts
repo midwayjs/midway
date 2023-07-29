@@ -70,6 +70,7 @@ export {
   pathMatching,
   wrapMiddleware,
   wrapAsync,
+  isTypeScriptEnvironment,
 } from './util/';
 export { extend } from './util/extend';
 export * from './util/webRouterParam';

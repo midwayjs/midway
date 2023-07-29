@@ -3,7 +3,7 @@ import {
   IMidwayApplication,
   IMidwayContext,
   NextFunction,
-  safeRequire,
+  loadModule,
   Config,
   Init,
   Inject,
@@ -32,7 +32,9 @@ export class SwaggerMiddleware
 
   @Init()
   async init() {
-    const { getAbsoluteFSPath } = safeRequire('swagger-ui-dist');
+    const { getAbsoluteFSPath } = await loadModule('swagger-ui-dist', {
+      safeLoad: true,
+    });
     if (getAbsoluteFSPath) {
       this.swaggerUiAssetPath = getAbsoluteFSPath();
     }
