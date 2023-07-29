@@ -16,8 +16,9 @@ For example:
 
 ```typescript
 import { Application, Context } from '@midwayjs/koa';
-import { Application, Context } from '@midwayjs/express';
+import { Application, Context } from '@midwayjs/faas';
 import { Application, Context } from '@midwayjs/web';
+import { Application, Context } from '@midwayjs/express';
 ```
 
 And non-Web framework, we have also maintained the same.
@@ -298,7 +299,45 @@ export class HomeController {
 
   @Get('/')
   async home() {
-    // this.ctx.query
+    // ...
+  }
+}
+```
+
+Since `ctx` is a framework built-in ctx instance keyword, if you want to use a different attribute name, you can also modify the decorator parameters.
+
+```typescript
+import { Inject, Controller, Get } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
+
+@Controller('/')
+export class HomeController {
+
+  @Inject('ctx')
+  customContextName: Context;
+
+  @Get('/')
+  async home() {
+    // ...
+  }
+}
+```
+
+If a service can be called by multiple upper-level frameworks, since the ctx types provided by different frameworks are different, it can be solved by type combination.
+
+```typescript
+import { Inject, Controller, Get } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
+import { Context as BullContext } from '@midwayjs/bull';
+
+@Provide()
+export class UserService {
+
+  @Inject()
+  ctx: Context & BullContext;
+
+  async getUser() {
+    // ...
   }
 }
 ```

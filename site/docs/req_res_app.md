@@ -16,8 +16,9 @@ Midway 的应用会同时对外暴露不同协议，比如 Http，WebSocket 等�
 
 ```typescript
 import { Application, Context } from '@midwayjs/koa';
-import { Application, Context } from '@midwayjs/express';
+import { Application, Context } from '@midwayjs/faas';
 import { Application, Context } from '@midwayjs/web';
+import { Application, Context } from '@midwayjs/express';
 ```
 
 且非 Web 框架，我们也保持了一致。
@@ -300,10 +301,50 @@ export class HomeController {
 
   @Get('/')
   async home() {
-    // this.ctx.query
+    // ...
   }
 }
 ```
+
+由于 `ctx` 是一个框架内置 ctx 实例关键字，如果你希望用不同的属性名，也可以通过修改装饰器参数。
+
+```typescript
+import { Inject, Controller, Get } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
+
+@Controller('/')
+export class HomeController {
+
+  @Inject('ctx')
+  customContextName: Context;
+
+  @Get('/')
+  async home() {
+    // ...
+  }
+}
+```
+
+如果一个服务可以被多个上层框架调用，由于不同框架提供的  ctx 类型不同，可以通过类型组合来解决。
+
+```typescript
+import { Inject, Controller, Get } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
+import { Context as BullContext } from '@midwayjs/bull';
+
+@Provide()
+export class UserService {
+
+  @Inject()
+  ctx: Context & BullContext;
+
+  async getUser() {
+    // ...
+  }
+}
+```
+
+
 
 除了显式声明外，在拦截器或者装饰器设计的时候，由于我们无法得知用户是否写了 ctx 属性，还可以通过内置的 `REQUEST_OBJ_CTX_KEY` 字段来获取。
 
