@@ -10,6 +10,6 @@ module.exports = {
         warnOnly: true
       }
     }
-  }
+  },
   coverageProvider: 'v8',
 };
