@@ -58,6 +58,7 @@ exports[`/test/parser.test.ts should fix issue#2286 with array example 1`] = `
     "/api/update_user": {
       "post": {
         "description": undefined,
+        "operationId": "catcontroller_updateuser",
         "parameters": [],
         "responses": {
           "200": {
@@ -299,6 +300,7 @@ exports[`/test/parser.test.ts should test ref path generate 1`] = `
     "/api/update_user": {
       "post": {
         "description": undefined,
+        "operationId": "apicontroller_updateuser",
         "parameters": [],
         "responses": {
           "200": {
@@ -358,6 +360,7 @@ exports[`/test/parser.test.ts should test simple case with example 1`] = `
     "/api/update_user": {
       "post": {
         "description": undefined,
+        "operationId": "catcontroller_updateuser",
         "parameters": [],
         "responses": {
           "200": {

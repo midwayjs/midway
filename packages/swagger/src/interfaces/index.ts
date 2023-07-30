@@ -3,6 +3,8 @@
  * @see https://github.com/OAI/OpenAPI-Specification/blob/3.0.0-rc0/versions/3.0.md
  */
 
+import type { RouterOption } from '@midwayjs/core';
+
 export interface OpenAPIObject {
   openapi: string;
   info: InfoObject;
@@ -411,5 +413,15 @@ export interface SwaggerOptions {
     showCommonExtensions?: boolean;
     useUnsafeMarkdown?: boolean;
     tryItOutEnabled?: boolean;
+  };
+  documentOptions?: {
+    /**
+     * 自定义 operationIdFactory，用于生成 operationId
+     * @default () => controllerKey_webRouter.methodKey
+     */
+    operationIdFactory?: (
+      controllerKey: string,
+      webRouter: RouterOption
+    ) => string;
   };
 }
