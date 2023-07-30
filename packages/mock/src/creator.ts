@@ -121,19 +121,19 @@ export async function create<
         enableCache: false,
       });
 
-      options.fileLoadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+      options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
     }
 
     if (options.baseDir) {
       await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
         safeLoad: true,
-        loadMode: options.fileLoadMode,
+        loadMode: options.moduleLoadType,
       });
     } else if (appDir) {
       options.baseDir = `${appDir}/src`;
       await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
         safeLoad: true,
-        loadMode: options.fileLoadMode,
+        loadMode: options.moduleLoadType,
       });
     }
 
@@ -206,7 +206,7 @@ export async function create<
         options.baseDir
           ? await loadModule(join(options.baseDir, 'configuration.ts'), {
               safeLoad: true,
-              loadMode: options.fileLoadMode,
+              loadMode: options.moduleLoadType,
             })
           : []
       ),
@@ -357,19 +357,19 @@ export async function createFunctionApp<
       enableCache: false,
     });
 
-    options.fileLoadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+    options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
 
     options = options || ({} as any);
     if (options.baseDir) {
       await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
         safeLoad: true,
-        loadMode: options.fileLoadMode,
+        loadMode: options.moduleLoadType,
       });
     } else if (options.appDir) {
       options.baseDir = `${options.appDir}/src`;
       await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
         safeLoad: true,
-        loadMode: options.fileLoadMode,
+        loadMode: options.moduleLoadType,
       });
     }
 
@@ -591,7 +591,7 @@ class BootstrapAppStarter implements IBootstrapAppStarter {
   ) {
     // eslint-disable-next-line node/no-extraneous-require
     const BootstrapModule = await loadModule('@midwayjs/bootstrap', {
-      loadMode: this.options.fileLoadMode,
+      loadMode: this.options.moduleLoadType,
       safeLoad: true,
     });
     if (BootstrapModule?.Bootstrap) {
@@ -634,7 +634,7 @@ export async function createLightApp(
       enableCache: false,
     });
 
-    options.fileLoadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+    options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
   }
 
   return createApp(baseDir, {
