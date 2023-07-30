@@ -11,6 +11,7 @@ import {
   Scope,
   ScopeEnum,
   MidwayFrameworkType,
+  MidwayEnvironmentService,
 } from '@midwayjs/core';
 import { readFileSync } from 'fs';
 import { join, extname } from 'path';
@@ -30,10 +31,14 @@ export class SwaggerMiddleware
   @Inject()
   private swaggerExplorer: SwaggerExplorer;
 
+  @Inject()
+  environmentService: MidwayEnvironmentService;
+
   @Init()
   async init() {
     const { getAbsoluteFSPath } = await loadModule('swagger-ui-dist', {
       safeLoad: true,
+      loadMode: this.environmentService.getModuleLoadType(),
     });
     if (getAbsoluteFSPath) {
       this.swaggerUiAssetPath = getAbsoluteFSPath();

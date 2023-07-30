@@ -141,7 +141,7 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
   // set default entry file
   if (baseDir) {
     imports.unshift(
-      await loadModule(join(baseDir, 'configuration'), {
+      await loadModule(join(baseDir, 'configuration.ts'), {
         loadMode,
         safeLoad: true,
       }),
@@ -174,6 +174,7 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
     applicationContext: container,
     globalConfig,
     loggerFactory: new MidwayLoggerFactory(),
+    moduleLoadType: loadMode,
   });
 
   return container.getAsync(EmptyFramework as any);

@@ -751,8 +751,8 @@ export interface IInformationService {
 
 export interface IEnvironmentService {
   getCurrentEnvironment(): string;
-  setCurrentEnvironment(environment: string);
   isDevelopmentEnvironment(): boolean;
+  getModuleLoadType(): ModuleLoadType;
 }
 
 export enum MidwayProcessTypeEnum {
@@ -1009,6 +1009,8 @@ export type IMidwayApplication<
   FrameworkApplication = unknown
 > = IMidwayBaseApplication<T> & FrameworkApplication;
 
+export type ModuleLoadType = 'commonjs' | 'esm';
+
 export interface IMidwayBootstrapOptions {
   [customPropertyKey: string]: any;
   baseDir?: string;
@@ -1020,7 +1022,7 @@ export interface IMidwayBootstrapOptions {
    */
   configurationModule?: any | any[];
   imports?: any | any[];
-  fileLoadType?: 'esm' | 'commonjs';
+  moduleLoadType?: ModuleLoadType;
   moduleDetector?: IFileDetector | false;
   logger?: boolean | ILogger;
   /**

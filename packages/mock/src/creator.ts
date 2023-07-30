@@ -55,16 +55,6 @@ function formatPath(baseDir, p) {
   }
 }
 
-function getCurrentFileDir(loadMode: 'commonjs' | 'esm') {
-  if (loadMode === 'commonjs') {
-    return __dirname;
-  } else {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return new URL(import.meta.url).pathname;
-  }
-}
-
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
@@ -125,7 +115,7 @@ export async function create<
       return;
     }
 
-    if (!options.fileLoadType) {
+    if (!options.moduleLoadType) {
       const pkgJSON = await loadModule(join(appDir, 'package.json'), {
         safeLoad: true,
         enableCache: false,
@@ -150,7 +140,7 @@ export async function create<
     if (!options.imports && customFramework) {
       options.imports = await transformFrameworkToConfiguration(
         customFramework,
-        options.fileLoadType
+        options.moduleLoadType
       );
     }
 
@@ -160,19 +150,18 @@ export async function create<
     }
 
     if (options.ssl) {
-      const currentFileDir = getCurrentFileDir(options.fileLoadMode);
       const sslConfig = {
         koa: {
-          key: join(currentFileDir, '../ssl/ssl.key'),
-          cert: join(currentFileDir, '../ssl/ssl.pem'),
+          key: join(__dirname, '../ssl/ssl.key'),
+          cert: join(__dirname, '../ssl/ssl.pem'),
         },
         egg: {
-          key: join(currentFileDir, '../ssl/ssl.key'),
-          cert: join(currentFileDir, '../ssl/ssl.pem'),
+          key: join(__dirname, '../ssl/ssl.key'),
+          cert: join(__dirname, '../ssl/ssl.pem'),
         },
         express: {
-          key: join(currentFileDir, '../ssl/ssl.key'),
-          cert: join(currentFileDir, '../ssl/ssl.pem'),
+          key: join(__dirname, '../ssl/ssl.key'),
+          cert: join(__dirname, '../ssl/ssl.pem'),
         },
       };
       options.globalConfig = mergeGlobalConfig(options.globalConfig, sslConfig);
@@ -519,14 +508,10 @@ export async function createFunctionApp<
       await new Promise<void>(resolve => {
         let server: http.Server | https.Server;
         if (options.ssl) {
-          const currentFileDir = getCurrentFileDir(options.fileLoadMode);
           server = require('https').createServer(
             {
-              key: readFileSync(join(currentFileDir, '../ssl/ssl.key'), 'utf8'),
-              cert: readFileSync(
-                join(currentFileDir, '../ssl/ssl.pem'),
-                'utf8'
-              ),
+              key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
+              cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
             },
             app.callback2()
           );
@@ -550,7 +535,7 @@ export async function createFunctionApp<
       ]);
     const serverlessModule = await transformFrameworkToConfiguration(
       customFramework,
-      options.fileLoadType
+      options.moduleLoadType
     );
     if (serverlessModule) {
       if (options && options.imports) {
@@ -642,7 +627,7 @@ export async function createLightApp(
     options.globalConfig ?? {}
   );
 
-  if (!options.fileLoadType) {
+  if (!options.moduleLoadType) {
     const cwd = process.cwd();
     const pkgJSON = await loadModule(join(cwd, 'package.json'), {
       safeLoad: true,
@@ -657,7 +642,7 @@ export async function createLightApp(
     imports: [
       await transformFrameworkToConfiguration(
         LightFramework,
-        options.fileLoadType
+        options.moduleLoadType
       ),
     ].concat(options?.imports),
   });

@@ -145,13 +145,13 @@ export async function prepareGlobalApplicationContext(
 
   debug('[core]: set default file detector');
 
-  if (!globalOptions.fileLoadType) {
-    globalOptions.fileLoadType = 'commonjs';
+  if (!globalOptions.moduleLoadType) {
+    globalOptions.moduleLoadType = 'commonjs';
   }
 
   // set module detector
   if (globalOptions.moduleDetector !== false) {
-    debug('[core]: set file load mode = %s', globalOptions.fileLoadType);
+    debug('[core]: set module load type = %s', globalOptions.moduleLoadType);
 
     // set default entry file
     if (!globalOptions.imports) {
@@ -162,21 +162,21 @@ export async function prepareGlobalApplicationContext(
             `configuration${isTypeScriptEnvironment() ? '.ts' : '.js'}`
           ),
           {
-            loadMode: globalOptions.fileLoadType,
+            loadMode: globalOptions.moduleLoadType,
             safeLoad: true,
           }
         ),
       ];
     }
     if (globalOptions.moduleDetector === undefined) {
-      if (globalOptions.fileLoadType === 'esm') {
+      if (globalOptions.moduleLoadType === 'esm') {
         applicationContext.setFileDetector(
           new ESModuleFileDetector({
             loadDir: baseDir,
             ignore: globalOptions.ignore ?? [],
           })
         );
-        globalOptions.fileLoadType = 'esm';
+        globalOptions.moduleLoadType = 'esm';
       } else {
         applicationContext.setFileDetector(
           new CommonJSFileDetector({
@@ -334,6 +334,10 @@ export function prepareGlobalApplicationContextSync(
   printStepDebugInfo(
     'Init MidwayConfigService, MidwayAspectService and MidwayDecoratorService'
   );
+
+  // init default environment
+  const environmentService = applicationContext.get(MidwayEnvironmentService);
+  environmentService.setModuleLoadType(globalOptions.moduleLoadType);
 
   // init default config
   const configService = applicationContext.get(MidwayConfigService);
