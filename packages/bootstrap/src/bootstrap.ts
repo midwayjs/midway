@@ -47,13 +47,13 @@ export class BootstrapStarter {
       }
     }
 
-    if (!this.globalOptions.fileLoadMode) {
+    if (!this.globalOptions.moduleLoadType) {
       const pkgJSON = await loadModule(join(this.appDir, 'package.json'), {
         safeLoad: true,
         enableCache: false,
       });
 
-      this.globalOptions.fileLoadMode =
+      this.globalOptions.moduleLoadType =
         pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
     }
 
