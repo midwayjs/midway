@@ -96,9 +96,12 @@ export class CatsController {
     return null;
   }
 
-  @Post('/test2', { description: 'hello test2', summary: 'hello test2 summary' })
-  async upload2(@Files() f: any[]) {
-    return null;
+  @Post('/upload')
+  async upload2(@Files() files, @Fields() fields) {
+    return {
+      files,
+      fields
+    }
   }
 
   @Get('/test3', { description: 'hello test3', summary: 'hello test3 summary' })

@@ -395,7 +395,6 @@ export class SwaggerExplorer {
         }
         if (arg.metadata?.type === RouteParamTypes.FIELDS) {
           this.expandSchemaRef(p);
-
           p.contentType = BodyContentType.Multipart;
         }
 
@@ -415,8 +414,9 @@ export class SwaggerExplorer {
         } else {
           // 这里拼 schema properties 时肯定存在
           Object.assign(
+            {},
             opts[webRouter.requestMethod].requestBody.content[p.contentType]
-              .schema.properties,
+              .schema?.properties,
             p.schema.properties
           );
         }
@@ -512,12 +512,14 @@ export class SwaggerExplorer {
       delete p.schema['$ref'];
     }
 
-    const schema = this.documentBuilder.getSchema(schemaName);
-    const ss = JSON.parse(JSON.stringify(schema));
-    if (p.schema.properties) {
-      Object.assign(p.schema.properties, ss.properties);
-    } else {
-      p.schema = JSON.parse(JSON.stringify(schema));
+    if (schemaName) {
+      const schema = this.documentBuilder.getSchema(schemaName);
+      const ss = JSON.parse(JSON.stringify(schema));
+      if (p.schema.properties) {
+        Object.assign(p.schema.properties, ss.properties);
+      } else {
+        p.schema = JSON.parse(JSON.stringify(schema));
+      }
     }
     return p;
   }
