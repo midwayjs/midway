@@ -182,12 +182,11 @@ export class SwaggerExplorer {
       target
     );
 
-    let header = null;
-    const headers = metaForMethods.filter(
+    let headers = metaForMethods.filter(
       item => item.key === DECORATORS.API_HEADERS
     );
     if (headers.length > 0) {
-      header = headers[0].metadata;
+      headers = headers.map(item => item.metadata);
     }
 
     const security = metaForMethods.filter(
@@ -227,7 +226,7 @@ export class SwaggerExplorer {
           paths,
           metaForMethods,
           routerArgs,
-          header,
+          headers,
           target
         );
 
@@ -273,7 +272,7 @@ export class SwaggerExplorer {
     paths: Record<string, PathItemObject>,
     metaForMethods: any[],
     routerArgs: any[],
-    header: any,
+    headers: any,
     target: Type
   ) {
     const operMeta = metaForMethods.filter(
@@ -430,8 +429,8 @@ export class SwaggerExplorer {
       parameters.push(p);
     }
     // class header 需要使用 ApiHeader 装饰器
-    if (header) {
-      parameters.unshift(header);
+    if (headers) {
+      headers.forEach(header => parameters.unshift(header));
     }
 
     opts[webRouter.requestMethod].parameters = parameters;

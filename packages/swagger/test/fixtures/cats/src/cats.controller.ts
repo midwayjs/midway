@@ -41,6 +41,9 @@ import { OssMultipleUploadResponseDto } from './entities/test';
 @ApiHeader({
   name: 'x-test-one',
 })
+@ApiHeader({
+  name: 'x-test-another',
+})
 @ApiBasicAuth('bbb')
 @ApiBearerAuth('ttt')
 export class CatsController {
