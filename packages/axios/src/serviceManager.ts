@@ -57,6 +57,10 @@ export class HttpService implements AxiosHttpService {
   @Inject()
   private serviceFactory: HttpServiceFactory;
 
+  get defaults() {
+    return this.instance.defaults;
+  }
+
   get interceptors() {
     return this.instance.interceptors;
   }

@@ -2,9 +2,11 @@ import {
   AxiosRequestConfig,
   AxiosResponse,
   AxiosInterceptorManager,
+  AxiosDefaults,
 } from 'axios';
 
 export interface AxiosHttpService {
+  defaults: AxiosDefaults;
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>;
     response: AxiosInterceptorManager<AxiosResponse>;
