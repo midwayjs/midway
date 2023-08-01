@@ -10,38 +10,53 @@ export interface AxiosHttpService {
     response: AxiosInterceptorManager<AxiosResponse>;
   };
   getUri(config?: AxiosRequestConfig): string;
-  request<T = any, R = AxiosResponse<T>>(
-    config: AxiosRequestConfig
+  request<T = any, R = AxiosResponse<T>, D = any>(
+    config: AxiosRequestConfig<D>
   ): Promise<R>;
-  get<T = any, R = AxiosResponse<T>>(
+  get<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig<D>
   ): Promise<R>;
-  delete<T = any, R = AxiosResponse<T>>(
+  delete<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig<D>
   ): Promise<R>;
-  head<T = any, R = AxiosResponse<T>>(
+  head<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig<D>
   ): Promise<R>;
-  options<T = any, R = AxiosResponse<T>>(
+  options<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig<D>
   ): Promise<R>;
-  post<T = any, R = AxiosResponse<T>>(
+  post<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: AxiosRequestConfig
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R>;
-  put<T = any, R = AxiosResponse<T>>(
+  put<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: AxiosRequestConfig
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R>;
-  patch<T = any, R = AxiosResponse<T>>(
+  patch<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: AxiosRequestConfig
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  postForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  putForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R>;
+  patchForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R>;
 }

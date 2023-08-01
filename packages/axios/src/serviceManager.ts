@@ -1,5 +1,10 @@
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import * as axios from 'axios';
+import type {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  CreateAxiosDefaults,
+} from 'axios';
+import axios from 'axios';
 import {
   Config,
   Init,
@@ -33,10 +38,10 @@ export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
   }
 
   protected async createClient(
-    config: AxiosRequestConfig,
+    config: CreateAxiosDefaults,
     clientName: any
   ): Promise<AxiosInstance> {
-    return (axios as any).create(config);
+    return axios.create(config);
   }
 
   getName(): string {
@@ -70,61 +75,85 @@ export class HttpService implements AxiosHttpService {
     return this.instance.getUri(config);
   }
 
-  request<T = any, R = AxiosResponse<T>>(
-    config: AxiosRequestConfig
+  request<T = any, R = AxiosResponse<T>, D = any>(
+    config: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.instance.request(config);
   }
 
-  get<T = any, R = AxiosResponse<T>>(
+  get<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.instance.get(url, config);
   }
 
-  delete<T = any, R = AxiosResponse<T>>(
+  delete<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.instance.delete(url, config);
   }
 
-  head<T = any, R = AxiosResponse<T>>(
+  head<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.instance.head(url, config);
   }
 
-  options<T = any, R = AxiosResponse<T>>(
+  options<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.instance.options(url, config);
   }
 
-  post<T = any, R = AxiosResponse<T>>(
+  post<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: AxiosRequestConfig
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.instance.post(url, data, config);
   }
 
-  put<T = any, R = AxiosResponse<T>>(
+  put<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: AxiosRequestConfig
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.instance.put(url, data, config);
   }
 
-  patch<T = any, R = AxiosResponse<T>>(
+  patch<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    data?: any,
-    config?: AxiosRequestConfig
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.instance.patch(url, data, config);
+  }
+
+  postForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.postForm(url, data, config);
+  }
+
+  putForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.putForm(url, data, config);
+  }
+
+  patchForm<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.instance.patchForm(url, data, config);
   }
 }
