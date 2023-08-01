@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.11.17 (2023-08-01)
+
+#### :bug: Bug Fix
+* `http-proxy`
+  * [#3130](https://github.com/midwayjs/midway/pull/3130) fix(http-proxy): readableStream.pipe(res) and res.on('finish') ([@wakeGISer](https://github.com/wakeGISer))
+
+#### Committers: 1
+- Suel ([@wakeGISer](https://github.com/wakeGISer))
+
+
+
 ## v3.11.16 (2023-08-01)
 
 #### :bug: Bug Fix

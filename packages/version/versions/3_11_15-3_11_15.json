@@ -26,7 +26,10 @@
   "@midwayjs/express-session": "3.11.15",
   "@midwayjs/faas": "3.11.15",
   "@midwayjs/grpc": "3.11.15",
-  "@midwayjs/http-proxy": "3.11.15",
+  "@midwayjs/http-proxy": [
+    "3.11.15",
+    "3.11.17"
+  ],
   "@midwayjs/i18n": "3.11.15",
   "@midwayjs/info": "3.11.15",
   "@midwayjs/jwt": "3.11.15",
@@ -59,7 +62,8 @@
   "@midwayjs/validate": "3.11.15",
   "@midwayjs/version": [
     "3.11.15",
-    "3.11.16"
+    "3.11.16",
+    "3.11.17"
   ],
   "@midwayjs/view": "3.11.15",
   "@midwayjs/view-ejs": "3.11.15",
