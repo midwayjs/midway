@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.11.16 (2023-08-01)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3126](https://github.com/midwayjs/midway/pull/3126) fix: swagger @ApiHeader @ApiHeaders only read one header ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `swagger`
+  * [#3122](https://github.com/midwayjs/midway/pull/3122) feat: add swagger operationId ([@odex21](https://github.com/odex21))
+* `axios`
+  * [#3127](https://github.com/midwayjs/midway/pull/3127) feat: expose more APIs from axios ([@ghostoy](https://github.com/ghostoy))
+
+#### Committers: 3
+- Cong Liu ([@ghostoy](https://github.com/ghostoy))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@odex21](https://github.com/odex21)
+
+
+
 ## v3.11.15 (2023-07-16)
 
 #### :bug: Bug Fix
