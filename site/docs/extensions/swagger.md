@@ -710,6 +710,19 @@ export default {
 
 ```
 
+也可以加在路由方法上。
+
+```typescript
+// ...
+export class HomeController {
+  @ApiTags(['bbb'])
+  @Get('/')
+  async home(@Body() dto?: Photo): Promise<string> {
+    return 'Hello Midwayjs!';
+  }
+}
+```
+
 
 
 
@@ -980,7 +993,9 @@ export interface SwaggerOptions {
       controllerKey: string,
       webRouter: RouterOption
     ) => string;
-  };}
+  };
+}
+
 /**
  * 继承自 https://swagger.io/specification/#security-scheme-object
  */
