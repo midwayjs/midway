@@ -5,12 +5,25 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "https://midwayjs.org/en/changelog/v3.11.17",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a href=\"#-bug-fix\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>http-proxy</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3130\" target=\"_blank\" rel=\"noopener noreferrer\">#3130</a> fix(http-proxy): readableStream.pipe(res) and res.on('finish') (<a href=\"https://github.com/wakeGISer\" target=\"_blank\" rel=\"noopener noreferrer\">@wakeGISer</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a href=\"#committers-1\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Suel (<a href=\"https://github.com/wakeGISer\" target=\"_blank\" rel=\"noopener noreferrer\">@wakeGISer</a>)</li></ul>",
+            "url": "https://midwayjs.org/en/changelog/v3.11.17",
+            "title": "v3.11.17",
+            "summary": "Bug Fix",
+            "date_modified": "2023-08-01T20:00:00.000Z",
+            "author": {
+                "name": "Suel",
+                "url": "https://github.com/wakeGISer"
+            },
+            "tags": []
+        },
+        {
             "id": "https://midwayjs.org/en/changelog/v3.11.16",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a href=\"#-bug-fix\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>swagger</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3126\" target=\"_blank\" rel=\"noopener noreferrer\">#3126</a> fix: swagger @ApiHeader @ApiHeaders only read one header (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-polish\">💅 Polish<a href=\"#-polish\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>swagger</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3122\" target=\"_blank\" rel=\"noopener noreferrer\">#3122</a> feat: add swagger operationId (<a href=\"https://github.com/odex21\" target=\"_blank\" rel=\"noopener noreferrer\">@odex21</a>)</li></ul></li><li><code>axios</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3127\" target=\"_blank\" rel=\"noopener noreferrer\">#3127</a> feat: expose more APIs from axios (<a href=\"https://github.com/ghostoy\" target=\"_blank\" rel=\"noopener noreferrer\">@ghostoy</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-3\">Committers: 3<a href=\"#committers-3\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Cong Liu (<a href=\"https://github.com/ghostoy\" target=\"_blank\" rel=\"noopener noreferrer\">@ghostoy</a>)</li><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li><li><a href=\"https://github.com/odex21\" target=\"_blank\" rel=\"noopener noreferrer\">@odex21</a></li></ul>",
             "url": "https://midwayjs.org/en/changelog/v3.11.16",
             "title": "v3.11.16",
             "summary": "Bug Fix",
-            "date_modified": "2023-08-01T20:00:00.000Z",
+            "date_modified": "2023-08-01T19:00:00.000Z",
             "author": {
                 "name": "Harry Chen",
                 "url": "https://github.com/czy88840616"
