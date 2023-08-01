@@ -67,6 +67,7 @@ exports[`/test/index.test.ts should fix issue1976 1`] = `
   "paths": {
     "/cats/login": {
       "post": {
+        "operationId": "usercontroller_login",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -92,6 +93,7 @@ exports[`/test/index.test.ts should fix issue1976 1`] = `
     },
     "/cats/smsLogin": {
       "post": {
+        "operationId": "usercontroller_smslogin",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -170,6 +172,7 @@ exports[`/test/index.test.ts should fix issue2603 1`] = `
   "paths": {
     "/api/get_role": {
       "get": {
+        "operationId": "apicontroller_getrole",
         "parameters": [],
         "responses": {
           "default": {
@@ -190,6 +193,7 @@ exports[`/test/index.test.ts should fix issue2603 1`] = `
     },
     "/api/get_user": {
       "get": {
+        "operationId": "apicontroller_getuser",
         "parameters": [
           {
             "in": "query",
@@ -397,6 +401,7 @@ exports[`/test/index.test.ts test swagger should get swagger json 5`] = `
 exports[`/test/index.test.ts test swagger should get swagger json 6`] = `
 {
   "get": {
+    "operationId": "cats_findone",
     "parameters": [
       {
         "in": "header",
@@ -486,6 +491,7 @@ exports[`/test/index.test.ts test swagger should get swagger json 6`] = `
     },
   },
   "post": {
+    "operationId": "cats_create",
     "parameters": [
       {
         "in": "header",

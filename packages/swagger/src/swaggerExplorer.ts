@@ -38,6 +38,10 @@ export class SwaggerExplorer {
   private swaggerConfig: SwaggerOptions;
 
   private documentBuilder = new DocumentBuilder();
+  private operationIdFactory = (
+    controllerKey: string,
+    webRouter: RouterOption
+  ) => `${controllerKey.toLowerCase()}_${webRouter.method.toLocaleLowerCase()}`;
 
   @Init()
   async init() {
@@ -92,6 +96,12 @@ export class SwaggerExplorer {
         this.documentBuilder.addTag(t.name, t.description, t.externalDocs);
       }
     }
+
+    if (this.swaggerConfig?.documentOptions?.operationIdFactory) {
+      this.operationIdFactory =
+        this.swaggerConfig.documentOptions.operationIdFactory;
+    }
+
     // 设置 auth 类型
     if (Array.isArray(this.swaggerConfig?.auth)) {
       for (const a of this.swaggerConfig?.auth) {
@@ -292,7 +302,7 @@ export class SwaggerExplorer {
         operMeta?.metadata?.description,
         webRouter.description
       ),
-      // operationId: `${webRouter.requestMethod}_${(operMeta?.metadata?.operationId || webRouter.method)}`,
+      operationId: this.getOperationId(target.name, webRouter),
       tags: operMeta?.metadata?.tags || [],
     };
     /**
@@ -501,6 +511,10 @@ export class SwaggerExplorer {
     }
 
     paths[url] = opts;
+  }
+
+  getOperationId(controllerKey: string, webRouter: RouterOption) {
+    return this.operationIdFactory(controllerKey, webRouter);
   }
 
   private expandSchemaRef(p: any, name?: string) {
