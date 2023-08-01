@@ -406,6 +406,13 @@ exports[`/test/index.test.ts test swagger should get swagger json 6`] = `
         },
       },
       {
+        "in": "header",
+        "name": "x-test-another",
+        "schema": {
+          "type": "string",
+        },
+      },
+      {
         "allowEmptyValue": false,
         "explode": true,
         "in": "query",
@@ -483,6 +490,13 @@ exports[`/test/index.test.ts test swagger should get swagger json 6`] = `
       {
         "in": "header",
         "name": "x-test-one",
+        "schema": {
+          "type": "string",
+        },
+      },
+      {
+        "in": "header",
+        "name": "x-test-another",
         "schema": {
           "type": "string",
         },
