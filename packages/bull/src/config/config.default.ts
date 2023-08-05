@@ -11,7 +11,7 @@ export const bull = {
   contextLoggerApplyLogger: 'bullLogger',
   contextLoggerFormat: info => {
     const { jobId, from } = info.ctx;
-    return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}}] ${info.message}`;
+    return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}`;
   },
 };
 
