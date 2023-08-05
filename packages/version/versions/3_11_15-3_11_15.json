@@ -8,8 +8,14 @@
     "3.11.16"
   ],
   "@midwayjs/bootstrap": "3.11.15",
-  "@midwayjs/bull": "3.11.15",
-  "@midwayjs/bull-board": "3.11.15",
+  "@midwayjs/bull": [
+    "3.11.15",
+    "3.11.18"
+  ],
+  "@midwayjs/bull-board": [
+    "3.11.15",
+    "3.11.18"
+  ],
   "@midwayjs/cache": "3.11.15",
   "@midwayjs/captcha": "3.11.15",
   "@midwayjs/casbin": "3.11.15",
@@ -19,7 +25,10 @@
   "@midwayjs/consul": "3.11.15",
   "@midwayjs/core": "3.11.15",
   "@midwayjs/cos": "3.11.15",
-  "@midwayjs/cron": "3.11.15",
+  "@midwayjs/cron": [
+    "3.11.15",
+    "3.11.18"
+  ],
   "@midwayjs/cross-domain": "3.11.15",
   "@midwayjs/decorator": "3.11.15",
   "@midwayjs/etcd": "3.11.15",
@@ -34,10 +43,16 @@
   "@midwayjs/info": "3.11.15",
   "@midwayjs/jwt": "3.11.15",
   "@midwayjs/kafka": "3.11.15",
-  "@midwayjs/mikro": "3.11.15",
+  "@midwayjs/mikro": [
+    "3.11.15",
+    "3.11.18"
+  ],
   "@midwayjs/mock": "3.11.15",
   "@midwayjs/mongoose": "3.11.15",
-  "@midwayjs/oss": "3.11.15",
+  "@midwayjs/oss": [
+    "3.11.15",
+    "3.11.18"
+  ],
   "@midwayjs/otel": "3.11.15",
   "@midwayjs/passport": "3.11.15",
   "@midwayjs/process-agent": "3.11.15",
@@ -63,7 +78,8 @@
   "@midwayjs/version": [
     "3.11.15",
     "3.11.16",
-    "3.11.17"
+    "3.11.17",
+    "3.11.18"
   ],
   "@midwayjs/view": "3.11.15",
   "@midwayjs/view-ejs": "3.11.15",
