@@ -13,7 +13,7 @@
     "@midwayjs/core": "^3.11.15",
     "@midwayjs/koa": "^3.11.15",
     "@midwayjs/mock": "^3.11.15",
-    "@opentelemetry/sdk-node": "0.41.1"
+    "@opentelemetry/sdk-node": "0.41.2"
   },
   "dependencies": {
     "@opentelemetry/api": "1.4.1"
