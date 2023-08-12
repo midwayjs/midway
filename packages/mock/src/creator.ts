@@ -18,6 +18,7 @@ import {
   sleep,
   ObjectIdentifier,
   getProviderUUId,
+  isTypeScriptEnvironment,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers } from '@midwayjs/logger';
@@ -55,6 +56,10 @@ function formatPath(baseDir, p) {
   }
 }
 
+function getFileNameWithSuffix(fileName: string) {
+  return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
+}
+
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
@@ -62,13 +67,14 @@ export async function create<
   options: MockAppConfigurationOptions = {},
   customFramework?: { new (...args): T } | ComponentModule
 ): Promise<T> {
-  debug(`[mock]: Create app, appDir="${appDir}"`);
-  process.env.MIDWAY_TS_MODE = 'true';
+  process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
 
   if (typeof appDir === 'object') {
     options = appDir;
     appDir = options.appDir || '';
   }
+
+  debug(`[mock]: Create app, appDir="${appDir}"`);
 
   try {
     if (appDir) {
@@ -125,16 +131,22 @@ export async function create<
     }
 
     if (options.baseDir) {
-      await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
-        safeLoad: true,
-        loadMode: options.moduleLoadType,
-      });
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
     } else if (appDir) {
       options.baseDir = `${appDir}/src`;
-      await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
-        safeLoad: true,
-        loadMode: options.moduleLoadType,
-      });
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
     }
 
     if (!options.imports && customFramework) {
@@ -204,10 +216,13 @@ export async function create<
       asyncContextManager: createContextManager(),
       imports: [].concat(options.imports).concat(
         options.baseDir
-          ? await loadModule(join(options.baseDir, 'configuration.ts'), {
-              safeLoad: true,
-              loadMode: options.moduleLoadType,
-            })
+          ? await loadModule(
+              join(options.baseDir, getFileNameWithSuffix('configuration')),
+              {
+                safeLoad: true,
+                loadMode: options.moduleLoadType,
+              }
+            )
           : []
       ),
     });
@@ -221,7 +236,9 @@ export async function create<
         return mainFramework;
       } else {
         throw new Error(
-          'Can not get main framework, please check your configuration.ts.'
+          `Can not get main framework, please check your ${getFileNameWithSuffix(
+            'configuration'
+          )}.`
         );
       }
     }
@@ -292,6 +309,7 @@ export async function createFunctionApp<
   options: MockAppConfigurationOptions = {},
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
+  process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
   if (typeof baseDir === 'object') {
     options = baseDir;
     baseDir = options.appDir || '';
@@ -330,7 +348,6 @@ export async function createFunctionApp<
   if (options.starter) {
     options.appDir = baseDir;
     debug(`[mock]: Create app, appDir="${options.appDir}"`);
-    process.env.MIDWAY_TS_MODE = 'true';
 
     if (options.appDir) {
       // 处理测试的 fixtures
@@ -361,16 +378,22 @@ export async function createFunctionApp<
 
     options = options || ({} as any);
     if (options.baseDir) {
-      await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
-        safeLoad: true,
-        loadMode: options.moduleLoadType,
-      });
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
     } else if (options.appDir) {
       options.baseDir = `${options.appDir}/src`;
-      await loadModule(join(`${options.baseDir}`, 'interface.ts'), {
-        safeLoad: true,
-        loadMode: options.moduleLoadType,
-      });
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
     }
 
     // new mode
