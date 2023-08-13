@@ -9,45 +9,24 @@ import { Types } from '../util/types';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { debuglog } from 'util';
 import { loadModule } from '../util';
-import { ModuleLoadType } from '../interface';
+import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
 const debug = debuglog('midway:debug');
 
-export interface CreateDataSourceInstanceOptions {
-  /**
-   * @default false
-   */
-  validateConnection?: boolean;
-  /**
-   * @default true
-   */
-  cacheInstance?: boolean | undefined;
-}
-
-interface DataSourceConfig extends CreateDataSourceInstanceOptions {
-  dataSource: {
-    entities?: Array<string | unknown>;
-    [key: string]: unknown;
-  };
-}
-
-export abstract class DataSourceManager<T> {
+export abstract class DataSourceManager<
+  T,
+  ConnectionOpts extends Record<string, any> = Record<string, any>
+> {
   protected dataSource: Map<string, T> = new Map();
-  protected options: Partial<DataSourceConfig> = {};
+  protected options: DataSourceManagerConfigOption<ConnectionOpts> = {};
   protected modelMapping = new WeakMap();
   private innerDefaultDataSourceName: string;
 
   protected async initDataSource(
-    dataSourceConfig: {
-      dataSource: {
-        entities?: Array<string | unknown>;
-        [key: string]: unknown;
-      };
-      cacheInstance?: boolean;
-      validateConnection?: boolean;
-    },
-    appDirOrOptions:
+    dataSourceConfig: DataSourceManagerConfigOption<ConnectionOpts>,
+    baseDirOrOptions:
       | {
-          appDir: string;
+          baseDir: string;
+          entitiesConfigKey?: string;
         }
       | string
   ): Promise<void> {
@@ -58,21 +37,25 @@ export abstract class DataSourceManager<T> {
       );
     }
 
-    if (typeof appDirOrOptions === 'string') {
-      appDirOrOptions = {
-        appDir: appDirOrOptions,
+    if (typeof baseDirOrOptions === 'string') {
+      baseDirOrOptions = {
+        baseDir: baseDirOrOptions,
+        entitiesConfigKey: 'entities',
       };
     }
 
     for (const dataSourceName in dataSourceConfig.dataSource) {
       const dataSourceOptions = dataSourceConfig.dataSource[dataSourceName];
-      if (dataSourceOptions['entities']) {
+      const userEntities = dataSourceOptions[
+        baseDirOrOptions.entitiesConfigKey
+      ] as any[];
+      if (userEntities) {
         const entities = new Set();
         // loop entities and glob files to model
-        for (const entity of dataSourceOptions['entities']) {
+        for (const entity of userEntities) {
           if (typeof entity === 'string') {
             // string will be glob file
-            const models = await globModels(entity, appDirOrOptions.appDir);
+            const models = await globModels(entity, baseDirOrOptions.baseDir);
             for (const model of models) {
               entities.add(model);
               this.modelMapping.set(model, dataSourceName);
@@ -83,13 +66,16 @@ export abstract class DataSourceManager<T> {
             this.modelMapping.set(entity, dataSourceName);
           }
         }
-        dataSourceOptions['entities'] = Array.from(entities);
+        (dataSourceOptions[baseDirOrOptions.entitiesConfigKey] as any) =
+          Array.from(entities);
         debug(
-          `[core]: DataManager load ${dataSourceOptions['entities'].length} models from ${dataSourceName}.`
+          `[core]: DataManager load ${
+            dataSourceOptions[baseDirOrOptions.entitiesConfigKey].length
+          } models from ${dataSourceName}.`
         );
       }
       // create data source
-      const opts: CreateDataSourceInstanceOptions = {
+      const opts = {
         cacheInstance: dataSourceConfig.cacheInstance, // will default true
         validateConnection: dataSourceConfig.validateConnection,
       };
@@ -129,7 +115,10 @@ export abstract class DataSourceManager<T> {
   public async createInstance(
     config: any,
     clientName: any,
-    options?: CreateDataSourceInstanceOptions
+    options?: {
+      validateConnection?: boolean;
+      cacheInstance?: boolean | undefined;
+    }
   ): Promise<T | void> {
     const cache =
       options && typeof options.cacheInstance === 'boolean'

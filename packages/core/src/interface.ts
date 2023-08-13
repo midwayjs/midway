@@ -427,15 +427,26 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
   defaultClientName?: string;
 };
 
-export type DataSourceManagerConfigOption<OPTIONS> = {
+export type CreateDataSourceInstanceOptions = {
+  /**
+   * @default false
+   */
+  validateConnection?: boolean;
+  /**
+   * @default true
+   */
+  cacheInstance?: boolean | undefined;
+}
+
+export type DataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY extends string = 'entities'> = {
   default?: PowerPartial<OPTIONS>;
   defaultDataSourceName?: string;
   dataSource?: {
     [key: string]: PowerPartial<{
-      entities: any[],
+      [keyName in ENTITY_CONFIG_KEY]: any[];
     } & OPTIONS>;
   };
-};
+} & CreateDataSourceInstanceOptions;
 
 type ConfigType<T> = T extends (...args: any[]) => any
   ? Writable<PowerPartial<ReturnType<T>>>
