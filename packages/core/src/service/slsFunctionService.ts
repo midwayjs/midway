@@ -20,7 +20,7 @@ import {
   RouterPriority,
 } from './webRouterService';
 import { MidwayContainer } from '../context/container';
-import { DirectoryFileDetector } from '../common/fileDetector';
+import { CommonJSFileDetector } from '../common/fileDetector';
 import { getCurrentMainFramework } from '../util/contextUtil';
 import { FaaSMetadata, ScopeEnum } from '../interface';
 
@@ -267,7 +267,7 @@ export class WebRouterCollector {
         const container = new MidwayContainer();
         bindContainer(container);
         container.setFileDetector(
-          new DirectoryFileDetector({
+          new CommonJSFileDetector({
             loadDir: this.baseDir,
           })
         );

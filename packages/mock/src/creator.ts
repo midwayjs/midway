@@ -7,7 +7,7 @@ import {
   IMidwayFramework,
   MidwayFrameworkService,
   MidwayFrameworkType,
-  safeRequire,
+  loadModule,
   MidwayContainer,
   MidwayCommonError,
   MidwayApplicationManager,
@@ -18,6 +18,7 @@ import {
   sleep,
   ObjectIdentifier,
   getProviderUUId,
+  isTypeScriptEnvironment,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers } from '@midwayjs/logger';
@@ -55,6 +56,10 @@ function formatPath(baseDir, p) {
   }
 }
 
+function getFileNameWithSuffix(fileName: string) {
+  return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
+}
+
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
@@ -62,13 +67,14 @@ export async function create<
   options: MockAppConfigurationOptions = {},
   customFramework?: { new (...args): T } | ComponentModule
 ): Promise<T> {
-  debug(`[mock]: Create app, appDir="${appDir}"`);
-  process.env.MIDWAY_TS_MODE = 'true';
+  process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
 
   if (typeof appDir === 'object') {
     options = appDir;
     appDir = options.appDir || '';
   }
+
+  debug(`[mock]: Create app, appDir="${appDir}"`);
 
   try {
     if (appDir) {
@@ -89,12 +95,6 @@ export async function create<
     clearAllLoggers();
 
     options = options || ({} as any);
-    if (options.baseDir) {
-      safeRequire(join(`${options.baseDir}`, 'interface'));
-    } else if (appDir) {
-      options.baseDir = `${appDir}/src`;
-      safeRequire(join(`${options.baseDir}`, 'interface'));
-    }
 
     if (options.entryFile) {
       // start from entry file, like bootstrap.js
@@ -121,8 +121,39 @@ export async function create<
       return;
     }
 
+    if (!options.moduleLoadType) {
+      const pkgJSON = await loadModule(join(appDir, 'package.json'), {
+        safeLoad: true,
+        enableCache: false,
+      });
+
+      options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+    }
+
+    if (options.baseDir) {
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
+    } else if (appDir) {
+      options.baseDir = `${appDir}/src`;
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
+    }
+
     if (!options.imports && customFramework) {
-      options.imports = transformFrameworkToConfiguration(customFramework);
+      options.imports = await transformFrameworkToConfiguration(
+        customFramework,
+        options.moduleLoadType
+      );
     }
 
     if (customFramework?.['Configuration']) {
@@ -183,13 +214,17 @@ export async function create<
       ...options,
       appDir,
       asyncContextManager: createContextManager(),
-      imports: []
-        .concat(options.imports)
-        .concat(
-          options.baseDir
-            ? safeRequire(join(options.baseDir, 'configuration'))
-            : []
-        ),
+      imports: [].concat(options.imports).concat(
+        options.baseDir
+          ? await loadModule(
+              join(options.baseDir, getFileNameWithSuffix('configuration')),
+              {
+                safeLoad: true,
+                loadMode: options.moduleLoadType,
+              }
+            )
+          : []
+      ),
     });
 
     if (customFramework) {
@@ -201,7 +236,9 @@ export async function create<
         return mainFramework;
       } else {
         throw new Error(
-          'Can not get main framework, please check your configuration.ts.'
+          `Can not get main framework, please check your ${getFileNameWithSuffix(
+            'configuration'
+          )}.`
         );
       }
     }
@@ -272,6 +309,7 @@ export async function createFunctionApp<
   options: MockAppConfigurationOptions = {},
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
+  process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
   if (typeof baseDir === 'object') {
     options = baseDir;
     baseDir = options.appDir || '';
@@ -296,7 +334,7 @@ export async function createFunctionApp<
       const doc = yaml.load(readFileSync(join(baseDir, 'f.yml'), 'utf8'));
       starterName = doc?.['provider']?.['starter'];
       if (starterName) {
-        const m = safeRequire(starterName);
+        const m = await loadModule(starterName);
         if (m && m['BootstrapStarter']) {
           options.starter = new m['BootstrapStarter']();
         }
@@ -310,7 +348,6 @@ export async function createFunctionApp<
   if (options.starter) {
     options.appDir = baseDir;
     debug(`[mock]: Create app, appDir="${options.appDir}"`);
-    process.env.MIDWAY_TS_MODE = 'true';
 
     if (options.appDir) {
       // 处理测试的 fixtures
@@ -332,12 +369,31 @@ export async function createFunctionApp<
 
     clearAllLoggers();
 
+    const pkgJSON = await loadModule(join(options.appDir, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+
+    options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+
     options = options || ({} as any);
     if (options.baseDir) {
-      safeRequire(join(`${options.baseDir}`, 'interface'));
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
     } else if (options.appDir) {
       options.baseDir = `${options.appDir}/src`;
-      safeRequire(join(`${options.baseDir}`, 'interface'));
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
     }
 
     // new mode
@@ -500,7 +556,10 @@ export async function createFunctionApp<
         '@ali/serverless-app',
         '@midwayjs/serverless-app',
       ]);
-    const serverlessModule = transformFrameworkToConfiguration(customFramework);
+    const serverlessModule = await transformFrameworkToConfiguration(
+      customFramework,
+      options.moduleLoadType
+    );
     if (serverlessModule) {
       if (options && options.imports) {
         options.imports.unshift(serverlessModule);
@@ -541,6 +600,7 @@ class LightFramework extends BaseFramework<any, any, any, any, any> {
 }
 
 class BootstrapAppStarter implements IBootstrapAppStarter {
+  constructor(protected options: MockBootstrapOptions) {}
   getApp(type: MidwayFrameworkType | string): IMidwayApplication<any> {
     const applicationContext = getCurrentApplicationContext();
     const applicationManager = applicationContext.get(MidwayApplicationManager);
@@ -553,7 +613,10 @@ class BootstrapAppStarter implements IBootstrapAppStarter {
     } = {}
   ) {
     // eslint-disable-next-line node/no-extraneous-require
-    const BootstrapModule = safeRequire('@midwayjs/bootstrap');
+    const BootstrapModule = await loadModule('@midwayjs/bootstrap', {
+      loadMode: this.options.moduleLoadType,
+      safeLoad: true,
+    });
     if (BootstrapModule?.Bootstrap) {
       await BootstrapModule.Bootstrap.stop();
     }
@@ -586,11 +649,25 @@ export async function createLightApp(
     },
     options.globalConfig ?? {}
   );
+
+  if (!options.moduleLoadType) {
+    const cwd = process.cwd();
+    const pkgJSON = await loadModule(join(cwd, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+
+    options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+  }
+
   return createApp(baseDir, {
     ...options,
-    imports: [transformFrameworkToConfiguration(LightFramework)].concat(
-      options?.imports
-    ),
+    imports: [
+      await transformFrameworkToConfiguration(
+        LightFramework,
+        options.moduleLoadType
+      ),
+    ].concat(options?.imports),
   });
 }
 
@@ -598,13 +675,16 @@ export async function createBootstrap(
   entryFile: string,
   options: MockBootstrapOptions = {}
 ): Promise<IBootstrapAppStarter> {
+  const cwd = process.cwd();
   if (!options.bootstrapMode) {
-    options.bootstrapMode = safeRequire('@midwayjs/faas') ? 'faas' : 'app';
+    options.bootstrapMode = existsSync(join(cwd, 'node_modules/@midwayjs/faas'))
+      ? 'faas'
+      : 'app';
   }
 
   if (options.bootstrapMode === 'faas') {
     options.entryFile = entryFile;
-    const app = await createFunctionApp(process.cwd(), options);
+    const app = await createFunctionApp(cwd, options);
     return {
       close: async () => {
         return close(app);
@@ -614,6 +694,6 @@ export async function createBootstrap(
     await create(undefined, {
       entryFile,
     });
-    return new BootstrapAppStarter();
+    return new BootstrapAppStarter(options);
   }
 }

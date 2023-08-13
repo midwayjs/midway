@@ -8,6 +8,8 @@ import { join, parse } from 'path';
 import { Types } from '../util/types';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { debuglog } from 'util';
+import { loadModule } from '../util';
+import { ModuleLoadType } from '../interface';
 const debug = debuglog('midway:debug');
 
 export interface CreateDataSourceInstanceOptions {
@@ -70,7 +72,7 @@ export abstract class DataSourceManager<T> {
         for (const entity of dataSourceOptions['entities']) {
           if (typeof entity === 'string') {
             // string will be glob file
-            const models = globModels(entity, appDirOrOptions.appDir);
+            const models = await globModels(entity, appDirOrOptions.appDir);
             for (const model of models) {
               entities.add(model);
               this.modelMapping.set(model, dataSourceName);
@@ -217,7 +219,11 @@ export function formatGlobString(globString: string): string[] {
   return pattern;
 }
 
-export function globModels(globString: string, appDir: string) {
+export async function globModels(
+  globString: string,
+  appDir: string,
+  loadMode?: ModuleLoadType
+) {
   const pattern = formatGlobString(globString);
 
   const models = [];
@@ -227,7 +233,9 @@ export function globModels(globString: string, appDir: string) {
     ignore: IGNORE_PATTERN,
   });
   for (const file of files) {
-    const exports = require(file);
+    const exports = await loadModule(file, {
+      loadMode,
+    });
     if (Types.isClass(exports)) {
       models.push(exports);
     } else {

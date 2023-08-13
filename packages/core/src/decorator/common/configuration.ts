@@ -1,4 +1,5 @@
 import { saveClassMetadata, CONFIGURATION_KEY } from '../';
+import { IFileDetector } from '../../interface';
 
 export interface IComponentInfo {
   component: any;
@@ -19,6 +20,7 @@ export interface InjectionConfigurationOptions {
     | Record<string, any>;
   importConfigFilter?: (config: Record<string, any>) => Record<string, any>;
   namespace?: string;
+  detector?: IFileDetector | false;
   detectorOptions?: Record<string, any>;
   conflictCheck?: boolean;
 }

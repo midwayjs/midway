@@ -4,11 +4,12 @@ import {
   MidwayApplicationManager,
   initializeGlobalApplicationContext,
   destroyGlobalApplicationContext,
+  loadModule,
+  isTypeScriptEnvironment,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { IMidwayLogger, MidwayBaseLogger } from '@midwayjs/logger';
 import { createContextManager } from '@midwayjs/async-hooks-context-manager';
-import { isTypeScriptEnvironment } from './util';
 import {
   ChildProcessEventBus,
   ThreadEventBus,
@@ -44,6 +45,16 @@ export class BootstrapStarter {
           isWorker: true,
         });
       }
+    }
+
+    if (!this.globalOptions.moduleLoadType) {
+      const pkgJSON = await loadModule(join(this.appDir, 'package.json'), {
+        safeLoad: true,
+        enableCache: false,
+      });
+
+      this.globalOptions.moduleLoadType =
+        pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
     }
 
     this.applicationContext = await initializeGlobalApplicationContext({

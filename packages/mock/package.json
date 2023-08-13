@@ -20,7 +20,9 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
-    "ssl"
+    "ssl",
+    "app.js",
+    "function.js"
   ],
   "engines": {
     "node": ">=12"

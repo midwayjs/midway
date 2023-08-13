@@ -89,7 +89,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
   }
 
-  ready() {
+  async ready() {
     // ignore other things
   }
 

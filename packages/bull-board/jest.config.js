@@ -4,4 +4,5 @@ module.exports = {
   testPathIgnorePatterns: ['<rootDir>/test/fixtures'],
   coveragePathIgnorePatterns: ['<rootDir>/test/'],
   setupFilesAfterEnv: ['./jest.setup.js'],
+  coverageProvider: 'v8',
 };
