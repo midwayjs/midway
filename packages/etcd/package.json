@@ -14,7 +14,7 @@
     "@midwayjs/mock": "^3.11.15"
   },
   "dependencies": {
-    "etcd3": "1.1.0"
+    "etcd3": "1.1.2"
   },
   "keywords": [
     "etcd",
