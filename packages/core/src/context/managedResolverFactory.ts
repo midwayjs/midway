@@ -1,16 +1,23 @@
 /**
  * 管理对象解析构建
  */
-import { KEYS, REQUEST_CTX_KEY, REQUEST_OBJ_CTX_KEY } from '../constants';
 import {
+  CONTAINER_OBJ_SCOPE,
+  KEYS,
+  REQUEST_CTX_KEY,
+  REQUEST_OBJ_CTX_KEY,
+  SINGLETON_CONTAINER_CTX,
+} from '../constants';
+import {
+  IManagedInstance,
   IManagedResolver,
-  IObjectDefinition,
   IManagedResolverFactoryCreateOptions,
   IMidwayContainer,
-  ObjectLifeCycleEvent,
-  IManagedInstance,
   InjectModeEnum,
+  IObjectDefinition,
   ObjectIdentifier,
+  ObjectLifeCycleEvent,
+  ScopeEnum,
 } from '../interface';
 
 import * as util from 'util';
@@ -18,10 +25,10 @@ import * as EventEmitter from 'events';
 import {
   MidwayCommonError,
   MidwayDefinitionNotFoundError,
+  MidwayInconsistentVersionError,
   MidwayMissingImportComponentError,
   MidwayResolverMissingError,
   MidwaySingletonInjectRequestError,
-  MidwayInconsistentVersionError,
 } from '../error';
 
 const debug = util.debuglog('midway:managedresolver');
@@ -218,14 +225,18 @@ export class ManagedResolverFactory {
       definition,
     });
 
-    if (definition.isSingletonScope() && definition.id) {
-      this.singletonCache.set(definition.id, inst);
+    if (definition.id) {
+      if (definition.isSingletonScope()) {
+        this.singletonCache.set(definition.id, inst);
+        this.setInstanceScope(inst, ScopeEnum.Singleton);
+      } else if (definition.isRequestScope()) {
+        this.context.registerObject(definition.id, inst);
+        this.setInstanceScope(inst, ScopeEnum.Request);
+      } else {
+        this.setInstanceScope(inst, ScopeEnum.Prototype);
+      }
     }
 
-    // for request scope
-    if (definition.isRequestScope() && definition.id) {
-      this.context.registerObject(definition.id, inst);
-    }
     this.removeCreateStatus(definition, true);
 
     return inst;
@@ -298,6 +309,7 @@ export class ManagedResolverFactory {
       definition.constructor.name === 'ObjectDefinition'
     ) {
       debug('id = %s inject ctx', definition.id);
+      // set related ctx
       Object.defineProperty(inst, REQUEST_OBJ_CTX_KEY, {
         value: this.context.get(REQUEST_CTX_KEY),
         writable: false,
@@ -341,16 +353,24 @@ export class ManagedResolverFactory {
       definition,
     });
 
-    if (definition.isSingletonScope() && definition.id) {
-      debug(`id = ${definition.id}(${definition.name}) set to singleton cache`);
-      this.singletonCache.set(definition.id, inst);
+    if (definition.id) {
+      if (definition.isSingletonScope()) {
+        debug(
+          `id = ${definition.id}(${definition.name}) set to singleton cache`
+        );
+        this.singletonCache.set(definition.id, inst);
+        this.setInstanceScope(inst, ScopeEnum.Singleton);
+      } else if (definition.isRequestScope()) {
+        debug(
+          `id = ${definition.id}(${definition.name}) set to register object`
+        );
+        this.context.registerObject(definition.id, inst);
+        this.setInstanceScope(inst, ScopeEnum.Request);
+      } else {
+        this.setInstanceScope(inst, ScopeEnum.Prototype);
+      }
     }
 
-    // for request scope
-    if (definition.isRequestScope() && definition.id) {
-      debug(`id = ${definition.id}(${definition.name}) set to register object`);
-      this.context.registerObject(definition.id, inst);
-    }
     this.removeCreateStatus(definition, true);
 
     return inst;
@@ -540,5 +560,22 @@ export class ManagedResolverFactory {
       }
     }
     return true;
+  }
+
+  private setInstanceScope(inst, scope: ScopeEnum) {
+    if (typeof inst === 'object') {
+      if (
+        scope === ScopeEnum.Request &&
+        inst[REQUEST_OBJ_CTX_KEY] === SINGLETON_CONTAINER_CTX
+      ) {
+        scope = ScopeEnum.Singleton;
+      }
+      Object.defineProperty(inst, CONTAINER_OBJ_SCOPE, {
+        value: scope,
+        writable: false,
+        enumerable: false,
+        configurable: false,
+      });
+    }
   }
 }

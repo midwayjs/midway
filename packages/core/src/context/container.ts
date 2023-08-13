@@ -1,18 +1,18 @@
 import {
   CONFIGURATION_KEY,
+  getClassExtendedMetadata,
   getClassMetadata,
+  getObjectDefinition,
+  getPropertyInject,
+  getProviderName,
+  getProviderUUId,
   IComponentInfo,
+  INJECT_CUSTOM_PROPERTY,
   InjectionConfigurationOptions,
   listModule,
   MAIN_MODULE_KEY,
   saveModule,
   saveProviderId,
-  getProviderUUId,
-  getPropertyInject,
-  getObjectDefinition,
-  getClassExtendedMetadata,
-  INJECT_CUSTOM_PROPERTY,
-  getProviderName,
 } from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -29,7 +29,12 @@ import {
   ObjectLifeCycleEvent,
   ScopeEnum,
 } from '../interface';
-import { FUNCTION_INJECT_KEY, REQUEST_CTX_KEY } from '../constants';
+import {
+  CONTAINER_OBJ_SCOPE,
+  FUNCTION_INJECT_KEY,
+  REQUEST_CTX_KEY,
+  SINGLETON_CONTAINER_CTX,
+} from '../constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import {
@@ -235,8 +240,8 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   private moduleMap = null;
   private _objectCreateEventTarget: EventEmitter;
   public parent: IMidwayContainer = null;
-  // 仅仅用于兼容requestContainer的ctx
-  protected ctx = {};
+  // 仅仅用于兼容 requestContainer 的 ctx
+  protected ctx = SINGLETON_CONTAINER_CTX;
   private fileDetector: IFileDetector | false | undefined;
   private attrMap: Map<string, any> = new Map();
   private _namespaceSet: Set<string> = null;
@@ -718,5 +723,12 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   hasObject(identifier: ObjectIdentifier) {
     return this.registry.hasObject(identifier);
+  }
+
+  getInstanceScope(instance: any): ScopeEnum | undefined {
+    if (instance[CONTAINER_OBJ_SCOPE]) {
+      return instance[CONTAINER_OBJ_SCOPE];
+    }
+    return undefined;
   }
 }

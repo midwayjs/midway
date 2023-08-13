@@ -714,12 +714,16 @@ export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycl
    * @param value
    */
   setAttr(key: string, value: any);
-
   /**
    * Get value from app attribute map
    * @param key
    */
   getAttr<T>(key: string): T;
+  /**
+   * Get instance IoC container scope
+   * @param instance
+   */
+  getInstanceScope(instance: any): ScopeEnum | undefined;
 }
 
 /**
@@ -774,12 +778,15 @@ export interface Context {
    * @param value
    */
   setAttr(key: string, value: any);
-
   /**
    * Get value from app attribute map
    * @param key
    */
   getAttr<T>(key: string): T;
+  /**
+   * Get current related application instance.
+   */
+  getApp(): IMidwayApplication;
 }
 
 export type IMidwayContext<FrameworkContext = unknown> = Context &
