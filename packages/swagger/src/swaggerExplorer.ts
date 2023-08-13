@@ -38,6 +38,10 @@ export class SwaggerExplorer {
   private swaggerConfig: SwaggerOptions;
 
   private documentBuilder = new DocumentBuilder();
+  private operationIdFactory = (
+    controllerKey: string,
+    webRouter: RouterOption
+  ) => `${controllerKey.toLowerCase()}_${webRouter.method.toLocaleLowerCase()}`;
 
   @Init()
   async init() {
@@ -92,6 +96,12 @@ export class SwaggerExplorer {
         this.documentBuilder.addTag(t.name, t.description, t.externalDocs);
       }
     }
+
+    if (this.swaggerConfig?.documentOptions?.operationIdFactory) {
+      this.operationIdFactory =
+        this.swaggerConfig.documentOptions.operationIdFactory;
+    }
+
     // 设置 auth 类型
     if (Array.isArray(this.swaggerConfig?.auth)) {
       for (const a of this.swaggerConfig?.auth) {
@@ -182,12 +192,11 @@ export class SwaggerExplorer {
       target
     );
 
-    let header = null;
-    const headers = metaForMethods.filter(
+    let headers = metaForMethods.filter(
       item => item.key === DECORATORS.API_HEADERS
     );
     if (headers.length > 0) {
-      header = headers[0].metadata;
+      headers = headers.map(item => item.metadata);
     }
 
     const security = metaForMethods.filter(
@@ -227,7 +236,7 @@ export class SwaggerExplorer {
           paths,
           metaForMethods,
           routerArgs,
-          header,
+          headers,
           target
         );
 
@@ -273,7 +282,7 @@ export class SwaggerExplorer {
     paths: Record<string, PathItemObject>,
     metaForMethods: any[],
     routerArgs: any[],
-    header: any,
+    headers: any,
     target: Type
   ) {
     const operMeta = metaForMethods.filter(
@@ -293,7 +302,7 @@ export class SwaggerExplorer {
         operMeta?.metadata?.description,
         webRouter.description
       ),
-      // operationId: `${webRouter.requestMethod}_${(operMeta?.metadata?.operationId || webRouter.method)}`,
+      operationId: this.getOperationId(target.name, webRouter),
       tags: operMeta?.metadata?.tags || [],
     };
     /**
@@ -395,7 +404,6 @@ export class SwaggerExplorer {
         }
         if (arg.metadata?.type === RouteParamTypes.FIELDS) {
           this.expandSchemaRef(p);
-
           p.contentType = BodyContentType.Multipart;
         }
 
@@ -415,8 +423,9 @@ export class SwaggerExplorer {
         } else {
           // 这里拼 schema properties 时肯定存在
           Object.assign(
+            {},
             opts[webRouter.requestMethod].requestBody.content[p.contentType]
-              .schema.properties,
+              .schema?.properties,
             p.schema.properties
           );
         }
@@ -430,8 +439,8 @@ export class SwaggerExplorer {
       parameters.push(p);
     }
     // class header 需要使用 ApiHeader 装饰器
-    if (header) {
-      parameters.unshift(header);
+    if (headers) {
+      headers.forEach(header => parameters.unshift(header));
     }
 
     opts[webRouter.requestMethod].parameters = parameters;
@@ -504,6 +513,10 @@ export class SwaggerExplorer {
     paths[url] = opts;
   }
 
+  getOperationId(controllerKey: string, webRouter: RouterOption) {
+    return this.operationIdFactory(controllerKey, webRouter);
+  }
+
   private expandSchemaRef(p: any, name?: string) {
     let schemaName = name;
     if (p.schema['$ref']) {
@@ -512,12 +525,14 @@ export class SwaggerExplorer {
       delete p.schema['$ref'];
     }
 
-    const schema = this.documentBuilder.getSchema(schemaName);
-    const ss = JSON.parse(JSON.stringify(schema));
-    if (p.schema.properties) {
-      Object.assign(p.schema.properties, ss.properties);
-    } else {
-      p.schema = JSON.parse(JSON.stringify(schema));
+    if (schemaName) {
+      const schema = this.documentBuilder.getSchema(schemaName);
+      const ss = JSON.parse(JSON.stringify(schema));
+      if (p.schema.properties) {
+        Object.assign(p.schema.properties, ss.properties);
+      } else {
+        p.schema = JSON.parse(JSON.stringify(schema));
+      }
     }
     return p;
   }

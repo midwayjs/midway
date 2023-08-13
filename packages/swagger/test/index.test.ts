@@ -3,13 +3,26 @@ import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
-
+  
   describe('test swagger', () => {
-
+    
     let app;
     beforeAll(async () => {
       try {
-        app = await createApp(join(__dirname, 'fixtures/cats'), {}, koa);
+        app = await createApp(
+          join(__dirname, 'fixtures/cats'),
+          {
+            globalConfig: {
+              swagger: {
+                documentOptions: {
+                  operationIdFactory: (c, r) =>
+                    `${c.replace('Controller', '')}_${r.method}`.toLowerCase(),
+                },
+              },
+            },
+          },
+          koa
+        );
       } catch (e) {
         console.log(e);
         console.log('beforeAll: ' +  e.stack);

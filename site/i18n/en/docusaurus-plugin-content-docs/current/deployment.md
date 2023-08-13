@@ -50,7 +50,7 @@ In this case, you can directly pass an entry file to the `dev` command and use t
 
 
 
-## Deploy to a normal server
+## Deploy to server
 
 
 ### The difference between post-deployment and local development
@@ -146,6 +146,16 @@ After the build is completed, the `dist` directory of the Midway build product a
 ├── package.json
 └── tsconfig.json
 ```
+
+
+
+### Alias path problem in build
+
+Aliases are a habit brought by front-end tools, rather than a standard capability of Node.js. Currently, there are two optional ways to use them:
+
+* 1. Use the [subpath imports](https://nodejs.org/dist/latest/docs/api/packages.html#subpath-imports) that comes with Node.js
+* 2. Use [extra tools](/docs/faq/alias_path) to process at compile time
+
 
 
 ### Packing compression

@@ -23,4 +23,11 @@ describe('/test/services/env.test.ts', () => {
     env.setCurrentEnvironment('prod');
     expect(env.isDevelopmentEnvironment()).toBeFalsy();
   });
+
+  it('should test module load type', () => {
+    const env = new MidwayEnvironmentService();
+    expect(env.getModuleLoadType()).toEqual('commonjs');
+    env.setModuleLoadType('esm');
+    expect(env.getModuleLoadType()).toEqual('esm');
+  });
 });

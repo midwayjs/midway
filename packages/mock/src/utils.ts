@@ -1,8 +1,8 @@
 import {
   IMidwayContainer,
   IMidwayFramework,
-  safeRequire,
   Configuration,
+  loadModule,
 } from '@midwayjs/core';
 import { ComponentModule } from './interface';
 import * as os from 'os';
@@ -37,18 +37,22 @@ export function findFirstExistModule(moduleList): ComponentModule {
  * transform a framework component or framework module to configuration class
  * @param Framework
  */
-export function transformFrameworkToConfiguration<
+export async function transformFrameworkToConfiguration<
   T extends IMidwayFramework<any, any, any>
 >(
-  Framework: any
-): {
+  Framework: any,
+  loadMode: 'commonjs' | 'esm'
+): Promise<{
   [key: string]: any;
   Configuration: any;
-} {
+}> {
   if (!Framework) return null;
   let CustomFramework = Framework;
   if (typeof Framework === 'string') {
-    Framework = safeRequire(Framework);
+    Framework = await loadModule(Framework, {
+      loadMode,
+      safeLoad: true,
+    });
   }
 
   if (Framework.Configuration) {

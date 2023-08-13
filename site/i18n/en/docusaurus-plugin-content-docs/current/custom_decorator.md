@@ -380,6 +380,14 @@ export class UserService {
 // output => Method "getUser" invoke during 4ms
 ```
 
+:::caution
+
+Note that the decorated method must be an async method.
+
+:::
+
+
+
 ## Method decorator without implementation
 
 By default, the custom method decorator must have an implementation, otherwise the runtime will report an error.
@@ -482,6 +490,12 @@ export class UserController {
 Note that for the correctness of the method call, if an error is reported in the parameter decorator, the framework will use the original parameters to call the method and will not throw an exception directly.
 
 You can find this error when turning on the `NODE_DEBUG = midway:debug` environment variable.
+
+:::
+
+:::caution
+
+Note that the decorated method must be an async method.
 
 :::
 

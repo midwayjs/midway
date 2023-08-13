@@ -1,6 +1,63 @@
 # Change Log
 
 
+## v3.11.18 (2023-08-05)
+
+#### :bug: Bug Fix
+* `bull`, `cron`
+  * [#3144](https://github.com/midwayjs/midway/pull/3144) fix: bull logger typo ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `mikro`
+  * [#3114](https://github.com/midwayjs/midway/pull/3114) feat: add InjectEntityManager decorator for MikroORM and upgrade document ([@ghostoy](https://github.com/ghostoy))
+* `oss`
+  * [#3132](https://github.com/midwayjs/midway/pull/3132) feat: expose native OSS from package ([@ghostoy](https://github.com/ghostoy))
+
+#### :package: Dependencies
+* `cos`
+  * [#3141](https://github.com/midwayjs/midway/pull/3141) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.12.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#3140](https://github.com/midwayjs/midway/pull/3140) fix(deps): update dependency casbin to v5.26.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3143](https://github.com/midwayjs/midway/pull/3143) chore(deps): update dependency autocannon to v7.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3139](https://github.com/midwayjs/midway/pull/3139) chore(deps): update dependency @types/node to v18.17.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Cong Liu ([@ghostoy](https://github.com/ghostoy))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.11.17 (2023-08-01)
+
+#### :bug: Bug Fix
+* `http-proxy`
+  * [#3130](https://github.com/midwayjs/midway/pull/3130) fix(http-proxy): readableStream.pipe(res) and res.on('finish') ([@wakeGISer](https://github.com/wakeGISer))
+
+#### Committers: 1
+- Suel ([@wakeGISer](https://github.com/wakeGISer))
+
+
+
+## v3.11.16 (2023-08-01)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3126](https://github.com/midwayjs/midway/pull/3126) fix: swagger @ApiHeader @ApiHeaders only read one header ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `swagger`
+  * [#3122](https://github.com/midwayjs/midway/pull/3122) feat: add swagger operationId ([@odex21](https://github.com/odex21))
+* `axios`
+  * [#3127](https://github.com/midwayjs/midway/pull/3127) feat: expose more APIs from axios ([@ghostoy](https://github.com/ghostoy))
+
+#### Committers: 3
+- Cong Liu ([@ghostoy](https://github.com/ghostoy))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@odex21](https://github.com/odex21)
+
+
+
 ## v3.11.15 (2023-07-16)
 
 #### :bug: Bug Fix

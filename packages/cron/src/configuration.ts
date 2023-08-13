@@ -22,7 +22,7 @@ import { JobNameOrClz } from './interface';
               fileLogName: 'midway-cron.log',
               contextFormat: info => {
                 const { jobId, from } = info.ctx;
-                return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}}] ${info.message}`;
+                return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}`;
               },
             },
           },

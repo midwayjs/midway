@@ -29,6 +29,7 @@ declare module 'egg' {
 
   interface Context<ResponseBodyT = any> extends IMidwayBaseContext {
     getLogger(name?: string): ILogger;
+    forward: (url: string) => void;
   }
 }
 

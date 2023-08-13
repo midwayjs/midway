@@ -3,10 +3,10 @@ import {
   getCurrentEnvironment,
   getUserHome,
   isDevelopmentEnvironment,
-  safeRequire,
 } from '../util';
 import { dirname, join } from 'path';
 import { Provide, Inject, Init, Scope } from '../decorator';
+import { existsSync, readFileSync } from 'fs';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -25,7 +25,15 @@ export class MidwayInformationService implements IInformationService {
       if (!this.appDir) {
         this.appDir = dirname(this.baseDir);
       }
-      this.pkg = safeRequire(join(this.appDir, 'package.json')) || {};
+      const pkgPath = join(this.appDir, 'package.json');
+      if (existsSync(pkgPath)) {
+        const content = readFileSync(pkgPath, {
+          encoding: 'utf-8',
+        });
+        this.pkg = JSON.parse(content);
+      } else {
+        this.pkg = {};
+      }
     } else {
       this.pkg = {};
     }

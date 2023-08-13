@@ -76,6 +76,46 @@ describe('/test/util/httpclient.test.ts', function () {
     manager.close();
   });
 
+  it('should test base http request with put and body', async () => {
+    const manager = await createHttpServer();
+    const httpclient = new HttpClient();
+    const result = await httpclient.request(`http://127.1:${manager.getPort()}/`, {
+      method: 'PUT',
+      data: {
+        a: 1,
+        b: 2
+      },
+      dataType: 'json',
+    });
+    expect(result.data.message['a']).toEqual(1);
+    manager.close();
+  });
+
+  it('should test base http request with patch and body', async () => {
+    const manager = await createHttpServer();
+    const httpclient = new HttpClient();
+    const result = await httpclient.request(`http://127.1:${manager.getPort()}/`, {
+      method: 'PATCH',
+      data: {
+        a: 1,
+        b: 2
+      },
+      dataType: 'json',
+    });
+    expect(result.data.message['a']).toEqual(1);
+    manager.close();
+  });
+
+  it('should test base http request with delete', async () => {
+    const manager = await createHttpServer();
+    const httpclient = new HttpClient();
+    const result = await httpclient.request(`http://127.1:${manager.getPort()}/`, {
+      method: 'DELETE',
+    });
+    expect(result.statusCode).toEqual(204);
+    manager.close();
+  });
+
   it('should test base http request and timeout', async () => {
     const manager = await createHttpServer({
       timeout: 1000,
