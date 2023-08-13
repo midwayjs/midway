@@ -1,9 +1,10 @@
-import {
+import type {
   AppControllerRoute,
   AppViewRoute,
   BullBoardQueues,
   ControllerHandlerReturnType,
   IServerAdapter,
+  UIConfig,
 } from '@bull-board/api/dist/typings/app';
 import * as ejs from 'ejs';
 import { join } from 'path';
@@ -22,6 +23,11 @@ export class MidwayAdapter implements IServerAdapter {
 
   public setBasePath(path: string): MidwayAdapter {
     this.basePath = path;
+    return this;
+  }
+
+  public setUIConfig(config: UIConfig): MidwayAdapter {
+    // 这里没用
     return this;
   }
 
@@ -58,8 +64,11 @@ export class MidwayAdapter implements IServerAdapter {
 
   public setEntryRoute(routeDef: AppViewRoute): MidwayAdapter {
     this.entryRoute = routeDef;
-
     return this;
+  }
+
+  public getEntryRoute() {
+    return this.entryRoute;
   }
 
   public setQueues(bullBoardQueues: BullBoardQueues): MidwayAdapter {
@@ -106,7 +115,7 @@ export class MidwayAdapter implements IServerAdapter {
     return content;
   }
 
-  public async renderView(filename) {
+  public async renderView(filename, params = {}) {
     const basePath = this.basePath.endsWith('/')
       ? this.basePath
       : `${this.basePath}/`;
@@ -117,7 +126,7 @@ export class MidwayAdapter implements IServerAdapter {
     return new Promise((resolve, reject) => {
       ejs.renderFile(
         filename,
-        { basePath, cache: true },
+        { basePath, cache: true, ...params },
         {
           root: this.viewPath,
         },
