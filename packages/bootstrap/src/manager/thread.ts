@@ -2,7 +2,7 @@ import { ThreadOptions } from '../interface';
 import { AbstractForkManager } from './base';
 import { Worker, isMainThread, SHARE_ENV } from 'worker_threads';
 import { ThreadEventBus } from '@midwayjs/event-bus';
-import { isTypeScriptEnvironment } from '../util';
+import { isTypeScriptEnvironment } from '@midwayjs/core';
 
 export class ThreadManager extends AbstractForkManager<Worker, ThreadOptions> {
   private workerExitListener;

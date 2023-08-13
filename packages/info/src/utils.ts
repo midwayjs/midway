@@ -1,8 +1,12 @@
 import { TypeInfo } from './interface';
+import { existsSync, readFileSync } from 'fs';
 
 export function safeRequire(mod: string, defaultValue?) {
   try {
-    return require(mod);
+    if (!existsSync(mod)) {
+      return defaultValue;
+    }
+    return JSON.parse(readFileSync(mod, 'utf8'));
   } catch (e) {
     return defaultValue;
   }

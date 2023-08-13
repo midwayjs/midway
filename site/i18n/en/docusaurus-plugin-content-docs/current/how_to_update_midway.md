@@ -44,13 +44,19 @@ For example, when the following error occurs
 You can use the following command to execute in the project root directory to check.
 
 ```bash
+# Community user
 $ npx midway-version
+# Internal user
+$ tnpx @ali/midway-version
 ```
 
 If the project is a dependency of pnpm installation, please use the following command.
 
 ```bash
+# Community user
 $ pnpx midway-version
+# Internal user
+$ pnpx @ali/midway-version
 ```
 
 
@@ -60,30 +66,42 @@ $ pnpx midway-version
 You can use the following command to execute the update prompt in the project root directory.
 
 ```bash
+# Community user
 $ npx midway-version -u
+# Internal user
+$ tnpx @ali/midway-version -u
 ```
 
 If the project is a dependency of pnpm installation, please use the following command.
 
 ```bash
+# Community user
 $ pnpx midway-version -u
+# Internal user
+$ pnpx @ali/midway-version -u
 ```
 
 If you want to write updates to `package.json`, please use the following command.
 
 ```bash
+# Community user
 $ npx midway-version -u -w
+# Internal user
+$ tnpx @ali/midway-version -u -w
 ```
 
 If the project is a dependency of pnpm installation, please use the following command.
 
 ```bash
+# Community user
 $ pnpx midway-version -u -w
+# Internal user
+$ pnpx @ali/midway-version -u -w
 ```
 
 :::tip
 
-After dependency updates are written to `package.json`, please reinstall dependencies.
+Newer versions will be written to `package.json` and `package-lock.json` and require reinstallation of dependencies.
 
 :::
 

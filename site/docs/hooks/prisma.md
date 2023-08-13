@@ -53,7 +53,7 @@ export const prisma =
 Prisma 在安装时会根据平台动态下载可执行文件，如果你的网络环境不好，可以通过环境变量来设置镜像。
 
 ```bash
-PRISMA_BINARIES_MIRROR=https://registry.npmmirror.com/-/binary/prisma/
+PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma/
 ```
 
 相关 Issue: [mirror prisma](https://github.com/cnpm/mirrors/issues/248)

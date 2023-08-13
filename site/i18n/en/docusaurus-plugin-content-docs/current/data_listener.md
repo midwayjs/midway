@@ -81,6 +81,17 @@ export class MemoryDataListener extends DataListener<string> {
 }
 ```
 
+The `initData` method above can fetch data asynchronously.
+
+```typescript
+// ...
+export class MemoryDataListener extends DataListener<string> {
+  async initData() {
+    // ...
+  }
+}
+```
+
 
 
 ## Use data subscription
@@ -100,7 +111,7 @@ export class UserService {
   memoryDataListener: MemoryDataListener;
 
   async getUserHelloData() {
-    const helloData = await this.memoryDataListener.getData();
+    const helloData = this.memoryDataListener.getData();
     // helloData => helloxxxxxxxx
     // ...
   }

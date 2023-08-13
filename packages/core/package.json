@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "3.11.6",
+  "version": "3.11.15",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -23,9 +23,9 @@
   "license": "MIT",
   "devDependencies": {
     "koa": "2.14.1",
-    "mm": "3.2.2",
+    "mm": "3.3.0",
     "raw-body": "2.5.2",
-    "sinon": "15.0.4"
+    "sinon": "15.2.0"
   },
   "dependencies": {
     "@midwayjs/glob": "^1.0.2",

@@ -100,7 +100,7 @@ import * as grpc from '@midwayjs/grpc';
   imports: [koa, grpc]
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
 		// ...
   }
@@ -349,10 +349,7 @@ Note that the generated Interface is to better write service code and standardiz
 ### Configuration service
 
 
-Startup here requires a separate file `bootstrap.js` from the project root directory. The code is similar to other framework initialization, except that the framework package here is `@midwayjs/grpc`.
-
-
-The content is as follows (configuration in function form):
+The content is as follows.
 ```typescript
 // src/config/config.default
 import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
@@ -379,14 +376,15 @@ services fields are arrays, which means that Midway projects can publish multipl
 
 | Property | Type | Description |
 | --- | --- | --- |
-| protoPath | string | Required, absolute path of proto file |
-| package | string | Required, the package corresponding to the service |
+| protoPath | String | Required, absolute path of proto file |
+| package | String | Required, the package corresponding to the service |
 
 In addition to the Service configuration, there are some other configurations.
 
 | Property | Type | Description |
 | ------------- | ----------------- | ------------------------------------------------------------ |
-| loaderOptions | Object | optional, the options of the proto file loader |
+| url | String            | Optional, gRPC service address, default 6565 port，like 'localhost:6565' |
+| loaderOptions | Object | Optional, the options of the proto file loader |
 | credentials | ServerCredentials | Optional. credentials parameter options when grpc Server binding |
 | serverOptions | ChannelOptions | Optional. [Custom options](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js#supported-channel-options) for grpc Server |
 

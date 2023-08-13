@@ -278,7 +278,7 @@ import * as prometheusSocketIo from '@midwayjs/prometheus-socket-io';
   imports: [prometheus, prometheusSocketIo],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle {}
+export class MainConfiguration {}
 ```
 
 然后在/metrics 这边就能看到 socket-io 的数据了。

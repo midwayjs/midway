@@ -29,7 +29,7 @@ import * as validate from '@midwayjs/validate';
 @Configuration({
   imports: [validate]
 })
-export class ContainerLifeCycle {}
+export class MainConfiguration {}
 ```
 
 
@@ -53,7 +53,7 @@ import * as info from '@midwayjs/info';
     },
   ],
 })
-export class ContainerLifeCycle {}
+export class MainConfiguration {}
 ```
 
 - `component` is used to specify a component object, which must contain a `Configuration` exported attribute

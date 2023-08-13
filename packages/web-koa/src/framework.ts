@@ -16,6 +16,7 @@ import {
 } from '@midwayjs/core';
 import { Cookies } from '@midwayjs/cookies';
 import {
+  Context,
   IMidwayKoaApplication,
   IMidwayKoaConfigurationOptions,
   IMidwayKoaContext,
@@ -94,6 +95,35 @@ export class MidwayKoaFramework extends BaseFramework<
       },
       set(value) {
         this.state = value;
+      },
+    });
+
+    Object.defineProperty(this.app.context, 'forward', {
+      get() {
+        return async function (this: Context, url: string) {
+          const routerService = this.requestContext.get(MidwayWebRouterService);
+          const matchedUrlRouteInfo = await routerService.getMatchedRouterInfo(
+            url,
+            this.method
+          );
+
+          if (matchedUrlRouteInfo) {
+            if (matchedUrlRouteInfo.controllerClz) {
+              // normal class controller router
+              const controllerInstance = await this.requestContext.getAsync(
+                matchedUrlRouteInfo.controllerClz
+              );
+              return controllerInstance[matchedUrlRouteInfo.method as string](
+                this
+              );
+            } else if (typeof matchedUrlRouteInfo.method === 'function') {
+              // dynamic router
+              return matchedUrlRouteInfo.method(this);
+            }
+          } else {
+            throw new httpError.NotFoundError(`Forward url ${url} Not Found`);
+          }
+        };
       },
     });
 

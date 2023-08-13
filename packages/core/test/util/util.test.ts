@@ -9,10 +9,12 @@ import {
   delegateTargetProperties,
   transformRequestObjectByType,
   isIncludeProperty,
-  delegateTargetAllPrototypeMethod
+  delegateTargetAllPrototypeMethod,
+  loadModule, sleep
 } from '../../src/util';
 import { PathFileUtil } from '../../src';
 import * as EventEmitter from 'events';
+import { fork } from 'child_process';
 
 describe('/test/util/util.test.ts', () => {
 
@@ -24,6 +26,37 @@ describe('/test/util/util.test.ts', () => {
     // assert.strictEqual(safeRequire(join(__dirname, '../fixtures/foo')), undefined);
     assert.strictEqual(safeRequire(join(__dirname, '../fixtures/dir/nok.js')), undefined);
     assert.strictEqual(safeRequire('../fixtures/dir/bbb/nok.js'), undefined);
+  });
+
+  it('should test loadModule', async () => {
+    expect(await loadModule(join(__dirname, '../fixtures/dir/nok.js'), {safeLoad: true})).toBeUndefined();
+    expect(await loadModule('../fixtures/dir/bbb/nok.js', {safeLoad: true})).toBeUndefined();
+  });
+
+  it('should test load modle with esm', async () => {
+    let child = fork('esm.mjs', [], {
+      cwd: join(__dirname, './esm-fixtures'),
+      execArgv: [
+        '--loader',
+        'ts-node/esm',
+      ]
+    });
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        console.log(`process exited with code ${code}`);
+      }
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      child.on('message', (ready) => {
+        if (ready === 'ready') {
+          resolve();
+        }
+      });
+    });
+
+    await sleep(1000);
   });
 
   it('should safeGet be ok', () => {

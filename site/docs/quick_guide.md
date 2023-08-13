@@ -7,7 +7,7 @@
 ## 环境准备
 
 - 操作系统：支持 macOS，Linux，Windows
-- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 12.x。
+- 运行环境：[Node.js 环境要求](/docs/intro#环境准备工作)
 
 
 
@@ -70,7 +70,7 @@ import { Controller, Get, Query } from '@midwayjs/core';
 @Controller('/')
 export class WeatherController {
   @Get('/weather')
-  async getWeatherInfo(@Query('id') cityId: string): Promise<string> {
+  async getWeatherInfo(@Query('cityId') cityId: string): Promise<string> {
     return cityId;
   }
 }
@@ -225,7 +225,7 @@ import * as view from '@midwayjs/view-nunjucks';
   ],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   // ...
 }
 
@@ -432,7 +432,7 @@ import { WeatherErrorFilter } from './filter/weather.filter';
 @Configuration({
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 

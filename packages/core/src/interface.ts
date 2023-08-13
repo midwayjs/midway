@@ -691,10 +691,10 @@ export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycl
   parent: IMidwayContainer;
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
-  ready();
+  ready(): void | Promise<void>;
   stop(): Promise<void>;
   registerObject(identifier: ObjectIdentifier, target: any);
-  load(module?: any);
+  load(module: any | any[]);
   hasNamespace(namespace: string): boolean;
   getNamespaceList(): string[];
   hasDefinition(identifier: ObjectIdentifier);
@@ -732,7 +732,7 @@ export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycl
 export type IApplicationContext = IMidwayContainer;
 
 export interface IFileDetector {
-  run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>);
+  run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>): void | Promise<void>;
   setExtraDetectorOptions(detectorOptions: Record<string, any>);
 }
 
@@ -755,8 +755,8 @@ export interface IInformationService {
 
 export interface IEnvironmentService {
   getCurrentEnvironment(): string;
-  setCurrentEnvironment(environment: string);
   isDevelopmentEnvironment(): boolean;
+  getModuleLoadType(): ModuleLoadType;
 }
 
 export enum MidwayProcessTypeEnum {
@@ -1016,6 +1016,8 @@ export type IMidwayApplication<
   FrameworkApplication = unknown
 > = IMidwayBaseApplication<T> & FrameworkApplication;
 
+export type ModuleLoadType = 'commonjs' | 'esm';
+
 export interface IMidwayBootstrapOptions {
   [customPropertyKey: string]: any;
   baseDir?: string;
@@ -1027,8 +1029,12 @@ export interface IMidwayBootstrapOptions {
    */
   configurationModule?: any | any[];
   imports?: any | any[];
-  moduleDetector?: 'file' | IFileDetector | false;
+  moduleLoadType?: ModuleLoadType;
+  moduleDetector?: IFileDetector | false;
   logger?: boolean | ILogger;
+  /**
+   * @deprecated please set it from '@Configuration' decorator
+   */
   ignore?: string[];
   globalConfig?:
     | Array<{ [environmentName: string]: Record<string, any> }>

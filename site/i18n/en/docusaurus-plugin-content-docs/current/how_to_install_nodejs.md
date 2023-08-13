@@ -13,7 +13,7 @@ The community has solutions such as [nvm](https://github.com/creationix/nvm), [n
 
 
 
-> Friendly reminder: both Node 6.x and 8.x will end LTS support this year. please upgrade to 10.x as soon as possible.
+> Friendly reminder: both Node 12.x and 14.x run into EOL. please upgrade to 16 or 18 as soon as possible.
 > [https://github.com/nodejs/Release](https://github.com/nodejs/Release)
 
 
@@ -92,8 +92,43 @@ $ source ~/.zshrc
 
 ---
 
+
+
+## Mac Silicon chips use lower versions of Node.js
+
+If you are using an Apple chip, since there is no chip support build for arm64 below Node.js 16, it cannot be installed directly.
+
+Fortunately, there are workarounds to get Node.js 14 to work with Mac Silicon. Apple offers Rosetta, a translation app that allows apps built for Intel chips (or previous-generation Macs) to run under Apple Silicon.
+
+There are two steps:
+
+* 1. Install Rosetta
+* 2. Switch to the intel environment and install a lower version of Node.js
+
+
+
+**Install Rosetta**
+
+Open the terminal and execute
+
+```bash
+$ /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+```
+
+
+
+**Switch the environment and install a lower version of Node.js**
+
+* 1. Open the terminal, execute `arch`, and confirm that the running is `arm64`
+* 2. Execute `arch -x86_64 zsh` to open a new terminal
+* 3. Execute `arch` to confirm that the running is `i386`
+* 4. Install a lower version of Node.js, you can use the nvs or nvm mentioned above to install
+
+
+
 ## Related reading
 
 - [Popular text: Node.js security attack and defense-how to forge and obtain a user's real IP address?](https://zhuanlan.zhihu.com/p/62265144)
 - [Popular text: What if O & M does not upgrade the Node version?](https://zhuanlan.zhihu.com/p/39226941)
 - [Popular Science: Why can't you use npm install on the server?](https://zhuanlan.zhihu.com/p/39209596)
+- [Using NodeJs 14 with Mac Silicon (M1)](https://devzilla.io/using-nodejs-14-with-mac-silicon-m1)

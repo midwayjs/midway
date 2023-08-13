@@ -1,4 +1,4 @@
-# Pipeline
+# Code pipeline
 
 In some scenarios, we want to split a complete task into different stages, each stage of the execution of the logic is relatively independent, and at the same time can improve the overall execution efficiency through parallel or serial ways. In Midway, we have implemented an optimized Pipeline mode.
 

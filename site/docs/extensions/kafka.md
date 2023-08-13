@@ -108,7 +108,7 @@ import * as kafka from '@midwayjs/kafka';
   ],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
         // ...
   }

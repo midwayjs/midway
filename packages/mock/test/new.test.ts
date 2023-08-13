@@ -125,7 +125,9 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test with entry file', async () => {
-    const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'));
+    const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'), {
+      bootstrapMode: 'app',
+    });
     const app = bootstrap.getApp('koa');
 
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
@@ -136,5 +138,15 @@ describe('/test/new.test.ts', () => {
       sleep: 2000
     });
     console.log('close complete');
+  });
+
+  it('should test entry file with faas v3', async () => {
+    const app = await createFunctionApp(join(__dirname, 'fixtures/base-faas-without-yaml'), {
+      entryFile: 'index.js'
+    });
+    const result = await createHttpRequest(app).get('/event').query({ name: 'harry' });
+    expect(result.status).toBe(200);
+    expect(result.text).toBe('hello world, harry');
+    await close(app);
   });
 });

@@ -50,7 +50,7 @@ $ npm run dev
 
 
 
-## 部署到普通服务器
+## 部署到服务器
 
 
 ### 部署后和本地开发的区别
@@ -74,7 +74,6 @@ $ npm run dev
 | --- | --- | --- |
 | appDir | 项目根目录 | 项目根目录 |
 | baseDir | 项目根目录下的 src 目录 | 项目根目录下的 dist 目录 |
-
 
 **3、环境的变化**
 
@@ -144,15 +143,32 @@ $ npm prune --production  # 移除开发依赖
 ├── dist                # Midway 构建产物目录
 ├── node_modules        # Node.js 依赖包目录
 ├── test
+├── bootstrap.js				# 部署启动文件
 ├── package.json
 └── tsconfig.json
 ```
+
+
+
+### 构建时别名（alias path）的问题
+
+别名是前端工具带来的习惯，而非 Node.js 的标准能力，目前使用有两种可选的方式：
+
+* 1、使用 Node.js 自带的 [子路径导入方案](https://nodejs.org/dist/latest/docs/api/packages.html#subpath-imports)
+* 2、使用 [额外工具](/docs/faq/alias_path) 在编译时处理
+
 
 
 ### 打包压缩
 
 
 构建完成后，你可以简单的打包压缩，上传到待发布的环境。
+
+:::caution
+
+一般来说服务器运行必须包含的文件或者目录有 `package.json`，`bootstrap.js`，`dist`，`node_modules`。
+
+:::
 
 
 
@@ -515,7 +531,7 @@ import * as LocalConfig from './config/config.local';
     }
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -666,7 +682,7 @@ $ npm i pkg --save-dev
 
 首先需要对 pkg 进行配置，主要内容在 `package.json` 的 `bin` 和 `pkg` 字段下。
 
-- `bin` 我们指定为入口文件，即 `bootstrap.js` 
+- `bin` 我们指定为入口文件，即 `bootstrap.js`
 - `pkg.scripts` 构建后的目录，使用了 glob 的语法包括了 `dist` 下的所有 js 文件
 - `pkg.asserts` 如果有一些静态资源文件，可以在这里配置
 - `pkg.targets` 构建的平台产物，是下列选项的组合（示例中我指定了 mac + node18）：

@@ -7,7 +7,6 @@ import { MidwayUtilHttpClientTimeoutError } from '../error';
 const debug = debuglog('request-client');
 const URL = url.URL;
 
-type MethodType = 'GET' | 'POST';
 type MimeType = 'text' | 'json' | undefined;
 const mimeMap = {
   text: 'application/text',
@@ -16,7 +15,6 @@ const mimeMap = {
 };
 
 interface IOptions extends https.RequestOptions {
-  method?: MethodType;
   headers?: any;
   contentType?: MimeType;
   dataType?: MimeType;
@@ -44,18 +42,19 @@ export async function makeHttpRequest<ResType>(
   debug(`request '${url}'`);
   const whatwgUrl = new URL(url);
   const client = whatwgUrl.protocol === 'https:' ? https : http;
-  options.method = (options.method || 'GET').toUpperCase() as MethodType;
+  options.method = (options.method || 'GET').toUpperCase();
   const {
     contentType,
     dataType,
     method,
     timeout = 5000,
+    headers: customHeaders,
     ...otherOptions
   } = options;
 
   const headers = {
     Accept: mimeMap[dataType] || mimeMap.octet,
-    ...options.headers,
+    ...customHeaders,
   };
 
   let data;

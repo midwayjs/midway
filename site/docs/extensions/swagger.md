@@ -3,13 +3,13 @@
 
 相关信息：
 
-| 描述              |      |
-| ----------------- | ---- |
-| 可用于标准项目    | ✅    |
-| 可用于 Serverless | ❌    |
-| 可用于一体化      | ❌    |
-| 包含独立主框架    | ❌    |
-| 包含独立日志      | ❌    |
+| 描述              |     |
+| ----------------- | --- |
+| 可用于标准项目    | ✅   |
+| 可用于 Serverless | ❌   |
+| 可用于一体化      | ❌   |
+| 包含独立主框架    | ❌   |
+| 包含独立日志      | ❌   |
 
 
 
@@ -710,6 +710,19 @@ export default {
 
 ```
 
+也可以加在路由方法上。
+
+```typescript
+// ...
+export class HomeController {
+  @ApiTags(['bbb'])
+  @Get('/')
+  async home(@Body() dto?: Photo): Promise<string> {
+    return 'Hello Midwayjs!';
+  }
+}
+```
+
 
 
 
@@ -970,7 +983,19 @@ export interface SwaggerOptions {
     useUnsafeMarkdown?: boolean;
     tryItOutEnabled?: boolean;
   };
+  
+  documentOptions?: {
+    /**
+     * 自定义 operationIdFactory，用于生成 operationId
+     * @default () => controllerKey_webRouter.methodKey
+     */
+    operationIdFactory?: (
+      controllerKey: string,
+      webRouter: RouterOption
+    ) => string;
+  };
 }
+
 /**
  * 继承自 https://swagger.io/specification/#security-scheme-object
  */

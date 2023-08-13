@@ -26,7 +26,7 @@ Use `npm init midway` to view the complete list of scaffolds. After a project is
 $ npm init midway
 ```
 
-For a v3 project, select `koa-v3`.
+For a v3 project, select `koa-v3`, pay attention to [Node.js environment requirements](/docs/intro#environmental-preparation).
 
 The example will create a directory structure similar to the following, where the simplest Midway project example is as follows.
 
@@ -127,7 +127,7 @@ If you need to modify the development startup port, you can modify it in the scr
 ### Python compilation error
 
 :::caution
-1. Executing `npm install/i` command under node15/npm7 to install dependency may cause Python compilation errors
+Executing `npm install/i` command under node15/npm7 to install dependency may cause Python compilation errors
 
 **Projects created using npm init midway will automatically install dependencies without this problem.**
 
@@ -135,17 +135,8 @@ If you need to modify the development startup port, you can modify it in the scr
 **Reason**: The test framework Jest relies on jsdom. Npm7 automatically installs the canvas package that its peerDependencies depends on. The installation and compilation of canvas requires a python3 environment.
 :::
 
-### Deprecated tips
-
-:::caution
-2. there will be npm warning: deprecated output when installing dependencies
-
-
-**Cause**: The test framework Jest relies on jsdom, which relies on obsolete module request. Jsdom has not yet resolved this problem. We will continue to track related issues. For more information, see [https:// github.com/jsdom/jsdom/issues/2792](https://github.com/jsdom/jsdom/issues/2792).
-:::
-
 ### windows eslint error
 
 :::caution
-3. Windows may encounter the problem of eslint error. Please pay attention to [the problem of line wrapping under windows](faq/git_problem#XCAgm).
+Windows may encounter the problem of eslint error. Please pay attention to [the problem of line wrapping under windows](faq/git_problem#XCAgm).
 :::

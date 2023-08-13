@@ -245,13 +245,13 @@ export interface Context extends IMidwayContext {
 }
 ```
 
-这里的  `CronJob` 类型来自于 `node-cron` 包。
+这里的  `CronJob` 类型来自于 [Cron](https://github.com/kelektiv/node-cron) 包。
 
 
 
 ## 组件日志
 
-件有着自己的日志，默认会将 `ctx.logger` 记录在 `midway-bull.log` 中。
+组件有着自己的日志，默认会将 `ctx.logger` 记录在 `midway-cron.log` 中。
 
 我们可以单独配置这个 logger 对象。
 
@@ -269,3 +269,20 @@ export default {
 }
 ```
 
+
+
+## 全局配置
+
+可以针对 Job 进行一些全局配置，会和每个 Job 的配置进行合并。
+
+```typescript
+export default {
+  cron: {
+    defaultCronJobOptions: {
+      // ...
+    }
+  }
+}
+```
+
+这里的 `defaultCronJobOptions` 配置项请参考 [CronJobParameters](https://github.com/kelektiv/node-cron/blob/main/lib/job.js#L51)

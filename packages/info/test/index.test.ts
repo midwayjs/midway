@@ -57,6 +57,8 @@ describe('test/index.test.ts', () => {
       ]
     });
     const infoService = await app.getApplicationContext().getAsync(InfoService);
-    expect(infoService.midwayConfig()).toMatchSnapshot();
+    const config = infoService.midwayConfig();
+    delete config['info']['midwayLogger'];
+    expect(config).toMatchSnapshot();
   });
 });

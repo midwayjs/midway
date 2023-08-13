@@ -2,7 +2,6 @@
   "extends": "./node_modules/mwts/tsconfig-midway.json",
   "compileOnSave": true,
   "compilerOptions": {
-    "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noImplicitThis": false,

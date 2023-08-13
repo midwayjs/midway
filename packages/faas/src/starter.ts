@@ -5,6 +5,8 @@ import {
   MidwayFrameworkService,
 } from '@midwayjs/core';
 import { MidwayFaaSFramework } from './framework';
+import { join } from 'path';
+import { isTypeScriptEnvironment } from '@midwayjs/core';
 
 export abstract class AbstractBootstrapStarter {
   protected applicationContext;
@@ -21,12 +23,31 @@ export abstract class AbstractBootstrapStarter {
     await this.onClose();
   }
 
+  protected getBaseDir() {
+    if (this.options.baseDir) {
+      return this.options.baseDir;
+    }
+    if (isTypeScriptEnvironment()) {
+      return join(this.options.appDir, 'src');
+    } else {
+      return join(this.options.appDir, 'dist');
+    }
+  }
+
   public start(options?: ServerlessStarterOptions) {
     if (!this.startedExports) {
       this.options = Object.assign(this.options, options);
+      if (this.options.appDir && !this.options.baseDir) {
+        this.options.baseDir = this.getBaseDir();
+      }
       this.startedExports = this.onStart();
     }
-    return this.startedExports;
+    if (this.startedExports) {
+      this.startedExports['getStarter'] = () => {
+        return this;
+      };
+      return this.startedExports;
+    }
   }
 
   public async initFramework(bootstrapOptions: IMidwayBootstrapOptions = {}) {

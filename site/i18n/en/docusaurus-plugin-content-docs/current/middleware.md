@@ -314,10 +314,14 @@ export class MainConfiguration {
 In this way, many koa tripartite middleware in the community can be easily accessed.
 
 
-Take `koa-static` as an example.
+
+## Use community middleware
 
 
-In the `koa-static` document, it is written as follows.
+Let's take `koa-static` as an example.
+
+
+In the `koa-static` documentation, it is written like this.
 
 ```typescript
 const Koa = require('koa');
@@ -325,14 +329,57 @@ const app = new Koa();
 app.use(require('koa-static')(root, opts));
 ```
 
-Then, the `require('koa-static'))(root, opts)` is actually the returned middleware method. We can export it directly and call `useMiddleware`.
+Then, `require('koa-static')(root, opts)` is actually the returned middleware method, we can export it directly and call `useMiddleware`.
 
 ```typescript
 async onReady() {
-  // add middleware
-  this.app.useMiddleware(require('koa-static')(root, opts));
+   // add middleware
+   this.app.useMiddleware(require('koa-static')(root, opts));
 }
 ```
+
+If the middleware supports importing on routes, for example:
+
+```typescript
+const Koa = require('koa');
+const app = new Koa();
+app.get('/controller', require('koa-static')(root, opts));
+```
+
+We can also treat middleware as ordinary functions and place them in decorator parameters.
+
+```typescript
+const static Middleware = require('koa-static')(root, opts);
+
+//...
+class HomeController {
+   @Get('/controller', {middleware: [staticMiddleware]})
+   async getMethod() {
+     //...
+   }
+}
+```
+
+It can also be used as a routing method body.
+
+```typescript
+const static Middleware = require('koa-static')(root, opts);
+
+//...
+class HomeController {
+   @Get('/controller')
+   async getMethod(ctx, next) {
+     //...
+     return static Middleware(ctx, next);
+   }
+}
+```
+
+:::tip
+
+There are many ways to write three-party middleware, and the above are just the most basic ways to use it.
+
+:::
 
 
 
@@ -547,7 +594,7 @@ The preceding code is only the code that is returned with the correct logic. If 
 
 ### About the case where middleware returns null
 
-under koa/egg, if a null value is returned in the middleware, the status code will become 204, and the status code needs to be explicitly assigned to the middleware.
+Under koa/egg, if the middleware returns a null value, the status code will change to 204. If you need to return other status codes (such as 200), you need to explicitly assign additional status codes in the middleware.
 
 ```typescript
 import { Middleware, IMiddleware } from '@midwayjs/core';

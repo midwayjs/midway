@@ -1075,7 +1075,7 @@ import { App, Configuration, Logger } from '@midwayjs/core';
     ]
   }
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   // ...
 }
 
@@ -1174,10 +1174,10 @@ export class UserManager {
 @Provide()
 export class UserService {
   // ...
-  
+
   @Inject()
   userManager: UserManager;
-  
+
   async invoke() {
     const ctx = this.userManager[REQUEST_OBJ_CTX_KEY];
     // ...

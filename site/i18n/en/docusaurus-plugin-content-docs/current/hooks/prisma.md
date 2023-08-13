@@ -53,7 +53,7 @@ export const prisma =
 Prisma will download executable files dynamically according to the platform during installation. If your network environment is not good, you can set the image through environment variables.
 
 ```bash
-PRISMA_BINARIES_MIRROR = https://registry.npmmirror.com/-/binary/prisma/
+PRISMA_ENGINES_MIRROR = https://registry.npmmirror.com/-/binary/prisma/
 ```
 
 Related issues: [mirror prisma](https://github.com/cnpm/mirrors/issues/248)

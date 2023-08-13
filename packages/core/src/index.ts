@@ -60,6 +60,7 @@ export * from './decorator/constant';
 export {
   safelyGet,
   safeRequire,
+  loadModule,
   delegateTargetPrototypeMethod,
   delegateTargetMethod,
   delegateTargetProperties,
@@ -69,6 +70,7 @@ export {
   pathMatching,
   wrapMiddleware,
   wrapAsync,
+  isTypeScriptEnvironment,
 } from './util/';
 export { extend } from './util/extend';
 export * from './util/webRouterParam';

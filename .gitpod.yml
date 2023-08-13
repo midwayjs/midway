@@ -1,5 +1,5 @@
 tasks:
-  - init: npm install && npm run bootstrap && npm run build
+  - init: npm install && npm run build
 
 github:
   prebuilds:

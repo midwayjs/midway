@@ -7,7 +7,7 @@ If you haven't touched Midway, it doesn't matter. In this chapter, we will build
 ## Environmental preparation
 
 - Operating system: supports macOS,Linux,Windows
-- Running environment: We recommend that you select [LTS](http://nodejs.org/). The minimum requirement is 12.x.
+- Running environment: [Node.js environment requirements](/docs/intro#environmental-preparation).
 
 
 
@@ -70,7 +70,7 @@ import { Controller, Get, Query } from '@midwayjs/core';
 @Controller('/')
 export class WeatherController {
   @Get('/weather')
-  async getWeatherInfo(@Query('id') cityId: string): Promise<string> {
+  async getWeatherInfo(@Query('cityId') cityId: string): Promise<string> {
     return cityId;
   }
 }
@@ -225,7 +225,7 @@ import * as view from '@midwayjs/view-nunjucks';
   ],
   importConfigs: [join(__dirname, './config')]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   // ...
 }
 
@@ -432,7 +432,7 @@ import { WeatherErrorFilter } from './filter/weather.filter';
 @Configuration({
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 

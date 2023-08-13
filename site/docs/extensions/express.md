@@ -201,7 +201,7 @@ import { ReportMiddleware } from './middleware/report.middleware.ts'
 @Configuration({
   imports: [express],
 })
-export class ContainerLifeCycle implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   @App()
   app: express.Application;
@@ -223,7 +223,7 @@ import { join } from 'path';
 @Configuration({
   imports: [express],
 })
-export class ContainerLifeCycle implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
 
   @App()
   app: express.Application;
@@ -300,7 +300,7 @@ import { GlobalMatchFilter } from 'filter/globalMatch.filter';
   imports: [express],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: express.Application;
 
@@ -348,7 +348,7 @@ import { GlobalError } from './filter/global.filter';
   imports: [express],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: express.Application;
 

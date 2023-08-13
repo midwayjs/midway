@@ -242,6 +242,9 @@ axios.options(url[, config])
 axios.post(url[, data[, config]])
 axios.put(url[, data[, config]])
 axios.patch(url[, data[, config]])
+axios.postForm(url[, data[, config]])
+axios.putForm(url[, data[, config]])
+axios.patchForm(url[, data[, config]])
 ```
 
 
@@ -363,7 +366,7 @@ import { join } from 'path';
     join(__dirname, 'config')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 
   async onReady(container: IMidwayContainer) {
   	const httpService = await container.getAsync(axios.HttpService);
@@ -396,7 +399,7 @@ import { join } from 'path';
     join(__dirname, 'config')
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 
   async onReady(container: IMidwayContainer) {
   	const httpServiceFactory = await container.getAsync(axios.HttpServiceFactory);
@@ -413,3 +416,21 @@ export class ContainerLifeCycle {
 }
 ```
 
+### Use Axios directly
+
+`@midayjs/axios` also exported the original instance of `axios`, which could be useful in helper functions.
+
+```typescript
+import { axios } from '@midwayjs/axios';
+import { ReadStream, createWriteStream } from 'fs';
+import { finished } from 'stream/promises';
+
+async function download(url: string, filename: string) {
+  const writer = await createWriteStream(filename);
+  const res = axios.get<ReadStream>(url, {
+    responseType: 'stream',
+  });
+  res.data.pipe(writer);
+  await finished(writer);
+  return res;
+}

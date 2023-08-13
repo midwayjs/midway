@@ -123,7 +123,7 @@ const StarContainer = styled('div', {
 const targets = [
   'Web',
   'Fullstack',
-  'Achitecture',
+  'Architecture',
   'API',
   'Production',
   'Microservice',
@@ -159,7 +159,7 @@ export function Splash() {
       </SubTitle>
       <ButtonGroup>
         <Button type="main" href="/docs/intro">
-          Documention
+          Documentation
         </Button>
         <Button type="secondary" href="https://github.com/midwayjs/midway" target="_blank">
           <Icon className="iconfont icon-github-fill" />

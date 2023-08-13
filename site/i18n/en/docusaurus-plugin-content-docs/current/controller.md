@@ -67,8 +67,15 @@ export class HomeController {
 ```
 The `@Controller` decorator tells the framework that this is a class of type Web Controller, and the `@Get` decorator tells the framework that the decorated `home` method will be exposed as a `/` route, which can be accessed by ` GET` request to access.
 
-
 The whole method returns a string, and in the browser you will receive the response type of `text/plain` and a `200` status code.
+
+:::tip
+
+Routing methods are all async methods.
+
+:::
+
+
 
 
 ## Routing method

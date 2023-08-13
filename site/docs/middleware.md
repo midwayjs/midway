@@ -317,6 +317,10 @@ export class MainConfiguration {
 这样的话，社区很多 koa 三方中间件都可以比较方便的接入。
 
 
+
+## 使用社区中间件
+
+
 我们以 `koa-static` 举例。
 
 
@@ -336,6 +340,49 @@ async onReady() {
   this.app.useMiddleware(require('koa-static')(root, opts));
 }
 ```
+
+如果中间件支持在路由上引入，比如：
+
+```typescript
+const Koa = require('koa');
+const app = new Koa();
+app.get('/controller', require('koa-static')(root, opts));
+```
+
+我们也可以将中间件看成普通函数，放在装饰器参数中。
+
+```typescript
+const staticMiddleware = require('koa-static')(root, opts);
+
+// ...
+class HomeController {
+  @Get('/controller', {middleware: [staticMiddleware]})
+  async getMethod() {
+    // ...
+  }
+}
+```
+
+也可以作为作为路由方法体使用。
+
+```typescript
+const staticMiddleware = require('koa-static')(root, opts);
+
+// ...
+class HomeController {
+  @Get('/controller')
+  async getMethod(ctx, next) {
+    // ...
+    return staticMiddleware(ctx, next);
+  }
+}
+```
+
+:::tip
+
+三方中间件写法有很多种，上面只是列出最基本的使用方式。
+
+:::
 
 
 
@@ -550,7 +597,7 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
 
 ### 关于中间件返回 null 的情况
 
-在 koa/egg 下，如果中间件中返回 null 值，会使得状态码变为 204，需要在中间件中显式额外赋值状态码。
+在 koa/egg 下，如果中间件中返回 null 值，会使得状态码变为 204，如果需要返回其他状态码（如 200），需要在中间件中显式额外赋值状态码。
 
 ```typescript
 import { Middleware, IMiddleware } from '@midwayjs/core';

@@ -63,7 +63,7 @@ export class CodeDyeMW {
         console.log(reqInfoJSON);
       } else if (outputType === 'html') {
         response.set('Content-Type', 'text/html');
-        return toHTML(reqInfo.call[0]);
+        return toHTML(reqInfo.call);
       } else if (outputType === 'json') {
         return reqInfoJSON;
       }

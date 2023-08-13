@@ -14,7 +14,8 @@ import {
   Inject,
   sleep,
   IMidwayContainer,
-  LoggerFactory
+  LoggerFactory,
+  loadModule,
 } from '../src';
 import { join } from 'path';
 import * as http from 'http';
@@ -129,8 +130,22 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
     EmptyFramework,
     Configuration: EmptyConfiguration,
   }];
+
+  const pkgJSON = await loadModule(join(baseDir, 'package.json'), {
+    safeLoad: true,
+    enableCache: false,
+  });
+
+  const loadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+
+  // set default entry file
   if (baseDir) {
-    imports.push(safeRequire(join(baseDir, 'configuration')));
+    imports.unshift(
+      await loadModule(join(baseDir, 'configuration.ts'), {
+        loadMode,
+        safeLoad: true,
+      }),
+    );
   }
 
   const container = new MidwayContainer();
@@ -159,6 +174,7 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
     applicationContext: container,
     globalConfig,
     loggerFactory: new MidwayLoggerFactory(),
+    moduleLoadType: loadMode,
   });
 
   return container.getAsync(EmptyFramework as any);
@@ -209,11 +225,15 @@ export async function createHttpServer(options?: {
       }
       response.statusCode = 200;
       let body;
-      if (req.method === 'POST') {
+      if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
         body = await getRawBody(req, {
           encoding: true,
         });
         body = JSON.parse(body);
+      } else if (req.method === 'DELETE') {
+        response.statusCode = 204;
+        response.end('No Content');
+        return
       }
       if (/javascript/.test(req.headers['content-type'])) {
         response.setHeader('content-type', 'text/javascript');

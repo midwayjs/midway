@@ -464,7 +464,7 @@ import * as bull from '@midwayjs/bull';
   imports: [koa, bull],
   importConfigs: [join(__dirname, '. /config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: koa;
 

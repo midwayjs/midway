@@ -53,6 +53,58 @@ export const safeRequire = (p, enabledCache = true) => {
 };
 
 /**
+ * load module, and it can be chosen commonjs or esm mode
+ * @param p
+ * @param options
+ * @since 3.12.0
+ */
+export const loadModule = async (
+  p: string,
+  options: {
+    enableCache?: boolean;
+    loadMode?: 'commonjs' | 'esm';
+    safeLoad?: boolean;
+  } = {}
+) => {
+  options.enableCache = options.enableCache ?? true;
+  options.safeLoad = options.safeLoad ?? false;
+  options.loadMode = options.loadMode ?? 'commonjs';
+
+  if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
+    p = resolve(dirname(module.parent.filename), p);
+  }
+
+  try {
+    if (options.enableCache) {
+      if (options.loadMode === 'commonjs') {
+        return require(p);
+      } else {
+        // if json file, import need add options
+        if (p.endsWith('.json')) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          return (await import(p, { assert: { type: 'json' } })).default;
+        } else {
+          return await import(p);
+        }
+      }
+    } else {
+      const content = readFileSync(p, {
+        encoding: 'utf-8',
+      });
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    if (!options.safeLoad) {
+      throw err;
+    } else {
+      debug(`[core]: SafeLoadModule Warning\n\n${err.message}\n`);
+      return undefined;
+    }
+  }
+};
+
+/**
  *  @example
  *  safelyGet(['a','b'],{a: {b: 2}})  // => 2
  *  safelyGet(['a','b'],{c: {b: 2}})  // => undefined
@@ -459,6 +511,15 @@ export function toAsyncFunction<T extends (...args) => any>(
   }
 }
 
+export function isTypeScriptEnvironment() {
+  const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
+  if ('false' === TS_MODE_PROCESS_FLAG) {
+    return false;
+  }
+  // eslint-disable-next-line node/no-deprecated-api
+  return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
+}
+
 export const Utils = {
   sleep,
   getParamNames,
@@ -469,4 +530,5 @@ export const Utils = {
   toAsyncFunction,
   safeStringify,
   safeParse,
+  isTypeScriptEnvironment,
 };

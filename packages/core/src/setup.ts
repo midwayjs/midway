@@ -1,5 +1,4 @@
 import {
-  DirectoryFileDetector,
   MidwayConfigService,
   MidwayContainer,
   MidwayEnvironmentService,
@@ -15,7 +14,11 @@ import {
   MidwayApplicationManager,
   MidwayMockService,
   MidwayWebRouterService,
+  ESModuleFileDetector,
+  CommonJSFileDetector,
+  loadModule,
   safeRequire,
+  isTypeScriptEnvironment,
 } from './';
 import defaultConfig from './config/config.default';
 import {
@@ -24,8 +27,8 @@ import {
   listPreloadModule,
 } from './decorator';
 import * as util from 'util';
-import { join } from 'path';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
+import { join } from 'path';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -40,7 +43,9 @@ function printStepDebugInfo(stepInfo: string) {
 export async function initializeGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ): Promise<IMidwayContainer> {
-  const applicationContext = prepareGlobalApplicationContext(globalOptions);
+  const applicationContext = await prepareGlobalApplicationContext(
+    globalOptions
+  );
 
   printStepDebugInfo('Init logger');
 
@@ -112,10 +117,10 @@ export async function destroyGlobalApplicationContext(
 }
 
 /**
- * prepare applicationContext, it use in egg framework.
+ * prepare applicationContext
  * @param globalOptions
  */
-export function prepareGlobalApplicationContext(
+export async function prepareGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ) {
   printStepDebugInfo('Ready to create applicationContext');
@@ -138,21 +143,48 @@ export function prepareGlobalApplicationContext(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
-  printStepDebugInfo('Ready module detector');
+  debug('[core]: set default file detector');
 
+  if (!globalOptions.moduleLoadType) {
+    globalOptions.moduleLoadType = 'commonjs';
+  }
+
+  // set module detector
   if (globalOptions.moduleDetector !== false) {
-    if (
-      globalOptions.moduleDetector === undefined ||
-      globalOptions.moduleDetector === 'file'
-    ) {
-      applicationContext.setFileDetector(
-        new DirectoryFileDetector({
-          loadDir: baseDir,
-          ignore: globalOptions.ignore ?? [],
-        })
-      );
-    } else if (globalOptions.moduleDetector) {
-      applicationContext.setFileDetector(globalOptions.moduleDetector);
+    debug('[core]: set module load type = %s', globalOptions.moduleLoadType);
+
+    // set default entry file
+    if (!globalOptions.imports) {
+      globalOptions.imports = [
+        await loadModule(
+          join(
+            baseDir,
+            `configuration${isTypeScriptEnvironment() ? '.ts' : '.js'}`
+          ),
+          {
+            loadMode: globalOptions.moduleLoadType,
+            safeLoad: true,
+          }
+        ),
+      ];
+    }
+    if (globalOptions.moduleDetector === undefined) {
+      if (globalOptions.moduleLoadType === 'esm') {
+        applicationContext.setFileDetector(
+          new ESModuleFileDetector({
+            loadDir: baseDir,
+            ignore: globalOptions.ignore ?? [],
+          })
+        );
+        globalOptions.moduleLoadType = 'esm';
+      } else {
+        applicationContext.setFileDetector(
+          new CommonJSFileDetector({
+            loadDir: baseDir,
+            ignore: globalOptions.ignore ?? [],
+          })
+        );
+      }
     }
   }
 
@@ -204,20 +236,136 @@ export function prepareGlobalApplicationContext(
     'Load imports(component) and user code configuration module'
   );
 
+  applicationContext.load(
+    [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
+  );
+
+  printStepDebugInfo('Run applicationContext ready method');
+
+  // bind user code module
+  await applicationContext.ready();
+
+  if (globalOptions.globalConfig) {
+    if (Array.isArray(globalOptions.globalConfig)) {
+      configService.add(globalOptions.globalConfig);
+    } else {
+      configService.addObject(globalOptions.globalConfig);
+    }
+  }
+
+  printStepDebugInfo('Load config file');
+
+  // merge config
+  configService.load();
+  debug('[core]: Current config = %j', configService.getConfiguration());
+
+  // middleware support
+  applicationContext.get(MidwayMiddlewareService, [applicationContext]);
+  return applicationContext;
+}
+
+/**
+ * prepare applicationContext, it use in egg framework.
+ * @param globalOptions
+ */
+export function prepareGlobalApplicationContextSync(
+  globalOptions: IMidwayBootstrapOptions
+) {
+  printStepDebugInfo('Ready to create applicationContext');
+
+  debug('[core]: start "initializeGlobalApplicationContext"');
+  debug(`[core]: bootstrap options = ${util.inspect(globalOptions)}`);
+  const appDir = globalOptions.appDir ?? '';
+  const baseDir = globalOptions.baseDir ?? '';
+
+  // new container
+  const applicationContext =
+    globalOptions.applicationContext ?? new MidwayContainer();
+  // bind container to decoratorManager
+  debug('[core]: delegate module map from decoratorManager');
+  bindContainer(applicationContext);
+
+  global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
+
+  // register baseDir and appDir
+  applicationContext.registerObject('baseDir', baseDir);
+  applicationContext.registerObject('appDir', appDir);
+
+  printStepDebugInfo('Ready module detector');
+
+  if (globalOptions.moduleDetector !== false) {
+    if (globalOptions.moduleDetector === undefined) {
+      applicationContext.setFileDetector(
+        new CommonJSFileDetector({
+          ignore: globalOptions.ignore ?? [],
+        })
+      );
+    } else if (globalOptions.moduleDetector) {
+      applicationContext.setFileDetector(globalOptions.moduleDetector);
+    }
+  }
+
+  printStepDebugInfo('Binding inner service');
+
+  // bind inner service
+  applicationContext.bindClass(MidwayEnvironmentService);
+  applicationContext.bindClass(MidwayInformationService);
+  applicationContext.bindClass(MidwayAspectService);
+  applicationContext.bindClass(MidwayDecoratorService);
+  applicationContext.bindClass(MidwayConfigService);
+  applicationContext.bindClass(MidwayLoggerService);
+  applicationContext.bindClass(MidwayApplicationManager);
+  applicationContext.bindClass(MidwayFrameworkService);
+  applicationContext.bindClass(MidwayMiddlewareService);
+  applicationContext.bindClass(MidwayLifeCycleService);
+  applicationContext.bindClass(MidwayMockService);
+  applicationContext.bindClass(MidwayWebRouterService);
+  applicationContext.bindClass(MidwayServerlessFunctionService);
+
+  printStepDebugInfo('Binding preload module');
+
+  // bind preload module
+  if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
+    for (const preloadModule of globalOptions.preloadModules) {
+      applicationContext.bindClass(preloadModule);
+    }
+  }
+
+  printStepDebugInfo(
+    'Init MidwayConfigService, MidwayAspectService and MidwayDecoratorService'
+  );
+
+  // init default environment
+  const environmentService = applicationContext.get(MidwayEnvironmentService);
+  environmentService.setModuleLoadType(globalOptions.moduleLoadType);
+
+  // init default config
+  const configService = applicationContext.get(MidwayConfigService);
+  configService.add([
+    {
+      default: defaultConfig,
+    },
+  ]);
+
+  // init aop support
+  applicationContext.get(MidwayAspectService, [applicationContext]);
+
+  // init decorator service
+  applicationContext.get(MidwayDecoratorService, [applicationContext]);
+
+  printStepDebugInfo(
+    'Load imports(component) and user code configuration module'
+  );
+
   if (!globalOptions.imports) {
     globalOptions.imports = [
       safeRequire(join(globalOptions.baseDir, 'configuration')),
     ];
   }
 
-  for (const configurationModule of []
-    .concat(globalOptions.imports)
-    .concat(globalOptions.configurationModule)) {
-    // load configuration and component
-    if (configurationModule) {
-      applicationContext.load(configurationModule);
-    }
-  }
+  applicationContext.load(
+    [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
+  );
 
   printStepDebugInfo('Run applicationContext ready method');
 

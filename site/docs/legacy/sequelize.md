@@ -77,7 +77,7 @@ import * as sequelize from '@midwayjs/sequelize';
   imports: [sequelize],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle implements ILifeCycle {
+export class MainConfiguration implements ILifeCycle {
   @App()
   app: Application;
 

@@ -9,7 +9,7 @@ export abstract class DataListener<T> {
     await this.onData(this.setData.bind(this));
   }
 
-  abstract initData(): T;
+  abstract initData(): T | Promise<T>;
   abstract onData(callback: (data: T) => void);
 
   protected setData(data: T): void {

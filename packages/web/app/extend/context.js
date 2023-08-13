@@ -1,7 +1,11 @@
 'use strict';
 const rc = Symbol('Context#RequestContext');
 const ctxLogger = Symbol('Context#ContextLogger');
-const { MidwayRequestContainer } = require('@midwayjs/core');
+const {
+  MidwayRequestContainer,
+  MidwayWebRouterService,
+  httpError,
+} = require('@midwayjs/core');
 
 module.exports = {
   get requestContext() {
@@ -36,5 +40,28 @@ module.exports = {
 
   getAttr(key) {
     return this.requestContext.getAttr(key);
+  },
+
+  async forward(url) {
+    const routerService = this.requestContext.get(MidwayWebRouterService);
+    const matchedUrlRouteInfo = await routerService.getMatchedRouterInfo(
+      url,
+      this.method
+    );
+
+    if (matchedUrlRouteInfo) {
+      if (matchedUrlRouteInfo.controllerClz) {
+        // normal class controller router
+        const controllerInstance = await this.requestContext.getAsync(
+          matchedUrlRouteInfo.controllerClz
+        );
+        return controllerInstance[matchedUrlRouteInfo.method](this);
+      } else if (typeof matchedUrlRouteInfo.method === 'function') {
+        // dynamic router
+        return matchedUrlRouteInfo.method(this);
+      }
+    } else {
+      throw new httpError.NotFoundError(`Forward url ${url} Not Found`);
+    }
   },
 };

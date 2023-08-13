@@ -13,7 +13,7 @@
 
 
 
-> 友情提示：Node 6.x 和 8.x 都将在今年结束 LTS 的支持，请尽快升级到 10.x 。
+> 友情提示：Node 12.x 和 14.x 分别于2022和2023年4月结束生命期（EOL），请尽快升级到 16 或者 18 。
 > [https://github.com/nodejs/Release](https://github.com/nodejs/Release)
 
 
@@ -92,8 +92,45 @@ $ source ~/.zshrc
 
 ---
 
+
+
+## Mac Silicon 芯片使用低版本 Node.js
+
+如果你使用的是 Apple 芯片，由于 Node.js 16 以下没有 arm64 的芯片支持构建版本，所以没法直接安装。
+
+幸运的是，有一些解决方法可以使 Node.js 14与 Mac Silicon一起使用。Apple提供了Rosetta，这是一款翻译应用程序，允许为Intel芯片 (或上一代Mac) 构建的应用程序在  Apple Silicon下运行。
+
+有两个步骤：
+
+* 1、安装 Rosetta
+* 2、切换到 intel 环境，安装低版本 Node.js
+
+
+
+**安装 Rosetta**
+
+打开终端，执行
+
+```bash
+$ /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+```
+
+
+
+**切换环境，安装低版本 Node.js**
+
+* 1、打开终端，执行 `arch` ，确认运行的是 `arm64`
+* 2、执行 `arch -x86_64 zsh`，开启新的终端
+* 3、执行 `arch` ，确认运行的是 `i386`
+* 4、安装低版本 Node.js，你可以使用上面提到的 nvs 或者 nvm 来安装
+
+
+
+
+
 ## 相关阅读
 
 - [科普文：Node.js 安全攻防 - 如何伪造和获取用户真实 IP ？](https://zhuanlan.zhihu.com/p/62265144)
 - [科普文：运维不给升级 Node 版本怎么办？](https://zhuanlan.zhihu.com/p/39226941)
 - [科普文：为什么不能在服务器上 npm install ？](https://zhuanlan.zhihu.com/p/39209596)
+- [Using NodeJs 14 with Mac Silicon (M1)](https://devzilla.io/using-nodejs-14-with-mac-silicon-m1)

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/view",
-  "version": "3.11.6",
+  "version": "3.11.15",
   "description": "Midway Component for render view",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -27,8 +27,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.11.6",
-    "@midwayjs/koa": "^3.11.6",
-    "@midwayjs/mock": "^3.11.6"
+    "@midwayjs/core": "^3.11.15",
+    "@midwayjs/koa": "^3.11.15",
+    "@midwayjs/mock": "^3.11.15"
   }
 }
