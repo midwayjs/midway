@@ -84,7 +84,7 @@ export function ServerlessTrigger(
         methodName: functionName,
         metadata,
       },
-      target.constructor
+      target
     );
   };
 }
