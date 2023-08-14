@@ -1,6 +1,54 @@
 # Change Log
 
 
+## v3.12.0 (2023-08-14)
+
+#### :boom: Breaking Change
+* `async-hooks-context-manager`, `axios`, `bootstrap`, `bull-board`, `bull`, `cache`, `captcha`, `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `decorator`, `etcd`, `express-session`, `faas`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `mikro`, `mock`, `mongoose`, `oss`, `otel`, `passport`, `processAgent`, `prometheus-socket-io`, `prometheus`, `rabbitmq`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `typegoose`, `typeorm`, `upload`, `validate`, `view-ejs`, `view-nunjucks`, `view`, `web-express`, `web-koa`, `web`, `ws`
+  * [#3045](https://github.com/midwayjs/midway/pull/3045) feat: support esm file loader ([@czy88840616](https://github.com/czy88840616))
+
+#### :rocket: New Feature
+* `core`, `leoric`
+  * [#3087](https://github.com/midwayjs/midway/pull/3087) feat(deps): support leoric as model layer ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#2961](https://github.com/midwayjs/midway/pull/2961) feat: add getApp and getScope api ([@czy88840616](https://github.com/czy88840616))
+  * [#3110](https://github.com/midwayjs/midway/pull/3110) feat: support all http methods ([@ghostoy](https://github.com/ghostoy))
+* `bull-board`
+  * [#3085](https://github.com/midwayjs/midway/pull/3085) feat: upgrade bull-board v5.6.0 ([@czy88840616](https://github.com/czy88840616))
+* `web-koa`, `web`
+  * [#3133](https://github.com/midwayjs/midway/pull/3133) feat: add ctx.forward api ([@czy88840616](https://github.com/czy88840616))
+* `async-hooks-context-manager`, `axios`, `bootstrap`, `bull-board`, `bull`, `cache`, `captcha`, `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `decorator`, `etcd`, `express-session`, `faas`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `mikro`, `mock`, `mongoose`, `oss`, `otel`, `passport`, `processAgent`, `prometheus-socket-io`, `prometheus`, `rabbitmq`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `typegoose`, `typeorm`, `upload`, `validate`, `view-ejs`, `view-nunjucks`, `view`, `web-express`, `web-koa`, `web`, `ws`
+  * [#3045](https://github.com/midwayjs/midway/pull/3045) feat: support esm file loader ([@czy88840616](https://github.com/czy88840616))
+
+#### :wrench: Maintenance
+* `core`
+  * [#3164](https://github.com/midwayjs/midway/pull/3164) chore(decorator): opt code in serverlessTrigger ([@taosher](https://github.com/taosher))
+
+#### :package: Dependencies
+* `etcd`
+  * [#3142](https://github.com/midwayjs/midway/pull/3142) fix(deps): update dependency etcd3 to v1.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`, `bull`
+  * [#2993](https://github.com/midwayjs/midway/pull/2993) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3155](https://github.com/midwayjs/midway/pull/3155) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.12.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3085](https://github.com/midwayjs/midway/pull/3085) feat: upgrade bull-board v5.6.0 ([@czy88840616](https://github.com/czy88840616))
+* Other
+  * [#3161](https://github.com/midwayjs/midway/pull/3161) chore(deps): update dependency @types/node to v18.17.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3157](https://github.com/midwayjs/midway/pull/3157) chore(deps): update supercharge/mongodb-github-action action to v1.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3162](https://github.com/midwayjs/midway/pull/3162) chore(deps): update dependency mongoose to v7.4.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#3156](https://github.com/midwayjs/midway/pull/3156) fix(deps): update socket.io packages to v4.7.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 4
+- Cong Liu ([@ghostoy](https://github.com/ghostoy))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Ming Ye ([@ymqy](https://github.com/ymqy))
+- Taosh ([@taosher](https://github.com/taosher))
+
+
+
 ## v3.11.18 (2023-08-05)
 
 #### :bug: Bug Fix
