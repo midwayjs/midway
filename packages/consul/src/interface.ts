@@ -1,5 +1,6 @@
-import * as Consul from 'consul';
-import { ConsulOptions } from 'consul';
+import Consul from 'consul';
+
+type ConsulOptions = ConstructorParameters<typeof Consul>[0];
 
 /**
  * consul configuration of midwayjs
@@ -20,7 +21,7 @@ export interface IConsulOptions {
    *
    *@see [consul.agent.service.register.options]{@link https://github.com/silas/node-consul#consulagentserviceregisteroptions}
    */
-  register: Consul.Agent.Service.RegisterOptions;
+  register: typeof Consul.Agent.Service;
 }
 
 /**

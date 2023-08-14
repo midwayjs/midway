@@ -9,7 +9,7 @@ import {
   Provide,
   Singleton,
 } from '@midwayjs/core';
-import * as Consul from 'consul';
+import Consul from 'consul';
 import { IConsulOptions, IServiceHealth, IServiceNode } from './interface';
 
 export class MidwayConsulError extends MidwayError {
@@ -30,9 +30,9 @@ export class ConsulService {
 
   serviceId: string;
 
-  private instance: Consul.Consul;
+  private instance: Consul;
 
-  get consul(): Consul.Consul {
+  get consul(): Consul {
     return this.instance;
   }
 
