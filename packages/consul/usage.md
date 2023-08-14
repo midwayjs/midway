@@ -11,7 +11,6 @@ npm i @types/consul -D
 
 - [x] register (optional)
 - [x] deregister on the shutdown (optional)
-- [x] service balancer (default random)
 - [x] expose the origin consul object
 
 ## Usage age
@@ -28,57 +27,148 @@ import * as consul from '@midwayjs/consul'
   importConfigs: [join(__dirname, 'config')]
 })
 export class ContainerConfiguration {}
+
 ```
 
 ### 2. config consul server and service definition.
 
-```
-consul: {
-  provider: {
-    // 注册本服务
-    register: true,
-    // 应用正常下线反注册
+```typescript
+export default {
+  consul: {
+    // {Optional}, Default is undefined
+    // If you need to register your current application with consul;or you can also use it as a client without registering
+    // more parameter? here ->  https://github.com/silas/node-consul#consulagentserviceregisteroptions
+    register: {
+      //{Required}
+      address: '127.0.0.1',
+      //{Required}
+      port: 7001,
+      //{Optional},Default to the name value of package.json
+      name: 'SERVICE_NAME',
+      //{Optional},Default is `name:address:port`
+      id: 'SERVICE_ID',
+    },
+    // {Required},Configuration of consul,All parameters -> https://github.com/silas/node-consul#consuloptions,
+    options: {
+      host: '127.0.0.1',
+      port: '8500',
+    },
+    //{Optional},Default is true;When value true is yes,will deregister the service after the application stops
     deregister: true,
-    // consul server 主机
-    host: '192.168.0.10',
-    // consul server 端口
-    port: 8500,
-    // 调用服务的策略(默认选取 random 具有随机性)
-    strategy: 'random',
   },
-  service: {
-    address: '127.0.0.1',
-    port: 7001,
-    tags: ['tag1', 'tag2'],
-    // others consul service definition
+};
+```
+Notes:`options` and `register` are consisitent with [Common Method Call Options](https://github.com/silas/node-consul#common-method-call-options) and  [consul agent service register options](https://github.com/silas/node-consul#consulagentserviceregisteroptions)
+
+
+
+
+### 3. lookup the service instance to call.
+
+- Get ConsulService with two ways
+
+```typescript
+import { ConsulService } from '@midwayjs/consul';
+import { App, IMidwayApplication } from '@midwayjs/core';
+
+export class Home {
+  //1. with Inject
+  @Inject()
+  consulSrv: ConsulService;
+  @App()
+  app: IMidwayApplication;
+
+  //2. with Code;
+  async home() {
+    const consulSrv = await app
+      .getApplicationContext()
+      .getAsync<ConsulService>(ConsulService);
   }
 }
 ```
 
-### 3. lookup the service instance to call.
+- Find service information by name,and You can get the same structure
+  as [consul's api response](https://developer.hashicorp.com/consul/api-docs/catalog#sample-response-3)
+
+```typescript
+// You can do whatever you want with serviceInfo,like service calls, etc
+// By the way,select will only get services that are in a healthy(status is passing) state,If there are multiple instances, select one at random
+import console = require("console");
+
+try {
+  const service = await consulSrv.select('SERVICE_NAME');
+  console.log(service)
+} catch (e) {
+  // if an exception occurs, you can get an instance of MidwayConsulError,so you can do some magic..
+}
+```
+the output [structure](https://developer.hashicorp.com/consul/api-docs/catalog#sample-response-3) is :
+```json
+[
+  {
+    "ID": "40e4a748-2192-161a-0510-9bf59fe950b5",
+    "Node": "t2.320",
+    "Address": "192.168.10.10",
+    "Datacenter": "dc1",
+    "TaggedAddresses": {
+      "lan": "192.168.10.10",
+      "wan": "10.0.10.10"
+    },
+    "NodeMeta": {
+      "somekey": "somevalue"
+    },
+    "CreateIndex": 51,
+    "ModifyIndex": 51,
+    "ServiceAddress": "172.17.0.3",
+    "ServiceEnableTagOverride": false,
+    "ServiceID": "32a2a47f7992:nodea:5000",
+    "ServiceName": "web",
+    "ServicePort": 5000,
+    "ServiceMeta": {
+      "web_meta_value": "baz"
+    },
+    "ServiceTaggedAddresses": {
+      "lan": {
+        "address": "172.17.0.3",
+        "port": 5000
+      },
+      "wan": {
+        "address": "198.18.0.1",
+        "port": 512
+      }
+    },
+    "ServiceTags": ["prod"],
+    "ServiceProxy": {
+      "DestinationServiceName": "",
+      "DestinationServiceID": "",
+      "LocalServiceAddress": "",
+      "LocalServicePort": 0,
+      "Config": null,
+      "Upstreams": null
+    },
+    "ServiceConnect": {
+      "Native": false,
+      "Proxy": null
+    },
+    "Namespace": "default"
+  }
+]
+
+
 
 ```
-// 1. 注入的方式
-@Inject('consul:balancerService')
-balancerService: IConsulBalancer;
-// 2. 编码的方式
-const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
 
-// 查询的 service 数据是 consul 返回的原生数据，因为组件并不知道应用层使用了 consul 的哪些元数据信息
-// 注意下 select 在没有服务实例时会抛出 Error
+### 4. Gets the original object of Consul,You can use the original object do you need(likes:KVStore,Events,etc...)
 
-// 1. 查询通过健康检查的服务
-const service = await balancerService.getBalancer().select('the-service-name');
-// 2. 可能取到不健康的服务
-const service = await balancerService.getBalancer().select('the-service-name', false);
-```
+```typescript
+import { ConsulService } from '@midwayjs/consul';
 
-### 4. inject the origin consul object.
+export class Home {
+  @Inject()
+  consulSrv: ConsulService;
 
-```
-import * as Consul from 'consul';
-
-// 使用 consul 官方包装的 API 接口
-@Inject('consul:consul')
-consul: Consul.Consul;
+  async home() {
+    const consulObj = this.consulSrv.consul;
+  }
+}
 ```

@@ -13,12 +13,11 @@
     "@midwayjs/core": "^3.11.15",
     "@midwayjs/koa": "^3.11.15",
     "@midwayjs/mock": "^3.11.15",
-    "@types/consul": "0.40.0",
     "@types/sinon": "10.0.16",
     "nock": "13.3.2"
   },
   "dependencies": {
-    "consul": "1.2.0"
+    "consul": "2.0.0-next.1"
   },
   "keywords": [
     "consul"
