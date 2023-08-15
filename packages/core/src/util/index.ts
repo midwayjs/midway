@@ -52,6 +52,8 @@ export const safeRequire = (p, enabledCache = true) => {
   }
 };
 
+const innerLoadModuleCache = {};
+
 /**
  * load module, and it can be chosen commonjs or esm mode
  * @param p
@@ -81,9 +83,18 @@ export const loadModule = async (
       } else {
         // if json file, import need add options
         if (p.endsWith('.json')) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          return (await import(p, { assert: { type: 'json' } })).default;
+          /**
+           * attention: import json not support under nodejs 16
+           * use readFileSync instead
+           */
+          if (!innerLoadModuleCache[p]) {
+            // return (await import(p, { assert: { type: 'json' } })).default;
+            const content = readFileSync(p, {
+              encoding: 'utf-8',
+            });
+            innerLoadModuleCache[p] = JSON.parse(content);
+          }
+          return innerLoadModuleCache[p];
         } else {
           return await import(p);
         }
