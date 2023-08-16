@@ -10,6 +10,7 @@ import { randomUUID } from './uuid';
 import { safeParse, safeStringify } from './flatted';
 import * as crypto from 'crypto';
 import { Types } from './types';
+import { fileURLToPath } from 'url';
 
 const debug = debuglog('midway:debug');
 
@@ -76,6 +77,10 @@ export const loadModule = async (
     p = resolve(dirname(module.parent.filename), p);
   }
 
+  debug(
+    `[core]: load module ${p}, cache: ${options.enableCache}, mode: ${options.loadMode}, safeLoad: ${options.safeLoad}`
+  );
+
   try {
     if (options.enableCache) {
       if (options.loadMode === 'commonjs') {
@@ -96,7 +101,7 @@ export const loadModule = async (
           }
           return innerLoadModuleCache[p];
         } else {
-          return await import(p);
+          return await import(fileURLToPath(p));
         }
       }
     } else {
