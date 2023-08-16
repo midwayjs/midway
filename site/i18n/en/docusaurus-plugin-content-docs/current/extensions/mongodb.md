@@ -386,7 +386,7 @@ export class TestService {
 
 Typegoose reserved a `setGlobalOptions` method to set up [schemaOptions](https://typegoose.github.io/typegoose/docs/api/decorators/model-options#schemaoptions) and some other global [configurations](https://typegoose.github.io/typegoose/docs/api/decorators/model-options#options-1).
 
-We can set it up when the project starts.
+We can set it up when config loaded.
 
 ```typescript
 // srcconfiguration.ts
@@ -398,7 +398,7 @@ import * as Typegoose from '@typegoose/typegoose';
   // ...
 })
 export class MainConfiguration {
-  async onReady() {
+  async onConfigLoad() {
 
     Typegoose.setGlobalOptions({
       schemaOptions: {
