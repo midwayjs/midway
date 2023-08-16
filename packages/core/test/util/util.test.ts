@@ -33,7 +33,7 @@ describe('/test/util/util.test.ts', () => {
     expect(await loadModule('../fixtures/dir/bbb/nok.js', {safeLoad: true})).toBeUndefined();
   });
 
-  it('should test load modle with esm', async () => {
+  it('should test load module with esm', async () => {
     let child = fork('esm.mjs', [], {
       cwd: join(__dirname, './esm-fixtures'),
       execArgv: [
