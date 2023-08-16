@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.12.1 (2023-08-16)
+
+#### :bug: Bug Fix
+* `core`
+  * [#3168](https://github.com/midwayjs/midway/pull/3168) fix: import json not support under node v16 ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.12.0 (2023-08-14)
 
 #### :boom: Breaking Change

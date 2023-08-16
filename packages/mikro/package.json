@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mikro",
-  "version": "3.12.0",
+  "version": "3.12.1",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -9,8 +9,8 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.12.0",
-    "@midwayjs/mock": "^3.12.0",
+    "@midwayjs/core": "^3.12.1",
+    "@midwayjs/mock": "^3.12.1",
     "@mikro-orm/core": "5.7.14",
     "@mikro-orm/entity-generator": "5.7.14",
     "@mikro-orm/sql-highlighter": "1.0.1",
