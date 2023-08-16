@@ -10,7 +10,7 @@ import { randomUUID } from './uuid';
 import { safeParse, safeStringify } from './flatted';
 import * as crypto from 'crypto';
 import { Types } from './types';
-import { fileURLToPath } from 'url';
+import { pathToFileURL } from 'url';
 
 const debug = debuglog('midway:debug');
 
@@ -101,7 +101,7 @@ export const loadModule = async (
           }
           return innerLoadModuleCache[p];
         } else {
-          return await import(fileURLToPath(p));
+          return await import(pathToFileURL(p).href);
         }
       }
     } else {
