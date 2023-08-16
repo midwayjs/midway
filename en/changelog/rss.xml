@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Mon, 14 Aug 2023 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 16 Aug 2023 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2023 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.12.1]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.12.1</link>
+            <guid>https://midwayjs.org/en/changelog/v3.12.1</guid>
+            <pubDate>Wed, 16 Aug 2023 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3168" target="_blank" rel="noopener noreferrer">#3168</a> fix: import json not support under node v16 (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.12.0]]></title>
             <link>https://midwayjs.org/en/changelog/v3.12.0</link>
