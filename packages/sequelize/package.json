@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/sequelize",
-  "version": "3.12.1",
+  "version": "3.12.2",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -9,9 +9,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.12.1",
-    "@midwayjs/koa": "^3.12.1",
-    "@midwayjs/mock": "^3.12.1",
+    "@midwayjs/core": "^3.12.2",
+    "@midwayjs/koa": "^3.12.2",
+    "@midwayjs/mock": "^3.12.2",
     "sequelize": "6.32.1",
     "sequelize-typescript": "2.1.5",
     "sqlite3": "5.1.6"

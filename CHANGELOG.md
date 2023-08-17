@@ -1,6 +1,19 @@
 # Change Log
 
 
+## v3.12.2 (2023-08-17)
+
+#### :bug: Bug Fix
+* `core`, `web`
+  * [#3175](https://github.com/midwayjs/midway/pull/3175) fix: use original method name ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#3171](https://github.com/midwayjs/midway/pull/3171) fix: load file missing file prefix under windows ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.12.1 (2023-08-16)
 
 #### :bug: Bug Fix
