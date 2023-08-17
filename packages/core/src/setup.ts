@@ -265,7 +265,7 @@ export async function prepareGlobalApplicationContextAsync(
 }
 
 /**
- * prepare applicationContext, it use in egg framework.
+ * prepare applicationContext, it use in egg framework, hooks and serverless function generator
  * @param globalOptions
  */
 export function prepareGlobalApplicationContext(
