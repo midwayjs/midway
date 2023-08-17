@@ -43,7 +43,7 @@ function printStepDebugInfo(stepInfo: string) {
 export async function initializeGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ): Promise<IMidwayContainer> {
-  const applicationContext = await prepareGlobalApplicationContext(
+  const applicationContext = await prepareGlobalApplicationContextAsync(
     globalOptions
   );
 
@@ -120,7 +120,7 @@ export async function destroyGlobalApplicationContext(
  * prepare applicationContext
  * @param globalOptions
  */
-export async function prepareGlobalApplicationContext(
+export async function prepareGlobalApplicationContextAsync(
   globalOptions: IMidwayBootstrapOptions
 ) {
   printStepDebugInfo('Ready to create applicationContext');
@@ -268,7 +268,7 @@ export async function prepareGlobalApplicationContext(
  * prepare applicationContext, it use in egg framework.
  * @param globalOptions
  */
-export function prepareGlobalApplicationContextSync(
+export function prepareGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ) {
   printStepDebugInfo('Ready to create applicationContext');
