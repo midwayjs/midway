@@ -5,6 +5,19 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "https://midwayjs.org/en/changelog/v3.12.2",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a href=\"#-bug-fix\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>core</code>, <code>web</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3175\" target=\"_blank\" rel=\"noopener noreferrer\">#3175</a> fix: use original method name (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li><li><code>core</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3171\" target=\"_blank\" rel=\"noopener noreferrer\">#3171</a> fix: load file missing file prefix under windows (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a href=\"#committers-1\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
+            "url": "https://midwayjs.org/en/changelog/v3.12.2",
+            "title": "v3.12.2",
+            "summary": "Bug Fix",
+            "date_modified": "2023-08-17T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
             "id": "https://midwayjs.org/en/changelog/v3.12.1",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a href=\"#-bug-fix\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>core</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3168\" target=\"_blank\" rel=\"noopener noreferrer\">#3168</a> fix: import json not support under node v16 (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a href=\"#committers-1\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
             "url": "https://midwayjs.org/en/changelog/v3.12.1",
