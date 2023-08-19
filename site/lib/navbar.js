@@ -7,18 +7,6 @@ module.exports = [
   },
   {
     "type": "doc",
-    "docId": "hooks/intro",
-    "label": "一体化",
-    "position": "left"
-  },
-  {
-    "type": "doc",
-    "docId": "serverless/serverless_intro",
-    "label": "Serverless",
-    "position": "left"
-  },
-  {
-    "type": "doc",
     "docId": "extensions/axios",
     "label": "组件",
     "position": "left"

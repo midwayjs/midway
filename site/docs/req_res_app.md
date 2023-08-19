@@ -432,3 +432,14 @@ this.ctx.getLogger('custom');
 // => custom logger
 ```
 
+
+
+### getApp
+
+从 ctx 上获取当前框架类型的 app 对象。
+
+```typescript
+const app = this.ctx.getApp();
+// app.getConfig();
+```
+

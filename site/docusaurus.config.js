@@ -178,10 +178,6 @@ const config = {
             position: 'right',
             items: [
               {
-                label: '开源送礼',
-                href: 'https://survey.taobao.com/apps/zhiliao/pJ3zng9Iv',
-              },
-              {
                 label: '线下沙龙',
                 href: 'https://subway.midwayjs.org/',
               },
