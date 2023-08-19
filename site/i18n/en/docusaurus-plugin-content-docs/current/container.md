@@ -430,6 +430,43 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 }
 ```
 
+### Get object scope
+
+Starting from version v3.12.0, the dependency injection container adds a new API for obtaining object scope.
+
+```typescript
+import { Controller, Inject, ApplicationContext, Get, IMidwayContainer } from '@midwayjs/core';
+import { UserService} from '../service/user.service';
+
+@Singleton()
+export class UserSerivce {
+   //...
+}
+
+@Controller('/')
+export class HomeController {
+   @Inject()
+   userService: UserService;
+
+   @ApplicationContext()
+   applicationContext: IMidwayContainer;
+
+   @Get('/')
+   async home(): Promise<string> {
+     console.log(this.applicationContext.getInstanceScope(this));
+     // => Request
+
+     console.log(this.applicationContext.getInstanceScope(this.userService));
+     // => Singleton
+    
+     //...
+   }
+}
+```
+
+The `getInstanceScope` method returns a `ScopeEnum` value.
+
+
 
 ## Injection rule
 

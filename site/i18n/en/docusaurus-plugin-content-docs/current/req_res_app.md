@@ -428,3 +428,13 @@ this.ctx.getLogger('custom');
 // => custom logger
 ```
 
+
+
+### getApp
+
+Get the app object of the current frame type from ctx.
+
+```typescript
+const app = this.ctx.getApp();
+// app. getConfig();
+```
