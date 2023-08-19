@@ -950,6 +950,42 @@ The response type cannot be modified after the response flow is closed (after re
 
 
 
+## Internal redirection
+
+Starting from v3.12.0, the framework provides an internal redirect API `ctx.forward(url)`, which only supports koa/egg type.
+
+The difference from external redirection is that internal redirection does not modify the URL of the browser, but only flows inside the program.
+
+```typescript
+import { Controller, Get, Inject } from '@midwayjs/core';
+
+@Controller('/')
+export class HomeController {
+   @Inject()
+   ctx: Context;
+
+   @Get('/')
+   async home() {
+     return this.ctx.forward('/api');
+   }
+  
+   @Get('/api')
+   async api() {
+     return 'abc';
+   }
+}
+```
+
+Note that there are some rules for internal redirects:
+
+* 1. Redirection will retain all parameters of the original route, that is, transparently transmit the entire ctx
+
+* 2. Redirection can only be done in the same http method
+
+* 3. Redirection will not execute Web Middleware again, and guards will not be executed, but interceptors and parameter decorators will be executed
+
+
+
 ## Global route prefix
 
 It needs to be set in the `src/config/config.default` configuration.

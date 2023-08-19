@@ -947,6 +947,44 @@ export class HomeController {
 
 
 
+## 内部重定向
+
+从 v3.12.0 开始，框架提供了一个内部重定向 API `ctx.forward(url)`，仅支持 koa/egg 类型。 
+
+和外部重定向不同的地方在于，内部重定向不会修改浏览器的 URL，只在程序内部流转。
+
+```typescript
+import { Controller, Get, Inject } from '@midwayjs/core';
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+
+  @Get('/')
+  async home() {
+    return this.ctx.forward('/api');
+  }
+  
+  @Get('/api')
+  async api() {
+    return 'abc';
+  }
+}
+```
+
+注意，内部重定向有一些规则：
+
+* 1、重定向会保留原始路由的所有参数，即透传整个 ctx
+
+* 2、重定向只能在相同的 http method 中进行
+
+* 3、重定向不会再执行一遍 Web Middleware，不会执行守卫，但是会执行拦截器和参数装饰器
+
+  
+
+
+
 ## 全局路由前缀
 
 需要在 `src/config/config.default` 配置中设置。
