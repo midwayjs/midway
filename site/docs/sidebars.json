@@ -14,8 +14,8 @@
     {
       "type": "category",
       "label": "基础",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "quickstart",
         "controller",
@@ -32,8 +32,8 @@
     {
       "type": "category",
       "label": "进阶",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "container",
         "testing",
@@ -47,12 +47,15 @@
         "built_in_service",
         "router_table",
         "decorator_index",
-        "error_code"
+        "error_code",
+        "esm"
       ]
     },
     {
       "type": "category",
       "label": "设计模式",
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "aspect",
         "auto_run",
@@ -66,12 +69,128 @@
     {
       "type": "category",
       "label": "自定义",
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "context_definition",
         "component_development",
         "custom_decorator",
         "custom_error",
         "change_start_dir"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Serverless",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        [
+          {
+            "type": "doc",
+            "id": "serverless/serverless_intro",
+            "label": "介绍"
+          },
+          {
+            "type": "doc",
+            "id": "serverless/serverless_v2_upgrade_serverless_v3"
+          },
+          {
+            "type": "category",
+            "label": "基础",
+            "collapsed": false,
+            "collapsible": false,
+            "items": [
+              "serverless/serverless_dev",
+              "serverless/serverless_testing",
+              "serverless/serverless_context",
+              "serverless/serverless_yml",
+              "serverless/serverless_environment",
+              "serverless/serverless_error"
+            ]
+          },
+          {
+            "type": "category",
+            "label": "平台触发器",
+            "collapsed": false,
+            "collapsible": false,
+            "items": [
+              "serverless/aliyun_faas",
+              "serverless/tencent_faas"
+            ]
+          },
+          {
+            "type": "category",
+            "label": "应用部署到弹性容器",
+            "collapsed": false,
+            "collapsible": false,
+            "items": [
+              "serverless/app_deploy_serverless",
+              "serverless/migrate_midway",
+              "serverless/migrate_static",
+              "serverless/migrate_koa",
+              "serverless/migrate_express",
+              "serverless/migrate_egg"
+            ]
+          },
+          {
+            "type": "doc",
+            "id": "serverless/serverless_post_difference",
+            "label": "Serverless 触发器 POST 情况差异"
+          }
+        ]
+      ]
+    },
+    {
+      "type": "category",
+      "label": "一体化",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        {
+          "type": "doc",
+          "id": "hooks/intro",
+          "label": "介绍"
+        },
+        {
+          "type": "category",
+          "label": "基础功能",
+          "collapsed": false,
+          "collapsible": false,
+          "items": [
+            "hooks/api",
+            "hooks/builtin-hooks",
+            "hooks/validate",
+            "hooks/middleware",
+            "hooks/cors",
+            "hooks/component",
+            "hooks/prisma",
+            "hooks/test",
+            "hooks/config",
+            "hooks/file-route",
+            "hooks/safe",
+            "hooks/upload"
+          ]
+        },
+        {
+          "type": "category",
+          "label": "一体化",
+          "collapsed": false,
+          "collapsible": false,
+          "items": [
+            "hooks/fullstack",
+            "hooks/client"
+          ]
+        },
+        {
+          "type": "category",
+          "label": "进阶",
+          "collapsed": false,
+          "collapsible": false,
+          "items": [
+            "hooks/deploy"
+          ]
+        }
       ]
     }
   ],
@@ -173,106 +292,6 @@
         "extensions/cfork",
         "extensions/alinode",
         "extensions/prometheus"
-      ]
-    }
-  ],
-  "serverless": [
-    {
-      "type": "doc",
-      "id": "serverless/serverless_intro",
-      "label": "介绍"
-    },
-    {
-      "type": "doc",
-      "id": "serverless/serverless_v2_upgrade_serverless_v3"
-    },
-    {
-      "type": "category",
-      "label": "基础",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "serverless/serverless_dev",
-        "serverless/serverless_testing",
-        "serverless/serverless_context",
-        "serverless/serverless_yml",
-        "serverless/serverless_environment",
-        "serverless/serverless_error"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "平台触发器",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "serverless/aliyun_faas",
-        "serverless/tencent_faas"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "应用部署到弹性容器",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "serverless/app_deploy_serverless",
-        "serverless/migrate_midway",
-        "serverless/migrate_static",
-        "serverless/migrate_koa",
-        "serverless/migrate_express",
-        "serverless/migrate_egg"
-      ]
-    },
-    {
-      "type": "doc",
-      "id": "serverless/serverless_post_difference",
-      "label": "Serverless 触发器 POST 情况差异"
-    }
-  ],
-  "hooks": [
-    {
-      "type": "doc",
-      "id": "hooks/intro",
-      "label": "介绍"
-    },
-    {
-      "type": "category",
-      "label": "基础功能",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "hooks/api",
-        "hooks/builtin-hooks",
-        "hooks/validate",
-        "hooks/middleware",
-        "hooks/cors",
-        "hooks/component",
-        "hooks/prisma",
-        "hooks/test",
-        "hooks/config",
-        "hooks/file-route",
-        "hooks/safe",
-        "hooks/upload"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "一体化",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "hooks/fullstack",
-        "hooks/client"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "进阶",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "hooks/deploy"
       ]
     }
   ],
