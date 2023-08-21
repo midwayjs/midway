@@ -121,6 +121,15 @@ import { helper } from "./foo"; // only works in CJS
 
 4、你不能在代码中使用 `__dirname`，`__filename` 等和路径相关关键字
 
+```typescript
+// ESM solution
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(fileURLToPath(import.meta.url))
+```
+
 所有配置的部分，必须使用对象模式。
 
 ```typescript

@@ -121,6 +121,15 @@ Only the `import` keyword can be used.
 
 4. You cannot use `__dirname`, `__filename`, etc. and path-related keywords in the code
 
+```typescript
+// ESM solution
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(fileURLToPath(import.meta.url))
+```
+
 Therefore, the configuration part must use the object mode.
 
 ```typescript
