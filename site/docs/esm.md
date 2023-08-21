@@ -121,7 +121,7 @@ import { helper } from "./foo"; // only works in CJS
 
 4、你不能在代码中使用 `__dirname`，`__filename` 等和路径相关关键字
 
-所以配置的部分，必须使用对象模式。
+所有配置的部分，必须使用对象模式。
 
 ```typescript
 import { Configuration } from '@midwayjs/core';
