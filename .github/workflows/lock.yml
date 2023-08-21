@@ -20,6 +20,7 @@ jobs:
         with:
           process-only: 'issues'
           issue-inactive-days: '90'
+          exclude-issue-created-before: '2023-06-01T00:00:00+00:00;'
           issue-comment: >
             This issue has been automatically locked since there
             has not been any recent activity after it was closed.
