@@ -26,7 +26,7 @@
 由于改动较多，Midway 提供了全新的 ESM 格式的脚手架，如有 ESM 的需求，我们推荐用户重新创建后再来开发业务。
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
 选择 esm 分组中的脚手架。

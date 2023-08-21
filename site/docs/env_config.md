@@ -93,8 +93,9 @@ export class MainConfiguration {
 
 ### 2、指定目录或者文件加载
 
-
 指定加载一个目录，目录里所有的 `config.*.ts` 都会被扫描加载。
+
+ESM，单文件部署等方式不支持目录配置加载。
 
 
 :::info

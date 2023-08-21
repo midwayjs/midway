@@ -16,7 +16,7 @@ If you haven't touched Midway, it doesn't matter. In this chapter, we will build
 We recommend using scaffolding directly, with only a few simple instructions, you can quickly generate the project.
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
 Select `koa-v3` to initialize the project. You can customize the project name, such as `weather-sample`.

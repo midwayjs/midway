@@ -93,8 +93,9 @@ The array in the `importConfigs` passes configuration objects. The key of each o
 
 ### 2. Specify directory or file loading
 
-
 Specifies that a directory is loaded. All `config.*.ts` in the directory are scanned and loaded.
+
+ESM, single-file deployment, etc. do not support directory configuration loading.
 
 
 :::info
