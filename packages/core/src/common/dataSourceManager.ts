@@ -10,6 +10,8 @@ import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { debuglog } from 'util';
 import { loadModule } from '../util';
 import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
+import { Inject } from '../decorator';
+import { MidwayEnvironmentService } from '../service/environmentService';
 const debug = debuglog('midway:debug');
 
 export abstract class DataSourceManager<
@@ -20,6 +22,12 @@ export abstract class DataSourceManager<
   protected options: DataSourceManagerConfigOption<ConnectionOpts> = {};
   protected modelMapping = new WeakMap();
   private innerDefaultDataSourceName: string;
+
+  @Inject()
+  appDir: string;
+
+  @Inject()
+  environmentService: MidwayEnvironmentService;
 
   protected async initDataSource(
     dataSourceConfig: DataSourceManagerConfigOption<ConnectionOpts>,
@@ -55,7 +63,11 @@ export abstract class DataSourceManager<
         for (const entity of userEntities) {
           if (typeof entity === 'string') {
             // string will be glob file
-            const models = await globModels(entity, baseDirOrOptions.baseDir);
+            const models = await globModels(
+              entity,
+              baseDirOrOptions.baseDir,
+              this.environmentService?.getModuleLoadType()
+            );
             for (const model of models) {
               entities.add(model);
               this.modelMapping.set(model, dataSourceName);

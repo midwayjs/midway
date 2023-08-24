@@ -218,6 +218,10 @@ export async function prepareGlobalApplicationContextAsync(
     'Init MidwayConfigService, MidwayAspectService and MidwayDecoratorService'
   );
 
+  // init default environment
+  const environmentService = applicationContext.get(MidwayEnvironmentService);
+  environmentService.setModuleLoadType(globalOptions.moduleLoadType);
+
   // init default config
   const configService = applicationContext.get(MidwayConfigService);
   configService.add([
@@ -292,6 +296,10 @@ export function prepareGlobalApplicationContext(
   applicationContext.registerObject('appDir', appDir);
 
   printStepDebugInfo('Ready module detector');
+
+  if (!globalOptions.moduleLoadType) {
+    globalOptions.moduleLoadType = 'commonjs';
+  }
 
   if (globalOptions.moduleDetector !== false) {
     if (globalOptions.moduleDetector === undefined) {
