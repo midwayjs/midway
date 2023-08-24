@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.12.3 (2023-08-24)
+
+#### :bug: Bug Fix
+* `core`
+  * [#3191](https://github.com/midwayjs/midway/pull/3191) fix: add glob load model args ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3181](https://github.com/midwayjs/midway/pull/3181) docs(site): __filename, __dirname under ESM ([@waitingsong](https://github.com/waitingsong))
+* [#3166](https://github.com/midwayjs/midway/pull/3166) docs: add document for esm version ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* Other
+  * [#3193](https://github.com/midwayjs/midway/pull/3193) chore(deps): update dependency jest to v29.6.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3183](https://github.com/midwayjs/midway/pull/3183) chore(deps): update dependency jest to v29.6.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3186](https://github.com/midwayjs/midway/pull/3186) chore(deps): update dependency @types/node to v18.17.7 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3177](https://github.com/midwayjs/midway/pull/3177) fix(deps): update dependency accepts to v1.3.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3187](https://github.com/midwayjs/midway/pull/3187) chore(deps): update dependency mongoose to v7.4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.12.2 (2023-08-17)
 
 #### :bug: Bug Fix

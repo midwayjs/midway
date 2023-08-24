@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/orm",
   "private": true,
-  "version": "3.12.2",
+  "version": "3.12.3",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -10,8 +10,8 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.12.2",
-    "@midwayjs/mock": "^3.12.2",
+    "@midwayjs/core": "^3.12.3",
+    "@midwayjs/mock": "^3.12.3",
     "sqlite3": "5.1.6",
     "typeorm": "0.3.17"
   },
