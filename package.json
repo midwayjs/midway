@@ -3,7 +3,7 @@
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
-    "@nrwl/tao": "15.9.5",
+    "@nrwl/tao": "15.9.6",
     "@types/jest": "29.5.4",
     "@types/node": "18.17.11",
     "@vercel/ncc": "0.36.1",
