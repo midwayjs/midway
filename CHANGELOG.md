@@ -1,6 +1,21 @@
 # Change Log
 
 
+## v3.12.4 (2023-08-29)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3209](https://github.com/midwayjs/midway/pull/3209) fix: swagger revert require ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `grpc`
+  * [#3195](https://github.com/midwayjs/midway/pull/3195) fix(deps): update dependency @grpc/proto-loader to v0.7.9 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.12.3 (2023-08-24)
 
 #### :bug: Bug Fix

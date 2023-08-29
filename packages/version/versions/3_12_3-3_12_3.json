@@ -45,14 +45,20 @@
   "@midwayjs/session": "3.12.3",
   "@midwayjs/socketio": "3.12.3",
   "@midwayjs/static-file": "3.12.3",
-  "@midwayjs/swagger": "3.12.3",
+  "@midwayjs/swagger": [
+    "3.12.3",
+    "3.12.4"
+  ],
   "@midwayjs/tablestore": "3.12.3",
   "@midwayjs/tags": "3.12.3",
   "@midwayjs/typegoose": "3.12.3",
   "@midwayjs/typeorm": "3.12.3",
   "@midwayjs/upload": "3.12.3",
   "@midwayjs/validate": "3.12.3",
-  "@midwayjs/version": "3.12.3",
+  "@midwayjs/version": [
+    "3.12.3",
+    "3.12.4"
+  ],
   "@midwayjs/view": "3.12.3",
   "@midwayjs/view-ejs": "3.12.3",
   "@midwayjs/view-nunjucks": "3.12.3",
