@@ -23,7 +23,7 @@ Midway 有多套技术方案可以选择，我们以部署的方式来做区分�
 使用 `npm init midway` 查看完整的脚手架列表，选中某个项目后，Midway 会自动创建示例目录，代码，以及安装依赖。
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
 针对 v3 项目，请选择 `koa-v3`，注意 [Node.js 环境要求](/docs/intro#环境准备工作)。

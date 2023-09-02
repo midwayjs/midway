@@ -26,7 +26,7 @@ Recommended reading:
 Due to many changes, Midway provides a brand-new scaffolding in ESM format. If there is a need for ESM, we recommend that users re-create it before developing business.
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
 Select the scaffolding in the esm group.

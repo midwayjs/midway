@@ -23,7 +23,7 @@ This chapter and subsequent documents will use the **pure Node.js project** as t
 Use `npm init midway` to view the complete list of scaffolds. After a project is selected, Midway automatically creates sample directories, codes, and installation dependencies.
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
 For a v3 project, select `koa-v3`, pay attention to [Node.js environment requirements](/docs/intro#environmental-preparation).

@@ -2,7 +2,7 @@ module.exports = [
   {
     "type": "doc",
     "docId": "intro",
-    "label": "标准项目",
+    "label": "使用文档",
     "position": "left"
   },
   {
