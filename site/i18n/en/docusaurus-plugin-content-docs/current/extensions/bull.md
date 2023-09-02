@@ -731,6 +731,12 @@ export default {
 
 
 
+## About Redis version
+
+Please choose the latest version (>=5) if possible. Currently, there is a problem of scheduled task creation failure on lower versions of redis.
+
+
+
 ## Bull UI
 
 In a distributed scenario, we can leverage the Bull UI to simplify management.
