@@ -8,7 +8,7 @@ import { debuglog } from 'util';
 const debug = debuglog('midway:bootstrap');
 
 export abstract class AbstractForkManager<
-  T,
+  Worker,
   ClusterOptions extends ForkOptions
 > {
   private reforks = [];
@@ -16,8 +16,8 @@ export abstract class AbstractForkManager<
   private unexpectedCount = 0;
   private disconnects = {};
   private hub = new EventEmitter();
-  protected workers: Map<string, T> = new Map();
-  protected eventBus: IEventBus<T>;
+  protected workers: Map<string, Worker> = new Map();
+  protected eventBus: IEventBus<Worker>;
   private isClosing = false;
   private exitListener: () => void;
 
@@ -135,7 +135,7 @@ export abstract class AbstractForkManager<
     await this.eventBus.start();
   }
 
-  protected tryToRefork(oldWorker: T) {
+  protected tryToRefork(oldWorker: Worker) {
     if (this.allowRefork()) {
       debug(
         ' - worker(%s): allow refork and will fork new',
@@ -214,7 +214,7 @@ export abstract class AbstractForkManager<
   /**
    * unexpectedExit default handler
    */
-  protected onUnexpected(worker: T, code, signal) {
+  protected onUnexpected(worker: Worker, code, signal) {
     // eslint-disable-next-line no-prototype-builtins
     const propertyName = worker.hasOwnProperty('exitedAfterDisconnect')
       ? 'exitedAfterDisconnect'
@@ -286,7 +286,7 @@ export abstract class AbstractForkManager<
     return this.workers.has(workerId);
   }
 
-  public getWorker(workerId: string): T {
+  public getWorker(workerId: string): Worker {
     return this.workers.get(workerId);
   }
 
@@ -339,12 +339,16 @@ export abstract class AbstractForkManager<
     this.options.logger.info('[bootstrap:master] exit with code:%s', code);
   }
 
-  abstract createWorker(oldWorker?: T): T;
-  abstract bindWorkerDisconnect(listener: (worker: T) => void): void;
-  abstract bindWorkerExit(listener: (worker: T, code, signal) => void): void;
-  abstract getWorkerId(worker: T): string;
-  abstract isWorkerDead(worker: T): boolean;
-  abstract closeWorker(worker: T);
-  abstract createEventBus(eventBusOptions: EventBusOptions): IEventBus<T>;
+  abstract createWorker(oldWorker?: Worker): Worker;
+  abstract bindWorkerDisconnect(listener: (worker: Worker) => void): void;
+  abstract bindWorkerExit(
+    listener: (worker: Worker, code, signal) => void
+  ): void;
+  abstract getWorkerId(worker: Worker): string;
+  abstract isWorkerDead(worker: Worker): boolean;
+  abstract closeWorker(worker: Worker);
+  abstract createEventBus(
+    eventBusOptions: EventBusOptions<Worker>
+  ): IEventBus<Worker>;
   abstract isPrimary(): boolean;
 }
