@@ -7,13 +7,31 @@ import TabItem from '@theme/TabItem';
 
 阿里云 Serverless 包含许多产品，如函数计算 FC，轻量应用引擎 SAE 等，本文主要使用了其 **函数计算** 部分。
 
-下面是常见的函数触发器的使用和测试方法。
+下面是常见的函数触发器的使用、测试和部署方法。
 
 
 
-## 触发器代码
+## 部署类型
 
-<Tabs>
+阿里云的函数部署类型比较多，根据运行的不同容器有以下几种。
+
+| 名称                           | 描述                                                         | 部署媒介        |
+| ------------------------------ | ------------------------------------------------------------ | --------------- |
+| 内置运行时                     | 只能部署函数接口，不需要自定义端口，构建出 zip 包给平台部署  | zip 包部署      |
+| 自定义运行时（Custom Runtime） | 可以部署标准应用，启动 9000 端口，使用平台提供的镜像，构建出 zip 包给平台部署 | zip 包部署      |
+| 自定义容器（Custom Container） | 可以部署标准应用，启动 9000 端口，自己控制所有环境依赖，构建出 Dockerfile 提供给平台部署 | Dockerfile 部署 |
+
+下面我们将以使用内置运行时部署纯函数作为示例。
+
+
+
+## 纯函数开发
+
+
+
+### 触发器代码
+
+<Tabs groupId="triggers">
 <TabItem value="event" label="Event">
 
 发布不包含触发器的函数，这是最简单的类型，可以直接通过 event 手动触发参数，也可以在平台绑定其他触发器。
@@ -22,7 +40,7 @@ import TabItem from '@theme/TabItem';
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
 
 @Provide()
 export class HelloAliyunService {
@@ -115,7 +133,7 @@ export class HelloAliyunService {
 
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
     type: 'cron',
-    value: '0 0 4 * * *', // 每天4:00触发  https://help.aliyun.com/document_detail/68172.html
+    value: '0 0 4 * * *', // 每天4:00触发
   })
   async handleTimerEvent(event: FC.TimerEvent) {
     this.ctx.logger.info(event);
@@ -283,7 +301,7 @@ OSS 消息返回的结构如下，在 `FC.OSSEvent` 类型中有描述。
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
 
 @Provide()
 export class HelloAliyunService {
@@ -349,15 +367,15 @@ MNS 消息返回的结构如下，在 `FC.MNSEvent` 类型中有描述。
 
 
 
-## 本地开发
+### 本地开发
 
 HTTP 触发器和 API Gateway 类型可以通过本地 `npm run dev` 和传统应用类似的开发方式进行本地开发，其他类型的触发器本地无法使用 dev 开发，只能通过运行 `npm run test` 进行测试执行。
 
 
 
-## 本地测试
+### 本地测试
 
-<Tabs>
+<Tabs groupId="triggers">
 <TabItem value="event" label="Event">
 
 通过 `createFunctionApp` 创建函数 app，通过 `getServerlessInstance` 获取类实例，然后通过实例的方法直接调用，传入参数进行测试。
@@ -571,204 +589,144 @@ describe('test/hello_aliyun.test.ts', () => {
 
 </Tabs>
 
-## 发布到阿里云
+## 纯函数部署
 
-在项目根目录的 `f.yml` 的 `provider` 段落处确保为 `aliyun` 。
+以下将简述如何使用 Serverless Devs 部署到阿里云函数。
 
-```yaml
-service:
-  name: midway-faas-examples
+### 1、确认启动器
 
-provider:
-  name: aliyun
-```
-
-部署函数，直接使用发布命令即可打包并部署函数，Deploy 命令会自动打包，并调用阿里云官方部署工具发布。
-
-```shell
-$ npm run deploy
-```
-
-:::info
-如果输错了信息，可以重新执行 `npx midway-bin deploy --resetConfig` 修改。
-:::
-
-阿里云部署首次需要配置 `accountId`、`accountKey`、`accountSecret`
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654967-11e1bcbd-5a56-4239-99e1-5a1472ad49fd.png#align=left&display=inline&height=514&margin=%5Bobject%20Object%5D&originHeight=514&originWidth=1152&size=0&status=done&style=none&width=1152" width="1152" />
-
-相关配置获取，可参照下方图片：
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654949-9c14958c-3aff-403a-b89b-d03a3a95cd18.png#align=left&display=inline&height=696&margin=%5Bobject%20Object%5D&originHeight=696&originWidth=1832&size=0&status=done&style=none&width=1832" width="1832" />
-
-点击此处跳转阿里云[安全设置页](https://account.console.aliyun.com/#/secure)。
-
-
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654950-19a811c5-2cf3-4843-a619-cfd744430fae.png#align=left&display=inline&height=184&margin=%5Bobject%20Object%5D&originHeight=592&originWidth=2406&size=0&status=done&style=none&width=746" width="746" />
-
-点击跳转阿里云个人 [AccessKey 页面](https://usercenter.console.aliyun.com/#/manage/ak)。
-
-这里以 http 触发器作为示例。
-
-发布后，阿里云会输出一个临时可用的域名，打开浏览器访问即可。
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1600835297676-1753de7a-fb0d-46ca-98f0-944eba5b2f2b.png#align=left&display=inline&height=193&margin=%5Bobject%20Object%5D&name=image.png&originHeight=193&originWidth=1219&size=35152&status=done&style=none&width=1219" width="1219" />
-
-发布完成后，平台状态如下。
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1586685106514-c52880d4-c447-4bc1-9b8b-6db99dd81878.png#height=436&id=wtVSC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=872&originWidth=2684&originalType=binary&size=164942&status=done&style=none&width=1342" width="1342" />
-
-发布效果，每个配置的函数都将发布成一个平台上的函数，并且自动配置 http 触发器。
-
-
-
-## 常见问题
-
-### 1、自定义域名
-
-你需要提前申请一个域名，在国内的话，需要备案，否则无法绑定。
-
-第一步，先将默认自动生成的域名的功能关闭
+在项目根目录的 `f.yml` 的 `provider` 段落处确保 starter 为 `@midwayjs/fc-starter`。
 
 ```yaml
-service:
-  name: midway-faas-examples
-
 provider:
   name: aliyun
-
-custom:
-  customDomain: false
+  starter: '@midwayjs/fc-starter'
 ```
 
-第二步，添加域名解析到你函数对应网关。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588654519449-2c98a9d8-ffac-42b7-bcf2-ac19c21f08ac.png#height=478&id=kmxTj&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1090&originWidth=1700&originalType=binary&size=132002&status=done&style=none&width=746" width="746" />
 
-在函数页面绑定自定义域名，添加路由
+### 2、安装 Serverless Devs 工具
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588654440214-75bfd1c2-1b6a-4c2b-9c57-198bec9d4e64.png#height=706&id=IEhZC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1412&originWidth=2794&originalType=binary&size=310772&status=done&style=none&width=1397" width="1397" />
+aliyun 使用 [Serverless Devs 工具](https://www.serverless-devs.com/) 进行函数部署。
 
-绑定完成后，即可用域名访问。
+你可以将其安装到全局。
 
-### 2、http 头的一些限制
+```bash
+$ npm install @serverless-devs/s -g
+```
 
-Request Headers 不支持以 x-fc-开头的自定义及以下字段的自定义：
-
-- accept-encoding
-- connection
-- keep-alive
-- proxy-authorization
-- te
-- trailer
-- transfer-encoding
-
-Response Headers 不支持以 `x-fc-` 开头的自定义及以下字段的自定义：
-
-- connection
-- content-length
-- content-encoding
-- date
-- keep-alive
-- proxy-authenticate
-- server
-- trailer
-- transfer-encoding
-- upgrade
-
-Request 限制项。如果超过以下限制，会返回 400 状态码和 InvalidArgument 错误码。
-
-- Headers 大小：Headers 中的所有 Key 和 Value 的总大小不得超过 4 KB。
-- Path 大小：包括所有的 Query Params，Path 的总大小不得超过 4 KB。
-- Body 大小：HTTP Body 的总大小不得超过 6 MB。
-
-Response 限制项。如果超过以下限制，会返回 502 状态码和 BadResponse 错误码。
-
-- Headers 大小：Headers 中的所有 Key 和 Value 的总大小不得超过 4 KB。
+参考 [密钥配置](https://docs.serverless-devs.com/serverless-devs/quick_start) 文档进行配置。
 
 
 
-### 3、发布包大小问题
+### 3、编写一个  Serverless Devs 描述文件
 
-为了提升启动速度，阿里云 FC 容器限制压缩包大小为 50M，请尽可能精简你的后端代码依赖。
+在根目录创建一个 `s.yaml` ，添加以下内容。
 
-一般来说，midway 默认脚手架（eggjs）构建完在 9M 左右，其他框架会更小，请尝试先删除 `package-lock.json` 后再尝试。
+```yaml
+edition: 1.0.0          #  命令行YAML规范版本，遵循语义化版本（Semantic Versioning）规范
+name: fcDeployApp       #  项目名称
+access: "default"  			#  秘钥别名
 
-### 4、容器时区问题
+vars:
+  service:
+    name: fc-build-demo
+    description: 'demo for fc-deploy component'
+services:
+  project1:
+    component: devsapp/fc  # 组件名称
+    props: #  组件的属性值
+      region: cn-hangzhou
+      service: ${vars.service}
+      function:
+        name: py-event-function-1
+        description: this is a test
+  project2:
+    component: devsapp/fc  # 组件名称
+    props: #  组件的属性值
+      region: cn-hangzhou
+      service: ${vars.service}
+      function:
+        name: py-event-function-2
+        description: this is a test
+```
 
-> 大部分 Docker 镜像都是基于 Alpine，Ubuntu，Debian，CentOS 等基础镜像制作而成。 基本上都采用 UTC 时间，默认时区为零时区。
+`s.yaml` 的完整配置较为复杂，具体请参考 [描述文件规范](https://docs.serverless-devs.com/serverless-devs/yaml)。
 
-阿里云容器环境的时区默认是 `GMT +0000`，直接使用 `new Date()` 等前端获取的时候，国内的用户可能未作时区处理，会相差 8 个小时。
 
-国内用户使用，默认可能习惯 `GMT +0800` 。可以通过环境变量调整（配置在平台或者 f.yml）。
+
+### 4、编写一个部署脚本
+
+由于部署有构建，拷贝等多个步骤，我们可以编写部署脚本统一这个过程。
+
+比如在项目根目录新建一个 `deploy.sh` 文件，内容如下。
+
+```bash
+#!/bin/bash
+
+set -e
+
+# 构建产物目录
+export BUILD_DIST=$PWD/.serverless
+# 构建开始时间，单位毫秒
+export BUILD_START_TIME=$(date +%s%3N)
+
+echo "Building Midway Serverless Application"
+
+# 打印当前目录 cwd
+echo "Current Working Directory: $PWD"
+# 打印结果目录 BUILD_DIST
+echo "Build Directory: $BUILD_DIST"
+
+# 安装当前项目依赖
+npm i
+
+# 函数入口生成
+npm i @midwayjs/serverless-yaml-generator --no-save --no-package-lock
+
+# 执行构建
+./node_modules/.bin/tsc || return 1
+# 生成入口文件
+./node_modules/.bin/serverless-yaml-generator || return 1
+
+# 如果 .serverless 文件夹存在，则删除后重新创建
+if [ -d "$BUILD_DIST" ]; then
+  rm -rf $BUILD_DIST
+fi
+
+mkdir $BUILD_DIST
+
+# 拷贝 dist、 *.json、*.yml 和入口文件到 .serverless 目录
+cp -r dist $BUILD_DIST
+cp *.js $BUILD_DIST 2>/dev/null || :
+cp *.yml $BUILD_DIST 2>/dev/null || :
+cp *.json $BUILD_DIST 2>/dev/null || :
+
+# 重新安装线上依赖
+cd $BUILD_DIST
+tnpm install --production
+
+echo "Build success"
+
+# 在 .serverless 目录进行部署
+s deploy
+
+```
+
+可以将这个 `deploy.sh` 文件放到 `package.json` 的 `deploy` 指令中，后续部署执行 `npm run deploy` 即可。
 
 ```json
-process.env.TZ = 'Asia/Shanghai';
+{
+  "scripts": {
+    "deploy": "sh deploy.sh"
+  }
+}
 ```
 
-```yaml
-provider:
-  name: aliyun
-  runtime: nodejs12
-	environment:
-  	TZ: 'Asia/Shanghai'
-```
+:::tip
 
-:::info
-注意，定时任务由网关触发，不会受到这里配置的函数时区影响。
+上述 `deploy.sh` 只测试了 mac/linux，windows 用户请自行调整。
+
 :::
 
-### 5、修改 AccessKey
-
-有时候，我们在第一次发布时会填错一个 AccessKey，或者其他区域选项，我们提供了一个 可以修改的参数，用于在发布时清理上次错误的选项。
-
-```bash
-midway-bin deploy --resetConfig
-```
-
-这里提示 `Please create alias for key pair. If not, please enter to skip` 时输入 default，否则不会使用当前的 AccessKey。如果只希望调整特定字段，可以进入 `~/.s/access.yaml` 文件中，直接修改保存。
-
-### 6、CLI 发布红色提示
-
-在 HTTP 触发器发布后，会出现下面的红色提示。这是**一个提示**，原因为，未配置域名的情况下，阿里云将默认添加 `Content-Disposition: attachment` 头到响应中，浏览器打开地址会变为附件下载。可以通过绑定自定义域名或者本地 curl 的方式来测试结果。
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1587036400388-b2ebe43f-fa7d-463b-b9b6-b38bf9e18430.png#height=268&id=H2BJz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=268&originWidth=958&originalType=binary&ratio=1&size=242934&status=done&style=none&width=958" width="958" />
-
-### 7、发布时指定 accessKey 等
-
-```bash
-export REGION=cn-beijing
-export ACCOUNT_ID=xxx
-export ACCESS_KEY_ID=xxx
-export ACCESS_KEY_SECRET=xxx
-```
-
-当前阿里云发布使用的是 funcraft 工具，可以使用 funcraft 的环境变量，可以加载启动的命令行前，也可以使用 yml 的变量填充方式。
-
-### 8、发布超时问题
-
-有时候包比较大， `midway-bin deploy` 上传可能会碰到超时的问题，这个超时时间是 funcraft 工具内部控制的。
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1598423950078-15838cbb-95f3-41f9-94ac-a31741b111d3.png#height=179&id=EOCLm&margin=%5Bobject%20Object%5D&name=image.png&originHeight=358&originWidth=2784&originalType=binary&ratio=1&size=310195&status=done&style=none&width=1392" width="1392" />
-
-解决方案： `~/.fcli/config.yaml` 里面配置 timeout，单位是 s（秒）。
-
-一般来说，midway 默认脚手架（eggjs）构建完在 9M 左右，其他框架会更小，请尝试先删除 `package-lock.json` 后再尝试。
-
-如无效果，确实是包过大，可以修改 fun 工具的部署时间，位置为 `~/.fcli/config.yaml` ，在其中增加 timeout 字段。
-
-示例如下：
-
-```typescript
-endpoint: ***************
-api_version: '2016-08-15'
-access_key_id: ***************
-access_key_secret: ***************
-security_token: ''
-debug: false
-timeout: 50      ## 部署超时时间，单位为 s
-retries: 3
-
-```
 

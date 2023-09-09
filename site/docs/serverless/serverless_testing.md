@@ -8,17 +8,13 @@
 
 唯一和应用不同的是，使用 `createFunctionApp` 方法创建函数应用（app）。
 
-`createFunctionApp` 方法是 `createApp` 方法在函数场景下的定制（其中指定了函数的 `@midwayjs/serverless-app` 框架）。
-
-:::info
-这里不直接使用 `@midwayjs/faas` 框架，而是使用 `@midwayjs/serverless-app` 框架，因为后者包含了网关模拟到函数调用的系列步骤。
-:::
+`createFunctionApp` 方法是 `createApp` 方法在函数场景下的定制。
 
 HTTP 测试代码如下：
 
 ```typescript
 import { createFunctionApp, close, createHttpRequest } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
+import { Framework, Application } from '@midwayjs/faas';
 
 describe('test/hello_aliyun.test.ts', () => {
   let app: Application;
@@ -41,6 +37,8 @@ describe('test/hello_aliyun.test.ts', () => {
 });
 ```
 
+
+
 ## 普通触发器
 
 除了类 HTTP 触发器之外，我们还有其他比如定时器、对象存储等函数触发器，这些触发器由于和网关关系密切，不能使用 HTTP 行为来测试，而是使用传统的方法调用来做。
@@ -49,7 +47,7 @@ describe('test/hello_aliyun.test.ts', () => {
 
 ```typescript
 import { createFunctionApp, close, createHttpRequest } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
+import { Framework, Application } from '@midwayjs/faas';
 import { createInitializeContext } from '@midwayjs/serverless-fc-trigger';
 
 describe('test/hello_aliyun.test.ts', () => {
@@ -160,4 +158,4 @@ await instance.handleTimer(createTimerEvent({
 }));
 ```
 
-具体的函数工具方法，可以查阅不同的平台触发器测试。
+具体的函数工具方法，可以查阅不同的平台适配器。

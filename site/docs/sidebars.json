@@ -105,39 +105,17 @@
               "serverless/serverless_dev",
               "serverless/serverless_testing",
               "serverless/serverless_context",
-              "serverless/serverless_yml",
-              "serverless/serverless_environment",
               "serverless/serverless_error"
             ]
           },
           {
             "type": "category",
-            "label": "平台触发器",
+            "label": "平台支持",
             "collapsed": false,
             "collapsible": false,
             "items": [
-              "serverless/aliyun_faas",
-              "serverless/tencent_faas"
+              "serverless/aliyun_faas"
             ]
-          },
-          {
-            "type": "category",
-            "label": "应用部署到弹性容器",
-            "collapsed": false,
-            "collapsible": false,
-            "items": [
-              "serverless/app_deploy_serverless",
-              "serverless/migrate_midway",
-              "serverless/migrate_static",
-              "serverless/migrate_koa",
-              "serverless/migrate_express",
-              "serverless/migrate_egg"
-            ]
-          },
-          {
-            "type": "doc",
-            "id": "serverless/serverless_post_difference",
-            "label": "Serverless 触发器 POST 情况差异"
           }
         ]
       ]
