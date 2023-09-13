@@ -18,14 +18,18 @@ import TabItem from '@theme/TabItem';
 | 名称                           | 描述                                                         | 部署媒介        |
 | ------------------------------ | ------------------------------------------------------------ | --------------- |
 | 内置运行时                     | 只能部署函数接口，不需要自定义端口，构建出 zip 包给平台部署  | zip 包部署      |
-| 自定义运行时（Custom Runtime） | 可以部署标准应用，启动 9000 端口，使用平台提供的镜像，构建出 zip 包给平台部署 | zip 包部署      |
+| 自定义运行时（Custom Runtime） | 可以部署标准应用，启动 9000 端口，使用平台提供的系统镜像，构建出 zip 包给平台部署 | zip 包部署      |
 | 自定义容器（Custom Container） | 可以部署标准应用，启动 9000 端口，自己控制所有环境依赖，构建出 Dockerfile 提供给平台部署 | Dockerfile 部署 |
 
-下面我们将以使用内置运行时部署纯函数作为示例。
+在平台上分别对应创建函数时的三种方式。
+
+![](https://img.alicdn.com/imgextra/i1/O1CN01JrlhOw1EJBZmHklbq_!!6000000000330-2-tps-1207-585.png)
 
 
 
-## 纯函数开发
+## 纯函数开发（内置运行时）
+
+下面我们将以使用 **"内置运行时部署"** 纯函数作为示例。
 
 
 
@@ -589,7 +593,7 @@ describe('test/hello_aliyun.test.ts', () => {
 
 </Tabs>
 
-## 纯函数部署
+## 纯函数部署（内置运行时）
 
 以下将简述如何使用 Serverless Devs 部署到阿里云函数。
 
@@ -624,32 +628,72 @@ $ npm install @serverless-devs/s -g
 在根目录创建一个 `s.yaml` ，添加以下内容。
 
 ```yaml
-edition: 1.0.0          #  命令行YAML规范版本，遵循语义化版本（Semantic Versioning）规范
-name: fcDeployApp       #  项目名称
-access: "default"  			#  秘钥别名
+edition: 1.0.0
+name: "midwayApp"                  #  项目名称
+access: "default"                  #  秘钥别名
+
+vars:
+  service:
+    name: fc-build-demo
+    description: 'demo for fc-deploy component'
+```
+
+Midway 提供了一个 `@midwayjs/serverless-yaml-generator ` 工具用来将装饰器函数信息写入 s.yaml，同时生成入口文件，可以将其配置到代码中。
+
+```diff
+{
+	"scripts": {
++    "generate": "serverless-yaml-generator",
+  },
+  "devDependencies": {
++    "@midwayjs/serverless-yaml-generator": "*",
+  },
+}
+```
+
+通过执行下面的命令，你可以将现有函数信息填充到 `s.yaml` 中，并生成入口文件，方便排查问题。
+
+```bash
+$ npm run generate
+```
+
+比如示例代码提供了一个 `Get` 路由，则执行完成效果为：
+
+```yaml
+edition: 1.0.0
+name: "midwayApp" #  项目名称
+access: "default" #  秘钥别名
 
 vars:
   service:
     name: fc-build-demo
     description: 'demo for fc-deploy component'
 services:
-  project1:
-    component: devsapp/fc  # 组件名称
-    props: #  组件的属性值
+  project-94c0549c9e:
+    component: devsapp/fc # 组件名称
+    props:
+      # 组件的属性值
       region: cn-hangzhou
       service: ${vars.service}
       function:
-        name: py-event-function-1
-        description: this is a test
-  project2:
-    component: devsapp/fc  # 组件名称
-    props: #  组件的属性值
-      region: cn-hangzhou
-      service: ${vars.service}
-      function:
-        name: py-event-function-2
-        description: this is a test
+        name: helloHttpService-handleHTTPEvent
+        handler: helloHttpService.handleHTTPEvent
+      triggers:
+        - name: http-0494ed5e67
+          type: http
+          config:
+            methods:
+              - GET
+            authType: anonymous
+
 ```
+
+工具将以函数名作为 key 在 `s.yaml` 中查找配置。
+
+* 1、如果存在函数，则进行属性合并
+* 2、如果不存在函数，则会添加一个新函数
+
+我们推荐用户只在装饰器定义基础函数名，函数 handler，以及基础触发器信息（比如 http 触发器的 path 和 method），其余都写在 `yaml` 中。
 
 `s.yaml` 的完整配置较为复杂，具体请参考 [描述文件规范](https://docs.serverless-devs.com/serverless-devs/yaml)。
 
@@ -696,15 +740,17 @@ fi
 
 mkdir $BUILD_DIST
 
-# 拷贝 dist、 *.json、*.yml 和入口文件到 .serverless 目录
+# 拷贝 dist、 *.json、*.yml 到 .serverless 目录
 cp -r dist $BUILD_DIST
-cp *.js $BUILD_DIST 2>/dev/null || :
 cp *.yml $BUILD_DIST 2>/dev/null || :
 cp *.json $BUILD_DIST 2>/dev/null || :
+# 移动入口文件到 .serverless 目录
+mv *.js $BUILD_DIST 2>/dev/null || :
 
-# 重新安装线上依赖
+# 进入 .serverless 目录
 cd $BUILD_DIST
-tnpm install --production
+# 安装线上依赖
+npm install --production
 
 echo "Build success"
 
@@ -730,3 +776,45 @@ s deploy
 :::
 
 
+
+## 自定义运行时部署
+
+### 1、创建项目
+
+自定义运行时可以使用标准项目来部署，由于需要提供 9000 端口，需要创建 Midway koa/express/express 项目。
+
+初始化项目请参考 [创建第一个应用](/docs/quickstart)。
+
+### 2、调整端口
+
+为了避免影响本地开发，我们仅在入口 `bootstrap.js` 处增加端口。
+
+```typescript
+const { Bootstrap } = require('@midwayjs/bootstrap');
+
+// 显式以组件方式引入用户代码
+Bootstrap.configure({
+  globalConfig: {
+    koa: {
+      port: 9000,
+    }
+  }
+}).run()
+```
+
+不同的框架修改端口请参考：
+
+* [koa 修改端口](/docs/extensions/koa)
+* [Egg 修改端口](/docs/extensions/egg)
+* [Express 修改端口](/docs/extensions/express)
+
+### 3、平台部署配置
+
+* 1、选择运行环境，比如 `Node.js 18`
+* 2、选择代码上传方式，比如可以本地打 zip 包上传
+* 3、启动命令指定 node bootstrap.js
+* 4、监听端口 9000
+
+![](https://img.alicdn.com/imgextra/i3/O1CN010JA2GU1lxNeqm81AR_!!6000000004885-2-tps-790-549.png)
+
+配置完成之后，上传压缩包即可部署完成。
