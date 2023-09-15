@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@types/ali-oss": "6.16.8",
-    "ali-oss": "6.18.0"
+    "ali-oss": "6.18.1"
   },
   "keywords": [
     "aliyun",
