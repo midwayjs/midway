@@ -16,7 +16,7 @@
     "@opentelemetry/sdk-node": "0.43.0"
   },
   "dependencies": {
-    "@opentelemetry/api": "1.4.1"
+    "@opentelemetry/api": "1.6.0"
   },
   "keywords": [
     "tracing",
