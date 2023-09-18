@@ -8,6 +8,7 @@ import type {
   VerifyOptions,
 } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
+import { isKeyObject } from 'util/types';
 
 type JwtPayload = string | Buffer | Record<string, any>;
 
@@ -39,15 +40,14 @@ export class JwtService {
     secretOrPrivateKey: any,
     options?: any
   ): string {
-    if (!options) {
+    if (!this.isSecret(secretOrPrivateKey)) {
       options = secretOrPrivateKey;
       secretOrPrivateKey = this.jwtConfig?.secret;
     }
     if (!secretOrPrivateKey) {
       throw new Error('[midway:jwt] jwt secret should be set');
     }
-    options = options ?? {};
-    options.expiresIn = options.expiresIn ?? this.jwtConfig.expiresIn;
+    options = this.getSignOptions(options);
 
     return jwt.sign(payload, secretOrPrivateKey, options);
   }
@@ -73,15 +73,14 @@ export class JwtService {
     secretOrPrivateKey: any,
     options?: any
   ): Promise<string> {
-    if (!options) {
+    if (!this.isSecret(secretOrPrivateKey)) {
       options = secretOrPrivateKey;
       secretOrPrivateKey = this.jwtConfig?.secret;
     }
     if (!secretOrPrivateKey) {
       throw new Error('[midway:jwt] provide the jwt secret please');
     }
-    options = options ?? {};
-    options.expiresIn = options.expiresIn ?? this.jwtConfig.expiresIn;
+    options = this.getSignOptions(options);
 
     return new Promise((resolve, reject) => {
       jwt.sign(payload, secretOrPrivateKey, options, (err, encoded) => {
@@ -117,14 +116,14 @@ export class JwtService {
     options?: VerifyOptions
   ): JwtPayload | string;
   public verifySync(token: string, secretOrPublicKey: any, options?: any): any {
-    if (!options) {
+    if (!this.isSecret(secretOrPublicKey)) {
       options = secretOrPublicKey;
       secretOrPublicKey = this.jwtConfig?.secret;
     }
-
     if (!secretOrPublicKey) {
       throw new Error('[midway:jwt] provide the jwt secret please');
     }
+    options = this.getVerifyOptions(options);
 
     return jwt.verify(token, secretOrPublicKey, options);
   }
@@ -159,14 +158,14 @@ export class JwtService {
     secretOrPublicKey: any,
     options?: any
   ): Promise<any> {
-    if (!options) {
+    if (!this.isSecret(secretOrPublicKey)) {
       options = secretOrPublicKey;
       secretOrPublicKey = this.jwtConfig?.secret;
     }
-
     if (!secretOrPublicKey) {
       throw new Error('[midway:jwt] provide the jwt secret please');
     }
+    options = this.getVerifyOptions(options);
 
     return new Promise((resolve, reject) => {
       jwt.verify(token, secretOrPublicKey, options, (err, encoded) => {
@@ -198,7 +197,7 @@ export class JwtService {
     options?: DecodeOptions
   ): null | JwtPayload | string;
   public decode(token: string, options?: any): any {
-    return jwt.decode(token, options);
+    return jwt.decode(token, this.getDecodeOptions(options));
   }
 
   /**
@@ -219,6 +218,45 @@ export class JwtService {
     options?: DecodeOptions
   ): null | JwtPayload | string;
   public decodeSync(token: string, options?: any): any {
-    return this.decode(token, options);
+    return this.decode(token, this.getDecodeOptions(options));
+  }
+
+  getSignOptions(options?: SignOptions) {
+    let signOptions =
+      'sign' in this.jwtConfig ? this.jwtConfig.sign : this.jwtConfig;
+    signOptions = Object.assign({}, signOptions, options);
+    // delete possible invalid options from jwtConfig
+    for (const keyToDelete of ['sign', 'verify', 'decode', 'secret']) {
+      delete signOptions[keyToDelete];
+    }
+    return signOptions;
+  }
+
+  getVerifyOptions(options?: VerifyOptions) {
+    let verifyOptions = 'verify' in this.jwtConfig ? this.jwtConfig.verify : {};
+    verifyOptions = Object.assign({}, verifyOptions, options);
+    delete verifyOptions.secret;
+    return verifyOptions;
+  }
+
+  getDecodeOptions(options?: DecodeOptions) {
+    let decodeOptions = 'decode' in this.jwtConfig ? this.jwtConfig.decode : {};
+    decodeOptions = Object.assign({}, decodeOptions, options);
+    delete decodeOptions.secret;
+    return decodeOptions;
+  }
+
+  isSecret(secret: any): secret is Secret {
+    if (typeof secret === 'string') return true;
+    if (Buffer.isBuffer(secret)) return true;
+    if (isKeyObject(secret)) return true;
+    if (
+      secret &&
+      typeof secret === 'object' &&
+      'key' in secret &&
+      'passphrase' in secret
+    )
+      return true;
+    return false;
   }
 }
