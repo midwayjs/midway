@@ -669,17 +669,25 @@ vars:
     name: fc-build-demo
     description: 'demo for fc-deploy component'
 services:
-  project-94c0549c9e:
-    component: devsapp/fc # 组件名称
+  project-0981cd9b07:
+    component: devsapp/fc
     props:
-      # 组件的属性值
       region: cn-hangzhou
       service: ${vars.service}
       function:
-        name: helloHttpService-handleHTTPEvent
+        name: hello
         handler: helloHttpService.handleHTTPEvent
+        codeUri: '.'
+        initializer: helloHttpService.initializer
+      customDomains:
+        - domainName: auto
+          protocol: HTTP
+          routeConfigs:
+            - path: /*
+              serviceName: ${vars.service.name}
+              functionName: helloHttpService-handleHTTPEvent
       triggers:
-        - name: http-0494ed5e67
+        - name: http
           type: http
           config:
             methods:
@@ -690,7 +698,7 @@ services:
 
 工具将以函数名作为 key 在 `s.yaml` 中查找配置。
 
-* 1、如果存在函数，则进行属性合并
+* 1、如果存在函数，则会覆盖特定字段，比如 handler，http 触发器的 methods
 * 2、如果不存在函数，则会添加一个新函数
 
 我们推荐用户只在装饰器定义基础函数名，函数 handler，以及基础触发器信息（比如 http 触发器的 path 和 method），其余都写在 `yaml` 中。
@@ -742,7 +750,7 @@ mkdir $BUILD_DIST
 
 # 拷贝 dist、 *.json、*.yml 到 .serverless 目录
 cp -r dist $BUILD_DIST
-cp *.yml $BUILD_DIST 2>/dev/null || :
+cp *.yaml $BUILD_DIST 2>/dev/null || :
 cp *.json $BUILD_DIST 2>/dev/null || :
 # 移动入口文件到 .serverless 目录
 mv *.js $BUILD_DIST 2>/dev/null || :
@@ -771,7 +779,8 @@ s deploy
 
 :::tip
 
-上述 `deploy.sh` 只测试了 mac/linux，windows 用户请自行调整。
+* 1、 `deploy.sh` 只测试了 mac，其余用户可以自行调整
+* 2、脚本内容可以根据业务逻辑自行调整，比如拷贝的文件等
 
 :::
 
