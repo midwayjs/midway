@@ -2,7 +2,7 @@
   "name": "@midwayjs/async-hooks-context-manager",
   "version": "3.12.3",
   "description": "midway async hooks context manager",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",

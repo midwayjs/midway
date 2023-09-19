@@ -2,7 +2,7 @@
   "name": "@midwayjs/decorator",
   "version": "3.12.3",
   "description": "definition decorator for midway project",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",

@@ -2,7 +2,7 @@
   "name": "@midwayjs/serverless-vercel-starter",
   "private": true,
   "version": "3.12.3",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/runtime-engine": "^3.7.0",

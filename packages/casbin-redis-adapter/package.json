@@ -2,7 +2,7 @@
   "name": "@midwayjs/casbin-redis-adapter",
   "description": "midway casbin redis adapter",
   "version": "3.12.3",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*.js",
