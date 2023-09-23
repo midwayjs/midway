@@ -110,17 +110,11 @@ export class HelloAliyunService {
 }
 ```
 
-在 `npm run deploy` 后，参考 [阿里云文档](https://help.aliyun.com/document_detail/74798.html?spm=a2c4g.11186623.6.701.3be978a1MKsNN4) 配置即可。
-
-:::info
-当前 API 网关线上的路由在平台进行配置。
-:::
-
 </TabItem>
 
 <TabItem value="timer" label="Timer">
 
-定时任务触发器用于定时执行一个函数。定时有两种方式，时间间隔（every）和 cron 格式。
+定时任务触发器用于定时执行一个函数。
 
 :::info
 温馨提醒，测试函数后请及时关闭触发器自动执行，避免超额扣费。
@@ -135,49 +129,12 @@ export class HelloAliyunService {
   @Inject()
   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'cron',
-    value: '0 0 4 * * *', // 每天4:00触发
-  })
+  @ServerlessTrigger(ServerlessTriggerType.TIMER)
   async handleTimerEvent(event: FC.TimerEvent) {
     this.ctx.logger.info(event);
     return 'hello world';
   }
 }
-```
-
-**Timer 配置**
-
-| 属性名  | 类型   | 描述                                                         |
-| ------- | ------ | ------------------------------------------------------------ |
-| type    | string | `cron` 或者 `every`，必填，触发类型，分别代表 cron 表达式，固定时间间隔。 |
-| value   | string | 必填，cron 表达式或者 every 的值。every 时最小时间间隔 1 分钟，固定单位分钟 |
-| payload | string | 可选，一个固定传递的值，很少用                               |
-
-:::info
-注意，FC 使用的是 UTC 时间，和传统的中国时区不同。
-:::
-
-示例：
-
-**cron 表达式**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'cron',
-  value: '0 0 4 * * *', // 每天4:00触发
-})
-```
-
-cron 表达式可以查看 [文档](https://help.aliyun.com/document_detail/169784.html)。
-
-**every 表达式**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'every',
-  value: '5m', // 每隔 5 分钟，最小为 1 分钟
-})
 ```
 
 **事件结构**
@@ -207,50 +164,14 @@ export class HelloAliyunService {
   @Inject()
   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.OS, {
-    bucket: 'ossBucketName',
-    events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
-    filter: {
-      prefix: 'filterdir/',
-      suffix: '.jpg',
-    },
-  })
+  @ServerlessTrigger(ServerlessTriggerType.OS)
   async handleOSSEvent(event: FC.OSSEvent) {
     // xxx
   }
 }
 ```
 
-:::caution
 
-一个 bucket 的一个前缀下只能支持配置一个触发器，如果配置多个会出现 `message: event source 'oss' returned error: Cannot specify overlapping prefix and suffix with same event type.` 的报错
-
-:::
-
-**OSS 触发器配置**
-
-| 属性名 | 类型                                                 | 描述                                                         |
-| ------ | ---------------------------------------------------- | ------------------------------------------------------------ |
-| bucket | string                                               | 对象存储的 bucket 名                                         |
-| events | string[]                                             | 触发函数执行的事件名                                         |
-| filter | {<br />prefix: string;<br/>   suffix: string;<br/> } | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
-
-
-
-示例：
-
-**监听对象创建和对象删除时的事件**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.OS, {
-  bucket: 'ossBucketName',
-  events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
-  filter: {
-    prefix: 'filterdir/',
-    suffix: '.jpg',
-  },
-})
-```
 
 **事件结构**
 
@@ -300,7 +221,10 @@ OSS 消息返回的结构如下，在 `FC.OSSEvent` 类型中有描述。
 <TabItem value="mns" label="MNS">
 
 :::info
-请务必注意，阿里云消息队列会对 Topic 和 Queue 产生一定的费用。
+
+* 1、阿里云消息队列会对 Topic 和 Queue 产生一定的费用。
+* 2、提供的默认消息队列格式为 JSON
+
 :::
 
 ```typescript
@@ -312,40 +236,14 @@ export class HelloAliyunService {
   @Inject()
   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.MQ, {
-    topic: 'test-topic',
-    tags: 'bbb',
-  })
+  @ServerlessTrigger(ServerlessTriggerType.MQ)
   async handleMNSEvent(event: FC.MNSEvent) {
     // ...
   }
 }
 ```
 
-:::info
-注意，在阿里云下，midway faas 提供的默认消息队列格式为 JSON
-:::
 
-**MNS 触发器配置**
-
-| 属性名   | 类型                                        | 描述                                                         |
-| -------- | ------------------------------------------- | ------------------------------------------------------------ |
-| topic    | string                                      | 接收消息的 topic                                             |
-| tags     | string                                      | 可选，描述了该订阅中消息过滤的标签（标签一致的消息才会被推送） |
-| strategy | 'BACKOFF_RETRY' \|'EXPONENTIAL_DECAY_RETRY' | 调用函数的重试策略，可选值：BACKOFF_RETRY, EXPONENTIAL_DECAY_RETRY, 默认值为: BACKOFF_RETRY |
-| region   | string                                      | 可选，topic 所在的 region，如果不填，默认为和函数一样的 region |
-
-示例：
-
-**监听 MQ 消息**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.MQ, {
-  topic: 'test-topic',
-  region: 'cn-shanghai'
-  strategy: 'BACKOFF_RETRY'
-})
-```
 
 **事件结构**
 
@@ -368,6 +266,12 @@ MNS 消息返回的结构如下，在 `FC.MNSEvent` 类型中有描述。
 </TabItem>
 
 </Tabs>
+
+:::info
+
+触发器的更多配置由于和平台相关，将写在 `s.yaml` 中，如定时任务的时间间隔等，更多细节请查看下面的部署段落。
+
+:::
 
 
 
@@ -629,38 +533,6 @@ $ npm install @serverless-devs/s -g
 
 ```yaml
 edition: 1.0.0
-name: "midwayApp"                  #  项目名称
-access: "default"                  #  秘钥别名
-
-vars:
-  service:
-    name: fc-build-demo
-    description: 'demo for fc-deploy component'
-```
-
-Midway 提供了一个 `@midwayjs/serverless-yaml-generator ` 工具用来将装饰器函数信息写入 s.yaml，同时生成入口文件，可以将其配置到代码中。
-
-```diff
-{
-	"scripts": {
-+    "generate": "serverless-yaml-generator",
-  },
-  "devDependencies": {
-+    "@midwayjs/serverless-yaml-generator": "*",
-  },
-}
-```
-
-通过执行下面的命令，你可以将现有函数信息填充到 `s.yaml` 中，并生成入口文件，方便排查问题。
-
-```bash
-$ npm run generate
-```
-
-比如示例代码提供了一个 `Get` 路由，则执行完成效果为：
-
-```yaml
-edition: 1.0.0
 name: "midwayApp" #  项目名称
 access: "default" #  秘钥别名
 
@@ -675,7 +547,7 @@ services:
       region: cn-hangzhou
       service: ${vars.service}
       function:
-        name: hello
+        name: hello	# 函数名
         handler: helloHttpService.handleHTTPEvent
         codeUri: '.'
         initializer: helloHttpService.initializer
@@ -696,10 +568,30 @@ services:
 
 ```
 
+每加一个函数都需要调整 `s.yaml` 文件，为此Midway 提供了一个 `@midwayjs/serverless-yaml-generator` 工具用来将装饰器函数信息写入 `s.yaml`。
+
+```diff
+{
+	"scripts": {
++    "generate": "serverless-yaml-generator",
+  },
+  "devDependencies": {
++    "@midwayjs/serverless-yaml-generator": "^1.0.0",
+  },
+}
+```
+
+通过执行下面的命令，可以将现有函数信息填充到 `s.yaml` 中，并生成入口文件，方便排查问题。
+
+```bash
+$ npm run generate
+```
+
 工具将以函数名作为 key 在 `s.yaml` 中查找配置。
 
 * 1、如果存在函数，则会覆盖特定字段，比如 handler，http 触发器的 methods
 * 2、如果不存在函数，则会添加一个新函数
+* 3、工具不会写入 http 的路由方法，为了简化后续更新，可以提供一个 `/*` 路由（如示例）
 
 我们推荐用户只在装饰器定义基础函数名，函数 handler，以及基础触发器信息（比如 http 触发器的 path 和 method），其余都写在 `yaml` 中。
 
@@ -732,9 +624,6 @@ echo "Build Directory: $BUILD_DIST"
 
 # 安装当前项目依赖
 npm i
-
-# 函数入口生成
-npm i @midwayjs/serverless-yaml-generator --no-save --no-package-lock
 
 # 执行构建
 ./node_modules/.bin/tsc || return 1
@@ -779,7 +668,7 @@ s deploy
 
 :::tip
 
-* 1、 `deploy.sh` 只测试了 mac，其余用户可以自行调整
+* 1、 `deploy.sh` 只测试了 mac，其余平台可以自行调整
 * 2、脚本内容可以根据业务逻辑自行调整，比如拷贝的文件等
 
 :::

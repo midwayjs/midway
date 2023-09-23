@@ -2,8 +2,8 @@ import { wrapAsync } from '@midwayjs/core';
 import {
   AbstractBootstrapStarter,
   IFaaSConfigurationOptions,
-  FC,
 } from '@midwayjs/faas';
+import { FC } from '@midwayjs/faas-typings';
 import * as getRawBody from 'raw-body';
 import { IncomingMessage } from 'http';
 import { createContextManager } from '@midwayjs/async-hooks-context-manager';
