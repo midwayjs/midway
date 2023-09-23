@@ -2,7 +2,7 @@
   "name": "@midwayjs/serverless-scf-starter",
   "private": true,
   "version": "3.10.14",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/runtime-engine": "^3.7.0",

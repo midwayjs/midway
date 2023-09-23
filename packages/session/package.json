@@ -2,7 +2,7 @@
   "name": "@midwayjs/session",
   "description": "midway session component for koa and faas",
   "version": "3.12.3",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",

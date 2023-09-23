@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/faas",
   "version": "3.12.3",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^3.12.3",

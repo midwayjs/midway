@@ -2,7 +2,7 @@
   "name": "@midwayjs/serverless-fc-trigger",
   "private": true,
   "version": "3.12.3",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/faas-typings": "^3.10.13",

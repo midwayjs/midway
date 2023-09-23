@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/swagger",
   "version": "3.12.4",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
