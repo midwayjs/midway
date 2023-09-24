@@ -28,7 +28,7 @@
     "@midwayjs/koa": "^3.12.3",
     "@midwayjs/mock": "^3.12.3",
     "@midwayjs/web": "^3.12.3",
-    "@types/passport-local": "1.0.35",
+    "@types/passport-local": "1.0.36",
     "express-session": "1.17.3",
     "passport-jwt": "4.0.1",
     "passport-local": "1.0.0",
