@@ -2,19 +2,11 @@
 
 ## 初始化代码
 
-让我们来开发第一个纯 HTTP 函数，来尝试将它部署到云环境（不用担心，函数现在都有免费额度，一般情况下不花钱）。
+让我们来开发第一个纯 HTTP 函数，来尝试将它部署到云环境。
 
-```bash
-$ npm -v
+执行 `npm init midway`，选择 `faas` 脚手架。
 
-# 如果是 npm v6
-$ npm init midway --type=faas-v3 my_midway_app
 
-# 如果是 npm v7
-$ npm init midway -- --type=faas-v3 my_midway_app
-```
-
-也可以执行 `npm init midway`，选择 `faas` 脚手架。
 
 ## 目录结构
 
@@ -70,7 +62,7 @@ export class HelloHTTPService {
 这样，当我们在一个函数上，使用多个触发器时，就可以这样设置。
 
 ```typescript
-import { Provide, Inject, ServerlessFunction, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/core';
+import { Provide, Inject, ServerlessFunction, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
 
 @Provide()
@@ -83,12 +75,7 @@ export class HelloServerlessService {
     functionName: 'abcde',
   })
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'every',
-    value: '5m',
-  })
-  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'every',
-    value: '10m',
+    name: 'timer'
   })
   async handleTimerEvent() {
     // TODO
@@ -102,19 +89,16 @@ export class HelloServerlessService {
 
 ## 函数定义文件
 
-`f.yml` 是函数的定义文件，通过这个文件，在构建时生成不同平台所能认识的文件，示例中的文件内容如下。
+`f.yml` 是框架识别函数信息的文件，内容如下。
 
 ```yaml
-service:
-  name: midway-faas-examples ## 函数组名，可以理解为应用名
-
 provider:
-  name: aliyun ## 发布的平台，这里是阿里云
+  name: aliyun  # 发布的平台，这里是阿里云
+  starter: '@midwayjs/fc-starter'
 
-custom:
-  customDomain:
-    domainName: auto ## 由于发布 HTTP 服务，域名这里使用自动生成，后续可以单独绑定
 ```
+
+这里的 `@midwayjs/fc-starter` 就是适配 aliyun 函数的适配器。
 
 
 
@@ -122,34 +106,35 @@ custom:
 
 `@ServerlessTrigger` 装饰器用于定义不同的触发器，它的参数为每个触发器信息，以及通用触发器参数。
 
-
-触发器和 [f.yml 的定义](/docs/serverless/serverless_yml)保持一致，当前的定义请参考每个触发器的 [interface](https://github.com/midwayjs/midway/blob/2.x/packages/decorator/src/interface.ts#L141)。
-
 比如触发器的名称修改为 abc。
 
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    name: 'abc',
-    type: 'every',
-    value: '5m',
+    name: 'abc',	// 触发器名称
   })
 ```
 
+如果只有一个触发器，可以将函数名信息写入到触发器上。
+
+```typescript
+  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
+  	functionName: 'hello'	// 如果只有一个触发器，可以省略一个装饰器
+    name: 'abc',
+  })
+```
+
+
+
 ## 函数装饰器参数
 
-`@ServerlessFunction` 装饰器用于定义函数，通过它可以修改函数名。
-
-
-函数触发器和 [f.yml 的定义](/docs/serverless/serverless_yml) 保持一致，当前的定义请参考每个触发器的 [interface](https://github.com/midwayjs/midway/blob/2.x/packages/decorator/src/interface.ts#L141)。
+`@ServerlessFunction` 装饰器用于定义函数，如果有多个触发器，通过它可以统一修改函数名。
 
 
 比如：
 
 ```typescript
 @ServerlessFunction({
-  functionName: 'abcde',
-  initTimeout: 3,		// 初始化超时，只对阿里云 fc 有效，默认 3s
-  timeout: 3				// 函数执行超时时间，默认 3s
+  functionName: 'abcde'	// 函数名称
 })
 ```
 
@@ -164,44 +149,5 @@ $ open http://localhost:7001
 
 Midway 会启动 HTTP 服务器，打开浏览器，访问 [http://127.0.0.1:7001](http://127.0.0.1:7001) ，浏览器会打印出 `Hello midwayjs`  的信息。
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1615045887650-73a90be7-1d49-4024-82c4-fd6b5192e75e.png#height=384&id=X8Jmz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=768&originWidth=1268&originalType=binary&ratio=1&size=85174&status=done&style=none&width=634" width="634" />
+非 HTTP 函数，无法直接触发，作为代替，可以编写测试函数执行。
 
-## 部署函数
-
-部署函数，直接使用发布命令即可打包并部署函数：
-
-```shell
-$ npm run deploy
-```
-
-:::info
-如果输错了信息，可以重新执行 `npx midway-bin deploy --resetConfig` 修改。
-:::
-
-这里我们用阿里云 FC 平台来演示，如需部署到腾讯云，请参考 [腾讯云部署](deploy_to_tencent)。
-
-阿里云部署首次需要配置 `accountId`、`accountKey`、`accountSecret`
-
-![](https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654967-11e1bcbd-5a56-4239-99e1-5a1472ad49fd.png)
-
-相关配置获取，可参照下方图片：
-
-![](https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654949-9c14958c-3aff-403a-b89b-d03a3a95cd18.png)
-
-点击此处跳转阿里云[安全设置页](https://account.console.aliyun.com/#/secure)。
-
----
-
-![](https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654950-19a811c5-2cf3-4843-a619-cfd744430fae.png)
-
-点击跳转阿里云个人 [AccessKey 页面](https://usercenter.console.aliyun.com/#/manage/ak)。
-
-整个部署效果如下：
-
-![](https://cdn.nlark.com/yuque/0/2021/svg/501408/1618722302423-d7d159b3-45b0-4a93-a2b1-daf50f46bc9f.svg)
-
-发布完后，从控制台获取当前的 url 即可访问。
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618722353090-bf9e0061-ea62-46a2-a77e-57236a4e4024.png)
-
-由于开启了自动域名，阿里云会免费增送一个临时域名用开发和调试，后续也可以自己绑定新域名。

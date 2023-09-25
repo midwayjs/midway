@@ -2,14 +2,15 @@ import { wrapAsync } from '@midwayjs/core';
 import {
   AbstractBootstrapStarter,
   IFaaSConfigurationOptions,
-  FC,
 } from '@midwayjs/faas';
 import * as getRawBody from 'raw-body';
 import { IncomingMessage } from 'http';
 import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 import { mockContext } from './mock';
+import { InitializeContext } from './interface';
 
 export * from './mock';
+export * from './interface';
 
 function isOutputError() {
   return (
@@ -55,7 +56,7 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
   }
 
   async onInit(
-    context: FC.InitializeContext = this.createDefaultMockContext(),
+    context: InitializeContext = this.createDefaultMockContext(),
     exports
   ) {
     const applicationAdapter = {
