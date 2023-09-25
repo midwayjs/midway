@@ -4,6 +4,12 @@
 
 本文章介绍如何从 Serverless v2.0 迁移到 Serverless v3.0，和传统应用升级非常的类似。
 
+:::caution
+
+新的 Serverless 当前只支持阿里云函数。
+
+:::
+
 
 
 ## 1、项目包版本的升级
@@ -16,7 +22,7 @@
 
 ```diff
 "scripts": {
-	"dev": "cross-env NODE_ENV=local midway-bin dev --ts",
+  "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
   "test": "cross-env midway-bin test --ts",
 -  "deploy": "cross-env UDEV_NODE_ENV=production midway-bin deploy",
   "lint": "mwts check",
@@ -92,8 +98,42 @@ import { createFunctionApp, close, createHttpRequest } from '@midwayjs/mock';
 + import { Framework, Application } from '@midwayjs/faas';
 ```
 
+移除了 `@midwayjs/serverless-fc-trigger` 和 `@midwayjs/serverless-fc-starter` 依赖，修改为 `@midwayjs/fc-starter`。
+
+```typescript
+import { Application, Context, Framework } from '@midwayjs/faas';
+import { mockContext } from '@midwayjs/fc-starter';
+import { createFunctionApp } from '@midwayjs/mock';
+
+describe('test/hello_aliyun.test.ts', () => {
+
+  it('should get result from event trigger', async () => {
+    
+    // create app
+    const app: Application = await createFunctionApp<Framework>(join(__dirname, '../'), {
+      initContext: Object.assign(mockContext(), {
+        function: {
+          name: '***',
+          handler: '***'
+        }
+      }),
+    });
+    
+    // ...
+    
+    await close(app);
+  });
+});
+```
+
+一些 API 的替代，比如原有的 `createXXXEvent`，将变为 `mockXXXEvent`，原有的 `createInitializeContext` 将变为 `mockContext` 方法。
+
+这些 API 将直接从 `@midwayjs/fc-starter` 中导出。
+
 
 
 ## 5、部署方式的变化
 
 不再使用 `midway-bin deploy` 进行部署，将采用平台自己的 CLI 工具，Midway 只提供框架和本地开发能力。
+
+更多的部署调整，请查询 [纯函数部署](/docs/serverless/aliyun_faas)。
