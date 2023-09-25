@@ -1,10 +1,19 @@
 {
   "@midwayjs/faas-typings": "3.10.13",
-  "@midwayjs/fc-starter": "3.12.3",
-  "@midwayjs/serverless-http-parser": "3.10.14",
+  "@midwayjs/fc-starter": [
+    "3.12.3",
+    "3.12.5"
+  ],
+  "@midwayjs/serverless-http-parser": [
+    "3.10.14",
+    "3.12.5"
+  ],
   "@midwayjs/async-hooks-context-manager": "3.12.3",
   "@midwayjs/axios": "3.12.3",
-  "@midwayjs/bootstrap": "3.12.3",
+  "@midwayjs/bootstrap": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/bull": "3.12.3",
   "@midwayjs/bull-board": "3.12.3",
   "@midwayjs/cache": "3.12.3",
@@ -12,20 +21,35 @@
   "@midwayjs/casbin": "3.12.3",
   "@midwayjs/casbin-redis-adapter": "3.12.3",
   "@midwayjs/casbin-typeorm-adapter": "3.12.3",
-  "@midwayjs/code-dye": "3.12.3",
+  "@midwayjs/code-dye": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/consul": "3.12.3",
   "@midwayjs/core": "3.12.3",
   "@midwayjs/cos": "3.12.3",
   "@midwayjs/cron": "3.12.3",
-  "@midwayjs/cross-domain": "3.12.3",
+  "@midwayjs/cross-domain": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/decorator": "3.12.3",
   "@midwayjs/etcd": "3.12.3",
   "@midwayjs/express-session": "3.12.3",
-  "@midwayjs/faas": "3.12.3",
+  "@midwayjs/faas": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/grpc": "3.12.3",
-  "@midwayjs/http-proxy": "3.12.3",
+  "@midwayjs/http-proxy": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/i18n": "3.12.3",
-  "@midwayjs/info": "3.12.3",
+  "@midwayjs/info": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/jwt": "3.12.3",
   "@midwayjs/kafka": "3.12.3",
   "@midwayjs/leoric": "3.12.3",
@@ -40,24 +64,37 @@
   "@midwayjs/prometheus-socket-io": "3.12.3",
   "@midwayjs/rabbitmq": "3.12.3",
   "@midwayjs/redis": "3.12.3",
-  "@midwayjs/security": "3.12.3",
+  "@midwayjs/security": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/sequelize": "3.12.3",
   "@midwayjs/session": "3.12.3",
   "@midwayjs/socketio": "3.12.3",
-  "@midwayjs/static-file": "3.12.3",
+  "@midwayjs/static-file": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/swagger": [
     "3.12.3",
     "3.12.4"
   ],
   "@midwayjs/tablestore": "3.12.3",
-  "@midwayjs/tags": "3.12.3",
+  "@midwayjs/tags": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/typegoose": "3.12.3",
   "@midwayjs/typeorm": "3.12.3",
-  "@midwayjs/upload": "3.12.3",
+  "@midwayjs/upload": [
+    "3.12.3",
+    "3.12.5"
+  ],
   "@midwayjs/validate": "3.12.3",
   "@midwayjs/version": [
     "3.12.3",
-    "3.12.4"
+    "3.12.4",
+    "3.12.5"
   ],
   "@midwayjs/view": "3.12.3",
   "@midwayjs/view-ejs": "3.12.3",

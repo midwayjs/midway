@@ -1,6 +1,52 @@
 # Change Log
 
 
+## v3.12.5 (2023-09-25)
+
+#### :memo: Documentation
+* `faas`
+  * [#3235](https://github.com/midwayjs/midway/pull/3235) docs: faas upgrade ([@czy88840616](https://github.com/czy88840616))
+* Other
+  * [#3219](https://github.com/midwayjs/midway/pull/3219) docs: for faas change ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `bull-board`
+  * [#3273](https://github.com/midwayjs/midway/pull/3273) fix(deps): update bull monorepo to v5.8.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3251](https://github.com/midwayjs/midway/pull/3251) fix(deps): update bull monorepo to v5.8.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3229](https://github.com/midwayjs/midway/pull/3229) fix(deps): update bull monorepo to v5.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3274](https://github.com/midwayjs/midway/pull/3274) fix(deps): update dependency @grpc/proto-loader to v0.7.10 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3252](https://github.com/midwayjs/midway/pull/3252) fix(deps): update dependency @grpc/grpc-js to v1.9.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3230](https://github.com/midwayjs/midway/pull/3230) fix(deps): update dependency @grpc/grpc-js to v1.9.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#3266](https://github.com/midwayjs/midway/pull/3266) chore(deps): update dependency dayjs to v1.11.10 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#3254](https://github.com/midwayjs/midway/pull/3254) fix(deps): update dependency @opentelemetry/api to v1.6.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#3253](https://github.com/midwayjs/midway/pull/3253) fix(deps): update dependency ali-oss to v6.18.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3232](https://github.com/midwayjs/midway/pull/3232) fix(deps): update dependency ali-oss to v6.18.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#3249](https://github.com/midwayjs/midway/pull/3249) chore(deps): update dependency @types/koa-router to v7.4.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3241](https://github.com/midwayjs/midway/pull/3241) chore(deps): update dependency mongoose to v7.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3196](https://github.com/midwayjs/midway/pull/3196) fix(deps): update dependency statuses to v2.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3237](https://github.com/midwayjs/midway/pull/3237) fix: remove querystring module ([@czy88840616](https://github.com/czy88840616))
+  * [#3084](https://github.com/midwayjs/midway/pull/3084) chore(deps): update dependency lerna to v7.2.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3234](https://github.com/midwayjs/midway/pull/3234) chore(deps): update dependency @types/node to v18.17.15 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3093](https://github.com/midwayjs/midway/pull/3093) chore(deps): update dependency @nrwl/tao to v16 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`
+  * [#3236](https://github.com/midwayjs/midway/pull/3236) fix(deps): update dependency @midwayjs/event-bus to v1.9.4 ([@czy88840616](https://github.com/czy88840616))
+* `leoric`
+  * [#3216](https://github.com/midwayjs/midway/pull/3216) fix(deps): update dependency leoric to v2.11.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#3215](https://github.com/midwayjs/midway/pull/3215) fix(deps): update dependency jsonwebtoken to v9.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.12.4 (2023-08-29)
 
 #### :bug: Bug Fix
