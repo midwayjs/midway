@@ -1,6 +1,5 @@
 import { is as typeis } from 'type-is';
 import * as accepts from 'accepts';
-import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as qs from 'querystring';
 import * as only from 'only';
 import { isPlainObject } from './util';
@@ -95,7 +94,7 @@ export const request = {
     return this.req.originEvent ?? this.req.getOriginEvent?.() ?? {};
   },
 
-  get originContext(): FaaSOriginContext {
+  get originContext() {
     return this.req.originContext ?? this.req.getOriginContext?.() ?? {};
   },
 

@@ -1,8 +1,6 @@
-import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import { is as typeis } from 'type-is';
 import * as qs from 'querystring';
 import * as parseurl from 'parseurl';
-import { GatewayEvent } from '../interface';
 import { isPlainObject } from '../util';
 
 const EVENT = Symbol.for('ctx#event');
@@ -19,7 +17,7 @@ export class HTTPRequest {
     this.originContext = context;
   }
 
-  get [EVENT](): GatewayEvent {
+  get [EVENT]() {
     if (!this[EVENT_PARSED]) {
       this[EVENT_PARSED] =
         typeof this.originEvent === 'object'
@@ -42,7 +40,7 @@ export class HTTPRequest {
     return this.originEvent;
   }
 
-  getOriginContext(): FaaSOriginContext {
+  getOriginContext(): any {
     return this.originContext;
   }
 

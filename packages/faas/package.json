@@ -5,7 +5,6 @@
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^3.12.3",
-    "@midwayjs/faas-typings": "^3.10.13",
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/serverless-http-parser": "^3.10.14",
     "@midwayjs/simple-lock": "^1.1.4"

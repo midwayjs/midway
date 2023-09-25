@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 
 ## 部署类型
 
-阿里云的函数部署类型比较多，根据运行的不同容器有以下几种。
+阿里云的函数计算部署类型比较多，根据运行的不同容器有以下几种。
 
 | 名称                           | 描述                                                         | 部署媒介        |
 | ------------------------------ | ------------------------------------------------------------ | --------------- |
@@ -122,7 +122,8 @@ export class HelloAliyunService {
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
+import type { TimerEvent } from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
@@ -130,7 +131,7 @@ export class HelloAliyunService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.TIMER)
-  async handleTimerEvent(event: FC.TimerEvent) {
+  async handleTimerEvent(event: TimerEvent) {
     this.ctx.logger.info(event);
     return 'hello world';
   }
@@ -139,7 +140,7 @@ export class HelloAliyunService {
 
 **事件结构**
 
-Timer 消息返回的结构如下，在 `FC.TimerEvent` 类型中有描述。
+Timer 消息返回的结构如下，在 `TimerEvent` 类型中有描述。
 
 ```json
 {
@@ -157,7 +158,8 @@ OSS 用于存储一些资源文件，是阿里云的资源存储产品。 当 OS
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
+import type { OSSEvent } from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
@@ -165,7 +167,7 @@ export class HelloAliyunService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.OS)
-  async handleOSSEvent(event: FC.OSSEvent) {
+  async handleOSSEvent(event: OSSEvent) {
     // xxx
   }
 }
@@ -230,6 +232,7 @@ OSS 消息返回的结构如下，在 `FC.OSSEvent` 类型中有描述。
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import { Context } from '@midwayjs/faas';
+import type { MNSEvent } from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
@@ -237,7 +240,7 @@ export class HelloAliyunService {
   ctx: Context;
 
   @ServerlessTrigger(ServerlessTriggerType.MQ)
-  async handleMNSEvent(event: FC.MNSEvent) {
+  async handleMNSEvent(event: MNSEvent) {
     // ...
   }
 }
@@ -275,6 +278,34 @@ MNS 消息返回的结构如下，在 `FC.MNSEvent` 类型中有描述。
 
 
 
+### 类型定义
+
+FC 的定义将由适配器导出，为了让 `ctx.originContext` 的定义保持正确，需要将其添加到 `src/interface.ts` 中。
+
+```typescript
+// src/interface.ts
+import type {} from '@midwayjs/fc-starter';
+```
+
+此外，还提供了各种 Event 类型的定义。
+
+```typescript
+// Event 类型
+import type { 
+  OSSEvent,
+  MNSEvent,
+  SLSEvent,
+  CDNEvent,
+  TimerEvent,
+  APIGatewayEvent,
+  TableStoreEvent,
+} from '@midwayjs/fc-starter';
+// InitializeContext 类型
+import type { InitializeContext } from '@midwayjs/fc-starter';
+```
+
+
+
 ### 本地开发
 
 HTTP 触发器和 API Gateway 类型可以通过本地 `npm run dev` 和传统应用类似的开发方式进行本地开发，其他类型的触发器本地无法使用 dev 开发，只能通过运行 `npm run test` 进行测试执行。
@@ -283,30 +314,74 @@ HTTP 触发器和 API Gateway 类型可以通过本地 `npm run dev` 和传统�
 
 ### 本地测试
 
+和传统应用测试类似，使用 `createFunctionApp` 方法创建函数 app， 使用 `close` 方法关闭。
+
+```typescript
+import { Application, Context, Framework } from '@midwayjs/faas';
+import { mockContext } from '@midwayjs/fc-starter';
+import { createFunctionApp } from '@midwayjs/mock';
+
+describe('test/hello_aliyun.test.ts', () => {
+
+  it('should get result from event trigger', async () => {
+    
+    // create app
+    const app: Application = await createFunctionApp<Framework>(join(__dirname, '../'), {
+      initContext: mockContext(),
+    });
+    
+    // ...
+    
+    await close(app);
+  });
+});
+```
+
+`mockContext` 方法用来模拟一个 FC Context 数据结构，可以自定传递一个类似的结构或者修改部分数据。
+
+```typescript
+import { Application, Context, Framework } from '@midwayjs/faas';
+import { mockContext } from '@midwayjs/fc-starter';
+import { createFunctionApp } from '@midwayjs/mock';
+
+describe('test/hello_aliyun.test.ts', () => {
+
+  it('should get result from event trigger', async () => {
+    
+    // create app
+    const app: Application = await createFunctionApp<Framework>(join(__dirname, '../'), {
+      initContext: Object.assign(mockContext(), {
+        function: {
+          name: '***',
+          handler: '***'
+        }
+      }),
+    });
+    
+    // ...
+    
+    await close(app);
+  });
+});
+```
+
+不同的触发器有着不同的测试方法，下面列出了一些常见的触发器。
+
 <Tabs groupId="triggers">
 <TabItem value="event" label="Event">
 
-通过 `createFunctionApp` 创建函数 app，通过 `getServerlessInstance` 获取类实例，然后通过实例的方法直接调用，传入参数进行测试。
+通过 `getServerlessInstance` 获取类实例，直接调用实例方法，传入参数进行测试。
 
 ```typescript
+import { HelloAliyunService } from '../src/function/hello_aliyun';
+
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from event trigger', async () => {
+    // ...
+    const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
     expect(await instance.handleEvent('hello world')).toEqual('hello world');
+    // ...
   });
 });
 ```
@@ -318,30 +393,17 @@ describe('test/hello_aliyun.test.ts', () => {
 和应用类似相同，通过 `createFunctionApp` 创建函数 app，通过 `createHttpRequest` 方式进行测试。
 
 ```typescript
-import { Framework } from '@midwayjs/serverless-app';
-import { createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { HelloAliyunService } from '../src/function/hello_aliyun';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from http trigger', async () => {
+    // ...
     const result = await createHttpRequest(app).get('/').query({
       name: 'zhangting',
     });
     expect(result.text).toEqual('hello zhangting');
+    // ...
   });
 });
 ```
@@ -353,31 +415,18 @@ describe('test/hello_aliyun.test.ts', () => {
 和 HTTP 测试相同，通过 `createFunctionApp` 创建函数 app，通过 `createHttpRequest` 方式进行测试。
 
 ```typescript
-import { Framework } from '@midwayjs/serverless-app';
-import { createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { createHttpRequest } from '@midwayjs/mock';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from http trigger', async () => {
+    // ...
     const result = await createHttpRequest(app).post('api_gateway_aliyun').send({
       name: 'zhangting',
     });
 
     expect(result.text).toEqual('hello zhangting');
+    // ...
   });
 });
 ```
@@ -388,33 +437,19 @@ describe('test/hello_aliyun.test.ts', () => {
 
 和 HTTP 测试不同，通过 `createFunctionApp` 创建函数 app，通过 `getServerlessInstance` 获取整个类的实例，从而调用到特定方法来测试。
 
-可以通过 `createTimerEvent` 方法快速创建平台传入的结构。
+可以通过 `mockTimerEvent` 方法快速创建平台传入的结构。
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createTimerEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockTimerEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from timer trigger', async () => {
-    expect(await instance.handleTimerEvent(createTimerEvent())).toEqual('hello world');
+    // ...
+    const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+    expect(await instance.handleTimerEvent(mockTimerEvent())).toEqual('hello world');
+    // ...
   });
 });
 ```
@@ -428,30 +463,15 @@ describe('test/hello_aliyun.test.ts', () => {
 可以通过 `createOSSEvent` 方法快速创建平台传入的结构。
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createOSSEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockOSSEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
-
   it('should get result from oss trigger', async () => {
-    expect(await instance.handleOSSEvent(createOSSEvent())).toEqual('hello world');
+    // ...
+    const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+    expect(await instance.handleOSSEvent(mockOSSEvent())).toEqual('hello world');
+    // ...
   });
 });
 ```
@@ -465,30 +485,16 @@ describe('test/hello_aliyun.test.ts', () => {
 可以通过 `createMNSEvent` 方法快速创建平台传入的结构。
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createMNSEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockMNSEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from oss trigger', async () => {
-    expect(await instance.handleMNSEvent(createMNSEvent())).toEqual('hello world');
+    // ...
+    const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+    expect(await instance.handleMNSEvent(mockMNSEvent())).toEqual('hello world');
+    // ...
   });
 });
 ```

@@ -75,12 +75,7 @@ export class HelloServerlessService {
     functionName: 'abcde',
   })
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'every',
-    value: '5m',
-  })
-  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'every',
-    value: '10m',
+    name: 'timer'
   })
   async handleTimerEvent() {
     // TODO
@@ -98,7 +93,7 @@ export class HelloServerlessService {
 
 ```yaml
 provider:
-  name: aliyun ## 发布的平台，这里是阿里云
+  name: aliyun  # 发布的平台，这里是阿里云
   starter: '@midwayjs/fc-starter'
 
 ```
@@ -111,18 +106,24 @@ provider:
 
 `@ServerlessTrigger` 装饰器用于定义不同的触发器，它的参数为每个触发器信息，以及通用触发器参数。
 
-
-这里的触发器参数将会写入到各个平台自己的部署配置文件中。
-
 比如触发器的名称修改为 abc。
 
 ```typescript
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    name: 'abc',
-    type: 'every',
-    value: '5m',
+    name: 'abc',	// 触发器名称
   })
 ```
+
+如果只有一个触发器，可以将函数名信息写入到触发器上。
+
+```typescript
+  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
+  	functionName: 'hello'	// 如果只有一个触发器，可以省略一个装饰器
+    name: 'abc',
+  })
+```
+
+
 
 ## 函数装饰器参数
 
@@ -133,7 +134,7 @@ provider:
 
 ```typescript
 @ServerlessFunction({
-  functionName: 'abcde'
+  functionName: 'abcde'	// 函数名称
 })
 ```
 
