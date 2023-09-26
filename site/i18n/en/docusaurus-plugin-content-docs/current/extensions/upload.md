@@ -7,11 +7,15 @@ Related Information:
 | web support       |      |
 | ----------------- | ---- |
 | @midwayjs/koa     | ✅    |
-| @midwayjs/faas    | ✅    |
+| @midwayjs/faas    | 💬    |
 | @midwayjs/web     | ✅    |
 | @midwayjs/express | ✅    |
 
+:::caution
 
+💬 Some function computing platforms do not support streaming request responses. Please refer to the corresponding platform capabilities.
+
+:::
 
 ## Install dependencies
 

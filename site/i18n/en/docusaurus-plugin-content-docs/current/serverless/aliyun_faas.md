@@ -15,11 +15,11 @@ The following are common methods of using, testing, and deploying function trigg
 
 Alibaba Cloud has many types of function computing deployments, including the following types according to the different containers they run.
 
-| Name             | Description                                                  | Deployment Media       |
-| ---------------- | ------------------------------------------------------------ | ---------------------- |
-| Built-in runtime | Only function interfaces can be deployed, no custom ports are required, zip packages are built for platform deployment | zip package deployment |
-| Custom Runtime   | You can deploy standard applications, start port 9000, use the system image provided by the platform, and build a zip package for platform deployment | zip package deployment |
-| Custom Container | You can deploy standard applications, start port 9000, control all environmental dependencies yourself, and build a Dockerfile for platform deployment | Dockerfile deployment  |
+| Name             | Functional limitations                                       | Description                                                  | Deployment Media       |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------- |
+| Built-in runtime | Streaming requests and responses are not supported; requests and responses that are too large are not supported. | Only function interfaces can be deployed, no custom ports are required, zip packages are built for platform deployment | zip package deployment |
+| Custom Runtime   |                                                              | You can deploy standard applications, start port 9000, use the system image provided by the platform, and build a zip package for platform deployment | zip package deployment |
+| Custom Container |                                                              | You can deploy standard applications, start port 9000, control all environmental dependencies yourself, and build a Dockerfile for platform deployment | Dockerfile deployment  |
 
 There are three ways to create functions on the platform.
 

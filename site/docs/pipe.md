@@ -61,7 +61,7 @@ import { Pipe, PipeTransform, TransformOptions } from '@midwayjs/core';
 
 @Pipe()
 export class ValidatePipe implements PipeTransform<T, R> {
-  transform(value: T, options:TransformOptions): R {
+  transform(value: T, options: TransformOptions): R {
     return value;
   }
 }
@@ -103,9 +103,9 @@ export TransformOptions<OriginType = unknown> {
 例如我们自定义一个 `RegValid` 参数装饰器，用于传入正则和另一个管道参数：
 
 ```typescript
-import { PipeTransform, createCustomParamDecorator } from '@midwayjs/core';
+import { PipeUnionTransform, createCustomParamDecorator } from '@midwayjs/core';
 
-function RegValid(reg: Regexp, pipe: PipeTransform) {
+function RegValid(reg: RegExp, pipe: PipeUnionTransform) {
   return createCustomParamDecorator('reg-valid', {
     reg,
   }, {
@@ -126,8 +126,8 @@ function RegValid(reg: Regexp, pipe: PipeTransform) {
 ```typescript
 @Pipe()
 export class CutPipe implements PipeTransform {
-  transform(value: number, options:TransformOptions): string {
-    return String(value).splice(5);
+  transform(value: number, options: TransformOptions): string {
+    return String(value).slice(5);
   }
 }
 ```

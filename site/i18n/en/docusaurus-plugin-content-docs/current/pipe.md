@@ -103,9 +103,9 @@ In the options of the custom decorator, we can transparently pass the pipeline p
 For example, we customize a `RegValid` parameter decorator to pass in the regex and another pipeline parameter:
 
 ```typescript
-import { PipeTransform, createCustomParamDecorator } from '@midwayjs/core';
+import { PipeUnionTransform, createCustomParamDecorator } from '@midwayjs/core';
 
-function RegValid(reg: Regexp, pipe: PipeTransform) {
+function RegValid(reg: RegExp, pipe: PipeUnionTransform) {
    return createCustomParamDecorator('reg-valid', {
      reg,
    }, {
@@ -126,8 +126,8 @@ In addition, we define another pipeline for intercepting data.
 ```typescript
 @Pipe()
 export class CutPipe implements PipeTransform {
-   transform(value: number, options:TransformOptions): string {
-     return String(value).splice(5);
+   transform(value: number, options: TransformOptions): string {
+     return String(value).slice(5);
    }
 }
 ```

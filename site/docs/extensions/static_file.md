@@ -7,9 +7,15 @@ midway 提供了基于 [koa-static-cache](https://github.com/koajs/static-cache)
 | web 支持情况      |      |
 | ----------------- | ---- |
 | @midwayjs/koa     | ✅    |
-| @midwayjs/faas    | ✅    |
+| @midwayjs/faas    | 💬    |
 | @midwayjs/web     | ✅    |
 | @midwayjs/express | ❌    |
+
+:::caution
+
+💬 部分函数计算平台不支持流式请求响应，请参考对应平台能力。
+
+:::
 
 
 
