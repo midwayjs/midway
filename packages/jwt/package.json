@@ -19,6 +19,9 @@
     "jsonwebtoken",
     "jwt"
   ],
+  "engines": {
+    "node": ">=12"
+  },
   "author": "Nawbc",
   "license": "MIT",
   "devDependencies": {

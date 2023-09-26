@@ -1,4 +1,5 @@
 import { Config, Provide, Scope, ScopeEnum } from '@midwayjs/core';
+import { KeyObject } from 'crypto';
 import type {
   DecodeOptions,
   GetPublicKeyOrSecret,
@@ -8,7 +9,6 @@ import type {
   VerifyOptions,
 } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
-import { isKeyObject } from 'util/types';
 
 type JwtPayload = string | Buffer | Record<string, any>;
 
@@ -249,7 +249,7 @@ export class JwtService {
   isSecret(secret: any): secret is Secret {
     if (typeof secret === 'string') return true;
     if (Buffer.isBuffer(secret)) return true;
-    if (isKeyObject(secret)) return true;
+    if (secret instanceof KeyObject) return true;
     if (
       secret &&
       typeof secret === 'object' &&
