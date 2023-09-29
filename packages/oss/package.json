@@ -15,7 +15,7 @@
     "dotenv": "16.3.1"
   },
   "dependencies": {
-    "@types/ali-oss": "6.16.8",
+    "@types/ali-oss": "6.16.9",
     "ali-oss": "6.18.1"
   },
   "keywords": [
