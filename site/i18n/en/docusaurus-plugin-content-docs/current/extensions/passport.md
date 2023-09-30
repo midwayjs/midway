@@ -125,7 +125,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   // Validation of policies
   async validate(username, password) {
-    const user = await this.userModel.findOne({ username });
+    const user = await this.userModel.findOneBy({ username });
     if (await bcrypt.compare(password, user.password)) {
       throw new Error('error password '+ username);
     }
