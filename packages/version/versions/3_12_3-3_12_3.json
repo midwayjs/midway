@@ -40,7 +40,10 @@
     "3.12.3",
     "3.12.5"
   ],
-  "@midwayjs/grpc": "3.12.3",
+  "@midwayjs/grpc": [
+    "3.12.3",
+    "3.12.6"
+  ],
   "@midwayjs/http-proxy": [
     "3.12.3",
     "3.12.5"
@@ -53,15 +56,30 @@
   "@midwayjs/jwt": "3.12.3",
   "@midwayjs/kafka": "3.12.3",
   "@midwayjs/leoric": "3.12.3",
-  "@midwayjs/mikro": "3.12.3",
+  "@midwayjs/mikro": [
+    "3.12.3",
+    "3.12.6"
+  ],
   "@midwayjs/mock": "3.12.3",
-  "@midwayjs/mongoose": "3.12.3",
-  "@midwayjs/oss": "3.12.3",
+  "@midwayjs/mongoose": [
+    "3.12.3",
+    "3.12.6"
+  ],
+  "@midwayjs/oss": [
+    "3.12.3",
+    "3.12.6"
+  ],
   "@midwayjs/otel": "3.12.3",
   "@midwayjs/passport": "3.12.3",
   "@midwayjs/process-agent": "3.12.3",
-  "@midwayjs/prometheus": "3.12.3",
-  "@midwayjs/prometheus-socket-io": "3.12.3",
+  "@midwayjs/prometheus": [
+    "3.12.3",
+    "3.12.6"
+  ],
+  "@midwayjs/prometheus-socket-io": [
+    "3.12.3",
+    "3.12.6"
+  ],
   "@midwayjs/rabbitmq": "3.12.3",
   "@midwayjs/redis": "3.12.3",
   "@midwayjs/security": [
@@ -84,7 +102,10 @@
     "3.12.3",
     "3.12.5"
   ],
-  "@midwayjs/typegoose": "3.12.3",
+  "@midwayjs/typegoose": [
+    "3.12.3",
+    "3.12.6"
+  ],
   "@midwayjs/typeorm": "3.12.3",
   "@midwayjs/upload": [
     "3.12.3",
@@ -94,7 +115,8 @@
   "@midwayjs/version": [
     "3.12.3",
     "3.12.4",
-    "3.12.5"
+    "3.12.5",
+    "3.12.6"
   ],
   "@midwayjs/view": "3.12.3",
   "@midwayjs/view-ejs": "3.12.3",

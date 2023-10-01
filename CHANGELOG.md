@@ -1,6 +1,24 @@
 # Change Log
 
 
+## v3.12.6 (2023-10-01)
+
+#### :memo: Documentation
+* [#3297](https://github.com/midwayjs/midway/pull/3297) docs(site): update passport.md ([@Sakuraine](https://github.com/Sakuraine))
+
+#### :package: Dependencies
+* `oss`
+  * [#3295](https://github.com/midwayjs/midway/pull/3295) fix(deps): update dependency @types/ali-oss to v6.16.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3294](https://github.com/midwayjs/midway/pull/3294) fix(deps): update dependency @grpc/grpc-js to v1.9.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3288](https://github.com/midwayjs/midway/pull/3288) chore(deps): update dependency @types/node to v18.18.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- iNE ([@Sakuraine](https://github.com/Sakuraine))
+
+
+
 ## v3.12.5 (2023-09-25)
 
 #### :memo: Documentation
