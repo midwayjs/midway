@@ -442,6 +442,7 @@ export type IMidwayLogger = ILogger;
  */
 export interface MidwayLoggerOptions {
   lazyLoad?: boolean;
+  aliasName?: string;
 }
 
 export interface MidwayCoreDefaultConfig {

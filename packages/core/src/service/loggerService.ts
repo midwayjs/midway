@@ -1,7 +1,12 @@
 import { Provide, Scope, Inject, Init } from '../decorator';
 import { MidwayConfigService } from './configService';
 import { ServiceFactory } from '../common/serviceFactory';
-import { ILogger, IMidwayContainer, IMidwayContext, ScopeEnum } from '../interface';
+import {
+  ILogger,
+  IMidwayContainer,
+  IMidwayContext,
+  ScopeEnum,
+} from '../interface';
 import {
   DefaultConsoleLoggerFactory,
   LoggerFactory,
@@ -17,6 +22,8 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   private loggerFactory: LoggerFactory<any, any>;
 
   private lazyLoggerConfigMap: Map<string, any> = new Map();
+
+  private aliasLoggerMap: Map<string, string> = new Map();
 
   constructor(
     readonly applicationContext: IMidwayContainer,
@@ -59,6 +66,10 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   }
 
   protected createClient(config, name?: string) {
+    if (config.aliasName) {
+      // mapping alias logger name to real logger name
+      this.aliasLoggerMap.set(config.aliasName, name);
+    }
     if (!config.lazyLoad) {
       this.loggerFactory.createLogger(name, config);
     } else {
@@ -76,6 +87,10 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   }
 
   public getLogger(name: string) {
+    if (this.aliasLoggerMap.has(name)) {
+      // get real logger name
+      name = this.aliasLoggerMap.get(name);
+    }
     const logger = this.loggerFactory.getLogger(name);
     if (logger) {
       return logger;
