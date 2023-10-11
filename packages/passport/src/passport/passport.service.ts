@@ -23,18 +23,19 @@ export function PassportStrategy(
 
     @Init()
     async init() {
-      const cb = async (...params: any[]) => {
+      const cb = (...params: any[]) => {
         const done = params[params.length - 1];
-        try {
-          const result = await this.validate(...params);
-          if (Array.isArray(result)) {
-            done(null, ...result);
-          } else {
-            done(null, result);
-          }
-        } catch (err) {
-          done(err, null);
-        }
+        Promise.resolve(this.validate(...params))
+          .then(result => {
+            if (Array.isArray(result)) {
+              done(null, ...result);
+            } else {
+              done(null, result);
+            }
+          })
+          .catch(err => {
+            done(err, null);
+          });
       };
 
       Object.defineProperty(cb, 'length', {
@@ -108,20 +109,13 @@ export function PassportMiddleware(
             ...options,
           };
 
-          const strategyList = [];
           for (const strategySingle of strategy as StrategyClass[]) {
-            // got strategy
-            const strategyInstance = await this.app
-              .getApplicationContext()
-              .getAsync(strategySingle);
-            strategyList.push(strategyInstance.getStrategy());
+            // int strategy
+            await this.app.getApplicationContext().getAsync(strategySingle);
           }
 
           // authenticate
-          const authenticate = this.passport.authenticate(
-            strategyList,
-            authOptions
-          );
+          const authenticate = this.passport.authenticate([], authOptions);
 
           let authenticateResult;
           try {
@@ -195,20 +189,13 @@ export function PassportMiddleware(
             ...options,
           };
 
-          const strategyList = [];
           for (const strategySingle of strategy as StrategyClass[]) {
-            // got strategy
-            const strategyInstance = await this.app
-              .getApplicationContext()
-              .getAsync(strategySingle);
-            strategyList.push(strategyInstance.getStrategy());
+            // int strategy
+            await this.app.getApplicationContext().getAsync(strategySingle);
           }
 
           // authenticate
-          const authenticate = this.passport.authenticate(
-            strategyList,
-            authOptions
-          );
+          const authenticate = this.passport.authenticate([], authOptions);
 
           let authenticateResult;
           try {
