@@ -15,7 +15,7 @@
     "@midwayjs/mock": "^3.12.3",
     "@types/consul": "0.40.1",
     "@types/sinon": "10.0.19",
-    "nock": "13.3.3"
+    "nock": "13.3.4"
   },
   "dependencies": {
     "consul": "1.2.0"
