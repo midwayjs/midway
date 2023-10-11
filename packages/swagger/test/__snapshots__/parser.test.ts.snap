@@ -110,6 +110,54 @@ exports[`/test/parser.test.ts should parse base type 1`] = `
 }
 `;
 
+exports[`/test/parser.test.ts should parse extends base 1`] = `
+{
+  "properties": {
+    "a": {
+      "format": undefined,
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should parse extends base 2`] = `
+{
+  "properties": {
+    "b": {
+      "format": undefined,
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should parse extends base 3`] = `
+{
+  "properties": {
+    "c": {
+      "format": undefined,
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
 exports[`/test/parser.test.ts should parse ref schema with function 1`] = `
 {
   "properties": {
