@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/consul",
   "description": "midway consul",
-  "version": "3.12.3",
+  "version": "3.12.7",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [

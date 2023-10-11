@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/tags",
-  "version": "3.12.5",
+  "version": "3.12.7",
   "description": "Midway Tag System",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -23,7 +23,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^3.12.3",
-    "@midwayjs/express": "^3.12.3",
+    "@midwayjs/express": "^3.12.7",
     "@midwayjs/faas": "^3.12.5",
     "@midwayjs/koa": "^3.12.3",
     "@midwayjs/mock": "^3.12.3",

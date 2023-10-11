@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.12.7 (2023-10-11)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3320](https://github.com/midwayjs/midway/pull/3320) fix: swagger type missing with multi-extends ([@czy88840616](https://github.com/czy88840616))
+* `passport`
+  * [#3314](https://github.com/midwayjs/midway/pull/3314) fix: passport validate resolve is not executed under concurrency ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `mongoose`, `typegoose`
+  * [#3308](https://github.com/midwayjs/midway/pull/3308) chore(deps): update mongoose monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3318](https://github.com/midwayjs/midway/pull/3318) chore(deps): update dependency lerna to v7.3.1 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `consul`
+  * [#3319](https://github.com/midwayjs/midway/pull/3319) chore(deps): update dependency nock to v13.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3306](https://github.com/midwayjs/midway/pull/3306) fix(deps): update dependency @grpc/grpc-js to v1.9.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#3307](https://github.com/midwayjs/midway/pull/3307) fix(deps): update dependency @types/jsonwebtoken to v9.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.12.6 (2023-10-01)
 
 #### :memo: Documentation
