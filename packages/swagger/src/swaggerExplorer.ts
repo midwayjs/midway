@@ -762,8 +762,9 @@ export class SwaggerExplorer {
     if (this.documentBuilder.getSchema(clzz.name)) {
       return this.documentBuilder.getSchema(clzz.name);
     }
+    // 解析 ApiExtraModel
     this.parseExtraModel(clzz);
-
+    // 解析类上的 ApiProperty
     const props = getClassExtendedMetadata(INJECT_CUSTOM_PROPERTY, clzz);
 
     const tt: any = {
@@ -771,9 +772,15 @@ export class SwaggerExplorer {
       properties: {},
     };
 
+    // 先添加到 schema，防止递归循环
+    this.documentBuilder.addSchema({
+      [clzz.name]: tt,
+    });
+
     if (props) {
-      Object.keys(props).forEach(key => {
-        const metadata = props[key].metadata;
+      for (const key of Object.keys(props)) {
+        const metadata: any = {};
+        Object.assign(metadata, props[key].metadata);
         if (typeof metadata?.required !== undefined) {
           if (metadata?.required) {
             if (!tt.required) {
@@ -794,7 +801,7 @@ export class SwaggerExplorer {
           if (metadata?.description) {
             tt.properties[key].description = metadata?.description;
           }
-          return;
+          continue;
         }
         if (metadata?.items?.enum) {
           tt.properties[key] = {
@@ -806,7 +813,7 @@ export class SwaggerExplorer {
           if (metadata?.description) {
             tt.properties[key].description = metadata?.description;
           }
-          return;
+          continue;
         }
         let isArray = false;
         let currentType = parseTypeSchema(metadata?.type);
@@ -828,7 +835,7 @@ export class SwaggerExplorer {
             tt.properties[key].oneOf.push(this.parseSubPropertyType(meta));
           });
           delete metadata?.oneOf;
-          return;
+          continue;
         }
 
         if (Types.isClass(currentType)) {
@@ -891,13 +898,8 @@ export class SwaggerExplorer {
         }
 
         Object.assign(tt.properties[key], metadata);
-      });
+      }
     }
-
-    this.documentBuilder.addSchema({
-      [clzz.name]: tt,
-    });
-
     // just for test
     return tt;
   }
