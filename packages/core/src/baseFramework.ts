@@ -51,7 +51,7 @@ export abstract class BaseFramework<
   protected appLogger: ILogger;
   protected defaultContext = {};
   protected contextLoggerApplyLogger: string;
-  protected contextLoggerFormat: LoggerContextFormat;
+  protected contextLoggerFormat: any;
   protected middlewareManager = this.createMiddlewareManager();
   protected filterManager = this.createFilterManager();
   protected guardManager = this.createGuardManager();

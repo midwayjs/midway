@@ -24,7 +24,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/logger": "^2.15.0",
     "@midwayjs/mock": "^3.12.3",
     "@types/koa": "2.13.6",
     "@types/koa-router": "7.4.5",

@@ -1,9 +1,6 @@
 import { createRabbitMQProducer } from '@midwayjs/mock';
 import { closeApp, creatApp } from './utils';
-import { loggers } from '@midwayjs/logger';
 import { sleep } from '@midwayjs/core';
-
-loggers.updateConsoleLevel('silly');
 
 describe('/test/index.test.ts', () => {
   it('should test create channel with legacy method', async () => {

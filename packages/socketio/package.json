@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@midwayjs/core": "^3.12.3",
-    "@midwayjs/logger": "^2.15.0",
     "socket.io": "4.7.2",
     "socket.io-redis": "^6.1.0"
   },

@@ -5,11 +5,11 @@
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^3.12.3",
-    "@midwayjs/logger": "^2.15.0",
     "@midwayjs/serverless-http-parser": "^3.12.5",
     "@midwayjs/simple-lock": "^1.1.4"
   },
   "devDependencies": {
+    "@midwayjs/logger": "3.0.0-beta.17",
     "@midwayjs/mock": "^3.12.3",
     "@midwayjs/serverless-fc-starter": "^3.12.5",
     "@midwayjs/serverless-scf-starter": "^3.12.5",

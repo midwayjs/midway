@@ -4,7 +4,7 @@ import { ServiceFactory } from '../common/serviceFactory';
 import {
   ILogger,
   IMidwayContainer,
-  IMidwayContext,
+  IMidwayContext, MidwayLoggerOptions,
   ScopeEnum,
 } from '../interface';
 import {
@@ -82,7 +82,8 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
     return 'logger';
   }
 
-  public createLogger(name, config) {
+  public createLogger(name: string, config: MidwayLoggerOptions) {
+    delete config['aliasName'];
     return this.loggerFactory.createLogger(name, config);
   }
 

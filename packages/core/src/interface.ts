@@ -443,6 +443,7 @@ export type IMidwayLogger = ILogger;
 export interface MidwayLoggerOptions {
   lazyLoad?: boolean;
   aliasName?: string;
+  [key: string]: any;
 }
 
 export interface MidwayCoreDefaultConfig {
