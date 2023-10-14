@@ -13,7 +13,11 @@ export abstract class LoggerFactory<Logger extends ILogger, LoggerOptions> {
       };
     };
   };
-  abstract createContextLogger(ctx: any, appLogger: ILogger): ILogger;
+  abstract createContextLogger(
+    ctx: any,
+    appLogger: ILogger,
+    contextOptions?: any
+  ): ILogger;
 }
 
 export class DefaultConsoleLoggerFactory

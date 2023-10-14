@@ -174,7 +174,9 @@ export abstract class BaseFramework<
       }
 
       // create new context logger
-      const ctxLogger = this.loggerService.createContextLogger(ctx, appLogger);
+      const ctxLogger = this.loggerService.createContextLogger(ctx, appLogger, {
+        contextFormat: this.contextLoggerFormat,
+      });
       ctxLoggerCache.set(name, ctxLogger);
       return ctxLogger;
     } else {

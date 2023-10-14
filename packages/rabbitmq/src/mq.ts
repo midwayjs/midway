@@ -7,7 +7,6 @@ import { IRabbitMQApplication } from './interface';
 import { ConsumeMessage } from 'amqplib/properties';
 import { RabbitMQListenerOptions, ILogger } from '@midwayjs/core';
 import type { Channel } from 'amqplib';
-import { ILogger } from '@midwayjs/logger';
 import { EventEmitter } from 'events';
 
 export class RabbitMQServer

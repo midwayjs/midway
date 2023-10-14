@@ -1,9 +1,4 @@
-import {
-  loggers,
-  ILogger,
-  IMidwayLogger,
-  LoggerOptions,
-} from '@midwayjs/logger';
+import { loggers, ILogger, LoggerOptions } from '@midwayjs/logger';
 import { join, isAbsolute, dirname, basename } from 'path';
 import { existsSync, lstatSync, statSync, renameSync, unlinkSync } from 'fs';
 import { Application, EggLogger } from 'egg';
@@ -189,10 +184,13 @@ class MidwayLoggers extends Map<string, ILogger> {
 
   disableConsole() {
     for (const value of this.values()) {
-      if ((value as IMidwayLogger)?.disableConsole) {
-        (value as IMidwayLogger)?.disableConsole();
-      } else if ((value as EggLogger).disable) {
-        (value as EggLogger).disable('console');
+      if ((value as any)?.['disableConsole']) {
+        (value as any).disableConsole();
+      } else if ((value as unknown as EggLogger).disable) {
+        (value as unknown as EggLogger).disable('console');
+      } else {
+        // v3
+        (value as any).level = 'none';
       }
     }
   }
@@ -200,8 +198,8 @@ class MidwayLoggers extends Map<string, ILogger> {
   reload() {
     // 忽略 midway logger，只有 egg logger 需要做切割
     for (const value of this.values()) {
-      if ((value as EggLogger).reload) {
-        (value as EggLogger).reload();
+      if ((value as unknown as EggLogger).reload) {
+        (value as unknown as EggLogger).reload();
       }
     }
   }
@@ -224,11 +222,11 @@ class MidwayLoggers extends Map<string, ILogger> {
         options.dir = dirname(file);
         options.fileLogName = basename(file);
         options.auditFileDir =
-          midwayLoggerConfig.auditFileDir === '.audit'
-            ? join(midwayLoggerConfig.dir, '.audit')
-            : midwayLoggerConfig.auditFileDir;
+          midwayLoggerConfig['auditFileDir'] === '.audit'
+            ? join(midwayLoggerConfig['dir'], '.audit')
+            : midwayLoggerConfig['auditFileDir'];
         options.errorDir =
-          midwayLoggerConfig.errorDir ?? midwayLoggerConfig.dir;
+          midwayLoggerConfig['errorDir'] ?? midwayLoggerConfig['dir'];
       } else {
         // 相对路径，使用默认的 dir 即可
         options.fileLogName = file;
