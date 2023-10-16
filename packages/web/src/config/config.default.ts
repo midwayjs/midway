@@ -10,13 +10,45 @@ export default appInfo => {
 
   // 修改默认的日志名
   exports.midwayLogger = {
+    default: {
+      // 兼容 v2
+      fileLogName: 'midway-web.log',
+      // 兼容 v3
+      transports: {
+        file: {
+          transports: {
+            file: {
+              fileLogName: 'midway-web.log',
+            },
+          },
+        },
+      },
+    },
     clients: {
+      coreLogger: {
+        fileLogName: 'midway-core.log',
+        transports: {
+          file: {
+            fileLogName: 'midway-core.log',
+          },
+        },
+      },
       appLogger: {
         fileLogName: 'midway-web.log',
+        transports: {
+          file: {
+            fileLogName: 'midway-web.log',
+          },
+        },
         aliasName: 'logger',
       },
       agentLogger: {
         fileLogName: 'midway-agent.log',
+        transports: {
+          file: {
+            fileLogName: 'midway-agent.log',
+          },
+        },
       },
     },
   };

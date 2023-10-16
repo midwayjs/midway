@@ -1,9 +1,6 @@
 import { loggers, ILogger, LoggerOptions } from '@midwayjs/logger';
 import { join, isAbsolute, dirname, basename } from 'path';
-import { existsSync, lstatSync, statSync, renameSync, unlinkSync } from 'fs';
 import { Application, EggLogger } from 'egg';
-import { getCurrentDateString } from './utils';
-import * as os from 'os';
 import {
   MidwayLoggerService,
   getCurrentApplicationContext,
@@ -12,11 +9,6 @@ import {
 import { debuglog } from 'util';
 
 const debug = debuglog('midway:debug');
-const isWindows = os.platform() === 'win32';
-
-function isEmptyFile(p: string) {
-  return statSync(p).size === 0;
-}
 
 const levelTransform = level => {
   // egg 自定义日志，不设置 level，默认是 info
@@ -47,26 +39,6 @@ const levelTransform = level => {
       return 'silly';
   }
 };
-
-function checkEggLoggerExistsAndBackup(dir, fileName) {
-  const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
-  try {
-    if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
-      // 如果是空文件，则直接删了，否则加入备份队列
-      if (isEmptyFile(file)) {
-        // midway 的软链在 windows 底下也不会创建出来，在 windows 底下就不做文件删除了
-        if (!isWindows) {
-          unlinkSync(file);
-        }
-      } else {
-        const timeFormat = getCurrentDateString();
-        renameSync(file, file + '.' + timeFormat + '_eggjs_bak');
-      }
-    }
-  } catch (err) {
-    // ignore
-  }
-}
 
 function cleanUndefinedProperty(obj) {
   Object.keys(obj).forEach(key => {
@@ -127,6 +99,7 @@ class MidwayLoggers extends Map<string, ILogger> {
 
     const loggerConfig = configService.getConfiguration('midwayLogger');
 
+    // 这里利用了 loggers 缓存的特性，提前初始化 logger
     if (loggerConfig) {
       for (const id of Object.keys(loggerConfig.clients)) {
         const config = Object.assign(
@@ -146,7 +119,12 @@ class MidwayLoggers extends Map<string, ILogger> {
     // 初始化日志服务
     this.loggerService = getCurrentApplicationContext().get(
       MidwayLoggerService,
-      [getCurrentApplicationContext()]
+      [
+        getCurrentApplicationContext(),
+        {
+          loggerFactory: loggers,
+        },
+      ]
     );
     // 防止循环枚举报错
     Object.defineProperty(this, 'loggerService', {
@@ -155,10 +133,6 @@ class MidwayLoggers extends Map<string, ILogger> {
   }
 
   createLogger(options, loggerKey: string) {
-    /**
-     * 提前备份 egg 日志
-     */
-    checkEggLoggerExistsAndBackup(options.dir, options.fileLogName);
     let logger: ILogger = loggers.createLogger(loggerKey, options);
 
     // overwrite values for pandora collect

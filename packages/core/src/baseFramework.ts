@@ -184,7 +184,9 @@ export abstract class BaseFramework<
       if (ctx['_logger']) {
         return ctx['_logger'];
       }
-      ctx['_logger'] = this.loggerService.createContextLogger(ctx, appLogger);
+      ctx['_logger'] = this.loggerService.createContextLogger(ctx, appLogger, {
+        contextFormat: this.contextLoggerFormat,
+      });
       return ctx['_logger'];
     }
   }
