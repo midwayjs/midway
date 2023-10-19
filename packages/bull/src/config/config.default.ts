@@ -19,6 +19,11 @@ export const midwayLogger = {
   clients: {
     bullLogger: {
       fileLogName: 'midway-bull.log',
+      transports: {
+        file: {
+          fileLogName: 'midway-bull.log',
+        },
+      },
     },
   },
 };

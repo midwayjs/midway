@@ -30,6 +30,11 @@ import {
             typeormLogger: {
               lazyLoad: true,
               fileLogName: 'midway-typeorm.log',
+              transports: {
+                file: {
+                  fileLogName: 'midway-typeorm.log',
+                },
+              },
               enableError: false,
               level: 'info',
             },
