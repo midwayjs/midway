@@ -121,7 +121,7 @@ export class Bootstrap {
         enableError: false,
         enableFile: false,
         enableConsole: true,
-      });
+      } as any);
       if (configuration.logger === false) {
         if (this.logger['disableConsole']) {
           // v2
