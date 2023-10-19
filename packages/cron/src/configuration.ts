@@ -21,8 +21,13 @@ import { JobNameOrClz } from './interface';
             cronLogger: {
               fileLogName: 'midway-cron.log',
               contextFormat: info => {
-                const { jobId, from } = info.ctx;
-                return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}`;
+                const { from } = info.ctx;
+                return `${info.timestamp} ${info.LEVEL} ${info.pid} [${from.name}] ${info.message}`;
+              },
+              transports: {
+                file: {
+                  fileLogName: 'midway-cron.log',
+                },
               },
             },
           },
