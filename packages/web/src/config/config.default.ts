@@ -2,56 +2,51 @@ import * as path from 'path';
 import * as mkdirp from 'mkdirp';
 import * as os from 'os';
 import * as fs from 'fs';
+import * as loggerModule from '@midwayjs/logger';
 
 export default appInfo => {
   const exports = {} as any;
 
   exports.rundir = path.join(appInfo.appDir, 'run');
 
-  // 修改默认的日志名
-  exports.midwayLogger = {
-    default: {
-      // 兼容 v2
-      fileLogName: 'midway-web.log',
-      // 兼容 v3
-      transports: {
-        file: {
+  // v2 格式
+  let defaultLoggerConfig = {
+    clients: {
+      appLogger: {
+        fileLogName: 'midway-web.log',
+        aliasName: 'logger',
+      },
+      agentLogger: {
+        fileLogName: 'midway-agent.log',
+      },
+    },
+  };
+
+  // v3 格式
+  if (loggerModule['formatLegacyLoggerOptions']) {
+    defaultLoggerConfig = {
+      clients: {
+        appLogger: {
           transports: {
             file: {
               fileLogName: 'midway-web.log',
             },
           },
+          aliasName: 'logger',
         },
-      },
-    },
-    clients: {
-      coreLogger: {
-        fileLogName: 'midway-core.log',
-        transports: {
-          file: {
-            fileLogName: 'midway-core.log',
+        agentLogger: {
+          transports: {
+            file: {
+              fileLogName: 'midway-agent.log',
+            },
           },
         },
       },
-      appLogger: {
-        fileLogName: 'midway-web.log',
-        transports: {
-          file: {
-            fileLogName: 'midway-web.log',
-          },
-        },
-        aliasName: 'logger',
-      },
-      agentLogger: {
-        fileLogName: 'midway-agent.log',
-        transports: {
-          file: {
-            fileLogName: 'midway-agent.log',
-          },
-        },
-      },
-    },
-  };
+    } as any;
+  }
+
+  // 修改默认的日志名
+  exports.midwayLogger = defaultLoggerConfig;
 
   exports.egg = {
     dumpConfig: true,

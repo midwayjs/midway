@@ -28,7 +28,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/logger": "3.0.0-beta.19",
+    "@midwayjs/logger": "3.0.0-beta.20",
     "@midwayjs/mock": "^3.12.3",
     "dayjs": "1.11.10",
     "egg-logger": "2.9.1",

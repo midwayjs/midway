@@ -7,7 +7,10 @@ import {
   MidwayConfigService,
 } from '@midwayjs/core';
 import { debuglog } from 'util';
+import { extend } from '@midwayjs/core';
+import * as loggerModule from '@midwayjs/logger';
 
+const isV3Logger = loggerModule['formatLegacyLoggerOptions'];
 const debug = debuglog('midway:debug');
 
 const levelTransform = level => {
@@ -102,7 +105,8 @@ class MidwayLoggers extends Map<string, ILogger> {
     // 这里利用了 loggers 缓存的特性，提前初始化 logger
     if (loggerConfig) {
       for (const id of Object.keys(loggerConfig.clients)) {
-        const config = Object.assign(
+        const config = extend(
+          true,
           {},
           loggerConfig['default'],
           loggerConfig.clients[id]
@@ -162,9 +166,11 @@ class MidwayLoggers extends Map<string, ILogger> {
         (value as any).disableConsole();
       } else if ((value as unknown as EggLogger).disable) {
         (value as unknown as EggLogger).disable('console');
-      } else {
+      } else if (isV3Logger) {
         // v3
-        (value as any).level = 'none';
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        (value as any).get('console')?.level = 'none';
       }
     }
   }
@@ -195,21 +201,44 @@ class MidwayLoggers extends Map<string, ILogger> {
         // 绝对路径，单独处理
         options.dir = dirname(file);
         options.fileLogName = basename(file);
-        options.auditFileDir =
-          midwayLoggerConfig['auditFileDir'] === '.audit'
-            ? join(midwayLoggerConfig['dir'], '.audit')
-            : midwayLoggerConfig['auditFileDir'];
-        options.errorDir =
-          midwayLoggerConfig['errorDir'] ?? midwayLoggerConfig['dir'];
+
+        if (isV3Logger) {
+          options.auditFileDir =
+            midwayLoggerConfig?.transports?.file?.['auditFileDir'] === '.audit'
+              ? join(midwayLoggerConfig?.transports?.file?.['dir'], '.audit')
+              : midwayLoggerConfig?.transports?.file?.['auditFileDir'];
+          options.errorDir =
+            midwayLoggerConfig?.transports?.error?.['dir'] ??
+            midwayLoggerConfig?.transports?.file?.['dir'];
+        } else {
+          options.auditFileDir =
+            midwayLoggerConfig['auditFileDir'] === '.audit'
+              ? join(midwayLoggerConfig['dir'], '.audit')
+              : midwayLoggerConfig['auditFileDir'];
+          options.errorDir =
+            midwayLoggerConfig['errorDir'] ?? midwayLoggerConfig['dir'];
+        }
       } else {
         // 相对路径，使用默认的 dir 即可
         options.fileLogName = file;
       }
-      transformLoggerConfig.midwayLogger.clients[name] = {
-        level: levelTransform(eggCustomLogger[name]?.level),
-        consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
-        ...options,
-      };
+
+      // v3 logger，格式化一下 options
+      if (isV3Logger) {
+        transformLoggerConfig.midwayLogger.clients[name] = loggerModule[
+          'formatLegacyLoggerOptions'
+        ]({
+          level: levelTransform(eggCustomLogger[name]?.level),
+          consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
+          ...options,
+        });
+      } else {
+        transformLoggerConfig.midwayLogger.clients[name] = {
+          level: levelTransform(eggCustomLogger[name]?.level),
+          consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
+          ...options,
+        };
+      }
       cleanUndefinedProperty(transformLoggerConfig.midwayLogger.clients[name]);
     }
     return transformLoggerConfig;

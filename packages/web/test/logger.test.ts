@@ -127,11 +127,11 @@ describe('test/logger.test.js', () => {
     const app = await creatApp('apps/mock-production-app');
 
     // 生产环境默认 _level = info
-    expect((app.logger as any).fileTransport.level).toEqual('info');
+    expect((app.logger as any).get('file').level).toEqual('info');
     // stdout 默认 INFO
-    expect((app.logger as any).consoleTransport.level).toEqual('info');
-    expect((app.coreLogger as any).fileTransport.level).toEqual('info');
-    expect((app.coreLogger as any).consoleTransport.level).toEqual('info');
+    expect((app.logger as any).get('console').level).toEqual('none');
+    expect((app.coreLogger as any).get('file').level).toEqual('info');
+    expect((app.coreLogger as any).get('console').level).toEqual('none');
     expect(app.config.logger.disableConsoleAfterReady === true);
 
     // 控制台看不见这个输出，但是文件中可以
@@ -162,10 +162,10 @@ describe('test/logger.test.js', () => {
     // await remove(join(getFilepath('apps/mock-production-app-do-not-force/src/config'), 'logs'));
     const app = await creatApp('apps/mock-production-app-do-not-force');
 
-    expect((app.logger as any).fileTransport.level).toEqual('debug');
-    expect((app.logger as any).consoleTransport.level).toEqual('info');
-    expect((app.coreLogger as any).fileTransport.level).toEqual('info');
-    expect((app.coreLogger as any).consoleTransport.level).toEqual('info');
+    expect((app.logger as any).get('file').level).toEqual('debug');
+    expect((app.logger as any).get('console').level).toEqual('none');
+    expect((app.coreLogger as any).get('file').level).toEqual('info');
+    expect((app.coreLogger as any).get('console').level).toEqual('none');
 
     // 由于 egg 默认设置了 disableConsoleAfterReady，所以控制台还是看不到这个输出
     app.logger.info('------');
@@ -179,10 +179,10 @@ describe('test/logger.test.js', () => {
     await remove(join(getFilepath('apps/mock-dev-app'), 'logs'));
     const app = await creatApp('apps/mock-dev-app');
 
-    expect((app.logger as any).fileTransport.level === 'info');
-    expect((app.logger as any).consoleTransport.level === 'info');
-    expect((app.coreLogger as any).fileTransport.level === 'info');
-    expect((app.coreLogger as any).consoleTransport.level === 'warn');
+    expect((app.logger as any).get('file').level === 'info');
+    expect((app.logger as any).get('console').level === 'info');
+    expect((app.coreLogger as any).get('file').level === 'info');
+    expect((app.coreLogger as any).get('console').level === 'warn');
     expect(app.config.logger.disableConsoleAfterReady === false);
     await closeApp(app);
   });
@@ -194,10 +194,10 @@ describe('test/logger.test.js', () => {
     await remove(join(getFilepath('apps/mock-dev-app'), 'logs'));
     const app = await creatApp('apps/mock-dev-app');
 
-    expect((app.logger as any).fileTransport.level === 'info');
-    expect((app.logger as any).consoleTransport.level === 'error');
-    expect((app.coreLogger as any).fileTransport.level === 'info');
-    expect((app.coreLogger as any).consoleTransport.level === 'error');
+    expect((app.logger as any).get('file').level === 'info');
+    expect((app.logger as any).get('console').level === 'error');
+    expect((app.coreLogger as any).get('file').level === 'info');
+    expect((app.coreLogger as any).get('console').level === 'error');
     expect(app.config.logger.disableConsoleAfterReady === false);
     await closeApp(app);
   });
@@ -209,10 +209,10 @@ describe('test/logger.test.js', () => {
     await remove(join(getFilepath('apps/mock-dev-app'), 'logs'));
     const app = await creatApp('apps/mock-dev-app');
 
-    expect((app.logger as any).fileTransport.level === 'info');
-    expect((app.logger as any).consoleTransport.level === 'warn');
-    expect((app.coreLogger as any).fileTransport.level === 'info');
-    expect((app.coreLogger as any).consoleTransport.level === 'warn');
+    expect((app.logger as any).get('file').level === 'info');
+    expect((app.logger as any).get('console').level === 'warn');
+    expect((app.coreLogger as any).get('file').level === 'info');
+    expect((app.coreLogger as any).get('console').level === 'warn');
     expect(app.config.logger.disableConsoleAfterReady === false);
     await closeApp(app);
   });
@@ -222,8 +222,8 @@ describe('test/logger.test.js', () => {
     await remove(join(getFilepath('apps/mock-dev-app'), 'logs'));
     const app = await creatApp('apps/mock-dev-app');
 
-    expect((app.logger as any).fileTransport.level === 'info');
-    expect((app.logger as any).consoleTransport.level === 'error');
+    expect((app.logger as any).get('file').level === 'info');
+    expect((app.logger as any).get('console').level === 'error');
     await closeApp(app);
   });
 
