@@ -1,10 +1,11 @@
 name: 🐛 Bug Report
 description: Create a report to help us reproduce and fix the bug（创建报告以帮助我们重现和修复 bug）
+labels: "type: bug"
 
 body:
   - type: markdown
     attributes:
-      value: >
+      value: |
         #### Before submitting a bug, please make sure the issue hasn't been already addressed by searching through [the existing and past issues](https://github.com/midwayjs/midway/issues?q=is%3Aissue+sort%3Acreated-desc+).
         #### 在提交 bug 之前，请通过搜索[现有和过去的问题](https://github.com/midwayjs/midway/issues?q=is%3Aissue+sort%3Acreated-desc+)来确保问题尚未解决。
   - type: textarea

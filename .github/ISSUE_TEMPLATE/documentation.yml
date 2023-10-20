@@ -1,5 +1,6 @@
 name: 📚 Documentation
 description: Report an issue and help us improve the documentation（报告问题并帮助我们改进文档）
+labels: "type: docs"
 
 body:
   - type: textarea
