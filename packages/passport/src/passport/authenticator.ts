@@ -121,12 +121,15 @@ export class PassportAuthenticator {
       let shouldBreak = false;
       let successResult, redirectResult;
 
-      for (const strategy of []
+      for (const strategyOrigin of []
         .concat(Array.from(this.strategies.values()))
         .concat(strategies)) {
         if (shouldBreak) {
           break;
         }
+
+        const strategy = Object.create(strategyOrigin);
+
         await new Promise<void>((resolve, reject) => {
           // ----- BEGIN STRATEGY AUGMENTATION -----
           // Augment the new strategy instance with action functions.  These action

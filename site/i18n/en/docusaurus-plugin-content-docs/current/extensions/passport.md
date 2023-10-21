@@ -18,7 +18,7 @@ Starting from v3.4.0, Midway maintains its own passport and will no longer need 
 
 ## Some concepts
 
-The passport is that the community uses more authentication libraries to make authentication requests through extensible plug-ins called policies. Passport routing is not mounted or any specific database is assumed, this maximizes flexibility and allows developers to make application-level decisions.
+The passport is that the community uses more authentication libraries to make authentication requests through extensible plug-ins called policies. 
 
 It itself contains several parts:
 
@@ -106,7 +106,34 @@ Here we use the local authentication strategy and the Jwt strategy as a demonstr
 
 ### Example: Local Policy
 
-We can start a policy from `@CustomStrategy` and derived `PassportStrategy`. The payload is obtained by validate a hook, and this function must have a return value, and its parameters are not clear. You can refer to the corresponding Strategy or print through the expansion character.
+We use `passport-local` to introduce how to use the Passport policy in Midway. The official document example of `passport-local` is as follows. Load a policy through `passport.use`. The verification logic of the policy is a `verify` method, including callback parameter, the rest of the strategy parameters are in the constructor.
+
+```typescript
+passport.use(
+   //Initialize a strategy
+   new LocalStrategy({
+       usernameField: 'username',
+       passwordField: 'password',
+       passReqToCallback: true,
+       session: false
+     },
+     function verify(username, password, done) {
+       User.findOne({ username: username }, function (err, user) {
+         if (err) { return done(err); }
+         if (!user) { return done(null, false); }
+         if (!user.verifyPassword(password)) { return done(null, false); }
+         return done(null, user);
+       });
+     }
+)
+);
+```
+
+Midway adapts this by inheriting a Passport existing strategy through the `@CustomStrategy` and `PassportStrategy` classes.
+
+The asynchronous `validate` method replaces the original `verify` method. The `validate` method returns the verified user result. The parameters of the method are consistent with the original corresponding policy.
+
+The effect written in Midway is as follows:
 
 ```typescript
 // src/strategy/local.strategy.ts
@@ -120,68 +147,86 @@ import * as bcrypt from 'bcrypt';
 
 @CustomStrategy()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  @InjectEntityModel(UserEntity)
-  userModel: Repository<UserEntity>;
+   @InjectEntityModel(UserEntity)
+   userModel: Repository<UserEntity>;
 
-  // Validation of policies
-  async validate(username, password) {
-    const user = await this.userModel.findOneBy({ username });
-    if (await bcrypt.compare(password, user.password)) {
-      throw new Error('error password '+ username);
-    }
+   //Verification of strategy
+   async validate(username, password) {
+     const user = await this.userModel.findOneBy({ username });
+     if (await bcrypt.compare(password, user.password)) {
+       throw new Error('error password ' + username);
+     }
 
-    return {
-      username
-      password
-    };
-  }
+     return {
+       username,
+       password,
+     };
+   }
 
-  // Parameters of the current policy
-  getStrategyOptions(): any {
-    return {};
-  }
+   // Constructor parameters of the current strategy
+   getStrategyOptions(): any {
+     return {};
+   }
 }
-
 ```
+
 :::tip
 
-Note: validate method is an Promise alternative to community policy verify. You don't need to pass callback parameters at the end.
+Note: The validate method is a Promise alternative to the community policy verify. You do not need to pass the callback parameter at the end.
 
 :::
 
-Use derivation to `PassportMiddleware` a middleware.
+In the official documentation of `passport-local`, after the strategy is implemented, it needs to be loaded into the business as middleware, such as:
+
+```typescript
+app.post('/login/password', passport.authenticate('local', {
+   successRedirect: '/',
+   failureRedirect: '/login'
+}));
+```
+
+:::tip
+
+Here `local` is the internal name of `passport-local`.
+
+:::
+
+In Midway, the `LocalStrategy` implemented above also needs to be loaded through middleware.
+
+Customize a middleware that inherits the basic middleware extended by `PassportMiddleware`. The example is as follows.
 
 ```typescript
 // src/middleware/local.middleware.ts
 
-import { Inject, Middleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/core';
 import { PassportMiddleware, AuthenticateOptions } from '@midwayjs/passport';
-import { LocalStrategy } from './strategy/local.strategy.ts'
+import { LocalStrategy } from '../strategy/local.strategy';
 
 @Middleware()
 export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
-  // Set AuthenticateOptions
-  getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions {
-    return {
-      failureRedirect: '/login',
-    };
-  }
+   //Set AuthenticateOptions
+   getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions {
+     return {
+       failureRedirect: '/login',
+     };
+   }
 }
 ```
+
+Load middleware into the global or route.
 
 ```typescript
 // src/controller.ts
 import { Post, Inject, Controller } from '@midwayjs/core';
-import { LocalPassportMiddleware } from './middleware/local.middleware.ts'
+import { LocalPassportMiddleware } from '../middleware/local.middleware';
 
 @Controller('/')
 export class LocalController {
-
-  @Post('/passport/local', { middleware: [LocalPassportMiddleware] })
-  async localPassport() {
-    console.log('local user:', this.ctx.state.user);
-    return this.ctx.state.user;
-  }
+   @Post('/passport/local', { middleware: [LocalPassportMiddleware] })
+   async localPassport() {
+     console.log('local user: ', this.ctx.state.user);
+     return this.ctx.state.user;
+   }
 }
 ```
 
@@ -190,8 +235,14 @@ Use curl to simulate a request.
 ```bash
 curl -X POST http://localhost:7001/passport/local -d '{"username": "demo", "password": "1234"}' -H "Content-Type: application/json"
 
-Results {"username": "demo", "password": "1234"}
+Result {"username": "demo", "password": "1234"}
 ```
+
+:::caution
+
+Note: If you place middleware globally, remember to ignore routes that require login, otherwise the request will loop endlessly.
+
+:::
 
 
 

@@ -6,7 +6,7 @@ class CustomSwaggerExplorer extends SwaggerExplorer {
     return super.generatePath(target);
   }
 
-  parseClzz(clz) {
+  parse(clz) {
     return super.parseClzz(clz);
   }
 }
@@ -140,7 +140,7 @@ describe('/test/parser.test.ts', function () {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(NotificationDTO)).toMatchSnapshot();
+    expect(explorer.parse(NotificationDTO)).toMatchSnapshot();
   });
 
 
@@ -177,8 +177,8 @@ describe('/test/parser.test.ts', function () {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
-    expect(explorer.parseClzz(Album)).toMatchSnapshot();
+    expect(explorer.parse(Photo)).toMatchSnapshot();
+    expect(explorer.parse(Album)).toMatchSnapshot();
   });
 
   it('should parse type with function', function () {
@@ -210,8 +210,8 @@ describe('/test/parser.test.ts', function () {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
-    expect(explorer.parseClzz(Album)).toMatchSnapshot();
+    expect(explorer.parse(Photo)).toMatchSnapshot();
+    expect(explorer.parse(Album)).toMatchSnapshot();
   });
 
   it('should test multi-type in property', function () {
@@ -250,7 +250,7 @@ describe('/test/parser.test.ts', function () {
       album: Album | Album[];
     }
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
+    expect(explorer.parse(Photo)).toMatchSnapshot();
   });
 
   it('should parse base type', function () {
@@ -266,6 +266,32 @@ describe('/test/parser.test.ts', function () {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(Cat)).toMatchSnapshot();
+    expect(explorer.parse(Cat)).toMatchSnapshot();
+  });
+
+  it('should parse extends base', () => {
+    class MyBase {
+      @ApiProperty({ format: 'date-time' })
+      created_at?: Date;
+    }
+
+    class SubA extends MyBase {
+      @ApiProperty()
+      a: number;
+    }
+
+    class SubB extends MyBase {
+      @ApiProperty()
+      b: number;
+    }
+
+    class SubC extends MyBase {
+      @ApiProperty()
+      c: number;
+    }
+    const explorer = new CustomSwaggerExplorer();
+    expect(explorer.parse(SubA)).toMatchSnapshot();
+    expect(explorer.parse(SubB)).toMatchSnapshot();
+    expect(explorer.parse(SubC)).toMatchSnapshot();
   });
 });
