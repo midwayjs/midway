@@ -149,6 +149,21 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test query parser #2162 case 2', async () => {
+    const app = await creatApp('feature/base-app-query-parser');
+    let result = await createHttpRequest(app)
+      .get('/query_array?appId=31062&flowId=1330&mixFlowInstIds[]=108015365&flowInstIds[]=103137222');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(JSON.stringify({"appId":"31062","flowId":"1330","mixFlowInstIds":["108015365"],"flowInstIds":["103137222"]}));
+    
+    result = await createHttpRequest(app)
+      .get('/query_array_duplicate?appId=123&appId=456');
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(JSON.stringify({"appId":["123","456"]}));
+    await closeApp(app);
+  });
+
   it('should test runInAgent decorator with egg', async () => {
     const resultFile = join(__dirname, 'fixtures/feature/base-app-run-in-agent', '.result');
     await remove(resultFile);

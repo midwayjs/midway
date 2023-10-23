@@ -1,7 +1,7 @@
 'use strict';
 
 const _querycache = Symbol('_querycache');
-const qs = require('querystring');
+const qs = require('qs');
 
 function firstValue(value) {
   if (Array.isArray(value)) {

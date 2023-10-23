@@ -49,7 +49,8 @@
     "egg": "^2.28.0",
     "egg-cluster": "^1.27.1",
     "find-up": "5.0.0",
-    "mkdirp": "1.0.4"
+    "mkdirp": "1.0.4",
+    "qs": "^6.11.2"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
