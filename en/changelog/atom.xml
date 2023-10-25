@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-10-11T20:00:00.000Z</updated>
+    <updated>2023-10-25T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.12.8]]></title>
+        <id>https://midwayjs.org/en/changelog/v3.12.8</id>
+        <link href="https://midwayjs.org/en/changelog/v3.12.8"/>
+        <updated>2023-10-25T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>web</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3351" target="_blank" rel="noopener noreferrer">#3351</a> fix: use qs to replace querystring to solve #2162 issue (<a href="https://github.com/SmartOrange" target="_blank" rel="noopener noreferrer">@SmartOrange</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>axios</code>, <code>http-proxy</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3326" target="_blank" rel="noopener noreferrer">#3326</a> fix(deps): update dependency axios to v1.5.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>mock</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3325" target="_blank" rel="noopener noreferrer">#3325</a> fix(deps): update dependency @types/supertest to v2.0.15 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>mongoose</code>, <code>typegoose</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3327" target="_blank" rel="noopener noreferrer">#3327</a> chore(deps): update dependency mongoose to v7.6.3 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li>Other<ul><li><a href="https://github.com/midwayjs/midway/pull/3345" target="_blank" rel="noopener noreferrer">#3345</a> chore(deps): update dependency @vercel/ncc to v0.38.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li><li><a href="https://github.com/midwayjs/midway/pull/3332" target="_blank" rel="noopener noreferrer">#3332</a> chore(deps): update dependency lerna to v7.4.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>axios</code>, <code>consul</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3346" target="_blank" rel="noopener noreferrer">#3346</a> chore(deps): update dependency nock to v13.3.6 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>web-express</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3336" target="_blank" rel="noopener noreferrer">#3336</a> chore(deps): update dependency @types/body-parser to v1.19.4 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>mikro</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3330" target="_blank" rel="noopener noreferrer">#3330</a> chore(deps): update mikro-orm monorepo to v5.8.10 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>ZhengChao (<a href="https://github.com/SmartOrange" target="_blank" rel="noopener noreferrer">@SmartOrange</a>)</li></ul>]]></content>
+        <author>
+            <name>ZhengChao</name>
+            <uri>https://github.com/SmartOrange</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.12.7]]></title>
         <id>https://midwayjs.org/en/changelog/v3.12.7</id>
