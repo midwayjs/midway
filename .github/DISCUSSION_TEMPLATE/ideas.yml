@@ -1,9 +1,9 @@
-title: "🚀 Feature request "
+title: "[Feature request] "
 labels: ["type: enhancement"]
 body:
   - type: textarea
     attributes:
-      label: 🚀 The feature, motivation（功能、动机）
+      label: The feature, motivation（功能、动机）
       description: |
         A clear and concise description of the feature proposal. Please outline the motivation for the proposal. Is your feature request related to a specific problem? e.g., *"I'm working on X and would like Y to be possible"*. If this is related to another GitHub issue, please link here too.
 
