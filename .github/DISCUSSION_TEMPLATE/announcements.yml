@@ -1,27 +1,55 @@
-name: 📚 Documentation
-description: Report an issue and help us improve the documentation（报告问题并帮助我们改进文档）
-labels: "type: docs"
-
+title: "[General] "
+labels: ["General Introduction"]
 body:
-  - type: textarea
-    attributes:
-      label: 📚 The doc issue
-      description: |
-        Provide a clear and concise description of the content in https://midwayjs.org. There may be some text description errors or link errors.
-        
-        提供 https://midwayjs.org 中的内容的清晰简洁的描述。可能是一些文本描述错误或链接错误。
-    validations:
-      required: true
-  - type: textarea
-    attributes:
-      label: Suggest a potential alternative/fix（建议潜在的替代/修复）
-      description: >
-        Tell us how we could improve the documentation in this regard.
-        
-        告诉我们如何在这方面改进文档。
   - type: markdown
     attributes:
-      value: >
-        Thanks for contributing 🎉!
-        
-        感谢您的贡献 🎉！
+      value: |
+        This is text that will show up in the template!
+  - type: textarea
+    id: improvements
+    attributes:
+      label: Top 3 improvements
+      description: "What are the top 3 improvements we could make to this project?"
+      value: |
+        1.
+        2.
+        3.
+        ...
+      render: bash
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## Markdown header
+        And some more markdown
+  - type: input
+    id: has-id
+    attributes:
+      label: Suggestions
+      description: A description about suggestions to help you
+    validations:
+      required: true
+  - type: dropdown
+    id: download
+    attributes:
+      label: Which area of this project could be most improved?
+      options:
+        - Documentation
+        - Pull request review time
+        - Bug fix time
+        - Release cadence
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Check that box!
+      options:
+        - label: This one!
+          required: true
+        - label: I won't stop you if you check this one, too
+  - type: markdown
+    attributes:
+      value: |
+        ### The thrilling conclusion
+        _to our template_
