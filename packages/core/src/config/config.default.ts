@@ -12,7 +12,9 @@ export default (appInfo: MidwayAppInfo): MidwayCoreDefaultConfig => {
         level: 'info',
       },
       clients: {
-        coreLogger: {},
+        coreLogger: {
+          level: isDevelopment ? 'info' : 'warn',
+        },
         appLogger: {
           aliasName: 'logger',
         },
