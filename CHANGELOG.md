@@ -1,6 +1,34 @@
 # Change Log
 
 
+## v3.12.8 (2023-10-25)
+
+#### :bug: Bug Fix
+* `web`
+  * [#3351](https://github.com/midwayjs/midway/pull/3351) fix: use qs to replace querystring to solve #2162 issue ([@SmartOrange](https://github.com/SmartOrange))
+
+#### :package: Dependencies
+* `axios`, `http-proxy`
+  * [#3326](https://github.com/midwayjs/midway/pull/3326) fix(deps): update dependency axios to v1.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`
+  * [#3325](https://github.com/midwayjs/midway/pull/3325) fix(deps): update dependency @types/supertest to v2.0.15 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3327](https://github.com/midwayjs/midway/pull/3327) chore(deps): update dependency mongoose to v7.6.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3345](https://github.com/midwayjs/midway/pull/3345) chore(deps): update dependency @vercel/ncc to v0.38.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3332](https://github.com/midwayjs/midway/pull/3332) chore(deps): update dependency lerna to v7.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `consul`
+  * [#3346](https://github.com/midwayjs/midway/pull/3346) chore(deps): update dependency nock to v13.3.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#3336](https://github.com/midwayjs/midway/pull/3336) chore(deps): update dependency @types/body-parser to v1.19.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3330](https://github.com/midwayjs/midway/pull/3330) chore(deps): update mikro-orm monorepo to v5.8.10 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- ZhengChao ([@SmartOrange](https://github.com/SmartOrange))
+
+
+
 ## v3.12.7 (2023-10-11)
 
 #### :bug: Bug Fix
