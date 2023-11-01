@@ -1148,7 +1148,7 @@ export interface HealthResult {
 export interface HealthResults {
   status: boolean;
   reason?: string;
-  reasons?: Array<{
+  results?: Array<{
     namespace: string;
     status: boolean;
     reason?: string;

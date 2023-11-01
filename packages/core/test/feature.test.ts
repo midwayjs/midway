@@ -80,4 +80,27 @@ describe('/test/feature.test.ts', () => {
 
     await framework.stop();
   });
+
+  it('should test health check service and return empty in code', async () => {
+    const framework = await createLightFramework(join(
+      __dirname,
+      './fixtures/app-with-health-check-empty/src'
+    ));
+    const healthService = await framework.getApplicationContext().getAsync(MidwayHealthService);
+    healthService.setCheckTimeout(200);
+    const result = await healthService.getStatus();
+    expect(result).toEqual({
+      "reason": "configuration.onHealthCheck return value must be object and contain status field",
+      "results": [
+        {
+          "namespace": "__main__",
+          "reason": "configuration.onHealthCheck return value must be object and contain status field",
+          "status": false
+        }
+      ],
+      "status": false
+    });
+
+    await framework.stop();
+  });
 });

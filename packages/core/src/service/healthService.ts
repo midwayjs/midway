@@ -65,6 +65,21 @@ export class MidwayHealthService {
         }),
         timeout: this.healthCheckTimeout,
         methodName: 'configuration.onHealthCheck',
+        onSuccess: (result, meta) => {
+          if (result['status'] !== undefined) {
+            return {
+              namespace: meta.namespace,
+              ...result,
+            };
+          } else {
+            return {
+              status: false,
+              namespace: meta.namespace,
+              reason:
+                'configuration.onHealthCheck return value must be object and contain status field',
+            };
+          }
+        },
         onFail: (err, meta) => {
           return {
             status: false,
@@ -79,7 +94,7 @@ export class MidwayHealthService {
     return {
       status: !failedResult,
       reason: failedResult?.reason,
-      reasons: checkResult,
+      results: checkResult,
     };
   }
 
