@@ -533,7 +533,7 @@ export default {
 ### 3、使用
 
 
-在只有一个默认连接或者直接使用 default 连接时，我们可以直接使用封装好的 `MongooseConnectionService` 对象来创建 model。
+当我们希望获取到原始的连接对象时，可以直接使用封装好的 `MongooseConnectionService` 对象。
 ```typescript
 import { Provide, Inject, Init } from '@midwayjs/core';
 import { MongooseDataSourceManager } from '@midwayjs/mongoose';

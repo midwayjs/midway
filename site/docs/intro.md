@@ -120,7 +120,7 @@ Midway 运行请预先安装 Node.js 环境和 npm，在国内可以使用 cnpm�
 
 群里会有热心的朋友，也会有新版本发布推送。
 
-![image.png](https://img.alicdn.com/imgextra/i3/O1CN01F2EYhK1t290OXO4am_!!6000000005843-0-tps-3916-3220.jpg)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01SlyAoV1bp0H0jZDlf_!!6000000003513-0-tps-3916-2480.jpg)
 
 
 
