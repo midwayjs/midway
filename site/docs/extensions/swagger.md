@@ -302,7 +302,7 @@ export class CreateCatDto {
 
 如果某个属性的类型是个复杂的数组类型，写法略有不同。
 
-除了 `type` 声明为 `array` 之外，由于 `items` 属性只支持字符串，我们需要使用 `getSchemaPath` 方法额外导入一个不同的类型。
+首先`type` 必须声明为 `array`，然后除了设置`type`，我们还可以使用 `getSchemaPath` 方法额外导入一个不同的类型（上面的复杂对象也可以使用它设置$ref）。
 
 此外，如果 `Cat` 类型没有在其他属性的 `type` 字段中声明过，需要使用 `@ApiExtraModel` 装饰器额外声明引入外部类型。
 
