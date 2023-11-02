@@ -1141,12 +1141,28 @@ export interface ISimulation {
 }
 
 export interface HealthResult {
+  /**
+   * health status
+   */
   status: boolean;
+  /**
+   * failed reason
+   */
   reason?: string;
 }
 
 export interface HealthResults {
+  /**
+   * health status
+   */
   status: boolean;
+  /**
+   * first failed namespace
+   */
+  namespace: string;
+  /**
+   * first failed reason
+   */
   reason?: string;
   results?: Array<{
     namespace: string;

@@ -93,6 +93,7 @@ export class MidwayHealthService {
 
     return {
       status: !failedResult,
+      namespace: failedResult?.namespace,
       reason: failedResult?.reason,
       results: checkResult,
     };

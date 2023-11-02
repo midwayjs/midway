@@ -69,6 +69,7 @@ describe('/test/feature.test.ts', () => {
     const resultFail = await healthService.getStatus();
     expect(resultFail).toEqual({
       "reason": "Invoke \"configuration.onHealthCheck\" running timeout(50ms)",
+      "namespace": "__main__",
       "results": [
         {
           "namespace": "__main__",
@@ -92,6 +93,7 @@ describe('/test/feature.test.ts', () => {
     const result = await healthService.getStatus();
     expect(result).toEqual({
       "reason": "configuration.onHealthCheck return value must be object and contain status field",
+      "namespace": "__main__",
       "results": [
         {
           "namespace": "__main__",
