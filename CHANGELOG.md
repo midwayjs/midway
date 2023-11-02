@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.12.9 (2023-11-02)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3382](https://github.com/midwayjs/midway/pull/3382) fix(swagger): api property should support $ref ([@odex21](https://github.com/odex21))
+
+#### :package: Dependencies
+* `axios`, `consul`
+  * [#3373](https://github.com/midwayjs/midway/pull/3373) chore(deps): update dependency nock to v13.3.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3375](https://github.com/midwayjs/midway/pull/3375) chore(deps): update dependency mongoose to v7.6.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#3364](https://github.com/midwayjs/midway/pull/3364) fix(deps): update dependency @types/ali-oss to v6.16.10 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@odex21](https://github.com/odex21)
+
+
+
 ## v3.12.8 (2023-10-25)
 
 #### :bug: Bug Fix
