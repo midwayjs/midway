@@ -334,6 +334,24 @@ exports[`/test/index.test.ts test swagger should get swagger json 4`] = `
       },
       "type": "array",
     },
+    "children": {
+      "items": {
+        "$ref": "#/components/schemas/Cat",
+      },
+      "type": "array",
+    },
+    "childrenWithRef": {
+      "items": {
+        "$ref": "#/components/schemas/Cat",
+      },
+      "type": "array",
+    },
+    "father": {
+      "$ref": "#/components/schemas/Cat",
+    },
+    "mother": {
+      "$ref": "#/components/schemas/Cat",
+    },
     "name": {
       "description": "The name of the Cat",
       "example": "Kitty",
