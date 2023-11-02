@@ -1,5 +1,13 @@
 # Introduction
 
+:::caution
+
+The integrated solution will be gradually stopped for maintenance. Existing projects can continue to be used. Please choose carefully for new projects.
+
+:::
+
+
+
 Midway's integrated solution is a full-stack framework based on Midway Hooks as the main function, supporting four core features: "zero" Api & type safety & full-stack suite & powerful backend.
 
 
