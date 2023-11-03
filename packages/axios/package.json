@@ -12,7 +12,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.12.3",
     "@midwayjs/mock": "^3.12.8",
-    "nock": "13.3.7"
+    "nock": "13.3.8"
   },
   "dependencies": {
     "axios": "1.5.1"
