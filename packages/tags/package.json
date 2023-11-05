@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/tags",
-  "version": "3.12.8",
+  "version": "3.12.10",
   "description": "Midway Tag System",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -23,12 +23,12 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^3.12.3",
-    "@midwayjs/express": "^3.12.8",
-    "@midwayjs/faas": "^3.12.8",
-    "@midwayjs/koa": "^3.12.8",
-    "@midwayjs/mock": "^3.12.8",
-    "@midwayjs/serverless-app": "^3.12.8",
-    "@midwayjs/web": "^3.12.8",
+    "@midwayjs/express": "^3.12.10",
+    "@midwayjs/faas": "^3.12.10",
+    "@midwayjs/koa": "^3.12.10",
+    "@midwayjs/mock": "^3.12.10",
+    "@midwayjs/serverless-app": "^3.12.10",
+    "@midwayjs/web": "^3.12.10",
     "mysql2": "^3.0.0"
   }
 }
