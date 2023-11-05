@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "bull": "4.11.3",
-    "cron": "2.3.1"
+    "cron": "2.4.4"
   },
   "engines": {
     "node": ">=12"
