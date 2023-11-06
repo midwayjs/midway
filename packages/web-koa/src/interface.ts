@@ -3,18 +3,20 @@ import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/core';
 
+export interface State extends DefaultState {}
+
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
-export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<DefaultState, IMidwayKoaContext> & {
+export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<State, IMidwayKoaContext> & {
   generateController(
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
-  ): Middleware<DefaultState, IMidwayKoaContext>;
+  ): Middleware<State, IMidwayKoaContext>;
   /**
    * @deprecated
    * @param middlewareId
    */
-  generateMiddleware(middlewareId: any): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+  generateMiddleware(middlewareId: any): Promise<Middleware<State, IMidwayKoaContext>>;
 }>;
 
 /**
@@ -92,7 +94,9 @@ export interface IWebMiddleware {
 
 export type Application = IMidwayKoaApplication;
 
-export interface Context extends IMidwayKoaContext {}
+export interface Context extends IMidwayKoaContext {
+  state: State;
+}
 
 export interface BodyParserOptions {
   enable?: boolean;

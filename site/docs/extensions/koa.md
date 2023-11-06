@@ -179,6 +179,27 @@ export class MainConfiguration {
 
 
 
+## State 类型定义
+
+在 koa 的 Context 中有一个特殊的 State 属性，通过和 Context 类似的方式可以扩展 State 定义。
+
+```typescript
+// src/interface.ts
+
+declare module '@midwayjs/koa/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+
+  interface State{
+    bbb: string;
+    ccc: number;
+  }
+}
+```
+
+
+
 
 
 ## 配置
