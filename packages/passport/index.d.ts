@@ -9,6 +9,9 @@ declare module '@midwayjs/core/dist/interface' {
 }
 
 declare module '@midwayjs/koa/dist/interface' {
+  interface State {
+    user?: any;
+  }
   interface Context {
     isAuthenticated(): boolean;
     isUnauthenticated(): boolean;
