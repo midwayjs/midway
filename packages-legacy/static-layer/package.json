@@ -14,7 +14,7 @@
     "@midwayjs/serverless-fc-trigger": "^3.12.5",
     "@midwayjs/serverless-scf-starter": "^3.12.5",
     "@midwayjs/serverless-scf-trigger": "^3.12.5",
-    "koa": "2.14.1",
+    "koa": "2.14.2",
     "koa-static-cache": "5.1.4",
     "path-to-regexp": "6.2.1",
     "request": "2.88.2",
