@@ -271,6 +271,28 @@ export default {
 
 
 
+### Customize SameSite option of Session Cookie
+
+By default, the framework will leave the SameSite option of Session Cookie to unset. Since Chrome v84, cookies with empty SameSite will be treated as SameSite=Lax, which means when the document is requested cross origins, the cookie won't take effect. If your application is always accessed directly by your users, there won't be any problem. But if your application needs to support cross origin requests, such as being embedded with iframe, or requested from another origin with XHR, then the SameSite option needs to be changed to SiteSite=None:
+
+```typescript
+// src/config/config.default.ts
+export default {
+  session: {
+    sameSite: 'none',
+    // SameSite=None cookies must be Secure
+    secure: true,
+    // ...
+  },
+  // ...
+}
+```
+
+Please refer to [SameSite Cookie explained](https://web.dev/articles/samesite-cookies-explained?hl=zh-cn) for more introduction about SameSite option.
+
+
+
+
 ## Custom Session Store
 
 It is not reasonable to put too much data in the Session. In most cases, we only need to store some Id in the Session to ensure security. Although we think Cookie is sufficient as a storage Session, in some extreme cases, Redis, for example, is still needed to store Session.

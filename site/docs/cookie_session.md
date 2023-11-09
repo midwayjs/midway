@@ -271,6 +271,27 @@ export default {
 
 
 
+### 调整 SameSite 配置以允许跨域访问
+
+默认情况下，框架不会设置 Session Cookie 的 SameSite 选项。从 Chrome 84 版本开始，SameSite 选项为空的 Cookie 默认将不会在跨域请求时发送，即默认按照 SameSite=Lax 处理。一般情况下，如果用户都是直接访问你的应用，这不会有问题。如果你的应用需要支持跨域访问，比如被其他应用 iframe 嵌入，或者允许配置 CORS 跨域请求，则需要调整 SameSite 选项，将其设置为更为宽松的 SameSite=None：
+
+```typescript
+// src/config/config.default.ts
+export default {
+  session: {
+    sameSite: 'none',
+    // 需要指定 Secure，否则 SameSite=None 无效
+    secure: true,
+    // ...
+  },
+  // ...
+}
+```
+
+可以阅读 [SameSite Cookie 说明](https://web.dev/articles/samesite-cookies-explained?hl=zh-cn) 了解更多 SameSite 选项。
+
+
+
 ## 自定义 Session Store
 
 过多的将数据放在 Session 中并不太合理，大部分情况下，我们只需要在 Session 中存储一些 Id，来保证安全性。虽然我们觉得 Cookie 作为存储 Session 已经足够，但是在某些极端情况下，还是需要使用例如 Redis 来存储 Session 的情况。
