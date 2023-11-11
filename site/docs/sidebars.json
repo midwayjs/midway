@@ -281,7 +281,7 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
-        "tool/create-midway",
+        "tool/create_midway",
         "tool/mwtsc",
         "tool/cli",
         "tool/mwts",
