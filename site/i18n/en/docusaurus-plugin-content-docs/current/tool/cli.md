@@ -1,4 +1,19 @@
-# midwayjs/cli
+# Midway CLI
+
+:::tip
+
+Since the underlying capabilities of the CLI are derived from the existing module functions of the community, in order to reduce the maintenance costs and understanding costs caused by transitional packaging, each function in the CLI will gradually become the existing modules of the community, and the CLI library will cease to exist. Iterate.
+
+The subsequent changes for this purpose are
+
+* Development will change from `midway-bin dev` to `mwtsc`
+* Compilation will change from `midway-bin build` to `tsc`
+* Test will change from `midway-bin test` to `mocha` or `jest`
+* Coverage will change from `midway-bin cov` to `jest --coverage` or other similar directives
+
+:::
+
+
 
 `@midwayjs/cli` is a new version of Midway system tool chain, which is integrated with Serverless and the original application tool chain.
 

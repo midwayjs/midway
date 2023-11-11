@@ -1545,7 +1545,7 @@ Note: Since the above entities configuration needs to be reused between CLI and 
 ### About Table Structure Synchronization
 
 
-- If you already have a table structure, you want to automatically create an Entity and use the [Generator](../tool/typeorm_generator)
+- If you already have a table structure, you want to automatically create an Entity and use the [Generator](https://www.npmjs.com/package/typeorm-model-generator)
 - If you already have Entity code, if you want to create a table structure, please use `synchronize: true` in the configuration, be aware that data may be lost
 - If it is already online, but the table structure has been modified, you can use `migration:generate` in the CLI
 
