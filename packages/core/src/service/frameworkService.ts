@@ -217,6 +217,8 @@ export class MidwayFrameworkService {
       global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =
         this.applicationManager.getFramework(mainNs) ??
         this.globalFrameworkList[0];
+
+      debug(`[core]: Current main Framework is "${mainNs}".`);
     }
 
     // init aspect module
@@ -236,6 +238,15 @@ export class MidwayFrameworkService {
   }
 
   public async runFramework() {
+    const namespaceList = this.applicationContext.getNamespaceList();
+    // globalFrameworkList 需要基于 namespaceList 进行排序，不然会出现顺序问题
+    this.globalFrameworkList = this.globalFrameworkList.sort((a, b) => {
+      return (
+        namespaceList.indexOf(a.getNamespace()) -
+        namespaceList.indexOf(b.getNamespace())
+      );
+    });
+
     for (const frameworkInstance of this.globalFrameworkList) {
       // if enable, just init framework
       if (frameworkInstance.isEnable()) {
