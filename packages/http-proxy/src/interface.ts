@@ -9,6 +9,7 @@ export interface HttpProxyStrategy {
 }
 
 export interface HttpProxyConfig extends HttpProxyStrategy {
+  enable?: boolean;
   default?: HttpProxyStrategy;
   strategy?: {
     [strategyName: string]: HttpProxyStrategy;

@@ -6,6 +6,7 @@ import {
 } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { HttpProxyMiddleware } from './middleware';
+import { HttpProxyConfig } from './interface';
 
 @Configuration({
   namespace: 'http-proxy',
@@ -20,10 +21,10 @@ export class HttpProxyConfiguration {
   applicationManager: MidwayApplicationManager;
 
   @Config('httpProxy')
-  httpProxy;
+  httpProxy: Partial<HttpProxyConfig>;
 
   async onReady() {
-    if (this.httpProxy) {
+    if (this.httpProxy.enable) {
       this.applicationManager
         .getApplications(['koa', 'faas', 'express', 'egg'])
         .forEach(app => {
