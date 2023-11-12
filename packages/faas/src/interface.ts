@@ -371,6 +371,10 @@ export interface FaaSHTTPContext
    * FaaS Cookies Object
    */
   cookies: Cookies;
+  /**
+   * FaaS Context State
+   */
+  state: State;
 
   /**
    * Throw an error with `msg` and optional `status`
@@ -515,3 +519,4 @@ export interface HttpResponseFormat<T = unknown> {
 }
 
 export interface wrapHttpRequestOptions extends HttpResponseOptions {}
+export interface State {}

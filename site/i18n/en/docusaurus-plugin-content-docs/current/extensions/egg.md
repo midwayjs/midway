@@ -574,6 +574,29 @@ The original egg uses `EGG_SERVER_ENV` as an environmental sign, please use `MID
 
 
 
+## State type definition
+
+There is a special State attribute in the Context of koa at the bottom of egg. The State definition can be extended in a similar way to Context.
+
+```typescript
+// src/interface.ts
+
+declare module '@midwayjs/web/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+
+  interface State{
+    bbb: string;
+    ccc: number;
+  }
+}
+```
+
+
+
+
+
 ## Configuration
 
 ### Default configuration

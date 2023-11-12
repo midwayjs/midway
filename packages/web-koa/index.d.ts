@@ -3,6 +3,7 @@ import {
   IMidwayKoaConfigurationOptions,
   Context as KoaContext,
   BodyParserOptions,
+  State,
 } from './dist';
 import { CookieSetOptions, Cookies } from '@midwayjs/cookies';
 import '@midwayjs/session';
@@ -41,5 +42,6 @@ declare module 'koa' {
     cookies: Cookies;
     app: Application;
     forward: (url: string) => void;
+    state: State;
   }
 }

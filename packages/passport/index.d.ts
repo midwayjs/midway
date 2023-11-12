@@ -9,10 +9,10 @@ declare module '@midwayjs/core/dist/interface' {
 }
 
 declare module '@midwayjs/koa/dist/interface' {
+  interface State {
+    user?: any;
+  }
   interface Context {
-    state: {
-      user?: any;
-    };
     isAuthenticated(): boolean;
     isUnauthenticated(): boolean;
     login(): Promise<void>;
@@ -21,10 +21,10 @@ declare module '@midwayjs/koa/dist/interface' {
 }
 
 declare module '@midwayjs/web/dist/interface' {
+  interface State {
+    user?: any;
+  }
   interface Context {
-    state: {
-      user?: any;
-    };
     isAuthenticated(): boolean;
     isUnauthenticated(): boolean;
     login(): Promise<void>;
@@ -33,10 +33,10 @@ declare module '@midwayjs/web/dist/interface' {
 }
 
 declare module '@midwayjs/faas/dist/interface' {
+  interface State {
+    user?: any;
+  }
   interface Context {
-    state: {
-      user?: any;
-    };
     isAuthenticated(): boolean;
     isUnauthenticated(): boolean;
     login(): Promise<void>;
