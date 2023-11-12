@@ -22,7 +22,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "koa": "2.14.1",
+    "koa": "2.14.2",
     "mm": "3.3.0",
     "raw-body": "2.5.2",
     "sinon": "15.2.0"
