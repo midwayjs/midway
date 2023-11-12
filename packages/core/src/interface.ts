@@ -413,9 +413,12 @@ export interface MidwayCoreDefaultConfig {
   debug?: {
     recordConfigMergeOrder?: boolean;
   };
-  asyncContextManager: {
-    enable: boolean;
+  asyncContextManager?: {
+    enable?: boolean;
   };
+  core?: {
+    healthCheckTimeout?: number;
+  }
 }
 
 export type ServiceFactoryConfigOption<OPTIONS> = {
@@ -477,6 +480,9 @@ export interface ILifeCycle extends Partial<IObjectLifeCycle> {
     container: IMidwayContainer,
     mainApp?: IMidwayApplication
   ): Promise<void>;
+  onHealthCheck?(
+    container: IMidwayContainer
+  ): Promise<HealthResult>;
   onStop?(
     container: IMidwayContainer,
     mainApp?: IMidwayApplication
@@ -1132,4 +1138,35 @@ export interface ISimulation {
   contextTearDown?(ctx: IMidwayContext, app: IMidwayApplication): Promise<void>;
   appTearDown?(app: IMidwayApplication): Promise<void>;
   enableCondition(): boolean | Promise<boolean>;
+}
+
+export interface HealthResult {
+  /**
+   * health status
+   */
+  status: boolean;
+  /**
+   * failed reason
+   */
+  reason?: string;
+}
+
+export interface HealthResults {
+  /**
+   * health status
+   */
+  status: boolean;
+  /**
+   * first failed namespace
+   */
+  namespace: string;
+  /**
+   * first failed reason
+   */
+  reason?: string;
+  results?: Array<{
+    namespace: string;
+    status: boolean;
+    reason?: string;
+  }>;
 }

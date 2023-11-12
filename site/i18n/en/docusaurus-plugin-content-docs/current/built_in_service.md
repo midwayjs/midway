@@ -555,3 +555,78 @@ API is as follows
 
 For more information, see [Web route table](# router_table).
 
+
+
+## MidwayHealthService
+
+Midway's built-in health check execution service is used for externally extended health check capabilities.
+
+It can be obtained through injection and then perform health check tasks.
+
+```typescript
+import { MidwayHealthService } from '@midwayjs/core';
+import { Configuration, Inject } from '@midwayjs/decorator';
+
+@Configuration({
+   // ...
+})
+export class MainConfiguration {
+   @Inject()
+   healthService: MidwayHealthService;
+
+   async onServerReady() {
+     setInterval(() => {
+       const results = await this.healthService.getStatus();
+      
+       // console.log(results);
+       // =>
+       // {
+       // "status": false
+       // "namespace": "redis",
+       // "reason": "health check timeout",
+       // "results": [
+       // {
+       // "status": false
+       // "reason": "health check timeout",
+       // "namespace": "redis"
+     // }
+       // ]
+       // }
+      
+     }, 1000);
+     // ...
+   }
+}
+```
+
+The API is as follows
+
+| API                              | Return Type            | Description                |
+| -------------------------------- | ---------------------- | -------------------------- |
+| getStatus()                      | Promise<HealthResults> | Dynamically add a function |
+| setCheckTimeout(timeout: number) | void                   | Set timeout                |
+
+The `getStatus` method is used to externally call the `onHealthCheck` method in polling `configuration` and return a data that conforms to the `HealthResults` structure.
+
+  `HealthResults` contains several fields. `status` indicates whether the check is successful. If it fails, `reason` indicates the reason for the first failed component. `namespace` represents the name of the first failed component. `results` It means that all the returned items are checked this time, and the structure of the returned items is the same as the external one.
+
+When executing the process, if the following conditions occur in the `onHealthCheck` method, it will be marked as failed.
+
+* 1. No data conforming to the `HealthResult` structure was returned.
+* 2. No value returned
+* 3. Execution timeout
+* 4. Throw an error
+* 5. Return error data that conforms to the `HealthResult` structure, such as `{status: false}`
+
+The default waiting timeout for health checks is 1s.
+
+Can be overridden using global configuration.
+
+```typescript
+//config.default
+export default {
+   core: {
+     healthCheckTimeout: 2000,
+   }
+};
+```

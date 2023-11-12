@@ -7,6 +7,9 @@ export default (appInfo: MidwayAppInfo): MidwayCoreDefaultConfig => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   const logRoot = process.env[MIDWAY_LOGGER_WRITEABLE_DIR] ?? appInfo.root;
   return {
+    core: {
+      healthCheckTimeout: 1000,
+    },
     asyncContextManager: {
       enable: false,
     },
