@@ -21,7 +21,7 @@ import {
   isTypeScriptEnvironment,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
-import { clearAllLoggers } from '@midwayjs/logger';
+import { clearAllLoggers, loggers } from '@midwayjs/logger';
 import {
   ComponentModule,
   MockAppConfigurationOptions,
@@ -214,6 +214,7 @@ export async function create<
       ...options,
       appDir,
       asyncContextManager: createContextManager(),
+      loggerFactory: loggers,
       imports: [].concat(options.imports).concat(
         options.baseDir
           ? await loadModule(

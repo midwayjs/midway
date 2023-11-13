@@ -82,6 +82,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
         (async () => {
           const ctx = self.app.createAnonymousContext({
             job: this,
+            from: name,
           });
 
           ctx.logger.info(`start job ${name.name}`);
@@ -107,7 +108,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
             ctx.logger.error(err);
           }
         })().catch(err => {
-          self.logger.error(`error in job from ${name.name}: ${err}`);
+          self.logger.error(`error in job from ${name.name}: ${err.stack}`);
         });
       };
     }

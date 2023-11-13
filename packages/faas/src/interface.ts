@@ -8,8 +8,8 @@ import {
   ContextMiddlewareManager,
   IMidwayBootstrapOptions,
   ObjectIdentifier,
+  ILogger,
 } from '@midwayjs/core';
-import { ILogger } from '@midwayjs/logger';
 import { Application as ServerlessHttpApplication, HttpResponseOptions } from '@midwayjs/serverless-http-parser';
 import { Cookies } from '@midwayjs/cookies';
 import { Writable } from 'stream';

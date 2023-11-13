@@ -1,4 +1,3 @@
-import type { LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
@@ -399,6 +398,20 @@ export interface ParamDecoratorOptions {
   pipes?: PipeUnionTransform<any, any>[];
 }
 
+/**
+ * Logger Options for midway, you can merge this interface in package
+ * @example
+ * ```typescript
+ *
+ * import { IMidwayLogger } from '@midwayjs/logger';
+ *
+ * declare module '@midwayjs/core/dist/interface' {
+ *   interface ILogger extends IMidwayLogger {
+ *   }
+ * }
+ *
+ * ```
+ */
 export interface ILogger {
   info(msg: any, ...args: any[]): void;
   debug(msg: any, ...args: any[]): void;
@@ -406,10 +419,35 @@ export interface ILogger {
   warn(msg: any, ...args: any[]): void;
 }
 
+/**
+ * @deprecated
+ */
+export type IMidwayLogger = ILogger;
+
+/**
+ * Logger Options for midway, you can merge this interface in package
+ * @example
+ * ```typescript
+ *
+ * import { LoggerOptions } from '@midwayjs/logger';
+ *
+ * declare module '@midwayjs/core/dist/interface' {
+ *   interface MidwayLoggerOptions extends LoggerOptions {
+ *     logDir?: string;
+ *     level?: string;
+ *   }
+ * }
+ *
+ * ```
+ */
+export interface MidwayLoggerOptions {
+  lazyLoad?: boolean;
+  aliasName?: string;
+  [key: string]: any;
+}
+
 export interface MidwayCoreDefaultConfig {
-  midwayLogger?: ServiceFactoryConfigOption<LoggerOptions & {
-    lazyLoad?: boolean;
-  }>;
+  midwayLogger?: ServiceFactoryConfigOption<MidwayLoggerOptions>;
   debug?: {
     recordConfigMergeOrder?: boolean;
   };
@@ -961,7 +999,7 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
    * @param name
    * @param options
    */
-  createLogger(name: string, options: LoggerOptions): ILogger;
+  createLogger(name: string, options: MidwayLoggerOptions): ILogger;
 
   /**
    * Get project name, just package.json name
@@ -1064,7 +1102,7 @@ export interface IConfigurationOptions {
   logger?: ILogger;
   appLogger?: ILogger;
   contextLoggerApplyLogger?: string;
-  contextLoggerFormat?: LoggerContextFormat;
+  contextLoggerFormat?: any;
 }
 
 export interface IMidwayFramework<
@@ -1090,7 +1128,7 @@ export interface IMidwayFramework<
   getBaseDir(): string;
   getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
-  createLogger(name: string, options: LoggerOptions): ILogger;
+  createLogger(name: string, options: MidwayLoggerOptions): ILogger;
   getProjectName(): string;
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
   getMiddleware(): IMiddlewareManager<CTX, ResOrNext, Next>;

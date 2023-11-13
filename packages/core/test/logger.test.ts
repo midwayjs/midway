@@ -21,7 +21,7 @@ describe('/test/logger.test.ts', () => {
     });
 
     const ctx = {};
-    const contextLogger = new MidwayContextLogger(ctx, customLogger);
+    const contextLogger = new MidwayContextLogger(ctx, customLogger as any);
     contextLogger.info('hello world');
     contextLogger.debug('hello world');
     contextLogger.warn('hello world');

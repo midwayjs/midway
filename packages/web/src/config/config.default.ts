@@ -2,14 +2,15 @@ import * as path from 'path';
 import * as mkdirp from 'mkdirp';
 import * as os from 'os';
 import * as fs from 'fs';
+import * as loggerModule from '@midwayjs/logger';
 
 export default appInfo => {
   const exports = {} as any;
 
   exports.rundir = path.join(appInfo.appDir, 'run');
 
-  // 修改默认的日志名
-  exports.midwayLogger = {
+  // v2 格式
+  let defaultLoggerConfig = {
     clients: {
       appLogger: {
         fileLogName: 'midway-web.log',
@@ -20,6 +21,32 @@ export default appInfo => {
       },
     },
   };
+
+  // v3 格式
+  if (loggerModule['formatLegacyLoggerOptions']) {
+    defaultLoggerConfig = {
+      clients: {
+        appLogger: {
+          transports: {
+            file: {
+              fileLogName: 'midway-web.log',
+            },
+          },
+          aliasName: 'logger',
+        },
+        agentLogger: {
+          transports: {
+            file: {
+              fileLogName: 'midway-agent.log',
+            },
+          },
+        },
+      },
+    } as any;
+  }
+
+  // 修改默认的日志名
+  exports.midwayLogger = defaultLoggerConfig;
 
   exports.egg = {
     dumpConfig: true,

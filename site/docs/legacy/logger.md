@@ -1,6 +1,14 @@
 # 日志
 
+:::tip
+
+本文档为 `@midwayjs/logger` v2.0 版本的文档。
+
+:::
+
 Midway 为不同场景提供了一套统一的日志接入方式。通过 `@midwayjs/logger` 包导出的方法，可以方便的接入不同场景的日志系统。
+
+Midway 的日志系统基于社区的 [winston](https://github.com/winstonjs/winston)，是现在社区非常受欢迎的日志库。
 
 实现的功能有：
 
@@ -8,29 +16,6 @@ Midway 为不同场景提供了一套统一的日志接入方式。通过 `@midw
 - 按大小和时间自动切割
 - 自定义输出格式
 - 统一错误日志
-
-:::tip
-
-当前版本为 3.0 的日志 SDK 文档，如需 2.0 版本，请查看 [这个文档](docs/legacy/logger)。
-
-
-
-## 从 2.0 升级到 3.0
-
-从 midway v3.13.0 开始，支持使用 3.0 版本的 `@midwayjs/logger`。
-
-将 `package.json` 中的依赖版本升级，注意是 `dependencies` 依赖。
-
-```diff
-{
-  "dependencies": {
--    "@midwayjs/logger": "2.0.0",
-+    "@midwayjs/logger": "^3.0.0"
-  }
-}
-```
-
-在大部分场景下，两个版本是兼容的，但是在配置中，会有一定的差异性，为此我们提供了一些方法来尽可能兼容老逻辑，完整的 Breaking Change 变化，请查看 [变更文档](https://github.com/midwayjs/logger/blob/main/BREAKING-3.md)。
 
 
 
@@ -40,7 +25,7 @@ Midway 会在日志根目录创建一些默认的文件。
 
 
 - `midway-core.log` 框架、组件打印信息的日志，对应 `coreLogger` 。
-- `midway-app.log` 应用打印信息的日志，对应 `appLogger`，在 `@midawyjs/web` 中，该文件是 `midway-web.log`
+- `midway-app.log` 应用打印信息的日志，对应 `appLogger`
 - `common-error.log` 所有错误的日志（所有 Midway 创建出来的日志，都会将错误重复打印一份到该文件中）
 
 本地开发和服务器部署时的 **日志路径** 和 **日志等级** 不同，具体请参考 [配置日志根目录](#配置日志根目录) 和 [框架的默认等级](#框架的默认等级)。
@@ -54,8 +39,8 @@ Midway 默认在框架提供了三种不同的日志，对应三种不同的行�
 | 日志                                | 释义                 | 描述                                                         | 常见使用                                                     |
 | ----------------------------------- | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | coreLogger                          | 框架，组件层面的日志 | 默认会输出控制台日志和文本日志 `midway-core.log` ，并且默认会将错误日志发送到 `common-error.log` 。 | 框架和组件的错误，一般会打印到其中。                         |
-| appLogger                           | 业务层面的日志       | 默认会输出控制台日志和文本日志 `midway-app.log` ，并且默认会将错误日志发送到 `common-error.log` ，在 `@midawyjs/web` 中，该文件是 `midway-web.log`。 | 业务使用的日志，一般业务日志会打印到其中。                   |
-| 上下文日志（复用 appLogger 的配置） | 请求链路的日志       | 默认使用 `appLogger` 进行输出，除了会将错误日志发送到 `common-error.log` 之外，还增加了上下文信息。 | 不同的协议有不同的请求日志格式，比如 HTTP 下就会输出路由信息。 |
+| appLogger                           | 业务层面的日志       | 默认会输出控制台日志和文本日志 `midway-app.log` ，并且默认会将错误日志发送到 `common-error.log` 。 | 业务使用的日志，一般业务日志会打印到其中。                   |
+| 上下文日志（复用 appLogger 的配置） | 请求链路的日志       | 默认使用 `appLogger` 进行输出，除了会将错误日志发送到 `common-error.log` 之外，还增加了上下文信息。 | 修改日志输出的标记（Label），不同的框架有不同的请求标记，比如 HTTP 下就会输出路由信息。 |
 
 
 
@@ -89,6 +74,7 @@ ctx.logger.error(new Error('custom error'));
 
 
 输出结果：
+
 ```text
 2021-07-22 14:50:59,388 INFO 7739 [-/::ffff:127.0.0.1/-/0ms GET /api/get_user] hello world
 ```
@@ -155,7 +141,6 @@ export class MainConfiguration implements ILifeCycle {
 在组件或者框架层面的研发中，我们会使用 coreLogger 来记录日志。
 
 ```typescript
-
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
 
@@ -176,33 +161,83 @@ export class MainConfiguration implements ILifeCycle {
 
 
 
+
+
 ## 输出方法和格式
 
 
-Midway 的日志对象提供 `error()` ， `warn()` ， `info()` , `debug()`，`write()` 五种方法。
+Midway 的日志对象继承与 winston 的日志对象，一般情况下，只提供 `error()` ， `warn()` ， `info()` , `debug` 四种方法。
 
 
 示例如下。
+
 ```typescript
 logger.debug('debug info');
 logger.info('启动耗时 %d ms', Date.now() - start);
 logger.warn('warning!');
 logger.error(new Error('my error'));
-logger.write('abcdef');
 ```
 
-:::tip
 
-`write` 方法用于输出用户的原始格式日志。
+### 默认的输出行为
 
+
+在大部分的普通类型下，日志库都能工作的很好。
+
+
+比如：
+
+```typescript
+logger.info('hello world');																					// 输出字符串
+logger.info(123);																										// 输出数字
+logger.info(['b', 'c']);																						// 输出数组
+logger.info(new Set([2, 3, 4]));																		// 输出 Set
+logger.info(new Map([['key1', 'value1'], ['key2', 'value2']]));			// 输出 Map
+```
+
+> Midway 针对 winston 无法输出的 `Array` ， `Set` ， `Map` 类型，做了特殊定制，使其也能够正常的输出。
+
+
+不过需要注意的是，日志对象在一般情况下，只能传入一个参数，它的第二个参数有其他作用。
+
+```typescript
+logger.info('plain error message', 321);			// 会忽略 321
+```
+
+
+### 错误输出
+
+
+针对错误对象，Midway 也对 winston 做了定制，使其能够方便的和普通文本结合到一起输出。
+
+```typescript
+// 输出错误对象
+logger.error(new Error('error instance'));
+
+// 输出自定义的错误对象
+const error = new Error('named error instance');
+error.name = 'NamedError';
+logger.error(error);
+
+// 文本在前，加上 error 实例
+logger.info('text before error', new Error('error instance after text'));
+```
+
+:::caution
+注意，错误对象只能放在最后，且有且只有一个，其后面的所有参数都会被忽略。
 :::
 
 
 
+
+### 格式化内容
+
 基于 `util.format` 的格式化方式。
+
 ```typescript
 logger.info('%s %d', 'aaa', 222);
 ```
+
 常用的有
 
 
@@ -214,30 +249,50 @@ logger.info('%s %d', 'aaa', 222);
 
 
 
+### 输出自定义对象或者复杂类型
+
+
+基于性能考虑，Midway（winston）大部分时间只会输出基本类型，所以当输出的参数为高级对象时，**需要用户手动转换为需要打印的字符串**。
+
+
+如下示例，将不会得到希望的结果。
+
+```typescript
+const obj = {a: 1};
+logger.info(obj);					// 默认情况下，输出 [object Object]
+```
+
+需要手动输出希望打印的内容。
+
+```typescript
+const obj = {a: 1};
+logger.info(JSON.stringify(obj));				// 可以输出格式化文本
+logger.info(obj.a);												// 直接输出属性值
+logger.info('%j', a);										// 直接占位符输出整个 json
+```
+
+
+
+### 纯输出内容
+
+
+特殊场景下，我们需要单纯的输出内容，不希望输出时间戳，label 等和格式相关的信息。这种需求我们可以使用 `write` 方法。
+
+`write` 方法是个非常底层的方法，并且不管什么级别的日志，它都会写入到文件中。
+
+
+虽然 `write` 方法在每个 logger 上都有，但是我们只在 `IMidwayLogger` 定义中提供它，我们希望你能明确的知道自己希望调用它。
+
+```typescript
+(logger as IMidwayLogger).write('hello world');		// 文件中只会有 hello world
+```
+
+
+
 ## 日志类型定义
 
 
-大部分情况下，用户应该使用 `@midwayjs/core` 中最简单的 `ILogger` 定义。
-```typescript
-import { Provide, Logger, ILogger } from '@midwayjs/core';
-
-@Provide()
-export class UserService {
-
-  @Inject()
-  logger: ILogger;
-
-  async getUser() {
-  	this.logger.info('hello user');
-  }
-}
-```
-
-`ILogger` 定义只提供最简单的 `debug` ， `info` ， `warn` 以及 `error` 方法。
-
-
-在某些场景下，我们需要更为复杂的定义，这个时候需要使用 `@midwayjs/logger` 提供的 `ILogger` 定义。
-
+默认的情况，用户应该使用最简单的 `ILogger` 定义。
 
 ```typescript
 import { Provide, Logger } from '@midwayjs/core';
@@ -247,23 +302,47 @@ import { ILogger } from '@midwayjs/logger';
 export class UserService {
 
   @Inject()
-  logger: ILogger;
+  logger: ILogger;						// 获取上下文日志
 
   async getUser() {
-    // ...
+  	this.logger.info('hello user');
   }
 
 }
 ```
-`ILogger`  的定义可以参考 interface 中的描述，或者查看 [代码](https://github.com/midwayjs/logger/blob/main/src/interface.ts)。
+
+
+`ILogger` 定义只提供最简单的 `debug` ， `info` ， `warn` 以及 `error` 方法。
+
+
+在某些场景下，我们需要更为复杂的定义，比如修改日志属性或者动态调节，这个时候需要使用更为复杂的 `IMidwayLogger` 定义。
+
+
+```typescript
+import { Provide, Logger } from '@midwayjs/core';
+import { IMidwayLogger } from '@midwayjs/logger';
+
+@Provide()
+export class UserService {
+
+  @Inject()
+  logger: IMidwayLogger;						// 获取上下文日志
+
+  async getUser() {
+    this.logger.disableConsole();		// 禁止控制台输出
+  	this.logger.info('hello user');	// 这句话在控制台看不到
+    this.logger.enableConsole();		// 开启控制台输出
+    this.logger.info('hello user');	// 这句话在控制台可以看到
+  }
+
+}
+```
+
+`IMidwayLogger`  的定义可以参考 interface 中的描述，或者查看 [代码](https://github.com/midwayjs/logger/blob/main/src/interface.ts)。
 
 
 
-## 日志配置
-
-
-
-### 基本配置结构
+## 日志基本配置
 
 我们可以在配置文件中配置日志的各种行为。
 
@@ -292,111 +371,61 @@ export default {
 
 如上所述，`clients` 配置段中的每个对象都是一个独立的日志配置项，其配置会和 `default` 段落合并后创建 logger 实例。
 
-
-
-### 默认 Transport
-
-在 Midway 中，默认启用了 `console`，`file`，`error` 三个 Transport，更多信息可以通过配置进行修改。
+如果你发现没有定义，请将 `@midawyjs/logger` 在 `src/interface.ts` 中显式声明一次。
 
 ```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-  midwayLogger: {
-    default: {
-      transports: {
-				console: {
-          // console transport 配置
-        },
-        file: {
-          // file transport 配置
-        },
-        error: {
-          // error transport 配置
-        },
-      }
-    },
-    // ...
-  },
-} as MidwayConfig;
-```
-
-如果不需要某个 transport，可以设置为 `false`。
-
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-  midwayLogger: {
-    default: {
-      transports: {
-				console: false,
-      }
-    },
-    // ...
-  },
-} as MidwayConfig;
+// ...
+import type {} from '@midwayjs/logger';
 ```
 
 
 
-### 配置日志等级
 
-在 Midway 中，一般情况下，我们只会使用 `error` ， `warn` ， `info` ， `debug` 这四种等级。
+
+## 配置日志等级
+
+
+winston 的日志等级分为下面几类，日志等级依次降低（数字越大，等级越低）：
+
+```typescript
+const levels = {
+  none: 0,
+  error: 1,
+  trace: 2,
+  warn: 3,
+  info: 4,
+  verbose: 5,
+  debug: 6,
+  silly: 7,
+  all: 8,
+}
+```
+
+在 Midway 中，为了简化，一般情况下，我们只会使用 `error` ， `warn` ， `info` ， `debug` 这四种等级。
 
 日志等级表示当前可输出日志的最低等级。比如当你的日志 level 设置为 `warn`  时，仅 `warn` 以及更高的 `error` 等级的日志能被输出。
+
+在 Midway 中，针对不同的输出行为，可以配置不同的日志等级。
+
+- `level` 写入文本的日志等级
+- `consoleLevel` 控制台输出的日志等级
+
+
+
+### 框架的默认等级
 
 
 在 Midway 中，有着自己的默认日志等级。
 
 
 - 在开发环境下（local，test，unittest），文本和控制台日志等级统一为 `info` 。
-- 在服务器环境，为减少日志数量，`coreLogger` 日志等级为 `warn` ，而其他日志为 `info`。
-
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-  midwayLogger: {
-    default: {
-      level: 'info',
-    },
-    // ...
-  },
-} as MidwayConfig;
-```
+- 在服务器环境（除开发环境外），为减少日志数量，`coreLogger` 日志等级为 `warn` ，而其他日志为 `info`。
 
 
 
-logger 的 level 和 Transport 的 level 可以分开设置，Tranport 的 level 优先级高于 logger 的 level。
+### 调整日志等级
 
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-  midwayLogger: {
-    default: {
-      // logger 的 level
-      level: 'info',
-      transports: {
-        file: {
-          // file transport 的 level
-          level: 'warn'
-        }
-      }
-    },
-    // ...
-  },
-} as MidwayConfig;
-```
-
-
-
-我们也可以调整特定的 logger 的日志等级，比如：
+一般情况下，我们不建议调整全局默认的日志等级，而是调整特定的 logger 的日志等级，比如：
 
 调整 `coreLogger` 或者 `appLogger` 。
 
@@ -409,10 +438,12 @@ export default {
     clients: {
       coreLogger: {
         level: 'warn',
+        consoleLevel: 'warn'
         // ...
       },
       appLogger: {
         level: 'warn',
+        consoleLevel: 'warn'
         // ...
       }
     }
@@ -430,11 +461,7 @@ export default {
   midwayLogger: {
     default: {
       level: 'info',
-      transports: {
-        console: {
-          level: 'warn'
-        }
-      }
+      consoleLevel: 'warn'
     },
     // ...
   },
@@ -443,7 +470,7 @@ export default {
 
 
 
-### 配置日志根目录
+## 配置日志根目录
 
 默认情况下，Midway 会在本地开发和服务器部署时输出日志到 **日志根目录**。
 
@@ -451,7 +478,7 @@ export default {
 - 本地的日志根目录为 `${app.appDir}/logs/项目名` 目录下
 - 服务器的日志根目录为用户目录 `${process.env.HOME}/logs/项目名` （Linux/Mac）以及 `${process.env.USERPROFILE}/logs/项目名` （Windows）下，例如 `/home/admin/logs/example-app`。
 
-我们可以配置日志所在的根目录，注意，要将所有 Transport 的路径都修改。
+我们可以配置日志所在的根目录。
 
 ```typescript
 // src/config/config.default.ts
@@ -460,14 +487,7 @@ import { MidwayConfig } from '@midwayjs/core';
 export default {
   midwayLogger: {
     default: {
-      transports: {
-        file: {
-          dir: '/home/admin/logs',
-        },
-        error: {
-          dir: '/home/admin/logs',
-        },
-      }
+      dir: '/home/admin/logs',
     },
     // ...
   },
@@ -476,7 +496,7 @@ export default {
 
 
 
-### 配置日志切割（轮转）
+## 配置日志切割（轮转）
 
 
 默认行为下，同一个日志对象 **会生成两个文件**。
@@ -499,14 +519,7 @@ export default {
 export default {
   midwayLogger: {
     default: {
-      transports: {
-        file: {
-          maxSize: '100m',
-        },
-        error: {
-          maxSize: '100m',
-        },
-      }
+      maxSize: '100m',
     },
     // ...
   },
@@ -515,9 +528,9 @@ export default {
 
 
 
-### 配置日志清理
+## 配置日志清理
 
-默认情况下，日志会存在 7 天。
+默认情况下，日志会存在 31 天。
 
 可以通过配置调整该行为，比如改为保存 3 天。
 
@@ -525,14 +538,7 @@ export default {
 export default {
   midwayLogger: {
     default: {
-      transports: {
-        file: {
-          maxFiles: '3d',
-        },
-        error: {
-          maxFiles: '3d',
-        },
-      }
+      maxFiles: '3d',
     },
     // ...
   },
@@ -541,7 +547,16 @@ export default {
 
 
 
-### 配置自定义日志
+
+
+
+## 高级配置
+
+如果用户不满足于默认的日志对象，也可以自行创建和修改。
+
+
+
+### 增加自定义日志
 
 可以如下配置：
 
@@ -595,19 +610,17 @@ export default {
 
 info 对象的默认属性如下：
 
-| **属性名**  | **描述**                                         | **示例**                |
-| ----------- | ------------------------------------------------ | ----------------------- |
-| timestamp   | 时间戳，默认为 `'YYYY-MM-DD HH:mm:ss,SSS` 格式。 | 2020-12-30 07:50:10,453 |
-| level       | 小写的日志等级                                   | info                    |
-| LEVEL       | 大写的日志等级                                   | INFO                    |
-| pid         | 当前进程 pid                                     | 3847                    |
-| message     | util.format 的结果                               |                         |
-| args        | 原始的用户入参                                   | [ 'a', 'b', 'c' ]       |
-| ctx         | 使用 ContextLogger 时关联的上下文对象            |                         |
-| originError | 原始错误对象，遍历参数后获取，性能较差           | 错误实例本身            |
-| originArgs  | 同 args，仅做兼容老版本使用                      |                         |
-
-
+| **属性名**  | **描述**                                         | **示例**                                                     |
+| ----------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| timestamp   | 时间戳，默认为 `'YYYY-MM-DD HH:mm:ss,SSS` 格式。 | 2020-12-30 07:50:10,453                                      |
+| level       | 小写的日志等级                                   | info                                                         |
+| LEVEL       | 大写的日志等级                                   | INFO                                                         |
+| pid         | 当前进程 pid                                     | 3847                                                         |
+| labelText   | 标签的聚合文本                                   | [abcde]                                                      |
+| message     | 普通消息 + 错误消息 + 错误堆栈的组合             | 1、普通文本，如 `123456` ， `hello world`<br />2、错误文本（错误名+堆栈）Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18)<br />3、普通文本+错误文本 hello world Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |
+| stack       | 错误堆栈                                         |                                                              |
+| originError | 原始错误对象                                     | 错误实例本身                                                 |
+| originArgs  | 原始的用户入参                                   | [ 'a', 'b', 'c' ]                                            |
 
 
 
@@ -624,6 +637,7 @@ const contextLogger = customLogger.createContextLogger(ctx);
 
 ```typescript
 import { Provide } from '@midwayjs/core';
+import { IMidwayLogger } from '@midwayjs/logger';
 import { Context } from '@midwayjs/koa';
 
 @Provide()
@@ -684,7 +698,157 @@ ctx.getLogger('customLogger').info('hello world');
 
 
 
-### 配置延迟初始化
+### 日志默认 Transport
+
+每个日志包含几个默认的 Transport。
+
+| 名称              | 默认行为 | 描述                           |
+| ----------------- | -------- | ------------------------------ |
+| Console Transport | 开启     | 用于输出到控制台               |
+| File Transport    | 开启     | 用于输出到文本文件             |
+| Error Transport   | 开启     | 用于将错误输出到特定的错误日志 |
+| JSON Transport    | 关闭     | 用于输出 JSON 格式的文本       |
+
+可以通过配置进行修改。
+
+**示例：只开启控制台输出**
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableFile: false,
+        enableError: false,
+        // ...
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+**示例：关闭控制台输出**
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableConsole: false,
+        // ...
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+**示例：开启文本和 JSON 同步输出，关闭错误输出**
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableConsole: false,
+        enableFile: true,
+        enableError: false,
+        enableJSON: true,
+        // ...
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+
+
+### 自定义 Transport
+
+框架提供了扩展 Transport 的功能，比如，你可以写一个 Transport 来做日志的中转，上传到别的日志库等能力。
+
+比如下面的示例，我们就将日志中转到另一个本地文件中。
+
+```typescript
+import { EmptyTransport } from '@midwayjs/logger';
+
+class CustomTransport extends EmptyTransport {
+  log(info, callback) {
+    const levelLowerCase = info.level;
+    if (levelLowerCase === 'error' || levelLowerCase === 'warn') {
+      writeFileSync(join(logsDir, 'test.log'), info.message);
+    }
+    callback();
+  }
+}
+```
+
+我们可以初始化，加到 logger 中，也可以单独对 Transport 设置 level。
+
+```typescript
+const customTransport = new CustomTransport({
+  level: 'warn',
+});
+
+logger.add(customTransport);
+```
+
+这样，原有的 logger 打印日志时，会自动执行该 Transport。
+
+所有的 Transport 是附加在原有的 logger 实例之上（非 context logger），如需 ctx 数据，可以从 info 获取，注意判空。
+
+
+```typescript
+class CustomTransport extends EmptyTransport {
+  log(info, callback) {
+    if (info.ctx) {
+      // ...
+    } else {
+      // ...
+    }
+    callback();
+  }
+}
+```
+
+
+我们也可以使用依赖注入的方式来定义 Transport。
+
+```typescript
+import { EmptyTransport, IMidwayLogger } from '@midwayjs/logger';
+import { MidwayLoggerService, Provide, Scope, ScopeEnum } from '@midwayjs/core';
+
+@Provide()
+@Scope(ScopeEnum)
+export class CustomTransport extends EmptyTransport {
+  log(info, callback) {
+    // ...
+    callback();
+  }
+}
+
+// src/configuration.ts
+@Configuration(/*...*/)
+export class MainConfiguration {
+
+  @Inject()
+  loggerService: MidwayLoggerService;
+
+  @Inject()
+  customTransport: CustomTransport;
+
+  async onReady() {
+    const appLogger = this.loggerService.getLogger('customLogger') as IMidwayLogger;
+    appLogger.add(this.customTransport);
+  }
+}
+```
+
+
+
+### 延迟初始化
 
 可以使用 `lazyLoad` 配置让日志延迟初始化。
 
@@ -695,7 +859,7 @@ export default {
   midwayLogger: {
     clients: {
       customLoggerA: {
-        // ..
+        level: 'DEBUG',
       },
       customLoggerB: {
         lazyLoad: true,
@@ -712,193 +876,15 @@ export default {
 
 
 
-### 配置关联日志
-
-日志对象可以配置一个关联的日志对象名。
-
-比如：
-
-```typescript
-export default {
-  midwayLogger: {
-    clients: {
-      customLoggerA: {
-        aliasName: 'customLoggerB',
-        // ...
-      },
-    }
-    // ...
-  },
-} as MidwayConfig;
-```
-
-当使用 API 获取时，不同的名字将取到同样的日志对象。
-
-```typescript
-app.getLogger('customLoggerA') => customLoggerA
-app.getLogger('customLoggerB') => customLoggerA
-```
-
-
-
-## Transport
-
-框架提供了扩展 Transport 的功能，比如，你可以写一个 Transport 来做日志的中转，上传到别的日志库等能力。
-
-
-
-### 继承现有 Transport
-
-如果是写入到新的文件，可以通过使用 `FileTransport` 来实现。
-
-```typescript
-import { FileTransport, isEnableLevel, LoggerLevel, LogMeta } from '@midwayjs/logger';
-
-// Transport 的配置
-interface CustomOptions {
-  // ...
-}
-
-class CustomTransport extends FileTransport {
-  log(level: LoggerLevel | false, meta: LogMeta, ...args) {
-    // 判断 level 是否满足当前 Transport
-  	if (!isEnableLevel(level, this.options.level)) {
-      return;
-    }
-    
-    // 使用内置的格式化方法格式化消息
-    let buf = this.format(level, meta, args) as string;
-    // 加上换行符
-    buf += this.options.eol;
-
-    // 写入自己想写的日志
-    if (this.options.bufferWrite) {
-      this.bufSize += buf.length;
-      this.buf.push(buf);
-      if (this.buf.length > this.options.bufferMaxLength) {
-        this.flush();
-      }
-    } else {
-      // 没启用缓存，则直接写入
-      this.logStream.write(buf);
-    }
-  }
-}
-```
-
-在使用前，需要注册到日志库中。
-
-```typescript
-import { TransportManager } from '@midwayjs/logger';
-
-TransportManager.set('custom', CustomTransport);
-```
-
-之后就可以在配置中使用这个 Transport 了。
-
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-  midwayLogger: {
-    default: {
-      transports: {
-        custom: {
-          dir: 'xxxx',
-          fileLogName: 'xxx',
-          // ...
-        }
-      }
-    }
-  },
-} as MidwayConfig;
-```
-
-这样，原有的 logger 打印日志时，会自动执行该 Transport。
-
-
-
-### 完全自定义 Transport
-
-除了写入文件之外，也可以将日志投递到远端服务，比如下面的示例，将日志中转到另一个服务。
-
-注意，Transport 是一个可异步执行的操作，但是 logger 本身不会等待 Transport 执行返回。
-
-```typescript
-import { Transport, ITransport, LoggerLevel, LogMeta } from '@midwayjs/logger';
-
-
-// Transport 的配置
-interface CustomOptions {
-  // ...
-}
-
-class CustomTransport extends Transport<CustomOptions> implements ITransport {
-  log(level: LoggerLevel | false, meta: LogMeta, ...args) {
-    // 使用内置的格式化方法格式化消息
-    let msg = this.format(level, meta, args) as string;
-  
-    // 异步写入日志库
-    remoteSdk.send(msg).catch(err => {
-      // 记录下错误或者忽略
-      console.error(err);
-    });
-  }
-}
-```
-
-
-
-## 动态 API
-
-通过 `getLogger` 方法动态获取日志对象。
-
-```typescript
-// 获取 coreLogger
-const coreLogger = app.getLogger('coreLogger');
-// 获取默认的 contextLogger
-const contextLogger = ctx.getLogger();
-// 获取特定 logger 创建出来的 contextLogger，等价于 customALogger.createContextLogger(ctx)
-const customAContextLogger = ctx.getLogger('customA');
-```
-
-框架内置的 `MidwayLoggerService` 也拥有上述的 API。
-
-```typescript
-import { MidwayLoggerService } from '@midwayjs/core';
-import { Context } from '@midwayjs/koa';
-
-@Provide()
-export class MainConfiguration {
-  
-  @Inject()
-  loggerService: MidwayLoggerService;
-  
-  @Inject()
-  ctx: Context;
-  
-  async getUser() {
-    // get custom logger
-    const customLogger = this.loggerService.getLogger('customLogger');
-    
-    // 创建 context logger
-    const customContextLogger = this.loggerService.createContextLogger(this.ctx, customLogger);
-  }
-}
-```
-
-
-
 ## 常见问题
 
 
 
 ### 1、服务器环境日志不输出
 
-我们不推荐在服务器环境打印太多的日志，只打印必须的内容，过多的日志输出影响性能，也影响快速定位问题。
+服务器环境，默认日志等级为 warn，即 `logger.warn` 才会打印输出，请查看 ”日志等级“ 部分。
 
-如需调整日志等级，请查看 ”配置日志等级“ 部分。
+我们不推荐在服务器环境打印太多的日志，只打印必须的内容，过多的日志输出影响性能，也影响快速定位问题。
 
 
 
@@ -906,31 +892,3 @@ export class MainConfiguration {
 
 一般来说，服务器控制台日志（console）是关闭的，只会输出到文件中，如有特殊需求，可以单独调整。
 
-
-
-### 3、部分 Docker 环境启动失败
-
-检查日志写入的目录当前应用启动的用户是否有权限。
-
-
-
-### 4、如果有老的配置如何转换
-
-日志库提供了一个转换方法，辅助用户将老配置转变为新的配置。
-
-```typescript
-import { formatLegacyLoggerOptions } from '@midwayjs/logger';
-
-const newLoggerConfig = formatLegacyLoggerOptions({
-  level: 'info',
-  enableFile: false,
-  disableConsole: true,
-  enableJSON: true,
-});
-```
-
-:::caution
-
-注意，这个方法只能转换老的配置，如果配置中包含新老配置则新配置不会生效。
-
-:::

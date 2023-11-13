@@ -81,5 +81,3 @@ export { Types } from './util/types';
 export { PathFileUtil } from './util/pathFileUtil';
 export { FileUtils } from './util/fs';
 export { FORMAT } from './util/format';
-
-export type { ILogger, IMidwayLogger } from '@midwayjs/logger';

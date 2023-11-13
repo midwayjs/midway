@@ -6,6 +6,7 @@ import {
   Scope,
   ScopeEnum,
   Utils,
+  ILogger,
 } from '@midwayjs/core';
 import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
 import {
@@ -14,7 +15,6 @@ import {
   IGRPCClientServiceOptions,
 } from '../interface';
 import { finePackageProto, loadProto } from '../util';
-import { ILogger } from '@midwayjs/logger';
 import { ClientUnaryRequest } from './type/unary-request';
 import { ClientDuplexStreamRequest } from './type/duplex-request';
 import { ClientReadableRequest } from './type/readable-request';
