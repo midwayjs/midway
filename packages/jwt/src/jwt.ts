@@ -15,7 +15,7 @@ import type {
   VerifyOptions,
 } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
-import { JwtConfig } from './interface';
+import { JwtUserConfig } from './interface';
 
 type JwtPayload = string | Buffer | Record<string, any>;
 
@@ -27,7 +27,7 @@ type JwtPayload = string | Buffer | Record<string, any>;
 @Scope(ScopeEnum.Singleton)
 export class JwtService {
   @Config('jwt')
-  private jwtConfig: JwtConfig;
+  private jwtConfig: JwtUserConfig;
 
   /**
    * Synchronously sign the given payload into a JSON Web Token string
@@ -229,20 +229,27 @@ export class JwtService {
   }
 
   getSignOptions(options?: SignOptions) {
-    let signOptions = 'sign' in this.jwtConfig ? this.jwtConfig.sign : {};
+    let signOptions =
+      'sign' in this.jwtConfig ? this.jwtConfig.sign : this.jwtConfig;
     signOptions = Object.assign({}, signOptions, options);
+    // delete possible invalid options from jwtConfig
+    for (const keyToDelete of ['sign', 'verify', 'decode', 'secret']) {
+      delete signOptions[keyToDelete];
+    }
     return signOptions;
   }
 
   getVerifyOptions(options?: VerifyOptions) {
     let verifyOptions = 'verify' in this.jwtConfig ? this.jwtConfig.verify : {};
     verifyOptions = Object.assign({}, verifyOptions, options);
+    delete verifyOptions['secret'];
     return verifyOptions;
   }
 
   getDecodeOptions(options?: DecodeOptions) {
     let decodeOptions = 'decode' in this.jwtConfig ? this.jwtConfig.decode : {};
     decodeOptions = Object.assign({}, decodeOptions, options);
+    delete decodeOptions['secret'];
     return decodeOptions;
   }
 

@@ -1,6 +1,5 @@
 import { close, createLightApp } from '@midwayjs/mock';
 import { JwtService, Jwt } from '../src';
-import { filterConfig } from '../src/configuration';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
@@ -78,16 +77,5 @@ describe('/test/index.test.ts', () => {
 
   it('should test jwt export', () => {
     expect(Jwt.TokenExpiredError).toBeDefined();
-  });
-
-  it('should test filterConfig', () => {
-    expect(filterConfig({} as any)).toEqual({});
-    expect(filterConfig({jwt: {}})).toEqual({jwt: {secret: undefined, sign: {}}});
-    expect(filterConfig({jwt: {algorithm: 'ES256'}})).toEqual({jwt: {secret: undefined, sign: {algorithm: 'ES256'}}});
-    expect(filterConfig({jwt: {sign: {}}})).toEqual({jwt: {sign: {}}});
-    expect(filterConfig({jwt: {verify: {}}})).toEqual({jwt: {verify: {}}});
-    expect(filterConfig({jwt: {decode: {}}})).toEqual({jwt: {decode: {}}});
-    expect(filterConfig({jwt: {secret: '123'}})).toEqual({jwt: {sign: {}, secret: '123'}});
-    expect(filterConfig({jwt: {sign: {algorithm: 'ES256'}, verify: {algorithms: ['ES256']}}})).toEqual({jwt: {sign: {algorithm: 'ES256'}, verify: {algorithms: ['ES256']}}});
   });
 });
