@@ -111,7 +111,7 @@ class MidwayLoggers extends Map<string, ILogger> {
     }
 
     // 这里利用了 loggers 缓存的特性，提前初始化 logger
-    if (loggerConfig) {7
+    if (loggerConfig) {
       for (const id of Object.keys(loggerConfig.clients)) {
         const config = extend(
           true,
