@@ -585,16 +585,16 @@ export class MainConfiguration {
       // console.log(results);
       // =>
       // {
-      // 		"status": false
-      //		"namespace": "redis",
-      //    "reason": "health check timeout",
-      //    "results": [
-      // 			{
-      //	    	"status": false
-      //    		"reason": "health check timeout",
-      //				"namespace": "redis"
-    	//			}
-      //		]
+      //   "status": false
+      //   "namespace": "redis",
+      //   "reason": "health check timeout",
+      //   "results": [
+      //      {
+      //        "status": false
+      //        "reason": "health check timeout",
+      //        "namespace": "redis"
+      //      }
+      //    ]
       // }
       
     }, 1000);
@@ -605,10 +605,10 @@ export class MainConfiguration {
 
 API 如下
 
-| API                              | 返回类型               | 描述             |
-| -------------------------------- | ---------------------- | ---------------- |
-| getStatus()                      | Promise<HealthResults> | 动态添加一个函数 |
-| setCheckTimeout(timeout: number) | void                   | 设置超时时间     |
+| API                              | 返回类型                    | 描述             |
+| -------------------------------- |-------------------------| ---------------- |
+| getStatus()                      | Promise<HealthResults\> | 动态添加一个函数 |
+| setCheckTimeout(timeout: number) | void                    | 设置超时时间     |
 
 `getStatus` 方法用于外部调用轮询 `configuration` 中的 `onHealthCheck` 方法，返回一个符合 `HealthResults` 结构的数据。
 

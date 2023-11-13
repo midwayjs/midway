@@ -568,43 +568,43 @@ import { MidwayHealthService } from '@midwayjs/core';
 import { Configuration, Inject } from '@midwayjs/decorator';
 
 @Configuration({
-   // ...
+  // ...
 })
 export class MainConfiguration {
-   @Inject()
-   healthService: MidwayHealthService;
+  @Inject()
+  healthService: MidwayHealthService;
 
-   async onServerReady() {
-     setInterval(() => {
-       const results = await this.healthService.getStatus();
+  async onServerReady() {
+    setInterval(() => {
+      const results = await this.healthService.getStatus();
       
-       // console.log(results);
-       // =>
-       // {
-       // "status": false
-       // "namespace": "redis",
-       // "reason": "health check timeout",
-       // "results": [
-       // {
-       // "status": false
-       // "reason": "health check timeout",
-       // "namespace": "redis"
-     // }
-       // ]
-       // }
+      // console.log(results);
+      // =>
+      // {
+      //   "status": false
+      //   "namespace": "redis",
+      //   "reason": "health check timeout",
+      //   "results": [
+      //      {
+      //        "status": false
+      //        "reason": "health check timeout",
+      //        "namespace": "redis"
+      //      }
+      //    ]
+      // }
       
-     }, 1000);
-     // ...
-   }
+    }, 1000);
+    // ...
+  }
 }
 ```
 
 The API is as follows
 
-| API                              | Return Type            | Description                |
-| -------------------------------- | ---------------------- | -------------------------- |
-| getStatus()                      | Promise<HealthResults> | Dynamically add a function |
-| setCheckTimeout(timeout: number) | void                   | Set timeout                |
+| API                              | Return Type             | Description                |
+| -------------------------------- |-------------------------| -------------------------- |
+| getStatus()                      | Promise<HealthResults\> | Dynamically add a function |
+| setCheckTimeout(timeout: number) | void                    | Set timeout                |
 
 The `getStatus` method is used to externally call the `onHealthCheck` method in polling `configuration` and return a data that conforms to the `HealthResults` structure.
 
