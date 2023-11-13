@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/cos",
   "description": "midway cos component",
-  "version": "3.12.8",
+  "version": "3.12.10",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -11,11 +11,11 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.12.3",
-    "@midwayjs/mock": "^3.12.8",
+    "@midwayjs/mock": "^3.12.10",
     "dotenv": "16.3.1"
   },
   "dependencies": {
-    "cos-nodejs-sdk-v5": "2.12.4"
+    "cos-nodejs-sdk-v5": "2.12.5"
   },
   "keywords": [
     "tencent",

@@ -177,6 +177,29 @@ export class MainConfiguration {
 
 
 
+## State type definition
+
+There is a special State attribute in koa's Context, and the State definition can be extended in a similar way to Context.
+
+```typescript
+// src/interface.ts
+
+declare module '@midwayjs/koa/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+
+  interface State{
+    bbb: string;
+    ccc: number;
+  }
+}
+```
+
+
+
+
+
 ## Configuration
 
 

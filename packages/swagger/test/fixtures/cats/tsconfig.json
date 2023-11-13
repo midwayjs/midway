@@ -1,0 +1,13 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "noUnusedLocals": false
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}

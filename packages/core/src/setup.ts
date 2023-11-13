@@ -29,6 +29,7 @@ import {
 import * as util from 'util';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 import { join } from 'path';
+import { MidwayHealthService } from './service/healthService';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -204,6 +205,7 @@ export async function prepareGlobalApplicationContextAsync(
   applicationContext.bindClass(MidwayMockService);
   applicationContext.bindClass(MidwayWebRouterService);
   applicationContext.bindClass(MidwayServerlessFunctionService);
+  applicationContext.bindClass(MidwayHealthService);
 
   printStepDebugInfo('Binding preload module');
 
@@ -329,6 +331,7 @@ export function prepareGlobalApplicationContext(
   applicationContext.bindClass(MidwayMockService);
   applicationContext.bindClass(MidwayWebRouterService);
   applicationContext.bindClass(MidwayServerlessFunctionService);
+  applicationContext.bindClass(MidwayHealthService);
 
   printStepDebugInfo('Binding preload module');
 

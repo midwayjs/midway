@@ -281,11 +281,11 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
+        "tool/create_midway",
+        "tool/mwtsc",
         "tool/cli",
         "tool/mwts",
         "tool/luckyeye",
-        "tool/typeorm_generator",
-        "tool/sequelize_generator",
         "tool/egg-ts-helper"
       ]
     },

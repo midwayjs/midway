@@ -879,6 +879,8 @@ export class SwaggerExplorer {
             }
 
             delete metadata.items;
+          } else if (metadata.$ref) {
+            tt.properties[key] = {};
           } else {
             tt.properties[key] = {
               type: currentType ?? getPropertyType(clzz.prototype, key).name,

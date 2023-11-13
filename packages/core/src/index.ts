@@ -68,6 +68,8 @@ export {
   wrapMiddleware,
   wrapAsync,
   isTypeScriptEnvironment,
+  sleep,
+  Utils,
 } from './util/';
 export { extend } from './util/extend';
 export * from './util/webRouterParam';
@@ -75,7 +77,6 @@ export * from './util/contextUtil';
 export * from './util/pathToRegexp';
 export * from './util/httpclient';
 export { retryWithAsync, retryWith } from './util/retry';
-export { sleep, Utils } from './util/index';
 export { Types } from './util/types';
 export { PathFileUtil } from './util/pathFileUtil';
 export { FileUtils } from './util/fs';

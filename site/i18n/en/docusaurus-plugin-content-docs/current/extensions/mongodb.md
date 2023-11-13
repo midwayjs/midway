@@ -529,10 +529,10 @@ export default {
 
 
 
-### 3. Use
+### 3. How to use
 
 
-When there is only one default connection or the default connection is directly used, we can directly use the encapsulated `MongooseConnectionService` object to create the model.
+When we want to get the original connection object, we can directly use the encapsulated `MongooseConnectionService` object.
 ```typescript
 import { Provide, Inject, Init } from '@midwayjs/core';
 import { MongooseDataSourceManager } from '@midwayjs/mongoose';
@@ -548,7 +548,7 @@ interface User extends Document {
 export class TestService {
 
   @Inject()
-  dataSourceManager: MongooseDataSourceManager;
+  dataSourceManager: MongooseDataSourceManager;9
 
   @Init()
   async init() {

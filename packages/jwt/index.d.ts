@@ -1,11 +1,8 @@
-import { SignOptions } from 'jsonwebtoken';
-
+import { JwtUserConfig } from './dist/index';
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    jwt?: SignOptions & {
-      secret?: string;
-    };
+    jwt?: JwtUserConfig;
   }
 }

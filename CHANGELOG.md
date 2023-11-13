@@ -1,6 +1,55 @@
 # Change Log
 
 
+## v3.12.10 (2023-11-05)
+
+#### :package: Dependencies
+* `axios`, `http-proxy`
+  * [#3400](https://github.com/midwayjs/midway/pull/3400) fix(deps): update dependency axios to v1.6.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3398](https://github.com/midwayjs/midway/pull/3398) chore(deps): update actions/checkout action to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3399](https://github.com/midwayjs/midway/pull/3399) chore(deps): update actions/setup-node action to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`, `bull`
+  * [#3397](https://github.com/midwayjs/midway/pull/3397) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#3395](https://github.com/midwayjs/midway/pull/3395) fix(deps): update dependency ws to v8.14.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#3392](https://github.com/midwayjs/midway/pull/3392) fix(deps): update dependency casbin to v5.27.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#3396](https://github.com/midwayjs/midway/pull/3396) fix(deps): update dependency leoric to v2.11.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cron`
+  * [#3393](https://github.com/midwayjs/midway/pull/3393) fix(deps): update dependency cron to v2.4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3394](https://github.com/midwayjs/midway/pull/3394) fix(deps): update dependency joi to v17.11.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#3384](https://github.com/midwayjs/midway/pull/3384) fix(deps): update dependency @types/jsonwebtoken to v9.0.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3385](https://github.com/midwayjs/midway/pull/3385) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.12.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.12.9 (2023-11-02)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3382](https://github.com/midwayjs/midway/pull/3382) fix(swagger): api property should support $ref ([@odex21](https://github.com/odex21))
+
+#### :package: Dependencies
+* `axios`, `consul`
+  * [#3373](https://github.com/midwayjs/midway/pull/3373) chore(deps): update dependency nock to v13.3.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3375](https://github.com/midwayjs/midway/pull/3375) chore(deps): update dependency mongoose to v7.6.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#3364](https://github.com/midwayjs/midway/pull/3364) fix(deps): update dependency @types/ali-oss to v6.16.10 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- [@odex21](https://github.com/odex21)
+
+
+
 ## v3.12.8 (2023-10-25)
 
 #### :bug: Bug Fix

@@ -8,7 +8,7 @@ import { StaticMiddleware } from './middleware/static.middleware';
 import * as DefaultConfig from './config/config.default';
 
 @Configuration({
-  namespace: 'info',
+  namespace: 'static-file',
   importConfigs: [
     {
       default: DefaultConfig,

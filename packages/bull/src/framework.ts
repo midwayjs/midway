@@ -110,6 +110,9 @@ export class BullFramework
       extend(true, {}, this.bullDefaultQueueConfig, queueOptions)
     );
     this.queueMap.set(name, queue);
+    queue.on('error', err => {
+      this.app.getCoreLogger().error(err);
+    });
     return queue;
   }
 
@@ -143,26 +146,25 @@ export class BullFramework
         from: processor,
       });
 
-      ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
-
-      const isPassed = await this.app
-        .getFramework()
-        .runGuard(ctx, processor, 'execute');
-      if (!isPassed) {
-        throw new MidwayInvokeForbiddenError('execute', processor);
-      }
-
-      const service = await ctx.requestContext.getAsync<IProcessor>(
-        processor as any
-      );
-      const fn = await this.applyMiddleware(async ctx => {
-        return await Utils.toAsyncFunction(service.execute.bind(service))(
-          job.data,
-          job
-        );
-      });
-
       try {
+        ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
+
+        const isPassed = await this.app
+          .getFramework()
+          .runGuard(ctx, processor, 'execute');
+        if (!isPassed) {
+          throw new MidwayInvokeForbiddenError('execute', processor);
+        }
+
+        const service = await ctx.requestContext.getAsync<IProcessor>(
+          processor as any
+        );
+        const fn = await this.applyMiddleware(async ctx => {
+          return await Utils.toAsyncFunction(service.execute.bind(service))(
+            job.data,
+            job
+          );
+        });
         const result = await Promise.resolve(await fn(ctx));
         ctx.logger.info(
           `complete process job ${job.id} from ${processor.name}`
