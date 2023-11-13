@@ -1,5 +1,5 @@
 import { close, createLightApp } from '@midwayjs/mock';
-import { JwtService } from '../src';
+import { JwtService, Jwt } from '../src';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
@@ -73,5 +73,9 @@ describe('/test/index.test.ts', () => {
     expect(decoded1).toEqual(null);
 
     await close(app);
+  });
+
+  it('should test jwt export', () => {
+    expect(Jwt.TokenExpiredError).toBeDefined();
   });
 });
