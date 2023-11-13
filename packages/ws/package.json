@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/ws",
-  "version": "3.12.10",
+  "version": "3.13.0",
   "description": "Midway Web Framework for ws",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -23,12 +23,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^3.12.10",
+    "@midwayjs/mock": "^3.13.0",
     "@types/ws": "8.5.9",
     "fs-extra": "11.1.1"
   },
   "dependencies": {
-    "@midwayjs/core": "^3.12.3",
+    "@midwayjs/core": "^3.13.0",
     "ws": "8.14.2"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

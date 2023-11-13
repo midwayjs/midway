@@ -1,6 +1,56 @@
 # Change Log
 
 
+## v3.13.0 (2023-11-13)
+
+#### :rocket: New Feature
+* `bootstrap`, `bull`, `core`, `cron`, `faas`, `grpc`, `kafka`, `mock`, `rabbitmq`, `socketio`, `typeorm`, `web-express`, `web-koa`, `web`, `ws`
+  * [#3328](https://github.com/midwayjs/midway/pull/3328) feat: support v3 logger ([@czy88840616](https://github.com/czy88840616))
+* `jwt`
+  * [#3261](https://github.com/midwayjs/midway/pull/3261) feat: config separated options for verify & decode and bug fixes ([@ghostoy](https://github.com/ghostoy))
+* `core`, `info`
+  * [#3381](https://github.com/midwayjs/midway/pull/3381) feat: add build-in healthService ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `core`
+  * [#3247](https://github.com/midwayjs/midway/pull/3247) fix: sort with imports sequence before framework run ([@czy88840616](https://github.com/czy88840616))
+* `static-file`
+  * [#3422](https://github.com/midwayjs/midway/pull/3422) fix: static file component namespace ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `jwt`
+  * [#3425](https://github.com/midwayjs/midway/pull/3425) chore: export default jwt instance ([@czy88840616](https://github.com/czy88840616))
+* `http-proxy`
+  * [#3391](https://github.com/midwayjs/midway/pull/3391) feat: add enable config for http-proxy ([@czy88840616](https://github.com/czy88840616))
+* `faas`, `passport`, `web-koa`, `web`
+  * [#3402](https://github.com/midwayjs/midway/pull/3402) fix: context.state property override when context typings merge ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3417](https://github.com/midwayjs/midway/pull/3417) docs(session): Supplementary explanation on SameSite = None ([@cyjake](https://github.com/cyjake))
+
+#### :package: Dependencies
+* `core`, `web-koa`
+  * [#2975](https://github.com/midwayjs/midway/pull/2975) fix(deps): update dependency koa to v2.14.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`
+  * [#3420](https://github.com/midwayjs/midway/pull/3420) fix(deps): update dependency @types/supertest to v2.0.16 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3421](https://github.com/midwayjs/midway/pull/3421) fix(deps): update dependency axios to v1.6.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#3418](https://github.com/midwayjs/midway/pull/3418) fix(deps): update dependency @types/ali-oss to v6.16.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#3419](https://github.com/midwayjs/midway/pull/3419) fix(deps): update dependency @types/jsonwebtoken to v9.0.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#3410](https://github.com/midwayjs/midway/pull/3410) chore(deps): update dependency @opentelemetry/sdk-node to v0.45.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3408](https://github.com/midwayjs/midway/pull/3408) chore(deps): update mikro-orm monorepo to v5.9.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Chen Yangjian ([@cyjake](https://github.com/cyjake))
+- Cong Liu ([@ghostoy](https://github.com/ghostoy))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.12.10 (2023-11-05)
 
 #### :package: Dependencies
