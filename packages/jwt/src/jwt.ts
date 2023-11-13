@@ -1,4 +1,10 @@
-import { Config, Provide, Scope, ScopeEnum } from '@midwayjs/core';
+import {
+  Config,
+  MidwayCommonError,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/core';
 import { KeyObject } from 'crypto';
 import type {
   DecodeOptions,
@@ -9,6 +15,7 @@ import type {
   VerifyOptions,
 } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
+import { JwtConfig } from './interface';
 
 type JwtPayload = string | Buffer | Record<string, any>;
 
@@ -20,7 +27,7 @@ type JwtPayload = string | Buffer | Record<string, any>;
 @Scope(ScopeEnum.Singleton)
 export class JwtService {
   @Config('jwt')
-  private jwtConfig: any;
+  private jwtConfig: JwtConfig;
 
   /**
    * Synchronously sign the given payload into a JSON Web Token string
@@ -45,7 +52,7 @@ export class JwtService {
       secretOrPrivateKey = this.jwtConfig?.secret;
     }
     if (!secretOrPrivateKey) {
-      throw new Error('[midway:jwt] jwt secret should be set');
+      throw new MidwayCommonError('[midway:jwt] jwt secret should be set');
     }
     options = this.getSignOptions(options);
 
@@ -78,7 +85,7 @@ export class JwtService {
       secretOrPrivateKey = this.jwtConfig?.secret;
     }
     if (!secretOrPrivateKey) {
-      throw new Error('[midway:jwt] provide the jwt secret please');
+      throw new MidwayCommonError('[midway:jwt] provide the jwt secret please');
     }
     options = this.getSignOptions(options);
 
@@ -121,7 +128,7 @@ export class JwtService {
       secretOrPublicKey = this.jwtConfig?.secret;
     }
     if (!secretOrPublicKey) {
-      throw new Error('[midway:jwt] provide the jwt secret please');
+      throw new MidwayCommonError('[midway:jwt] provide the jwt secret please');
     }
     options = this.getVerifyOptions(options);
 
@@ -163,7 +170,7 @@ export class JwtService {
       secretOrPublicKey = this.jwtConfig?.secret;
     }
     if (!secretOrPublicKey) {
-      throw new Error('[midway:jwt] provide the jwt secret please');
+      throw new MidwayCommonError('[midway:jwt] provide the jwt secret please');
     }
     options = this.getVerifyOptions(options);
 
@@ -222,27 +229,20 @@ export class JwtService {
   }
 
   getSignOptions(options?: SignOptions) {
-    let signOptions =
-      'sign' in this.jwtConfig ? this.jwtConfig.sign : this.jwtConfig;
+    let signOptions = 'sign' in this.jwtConfig ? this.jwtConfig.sign : {};
     signOptions = Object.assign({}, signOptions, options);
-    // delete possible invalid options from jwtConfig
-    for (const keyToDelete of ['sign', 'verify', 'decode', 'secret']) {
-      delete signOptions[keyToDelete];
-    }
     return signOptions;
   }
 
   getVerifyOptions(options?: VerifyOptions) {
     let verifyOptions = 'verify' in this.jwtConfig ? this.jwtConfig.verify : {};
     verifyOptions = Object.assign({}, verifyOptions, options);
-    delete verifyOptions.secret;
     return verifyOptions;
   }
 
   getDecodeOptions(options?: DecodeOptions) {
     let decodeOptions = 'decode' in this.jwtConfig ? this.jwtConfig.decode : {};
     decodeOptions = Object.assign({}, decodeOptions, options);
-    delete decodeOptions.secret;
     return decodeOptions;
   }
 
