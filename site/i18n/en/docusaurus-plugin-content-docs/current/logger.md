@@ -11,7 +11,9 @@ The functions implemented are:
 
 :::tip
 
-The current version of the log SDK documentation is 3.0. If you need version 2.0, please check [this document](docs/legacy/logger).
+The current version of the log SDK documentation is 3.0. If you need version 2.0, please check [this document](/docs/legacy/logger).
+
+:::
 
 
 

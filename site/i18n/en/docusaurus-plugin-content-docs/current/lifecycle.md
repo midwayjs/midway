@@ -203,6 +203,56 @@ export class MainConfiguration implements ILifeCycle {
 
 
 
+### onHealthCheck
+
+When the built-in health check service calls the status retrieval API, this method is automatically executed for all components.
+
+The following simulates a db health check method.
+
+```typescript
+// src/configuration.ts
+import { Configuration, ILifeCycle, IMidwayContainer, HealthResult } from '@midwayjs/core';
+
+@Configuration({
+   namespace: 'db'
+})
+export class MainConfiguration implements ILifeCycle {
+   @Inject()
+   db: any;
+
+   async onReady(container: IMidwayContainer): Promise<void> {
+     await this.db.connect();
+   }
+
+   async onHealthCheck(): Promise<HealthResult> {
+     try {
+       const result = await this.db.isConnect();
+       if (result) {
+         return {
+           status: true,
+         };
+       } else {
+         return {
+           status: false,
+           reason: 'db is disconnected',
+         };
+       }
+     } catch (err) {
+       return {
+         status: false,
+         reason: err.message,
+       };
+     }
+   }
+}
+```
+
+In the above `onHealthCheck`, a status check of `isConnect` is called, and a fixed `HealthResult` type format is returned based on the result.
+
+Note that external calls to `onHealthCheck` may be very frequent. Please keep the check logic as reliable and efficient as possible to ensure that there is no greater pressure on check dependencies. At the same time, please handle the logic of resource release after the check timeout by yourself to avoid the risk of memory leaks caused by frequent resource requests without returning results.
+
+
+
 ## Global Object Lifecycle
 
 The so-called object life cycle refers to the event that each object is created and destroyed in the dependency injection container. Through these life cycles, we can do some operations when the object is created and destroyed.
