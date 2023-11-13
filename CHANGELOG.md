@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.13.1 (2023-11-13)
+
+#### :bug: Bug Fix
+* `web`
+  * [#3427](https://github.com/midwayjs/midway/pull/3427) fix: missing default logger dir when cluster mode ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.13.0 (2023-11-13)
 
 #### :rocket: New Feature
