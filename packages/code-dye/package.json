@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/code-dye",
-  "version": "3.13.1",
+  "version": "3.13.2",
   "description": "Midway Code Dye Component",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -28,6 +28,6 @@
     "@midwayjs/koa": "^3.13.0",
     "@midwayjs/mock": "^3.13.0",
     "@midwayjs/serverless-app": "^3.13.0",
-    "@midwayjs/web": "^3.13.1"
+    "@midwayjs/web": "^3.13.2"
   }
 }

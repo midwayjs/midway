@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.13.2 (2023-11-14)
+
+#### :bug: Bug Fix
+* `web`
+  * [#3428](https://github.com/midwayjs/midway/pull/3428) fix: core logger missing file log name ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.13.1 (2023-11-13)
 
 #### :bug: Bug Fix
