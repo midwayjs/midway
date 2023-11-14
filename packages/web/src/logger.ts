@@ -102,13 +102,11 @@ class MidwayLoggers extends Map<string, ILogger> {
 
     let loggerConfig = configService.getConfiguration('midwayLogger');
     // 这里属于 hack 了，cluster 模式下会先走这里，找不到默认值
-    if (!loggerConfig['default']['dir']) {
-      // 先合并一遍默认配置
-      configService.addObject(
-        loggers.getDefaultMidwayLoggerConfig(configService.getAppInfo())
-      );
-      loggerConfig = configService.getConfiguration('midwayLogger');
-    }
+    // 先合并一遍默认配置
+    configService.addObject(
+      loggers.getDefaultMidwayLoggerConfig(configService.getAppInfo())
+    );
+    loggerConfig = configService.getConfiguration('midwayLogger');
 
     // 这里利用了 loggers 缓存的特性，提前初始化 logger
     if (loggerConfig) {
