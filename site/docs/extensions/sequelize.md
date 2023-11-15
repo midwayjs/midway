@@ -148,7 +148,7 @@ class Person extends Model {
 class Person extends Model {}
 ```
 
-这些实体列也可以使用 [sequelize_generator](/docs/tool/sequelize_generator) 工具生成。
+
 
 ### 2、主键
 
@@ -675,4 +675,5 @@ export class MainConfiguration {
 
 - 上面的文档，翻译自 sequelize-typescript，更多 API ，请参考 [英文文档](<(https://github.com/sequelize/sequelize-typescrip)>)
 - 一些 [案例](https://github.com/ddzyan/midway-practice)
-- 如果遇到比较复杂的，可以使用 [raw query 方法](https://sequelize.org/v5/manual/raw-queries.html)
+- 如果遇到比较复杂的，可以使用 [raw query 方法](https://sequelize.org/v5/manual/raw-queries.html)]
+- 框架不直接提供实体列生成工具，请参考社区提供的模块，如 [sequelize-typescript-generator](https://github.com/spinlud/sequelize-typescript-generator)
