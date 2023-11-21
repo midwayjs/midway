@@ -620,6 +620,7 @@ export default {
 | hostname       | string           | 监听的 hostname，默认 127.1  |
 | http2          | boolean          | 可选，http2 支持，默认 false |
 | queryParseMode | simple\|extended | 默认为 extended              |
+| queryParseOptions | `qs.IParseOptions` | 解析选项，当使用'simple'模式解析时可用 |
 
 以上的属性，对本地和使用 `bootstrap.js` 部署的应用生效。
 
@@ -747,6 +748,9 @@ export default {
   egg: {
     // ...
     queryParseMode: 'simple',
+    queryParseOptions: {
+      arrayLimit: 100,
+    },
   },
 }
 ```

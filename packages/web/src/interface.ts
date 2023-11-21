@@ -8,6 +8,7 @@ import {
 } from '@midwayjs/core';
 import { DefaultState, Middleware } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
+import { IParseOptions } from 'qs';
 
 export const RUN_IN_AGENT_KEY = 'egg:run_in_agent';
 export const EGG_AGENT_APP_KEY = 'egg_agent_app';
@@ -118,6 +119,10 @@ export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
    * http query parser mode, default is extended
    */
   queryParseMode?: 'simple' | 'extended';
+  /**
+   * http query parse options, used when 'simple' mode is used
+   */
+  queryParseOptions?: IParseOptions;
 }
 
 /**

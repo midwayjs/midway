@@ -622,6 +622,7 @@ All parameters of `@midwayjs/web` are as follows:
 | hostname | string | The hostname of the listener, the default 127.1 |
 | http2 | boolean | Optional, supported by http2, default false |
 | queryParseMode | simple\|extended | The default is extended |
+| queryParseOptions | `qs.IParseOptions` | Parse options when 'simple' mode is used |
 
 The above attributes are valid for applications deployed locally and using `bootstrap.js`.
 
@@ -749,6 +750,9 @@ export default {
   egg: {
     // ...
     queryParseMode: 'simple',
+    queryParseOptions: {
+      arrayLimit: 100,
+    },
   },
 }
 ```
