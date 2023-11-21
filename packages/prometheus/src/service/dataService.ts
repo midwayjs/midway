@@ -20,6 +20,7 @@ export class DataService {
   bInit = false;
 
   async init() {
+    Client.register.clear();
     this.responseSummary = new Client.Summary({
       name: 'http_request_latency_milliseconds',
       help: 'response time in millis',
