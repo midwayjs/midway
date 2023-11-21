@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@nrwl/tao": "16.10.0",
-    "@types/jest": "29.5.8",
+    "@types/jest": "29.5.9",
     "@types/node": "18.18.10",
     "@vercel/ncc": "0.38.1",
     "autocannon": "7.12.0",
