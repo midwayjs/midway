@@ -10,10 +10,13 @@ import { SecurityOptions } from './interface';
 import { XFrameMiddleware } from './middleware/xframe.middleware';
 import { HSTSMiddleware } from './middleware/hsts.middleware';
 import { NoOpenMiddleware } from './middleware/noopen.middleware';
-import { NoSniffMiddleware } from '.';
 import { XSSProtectionMiddleware } from './middleware/xssProtection.middleware';
 import { CSPMiddleware } from './middleware/csp.middleware';
 import { SecurityHelper } from './middleware/helper';
+import { ReferrerPolicyMiddleware } from './middleware/refererPolicy.middleware';
+import { MethodNotAllowedMiddleware } from './middleware/methodNotAllowed.middleware'
+import { NoSniffMiddleware } from './middleware/nosniff.middleware';
+
 @Configuration({
   namespace: 'security',
   importConfigs: [
@@ -34,27 +37,15 @@ export class SecurityConfiguration {
       .getApplications(['koa', 'faas', 'express', 'egg'])
       .forEach(app => {
         app.useMiddleware(SecurityHelper);
-        if (this.security.csrf?.enable) {
-          app.useMiddleware(CsrfMiddleware);
-        }
-        if (this.security.csp?.enable) {
-          app.useMiddleware(CSPMiddleware);
-        }
-        if (this.security.xframe?.enable) {
-          app.useMiddleware(XFrameMiddleware);
-        }
-        if (this.security.hsts?.enable) {
-          app.useMiddleware(HSTSMiddleware);
-        }
-        if (this.security.noopen?.enable) {
-          app.useMiddleware(NoOpenMiddleware);
-        }
-        if (this.security.nosniff?.enable) {
-          app.useMiddleware(NoSniffMiddleware);
-        }
-        if (this.security.xssProtection?.enable) {
-          app.useMiddleware(XSSProtectionMiddleware);
-        }
+        app.useMiddleware(CsrfMiddleware);
+        app.useMiddleware(CSPMiddleware);
+        app.useMiddleware(XFrameMiddleware);
+        app.useMiddleware(HSTSMiddleware);
+        app.useMiddleware(NoOpenMiddleware);
+        app.useMiddleware(NoSniffMiddleware);
+        app.useMiddleware(XSSProtectionMiddleware);
+        app.useMiddleware(ReferrerPolicyMiddleware);
+        app.useMiddleware(MethodNotAllowedMiddleware);
       });
   }
 }

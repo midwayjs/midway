@@ -7,4 +7,6 @@ export * from './middleware/noopen.middleware';
 export * from './middleware/nosniff.middleware';
 export * from './middleware/xssProtection.middleware';
 export * from './middleware/csp.middleware';
+export * from './middleware/refererPolicy.middleware';
+export * from './middleware/methodNotAllowed.middleware';
 export * from './middleware/helper';

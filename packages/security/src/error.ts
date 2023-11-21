@@ -6,3 +6,9 @@ export class CSRFError extends httpError.ForbiddenError {
     super(message || 'csrf error');
   }
 }
+
+export class ReferrerPolicyNotAllowedError extends httpError.InternalServerErrorError {
+  constructor(policy) {
+    super(`Current policy ${policy} not allowed`);
+  }
+}

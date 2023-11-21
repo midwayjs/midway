@@ -33,4 +33,11 @@ export const security: Partial<SecurityOptions> = {
     enable: true,
     value: '1; mode=block',
   },
+  referrerPolicy: {
+    enable: false,
+    value: 'no-referrer-when-downgrade',
+  },
+  methodnoallow: {
+    enable: false,
+  },
 };

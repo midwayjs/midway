@@ -129,18 +129,30 @@ export class CsrfMiddleware extends BaseMiddleware {
     }
     const secret = tokens.secretSync();
     context[NEW_CSRF_SECRET] = secret;
-    const { useSession, sessionName, cookieDomain } = this.security.csrf;
-    let { cookieName } = this.security.csrf;
+    let {
+      // eslint-disable-next-line prefer-const
+      useSession,
+      // eslint-disable-next-line prefer-const
+      sessionName,
+      // eslint-disable-next-line prefer-const
+      cookieDomain,
+      cookieName,
+      // eslint-disable-next-line prefer-const
+      cookieOptions = {},
+    } = this.security.csrf;
 
     if (useSession) {
       context.session[sessionName] = secret;
     } else {
-      const cookieOpts = {
-        domain: cookieDomain && cookieDomain(request),
-        signed: false,
-        httpOnly: false,
-        overwrite: true,
-      };
+      const cookieOpts = Object.assign(
+        {
+          domain: cookieDomain && cookieDomain(request),
+          signed: false,
+          httpOnly: false,
+          overwrite: true,
+        },
+        cookieOptions
+      );
       // cookieName support array. so we can change csrf cookie name smoothly
       if (!Array.isArray(cookieName)) {
         cookieName = [cookieName];
