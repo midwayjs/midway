@@ -146,7 +146,7 @@ export class JwtMiddleware {
       if (/^Bearer$/i.test(scheme)) {
         try {
           // jwt.verify that token is valid.
-          await jwtService.verify(token, {
+          await this.jwtService.verify(token, {
             complete: true
           });
         } catch (error) {
