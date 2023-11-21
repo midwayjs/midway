@@ -25,7 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/mock": "^3.13.0",
-    "@types/koa": "2.13.11",
+    "@types/koa": "2.13.12",
     "@types/koa-router": "7.4.8",
     "fs-extra": "11.1.1"
   },
