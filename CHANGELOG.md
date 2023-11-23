@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.13.3 (2023-11-23)
+
+#### :bug: Bug Fix
+* `web`
+  * [#3448](https://github.com/midwayjs/midway/pull/3448) fix: parsing array of size > 20 in query (#3447) ([@ghostoy](https://github.com/ghostoy))
+
+#### :memo: Documentation
+* [#3443](https://github.com/midwayjs/midway/pull/3443) docs(jwt): Fix a bug in the documentation example where `jwtService` is not retrieved from `this`. ([@gucovip](https://github.com/gucovip))
+
+#### :package: Dependencies
+* Other
+  * [#3451](https://github.com/midwayjs/midway/pull/3451) chore(deps): update dependency autocannon to v7.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#3441](https://github.com/midwayjs/midway/pull/3441) chore(deps): update dependency @types/koa to v2.13.12 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3434](https://github.com/midwayjs/midway/pull/3434) fix(deps): update dependency axios to v1.6.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3435](https://github.com/midwayjs/midway/pull/3435) fix(deps): update dependency bull to v4.11.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Cong ([@gucovip](https://github.com/gucovip))
+- Cong Liu ([@ghostoy](https://github.com/ghostoy))
+
+
+
 ## v3.13.2 (2023-11-14)
 
 #### :bug: Bug Fix
