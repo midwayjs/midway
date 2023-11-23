@@ -10,4 +10,7 @@ export const hello = {
 
 export const egg = {
   queryParseMode: 'simple',
+  queryParseOptions: {
+    arrayLimit: 5,
+  },
 }
