@@ -27,7 +27,6 @@ for (const item of data) {
 
     if (remoteVersion !== localVersion) {
       arr.push(`npm dist-tag add ${item.name}@${remoteVersion} latest\n`);
-      tnpmArr.push(`tnpm dist-tag add ${item.name}@${remoteVersion} latest\n`);
       diff.push(`#  - ${item.name}: ${remoteVersion} => ${currentVersion}\n`);
     }
   }
