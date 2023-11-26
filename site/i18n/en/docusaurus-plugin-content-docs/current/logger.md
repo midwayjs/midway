@@ -34,6 +34,8 @@ Upgrade the dependency versions in `package.json`, pay attention to the `depende
 
 In most scenarios, the two versions are compatible, but there will be certain differences in configuration. For this reason, we have provided some methods to be as compatible with the old logic as possible. For complete Breaking Change changes, please view [the change document](https://github.com/midwayjs/logger/blob/main/BREAKING-3.md).
 
+If you have old log configuration in your configuration file, you can refer to **Common Problem** to convert it.
+
 
 
 ## Logger path and file
@@ -897,7 +899,7 @@ export class MainConfiguration {
 
 
 
-## Common problem
+## Common Problem
 
 
 
@@ -918,3 +920,47 @@ Generally speaking, the server console log (console) is closed and will only be 
 ### 3. Some Docker environments fail to start
 
 Check whether the user who started the current application in the directory where the log is written has permissions.
+
+
+
+### 4. How to convert if there is an old configuration?
+
+The log library provides a conversion method to assist users in converting old configurations into new configurations.
+
+```typescript
+import { formatLegacyLoggerOptions } from '@midwayjs/logger';
+
+const newLoggerConfig = formatLegacyLoggerOptions({
+   level: 'info',
+   enableFile: false,
+   disableConsole: true,
+   enableJSON: true,
+});
+```
+
+:::caution
+
+Note that this method can only convert the old configuration. If the configuration contains the old and new configurations, the new configuration will not take effect.
+
+:::
+
+For example, if there are logs in your `src/config/config.default.ts` that use old configurations, you can use this method for compatibility.
+
+```typescript
+import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
+import { formatLegacyLoggerOptions } from '@midwayjs/logger';
+
+export default (appInfo: MidwayAppInfo) => {
+   return {
+     midwayLogger: {
+       clients: {
+         abc: logger.formatLegacyLoggerOptions({
+           fileLogName: 'abc.log',
+         }),
+       }
+     },
+     // ...
+   } as MidwayConfig;
+};
+
+```

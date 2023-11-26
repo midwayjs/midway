@@ -34,6 +34,8 @@ Midway 为不同场景提供了一套统一的日志接入方式。通过 `@midw
 
 在大部分场景下，两个版本是兼容的，但是在配置中，会有一定的差异性，为此我们提供了一些方法来尽可能兼容老逻辑，完整的 Breaking Change 变化，请查看 [变更文档](https://github.com/midwayjs/logger/blob/main/BREAKING-3.md)。
 
+如果你的配置文件中有老的日志配置，可以参考 **常见问题** 进行转换。
+
 
 
 ## 日志路径和文件
@@ -936,3 +938,25 @@ const newLoggerConfig = formatLegacyLoggerOptions({
 注意，这个方法只能转换老的配置，如果配置中包含新老配置则新配置不会生效。
 
 :::
+
+比如，你的 `src/config/config.default.ts` 中如果有日志使用的是老配置，可以使用这个方法做兼容。
+
+```typescript
+import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
+import { formatLegacyLoggerOptions } from '@midwayjs/logger';
+
+export default (appInfo: MidwayAppInfo) => {
+  return {
+    midwayLogger: {
+      clients: {
+        abc: logger.formatLegacyLoggerOptions({
+          fileLogName: 'abc.log',
+        }),
+      }
+    },
+    // ...
+  } as MidwayConfig;
+};
+
+```
+
