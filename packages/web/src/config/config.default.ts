@@ -3,7 +3,6 @@ import * as mkdirp from 'mkdirp';
 import * as os from 'os';
 import * as fs from 'fs';
 import * as loggerModule from '@midwayjs/logger';
-import { extend } from '@midwayjs/core';
 
 export default appInfo => {
   const exports = {} as any;
@@ -47,12 +46,7 @@ export default appInfo => {
   }
 
   // 修改默认的日志名
-  exports.midwayLogger = extend(
-    true,
-    {},
-    loggerModule.loggers.getDefaultMidwayLoggerConfig(appInfo)['midwayLogger'],
-    defaultLoggerConfig
-  );
+  exports.midwayLogger = defaultLoggerConfig;
 
   exports.egg = {
     dumpConfig: true,
