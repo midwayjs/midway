@@ -13,7 +13,7 @@
     "@midwayjs/koa": "^3.13.3",
     "@midwayjs/mock": "^3.13.0",
     "sequelize": "6.35.1",
-    "sequelize-typescript": "2.1.5",
+    "sequelize-typescript": "2.1.6",
     "sqlite3": "5.1.6"
   },
   "keywords": [
