@@ -860,7 +860,7 @@ export default {
   },
 }
 ```
-
+【注意：建议不要在 config 中配置 adapter，因为 socket.io server 创建和设置adapter时，会导致 redis-adapter 两次被创建，产生多个 adapter 实例，导致 fetchSockets 时出现数据响应混乱；建议在 configuration 中手动设置 adapter】
 通过使用 `@socket.io/redis-adapter` 适配器运行 Socket.io，可以在不同的进程或服务器中运行多个 Socket.io 实例，这些实例都可以相互广播和发送事件。
 
 此外，还有一些 Adapter 上的特殊 API，具体可以查看 [文档](https://github.com/socketio/socket.io-redis-adapter#api)。
