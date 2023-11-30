@@ -28,6 +28,6 @@
     "@midwayjs/core": "^3.13.0",
     "@midwayjs/mock": "^3.13.0",
     "@typegoose/typegoose": "11.7.1",
-    "mongoose": "7.6.5"
+    "mongoose": "7.6.6"
   }
 }
