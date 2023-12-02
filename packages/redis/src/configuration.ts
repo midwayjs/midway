@@ -1,4 +1,9 @@
-import { Configuration, HealthResult, ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import {
+  Configuration,
+  HealthResult,
+  ILifeCycle,
+  IMidwayContainer,
+} from '@midwayjs/core';
 import { RedisServiceFactory } from './manager';
 
 @Configuration({
