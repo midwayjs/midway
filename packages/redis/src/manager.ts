@@ -11,6 +11,7 @@ import {
   delegateTargetMethod,
   MidwayCommonError,
   ServiceFactoryConfigOption,
+  ILogger,
 } from '@midwayjs/core';
 import Redis from 'ioredis';
 import * as assert from 'assert';
@@ -28,7 +29,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
   }
 
   @Logger('coreLogger')
-  logger;
+  logger: ILogger;
 
   async createClient(config): Promise<Redis> {
     let client;

@@ -1166,6 +1166,7 @@ export interface IServiceFactory<Client> {
   getName(): string;
   stop(): Promise<void>;
   getDefaultClientName(): string;
+  getClients(): Map<string, Client>;
 }
 
 export interface ISimulation {
