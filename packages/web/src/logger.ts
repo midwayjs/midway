@@ -209,43 +209,22 @@ class MidwayLoggers extends Map<string, ILogger> {
         options.dir = dirname(file);
         options.fileLogName = basename(file);
 
-        if (isV3Logger) {
-          options.auditFileDir =
-            midwayLoggerConfig?.transports?.file?.['auditFileDir'] === '.audit'
-              ? join(midwayLoggerConfig?.transports?.file?.['dir'], '.audit')
-              : midwayLoggerConfig?.transports?.file?.['auditFileDir'];
-          options.errorDir =
-            midwayLoggerConfig?.transports?.error?.['dir'] ??
-            midwayLoggerConfig?.transports?.file?.['dir'];
-        } else {
-          options.auditFileDir =
-            midwayLoggerConfig['auditFileDir'] === '.audit'
-              ? join(midwayLoggerConfig['dir'], '.audit')
-              : midwayLoggerConfig['auditFileDir'];
-          options.errorDir =
-            midwayLoggerConfig['errorDir'] ?? midwayLoggerConfig['dir'];
-        }
+        options.auditFileDir =
+          midwayLoggerConfig['auditFileDir'] === '.audit'
+            ? join(midwayLoggerConfig['dir'], '.audit')
+            : midwayLoggerConfig['auditFileDir'];
+        options.errorDir =
+          midwayLoggerConfig['errorDir'] ?? midwayLoggerConfig['dir'];
       } else {
         // 相对路径，使用默认的 dir 即可
         options.fileLogName = file;
       }
 
-      // v3 logger，格式化一下 options
-      if (isV3Logger) {
-        transformLoggerConfig.midwayLogger.clients[name] = loggerModule[
-          'formatLegacyLoggerOptions'
-        ]({
-          level: levelTransform(eggCustomLogger[name]?.level),
-          consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
-          ...options,
-        });
-      } else {
-        transformLoggerConfig.midwayLogger.clients[name] = {
-          level: levelTransform(eggCustomLogger[name]?.level),
-          consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
-          ...options,
-        };
-      }
+      transformLoggerConfig.midwayLogger.clients[name] = {
+        level: levelTransform(eggCustomLogger[name]?.level),
+        consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
+        ...options,
+      };
       cleanUndefinedProperty(transformLoggerConfig.midwayLogger.clients[name]);
     }
     return transformLoggerConfig;
