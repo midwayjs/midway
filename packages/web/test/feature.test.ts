@@ -220,4 +220,28 @@ describe('/test/feature.test.ts', () => {
 
     await closeApp(app);
   });
+
+  it('should use logger v3 and get correct logger file', async () => {
+    const logFiles = join(__dirname, 'fixtures/feature/base-app-logger-v3', 'logs');
+    await remove(logFiles);
+    const app = await creatApp('feature/base-app-logger-v3');
+    await sleep(1000);
+
+
+    const webLogger = join(logFiles, 'ali-demo', 'midway-web.log');
+    const appLogger = join(logFiles, 'ali-demo', 'midway-app.log');
+    const customLogger = join(logFiles, 'ali-demo', 'custom.log');
+    const abcLogger = join(logFiles, 'abc.log');
+
+    expect(existsSync(webLogger)).toBeTruthy();
+    expect(existsSync(appLogger)).toBeFalsy();
+    expect(existsSync(customLogger)).toBeTruthy();
+    expect(existsSync(abcLogger)).toBeTruthy();
+
+    expect(readFileSync(webLogger, {encoding: 'utf8'})).toMatch(/框架默认的 app 日志，应该输出到 midway-web.log/);
+    expect(readFileSync(customLogger, {encoding: 'utf8'})).toMatch(/egg 自定义 logger，应该输出到 custom.log/);
+    expect(readFileSync(abcLogger, {encoding: 'utf8'})).toMatch(/midway 自定义 logger，应该输出到 abc.log/);
+    await closeApp(app);
+
+  });
 });
