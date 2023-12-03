@@ -24,11 +24,6 @@ import { JobNameOrClz } from './interface';
                 const { from } = info.ctx;
                 return `${info.timestamp} ${info.LEVEL} ${info.pid} [${from.name}] ${info.message}`;
               },
-              transports: {
-                file: {
-                  fileLogName: 'midway-cron.log',
-                },
-              },
             },
           },
         },
