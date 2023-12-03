@@ -230,8 +230,8 @@ describe('/test/feature.test.ts', () => {
 
     const webLogger = join(logFiles, 'ali-demo', 'midway-web.log');
     const appLogger = join(logFiles, 'ali-demo', 'midway-app.log');
-    const customLogger = join(logFiles, 'ali-demo', 'custom.log');
-    const abcLogger = join(logFiles, 'abc.log');
+    const customLogger = join(logFiles, 'custom.log');
+    const abcLogger = join(logFiles,  'ali-demo', 'abc.log');
 
     expect(existsSync(webLogger)).toBeTruthy();
     expect(existsSync(appLogger)).toBeFalsy();
