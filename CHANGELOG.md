@@ -1,6 +1,30 @@
 # Change Log
 
 
+## v3.13.4 (2023-12-03)
+
+#### :bug: Bug Fix
+* `bull`, `cron`, `typeorm`, `web`
+  * [#3474](https://github.com/midwayjs/midway/pull/3474) fix: remove logger v3 compatible ([@czy88840616](https://github.com/czy88840616))
+* `web`
+  * [#3456](https://github.com/midwayjs/midway/pull/3456) fix: web default config ([@czy88840616](https://github.com/czy88840616))
+  * [#3455](https://github.com/midwayjs/midway/pull/3455) fix(web): default app logger name error  in cluster mode ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `bull-board`
+  * [#3468](https://github.com/midwayjs/midway/pull/3468) fix(deps): update bull monorepo to v5.10.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#3469](https://github.com/midwayjs/midway/pull/3469) fix(deps): update dependency casbin to v5.28.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `captcha`, `security`
+  * [#3452](https://github.com/midwayjs/midway/pull/3452) fix(deps): update dependency nanoid to v3.3.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#3453](https://github.com/midwayjs/midway/pull/3453) fix(deps): update dependency @opentelemetry/api to v1.7.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.13.3 (2023-11-23)
 
 #### :bug: Bug Fix
