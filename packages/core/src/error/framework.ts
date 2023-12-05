@@ -22,6 +22,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   RETRY_OVER_MAX_TIME: 10017,
   INVOKE_METHOD_FORBIDDEN: 10018,
   CODE_INVOKE_TIMEOUT: 10019,
+  MAIN_FRAMEWORK_MISSING: 10020,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -205,6 +206,15 @@ export class MidwayCodeInvokeTimeoutError extends MidwayError {
     super(
       `Invoke "${methodName}" running timeout(${timeout}ms)`,
       FrameworkErrorEnum.CODE_INVOKE_TIMEOUT
+    );
+  }
+}
+
+export class MidwayMainFrameworkMissingError extends MidwayError {
+  constructor() {
+    super(
+      'Main framework missing, please check your configuration.',
+      FrameworkErrorEnum.MAIN_FRAMEWORK_MISSING
     );
   }
 }
