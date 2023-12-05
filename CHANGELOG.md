@@ -1,6 +1,19 @@
 # Change Log
 
 
+## v3.13.5 (2023-12-05)
+
+#### :nail_care: Polish
+* `bootstrap`, `core`
+  * [#3462](https://github.com/midwayjs/midway/pull/3462) feat: add main framework missing error ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#3478](https://github.com/midwayjs/midway/pull/3478) feat: export http client options typings ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.13.4 (2023-12-03)
 
 #### :bug: Bug Fix
