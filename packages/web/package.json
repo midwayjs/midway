@@ -38,7 +38,7 @@
     "egg-view-nunjucks": "2.3.0",
     "fake-egg": "1.0.0",
     "fs-extra": "11.2.0",
-    "mm": "3.3.0",
+    "mm": "3.4.0",
     "pedding": "1.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
