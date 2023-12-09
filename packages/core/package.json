@@ -24,7 +24,7 @@
   "devDependencies": {
     "@midwayjs/logger": "^3.0.0",
     "koa": "2.14.2",
-    "mm": "3.3.0",
+    "mm": "3.4.0",
     "raw-body": "2.5.2",
     "sinon": "15.2.0"
   },

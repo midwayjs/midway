@@ -13,7 +13,7 @@
     "@midwayjs/mock": "^3.13.5",
     "@midwayjs/serverless-fc-starter": "^3.13.5",
     "@midwayjs/serverless-scf-starter": "^3.12.5",
-    "mm": "3.3.0"
+    "mm": "3.4.0"
   },
   "engines": {
     "node": ">=12"
