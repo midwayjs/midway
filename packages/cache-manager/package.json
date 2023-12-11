@@ -29,9 +29,12 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.13.5",
-    "@midwayjs/mock": "^3.13.5"
+    "@midwayjs/mock": "^3.13.5",
+    "@midwayjs/redis": "^3.13.5",
+    "cache-manager-ioredis-yet": "1.2.2"
   },
   "dependencies": {
-    "cache-manager": "5.3.1"
+    "cache-manager": "5.3.1",
+    "promise-coalesce": "1.1.1"
   }
 }

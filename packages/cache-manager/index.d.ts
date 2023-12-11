@@ -1,9 +1,9 @@
-import { CacheOptions, StoreConfig } from 'cache-manager';
+import { CacheManagerOptions } from './dist/index';
 
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    cache?: Partial<StoreConfig & CacheOptions>;
+    cacheManager?: ServiceFactoryConfigOption<CacheManagerOptions>;
   }
 }
