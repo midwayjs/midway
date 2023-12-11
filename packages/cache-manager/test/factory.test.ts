@@ -1,4 +1,4 @@
-import { CachingFactory } from '../src/factory';
+import { CachingFactory } from '../src';
 import { sleep } from '@midwayjs/core';
 import { redisStore } from 'cache-manager-ioredis-yet';
 
@@ -49,11 +49,11 @@ describe('CachingFactory', () => {
     expect(caching).toBeDefined();
     expect(caching.methodWrap).toBeDefined();
 
-    let result = await caching.methodWrap('key', async () => {
+    let result = await caching.methodWrap('cache-manager-key', async () => {
       return 1;
     }, [], 10);
     expect(result).toBe(1);
-    result = await caching.methodWrap('key', async () => {
+    result = await caching.methodWrap('cache-manager-key', async () => {
       return 2;
     }, [], 10);
     expect(result).toBe(1);
@@ -76,28 +76,28 @@ describe('CachingFactory', () => {
     expect(caching).toBeDefined();
     expect(caching.methodWrap).toBeDefined();
 
-    let result = await caching.methodWrap('key', async () => {
+    let result = await caching.methodWrap('cache-manager-key', async () => {
       return 1;
     }, [], () => 10);
     expect(result).toBe(1);
-    result = await caching.methodWrap('key', async () => {
+    result = await caching.methodWrap('cache-manager-key', async () => {
       return 2;
     }, [], () => 10);
     expect(result).toBe(1);
 
     await sleep(20);
 
-    result = await caching.methodWrap('key', async () => {
+    result = await caching.methodWrap('cache-manager-key', async () => {
       return 3;
     }, [], () => 100);
     expect(result).toBe(3);
 
-    result = await caching.methodWrap('key', async () => {
+    result = await caching.methodWrap('cache-manager-key', async () => {
       return 4;
     }, [], () => 1);
     expect(result).toBe(3);
 
-    result = await caching.methodWrap('key', async () => {
+    result = await caching.methodWrap('cache-manager-key', async () => {
       return 5;
     }, [], () => 1);
     expect(result).toBe(3);
@@ -129,12 +129,12 @@ describe('CachingFactory', () => {
     expect(caching).toBeDefined();
     expect(caching.methodWrap).toBeDefined();
 
-    let result = await caching.methodWrap('key', async (v) => {
+    let result = await caching.methodWrap('cache-manager-key', async (v) => {
       return v;
     }, [1]);
     expect(result).toBe(1);
 
-    result = await caching.methodWrap('key', async (v) => {
+    result = await caching.methodWrap('cache-manager-key', async (v) => {
       return v;
     }, [2]);
     expect(result).toBe(1);
@@ -142,13 +142,13 @@ describe('CachingFactory', () => {
     await sleep(60);
 
     // 这里是后台刷新，所以拿到的还是 1
-    result = await caching.methodWrap('key', async (v) => {
+    result = await caching.methodWrap('cache-manager-key', async (v) => {
       return v;
     }, [3]);
     expect(result).toBe(1);
 
     // 这里拿到的是上一次刷新的结果
-    result = await caching.methodWrap('key', async (v) => {
+    result = await caching.methodWrap('cache-manager-key', async (v) => {
       return v;
     }, [4]);
     expect(result).toBe(3);
@@ -174,7 +174,7 @@ describe('CachingFactory', () => {
     expect(caching).toBeDefined();
     expect(caching.methodWrap).toBeDefined();
 
-    let result = await caching.methodWrap('key', async (v) => {
+    let result = await caching.methodWrap('cache-manager-key', async (v) => {
       return v;
     }, [1], () => 10);
     expect(result).toBe(1);
@@ -182,7 +182,7 @@ describe('CachingFactory', () => {
     await sleep(20);
 
     // 这里上一个设置的过期了，所以重新设置生效了
-    result = await caching.methodWrap('key', async (v) => {
+    result = await caching.methodWrap('cache-manager-key', async (v) => {
       return v;
     }, [2], () => 100);
     expect(result).toBe(2);
@@ -190,7 +190,7 @@ describe('CachingFactory', () => {
     await sleep(60);
 
     // 因为值还是缓存着，没有拿到最新的值, ttl 设置没生效
-    result = await caching.methodWrap('key', async (v) => {
+    result = await caching.methodWrap('cache-manager-key', async (v) => {
       return v;
     }, [3], () => 10);
     expect(result).toBe(2);
@@ -240,13 +240,13 @@ describe('CachingFactory', () => {
     expect(caching).toBeDefined();
 
     // get/set
-    await caching.set('key', 'value');
-    let result = await caching.get('key');
+    await caching.set('cache-manager-key', 'value');
+    let result = await caching.get('cache-manager-key');
     expect(result).toBe('value');
 
     // ttl
     await sleep(20);
-    result = await caching.get('key');
+    result = await caching.get('cache-manager-key');
     expect(result).toBeUndefined();
 
     await (caching.store as any).client.quit();

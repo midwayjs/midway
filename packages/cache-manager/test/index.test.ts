@@ -13,7 +13,7 @@ describe(`index.test.ts`, ()=>{
         ttl: 10
       });
       let i = 0;
-      const cached = await memoryCache.wrap('key', async () => {
+      const cached = await memoryCache.wrap('cache-manager-key', async () => {
         return i++;
       });
       expect(cached).toEqual(0);

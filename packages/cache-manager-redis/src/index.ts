@@ -4,9 +4,9 @@ import { Config } from 'cache-manager';
 import { createRedisStore } from './store';
 
 export function createStore(instanceName: string) {
-  return async (container: IMidwayContainer, option?: Config) => {
+  return async (options: Config, container: IMidwayContainer) => {
     const redisServiceFactory = await container.getAsync(RedisServiceFactory);
     const redisInstance = redisServiceFactory.get(instanceName);
-    return createRedisStore(redisInstance, option);
+    return createRedisStore(redisInstance, options);
   };
 }

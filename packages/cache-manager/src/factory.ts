@@ -37,6 +37,7 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
     config: CacheManagerOptions<any>,
     clientName: string
   ): Promise<void | MidwayUnionCache> {
+    // multi cache
     if (Array.isArray(config.store)) {
       const newFactory = [];
       for (const storeConfig of config.store) {
@@ -55,8 +56,8 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
         } else if (typeof storeConfig === 'object') {
           if (typeof storeConfig.store === 'function') {
             storeConfig.store = await storeConfig.store(
-              this.applicationContext,
-              storeConfig['options']
+              storeConfig['options'] || {},
+              this.applicationContext
             );
           }
           if (!storeConfig.store) {
@@ -74,10 +75,11 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
       const cacheInstance = await multiCaching(newFactory);
       return this.wrapMultiCaching(cacheInstance, newFactory);
     } else {
+      // single cache
       if (typeof config.store === 'function') {
         config.store = await config.store(
-          this.applicationContext,
-          config['options']
+          config['options'] || {},
+          this.applicationContext
         );
       }
       if (!config.store) {
