@@ -710,10 +710,12 @@ testQueue.on('completed', function (job, result) {
 ```typescript
 export default {
   midwayLogger: {
-    // ...
-    bullLogger: {
-      fileLogName: 'midway-bull.log',
-    },
+    clients:{   
+      // ...
+      bullLogger: {
+        fileLogName: 'midway-bull.log',
+      },
+    }
   }
 }
 ```
@@ -722,12 +724,17 @@ export default {
 
 ```typescript
 export default {
-  bull: {
-    // ...
-    contextLoggerFormat: info => {
-      const { jobId, from } = info.ctx;
-      return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}`;
-    },
+  midwayLogger: {
+    clients:{   
+      // ...
+      bullLogger: {
+        fileLogName: 'midway-bull.log',
+        contextLoggerFormat: info => {
+          const { jobId, from } = info.ctx;
+          return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}`;
+        },
+      },
+    }
   }
 }
 ```
