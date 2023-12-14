@@ -175,7 +175,7 @@ After defining the type, it can be directly used in the business code.
 
 ```typescript
 // src/controller/home.ts
-import { Controller, Get, Provide } from '@midwayjs/core';
+import { Controller, Get, Provide, Body } from '@midwayjs/core';
 import { UserDTO } from './dto/user';
 
 @Controller('/api/user')
