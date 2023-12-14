@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v3.13.6 (2023-12-14)
+
+#### :bug: Bug Fix
+* `session`
+  * [#3499](https://github.com/midwayjs/midway/pull/3499) fix: add regenerate method for session security ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3490](https://github.com/midwayjs/midway/pull/3490) docs: update validate.md ([@freedomdebug](https://github.com/freedomdebug))
+
+#### :package: Dependencies
+* `sequelize`
+  * [#3493](https://github.com/midwayjs/midway/pull/3493) chore(deps): update dependency sequelize to v6.35.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3487](https://github.com/midwayjs/midway/pull/3487) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.12.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3486](https://github.com/midwayjs/midway/pull/3486) fix(deps): update bull monorepo to v5.10.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- tommy.hu ([@freedomdebug](https://github.com/freedomdebug))
+
+
+
 ## v3.13.5 (2023-12-05)
 
 #### :nail_care: Polish
