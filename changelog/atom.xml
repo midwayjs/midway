@@ -2,12 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-12-05T20:00:00.000Z</updated>
+    <updated>2023-12-14T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.13.6]]></title>
+        <id>https://midwayjs.org/changelog/v3.13.6</id>
+        <link href="https://midwayjs.org/changelog/v3.13.6"/>
+        <updated>2023-12-14T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="🐛 Bug Fix的直接链接" title="🐛 Bug Fix的直接链接">​</a></h2><ul><li><code>session</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3499" target="_blank" rel="noopener noreferrer">#3499</a> fix: add regenerate method for session security (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a href="#-documentation" class="hash-link" aria-label="📝 Documentation的直接链接" title="📝 Documentation的直接链接">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/3490" target="_blank" rel="noopener noreferrer">#3490</a> docs: update validate.md (<a href="https://github.com/freedomdebug" target="_blank" rel="noopener noreferrer">@freedomdebug</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="📦 Dependencies的直接链接" title="📦 Dependencies的直接链接">​</a></h2><ul><li><code>sequelize</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3493" target="_blank" rel="noopener noreferrer">#3493</a> chore(deps): update dependency sequelize to v6.35.2 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>cos</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3487" target="_blank" rel="noopener noreferrer">#3487</a> fix(deps): update dependency cos-nodejs-sdk-v5 to v2.12.6 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>bull-board</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3486" target="_blank" rel="noopener noreferrer">#3486</a> fix(deps): update bull monorepo to v5.10.2 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a href="#committers-2" class="hash-link" aria-label="Committers: 2的直接链接" title="Committers: 2的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>tommy.hu (<a href="https://github.com/freedomdebug" target="_blank" rel="noopener noreferrer">@freedomdebug</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>tommy.hu</name>
+            <uri>https://github.com/freedomdebug</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.13.5]]></title>
         <id>https://midwayjs.org/changelog/v3.13.5</id>
