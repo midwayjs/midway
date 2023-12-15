@@ -1,6 +1,16 @@
 # Change Log
 
 
+## v3.13.7 (2023-12-15)
+
+#### :package: Dependencies
+* `leoric`
+  * [#3501](https://github.com/midwayjs/midway/pull/3501) fix(deps): update dependency leoric to v2.12.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#3502](https://github.com/midwayjs/midway/pull/3502) fix(deps): update dependency reflect-metadata to v0.2.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+
+
 ## v3.13.6 (2023-12-14)
 
 #### :bug: Bug Fix
