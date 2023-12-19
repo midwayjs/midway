@@ -12,6 +12,7 @@ function cleanFile(file) {
 
 describe('test/index.test.ts', () => {
   let app: IMidwayApplication;
+
   beforeAll(async () => {
     cleanFile(join(__dirname, 'fixtures/basic', 'database.sqlite'));
     app = await createLightApp(join(__dirname, 'fixtures', 'basic'));
@@ -20,6 +21,7 @@ describe('test/index.test.ts', () => {
   afterAll(async () => {
     await close(app);
   });
+
   it('list user service ', async () => {
     const userService: UserService = await app
       .getApplicationContext()
