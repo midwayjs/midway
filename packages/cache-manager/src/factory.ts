@@ -121,7 +121,10 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
             remainingTtl !== -1 &&
             remainingTtl < cachingArgs.refreshThreshold
           ) {
-            fn(...fnArgs).then(result => store.set(key, result, cacheTTL));
+            // fn(...fnArgs).then(result => store.set(key, result, cacheTTL));
+            coalesceAsync(`+++${key}`, fn(...fnArgs)).then(result =>
+              store.set<T>(key, result, cacheTTL)
+            );
           }
         }
         return value;
