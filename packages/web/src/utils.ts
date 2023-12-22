@@ -81,8 +81,8 @@ export const getCurrentDateString = (timestamp: number = Date.now()) => {
 export async function initializeAgentApplicationContext(agent) {
   const applicationContext = getCurrentApplicationContext();
   const agentFramework = new MidwayWebFramework(applicationContext);
-  agentFramework['logger'] = agent.logger;
-  agentFramework['appLogger'] = agent.coreLogger;
+  agentFramework['logger'] = agent.coreLogger;
+  agentFramework['appLogger'] = agent.logger;
   agentFramework.app = agent;
   agentFramework.configService = applicationContext.get(MidwayConfigService);
   agentFramework.environmentService = applicationContext.get(
