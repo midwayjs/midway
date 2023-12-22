@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.13.8 (2023-12-22)
+
+#### :bug: Bug Fix
+* `web`
+  * [#3507](https://github.com/midwayjs/midway/pull/3507) fix: wrong agent logger ([@czy88840616](https://github.com/czy88840616))
+* `mock`
+  * [#3512](https://github.com/midwayjs/midway/pull/3512) fix: serverless catch error when throw error ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `oss`
+  * [#3515](https://github.com/midwayjs/midway/pull/3515) fix(deps): update dependency ali-oss to v6.19.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3516](https://github.com/midwayjs/midway/pull/3516) fix(deps): update dependency bull to v4.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.13.7 (2023-12-15)
 
 #### :package: Dependencies
