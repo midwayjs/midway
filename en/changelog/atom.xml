@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2023-12-15T20:00:00.000Z</updated>
+    <updated>2023-12-22T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2023 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.13.8]]></title>
+        <id>https://midwayjs.org/en/changelog/v3.13.8</id>
+        <link href="https://midwayjs.org/en/changelog/v3.13.8"/>
+        <updated>2023-12-22T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>web</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3507" target="_blank" rel="noopener noreferrer">#3507</a> fix: wrong agent logger (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>mock</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3512" target="_blank" rel="noopener noreferrer">#3512</a> fix: serverless catch error when throw error (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>oss</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3515" target="_blank" rel="noopener noreferrer">#3515</a> fix(deps): update dependency ali-oss to v6.19.0 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>bull</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3516" target="_blank" rel="noopener noreferrer">#3516</a> fix(deps): update dependency bull to v4.12.0 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.13.7]]></title>
         <id>https://midwayjs.org/en/changelog/v3.13.7</id>
