@@ -117,3 +117,33 @@ export function mergeGlobalConfig(
 
   return globalConfig;
 }
+
+/**
+ * 解析命令行参数的函数。
+ * 它接受一个字符串数组作为输入，然后解析这个数组，
+ * 将形如 `--key value` 或 `--key=value` 的参数转换为对象的键值对，
+ * 形如 `--key` 的参数转换为 `{ key: true }`。
+ * @param argv 命令行参数数组
+ * @returns 解析后的参数对象
+ */
+export function processArgsParser(argv: string[]) {
+  const args = argv.slice(2);
+  const result = {};
+
+  args.forEach((arg, index) => {
+    if (arg.startsWith('--')) {
+      let value;
+      let key = arg.slice(2);
+      if (key.includes('=')) {
+        [key, value] = key.split('=');
+      } else if (args[index + 1] && !args[index + 1].startsWith('--')) {
+        value = args[index + 1];
+      } else {
+        value = true;
+      }
+      result[key] = value;
+    }
+  });
+
+  return result;
+}

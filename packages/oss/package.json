@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/oss",
   "description": "midway oss component",
-  "version": "3.13.7",
+  "version": "3.13.8",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -11,12 +11,12 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.13.7",
-    "@midwayjs/mock": "^3.13.7",
+    "@midwayjs/mock": "^3.13.8",
     "dotenv": "16.3.1"
   },
   "dependencies": {
     "@types/ali-oss": "6.16.11",
-    "ali-oss": "6.18.1"
+    "ali-oss": "6.19.0"
   },
   "keywords": [
     "aliyun",
