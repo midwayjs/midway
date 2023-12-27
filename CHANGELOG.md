@@ -1,6 +1,27 @@
 # Change Log
 
 
+## v3.13.9 (2023-12-27)
+
+#### :bug: Bug Fix
+* `mock`
+  * [#3521](https://github.com/midwayjs/midway/pull/3521) fix: wrong protocol get in local ([@czy88840616](https://github.com/czy88840616))
+  * [#3519](https://github.com/midwayjs/midway/pull/3519) fix: support custom args pass through ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `leoric`
+  * [#3509](https://github.com/midwayjs/midway/pull/3509) feat: inject ctx and app to leoric models ([@cyjake](https://github.com/cyjake))
+
+#### :package: Dependencies
+* `grpc`
+  * [#3363](https://github.com/midwayjs/midway/pull/3363) fix(deps): update dependency @grpc/grpc-js to v1.9.13 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Chen Yangjian ([@cyjake](https://github.com/cyjake))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.13.8 (2023-12-22)
 
 #### :bug: Bug Fix
