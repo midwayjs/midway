@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.13.7",
+    "@midwayjs/koa": "^3.13.8",
     "@midwayjs/mock": "^3.13.8",
     "sqlite3": "5.1.6"
   },
