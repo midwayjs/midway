@@ -117,3 +117,24 @@ export function mergeGlobalConfig(
 
   return globalConfig;
 }
+
+/**
+ * // 实现一个命令参数处理工具 parser，将 --port 8080 转换为 { port: 8080 }, --ssl 转换为 { ssl: true }
+ * @param argv
+ */
+export function processArgsParser(argv: string[]) {
+  const args = argv.slice(2);
+  const result = {};
+  args.forEach((arg, index) => {
+    if (arg.startsWith('--')) {
+      const key = arg.slice(2);
+      const nextArg = args[index + 1];
+      if (!nextArg || nextArg.startsWith('--')) {
+        result[key] = true;
+      } else {
+        result[key] = nextArg;
+      }
+    }
+  });
+  return result;
+}
