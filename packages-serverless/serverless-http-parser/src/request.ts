@@ -242,6 +242,8 @@ export const request = {
   },
 
   get protocol() {
+    // 本地开发应该有 socket 对象
+    if (this.req?.socket?.encrypted) return 'https';
     const proto = this.get('x-real-scheme') || this.get('X-Forwarded-Proto');
     return proto ? proto.split(/\s*,\s*/, 1)[0] : 'http';
   },

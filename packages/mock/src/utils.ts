@@ -119,22 +119,31 @@ export function mergeGlobalConfig(
 }
 
 /**
- * // 实现一个命令参数处理工具 parser，将 --port 8080 转换为 { port: 8080 }, --ssl 转换为 { ssl: true }
- * @param argv
+ * 解析命令行参数的函数。
+ * 它接受一个字符串数组作为输入，然后解析这个数组，
+ * 将形如 `--key value` 或 `--key=value` 的参数转换为对象的键值对，
+ * 形如 `--key` 的参数转换为 `{ key: true }`。
+ * @param argv 命令行参数数组
+ * @returns 解析后的参数对象
  */
 export function processArgsParser(argv: string[]) {
   const args = argv.slice(2);
   const result = {};
+
   args.forEach((arg, index) => {
     if (arg.startsWith('--')) {
-      const key = arg.slice(2);
-      const nextArg = args[index + 1];
-      if (!nextArg || nextArg.startsWith('--')) {
-        result[key] = true;
+      let value;
+      let key = arg.slice(2);
+      if (key.includes('=')) {
+        [key, value] = key.split('=');
+      } else if (args[index + 1] && !args[index + 1].startsWith('--')) {
+        value = args[index + 1];
       } else {
-        result[key] = nextArg;
+        value = true;
       }
+      result[key] = value;
     }
   });
+
   return result;
 }
