@@ -132,20 +132,16 @@ export function processArgsParser(argv: string[]) {
 
   args.forEach((arg, index) => {
     if (arg.startsWith('--')) {
-      const [key, value] = arg.includes('=')
-        ? arg.slice(2).split('=')
-        : [arg.slice(2), args[index + 1]];
-      result[key] =
-        value || !args[index + 1] || args[index + 1].startsWith('--')
-          ? true
-          : args[index + 1];
-      if (arg.includes('=')) {
-        result[key] = value;
+      let value;
+      let key = arg.slice(2);
+      if (key.includes('=')) {
+        [key, value] = key.split('=');
       } else if (args[index + 1] && !args[index + 1].startsWith('--')) {
-        result[key] = args[index + 1];
+        value = args[index + 1];
       } else {
-        result[key] = true;
+        value = true;
       }
+      result[key] = value;
     }
   });
 
