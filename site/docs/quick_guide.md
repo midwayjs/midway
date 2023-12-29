@@ -93,7 +93,7 @@ import { Provide, makeHttpRequest } from '@midwayjs/core';
 @Provide()
 export class WeatherService {
   async getWeather(cityId: string) {
-    return makeHttpRequest(`http://www.weather.com.cn/data/cityinfo/${cityId}.html`, {
+    return makeHttpRequest(`https://midwayjs.org/resource/${cityId}.json`, {
       dataType: 'json',
     });
   }
@@ -103,7 +103,6 @@ export class WeatherService {
 :::info
 
 - 1、`makeHttpRequest` 方法是 Midway 内置的 http 请求方法，更多参数请查看 [文档](./extensions/axios)
-- 2、示例中的城市天气信息来自于中国中央气象台 API
 
 :::
 
@@ -144,7 +143,7 @@ import { WeatherInfo } from '../interface';
 @Provide()
 export class WeatherService {
   async getWeather(cityId: string): Promise<WeatherInfo> {
-    const result = await makeHttpRequest<WeatherInfo>(`http://www.weather.com.cn/data/sk/${cityId}.html`, {
+    const result = await makeHttpRequest<WeatherInfo>(`https://midwayjs.org/resource/${cityId}.json`, {
       dataType: 'json',
     });
 
@@ -381,7 +380,7 @@ export class WeatherService {
     }
 
     try {
-      const result = await makeHttpRequest<WeatherInfo>(`http://www.weather.com.cn/data/sk/${cityId}.html`, {
+      const result = await makeHttpRequest<WeatherInfo>(`https://midwayjs.org/resource/${cityId}.json`, {
         dataType: 'json',
       });
       if (result.status === 200) {

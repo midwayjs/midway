@@ -93,7 +93,7 @@ import { Provide, makeHttpRequest } from '@midwayjs/core';
 @Provide()
 export class WeatherService {
   async getWeather(cityId: string) {
-    return makeHttpRequest('http://www.weather.com.cn/data/cityinfo/${cityId}.html', {
+    return makeHttpRequest(`https://midwayjs.org/resource/${cityId}.json`, {
       dataType: 'json',
     });
   }
@@ -144,7 +144,7 @@ import { WeatherInfo } from '../interface';
 @Provide
 export class WeatherService {
   async getWeather(cityId: string): Promise<WeatherInfo> {
-    const result = await makeHttpRequest<WeatherInfo>('http://www.weather.com.cn/data/sk/${cityId}.html', {
+    const result = await makeHttpRequest<WeatherInfo>(`https://midwayjs.org/resource/${cityId}.json`, {
       dataType: 'json',
     });
 
@@ -381,7 +381,7 @@ export class WeatherService {
     }
 
     try {
-      const result = await makeHttpRequest<WeatherInfo>('http://www.weather.com.cn/data/sk/${cityId}.html', {
+      const result = await makeHttpRequest<WeatherInfo>(`https://midwayjs.org/resource/${cityId}.json`, {
         dataType: 'json',
       });
       if (result.status === 200) {

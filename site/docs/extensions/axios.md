@@ -259,7 +259,7 @@ export class UserService {
   httpService: HttpService;
 
   async invoke() {
-  	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
+  	const url = 'https://midwayjs.org/resource/101010100.json';
     const result = await this.httpService.get(url);
     // TODO result
   }
@@ -340,7 +340,7 @@ export class UserService {
   customAxios: HttpService;
 
   async invoke() {
-  	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
+  	const url = 'https://midwayjs.org/resource/101010100.json';
     const result = await this.customAxios.get(url);
     // TODO result
   }
