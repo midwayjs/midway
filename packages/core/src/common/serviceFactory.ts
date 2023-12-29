@@ -46,6 +46,10 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
     }
   }
 
+  public getClients(): Map<string, T> {
+    return this.clients;
+  }
+
   public abstract getName(): string;
   protected abstract createClient(
     config,
