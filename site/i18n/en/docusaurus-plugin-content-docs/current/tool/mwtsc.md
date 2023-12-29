@@ -62,3 +62,50 @@ $ npx mwtsc --watch --project tsconfig.production.json --run ./bootstrap.js
 ```
 
 Note that the `run` command must be placed at the end, and all parameters after it will be passed to the child process.
+
+
+
+## Framework configuration
+
+You can use mwtsc in the Midway project for development and testing, such as:
+
+```json
+{
+   "scripts": {
+     "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/app",
+     "build": "cross-env rm -rf dist && tsc"
+   },
+}
+```
+
+Here `@midwayjs/mock/app` refers to the `app.js` file in the `@midwayjs/mock` package. This file is used to start the framework during local development. For Serverless environments, there are also corresponding startup files.
+
+```json
+{
+   "scripts": {
+     "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/function",
+   },
+}
+```
+
+
+
+## Common abilities
+
+### Adjust port
+
+The started http port can be dynamically modified through the parameter `--port`. This parameter has a higher priority than the port configuration in the code.
+
+```bash
+$ npx mwtsc --watch --run @midwayjs/mock/app --port 7001
+```
+
+
+
+### Enable https
+
+The framework has a built-in https certificate for local testing, which can be enabled through the parameter `--ssl`.
+
+```bash
+$ npx mwtsc --watch --run @midwayjs/mock/app --ssl
+```

@@ -62,3 +62,51 @@ $ npx mwtsc --watch --project tsconfig.production.json --run ./bootstrap.js
 ```
 
 注意 `run` 命令必须放在最后，它之后的所有参数，都将传递给子进程。
+
+
+
+## 框架配置
+
+可以在 Midway 项目中用 mwtsc 进行开发测试，比如：
+
+```json
+{
+  "scripts": {
+    "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/app",
+    "build": "cross-env rm -rf dist && tsc"
+  },
+}
+```
+
+这里的 `@midwayjs/mock/app` 指代的是 `@midwayjs/mock` 包中的 `app.js` 文件，这个文件用于本地开发时启动框架。针对 Serverless 环境，也有相应的启动文件。
+
+```json
+{
+  "scripts": {
+    "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/function",
+  },
+}
+```
+
+
+
+## 常用能力
+
+### 调整端口
+
+可以通过参数 `--port` 动态修改启动的 http 端口，这个参数的优先级高于代码中的端口配置。
+
+```bash
+$  npx mwtsc --watch --run @midwayjs/mock/app --port 7001
+```
+
+
+
+### 开启 https
+
+框架内置了一个 https 证书用来本地测试，可以通过参数 `--ssl` 启用。
+
+```bash
+$  npx mwtsc --watch --run @midwayjs/mock/app --ssl
+```
+

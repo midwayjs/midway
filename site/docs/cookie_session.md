@@ -57,16 +57,17 @@ export class HomeController {
 
 这些选项包括：
 
-| 选项        | 类型    | 描述                                                         | 支持版本                   |
-| ----------- | ------- | ------------------------------------------------------------ | -------------------------- |
-| path        | String  | 设置键值对生效的 URL 路径，默认设置在根路径上（`/`），也就是当前域名下的所有 URL 都可以访问这个 Cookie。 |                            |
-| domain      | String  | 设置键值对生效的域名，默认没有配置，可以配置成只在指定域名才能访问。 |                            |
-| expires     | Date    | 设置这个键值对的失效时间，如果设置了 maxAge，expires 将会被覆盖。如果 maxAge 和 expires 都没设置，Cookie 将会在浏览器的会话失效（一般是关闭浏览器时）的时候失效。 |                            |
-| maxAge      | Number  | 设置这个键值对在浏览器的最长保存时间。是一个从服务器当前时刻开始的毫秒数。如果设置了 maxAge，expires 将会被覆盖。 |                            |
-| secure      | Boolean | 设置键值对 [只在 HTTPS 连接上传输](http://stackoverflow.com/questions/13729749/how-does-cookie-secure-flag-work)，框架会帮我们判断当前是否在 HTTPS 连接上自动设置 secure 的值。 |                            |
-| httpOnly    | Boolean | 设置键值对是否可以被 js 访问，默认为 true，不允许被 js 访问  |                            |
-| partitioned | Boolean | 设置独立分区状态（[CHIPS](https://developers.google.com/privacy-sandbox/3pcd/chips)）的 Cookie。注意，只有 `secure` 为 true 且 Chrome >=114 版本此配置才会生效 | @midwayjs/cookies >= 1.1.0 |
-| priority    | String  | 设置 Cookie 的 [优先级](https://developer.chrome.com/blog/new-in-devtools-81?hl=zh-cn#cookiepriority)，可选值为 `Low`、`Medium`、`High`，仅对 Chrome >= 81 版本有效 | @midwayjs/cookies >= 1.1.0 |
+| 选项                | 类型    | 描述                                                         | 支持版本                   |
+| ------------------- | ------- | ------------------------------------------------------------ | -------------------------- |
+| path                | String  | 设置键值对生效的 URL 路径，默认设置在根路径上（`/`），也就是当前域名下的所有 URL 都可以访问这个 Cookie。 |                            |
+| domain              | String  | 设置键值对生效的域名，默认没有配置，可以配置成只在指定域名才能访问。 |                            |
+| expires             | Date    | 设置这个键值对的失效时间，如果设置了 maxAge，expires 将会被覆盖。如果 maxAge 和 expires 都没设置，Cookie 将会在浏览器的会话失效（一般是关闭浏览器时）的时候失效。 |                            |
+| maxAge              | Number  | 设置这个键值对在浏览器的最长保存时间。是一个从服务器当前时刻开始的毫秒数。如果设置了 maxAge，expires 将会被覆盖。 |                            |
+| secure              | Boolean | 设置键值对 [只在 HTTPS 连接上传输](http://stackoverflow.com/questions/13729749/how-does-cookie-secure-flag-work)，框架会帮我们判断当前是否在 HTTPS 连接上自动设置 secure 的值。 |                            |
+| httpOnly            | Boolean | 设置键值对是否可以被 js 访问，默认为 true，不允许被 js 访问  |                            |
+| partitioned         | Boolean | 设置独立分区状态（[CHIPS](https://developers.google.com/privacy-sandbox/3pcd/chips)）的 Cookie。注意，只有 `secure` 为 true 且 Chrome >=114 版本此配置才会生效 | @midwayjs/cookies >= 1.1.0 |
+| removeUnpartitioned | Boolean | 是否删除非独立分区状态的同名 cookie。注意，只有 `partitioned` 为 true 的时候此配置才会生效 | @midwayjs/cookies >= 1.2.0 |
+| priority            | String  | 设置 Cookie 的 [优先级](https://developer.chrome.com/blog/new-in-devtools-81?hl=zh-cn#cookiepriority)，可选值为 `Low`、`Medium`、`High`，仅对 Chrome >= 81 版本有效 | @midwayjs/cookies >= 1.1.0 |
 
 除了这些属性之外，框架另外扩展了 3 个参数：
 

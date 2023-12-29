@@ -66,6 +66,7 @@ These options include:
 | secure | Boolean | Set the key-value pair to [transmit only on HTTPS connections](http://stackoverflow.com/questions/13729749/how-does-cookie-secure-flag-work). The framework helps us to determine whether the secure value is automatically set on the HTTPS connection.  |   |
 | httpOnly | Boolean | Set whether the key-value pair can be accessed by JS. The default value is true and JS access is not allowed. |  |
 | partitioned | Boolean | Set cookies for independent partition status ([CHIPS](https://developers.google.com/privacy-sandbox/3pcd/chips)). Note that this configuration will only take effect if `secure` is true and Chrome >=114 version | @midwayjs/cookies >= 1.1.0 |
+| removeUnpartitioned | Boolean | Whether to delete the cookie with the same name in the non-independent partition state. Note that this configuration will only take effect when `partitioned` is true. | @midwayjs/cookies >= 1.2.0 |
 | priority | String | Set the [Priority](https://developer.chrome.com/blog/new-in-devtools-81?hl=en#cookiepriority) of Cookie, the optional values are `Low`, `Medium`, `High` , only valid for Chrome >= 81 version | @midwayjs/cookies >= 1.1.0 |
 
 In addition to these attributes, the framework extends 3 additional parameters:
