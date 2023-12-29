@@ -10,48 +10,22 @@ export default appInfo => {
 
   exports.rundir = path.join(appInfo.appDir, 'run');
 
-  // v2 格式
-  let defaultLoggerConfig = {
-    clients: {
-      appLogger: {
-        fileLogName: 'midway-web.log',
-        aliasName: 'logger',
-      },
-      agentLogger: {
-        fileLogName: 'midway-agent.log',
-      },
-    },
-  };
-
-  // v3 格式
-  if (loggerModule['formatLegacyLoggerOptions']) {
-    defaultLoggerConfig = {
-      clients: {
-        appLogger: {
-          transports: {
-            file: {
-              fileLogName: 'midway-web.log',
-            },
-          },
-          aliasName: 'logger',
-        },
-        agentLogger: {
-          transports: {
-            file: {
-              fileLogName: 'midway-agent.log',
-            },
-          },
-        },
-      },
-    } as any;
-  }
-
   // 修改默认的日志名
   exports.midwayLogger = extend(
     true,
     {},
     loggerModule.loggers.getDefaultMidwayLoggerConfig(appInfo)['midwayLogger'],
-    defaultLoggerConfig
+    {
+      clients: {
+        appLogger: {
+          fileLogName: 'midway-web.log',
+          aliasName: 'logger',
+        },
+        agentLogger: {
+          fileLogName: 'midway-agent.log',
+        },
+      },
+    }
   );
 
   exports.egg = {

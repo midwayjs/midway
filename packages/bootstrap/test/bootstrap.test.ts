@@ -117,4 +117,18 @@ describe('/test/bootstrap.test.ts', () => {
 
     child.kill();
   });
+
+  it('should test throw midway main framework missing error', async () => {
+    const code = await new Promise<number>((resolve, reject) => {
+      let child = fork('bootstrap.js', ['--require=ts-node/register'], {
+        cwd: join(__dirname, './fixtures/empty-app'),
+      });
+
+      child.on('exit', (code) => {
+        resolve(code);
+      });
+    });
+
+    expect(code).toEqual(1);
+  });
 });

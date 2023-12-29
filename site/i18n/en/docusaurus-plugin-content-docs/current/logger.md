@@ -26,15 +26,20 @@ Upgrade the dependency versions in `package.json`, pay attention to the `depende
 ```diff
 {
    "dependencies": {
-- "@midwayjs/logger": "2.0.0",
-+ "@midwayjs/logger": "^3.0.0"
+- 		"@midwayjs/logger": "2.0.0",
++ 		"@midwayjs/logger": "^3.0.0"
    }
 }
 ```
 
-In most scenarios, the two versions are compatible, but there will be certain differences in configuration. For this reason, we have provided some methods to be as compatible with the old logic as possible. For complete Breaking Change changes, please view [the change document](https://github.com/midwayjs/logger/blob/main/BREAKING-3.md).
+If there is no type hint for midwayLogger in the configuration, you need to add a reference to the log library in `src/interface.ts`.
 
-If you have old log configuration in your configuration file, you can refer to **Common Problem** to convert it.
+```diff
+// src/interface.ts
++ import type {} from '@midwayjs/logger';
+```
+
+In most scenarios, the two versions are compatible, but since it is a major version upgrade, there will definitely be some differences. For the complete Breaking Change, please view the [Change Document](https://github.com/midwayjs /logger/blob/main/BREAKING-3.md).
 
 
 
@@ -548,7 +553,25 @@ export default {
 } as MidwayConfig;
 ```
 
+You can also configure a number to indicate the maximum number of log files to retain.
 
+```typescript
+export default {
+   midwayLogger: {
+     default: {
+       transports: {
+         file: {
+           maxFiles: '3',
+         },
+         error: {
+           maxFiles: '3d',
+         },
+       }
+     },
+     // ...
+   },
+} as MidwayConfig;
+```
 
 ### Configure custom logs
 
@@ -750,7 +773,30 @@ app.getLogger('customLoggerB') => customLoggerA
 
 
 
-## Transport
+### Configure console output color
+
+When outputting to the console, if the command line supports color output, different colors will be output for different log levels. If color is not supported, it will not be displayed.
+
+You can turn off color output directly through configuration.
+
+```typescript
+export default {
+   midwayLogger: {
+     default: {
+       transports: {
+         console: {
+           autoColors: false,
+         }
+       }
+     }
+     // ...
+   },
+} as MidwayConfig;
+```
+
+
+
+## Custom Transport
 
 The framework provides the function of extending Transport. For example, you can write a Transport to transfer logs and upload them to other log libraries.
 
@@ -925,42 +971,6 @@ Check whether the user who started the current application in the directory wher
 
 ### 4. How to convert if there is an old configuration?
 
-The log library provides a conversion method to assist users in converting old configurations into new configurations.
+The new version of the log library is already compatible with the old configuration. Generally, no additional processing is required. There is a priority relationship between the old configuration and the new configuration when merging. Please check the [Change Document](https://github.com/midwayjs/logger/blob/ main/BREAKING-3.md).
 
-```typescript
-import { formatLegacyLoggerOptions } from '@midwayjs/logger';
-
-const newLoggerConfig = formatLegacyLoggerOptions({
-   level: 'info',
-   enableFile: false,
-   disableConsole: true,
-   enableJSON: true,
-});
-```
-
-:::caution
-
-Note that this method can only convert the old configuration. If the configuration contains the old and new configurations, the new configuration will not take effect.
-
-:::
-
-For example, if there are logs in your `src/config/config.default.ts` that use old configurations, you can use this method for compatibility.
-
-```typescript
-import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
-import { formatLegacyLoggerOptions } from '@midwayjs/logger';
-
-export default (appInfo: MidwayAppInfo) => {
-   return {
-     midwayLogger: {
-       clients: {
-         abc: logger.formatLegacyLoggerOptions({
-           fileLogName: 'abc.log',
-         }),
-       }
-     },
-     // ...
-   } as MidwayConfig;
-};
-
-```
+In order to reduce troubleshooting problems, please use the new configuration format when using the new version of the log library.

@@ -66,4 +66,12 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
   public getDefaultClientName(): string {
     return this.options['defaultClientName'];
   }
+
+  public getClients() {
+    return this.clients;
+  }
+
+  public getClientKeys() {
+    return Array.from(this.clients.keys());
+  }
 }

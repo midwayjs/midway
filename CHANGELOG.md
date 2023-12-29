@@ -1,6 +1,116 @@
 # Change Log
 
 
+## v3.13.9 (2023-12-27)
+
+#### :bug: Bug Fix
+* `mock`
+  * [#3521](https://github.com/midwayjs/midway/pull/3521) fix: wrong protocol get in local ([@czy88840616](https://github.com/czy88840616))
+  * [#3519](https://github.com/midwayjs/midway/pull/3519) fix: support custom args pass through ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `leoric`
+  * [#3509](https://github.com/midwayjs/midway/pull/3509) feat: inject ctx and app to leoric models ([@cyjake](https://github.com/cyjake))
+
+#### :package: Dependencies
+* `grpc`
+  * [#3363](https://github.com/midwayjs/midway/pull/3363) fix(deps): update dependency @grpc/grpc-js to v1.9.13 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Chen Yangjian ([@cyjake](https://github.com/cyjake))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.13.8 (2023-12-22)
+
+#### :bug: Bug Fix
+* `web`
+  * [#3507](https://github.com/midwayjs/midway/pull/3507) fix: wrong agent logger ([@czy88840616](https://github.com/czy88840616))
+* `mock`
+  * [#3512](https://github.com/midwayjs/midway/pull/3512) fix: serverless catch error when throw error ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `oss`
+  * [#3515](https://github.com/midwayjs/midway/pull/3515) fix(deps): update dependency ali-oss to v6.19.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3516](https://github.com/midwayjs/midway/pull/3516) fix(deps): update dependency bull to v4.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.13.7 (2023-12-15)
+
+#### :package: Dependencies
+* `leoric`
+  * [#3501](https://github.com/midwayjs/midway/pull/3501) fix(deps): update dependency leoric to v2.12.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#3502](https://github.com/midwayjs/midway/pull/3502) fix(deps): update dependency reflect-metadata to v0.2.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+
+
+## v3.13.6 (2023-12-14)
+
+#### :bug: Bug Fix
+* `session`
+  * [#3499](https://github.com/midwayjs/midway/pull/3499) fix: add regenerate method for session security ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3490](https://github.com/midwayjs/midway/pull/3490) docs: update validate.md ([@freedomdebug](https://github.com/freedomdebug))
+
+#### :package: Dependencies
+* `sequelize`
+  * [#3493](https://github.com/midwayjs/midway/pull/3493) chore(deps): update dependency sequelize to v6.35.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3487](https://github.com/midwayjs/midway/pull/3487) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.12.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3486](https://github.com/midwayjs/midway/pull/3486) fix(deps): update bull monorepo to v5.10.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- tommy.hu ([@freedomdebug](https://github.com/freedomdebug))
+
+
+
+## v3.13.5 (2023-12-05)
+
+#### :nail_care: Polish
+* `bootstrap`, `core`
+  * [#3462](https://github.com/midwayjs/midway/pull/3462) feat: add main framework missing error ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#3478](https://github.com/midwayjs/midway/pull/3478) feat: export http client options typings ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.13.4 (2023-12-03)
+
+#### :bug: Bug Fix
+* `bull`, `cron`, `typeorm`, `web`
+  * [#3474](https://github.com/midwayjs/midway/pull/3474) fix: remove logger v3 compatible ([@czy88840616](https://github.com/czy88840616))
+* `web`
+  * [#3456](https://github.com/midwayjs/midway/pull/3456) fix: web default config ([@czy88840616](https://github.com/czy88840616))
+  * [#3455](https://github.com/midwayjs/midway/pull/3455) fix(web): default app logger name error  in cluster mode ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `bull-board`
+  * [#3468](https://github.com/midwayjs/midway/pull/3468) fix(deps): update bull monorepo to v5.10.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#3469](https://github.com/midwayjs/midway/pull/3469) fix(deps): update dependency casbin to v5.28.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `captcha`, `security`
+  * [#3452](https://github.com/midwayjs/midway/pull/3452) fix(deps): update dependency nanoid to v3.3.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#3453](https://github.com/midwayjs/midway/pull/3453) fix(deps): update dependency @opentelemetry/api to v1.7.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.13.3 (2023-11-23)
 
 #### :bug: Bug Fix

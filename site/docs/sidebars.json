@@ -224,8 +224,7 @@
         "extensions/oss",
         "extensions/cos",
         "extensions/tablestore",
-        "extensions/mikro",
-        "extensions/tags"
+        "extensions/mikro"
       ]
     },
     {

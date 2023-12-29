@@ -32,9 +32,14 @@ Midway 为不同场景提供了一套统一的日志接入方式。通过 `@midw
 }
 ```
 
-在大部分场景下，两个版本是兼容的，但是在配置中，会有一定的差异性，为此我们提供了一些方法来尽可能兼容老逻辑，完整的 Breaking Change 变化，请查看 [变更文档](https://github.com/midwayjs/logger/blob/main/BREAKING-3.md)。
+如果在配置中没有了 midwayLogger 的类型提示，你需要在 `src/interface.ts` 中加入日志库的引用。
 
-如果你的配置文件中有老的日志配置，可以参考 **常见问题** 进行转换。
+```diff
+// src/interface.ts
++ import type {} from '@midwayjs/logger';
+```
+
+在大部分场景下，两个版本是兼容的，但是由于是大版本升级，肯定会有一定的差异性，完整的 Breaking Change 变化，请查看 [变更文档](https://github.com/midwayjs/logger/blob/main/BREAKING-3.md)。
 
 
 
@@ -310,7 +315,7 @@ export default {
   midwayLogger: {
     default: {
       transports: {
-				console: {
+        console: {
           // console transport 配置
         },
         file: {
@@ -336,7 +341,7 @@ export default {
   midwayLogger: {
     default: {
       transports: {
-				console: false,
+        console: false,
       }
     },
     // ...
@@ -532,6 +537,26 @@ export default {
       transports: {
         file: {
           maxFiles: '3d',
+        },
+        error: {
+          maxFiles: '3d',
+        },
+      }
+    },
+    // ...
+  },
+} as MidwayConfig;
+```
+
+也可以配置数字，表示最多保留日志文件的个数。
+
+```typescript
+export default {
+  midwayLogger: {
+    default: {
+      transports: {
+        file: {
+          maxFiles: '3',
         },
         error: {
           maxFiles: '3d',
@@ -745,7 +770,32 @@ app.getLogger('customLoggerB') => customLoggerA
 
 
 
-## Transport
+### 配置控制台输出颜色
+
+控制台输出时，在命令行支持颜色输出的情况下，针对不同的的日志等级会输出不同的颜色，如果不支持颜色，则不会显示。
+
+你可以通过配置直接关闭颜色输出。
+
+```typescript
+export default {
+  midwayLogger: {
+    default: {
+      transports: {
+        console: {
+          autoColors: false,
+        }
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+
+
+
+
+## 自定义 Transport
 
 框架提供了扩展 Transport 的功能，比如，你可以写一个 Transport 来做日志的中转，上传到别的日志库等能力。
 
@@ -920,43 +970,6 @@ export class MainConfiguration {
 
 ### 4、如果有老的配置如何转换
 
-日志库提供了一个转换方法，辅助用户将老配置转变为新的配置。
+新版本日志库已经兼容老配置，一般情况下无需额外处理，老配置和新配置在合并时有优先级关系，请查看 [变更文档](https://github.com/midwayjs/logger/blob/main/BREAKING-3.md)。
 
-```typescript
-import { formatLegacyLoggerOptions } from '@midwayjs/logger';
-
-const newLoggerConfig = formatLegacyLoggerOptions({
-  level: 'info',
-  enableFile: false,
-  disableConsole: true,
-  enableJSON: true,
-});
-```
-
-:::caution
-
-注意，这个方法只能转换老的配置，如果配置中包含新老配置则新配置不会生效。
-
-:::
-
-比如，你的 `src/config/config.default.ts` 中如果有日志使用的是老配置，可以使用这个方法做兼容。
-
-```typescript
-import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
-import { formatLegacyLoggerOptions } from '@midwayjs/logger';
-
-export default (appInfo: MidwayAppInfo) => {
-  return {
-    midwayLogger: {
-      clients: {
-        abc: logger.formatLegacyLoggerOptions({
-          fileLogName: 'abc.log',
-        }),
-      }
-    },
-    // ...
-  } as MidwayConfig;
-};
-
-```
-
+为了减少排查问题，在使用新版本日志库时请尽可能使用新配置格式。

@@ -1,5 +1,5 @@
 module.exports = {
-  "decorator": "3.13.0",
-  "core": "3.13.0",
-  "timestamp": 1700755133996
+  "decorator": "3.13.7",
+  "core": "3.13.7",
+  "timestamp": 1703684131638
 };

@@ -1,12 +1,11 @@
-const { createApp, close } = require('./dist');
+const { createApp, close, processArgsParser } = require('./dist');
 const { join } = require('path');
 
 (async () => {
   process.env.MIDWAY_TS_MODE = 'false';
-  // 查找 process.argv 中的 --port 参数
-  const portIndex = process.argv.findIndex((item) => item === '--port');
-  if (portIndex !== -1) {
-    process.env.MIDWAY_HTTP_PORT = process.argv[portIndex + 1];
+  const args = processArgsParser(process.argv);
+  if (args.port) {
+    process.env.MIDWAY_HTTP_PORT = args.port;
   }
 
   process.once('SIGINT', onSignal);
@@ -18,11 +17,13 @@ const { join } = require('path');
   const app = await createApp({
     appDir: process.cwd(),
     baseDir: join(process.cwd(), 'dist'),
+    ...args,
   });
 
   process.send({
     title: 'server-ready',
     port: process.env.MIDWAY_HTTP_PORT,
+    ssl: args.ssl,
   });
 
   function onSignal() {

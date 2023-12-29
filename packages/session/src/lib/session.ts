@@ -112,8 +112,19 @@ export class Session implements ISession {
    * @api public
    */
 
-  save() {
-    this._requireSave = true;
+  save(callback) {
+    return this.commit({ save: true }, callback);
+  }
+
+  /**
+   * regenerate this session
+   *
+   * @param  {Function} callback the optional function to call after regenerating the session
+   * @api public
+   */
+
+  regenerate(callback) {
+    return this.commit({ regenerate: true }, callback);
   }
 
   /**
@@ -122,7 +133,20 @@ export class Session implements ISession {
    * @api public
    */
 
-  async manuallyCommit() {
-    await this._sessCtx.commit();
+  manuallyCommit() {
+    return this.commit();
+  }
+
+  commit(options?, callback?) {
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
+    const promise = this._sessCtx.commit(options);
+    if (callback) {
+      promise.then(() => callback(), callback);
+    } else {
+      return promise;
+    }
   }
 }

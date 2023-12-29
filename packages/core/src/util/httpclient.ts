@@ -7,22 +7,23 @@ import { MidwayUtilHttpClientTimeoutError } from '../error';
 const debug = debuglog('request-client');
 const URL = url.URL;
 
-type MimeType = 'text' | 'json' | undefined;
+export type HttpClientMimeType = 'text' | 'json' | undefined;
 const mimeMap = {
   text: 'application/text',
   json: 'application/json',
   octet: 'application/octet-stream',
 };
 
-interface IOptions extends https.RequestOptions {
+export interface HttpClientOptions<Data = any> extends https.RequestOptions {
   headers?: any;
-  contentType?: MimeType;
-  dataType?: MimeType;
-  data?: any;
+  contentType?: HttpClientMimeType;
+  dataType?: HttpClientMimeType;
+  data?: Data;
   timeout?: number;
 }
 
-export interface IResponse<ResType = any> extends http.IncomingMessage {
+export interface HttpClientResponse<ResType = any>
+  extends http.IncomingMessage {
   status: number;
   data: Buffer | string | ResType;
 }
@@ -37,8 +38,8 @@ function isHeaderExists(headers, headerKey: string): boolean {
 
 export async function makeHttpRequest<ResType>(
   url: string,
-  options: IOptions = {}
-): Promise<IResponse<ResType>> {
+  options: HttpClientOptions = {}
+): Promise<HttpClientResponse<ResType>> {
   debug(`request '${url}'`);
   const whatwgUrl = new URL(url);
   const client = whatwgUrl.protocol === 'https:' ? https : http;
@@ -113,7 +114,7 @@ export async function makeHttpRequest<ResType>(
             data,
           });
           debug(`request '${url}' resolved with status ${res.statusCode}`);
-          resolve(res as IResponse);
+          resolve(res as HttpClientResponse);
         });
       }
     );
@@ -138,12 +139,15 @@ export async function makeHttpRequest<ResType>(
 export class HttpClient {
   constructor(
     readonly defaultOptions: Pick<
-      IOptions,
+      HttpClientOptions,
       'headers' | 'timeout' | 'method'
     > = {}
   ) {}
 
-  async request(url: string, options?: IOptions): Promise<IResponse> {
+  async request(
+    url: string,
+    options?: HttpClientOptions
+  ): Promise<HttpClientResponse> {
     return makeHttpRequest(url, Object.assign(this.defaultOptions, options));
   }
 }

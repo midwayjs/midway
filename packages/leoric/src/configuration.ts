@@ -1,9 +1,11 @@
 import {
+  APPLICATION_KEY,
   Configuration,
   IMidwayContainer,
   Init,
   Inject,
   MidwayDecoratorService,
+  REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
 import { LeoricDataSourceManager } from './dataSourceManager';
 import { DATA_SOURCE_KEY, MODEL_KEY } from './decorator';
@@ -36,13 +38,32 @@ export class LeoricConfiguration {
       MODEL_KEY,
       (
         propertyName,
-        meta: { modelName?: string | ClassLikeBone; connectionName?: string }
+        meta: { modelName?: string | ClassLikeBone; connectionName?: string },
+        instance
       ) => {
-        return this.dataSourceManager.getDataSource(
+        const dataSource = this.dataSourceManager.getDataSource(
           meta.connectionName ||
             this.dataSourceManager.getDataSourceNameByModel(meta.modelName) ||
             this.dataSourceManager.getDefaultDataSourceName()
-        ).models[getModelName(meta.modelName)];
+        );
+        const model = dataSource.models[getModelName(meta.modelName)];
+        const ctx = instance[REQUEST_OBJ_CTX_KEY];
+        const app = instance[APPLICATION_KEY];
+        if (ctx) {
+          return class extends model {
+            static get ctx() {
+              return ctx;
+            }
+            static get app() {
+              return ctx.getApp();
+            }
+          };
+        }
+        return class extends model {
+          static get app() {
+            return app;
+          }
+        };
       }
     );
 

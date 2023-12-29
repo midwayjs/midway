@@ -6,6 +6,8 @@ import {
   destroyGlobalApplicationContext,
   loadModule,
   isTypeScriptEnvironment,
+  MidwayMainFrameworkMissingError,
+  MidwayFrameworkService,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { ILogger, MidwayLoggerContainer, loggers } from '@midwayjs/logger';
@@ -76,6 +78,14 @@ export class BootstrapStarter {
         const io = applicationManager.getApplication('socketIO');
         setupWorker(io);
       }
+    }
+
+    const frameworkService = this.applicationContext.get(
+      MidwayFrameworkService
+    );
+    // check main framework
+    if (!frameworkService.getMainApp()) {
+      throw new MidwayMainFrameworkMissingError();
     }
   }
 
