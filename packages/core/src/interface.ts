@@ -459,6 +459,9 @@ export interface MidwayCoreDefaultConfig {
   }
 }
 
+
+export type ClientPriorityValue = 'High' | 'Medium' | 'Low';
+
 export type ServiceFactoryConfigOption<OPTIONS> = {
   default?: PowerPartial<OPTIONS>;
   client?: PowerPartial<OPTIONS>;
@@ -466,6 +469,9 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
     [key: string]: PowerPartial<OPTIONS>;
   };
   defaultClientName?: string;
+  clientPriority?: {
+    [key: string]: ClientPriorityValue;
+  }
 };
 
 export type CreateDataSourceInstanceOptions = {
@@ -1166,6 +1172,12 @@ export interface IServiceFactory<Client> {
   getName(): string;
   stop(): Promise<void>;
   getDefaultClientName(): string;
+  getClients(): Map<string, Client>;
+  getClientKeys(): string[];
+  getClientPriority(clientName: string): ClientPriorityValue;
+  isHighPriority(clientName: string): boolean;
+  isMediumPriority(clientName: string): boolean;
+  isLowPriority(clientName: string) : boolean;
 }
 
 export interface ISimulation {
