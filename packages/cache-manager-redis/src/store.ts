@@ -7,7 +7,7 @@ export interface RedisStore extends Store {
   readonly isCacheable: (value: unknown) => boolean;
 }
 
-export function createRedisStore(redisCache: Redis.Redis, options?: Config) {
+export function createRedisStore(redisCache: Redis, options?: Config) {
   const isCacheable =
     options?.isCacheable || (value => value !== undefined && value !== null);
 
