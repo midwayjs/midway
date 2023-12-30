@@ -1,7 +1,4 @@
-import { ClusterNode, ClusterOptions } from 'ioredis';
-import * as Redis from 'ioredis';
 import { RedisConfigOptions } from './dist';
-
 export * from './dist/index';
 
 // Single Redis
