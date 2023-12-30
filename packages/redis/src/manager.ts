@@ -21,17 +21,17 @@ import { RedisConfigOptions } from './interface';
 @Scope(ScopeEnum.Singleton)
 export class RedisServiceFactory extends ServiceFactory<Redis> {
   @Config('redis')
-  redisConfig: ServiceFactoryConfigOption<RedisConfigOptions>;
+  protected redisConfig: ServiceFactoryConfigOption<RedisConfigOptions>;
 
   @Init()
-  async init() {
+  protected async init() {
     await this.initClients(this.redisConfig);
   }
 
   @Logger('coreLogger')
-  logger: ILogger;
+  protected logger: ILogger;
 
-  async createClient(config): Promise<Redis> {
+  protected async createClient(config): Promise<Redis> {
     let client;
 
     if (config.cluster === true) {
@@ -94,7 +94,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
     return 'redis';
   }
 
-  async destroyClient(redisInstance) {
+  protected async destroyClient(redisInstance) {
     try {
       await (redisInstance && redisInstance.quit());
     } catch (error) {

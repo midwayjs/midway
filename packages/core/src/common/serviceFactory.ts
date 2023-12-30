@@ -1,11 +1,19 @@
 import { extend } from '../util/extend';
 import { IServiceFactory } from '../interface';
 
+export const DEFAULT_PRIORITY = {
+  L1: 'High',
+  L2: 'Medium',
+  L3: 'Low',
+};
+
 /**
  * 多客户端工厂实现
  */
 export abstract class ServiceFactory<T> implements IServiceFactory<T> {
   protected clients: Map<string, T> = new Map();
+  protected priority;
+
   protected options = {};
 
   protected async initClients(options: any = {}): Promise<void> {
@@ -24,6 +32,13 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
         await this.createInstance(options.clients[id], id);
       }
     }
+
+    // set priority
+    this.priority = options.priority || {
+      ...Array.from(this.clients.keys()).map(name => ({
+        [name]: DEFAULT_PRIORITY.L2,
+      })),
+    };
   }
 
   public get<U = T>(id = 'default'): U {
@@ -44,10 +59,6 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
       }
       return client;
     }
-  }
-
-  public getClients(): Map<string, T> {
-    return this.clients;
   }
 
   public abstract getName(): string;
@@ -73,5 +84,21 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
 
   public getClientKeys() {
     return Array.from(this.clients.keys());
+  }
+
+  public getClientPriority(clientName: string) {
+    return this.priority[clientName] || DEFAULT_PRIORITY.L2;
+  }
+
+  public isHighPriority(clientName: string) {
+    return this.getClientPriority(clientName) === DEFAULT_PRIORITY.L1;
+  }
+
+  public isMediumPriority(clientName: string) {
+    return this.getClientPriority(clientName) === DEFAULT_PRIORITY.L2;
+  }
+
+  public isLowPriority(clientName: string) {
+    return this.getClientPriority(clientName) === DEFAULT_PRIORITY.L3;
   }
 }
