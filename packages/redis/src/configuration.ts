@@ -33,7 +33,7 @@ export class RedisConfiguration implements ILifeCycle {
     // find status not ready
     let clientName: any;
     for (const [name, instance] of clients) {
-      if (instance.status !== 'ready') {
+      if (instance.status !== 'ready' && !factory.isLowPriority(name)) {
         clientName = name;
         break;
       }

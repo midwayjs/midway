@@ -1,4 +1,4 @@
-import { ServiceFactory } from '../../src';
+import { DEFAULT_PRIORITY, ServiceFactory } from '../../src';
 
 describe('test/common/serviceFactory.test.ts', () => {
 
@@ -76,4 +76,63 @@ describe('test/common/serviceFactory.test.ts', () => {
     })
     expect(instance.getDefaultClientName()).toEqual('abc');
   });
+
+  describe('Priority related tests', () => {
+    let instance;
+
+    beforeEach(async () => {
+      instance = new TestServiceFactory();
+      await instance.initClients({
+        clients: {
+          high: {},
+          medium: {},
+          low: {}
+        },
+        priority: {
+          high: DEFAULT_PRIORITY.L1,
+          medium: DEFAULT_PRIORITY.L2,
+          low: DEFAULT_PRIORITY.L3
+        }
+      });
+    });
+
+    it('should get correct client priority', () => {
+      expect(instance.getClientPriority('high')).toEqual(DEFAULT_PRIORITY.L1);
+      expect(instance.getClientPriority('medium')).toEqual(DEFAULT_PRIORITY.L2);
+      expect(instance.getClientPriority('low')).toEqual(DEFAULT_PRIORITY.L3);
+    });
+
+    it('should correctly identify high priority client', () => {
+      expect(instance.isHighPriority('high')).toBeTruthy();
+      expect(instance.isHighPriority('medium')).toBeFalsy();
+      expect(instance.isHighPriority('low')).toBeFalsy();
+    });
+
+    it('should correctly identify medium priority client', () => {
+      expect(instance.isMediumPriority('high')).toBeFalsy();
+      expect(instance.isMediumPriority('medium')).toBeTruthy();
+      expect(instance.isMediumPriority('low')).toBeFalsy();
+    });
+
+    it('should correctly identify low priority client', () => {
+      expect(instance.isLowPriority('high')).toBeFalsy();
+      expect(instance.isLowPriority('medium')).toBeFalsy();
+      expect(instance.isLowPriority('low')).toBeTruthy();
+    });
+
+    it('should use default priority if not set', async () => {
+      const instance = new TestServiceFactory();
+      await instance.initClients({
+        clients: {
+          defaultPriorityClient: {},
+        },
+      });
+
+      expect(instance.getClientPriority('defaultPriorityClient')).toEqual(DEFAULT_PRIORITY.L2);
+      expect(instance.isHighPriority('defaultPriorityClient')).toBeFalsy();
+      expect(instance.isMediumPriority('defaultPriorityClient')).toBeTruthy();
+      expect(instance.isLowPriority('defaultPriorityClient')).toBeFalsy();
+    });
+  });
+
 });
