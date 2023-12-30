@@ -2,18 +2,22 @@ import { MidwayCommonError, safeRequire } from '@midwayjs/core';
 import type { SwaggerOptions } from './interfaces';
 import { readFileSync } from 'fs';
 import { extname, join } from 'path';
+import { SwaggerExplorer } from './swaggerExplorer';
 
-export function renderSwaggerUI(swaggerConfig: SwaggerOptions) {
+export function renderSwaggerUI(
+  swaggerConfig: SwaggerOptions,
+  swaggerExplorer: SwaggerExplorer
+) {
   const { getAbsoluteFSPath } = safeRequire('swagger-ui-dist');
   if (!getAbsoluteFSPath) {
     throw new MidwayCommonError('swagger-ui-dist is not installed');
   }
 
   function replaceInfo(content: string): string {
-    let str = `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json'),\n validatorUrl: null,`;
-    if (this.swaggerConfig.displayOptions) {
-      Object.keys(this.swaggerConfig.displayOptions).forEach(key => {
-        str += `\n${key}: ${this.swaggerConfig.displayOptions[key]},`;
+    let str = `location.href.replace('${swaggerConfig.swaggerPath}/index.html', '${swaggerConfig.swaggerPath}/index.json'),\n validatorUrl: null,`;
+    if (swaggerConfig.displayOptions) {
+      Object.keys(swaggerConfig.displayOptions).forEach(key => {
+        str += `\n${key}: ${swaggerConfig.displayOptions[key]},`;
       });
     }
     return content.replace(
@@ -24,7 +28,7 @@ export function renderSwaggerUI(swaggerConfig: SwaggerOptions) {
 
   const swaggerUiAssetPath = getAbsoluteFSPath();
 
-  return async (pathname: string) => {
+  return async (pathname: string): Promise<{ ext: string; content: any }> => {
     if (
       !swaggerUiAssetPath ||
       pathname.indexOf(swaggerConfig.swaggerPath) === -1
@@ -35,7 +39,7 @@ export function renderSwaggerUI(swaggerConfig: SwaggerOptions) {
     const arr = pathname.split('/');
     let lastName = arr.pop();
     if (lastName === 'index.json') {
-      return { ext: 'json', content: this.swaggerExplorer.getData() };
+      return { ext: 'json', content: swaggerExplorer.getData() };
     }
     if (!lastName) {
       lastName = 'index.html';
@@ -53,13 +57,16 @@ export function renderSwaggerUI(swaggerConfig: SwaggerOptions) {
   };
 }
 
-export function renderJSON(swaggerConfig: SwaggerOptions) {
+export function renderJSON(
+  swaggerConfig: SwaggerOptions,
+  swaggerExplorer: SwaggerExplorer
+) {
   return async (pathname: string) => {
     if (pathname.indexOf(swaggerConfig.swaggerPath) === -1) {
       return;
     }
     if (pathname === 'index.json') {
-      return { ext: 'json', content: this.swaggerExplorer.getData() };
+      return { ext: 'json', content: swaggerExplorer.getData() };
     }
     return;
   };
