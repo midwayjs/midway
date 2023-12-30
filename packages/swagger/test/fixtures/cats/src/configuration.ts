@@ -1,6 +1,7 @@
 import { Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as swagger from '../../../../src';
+import { renderSwaggerUIDist } from '../../../../src';
 
 @Configuration({
   importConfigs: [{
@@ -10,6 +11,7 @@ import * as swagger from '../../../../src';
       swagger: {
         auth: [{authType: 'basic', name: 'bbb'}, {authType: 'bearer', name: 'ttt'}],
         tagSortable: true,
+        swaggerUIRender: renderSwaggerUIDist,
       },
     }
   }],

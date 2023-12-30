@@ -36,10 +36,10 @@ export class SwaggerMiddleware
 
   @Init()
   async init() {
-    if (typeof this.swaggerConfig.swaggerRender !== 'function') {
+    if (typeof this.swaggerConfig.swaggerUIRender !== 'function') {
       throw new MidwayInvalidConfigPropertyError('swagger.swaggerRender');
     }
-    this.swaggerRender = this.swaggerConfig.swaggerRender(
+    this.swaggerRender = this.swaggerConfig.swaggerUIRender(
       this.swaggerConfig,
       this.swaggerExplorer
     );

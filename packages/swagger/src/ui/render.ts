@@ -1,10 +1,10 @@
 import { MidwayCommonError, safeRequire } from '@midwayjs/core';
-import type { SwaggerOptions } from './interfaces';
+import type { SwaggerOptions } from '../interfaces';
 import { readFileSync } from 'fs';
 import { extname, join } from 'path';
-import { SwaggerExplorer } from './swaggerExplorer';
+import { SwaggerExplorer } from '../swaggerExplorer';
 
-export function renderSwaggerUI(
+export function renderSwaggerUIDist(
   swaggerConfig: SwaggerOptions,
   swaggerExplorer: SwaggerExplorer
 ) {
@@ -67,6 +67,35 @@ export function renderJSON(
     }
     if (pathname === 'index.json') {
       return { ext: 'json', content: swaggerExplorer.getData() };
+    }
+    return;
+  };
+}
+
+export function renderSwaggerUIRemote(
+  swaggerConfig: SwaggerOptions,
+  swaggerExplorer: SwaggerExplorer,
+  swaggerRenderOptions: any
+) {
+  const indexPagePath =
+    swaggerRenderOptions?.indexPagePath || join(__dirname, '../../index.html');
+  return async (pathname: string) => {
+    if (pathname.indexOf(swaggerConfig.swaggerPath) === -1) {
+      return;
+    }
+
+    const arr = pathname.split('/');
+    let lastName = arr.pop();
+    if (lastName === 'index.json') {
+      return { ext: 'json', content: swaggerExplorer.getData() };
+    }
+    if (!lastName) {
+      lastName = 'index.html';
+    }
+
+    if (lastName === 'index.html') {
+      const content = readFileSync(indexPagePath, 'utf8');
+      return { ext: 'html', content };
     }
     return;
   };
