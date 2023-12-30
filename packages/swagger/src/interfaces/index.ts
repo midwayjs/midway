@@ -3,7 +3,8 @@
  * @see https://github.com/OAI/OpenAPI-Specification/blob/3.0.0-rc0/versions/3.0.md
  */
 
-import type { RouterOption } from '@midwayjs/core';
+import { RouterOption } from '@midwayjs/core';
+import { SwaggerExplorer } from '../swaggerExplorer';
 
 export interface OpenAPIObject {
   openapi: string;
@@ -424,4 +425,9 @@ export interface SwaggerOptions {
       webRouter: RouterOption
     ) => string;
   };
+
+  swaggerRender?: (
+    config: SwaggerOptions,
+    swaggerExplorer: SwaggerExplorer
+  ) => (pathname: string) => Promise<{ ext: string; content: string }>;
 }
