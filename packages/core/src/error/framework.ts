@@ -23,6 +23,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   INVOKE_METHOD_FORBIDDEN: 10018,
   CODE_INVOKE_TIMEOUT: 10019,
   MAIN_FRAMEWORK_MISSING: 10020,
+  INVALID_CONFIG_PROPERTY: 10021,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -215,6 +216,15 @@ export class MidwayMainFrameworkMissingError extends MidwayError {
     super(
       'Main framework missing, please check your configuration.',
       FrameworkErrorEnum.MAIN_FRAMEWORK_MISSING
+    );
+  }
+}
+
+export class MidwayInvalidConfigPropertyError extends MidwayError {
+  constructor(propertyName: string) {
+    super(
+      `Invalid config property "${propertyName}", please check your configuration.`,
+      FrameworkErrorEnum.INVALID_CONFIG_PROPERTY
     );
   }
 }
