@@ -140,7 +140,7 @@ describe('test/koa.test.ts', function () {
         .expect(400);
     });
 
-    it('invalid file type', async () => {
+    it('invalid custom file type', async () => {
       const filePath = join(__dirname, 'fixtures/1.from-jpg.png');
       const request = await createHttpRequest(app);
       await request.post('/upload')
@@ -160,7 +160,7 @@ describe('test/koa.test.ts', function () {
         .expect(200);
     });
 
-    it('normal file type', async () => {
+    it('custom file type', async () => {
       const filePath = join(__dirname, 'fixtures/1.more');
       const request = await createHttpRequest(app);
       await request.post('/upload')
