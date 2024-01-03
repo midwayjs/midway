@@ -16,7 +16,7 @@
     "@midwayjs/core": "^3.13.7",
     "@midwayjs/mock": "^3.13.9",
     "sqlite3": "5.1.6",
-    "typeorm": "0.3.17"
+    "typeorm": "0.3.19"
   },
   "author": {
     "name": "czy88840616",
