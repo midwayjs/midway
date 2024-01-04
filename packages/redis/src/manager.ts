@@ -1,15 +1,15 @@
 import {
   Config,
+  delegateTargetAllPrototypeMethod,
+  delegateTargetMethod,
   Init,
   Inject,
   Logger,
+  MidwayCommonError,
   Provide,
   Scope,
   ScopeEnum,
   ServiceFactory,
-  delegateTargetAllPrototypeMethod,
-  delegateTargetMethod,
-  MidwayCommonError,
   ServiceFactoryConfigOption,
 } from '@midwayjs/core';
 import Redis from 'ioredis';
@@ -95,7 +95,12 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
 
   async destroyClient(redisInstance) {
     try {
-      await (redisInstance && redisInstance.quit());
+      if (redisInstance) {
+        const canQuit = !['end', 'close'].includes(redisInstance.status);
+        if (canQuit) {
+          await redisInstance.quit();
+        }
+      }
     } catch (error) {
       this.logger.error('[midway:redis] Redis quit failed.', error);
     }
