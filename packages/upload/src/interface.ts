@@ -3,7 +3,7 @@ import { IgnoreMatcher } from '@midwayjs/core';
 
 export type UploadMode = 'stream' | 'file';
 
-export type WhitelistCheckerHandler = (reqOrCtx: any, ext: string, filename: string) => [boolean, string?];
+export type WhitelistCheckerHandler = (reqOrCtx: any, ext: string) => [boolean, string?];
 export type MimeTypeCheckerHandler = (reqOrCtx: any, ext: string) => [boolean, (string | string[])?];
 
 export interface UploadOptions {
@@ -18,7 +18,7 @@ export interface UploadOptions {
   /**
    * The white ext file names
    */
-  whitelist?: string[] | WhitelistCheckerHandler | null;
+  whitelist?: string[] | ((ctx: any) => string[]) | null;
   /**
    * Temporary file directory
    */
@@ -42,7 +42,7 @@ export interface UploadOptions {
   /**
    * Mime type white list
    */
-  mimeTypeWhiteList?: Record<string, string | string[]> | MimeTypeCheckerHandler | null;
+  mimeTypeWhiteList?: Record<string, string | string[]> | ((ctx: any) => Record<string, string | string[]>) | null;
 }
 
 

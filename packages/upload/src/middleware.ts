@@ -49,38 +49,36 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     }
 
     // init ext white list checker
-    if (Array.isArray(this.uploadConfig.whitelist)) {
-      this.extWhiteListChecker = (reqOrCtx, ext, filename) => {
-        return (this.uploadConfig.whitelist as string[]).includes(ext)
-          ? [true, ext]
-          : [false];
-      };
-    } else if (typeof this.uploadConfig.whitelist === 'function') {
-      this.extWhiteListChecker = this.uploadConfig.whitelist;
-    } else {
-      this.extWhiteListChecker = (reqOrCtx, p: string, ext: string) => {
+    this.extWhiteListChecker = (reqOrCtx, ext) => {
+      if (this.uploadConfig.whitelist === null) {
         const newExt = formatExt(ext);
         return [!!newExt, newExt];
-      };
-    }
+      }
+
+      const newPattern =
+        typeof this.uploadConfig.whitelist === 'function'
+          ? this.uploadConfig.whitelist(reqOrCtx)
+          : this.uploadConfig.whitelist;
+      return newPattern.includes(ext) ? [true, ext] : [false];
+    };
 
     // init mime type checker
-    if (typeof this.uploadConfig.mimeTypeWhiteList === 'function') {
-      this.mimeTypeChecker = this.uploadConfig.mimeTypeWhiteList;
-    } else {
-      this.mimeTypeChecker = (ctxOrReq: string, ext: string) => {
-        if (this.uploadConfig.mimeTypeWhiteList) {
-          const whiteList = this.uploadConfig.mimeTypeWhiteList[ext];
-          if (whiteList) {
-            return [true, whiteList];
-          } else {
-            return [false];
-          }
+    this.mimeTypeChecker = (reqOrCtx: string, ext: string) => {
+      if (this.uploadConfig.mimeTypeWhiteList) {
+        const newPattern =
+          typeof this.uploadConfig.mimeTypeWhiteList === 'function'
+            ? this.uploadConfig.mimeTypeWhiteList(reqOrCtx)
+            : this.uploadConfig.mimeTypeWhiteList;
+        const whiteList = newPattern[ext];
+        if (whiteList) {
+          return [true, whiteList];
         } else {
-          return [true, ext];
+          return [false];
         }
-      };
-    }
+      } else {
+        return [true, ext];
+      }
+    };
   }
 
   resolve(app) {
@@ -263,7 +261,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     while (lowerCaseFileNameList.length) {
       lowerCaseFileNameList.shift();
       const curExt = `.${lowerCaseFileNameList.join('.')}`;
-      return this.extWhiteListChecker(reqOrCtx, curExt, filename);
+      return this.extWhiteListChecker(reqOrCtx, curExt);
     }
     return [false];
   }
