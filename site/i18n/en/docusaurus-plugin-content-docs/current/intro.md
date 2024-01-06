@@ -120,7 +120,7 @@ For more information, see [How to install the Node.js environment](how_to_instal
 
 There will be enthusiastic friends in the group and new versions will be released and pushed.
 
-![image.png](https://img.alicdn.com/imgextra/i4/O1CN01SlyAoV1bp0H0jZDlf_!!6000000003513-0-tps-3916-2480.jpg)
+![image.png](https://img.alicdn.com/imgextra/i3/O1CN01LyI8r91S91RsKsD29_!!6000000002203-0-tps-3916-2480.jpg)
 
 
 
