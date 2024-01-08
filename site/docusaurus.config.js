@@ -111,7 +111,7 @@ const config = {
         lastVersion: 'current',
       },
     ],
-    './lib/plugin.js'
+    './src/plugins/arms/index.js',
   ],
   presets: [
     [
