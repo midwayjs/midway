@@ -7,6 +7,7 @@ export type NodeEntryRequest = [WorkerContext, IncomingMessage, ServerResponse];
 export type EntryRequest = WorkerEntryRequest | NodeEntryRequest;
 
 export const EVENT_INVOKE_METHOD = 'alice-event-invoke';
+export const NOSLATED_EVENT_INVOKE_METHOD = 'noslated-event-invoke';
 
 export interface DaprResponse {
   status: number;
