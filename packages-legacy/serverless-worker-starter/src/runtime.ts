@@ -8,6 +8,7 @@ import { HTTPRequest } from './http-request';
 import {
   EntryRequest,
   EVENT_INVOKE_METHOD,
+  NOSLATED_EVENT_INVOKE_METHOD,
   IncomingMessage,
   NodeEntryRequest,
   ServerResponse,
@@ -57,7 +58,9 @@ export class WorkerRuntime extends ServerlessLightRuntime {
         request = req[1] as IncomingMessage;
       }
 
-      const isEventRequest = EVENT_INVOKE_METHOD.includes(request.method);
+      const isEventRequest =
+        request.method === EVENT_INVOKE_METHOD ||
+        request.method === NOSLATED_EVENT_INVOKE_METHOD;
 
       if (isEventRequest) {
         return this.wrapperEventInvoker(handler, request, req);
