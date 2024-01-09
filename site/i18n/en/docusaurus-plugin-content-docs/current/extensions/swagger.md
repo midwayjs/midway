@@ -1053,6 +1053,113 @@ All decorators of the component refer to the design of [@nestjs/swagger](https:/
 | ```@ApiParam``` | Method |
 | ```@ApiExtraModel``` | Controller/Model |
 
+
+
+## UI rendering
+
+### Rendering from Swagger-ui-dist
+
+By default, if the `swagger-ui-dist` package is installed, the component will call `renderSwaggerUIDist` to render swagger ui by default. If you need to pass the options of swagger-ui, you can pass the `swaggerUIRenderOptions` option.
+
+```typescript
+// src/config/config.default.ts
+import { renderSwaggerUIDist } from '@midwayjs/swagger';
+
+export default {
+   // ...
+   swagger: {
+     swaggerUIRender: renderSwaggerUIDist,
+     swaggerUIRenderOptions: {
+       // ...
+     }
+   },
+}
+```
+
+If you want to adjust the UI configuration, you can replace the default `swagger-initializer.js` with a custom file.
+
+```typescript
+// src/config/config.default.ts
+import { AppInfo } from '@midwayjs/core';
+import { renderSwaggerUIDist } from '@midwayjs/swagger';
+import { join } from 'path';
+
+export default (appInfo: AppInfo) {
+   return {
+     // ...
+     swagger: {
+       swaggerUIRender: renderSwaggerUIDist,
+       swaggerUIRenderOptions: {
+         customInitializer: join(appInfo.appDir, 'resource/swagger-initializer.js'),
+       }
+     },
+   }
+}
+```
+
+The content of the customized `swagger-initializer.js` is roughly as follows:
+
+```javascript
+window.onload = function() {
+   window.ui = SwaggerUIBundle({
+     url: "/index.json",
+     dom_id: '#swagger-ui',
+     deepLinking: true,
+     presets: [
+       SwaggerUIBundle.presets.apis,
+       SwaggerUIStandalonePreset
+     ],
+     plugins: [
+       SwaggerUIBundle.plugins.DownloadUrl
+     ],
+     layout: "StandaloneLayout",
+     persistAuthorization: true,
+   });
+};
+
+```
+
+The url points to the current swagger json and can be modified by yourself. For the complete `swagger-ui` configuration, please refer to [here](https://github.com/swagger-api/swagger-ui/blob/master/docs/usage /configuration.md).
+
+### Rendering from CDN addresses such as unpkg
+
+If the `swagger-ui-dist` package is not installed, the `renderSwaggerUIRemote` method is automatically used for rendering, and the cdn resource is provided by `unpkg.com` by default.
+
+```typescript
+// src/config/config.default.ts
+import { renderSwaggerUIRemote } from '@midwayjs/swagger';
+
+export default {
+   // ...
+   swagger: {
+     swaggerUIRender: renderSwaggerUIRemote,
+     swaggerUIRenderOptions: {
+       // ...
+     }
+   },
+}
+```
+
+
+
+### Only Swagger JSON is provided
+
+If you only want to provide Swagger JSON, you can configure `renderJSON` to only render JSON without introducing the `swagger-ui-dist` package.
+
+```typescript
+// src/config/config.default.ts
+import { renderJSON } from '@midwayjs/swagger';
+
+export default {
+   // ...
+   swagger: {
+     swaggerUIRender: renderJSON,
+   },
+}
+```
+
+
+
 ## Frequently Asked Questions
 
 ### `summary` or `description` in route annotations such as `@Get` do not take effect
