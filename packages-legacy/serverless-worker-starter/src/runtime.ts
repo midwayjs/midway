@@ -57,7 +57,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
         request = req[1] as IncomingMessage;
       }
 
-      const isEventRequest = request.method === EVENT_INVOKE_METHOD;
+      const isEventRequest = EVENT_INVOKE_METHOD.includes(request.method);
 
       if (isEventRequest) {
         return this.wrapperEventInvoker(handler, request, req);
