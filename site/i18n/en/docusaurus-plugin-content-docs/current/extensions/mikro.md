@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # MikroORM
 
 This section describes how users use MikroORM in midway.  MikroORM is the TypeScript ORM of Node.js based on data mapper, working unit and identity mapping mode.
@@ -13,6 +16,14 @@ Related information:
 | Can be used for integration | ✅ |
 | Contains independent main framework | ❌ |
 | Contains independent logs | ❌ |
+
+
+
+## About upgrade
+
+* Starting from the `v3.14.0` version of the component, mikro v5/v6 versions are supported. Since there are major changes from mikro v5 to v6, if you want to upgrade from an old version of mikro, please read [Upgrading from v5 to v6](https:/ /mikro-orm.io/docs/upgrading-v5-to-v6)
+* Component examples updated to v6
+
 
 
 ## Installation Components
@@ -31,7 +42,7 @@ Or reinstall the following dependencies in `package.json`.
 {
   "dependencies": {
     "@midwayjs/mikro": "^3.0.0",
-    "@mikro-orm/core": "^5.3.1 ",
+    "@mikro-orm/core": "^6.0.2",
     // ...
   },
   "devDependencies": {
@@ -48,10 +59,10 @@ For example:
 {
   "dependencies": {
     // sqlite
-    "@mikro-orm/sqlite": "^5.3.1 ",
+    "@mikro-orm/sqlite": "^6.0.2",
 
     // mysql
-    "@mikro-orm/mysql": "^5.3.1 ",
+    "@mikro-orm/mysql": "^6.0.2",
   },
   "devDependencies": {
     // ...
@@ -168,11 +179,41 @@ export class Book extends BaseEntity {
 
 ### Configure the data source
 
+mikro v5 and v6 are slightly different.
+
+<Tabs>
+<TabItem value="v6" label="mikro v6">
+
+```typescript
+// src/config/config.default
+import { Author, BaseEntity, Book, BookTag, Publisher } from '../entity';
+import { join } from 'path';
+import { SqliteDriver } from '@mikro-orm/sqlite';
+
+export default (appInfo) => {
+  return {
+    mikro: {
+      dataSource: {
+        default: {
+          entities: [Author, Book, BookTag, Publisher, BaseEntity],
+          dbName: join(__dirname, '../../test.sqlite'),
+          driver: SqliteDriver,		// SQLite is used as an example here.
+          allowGlobalContext: true,
+        }
+      }
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="v5" label="mikro v5">
+
 ```typescript
 
 // src/config/config.default
 import { Author, BaseEntity, Book, BookTag, Publisher } from '../entity';
-import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { join } from 'path';
 
 export default (appInfo) => {
@@ -183,8 +224,6 @@ export default (appInfo) => {
           entities: [Author, Book, BookTag, Publisher, BaseEntity]
           dbName: join(__dirname, '../../test.sqlite')
           Type: 'sqlite', // SQLite is used as an example here.
-          highlighter: new SqlHighlighter()
-          debug: true
           allowGlobalContext: true
         }
       }
@@ -193,6 +232,9 @@ export default (appInfo) => {
 }
 
 ```
+
+</TabItem>
+</Tabs>
 
 For association in the form of a directory scan, please refer to [Data Source Management](../data_source).
 
@@ -205,7 +247,8 @@ You can also get `EntityManager` by calling `repository.getEntityManger()`.
 
 :::caution
 
-Since v5.7, `persist` and `flush` etc. on `Repository` (shortcuts to methods on `EntityManager`) were marked as *deprecated*, and [planned to remove them in v6](https://github.com/mikro-orm/mikro-orm/discussions/3989). Please use those APIs on `EntityManger` directly instead of on `Repository`.
+* 1. Since v5.7, `persist` and `flush` etc. on `Repository` (shortcuts to methods on `EntityManager`) were marked as *deprecated*, and [planned to remove them in v6](https://github.com/mikro-orm/mikro-orm/discussions/3989). Please use those APIs on `EntityManger` directly instead of on `Repository`.
+* 2. v6 has been completely [deprecated](https://mikro-orm.io/docs/upgrading-v5-to-v6#removed-methods-from-entityrepository) the above interface
 
 :::
 
@@ -292,6 +335,66 @@ export class MainConfiguration {
 
   async onReady(container: IMidwayContainer) {
     //...
+  }
+}
+```
+
+
+
+### Logging
+
+Midway's logger can be added to mikro through configuration to record SQL and other information.
+
+```typescript
+// src/config/config.default.ts
+exporg default {
+	midwayLogger: {
+    clients: {
+      mikroLogger: {
+        // ...
+      }
+    }
+  },
+  mikro: {
+    dataSource: {
+      default: {
+        entities: [Author, Book, BookTag, Publisher, BaseEntity],
+        // ...
+        logger: 'mikroLogger',
+      }
+    },
+  }
+}
+```
+
+By default mikro comes with colors and also writes them to files, which can be turned off through configuration.
+
+```typescript
+// src/config/config.default.ts
+exporg default {
+	midwayLogger: {
+    clients: {
+      mikroLogger: {
+        transports: {
+          console: {
+            autoColors: false,
+          }，
+          file: {
+            fileLogName: 'mikro.log'，
+          },
+        },
+      }
+    }
+  },
+  mikro: {
+    dataSource: {
+      default: {
+        entities: [Author, Book, BookTag, Publisher, BaseEntity],
+        // ...
+        logger: 'mikroLogger',
+        colors: false,
+      }
+    },
   }
 }
 ```
