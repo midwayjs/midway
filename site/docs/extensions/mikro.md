@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # MikroORM
 
 本章节介绍用户如何在 midway 中使用 MikroORM。 MikroORM 是基于数据映射器、工作单元和身份映射模式的 Node.js 的 TypeScript ORM。
@@ -13,6 +16,14 @@ MikroORM 的官网文档在 [这里](https://mikro-orm.io/docs)。
 | 可用于一体化      | ✅    |
 | 包含独立主框架    | ❌    |
 | 包含独立日志      | ❌    |
+
+
+
+## 关于升级
+
+* 从 `v3.14.0` 版本的组件开始，支持 mikro v5/v6 版本，由于 mikro v5 到 v6 有较大的变化，如从 mikro 老版本升级请提前阅读 [Upgrading from v5 to v6](https://mikro-orm.io/docs/upgrading-v5-to-v6)
+* 组件示例已更新为 v6 版本
+
 
 
 ## 安装组件
@@ -31,7 +42,7 @@ $ npm i @midwayjs/mikro@3 @mikro-orm/core --save
 {
   "dependencies": {
     "@midwayjs/mikro": "^3.0.0",
-    "@mikro-orm/core": "^5.3.1",
+    "@mikro-orm/core": "^6.0.2",
     // ...
   },
   "devDependencies": {
@@ -48,10 +59,10 @@ $ npm i @midwayjs/mikro@3 @mikro-orm/core --save
 {
   "dependencies": {
     // sqlite
-    "@mikro-orm/sqlite": "^5.3.1",
+    "@mikro-orm/sqlite": "^6.0.2",
 
     // mysql
-    "@mikro-orm/mysql": "^5.3.1",
+    "@mikro-orm/mysql": "^6.0.2",
   },
   "devDependencies": {
     // ...
@@ -77,7 +88,7 @@ import { join } from 'path';
 @Configuration({
   imports: [
     // ...
-    mikro  														// 加载 mikro 组件
+    mikro				// 加载 mikro 组件
   ],
   importConfigs: [
   	join(__dirname, './config')
@@ -167,11 +178,40 @@ export class Book extends BaseEntity {
 
 ### 配置数据源
 
-```typescript
+mikro v5 和 v6 略有不同。
 
+<Tabs>
+<TabItem value="v6" label="mikro v6">
+
+```typescript
 // src/config/config.default
 import { Author, BaseEntity, Book, BookTag, Publisher } from '../entity';
-import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
+import { join } from 'path';
+import { SqliteDriver } from '@mikro-orm/sqlite';
+
+export default (appInfo) => {
+  return {
+    mikro: {
+      dataSource: {
+        default: {
+          entities: [Author, Book, BookTag, Publisher, BaseEntity],
+          dbName: join(__dirname, '../../test.sqlite'),
+          driver: SqliteDriver,		// 这里使用了 sqlite 做示例
+          allowGlobalContext: true,
+        }
+      }
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="v5" label="mikro v5">
+
+```typescript
+// src/config/config.default
+import { Author, BaseEntity, Book, BookTag, Publisher } from '../entity';
 import { join } from 'path';
 
 export default (appInfo) => {
@@ -182,16 +222,16 @@ export default (appInfo) => {
           entities: [Author, Book, BookTag, Publisher, BaseEntity],
           dbName: join(__dirname, '../../test.sqlite'),
           type: 'sqlite',			// 这里使用了 sqlite 做示例
-          highlighter: new SqlHighlighter(),
-          debug: true,
           allowGlobalContext: true,
         }
       }
     }
   }
 }
-
 ```
+
+</TabItem>
+</Tabs>
 
 如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
 
@@ -199,11 +239,12 @@ export default (appInfo) => {
 
 ### 增删查改
 
-在业务代码中，可以使用`InjectRepository`注入`Repository`对象执行简单的查询操作。其它的增删改操作可以通过配合`EntityManger`的`persist`和`flush`接口来实现，使用`InjectEntityManager`可以直接注入`EntityManager`对象，也可以通过`repository.getEntityManager()`获取。
+在业务代码中，可以使用 `InjectRepository` 注入 `Repository` 对象执行简单的查询操作。其它的增删改操作可以通过配合`EntityManger ` 的 `persist` 和 `flush` 接口来实现，使用 `InjectEntityManager` 可以直接注入 `EntityManager` 对象，也可以通过`repository.getEntityManager()`获取。
 
 :::caution
 
-从5.7版本开始，MikroORM将原来`Repository`上`persist`和`flush`等接口标为*弃用*，并计划在v6版本中[彻底移除](https://github.com/mikro-orm/mikro-orm/discussions/3989)，建议直接调用`EntityManager`上的相关接口。
+* 1、从 5.7 版本开始，MikroORM 将原来 `Repository` 上 `persist` 和 `flush` 等接口标为*弃用*，并计划在 v6 版本中 [彻底移除](https://github.com/mikro-orm/mikro-orm/discussions/3989)，建议直接调用`EntityManager`上的相关接口
+* 2、v6 已经彻底 [弃用](https://mikro-orm.io/docs/upgrading-v5-to-v6#removed-methods-from-entityrepository) 上述接口
 
 :::
 
@@ -290,6 +331,66 @@ export class MainConfiguration {
 
   async onReady(container: IMidwayContainer) {
     // ...
+  }
+}
+```
+
+
+
+### 日志
+
+可以通过配置将 midway 的 logger 添加到 mikro 中，用于记录 sql 等信息。
+
+```typescript
+// src/config/config.default.ts
+exporg default {
+	midwayLogger: {
+    clients: {
+      mikroLogger: {
+        // ...
+      }
+    }
+  },
+  mikro: {
+    dataSource: {
+      default: {
+        entities: [Author, Book, BookTag, Publisher, BaseEntity],
+        // ...
+        logger: 'mikroLogger',
+      }
+    },
+  }
+}
+```
+
+默认情况下  mikro 自带颜色，也会将其写入文件，可以通过配置关闭。
+
+```typescript
+// src/config/config.default.ts
+exporg default {
+	midwayLogger: {
+    clients: {
+      mikroLogger: {
+        transports: {
+          console: {
+            autoColors: false,
+          }，
+          file: {
+            fileLogName: 'mikro.log'，
+          },
+        },
+      }
+    }
+  },
+  mikro: {
+    dataSource: {
+      default: {
+        entities: [Author, Book, BookTag, Publisher, BaseEntity],
+        // ...
+        logger: 'mikroLogger',
+        colors: false,
+      }
+    },
   }
 }
 ```
