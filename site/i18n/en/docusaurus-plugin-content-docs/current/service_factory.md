@@ -442,3 +442,69 @@ export class UserService {
   }
 }
 ```
+
+
+
+## Instance priority
+
+Starting from v3.14.0, service factory instances can add a priority attribute. In different scenarios, some different processing will be done based on the priority.
+
+There are three levels of priority for instances: `L1`, `L2`, and `L3`, which correspond to high, medium, and low levels respectively.
+
+The definition is as follows:
+
+```typescript
+export const DEFAULT_PRIORITY = {
+   L1: 'High',
+   L2: 'Medium',
+   L3: 'Low',
+};
+```
+
+Through configuration, we can specify the priority of different instances.
+
+```typescript
+//config.default.ts
+import { DEFAULT_PRIORITY } from '@midwayjs/core';
+
+export default {
+   httpClient: {
+     clients: {
+       default: {
+         baseUrl: ''
+       },
+       default2: {
+         baseUrl: ''
+       }
+     },
+     priority: {
+       default: DEFAULT_PRIORITY.L1,
+       default2: DEFAULT_PRIORITY.L2,
+     }
+   }
+}
+```
+
+If no setting is made, the default priority is medium, that is, `DEFAULT_PRIORITY.L2`.
+
+In order to better judge the priority, some methods will be added to the `ServiceFactory` base class.
+
+```typescript
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class HTTPClientService implements HTTPClient {
+   @Inject()
+   private serviceFactory: HTTPClientServiceFactory;
+
+   @Init()
+   async init() {
+     // Get priority
+     this.serviceFactory.getClientPriority('default'); // DEFAULT_PRIORITY.L2
+    
+     // Determine priority
+     this.serviceFactory.isHighPriority('default');
+     this.serviceFactory.isMediumPriority('default');
+     this.serviceFactory.isLowPriority('default');
+   }
+}
+```

@@ -1,5 +1,6 @@
 import {
   Configuration,
+  getProviderUUId,
   ILifeCycle,
   IMidwayContainer,
   Inject,
@@ -9,6 +10,10 @@ import {
 } from '@midwayjs/core';
 import { CACHE_DECORATOR_KEY } from './decorator/cacheKey';
 import { CachingFactory } from './factory';
+
+export function getClassMethodDefaultCacheKey(target, methodName: string) {
+  return target.name + '-' + getProviderUUId(target) + '-' + methodName;
+}
 
 @Configuration({
   namespace: 'cacheManager',
@@ -32,7 +37,14 @@ export class CacheConfiguration implements ILifeCycle {
     // register @Caching decorator implementation
     this.decoratorService.registerMethodHandler(
       CACHE_DECORATOR_KEY,
-      ({ metadata }) => {
+      ({ target, propertyName, metadata }) => {
+        if (!metadata.cacheKey) {
+          metadata.cacheKey = getClassMethodDefaultCacheKey(
+            target,
+            propertyName
+          );
+        }
+
         return {
           around: async (joinPoint: JoinPoint) => {
             const cachingInstance = this.cacheService.get(

@@ -221,9 +221,13 @@ export class MidwayMainFrameworkMissingError extends MidwayError {
 }
 
 export class MidwayInvalidConfigPropertyError extends MidwayError {
-  constructor(propertyName: string) {
+  constructor(propertyName: string, allowTypes?: string[]) {
     super(
-      `Invalid config property "${propertyName}", please check your configuration.`,
+      `Invalid config property "${propertyName}", ${
+        allowTypes
+          ? `only ${allowTypes.join(',')} can be set`
+          : 'please check your configuration'
+      }.`,
       FrameworkErrorEnum.INVALID_CONFIG_PROPERTY
     );
   }

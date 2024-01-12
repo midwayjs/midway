@@ -1,16 +1,37 @@
-import { MidwayCommonError, safeRequire } from '@midwayjs/core';
+import {
+  MidwayCommonError,
+  MidwayInvalidConfigPropertyError,
+  safeRequire,
+} from '@midwayjs/core';
 import type { SwaggerOptions } from '../interfaces';
 import { readFileSync } from 'fs';
-import { extname, join } from 'path';
+import { extname, join, isAbsolute } from 'path';
 import { SwaggerExplorer } from '../swaggerExplorer';
 
 export function renderSwaggerUIDist(
   swaggerConfig: SwaggerOptions,
-  swaggerExplorer: SwaggerExplorer
+  swaggerExplorer: SwaggerExplorer,
+  swaggerRenderOptions?: {
+    customInitializer?: Buffer | string;
+  }
 ) {
   const { getAbsoluteFSPath } = safeRequire('swagger-ui-dist');
   if (!getAbsoluteFSPath) {
     throw new MidwayCommonError('swagger-ui-dist is not installed');
+  }
+
+  swaggerRenderOptions = swaggerRenderOptions || {};
+  if (swaggerRenderOptions.customInitializer) {
+    if (isAbsolute(swaggerRenderOptions.customInitializer as string)) {
+      swaggerRenderOptions.customInitializer = readFileSync(
+        swaggerRenderOptions.customInitializer as string
+      );
+    } else {
+      throw new MidwayInvalidConfigPropertyError(
+        'swagger.swaggerRenderOptions.customInitializer',
+        ['Buffer', 'String']
+      );
+    }
   }
 
   function replaceInfo(content: string): string {
@@ -48,6 +69,14 @@ export function renderSwaggerUIDist(
     let content: Buffer | string = readFileSync(
       join(swaggerUiAssetPath, lastName)
     );
+
+    if (
+      lastName === 'swagger-initializer.js' &&
+      swaggerRenderOptions?.customInitializer
+    ) {
+      return { ext: 'js', content: swaggerRenderOptions.customInitializer };
+    }
+
     if (lastName === 'index.html' || lastName === 'swagger-initializer.js') {
       content = content.toString('utf8');
       content = replaceInfo(content);
@@ -75,7 +104,9 @@ export function renderJSON(
 export function renderSwaggerUIRemote(
   swaggerConfig: SwaggerOptions,
   swaggerExplorer: SwaggerExplorer,
-  swaggerRenderOptions: any
+  swaggerRenderOptions?: {
+    indexPagePath?: string;
+  }
 ) {
   const indexPagePath =
     swaggerRenderOptions?.indexPagePath || join(__dirname, '../../index.html');

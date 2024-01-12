@@ -20,7 +20,7 @@ $ npm install @midwayjs/swagger@3 --save
 $ npm install swagger-ui-dist --save-dev
 ```
 
-如果想要在服务器上输出 Swagger API 页面，则需要将 swagger-ui-dist 安装到依赖中。
+如果想要在服务器上输出 Swagger API 页面，则需要将 `swagger-ui-dist` 安装到依赖中。
 
 ```bash
 $ npm install swagger-ui-dist --save
@@ -65,7 +65,7 @@ export class MainConfiguration {
 }
 ```
 
-可以配置启用的环境，比如下面的代码指的是“只在 local 环境下启用”。
+可以配置启用的环境，比如下面的代码指的是 **只在 local 环境下启用**。
 
 ```typescript
 import { Configuration } from '@midwayjs/core';
@@ -677,7 +677,9 @@ findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
 
 
 
-## 高级用法
+
+
+## 更多配置
 
 ### 路由标签
 Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则会默认归组到 default 下。可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
@@ -900,7 +902,7 @@ export class HelloController {}
 
 
 
-## 参数配置
+### 完整参数配置
 
 Swagger 组件提供了和 [OpenAPI](https://swagger.io/specification/) 一致的参数配置能力，可以通过自定义配置来实现。
 
@@ -1053,6 +1055,111 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
 | ```@ApiSecurity```          | Controller        |
 | ```@ApiParam```             | Method            |
 | ```@ApiExtraModel```        | Controller/Model  |
+
+
+
+## UI 渲染
+
+### 从 Swagger-ui-dist 渲染
+
+默认情况下，如果安装了 `swagger-ui-dist` 包，组件会默认会调用 `renderSwaggerUIDist` 渲染 swagger ui，如果需要传递 swagger-ui 的 options，可以 通过 `swaggerUIRenderOptions` 选项。
+
+```typescript
+// src/config/config.default.ts
+import { renderSwaggerUIDist } from '@midwayjs/swagger';
+
+export default {
+  // ...
+  swagger: {
+    swaggerUIRender: renderSwaggerUIDist,
+    swaggerUIRenderOptions: {
+      // ...
+    }
+  },
+}
+```
+
+如果希望调整 UI 的配置，可以使用自定义文件的方式替换默认的 `swagger-initializer.js`。
+
+```typescript
+// src/config/config.default.ts
+import { AppInfo } from '@midwayjs/core';
+import { renderSwaggerUIDist } from '@midwayjs/swagger';
+import { join } from 'path';
+
+export default (appInfo: AppInfo) {
+  return {
+    // ...
+    swagger: {
+      swaggerUIRender: renderSwaggerUIDist,
+      swaggerUIRenderOptions: {
+        customInitializer: join(appInfo.appDir, 'resource/swagger-initializer.js'),
+      }
+    },
+  }
+}
+```
+
+自定义的 `swagger-initializer.js` 内容大致如下：
+
+```javascript
+window.onload = function() {
+  window.ui = SwaggerUIBundle({
+    url: "/index.json",
+    dom_id: '#swagger-ui',
+    deepLinking: true,
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    plugins: [
+      SwaggerUIBundle.plugins.DownloadUrl
+    ],
+    layout: "StandaloneLayout",
+    persistAuthorization: true,
+  });
+};
+
+```
+
+其中的 url 指向当前的 swagger json，可以自行修改，完整的 `swagger-ui` 配置请参考 [这里](https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md)。
+
+### 从 unpkg 等 CDN 地址渲染
+
+如果未安装 `swagger-ui-dist` 包，会自动使用 `renderSwaggerUIRemote` 方法进行渲染，默认由 `unpkg.com` 提供 cdn 资源。
+
+```typescript
+// src/config/config.default.ts
+import { renderSwaggerUIRemote } from '@midwayjs/swagger';
+
+export default {
+  // ...
+  swagger: {
+    swaggerUIRender: renderSwaggerUIRemote,
+    swaggerUIRenderOptions: {
+      // ...
+    }
+  },
+}
+```
+
+
+
+### 仅提供 Swagger JSON
+
+如果仅希望提供 Swagger JSON，可以配置 `renderJSON` 仅渲染 JSON ，无需引入 `swagger-ui-dist` 包。
+
+```typescript
+// src/config/config.default.ts
+import { renderJSON } from '@midwayjs/swagger';
+
+export default {
+  // ...
+  swagger: {
+    swaggerUIRender: renderJSON,
+  },
+}
+```
 
 
 

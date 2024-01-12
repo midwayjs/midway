@@ -445,3 +445,69 @@ export class UserService {
 }
 ```
 
+
+
+## 实例优先级
+
+从 v3.14.0 开始，服务工厂的实例可以增加一个优先级属性，在不同的场景，会根据优先级做一些不同处理。
+
+实例的优先级有 `L1`，`L2`, `L3`三个等级，分别对应高，中，低三个层级。
+
+定义如下：
+
+```typescript
+export const DEFAULT_PRIORITY = {
+  L1: 'High',
+  L2: 'Medium',
+  L3: 'Low',
+};
+```
+
+通过配置，我们可以指定不同实例的优先级。
+
+```typescript
+// config.default.ts
+import { DEFAULT_PRIORITY } from '@midwayjs/core';
+
+export default {
+  httpClient: {
+    clients: {
+      default: {
+        baseUrl: ''
+      },
+      default2: {
+        baseUrl: ''
+      }
+    },
+    priority: {
+      default: DEFAULT_PRIORITY.L1,
+      default2: DEFAULT_PRIORITY.L2,
+    }
+  }
+}
+```
+
+如果不做设置， 默认情况下优先级为中等，即 `DEFAULT_PRIORITY.L2`。
+
+为了更好的判断优先级，`ServiceFactory` 基类中会增加一些方法。
+
+```typescript
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class HTTPClientService implements HTTPClient {
+  @Inject()
+  private serviceFactory: HTTPClientServiceFactory;
+
+  @Init()
+  async init() {
+    // 获取优先级
+    this.serviceFactory.getClientPriority('default'); // DEFAULT_PRIORITY.L2
+    
+    // 判断优先级
+    this.serviceFactory.isHighPriority('default');
+    this.serviceFactory.isMediumPriority('default');
+    this.serviceFactory.isLowPriority('default');
+  }
+}
+```
+

@@ -207,3 +207,20 @@ export default {
   },
 }
 ```
+
+
+
+### 3、egg（@midwayjs/web）下不生效的情况
+
+由于 egg  自带了静态托管插件，如果开启了 static 插件，会和此组件冲突。
+
+如需使用本组件，请务必关闭 egg 插件。
+
+```typescript
+// src/config/plugin.ts
+import { EggPlugin } from 'egg';
+export default {
+  // ...
+  static: false,
+} as EggPlugin;
+```
