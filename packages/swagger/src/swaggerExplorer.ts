@@ -305,6 +305,10 @@ export class SwaggerExplorer {
       operationId: this.getOperationId(target.name, webRouter),
       tags: operMeta?.metadata?.tags || [],
     };
+    if (operMeta?.metadata?.deprecated != null) {
+      opts[webRouter.requestMethod].deprecated =
+        !!operMeta?.metadata?.deprecated;
+    }
     /**
      * [{"key":"web:router_param","parameterIndex":1,"propertyName":"create","metadata":{"type":2}},
      * {"key":"web:router_param","parameterIndex":0,"propertyName":"create","metadata":{"type":1,"propertyData":"createCatDto"}}]
