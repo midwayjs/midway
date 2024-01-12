@@ -11,12 +11,16 @@ export type CachingDecoratorKeyOptions =
 
 export function Caching(
   cacheInstanceName: string,
-  cacheKey: CachingDecoratorKeyOptions,
+  cacheKeyOrTTL?: CachingDecoratorKeyOptions | number,
   ttl?: number
 ) {
+  if (typeof cacheKeyOrTTL === 'number') {
+    ttl = cacheKeyOrTTL;
+    cacheKeyOrTTL = undefined;
+  }
   return createCustomMethodDecorator(CACHE_DECORATOR_KEY, {
     cacheInstanceName,
-    cacheKey,
+    cacheKey: cacheKeyOrTTL,
     ttl,
   });
 }

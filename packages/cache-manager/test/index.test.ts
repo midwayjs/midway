@@ -39,6 +39,19 @@ describe(`index.test.ts`, ()=>{
     const appCtx = app.getApplicationContext();
 
     const userService: any = await appCtx.getAsync('userService');
+    // cache with auto generate cache key
+    expect((await userService.getDefaultUser('harry'))).toEqual('hello harry');
+    expect((await userService.getDefaultUser('harry1'))).toEqual('hello harry');
+    expect((await userService.getDefaultUser('harry2'))).toEqual('hello harry');
+
+    // cache with auto generate cache key and ttl
+    await sleep(20);
+    expect((await userService.getDefaultUserWithTTL('harry'))).toEqual('hello ttl harry');
+    expect((await userService.getDefaultUserWithTTL('harry1'))).toEqual('hello ttl harry');
+    await sleep(100);
+    expect((await userService.getDefaultUserWithTTL('harry2'))).toEqual('hello ttl harry2');
+
+    // custom cache key
     expect((await userService.getUser('harry'))).toEqual('harry');
     expect((await userService.getUser('harry1'))).toEqual('harry');
     expect((await userService.getUser('harry2'))).toEqual('harry');
