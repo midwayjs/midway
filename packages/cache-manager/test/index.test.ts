@@ -48,7 +48,7 @@ describe(`index.test.ts`, ()=>{
     await sleep(20);
     expect((await userService.getDefaultUserWithTTL('harry'))).toEqual('hello ttl harry');
     expect((await userService.getDefaultUserWithTTL('harry1'))).toEqual('hello ttl harry');
-    await sleep(100);
+    await sleep(105);
     expect((await userService.getDefaultUserWithTTL('harry2'))).toEqual('hello ttl harry2');
 
     // custom cache key
