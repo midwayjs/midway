@@ -1,10 +1,11 @@
 # TypeORM
 
-[TypeORM](https://github.com/typeorm/typeorm) 是 `node.js` 现有社区最成熟的对象关系映射器（`ORM` ）。Midway 和 TypeORM 搭配，使开发更简单。
-
 :::tip
 本文档从 v3.4.0 版本起废弃。
 :::
+
+[TypeORM](https://github.com/typeorm/typeorm) 是 `node.js` 现有社区最成熟的对象关系映射器（`ORM` ）。Midway 和 TypeORM 搭配，使开发更简单。
+
 
 相关信息：
 
@@ -13,7 +14,6 @@
 | 可用于标准项目    | ✅    |
 | 可用于 Serverless | ✅    |
 | 可用于一体化      | ✅    |
-
 
 
 

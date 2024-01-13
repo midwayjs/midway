@@ -1,10 +1,11 @@
 # TypeORM
 
-[TypeORM](https://github.com/typeorm/typeorm) is the most mature object relation mapper (`ORM`) in the existing community of `node.js`. Midway and TypeORM match to make development easier.
-
 :::tip
 This document is obsolete from v3.4.0.
 :::
+
+[TypeORM](https://github.com/typeorm/typeorm) is the most mature object relation mapper (`ORM`) in the existing community of `node.js`. Midway and TypeORM match to make development easier.
+
 
 Related information:
 

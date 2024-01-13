@@ -1,5 +1,10 @@
 # MongoDB
 
+
+:::tip
+This document is obsolete from v3.4.0.
+:::
+
 In this chapter, we choose [Typegoose](https://github.com/typegoose/typegoose) as the MongoDB ORM library based on it. As he described, "Define Mongoose models using TypeScript classes" is very well combined with TypeScript.
 
 Simply put, Typegoose using TypeScript "wrappers" to write Mongoose models, most of its capabilities are provided by [mongoose](https://www.npmjs.com/package/mongoose) libraries.
@@ -15,9 +20,6 @@ Related information:
 | Can be used for integration | ✅ |
 
 
-:::tip
-This document is obsolete from v3.4.0.
-:::
 
 ## Mongoose version dependency
 

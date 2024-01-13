@@ -43,7 +43,7 @@
         "environment",
         "env_config",
         "lifecycle",
-        "logger",
+        "logger_v3",
         "cookie_session",
         "built_in_service",
         "router_table",
@@ -189,6 +189,15 @@
         "contributing",
         "awesome_midway"
       ]
+    },
+    {
+      "type": "category",
+      "label": "历史文档",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        "logger"
+      ]
     }
   ],
   "component": [
@@ -288,6 +297,18 @@
         "extensions/cfork",
         "extensions/alinode",
         "extensions/prometheus"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "历史废弃组件",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "legacy/mongodb",
+        "legacy/sequelize",
+        "legacy/orm",
+        "legacy/task"
       ]
     }
   ]

@@ -1,111 +1,86 @@
 # Logger
 
-Midway provides a unified log access method for different scenarios. Through the `@midwayjs/logger` package export method, you can easily access the logging system in different scenarios.
+:::tip
 
-The functions implemented are:
+This document is for `@midwayjs/logger` v2.0 version.
+
+:::
+
+Midway provides a unified log access method for different scenarios. The `@midwayjs/logger` package export method allows you to easily access log systems in different scenarios.
+
+Midway's log system is based on the [winston](https://github.com/winstonjs/winston) of the community and is now a very popular log library in the community.
+
+The functions realized are:
 
 - Log classification
 - Automatic cutting by size and time
 - Custom output format
 - Unified error log
 
-:::tip
-
-The current version of the log SDK documentation is 3.0. If you need version 2.0, please check [this document](/docs/legacy/logger).
-
-:::
 
 
+## Loger path and file
 
-## Upgrade from 2.0 to 3.0
+Midway creates some default files in the log root directory.
 
-Starting from midway v3.13.0, the 3.0 version of `@midwayjs/logger` is supported.
 
-Upgrade the dependency versions in `package.json`, pay attention to the `dependencies` dependencies.
+- `midway-core.log` logs of printed information of the framework and components, corresponding to the `coreLogger`.
+- `midway-app.log` applies the log of printing information, corresponding to the `appLogger`
+- `common-error.log` The log of all errors (all logs created by Midway will repeatedly print errors to this file)
 
-```diff
-{
-   "dependencies": {
-- 		"@midwayjs/logger": "2.0.0",
-+ 		"@midwayjs/logger": "^3.0.0"
-   }
-}
-```
-
-If there is no type hint for midwayLogger in the configuration, you need to add a reference to the log library in `src/interface.ts`.
-
-```diff
-// src/interface.ts
-+ import type {} from '@midwayjs/logger';
-```
-
-In most scenarios, the two versions are compatible, but since it is a major version upgrade, there will definitely be some differences. For the complete Breaking Change, please view the [Change Document](https://github.com/midwayjs /logger/blob/main/BREAKING-3.md).
+The **Log Path** and **Log Level** of local development and server deployment are different. For more information, see [Configure Log Root](# Configure the log root directory) and [Default Level](# The default level of the framework).
 
 
 
-## Logger path and file
-
-Midway will create some default files in the log root directory.
-
-
-- `midway-core.log` is the log of information printed by the framework and components, corresponding to `coreLogger`.
-- `midway-app.log` is the log of application printing information, corresponding to `appLogger`. In `@midawyjs/web`, the file is `midway-web.log`
-- `common-error.log` All error logs (all logs created by Midway will repeatedly print errors to this file)
-
-The **log path** and **log level** are different between local development and server deployment. For details, please refer to [Configuration log root directory](#Configuration log root directory) and [Framework’s default level](#Framework’s default grade).
-
-
-
-##Default log object
+## Default loger object
 
 Midway provides three different logs in the framework by default, corresponding to three different behaviors.
 
-| Log                                            | Definition                      | Description                                                  | Common Usage                                                 |
-| ---------------------------------------------- | ------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| coreLogger                                     | Framework, component level logs | Console logs and text logs `midway-core.log` will be output by default, and error logs will be sent to `common-error.log` by default. | Errors in frameworks and components are generally printed to it. |
-| appLogger                                      | Business-level logs             | Console logs and text logs `midway-app.log` will be output by default, and error logs will be sent to `common-error.log` by default, in `@midawyjs/web`, The file is `midway-web.log`. | Log used by business, generally business logs will be printed into it. |
-| Context logger (reuse appLogger configuration) | Request link log                | By default, `appLogger` is used for output. In addition to sending the error log to `common-error.log`, context information is also added. | Different protocols have different request log formats. For example, routing information will be output under HTTP. |
+| Log | Interpretation | Description | Common use |
+| ----------------------------------- | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| coreLogger | Framework, component-level logs | By default, the console log and text log `midway-core.log` are output, and the error log is sent to `common-error.log` by default.  | Frames and component errors are generally printed into them.  |
+| appLogger | Logs at the business level | The `midway-app.log` of the console log and text log is output by default, and the error log is sent to `common-error.log` by default.  | The log used by the business. Generally, the business log will be printed in it.  |
+| Context Logger (Configuration of Multiplexing appLogger) | Log of request link | By default, `appLogger` is used for output. In addition to sending error logs to `common-error.log`, context information is added.  | Modify the label (Label) of log output. Different frameworks have different request labels. For example, under HTTP, routing information will be output. |
 
 
 
-## Usage logger
+## Use log
 
-Common log usage methods for Midway.
+Midway's common log usage method.
 
-### Context logger
+### Context log
 
-The context log is a log associated with the framework context object (Context).
+The context log is the log associated with the framework context object (Context).
 
-We can use the `ctx.logger` object to print logs after [obtaining the ctx object](./req_res_app).
+You can [obtain the ctx object](./req_res_app) and then use the `ctx.logger` object to print and output logs.
 
-for example:
+For example:
 
 ```typescript
 ctx.logger.info("hello world");
 ctx.logger.debug('debug info');
 ctx.logger.warn('WARNNING!!!!');
 
-// Error logging will directly record the complete stack information of the error log and output it to errorLog.
-// In order to ensure that exceptions are traceable, it must be ensured that all thrown exceptions are of type Error, because only type Error will bring stack information and locate the problem.
+// Error log recording will directly record the complete stack information of the error log and output it to the errorLog
+// In order to ensure that exceptions can be traced, all exceptions thrown must be of Error type, because only Error type will bring stack information to locate the problem.
 ctx.logger.error(new Error('custom error'));
 ```
 
-After execution, we can see log output in two places:
+After execution, we can see the log output in two places:
 
 
 - The console sees the output.
-- midway-app.log file in the log directory
+- In the midway-app.log file of the log directory
 
 
 Output result:
-
 ```text
 2021-07-22 14:50:59,388 INFO 7739 [-/::ffff:127.0.0.1/-/0ms GET /api/get_user] hello world
 ```
 
-In the form of injection, we can also directly use the form of `@Inject() logger` to inject `ctx.logger`, which is equivalent to directly calling `ctx.logger`.
+In the injection form, you can also use `@Inject() logger` to inject `ctx.logger`, which is equivalent to calling `ctx.logger` directly.
 
-for example:
+For example:
 
 ```typescript
 import { Get, Inject, Controller, Provide } from '@midwayjs/core';
@@ -114,18 +89,18 @@ import { ILogger } from '@midwayjs/logger';
 @Controller()
 export class HelloController {
 
-   @Inject()
-   logger: ILogger;
+  @Inject()
+  logger: ILogger;
 
-   @Inject()
-   ctx;
+  @Inject()
+  ctx;
 
-   @Get("/")
-   async hello(){
-     // ...
+  @Get("/")
+  async hello() {
+    // ...
 
-     // this.logger === ctx.logger
-   }
+    // this.logger === ctx.logger
+  }
 }
 ```
 
@@ -142,16 +117,16 @@ import { ILogger } from '@midwayjs/logger';
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
 
-   @Logger()
-   logger: ILogger;
+  @Logger()
+  logger: ILogger;
 
-   async onReady(container: IMidwayContainer): Promise<void> {
-     this.logger.debug('debug info');
-     this.logger.info('Startup took %d ms', Date.now() - start);
-     this.logger.warn('warning!');
+  async onReady(container: IMidwayContainer): Promise<void> {
+    this.logger.debug('debug info');
+    This.logger.info ('startup takes% d ms', Date.now() - start);
+    this.logger.warn('warning!');
 
-     this.logger.error(someErrorObj);
-   }
+    this.logger.error(someErrorObj);
+  }
 
 }
 ```
@@ -162,25 +137,28 @@ Note that the `@Logger()` decorator is used here.
 
 ### CoreLogger
 
-In component or framework level development, we will use coreLogger to record logs.
+In research and development at the component or framework level, we will use coreLogger to log.
 
 ```typescript
+
 @Configuration()
 export class MainConfiguration implements ILifeCycle {
 
-   @Logger('coreLogger')
-   logger: ILogger;
+  @Logger('coreLogger')
+  logger: ILogger;
 
-   async onReady(container: IMidwayContainer): Promise<void> {
-     this.logger.debug('debug info');
-     this.logger.info('Startup took %d ms', Date.now() - start);
-     this.logger.warn('warning!');
+  async onReady(container: IMidwayContainer): Promise<void> {
+    this.logger.debug('debug info');
+    This.logger.info ('startup takes% D MS', Date.now() -Start);
+    this.logger.warn('warning!');
 
-     this.logger.error(someErrorObj);
-   }
+    this.logger.error(someErrorObj);
+  }
 
 }
 ```
+
+
 
 
 
@@ -188,70 +166,120 @@ export class MainConfiguration implements ILifeCycle {
 ## Output method and format
 
 
-Midway's log object provides five methods: `error()`, `warn()`, `info()`, `debug()`, and `write()`.
+The log object of Midway inherits the log object of the winston. In general, only four methods are provided: `error()`, `war ()`, `info()`, and `debug`.
 
 
-Examples are as follows.
-
+An example is as follows.
 ```typescript
 logger.debug('debug info');
-logger.info('Startup takes %d ms', Date.now() - start);
+logger.info('startup takes% d ms', Date.now() - start);
 logger.warn('warning!');
 logger.error(new Error('my error'));
-logger.write('abcdef');
 ```
 
-:::tip
 
-The `write` method is used to output the user's original format log.
+### Default output behavior
 
+
+In most common types, the logstore works well.
+
+
+For example:
+```typescript
+logger.info('hello world'); // Output string
+logger.info(123); //Output Number
+logger.info(['B', 'c']); // Output array
+logger.info(new Set([2, 3, 4])); // Output Set
+logger.info(new Map([['key1', 'value1'], ['key2', 'value2']])); // Output Map
+```
+> Midway has specially customized the `Array`, `Set`, and `Map` types that winston cannot output to enable them to output normally.
+
+
+However, it should be noted that under normal circumstances, the log object can only pass in one parameter, and its second parameter has other functions.
+```typescript
+logger.info('plain error message', 321); // 321 will be ignored
+```
+
+
+### Error output
+
+
+For the wrong object, Midway has also customized the winston so that it can be easily combined with ordinary text for output.
+```typescript
+// Output error object
+logger.error(new Error('error instance'));
+
+// Output custom error object
+const error = new Error('named error instance');
+error.name = 'NamedError';
+logger.error(error);
+
+// Text before, plus error instance
+logger.info('text before error', new Error('error instance after text'));
+```
+:::caution
+Note that the error object can only be placed at the end, and there is only one, and all parameters after it will be ignored.
 :::
 
 
 
-Formatting method based on `util.format`.
 
+### Format content
+The format method based on `util.format`.
 ```typescript
 logger.info('%s %d', 'aaa', 222);
 ```
+Commonly used are
 
-Commonly used ones include
 
-
-- `%s` string placeholder
-- `%d` digital placeholder
+- The `%s` string is occupied.
+- `%d` digit occupancy
 - `%j` json placeholder
 
-For more placeholders and details, please refer to the [util.format](https://nodejs.org/dist/latest-v14.x/docs/api/util.html#util_util_format_format_args) method of node.js.
+For more information, see the [util.format](https://nodejs.org/dist/latest-v14.x/docs/api/util.html#util_util_format_format_args) method of Node. js.
 
 
 
-## Logger type definition
+### Output custom objects or complex types
 
 
-In most cases, users should use the simplest `ILogger` definition in `@midwayjs/core`.
+Based on performance considerations, Midway(winston) only outputs basic types most of the time, so when the output parameter is an advanced object, the user **needs to manually convert it to a string** that needs to be printed.
 
+
+The following example will not get the desired result.
 ```typescript
-import { Provide, Logger, ILogger } from '@midwayjs/core';
-
-@Provide()
-export class UserService {
-
-   @Inject()
-   logger: ILogger;
-
-   async getUser() {
-     this.logger.info('hello user');
-   }
-}
+const obj = {a: 1};
+logger.info(obj); // By default, output [object Object]
+```
+You need to manually output what you want to print.
+```typescript
+const obj = {a: 1};
+logger.info(JSON.stringify(obj)); // formatted text can be output
+logger.info(obj.a); // Direct output attribute value
+logger.info('%j', a); // Direct placeholder output entire json
 ```
 
-The `ILogger` definition only provides the simplest `debug`, `info`, `warn` and `error` methods.
 
 
-In some scenarios, we need more complex definitions. In this case, we need to use the `ILogger` definition provided by `@midwayjs/logger`.
+### Pure output content
 
 
+In special scenarios, we need to simply output content, and do not want to output timestamps, labels and other format-related information. For this requirement, we can use the `write` method.
+
+The `write` method is a very low-level method, and no matter what level of logs are written to the file.
+
+
+Although the `write` method is available on every logger, we only provide it in the `IMidwayLogger` definition, and we hope you can clearly know that you want to call it.
+```typescript
+(logger as IMidwayLogger).write('hello world'); // There will only be hello world in the file
+```
+
+
+
+## Log type definition
+
+
+By default, users should use the simplest `ILogger` definition.
 ```typescript
 import { Provide, Logger } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
@@ -259,158 +287,119 @@ import { ILogger } from '@midwayjs/logger';
 @Provide()
 export class UserService {
 
-   @Inject()
-   logger: ILogger;
+  @Inject()
+  logger: ILogger; // Get context log
 
-   async getUser() {
-     // ...
-   }
+  async getUser() {
+  	this.logger.info('hello user');
+  }
 
 }
 ```
 
-`ILogger`The definition can refer to the description in interface, or view [code](https://github.com/midwayjs/logger/blob/main/src/interface.ts).
+
+The `ILogger` definition provides only the simplest `debug`, `info`, `WARN`, and `error` methods.
+
+
+In some scenarios, we need more complex definitions, such as modifying log attributes or dynamically adjusting. At this time, we need to use more complex `IMidwayLogger` definitions.
+
+
+```typescript
+import { Provide, Logger } from '@midwayjs/core';
+import { IMidwayLogger } from '@midwayjs/logger';
+
+@Provide()
+export class UserService {
+
+  @Inject()
+  logger: IMidwayLogger; // Get context log
+
+  async getUser() {
+    This. Logger. disableConsole(); // Prohibit console output
+  	this.logger.info('hello user'); // This sentence is not visible in the console
+    This. Logger. enableConsole(); // Turn on console output
+    this.logger.info('hello user'); // This sentence can be seen in the console
+  }
+
+}
+```
+The definition of the `IMidwayLogger` can refer to the description in the interface or view the [code](https://github.com/midwayjs/logger/blob/main/src/interface.ts).
 
 
 
-## Logger configuration
+## Basic log configuration
 
+We can configure various behaviors of the log in the configuration file.
 
-
-### Basic configuration structure
-
-We can configure various log behaviors in the configuration file.
-
-The log configuration in Midway includes two parts: **global configuration** and **individual log configuration**. The two configurations will be merged and overwritten.
+The log configuration in Midway includes **Global Configuration** and **Single Log Configuration**. The two configurations are merged and overwritten.
 
 ```typescript
 // src/config/config.default.ts
 import { MidwayConfig } from '@midwayjs/core';
 
 export default {
-   midwayLogger: {
-     default: {
-       // ...
-     },
-     clients: {
-       coreLogger: {
-         // ...
-       },
-       appLogger: {
-         // ...
-       }
-     }
-   },
+  midwayLogger: {
+    default: {
+      // ...
+    },
+    clients: {
+      coreLogger: {
+        // ...
+      },
+      appLogger: {
+        // ...
+      }
+    }
+  },
 } as MidwayConfig;
 ```
 
-As mentioned above, each object in the `clients` configuration section is an independent log configuration item, and its configuration will be merged with the `default` section to create a logger instance.
+As mentioned above, each object in the `clients` configuration segment is an independent log configuration item, and its configuration will be merged with the `default` segment to create a logger instance.
 
 
 
-### Default Transport
+## Configure log level
 
-In Midway, three Transports `console`, `file`, and `error` are enabled by default. More information can be modified through configuration.
 
+The winston log levels are divided into the following categories, and the log levels decrease in turn (the larger the number, the lower the level):
 ```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-   midwayLogger: {
-     default: {
-       transports: {
-         console: {
-           // console transport configuration
-         },
-         file: {
-           // file transport configuration
-         },
-         error: {
-           // error transport configuration
-         },
-       }
-     },
-     // ...
-   },
-} as MidwayConfig;
+const levels = {
+  none: 0
+  error: 1
+  trace: 2
+  warn: 3
+  info: 4
+  verbose: 5
+  debug: 6
+  silly: 7
+  all: 8
+}
 ```
+In order to simplify the Midway, we usually use only four levels: `error`, `war`, `info`, and `debug`.
 
-If a transport is not required, it can be set to `false`.
+The log level represents the lowest level that can currently output logs. For example, if your log level is set to `WARN`, only logs of the `WARN` and higher `error` level can be output.
 
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
+In Midway, different log levels can be configured for different output behaviors.
 
-export default {
-   midwayLogger: {
-     default: {
-       transports: {
-         console: false,
-       }
-     },
-     // ...
-   },
-} as MidwayConfig;
-```
+- `Level` Log Level of Text Written
+- `consoleLevel` the log level output from the console
 
 
 
-### Configure log level
-
-In Midway, under normal circumstances, we only use four levels: `error`, `warn`, `info`, and `debug`.
-
-The log level indicates the lowest level that can currently output logs. For example, when your log level is set to `warn`, only `warn` and higher `error` level logs can be output.
+### The default level of the framework
 
 
-Midway has its own default log level.
+In Midway, it has its own default log level.
 
 
-- In the development environment (local, test, unittest), the text and console log levels are unified to `info`.
-- In a server environment, in order to reduce the number of logs, the log level of `coreLogger` is `warn`, while other logs are `info`.
-
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-   midwayLogger: {
-     default: {
-       level: 'info',
-     },
-     // ...
-   },
-} as MidwayConfig;
-```
+- In the development environment (local,test,unittest), the text and console log levels are unified to `info`.
+- In the server environment (except the development environment), in order to reduce the number of logs, the log level of `coreLogger` is `warn`, while other logs are `info`.
 
 
 
-The level of the logger and the level of the Transport can be set separately. The level of the Transport has a higher priority than the level of the logger.
+### Adjust log level
 
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-   midwayLogger: {
-     default: {
-       // level of logger
-       level: 'info',
-       transports: {
-         file: {
-           //level of file transport
-           level: 'warn'
-         }
-       }
-     },
-     // ...
-   },
-} as MidwayConfig;
-```
-
-
-
-We can also adjust the log level of a specific logger, such as:
+In general, we do not recommend adjusting the global default log level, but adjust the log level of a specific logger, for example:
 
 Adjust `coreLogger` or `appLogger`.
 
@@ -419,256 +408,223 @@ Adjust `coreLogger` or `appLogger`.
 import { MidwayConfig } from '@midwayjs/core';
 
 export default {
-   midwayLogger: {
-     clients: {
-       coreLogger: {
-         level: 'warn',
-         // ...
-       },
-       appLogger: {
-         level: 'warn',
-         // ...
-       }
-     }
-   },
+  midwayLogger: {
+    clients: {
+      coreLogger: {
+        level: 'warn',
+        consoleLevel: 'warn'
+        // ...
+      },
+      appLogger: {
+        level: 'warn',
+        consoleLevel: 'warn'
+        // ...
+      }
+    }
+  },
 } as MidwayConfig;
 ```
 
-In special scenarios, the global log level can also be temporarily adjusted.
+In special scenarios, you can also temporarily adjust the global log level.
 
 ```typescript
 // src/config/config.default.ts
 import { MidwayConfig } from '@midwayjs/core';
 
 export default {
-   midwayLogger: {
-     default: {
-       level: 'info',
-       transports: {
-         console: {
-           level: 'warn'
-         }
-       }
-     },
-     // ...
-   },
+  midwayLogger: {
+    default: {
+      level: 'info',
+      consoleLevel: 'warn'
+    },
+    // ...
+  },
 } as MidwayConfig;
 ```
 
 
 
-### Configure log root directory
+## Configure the log root directory
 
-By default, Midway will output logs to the **log root** during local development and server deployment.
+By default, Midway outputs logs to the **root directory** during local development and server deployment.
 
 
-- The local log root directory is under the `${app.appDir}/logs/project name` directory
-- The server's log root directory is under the user directory `${process.env.HOME}/logs/project name` (Linux/Mac) and `${process.env.USERPROFILE}/logs/project name` (Windows), For example `/home/admin/logs/example-app`.
+- The root directory of the local log is `${app.appDir}/logs/project name`.
+- The log root directory of the server is under the user directory `${process.env.HOME}/logs/project_name` (Linux/Mac) and `${process.env.USERPROFILE}/logs/project_name` (Windows), for example `/home/admin/logs/example-app`.
 
-We can configure the root directory where the log is located. Note that all Transport paths must be modified.
+We can configure the root directory where the log is located.
 
 ```typescript
 // src/config/config.default.ts
 import { MidwayConfig } from '@midwayjs/core';
 
 export default {
-   midwayLogger: {
-     default: {
-       transports: {
-         file: {
-           dir: '/home/admin/logs',
-         },
-         error: {
-           dir: '/home/admin/logs',
-         },
-       }
-     },
-     // ...
-   },
+  midwayLogger: {
+    default: {
+      dir: '/home/admin/logs',
+    },
+    // ...
+  },
 } as MidwayConfig;
 ```
 
 
 
-### Configure log cutting (rotation)
+## Configure log cutting (rotation)
 
 
-Under the default behavior, the same log object **will generate two files**.
+By default, the same log object **generates two files**.
 
-Taking `midway-core.log` as an example, when the application starts, it will generate a file in the format of `midway-core.YYYY-MM-DD` with a timestamp of the day, and a `midway-core.log` without a timestamp. soft link file.
+Take `midway-core.log` as an example. When the application is started, a `midway-core with the timestamp of the day is generated. YYYY-MM files in-DD` format and a soft chain file of `midway-core.log` without timestamp.
 
-> Soft links will not be generated under windows
-
-
-To facilitate the configuration of log collection and viewing, the soft link file always points to the latest log file.
+> Soft chain will not be generated under windows
 
 
-When `00:00` is reached in the morning, a new file will be generated in the form of `midway-core.log.YYYY-MM-DD` ending with the current day's log.
+To facilitate log collection and viewing, the soft chain file always points to the latest log file.
 
-At the same time, when a single log file exceeds 200M, it will be automatically cut and a new log file will be generated.
 
-Cutting by size behavior can be adjusted through configuration.
+At `00:00` in the morning, a new file of the form `midway-core.log.YYYY-MM-DD` is generated at the end of the day's log.
+
+At the same time, when a single log file exceeds 200M, it will be automatically cut to generate a new log file.
+
+You can adjust the cutting behavior by configuration.
 
 ```typescript
 export default {
-   midwayLogger: {
-     default: {
-       transports: {
-         file: {
-           maxSize: '100m',
-         },
-         error: {
-           maxSize: '100m',
-         },
-       }
-     },
-     // ...
-   },
+  midwayLogger: {
+    default: {
+      maxSize: '100m',
+    },
+    // ...
+  },
 } as MidwayConfig;
 ```
 
 
 
-### Configure log cleaning
+## Configure log cleanup
 
-By default, logs exist for 7 days.
+By default, the log will exist for 31 days.
 
-This behavior can be adjusted through configuration, such as saving for 3 days instead.
+This behavior can be adjusted by configuration, such as saving for 3 days instead.
 
 ```typescript
-export default {
-   midwayLogger: {
-     default: {
-       transports: {
-         file: {
-           maxFiles: '3d',
-         },
-         error: {
-           maxFiles: '3d',
-         },
-       }
-     },
-     // ...
-   },
+} as MidwayConfig;export default {
+  midwayLogger: {
+    default: {
+      maxFiles: '3d',
+    },
+    // ...
+  },
 } as MidwayConfig;
 ```
 
-You can also configure a number to indicate the maximum number of log files to retain.
 
-```typescript
-export default {
-   midwayLogger: {
-     default: {
-       transports: {
-         file: {
-           maxFiles: '3',
-         },
-         error: {
-           maxFiles: '3d',
-         },
-       }
-     },
-     // ...
-   },
-} as MidwayConfig;
-```
 
-### Configure custom logs
+
+
+
+## Advanced configuration
+
+If you are not satisfied with the default log object, you can create and modify it yourself.
+
+
+
+### Add custom log
 
 It can be configured as follows:
 
 ```typescript
 export default {
-   midwayLogger: {
-     clients: {
-       abcLogger: {
-         fileLogName: 'abc.log'
-         // ...
-       }
-     }
-     // ...
-   },
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        fileLogName: 'abc.log'
+        // ...
+      }
+    }
+    // ...
+  },
 } as MidwayConfig;
 ```
 
-Customized logs can be obtained through `@Logger('abcLogger')`.
+You can call `@Logger('abcLogger')` to obtain custom logs.
 
-For more logging options, please refer to [LoggerOptions Description](https://github.com/midwayjs/logger/blob/main/src/interface.ts) in interface.
+For more log options, please refer to the [LoggerOptions description](https://github.com/midwayjs/logger/blob/main/src/interface.ts) in the interface.
 
 
 
 ### Configure log output format
 
 
-The display format refers to the string structure of a single line of text when outputting logs. Midway has customized Winston's log and provides some default objects.
+The display format refers to the string structure of a single line of text when the log is output. Midway has customized Winston logs and provided some default objects.
 
-Each logger object can be configured with an output format. The display format is a method that returns a string structure, and the parameter is Winston's [info object](https://github.com/winstonjs/logform#info-objects).
+For each logger object, you can configure an output format. The display format is a method that returns a string structure with the [info object](https://github.com/winstonjs/logform#info-objects) parameter of the Winston.
 
 ```typescript
 export default {
-   midwayLogger: {
-     clients: {
-       appLogger: {
-         format: info => {
-           return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
-         }
-         // ...
-       },
-       customOtherLogger: {
-         format: info => {
-           return 'xxxx';
-         }
-       }
-     }
-     // ...
-   },
+  midwayLogger: {
+    clients: {
+      appLogger: {
+        format: info => {
+          return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
+        }
+        // ...
+      },
+      customOtherLogger: {
+        format: info => {
+          return 'xxxx';
+        }
+      }
+    }
+    // ...
+  },
 } as MidwayConfig;
 ```
 
 The default properties of the info object are as follows:
 
-| **Attribute name** | **Description**                                              | **Example**             |
-| ------------------ | ------------------------------------------------------------ | ----------------------- |
-| timestamp          | Timestamp, default is `'YYYY-MM-DD HH:mm:ss,SSS` format.     | 2020-12-30 07:50:10,453 |
-| level              | Lowercase log level                                          | info                    |
-| LEVEL              | uppercase log level                                          | INFO                    |
-| pid                | current process pid                                          | 3847                    |
-| message            | result of util.format                                        |                         |
-| args               | Original user input parameters                               | [ 'a', 'b', 'c' ]       |
-| ctx                | Context object associated when using ContextLogger           |                         |
-| originError        | Original error object, obtained after traversing parameters, poor performance | error instance itself   |
-| originArgs         | Same as args, only compatible with older versions            |                         |
+| **Attribute Name** | **Description** | **Example** |
+| ----------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| timestamp | The timestamp. Default value: `'YYYY-MM-DD HH:mm:ss,SSS`.  | 2020-12-30 07:50:10,453 |
+| level | Lowercase log level | info |
+| LEVEL | Uppercase log level | INFO |
+| pid | current process pid | 3847 |
+| labelText | Aggregate text for labels | [abcde] |
+| message | Combination of normal messages + error messages + error stacks | 1. plain text, such as `123456`, `hello world` <br />2, error text (error name + stack) error: another test error at object. anonymous (/home/runner/work/midway/packages/logger/test/index.test.ts:224:18) <br />3, plain text + error text hello world error: another test error at object. anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |
+| stack | Error stack |                                                              |
+| originError | Original error object | The error instance itself |
+| originArgs | Original user input parameters | ['a', 'B', 'c'] |
 
 
 
+### Get a custom context log
 
-
-### Get custom context log
-
-Context log is logged based on **original log object** and will reuse all formats of the original log. Their relationship is as follows.
+Context logs are typed based on **raw log objects**. All formats of the original logs are reused. The relationship between them is as follows.
 
 ```typescript
-// pseudocode
+// Pseudocode
 const contextLogger = customLogger.createContextLogger(ctx);
 ```
 
-`@Inject` can only inject the default context log. We can obtain the **context log** corresponding to other **custom log** through the `ctx.getLogger` method. The context log is associated with ctx. The same context and the same key will obtain the same log object. When ctx is destroyed, the log object will also be recycled.
+`@Inject` can only inject the default context logs. You can use the `ctx.getLogger` method to obtain the **context logs** corresponding to other **custom logs**. the context log is associated with ctx, and the same key in the same context will obtain the same log object. when ctx is destroyed, the log object will also be recycled.
 
 ```typescript
 import { Provide } from '@midwayjs/core';
+import { IMidwayLogger } from '@midwayjs/logger';
 import { Context } from '@midwayjs/koa';
 
 @Provide()
 export class UserService {
 
-   @Inject()
-   ctx: Context;
+  @Inject()
+  ctx: Context;
 
-   async getUser() {
-     // What is obtained here is the context log object corresponding to customLogger
-     const customLogger = this.ctx.getLogger('customLogger');
-     customLogger.info('hello world');
-   }
+  async getUser() {
+    // The context log object corresponding to the customLogger is obtained here.
+    const customLogger = this.ctx.getLogger('customLogger');
+  	customLogger.info('hello world');
+  }
 
 }
 ```
@@ -676,47 +632,198 @@ export class UserService {
 
 
 
-### Configure context log output format
+### Configure the context log output format
 
-The context log is based on the **original log object** and will reuse all the formats of the original log, but we can separately configure the corresponding context log format of the log object.
+Context logs are typed based on the **original log object**. All formats of the original log are reused. However, you can configure the corresponding context log format of the log object separately.
 
-There is an additional ctx object in the info object of the context log. Let's take modifying the context log of `customLogger` as an example.
+There are more ctx objects in the info object of the context log. Let's take the context log of the `customLogger` as an example.
 
 ```typescript
 export default {
-   midwayLogger: {
-     clients: {
-       customLogger: {
-         contextFormat: info => {
-           const ctx = info.ctx;
-           return `${info.timestamp} ${info.LEVEL} ${info.pid} [${Date.now() - ctx.startTime}ms ${ctx.method}] ${info.message}`;
-         }
-         // ...
-       }
-     }
-     // ...
-   },
+  midwayLogger: {
+    clients: {
+      customLogger: {
+        contextFormat: info => {
+          const ctx = info.ctx;
+          return `${info.timestamp} ${info.LEVEL} ${info.pid} [${Date.now() - ctx.startTime}ms ${ctx.method}] ${info.message}`;
+        }
+        // ...
+      }
+    }
+    // ...
+  },
 } as MidwayConfig;
 ```
 
-Then when you use context log output, it will become your format by default.
+Then when you use the context log output, it will default to your format.
 
 ```typescript
 ctx.getLogger('customLogger').info('hello world');
 // 2021-01-28 11:10:19,334 INFO 9223 [2ms POST] hello world
 ```
 
-Note that since `App Logger` is the default log object of all frameworks and is quite special, some existing frameworks configure its context format by default, causing the configuration in the `midwayLogger` field to be invalid.
+Note that because `App Logger` is the default log object for all frameworks, it is relatively special. Some existing frameworks have their context formats configured by default, resulting in invalid configuration in `midwayLogger` fields.
 
-To do this, you need to modify the context log format configuration of a certain framework separately. Please jump to a different framework to view it.
+For this, you need to modify the context log format configuration of a framework separately, please jump to a different framework to view.
 
-- [Modify koa's context log format](./extensions/koa#Modify context log)
-- [Modify egg's context log format](./extensions/egg#Modify context log)
-- [Modify the context log format of express](./extensions/express#Modify the context log)
+- [Modify the koa context log format](./extensions/koa# Modify Context Log)
+- [Modify the context log format of the egg](./extensions/egg# Modify Context Log)
+- [Modify express context log format](./extensions/express# Modify Context Log)
 
 
 
-### Configure delayed initialization
+### Log default Transport
+
+Each log contains several default Transport.
+
+| Name | Default behavior | Description |
+| ----------------- | -------- | ------------------------------ |
+| Console Transport | Open | For output to console |
+| File Transport | Open | For output to a text file |
+| Error Transport | Open | Used to output errors to specific error logs |
+| JSON Transport | Close | Text used to output JSON format |
+
+It can be modified through configuration.
+
+**Example: Only enable console output**
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableFile: false
+        enableError: false
+        // ...
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+**Example: Disable Console Output**
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableConsole: false
+        // ...
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+**Example: Enable text and JSON synchronization and disable error output**
+
+```typescript
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableConsole: false
+        enableFile: true
+        enableError: false
+        enableJSON: true
+        // ...
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+
+
+### Custom Transport
+
+The framework provides extended Transport functions, for example, you can write a Transport to transfer logs and upload them to other log libraries.
+
+For example, in the following example, we will transfer the log to another local file.
+
+```typescript
+import { EmptyTransport } from '@midwayjs/logger';
+
+class CustomTransport extends EmptyTransport {
+  log(info, callback) {
+    const levelLowerCase = info.level;
+    if (levelLowerCase === 'error' || levelLowerCase === 'warn') {
+      writeFileSync(join(logsDir, 'test.log'), info.message);
+    }
+    callback();
+  }
+}
+```
+
+We can initialize, add it to logger, or set level for Transport separately.
+
+```typescript
+const customTransport = new CustomTransport({
+  level: 'warn',
+});
+
+logger.add(customTransport);
+```
+
+In this way, the original logger will automatically execute the Transport when printing logs.
+
+All Transport are attached to the original logger instance (not context logger). If ctx data is required, it can be obtained from info. Note that it is empty.
+
+
+```typescript
+class CustomTransport extends EmptyTransport {
+  log(info, callback) {
+    if (info.ctx) {
+      // ...
+    } else {
+      // ...
+    }
+    callback();
+  }
+}
+```
+
+
+We can also use dependency injection to define Transport.
+
+```typescript
+import { EmptyTransport, IMidwayLogger } from '@midwayjs/logger';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
+import { MidwayLoggerService } from '@midwayjs/core';
+
+@Provide()
+@Scope(ScopeEnum)
+export class CustomTransport extends EmptyTransport {
+  log(info, callback) {
+    // ...
+    callback();
+  }
+}
+
+// src/configuration.ts
+@Configuration(/*...*/)
+export class MainConfiguration {
+
+  @Inject()
+  loggerService: MidwayLoggerService;
+
+  @Inject()
+  customTransport: CustomTransport;
+
+  async onReady() {
+    const appLogger = this.loggerService.getLogger('customLogger') as IMidwayLogger;
+    appLogger.add(this.customTransport);
+  }
+}
+```
+
+
+
+### Lazy initialization
 
 The log can be initialized lazily using the `lazyLoad` configuration.
 
@@ -727,250 +834,36 @@ export default {
    midwayLogger: {
      clients: {
        customLoggerA: {
-         // ..
+         level: 'DEBUG',
        },
        customLoggerB: {
          lazyLoad: true,
        },
      }
-     // ...
+     //...
    },
 } as MidwayConfig;
 ```
 
-`customLoggerA` will be initialized immediately when the framework starts, while `customLoggerB` will be initialized when the business actually uses `getLogger` or `@Logger` injection for the first time.
+`customLoggerA` will be initialized immediately when the framework starts, and `customLoggerB` will be initialized when the business actually uses `getLogger` or `@Logger` injection for the first time.
 
-This function is very suitable for scenarios where logs are dynamically created, but the configurations are expected to be merged together.
-
-
-
-### Configure associated logs
-
-The log object can be configured with an associated log object name.
-
-for example:
-
-```typescript
-export default {
-   midwayLogger: {
-     clients: {
-       customLoggerA: {
-         aliasName: 'customLoggerB',
-         // ...
-       },
-     }
-     // ...
-   },
-} as MidwayConfig;
-```
-
-When using the API to retrieve, the same log object will be retrieved with different names.
-
-```typescript
-app.getLogger('customLoggerA') => customLoggerA
-app.getLogger('customLoggerB') => customLoggerA
-```
+This feature is very suitable for dynamically creating logs, but configurations want to be merged together.
 
 
 
-### Configure console output color
-
-When outputting to the console, if the command line supports color output, different colors will be output for different log levels. If color is not supported, it will not be displayed.
-
-You can turn off color output directly through configuration.
-
-```typescript
-export default {
-   midwayLogger: {
-     default: {
-       transports: {
-         console: {
-           autoColors: false,
-         }
-       }
-     }
-     // ...
-   },
-} as MidwayConfig;
-```
-
-
-
-## Custom Transport
-
-The framework provides the function of extending Transport. For example, you can write a Transport to transfer logs and upload them to other log libraries.
-
-
-
-### Inherit existing Transport
-
-If writing to a new file, this can be achieved by using `FileTransport`.
-
-```typescript
-import { FileTransport, isEnableLevel, LoggerLevel, LogMeta } from '@midwayjs/logger';
-
-// Transport configuration
-interface CustomOptions {
-   // ...
-}
-
-class CustomTransport extends FileTransport {
-   log(level: LoggerLevel | false, meta: LogMeta, ...args) {
-     // Determine whether level satisfies the current Transport
-     if (!isEnableLevel(level, this.options.level)) {
-       return;
-     }
-    
-     // Format the message using built-in formatting methods
-     let buf = this.format(level, meta, args) as string;
-     //Add newline character
-     buf += this.options.eol;
-
-     //Write the log you want to write
-     if (this.options.bufferWrite) {
-       this.bufSize += buf.length;
-       this.buf.push(buf);
-       if (this.buf.length > this.options.bufferMaxLength) {
-         this.flush();
-       }
-     } else {
-       // If caching is not enabled, write directly
-       this.logStream.write(buf);
-     }
-   }
-}
-```
-
-Before use, it needs to be registered in the log library.
-
-```typescript
-import { TransportManager } from '@midwayjs/logger';
-
-TransportManager.set('custom', CustomTransport);
-```
-
-You can then use this Transport in your configuration.
-
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-   midwayLogger: {
-     default: {
-       transports: {
-         custom: {
-           dir: 'xxxx',
-           fileLogName: 'xxx',
-           // ...
-         }
-       }
-     }
-   },
-} as MidwayConfig;
-```
-
-In this way, the original logger will automatically execute the Transport when printing logs.
-
-
-
-### Fully customized Transport
-
-In addition to writing files, logs can also be delivered to remote services. For example, in the following example, the logs are forwarded to another service.
-
-Note that Transport is an operation that can be executed asynchronously, but the logger itself will not wait for Transport to execute and return.
-
-```typescript
-import { Transport, ITransport, LoggerLevel, LogMeta } from '@midwayjs/logger';
-
-
-// Transport configuration
-interface CustomOptions {
-   // ...
-}
-
-class CustomTransport extends Transport<CustomOptions> implements ITransport {
-   log(level: LoggerLevel | false, meta: LogMeta, ...args) {
-     // Format the message using built-in formatting methods
-     let msg = this.format(level, meta, args) as string;
-  
-     //Asynchronously write to the log library
-     remoteSdk.send(msg).catch(err => {
-       // Log the error or ignore it
-       console.error(err);
-     });
-   }
-}
-```
-
-
-
-## Dynamic API
-
-Dynamically obtain the log object through the `getLogger` method.
-
-```typescript
-// Get coreLogger
-const coreLogger = app.getLogger('coreLogger');
-// Get the default contextLogger
-const contextLogger = ctx.getLogger();
-// Get the contextLogger created by a specific logger, equivalent to customALogger.createContextLogger(ctx)
-const customAContextLogger = ctx.getLogger('customA');
-```
-
-The framework's built-in `MidwayLoggerService` also has the above API.
-
-```typescript
-import { MidwayLoggerService } from '@midwayjs/core';
-import { Context } from '@midwayjs/koa';
-
-@Provide()
-export class MainConfiguration {
-  
-   @Inject()
-   loggerService: MidwayLoggerService;
-  
-   @Inject()
-   ctx: Context;
-  
-   async getUser() {
-     // get custom logger
-     const customLogger = this.loggerService.getLogger('customLogger');
-    
-     //Create context logger
-     const customContextLogger = this.loggerService.createContextLogger(this.ctx, customLogger);
-   }
-}
-```
-
-
-
-## Common Problem
+## Frequently Asked Questions
 
 
 
 ### 1. The server environment log is not output
 
-We do not recommend printing too many logs in the server environment. Only print necessary content. Excessive log output affects performance and quickly locates problems.
+For the server environment, the default log level is warn, that is, `logger.warn` will print out. please check the "log level" section.
 
-To adjust the log level, see the "Configuring Log Level" section.
-
-
-
-### 2. The server has no console log
-
-Generally speaking, the server console log (console) is closed and will only be output to a file. If there are special needs, it can be adjusted individually.
+We do not recommend printing too many logs in the server environment, only printing the necessary content, too much log output affects performance, but also affects the rapid positioning problem.
 
 
 
-### 3. Some Docker environments fail to start
+### 2. The server does not have a console log
 
-Check whether the user who started the current application in the directory where the log is written has permissions.
+Generally speaking, the server console log (console) is closed and will only be output to the file. If there are special requirements, it can be adjusted separately.
 
-
-
-### 4. How to convert if there is an old configuration?
-
-The new version of the log library is already compatible with the old configuration. Generally, no additional processing is required. There is a priority relationship between the old configuration and the new configuration when merging. Please check the [Change Document](https://github.com/midwayjs/logger/blob/ main/BREAKING-3.md).
-
-In order to reduce troubleshooting problems, please use the new configuration format when using the new version of the log library.
