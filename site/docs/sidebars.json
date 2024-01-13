@@ -247,7 +247,7 @@
         "extensions/sequelize",
         "extensions/redis",
         "extensions/mongodb",
-        "extensions/cache",
+        "extensions/caching",
         "extensions/oss",
         "extensions/cos",
         "extensions/tablestore",
@@ -305,6 +305,7 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
+        "extensions/cache",
         "legacy/mongodb",
         "legacy/sequelize",
         "legacy/orm",
