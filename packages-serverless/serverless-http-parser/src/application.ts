@@ -85,7 +85,9 @@ export class Application extends EventEmitter {
       const ctx = this.createContext(req, res);
       return respond(ctx)
         .catch(onerror)
-        .finally(() => ctx.res.end());
+        .finally(() => {
+          ctx.res.end && ctx.res.end();
+        });
     };
   }
 
