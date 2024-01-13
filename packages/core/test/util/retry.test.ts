@@ -91,7 +91,8 @@ describe('test/util/retry.test.ts', function () {
 
       const result = await fn();
       expect(result).toEqual('ok');
-      expect(Date.now() - start).toBeGreaterThanOrEqual(2000);
+      // js 稍微有点精度问题，所以这里取 1999
+      expect(Date.now() - start).toBeGreaterThanOrEqual(1999);
     });
   });
 
