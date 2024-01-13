@@ -12,12 +12,6 @@ module.exports = [
     "position": "left"
   },
   {
-    "type": "doc",
-    "docId": "tool/cli",
-    "label": "其他",
-    "position": "left"
-  },
-  {
     to: 'api',
     label: 'API',
     position: 'left',

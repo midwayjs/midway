@@ -10,6 +10,7 @@ CREATE TABLE
   `terms_accepted`    tinyint(1) DEFAULT NULL,
   `name`              varchar(255) DEFAULT NULL,
   `email`             varchar(255) DEFAULT NULL,
+  `age`               integer DEFAULT NULL,
   `born`              datetime     DEFAULT NULL,
   `favourite_book_id` int(11) DEFAULT NULL
 );

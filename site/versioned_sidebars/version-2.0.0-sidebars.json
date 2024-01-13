@@ -424,6 +424,43 @@
           ]
         }
       ]
+    },
+    {
+      "type": "category",
+      "label": "工具",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "tool/cli",
+        "tool/mwts",
+        "tool/luckyeye",
+        "tool/typeorm_generator",
+        "tool/egg-ts-helper"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "常见问题",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "framework_problem",
+        "git_problem",
+        "npm_problem",
+        "ts_problem",
+        "how_to_install_nodejs",
+        "how_to_update_midway",
+        "midway_slow_problem"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "其他",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "release_schedule"
+      ]
     }
   ],
   "component": [
@@ -554,45 +591,6 @@
           "id": "prometheus",
           "label": "接入 Prometheus"
         }
-      ]
-    }
-  ],
-  "other": [
-    {
-      "type": "category",
-      "label": "工具",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "tool/cli",
-        "tool/mwts",
-        "tool/luckyeye",
-        "tool/typeorm_generator",
-        "tool/egg-ts-helper"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "常见问题",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "framework_problem",
-        "git_problem",
-        "npm_problem",
-        "ts_problem",
-        "how_to_install_nodejs",
-        "how_to_update_midway",
-        "midway_slow_problem"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "其他",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "release_schedule"
       ]
     }
   ]

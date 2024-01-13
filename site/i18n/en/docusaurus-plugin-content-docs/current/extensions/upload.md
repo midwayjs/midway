@@ -224,6 +224,34 @@ The default suffix whitelist can be obtained through the `uploadWhiteList` expor
 
 In addition, midway upload component, in order to avoid some `malicious users`, uses some technical means to `forge` some extensions that can be truncated, so it will filter the binary data of the obtained extensions, and only support `0x2e` (that is, the English dot `.`), `0x30-0x39` (that is, the number `0-9`), `0x61-0x7a` (that is, the lowercase letters `a-z`) are used as extensions, and other characters will be Automatically ignored.
 
+Starting with v3.14.0, you can pass a function that can dynamically return a whitelist based on different conditions.
+
+```typescript
+// src/config/config.default.ts
+import { uploadWhiteList } from '@midwayjs/upload';
+import { tmpdir } from 'os';
+import { join } from 'path';
+
+export default {
+   // ...
+   upload: {
+     whitelist: (ctx) => {
+       if (ctx.path === '/') {
+         return [
+           '.jpg',
+					 '.jpeg',
+         ];
+       } else {
+         return [
+           '.jpg',
+         ]
+       };
+     },
+     // ...
+   },
+}
+```
+
 
 
 ### MIME type checking
@@ -283,6 +311,31 @@ The MIME type verification rule is only applicable to the file upload mode `mode
 However, we still recommend that you set the `mimeTypeWhiteList` parameter if possible, which will improve your application security.
 
 :::
+
+Starting with v3.14.0, you can pass a function that dynamically returns MIME rules based on different conditions.
+
+```typescript
+// src/config/config.default.ts
+import { tmpdir } from 'os';
+import { join } from 'path';
+
+export default {
+   // ...
+   upload: {
+     mimeTypeWhiteList: (ctx) => {
+       if (ctx.path === '/') {
+         return {
+           '.jpg': 'image/jpeg',
+         };
+       } else {
+         return {
+           '.jpeg': ['image/jpeg', 'image/png'],
+         }
+       };
+     }
+   },
+}
+```
 
 
 

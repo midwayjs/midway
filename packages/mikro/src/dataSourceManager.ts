@@ -6,6 +6,7 @@ import {
   Inject,
   ScopeEnum,
   DataSourceManager,
+  MidwayLoggerService,
 } from '@midwayjs/core';
 import { MikroORM, IDatabaseDriver, Connection } from '@mikro-orm/core';
 
@@ -20,6 +21,9 @@ export class MikroDataSourceManager extends DataSourceManager<
   @Inject()
   baseDir: string;
 
+  @Inject()
+  loggerService: MidwayLoggerService;
+
   @Init()
   async init() {
     await this.initDataSource(this.mikroConfig, this.baseDir);
@@ -33,6 +37,12 @@ export class MikroDataSourceManager extends DataSourceManager<
     config: any,
     dataSourceName: string
   ): Promise<MikroORM<IDatabaseDriver<Connection>>> {
+    if (config.logger && typeof config.logger === 'string') {
+      const logger = this.loggerService.getLogger(config.logger);
+      config.logger = message => {
+        logger.info(message);
+      };
+    }
     return MikroORM.init(config);
   }
 

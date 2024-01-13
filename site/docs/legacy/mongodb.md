@@ -1,5 +1,9 @@
 # MongoDB
 
+:::tip
+本文档从 v3.4.0 版本起废弃。
+:::
+
 在这一章节中，我们选择 [Typegoose](https://github.com/typegoose/typegoose) 作为基础的 MongoDB ORM 库。就如同他描述的那样 " Define Mongoose models using TypeScript classes"，和 TypeScript 结合的很不错。
 
 简单的来说，Typegoose 使用 TypeScript 编写 Mongoose 模型的 “包装器”，它的大部分能力还是由 [mongoose](https://www.npmjs.com/package/mongoose) 库来提供的。
@@ -14,10 +18,6 @@
 | 可用于 Serverless | ✅    |
 | 可用于一体化      | ✅    |
 
-
-:::tip
-本文档从 v3.4.0 版本起废弃。
-:::
 
 ## Mongoose 版本依赖
 

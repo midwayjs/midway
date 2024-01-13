@@ -121,4 +121,12 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
       contextOptions
     );
   }
+
+  public getClients() {
+    return this.clients;
+  }
+
+  public getClientKeys() {
+    return Array.from(this.clients.keys());
+  }
 }

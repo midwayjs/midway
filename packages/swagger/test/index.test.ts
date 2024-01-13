@@ -95,6 +95,10 @@ describe('/test/index.test.ts', () => {
     const body = result.body;
     expect(body).toMatchSnapshot();
     console.log(JSON.stringify(body));
+
+    const result1 = await createHttpRequest(app).get('/swagger-ui/index.html');
+    expect(result1.type).toEqual('text/html');
+    expect(result1.text).toMatch(/html/);
     await close(app);
   });
 

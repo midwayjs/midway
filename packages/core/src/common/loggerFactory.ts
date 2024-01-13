@@ -23,11 +23,13 @@ export abstract class LoggerFactory<Logger extends ILogger, LoggerOptions> {
 export class DefaultConsoleLoggerFactory
   implements LoggerFactory<ILogger, any>
 {
+  private instance: Map<string, ILogger> = new Map();
   createLogger(name: string, options: any): ILogger {
+    this.instance.set(name, console);
     return console;
   }
   getLogger(loggerName: string): ILogger {
-    return console;
+    return this.instance.get(loggerName);
   }
   close(loggerName?: string) {}
   removeLogger(loggerName: string) {}
@@ -48,5 +50,13 @@ export class DefaultConsoleLoggerFactory
 
   createContextLogger(ctx: any, appLogger: ILogger): ILogger {
     return appLogger;
+  }
+
+  public getClients() {
+    return this.instance;
+  }
+
+  public getClientKeys() {
+    return Array.from(this.instance.keys());
   }
 }

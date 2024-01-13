@@ -1,4 +1,4 @@
-# Lint tools, rules and formatting
+# Lint tools and formatting
 
 Midway's framework and business code are written by TypeScript. The default Midway provides a set of default lint, editor and formatting rules for more convenient development and testing.
 
