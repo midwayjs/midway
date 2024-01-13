@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cache-manager-redis",
-  "version": "3.13.5",
+  "version": "3.14.0",
   "description": "midway redis store for cache manager",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -29,12 +29,12 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.13.5",
-    "@midwayjs/cache-manager": "^3.13.5",
-    "@midwayjs/mock": "^3.13.5",
+    "@midwayjs/cache-manager": "^3.14.0",
+    "@midwayjs/core": "^3.14.0",
+    "@midwayjs/mock": "^3.14.0",
     "cache-manager": "5.3.1"
   },
   "dependencies": {
-    "@midwayjs/redis": "^3.13.5"
+    "@midwayjs/redis": "^3.14.0"
   }
 }

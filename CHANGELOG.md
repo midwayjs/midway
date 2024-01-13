@@ -1,6 +1,44 @@
 # Change Log
 
 
+## v3.14.0 (2024-01-13)
+
+#### :rocket: New Feature
+* `cache-manager-redis`, `cache-manager`, `core`, `mikro`, `redis`, `swagger`
+  * [#3556](https://github.com/midwayjs/midway/pull/3556) feat: Release/3.14.0 ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* Other
+  * [#2741](https://github.com/midwayjs/midway/pull/2741) fix: normal return will be close stream ([@czy88840616](https://github.com/czy88840616))
+* `swagger`
+  * [#3555](https://github.com/midwayjs/midway/pull/3555) fix: Swagger tags are duplicate, deprecated field in ApiOperation is … ([@qingniaotonghua](https://github.com/qingniaotonghua))
+* `redis`
+  * [#3533](https://github.com/midwayjs/midway/pull/3533) fix(redis): Check the status of the redis client before closing redis ([@flyingcrp](https://github.com/flyingcrp))
+
+#### :package: Dependencies
+* `mikro`
+  * [#3557](https://github.com/midwayjs/midway/pull/3557) chore(deps): update mikro-orm monorepo to v6.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3551](https://github.com/midwayjs/midway/pull/3551) fix(deps): update dependency axios to v1.6.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3535](https://github.com/midwayjs/midway/pull/3535) fix(deps): update dependency axios to v1.6.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3523](https://github.com/midwayjs/midway/pull/3523) fix(deps): update dependency axios to v1.6.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#3552](https://github.com/midwayjs/midway/pull/3552) fix(deps): update socket.io packages to v4.7.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3534](https://github.com/midwayjs/midway/pull/3534) fix(deps): update bull monorepo to v5.10.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `typeorm`
+  * [#3532](https://github.com/midwayjs/midway/pull/3532) chore(deps): update dependency typeorm to v0.3.19 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#3524](https://github.com/midwayjs/midway/pull/3524) fix(deps): update dependency ws to v8.16.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 4
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- flyingcrp ([@flyingcrp](https://github.com/flyingcrp))
+- wangwei ([@qingniaotonghua](https://github.com/qingniaotonghua))
+- 玄道 ([@xuandao](https://github.com/xuandao))
+
+
+
 ## v3.13.9 (2023-12-27)
 
 #### :bug: Bug Fix
