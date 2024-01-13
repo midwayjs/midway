@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions（问题），Bug Report（错误报告），Feature Request（功能请求）
+    url: https://github.com/midwayjs/midway/discussions/new/choose
+    about: Ask questions and discuss with other midway community members（提出问题并与其他 midway 社区成员讨论）

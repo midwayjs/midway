@@ -38,6 +38,10 @@ export class SwaggerExplorer {
   private swaggerConfig: SwaggerOptions;
 
   private documentBuilder = new DocumentBuilder();
+  private operationIdFactory = (
+    controllerKey: string,
+    webRouter: RouterOption
+  ) => `${controllerKey.toLowerCase()}_${webRouter.method.toLocaleLowerCase()}`;
 
   @Init()
   async init() {
@@ -92,6 +96,12 @@ export class SwaggerExplorer {
         this.documentBuilder.addTag(t.name, t.description, t.externalDocs);
       }
     }
+
+    if (this.swaggerConfig?.documentOptions?.operationIdFactory) {
+      this.operationIdFactory =
+        this.swaggerConfig.documentOptions.operationIdFactory;
+    }
+
     // 设置 auth 类型
     if (Array.isArray(this.swaggerConfig?.auth)) {
       for (const a of this.swaggerConfig?.auth) {
@@ -182,12 +192,11 @@ export class SwaggerExplorer {
       target
     );
 
-    let header = null;
-    const headers = metaForMethods.filter(
+    let headers = metaForMethods.filter(
       item => item.key === DECORATORS.API_HEADERS
     );
     if (headers.length > 0) {
-      header = headers[0].metadata;
+      headers = headers.map(item => item.metadata);
     }
 
     const security = metaForMethods.filter(
@@ -227,7 +236,7 @@ export class SwaggerExplorer {
           paths,
           metaForMethods,
           routerArgs,
-          header,
+          headers,
           target
         );
 
@@ -273,7 +282,7 @@ export class SwaggerExplorer {
     paths: Record<string, PathItemObject>,
     metaForMethods: any[],
     routerArgs: any[],
-    header: any,
+    headers: any,
     target: Type
   ) {
     const operMeta = metaForMethods.filter(
@@ -293,9 +302,13 @@ export class SwaggerExplorer {
         operMeta?.metadata?.description,
         webRouter.description
       ),
-      // operationId: `${webRouter.requestMethod}_${(operMeta?.metadata?.operationId || webRouter.method)}`,
+      operationId: this.getOperationId(target.name, webRouter),
       tags: operMeta?.metadata?.tags || [],
     };
+    if (operMeta?.metadata?.deprecated != null) {
+      opts[webRouter.requestMethod].deprecated =
+        !!operMeta?.metadata?.deprecated;
+    }
     /**
      * [{"key":"web:router_param","parameterIndex":1,"propertyName":"create","metadata":{"type":2}},
      * {"key":"web:router_param","parameterIndex":0,"propertyName":"create","metadata":{"type":1,"propertyData":"createCatDto"}}]
@@ -395,7 +408,6 @@ export class SwaggerExplorer {
         }
         if (arg.metadata?.type === RouteParamTypes.FIELDS) {
           this.expandSchemaRef(p);
-
           p.contentType = BodyContentType.Multipart;
         }
 
@@ -415,8 +427,9 @@ export class SwaggerExplorer {
         } else {
           // 这里拼 schema properties 时肯定存在
           Object.assign(
+            {},
             opts[webRouter.requestMethod].requestBody.content[p.contentType]
-              .schema.properties,
+              .schema?.properties,
             p.schema.properties
           );
         }
@@ -430,8 +443,8 @@ export class SwaggerExplorer {
       parameters.push(p);
     }
     // class header 需要使用 ApiHeader 装饰器
-    if (header) {
-      parameters.unshift(header);
+    if (headers) {
+      headers.forEach(header => parameters.unshift(header));
     }
 
     opts[webRouter.requestMethod].parameters = parameters;
@@ -504,6 +517,10 @@ export class SwaggerExplorer {
     paths[url] = opts;
   }
 
+  getOperationId(controllerKey: string, webRouter: RouterOption) {
+    return this.operationIdFactory(controllerKey, webRouter);
+  }
+
   private expandSchemaRef(p: any, name?: string) {
     let schemaName = name;
     if (p.schema['$ref']) {
@@ -512,12 +529,14 @@ export class SwaggerExplorer {
       delete p.schema['$ref'];
     }
 
-    const schema = this.documentBuilder.getSchema(schemaName);
-    const ss = JSON.parse(JSON.stringify(schema));
-    if (p.schema.properties) {
-      Object.assign(p.schema.properties, ss.properties);
-    } else {
-      p.schema = JSON.parse(JSON.stringify(schema));
+    if (schemaName) {
+      const schema = this.documentBuilder.getSchema(schemaName);
+      const ss = JSON.parse(JSON.stringify(schema));
+      if (p.schema.properties) {
+        Object.assign(p.schema.properties, ss.properties);
+      } else {
+        p.schema = JSON.parse(JSON.stringify(schema));
+      }
     }
     return p;
   }
@@ -747,8 +766,9 @@ export class SwaggerExplorer {
     if (this.documentBuilder.getSchema(clzz.name)) {
       return this.documentBuilder.getSchema(clzz.name);
     }
+    // 解析 ApiExtraModel
     this.parseExtraModel(clzz);
-
+    // 解析类上的 ApiProperty
     const props = getClassExtendedMetadata(INJECT_CUSTOM_PROPERTY, clzz);
 
     const tt: any = {
@@ -756,9 +776,15 @@ export class SwaggerExplorer {
       properties: {},
     };
 
+    // 先添加到 schema，防止递归循环
+    this.documentBuilder.addSchema({
+      [clzz.name]: tt,
+    });
+
     if (props) {
-      Object.keys(props).forEach(key => {
-        const metadata = props[key].metadata;
+      for (const key of Object.keys(props)) {
+        const metadata: any = {};
+        Object.assign(metadata, props[key].metadata);
         if (typeof metadata?.required !== undefined) {
           if (metadata?.required) {
             if (!tt.required) {
@@ -779,7 +805,7 @@ export class SwaggerExplorer {
           if (metadata?.description) {
             tt.properties[key].description = metadata?.description;
           }
-          return;
+          continue;
         }
         if (metadata?.items?.enum) {
           tt.properties[key] = {
@@ -791,7 +817,7 @@ export class SwaggerExplorer {
           if (metadata?.description) {
             tt.properties[key].description = metadata?.description;
           }
-          return;
+          continue;
         }
         let isArray = false;
         let currentType = parseTypeSchema(metadata?.type);
@@ -813,7 +839,7 @@ export class SwaggerExplorer {
             tt.properties[key].oneOf.push(this.parseSubPropertyType(meta));
           });
           delete metadata?.oneOf;
-          return;
+          continue;
         }
 
         if (Types.isClass(currentType)) {
@@ -857,6 +883,8 @@ export class SwaggerExplorer {
             }
 
             delete metadata.items;
+          } else if (metadata.$ref) {
+            tt.properties[key] = {};
           } else {
             tt.properties[key] = {
               type: currentType ?? getPropertyType(clzz.prototype, key).name,
@@ -876,13 +904,8 @@ export class SwaggerExplorer {
         }
 
         Object.assign(tt.properties[key], metadata);
-      });
+      }
     }
-
-    this.documentBuilder.addSchema({
-      [clzz.name]: tt,
-    });
-
     // just for test
     return tt;
   }

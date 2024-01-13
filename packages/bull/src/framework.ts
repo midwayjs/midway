@@ -16,7 +16,7 @@ import {
   IQueueManager,
 } from './interface';
 import { Job, JobOptions, QueueOptions } from 'bull';
-import * as Bull from 'bull';
+import Bull = require('bull');
 import { BULL_PROCESSOR_KEY } from './constants';
 
 export class BullQueue extends Bull implements IQueue<Job> {
@@ -74,11 +74,13 @@ export class BullFramework
         queueName: string;
         concurrency: number;
         jobOptions?: JobOptions;
+        queueOptions?: QueueOptions;
       };
 
       const { repeat, delay, ...otherOptions } = options.jobOptions ?? {};
-
+      const queueOptions = options.queueOptions ?? {};
       const currentQueue = this.ensureQueue(options.queueName, {
+        ...queueOptions,
         defaultJobOptions: otherOptions,
       });
       // clear old repeat job when start
@@ -108,6 +110,9 @@ export class BullFramework
       extend(true, {}, this.bullDefaultQueueConfig, queueOptions)
     );
     this.queueMap.set(name, queue);
+    queue.on('error', err => {
+      this.app.getCoreLogger().error(err);
+    });
     return queue;
   }
 
@@ -141,26 +146,25 @@ export class BullFramework
         from: processor,
       });
 
-      ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
-
-      const isPassed = await this.app
-        .getFramework()
-        .runGuard(ctx, processor, 'execute');
-      if (!isPassed) {
-        throw new MidwayInvokeForbiddenError('execute', processor);
-      }
-
-      const service = await ctx.requestContext.getAsync<IProcessor>(
-        processor as any
-      );
-      const fn = await this.applyMiddleware(async ctx => {
-        return await Utils.toAsyncFunction(service.execute.bind(service))(
-          job.data,
-          job
-        );
-      });
-
       try {
+        ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
+
+        const isPassed = await this.app
+          .getFramework()
+          .runGuard(ctx, processor, 'execute');
+        if (!isPassed) {
+          throw new MidwayInvokeForbiddenError('execute', processor);
+        }
+
+        const service = await ctx.requestContext.getAsync<IProcessor>(
+          processor as any
+        );
+        const fn = await this.applyMiddleware(async ctx => {
+          return await Utils.toAsyncFunction(service.execute.bind(service))(
+            job.data,
+            job
+          );
+        });
         const result = await Promise.resolve(await fn(ctx));
         ctx.logger.info(
           `complete process job ${job.id} from ${processor.name}`

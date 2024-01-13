@@ -4,13 +4,13 @@ We often need to perform type checking and parameter conversion when calling a m
 
 Related information:
 
-| Description |      |
-| ----------------- | ---- |
-| Can be used for standard projects | ✅ |
-| Can be used for Serverless | ✅ |
-| Can be used for integration | ✅ |
-| Contains independent main framework | ❌ |
-| Contains independent logs | ❌ |
+| Description                         |     |
+| ----------------------------------- | --- |
+| Can be used for standard projects   | ✅   |
+| Can be used for Serverless          | ✅   |
+| Can be used for integration         | ✅   |
+| Contains independent main framework | ❌   |
+| Contains independent logs           | ❌   |
 
 
 
@@ -171,11 +171,11 @@ The `RuleType` here is the joi object itself.
 ## Check parameters
 
 
-After defining the type, it can be directly used in the business code, and the `@Validate` decorator is required to turn on the verification capability.
+After defining the type, it can be directly used in the business code.
 
 ```typescript
 // src/controller/home.ts
-import { Controller, Get, Provide } from '@midwayjs/core';
+import { Controller, Get, Provide, Body } from '@midwayjs/core';
 import { UserDTO } from './dto/user';
 
 @Controller('/api/user')
@@ -228,6 +228,38 @@ export class HomeController {
 ```
 
 In general, use the global default configuration.
+
+## Validation for non-web
+
+In non-Web scenarios, if there is no web class decorator such as `@Body`, you can also use the `@Valid` decorator for validation.
+
+For example in a service:
+
+```typescript
+import { Valid } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+   async updateUser(@Valid() user: UserDTO ) {
+     //...
+   }
+}
+```
+
+If the parameter is not DTO, there is no rule, and a validation rule in Joi format can also be passed through the parameter.
+
+```typescript
+import { Valid, RuleType } from '@midwayjs/validate';
+import { Provide } from '@midwayjs/core';
+
+@Provide()
+export class UserService {
+   async updateUser(@Valid(RuleType. number(). required()) userAge: number ) {
+     //...
+   }
+}
+```
 
 
 
@@ -316,39 +348,7 @@ async update(@Body('nickName', [new DefaultValuePipe('anonymous')]) nickName: st
    return nickName;
 }
 
-update({ isMale: undefined} ); => 'anonymous'
-```
-
-
-
-In non-Web scenarios, if there is no web class decorator such as `@Body`, you can also use the `@Valid` decorator for validation.
-
-For example in a service:
-
-```typescript
-import { Valid } from '@midwayjs/validate';
-import { Provide } from '@midwayjs/core';
-
-@Provide()
-export class UserService {
-   async updateUser(@Valid() user: UserDTO ) {
-     //...
-   }
-}
-```
-
-If the parameter is not DTO, there is no rule, and a validation rule in Joi format can also be passed through the parameter.
-
-```typescript
-import { Valid, RuleType } from '@midwayjs/validate';
-import { Provide } from '@midwayjs/core';
-
-@Provide()
-export class UserService {
-   async updateUser(@Valid(RuleType. number(). required()) userAge: number ) {
-     //...
-   }
-}
+update({ nickName: undefined} ); => 'anonymous'
 ```
 
 
@@ -412,6 +412,12 @@ RuleType.array().min(10); //Array, minimum length is 10
 RuleType.array().length(10); // Array, length 10
 
 RuleType.string().allow('') // non-required fields pass in an empty string
+
+export enum DeviceType {
+  iOS = 'ios',
+  Android = 'android',
+}
+RuleType.string().valid(...Object.values(DeviceType)) // validate by enum
 ```
 
 
@@ -782,11 +788,11 @@ export default {
 
 We can do some configuration for validate components.
 
-| Configuration Item | Type | Description |
-| ----------------- | ----------------------------- | ------------------------------------------------------------ |
-| errorStatus | number | When the verification error occurs, the returned Http status code takes effect in the http scenario. The default 422 |
-| locale | string | The default language for verifying the error text. Currently, there are two languages: `en_US` and `zh_CN`. The default language is `en_US`. |
-| validationOptions | Joi's ValidationOptions options | Commonly used options are allowUnknown, stripUnknown and other options. If configured, the global validation allows undefined fields to appear. For more information, please see joi's [ValidationOptions option](https://joi.dev/api/?v= 17.6.0#anyvalidatevalue-options). |
+| Configuration Item | Type                            | Description                                                                                                                                                                                                                                                                 |
+| ------------------ | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| errorStatus        | number                          | When the verification error occurs, the returned Http status code takes effect in the http scenario. The default 422                                                                                                                                                        |
+| locale             | string                          | The default language for verifying the error text. Currently, there are two languages: `en_US` and `zh_CN`. The default language is `en_US`.                                                                                                                                |
+| validationOptions  | Joi's ValidationOptions options | Commonly used options are allowUnknown, stripUnknown and other options. If configured, the global validation allows undefined fields to appear. For more information, please see joi's [ValidationOptions option](https://joi.dev/api/?v= 17.6.0#anyvalidatevalue-options). |
 
 
 

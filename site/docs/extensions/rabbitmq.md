@@ -110,7 +110,7 @@ import * as rabbitmq from '@midwayjs/rabbitmq';
   ],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
         // ...
   }

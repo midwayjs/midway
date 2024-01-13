@@ -1,5 +1,5 @@
 import { Consumer, ConsumerConfig, Kafka, KafkaConfig } from 'kafkajs';
-import { ILogger } from '@midwayjs/logger';
+import { ILogger } from '@midwayjs/core';
 import { IKafkaApplication } from './interface';
 import { EventEmitter } from 'stream';
 

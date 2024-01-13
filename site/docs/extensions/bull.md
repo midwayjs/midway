@@ -467,7 +467,7 @@ import * as bull from '@midwayjs/bull';
   imports: [koa, bull],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -731,6 +731,12 @@ export default {
   }
 }
 ```
+
+
+
+## 关于 Redis 版本
+
+请尽可能选择最新的版本（ >=5 ），目前在低版本 redis 上有发现定时任务创建失败的问题。
 
 
 

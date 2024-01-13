@@ -1,8 +1,8 @@
 {
   "name": "@midwayjs/etcd",
   "description": "midway etcd component",
-  "version": "3.10.11",
-  "main": "dist/index",
+  "version": "3.13.9",
+  "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
@@ -10,11 +10,11 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.10.10",
-    "@midwayjs/mock": "^3.10.11"
+    "@midwayjs/core": "^3.13.7",
+    "@midwayjs/mock": "^3.13.9"
   },
   "dependencies": {
-    "etcd3": "1.1.0"
+    "etcd3": "1.1.2"
   },
   "keywords": [
     "etcd",
@@ -30,7 +30,7 @@
     "lint": "mwts check"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "repository": {
     "type": "git",

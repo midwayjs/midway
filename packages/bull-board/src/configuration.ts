@@ -15,6 +15,7 @@ import { BoardMiddleware } from './board.middleware';
       default: {
         bullBoard: {
           basePath: '/ui',
+          uiConfig: {},
           adapterOptions: {
             readOnlyMode: false,
           },

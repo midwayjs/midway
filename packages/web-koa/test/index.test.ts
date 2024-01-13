@@ -458,4 +458,25 @@ describe('/test/feature.test.ts', () => {
     await server.close();
     await closeApp(app);
   });
+
+  it('should test http forward', async () => {
+    const app = await creatApp('base-app-forward');
+    let result = await createHttpRequest(app)
+      .get('/exists');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('exists');
+
+    result = await createHttpRequest(app)
+      .get('/not-exists');
+
+    expect(result.status).toEqual(404);
+
+    result = await createHttpRequest(app)
+      .get('/forward-function');
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world');
+
+    await closeApp(app);
+  });
 });

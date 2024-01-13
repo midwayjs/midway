@@ -21,10 +21,26 @@ export class TestPipe implements PipeTransform {
   }
 }
 
+@Pipe()
+export class ErrorPipe implements PipeTransform {
+  transform(value: any) {
+    throw new Error('error');
+  }
+}
+
 function Token() {
   return createRequestParamDecorator(ctx => {
     return ctx.request.headers.token;
   }, [TestPipe]);
+}
+
+function ErrorToken() {
+  return createRequestParamDecorator(ctx => {
+    return ctx.request.headers.token;
+  }, {
+    pipes: [ErrorPipe],
+    throwError: true
+  });
 }
 
 class Test {
@@ -40,6 +56,8 @@ class Test {
     @Session(ALL, [TestPipe]) bb: any,
     @Token() token: any
   ) {}
+
+  async dogetError(@ErrorToken() token: any) {}
 }
 
 describe('/test/web/paramMapping.test.ts', () => {

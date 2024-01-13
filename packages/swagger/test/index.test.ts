@@ -3,16 +3,27 @@ import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
-
   describe('test swagger', () => {
-
     let app;
     beforeAll(async () => {
       try {
-        app = await createApp(join(__dirname, 'fixtures/cats'), {}, koa);
+        app = await createApp(
+          join(__dirname, 'fixtures/cats'),
+          {
+            globalConfig: {
+              swagger: {
+                documentOptions: {
+                  operationIdFactory: (c, r) =>
+                    `${c.replace('Controller', '')}_${r.method}`.toLowerCase(),
+                },
+              },
+            },
+          },
+          koa
+        );
       } catch (e) {
         console.log(e);
-        console.log('beforeAll: ' +  e.stack);
+        console.log('beforeAll: ' + e.stack);
       }
     });
 
@@ -39,13 +50,40 @@ describe('/test/index.test.ts', () => {
       console.log('--->', JSON.stringify(body));
 
       expect(body.tags.length).toBeGreaterThanOrEqual(2);
-      expect(body.tags).toStrictEqual([{"name":"1-你好这里","description":""},{"name":"2-国家测试","description":""},{"description":"","name":"sss"}]);
-      expect(body.components.securitySchemes).toStrictEqual({"bbb":{"type":"http","scheme":"basic"},"ttt":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}})
+      expect(body.tags).toStrictEqual([
+        { name: '1-你好这里', description: '' },
+        { name: '2-国家测试', description: '' },
+        { description: '', name: 'sss' },
+      ]);
+      expect(body.components.securitySchemes).toStrictEqual({
+        bbb: { type: 'http', scheme: 'basic' },
+        ttt: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      });
       expect(body.components.schemas.CatT).toMatchSnapshot();
       expect(body.components.schemas.Catd).toMatchSnapshot();
       expect(body.components.schemas.Cata).toMatchSnapshot();
       expect(body.components.schemas.Cat).toMatchSnapshot();
       expect(body.components.schemas.CreateCatDto).toMatchSnapshot();
+
+      const selfSchema = {
+        items: {
+          $ref: '#/components/schemas/Cat',
+        },
+        type: 'array',
+      };
+      expect(body.components.schemas.Cat.properties.children).toEqual(
+        selfSchema
+      );
+
+      expect(body.components.schemas.Cat.properties.childrenWithRef).toEqual(
+        selfSchema
+      );
+      expect(body.components.schemas.Cat.properties.mother).toEqual({
+        $ref: '#/components/schemas/Cat',
+      });
+      expect(body.components.schemas.Cat.properties.father).toEqual({
+        $ref: '#/components/schemas/Cat',
+      });
       expect(body.paths['/cats/{id}']).toMatchSnapshot();
     });
   });

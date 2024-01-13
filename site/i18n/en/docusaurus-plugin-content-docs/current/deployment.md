@@ -50,7 +50,7 @@ In this case, you can directly pass an entry file to the `dev` command and use t
 
 
 
-## Deploy to a normal server
+## Deploy to server
 
 
 ### The difference between post-deployment and local development
@@ -142,15 +142,32 @@ After the build is completed, the `dist` directory of the Midway build product a
 ├── dist                # Midway build product directory
 ├── node_modules        # Node.js dependency package directory.
 ├── test
+├── bootstrap.js        # Deployment Startup File
 ├── package.json
 └── tsconfig.json
 ```
+
+
+
+### Alias path problem in build
+
+Aliases are a habit brought by front-end tools, rather than a standard capability of Node.js. Currently, there are two optional ways to use them:
+
+* 1. Use the [subpath imports](https://nodejs.org/dist/latest/docs/api/packages.html#subpath-imports) that comes with Node.js
+* 2. Use [extra tools](/docs/faq/alias_path) to process at compile time
+
 
 
 ### Packing compression
 
 
 After the construction is completed, you can simply package and compress it and upload it to the environment to be released.
+
+:::caution
+
+Generally speaking, the files or directories that must be included in the server operation are `package.json`, `bootstrap.js`, `dist`, `node_modules`.
+
+:::
 
 
 
@@ -423,55 +440,51 @@ For more details about docker-compose, you can see how to use docker-compose onl
 
 ## Single file build deployment
 
-In some scenarios, when the project is built as a single file, the deployed files can be smaller and easier to distribute and deploy. In some scenarios, it is particularly efficient, such:
+In some scenarios, the project is built as a single file, the deployed file can be smaller, and it can be distributed and deployed more easily. In some scenarios, it is particularly efficient, such as:
 
-- Serverless scenarios, single files can be deployed faster
-- In private scenarios, single files can be more easily encrypted and confused.
+- In serverless scenarios, a single file can be deployed faster
+- For private scenarios, a single file can be encrypted and confused more easily
 
-Midway supports building projects as single files from v3.
+Midway supports building projects as a single file starting from v3.
 
-Unsupported situations are:
+Cases that are not supported are:
 
-- Egg project (@midwayjs/web)
-- The path form used by the `importConfigs` at the entrance introduces the configured application, components
-- Packages that are not explicitly dependent, or have convention-based files in the package
+- egg project (@midwayjs/web)
+- The path form used by `importConfigs` at the entrance imports the configured application, component
+- Packages that are not explicitly depended on, or that contain convention-based files
 
-:::info
 
-Currently, it is still in the testing phase.
 
-:::
+### pre-dependency
 
-### Pre-dependency
-
-Single file construction has some pre-dependencies.
+Single-file builds have some pre-dependencies that need to be installed.
 
 ```bash
 ## Used to generate entry
 $ npm i @midwayjs/bundle-helper --save-dev
 
 ## Used to build a single file
-## Pack to Global
+## install to the global
 $ npm i @vercel/ncc -g
-## Or install into the project
+## Or install to project (recommended)
 $ npm i @vercel/ncc --save-dev
 ```
 
 
 
-### Code adjustment
+### Code adjustments
 
-There are some possible adjustments, listed as follows:
+There are some possible adjustments, listed below:
 
 #### 1. Configuration format adjustment
 
-You must adjust the configuration introduced by the project to [Object Mode](./env_config).
+The configuration imported by the project must be adjusted to [object mode](./env_config).
 
-The official components of Midway have been adjusted to this mode. If you have your own components, please adjust to this mode to build as a single file.
+Midway's official components have been adjusted to this mode. If you have your own components, please adjust to this mode to build a single file.
 
 :::tip
 
-Midway v2/v3 both support configuration loading in "object mode.
+Both Midway v2/v3 support configuration loading in "object mode".
 
 :::
 
@@ -484,103 +497,102 @@ import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 
 @Configuration({
-  importConfigs: [
-    {
-      default: DefaultConfig
-      local: LocalConfig
-    }
-  ]
+   importConfigs: [
+     {
+       default: DefaultConfig,
+       local: LocalConfig
+     }
+   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
 
 
-#### 2. Default Export
+#### 2. The default export situation
 
-Due to the default behavior of ncc builders, **do not** use default exports in code related to dependency injection.
+Due to the default behavior of the ncc builder, please **DO NOT** use default exports in dependency injection related code.
 
-For example:
+for example:
 
 ```typescript
 export default class UserSerivce {
-  // ...
+   //...
 }
 ```
 
-After compilation, the `UserSerivce` cannot be injected.
+After compiling, `UserSerivce` cannot be injected.
 
 
 
-#### 3, data source entities related
+#### 3. Data source entities related
 
-The scan path that the data source depends on is also not supported.
+Data source-dependent scan paths are also not supported.
 
 ```typescript
 export default {
-  typeorm: {
-    dataSource: {
-      default: {
-        // ...
-        entities: [
-          '/abc',			// not supported
-        ]
-      },
-  }
+   typeorm: {
+     dataSource: {
+       default: {
+         //...
+         entities: [
+           '/abc', // not supported
+         ]
+       },
+   }
 }
 ```
 
-If there are too many entities, you can write a js file, scan out the entities, generate a file to the directory, and execute it every time you build it.
+If there are too many entities, you can write a js file, scan out the entities, generate a file to the directory, and execute it every time you build.
 
 
 
-### Build process
+### Modify the entry file
 
-Compiling a single file build requires several steps:
-
-- 1. Prepare a single file to build the portal.
-- 2. build the project ts file as js
-- 3. Use an additional compiler to package all js files into one file
-
-**Step 1**
-
-Modify the `bootstrap.js` of the entry to the following code.
+Modify the entry `bootstrap.js` to the following code.
 
 ```typescript
 const { Bootstrap } = require('@midwayjs/bootstrap');
 
 // Explicitly introduce user code as a component
-Bootstrap.configure({
-  // The reference here is the compiled entry, and the local development does not take this file.
-  imports: require('./dist/index')
-  // Disable directory scanning for dependent injection
-  moduleDetector: false
+Bootstrap. configure({
+   // Here is the compiled entry, local development does not use this file
+   imports: require('./dist/index'),
+   // Disable directory scanning for dependency injection
+   moduleDetector: false,
 }).run()
 
 ```
 
-**Step 2**
 
-Add the following script to `package.json`.
+
+### Construct
+
+Compilation for single-file builds requires several steps:
+
+- 1. Build the project ts file into js
+- 2. Use an additional compiler to package all js files into one file
+
+We can write the above process as the following two commands, and put them in the `scripts` field of `package.json`.
 
 ```json
-  "scripts": {
-    // ...
-    "bundle": "bundle && npm run build && ncc build bootstrap.js -o build",
-    "bundle_start": "NODE_ENV=production node ./build/index.js"
-  },
+   "scripts": {
+     //...
+     "bundle": "bundle && npm run build && ncc build bootstrap.js -o build",
+     "bundle_start": "NODE_ENV=production node ./build/index.js"
+   },
 ```
 
 Contains three parts
 
-- `bundle` exports all project codes as components and generates a `src/index.ts` file.
-- `npm run buid` is a basic ts project. `src/**/*.ts` is built into `dist/**/*.js`
-- `ncc build bootstrap.js -o build` uses `bootstrap.js` as the entry point to build a single file, and finally generates `build/index.js`
+- `bundle` is to export all project codes as components and generate a `src/index.ts` file, this command is provided by `@midwayjs/bundle-helper`
+- `npm run buid` is the basic ts project build, build `src/**/*.ts` to `dist/**/*.js`
+- `ncc build bootstrap.js -o build` uses `bootstrap.js` as the entry to build a single file, and finally generates it into `build/index.js`
 
-**Step 3**
 
-Execute the command.
+
+After writing, execute the command.
 
 ```bash
 $ npm run bundle
@@ -588,19 +600,126 @@ $ npm run bundle
 
 :::tip
 
-note that there may be errors in the build process, such as incorrect ts definition and incorrect entry generation syntax, which need to be manually fixed.
+Note that there may be errors during the construction process, such as ts definition errors, incorrect entry generation syntax, etc., which need to be repaired manually.
 
 :::
 
-**Step 4**
-
-Start the project.
+After compiling, start the project.
 
 ```bash
 $ npm run bundle_start
 ```
 
-If there is no problem in starting the access, then you can take the built directory and distribute it.
+If boot access is fine, then you can distribute your build in the build directory.
+
+
+
+## Binary deployment
+
+Package Node.js into a single executable file, which can be directly copied and executed during deployment. This method includes the node runtime and business code, which is conducive to the protection of intellectual property rights.
+
+Common tools for packaging Node.js into executable files include `pkg`, `nexe`, `node-packer`, `enclose`, etc. Below we will take the most common `pkg` package as an example.
+
+
+
+### pre-dependency
+
+Binary deployment has some pre-dependencies that need to be installed.
+
+```bash
+## Used to generate entry
+$ npm i @midwayjs/bundle-helper --save-dev
+
+## for building binaries
+## install to the global
+$ npm i pkg -g
+## Or install to project (recommended)
+$ npm i pkg --save-dev
+```
+
+
+
+### Code adjustments
+
+The adjustment is the same as [Single File Build Deployment](./deployment#Single File Build Deployment), please refer to the above document.
+
+
+
+### Modify the entry file
+
+The adjustment is the same as [Single File Build Deployment](./deployment#Single File Build Deployment), please refer to the above document.
+
+
+
+### Construct
+
+First you need to configure pkg, the main content is in the `bin` and `pkg` fields of `package.json`.
+
+- `bin` we specify as the entry file, ie `bootstrap.js`
+- The directory after `pkg.scripts` is built, using glob syntax to include all js files under `dist`
+- `pkg.asserts` If there are some static resource files, you can configure them here
+- The platform product built by `pkg.targets` is a combination of the following options (in the example I specified mac + node18):
+   - **nodeRange** (node8), node10, node12, node14, node16 or latest
+   - **platform** alpine, linux, linuxstatic, win, macos, (freebsd)
+   - **arch** x64, arm64, (armv6, armv7)
+- `pkg.outputPath` is the address of the build product, in order to separate it from the ts output, we chose the build directory
+
+
+
+`package.json` reference example:
+
+```json
+{
+   "name": "my-midway-project",
+   //...
+   "devDependencies": {
+     //...
+     "@midwayjs/bundle-helper": "^1.2.0",
+     "pkg": "^5.8.1"
+   },
+   "scripts": {
+     //...
+     "build": "midway-bin build -c",
+     "pkg": "pkg . -d > build/pkg.log",
+     "bundle": "bundle && npm run build"
+   },
+   "bin": "./bootstrap.js",
+   "pkg": {
+     "scripts": "dist/**/*.js",
+     "assets": [],
+     "targets": [
+       "node18-macos-arm64"
+     ],
+     "outputPath": "build"
+   },
+   //...
+}
+
+```
+
+For more details, please refer to [PKG Documentation](https://github.com/vercel/pkg).
+
+:::tip
+
+In the above example, the `-d` parameter of the pkg command is to output debugging information to a specific file, which can be deleted by yourself.
+
+:::
+
+
+
+Compilation for binary builds requires several steps:
+
+- 1. Generate the `src/index.ts` entry file, and build the project ts file into js
+- 2. Use pkg to generate platform-specific build products
+
+We can execute orders.
+
+```bash
+$ npm run bundle
+$ npm run pkg
+```
+
+If it is correct, we can see a `my-midway-project` file in the `build` directory (the `name` field of our `package.json`), double click it to execute.
 
 
 

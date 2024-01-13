@@ -78,6 +78,22 @@ describe('test/express.test.ts', function () {
           assert(file1Stat.size && file1Stat.size === stat.size);
         });
     });
+
+    it('upload file ignore path', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = await createHttpRequest(app);
+      await request.post('/upload-ignore')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', pdfPath)
+        .attach('file2', pdfPath)
+        .expect(200)
+        .then(async response => {
+          assert(response.body.ignore);
+          assert(!response.body.files);
+          assert(!response.body.fields);
+        });
+    });
     
     it('upload unsupport ext file using file', async () => {
       const filePath = join(__dirname, 'fixtures/1.test');

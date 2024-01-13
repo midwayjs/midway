@@ -263,4 +263,8 @@ export class MidwayConfigService implements IConfigService {
     }
     return config;
   }
+
+  public getAppInfo() {
+    return this.appInfo;
+  }
 }

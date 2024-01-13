@@ -65,8 +65,16 @@ The mongoose is also related to the version of MongoDB Server used by your serve
 From mongoose@v5.11.0 on, mongoose the definition is officially supported, there is no need to install the @types/mongoose dependency package.
 :::
 
-
 The installation package depends on the following version:
+
+**Support MongoDB Server 6.x**
+
+```json
+  "dependencies": {
+    "mongoose": "^7.0.0",
+    "@typegoose/typegoose": "^10.0.0",		// This dependency needs to be installed using typegoose
+  },
+```
 
 **Support MongoDB Server 5.x**
 
@@ -378,7 +386,7 @@ export class TestService {
 
 Typegoose reserved a `setGlobalOptions` method to set up [schemaOptions](https://typegoose.github.io/typegoose/docs/api/decorators/model-options#schemaoptions) and some other global [configurations](https://typegoose.github.io/typegoose/docs/api/decorators/model-options#options-1).
 
-We can set it up when the project starts.
+We can set it up when config loaded.
 
 ```typescript
 // srcconfiguration.ts
@@ -390,7 +398,7 @@ import * as Typegoose from '@typegoose/typegoose';
   // ...
 })
 export class MainConfiguration {
-  async onReady() {
+  async onConfigLoad() {
 
     Typegoose.setGlobalOptions({
       schemaOptions: {
@@ -521,10 +529,10 @@ export default {
 
 
 
-### 3. Use
+### 3. How to use
 
 
-When there is only one default connection or the default connection is directly used, we can directly use the encapsulated `MongooseConnectionService` object to create the model.
+When we want to get the original connection object, we can directly use the encapsulated `MongooseConnectionService` object.
 ```typescript
 import { Provide, Inject, Init } from '@midwayjs/core';
 import { MongooseDataSourceManager } from '@midwayjs/mongoose';
@@ -540,7 +548,7 @@ interface User extends Document {
 export class TestService {
 
   @Inject()
-  dataSourceManager: MongooseDataSourceManager;
+  dataSourceManager: MongooseDataSourceManager;9
 
   @Init()
   async init() {
@@ -596,7 +604,7 @@ Object.defineProperty(process, 'version', {
 
 // other code
 
-export class AutoConfiguration {}
+export class MainConfiguration {}
 ```
 
 

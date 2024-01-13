@@ -1,6 +1,5 @@
 import * as assert from 'assert';
 import { Application, HTTPRequest, HTTPResponse } from '../src';
-import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import * as mm from 'mm';
 import { createReadStream, createWriteStream, readFileSync } from 'fs';
 import { join } from 'path';
@@ -420,7 +419,7 @@ describe('/test/index.test.ts', () => {
     );
     const res = new HTTPResponse();
     const respond = app.callback();
-    const ctx: FaaSHTTPContext = await new Promise(resolve => {
+    const ctx: any = await new Promise(resolve => {
       respond(req, res, ctx => {
         resolve(ctx);
       });
@@ -512,7 +511,7 @@ describe('/test/index.test.ts', () => {
       require('./resource/scf_ctx.json')
     );
     const res = new HTTPResponse();
-    const ctx: FaaSHTTPContext = app.createContext(req, res);
+    const ctx: any = app.createContext(req, res);
     ctx.redirect('http://google.com');
     assert.equal(ctx.response.header.location, 'http://google.com');
     assert.equal(ctx.status, 302);
@@ -625,7 +624,7 @@ describe('/test/index.test.ts', () => {
         require('./resource/scf_ctx.json')
       );
       const res = new HTTPResponse();
-      const ctx: FaaSHTTPContext = app.createContext(req, res);
+      const ctx: any = app.createContext(req, res);
       try {
         ctx.throw(403, 'throw error');
       } catch (er) {
@@ -647,6 +646,7 @@ describe('/test/index.test.ts', () => {
 
       let err;
       try {
+        context.streaming = true;
         context.res.write('abc');
         context.res.write('bcd');
         context.res.end();
@@ -681,6 +681,7 @@ describe('/test/index.test.ts', () => {
           resolve()
         });
 
+        context.streaming = true;
         context.res.write('abc');
         context.res.write('bcd');
         context.res.end('efg');
@@ -705,6 +706,7 @@ describe('/test/index.test.ts', () => {
         writeableImpl: stream,
       });
       const context = app.createContext(req, res);
+      context.streaming = true;
       await new Promise<void>((resolve, reject) => {
         stream.on('finish', () => {
           const data = readFileSync(demoFile, 'utf8');

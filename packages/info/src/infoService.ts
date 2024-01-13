@@ -151,7 +151,7 @@ export class InfoService {
     ];
     const info = {};
     for (const modName of npmModuleList) {
-      const modulePkg = safeRequire(join(modName, 'package.json'));
+      const modulePkg = this.midwayInformationService.getPkg();
       if (modulePkg) {
         info[modName] = modulePkg.version;
       }

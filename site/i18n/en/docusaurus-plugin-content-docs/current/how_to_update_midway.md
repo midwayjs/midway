@@ -39,8 +39,80 @@ For example, when the following error occurs
 
 
 
+## Check package version exception
 
-## General item update
+You can use the following command to execute in the project root directory to check.
+
+```bash
+# Community user
+$ npx midway-version
+# Internal user
+$ tnpx @ali/midway-version
+```
+
+If the project is a dependency of pnpm installation, please use the following command.
+
+```bash
+# Community user
+$ pnpx midway-version
+# Internal user
+$ pnpx @ali/midway-version
+```
+
+
+
+## Update version using tools
+
+You can use the following command to execute the update prompt in the project root directory.
+
+```bash
+# Community user
+$ npx midway-version -u
+# Internal user
+$ tnpx @ali/midway-version -u
+```
+
+If the project is a dependency of pnpm installation, please use the following command.
+
+```bash
+# Community user
+$ pnpx midway-version -u
+# Internal user
+$ pnpx @ali/midway-version -u
+```
+
+If you want to write updates to `package.json`, please use the following command.
+
+```bash
+# Community user
+$ npx midway-version -u -w
+# Internal user
+$ tnpx @ali/midway-version -u -w
+```
+
+If the project is a dependency of pnpm installation, please use the following command.
+
+```bash
+# Community user
+$ pnpx midway-version -u -w
+# Internal user
+$ pnpx @ali/midway-version -u -w
+```
+
+:::tip
+
+Newer versions will be written to `package.json` and `package-lock.json` and require reinstallation of dependencies.
+
+:::
+
+
+
+## Manually update the version
+
+
+
+
+### General item update
 
 
 For projects that normally use npm/yarn, please follow the following procedure for upgrading
@@ -57,7 +129,7 @@ For projects that normally use npm/yarn, please follow the following procedure f
 
 
 
-## Lerna project update
+### Lerna project update
 
 
 If you use lerna to develop a project, due to the existence of hoist mode, please follow the following procedure (take lerna3 as an example)

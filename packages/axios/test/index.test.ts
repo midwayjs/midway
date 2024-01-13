@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { HttpService } from '../src';
+import { HttpService, axios } from '../src';
 import { createLightApp } from '@midwayjs/mock';
 import * as nock from 'nock';
 
@@ -39,7 +39,7 @@ describe('/test/index.test.ts', () => {
     expect(httpServiceWithRequest).toEqual(httpService);
   });
 
-  it('should test proxy method', function () {
+  it('should test proxy method', () => {
     const proxyMethods = [
       'getUri',
       'request',
@@ -50,11 +50,14 @@ describe('/test/index.test.ts', () => {
       'post',
       'put',
       'patch',
+      'postForm',
+      'putForm',
+      'patchForm',
     ];
 
     for (const method of proxyMethods) {
       const fn = jest
-        .spyOn(httpService['instance'], method)
+        .spyOn(httpService.instance, method)
         .mockImplementation(() => {
           return 'hello world';
         });
@@ -62,6 +65,11 @@ describe('/test/index.test.ts', () => {
       expect(fn).toHaveBeenCalled();
       jest.restoreAllMocks();
     }
+  });
+
+  it('should test defaults and intercepters', () => {
+    expect(httpService.defaults).toStrictEqual(axios.defaults);
+    expect(httpService.interceptors).toStrictEqual(axios.interceptors);
   });
 
   it('should test get method', async () => {

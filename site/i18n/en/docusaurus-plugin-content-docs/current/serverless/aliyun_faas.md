@@ -3,36 +3,58 @@ import TabItem from '@theme/TabItem';
 
 # Aliyun FC
 
-Alibaba Cloud Serverless is one of the first teams in China to provide Serverless computing services. Relying on Alibaba Cloud's powerful cloud infrastructure service capabilities, Alibaba Cloud continues to achieve technological breakthroughs. At present, Taobao, Alipay, DingTalk, Gaud and other enterprises have applied Serverless to the production business. Serverless products on the cloud have successfully landed in tens of thousands of enterprises such as pumpkin movies, Netease Cloud Music, iQiyi sports and Lilith.
+Alibaba Cloud Serverless is one of the first teams in China to provide serverless computing services. It relies on Alibaba Cloud's powerful cloud infrastructure service capabilities to continuously achieve technological breakthroughs. At present, Taobao, Alipay, DingTalk, AutoNavi, etc. have applied Serverless to production business. Serverless products on the cloud have been successfully implemented in tens of thousands of companies such as Pumpkin Movie, NetEase Cloud Music, iQiyi Sports, and Lilith.
 
-Alibaba Cloud Serverless includes many products, such as Function Compute FC and Lightweight Application Engine SAE. This article mainly uses its **Function Compute** part.
+Alibaba Cloud Serverless includes many products, such as Function Compute FC, Lightweight Application Engine SAE, etc. This article mainly uses its **Function Compute** part.
 
-The following are common methods for using and testing function triggers.
+The following are common methods of using, testing, and deploying function triggers.
 
 
 
-## Trigger code
+## Deployment type
 
-<Tabs>
+Alibaba Cloud has many types of function computing deployments, including the following types according to the different containers they run.
+
+| Name             | Functional limitations                                       | Description                                                  | Deployment Media       |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------- |
+| Built-in runtime | Streaming requests and responses are not supported; requests and responses that are too large are not supported. | Only function interfaces can be deployed, no custom ports are required, zip packages are built for platform deployment | zip package deployment |
+| Custom Runtime   |                                                              | You can deploy standard applications, start port 9000, use the system image provided by the platform, and build a zip package for platform deployment | zip package deployment |
+| Custom Container |                                                              | You can deploy standard applications, start port 9000, control all environmental dependencies yourself, and build a Dockerfile for platform deployment | Dockerfile deployment  |
+
+There are three ways to create functions on the platform.
+
+![](https://img.alicdn.com/imgextra/i1/O1CN01JrlhOw1EJBZmHklbq_!!6000000000330-2-tps-1207-585.png)
+
+
+
+## Pure function development (built-in runtime)
+
+Below we will use the **"built-in runtime deployment"** pure function as an example.
+
+
+
+### Trigger code
+
+<Tabs groupId="triggers">
 <TabItem value="event" label="Event">
 
-Publish functions that do not contain triggers. This is the simplest type. You can manually trigger parameters directly through event or bind other triggers on the platform.
+Publish a function that does not contain a trigger. This is the simplest type. You can manually trigger parameters directly through event, or you can bind other triggers on the platform.
 
-Bind the event trigger by `@ServerlessTrigger` the decorator directly in the code.
+Bind event triggers via the `@ServerlessTrigger` decorator directly in code.
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
 
 @Provide()
 export class HelloAliyunService {
-  @Inject()
-  ctx: Context;
+   @Inject()
+   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.EVENT)
-  async handleEvent(event: any) {
-    return event;
-  }
+   @ServerlessTrigger(ServerlessTriggerType.EVENT)
+   async handleEvent(event: any) {
+     return event;
+   }
 }
 ```
 
@@ -40,9 +62,9 @@ export class HelloAliyunService {
 
 <TabItem value="http" label="HTTP">
 
-Alibaba Cloud's HTTP triggers are different from other platforms. They are another set of triggers that are independent of API Gateway and serve HTTP scenarios. Compared with API gateway, this trigger is easier to use and configure.
+Alibaba Cloud's HTTP triggers are different from those of other platforms. They are another set of triggers independent of the API gateway that serve HTTP scenarios. This trigger is easier to use and configure than API Gateway.
 
-Bind HTTP triggers by `@ServerlessTrigger` decorators directly in code.
+Bind HTTP triggers via the `@ServerlessTrigger` decorator directly in code.
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
@@ -50,24 +72,24 @@ import { Context } from '@midwayjs/faas';
 
 @Provide()
 export class HelloAliyunService {
-  @Inject()
-  ctx: Context;
+   @Inject()
+   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.HTTP, {
-    path: '/',
-    method: 'get',
-  })
-  async handleHTTPEvent(@Query() name = 'midway') {
-    return 'hello ${name}';
-  }
+   @ServerlessTrigger(ServerlessTriggerType.HTTP, {
+     path: '/',
+     method: 'get',
+   })
+   async handleHTTPEvent(@Query() name = 'midway') {
+     return `hello ${name}`;
+   }
 }
 ```
 
 </TabItem>
 
-<TabItem value="apigw" label="API 网关">
+<TabItem value="apigw" label="API Gateway">
 
-API Gateway is special in the Alibaba Cloud function system. It is similar to creating a trigger-free function that is bound to a specific path through the platform gateway.
+The API gateway is special in the Alibaba Cloud function system. It is similar to creating a trigger-free function and binding it to a specific path through the platform gateway.
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
@@ -75,98 +97,56 @@ import { Context } from '@midwayjs/faas';
 
 @Provide()
 export class HelloAliyunService {
-  @Inject()
-  ctx: Context;
+   @Inject()
+   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, {
-    path: '/api_gateway_aliyun',
-    method: 'post',
-  })
-  async handleAPIGatewayEvent(@Body() name) {
-    return 'hello ${name}';
-  }
+   @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, {
+     path: '/api_gateway_aliyun',
+     method: 'post',
+   })
+   async handleAPIGatewayEvent(@Body() name) {
+     return `hello ${name}`;
+   }
 }
 ```
-
-After `npm run deploy`, see [Alibaba Cloud documentation](https://help.aliyun.com/document_detail/74798.html?spm=a2c4g.11186623.6.701.3be978a1MKsNN4).
-
-:::info
-The route on the current API gateway is configured on the platform.
-:::
 
 </TabItem>
 
 <TabItem value="timer" label="Timer">
 
-A timed task trigger is used to periodically execute a function. There are two ways of timing, every time and cron format.
+Scheduled task triggers are used to execute a function regularly.
 
 :::info
-Warm reminder, please close the trigger in time after testing the function and execute it automatically to avoid over-deduction.
+Warm reminder, please turn off trigger automatic execution in time after testing the function to avoid excessive deductions.
 :::
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
+import type { TimerEvent } from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
-  @Inject()
-  ctx: Context;
+   @Inject()
+   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'cron',
-    value: '0 0 4 * * *', // trigger https://help.aliyun.com/document_detail/68172.html at 4:00 every day
-  })
-  async handleTimerEvent(event: FC.TimerEvent) {
-    this.ctx.logger.info(event);
-    return 'hello world';
-  }
+   @ServerlessTrigger(ServerlessTriggerType.TIMER)
+   async handleTimerEvent(event: TimerEvent) {
+     this.ctx.logger.info(event);
+     return 'hello world';
+   }
 }
 ```
 
-**Timer configuration**
+**Event Structure**
 
-| Attribute name | Type | Description |
-| ------- | ------ | ------------------------------------------------------------ |
-| type | string | `cron` or `every`, which is required. The trigger type represents a cron expression at a fixed time interval.  |
-| value | string | Required, cron expression or every value. At every time, the minimum time interval is 1 minute, fixed unit minute. |
-| payload | string | Optional, a fixed passed value, rarely used |
-
-:::info
-Note that FC uses UTC time, which is different from the traditional Chinese time zone.
-:::
-
-Example:
-
-**cron expression**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'cron',
-  value: '0 0 4 * * *', //triggered at 4:00 every day
-})
-```
-
-You can view the [documentation](https://help.aliyun.com/document_detail/169784.html) of the cron expression.
-
-**every expression**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'every',
-  value: '5m', // every 5 minutes, minimum 1 minute
-})
-```
-
-**Event structure**
-
-The structure returned by the Timer message is as follows, described in the `FC.TimerEvent` type.
+The structure returned by the Timer message is as follows, described in the `TimerEvent` type.
 
 ```json
 {
-  triggerTime: new Date().toJSON()
-  triggerName: 'timer',
-  payload: '',
+   triggerTime: new Date().toJSON(),
+   triggerName: 'timer',
+   payload: '',
 }
 ```
 
@@ -174,102 +154,67 @@ The structure returned by the Timer message is as follows, described in the `FC.
 
 <TabItem value="oss" label="OSS">
 
-OSS is used to store some resource files and is a resource storage product of Alibaba Cloud.  When a file is created and updated in OSS, the corresponding function will be triggered and executed.
+OSS is used to store some resource files and is Alibaba Cloud's resource storage product. When a file is created or updated in OSS, the corresponding function will be triggered and executed.
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
+import type { OSSEvent } from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
-  @Inject()
-  ctx: Context;
+   @Inject()
+   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType. OS, {
-    bucket: 'ossBucketName',
-    events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
-    filter: {
-      prefix: 'filterdir /',
-      suffix: '.jpg',
-    },
-  })
-  async handleOSSEvent(event: FC.OSSEvent) {
-    // xxx
-  }
+   @ServerlessTrigger(ServerlessTriggerType.OS)
+   async handleOSSEvent(event: OSSEvent) {
+     //xxx
+   }
 }
 ```
 
-:::caution
-
-Only one trigger can be configured under one prefix of a bucket. If multiple triggers are configured, the `message: event source'oss' returned error: Canot specify overlapping prefix and suffix with same event type will appear.` The error
-
-:::
-
-**OSS Trigger Configuration**
-
-| Attribute name | Type | Description |
-| ------ | ---------------------------------------------------- | ------------------------------------------------------------ |
-| bucket | string | The bucket name of the object store. |
-| events | string [] | The name of the event that triggered the execution of the function. |
-| Filter | {<br />prefix: string; <br/>suffix: string;<br/>} | the object filtering parameter. only objects that meet the filtering criteria can trigger the function. it contains a configuration property key, which indicates the object key that the filter supports filtering.  |
 
 
+**Event Structure**
 
-Example:
-
-**Listener events during object creation and object deletion**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType. OS, {
-  bucket: 'ossBucketName',
-  events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject']
-  filter: {
-    prefix: 'filterdir /',
-    suffix: '.jpg',
-  },
-})
-```
-
-**Event structure**
-
-The structure of OSS messages returned is as follows, which is described in the `FC.OSSEvent` type.
+The structure returned by OSS messages is as follows, which is described in the `FC.OSSEvent` type.
 
 ```json
 {
-  "events": [
-    {
-      "eventName": "ObjectCreated:PutObject ",
-      "eventSource": "acs:oss ",
-      "eventTime": "2017-04-21T12:46:37.000Z ",
-      "eventVersion": "1.0 ",
-      "oss": {
-        "bucket": {
-          "arn": "acs:oss:cn-shanghai:123456789:bucketname ",
-          "name": "testbucket ",
-          "ownerIdentity": "123456789 ",
-          "virtualBucket": ""
-        },
-        "object": {
-          "deltaSize": 122539
-          "eTag": "688A7BF4F233DC9C88A80BF985AB7329 ",
-          "key": "image/a.jpg ",
-          "size": 122539
-        },
-        "ossSchemaVersion": "1.0 ",
-        "ruleId": "9adac8e253828f4f7c0466d941fa3db81161e853"
-      },
-      "region": "cn-shanghai ",
-      "requestParameters": {
-        "sourceIPAddress": "140.205.128.221"
-      },
-      "responseElements": {
-        "requestId": "58F9FF2D3DF792092E12044C"
-      },
-      "userIdentity": {
-        "principalId": "123456789"
-      }
-    }
-  ]
+   "events": [
+     {
+       "eventName": "ObjectCreated:PutObject",
+       "eventSource": "acs:oss",
+       "eventTime": "2017-04-21T12:46:37.000Z",
+       "eventVersion": "1.0",
+       "oss": {
+         "bucket": {
+           "arn": "acs:oss:cn-shanghai:123456789:bucketname",
+           "name": "testbucket",
+           "ownerIdentity": "123456789",
+           "virtualBucket": ""
+         },
+         "object": {
+           "deltaSize": 122539,
+           "eTag": "688A7BF4F233DC9C88A80BF985AB7329",
+           "key": "image/a.jpg",
+           "size": 122539
+         },
+         "ossSchemaVersion": "1.0",
+         "ruleId": "9adac8e253828f4f7c0466d941fa3db81161e853"
+       },
+       "region": "cn-shanghai",
+       "requestParameters": {
+         "sourceIPAddress": "140.205.128.221"
+       },
+       "responseElements": {
+         "requestId": "58F9FF2D3DF792092E12044C"
+       },
+       "userIdentity": {
+         "principalId": "123456789"
+       }
+     }
+   ]
 }
 ```
 
@@ -278,68 +223,48 @@ The structure of OSS messages returned is as follows, which is described in the 
 <TabItem value="mns" label="MNS">
 
 :::info
-Please note that Alibaba Cloud Message Queue will incur certain fees for Topic and Queue.
+
+* 1. Alibaba Cloud Message Queue will incur certain fees for Topic and Queue.
+* 2. The default message queue format provided is JSON
+
 :::
+
+
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
+import type {MNSEvent} from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
-  @Inject()
-  ctx: Context;
+   @Inject()
+   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.MQ, {
-    topic: 'test-topic',
-    tags: 'bbb',
-  })
-  async handleMNSEvent(event: FC.MNSEvent) {
-    // ...
-  }
+   @ServerlessTrigger(ServerlessTriggerType.MQ)
+   async handleMNSEvent(event: MNSEvent) {
+     // ...
+   }
 }
 ```
 
-:::info
-Note that under Alibaba Cloud, the default message queue format provided by midway faas is JSON.
-:::
 
-**Configure an MNS trigger**
 
-| Attribute name | Type | Description |
-| -------- | ------------------------------------------- | ------------------------------------------------------------ |
-| topic | string | topic for receiving messages |
-| tags | string | optional, which describes the tags of message filtering in the subscription (only messages with consistent tags will be pushed) |
-| strategy | "BACKOFF_RETRY" \| "EXPONENTIAL_DECAY_RETRY' | Retry policy for calling function, optional value: BACKOFF_RETRY, EXPONENTIAL_DECAY_RETRY, default value: BACKOFF_RETRY |
-| region | string | optional. the region where the topic is located. if not, the default is the same region as the function. |
+**Event Structure**
 
-Example:
-
-**Monitor MQ messages**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.MQ, {
-  topic: 'test-topic',
-  region: 'cn-shanghai'
-  strategy: 'BACKOFF_RETRY'
-})
-```
-
-**Event structure**
-
-The structure returned by MNS messages is as follows, which is described in the type of `FC.MNSEvent`.
+The structure returned by the MNS message is as follows, described in the `FC.MNSEvent` type.
 
 ```json
 {
-  "Context": "user custom info ",
-  "TopicOwner": "1186202104331798 ",
-  "Message": "hello topic ",
-  "Subscriber": "1186202104331798 ",
-  "PublishTime": 1550216302888
-  "SubscriptionName": "test-fc-subscibe ",
-  "MessageMD5": "BA4BA9B48AC81F0F9C66F6C909C39DBB",
-  "TopicName": "test-topic ",
-  "MessageId": "2F5B3C281B283D4EAC694B7425288675"
+   "Context": "user custom info",
+   "TopicOwner": "1186202104331798",
+   "Message": "hello topic",
+   "Subscriber": "1186202104331798",
+   "PublishTime": 1550216302888,
+   "SubscriptionName": "test-fc-subscibe",
+   "MessageMD5": "BA4BA9B48AC81F0F9C66F6C909C39DBB",
+   "TopicName": "test-topic",
+   "MessageId": "2F5B3C281B283D4EAC694B7425288675"
 }
 ```
 
@@ -347,41 +272,119 @@ The structure returned by MNS messages is as follows, which is described in the 
 
 </Tabs>
 
+:::info
+
+More configurations of triggers are platform-related and will be written in `s.yaml`, such as the time interval of scheduled tasks, etc. For more details, please see the deployment paragraph below.
+
+:::
 
 
-## Local development
 
-HTTP triggers and API Gateway types can be developed locally by using local `npm run dev` and similar development methods to traditional applications. Other types of triggers cannot be developed locally by using dev. They can only be tested and executed by running `npm run test`.
+### Type definition
 
-
-
-## Local test
-
-<Tabs>
-<TabItem value="event" label="Event">
-
-Create a function app by `createFunctionApp`, obtain a class instance by `getServerlessInstance`, and then directly call the method of the instance to pass in parameters for testing.
+The definition of FC will be exported by the adapter. In order for the definition of `ctx.originContext` to remain correct, it needs to be added to `src/interface.ts`.
 
 ```typescript
+// src/interface.ts
+import type {} from '@midwayjs/fc-starter';
+```
+
+Additionally, definitions for various Event types are provided.
+
+```typescript
+//Event type
+import type {
+   OSSEvent,
+   MNSEvent,
+   SLSEEvent,
+   CDNEvent,
+   TimerEvent,
+   APIGatewayEvent,
+   TableStoreEvent,
+} from '@midwayjs/fc-starter';
+// InitializeContext type
+import type { InitializeContext } from '@midwayjs/fc-starter';
+```
+
+
+
+### Local development
+
+HTTP triggers and API Gateway types can be developed locally through local `npm run dev` and development methods similar to traditional applications. Other types of triggers cannot be developed locally using dev and can only be tested by running `npm run test`.
+
+
+
+### Local testing
+
+Similar to traditional application testing, use the `createFunctionApp` method to create a function app and use the `close` method to close it.
+
+```typescript
+import { Application, Context, Framework } from '@midwayjs/faas';
+import { mockContext } from '@midwayjs/fc-starter';
+import { createFunctionApp } from '@midwayjs/mock';
+
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
 
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext()
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
+   it('should get result from event trigger', async () => {
+    
+     // create app
+     const app: Application = await createFunctionApp<Framework>(join(__dirname, '../'), {
+       initContext: mockContext(),
+     });
+    
+     // ...
+    
+     await close(app);
+   });
+});
+```
 
-  afterAll(async () => {
-    await close(app);
-  });
+The `mockContext` method is used to simulate a FC Context data structure. You can customize a similar structure or modify some data.
 
-  it('should get result from event trigger', async () => {
-    expect(await instance.handleEvent('hello world')).toEqual('hello world');
-  });
+```typescript
+import { Application, Context, Framework } from '@midwayjs/faas';
+import { mockContext } from '@midwayjs/fc-starter';
+import { createFunctionApp } from '@midwayjs/mock';
+
+describe('test/hello_aliyun.test.ts', () => {
+
+   it('should get result from event trigger', async () => {
+    
+     // create app
+     const app: Application = await createFunctionApp<Framework>(join(__dirname, '../'), {
+       initContext: Object.assign(mockContext(), {
+         function: {
+           name: '***',
+           handler: '***'
+         }
+       }),
+     });
+    
+     // ...
+    
+     await close(app);
+   });
+});
+```
+
+Different triggers have different testing methods. Some common triggers are listed below.
+
+<Tabs groupId="triggers">
+<TabItem value="event" label="Event">
+
+Obtain the class instance through `getServerlessInstance`, directly call the instance method, and pass in the parameters for testing.
+
+```typescript
+import { HelloAliyunService } from '../src/function/hello_aliyun';
+
+describe('test/hello_aliyun.test.ts', () => {
+
+   it('should get result from event trigger', async () => {
+     // ...
+     const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+     expect(await instance.handleEvent('hello world')).toEqual('hello world');
+     // ...
+   });
 });
 ```
 
@@ -389,70 +392,44 @@ describe('test/hello_aliyun.test.ts', () => {
 
 <TabItem value="http" label="HTTP">
 
-Similar to the application, the function app is created by `createFunctionApp` and tested by `createHttpRequest` method.
+Similar to the application, create a function app through `createFunctionApp` and test it through `createHttpRequest`.
 
 ```typescript
-import { Framework } from '@midwayjs/serverless-app';
-import { createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { HelloAliyunService } from '../src/function/hello_aliyun';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
 
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext()
-    });
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
-
-  it('should get result from http trigger', async () => {
-    const result = await createHttpRequest(app).get('/').query({
-      name: 'zhangting',
-    });
-    expect(result.text).toEqual('hello zhangting');
-  });
+   it('should get result from http trigger', async () => {
+     // ...
+     const result = await createHttpRequest(app).get('/').query({
+       name: 'zhangting',
+     });
+     expect(result.text).toEqual('hello zhangting');
+     // ...
+   });
 });
 ```
 
 </TabItem>
 
-<TabItem value="apigw" label="API 网关">
+<TabItem value="apigw" label="API Gateway">
 
-Same as HTTP testing, the function app is created by `createFunctionApp` and tested by `createHttpRequest` methods.
+The same as HTTP testing, create a function app through `createFunctionApp` and test it through `createHttpRequest`.
 
 ```typescript
-import { Framework } from '@midwayjs/serverless-app';
-import { createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { createHttpRequest } from '@midwayjs/mock';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
 
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext()
-    });
-  });
+   it('should get result from http trigger', async () => {
+     // ...
+     const result = await createHttpRequest(app).post('api_gateway_aliyun').send({
+       name: 'zhangting',
+     });
 
-  afterAll(async () => {
-    await close(app);
-  });
-
-  it('should get result from http trigger', async () => {
-    const result = await createHttpRequest(app).post('api_gateway_aliyun').send({
-      name: 'zhangting',
-    });
-
-    expect(result.text).toEqual('hello zhangting');
-  });
+     expect(result.text).toEqual('hello zhangting');
+     // ...
+   });
 });
 ```
 
@@ -460,36 +437,22 @@ describe('test/hello_aliyun.test.ts', () => {
 
 <TabItem value="timer" label="Timer">
 
-Unlike HTTP testing, the function app is created by `createFunctionApp`, and the instance of the entire class is obtained by `getServerlessInstance`, thus calling a specific method to test.
+Different from HTTP testing, create a function app through `createFunctionApp`, obtain an instance of the entire class through `getServerlessInstance`, and call a specific method for testing.
 
-You can quickly create the structure passed in by the platform by `createTimerEvent` methods.
+The structure passed by the platform can be quickly created through the `mockTimerEvent` method.
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createTimerEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockTimerEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
 
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext()
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
-
-  it('should get result from timer trigger', async () => {
-    expect(await instance.handleTimerEvent(createTimerEvent())).toEqual('hello world');
-  });
+   it('should get result from timer trigger', async () => {
+     // ...
+     const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+     expect(await instance.handleTimerEvent(mockTimerEvent())).toEqual('hello world');
+     // ...
+   });
 });
 ```
 
@@ -497,36 +460,21 @@ describe('test/hello_aliyun.test.ts', () => {
 
 <TabItem value="oss" label="OSS">
 
-Unlike HTTP testing, the function app is created by `createFunctionApp`, and the instance of the entire class is obtained by `getServerlessInstance`, thus calling a specific method to test.
+Unlike HTTP testing, through `createFunctionApp`Create a function app, get an instance of the entire class through `getServerlessInstance`, and call a specific method for testing.
 
-You can quickly create the structure passed in by the platform by `createOSSEvent` methods.
+The structure passed by the platform can be quickly created through the `createOSSEvent` method.
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createOSSEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockOSSEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext()
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
-
-  it('should get result from oss trigger', async () => {
-    expect(await instance.handleOSSEvent(createOSSEvent())).toEqual('hello world');
-  });
+   it('should get result from oss trigger', async () => {
+     // ...
+     const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+     expect(await instance.handleOSSEvent(mockOSSEvent())).toEqual('hello world');
+     // ...
+   });
 });
 ```
 
@@ -534,36 +482,22 @@ describe('test/hello_aliyun.test.ts', () => {
 
 <TabItem value="mns" label="MNS">
 
-Unlike HTTP testing, the function app is created by `createFunctionApp`, and the instance of the entire class is obtained by `getServerlessInstance`, thus calling a specific method to test.
+Different from HTTP testing, create a function app through `createFunctionApp`, obtain an instance of the entire class through `getServerlessInstance`, and call a specific method for testing.
 
-You can quickly create the structure passed in by the platform by `createMNSEvent` methods.
+The structure passed in by the platform can be quickly created through the `createMNSEvent` method.
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createMNSEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockMNSEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
 
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext()
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
-
-  it('should get result from oss trigger', async () => {
-    expect(await instance.handleMNSEvent(createMNSEvent())).toEqual('hello world');
-  });
+   it('should get result from oss trigger', async () => {
+     // ...
+     const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+     expect(await instance.handleMNSEvent(mockMNSEvent())).toEqual('hello world');
+     // ...
+   });
 });
 ```
 
@@ -571,204 +505,222 @@ describe('test/hello_aliyun.test.ts', () => {
 
 </Tabs>
 
-## publish to alibaba cloud
+## Pure function deployment (built-in runtime)
 
-Ensure `aliyun` at the `provider` paragraph of `f.yml` in the project root directory.
+The following will briefly describe how to use Serverless Devs to deploy to Alibaba Cloud functions.
 
-```yaml
-service:
-  name: midway-faas-examples
+### 1. Confirm the launcher
 
-provider:
-  name: aliyun
-```
-
-Deploy the function. You can directly use the release command to package and deploy the function. The Deploy command is automatically packaged and released by calling the official deployment tool of Alibaba Cloud.
-
-```shell
-$ npm run deploy
-```
-
-:::info
-If you enter the wrong information, you can re-execute the `npx midway-bin deploy -- resetConfig` modification.
-:::
-
-For the first time, Alibaba Cloud deployment needs to configure `accountId`, `accountKey`, and `accountSecret`.
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654967-11e1bcbd-5a56-4239-99e1-5a1472ad49fd.png#align=left&display=inline&height=514&margin=%5Bobject%20Object%5D&originHeight=514&originWidth=1152&size=0&status=done&style=none&width=1152" width="1152" />
-
-For related configuration, please refer to the picture below:
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654949-9c14958c-3aff-403a-b89b-d03a3a95cd18.png#align=left&display=inline&height=696&margin=%5Bobject%20Object%5D&originHeight=696&originWidth=1832&size=0&status=done&style=none&width=1832" width="1832" />
-
-Click [Security Settings](https://account.console.aliyun.com/#/secure).
-
-
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654950-19a811c5-2cf3-4843-a619-cfd744430fae.png#align=left&display=inline&height=184&margin=%5Bobject%20Object%5D&originHeight=592&originWidth=2406&size=0&status=done&style=none&width=746" width="746" />
-
-Click the [AccessKey page](https://usercenter.console.aliyun.com/#/manage/ak) of Alibaba Cloud.
-
-Here is an example of an http trigger.
-
-After the release, Alibaba Cloud will output a temporarily available domain name and open the browser to access it.
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1600835297676-1753de7a-fb0d-46ca-98f0-944eba5b2f2b.png#align=left&display=inline&height=193&margin=%5Bobject%20Object%5D&name=image.png&originHeight=193&originWidth=1219&size=35152&status=done&style=none&width=1219" width="1219" />
-
-After the release is completed, the platform status is as follows.
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1586685106514-c52880d4-c447-4bc1-9b8b-6db99dd81878.png#height=436&id=wtVSC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=872&originWidth=2684&originalType=binary&size=164942&status=done&style=none&width=1342" width="1342" />
-
-release effect, each configured function will be published as a function on the platform, and the http trigger will be automatically configured.
-
-
-
-## Frequently Asked Questions
-
-### 1. Custom domain name
-
-You need to apply for a domain name in advance. If you are in China, you need to file it, otherwise you cannot bind it.
-
-The first step is to turn off the function of the default automatically generated domain name
+In the `provider` section of `f.yml` in the project root directory, make sure the starter is `@midwayjs/fc-starter`.
 
 ```yaml
-service:
-  name: midway-faas-examples
-
 provider:
-  name: aliyun
-
-custom:
-  customDomain: false
+   name: aliyun
+   starter: '@midwayjs/fc-starter'
 ```
 
-The second step is to add domain name resolution to the gateway corresponding to your function.
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588654519449-2c98a9d8-ffac-42b7-bcf2-ac19c21f08ac.png#height=478&id=kmxTj&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1090&originWidth=1700&originalType=binary&size=132002&status=done&style=none&width=746" width="746" />
 
-Bind a custom domain name on the function page and add a route
+### 2. Install Serverless Devs tools
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588654440214-75bfd1c2-1b6a-4c2b-9c57-198bec9d4e64.png#height=706&id=IEhZC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1412&originWidth=2794&originalType=binary&size=310772&status=done&style=none&width=1397" width="1397" />
+aliyun uses [Serverless Devs tool](https://www.serverless-devs.com/) for function deployment.
 
-After the binding is completed, you can use the domain name to access.
+You can install it globally.
 
-### 2. Some restrictions on http headers
+```bash
+$ npm install @serverless-devs/s -g
+```
 
-Request Headers does not support customization starting with x-fc-and customization of the following fields:
-
-- accept-encoding
-- connection
-- keep-alive
-- proxy-authorization
-- te
-- trailer
-- transfer-encoding
-
-Response Headers does not support customization starting with `x-fc-` and customization of the following fields:
-
-- connection
-- content-length
-- content-encoding
-- date
-- keep-alive
-- proxy-authenticate
-- server
-- trailer
-- transfer-encoding
-- upgrade
-
-Request restrictions. If the following limit is exceeded, the 400 status code and InvalidArgument error code will be returned.
-
-- Headers Size: The total size of all Key and Value in the Headers must not exceed 4KB.
-- Path size: Including all Query Params, the total size of Path must not exceed 4KB.
-- Body size: The total size of HTTP Body must not exceed 6MB.
-
-Response restrictions. If the following limit is exceeded, the 502 status code and BadResponse error code will be returned.
-
-- Headers Size: The total size of all Key and Value in the Headers must not exceed 4KB.
+Refer to the [Key Configuration](https://docs.serverless-devs.com/serverless-devs/quick_start) document for configuration.
 
 
 
-### 3. The size of the release package
+### 3. Write a Serverless Devs description file
 
-In order to improve the startup speed, the Alibaba Cloud FC container limits the size of the compressed package to 50M. Please simplify your back-end code dependencies as much as possible.
+Create a `s.yaml` in the root directory and add the following content.
 
-Generally speaking, the default scaffold (eggjs) of midway is built at about 9M, and other frameworks will be smaller. Please try to delete the `package-lock.json` before trying.
+```yaml
+edition: 1.0.0
+name: "midwayApp" # project name
+access: "default" # Secret key alias
 
-### 4. Container time zone problem
+vars:
+   service:
+     name: fc-build-demo
+     description: 'demo for fc-deploy component'
+services:
+   project-0981cd9b07:
+     component: devsapp/fc
+     props:
+       region: cn-hangzhou
+       service: ${vars.service}
+       function:
+         name: hello # function name
+         handler: helloHttpService.handleHTTPEvent
+         codeUri: '.'
+         initializer: helloHttpService.initializer
+       customDomains:
+         - domainName: auto
+           protocol: HTTP
+           routeConfigs:
+             - path: /*
+               serviceName: ${vars.service.name}
+               functionName: helloHttpService-handleHTTPEvent
+       triggers:
+         - name: http
+           type: http
+           config:
+             methods:
+               -GET
+             authType: anonymous
 
-> Most Docker images are based on Alpine,Ubuntu,Debian,CentOS and other basic images.  Basically, UTC time is used, and the default time zone is zero time zone.
+```
 
-The default time zone of Alibaba Cloud container environment is `GMT +0000`. When you use the `new Date()` and other frontend users to obtain the time zone, the time zone may not be processed by domestic users, and the difference will be 8 hours.
+Every time you add a function, you need to adjust the `s.yaml` file. For this reason, Midway provides a `@midwayjs/serverless-yaml-generator` tool to write the decorator function information into `s.yaml`.
 
-Domestic users may be accustomed to `GMT +0800` by default. Can be adjusted by environment variables (configured on platform or f.yml).
+```diff
+{
+"scripts": {
++ "generate": "serverless-yaml-generator",
+   },
+   "devDependencies": {
++ "@midwayjs/serverless-yaml-generator": "^1.0.0",
+   },
+}
+```
+
+By executing the following command, you can fill existing function information into `s.yaml` and generate an entry file to facilitate troubleshooting.
+
+```bash
+$ npm run generate
+```
+
+The tool will look for the configuration in `s.yaml` using the function name as the key.
+
+* 1. If there is a function, it will cover specific fields, such as handler, http trigger methods
+* 2. If the function does not exist, a new function will be added
+* 3. The tool will not write the http routing method. To simplify subsequent updates, you can provide a `/*` route (as an example)
+
+We recommend that users only define the basic function name, function handler, and basic trigger information (such as the path and method of the http trigger) in the decorator, and write the rest in `yaml`.
+
+The complete configuration of `s.yaml` is more complicated. For details, please refer to [Description File Specification](https://docs.serverless-devs.com/serverless-devs/yaml).
+
+
+
+### 4. Write a deployment script
+
+Since deployment has multiple steps such as building and copying, we can write a deployment script to unify this process.
+
+For example, create a new `deploy.sh` file in the project root directory with the following content.
+
+```bash
+#!/bin/bash
+
+set -e
+
+# Build product directory
+export BUILD_DIST=$PWD/.serverless
+#Build start time in milliseconds
+export BUILD_START_TIME=$(date +%s%3N)
+
+echo "Building Midway Serverless Application"
+
+#Print the current directory cwd
+echo "Current Working Directory: $PWD"
+#Print result directory BUILD_DIST
+echo "Build Directory: $BUILD_DIST"
+
+#Install current project dependencies
+npm i
+
+# Execute build
+./node_modules/.bin/tsc || return 1
+# Generate entry file
+./node_modules/.bin/serverless-yaml-generator || return 1
+
+# If the .serverless folder exists, delete it and recreate it
+if [ -d "$BUILD_DIST" ]; then
+   rm -rf $BUILD_DIST
+fi
+
+mkdir $BUILD_DIST
+
+# Copy dist, *.json, *.yml to the .serverless directory
+cp -r dist $BUILD_DIST
+cp *.yaml $BUILD_DIST 2>/dev/null || :
+cp *.json $BUILD_DIST 2>/dev/null || :
+# Move the entry file to the .serverless directory
+mv *.js $BUILD_DIST 2>/dev/null || :
+
+# Enter the .serverless directory
+cd $BUILD_DIST
+# Install online dependencies
+npm install --production
+
+echo "Build success"
+
+# Deploy in the .serverless directory
+s deploy
+
+```
+
+You can put this `deploy.sh` file in the `deploy` command of `package.json`, and execute `npm run deploy` for subsequent deployment.
 
 ```json
-process.env.TZ = 'Asia/Shanghai';
+{
+   "scripts": {
+     "deploy": "sh deploy.sh"
+   }
+}
 ```
 
-```yaml
-provider:
-  name: aliyun
-  runtime: nodejs12
-	environment:
-  	TZ: 'Asia/Shanghai'
-```
+:::tip
 
-:::info
-Note that the scheduled task is triggered by the gateway and will not be affected by the function time zone configured here.
+* 1. `deploy.sh` is only tested on mac, other platforms can be adjusted by yourself.
+* 2. The script content can be adjusted according to business logic, such as copied files, etc.
+
 :::
 
-### 5. Revised AccessKey
 
-Sometimes, we fill in a wrong `AccessKey` or other regional options on the first release. We provide a modifiable parameter to clean up the last error on the release.
 
-```bash
-midway-bin deploy --resetConfig
-```
+## Custom runtime deployment
 
-Enter default when prompted `Please create alias for key pair. If not, please enter to skip`, otherwise the current AccessKey will not be used. If you only want to adjust specific fields, you can enter the `~/.s/access.yaml` file, modify and save directly.
+### 1. Create a project
 
-### 6. CLI Releases Red Tips
+Custom runtimes can be deployed using standard projects. Since port 9000 needs to be provided, the Midway koa/express/express project needs to be created.
 
-After the HTTP trigger is published, the following red prompt will appear. This is **a prompt** because if the domain name is not configured, Alibaba Cloud will add the `Content-Disposition: attachment` the header to the response by default, and the browser opening address will change to attachment download. You can test the results by binding a custom domain name or a local curl.
+For initialization projects, please refer to [Creating the first application](/docs/quickstart).
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1587036400388-b2ebe43f-fa7d-463b-b9b6-b38bf9e18430.png#height=268&id=H2BJz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=268&originWidth=958&originalType=binary&ratio=1&size=242934&status=done&style=none&width=958" width="958" />
+### 2. Adjust the port
 
-### 7. Specify accessKey at the time of release, etc.
-
-```bash
-export REGION=cn-beijing
-export ACCOUNT_ID=xxx
-export ACCESS_KEY_ID=xxx
-export ACCESS_KEY_SECRET=xxx
-```
-
-currently, alibaba cloud releases using funcraft tools. you can use the funcraft environment variables, load the startup command line, or use the yml variable filling method.
-
-### 8. Release Timeout
-
-Sometimes the package is relatively large, and the upload of `midway-bin deploy` may encounter the problem of timeout, which is controlled internally by the funcraft tool.
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1598423950078-15838cbb-95f3-41f9-94ac-a31741b111d3.png#height=179&id=EOCLm&margin=%5Bobject%20Object%5D&name=image.png&originHeight=358&originWidth=2784&originalType=binary&ratio=1&size=310195&status=done&style=none&width=1392" width="1392" />
-
-Solution: Configure timeout in `~/.fcli/config.yaml` in s (seconds).
-
-Generally speaking, the default scaffold (eggjs) of midway is built at about 9M, and other frameworks will be smaller. Please try to delete the `package-lock.json` before trying.
-
-If there is no effect, if the package is too large, you can modify the deployment time of the fun tool in `~/.fcli/config.yaml`, and add the timeout field to it.
-
-Examples are as follows:
+In order to avoid affecting local development, we only add ports at the entrance `bootstrap.js`.
 
 ```typescript
-endpoint: ***************
-api_version: '2016-08-15'
-access_key_id: ***************
-access_key_secret: * * * * * * * * * * * * * * *
-security_token: ''
-debug: false
-timeout: 50 ## deployment timeout, unit is s
-retries: 3
+const { Bootstrap } = require('@midwayjs/bootstrap');
 
+// Explicitly introduce user code as a component
+Bootstrap.configure({
+   globalConfig: {
+     koa: {
+       port: 9000,
+     }
+   }
+}).run()
 ```
 
+For different framework modification ports, please refer to:
+
+* [koa modification port](/docs/extensions/koa)
+* [Egg modification port](/docs/extensions/egg)
+* [Express modification port](/docs/extensions/express)
+
+### 3. Platform deployment configuration
+
+* 1. Select the running environment, such as `Node.js 18`
+* 2. Select the code upload method, for example, you can upload a zip package locally
+* 3. The startup command specifies node bootstrap.js
+* 4. Listening port 9000
+
+![](https://img.alicdn.com/imgextra/i3/O1CN010JA2GU1lxNeqm81AR_!!6000000004885-2-tps-790-549.png)
+
+After the configuration is completed, upload the compressed package to complete the deployment.

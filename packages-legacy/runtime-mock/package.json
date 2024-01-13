@@ -2,7 +2,7 @@
   "name": "@midwayjs/runtime-mock",
   "private": true,
   "version": "3.7.0",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/runtime-engine": "^3.7.0"

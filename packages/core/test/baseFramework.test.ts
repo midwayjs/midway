@@ -498,7 +498,7 @@ describe('/test/baseFramework.test.ts', () => {
     mm.restore();
   });
 
-  it('should test attr api', async () => {
+  it('should test attr and getApp api', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,
       './fixtures/base-app/src'
@@ -513,6 +513,9 @@ describe('/test/baseFramework.test.ts', () => {
 
     framework.getApplicationContext().setAttr('abc', 2);
     expect(app.getAttr('abc')).toEqual(2);
+
+    const ctx = app.createAnonymousContext();
+    expect(ctx.getApp()).toEqual(app);
   });
 
   it('should test object config load', async () => {

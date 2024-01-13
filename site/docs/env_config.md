@@ -2,18 +2,34 @@
 
 配置是我们常用的功能，而且在不同的环境，经常会使用不同的配置信息。
 
-
 本篇我们来介绍 Midway 如何加载不同环境的业务配置。
 
 
 
-## 业务配置文件
+## 配置文件
+
+最为简单的就是使用框架提供的业务配置文件能力。
+
+该能力可以在所有业务代码和组件中使用，贯穿整个 Midway 生命周期。
+
+配置文件可以以两种格式导出，**对象形式** 和 **函数形式**。
+
+:::tip
+
+经过我们的实践，**对象形式** 会更加的简单友好，可以规避许多错误用法。
+
+大部分文档中我们都将以此形式进行展示。
+
+:::
 
 
-框架提供了可扩展的配置功能，可以自动合并应用、框架、组件的配置，且可以根据环境维护不同的配置。
 
+### 配置文件目录
 
-我们可以自定义目录，在其中放入多个环境的配置文件，如下列常见的目录结构，具体环境的概念请查看 [运行环境](environment)。
+我们可以自定义一个目录，在其中放入配置文件。
+
+比如 `src/config` 目录。
+
 ```
 ➜  my_midway_app tree
 .
@@ -30,180 +46,21 @@
 └── tsconfig.json
 ```
 
-`config.default.ts` 为默认的配置文件，所有环境都会加载这个配置文件，一般也会作为开发环境的默认配置文件。
+配置文件的名字有一些特定的约定。
 
+`config.default.ts` 为默认的配置文件，所有环境都会加载这个配置文件。
+
+其余的文件名，使用 `config.环境` 作为文件名，具体环境的概念请查看 [运行环境](environment)。
 
 配置不是 **必选项**，请酌情添加自己需要的环境配置。
 
 
 
-## 加载业务配置
+
+### 对象形式
 
 
-然后我们可以在 `src/configuration.ts` 中配置这个文件（目录），框架就知道加载它了。
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/core';
-import { join } from 'path';
-
-@Configuration({
-  importConfigs: [
-    join(__dirname, './config/'),
-  ]
-})
-export class ContainerLifeCycle {
-}
-```
-
-下面我们将介绍加载配置的两种方式。
-
-
-
-### 1、对象形式加载
-
-从 Midway v3 开始，我们将以标准的对象加载方式作为主推的配置引入形式。
-
-在一些场景下，比如单文件构建等和目录结构无关的需求，只支持这种标准的模块加载方式来加载配置。
-
-每个环境的配置文件 **必须显式指定添加**，后续框架会根据实际的环境进行合并。
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/core';
-import { join } from 'path';
-
-import * as DefaultConfig from './config/config.default';
-import * as LocalConfig from './config/config.local';
-
-@Configuration({
-  importConfigs: [
-    {
-      default: DefaultConfig,
-      local: LocalConfig
-    }
-  ]
-})
-export class ContainerLifeCycle {
-}
-```
-`importConfigs` 中的数组中传递配置对象，每个对象的 key 为环境，值为环境对应的配置值，midway 在启动中会根据环境来加载对应的配置。
-
-
-
-### 2、指定目录或者文件加载
-
-
-指定加载一个目录，目录里所有的 `config.*.ts` 都会被扫描加载。
-
-
-:::info
-`importConfigs`  这里只是指定需要加载的文件，实际运行时会**自动选择当前的环境**来找对应的文件后缀。
-:::
-
-
-配置文件的规则为：
-
-
-- 1、可以指定一个目录，推荐传统的 `src/config`  目录，也可以指定一个文件
-- 2、文件指定无需 ts 后缀
-- 3、配置文件 **必须显式指定添加**
-
-
-
-**示例：指定目录**
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/core';
-import { join } from 'path';
-
-@Configuration({
-  importConfigs: [
-    join(__dirname, './config/'),
-  ]
-})
-export class ContainerLifeCycle {
-}
-```
-
-
-**示例：指定特定文件**
-
-
-手动指定一批文件时，这个时候如果文件不存在，则会报错。
-
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/core';
-import { join } from 'path';
-
-@Configuration({
-  importConfigs: [
-    join(__dirname, './config/config.default'),
-    join(__dirname, './config/config.local'),
-    join(__dirname, './config/custom.local')		// 可以使用自定义的命名，只要中间部分带环境就行
-  ]
-})
-export class ContainerLifeCycle {
-}
-```
-
-
-也可以使用项目外的配置，但是请使用绝对路径，以及 `*.js`  后缀。
-
-
-比如目录结构如下（注意 `customConfig.default.js` 文件）：
-
-```
- base-app
- ├── package.json
- ├── customConfig.default.js
- └── src
-     ├── configuration.ts
-     └── config
-         └── config.default.ts
-```
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/core';
-import { join } from 'path';
-
-@Configuration({
-  importConfigs: [
-    join(__dirname, './config/'),
-    join(__dirname, '../customConfig.default'),
-  ]
-})
-export class ContainerLifeCycle {
-}
-```
-
-
-
-## 配置格式
-
-Midway 提供了 `MidwayConfig` 定义，每当一个组件被开启（在 `configuration.ts` 中被 `imports` ），`MidwayConfig` 就会自动包含该组件的配置定义。
-
-配置可以以两种格式导出。
-
-:::tip
-
-经过我们的实践，以对象导出会更加的简单友好，可以规避许多错误用法。
-
-组件的配置我们都将以此格式编写文档。
-
-:::
-
-
-
-
-### 1、对象形式
-
-
-配置文件格式为 object，比如：
+配置文件导出的格式为 object，比如：
 
 ```typescript
 // src/config/config.default.ts
@@ -219,10 +76,10 @@ export default {
 
 
 
-### 2、函数形式
+### 函数形式
 
 
-配置文件为一个带有 `appInfo` 参数的函数。通过这样返回方法的形式，在运行期会被自动执行，将返回值合并进完整的配置对象。
+配置文件为一个带有 `appInfo` 参数的函数。这个函数在框架初始化时会被自动执行，将返回值合并进完整的配置对象。
 
 ```typescript
 // src/config/config.default.ts
@@ -256,9 +113,9 @@ export default (appInfo: MidwayAppInfo): MidwayConfig => {
 
 
 
-## 配置定义
+### 配置文件定义
 
-Midway 提供了 `MidwayConfig` 作为统一的配置项定义，所有的组件都会将定义合并到此配置项定义中。
+Midway 提供了 `MidwayConfig` 作为统一的配置项定义，所有的组件都会将定义合并到此配置项定义中。每当一个组件被开启（在 `configuration.ts` 中被 `imports` ），`MidwayConfig` 就会自动包含该组件的配置定义。
 
 为此，请尽可能使用文档推荐的格式，以达到最佳的使用效果。
 
@@ -282,7 +139,137 @@ Midway 提供了 `MidwayConfig` 作为统一的配置项定义，所有的组件
 
 
 
-## 配置加载顺序
+### 对象形式加载配置文件
+
+
+框架提供了加载不同环境的配置文件的功能，需要在 `src/configuration.ts` 文件中开启。
+
+
+配置加载有两种方式，**对象形式** 和 **指定目录形式** 加载。
+
+从 Midway v3 开始，我们将以 **对象形式**  作为主推的配置加载形式。
+
+在单文件构建、ESM 等场景下，只支持这种标准的模块加载方式来加载配置。
+
+每个环境的配置文件 **必须显式指定添加**，后续框架会根据实际的环境进行合并。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/core';
+
+import * as DefaultConfig from './config/config.default';
+import * as LocalConfig from './config/config.local';
+
+@Configuration({
+  importConfigs: [
+    {
+      default: DefaultConfig,
+      local: LocalConfig
+    }
+  ]
+})
+export class MainConfiguration {
+}
+```
+`importConfigs` 中的数组中传递配置对象，每个对象的 key 为环境，值为环境对应的配置值，midway 在启动中会根据环境来加载对应的配置。
+
+
+
+### 指定目录、文件加载配置
+
+指定加载一个目录，目录里所有的 `config.*.ts` 都会被扫描加载。
+
+ESM，单文件部署等方式不支持目录配置加载。
+
+:::info
+`importConfigs`  这里只是指定需要加载的文件，实际运行时会**自动选择当前的环境**来找对应的文件后缀。
+:::
+
+
+配置文件的规则为：
+
+
+- 1、可以指定一个目录，推荐传统的 `src/config`  目录，也可以指定一个文件
+- 2、文件指定无需 ts 后缀
+- 3、配置文件 **必须显式指定添加**
+
+
+
+**示例：指定目录**
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/core';
+import { join } from 'path';
+
+@Configuration({
+  importConfigs: [
+    join(__dirname, './config/'),
+  ]
+})
+export class MainConfiguration {
+}
+```
+
+
+**示例：指定特定文件**
+
+
+手动指定一批文件时，这个时候如果文件不存在，则会报错。
+
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/core';
+import { join } from 'path';
+
+@Configuration({
+  importConfigs: [
+    join(__dirname, './config/config.default'),
+    join(__dirname, './config/config.local'),
+    join(__dirname, './config/custom.local')		// 可以使用自定义的命名，只要中间部分带环境就行
+  ]
+})
+export class MainConfiguration {
+}
+```
+
+
+也可以使用项目外的配置，但是请使用绝对路径，以及 `*.js`  后缀。
+
+
+比如目录结构如下（注意 `customConfig.default.js` 文件）：
+
+```
+ base-app
+ ├── package.json
+ ├── customConfig.default.js
+ └── src
+     ├── configuration.ts
+     └── config
+         └── config.default.ts
+```
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/core';
+import { join } from 'path';
+
+@Configuration({
+  importConfigs: [
+    join(__dirname, './config/'),
+    join(__dirname, '../customConfig.default'),
+  ]
+})
+export class MainConfiguration {
+}
+```
+
+
+
+
+
+### 配置加载顺序
 
 
 配置存在优先级（应用代码 >  组件），相对于此运行环境的优先级会更高。
@@ -300,7 +287,7 @@ Midway 提供了 `MidwayConfig` 作为统一的配置项定义，所有的组件
 
 
 
-## 配置合并规则
+### 配置合并规则
 
 
 默认会加载 `**/config.defaut.ts`  的文件以及 `**/config.{环境}.ts`  文件。
@@ -317,7 +304,7 @@ import { join } from 'path';
     join(__dirname, './config/'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
@@ -459,7 +446,7 @@ import { RemoteConfigService } from '../service/remote'; // 自定义的获取�
     join(__dirname, './config/'),
   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 
   async onConfigLoad(container: IMidwayContainer) {
     // 这里你可以修改全局配置
@@ -490,13 +477,44 @@ export class ContainerLifeCycle {
 }
 ```
 
-注意，`onConfigLoad` 生命周期会在 egg 插件（若有）初始化之后执行，所以不能用于覆盖 egg 插件所使用的配置。
+:::caution
+
+`onConfigLoad` 生命周期会在 egg 插件（若有）初始化之后执行，不能用于覆盖 egg 插件的配置。
+
+:::
 
 
 
-### bootstrap 中添加配置
+### 启动时修改
 
-可以在启动代码之前添加配置。
+可以在启动代码之前，使用 Bootstrap 的 `configure` 方法添加配置。
+
+`configure` 方法可以传递一个 `globalConfig` 的属性，可以在应用启动前传递一个全局配置。
+
+如果传递数组，则可以区分环境。
+
+```typescript
+// bootstrap.js
+const { Bootstrap } = require('@midwayjs/bootstrap');
+Bootstrap
+  .configure({
+  	globalConfig: [
+      {
+        default: {
+          abc: '123'
+        },
+        unittest: {
+          abc: '321'
+        }
+      }
+    ]
+  })
+  .run();
+
+// in unittest, app.getConfig('abc') => '321'
+```
+
+如果传递对象，则直接覆盖。
 
 ```typescript
 // bootstrap.js
@@ -504,34 +522,24 @@ const { Bootstrap } = require('@midwayjs/bootstrap');
 Bootstrap
   .configure({
   	globalConfig: {
-      default: {
-        keys: 'abcde',
-        koa: {
-          port: 7001
-        }
-      },
-      unittest: {
-        koa: {
-          port: null
-        }
-      }
+      abc: 'text'
     }
   })
   .run();
+
+// app.getConfig('abc') => 'text'
 ```
 
-`configure` 方法可以传递一个 `globalConfig` 的属性，可以在应用启动前传递一个全局配置，结构和 “对象形式的配置一致”，区分环境。
 
 
-
-### 使用 API 添加配置
+### 使用 API 修改
 
 
 其他场景的修改配置，可以使用 midway 提供的 [API](./built_in_service#midwayconfigservice)。
 
 
 
-## 使用环境变量
+## 环境变量和配置
 
 
 社区有一些库，比如 `dotenv` 可以加载 `.env` 文件注入到环境中，从而将一些秘钥放在环境中，在 Midway 中可以直接依赖它使用。
@@ -554,7 +562,7 @@ dotenv.config();
 @Configuration({
   //...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   async onReady(container) {
 
   }

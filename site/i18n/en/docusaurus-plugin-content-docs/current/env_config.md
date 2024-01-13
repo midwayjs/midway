@@ -1,19 +1,35 @@
 # Multi-environment configuration
 
-Configuration is a common function, and different configuration information is often used in different environments.
-
+Configuration is a commonly used function, and different configuration information is often used in different environments.
 
 In this article, we will introduce how Midway loads business configurations for different environments.
 
 
 
-## Business profile
+## Configuration file
+
+The simplest is to use the business configuration file capabilities provided by the framework.
+
+This capability is available across all business code and components throughout the Midway lifecycle.
+
+Configuration files can be exported in two formats, **object form** and **function form**.
+
+:::tip
+
+After our practice, **object form** will be simpler and more friendly, and can avoid many wrong usages.
+
+We will display it in this form in most documents.
+
+:::
 
 
-The framework provides extensible configuration functions, which can automatically merge the configurations of applications, frameworks, and components, and can maintain different configurations according to the environment.
 
+### Configuration file directory
 
-You can customize the directory and put the configuration files of multiple environments in it. For example, the following common directory structures are used. For more information about the specific environment, see [Running environment](environment).
+We can customize a directory and put the configuration file in it.
+
+For example, the `src/config` directory.
+
 ```
 ➜  my_midway_app tree
 .
@@ -30,75 +46,144 @@ You can customize the directory and put the configuration files of multiple envi
 └── tsconfig.json
 ```
 
-`Config. default.ts` is the default configuration file. All environments will load this configuration file and will generally be used as the default configuration file for the development environment.
+There are some specific conventions for configuration file names.
+
+`config.default.ts` is the default configuration file, and all environments will load this configuration file.
+
+For the rest of the file names, use `config.environment` as the file name. For the concept of specific environment, please see [Running Environment](environment).
+
+Configuration is not **required**, please add the environment configuration you need as appropriate.
 
 
-The configuration is not **required**. You must add the required environment.
 
 
+### Object form
 
-## Load business configuration
 
-
-Then we can configure this file (directory) in `src/configuration.ts`, and the framework will know to load it.
+The configuration file export format is object, for example:
 
 ```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/core';
-import { join } from 'path';
+// src/config/config.default.ts
+import { MidwayConfig } from '@midwayjs/core';
 
-@Configuration({
-  importConfigs: [
-    join(__dirname, './config/')
-  ]
-})
-export class ContainerLifeCycle {
-}
+export default {
+   keys: '1639994056460_8009',
+   koa: {
+     port: 7001,
+   },
+} as MidwayConfig;
 ```
 
-Below we will introduce two ways to load the configuration.
+
+
+### Function form
+
+
+The configuration file is a function with `appInfo` parameters. This function will be automatically executed when the framework is initialized, and the return value will be merged into the complete configuration object.
+
+```typescript
+// src/config/config.default.ts
+import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
+
+export default (appInfo: MidwayAppInfo): MidwayConfig => {
+   return {
+     keys: '1639994056460_8009',
+     koa: {
+       port: 7001,
+     },
+     view: {
+       root: path.join(appInfo.appDir, 'view'),
+     },
+   };
+}
+
+```
+
+The parameter of this function is `MidwayAppInfo` type, and the value is as follows.
+
+
+| **appInfo** | **Description**                                              |
+| ----------- | ------------------------------------------------------------ |
+| pkg         | package.json                                                 |
+| name        | application name, same as pkg.name                           |
+| baseDir     | src (local development) or dist (online) directory of the application code |
+| appDir      | directory for application code                               |
+| HOME        | user directory, such as /home/admin for the admin account    |
+| root        | Application root directory, baseDir only in local and unittest environments, and HOME in others. |
 
 
 
-### 1. Object form loading
+### Configuration file definition
 
-Starting from Midway v3, we will introduce the standard object loading method as the configuration of the main push.
+Midway provides `MidwayConfig` as a unified configuration item definition, and all components will merge their definitions into this configuration item definition. Whenever a component is enabled (`imports` in `configuration.ts`), `MidwayConfig` will automatically include the configuration definition for that component.
 
-In some scenarios, such as single-file construction and other requirements that are not related to the directory structure, only this standard module loading method is supported to load the configuration.
+For this reason, please use the format recommended by the documentation as much as possible to achieve the best usage effect.
 
-The configuration files of each environment **must be explicitly specified and added**. Subsequent frames are merged based on the actual environment.
+Whenever a new component is enabled, the configuration definition will automatically add the configuration items of the component. Through this behavior, you can also check whether a certain component is enabled in disguise.
+
+For example, we enable the effect of the view component.
+
+![](https://img.alicdn.com/imgextra/i2/O1CN013sHGlA1o3uQ4Pg0nO_!!6000000005170-2-tps-1416-572.png)
+
+:::tip
+
+Why use objects instead of plain key exports?
+
+1. If the user does not understand the configuration items, he still needs to check the document to understand the meaning of each item. Except for the first level of prompts, the subsequent levels of prompts do not have obvious efficiency improvements.
+
+2. The form of key export has no advantage in displaying under an overly deep structure
+
+3. The key export may be repeated, but there will be no warnings or errors at the code level, which is difficult to troubleshoot. The object form is more friendly
+
+:::
+
+
+
+### Load configuration file in object form
+
+
+The framework provides the function of loading configuration files for different environments, which needs to be enabled in the `src/configuration.ts` file.
+
+
+There are two ways to load configuration, **object format** and **specified directory format** loading.
+
+Starting from Midway v3, we will use **object form** as the main configuration loading form.
+
+In scenarios such as single-file construction and ESM, only this standard module loading method is supported to load configurations.
+
+The configuration file of each environment **must explicitly specify to add**, and subsequent frameworks will be merged according to the actual environment.
 
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/core';
-import { join } from 'path';
 
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 
 @Configuration({
-  importConfigs: [
-    {
-      default: DefaultConfig
-      local: LocalConfig
-    }
-  ]
+   importConfigs: [
+     {
+       default: DefaultConfig,
+       local: LocalConfig
+     }
+   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
-The array in the `importConfigs` passes configuration objects. The key of each object is the environment, and the value is the configuration value corresponding to the environment. midway loads the corresponding configuration according to the environment during startup.
+
+Configuration objects are passed in the array in `importConfigs`. The key of each object is the environment, and the value is the configuration value corresponding to the environment. Midway will load the corresponding configuration according to the environment during startup.
 
 
 
-### 2. Specify directory or file loading
+### Specify directory and file loading configuration
 
+Specify a directory to load, and all `config.*.ts` in the directory will be scanned and loaded.
 
-Specifies that a directory is loaded. All `config.*.ts` in the directory are scanned and loaded.
-
+ESM, single-file deployment, etc. do not support directory configuration loading.
 
 :::info
-`importConfigs` here, only the files to be loaded are specified. In actual runtime, the current environment** will be **automatically selected to find the corresponding file suffix.
+`importConfigs` here just specify the files that need to be loaded, and the actual runtime will **automatically select the current environment** to find the corresponding file suffix.
 :::
 
 
@@ -106,33 +191,12 @@ The rules for the configuration file are:
 
 
 - 1. You can specify a directory, the traditional `src/config` directory is recommended, or you can specify a file
-- 2. file designation does not require TS suffix
-- 3. The configuration file **must be explicitly specified and added**.
+- 2. The file specification does not require the ts suffix
+- 3. Configuration file **Must be explicitly specified to add**
 
 
 
-**Example: Specify a directory**
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/core';
-import { join } from 'path';
-
-@Configuration({
-  importConfigs: [
-    join(__dirname, './config/'),
-  ]
-})
-export class ContainerLifeCycle {
-}
-```
-
-
-**Example: Specify a specific file**
-
-
-When you manually specify a batch of files, an error will be reported if the file does not exist at this time.
-
+**Example: specify directory**
 
 ```typescript
 // src/configuration.ts
@@ -140,18 +204,39 @@ import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
-  importConfigs: [
-    join(__dirname, './config/config.default'),
-    join(__dirname, './config/config.local'),
-    join(__dirname, './config/custom.local')		// You can use custom naming, as long as the middle part has an environment
-  ]
+   importConfigs: [
+     join(__dirname, './config/'),
+   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
 
-You can also use configurations outside the project, but use the absolute path and the `*.js` suffix.
+**Example: specifying a specific file**
+
+
+When manually specifying a batch of files, if the files do not exist at this time, an error will be reported.
+
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/core';
+import { join } from 'path';
+
+@Configuration({
+   importConfigs: [
+     join(__dirname, './config/config.default'),
+     join(__dirname, './config/config.local'),
+     join(__dirname, './config/custom.local') // You can use custom naming, as long as the middle part has an environment
+   ]
+})
+export class MainConfiguration {
+}
+```
+
+
+You can also use the configuration outside the project, but please use the absolute path and `*.js` suffix.
 
 
 For example, the directory structure is as follows (note the `customConfig.default.js` file):
@@ -172,195 +257,99 @@ import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
-  importConfigs: [
-    join(__dirname, './config/')
-    join(__dirname, '../customConfig.default')
-  ]
+   importConfigs: [
+     join(__dirname, './config/'),
+     join(__dirname, '../customConfig.default'),
+   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
 
 
-## Configuration format
-
-Midway provides a `MidwayConfig` definition. Whenever a component is turned on (`imports` in `configuration.ts` ), the `MidwayConfig` will automatically include the configuration definition of the component.
-
-Configurations can be exported in two formats.
-
-:::tip
-
-Through our practice, exporting objects will be simpler and more friendly, and many wrong usages can be avoided.
-
-The configuration of the components will be documented in this format.
-
-:::
 
 
+### Configure loading order
 
 
-### 1. Object Form
+There is a priority for configuration (Application Code > Component), and the priority will be higher relative to this running environment.
 
 
-The configuration file format is object, for example:
-
-```typescript
-// src/config/config.default.ts
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-  keys: '1639994056460_8009',
-  koa: {
-    port: 7001,
-  },
-} as MidwayConfig;
-```
-
-
-
-### 2. Function form
-
-
-The configuration file is a function with `appInfo` parameters. In the form of this return method, it will be automatically executed during the runtime, merging the return values into the complete configuration object.
-
-```typescript
-// src/config/config.default.ts
-import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
-
-export default (appInfo: MidwayAppInfo): MidwayConfig => {
-  return {
-    keys: '1639994056460_8009',
-    koa: {
-      port: 7001
-    },
-    view: {
-      root: path.join(appInfo.appDir, 'view')
-    },
-  };
-}
-
-```
-
-The parameter of this function is of `MidwayAppInfo` type and the value is the following.
-
-
-| **appInfo** | **Description** |
-| ----------- | ------------------------------------------------------------ |
-| pkg | package.json |
-| name | Application name, same as pkg.name |
-| baseDir | The src (locally developed) or dist (after online) directory of the application code |
-| appDir | Directory of application code |
-| HOME | The user directory, for example, the admin account is/home/admin. |
-| root | The root directory of the application is only baseDir in local and unittest environments, and the others are HOME.  |
-
-
-
-## Configuration definition
-
-Midway provides `MidwayConfig` as a unified configuration item definition, and all components merge the definition into this configuration item definition.
-
-To do this, please use the format recommended by the document as much as possible to achieve the best effect.
-
-Whenever a new component is enabled, the configuration definition will automatically add the configuration items of the component. Through this behavior, you can also check whether a component is enabled in disguise.
-
-For example, we have enabled the effect of the view component.
-
-![](https://img.alicdn.com/imgextra/i2/O1CN013sHGlA1o3uQ4Pg0nO_!!6000000005170-2-tps-1416-572.png)
-
-:::tip
-
-Why not use the normal key export form and use the object?
-
-1. If the user does not understand the configuration items, he still needs to check the document to understand the meaning of each item. Except that the first layer has a certain prompt function, the later level prompts have no obvious efficiency improvement.
-
-2. The form of key export has no advantage in the deep structure.
-
-3. Key export may be duplicated, but there will be no warning or error at the code level, which is difficult to troubleshoot. This object form is relatively friendly.
-
-:::
-
-
-
-## Configure load order
-
-
-There is a priority in the configuration (application code> component), and the priority will be higher relative to this operating environment.
-
-
-For example, the loading sequence of a configuration in the prod environment is as follows, and the subsequent loading will overwrite the previous configuration with the same name.
+For example, the loading sequence for loading a configuration in the prod environment is as follows. The later loaded configuration will overwrite the previous configuration with the same name.
 
 
 ```typescript
--> component config.default.ts
--> apply config.default.ts
+-> Component config.default.ts
+-> Apply config.default.ts
 -> component config.prod.ts
 -> apply config.prod.ts
 ```
 
 
 
-## Configure merge rules
+### Configure merge rules
 
 
-By default, the `**/config.defaut.ts` file and the `**/config.{environment}.ts` file are loaded.
+By default, the `**/config.defaut.ts` file and the `**/config.{environment}.ts` file will be loaded.
 
+For example, the following code will search for `config.default.*` and `config.local.*` files in the `local` environment. If it is in other environments, it will only search for `config.default.*` and `config.{Current environment}.*`, if the file does not exist, it will not be loaded and no error will be reported.
 
-For example, the following code will find the `config.default.*` and `config.local.*` files in the `local` environment. If the file is in other environments, only `config.default.*` and `config.{current environment}.*` will be found. If the file does not exist, it will not be loaded or an error will be reported.
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
-  importConfigs: [
-    join(__dirname, './config/'),
-  ]
+   importConfigs: [
+     join(__dirname, './config/'),
+   ]
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
 }
 ```
 
 
-In order to be forward compatible, we have done some processing on configuration reading for some special environments. The value of the environment here refers to the [result](environment#AxjGQ) obtained from the combination of `NODE_ENV` and `MIDWAY_SERVER_ENV` values.
+For forward compatibility, we have done some processing on the configuration reading of some special environments. The value of the environment here refers to the [result](environment#AxjGQ) based on the values of `NODE_ENV` and `MIDWAY_SERVER_ENV`.
 
-| **Environment Value** | **Read configuration file** |
-| --- | --- |
-| prod | *.default.ts + *.prod.ts |
-| production | *.default.ts + *.production.ts + *.prod.ts |
-| unittest | *.default.ts + *.unittest.ts |
-| test | *.default.ts + *.test.ts + *.unittest.ts |
+| **Environment value** | **Configuration file read**                |
+| --------------------- | ------------------------------------------ |
+| prod                  | *.default.ts + *.prod.ts                   |
+| production            | *.default.ts + *.production.ts + *.prod.ts |
+| unittest              | *.default.ts + *.unittest.ts               |
+| test                  | *.default.ts + *.test.ts + *.unittest.ts   |
 
-Except for the above table, the rest are values of `*.default.ts + *.{current environment}.ts`.
+Except for the above table, the rest are the values of `*.default.ts + *.{current environment}.ts`.
 
 
-In addition, the configured merge uses the [extend2](https://github.com/eggjs/extend2) module for deep copy, [extend2](https://github.com/eggjs/extend2) fork from [extend](https://github.com/justmoon/node-extend), and there will be differences in array processing.
+In addition, the configuration is merged using the [extend2](https://github.com/eggjs/extend2) module for deep copying, and the [extend2](https://github.com/eggjs/extend2) fork from [extend](https ://github.com/justmoon/node-extend), there will be differences when handling arrays.
 
 ```javascript
 const a = {
-  arr: [ 1, 2 ],
+   arr: [ 1, 2 ],
 };
 const b = {
-  arr: [ 3 ],
+   arr: [ 3 ],
 };
 extend(true, a, b);
 // => { arr: [ 3 ] }
 ```
-According to the above example, the framework directly covers the array instead of merging.
+
+According to the example above, the framework directly overwrites the array instead of doing the merge.
 
 
 
-## Get configuration
+## get configuration
 
 
-Midway saves all the configurations in the internal configuration service. The entire structure is an object. When using the Midway service code, use the `@Config` decorator to inject the configuration.
+Midway will save the configuration in the internal configuration service. The entire structure is an object, which is injected using the `@Config` decorator when used by Midway business code.
 
 
 
 ### Single configuration value
 
 
-By default, it is obtained from the configuration object based on the string parameter value of the decorator.
+By default, it will be obtained from the configuration object according to the string parameter value of the decorator.
 
 
 ```typescript
@@ -368,21 +357,21 @@ import { Config } from '@midwayjs/core';
 
 export class IndexHandler {
 
-  @Config('userService')
-  userConfig;
+   @Config('userService')
+   userConfig;
 
-  async handler() {
-  	console.log(this.userConfig);  // { appname: 'test'}
-  }
+   async handler() {
+   console.log(this.userConfig); // { appname: 'test'}
+   }
 }
 ```
 
 
 
-### Deep level configuration value
+### Deep level configuration values
 
 
-If the value of the configuration object is deep in the object, it can be obtained in Cascade.
+If the value of the configuration object is deep in the object, it can be obtained in a cascaded manner.
 
 
 For example, the data source is:
@@ -390,28 +379,31 @@ For example, the data source is:
 
 ```json
 {
-  "userService": {
-  	"appname": {
-      "test": {
-      	"data": "xxx"
-      }
-    }
-  }
+   "userService": {
+   "appname": {
+       "test": {
+       "data": "xxx"
+       }
+     }
+   }
 }
 ```
-You can write complex fetch expressions to fetch values, as shown in the following example.
+
+You can write complex acquisition expressions to acquire values, examples are as follows.
+
 ```typescript
 import { Config } from '@midwayjs/core';
 
 export class IndexHandler {
 
-  @Config('userService.appname.test.data')
-  data;
+   @Config('userService.appname.test.data')
+   data;
 
-  async handler() {
-  	console.log(this.data);  // xxx
-  }
+   async handler() {
+   console.log(this.data); // xxx
+   }
 }
+
 ```
 
 
@@ -419,50 +411,51 @@ export class IndexHandler {
 ### The entire configuration object
 
 
-You can also use the `ALL` attribute to obtain the entire configured object.
+You can also get the entire configuration object through the special attribute `ALL`.
+
 ```typescript
 import { Config, ALL } from '@midwayjs/core';
 
 export class IndexHandler {
 
-  @Config(ALL)
-  allConfig;
+   @Config(ALL)
+   allConfig;
 
-  async handler() {
-  	console.log(this.allConfig);  // { userService: { appname: 'test'}}
-  }
+   async handler() {
+   console.log(this.allConfig); // { userService: { appname: 'test'}}
+   }
 }
 ```
 
 
 
-## Modify configuration
+## Change setting
 
-In the coding process, we have some places that can dynamically modify the configuration for different scenarios.
-
-
-
-### Modification in Life Cycle
+During the coding process, we have some places where the configuration can be dynamically modified for use in different scenarios.
 
 
-midway adds an asynchronous configuration loading lifecycle that can be executed after the configuration is loaded.
+
+### Modification during life cycle
+
+
+midway has added an asynchronous configuration loading life cycle, which can be executed after the configuration is loaded.
 
 ```typescript
 // src/configuration.ts
-import { Configuration, IMidwayContainer, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import { join } from 'path';
-import { RemoteConfigService } from '../service/remote'; // Custom Get Remote Configuration Service
+import { RemoteConfigService } from '../service/remote'; // Customized access to remote configuration service
 
 @Configuration({
-  importConfigs: [
-    join(__dirname, './config/')
-  ]
+   importConfigs: [
+     join(__dirname, './config/'),
+   ]
 })
-export class ContainerLifeCycle {
-
+export class MainConfiguration {
+  
   async onConfigLoad(container: IMidwayContainer) {
     // Here you can modify the global configuration
-  	const remoteConfigService = await container.getAsync(RemoteConfigService);
+    const remoteConfigService = await container. getAsync(RemoteConfigService);
     const remoteConfig = await remoteConfigService.getData();
 
     // The return value here will be merged with the global config
@@ -484,65 +477,92 @@ export class ContainerLifeCycle {
     //     }
     //   }
     // }
+    
     return remoteConfig;
   }
 }
 ```
 
-Note that the `onConfigLoad` lifecycle is executed after the egg plug-in (if any) is initialized, so it cannot be used to override the configuration used by the egg plug-in.
+:::caution
+
+The `onConfigLoad` lifecycle is executed after the egg plugin (if any) is initialized and cannot be used to override the configuration of the egg plugin.
+
+:::
 
 
 
-### Add configuration in bootstrap
+### Modify at startup
 
-You can add configuration before starting the code.
+You can add configuration using Bootstrap's `configure` method before starting the code.
+
+The `configure` method can pass a `globalConfig` attribute, which can pass a global configuration before the application starts.
+
+If you pass an array, you can differentiate between environments.
 
 ```typescript
 // bootstrap.js
 const { Bootstrap } = require('@midwayjs/bootstrap');
 Bootstrap
   .configure({
-  	globalConfig: {
-      default: {
-        keys: 'abcde',
-        koa: {
-          port: 7001
-        }
-      },
-      unittest: {
-        koa: {
-          port: null
+    globalConfig: [
+      {
+        default: {
+          abc: '123'
+        },
+        unittest: {
+          abc: '321'
         }
       }
+    ]
+  })
+  .run();
+
+// in unittest, app.getConfig('abc') => '321'
+```
+
+If an object is passed, it is overridden directly.
+
+```typescript
+// bootstrap.js
+const { Bootstrap } = require('@midwayjs/bootstrap');
+Bootstrap
+  .configure({
+    globalConfig: {
+      abc: 'text'
     }
   })
   .run();
+
+// app.getConfig('abc') => 'text'
 ```
 
-`configure` method can pass a `globalConfig` attribute, and can pass a global configuration before the application starts. The structure is consistent with the configuration of the object form to distinguish the environment.
+
+
+### Modify using API
+
+
+To modify the configuration in other scenarios, you can use the [API](./built_in_service#midwayconfigservice) provided by midway.
 
 
 
-### Use API to add configuration
+## Environment variables and configuration
 
 
-You can use the [API](./built_in_service#midwayconfigservice) provided by midway to modify the configuration in other scenarios.
+There are some libraries in the community, such as `dotenv`, which can load `.env` files and inject them into the environment, thereby placing some keys in the environment, which can be directly relied on in Midway.
 
-
-
-## Use environmental variables
-
-
-The community has some libraries, such as `dotenv`, which can load `.env` files and inject them into the environment, so as to put some keys in the environment, which can be directly used in Midway.
 ```bash
 $ npm i dotenv --save
 ```
-We can initialize in entry points like `bootstrap.js` or `configuration` .
+
+You can add a `.env` file in the project root directory, such as the following:
+
 ```
-OSS_SECRET = 12345
-OSS_ACCESSKEY = 54321
+OSS_SECRET=12345
+OSS_ACCESSKEY=54321
 ```
-We can initialize in the portal, such as `bootstrap.js` or `configuration`.
+
+We can initialize it in the entry, such as `bootstrap.js` or `configuration`.
+
 ```typescript
 import { Configuration } from '@midwayjs/core';
 import * as dotenv from 'dotenv';
@@ -551,44 +571,44 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 @Configuration({
-  //...
+   //...
 })
-export class AutoConfiguration {
-  async onReady(container) {
+export class MainConfiguration {
+   async onReady(container) {
 
-  }
+   }
 }
 
 ```
 
 
 We can use it in the environment configuration.
+
 ```typescript
 // src/config/config.default
 
 export const oss = {
-  accessKey: process.env.OSS_ACCESSKEY, // 54321
-  secret: process.env.OSS_SECRET // 12345
+   accessKey: process.env.OSS_ACCESSKEY, // 54321
+   secret: process.env.OSS_SECRET // 12345
 }
 ```
 
 
 
-## Common errors
+## Common mistakes
 
 
-There are many possibilities that the configuration does not take effect, and the troubleshooting ideas are as follows:
+There are many possibilities for the configuration not taking effect. The troubleshooting ideas are as follows:
 
-- 1. Check whether `importConfigs` related files or directories are explicitly configured in the configuration file
-- 2. Check whether the environment in which the application is started is consistent with the configuration file. For example, the configuration of prod will definitely not appear in local
-- 3. Check whether ordinary export and method callback export are mixed, such as the following mixed use
-
-
-
-### 1. Get the value injected by @Config in the constructor (constructor)
+- 1. Check whether the files or directories related to `importConfigs` are explicitly configured in the configuration file.
+- 2. Check whether the application startup environment is consistent with the configuration file. For example, the prod configuration will definitely not appear in local.
+- 3. Check whether ordinary export and method callback export are mixed use, such as the following mixed use situation
 
 
-**Please do not get the attribute injected by `@Config()` in the constructor**, which will make the result undefined. The reason is that the properties injected by the decorator are assigned only after the instance is created (new). In this case, use the `@Init` decorator.
+
+### 1. Obtain the value injected by @Config in the constructor
+
+**Please don’t **get the properties injected by `@Config()` in the constructor, which will make the result undefined. The reason is that the attributes injected by the decorator will not be assigned until the instance is created (new). In this case, use the `@Init` decorator.
 
 ```typescript
 @Provide()
@@ -598,12 +618,12 @@ export class UserService {
   redisConfig;
 
   constructor() {
-  	console.log(this.redisConfig); // undefined
+    console.log(this.redisConfig); // undefined
   }
 
   @Init()
   async initMethod() {
-  	console.log(this.redisConfig); // has value
+    console.log(this.redisConfig); // has value
   }
 
 }
@@ -611,52 +631,52 @@ export class UserService {
 
 
 
-### 2. Mixed use of callback and export writing
+### 2. Mix callback and export writing methods
 
-**The following is the wrong usage.**
+**The following is incorrect usage. **
 
 ```typescript
 export default (appInfo) => {
-  const config = {};
+   const config = {};
 
-  // xxx
-  return config;
+   // xxx
+   return config;
 };
 
 export const keys = '12345';
 ```
 
-The value defined by `export const` is ignored.
+Values defined with `export const` are ignored.
 
 
 
-### 3. mix export default and export const
+### 3. Mix export default and export const
 
-**The following is the wrong usage.**
+**The following is incorrect usage. **
 
 ```typescript
 export default {
-  keys: '12345',
+   keys: '12345',
 }
 
 export const anotherKey = '54321';
 ```
-The following configuration will be ignored.
 
-### 4. export = mixed with other
+Configurations located later will be ignored.
 
-If the `export =` parameter is mixed, the value of the `export =` parameter is ignored.
+### 4. Export= mixed with others
+
+When `export=` is mixed, if there are other configurations later, the value of `export=` will be ignored.
 
 ```typescript
 export = {
-  a: 1
+   a: 1
 }
 export const b = 2;
 ```
 
-Compiled results:
+Compiled result:
 
 ```typescript
 export const b = 2;
 ```
-

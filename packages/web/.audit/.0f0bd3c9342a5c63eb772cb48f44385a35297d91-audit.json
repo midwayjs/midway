@@ -1,0 +1,15 @@
+{
+  "keep": {
+    "days": true,
+    "amount": 7
+  },
+  "auditLog": ".audit/.0f0bd3c9342a5c63eb772cb48f44385a35297d91-audit.json",
+  "files": [
+    {
+      "date": 1698030212817,
+      "name": "/Users/harry/project/open-midway-v3/packages/web/test/fixtures/feature/base-app-query-parser/logs/ali-demo/midway-agent.log.2023-10-23",
+      "hash": "44575bff31e5ea210246485ec0d7d017"
+    }
+  ],
+  "hashType": "md5"
+}

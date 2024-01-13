@@ -6,6 +6,7 @@ import {
   IMidwayWebBaseApplication,
   IMidwayWebConfigurationOptions,
   Context as EggContext,
+  State,
 } from './dist';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import { EggAppConfig } from 'egg';
@@ -29,6 +30,8 @@ declare module 'egg' {
 
   interface Context<ResponseBodyT = any> extends IMidwayBaseContext {
     getLogger(name?: string): ILogger;
+    forward: (url: string) => void;
+    state: State;
   }
 }
 

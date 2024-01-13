@@ -7,46 +7,89 @@ import { run } from '@midwayjs/glob';
 import { join, parse } from 'path';
 import { Types } from '../util/types';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
+import { debuglog } from 'util';
+import { loadModule } from '../util';
+import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
+import { Inject } from '../decorator';
+import { MidwayEnvironmentService } from '../service/environmentService';
+const debug = debuglog('midway:debug');
 
-export abstract class DataSourceManager<T> {
+export abstract class DataSourceManager<
+  T,
+  ConnectionOpts extends Record<string, any> = Record<string, any>
+> {
   protected dataSource: Map<string, T> = new Map();
-  protected options = {};
+  protected options: DataSourceManagerConfigOption<ConnectionOpts> = {};
   protected modelMapping = new WeakMap();
   private innerDefaultDataSourceName: string;
 
-  protected async initDataSource(options: any, appDir: string): Promise<void> {
-    this.options = options;
-    if (!options.dataSource) {
+  @Inject()
+  appDir: string;
+
+  @Inject()
+  environmentService: MidwayEnvironmentService;
+
+  protected async initDataSource(
+    dataSourceConfig: DataSourceManagerConfigOption<ConnectionOpts>,
+    baseDirOrOptions:
+      | {
+          baseDir: string;
+          entitiesConfigKey?: string;
+        }
+      | string
+  ): Promise<void> {
+    this.options = dataSourceConfig;
+    if (!this.options.dataSource) {
       throw new MidwayParameterError(
         '[DataSourceManager] must set options.dataSource.'
       );
     }
 
-    for (const dataSourceName in options.dataSource) {
-      const dataSourceOptions = options.dataSource[dataSourceName];
-      if (dataSourceOptions['entities']) {
+    if (typeof baseDirOrOptions === 'string') {
+      baseDirOrOptions = {
+        baseDir: baseDirOrOptions,
+        entitiesConfigKey: 'entities',
+      };
+    }
+
+    for (const dataSourceName in dataSourceConfig.dataSource) {
+      const dataSourceOptions = dataSourceConfig.dataSource[dataSourceName];
+      const userEntities = dataSourceOptions[
+        baseDirOrOptions.entitiesConfigKey
+      ] as any[];
+      if (userEntities) {
         const entities = new Set();
         // loop entities and glob files to model
-        for (const entity of dataSourceOptions['entities']) {
+        for (const entity of userEntities) {
           if (typeof entity === 'string') {
             // string will be glob file
-            const models = globModels(entity, appDir);
+            const models = await globModels(
+              entity,
+              baseDirOrOptions.baseDir,
+              this.environmentService?.getModuleLoadType()
+            );
             for (const model of models) {
               entities.add(model);
               this.modelMapping.set(model, dataSourceName);
             }
           } else {
-            // model will be add to array
+            // model will be added to array
             entities.add(entity);
             this.modelMapping.set(entity, dataSourceName);
           }
         }
-        dataSourceOptions['entities'] = Array.from(entities);
+        (dataSourceOptions[baseDirOrOptions.entitiesConfigKey] as any) =
+          Array.from(entities);
+        debug(
+          `[core]: DataManager load ${
+            dataSourceOptions[baseDirOrOptions.entitiesConfigKey].length
+          } models from ${dataSourceName}.`
+        );
       }
       // create data source
-      const opts: CreateDataSourceInstanceOptions = {
-        cacheInstance: options.cacheInstance, // will default true
-        validateConnection: options.validateConnection,
+      const opts = {
+        cacheInstance: dataSourceConfig.cacheInstance, // will default true
+        validateConnection: dataSourceConfig.validateConnection,
       };
       await this.createInstance(dataSourceOptions, dataSourceName, opts);
     }
@@ -84,7 +127,10 @@ export abstract class DataSourceManager<T> {
   public async createInstance(
     config: any,
     clientName: any,
-    options?: CreateDataSourceInstanceOptions
+    options?: {
+      validateConnection?: boolean;
+      cacheInstance?: boolean | undefined;
+    }
   ): Promise<T | void> {
     const cache =
       options && typeof options.cacheInstance === 'boolean'
@@ -174,7 +220,11 @@ export function formatGlobString(globString: string): string[] {
   return pattern;
 }
 
-export function globModels(globString: string, appDir: string) {
+export async function globModels(
+  globString: string,
+  appDir: string,
+  loadMode?: ModuleLoadType
+) {
   const pattern = formatGlobString(globString);
 
   const models = [];
@@ -184,7 +234,9 @@ export function globModels(globString: string, appDir: string) {
     ignore: IGNORE_PATTERN,
   });
   for (const file of files) {
-    const exports = require(file);
+    const exports = await loadModule(file, {
+      loadMode,
+    });
     if (Types.isClass(exports)) {
       models.push(exports);
     } else {
@@ -197,15 +249,4 @@ export function globModels(globString: string, appDir: string) {
     }
   }
   return models;
-}
-
-export interface CreateDataSourceInstanceOptions {
-  /**
-   * @default false
-   */
-  validateConnection?: boolean;
-  /**
-   * @default true
-   */
-  cacheInstance?: boolean | undefined;
 }

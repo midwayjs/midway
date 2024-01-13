@@ -1,0 +1,73 @@
+title: "[Support] "
+labels: ["type: question / discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        #### Before submitting a bug, please make sure the issue hasn't been already addressed by searching through [the existing and past issues](https://github.com/midwayjs/midway/issues?q=is%3Aissue+sort%3Acreated-desc+).
+        #### 在提交之前，请通过搜索[现有和过去的问题](https://github.com/midwayjs/midway/issues?q=is%3Aissue+sort%3Acreated-desc+)来确保问题尚未解决。
+  - type: textarea
+    attributes:
+      label: Describe the problem（描述问题）
+      description: |
+        Please provide a clear and concise description of what the problem is.
+
+        If relevant, add a minimal example so that we can reproduce the error by running the code. It is very important for the snippet to be as succinct (minimal) as possible, so please take time to trim down any irrelevant code to help us debug efficiently. We are going to copy-paste your code and we expect to get the same result as you did: avoid any external data, and include the relevant imports, etc. For example:
+
+        请提供一个清晰简洁的描述，描述问题是什么。
+
+        如果有必要，请添加一个最小示例，以便我们可以通过运行代码来重现错误。代码片段尽可能简洁（最小）非常重要，因此请花时间删除任何不相关的代码，以帮助我们高效调试。我们将复制粘贴您的代码，并且我们希望获得与您相同的结果：避免任何外部数据，并包括相关的导入等。例如：
+
+        ```typescript
+          @Controller('/api')
+          export class TestController {
+          @Get('/test')
+          async test() {
+            return {
+              a: 1,
+              b: 2,
+            };
+          }
+        }
+        ```
+
+        If the code is too long (hopefully, it isn't), feel free to put it in a public gist and link it in the issue: https://gist.github.com.
+
+        Please also paste or describe the results you observe instead of the expected results. If you observe an error, please paste the error message including the **full** traceback of the exception. It may be relevant to wrap error messages in ```` ```triple quotes blocks``` ````.
+
+        如果代码太长（希望不是），请随意将其放在公共的 gist 中，并在本文中链接：https://gist.github.com。
+
+        请还粘贴或描述您观察到的结果，而不是预期的结果。如果您观察到错误，请粘贴包含异常的**完整**回溯的错误消息。将错误消息包装在 ```` ```triple quotes blocks``` ```` 中。
+
+        ```
+
+      placeholder: |
+        A clear and concise description of what the bug is.
+
+        ```typescript
+        # Sample code to reproduce the problem
+        # 用于重现问题的示例代码
+        ```
+
+        ```
+        The error message you got, with the full traceback.
+        您收到的错误消息，包含完整的回溯。
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Midway Versions（Midway 版本）
+      description: |
+        Please run the following and paste the output below.
+        请行以下命令并将输出粘贴到下面。
+        ```sh
+        npx midway-version@latest
+        ```
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: >
+        Thanks for contributing 🎉!
+        感谢您的贡献 🎉！

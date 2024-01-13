@@ -128,16 +128,18 @@ export class MidwaySocketIOFramework extends BaseFramework<
       next();
     });
 
-    nsp.on('connect', async (socket: Context) => {
-      // run connection middleware
-      const connectFn = await this.middlewareService.compose(
-        [
-          ...this.connectionMiddlewareManager,
-          ...controllerConnectionMiddleware,
-        ],
-        this.app
-      );
-      await connectFn(socket);
+    // `connect`事件应该使用**同步**的方式调用以保证后续事件监听能够正常得到处理
+    nsp.on('connect', (socket: Context) => {
+      // 异步执行全局和Controller级的连接中间件
+      let connMiddlewarePromise = this.middlewareService
+        .compose(
+          [
+            ...this.connectionMiddlewareManager,
+            ...controllerConnectionMiddleware,
+          ],
+          this.app
+        )
+        .then(connectFn => connectFn(socket));
 
       const wsEventInfos: WSEventInfo[] = getClassMetadata(
         WS_EVENT_KEY,
@@ -147,42 +149,70 @@ export class MidwaySocketIOFramework extends BaseFramework<
       // 存储方法对应的响应处理
       const methodMap = {};
 
-      if (wsEventInfos.length) {
-        for (const wsEventInfo of wsEventInfos) {
+      // 优先处理`@OnWSConnection`
+      const wsOnConnectionEventInfos = wsEventInfos.filter(
+        wsEventInfo => wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION
+      );
+      if (wsOnConnectionEventInfos.length) {
+        // `@OnWSConnection`应该在之前的连接中间件执行完成后继续
+        connMiddlewarePromise = connMiddlewarePromise.then(() =>
+          // 可能存在多个`@OnWSConnection`，这时不保障它们的执行顺序
+          Promise.all(
+            wsOnConnectionEventInfos.map(async wsEventInfo => {
+              methodMap[wsEventInfo.propertyName] = methodMap[
+                wsEventInfo.propertyName
+              ] || { responseEvents: [] };
+
+              const controller = await socket.requestContext.getAsync(target);
+
+              try {
+                const fn = await this.middlewareService.compose(
+                  [
+                    ...(wsEventInfo?.eventOptions?.middleware || []),
+                    async (ctx, next) => {
+                      // eslint-disable-next-line prefer-spread
+                      return controller[wsEventInfo.propertyName].apply(
+                        controller,
+                        [socket]
+                      );
+                    },
+                  ],
+                  this.app
+                );
+                const result = await fn(socket);
+
+                await this.bindSocketResponse(
+                  result,
+                  socket,
+                  wsEventInfo.propertyName,
+                  methodMap
+                );
+              } catch (err) {
+                this.logger.error(err);
+              }
+            })
+          )
+        );
+      }
+
+      // 监听和处理其它非`@OnWSConnection`的逻辑
+      const wsRestEventInfos = wsEventInfos.filter(
+        wsEventInfo => wsEventInfo.eventType !== WSEventTypeEnum.ON_CONNECTION
+      );
+
+      if (wsRestEventInfos.length) {
+        for (const wsEventInfo of wsRestEventInfos) {
           methodMap[wsEventInfo.propertyName] = methodMap[
             wsEventInfo.propertyName
           ] || { responseEvents: [] };
-          const controller = await socket.requestContext.getAsync(target);
-          // on connection
-          if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
-            try {
-              const fn = await this.middlewareService.compose(
-                [
-                  ...(wsEventInfo?.eventOptions?.middleware || []),
-                  async (ctx, next) => {
-                    // eslint-disable-next-line prefer-spread
-                    return controller[wsEventInfo.propertyName].apply(
-                      controller,
-                      [socket]
-                    );
-                  },
-                ],
-                this.app
-              );
-              const result = await fn(socket);
-
-              await this.bindSocketResponse(
-                result,
-                socket,
-                wsEventInfo.propertyName,
-                methodMap
-              );
-            } catch (err) {
-              this.logger.error(err);
-            }
-          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
+          if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
             // on user custom event
             socket.on(wsEventInfo.messageEventName, async (...args) => {
+              // 需要等待所有连接中间件和@OnWSConnection执行完成后再触发@OnWSMessage
+              await connMiddlewarePromise;
+
+              const controller = await socket.requestContext.getAsync(target);
+
               debug('got message', wsEventInfo.messageEventName, args);
 
               try {
@@ -236,6 +266,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
           ) {
             // on socket disconnect
             socket.on('disconnect', async (reason: string) => {
+              const controller = await socket.requestContext.getAsync(target);
               try {
                 const result = await controller[wsEventInfo.propertyName].apply(
                   controller,

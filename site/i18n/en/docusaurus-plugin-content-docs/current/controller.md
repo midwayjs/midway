@@ -67,8 +67,15 @@ export class HomeController {
 ```
 The `@Controller` decorator tells the framework that this is a class of type Web Controller, and the `@Get` decorator tells the framework that the decorated `home` method will be exposed as a `/` route, which can be accessed by ` GET` request to access.
 
-
 The whole method returns a string, and in the browser you will receive the response type of `text/plain` and a `200` status code.
+
+:::tip
+
+Routing methods are all async methods.
+
+:::
+
+
 
 
 ## Routing method
@@ -940,6 +947,42 @@ export class HomeController {
 :::info
 The response type cannot be modified after the response flow is closed (after response.end).
 :::
+
+
+
+## Internal redirection
+
+Starting from v3.12.0, the framework provides an internal redirect API `ctx.forward(url)`, which only supports koa/egg type.
+
+The difference from external redirection is that internal redirection does not modify the URL of the browser, but only flows inside the program.
+
+```typescript
+import { Controller, Get, Inject } from '@midwayjs/core';
+
+@Controller('/')
+export class HomeController {
+   @Inject()
+   ctx: Context;
+
+   @Get('/')
+   async home() {
+     return this.ctx.forward('/api');
+   }
+  
+   @Get('/api')
+   async api() {
+     return 'abc';
+   }
+}
+```
+
+Note that there are some rules for internal redirects:
+
+* 1. Redirection will retain all parameters of the original route, that is, transparently transmit the entire ctx
+
+* 2. Redirection can only be done in the same http method
+
+* 3. Redirection will not execute Web Middleware again, and guards will not be executed, but interceptors and parameter decorators will be executed
 
 
 

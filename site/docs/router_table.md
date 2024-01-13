@@ -36,7 +36,7 @@ export class MainConfiguration {
 }
 ```
 
-`MidwayServerlessFunctionService` 仅在 Serverless 场景下生效，方法和 `MidwayServerlessFunctionService` 几乎相同。
+`MidwayServerlessFunctionService` 仅在 Serverless 场景下生效，方法和 `MidwayWebRouterService` 几乎相同。
 
 
 
@@ -445,7 +445,7 @@ export class DataController {
 ```typescript
 // src/configuration.ts
 import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 import { DataController } from './controller/data.controller';
 
 @Configuration({
@@ -482,7 +482,7 @@ export class MainConfiguration {
 ```typescript
 // src/configuration.ts
 import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 
 @Configuration({
   // ...
@@ -525,7 +525,7 @@ export class MainConfiguration {
 ```typescript
 // src/configuration.ts
 import { MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 
 @Configuration({
   // ...

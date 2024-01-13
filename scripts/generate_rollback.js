@@ -7,7 +7,7 @@ if (/beta/.test(currentVersion) || /alpha/.test(currentVersion)) {
   return;
 }
 
-const originData = execSync('npx lerna ls --json').toString();
+const originData = execSync('npx lerna changed --json').toString();
 const data = JSON.parse(originData);
 
 const arr = ['#!/bin/bash\n', `# timestamp: ${Date.now()}\n\n`];
@@ -27,9 +27,6 @@ for (const item of data) {
 
     if (remoteVersion !== localVersion) {
       arr.push(`npm dist-tag add ${item.name}@${remoteVersion} latest\n`);
-      arr.push(`npm dist-tag add ${item.name}@${localVersion} beta\n`);
-      tnpmArr.push(`tnpm dist-tag add ${item.name}@${remoteVersion} latest\n`);
-      tnpmArr.push(`tnpm dist-tag add ${item.name}@${localVersion} beta\n`);
       diff.push(`#  - ${item.name}: ${remoteVersion} => ${currentVersion}\n`);
     }
   }

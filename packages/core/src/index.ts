@@ -29,10 +29,7 @@ export {
   MidwayServerlessFunctionService,
   WebRouterCollector,
 } from './service/slsFunctionService';
-export {
-  CreateDataSourceInstanceOptions,
-  DataSourceManager,
-} from './common/dataSourceManager';
+export { DataSourceManager } from './common/dataSourceManager';
 export * from './service/pipelineService';
 
 export * from './common/loggerFactory';
@@ -60,6 +57,7 @@ export * from './decorator/constant';
 export {
   safelyGet,
   safeRequire,
+  loadModule,
   delegateTargetPrototypeMethod,
   delegateTargetMethod,
   delegateTargetProperties,
@@ -69,6 +67,9 @@ export {
   pathMatching,
   wrapMiddleware,
   wrapAsync,
+  isTypeScriptEnvironment,
+  sleep,
+  Utils,
 } from './util/';
 export { extend } from './util/extend';
 export * from './util/webRouterParam';
@@ -76,10 +77,7 @@ export * from './util/contextUtil';
 export * from './util/pathToRegexp';
 export * from './util/httpclient';
 export { retryWithAsync, retryWith } from './util/retry';
-export { sleep, Utils } from './util/index';
 export { Types } from './util/types';
 export { PathFileUtil } from './util/pathFileUtil';
 export { FileUtils } from './util/fs';
 export { FORMAT } from './util/format';
-
-export type { ILogger, IMidwayLogger } from '@midwayjs/logger';

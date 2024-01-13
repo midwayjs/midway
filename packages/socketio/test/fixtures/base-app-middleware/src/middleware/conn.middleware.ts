@@ -1,10 +1,11 @@
-import { Middleware } from '@midwayjs/core';
+import { Middleware, sleep } from '@midwayjs/core';
 import { Context } from '../../../../../src';
 
 @Middleware()
 export class ConnectionMiddleware {
   resolve() {
     return async (ctx: Context, next) => {
+      await sleep(5000); // 模拟可能存在的延迟
       ctx.setAttr('result', 1);
       return await next();
     }

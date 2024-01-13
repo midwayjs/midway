@@ -15,7 +15,7 @@
 
 ## 一些概念
 
-passport 是社区使用较多的身份验证库，通过称为策略的可扩展插件进行身份验证请求。Passport 不挂载路由或假设任何特定的数据库，这最大限度地提高了灵活性并允许开发人员做出应用程序级别的决策。
+passport 是社区使用较多的身份验证库，通过称为策略的可扩展插件进行身份验证请求。
 
 它本身包含几个部分：
 
@@ -94,7 +94,34 @@ export class MainConfiguration implements ILifeCycle {}
 
 ### 示例：本地策略
 
-我们可以通过 `@CustomStrategy` 和派生 `PassportStrategy` 来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
+我们以 `passport-local` 来介绍 Passport 策略在 Midway 中如何使用， `passport-local` 的官方文档示例如下，通过 `passport.use` 加载一个策略，策略的验证逻辑是一个 `verify` 方法，包含 callback 参数，其余的策略的参数都在构造器中。
+
+```typescript
+passport.use(
+  // 初始化一个策略
+  new LocalStrategy({
+      usernameField: 'username',
+      passwordField: 'password',
+      passReqToCallback: true,
+      session: false
+    },
+    function verify(username, password, done) {
+      User.findOne({ username: username }, function (err, user) {
+        if (err) { return done(err); }
+        if (!user) { return done(null, false); }
+        if (!user.verifyPassword(password)) { return done(null, false); }
+        return done(null, user);
+      });
+    }
+	)
+);
+```
+
+Midway 对此进行了改造，通过 `@CustomStrategy` 和 `PassportStrategy` 类继承一个 Passport 现有策略。
+
+异步的 `validate`  方法代替原有的 `verify` 方法，`validate` 方法返回验证后的用户结果，方法的参数和原有对应的策略一致。
+
+在 Midway 中编写的效果如下：
 
 ```typescript
 // src/strategy/local.strategy.ts
@@ -113,7 +140,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   // 策略的验证
   async validate(username, password) {
-    const user = await this.userModel.findOne({ username });
+    const user = await this.userModel.findOneBy({ username });
     if (await bcrypt.compare(password, user.password)) {
       throw new Error('error password ' + username);
     }
@@ -124,7 +151,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     };
   }
 
-  // 当前策略的参数
+  // 当前策略的构造器参数
   getStrategyOptions(): any {
     return {};
   }
@@ -137,14 +164,31 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
 :::
 
-使用派生 `PassportMiddleware`出一个中间件。
+在 `passport-local` 的官方文档中，实现完策略后，需要作为中间件加载到业务中，比如：
+
+```typescript
+app.post('/login/password', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+}));
+```
+
+:::tip
+
+这里的 `local` 是 `passport-local` 内部的名字。
+
+:::
+
+在 Midway 中，也需要将上述实现的 `LocalStrategy` 通过中间件加载。
+
+自定义一个中间件继承 `PassportMiddleware` 扩展出的基础中间件，示例如下。
 
 ```typescript
 // src/middleware/local.middleware.ts
 
-import { Inject, Middleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/core';
 import { PassportMiddleware, AuthenticateOptions } from '@midwayjs/passport';
-import { LocalStrategy } from './strategy/local.strategy.ts';
+import { LocalStrategy } from '../strategy/local.strategy';
 
 @Middleware()
 export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
@@ -156,11 +200,12 @@ export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
   }
 }
 ```
+将中间件加载到全局或者路由。
 
 ```typescript
 // src/controller.ts
 import { Post, Inject, Controller } from '@midwayjs/core';
-import { LocalPassportMiddleware } from './middleware/local.middleware.ts';
+import { LocalPassportMiddleware } from '../middleware/local.middleware';
 
 @Controller('/')
 export class LocalController {
@@ -179,6 +224,14 @@ curl -X POST http://localhost:7001/passport/local -d '{"username": "demo", "pass
 
 结果 {"username": "demo", "password": "1234"}
 ```
+
+:::caution
+
+注意：如果将中间件放到全局，记得忽略需要登录的路由，否则请求会死循环。
+
+:::
+
+
 
 ### 示例：Jwt 策略
 

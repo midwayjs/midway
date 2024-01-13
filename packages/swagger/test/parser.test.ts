@@ -1,4 +1,4 @@
-import { ApiExtraModel, ApiProperty, ApiResponse, getSchemaPath, SwaggerExplorer, Type } from '../src';
+import { ApiExtraModel, ApiOperation, ApiProperty, ApiResponse, ApiTags, getSchemaPath, SwaggerExplorer, Type } from '../src';
 import { Controller, Post } from '@midwayjs/core';
 
 class CustomSwaggerExplorer extends SwaggerExplorer {
@@ -6,7 +6,7 @@ class CustomSwaggerExplorer extends SwaggerExplorer {
     return super.generatePath(target);
   }
 
-  parseClzz(clz) {
+  parse(clz) {
     return super.parseClzz(clz);
   }
 }
@@ -14,7 +14,7 @@ class CustomSwaggerExplorer extends SwaggerExplorer {
 describe('/test/parser.test.ts', function () {
   it('should fix issue#2286 with array example', function () {
     class Catd {
-      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat'})
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
       named: string;
 
       @ApiProperty({ example: 1, description: 'The age of the Cat' })
@@ -30,7 +30,7 @@ describe('/test/parser.test.ts', function () {
 
     @ApiExtraModel(Catd)
     class Cat {
-      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat'})
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
       name: string;
 
       @ApiProperty({
@@ -44,7 +44,7 @@ describe('/test/parser.test.ts', function () {
       catds: Catd[];
     }
 
-    @Controller('/api', { middleware: []})
+    @Controller('/api', { middleware: [] })
     class CatController {
       @ApiResponse({
         status: 200,
@@ -64,11 +64,11 @@ describe('/test/parser.test.ts', function () {
 
   it('should test simple case with example', function () {
     class Cat {
-      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat'})
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
       name: string;
     }
 
-    @Controller('/api', { middleware: []})
+    @Controller('/api', { middleware: [] })
     class CatController {
       @ApiResponse({
         status: 200,
@@ -88,10 +88,10 @@ describe('/test/parser.test.ts', function () {
 
   it('should test ref path generate', function () {
     class NotificationDTO {
-      @ApiProperty({ example: '通知标题', description: 'title'})
+      @ApiProperty({ example: '通知标题', description: 'title' })
       title: string;
 
-      @ApiProperty({ example: '1', description: '这是 id'})
+      @ApiProperty({ example: '1', description: '这是 id' })
       id: number;
     }
 
@@ -100,22 +100,22 @@ describe('/test/parser.test.ts', function () {
       @ApiProperty({ description: '列表数据', type: 'array', items: { $ref: getSchemaPath(NotificationDTO) } })
       rows: NotificationDTO[]
 
-      @ApiProperty({ example: '999', description: '通知数量'})
+      @ApiProperty({ example: '999', description: '通知数量' })
       count: number;
     }
     @ApiExtraModel(NotificationPageListDTO)
     class UserDTO {
-      @ApiProperty({ example: 'Kitty', description: 'The name of the user'})
+      @ApiProperty({ example: 'Kitty', description: 'The name of the user' })
       name: string;
 
-      @ApiProperty({ example: '1', description: 'The uid of the user'})
+      @ApiProperty({ example: '1', description: 'The uid of the user' })
       uid: number;
 
-      @ApiProperty({ description: 'The uid of the user', type: NotificationPageListDTO})
+      @ApiProperty({ description: 'The uid of the user', type: NotificationPageListDTO })
       data: NotificationPageListDTO
     }
 
-    @Controller('/api', { middleware: []})
+    @Controller('/api', { middleware: [] })
     class APIController {
       @ApiResponse({
         status: 200,
@@ -140,7 +140,7 @@ describe('/test/parser.test.ts', function () {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(NotificationDTO)).toMatchSnapshot();
+    expect(explorer.parse(NotificationDTO)).toMatchSnapshot();
   });
 
 
@@ -177,8 +177,8 @@ describe('/test/parser.test.ts', function () {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
-    expect(explorer.parseClzz(Album)).toMatchSnapshot();
+    expect(explorer.parse(Photo)).toMatchSnapshot();
+    expect(explorer.parse(Album)).toMatchSnapshot();
   });
 
   it('should parse type with function', function () {
@@ -210,8 +210,8 @@ describe('/test/parser.test.ts', function () {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
-    expect(explorer.parseClzz(Album)).toMatchSnapshot();
+    expect(explorer.parse(Photo)).toMatchSnapshot();
+    expect(explorer.parse(Album)).toMatchSnapshot();
   });
 
   it('should test multi-type in property', function () {
@@ -238,7 +238,7 @@ describe('/test/parser.test.ts', function () {
 
       @ApiProperty({
         oneOf: [
-          { type: Album},
+          { type: Album },
           {
             type: 'array',
             items: {
@@ -250,7 +250,7 @@ describe('/test/parser.test.ts', function () {
       album: Album | Album[];
     }
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(Photo)).toMatchSnapshot();
+    expect(explorer.parse(Photo)).toMatchSnapshot();
   });
 
   it('should parse base type', function () {
@@ -266,6 +266,86 @@ describe('/test/parser.test.ts', function () {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parseClzz(Cat)).toMatchSnapshot();
+    expect(explorer.parse(Cat)).toMatchSnapshot();
+  });
+
+  it('should parse extends base', () => {
+    class MyBase {
+      @ApiProperty({ format: 'date-time' })
+      created_at?: Date;
+    }
+
+    class SubA extends MyBase {
+      @ApiProperty()
+      a: number;
+    }
+
+    class SubB extends MyBase {
+      @ApiProperty()
+      b: number;
+    }
+
+    class SubC extends MyBase {
+      @ApiProperty()
+      c: number;
+    }
+    const explorer = new CustomSwaggerExplorer();
+    expect(explorer.parse(SubA)).toMatchSnapshot();
+    expect(explorer.parse(SubB)).toMatchSnapshot();
+    expect(explorer.parse(SubC)).toMatchSnapshot();
+  });
+  it('should support deprecated field in ApiOperation', () => {
+    @Controller('/api', { middleware: [] })
+    class APIController {
+      @ApiOperation({
+        deprecated: true,
+      })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect((explorer.getData() as any).paths['/api/update_user'].post.deprecated).toBe(true);
+  })
+
+  it('should swagger tags duplicate', () => {
+    @Controller('/api')
+    @ApiTags('tag1')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    @Controller('/api2')
+    @ApiTags('tag1')
+    class API2Controller {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    @Controller('/api3')
+    @ApiTags('tag2')
+    class API3Controller {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    explorer.generatePath(API2Controller);
+    explorer.generatePath(API3Controller);
+    const data = explorer.getData() as any;
+    expect(data.tags.length).toBe(2);
+    expect(data.tags[0].name).toBe('tag1');
+    expect(data.tags[1].name).toBe('tag2');
   });
 });

@@ -7,5 +7,5 @@ export {
   createBootstrap,
 } from './creator';
 export * from './client/index';
-export { transformFrameworkToConfiguration } from './utils';
+export { transformFrameworkToConfiguration, processArgsParser } from './utils';
 export * from './mock';

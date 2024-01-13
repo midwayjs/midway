@@ -464,7 +464,7 @@ import * as bull from '@midwayjs/bull';
   imports: [koa, bull],
   importConfigs: [join(__dirname, '. /config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: koa;
 
@@ -728,6 +728,12 @@ export default {
   }
 }
 ```
+
+
+
+## About Redis version
+
+Please choose the latest version (>=5) if possible. Currently, there is a problem of scheduled task creation failure on lower versions of redis.
 
 
 

@@ -148,7 +148,7 @@ The `@Table` decorator can be used without passing any parameters. For more info
 class Person extends Model {}
 ```
 
-These entity columns can also be generated using [sequelize_generator](/docs/tool/sequelize_generator) tools.
+
 
 ### 2. Primary key
 
@@ -494,6 +494,7 @@ import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
 import { Op } from 'sequelize';
+import { Repository } from 'sequelize-typescript';
 
 @Controller('/')
 export class HomeController {
@@ -548,6 +549,7 @@ import { Controller } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
 import { Photo } from '../entity/photo';
 import { User } from '../entity/user';
+import { Repository } from 'sequelize-typescript';
 
 @Controller('/')
 export class HomeController {
@@ -670,4 +672,5 @@ The reason is that the data source in the configuration does not specify the `di
 
 - The above document is translated from sequelize-typescript. For more API, please refer to the [English document](<(https://github.com/sequelize/sequelize-typescrip)>).
 - Some [cases](https://github.com/ddzyan/midway-practice)
-- If you encounter complex problems, you can use the [raw query method](https://sequelize.org/v5/manual/raw-queries.html).
+- If you encounter complex problems, you can use the [raw query method](https://sequelize.org/v5/manual/raw-queries.html)
+- The framework does not directly provide entity column generation tools. Please refer to the modules provided by the community, such as [sequelize-typescript-generator](https://github.com/spinlud/sequelize-typescript-generator)

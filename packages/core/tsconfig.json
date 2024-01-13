@@ -3,7 +3,8 @@
   "compileOnSave": true,
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "moduleResolution": "Node16"
   },
   "include": [
     "./src/**/*.ts"

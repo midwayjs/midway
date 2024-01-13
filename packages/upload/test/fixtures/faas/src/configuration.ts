@@ -13,6 +13,7 @@ import { Readable } from 'stream';
       default: {
         upload: {
           mode: 'file',
+          match: /upload/
         },
       }
     }
@@ -28,6 +29,15 @@ export class HelloHttpService {
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/upload', method: 'post'})
   async upload(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
     return {
+      files,
+      fields
+    }
+  }
+
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/xxxx', method: 'post'})
+  async xxxx(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
+    return {
+      ignore: true,
       files,
       fields
     }

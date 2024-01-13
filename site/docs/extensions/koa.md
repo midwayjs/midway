@@ -135,7 +135,7 @@ import * as koa from '@midwayjs/koa';
 @Configuration({
 	// ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -152,6 +152,53 @@ export class AutoConfiguration {
 ```
 
 但是这样做无法直接让 Context 包含 Typescript 定义，需要额外增加定义，请参考 [扩展上下文定义](../context_definition)。
+
+
+
+## 获取 Http Server
+
+在一些特殊情况下，你需要获取到原始的 Http Server，我们可以在服务器启动后获取。
+
+```typescript
+import { App, Configuration } from '@midwayjs/core';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+	// ...
+})
+export class MainConfiguration {
+  @Inject()
+  framework: koa.Framework;
+
+  async onServerReady(container) {
+    const server = this.framework.getServer();
+    // ...
+  }
+}
+```
+
+
+
+## State 类型定义
+
+在 koa 的 Context 中有一个特殊的 State 属性，通过和 Context 类似的方式可以扩展 State 定义。
+
+```typescript
+// src/interface.ts
+
+declare module '@midwayjs/koa/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+
+  interface State{
+    bbb: string;
+    ccc: number;
+  }
+}
+```
+
+
 
 
 
@@ -306,3 +353,4 @@ export default {
   },
 };
 ```
+

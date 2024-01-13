@@ -55,8 +55,8 @@
     "message": "Base",
     "description": "The label for category 基础 in sidebar serverless"
   },
-  "sidebar.serverless.category.平台触发器": {
-    "message": "Trigger",
+  "sidebar.serverless.category.平台支持": {
+    "message": "Platform Support",
     "description": "The label for category 平台触发器 in sidebar serverless"
   },
   "sidebar.serverless.category.应用部署到弹性容器": {

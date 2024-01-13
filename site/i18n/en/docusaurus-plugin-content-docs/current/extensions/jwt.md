@@ -63,7 +63,16 @@ export default {
   // ...
   jwt: {
     secret: 'xxxxxxxxxxxxxx', // fs.readFileSync('xxxxx.key')
-    expiresIn: '2d', // https://github.com/vercel/ms
+    sign: {
+      // signOptions
+      expiresIn: '2d', // https://github.com/vercel/ms
+    },
+    verify: {
+      // verifyOptions
+    },
+    decode: {
+      // decodeOptions
+    }
   },
 };
 ```
@@ -137,7 +146,7 @@ export class JwtMiddleware {
       if (/^Bearer$/i.test(scheme)) {
         try {
           // jwt.verify that token is valid.
-          await jwtService.verify(token, {
+          await this.jwtService.verify(token, {
             complete: true
           });
         } catch (error) {
@@ -187,4 +196,16 @@ export class MainConfiguration {
     ]);
   }
 }
+```
+
+
+
+## Original JWT object
+
+Objects and methods on the original instance can be referenced through the exported `Jwt` object.
+
+```typescript
+import { Jwt } from '@midwayjs/jwt';
+
+// Jwt.TokenExpiredError
 ```

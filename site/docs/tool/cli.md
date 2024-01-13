@@ -1,4 +1,19 @@
-# midwayjs/cli
+# Midway CLI
+
+:::tip
+
+由于 CLI 底层能力都来源于社区现有的模块功能，为了减少过渡封装带来的维护成本和理解成本，CLI 中的各项功能都将逐步变为社区现有的模块，同时 CLI 库将停止继续迭代。
+
+为此后续的变化为
+
+* 开发将从 `midway-bin dev` 变为 `mwtsc` 
+* 编译将从 `midway-bin build` 变为 `tsc`
+* 测试将从 `midway-bin test` 变为 `mocha` 或者 `jest`
+* 覆盖率将从 `midway-bin cov` 变为 `jest --coverage` 或者其他类似指令
+
+:::
+
+
 
 `@midwayjs/cli` 是新版本的 Midway 体系工具链，和 Serverless，以及原应用的工具链进行了整合。
 

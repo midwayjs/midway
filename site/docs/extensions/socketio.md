@@ -265,7 +265,7 @@ Socket 中的中间件的写法和 [Web 中间件 ](../middleware)相似，但�
 - 全局 Connection 中间件，会对所有 namespace 下的 connection 生效
 - 全局 Message 中间件，会对所有 namespace 下的 message 生效
 - Controller 中间件，会对单个 namespace 下的 connection 和 message 生效
-- Connection 中间件，会对单个 namespace 下的 connection 生消息
+- Connection 中间件，会对单个 namespace 下的 connection 生效
 - Message 中间件，会对单个 namespace 下的 message 生效
 
 ### 中间件写法
@@ -304,7 +304,7 @@ import * as socketio from '@midwayjs/socketio';
   ],
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App('socketIO')
   app: Application;

@@ -39,8 +39,78 @@ midway 项目的依赖使用 lerna 发布，**请不要**：
 
 
 
+## 检查包版本异常
 
-## 普通项目更新
+你可以使用下面的命令在项目根目录执行进行检查。
+
+```bash
+# 社区用户
+$ npx midway-version
+# 内部用户
+$ tnpx @ali/midway-version
+```
+
+如果项目为 pnpm 安装的依赖，请使用下面的命令。
+
+```bash
+# 社区用户
+$ pnpx midway-version
+# 内部用户
+$ pnpx @ali/midway-version
+```
+
+
+
+## 使用工具更新版本
+
+你可以使用下面的命令在项目根目录执行进行更新提示。
+
+```bash
+# 社区用户
+$ npx midway-version -u
+# 内部用户
+$ tnpx @ali/midway-version -u
+```
+
+如果项目为 pnpm 安装的依赖，请使用下面的命令。
+
+```bash
+# 社区用户
+$ pnpx midway-version -u
+# 内部用户
+$ pnpx @ali/midway-version -u
+```
+
+如果你希望将更新写入到 `package.json` 中，请使用下面的命令。
+
+```bash
+# 社区用户
+$ npx midway-version -u -w
+# 内部用户
+$ tnpx @ali/midway-version -u -w
+```
+
+如果项目为 pnpm 安装的依赖，请使用下面的命令。
+
+```bash
+# 社区用户
+$ pnpx midway-version -u -w
+# 内部用户
+$ pnpx @ali/midway-version -u -w
+```
+
+:::tip
+
+更新的版本会写入 `package.json` 和 `package-lock.json`，并需要重新安装依赖。
+
+:::
+
+
+
+## 手动更新版本
+
+
+### 普通项目更新
 
 
 普通使用 npm/yarn 的项目，升级请按照下面的流程
@@ -57,7 +127,7 @@ midway 项目的依赖使用 lerna 发布，**请不要**：
 
 
 
-## lerna 项目更新
+### lerna 项目更新
 
 
 使用 lerna 开发项目，由于有 hoist 模式的存在，升级请按照下面的流程（以 lerna3 为例）
@@ -72,6 +142,8 @@ midway 项目的依赖使用 lerna 发布，**请不要**：
 
 
 **我们不保证使用其他工具、cli 单独升级包的效果。**
+
+
 
 
 ## 大版本更新

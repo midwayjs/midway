@@ -5,11 +5,15 @@ import {
   MidwayFrameworkService,
 } from '@midwayjs/core';
 import { MidwayFaaSFramework } from './framework';
+import { join } from 'path';
+import { isTypeScriptEnvironment } from '@midwayjs/core';
 
 export abstract class AbstractBootstrapStarter {
   protected applicationContext;
   protected framework: MidwayFaaSFramework;
   constructor(protected options: ServerlessStarterOptions = {}) {}
+
+  private startedExports: Record<string, any>;
 
   public getApplicationContext() {
     return this.applicationContext;
@@ -19,9 +23,31 @@ export abstract class AbstractBootstrapStarter {
     await this.onClose();
   }
 
+  protected getBaseDir() {
+    if (this.options.baseDir) {
+      return this.options.baseDir;
+    }
+    if (isTypeScriptEnvironment()) {
+      return join(this.options.appDir, 'src');
+    } else {
+      return join(this.options.appDir, 'dist');
+    }
+  }
+
   public start(options?: ServerlessStarterOptions) {
-    this.options = Object.assign(this.options, options);
-    return this.onStart();
+    if (!this.startedExports) {
+      this.options = Object.assign(this.options, options);
+      if (this.options.appDir && !this.options.baseDir) {
+        this.options.baseDir = this.getBaseDir();
+      }
+      this.startedExports = this.onStart();
+    }
+    if (this.startedExports) {
+      this.startedExports['getStarter'] = () => {
+        return this;
+      };
+      return this.startedExports;
+    }
   }
 
   public async initFramework(bootstrapOptions: IMidwayBootstrapOptions = {}) {
@@ -42,7 +68,7 @@ export abstract class AbstractBootstrapStarter {
 
   protected createDefaultMockContext() {}
 
-  abstract onStart(): any;
+  abstract onStart(): unknown;
   abstract onInit(...args: unknown[]);
   abstract onRequest(...args: unknown[]);
   abstract onClose();

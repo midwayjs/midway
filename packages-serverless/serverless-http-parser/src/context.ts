@@ -1,4 +1,3 @@
-import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as util from 'util';
 import * as createError from 'http-errors';
 import { Cookies } from '@midwayjs/cookies';
@@ -19,7 +18,7 @@ export const context = {
     return this.request.originEvent;
   },
 
-  get originContext(): FaaSOriginContext {
+  get originContext() {
     return this.request.originContext;
   },
 
@@ -260,5 +259,13 @@ export const context = {
 
   set cookies(_cookies) {
     this[COOKIES] = _cookies;
+  },
+
+  get streaming() {
+    return this.res.streaming;
+  },
+
+  set streaming(isStream: boolean) {
+    this.res.streaming = isStream;
   },
 };

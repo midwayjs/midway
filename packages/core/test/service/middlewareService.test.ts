@@ -1,4 +1,4 @@
-import { Provide, MidwayMiddlewareService, MidwayContainer } from '../../src';
+import { Provide, MidwayMiddlewareService, MidwayContainer, Init, IgnoreMatcher } from '../../src';
 import * as assert from 'assert';
 
 describe('/test/services/middlewareService.test.ts', () => {
@@ -323,9 +323,10 @@ describe('/test/services/middlewareService.test.ts', () => {
 
       @Provide()
       class TestMiddleware1 {
+        title = 'midway, ';
         resolve() {
           return async (ctx, next) => {
-            return 'hello ' + await next();
+            return this.title + 'hello ' + await next();
           }
         }
       }
@@ -350,7 +351,7 @@ describe('/test/services/middlewareService.test.ts', () => {
         console.log('end');
       });
 
-      expect(result).toEqual('hello world');
+      expect(result).toEqual('midway, hello world');
     });
 
     it('test compose should be ok', async () => {
@@ -462,7 +463,7 @@ describe('/test/services/middlewareService.test.ts', () => {
     });
   });
 
-  describe('test middleware return empty value', function () {
+  describe('test middleware return empty value', () => {
 
     let middlewareService = null;
 
@@ -514,6 +515,260 @@ describe('/test/services/middlewareService.test.ts', () => {
       expect(await fn({body: 1}, () => {})).toEqual(0);
       expect(await fn({body: false}, () => {})).toEqual(0);
       expect(await fn({body: 0}, () => {})).toEqual(0);
+    });
+
+  });
+
+  describe('test middleware match and ignore', () => {
+    it('should test single match', async () => {
+      @Provide()
+      class TestMiddleware {
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+
+        match = '/test';
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/test'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('matched');
+    });
+
+    it('should test single not match', async () => {
+      @Provide()
+      class TestMiddleware {
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+
+        match = '/test';
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('');
+    });
+
+    it('should test single ignore', async () => {
+      @Provide()
+      class TestMiddleware {
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+
+        ignore = '/test';
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/test'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('');
+    });
+
+    it('should test match array', async () => {
+      @Provide()
+      class TestMiddleware {
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+
+        match = ['/test', '/test2'];
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/test2'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('matched');
+    });
+
+    it('should test match with regexp', async () => {
+      @Provide()
+      class TestMiddleware {
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+
+        match = ['/test', /^\/123/];
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/123'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('matched');
+    });
+
+    it('should test match with function', async () => {
+      @Provide()
+      class TestMiddleware {
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+
+        match = ['/test', (ctx) => {
+          return /^\/123/.test(ctx.path);
+        }];
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/123'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('matched');
+    });
+
+    it('should match function this type', async () => {
+      @Provide()
+      class TestMiddleware {
+        matchPath = '/123';
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+
+        match(ctx) {
+          return this.matchPath.includes(ctx.path);
+        };
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/123'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('matched');
+    });
+
+    it('should match function this type in property array', async () => {
+      @Provide()
+      class TestMiddleware {
+        matchPath = '/123';
+
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+
+        match = [ctx => {
+          return this.matchPath.includes(ctx.path);
+        }]
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/123'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('matched');
+    });
+
+    it('should match function this type with dynamic set', async () => {
+      @Provide()
+      class TestMiddleware {
+        matchPath = '/123';
+        match: IgnoreMatcher<any>[] = [];
+
+        @Init()
+        async init() {
+          this.match.push(function (this: TestMiddleware, ctx) {
+            return this.matchPath.includes(ctx.path);
+          });
+        }
+
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'matched';
+          }
+        }
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware], {} as any);
+      const result = await fn({body: '', path: '/123'}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('matched');
     });
 
   });

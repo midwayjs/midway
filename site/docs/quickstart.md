@@ -8,8 +8,8 @@ Midway 有多套技术方案可以选择，我们以部署的方式来做区分�
 | 技术选型        | 描述                                                         |
 | --------------- | ------------------------------------------------------------ |
 | 纯 Node.js 项目 | Midway 传统项目，纯 Node.js 研发，以 `@midwayjs/koa` 为代表的模块，最完整的支持后端项目，采用 **依赖注入 + Class** 为技术栈。 |
-| Serverless 项目 | Midway 为 Serverless 场景单独开发的技术栈，以 `@midwayjs/faas` 为代表的的模块，使用轻量的方式接入不同的 Serverless 平台。 |
-| 一体化项目      | Midway 创新技术方案，采用前后端一体化开发方式，节省前后端联调时间，以 `@midwayjs/hooks` 为代表的的模块，使用 **函数式** 为主要编码范式。 |
+| Serverless 项目 | Midway 为 Serverless 场景单独开发的技术栈，以 `@midwayjs/faas` 为代表的模块，使用轻量的方式接入不同的 Serverless 平台。 |
+| 一体化项目      | Midway 创新技术方案，采用前后端一体化开发方式，节省前后端联调时间，以 `@midwayjs/hooks` 为代表的模块，使用 **函数式** 为主要编码范式。 |
 
 :::tip
 本章节及后续的文档将以 **纯 Node.js 项目** 作为基础示例，如需使用 Serverless 项目，请跳转到 [Serverless](serverless/serverless_intro)，如需了解一体化项目，请访问 [一体化](hooks/intro) 。
@@ -23,10 +23,10 @@ Midway 有多套技术方案可以选择，我们以部署的方式来做区分�
 使用 `npm init midway` 查看完整的脚手架列表，选中某个项目后，Midway 会自动创建示例目录，代码，以及安装依赖。
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
-针对 v3 项目，请选择 `koa-v3`。
+针对 v3 项目，请选择 `koa-v3`，注意 [Node.js 环境要求](/docs/intro#环境准备工作)。
 
 示例将创建一个类似下面的目录结构，其中最精简的 Midway 项目示例如下。
 
@@ -127,7 +127,7 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 ### Python 的编译错误
 
 :::caution
-1、在 node15/npm7 下执行 `npm install/i` 命令安装依赖可能会有 Python 编译错误
+在 node15/npm7 下执行 `npm install/i` 命令安装依赖可能会有 Python 编译错误
 
 **使用 npm init midway 创建的项目会自动安装依赖，无此问题。**
 
@@ -135,17 +135,8 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 **原因**：测试框架 Jest 依赖 jsdom，npm7 会自动安装其 peerDependencies 中依赖的 canvas 包， 而 canvas 的安装编译需要有python3环境。
 :::
 
-### Deprecated 提示
-
-:::caution
-2、在安装依赖时会有 npm warn: deprecated 输出
-
-
-**原因**：测试框架 Jest 依赖 jsdom，其依赖了已废弃的模块 request，目前jsdom尚未解决此问题，我们会持续进行跟踪，相关问题参看：[https://github.com/jsdom/jsdom/issues/2792](https://github.com/jsdom/jsdom/issues/2792)
-:::
-
 ### windows eslint 报错
 
 :::caution
-3、windows 可能会碰到 eslint 报错的问题，请关注 [windows 下换行问题](faq/git_problem#XCAgm)。
+Windows 可能会碰到 eslint 报错的问题，请关注 [windows 下换行问题](faq/git_problem#XCAgm)。
 :::

@@ -198,33 +198,50 @@ For association in the form of a directory scan, please refer to [Data Source Ma
 
 
 
-### Call Repository
+### CRUD Operations
 
-Use `InjectRepository` injection `repository` objects in business code to perform database operations.
+Use `InjectRepository` to inject `Repository` to perform simple query operations. And use `InjectEntityManager` to get the instance of `EntityManager`, to perform creating, updating and deleting operations.
+You can also get `EntityManager` by calling `repository.getEntityManger()`.
+
+:::caution
+
+Since v5.7, `persist` and `flush` etc. on `Repository` (shortcuts to methods on `EntityManager`) were marked as *deprecated*, and [planned to remove them in v6](https://github.com/mikro-orm/mikro-orm/discussions/3989). Please use those APIs on `EntityManger` directly instead of on `Repository`.
+
+:::
 
 ```typescript
 import { Book } from './entity';
 import { Provide } from '@midwayjs/core';
-import { InjectRepository } from '@midwayjs/mikro';
-import { EntityRepository, QueryOrder, wrap } from '@mikro-orm/core';
+import { InjectEntityManager, InjectRepository } from '@midwayjs/mikro';
+import { QueryOrder } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/mysql'; // should be imported from driver specific packages
 
 @Provide()
-export class BookController {
+export class BookService {
 
   @InjectRepository(Book)
   bookRepository: EntityRepository<Book>;
 
-  async findBookAndQuery() {
-    const book = this.bookRepository.create({ title: 'b1', author: { name: 'a1', email: 'e1' } });
-    wrap(book.author, true).__initialized = true;
-    await this.bookRepository.persist(book).flush();
+  @InjectEntityManager()
+  em: EntityManager;
 
-    const findResult = await this.bookRepository.findAll({
-      populate: ['author']
-      orderBy: { title: QueryOrder.DESC}
-      limit: 20
+  async queryByRepo() {
+    // query with Repository
+    const books = await this.bookRepository.findAll({
+      populate: ['author'],
+      orderBy: { title: QueryOrder.DESC },
+      limit: 20,
     });
+    return books;
+  }
 
+  async createBook() {
+    const book = new Book({ title: 'b1', author: { name: 'a1', email: 'e1' } });
+    // mark book as persisted
+    this.em.persist(book);
+    // persist all changes to database
+    await this.em.flush();
+    return book;
   }
 }
 ```

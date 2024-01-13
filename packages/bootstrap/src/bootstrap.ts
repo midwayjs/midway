@@ -4,11 +4,14 @@ import {
   MidwayApplicationManager,
   initializeGlobalApplicationContext,
   destroyGlobalApplicationContext,
+  loadModule,
+  isTypeScriptEnvironment,
+  MidwayMainFrameworkMissingError,
+  MidwayFrameworkService,
 } from '@midwayjs/core';
 import { join } from 'path';
-import { IMidwayLogger, MidwayBaseLogger } from '@midwayjs/logger';
+import { ILogger, MidwayLoggerContainer, loggers } from '@midwayjs/logger';
 import { createContextManager } from '@midwayjs/async-hooks-context-manager';
-import { isTypeScriptEnvironment } from './util';
 import {
   ChildProcessEventBus,
   ThreadEventBus,
@@ -46,8 +49,19 @@ export class BootstrapStarter {
       }
     }
 
+    if (!this.globalOptions.moduleLoadType) {
+      const pkgJSON = await loadModule(join(this.appDir, 'package.json'), {
+        safeLoad: true,
+        enableCache: false,
+      });
+
+      this.globalOptions.moduleLoadType =
+        pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+    }
+
     this.applicationContext = await initializeGlobalApplicationContext({
       asyncContextManager: createContextManager(),
+      loggerFactory: loggers,
       ...this.globalOptions,
     });
     return this.applicationContext;
@@ -64,6 +78,14 @@ export class BootstrapStarter {
         const io = applicationManager.getApplication('socketIO');
         setupWorker(io);
       }
+    }
+
+    const frameworkService = this.applicationContext.get(
+      MidwayFrameworkService
+    );
+    // check main framework
+    if (!frameworkService.getMainApp()) {
+      throw new MidwayMainFrameworkMissingError();
     }
   }
 
@@ -94,8 +116,9 @@ export class BootstrapStarter {
 
 export class Bootstrap {
   protected static starter: BootstrapStarter;
-  protected static logger: IMidwayLogger;
+  protected static logger: ILogger;
   protected static configured = false;
+  protected static bootstrapLoggerFactory = new MidwayLoggerContainer();
 
   /**
    * set global configuration for midway
@@ -104,16 +127,23 @@ export class Bootstrap {
   static configure(configuration: IMidwayBootstrapOptions = {}) {
     this.configured = true;
     if (!this.logger && !configuration.logger) {
-      this.logger = new MidwayBaseLogger({
-        disableError: true,
-        disableFile: true,
-      });
+      this.logger = this.bootstrapLoggerFactory.createLogger('bootstrap', {
+        enableError: false,
+        enableFile: false,
+        enableConsole: true,
+      } as any);
       if (configuration.logger === false) {
-        this.logger?.['disableConsole']();
+        if (this.logger['disableConsole']) {
+          // v2
+          this.logger['disableConsole']();
+        } else {
+          // v3
+          this.logger['level'] = 'none';
+        }
       }
       configuration.logger = this.logger;
     } else {
-      this.logger = this.logger || (configuration.logger as IMidwayLogger);
+      this.logger = this.logger || (configuration.logger as ILogger);
     }
 
     // 处理三方框架内部依赖 process.cwd 来查找 node_modules 等问题
@@ -180,7 +210,7 @@ export class Bootstrap {
   static reset() {
     this.configured = false;
     this.starter = null;
-    this.logger.close();
+    this.bootstrapLoggerFactory.close();
   }
 
   /**

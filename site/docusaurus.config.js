@@ -3,8 +3,8 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const { join } = require('path');
 
-/** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Midway',
   tagline: 'Midway is a fullstack framework for web & Serverless',
@@ -13,7 +13,7 @@ const config = {
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.svg',
-  organizationName: 'midwayjs', // Usually your GitHub org/user name.
+  organizationName: 'midwayjs', // Usually your GitHub org/username.
   projectName: 'midway', // Usually your repo name.
   stylesheets: ['//at.alicdn.com/t/font_2797741_dnh1sm1jan.css'],
   i18n: {
@@ -44,7 +44,74 @@ const config = {
         },
       },
     ],
-    './lib/plugin.js'
+    [
+      'docusaurus-plugin-typedoc-api',
+      {
+        projectRoot: join(__dirname, '..'),
+        packages: [
+          "packages/async-hooks-context-manager",
+          "packages/axios",
+          "packages/bootstrap",
+          "packages/bull-board",
+          "packages/bull",
+          "packages/cache",
+          "packages/captcha",
+          "packages/casbin-redis-adapter",
+          "packages/casbin-typeorm-adapter",
+          "packages/casbin",
+          "packages/code-dye",
+          "packages/consul",
+          "packages/core",
+          "packages/cos",
+          "packages/cron",
+          "packages/cross-domain",
+          "packages/decorator",
+          "packages/etcd",
+          "packages/express-session",
+          "packages/faas",
+          "packages/grpc",
+          "packages/http-proxy",
+          "packages/i18n",
+          "packages/info",
+          "packages/jwt",
+          "packages/kafka",
+          "packages/mikro",
+          "packages/mock",
+          "packages/mongoose",
+          "packages/otel",
+          "packages/passport",
+          "packages/processAgent",
+          "packages/prometheus-socket-io",
+          "packages/prometheus",
+          "packages/rabbitmq",
+          "packages/redis",
+          "packages/security",
+          "packages/sequelize",
+          "packages/session",
+          "packages/socketio",
+          "packages/static-file",
+          "packages/swagger",
+          "packages/tablestore",
+          "packages/tags",
+          "packages/typegoose",
+          "packages/typeorm",
+          "packages/upload",
+          "packages/validate",
+          "packages/view-ejs",
+          "packages/view-nunjucks",
+          "packages/view",
+          "packages/web-express",
+          "packages/web-koa",
+          "packages/web",
+          "packages/ws"
+        ],
+        debug:true,
+        minimal: true,
+        gitRefName: 'main',
+        lastVersion: 'current',
+      },
+    ],
+    './src/plugins/aem/index.js',
   ],
   presets: [
     [
@@ -110,10 +177,6 @@ const config = {
             label: '社区活动',
             position: 'right',
             items: [
-              {
-                label: '开源送礼',
-                href: 'https://survey.taobao.com/apps/zhiliao/pJ3zng9Iv',
-              },
               {
                 label: '线下沙龙',
                 href: 'https://subway.midwayjs.org/',

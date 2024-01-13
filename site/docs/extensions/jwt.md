@@ -63,7 +63,16 @@ export default {
   // ...
   jwt: {
     secret: 'xxxxxxxxxxxxxx', // fs.readFileSync('xxxxx.key')
-    expiresIn: '2d', // https://github.com/vercel/ms
+    sign: {
+      // signOptions
+      expiresIn: '2d', // https://github.com/vercel/ms
+    },
+    verify: {
+      // verifyOptions
+    },
+    decode: {
+      // decodeOptions
+    }
   },
 };
 ```
@@ -137,7 +146,7 @@ export class JwtMiddleware {
       if (/^Bearer$/i.test(scheme)) {
         try {
           //jwt.verify方法验证token是否有效
-          await jwtService.verify(token, {
+          await this.jwtService.verify(token, {
             complete: true,
           });
         } catch (error) {
@@ -187,4 +196,16 @@ export class MainConfiguration {
     ]);
   }
 }
+```
+
+
+
+## 原始 JWT 对象
+
+可以通过导出的 `Jwt` 对象引用到原始实例上的对象和方法。
+
+```typescript
+import { Jwt } from '@midwayjs/jwt';
+
+// Jwt.TokenExpiredError
 ```

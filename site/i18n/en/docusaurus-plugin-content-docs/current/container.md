@@ -430,6 +430,43 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 }
 ```
 
+### Get object scope
+
+Starting from version v3.12.0, the dependency injection container adds a new API for obtaining object scope.
+
+```typescript
+import { Controller, Inject, ApplicationContext, Get, IMidwayContainer } from '@midwayjs/core';
+import { UserService} from '../service/user.service';
+
+@Singleton()
+export class UserSerivce {
+   //...
+}
+
+@Controller('/')
+export class HomeController {
+   @Inject()
+   userService: UserService;
+
+   @ApplicationContext()
+   applicationContext: IMidwayContainer;
+
+   @Get('/')
+   async home(): Promise<string> {
+     console.log(this.applicationContext.getInstanceScope(this));
+     // => Request
+
+     console.log(this.applicationContext.getInstanceScope(this.userService));
+     // => Singleton
+    
+     //...
+   }
+}
+```
+
+The `getInstanceScope` method returns a `ScopeEnum` value.
+
+
 
 ## Injection rule
 
@@ -578,7 +615,7 @@ import * as lodash from 'lodash';
 import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-export class AutoConfiguration {
+export class MainConfiguration {
 
   async onReady(applicationContext: IMidwayContainer) {
 		// Add some global objects to the dependency injection container
@@ -766,7 +803,7 @@ In the life cycle of the code entry `configuration` file, we will also pass addi
 import { Configuration, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
-export class AutoConfiguration {
+export class MainConfiguration {
   async onReady(applicationContext: IMidwayContainer) {
     // ...
   }
@@ -903,11 +940,11 @@ Then you can define a dynamic service (factory) and return different implementat
 ```typescript
 // src/service/dynamicCacheService.ts
 
-import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
+import { providerWrapper, IMidwayContainer, MidwayConfigService } from '@midwayjs/core';
 
 export async function dynamicCacheServiceHandler(container: IMidwayContainer) {
 	// Get global configuration from container API
-  const config = container.getConfigService().getConfiguration();
+  const config = container.get(MidwayConfigService).getConfiguration();
   if (config['redis']['mode'] === 'local') {
     return await container.getAsync('localCacheService');
   } else {
@@ -1034,7 +1071,9 @@ export const getGlobalConfig = () => {
 
 
 
-## Automatic binding
+## Start Behavior
+
+### Automatic scan binding
 
 As mentioned above, after the container is initialized, we will bind the existing class registration to the container.
 
@@ -1047,6 +1086,8 @@ container.bind(UserService);
 Midway will automatically scan the entire project directory during the startup process and automatically process this behavior, so that the user does not need to manually perform binding operations.
 
 Simply put, the framework will recursively scan the ts/js files in the entire `src` directory by default, and then perform require operations. When the file is exported as a class and explicitly or implicitly contains the `@Provide()` decorator, it will execute the `container.bind` logic.
+
+### Ignore scanning
 
 In general, we should not put non-ts files under src (such as front-end code). In special scenarios, we can ignore some directories and configure them in the `@Configuration` decorator.
 
@@ -1065,7 +1106,7 @@ import { App, Configuration, Logger } from '@midwayjs/core';
     ]
   }
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   // ...
 }
 
@@ -1148,6 +1189,34 @@ export class BaseService {
 ```
 
 
+
+## Context object in request scope
+
+For objects created in the request scope, the framework will mount a context object on the object, even if the object does not explicitly declare `@Inject() ctx`, the current context object can be obtained.
+
+```typescript
+import { REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
+
+@Provide()
+export class UserManager {
+   //...
+}
+
+@Provide()
+export class UserService {
+   //...
+
+   @Inject()
+   userManager: UserManager;
+
+   async invoke() {
+     const ctx = this. userManager[REQUEST_OBJ_CTX_KEY];
+     //...
+   }
+}
+```
+
+This feature is useful in [Interceptor](./aspect) or [Custom Method Decorator](./custom_decorator).
 
 
 

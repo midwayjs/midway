@@ -316,7 +316,7 @@ import { ReportMiddleware } from './middleware/user.middleware';
   imports: [egg]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: egg.Application;
@@ -479,7 +479,7 @@ export default {
 ```
 ### 增加扩展定义
 
-Context 请使用 Midway 的方式来扩展，请查看 [扩展上下文定义](https://midwayjs.org/docs/context_definition)。
+Context 请使用 Midway 的方式来扩展，请查看 [扩展上下文定义](/docs/context_definition)。
 
 
 其余的部分，沿用 egg 的方式，请在 `src/interface.ts` 中扩展。
@@ -574,6 +574,27 @@ Copy
 
 
 
+## State 类型定义
+
+在 egg 底层的 koa 的 Context 中有一个特殊的 State 属性，通过和 Context 类似的方式可以扩展 State 定义。
+
+```typescript
+// src/interface.ts
+
+declare module '@midwayjs/web/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+
+  interface State{
+    bbb: string;
+    ccc: number;
+  }
+}
+```
+
+
+
 ## 配置
 
 ### 默认配置
@@ -599,6 +620,7 @@ export default {
 | hostname       | string           | 监听的 hostname，默认 127.1  |
 | http2          | boolean          | 可选，http2 支持，默认 false |
 | queryParseMode | simple\|extended | 默认为 extended              |
+| queryParseOptions | `qs.IParseOptions` | 解析选项，当使用'simple'模式解析时可用 |
 
 以上的属性，对本地和使用 `bootstrap.js` 部署的应用生效。
 
@@ -726,6 +748,9 @@ export default {
   egg: {
     // ...
     queryParseMode: 'simple',
+    queryParseOptions: {
+      arrayLimit: 100,
+    },
   },
 }
 ```

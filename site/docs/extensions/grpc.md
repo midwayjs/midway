@@ -100,7 +100,7 @@ import * as grpc from '@midwayjs/grpc';
   imports: [koa, grpc],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
 		// ...
   }
@@ -350,10 +350,7 @@ export class Greeter implements helloworld.Greeter {
 ### 配置服务
 
 
-这里启动需要用到项目根目录 `bootstrap.js` 独立文件。代码和其他框架初始化类似，只是这里的框架包是 `@midwayjs/grpc` 。
-
-
-内容如下（函数形式的配置）：
+配置内容如下。
 ```typescript
 // src/config/config.default
 import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
@@ -387,6 +384,7 @@ services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 
 
 | 属性          | 类型              | 描述                                                         |
 | ------------- | ----------------- | ------------------------------------------------------------ |
+| url           | string            | 可选，gRPC 服务地址，默认 6565 端口，比如 'localhost:6565'   |
 | loaderOptions | Object            | 可选，proto file loader 的 options                           |
 | credentials   | ServerCredentials | 可选，grpc Server binding 时的 credentials 参数选项          |
 | serverOptions | ChannelOptions    | 可选，grpc Server 的 [自定义 options](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js#supported-channel-options) |

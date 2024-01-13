@@ -93,21 +93,27 @@ export class DocumentBuilder {
     description = '',
     externalDocs?: ExternalDocumentationObject
   ): this {
+    const tags = this.document.tags || [];
     if (Array.isArray(name)) {
       const arr = name as Array<string>;
       for (const s of arr) {
-        this.document.tags.push({
-          name: s,
-          description: '',
-        });
+        if (!tags.find(tag => tag.name === name)) {
+          tags.push({
+            name: s,
+            description: '',
+          });
+        }
       }
       return this;
     }
-    this.document.tags.push({
-      name,
-      description,
-      externalDocs,
-    });
+    if (!tags.find(tag => tag.name === name)) {
+      tags.push({
+        name,
+        description,
+        externalDocs,
+      });
+    }
+    this.document.tags = tags;
     return this;
   }
 

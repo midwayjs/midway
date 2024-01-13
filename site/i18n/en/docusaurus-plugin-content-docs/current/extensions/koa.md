@@ -133,7 +133,7 @@ import * as koa from '@midwayjs/koa';
 @Configuration({
 	// ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -150,6 +150,53 @@ export class AutoConfiguration {
 ```
 
 However, this cannot directly allow the Context to include Typescript Definitions. Additional definitions are required. Please refer to [extended context definitions](../context_definition).
+
+
+
+## Get Http Server
+
+In some special cases, you need to get the original Http Server, we can get it after the server starts.
+
+```typescript
+import { App, Configuration } from '@midwayjs/core';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+	// ...
+})
+export class MainConfiguration {
+  @Inject()
+  framework: koa.Framework;
+
+  async onServerReady(container) {
+    const server = this.framework.getServer();
+    // ...
+  }
+}
+```
+
+
+
+## State type definition
+
+There is a special State attribute in koa's Context, and the State definition can be extended in a similar way to Context.
+
+```typescript
+// src/interface.ts
+
+declare module '@midwayjs/koa/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+
+  interface State{
+    bbb: string;
+    ccc: number;
+  }
+}
+```
+
+
 
 
 

@@ -82,6 +82,17 @@ export class MemoryDataListener extends DataListener<string> {
 }
 ```
 
+上面的 `initData` 方法可以异步获取数据。
+
+```typescript
+// ...
+export class MemoryDataListener extends DataListener<string> {
+  async initData() {
+    // ...
+  }
+}
+```
+
 
 
 ## 使用数据订阅
@@ -101,7 +112,7 @@ export class UserService {
   memoryDataListener: MemoryDataListener;
 
   async getUserHelloData() {
-    const helloData = await this.memoryDataListener.getData();
+    const helloData = this.memoryDataListener.getData();
     // helloData => helloxxxxxxxx
     // ...
   }

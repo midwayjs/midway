@@ -1,6 +1,5 @@
 import { is as typeis } from 'type-is';
 import * as accepts from 'accepts';
-import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as qs from 'querystring';
 import * as only from 'only';
 import { isPlainObject } from './util';
@@ -95,7 +94,7 @@ export const request = {
     return this.req.originEvent ?? this.req.getOriginEvent?.() ?? {};
   },
 
-  get originContext(): FaaSOriginContext {
+  get originContext() {
     return this.req.originContext ?? this.req.getOriginContext?.() ?? {};
   },
 
@@ -243,6 +242,8 @@ export const request = {
   },
 
   get protocol() {
+    // 本地开发应该有 socket 对象
+    if (this.req?.socket?.encrypted) return 'https';
     const proto = this.get('x-real-scheme') || this.get('X-Forwarded-Proto');
     return proto ? proto.split(/\s*,\s*/, 1)[0] : 'http';
   },

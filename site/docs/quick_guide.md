@@ -7,7 +7,7 @@
 ## 环境准备
 
 - 操作系统：支持 macOS，Linux，Windows
-- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 12.x。
+- 运行环境：[Node.js 环境要求](/docs/intro#环境准备工作)
 
 
 
@@ -16,7 +16,7 @@
 我们推荐直接使用脚手架，只需几条简单指令，即可快速生成项目。
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
 选择 `koa-v3` 项目进行初始化创建，项目名可以自定，比如 `weather-sample`。
@@ -70,7 +70,7 @@ import { Controller, Get, Query } from '@midwayjs/core';
 @Controller('/')
 export class WeatherController {
   @Get('/weather')
-  async getWeatherInfo(@Query('id') cityId: string): Promise<string> {
+  async getWeatherInfo(@Query('cityId') cityId: string): Promise<string> {
     return cityId;
   }
 }
@@ -93,7 +93,7 @@ import { Provide, makeHttpRequest } from '@midwayjs/core';
 @Provide()
 export class WeatherService {
   async getWeather(cityId: string) {
-    return makeHttpRequest(`http://www.weather.com.cn/data/cityinfo/${cityId}.html`, {
+    return makeHttpRequest(`https://midwayjs.org/resource/${cityId}.json`, {
       dataType: 'json',
     });
   }
@@ -103,7 +103,6 @@ export class WeatherService {
 :::info
 
 - 1、`makeHttpRequest` 方法是 Midway 内置的 http 请求方法，更多参数请查看 [文档](./extensions/axios)
-- 2、示例中的城市天气信息来自于中国中央气象台 API
 
 :::
 
@@ -144,12 +143,12 @@ import { WeatherInfo } from '../interface';
 @Provide()
 export class WeatherService {
   async getWeather(cityId: string): Promise<WeatherInfo> {
-    const result = await makeHttpRequest(`http://www.weather.com.cn/data/sk/${cityId}.html`, {
+    const result = await makeHttpRequest<WeatherInfo>(`https://midwayjs.org/resource/${cityId}.json`, {
       dataType: 'json',
     });
 
     if (result.status === 200) {
-      return result.data;
+      return result.data as WeatherInfo;
     }
   }
 }
@@ -225,7 +224,7 @@ import * as view from '@midwayjs/view-nunjucks';
   ],
   importConfigs: [join(__dirname, './config')],
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   // ...
 }
 
@@ -381,11 +380,11 @@ export class WeatherService {
     }
 
     try {
-      const result = await makeHttpRequest(`http://www.weather.com.cn/data/sk/${cityId}.html`, {
+      const result = await makeHttpRequest<WeatherInfo>(`https://midwayjs.org/resource/${cityId}.json`, {
         dataType: 'json',
       });
       if (result.status === 200) {
-        return result.data;
+        return result.data as WeatherInfo;
       }
     } catch (error) {
       throw new WeatherEmptyDataError(error);
@@ -432,7 +431,7 @@ import { WeatherErrorFilter } from './filter/weather.filter';
 @Configuration({
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   @App()
   app: koa.Application;
 
@@ -448,6 +447,85 @@ export class ContainerLifeCycle {
 这样，当每次请求中获取到了 `WeatherEmptyDataError` 错误，会使用相同的返回值返回给浏览器，同时会在日志中记录原始的错误信息。
 
 异常处理的更多信息，可以查阅 [文档](./error_filter)。
+
+
+
+## 数据模拟
+
+在编写代码时，我们的接口经常还处在无法使用的阶段，为了尽可能降低影响，可以使用模拟数据来代替。
+
+比如我们的天气接口，就可以在本地和测试环境模拟掉。
+
+我们需要创建一个 `src/mock/data.mock.ts` 文件，内容如下：
+
+```typescript
+// src/mock/data.mock.ts
+import {
+  Mock,
+  ISimulation,
+  App,
+  Inject,
+  IMidwayApplication,
+  MidwayMockService,
+} from '@midwayjs/core';
+import { WeatherService } from '../service/weather.service';
+
+@Mock()
+export class WeatherDataMock implements ISimulation {
+  @App()
+  app: IMidwayApplication;
+
+  @Inject()
+  mockService: MidwayMockService;
+
+  async setup(): Promise<void> {
+    const originMethod = WeatherService.prototype.getWeather;
+    this.mockService.mockClassProperty(
+      WeatherService,
+      'getWeather',
+      async cityId => {
+        if (cityId === '101010100') {
+          return {
+            weatherinfo: {
+              city: '北京',
+              cityid: '101010100',
+              temp: '27.9',
+              WD: '南风',
+              WS: '小于3级',
+              SD: '28%',
+              AP: '1002hPa',
+              njd: '暂无实况',
+              WSE: '<3',
+              time: '17:55',
+              sm: '2.1',
+              isRadar: '1',
+              Radar: 'JC_RADAR_AZ9010_JB',
+            },
+          };
+        } else {
+          return originMethod.apply(this, [cityId]);
+        }
+      }
+    );
+  }
+
+  enableCondition(): boolean | Promise<boolean> {
+    // 模拟类启用的条件
+    return ['local', 'test', 'unittest'].includes(this.app.getEnv());
+  }
+}
+
+```
+
+`WeatherDataMock` 类用于模拟天气数据，其中的 `setup` 方法，用于实际的初始化模拟，其中，我们使用了内置的 `MidwayMockService` 的 `mockClassProperty` 方法，将 `WeatherService` 的 `getWeather` 方法模拟掉。
+
+在模拟过程中，我们仅仅将单个城市的数据进行了处理，其他依旧走了原来的接口。
+
+`enableCondition` 用于标识这个模拟类在哪些场景下生效，比如我们上面的代码就仅在本地和测试环境生效。
+
+这样，当本地开发和测试时，我们请求 `101010100` 的数据，将直接被拦截和返回，且在部署到服务器环境后，也不会受到影响。
+
+数据模拟还有更多的接口可以使用，可以查阅 [文档](./mock)。
 
 
 

@@ -1,18 +1,18 @@
 import {
   CONFIGURATION_KEY,
+  getClassExtendedMetadata,
   getClassMetadata,
+  getObjectDefinition,
+  getPropertyInject,
+  getProviderName,
+  getProviderUUId,
   IComponentInfo,
+  INJECT_CUSTOM_PROPERTY,
   InjectionConfigurationOptions,
   listModule,
   MAIN_MODULE_KEY,
   saveModule,
   saveProviderId,
-  getProviderUUId,
-  getPropertyInject,
-  getObjectDefinition,
-  getClassExtendedMetadata,
-  INJECT_CUSTOM_PROPERTY,
-  getProviderName,
 } from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -29,7 +29,12 @@ import {
   ObjectLifeCycleEvent,
   ScopeEnum,
 } from '../interface';
-import { FUNCTION_INJECT_KEY, REQUEST_CTX_KEY } from '../constants';
+import {
+  CONTAINER_OBJ_SCOPE,
+  FUNCTION_INJECT_KEY,
+  REQUEST_CTX_KEY,
+  SINGLETON_CONTAINER_CTX,
+} from '../constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import {
@@ -40,17 +45,17 @@ import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
 import * as EventEmitter from 'events';
 import { MidwayDefinitionNotFoundError } from '../error';
-import { extend } from '../util/extend';
 import { Types } from '../util/types';
 import { Utils } from '../util';
 
 const debug = util.debuglog('midway:debug');
 const debugBind = util.debuglog('midway:bind');
+const debugSpaceLength = 9;
 
 class ContainerConfiguration {
   private loadedMap = new WeakMap();
   private namespaceList = [];
-  private detectorOptionsList = [];
+  private configurationOptionsList: Array<InjectionConfigurationOptions> = [];
   constructor(readonly container: IMidwayContainer) {}
 
   load(module) {
@@ -87,10 +92,7 @@ class ContainerConfiguration {
           namespace = configurationOptions.namespace;
           this.namespaceList.push(namespace);
         }
-        this.detectorOptionsList.push({
-          conflictCheck: configurationOptions.conflictCheck,
-          ...configurationOptions.detectorOptions,
-        });
+        this.configurationOptionsList.push(configurationOptions);
         debug(`[core]: load configuration in namespace="${namespace}"`);
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);
@@ -226,8 +228,8 @@ class ContainerConfiguration {
     return this.namespaceList;
   }
 
-  public getDetectorOptionsList() {
-    return this.detectorOptionsList;
+  public getConfigurationOptionsList() {
+    return this.configurationOptionsList;
   }
 }
 
@@ -238,12 +240,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   private moduleMap = null;
   private _objectCreateEventTarget: EventEmitter;
   public parent: IMidwayContainer = null;
-  // 仅仅用于兼容requestContainer的ctx
-  protected ctx = {};
-  private fileDetector: IFileDetector;
+  // 仅仅用于兼容 requestContainer 的 ctx
+  protected ctx = SINGLETON_CONTAINER_CTX;
+  private fileDetector: IFileDetector | false | undefined;
   private attrMap: Map<string, any> = new Map();
   private _namespaceSet: Set<string> = null;
-  private isLoad = false;
 
   constructor(parent?: IMidwayContainer) {
     this.parent = parent;
@@ -295,31 +296,45 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return this._namespaceSet;
   }
 
-  load(module?) {
-    if (module) {
-      // load configuration
-      const configuration = new ContainerConfiguration(this);
-      configuration.load(module);
-      for (const ns of configuration.getNamespaceList()) {
-        this.namespaceSet.add(ns);
-        debug(`[core]: load configuration in namespace="${ns}" complete`);
-      }
+  load(module) {
+    if (!Array.isArray(module)) {
+      module = [module];
+    }
+    // load configuration
+    const configuration = new ContainerConfiguration(this);
 
-      const detectorOptionsMerged = {};
-      for (const detectorOptions of configuration.getDetectorOptionsList()) {
-        extend(true, detectorOptionsMerged, detectorOptions);
+    for (const mod of module) {
+      if (mod) {
+        configuration.load(mod);
       }
-      this.fileDetector?.setExtraDetectorOptions(detectorOptionsMerged);
-      this.isLoad = true;
+    }
+    for (const ns of configuration.getNamespaceList()) {
+      this.namespaceSet.add(ns);
+      debug(`[core]: load configuration in namespace="${ns}" complete`);
+    }
+
+    const configurationOptionsList =
+      configuration.getConfigurationOptionsList() ?? [];
+
+    // find user code configuration it's without namespace
+    const userCodeConfiguration =
+      configurationOptionsList.find(options => !options.namespace) ?? {};
+
+    this.fileDetector = userCodeConfiguration.detector ?? this.fileDetector;
+
+    if (this.fileDetector) {
+      this.fileDetector.setExtraDetectorOptions({
+        conflictCheck: userCodeConfiguration.conflictCheck,
+        ...userCodeConfiguration.detectorOptions,
+      });
     }
   }
 
-  protected loadDefinitions() {
-    if (!this.isLoad) {
-      this.load();
-    }
+  protected loadDefinitions(): void | Promise<void> {
     // load project file
-    this.fileDetector?.run(this);
+    if (this.fileDetector) {
+      return this.fileDetector.run(this);
+    }
   }
 
   bindClass(exports, options?: Partial<IObjectDefinition>) {
@@ -387,7 +402,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
     for (const p in props) {
       const propertyMeta = props[p];
-      debugBind(`  inject properties => [${JSON.stringify(propertyMeta)}]`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}inject properties => [${JSON.stringify(
+          propertyMeta
+        )}]`
+      );
       const refManaged = new ManagedReference();
       refManaged.args = propertyMeta.args;
       refManaged.name = propertyMeta.value as any;
@@ -415,22 +434,36 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     const objDefOptions = getObjectDefinition(target) ?? {};
 
     if (objDefOptions.initMethod) {
-      debugBind(`  register initMethod = ${objDefOptions.initMethod}`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}register initMethod = ${
+          objDefOptions.initMethod
+        }`
+      );
       definition.initMethod = objDefOptions.initMethod;
     }
 
     if (objDefOptions.destroyMethod) {
-      debugBind(`  register destroyMethod = ${objDefOptions.destroyMethod}`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}register destroyMethod = ${
+          objDefOptions.destroyMethod
+        }`
+      );
       definition.destroyMethod = objDefOptions.destroyMethod;
     }
 
     if (objDefOptions.scope) {
-      debugBind(`  register scope = ${objDefOptions.scope}`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}register scope = ${objDefOptions.scope}`
+      );
       definition.scope = objDefOptions.scope;
     }
 
     if (objDefOptions.allowDowngrade) {
-      debugBind(`  register allowDowngrade = ${objDefOptions.allowDowngrade}`);
+      debugBind(
+        `${' '.repeat(debugSpaceLength)}register allowDowngrade = ${
+          objDefOptions.allowDowngrade
+        }`
+      );
       definition.allowDowngrade = objDefOptions.allowDowngrade;
     }
 
@@ -514,8 +547,8 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     this.registry.clearAll();
   }
 
-  ready(): void {
-    this.loadDefinitions();
+  ready() {
+    return this.loadDefinitions();
   }
 
   get<T>(
@@ -690,5 +723,12 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   hasObject(identifier: ObjectIdentifier) {
     return this.registry.hasObject(identifier);
+  }
+
+  getInstanceScope(instance: any): ScopeEnum | undefined {
+    if (instance[CONTAINER_OBJ_SCOPE]) {
+      return instance[CONTAINER_OBJ_SCOPE];
+    }
+    return undefined;
   }
 }

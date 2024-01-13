@@ -65,8 +65,15 @@ export class HomeController {
 ```
 `@Controller` 装饰器告诉框架，这是一个 Web 控制器类型的类，而 `@Get` 装饰器告诉框架，被修饰的 `home` 方法，将被暴露为 `/` 这个路由，可以由 `GET` 请求来访问。
 
-
 整个方法返回了一个字符串，在浏览器中你会收到 `text/plain` 的响应类型，以及一个 `200` 的状态码。
+
+:::tip
+
+路由方法均为 async 方法。
+
+:::
+
+
 
 
 ## 路由方法
@@ -937,6 +944,44 @@ export class HomeController {
 :::info
 响应类型不能在响应流关闭后（response.end之后）修改。
 :::
+
+
+
+## 内部重定向
+
+从 v3.12.0 开始，框架提供了一个内部重定向 API `ctx.forward(url)`，仅支持 koa/egg 类型。 
+
+和外部重定向不同的地方在于，内部重定向不会修改浏览器的 URL，只在程序内部流转。
+
+```typescript
+import { Controller, Get, Inject } from '@midwayjs/core';
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+
+  @Get('/')
+  async home() {
+    return this.ctx.forward('/api');
+  }
+  
+  @Get('/api')
+  async api() {
+    return 'abc';
+  }
+}
+```
+
+注意，内部重定向有一些规则：
+
+* 1、重定向会保留原始路由的所有参数，即透传整个 ctx
+
+* 2、重定向只能在相同的 http method 中进行
+
+* 3、重定向不会再执行一遍 Web Middleware，不会执行守卫，但是会执行拦截器和参数装饰器
+
+  
 
 
 

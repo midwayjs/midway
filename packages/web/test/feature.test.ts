@@ -3,6 +3,7 @@ import { IMidwayWebApplication } from '../src';
 import { join } from 'path';
 import { remove, existsSync } from 'fs-extra';
 import { readFileSync } from 'fs';
+import * as qs from 'qs';
 
 describe('/test/feature.test.ts', () => {
   describe('test new decorator', () => {
@@ -149,6 +150,44 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test query parser #2162 case 2', async () => {
+    const app = await creatApp('feature/base-app-query-parser');
+    let result = await createHttpRequest(app)
+      .get('/query_array?appId=31062&flowId=1330&mixFlowInstIds[]=108015365&flowInstIds[]=103137222');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(JSON.stringify({"appId":"31062","flowId":"1330","mixFlowInstIds":["108015365"],"flowInstIds":["103137222"]}));
+
+    result = await createHttpRequest(app)
+      .get('/query_array_duplicate?appId=123&appId=456');
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(JSON.stringify({"appId":["123","456"]}));
+    await closeApp(app);
+  });
+
+  it('should test query parser options', async () => {
+    const query5 = {
+      arr: ['1','2','3','4','5'],
+    };
+    const app = await creatApp('feature/base-app-query-parser');
+    let result = await createHttpRequest(app)
+      .get('/query_array')
+      .query(qs.stringify(query5));
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(JSON.stringify(query5));
+
+    const query6 = {
+      arr: ['1','2','3','4','5','6'],
+    };
+    result = await createHttpRequest(app)
+      .get('/query_array')
+      .query(qs.stringify(query6));
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(JSON.stringify(qs.parse(qs.stringify(query6), { arrayLimit: 5 })));
+    await closeApp(app);
+  });
+
   it('should test runInAgent decorator with egg', async () => {
     const resultFile = join(__dirname, 'fixtures/feature/base-app-run-in-agent', '.result');
     await remove(resultFile);
@@ -159,5 +198,50 @@ describe('/test/feature.test.ts', () => {
 
     expect(readFileSync(resultFile, {encoding: 'utf8'})).toEqual('success');
     await closeApp(app);
+  });
+
+  it('should test http forward', async () => {
+    const app = await creatApp('feature/base-app-forward');
+    let result = await createHttpRequest(app)
+      .get('/exists');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('exists');
+
+    result = await createHttpRequest(app)
+      .get('/not-exists');
+
+    expect(result.status).toEqual(404);
+
+    result = await createHttpRequest(app)
+      .get('/forward-function');
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world');
+
+    await closeApp(app);
+  });
+
+  it('should use logger v3 and get correct logger file', async () => {
+    const logFiles = join(__dirname, 'fixtures/feature/base-app-logger-v3', 'logs');
+    await remove(logFiles);
+    const app = await creatApp('feature/base-app-logger-v3');
+    await sleep(1000);
+
+
+    const webLogger = join(logFiles, 'ali-demo', 'midway-web.log');
+    const appLogger = join(logFiles, 'ali-demo', 'midway-app.log');
+    const customLogger = join(logFiles, 'custom.log');
+    const abcLogger = join(logFiles,  'ali-demo', 'abc.log');
+
+    expect(existsSync(webLogger)).toBeTruthy();
+    expect(existsSync(appLogger)).toBeFalsy();
+    expect(existsSync(customLogger)).toBeTruthy();
+    expect(existsSync(abcLogger)).toBeTruthy();
+
+    expect(readFileSync(webLogger, {encoding: 'utf8'})).toMatch(/框架默认的 app 日志，应该输出到 midway-web.log/);
+    expect(readFileSync(customLogger, {encoding: 'utf8'})).toMatch(/egg 自定义 logger，应该输出到 custom.log/);
+    expect(readFileSync(abcLogger, {encoding: 'utf8'})).toMatch(/midway 自定义 logger，应该输出到 abc.log/);
+    await closeApp(app);
+
   });
 });

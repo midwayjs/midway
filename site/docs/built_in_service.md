@@ -16,7 +16,7 @@ Midway 内置的应用管理器，可以使用它获取到所有的 Application�
 
 ```typescript
 import { MidwayApplicationManager } from '@midwayjs/core'
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 import { CustomMiddleware } from './middleware/custom.middleware';
 
 @Configuration({
@@ -428,7 +428,7 @@ class TestMockService {
 import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
-export class AutoConfiguration {
+export class MainConfiguration {
   @Inject()
   mockService: MidwayMockService;
 
@@ -450,7 +450,7 @@ export class AutoConfiguration {
 import { MidwayMockService, Configuration, App } from '@midwayjs/core';
 
 @Configuration(/**/)
-export class AutoConfiguration {
+export class MainConfiguration {
   @Inject()
   mockService: MidwayMockService;
 
@@ -480,7 +480,7 @@ Midway 内置的路由表服务，用于应用路由和函数的创建。
 
 ```typescript
 import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 
 @Configuration({
   // ...
@@ -524,7 +524,7 @@ Midway 内置的函数信息服务，继承与 `MidwayWebRouterService` ，方�
 
 ```typescript
 import { MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midawyjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 
 @Configuration({
   // ...
@@ -558,4 +558,80 @@ API 如下
 | getFunctionList()                                          | Promise<RouterInfo[]> | 获取所有函数列表 |
 
 更多使用请参考 [Web 路由表](#router_table)。
+
+
+
+## MidwayHealthService
+
+Midway 内置的健康检查执行服务，用于外部扩展的健康检查能力。
+
+可以通过注入获取后，执行健康检查任务。
+
+```typescript
+import { MidwayHealthService } from '@midwayjs/core';
+import { Configuration, Inject } from '@midwayjs/decorator';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {
+  @Inject()
+  healthService: MidwayHealthService;
+
+  async onServerReady() {
+    setInterval(() => {
+      const results = await this.healthService.getStatus();
+      
+      // console.log(results);
+      // =>
+      // {
+      //   "status": false
+      //   "namespace": "redis",
+      //   "reason": "health check timeout",
+      //   "results": [
+      //      {
+      //        "status": false
+      //        "reason": "health check timeout",
+      //        "namespace": "redis"
+      //      }
+      //    ]
+      // }
+      
+    }, 1000);
+    // ...
+  }
+}
+```
+
+API 如下
+
+| API                              | 返回类型                    | 描述             |
+| -------------------------------- |-------------------------| ---------------- |
+| getStatus()                      | Promise<HealthResults\> | 动态添加一个函数 |
+| setCheckTimeout(timeout: number) | void                    | 设置超时时间     |
+
+`getStatus` 方法用于外部调用轮询 `configuration` 中的 `onHealthCheck` 方法，返回一个符合 `HealthResults` 结构的数据。
+
+ `HealthResults` 包含几个字段，`status` 表示本次检查是否成功， 如果失败，`reason` 表示本次第一个失败组件的原因，`namespace` 代表第一个失败的组件名， `results` 则表示本次检查所有的返回项内容，返回项的结构和外部相同。
+
+在执行过程时，如果 `onHealthCheck` 方法出现下列的情况，都会标记为失败。
+
+* 1、未返回符合 `HealthResult` 结构的数据
+* 2、未返回值
+* 3、执行超时
+* 4、抛出错误
+* 5、返回符合 `HealthResult` 结构的代表错误的数据，比如 `{status: false}`
+
+健康检查默认等待超时时间 1s。
+
+可以使用全局的配置进行覆盖。
+
+```typescript
+// config.default
+export default {
+  core: {
+    healthCheckTimeout: 2000,
+  }
+};
+```
 

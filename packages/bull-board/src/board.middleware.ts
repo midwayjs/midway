@@ -16,6 +16,7 @@ import * as bull from '@midwayjs/bull';
 import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { MidwayAdapter } from './adapter';
+import { BullBoardOption } from './interface';
 
 const MIME_MAP = {
   '.html': 'text/html',
@@ -45,10 +46,7 @@ export class BoardMiddleware
   framework: bull.Framework;
 
   @Config('bullBoard')
-  bullBoardConfig: {
-    basePath?: string;
-    adapterOptions?: any;
-  };
+  bullBoardConfig: BullBoardOption;
 
   private basePath: string;
   private serverAdapter: MidwayAdapter;
@@ -63,6 +61,9 @@ export class BoardMiddleware
     createBullBoard({
       queues: wrapQueues,
       serverAdapter: this.serverAdapter,
+      options: {
+        uiConfig: this.bullBoardConfig.uiConfig,
+      },
     });
     this.serverAdapter.setBasePath(this.basePath);
   }
@@ -82,7 +83,12 @@ export class BoardMiddleware
         } else if (
           this.serverAdapter.getViewRoutes().indexOf(routePath) !== -1
         ) {
-          content = await this.serverAdapter.renderView(routePath);
+          const entryRoute = this.serverAdapter.getEntryRoute();
+          const { name, params } = entryRoute.handler({
+            basePath: this.basePath,
+            uiConfig: this.bullBoardConfig.uiConfig,
+          });
+          content = await this.serverAdapter.renderView(name, params);
         } else {
           const matchRoute = this.serverAdapter.matchApiRoutes(
             req.method,
@@ -121,7 +127,12 @@ export class BoardMiddleware
         } else if (
           this.serverAdapter.getViewRoutes().indexOf(routePath) !== -1
         ) {
-          content = await this.serverAdapter.renderView(routePath);
+          const entryRoute = this.serverAdapter.getEntryRoute();
+          const { name, params } = entryRoute.handler({
+            basePath: this.basePath,
+            uiConfig: this.bullBoardConfig.uiConfig,
+          });
+          content = await this.serverAdapter.renderView(name, params);
         } else {
           const matchRoute = this.serverAdapter.matchApiRoutes(
             (ctx as any).method,

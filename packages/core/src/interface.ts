@@ -1,7 +1,51 @@
-import type { LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
+
+export type PowerPartial<T> = {
+  [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
+};
+
+/**
+ * Make object property writeable
+ */
+export type Writable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
+/**
+ * Utility type that adds a `fn` parameter to each method in the input type `T`,
+ * transforming the original method's parameter types and return type into a function type.
+ *
+ * @example
+ * // Input:
+ * interface MyInterface {
+ *   method1(a: string, b: number): boolean;
+ *   method2(x: Foo, y: Bar): void;
+ * }
+ *
+ * // Output:
+ * interface MyInterfaceWithFn {
+ *   method1(fn: (a: string, b: number) => boolean): void;
+ *   method2(fn: (x: Foo, y: Bar) => void): void;
+ * }
+ */
+export type WithFn<T> = {
+  [K in keyof T]: T[K] extends (...args: infer P) => infer R
+    ? (fn: (...args: P) => R) => void
+    : T[K];
+};
+
+/**
+ * Transform an object type `T` with methods that have function-type parameters
+ * to a new object type with the same methods, but with the parameters
+ * extracted as separate properties.
+ */
+export type WithoutFn<T> = {
+  [K in keyof T]: T[K] extends (arg: any, ...args: any[]) => any
+    ? (...args: Parameters<T[K]>) => ReturnType<T[K]>
+    : T[K];
+};
 
 export type MiddlewareParamArray = Array<string | any>;
 export type ObjectIdentifier = string | Symbol;
@@ -279,6 +323,7 @@ export interface JoinPoint {
   target: any;
   args: any[];
   proceed?(...args: any[]): any;
+  proceedIsAsyncFunction?: boolean;
 }
 
 export interface AspectMetadata {
@@ -353,6 +398,20 @@ export interface ParamDecoratorOptions {
   pipes?: PipeUnionTransform<any, any>[];
 }
 
+/**
+ * Logger Options for midway, you can merge this interface in package
+ * @example
+ * ```typescript
+ *
+ * import { IMidwayLogger } from '@midwayjs/logger';
+ *
+ * declare module '@midwayjs/core/dist/interface' {
+ *   interface ILogger extends IMidwayLogger {
+ *   }
+ * }
+ *
+ * ```
+ */
 export interface ILogger {
   info(msg: any, ...args: any[]): void;
   debug(msg: any, ...args: any[]): void;
@@ -360,21 +419,45 @@ export interface ILogger {
   warn(msg: any, ...args: any[]): void;
 }
 
+/**
+ * @deprecated
+ */
+export type IMidwayLogger = ILogger;
+
+/**
+ * Logger Options for midway, you can merge this interface in package
+ * @example
+ * ```typescript
+ *
+ * import { LoggerOptions } from '@midwayjs/logger';
+ *
+ * declare module '@midwayjs/core/dist/interface' {
+ *   interface MidwayLoggerOptions extends LoggerOptions {
+ *     logDir?: string;
+ *     level?: string;
+ *   }
+ * }
+ *
+ * ```
+ */
+export interface MidwayLoggerOptions {
+  lazyLoad?: boolean;
+  aliasName?: string;
+  [key: string]: any;
+}
+
 export interface MidwayCoreDefaultConfig {
-  midwayLogger?: ServiceFactoryConfigOption<LoggerOptions & {
-    lazyLoad?: boolean;
-  }>;
+  midwayLogger?: ServiceFactoryConfigOption<MidwayLoggerOptions>;
   debug?: {
     recordConfigMergeOrder?: boolean;
   };
-  asyncContextManager: {
-    enable: boolean;
+  asyncContextManager?: {
+    enable?: boolean;
   };
+  core?: {
+    healthCheckTimeout?: number;
+  }
 }
-
-export type PowerPartial<T> = {
-  [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
-};
 
 export type ServiceFactoryConfigOption<OPTIONS> = {
   default?: PowerPartial<OPTIONS>;
@@ -385,15 +468,26 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
   defaultClientName?: string;
 };
 
-export type DataSourceManagerConfigOption<OPTIONS> = {
+export type CreateDataSourceInstanceOptions = {
+  /**
+   * @default false
+   */
+  validateConnection?: boolean;
+  /**
+   * @default true
+   */
+  cacheInstance?: boolean | undefined;
+}
+
+export type DataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY extends string = 'entities'> = {
   default?: PowerPartial<OPTIONS>;
   defaultDataSourceName?: string;
   dataSource?: {
     [key: string]: PowerPartial<{
-      entities: any[],
+      [keyName in ENTITY_CONFIG_KEY]: any[];
     } & OPTIONS>;
   };
-};
+} & CreateDataSourceInstanceOptions;
 
 type ConfigType<T> = T extends (...args: any[]) => any
   ? Writable<PowerPartial<ReturnType<T>>>
@@ -406,12 +500,6 @@ export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T>
   ? Pick<ConfigType<T>, K>
   : ConfigType<T>;
 
-/**
- * Make object property writeable
- */
-export type Writable<T> = {
-  -readonly [P in keyof T]: T[P];
-};
 
 /**
  * Lifecycle Definition
@@ -430,6 +518,9 @@ export interface ILifeCycle extends Partial<IObjectLifeCycle> {
     container: IMidwayContainer,
     mainApp?: IMidwayApplication
   ): Promise<void>;
+  onHealthCheck?(
+    container: IMidwayContainer
+  ): Promise<HealthResult>;
   onStop?(
     container: IMidwayContainer,
     mainApp?: IMidwayApplication
@@ -502,15 +593,11 @@ export interface ObjectBeforeDestroyOptions extends ObjectLifeCycleOptions {}
  * 对象生命周期
  */
 export interface IObjectLifeCycle {
-  onBeforeBind(fn: (Clzz: any, options: ObjectBeforeBindOptions) => void);
-  onBeforeObjectCreated(
-    fn: (Clzz: any, options: ObjectBeforeCreatedOptions) => void
-  );
-  onObjectCreated<T>(fn: (ins: T, options: ObjectCreatedOptions<T>) => void);
-  onObjectInit<T>(fn: (ins: T, options: ObjectInitOptions) => void);
-  onBeforeObjectDestroy<T>(
-    fn: (ins: T, options: ObjectBeforeDestroyOptions) => void
-  );
+  onBeforeBind(Clzz: any, options: ObjectBeforeBindOptions): void;
+  onBeforeObjectCreated(Clzz: any, options: ObjectBeforeCreatedOptions): void;
+  onObjectCreated<T>(ins: T, options: ObjectCreatedOptions<T>): void;
+  onObjectInit<T>(ins: T, options: ObjectInitOptions): void;
+  onBeforeObjectDestroy<T>(ins: T, options: ObjectBeforeDestroyOptions): void;
 }
 
 /**
@@ -655,14 +742,14 @@ export interface IIdentifierRelationShip {
   getRelation(id: ObjectIdentifier): string;
 }
 
-export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
+export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycle> {
   parent: IMidwayContainer;
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
-  ready();
+  ready(): void | Promise<void>;
   stop(): Promise<void>;
   registerObject(identifier: ObjectIdentifier, target: any);
-  load(module?: any);
+  load(module: any | any[]);
   hasNamespace(namespace: string): boolean;
   getNamespaceList(): string[];
   hasDefinition(identifier: ObjectIdentifier);
@@ -682,12 +769,16 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
    * @param value
    */
   setAttr(key: string, value: any);
-
   /**
    * Get value from app attribute map
    * @param key
    */
   getAttr<T>(key: string): T;
+  /**
+   * Get instance IoC container scope
+   * @param instance
+   */
+  getInstanceScope(instance: any): ScopeEnum | undefined;
 }
 
 /**
@@ -696,7 +787,7 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
 export type IApplicationContext = IMidwayContainer;
 
 export interface IFileDetector {
-  run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>);
+  run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>): void | Promise<void>;
   setExtraDetectorOptions(detectorOptions: Record<string, any>);
 }
 
@@ -719,8 +810,8 @@ export interface IInformationService {
 
 export interface IEnvironmentService {
   getCurrentEnvironment(): string;
-  setCurrentEnvironment(environment: string);
   isDevelopmentEnvironment(): boolean;
+  getModuleLoadType(): ModuleLoadType;
 }
 
 export enum MidwayProcessTypeEnum {
@@ -742,25 +833,30 @@ export interface Context {
    * @param value
    */
   setAttr(key: string, value: any);
-
   /**
    * Get value from app attribute map
    * @param key
    */
   getAttr<T>(key: string): T;
+  /**
+   * Get current related application instance.
+   */
+  getApp(): IMidwayApplication;
 }
 
 export type IMidwayContext<FrameworkContext = unknown> = Context &
   FrameworkContext;
 export type NextFunction = () => Promise<any>;
 
+export type IgnoreMatcher<CTX> = string | RegExp | ((ctx: CTX) => boolean);
+
 /**
  * Common middleware definition
  */
 export interface IMiddleware<CTX, R, N = unknown> {
   resolve: (app: IMidwayApplication) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
-  match?: (ctx: CTX) => boolean;
-  ignore?: (ctx: CTX) => boolean;
+  match?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
+  ignore?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
 }
 export type FunctionMiddleware<CTX, R, N = unknown> = N extends true
   ? (req: CTX, res: R, next: N) => any
@@ -903,7 +999,7 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
    * @param name
    * @param options
    */
-  createLogger(name: string, options: LoggerOptions): ILogger;
+  createLogger(name: string, options: MidwayLoggerOptions): ILogger;
 
   /**
    * Get project name, just package.json name
@@ -975,6 +1071,8 @@ export type IMidwayApplication<
   FrameworkApplication = unknown
 > = IMidwayBaseApplication<T> & FrameworkApplication;
 
+export type ModuleLoadType = 'commonjs' | 'esm';
+
 export interface IMidwayBootstrapOptions {
   [customPropertyKey: string]: any;
   baseDir?: string;
@@ -986,8 +1084,12 @@ export interface IMidwayBootstrapOptions {
    */
   configurationModule?: any | any[];
   imports?: any | any[];
-  moduleDetector?: 'file' | IFileDetector | false;
+  moduleLoadType?: ModuleLoadType;
+  moduleDetector?: IFileDetector | false;
   logger?: boolean | ILogger;
+  /**
+   * @deprecated please set it from '@Configuration' decorator
+   */
   ignore?: string[];
   globalConfig?:
     | Array<{ [environmentName: string]: Record<string, any> }>
@@ -1000,7 +1102,7 @@ export interface IConfigurationOptions {
   logger?: ILogger;
   appLogger?: ILogger;
   contextLoggerApplyLogger?: string;
-  contextLoggerFormat?: LoggerContextFormat;
+  contextLoggerFormat?: any;
 }
 
 export interface IMidwayFramework<
@@ -1026,7 +1128,7 @@ export interface IMidwayFramework<
   getBaseDir(): string;
   getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
-  createLogger(name: string, options: LoggerOptions): ILogger;
+  createLogger(name: string, options: MidwayLoggerOptions): ILogger;
   getProjectName(): string;
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
   getMiddleware(): IMiddlewareManager<CTX, ResOrNext, Next>;
@@ -1074,4 +1176,35 @@ export interface ISimulation {
   contextTearDown?(ctx: IMidwayContext, app: IMidwayApplication): Promise<void>;
   appTearDown?(app: IMidwayApplication): Promise<void>;
   enableCondition(): boolean | Promise<boolean>;
+}
+
+export interface HealthResult {
+  /**
+   * health status
+   */
+  status: boolean;
+  /**
+   * failed reason
+   */
+  reason?: string;
+}
+
+export interface HealthResults {
+  /**
+   * health status
+   */
+  status: boolean;
+  /**
+   * first failed namespace
+   */
+  namespace: string;
+  /**
+   * first failed reason
+   */
+  reason?: string;
+  results?: Array<{
+    namespace: string;
+    status: boolean;
+    reason?: string;
+  }>;
 }

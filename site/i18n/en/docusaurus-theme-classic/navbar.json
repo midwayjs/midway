@@ -3,9 +3,9 @@
     "message": "Midway",
     "description": "The title in the navbar"
   },
-  "item.label.标准项目": {
-    "message": "Standard Project",
-    "description": "Navbar item with label 标准项目"
+  "item.label.使用文档": {
+    "message": "Document",
+    "description": "Navbar item with label 使用文档"
   },
   "item.label.一体化": {
     "message": "Integration",

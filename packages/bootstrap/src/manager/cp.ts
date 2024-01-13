@@ -4,7 +4,7 @@ import { ClusterOptions } from '../interface';
 import { AbstractForkManager } from './base';
 const cluster = require('cluster');
 import { debuglog } from 'util';
-import { isTypeScriptEnvironment } from '../util';
+import { isTypeScriptEnvironment } from '@midwayjs/core';
 
 const debug = debuglog('midway:bootstrap');
 

@@ -7,7 +7,7 @@ import {
   IMidwayFramework,
   MidwayFrameworkService,
   MidwayFrameworkType,
-  safeRequire,
+  loadModule,
   MidwayContainer,
   MidwayCommonError,
   MidwayApplicationManager,
@@ -18,10 +18,16 @@ import {
   sleep,
   ObjectIdentifier,
   getProviderUUId,
+  isTypeScriptEnvironment,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
-import { clearAllLoggers } from '@midwayjs/logger';
-import { ComponentModule, MockAppConfigurationOptions } from './interface';
+import { clearAllLoggers, loggers } from '@midwayjs/logger';
+import {
+  ComponentModule,
+  MockAppConfigurationOptions,
+  IBootstrapAppStarter,
+  MockBootstrapOptions,
+} from './interface';
 import {
   findFirstExistModule,
   isTestEnvironment,
@@ -50,15 +56,25 @@ function formatPath(baseDir, p) {
   }
 }
 
+function getFileNameWithSuffix(fileName: string) {
+  return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
+}
+
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
-  appDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions,
+  appDir: string | MockAppConfigurationOptions,
+  options: MockAppConfigurationOptions = {},
   customFramework?: { new (...args): T } | ComponentModule
 ): Promise<T> {
+  process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
+
+  if (typeof appDir === 'object') {
+    options = appDir;
+    appDir = options.appDir || '';
+  }
+
   debug(`[mock]: Create app, appDir="${appDir}"`);
-  process.env.MIDWAY_TS_MODE = 'true';
 
   try {
     if (appDir) {
@@ -72,17 +88,13 @@ export async function create<
           `Path "${appDir}" not exists, please check it.`
         );
       }
+    } else {
+      appDir = process.cwd();
     }
 
     clearAllLoggers();
 
     options = options || ({} as any);
-    if (options.baseDir) {
-      safeRequire(join(`${options.baseDir}`, 'interface'));
-    } else if (appDir) {
-      options.baseDir = `${appDir}/src`;
-      safeRequire(join(`${options.baseDir}`, 'interface'));
-    }
 
     if (options.entryFile) {
       // start from entry file, like bootstrap.js
@@ -109,8 +121,39 @@ export async function create<
       return;
     }
 
+    if (!options.moduleLoadType) {
+      const pkgJSON = await loadModule(join(appDir, 'package.json'), {
+        safeLoad: true,
+        enableCache: false,
+      });
+
+      options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+    }
+
+    if (options.baseDir) {
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
+    } else if (appDir) {
+      options.baseDir = `${appDir}/src`;
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
+    }
+
     if (!options.imports && customFramework) {
-      options.imports = transformFrameworkToConfiguration(customFramework);
+      options.imports = await transformFrameworkToConfiguration(
+        customFramework,
+        options.moduleLoadType
+      );
     }
 
     if (customFramework?.['Configuration']) {
@@ -171,13 +214,18 @@ export async function create<
       ...options,
       appDir,
       asyncContextManager: createContextManager(),
-      imports: []
-        .concat(options.imports)
-        .concat(
-          options.baseDir
-            ? safeRequire(join(options.baseDir, 'configuration'))
-            : []
-        ),
+      loggerFactory: loggers,
+      imports: [].concat(options.imports).concat(
+        options.baseDir
+          ? await loadModule(
+              join(options.baseDir, getFileNameWithSuffix('configuration')),
+              {
+                safeLoad: true,
+                loadMode: options.moduleLoadType,
+              }
+            )
+          : []
+      ),
     });
 
     if (customFramework) {
@@ -189,7 +237,9 @@ export async function create<
         return mainFramework;
       } else {
         throw new Error(
-          'Can not get main framework, please check your configuration.ts.'
+          `Can not get main framework, please check your ${getFileNameWithSuffix(
+            'configuration'
+          )}.`
         );
       }
     }
@@ -213,8 +263,8 @@ export async function createApp<
   return framework.getApplication();
 }
 
-export async function close<T extends IMidwayApplication<any>>(
-  app: T,
+export async function close(
+  app: IMidwayApplication<any> | { close: (...args) => void },
   options?: {
     cleanLogsDir?: boolean;
     cleanTempDir?: boolean;
@@ -222,24 +272,32 @@ export async function close<T extends IMidwayApplication<any>>(
   }
 ) {
   if (!app) return;
-  debug(`[mock]: Closing app, appDir=${app.getAppDir()}`);
-  options = options || {};
+  if (
+    app instanceof BootstrapAppStarter ||
+    (typeof app['close'] === 'function' && !app['getConfig'])
+  ) {
+    await app['close'](options);
+  } else {
+    app = app as IMidwayApplication<any>;
+    debug(`[mock]: Closing app, appDir=${app.getAppDir()}`);
+    options = options || {};
 
-  await destroyGlobalApplicationContext(app.getApplicationContext());
-  if (isTestEnvironment()) {
-    // clean first
-    if (options.cleanLogsDir && !isWin32()) {
-      await removeFile(join(app.getAppDir(), 'logs'));
-    }
-    if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
-      if (options.cleanTempDir && !isWin32()) {
-        await removeFile(join(app.getAppDir(), 'run'));
+    await destroyGlobalApplicationContext(app.getApplicationContext());
+    if (isTestEnvironment()) {
+      // clean first
+      if (options.cleanLogsDir && !isWin32()) {
+        await removeFile(join(app.getAppDir(), 'logs'));
       }
-    }
-    if (options.sleep > 0) {
-      await sleep(options.sleep);
-    } else {
-      await sleep(50);
+      if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
+        if (options.cleanTempDir && !isWin32()) {
+          await removeFile(join(app.getAppDir(), 'run'));
+        }
+      }
+      if (options.sleep > 0) {
+        await sleep(options.sleep);
+      } else {
+        await sleep(50);
+      }
     }
   }
 }
@@ -248,18 +306,36 @@ export async function createFunctionApp<
   T extends IMidwayFramework<any, any, any, any, any>,
   Y = ReturnType<T['getApplication']>
 >(
-  baseDir: string = process.cwd(),
+  baseDir?: string | MockAppConfigurationOptions,
   options: MockAppConfigurationOptions = {},
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
+  process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
+  if (typeof baseDir === 'object') {
+    options = baseDir;
+    baseDir = options.appDir || '';
+  }
+
+  // v3 新的处理 bootstrap 过来的 faas 入口
+  if (options.entryFile) {
+    const exportModules: {
+      getStarter: () => { close: () => void; start: (...args) => any };
+    } = require(formatPath(baseDir, options.entryFile));
+    options.starter = exportModules.getStarter();
+  }
+
   let starterName;
+  // 老的 f.yml 逻辑
   if (!options.starter) {
+    if (!baseDir) {
+      baseDir = process.cwd();
+    }
     // load yaml
     try {
       const doc = yaml.load(readFileSync(join(baseDir, 'f.yml'), 'utf8'));
       starterName = doc?.['provider']?.['starter'];
       if (starterName) {
-        const m = safeRequire(starterName);
+        const m = await loadModule(starterName);
         if (m && m['BootstrapStarter']) {
           options.starter = new m['BootstrapStarter']();
         }
@@ -273,7 +349,6 @@ export async function createFunctionApp<
   if (options.starter) {
     options.appDir = baseDir;
     debug(`[mock]: Create app, appDir="${options.appDir}"`);
-    process.env.MIDWAY_TS_MODE = 'true';
 
     if (options.appDir) {
       // 处理测试的 fixtures
@@ -295,12 +370,31 @@ export async function createFunctionApp<
 
     clearAllLoggers();
 
+    const pkgJSON = await loadModule(join(options.appDir, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+
+    options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+
     options = options || ({} as any);
     if (options.baseDir) {
-      safeRequire(join(`${options.baseDir}`, 'interface'));
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
     } else if (options.appDir) {
       options.baseDir = `${options.appDir}/src`;
-      safeRequire(join(`${options.baseDir}`, 'interface'));
+      await loadModule(
+        join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
+        {
+          safeLoad: true,
+          loadMode: options.moduleLoadType,
+        }
+      );
     }
 
     // new mode
@@ -349,30 +443,46 @@ export async function createFunctionApp<
             return options.starter?.createDefaultMockContext() || {};
           };
 
-          const ctx = await framework.wrapHttpRequest(req);
+          try {
+            const ctx = await framework.wrapHttpRequest(req);
 
-          // create event and invoke
-          const result = await framework.invokeTriggerFunction(
-            ctx,
-            url.pathname,
-            {
-              isHttpFunction: true,
+            // create event and invoke
+            const result = await framework.invokeTriggerFunction(
+              ctx,
+              url.pathname,
+              {
+                isHttpFunction: true,
+              }
+            );
+            const { statusCode, headers, body, isBase64Encoded } =
+              result as any;
+            if (res.headersSent) {
+              return;
             }
-          );
-          const { statusCode, headers, body } = result as any;
-          if (res.headersSent) {
-            return;
-          }
 
-          for (const key in headers) {
-            res.setHeader(key, headers[key]);
-          }
-          if (res.statusCode !== statusCode) {
-            res.statusCode = statusCode;
-          }
+            for (const key in headers) {
+              res.setHeader(key, headers[key]);
+            }
+            if (res.statusCode !== statusCode) {
+              res.statusCode = statusCode;
+            }
 
-          // http trigger only support `Buffer` or a `string` or a `stream.Readable`
-          res.end(body);
+            // http trigger only support `Buffer` or a `string` or a `stream.Readable`
+            if (isBase64Encoded && typeof body === 'string') {
+              res.end(Buffer.from(body, 'base64'));
+            } else {
+              res.end(body);
+            }
+          } catch (err) {
+            if (/favicon\.ico not found/.test(err.message)) {
+              res.statusCode = 404;
+              res.end();
+              return;
+            }
+            console.error(err);
+            res.statusCode = err.status || 500;
+            res.end(err.message);
+          }
         };
       };
     }
@@ -459,7 +569,10 @@ export async function createFunctionApp<
         '@ali/serverless-app',
         '@midwayjs/serverless-app',
       ]);
-    const serverlessModule = transformFrameworkToConfiguration(customFramework);
+    const serverlessModule = await transformFrameworkToConfiguration(
+      customFramework,
+      options.moduleLoadType
+    );
     if (serverlessModule) {
       if (options && options.imports) {
         options.imports.unshift(serverlessModule);
@@ -499,7 +612,8 @@ class LightFramework extends BaseFramework<any, any, any, any, any> {
   }
 }
 
-class BootstrapAppStarter {
+class BootstrapAppStarter implements IBootstrapAppStarter {
+  constructor(protected options: MockBootstrapOptions) {}
   getApp(type: MidwayFrameworkType | string): IMidwayApplication<any> {
     const applicationContext = getCurrentApplicationContext();
     const applicationManager = applicationContext.get(MidwayApplicationManager);
@@ -512,7 +626,10 @@ class BootstrapAppStarter {
     } = {}
   ) {
     // eslint-disable-next-line node/no-extraneous-require
-    const BootstrapModule = safeRequire('@midwayjs/bootstrap');
+    const BootstrapModule = await loadModule('@midwayjs/bootstrap', {
+      loadMode: this.options.moduleLoadType,
+      safeLoad: true,
+    });
     if (BootstrapModule?.Bootstrap) {
       await BootstrapModule.Bootstrap.stop();
     }
@@ -545,19 +662,51 @@ export async function createLightApp(
     },
     options.globalConfig ?? {}
   );
+
+  if (!options.moduleLoadType) {
+    const cwd = process.cwd();
+    const pkgJSON = await loadModule(join(cwd, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+
+    options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+  }
+
   return createApp(baseDir, {
     ...options,
-    imports: [transformFrameworkToConfiguration(LightFramework)].concat(
-      options?.imports
-    ),
+    imports: [
+      await transformFrameworkToConfiguration(
+        LightFramework,
+        options.moduleLoadType
+      ),
+    ].concat(options?.imports),
   });
 }
 
 export async function createBootstrap(
-  entryFile: string
-): Promise<BootstrapAppStarter> {
-  await create(undefined, {
-    entryFile,
-  });
-  return new BootstrapAppStarter();
+  entryFile: string,
+  options: MockBootstrapOptions = {}
+): Promise<IBootstrapAppStarter> {
+  const cwd = process.cwd();
+  if (!options.bootstrapMode) {
+    options.bootstrapMode = existsSync(join(cwd, 'node_modules/@midwayjs/faas'))
+      ? 'faas'
+      : 'app';
+  }
+
+  if (options.bootstrapMode === 'faas') {
+    options.entryFile = entryFile;
+    const app = await createFunctionApp(cwd, options);
+    return {
+      close: async () => {
+        return close(app);
+      },
+    };
+  } else {
+    await create(undefined, {
+      entryFile,
+    });
+    return new BootstrapAppStarter(options);
+  }
 }

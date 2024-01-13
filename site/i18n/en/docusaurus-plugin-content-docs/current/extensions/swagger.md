@@ -712,7 +712,18 @@ export default {
 
 ```
 
+It can also be added to the routing method.
 
+```typescript
+// ...
+export class HomeController {
+  @ApiTags(['bbb'])
+  @Get('/')
+  async home(@Body() dto?: Photo): Promise<string> {
+    return 'Hello Midwayjs!';
+  }
+}
+```
 
 
 
@@ -971,6 +982,17 @@ export interface SwaggerOptions {
     showCommonExtensions?: boolean;
     useUnsafeMarkdown?: boolean;
     tryItOutEnabled?: boolean;
+  };
+  
+  documentOptions?: {
+    /**
+     * Custom operationIdFactory for generating operationId
+     * @default () => controllerKey_webRouter.methodKey
+     */
+    operationIdFactory?: (
+      controllerKey: string,
+      webRouter: RouterOption
+    ) => string;
   };
 }
 /**

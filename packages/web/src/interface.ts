@@ -8,15 +8,18 @@ import {
 } from '@midwayjs/core';
 import { DefaultState, Middleware } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
+import { IParseOptions } from 'qs';
 
 export const RUN_IN_AGENT_KEY = 'egg:run_in_agent';
 export const EGG_AGENT_APP_KEY = 'egg_agent_app';
+
+export interface State extends DefaultState {}
 
 export interface IMidwayWebBaseApplication {
   applicationContext: IMidwayContainer;
   getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
-  generateMiddleware?(middlewareId: any): Promise<Middleware<DefaultState, EggContext>>;
+  generateMiddleware?(middlewareId: any): Promise<Middleware<State, EggContext>>;
   createLogger(name: string, options: LoggerOptions): ILogger;
 }
 
@@ -62,7 +65,8 @@ export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <Re
      * allow to put any value on session object
      */
     [_: string]: any;
-  }
+  };
+  state: State;
 }
 /**
  * @deprecated since version 3.0.0
@@ -115,13 +119,17 @@ export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
    * http query parser mode, default is extended
    */
   queryParseMode?: 'simple' | 'extended';
+  /**
+   * http query parse options, used when 'simple' mode is used
+   */
+  queryParseOptions?: IParseOptions;
 }
 
 /**
  * @deprecated since version 3.0.0
  * Please use IMiddleware from '@midwayjs/core'
  */
-export type MidwayWebMiddleware = Middleware<DefaultState, Context>;
+export type MidwayWebMiddleware = Middleware<State, Context>;
 
 /**
  * @deprecated since version 3.0.0

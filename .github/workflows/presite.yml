@@ -1,0 +1,29 @@
+name: Check site dependencies before deploy
+
+on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - site/package.json
+  pull_request:
+    branches-ignore:
+      - main
+    paths:
+      - site/package.json
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 16.x ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run build --if-present
+      - run: cd site && npm install && npm run build

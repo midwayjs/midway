@@ -71,3 +71,23 @@ export const ensureDir = async (dirPath: string): Promise<boolean> => {
     return false;
   }
 };
+
+export const formatExt = (ext: string): string => {
+  return Buffer.from(ext.toLowerCase())
+    .filter(ext => {
+      // .
+      if (ext === 0x2e) {
+        return true;
+      }
+      // 0-9
+      if (ext >= 0x30 && ext <= 0x39) {
+        return true;
+      }
+      // a-z
+      if (ext >= 0x61 && ext <= 0x7a) {
+        return true;
+      }
+      return false;
+    })
+    .toString();
+};

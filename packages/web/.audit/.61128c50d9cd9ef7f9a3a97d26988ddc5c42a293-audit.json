@@ -1,0 +1,15 @@
+{
+  "keep": {
+    "days": true,
+    "amount": 7
+  },
+  "auditLog": ".audit/.61128c50d9cd9ef7f9a3a97d26988ddc5c42a293-audit.json",
+  "files": [
+    {
+      "date": 1698030212806,
+      "name": "/Users/harry/project/open-midway-v3/packages/web/test/fixtures/feature/base-app-query-parser/logs/ali-demo/common-error.log.2023-10-23",
+      "hash": "cbacf807997e8d12439fa652967ed57e"
+    }
+  ],
+  "hashType": "md5"
+}

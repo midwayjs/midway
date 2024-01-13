@@ -1,0 +1,90 @@
+{
+  "@midwayjs/faas-typings": "3.10.13",
+  "@midwayjs/fc-starter": "3.10.15",
+  "@midwayjs/serverless-http-parser": "3.10.14",
+  "@midwayjs/async-hooks-context-manager": "3.10.15",
+  "@midwayjs/axios": "3.10.15",
+  "@midwayjs/bootstrap": "3.10.15",
+  "@midwayjs/bull-board": "3.10.15",
+  "@midwayjs/bull": "3.10.15",
+  "@midwayjs/cache": "3.10.15",
+  "@midwayjs/captcha": "3.10.15",
+  "@midwayjs/casbin-redis-adapter": "3.10.15",
+  "@midwayjs/casbin-typeorm-adapter": "3.10.15",
+  "@midwayjs/casbin": "3.10.15",
+  "@midwayjs/code-dye": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/consul": "3.10.15",
+  "@midwayjs/core": "3.10.15",
+  "@midwayjs/cos": "3.10.15",
+  "@midwayjs/cross-domain": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/decorator": "3.10.15",
+  "@midwayjs/etcd": "3.10.15",
+  "@midwayjs/express-session": "3.10.15",
+  "@midwayjs/faas": "3.10.15",
+  "@midwayjs/grpc": "3.10.15",
+  "@midwayjs/http-proxy": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/i18n": "3.10.15",
+  "@midwayjs/info": "3.10.15",
+  "@midwayjs/jwt": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/kafka": "3.10.15",
+  "@midwayjs/mikro": "3.10.15",
+  "@midwayjs/mock": "3.10.15",
+  "@midwayjs/mongoose": "3.10.15",
+  "@midwayjs/oss": "3.10.15",
+  "@midwayjs/otel": "3.10.15",
+  "@midwayjs/passport": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/process-agent": "3.10.15",
+  "@midwayjs/prometheus-socket-io": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/prometheus": "3.10.15",
+  "@midwayjs/rabbitmq": "3.10.15",
+  "@midwayjs/redis": "3.10.15",
+  "@midwayjs/security": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/sequelize": "3.10.15",
+  "@midwayjs/session": "3.10.15",
+  "@midwayjs/socketio": "3.10.15",
+  "@midwayjs/static-file": "3.10.15",
+  "@midwayjs/swagger": "3.10.15",
+  "@midwayjs/tablestore": "3.10.15",
+  "@midwayjs/typegoose": "3.10.15",
+  "@midwayjs/typeorm": "3.10.15",
+  "@midwayjs/upload": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/validate": "3.10.15",
+  "@midwayjs/version": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/view-ejs": "3.10.15",
+  "@midwayjs/view-nunjucks": "3.10.15",
+  "@midwayjs/view": "3.10.15",
+  "@midwayjs/express": "3.10.15",
+  "@midwayjs/koa": "3.10.15",
+  "@midwayjs/web": [
+    "3.10.15",
+    "3.10.16"
+  ],
+  "@midwayjs/ws": "3.10.15"
+}

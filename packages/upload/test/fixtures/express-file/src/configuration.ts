@@ -13,6 +13,7 @@ import * as upload from '../../../../src';
         keys: ["test"],
         upload: {
           mode: 'file',
+          ignore: /ignore/,
         }
       }
     }
@@ -32,6 +33,15 @@ export class HomeController {
     return {
       files,
       fields
+    }
+  }
+
+  @Post('/upload-ignore')
+  async uploadIgnore(@Fields() fields, @Files() files: upload.UploadFileInfo<string>[]) {
+    return {
+      files,
+      fields,
+      ignore: true
     }
   }
 }

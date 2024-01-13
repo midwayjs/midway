@@ -11,6 +11,7 @@ import {
   REQUEST_OBJ_CTX_KEY,
   MidwayEnvironmentService,
   MidwayInformationService,
+  isTypeScriptEnvironment,
 } from '@midwayjs/core';
 import {
   ALL,
@@ -26,15 +27,6 @@ import { EGG_AGENT_APP_KEY } from './interface';
 
 const debug = debuglog('midway:debug');
 
-export function isTypeScriptEnvironment() {
-  const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
-  if ('false' === TS_MODE_PROCESS_FLAG) {
-    return false;
-  }
-  // eslint-disable-next-line node/no-deprecated-api
-  return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
-}
-
 export const parseNormalDir = (baseDir: string, isTypescript = true) => {
   if (isTypescript) {
     // 这里要么就是 src 目录，要么就已经是根目录
@@ -46,12 +38,12 @@ export const parseNormalDir = (baseDir: string, isTypescript = true) => {
 
     if (isTypeScriptEnv) {
       return {
-        baseDir: join(baseDir, 'src'),
+        baseDir: join(baseDir, process.env.MIDWAY_SOURCE_DIR || 'src'),
         appDir: baseDir,
       };
     } else {
       return {
-        baseDir: join(baseDir, 'dist'),
+        baseDir: join(baseDir, process.env.MIDWAY_SOURCE_DIR || 'dist'),
         appDir: baseDir,
       };
     }
@@ -89,8 +81,8 @@ export const getCurrentDateString = (timestamp: number = Date.now()) => {
 export async function initializeAgentApplicationContext(agent) {
   const applicationContext = getCurrentApplicationContext();
   const agentFramework = new MidwayWebFramework(applicationContext);
-  agentFramework['logger'] = agent.logger;
-  agentFramework['appLogger'] = agent.coreLogger;
+  agentFramework['logger'] = agent.coreLogger;
+  agentFramework['appLogger'] = agent.logger;
   agentFramework.app = agent;
   agentFramework.configService = applicationContext.get(MidwayConfigService);
   agentFramework.environmentService = applicationContext.get(

@@ -37,10 +37,15 @@ interface ILifeCycle {
    */
   onServerReady?(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
 
-   /**
+  /**
    * 在应用停止的时候执行
    */
   onStop?(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
+
+  /**
+   * 在健康检查时执行
+   */
+  onHealthCheck?(container: IMidwayContainer): Promise<HealthResult>;
 }
 ```
 
@@ -200,6 +205,56 @@ export class MainConfiguration implements ILifeCycle {
   }
 }
 ```
+
+
+
+### onHealthCheck
+
+当内置的健康检查服务调用状态获取 API 时，所有组件的该方法都被自动执行。
+
+下面模拟了一个 db 健康检查的方法。
+
+```typescript
+// src/configuration.ts
+import { Configuration, ILifeCycle, IMidwayContainer, HealthResult } from '@midwayjs/core';
+
+@Configuration({
+  namespace: 'db'
+})
+export class MainConfiguration implements ILifeCycle {
+  @Inject()
+  db: any;
+
+  async onReady(container: IMidwayContainer): Promise<void> {
+    await this.db.connect();
+  }
+
+  async onHealthCheck(): Promise<HealthResult> {
+    try {
+      const result = await this.db.isConnect();
+      if (result) {
+        return {
+          status: true,
+        };
+      } else {
+        return {
+          status: false,
+          reason: 'db is disconnect',
+        };
+      }
+    } catch (err) {
+      return {
+        status: false,
+        reason: err.message,
+      };
+    }
+  }
+}
+```
+
+上述 `onHealthCheck` 中，调用了一个 `isConnect` 的状态检查，根据结果返回了固定的 `HealthResult` 类型格式。
+
+注意，外部调用 `onHealthCheck` 可能会非常频繁，请尽可能保持检查逻辑的可靠性和效率，确保不会对检查依赖有较大的压力。同时请自行处理检查超时后资源释放的逻辑，避免资源频繁请求却未返回结果，导致内存泄露的风险。
 
 
 

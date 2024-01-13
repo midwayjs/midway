@@ -79,12 +79,12 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(instance.getDataSourceNames()).toEqual([]);
   });
 
-  it('should test glob model', function () {
-    let result = globModels('dd', __dirname);
+  it('should test glob model', async () => {
+    let result = await globModels('dd', __dirname);
     expect(result).toEqual([]);
 
-    result = globModels('abc', __dirname);
-    expect(result.length).toEqual(4);
+    result = await globModels('abc', __dirname);
+    expect(result.length).toEqual(6);
   });
 
   it('should test with glob model', async () => {
@@ -213,32 +213,35 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(instance.getDefaultDataSourceName()).toEqual('abc');
   });
 
-  it('should test glob model with pattern string', function () {
-    let result = globModels('**/bcd/**', join(__dirname, 'glob_dir_pattern'));
+  it('should test glob model with pattern string', async () => {
+    let result = await globModels('**/bcd/**', join(__dirname, 'glob_dir_pattern'));
     expect(result.length).toEqual(1);
 
-    result = globModels('abc/*.ts', __dirname);
+    result = await globModels('abc/*.ts', __dirname);
     expect(result.length).toEqual(4);
 
-    result = globModels('abc/a.ts', __dirname);
+    result = await globModels('/abc', __dirname);
+    expect(result.length).toEqual(6);
+
+    result = await globModels('abc/a.ts', __dirname);
     expect(result.length).toEqual(2);
 
-    result = globModels('**/a.ts', __dirname);
+    result = await globModels('**/a.ts', __dirname);
     expect(result.length).toEqual(11);
 
-    result = globModels('abc/*.ts', join(__dirname, 'glob_dir_pattern'));
+    result = await globModels('abc/*.ts', join(__dirname, 'glob_dir_pattern'));
     expect(result.length).toEqual(3);
 
-    result = globModels('abc/**/*.ts', join(__dirname, 'glob_dir_pattern'));
+    result = await globModels('abc/**/*.ts', join(__dirname, 'glob_dir_pattern'));
     expect(result.length).toEqual(4);
 
-    result = globModels('abc/*.entity.ts', join(__dirname, 'glob_dir_pattern'));
+    result = await globModels('abc/*.entity.ts', join(__dirname, 'glob_dir_pattern'));
     expect(result.length).toEqual(0);
 
-    result = globModels('**/*.entity.ts', join(__dirname, 'glob_dir_pattern'));
+    result = await globModels('**/*.entity.ts', join(__dirname, 'glob_dir_pattern'));
     expect(result.length).toEqual(1);
 
-    result = globModels('**/*.{j,t}s', join(__dirname, 'glob_dir_pattern'));
+    result = await globModels('**/*.{j,t}s', join(__dirname, 'glob_dir_pattern'));
     expect(result.length).toEqual(6);
   });
 
@@ -246,6 +249,15 @@ describe('test/common/dataSourceManager.test.ts', () => {
 
 describe('test global pattern', () => {
   it('should test parse global string', function () {
+    expect(formatGlobString('/entity')).toEqual([
+      '/entity/**/**.ts',
+      '/entity/**/**.js',
+      '/entity/**/**.mts',
+      '/entity/**/**.mjs',
+      '/entity/**/**.cts',
+      '/entity/**/**.cjs'
+    ]);
+
     expect(formatGlobString('./entity')).toEqual([
       '/entity/**/**.ts',
       '/entity/**/**.js',

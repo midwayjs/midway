@@ -4,7 +4,7 @@ Midway Hooks supports Api Server and integration.
 
 ## Api Server deployment
 
-For more information about how to deploy Api Server, see [Start and deploy Api Server](https://midwayjs.org/docs/deployment).
+For more information about how to deploy Api Server, see [Start and deploy Api Server](/docs/deployment).
 
 If you use a single file deployment, you can refer to the example: [hooks-api-bundle-starter](https://github.com/midwayjs/hooks/blob/main/examples/api-bundle/readme.md)
 

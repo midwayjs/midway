@@ -7,43 +7,55 @@ import { MidwayUtilHttpClientTimeoutError } from '../error';
 const debug = debuglog('request-client');
 const URL = url.URL;
 
-type MethodType = 'GET' | 'POST';
-type MimeType = 'text' | 'json' | undefined;
+export type HttpClientMimeType = 'text' | 'json' | undefined;
 const mimeMap = {
   text: 'application/text',
   json: 'application/json',
   octet: 'application/octet-stream',
 };
 
-interface IOptions {
-  method?: MethodType;
+export interface HttpClientOptions<Data = any> extends https.RequestOptions {
   headers?: any;
-  contentType?: MimeType;
-  dataType?: MimeType;
-  data?: any;
+  contentType?: HttpClientMimeType;
+  dataType?: HttpClientMimeType;
+  data?: Data;
   timeout?: number;
 }
 
-export interface IResponse<ResType = any> extends http.IncomingMessage {
+export interface HttpClientResponse<ResType = any>
+  extends http.IncomingMessage {
   status: number;
   data: Buffer | string | ResType;
 }
 
+function isHeaderExists(headers, headerKey: string): boolean {
+  return (
+    headers[headerKey] ||
+    headers[headerKey.toLowerCase()] ||
+    headers[headerKey.toUpperCase()]
+  );
+}
+
 export async function makeHttpRequest<ResType>(
   url: string,
-  options: IOptions = {}
-): Promise<IResponse<ResType>> {
+  options: HttpClientOptions = {}
+): Promise<HttpClientResponse<ResType>> {
   debug(`request '${url}'`);
   const whatwgUrl = new URL(url);
   const client = whatwgUrl.protocol === 'https:' ? https : http;
-  const contentType: MimeType = options.contentType;
-  const dataType: MimeType = options.dataType;
-  const method = (options.method || 'GET').toUpperCase();
-  const timeout = options.timeout || 5000;
+  options.method = (options.method || 'GET').toUpperCase();
+  const {
+    contentType,
+    dataType,
+    method,
+    timeout = 5000,
+    headers: customHeaders,
+    ...otherOptions
+  } = options;
 
   const headers = {
     Accept: mimeMap[dataType] || mimeMap.octet,
-    ...options.headers,
+    ...customHeaders,
   };
 
   let data;
@@ -55,8 +67,12 @@ export async function makeHttpRequest<ResType>(
   } else if (options.data) {
     data = Buffer.from(JSON.stringify(options.data));
 
-    headers['Content-Type'] = mimeMap[contentType] || mimeMap.octet;
-    headers['Content-Length'] = data.byteLength;
+    if (!isHeaderExists(headers, 'Content-Type')) {
+      headers['Content-Type'] = mimeMap[contentType] || mimeMap.octet;
+    }
+    if (!isHeaderExists(headers, 'Content-Length')) {
+      headers['Content-Length'] = data.byteLength;
+    }
   }
 
   return new Promise((resolve, reject) => {
@@ -65,6 +81,7 @@ export async function makeHttpRequest<ResType>(
       {
         method,
         headers,
+        ...otherOptions,
       },
       res => {
         res.setTimeout(timeout, () => {
@@ -97,7 +114,7 @@ export async function makeHttpRequest<ResType>(
             data,
           });
           debug(`request '${url}' resolved with status ${res.statusCode}`);
-          resolve(res as IResponse);
+          resolve(res as HttpClientResponse);
         });
       }
     );
@@ -122,12 +139,15 @@ export async function makeHttpRequest<ResType>(
 export class HttpClient {
   constructor(
     readonly defaultOptions: Pick<
-      IOptions,
+      HttpClientOptions,
       'headers' | 'timeout' | 'method'
     > = {}
   ) {}
 
-  async request(url: string, options?: IOptions): Promise<IResponse> {
+  async request(
+    url: string,
+    options?: HttpClientOptions
+  ): Promise<HttpClientResponse> {
     return makeHttpRequest(url, Object.assign(this.defaultOptions, options));
   }
 }

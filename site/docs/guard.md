@@ -127,7 +127,7 @@ import { AuthGuard } from './guard/auth.guard';
   imports: [koa]
   // ...
 })
-export class AutoConfiguration {
+export class MainConfiguration {
 
   @App()
   app: koa.Application;

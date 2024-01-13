@@ -7,13 +7,35 @@ import TabItem from '@theme/TabItem';
 
 阿里云 Serverless 包含许多产品，如函数计算 FC，轻量应用引擎 SAE 等，本文主要使用了其 **函数计算** 部分。
 
-下面是常见的函数触发器的使用和测试方法。
+下面是常见的函数触发器的使用、测试和部署方法。
 
 
 
-## 触发器代码
+## 部署类型
 
-<Tabs>
+阿里云的函数计算部署类型比较多，根据运行的不同容器有以下几种。
+
+| 名称                           | 能力限制                                         | 描述                                                         | 部署媒介        |
+| ------------------------------ | ------------------------------------------------ | ------------------------------------------------------------ | --------------- |
+| 内置运行时                     | 不支持流式请求和响应；不支持太大的请求和响应入参 | 只能部署函数接口，不需要自定义端口，构建出 zip 包给平台部署  | zip 包部署      |
+| 自定义运行时（Custom Runtime） |                                                  | 可以部署标准应用，启动 9000 端口，使用平台提供的系统镜像，构建出 zip 包给平台部署 | zip 包部署      |
+| 自定义容器（Custom Container） |                                                  | 可以部署标准应用，启动 9000 端口，自己控制所有环境依赖，构建出 Dockerfile 提供给平台部署 | Dockerfile 部署 |
+
+在平台上分别对应创建函数时的三种方式。
+
+![](https://img.alicdn.com/imgextra/i1/O1CN01JrlhOw1EJBZmHklbq_!!6000000000330-2-tps-1207-585.png)
+
+
+
+## 纯函数开发（内置运行时）
+
+下面我们将以使用 **"内置运行时部署"** 纯函数作为示例。
+
+
+
+### 触发器代码
+
+<Tabs groupId="triggers">
 <TabItem value="event" label="Event">
 
 发布不包含触发器的函数，这是最简单的类型，可以直接通过 event 手动触发参数，也可以在平台绑定其他触发器。
@@ -22,7 +44,7 @@ import TabItem from '@theme/TabItem';
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
 
 @Provide()
 export class HelloAliyunService {
@@ -88,17 +110,11 @@ export class HelloAliyunService {
 }
 ```
 
-在 `npm run deploy` 后，参考 [阿里云文档](https://help.aliyun.com/document_detail/74798.html?spm=a2c4g.11186623.6.701.3be978a1MKsNN4) 配置即可。
-
-:::info
-当前 API 网关线上的路由在平台进行配置。
-:::
-
 </TabItem>
 
 <TabItem value="timer" label="Timer">
 
-定时任务触发器用于定时执行一个函数。定时有两种方式，时间间隔（every）和 cron 格式。
+定时任务触发器用于定时执行一个函数。
 
 :::info
 温馨提醒，测试函数后请及时关闭触发器自动执行，避免超额扣费。
@@ -106,61 +122,25 @@ export class HelloAliyunService {
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
+import type { TimerEvent } from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
   @Inject()
   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
-    type: 'cron',
-    value: '0 0 4 * * *', // 每天4:00触发  https://help.aliyun.com/document_detail/68172.html
-  })
-  async handleTimerEvent(event: FC.TimerEvent) {
+  @ServerlessTrigger(ServerlessTriggerType.TIMER)
+  async handleTimerEvent(event: TimerEvent) {
     this.ctx.logger.info(event);
     return 'hello world';
   }
 }
 ```
 
-**Timer 配置**
-
-| 属性名  | 类型   | 描述                                                         |
-| ------- | ------ | ------------------------------------------------------------ |
-| type    | string | `cron` 或者 `every`，必填，触发类型，分别代表 cron 表达式，固定时间间隔。 |
-| value   | string | 必填，cron 表达式或者 every 的值。every 时最小时间间隔 1 分钟，固定单位分钟 |
-| payload | string | 可选，一个固定传递的值，很少用                               |
-
-:::info
-注意，FC 使用的是 UTC 时间，和传统的中国时区不同。
-:::
-
-示例：
-
-**cron 表达式**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'cron',
-  value: '0 0 4 * * *', // 每天4:00触发
-})
-```
-
-cron 表达式可以查看 [文档](https://help.aliyun.com/document_detail/169784.html)。
-
-**every 表达式**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.TIMER, {
-  type: 'every',
-  value: '5m', // 每隔 5 分钟，最小为 1 分钟
-})
-```
-
 **事件结构**
 
-Timer 消息返回的结构如下，在 `FC.TimerEvent` 类型中有描述。
+Timer 消息返回的结构如下，在 `TimerEvent` 类型中有描述。
 
 ```json
 {
@@ -178,57 +158,22 @@ OSS 用于存储一些资源文件，是阿里云的资源存储产品。 当 OS
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
+import type { OSSEvent } from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
   @Inject()
   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.OS, {
-    bucket: 'ossBucketName',
-    events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
-    filter: {
-      prefix: 'filterdir/',
-      suffix: '.jpg',
-    },
-  })
-  async handleOSSEvent(event: FC.OSSEvent) {
+  @ServerlessTrigger(ServerlessTriggerType.OS)
+  async handleOSSEvent(event: OSSEvent) {
     // xxx
   }
 }
 ```
 
-:::caution
 
-一个 bucket 的一个前缀下只能支持配置一个触发器，如果配置多个会出现 `message: event source 'oss' returned error: Cannot specify overlapping prefix and suffix with same event type.` 的报错
-
-:::
-
-**OSS 触发器配置**
-
-| 属性名 | 类型                                                 | 描述                                                         |
-| ------ | ---------------------------------------------------- | ------------------------------------------------------------ |
-| bucket | string                                               | 对象存储的 bucket 名                                         |
-| events | string[]                                             | 触发函数执行的事件名                                         |
-| filter | {<br />prefix: string;<br/>   suffix: string;<br/> } | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
-
-
-
-示例：
-
-**监听对象创建和对象删除时的事件**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.OS, {
-  bucket: 'ossBucketName',
-  events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
-  filter: {
-    prefix: 'filterdir/',
-    suffix: '.jpg',
-  },
-})
-```
 
 **事件结构**
 
@@ -278,52 +223,30 @@ OSS 消息返回的结构如下，在 `FC.OSSEvent` 类型中有描述。
 <TabItem value="mns" label="MNS">
 
 :::info
-请务必注意，阿里云消息队列会对 Topic 和 Queue 产生一定的费用。
+
+* 1、阿里云消息队列会对 Topic 和 Queue 产生一定的费用。
+* 2、提供的默认消息队列格式为 JSON
+
 :::
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Context, FC } from '@midwayjs/faas';
+import { Context } from '@midwayjs/faas';
+import type { MNSEvent } from '@midwayjs/fc-starter';
 
 @Provide()
 export class HelloAliyunService {
   @Inject()
   ctx: Context;
 
-  @ServerlessTrigger(ServerlessTriggerType.MQ, {
-    topic: 'test-topic',
-    tags: 'bbb',
-  })
-  async handleMNSEvent(event: FC.MNSEvent) {
+  @ServerlessTrigger(ServerlessTriggerType.MQ)
+  async handleMNSEvent(event: MNSEvent) {
     // ...
   }
 }
 ```
 
-:::info
-注意，在阿里云下，midway faas 提供的默认消息队列格式为 JSON
-:::
 
-**MNS 触发器配置**
-
-| 属性名   | 类型                                        | 描述                                                         |
-| -------- | ------------------------------------------- | ------------------------------------------------------------ |
-| topic    | string                                      | 接收消息的 topic                                             |
-| tags     | string                                      | 可选，描述了该订阅中消息过滤的标签（标签一致的消息才会被推送） |
-| strategy | 'BACKOFF_RETRY' \|'EXPONENTIAL_DECAY_RETRY' | 调用函数的重试策略，可选值：BACKOFF_RETRY, EXPONENTIAL_DECAY_RETRY, 默认值为: BACKOFF_RETRY |
-| region   | string                                      | 可选，topic 所在的 region，如果不填，默认为和函数一样的 region |
-
-示例：
-
-**监听 MQ 消息**
-
-```typescript
-@ServerlessTrigger(ServerlessTriggerType.MQ, {
-  topic: 'test-topic',
-  region: 'cn-shanghai'
-  strategy: 'BACKOFF_RETRY'
-})
-```
 
 **事件结构**
 
@@ -347,40 +270,118 @@ MNS 消息返回的结构如下，在 `FC.MNSEvent` 类型中有描述。
 
 </Tabs>
 
+:::info
+
+触发器的更多配置由于和平台相关，将写在 `s.yaml` 中，如定时任务的时间间隔等，更多细节请查看下面的部署段落。
+
+:::
 
 
-## 本地开发
+
+### 类型定义
+
+FC 的定义将由适配器导出，为了让 `ctx.originContext` 的定义保持正确，需要将其添加到 `src/interface.ts` 中。
+
+```typescript
+// src/interface.ts
+import type {} from '@midwayjs/fc-starter';
+```
+
+此外，还提供了各种 Event 类型的定义。
+
+```typescript
+// Event 类型
+import type { 
+  OSSEvent,
+  MNSEvent,
+  SLSEvent,
+  CDNEvent,
+  TimerEvent,
+  APIGatewayEvent,
+  TableStoreEvent,
+} from '@midwayjs/fc-starter';
+// InitializeContext 类型
+import type { InitializeContext } from '@midwayjs/fc-starter';
+```
+
+
+
+### 本地开发
 
 HTTP 触发器和 API Gateway 类型可以通过本地 `npm run dev` 和传统应用类似的开发方式进行本地开发，其他类型的触发器本地无法使用 dev 开发，只能通过运行 `npm run test` 进行测试执行。
 
 
 
-## 本地测试
+### 本地测试
 
-<Tabs>
-<TabItem value="event" label="Event">
-
-通过 `createFunctionApp` 创建函数 app，通过 `getServerlessInstance` 获取类实例，然后通过实例的方法直接调用，传入参数进行测试。
+和传统应用测试类似，使用 `createFunctionApp` 方法创建函数 app， 使用 `close` 方法关闭。
 
 ```typescript
+import { Application, Context, Framework } from '@midwayjs/faas';
+import { mockContext } from '@midwayjs/fc-starter';
+import { createFunctionApp } from '@midwayjs/mock';
+
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from event trigger', async () => {
+    
+    // create app
+    const app: Application = await createFunctionApp<Framework>(join(__dirname, '../'), {
+      initContext: mockContext(),
+    });
+    
+    // ...
+    
+    await close(app);
+  });
+});
+```
+
+`mockContext` 方法用来模拟一个 FC Context 数据结构，可以自定传递一个类似的结构或者修改部分数据。
+
+```typescript
+import { Application, Context, Framework } from '@midwayjs/faas';
+import { mockContext } from '@midwayjs/fc-starter';
+import { createFunctionApp } from '@midwayjs/mock';
+
+describe('test/hello_aliyun.test.ts', () => {
+
+  it('should get result from event trigger', async () => {
+    
+    // create app
+    const app: Application = await createFunctionApp<Framework>(join(__dirname, '../'), {
+      initContext: Object.assign(mockContext(), {
+        function: {
+          name: '***',
+          handler: '***'
+        }
+      }),
+    });
+    
+    // ...
+    
+    await close(app);
+  });
+});
+```
+
+不同的触发器有着不同的测试方法，下面列出了一些常见的触发器。
+
+<Tabs groupId="triggers">
+<TabItem value="event" label="Event">
+
+通过 `getServerlessInstance` 获取类实例，直接调用实例方法，传入参数进行测试。
+
+```typescript
+import { HelloAliyunService } from '../src/function/hello_aliyun';
+
+describe('test/hello_aliyun.test.ts', () => {
+
+  it('should get result from event trigger', async () => {
+    // ...
+    const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
     expect(await instance.handleEvent('hello world')).toEqual('hello world');
+    // ...
   });
 });
 ```
@@ -392,30 +393,17 @@ describe('test/hello_aliyun.test.ts', () => {
 和应用类似相同，通过 `createFunctionApp` 创建函数 app，通过 `createHttpRequest` 方式进行测试。
 
 ```typescript
-import { Framework } from '@midwayjs/serverless-app';
-import { createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { HelloAliyunService } from '../src/function/hello_aliyun';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from http trigger', async () => {
+    // ...
     const result = await createHttpRequest(app).get('/').query({
       name: 'zhangting',
     });
     expect(result.text).toEqual('hello zhangting');
+    // ...
   });
 });
 ```
@@ -427,31 +415,18 @@ describe('test/hello_aliyun.test.ts', () => {
 和 HTTP 测试相同，通过 `createFunctionApp` 创建函数 app，通过 `createHttpRequest` 方式进行测试。
 
 ```typescript
-import { Framework } from '@midwayjs/serverless-app';
-import { createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { createHttpRequest } from '@midwayjs/mock';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from http trigger', async () => {
+    // ...
     const result = await createHttpRequest(app).post('api_gateway_aliyun').send({
       name: 'zhangting',
     });
 
     expect(result.text).toEqual('hello zhangting');
+    // ...
   });
 });
 ```
@@ -462,33 +437,19 @@ describe('test/hello_aliyun.test.ts', () => {
 
 和 HTTP 测试不同，通过 `createFunctionApp` 创建函数 app，通过 `getServerlessInstance` 获取整个类的实例，从而调用到特定方法来测试。
 
-可以通过 `createTimerEvent` 方法快速创建平台传入的结构。
+可以通过 `mockTimerEvent` 方法快速创建平台传入的结构。
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createTimerEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockTimerEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from timer trigger', async () => {
-    expect(await instance.handleTimerEvent(createTimerEvent())).toEqual('hello world');
+    // ...
+    const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+    expect(await instance.handleTimerEvent(mockTimerEvent())).toEqual('hello world');
+    // ...
   });
 });
 ```
@@ -502,30 +463,15 @@ describe('test/hello_aliyun.test.ts', () => {
 可以通过 `createOSSEvent` 方法快速创建平台传入的结构。
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createOSSEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockOSSEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
-
   it('should get result from oss trigger', async () => {
-    expect(await instance.handleOSSEvent(createOSSEvent())).toEqual('hello world');
+    // ...
+    const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+    expect(await instance.handleOSSEvent(mockOSSEvent())).toEqual('hello world');
+    // ...
   });
 });
 ```
@@ -539,30 +485,16 @@ describe('test/hello_aliyun.test.ts', () => {
 可以通过 `createMNSEvent` 方法快速创建平台传入的结构。
 
 ```typescript
-import { createFunctionApp, close } from '@midwayjs/mock';
-import { Framework, Application } from '@midwayjs/serverless-app';
 import { HelloAliyunService } from '../src/function/hello_aliyun';
-import { createMNSEvent, createInitializeContext } from '@midwayjs/serverless-fc-trigger';
-import { join } from 'path';
+import { mockMNSEvent } from '@midwayjs/fc-starter';
 
 describe('test/hello_aliyun.test.ts', () => {
-  let app: Application;
-  let instance: HelloAliyunService;
-
-  beforeAll(async () => {
-    // create app
-    app = await createFunctionApp<Framework>(join(__dirname, '../'), {
-      initContext: createInitializeContext(),
-    });
-    instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
-  });
-
-  afterAll(async () => {
-    await close(app);
-  });
 
   it('should get result from oss trigger', async () => {
-    expect(await instance.handleMNSEvent(createMNSEvent())).toEqual('hello world');
+    // ...
+    const instance = await app.getServerlessInstance<HelloAliyunService>(HelloAliyunService);
+    expect(await instance.handleMNSEvent(mockMNSEvent())).toEqual('hello world');
+    // ...
   });
 });
 ```
@@ -571,204 +503,222 @@ describe('test/hello_aliyun.test.ts', () => {
 
 </Tabs>
 
-## 发布到阿里云
+## 纯函数部署（内置运行时）
 
-在项目根目录的 `f.yml` 的 `provider` 段落处确保为 `aliyun` 。
+以下将简述如何使用 Serverless Devs 部署到阿里云函数。
 
-```yaml
-service:
-  name: midway-faas-examples
+### 1、确认启动器
 
-provider:
-  name: aliyun
-```
-
-部署函数，直接使用发布命令即可打包并部署函数，Deploy 命令会自动打包，并调用阿里云官方部署工具发布。
-
-```shell
-$ npm run deploy
-```
-
-:::info
-如果输错了信息，可以重新执行 `npx midway-bin deploy --resetConfig` 修改。
-:::
-
-阿里云部署首次需要配置 `accountId`、`accountKey`、`accountSecret`
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654967-11e1bcbd-5a56-4239-99e1-5a1472ad49fd.png#align=left&display=inline&height=514&margin=%5Bobject%20Object%5D&originHeight=514&originWidth=1152&size=0&status=done&style=none&width=1152" width="1152" />
-
-相关配置获取，可参照下方图片：
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654949-9c14958c-3aff-403a-b89b-d03a3a95cd18.png#align=left&display=inline&height=696&margin=%5Bobject%20Object%5D&originHeight=696&originWidth=1832&size=0&status=done&style=none&width=1832" width="1832" />
-
-点击此处跳转阿里云[安全设置页](https://account.console.aliyun.com/#/secure)。
-
-
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1585718654950-19a811c5-2cf3-4843-a619-cfd744430fae.png#align=left&display=inline&height=184&margin=%5Bobject%20Object%5D&originHeight=592&originWidth=2406&size=0&status=done&style=none&width=746" width="746" />
-
-点击跳转阿里云个人 [AccessKey 页面](https://usercenter.console.aliyun.com/#/manage/ak)。
-
-这里以 http 触发器作为示例。
-
-发布后，阿里云会输出一个临时可用的域名，打开浏览器访问即可。
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1600835297676-1753de7a-fb0d-46ca-98f0-944eba5b2f2b.png#align=left&display=inline&height=193&margin=%5Bobject%20Object%5D&name=image.png&originHeight=193&originWidth=1219&size=35152&status=done&style=none&width=1219" width="1219" />
-
-发布完成后，平台状态如下。
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1586685106514-c52880d4-c447-4bc1-9b8b-6db99dd81878.png#height=436&id=wtVSC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=872&originWidth=2684&originalType=binary&size=164942&status=done&style=none&width=1342" width="1342" />
-
-发布效果，每个配置的函数都将发布成一个平台上的函数，并且自动配置 http 触发器。
-
-
-
-## 常见问题
-
-### 1、自定义域名
-
-你需要提前申请一个域名，在国内的话，需要备案，否则无法绑定。
-
-第一步，先将默认自动生成的域名的功能关闭
+在项目根目录的 `f.yml` 的 `provider` 段落处确保 starter 为 `@midwayjs/fc-starter`。
 
 ```yaml
-service:
-  name: midway-faas-examples
-
 provider:
   name: aliyun
-
-custom:
-  customDomain: false
+  starter: '@midwayjs/fc-starter'
 ```
 
-第二步，添加域名解析到你函数对应网关。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588654519449-2c98a9d8-ffac-42b7-bcf2-ac19c21f08ac.png#height=478&id=kmxTj&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1090&originWidth=1700&originalType=binary&size=132002&status=done&style=none&width=746" width="746" />
 
-在函数页面绑定自定义域名，添加路由
+### 2、安装 Serverless Devs 工具
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588654440214-75bfd1c2-1b6a-4c2b-9c57-198bec9d4e64.png#height=706&id=IEhZC&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1412&originWidth=2794&originalType=binary&size=310772&status=done&style=none&width=1397" width="1397" />
+aliyun 使用 [Serverless Devs 工具](https://www.serverless-devs.com/) 进行函数部署。
 
-绑定完成后，即可用域名访问。
+你可以将其安装到全局。
 
-### 2、http 头的一些限制
+```bash
+$ npm install @serverless-devs/s -g
+```
 
-Request Headers 不支持以 x-fc-开头的自定义及以下字段的自定义：
-
-- accept-encoding
-- connection
-- keep-alive
-- proxy-authorization
-- te
-- trailer
-- transfer-encoding
-
-Response Headers 不支持以 `x-fc-` 开头的自定义及以下字段的自定义：
-
-- connection
-- content-length
-- content-encoding
-- date
-- keep-alive
-- proxy-authenticate
-- server
-- trailer
-- transfer-encoding
-- upgrade
-
-Request 限制项。如果超过以下限制，会返回 400 状态码和 InvalidArgument 错误码。
-
-- Headers 大小：Headers 中的所有 Key 和 Value 的总大小不得超过 4 KB。
-- Path 大小：包括所有的 Query Params，Path 的总大小不得超过 4 KB。
-- Body 大小：HTTP Body 的总大小不得超过 6 MB。
-
-Response 限制项。如果超过以下限制，会返回 502 状态码和 BadResponse 错误码。
-
-- Headers 大小：Headers 中的所有 Key 和 Value 的总大小不得超过 4 KB。
+参考 [密钥配置](https://docs.serverless-devs.com/serverless-devs/quick_start) 文档进行配置。
 
 
 
-### 3、发布包大小问题
+### 3、编写一个  Serverless Devs 描述文件
 
-为了提升启动速度，阿里云 FC 容器限制压缩包大小为 50M，请尽可能精简你的后端代码依赖。
+在根目录创建一个 `s.yaml` ，添加以下内容。
 
-一般来说，midway 默认脚手架（eggjs）构建完在 9M 左右，其他框架会更小，请尝试先删除 `package-lock.json` 后再尝试。
+```yaml
+edition: 1.0.0
+name: "midwayApp" #  项目名称
+access: "default" #  秘钥别名
 
-### 4、容器时区问题
+vars:
+  service:
+    name: fc-build-demo
+    description: 'demo for fc-deploy component'
+services:
+  project-0981cd9b07:
+    component: devsapp/fc
+    props:
+      region: cn-hangzhou
+      service: ${vars.service}
+      function:
+        name: hello	# 函数名
+        handler: helloHttpService.handleHTTPEvent
+        codeUri: '.'
+        initializer: helloHttpService.initializer
+      customDomains:
+        - domainName: auto
+          protocol: HTTP
+          routeConfigs:
+            - path: /*
+              serviceName: ${vars.service.name}
+              functionName: helloHttpService-handleHTTPEvent
+      triggers:
+        - name: http
+          type: http
+          config:
+            methods:
+              - GET
+            authType: anonymous
 
-> 大部分 Docker 镜像都是基于 Alpine，Ubuntu，Debian，CentOS 等基础镜像制作而成。 基本上都采用 UTC 时间，默认时区为零时区。
+```
 
-阿里云容器环境的时区默认是 `GMT +0000`，直接使用 `new Date()` 等前端获取的时候，国内的用户可能未作时区处理，会相差 8 个小时。
+每加一个函数都需要调整 `s.yaml` 文件，为此Midway 提供了一个 `@midwayjs/serverless-yaml-generator` 工具用来将装饰器函数信息写入 `s.yaml`。
 
-国内用户使用，默认可能习惯 `GMT +0800` 。可以通过环境变量调整（配置在平台或者 f.yml）。
+```diff
+{
+	"scripts": {
++    "generate": "serverless-yaml-generator",
+  },
+  "devDependencies": {
++    "@midwayjs/serverless-yaml-generator": "^1.0.0",
+  },
+}
+```
+
+通过执行下面的命令，可以将现有函数信息填充到 `s.yaml` 中，并生成入口文件，方便排查问题。
+
+```bash
+$ npm run generate
+```
+
+工具将以函数名作为 key 在 `s.yaml` 中查找配置。
+
+* 1、如果存在函数，则会覆盖特定字段，比如 handler，http 触发器的 methods
+* 2、如果不存在函数，则会添加一个新函数
+* 3、工具不会写入 http 的路由方法，为了简化后续更新，可以提供一个 `/*` 路由（如示例）
+
+我们推荐用户只在装饰器定义基础函数名，函数 handler，以及基础触发器信息（比如 http 触发器的 path 和 method），其余都写在 `yaml` 中。
+
+`s.yaml` 的完整配置较为复杂，具体请参考 [描述文件规范](https://docs.serverless-devs.com/serverless-devs/yaml)。
+
+
+
+### 4、编写一个部署脚本
+
+由于部署有构建，拷贝等多个步骤，我们可以编写部署脚本统一这个过程。
+
+比如在项目根目录新建一个 `deploy.sh` 文件，内容如下。
+
+```bash
+#!/bin/bash
+
+set -e
+
+# 构建产物目录
+export BUILD_DIST=$PWD/.serverless
+# 构建开始时间，单位毫秒
+export BUILD_START_TIME=$(date +%s%3N)
+
+echo "Building Midway Serverless Application"
+
+# 打印当前目录 cwd
+echo "Current Working Directory: $PWD"
+# 打印结果目录 BUILD_DIST
+echo "Build Directory: $BUILD_DIST"
+
+# 安装当前项目依赖
+npm i
+
+# 执行构建
+./node_modules/.bin/tsc || return 1
+# 生成入口文件
+./node_modules/.bin/serverless-yaml-generator || return 1
+
+# 如果 .serverless 文件夹存在，则删除后重新创建
+if [ -d "$BUILD_DIST" ]; then
+  rm -rf $BUILD_DIST
+fi
+
+mkdir $BUILD_DIST
+
+# 拷贝 dist、 *.json、*.yml 到 .serverless 目录
+cp -r dist $BUILD_DIST
+cp *.yaml $BUILD_DIST 2>/dev/null || :
+cp *.json $BUILD_DIST 2>/dev/null || :
+# 移动入口文件到 .serverless 目录
+mv *.js $BUILD_DIST 2>/dev/null || :
+
+# 进入 .serverless 目录
+cd $BUILD_DIST
+# 安装线上依赖
+npm install --production
+
+echo "Build success"
+
+# 在 .serverless 目录进行部署
+s deploy
+
+```
+
+可以将这个 `deploy.sh` 文件放到 `package.json` 的 `deploy` 指令中，后续部署执行 `npm run deploy` 即可。
 
 ```json
-process.env.TZ = 'Asia/Shanghai';
+{
+  "scripts": {
+    "deploy": "sh deploy.sh"
+  }
+}
 ```
 
-```yaml
-provider:
-  name: aliyun
-  runtime: nodejs12
-	environment:
-  	TZ: 'Asia/Shanghai'
-```
+:::tip
 
-:::info
-注意，定时任务由网关触发，不会受到这里配置的函数时区影响。
+* 1、 `deploy.sh` 只测试了 mac，其余平台可以自行调整
+* 2、脚本内容可以根据业务逻辑自行调整，比如拷贝的文件等
+
 :::
 
-### 5、修改 AccessKey
 
-有时候，我们在第一次发布时会填错一个 AccessKey，或者其他区域选项，我们提供了一个 可以修改的参数，用于在发布时清理上次错误的选项。
 
-```bash
-midway-bin deploy --resetConfig
-```
+## 自定义运行时部署
 
-这里提示 `Please create alias for key pair. If not, please enter to skip` 时输入 default，否则不会使用当前的 AccessKey。如果只希望调整特定字段，可以进入 `~/.s/access.yaml` 文件中，直接修改保存。
+### 1、创建项目
 
-### 6、CLI 发布红色提示
+自定义运行时可以使用标准项目来部署，由于需要提供 9000 端口，需要创建 Midway koa/express/express 项目。
 
-在 HTTP 触发器发布后，会出现下面的红色提示。这是**一个提示**，原因为，未配置域名的情况下，阿里云将默认添加 `Content-Disposition: attachment` 头到响应中，浏览器打开地址会变为附件下载。可以通过绑定自定义域名或者本地 curl 的方式来测试结果。
+初始化项目请参考 [创建第一个应用](/docs/quickstart)。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1587036400388-b2ebe43f-fa7d-463b-b9b6-b38bf9e18430.png#height=268&id=H2BJz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=268&originWidth=958&originalType=binary&ratio=1&size=242934&status=done&style=none&width=958" width="958" />
+### 2、调整端口
 
-### 7、发布时指定 accessKey 等
-
-```bash
-export REGION=cn-beijing
-export ACCOUNT_ID=xxx
-export ACCESS_KEY_ID=xxx
-export ACCESS_KEY_SECRET=xxx
-```
-
-当前阿里云发布使用的是 funcraft 工具，可以使用 funcraft 的环境变量，可以加载启动的命令行前，也可以使用 yml 的变量填充方式。
-
-### 8、发布超时问题
-
-有时候包比较大， `midway-bin deploy` 上传可能会碰到超时的问题，这个超时时间是 funcraft 工具内部控制的。
-
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1598423950078-15838cbb-95f3-41f9-94ac-a31741b111d3.png#height=179&id=EOCLm&margin=%5Bobject%20Object%5D&name=image.png&originHeight=358&originWidth=2784&originalType=binary&ratio=1&size=310195&status=done&style=none&width=1392" width="1392" />
-
-解决方案： `~/.fcli/config.yaml` 里面配置 timeout，单位是 s（秒）。
-
-一般来说，midway 默认脚手架（eggjs）构建完在 9M 左右，其他框架会更小，请尝试先删除 `package-lock.json` 后再尝试。
-
-如无效果，确实是包过大，可以修改 fun 工具的部署时间，位置为 `~/.fcli/config.yaml` ，在其中增加 timeout 字段。
-
-示例如下：
+为了避免影响本地开发，我们仅在入口 `bootstrap.js` 处增加端口。
 
 ```typescript
-endpoint: ***************
-api_version: '2016-08-15'
-access_key_id: ***************
-access_key_secret: ***************
-security_token: ''
-debug: false
-timeout: 50      ## 部署超时时间，单位为 s
-retries: 3
+const { Bootstrap } = require('@midwayjs/bootstrap');
 
+// 显式以组件方式引入用户代码
+Bootstrap.configure({
+  globalConfig: {
+    koa: {
+      port: 9000,
+    }
+  }
+}).run()
 ```
 
+不同的框架修改端口请参考：
+
+* [koa 修改端口](/docs/extensions/koa)
+* [Egg 修改端口](/docs/extensions/egg)
+* [Express 修改端口](/docs/extensions/express)
+
+### 3、平台部署配置
+
+* 1、选择运行环境，比如 `Node.js 18`
+* 2、选择代码上传方式，比如可以本地打 zip 包上传
+* 3、启动命令指定 node bootstrap.js
+* 4、监听端口 9000
+
+![](https://img.alicdn.com/imgextra/i3/O1CN010JA2GU1lxNeqm81AR_!!6000000004885-2-tps-790-549.png)
+
+配置完成之后，上传压缩包即可部署完成。

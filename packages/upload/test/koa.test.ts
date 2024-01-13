@@ -119,6 +119,58 @@ describe('test/koa.test.ts', function () {
 
   });
 
+  describe('koa file mime', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, 'fixtures/koa-file-mime');
+      app = await createApp(appDir);
+    });
+
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('invalid file type', async () => {
+      const filePath = join(__dirname, 'fixtures/err.jpg');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', filePath)
+        .expect(400);
+    });
+
+    it('invalid file type', async () => {
+      const filePath = join(__dirname, 'fixtures/1.from-jpg.png');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', filePath)
+        .expect(400);
+    });
+
+    it('normal file type', async () => {
+      const filePath = join(__dirname, 'fixtures/1.jpg');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', filePath)
+        .expect(200);
+    });
+
+    it('normal file type', async () => {
+      const filePath = join(__dirname, 'fixtures/1.more');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', filePath)
+        .expect(200);
+    });
+  });
+
   describe('test null set', function () {
     it('upload test ext set null', async () => {
       const appDir = join(__dirname, 'fixtures/koa-ext-null');

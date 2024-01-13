@@ -58,6 +58,7 @@ exports[`/test/parser.test.ts should fix issue#2286 with array example 1`] = `
     "/api/update_user": {
       "post": {
         "description": undefined,
+        "operationId": "catcontroller_updateuser",
         "parameters": [],
         "responses": {
           "200": {
@@ -103,6 +104,54 @@ exports[`/test/parser.test.ts should parse base type 1`] = `
       "nullable": true,
       "type": "array",
       "uniqueItems": true,
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should parse extends base 1`] = `
+{
+  "properties": {
+    "a": {
+      "format": undefined,
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should parse extends base 2`] = `
+{
+  "properties": {
+    "b": {
+      "format": undefined,
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`/test/parser.test.ts should parse extends base 3`] = `
+{
+  "properties": {
+    "c": {
+      "format": undefined,
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
     },
   },
   "type": "object",
@@ -299,6 +348,7 @@ exports[`/test/parser.test.ts should test ref path generate 1`] = `
     "/api/update_user": {
       "post": {
         "description": undefined,
+        "operationId": "apicontroller_updateuser",
         "parameters": [],
         "responses": {
           "200": {
@@ -358,6 +408,7 @@ exports[`/test/parser.test.ts should test simple case with example 1`] = `
     "/api/update_user": {
       "post": {
         "description": undefined,
+        "operationId": "catcontroller_updateuser",
         "parameters": [],
         "responses": {
           "200": {

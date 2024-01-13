@@ -1,9 +1,24 @@
-import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
+import * as typeorm from 'typeorm';
+
+interface NewObj {
+  ObjectId: unknown;
+}
+
+interface OldObj {
+  ObjectID: unknown;
+}
+
+declare type ExtractObjectID<T> = T extends NewObj
+  ? T['ObjectId']
+  : T extends OldObj
+  ? T['ObjectID']
+  : never;
 
 @Entity()
 export class CasbinMongoRule extends BaseEntity {
   @ObjectIdColumn()
-  public id!: ObjectID;
+  public id!: ExtractObjectID<typeof typeorm>;
 
   @Column({
     nullable: true,

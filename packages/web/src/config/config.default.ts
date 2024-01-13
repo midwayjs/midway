@@ -2,6 +2,8 @@ import * as path from 'path';
 import * as mkdirp from 'mkdirp';
 import * as os from 'os';
 import * as fs from 'fs';
+import * as loggerModule from '@midwayjs/logger';
+import { extend } from '@midwayjs/core';
 
 export default appInfo => {
   const exports = {} as any;
@@ -9,17 +11,22 @@ export default appInfo => {
   exports.rundir = path.join(appInfo.appDir, 'run');
 
   // 修改默认的日志名
-  exports.midwayLogger = {
-    clients: {
-      appLogger: {
-        fileLogName: 'midway-web.log',
-        aliasName: 'logger',
+  exports.midwayLogger = extend(
+    true,
+    {},
+    loggerModule.loggers.getDefaultMidwayLoggerConfig(appInfo)['midwayLogger'],
+    {
+      clients: {
+        appLogger: {
+          fileLogName: 'midway-web.log',
+          aliasName: 'logger',
+        },
+        agentLogger: {
+          fileLogName: 'midway-agent.log',
+        },
       },
-      agentLogger: {
-        fileLogName: 'midway-agent.log',
-      },
-    },
-  };
+    }
+  );
 
   exports.egg = {
     dumpConfig: true,

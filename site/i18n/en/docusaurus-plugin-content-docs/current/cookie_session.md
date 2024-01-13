@@ -8,6 +8,15 @@ HTTP Cookie (also called Web Cookie or Browser Cookie) is a small piece of data 
 
 Cookie often assume the function of identifying the requestor's identity in Web applications, so Web applications encapsulate the concept of Session on the basis of cookies and are specially used for user identification.
 
+
+
+## Scope of application
+
+* The built-in cookie under @midwayjs/web (i.e. egg) is the cookie that comes with egg. It does not provide replacement capabilities and is not applicable to this document.
+* The built-in cookie library under @midwayjs/express (i.e. express) is the cookie library that comes with express. It does not provide replacement capabilities and is not applicable to this document.
+
+
+
 ## Default Cookies
 
 Midway provides a `@midwayjs/cookies` module to manipulate Cookie.
@@ -48,14 +57,17 @@ Setting Cookie is actually done by setting a set-cookie header in the HTTP respo
 
 These options include:
 
-| Options | Type | Description |
-| -------- | ------- | ------------------------------------------------------------ |
-| path | String | The path where the key-value pair takes effect. By default, the path is set to the root path (`/`). That is, all URLs under the current domain name can access this cookie.  |
-| domain | String | The domain name for which the key-value pair takes effect is not configured by default. It can be configured to be accessed only in the specified domain name.  |
-| expires | Date | Set the expiration time of this key-value pair. If maxAge is set, the expires will be overwritten. If maxAge and expires are not set, Cookie will expire when the browser's session fails (usually when the browser is closed).  |
-| maxAge | Number | Set the maximum save time for this key-value pair in the browser. is the number of milliseconds from the current time on the server. If maxAge is set, the expires will be overwritten.  |
-| secure | Boolean | Set the key-value pair to [transmit only on HTTPS connections](http://stackoverflow.com/questions/13729749/how-does-cookie-secure-flag-work). The framework helps us to determine whether the secure value is automatically set on the HTTPS connection.  |
-| httpOnly | Boolean | Set whether the key-value pair can be accessed by JS. The default value is true and JS access is not allowed. |
+| Options | Type | Description | Support Version |
+| -------- | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| path | String | The path where the key-value pair takes effect. By default, the path is set to the root path (`/`). That is, all URLs under the current domain name can access this cookie.  |   |
+| domain | String | The domain name for which the key-value pair takes effect is not configured by default. It can be configured to be accessed only in the specified domain name.  |   |
+| expires | Date | Set the expiration time of this key-value pair. If maxAge is set, the expires will be overwritten. If maxAge and expires are not set, Cookie will expire when the browser's session fails (usually when the browser is closed).  |   |
+| maxAge | Number | Set the maximum save time for this key-value pair in the browser. is the number of milliseconds from the current time on the server. If maxAge is set, the expires will be overwritten.  |   |
+| secure | Boolean | Set the key-value pair to [transmit only on HTTPS connections](http://stackoverflow.com/questions/13729749/how-does-cookie-secure-flag-work). The framework helps us to determine whether the secure value is automatically set on the HTTPS connection.  |   |
+| httpOnly | Boolean | Set whether the key-value pair can be accessed by JS. The default value is true and JS access is not allowed. |  |
+| partitioned | Boolean | Set cookies for independent partition status ([CHIPS](https://developers.google.com/privacy-sandbox/3pcd/chips)). Note that this configuration will only take effect if `secure` is true and Chrome >=114 version | @midwayjs/cookies >= 1.1.0 |
+| removeUnpartitioned | Boolean | Whether to delete the cookie with the same name in the non-independent partition state. Note that this configuration will only take effect when `partitioned` is true. | @midwayjs/cookies >= 1.2.0 |
+| priority | String | Set the [Priority](https://developer.chrome.com/blog/new-in-devtools-81?hl=en#cookiepriority) of Cookie, the optional values are `Low`, `Medium`, `High` , only valid for Chrome >= 81 version | @midwayjs/cookies >= 1.1.0 |
 
 In addition to these attributes, the framework extends 3 additional parameters:
 
@@ -268,6 +280,28 @@ export default {
   // ...
 }
 ```
+
+
+
+### Customize SameSite option of Session Cookie
+
+By default, the framework will leave the SameSite option of Session Cookie to unset. Since Chrome v84, cookies with empty SameSite will be treated as SameSite=Lax, which means when the document is requested cross origins, the cookie won't take effect. If your application is always accessed directly by your users, there won't be any problem. But if your application needs to support cross origin requests, such as being embedded with iframe, or requested from another origin with XHR, then the SameSite option needs to be changed to SiteSite=None:
+
+```typescript
+// src/config/config.default.ts
+export default {
+  session: {
+    sameSite: 'none',
+    // SameSite=None cookies must be Secure
+    secure: true,
+    // ...
+  },
+  // ...
+}
+```
+
+Please refer to [SameSite Cookie explained](https://web.dev/articles/samesite-cookies-explained?hl=zh-cn) for more introduction about SameSite option.
+
 
 
 

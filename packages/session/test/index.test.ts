@@ -158,4 +158,27 @@ describe('test/index.test.ts', function () {
 
     await close(app);
   });
+
+  it('should change the session key, but not content', async () => {
+    const app = await createApp(join(__dirname, 'fixtures/change-session-key'));
+    const request = createHttpRequest(app);
+    let koaSession = null;
+    await request.get('/')
+      .expect(200)
+      .expect((res) => {
+        koaSession = res.headers['set-cookie'][0];
+        assert(koaSession.match(/MW_SESS=.*?;/));
+      });
+
+    await request.get('/')
+      .set('Cookie', koaSession)
+      .expect(200)
+      .expect((res) => {
+        const cookies = res.headers['set-cookie'][0];
+        assert(cookies.match(/MW_SESS=.*?;/));
+        assert(cookies.replace(/;.*/, '') !== koaSession.replace(/;.*/, ''));
+      });
+
+    await close(app);
+  });
 });

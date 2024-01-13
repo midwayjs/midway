@@ -1,0 +1,246 @@
+{
+  "@midwayjs/faas-typings": "3.10.13",
+  "@midwayjs/fc-starter": "3.13.0",
+  "@midwayjs/serverless-http-parser": "3.12.5",
+  "@midwayjs/async-hooks-context-manager": "3.13.0",
+  "@midwayjs/axios": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/bootstrap": "3.13.0",
+  "@midwayjs/bull": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/bull-board": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/cache": "3.13.0",
+  "@midwayjs/captcha": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/casbin": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/casbin-redis-adapter": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/casbin-typeorm-adapter": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/code-dye": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/consul": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/core": "3.13.0",
+  "@midwayjs/cos": "3.13.0",
+  "@midwayjs/cron": [
+    "3.13.0",
+    "3.13.4"
+  ],
+  "@midwayjs/cross-domain": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/decorator": "3.13.0",
+  "@midwayjs/etcd": "3.13.0",
+  "@midwayjs/express-session": "3.13.0",
+  "@midwayjs/faas": "3.13.0",
+  "@midwayjs/grpc": [
+    "3.13.0",
+    "3.13.4"
+  ],
+  "@midwayjs/http-proxy": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/i18n": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/info": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/jwt": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/kafka": "3.13.0",
+  "@midwayjs/leoric": "3.13.0",
+  "@midwayjs/mikro": [
+    "3.13.0",
+    "3.13.3"
+  ],
+  "@midwayjs/mock": "3.13.0",
+  "@midwayjs/mongoose": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/oss": "3.13.0",
+  "@midwayjs/otel": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/passport": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/process-agent": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/prometheus": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/prometheus-socket-io": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/rabbitmq": [
+    "3.13.0",
+    "3.13.4"
+  ],
+  "@midwayjs/redis": "3.13.0",
+  "@midwayjs/security": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/sequelize": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/session": "3.13.0",
+  "@midwayjs/socketio": [
+    "3.13.0",
+    "3.13.4"
+  ],
+  "@midwayjs/static-file": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/swagger": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/tablestore": "3.13.0",
+  "@midwayjs/tags": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/typegoose": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/typeorm": [
+    "3.13.0",
+    "3.13.4"
+  ],
+  "@midwayjs/upload": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/validate": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/version": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/view": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/view-ejs": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/view-nunjucks": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/web": [
+    "3.13.0",
+    "3.13.1",
+    "3.13.2",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/express": [
+    "3.13.0",
+    "3.13.4"
+  ],
+  "@midwayjs/koa": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ],
+  "@midwayjs/ws": [
+    "3.13.0",
+    "3.13.3",
+    "3.13.4"
+  ]
+}

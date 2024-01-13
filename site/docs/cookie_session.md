@@ -8,6 +8,15 @@ HTTP Cookie（也叫 Web Cookie 或浏览器 Cookie）是服务器发送到用�
 
 Cookie 在 Web 应用中经常承担标识请求方身份的功能，所以 Web 应用在 Cookie 的基础上封装了 Session 的概念，专门用做用户身份识别。
 
+
+
+## 适用范围
+
+* @midwayjs/web 下（即 egg）内置的是 egg 自带的 Cookie，未提供替换能力，不适用本文档
+* @midwayjs/express 下（即 express）内置的是 express 自带的 Cookie 库，未提供替换能力，不适用本文档
+
+
+
 ## 默认的 Cookies
 
 Midway 提供了 `@midwayjs/cookies` 模块来操作 Cookie。
@@ -48,14 +57,17 @@ export class HomeController {
 
 这些选项包括：
 
-| 选项     | 类型    | 描述                                                         |
-| -------- | ------- | ------------------------------------------------------------ |
-| path     | String  | 设置键值对生效的 URL 路径，默认设置在根路径上（`/`），也就是当前域名下的所有 URL 都可以访问这个 Cookie。 |
-| domain   | String  | 设置键值对生效的域名，默认没有配置，可以配置成只在指定域名才能访问。 |
-| expires  | Date    | 设置这个键值对的失效时间，如果设置了 maxAge，expires 将会被覆盖。如果 maxAge 和 expires 都没设置，Cookie 将会在浏览器的会话失效（一般是关闭浏览器时）的时候失效。 |
-| maxAge   | Number  | 设置这个键值对在浏览器的最长保存时间。是一个从服务器当前时刻开始的毫秒数。如果设置了 maxAge，expires 将会被覆盖。 |
-| secure   | Boolean | 设置键值对 [只在 HTTPS 连接上传输](http://stackoverflow.com/questions/13729749/how-does-cookie-secure-flag-work)，框架会帮我们判断当前是否在 HTTPS 连接上自动设置 secure 的值。 |
-| httpOnly | Boolean | 设置键值对是否可以被 js 访问，默认为 true，不允许被 js 访问  |
+| 选项                | 类型    | 描述                                                         | 支持版本                   |
+| ------------------- | ------- | ------------------------------------------------------------ | -------------------------- |
+| path                | String  | 设置键值对生效的 URL 路径，默认设置在根路径上（`/`），也就是当前域名下的所有 URL 都可以访问这个 Cookie。 |                            |
+| domain              | String  | 设置键值对生效的域名，默认没有配置，可以配置成只在指定域名才能访问。 |                            |
+| expires             | Date    | 设置这个键值对的失效时间，如果设置了 maxAge，expires 将会被覆盖。如果 maxAge 和 expires 都没设置，Cookie 将会在浏览器的会话失效（一般是关闭浏览器时）的时候失效。 |                            |
+| maxAge              | Number  | 设置这个键值对在浏览器的最长保存时间。是一个从服务器当前时刻开始的毫秒数。如果设置了 maxAge，expires 将会被覆盖。 |                            |
+| secure              | Boolean | 设置键值对 [只在 HTTPS 连接上传输](http://stackoverflow.com/questions/13729749/how-does-cookie-secure-flag-work)，框架会帮我们判断当前是否在 HTTPS 连接上自动设置 secure 的值。 |                            |
+| httpOnly            | Boolean | 设置键值对是否可以被 js 访问，默认为 true，不允许被 js 访问  |                            |
+| partitioned         | Boolean | 设置独立分区状态（[CHIPS](https://developers.google.com/privacy-sandbox/3pcd/chips)）的 Cookie。注意，只有 `secure` 为 true 且 Chrome >=114 版本此配置才会生效 | @midwayjs/cookies >= 1.1.0 |
+| removeUnpartitioned | Boolean | 是否删除非独立分区状态的同名 cookie。注意，只有 `partitioned` 为 true 的时候此配置才会生效 | @midwayjs/cookies >= 1.2.0 |
+| priority            | String  | 设置 Cookie 的 [优先级](https://developer.chrome.com/blog/new-in-devtools-81?hl=zh-cn#cookiepriority)，可选值为 `Low`、`Medium`、`High`，仅对 Chrome >= 81 版本有效 | @midwayjs/cookies >= 1.1.0 |
 
 除了这些属性之外，框架另外扩展了 3 个参数：
 
@@ -268,6 +280,27 @@ export default {
   // ...
 }
 ```
+
+
+
+### 调整 SameSite 配置以允许跨域访问
+
+默认情况下，框架不会设置 Session Cookie 的 SameSite 选项。从 Chrome 84 版本开始，SameSite 选项为空的 Cookie 默认将不会在跨域请求时发送，即默认按照 SameSite=Lax 处理。一般情况下，如果用户都是直接访问你的应用，这不会有问题。如果你的应用需要支持跨域访问，比如被其他应用 iframe 嵌入，或者允许配置 CORS 跨域请求，则需要调整 SameSite 选项，将其设置为更为宽松的 SameSite=None：
+
+```typescript
+// src/config/config.default.ts
+export default {
+  session: {
+    sameSite: 'none',
+    // 需要指定 Secure，否则 SameSite=None 无效
+    secure: true,
+    // ...
+  },
+  // ...
+}
+```
+
+可以阅读 [SameSite Cookie 说明](https://web.dev/articles/samesite-cookies-explained?hl=zh-cn) 了解更多 SameSite 选项。
 
 
 

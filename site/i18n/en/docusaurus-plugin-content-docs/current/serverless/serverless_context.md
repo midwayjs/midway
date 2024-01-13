@@ -17,9 +17,9 @@ export class Index {
   ctx: Context;
 
   @ServerlessTrigger(...)
-	async handler(event) {
-		return 'hello world'
-	}
+  async handler(event) {
+  	return 'hello world';
+  }
 }
 ```
 
@@ -36,11 +36,11 @@ export class Index {
   ctx: Context;
 
   @ServerlessTrigger(...)
-	async handler() {
+  async handler() {
     // The following two writing methods are the same
-		// this.ctx.body = 'hello world';
+    // this.ctx.body = 'hello world';
     return 'hello world';
-	}
+  }
 }
 ```
 

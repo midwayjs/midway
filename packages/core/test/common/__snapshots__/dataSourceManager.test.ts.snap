@@ -45,8 +45,10 @@ exports[`test/common/dataSourceManager.test.ts should test with glob model 1`] =
     [Function],
     [Function],
     [Function],
+    [Function],
+    [Function],
   ],
-  "entitiesLength": 5,
+  "entitiesLength": 7,
   "host": "localhost",
   "pool": {
     "idle": 10000,

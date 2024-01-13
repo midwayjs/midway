@@ -179,25 +179,29 @@ export class MidwayMockService {
 
   public async runSimulatorSetup() {
     for (const simulator of this.simulatorList) {
-      await simulator?.setup();
+      await simulator.setup?.();
     }
   }
 
   public async runSimulatorTearDown() {
-    for (const simulator of this.simulatorList) {
-      await simulator?.tearDown();
+    // reverse loop and not change origin simulatorList
+    for (let i = this.simulatorList.length - 1; i >= 0; i--) {
+      const simulator = this.simulatorList[i];
+      await simulator.tearDown?.();
     }
   }
 
   public async runSimulatorAppSetup(app: IMidwayApplication) {
     for (const simulator of this.simulatorList) {
-      await simulator?.appSetup(app);
+      await simulator.appSetup?.(app);
     }
   }
 
   public async runSimulatorAppTearDown(app: IMidwayApplication) {
-    for (const simulator of this.simulatorList) {
-      await simulator?.appTearDown(app);
+    // reverse loop and not change origin simulatorList
+    for (let i = this.simulatorList.length - 1; i >= 0; i--) {
+      const simulator = this.simulatorList[i];
+      await simulator.appTearDown?.(app);
     }
   }
 
@@ -206,7 +210,7 @@ export class MidwayMockService {
     app: IMidwayApplication
   ) {
     for (const simulator of this.simulatorList) {
-      await simulator?.contextSetup(ctx, app);
+      await simulator.contextSetup?.(ctx, app);
     }
   }
 
@@ -214,8 +218,10 @@ export class MidwayMockService {
     ctx: IMidwayContext,
     app: IMidwayApplication
   ) {
-    for (const simulator of this.simulatorList) {
-      await simulator?.contextTearDown(ctx, app);
+    // reverse loop and not change origin simulatorList
+    for (let i = this.simulatorList.length - 1; i >= 0; i--) {
+      const simulator = this.simulatorList[i];
+      await simulator?.contextTearDown?.(ctx, app);
     }
   }
 }

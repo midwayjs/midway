@@ -23,6 +23,7 @@ import {
 import { isClass, isNullOrUndefined } from '../util/types';
 import { camelCase } from '../util/camelCase';
 import { generateRandomId, merge } from '../util';
+import { getModuleRequirePathList } from '../util/pathFileUtil';
 
 const debug = require('util').debuglog('midway:core');
 
@@ -410,6 +411,13 @@ if (typeof global === 'object') {
     console.warn(
       'DecoratorManager not singleton and please check @midwayjs/core version by "npm ls @midwayjs/core"'
     );
+    const coreModulePathList = getModuleRequirePathList('@midwayjs/core');
+    if (coreModulePathList.length) {
+      console.info('The module may be located in:');
+      coreModulePathList.forEach((path, index) => {
+        console.info(`${index + 1}. ${path}`);
+      });
+    }
     manager = global['MIDWAY_GLOBAL_DECORATOR_MANAGER'];
   } else {
     global['MIDWAY_GLOBAL_DECORATOR_MANAGER'] = manager;

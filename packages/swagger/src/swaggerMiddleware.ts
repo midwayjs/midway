@@ -11,6 +11,8 @@ import {
   Scope,
   ScopeEnum,
   MidwayFrameworkType,
+  MidwayEnvironmentService,
+  MidwayCommonError,
 } from '@midwayjs/core';
 import { readFileSync } from 'fs';
 import { join, extname } from 'path';
@@ -30,11 +32,16 @@ export class SwaggerMiddleware
   @Inject()
   private swaggerExplorer: SwaggerExplorer;
 
+  @Inject()
+  environmentService: MidwayEnvironmentService;
+
   @Init()
   async init() {
     const { getAbsoluteFSPath } = safeRequire('swagger-ui-dist');
     if (getAbsoluteFSPath) {
       this.swaggerUiAssetPath = getAbsoluteFSPath();
+    } else {
+      throw new MidwayCommonError('swagger-ui-dist is not installed');
     }
   }
 

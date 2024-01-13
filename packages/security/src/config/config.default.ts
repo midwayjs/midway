@@ -1,5 +1,4 @@
-import { SecurityOptions } from '../interface';
-
+import type { SecurityOptions } from '../interface';
 export const security: Partial<SecurityOptions> = {
   csrf: {
     enable: true,

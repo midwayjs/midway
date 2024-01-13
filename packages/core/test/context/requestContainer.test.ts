@@ -6,7 +6,7 @@ import {
   Inject,
   Provide,
   Scope,
-  ScopeEnum
+  ScopeEnum, SINGLETON_CONTAINER_CTX
 } from '../../src';
 import {
   AppService,
@@ -281,9 +281,9 @@ describe('/test/context/requestContainer.test.ts', () => {
     const a2 = await requestContainer2.getAsync(A);
     // 请求 ctx 是否正确
     expect(a1.ctx.c).toEqual(1);
-    expect(a1.b.ctx).toEqual({});
+    expect(a1.b.ctx).toEqual(SINGLETON_CONTAINER_CTX);
     expect(a2.ctx.d).toEqual(1);
-    expect(a2.b.ctx).toEqual({});
+    expect(a2.b.ctx).toEqual(SINGLETON_CONTAINER_CTX);
     // 是否同一单例
     expect(a1.aid).not.toEqual(a2.aid);
     expect(a1.b.bid).toEqual(a2.b.bid);
@@ -318,10 +318,10 @@ describe('/test/context/requestContainer.test.ts', () => {
     const requestContainer2 = new RequestContainer({d:1}, appCtx);
     const a2 = await requestContainer2.getAsync(A);
     // 请求 ctx 是否正确
-    expect(a1.ctx).toEqual({});
-    expect(a1.b.ctx).toEqual({});
-    expect(a2.ctx).toEqual({});
-    expect(a2.b.ctx).toEqual({});
+    expect(a1.ctx).toEqual(SINGLETON_CONTAINER_CTX);
+    expect(a1.b.ctx).toEqual(SINGLETON_CONTAINER_CTX);
+    expect(a2.ctx).toEqual(SINGLETON_CONTAINER_CTX);
+    expect(a2.b.ctx).toEqual(SINGLETON_CONTAINER_CTX);
     // 是否同一单例
     expect(a1.aid).toEqual(a2.aid);
     expect(a1.b.bid).toEqual(a2.b.bid);
@@ -356,5 +356,41 @@ describe('/test/context/requestContainer.test.ts', () => {
       requestContainer1.getAsync(A).catch(resolve);
     })
     expect(err).toBeInstanceOf(MidwaySingletonInjectRequestError);
+  });
+
+  it('should test get scope from object', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Request, { allowDowngrade: true})
+    class B {
+      bid = Math.random();
+      @Inject()
+      ctx;
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Singleton)
+    class A {
+      aid = Math.random();
+      @Inject()
+      bbb: B;
+    }
+
+    const appCtx = new Container();
+    appCtx.bind(A);
+    appCtx.bind(B);
+
+    const a = await appCtx.getAsync(A);
+    const b = await appCtx.getAsync(B);
+
+    expect(appCtx.getInstanceScope(a)).toEqual(ScopeEnum.Singleton);
+    expect(appCtx.getInstanceScope(b)).toEqual(ScopeEnum.Singleton);
+
+    // 创建请求作用域
+    const requestContainer = new RequestContainer({c:1}, appCtx);
+    const a1 = await requestContainer.getAsync(A);
+    const b1 = await requestContainer.getAsync(B);
+
+    expect(requestContainer.getInstanceScope(a1)).toEqual(ScopeEnum.Singleton);
+    expect(requestContainer.getInstanceScope(b1)).toEqual(ScopeEnum.Request);
   });
 });

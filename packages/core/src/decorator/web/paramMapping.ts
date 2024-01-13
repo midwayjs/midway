@@ -1,5 +1,9 @@
 import { createCustomParamDecorator, WEB_ROUTER_PARAM_KEY } from '../';
-import { IMidwayContext, PipeUnionTransform } from '../../interface';
+import {
+  IMidwayContext,
+  ParamDecoratorOptions,
+  PipeUnionTransform,
+} from '../../interface';
 
 export enum RouteParamTypes {
   QUERY = 'query',
@@ -58,9 +62,18 @@ export declare type CustomParamDecorator<T = unknown> =
 
 export const createRequestParamDecorator = function (
   transform: CustomParamDecorator,
-  pipes?: Array<PipeUnionTransform>
+  pipesOrOptions?: ParamDecoratorOptions | Array<PipeUnionTransform>
 ) {
-  return createParamMapping(RouteParamTypes.CUSTOM)(transform, pipes);
+  pipesOrOptions = pipesOrOptions || {};
+  if (Array.isArray(pipesOrOptions)) {
+    pipesOrOptions = {
+      pipes: pipesOrOptions as Array<PipeUnionTransform>,
+    };
+  }
+  return createParamMapping(RouteParamTypes.CUSTOM)(
+    transform,
+    pipesOrOptions.pipes
+  );
 };
 
 export const Session = (

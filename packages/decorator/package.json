@@ -1,8 +1,8 @@
 {
   "name": "@midwayjs/decorator",
-  "version": "3.10.10",
+  "version": "3.13.7",
   "description": "definition decorator for midway project",
-  "main": "dist/index",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
@@ -12,10 +12,10 @@
     "link": "npm link"
   },
   "dependencies": {
-    "@midwayjs/core": "^3.10.10"
+    "@midwayjs/core": "^3.13.7"
   },
   "devDependencies": {
-    "mm": "3.2.1"
+    "mm": "3.4.0"
   },
   "keywords": [
     "midway",

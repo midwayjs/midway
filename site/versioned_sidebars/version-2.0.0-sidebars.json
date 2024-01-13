@@ -12,14 +12,15 @@
         "service",
         "req_res_app",
         "web_middleware",
-        "deployment"
+        "deployment",
+        "v1_upgrade_v2"
       ]
     },
     {
       "type": "category",
       "label": "Web 技术",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "cookies",
         "session",
@@ -33,8 +34,8 @@
     {
       "type": "category",
       "label": "Web 框架",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "eggjs",
         "koa",
@@ -44,8 +45,8 @@
     {
       "type": "category",
       "label": "WebSocket",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "socketio",
         "ws"
@@ -54,8 +55,8 @@
     {
       "type": "category",
       "label": "通用能力",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         {
           "type": "doc",
@@ -174,102 +175,253 @@
     },
     {
       "type": "category",
-      "label": "升级",
+      "label": "Serverless",
       "collapsed": true,
       "collapsible": true,
       "items": [
-        {
-          "type": "doc",
-          "id": "v1_upgrade_v2",
-          "label": "从 Midway v1 升级到 v2"
-        }
-      ]
-    }
-  ],
-  "hooks": [
-    {
-      "type": "doc",
-      "id": "hooks/intro",
-      "label": "介绍"
-    },
-    {
-      "type": "category",
-      "label": "函数式",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        {
-          "type": "doc",
-          "id": "hooks/hooks_api",
-          "label": "接口开发 & 前端调用"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/hooks_syntax",
-          "label": "Hooks 语法"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/hooks_builtin",
-          "label": "内置 Hooks"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/hooks_route",
-          "label": "路由"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/hooks_middleware",
-          "label": "Web 中间件"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/hooks_component",
-          "label": "运行时配置 & Hooks 组件"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/hooks_debug",
-          "label": "本地调试"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/hooks_bff",
-          "label": "纯接口项目增加 Hooks 支持"
-        }
+        [
+          {
+            "type": "doc",
+            "id": "serverless/serverless_intro",
+            "label": "介绍"
+          },
+          {
+            "type": "doc",
+            "id": "serverless/serverless_v1_upgrade_serverless_v2"
+          },
+          {
+            "type": "category",
+            "label": "基础",
+            "collapsed": false,
+            "collapsible": false,
+            "items": [
+              "serverless/serverless_dev",
+              "serverless/serverless_testing",
+              "serverless/serverless_aggr",
+              "serverless/serverless_context",
+              "serverless/serverless_yml",
+              "serverless/serverless_environment",
+              "serverless/serverless_error"
+            ]
+          },
+          {
+            "type": "category",
+            "label": "平台能力：阿里云 FC",
+            "collapsed": false,
+            "collapsible": false,
+            "items": [
+              {
+                "type": "doc",
+                "id": "serverless/aliyun_trigger_event",
+                "label": "事件触发器（Event）"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/aliyun_trigger_http",
+                "label": "HTTP 触发器"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/aliyun_trigger_apigw",
+                "label": "API 网关"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/aliyun_trigger_timer",
+                "label": "Timer 触发器（定时任务）"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/aliyun_trigger_oss",
+                "label": "OSS 触发器（对象存储）"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/aliyun_trigger_mns",
+                "label": "MNS 触发器（消息队列）"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/deploy_to_aliyun",
+                "label": "发布到阿里云 FC"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/deploy_aliyun_faq",
+                "label": "阿里云发布 FAQ"
+              }
+            ]
+          },
+          {
+            "type": "category",
+            "label": "平台能力：腾讯云 SCF",
+            "collapsed": false,
+            "collapsible": false,
+            "items": [
+              {
+                "type": "doc",
+                "id": "serverless/tencent_trigger_apigw",
+                "label": "API 网关（HTTP）"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/tencent_trigger_timer",
+                "label": "Timer 触发器（定时任务）"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/tencent_trigger_cos",
+                "label": "COS 触发器（对象存储）"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/tencent_trigger_cmq",
+                "label": "CMQ 触发器（消息队列）"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/deploy_to_tencent",
+                "label": "发布到腾讯云 SCF"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/deploy_tencent_faq",
+                "label": "腾讯云发布 FAQ"
+              }
+            ]
+          },
+          {
+            "type": "category",
+            "label": "应用部署到弹性容器",
+            "collapsed": false,
+            "collapsible": false,
+            "items": [
+              {
+                "type": "doc",
+                "id": "serverless/app_deploy_serverless",
+                "label": "应用迁移方案说明"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/migrate_koa",
+                "label": "Koa 应用迁移"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/migrate_express",
+                "label": "Express 应用迁移"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/migrate_egg",
+                "label": "Egg/Midway 应用迁移"
+              },
+              {
+                "type": "doc",
+                "id": "serverless/migrate_static",
+                "label": "静态网站托管"
+              }
+            ]
+          },
+          {
+            "type": "doc",
+            "id": "serverless/serverless_post_difference",
+            "label": "Serverless 触发器 POST 情况差异"
+          }
+        ]
       ]
     },
     {
       "type": "category",
       "label": "一体化",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         {
           "type": "doc",
-          "id": "hooks/hooks_create",
-          "label": "项目初始化"
+          "id": "hooks/intro",
+          "label": "介绍"
         },
         {
-          "type": "doc",
-          "id": "hooks/hooks_custom_request",
-          "label": "自定义前端 SDK"
+          "type": "category",
+          "label": "基础功能",
+          "collapsed": false,
+          "collapsible": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "hooks/hooks_api",
+              "label": "接口开发 & 前端调用"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_syntax",
+              "label": "Hooks 语法"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_builtin",
+              "label": "内置 Hooks"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_route",
+              "label": "路由"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_middleware",
+              "label": "Web 中间件"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_component",
+              "label": "运行时配置 & Hooks 组件"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_debug",
+              "label": "本地调试"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_bff",
+              "label": "纯接口项目增加 Hooks 支持"
+            }
+          ]
         },
         {
-          "type": "doc",
-          "id": "hooks/oss_upload",
-          "label": "OSS 文件上传"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/hooks_miniprogram",
-          "label": "小程序一体化"
-        },
-        {
-          "type": "doc",
-          "id": "hooks/application_integration",
-          "label": "非 Serverless 环境使用一体化"
+          "type": "category",
+          "label": "一体化",
+          "collapsed": false,
+          "collapsible": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "hooks/hooks_create",
+              "label": "项目初始化"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_custom_request",
+              "label": "自定义前端 SDK"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/oss_upload",
+              "label": "OSS 文件上传"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/hooks_miniprogram",
+              "label": "小程序一体化"
+            },
+            {
+              "type": "doc",
+              "id": "hooks/application_integration",
+              "label": "非 Serverless 环境使用一体化"
+            }
+          ]
         }
       ]
     }
@@ -401,188 +553,6 @@
           "type": "doc",
           "id": "prometheus",
           "label": "接入 Prometheus"
-        }
-      ]
-    }
-  ],
-  "Serverless": [
-    {
-      "type": "doc",
-      "id": "serverless/serverless_intro",
-      "label": "介绍"
-    },
-    {
-      "type": "category",
-      "label": "基础",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        {
-          "type": "doc",
-          "id": "serverless/serverless_dev",
-          "label": "开发函数"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/serverless_testing",
-          "label": "测试函数"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/serverless_aggr",
-          "label": "聚合部署"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/serverless_context",
-          "label": "函数上下文"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/serverless_yml",
-          "label": "f.yml 定义"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/serverless_environment",
-          "label": "部署环境"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/serverless_error",
-          "label": "默认错误行为"
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "平台能力：阿里云 FC",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "serverless/aliyun_trigger_event",
-          "label": "事件触发器（Event）"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/aliyun_trigger_http",
-          "label": "HTTP 触发器"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/aliyun_trigger_apigw",
-          "label": "API 网关"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/aliyun_trigger_timer",
-          "label": "Timer 触发器（定时任务）"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/aliyun_trigger_oss",
-          "label": "OSS 触发器（对象存储）"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/aliyun_trigger_mns",
-          "label": "MNS 触发器（消息队列）"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/deploy_to_aliyun",
-          "label": "发布到阿里云 FC"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/deploy_aliyun_faq",
-          "label": "阿里云发布 FAQ"
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "平台能力：腾讯云 SCF",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "serverless/tencent_trigger_apigw",
-          "label": "API 网关（HTTP）"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/tencent_trigger_timer",
-          "label": "Timer 触发器（定时任务）"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/tencent_trigger_cos",
-          "label": "COS 触发器（对象存储）"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/tencent_trigger_cmq",
-          "label": "CMQ 触发器（消息队列）"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/deploy_to_tencent",
-          "label": "发布到腾讯云 SCF"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/deploy_tencent_faq",
-          "label": "腾讯云发布 FAQ"
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "应用部署到 Serverless 环境",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "serverless/app_deploy_serverless",
-          "label": "应用迁移方案说明"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/migrate_koa",
-          "label": "Koa 应用迁移"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/migrate_express",
-          "label": "Express 应用迁移"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/migrate_egg",
-          "label": "Egg/Midway 应用迁移"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/migrate_static",
-          "label": "静态网站托管"
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "迁移和升级",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "serverless/serverless_v1_upgrade_serverless_v2",
-          "label": "从 Serverless v1 迁移到 v2"
         }
       ]
     }

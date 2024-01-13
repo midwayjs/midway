@@ -6,7 +6,7 @@
 
 ## 启用组件
 
-组件一般以 npm 包形式进行复用。每个组件都是一个可以被直接 `require` 的代码包。我们以 `@midawyjs/validate` 组件为例。
+组件一般以 npm 包形式进行复用。每个组件都是一个可以被直接 `require` 的代码包。我们以 `@midwayjs/validate` 组件为例。
 
 首先，在应用中加入依赖。
 
@@ -29,7 +29,7 @@ import * as validate from '@midwayjs/validate';
 @Configuration({
   imports: [validate],
 })
-export class ContainerLifeCycle {}
+export class MainConfiguration {}
 ```
 
 
@@ -53,7 +53,7 @@ import * as info from '@midwayjs/info';
     },
   ],
 })
-export class ContainerLifeCycle {}
+export class MainConfiguration {}
 ```
 
 - `component` 用于指定组件对象，组件对象必须包含一个 `Configuration` 导出的属性

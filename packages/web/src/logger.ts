@@ -1,27 +1,17 @@
-import {
-  loggers,
-  ILogger,
-  IMidwayLogger,
-  LoggerOptions,
-} from '@midwayjs/logger';
+import { loggers, ILogger, LoggerOptions } from '@midwayjs/logger';
 import { join, isAbsolute, dirname, basename } from 'path';
-import { existsSync, lstatSync, statSync, renameSync, unlinkSync } from 'fs';
 import { Application, EggLogger } from 'egg';
-import { getCurrentDateString } from './utils';
-import * as os from 'os';
 import {
   MidwayLoggerService,
   getCurrentApplicationContext,
   MidwayConfigService,
 } from '@midwayjs/core';
 import { debuglog } from 'util';
+import { extend } from '@midwayjs/core';
+import * as loggerModule from '@midwayjs/logger';
 
+const isV3Logger = loggerModule['formatLegacyLoggerOptions'];
 const debug = debuglog('midway:debug');
-const isWindows = os.platform() === 'win32';
-
-function isEmptyFile(p: string) {
-  return statSync(p).size === 0;
-}
 
 const levelTransform = level => {
   // egg 自定义日志，不设置 level，默认是 info
@@ -52,26 +42,6 @@ const levelTransform = level => {
       return 'silly';
   }
 };
-
-function checkEggLoggerExistsAndBackup(dir, fileName) {
-  const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
-  try {
-    if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
-      // 如果是空文件，则直接删了，否则加入备份队列
-      if (isEmptyFile(file)) {
-        // midway 的软链在 windows 底下也不会创建出来，在 windows 底下就不做文件删除了
-        if (!isWindows) {
-          unlinkSync(file);
-        }
-      } else {
-        const timeFormat = getCurrentDateString();
-        renameSync(file, file + '.' + timeFormat + '_eggjs_bak');
-      }
-    }
-  } catch (err) {
-    // ignore
-  }
-}
 
 function cleanUndefinedProperty(obj) {
   Object.keys(obj).forEach(key => {
@@ -130,11 +100,20 @@ class MidwayLoggers extends Map<string, ILogger> {
       }
     }
 
-    const loggerConfig = configService.getConfiguration('midwayLogger');
+    let loggerConfig = configService.getConfiguration('midwayLogger');
+    // 这里属于 hack 了，cluster 模式下会先走这里，找不到默认值
+    // 先合并一遍默认配置
+    configService.addObject(
+      loggers.getDefaultMidwayLoggerConfig(configService.getAppInfo()),
+      true
+    );
+    loggerConfig = configService.getConfiguration('midwayLogger');
 
+    // 这里利用了 loggers 缓存的特性，提前初始化 logger
     if (loggerConfig) {
       for (const id of Object.keys(loggerConfig.clients)) {
-        const config = Object.assign(
+        const config = extend(
+          true,
           {},
           loggerConfig['default'],
           loggerConfig.clients[id]
@@ -151,7 +130,12 @@ class MidwayLoggers extends Map<string, ILogger> {
     // 初始化日志服务
     this.loggerService = getCurrentApplicationContext().get(
       MidwayLoggerService,
-      [getCurrentApplicationContext()]
+      [
+        getCurrentApplicationContext(),
+        {
+          loggerFactory: loggers,
+        },
+      ]
     );
     // 防止循环枚举报错
     Object.defineProperty(this, 'loggerService', {
@@ -160,10 +144,6 @@ class MidwayLoggers extends Map<string, ILogger> {
   }
 
   createLogger(options, loggerKey: string) {
-    /**
-     * 提前备份 egg 日志
-     */
-    checkEggLoggerExistsAndBackup(options.dir, options.fileLogName);
     let logger: ILogger = loggers.createLogger(loggerKey, options);
 
     // overwrite values for pandora collect
@@ -189,10 +169,15 @@ class MidwayLoggers extends Map<string, ILogger> {
 
   disableConsole() {
     for (const value of this.values()) {
-      if ((value as IMidwayLogger)?.disableConsole) {
-        (value as IMidwayLogger)?.disableConsole();
-      } else if ((value as EggLogger).disable) {
-        (value as EggLogger).disable('console');
+      if ((value as any)?.['disableConsole']) {
+        (value as any).disableConsole();
+      } else if ((value as unknown as EggLogger).disable) {
+        (value as unknown as EggLogger).disable('console');
+      } else if (isV3Logger) {
+        // v3
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        (value as any).get('console')?.level = 'none';
       }
     }
   }
@@ -200,8 +185,8 @@ class MidwayLoggers extends Map<string, ILogger> {
   reload() {
     // 忽略 midway logger，只有 egg logger 需要做切割
     for (const value of this.values()) {
-      if ((value as EggLogger).reload) {
-        (value as EggLogger).reload();
+      if ((value as unknown as EggLogger).reload) {
+        (value as unknown as EggLogger).reload();
       }
     }
   }
@@ -223,16 +208,18 @@ class MidwayLoggers extends Map<string, ILogger> {
         // 绝对路径，单独处理
         options.dir = dirname(file);
         options.fileLogName = basename(file);
+
         options.auditFileDir =
-          midwayLoggerConfig.auditFileDir === '.audit'
-            ? join(midwayLoggerConfig.dir, '.audit')
-            : midwayLoggerConfig.auditFileDir;
+          midwayLoggerConfig['auditFileDir'] === '.audit'
+            ? join(midwayLoggerConfig['dir'], '.audit')
+            : midwayLoggerConfig['auditFileDir'];
         options.errorDir =
-          midwayLoggerConfig.errorDir ?? midwayLoggerConfig.dir;
+          midwayLoggerConfig['errorDir'] ?? midwayLoggerConfig['dir'];
       } else {
         // 相对路径，使用默认的 dir 即可
         options.fileLogName = file;
       }
+
       transformLoggerConfig.midwayLogger.clients[name] = {
         level: levelTransform(eggCustomLogger[name]?.level),
         consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),

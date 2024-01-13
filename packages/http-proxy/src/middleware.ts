@@ -103,7 +103,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     res.status = proxyResponse.status;
     if (isSupportStream) {
       await new Promise(resolve => {
-        proxyResponse.data.on('finish', () => {
+        targetRes.on('finish', () => {
           if (targetRes.end) {
             targetRes.end();
           }

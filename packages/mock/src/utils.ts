@@ -1,14 +1,13 @@
 import {
   IMidwayContainer,
   IMidwayFramework,
-  safeRequire,
   Configuration,
+  loadModule,
 } from '@midwayjs/core';
 import { ComponentModule } from './interface';
 import * as os from 'os';
 import * as assert from 'assert';
-import { promises } from 'fs';
-const { access, unlink, constants } = promises;
+import * as fs from 'fs';
 
 export function isTestEnvironment() {
   const testEnv = ['test', 'unittest'];
@@ -38,18 +37,22 @@ export function findFirstExistModule(moduleList): ComponentModule {
  * transform a framework component or framework module to configuration class
  * @param Framework
  */
-export function transformFrameworkToConfiguration<
+export async function transformFrameworkToConfiguration<
   T extends IMidwayFramework<any, any, any>
 >(
-  Framework: any
-): {
+  Framework: any,
+  loadMode: 'commonjs' | 'esm'
+): Promise<{
   [key: string]: any;
   Configuration: any;
-} {
+}> {
   if (!Framework) return null;
   let CustomFramework = Framework;
   if (typeof Framework === 'string') {
-    Framework = safeRequire(Framework);
+    Framework = await loadModule(Framework, {
+      loadMode,
+      safeLoad: true,
+    });
   }
 
   if (Framework.Configuration) {
@@ -82,8 +85,8 @@ export function transformFrameworkToConfiguration<
 
 export async function removeFile(file: string) {
   try {
-    await access(file, constants.W_OK);
-    await unlink(file);
+    await fs.promises.access(file, fs.constants.W_OK);
+    await fs.promises.unlink(file);
   } catch {
     // ignore
   }
@@ -113,4 +116,34 @@ export function mergeGlobalConfig(
   }
 
   return globalConfig;
+}
+
+/**
+ * 解析命令行参数的函数。
+ * 它接受一个字符串数组作为输入，然后解析这个数组，
+ * 将形如 `--key value` 或 `--key=value` 的参数转换为对象的键值对，
+ * 形如 `--key` 的参数转换为 `{ key: true }`。
+ * @param argv 命令行参数数组
+ * @returns 解析后的参数对象
+ */
+export function processArgsParser(argv: string[]) {
+  const args = argv.slice(2);
+  const result = {};
+
+  args.forEach((arg, index) => {
+    if (arg.startsWith('--')) {
+      let value;
+      let key = arg.slice(2);
+      if (key.includes('=')) {
+        [key, value] = key.split('=');
+      } else if (args[index + 1] && !args[index + 1].startsWith('--')) {
+        value = args[index + 1];
+      } else {
+        value = true;
+      }
+      result[key] = value;
+    }
+  });
+
+  return result;
 }

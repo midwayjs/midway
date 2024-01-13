@@ -108,7 +108,7 @@ import * as kafka from '@midwayjs/kafka';
   ],
   // ...
 })
-export class ContainerLifeCycle {
+export class MainConfiguration {
   async onReady() {
         // ...
   }
@@ -409,7 +409,6 @@ export class KafkaService {
   @Config('kafka')
   kafkaConfig: any;
 
-  private connection;
   private producer;
 
   @Init()
@@ -421,7 +420,7 @@ export class KafkaService {
       brokers: brokers
     });
     this.producer = client.producer(producerConfig);
-    this.connection = await this.producer.connect();
+    await this.producer.connect();
   }
 
   // Send a message
@@ -431,7 +430,7 @@ export class KafkaService {
 
   @Destroy()
   async close() {
-    await this.connection.close();
+    await this.producer.disconnect();
   }
 }
 

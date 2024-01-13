@@ -20,7 +20,7 @@ import {
   RouterPriority,
 } from './webRouterService';
 import { MidwayContainer } from '../context/container';
-import { DirectoryFileDetector } from '../common/fileDetector';
+import { CommonJSFileDetector } from '../common/fileDetector';
 import { getCurrentMainFramework } from '../util/contextUtil';
 import { FaaSMetadata, ScopeEnum } from '../interface';
 
@@ -133,7 +133,12 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
           functionMeta['functionName'] ??
           webRouter?.['metadata']?.['functionName'] ??
           createFunctionName(module, webRouter['methodName']);
+        const funcHandlerName =
+          functionMeta['handlerName'] ??
+          webRouter?.['metadata']?.['handlerName'] ??
+          data.funcHandlerName;
         data.functionName = functionName;
+        data.funcHandlerName = funcHandlerName;
         data.functionTriggerName = webRouter['type'];
         data.functionTriggerMetadata = webRouter['metadata'];
         data.functionMetadata = {
@@ -152,6 +157,11 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
           functionMeta['functionName'] ??
           webRouter?.['metadata']?.['functionName'] ??
           createFunctionName(module, webRouter['methodName']);
+
+        const funcHandlerName =
+          functionMeta['handlerName'] ??
+          webRouter?.['metadata']?.['handlerName'] ??
+          `${controllerId}.${webRouter['methodName']}`;
         // 其他类型的函数
         this.checkDuplicateAndPush(prefix, {
           id,
@@ -163,7 +173,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
           description: '',
           summary: '',
           handlerName: `${controllerId}.${webRouter['methodName']}`,
-          funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
+          funcHandlerName: funcHandlerName,
           controllerId,
           middleware: webRouter['metadata']?.['middleware'] || [],
           controllerMiddleware: [],
@@ -257,7 +267,7 @@ export class WebRouterCollector {
         const container = new MidwayContainer();
         bindContainer(container);
         container.setFileDetector(
-          new DirectoryFileDetector({
+          new CommonJSFileDetector({
             loadDir: this.baseDir,
           })
         );

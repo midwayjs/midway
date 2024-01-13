@@ -3,15 +3,16 @@ import { readFileSync } from 'fs';
 import { debuglog } from 'util';
 import * as transformer from 'class-transformer';
 import { PathToRegexpUtil } from './pathToRegexp';
-import { MidwayCommonError } from '../error';
-import { FunctionMiddleware } from '../interface';
+import { MidwayCodeInvokeTimeoutError, MidwayCommonError } from '../error';
+import { FunctionMiddleware, IgnoreMatcher } from '../interface';
 import { camelCase, pascalCase } from './camelCase';
 import { randomUUID } from './uuid';
 import { safeParse, safeStringify } from './flatted';
 import * as crypto from 'crypto';
 import { Types } from './types';
+import { pathToFileURL } from 'url';
 
-const debug = debuglog('midway:container:util');
+const debug = debuglog('midway:debug');
 
 /**
  * @since 2.0.0
@@ -47,12 +48,80 @@ export const safeRequire = (p, enabledCache = true) => {
       return JSON.parse(content);
     }
   } catch (err) {
-    debug(`SafeRequire Warning, message = ${err.message}`);
+    debug(`[core]: SafeRequire Warning\n\n${err.message}\n`);
     return undefined;
   }
 };
 
+const innerLoadModuleCache = {};
+
 /**
+ * load module, and it can be chosen commonjs or esm mode
+ * @param p
+ * @param options
+ * @since 3.12.0
+ */
+export const loadModule = async (
+  p: string,
+  options: {
+    enableCache?: boolean;
+    loadMode?: 'commonjs' | 'esm';
+    safeLoad?: boolean;
+  } = {}
+) => {
+  options.enableCache = options.enableCache ?? true;
+  options.safeLoad = options.safeLoad ?? false;
+  options.loadMode = options.loadMode ?? 'commonjs';
+
+  if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
+    p = resolve(dirname(module.parent.filename), p);
+  }
+
+  debug(
+    `[core]: load module ${p}, cache: ${options.enableCache}, mode: ${options.loadMode}, safeLoad: ${options.safeLoad}`
+  );
+
+  try {
+    if (options.enableCache) {
+      if (options.loadMode === 'commonjs') {
+        return require(p);
+      } else {
+        // if json file, import need add options
+        if (p.endsWith('.json')) {
+          /**
+           * attention: import json not support under nodejs 16
+           * use readFileSync instead
+           */
+          if (!innerLoadModuleCache[p]) {
+            // return (await import(p, { assert: { type: 'json' } })).default;
+            const content = readFileSync(p, {
+              encoding: 'utf-8',
+            });
+            innerLoadModuleCache[p] = JSON.parse(content);
+          }
+          return innerLoadModuleCache[p];
+        } else {
+          return await import(pathToFileURL(p).href);
+        }
+      }
+    } else {
+      const content = readFileSync(p, {
+        encoding: 'utf-8',
+      });
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    if (!options.safeLoad) {
+      throw err;
+    } else {
+      debug(`[core]: SafeLoadModule Warning\n\n${err.message}\n`);
+      return undefined;
+    }
+  }
+};
+
+/**
+ *  @example
  *  safelyGet(['a','b'],{a: {b: 2}})  // => 2
  *  safelyGet(['a','b'],{c: {b: 2}})  // => undefined
  *  safelyGet(['a','1'],{a: {"1": 2}})  // => 2
@@ -284,7 +353,11 @@ export function toPathMatch(pattern) {
   );
 }
 
-export function pathMatching(options) {
+export function pathMatching(options: {
+  match?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  ignore?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  thisResolver?: any;
+}) {
   options = options || {};
   if (options.match && options.ignore)
     throw new MidwayCommonError(
@@ -292,9 +365,36 @@ export function pathMatching(options) {
     );
   if (!options.match && !options.ignore) return () => true;
 
+  if (options.match && !Array.isArray(options.match)) {
+    options.match = [options.match];
+  }
+
+  if (options.ignore && !Array.isArray(options.ignore)) {
+    options.ignore = [options.ignore];
+  }
+
+  const createMatch = (ignoreMatcherArr: IgnoreMatcher<any>[]) => {
+    const matchedArr = ignoreMatcherArr.map(item => {
+      if (options.thisResolver) {
+        return toPathMatch(item).bind(options.thisResolver);
+      }
+      return toPathMatch(item);
+    });
+
+    return ctx => {
+      for (let i = 0; i < matchedArr.length; i++) {
+        const matched = matchedArr[i](ctx);
+        if (matched) {
+          return true;
+        }
+      }
+      return false;
+    };
+  };
+
   const matchFn = options.match
-    ? toPathMatch(options.match)
-    : toPathMatch(options.ignore);
+    ? createMatch(options.match as IgnoreMatcher<any>[])
+    : createMatch(options.ignore as IgnoreMatcher<any>[]);
 
   return function pathMatch(ctx?) {
     const matched = matchFn(ctx);
@@ -427,6 +527,109 @@ export function toAsyncFunction<T extends (...args) => any>(
   }
 }
 
+export function isTypeScriptEnvironment() {
+  const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
+  if ('false' === TS_MODE_PROCESS_FLAG) {
+    return false;
+  }
+  // eslint-disable-next-line node/no-deprecated-api
+  return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
+}
+
+/**
+ * Create a Promise that resolves after the specified time
+ * @param options
+ */
+export async function createPromiseTimeoutInvokeChain<Result>(options: {
+  promiseItems: Array<
+    Promise<any> | { item: Promise<any>; meta?: any; timeout?: number }
+  >;
+  timeout: number;
+  methodName: string;
+  onSuccess?: (result: any, meta: any) => Result | Promise<Result>;
+  onFail: (err: Error, meta: any) => Result | Promise<Result>;
+  isConcurrent?: boolean;
+}): Promise<Result[]> {
+  if (!options.onSuccess) {
+    options.onSuccess = async result => {
+      return result as Result;
+    };
+  }
+  options.isConcurrent = options.isConcurrent ?? true;
+  options.promiseItems = options.promiseItems.map(item => {
+    if (item instanceof Promise) {
+      return { item };
+    } else {
+      return item;
+    }
+  });
+
+  // filter promise
+  options.promiseItems = options.promiseItems.filter(item => {
+    return item['item'] instanceof Promise;
+  });
+
+  if (options.isConcurrent) {
+    // For each check item, we create a timeout Promise
+    const checkPromises = options.promiseItems.map(item => {
+      const timeoutPromise = new Promise((_, reject) => {
+        // The timeout Promise fails after the specified time
+        setTimeout(
+          () =>
+            reject(
+              new MidwayCodeInvokeTimeoutError(
+                options.methodName,
+                item['timeout'] ?? options.timeout
+              )
+            ),
+          item['timeout'] ?? options.timeout
+        );
+      });
+      // We use Promise.race to wait for either the check item or the timeout Promise
+      return (
+        Promise.race([item['item'], timeoutPromise])
+          // If the check item Promise resolves, we set the result to success
+          .then(re => {
+            return options.onSuccess(re, item['meta']);
+          })
+          // If the timeout Promise resolves (i.e., the check item Promise did not resolve in time), we set the result to failure
+          .catch(err => {
+            return options.onFail(err, item['meta']);
+          })
+      );
+    });
+    return Promise.all(checkPromises);
+  } else {
+    const results = [];
+    for (const item of options.promiseItems) {
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(
+          () =>
+            reject(
+              new MidwayCodeInvokeTimeoutError(
+                options.methodName,
+                item['timeout'] ?? options.timeout
+              )
+            ),
+          item['timeout'] ?? options.timeout
+        );
+      });
+      try {
+        const result = await Promise.race([item['item'], timeoutPromise]).then(
+          re => {
+            return options.onSuccess(re, item['meta']);
+          }
+        );
+        results.push(result);
+      } catch (error) {
+        results.push(options.onFail(error, item['meta']));
+        break;
+      }
+    }
+    return results;
+  }
+}
+
 export const Utils = {
   sleep,
   getParamNames,
@@ -437,4 +640,5 @@ export const Utils = {
   toAsyncFunction,
   safeStringify,
   safeParse,
+  isTypeScriptEnvironment,
 };

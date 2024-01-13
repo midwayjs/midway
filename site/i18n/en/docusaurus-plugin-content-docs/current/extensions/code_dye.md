@@ -1,58 +1,78 @@
-## Code-Dye 代码染色组件
+# Code dyeing
 
-Code dye components are applicable to `@midwayjs/faas`, `@midwayjs/web`, `@midwayjs/koa`, and `@midwayjs/express` frameworks.
+Code dyeing components for `@midwayjs/faas`, `@midwayjs/web`, `@midwayjs/koa` and `@midwayjs/express` frameworks.
 
-Related information:
+It is used to display the time-consuming call link and the input and output parameters of each method in the HTTP scenario, helping you locate code problems faster.
 
-| Web support |      |
-| ----------------- | ---- |
-| @midwayjs/koa | ✅ |
-| @midwayjs/faas | ✅ |
-| @midwayjs/web | ✅ |
-| @midwayjs/express | ✅ |
+for example:
 
++ code execution is slow
+   - I don’t know which method executes slowly: After code dyeing, you can check the execution time of each `method`.
++ code execution error
+   - It may be that the method is not transferred: after code dyeing, you can view each `method call chain`.
+   - It may be that the method call parameter is wrong: After the code is dyed, check the input parameter and return value of each `method`
 
-### Scenes that can be used
+Effect:
 
-Clearly show the time-consuming of calling links and the parameters of each method to help you locate code problems faster.。
-
-+ Code execution is slow
-  - When you don't know which method is slow to execute: after dyeing with code, you can check the `execution duration of each method`。
-+ Code execution error
-  - It may be that the method is not tuned: after dyeing with the code, you can view every `call chain' of the method`。
-  - It may be that there is an error in the method call parameter: after dyeing through the code, view each `input parameter and return value' of the method`
-
-
-### Effect
 ![](https://gw.alicdn.com/imgextra/i1/O1CN017Zd6y628M2PvqJO7I_!!6000000007917-2-tps-2392-844.png)
 
-### Install
 
-1. Installation dependency
+
+
+Related Information:
+
+| web support       |      |
+| ----------------- | ---- |
+| @midwayjs/koa     | ✅    |
+| @midwayjs/faas    | ✅    |
+| @midwayjs/web     | ✅    |
+| @midwayjs/express | ✅    |
+
+
+
+## Install dependencies
 
 ```bash
-$ npm i @midwayjs/code-dye --save
+$ npm i @midwayjs/code-dye@3 --save
 ```
 
-2. Introduce components into configuration
+Or add the following dependencies in `package.json` and reinstall.
+
+```json
+{
+   "dependencies": {
+     "@midwayjs/code-dye": "^3.0.0"
+     //...
+   },
+}
+```
+
+
+
+## Enable component
+
+Configure the code-dye component into the code.
 
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/core';
 import * as codeDye from '@midwayjs/code-dye';
+
 @Configuration({
-  imports: [
-    // ...
-    {
-      component: codeDye,
-      enabledEnvironment: ['local'],	// Enabled locally only
-    }
-  ],
+   imports: [
+     //...
+     {
+       component: codeDye,
+       enabledEnvironment: ['local'], // only enabled locally
+     }
+   ],
 })
 export class MainConfiguration {}
 ```
 
-### configuration
+
+
+
 
 :::tip
 
@@ -60,7 +80,9 @@ export class MainConfiguration {}
 
 :::
 
-#### Enable coloring
+
+
+## Configure coloring
 
 You can use `matchQueryKey` configuration to control when the `query` parameter contains the value corresponding to `matchQueryKey` configuration, to enter the dye link, for example, the configuration is:
 
@@ -72,6 +94,7 @@ export default {
    }
 }
 ```
+
 When requesting the interface `http://127.0.0.1:7001/test?codeDyeABC=html`, it will judge whether `codeDyeABC` parameter exists in `query` to decide whether to dye or not, and respond differently according to the corresponding value of the parameter the staining results.
 
 You can also use the `matchHeaderKey` configuration to control when the `headers` parameter contains the value corresponding to the `matchHeaderKey` configuration, to enter the dye link. For example, the configuration is:
@@ -84,10 +107,12 @@ export default {
    }
 }
 ```
+
 When requesting the interface `http://127.0.0.1:7001/test`, it will judge whether there is a `codeDyeHeader` parameter in the `headers` of the request to decide whether to dye, and respond to different dyeing according to the corresponding value of the parameter result.
 
 
-#### Dyeing results
+
+## Dye report
 
 After code coloring is enabled, the result of link coloring can be configured by enabling different parameter values for coloring. Currently, the following three types are supported:
 

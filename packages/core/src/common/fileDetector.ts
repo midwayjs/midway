@@ -8,16 +8,17 @@ import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { getProviderName } from '../decorator';
+import { loadModule } from '../util';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
   extraDetectorOptions: T;
-  constructor(options) {
+  constructor(options?: T) {
     this.options = options;
     this.extraDetectorOptions = {} as T;
   }
 
-  abstract run(container: IMidwayContainer);
+  abstract run(container: IMidwayContainer): void | Promise<void>;
 
   setExtraDetectorOptions(detectorOptions: T) {
     this.extraDetectorOptions = detectorOptions;
@@ -38,7 +39,10 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/__test__/**',
 ].concat(IGNORE_PATTERN);
 
-export class DirectoryFileDetector extends AbstractFileDetector<{
+/**
+ * CommonJS module loader
+ */
+export class CommonJSFileDetector extends AbstractFileDetector<{
   loadDir?: string | string[];
   pattern?: string | string[];
   ignore?: string | string[];
@@ -48,9 +52,18 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
   private duplicateModuleCheckSet = new Map();
 
   run(container) {
-    const loadDirs = []
-      .concat(this.options.loadDir || [])
-      .concat(this.extraDetectorOptions.loadDir || []);
+    if (this.getType() === 'commonjs') {
+      return this.loadSync(container);
+    } else {
+      return this.loadAsync(container);
+    }
+  }
+
+  loadSync(container) {
+    this.options = this.options || {};
+    const loadDirs = [].concat(
+      this.options.loadDir ?? container.get('baseDir')
+    );
 
     for (const dir of loadDirs) {
       const fileResults = run(
@@ -102,13 +115,85 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
     // check end
     this.duplicateModuleCheckSet.clear();
   }
+
+  async loadAsync(container) {
+    this.options = this.options || {};
+    const loadDirs = [].concat(
+      this.options.loadDir ?? container.get('baseDir')
+    );
+
+    for (const dir of loadDirs) {
+      const fileResults = run(
+        DEFAULT_GLOB_PATTERN.concat(this.options.pattern || []).concat(
+          this.extraDetectorOptions.pattern || []
+        ),
+        {
+          cwd: dir,
+          ignore: DEFAULT_IGNORE_PATTERN.concat(
+            this.options.ignore || []
+          ).concat(this.extraDetectorOptions.ignore || []),
+        }
+      );
+
+      // 检查重复模块
+      const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {
+        if (
+          (this.options.conflictCheck ||
+            this.extraDetectorOptions.conflictCheck) &&
+          Types.isClass(module)
+        ) {
+          const name = getProviderName(module);
+          if (name) {
+            if (this.duplicateModuleCheckSet.has(name)) {
+              throw new MidwayDuplicateClassNameError(
+                name,
+                options.srcPath,
+                this.duplicateModuleCheckSet.get(name)
+              );
+            } else {
+              this.duplicateModuleCheckSet.set(name, options.srcPath);
+            }
+          }
+        }
+      };
+
+      for (const file of fileResults) {
+        const exports = await loadModule(file, {
+          loadMode: 'esm',
+        });
+        // add module to set
+        container.bindClass(exports, {
+          namespace: this.options.namespace,
+          srcPath: file,
+          createFrom: 'file',
+          bindHook: checkDuplicatedHandler,
+        });
+      }
+    }
+
+    // check end
+    this.duplicateModuleCheckSet.clear();
+  }
+
+  getType(): 'commonjs' | 'module' {
+    return 'commonjs';
+  }
+}
+
+/**
+ * ES module loader
+ */
+export class ESModuleFileDetector extends CommonJSFileDetector {
+  getType(): 'commonjs' | 'module' {
+    return 'module';
+  }
 }
 
 export class CustomModuleDetector extends AbstractFileDetector<{
   modules?: any[];
   namespace?: string;
 }> {
-  run(container) {
+  async run(container) {
     for (const module of this.options.modules) {
       container.bindClass(module, {
         namespace: this.options.namespace,

@@ -479,6 +479,19 @@ Timeout - Async callback was not invoked within the 5000 ms timeout specified by
 ```
 The default time for jest is **5000ms(5 seconds)**. You can adjust it to more.
 
+Can be modified at startup via `package.json`.
+
+```javascript
+// jest.setup.js
+{
+  "scripts": {
+    "test": "midway-bin test --ts --testTimeout=30000"
+  }
+}
+```
+
+Here `testTimeout` is the startup parameter of jest.
+
 
 You can write the following code in the `jest.setup.js` file to adjust the jest timeout period.
 

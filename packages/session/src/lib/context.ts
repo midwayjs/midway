@@ -223,7 +223,7 @@ export class ContextSession {
    * @api public
    */
 
-  async commit() {
+  async commit({ save = false, regenerate = false } = {}) {
     const session = this.session;
     const opts = this.opts;
     const ctx = this.ctx;
@@ -237,7 +237,16 @@ export class ContextSession {
       return;
     }
 
-    const reason = this._shouldSaveSession();
+    if (regenerate) {
+      await this.remove();
+      if (this.store) this.externalKey = opts.genid && opts.genid(ctx);
+    }
+
+    // force save session when `session._requireSave` set
+    const reason =
+      save || regenerate || session._requireSave
+        ? 'force'
+        : this._shouldSaveSession();
     debug('should save session: %s', reason);
     if (!reason) return;
 
@@ -252,9 +261,6 @@ export class ContextSession {
   _shouldSaveSession() {
     const prevHash = this.prevHash;
     const session = this.session;
-
-    // force save session when `session._requireSave` set
-    if (session._requireSave) return 'force';
 
     // do nothing if new and not populated
     const json = session.toJSON();
