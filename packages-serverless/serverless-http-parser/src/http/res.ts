@@ -46,8 +46,9 @@ export class HTTPResponse extends Writable {
     callback: (error?: Error | null | undefined) => void
   ): void {
     this._streaming = true;
-    this.checkStreaming();
-    this.options.writeableImpl.write(chunk, encoding);
+    if (this.options.writeableImpl) {
+      this.options.writeableImpl.write(chunk, encoding);
+    }
     callback();
   }
 
@@ -55,15 +56,10 @@ export class HTTPResponse extends Writable {
   end(chunk: any, cb?: () => void): this;
   end(chunk: any, encoding: BufferEncoding, cb?: () => void): this;
   end(chunk?: any, encoding?: any, cb?: any): this {
-    this.checkStreaming();
-    super.end(chunk, encoding, cb);
-    return this;
-  }
-
-  private checkStreaming() {
-    if (!this.options.writeableImpl) {
-      throw new Error('Current platform not support return value by stream.');
+    if (this.options.writeableImpl) {
+      super.end(chunk, encoding, cb);
     }
+    return this;
   }
 
   get streaming() {
