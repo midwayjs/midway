@@ -1,4 +1,4 @@
-# 脚手架工具
+# 脚手架
 
 Midway 编写了 `create-midway` 包，通过 npx 命令，可以方便的使用 `npm init midway` 命令创建脚手架。
 

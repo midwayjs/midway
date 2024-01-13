@@ -1,4 +1,4 @@
-# Scaffoldingtools
+# Scaffolding
 
 Midway has written the `create-midway` package. Through the npx command, you can easily use the `npm init midway` command to create scaffolding.
 

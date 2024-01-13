@@ -87,36 +87,13 @@
       "collapsible": true,
       "items": [
         [
-          {
-            "type": "doc",
-            "id": "serverless/serverless_intro",
-            "label": "介绍"
-          },
-          {
-            "type": "doc",
-            "id": "serverless/serverless_v2_upgrade_serverless_v3"
-          },
-          {
-            "type": "category",
-            "label": "基础",
-            "collapsed": false,
-            "collapsible": false,
-            "items": [
-              "serverless/serverless_dev",
-              "serverless/serverless_testing",
-              "serverless/serverless_context",
-              "serverless/serverless_error"
-            ]
-          },
-          {
-            "type": "category",
-            "label": "平台支持",
-            "collapsed": false,
-            "collapsible": false,
-            "items": [
-              "serverless/aliyun_faas"
-            ]
-          }
+          "serverless/serverless_intro",
+          "serverless/serverless_v2_upgrade_serverless_v3",
+          "serverless/serverless_dev",
+          "serverless/serverless_testing",
+          "serverless/serverless_context",
+          "serverless/serverless_error",
+          "serverless/aliyun_faas"
         ]
       ]
     },
@@ -170,6 +147,47 @@
             "hooks/deploy"
           ]
         }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "开发工具",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        "tool/create_midway",
+        "tool/mwtsc",
+        "tool/mwts",
+        "tool/luckyeye",
+        "tool/egg-ts-helper",
+        "tool/cli"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "常见问题",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        "faq/framework_problem",
+        "faq/git_problem",
+        "faq/npm_problem",
+        "faq/ts_problem",
+        "faq/alias_path",
+        "how_to_install_nodejs",
+        "ops/ecs_start_err",
+        "midway_slow_problem"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "其他",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        "release_schedule",
+        "contributing",
+        "awesome_midway"
       ]
     }
   ],
@@ -270,57 +288,6 @@
         "extensions/cfork",
         "extensions/alinode",
         "extensions/prometheus"
-      ]
-    }
-  ],
-  "other": [
-    {
-      "type": "category",
-      "label": "工具",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "tool/create_midway",
-        "tool/mwtsc",
-        "tool/cli",
-        "tool/mwts",
-        "tool/luckyeye",
-        "tool/egg-ts-helper"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "运维",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "ops/ecs_start_err"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "常见问题",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "faq/framework_problem",
-        "faq/git_problem",
-        "faq/npm_problem",
-        "faq/ts_problem",
-        "faq/alias_path",
-        "how_to_install_nodejs",
-        "midway_slow_problem"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "其他",
-      "collapsed": false,
-      "collapsible": false,
-      "items": [
-        "release_schedule",
-        "contributing",
-        "awesome_midway"
       ]
     }
   ]

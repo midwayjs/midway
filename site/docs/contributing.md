@@ -4,12 +4,12 @@ Midway 是一款开源框架，欢迎大家为社区贡献力量，本文介绍�
 
 
 
-## 报告问题，提交一个 issue
+## 报告问题
 
 如果你在开发过程中遇到了一些问题，你无法解决需要想开发者问询的，我们强烈建议：
 
 - 1、先在文档中查找相关的问题
-- 2、如果查找后无法解决，可以提交一个 [issue](https://github.com/midwayjs/midway/issues/new)。
+- 2、如果查找后无法解决，可以提交一个 [Q&A](https://github.com/midwayjs/midway/discussions/new/choose)。
 
 
 
@@ -43,6 +43,10 @@ Midway 是一款开源框架，欢迎大家为社区贡献力量，本文介绍�
 ```bash
 # 创建新分支
 $ git checkout -b branch-name
+# 安装依赖
+$ npm i
+# 构建项目
+$ npm run build
 
 # 开发并执行测试
 $ npm test

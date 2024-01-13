@@ -4,12 +4,12 @@ Midway is an open source framework that welcomes everyone to contribute to the c
 
 
 
-## Report problems and submit an issue
+## Report problems
 
 If you encounter some problems in the development process and you cannot solve the problems you need to ask developers, we strongly recommend:
 
 - 1. Find relevant problems in the document first
-- 2. If you cannot solve it after searching, you can submit an [issue](https://github.com/midwayjs/midway/issues/new).
+- 2. If you cannot solve it after searching, you can submit an [Q&A](https://github.com/midwayjs/midway/discussions/new/choose).
 
 
 
@@ -42,14 +42,18 @@ If you find that the framework has some problems to be modified, you can submit 
 
 ```bash
 # Create a new branch
-$git checkout -b branch-name
+$ git checkout -b branch-name
+# install dependencies
+$ npm i
+# build code
+$ npm run build
 
 # Develop and execute tests
 $ npm test
 
-$git add . # git add -u to delete files
-$git commit -m "fix(role): role.use must xxx"
-$git push origin branch-name
+$ git add . # git add -u to delete files
+$ git commit -m "fix(role): role.use must xxx"
+$ git push origin branch-name
 ```
 
 3. Create a Pull Request and choose to merge your own project branch into the main branch of the target midwayjs/midway.

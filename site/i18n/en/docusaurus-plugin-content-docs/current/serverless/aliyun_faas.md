@@ -1,7 +1,7 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Aliyun FC
+# Deploy to Alibaba Cloud Function Compute
 
 Alibaba Cloud Serverless is one of the first teams in China to provide serverless computing services. It relies on Alibaba Cloud's powerful cloud infrastructure service capabilities to continuously achieve technological breakthroughs. At present, Taobao, Alipay, DingTalk, AutoNavi, etc. have applied Serverless to production business. Serverless products on the cloud have been successfully implemented in tens of thousands of companies such as Pumpkin Movie, NetEase Cloud Music, iQiyi Sports, and Lilith.
 
