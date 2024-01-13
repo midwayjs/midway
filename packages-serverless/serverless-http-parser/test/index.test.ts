@@ -635,7 +635,7 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test stream', () => {
-    it('should test return with no write impl', function () {
+    it('should test return with no write impl will ignore throw error', function () {
       const app = new Application();
       const req = new HTTPRequest(
         require('./resource/scf_apigw.json'),
@@ -644,16 +644,10 @@ describe('/test/index.test.ts', () => {
       const res = new HTTPResponse();
       const context = app.createContext(req, res);
 
-      let err;
-      try {
-        context.streaming = true;
-        context.res.write('abc');
-        context.res.write('bcd');
-        context.res.end();
-      } catch (error) {
-        err = error;
-      }
-      expect(err.message).toMatch(/Current platform not support/);
+      context.streaming = true;
+      context.res.write('abc');
+      context.res.write('bcd');
+      context.res.end();
     });
 
     it('should test return with stream impl', async () => {

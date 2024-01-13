@@ -83,7 +83,11 @@ export class Application extends EventEmitter {
       res.statusCode = 404;
       const onerror = err => ctx.onerror(err);
       const ctx = this.createContext(req, res);
-      return respond(ctx).catch(onerror);
+      return respond(ctx)
+        .catch(onerror)
+        .finally(() => {
+          ctx.res.end && ctx.res.end();
+        });
     };
   }
 
