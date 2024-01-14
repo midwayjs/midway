@@ -95,7 +95,7 @@ export function renderJSON(
       return;
     }
     const arr = pathname.split('/');
-    let lastName = arr.pop();
+    const lastName = arr.pop();
     if (lastName === 'index.json') {
       return { ext: 'json', content: swaggerExplorer.getData() };
     }
