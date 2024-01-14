@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.14.1 (2024-01-14)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3559](https://github.com/midwayjs/midway/pull/3559) fix: swagger-ui-dist require missing ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.0 (2024-01-13)
 
 #### :rocket: New Feature
