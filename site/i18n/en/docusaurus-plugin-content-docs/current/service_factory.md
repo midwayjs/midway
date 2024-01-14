@@ -477,7 +477,7 @@ export default {
          baseUrl: ''
        }
      },
-     priority: {
+     clientPriority: {
        default: DEFAULT_PRIORITY.L1,
        default2: DEFAULT_PRIORITY.L2,
      }
@@ -500,7 +500,7 @@ export class HTTPClientService implements HTTPClient {
    async init() {
      // Get priority
      this.serviceFactory.getClientPriority('default'); // DEFAULT_PRIORITY.L2
-    
+
      // Determine priority
      this.serviceFactory.isHighPriority('default');
      this.serviceFactory.isMediumPriority('default');

@@ -4,7 +4,7 @@ Caching is a great and simple technique that helps improve the performance of yo
 
 :::tip
 
-Midway provides a module based on [cache-manager v5](https://github.com/node-cache-manager/node-cache-manager) that re-encapsulates the cache component. The original cache module is developed based on v3 and is no longer iterated, such as To view old documentation, please visit [here](/docs/cache).
+Midway provides a module based on [cache-manager v5](https://github.com/node-cache-manager/node-cache-manager) that re-encapsulates the cache component. The original cache module is developed based on v3 and is no longer iterated, such as To view old documentation, please visit [here](/docs/extensions/cache).
 
 :::
 
@@ -108,7 +108,8 @@ export default {
 
 :::tip
 
-The eviction algorithm used by the memory cache is LRU.
+* The eviction algorithm used by the memory cache is LRU
+* The unit of `ttl` is milliseconds
 
 :::
 
@@ -273,7 +274,7 @@ The `createStore` method can pass an already configured redis instance name, and
 
 ### 5. Configure third-party Store
 
-In addition to Redis, users can also choose the Store of Cache-Manager. The list can be found [here](https://github.com/node-cache-manager/node-cache-manager?tab=readme-ov-file #store-engines).
+In addition to Redis, users can also choose the Store of Cache-Manager. The list can be found [here](https://github.com/node-cache-manager/node-cache-manager?tab=readme-ov-file#store-engines).
 
 Below is an example of configuring [node-cache-manager-ioredis-yet](https://github.com/node-cache-manager/node-cache-manager-ioredis-yet).
 
@@ -282,18 +283,18 @@ Below is an example of configuring [node-cache-manager-ioredis-yet](https://gith
 import { redisStore } from 'cache-manager-ioredis-yet';
 
 export default {
-   cacheManager: {
-     clients: {
-       default: {
-         store: redisStore,
+  cacheManager: {
+    clients: {
+      default: {
+        store: redisStore,
         options: {
-         port: 6379,
-           host: 'localhost',
-           ttl: 10,
-         },
-       },
-     },
-   }
+          port: 6379,
+          host: 'localhost',
+          ttl: 10,
+        },
+      },
+    },
+  },
 }
 ```
 
@@ -309,36 +310,33 @@ For example, I can create a multi-level cache to merge multiple cache stores tog
 // src/config/config.default.ts
 import { createStore } from '@midwayjs/cache-manager-redis';
 export default {
-   cacheManager: {
-     clients: {
-       memoryCaching: {
-         store: 'memory',
-       },
-       redisCaching: {
-         store: createStore('default'),
-         options: {
-           ttl: 10,
-         }
-       },
-       multiCaching: {
-         store: [
-       'memoryCaching',
-       'redisCaching'
-       ],
-     options: {
-     ttl: 100,
-   },
-       },
-     },
-   },
-   redis: {
-     clients: {
-       default: {
-         port: 6379,
-         host: '127.0.0.1',
-       }
-     }
-   }
+  cacheManager: {
+    clients: {
+      memoryCaching: {
+        store: 'memory',
+      },
+      redisCaching: {
+        store: createStore('default'),
+        options: {
+          ttl: 10,
+        }
+      },
+      multiCaching: {
+        store: ['memoryCaching', 'redisCaching'],
+        options: {
+          ttl: 100,
+        },
+      },
+    },
+  },
+  redis: {
+    clients: {
+      default: {
+        port: 6379,
+        host: '127.0.0.1',
+      }
+    }
+  }
 }
 ```
 

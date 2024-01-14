@@ -110,7 +110,8 @@ export default {
 
 :::tip
 
-内存缓存使用的淘汰算法是 LRU。
+* 内存缓存使用的淘汰算法是 LRU
+* `ttl` 的单位是毫秒
 
 :::
 
@@ -288,8 +289,8 @@ export default {
     clients: {
       default: {
         store: redisStore,
-       	options: {
-        	port: 6379,
+        options: {
+          port: 6379,
           host: 'localhost',
           ttl: 10,
         },
@@ -320,16 +321,13 @@ export default {
         store: createStore('default'),
         options: {
           ttl: 10,
-        }
+        },
       },
       multiCaching: {
-        store: [
-      		'memoryCaching',
-      		'redisCaching'
-      	],
-    		options: {
-    			ttl: 100,
-  			},
+        store: ['memoryCaching', 'redisCaching'],
+        options: {
+          ttl: 100,
+        },
       },
     },
   },
@@ -338,10 +336,11 @@ export default {
       default: {
         port: 6379,
         host: '127.0.0.1',
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
+
 ```
 
 这样 `multiCaching` 这个缓存实例就包含了两级缓存，缓存的优先级从上到下，在查找时，会先查找 `memoryCaching` ，如果内存缓存不存在 key，则继续查找 `redisCaching`。
@@ -420,7 +419,7 @@ export default {
 }
 ```
 
-如果设置了 `refreshthreshold`，每次从缓存获取值之后，会检查`ttl` 的值，如果剩余的 `ttl` 小于 `refreshthreshold` ，则系统将异步更新缓存，同时系统会返回旧值，直到 `ttl` 过期。
+如果设置了 `refreshthreshold`，每次从缓存获取值之后，会检查 `ttl` 的值，如果剩余的 `ttl` 小于 `refreshthreshold` ，则系统将异步更新缓存，同时系统会返回旧值，直到 `ttl` 过期。
 
 :::tip
 

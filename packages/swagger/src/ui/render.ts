@@ -94,7 +94,9 @@ export function renderJSON(
     if (pathname.indexOf(swaggerConfig.swaggerPath) === -1) {
       return;
     }
-    if (pathname === 'index.json') {
+    const arr = pathname.split('/');
+    let lastName = arr.pop();
+    if (lastName === 'index.json') {
       return { ext: 'json', content: swaggerExplorer.getData() };
     }
     return;
