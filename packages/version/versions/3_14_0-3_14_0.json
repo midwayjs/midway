@@ -48,7 +48,8 @@
   "@midwayjs/static-file": "3.14.0",
   "@midwayjs/swagger": [
     "3.14.0",
-    "3.14.1"
+    "3.14.1",
+    "3.14.2"
   ],
   "@midwayjs/tablestore": "3.14.0",
   "@midwayjs/tags": "3.14.0",
@@ -58,7 +59,8 @@
   "@midwayjs/validate": "3.14.0",
   "@midwayjs/version": [
     "3.14.0",
-    "3.14.1"
+    "3.14.1",
+    "3.14.2"
   ],
   "@midwayjs/view": "3.14.0",
   "@midwayjs/view-ejs": "3.14.0",

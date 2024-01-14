@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.14.2 (2024-01-14)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3560](https://github.com/midwayjs/midway/pull/3560) fix: swagger render json not match path ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.1 (2024-01-14)
 
 #### :bug: Bug Fix
