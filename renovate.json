@@ -27,6 +27,10 @@
       "platformAutomerge": true
     },
     {
+      "matchPackageNames": ["cache-manager"],
+      "matchFileNames": ["!packages-legacy/cache/package.json"]
+    },
+    {
       "groupName": "mongoose monorepo",
       "matchPackageNames": [
         "mongoose",
