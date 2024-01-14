@@ -9,10 +9,22 @@
     <icon>https://midwayjs.org/img/logo.svg</icon>
     <rights>Copyright © 2024 Facebook, Inc.</rights>
     <entry>
+        <title type="html"><![CDATA[v3.14.2]]></title>
+        <id>https://midwayjs.org/changelog/v3.14.2</id>
+        <link href="https://midwayjs.org/changelog/v3.14.2"/>
+        <updated>2024-01-14T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="🐛 Bug Fix的直接链接" title="🐛 Bug Fix的直接链接">​</a></h2><ul><li><code>swagger</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3560" target="_blank" rel="noopener noreferrer">#3560</a> fix: swagger render json not match path (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Committers: 1的直接链接" title="Committers: 1的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[v3.14.1]]></title>
         <id>https://midwayjs.org/changelog/v3.14.1</id>
         <link href="https://midwayjs.org/changelog/v3.14.1"/>
-        <updated>2024-01-14T20:00:00.000Z</updated>
+        <updated>2024-01-14T19:00:00.000Z</updated>
         <summary type="html"><![CDATA[Bug Fix]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="🐛 Bug Fix的直接链接" title="🐛 Bug Fix的直接链接">​</a></h2><ul><li><code>swagger</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3559" target="_blank" rel="noopener noreferrer">#3559</a> fix: swagger-ui-dist require missing (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Committers: 1的直接链接" title="Committers: 1的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
         <author>

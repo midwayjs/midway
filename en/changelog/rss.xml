@@ -10,10 +10,18 @@
         <language>en</language>
         <copyright>Copyright © 2024 Facebook, Inc.</copyright>
         <item>
+            <title><![CDATA[v3.14.2]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.14.2</link>
+            <guid>https://midwayjs.org/en/changelog/v3.14.2</guid>
+            <pubDate>Sun, 14 Jan 2024 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>swagger</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3560" target="_blank" rel="noopener noreferrer">#3560</a> fix: swagger render json not match path (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
+        </item>
+        <item>
             <title><![CDATA[v3.14.1]]></title>
             <link>https://midwayjs.org/en/changelog/v3.14.1</link>
             <guid>https://midwayjs.org/en/changelog/v3.14.1</guid>
-            <pubDate>Sun, 14 Jan 2024 20:00:00 GMT</pubDate>
+            <pubDate>Sun, 14 Jan 2024 19:00:00 GMT</pubDate>
             <description><![CDATA[Bug Fix]]></description>
             <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>swagger</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3559" target="_blank" rel="noopener noreferrer">#3559</a> fix: swagger-ui-dist require missing (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
         </item>
