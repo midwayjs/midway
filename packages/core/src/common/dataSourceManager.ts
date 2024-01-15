@@ -12,6 +12,8 @@ import { loadModule } from '../util';
 import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
 import { Inject } from '../decorator';
 import { MidwayEnvironmentService } from '../service/environmentService';
+import { PriorityManager } from './priorityManager';
+
 const debug = debuglog('midway:debug');
 
 export abstract class DataSourceManager<
@@ -22,12 +24,16 @@ export abstract class DataSourceManager<
   protected options: DataSourceManagerConfigOption<ConnectionOpts> = {};
   protected modelMapping = new WeakMap();
   private innerDefaultDataSourceName: string;
+  protected dataSourcePriority: Record<string, string>;
 
   @Inject()
-  appDir: string;
+  protected appDir: string;
 
   @Inject()
-  environmentService: MidwayEnvironmentService;
+  protected environmentService: MidwayEnvironmentService;
+
+  @Inject()
+  protected priorityManager: PriorityManager;
 
   protected async initDataSource(
     dataSourceConfig: DataSourceManagerConfigOption<ConnectionOpts>,
@@ -113,6 +119,10 @@ export abstract class DataSourceManager<
 
   public getDataSourceNames() {
     return Array.from(this.dataSource.keys());
+  }
+
+  public getAllDataSources() {
+    return this.dataSource;
   }
 
   /**
@@ -202,6 +212,22 @@ export abstract class DataSourceManager<
       }
     }
     return this.innerDefaultDataSourceName;
+  }
+
+  public getDataSourcePriority(name: string) {
+    return this.priorityManager.getPriority(this.dataSourcePriority[name]);
+  }
+
+  public isHighPriority(name: string) {
+    return this.priorityManager.isHighPriority(this.dataSourcePriority[name]);
+  }
+
+  public isMediumPriority(name: string) {
+    return this.priorityManager.isMediumPriority(this.dataSourcePriority[name]);
+  }
+
+  public isLowPriority(name: string) {
+    return this.priorityManager.isLowPriority(this.dataSourcePriority[name]);
   }
 }
 

@@ -31,6 +31,7 @@ export {
   WebRouterCollector,
 } from './service/slsFunctionService';
 export { DataSourceManager } from './common/dataSourceManager';
+export { DEFAULT_PRIORITY, PriorityManager } from './common/priorityManager';
 export * from './service/pipelineService';
 
 export * from './common/loggerFactory';

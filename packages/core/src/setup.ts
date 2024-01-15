@@ -19,6 +19,7 @@ import {
   loadModule,
   safeRequire,
   isTypeScriptEnvironment,
+  PriorityManager,
 } from './';
 import defaultConfig from './config/config.default';
 import {
@@ -206,6 +207,7 @@ export async function prepareGlobalApplicationContextAsync(
   applicationContext.bindClass(MidwayWebRouterService);
   applicationContext.bindClass(MidwayServerlessFunctionService);
   applicationContext.bindClass(MidwayHealthService);
+  applicationContext.bindClass(PriorityManager);
 
   printStepDebugInfo('Binding preload module');
 
@@ -332,6 +334,7 @@ export function prepareGlobalApplicationContext(
   applicationContext.bindClass(MidwayWebRouterService);
   applicationContext.bindClass(MidwayServerlessFunctionService);
   applicationContext.bindClass(MidwayHealthService);
+  applicationContext.bindClass(PriorityManager);
 
   printStepDebugInfo('Binding preload module');
 
