@@ -32,7 +32,7 @@
     "@midwayjs/cache-manager": "^3.14.0",
     "@midwayjs/core": "^3.14.0",
     "@midwayjs/mock": "^3.14.0",
-    "cache-manager": "5.3.1"
+    "cache-manager": "5.3.2"
   },
   "dependencies": {
     "@midwayjs/redis": "^3.14.0"

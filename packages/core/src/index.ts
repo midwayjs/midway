@@ -18,6 +18,7 @@ export { MidwayLifeCycleService } from './service/lifeCycleService';
 export { MidwayMiddlewareService } from './service/middlewareService';
 export { MidwayDecoratorService } from './service/decoratorService';
 export { MidwayMockService } from './service/mockService';
+export { MidwayHealthService } from './service/healthService';
 export {
   RouterInfo,
   DynamicRouterInfo,
