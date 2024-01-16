@@ -1,4 +1,4 @@
-import { DEFAULT_PRIORITY, ServiceFactory } from '../../src';
+import { ServiceFactory, DEFAULT_PRIORITY, MidwayPriorityManager } from '../../src';
 
 describe('test/common/serviceFactory.test.ts', () => {
 
@@ -78,10 +78,11 @@ describe('test/common/serviceFactory.test.ts', () => {
   });
 
   describe('Priority related tests', () => {
-    let instance;
+    let instance: TestServiceFactory;
 
     beforeEach(async () => {
       instance = new TestServiceFactory();
+      instance['priorityManager'] = new MidwayPriorityManager();
       await instance.initClients({
         clients: {
           high: {},
@@ -122,6 +123,7 @@ describe('test/common/serviceFactory.test.ts', () => {
 
     it('should use default priority if not set', async () => {
       const instance = new TestServiceFactory();
+      instance['priorityManager'] = new MidwayPriorityManager();
       await instance.initClients({
         clients: {
           defaultPriorityClient: {},

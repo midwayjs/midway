@@ -18,6 +18,7 @@ export { MidwayLifeCycleService } from './service/lifeCycleService';
 export { MidwayMiddlewareService } from './service/middlewareService';
 export { MidwayDecoratorService } from './service/decoratorService';
 export { MidwayMockService } from './service/mockService';
+export { MidwayHealthService } from './service/healthService';
 export {
   RouterInfo,
   DynamicRouterInfo,
@@ -30,6 +31,10 @@ export {
   WebRouterCollector,
 } from './service/slsFunctionService';
 export { DataSourceManager } from './common/dataSourceManager';
+export {
+  DEFAULT_PRIORITY,
+  MidwayPriorityManager,
+} from './common/priorityManager';
 export * from './service/pipelineService';
 
 export * from './common/loggerFactory';

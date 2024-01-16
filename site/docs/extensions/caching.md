@@ -236,23 +236,18 @@ export class UserService {
 
 组件基于 [cache-manager](https://github.com/node-cache-manager/node-cache-manager) 可以配置不同的缓存 Store，比如最常见的可以配置 Redis Store。
 
-为了减少重复配置，可以使用 `@midwayjs/cache-manager-redis` 模块，复用 Redis 组件的配置。
+假如项目已经配置了一个 `Redis`，通过组件内置的 `createRedisStore` 方法，可以快速创建一个 Redis Store。
 
-```bash
-$ npm i @midwayjs/cache-manager-redis --save
-```
-
-假如项目已经配置了一个 `Redis` 。
 
 ```typescript
-import { createStore } from '@midwayjs/cache-manager-redis';
+import { createRedisStore } from '@midwayjs/cache-manager-redis';
 
 // src/config/config.default.ts
 export default {
   cacheManager: {
     clients: {
       default: {
-        store: createStore('default'),
+        store: createRedisStore('default'),
         options: {
           ttl: 10,
         }
@@ -270,7 +265,7 @@ export default {
 }
 ```
 
-`createStore` 方法可以传递一个已经配置的 redis 实例名，可以和 redis 组件复用实例。
+`createRedisStore` 方法可以传递一个已经配置的 redis 实例名，可以和 redis 组件复用实例。
 
 
 
@@ -310,7 +305,7 @@ export default {
 
 ```typescript
 // src/config/config.default.ts
-import { createStore } from '@midwayjs/cache-manager-redis';
+import { createRedisStore } from '@midwayjs/cache-manager';
 export default {
   cacheManager: {
     clients: {
@@ -318,7 +313,7 @@ export default {
         store: 'memory',
       },
       redisCaching: {
-        store: createStore('default'),
+        store: createRedisStore('default'),
         options: {
           ttl: 10,
         },

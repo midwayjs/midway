@@ -234,23 +234,17 @@ export class UserService {
 
 The component is based on [cache-manager](https://github.com/node-cache-manager/node-cache-manager) and can be configured with different cache stores. For example, the most common one can be configured with Redis Store.
 
-In order to reduce repeated configuration, you can use the `@midwayjs/cache-manager-redis` module to reuse the configuration of the Redis component.
-
-```bash
-$ npm i @midwayjs/cache-manager-redis --save
-```
-
-If the project has been configured with a `Redis`.
+If the project has been configured with a 'Redis', you can quickly create a Redis Store by using the built-in 'createRedisStore' method of the component.
 
 ```typescript
-import { createStore } from '@midwayjs/cache-manager-redis';
+import { createRedisStore } from '@midwayjs/cache-manager';
 
 // src/config/config.default.ts
 export default {
    cacheManager: {
      clients: {
        default: {
-         store: createStore('default'),
+         store: createRedisStore('default'),
          options: {
            ttl: 10,
          }
@@ -268,7 +262,7 @@ export default {
 }
 ```
 
-The `createStore` method can pass an already configured redis instance name, and the instance can be reused with the redis component.
+The `createRedisStore` method can pass an already configured redis instance name, and the instance can be reused with the redis component.
 
 
 
@@ -308,7 +302,7 @@ For example, I can create a multi-level cache to merge multiple cache stores tog
 
 ```typescript
 // src/config/config.default.ts
-import { createStore } from '@midwayjs/cache-manager-redis';
+import { createRedisStore } from '@midwayjs/cache-manager';
 export default {
   cacheManager: {
     clients: {
@@ -316,7 +310,7 @@ export default {
         store: 'memory',
       },
       redisCaching: {
-        store: createStore('default'),
+        store: createRedisStore('default'),
         options: {
           ttl: 10,
         }

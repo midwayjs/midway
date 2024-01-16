@@ -1,20 +1,19 @@
 import { extend } from '../util/extend';
 import { IServiceFactory } from '../interface';
-
-export const DEFAULT_PRIORITY = {
-  L1: 'High',
-  L2: 'Medium',
-  L3: 'Low',
-};
+import { MidwayPriorityManager } from './priorityManager';
+import { Inject } from '../decorator';
 
 /**
  * 多客户端工厂实现
  */
 export abstract class ServiceFactory<T> implements IServiceFactory<T> {
   protected clients: Map<string, T> = new Map();
-  protected priority;
+  protected clientPriority: Record<string, string>;
 
   protected options = {};
+
+  @Inject()
+  protected priorityManager: MidwayPriorityManager;
 
   protected async initClients(options: any = {}): Promise<void> {
     this.options = options;
@@ -34,11 +33,7 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
     }
 
     // set priority
-    this.priority = options.priority || {
-      ...Array.from(this.clients.keys()).map(name => ({
-        [name]: DEFAULT_PRIORITY.L2,
-      })),
-    };
+    this.clientPriority = options.priority || {};
   }
 
   public get<U = T>(id = 'default'): U {
@@ -86,19 +81,19 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
     return Array.from(this.clients.keys());
   }
 
-  public getClientPriority(clientName: string) {
-    return this.priority[clientName] || DEFAULT_PRIORITY.L2;
+  public getClientPriority(name: string) {
+    return this.priorityManager.getPriority(this.clientPriority[name]);
   }
 
-  public isHighPriority(clientName: string) {
-    return this.getClientPriority(clientName) === DEFAULT_PRIORITY.L1;
+  public isHighPriority(name: string) {
+    return this.priorityManager.isHighPriority(this.clientPriority[name]);
   }
 
-  public isMediumPriority(clientName: string) {
-    return this.getClientPriority(clientName) === DEFAULT_PRIORITY.L2;
+  public isMediumPriority(name: string) {
+    return this.priorityManager.isMediumPriority(this.clientPriority[name]);
   }
 
-  public isLowPriority(clientName: string) {
-    return this.getClientPriority(clientName) === DEFAULT_PRIORITY.L3;
+  public isLowPriority(name: string) {
+    return this.priorityManager.isLowPriority(this.clientPriority[name]);
   }
 }

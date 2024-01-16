@@ -1,10 +1,9 @@
 import * as cacheManager from '@midwayjs/cache-manager';
 import * as redis from '@midwayjs/redis';
 import { createLightApp, close } from '@midwayjs/mock';
-import { createStore } from '../src';
-import { CachingFactory } from '@midwayjs/cache-manager';
+import { CachingFactory, createRedisStore } from '../src';
 
-describe('cache-manager-redis', () => {
+describe('cache-manager-redis store test', () => {
   it('should test single caching', async () => {
     const app = await createLightApp('', {
       imports: [
@@ -14,7 +13,7 @@ describe('cache-manager-redis', () => {
       globalConfig: {
         cacheManager: {
           client: {
-            store: createStore('default'),
+            store: createRedisStore('default'),
             options: {
               ttl: 10,
             }
@@ -56,7 +55,7 @@ describe('cache-manager-redis', () => {
           client: {
             store: [
               {
-                store: createStore('default'),
+                store: createRedisStore('default'),
                 options: {
                   ttl: 10,
                 }
