@@ -1,6 +1,19 @@
 # Change Log
 
 
+## v3.14.3 (2024-01-16)
+
+#### :nail_care: Polish
+* `captcha`, `mock`
+  * [#3570](https://github.com/midwayjs/midway/pull/3570) feat: captcha use newest cacheManager component ([@czy88840616](https://github.com/czy88840616))
+* `cache-manager-redis`, `cache-manager`, `core`, `mongoose`
+  * [#3569](https://github.com/midwayjs/midway/pull/3569) feat: export health service and support mongoose health check ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.2 (2024-01-14)
 
 #### :bug: Bug Fix
