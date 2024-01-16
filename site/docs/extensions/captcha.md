@@ -50,7 +50,9 @@ export class MainConfiguration {}
 ## 调用服务
 
 ```typescript
+import { Controller, Inject } from '@midwayjs/core';
 import { CaptchaService } from '@midwayjs/captcha';
+
 @Controller('/')
 export class HomeController {
 
@@ -255,9 +257,23 @@ export const captcha: CaptchaOptions = {
 
 ## 组件依赖
 
-验证码的内容存储基于 `@midwayjs/cache` 组件，默认是在 `memory` 中存储，如果要替换为 `redis` 或其他服务，请参照 `@midwayjs/cache` 的[文档](/docs/extensions/cache），对 cache 进行配置。
+验证码的内容存储基于 `@midwayjs/cache-manager` 组件，默认创建了一个名为 `captcha` 的缓存实例，将数据存储在 `memory` 中。
 
-`@midwayjs/cache` 组件已在 `@midwayjs/captcha` 组件 `package.json` 的 `dependencies` 中，无需额外再次安装。
+```typescript
+export default {
+  cacheManager: {
+    clients: {
+      captcha: {
+        store: 'memory',
+      },
+    },
+  },
+};
+```
+
+如果要替换为 `redis` 或其他服务，请参照 `@midwayjs/cache-manager` 的 [文档](/docs/extensions/caching)，对 cache 进行配置。
+
+
 
 
 ## 效果
