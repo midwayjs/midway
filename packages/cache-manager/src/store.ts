@@ -1,13 +1,28 @@
 import type { Config, Store } from 'cache-manager';
-import { Redis } from '@midwayjs/redis';
-import { MidwayCommonError } from '@midwayjs/core';
+import type { Redis, RedisServiceFactory } from '@midwayjs/redis';
+import {
+  IMidwayContainer,
+  MidwayCommonError,
+  safeRequire,
+} from '@midwayjs/core';
 
 const getVal = (value: unknown) => JSON.stringify(value) || '"undefined"';
 export interface RedisStore extends Store {
   readonly isCacheable: (value: unknown) => boolean;
 }
 
-export function createRedisStore(redisCache: Redis, options?: Config) {
+export function createRedisStore(instanceName: string) {
+  return async (options: Config, container: IMidwayContainer) => {
+    const { RedisServiceFactory } = safeRequire('@midwayjs/redis');
+    const redisServiceFactory: RedisServiceFactory = await container.getAsync(
+      RedisServiceFactory
+    );
+    const redisInstance = redisServiceFactory.get(instanceName);
+    return createStore(redisInstance, options);
+  };
+}
+
+function createStore(redisCache: Redis, options?: Config) {
   const isCacheable =
     options?.isCacheable || (value => value !== undefined && value !== null);
 
