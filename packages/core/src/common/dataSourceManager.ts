@@ -12,7 +12,7 @@ import { loadModule } from '../util';
 import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
 import { Inject } from '../decorator';
 import { MidwayEnvironmentService } from '../service/environmentService';
-import { MidwayPriorityManager } from './midwayPriorityManager';
+import { MidwayPriorityManager } from './priorityManager';
 
 const debug = debuglog('midway:debug');
 

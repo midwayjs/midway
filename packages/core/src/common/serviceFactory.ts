@@ -1,6 +1,6 @@
 import { extend } from '../util/extend';
 import { IServiceFactory } from '../interface';
-import { MidwayPriorityManager } from './midwayPriorityManager';
+import { MidwayPriorityManager } from './priorityManager';
 import { Inject } from '../decorator';
 
 /**
