@@ -1,5 +1,11 @@
-import { Provide, Inject, Config, Scope, ScopeEnum } from '@midwayjs/core';
-import { CacheManager } from '@midwayjs/cache';
+import {
+  Provide,
+  Config,
+  Scope,
+  ScopeEnum,
+  InjectClient,
+} from '@midwayjs/core';
+import { CachingFactory, MidwayCache } from '@midwayjs/cache-manager';
 import * as svgCaptcha from 'svg-captcha';
 import * as svgBase64 from 'mini-svg-data-uri';
 import { nanoid } from 'nanoid';
@@ -13,11 +19,11 @@ import { letters, numbers } from './constants';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class CaptchaService {
-  @Inject()
-  cacheManager: CacheManager;
+  @InjectClient(CachingFactory, 'captcha')
+  protected captchaCaching: MidwayCache;
 
   @Config('captcha')
-  captcha: CaptchaOptions;
+  protected captcha: CaptchaOptions;
 
   async image(options?: ImageCaptchaOptions): Promise<{
     id: string;
@@ -102,10 +108,10 @@ export class CaptchaService {
 
   async set(text: string): Promise<string> {
     const id = nanoid();
-    await this.cacheManager.set(
+    await this.captchaCaching.set(
       this.getStoreId(id),
       (text || '').toLowerCase(),
-      { ttl: this.captcha.expirationTime }
+      this.captcha.expirationTime
     );
     return id;
   }
@@ -115,11 +121,11 @@ export class CaptchaService {
       return false;
     }
     const storeId = this.getStoreId(id);
-    const storedValue = await this.cacheManager.get(storeId);
+    const storedValue = await this.captchaCaching.get(storeId);
     if (value.toLowerCase() !== storedValue) {
       return false;
     }
-    this.cacheManager.del(storeId);
+    await this.captchaCaching.del(storeId);
     return true;
   }
 

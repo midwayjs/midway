@@ -52,10 +52,11 @@ export class MainConfiguration {}
 ## Call service
 
 ```typescript
+import { Controller, Inject } from '@midwayjs/core';
 import { CaptchaService } from '@midwayjs/captcha';
+
 @Controller('/')
 export class HomeController {
-
   @Inject()
   ctx;
 
@@ -253,6 +254,28 @@ export const captcha: CaptchaOptions = {
   }
 }
 ```
+
+
+
+## Component Dependency
+
+The content storage of the verification code is based on the '@ midwayjs/cache-manager' component. By default, a cache instance named 'captcha' is created and the data is stored in 'memory.
+
+```typescript
+export default {
+  cacheManager: {
+    clients: {
+      captcha: {
+        store: 'memory',
+      },
+    },
+  },
+};
+```
+
+If you want to replace it with 'redis' or other services, please refer to the [documentation](/docs/extensions/caching) of `@midwayjs/cache-manager` to configure the cache.
+
+
 
 ## Effect
 
