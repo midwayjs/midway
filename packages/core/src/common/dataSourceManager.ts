@@ -12,7 +12,7 @@ import { loadModule } from '../util';
 import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
 import { Inject } from '../decorator';
 import { MidwayEnvironmentService } from '../service/environmentService';
-import { PriorityManager } from './priorityManager';
+import { MidwayPriorityManager } from './midwayPriorityManager';
 
 const debug = debuglog('midway:debug');
 
@@ -33,7 +33,7 @@ export abstract class DataSourceManager<
   protected environmentService: MidwayEnvironmentService;
 
   @Inject()
-  protected priorityManager: PriorityManager;
+  protected priorityManager: MidwayPriorityManager;
 
   protected async initDataSource(
     dataSourceConfig: DataSourceManagerConfigOption<ConnectionOpts>,

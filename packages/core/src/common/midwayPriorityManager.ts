@@ -9,7 +9,7 @@ export const DEFAULT_PRIORITY = {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class PriorityManager {
+export class MidwayPriorityManager {
   private priorityList: Record<string, string> = DEFAULT_PRIORITY;
   private defaultPriority = DEFAULT_PRIORITY.L2;
 

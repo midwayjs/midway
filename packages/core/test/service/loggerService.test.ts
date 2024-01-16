@@ -4,7 +4,8 @@ import {
   MidwayContainer,
   MidwayEnvironmentService,
   MidwayInformationService,
-  MidwayLoggerService
+  MidwayLoggerService,
+  MidwayPriorityManager
 } from '../../src';
 import { ILogger } from '@midwayjs/logger';
 
@@ -43,6 +44,7 @@ describe('/test/service/loggerService.test.ts', () => {
     container.bindClass(MidwayInformationService);
     container.bindClass(MidwayConfigService)
     container.bindClass(MidwayLoggerService);
+    container.bindClass(MidwayPriorityManager);
 
     container.registerObject('baseDir', '');
     container.registerObject('appDir', '');

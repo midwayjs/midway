@@ -31,7 +31,7 @@ export {
   WebRouterCollector,
 } from './service/slsFunctionService';
 export { DataSourceManager } from './common/dataSourceManager';
-export { DEFAULT_PRIORITY, PriorityManager } from './common/priorityManager';
+export { DEFAULT_PRIORITY, MidwayPriorityManager } from './common/midwayPriorityManager';
 export * from './service/pipelineService';
 
 export * from './common/loggerFactory';

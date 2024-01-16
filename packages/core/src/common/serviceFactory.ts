@@ -1,6 +1,6 @@
 import { extend } from '../util/extend';
 import { IServiceFactory } from '../interface';
-import { PriorityManager } from './priorityManager';
+import { MidwayPriorityManager } from './midwayPriorityManager';
 import { Inject } from '../decorator';
 
 /**
@@ -13,7 +13,7 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
   protected options = {};
 
   @Inject()
-  protected priorityManager: PriorityManager;
+  protected priorityManager: MidwayPriorityManager;
 
   protected async initClients(options: any = {}): Promise<void> {
     this.options = options;
