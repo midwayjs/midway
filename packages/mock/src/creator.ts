@@ -131,6 +131,9 @@ export async function create<
     }
 
     if (options.baseDir) {
+      if (!isAbsolute(options.baseDir)) {
+        options.baseDir = join(appDir, options.baseDir);
+      }
       await loadModule(
         join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
         {
@@ -139,7 +142,7 @@ export async function create<
         }
       );
     } else if (appDir) {
-      options.baseDir = `${appDir}/src`;
+      options.baseDir = join(appDir, 'src');
       await loadModule(
         join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
         {
