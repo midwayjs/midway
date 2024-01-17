@@ -75,5 +75,6 @@ describe('test/index.test.ts', function () {
     expect(await captchaService.check(id, '123')).toBeTruthy();
     await sleep(1000);
     expect(await captchaService.check(id, '123')).toBeFalsy();
+    await close(app);
   });
 });
