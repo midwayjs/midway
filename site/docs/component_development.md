@@ -20,7 +20,7 @@
 只需执行下面的脚本，模板列表中选择 `component-v3` 模板，即可快速生成示例组件。
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
 注意 [Node.js 环境要求](/docs/intro#环境准备工作)。

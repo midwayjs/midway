@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 创建第一个应用
 
 
@@ -112,8 +115,22 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01KoUxO91jydMw41Vv4_!!6000000004617-2-tps-1268-768.png)
 
-
 如果需要修改开发的启动端口，可以在 `package.json`  的 scripts 段落里修改，如修改为 6001：
+
+<Tabs groupId="cli">
+
+<TabItem value="mwtsc" label="使用 mwtsc">
+
+```typescript
+"scripts": {
+  //...
+  "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/app.js --port 6001",
+},
+```
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
 
 ```typescript
 "scripts": {
@@ -122,18 +139,13 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 },
 ```
 
+</TabItem>
+
+
+
+</Tabs>
+
 ## 常见问题
-
-### Python 的编译错误
-
-:::caution
-在 node15/npm7 下执行 `npm install/i` 命令安装依赖可能会有 Python 编译错误
-
-**使用 npm init midway 创建的项目会自动安装依赖，无此问题。**
-
-**解决方案**：npm i 时添加 `--legacy-peer-deps`  参数。
-**原因**：测试框架 Jest 依赖 jsdom，npm7 会自动安装其 peerDependencies 中依赖的 canvas 包， 而 canvas 的安装编译需要有python3环境。
-:::
 
 ### windows eslint 报错
 

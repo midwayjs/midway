@@ -75,16 +75,3 @@ After you select `package.json`, drop down and select `Scrips`, which is the com
 Debugging can be performed after the code breakpoint.
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01sGzfeH1iLPpzSIWSg_!!6000000004396-2-tps-1327-907.png)
 
-
-
-## Debugging in Chrome
-
-If you use vim or other code editors, you can use this method, through the `dev` command of `@midwayjs/cli`, add the `--debug` parameter to enable debug mode, you can use `chrome devtools` for single-step code debugging :
-
-![69456694-513D-4388-B52F-001562D4A520.png](https://img.alicdn.com/imgextra/i1/O1CN01jovior1pQBGiH8ao3_!!6000000005354-2-tps-1462-633.png)
-You can use `chrome:// inspect/` to open the `nodejs devtools` for breakpoint debugging:
-![image.png](https://img.alicdn.com/imgextra/i4/O1CN01ntvZ5j28wDfyG5Gpe_!!6000000007996-2-tps-1464-708.png)
-![image.png](https://img.alicdn.com/imgextra/i1/O1CN010Jpz2O1lp8NrFFK57_!!6000000004867-2-tps-1500-842.png)
-You can also directly open the link of the `devtools` protocol output from the command line through the chrome browser, add a breakpoint to the corresponding code and debug it:
-![10016148-385E-46A4-8B3A-0A0110BECD18.png](https://img.alicdn.com/imgextra/i1/O1CN01jOAX0U1Ggey4FsGnw_!!6000000000652-2-tps-1474-487.png)
-

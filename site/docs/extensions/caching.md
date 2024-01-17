@@ -4,7 +4,7 @@
 
 :::tip
 
-Midway 提供基于 [cache-manager v5](https://github.com/node-cache-manager/node-cache-manager) 模块重新封装了缓存组件，原有的缓存模块基于 v3 开发不再迭代，如需查看老文档，请访问 [这里](/docs/cache)。
+Midway 提供基于 [cache-manager v5](https://github.com/node-cache-manager/node-cache-manager) 模块重新封装了缓存组件，原有的缓存模块基于 v3 开发不再迭代，如需查看老文档，请访问 [这里](/docs/extensions/cache)。
 
 :::
 
@@ -110,8 +110,9 @@ export default {
 
 :::tip
 
-* 内存缓存使用的淘汰算法是 LRU
 * `ttl` 的单位是毫秒
+* `max` 代表缓存 key 的最大个数
+* 不同的 Store 淘汰 key 的算法不同，内存缓存使用的淘汰算法是 LRU
 
 :::
 
@@ -240,7 +241,7 @@ export class UserService {
 
 
 ```typescript
-import { createRedisStore } from '@midwayjs/cache-manager-redis';
+import { createRedisStore } from '@midwayjs/cache-manager';
 
 // src/config/config.default.ts
 export default {

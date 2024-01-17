@@ -1,6 +1,9 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Start-up and deployment
 
-Midway provides a lightweight launcher to launch your application. null
+Midway provides a lightweight launcher for launching your app. We provide a variety of deployment models for applications. You can either deploy the application to any server (such as a server purchased by yourself) in the traditional way, or you can build the application as a Serverless application. Midway provides a cross-cloud deployment method.
 
 
 ## Local development
@@ -13,6 +16,30 @@ Here are two ways to use the `dev` command for local development.
 
 
 In local development, Midway provides a `dev` command startup framework in `package.json`, such:
+
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="Use mwtsc">
+
+```json
+{
+   "scripts": {
+     "dev": "mwtsc --watch --run @midwayjs/mock/app.js",
+   }
+}
+```
+
+This is the most streamlined command. It has the following features:
+
+
+- 1. Use the `mwtsc` tool to build the code. After success, read the built code through the `app.js` file in the `@midwayjs/mock` package to start the project
+- 2. Use the built-in API (`initializeGlobalApplicationContext` of @midwayjs/core) to create a service without going through `bootstrap.js`
+- 3. Single process operation
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
 ```json
 {
   "script": {
@@ -27,6 +54,10 @@ This is the most concise command, it has the following characteristics:
 - 2. Use the built-in API(@midwayjs/core `initializeGlobalApplicationContext`) to create a service without `bootstrap.js`
 - 3. Single process operation
 
+</TabItem>
+
+</Tabs>
+
 Run the following command on the command line to execute.
 ```bash
 $ npm run dev
@@ -40,6 +71,23 @@ Because the local dev command is usually different from the initialization param
 
 In this case, you can directly pass an entry file to the `dev` command and use the entry file to start the service.
 
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="Use mwtsc">
+
+```json
+{
+  "scripts": {
+    "dev": "mwtsc --watch --run bootstrap.js",
+  },
+}
+```
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
+
 ```json
 {
   "script": {
@@ -48,6 +96,9 @@ In this case, you can directly pass an entry file to the `dev` command and use t
 }
 ```
 
+</TabItem>
+
+</Tabs>
 
 
 ## Deploy to server
@@ -62,8 +113,10 @@ After deployment, some places are different from local development.
 **1. Changes in the node environment**
 
 
-The biggest difference is that after the server is deployed, node will be used directly to start the project instead of ts-node, which means that the `*.ts` file will no longer be read.
+The biggest difference is that after the server is deployed, node will be used directly to start the project.
 
+* If you use `mwtsc` to develop the project, the difference is not big
+* If `@midwayjs/cli` is used, `ts-node` will not be used to start the project, which means that `*.ts` files will no longer be read
 
 **2. Changes in the loading directory**
 
@@ -99,6 +152,23 @@ Since deployment is very relevant to the platform and environment, we will demon
 
 
 Since Midway project is TypeScript written, we compile it before deployment. In this example, we have written the build script in advance and run the `npm run build` command. If not, add the following `build` command to `package.json`.
+
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="Use mwtsc">
+
+```typescript
+{
+  "scripts": {
+    "build": "mwtsc --cleanOutDir",
+  },
+}
+```
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
 ```json
 // package.json
 {
@@ -107,6 +177,10 @@ Since Midway project is TypeScript written, we compile it before deployment. In 
   },
 }
 ```
+
+</TabItem>
+
+</Tabs>
 
 :::info
 Although it is not necessary, it is recommended that you perform the test and lint first.
@@ -392,6 +466,7 @@ The result of the current example is only `207MB`. Compared with the original `1
 
 On the basis of docker deployment, you can also deploy some services related to your own services in combination with docker-compose.
 
+The following uses midway combined with redis as an example to quickly deploy the entire project using docker-compose.
 
 **Step 1**
 
@@ -416,25 +491,46 @@ services:
 
 ```
 
+**Step 3: Modify config**
 
-**Step 3: Build**
+Modify the configuration file of redis as follows: (To configure redis, please refer to [redis component](extensions/redis))
+
+```javascript
+// src/config/config.default.ts
+export default {
+  // ...
+   redis: {
+     client: {
+       port: 6379, //The port of the redis container
+       host: "redis", // This is consistent with the redis service name in the docker-compose.yml file
+       password: "", //There is no password by default. Please change it to the password configured for the redis container.
+       db: 0,
+     },
+   },
+}
+
+```
+
+
+**Step 4: Build**
 
 Use command:
 
 ```bash
-$docker-compose build
+$ docker-compose build
 ```
 
-**Step 4: Run**
+**Step 5: Run**
 
 ```bash
-$docker-compose up -d
+$ docker-compose up -d
 ```
 
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608884158660-02bd2d3c-08b4-4ecc-a4dd-a18d4b9d2c12.png)
-So how to use redis, for example, because docker-compose has added a redis and link.
 
-For more details about docker-compose, you can see how to use docker-compose online.
+**Followup**
+
+For more information about docker-compose, please refer to [Official Documentation](https://docs.docker.com/compose/)
 
 
 
@@ -679,7 +775,6 @@ First you need to configure pkg, the main content is in the `bin` and `pkg` fiel
    },
    "scripts": {
      //...
-     "build": "midway-bin build -c",
      "pkg": "pkg . -d > build/pkg.log",
      "bundle": "bundle && npm run build"
    },
@@ -725,4 +820,4 @@ If it is correct, we can see a `my-midway-project` file in the `build` directory
 
 ## Deployment failure
 
-After deployment, the situation is more complicated because it is related to the environment. If you encounter problems after deployment to the server, see [Troubleshoot server startup failure](null).
+After deployment, the situation is more complicated because it is related to the environment. If you encounter problems after deployment to the server, see [Troubleshoot server startup failure](/docs/ops/ecs_start_err).

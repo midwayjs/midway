@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 修改源码目录
 
 在某些特殊场景下，可以修改源码所在的 `src` 目录。
@@ -16,11 +19,35 @@
 
 `package.json` 中的 dev 命令需要增加源码目录，方便 dev 查找。
 
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="使用 mwtsc">
+
+默认可以识别 `tsconfig.json` 中的 `outDir` 字段，无需调整。
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
+
 ```typescript
 "dev": "cross-env NODE_ENV=local midway-bin dev --sourceDir=./server --ts",
 ```
 
+</TabItem>
+
+</Tabs>
+
 ### build 编译
+
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="使用 mwtsc">
+
+默认可以识别 `tsconfig.json` 中的 `outDir` 字段，无需调整。
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
 
 为了让 tsc 编译能找到源码目录，需要修改 `tsconfig.json` ，增加 `rootDir` 字段。
 
@@ -35,6 +62,12 @@
 ```
 
 这样，开发和编译就都正常了。
+
+</TabItem>
+
+</Tabs>
+
+
 
 
 ## 编译目录的修改
@@ -52,6 +85,10 @@
     // ...
     "outDir": "build"
   },
+  "exclude": {
+    "build",
+    //...
+  }
 }
 ```
 

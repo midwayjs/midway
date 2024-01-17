@@ -77,14 +77,3 @@
 
 
 
-## 在 Chrome 中调试
-
-如果您使用 vim 或其他代码编辑器，可以使用此方式，通过 `@midwayjs/cli` 的 `dev` 命令，添加 `--debug` 参数启动 debug 模式，可以通过 `chrome devtools` 进行单步代码调试：
-
-![69456694-513D-4388-B52F-001562D4A520.png](https://img.alicdn.com/imgextra/i1/O1CN01jovior1pQBGiH8ao3_!!6000000005354-2-tps-1462-633.png)
-您可以通过 `chrome://inspect/` 打开 `nodejs devtools` 进行断点调试：
-![image.png](https://img.alicdn.com/imgextra/i4/O1CN01ntvZ5j28wDfyG5Gpe_!!6000000007996-2-tps-1464-708.png)
-![image.png](https://img.alicdn.com/imgextra/i1/O1CN010Jpz2O1lp8NrFFK57_!!6000000004867-2-tps-1500-842.png)
-您也可以直接通过 chrome 浏览器打开命令行中输出的 `devtools` 协议的链接，给对应代码添加断点后调试：
-![10016148-385E-46A4-8B3A-0A0110BECD18.png](https://img.alicdn.com/imgextra/i1/O1CN01jOAX0U1Ggey4FsGnw_!!6000000000652-2-tps-1474-487.png)
-

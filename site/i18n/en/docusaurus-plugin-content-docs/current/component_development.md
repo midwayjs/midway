@@ -20,7 +20,7 @@ Starting from v3, the framework (Framework) has also become part of the componen
 Just execute the script below and select the `component-v3` template in the template list to quickly generate a sample component.
 
 ```bash
-$ npm init midway
+$ npm init midway@latest -y
 ```
 
 Note [Node.js environment requirements](/docs/intro#environmental-preparation).

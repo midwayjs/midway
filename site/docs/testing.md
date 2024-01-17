@@ -1,9 +1,15 @@
+
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 测试
 
 应用开发中，测试十分重要，在传统 Web 产品快速迭代的时期，每个测试用例都给应用的稳定性提供了一层保障。 API 升级，测试用例可以很好地检查代码是否向下兼容。 对于各种可能的输入，一旦测试覆盖，都能明确它的输出。 代码改动后，可以通过测试结果判断代码的改动是否影响已确定的结果。
 
-
 所以，应用的 Controller、Service 等代码，都必须有对应的单元测试保证代码质量。 当然，框架和组件的每个功能改动和重构都需要有相应的单元测试，并且要求尽量做到修改的代码能被 100% 覆盖到。
+
+当前社区的测试库主要是 `jest` 和 `mocha` ，本文以 `jest` 作为示例 。
 
 
 
@@ -35,8 +41,43 @@
 
 Midway 默认提供 `midway-bin` 命令来运行测试脚本。在新版本中，Midway 默认将 mocha 替换成了 Jest，它的功能更为强大，集成度更高，这让我们**聚焦精力在编写测试代码**上，而不是纠结选择那些测试周边工具和模块。
 
-
 只需要在 `package.json` 上配置好 `scripts.test` 即可。
+
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="直接使用 jest">
+
+
+```json
+{
+  "scripts": {
+    "test": "jest"
+  }
+}
+```
+
+然后就可以按标准的 `npm test` 来运行测试了，默认脚手架中，我们都已经提供了此命令，所以你可以开箱即用的运行测试。
+
+```bash
+➜  my_midway_app npm run test
+
+> my_midway_project@1.0.0 test /Users/harry/project/application/my_midway_app
+> jest
+
+Testing all *.test.ts...
+ PASS  test/controller/home.controller.test.ts
+ PASS  test/controller/api.controller.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        3.26 s
+Ran all test suites matching /\/test\/[^.]*\.test\.ts$/i.
+```
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
 
 
 ```json
@@ -47,8 +88,8 @@ Midway 默认提供 `midway-bin` 命令来运行测试脚本。在新版本中�
 }
 ```
 
-
 然后就可以按标准的 `npm test` 来运行测试了，默认脚手架中，我们都已经提供了此命令，所以你可以开箱即用的运行测试。
+
 ```bash
 ➜  my_midway_app npm run test
 
@@ -65,6 +106,10 @@ Snapshots:   0 total
 Time:        3.26 s
 Ran all test suites matching /\/test\/[^.]*\.test\.ts$/i.
 ```
+
+</TabItem>
+
+</Tabs>
 
 
 
@@ -403,18 +448,48 @@ it('should GET /', async () => {
 
 ## 运行单个测试
 
+和 mocha 的 `only`  不同，jest 的 `only` 方法只针对单个文件生效。
 
-和 mocha 的 `only`  不同，jest 的 `only` 方法只针对单个文件生效。 `midway-bin` 提供可以运行单个文件的能力。
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="直接使用 jest">
+
+执行单个文件。
+
+```bash
+$ jest test/controller/api.ts
+```
+
+如果你想运行文件中的特定测试，你可以使用 jest 的 `-t` 或 `--testNamePattern` 选项，后面跟上你想运行的测试的名称。例如：
+
+```bash
+$ jest -t "name of your test"
+```
+
+这将只运行名称匹配的测试。
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
+
+ `midway-bin` 提供可以运行单个文件的能力。
+
 ```bash
 $ midway-bin test -f test/controller/api.ts
 ```
+
 这样可以指定运行某个文件的测试，再配合 `describe.only` 和 `it.only` ，这样可以只运行单个文件中的单个测试方法。
 
 
 `midway-bin test --ts` 等价于直接使用  jest 的下面的命令。
+
 ```bash
 $ node --require=ts-node/register ./node_modules/.bin/jest
 ```
+
+</TabItem>
+
+</Tabs>
 
 
 
@@ -481,8 +556,23 @@ jest 默认时间为 **5000ms（5秒钟）**，我们可以将它调整到更多
 
 可以通过在 `package.json` 启动时修改。
 
-```javascript
-// jest.setup.js
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="直接使用 jest">
+
+```json
+{
+  "scripts": {
+    "test": "jest --testTimeout=30000"
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
+
+```json
 {
   "scripts": {
     "test": "midway-bin test --ts --testTimeout=30000"
@@ -491,6 +581,10 @@ jest 默认时间为 **5000ms（5秒钟）**，我们可以将它调整到更多
 ```
 
 这里的 `testTimeout` 是 jest 的启动参数。
+
+</TabItem>
+
+</Tabs>
 
 我们可以在 `jest.setup.js` 文件中写入下面的代码，对 jest 超时时间做调整。
 
@@ -511,14 +605,32 @@ process.env.MIDWAY_TS_MODE = 'true';
 ```
 ### 示例三：程序无法正常退出的处理
 
-
 有时候，由于一些代码（定时器，监听等）在后台运行，导致单测跑完后会无法退出进程，对于这个情况，jest 提供了 `--forceExit` 参数。
 
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="直接使用 jest">
+
+```bash
+$ jest --forceExit
+$ jest --coverage --forceExit
+```
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
 
 ```bash
 $ midway-bin test --ts --forceExit
 $ midway-bin cov --ts --forceExit
 ```
+
+这里的 `testTimeout` 是 jest 的启动参数。
+
+</TabItem>
+
+</Tabs>
+
 也可以在自定义文件中，增加属性。
 
 ```javascript
@@ -533,12 +645,29 @@ module.exports = {
 
 ### 示例四：并行改串行执行
 
-
 jest 默认为每个测试文件并行处理，如果测试代码中有启动端口等场景，并行处理可能会导致端口冲突而报错，这个时候需要加 `--runInBand` 参数，注意，这个参数只能加载命令中。
+
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="直接使用 jest">
+
+```bash
+$ jest --runInBand
+$ jest --coverage --runInBand
+```
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
+
 ```bash
 $ midway-bin test --ts --runInBand
 $ midway-bin cov --ts --runInBand
 ```
+
+</TabItem>
+
+</Tabs>
 
 
 
@@ -606,86 +735,9 @@ $ midway-bin cov --ts --runInBand
 
 
 
-## 配置 alias paths
+## 关于 alias paths
 
-tsc 将 ts 编译成 js 的时候，并不会去转换 import 的模块路径，因此当你在 `tsconfig.json`  中配置了 paths 之后，如果你在 ts 中使用 paths 并 import 了对应模块，编译成 js 的时候就有大概率出现模块找不到的情况。
-
-
-解决办法是，要么不用 paths ，要么使用 paths 的时候只用来 import 一些声明而非具体值，再要么就可以使用 [tsconfig-paths](https://github.com/dividab/tsconfig-paths) 来 hook 掉 node 中的模块路径解析逻辑，从而支持 `tsconfig.json`  中的 paths。
-
-```bash
-$ npm i tsconfig-paths --save-dev
-```
-
-使用 tsconfig-paths 可以在 `src/configuration.ts`  中引入。
-
-```typescript
-// src/configuration.ts
-
-import 'tsconfig-paths/register';
-// ...
-```
-
-
-:::info
-上述的方法只会对 dev 阶段（ ts-node）生效。
-:::
-
-
-在测试中，由于 Jest 的环境比较特殊，需要对 alias 再做一次处理，可以利用 Jest 的配置文件中的 `moduleNameMapper` 功能来替换加载到的模块，变相实现 alias 的功能。
-
-```typescript
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  testPathIgnorePatterns: ['<rootDir>/test/fixtures'],
-  coveragePathIgnorePatterns: ['<rootDir>/test/'],
-  moduleNameMapper: {
-  	'^@/(.*)$': '<rootDir>/src/$1'
-  }
-};
-
-```
-注意，这里使用的 alias 前缀是 @符号，如果是其他的 alias 名，请自行修改。
-
-
-
-## 使用 mocha 替代 jest
-
-
-有些同学对 mocha 情有独钟，希望使用 mocha 作为测试工具。
-
-
-可以使用 mocha 模式进行测试。
-```bash
-$ midway-bin test --ts --mocha
-```
-
-
-使用 mocha 进行单测时，需要手动安装 `mocha` 和 `@types/mocha` 两个依赖到 `devDependencies` 中：`npm i mocha @types/mocha -D` 。
-
-### 配置 alias paths
-当你在 `tsconfig.json` 中配置了 paths 之后，并且模块包导入使用了 paths ，则会存在 mocha 做单元测试会导致路径无法被解析，无法使用通过导入 `tsconfig-paths/register` 解决
-```typescript
-// src/configuration.ts
-
-import 'tsconfig-paths/register';
-// ...
-```
-
-需要添加 `tsconfig-paths` 并且在测试的时候引用进行处理
-
-```bash
-$ npm install --save-dev tsconfig-paths
-```
-
-```bash
-$ midway-bin test --ts --mocha -r tsconfig-paths/register
-```
-
-:::info
-注意，由于 mocha 没有自带断言工具，需要使用其他如 assert，chai 等工具进行断言。
-:::
+`mwtsc` 工具不支持 Alias Path 功能。
 
 
 

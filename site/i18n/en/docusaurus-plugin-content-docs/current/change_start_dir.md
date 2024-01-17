@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Change Source Dir
 
 In some special scenarios, you can modify the `src` directory where the source code is located.
@@ -16,11 +19,36 @@ Below, we will change the `src` directory to `server` as an example.
 
 The Dev command in `package.json` needs to add a source directory to facilitate Dev search.
 
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="Use mwtsc">
+
+The `outDir` field in `tsconfig.json` is recognized by default and no adjustment is required.
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
 ```typescript
-"dev": "cross-env NODE_ENV=local midway-bin dev --sourceDir=./server --ts ",
+"dev": "cross-env NODE_ENV=local midway-bin dev --sourceDir=./server --ts",
 ```
 
+</TabItem>
+
+</Tabs>
+
+
 ### build compilation
+
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="Use mwtsc">
+
+The `outDir` field in `tsconfig.json` is recognized by default and no adjustment is required.
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
 
 In order for tsc compilation to find the source directory, it is necessary to modify the `tsconfig.json` and add `rootDir` fields.
 
@@ -35,6 +63,10 @@ In order for tsc compilation to find the source directory, it is necessary to mo
 ```
 
 In this way, development and compilation are normal.
+
+</TabItem>
+
+</Tabs>
 
 
 ## Modification of Compiled Directory
@@ -52,6 +84,10 @@ Modify the `outDir` field in the `tsconfig.json`.
     // ...
     "outDir": "build"
   },
+  "exclude": {
+    "build",
+    //...
+  }
 }
 ```
 

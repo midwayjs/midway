@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Create the first application
 
 
@@ -115,6 +118,21 @@ Midway will start the HTTP server, open the browser, access `http:// 127.0.0.1:7
 
 If you need to modify the development startup port, you can modify it in the scripts paragraph of the `package.json`, such as 6001:
 
+<Tabs groupId="cli">
+
+<TabItem value="mwtsc" label="Use mwtsc">
+
+```typescript
+"scripts": {
+  //...
+  "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/app.js --port 6001",
+},
+```
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
 ```typescript
 "scripts": {
   //...
@@ -122,18 +140,12 @@ If you need to modify the development startup port, you can modify it in the scr
 },
 ```
 
+</TabItem>
+
+</Tabs>
+
+
 ## Frequently Asked Questions
-
-### Python compilation error
-
-:::caution
-Executing `npm install/i` command under node15/npm7 to install dependency may cause Python compilation errors
-
-**Projects created using npm init midway will automatically install dependencies without this problem.**
-
-**Solution**: Add the `--legacy-peer-deps` parameter when run `npm i`.
-**Reason**: The test framework Jest relies on jsdom. Npm7 automatically installs the canvas package that its peerDependencies depends on. The installation and compilation of canvas requires a python3 environment.
-:::
 
 ### windows eslint error
 

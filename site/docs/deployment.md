@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 启动和部署
 
 Midway 提供了一个轻量的启动器，用于启动你的应用。我们为应用提供了多种部署模式，你既可以将应用按照传统的样子，部署到任意的服务器上（比如自己购买的服务器），也可以将应用构建为一个 Serverless 应用，Midway 提供跨多云的部署方式。
@@ -11,8 +14,31 @@ Midway 提供了一个轻量的启动器，用于启动你的应用。我们为�
 
 ### 快速启动单个服务
 
-
 在本地研发时，Midway 在 `package.json` 中提供了一个 `dev` 命令启动框架，比如：
+
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="使用 mwtsc">
+
+```json
+{
+  "scripts": {
+    "dev": "mwtsc --watch --run @midwayjs/mock/app.js",
+  }
+}
+```
+
+这是一个最精简的命令，他有如下特性：
+
+
+- 1、使用 `mwtsc` 工具构建代码，成功后通过 `@midwayjs/mock` 包中的 `app.js` 文件读取构建后的代码启动项目
+- 2、使用内置的 API（@midwayjs/core 的 `initializeGlobalApplicationContext`）创建一个服务，不经过 `bootstrap.js`
+- 3、单进程运行
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
+
 ```json
 {
   "script": {
@@ -20,12 +46,17 @@ Midway 提供了一个轻量的启动器，用于启动你的应用。我们为�
   }
 }
 ```
+
 这是一个最精简的命令，他有如下特性：
 
 
 - 1、使用 `--ts` 指定 TypeScript（ts-node）环境启动
 - 2、使用内置的 API（@midwayjs/core 的 `initializeGlobalApplicationContext`）创建一个服务，不经过 `bootstrap.js`
 - 3、单进程运行
+
+</TabItem>
+
+</Tabs>
 
 在命令行运行下面的命令即可执行。
 ```bash
@@ -40,6 +71,22 @@ $ npm run dev
 
 这个时候我们可以直接传递一个入口文件给 `dev` 命令，直接使用入口文件启动服务。
 
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="使用 mwtsc">
+
+```json
+{
+  "scripts": {
+    "dev": "mwtsc --watch --run bootstrap.js",
+  },
+}
+```
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
+
 ```json
 {
   "script": {
@@ -47,6 +94,10 @@ $ npm run dev
   }
 }
 ```
+
+</TabItem>
+
+</Tabs>
 
 
 
@@ -61,9 +112,10 @@ $ npm run dev
 
 **1、node 环境的变化**
 
+最大的不同是，服务器部署后，会直接使用 node 来启动项目。
 
-最大的不同是，服务器部署后，会直接使用 node 来启动项目，而不是 ts-node，这意味着不再读取 `*.ts` 文件。
-
+* 如果使用了 `mwtsc` 开发项目，差距不是很大
+* 如果使用了 `@midwayjs/cli`，将不会使用 `ts-node` 来启动项目，这意味着不再读取 `*.ts` 文件
 
 **2、加载目录的变化**
 
@@ -98,16 +150,37 @@ $ npm run dev
 
 ### 编译代码和安装依赖
 
-
 由于 Midway 项目是 TypeScript 编写，在部署前，我们先进行编译。在示例中，我们预先写好了构建脚本，执行 `npm run build` 即可，如果没有，在 `package.json` 中添加下面的 `build` 命令即可。
+
+<Tabs groupId="scripts">
+
+<TabItem value="mwtsc" label="使用 mwtsc">
+
+```typescript
+{
+  "scripts": {
+    "build": "mwtsc --cleanOutDir",
+  },
+}
+```
+
+</TabItem>
+
+<TabItem value="cli" label="使用 @midwayjs/cli">
+
 ```json
-// package.json
 {
   "scripts": {
     "build": "midway-bin build -c"
   },
 }
 ```
+
+</TabItem>
+
+</Tabs>
+
+
 
 :::info
 虽然不是必须，但是推荐大家先执行测试和 lint。
@@ -143,7 +216,7 @@ $ npm prune --production  # 移除开发依赖
 ├── dist                # Midway 构建产物目录
 ├── node_modules        # Node.js 依赖包目录
 ├── test
-├── bootstrap.js				# 部署启动文件
+├── bootstrap.js        # 部署启动文件
 ├── package.json
 └── tsconfig.json
 ```
@@ -394,7 +467,8 @@ CMD ["npm", "run", "start"]
 ### 结合 Docker-Compose 运行
 
 在 docker 部署的基础上，还可以结合 docker-compose 配置项目依赖的服务，实现快速部署整个项目。
-下面以midway结合redis为例，使用 docker-compose 快速部署整个项目。
+
+下面以 midway 结合 redis 为例，使用 docker-compose 快速部署整个项目。
 
 
 **步骤一：编写Dockerfile**
@@ -404,7 +478,7 @@ CMD ["npm", "run", "start"]
 
 **步骤二：编写docker-compose.yml**
 
-新增 `docker-compose.yml` 文件，内容如下：（此处模拟我们的 midway 项目需要使用redis）
+新增 `docker-compose.yml` 文件，内容如下：（此处模拟我们的 midway 项目需要使用 redis）
 
 ```yaml
 # 项目的根目录，与Dockerfile文件同级
@@ -425,7 +499,7 @@ services:
 
 **步骤三：修改配置**
 
-修改redis的配置文件，内容如下：（ 配置redis，请参考[redis组件](extensions/redis) ）
+修改 redis 的配置文件，内容如下：（ 配置redis，请参考 [redis组件](extensions/redis) ）
 
 ```javascript
 // src/config/config.default.ts
@@ -706,7 +780,6 @@ $ npm i pkg --save-dev
   },
   "scripts": {
     // ...
-    "build": "midway-bin build -c",
     "pkg": "pkg . -d > build/pkg.log",
     "bundle": "bundle && npm run build"
   },
@@ -752,4 +825,4 @@ $ npm run pkg
 
 ## 部署失败的问题
 
-部署后由于和环境相关，情况更为复杂，如果部署到服务器之后碰到了问题，请查看 [服务器启动失败排查](./ops/ecs_start_err) 。
+部署后由于和环境相关，情况更为复杂，如果部署到服务器之后碰到了问题，请查看 [服务器启动失败排查](/docs/ops/ecs_start_err) 。

@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Test
 
 In application development, testing is very important. In the period of rapid iteration of traditional Web products, each test case provides a guarantee for the stability of the application.  API upgrade, test cases can well check whether the code is backwards compatible.  For all possible inputs, once the test covers, its output can be clarified.  After the code changes, you can judge whether the code changes affect the determined results through the test results.
@@ -5,7 +8,7 @@ In application development, testing is very important. In the period of rapid it
 
 Therefore, the Controller, Service and other codes of the application must have corresponding unit tests to ensure the code quality.  Of course, each functional change and refactoring of the framework and components requires corresponding unit tests, and the modified code is required to be covered by the 100% as much as possible.
 
-
+The current testing libraries in the community are mainly `jest` and `mocha`. This article uses `jest` as an example.
 
 ## Test directory structure
 
@@ -38,6 +41,42 @@ By default, Midway provides the `midway-bin` command to run the test script. In 
 
 You only need to configure the `scripts.test` on the `package.json`.
 
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="Use jest directly">
+
+
+```json
+{
+   "scripts": {
+     "test": "jest"
+   }
+}
+```
+
+Then you can run the test according to the standard `npm test`. In the default scaffolding, we have provided this command, so you can run the test out of the box.
+
+```bash
+➜ my_midway_app npm run test
+
+> my_midway_project@1.0.0 test /Users/harry/project/application/my_midway_app
+>jest
+
+Testing all *.test.ts...
+  PASS test/controller/home.controller.test.ts
+  PASS test/controller/api.controller.test.ts
+
+Test Suites: 2 passed, 2 total
+Tests: 2 passed, 2 total
+Snapshots: 0 total
+Time: 3.26 seconds
+Ran all test suites matching /\/test\/[^.]*\.test\.ts$/i.
+```
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
 
 ```json
 {
@@ -49,6 +88,7 @@ You only need to configure the `scripts.test` on the `package.json`.
 
 
 Then you can run the test according to the standard `npm test`. By default, we have already provided this command in the scaffold, so you can run the test out of the box.
+
 ```bash
 ➜  my_midway_app npm run test
 
@@ -66,6 +106,9 @@ Time:        3.26 s
 Ran all test suites matching /\/test\/[^.]*\.test\.ts$/i.
 ```
 
+</TabItem>
+
+</Tabs>
 
 
 ## Assertion library
@@ -405,9 +448,35 @@ it('should GET /', async () => {
 
 
 Unlike the `only` of mocha, the `only` method of jest takes effect only for a single file.  `midway-bin` provides the ability to run a single file.
+
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="Use jest directly">
+
+Execute a single file.
+
+```bash
+$ jest test/controller/api.ts
+```
+
+If you want to run a specific test in a file, you can use jest's `-t` or `--testNamePattern` option, followed by the name of the test you want to run. For example:
+
+```bash
+$ jest -t "name of your test"
+```
+
+This will only run tests with matching names.
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
+`midway-bin` provides the ability to run individual files.
+
 ```bash
 $ midway-bin test -f test/controller/api.ts
 ```
+
 In this way, you can specify to run the test of a file, and then cooperate with the `describe.only` and `it.only`, so that you can run only a single test method in a single file.
 
 `midway-bin test --ts` is equivalent to the following command using jest directly.
@@ -416,6 +485,9 @@ In this way, you can specify to run the test of a file, and then cooperate with 
 $ node --require=ts-node/register ./node_modules/.bin/jest
 ```
 
+</TabItem>
+
+</Tabs>
 
 
 ## Customize Jest file content
@@ -481,8 +553,23 @@ The default time for jest is **5000ms(5 seconds)**. You can adjust it to more.
 
 Can be modified at startup via `package.json`.
 
-```javascript
-// jest.setup.js
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="Use jest directly">
+
+```json
+{
+  "scripts": {
+    "test": "jest --testTimeout=30000"
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
+```json
 {
   "scripts": {
     "test": "midway-bin test --ts --testTimeout=30000"
@@ -492,6 +579,10 @@ Can be modified at startup via `package.json`.
 
 Here `testTimeout` is the startup parameter of jest.
 
+
+</TabItem>
+
+</Tabs>
 
 You can write the following code in the `jest.setup.js` file to adjust the jest timeout period.
 
@@ -515,11 +606,30 @@ process.env.MIDWAY_TS_MODE = 'true';
 
 Sometimes, because some codes (timers, listeners, etc.) run in the background, the process cannot be exited after a single test run. For this case, jest provides the `-forceExit` parameter.
 
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="Use jest directly">
+
+```bash
+$ jest --forceExit
+$ jest --coverage --forceExit
+```
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
 
 ```bash
 $ midway-bin test --ts --forceExit
 $ midway-bin cov --ts --forceExit
 ```
+
+The `testTimeout` here is the startup parameter of jest.
+
+</TabItem>
+
+</Tabs>
+
 You can also add attributes to a custom file.
 
 ```javascript
@@ -536,11 +646,28 @@ module.exports = {
 
 
 By default, jest processes each test file in parallel. If there are scenarios such as startup ports in the test code, parallel processing may cause port conflicts and report errors. At this time, you need to add the `-runInBand` parameter. Note that this parameter can only be loaded in the command.
+
+<Tabs groupId="scripts">
+
+<TabItem value="jest" label="Use jest directly">
+
+```bash
+$ jest --runInBand
+$ jest --coverage --runInBand
+```
+
+</TabItem>
+
+<TabItem value="cli" label="Use @midwayjs/cli">
+
 ```bash
 $ midway-bin test --ts --runInBand
 $ midway-bin cov --ts --runInBand
 ```
 
+</TabItem>
+
+</Tabs>
 
 
 ## Editor configuration
@@ -607,87 +734,9 @@ Set launch.json in the folder. vscode
 
 
 
-## Configure alias paths
+## About alias paths
 
-Tsc does not convert the module path of import when compiling ts into js, so when you configure paths in `tsconfig.json`, if you use paths in ts and import the corresponding module, there is a high probability that the module cannot be found when compiling js.
-
-
-The solution is to either use paths, or use paths to import some declarations instead of specific values, or use [tsconfig-paths](https://github.com/dividab/tsconfig-paths) to hook out the module path resolution logic in node to support paths in `tsconfig.json`.
-
-```bash
-$ npm i tsconfig-paths --save-dev
-```
-
-The use tsconfig-paths can be introduced in `src/configuration.ts`.
-
-```typescript
-// src/configuration.ts
-
-import 'tsconfig-paths/register';
-// ...
-```
-
-
-:::info
-The above method will only take effect for dev phase (ts-node).
-:::
-
-
-In the test, due to Jest's special environment, alias needs to be processed again. `moduleNameMapper` functions in Jest's configuration file can be used to replace the loaded modules to realize alias functions in disguise.
-
-```typescript
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  testPathIgnorePatterns: ['<rootDir>/test/fixtures']
-  coveragePathIgnorePatterns: ['<rootDir>/test/']
-  moduleNameMapper: {
-  	'^@/(.*)$': '<rootDir>/src/$1'
-  }
-};
-
-```
-Note that the alias prefix used here is the @symbol. If it is another alias name, please modify it yourself.
-
-
-
-## Use mocha instead of jest
-
-
-Some students have a soft spot for mocha and want to use mocha as a testing tool.
-
-
-Mocha mode can be used for testing.
-```bash
-$ midway-bin test --ts --mocha
-```
-
-
-When you use mocha for a single test, you must manually install the `mocha` and `@types/mocha` dependencies in the `devDependencies`: `npm I mocha @types/mocha -D`.
-
-### Configure alias paths
-When you configure paths in `tsconfig.json` and module package import uses paths, there will be mocha for unit testing, which will cause the path to be unresolved and cannot be resolved by importing the `tsconfig-paths/register`.
-```typescript
-// src/configuration.ts
-
-import 'tsconfig-paths/register';
-// ...
-```
-
-`tsconfig-paths` need to be added and referenced for processing during testing.
-
-```bash
-$ npm install --save-dev tsconfig-paths
-```
-
-```bash
-$ midway-bin test --ts --mocha -r tsconfig-paths/register
-```
-
-:::info
-Note that since mocha does not have its own assertion tool, other tools such as assert and chai need to be used for assertion.
-:::
-
+The `mwtsc` tool does not support the Alias Path feature.
 
 
 ## About mock data
