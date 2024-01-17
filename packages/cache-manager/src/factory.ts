@@ -10,14 +10,13 @@ import {
   ServiceFactory,
   ServiceFactoryConfigOption,
 } from '@midwayjs/core';
-import { caching, multiCaching, WrapTTL, CachingConfig } from 'cache-manager';
+import { caching, multiCaching } from './base';
 import {
   CacheManagerOptions,
   MidwayCache,
   MidwayMultiCache,
   MidwayUnionCache,
 } from './interface';
-import { coalesceAsync } from 'promise-coalesce';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -72,8 +71,7 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
           throw new MidwayCommonError('invalid cache config');
         }
       }
-      const cacheInstance = await multiCaching(newFactory);
-      return this.wrapMultiCaching(cacheInstance, newFactory);
+      return await multiCaching(newFactory);
     } else {
       // single cache
       if (typeof config.store === 'function') {
@@ -87,93 +85,8 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
           `cache instance "${clientName}" store is undefined, please check your configuration.`
         );
       }
-      const cacheInstance = await caching(config.store, config['options']);
-      return this.wrapCaching(cacheInstance, config['options']);
+      return await caching(config.store, config['options']);
     }
-  }
-
-  public wrapCaching(
-    cacheInstance: MidwayCache,
-    cachingArgs?: CachingConfig<any>
-  ): MidwayCache {
-    if (cacheInstance.methodWrap) {
-      return cacheInstance;
-    }
-
-    cacheInstance.methodWrap = async <T>(
-      key: string,
-      fn: (...args) => Promise<T>,
-      fnArgs: any[],
-      ttl?: WrapTTL<T>
-    ): Promise<T> => {
-      const store = cacheInstance.store;
-      return coalesceAsync(key, async () => {
-        const value = await store.get<T>(key);
-        if (value === undefined) {
-          const result = await fn(...fnArgs);
-          const cacheTTL = typeof ttl === 'function' ? ttl(result) : ttl;
-          await store.set(key, result, cacheTTL);
-          return result;
-        } else if (cachingArgs?.refreshThreshold) {
-          const cacheTTL = typeof ttl === 'function' ? ttl(value) : ttl;
-          const remainingTtl = await store.ttl(key);
-          if (
-            remainingTtl !== -1 &&
-            remainingTtl < cachingArgs.refreshThreshold
-          ) {
-            // fn(...fnArgs).then(result => store.set(key, result, cacheTTL));
-            coalesceAsync<T>(`+++${key}`, () => fn(...fnArgs)).then(result =>
-              store.set<T>(key, result, cacheTTL)
-            );
-          }
-        }
-        return value;
-      });
-    };
-
-    return cacheInstance;
-  }
-
-  public wrapMultiCaching(
-    cacheInstance: MidwayMultiCache,
-    caches: MidwayCache[]
-  ): MidwayMultiCache {
-    if (cacheInstance.methodWrap) {
-      return cacheInstance;
-    }
-
-    cacheInstance.methodWrap = async <T>(
-      key: string,
-      fn: (...args) => Promise<T>,
-      fnArgs: any[],
-      ttl?: WrapTTL<T>
-    ): Promise<T> => {
-      let value: T | undefined;
-      let i = 0;
-      for (; i < caches.length; i++) {
-        try {
-          value = await caches[i].get<T>(key);
-          if (value !== undefined) break;
-        } catch (e) {
-          // ignore
-        }
-      }
-      if (value === undefined) {
-        const result = await fn(...fnArgs);
-        const cacheTTL = typeof ttl === 'function' ? ttl(result) : ttl;
-        await cacheInstance.set(key, result, cacheTTL);
-        return result;
-      } else {
-        const cacheTTL = typeof ttl === 'function' ? ttl(value) : ttl;
-        Promise.all(
-          caches.slice(0, i).map(cache => cache.set(key, value, cacheTTL))
-        ).then();
-        caches[i].methodWrap(key, fn, fnArgs, ttl).then(); // call wrap for store for internal refreshThreshold logic, see: src/caching.ts caching.wrap
-      }
-      return value;
-    };
-
-    return cacheInstance;
   }
 
   getName(): string {

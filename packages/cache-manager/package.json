@@ -34,7 +34,7 @@
     "cache-manager-ioredis-yet": "1.2.2"
   },
   "dependencies": {
-    "cache-manager": "5.3.2",
-    "promise-coalesce": "1.1.1"
+    "lodash.clonedeep": "4.5.0",
+    "lru-cache": "7.18.3"
   }
 }

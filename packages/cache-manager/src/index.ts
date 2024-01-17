@@ -5,5 +5,5 @@ export {
 export * from './interface';
 export * from './factory';
 export * from './decorator/cacheKey';
-export * as CacheManager from 'cache-manager';
+export * as CacheManager from './base';
 export * from './store';

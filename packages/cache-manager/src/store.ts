@@ -1,4 +1,4 @@
-import type { Config, Store } from 'cache-manager';
+import type { Config, Store } from './base';
 import type { Redis, RedisServiceFactory } from '@midwayjs/redis';
 import {
   IMidwayContainer,
