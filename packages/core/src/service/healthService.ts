@@ -1,4 +1,4 @@
-import { ApplicationContext, Init, Inject, Provide, Scope } from '../decorator';
+import { ApplicationContext, Inject, Provide, Scope } from '../decorator';
 import {
   HealthResult,
   HealthResults,
@@ -6,7 +6,6 @@ import {
   ScopeEnum,
 } from '../interface';
 import { MidwayConfigService } from './configService';
-import { MidwayLifeCycleService } from './lifeCycleService';
 import { createPromiseTimeoutInvokeChain } from '../util';
 
 interface InnerHealthResult extends HealthResult {
@@ -19,9 +18,6 @@ export class MidwayHealthService {
   @Inject()
   protected configService: MidwayConfigService;
 
-  @Inject()
-  protected lifeCycleService: MidwayLifeCycleService;
-
   @ApplicationContext()
   protected applicationContext: IMidwayContainer;
 
@@ -33,13 +29,18 @@ export class MidwayHealthService {
     };
   }> = [];
 
-  @Init()
-  protected async init() {
+  async init(
+    lifeCycleInstanceList: Array<{
+      target: any;
+      namespace: string;
+      instance?: any;
+    }>
+  ) {
     const healthCheckTimeout =
       this.configService.getConfiguration('core.healthCheckTimeout') || 1000;
     this.setCheckTimeout(healthCheckTimeout);
 
-    for (const lifecycleInstance of this.lifeCycleService.getLifecycleInstanceList()) {
+    for (const lifecycleInstance of lifeCycleInstanceList) {
       if (
         lifecycleInstance.instance &&
         lifecycleInstance.instance['onHealthCheck']

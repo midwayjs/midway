@@ -12,6 +12,7 @@ import { MidwayFrameworkService } from './frameworkService';
 import { MidwayConfigService } from './configService';
 import { debuglog } from 'util';
 import { MidwayMockService } from './mockService';
+import { MidwayHealthService } from './healthService';
 const debug = debuglog('midway:debug');
 
 @Provide()
@@ -25,6 +26,9 @@ export class MidwayLifeCycleService {
 
   @Inject()
   protected mockService: MidwayMockService;
+
+  @Inject()
+  protected healthService: MidwayHealthService;
 
   private lifecycleInstanceList: Array<{
     target: any;
@@ -62,6 +66,9 @@ export class MidwayLifeCycleService {
 
       cycle.instance && this.lifecycleInstanceList.push(cycle);
     }
+
+    // init health check service
+    await this.healthService.init(this.lifecycleInstanceList);
 
     // bind object lifecycle
     await Promise.all([
