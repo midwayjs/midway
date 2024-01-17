@@ -111,7 +111,7 @@ export class CaptchaService {
     await this.captchaCaching.set(
       this.getStoreId(id),
       (text || '').toLowerCase(),
-      this.captcha.expirationTime
+      this.captcha.expirationTime * 1000
     );
     return id;
   }
