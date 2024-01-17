@@ -1,6 +1,8 @@
-import { createHttpRequest, close, createApp } from '@midwayjs/mock';
+import { createHttpRequest, close, createApp, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
+import * as captcha from '../src';
+import { sleep } from '@midwayjs/core';
 
 describe('test/index.test.ts', function () {
   let app;
@@ -55,5 +57,24 @@ describe('test/index.test.ts', function () {
         return response.body;
       });
       assert(textCheckRes === true);
+  });
+
+  it('test CaptchaService cache with seconds', async () => {
+    const app = await createLightApp('', {
+      imports: [captcha],
+      globalConfig: {
+        captcha: {
+          expirationTime: 1,
+        },
+      }
+    });
+
+    const captchaService = await app.getApplicationContext().getAsync(captcha.CaptchaService);
+
+    const id = await captchaService.set('123');
+    expect(await captchaService.check(id, '123')).toBeTruthy();
+    await sleep(1000);
+    expect(await captchaService.check(id, '123')).toBeFalsy();
+    await close(app);
   });
 });
