@@ -1,6 +1,19 @@
 # Change Log
 
 
+## v3.14.4 (2024-01-18)
+
+#### :bug: Bug Fix
+* `cache-manager`, `captcha`, `web-koa`
+  * [#3572](https://github.com/midwayjs/midway/pull/3572) fix: captcha time use seconds ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#3573](https://github.com/midwayjs/midway/pull/3573) fix: lifecycle inject fail in configuration ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.3 (2024-01-16)
 
 #### :nail_care: Polish
