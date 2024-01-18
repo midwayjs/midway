@@ -29,7 +29,10 @@
   "@midwayjs/jwt": "3.14.4",
   "@midwayjs/kafka": "3.14.4",
   "@midwayjs/leoric": "3.14.4",
-  "@midwayjs/mikro": "3.14.4",
+  "@midwayjs/mikro": [
+    "3.14.4",
+    "3.14.5"
+  ],
   "@midwayjs/mock": "3.14.4",
   "@midwayjs/mongoose": "3.14.4",
   "@midwayjs/oss": "3.14.4",
@@ -52,7 +55,10 @@
   "@midwayjs/typeorm": "3.14.4",
   "@midwayjs/upload": "3.14.4",
   "@midwayjs/validate": "3.14.4",
-  "@midwayjs/version": "3.14.4",
+  "@midwayjs/version": [
+    "3.14.4",
+    "3.14.5"
+  ],
   "@midwayjs/view": "3.14.4",
   "@midwayjs/view-ejs": "3.14.4",
   "@midwayjs/view-nunjucks": "3.14.4",

@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.14.5 (2024-01-18)
+
+#### :bug: Bug Fix
+* `mikro`
+  * [#3574](https://github.com/midwayjs/midway/pull/3574) fix: entityManager chaos under multiple instances ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.4 (2024-01-18)
 
 #### :bug: Bug Fix
