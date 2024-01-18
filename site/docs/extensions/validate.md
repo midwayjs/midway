@@ -216,16 +216,32 @@ export class HomeController {
 
 
 
-## 非 Web 场景校验
+## 通用场景校验
 
-在非 Web 场景下，没有 `@Body` 等 Web 类装饰器的情况下，也可以使用 `@Valid` 装饰器来进行校验。
+如果参数不是 DTO，可以使用 `@Valid` 装饰器进行校验，`@Valid` 装饰器可以直接传递一个 Joi 规则。
+
+```typescript
+// src/controller/home.ts
+import { Controller, Get, Query } from '@midwayjs/core';
+import { Valid, RuleType } from '@midwayjs/validate';
+import { UserDTO } from './dto/user';
+
+@Controller('/api/user')
+export class HomeController {
+  @get('/')
+  async getUser(@Valid(RuleType.number().required()) @Query('id') id: number) {
+    // ...
+  }
+}
+```
+
+在非 Web 场景下，没有 `@Body` 等 Web 类装饰器的情况下，也可以使用 `@Valid` 装饰器来进行校验，如果不传参数，也会复用 DTO 规则。
 
 比如在服务中：
 
 ```typescript
 import { Valid } from '@midwayjs/validate';
 import { Provide } from '@midwayjs/core';
-
 import { UserDTO } from './dto/user';
 
 @Provide()

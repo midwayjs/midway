@@ -229,15 +229,33 @@ export class HomeController {
 
 In general, use the global default configuration.
 
-## Validation for non-web
+## General scenario verification
 
-In non-Web scenarios, if there is no web class decorator such as `@Body`, you can also use the `@Valid` decorator for validation.
+If the parameter is not a DTO, you can use the `@Valid` decorator for verification. The `@Valid` decorator can directly pass a Joi rule.
+
+```typescript
+// src/controller/home.ts
+import { Controller, Get, Query } from '@midwayjs/core';
+import { Valid, RuleType } from '@midwayjs/validate';
+import { UserDTO } from './dto/user';
+
+@Controller('/api/user')
+export class HomeController {
+   @get('/')
+   async getUser(@Valid(RuleType.number().required()) @Query('id') id: number) {
+     // ...
+   }
+}
+```
+
+In non-Web scenarios, if there are no Web class decorators such as `@Body`, you can also use the `@Valid` decorator for verification. If no parameters are passed, the DTO rules will be reused.
 
 For example in a service:
 
 ```typescript
 import { Valid } from '@midwayjs/validate';
 import { Provide } from '@midwayjs/core';
+import { UserDTO } from './dto/user';
 
 @Provide()
 export class UserService {
