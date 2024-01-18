@@ -5,6 +5,19 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "https://midwayjs.org/en/changelog/v3.14.4",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a href=\"#-bug-fix\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>cache-manager</code>, <code>captcha</code>, <code>web-koa</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3572\" target=\"_blank\" rel=\"noopener noreferrer\">#3572</a> fix: captcha time use seconds (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li><li><code>core</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3573\" target=\"_blank\" rel=\"noopener noreferrer\">#3573</a> fix: lifecycle inject fail in configuration (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a href=\"#committers-1\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
+            "url": "https://midwayjs.org/en/changelog/v3.14.4",
+            "title": "v3.14.4",
+            "summary": "Bug Fix",
+            "date_modified": "2024-01-18T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
             "id": "https://midwayjs.org/en/changelog/v3.14.3",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-polish\">💅 Polish<a href=\"#-polish\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>captcha</code>, <code>mock</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3570\" target=\"_blank\" rel=\"noopener noreferrer\">#3570</a> feat: captcha use newest cacheManager component (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li><li><code>cache-manager-redis</code>, <code>cache-manager</code>, <code>core</code>, <code>mongoose</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3569\" target=\"_blank\" rel=\"noopener noreferrer\">#3569</a> feat: export health service and support mongoose health check (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a href=\"#committers-1\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
             "url": "https://midwayjs.org/en/changelog/v3.14.3",
