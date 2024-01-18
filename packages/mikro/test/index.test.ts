@@ -35,7 +35,10 @@ describe('/test/index.test.ts', () => {
         join(__dirname, 'fixtures/multi-enitymanager'),
         {}
       );
-      const result = await createHttpRequest(app).get('/m1').expect(200);
+      let result = await createHttpRequest(app).get('/m1').expect(200);
+      expect(result.text.includes('[]')).toBeTruthy();
+
+      result = await createHttpRequest(app).get('/').expect(200);
       expect(result.text.includes('[]')).toBeTruthy();
 
       await close(app);
