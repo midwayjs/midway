@@ -14,7 +14,7 @@ export default (appInfo: MidwayAppInfo): MidwayConfig => {
           ],
           dbName: join(appInfo.appDir, 'test1.sqlite'),
           driver: SqliteDriver,       // 这里使用了 sqlite 做示例
-          debug: true,
+          // debug: true,
           // allowGlobalContext: true,
           timezone: '+08:00',
           loadStrategy: LoadStrategy.JOINED,

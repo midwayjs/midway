@@ -1,5 +1,6 @@
-import { Configuration } from '@midwayjs/core';
+import { Configuration, Inject, MidwayConfigService } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
+import { Author } from './entity/author.entity';
 
 @Configuration({
   namespace: 'm1',
@@ -10,7 +11,13 @@ import * as DefaultConfig from './config/config.default';
   ],
 })
 export class BookConfiguration {
-  async onReady() {
-    // TODO something
+
+  @Inject()
+  configService: MidwayConfigService;
+  async onConfigLoad() {
+    // 在组件加到应用定义的实例里
+    const customEntities = this.configService.getConfiguration('mikro.dataSource.default.entities')
+    // console.log(customEntities);
+    customEntities.push(Author);
   }
 }

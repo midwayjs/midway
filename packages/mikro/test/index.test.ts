@@ -36,10 +36,10 @@ describe('/test/index.test.ts', () => {
         {}
       );
       let result = await createHttpRequest(app).get('/m1').expect(200);
-      expect(result.text.includes('[]')).toBeTruthy();
+      expect(result.text).toEqual('[]');
 
       result = await createHttpRequest(app).get('/').expect(200);
-      expect(result.text.includes('[]')).toBeTruthy();
+      expect(result.text).toEqual('[[],[]]');
 
       await close(app);
     });

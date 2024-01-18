@@ -19,14 +19,6 @@ export class MainConfiguration {
   @Inject()
   configService: MidwayConfigService;
   async onReady(container: IMidwayContainer) {
-
-    // 这种方法也不行
-    // const config = this.configService.getConfiguration()
-    // const customEntities = this.configService.getConfiguration('mikro.dataSource.default1.entities')
-    // console.log(customEntities)
-    // config.mikro.dataSource['default']['entities'].push(...customEntities);
-    // console.log(config.mikro.dataSource['default']['entities'])
-
     // 开发环境同步生成创建表
     const dataSourceManager = await container.getAsync(mikro.MikroDataSourceManager);
     for (const [_, dataSource] of dataSourceManager.getAllDataSources()) {
