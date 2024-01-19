@@ -3,6 +3,10 @@
 
 ## v3.14.6 (2024-01-19)
 
+#### :bug: Bug Fix
+* `swagger`
+  * [#3578](https://github.com/midwayjs/midway/pull/3578) swagger-UI not show exception after fixing global configuration ([@mmdapl](https://github.com/mmdapl))
+
 #### :package: Dependencies
 * `grpc`
   * [#3576](https://github.com/midwayjs/midway/pull/3576) fix(deps): update dependency @grpc/grpc-js to v1.9.14 ([@renovate[bot]](https://github.com/apps/renovate))
