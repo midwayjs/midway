@@ -22,7 +22,10 @@
   "@midwayjs/etcd": "3.14.4",
   "@midwayjs/express-session": "3.14.4",
   "@midwayjs/faas": "3.14.4",
-  "@midwayjs/grpc": "3.14.4",
+  "@midwayjs/grpc": [
+    "3.14.4",
+    "3.14.6"
+  ],
   "@midwayjs/http-proxy": "3.14.4",
   "@midwayjs/i18n": "3.14.4",
   "@midwayjs/info": "3.14.4",
@@ -31,7 +34,8 @@
   "@midwayjs/leoric": "3.14.4",
   "@midwayjs/mikro": [
     "3.14.4",
-    "3.14.5"
+    "3.14.5",
+    "3.14.6"
   ],
   "@midwayjs/mock": "3.14.4",
   "@midwayjs/mongoose": "3.14.4",
@@ -48,7 +52,10 @@
   "@midwayjs/session": "3.14.4",
   "@midwayjs/socketio": "3.14.4",
   "@midwayjs/static-file": "3.14.4",
-  "@midwayjs/swagger": "3.14.4",
+  "@midwayjs/swagger": [
+    "3.14.4",
+    "3.14.6"
+  ],
   "@midwayjs/tablestore": "3.14.4",
   "@midwayjs/tags": "3.14.4",
   "@midwayjs/typegoose": "3.14.4",
@@ -57,7 +64,8 @@
   "@midwayjs/validate": "3.14.4",
   "@midwayjs/version": [
     "3.14.4",
-    "3.14.5"
+    "3.14.5",
+    "3.14.6"
   ],
   "@midwayjs/view": "3.14.4",
   "@midwayjs/view-ejs": "3.14.4",
