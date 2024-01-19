@@ -597,22 +597,24 @@ export default {
 ### 配置日志输出格式
 
 
-显示格式指的是日志输出时单行文本的字符串结构。Midway 对 Winston 的日志做了定制，提供了一些默认对象。
+显示格式指的是日志输出时单行文本的字符串结构。
 
-每个 logger 对象，都可以配置一个输出格式，显示格式是一个返回字符串结构的方法，参数为 Winston 的 [info 对象](https://github.com/winstonjs/logform#info-objects)。
+每个 logger 对象，都可以配置一个输出格式，显示格式是一个返回字符串结构的方法，参数为一个 info 对象。
 
 ```typescript
+import { LoggerInfo } from '@midwayjs/logger';
+
 export default {
   midwayLogger: {
     clients: {
       appLogger: {
-        format: info => {
+        format: (info: LoggerInfo) => {
           return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
         }
         // ...
       },
       customOtherLogger: {
-        format: info => {
+        format: (info: LoggerInfo) => {
           return 'xxxx';
         }
       }

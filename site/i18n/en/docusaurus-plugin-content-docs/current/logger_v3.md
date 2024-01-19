@@ -600,28 +600,30 @@ For more logging options, please refer to [LoggerOptions Description](https://gi
 ### Configure log output format
 
 
-The display format refers to the string structure of a single line of text when outputting logs. Midway has customized Winston's log and provides some default objects.
+The display format refers to the string structure of a single line of text when outputting logs. 
 
-Each logger object can be configured with an output format. The display format is a method that returns a string structure, and the parameter is Winston's [info object](https://github.com/winstonjs/logform#info-objects).
+Each logger object can be configured with an output format. The display format is a method that returns a string structure, and the parameter is an info object.
 
 ```typescript
+import { LoggerInfo } from '@midwayjs/logger';
+
 export default {
-   midwayLogger: {
-     clients: {
-       appLogger: {
-         format: info => {
-           return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
-         }
-         // ...
-       },
-       customOtherLogger: {
-         format: info => {
-           return 'xxxx';
-         }
-       }
-     }
-     // ...
-   },
+  midwayLogger: {
+    clients: {
+      appLogger: {
+        format: (info: LoggerInfo) => {
+          return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
+        }
+        // ...
+      },
+      customOtherLogger: {
+        format: (info: LoggerInfo) => {
+          return 'xxxx';
+        }
+      }
+    }
+    // ...
+  },
 } as MidwayConfig;
 ```
 
