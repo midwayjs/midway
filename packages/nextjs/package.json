@@ -1,0 +1,40 @@
+{
+  "name": "@midwayjs/nextjs",
+  "description": "midway nextjs component",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "devDependencies": {
+    "next": "14.0.4",
+    "@midwayjs/core": "^3.14.4",
+    "@midwayjs/mock": "^3.14.4"
+  },
+  "dependencies": {
+  },
+  "keywords": [
+    "midway",
+    "nextjs",
+    "ssr"
+  ],
+  "author": "czy88840616 <czy88840616@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  }
+}
