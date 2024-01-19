@@ -33,12 +33,15 @@ export class SwaggerConfiguration implements ILifeCycle {
     ]);
 
     if (apps.length) {
+      const explorer = await container.getAsync(SwaggerExplorer);
+      explorer.scanApp();
+
+      // 添加统一前缀
       let globalPrefix =
         this.configService.getConfiguration('globalPrefix') ||
         this.configService.getConfiguration('koa.globalPrefix') ||
         this.configService.getConfiguration('express.globalPrefix') ||
         this.configService.getConfiguration('egg.globalPrefix');
-      const explorer = await container.getAsync(SwaggerExplorer);
 
       if (globalPrefix) {
         if (!/^\//.test(globalPrefix)) {
@@ -47,8 +50,6 @@ export class SwaggerConfiguration implements ILifeCycle {
 
         explorer.addGlobalPrefix(globalPrefix);
       }
-
-      explorer.scanApp();
 
       apps.forEach(app => {
         app.useMiddleware(SwaggerMiddleware);

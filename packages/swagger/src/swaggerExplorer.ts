@@ -112,11 +112,23 @@ export class SwaggerExplorer {
     }
   }
 
-  public addGlobalPrefix(prefix: string) {
-    if (!prefix) {
+  public addGlobalPrefix(globalPrefix: string) {
+    if (!globalPrefix) {
       return;
     }
-    this.documentBuilder.addServer(prefix);
+    const paths = this.documentBuilder.getPaths();
+
+    // 添加统一前缀后的接口地址
+    const newPaths: Record<string, PathItemObject> = {};
+    for (const [routerUrl, value] of Object.entries(paths)) {
+      // 处理路由
+      if (!/^\//.test(routerUrl)) {
+        newPaths[`${globalPrefix}/${routerUrl}`] = value;
+      } else {
+        newPaths[`${globalPrefix}${routerUrl}`] = value;
+      }
+    }
+    this.documentBuilder.addPaths(newPaths);
   }
 
   public scanApp() {

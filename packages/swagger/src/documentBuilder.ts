@@ -7,6 +7,7 @@ import {
   PathItemObject,
   SchemaObject,
   TagObject,
+  PathsObject,
 } from './interfaces';
 
 export class DocumentBuilder {
@@ -71,6 +72,10 @@ export class DocumentBuilder {
   public addPaths(paths: Record<string, PathItemObject>) {
     Object.assign(this.document.paths, paths);
     return this;
+  }
+
+  public getPaths(): PathsObject {
+    return this.document.paths;
   }
 
   public addSchema(schema: Record<string, SchemaObject>) {
