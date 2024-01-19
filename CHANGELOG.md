@@ -11,6 +11,8 @@
 * `grpc`
   * [#3576](https://github.com/midwayjs/midway/pull/3576) fix(deps): update dependency @grpc/grpc-js to v1.9.14 ([@renovate[bot]](https://github.com/apps/renovate))
 
+#### Committers: 1
+- 142vip.cn ([@mmdapl](https://github.com/mmdapl))
 
 
 ## v3.14.5 (2024-01-18)
