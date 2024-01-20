@@ -18,10 +18,19 @@ export type IMidwayWSApplication = IMidwayApplication<IMidwayWSContext, {
 export type IMidwayWSConfigurationOptions = {
   pubClient?: any;
   subClient?: any;
+  /**
+   * enable server heartbeat check, default is false
+   */
+  enableServerHeartbeatCheck?: boolean;
+  /**
+   * server heartbeat interval, default is 30000ms
+   */
+  serverHeartbeatInterval?: number;
 } & Partial<WebSocket.ServerOptions> & IConfigurationOptions;
 
 export type IMidwayWSContext = IMidwayContext<WebSocket & {
   app: IMidwayWSApplication;
+  isAlive: boolean;
 }>;
 
 export type Application = IMidwayWSApplication;

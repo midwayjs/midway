@@ -5,7 +5,10 @@ import { Configuration } from '@midwayjs/core';
   importConfigs: [
     {
       default: {
-        webSocket: {},
+        webSocket: {
+          enableServerHeartbeatCheck: false,
+          serverHeartbeatInterval: 30000,
+        },
       },
     },
   ],
