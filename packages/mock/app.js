@@ -14,7 +14,8 @@ const { join } = require('path');
   // kill(15) default
   process.once('SIGTERM', onSignal);
 
-  const app = await createApp({
+  let app = undefined;
+  app = await createApp({
     appDir: process.cwd(),
     baseDir: join(process.cwd(), 'dist'),
     ...args,

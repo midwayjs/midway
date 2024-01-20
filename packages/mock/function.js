@@ -13,8 +13,8 @@ const { join } = require('path');
   process.once('SIGQUIT', onSignal);
   // kill(15) default
   process.once('SIGTERM', onSignal);
-
-  const app = await createFunctionApp({
+  let app = undefined;
+  app = await createFunctionApp({
     appDir: process.cwd(),
     baseDir: join(process.cwd(), 'dist'),
     ...args,
