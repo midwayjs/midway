@@ -8,6 +8,10 @@ describe('/test/index.test.ts', () => {
     const app = await createServer('base-app');
     const client = await createWebSocketClient(`ws://localhost:3000`);
 
+    client.on('ping', () => {
+      console.log('got ping');
+    });
+
     client.send(1);
     let gotEvent = once(client, 'message');
     let [data] = await gotEvent;
@@ -74,6 +78,35 @@ describe('/test/index.test.ts', () => {
     await sleep();
 
     await client.close();
+    await closeApp(app);
+  });
+
+  it('should test heartbeat timeout and terminate', async () => {
+    const app = await createServer('base-app-heartbeat');
+    const client = await createWebSocketClient(`ws://localhost:3000`);
+
+    client.on('ping', () => {
+      console.log('got ping');
+    });
+
+    client.send(1);
+    let gotEvent = once(client, 'message');
+    let [data] = await gotEvent;
+    expect(JSON.parse(data)).toEqual({
+      name: 'harry',
+      result: 6,
+    });
+
+    await sleep(2000);
+
+    // 客户端终止后，服务端会收到 disconnect 事件
+    client.terminate();
+
+    await sleep(2000);
+
+    // 看一下服务端的 clients
+    expect(app.clients.size).toEqual(0);
+
     await closeApp(app);
   });
 });

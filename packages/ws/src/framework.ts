@@ -37,6 +37,7 @@ export class MidwayWSFramework extends BaseFramework<
   IMidwayWSConfigurationOptions
 > {
   server: http.Server;
+  protected heartBeatInterval: NodeJS.Timeout;
   protected connectionMiddlewareManager = this.createMiddlewareManager();
 
   configure(): IMidwayWSConfigurationOptions {
@@ -95,6 +96,9 @@ export class MidwayWSFramework extends BaseFramework<
           this.logger.info(
             `[midway:ws] WebSocket server port = ${this.configurationOptions.port} start success.`
           );
+          if (this.configurationOptions.enableServerHeartbeatCheck) {
+            this.startHeartBeat();
+          }
           resolve();
         });
       });
@@ -138,6 +142,13 @@ export class MidwayWSFramework extends BaseFramework<
     this.app.on(
       'connection',
       async (socket: IMidwayWSContext, request: http.IncomingMessage) => {
+        socket.isAlive = true;
+        socket.on('error', error => {
+          this.logger.error(`socket got error: ${error}`);
+        });
+        socket.on('pong', () => {
+          socket.isAlive = true;
+        });
         // create request context
         this.app.createAnonymousContext(socket);
         socket.requestContext.registerObject('socket', socket);
@@ -277,10 +288,13 @@ export class MidwayWSFramework extends BaseFramework<
     );
 
     this.app.on('error', err => {
-      this.logger.error('socket server close', err);
+      this.logger.error('socket server got error', err);
     });
 
     this.app.on('close', () => {
+      if (this.heartBeatInterval) {
+        clearInterval(this.heartBeatInterval);
+      }
       this.logger.info('socket server close');
     });
   }
@@ -332,6 +346,19 @@ export class MidwayWSFramework extends BaseFramework<
     undefined
   > {
     return this.connectionMiddlewareManager;
+  }
+
+  public startHeartBeat() {
+    this.heartBeatInterval = setInterval(() => {
+      this.app.clients.forEach((socket: IMidwayWSContext) => {
+        if (socket.isAlive === false) {
+          debug('[ws]: socket terminate');
+          return socket.terminate();
+        }
+        socket.isAlive = false;
+        socket.ping();
+      });
+    }, this.configurationOptions.serverHeartbeatInterval);
   }
 }
 
