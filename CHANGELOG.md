@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.14.7 (2024-01-20)
+
+#### :bug: Bug Fix
+* `mock`
+  * [#3579](https://github.com/midwayjs/midway/pull/3579) fix: app throw initialize error when invoke close method ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `ws`
+  * [#3582](https://github.com/midwayjs/midway/pull/3582) feat: support heartbeat for ws ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `cos`, `oss`
+  * [#3581](https://github.com/midwayjs/midway/pull/3581) chore(deps): update dependency dotenv to v16.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.6 (2024-01-19)
 
 #### :bug: Bug Fix
