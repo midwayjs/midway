@@ -78,8 +78,8 @@ export class DocumentBuilder {
     return this.document.paths;
   }
 
-  public setPaths(paths: Record<string, PathItemObject>){
-    this.document.paths=paths
+  public setPaths(paths: Record<string, PathItemObject>) {
+    this.document.paths = paths;
     return this;
   }
 
