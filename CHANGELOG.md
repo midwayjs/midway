@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.14.8 (2024-01-22)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3583](https://github.com/midwayjs/midway/pull/3583) fix(swagger): Updated test cases to fix duplicate interface addresses… ([@mmdapl](https://github.com/mmdapl))
+
+#### Committers: 1
+- 142vip.cn ([@mmdapl](https://github.com/mmdapl))
+
+
+
 ## v3.14.7 (2024-01-20)
 
 #### :bug: Bug Fix
