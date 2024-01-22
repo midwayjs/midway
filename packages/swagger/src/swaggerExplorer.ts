@@ -128,7 +128,7 @@ export class SwaggerExplorer {
         newPaths[`${globalPrefix}${routerUrl}`] = value;
       }
     }
-    this.documentBuilder.addPaths(newPaths);
+    this.documentBuilder.setPaths(newPaths);
   }
 
   public scanApp() {

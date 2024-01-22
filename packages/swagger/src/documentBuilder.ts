@@ -78,6 +78,11 @@ export class DocumentBuilder {
     return this.document.paths;
   }
 
+  public setPaths(paths: Record<string, PathItemObject>) {
+    this.document.paths = paths;
+    return this;
+  }
+
   public addSchema(schema: Record<string, SchemaObject>) {
     if (!this.document.components.schemas) {
       this.document.components.schemas = {};

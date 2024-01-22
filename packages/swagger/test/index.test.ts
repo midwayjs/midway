@@ -84,7 +84,7 @@ describe('/test/index.test.ts', () => {
       expect(body.components.schemas.Cat.properties.father).toEqual({
         $ref: '#/components/schemas/Cat',
       });
-      expect(body.paths['/cats/{id}']).toMatchSnapshot();
+      expect(body.paths['/helloworld/vvvv01/cats/{id}']).toMatchSnapshot();
     });
   });
 
