@@ -392,9 +392,9 @@ export default {
   schedule: true,
   schedulePlus: {
     enable: true,
-    package: midway-schedule,
-  }
-}
+    package: 'midway-schedule',
+  },
+};
 ```
 
 使用请参考上一版本文档。
