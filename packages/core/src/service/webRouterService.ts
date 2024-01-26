@@ -402,6 +402,21 @@ export class MidwayWebRouterService {
     this.sortPrefixAndRouter();
   }
 
+  public async deleteRouter(prefix: string) {
+    if (!prefix) {
+      return;
+    }
+    const routerTable = await this.getRouterTable();
+    routerTable.delete(prefix);
+
+    this.routesPriority = this.routesPriority.filter(item => {
+      if (prefix === item.prefix) {
+        return false;
+      }
+      return true;
+    });
+  }
+
   public sortRouter(urlMatchList: RouterInfo[]) {
     // 1. 绝对路径规则优先级最高如 /ab/cb/e
     // 2. 星号只能出现最后且必须在/后面，如 /ab/cb/**
