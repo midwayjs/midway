@@ -36,7 +36,7 @@ describe('/test/service/webRouterService.test.ts', function () {
       url: '/abc/dddd/*',
       requestMethod: 'GET',
     });
-   
+
     let routeInfo = await collector.getMatchedRouterInfo('/api', 'get');
     expect(routeInfo).toBeUndefined();
 
@@ -204,6 +204,41 @@ describe('/test/service/webRouterService.test.ts', function () {
     const result1 = collector.sortRouter(require('./router').routerList6);
     expect(result1[0].url).toEqual('/hello');
     expect(result1[1].url).toEqual('/:slot');
+  });
+
+
+  it('should test delete router', async () => {
+    const collector = new MidwayWebRouterService();
+    const prefix = '/_abc'
+    collector.addRouter(async (ctx) => {
+      return 'hello world';
+    }, {
+      prefix,
+      url: prefix + '/dddd/efg',
+      requestMethod: 'GET',
+    });
+
+    const routerTable = await collector.getRouterTable();
+    expect(routerTable.has(prefix)).toEqual(true);
+
+    await collector.deleteRouter('fake_input')
+    expect(routerTable.has(prefix)).toEqual(true);
+
+    await collector.deleteRouter('')
+    expect(routerTable.has(prefix)).toEqual(true);
+
+    await collector.deleteRouter(prefix)
+    expect(routerTable.has(prefix)).toEqual(false);
+
+    const flattenTable = await collector.getFlattenRouterTable();
+    let exists = false;
+    flattenTable.forEach(item => {
+      if (item.prefix === prefix) {
+        exists = true;
+      }
+    });
+    expect(exists).toEqual(false);
+
   });
 
 });

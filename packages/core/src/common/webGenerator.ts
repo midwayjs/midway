@@ -16,7 +16,7 @@ import {
   MidwayWebRouterService,
   RouterInfo,
 } from '../service/webRouterService';
-import { httpError } from '../error';
+import { MidwayCommonError, httpError } from '../error';
 import { MidwayMiddlewareService } from '../service/middlewareService';
 
 const debug = util.debuglog('midway:debug');
@@ -135,8 +135,11 @@ export abstract class WebControllerGenerator<
       // add route
       const routes = routerTable.get(routerInfo.prefix);
       if (!routes) {
-        throw new Error(`router table not found for ${routerInfo.prefix}`);
+        throw new MidwayCommonError(
+          `router table not found for ${routerInfo.prefix}`
+        );
       }
+
       for (const routeInfo of routes) {
         // get middleware
         const methodMiddlewares = [];
