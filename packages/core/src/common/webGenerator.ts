@@ -134,6 +134,9 @@ export abstract class WebControllerGenerator<
 
       // add route
       const routes = routerTable.get(routerInfo.prefix);
+      if (!routes) {
+        throw new Error(`router table not found for ${routerInfo.prefix}`);
+      }
       for (const routeInfo of routes) {
         // get middleware
         const methodMiddlewares = [];
