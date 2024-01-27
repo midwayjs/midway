@@ -20,6 +20,7 @@ import {
   getPropertyType,
   RequestMethod,
   getClassExtendedMetadata,
+  RouterInfo,
 } from '@midwayjs/core';
 import { PathItemObject, Type } from './interfaces';
 import { DECORATORS } from './constants';
@@ -131,11 +132,11 @@ export class SwaggerExplorer {
     this.documentBuilder.setPaths(newPaths);
   }
 
-  public scanApp() {
+  public scanApp(routerTable: Map<string, RouterInfo[]>) {
     const routes = listModule(CONTROLLER_KEY);
 
     for (const route of routes) {
-      this.generatePath(route);
+      this.generatePath(route, routerTable);
     }
 
     if (this.swaggerConfig?.tagSortable) {
@@ -147,7 +148,7 @@ export class SwaggerExplorer {
     return this.documentBuilder.build();
   }
 
-  protected generatePath(target: Type) {
+  protected generatePath(target: Type, routerTable: Map<string, RouterInfo[]>) {
     this.parseExtraModel(target);
 
     const metaForMethods: any[] =
@@ -168,6 +169,10 @@ export class SwaggerExplorer {
     );
 
     const prefix = controllerOption.prefix;
+    if (routerTable && routerTable.size > 0 && !routerTable.has(prefix)) {
+      return;
+    }
+
     const tags = metaForMethods.filter(
       item => item.key === DECORATORS.API_TAGS
     );

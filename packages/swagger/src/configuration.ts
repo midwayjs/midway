@@ -1,10 +1,11 @@
 import {
+  Configuration,
   ILifeCycle,
+  Inject,
   IMidwayContainer,
   MidwayApplicationManager,
   MidwayConfigService,
-  Inject,
-  Configuration,
+  MidwayWebRouterService,
 } from '@midwayjs/core';
 import { SwaggerExplorer, SwaggerMiddleware } from '.';
 import * as DefaultConfig from './config/config.default';
@@ -24,6 +25,9 @@ export class SwaggerConfiguration implements ILifeCycle {
   @Inject()
   configService: MidwayConfigService;
 
+  @Inject()
+  readonly webRouterService: MidwayWebRouterService;
+
   async onReady(container: IMidwayContainer) {
     const apps = this.applicationManager.getApplications([
       'express',
@@ -34,7 +38,8 @@ export class SwaggerConfiguration implements ILifeCycle {
 
     if (apps.length) {
       const explorer = await container.getAsync(SwaggerExplorer);
-      explorer.scanApp();
+      const routerTable = await this.webRouterService.getRouterTable();
+      explorer.scanApp(routerTable);
 
       // 添加统一前缀
       let globalPrefix =
