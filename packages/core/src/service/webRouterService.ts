@@ -402,6 +402,9 @@ export class MidwayWebRouterService {
     this.sortPrefixAndRouter();
   }
 
+  /**
+   * @description 仅在 `serverReady` 之前调用有效
+   */
   public async deleteRouter(prefix: string) {
     if (!prefix) {
       return;
