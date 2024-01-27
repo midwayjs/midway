@@ -900,6 +900,52 @@ export class HelloController {}
 
 
 
+### Ignore routing
+
+Configuring `@ApiExcludeController` can ignore the entire Controller's routing.
+
+```typescript
+@ApiExcludeController()
+@Controller('/hello')
+export class HelloController {}
+```
+
+Configure `@ApiExcludeEndpoint` to ignore individual routes.
+
+```typescript
+@Controller('/hello')
+export class HelloController {
+  
+   @ApiExcludeEndpoint()
+   @Get()
+   async getUser() {
+     // ...
+   }
+}
+```
+
+If you need to meet more dynamic scenarios, you can configure routing filters to filter in batches.
+
+```typescript
+// src/config/config.default.ts
+import { RouterOption } from '@midwayjs/core';
+
+export default {
+   // ...
+   swagger: {
+     routerFilter: (url: string, options: RouterOption) => {
+       return url === '/hello/getUser';
+     }
+   },
+}
+```
+
+`routerFilter` is used to pass in a filter function, including `url` and `routerOptions` two parameters. `routerOptions` contains basic routing information.
+
+Whenever a route is matched, the `routerFilter` method will be automatically executed. When `routerFilter` returns true, it means that this route will be filtered.
+
+
+
 ## Parameter configuration
 
 Swagger components provide the same parameter configuration capability as the [OpenAPI](https://swagger.io/specification/), which can be implemented through custom configuration.

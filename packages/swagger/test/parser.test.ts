@@ -402,4 +402,30 @@ describe('/test/parser.test.ts', function () {
     expect(data.paths['/api/update_user']).not.toBeUndefined();
     expect(data.paths['/api/get_user']).toBeUndefined();
   });
+
+  it('should test routerFilter', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'] = {
+      routerFilter: (url) => {
+        return url === '/api/update_user';
+      }
+    };
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/update_user']).toBeUndefined();
+    expect(data.paths['/api/get_user']).not.toBeUndefined();
+  });
 });

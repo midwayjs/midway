@@ -926,6 +926,26 @@ export class HelloController {
 }
 ```
 
+如果需要满足更加动态的场景，可以通过配置路由过滤器来批量过滤。
+
+```typescript
+// src/config/config.default.ts
+import { RouterOption } from '@midwayjs/core';
+
+export default {
+  // ...
+  swagger: {
+    routerFilter: (url: string, options: RouterOption) => {
+      return url === '/hello/getUser';
+    }
+  },
+}
+```
+
+`routerFilter` 用来传入一个过滤函数，包含 `url` 和 `routerOptions` 两个参数。`routerOptions` 中包含了路由基础信息。
+
+每当匹配到一个路由时，会自动执行 `routerFilter` 方法，当 `routerFilter` 返回 true 时，代表这个路由将会被过滤。
+
 
 
 ### 完整参数配置

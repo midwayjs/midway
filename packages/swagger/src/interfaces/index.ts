@@ -433,4 +433,9 @@ export interface SwaggerOptions {
   ) => (pathname: string) => Promise<{ ext: string; content: any }>;
 
   swaggerUIRenderOptions?: Record<string, any>;
+
+  /**
+   * 自定义路由过滤器
+   */
+  routerFilter?: (url: string, options: RouterOption) => boolean;
 }

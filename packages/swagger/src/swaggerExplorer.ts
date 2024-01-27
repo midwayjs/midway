@@ -35,7 +35,7 @@ import { BodyContentType } from '.';
 @Scope(ScopeEnum.Singleton)
 export class SwaggerExplorer {
   @Config('swagger')
-  private swaggerConfig: SwaggerOptions;
+  private swaggerConfig: SwaggerOptions = {};
 
   private documentBuilder = new DocumentBuilder();
   private operationIdFactory = (
@@ -246,6 +246,14 @@ export class SwaggerExplorer {
         // 如果存在需要忽略的路由，则跳过当前循环
         if (endpoints[0]) {
           continue;
+        }
+
+        // 判断是否需要过滤当前路由
+        if (this.swaggerConfig.routerFilter) {
+          const isFilter = this.swaggerConfig.routerFilter(url, webRouter);
+          if (isFilter) {
+            continue;
+          }
         }
 
         // 获取路由参数
