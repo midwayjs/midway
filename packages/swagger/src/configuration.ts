@@ -28,7 +28,7 @@ export class SwaggerConfiguration implements ILifeCycle {
   @Inject()
   readonly webRouterService: MidwayWebRouterService;
 
-  async onReady(container: IMidwayContainer) {
+  async onServerReady(container: IMidwayContainer) {
     const apps = this.applicationManager.getApplications([
       'express',
       'koa',
