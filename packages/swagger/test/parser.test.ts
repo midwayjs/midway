@@ -1,5 +1,16 @@
-import { ApiExtraModel, ApiOperation, ApiProperty, ApiResponse, ApiTags, getSchemaPath, SwaggerExplorer, Type } from '../src';
-import { Controller, Post } from '@midwayjs/core';
+import {
+  ApiExcludeController,
+  ApiExcludeEndpoint,
+  ApiExtraModel,
+  ApiOperation,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+  SwaggerExplorer,
+  Type
+} from '../src';
+import { Controller, Post, Get } from '@midwayjs/core';
 
 class CustomSwaggerExplorer extends SwaggerExplorer {
   generatePath(target: Type) {
@@ -347,5 +358,48 @@ describe('/test/parser.test.ts', function () {
     expect(data.tags.length).toBe(2);
     expect(data.tags[0].name).toBe('tag1');
     expect(data.tags[1].name).toBe('tag2');
+  });
+
+  it('should test exclude controller', () => {
+    @Controller('/api')
+    @ApiExcludeController()
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths).toEqual({});
+  });
+
+  it('should test exclude endpoint', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @ApiExcludeEndpoint()
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/update_user']).not.toBeUndefined();
+    expect(data.paths['/api/get_user']).toBeUndefined();
   });
 });

@@ -902,6 +902,32 @@ export class HelloController {}
 
 
 
+### 忽略路由
+
+配置 `@ApiExcludeController`  可以忽略整个 Controller 的路由。
+
+```typescript
+@ApiExcludeController()
+@Controller('/hello')
+export class HelloController {}
+```
+
+配置 `@ApiExcludeEndpoint` 可以忽略单个路由。
+
+```typescript
+@Controller('/hello')
+export class HelloController {
+  
+  @ApiExcludeEndpoint()
+  @Get()
+  async getUser() {
+    // ...
+  }
+}
+```
+
+
+
 ### 完整参数配置
 
 Swagger 组件提供了和 [OpenAPI](https://swagger.io/specification/) 一致的参数配置能力，可以通过自定义配置来实现。
