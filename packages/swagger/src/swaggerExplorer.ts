@@ -148,9 +148,6 @@ export class SwaggerExplorer {
   }
 
   protected generatePath(target: Type) {
-    // 解析额外的模型
-    this.parseExtraModel(target);
-
     // 获取控制器元数据
     const excludeClassMeta = getClassMetadata(
       DECORATORS.API_EXCLUDE_CONTROLLER,
@@ -161,6 +158,9 @@ export class SwaggerExplorer {
       // 如果存在需要排除的控制器，则直接返回
       return;
     }
+
+    // 解析额外的模型
+    this.parseExtraModel(target);
 
     // 获取方法的元数据
     const metaForClass: any[] =
@@ -181,12 +181,14 @@ export class SwaggerExplorer {
     // 过滤出标签
     const tags = metaForClass.filter(item => item.key === DECORATORS.API_TAGS);
     let strTags: string[] = [];
+    const controllerTags = [];
     // 如果存在标签，则将其添加到文档构建器中
     if (tags.length > 0) {
       for (const t of tags) {
         // 这里 metadata => string[]
         strTags = strTags.concat(t.metadata);
-        this.documentBuilder.addTag(t.metadata);
+        controllerTags.push(t.metadata);
+        // this.documentBuilder.addTag(t.metadata);
       }
     } else {
       // 如果不存在标签，则根据控制器选项生成标签
@@ -205,7 +207,8 @@ export class SwaggerExplorer {
       // 如果标签名存在，则将其添加到文档构建器中
       if (tag.name) {
         strTags.push(tag.name);
-        this.documentBuilder.addTag(tag.name, tag.description);
+        controllerTags.push([tag.name, tag.description]);
+        // this.documentBuilder.addTag(tag.name, tag.description);
       }
     }
 
@@ -315,6 +318,16 @@ export class SwaggerExplorer {
 
     // 将路径添加到文档构建器中
     this.documentBuilder.addPaths(paths);
+    // 将控制器标签添加到文档构建器中
+    if (Object.keys(paths).length > 0) {
+      controllerTags.forEach(tag => {
+        if (Array.isArray(tag)) {
+          this.documentBuilder.addTag(tag[0], tag[1]);
+        } else {
+          this.documentBuilder.addTag(tag);
+        }
+      });
+    }
   }
   /**
    * 构造 router 提取方法
