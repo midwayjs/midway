@@ -24,11 +24,11 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/mock": "^3.14.7",
-    "@types/ws": "8.5.10",
+    "@midwayjs/core": "^3.14.4",
     "fs-extra": "11.2.0"
   },
   "dependencies": {
-    "@midwayjs/core": "^3.14.4",
+    "@types/ws": "8.5.10",
     "ws": "8.16.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

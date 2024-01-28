@@ -392,7 +392,7 @@ export default {
   schedule: true
   schedulePlus: {
     enable: true
-    package: midway-schedule
+    package: 'midway-schedule',
   }
 }
 ```

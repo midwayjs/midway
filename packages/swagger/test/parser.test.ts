@@ -1,5 +1,16 @@
-import { ApiExtraModel, ApiOperation, ApiProperty, ApiResponse, ApiTags, getSchemaPath, SwaggerExplorer, Type } from '../src';
-import { Controller, Post } from '@midwayjs/core';
+import {
+  ApiExcludeController,
+  ApiExcludeEndpoint,
+  ApiExtraModel,
+  ApiOperation,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+  SwaggerExplorer,
+  Type
+} from '../src';
+import { Controller, Post, Get } from '@midwayjs/core';
 
 class CustomSwaggerExplorer extends SwaggerExplorer {
   generatePath(target: Type) {
@@ -343,6 +354,128 @@ describe('/test/parser.test.ts', function () {
     explorer.generatePath(APIController);
     explorer.generatePath(API2Controller);
     explorer.generatePath(API3Controller);
+    const data = explorer.getData() as any;
+    expect(data.tags.length).toBe(2);
+    expect(data.tags[0].name).toBe('tag1');
+    expect(data.tags[1].name).toBe('tag2');
+  });
+
+  it('should test exclude controller', () => {
+    @Controller('/api')
+    @ApiExcludeController()
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths).toEqual({});
+  });
+
+  it('should test exclude endpoint', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @ApiExcludeEndpoint()
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/update_user']).not.toBeUndefined();
+    expect(data.paths['/api/get_user']).toBeUndefined();
+  });
+
+  it('should test routerFilter', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'] = {
+      routerFilter: (url) => {
+        return url === '/api/update_user';
+      }
+    };
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/update_user']).toBeUndefined();
+    expect(data.paths['/api/get_user']).not.toBeUndefined();
+
+    // tag is not empty
+    expect(data.tags).toEqual([{
+      name: 'api',
+      description: 'api',
+    }]);
+  });
+
+  it('should test routerFilter and clean empty paths', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'] = {
+      routerFilter: (url) => {
+        return url === '/api/update_user' || url === '/api/get_user'
+      }
+    };
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/update_user']).toBeUndefined();
+    expect(data.paths['/api/get_user']).toBeUndefined();
+
+    // tag is empty
+    expect(data.tags).toEqual([]);
+  });
+
+  it('should test multi-tags', () => {
+    @Controller('/api')
+    @ApiTags(['tag1', 'tag2'])
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
     const data = explorer.getData() as any;
     expect(data.tags.length).toBe(2);
     expect(data.tags[0].name).toBe('tag1');

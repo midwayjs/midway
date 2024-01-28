@@ -9,7 +9,6 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-  MidwayFrameworkType,
   MidwayEnvironmentService,
   MidwayInvalidConfigPropertyError,
 } from '@midwayjs/core';
@@ -46,7 +45,7 @@ export class SwaggerMiddleware
   }
 
   resolve(app: IMidwayApplication) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if (app.getNamespace() === 'express') {
       return async (req: any, res: any, next: NextFunction) => {
         const pathname = req.path;
         const renderResult = await this.swaggerRender(pathname);

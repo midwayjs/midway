@@ -902,6 +902,52 @@ export class HelloController {}
 
 
 
+### 忽略路由
+
+配置 `@ApiExcludeController`  可以忽略整个 Controller 的路由。
+
+```typescript
+@ApiExcludeController()
+@Controller('/hello')
+export class HelloController {}
+```
+
+配置 `@ApiExcludeEndpoint` 可以忽略单个路由。
+
+```typescript
+@Controller('/hello')
+export class HelloController {
+  
+  @ApiExcludeEndpoint()
+  @Get()
+  async getUser() {
+    // ...
+  }
+}
+```
+
+如果需要满足更加动态的场景，可以通过配置路由过滤器来批量过滤。
+
+```typescript
+// src/config/config.default.ts
+import { RouterOption } from '@midwayjs/core';
+
+export default {
+  // ...
+  swagger: {
+    routerFilter: (url: string, options: RouterOption) => {
+      return url === '/hello/getUser';
+    }
+  },
+}
+```
+
+`routerFilter` 用来传入一个过滤函数，包含 `url` 和 `routerOptions` 两个参数。`routerOptions` 中包含了路由基础信息。
+
+每当匹配到一个路由时，会自动执行 `routerFilter` 方法，当 `routerFilter` 返回 true 时，代表这个路由将会被过滤。
+
+
+
 ### 完整参数配置
 
 Swagger 组件提供了和 [OpenAPI](https://swagger.io/specification/) 一致的参数配置能力，可以通过自定义配置来实现。

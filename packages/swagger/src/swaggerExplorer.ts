@@ -35,7 +35,7 @@ import { BodyContentType } from '.';
 @Scope(ScopeEnum.Singleton)
 export class SwaggerExplorer {
   @Config('swagger')
-  private swaggerConfig: SwaggerOptions;
+  private swaggerConfig: SwaggerOptions = {};
 
   private documentBuilder = new DocumentBuilder();
   private operationIdFactory = (
@@ -148,37 +148,52 @@ export class SwaggerExplorer {
   }
 
   protected generatePath(target: Type) {
-    this.parseExtraModel(target);
-
-    const metaForMethods: any[] =
-      getClassMetadata(INJECT_CUSTOM_METHOD, target) || [];
-    const exs = metaForMethods.filter(
-      item => item.key === DECORATORS.API_EXCLUDE_CONTROLLER
+    // 获取控制器元数据
+    const excludeClassMeta = getClassMetadata(
+      DECORATORS.API_EXCLUDE_CONTROLLER,
+      target
     );
-    if (exs[0]) {
+
+    if (excludeClassMeta && excludeClassMeta.disable) {
+      // 如果存在需要排除的控制器，则直接返回
       return;
     }
 
+    // 解析额外的模型
+    this.parseExtraModel(target);
+
+    // 获取方法的元数据
+    const metaForClass: any[] =
+      getClassMetadata(INJECT_CUSTOM_METHOD, target) || [];
+
+    // 获取参数的元数据
     const metaForParams: any[] =
       getClassMetadata(INJECT_CUSTOM_PARAM, target) || [];
 
+    // 获取控制器选项
     const controllerOption: ControllerOption = getClassMetadata(
       CONTROLLER_KEY,
       target
     );
 
+    // 获取前缀
     const prefix = controllerOption.prefix;
-    const tags = metaForMethods.filter(
-      item => item.key === DECORATORS.API_TAGS
-    );
+    // 过滤出标签
+    const tags = metaForClass.filter(item => item.key === DECORATORS.API_TAGS);
     let strTags: string[] = [];
+    const controllerTags = [];
+    // 如果存在标签，则将其添加到文档构建器中
     if (tags.length > 0) {
       for (const t of tags) {
         // 这里 metadata => string[]
         strTags = strTags.concat(t.metadata);
-        this.documentBuilder.addTag(t.metadata);
+        controllerTags.push(
+          Array.isArray(t.metadata) ? [t.metadata] : t.metadata
+        );
+        // this.documentBuilder.addTag(t.metadata);
       }
     } else {
+      // 如果不存在标签，则根据控制器选项生成标签
       const tag = { name: '', description: '' };
       if (prefix !== '/') {
         tag.name =
@@ -191,83 +206,103 @@ export class SwaggerExplorer {
         tag.description =
           controllerOption?.routerOptions.description || tag.name;
       }
+      // 如果标签名存在，则将其添加到文档构建器中
       if (tag.name) {
         strTags.push(tag.name);
-        this.documentBuilder.addTag(tag.name, tag.description);
+        controllerTags.push([tag.name, tag.description]);
+        // this.documentBuilder.addTag(tag.name, tag.description);
       }
     }
 
-    // const globalMiddleware = controllerOption.routerOptions.middleware;
-    // get router info
+    // 获取路由信息
     const webRouterInfo: RouterOption[] = getClassMetadata(
       WEB_ROUTER_KEY,
       target
     );
 
-    let headers = metaForMethods.filter(
+    // 过滤出头部信息
+    let headers = metaForClass.filter(
       item => item.key === DECORATORS.API_HEADERS
     );
     if (headers.length > 0) {
       headers = headers.map(item => item.metadata);
     }
 
-    const security = metaForMethods.filter(
+    // 过滤出安全信息
+    const security = metaForClass.filter(
       item => item.key === DECORATORS.API_SECURITY
     );
 
+    // 初始化路径对象
     const paths: Record<string, PathItemObject> = {};
+    // 如果存在路由信息，则遍历生成路径
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
+        // 生成URL
         let url = (prefix + webRouter.path).replace('//', '/');
         url = replaceUrl(url, parseParamsInPath(url));
 
         // 判断是否忽略当前路由
-        const endpoints = metaForMethods.filter(
+        const endpoints = metaForClass.filter(
           item =>
             item.key === DECORATORS.API_EXCLUDE_ENDPOINT &&
             item.propertyName === webRouter.method
         );
+        // 如果存在需要忽略的路由，则跳过当前循环
         if (endpoints[0]) {
           continue;
         }
 
+        // 判断是否需要过滤当前路由
+        if (this.swaggerConfig.routerFilter) {
+          const isFilter = this.swaggerConfig.routerFilter(url, webRouter);
+          if (isFilter) {
+            continue;
+          }
+        }
+
+        // 获取路由参数
         const routerArgs = metaForParams[webRouter.method] || [];
+        // 过滤出主体参数
         const bds = routerArgs.filter(
           item =>
             item.key === WEB_ROUTER_PARAM_KEY &&
             item?.metadata?.type === RouteParamTypes.BODY
         );
+        // 如果存在多个主体参数，则跳过当前循环，因为swagger不支持多个@Body
         if (bds.length > 1) {
-          // swagger not support more than one @Body
           continue;
         }
 
+        // 生成路由方法
         this.generateRouteMethod(
           url,
           webRouter,
           paths,
-          metaForMethods,
+          metaForClass,
           routerArgs,
           headers,
           target
         );
 
-        // 这里赋值 tags
+        // 如果当前路径的标签长度为0，则赋值标签
         if (paths[url][webRouter.requestMethod].tags.length === 0) {
           paths[url][webRouter.requestMethod].tags = strTags;
         }
-        // extension => prefix 为 x-
-        const exts = metaForMethods.filter(
+        // 过滤出扩展信息
+        const exts = metaForClass.filter(
           item =>
             item.key === DECORATORS.API_EXTENSION &&
             item.propertyName === webRouter.method
         );
+        // 如果存在扩展信息，则将其添加到路径中
         for (const e of exts) {
           if (e.metadata) {
             Object.assign(paths[url][webRouter.requestMethod], e.metadata);
           }
         }
 
+        // 如果存在安全信息，则将其添加到路径中
         if (security.length > 0) {
           if (!paths[url][webRouter.requestMethod].security) {
             paths[url][webRouter.requestMethod].security = [];
@@ -283,7 +318,18 @@ export class SwaggerExplorer {
       }
     }
 
+    // 将路径添加到文档构建器中
     this.documentBuilder.addPaths(paths);
+    // 将控制器标签添加到文档构建器中
+    if (Object.keys(paths).length > 0) {
+      controllerTags.forEach(tag => {
+        if (Array.isArray(tag)) {
+          this.documentBuilder.addTag(tag[0], tag[1]);
+        } else {
+          this.documentBuilder.addTag(tag);
+        }
+      });
+    }
   }
   /**
    * 构造 router 提取方法

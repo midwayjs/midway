@@ -25,7 +25,6 @@ Midway 提供了对 [ws](https://www.npmjs.com/package/ws) 模块的支持和封
 在现有项目中安装 WebSocket 的依赖。
 ```bash
 $ npm i @midwayjs/ws@3 --save
-$ npm i @types/ws --save-dev
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -36,10 +35,6 @@ $ npm i @types/ws --save-dev
     "@midwayjs/ws": "^3.0.0",
     // ...
   },
-  "devDependencies": {
-    "@types/ws": "^8.2.2",
-    // ...
-  }
 }
 ```
 
