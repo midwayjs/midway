@@ -463,4 +463,22 @@ describe('/test/parser.test.ts', function () {
     // tag is empty
     expect(data.tags).toEqual([]);
   });
+
+  it('should test multi-tags', () => {
+    @Controller('/api')
+    @ApiTags(['tag1', 'tag2'])
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.tags.length).toBe(2);
+    expect(data.tags[0].name).toBe('tag1');
+    expect(data.tags[1].name).toBe('tag2');
+  });
 });

@@ -187,7 +187,9 @@ export class SwaggerExplorer {
       for (const t of tags) {
         // 这里 metadata => string[]
         strTags = strTags.concat(t.metadata);
-        controllerTags.push(t.metadata);
+        controllerTags.push(
+          Array.isArray(t.metadata) ? [t.metadata] : t.metadata
+        );
         // this.documentBuilder.addTag(t.metadata);
       }
     } else {
