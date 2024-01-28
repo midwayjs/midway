@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        node-version: [16, 18]
+        node-version: [16, 18, 'lts/*']
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     services:
