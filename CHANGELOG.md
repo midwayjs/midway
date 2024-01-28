@@ -1,6 +1,32 @@
 # Change Log
 
 
+## v3.14.9 (2024-01-28)
+
+#### :nail_care: Polish
+* `swagger`, `ws`
+  * [#3601](https://github.com/midwayjs/midway/pull/3601) feat: custom Ignore swagger endpoint ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3588](https://github.com/midwayjs/midway/pull/3588) docs: update egg.md ([@yiliang114](https://github.com/yiliang114))
+
+#### :package: Dependencies
+* `bull-board`, `bull`
+  * [#3593](https://github.com/midwayjs/midway/pull/3593) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3592](https://github.com/midwayjs/midway/pull/3592) fix(deps): update dependency axios to v1.6.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`, `oss`
+  * [#3589](https://github.com/midwayjs/midway/pull/3589) chore(deps): update dependency dotenv to v16.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `typeorm`
+  * [#3597](https://github.com/midwayjs/midway/pull/3597) chore(deps): update dependency typeorm to v0.3.20 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+- 易良 ([@yiliang114](https://github.com/yiliang114))
+
+
+
 ## v3.14.8 (2024-01-22)
 
 #### :bug: Bug Fix

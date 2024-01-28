@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/ws",
-  "version": "3.14.7",
+  "version": "3.14.9",
   "description": "Midway Web Framework for ws",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -23,8 +23,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^3.14.7",
     "@midwayjs/core": "^3.14.4",
+    "@midwayjs/mock": "^3.14.7",
     "fs-extra": "11.2.0"
   },
   "dependencies": {
