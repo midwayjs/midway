@@ -29,7 +29,7 @@
     "@midwayjs/mock": "^3.14.7",
     "@midwayjs/web": "^3.14.7",
     "@types/passport-local": "1.0.38",
-    "express-session": "1.17.3",
+    "express-session": "1.18.0",
     "passport-jwt": "4.0.1",
     "passport-local": "1.0.0",
     "passport-openidconnect": "0.1.1"
