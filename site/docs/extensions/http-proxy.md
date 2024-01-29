@@ -100,24 +100,26 @@ export default {
 
 // 代理配置类型
 export default {
-  default: {
-    // 一些每个策略复用的值，会和底下的策略进行合并
-  },
-  strategy: {
-    gw: {
-      // https://gw.alicdn.com/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png
-      match: /\/tfs\//,
-      host: 'https://gw.alicdn.com',
+  httpProxy: {
+    default: {
+      // 一些每个策略复用的值，会和底下的策略进行合并
     },
-    g: {
-      // https://g.alicdn.com/mtb/lib-mtop/2.6.1/mtop.js
-      match: /\/bdimg\/(.*)$/,
-      target: 'https://sm.bdimg.com/$1',
-    },
-    httpBin: {
-      // https://httpbin.org/
-      match: /\/httpbin\/(.*)$/,
-      target: 'https://httpbin.org/$1',
+    strategy: {
+      gw: {
+        // https://gw.alicdn.com/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png
+        match: /\/tfs\//,
+        host: 'https://gw.alicdn.com',
+      },
+      g: {
+        // https://g.alicdn.com/mtb/lib-mtop/2.6.1/mtop.js
+        match: /\/bdimg\/(.*)$/,
+        target: 'https://sm.bdimg.com/$1',
+      },
+      httpBin: {
+        // https://httpbin.org/
+        match: /\/httpbin\/(.*)$/,
+        target: 'https://httpbin.org/$1',
+      },
     },
   },
 };
