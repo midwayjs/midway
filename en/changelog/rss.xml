@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Sun, 28 Jan 2024 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 02 Feb 2024 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2024 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.14.10]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.14.10</link>
+            <guid>https://midwayjs.org/en/changelog/v3.14.10</guid>
+            <pubDate>Fri, 02 Feb 2024 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>passport</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3617" target="_blank" rel="noopener noreferrer">#3617</a> fix: isAuthenticated missing this (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a href="#-documentation" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/3605" target="_blank" rel="noopener noreferrer">#3605</a> docs: update http-proxy.md (<a href="https://github.com/jiumengs" target="_blank" rel="noopener noreferrer">@jiumengs</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>cos</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3616" target="_blank" rel="noopener noreferrer">#3616</a> fix(deps): update dependency cos-nodejs-sdk-v5 to v2.13.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>oss</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3615" target="_blank" rel="noopener noreferrer">#3615</a> fix(deps): update dependency ali-oss to v6.20.0 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>express-session</code>, <code>passport</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3604" target="_blank" rel="noopener noreferrer">#3604</a> chore(deps): update dependency express-session to v1.18.0 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a href="#committers-2" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>旧梦 (<a href="https://github.com/jiumengs" target="_blank" rel="noopener noreferrer">@jiumengs</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.14.9]]></title>
             <link>https://midwayjs.org/en/changelog/v3.14.9</link>
