@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v3.14.10 (2024-02-02)
+
+#### :bug: Bug Fix
+* `passport`
+  * [#3617](https://github.com/midwayjs/midway/pull/3617) fix: isAuthenticated missing this ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3605](https://github.com/midwayjs/midway/pull/3605) docs: update http-proxy.md ([@jiumengs](https://github.com/jiumengs))
+
+#### :package: Dependencies
+* `cos`
+  * [#3616](https://github.com/midwayjs/midway/pull/3616) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.13.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#3615](https://github.com/midwayjs/midway/pull/3615) fix(deps): update dependency ali-oss to v6.20.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `express-session`, `passport`
+  * [#3604](https://github.com/midwayjs/midway/pull/3604) chore(deps): update dependency express-session to v1.18.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- 旧梦 ([@jiumengs](https://github.com/jiumengs))
+
+
+
 ## v3.14.9 (2024-01-28)
 
 #### :nail_care: Polish
