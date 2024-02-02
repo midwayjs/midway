@@ -2,6 +2,7 @@ import { extend } from '../util/extend';
 import { IServiceFactory } from '../interface';
 import { MidwayPriorityManager } from './priorityManager';
 import { Inject } from '../decorator';
+import { MidwayCommonError } from '../error';
 
 /**
  * 多客户端工厂实现
@@ -42,6 +43,19 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
 
   public has(id: string): boolean {
     return this.clients.has(id);
+  }
+
+  public add(
+    id: string,
+    client: T,
+    options = {
+      errorWhenExists: true,
+    }
+  ): void {
+    if (options.errorWhenExists && this.clients.has(id)) {
+      throw new MidwayCommonError(`client ${id} already exists`);
+    }
+    this.clients.set(id, client);
   }
 
   public async createInstance(config, clientName?): Promise<T | undefined> {

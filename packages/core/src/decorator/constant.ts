@@ -11,6 +11,8 @@ export const MATCH_KEY = 'common:match';
 export const GUARD_KEY = 'common:guard';
 export const MOCK_KEY = 'common:mock';
 export const FACTORY_SERVICE_CLIENT_KEY = 'common:service_factory:client';
+export const FACTORY_DATASOURCE_INSTANCE_KEY =
+  'common:data_source_manager:client';
 
 // faas
 export const FUNC_KEY = 'faas:func';

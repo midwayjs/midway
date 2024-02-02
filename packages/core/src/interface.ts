@@ -1165,6 +1165,9 @@ export interface MidwayConfig extends FileConfigOption<MidwayCoreDefaultConfig> 
 export interface IServiceFactory<Client> {
   get(clientId: string): Client;
   has(clientId: string): boolean;
+  add(clientId: string, client: Client, options?: {
+    errorWhenExists: boolean;
+  }): void;
   createInstance(config: any, clientId?: string): Promise<Client | undefined>;
   getName(): string;
   stop(): Promise<void>;
@@ -1175,6 +1178,36 @@ export interface IServiceFactory<Client> {
   isHighPriority(clientName: string): boolean;
   isMediumPriority(clientName: string): boolean;
   isLowPriority(clientName: string) : boolean;
+}
+
+export interface IDataSourceManager<
+  DataSource,
+  DataSourceOptions extends Record<string, any> = Record<string, any>
+> {
+  getDataSource(dataSourceName: string): DataSource;
+  hasDataSource(dataSourceName: string): boolean;
+  addDataSource(
+    dataSourceName: string,
+    dataSource: DataSource,
+    options?: {
+      errorWhenExists: boolean;
+    }
+  ): void;
+  getDataSourceNames(): string[];
+  getAllDataSources(): Map<string, DataSource>;
+  isConnected(dataSourceName: string): Promise<boolean>;
+  createInstance(config: DataSourceOptions, dataSourceName: string, options?: {
+    validateConnection?: boolean;
+    cacheInstance?: boolean | undefined;
+  }): Promise<DataSource | undefined >;
+  getDataSourceNameByModel(modelOrRepository: any): string;
+  getName(): string;
+  stop(): Promise<void>;
+  getDefaultDataSourceName(): string;
+  getDataSourcePriority(dataSourceName: string): string;
+  isHighPriority(dataSourceName: string): boolean;
+  isMediumPriority(dataSourceName: string): boolean;
+  isLowPriority(dataSourceName: string) : boolean;
 }
 
 export interface ISimulation {

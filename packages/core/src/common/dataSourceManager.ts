@@ -9,7 +9,11 @@ import { Types } from '../util/types';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { debuglog } from 'util';
 import { loadModule } from '../util';
-import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
+import {
+  ModuleLoadType,
+  DataSourceManagerConfigOption,
+  IDataSourceManager,
+} from '../interface';
 import { Inject } from '../decorator';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayPriorityManager } from './priorityManager';
@@ -17,11 +21,12 @@ import { MidwayPriorityManager } from './priorityManager';
 const debug = debuglog('midway:debug');
 
 export abstract class DataSourceManager<
-  T,
-  ConnectionOpts extends Record<string, any> = Record<string, any>
-> {
-  protected dataSource: Map<string, T> = new Map();
-  protected options: DataSourceManagerConfigOption<ConnectionOpts> = {};
+  DataSource,
+  DataSourceOptions extends Record<string, any> = Record<string, any>
+> implements IDataSourceManager<DataSource, DataSourceOptions>
+{
+  protected dataSource: Map<string, DataSource> = new Map();
+  protected options: DataSourceManagerConfigOption<DataSourceOptions> = {};
   protected modelMapping = new WeakMap();
   private innerDefaultDataSourceName: string;
   protected dataSourcePriority: Record<string, string>;
@@ -36,7 +41,7 @@ export abstract class DataSourceManager<
   protected priorityManager: MidwayPriorityManager;
 
   protected async initDataSource(
-    dataSourceConfig: DataSourceManagerConfigOption<ConnectionOpts>,
+    dataSourceConfig: DataSourceManagerConfigOption<DataSourceOptions>,
     baseDirOrOptions:
       | {
           baseDir: string;
@@ -97,7 +102,11 @@ export abstract class DataSourceManager<
         cacheInstance: dataSourceConfig.cacheInstance, // will default true
         validateConnection: dataSourceConfig.validateConnection,
       };
-      await this.createInstance(dataSourceOptions, dataSourceName, opts);
+      await this.createInstance(
+        dataSourceOptions as DataSourceOptions,
+        dataSourceName,
+        opts
+      );
     }
   }
 
@@ -115,6 +124,21 @@ export abstract class DataSourceManager<
    */
   public hasDataSource(dataSourceName: string): boolean {
     return this.dataSource.has(dataSourceName);
+  }
+
+  public addDataSource(
+    dataSourceName: string,
+    dataSource: DataSource,
+    options = {
+      errorWhenExists: true,
+    }
+  ) {
+    if (this.dataSource.has(dataSourceName) && options.errorWhenExists) {
+      throw new MidwayCommonError(
+        `[DataSourceManager] ${dataSourceName} already exists.`
+      );
+    }
+    this.dataSource.set(dataSourceName, dataSource);
   }
 
   public getDataSourceNames() {
@@ -135,13 +159,13 @@ export abstract class DataSourceManager<
   }
 
   public async createInstance(
-    config: any,
-    clientName: any,
+    config: DataSourceOptions,
+    clientName: string,
     options?: {
       validateConnection?: boolean;
       cacheInstance?: boolean | undefined;
     }
-  ): Promise<T | void> {
+  ): Promise<DataSource | undefined> {
     const cache =
       options && typeof options.cacheInstance === 'boolean'
         ? options.cacheInstance
@@ -185,9 +209,9 @@ export abstract class DataSourceManager<
   protected abstract createDataSource(
     config,
     dataSourceName: string
-  ): Promise<T | void> | (T | void);
-  protected abstract checkConnected(dataSource: T): Promise<boolean>;
-  protected abstract destroyDataSource(dataSource: T): Promise<void>;
+  ): Promise<DataSource | undefined>;
+  protected abstract checkConnected(dataSource: DataSource): Promise<boolean>;
+  protected abstract destroyDataSource(dataSource: DataSource): Promise<void>;
 
   public async stop(): Promise<void> {
     const arr = Array.from(this.dataSource.values());

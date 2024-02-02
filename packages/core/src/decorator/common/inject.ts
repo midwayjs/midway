@@ -2,8 +2,15 @@ import {
   createCustomPropertyDecorator,
   savePropertyInject,
 } from '../decoratorManager';
-import { IServiceFactory, ObjectIdentifier } from '../../interface';
-import { FACTORY_SERVICE_CLIENT_KEY } from '../constant';
+import {
+  IDataSourceManager,
+  IServiceFactory,
+  ObjectIdentifier,
+} from '../../interface';
+import {
+  FACTORY_DATASOURCE_INSTANCE_KEY,
+  FACTORY_SERVICE_CLIENT_KEY,
+} from '../constant';
 
 export function Inject(identifier?: ObjectIdentifier) {
   return function (target: any, targetKey: string): void {
@@ -18,5 +25,15 @@ export function InjectClient(
   return createCustomPropertyDecorator(FACTORY_SERVICE_CLIENT_KEY, {
     serviceFactoryClz,
     clientName,
+  });
+}
+
+export function InjectDataSource(
+  dataSourceManagerClz: new (...args) => IDataSourceManager<unknown>,
+  instanceName?: string
+) {
+  return createCustomPropertyDecorator(FACTORY_DATASOURCE_INSTANCE_KEY, {
+    dataSourceManagerClz,
+    instanceName,
   });
 }

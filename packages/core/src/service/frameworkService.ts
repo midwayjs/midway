@@ -13,6 +13,7 @@ import {
   Provide,
   Scope,
   FACTORY_SERVICE_CLIENT_KEY,
+  FACTORY_DATASOURCE_INSTANCE_KEY,
 } from '../decorator';
 import {
   IMidwayContainer,
@@ -20,6 +21,7 @@ import {
   IServiceFactory,
   ScopeEnum,
   MidwayFrameworkType,
+  IDataSourceManager,
 } from '../interface';
 import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';
@@ -119,6 +121,7 @@ export class MidwayFrameworkService {
       }
     );
 
+    // register @InjectClient implementation
     this.decoratorService.registerPropertyHandler(
       FACTORY_SERVICE_CLIENT_KEY,
       (
@@ -140,6 +143,35 @@ export class MidwayFrameworkService {
           } else {
             throw new MidwayParameterError(
               `ClientName(${clientName} not found in ${meta.serviceFactoryClz.name}).`
+            );
+          }
+        }
+      }
+    );
+
+    // register @InjectDataSource implementation
+    this.decoratorService.registerPropertyHandler(
+      FACTORY_DATASOURCE_INSTANCE_KEY,
+      (
+        propertyName,
+        meta: {
+          dataSourceManagerClz: new (...args) => IDataSourceManager<unknown>;
+          instanceName: string;
+        }
+      ) => {
+        const factory = this.applicationContext.get(meta.dataSourceManagerClz);
+        const instanceName =
+          meta.instanceName || factory.getDefaultDataSourceName();
+        if (instanceName && factory.hasDataSource(instanceName)) {
+          return factory.getDataSource(instanceName);
+        } else {
+          if (!instanceName) {
+            throw new MidwayParameterError(
+              `Please set instanceName or options.defaultInstanceName for ${meta.dataSourceManagerClz.name}).`
+            );
+          } else {
+            throw new MidwayParameterError(
+              `InstanceName(${instanceName} not found in ${meta.dataSourceManagerClz.name}).`
             );
           }
         }
