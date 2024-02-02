@@ -16,7 +16,7 @@ declare module '@midwayjs/koa/dist/interface' {
     isAuthenticated(): boolean;
     isUnauthenticated(): boolean;
     login(): Promise<void>;
-    logout(): void;
+    logout(): Promise<void>;
   }
 }
 
@@ -28,7 +28,7 @@ declare module '@midwayjs/web/dist/interface' {
     isAuthenticated(): boolean;
     isUnauthenticated(): boolean;
     login(): Promise<void>;
-    logout(): void;
+    logout(): Promise<void>;
   }
 }
 
@@ -40,7 +40,7 @@ declare module '@midwayjs/faas/dist/interface' {
     isAuthenticated(): boolean;
     isUnauthenticated(): boolean;
     login(): Promise<void>;
-    logout(): void;
+    logout(): Promise<void>;
   }
 }
 
@@ -50,7 +50,7 @@ declare module '@midwayjs/express/dist/interface' {
     // These declarations are merged into express's Request type
     login(user: any, done: (err: any) => void): void;
     login(user: any, options: any, done: (err: any) => void): void;
-    logout(): void;
+    logout(): Promise<void>;
     isAuthenticated(): boolean;
     isUnauthenticated(): boolean;
   }

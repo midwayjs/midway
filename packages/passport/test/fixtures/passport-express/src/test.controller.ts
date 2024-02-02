@@ -12,7 +12,7 @@ export class TestPackagesController {
       this.req.user?.username === 'admin' &&
       this.req.user?.password === '123'
     ) {
-      return 'success';
+      return this.req.isAuthenticated() ? 'success': 'fail';
     }
 
     return 'fail';
