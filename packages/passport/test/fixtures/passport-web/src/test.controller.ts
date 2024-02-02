@@ -11,7 +11,7 @@ export class TestPackagesController {
       this.ctx.state.user?.username === 'admin' &&
       this.ctx.state.user?.password === '123'
     ) {
-      return 'success';
+      return this.ctx.isAuthenticated() ? 'success': 'fail';
     }
 
     return 'fail';

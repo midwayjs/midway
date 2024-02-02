@@ -445,7 +445,7 @@ export function PassportMiddleware(
       };
       req.isAuthenticated = () => {
         const property = this.passport.getUserProperty();
-        return !!this[property];
+        return !!req[property];
       };
       req.isUnauthenticated = () => {
         return !req.isAuthenticated();
