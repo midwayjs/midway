@@ -16,7 +16,7 @@
     "@midwayjs/serverless-fc-trigger": "^3.14.4",
     "@midwayjs/serverless-scf-starter": "^3.14.0",
     "@midwayjs/serverless-scf-trigger": "^3.14.4",
-    "koa": "2.14.2",
+    "koa": "2.15.0",
     "koa-bodyparser": "4.4.1",
     "koa-router": "11.0.2",
     "supertest": "6.3.3"
