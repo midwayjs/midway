@@ -26,7 +26,7 @@
     "koa": "2.15.0",
     "mm": "3.4.0",
     "raw-body": "2.5.2",
-    "sinon": "15.2.0"
+    "sinon": "17.0.1"
   },
   "dependencies": {
     "@midwayjs/glob": "^1.0.2",
