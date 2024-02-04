@@ -12,8 +12,8 @@ Cookie 在 Web 应用中经常承担标识请求方身份的功能，所以 Web 
 
 ## 适用范围
 
-* @midwayjs/web 下（即 egg）内置的是 egg 自带的 Cookie，未提供替换能力，不适用本文档
-* @midwayjs/express 下（即 express）内置的是 express 自带的 Cookie 库，未提供替换能力，不适用本文档
+* `@midwayjs/web` 下（即 egg）内置的是 egg 自带的 Cookie，未提供替换能力，不适用本文档
+* `@midwayjs/express` 下（即 express）内置的是 express 自带的 Cookie 库，未提供替换能力，不适用本文档
 
 
 
@@ -227,6 +227,41 @@ export default {
 ```
 
 可以看到这些参数除了 `key` 都是 Cookie 的参数，`key` 代表了存储 Session 的 Cookie 键值对的 key 是什么。在默认的配置下，存放 Session 的 Cookie 将会加密存储、不可被前端 js 访问，这样可以保证用户的 Session 是安全的。
+
+
+
+## 函数下的 Session
+
+在函数弹性容器的场景下，默认未内置 Session 模块，如果需要可以手动添加。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/session": "^3.0.0",
+    // ...
+  },
+}
+```
+
+在 configuration 中引入组件。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/core';
+import * as faas from '@midwayjs/faas';
+import * as session from '@midwayjs/session';
+
+@Configuration({
+  imports: [
+    faas,
+    session,
+    // ...
+  ]
+})
+export class MainConfiguration {
+  // ...
+}
+```
 
 
 

@@ -12,8 +12,8 @@ Cookie often assume the function of identifying the requestor's identity in Web 
 
 ## Scope of application
 
-* The built-in cookie under @midwayjs/web (i.e. egg) is the cookie that comes with egg. It does not provide replacement capabilities and is not applicable to this document.
-* The built-in cookie library under @midwayjs/express (i.e. express) is the cookie library that comes with express. It does not provide replacement capabilities and is not applicable to this document.
+* The built-in cookie under `@midwayjs/web` (i.e. egg) is the cookie that comes with egg. It does not provide replacement capabilities and is not applicable to this document.
+* The built-in cookie library under `@midwayjs/express` (i.e. express) is the cookie library that comes with express. It does not provide replacement capabilities and is not applicable to this document.
 
 
 
@@ -227,6 +227,41 @@ export default {
 ```
 
 It can be seen that these parameters are cookie parameters except `key`. `key` represents the key of the cookie key value pair that stores the Session. Under the default configuration, cookies stored in Session will be encrypted and cannot be accessed by the front-end js, thus ensuring that the user's Session is secure.
+
+
+
+## Session in Serverless
+
+In the scenario of a function elastic container, the Session module is not built-in by default. You can add it manually if necessary.
+
+```json
+{
+   "dependencies": {
+     "@midwayjs/session": "^3.0.0",
+     // ...
+   },
+}
+```
+
+Introduce components in configuration.
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/core';
+import * as faas from '@midwayjs/faas';
+import * as session from '@midwayjs/session';
+
+@Configuration({
+   imports: [
+     faas,
+     session,
+     // ...
+   ]
+})
+export class MainConfiguration {
+   // ...
+}
+```
 
 
 

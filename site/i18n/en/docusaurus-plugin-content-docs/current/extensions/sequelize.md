@@ -712,6 +712,35 @@ If you encounter something more complex, you can use the [raw query method](http
 
 
 
+### 4. TS2612 error
+
+If your model reports a TS2612 error, such as:
+
+```
+src/entity/AesTenantConfigInfo.ts:29:6 - error TS2612: Property 'id' will overwrite the base property in 'Model<AesTenantConfigInfoAttributes, AesTenantConfigInfoAttributes>'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
+
+29 id?: number;
+         ~~
+```
+
+It can be assigned a null value.
+
+```typescript
+import { Table, Column } from 'sequelize-typescript';
+
+@Table
+export class User extends Model {
+   @Column({
+     primaryKey: true,
+     autoIncrement: true,
+     type: DataType.BIGINT,
+   })
+   id?: number = undefined;
+}
+```
+
+
+
 ## Other
 
 - The above document is translated from sequelize-typescript. For more API, please refer to the [English document](<(https://github.com/sequelize/sequelize-typescrip)>).
