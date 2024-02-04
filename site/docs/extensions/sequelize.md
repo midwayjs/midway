@@ -32,6 +32,8 @@
   - 3.1 修改为数据源的形式 `sequelize.dataSource`
   - 3.2 将实体模型在数据源的 `entities` 字段中声明
 
+
+
 ## 安装依赖
 
 ```bash
@@ -118,13 +120,13 @@ export class MainConfiguration implements ILifeCycle {
 import { Table, Model, Column, HasMany } from 'sequelize-typescript';
 
 @Table
-class Hobby extends Model {
+export class Hobby extends Model {
   @Column
   name: string;
 }
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @Column
   name: string;
 
@@ -145,7 +147,7 @@ class Person extends Model {
   timestamps: true,
   ...
 })
-class Person extends Model {}
+export class Person extends Model {}
 ```
 
 
@@ -162,7 +164,7 @@ class Person extends Model {}
 import { Table, Model, PrimaryKey } from 'sequelize-typescript';
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @PrimaryKey
   name: string;
 }
@@ -178,7 +180,7 @@ class Person extends Model {
 import { Table, Model, CreatedAt, UpdatedAt, DeletedAt } from 'sequelize-typescript';
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @CreatedAt
   creationDate: Date;
 
@@ -204,7 +206,7 @@ class Person extends Model {
 import { Table, Model, Column } from 'sequelize-typescript';
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @Column
   name: string;
 }
@@ -216,7 +218,7 @@ class Person extends Model {
 import { Table, Column, DataType } from 'sequelize-typescript';
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @Column(DataType.TEXT)
   name: string;
 }
@@ -230,7 +232,7 @@ class Person extends Model {
 import { Table, Model, Column, DataType } from 'sequelize-typescript'
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @Column({
     type: DataType.FLOAT,
     comment: 'Some value',
@@ -291,6 +293,12 @@ export default {
 ## 模型关联
 
 可以通过 `HasMany` 、`@HasOne` 、`@BelongsTo`、`@BelongsToMany` 和 `@ForeignKey` 装饰器在模型中直接描述关系。
+
+:::tip
+
+你不需要在数据库中创建外键也可以使用这个功能。
+
+:::
 
 ### 一对多
 
@@ -404,6 +412,32 @@ export class User extends Model {
   name: string;
 }
 ```
+
+
+
+### 模型循环依赖
+
+如果你使用了 `@BelongsTo` 装饰器，很容易触发一个模型循环依赖的错误，比如：
+
+```
+ReferenceError: Cannot access 'Photo' before initialization
+```
+
+你可以将类型使用 `ReturnType` 包裹起来。
+
+```typescript
+import { Table, Column, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import { User } from './User';
+
+@Table
+export class Photo extends Model {
+  // ...
+  @BelongsTo(() => User)
+  user: ReturnType<() => User>;
+}
+```
+
+
 
 
 
@@ -671,9 +705,48 @@ export class MainConfiguration {
 
 
 
+### 2、生成实体列
+
+请参考社区提供的模块，如 [sequelize-typescript-generator](https://github.com/spinlud/sequelize-typescript-generator)
+
+
+
+### 3、Raw Query
+
+如果遇到比较复杂的，可以使用 [raw query 方法](https://sequelize.org/v5/manual/raw-queries.html)
+
+
+
+### 4、TS2612 错误
+
+如果你的模型列报了 TS2612 错误，比如：
+
+```
+src/entity/AesTenantConfigInfo.ts:29:6 - error TS2612: Property 'id' will overwrite the base property in 'Model<AesTenantConfigInfoAttributes, AesTenantConfigInfoAttributes>'. If this is intentional, add an initializer. Otherwise, add a 'declare' modifier or remove the redundant declaration.
+
+29      id?: number;
+        ~~
+```
+
+可以将其赋一个空值。
+
+```typescript
+import { Table, Column } from 'sequelize-typescript';
+
+@Table
+export class User extends Model {
+  @Column({
+    primaryKey: true,
+    autoIncrement: true,
+    type: DataType.BIGINT,
+  })
+  id?: number = undefined;
+}
+```
+
+
+
 ## 其他
 
 - 上面的文档，翻译自 sequelize-typescript，更多 API ，请参考 [英文文档](<(https://github.com/sequelize/sequelize-typescrip)>)
 - 一些 [案例](https://github.com/ddzyan/midway-practice)
-- 如果遇到比较复杂的，可以使用 [raw query 方法](https://sequelize.org/v5/manual/raw-queries.html)]
-- 框架不直接提供实体列生成工具，请参考社区提供的模块，如 [sequelize-typescript-generator](https://github.com/spinlud/sequelize-typescript-generator)

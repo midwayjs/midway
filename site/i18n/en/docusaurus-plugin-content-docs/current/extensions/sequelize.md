@@ -118,13 +118,13 @@ In the example, you need an entity. Let's take `person` as an example. Create an
 import { Table, Model, Column, HasMany } from 'sequelize-typescript';
 
 @Table
-class Hobby extends Model {
+export class Hobby extends Model {
   @Column
   name: string;
 }
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @Column
   name: string;
 
@@ -145,7 +145,7 @@ The `@Table` decorator can be used without passing any parameters. For more info
   timestamps: true
   ...
 })
-class Person extends Model {}
+export class Person extends Model {}
 ```
 
 
@@ -162,7 +162,7 @@ For example:
 import { Table, Model, PrimaryKey } from 'sequelize-typescript';
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @PrimaryKey
   name: string;
 }
@@ -178,7 +178,7 @@ for example:
 import { Table, Model, CreatedAt, UpdatedAt, DeletedAt } from 'sequelize-typescript';
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @CreatedAt
   creationDate: Date;
 
@@ -204,7 +204,7 @@ The @Column decorator is used to label normal columns and can be used without pa
 import { Table, Model, Column } from 'sequelize-typescript';
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @Column
   name: string;
 }
@@ -216,7 +216,7 @@ Or specify the column type.
 import { Table, Column, DataType } from 'sequelize-typescript';
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @Column(DataType.TEXT)
   name: string;
 }
@@ -230,7 +230,7 @@ For example:
 import { Table, Model, Column, DataType } from 'sequelize-typescript'
 
 @Table
-class Person extends Model {
+export class Person extends Model {
   @Column({
     type: DataType.FLOAT
     comment: 'Some value',
@@ -402,6 +402,36 @@ export class User extends Model {
   name: string;
 }
 ```
+
+
+
+### Model Cyclic Dependency
+
+If you use the `@BelongsTo` decorator, it is easy to trigger a model circular dependency error, such as:
+
+```
+ReferenceError: Cannot access 'Photo' before initialization
+```
+
+You can wrap types with `ReturnType`.
+
+```typescript
+import { Table, Column, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import { User } from './User';
+
+@Table
+export class Photo extends Model {
+  // ...
+  @BelongsTo(() => User)
+  user: ReturnType<() => User>;
+}
+```
+
+
+
+
+
+
 
 ## Static operation method
 
@@ -662,9 +692,23 @@ export class MainConfiguration {
 
 ## Common problem
 
+
+
 ### 1. Dialect needs to be explicitly supplied as of v4.0.0
 
 The reason is that the data source in the configuration does not specify the `dialect` field, which confirms the structure, format of the data source and the result of the configuration merging.
+
+
+
+### 2. Generate entity columns
+
+Please refer to the modules provided by the community, such as [sequelize-typescript-generator](https://github.com/spinlud/sequelize-typescript-generator)
+
+
+
+### 3. Raw Query
+
+If you encounter something more complex, you can use the [raw query method](https://sequelize.org/v5/manual/raw-queries.html)
 
 
 
@@ -672,5 +716,3 @@ The reason is that the data source in the configuration does not specify the `di
 
 - The above document is translated from sequelize-typescript. For more API, please refer to the [English document](<(https://github.com/sequelize/sequelize-typescrip)>).
 - Some [cases](https://github.com/ddzyan/midway-practice)
-- If you encounter complex problems, you can use the [raw query method](https://sequelize.org/v5/manual/raw-queries.html)
-- The framework does not directly provide entity column generation tools. Please refer to the modules provided by the community, such as [sequelize-typescript-generator](https://github.com/spinlud/sequelize-typescript-generator)
