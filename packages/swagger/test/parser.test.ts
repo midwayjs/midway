@@ -10,7 +10,7 @@ import {
   SwaggerExplorer,
   Type
 } from '../src';
-import { Controller, Post, Get } from '@midwayjs/core';
+import { Controller, Post, Get, Query, createRequestParamDecorator } from '@midwayjs/core';
 
 class CustomSwaggerExplorer extends SwaggerExplorer {
   generatePath(target: Type) {
@@ -480,5 +480,25 @@ describe('/test/parser.test.ts', function () {
     expect(data.tags.length).toBe(2);
     expect(data.tags[0].name).toBe('tag1');
     expect(data.tags[1].name).toBe('tag2');
+  });
+
+  it("should ignore custom param decorator", () => {
+    function Test() {
+      return createRequestParamDecorator(ctx => {
+        return ctx.test;
+      });
+    }
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      async getUser(@Test() param: any, @Query('data') data: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/get_user'].get.parameters.length).toEqual(1);
   });
 });

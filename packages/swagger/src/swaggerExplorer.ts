@@ -373,7 +373,9 @@ export class SwaggerExplorer {
      */
     // WEB_ROUTER_PARAM_KEY
     const args: any[] = routerArgs.filter(
-      item => item.key === WEB_ROUTER_PARAM_KEY
+      item =>
+        item.key === WEB_ROUTER_PARAM_KEY &&
+        item?.metadata?.type !== RouteParamTypes.CUSTOM
     );
     const types = getMethodParamTypes(target, webRouter.method);
     const params = metaForMethods.filter(
