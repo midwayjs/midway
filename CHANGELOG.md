@@ -1,6 +1,34 @@
 # Change Log
 
 
+## v3.14.11 (2024-02-07)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3630](https://github.com/midwayjs/midway/pull/3630) fix: ignore custom param decorator in swagger ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `mikro`
+  * [#3627](https://github.com/midwayjs/midway/pull/3627) chore(deps): update mikro-orm monorepo to v6.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#3623](https://github.com/midwayjs/midway/pull/3623) chore(deps): update dependency swagger-ui-dist to v5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `consul`, `core`
+  * [#3622](https://github.com/midwayjs/midway/pull/3622) chore(deps): update dependency sinon to v17 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#3035](https://github.com/midwayjs/midway/pull/3035) chore(deps): update dependency egg-logger to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3618](https://github.com/midwayjs/midway/pull/3618) fix(deps): update dependency joi to v17.12.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3614](https://github.com/midwayjs/midway/pull/3614) chore(deps): update dependency @types/node to v18.19.14 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3620](https://github.com/midwayjs/midway/pull/3620) chore(deps): update codecov/codecov-action action to v4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `web-koa`
+  * [#3619](https://github.com/midwayjs/midway/pull/3619) fix(deps): update dependency koa to v2.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.10 (2024-02-02)
 
 #### :bug: Bug Fix
