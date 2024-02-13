@@ -40,7 +40,7 @@ describe('test/express.test.ts', function () {
     await request
       .post('/cors')
       .expect(res => {
-        assert(!res.headers['access-control-allow-origin']);
+        assert.ok(!res.headers['access-control-allow-origin']);
       })
       .expect(200)
   });

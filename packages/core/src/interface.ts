@@ -420,11 +420,6 @@ export interface ILogger {
 }
 
 /**
- * @deprecated
- */
-export type IMidwayLogger = ILogger;
-
-/**
  * Logger Options for midway, you can merge this interface in package
  * @example
  * ```typescript
@@ -784,11 +779,6 @@ export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycl
   getInstanceScope(instance: any): ScopeEnum | undefined;
 }
 
-/**
- * @deprecated
- */
-export type IApplicationContext = IMidwayContainer;
-
 export interface IFileDetector {
   run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>): void | Promise<void>;
   setExtraDetectorOptions(detectorOptions: Record<string, any>);
@@ -1082,10 +1072,6 @@ export interface IMidwayBootstrapOptions {
   appDir?: string;
   applicationContext?: IMidwayContainer;
   preloadModules?: any[];
-  /**
-   * @deprecated please use 'imports'
-   */
-  configurationModule?: any | any[];
   imports?: any | any[];
   moduleLoadType?: ModuleLoadType;
   moduleDetector?: IFileDetector | false;

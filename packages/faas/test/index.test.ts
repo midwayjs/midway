@@ -19,7 +19,7 @@ describe('test/index.test.ts', () => {
 
   it('invoke different handler use @Handler', async () => {
     const starter = await creatStarter('base-app-handler');
-    assert(
+    assert.ok(
       (await starter.handleInvokeWrapper('indexService.handler')(
         {
           text: 'hello',
@@ -29,7 +29,7 @@ describe('test/index.test.ts', () => {
         { text: 'a' }
       )) === 'ahello'
     );
-    assert(
+    assert.ok(
       (await starter.handleInvokeWrapper('indexService.getList')(
         {
           text: 'hello',
@@ -44,7 +44,7 @@ describe('test/index.test.ts', () => {
 
   it('use default handler and new handler', async () => {
     const starter = await creatStarter('base-app-handler2');
-    assert(
+    assert.ok(
       (await starter.handleInvokeWrapper('indexService.handler')(
         {
           text: 'hello',
@@ -54,7 +54,7 @@ describe('test/index.test.ts', () => {
         { text: 'a' }
       )) === 'defaultahello'
     );
-    assert(
+    assert.ok(
       (await starter.handleInvokeWrapper('indexService.getList')(
         {
           text: 'hello',
@@ -64,7 +64,7 @@ describe('test/index.test.ts', () => {
         { text: 'ab' }
       )) === 'abhello'
     );
-    assert(
+    assert.ok(
       (await starter.handleInvokeWrapper('indexService.get')({}, {})) ===
         'hello'
     );
@@ -81,7 +81,7 @@ describe('test/index.test.ts', () => {
       },
       { text: 'ab' }
     );
-    assert(data === 'abhello');
+    assert.ok(data === 'abhello');
     await closeApp(starter);
   });
 
@@ -94,7 +94,7 @@ describe('test/index.test.ts', () => {
   //   };
   //   const arr = [starter.start({ cb }), starter.start({ cb }), starter.start({ cb })];
   //   await Promise.all(arr);
-  //   assert(1 === i);
+  //   assert.ok(1 === i);
   //   await closeApp(starter);
   // });
 
@@ -181,7 +181,7 @@ describe('test/index.test.ts', () => {
       { text: 'a' }
     );
 
-    assert(data.body === 'ahello555');
+    assert.ok(data.body === 'ahello555');
     await closeApp(starter);
   });
 
@@ -230,7 +230,7 @@ describe('test/index.test.ts', () => {
       { text: 'a' }
     );
 
-    assert(data.body === 'hello world');
+    assert.ok(data.body === 'hello world');
     await closeApp(starter);
   });
 

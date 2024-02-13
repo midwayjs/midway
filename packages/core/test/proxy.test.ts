@@ -21,8 +21,8 @@ describe('/test/proxy.test.ts', () => {
       configurable: false,
     });
 
-    assert(pluginContext['test'] === 1);
-    assert(pluginContext['key'] === 123);
+    assert.ok(pluginContext['test'] === 1);
+    assert.ok(pluginContext['key'] === 123);
   });
 
   it('should test merge array', () => {
@@ -31,6 +31,6 @@ describe('/test/proxy.test.ts', () => {
     }, {
       a: [3, 4]
     });
-    assert(target.a.length === 2);
+    assert.ok(target.a.length === 2);
   });
 });

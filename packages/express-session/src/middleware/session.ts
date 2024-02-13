@@ -7,7 +7,7 @@ import {
   MidwayConfigMissingError,
   MidwayConfigService,
 } from '@midwayjs/core';
-import * as session from 'express-session';
+import session from 'express-session';
 import * as cookieSession from 'cookie-session';
 import { SessionStoreManager } from '../store';
 

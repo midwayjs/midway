@@ -17,7 +17,7 @@ export class AutoConfiguration {
       disableError: true,
     })
 
-    assert(otherLogger === this.app.getLogger('otherLogger'));
-    assert(this.logger === this.app.getLogger('logger'));
+    assert.ok(otherLogger === this.app.getLogger('otherLogger'));
+    assert.ok(this.logger === this.app.getLogger('logger'));
   }
 }

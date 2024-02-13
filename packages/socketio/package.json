@@ -30,8 +30,7 @@
   },
   "dependencies": {
     "@midwayjs/core": "^3.15.6",
-    "socket.io": "4.7.4",
-    "socket.io-redis": "^6.1.0"
+    "socket.io": "4.7.4"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

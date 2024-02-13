@@ -43,7 +43,7 @@ import {
 } from './managedResolverFactory';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
-import * as EventEmitter from 'events';
+import EventEmitter from 'events';
 import { MidwayDefinitionNotFoundError } from '../error';
 import { Types } from '../util/types';
 import { Utils } from '../util';

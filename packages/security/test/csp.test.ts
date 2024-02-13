@@ -11,7 +11,7 @@ const withcspHeader = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/csp').expect(200);
   const header = response.headers['content-security-policy'];
-  assert(header === `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.midwayjs.org 'nonce-${response.text}';style-src 'unsafe-inline' https://apis.midwayjs.org`);
+  assert.ok(header === `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.midwayjs.org 'nonce-${response.text}';style-src 'unsafe-inline' https://apis.midwayjs.org`);
 }
 
 describe(`test/${type}.test.ts`, function () {

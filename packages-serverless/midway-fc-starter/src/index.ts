@@ -3,7 +3,7 @@ import {
   AbstractBootstrapStarter,
   IFaaSConfigurationOptions,
 } from '@midwayjs/faas';
-import * as getRawBody from 'raw-body';
+import getRawBody from 'raw-body';
 import { IncomingMessage } from 'http';
 import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 import { mockContext } from './mock';

@@ -7,7 +7,7 @@ import * as assert from 'assert';
 export class BaseApi {
   async index(ctx) {
     const baseApi = await ctx.requestContext.getAsync('baseApi');
-    assert(baseApi);
+    assert.ok(baseApi);
     ctx.body = 'index';
   }
 }

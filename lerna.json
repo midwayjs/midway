@@ -1,10 +1,4 @@
 {
-  "packages": [
-    "packages/*",
-    "packages-serverless/*",
-    "packages-legacy/*",
-    "packages-resource/*"
-  ],
   "command": {
     "bootstrap": {
       "hoist": true,
@@ -46,6 +40,6 @@
     },
     "cacheDir": ".changelog"
   },
-  "npmClient": "npm",
+  "npmClient": "pnpm",
   "version": "3.15.7"
 }

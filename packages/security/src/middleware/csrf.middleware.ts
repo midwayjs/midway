@@ -1,6 +1,6 @@
 import { Middleware } from '@midwayjs/core';
 import { CSRFError } from '../error';
-import * as CsrfTokens from 'csrf';
+import CsrfTokens from 'csrf';
 import { isSafeDomain, parseUrl } from '../utils';
 import { BaseMiddleware } from './base';
 

@@ -26,10 +26,10 @@ describe('test/web.test.ts', function () {
         .attach('file2', pdfPath)
         .expect(200)
         .then(async response => {
-          assert(response.body.files.length === 1);
-          assert(response.body.files[0].filename === 'test.pdf');
-          assert(response.body.fields.name === 'form');
-          assert(response.body.fields.name2 === 'form2');
+          assert.ok(response.body.files.length === 1);
+          assert.ok(response.body.files[0].filename === 'test.pdf');
+          assert.ok(response.body.fields.name === 'form');
+          assert.ok(response.body.fields.name2 === 'form2');
         });
     });
 
@@ -67,16 +67,16 @@ describe('test/web.test.ts', function () {
         .attach('file2', pdfPath)
         .expect(200)
         .then(async response => {
-          assert(response.body.files.length === 2);
-          assert(response.body.files[0].fieldName === 'file');
-          assert(response.body.files[1].fieldName === 'file2');
-          assert(response.body.files[1].mimeType === 'application/pdf');
-          assert(response.body.fields.name === 'form');
-          assert(response.body.fields.name2 === 'form2');
+          assert.ok(response.body.files.length === 2);
+          assert.ok(response.body.files[0].fieldName === 'file');
+          assert.ok(response.body.files[1].fieldName === 'file2');
+          assert.ok(response.body.files[1].mimeType === 'application/pdf');
+          assert.ok(response.body.fields.name === 'form');
+          assert.ok(response.body.fields.name2 === 'form2');
           const file1Stat = statSync(response.body.files[0].data);
-          assert(file1Stat.size && file1Stat.size === stat.size);
+          assert.ok(file1Stat.size && file1Stat.size === stat.size);
           const file2Stat = statSync(response.body.files[1].data);
-          assert(file2Stat.size && file2Stat.size === stat.size);
+          assert.ok(file2Stat.size && file2Stat.size === stat.size);
         });
     });
     

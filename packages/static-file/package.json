@@ -18,8 +18,7 @@
     "@midwayjs/core": "^3.15.6",
     "@midwayjs/faas": "^3.15.6",
     "@midwayjs/koa": "^3.15.6",
-    "@midwayjs/mock": "^3.15.6",
-    "@midwayjs/serverless-app": "^3.15.7"
+    "@midwayjs/mock": "^3.15.6"
   },
   "keywords": [
     "midway",

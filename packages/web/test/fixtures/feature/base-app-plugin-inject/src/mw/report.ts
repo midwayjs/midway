@@ -15,7 +15,7 @@ export class Report {
 
   resolve() {
     return async (ctx, next) => {
-      assert(this.logger);
+      assert.ok(this.logger);
       ctx.text = this.custom['bbb'] + this.hello['a'];
       await next();
     };

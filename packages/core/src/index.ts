@@ -28,7 +28,6 @@ export {
 } from './service/webRouterService';
 export {
   MidwayServerlessFunctionService,
-  WebRouterCollector,
 } from './service/slsFunctionService';
 export { DataSourceManager } from './common/dataSourceManager';
 export {

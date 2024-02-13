@@ -8,8 +8,8 @@ export class TestMiddleware {
 
   resolve() {
     return async (ctx, next) => {
-      assert(this.adb);
-      assert(ctx.logger);
+      assert.ok(this.adb);
+      assert.ok(ctx.logger);
       ctx.requestId = 555;
       return await next();
     };

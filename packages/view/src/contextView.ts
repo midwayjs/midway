@@ -44,7 +44,7 @@ export class ContextView implements IViewEngine {
     if (!viewEngineName) {
       viewEngineName = this.viewConfig.defaultViewEngine;
     }
-    assert(viewEngineName, `Can't find viewEngine for ${filename}`);
+    assert.ok(viewEngineName, `Can't find viewEngine for ${filename}`);
 
     // get view engine and render
     const view = await this.getViewEngine(viewEngineName);
@@ -59,7 +59,7 @@ export class ContextView implements IViewEngine {
     options = options ?? {};
     const viewEngineName =
       options.viewEngine ?? this.viewConfig.defaultViewEngine;
-    assert(viewEngineName, "Can't find viewEngine");
+    assert.ok(viewEngineName, "Can't find viewEngine");
 
     // get view engine and render
     const view = await this.getViewEngine(viewEngineName);
@@ -69,7 +69,7 @@ export class ContextView implements IViewEngine {
   private async getViewEngine(name) {
     // get view engine
     const ViewEngine = this.viewManager.get(name);
-    assert(ViewEngine, `Can't find ViewEngine "${name}"`);
+    assert.ok(ViewEngine, `Can't find ViewEngine "${name}"`);
 
     // use view engine to render
     const engine = await this.ctx.requestContext.getAsync(ViewEngine);

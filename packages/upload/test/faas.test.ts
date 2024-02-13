@@ -24,11 +24,11 @@ describe('test/faas.test.ts', function () {
       .attach('file', imagePath)
       .expect(200)
       .then(async response => {
-        assert(response.body.files.length === 1);
-        assert(response.body.files[0].filename === '1.jpg');
-        assert(response.body.fields.name === 'form');
+        assert.ok(response.body.files.length === 1);
+        assert.ok(response.body.files[0].filename === '1.jpg');
+        assert.ok(response.body.fields.name === 'form');
         const file1Stat = statSync(response.body.files[0].data);
-        assert(file1Stat.size && file1Stat.size === stat.size);
+        assert.ok(file1Stat.size && file1Stat.size === stat.size);
       });
 
   });
@@ -41,9 +41,9 @@ describe('test/faas.test.ts', function () {
       .attach('file', imagePath)
       .expect(200)
       .then(async response => {
-        assert(response.body.ignore);
-        assert(!response.body.files);
-        assert(!response.body.fields);
+        assert.ok(response.body.ignore);
+        assert.ok(!response.body.files);
+        assert.ok(!response.body.fields);
       });
   });
 
@@ -55,10 +55,10 @@ describe('test/faas.test.ts', function () {
       .attach('file', imagePath)
       .expect(200)
       .then(async response => {
-        assert(response.body.files[0].filename === '1.jpg');
-        assert(response.body.files.length === 1);
-        assert(response.body.fields.name === 'form');
-        assert(!existsSync(response.body.files[0].data));
+        assert.ok(response.body.files[0].filename === '1.jpg');
+        assert.ok(response.body.files.length === 1);
+        assert.ok(response.body.fields.name === 'form');
+        assert.ok(!existsSync(response.body.files[0].data));
       });
   });
   it('upload unsupport ext file using file', async () => {

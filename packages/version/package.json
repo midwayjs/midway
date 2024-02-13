@@ -4,10 +4,10 @@
   "description": "Midway Package Version Manager",
   "main": "index.js",
   "scripts": {
-    "build": "",
-    "test": "",
-    "cov": "",
-    "ci": ""
+    "build": "echo 'ok'",
+    "test": "echo 'ok'",
+    "cov": "echo 'ok'",
+    "ci": "echo 'ok'"
   },
   "keywords": [
     "midway",

@@ -26,11 +26,11 @@ describe('test/koa.test.ts', function () {
         .expect(200)
         .then(async response => {
           const stat = statSync(pdfPath);
-          assert(response.body.size === stat.size);
-          assert(response.body.files.length === 1);
-          assert(response.body.files[0].filename === 'test.pdf');
-          assert(response.body.fields.name === 'form');
-          assert(response.body.fields.name2 === 'form2');
+          assert.ok(response.body.size === stat.size);
+          assert.ok(response.body.files.length === 1);
+          assert.ok(response.body.files[0].filename === 'test.pdf');
+          assert.ok(response.body.fields.name === 'form');
+          assert.ok(response.body.fields.name2 === 'form2');
         });
     });
 
@@ -45,9 +45,9 @@ describe('test/koa.test.ts', function () {
         .expect(200)
         .then(async response => {
           const stat = statSync(pdfPath);
-          assert(response.body.size === stat.size);
-          assert(response.body.files.length === 1);
-          assert(response.body.files[0].filename === '3kb.png');
+          assert.ok(response.body.size === stat.size);
+          assert.ok(response.body.files.length === 1);
+          assert.ok(response.body.files[0].filename === '3kb.png');
         });
     });
 
@@ -83,12 +83,12 @@ describe('test/koa.test.ts', function () {
         .attach('file2', pdfPath)
         .expect(200)
         .then(async response => {
-          assert(response.body.files.length === 2);
-          assert(response.body.files[0].fieldName === 'file');
-          assert(response.body.files[1].fieldName === 'file2');
-          assert(response.body.files[1].mimeType === 'application/pdf');
-          assert(response.body.fields.name === 'form');
-          assert(response.body.fields.name2 === 'form2');
+          assert.ok(response.body.files.length === 2);
+          assert.ok(response.body.files[0].fieldName === 'file');
+          assert.ok(response.body.files[1].fieldName === 'file2');
+          assert.ok(response.body.files[1].mimeType === 'application/pdf');
+          assert.ok(response.body.fields.name === 'form');
+          assert.ok(response.body.fields.name2 === 'form2');
         });
     });
 
@@ -102,8 +102,8 @@ describe('test/koa.test.ts', function () {
         .expect(200)
         .then(async response => {
           const stat = statSync(path);
-          assert(response.body.size === stat.size);
-          assert(response.body.files[0].data.endsWith('.tar.gz'));
+          assert.ok(response.body.size === stat.size);
+          assert.ok(response.body.files[0].data.endsWith('.tar.gz'));
         });
     });
 

@@ -31,9 +31,9 @@ export class AutoConfiguration implements ILifeCycle {
 
   async onReady() {
     console.log('ready');
-    assert(this.prepareConfig['prepare'] === 'remote data');
-    assert(this.prepareConfig['id'] === this.configService.innerData);
-    assert(getCurrentApplicationContext() === this.app.getApplicationContext());
-    assert((getCurrentMainFramework() as any).getFrameworkType() === MidwayFrameworkType.WEB);
+    assert.ok(this.prepareConfig['prepare'] === 'remote data');
+    assert.ok(this.prepareConfig['id'] === this.configService.innerData);
+    assert.ok(getCurrentApplicationContext() === this.app.getApplicationContext());
+    assert.ok((getCurrentMainFramework() as any).getFrameworkType() === MidwayFrameworkType.WEB);
   }
 }

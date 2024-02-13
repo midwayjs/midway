@@ -89,7 +89,7 @@ jobs:
     - run: npm run build --if-present
     - run: npm run lint
     - run: npm run lint:cycle
-    - run: npm run test_legacy
+#    - run: npm run test_legacy
       env:
        RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
        ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}

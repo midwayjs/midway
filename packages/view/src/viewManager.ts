@@ -54,15 +54,15 @@ export class ViewManager extends Map {
    * @param {Object} viewEngine - the class of view engine
    */
   public use(name: string, viewEngine: new (...args) => IViewEngine): void {
-    assert(name, 'name is required');
-    assert(!this.has(name), `${name} has been registered`);
+    assert.ok(name, 'name is required');
+    assert.ok(!this.has(name), `${name} has been registered`);
 
-    assert(viewEngine, 'viewEngine is required');
-    assert(
+    assert.ok(viewEngine, 'viewEngine is required');
+    assert.ok(
       viewEngine.prototype.render,
       'viewEngine should implement `render` method'
     );
-    assert(
+    assert.ok(
       viewEngine.prototype.renderString,
       'viewEngine should implement `renderString` method'
     );
@@ -89,7 +89,7 @@ export class ViewManager extends Map {
       [name, name + config.defaultExtension],
       config.root
     );
-    assert(filename, `Can't find ${name} from ${config.root.join(',')}`);
+    assert.ok(filename, `Can't find ${name} from ${config.root.join(',')}`);
 
     // set cache
     this.fileMap.set(name, filename);

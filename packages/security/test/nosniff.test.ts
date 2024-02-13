@@ -16,7 +16,7 @@ const withnosniffHeader = async app => {
 const redirectIgnoreSniff = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/redirect').expect(302).expect('location', '/');
-  assert(!response.headers['X-Content-Type-Options']);
+  assert.ok(!response.headers['X-Content-Type-Options']);
 }
 
 describe(`test/${type}.test.ts`, function () {

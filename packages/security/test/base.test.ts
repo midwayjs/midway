@@ -11,19 +11,19 @@ const type = 'base';
 const noHSTSHeader = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/').expect(200);
-  assert(!response.headers['strict-transport-security']);
+  assert.ok(!response.headers['strict-transport-security']);
 }
 
 const noNOOpenHeader = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/').expect(200);
-  assert(!response.headers['x-download-options']);
+  assert.ok(!response.headers['x-download-options']);
 }
 
 const noSniffHeader = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/').expect(200);
-  assert(!response.headers['X-Content-Type-Options']);
+  assert.ok(!response.headers['X-Content-Type-Options']);
 }
 
 describe(`test/${type}.test.ts`, function () {

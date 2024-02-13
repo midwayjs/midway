@@ -32,9 +32,6 @@ export * from './microservice/provider';
 export * from './microservice/rabbitmqListener';
 export * from './microservice/kafkaListener';
 
-// rpc
-export * from './rpc/hsf';
-
 // task
 export * from './task/queue';
 export * from './task/task';

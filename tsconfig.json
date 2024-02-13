@@ -10,12 +10,16 @@
     "noImplicitReturns": false,
     "strict": false,
     "noEmitOnError": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "target": "ES2020",
+    "lib": ["ES2020"]
   },
   "exclude": [
     "dist",
     "node_modules",
     "test",
     "site"
-  ],
+  ]
 }

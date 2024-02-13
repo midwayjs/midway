@@ -22,8 +22,8 @@ export class APIController {
   @OnWSConnection()
   init(socket, request) {
     console.log(`namespace / got a connection ${this.ctx.readyState}`);
-    assert(this.ctx.readyState === socket.readyState);
-    assert(request);
+    assert.ok(this.ctx.readyState === socket.readyState);
+    assert.ok(request);
   }
 
   @OnWSMessage('message')

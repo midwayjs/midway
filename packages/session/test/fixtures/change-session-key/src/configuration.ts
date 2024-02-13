@@ -34,7 +34,7 @@ export class AutoConfiguration {
     });
 
     app.useMiddleware(async function(ctx) {
-      assert(ctx.session.message === message);
+      assert.ok(ctx.session.message === message);
       ctx.body = '';
     });
   }

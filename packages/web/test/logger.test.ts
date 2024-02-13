@@ -287,8 +287,8 @@ describe('test/logger.test.js', () => {
   //
   //   await sleep(2000);
   //
-  //   assert(fs.existsSync(logfile));
-  //   assert(fs.readFileSync(logfile, 'utf8').includes('"message":"json format"'));
+  //   assert.ok(fs.existsSync(logfile));
+  //   assert.ok(fs.readFileSync(logfile, 'utf8').includes('"message":"json format"'));
   // });
   //
   // it('dont output to console after app ready', done => {
@@ -329,10 +329,10 @@ describe('test/logger.test.js', () => {
   //     // .debug()
   //     .coverage(false)
   //     .end(err => {
-  //       assert(!err);
+  //       assert.ok(!err);
   //       const content = fs.readFileSync(path.join(baseDir, 'logs/logger/common-error.log'), 'utf8');
-  //       assert(content.includes('nodejs.Error: agent error'));
-  //       assert(content.includes('nodejs.Error: app error'));
+  //       assert.ok(content.includes('nodejs.Error: agent error'));
+  //       assert.ok(content.includes('nodejs.Error: app error'));
   //       done();
   //     });
   // });
@@ -349,17 +349,17 @@ describe('test/logger.test.js', () => {
   //   await sleep(1000);
   //
   //   const content = fs.readFileSync(path.join(app.baseDir, 'logs/logger/common-error.log'), 'utf8');
-  //   assert(content.includes('nodejs.Error: logger error'));
-  //   assert(content.includes('nodejs.Error: coreLogger error'));
-  //   assert(content.includes('nodejs.Error: errorLogger error'));
-  //   assert(content.includes('nodejs.Error: customLogger error'));
+  //   assert.ok(content.includes('nodejs.Error: logger error'));
+  //   assert.ok(content.includes('nodejs.Error: coreLogger error'));
+  //   assert.ok(content.includes('nodejs.Error: errorLogger error'));
+  //   assert.ok(content.includes('nodejs.Error: customLogger error'));
   // });
   //
   // it('agent\'s logger is same as coreLogger', async () => {
   //   app = utils.app('apps/logger');
   //   await app.ready();
   //
-  //   assert(app.agent.logger.options.file === app.agent.coreLogger.options.file);
+  //   assert.ok(app.agent.logger.options.file === app.agent.coreLogger.options.file);
   // });
   //
   // describe('logger.level = DEBUG', () => {
@@ -375,8 +375,8 @@ describe('test/logger.test.js', () => {
   //       .get('/')
   //       .expect('ok')
   //       .end(err => {
-  //         assert(!err);
-  //         assert(
+  //         assert.ok(!err);
+  //         assert.ok(
   //           fs.readFileSync(path.join(app.config.baseDir, 'logs/foo/foo-web.log'), 'utf8').includes(' DEBUG ')
   //         );
   //         done();

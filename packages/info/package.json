@@ -16,9 +16,7 @@
     "@midwayjs/core": "^3.15.6",
     "@midwayjs/express": "^3.15.7",
     "@midwayjs/koa": "^3.15.6",
-    "@midwayjs/mock": "^3.15.6",
-    "@midwayjs/serverless-fc-starter": "^3.15.6",
-    "@midwayjs/serverless-scf-starter": "^3.14.0"
+    "@midwayjs/mock": "^3.15.6"
   },
   "keywords": [
     "midway"

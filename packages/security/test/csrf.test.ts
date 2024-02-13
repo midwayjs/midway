@@ -10,7 +10,7 @@ const postWithCsrfToken = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/csrf').expect(200);
   const csrfToken = response.text;
-  assert(response.text);
+  assert.ok(response.text);
   const body = {
     _csrf: csrfToken,
     test: Date.now()
@@ -27,7 +27,7 @@ const postWithCsrfTokenSetToQuery = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/csrf').expect(200);
   const csrfToken = response.text;
-  assert(response.text);
+  assert.ok(response.text);
   const body = {
     test: Date.now()
   };
@@ -43,7 +43,7 @@ const postWithCsrfTokenRotate = async app => {
   const preResponse = await request.get('/csrf').expect(200);
   const response = await request.get('/rotate').expect(200);
   const csrfToken = response.text;
-  assert(response.text && preResponse.text !== response.text);
+  assert.ok(response.text && preResponse.text !== response.text);
   const body = {
     _csrf: csrfToken,
     test: Date.now()
@@ -58,7 +58,7 @@ const postWithCsrfTokenRotate = async app => {
 const return403WithoutCsrfToken = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/csrf').expect(200);
-  assert(response.text);
+  assert.ok(response.text);
   const body = {
     test: Date.now()
   };
@@ -71,7 +71,7 @@ const return200WithCorrectRefererWhenTypeIsReferer = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/csrf').expect(200);
   const csrfToken = response.text;
-  assert(response.text);
+  assert.ok(response.text);
   const body = {
     _csrf: csrfToken,
     test: Date.now()
@@ -88,7 +88,7 @@ const return403WithIncorrectRefererWhenTypeIsReferer = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/csrf').expect(200);
   const csrfToken = response.text;
-  assert(response.text);
+  assert.ok(response.text);
   const body = {
     _csrf: csrfToken,
     test: Date.now()
@@ -104,7 +104,7 @@ const postWithCsrfTokenSetToBodyUsingSession = async app => {
   const request = await createHttpRequest(app);
   const response = await request.get('/csrf').expect(200);
   const csrfToken = response.text;
-  assert(response.text);
+  assert.ok(response.text);
   const body = {
     _csrf: csrfToken,
     test: Date.now()

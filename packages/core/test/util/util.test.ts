@@ -21,8 +21,8 @@ import { fork } from 'child_process';
 describe('/test/util/util.test.ts', () => {
 
   it('should test safeRequire', () => {
-    // assert(safeRequire('@ali/abc') === undefined);
-    // assert(safeRequire('url') === require('url'));
+    // assert.ok(safeRequire('@ali/abc') === undefined);
+    // assert.ok(safeRequire('url') === require('url'));
     //
     // assert.strictEqual(safeRequire(join(__dirname, '../fixtures/dir/ok')), require('./fixtures/dir/ok'));
     // assert.strictEqual(safeRequire(join(__dirname, '../fixtures/foo')), undefined);
@@ -72,14 +72,14 @@ describe('/test/util/util.test.ts', () => {
 
 describe('/test/pathFileUtil.test.ts', () => {
   it('should test is path', () => {
-    assert(PathFileUtil.isPath('@ali/abc') === false);
-    assert(PathFileUtil.isPath('def') === false);
-    assert(PathFileUtil.isPath('bbb-ccc') === false);
-    assert(PathFileUtil.isPath('./hello') === true);
-    assert(PathFileUtil.isPath('../hello') === true);
-    assert(PathFileUtil.isPath('../../bbb') === true);
-    assert(PathFileUtil.isPath('/home/admin/logs') === true);
-    assert(PathFileUtil.isPath('C:\\Program Files') === true);
+    assert.ok(PathFileUtil.isPath('@ali/abc') === false);
+    assert.ok(PathFileUtil.isPath('def') === false);
+    assert.ok(PathFileUtil.isPath('bbb-ccc') === false);
+    assert.ok(PathFileUtil.isPath('./hello') === true);
+    assert.ok(PathFileUtil.isPath('../hello') === true);
+    assert.ok(PathFileUtil.isPath('../../bbb') === true);
+    assert.ok(PathFileUtil.isPath('/home/admin/logs') === true);
+    assert.ok(PathFileUtil.isPath('C:\\Program Files') === true);
   });
 
   it('should isPathEqual be ok', () => {

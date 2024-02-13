@@ -11,7 +11,7 @@ import {
   MidwayCommonError,
 } from '@midwayjs/core';
 import * as assert from 'assert';
-import * as COS from 'cos-nodejs-sdk-v5';
+import COS from 'cos-nodejs-sdk-v5';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -28,7 +28,7 @@ export class COSServiceFactory extends ServiceFactory<COS> {
   logger;
 
   async createClient(config: COS.COSOptions): Promise<COS> {
-    assert(
+    assert.ok(
       config.SecretKey && config.SecretId,
       '[@midwayjs/cos] secretId secretKey is required on config'
     );

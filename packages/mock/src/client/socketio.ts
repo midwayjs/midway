@@ -1,4 +1,4 @@
-import type { ManagerOptions, SocketOptions, Socket } from 'socket.io-client';
+import type { ManagerOptions, SocketOptions } from 'socket.io-client';
 
 export interface MidwaySocketIOClientOptions
   extends Partial<ManagerOptions & SocketOptions> {
@@ -10,7 +10,7 @@ export interface MidwaySocketIOClientOptions
 }
 
 export class SocketIOWrapperClient {
-  private readonly socket: Socket;
+  private readonly socket;
   constructor(socket) {
     this.socket = socket;
   }
