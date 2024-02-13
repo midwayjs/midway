@@ -21,7 +21,7 @@ $ npm i @midwayjs/cross-domain --save
 
 ## Introducing components
 
-Introducing components in `src/configuration.ts`,
+Introducing components in `src/configuration.ts`.
 
 ```typescript
 import * as crossDomain from '@midwayjs/cross-domain';
@@ -35,19 +35,95 @@ export class MainConfiguration {}
 ```
 
 
-## CORS configuration
 
-CORS configuration can be performed in `src/config/config.default`.
+## What is CORS
+
+The following errors are often encountered when front-end code calls back-end services. This is the most common cross-domain [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) error. .
+
+```
+Access to fetch at 'http://127.0.0.1:7002/' from origin 'http://127.0.0.1:7001' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
+```
+
+For security reasons, browsers restrict cross-origin HTTP requests made within scripts. For example, `XMLHttpRequest` and [Fetch API](https://developer.mozilla.org/en-CN/docs/Web/API/Fetch_API) follow the [Same Origin Policy](https://developer.mozilla.org/ en-CN/docs/Web/Security/Same-origin_policy). This means that web applications using these APIs can only request HTTP resources from the same domain where the application is loaded unless the response message contains the correct CORS response headers.
+
+The CORS mechanism allows web application servers to perform cross-origin access control so that cross-origin data transmission can be carried out securely. Modern browsers support this in API containers such as [`XMLHttpRequest`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest) or [Fetch](https://developer.mozilla .org/zh-CN/docs/Web/API/Fetch_API)) uses CORS to reduce the risks caused by cross-origin HTTP requests.
+
+
+
+## Common CORS configurations
+
+Below are several cross-domain solutions. Let’s take the `fetch` method as an example.
+
+### `credentials` not used
+
+client.
+
+```javascript
+fetch(url);
+```
+
+Server configuration.
 
 ```typescript
 // src/config/config.default.ts
 export default {
-  // ...
-  cors: {
-    credentials: false,
-  },
+   // ...
+   cors: {
+     origin: '*',
+   },
 }
 ```
+
+### Using `credentials`
+
+client.
+
+```javascript
+fetch(url, {
+   credentials: "include",
+});
+```
+
+Server configuration
+
+```typescript
+// src/config/config.default.ts
+export default {
+   // ...
+   cors: {
+     credentials: true,
+   },
+}
+```
+
+### Limit `origin` 
+
+Suppose our web page address is `http://127.0.0.1:7001` and the interface is `http://127.0.0.1:7002`.
+
+client.
+
+```javascript
+fetch('http://127.0.0.1:7002/', {
+   credentials: 'include'
+})
+```
+
+Server configuration, please note that since `credentials` is enabled, the `origin` field cannot be `*` at this time.
+
+```typescript
+// src/config/config.default.ts
+export default {
+   // ...
+   cors: {
+     origin: 'http://127.0.0.1:7001',
+     credentials: true,
+   },
+}
+```
+
+
+
+## More CORS configuration
 
 The available configurations are as follows:
 
