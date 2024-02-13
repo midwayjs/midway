@@ -44,7 +44,7 @@ describe('test/index.test.ts', function () {
         .expect(200)
         // .expect({})
         .expect(res => {
-          assert(!res.header['set-cookie']?.join('').match(/MW_SESS/));
+          assert.ok(!res.header['set-cookie']?.join('').match(/MW_SESS/));
         });
     });
 
@@ -115,9 +115,9 @@ describe('test/index.test.ts', function () {
         .expect({ key: 'foo', foo: 'bar' })
         .expect(res => {
           cookie = res.headers['set-cookie'].join(';');
-          assert(cookie.match(/MW_SESS=.*?;/));
-          assert(cookie.match(/expires=/));
-          assert(cookie.match(/max-age=/));
+          assert.ok(cookie.match(/MW_SESS=.*?;/));
+          assert.ok(cookie.match(/expires=/));
+          assert.ok(cookie.match(/max-age=/));
         });
 
       await sleep(200);
@@ -153,7 +153,7 @@ describe('test/index.test.ts', function () {
       .expect({ foo: 'bar' })
       .expect(res => {
         const cookie = res.headers['set-cookie'].join('|');
-        assert(cookie.includes('; samesite=none;'));
+        assert.ok(cookie.includes('; samesite=none;'));
       });
 
     await close(app);
@@ -167,7 +167,7 @@ describe('test/index.test.ts', function () {
       .expect(200)
       .expect((res) => {
         koaSession = res.headers['set-cookie'][0];
-        assert(koaSession.match(/MW_SESS=.*?;/));
+        assert.ok(koaSession.match(/MW_SESS=.*?;/));
       });
 
     await request.get('/')
@@ -175,8 +175,8 @@ describe('test/index.test.ts', function () {
       .expect(200)
       .expect((res) => {
         const cookies = res.headers['set-cookie'][0];
-        assert(cookies.match(/MW_SESS=.*?;/));
-        assert(cookies.replace(/;.*/, '') !== koaSession.replace(/;.*/, ''));
+        assert.ok(cookies.match(/MW_SESS=.*?;/));
+        assert.ok(cookies.replace(/;.*/, '') !== koaSession.replace(/;.*/, ''));
       });
 
     await close(app);

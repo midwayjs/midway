@@ -12,7 +12,7 @@ export class AutoConfiguration {
   view;
 
   async onReady() {
-    assert(this.view);
-    assert(this.app.view === this.view);
+    assert.ok(this.view);
+    assert.ok(this.app.view === this.view);
   }
 }

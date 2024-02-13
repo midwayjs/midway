@@ -62,7 +62,7 @@ describe('test/new.test.ts', () => {
 
   it('invoke different handler use @Handler', async () => {
     const starter = await createNewStarter('base-app-handler');
-    assert(
+    assert.ok(
       (await starter.invokeTriggerFunction(
         {
           text: 'hello',
@@ -75,7 +75,7 @@ describe('test/new.test.ts', () => {
         }
       )) === 'ahello'
     );
-    assert(
+    assert.ok(
       (await starter.invokeTriggerFunction(
         {
           text: 'hello',
@@ -93,7 +93,7 @@ describe('test/new.test.ts', () => {
 
   it('use default handler and new handler', async () => {
     const starter = await createNewStarter('base-app-handler2');
-    assert(
+    assert.ok(
       (await starter.invokeTriggerFunction(
         {
           text: 'hello',
@@ -106,7 +106,7 @@ describe('test/new.test.ts', () => {
         }
       )) === 'defaultahello'
     );
-    assert(
+    assert.ok(
       (await starter.invokeTriggerFunction(
         {
           text: 'hello',
@@ -119,7 +119,7 @@ describe('test/new.test.ts', () => {
         }
       )) === 'abhello'
     );
-    assert(
+    assert.ok(
       (await starter.invokeTriggerFunction({},'indexService.get', {
         isHttpFunction: false,
       })) ===
@@ -141,7 +141,7 @@ describe('test/new.test.ts', () => {
         isHttpFunction: false,
       }
     );
-    assert(data === 'abhello');
+    assert.ok(data === 'abhello');
     await closeApp(starter);
   });
 
@@ -154,7 +154,7 @@ describe('test/new.test.ts', () => {
   //   };
   //   const arr = [starter.start({ cb }), starter.start({ cb }), starter.start({ cb })];
   //   await Promise.all(arr);
-  //   assert(1 === i);
+  //   assert.ok(1 === i);
   //   await closeApp(starter);
   // });
 
@@ -194,7 +194,7 @@ describe('test/new.test.ts', () => {
         isHttpFunction: false,
       });
 
-    assert(data.body === 'hello world');
+    assert.ok(data.body === 'hello world');
     await closeApp(starter);
   });
 

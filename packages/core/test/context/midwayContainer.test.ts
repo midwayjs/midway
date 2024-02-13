@@ -67,7 +67,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
     // register handler for container
     frameworkService.registerPropertyHandler(CONFIG_KEY, (key, meta, target) => {
-      assert(
+      assert.ok(
         target instanceof
         require('../fixtures/base-app-decorator/src/lib/service')[
           'BaseService'
@@ -86,18 +86,18 @@ describe('/test/context/midwayContainer.test.ts', () => {
     await container.ready();
     const appCtx = container;
     const baseService: any = await appCtx.getAsync('baseService');
-    assert(baseService.config === 'hello');
-    assert(baseService.logger === console);
-    assert(baseService.plugin2.b === 2);
+    assert.ok(baseService.config === 'hello');
+    assert.ok(baseService.logger === console);
+    assert.ok(baseService.plugin2.b === 2);
 
     const context = { logger: console };
     const requestCtx = new MidwayRequestContainer(context, appCtx);
     const baseServiceCtx = await requestCtx.getAsync('baseService');
     const baseServiceCtx1 = await requestCtx.getAsync('baseService');
-    assert(baseServiceCtx === baseServiceCtx1);
-    assert(baseServiceCtx.config === 'hello');
-    assert(baseServiceCtx.logger === console);
-    assert(baseServiceCtx.plugin2.b === 2);
+    assert.ok(baseServiceCtx === baseServiceCtx1);
+    assert.ok(baseServiceCtx.config === 'hello');
+    assert.ok(baseServiceCtx.logger === console);
+    assert.ok(baseServiceCtx.plugin2.b === 2);
   });
 
   it('should load ts file and bindapp success', async () => {
@@ -128,7 +128,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
     frameworkService.registerPropertyHandler(APPLICATION_KEY, () => tt);
     // register handler for container
     frameworkService.registerPropertyHandler(CONFIG_KEY, (key, meta, target) => {
-      assert(
+      assert.ok(
         target instanceof
         require('../fixtures/base-app-forbindapp/src/lib/service')[
           'BaseService'
@@ -147,10 +147,10 @@ describe('/test/context/midwayContainer.test.ts', () => {
     await container.ready();
     const appCtx = container;
     const baseService: any = await appCtx.getAsync('baseService');
-    assert(baseService.config === 'hello');
-    assert(baseService.logger === console);
-    assert(baseService.plugin2.b === 2);
-    assert(baseService.test.getBaseDir() === 'hello this is basedir');
+    assert.ok(baseService.config === 'hello');
+    assert.ok(baseService.logger === console);
+    assert.ok(baseService.plugin2.b === 2);
+    assert.ok(baseService.test.getBaseDir() === 'hello this is basedir');
   });
 
   it('load ts file support constructor inject', async () => {
@@ -193,9 +193,9 @@ describe('/test/context/midwayContainer.test.ts', () => {
     );
     const module = require('../fixtures/base-app-constructor/src/lib/service');
     const baseServiceCtx = await requestCtx.getAsync(module.BaseService);
-    assert(baseServiceCtx.config.c === 120);
-    assert(baseServiceCtx.plugin2.text === 2);
-    assert(baseServiceCtx.logger === console);
+    assert.ok(baseServiceCtx.config.c === 120);
+    assert.ok(baseServiceCtx.plugin2.text === 2);
+    assert.ok(baseServiceCtx.logger === console);
   });
 
   it('should auto load function file and inject by function name', async () => {
@@ -237,7 +237,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
       container
     );
     const baseServiceCtx = await requestCtx.getAsync('baseService');
-    assert(baseServiceCtx.factory('google'));
+    assert.ok(baseServiceCtx.factory('google'));
   });
 
   it('should scan app dir and inject automatic', async () => {

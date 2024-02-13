@@ -25,13 +25,13 @@ describe(`index.test.ts`, ()=>{
     const appCtx = app.getApplicationContext();
 
     const userService: any = await appCtx.getAsync('userService');
-    assert((await userService.getUser(`name`)) === undefined);
+    assert.ok((await userService.getUser(`name`)) === undefined);
     await userService.setUser('name', 'stone-jin');
-    assert((await userService.getUser(`name`)) === 'stone-jin');
+    assert.ok((await userService.getUser(`name`)) === 'stone-jin');
     await userService.setUser('name', {name: '123'});
-    assert(JSON.stringify(await userService.getUser('name')) === JSON.stringify({name: '123'}));
+    assert.ok(JSON.stringify(await userService.getUser('name')) === JSON.stringify({name: '123'}));
     await userService.reset();
-    assert((await userService.getUser(`name`)) === undefined);
+    assert.ok((await userService.getUser(`name`)) === undefined);
   });
 
   it(`test cache decorator`, async () => {

@@ -19,6 +19,6 @@ export class ContainerConfiguration {
   async onServerReady() {
     console.log('in server ready ' + Date.now());
     this.framework.getJob(HelloTask).start();
-    assert(this.helloTask === this.framework.getJob(HelloTask));
+    assert.ok(this.helloTask === this.framework.getJob(HelloTask));
   }
 }

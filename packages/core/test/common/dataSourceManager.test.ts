@@ -343,7 +343,7 @@ describe('test validate connection and checked it', () => {
     }
 
     protected async createDataSource(config, dataSourceName: string): Promise<any> {
-      assert(config);
+      assert.ok(config);
       config.entitiesLength = 0;
       // to skip real connection action
       if (config.port === fakePort) {
@@ -456,12 +456,12 @@ describe('test validate connection and checked it', () => {
       try {
         await instance.createInstance(config, clientName, {validateConnection: true});
       } catch (ex) {
-        assert(ex instanceof Error);
-        assert(ex.message.includes(clientName));
-        assert(ex.message.includes('not connected'));
+        assert.ok(ex instanceof Error);
+        assert.ok(ex.message.includes(clientName));
+        assert.ok(ex.message.includes('not connected'));
         return;
       }
-      assert(false, 'should throw error but not');
+      assert.ok(false, 'should throw error but not');
     });
   });
 

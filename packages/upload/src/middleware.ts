@@ -5,7 +5,7 @@ import {
   Init,
   MidwayFrameworkType,
   IMiddleware,
-  IMidwayLogger,
+  ILogger,
   IgnoreMatcher,
 } from '@midwayjs/core';
 import { resolve } from 'path';
@@ -19,7 +19,7 @@ import {
   UploadOptions,
 } from '.';
 import { parseFromReadableStream, parseMultipart } from './parse';
-import * as getRawBody from 'raw-body';
+import getRawBody from 'raw-body';
 import { fromBuffer } from 'file-type';
 import { formatExt } from './utils';
 
@@ -31,7 +31,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   uploadConfig: UploadOptions;
 
   @Logger()
-  logger: IMidwayLogger;
+  logger: ILogger;
 
   private uploadWhiteListMap = new Map<string, string>();
   private uploadFileMimeTypeMap = new Map<string, string[]>();

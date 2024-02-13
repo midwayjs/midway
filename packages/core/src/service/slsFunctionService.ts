@@ -1,5 +1,4 @@
 import {
-  bindContainer,
   FUNC_KEY,
   getClassMetadata,
   getPropertyDataFromClass,
@@ -17,11 +16,7 @@ import {
   MidwayWebRouterService,
   RouterCollectorOptions,
   RouterInfo,
-  RouterPriority,
 } from './webRouterService';
-import { MidwayContainer } from '../context/container';
-import { CommonJSFileDetector } from '../common/fileDetector';
-import { getCurrentMainFramework } from '../util/contextUtil';
 import { FaaSMetadata, ScopeEnum } from '../interface';
 
 @Provide()
@@ -246,65 +241,4 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
 
 function createFunctionName(target, functionName) {
   return getProviderName(target).replace(/[:#]/g, '-') + '-' + functionName;
-}
-
-/**
- * @deprecated use built-in MidwayWebRouterService first
- */
-export class WebRouterCollector {
-  private baseDir: string;
-  private options: RouterCollectorOptions;
-  private proxy: MidwayWebRouterService;
-
-  constructor(baseDir = '', options: RouterCollectorOptions = {}) {
-    this.baseDir = baseDir;
-    this.options = options;
-  }
-
-  protected async init() {
-    if (!this.proxy) {
-      if (this.baseDir) {
-        const container = new MidwayContainer();
-        bindContainer(container);
-        container.setFileDetector(
-          new CommonJSFileDetector({
-            loadDir: this.baseDir,
-          })
-        );
-        await container.ready();
-      }
-      if (this.options.includeFunctionRouter) {
-        if (getCurrentMainFramework()) {
-          this.proxy = await getCurrentMainFramework()
-            .getApplicationContext()
-            .getAsync(MidwayServerlessFunctionService, [this.options]);
-        } else {
-          this.proxy = new MidwayServerlessFunctionService(this.options);
-        }
-      } else {
-        if (getCurrentMainFramework()) {
-          this.proxy = await getCurrentMainFramework()
-            .getApplicationContext()
-            .getAsync(MidwayWebRouterService, [this.options]);
-        } else {
-          this.proxy = new MidwayWebRouterService(this.options);
-        }
-      }
-    }
-  }
-
-  async getRoutePriorityList(): Promise<RouterPriority[]> {
-    await this.init();
-    return this.proxy.getRoutePriorityList();
-  }
-
-  async getRouterTable(): Promise<Map<string, RouterInfo[]>> {
-    await this.init();
-    return this.proxy.getRouterTable();
-  }
-
-  async getFlattenRouterTable(): Promise<RouterInfo[]> {
-    await this.init();
-    return this.proxy.getFlattenRouterTable();
-  }
 }

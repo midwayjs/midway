@@ -97,7 +97,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       await (await middlewareService.compose(stack))({});
 
       for (const next of arr) {
-        assert(isPromise(next), 'one of the functions next is not a Promise');
+        assert.ok(isPromise(next), 'one of the functions next is not a Promise');
       }
     });
 
@@ -115,7 +115,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       });
 
       await (await middlewareService.compose(stack))({});
-      assert(called);
+      assert.ok(called);
     });
 
     it('should reject on errors in middleware', async () => {
@@ -185,7 +185,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       return (await middlewareService.compose([]))({}, async () => {
         called = true
       }).then(function () {
-        assert(called);
+        assert.ok(called);
       });
     });
 
@@ -234,7 +234,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       ]))({}).then(() => {
         throw new Error('boom');
       }, (err) => {
-        assert(/multiple times/.test(err.message));
+        assert.ok(/multiple times/.test(err.message));
       });
     });
 

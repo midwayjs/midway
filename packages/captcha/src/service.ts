@@ -7,7 +7,7 @@ import {
 } from '@midwayjs/core';
 import { CachingFactory, MidwayCache } from '@midwayjs/cache-manager';
 import * as svgCaptcha from 'svg-captcha';
-import * as svgBase64 from 'mini-svg-data-uri';
+import svgBase64 from 'mini-svg-data-uri';
 import { nanoid } from 'nanoid';
 import {
   FormulaCaptchaOptions,

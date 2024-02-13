@@ -45,7 +45,7 @@ describe('test/index.test.js', () => {
     stream.pipe(new PauseStream());
     // mock delay
     setTimeout(() => {
-      assert(writeSize > 0);
+      assert.ok(writeSize > 0);
       sendToWormhole(stream).then(done);
     }, 100);
   });
@@ -60,7 +60,7 @@ describe('test/index.test.js', () => {
       }
     });
     await sendToWormhole(stream).then(() => {
-      assert(!data);
+      assert.ok(!data);
     });
   });
 
@@ -75,7 +75,7 @@ describe('test/index.test.js', () => {
     });
     setTimeout(() => {
       sendToWormhole(stream).then(() => {
-        assert(data);
+        assert.ok(data);
         done();
       });
     }, 500);
@@ -95,7 +95,7 @@ describe('test/index.test.js', () => {
     stream.pipe(new PauseStream());
     // mock delay
     setTimeout(() => {
-      assert(writeSize > 0);
+      assert.ok(writeSize > 0);
       sendToWormhole(stream).then(() => {
         sendToWormhole(stream).then(() => {
           sendToWormhole(stream).then(done);

@@ -26,13 +26,13 @@ export class HelloService {
 
   @ServerlessTrigger(ServerlessTriggerType.EVENT)
   async handler() {
-    assert(this.loggerService.getLogger());
-    assert(this.loggerService.getLogger() === this.app.getLogger());
-    assert(this.logger);
-    assert(this.logger === this.ctx.logger);
-    assert(this.logger === this.appLogger);
-    assert(this.logger === this.anotherLogger);
-    assert(this.logger === this.anotherAppLogger);
+    assert.ok(this.loggerService.getLogger());
+    assert.ok(this.loggerService.getLogger() === this.app.getLogger());
+    assert.ok(this.logger);
+    assert.ok(this.logger === this.ctx.logger);
+    assert.ok(this.logger === this.appLogger);
+    assert.ok(this.logger === this.anotherLogger);
+    assert.ok(this.logger === this.anotherAppLogger);
     return 'hello world';
   }
 }

@@ -18,11 +18,11 @@ import type {
 } from './interface';
 
 function checkBucketConfig(config) {
-  assert(
+  assert.ok(
     config.endpoint || config.region,
     "[midway:oss] Must set `endpoint` or `region` in oss's config"
   );
-  assert(
+  assert.ok(
     config.accessKeySecret && config.accessKeyId,
     "[midway:oss] Must set `accessKeyId` and `accessKeySecret` in oss's config"
   );

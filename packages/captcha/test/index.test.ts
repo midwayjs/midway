@@ -29,34 +29,34 @@ describe('test/index.test.ts', function () {
       .then(async response => {
         return response.body;
       });
-      assert(checkRes === true);
+      assert.ok(checkRes === true);
     const imgRes = await request.get('/img')
       .expect(200)
       .then(async response => {
         return response.body;
       });
-      assert(imgRes.id && imgRes.imageBase64);
+      assert.ok(imgRes.id && imgRes.imageBase64);
 
       const formulaRes = await request.get('/formula')
       .expect(200)
       .then(async response => {
         return response.body;
       });
-      assert(formulaRes.id && formulaRes.imageBase64);
+      assert.ok(formulaRes.id && formulaRes.imageBase64);
 
       const textCodeRes = await request.get('/text')
       .expect(200)
       .then(async response => {
         return response.body;
       });
-      assert(textCodeRes.id && textCodeRes.text);
+      assert.ok(textCodeRes.id && textCodeRes.text);
       const textCheckRes = await request.post('/check')
       .send({ id: textCodeRes.id, code: textCodeRes.text })
       .expect(200)
       .then(async response => {
         return response.body;
       });
-      assert(textCheckRes === true);
+      assert.ok(textCheckRes === true);
   });
 
   it('test CaptchaService cache with seconds', async () => {

@@ -3,8 +3,8 @@ import { join } from 'path';
 import { Application } from 'egg';
 
 module.exports = (app: Application) => {
-  assert(app.baseDir === __dirname);
-  assert((app as any).appDir === join(__dirname, '..'));
-  assert((app as any).applicationContext);
+  assert.ok(app.baseDir === __dirname);
+  assert.ok((app as any).appDir === join(__dirname, '..'));
+  assert.ok((app as any).applicationContext);
   app.createAnonymousContext().logger.warn('app aaaaa');
 }

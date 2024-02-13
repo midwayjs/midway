@@ -11,7 +11,7 @@ import {
   ILogger,
 } from '@midwayjs/core';
 import { Application as ServerlessHttpApplication, HttpResponseOptions } from '@midwayjs/serverless-http-parser';
-import { Cookies } from '@midwayjs/cookies';
+import type { Cookies } from '@midwayjs/cookies';
 import { Writable } from 'stream';
 
 interface ContextDelegatedRequest {

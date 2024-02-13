@@ -42,7 +42,7 @@ describe('test/index.test.ts', function () {
         .expect(200)
         // .expect({})
         .expect(res => {
-          assert(!res.header['set-cookie']?.join('').match(/MW_SESS/));
+          assert.ok(!res.header['set-cookie']?.join('').match(/MW_SESS/));
         });
     });
 
@@ -107,7 +107,7 @@ describe('test/index.test.ts', function () {
       .expect({ foo: 'bar' })
       .expect(res => {
         const cookie = res.headers['set-cookie'].join('|');
-        assert(cookie.includes('; samesite=none;'));
+        assert.ok(cookie.includes('; samesite=none;'));
       });
 
     await close(app);

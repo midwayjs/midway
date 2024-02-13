@@ -49,18 +49,21 @@ function formatOpts(opts) {
 
   const store = opts.store;
   if (store) {
-    assert(Types.isFunction(store.get), 'store.get must be function');
-    assert(Types.isFunction(store.set), 'store.set must be function');
-    assert(Types.isFunction(store.destroy), 'store.destroy must be function');
+    assert.ok(Types.isFunction(store.get), 'store.get must be function');
+    assert.ok(Types.isFunction(store.set), 'store.set must be function');
+    assert.ok(
+      Types.isFunction(store.destroy),
+      'store.destroy must be function'
+    );
   }
 
   const externalKey = opts.externalKey;
   if (externalKey) {
-    assert(
+    assert.ok(
       Types.isFunction(externalKey.get),
       'externalKey.get must be function'
     );
-    assert(
+    assert.ok(
       Types.isFunction(externalKey.set),
       'externalKey.set must be function'
     );
@@ -68,16 +71,16 @@ function formatOpts(opts) {
 
   const ContextStore = opts.ContextStore;
   if (ContextStore) {
-    assert(Types.isClass(ContextStore), 'ContextStore must be a class');
-    assert(
+    assert.ok(Types.isClass(ContextStore), 'ContextStore must be a class');
+    assert.ok(
       Types.isFunction(ContextStore.prototype.get),
       'ContextStore.prototype.get must be function'
     );
-    assert(
+    assert.ok(
       Types.isFunction(ContextStore.prototype.set),
       'ContextStore.prototype.set must be function'
     );
-    assert(
+    assert.ok(
       Types.isFunction(ContextStore.prototype.destroy),
       'ContextStore.prototype.destroy must be function'
     );

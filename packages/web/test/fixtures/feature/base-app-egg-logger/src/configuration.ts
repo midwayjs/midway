@@ -17,7 +17,7 @@ export class ContainerConfiguration {
   app: Application;
 
   async onReady() {
-    assert(this.logger.get('file'));
-    assert(this.logger === this.app.logger);
+    assert.ok(this.logger.get('file'));
+    assert.ok(this.logger === this.app.logger);
   }
 }

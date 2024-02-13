@@ -53,9 +53,9 @@ describe('test/web.test.ts', function () {
     await request.get('/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png?version=123')
       .expect(200)
       .then(async response => {
-        assert(response.status === 200)
-        assert(response.headers['content-type'] === 'image/png')
-        assert(response.body.length);
+        assert.ok(response.status === 200)
+        assert.ok(response.headers['content-type'] === 'image/png')
+        assert.ok(response.body.length);
       });
   });
 
@@ -65,9 +65,9 @@ describe('test/web.test.ts', function () {
       .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
       .expect(200)
       .then(async response => {
-        assert(response.status === 200)
-        assert(response.text.length);
-        assert(response.text.endsWith('</html>'));
+        assert.ok(response.status === 200)
+        assert.ok(response.text.length);
+        assert.ok(response.text.endsWith('</html>'));
       });
   });
 
@@ -76,8 +76,8 @@ describe('test/web.test.ts', function () {
     await request.get('/bdimg/static/wiseindex/amd_modules/@searchfe/assert_3ed54c3.js')
       .expect(200)
       .then(async response => {
-        assert(response.status === 200)
-        assert(response.headers['content-type'] === 'application/x-javascript')
+        assert.ok(response.status === 200)
+        assert.ok(response.headers['content-type'] === 'application/x-javascript')
       });
   });
 
@@ -86,10 +86,10 @@ describe('test/web.test.ts', function () {
     await request.get('/httpbin/get?name=midway')
       .expect(200)
       .then(async response => {
-        assert(response.status === 200)
-        assert(response.body.url === 'https://httpbin.org/get?name=midway');
-        assert(response.body.args.name === 'midway');
-        assert(response.body.headers['Host'] === 'httpbin.org');
+        assert.ok(response.status === 200)
+        assert.ok(response.body.url === 'https://httpbin.org/get?name=midway');
+        assert.ok(response.body.args.name === 'midway');
+        assert.ok(response.body.headers['Host'] === 'httpbin.org');
       });
   });
 
@@ -100,10 +100,10 @@ describe('test/web.test.ts', function () {
       .set('Accept', 'application/json')
       .expect(200)
       .then(async response => {
-        assert(response.status === 200)
-        assert(response.body.url === 'https://httpbin.org/post');
-        assert(response.body.headers['Content-Type'] === 'application/json');
-        assert(response.body.data === JSON.stringify({ name: 'midway'}));
+        assert.ok(response.status === 200)
+        assert.ok(response.body.url === 'https://httpbin.org/post');
+        assert.ok(response.body.headers['Content-Type'] === 'application/json');
+        assert.ok(response.body.data === JSON.stringify({ name: 'midway'}));
       });
   });
 
@@ -115,10 +115,10 @@ describe('test/web.test.ts', function () {
       .expect(200)
       .then(async response => {
 
-        assert(response.status === 200)
-        assert(response.body.url === 'https://httpbin.org/post');
-        assert(response.body.headers['Content-Type'] === 'application/x-www-form-urlencoded');
-        assert(response.body.form.name === 'midway');
+        assert.ok(response.status === 200)
+        assert.ok(response.body.url === 'https://httpbin.org/post');
+        assert.ok(response.body.headers['Content-Type'] === 'application/x-www-form-urlencoded');
+        assert.ok(response.body.form.name === 'midway');
       });
   });
 });

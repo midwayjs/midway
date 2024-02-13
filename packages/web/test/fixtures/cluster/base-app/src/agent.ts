@@ -3,8 +3,8 @@ import * as assert from 'assert';
 
 export default async agent => {
   const sdkService = await agent.getApplicationContext().getAsync(MySdkService);
-  assert(agent.applicationContext);
-  assert(sdkService);
-  assert(agent.getConfig());
-  assert(agent.getEnv());
+  assert.ok(agent.applicationContext);
+  assert.ok(sdkService);
+  assert.ok(agent.getConfig());
+  assert.ok(agent.getEnv());
 }

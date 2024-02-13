@@ -34,7 +34,7 @@ describe('/test/baseFramework.test.ts', () => {
     const appCtx = framework.getApplicationContext();
     appCtx.bind(TestModule);
     const module: any = await appCtx.getAsync('testModule');
-    assert(module.test() === 'hello');
+    assert.ok(module.test() === 'hello');
 
     // test namespace
     const ns = framework.getNamespace();
@@ -60,7 +60,7 @@ describe('/test/baseFramework.test.ts', () => {
     const appCtx = framework.getApplicationContext();
 
     const baseService: any = await appCtx.getAsync('baseService');
-    assert((await baseService.getInformation()) === 'harry,one article');
+    assert.ok((await baseService.getInformation()) === 'harry,one article');
     assert.strictEqual(baseService.getAaa(), 123);
     assert.strictEqual(baseService.getCcc(), 'mock');
   });
@@ -84,7 +84,7 @@ describe('/test/baseFramework.test.ts', () => {
     ));
     const appCtx = framework.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
-    assert((await replaceManager.getOne()) === 'ok1');
+    assert.ok((await replaceManager.getOne()) === 'ok1');
     mm.restore();
   });
 
@@ -102,7 +102,7 @@ describe('/test/baseFramework.test.ts', () => {
 
     const appCtx = framework.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
-    assert((await replaceManager.getOne()) === 'ok1');
+    assert.ok((await replaceManager.getOne()) === 'ok1');
     assert.ok(
       callback.withArgs('------auto configuration ready now').calledOnce
     );
@@ -118,14 +118,14 @@ describe('/test/baseFramework.test.ts', () => {
 
     const appCtx = framework.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
-    assert((await replaceManager.getOne()) === 'oktwo');
+    assert.ok((await replaceManager.getOne()) === 'oktwo');
     const replaceManagerno: any = await appCtx.getAsync(
       'midway-plugin-no-pkg-json:replaceManager'
     );
-    assert((await replaceManagerno.getOne()) === 'oktwo');
+    assert.ok((await replaceManagerno.getOne()) === 'oktwo');
 
     const replaceManagerTwo: any = await appCtx.getAsync('ok:replaceManagerTwo');
-    assert((await replaceManagerTwo.getOne()) === 'oktwo');
+    assert.ok((await replaceManagerTwo.getOne()) === 'oktwo');
     mm.restore();
   });
 
@@ -173,8 +173,8 @@ describe('/test/baseFramework.test.ts', () => {
       ));
 
       const value = framework.getConfiguration();
-      assert(value['env'] === 'prod');
-      assert(value['bbb'] === '111');
+      assert.ok(value['env'] === 'prod');
+      assert.ok(value['bbb'] === '111');
     });
 
     it('load prod env', async () => {
@@ -186,7 +186,7 @@ describe('/test/baseFramework.test.ts', () => {
       ));
 
       const value = framework.getConfiguration('env');
-      assert(value === 'prod');
+      assert.ok(value === 'prod');
     });
 
     it('load daily env', async () => {
@@ -196,7 +196,7 @@ describe('/test/baseFramework.test.ts', () => {
         './fixtures/app-with-configuration-config/src'
       ));
       const value = framework.getConfiguration('env');
-      assert(value === 'daily');
+      assert.ok(value === 'daily');
     });
 
     it('load pre env', async () => {
@@ -208,7 +208,7 @@ describe('/test/baseFramework.test.ts', () => {
       ));
 
       const value = framework.getConfiguration('env');
-      assert(value === 'pre');
+      assert.ok(value === 'pre');
     });
 
     it('load local env', async () => {
@@ -239,16 +239,16 @@ describe('/test/baseFramework.test.ts', () => {
       const applicationContext = framework.getApplicationContext();
 
       const value = framework.getConfiguration();
-      assert(value['env'] === 'prod');
-      assert(value['bbb'] === '222');
+      assert.ok(value['env'] === 'prod');
+      assert.ok(value['bbb'] === '222');
 
       const configManager = await applicationContext.getAsync<{
         allConfig: any;
         bbbConfig: any;
       }>('configManager');
-      assert(configManager.allConfig['env'] === 'prod');
-      assert(configManager.allConfig['bbb'] === '222');
-      assert(configManager.bbbConfig === '222');
+      assert.ok(configManager.allConfig['env'] === 'prod');
+      assert.ok(configManager.allConfig['bbb'] === '222');
+      assert.ok(configManager.bbbConfig === '222');
     });
 
     it('load prod env', async () => {
@@ -260,7 +260,7 @@ describe('/test/baseFramework.test.ts', () => {
       ));
 
       const value = framework.getConfiguration('env');
-      assert(value === 'prod');
+      assert.ok(value === 'prod');
     });
 
     it('load daily env', async () => {
@@ -272,7 +272,7 @@ describe('/test/baseFramework.test.ts', () => {
       ));
 
       const value = framework.getConfiguration('env');
-      assert(value === 'daily');
+      assert.ok(value === 'daily');
     });
 
     it('load pre env', async () => {
@@ -284,7 +284,7 @@ describe('/test/baseFramework.test.ts', () => {
       ));
 
       const value = framework.getConfiguration('env');
-      assert(value === 'pre');
+      assert.ok(value === 'pre');
     });
 
   });

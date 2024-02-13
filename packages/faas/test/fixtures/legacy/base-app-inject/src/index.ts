@@ -15,7 +15,7 @@ export class HelloService {
 
   @ServerlessTrigger(ServerlessTriggerType.EVENT)
   handler(event) {
-    assert(this.app);
+    assert.ok(this.app);
     return this.ctx.originContext['text'] + event.text + this.mysql.model;
   }
 }

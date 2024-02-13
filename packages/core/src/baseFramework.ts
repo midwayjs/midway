@@ -99,37 +99,11 @@ export abstract class BaseFramework<
 
   public async initialize(options?: IMidwayBootstrapOptions): Promise<void> {
     this.bootstrapOptions = options;
-    await this.beforeContainerInitialize(options);
-    await this.containerInitialize(options);
-    await this.afterContainerInitialize(options);
-    await this.containerDirectoryLoad(options);
-    await this.afterContainerDirectoryLoad(options);
-
     /**
      * Third party application initialization
      */
     await this.applicationInitialize(options);
-    await this.containerReady(options);
-    await this.afterContainerReady(options);
-
     await this.mockService.runSimulatorAppSetup(this.app);
-  }
-
-  /**
-   * @deprecated
-   */
-  protected async containerInitialize(options: IMidwayBootstrapOptions) {}
-  /**
-   * @deprecated
-   */
-  protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {}
-  /**
-   * @deprecated
-   */
-  protected async containerReady(options: IMidwayBootstrapOptions) {
-    if (!this.app.getApplicationContext) {
-      this.defineApplicationProperties();
-    }
   }
 
   public getApplicationContext(): IMidwayContainer {
@@ -330,30 +304,6 @@ export abstract class BaseFramework<
   }
 
   protected async beforeStop(): Promise<void> {}
-  /**
-   * @deprecated
-   */
-  protected async beforeContainerInitialize(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {}
-  /**
-   * @deprecated
-   */
-  protected async afterContainerInitialize(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {}
-  /**
-   * @deprecated
-   */
-  protected async afterContainerDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {}
-  /**
-   * @deprecated
-   */
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {}
 
   public async applyMiddleware<R, N>(
     lastMiddleware?: CommonMiddlewareUnion<CTX, R, N>

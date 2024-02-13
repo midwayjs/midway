@@ -245,8 +245,8 @@ export const response = {
    */
 
   set status(code) {
-    assert(Number.isInteger(code), 'status code must be a number');
-    assert(code >= 100 && code <= 999, `invalid status code: ${code}`);
+    assert.ok(Number.isInteger(code), 'status code must be a number');
+    assert.ok(code >= 100 && code <= 999, `invalid status code: ${code}`);
     this._explicitStatus = true;
     this.res.statusCode = code;
     if (this.body && statuses.empty[code]) this.body = null;

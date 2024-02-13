@@ -19,7 +19,7 @@ describe('/test/enhance.test.ts', () => {
     })
 
     it('should get config merge', () => {
-      assert(
+      assert.ok(
         app.config.rundir,
         path.join(__dirname, './fixtures/enhance/base-app/run')
       );
@@ -28,7 +28,7 @@ describe('/test/enhance.test.ts', () => {
     it('mock context', async () => {
       const ctx = app.mockContext();
       const userService = await ctx.requestContext.getAsync('userService');
-      assert((await userService.hello()) === 'world,0');
+      assert.ok((await userService.hello()) === 'world,0');
     });
 
     it('should load ts directory', done => {
@@ -360,9 +360,9 @@ describe('/test/enhance.test.ts', () => {
 
     it('should appDir not equal baseDir', () => {
       const appInfo = app.loader.getAppInfo();
-      assert(appInfo['name'] === app.name);
-      assert(appInfo['baseDir'] === app.baseDir);
-      assert(appInfo['baseDir'] === app.appDir + '/src');
+      assert.ok(appInfo['name'] === app.name);
+      assert.ok(appInfo['baseDir'] === app.baseDir);
+      assert.ok(appInfo['baseDir'] === app.appDir + '/src');
     });
   });
 

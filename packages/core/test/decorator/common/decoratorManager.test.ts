@@ -24,44 +24,44 @@ import mm = require('mm');
 
 describe('/test/common/decoratorManager.test.ts', () => {
   it('should save data on class and get it', () => {
-    assert(getClassMetadata('custom', ManagerTest) === 'test');
-    assert(getClassMetadata('custom_method', ManagerTest) === 'testSomething');
+    assert.ok(getClassMetadata('custom', ManagerTest) === 'test');
+    assert.ok(getClassMetadata('custom_method', ManagerTest) === 'testSomething');
   });
 
   it('should save data to class and list it', () => {
     const dataRes = listPropertyDataFromClass('custom', ManagerTest);
-    assert(dataRes.length === 1);
+    assert.ok(dataRes.length === 1);
 
     const { method, data } = getPropertyDataFromClass(
       'custom',
       ManagerTest,
       'testSomething'
     );
-    assert(dataRes[0].method === method);
-    assert(dataRes[0].data === data);
+    assert.ok(dataRes[0].method === method);
+    assert.ok(dataRes[0].data === data);
   });
 
   it('should get method meta data from method', () => {
     const m = new ManagerTest();
     // 挂载到方法上的元信息必须有实例
-    assert(getPropertyMetadata('custom', m, 'testSomething') === 'methodData');
+    assert.ok(getPropertyMetadata('custom', m, 'testSomething') === 'methodData');
   });
 
   it('should list preload module', () => {
     let modules = listPreloadModule();
-    assert(modules.length === 1);
+    assert.ok(modules.length === 1);
 
     resetModule(PRELOAD_MODULE_KEY);
     modules = listPreloadModule();
-    assert(modules.length === 0);
+    assert.ok(modules.length === 0);
   });
 
   it('should list module', () => {
     const modules = listModule('custom');
-    assert(modules.length === 1);
+    assert.ok(modules.length === 1);
 
     const nothings = listModule('c_custom_notfound');
-    assert(nothings.length === 0);
+    assert.ok(nothings.length === 0);
   });
 
   it('should clear all module', () => {
@@ -76,35 +76,35 @@ describe('/test/common/decoratorManager.test.ts', () => {
 
   it('should get function args', () => {
     let args = Utils.getParamNames((a, b, c) => {});
-    assert(args.length === 3);
+    assert.ok(args.length === 3);
 
     args = Utils.getParamNames(() => {});
-    assert(args.length === 0);
+    assert.ok(args.length === 0);
 
     args = Utils.getParamNames((a) => {});
-    assert(args.length === 1);
+    assert.ok(args.length === 1);
 
     args = Utils.getParamNames((a,b) => {});
-    assert(args.length === 2);
+    assert.ok(args.length === 2);
 
     args = Utils.getParamNames((a, b=1) => {});
-    assert(args.length === 2);
+    assert.ok(args.length === 2);
 
     args = Utils.getParamNames((a = 1, b =2, c) => {});
-    assert(args.length === 3);
+    assert.ok(args.length === 3);
   });
 
   it('should get attach data from method', () => {
     const m = new ManagerTest();
-    assert(getPropertyMetadata('custom_attach', m, 'index').length === 3);
-    assert(
+    assert.ok(getPropertyMetadata('custom_attach', m, 'index').length === 3);
+    assert.ok(
       getPropertyDataFromClass('custom_attach_to_class', ManagerTest, 'index')
         .length === 3
     );
   });
 
   it('should get attach data from class', () => {
-    assert(getClassMetadata('custom_class_attach', ManagerTest).length === 4);
+    assert.ok(getClassMetadata('custom_class_attach', ManagerTest).length === 4);
   });
 
   it('should get name from class', () => {
@@ -119,10 +119,10 @@ describe('/test/common/decoratorManager.test.ts', () => {
 
   it('should get property data', () => {
     const m = new ManagerTest();
-    assert(
+    assert.ok(
       getPropertyMetadata('custom_property', m, 'testProperty') === 'property_a'
     );
-    assert(
+    assert.ok(
       getPropertyDataFromClass('custom_property_class', ManagerTest, 'testProperty')
         .length === 3
     );

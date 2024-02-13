@@ -65,7 +65,7 @@ export async function transformFrameworkToConfiguration<
     CustomFramework = Framework;
   }
 
-  assert(CustomFramework, `can't found custom framework ${Framework}`);
+  assert.ok(CustomFramework, `can't found custom framework ${Framework}`);
 
   @Configuration()
   class CustomConfiguration {

@@ -20,7 +20,7 @@ describe('memory.test.ts', () => {
       name: 'test1',
       desc: 'desc test 1'
     });
-    assert(tag1Result.success && tag1Result.id === 1);
+    assert.ok(tag1Result.success && tag1Result.id === 1);
 
     const tag1ExistsResult = await tagService.new({
       name: 'test1',
@@ -44,9 +44,9 @@ describe('memory.test.ts', () => {
     }
     // list top 20
     const result = await tagService.list({ count: true });
-    assert(result.list.length === 20 && result.total === 100);
-    assert(result.list[0].id === 1 && result.list[0].name === 'test1');
-    assert(result.list[19].id === 20 && result.list[19].name === 'test20');
+    assert.ok(result.list.length === 20 && result.total === 100);
+    assert.ok(result.list[0].id === 1 && result.list[0].name === 'test1');
+    assert.ok(result.list[19].id === 20 && result.list[19].name === 'test20');
 
     // list page 2 and pageSize 17
     const result2 = await tagService.list({
@@ -54,8 +54,8 @@ describe('memory.test.ts', () => {
       pageSize: 17,
       count: false
     });
-    assert(result2.list.length === 17 && !result2.total);
-    assert(result2.list[0].id === 18 && result2.list[16].id === 34);
+    assert.ok(result2.list.length === 17 && !result2.total);
+    assert.ok(result2.list[0].id === 18 && result2.list[16].id === 34);
 
     // macth/search/list
     const match = await tagService.list({
@@ -63,12 +63,12 @@ describe('memory.test.ts', () => {
       count: true
     });
     // 2/4/9/67/78/90~99
-    assert(match.list.length === 15 && match.total === 15);
-    assert(match.list[0].id === 2);
-    assert(match.list[1].id === 4);
-    assert(match.list[2].id === 9);
-    assert(match.list[3].name.endsWith('t67'));
-    assert(match.list[4].id === 78);
+    assert.ok(match.list.length === 15 && match.total === 15);
+    assert.ok(match.list[0].id === 2);
+    assert.ok(match.list[1].id === 4);
+    assert.ok(match.list[2].id === 9);
+    assert.ok(match.list[3].name.endsWith('t67'));
+    assert.ok(match.list[4].id === 78);
   });
   it('update tag', async () => {
     const tagService = tagManager.get('test-update');
@@ -82,15 +82,15 @@ describe('memory.test.ts', () => {
       name: 'xxxx23',
       desc: 'descxxx23',
     });
-    assert(updateRes.success && updateRes.id === 23);
+    assert.ok(updateRes.success && updateRes.id === 23);
     const find23 = await tagService.list({ tags: [23] });
-    assert(find23.list.length === 1 && find23.list[0].id === 23 && find23.list[0].name === 'xxxx23' && find23.list[0].desc === 'descxxx23');
+    assert.ok(find23.list.length === 1 && find23.list[0].id === 23 && find23.list[0].name === 'xxxx23' && find23.list[0].desc === 'descxxx23');
 
     const updateByNameRes = await tagService.update('test67', {
       name: 'xxxx67',
       desc: 'descxxx67',
     });
-    assert(updateByNameRes.success && updateByNameRes.id === 67);
+    assert.ok(updateByNameRes.success && updateByNameRes.id === 67);
   });
   it('remove tag', async () => {
     const tagService = tagManager.get('test-remove');
@@ -101,11 +101,11 @@ describe('memory.test.ts', () => {
       });
     }
     const removeRes = await tagService.remove(23);
-    assert(removeRes.success && removeRes.id === 23);
+    assert.ok(removeRes.success && removeRes.id === 23);
     const find23 = await tagService.list({ tags: [23], count: true });
-    assert(find23.list.length === 0 && find23.total === 0);
+    assert.ok(find23.list.length === 0 && find23.total === 0);
     const findAll = await tagService.list({ count: true });
-    assert(findAll.total === 99);
+    assert.ok(findAll.total === 99);
   });
   it('bind tags', async () => {
     const tagService = tagManager.get('test-bind-object');
@@ -119,22 +119,22 @@ describe('memory.test.ts', () => {
       objectId: 1,
       tags: [1,23,45,78]
     });
-    assert(bindRes.success);
+    assert.ok(bindRes.success);
 
     const bindRes2 = await tagService.bind({
       objectId: 1,
       tags: [1,23,'xxx']
     });
-    assert(!bindRes2.success && bindRes2.message === TAG_ERROR.NOT_EXISTS && bindRes2.id[0] === 'xxx');
+    assert.ok(!bindRes2.success && bindRes2.message === TAG_ERROR.NOT_EXISTS && bindRes2.id[0] === 'xxx');
     // auto create
     const bindRes3 = await tagService.bind({
       objectId: 1,
       tags: [1,23,'xxx'],
       autoCreateTag: true
     });
-    assert(bindRes3.success);
+    assert.ok(bindRes3.success);
     const tag = await tagService.list({ tags: ['xxx']})
-    assert(tag.list[0].name === 'xxx' && tag.list[0].id === 101);
+    assert.ok(tag.list[0].name === 'xxx' && tag.list[0].id === 101);
   });
 
   it('list objectId by tags', async () => {
@@ -158,8 +158,8 @@ describe('memory.test.ts', () => {
       tags: [16],
       count: true
     });
-    assert(listRes.list.length === 3 && listRes.total === 3);
-    assert(listRes.list[0] === 2 && listRes.list[1] === 4 && listRes.list[2] === 8);
+    assert.ok(listRes.list.length === 3 && listRes.total === 3);
+    assert.ok(listRes.list[0] === 2 && listRes.list[1] === 4 && listRes.list[2] === 8);
  
     // objectId = 4/8 
     const listRes2 = await tagService.listObjects({
@@ -167,8 +167,8 @@ describe('memory.test.ts', () => {
       count: true,
       type: MATCH_TYPE.And
     });
-    assert(listRes2.list.length === 2 && listRes2.total === 2);
-    assert(listRes2.list[0] === 4 && listRes2.list[1] === 8);
+    assert.ok(listRes2.list.length === 2 && listRes2.total === 2);
+    assert.ok(listRes2.list[0] === 4 && listRes2.list[1] === 8);
 
     // 16 = 2 * 8 / 4 * 4;32 = 4 * 8
     const listRes2Or = await tagService.listObjects({
@@ -177,8 +177,8 @@ describe('memory.test.ts', () => {
       type: MATCH_TYPE.Or,
       pageSize: 2
     });
-    assert(listRes2Or.list.length === 2 && listRes2Or.total === 3);
-    assert(listRes2Or.list[0] === 2 && listRes2Or.list[1] === 4);
+    assert.ok(listRes2Or.list.length === 2 && listRes2Or.total === 3);
+    assert.ok(listRes2Or.list[0] === 2 && listRes2Or.list[1] === 4);
 
     // remove tag 16
     await tagService.remove(16);
@@ -186,7 +186,7 @@ describe('memory.test.ts', () => {
       tags: [16],
       count: true
     });
-    assert(listResAfterRemove16.list.length === 0 && listResAfterRemove16.total === 0);
+    assert.ok(listResAfterRemove16.list.length === 0 && listResAfterRemove16.total === 0);
   });
 
   it('unbind & listInstanTags', async () => {
@@ -205,8 +205,8 @@ describe('memory.test.ts', () => {
       objectId: 123,
       count: true
     });
-    assert(list.length === 4 && total === 4);
-    assert(list[1].id === 2 && list[2].id === 3 )
+    assert.ok(list.length === 4 && total === 4);
+    assert.ok(list[1].id === 2 && list[2].id === 3 )
     await tagService.unbind({
       objectId: 123,
       tags: [3, 1],
@@ -215,7 +215,7 @@ describe('memory.test.ts', () => {
       objectId: 123,
       count: true
     });
-    assert(afterUnbind.list.length === 2 && afterUnbind.total === 2);
-    assert(afterUnbind.list[0].id === 2 && afterUnbind.list[1].id === 4 )
+    assert.ok(afterUnbind.list.length === 2 && afterUnbind.total === 2);
+    assert.ok(afterUnbind.list[0].id === 2 && afterUnbind.list[1].id === 4 )
   });
 });

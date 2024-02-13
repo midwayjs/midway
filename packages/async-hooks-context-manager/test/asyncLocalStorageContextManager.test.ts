@@ -50,7 +50,7 @@ describe('AsyncLocalStorageContextManager.test.ts', () => {
     it('should work', () => {
       assert.doesNotThrow(() => {
         contextManager = new AsyncLocalStorageContextManager();
-        assert(
+        assert.ok(
           contextManager.enable() === contextManager,
           'should return this'
         );
@@ -61,7 +61,7 @@ describe('AsyncLocalStorageContextManager.test.ts', () => {
   describe('.disable()', () => {
     it('should work', () => {
       assert.doesNotThrow(() => {
-        assert(
+        assert.ok(
           contextManager.disable() === contextManager,
           'should return this'
         );

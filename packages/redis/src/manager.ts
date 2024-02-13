@@ -35,13 +35,13 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
     let client;
 
     if (config.cluster === true) {
-      assert(
+      assert.ok(
         config.nodes && config.nodes.length !== 0,
         '[midway:redis] cluster nodes configuration is required when use cluster redis'
       );
 
       config.nodes.forEach(client => {
-        assert(
+        assert.ok(
           client.host && client.port,
           `[midway:redis] 'host: ${client.host}', 'port: ${client.port}' are required on config`
         );
@@ -49,13 +49,13 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
       this.logger.info('[midway:redis] cluster connecting');
       client = new Redis.Cluster(config.nodes, config);
     } else if (config.sentinels) {
-      assert(
+      assert.ok(
         config.sentinels && config.sentinels.length !== 0,
         '[midway:redis] sentinels configuration is required when use redis sentinel'
       );
 
       config.sentinels.forEach(sentinel => {
-        assert(
+        assert.ok(
           sentinel.host && sentinel.port,
           `[midway:redis] 'host: ${sentinel.host}', 'port: ${sentinel.port}' are required on config`
         );
@@ -64,7 +64,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
       this.logger.info('[midway:redis] sentinel connecting start');
       client = new Redis(config);
     } else {
-      assert(
+      assert.ok(
         config.host && config.port,
         `[midway:redis] 'host: ${config.host}', 'port: ${config.port}' are required on config`
       );

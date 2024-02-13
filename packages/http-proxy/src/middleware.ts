@@ -3,7 +3,7 @@ import {
   Logger,
   Middleware,
   IMiddleware,
-  IMidwayLogger,
+  ILogger,
   IMidwayApplication,
 } from '@midwayjs/core';
 import { HttpProxyConfig, HttpProxyStrategy } from './interface';
@@ -15,7 +15,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
   httpProxy: HttpProxyConfig;
 
   @Logger()
-  logger: IMidwayLogger;
+  logger: ILogger;
 
   resolve(app: IMidwayApplication) {
     if (app.getNamespace() === 'express') {

@@ -27,7 +27,6 @@
     "@midwayjs/faas": "^3.15.0",
     "@midwayjs/koa": "^3.15.1",
     "@midwayjs/mock": "^3.15.0",
-    "@midwayjs/serverless-app": "^3.15.0",
     "@midwayjs/web": "^3.15.0",
     "mysql2": "^3.0.0"
   }

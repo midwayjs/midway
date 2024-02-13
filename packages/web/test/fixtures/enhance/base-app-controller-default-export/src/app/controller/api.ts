@@ -21,7 +21,7 @@ export class Api {
 
   @Get('/')
   async index(ctx) {
-    assert(this.logger.constructor.name === 'ContextLogger');
+    assert.ok(this.logger.constructor.name === 'ContextLogger');
     ctx.body = 'hello';
   }
 }

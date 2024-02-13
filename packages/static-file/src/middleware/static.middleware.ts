@@ -9,7 +9,7 @@ import {
 } from '@midwayjs/core';
 import * as assert from 'assert';
 import * as staticCache from 'koa-static-cache';
-import * as LRU from 'ylru';
+import LRU from 'ylru';
 import * as range from 'koa-range';
 import { DirectoryNotFoundError } from '../error';
 
@@ -43,7 +43,7 @@ export class StaticMiddleware {
     const middlewares = [rangeMiddleware];
 
     for (const dirObj of dirs) {
-      assert(
+      assert.ok(
         Types.isObject(dirObj) || Types.isString(dirObj),
         '`config.static.dir` must be `string | Array<string|object>`.'
       );

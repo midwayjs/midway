@@ -22,7 +22,7 @@ import {
   Context,
 } from './interface';
 import type { IRouter, IRouterHandler, Response, NextFunction } from 'express';
-import * as express from 'express';
+import express from 'express';
 import { Server } from 'net';
 import {
   wrapAsyncHandler,

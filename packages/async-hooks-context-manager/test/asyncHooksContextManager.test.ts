@@ -50,7 +50,7 @@ describe('AsyncHooksContextManager.test.ts', () => {
     it('should work', () => {
       assert.doesNotThrow(() => {
         contextManager = new AsyncHooksContextManager();
-        assert(
+        assert.ok(
           contextManager.enable() === contextManager,
           'should return this'
         );
@@ -61,7 +61,7 @@ describe('AsyncHooksContextManager.test.ts', () => {
   describe('.disable()', () => {
     it('should work', () => {
       assert.doesNotThrow(() => {
-        assert(
+        assert.ok(
           contextManager.disable() === contextManager,
           'should return this'
         );
