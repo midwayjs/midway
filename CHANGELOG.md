@@ -1,6 +1,21 @@
 # Change Log
 
 
+## v3.14.12 (2024-02-17)
+
+#### :bug: Bug Fix
+* `core`
+  * [#3648](https://github.com/midwayjs/midway/pull/3648) fix: ctx get logger with custom logger ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `swagger`
+  * [#3631](https://github.com/midwayjs/midway/pull/3631) chore(deps): update dependency swagger-ui-dist to v5.11.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.11 (2024-02-07)
 
 #### :bug: Bug Fix
