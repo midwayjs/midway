@@ -153,8 +153,8 @@ export abstract class BaseFramework<
   public abstract run(): Promise<void>;
 
   protected createContextLogger(ctx: CTX, name?: string): ILogger {
-    const appLogger = this.getLogger(name ?? this.contextLoggerApplyLogger);
-    if (name) {
+    if (name && name !== 'appLogger') {
+      const appLogger = this.getLogger(name);
       let ctxLoggerCache = ctx.getAttr(REQUEST_CTX_LOGGER_CACHE_KEY) as Map<
         string,
         ILogger
@@ -163,23 +163,17 @@ export abstract class BaseFramework<
         ctxLoggerCache = new Map();
         ctx.setAttr(REQUEST_CTX_LOGGER_CACHE_KEY, ctxLoggerCache);
       }
-
-      if (!name) {
-        name = 'appLogger';
-      }
-
       // if logger exists
       if (ctxLoggerCache.has(name)) {
         return ctxLoggerCache.get(name);
       }
 
       // create new context logger
-      const ctxLogger = this.loggerService.createContextLogger(ctx, appLogger, {
-        contextFormat: this.contextLoggerFormat,
-      });
+      const ctxLogger = this.loggerService.createContextLogger(ctx, appLogger);
       ctxLoggerCache.set(name, ctxLogger);
       return ctxLogger;
     } else {
+      const appLogger = this.getLogger(name ?? this.contextLoggerApplyLogger);
       // avoid maximum call stack size exceeded
       if (ctx['_logger']) {
         return ctx['_logger'];
