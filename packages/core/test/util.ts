@@ -161,7 +161,7 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
   return container.getAsync(EmptyFramework as any);
 }
 
-export async function createFramework(baseDir: string = '', globalConfig: any = {}): Promise<IMidwayContainer> {
+export async function createFramework(baseDir: string = '', globalConfig: any = {}, loggerFactory?): Promise<IMidwayContainer> {
   const container = new MidwayContainer();
   const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
   // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
@@ -189,6 +189,7 @@ export async function createFramework(baseDir: string = '', globalConfig: any = 
     ],
     applicationContext: container,
     globalConfig,
+    loggerFactory,
   });
 }
 

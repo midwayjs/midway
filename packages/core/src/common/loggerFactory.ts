@@ -48,7 +48,7 @@ export class DefaultConsoleLoggerFactory
     };
   }
 
-  createContextLogger(ctx: any, appLogger: ILogger): ILogger {
+  createContextLogger(ctx: any, appLogger: ILogger, contextOptions?): ILogger {
     return appLogger;
   }
 

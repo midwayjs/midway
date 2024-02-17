@@ -14,7 +14,7 @@ import {
   ASYNC_CONTEXT_MANAGER_KEY,
   APPLICATION_KEY,
   MidwayFrameworkType,
-  Provide
+  Provide, IMidwayContainer, DefaultConsoleLoggerFactory, ILogger
 } from '../src';
 import { createFramework, createLightFramework } from './util';
 import sinon = require('sinon');
@@ -741,5 +741,124 @@ describe('/test/baseFramework.test.ts', () => {
     expect(() => {
       a.invokeD();
     }).toThrow(/custom1 not found/);
+  });
+
+  describe('should create custom framework', () => {
+
+    let applicationContext: IMidwayContainer;
+
+    beforeAll(async () => {
+      class Logger {
+        constructor(protected options) {
+          if (!this.options.format) {
+            this.options.format = info => info.message;
+          }
+        }
+
+        info(msg) {
+          return this.options.format({
+            message: msg,
+          });
+        }
+        debug(msg) {
+          return this.options.format({
+            message: msg,
+          });
+        }
+        warn(msg) {
+          return this.options.format({
+            message: msg,
+          });
+        }
+        error(msg) {
+          return this.options.format({
+            message: msg,
+          });
+        }
+      }
+      class ContextLogger {
+        constructor(protected appLogger, protected options) {
+          this.options = {
+            ...appLogger.options,
+            ...options
+          }
+        }
+        info(msg) {
+          msg = this.options.contextFormat({
+            message: msg,
+          });
+          return msg;
+        }
+        debug(msg) {
+          msg = this.options.contextFormat({
+            message: msg,
+          });
+          return msg;
+        }
+        warn(msg) {
+          msg = this.options.contextFormat({
+            message: msg,
+          });
+          return msg;
+        }
+        error(msg) {
+          msg = this.options.contextFormat({
+            message: msg,
+          });
+          return msg;
+        }
+      }
+      class TestConsoleLoggerFactory extends DefaultConsoleLoggerFactory {
+        createLogger(name: string, options: any): ILogger {
+          const logger = new Logger(options);
+          this['instance'].set(name, logger);
+          return logger;
+        }
+        createContextLogger(ctx: any, appLogger: ILogger, options): ILogger {
+          return new ContextLogger(appLogger, options);
+        }
+      }
+
+      const loggerFactory = new TestConsoleLoggerFactory();
+
+      const appDir = path.join(
+        __dirname,
+        './fixtures/base-app-custom-framework-logger'
+      );
+      applicationContext = await createFramework(path.join(
+        appDir,
+        'src'
+      ), {
+        custom: {
+          contextLoggerApplyLogger: 'customFrameworkLogger',
+          contextLoggerFormat: info => {
+            return `[custom ctx] ${info.message}`;
+          },
+        },
+        midwayLogger: {
+          clients: {
+            customFrameworkLogger: {},
+            customLogger: {
+              format: info => {
+                return `[new custom] ${info.message}`;
+              },
+              contextFormat: info => {
+                return `[new custom ctx] ${info.message}`;
+              },
+            }
+          }
+        }
+      }, loggerFactory);
+    });
+
+    it('should test custom framework apply logger', async () => {
+      const midwayFrameworkService = applicationContext.get(MidwayFrameworkService);
+      const mainFramework = midwayFrameworkService.getMainFramework();
+      const ctx = mainFramework.getApplication().createAnonymousContext();
+      expect(ctx.logger.info('hello world')).toEqual('[custom ctx] hello world');
+      expect(ctx.getLogger('appLogger').info('hello world')).toEqual('[custom ctx] hello world');
+      expect(ctx.getLogger('customLogger').info('hello world')).toEqual('[new custom ctx] hello world');
+      expect(mainFramework.getLogger('customLogger').info('hello world')).toEqual('[new custom] hello world');
+    });
   });
 });
