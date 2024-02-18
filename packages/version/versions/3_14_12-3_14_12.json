@@ -3,7 +3,10 @@
   "@midwayjs/fc-starter": "3.14.12",
   "@midwayjs/serverless-http-parser": "3.14.0",
   "@midwayjs/async-hooks-context-manager": "3.14.12",
-  "@midwayjs/axios": "3.14.12",
+  "@midwayjs/axios": [
+    "3.14.12",
+    "3.14.13"
+  ],
   "@midwayjs/bootstrap": "3.14.12",
   "@midwayjs/bull": "3.14.12",
   "@midwayjs/bull-board": "3.14.12",
@@ -13,7 +16,10 @@
   "@midwayjs/casbin-redis-adapter": "3.14.12",
   "@midwayjs/casbin-typeorm-adapter": "3.14.12",
   "@midwayjs/code-dye": "3.14.12",
-  "@midwayjs/consul": "3.14.12",
+  "@midwayjs/consul": [
+    "3.14.12",
+    "3.14.13"
+  ],
   "@midwayjs/core": "3.14.12",
   "@midwayjs/cos": "3.14.12",
   "@midwayjs/cron": "3.14.12",
@@ -41,18 +47,27 @@
   "@midwayjs/rabbitmq": "3.14.12",
   "@midwayjs/redis": "3.14.12",
   "@midwayjs/security": "3.14.12",
-  "@midwayjs/sequelize": "3.14.12",
+  "@midwayjs/sequelize": [
+    "3.14.12",
+    "3.14.13"
+  ],
   "@midwayjs/session": "3.14.12",
   "@midwayjs/socketio": "3.14.12",
   "@midwayjs/static-file": "3.14.12",
-  "@midwayjs/swagger": "3.14.12",
+  "@midwayjs/swagger": [
+    "3.14.12",
+    "3.14.13"
+  ],
   "@midwayjs/tablestore": "3.14.12",
   "@midwayjs/tags": "3.14.12",
   "@midwayjs/typegoose": "3.14.12",
   "@midwayjs/typeorm": "3.14.12",
   "@midwayjs/upload": "3.14.12",
   "@midwayjs/validate": "3.14.12",
-  "@midwayjs/version": "3.14.12",
+  "@midwayjs/version": [
+    "3.14.12",
+    "3.14.13"
+  ],
   "@midwayjs/view": "3.14.12",
   "@midwayjs/view-ejs": "3.14.12",
   "@midwayjs/view-nunjucks": "3.14.12",

@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.14.13 (2024-02-18)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3652](https://github.com/midwayjs/midway/pull/3652) fix: missing swagger ui render options ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.12 (2024-02-17)
 
 #### :bug: Bug Fix
