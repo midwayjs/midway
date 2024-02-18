@@ -54,6 +54,7 @@ const brands = [
   'https://img.alicdn.com/imgextra/i3/O1CN010wn80L1UR01GSABXa_!!6000000002513-2-tps-277-121.png',
   'https://img.alicdn.com/imgextra/i3/O1CN01vsbUzd1T9J6X9VBg7_!!6000000002339-2-tps-400-400.png',
   'https://img.alicdn.com/imgextra/i1/O1CN01zw2fMc2266tFQCFQr_!!6000000007070-2-tps-704-255.png',
+  'https://img.alicdn.com/imgextra/i4/O1CN01RiM9ex1hyycitrJHV_!!6000000004347-2-tps-890-310.png',
 ]
 
 export function UsedBy() {
