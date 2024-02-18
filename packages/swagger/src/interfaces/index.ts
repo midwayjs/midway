@@ -428,8 +428,7 @@ export interface SwaggerOptions {
 
   swaggerUIRender?: (
     config: SwaggerOptions,
-    swaggerExplorer: SwaggerExplorer,
-    swaggerRenderOptions?: any
+    swaggerExplorer: SwaggerExplorer
   ) => (pathname: string) => Promise<{ ext: string; content: any }>;
 
   swaggerUIRenderOptions?: Record<string, any>;
