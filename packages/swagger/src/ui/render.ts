@@ -10,17 +10,14 @@ import { SwaggerExplorer } from '../swaggerExplorer';
 
 export function renderSwaggerUIDist(
   swaggerConfig: SwaggerOptions,
-  swaggerExplorer: SwaggerExplorer,
-  swaggerRenderOptions?: {
-    customInitializer?: Buffer | string;
-  }
+  swaggerExplorer: SwaggerExplorer
 ) {
   const { getAbsoluteFSPath } = safeRequire('swagger-ui-dist');
   if (!getAbsoluteFSPath) {
     throw new MidwayCommonError('swagger-ui-dist is not installed');
   }
 
-  swaggerRenderOptions = swaggerRenderOptions || {};
+  const swaggerRenderOptions = swaggerConfig.swaggerUIRenderOptions || {};
   if (swaggerRenderOptions.customInitializer) {
     if (isAbsolute(swaggerRenderOptions.customInitializer as string)) {
       swaggerRenderOptions.customInitializer = readFileSync(
@@ -105,11 +102,9 @@ export function renderJSON(
 
 export function renderSwaggerUIRemote(
   swaggerConfig: SwaggerOptions,
-  swaggerExplorer: SwaggerExplorer,
-  swaggerRenderOptions?: {
-    indexPagePath?: string;
-  }
+  swaggerExplorer: SwaggerExplorer
 ) {
+  const swaggerRenderOptions = swaggerConfig.swaggerUIRenderOptions || {};
   const indexPagePath =
     swaggerRenderOptions?.indexPagePath || join(__dirname, '../../index.html');
   return async (pathname: string) => {
