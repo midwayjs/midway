@@ -47,9 +47,13 @@ async invokeNew() {
 ```typescript
 import { retryWithAsync } from '@midwayjs/core';
 
+function foo(value) {
+  // TODO
+}
+
 async function invoke() {
   // 默认调用，加上重试两次，最多执行三次
-  const invokeNew = retryWithAsync(invoke, 2);
+  const invokeNew = retryWithAsync(foo, 2);
 
   try {
     return await invokeNew(1);
