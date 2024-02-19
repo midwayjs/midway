@@ -14,6 +14,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
         "pipes": [
           [Function],
         ],
+        "throwError": true,
       },
       "parameterIndex": 9,
       "propertyName": "doget",
