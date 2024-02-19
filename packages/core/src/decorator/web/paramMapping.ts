@@ -68,7 +68,7 @@ export const createRequestParamDecorator = function (
       pipes: pipesOrOptions as Array<PipeUnionTransform>,
     };
   }
-  if(pipesOrOptions.throwError==null)
+  if(pipesOrOptions.throwError===undefined)
     pipesOrOptions.throwError=true
 
   return createParamMapping(RouteParamTypes.CUSTOM)(transform, pipesOrOptions);
