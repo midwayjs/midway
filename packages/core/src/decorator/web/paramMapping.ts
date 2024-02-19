@@ -28,7 +28,7 @@ export interface RouterParamValue {
 }
 
 const createParamMapping = function (type: RouteParamTypes) {
-  return (propertyOrPipes?: any, options: ParamDecoratorOptions = {}) => {
+  return (propertyOrPipes: any, options: ParamDecoratorOptions = {}) => {
     let propertyData = propertyOrPipes;
     if (Array.isArray(propertyOrPipes) && options.pipes === undefined) {
       options.pipes = propertyOrPipes;
