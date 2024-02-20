@@ -28,7 +28,7 @@
     "fs-extra": "11.2.0"
   },
   "dependencies": {
-    "@grpc/grpc-js": "1.9.14",
+    "@grpc/grpc-js": "1.10.1",
     "@grpc/proto-loader": "0.7.10",
     "@midwayjs/core": "^3.14.12"
   },
