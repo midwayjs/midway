@@ -28,10 +28,10 @@ export interface RouterParamValue {
 }
 
 const createParamMapping = function (type: RouteParamTypes) {
-  return (propertyOrPipes?: any, pipes?: Array<PipeUnionTransform>) => {
+  return (propertyOrPipes: any, options: ParamDecoratorOptions = {}) => {
     let propertyData = propertyOrPipes;
-    if (Array.isArray(propertyOrPipes) && pipes === undefined) {
-      pipes = propertyOrPipes;
+    if (Array.isArray(propertyOrPipes) && options.pipes === undefined) {
+      options.pipes = propertyOrPipes;
       propertyData = undefined;
     }
     return createCustomParamDecorator(
@@ -40,9 +40,7 @@ const createParamMapping = function (type: RouteParamTypes) {
         type,
         propertyData,
       },
-      {
-        pipes,
-      }
+      options
     );
   };
 };
@@ -70,45 +68,42 @@ export const createRequestParamDecorator = function (
       pipes: pipesOrOptions as Array<PipeUnionTransform>,
     };
   }
-  return createParamMapping(RouteParamTypes.CUSTOM)(
-    transform,
-    pipesOrOptions.pipes
-  );
+  return createParamMapping(RouteParamTypes.CUSTOM)(transform, pipesOrOptions);
 };
 
 export const Session = (
   propertyOrPipes?: string | PipeUnionTransform[],
   pipes?: PipeUnionTransform[]
-) => createParamMapping(RouteParamTypes.SESSION)(propertyOrPipes, pipes);
+) => createParamMapping(RouteParamTypes.SESSION)(propertyOrPipes, { pipes });
 export const Body = (
   propertyOrPipes?: string | PipeUnionTransform[],
   pipes?: PipeUnionTransform[]
-) => createParamMapping(RouteParamTypes.BODY)(propertyOrPipes, pipes);
+) => createParamMapping(RouteParamTypes.BODY)(propertyOrPipes, { pipes });
 export const Query = (
   propertyOrPipes?: string | PipeUnionTransform[],
   pipes?: PipeUnionTransform[]
-) => createParamMapping(RouteParamTypes.QUERY)(propertyOrPipes, pipes);
+) => createParamMapping(RouteParamTypes.QUERY)(propertyOrPipes, { pipes });
 export const Param = (
   propertyOrPipes?: string | PipeUnionTransform[],
   pipes?: PipeUnionTransform[]
-) => createParamMapping(RouteParamTypes.PARAM)(propertyOrPipes, pipes);
+) => createParamMapping(RouteParamTypes.PARAM)(propertyOrPipes, { pipes });
 export const Headers = (
   propertyOrPipes?: string | PipeUnionTransform[],
   pipes?: PipeUnionTransform[]
-) => createParamMapping(RouteParamTypes.HEADERS)(propertyOrPipes, pipes);
+) => createParamMapping(RouteParamTypes.HEADERS)(propertyOrPipes, { pipes });
 export const File = (propertyOrPipes?: any, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.FILESTREAM)(propertyOrPipes, pipes);
+  createParamMapping(RouteParamTypes.FILESTREAM)(propertyOrPipes, { pipes });
 export const Files = (propertyOrPipes?: any, pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.FILESSTREAM)(propertyOrPipes, pipes);
+  createParamMapping(RouteParamTypes.FILESSTREAM)(propertyOrPipes, { pipes });
 export const RequestPath = (pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.REQUEST_PATH)(undefined, pipes);
+  createParamMapping(RouteParamTypes.REQUEST_PATH)(undefined, { pipes });
 export const RequestIP = (pipes?: PipeUnionTransform[]) =>
-  createParamMapping(RouteParamTypes.REQUEST_IP)(undefined, pipes);
+  createParamMapping(RouteParamTypes.REQUEST_IP)(undefined, { pipes });
 export const Queries = (
   propertyOrPipes?: string | PipeUnionTransform[],
   pipes?: PipeUnionTransform[]
-) => createParamMapping(RouteParamTypes.QUERIES)(propertyOrPipes, pipes);
+) => createParamMapping(RouteParamTypes.QUERIES)(propertyOrPipes, { pipes });
 export const Fields = (
   propertyOrPipes?: string | PipeUnionTransform[],
   pipes?: PipeUnionTransform[]
-) => createParamMapping(RouteParamTypes.FIELDS)(propertyOrPipes, pipes);
+) => createParamMapping(RouteParamTypes.FIELDS)(propertyOrPipes, { pipes });
