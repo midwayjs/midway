@@ -1,41 +1,21 @@
-import { attachClassMetadata, attachPropertyDataToClass } from '@midwayjs/core';
-import { DECORATORS, DECORATORS_CLASS_METADATA, DECORATORS_METHOD_METADATA } from '../constants';
+import { DECORATORS } from '../constants';
 import { SecurityRequirementObject } from '../interfaces';
+import { createMixedDecorator } from './helpers';
 
 export function ApiSecurity(
   name: string | SecurityRequirementObject,
   requirements: string[] = []
 ): ClassDecorator {
-  return target => {
-    let metadata: SecurityRequirementObject;
+  let metadata: SecurityRequirementObject;
 
-    if (typeof name === 'string') {
-      metadata = { [name]: requirements || [] };
-    } else {
-      metadata = name;
-    }
-
-    attachClassMetadata(
-      DECORATORS_CLASS_METADATA,
-      {
-        key: DECORATORS.API_SECURITY,
-        metadata,
-      },
-      target
-    );
-  };
+  if (typeof name === 'string') {
+    metadata = { [name]: requirements || [] };
+  } else {
+    metadata = name;
+  }
+  return createMixedDecorator(DECORATORS.API_SECURITY, metadata);
 }
 
 export function ApiExcludeSecurity(): MethodDecorator {
-  return (target, methodName) => {
-    attachPropertyDataToClass(
-      DECORATORS_METHOD_METADATA,
-      {
-        key: DECORATORS.API_EXCLUDE_SECURITY,
-        metadata: true,
-      },
-      target,
-      methodName
-    );
-  };
+  return createMixedDecorator(DECORATORS.API_EXCLUDE_SECURITY, true);
 }

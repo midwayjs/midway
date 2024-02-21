@@ -16,13 +16,12 @@ import {
   ScopeEnum,
   INJECT_CUSTOM_PROPERTY,
   INJECT_CUSTOM_PARAM,
-  INJECT_CUSTOM_METHOD,
   getPropertyType,
   RequestMethod,
   getClassExtendedMetadata,
   getPropertyDataFromClass,
 } from '@midwayjs/core';
-import { PathItemObject, Type } from './interfaces';
+import { MixDecoratorMetadata, PathItemObject, Type } from './interfaces';
 import {
   DECORATORS,
   DECORATORS_CLASS_METADATA,
@@ -167,15 +166,11 @@ export class SwaggerExplorer {
     // 解析额外的模型
     this.parseExtraModel(target);
 
-    // 获取方法的元数据
-    const metaForClass: any[] =
-      getClassMetadata(INJECT_CUSTOM_METHOD, target) || [];
-
-    const classMetadata =
-      (getClassMetadata(DECORATORS_CLASS_METADATA, target) as Array<{
-        key: string;
-        metadata: any;
-      }>) || [];
+    const metaForClass =
+      getClassMetadata<MixDecoratorMetadata[]>(
+        DECORATORS_CLASS_METADATA,
+        target
+      ) || [];
 
     // 获取参数的元数据
     const metaForParams: any[] =
@@ -240,7 +235,7 @@ export class SwaggerExplorer {
     }
 
     // 过滤出安全信息
-    const security = classMetadata.filter(
+    const security = metaForClass.filter(
       item => item.key === DECORATORS.API_SECURITY
     );
 
@@ -254,15 +249,15 @@ export class SwaggerExplorer {
         url = replaceUrl(url, parseParamsInPath(url));
 
         // 方法元数据
-        const swaggerRouterMetadata =
-          getPropertyDataFromClass(
+        const metaForMethods =
+          getPropertyDataFromClass<MixDecoratorMetadata[]>(
             DECORATORS_METHOD_METADATA,
             target,
             webRouter.method
           ) || [];
 
         // 判断是否忽略当前路由
-        const endpoints = metaForClass.filter(
+        const endpoints = metaForMethods.filter(
           item =>
             item.key === DECORATORS.API_EXCLUDE_ENDPOINT &&
             item.propertyName === webRouter.method
@@ -298,7 +293,7 @@ export class SwaggerExplorer {
           url,
           webRouter,
           paths,
-          metaForClass,
+          metaForMethods,
           routerArgs,
           headers,
           target
@@ -309,7 +304,7 @@ export class SwaggerExplorer {
           paths[url][webRouter.requestMethod].tags = strTags;
         }
         // 过滤出扩展信息
-        const exts = metaForClass.filter(
+        const exts = metaForMethods.filter(
           item =>
             item.key === DECORATORS.API_EXTENSION &&
             item.propertyName === webRouter.method
@@ -321,7 +316,7 @@ export class SwaggerExplorer {
           }
         }
 
-        const excludeSecurity = swaggerRouterMetadata.find(item => {
+        const excludeSecurity = metaForMethods.find(item => {
           return item.key === DECORATORS.API_EXCLUDE_SECURITY;
         });
 
@@ -361,7 +356,7 @@ export class SwaggerExplorer {
     url: string,
     webRouter: RouterOption,
     paths: Record<string, PathItemObject>,
-    metaForMethods: any[],
+    metaForMethods: MixDecoratorMetadata[],
     routerArgs: any[],
     headers: any,
     target: Type
@@ -715,9 +710,12 @@ export class SwaggerExplorer {
    * @param clzz
    */
   private parseExtraModel(clzz: any) {
-    const metaForMethods: any[] =
-      getClassMetadata(INJECT_CUSTOM_METHOD, clzz) || [];
-    const extraModels = metaForMethods.filter(
+    const metaForClass =
+      getClassMetadata<MixDecoratorMetadata[]>(
+        DECORATORS_CLASS_METADATA,
+        clzz
+      ) || [];
+    const extraModels = metaForClass.filter(
       item => item.key === DECORATORS.API_EXTRA_MODEL
     );
     for (const m of extraModels) {

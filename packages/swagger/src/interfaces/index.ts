@@ -438,3 +438,9 @@ export interface SwaggerOptions {
    */
   routerFilter?: (url: string, options: RouterOption) => boolean;
 }
+
+export interface MixDecoratorMetadata {
+  key: string;
+  metadata: any;
+  propertyName?: string;
+}

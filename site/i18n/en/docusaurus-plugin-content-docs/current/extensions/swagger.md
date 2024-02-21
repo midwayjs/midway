@@ -900,6 +900,26 @@ export class HelloController {}
 
 
 
+### Ignore routing verification
+
+You can set `@ApiExcludeSecurity` to ignore validation of a route.
+
+```typescript
+@Controller('/api')
+@ApiSecurity('api_key')
+class APIController {
+  // ...
+
+  @Get('/get_user')
+  @ApiExcludeSecurity()
+  async getUser() {
+    // ...
+  }
+}
+```
+
+
+
 ### Ignore routing
 
 Configuring `@ApiExcludeController` can ignore the entire Controller's routing.
@@ -1096,8 +1116,9 @@ All decorators of the component refer to the design of [@nestjs/swagger](https:/
 | ```@ApiCookieAuth``` | Controller |
 | ```@ApiOAuth2``` | Controller |
 | ```@ApiSecurity``` | Controller |
+| ```@ApiExcludeSecurity``` | Method |
 | ```@ApiParam``` | Method |
-| ```@ApiExtraModel``` | Controller/Model |
+| ```@ApiExtraModel``` | Controller |
 
 
 

@@ -1,6 +1,6 @@
-import { createCustomMethodDecorator } from '@midwayjs/core';
 import { DECORATORS } from '../constants';
 import { OperationObject } from '../interfaces';
+import { createMixedDecorator } from './helpers';
 
 export type ApiOperationOptions = Partial<OperationObject>;
 
@@ -9,12 +9,8 @@ const defaultOperationOptions: ApiOperationOptions = {
 };
 
 export function ApiOperation(options: ApiOperationOptions): MethodDecorator {
-  return createCustomMethodDecorator(
-    DECORATORS.API_OPERATION,
-    {
-      ...defaultOperationOptions,
-      ...options,
-    } as ApiOperationOptions,
-    false
-  );
+  return createMixedDecorator(DECORATORS.API_OPERATION, {
+    ...defaultOperationOptions,
+    ...options,
+  } as ApiOperationOptions);
 }
