@@ -1,4 +1,4 @@
-import { Inject } from '@midwayjs/core';
+import { ILogger, Inject } from '@midwayjs/core';
 import { Context, IMqttSubscriber, MqttSubscriber } from '../../../../../src';
 import * as assert from 'node:assert';
 
@@ -9,12 +9,14 @@ export class UserConsumer implements IMqttSubscriber {
   ctx: Context;
 
   @Inject()
-  logger;
+  logger: ILogger;
 
   async subscribe(ctx: Context) {
     this.logger.info('subscribe once');
     assert(this.ctx === ctx);
     assert(ctx.packet.cmd === 'publish');
     assert(ctx.packet.payload === ctx.message);
+
+    ctx.getApp().setAttr('subscribe', true);
   }
 }

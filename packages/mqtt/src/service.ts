@@ -1,27 +1,27 @@
 import {
+  Config,
+  delegateTargetAllPrototypeMethod,
+  ILogger,
+  Init,
+  Inject,
+  Logger,
+  MidwayCommonError,
   Provide,
   Scope,
   ScopeEnum,
-  Init,
-  Logger,
-  Inject,
-  Config,
-} from '@midwayjs/core';
-import {
   ServiceFactory,
-  delegateTargetAllPrototypeMethod,
-  MidwayCommonError,
+  ServiceFactoryConfigOption,
 } from '@midwayjs/core';
-import { MqttClient, connect } from 'mqtt';
+import { connect, type IClientOptions, MqttClient } from 'mqtt';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MqttProducerFactory extends ServiceFactory<MqttClient> {
   @Logger('mqttLogger')
-  logger;
+  logger: ILogger;
 
   @Config('mqtt.pub')
-  pubConfig;
+  pubConfig: ServiceFactoryConfigOption<IClientOptions>;
   getName(): string {
     return 'mqtt';
   }
@@ -35,7 +35,7 @@ export class MqttProducerFactory extends ServiceFactory<MqttClient> {
     config: any,
     clientName: any
   ): Promise<MqttClient> {
-    const producer = await new Promise<MqttClient>(resolve => {
+    return new Promise<MqttClient>(resolve => {
       const client = connect(config);
       client.on('connect', () => {
         this.logger.info('[midway-mqtt] producer: %s is connect', clientName);
@@ -45,10 +45,9 @@ export class MqttProducerFactory extends ServiceFactory<MqttClient> {
         this.logger.error(err);
       });
     });
-    return producer;
   }
 
-  async destroyClient(producer, name) {
+  async destroyClient(producer: MqttClient, name: string) {
     await producer.endAsync();
     this.logger.info('[midway-mqtt] producer: %s is close', name);
   }

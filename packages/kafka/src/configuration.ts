@@ -1,5 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/core';
-import { MidwayKafkaFramework } from './framework';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'kafka',
@@ -12,8 +11,5 @@ import { MidwayKafkaFramework } from './framework';
   ],
 })
 export class KafkaConfiguration {
-  @Inject()
-  framework: MidwayKafkaFramework;
-
   async onReady() {}
 }

@@ -109,6 +109,14 @@ export class MidwayMQTTFramework extends BaseFramework<
     });
   }
 
+  public getSubscriber(name: string) {
+    return this.subscriberMap.get(name);
+  }
+
+  public getSubscribers(): MqttClient[] {
+    return Object.values(this.subscriberMap);
+  }
+
   public getFrameworkName() {
     return 'midway:mqtt';
   }
