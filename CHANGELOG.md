@@ -1,6 +1,35 @@
 # Change Log
 
 
+## v3.15.0 (2024-02-21)
+
+#### :rocket: New Feature
+* `swagger`
+  * [#3659](https://github.com/midwayjs/midway/pull/3659) feat: add ApiExcludeSecurity decorator ([@czy88840616](https://github.com/czy88840616))
+* `core`, `kafka`, `mqtt`, `rabbitmq`
+  * [#3658](https://github.com/midwayjs/midway/pull/3658) feat: add mqtt module ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `core`
+  * [#3655](https://github.com/midwayjs/midway/pull/3655) feat: support custom param decorator throw error ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `bull-board`
+  * [#3645](https://github.com/midwayjs/midway/pull/3645) fix(deps): update bull monorepo to v5.14.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#3624](https://github.com/midwayjs/midway/pull/3624) fix(deps): update dependency @koa/router to v12 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3634](https://github.com/midwayjs/midway/pull/3634) fix(deps): update dependency @grpc/grpc-js to v1.10.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#3643](https://github.com/midwayjs/midway/pull/3643) chore(deps): update dependency swagger-ui-dist to v5.11.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`, `oss`
+  * [#3657](https://github.com/midwayjs/midway/pull/3657) chore(deps): update dependency dotenv to v16.4.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.14.13 (2024-02-18)
 
 #### :bug: Bug Fix
