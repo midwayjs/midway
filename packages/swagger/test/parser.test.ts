@@ -1,10 +1,13 @@
 import {
+  ApiBody,
   ApiExcludeController,
   ApiExcludeEndpoint,
+  ApiExcludeSecurity, ApiExtension,
   ApiExtraModel,
   ApiOperation,
   ApiProperty,
   ApiResponse,
+  ApiSecurity,
   ApiTags,
   getSchemaPath,
   SwaggerExplorer,
@@ -319,7 +322,7 @@ describe('/test/parser.test.ts', function () {
 
     const explorer = new CustomSwaggerExplorer();
     explorer.generatePath(APIController);
-    expect((explorer.getData() as any).paths['/api/update_user'].post.deprecated).toBe(true);
+    expect(explorer.getData()).toMatchSnapshot();
   })
 
   it('should swagger tags duplicate', () => {
@@ -500,5 +503,70 @@ describe('/test/parser.test.ts', function () {
     explorer.generatePath(APIController);
     const data = explorer.getData() as any;
     expect(data.paths['/api/get_user'].get.parameters.length).toEqual(1);
+  });
+
+  it('should test ApiSecurity', () => {
+    @Controller('/api')
+    @ApiSecurity('api_key')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Get('/get_user')
+      @ApiExcludeSecurity()
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiBody', () => {
+    class Cat {
+      /**
+       * The name of the Catcomment
+       * @example Kitty
+       */
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+
+      @ApiProperty({ example: 1, description: 'The age of the Cat' })
+      age: number;
+    }
+
+    @Controller('/api')
+    @ApiExtraModel(Cat)
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({ description: 'hello file' })
+      @ApiBody({ description: 'hello fields', type: Cat })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiExtension', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      @ApiExtension('x-hello', { hello: 'world' })
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
   });
 });

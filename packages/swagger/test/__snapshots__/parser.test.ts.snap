@@ -240,6 +240,207 @@ exports[`/test/parser.test.ts should parse type with function 2`] = `
 }
 `;
 
+exports[`/test/parser.test.ts should support deprecated field in ApiOperation 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "deprecated": true,
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`/test/parser.test.ts should test ApiBody 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {
+          "age": {
+            "description": "The age of the Cat",
+            "example": 1,
+            "format": undefined,
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "format": undefined,
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`/test/parser.test.ts should test ApiExtension 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+        "x-hello": {
+          "hello": "world",
+        },
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`/test/parser.test.ts should test ApiSecurity 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "security": [
+          {
+            "api_key": [],
+          },
+        ],
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
 exports[`/test/parser.test.ts should test multi-type in property 1`] = `
 {
   "properties": {

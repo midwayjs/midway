@@ -5,9 +5,8 @@ import {
   ReferenceObject,
   Type,
 } from '../interfaces';
-import { getTypeIsArrayTuple } from './helpers';
+import { createMixedDecorator, getTypeIsArrayTuple } from './helpers';
 import { HttpStatus } from '../common/httpStatus';
-import { createCustomMethodDecorator } from '@midwayjs/core';
 
 export interface ApiResponseMetadata
   extends Omit<ResponseObject, 'description'> {
@@ -40,11 +39,7 @@ export function ApiResponse(options: ApiResponseOptions): any {
     [options.status || 'default']: options,
   };
 
-  return createCustomMethodDecorator(
-    DECORATORS.API_RESPONSE,
-    groupedMetadata,
-    false
-  );
+  return createMixedDecorator(DECORATORS.API_RESPONSE, groupedMetadata);
 }
 
 export const ApiOkResponse = (options: ApiResponseOptions = {}) =>
