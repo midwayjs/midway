@@ -47,7 +47,11 @@ async invokeNew() {
 ```typescript
 import { retryWithAsync } from '@midwayjs/core';
 
-async function invoke() {
+async function invoke(id) {
+  // ...
+}
+
+async function someServiceMethod() {
   // 默认调用，加上重试两次，最多执行三次
   const invokeNew = retryWithAsync(invoke, 2);
 
@@ -177,7 +181,11 @@ const invokeNew = retryWithAsync(invoke, 2, {
 ```typescript
 import { retryWithAsync, MidwayRetryExceededMaxTimesError } from '@midwayjs/core';
 
-async function invoke() {
+async function invoke(id) {
+  // ...
+}
+
+async function someServiceMethod() {
   // 默认调用，加上重试两次，最多执行三次
   const invokeNew = retryWithAsync(invoke, 2);
 
