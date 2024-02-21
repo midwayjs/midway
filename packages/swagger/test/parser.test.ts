@@ -1,10 +1,11 @@
 import {
   ApiExcludeController,
-  ApiExcludeEndpoint,
+  ApiExcludeEndpoint, ApiExcludeSecurity,
   ApiExtraModel,
   ApiOperation,
   ApiProperty,
   ApiResponse,
+  ApiSecurity,
   ApiTags,
   getSchemaPath,
   SwaggerExplorer,
@@ -500,5 +501,26 @@ describe('/test/parser.test.ts', function () {
     explorer.generatePath(APIController);
     const data = explorer.getData() as any;
     expect(data.paths['/api/get_user'].get.parameters.length).toEqual(1);
+  });
+
+  it('should test ApiSecurity', () => {
+    @Controller('/api')
+    @ApiSecurity('api_key')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Get('/get_user')
+      @ApiExcludeSecurity()
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
   });
 });

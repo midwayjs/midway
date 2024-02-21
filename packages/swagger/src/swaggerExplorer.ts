@@ -20,9 +20,14 @@ import {
   getPropertyType,
   RequestMethod,
   getClassExtendedMetadata,
+  getPropertyDataFromClass,
 } from '@midwayjs/core';
 import { PathItemObject, Type } from './interfaces';
-import { DECORATORS } from './constants';
+import {
+  DECORATORS,
+  DECORATORS_CLASS_METADATA,
+  DECORATORS_METHOD_METADATA,
+} from './constants';
 import { DocumentBuilder } from './documentBuilder';
 import {
   SwaggerOptions,
@@ -166,6 +171,12 @@ export class SwaggerExplorer {
     const metaForClass: any[] =
       getClassMetadata(INJECT_CUSTOM_METHOD, target) || [];
 
+    const classMetadata =
+      (getClassMetadata(DECORATORS_CLASS_METADATA, target) as Array<{
+        key: string;
+        metadata: any;
+      }>) || [];
+
     // 获取参数的元数据
     const metaForParams: any[] =
       getClassMetadata(INJECT_CUSTOM_PARAM, target) || [];
@@ -229,7 +240,7 @@ export class SwaggerExplorer {
     }
 
     // 过滤出安全信息
-    const security = metaForClass.filter(
+    const security = classMetadata.filter(
       item => item.key === DECORATORS.API_SECURITY
     );
 
@@ -241,6 +252,14 @@ export class SwaggerExplorer {
         // 生成URL
         let url = (prefix + webRouter.path).replace('//', '/');
         url = replaceUrl(url, parseParamsInPath(url));
+
+        // 方法元数据
+        const swaggerRouterMetadata =
+          getPropertyDataFromClass(
+            DECORATORS_METHOD_METADATA,
+            target,
+            webRouter.method
+          ) || [];
 
         // 判断是否忽略当前路由
         const endpoints = metaForClass.filter(
@@ -302,8 +321,12 @@ export class SwaggerExplorer {
           }
         }
 
+        const excludeSecurity = swaggerRouterMetadata.find(item => {
+          return item.key === DECORATORS.API_EXCLUDE_SECURITY;
+        });
+
         // 如果存在安全信息，则将其添加到路径中
-        if (security.length > 0) {
+        if (security.length > 0 && !excludeSecurity) {
           if (!paths[url][webRouter.requestMethod].security) {
             paths[url][webRouter.requestMethod].security = [];
           }
