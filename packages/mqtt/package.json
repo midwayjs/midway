@@ -1,0 +1,41 @@
+{
+  "name": "@midwayjs/mqtt",
+  "version": "3.14.12",
+  "description": "Midway Framework for mqtt",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "lint:fix": "../../node_modules/.bin/mwts fix"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "framework",
+    "mqtt"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/mock": "^3.14.12",
+    "@midwayjs/core": "^3.14.12"
+  },
+  "dependencies": {
+    "mqtt": "5.3.5"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+}

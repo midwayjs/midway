@@ -1,5 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/core';
-import { MidwayRabbitMQFramework } from './framework';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'rabbitMQ',
@@ -12,8 +11,5 @@ import { MidwayRabbitMQFramework } from './framework';
   ],
 })
 export class RabbitMQConfiguration {
-  @Inject()
-  framework: MidwayRabbitMQFramework;
-
   async onReady() {}
 }

@@ -1,0 +1,123 @@
+import {
+  getClassMetadata,
+  listModule,
+  Framework,
+  BaseFramework,
+  Logger,
+} from '@midwayjs/core';
+import {
+  IMidwayMQTTApplication,
+  IMidwayMQTTConfigurationOptions,
+  IMidwayMQTTContext,
+} from './interface';
+import { connect, IClientOptions, MqttClient } from 'mqtt';
+import { MQTT_DECORATOR_KEY } from './decorator';
+
+@Framework()
+export class MidwayMQTTFramework extends BaseFramework<
+  IMidwayMQTTApplication,
+  IMidwayMQTTContext,
+  IMidwayMQTTConfigurationOptions
+> {
+  public app: IMidwayMQTTApplication;
+  protected subscriberMap: Map<string, MqttClient> = new Map();
+
+  @Logger('mqttLogger')
+  mqttLogger;
+
+  configure() {
+    return this.configService.getConfiguration('mqtt');
+  }
+
+  async applicationInitialize(options) {
+    this.app = {} as any;
+  }
+
+  public async run(): Promise<void> {
+    const { sub } = this.configurationOptions;
+
+    if (Object.keys(sub || {}).length === 0) {
+      this.mqttLogger.info(
+        '[midway-mqtt] Not found consumer config, skip init consumer'
+      );
+    }
+    // find subscriber
+    const mqttSubscriberModules = listModule(MQTT_DECORATOR_KEY);
+    const mqttSubscriberMap = {};
+    for (const subscriberModule of mqttSubscriberModules) {
+      const subscriberName = getClassMetadata(
+        MQTT_DECORATOR_KEY,
+        subscriberModule
+      ) as string;
+      mqttSubscriberMap[subscriberName] = subscriberModule;
+    }
+
+    for (const customKey in sub) {
+      const consumer = await this.createSubscriber(
+        sub[customKey].connectOptions,
+        customKey
+      );
+
+      await consumer.subscribeAsync(
+        sub[customKey].subscribeOptions.topicObject,
+        sub[customKey].subscribeOptions.opts
+      );
+
+      consumer.on('message', async (topic, message, packet) => {
+        const ctx = this.app.createAnonymousContext();
+        ctx.topic = topic;
+        ctx.packet = packet;
+        ctx.message = message;
+        const fn = await this.applyMiddleware(async ctx => {
+          const instance = await ctx.requestContext.getAsync(
+            mqttSubscriberMap[customKey]
+          );
+          // eslint-disable-next-line prefer-spread
+          return await instance['subscribe'].call(instance, ctx);
+        });
+        return await fn(ctx);
+      });
+    }
+  }
+
+  protected async beforeStop(): Promise<void> {
+    for (const [name, consumer] of this.subscriberMap) {
+      await consumer.endAsync();
+      this.mqttLogger.info(`[midway-mqtt] subscriber: ${name} is closed`);
+    }
+  }
+
+  public async createSubscriber(
+    connectionOptions: IClientOptions,
+    clientName?: string
+  ) {
+    return new Promise<MqttClient>(resolve => {
+      const client = connect(connectionOptions);
+      client.on('connect', () => {
+        if (clientName) {
+          this.logger.info(
+            '[midway-mqtt] subscriber: %s is connect',
+            clientName
+          );
+          this.subscriberMap.set(clientName, client);
+        }
+        resolve(client);
+      });
+      client.on('error', err => {
+        this.mqttLogger.error(err);
+      });
+    });
+  }
+
+  public getSubscriber(name: string) {
+    return this.subscriberMap.get(name);
+  }
+
+  public getSubscribers(): MqttClient[] {
+    return Object.values(this.subscriberMap);
+  }
+
+  public getFrameworkName() {
+    return 'midway:mqtt';
+  }
+}

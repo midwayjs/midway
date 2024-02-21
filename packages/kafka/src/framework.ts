@@ -18,7 +18,11 @@ import {
 import { KafkaConsumerServer } from './kafka';
 
 @Framework()
-export class MidwayKafkaFramework extends BaseFramework<any, any, any> {
+export class MidwayKafkaFramework extends BaseFramework<
+  any,
+  IMidwayKafkaContext,
+  any
+> {
   configure() {
     return this.configService.getConfiguration('kafka');
   }
