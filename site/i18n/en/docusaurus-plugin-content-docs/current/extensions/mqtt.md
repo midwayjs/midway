@@ -29,7 +29,7 @@ Since MQTT requires Broker as a transit transport, you need to deploy the MQTT B
 ## Install components
 
 
-Install the mikro component to provide the ability to access mikro-orm.
+Install the mqtt component.
 
 
 ```bash

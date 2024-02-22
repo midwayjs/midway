@@ -29,7 +29,7 @@ MQTT是用于物联网 (IoT) 的OASIS标准消息传递协议。它被设计为�
 ## 安装组件
 
 
-安装 mikro 组件，提供接入 mikro-orm 的能力。
+安装 mqtt 组件。
 
 
 ```bash
