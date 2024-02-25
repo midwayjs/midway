@@ -5,6 +5,7 @@ export type SingleCacheOptions<S extends Store = any, T extends object = any> = 
   options?: MemoryConfig;
 } | {
   store: S | (() => S | Promise<S>);
+  options?: MemoryConfig;
 } | {
   store: FactoryStore<S, T>;
   options?: FactoryConfig<Parameters<FactoryStore<S, T>>[0]>,
@@ -12,6 +13,7 @@ export type SingleCacheOptions<S extends Store = any, T extends object = any> = 
 
 export type CacheManagerOptions<S extends Store = any, T extends object = any> = SingleCacheOptions<S> | {
   store: Array<string | Cache | SingleCacheOptions<S, T> | (() => Cache | Promise<Cache>)>;
+  options?: MemoryConfig;
 }
 
 export type MidwayCache = Cache;
