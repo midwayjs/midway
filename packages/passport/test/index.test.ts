@@ -173,6 +173,21 @@ describe('/test/index.test.ts', () => {
       await close(app);
     });
 
+    it('should test passport all fail - http-bearer', async () => {
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-koa-bearer-fail'),
+        {},
+      );
+
+      const request = createHttpRequest(app);
+      let result = await request.get('/')
+
+      expect(result.status).toEqual(401);
+      expect(result.headers['www-authenticate']).toEqual('Bearer realm=\"Users\"')
+
+      await close(app);
+    });
+
     it('jwt passport with koa', async () => {
       let token;
       const app = await createApp(
