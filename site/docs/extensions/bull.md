@@ -831,13 +831,13 @@ ReplyError: EXECABORT Transaction discarded because of previous errors.
 }
 ```
 
-可以在队列的 error 事件回调中监测到这个错误，问题表现为 queue.createBulk()、job.moveToFailed() 等任务队列 API 调用无效，建议在代码中都加上：
+问题表现为 queue.createBulk()、job.moveToFailed() 等任务队列 API 调用无效，这些 API 依赖的 Redis Lua 脚本中使用了 EVAL 或者 EVALSHA。可以在队列的 error 事件回调中监测到这个错误，建议在代码中都加上：
 
 ```typescript
 const queue = this.bullFramework.getQueue(queueName);
 queue.on('error', err => this.logger.error(err));
 ```
 
-这个问题的原因是阿里云 Redis 使用代理模式连接时，会对 Lua 脚本调用做额外限制，包括不允许在 MULTI 事务中执行 EVAL 命令（<https://help.aliyun.com/zh/redis/support/usage-of-lua-scripts?#section-8f7-qgv-dlv>），文档中还提到可以通过参数配置关闭这一校验，但是验证无效。
+报错的原因是阿里云 Redis 使用代理模式连接时，会对 Lua 脚本调用做额外限制，包括不允许在 MULTI 事务中执行 EVAL 命令（<https://help.aliyun.com/zh/redis/support/usage-of-lua-scripts?#section-8f7-qgv-dlv>），文档中还提到可以通过参数配置 script_check_enable 关闭这一校验，但是验证无效。
 
 好在切换到直连模式可以解决这个问题，可以在阿里云控制台操作开启直连地址，由于直连模式需要客户端切换成集群模式，需要参考前文中的「Redis 集群」章节，切换成 defaultQueueOptions.createClient 配置方式。
