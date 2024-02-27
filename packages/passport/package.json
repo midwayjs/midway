@@ -32,6 +32,7 @@
     "express-session": "1.18.0",
     "passport-jwt": "4.0.1",
     "passport-local": "1.0.0",
-    "passport-openidconnect": "0.1.2"
+    "passport-openidconnect": "0.1.2",
+    "passport-http-bearer": "1.0.1"
   }
 }
