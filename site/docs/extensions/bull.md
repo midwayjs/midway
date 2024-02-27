@@ -833,9 +833,9 @@ ReplyError: EXECABORT Transaction discarded because of previous errors.
 }
 ```
 
-::: tip
+:::tip
 
-常出现与使用阿里云 Redis 服务时。
+常出现于使用阿里云 Redis 服务。
 
 :::
 

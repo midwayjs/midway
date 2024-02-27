@@ -830,7 +830,7 @@ ReplyError: EXECABORT Transaction discarded because of previous errors.
 }
 ```
 
-::: tip
+:::tip
 
 Often occurs when using Alibaba Cloud Redis service.
 
