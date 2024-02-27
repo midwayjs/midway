@@ -812,9 +812,11 @@ export default {
 
 原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步 @midwayjs/bull 的 key 命中了不同的 slot。
 
-解决办法是 task 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
+解决方案： task 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
 
 ### 2、EVAL inside MULTI is not allowed 错误
+
+表现为 `queue.createBulk()`、`job.moveToFailed()` 等任务队列 API 调用无效，并出现下面的错误。
 
 ```
 ReplyError: EXECABORT Transaction discarded because of previous errors.
@@ -831,6 +833,15 @@ ReplyError: EXECABORT Transaction discarded because of previous errors.
 }
 ```
 
-问题表现为 queue.createBulk()、job.moveToFailed() 等任务队列 API 调用无效，这些 API 依赖的 Redis Lua 脚本中使用了 EVAL 或者 EVALSHA。报错的原因是阿里云 Redis 使用代理模式连接时，会对 Lua 脚本调用做额外限制，包括不允许在 MULTI 事务中执行 EVAL 命令（<https://help.aliyun.com/zh/redis/support/usage-of-lua-scripts?#section-8f7-qgv-dlv>），文档中还提到可以通过参数配置 script_check_enable 关闭这一校验，但是验证无效。
+::: tip
 
-好在切换到直连模式可以解决这个问题，可以在阿里云控制台操作开启直连地址，由于直连模式需要客户端切换成集群模式，需要参考前文中的「Redis 集群」章节，切换成 defaultQueueOptions.createClient 配置方式。
+常出现与使用阿里云 Redis 服务时。
+
+:::
+
+由于这些 API 依赖的 Redis Lua 脚本中使用了 EVAL 或者 EVALSHA，阿里云 Redis 使用代理模式连接时，会对 Lua 脚本调用做额外限制，包括 [不允许在 MULTI 事务中执行 EVAL 命令](https://help.aliyun.com/zh/redis/support/usage-of-lua-scripts?#section-8f7-qgv-dlv)，文档中还提到可以通过参数配置 script_check_enable 关闭这一校验，但是验证无效。
+
+解决方案：
+
+* 1、在阿里云控制台操作开启直连地址，将服务切换到直连模式
+* 2、客户端切换成集群模式，参考上述「Redis 集群」章节，切换配置方式
