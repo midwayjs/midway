@@ -1,6 +1,38 @@
 # Change Log
 
 
+## v3.15.1 (2024-02-27)
+
+#### :nail_care: Polish
+* `bull`
+  * [#3671](https://github.com/midwayjs/midway/pull/3671) fix: use bull logger when queue emit error ([@czy88840616](https://github.com/czy88840616))
+* `passport`
+  * [#3669](https://github.com/midwayjs/midway/pull/3669) fix: passport missing ctx.setHeader ([@odex21](https://github.com/odex21))
+
+#### :memo: Documentation
+* [#3666](https://github.com/midwayjs/midway/pull/3666) docs: bull incompatibility with aliyun redis proxy mode ([@cyjake](https://github.com/cyjake))
+
+#### :package: Dependencies
+* `axios`, `consul`
+  * [#3668](https://github.com/midwayjs/midway/pull/3668) chore(deps): update dependency nock to v13.5.4 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `express-session`
+  * [#3670](https://github.com/midwayjs/midway/pull/3670) chore(deps): update dependency @types/express-session to v1.18.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3660](https://github.com/midwayjs/midway/pull/3660) chore(deps): update mikro-orm monorepo to v6.1.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#3664](https://github.com/midwayjs/midway/pull/3664) chore(deps): update dependency swagger-ui-dist to v5.11.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#3663](https://github.com/midwayjs/midway/pull/3663) fix(deps): update dependency @types/koa to v2.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3662](https://github.com/midwayjs/midway/pull/3662) fix(deps): update dependency joi to v17.12.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Chen Yangjian ([@cyjake](https://github.com/cyjake))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@odex21](https://github.com/odex21)
+
+
+
 ## v3.15.0 (2024-02-21)
 
 #### :rocket: New Feature
