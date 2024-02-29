@@ -21,9 +21,14 @@ const { join } = require('path');
     ...args,
   });
 
+  const port = process.env.MIDWAY_HTTP_PORT
+  if (! port) {
+    throw new Error('MIDWAY_HTTP_PORT is not defined');
+  }
+
   process.send({
     title: 'server-ready',
-    port: process.env.MIDWAY_HTTP_PORT,
+    port,
     ssl: args.ssl,
   });
 
