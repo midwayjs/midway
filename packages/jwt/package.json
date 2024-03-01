@@ -32,7 +32,7 @@
     "@midwayjs/web": "^3.15.0"
   },
   "dependencies": {
-    "@types/jsonwebtoken": "9.0.5",
+    "@types/jsonwebtoken": "9.0.6",
     "jsonwebtoken": "9.0.2"
   }
 }
