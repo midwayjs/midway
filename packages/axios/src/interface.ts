@@ -4,10 +4,6 @@ import type {
   AxiosInterceptorManager,
   AxiosDefaults,
 } from 'axios';
-import axios from 'axios';
-
-export { axios };
-
 export interface AxiosHttpService {
   defaults: AxiosDefaults;
   interceptors: {
