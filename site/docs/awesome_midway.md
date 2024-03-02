@@ -13,6 +13,7 @@
 | [@mwcp/kmore][@mwcp/kmore]                           | waitingsong | midway 数据库组件 基于 [Knex]，通过 `Transactional` 装饰器支持声明式事务，支持自动分页、智能连表，集成 [OpenTelemetry] 链路追踪 |
 | [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 增强组件 支持 `Trace` 装饰器  并支持[传入泛型参数获得方法入参类型][otel-generics-cn]                     |
 | [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件                                                                                                       |
+| [邮件组件][mailer-zh]                 | MrDotYan   | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]                                                                                                  |
 
 ## swagger
 
@@ -71,3 +72,5 @@
 
 [Knex]: https://knexjs.org/
 [OpenTelemetry]: https://github.com/open-telemetry
+[mailer-zh]:https://gitee.com/onlymry_admin/midwayjs_mailer
+[mailer-zh-doc]:https://gitee.com/onlymry_admin/midwayjs_mailer/blob/main/readme.md
