@@ -13,6 +13,7 @@ The following lists high-quality community projects related to Midwayjs
 | [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `Transactional` decorator, intergrated [OpenTelemetry] trace                        |
 | [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component supports `Trace` decorator  and supports generics for [obtaining method parameter type][otel-generics]                      |
 | [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                                                                                                                  |
+| [邮件组件][mailer-zh]                 | MrDotYan   | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]                                                                                                  |
 ## swagger
 
 | Name                                   | Author | Description             |

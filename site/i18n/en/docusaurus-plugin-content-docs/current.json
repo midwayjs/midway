@@ -71,11 +71,11 @@
     "message": "Serverless trigger POST case differences",
     "description": "The label for the doc item Serverless 触发器 POST 情况差异 in sidebar serverless, linking to the doc serverless/serverless_post_difference"
   },
-  "sidebar.hooks.category.基础功能": {
+  "sidebar.category.基础功能": {
     "message": "Fundamentals",
     "description": "The label for category 基础功能 in sidebar hooks"
   },
-  "sidebar.hooks.category.一体化": {
+  "sidebar.category.一体化": {
     "message": "Integration",
     "description": "The label for category 一体化 in sidebar hooks"
   },
@@ -102,5 +102,13 @@
   "sidebar.other.category.其他": {
     "message": "Other",
     "description": "The label for category 其他 in sidebar other"
+  },
+  "sidebar.category.开发工具": {
+    "message": "Development Tools",
+    "description": "The label for category 开发工具 in sidebar"
+  },
+  "sidebar.category.历史文档": {
+    "message": "History Documents",
+    "description": "The label for category 历史文档 in sidebar"
   }
 }
