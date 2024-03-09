@@ -34,7 +34,7 @@
     "@midwayjs/express-session": "^3.15.1",
     "body-parser": "1.20.2",
     "cookie-parser": "^1.4.6",
-    "express": "4.18.2"
+    "express": "4.18.3"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
