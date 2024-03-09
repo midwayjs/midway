@@ -1,6 +1,34 @@
 # Change Log
 
 
+## v3.15.2 (2024-03-09)
+
+#### :nail_care: Polish
+* `axios`
+  * [#3680](https://github.com/midwayjs/midway/pull/3680) chore: use Axios for interface export ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `swagger`
+  * [#3690](https://github.com/midwayjs/midway/pull/3690) chore(deps): update dependency swagger-ui-dist to v5.11.10 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3685](https://github.com/midwayjs/midway/pull/3685) chore(deps): update dependency swagger-ui-dist to v5.11.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3693](https://github.com/midwayjs/midway/pull/3693) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.13.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#3694](https://github.com/midwayjs/midway/pull/3694) fix(deps): update dependency express to v4.18.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3686](https://github.com/midwayjs/midway/pull/3686) chore(deps): update mikro-orm monorepo to v6.1.7 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#3678](https://github.com/midwayjs/midway/pull/3678) fix(deps): update dependency @types/jsonwebtoken to v9.0.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#3676](https://github.com/midwayjs/midway/pull/3676) chore(deps): update dependency @opentelemetry/sdk-node to v0.49.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3677](https://github.com/midwayjs/midway/pull/3677) fix(deps): update bull monorepo to v5.14.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.15.1 (2024-02-27)
 
 #### :nail_care: Polish
