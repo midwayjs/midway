@@ -381,6 +381,94 @@ exports[`/test/parser.test.ts should test ApiExtension 1`] = `
 }
 `;
 
+exports[`/test/parser.test.ts should test ApiHeader 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "description": "this is test one",
+            "in": "header",
+            "name": "x-test-one",
+            "required": undefined,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`/test/parser.test.ts should test ApiHeader in method 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
 exports[`/test/parser.test.ts should test ApiSecurity 1`] = `
 {
   "components": {},

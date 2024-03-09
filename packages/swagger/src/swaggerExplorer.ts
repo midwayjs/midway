@@ -1,38 +1,30 @@
 import {
   Config,
   CONTROLLER_KEY,
-  listModule,
-  Provide,
   ControllerOption,
+  getClassExtendedMetadata,
   getClassMetadata,
   getMethodParamTypes,
-  Types,
+  getPropertyDataFromClass,
+  getPropertyType,
+  Init,
+  INJECT_CUSTOM_PARAM,
+  INJECT_CUSTOM_PROPERTY,
+  listModule,
+  Provide,
+  RequestMethod,
   RouteParamTypes,
   RouterOption,
-  WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY,
-  Init,
   Scope,
   ScopeEnum,
-  INJECT_CUSTOM_PROPERTY,
-  INJECT_CUSTOM_PARAM,
-  getPropertyType,
-  RequestMethod,
-  getClassExtendedMetadata,
-  getPropertyDataFromClass,
+  Types,
+  WEB_ROUTER_KEY,
+  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/core';
 import { MixDecoratorMetadata, PathItemObject, Type } from './interfaces';
-import {
-  DECORATORS,
-  DECORATORS_CLASS_METADATA,
-  DECORATORS_METHOD_METADATA,
-} from './constants';
+import { DECORATORS, DECORATORS_CLASS_METADATA, DECORATORS_METHOD_METADATA, } from './constants';
 import { DocumentBuilder } from './documentBuilder';
-import {
-  SwaggerOptions,
-  AuthOptions,
-  SecuritySchemeObject,
-} from './interfaces/';
+import { AuthOptions, SecuritySchemeObject, SwaggerOptions, } from './interfaces/';
 import { BodyContentType } from '.';
 
 @Provide()
@@ -496,12 +488,11 @@ export class SwaggerExplorer {
           };
         }
         if (!opts[webRouter.requestMethod].requestBody) {
-          const requestBody = {
+          opts[webRouter.requestMethod].requestBody = {
             required: true,
             description: p.description || p.name,
             content: p.content,
           };
-          opts[webRouter.requestMethod].requestBody = requestBody;
         } else {
           // 这里拼 schema properties 时肯定存在
           Object.assign(

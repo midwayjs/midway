@@ -3,7 +3,7 @@ import {
   ApiExcludeController,
   ApiExcludeEndpoint,
   ApiExcludeSecurity, ApiExtension,
-  ApiExtraModel,
+  ApiExtraModel, ApiHeader,
   ApiOperation,
   ApiProperty,
   ApiResponse,
@@ -560,6 +560,42 @@ describe('/test/parser.test.ts', function () {
     class APIController {
       @Get('/get_user')
       @ApiExtension('x-hello', { hello: 'world' })
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiHeader', () => {
+    @Controller('/api')
+    @ApiHeader({
+      name: 'x-test-one',
+      description: 'this is test one'
+    })
+    class APIController {
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiHeader in method', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      @ApiHeader({
+        name: 'x-test-one',
+        description: 'this is test one'
+      })
       async getUser() {
         // ...
       }
