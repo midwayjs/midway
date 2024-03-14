@@ -34,6 +34,6 @@ export interface Context extends IMidwayMQTTContext {}
 export type NextFunction = BaseNextFunction;
 
 export interface IMqttSubscriber {
-  subscribe(ctx: IMidwayMQTTContext): Promise<void>;
+  subscribe(ctx: IMidwayMQTTContext): Promise<any>;
 }
 
