@@ -16,6 +16,7 @@ import {
 } from './decorator';
 import { MikroDataSourceManager } from './dataSourceManager';
 import { EntityName, RequestContext } from '@mikro-orm/core';
+import { MikroMiddleware } from './mikro.middleware';
 
 @Configuration({
   importConfigs: [
@@ -98,6 +99,11 @@ export class MikroConfiguration implements ILifeCycle {
 
   async onReady(container: IMidwayContainer) {
     this.dataSourceManager = await container.getAsync(MikroDataSourceManager);
+    this.applicationManager
+      .getApplications(['express', 'egg', 'koa'])
+      .forEach(app => {
+        app.useMiddleware([MikroMiddleware]);
+      });
   }
 
   async onStop(container: IMidwayContainer) {
