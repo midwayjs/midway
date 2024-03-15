@@ -17,7 +17,6 @@ Midway 默认的示例都是基于该包。
 
 ```bash
 $ npm i @midwayjs/koa@3 --save
-$ npm i @types/koa --save-dev
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -28,10 +27,6 @@ $ npm i @types/koa --save-dev
     "@midwayjs/koa": "^3.0.0",
     // ...
   },
-  "devDependencies": {
-    "@types/koa": "^2.13.4",
-    // ...
-  }
 }
 ```
 
@@ -232,11 +227,11 @@ export default {
 | cert         | string \| Buffer \| Array<Buffer\|Object> | 可选，Https cert，服务端证书                            |
 | ca           | string \| Buffer \| Array<Buffer\|Object> | 可选，Https ca                                          |
 | http2        | boolean                                   | 可选，http2 支持，默认 false                            |
-| proxy        | boolean                                   | 可选，是否开启代理，如果为 true 则对于 request 请求中的 host / protocol / ip分别优先从 Header 字段中 X-Forwarded-Host / X-Forwarded-Proto / X-Forwarded-For 获取，默认 false                            |
+| proxy        | boolean                                   | 可选，是否开启代理，如果为 true 则对于 request 请求中的 ip 优先从 Header 字段中 X-Forwarded-For 获取，默认 false           |
 | subdomainOffset        | number                                   | 可选，子域名的偏移量，默认 2                            |
 | proxyIpHeader        | string                                   | 可选，获取代理 ip 的字段名，默认为 X-Forwarded-For |
 | maxIpsCount        | number                                   | 可选，获取的 ips 最大数量，默认为 0（全部返回）|
-| serverTimeout | number | 可选，服务端超时配置，单位秒。 |
+| serverTimeout | number | 可选，服务端超时配置，默认为 2 * 60 * 1000（2 分钟），单位毫秒 |
 
 
 
@@ -275,6 +270,37 @@ export default {
 ### 全局前缀
 
 此功能请参考 [全局前缀](../controller#全局路由前缀)。
+
+
+
+### 反向代理配置
+
+如果使用了 Nginx 等反向代理，请开启 `proxy` 配置。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    proxy: true,
+  },
+}
+```
+
+默认使用 `X-Forwarded-For` Header，如果代理配置不同，请自行配置不同的 Header。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    proxy: true,
+    proxyIpHeader: 'X-Forwarded-Host'
+  },
+}
+```
+
+
 
 
 

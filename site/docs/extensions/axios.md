@@ -416,18 +416,18 @@ export class MainConfiguration {
 }
 ```
 
-### 直接使用Axios
+### 直接使用 Axios
 
 `@midayjs/axios`导出了原始的`axios`实例，在非应用环境中可以直接使用。
 
 ```typescript
-import { axios } from '@midwayjs/axios';
+import { Axios } from '@midwayjs/axios';
 import { ReadStream, createWriteStream } from 'fs';
 import { finished } from 'stream/promises';
 
 async function download(url: string, filename: string) {
   const writer = await createWriteStream(filename);
-  const res = axios.get<ReadStream>(url, {
+  const res = Axios.get<ReadStream>(url, {
     responseType: 'stream',
   });
   res.data.pipe(writer);

@@ -15,8 +15,7 @@ Midway 内置的应用管理器，可以使用它获取到所有的 Application�
 可以通过注入获取，比如对不同的 Application 添加同一个中间件。
 
 ```typescript
-import { MidwayApplicationManager } from '@midwayjs/core'
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { MidwayApplicationManager, onfiguration, Inject } from '@midwayjs/core'
 import { CustomMiddleware } from './middleware/custom.middleware';
 
 @Configuration({
@@ -479,8 +478,7 @@ Midway 内置的路由表服务，用于应用路由和函数的创建。
 可以通过注入获取。
 
 ```typescript
-import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { MidwayWebRouterService, Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -523,8 +521,7 @@ Midway 内置的函数信息服务，继承与 `MidwayWebRouterService` ，方�
 可以通过注入获取。
 
 ```typescript
-import { MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { MidwayServerlessFunctionService, Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -565,11 +562,17 @@ API 如下
 
 Midway 内置的健康检查执行服务，用于外部扩展的健康检查能力。
 
+完整的健康检查包含两个部分：
+
+* 1、健康检查的触发端，比如外部的定时请求，通常为一个 Http 接口
+* 2、健康检查的执行端，一般在各个组件或者业务中，检查特定的项是否正常
+
+`MidwayHealthService` 一般用于健康检查的触发端，下面描述的内容一般在触发端会实现。
+
 可以通过注入获取后，执行健康检查任务。
 
 ```typescript
-import { MidwayHealthService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { MidwayHealthService ,Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -635,3 +638,4 @@ export default {
 };
 ```
 
+健康检查的执行端在业务或者组件的生命周期中实现，具体请查看 [生命周期](/docs/lifecycle#onhealthcheck)。

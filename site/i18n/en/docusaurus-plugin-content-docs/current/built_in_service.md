@@ -561,11 +561,17 @@ For more information, see [Web route table](# router_table).
 
 Midway's built-in health check execution service is used for externally extended health check capabilities.
 
+A complete health check consists of two parts:
+
+* 1. The trigger end of the health check, such as an external scheduled request, is usually an Http interface
+* 2. The execution end of the health check usually checks whether specific items are normal in each component or business.
+
+`MidwayHealthService` is generally used as the trigger end of health check. The content described below is generally implemented on the trigger end.
+
 It can be obtained through injection and then perform health check tasks.
 
 ```typescript
-import { MidwayHealthService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { MidwayHealthService, Configuration, Inject } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -630,3 +636,5 @@ export default {
    }
 };
 ```
+
+The execution end of the health check is implemented in the life cycle of the business or component. For details, please see [Life Cycle](/docs/lifecycle#onhealthcheck).

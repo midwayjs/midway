@@ -17,7 +17,6 @@ The `@midwayjs/koa` package uses `koa @2` and integrates `@koa/router` as the ba
 
 ```bash
 $ npm i @midwayjs/koa@3 --save
-$ npm i @types/koa --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -28,10 +27,6 @@ Or reinstall the following dependencies in `package.json`.
     "@midwayjs/koa": "^3.0.0",
     // ...
   },
-  "devDependencies": {
-    "@types/koa": "^2.13.4 ",
-    // ...
-  }
 }
 ```
 
@@ -230,11 +225,11 @@ All attributes are described as follows:
 | cert | string \| Buffer \| Array<Buffer\|Object> | Optional, Https cert, server certificate |
 | ca | string \| Buffer \| Array<Buffer\|Object> | Optional, Https ca |
 | http2 | boolean | Optional, supported by http2, default false |
-| proxy | boolean | Optional. Whether to enable the proxy. If true, the host / protocol / ip in the request request is obtained from the X-Forwarded-Host / X-Forwarded-Proto / X-Forwarded-For in the Header field. The default value is false |
+| proxy | boolean | Optional, whether to enable the proxy. If it is true, the IP in the request request will be obtained first from the X-Forwarded-For in the Header field. The default is false. |
 | subdomainOffset | number | optional, the offset of the subdomain name, default 2. |
 | proxyIpHeader | string | optional. obtains the field name of the proxy ip address. the default value is X-Forwarded-For |
 | maxIpsCount | number | optional. the maximum number of ips obtained, which is 0 by default. |
-| serverTimeout | number | Optional, server-side timeout configuration, unit seconds. |
+| serverTimeout | number | Optional, server timeout configuration, the default is 2 * 60 * 1000 (2 minutes), in milliseconds |
 
 
 ### Modify port
@@ -272,6 +267,35 @@ In addition, you can also temporarily modify the port by `midway-bin dev-ts-port
 ### Global prefix
 
 For more information about this feature, see [Global Prefixes](../controller# Global Routing Prefix).
+
+
+
+### Reverse proxy configuration
+
+If you use a reverse proxy such as Nginx, please enable the `proxy` configuration.
+
+```typescript
+// src/config/config.default
+export default {
+   // ...
+   koa: {
+     proxy: true,
+   },
+}
+```
+
+The `X-Forwarded-For` Header is used by default. If the proxy configuration is different, please configure a different Header yourself.
+
+```typescript
+// src/config/config.default
+export default {
+   // ...
+   koa: {
+     proxy: true,
+     proxyIpHeader: 'X-Forwarded-Host'
+   },
+}
+```
 
 
 
