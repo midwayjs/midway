@@ -70,13 +70,13 @@ export class MikroConfiguration implements ILifeCycle {
     this.decoratorService.registerPropertyHandler(
       ENTITY_MANAGER_KEY,
       (propertyName, meta: { connectionName?: string }) => {
-        if (RequestContext.getEntityManager()) {
-          return RequestContext.getEntityManager();
+        const name =
+          meta.connectionName ||
+          this.dataSourceManager.getDefaultDataSourceName();
+        if (RequestContext.getEntityManager(name)) {
+          return RequestContext.getEntityManager(name);
         } else {
-          return this.dataSourceManager.getDataSource(
-            meta.connectionName ||
-              this.dataSourceManager.getDefaultDataSourceName()
-          ).em;
+          return this.dataSourceManager.getDataSource(name).em;
         }
       }
     );
@@ -102,7 +102,7 @@ export class MikroConfiguration implements ILifeCycle {
     this.applicationManager
       .getApplications(['express', 'egg', 'koa'])
       .forEach(app => {
-        app.useMiddleware([MikroMiddleware]);
+        app.getMiddleware().insertFirst(MikroMiddleware);
       });
   }
 
