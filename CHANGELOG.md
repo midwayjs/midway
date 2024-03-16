@@ -1,6 +1,30 @@
 # Change Log
 
 
+## v3.15.3 (2024-03-16)
+
+#### :bug: Bug Fix
+* `bull`
+  * [#3707](https://github.com/midwayjs/midway/pull/3707) fix: bullLogger with undefined value when emit error ([@czy88840616](https://github.com/czy88840616))
+* `mikro`
+  * [#3704](https://github.com/midwayjs/midway/pull/3704) fix(mikro): RequestContext middleware ([@odex21](https://github.com/odex21))
+
+#### :nail_care: Polish
+* `mikro`
+  * [#3708](https://github.com/midwayjs/midway/pull/3708) chore: update request content middleware and use default source name … ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `grpc`
+  * [#3702](https://github.com/midwayjs/midway/pull/3702) fix(deps): update dependency @grpc/grpc-js to v1.10.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `security`
+  * [#3703](https://github.com/midwayjs/midway/pull/3703) fix(deps): update dependency xss to v1.0.15 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@odex21](https://github.com/odex21)
+
+
+
 ## v3.15.2 (2024-03-09)
 
 #### :nail_care: Polish
