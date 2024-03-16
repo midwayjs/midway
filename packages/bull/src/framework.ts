@@ -45,7 +45,7 @@ export class BullFramework
   private bullClearRepeatJobWhenStart: boolean;
   private queueMap: Map<string, BullQueue> = new Map();
 
-  @Logger('bull')
+  @Logger('bullLogger')
   protected bullLogger: ILogger;
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
