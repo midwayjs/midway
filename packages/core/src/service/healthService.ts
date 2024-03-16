@@ -46,7 +46,9 @@ export class MidwayHealthService {
         lifecycleInstance.instance['onHealthCheck']
       ) {
         this.healthCheckMethods.push({
-          item: lifecycleInstance.instance['onHealthCheck'],
+          item: lifecycleInstance.instance['onHealthCheck'].bind(
+            lifecycleInstance.instance
+          ),
           meta: {
             namespace: lifecycleInstance.namespace,
           },
