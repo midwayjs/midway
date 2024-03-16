@@ -16,6 +16,7 @@ import {
 } from './decorator';
 import { MikroDataSourceManager } from './dataSourceManager';
 import { EntityName, RequestContext } from '@mikro-orm/core';
+import { MikroMiddleware } from './mikro.middleware';
 
 @Configuration({
   importConfigs: [
@@ -69,13 +70,13 @@ export class MikroConfiguration implements ILifeCycle {
     this.decoratorService.registerPropertyHandler(
       ENTITY_MANAGER_KEY,
       (propertyName, meta: { connectionName?: string }) => {
-        if (RequestContext.getEntityManager()) {
-          return RequestContext.getEntityManager();
+        const name =
+          meta.connectionName ||
+          this.dataSourceManager.getDefaultDataSourceName();
+        if (RequestContext.getEntityManager(name)) {
+          return RequestContext.getEntityManager(name);
         } else {
-          return this.dataSourceManager.getDataSource(
-            meta.connectionName ||
-              this.dataSourceManager.getDefaultDataSourceName()
-          ).em;
+          return this.dataSourceManager.getDataSource(name).em;
         }
       }
     );
@@ -98,6 +99,11 @@ export class MikroConfiguration implements ILifeCycle {
 
   async onReady(container: IMidwayContainer) {
     this.dataSourceManager = await container.getAsync(MikroDataSourceManager);
+    this.applicationManager
+      .getApplications(['express', 'egg', 'koa'])
+      .forEach(app => {
+        app.getMiddleware().insertFirst(MikroMiddleware);
+      });
   }
 
   async onStop(container: IMidwayContainer) {
