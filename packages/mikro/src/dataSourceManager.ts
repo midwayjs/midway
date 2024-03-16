@@ -43,6 +43,11 @@ export class MikroDataSourceManager extends DataSourceManager<
         logger.info(message);
       };
     }
+    // https://mikro-orm.io/docs/usage-with-nestjs#multiple-database-connections
+    if (!config.contextName) {
+      config.contextName = dataSourceName;
+    }
+    config.registerRequestContext = config.registerRequestContext ?? false;
     return MikroORM.init(config);
   }
 

@@ -16,7 +16,6 @@ import {
 } from './decorator';
 import { MikroDataSourceManager } from './dataSourceManager';
 import { EntityName, RequestContext } from '@mikro-orm/core';
-import { MikroMiddleware } from './mikro.middleware';
 
 @Configuration({
   importConfigs: [
@@ -99,11 +98,25 @@ export class MikroConfiguration implements ILifeCycle {
 
   async onReady(container: IMidwayContainer) {
     this.dataSourceManager = await container.getAsync(MikroDataSourceManager);
-    this.applicationManager
-      .getApplications(['express', 'egg', 'koa'])
-      .forEach(app => {
-        app.getMiddleware().insertFirst(MikroMiddleware);
+    const names = this.dataSourceManager.getDataSourceNames();
+    const entityManagers = names.map(name => {
+      return this.dataSourceManager.getDataSource(name).em;
+    });
+    if (names.length > 0) {
+      // create mikro request scope
+      // https://mikro-orm.io/docs/identity-map
+      this.applicationManager.getApplications().forEach(app => {
+        app.useMiddleware(async (ctx, next) => {
+          if (RequestContext['createAsync']) {
+            // mikro-orm 5.x
+            return await RequestContext['createAsync'](entityManagers, next);
+          } else {
+            // mikro-orm 6.x
+            return await RequestContext.create(entityManagers, next);
+          }
+        });
       });
+    }
   }
 
   async onStop(container: IMidwayContainer) {
