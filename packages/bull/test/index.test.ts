@@ -14,6 +14,7 @@ describe(`/test/index.test.ts`, () => {
 
     // run job
     const bullFramework = app.getApplicationContext().get(bull.Framework);
+    expect(bullFramework.getCoreLogger()).toBeDefined();
     const testQueue = bullFramework.getQueue('test');
     expect(testQueue).toBeDefined();
 
