@@ -13,8 +13,6 @@ export default (appInfo: MidwayAppInfo): MidwayConfig => {
           dbName: join(appInfo.appDir, 'test1.sqlite'),
           driver: SqliteDriver, // 这里使用了 sqlite 做示例
           // debug: true,
-          // allowGlobalContext: true,
-          contextName: 'default1',
           timezone: '+08:00',
           loadStrategy: LoadStrategy.JOINED,
           // forceUtcTimezone: true, //可以强制将日期保存在不带时区的日期

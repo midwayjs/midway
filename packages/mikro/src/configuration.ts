@@ -50,17 +50,17 @@ export class MikroConfiguration implements ILifeCycle {
           connectionName?: string;
         }
       ) => {
-        if (RequestContext.getEntityManager()) {
-          return RequestContext.getEntityManager().getRepository(meta.modelKey);
+        const name =
+          meta.connectionName ||
+          this.dataSourceManager.getDefaultDataSourceName();
+
+        if (RequestContext.getEntityManager(name)) {
+          return RequestContext.getEntityManager(name).getRepository(
+            meta.modelKey
+          );
         } else {
           return this.dataSourceManager
-            .getDataSource(
-              meta.connectionName ||
-                this.dataSourceManager.getDataSourceNameByModel(
-                  meta.modelKey
-                ) ||
-                this.dataSourceManager.getDefaultDataSourceName()
-            )
+            .getDataSource(name)
             .em.getRepository(meta.modelKey);
         }
       }
