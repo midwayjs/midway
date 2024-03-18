@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.15.4 (2024-03-18)
+
+#### :bug: Bug Fix
+* `mikro`
+  * [#3709](https://github.com/midwayjs/midway/pull/3709) fix(mikro): Ensure dataSourceName/contextName used in InjectRepository ([@odex21](https://github.com/odex21))
+
+#### Committers: 1
+- [@odex21](https://github.com/odex21)
+
+
+
 ## v3.15.3 (2024-03-16)
 
 #### :bug: Bug Fix

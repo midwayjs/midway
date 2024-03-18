@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mikro",
-  "version": "3.15.3",
+  "version": "3.15.4",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
