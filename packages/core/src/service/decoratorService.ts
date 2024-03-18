@@ -131,6 +131,7 @@ export class MidwayDecoratorService {
                       target: Clzz,
                       originArgs: newArgs,
                       originParamType: paramTypes[parameterIndex],
+                      instance: joinPoint.target,
                     });
                   } catch (err) {
                     skipPipes = true;
