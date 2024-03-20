@@ -5,7 +5,7 @@
   "devDependencies": {
     "@nrwl/tao": "16.10.0",
     "@types/jest": "29.5.12",
-    "@types/node": "18.19.18",
+    "@types/node": "18.19.26",
     "@vercel/ncc": "0.38.1",
     "autocannon": "7.15.0",
     "jest": "29.7.0",
