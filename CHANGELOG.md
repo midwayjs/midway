@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.15.5 (2024-03-20)
+
+#### :bug: Bug Fix
+* `cache-manager`
+  * [#3715](https://github.com/midwayjs/midway/pull/3715) fix: cache manager cache key overwrite when use custom logic ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3714](https://github.com/midwayjs/midway/pull/3714) the dosc fix of extension casbin ([@jingmingji](https://github.com/jingmingji))
+
+#### :package: Dependencies
+* `mikro`
+  * [#3711](https://github.com/midwayjs/midway/pull/3711) chore(deps): update mikro-orm monorepo to v6.1.11 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@jingmingji](https://github.com/jingmingji)
+
+
+
 ## v3.15.4 (2024-03-18)
 
 #### :bug: Bug Fix

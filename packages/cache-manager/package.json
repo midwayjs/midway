@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cache-manager",
-  "version": "3.15.2",
+  "version": "3.15.5",
   "description": "midway cache manager",
   "main": "dist/index.js",
   "typings": "index.d.ts",
