@@ -71,6 +71,12 @@ describe(`index.test.ts`, ()=>{
     expect((await userService.getUserThrowError('harry'))).toEqual('harry');
     expect((await userService.getUserThrowError('harry1'))).toEqual('harry');
 
+    // custom cache logic
+    expect((await userService.getCustomUser('harry'))).toEqual('hello harry');
+    expect((await userService.getCustomUser('mike'))).toEqual('hello harry');
+
+    expect((await userService.getCustomUser('bbb'))).toEqual('hello bbb');
+
     await close(app);
   });
 })

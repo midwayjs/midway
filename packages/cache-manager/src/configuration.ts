@@ -47,21 +47,22 @@ export class CacheConfiguration implements ILifeCycle {
 
         return {
           around: async (joinPoint: JoinPoint) => {
+            let cacheKey = metadata.cacheKey;
             const cachingInstance = this.cacheService.get(
               metadata.cacheInstanceName
             );
 
-            if (typeof metadata.cacheKey === 'function') {
-              metadata.cacheKey = await metadata.cacheKey({
+            if (typeof cacheKey === 'function') {
+              cacheKey = await cacheKey({
                 methodArgs: joinPoint.args,
                 ctx: joinPoint.target[REQUEST_OBJ_CTX_KEY],
                 target: joinPoint.target,
               });
             }
 
-            if (typeof metadata.cacheKey === 'string') {
+            if (typeof cacheKey === 'string') {
               return cachingInstance.methodWrap(
-                metadata.cacheKey,
+                cacheKey,
                 joinPoint.proceed,
                 joinPoint.args,
                 metadata.ttl
