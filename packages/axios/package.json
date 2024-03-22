@@ -15,7 +15,7 @@
     "nock": "13.5.4"
   },
   "dependencies": {
-    "axios": "1.6.7"
+    "axios": "1.6.8"
   },
   "keywords": [
     "http client",
