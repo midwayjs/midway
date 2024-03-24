@@ -5,6 +5,32 @@
     "description": "Keep yourself up-to-date about new features in every release",
     "items": [
         {
+            "id": "https://midwayjs.org/en/changelog/v3.15.6",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a href=\"#-bug-fix\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>faas</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3722\" target=\"_blank\" rel=\"noopener noreferrer\">#3722</a> fix: enable console transport in serverless env (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-dependencies\">📦 Dependencies<a href=\"#-dependencies\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>core</code>, <code>web-koa</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3718\" target=\"_blank\" rel=\"noopener noreferrer\">#3718</a> fix(deps): update dependency koa to v2.15.2 (<a href=\"https://github.com/apps/renovate\" target=\"_blank\" rel=\"noopener noreferrer\">@renovate[bot]</a>)</li></ul></li><li><code>axios</code>, <code>http-proxy</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3717\" target=\"_blank\" rel=\"noopener noreferrer\">#3717</a> fix(deps): update dependency axios to v1.6.8 (<a href=\"https://github.com/apps/renovate\" target=\"_blank\" rel=\"noopener noreferrer\">@renovate[bot]</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a href=\"#committers-1\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul>",
+            "url": "https://midwayjs.org/en/changelog/v3.15.6",
+            "title": "v3.15.6",
+            "summary": "Bug Fix",
+            "date_modified": "2024-03-24T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
+            "id": "https://midwayjs.org/en/changelog/v3.15.5",
+            "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a href=\"#-bug-fix\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>cache-manager</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3715\" target=\"_blank\" rel=\"noopener noreferrer\">#3715</a> fix: cache manager cache key overwrite when use custom logic (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-documentation\">📝 Documentation<a href=\"#-documentation\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3714\" target=\"_blank\" rel=\"noopener noreferrer\">#3714</a> the dosc fix of extension casbin (<a href=\"https://github.com/jingmingji\" target=\"_blank\" rel=\"noopener noreferrer\">@jingmingji</a>)</li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-dependencies\">📦 Dependencies<a href=\"#-dependencies\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>mikro</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3711\" target=\"_blank\" rel=\"noopener noreferrer\">#3711</a> chore(deps): update mikro-orm monorepo to v6.1.11 (<a href=\"https://github.com/apps/renovate\" target=\"_blank\" rel=\"noopener noreferrer\">@renovate[bot]</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-2\">Committers: 2<a href=\"#committers-2\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li>Harry Chen (<a href=\"https://github.com/czy88840616\" target=\"_blank\" rel=\"noopener noreferrer\">@czy88840616</a>)</li><li><a href=\"https://github.com/jingmingji\" target=\"_blank\" rel=\"noopener noreferrer\">@jingmingji</a></li></ul>",
+            "url": "https://midwayjs.org/en/changelog/v3.15.5",
+            "title": "v3.15.5",
+            "summary": "Bug Fix",
+            "date_modified": "2024-03-20T20:00:00.000Z",
+            "author": {
+                "name": "Harry Chen",
+                "url": "https://github.com/czy88840616"
+            },
+            "tags": []
+        },
+        {
             "id": "https://midwayjs.org/en/changelog/v3.15.4",
             "content_html": "<h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"-bug-fix\">🐛 Bug Fix<a href=\"#-bug-fix\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><code>mikro</code><ul><li><a href=\"https://github.com/midwayjs/midway/pull/3709\" target=\"_blank\" rel=\"noopener noreferrer\">#3709</a> fix(mikro): Ensure dataSourceName/contextName used in InjectRepository (<a href=\"https://github.com/odex21\" target=\"_blank\" rel=\"noopener noreferrer\">@odex21</a>)</li></ul></li></ul><h2 class=\"anchor anchorWithHideOnScrollNavbar_WYt5\" id=\"committers-1\">Committers: 1<a href=\"#committers-1\" class=\"hash-link\" aria-label=\"Lien direct vers le titre\" title=\"Lien direct vers le titre\">​</a></h2><ul><li><a href=\"https://github.com/odex21\" target=\"_blank\" rel=\"noopener noreferrer\">@odex21</a></li></ul>",
             "url": "https://midwayjs.org/en/changelog/v3.15.4",
