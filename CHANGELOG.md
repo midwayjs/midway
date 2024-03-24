@@ -1,6 +1,23 @@
 # Change Log
 
 
+## v3.15.6 (2024-03-24)
+
+#### :bug: Bug Fix
+* `faas`
+  * [#3722](https://github.com/midwayjs/midway/pull/3722) fix: enable console transport in serverless env ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `core`, `web-koa`
+  * [#3718](https://github.com/midwayjs/midway/pull/3718) fix(deps): update dependency koa to v2.15.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3717](https://github.com/midwayjs/midway/pull/3717) fix(deps): update dependency axios to v1.6.8 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.15.5 (2024-03-20)
 
 #### :bug: Bug Fix
