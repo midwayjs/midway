@@ -1,6 +1,6 @@
 import { MidwayAppInfo } from '@midwayjs/core';
 
-export const isDevelopmentEnvironment = env => {
+const isDevelopmentEnvironment = env => {
   return ['local', 'test', 'unittest'].includes(env);
 };
 
