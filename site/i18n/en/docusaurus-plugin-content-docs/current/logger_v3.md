@@ -310,7 +310,7 @@ As mentioned above, each object in the `clients` configuration section is an ind
 
 ### Default Transport
 
-In Midway, three Transports `console`, `file`, and `error` are enabled by default. More information can be modified through configuration.
+In logger module, four Transports `console`, `file`, `error` and `json` are built-in by default. Among them, Midway enables `console`, `file` and `error` by default. More information can be configured through to modify.
 
 ```typescript
 // src/config/config.default.ts
@@ -794,6 +794,79 @@ export default {
      // ...
    },
 } as MidwayConfig;
+```
+
+
+
+### Configure JSON output
+
+By enabling the `json` Transport, the logs can be output in JSON format.
+
+For example, all loggers are turned on.
+
+```typescript
+export default {
+   midwayLogger: {
+     default: {
+       transports: {
+         json: {
+           // ...
+         }
+       }
+     }
+     // ...
+   },
+} as MidwayConfig;
+```
+
+Or a single logger is enabled.
+
+```typescript
+export default {
+   midwayLogger: {
+     default: {
+       // ...
+     },
+     clients: {
+       appLogger: {
+         transports: {
+           json: {
+             // ...
+           }
+         }
+       }
+     }
+   },
+} as MidwayConfig;
+```
+
+The configuration format of `json` Transport is the same as `file`, but the output is slightly different.
+
+For example, we can modify the output content in `format`. By default, the output will contain at least the `level` and `pid` fields.
+
+```typescript
+export default {
+   midwayLogger: {
+     default: {
+       transports: {
+         json: {
+           format: (info: LoggerInfo & {data: string}) => {
+             info.data = 'custom data';
+             return info;
+           }
+         }
+       }
+     }
+     // ...
+   },
+} as MidwayConfig;
+```
+
+The output is:
+
+```text
+{"data":"custom data","level":"info","pid":89925}
+{"data":"custom data","level":"debug","pid":89925}
 ```
 
 

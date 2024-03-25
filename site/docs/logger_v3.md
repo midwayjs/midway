@@ -305,7 +305,7 @@ export default {
 
 ### 默认 Transport
 
-在 Midway 中，默认启用了 `console`，`file`，`error` 三个 Transport，更多信息可以通过配置进行修改。
+在日志模块中，默认内置了 `console`，`file`，`error` ，`json` 四个 Transport，其中 Midway 默认启用了  `console`，`file`，`error` ，更多信息可以通过配置进行修改。
 
 ```typescript
 // src/config/config.default.ts
@@ -640,8 +640,6 @@ info 对象的默认属性如下：
 
 
 
-
-
 ### 获取自定义上下文日志
 
 上下文日志是基于 **原始日志对象** 来打日志的，会复用原始日志的所有格式，他们的关系如下。
@@ -794,6 +792,77 @@ export default {
 ```
 
 
+
+### 配置 JSON 输出
+
+通过开启 `json` Transport，可以将日志输出为 JSON 格式。
+
+比如所有 logger 开启。
+
+```typescript
+export default {
+  midwayLogger: {
+    default: {
+      transports: {
+        json: {
+          // ...
+        }
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+或者单个 logger 开启。
+
+```typescript
+export default {
+  midwayLogger: {
+    default: {
+      // ...
+    },
+    clients: {
+      appLogger: {
+        transports: {
+          json: {
+            // ...
+          }
+        }
+      }
+    }
+  },
+} as MidwayConfig;
+```
+
+`json` Transport 的配置格式和 `file` 相同，输出略有不同。
+
+比如我们可以修改 `format` 中输出的内容，默认情况下，输出至少会包含 `level` 和 `pid` 字段
+
+```typescript
+export default {
+  midwayLogger: {
+    default: {
+      transports: {
+        json: {
+          format: (info: LoggerInfo & {data: string}) => {
+            info.data = 'custom data';
+            return info;
+          }
+        }
+      }
+    }
+    // ...
+  },
+} as MidwayConfig;
+```
+
+输出为：
+
+```text
+{"data":"custom data","level":"info","pid":89925}
+{"data":"custom data","level":"debug","pid":89925}
+```
 
 
 
