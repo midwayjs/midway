@@ -16,7 +16,7 @@ import * as mqtt from '../../../../src';
                 port: 1883,
               },
               subscribeOptions: {
-                topicObject: 'test',
+                topicObject: 'test_midway',
               },
             },
           },
@@ -41,7 +41,7 @@ export class AutoConfiguration implements ILifeCycle {
   async onServerReady(container: IMidwayContainer) {
     const producer = await container.getAsync(DefaultMqttProducer);
     console.log('onServerReady and send message');
-    await producer.publishAsync('test', 'hello world', {
+    await producer.publishAsync('test_midway', 'hello world', {
       qos: 2
     });
   }

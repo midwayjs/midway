@@ -9,6 +9,8 @@ import {
   IMidwayMQTTApplication,
   IMidwayMQTTConfigurationOptions,
   IMidwayMQTTContext,
+  IMqttSubscriber,
+  MqttSubscriberOptions,
 } from './interface';
 import { connect, IClientOptions, MqttClient } from 'mqtt';
 import { MQTT_DECORATOR_KEY } from './decorator';
@@ -53,30 +55,12 @@ export class MidwayMQTTFramework extends BaseFramework<
     }
 
     for (const customKey in sub) {
-      const consumer = await this.createSubscriber(
+      await this.createSubscriber(
         sub[customKey].connectOptions,
+        sub[customKey].subscribeOptions,
+        mqttSubscriberMap[customKey],
         customKey
       );
-
-      await consumer.subscribeAsync(
-        sub[customKey].subscribeOptions.topicObject,
-        sub[customKey].subscribeOptions.opts
-      );
-
-      consumer.on('message', async (topic, message, packet) => {
-        const ctx = this.app.createAnonymousContext();
-        ctx.topic = topic;
-        ctx.packet = packet;
-        ctx.message = message;
-        const fn = await this.applyMiddleware(async ctx => {
-          const instance = await ctx.requestContext.getAsync(
-            mqttSubscriberMap[customKey]
-          );
-          // eslint-disable-next-line prefer-spread
-          return await instance['subscribe'].call(instance, ctx);
-        });
-        return await fn(ctx);
-      });
     }
   }
 
@@ -87,11 +71,28 @@ export class MidwayMQTTFramework extends BaseFramework<
     }
   }
 
+  /**
+   * dynamic create subscriber
+   */
   public async createSubscriber(
+    /**
+     * mqtt connection options
+     */
     connectionOptions: IClientOptions,
+    /**
+     * mqtt subscribe options
+     */
+    subscribeOptions: MqttSubscriberOptions,
+    /**
+     * midway mqtt subscriber class
+     */
+    ClzProvider: new () => IMqttSubscriber,
+    /**
+     * midway mqtt component instance name, if not set, will be manager by your self
+     */
     clientName?: string
   ) {
-    return new Promise<MqttClient>(resolve => {
+    const consumer = await new Promise<MqttClient>(resolve => {
       const client = connect(connectionOptions);
       client.on('connect', () => {
         if (clientName) {
@@ -107,6 +108,26 @@ export class MidwayMQTTFramework extends BaseFramework<
         this.mqttLogger.error(err);
       });
     });
+
+    consumer.on('message', async (topic, message, packet) => {
+      const ctx = this.app.createAnonymousContext();
+      ctx.topic = topic;
+      ctx.packet = packet;
+      ctx.message = message;
+      const fn = await this.applyMiddleware(async ctx => {
+        const instance = await ctx.requestContext.getAsync(ClzProvider);
+        // eslint-disable-next-line prefer-spread
+        return await instance['subscribe'].call(instance, ctx);
+      });
+      return await fn(ctx);
+    });
+
+    await consumer.subscribeAsync(
+      subscribeOptions.topicObject,
+      subscribeOptions.opts
+    );
+
+    return consumer;
   }
 
   public getSubscriber(name: string) {
