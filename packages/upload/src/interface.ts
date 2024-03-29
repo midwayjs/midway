@@ -15,7 +15,7 @@ export interface UploadOptions {
   /**
    * The white ext file names
    */
-  whitelist?: string[] | null;
+  whitelist?: string[] | null | ((a: any) => string[]);
   /**
    * Temporary file directory
    */
