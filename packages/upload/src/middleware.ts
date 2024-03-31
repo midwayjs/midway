@@ -97,7 +97,13 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         })
       );
     };
-
+    let whiteListMap = this.uploadWhiteListMap;
+    if (typeof this.uploadConfig.whitelist === 'function') {
+      const whiteListArray = this.uploadConfig.whitelist.call(this, ctx);
+      const map = new Map();
+      whiteListArray.forEach(ext => map.set(ext, ext));
+      whiteListMap = map;
+    }
     let body;
     if (this.isReadableStream(req, isExpress)) {
       if (mode === 'stream') {
@@ -105,7 +111,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           req,
           boundary
         );
-        const ext = this.checkAndGetExt(fileInfo.filename);
+        const ext = this.checkAndGetExt(fileInfo.filename, whiteListMap);
         if (!ext) {
           throw new MultipartInvalidFilenameError(fileInfo.filename);
         } else {
@@ -137,7 +143,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     const requireId = `upload_${Date.now()}.${Math.random()}`;
     const files = data.files;
     for (const fileInfo of files) {
-      const ext = this.checkAndGetExt(fileInfo.filename);
+      const ext = this.checkAndGetExt(fileInfo.filename, whiteListMap);
       if (!ext) {
         throw new MultipartInvalidFilenameError(fileInfo.filename);
       }
@@ -220,7 +226,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   }
 
   // check extentions
-  checkAndGetExt(filename): string | boolean {
+  checkAndGetExt(filename, whiteListMap): string | boolean {
     const lowerCaseFileNameList = filename.toLowerCase().split('.');
     while (lowerCaseFileNameList.length) {
       lowerCaseFileNameList.shift();
@@ -228,9 +234,9 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       if (this.uploadConfig.whitelist === null) {
         return formatExt(curExt);
       }
-      if (this.uploadWhiteListMap.has(curExt)) {
+      if (whiteListMap.has(curExt)) {
         // Avoid the presence of hidden characters and return extensions in the white list.
-        return this.uploadWhiteListMap.get(curExt);
+        return whiteListMap.get(curExt);
       }
     }
     return false;
