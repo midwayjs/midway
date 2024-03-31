@@ -245,7 +245,7 @@ export default {
       if (ctx.path === '/') {
         return [
           '.jpg',
-					'.jpeg',
+          '.jpeg',
         ];
       } else {
         return [
