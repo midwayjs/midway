@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.15.7 (2024-04-01)
+
+#### :bug: Bug Fix
+* `upload`
+  * [#3734](https://github.com/midwayjs/midway/pull/3734) fix(upload):parameter "whitelist" supports the function type ([@Bacuuu](https://github.com/Bacuuu))
+
+#### :nail_care: Polish
+* `upload`
+  * [#3741](https://github.com/midwayjs/midway/pull/3741) feat: support upload mime type white list using function type ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `grpc`
+  * [#3729](https://github.com/midwayjs/midway/pull/3729) fix(deps): update dependency @grpc/proto-loader to v0.7.12 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3728](https://github.com/midwayjs/midway/pull/3728) fix(deps): update dependency @grpc/grpc-js to v1.10.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `sequelize`
+  * [#3736](https://github.com/midwayjs/midway/pull/3736) chore(deps): update dependency sequelize to v6.37.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#3724](https://github.com/midwayjs/midway/pull/3724) fix(deps): update dependency express to v4.19.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Bacuuu ([@Bacuuu](https://github.com/Bacuuu))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.15.6 (2024-03-24)
 
 #### :bug: Bug Fix

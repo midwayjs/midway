@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/serverless-fc-trigger",
   "private": true,
-  "version": "3.15.6",
+  "version": "3.15.7",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
