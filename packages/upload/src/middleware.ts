@@ -5,7 +5,7 @@ import {
   Init,
   MidwayFrameworkType,
   IMiddleware,
-  IMidwayLogger,
+  ILogger,
   IgnoreMatcher,
 } from '@midwayjs/core';
 import { resolve } from 'path';
@@ -31,9 +31,17 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   uploadConfig: UploadOptions;
 
   @Logger()
-  logger: IMidwayLogger;
+  logger: ILogger;
 
+  /**
+   * cache global upload white list when uploadConfig.whitelist is set
+   * @private
+   */
   private uploadWhiteListMap = new Map<string, string>();
+  /**
+   * cache global upload mime type white list when uploadConfig.mimeTypeWhiteList is set
+   * @private
+   */
   private uploadFileMimeTypeMap = new Map<string, string[]>();
   match: IgnoreMatcher<any>[];
   ignore: IgnoreMatcher<any>[];
@@ -48,7 +56,10 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   }
 
   resolve(app) {
-    if (Array.isArray(this.uploadConfig.whitelist)) {
+    if (
+      this.uploadConfig.whitelist &&
+      Array.isArray(this.uploadConfig.whitelist)
+    ) {
       for (const whiteExt of this.uploadConfig.whitelist) {
         this.uploadWhiteListMap.set(whiteExt, whiteExt);
       }
@@ -97,13 +108,29 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         })
       );
     };
-    let whiteListMap = this.uploadWhiteListMap;
+    // create new map include custom white list
+    const currentContextWhiteListMap = new Map([
+      ...this.uploadWhiteListMap.entries(),
+    ]);
     if (typeof this.uploadConfig.whitelist === 'function') {
       const whiteListArray = this.uploadConfig.whitelist.call(this, ctx);
-      const map = new Map();
-      whiteListArray.forEach(ext => map.set(ext, ext));
-      whiteListMap = map;
+      whiteListArray.forEach(ext => currentContextWhiteListMap.set(ext, ext));
     }
+    // create new map include custom mime type white list
+    const currentContextMimeTypeWhiteListMap = new Map([
+      ...this.uploadFileMimeTypeMap.entries(),
+    ]);
+    if (typeof this.uploadConfig.mimeTypeWhiteList === 'function') {
+      const mimeTypeWhiteList = this.uploadConfig.mimeTypeWhiteList.call(
+        this,
+        ctx
+      );
+      for (const ext in mimeTypeWhiteList) {
+        const mime = [].concat(mimeTypeWhiteList[ext]);
+        currentContextMimeTypeWhiteListMap.set(ext, mime);
+      }
+    }
+
     let body;
     if (this.isReadableStream(req, isExpress)) {
       if (mode === 'stream') {
@@ -111,7 +138,10 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           req,
           boundary
         );
-        const ext = this.checkAndGetExt(fileInfo.filename, whiteListMap);
+        const ext = this.checkAndGetExt(
+          fileInfo.filename,
+          currentContextWhiteListMap
+        );
         if (!ext) {
           throw new MultipartInvalidFilenameError(fileInfo.filename);
         } else {
@@ -143,13 +173,17 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     const requireId = `upload_${Date.now()}.${Math.random()}`;
     const files = data.files;
     for (const fileInfo of files) {
-      const ext = this.checkAndGetExt(fileInfo.filename, whiteListMap);
+      const ext = this.checkAndGetExt(
+        fileInfo.filename,
+        currentContextWhiteListMap
+      );
       if (!ext) {
         throw new MultipartInvalidFilenameError(fileInfo.filename);
       }
       const { passed, mime, current } = await this.checkFileType(
         ext as string,
-        fileInfo.data
+        fileInfo.data,
+        currentContextMimeTypeWhiteListMap
       );
       if (!passed) {
         throw new MultipartInvalidFileTypeError(
@@ -225,8 +259,11 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     return false;
   }
 
-  // check extentions
-  checkAndGetExt(filename, whiteListMap): string | boolean {
+  // check extensions
+  checkAndGetExt(
+    filename,
+    whiteListMap = this.uploadWhiteListMap
+  ): string | boolean {
     const lowerCaseFileNameList = filename.toLowerCase().split('.');
     while (lowerCaseFileNameList.length) {
       lowerCaseFileNameList.shift();
@@ -245,14 +282,15 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   // check file-type
   async checkFileType(
     ext: string,
-    data: Buffer
+    data: Buffer,
+    uploadFileMimeTypeMap = this.uploadFileMimeTypeMap
   ): Promise<{ passed: boolean; mime?: string; current?: string }> {
     // fileType == null, pass check
     if (!this.uploadConfig.mimeTypeWhiteList) {
       return { passed: true };
     }
 
-    const mime = this.uploadFileMimeTypeMap.get(ext);
+    const mime = uploadFileMimeTypeMap.get(ext);
     if (!mime) {
       return { passed: false, mime: ext };
     }
