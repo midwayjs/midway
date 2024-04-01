@@ -160,7 +160,7 @@ describe('test/koa.test.ts', function () {
         .expect(200);
     });
 
-    it('normal file type', async () => {
+    it('normal file type 2', async () => {
       const filePath = join(__dirname, 'fixtures/1.more');
       const request = await createHttpRequest(app);
       await request.post('/upload')

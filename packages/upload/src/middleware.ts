@@ -64,10 +64,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         this.uploadWhiteListMap.set(whiteExt, whiteExt);
       }
     }
-    if (
-      this.uploadConfig.mimeTypeWhiteList &&
-      Array.isArray(this.uploadConfig.mimeTypeWhiteList)
-    ) {
+    if (this.uploadConfig.mimeTypeWhiteList) {
       for (const ext in this.uploadConfig.mimeTypeWhiteList) {
         const mime = [].concat(this.uploadConfig.mimeTypeWhiteList[ext]);
         this.uploadFileMimeTypeMap.set(ext, mime);
