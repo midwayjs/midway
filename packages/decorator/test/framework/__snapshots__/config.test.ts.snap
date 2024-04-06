@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/framework/config.test.ts config decorator should be ok 1`] = `
+{
+  "bbb": {
+    "impl": true,
+    "key": "config",
+    "metadata": {
+      "identifier": "bbb",
+    },
+    "propertyName": "bbb",
+  },
+  "hhh": {
+    "impl": true,
+    "key": "config",
+    "metadata": {
+      "identifier": undefined,
+    },
+    "propertyName": "hhh",
+  },
+}
+`;

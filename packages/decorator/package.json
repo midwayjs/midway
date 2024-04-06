@@ -1,0 +1,41 @@
+{
+  "name": "@midwayjs/decorator",
+  "version": "3.15.6",
+  "description": "definition decorator for midway project",
+  "private": true,
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "ci": "npm run test",
+    "link": "npm link"
+  },
+  "dependencies": {
+    "@midwayjs/core": "^3.15.6"
+  },
+  "devDependencies": {
+    "mm": "3.4.0"
+  },
+  "keywords": [
+    "midway",
+    "decorator"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+}

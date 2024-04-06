@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/annotation/filter.test.ts should test catch global 1`] = `
+{
+  "catchOptions": {},
+  "catchTargets": undefined,
+}
+`;
+
+exports[`/test/annotation/filter.test.ts test catch decorator 1`] = `
+{
+  "catchOptions": {},
+  "catchTargets": [
+    [Function],
+  ],
+}
+`;
+
+exports[`/test/annotation/filter.test.ts test catch decorator 2`] = `
+{
+  "catchOptions": {
+    "matchPrototype": true,
+  },
+  "catchTargets": [
+    [Function],
+  ],
+}
+`;
+
+exports[`/test/annotation/filter.test.ts test match decorator 1`] = `
+{
+  "matchPattern": true,
+}
+`;
