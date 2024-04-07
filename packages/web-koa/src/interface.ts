@@ -83,8 +83,13 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * @see https://nodejs.org/api/http.html#http_server_timeout
    */
   serverTimeout?: number;
-
-  queryParseMode?: 'extended' | 'simple' | 'strict' | 'first';
+  /**
+   * qs mode
+   */
+  queryParseMode?: 'extended' | 'strict' | 'first';
+  /**
+   * qs options
+   */
   queryParseOptions?: qs.IParseOptions;
 }
 

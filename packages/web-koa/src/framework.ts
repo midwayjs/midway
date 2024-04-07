@@ -151,10 +151,7 @@ export class MidwayKoaFramework extends BaseFramework<
         // find cache
         if (c[str]) return c[str];
 
-        if (
-          self.configurationOptions.queryParseMode === 'extended' ||
-          self.configurationOptions.queryParseMode === 'simple'
-        ) {
+        if (self.configurationOptions.queryParseMode) {
           // use qs module to parse query
           c[str] = qs.parse(
             str,

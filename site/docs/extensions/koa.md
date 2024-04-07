@@ -380,3 +380,84 @@ export default {
 };
 ```
 
+
+
+### Query 数组解析
+
+默认情况下，koa 使用 `querystring` 解析 query 参数，当碰到数组时，会将数组的数据拆开。
+
+比如：
+
+```
+GET /query?a[0]=1&a[1]=2
+```
+
+拿到的结果是：
+
+```json
+{
+    "a[0]": 1,
+    "a[1]": 2,
+}
+```
+
+框架提供了一些参数来处理这种情况。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    queryParseMode: 'extended',
+    // ...
+  },
+}
+```
+
+`queryParseMode` 参数可以选择 `extended`、 `strict`、`first` 三种值。
+
+ 当 `queryParseMode` 有值时，会使用 `qs` 模块处理 query，效果同 `koa-qs` 模块。
+
+当请求参数为 `/query?a=1&b=2&a=3&c[0]=1&c[1]=2'` 时。
+
+默认效果（使用 `querystring`）
+
+```JSON
+{
+  "a": ["1", "3" ],
+  "b": "2",
+  "c[0]": "1",
+  "c[1]": "2"
+}
+```
+
+ `extended` 效果
+
+```JSON
+{
+  "a": ["1", "3" ],
+  "b": ["2"],
+  "c": ["1", "2"]
+}
+```
+
+ `strict` 效果
+
+```JSON
+{
+  "a": ["1", "3" ],
+  "b": "2",
+  "c": ["1", "2"]
+}
+```
+
+ `first` 效果
+
+```JSON
+{
+  "a": "1",
+  "b": "2",
+  "c": "1"
+}
+```
+
