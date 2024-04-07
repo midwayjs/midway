@@ -2,6 +2,7 @@ import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midw
 import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/core';
+import * as qs from 'qs';
 
 export interface State extends DefaultState {}
 
@@ -82,6 +83,9 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * @see https://nodejs.org/api/http.html#http_server_timeout
    */
   serverTimeout?: number;
+
+  queryParseMode?: 'extended' | 'simple' | 'strict' | 'first';
+  queryParseOptions?: qs.IParseOptions;
 }
 
 export type MiddlewareParamArray = Array<
