@@ -140,6 +140,7 @@ export class MidwayKoaFramework extends BaseFramework<
           }
         : undefined;
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     // fix query with array params
     Object.defineProperty(this.app.request, 'query', {
