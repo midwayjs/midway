@@ -57,7 +57,7 @@ export class MainConfiguration {}
 When we started our application, there was an extra `${host }:${ port}/metrics` when we visited it.
 
 :::info
-Prometheus the monitoring data is obtained based on HTTP, please load any framework of web/koa/express and start in multi-framework mode.
+Prometheus the monitoring data is obtained based on HTTP, please include one of web/koa/express component..
 :::
 
 Access interface, return as follows, the contents are the current indicators.
