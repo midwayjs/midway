@@ -2,8 +2,11 @@ import {
   ApiBody,
   ApiExcludeController,
   ApiExcludeEndpoint,
-  ApiExcludeSecurity, ApiExtension,
-  ApiExtraModel, ApiHeader,
+  ApiExcludeSecurity,
+  ApiExtension,
+  ApiExtraModel,
+  ApiHeader,
+  ApiHeaders,
   ApiOperation,
   ApiProperty,
   ApiResponse,
@@ -596,7 +599,50 @@ describe('/test/parser.test.ts', function () {
         name: 'x-test-one',
         description: 'this is test one'
       })
+      @ApiHeader({
+        name: 'x-test-two',
+        description: 'this is test two'
+      })
       async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiHeaders in class and method', () => {
+    @Controller('/api')
+    @ApiHeaders([
+      {
+        name: 'x-test-one',
+        description: 'this is test one'
+      },
+      {
+        name: 'x-test-two',
+        description: 'this is test two'
+      }
+    ])
+    class APIController {
+      @Get('/get_user')
+      @ApiHeaders([
+        {
+          name: 'x-test-three',
+          description: 'this is test three'
+        },
+        {
+          name: 'x-test-four',
+          description: 'this is test four'
+        }
+      ])
+      async getUser() {
+        // ...
+      }
+
+      @Get('/get_user2')
+      async anotherMethod(){
         // ...
       }
     }

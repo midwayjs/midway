@@ -512,8 +512,17 @@ export class SwaggerExplorer {
       parameters.push(p);
     }
     // class header 需要使用 ApiHeader 装饰器
-    if (headers) {
+    if (headers && headers.length) {
       headers.forEach(header => parameters.unshift(header));
+    }
+
+    // 获取方法上的 @ApiHeader
+    const methodHeaders = metaForMethods.filter(
+      item => item.key === DECORATORS.API_HEADERS
+    );
+
+    if (methodHeaders.length > 0) {
+      methodHeaders.forEach(item => parameters.unshift(item.metadata));
     }
 
     opts[webRouter.requestMethod].parameters = parameters;
