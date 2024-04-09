@@ -22,9 +22,17 @@ import {
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/core';
 import { MixDecoratorMetadata, PathItemObject, Type } from './interfaces';
-import { DECORATORS, DECORATORS_CLASS_METADATA, DECORATORS_METHOD_METADATA, } from './constants';
+import {
+  DECORATORS,
+  DECORATORS_CLASS_METADATA,
+  DECORATORS_METHOD_METADATA,
+} from './constants';
 import { DocumentBuilder } from './documentBuilder';
-import { AuthOptions, SecuritySchemeObject, SwaggerOptions, } from './interfaces/';
+import {
+  AuthOptions,
+  SecuritySchemeObject,
+  SwaggerOptions,
+} from './interfaces/';
 import { BodyContentType } from '.';
 
 @Provide()
