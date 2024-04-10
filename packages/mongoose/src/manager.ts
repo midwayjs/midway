@@ -87,6 +87,10 @@ export class MongooseDataSourceManager extends DataSourceManager<mongoose.Connec
   ): Promise<boolean> {
     return dataSource.readyState === mongoose.ConnectionStates.connected;
   }
+
+  public getDataSourceNameByModel(modelOrRepository: any): string | undefined {
+    return super.getDataSourceNameByModel(modelOrRepository);
+  }
 }
 
 /**
