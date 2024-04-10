@@ -90,156 +90,6 @@ exports[`/test/parser.test.ts should fix issue#2286 with array example 1`] = `
 }
 `;
 
-exports[`/test/parser.test.ts should parse base type 1`] = `
-{
-  "properties": {
-    "breeds": {
-      "description": "The name of the Catage",
-      "example": [
-        "1",
-      ],
-      "items": {
-        "type": "string",
-      },
-      "nullable": true,
-      "type": "array",
-      "uniqueItems": true,
-    },
-  },
-  "type": "object",
-}
-`;
-
-exports[`/test/parser.test.ts should parse extends base 1`] = `
-{
-  "properties": {
-    "a": {
-      "format": undefined,
-      "type": "number",
-    },
-    "created_at": {
-      "format": "date-time",
-      "type": "string",
-    },
-  },
-  "type": "object",
-}
-`;
-
-exports[`/test/parser.test.ts should parse extends base 2`] = `
-{
-  "properties": {
-    "b": {
-      "format": undefined,
-      "type": "number",
-    },
-    "created_at": {
-      "format": "date-time",
-      "type": "string",
-    },
-  },
-  "type": "object",
-}
-`;
-
-exports[`/test/parser.test.ts should parse extends base 3`] = `
-{
-  "properties": {
-    "c": {
-      "format": undefined,
-      "type": "number",
-    },
-    "created_at": {
-      "format": "date-time",
-      "type": "string",
-    },
-  },
-  "type": "object",
-}
-`;
-
-exports[`/test/parser.test.ts should parse ref schema with function 1`] = `
-{
-  "properties": {
-    "albums": {
-      "items": {
-        "$ref": "#/components/schemas/Album",
-      },
-      "type": "array",
-    },
-    "id": {
-      "format": undefined,
-      "type": "number",
-    },
-    "name": {
-      "format": undefined,
-      "type": "string",
-    },
-  },
-  "type": "object",
-}
-`;
-
-exports[`/test/parser.test.ts should parse ref schema with function 2`] = `
-{
-  "properties": {
-    "id": {
-      "format": undefined,
-      "type": "number",
-    },
-    "name": {
-      "format": undefined,
-      "type": "string",
-    },
-    "photos": {
-      "items": {
-        "$ref": "#/components/schemas/Photo",
-      },
-      "type": "array",
-    },
-  },
-  "type": "object",
-}
-`;
-
-exports[`/test/parser.test.ts should parse type with function 1`] = `
-{
-  "properties": {
-    "album": {
-      "$ref": "#/components/schemas/Album",
-    },
-    "id": {
-      "format": undefined,
-      "type": "number",
-    },
-    "name": {
-      "format": undefined,
-      "type": "string",
-    },
-  },
-  "type": "object",
-}
-`;
-
-exports[`/test/parser.test.ts should parse type with function 2`] = `
-{
-  "properties": {
-    "id": {
-      "format": undefined,
-      "type": "number",
-    },
-    "name": {
-      "format": undefined,
-      "type": "string",
-    },
-    "photo": {
-      "$ref": "#/components/schemas/Photo",
-    },
-  },
-  "type": "object",
-}
-`;
-
 exports[`/test/parser.test.ts should support deprecated field in ApiOperation 1`] = `
 {
   "components": {},
@@ -280,7 +130,7 @@ exports[`/test/parser.test.ts should support deprecated field in ApiOperation 1`
 }
 `;
 
-exports[`/test/parser.test.ts should test ApiBody 1`] = `
+exports[`test @ApiBody should test ApiBody 1`] = `
 {
   "components": {
     "schemas": {
@@ -289,13 +139,11 @@ exports[`/test/parser.test.ts should test ApiBody 1`] = `
           "age": {
             "description": "The age of the Cat",
             "example": 1,
-            "format": undefined,
             "type": "number",
           },
           "name": {
             "description": "The name of the Cat",
             "example": "Kitty",
-            "format": undefined,
             "type": "string",
           },
         },
@@ -339,7 +187,64 @@ exports[`/test/parser.test.ts should test ApiBody 1`] = `
 }
 `;
 
-exports[`/test/parser.test.ts should test ApiExtension 1`] = `
+exports[`test @ApiBody should test ApiBody with array 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {
+          "age": {
+            "description": "The age of the Cat",
+            "example": 1,
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiExtension should test ApiExtension 1`] = `
 {
   "components": {},
   "info": {
@@ -381,7 +286,7 @@ exports[`/test/parser.test.ts should test ApiExtension 1`] = `
 }
 `;
 
-exports[`/test/parser.test.ts should test ApiHeader 1`] = `
+exports[`test @ApiHeaders and @ApiHeader should test ApiHeader 1`] = `
 {
   "components": {},
   "info": {
@@ -430,7 +335,7 @@ exports[`/test/parser.test.ts should test ApiHeader 1`] = `
 }
 `;
 
-exports[`/test/parser.test.ts should test ApiHeader in method 1`] = `
+exports[`test @ApiHeaders and @ApiHeader should test ApiHeader in method 1`] = `
 {
   "components": {},
   "info": {
@@ -488,7 +393,7 @@ exports[`/test/parser.test.ts should test ApiHeader in method 1`] = `
 }
 `;
 
-exports[`/test/parser.test.ts should test ApiHeaders in class and method 1`] = `
+exports[`test @ApiHeaders and @ApiHeader should test ApiHeaders in class and method 1`] = `
 {
   "components": {},
   "info": {
@@ -599,7 +504,1038 @@ exports[`/test/parser.test.ts should test ApiHeaders in class and method 1`] = `
 }
 `;
 
-exports[`/test/parser.test.ts should test ApiSecurity 1`] = `
+exports[`test @ApiProperty should parse base type 1`] = `
+{
+  "properties": {
+    "breeds": {
+      "description": "The name of the Catage",
+      "example": [
+        "1",
+      ],
+      "items": {
+        "type": "string",
+      },
+      "nullable": true,
+      "type": "array",
+      "uniqueItems": true,
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should parse extends base 1`] = `
+{
+  "properties": {
+    "a": {
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should parse extends base 2`] = `
+{
+  "properties": {
+    "b": {
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should parse extends base 3`] = `
+{
+  "properties": {
+    "c": {
+      "type": "number",
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should parse ref schema with function 1`] = `
+{
+  "properties": {
+    "albums": {
+      "items": {
+        "$ref": "#/components/schemas/Album",
+      },
+      "type": "array",
+    },
+    "id": {
+      "type": "number",
+    },
+    "name": {
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should parse ref schema with function 2`] = `
+{
+  "properties": {
+    "id": {
+      "type": "number",
+    },
+    "name": {
+      "type": "string",
+    },
+    "photos": {
+      "items": {
+        "$ref": "#/components/schemas/Photo",
+      },
+      "type": "array",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should parse type with function 1`] = `
+{
+  "properties": {
+    "album": {
+      "$ref": "#/components/schemas/Album",
+    },
+    "id": {
+      "type": "number",
+    },
+    "name": {
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should parse type with function 2`] = `
+{
+  "properties": {
+    "id": {
+      "type": "number",
+    },
+    "name": {
+      "type": "string",
+    },
+    "photo": {
+      "$ref": "#/components/schemas/Photo",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should test multi-type in property 1`] = `
+{
+  "properties": {
+    "album": {
+      "oneOf": [
+        {
+          "$ref": "#/components/schemas/Album",
+        },
+        {
+          "items": {
+            "$ref": "#/components/schemas/Album",
+          },
+          "type": "array",
+        },
+      ],
+    },
+    "name": {
+      "oneOf": [
+        {
+          "type": "string",
+        },
+        {
+          "items": {
+            "type": "string",
+          },
+          "type": "array",
+        },
+      ],
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should test raw definition with array 1`] = `
+{
+  "properties": {
+    "coords": {
+      "items": {
+        "type": "number",
+      },
+      "type": "array",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should test raw definition with nested array 1`] = `
+{
+  "properties": {
+    "coords": {
+      "items": {
+        "items": {
+          "type": "number",
+        },
+        "type": "array",
+      },
+      "type": "array",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiProperty should test ref path generate 1`] = `
+{
+  "components": {
+    "schemas": {
+      "NotificationDTO": {
+        "properties": {
+          "id": {
+            "description": "这是 id",
+            "example": "1",
+            "type": "number",
+          },
+          "title": {
+            "description": "title",
+            "example": "通知标题",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "NotificationPageListDTO": {
+        "properties": {
+          "count": {
+            "description": "通知数量",
+            "example": "999",
+            "type": "number",
+          },
+          "rows": {
+            "description": "列表数据",
+            "items": {
+              "$ref": "#/components/schemas/NotificationDTO",
+            },
+            "type": "array",
+          },
+        },
+        "type": "object",
+      },
+      "UserDTO": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/NotificationPageListDTO",
+            "description": "The uid of the user",
+          },
+          "name": {
+            "description": "The name of the user",
+            "example": "Kitty",
+            "type": "string",
+          },
+          "uid": {
+            "description": "The uid of the user",
+            "example": "1",
+            "type": "number",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO",
+                },
+              },
+            },
+            "description": "The found record",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiProperty should test simple case with example 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "catcontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cat",
+                },
+              },
+            },
+            "description": "The found record",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiProperty should test specify type 1`] = `
+{
+  "properties": {
+    "id": {
+      "type": "string",
+    },
+  },
+  "type": "object",
+}
+`;
+
+exports[`test @ApiResponse should test @ApiCreatedResponse with type 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "format": undefined,
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cat",
+                },
+              },
+            },
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiResponse should test ApiResponse 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "The record has been successfully created.",
+          },
+          "403": {
+            "description": "Forbidden.",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiResponse should test pre-defined response decorator 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/apiAcceptedResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiacceptedresponse",
+        "parameters": [],
+        "responses": {
+          "202": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiBadGatewayResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apibadgatewayresponse",
+        "parameters": [],
+        "responses": {
+          "502": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiBadRequestResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apibadrequestresponse",
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiConflictResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiconflictresponse",
+        "parameters": [],
+        "responses": {
+          "409": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiCreatedResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apicreatedresponse",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiDefaultResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apidefaultresponse",
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiForbiddenResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiforbiddenresponse",
+        "parameters": [],
+        "responses": {
+          "403": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiFoundResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apifoundresponse",
+        "parameters": [],
+        "responses": {
+          "302": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiGatewayTimeoutResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apigatewaytimeoutresponse",
+        "parameters": [],
+        "responses": {
+          "504": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiGoneResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apigoneresponse",
+        "parameters": [],
+        "responses": {
+          "410": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiInternalServerErrorResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiinternalservererrorresponse",
+        "parameters": [],
+        "responses": {
+          "500": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiMethodNotAllowedResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apimethodnotallowedresponse",
+        "parameters": [],
+        "responses": {
+          "405": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiMovedPermanentlyResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apimovedpermanentlyresponse",
+        "parameters": [],
+        "responses": {
+          "301": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiNoContentResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apinocontentresponse",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiNotAcceptableResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apinotacceptableresponse",
+        "parameters": [],
+        "responses": {
+          "406": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiNotFoundResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apinotfoundresponse",
+        "parameters": [],
+        "responses": {
+          "404": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiNotImplementedResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apinotimplementedresponse",
+        "parameters": [],
+        "responses": {
+          "501": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiOkResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiokresponse",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiPayloadTooLargeResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apipayloadtoolargeresponse",
+        "parameters": [],
+        "responses": {
+          "413": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiPreconditionFailedResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apipreconditionfailedresponse",
+        "parameters": [],
+        "responses": {
+          "412": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiRequestTimeoutResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apirequesttimeoutresponse",
+        "parameters": [],
+        "responses": {
+          "408": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiServiceUnavailableResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiserviceunavailableresponse",
+        "parameters": [],
+        "responses": {
+          "503": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiTooManyRequestsResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apitoomanyrequestsresponse",
+        "parameters": [],
+        "responses": {
+          "429": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiUnauthorizedResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiunauthorizedresponse",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiUnprocessableEntityResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiunprocessableentityresponse",
+        "parameters": [],
+        "responses": {
+          "422": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+    "/api/apiUnsupportedMediaTypeResponse": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_apiunsupportedmediatyperesponse",
+        "parameters": [],
+        "responses": {
+          "415": {
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiResponse should test response with type 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "format": undefined,
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cat",
+                },
+              },
+            },
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiResponse should test with array type 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {},
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Cat",
+                  },
+                  "type": "array",
+                },
+              },
+            },
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiSecurity should test ApiSecurity and @ApiExcludeSecurity 1`] = `
 {
   "components": {},
   "info": {
@@ -656,217 +1592,5 @@ exports[`/test/parser.test.ts should test ApiSecurity 1`] = `
       "name": "api",
     },
   ],
-}
-`;
-
-exports[`/test/parser.test.ts should test multi-type in property 1`] = `
-{
-  "properties": {
-    "album": {
-      "oneOf": [
-        {
-          "$ref": "#/components/schemas/Album",
-        },
-        {
-          "items": {
-            "$ref": "#/components/schemas/Album",
-          },
-          "type": "array",
-        },
-      ],
-    },
-    "name": {
-      "oneOf": [
-        {
-          "format": undefined,
-          "type": "string",
-        },
-        {
-          "items": {
-            "type": "string",
-          },
-          "type": "array",
-        },
-      ],
-    },
-  },
-  "type": "object",
-}
-`;
-
-exports[`/test/parser.test.ts should test ref path generate 1`] = `
-{
-  "components": {
-    "schemas": {
-      "NotificationDTO": {
-        "properties": {
-          "id": {
-            "description": "这是 id",
-            "example": "1",
-            "format": undefined,
-            "type": "number",
-          },
-          "title": {
-            "description": "title",
-            "example": "通知标题",
-            "format": undefined,
-            "type": "string",
-          },
-        },
-        "type": "object",
-      },
-      "NotificationPageListDTO": {
-        "properties": {
-          "count": {
-            "description": "通知数量",
-            "example": "999",
-            "format": undefined,
-            "type": "number",
-          },
-          "rows": {
-            "description": "列表数据",
-            "items": {
-              "$ref": "#/components/schemas/NotificationDTO",
-            },
-            "type": "array",
-          },
-        },
-        "type": "object",
-      },
-      "UserDTO": {
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/NotificationPageListDTO",
-            "description": "The uid of the user",
-          },
-          "name": {
-            "description": "The name of the user",
-            "example": "Kitty",
-            "format": undefined,
-            "type": "string",
-          },
-          "uid": {
-            "description": "The uid of the user",
-            "example": "1",
-            "format": undefined,
-            "type": "number",
-          },
-        },
-        "type": "object",
-      },
-    },
-  },
-  "info": {
-    "contact": {},
-    "description": "",
-    "title": "",
-    "version": "1.0.0",
-  },
-  "openapi": "3.0.1",
-  "paths": {
-    "/api/update_user": {
-      "post": {
-        "description": undefined,
-        "operationId": "apicontroller_updateuser",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserDTO",
-                },
-              },
-            },
-            "description": "The found record",
-          },
-        },
-        "summary": undefined,
-        "tags": [
-          "api",
-        ],
-      },
-    },
-  },
-  "servers": [],
-  "tags": [
-    {
-      "description": "api",
-      "externalDocs": undefined,
-      "name": "api",
-    },
-  ],
-}
-`;
-
-exports[`/test/parser.test.ts should test simple case with example 1`] = `
-{
-  "components": {
-    "schemas": {
-      "Cat": {
-        "properties": {
-          "name": {
-            "description": "The name of the Cat",
-            "example": "Kitty",
-            "format": undefined,
-            "type": "string",
-          },
-        },
-        "type": "object",
-      },
-    },
-  },
-  "info": {
-    "contact": {},
-    "description": "",
-    "title": "",
-    "version": "1.0.0",
-  },
-  "openapi": "3.0.1",
-  "paths": {
-    "/api/update_user": {
-      "post": {
-        "description": undefined,
-        "operationId": "catcontroller_updateuser",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cat",
-                },
-              },
-            },
-            "description": "The found record",
-          },
-        },
-        "summary": undefined,
-        "tags": [
-          "api",
-        ],
-      },
-    },
-  },
-  "servers": [],
-  "tags": [
-    {
-      "description": "api",
-      "externalDocs": undefined,
-      "name": "api",
-    },
-  ],
-}
-`;
-
-exports[`/test/parser.test.ts should test specify type 1`] = `
-{
-  "properties": {
-    "id": {
-      "format": undefined,
-      "type": "string",
-    },
-  },
-  "type": "object",
 }
 `;

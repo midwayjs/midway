@@ -847,6 +847,106 @@ export class SwaggerExplorer {
     return Object.assign(typeMeta, metadata);
   }
 
+  protected formatType(metadata: {
+    type: any;
+    items?: any;
+    format?: string;
+    oneOf?: any[];
+    allOf?: any[];
+    anyOf?: any[];
+    not?: any;
+    enum?: any[];
+    properties?: any;
+    additionalProperties?: any;
+    $ref?: any;
+  }) {
+    if (metadata === null) {
+      return null;
+    }
+
+    // 如果有枚举，单独处理
+    if (metadata.enum) {
+      // enum 不需要处理
+      metadata.enum.map(item => this.formatType(item));
+    }
+
+    if (metadata.not) {
+      metadata.not = this.formatType(metadata.not);
+    }
+
+    if (metadata['$ref'] && typeof metadata['$ref'] === 'function') {
+      metadata['$ref'] = metadata['$ref']();
+    }
+
+    if (metadata.oneOf) {
+      metadata.oneOf = metadata.oneOf.map(item => this.formatType(item));
+    } else if (metadata.anyOf) {
+      metadata.anyOf = metadata.anyOf.map(item => this.formatType(item));
+    } else if (metadata.allOf) {
+      metadata.allOf = metadata.allOf.map(item => this.formatType(item));
+    }
+
+    // 有下面的这些属性，就不需要 type 了
+    ['not', '$ref', 'oneOf', 'anyOf', 'allOf'].forEach(key => {
+      if (metadata[key]) {
+        delete metadata['type'];
+      }
+    });
+
+    if (metadata.properties) {
+      const properties = {};
+      for (const key in metadata.properties) {
+        properties[key] = this.formatType(metadata.properties[key]);
+      }
+      metadata.properties = properties;
+    }
+
+    if (metadata.additionalProperties) {
+      metadata.additionalProperties = this.formatType(
+        metadata.additionalProperties
+      );
+    }
+
+    // 处理类型
+    if (['string', 'number', 'boolean', 'integer'].includes(metadata.type)) {
+      // 不做处理
+    } else if (metadata.type === Number) {
+      metadata.type = 'number';
+    } else if (metadata.type === String) {
+      metadata.type = 'string';
+    } else if (metadata.type === Boolean) {
+      metadata.type = 'boolean';
+    } else if (
+      metadata.type === 'date' ||
+      metadata.type === 'Date' ||
+      metadata.type === Date
+    ) {
+      metadata.type = 'string';
+      metadata.format = 'date-time';
+    } else if (metadata.type === Array || metadata.type === 'array') {
+      // Array => { type: 'array' }
+      metadata.type = 'array';
+      if (metadata.items) {
+        metadata.items = this.formatType(metadata.items);
+      }
+    } else if (Array.isArray(metadata.type)) {
+      // [String] => { type: 'array', items: { type: 'string' } }
+      metadata.items = this.formatType({ type: metadata.type[0] });
+      metadata.type = 'array';
+    } else if (metadata.type === Object || metadata.type === 'object') {
+      metadata.type = 'object';
+    } else if (Types.isClass(metadata.type)) {
+      this.parseClzz(metadata.type);
+      metadata['$ref'] = '#/components/schemas/' + metadata.type.name;
+      delete metadata['type'];
+    } else if (metadata.type instanceof Function) {
+      // () => String => { type: 'string' }
+      metadata.type = metadata.type();
+      this.formatType(metadata);
+    }
+    return metadata;
+  }
+
   /**
    * 解析类型的 ApiProperty
    * @param clzz
@@ -858,6 +958,7 @@ export class SwaggerExplorer {
     // 解析 ApiExtraModel
     this.parseExtraModel(clzz);
     // 解析类上的 ApiProperty
+    // TODO 这里后面不能用这个方法
     const props = getClassExtendedMetadata(INJECT_CUSTOM_PROPERTY, clzz);
 
     const tt: any = {
@@ -872,127 +973,62 @@ export class SwaggerExplorer {
 
     if (props) {
       for (const key of Object.keys(props)) {
-        const metadata: any = {};
-        Object.assign(metadata, props[key].metadata);
-        if (typeof metadata?.required !== undefined) {
-          if (metadata?.required) {
+        const metadata = props[key].metadata || {};
+        if (!metadata.type) {
+          // 推导类型
+          metadata.type = getPropertyType(clzz.prototype, key).name;
+        }
+        tt.properties[key] = tt.properties[key] || {};
+
+        // loop metadata
+        for (const metadataKey in metadata) {
+          if (metadataKey === 'required' && metadata['required']) {
+            // required 需要加到 schema 上
             if (!tt.required) {
               tt.required = [];
             }
             tt.required.push(key);
-          }
-
-          delete metadata.required;
-        }
-        if (metadata?.enum) {
-          tt.properties[key] = {
-            type: metadata?.type,
-            enum: metadata?.enum,
-            default: metadata?.default,
-          };
-
-          if (metadata?.description) {
-            tt.properties[key].description = metadata?.description;
-          }
-          continue;
-        }
-        if (metadata?.items?.enum) {
-          tt.properties[key] = {
-            type: metadata?.type,
-            items: metadata?.items,
-            default: metadata?.default,
-          };
-
-          if (metadata?.description) {
-            tt.properties[key].description = metadata?.description;
-          }
-          continue;
-        }
-        let isArray = false;
-        let currentType = parseTypeSchema(metadata?.type);
-
-        delete metadata?.type;
-
-        if (currentType === 'array') {
-          isArray = true;
-          currentType = parseTypeSchema(metadata?.items?.type);
-
-          delete metadata?.items.type;
-        }
-
-        if (metadata?.oneOf) {
-          tt.properties[key] = {
-            oneOf: [],
-          };
-          metadata?.oneOf.forEach((meta: any) => {
-            tt.properties[key].oneOf.push(this.parseSubPropertyType(meta));
-          });
-          delete metadata?.oneOf;
-          continue;
-        }
-
-        if (Types.isClass(currentType)) {
-          this.parseClzz(currentType);
-
-          if (isArray) {
-            tt.properties[key] = {
-              type: 'array',
-              items: {
-                $ref: '#/components/schemas/' + currentType?.name,
-              },
-            };
-          } else {
-            tt.properties[key] = {
-              $ref: '#/components/schemas/' + currentType?.name,
-            };
-          }
-
-          delete metadata.items;
-        } else {
-          if (isArray) {
-            // 没有配置类型则认为自己配置了 items 内容
-            if (!currentType) {
-              if (metadata?.items?.['$ref']) {
-                metadata.items['$ref'] = parseTypeSchema(
-                  metadata.items['$ref']
-                );
-              }
-
-              tt.properties[key] = {
-                type: 'array',
-                items: metadata?.items,
-              };
-            } else {
-              tt.properties[key] = {
-                type: 'array',
-                items: {
-                  type: convertSchemaType(currentType?.name || currentType),
-                },
-              };
+          } else if (['oneOf', 'anyOf', 'allOf'].includes(metadataKey)) {
+            tt.properties[key][metadataKey] = [];
+            metadata[metadataKey].forEach((meta: any) => {
+              tt.properties[key][metadataKey].push(this.formatType(meta));
+            });
+          } else if (metadataKey === 'not') {
+            tt.properties[key][metadataKey] = this.formatType(
+              metadata[metadataKey]
+            );
+          } else if (metadataKey === 'type') {
+            this.formatType(metadata);
+            if (metadata.type) {
+              tt.properties[key].type = metadata.type;
             }
-
-            delete metadata.items;
-          } else if (metadata.$ref) {
-            tt.properties[key] = {};
-          } else {
-            tt.properties[key] = {
-              type: currentType ?? getPropertyType(clzz.prototype, key).name,
-              format: metadata?.format,
-            };
-
-            // Date 类型支持
-            if (tt.properties[key].type === 'Date') {
-              tt.properties[key].type = 'string';
-              if (!tt.properties[key].format) {
-                tt.properties[key].format = 'date';
-              }
+            if (metadata['$ref']) {
+              tt.properties[key].$ref = metadata['$ref'];
             }
-
-            delete metadata.format;
+            if (metadata.items) {
+              tt.properties[key].items = metadata.items;
+            }
+            if (metadata.format) {
+              tt.properties[key].format = metadata.format;
+            }
+            if (metadata.pattern) {
+              tt.properties[key].pattern = metadata.pattern;
+            }
+            if (metadata.enum) {
+              tt.properties[key].enum = metadata.enum;
+            }
+          } else if (
+            metadataKey === 'items' ||
+            metadataKey === 'pattern' ||
+            metadataKey === 'format' ||
+            metadataKey === 'enum' ||
+            metadataKey === '$ref'
+          ) {
+            // type 中已经处理
+          } else {
+            tt.properties[key][metadataKey] = metadata[metadataKey];
           }
         }
-
-        Object.assign(tt.properties[key], metadata);
       }
     }
     // just for test
