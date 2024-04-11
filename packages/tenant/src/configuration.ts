@@ -1,9 +1,4 @@
-import {
-  Configuration,
-  IMidwayContainer,
-  Inject,
-  MidwayApplicationManager,
-} from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import { TenantManager } from './tenantManager';
 
 @Configuration({
@@ -19,9 +14,6 @@ import { TenantManager } from './tenantManager';
   ],
 })
 export class TenantConfiguration {
-  @Inject()
-  applicationManager: MidwayApplicationManager;
-
   async onReady(container: IMidwayContainer) {
     await container.getAsync(TenantManager);
   }
