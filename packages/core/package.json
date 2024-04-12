@@ -32,7 +32,7 @@
     "@midwayjs/glob": "^1.0.2",
     "class-transformer": "0.5.1",
     "picomatch": "2.3.1",
-    "reflect-metadata": "0.2.1"
+    "reflect-metadata": "0.2.2"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
