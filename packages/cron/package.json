@@ -26,7 +26,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@types/cron": "2.4.0",
     "cron": "2.4.4"
   },
   "devDependencies": {
