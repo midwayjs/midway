@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.15.9 (2024-04-14)
+
+#### :bug: Bug Fix
+* `cron`
+  * [#3786](https://github.com/midwayjs/midway/pull/3786) fix: remove typings from the cron module since it includes its own types ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.15.8 (2024-04-12)
 
 #### :bug: Bug Fix
