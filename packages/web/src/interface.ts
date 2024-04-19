@@ -123,6 +123,10 @@ export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
    * http query parse options, used when 'simple' mode is used
    */
   queryParseOptions?: IParseOptions;
+  /**
+   * https/https/http2 server options
+   */
+  serverOptions?: Record<string, any>;
 }
 
 /**
