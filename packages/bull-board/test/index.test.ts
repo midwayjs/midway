@@ -1,5 +1,6 @@
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
+import { createApp, close, createHttpRequest, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
+import * as bullboard from '../src';
 
 describe(`/test/index.test.ts`, () => {
   it('test ui in koa', async () => {
@@ -48,6 +49,28 @@ describe(`/test/index.test.ts`, () => {
       "queues": []
     });
     expect(result.headers['content-type']).toMatch('application/json');
+
+    await close(app);
+  });
+
+  it('should test bullboard manager', async () => {
+    const app = await createLightApp('', {
+      imports: [bullboard],
+    });
+    const manager = await app.getApplicationContext().getAsync(bullboard.BullBoardManager);
+    expect(manager).toBeDefined();
+    expect(manager.getBullBoardOrigin()).toBeUndefined();
+
+    // set bull board
+    const bullBoard = {
+      addQueue: () => {},
+      removeQueue: () => {},
+      replaceQueues: () => {},
+      setQueues: () => {},
+    };
+
+    manager.setBullBoard(bullBoard);
+    expect(manager.getBullBoardOrigin()).toBe(bullBoard);
 
     await close(app);
   });
