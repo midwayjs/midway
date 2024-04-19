@@ -82,6 +82,10 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * @see https://nodejs.org/api/http.html#http_server_timeout
    */
   serverTimeout?: number;
+  /**
+   * https/https/http2 server options
+   */
+  serverOptions?: Record<string, any>;
 }
 
 export type MiddlewareParamArray = Array<
