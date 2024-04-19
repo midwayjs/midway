@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/task",
-  "version": "3.15.8",
+  "version": "3.15.10",
   "private": true,
   "description": "midway component for task and schedule",
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^3.15.8",
-    "@midwayjs/koa": "^3.15.8",
+    "@midwayjs/koa": "^3.15.10",
     "@midwayjs/mock": "^3.15.8",
     "@types/bull": "3.15.9",
     "@types/cron": "2.4.0"

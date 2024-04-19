@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.15.10 (2024-04-19)
+
+#### :nail_care: Polish
+* `bull-board`
+  * [#3798](https://github.com/midwayjs/midway/pull/3798) refactor: add the bullBoardManager class along with documentation ([@czy88840616](https://github.com/czy88840616))
+  * [#3791](https://github.com/midwayjs/midway/pull/3791) feat(bull-board): save the result of createBullBoard ([@DanielXuuuuu](https://github.com/DanielXuuuuu))
+* `web-express`, `web-koa`, `web`
+  * [#3797](https://github.com/midwayjs/midway/pull/3797) feat Support http server opts ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3788](https://github.com/midwayjs/midway/pull/3788) fix(docs): typo ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* `bull-board`, `view-ejs`
+  * [#3792](https://github.com/midwayjs/midway/pull/3792) fix(deps): update dependency ejs to v3.1.10 ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#3793](https://github.com/midwayjs/midway/pull/3793) fix(deps): update dependency leoric to v2.12.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Daniel Xu ([@DanielXuuuuu](https://github.com/DanielXuuuuu))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.15.9 (2024-04-14)
 
 #### :bug: Bug Fix
