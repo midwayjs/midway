@@ -48,6 +48,8 @@ export class BoardMiddleware
   @Config('bullBoard')
   bullBoardConfig: BullBoardOption;
 
+  bullBoard: ReturnType<typeof createBullBoard>;
+
   private basePath: string;
   private serverAdapter: MidwayAdapter;
 
@@ -58,7 +60,7 @@ export class BoardMiddleware
     this.basePath = this.bullBoardConfig.basePath;
 
     this.serverAdapter = new MidwayAdapter();
-    createBullBoard({
+    this.bullBoard = createBullBoard({
       queues: wrapQueues,
       serverAdapter: this.serverAdapter,
       options: {
