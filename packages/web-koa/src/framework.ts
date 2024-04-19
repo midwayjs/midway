@@ -210,10 +210,9 @@ export class MidwayKoaFramework extends BaseFramework<
     // restore use method
     this.app.use = (this.app as any).originUse;
 
-    const { serverOptions } = this.configurationOptions;
-    const options = {
+    const serverOptions = {
       ...this.configurationOptions,
-      ...serverOptions,
+      ...this.configurationOptions.serverOptions,
     };
 
     // https config
@@ -230,24 +229,24 @@ export class MidwayKoaFramework extends BaseFramework<
 
       if (this.configurationOptions.http2) {
         this.server = require('http2').createSecureServer(
-          options,
+          serverOptions,
           this.app.callback()
         );
       } else {
         this.server = require('https').createServer(
-          options,
+          serverOptions,
           this.app.callback()
         );
       }
     } else {
       if (this.configurationOptions.http2) {
         this.server = require('http2').createServer(
-          options,
+          serverOptions,
           this.app.callback()
         );
       } else {
         this.server = require('http').createServer(
-          options,
+          serverOptions,
           this.app.callback()
         );
       }
