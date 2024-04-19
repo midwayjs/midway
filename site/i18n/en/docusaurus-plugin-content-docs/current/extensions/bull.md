@@ -795,6 +795,38 @@ export default {
 }
 ```
 
+In addition, the component provides the `BullBoardManager` class, which can add queues dynamically created.
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import * as bull from '@midwayjs/bull';
+import * as bullBoard from '@midwayjs/bull-board';
+
+@Configuration({
+  imports: [
+    // ...
+    bull,
+    bullBoard
+  ]
+})
+export class MainConfiguration {
+
+  @Inject()
+  bullFramework: bull.Framework;
+  
+  @Inject()
+  bullBoardManager: bullBoard.BullBoardManager;
+
+  async onReady() {
+    const testQueue = this.bullFramework.createQueue('test', {
+      // ...
+    });
+
+    this.bullBoardManager.addQueue(testQueue);
+  }
+}
+```
+
 
 
 

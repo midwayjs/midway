@@ -17,6 +17,7 @@ import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { MidwayAdapter } from './adapter';
 import { BullBoardOption } from './interface';
+import { BullBoardManager } from './board.manager';
 
 const MIME_MAP = {
   '.html': 'text/html',
@@ -43,24 +44,25 @@ export class BoardMiddleware
   implements IMiddleware<IMidwayContext, NextFunction, unknown>
 {
   @Inject()
-  framework: bull.Framework;
+  protected framework: bull.Framework;
 
   @Config('bullBoard')
-  bullBoardConfig: BullBoardOption;
+  protected bullBoardConfig: BullBoardOption;
 
-  bullBoard: ReturnType<typeof createBullBoard>;
+  @Inject()
+  protected bullBoardManager: BullBoardManager;
 
   private basePath: string;
   private serverAdapter: MidwayAdapter;
 
   @Init()
-  async init() {
+  protected async init() {
     const queueList = this.framework.getQueueList();
     const wrapQueues = queueList.map(queue => new BullAdapter(queue));
     this.basePath = this.bullBoardConfig.basePath;
 
     this.serverAdapter = new MidwayAdapter();
-    this.bullBoard = createBullBoard({
+    const bullBoard = createBullBoard({
       queues: wrapQueues,
       serverAdapter: this.serverAdapter,
       options: {
@@ -68,6 +70,7 @@ export class BoardMiddleware
       },
     });
     this.serverAdapter.setBasePath(this.basePath);
+    this.bullBoardManager.setBullBoard(bullBoard);
   }
 
   resolve(app: IMidwayApplication) {
