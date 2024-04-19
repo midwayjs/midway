@@ -210,6 +210,11 @@ export class MidwayKoaFramework extends BaseFramework<
     // restore use method
     this.app.use = (this.app as any).originUse;
 
+    const serverOptions = {
+      ...this.configurationOptions,
+      ...this.configurationOptions.serverOptions,
+    };
+
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
       this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -224,20 +229,26 @@ export class MidwayKoaFramework extends BaseFramework<
 
       if (this.configurationOptions.http2) {
         this.server = require('http2').createSecureServer(
-          this.configurationOptions,
+          serverOptions,
           this.app.callback()
         );
       } else {
         this.server = require('https').createServer(
-          this.configurationOptions,
+          serverOptions,
           this.app.callback()
         );
       }
     } else {
       if (this.configurationOptions.http2) {
-        this.server = require('http2').createServer(this.app.callback());
+        this.server = require('http2').createServer(
+          serverOptions,
+          this.app.callback()
+        );
       } else {
-        this.server = require('http').createServer(this.app.callback());
+        this.server = require('http').createServer(
+          serverOptions,
+          this.app.callback()
+        );
       }
     }
     // register httpServer to applicationContext

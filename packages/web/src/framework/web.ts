@@ -224,6 +224,12 @@ export class MidwayWebFramework extends BaseFramework<
     if (!this.isClusterMode) {
       // load controller
       await this.loadMidwayController();
+
+      const serverOptions = {
+        ...this.configurationOptions,
+        ...this.configurationOptions.serverOptions,
+      };
+
       // https config
       if (this.configurationOptions.key && this.configurationOptions.cert) {
         this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -238,20 +244,26 @@ export class MidwayWebFramework extends BaseFramework<
 
         if (this.configurationOptions.http2) {
           this.server = require('http2').createSecureServer(
-            this.configurationOptions,
+            serverOptions,
             this.app.callback()
           );
         } else {
           this.server = require('https').createServer(
-            this.configurationOptions,
+            serverOptions,
             this.app.callback()
           );
         }
       } else {
         if (this.configurationOptions.http2) {
-          this.server = require('http2').createServer(this.app.callback());
+          this.server = require('http2').createServer(
+            serverOptions,
+            this.app.callback()
+          );
         } else {
-          this.server = require('http').createServer(this.app.callback());
+          this.server = require('http').createServer(
+            serverOptions,
+            this.app.callback()
+          );
         }
       }
       // emit egg-ready message in agent and application

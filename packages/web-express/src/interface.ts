@@ -81,6 +81,10 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
    * http global prefix
    */
   globalPrefix?: string;
+  /**
+   * https/https/http2 server options
+   */
+  serverOptions?: Record<string, any>;
 }
 
 export type Application = IMidwayExpressApplication;
