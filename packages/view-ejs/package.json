@@ -29,7 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "@midwayjs/view": "^3.15.8",
-    "ejs": "3.1.9"
+    "ejs": "3.1.10"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.15.8",
