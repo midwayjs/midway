@@ -16,7 +16,7 @@ export class RabbitMQServer
   protected channelManagerSet: Set<Channel> = new Set();
   protected connection: amqp.AmqpConnectionManager = null;
   protected logger: ILogger;
-  protected reconnectTime;
+  protected reconnectTime: number;
 
   constructor(options: any = {}) {
     super();
@@ -27,7 +27,10 @@ export class RabbitMQServer
 
   bindError() {
     this.on('error', err => {
-      this.logger.error(err);
+      if (err.err) {
+        err = err.err as any;
+      }
+      this.logger.error('[midway:rabbitmq] got server error', err);
     });
   }
 
@@ -48,16 +51,16 @@ export class RabbitMQServer
         if (err.err) {
           err = err.err as any;
         }
-        this.logger.error('Message Queue error', err);
+        this.logger.error('[midway:rabbitmq] Message Queue error', err);
       } else {
-        this.logger.info('Message Queue disconnected!');
+        this.logger.info('[midway:rabbitmq] Message Queue disconnected!');
       }
     });
 
     await new Promise<void>((resolve, reject) => {
       // 监听 成功连接 的通知
       this.connection.on('connect', () => {
-        this.logger.info('Message Queue connected!');
+        this.logger.info('[midway:rabbitmq] Message Queue connected!');
         resolve();
       });
 
@@ -67,9 +70,12 @@ export class RabbitMQServer
           if (err.err) {
             err = err.err as any;
           }
-          this.logger.error('Message Queue disconnected', err);
+          this.logger.error(
+            '[midway:rabbitmq] Message Queue disconnected',
+            err
+          );
         } else {
-          this.logger.info('Message Queue disconnected!');
+          this.logger.info('[midway:rabbitmq] Message Queue disconnected!');
         }
         reject(err);
       });
@@ -142,16 +148,21 @@ export class RabbitMQServer
       if (this.connection) {
         await this.connection.close();
       }
-      this.logger.debug('Message Queue connection close success');
+      this.logger.debug(
+        '[midway:rabbitmq] Message Queue connection close success'
+      );
     } catch (err) {
-      this.logger.error('Message Queue connection close error', err);
+      this.logger.error(
+        '[midway:rabbitmq] Message Queue connection close error',
+        err
+      );
     } finally {
       this.connection = null;
     }
   }
 
   async close() {
-    this.logger.debug('Message Queue will be close');
+    this.logger.debug('[midway:rabbitmq] Message Queue will be close');
     await this.closeConnection();
   }
 }

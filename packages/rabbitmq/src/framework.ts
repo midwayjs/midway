@@ -48,7 +48,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
         this.configurationOptions.socketOptions
       );
       await this.loadSubscriber();
-      this.logger.info('Rabbitmq server start success');
+      this.logger.info('[midway:rabbitmq] Rabbitmq server start success');
     } catch (error) {
       this.app.close();
       throw error;
