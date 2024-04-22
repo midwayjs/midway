@@ -42,9 +42,9 @@ export class MidwayKafkaFramework extends BaseFramework<
         this.configurationOptions.consumerConfig
       );
       await this.loadSubscriber();
-      this.logger.info('Kafka consumer server start success');
+      this.logger.info('[midway:kafka] Kafka consumer server start success');
     } catch (error) {
-      this.logger.error('Kafka consumer connect fail', error);
+      this.logger.error('[midway:kafka] Kafka consumer connect fail', error);
       await this.app.closeConnection();
     }
   }

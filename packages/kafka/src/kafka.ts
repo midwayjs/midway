@@ -14,20 +14,20 @@ export class KafkaConsumerServer extends EventEmitter {
 
   bindError() {
     this.on('error', err => {
-      this.loggers.error(err);
+      this.loggers.error('[midway:kafka] got global error', err);
     });
   }
 
   async connect(options: KafkaConfig, consumerOptions: ConsumerConfig) {
     this.connection = new Kafka(options).consumer(consumerOptions);
     this.connection.on('consumer.connect', () => {
-      this.loggers.info('Kafka consumer connected!');
+      this.loggers.info('[midway:kafka] Kafka consumer connected!');
     });
     this.connection.on('consumer.disconnect', err => {
       if (err) {
-        this.loggers.error('Kafka consumer disconnected', err);
+        this.loggers.error('[midway:kafka] Kafka consumer disconnected', err);
       } else {
-        this.loggers.info('Kafka consumer disconnected!');
+        this.loggers.info('[midway:kafka] Kafka consumer disconnected!');
       }
     });
   }
@@ -37,16 +37,21 @@ export class KafkaConsumerServer extends EventEmitter {
       if (this.connection) {
         await this.connection.disconnect();
       }
-      this.loggers.debug('Kafka consumer connection close success');
+      this.loggers.debug(
+        '[midway:kafka] Kafka consumer connection close success'
+      );
     } catch (err) {
-      this.loggers.error('Kafka consumer connection close error', err);
+      this.loggers.error(
+        '[midway:kafka] Kafka consumer connection close error',
+        err
+      );
     } finally {
       this.connection = null;
     }
   }
 
   async close() {
-    this.loggers.debug('Kafka consumer will be close');
+    this.loggers.debug('[midway:kafka] Kafka consumer will be close');
     await this.closeConnection();
   }
 }
