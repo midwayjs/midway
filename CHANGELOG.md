@@ -1,6 +1,23 @@
 # Change Log
 
 
+## v3.15.11 (2024-04-25)
+
+#### :bug: Bug Fix
+* `express-session`, `web-express`, `web-koa`, `web`
+  * [#3807](https://github.com/midwayjs/midway/pull/3807) fix: certificate error in web scene ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `otel`
+  * [#3805](https://github.com/midwayjs/midway/pull/3805) chore(deps): update dependency @opentelemetry/sdk-node to v0.51.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3806](https://github.com/midwayjs/midway/pull/3806) chore(deps): update mikro-orm monorepo to v6.2.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.15.10 (2024-04-19)
 
 #### :nail_care: Polish
