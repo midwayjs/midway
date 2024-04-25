@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[65752],{23495:e=>{e.exports=JSON.parse('{"permalink":"/changelog","page":1,"postsPerPage":20,"totalPages":20,"totalCount":400,"nextPage":"/changelog/page/2","blogDescription":"Keep yourself up-to-date about new features in every release","blogTitle":"Midway changelog"}')}}]);
