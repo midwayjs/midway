@@ -67,7 +67,7 @@ export class AutoConfiguration {
 }
 ```
 
-Antoher exmple for [connect-redis](https://github.com/tj/connect-redis).
+Another example for [connect-redis](https://github.com/tj/connect-redis).
 
 ```ts
 import { Configuration, Inject } from '@midwayjs/core';
