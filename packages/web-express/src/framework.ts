@@ -165,18 +165,12 @@ export class MidwayExpressFramework extends BaseFramework<
     };
 
     // https config
-    if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key = PathFileUtil.getFileContentSync(
-        this.configurationOptions.key
-      );
-      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
-        this.configurationOptions.cert
-      );
-      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
-        this.configurationOptions.ca
-      );
+    if (serverOptions.key && serverOptions.cert) {
+      serverOptions.key = PathFileUtil.getFileContentSync(serverOptions.key);
+      serverOptions.cert = PathFileUtil.getFileContentSync(serverOptions.cert);
+      serverOptions.ca = PathFileUtil.getFileContentSync(serverOptions.ca);
 
-      if (this.configurationOptions.http2) {
+      if (serverOptions.http2) {
         this.server = require('http2').createSecureServer(
           serverOptions,
           this.app
@@ -185,7 +179,7 @@ export class MidwayExpressFramework extends BaseFramework<
         this.server = require('https').createServer(serverOptions, this.app);
       }
     } else {
-      if (this.configurationOptions.http2) {
+      if (serverOptions.http2) {
         this.server = require('http2').createServer(serverOptions, this.app);
       } else {
         this.server = require('http').createServer(serverOptions, this.app);
