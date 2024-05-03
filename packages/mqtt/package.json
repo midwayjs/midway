@@ -27,7 +27,7 @@
     "@midwayjs/mock": "^3.15.8"
   },
   "dependencies": {
-    "mqtt": "5.5.1"
+    "mqtt": "5.5.5"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
