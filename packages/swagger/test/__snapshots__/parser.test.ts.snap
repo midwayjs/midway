@@ -11,12 +11,12 @@ exports[`/test/parser.test.ts should fix issue#2286 with array example 1`] = `
             "items": {
               "$ref": "#/components/schemas/Catd",
             },
+            "required": false,
             "type": "array",
           },
           "name": {
             "description": "The name of the Cat",
             "example": "Kitty",
-            "format": undefined,
             "type": "string",
           },
         },
@@ -27,19 +27,16 @@ exports[`/test/parser.test.ts should fix issue#2286 with array example 1`] = `
           "aged": {
             "description": "The age of the Cat",
             "example": 1,
-            "format": undefined,
             "type": "number",
           },
           "breedd": {
             "description": "The breed of the Cat",
             "example": "Maine Coon",
-            "format": undefined,
             "type": "string",
           },
           "named": {
             "description": "The name of the Cat",
             "example": "Kitty",
-            "format": undefined,
             "type": "string",
           },
         },
@@ -164,6 +161,20 @@ exports[`test @ApiBody should test ApiBody 1`] = `
         "description": undefined,
         "operationId": "apicontroller_updateuser",
         "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/Cat",
+                },
+                "type": "array",
+              },
+            },
+          },
+          "description": "hello fields",
+          "required": true,
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -221,6 +232,256 @@ exports[`test @ApiBody should test ApiBody with array 1`] = `
         "description": undefined,
         "operationId": "apicontroller_updateuser",
         "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/Cat",
+                },
+                "type": "array",
+              },
+            },
+          },
+          "description": undefined,
+          "required": true,
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiBody should test ApiBody with example 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {
+          "age": {
+            "description": "The age of the Cat",
+            "example": 1,
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "Fluffy",
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/Cat",
+                },
+                "type": "array",
+              },
+            },
+          },
+          "description": undefined,
+          "required": true,
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiBody should test ApiBody with examples 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {
+          "age": {
+            "description": "The age of the Cat",
+            "example": 1,
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "example1": {
+                  "summary": "An example of a cat",
+                },
+                "example2": {
+                  "$ref": "#/components/examples/hamster",
+                },
+              },
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/Cat",
+                },
+                "type": "array",
+              },
+            },
+          },
+          "description": undefined,
+          "required": true,
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiBody should test ApiBody with formData 1`] = `
+{
+  "components": {
+    "schemas": {
+      "Cat": {
+        "properties": {
+          "age": {
+            "description": "The age of the Cat",
+            "example": 1,
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded:": {
+              "encoding": {
+                "color": {
+                  "explode": false,
+                  "style": "form",
+                },
+              },
+              "schema": {
+                "properties": {
+                  "fav_number": {
+                    "type": "integer",
+                  },
+                  "name": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "name",
+                ],
+                "type": "object",
+              },
+            },
+          },
+          "description": undefined,
+          "required": true,
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -489,6 +750,164 @@ exports[`test @ApiHeaders and @ApiHeader should test ApiHeaders in class and met
         "summary": undefined,
         "tags": [
           "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiOperation should test custom operationId 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "updateUser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiOperation should test deprecated 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "deprecated": true,
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiOperation should test summary and description 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": "update user description",
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": "update user",
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiOperation should test tags 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "tag1",
+          "tag2",
         ],
       },
     },
@@ -875,6 +1294,470 @@ exports[`test @ApiProperty should test specify type 1`] = `
     },
   },
   "type": "object",
+}
+`;
+
+exports[`test @ApiQuery should get array type from DTO 1`] = `
+{
+  "components": {
+    "schemas": {
+      "UserDTO": {
+        "properties": {
+          "id": {
+            "description": "The uid of the user",
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the user",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "items": {
+                "$ref": "#/components/schemas/UserDTO",
+              },
+              "type": "array",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should get base type from @query 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "list",
+            "required": false,
+            "schema": {
+              "type": "object",
+            },
+          },
+          {
+            "in": "query",
+            "name": "flag",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+            },
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "type": "number",
+            },
+          },
+          {
+            "in": "query",
+            "name": "data",
+            "required": false,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should get class type from DTO 1`] = `
+{
+  "components": {
+    "schemas": {
+      "UserDTO": {
+        "properties": {
+          "id": {
+            "description": "The uid of the user",
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the user",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "description": "The name of the user",
+              "type": "string",
+            },
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "description": "The uid of the user",
+              "type": "number",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should get enum type 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": true,
+            "schema": {
+              "enum": [
+                "active",
+                "inactive",
+              ],
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should test merge @query and @ApiQuery 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "description": "The name of the user",
+            "in": "query",
+            "name": "data",
+            "required": false,
+            "schema": {
+              "type": "string",
+            },
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "type": "object",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should test with @query decorator and @ApiQuery 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number",
+            },
+          },
+          {
+            "description": "The name of the user",
+            "in": "query",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should test with @query decorator and any type 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should test with @query decorator and fixed name 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "data",
+            "required": false,
+            "schema": {
+              "type": "object",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
 }
 `;
 

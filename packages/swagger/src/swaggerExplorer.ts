@@ -378,7 +378,9 @@ export class SwaggerExplorer {
         operMeta?.metadata?.description,
         webRouter.description
       ),
-      operationId: this.getOperationId(target.name, webRouter),
+      operationId:
+        operMeta?.metadata?.operationId ||
+        this.getOperationId(target.name, webRouter),
       tags: operMeta?.metadata?.tags || [],
     };
     if (operMeta?.metadata?.deprecated != null) {
@@ -402,13 +404,82 @@ export class SwaggerExplorer {
         item.propertyName === webRouter.method
     );
 
+    // set params information from @ApiQuery() to parameters
+    for (const param of params) {
+      // rebuild query param to swagger format
+      if (!param.metadata.schema !== undefined) {
+        param.metadata.schema = {};
+        if (param.metadata.type) {
+          param.metadata.schema['type'] = param.metadata.type;
+          delete param.metadata.type;
+        }
+        if (param.metadata.isArray !== undefined) {
+          param.metadata.schema['items'] = {
+            type: param.metadata.schema['type'],
+          };
+          param.metadata.schema['type'] = 'array';
+          delete param.metadata.isArray;
+        }
+        if (param.metadata.enum !== undefined) {
+          param.metadata.schema.enum = param.metadata.enum;
+          delete param.metadata.enum;
+        }
+      } else {
+        // if schema is defined, then type is not needed
+        delete param.metadata.type;
+        delete param.metadata.isArray;
+        delete param.metadata.enum;
+      }
+
+      const p = param.metadata;
+      p.schema = this.formatType(param.metadata.schema);
+
+      if (p.in === 'query' || p.in === 'path' || p.in === 'header') {
+        parameters.push(p);
+      } else if (p.in === 'body') {
+        p.content = p.content ?? {};
+        if (Object.keys(p.content).length === 0) {
+          p.content[p.contentType || 'application/json'] = p.content[
+            p.contentType || 'application/json'
+          ] ?? {
+            schema: p.schema,
+          };
+        }
+
+        // format schema
+        for (const key in p.content) {
+          p.content[key].schema = this.formatType(p.content[key].schema);
+        }
+
+        // if requestBody is already set, skip
+        opts[webRouter.requestMethod].requestBody =
+          opts[webRouter.requestMethod].requestBody ?? {};
+        opts[webRouter.requestMethod].requestBody.description =
+          opts[webRouter.requestMethod].requestBody.description ??
+          p.description;
+        opts[webRouter.requestMethod].requestBody.content =
+          opts[webRouter.requestMethod].requestBody.content ?? p.content;
+        opts[webRouter.requestMethod].requestBody.required =
+          opts[webRouter.requestMethod].requestBody.required ?? p.required;
+      }
+    }
+
     for (const arg of args) {
       const currentType = types[arg.parameterIndex];
       const p: any = {
-        name: arg?.metadata?.propertyData ?? '',
+        name: arg?.metadata?.propertyData,
         in: convertTypeToString(arg.metadata?.type),
         required: false,
       };
+
+      const existsParam = parameters.find(item => {
+        return item.name === arg?.metadata?.propertyData && item.in === p.in;
+      });
+
+      // if exists same param from @ApiQuery and other decorator, just skip
+      if (existsParam) {
+        continue;
+      }
 
       if (p.in === 'path') {
         p.required = true;
@@ -425,12 +496,11 @@ export class SwaggerExplorer {
           // 如果@Query()装饰的 是一个对象，则把该对象的子属性作为多个@Query参数
           const schema = this.documentBuilder.getSchema(currentType.name);
           Object.keys(schema.properties).forEach(pName => {
-            const ppt: any = schema.properties[pName];
             const pp = {
               name: pName,
               in: p.in,
+              schema: schema.properties[pName],
             };
-            this.parseFromParamsToP({ metadata: ppt }, pp);
             parameters.push(pp);
           });
           continue;
@@ -440,18 +510,20 @@ export class SwaggerExplorer {
           };
         }
       } else {
+        if (!p.name) {
+          continue;
+        }
         p.schema = {
           type: convertSchemaType(currentType?.name ?? currentType),
         };
       }
 
-      this.parseFromParamsToP(
-        params[params.length - 1 - arg.parameterIndex],
-        p
-      );
-
       if (p.in === 'body') {
         if (webRouter.requestMethod === RequestMethod.GET) {
+          continue;
+        }
+        // if requestBody is already set, skip
+        if (opts[webRouter.requestMethod].requestBody) {
           continue;
         }
         // 这里兼容一下 @File()、@Files()、@Fields() 装饰器
@@ -631,7 +703,7 @@ export class SwaggerExplorer {
    * @param params
    * @param p
    */
-  private parseFromParamsToP(paramMeta: any, p: any) {
+  protected parseFromParamsToP(paramMeta: any, p: any) {
     if (paramMeta) {
       const param = paramMeta.metadata;
 
@@ -1157,7 +1229,7 @@ function convertSchemaType(value) {
     case 'String':
       return 'string';
     default:
-      return value;
+      return 'object';
   }
 }
 

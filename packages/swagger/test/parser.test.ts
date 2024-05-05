@@ -28,7 +28,7 @@ import {
   ApiOperation,
   ApiPayloadTooLargeResponse,
   ApiPreconditionFailedResponse,
-  ApiProperty,
+  ApiProperty, ApiQuery,
   ApiRequestTimeoutResponse,
   ApiResponse,
   ApiSecurity,
@@ -394,6 +394,135 @@ describe('test @ApiBody', () => {
                 $ref: getSchemaPath(Cat),
               },
             },
+          },
+        },
+      })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiBody with example', () => {
+    class Cat {
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+
+      @ApiProperty({ example: 1, description: 'The age of the Cat' })
+      age: number;
+    }
+
+    @Controller('/api')
+    @ApiExtraModel(Cat)
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                $ref: getSchemaPath(Cat),
+              },
+            },
+            example: 'Fluffy',
+          },
+        },
+      })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiBody with examples', () => {
+    class Cat {
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+
+      @ApiProperty({ example: 1, description: 'The age of the Cat' })
+      age: number;
+    }
+
+    @Controller('/api')
+    @ApiExtraModel(Cat)
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                $ref: getSchemaPath(Cat),
+              },
+            },
+            examples: {
+              example1: {
+                summary: 'An example of a cat',
+              },
+              example2: {
+                $ref: '#/components/examples/hamster'
+              },
+            }
+          },
+        },
+      })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiBody with formData', () => {
+    class Cat {
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+
+      @ApiProperty({ example: 1, description: 'The age of the Cat' })
+      age: number;
+    }
+
+    @Controller('/api')
+    @ApiExtraModel(Cat)
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({
+        required: true,
+        content: {
+          'application/x-www-form-urlencoded:': {
+            schema: {
+              type: 'object',
+              properties: {
+                name: {
+                  type: 'string',
+                },
+                fav_number: {
+                  type: 'integer',
+                }
+              },
+              required: [
+                'name',
+              ]
+            },
+            encoding: {
+              color: {
+                style: 'form',
+                explode: false,
+              }
+            }
           },
         },
       })
@@ -1470,5 +1599,227 @@ describe('test property metadata parse', () => {
       type: 'object',
       additionalProperties: true
     });
+  });
+});
+
+describe('test @ApiOperation', () => {
+  it('should test deprecated', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiOperation({
+        deprecated: true,
+      })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test tags', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiOperation({
+        tags: ['tag1', 'tag2'],
+      })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test summary and description', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiOperation({
+        summary: 'update user',
+        description: 'update user description',
+      })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test custom operationId', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiOperation({
+        operationId: 'updateUser',
+      })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+});
+
+describe('test @ApiQuery', () => {
+  it('should test with @query decorator and any type', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      async getUser(@Query() data: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test with @query decorator and fixed name', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      async getUser(@Query('data') data: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test with @query decorator and @ApiQuery', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      @ApiQuery({ name: 'data', description: 'The name of the user', type: 'string'})
+      @ApiQuery({ name: 'id', schema: {type: 'number'} })
+      async getUser(@Query('data') data: any, @Query('id') id: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test merge @query and @ApiQuery', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      @ApiQuery({ name: 'data', description: 'The name of the user', type: 'string', required: false})
+      async getUser(@Query('data') data: any, @Query('id') id: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should get base type from @query', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      async getUser(
+        @Query('data') data: string,
+        @Query('id') id: number,
+        @Query('flag') flag: boolean,
+        @Query('list') list: string[],
+      ) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should get class type from DTO', () => {
+    class UserDTO {
+      @ApiProperty({
+        description: 'The name of the user',
+      })
+      name: string;
+
+      @ApiProperty({
+        description: 'The uid of the user',
+      })
+      id: number;
+    }
+
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      async getUser(@Query() user: UserDTO) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should get array type from DTO', () => {
+    class UserDTO {
+      @ApiProperty({
+        description: 'The name of the user',
+      })
+      name: string;
+
+      @ApiProperty({
+        description: 'The uid of the user',
+      })
+      id: number;
+    }
+
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      @ApiQuery({ name: 'user', type: UserDTO, isArray: true })
+      async getUser(@Query() user: UserDTO[]) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should get enum type', () => {
+    enum Status {
+      ACTIVE = 'active',
+      INACTIVE = 'inactive',
+    }
+
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      @ApiQuery({ name: 'status', enum: Status })
+      async getUser(@Query('status') status: Status) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
   });
 });
