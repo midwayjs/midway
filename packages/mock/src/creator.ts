@@ -646,13 +646,18 @@ class BootstrapAppStarter implements IBootstrapAppStarter {
 
 /**
  * Create a real project but not ready or a virtual project
- * @param baseDir
+ * @param baseDirOrOptions
  * @param options
  */
 export async function createLightApp(
-  baseDir = '',
+  baseDirOrOptions: string | MockAppConfigurationOptions,
   options: MockAppConfigurationOptions = {}
 ): Promise<IMidwayApplication> {
+  if (baseDirOrOptions && typeof baseDirOrOptions === 'object') {
+    options = baseDirOrOptions;
+    baseDirOrOptions = options.baseDir || '';
+  }
+
   Framework()(LightFramework);
   options.globalConfig = Object.assign(
     {
@@ -676,7 +681,7 @@ export async function createLightApp(
     options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
   }
 
-  return createApp(baseDir, {
+  return createApp(baseDirOrOptions as string, {
     ...options,
     imports: [
       await transformFrameworkToConfiguration(
