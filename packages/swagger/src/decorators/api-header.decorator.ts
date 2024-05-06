@@ -1,7 +1,7 @@
 import { DECORATORS } from '../constants';
 import { SwaggerEnumType, ParameterObject, Type } from '../interfaces';
 import { getEnumType, getEnumValues } from '../common/enum.utils';
-import { createMixedDecorator, createParamDecorator } from './helpers';
+import { createMixedDecorator } from './helpers';
 
 export interface ApiHeaderOptions extends Omit<ParameterObject, 'in'> {
   enum?: SwaggerEnumType;
@@ -37,7 +37,7 @@ export function ApiHeader(options: ApiHeaderOptions): any {
     descriptor?: TypedPropertyDescriptor<any>
   ): any => {
     if (descriptor) {
-      return createParamDecorator(param, defaultHeaderOptions as any)(
+      return createMixedDecorator(DECORATORS.API_HEADERS, param)(
         target,
         key,
         descriptor
