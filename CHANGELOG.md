@@ -1,6 +1,60 @@
 # Change Log
 
 
+## v3.16.0 (2024-05-06)
+
+#### :rocket: New Feature
+* `web-koa`
+  * [#3751](https://github.com/midwayjs/midway/pull/3751) feat: parse array query by qs ([@czy88840616](https://github.com/czy88840616))
+* `core`, `tenant`
+  * [#3762](https://github.com/midwayjs/midway/pull/3762) feat: add tenant component with tenant manager ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3756](https://github.com/midwayjs/midway/pull/3756) refactor: Refactor swagger module ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#3700](https://github.com/midwayjs/midway/pull/3700) fix: health check missing this resolver ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `core`
+  * [#3710](https://github.com/midwayjs/midway/pull/3710) feat: add instance args for parameter decorator options ([@czy88840616](https://github.com/czy88840616))
+* `mock`, `mqtt`
+  * [#3699](https://github.com/midwayjs/midway/pull/3699) feat: support dynamic create mqtt consumer ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `casbin-redis-adapter`, `redis`
+  * [#3827](https://github.com/midwayjs/midway/pull/3827) fix(deps): update dependency ioredis to v5.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3825](https://github.com/midwayjs/midway/pull/3825) fix(deps): update bull monorepo to v5.17.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#3811](https://github.com/midwayjs/midway/pull/3811) fix(deps): update dependency qs to v6.12.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#3824](https://github.com/midwayjs/midway/pull/3824) fix(deps): update dependency tablestore to v5.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3823](https://github.com/midwayjs/midway/pull/3823) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.13.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#3829](https://github.com/midwayjs/midway/pull/3829) fix(deps): update dependency ws to v8.17.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3828](https://github.com/midwayjs/midway/pull/3828) fix(deps): update dependency joi to v17.13.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#3826](https://github.com/midwayjs/midway/pull/3826) fix(deps): update dependency casbin to v5.30.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#3775](https://github.com/midwayjs/midway/pull/3775) fix(deps): update dependency reflect-metadata to v0.2.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3818](https://github.com/midwayjs/midway/pull/3818) fix(deps): update dependency @grpc/proto-loader to v0.7.13 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3817](https://github.com/midwayjs/midway/pull/3817) fix(deps): update dependency @grpc/grpc-js to v1.10.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#3822](https://github.com/midwayjs/midway/pull/3822) chore(deps): update dependency swagger-ui-dist to v5.17.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3819](https://github.com/midwayjs/midway/pull/3819) chore(deps): update mikro-orm monorepo to v6.2.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3810](https://github.com/midwayjs/midway/pull/3810) fix(deps): update dependency mqtt to v5.5.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.15.11 (2024-04-25)
 
 #### :bug: Bug Fix
