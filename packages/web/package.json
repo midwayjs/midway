@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "3.15.6",
+  "version": "3.15.11",
   "description": "Midway Web Framework for Egg.js",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -29,8 +29,8 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/logger": "^3.0.0",
-    "@midwayjs/mock": "^3.15.6",
-    "dayjs": "1.11.10",
+    "@midwayjs/mock": "^3.15.8",
+    "dayjs": "1.11.11",
     "egg-logger": "3.4.2",
     "egg-mock": "4.2.1",
     "egg-scripts": "2.17.0",
@@ -45,12 +45,12 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
-    "@midwayjs/core": "^3.15.6",
+    "@midwayjs/core": "^3.15.8",
     "egg": "^2.28.0",
     "egg-cluster": "^1.27.1",
     "find-up": "5.0.0",
     "mkdirp": "1.0.4",
-    "qs": "6.11.2"
+    "qs": "6.12.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

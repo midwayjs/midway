@@ -232,6 +232,7 @@ export default {
 | proxyIpHeader        | string                                   | 可选，获取代理 ip 的字段名，默认为 X-Forwarded-For |
 | maxIpsCount        | number                                   | 可选，获取的 ips 最大数量，默认为 0（全部返回）|
 | serverTimeout | number | 可选，服务端超时配置，默认为 2 * 60 * 1000（2 分钟），单位毫秒 |
+| serverOptions | Record<string, any> | 可选，http Server [选项](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
 
 
 
@@ -381,7 +382,6 @@ export default {
 ```
 
 
-
 ### Query 数组解析
 
 默认情况下，koa 使用 `querystring` 解析 query 参数，当碰到数组时，会将数组的数据拆开。
@@ -458,6 +458,42 @@ export default {
   "a": "1",
   "b": "2",
   "c": "1"
+}
+```
+
+
+### 超时配置
+
+RequestTiemout 和 ServerTimeout 是两种不同的超时情况。
+
+- `serverTimeout`：用于设置服务器接收到请求后，等待客户端发送数据的超时时间。如果在该时间内客户端没有发送任何数据，则服务器将关闭连接。此超时适用于整个请求-响应周期，包括请求头、请求主体以及响应。
+- `requestTimeout`：用于设置服务器等待客户端发送完整请求的超时时间。这个超时是针对请求头和请求主体的，服务器将在该时间内等待客户端发送完整的请求。如果在超时时间内没有收到完整的请求，则服务器将中止该请求。
+
+默认情况下，`serverTimeout` 为 0，不会触发超时。
+
+如有需求，可以通过配置修改，单位毫秒。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    serverTimeout: 100_000
+  },
+}
+```
+
+如果程序出现 `ERR_HTTP_REQUEST_TIMEOUT` 这个错误，说明是触发了 `requestTimeout`，默认为 `300_000` （五分钟），单位毫秒，可以通过以下配置修改。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    serverOptions: {
+      requestTimeout: 600_000
+    }
+  },
 }
 ```
 

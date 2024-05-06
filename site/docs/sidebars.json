@@ -159,8 +159,7 @@
         "tool/mwtsc",
         "tool/mwts",
         "tool/luckyeye",
-        "tool/egg-ts-helper",
-        "tool/cli"
+        "tool/egg-ts-helper"
       ]
     },
     {
@@ -196,7 +195,8 @@
       "collapsed": true,
       "collapsible": true,
       "items": [
-        "logger"
+        "logger",
+        "tool/cli"
       ]
     }
   ],

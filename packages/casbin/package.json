@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/casbin",
   "description": "midway casbin component",
-  "version": "3.15.6",
+  "version": "3.15.11",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -10,12 +10,12 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.15.6",
-    "@midwayjs/koa": "^3.15.6",
-    "@midwayjs/mock": "^3.15.6"
+    "@midwayjs/core": "^3.15.8",
+    "@midwayjs/koa": "^3.15.11",
+    "@midwayjs/mock": "^3.15.8"
   },
   "dependencies": {
-    "casbin": "5.28.0"
+    "casbin": "5.29.0"
   },
   "keywords": [
     "midway",

@@ -230,6 +230,8 @@ All attributes are described as follows:
 | proxyIpHeader | string | optional. obtains the field name of the proxy ip address. the default value is X-Forwarded-For |
 | maxIpsCount | number | optional. the maximum number of ips obtained, which is 0 by default. |
 | serverTimeout | number | Optional, server timeout configuration, the default is 2 * 60 * 1000 (2 minutes), in milliseconds |
+| serverOptions | Record<string, any> | Optional，http Server [Options](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
+
 
 
 ### Modify port
@@ -453,5 +455,40 @@ Default effect (using `querystring`)
    "a": "1",
    "b": "2",
    "c": "1"
+}
+
+### Timeout Configuration
+
+RequestTimeout and ServerTimeout are two different timeout scenarios.
+
+- `serverTimeout`: Used to set the timeout for the server to wait for the client to send data after receiving a request. If the client does not send any data within this time, the server will close the connection. This timeout applies to the entire request-response cycle, including request headers, request body, and response.
+- `requestTimeout`: Used to set the timeout for the server to wait for the client to send a complete request. This timeout applies specifically to request headers and request body. If the complete request is not received within this time, the server will abort the request.
+
+By default, `serverTimeout` is set to 0 and does not trigger a timeout.
+
+If needed, you can modify the configuration by specifying the timeout in milliseconds.
+
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    serverTimeout: 100_000
+  },
+}
+```
+
+If you encounter the `ERR_HTTP_REQUEST_TIMEOUT` error, it means that the `requestTimeout` has been triggered, which defaults to `300_000` (5 minutes) in milliseconds. You can modify this timeout by configuring as follows.
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    serverOptions: {
+      requestTimeout: 600_000
+    }
+  },
 }
 ```

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "3.15.6",
+  "version": "3.15.8",
   "description": "midway core",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -23,7 +23,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/logger": "^3.0.0",
-    "koa": "2.15.2",
+    "koa": "2.15.3",
     "mm": "3.4.0",
     "raw-body": "2.5.2",
     "sinon": "17.0.1"

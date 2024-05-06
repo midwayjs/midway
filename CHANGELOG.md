@@ -1,6 +1,100 @@
 # Change Log
 
 
+## v3.15.11 (2024-04-25)
+
+#### :bug: Bug Fix
+* `express-session`, `web-express`, `web-koa`, `web`
+  * [#3807](https://github.com/midwayjs/midway/pull/3807) fix: certificate error in web scene ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `otel`
+  * [#3805](https://github.com/midwayjs/midway/pull/3805) chore(deps): update dependency @opentelemetry/sdk-node to v0.51.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3806](https://github.com/midwayjs/midway/pull/3806) chore(deps): update mikro-orm monorepo to v6.2.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.15.10 (2024-04-19)
+
+#### :nail_care: Polish
+* `bull-board`
+  * [#3798](https://github.com/midwayjs/midway/pull/3798) refactor: add the bullBoardManager class along with documentation ([@czy88840616](https://github.com/czy88840616))
+  * [#3791](https://github.com/midwayjs/midway/pull/3791) feat(bull-board): save the result of createBullBoard ([@DanielXuuuuu](https://github.com/DanielXuuuuu))
+* `web-express`, `web-koa`, `web`
+  * [#3797](https://github.com/midwayjs/midway/pull/3797) feat Support http server opts ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3788](https://github.com/midwayjs/midway/pull/3788) fix(docs): typo ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* `bull-board`, `view-ejs`
+  * [#3792](https://github.com/midwayjs/midway/pull/3792) fix(deps): update dependency ejs to v3.1.10 ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#3793](https://github.com/midwayjs/midway/pull/3793) fix(deps): update dependency leoric to v2.12.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Daniel Xu ([@DanielXuuuuu](https://github.com/DanielXuuuuu))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
+## v3.15.9 (2024-04-14)
+
+#### :bug: Bug Fix
+* `cron`
+  * [#3786](https://github.com/midwayjs/midway/pull/3786) fix: remove typings from the cron module since it includes its own types ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.15.8 (2024-04-12)
+
+#### :bug: Bug Fix
+* `socketio`
+  * [#3764](https://github.com/midwayjs/midway/pull/3764) fix: socket with regexp namespace ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* Other
+  * [#3780](https://github.com/midwayjs/midway/pull/3780) chore(deps): update dessant/lock-threads action to v5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#3769](https://github.com/midwayjs/midway/pull/3769) fix(deps): update socket.io packages to v4.7.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#3777](https://github.com/midwayjs/midway/pull/3777) fix(deps): update dependency qs to v6.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `static-file`
+  * [#3778](https://github.com/midwayjs/midway/pull/3778) fix(deps): update dependency ylru to v1.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#3776](https://github.com/midwayjs/midway/pull/3776) fix(deps): update dependency @opentelemetry/api to v1.8.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#3774](https://github.com/midwayjs/midway/pull/3774) fix(deps): update dependency tablestore to v5.5.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3773](https://github.com/midwayjs/midway/pull/3773) fix(deps): update dependency mqtt to v5.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#3772](https://github.com/midwayjs/midway/pull/3772) fix(deps): update dependency casbin to v5.29.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cron`
+  * [#3771](https://github.com/midwayjs/midway/pull/3771) fix(deps): update dependency @types/cron to v2.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3770](https://github.com/midwayjs/midway/pull/3770) fix(deps): update bull monorepo to v5.15.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3767](https://github.com/midwayjs/midway/pull/3767) fix(deps): update dependency joi to v17.12.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `web-koa`
+  * [#3768](https://github.com/midwayjs/midway/pull/3768) fix(deps): update dependency koa to v2.15.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3747](https://github.com/midwayjs/midway/pull/3747) fix(deps): update dependency @grpc/grpc-js to v1.10.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3748](https://github.com/midwayjs/midway/pull/3748) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.13.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.15.7 (2024-04-01)
 
 #### :bug: Bug Fix

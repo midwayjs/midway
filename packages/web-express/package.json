@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/express",
-  "version": "3.15.7",
+  "version": "3.15.11",
   "description": "Midway Web Framework for Express",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -24,14 +24,14 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^3.15.6",
+    "@midwayjs/mock": "^3.15.8",
     "@types/body-parser": "1.19.5",
     "@types/express": "4.17.21",
     "fs-extra": "11.2.0"
   },
   "dependencies": {
-    "@midwayjs/core": "^3.15.6",
-    "@midwayjs/express-session": "^3.15.6",
+    "@midwayjs/core": "^3.15.8",
+    "@midwayjs/express-session": "^3.15.11",
     "body-parser": "1.20.2",
     "cookie-parser": "^1.4.6",
     "express": "4.19.2"

@@ -292,11 +292,15 @@ export class MidwaySocketIOFramework extends BaseFramework<
       }
     });
 
-    if (nsp.adapter) {
+    if (nsp.adapter && nsp.adapter.on) {
       nsp.adapter.on('error', err => {
         this.logger.error(err);
       });
     }
+
+    nsp.on('error', err => {
+      this.logger.error(err);
+    });
   }
 
   private async bindSocketResponse(

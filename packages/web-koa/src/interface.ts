@@ -91,6 +91,10 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * qs options
    */
   queryParseOptions?: qs.IParseOptions;
+  /*
+   * https/https/http2 server options
+   */
+  serverOptions?: Record<string, any>;
 }
 
 export type MiddlewareParamArray = Array<

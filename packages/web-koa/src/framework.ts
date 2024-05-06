@@ -255,34 +255,39 @@ export class MidwayKoaFramework extends BaseFramework<
     // restore use method
     this.app.use = (this.app as any).originUse;
 
-    // https config
-    if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key = PathFileUtil.getFileContentSync(
-        this.configurationOptions.key
-      );
-      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
-        this.configurationOptions.cert
-      );
-      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
-        this.configurationOptions.ca
-      );
+    const serverOptions = {
+      ...this.configurationOptions,
+      ...this.configurationOptions.serverOptions,
+    };
 
-      if (this.configurationOptions.http2) {
+    // https config
+    if (serverOptions.key && serverOptions.cert) {
+      serverOptions.key = PathFileUtil.getFileContentSync(serverOptions.key);
+      serverOptions.cert = PathFileUtil.getFileContentSync(serverOptions.cert);
+      serverOptions.ca = PathFileUtil.getFileContentSync(serverOptions.ca);
+
+      if (serverOptions.http2) {
         this.server = require('http2').createSecureServer(
-          this.configurationOptions,
+          serverOptions,
           this.app.callback()
         );
       } else {
         this.server = require('https').createServer(
-          this.configurationOptions,
+          serverOptions,
           this.app.callback()
         );
       }
     } else {
-      if (this.configurationOptions.http2) {
-        this.server = require('http2').createServer(this.app.callback());
+      if (serverOptions.http2) {
+        this.server = require('http2').createServer(
+          serverOptions,
+          this.app.callback()
+        );
       } else {
-        this.server = require('http').createServer(this.app.callback());
+        this.server = require('http').createServer(
+          serverOptions,
+          this.app.callback()
+        );
       }
     }
     // register httpServer to applicationContext
