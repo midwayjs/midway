@@ -2,6 +2,7 @@ import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midw
 import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/core';
+import * as qs from 'qs';
 
 export interface State extends DefaultState {}
 
@@ -83,6 +84,14 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    */
   serverTimeout?: number;
   /**
+   * qs mode
+   */
+  queryParseMode?: 'extended' | 'strict' | 'first';
+  /**
+   * qs options
+   */
+  queryParseOptions?: qs.IParseOptions;
+  /*
    * https/https/http2 server options
    */
   serverOptions?: Record<string, any>;

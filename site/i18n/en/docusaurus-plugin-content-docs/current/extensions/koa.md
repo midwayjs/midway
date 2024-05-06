@@ -377,6 +377,86 @@ export default {
 };
 ```
 
+
+
+### Query array parsing
+
+By default, koa uses `querystring` to parse query parameters, and when it encounters an array, it will split the data in the array.
+
+for example:
+
+```
+GET /query?a[0]=1&a[1]=2
+```
+
+The result obtained is:
+
+```json
+{
+     "a[0]": 1,
+     "a[1]": 2,
+}
+```
+
+The framework provides some parameters to handle this situation.
+
+```typescript
+// src/config/config.default
+export default {
+   // ...
+   koa: {
+     queryParseMode: 'extended',
+     // ...
+   },
+}
+```
+
+The `queryParseMode` parameter can choose from three values: `extended`, `strict`, and `first`.
+
+  When `queryParseMode` has a value, the `qs` module will be used to process the query, and the effect is the same as the `koa-qs` module.
+
+When the request parameter is `/query?a=1&b=2&a=3&c[0]=1&c[1]=2'`.
+
+Default effect (using `querystring`)
+
+```JSON
+{
+   "a": ["1", "3" ],
+   "b": "2",
+   "c[0]": "1",
+   "c[1]": "2"
+}
+```
+
+  `extended` effect
+
+```JSON
+{
+   "a": ["1", "3" ],
+   "b": ["2"],
+   "c": ["1", "2"]
+}
+```
+
+  `strict` effect
+
+```JSON
+{
+   "a": ["1", "3" ],
+   "b": "2",
+   "c": ["1", "2"]
+}
+```
+
+  `first` effect
+
+```JSON
+{
+   "a": "1",
+   "b": "2",
+   "c": "1"
+}
+
 ### Timeout Configuration
 
 RequestTimeout and ServerTimeout are two different timeout scenarios.
@@ -387,6 +467,7 @@ RequestTimeout and ServerTimeout are two different timeout scenarios.
 By default, `serverTimeout` is set to 0 and does not trigger a timeout.
 
 If needed, you can modify the configuration by specifying the timeout in milliseconds.
+
 
 ```typescript
 // src/config/config.default

@@ -27,6 +27,8 @@ import type { DefaultState, Middleware, Next } from 'koa';
 import * as koa from 'koa';
 import { Server } from 'http';
 import { setupOnError } from './onerror';
+import * as qs from 'qs';
+import * as querystring from 'querystring';
 
 const COOKIES = Symbol('context#cookies');
 
@@ -124,6 +126,49 @@ export class MidwayKoaFramework extends BaseFramework<
             throw new httpError.NotFoundError(`Forward url ${url} Not Found`);
           }
         };
+      },
+    });
+
+    const converter =
+      this.configurationOptions.queryParseMode === 'strict'
+        ? function (value) {
+            return !Array.isArray(value) ? [value] : value;
+          }
+        : this.configurationOptions.queryParseMode === 'first'
+        ? function (value) {
+            return Array.isArray(value) ? value[0] : value;
+          }
+        : undefined;
+
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    // fix query with array params
+    Object.defineProperty(this.app.request, 'query', {
+      get() {
+        const str = this.querystring;
+        const c = (this._querycache = this._querycache || {});
+
+        // find cache
+        if (c[str]) return c[str];
+
+        if (self.configurationOptions.queryParseMode) {
+          // use qs module to parse query
+          c[str] = qs.parse(
+            str,
+            self.configurationOptions.queryParseOptions || {}
+          );
+        } else {
+          // use querystring to parse query by default
+          c[str] = querystring.parse(str);
+        }
+
+        if (converter) {
+          for (const key in c[str]) {
+            c[str][key] = converter(c[str][key]);
+          }
+        }
+
+        return c[str];
       },
     });
 
