@@ -1,6 +1,7 @@
 import { closeApp, creatApp, createHttpRequest } from './utils';
 import { IMidwayKoaApplication } from '../src';
-import { makeHttpRequest } from '@midwayjs/core';
+import { Controller, Get, makeHttpRequest } from '@midwayjs/core';
+import { createLightApp } from '@midwayjs/mock';
 
 describe('/test/feature.test.ts', () => {
 
@@ -478,5 +479,135 @@ describe('/test/feature.test.ts', () => {
     expect(result.text).toEqual('hello world');
 
     await closeApp(app);
+  });
+
+  describe('test query parser', () => {
+    @Controller()
+    class HomeController {
+      @Get('/query')
+      async query(ctx) {
+        return ctx.query;
+      }
+    }
+    it('should test parse with querystring', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123'
+        }
+      });
+
+      let result = await createHttpRequest(app)
+        .get('/query?a=1&b=2&a=3&c[0]=1&c[1]=2');
+
+      expect(result.text).toEqual(JSON.stringify({'a': ['1', '3'], 'b': '2', 'c[0]': '1', 'c[1]': '2'}));
+
+      await closeApp(app);
+    });
+
+    it('should test parse with parseQueryMode extended', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            queryParseMode: 'extended'
+          }
+        }
+      });
+
+      let result = await createHttpRequest(app)
+        .get('/query?a=1&b=2&a=3&c[0]=1&c[1]=2');
+
+      expect(result.text).toEqual(JSON.stringify({'a': ['1', '3'], 'b': '2', 'c': ['1', '2']}));
+
+      await closeApp(app);
+    });
+
+    it('should test parse with parseQueryMode strict', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            queryParseMode: 'strict'
+          }
+        }
+      });
+
+      let result = await createHttpRequest(app)
+        .get('/query?a=1&b=2&a=3&c[0]=1&c[1]=2');
+
+      expect(result.text).toEqual(JSON.stringify({'a': ['1', '3'], 'b': ['2'], 'c': ['1', '2']}));
+
+      await closeApp(app);
+    });
+
+    it('should test parse with parseQueryMode first', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            queryParseMode: 'first'
+          }
+        }
+      });
+
+      let result = await createHttpRequest(app)
+        .get('/query?a=1&b=2&a=3&c[0]=1&c[1]=2');
+
+      expect(result.text).toEqual(JSON.stringify({'a': '1', 'b': '2', 'c': '1'}));
+
+      await closeApp(app);
+    });
+
+    it('should test queryParseOptions', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            queryParseMode: 'first',
+            queryParseOptions: {
+              parameterLimit: 3,
+              arrayLimit: 1,
+            }
+          }
+        }
+      });
+
+      let result = await createHttpRequest(app)
+        .get('/query?a=1&b=2&a=3&c[0]=1&c[1]=2');
+
+      expect(result.text).toEqual(JSON.stringify({'a': '1', 'b': '2'}));
+
+      await closeApp(app);
+    });
   });
 });

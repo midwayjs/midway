@@ -34,8 +34,10 @@
     "@midwayjs/core": "^3.15.6",
     "@midwayjs/session": "^3.15.6",
     "@types/koa": "2.15.0",
+    "@types/qs": "6.9.14",
     "koa": "2.15.3",
-    "koa-bodyparser": "4.4.1"
+    "koa-bodyparser": "4.4.1",
+    "qs": "6.11.2"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
