@@ -12,8 +12,8 @@
     "@midwayjs/core": "^3.15.8",
     "@midwayjs/koa": "^3.15.11",
     "@midwayjs/mock": "^3.15.8",
-    "casbin": "5.29.0",
-    "ioredis": "5.3.2"
+    "casbin": "5.30.0",
+    "ioredis": "5.4.1"
   },
   "dependencies": {
     "@midwayjs/casbin": "^3.15.11",
