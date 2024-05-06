@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "int64-buffer": "1.0.1",
-    "tablestore": "5.5.0"
+    "tablestore": "5.5.1"
   },
   "keywords": [
     "aliyun",
