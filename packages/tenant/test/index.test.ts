@@ -11,7 +11,7 @@ describe('index.test.ts', () => {
       tenantManager: tenant.TenantManager;
 
       async getTenant() {
-        return this.tenantManager.getCurrentTenantId();
+        return this.tenantManager.getCurrentTenant();
       }
     }
 
@@ -34,7 +34,9 @@ describe('index.test.ts', () => {
 
     let err;
     try {
-      await manager.setCurrentTenantId('test1');
+      await manager.setCurrentTenant({
+        id: 'test1'
+      });
     } catch (e) {
       err = e;
     }
@@ -47,17 +49,21 @@ describe('index.test.ts', () => {
     const newContext2 = ASYNC_ROOT_CONTEXT.setValue(ASYNC_CONTEXT_KEY, ctx2);
 
     contextManager.with(newContext1, async () => {
-      await manager.setCurrentTenantId('test1');
+      await manager.setCurrentTenant({
+        id: 'test1'
+      });
 
       const service = await app.getApplicationContext().getAsync(TestService);
-      expect(await service.getTenant()).toEqual('test1');
+      expect((await service.getTenant())['id']).toEqual('test1');
     });
 
     contextManager.with(newContext2, async () => {
-      await manager.setCurrentTenantId('test2');
+      await manager.setCurrentTenant({
+        id: 'test2'
+      });
 
       const service = await app.getApplicationContext().getAsync(TestService);
-      expect(await service.getTenant()).toEqual('test2');
+      expect((await service.getTenant())['id']).toEqual('test2');
     });
 
     await close(app);

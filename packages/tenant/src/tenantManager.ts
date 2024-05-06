@@ -9,14 +9,14 @@ import {
   Singleton,
 } from '@midwayjs/core';
 
-const TENANT_MANAGER_KEY = 'tenant:manager_attr_key';
+const CURRENT_TENANT_MANAGER_KEY = 'tenant:current_manager_tenant_key';
 
 @Singleton()
 export class TenantManager {
   @ApplicationContext()
   applicationContext: IMidwayContainer;
 
-  async getCurrentTenantId(): Promise<string | number | undefined> {
+  async getCurrentTenant<T = any>(): Promise<T> {
     const contextManager: AsyncContextManager = this.applicationContext.get(
       ASYNC_CONTEXT_MANAGER_KEY
     );
@@ -26,11 +26,11 @@ export class TenantManager {
       .getValue(ASYNC_CONTEXT_KEY) as IMidwayContext;
 
     if (ctx) {
-      return ctx.getAttr(TENANT_MANAGER_KEY);
+      return ctx.getAttr(CURRENT_TENANT_MANAGER_KEY);
     }
   }
 
-  async setCurrentTenantId(tenantId: string | number): Promise<void> {
+  async setCurrentTenant<T = any>(currentTenant: T): Promise<void> {
     const contextManager: AsyncContextManager = this.applicationContext.get(
       ASYNC_CONTEXT_MANAGER_KEY
     );
@@ -42,7 +42,7 @@ export class TenantManager {
     ) as IMidwayContext;
 
     if (requestContext) {
-      requestContext.setAttr(TENANT_MANAGER_KEY, tenantId);
+      requestContext.setAttr(CURRENT_TENANT_MANAGER_KEY, currentTenant);
     } else {
       throw new MidwayEmptyValueError('Current Async Context is Empty');
     }
