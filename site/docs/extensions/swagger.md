@@ -512,6 +512,8 @@ Swagger UI 中展示：
 export class HelloController {}
 ```
 
+![](https://img.alicdn.com/imgextra/i1/O1CN01n8Xgn729GphI6XzXk_!!6000000008041-2-tps-1234-584.png)
+
 ### 请求 Response
 
 可以使用 ```@ApiResponse({...})``` 来自定义请求 Response。

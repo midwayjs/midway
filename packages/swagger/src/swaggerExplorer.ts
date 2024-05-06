@@ -1,25 +1,25 @@
 import {
   Config,
   CONTROLLER_KEY,
-  listModule,
-  Provide,
   ControllerOption,
+  getClassExtendedMetadata,
   getClassMetadata,
   getMethodParamTypes,
-  Types,
+  getPropertyDataFromClass,
+  getPropertyType,
+  Init,
+  INJECT_CUSTOM_PARAM,
+  INJECT_CUSTOM_PROPERTY,
+  listModule,
+  Provide,
+  RequestMethod,
   RouteParamTypes,
   RouterOption,
-  WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY,
-  Init,
   Scope,
   ScopeEnum,
-  INJECT_CUSTOM_PROPERTY,
-  INJECT_CUSTOM_PARAM,
-  getPropertyType,
-  RequestMethod,
-  getClassExtendedMetadata,
-  getPropertyDataFromClass,
+  Types,
+  WEB_ROUTER_KEY,
+  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/core';
 import { MixDecoratorMetadata, PathItemObject, Type } from './interfaces';
 import {
@@ -29,9 +29,9 @@ import {
 } from './constants';
 import { DocumentBuilder } from './documentBuilder';
 import {
-  SwaggerOptions,
   AuthOptions,
   SecuritySchemeObject,
+  SwaggerOptions,
 } from './interfaces/';
 import { BodyContentType } from '.';
 
@@ -378,7 +378,9 @@ export class SwaggerExplorer {
         operMeta?.metadata?.description,
         webRouter.description
       ),
-      operationId: this.getOperationId(target.name, webRouter),
+      operationId:
+        operMeta?.metadata?.operationId ||
+        this.getOperationId(target.name, webRouter),
       tags: operMeta?.metadata?.tags || [],
     };
     if (operMeta?.metadata?.deprecated != null) {
@@ -402,13 +404,82 @@ export class SwaggerExplorer {
         item.propertyName === webRouter.method
     );
 
+    // set params information from @ApiQuery() to parameters
+    for (const param of params) {
+      // rebuild query param to swagger format
+      if (param.metadata.schema === undefined) {
+        param.metadata.schema = {};
+        if (param.metadata.type) {
+          param.metadata.schema['type'] = param.metadata.type;
+          delete param.metadata.type;
+        }
+        if (param.metadata.isArray !== undefined) {
+          param.metadata.schema['items'] = {
+            type: param.metadata.schema['type'],
+          };
+          param.metadata.schema['type'] = 'array';
+          delete param.metadata.isArray;
+        }
+        if (param.metadata.enum !== undefined) {
+          param.metadata.schema.enum = param.metadata.enum;
+          delete param.metadata.enum;
+        }
+      } else {
+        // if schema is defined, then type is not needed
+        delete param.metadata.type;
+        delete param.metadata.isArray;
+        delete param.metadata.enum;
+      }
+
+      const p = param.metadata;
+      p.schema = this.formatType(param.metadata.schema);
+
+      if (p.in === 'query' || p.in === 'path' || p.in === 'header') {
+        parameters.push(p);
+      } else if (p.in === 'body') {
+        p.content = p.content ?? {};
+        if (Object.keys(p.content).length === 0) {
+          p.content[p.contentType || 'application/json'] = p.content[
+            p.contentType || 'application/json'
+          ] ?? {
+            schema: p.schema,
+          };
+        }
+
+        // format schema
+        for (const key in p.content) {
+          p.content[key].schema = this.formatType(p.content[key].schema);
+        }
+
+        // if requestBody is already set, skip
+        opts[webRouter.requestMethod].requestBody =
+          opts[webRouter.requestMethod].requestBody ?? {};
+        opts[webRouter.requestMethod].requestBody.description =
+          opts[webRouter.requestMethod].requestBody.description ??
+          p.description;
+        opts[webRouter.requestMethod].requestBody.content =
+          opts[webRouter.requestMethod].requestBody.content ?? p.content;
+        opts[webRouter.requestMethod].requestBody.required =
+          opts[webRouter.requestMethod].requestBody.required ?? p.required;
+      }
+    }
+
     for (const arg of args) {
       const currentType = types[arg.parameterIndex];
       const p: any = {
-        name: arg?.metadata?.propertyData ?? '',
+        name: arg?.metadata?.propertyData,
         in: convertTypeToString(arg.metadata?.type),
         required: false,
       };
+
+      const existsParam = parameters.find(item => {
+        return item.name === arg?.metadata?.propertyData && item.in === p.in;
+      });
+
+      // if exists same param from @ApiQuery and other decorator, just skip
+      if (existsParam) {
+        continue;
+      }
 
       if (p.in === 'path') {
         p.required = true;
@@ -420,100 +491,96 @@ export class SwaggerExplorer {
 
       if (Types.isClass(currentType)) {
         this.parseClzz(currentType);
+      }
 
-        if (p.in === 'query') {
+      if (p.in === 'query' || p.in === 'path') {
+        if (Types.isClass(currentType)) {
           // 如果@Query()装饰的 是一个对象，则把该对象的子属性作为多个@Query参数
           const schema = this.documentBuilder.getSchema(currentType.name);
           Object.keys(schema.properties).forEach(pName => {
-            const ppt: any = schema.properties[pName];
             const pp = {
               name: pName,
               in: p.in,
+              schema: schema.properties[pName],
             };
-            this.parseFromParamsToP({ metadata: ppt }, pp);
             parameters.push(pp);
           });
           continue;
         } else {
+          if (!p.name) {
+            continue;
+          }
           p.schema = {
-            $ref: '#/components/schemas/' + currentType.name,
+            type: convertSchemaType(currentType?.name ?? currentType),
           };
         }
-      } else {
-        p.schema = {
-          type: convertSchemaType(currentType?.name ?? currentType),
-        };
-      }
-
-      this.parseFromParamsToP(
-        params[params.length - 1 - arg.parameterIndex],
-        p
-      );
-
-      if (p.in === 'body') {
+      } else if (p.in === 'body') {
         if (webRouter.requestMethod === RequestMethod.GET) {
           continue;
         }
+        // if requestBody is already set, skip
+        if (opts[webRouter.requestMethod].requestBody) {
+          continue;
+        }
+
         // 这里兼容一下 @File()、@Files()、@Fields() 装饰器
         if (arg.metadata?.type === RouteParamTypes.FILESSTREAM) {
-          p.schema = {
-            type: 'object',
-            properties: {
-              files: {
-                type: 'array',
-                items: {
+          p.content = {};
+          p.content[BodyContentType.Multipart] = {
+            schema: {
+              type: 'object',
+              properties: {
+                files: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                    format: 'binary',
+                  },
+                  description: p.description,
+                },
+              },
+            },
+          };
+        } else if (arg.metadata?.type === RouteParamTypes.FILESTREAM) {
+          p.content = {};
+          p.content[BodyContentType.Multipart] = {
+            schema: {
+              type: 'object',
+              properties: {
+                file: {
                   type: 'string',
                   format: 'binary',
+                  description: p.description,
                 },
-                description: p.description,
               },
             },
           };
-          p.contentType = BodyContentType.Multipart;
-        }
-        if (arg.metadata?.type === RouteParamTypes.FILESTREAM) {
-          p.schema = {
-            type: 'object',
-            properties: {
-              file: {
-                type: 'string',
-                format: 'binary',
-                description: p.description,
-              },
-            },
-          };
-          p.contentType = BodyContentType.Multipart;
-        }
-        if (arg.metadata?.type === RouteParamTypes.FIELDS) {
-          this.expandSchemaRef(p);
-          p.contentType = BodyContentType.Multipart;
-        }
-
-        if (!p.content) {
-          p.content = {};
-          p.content[p.contentType || 'application/json'] = {
-            schema: p.schema,
-          };
-        }
-        if (!opts[webRouter.requestMethod].requestBody) {
-          const requestBody = {
-            required: true,
-            description: p.description || p.name,
-            content: p.content,
-          };
-          opts[webRouter.requestMethod].requestBody = requestBody;
         } else {
-          // 这里拼 schema properties 时肯定存在
-          Object.assign(
-            {},
-            opts[webRouter.requestMethod].requestBody.content[p.contentType]
-              .schema?.properties,
-            p.schema.properties
-          );
+          if (Types.isClass(currentType)) {
+            p.content = {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/' + currentType.name,
+                },
+              },
+            };
+          } else {
+            // base type
+            p.content = {
+              'text/plain': {
+                schema: {
+                  type: convertSchemaType(currentType?.name ?? currentType),
+                },
+              },
+            };
+          }
         }
 
-        delete p.contentType;
-        delete p.content;
+        opts[webRouter.requestMethod].requestBody = {
+          required: true,
+          description: p.description || p.name,
+          content: p.content,
+        };
         // in body 不需要处理
         continue;
       }
@@ -521,8 +588,17 @@ export class SwaggerExplorer {
       parameters.push(p);
     }
     // class header 需要使用 ApiHeader 装饰器
-    if (headers) {
+    if (headers && headers.length) {
       headers.forEach(header => parameters.unshift(header));
+    }
+
+    // 获取方法上的 @ApiHeader
+    const methodHeaders = metaForMethods.filter(
+      item => item.key === DECORATORS.API_HEADERS
+    );
+
+    if (methodHeaders.length > 0) {
+      methodHeaders.forEach(item => parameters.unshift(item.metadata));
     }
 
     opts[webRouter.requestMethod].parameters = parameters;
@@ -599,31 +675,12 @@ export class SwaggerExplorer {
     return this.operationIdFactory(controllerKey, webRouter);
   }
 
-  private expandSchemaRef(p: any, name?: string) {
-    let schemaName = name;
-    if (p.schema['$ref']) {
-      // 展开各个字段属性
-      schemaName = p.schema['$ref'].replace('#/components/schemas/', '');
-      delete p.schema['$ref'];
-    }
-
-    if (schemaName) {
-      const schema = this.documentBuilder.getSchema(schemaName);
-      const ss = JSON.parse(JSON.stringify(schema));
-      if (p.schema.properties) {
-        Object.assign(p.schema.properties, ss.properties);
-      } else {
-        p.schema = JSON.parse(JSON.stringify(schema));
-      }
-    }
-    return p;
-  }
   /**
    * 提取参数
    * @param params
    * @param p
    */
-  private parseFromParamsToP(paramMeta: any, p: any) {
+  protected parseFromParamsToP(paramMeta: any, p: any) {
     if (paramMeta) {
       const param = paramMeta.metadata;
 
@@ -839,6 +896,106 @@ export class SwaggerExplorer {
     return Object.assign(typeMeta, metadata);
   }
 
+  protected formatType(metadata: {
+    type: any;
+    items?: any;
+    format?: string;
+    oneOf?: any[];
+    allOf?: any[];
+    anyOf?: any[];
+    not?: any;
+    enum?: any[];
+    properties?: any;
+    additionalProperties?: any;
+    $ref?: any;
+  }) {
+    if (metadata === null) {
+      return null;
+    }
+
+    // 如果有枚举，单独处理
+    if (metadata.enum) {
+      // enum 不需要处理
+      metadata.enum.map(item => this.formatType(item));
+    }
+
+    if (metadata.not) {
+      metadata.not = this.formatType(metadata.not);
+    }
+
+    if (metadata['$ref'] && typeof metadata['$ref'] === 'function') {
+      metadata['$ref'] = metadata['$ref']();
+    }
+
+    if (metadata.oneOf) {
+      metadata.oneOf = metadata.oneOf.map(item => this.formatType(item));
+    } else if (metadata.anyOf) {
+      metadata.anyOf = metadata.anyOf.map(item => this.formatType(item));
+    } else if (metadata.allOf) {
+      metadata.allOf = metadata.allOf.map(item => this.formatType(item));
+    }
+
+    // 有下面的这些属性，就不需要 type 了
+    ['not', '$ref', 'oneOf', 'anyOf', 'allOf'].forEach(key => {
+      if (metadata[key]) {
+        delete metadata['type'];
+      }
+    });
+
+    if (metadata.properties) {
+      const properties = {};
+      for (const key in metadata.properties) {
+        properties[key] = this.formatType(metadata.properties[key]);
+      }
+      metadata.properties = properties;
+    }
+
+    if (metadata.additionalProperties) {
+      metadata.additionalProperties = this.formatType(
+        metadata.additionalProperties
+      );
+    }
+
+    // 处理类型
+    if (['string', 'number', 'boolean', 'integer'].includes(metadata.type)) {
+      // 不做处理
+    } else if (metadata.type === Number) {
+      metadata.type = 'number';
+    } else if (metadata.type === String) {
+      metadata.type = 'string';
+    } else if (metadata.type === Boolean) {
+      metadata.type = 'boolean';
+    } else if (
+      metadata.type === 'date' ||
+      metadata.type === 'Date' ||
+      metadata.type === Date
+    ) {
+      metadata.type = 'string';
+      metadata.format = 'date-time';
+    } else if (metadata.type === Array || metadata.type === 'array') {
+      // Array => { type: 'array' }
+      metadata.type = 'array';
+      if (metadata.items) {
+        metadata.items = this.formatType(metadata.items);
+      }
+    } else if (Array.isArray(metadata.type)) {
+      // [String] => { type: 'array', items: { type: 'string' } }
+      metadata.items = this.formatType({ type: metadata.type[0] });
+      metadata.type = 'array';
+    } else if (metadata.type === Object || metadata.type === 'object') {
+      metadata.type = 'object';
+    } else if (Types.isClass(metadata.type)) {
+      this.parseClzz(metadata.type);
+      metadata['$ref'] = '#/components/schemas/' + metadata.type.name;
+      delete metadata['type'];
+    } else if (metadata.type instanceof Function) {
+      // () => String => { type: 'string' }
+      metadata.type = metadata.type();
+      this.formatType(metadata);
+    }
+    return metadata;
+  }
+
   /**
    * 解析类型的 ApiProperty
    * @param clzz
@@ -850,6 +1007,7 @@ export class SwaggerExplorer {
     // 解析 ApiExtraModel
     this.parseExtraModel(clzz);
     // 解析类上的 ApiProperty
+    // TODO 这里后面不能用这个方法
     const props = getClassExtendedMetadata(INJECT_CUSTOM_PROPERTY, clzz);
 
     const tt: any = {
@@ -864,127 +1022,62 @@ export class SwaggerExplorer {
 
     if (props) {
       for (const key of Object.keys(props)) {
-        const metadata: any = {};
-        Object.assign(metadata, props[key].metadata);
-        if (typeof metadata?.required !== undefined) {
-          if (metadata?.required) {
+        const metadata = props[key].metadata || {};
+        if (!metadata.type) {
+          // 推导类型
+          metadata.type = getPropertyType(clzz.prototype, key).name;
+        }
+        tt.properties[key] = tt.properties[key] || {};
+
+        // loop metadata
+        for (const metadataKey in metadata) {
+          if (metadataKey === 'required' && metadata['required']) {
+            // required 需要加到 schema 上
             if (!tt.required) {
               tt.required = [];
             }
             tt.required.push(key);
-          }
-
-          delete metadata.required;
-        }
-        if (metadata?.enum) {
-          tt.properties[key] = {
-            type: metadata?.type,
-            enum: metadata?.enum,
-            default: metadata?.default,
-          };
-
-          if (metadata?.description) {
-            tt.properties[key].description = metadata?.description;
-          }
-          continue;
-        }
-        if (metadata?.items?.enum) {
-          tt.properties[key] = {
-            type: metadata?.type,
-            items: metadata?.items,
-            default: metadata?.default,
-          };
-
-          if (metadata?.description) {
-            tt.properties[key].description = metadata?.description;
-          }
-          continue;
-        }
-        let isArray = false;
-        let currentType = parseTypeSchema(metadata?.type);
-
-        delete metadata?.type;
-
-        if (currentType === 'array') {
-          isArray = true;
-          currentType = parseTypeSchema(metadata?.items?.type);
-
-          delete metadata?.items.type;
-        }
-
-        if (metadata?.oneOf) {
-          tt.properties[key] = {
-            oneOf: [],
-          };
-          metadata?.oneOf.forEach((meta: any) => {
-            tt.properties[key].oneOf.push(this.parseSubPropertyType(meta));
-          });
-          delete metadata?.oneOf;
-          continue;
-        }
-
-        if (Types.isClass(currentType)) {
-          this.parseClzz(currentType);
-
-          if (isArray) {
-            tt.properties[key] = {
-              type: 'array',
-              items: {
-                $ref: '#/components/schemas/' + currentType?.name,
-              },
-            };
-          } else {
-            tt.properties[key] = {
-              $ref: '#/components/schemas/' + currentType?.name,
-            };
-          }
-
-          delete metadata.items;
-        } else {
-          if (isArray) {
-            // 没有配置类型则认为自己配置了 items 内容
-            if (!currentType) {
-              if (metadata?.items?.['$ref']) {
-                metadata.items['$ref'] = parseTypeSchema(
-                  metadata.items['$ref']
-                );
-              }
-
-              tt.properties[key] = {
-                type: 'array',
-                items: metadata?.items,
-              };
-            } else {
-              tt.properties[key] = {
-                type: 'array',
-                items: {
-                  type: convertSchemaType(currentType?.name || currentType),
-                },
-              };
+          } else if (['oneOf', 'anyOf', 'allOf'].includes(metadataKey)) {
+            tt.properties[key][metadataKey] = [];
+            metadata[metadataKey].forEach((meta: any) => {
+              tt.properties[key][metadataKey].push(this.formatType(meta));
+            });
+          } else if (metadataKey === 'not') {
+            tt.properties[key][metadataKey] = this.formatType(
+              metadata[metadataKey]
+            );
+          } else if (metadataKey === 'type') {
+            this.formatType(metadata);
+            if (metadata.type) {
+              tt.properties[key].type = metadata.type;
             }
-
-            delete metadata.items;
-          } else if (metadata.$ref) {
-            tt.properties[key] = {};
-          } else {
-            tt.properties[key] = {
-              type: currentType ?? getPropertyType(clzz.prototype, key).name,
-              format: metadata?.format,
-            };
-
-            // Date 类型支持
-            if (tt.properties[key].type === 'Date') {
-              tt.properties[key].type = 'string';
-              if (!tt.properties[key].format) {
-                tt.properties[key].format = 'date';
-              }
+            if (metadata['$ref']) {
+              tt.properties[key].$ref = metadata['$ref'];
             }
-
-            delete metadata.format;
+            if (metadata.items) {
+              tt.properties[key].items = metadata.items;
+            }
+            if (metadata.format) {
+              tt.properties[key].format = metadata.format;
+            }
+            if (metadata.pattern) {
+              tt.properties[key].pattern = metadata.pattern;
+            }
+            if (metadata.enum) {
+              tt.properties[key].enum = metadata.enum;
+            }
+          } else if (
+            metadataKey === 'items' ||
+            metadataKey === 'pattern' ||
+            metadataKey === 'format' ||
+            metadataKey === 'enum' ||
+            metadataKey === '$ref'
+          ) {
+            // type 中已经处理
+          } else {
+            tt.properties[key][metadataKey] = metadata[metadataKey];
           }
         }
-
-        Object.assign(tt.properties[key], metadata);
       }
     }
     // just for test
@@ -1113,7 +1206,7 @@ function convertSchemaType(value) {
     case 'String':
       return 'string';
     default:
-      return value;
+      return 'object';
   }
 }
 
