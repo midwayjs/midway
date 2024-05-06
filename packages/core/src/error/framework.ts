@@ -24,6 +24,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   CODE_INVOKE_TIMEOUT: 10019,
   MAIN_FRAMEWORK_MISSING: 10020,
   INVALID_CONFIG_PROPERTY: 10021,
+  EMPTY_VALUE: 10022,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -229,6 +230,15 @@ export class MidwayInvalidConfigPropertyError extends MidwayError {
           : 'please check your configuration'
       }.`,
       FrameworkErrorEnum.INVALID_CONFIG_PROPERTY
+    );
+  }
+}
+
+export class MidwayEmptyValueError extends MidwayError {
+  constructor(msg: string) {
+    super(
+      msg ?? 'There is an empty value got and it is not allowed.',
+      FrameworkErrorEnum.EMPTY_VALUE
     );
   }
 }
