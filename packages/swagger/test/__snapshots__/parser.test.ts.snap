@@ -2930,6 +2930,17 @@ exports[`test Generics class should test with generics and multi implementation 
 {
   "components": {
     "schemas": {
+      "AnotherUser": {
+        "properties": {
+          "name": {
+            "type": "string",
+          },
+          "sex": {
+            "type": "boolean",
+          },
+        },
+        "type": "object",
+      },
       "SuccessUser": {
         "properties": {
           "code": {
@@ -2938,12 +2949,27 @@ exports[`test Generics class should test with generics and multi implementation 
           },
           "data": {
             "oneOf": [
-              [Function],
-              [Function],
+              {
+                "$ref": "#/components/schemas/User",
+              },
+              {
+                "$ref": "#/components/schemas/AnotherUser",
+              },
             ],
           },
           "message": {
             "description": "消息",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "User": {
+        "properties": {
+          "id": {
+            "type": "number",
+          },
+          "name": {
             "type": "string",
           },
         },
