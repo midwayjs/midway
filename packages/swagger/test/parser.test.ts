@@ -2145,3 +2145,125 @@ describe('test @ApiParam', () => {
     expect(explorer.getData()).toMatchSnapshot();
   });
 });
+
+describe('test Generics class', () => {
+  it('should test with generics class', () => {
+
+    type Res<T> = {
+      code: number;
+      message: string;
+      data: T;
+    }
+
+    function SuccessWrapper<T>(ResourceCls: Type<T>): Type<Res<T>> {
+      class Result<T> implements Res<T> {
+        @ApiProperty({ description: '状态码' })
+        code: number;
+
+        @ApiProperty({ description: '消息' })
+        message: string;
+
+        @ApiProperty({
+          type: ResourceCls,
+        })
+        data: T;
+      }
+
+      return Result;
+    }
+
+    class User {
+      @ApiProperty()
+      name: string;
+
+      @ApiProperty()
+      id: number;
+    }
+
+    class SuccessUser extends SuccessWrapper<User>(User) {}
+
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      @ApiCreatedResponse({ type: SuccessUser })
+      async updateUser(@Body() data: SuccessUser) {
+        const successUser = new SuccessUser();
+        successUser.code = 200;
+        successUser.message = 'Success';
+        successUser.data = {
+          name: 'Kitty',
+          id: 1,
+        };
+        return successUser;
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  })
+
+  it('should test with generics and multi implementation', () => {
+
+    type Res<T> = {
+      code: number;
+      message: string;
+      data: T;
+    }
+
+    function SuccessWrapper<T>(ResourceCls: Type<T>[]): Type<Res<T>> {
+      class Result<T> implements Res<T> {
+        @ApiProperty({ description: '状态码' })
+        code: number;
+
+        @ApiProperty({ description: '消息' })
+        message: string;
+
+        @ApiProperty({
+          oneOf: ResourceCls.map(cls => ({ type: cls })),
+        })
+        data: T;
+      }
+
+      return Result;
+    }
+
+    class User {
+      @ApiProperty()
+      name: string;
+
+      @ApiProperty()
+      id: number;
+    }
+
+    class AnotherUser {
+      @ApiProperty()
+      name: string;
+
+      @ApiProperty()
+      sex: boolean;
+    }
+
+    class SuccessUser extends SuccessWrapper<User | AnotherUser>([User, AnotherUser]) {}
+
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      @ApiOkResponse({ type: SuccessUser })
+      async updateUser(@Body() data: SuccessUser) {
+        const successUser = new SuccessUser();
+        successUser.code = 200;
+        successUser.message = 'Success';
+        successUser.data = {
+          name: 'Kitty',
+          sex: true,
+        };
+        return successUser;
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  })
+});

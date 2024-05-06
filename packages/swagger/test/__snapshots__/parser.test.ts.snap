@@ -2926,6 +2926,172 @@ exports[`test @ApiSecurity test OAuth2 1`] = `
 }
 `;
 
+exports[`test Generics class should test with generics and multi implementation 1`] = `
+{
+  "components": {
+    "schemas": {
+      "SuccessUser": {
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "number",
+          },
+          "data": {
+            "oneOf": [
+              [Function],
+              [Function],
+            ],
+          },
+          "message": {
+            "description": "消息",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuccessUser",
+              },
+            },
+          },
+          "description": undefined,
+          "required": true,
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessUser",
+                },
+              },
+            },
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test Generics class should test with generics class 1`] = `
+{
+  "components": {
+    "schemas": {
+      "SuccessUser": {
+        "properties": {
+          "code": {
+            "description": "状态码",
+            "type": "number",
+          },
+          "data": {
+            "$ref": "#/components/schemas/User",
+          },
+          "message": {
+            "description": "消息",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "User": {
+        "properties": {
+          "id": {
+            "type": "number",
+          },
+          "name": {
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuccessUser",
+              },
+            },
+          },
+          "description": undefined,
+          "required": true,
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessUser",
+                },
+              },
+            },
+            "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
 exports[`test post args without @ApiBody post with any type 1`] = `
 {
   "components": {},
