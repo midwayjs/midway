@@ -407,7 +407,7 @@ export class SwaggerExplorer {
     // set params information from @ApiQuery() to parameters
     for (const param of params) {
       // rebuild query param to swagger format
-      if (!param.metadata.schema !== undefined) {
+      if (param.metadata.schema === undefined) {
         param.metadata.schema = {};
         if (param.metadata.type) {
           param.metadata.schema['type'] = param.metadata.type;
@@ -491,8 +491,10 @@ export class SwaggerExplorer {
 
       if (Types.isClass(currentType)) {
         this.parseClzz(currentType);
+      }
 
-        if (p.in === 'query') {
+      if (p.in === 'query' || p.in === 'path') {
+        if (Types.isClass(currentType)) {
           // 如果@Query()装饰的 是一个对象，则把该对象的子属性作为多个@Query参数
           const schema = this.documentBuilder.getSchema(currentType.name);
           Object.keys(schema.properties).forEach(pName => {
@@ -505,20 +507,14 @@ export class SwaggerExplorer {
           });
           continue;
         } else {
+          if (!p.name) {
+            continue;
+          }
           p.schema = {
-            $ref: '#/components/schemas/' + currentType.name,
+            type: convertSchemaType(currentType?.name ?? currentType),
           };
         }
-      } else {
-        if (!p.name) {
-          continue;
-        }
-        p.schema = {
-          type: convertSchemaType(currentType?.name ?? currentType),
-        };
-      }
-
-      if (p.in === 'body') {
+      } else if (p.in === 'body') {
         if (webRouter.requestMethod === RequestMethod.GET) {
           continue;
         }
@@ -526,65 +522,65 @@ export class SwaggerExplorer {
         if (opts[webRouter.requestMethod].requestBody) {
           continue;
         }
+
         // 这里兼容一下 @File()、@Files()、@Fields() 装饰器
         if (arg.metadata?.type === RouteParamTypes.FILESSTREAM) {
-          p.schema = {
-            type: 'object',
-            properties: {
-              files: {
-                type: 'array',
-                items: {
+          p.content = {};
+          p.content[BodyContentType.Multipart] = {
+            schema: {
+              type: 'object',
+              properties: {
+                files: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                    format: 'binary',
+                  },
+                  description: p.description,
+                },
+              },
+            },
+          };
+        } else if (arg.metadata?.type === RouteParamTypes.FILESTREAM) {
+          p.content = {};
+          p.content[BodyContentType.Multipart] = {
+            schema: {
+              type: 'object',
+              properties: {
+                file: {
                   type: 'string',
                   format: 'binary',
+                  description: p.description,
                 },
-                description: p.description,
               },
             },
-          };
-          p.contentType = BodyContentType.Multipart;
-        }
-        if (arg.metadata?.type === RouteParamTypes.FILESTREAM) {
-          p.schema = {
-            type: 'object',
-            properties: {
-              file: {
-                type: 'string',
-                format: 'binary',
-                description: p.description,
-              },
-            },
-          };
-          p.contentType = BodyContentType.Multipart;
-        }
-        if (arg.metadata?.type === RouteParamTypes.FIELDS) {
-          this.expandSchemaRef(p);
-          p.contentType = BodyContentType.Multipart;
-        }
-
-        if (!p.content) {
-          p.content = {};
-          p.content[p.contentType || 'application/json'] = {
-            schema: p.schema,
-          };
-        }
-        if (!opts[webRouter.requestMethod].requestBody) {
-          opts[webRouter.requestMethod].requestBody = {
-            required: true,
-            description: p.description || p.name,
-            content: p.content,
           };
         } else {
-          // 这里拼 schema properties 时肯定存在
-          Object.assign(
-            {},
-            opts[webRouter.requestMethod].requestBody.content[p.contentType]
-              .schema?.properties,
-            p.schema.properties
-          );
+          if (Types.isClass(currentType)) {
+            p.content = {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/' + currentType.name,
+                },
+              },
+            };
+          } else {
+            // base type
+            p.content = {
+              'text/plain': {
+                schema: {
+                  type: convertSchemaType(currentType?.name ?? currentType),
+                },
+              },
+            };
+          }
         }
 
-        delete p.contentType;
-        delete p.content;
+        opts[webRouter.requestMethod].requestBody = {
+          required: true,
+          description: p.description || p.name,
+          content: p.content,
+        };
         // in body 不需要处理
         continue;
       }
@@ -679,25 +675,6 @@ export class SwaggerExplorer {
     return this.operationIdFactory(controllerKey, webRouter);
   }
 
-  private expandSchemaRef(p: any, name?: string) {
-    let schemaName = name;
-    if (p.schema['$ref']) {
-      // 展开各个字段属性
-      schemaName = p.schema['$ref'].replace('#/components/schemas/', '');
-      delete p.schema['$ref'];
-    }
-
-    if (schemaName) {
-      const schema = this.documentBuilder.getSchema(schemaName);
-      const ss = JSON.parse(JSON.stringify(schema));
-      if (p.schema.properties) {
-        Object.assign(p.schema.properties, ss.properties);
-      } else {
-        p.schema = JSON.parse(JSON.stringify(schema));
-      }
-    }
-    return p;
-  }
   /**
    * 提取参数
    * @param params

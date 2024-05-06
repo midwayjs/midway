@@ -1,9 +1,9 @@
 import {
   ApiAcceptedResponse,
   ApiBadGatewayResponse,
-  ApiBadRequestResponse,
+  ApiBadRequestResponse, ApiBasicAuth, ApiBearerAuth,
   ApiBody,
-  ApiConflictResponse,
+  ApiConflictResponse, ApiCookieAuth,
   ApiCreatedResponse,
   ApiDefaultResponse,
   ApiExcludeController,
@@ -23,9 +23,9 @@ import {
   ApiNoContentResponse,
   ApiNotAcceptableResponse,
   ApiNotFoundResponse,
-  ApiNotImplementedResponse,
+  ApiNotImplementedResponse, ApiOAuth2,
   ApiOkResponse,
-  ApiOperation,
+  ApiOperation, ApiParam,
   ApiPayloadTooLargeResponse,
   ApiPreconditionFailedResponse,
   ApiProperty, ApiQuery,
@@ -48,6 +48,10 @@ import {
   Get,
   Query,
   createRequestParamDecorator,
+  Body,
+  File,
+  Files,
+  Param,
 } from '@midwayjs/core';
 
 class CustomSwaggerExplorer extends SwaggerExplorer {
@@ -535,6 +539,70 @@ describe('test @ApiBody', () => {
     explorer.generatePath(APIController);
     expect(explorer.getData()).toMatchSnapshot();
   });
+
+  it('should test ApiBody with binary', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({
+        required: true,
+        content: {
+          'image/png': {
+            schema: {
+              type: 'string',
+              format: 'binary',
+            },
+          },
+        },
+      })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiBody with multipart request', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({
+        required: true,
+        content: {
+          'multipart/form-data': {
+            schema: {
+              type: 'object',
+              properties: {
+                name: {
+                  type: 'string',
+                },
+                fav_number: {
+                  type: 'integer',
+                },
+                file: {
+                  type: 'string',
+                  format: 'binary',
+                },
+              },
+              required: [
+                'name',
+              ]
+            },
+          },
+        },
+      })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
 });
 
 describe('test @ApiExtension', () => {
@@ -566,6 +634,66 @@ describe('test @ApiSecurity', () => {
 
       @Get('/get_user')
       @ApiExcludeSecurity()
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test @ApiBasicAuth', () => {
+    @Controller('/api')
+    @ApiBasicAuth()
+    class APIController {
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test with @ApiBearerAuth', () => {
+    @Controller('/api')
+    @ApiBearerAuth()
+    class APIController {
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('test OAuth2', () => {
+    @Controller('/api')
+    @ApiOAuth2(['pets:write'])
+    class APIController {
+      @Get('/get_user')
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('test ApiCookieAuth', () => {
+    @Controller('/api')
+    @ApiCookieAuth()
+    class APIController {
+      @Get('/get_user')
       async getUser() {
         // ...
       }
@@ -896,6 +1024,47 @@ describe('test @ApiResponse', () => {
     class APIController {
       @Post('/update_user')
       @ApiCreatedResponse({ type: Cat, isArray: true })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test with content and content type', () => {
+    class Cat {
+      name: string;
+    }
+
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      @ApiResponse({
+        status: 200,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                $ref: getSchemaPath(Cat),
+              },
+            }
+          },
+          'application/xml': {
+            schema: {
+              $ref: getSchemaPath(Cat),
+            }
+          },
+          'text/plain': {
+            schema: {
+              type: 'string',
+            }
+          }
+        }
+      })
       async updateUser() {
         // ...
       }
@@ -1814,6 +1983,159 @@ describe('test @ApiQuery', () => {
       @Get('/get_user')
       @ApiQuery({ name: 'status', enum: Status })
       async getUser(@Query('status') status: Status) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+});
+
+describe('test post args without @ApiBody', () => {
+  it('post with any type', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser(@Body() data: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('post with class type', () => {
+    class UserDTO {
+      @ApiProperty({
+        description: 'The name of the user',
+      })
+      name: string;
+
+      @ApiProperty({
+        description: 'The uid of the user',
+      })
+      id: number;
+    }
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser(@Body() data: UserDTO) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('post with string type', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser(@Body() data: string) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('post with array type', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser(@Body() data: number[]) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('post with class array type', () => {
+    class UserDTO {
+      @ApiProperty({
+        description: 'The name of the user',
+      })
+      name: string;
+
+      @ApiProperty({
+        description: 'The uid of the user',
+      })
+      id: number;
+    }
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser(@Body() data: UserDTO[]) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test with @File and any type', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser(@File() file: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test with @Files and any type', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser(@Files() file: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+});
+
+describe('test @ApiParam', () => {
+  it('should test with @ApiParam decorator', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user/:id')
+      @ApiParam({ name: 'id', description: 'The id of the user', type: 'number' })
+      async getUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test with @Param decorator', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user/:id')
+      async getUser(@Param('id') id: number) {
         // ...
       }
     }
