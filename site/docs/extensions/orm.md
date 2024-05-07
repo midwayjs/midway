@@ -437,13 +437,13 @@ export default {
         // 配置实体模型
         entities: [Photo],
 
-        // 或者扫描形式
+        // 支持如下的扫描形式，为了兼容我们可以同时进行.js和.ts匹配，⬇️
         entities: [
           'entity',             // 特定目录
           '**/abc/**',          // 仅获取包含 abc 字符的目录下的文件
-          'abc/**/*.ts',        // 特定目录 + 通配
-          'abc/*.entity.ts',    // 匹配后缀
-          '**/*.entity.ts',     // 通配加后缀匹配
+          'abc/**/*.{j,t}s',        // 特定目录 + 通配
+          'abc/*.entity.{j,t}s',    // 匹配后缀
+          '**/*.entity.{j,t}s',     // 通配加后缀匹配
           '**/*.{j,t}s',        // 后缀匹配
         ]
       }
