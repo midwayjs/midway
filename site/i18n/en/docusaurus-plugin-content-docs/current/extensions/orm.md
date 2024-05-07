@@ -445,7 +445,7 @@ export default {
           '**/abc/**',          // Gets only files in directories that contain abc characters
           'abc/**/*.{j,t}s',        // Specific directory + suffix matching
           'abc/*.entity.{j,t}s',    // suffix matching
-          '**/*.entity.{j,t}s',     // path and and suffix matching
+          '**/*.entity.{j,t}s',     // wildcard path + suffix matching
           '**/*.{j,t}s',        // suffix matching
         ]
       }
