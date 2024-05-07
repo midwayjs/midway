@@ -639,7 +639,15 @@ For example, we need to add some common package structure to the return value.
 To do this, we can write a method where the input parameter is the returned data and returns a wrapped class.
 
 ```typescript
-export function SuccessWrapper<T extends Type>(ResourceCls: T) {
+import { Type } from '@midwayjs/swagger';
+
+type Res<T> = {
+  code: number;
+  message: string;
+  data: T;
+}
+
+export function SuccessWrapper<T>(ResourceCls: Type<T>): Type<Res<T>> {
   class Successed {
     @ApiProperty({ description: 'Status Code'})
     code: number;
@@ -660,7 +668,7 @@ export function SuccessWrapper<T extends Type>(ResourceCls: T) {
 We can implement our own return class based on this method.
 
 ```typescript
-class ViewCat extends SuccessWrapper(Cat) {}
+class ViewCat extends SuccessWrapper<Cat>(Cat) {}
 ```
 
 When using, you can directly specify this class.
@@ -672,7 +680,7 @@ When using, you can directly specify this class.
   description: 'The found record',
   type: ViewCat
 })
-findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
+async findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
   // ...
 }
 ```

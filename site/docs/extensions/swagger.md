@@ -639,7 +639,15 @@ Swagger 本身不支持泛型数据，泛型作为 Typescript 的一种类型，
 为此，我们可以编写一个方法，入参是返回的 data，返回一个包裹的类。
 
 ```typescript
-export function SuccessWrapper<T extends Type>(ResourceCls: T) {
+import { Type } from '@midwayjs/swagger';
+
+type Res<T> = {
+  code: number;
+  message: string;
+  data: T;
+}
+
+export function SuccessWrapper<T>(ResourceCls: Type<T>): Type<Res<T>> {
   class Successed {
     @ApiProperty({ description: '状态码' })
     code: number;
@@ -660,7 +668,7 @@ export function SuccessWrapper<T extends Type>(ResourceCls: T) {
 我们可以基于这个方法，来实现我们自己的返回类。
 
 ```typescript
-class ViewCat extends SuccessWrapper(Cat) {}
+class ViewCat extends SuccessWrapper<Cat>(Cat) {}
 ```
 
 在使用的时候，可以直接指定这个类即可。
@@ -672,7 +680,7 @@ class ViewCat extends SuccessWrapper(Cat) {}
   description: 'The found record',
   type: ViewCat,
 })
-findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
+async findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
   // ...
 }
 ```

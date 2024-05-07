@@ -234,7 +234,8 @@
         "extensions/static_file",
         "extensions/cross_domain",
         "extensions/http-proxy",
-        "extensions/captcha"
+        "extensions/captcha",
+        "extensions/tenant"
       ]
     },
     {
