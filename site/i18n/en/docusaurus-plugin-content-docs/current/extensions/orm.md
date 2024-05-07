@@ -439,9 +439,14 @@ export default {
         // Configure the entity model
         entities: [Photo],
 
-        // or scan format
+        // or scan format,For compatibility we can match .js and .ts at the same time
         entities: [
-          '**/entity/*.entity{.ts,.js}'
+          'entity',             // Specific directory
+          '**/abc/**',          // Gets only files in directories that contain abc characters
+          'abc/**/*.{j,t}s',        // Specific directory + suffix matching
+          'abc/*.entity.{j,t}s',    // suffix matching
+          '**/*.entity.{j,t}s',     // wildcard path + suffix matching
+          '**/*.{j,t}s',        // suffix matching
         ]
       }
     }
