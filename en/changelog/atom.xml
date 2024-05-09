@@ -2,12 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2024-05-06T20:00:00.000Z</updated>
+    <updated>2024-05-09T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2024 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.16.1]]></title>
+        <id>https://midwayjs.org/en/changelog/v3.16.1</id>
+        <link href="https://midwayjs.org/en/changelog/v3.16.1"/>
+        <updated>2024-05-09T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>tenant</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3840" target="_blank" rel="noopener noreferrer">#3840</a> fix: export named error for tenant component (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>web-koa</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3842" target="_blank" rel="noopener noreferrer">#3842</a> fix: make request.query writeable (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a href="#-documentation" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/3833" target="_blank" rel="noopener noreferrer">#3833</a> docs: update orm.md (<a href="https://github.com/flyingcrp" target="_blank" rel="noopener noreferrer">@flyingcrp</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a href="#committers-2" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>陈十一 (<a href="https://github.com/flyingcrp" target="_blank" rel="noopener noreferrer">@flyingcrp</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+        <author>
+            <name>flyingcrp</name>
+            <uri>https://github.com/flyingcrp</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.16.0]]></title>
         <id>https://midwayjs.org/en/changelog/v3.16.0</id>

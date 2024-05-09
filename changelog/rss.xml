@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Mon, 06 May 2024 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 09 May 2024 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2024 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.16.1]]></title>
+            <link>https://midwayjs.org/changelog/v3.16.1</link>
+            <guid>https://midwayjs.org/changelog/v3.16.1</guid>
+            <pubDate>Thu, 09 May 2024 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="🐛 Bug Fix的直接链接" title="🐛 Bug Fix的直接链接">​</a></h2><ul><li><code>tenant</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3840" target="_blank" rel="noopener noreferrer">#3840</a> fix: export named error for tenant component (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>web-koa</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3842" target="_blank" rel="noopener noreferrer">#3842</a> fix: make request.query writeable (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-documentation">📝 Documentation<a href="#-documentation" class="hash-link" aria-label="📝 Documentation的直接链接" title="📝 Documentation的直接链接">​</a></h2><ul><li><a href="https://github.com/midwayjs/midway/pull/3833" target="_blank" rel="noopener noreferrer">#3833</a> docs: update orm.md (<a href="https://github.com/flyingcrp" target="_blank" rel="noopener noreferrer">@flyingcrp</a>)</li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-2">Committers: 2<a href="#committers-2" class="hash-link" aria-label="Committers: 2的直接链接" title="Committers: 2的直接链接">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li><li>陈十一 (<a href="https://github.com/flyingcrp" target="_blank" rel="noopener noreferrer">@flyingcrp</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.16.0]]></title>
             <link>https://midwayjs.org/changelog/v3.16.0</link>
