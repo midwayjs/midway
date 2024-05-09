@@ -170,6 +170,10 @@ export class MidwayKoaFramework extends BaseFramework<
 
         return c[str];
       },
+      set(value) {
+        this._querycache = this._querycache || {};
+        this._querycache[this.querystring] = value;
+      },
     });
 
     const onerrorConfig = this.configService.getConfiguration('onerror');

@@ -488,6 +488,12 @@ describe('/test/feature.test.ts', () => {
       async query(ctx) {
         return ctx.query;
       }
+
+      @Get('/set_query')
+      async setQuery(ctx) {
+        ctx.query = { a: 1 };
+        return ctx.query;
+      }
     }
     it('should test parse with querystring', async () => {
       const app = await createLightApp('', {
@@ -607,6 +613,33 @@ describe('/test/feature.test.ts', () => {
 
       expect(result.text).toEqual(JSON.stringify({'a': '1', 'b': '2'}));
 
+      await closeApp(app);
+    });
+
+    it('should test request.query writeable', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            queryParseMode: 'first',
+            queryParseOptions: {
+              parameterLimit: 3,
+              arrayLimit: 1,
+            }
+          }
+        }
+      });
+
+      let result = await createHttpRequest(app)
+        .get('/set_query');
+
+      expect(result.text).toEqual(JSON.stringify({'a': 1}));
       await closeApp(app);
     });
   });
