@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/passport",
   "description": "midway passport component",
-  "version": "3.16.0",
+  "version": "3.16.1",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -24,8 +24,8 @@
   "devDependencies": {
     "@midwayjs/core": "^3.16.0",
     "@midwayjs/express": "^3.16.0",
-    "@midwayjs/jwt": "^3.16.0",
-    "@midwayjs/koa": "^3.16.0",
+    "@midwayjs/jwt": "^3.16.1",
+    "@midwayjs/koa": "^3.16.1",
     "@midwayjs/mock": "^3.16.0",
     "@midwayjs/web": "^3.16.0",
     "@types/passport-local": "1.0.38",

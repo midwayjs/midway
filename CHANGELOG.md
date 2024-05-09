@@ -1,6 +1,23 @@
 # Change Log
 
 
+## v3.16.1 (2024-05-09)
+
+#### :bug: Bug Fix
+* `tenant`
+  * [#3840](https://github.com/midwayjs/midway/pull/3840) fix: export named error for tenant component ([@czy88840616](https://github.com/czy88840616))
+* `web-koa`
+  * [#3842](https://github.com/midwayjs/midway/pull/3842) fix: make request.query writeable ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3833](https://github.com/midwayjs/midway/pull/3833) docs: update orm.md ([@flyingcrp](https://github.com/flyingcrp))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- 陈十一 ([@flyingcrp](https://github.com/flyingcrp))
+
+
+
 ## v3.16.0 (2024-05-06)
 
 #### :rocket: New Feature
