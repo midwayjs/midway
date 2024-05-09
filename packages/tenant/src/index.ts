@@ -1,2 +1,2 @@
-export { TenantConfiguration } from './configuration';
+export { TenantConfiguration as Configuration } from './configuration';
 export * from './tenantManager';
