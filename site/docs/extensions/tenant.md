@@ -100,7 +100,7 @@ class TenantMiddleware {
   resolve() {
     return async(ctx, next) => {
       // 请求链路中设置租户信息
-      this.tenantManager.setCurrentTenant({
+      await this.tenantManager.setCurrentTenant({
         id: '123',
         name: '我的租户'
       });
@@ -125,7 +125,7 @@ class TenantService {
     const tenantInfo = await this.tenantManager.getCurrentTenant<TenantInfo>();
     if (tenantInfo) {
       console.log(tenantInfo.name);
-    	// output => 我的租户
+      // output => 我的租户
     }
   }
 }

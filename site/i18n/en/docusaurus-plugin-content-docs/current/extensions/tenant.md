@@ -100,7 +100,7 @@ class TenantMiddleware {
    resolve() {
      return async(ctx, next) => {
        //Set tenant information in the request link
-       this.tenantManager.setCurrentTenant({
+       await this.tenantManager.setCurrentTenant({
          id: '123',
          name: 'my tenant'
        });
@@ -125,7 +125,7 @@ class TenantService {
      const tenantInfo = await this.tenantManager.getCurrentTenant<TenantInfo>();
      if (tenantInfo) {
        console.log(tenantInfo.name);
-     // output => my tenant
+       // output => my tenant
      }
    }
 }
