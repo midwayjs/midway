@@ -95,7 +95,7 @@ import { Middleware, Inject } from '@midwayjs/core';
 @Middleware()
 class TenantMiddleware {
   @Inject()
-  tenantManager: tenant.TenantManager;
+  tenantManager: TenantManager;
 
   resolve() {
     return async(ctx, next) => {
@@ -119,7 +119,7 @@ import { TenantInfo } from '../interface';
 @Singleton()
 class TenantService {
   @Inject()
-  tenantManager: tenant.TenantManager;
+  tenantManager: TenantManager;
 
   async getTenantInfo() {
     const tenantInfo = await this.tenantManager.getCurrentTenant<TenantInfo>();
