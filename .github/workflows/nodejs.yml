@@ -35,7 +35,7 @@ jobs:
           - 5672/tcp
         options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
       zookeeper:
-        image: zookeeper
+        image: zookeeper:latest
         ports:
           - 2181:2181
         env:
@@ -46,7 +46,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       kafka:
-        image: wurstmeister/kafka
+        image: bitnami/kafka:latest
         ports:
           - 9092:9092
         options: >-
