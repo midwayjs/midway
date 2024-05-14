@@ -35,30 +35,24 @@ jobs:
           - 5672/tcp
         options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
       zookeeper:
-        image: zookeeper:latest
+        image: bitnami/zookeeper:3.7.0
         ports:
           - 2181:2181
         env:
           ALLOW_ANONYMOUS_LOGIN: yes
         options: >-
-          --health-cmd "echo mntr | nc -w 2 -q 2 localhost 2181"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --network-alias zookeeper
       kafka:
-        image: bitnami/kafka:latest
+        image: bitnami/kafka:3.3.2
         ports:
           - 9092:9092
         options: >-
-          --health-cmd "kafka-broker-api-versions.sh --version"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --network-alias kafka
         env:
+          KAFKA_BROKER_ID: 1
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
           KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092    ## 修改:宿主机IP
-          KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-          KAFKA_ADVERTISED_PORT: 9092
 
 #      postgres:
 #        image: postgres:alpine
