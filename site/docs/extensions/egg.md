@@ -831,3 +831,27 @@ await (this.app as any).mysql.query(sql);
 
 或者可以自行增加扩展定义。
 
+### 6、获取 Http Server
+
+Eggjs 内部封装了原始的 HttpServer，需要通过事件获取。
+
+```typescript
+// src/configuration.ts
+import { Configuration, App } from '@midwayjs/core';
+import { Application } from '@midwayjs/web';
+
+@Configuration(/***/)
+export class MainConfiguration {
+  
+  @App('egg')
+  app: Application;
+  
+  // ...
+  async onServerReady() {
+    this.app.once('server', (server) => {
+      // ...
+    })
+  }
+}
+```
+
