@@ -14,7 +14,7 @@
     "@midwayjs/koa": "^3.16.1",
     "@midwayjs/mock": "^3.16.0",
     "@midwayjs/validate": "^3.16.1",
-    "swagger-ui-dist": "5.17.9"
+    "swagger-ui-dist": "5.17.10"
   },
   "author": "Kurten Chan <chinkurten@gmail.com>",
   "license": "MIT",
