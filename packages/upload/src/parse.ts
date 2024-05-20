@@ -110,7 +110,8 @@ export const parseFromReadableStream = (
         ) {
           const [headerBuf, data] = bufferSplit(
             splitAllChuns[chunkIndex],
-            headSeparator
+            headSeparator,
+            2
           );
           const head = parseHead(headerBuf);
           if (!head['content-disposition']) {
