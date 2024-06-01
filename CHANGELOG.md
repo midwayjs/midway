@@ -1,6 +1,44 @@
 # Change Log
 
 
+## v3.16.2 (2024-06-01)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3886](https://github.com/midwayjs/midway/pull/3886) fix(swagger): miss dto required from schema ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3871](https://github.com/midwayjs/midway/pull/3871) docs: update release schedule docs, mark v2 as EOL ([@Yuliang-Lee](https://github.com/Yuliang-Lee))
+* [#3854](https://github.com/midwayjs/midway/pull/3854) docs: fix typo in mock.md ([@wjw-gavin](https://github.com/wjw-gavin))
+* [#3849](https://github.com/midwayjs/midway/pull/3849) docs: update en version tenant.md ([@tuohuang](https://github.com/tuohuang))
+* [#3848](https://github.com/midwayjs/midway/pull/3848) docs: update tenant.md ([@tuohuang](https://github.com/tuohuang))
+
+#### :package: Dependencies
+* `bull-board`, `bull`
+  * [#3881](https://github.com/midwayjs/midway/pull/3881) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3844](https://github.com/midwayjs/midway/pull/3844) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3882](https://github.com/midwayjs/midway/pull/3882) fix(deps): update dependency axios to v1.7.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#3874](https://github.com/midwayjs/midway/pull/3874) chore(deps): update dependency swagger-ui-dist to v5.17.13 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3869](https://github.com/midwayjs/midway/pull/3869) fix(deps): update dependency @grpc/grpc-js to v1.10.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3870](https://github.com/midwayjs/midway/pull/3870) chore(deps): update supercharge/mongodb-github-action action to v1.11.0 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3860](https://github.com/midwayjs/midway/pull/3860) chore(deps): update dependency ts-jest to v29.1.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3781](https://github.com/midwayjs/midway/pull/3781) chore(deps): update mongoose monorepo (major) ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3856](https://github.com/midwayjs/midway/pull/3856) chore(deps): update mikro-orm monorepo to v6.2.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 4
+- Gavin ([@wjw-gavin](https://github.com/wjw-gavin))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- xlaoyu ([@Yuliang-Lee](https://github.com/Yuliang-Lee))
+- 拓荒 ([@tuohuang](https://github.com/tuohuang))
+
+
+
 ## v3.16.1 (2024-05-09)
 
 #### :bug: Bug Fix

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/leoric",
-  "version": "3.16.1",
+  "version": "3.16.2",
   "description": "Leoric as a Midway model component",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -21,9 +21,9 @@
     "leoric": "2.12.3"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.16.0",
-    "@midwayjs/koa": "^3.16.1",
-    "@midwayjs/mock": "^3.16.0",
+    "@midwayjs/core": "^3.16.2",
+    "@midwayjs/koa": "^3.16.2",
+    "@midwayjs/mock": "^3.16.2",
     "sqlite3": "5.1.7"
   },
   "scripts": {
