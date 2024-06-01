@@ -1684,6 +1684,7 @@ exports[`test @ApiQuery should get class type from DTO 1`] = `
           {
             "in": "query",
             "name": "name",
+            "required": false,
             "schema": {
               "description": "The name of the user",
               "type": "string",
@@ -1692,8 +1693,88 @@ exports[`test @ApiQuery should get class type from DTO 1`] = `
           {
             "in": "query",
             "name": "id",
+            "required": false,
             "schema": {
               "description": "The uid of the user",
+              "type": "number",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should get class type from DTO with required 1`] = `
+{
+  "components": {
+    "schemas": {
+      "UserDTO": {
+        "properties": {
+          "id": {
+            "description": "The uid of the user",
+            "required": false,
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the user",
+            "type": "string",
+          },
+        },
+        "required": [
+          "name",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "description": "The name of the user",
+              "type": "string",
+            },
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "description": "The uid of the user",
+              "required": false,
               "type": "number",
             },
           },

@@ -502,6 +502,7 @@ export class SwaggerExplorer {
               name: pName,
               in: p.in,
               schema: schema.properties[pName],
+              required: schema.required?.includes(pName) || false,
             };
             parameters.push(pp);
           });
