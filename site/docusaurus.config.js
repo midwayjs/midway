@@ -193,7 +193,7 @@ const config = {
       },
       algolia: {
         appId: 'DHOMYJQQ2W',
-        apiKey: '75f3dce231a9777ae8fa6fba6b82085b',
+        apiKey: 'd449ee339aeb289a3f1ace98ca66094c',
         indexName: 'midway',
         contextualSearch: true,
       },
