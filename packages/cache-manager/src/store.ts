@@ -32,7 +32,13 @@ function createStore(redisCache: Redis, options?: Config) {
     async get<T>(key: string) {
       const val = await redisCache.get(key);
       if (val === undefined || val === null) return undefined;
-      else return JSON.parse(val) as T;
+      else {
+        try {
+          return JSON.parse(val) as T;
+        } catch (e) {
+          return val;
+        }
+      }
     },
     async set(key, value, ttl) {
       if (!isCacheable(value))
