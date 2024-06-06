@@ -6,16 +6,28 @@
   "@midwayjs/axios": "3.16.2",
   "@midwayjs/bootstrap": "3.16.2",
   "@midwayjs/bull": "3.16.2",
-  "@midwayjs/bull-board": "3.16.2",
-  "@midwayjs/cache-manager": "3.16.2",
-  "@midwayjs/captcha": "3.16.2",
+  "@midwayjs/bull-board": [
+    "3.16.2",
+    "3.16.3"
+  ],
+  "@midwayjs/cache-manager": [
+    "3.16.2",
+    "3.16.3"
+  ],
+  "@midwayjs/captcha": [
+    "3.16.2",
+    "3.16.3"
+  ],
   "@midwayjs/casbin": "3.16.2",
   "@midwayjs/casbin-redis-adapter": "3.16.2",
   "@midwayjs/casbin-typeorm-adapter": "3.16.2",
   "@midwayjs/code-dye": "3.16.2",
   "@midwayjs/consul": "3.16.2",
   "@midwayjs/core": "3.16.2",
-  "@midwayjs/cos": "3.16.2",
+  "@midwayjs/cos": [
+    "3.16.2",
+    "3.16.3"
+  ],
   "@midwayjs/cron": "3.16.2",
   "@midwayjs/cross-domain": "3.16.2",
   "@midwayjs/decorator": "3.16.2",
@@ -32,9 +44,15 @@
   "@midwayjs/mikro": "3.16.2",
   "@midwayjs/mock": "3.16.2",
   "@midwayjs/mongoose": "3.16.2",
-  "@midwayjs/mqtt": "3.16.2",
+  "@midwayjs/mqtt": [
+    "3.16.2",
+    "3.16.3"
+  ],
   "@midwayjs/oss": "3.16.2",
-  "@midwayjs/otel": "3.16.2",
+  "@midwayjs/otel": [
+    "3.16.2",
+    "3.16.3"
+  ],
   "@midwayjs/passport": "3.16.2",
   "@midwayjs/process-agent": "3.16.2",
   "@midwayjs/prometheus": "3.16.2",
@@ -54,7 +72,10 @@
   "@midwayjs/typeorm": "3.16.2",
   "@midwayjs/upload": "3.16.2",
   "@midwayjs/validate": "3.16.2",
-  "@midwayjs/version": "3.16.2",
+  "@midwayjs/version": [
+    "3.16.2",
+    "3.16.3"
+  ],
   "@midwayjs/view": "3.16.2",
   "@midwayjs/view-ejs": "3.16.2",
   "@midwayjs/view-nunjucks": "3.16.2",

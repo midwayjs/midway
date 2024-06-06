@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v3.16.3 (2024-06-06)
+
+#### :bug: Bug Fix
+* `cache-manager`
+  * [#3889](https://github.com/midwayjs/midway/pull/3889) fix: get origin value from redis store ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `otel`
+  * [#3894](https://github.com/midwayjs/midway/pull/3894) fix(deps): update dependency @opentelemetry/api to v1.9.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3895](https://github.com/midwayjs/midway/pull/3895) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3893](https://github.com/midwayjs/midway/pull/3893) fix(deps): update bull monorepo to v5.20.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3896](https://github.com/midwayjs/midway/pull/3896) fix(deps): update dependency mqtt to v5.7.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3845](https://github.com/midwayjs/midway/pull/3845) chore(deps): update dependency @types/node to v20 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.16.2 (2024-06-01)
 
 #### :bug: Bug Fix
