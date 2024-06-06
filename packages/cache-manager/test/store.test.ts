@@ -2,6 +2,7 @@ import * as cacheManager from '@midwayjs/cache-manager';
 import * as redis from '@midwayjs/redis';
 import { createLightApp, close } from '@midwayjs/mock';
 import { CachingFactory, createRedisStore } from '../src';
+import { RedisService } from '@midwayjs/redis';
 
 describe('cache-manager-redis store test', () => {
   it('should test single caching', async () => {
@@ -84,6 +85,48 @@ describe('cache-manager-redis store test', () => {
     await caching.mdel('foo');
     const result2 = await caching.mget('foo');
     expect(result2).toEqual([undefined]);
+
+    await close(app);
+  });
+
+  it('should test redis store get value from out side data', async () => {
+    const app = await createLightApp('', {
+      imports: [
+        redis,
+        cacheManager,
+      ],
+      globalConfig: {
+        cacheManager: {
+          clients: {
+            default: {
+              store: createRedisStore('default'),
+            },
+            multi: {
+              store: ['default']
+            }
+          }
+        },
+        redis: {
+          client: {
+            port: 6379,
+            host: '127.0.0.1',
+          }
+        }
+      },
+    });
+
+    const redisService = await app.getApplicationContext().getAsync(RedisService);
+    const cachingFactory = await app.getApplicationContext().getAsync(CachingFactory);
+
+    redisService.set('foo', 'bar');
+
+    const caching = cachingFactory.getCaching('default');
+    const result = await caching.get('foo');
+    expect(result).toEqual('bar');
+
+    const multiCaching = cachingFactory.getMultiCaching('multi');
+    const res = await multiCaching.mget('foo');
+    expect(res).toEqual(['bar']);
 
     await close(app);
   });
