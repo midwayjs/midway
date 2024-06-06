@@ -30,8 +30,8 @@
     "@midwayjs/mock": "^3.16.2"
   },
   "dependencies": {
-    "@bull-board/api": "5.19.2",
-    "@bull-board/ui": "5.19.2",
+    "@bull-board/api": "5.20.1",
+    "@bull-board/ui": "5.20.1",
     "@midwayjs/bull": "^3.16.2",
     "ejs": "3.1.10"
   },
