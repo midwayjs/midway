@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Sat, 01 Jun 2024 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 06 Jun 2024 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2024 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.16.3]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.16.3</link>
+            <guid>https://midwayjs.org/en/changelog/v3.16.3</guid>
+            <pubDate>Thu, 06 Jun 2024 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>cache-manager</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3889" target="_blank" rel="noopener noreferrer">#3889</a> fix: get origin value from redis store (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>otel</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3894" target="_blank" rel="noopener noreferrer">#3894</a> fix(deps): update dependency @opentelemetry/api to v1.9.0 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>cos</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3895" target="_blank" rel="noopener noreferrer">#3895</a> fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.0 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>bull-board</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3893" target="_blank" rel="noopener noreferrer">#3893</a> fix(deps): update bull monorepo to v5.20.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>mqtt</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3896" target="_blank" rel="noopener noreferrer">#3896</a> fix(deps): update dependency mqtt to v5.7.0 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li>Other<ul><li><a href="https://github.com/midwayjs/midway/pull/3845" target="_blank" rel="noopener noreferrer">#3845</a> chore(deps): update dependency @types/node to v20 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.16.2]]></title>
             <link>https://midwayjs.org/en/changelog/v3.16.2</link>
