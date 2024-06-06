@@ -15,7 +15,7 @@
     "dotenv": "16.4.5"
   },
   "dependencies": {
-    "cos-nodejs-sdk-v5": "2.13.5"
+    "cos-nodejs-sdk-v5": "2.14.0"
   },
   "keywords": [
     "tencent",
