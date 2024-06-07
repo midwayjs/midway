@@ -31,7 +31,7 @@
     "@midwayjs/core": "^3.16.2",
     "@midwayjs/mock": "^3.16.2",
     "@midwayjs/redis": "^3.16.2",
-    "cache-manager-ioredis-yet": "1.2.2"
+    "cache-manager-ioredis-yet": "2.1.1"
   },
   "dependencies": {
     "lodash.clonedeep": "4.5.0",
