@@ -4,16 +4,17 @@ The following lists high-quality community projects related to Midwayjs
 
 ## Microservices
 
-| Name                                         | Author      | Description                                                                                                                                                  |
-| -------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                                                                                                                       |
-| [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                                                                                                              |
-| [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components                                                                                            |
-| [@mwcp/cache][@mwcp/cache]                   | waitingsong | midway Cache Component supports `Cacheable`, `CacheEvict`, `CachePut` decorators and supports generics for [obtaining method parameter type][cache-generics] |
-| [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `Transactional` decorator, intergrated [OpenTelemetry] trace                        |
-| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component supports `Trace` decorator  and supports generics for [obtaining method parameter type][otel-generics]                      |
-| [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                                                                                                                  |
-| [邮件组件][mailer-zh]                 | MrDotYan   | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]                                                                                                  |
+| Name                                         | Author      | Description                                                                                                                                                                                         |
+| -------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                                                                                                                                                              |
+| [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                                                                                                                                                     |
+| [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components                                                                                                                                   |
+| [@mwcp/cache][@mwcp/cache]                   | waitingsong | midway Cache Component supports [`Cacheable`][Cacheable], [`CacheEvict`][CacheEvict], [`CachePut`][CachePut] decorators and supports generics for [obtaining method parameter type][cache-generics] |
+| [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `Transactional` decorator, intergrated [OpenTelemetry] trace                                                               |
+| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component supports [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] decorators and supports generics for [obtaining method parameter type][otel-generics]  |
+| [@mwcp/jwt][@mwcp/jwt]                       | waitingsong | midway JWT component supports [`Public`][jwt-public] decorator                                                                                                                                      |
+| [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                                                                                                                                                         |
+| [邮件组件][mailer-zh]                        | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]                                                                                              |
 ## swagger
 
 | Name                                   | Author | Description             |
@@ -52,12 +53,23 @@ Welcome everyone to contribute to the community, edit this page and add your fav
 [midway-apollo]: https://github.com/helloHT/midway-apollo
 [@letscollab/midway-nacos]: https://github.com/deskbtm-letscollab/midway-nacos
 [@mwcp/kmore]: https://github.com/waitingsong/kmore
+
 [@mwcp/cache]: https://github.com/waitingsong/midway-components/tree/main/packages/cache
+[Cacheable]: https://github.com/waitingsong/midway-components/blob/main/packages/cache/README.md#cacheable-decorator
+[CacheEvict]: https://github.com/waitingsong/midway-components/blob/main/packages/cache/README.md#cacheevict-decorator
+[CachePut]: https://github.com/waitingsong/midway-components/blob/main/packages/cache/README.md#cacheput-decorator
+
 [@mwcp/otel]: https://github.com/waitingsong/midway-components/tree/main/packages/otel
+[Trace]: https://github.com/waitingsong/midway-components/tree/main/packages/otel#trace-decorator
+[TraceLog]: https://github.com/waitingsong/midway-components/tree/main/packages/otel#tracelog-decorator
+[TraceInit]: https://github.com/waitingsong/midway-components/tree/main/packages/otel#traceinit-decorator
 [otel-generics]: https://github.com/waitingsong/midway-components/tree/main/packages/otel#auto-parameter-type-of-keygenerator-from-generics
 [otel-generics-cn]: https://github.com/waitingsong/midway-components/blob/main/packages/otel/README.zh-CN.md#%E4%BB%8E%E6%B3%9B%E5%9E%8B%E5%8F%82%E6%95%B0%E8%87%AA%E5%8A%A8%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E5%8F%82%E6%95%B0%E7%B1%BB%E5%9E%8B
 [cache-generics]: https://github.com/waitingsong/midway-components/tree/main/packages/cache#auto-parameter-type-of-keygenerator-from-generics
 [cache-generics-cn]: https://github.com/waitingsong/midway-components/blob/main/packages/cache/README.zh-CN.md#%E4%BB%8E%E6%B3%9B%E5%9E%8B%E5%8F%82%E6%95%B0%E8%87%AA%E5%8A%A8%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E5%8F%82%E6%95%B0%E7%B1%BB%E5%9E%8B
+
+[@mwcp/jwt]: https://github.com/waitingsong/midway-components/tree/main/packages/jwt
+[jwt-public]: https://github.com/waitingsong/midway-components/blob/main/packages/jwt/README.md#public-decorator
 
 [midwayjs-knife4j2]: https://github.com/fangbao-0418/midway/tree/master/packages/swagger
 [yuntian001/midway-vite-view]: https://github.com/yuntian001/midway-vite-view
