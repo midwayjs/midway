@@ -7,8 +7,7 @@ export const upload: UploadOptions = {
   mode: 'file',
   fileSize: '10mb',
   whitelist: uploadWhiteList,
-  tmpdir: join(tmpdir(), 'midway-upload-files'),
+  tmpdir: join(tmpdir(), 'midway-busboy-files'),
   cleanTimeout: 5 * 60 * 1000,
   base64: false,
-  enable: true,
 };
