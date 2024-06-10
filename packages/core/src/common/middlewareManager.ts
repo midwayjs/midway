@@ -1,7 +1,8 @@
 import {
   ClassMiddleware,
   CommonMiddleware,
-  CommonMiddlewareUnion, CompositionMiddleware,
+  CommonMiddlewareUnion,
+  CompositionMiddleware,
   IMiddlewareManager,
   IMidwayContext,
 } from '../interface';
