@@ -17,6 +17,7 @@ import {
   MultipartInvalidFileTypeError,
   UploadFileInfo,
   UploadOptions,
+  UploadStreamFileInfo,
 } from '.';
 import { parseMultipart } from './parse';
 import { fromBuffer } from 'file-type';
@@ -27,7 +28,7 @@ const { unlink, writeFile } = promises;
 
 @Middleware()
 export class UploadMiddleware implements IMiddleware<any, any> {
-  @Config('upload')
+  @Config('busboy')
   uploadConfig: UploadOptions;
 
   @Logger()
@@ -110,17 +111,19 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           return [];
         }
         return Promise.all(
-          ctxOrReq.files.map(async (fileInfo: UploadFileInfo<any>) => {
-            if (typeof fileInfo.data !== 'string') {
-              return false;
+          ctxOrReq.files.map(
+            async (fileInfo: UploadFileInfo | UploadStreamFileInfo) => {
+              if (typeof fileInfo.data !== 'string') {
+                return false;
+              }
+              try {
+                await unlink(fileInfo.data);
+                return true;
+              } catch {
+                return false;
+              }
             }
-            try {
-              await unlink(fileInfo.data);
-              return true;
-            } catch {
-              return false;
-            }
-          })
+          )
         );
       };
 

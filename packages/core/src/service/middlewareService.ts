@@ -30,36 +30,38 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
     const newMiddlewareArr = [];
 
     for (let fn of middleware) {
-      if (Types.isClass(fn) || typeof fn === 'string') {
+      if (Types.isClass(fn) || typeof fn === 'string' || fn?.['middleware']) {
+        let mw = fn?.['middleware'] ?? fn;
+        const mwConfig = fn?.['options'];
+        let mwName = fn?.['name'];
         if (
-          typeof fn === 'string' &&
-          !this.applicationContext.hasDefinition(fn)
+          typeof mw === 'string' &&
+          !this.applicationContext.hasDefinition(mw)
         ) {
           throw new MidwayCommonError(
-            `Middleware definition of "${fn}" not found in midway container`
+            `Middleware definition of "${mw}" not found in midway container`
           );
         }
         const classMiddleware = await this.applicationContext.getAsync<
           IMiddleware<T, R, N>
-        >(fn as any);
+        >(mw as any);
         if (classMiddleware) {
-          fn = await classMiddleware.resolve(app);
+          mwName = mwName ?? classMiddleware.constructor.name;
+          mw = await classMiddleware.resolve(app, mwConfig);
 
-          if (!fn) {
+          if (!mw) {
             // for middleware enabled
             continue;
           }
 
           if (!classMiddleware.match && !classMiddleware.ignore) {
-            if (!fn.name) {
-              (fn as any)._name = classMiddleware.constructor.name;
+            if (!mw.name) {
+              (mw as any)._name = mwName;
             }
             // just got fn
-            newMiddlewareArr.push(fn);
+            newMiddlewareArr.push(mw);
           } else {
             // wrap ignore and match
-            const mw = fn;
-
             const match = pathMatching({
               match: classMiddleware.match,
               ignore: classMiddleware.ignore,
@@ -69,7 +71,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
               if (!match(ctx)) return next();
               return mw(ctx, next, options);
             };
-            (fn as any)._name = classMiddleware.constructor.name;
+            (fn as any)._name = mwName;
             newMiddlewareArr.push(fn);
           }
         } else {
