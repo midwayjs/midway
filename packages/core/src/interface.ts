@@ -858,7 +858,13 @@ export type IgnoreMatcher<CTX> = string | RegExp | ((ctx: CTX) => boolean);
  */
 export interface IMiddleware<CTX, R, N = unknown> {
   resolve: (app: IMidwayApplication) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
+  /**
+   * Which paths to ignore
+   */
   match?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
+  /**
+   * Match those paths with higher priority than ignore
+   */
   ignore?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
 }
 export type FunctionMiddleware<CTX, R, N = unknown> = N extends true
