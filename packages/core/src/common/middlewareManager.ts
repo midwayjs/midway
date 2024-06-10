@@ -1,6 +1,7 @@
 import {
+  ClassMiddleware,
   CommonMiddleware,
-  CommonMiddlewareUnion,
+  CommonMiddlewareUnion, CompositionMiddleware,
   IMiddlewareManager,
   IMidwayContext,
 } from '../interface';
@@ -188,6 +189,12 @@ export class ContextMiddlewareManager<CTX extends IMidwayContext, R, N>
    * @param middleware
    */
   public getMiddlewareName(middleware: CommonMiddleware<CTX, R, N>): string {
+    if (middleware['middleware']) {
+      return (
+        middleware.name ?? this.getMiddlewareName(middleware['middleware'])
+      );
+    }
+
     return (
       ((middleware as any).getName && (middleware as any).getName()) ??
       (middleware as any)._name ??
@@ -243,4 +250,16 @@ export class ContextMiddlewareManager<CTX extends IMidwayContext, R, N>
       return this.getMiddlewareName(item);
     });
   }
+}
+
+export function createMiddleware<CTX extends IMidwayContext, R, N>(
+  middleware: ClassMiddleware<CTX, R, N>,
+  options: any,
+  name?: string
+): CompositionMiddleware<any, any, any> {
+  return {
+    middleware,
+    options,
+    name,
+  };
 }

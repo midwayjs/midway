@@ -42,21 +42,34 @@ export interface UploadOptions {
   mimeTypeWhiteList?: Record<string, string | string[]> | ((ctx: IMidwayContext<any>) => string | string[]);
 }
 
-export interface UploadFileInfo<T> {
+export interface UploadFileInfo {
   /**
    * File name
    */
   filename: string;
   /**
-   * @deprecated, empty string, we will remove it in the future
+   * file mime type
    */
-  fieldName: string;
+  mimeType: string;
+  /**
+   * file data, a string of path
+   */
+  data: string;
+}
+
+export interface UploadStreamFileInfo {
+  /**
+   * File name
+   */
+  filename: string;
   /**
    * file mime type
    */
   mimeType: string;
   /**
-   * file data, if mode is `file`, it is a string, if mode is `stream`, it is a Readable stream
+   * file data, Readable stream
    */
-  data: T extends string ? string : Readable ;
+  data: Readable ;
 }
+
+
