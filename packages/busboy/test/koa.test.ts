@@ -119,7 +119,7 @@ describe('test/koa.test.ts', function () {
 
   });
 
-  describe.skip('koa file mime', function () {
+  describe('koa file mime', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, 'fixtures/koa-file-mime');
