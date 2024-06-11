@@ -1,4 +1,4 @@
-import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
+import { App, Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
 import * as express from '@midwayjs/express';
 import * as upload from '../../../../src';
 
@@ -11,7 +11,7 @@ import * as upload from '../../../../src';
     {
       default: {
         keys: ["test"],
-        upload: {
+        busboy: {
           mode: 'file',
           ignore: /ignore/,
         }
@@ -19,7 +19,13 @@ import * as upload from '../../../../src';
     }
   ]
 })
-export class AutoConfiguration {}
+export class AutoConfiguration {
+  @App()
+  app;
+  async onReady() {
+    this.app.useMiddleware(upload.UploadMiddleware);
+  }
+}
 
 
 @Controller('/')
@@ -29,7 +35,7 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload(@Fields() fields, @Files() files: upload.UploadFileInfo<string>[]) {
+  async upload(@Fields() fields, @Files() files: upload.UploadFileInfo[]) {
     return {
       files,
       fields
@@ -37,7 +43,7 @@ export class HomeController {
   }
 
   @Post('/upload-ignore')
-  async uploadIgnore(@Fields() fields, @Files() files: upload.UploadFileInfo<string>[]) {
+  async uploadIgnore(@Fields() fields, @Files() files: upload.UploadFileInfo[]) {
     return {
       files,
       fields,
