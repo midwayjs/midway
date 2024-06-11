@@ -1,7 +1,15 @@
-import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject, Fields, Files } from '@midwayjs/core';
+import {
+  Configuration,
+  Provide,
+  ServerlessTrigger,
+  ServerlessTriggerType,
+  Inject,
+  Fields,
+  Files,
+  App
+} from '@midwayjs/core';
 import * as faas from '@midwayjs/faas';
 import * as upload from '../../../../src';
-import { Readable } from 'stream';
 
 @Configuration({
   imports: [
@@ -11,7 +19,7 @@ import { Readable } from 'stream';
   importConfigs: [
     {
       default: {
-        upload: {
+        busboy: {
           mode: 'file',
           match: /upload/
         },
@@ -19,7 +27,13 @@ import { Readable } from 'stream';
     }
   ]
 })
-export class AutoConfiguration {}
+export class AutoConfiguration {
+  @App()
+  app;
+  async onReady() {
+    this.app.useMiddleware(upload.UploadMiddleware);
+  }
+}
 
 @Provide()
 export class HelloHttpService {
@@ -27,7 +41,7 @@ export class HelloHttpService {
   ctx;
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/upload', method: 'post'})
-  async upload(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
+  async upload(@Fields() fields, @Files() files: upload.UploadStreamFileInfo[]) {
     return {
       files,
       fields
@@ -35,7 +49,7 @@ export class HelloHttpService {
   }
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/xxxx', method: 'post'})
-  async xxxx(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
+  async xxxx(@Fields() fields, @Files() files: upload.UploadStreamFileInfo[]) {
     return {
       ignore: true,
       files,
@@ -44,7 +58,7 @@ export class HelloHttpService {
   }
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/uploadAutoClean', method: 'post'})
-  async uploadAutoClean(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
+  async uploadAutoClean(@Fields() fields, @Files() files: upload.UploadStreamFileInfo[]) {
     await this.ctx.cleanupRequestFiles();
     return {
       files,

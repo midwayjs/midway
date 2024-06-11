@@ -5,17 +5,16 @@ import { createWriteStream, statSync } from 'fs';
 import * as assert from 'assert';
 import { Controller, Post } from '@midwayjs/core';
 import { tmpdir } from 'os';
-import { UploadFileInfo } from '../src';
-import { Readable } from 'stream';
+import { UploadMiddleware, UploadStreamFileInfo } from '../src';
 
 describe('/test/index.test.ts', () => {
   it('should fix #3858 ', async () => {
 
     @Controller()
     class APIController {
-      @Post('/upload')
+      @Post('/upload', { middleware: [UploadMiddleware]})
       async upload(ctx) {
-        const files = ctx.files as UploadFileInfo<Readable>;
+        const files = ctx.files as UploadStreamFileInfo;
         const fields = ctx.fields;
         const fileName = join(tmpdir(), Date.now() + '_' + files[0].filename);
         const fsWriteStream = createWriteStream(fileName);
@@ -41,7 +40,7 @@ describe('/test/index.test.ts', () => {
       ],
       globalConfig: {
         keys: '123',
-        upload: {
+        busboy: {
           mode: 'stream',
           whitelist: ['.txt'],
         }
