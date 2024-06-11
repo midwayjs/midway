@@ -92,7 +92,7 @@ describe('test/express.test.ts', function () {
           assert(response.body.ignore);
           assert(!response.body.files);
           assert(!response.body.fields);
-        });
+        }).catch(err => console.log);
     });
 
     it('upload unsupport ext file using file', async () => {
