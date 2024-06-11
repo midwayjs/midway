@@ -875,6 +875,7 @@ export type ClassMiddleware<CTX, R, N> = new (...args) => IMiddleware<
   R,
   N
 >;
+
 export type CompositionMiddleware<CTX, R, N> = {
   middleware: ClassMiddleware<CTX, R, N>;
   options: any;

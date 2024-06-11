@@ -1,18 +1,19 @@
-import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
+import { App, Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import { UploadFileInfo, uploadWhiteList, DefaultUploadFileMimeType } from '../../../../src';
 import { statSync } from 'fs';
+import * as upload from '../../../../src';
 
 @Configuration({
   imports: [
     koa,
-    require('../../../../src')
+    upload,
   ],
   importConfigs: [
     {
       default: {
         keys: ["test"],
-        upload: {
+        busboy: {
           mode: 'file',
           whitelist: (ctx) => {
             return uploadWhiteList.concat('.more');
@@ -28,7 +29,13 @@ import { statSync } from 'fs';
     }
   ]
 })
-export class AutoConfiguration {}
+export class AutoConfiguration {
+  @App()
+  app;
+  async onReady() {
+    this.app.useMiddleware(upload.UploadMiddleware);
+  }
+}
 
 
 @Controller('/')
@@ -38,7 +45,7 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload(@Fields() fields, @Files() files: UploadFileInfo<string>[]) {
+  async upload(@Fields() fields, @Files() files: UploadFileInfo[]) {
     const stat = statSync(files[0].data);
     return {
       size: stat.size,

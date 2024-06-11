@@ -4,6 +4,6 @@ export const security = {
   csrf: false,
 };
 
-export const upload = {
+export const busboy = {
   mode: 'stream'
 }

@@ -1,7 +1,6 @@
-import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject, Fields, Files } from '@midwayjs/core';
+import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject, Fields, Files, App } from '@midwayjs/core';
 import * as faas from '@midwayjs/faas';
 import * as upload from '../../../../src';
-import { Readable } from 'stream';
 
 @Configuration({
   imports: [
@@ -11,7 +10,7 @@ import { Readable } from 'stream';
   importConfigs: [
     {
       default: {
-        upload: {
+        busboy: {
           mode: 'file',
           cleanTimeout: 1,
         },
@@ -19,7 +18,13 @@ import { Readable } from 'stream';
     }
   ]
 })
-export class AutoConfiguration {}
+export class AutoConfiguration {
+  @App()
+  app;
+  async onReady() {
+    this.app.useMiddleware(upload.UploadMiddleware);
+  }
+}
 
 @Provide()
 export class HelloHttpService {
@@ -27,7 +32,7 @@ export class HelloHttpService {
   ctx;
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/upload', method: 'post'})
-  async upload(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
+  async upload(@Fields() fields, @Files() files: upload.UploadStreamFileInfo[]) {
     return {
       files,
       fields

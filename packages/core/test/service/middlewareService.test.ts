@@ -466,7 +466,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       @Provide()
       class TestMiddleware1 {
         title = 'midway, ';
-        resolve(app, options) {
+        resolve(app, options: {text: string}) {
           return async (ctx, next) => {
             return (options?.text || this.title) + (await next() ?? '');
           }

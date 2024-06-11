@@ -1,10 +1,9 @@
-import { Configuration, Controller, Fields, File, Inject, Post, sleep } from '@midwayjs/core';
+import { App, Configuration, Controller, Fields, File, Inject, Post, sleep } from '@midwayjs/core';
 import * as web from '@midwayjs/web';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 import * as defaultConfig from './config/config.default';
 import * as upload from '../../../../src';
-import { Readable } from 'stream';
 
 @Configuration({
   imports: [
@@ -17,7 +16,13 @@ import { Readable } from 'stream';
     }
   ]
 })
-export class AutoConfiguration {}
+export class AutoConfiguration {
+  @App()
+  app;
+  async onReady() {
+    this.app.useMiddleware(upload.UploadMiddleware);
+  }
+}
 
 
 @Controller('/')
@@ -27,7 +32,7 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload(@File() file: upload.UploadFileInfo<Readable>, @Fields() fields) {
+  async upload(@File() file: upload.UploadStreamFileInfo, @Fields() fields) {
     const path = join(__dirname, '../logs/test.pdf');
     const stream = createWriteStream(path)
     file.data.pipe(stream);
