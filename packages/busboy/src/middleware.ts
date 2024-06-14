@@ -54,7 +54,16 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     } else {
       this.ignore = [].concat(this.uploadConfig.ignore || []);
     }
+  }
 
+  resolve(
+    app: IMidwayApplication,
+    options?: {
+      mode: 'file' | 'stream';
+      fileSize: string;
+      tmpdir: string;
+    }
+  ) {
     if (
       this.uploadConfig.whitelist &&
       Array.isArray(this.uploadConfig.whitelist)
@@ -69,9 +78,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         this.uploadFileMimeTypeMap.set(ext, mime);
       }
     }
-  }
 
-  resolve(app: IMidwayApplication) {
     const isExpress = app.getNamespace() === 'express';
     return async (ctxOrReq, resOrNext, next) => {
       const req = ctxOrReq.request?.req || ctxOrReq.request || ctxOrReq;
@@ -131,7 +138,9 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         let isStreamResolve = false;
         const { files = [], fields = [] } = await new Promise<any>(
           (resolveP, reject) => {
-            const bb = busboy({ headers: req.headers });
+            const bb = busboy({
+              headers: req.headers,
+            });
             const fields: Promise<any>[] = [];
             const files: Promise<any>[] = [];
             let fileModeCount = 0;

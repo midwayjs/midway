@@ -23,7 +23,8 @@
   "license": "MIT",
   "dependencies": {
     "file-type": "16.5.4",
-    "busboy": "1.6.0"
+    "busboy": "1.6.0",
+    "@types/busboy": "1.5.4"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.16.2",
@@ -31,7 +32,6 @@
     "@midwayjs/faas": "^3.16.2",
     "@midwayjs/koa": "^3.16.2",
     "@midwayjs/mock": "^3.16.2",
-    "@midwayjs/web": "^3.16.2",
-    "@types/busboy": "1.5.4"
+    "@midwayjs/web": "^3.16.2"
   }
 }
