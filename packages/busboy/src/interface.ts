@@ -1,17 +1,14 @@
 import { Readable } from 'stream';
 import { IgnoreMatcher, IMidwayContext } from '@midwayjs/core';
+import { BusboyConfig } from 'busboy';
 
 export type UploadMode = 'stream' | 'file';
 
-export interface UploadOptions {
+export interface UploadOptions extends BusboyConfig {
   /**
    * Upload mode, default is `file`
    */
   mode?: UploadMode,
-  /**
-   * Max file size (in bytes), default is `10mb`
-   */
-  fileSize?: string;
   /**
    * The white ext file names
    */
