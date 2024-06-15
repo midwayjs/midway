@@ -27,8 +27,9 @@ import TabItem from '@theme/TabItem';
 和 upload 组件的差异为：
 
 * 1、配置的 key 从 `upload` 调整为 `busboy`
-* 2、默认加载的中间件变为手动配置中间件
+* 2、中间件不再默认加载，手动可配置到全局或者路由
 * 3、流式上传时不再提供 fieldName 字段，入参定义类型调整为 `UploadStreamFileInfo`
+* 4、`fileSize` 的配置有调整
 
 :::
 
@@ -78,9 +79,7 @@ export class MainConfiguration {}
 
 ## 配置中间件
 
-组件中提供了 `UploadMiddleware` 这个中间件，默认未开启。
-
-可以将其配置到全局或者特定路由，推荐配置到特定路由，提升性能。
+组件中提供了 `UploadMiddleware` 这个中间件，可以将其配置到全局或者特定路由，推荐配置到特定路由，提升性能。
 
 
 
@@ -197,40 +196,6 @@ export class MainConfiguration {
 
 ## 配置
 
-### 默认配置
-
-默认配置如下，一般情况下无需修改。
-
-```typescript
-// src/config/config.default.ts
-import { uploadWhiteList } from '@midwayjs/busboy';
-import { tmpdir } from 'os';
-import { join } from 'path';
-
-export default {
-  // ...
-  upload: {
-    // mode: UploadMode, 默认为file，即上传到服务器临时目录，可以配置为 stream
-    mode: 'file',
-    // fileSize: string, 最大上传文件大小，默认为 10mb
-    fileSize: '10mb',
-    // whitelist: string[]，文件扩展名白名单
-    whitelist: uploadWhiteList.filter(ext => ext !== '.pdf'),
-    // tmpdir: string，上传的文件临时存储路径
-    tmpdir: join(tmpdir(), 'midway-busboy-files'),
-    // cleanTimeout: number，上传的文件在临时目录中多久之后自动删除，默认为 5 分钟
-    cleanTimeout: 5 * 60 * 1000,
-    // base64: boolean，设置原始body是否是base64格式，默认为false，一般用于腾讯云的兼容
-    base64: false,
-    // 仅在匹配路径到 /api/upload 的时候去解析 body 中的文件信息
-    match: /\/api\/upload/,
-  },
-}
-
-```
-
-
-
 ### 上传模式 - file
 
 `file` 为默认值，也是框架的推荐值。
@@ -248,7 +213,7 @@ export default {
 
 ```
 
-在代码中获取上传的文件
+在代码中获取上传的文件。
 
 ```typescript
 import { Controller, Post, Files, Fields } from '@midwayjs/core';
@@ -306,7 +271,7 @@ export class HomeController {
 
 ### 上传模式 - stream
 
-配置 upload 的 mode 为 `stream` 字符串，或使用 `@midwayjs/upload` 包导出的 `UploadMode.Stream` 来配置。
+配置 upload 的 mode 为 `stream` 字符串。
 
 
 使用 stream 模式时，通过 `this.ctx.files` 中获取的 `data` 为 `ReadStream`，后续可以再通过 `pipe` 等方式继续将数据流转至其他 `WriteStream` 或 `TransformStream`。
@@ -359,7 +324,7 @@ export class HomeController {
 
 
 
-### 上传白名单
+### 上传文件后缀检查
 
 通过 `whitelist` 属性，配置允许上传的文件后缀名，配置 `null` 则不校验后缀名。
 
@@ -367,7 +332,7 @@ export class HomeController {
 
 如果配置为 `null`，则不对上传文件后缀名进行校验，如果采取文件上传模式 (mode=file)，则会有可能被攻击者所利用，上传 `.php`、`.asp` 等后缀的 WebShell 实现攻击行为。
 
-当然，由于 `@midwayjs/upload` 组件会对上传后的临时文件采取 `重新随机生成` 文件名写入，只要开发者 `不将` 上传后的临时文件地址返回给用户，那么即使用户上传了一些不被预期的文件，那也无需过多担心会被利用。
+当然，由于组件会对上传后的临时文件采取 `重新随机生成` 文件名写入，只要开发者 `不将` 上传后的临时文件地址返回给用户，那么即使用户上传了一些不被预期的文件，那也无需过多担心会被利用。
 
 :::
 
@@ -403,21 +368,21 @@ export class HomeController {
 '.avi',
 ```
 
-可以通过 `@midwayjs/upload` 包中导出的 `uploadWhiteList` 获取到默认的后缀名白名单。
+可以通过组件中导出的 `uploadWhiteList` 获取到默认的后缀名白名单。
 
 另外，midway 上传组件，为了避免部分 `恶意用户`，通过某些技术手段来`伪造`一些可以被截断的扩展名，所以会对获取到的扩展名的二进制数据进行过滤，仅支持 `0x2e`（即英文点 `.`）、`0x30-0x39`（即数字 `0-9`）、`0x61-0x7a`（即小写字母 `a-z`） 范围内的字符作为扩展名，其他字符将会被自动忽略。
 
-从 v3.14.0 开始，你可以传递一个函数，可以根据不同的条件动态返回白名单。
+你可以传递一个函数，可以根据不同的条件动态返回白名单。
 
 ```typescript
 // src/config/config.default.ts
-import { uploadWhiteList } from '@midwayjs/upload';
+import { uploadWhiteList } from '@midwayjs/busboy';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
 export default {
   // ...
-  upload: {
+  busboy: {
     whitelist: (ctx) => {
       if (ctx.path === '/') {
         return [
@@ -439,18 +404,18 @@ export default {
 
 
 
-### MIME 类型检查
+### 上传文件 MIME 类型检查
 
 部分`恶意用户`，会尝试将 `.php` 等 WebShell 修改扩展名为 `.jpg`，来绕过基于扩展名的白名单过滤规则，在某些服务器环境内，这个 jpg 文件依然会被作为 PHP 脚本来执行，造成安全风险。
 
-因此，`@midwayjs/upload` 组件提供了 `mimeTypeWhiteList` 配置参数 **【请注意，此参数无默认值设置，即默认不校验】**，您可以通过此配置设置允许的文件 MIME 格式，规则为由数组 `[扩展名, mime, [...moreMime]]` 组成的 `二级数组`，例如：
+组件提供了 `mimeTypeWhiteList` 配置参数 **【请注意，此参数无默认值设置，即默认不校验】**，您可以通过此配置设置允许的文件 MIME 格式，规则为由数组 `[扩展名, mime, [...moreMime]]` 组成的 `二级数组`，例如：
 
 ```typescript
 // src/config/config.default.ts
-import { uploadWhiteList } from '@midwayjs/upload';
+import { uploadWhiteList } from '@midwayjs/busboy';
 export default {
   // ...
-  upload: {
+  busboy: {
     // ...
     // 扩展名白名单
     whitelist: uploadWhiteList,
@@ -469,14 +434,14 @@ export default {
 }
 ```
 
-您也可以使用 `@midwayjs/upload` 组件提供的 `DefaultUploadFileMimeType` 变量，作为默认的 MIME 校验规则，它提供了常用的 `.jpg`、`.png`、`.psd` 等文件扩展名的 MIME 数据：
+您也可以使用组件提供的 `DefaultUploadFileMimeType` 变量，作为默认的 MIME 校验规则，它提供了常用的 `.jpg`、`.png`、`.psd` 等文件扩展名的 MIME 数据：
 
 ```typescript
 // src/config/config.default.ts
-import { uploadWhiteList, DefaultUploadFileMimeType } from '@midwayjs/upload';
+import { uploadWhiteList, DefaultUploadFileMimeType } from '@midwayjs/busboy';
 export default {
   // ...
-  upload: {
+  busboy: {
     // ...
     // 扩展名白名单
     whitelist: uploadWhiteList,
@@ -496,7 +461,7 @@ MIME 类型校验规则仅适用于使用 文件上传模式 `mode=file`，同�
 
 :::
 
-从 v3.14.0 开始，你可以传递一个函数，可以根据不同的条件动态返回 MIME 规则。
+你可以传递一个函数，可以根据不同的条件动态返回 MIME 规则。
 
 ```typescript
 // src/config/config.default.ts
@@ -505,7 +470,7 @@ import { join } from 'path';
 
 export default {
   // ...
-  upload: {
+  busboy: {
     mimeTypeWhiteList: (ctx) => {
       if (ctx.path === '/') {
         return {
@@ -524,27 +489,91 @@ export default {
 
 
 
-### 配置 match 或 ignore
+### Busboy 上传限制
 
-当开启了 upload 组件后，当请求的 `method` 为 `POST/PUT/DELETE/PATCH` 之一时，如果判断请求的 `headers['content-type']` 中包含 `multipart/form-data` 及 `boundary` 时，将会 `**自动进入**` 上传文件解析逻辑。
+默认情况下没有限制，可以通过配置修改，数字类型，单位为 byte。
 
-这会造成：如果用户可能手动分析了网站的请求信息，手动调用任一一个 `post` 等类型的接口，将一个文件进行上传，就会触发 `upload` 组件的解析逻辑，在临时目录创建临时的已上传文件缓存，对网站服务器产生不必要的`负荷`，严重时可能会`影响`服务器正常业务逻辑处理。
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  busboy: {
+    // ...
+    limits: {
+      fileSize: 1024
+    }
+  },
+}
+```
 
-所以，您可以在配置中添加 `match` 或 `ignore` 配置，来设置哪些 api 路径是允许进行上传的。
+除此之外，还可以设置一些其他的 [限制]((https://github.com/mscdex/busboy/tree/master?tab=readme-ov-file#exports)。)。
 
 
 
 
-
-
-## 临时文件与清理
+### 临时文件与清理
 
 
 如果你使用了 `file` 模式来获取上传的文件，那么上传的文件会存放在您于 `config` 文件中设置的 `upload` 组件配置中的 `tmpdir` 选项指向的文件夹内。
 
 你可以通过在配置中使用 `cleanTimeout` 来控制自动的临时文件清理时间，默认值为 `5 * 60 * 1000`，即上传的文件于 `5 分钟` 后自动清理，设置为 `0` 则视为不开启自动清理功能。
 
+```typescript
+// src/config/config.default.ts
+import { uploadWhiteList } from '@midwayjs/busboy';
+import { tmpdir } from 'os';
+import { join } from 'path';
+
+export default {
+  // ...
+  busboy: {
+    mode: 'file',
+    tmpdir: join(tmpdir(), 'midway-busboy-files'),
+    cleanTimeout: 5 * 60 * 1000,
+  },
+}
+
+```
+
 你也可以在代码中通过调用 `await ctx.cleanupRequestFiles()` 来主动清理当前请求上传的临时文件。
+
+
+
+### 设置不同路由的配置
+
+通过中间件的不同实例，可以对不同的路由做不同的配置，这种场景下会和全局配置合并，仅能覆盖一小部分配置。
+
+```typescript
+import { Controller, Post, Files, Fields } from '@midwayjs/core';
+import { UploadFileInfo, UploadMiddleware } from '@midwayjs/busboy';
+
+@Controller('/')
+export class HomeController {
+  @Post('/upload1', { middlewares: [ createMiddleware(UploadMiddleware, {mode: 'file'}) ]})
+  async upload1(@Files() files Array<UploadFileInfo>) {
+    // ...
+  }
+  
+  @Post('/upload2', { middlewares: [ createMiddleware(UploadMiddleware, {mode: 'stream'}) ]})
+  async upload2(@Files() files Array<UploadFileInfo>) {
+    // ...
+  }
+}
+```
+
+当前可以传递的配置包括 `mode` 以及 `busboy` 自带的 [配置](https://github.com/mscdex/busboy/tree/master?tab=readme-ov-file#exports)。
+
+
+
+## 内置错误
+
+* `MultipartInvalidFilenameError` 无效文件名
+* `MultipartInvalidFileTypeError` 无效文件类型
+* `MultipartFileSizeLimitError` 文件大小超出限制
+* `MultipartFileLimitError` 文件数量超出限制
+* `MultipartPartsLimitError` 上传 parts 数量超出限制
+* `MultipartFieldsLimitError` fields 数量超出限制
+* `MultipartError` 其余的 busbuy 错误
 
 
 

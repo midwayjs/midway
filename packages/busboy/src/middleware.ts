@@ -7,14 +7,20 @@ import {
   ILogger,
   IgnoreMatcher,
   IMidwayApplication,
+  extend,
 } from '@midwayjs/core';
 import { resolve } from 'path';
 import { createWriteStream, promises } from 'fs';
 import { Readable, Stream } from 'stream';
 import {
   EXT_KEY,
+  MultipartError,
+  MultipartFieldsLimitError,
+  MultipartFileLimitError,
+  MultipartFileSizeLimitError,
   MultipartInvalidFilenameError,
   MultipartInvalidFileTypeError,
+  MultipartPartsLimitError,
   UploadFileInfo,
   UploadOptions,
   UploadStreamFileInfo,
@@ -23,6 +29,7 @@ import { parseMultipart } from './parse';
 import { fromBuffer } from 'file-type';
 import { formatExt } from './utils';
 import * as busboy from 'busboy';
+import { BusboyConfig } from 'busboy';
 
 const { unlink, writeFile } = promises;
 
@@ -54,16 +61,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     } else {
       this.ignore = [].concat(this.uploadConfig.ignore || []);
     }
-  }
 
-  resolve(
-    app: IMidwayApplication,
-    options?: {
-      mode: 'file' | 'stream';
-      fileSize: string;
-      tmpdir: string;
-    }
-  ) {
     if (
       this.uploadConfig.whitelist &&
       Array.isArray(this.uploadConfig.whitelist)
@@ -78,8 +76,19 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         this.uploadFileMimeTypeMap.set(ext, mime);
       }
     }
+  }
 
+  resolve(
+    app: IMidwayApplication,
+    options?: {
+      mode?: 'file' | 'stream';
+    } & BusboyConfig
+  ) {
     const isExpress = app.getNamespace() === 'express';
+    const uploadConfig: UploadOptions = options
+      ? extend({}, this.uploadConfig, options || {})
+      : this.uploadConfig;
+
     return async (ctxOrReq, resOrNext, next) => {
       const req = ctxOrReq.request?.req || ctxOrReq.request || ctxOrReq;
       next = isExpress ? next : resOrNext;
@@ -88,22 +97,22 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         return next();
       }
 
-      const { mode, tmpdir } = this.uploadConfig;
+      const { mode, tmpdir } = uploadConfig;
 
       // create new map include custom white list
       const currentContextWhiteListMap = new Map([
         ...this.uploadWhiteListMap.entries(),
       ]);
-      if (typeof this.uploadConfig.whitelist === 'function') {
-        const whiteListArray = this.uploadConfig.whitelist.call(this, ctxOrReq);
+      if (typeof uploadConfig.whitelist === 'function') {
+        const whiteListArray = uploadConfig.whitelist.call(this, ctxOrReq);
         whiteListArray.forEach(ext => currentContextWhiteListMap.set(ext, ext));
       }
       // create new map include custom mime type white list
       const currentContextMimeTypeWhiteListMap = new Map([
         ...this.uploadFileMimeTypeMap.entries(),
       ]);
-      if (typeof this.uploadConfig.mimeTypeWhiteList === 'function') {
-        const mimeTypeWhiteList = this.uploadConfig.mimeTypeWhiteList.call(
+      if (typeof uploadConfig.mimeTypeWhiteList === 'function') {
+        const mimeTypeWhiteList = uploadConfig.mimeTypeWhiteList.call(
           this,
           ctxOrReq
         );
@@ -140,6 +149,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           (resolveP, reject) => {
             const bb = busboy({
               headers: req.headers,
+              ...uploadConfig,
             });
             const fields: Promise<any>[] = [];
             const files: Promise<any>[] = [];
@@ -153,6 +163,10 @@ export class UploadMiddleware implements IMiddleware<any, any> {
               if (!ext) {
                 reject(new MultipartInvalidFilenameError(filename));
               }
+
+              file.on('limit', () => {
+                reject(new MultipartFileSizeLimitError(filename));
+              });
 
               if (mode === 'stream') {
                 if (isStreamResolve) {
@@ -231,6 +245,21 @@ export class UploadMiddleware implements IMiddleware<any, any> {
                 })
               );
             });
+            bb.on('error', (err: Error) => {
+              reject(new MultipartError(err));
+            });
+
+            bb.on('partsLimit', () => {
+              reject(new MultipartPartsLimitError());
+            });
+
+            bb.on('filesLimit', () => {
+              reject(new MultipartFileLimitError());
+            });
+
+            bb.on('fieldsLimit', () => {
+              reject(new MultipartFieldsLimitError());
+            });
 
             req.pipe(bb);
           }
@@ -260,7 +289,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           body = req.body;
         }
 
-        const data = await parseMultipart(body, boundary, this.uploadConfig);
+        const data = await parseMultipart(body, boundary, uploadConfig);
         if (!data) {
           return next();
         }
