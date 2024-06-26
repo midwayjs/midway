@@ -8,5 +8,4 @@ import { Configuration } from '@midwayjs/core';
     },
   ],
 })
-export class ServerSentEventConfiguration {
-}
+export class ServerSentEventConfiguration {}
