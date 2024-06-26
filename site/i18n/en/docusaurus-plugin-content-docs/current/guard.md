@@ -6,8 +6,6 @@ The guard determines whether a given request is handled by the routing handler b
 
 In ordinary applications, these logics are usually processed in the middleware, but the logic of the middleware is too common, and it cannot be combined with routing methods gracefully. For this reason, we have designed guards after the middleware and before entering the routing method, which can facilitate method authentication and other processing.
 
-The guard will execute **after** the middleware and **before** the routing method.
-
 For the following code, we will take `@midwayjs/koa` as an example.
 
 
@@ -55,17 +53,11 @@ export class AuthGuard implements IGuard<Context> {
 
 `canActivate` method is used to verify whether subsequent methods can be accessed in the request. When true is returned, subsequent methods will be executed. When false is `canActivate`, 403 error codes will be thrown.
 
-:::tip
-
-Note that currently only class Controller can use guards.
-
-:::
-
 
 
 ## Use guards
 
-Guards can be applied to different frameworks, under http, can be applied to globals, controllers and methods.
+Guards can be applied to different frameworks. In http, they can be applied globally, to Controllers, and to methods. In other Framework implementations, they can only be used on methods.
 
 
 
@@ -87,7 +79,7 @@ export class HomeController {
 ```
 
 
-Midway also provides middleware parameters on route decorators such as `@Get` and `@Post` to facilitate middleware interception of a single route.
+Apply guards on methods.
 
 ```typescript
 import { Controller, Get } from '@midwayjs/core';
@@ -165,9 +157,27 @@ export class AuthGuard implements IGuard<Context> {
     if (methodName ==='xxx') {
       throw new httpError.ForbiddenError();
     }
+    
+    return true;
   }
 }
 ```
+
+:::tip
+
+Note that the global error handler will also intercept errors thrown by guards.
+
+:::
+
+
+
+## Difference from middleware
+
+Guards will be executed **after** the global middleware and **before** the business logic of the routing method.
+
+Middleware generally writes general processing logic, such as login, user identification, security verification, etc., while guards are more suitable for routing-based permission control because they are inside the routing.
+
+Although there is routing information in the middleware, it is impossible to clearly know which actual routing controller is entered (unless additional query matching), while guards have entered the routing method, which has a relatively large advantage in performance.
 
 
 
