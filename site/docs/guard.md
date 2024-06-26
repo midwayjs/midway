@@ -6,8 +6,6 @@
 
 普通的应用程序中，一般会在中间件中处理这些逻辑，但是中间件的逻辑过于通用，同时也无法很优雅的去和路由方法进行结合，为此我们在中间件之后，进入路由方法之前设计了守卫，可以方便的进行方法鉴权等处理。
 
-守卫会在中间件 **之后**，路由方法 **之前** 执行。
-
 下面的代码，我们将以 `@midwayjs/koa` 举例。
 
 
@@ -55,17 +53,11 @@ export class AuthGuard implements IGuard<Context> {
 
 `canActivate` 方法用于在请求中验证是否可以访问后续的方法，当返回 true 时，后续的方法会被执行，当 `canActivate` 返回 false 时，会抛出 403 错误码。
 
-:::tip
-
-注意，当前只有类 Controller 才能使用守卫。
-
-:::
-
 
 
 ## 使用守卫
 
-守卫可以被应用到不同的框架上，在 http 下，可以应用到全局，Controller 和方法上。
+守卫可以被应用到不同的框架上，在 http 下，可以应用到全局，Controller 和方法上，在其他的 Framework 实现中，仅能在方法上使用。
 
 
 
@@ -87,7 +79,7 @@ export class HomeController {
 ```
 
 
-Midway 同时也在 `@Get` 、 `@Post` 等路由装饰器上都提供了 middleware 参数，方便对单个路由做中间件拦截。
+在方法上应用守卫。
 
 ```typescript
 import { Controller, Get } from '@midwayjs/core';
@@ -166,9 +158,27 @@ export class AuthGuard implements IGuard<Context> {
     if (methodName ==='xxx') {
       throw new httpError.ForbiddenError();
     }
+    
+    return true;
   }
 }
 ```
+
+:::tip
+
+注意全局错误处理器也会拦截守卫抛出的错误。
+
+:::
+
+
+
+## 和中间件的区别
+
+守卫会在全局中间件 **之后**，路由方法业务逻辑 **之前** 执行。
+
+中间件一般编写通用的处理逻辑，比如登录，用户识别，安全校验等，而守卫由于在路由内部，更适合做基于路由的权限控制。
+
+中间件中虽然有路由信息，但是无法明确得知具体进入的是哪个实际的路由控制器（除非额外查询匹配），而守卫已经进入了路由方法，在性能方面有比较大的优势。
 
 
 
