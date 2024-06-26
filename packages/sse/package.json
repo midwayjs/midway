@@ -1,0 +1,36 @@
+{
+  "name": "@midwayjs/sse",
+  "version": "3.16.2",
+  "description": "midway component for sse",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "sse",
+    "plugin"
+  ],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^3.16.2",
+    "@midwayjs/mock": "^3.16.2",
+    "@midwayjs/koa": "^3.16.2",
+    "eventsource": "2.0.2"
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}
