@@ -15,11 +15,11 @@ import {
   sleep,
   IMidwayContainer,
   loadModule,
+  DefaultConsoleLoggerFactory,
 } from '../src';
 import { join } from 'path';
 import * as http from 'http';
 import * as getRawBody from 'raw-body';
-import { LoggerFactory } from '@midwayjs/logger';
 
 /**
  * 任意一个数组中的对象，和预期的对象属性一致即可
@@ -63,7 +63,7 @@ function deepEqual(x, y) {
   ) : (x === y);
 }
 
-export async function createLightFramework(baseDir: string = '', globalConfig: any = {}): Promise<IMidwayFramework<any, any, any>> {
+export async function createLightFramework(baseDir: string = '', bootstrapOptions: IMidwayBootstrapOptions = {}): Promise<IMidwayFramework<any, any, any>> {
   /**
    * 一个全量的空框架
    */
@@ -153,9 +153,9 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
     baseDir,
     imports,
     applicationContext: container,
-    globalConfig,
-    loggerFactory: new LoggerFactory(),
+    loggerFactory: new DefaultConsoleLoggerFactory(),
     moduleLoadType: loadMode,
+    ...bootstrapOptions,
   });
 
   return container.getAsync(EmptyFramework as any);
