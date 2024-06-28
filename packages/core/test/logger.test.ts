@@ -5,6 +5,7 @@ import { tmpdir } from 'os';
 import { existsSync } from 'fs';
 import { createLightFramework } from './util';
 import { clearAllModule } from '../src';
+import { LoggerFactory } from '@midwayjs/logger';
 
 describe('/test/logger.test.ts', () => {
   beforeEach(() => {
@@ -13,7 +14,10 @@ describe('/test/logger.test.ts', () => {
 
   it('should create context logger', async () => {
     const framework = await createLightFramework(
-      join(__dirname, './fixtures/base-app/src')
+      join(__dirname, './fixtures/base-app/src'),
+      {
+        loggerFactory: new LoggerFactory(),
+      }
     );
     const customLogger = framework.createLogger('customLogger', {
       disableError: true,
@@ -37,7 +41,10 @@ describe('/test/logger.test.ts', () => {
     );
     mm(process.env, 'MIDWAY_LOGGER_WRITEABLE_DIR', tmpLogsDir);
     const framework = await createLightFramework(
-      join(__dirname, './fixtures/base-app/src')
+      join(__dirname, './fixtures/base-app/src'),
+      {
+        loggerFactory: new LoggerFactory(),
+      }
     );
     const logger = framework.getCoreLogger();
     logger.info('hello world');
