@@ -8,6 +8,8 @@ Midway has a built-in simple HTTP request client, which can be used without intr
 
 The default Get request, and the returned data is Buffer.
 
+The built-in Http client only provides the simplest capabilities and can only meet most of the front-end interface data acquisition needs. If you need complex functions, such as file upload, please use other clients, such as fetch, axios, got, etc.
+
 
 
 ### Simple method form
@@ -98,12 +100,6 @@ try {
   err = e;
 }
 ```
-
-:::tip
-
-The built-in Http client only provides the simplest capabilities. If you need complex functions (front and back interception or other additional configurations), please use axios.
-
-:::
 
 
 
