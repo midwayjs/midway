@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/process-agent",
-  "version": "3.16.2",
+  "version": "3.16.4",
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -26,8 +26,8 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^3.16.2",
-    "@midwayjs/koa": "^3.16.2",
-    "@midwayjs/mock": "^3.16.2"
+    "@midwayjs/koa": "^3.16.4",
+    "@midwayjs/mock": "^3.16.4"
   },
   "dependencies": {
     "request": "2.88.2"

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/upload",
-  "version": "3.16.2",
+  "version": "3.16.4",
   "description": "Midway Component for upload",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -27,10 +27,10 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.16.2",
-    "@midwayjs/express": "^3.16.2",
-    "@midwayjs/faas": "^3.16.2",
-    "@midwayjs/koa": "^3.16.2",
-    "@midwayjs/mock": "^3.16.2",
-    "@midwayjs/web": "^3.16.2"
+    "@midwayjs/express": "^3.16.4",
+    "@midwayjs/faas": "^3.16.4",
+    "@midwayjs/koa": "^3.16.4",
+    "@midwayjs/mock": "^3.16.4",
+    "@midwayjs/web": "^3.16.4"
   }
 }

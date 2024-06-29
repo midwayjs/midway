@@ -1,6 +1,39 @@
 # Change Log
 
 
+## v3.16.4 (2024-06-29)
+
+#### :memo: Documentation
+* [#3899](https://github.com/midwayjs/midway/pull/3899) docs(site): update awesome_midway.md ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* `mqtt`
+  * [#3928](https://github.com/midwayjs/midway/pull/3928) fix(deps): update dependency mqtt to v5.7.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3918](https://github.com/midwayjs/midway/pull/3918) fix(deps): update dependency joi to v17.13.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#3912](https://github.com/midwayjs/midway/pull/3912) fix(deps): update dependency ws to v8.17.1 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3924](https://github.com/midwayjs/midway/pull/3924) fix(deps): update dependency @grpc/grpc-js to v1.10.10 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3901](https://github.com/midwayjs/midway/pull/3901) fix(deps): update dependency @grpc/grpc-js to v1.10.9 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`, `bull`
+  * [#3917](https://github.com/midwayjs/midway/pull/3917) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3925](https://github.com/midwayjs/midway/pull/3925) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3904](https://github.com/midwayjs/midway/pull/3904) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3905](https://github.com/midwayjs/midway/pull/3905) fix(deps): update dependency bull to v4.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cache-manager`
+  * [#3897](https://github.com/midwayjs/midway/pull/3897) chore(deps): update dependency cache-manager-ioredis-yet to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#3898](https://github.com/midwayjs/midway/pull/3898) chore(deps): update dependency egg-scripts to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.16.3 (2024-06-06)
 
 #### :bug: Bug Fix
