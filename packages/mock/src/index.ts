@@ -9,3 +9,4 @@ export {
 export * from './client/index';
 export { transformFrameworkToConfiguration, processArgsParser } from './utils';
 export * from './mock';
+export { checkVersion } from './check';
