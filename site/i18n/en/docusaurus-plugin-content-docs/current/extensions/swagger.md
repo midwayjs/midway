@@ -434,71 +434,75 @@ async upateUser(@Body() dto: UserDTO) {
 
 For additional details, please use `@ApiBody` enhancement.
 
+Note that Swagger stipulates that there can only be one `Body` definition. If `@ApiBody` is configured, the data extracted by the type will be automatically overwritten.
+
+For example, in the following example, the type of `Body` will be replaced with `Cat`.
+
+```typescript
+@ApiBody({
+  type: Cat
+})
+async upateUser(@Body() dto: UserDTO) {
+  // ...
+}
+```
+
 ### File upload definition
 
-Set `contentType` with ```@ApiBody```
+File upload is a special case in Post request.
+
+You can implement multiple files and `Fields` types by defining properties in DTO.
+
 
 ```typescript
-@Post('/:id', { summary: 'test'})
-@ApiBody({
-  description: 'this is body',
-  contentType: BodyContentType.Multipart
-})
-@ApiParam({ description: 'this is id' })
-async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
-  return this.catsService.create(createCatDto);
-}
-```
+import { ApiProperty, BodyContentType } from "@midwayjs/swagger";
 
-
-
-Use `@ApiProperty` to add `format` in `CreateCatDto`
-
-```typescript
-@ApiProperty({
-  type: 'string',
-  format: 'binary',
-  description: 'this is file test'
-})
-file: any;
-```
-
-The Swagger UI shows:
-![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
-
-:::caution
-
-If you want to display the upload information swagger, please add the type (the type corresponding to the decorator and the type in the @ApiBody), otherwise an error will be reported.
-
-:::
-
-Compatible with Upload components, add ```@ApiBody()``` decorator description
-
-```typescript
-@Post('/test')
-@ApiBody({ description: 'hello file' })
-@ApiBody({ description: 'hello fields', type: Cat })
-async upload(@File() f: any, @Fields() data: Cat) {
+export class CreateCatDto {
   // ...
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'string',
+      format: 'binary',
+    }
+  })
+  files: any;
 }
-```
 
-The Swagger UI shows:
-![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
+// ...
 
-Do not add ```@ApiBody()``` decorator description
-
-```typescript
 @Post('/test1')
-async upload1(@Files() f: any[], @Fields() data: Cat) {
+@ApiBody({
+  contentType: BodyContentType.Multipart,
+  schema: {
+    type: CreateCatDto,
+  }
+})
+async upload1(@Files() files, @Fields() fields) {
   // ...
 }
 ```
-
-
-
 The Swagger UI shows:
 ![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
+
+If you don't need multiple files, use schema definition.
+
+```typescript
+export class CreateCatDto {
+  // ...
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+  })
+  file: any;
+}
+```
+
+The Swagger UI shows:
+
+Swagger UI 中展示：
+![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
+
 
 ### Request Header
 
@@ -684,6 +688,12 @@ async findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
   // ...
 }
 ```
+
+
+
+## More definition examples
+
+There are more ways to write in Swagger, and the framework supports them. For more usage, please refer to our [test case](https://github.com/midwayjs/midway/blob/main/packages/swagger/test/parser.test.ts).
 
 
 
