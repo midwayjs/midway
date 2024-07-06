@@ -1,9 +1,12 @@
 import {
   ApiAcceptedResponse,
   ApiBadGatewayResponse,
-  ApiBadRequestResponse, ApiBasicAuth, ApiBearerAuth,
+  ApiBadRequestResponse,
+  ApiBasicAuth,
+  ApiBearerAuth,
   ApiBody,
-  ApiConflictResponse, ApiCookieAuth,
+  ApiConflictResponse,
+  ApiCookieAuth,
   ApiCreatedResponse,
   ApiDefaultResponse,
   ApiExcludeController,
@@ -23,7 +26,8 @@ import {
   ApiNoContentResponse,
   ApiNotAcceptableResponse,
   ApiNotFoundResponse,
-  ApiNotImplementedResponse, ApiOAuth2,
+  ApiNotImplementedResponse,
+  ApiOAuth2,
   ApiOkResponse,
   ApiOperation, ApiParam,
   ApiPayloadTooLargeResponse,
@@ -38,6 +42,7 @@ import {
   ApiUnauthorizedResponse,
   ApiUnprocessableEntityResponse,
   ApiUnsupportedMediaTypeResponse,
+  BodyContentType,
   getSchemaPath,
   SwaggerExplorer,
   Type,
@@ -595,6 +600,77 @@ describe('test @ApiBody', () => {
         },
       })
       async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiBody with contentType', () => {
+    class UploadType {
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+
+      @ApiProperty({
+        type: 'string',
+        format: 'binary',
+        description: 'this is file test'
+      })
+      file: any;
+    }
+
+    @Controller('/api')
+    @ApiExtraModel(UploadType)
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({
+        required: true,
+        contentType: BodyContentType.Multipart,
+        schema: {
+          type: UploadType,
+        }
+      })
+      async updateUser(@File() files: any) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test ApiBody with contentType and files', () => {
+    class UploadType {
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+
+      @ApiProperty({
+        type: 'array',
+        items: {
+          type: 'string',
+          format: 'binary',
+          description: 'this is file test'
+        }
+      })
+      files: any;
+    }
+
+    @Controller('/api')
+    @ApiExtraModel(UploadType)
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({
+        required: true,
+        contentType: BodyContentType.Multipart,
+        schema: {
+          type: UploadType,
+        }
+      })
+      async updateUser(@Files() files: any) {
         // ...
       }
     }

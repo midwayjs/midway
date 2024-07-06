@@ -320,6 +320,145 @@ exports[`test @ApiBody should test ApiBody with binary 1`] = `
 }
 `;
 
+exports[`test @ApiBody should test ApiBody with contentType 1`] = `
+{
+  "components": {
+    "schemas": {
+      "UploadType": {
+        "properties": {
+          "file": {
+            "description": "this is file test",
+            "format": "binary",
+            "type": "string",
+          },
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadType",
+              },
+            },
+          },
+          "description": undefined,
+          "required": true,
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiBody should test ApiBody with contentType and files 1`] = `
+{
+  "components": {
+    "schemas": {
+      "UploadType": {
+        "properties": {
+          "files": {
+            "items": {
+              "description": "this is file test",
+              "format": "binary",
+              "type": "string",
+            },
+            "type": "array",
+          },
+          "name": {
+            "description": "The name of the Cat",
+            "example": "Kitty",
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadType",
+              },
+            },
+          },
+          "description": undefined,
+          "required": true,
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
 exports[`test @ApiBody should test ApiBody with example 1`] = `
 {
   "components": {

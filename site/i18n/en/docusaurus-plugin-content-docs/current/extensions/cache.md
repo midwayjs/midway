@@ -128,7 +128,7 @@ You can also manually set TTL (Expiration Time), as follows:
 ```typescript
 Await this.cacheManager.set(key, value, {ttl: 1000}); // ttl is in seconds
 ```
-If you want to prohibit Cache from expiring, set TTL to null.
+If you don't want to Cache expired, set TTL to null.
 ```typescript
 await this.cacheManager.set(key, value, {ttl: null});
 ```

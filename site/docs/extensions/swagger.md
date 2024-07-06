@@ -432,71 +432,76 @@ async upateUser(@Body() dto: UserDTO) {
 
 如需其他细节，请使用 `@ApiBody` 增强。
 
-### 文件上传定义
+注意，Swagger 规定，`Body` 定义只能存在一个，如果配置了  `@ApiBody` ，则类型提取的数据会自动被覆盖。
 
-使用 ```@ApiBody``` 设置 `contentType`
+比如下面示例中，`Body` 的类型会被替换为 `Cat`。
 
 ```typescript
-@Post('/:id', { summary: 'test'})
 @ApiBody({
-  description: 'this is body',
-  contentType: BodyContentType.Multipart
+  type: Cat
 })
-@ApiParam({ description: 'this is id' })
-async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
-  return this.catsService.create(createCatDto);
+async upateUser(@Body() dto: UserDTO) {
+  // ...
 }
 ```
 
 
 
-在 `CreateCatDto` 中使用 `@ApiProperty` 添加  `format`
+### 文件上传定义
+
+文件上传是 Post 请求中较为特殊的一类场景。
+
+可以通过在 DTO 中定义属性来实现多个文件以及 `Fields` 的类型。
 
 ```typescript
-@ApiProperty({
-  type: 'string',
-  format: 'binary',
-  description: 'this is file test'
+import { ApiProperty, BodyContentType } from "@midwayjs/swagger";
+
+export class CreateCatDto {
+  // ...
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'string',
+      format: 'binary',
+    }
+  })
+  files: any;
+}
+
+// ...
+
+@Post('/test1')
+@ApiBody({
+  contentType: BodyContentType.Multipart,
+  schema: {
+    type: CreateCatDto,
+  }
 })
-file: any;
+async upload1(@Files() files, @Fields() fields) {
+  // ...
+}
+```
+
+Swagger UI 中展示：
+![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
+
+如果不需要多个文件，使用 schema 定义即可。
+
+```typescript
+export class CreateCatDto {
+  // ...
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+  })
+  file: any;
+}
 ```
 
 Swagger UI 中展示：
 ![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
 
-:::caution
 
-如需 swagger 展示上传信息，请务必添加类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错。
-
-:::
-
-兼容 Upload 组件，添加 ```@ApiBody()``` 装饰器描述
-
-```typescript
-@Post('/test')
-@ApiBody({ description: 'hello file' })
-@ApiBody({ description: 'hello fields', type: Cat })
-async upload(@File() f: any, @Fields() data: Cat) {
-  // ...
-}
-```
-
-Swagger UI 中展示：
-![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
-
-不添加 ```@ApiBody()``` 装饰器描述
-
-```typescript
-@Post('/test1')
-async upload1(@Files() f: any[], @Fields() data: Cat) {
-  // ...
-}
-```
-
-
-
-Swagger UI 中展示：
-![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
 
 ### 请求 Header
 
@@ -686,6 +691,10 @@ async findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
 ```
 
 
+
+## 更多的定义示例
+
+Swagger 中还有更多的写法，框架都进行了支持，更多用法可以查看我们的 [测试用例](https://github.com/midwayjs/midway/blob/main/packages/swagger/test/parser.test.ts)。
 
 
 
