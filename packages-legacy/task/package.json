@@ -30,7 +30,7 @@
     "@types/cron": "2.4.0"
   },
   "dependencies": {
-    "bull": "4.14.0",
+    "bull": "4.15.1",
     "cron": "2.4.4"
   },
   "engines": {
