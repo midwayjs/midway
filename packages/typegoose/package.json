@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/typegoose",
-  "version": "3.16.0",
+  "version": "3.16.4",
   "description": "Midway Component for typegoose",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -22,12 +22,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/mongoose": "^3.16.0"
+    "@midwayjs/mongoose": "^3.16.4"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.16.0",
-    "@midwayjs/mock": "^3.16.0",
-    "@typegoose/typegoose": "12.5.0",
-    "mongoose": "8.4.5"
+    "@midwayjs/core": "^3.16.2",
+    "@midwayjs/mock": "^3.16.4",
+    "@typegoose/typegoose": "12.6.0",
+    "mongoose": "8.5.0"
   }
 }
