@@ -1,4 +1,4 @@
-# Check tool
+# Rule check tool
 
 Midway provides some checking tools for common errors to facilitate users to quickly debug them. The `@midwayjs/luckyeye` package provides some basic inspection rules, which can quickly troubleshoot problems with the new version of Midway.
 

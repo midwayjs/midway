@@ -99,64 +99,13 @@
     },
     {
       "type": "category",
-      "label": "一体化",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "hooks/intro",
-          "label": "介绍"
-        },
-        {
-          "type": "category",
-          "label": "基础功能",
-          "collapsed": false,
-          "collapsible": false,
-          "items": [
-            "hooks/api",
-            "hooks/builtin-hooks",
-            "hooks/validate",
-            "hooks/middleware",
-            "hooks/cors",
-            "hooks/component",
-            "hooks/prisma",
-            "hooks/test",
-            "hooks/config",
-            "hooks/file-route",
-            "hooks/safe",
-            "hooks/upload"
-          ]
-        },
-        {
-          "type": "category",
-          "label": "一体化",
-          "collapsed": false,
-          "collapsible": false,
-          "items": [
-            "hooks/fullstack",
-            "hooks/client"
-          ]
-        },
-        {
-          "type": "category",
-          "label": "进阶",
-          "collapsed": false,
-          "collapsible": false,
-          "items": [
-            "hooks/deploy"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
       "label": "开发工具",
       "collapsed": true,
       "collapsible": true,
       "items": [
         "tool/create_midway",
         "tool/mwtsc",
+        "tool/version_check",
         "tool/mwts",
         "tool/luckyeye",
         "tool/egg-ts-helper"
@@ -196,7 +145,59 @@
       "collapsible": true,
       "items": [
         "logger",
-        "tool/cli"
+        "tool/cli",
+        {
+          "type": "category",
+          "label": "一体化",
+          "collapsed": true,
+          "collapsible": true,
+          "items": [
+            {
+              "type": "doc",
+              "id": "hooks/intro",
+              "label": "介绍"
+            },
+            {
+              "type": "category",
+              "label": "基础功能",
+              "collapsed": false,
+              "collapsible": false,
+              "items": [
+                "hooks/api",
+                "hooks/builtin-hooks",
+                "hooks/validate",
+                "hooks/middleware",
+                "hooks/cors",
+                "hooks/component",
+                "hooks/prisma",
+                "hooks/test",
+                "hooks/config",
+                "hooks/file-route",
+                "hooks/safe",
+                "hooks/upload"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "一体化",
+              "collapsed": false,
+              "collapsible": false,
+              "items": [
+                "hooks/fullstack",
+                "hooks/client"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "进阶",
+              "collapsed": false,
+              "collapsible": false,
+              "items": [
+                "hooks/deploy"
+              ]
+            }
+          ]
+        }
       ]
     }
   ],
