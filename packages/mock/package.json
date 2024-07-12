@@ -40,10 +40,8 @@
   },
   "dependencies": {
     "@midwayjs/async-hooks-context-manager": "^3.16.2",
-    "@midwayjs/version": "^3.16.4",
     "@types/superagent": "4.1.14",
     "@types/supertest": "2.0.16",
-    "compare-versions": "6.1.0",
     "js-yaml": "4.1.0",
     "raw-body": "2.5.2",
     "supertest": "6.3.3"
