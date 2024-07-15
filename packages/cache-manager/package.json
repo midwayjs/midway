@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cache-manager",
-  "version": "3.16.4",
+  "version": "3.16.5",
   "description": "midway cache manager",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.16.2",
-    "@midwayjs/mock": "^3.16.4",
-    "@midwayjs/redis": "^3.16.4",
+    "@midwayjs/mock": "^3.16.5",
+    "@midwayjs/redis": "^3.16.5",
     "cache-manager-ioredis-yet": "2.1.1"
   },
   "dependencies": {

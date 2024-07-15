@@ -1,6 +1,33 @@
 # Change Log
 
 
+## v3.16.5 (2024-07-15)
+
+#### :memo: Documentation
+* [#3929](https://github.com/midwayjs/midway/pull/3929) docs: update awesome_midway.md ([@MrDotYan](https://github.com/MrDotYan))
+
+#### :package: Dependencies
+* `cos`
+  * [#3948](https://github.com/midwayjs/midway/pull/3948) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3947](https://github.com/midwayjs/midway/pull/3947) fix(deps): update dependency @grpc/grpc-js to v1.10.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3939](https://github.com/midwayjs/midway/pull/3939) chore(deps): update dependency why-is-node-running to v2.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3937](https://github.com/midwayjs/midway/pull/3937) fix(deps): update dependency mqtt to v5.8.0 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#3938](https://github.com/midwayjs/midway/pull/3938) fix(deps): update dependency ws to v8.18.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#3932](https://github.com/midwayjs/midway/pull/3932) fix(deps): update dependency qs to v6.12.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3933](https://github.com/midwayjs/midway/pull/3933) fix(deps): update dependency bull to v4.15.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@MrDotYan](https://github.com/MrDotYan)
+
+
+
 ## v3.16.4 (2024-06-29)
 
 #### :memo: Documentation

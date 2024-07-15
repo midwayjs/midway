@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cross-domain",
-  "version": "3.16.4",
+  "version": "3.16.5",
   "description": "Midway Component for Cross Domain",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -26,11 +26,11 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.16.2",
-    "@midwayjs/express": "^3.16.4",
-    "@midwayjs/faas": "^3.16.4",
-    "@midwayjs/koa": "^3.16.4",
-    "@midwayjs/mock": "^3.16.4",
-    "@midwayjs/serverless-app": "^3.16.4",
-    "@midwayjs/web": "^3.16.4"
+    "@midwayjs/express": "^3.16.5",
+    "@midwayjs/faas": "^3.16.5",
+    "@midwayjs/koa": "^3.16.5",
+    "@midwayjs/mock": "^3.16.5",
+    "@midwayjs/serverless-app": "^3.16.5",
+    "@midwayjs/web": "^3.16.5"
   }
 }
