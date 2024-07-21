@@ -1,7 +1,7 @@
 {
-  "name": "@midwayjs/sse",
+  "name": "@midwayjs/server-stream",
   "version": "3.16.2",
-  "description": "midway component for sse",
+  "description": "midway component for server stream, like sse and ssr",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -13,6 +13,7 @@
     "midway",
     "IoC",
     "sse",
+    "ssr",
     "plugin"
   ],
   "author": "",
@@ -26,6 +27,7 @@
     "@midwayjs/core": "^3.16.2",
     "@midwayjs/mock": "^3.16.2",
     "@midwayjs/koa": "^3.16.2",
+    "@midwayjs/express": "^3.16.2",
     "eventsource": "2.0.2"
   },
   "dependencies": {
