@@ -1,4 +1,4 @@
-# @midwayjs/sse
+# @midwayjs/server-response
 
 this is a sub package for midway.
 
