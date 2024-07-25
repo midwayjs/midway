@@ -47,7 +47,7 @@ export class MidwayI18nServiceSingleton {
    * @param localeTextMapping
    */
   public addLocale(locale: string, localeTextMapping: Record<string, any>) {
-    const currentLangMap = getMap(this.localeTextMap, locale);
+    const currentLangMap = getMap(this.localeTextMap, locale, true);
 
     for (const key in localeTextMapping) {
       if (typeof localeTextMapping[key] === 'string') {
@@ -288,8 +288,8 @@ function getES6Object(o) {
   return o;
 }
 
-function getMap(o: Map<string, any>, key: string) {
-  key = formatLocale(key);
+function getMap(o: Map<string, any>, key: string, formatKey = false) {
+  key = formatKey ? formatLocale(key) : key;
   if (!o.has(key)) {
     o.set(key, new Map());
   }

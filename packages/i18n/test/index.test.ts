@@ -2,6 +2,7 @@ import { MidwayI18nService } from '../src';
 import { createLightApp, close, createHttpRequest, createApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { formatWithArray, formatWithObject } from '../src/utils';
+import * as i18n from '../src';
 
 describe('test/index.test.ts', () => {
   it('i18n service', async () => {
@@ -425,5 +426,45 @@ describe('test/index.test.ts', () => {
 
       await close(app);
     });
+  });
+
+  it('should test group name', async () => {
+    const app = await createLightApp({
+      imports: [i18n],
+      globalConfig: {
+        i18n: {
+          defaultLocale: 'en_US',
+          localeTable: {
+            'zh_CN': {
+              'box_cate': {
+                'hello': '你好，美丽的世界'
+              }
+            },
+            'en-us': {
+              'box_cate': {
+                'hello': 'hello world'
+              }
+            }
+          },
+          fallbacks: {
+            'zh_*': 'zh_CN'
+          }
+        }
+      }
+    });
+
+    const i18nService = await app.getApplicationContext().getAsync(MidwayI18nService);
+
+    expect(i18nService.getDefaultLocale()).toEqual('en-us');
+
+    expect(i18nService.translate('hello', {
+      group: 'box_cate'
+    })).toEqual('hello world');
+    expect(i18nService.translate('hello', {
+      locale: 'zh_CN',
+      group: 'box_cate'
+    })).toEqual('你好，美丽的世界');
+
+    await close(app);
   });
 });
