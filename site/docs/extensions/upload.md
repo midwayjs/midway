@@ -357,6 +357,45 @@ export default {
 
 
 
+### 同名 Field
+
+从 v3.16.6 开始，组件支持同名 Field。
+
+```typescript
+// src/config/config.default.ts
+import { tmpdir } from 'os';
+import { join } from 'path';
+
+export default {
+  // ...
+  upload: {
+    allowFieldsDuplication: true
+  },
+}
+
+```
+
+开启 `allowFieldsDuplication` 之后，同名的 Field 会被合并为数组。
+
+```typescript
+import { Controller, Inject, Post, Files, Fields } from '@midwayjs/core';
+
+@Controller('/')
+export class HomeController {
+  @Post('/upload')
+  async upload(@Files() files, @Fields() fields) {
+    /*
+    fields = {
+    	name: ['name1', 'name2'],
+    	otherName: 'nameOther'
+    	// ...
+    }
+
+    */
+  }
+}
+```
+
 
 
 
