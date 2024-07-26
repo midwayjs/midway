@@ -1,6 +1,21 @@
 # Change Log
 
 
+## v3.16.7 (2024-07-26)
+
+#### :bug: Bug Fix
+* `upload`
+  * [#3981](https://github.com/midwayjs/midway/pull/3981) fix: single field when allowFieldsDuplication enabled ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `cos`
+  * [#3973](https://github.com/midwayjs/midway/pull/3973) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.16.6 (2024-07-26)
 
 #### :nail_care: Polish
