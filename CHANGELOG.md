@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.16.6 (2024-07-26)
+
+#### :nail_care: Polish
+* `upload`
+  * [#3971](https://github.com/midwayjs/midway/pull/3971) feat: add allowFieldsDuplication options ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `web-koa`, `web`
+  * [#3974](https://github.com/midwayjs/midway/pull/3974) fix(deps): update dependency qs to v6.12.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3975](https://github.com/midwayjs/midway/pull/3975) fix(deps): update bull monorepo to v5.21.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`
+  * [#3977](https://github.com/midwayjs/midway/pull/3977) fix(deps): update dependency @midwayjs/event-bus to v1.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3976](https://github.com/midwayjs/midway/pull/3976) fix(deps): update dependency @grpc/grpc-js to v1.11.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `ws`
+  * [#3958](https://github.com/midwayjs/midway/pull/3958) fix(deps): update dependency @types/ws to v8.5.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3959](https://github.com/midwayjs/midway/pull/3959) fix(deps): update dependency mqtt to v5.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.16.5 (2024-07-15)
 
 #### :memo: Documentation
