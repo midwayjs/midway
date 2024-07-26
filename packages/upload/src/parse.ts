@@ -5,8 +5,11 @@ const headSeparator = Buffer.from('\r\n\r\n');
 function saveFields(fields, key, value, allowFieldsDuplication) {
   if (allowFieldsDuplication) {
     if (!fields[key]) {
-      fields[key] = [value];
+      fields[key] = value;
     } else {
+      if (!Array.isArray(fields[key])) {
+        fields[key] = [fields[key]];
+      }
       fields[key].push(value);
     }
   } else {
