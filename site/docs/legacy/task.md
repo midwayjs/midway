@@ -254,7 +254,7 @@ export class MainConfiguration implements ILifeCycle {
 
 
 
-Midway 在框架侧提供了一些常用的表达式，放在 `@midwayjs/decorator` 中供大家使用。
+Midway 在框架侧提供了一些常用的表达式，放在 `@midwayjs/core` 中供大家使用。
 
 ```typescript
 import { FORMAT } from '@midwayjs/core';
