@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@midwayjs/async-hooks-context-manager": "^3.16.2",
-    "@midwayjs/event-bus": "1.9.4"
+    "@midwayjs/event-bus": "1.10.0"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.16.2",
