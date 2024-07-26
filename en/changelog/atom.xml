@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2024-07-15T20:00:00.000Z</updated>
+    <updated>2024-07-26T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2024 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.16.6]]></title>
+        <id>https://midwayjs.org/en/changelog/v3.16.6</id>
+        <link href="https://midwayjs.org/en/changelog/v3.16.6"/>
+        <updated>2024-07-26T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Polish]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-polish">💅 Polish<a href="#-polish" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>upload</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3971" target="_blank" rel="noopener noreferrer">#3971</a> feat: add allowFieldsDuplication options (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>web-koa</code>, <code>web</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3974" target="_blank" rel="noopener noreferrer">#3974</a> fix(deps): update dependency qs to v6.12.3 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>bull-board</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3975" target="_blank" rel="noopener noreferrer">#3975</a> fix(deps): update bull monorepo to v5.21.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>bootstrap</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3977" target="_blank" rel="noopener noreferrer">#3977</a> fix(deps): update dependency @midwayjs/event-bus to v1.10.0 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>grpc</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3976" target="_blank" rel="noopener noreferrer">#3976</a> fix(deps): update dependency @grpc/grpc-js to v1.11.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>ws</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3958" target="_blank" rel="noopener noreferrer">#3958</a> fix(deps): update dependency @types/ws to v8.5.11 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>mqtt</code><ul><li><a href="https://github.com/midwayjs/midway/pull/3959" target="_blank" rel="noopener noreferrer">#3959</a> fix(deps): update dependency mqtt to v5.8.1 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content>
+        <author>
+            <name>Harry Chen</name>
+            <uri>https://github.com/czy88840616</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.16.5]]></title>
         <id>https://midwayjs.org/en/changelog/v3.16.5</id>
