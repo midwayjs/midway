@@ -40,6 +40,10 @@ export interface UploadOptions {
    * Mime type white list
    */
   mimeTypeWhiteList?: Record<string, string | string[]> | ((ctx: IMidwayContext<any>) => string | string[]);
+  /**
+   * Whether to allow fields duplication, default is `false`
+   */
+  allowFieldsDuplication?: boolean;
 }
 
 

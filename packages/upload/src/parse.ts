@@ -1,6 +1,19 @@
 import { Readable, Transform, Writable } from 'stream';
 import { UploadFileInfo, UploadOptions } from './interface';
 const headSeparator = Buffer.from('\r\n\r\n');
+
+function saveFields(fields, key, value, allowFieldsDuplication) {
+  if (allowFieldsDuplication) {
+    if (!fields[key]) {
+      fields[key] = [value];
+    } else {
+      fields[key].push(value);
+    }
+  } else {
+    fields[key] = value;
+  }
+}
+
 export const parseMultipart = async (
   body: any,
   boundary: string,
@@ -24,7 +37,12 @@ export const parseMultipart = async (
     }
     if (!head['content-disposition'].filename) {
       if (head['content-disposition'].name) {
-        fields[head['content-disposition'].name] = data.toString();
+        saveFields(
+          fields,
+          head['content-disposition'].name,
+          data.toString(),
+          uploadConfig.allowFieldsDuplication
+        );
       }
       return;
     }
@@ -45,7 +63,8 @@ export const parseMultipart = async (
 const pre = Buffer.from('\r\n');
 export const parseFromReadableStream = (
   readStream: Readable,
-  boundary
+  boundary,
+  uploadConfig: UploadOptions
 ): Promise<{ fields: any; fileInfo: UploadFileInfo<Readable> }> => {
   const bufferSeparator = Buffer.from(`\r\n--${boundary}`);
   const fields = {};
@@ -118,7 +137,12 @@ export const parseFromReadableStream = (
           }
           if (!head['content-disposition'].filename) {
             if (head['content-disposition'].name) {
-              fields[head['content-disposition'].name] = data.toString();
+              saveFields(
+                fields,
+                head['content-disposition'].name,
+                data.toString(),
+                uploadConfig.allowFieldsDuplication
+              );
             }
             continue;
           }
