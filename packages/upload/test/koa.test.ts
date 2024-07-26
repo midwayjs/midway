@@ -232,12 +232,14 @@ describe('test/koa.test.ts', function () {
       await request.post('/upload')
         .field('name', 'form')
         .field('name', 'form2')
+        .field('nameOther', 'other')
         .attach('file', filePath)
         .expect(200)
         .then(async response => {
           assert(response.body.files.length === 1);
           assert(response.body.files[0].filename === 'test.pdf');
           assert(JSON.stringify(response.body.fields.name) === JSON.stringify(['form', 'form2']));
+          assert(response.body.fields.nameOther === 'other');
         });
     });
   });
