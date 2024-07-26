@@ -136,7 +136,8 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       if (mode === 'stream') {
         const { fields, fileInfo } = await parseFromReadableStream(
           req,
-          boundary
+          boundary,
+          this.uploadConfig
         );
         const ext = this.checkAndGetExt(
           fileInfo.filename,

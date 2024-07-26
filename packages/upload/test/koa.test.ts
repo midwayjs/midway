@@ -214,4 +214,31 @@ describe('test/koa.test.ts', function () {
         });
     });
   });
+
+  describe('koa function with duplicate fields', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, 'fixtures/koa-function-duplicate-fields');
+      app = await createApp(appDir);
+    });
+
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('allow fields duplication', async () => {
+      const filePath = join(__dirname, 'fixtures/test.pdf');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name', 'form2')
+        .attach('file', filePath)
+        .expect(200)
+        .then(async response => {
+          assert(response.body.files.length === 1);
+          assert(response.body.files[0].filename === 'test.pdf');
+          assert(JSON.stringify(response.body.fields.name) === JSON.stringify(['form', 'form2']));
+        });
+    });
+  });
 });

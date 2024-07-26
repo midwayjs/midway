@@ -10,4 +10,5 @@ export const upload: UploadOptions = {
   tmpdir: join(tmpdir(), 'midway-upload-files'),
   cleanTimeout: 5 * 60 * 1000,
   base64: false,
+  allowFieldsDuplication: false,
 };
