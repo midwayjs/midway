@@ -1629,10 +1629,17 @@ export default {
 如果使用了 `@CreateDateColumn` 和 `@UpdateDateColumn` ，可以调整实体返回类型。
 
 ```typescript
-  @CreateDateColumn({
-    type: 'timestamp',
-  })
-  createdDate: string;
+@UpdateDateColumn({
+  name: "gmt_modified",
+  type: 'timestamp'
+})
+gmtModified: string;
+
+@CreateDateColumn({
+  name: "gmt_create",
+  type: 'timestamp',
+})
+gmtCreate: string;
 ```
 
 
@@ -1648,7 +1655,7 @@ gmtCreate: 2021-12-13T03:49:43.000Z
 **配置后：**
 
 ```typescript
-gmtModified: '2021-12-13 11:49:43.725949',
+gmtModified: '2021-12-13 11:49:43',
 gmtCreate: '2021-12-13 11:49:43'
 ```
 

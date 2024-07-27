@@ -1630,10 +1630,17 @@ export default {
 Entity return types can be adjusted if `@CreateDateColumn` and `@UpdateDateColumn` are used.
 
 ```typescript
-  @CreateDateColumn({
-    type: 'timestamp',
-  })
-  createdDate: string;
+@UpdateDateColumn({
+  name: "gmt_modified",
+  type: 'timestamp'
+})
+gmtModified: string;
+
+@CreateDateColumn({
+  name: "gmt_create",
+  type: 'timestamp',
+})
+gmtCreate: string;
 ```
 
 
