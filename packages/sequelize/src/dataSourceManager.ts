@@ -47,7 +47,7 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
     const listEntities = listModule('sequelize:core');
     client.addModels(listEntities);
 
-    const isConnected = this.checkConnected(client);
+    const isConnected = await this.checkConnected(client);
 
     if (isConnected && config.sync) {
       await client.sync(config.syncOptions);
