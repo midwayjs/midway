@@ -77,6 +77,7 @@ describe('/test/index.test.ts', () => {
                 port: 3306,
               },
             },
+            validateConnection: false,
           },
         },
       });
@@ -104,7 +105,6 @@ describe('/test/index.test.ts', () => {
                   port: 3306,
                 },
               },
-              validateConnection: true,
             },
           },
         });
