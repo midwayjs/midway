@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v3.16.8 (2024-08-03)
+
+#### :bug: Bug Fix
+* `sequelize`
+  * [#3993](https://github.com/midwayjs/midway/pull/3993) fix: remove authenticate when create data source ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `web-koa`, `web`
+  * [#3995](https://github.com/midwayjs/midway/pull/3995) fix(deps): update dependency qs to v6.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `ws`
+  * [#3988](https://github.com/midwayjs/midway/pull/3988) fix(deps): update dependency @types/ws to v8.5.12 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3990](https://github.com/midwayjs/midway/pull/3990) fix(deps): update dependency bull to v4.16.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3991](https://github.com/midwayjs/midway/pull/3991) fix(deps): update dependency mqtt to v5.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3989](https://github.com/midwayjs/midway/pull/3989) fix(deps): update dependency axios to v1.7.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.16.7 (2024-07-26)
 
 #### :bug: Bug Fix

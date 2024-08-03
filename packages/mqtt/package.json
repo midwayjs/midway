@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mqtt",
-  "version": "3.16.6",
+  "version": "3.16.8",
   "description": "Midway Framework for mqtt",
   "main": "dist/index.js",
   "typings": "index.d.ts",

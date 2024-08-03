@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "3.16.6",
+  "version": "3.16.8",
   "description": "Midway Web Framework for Egg.js",
   "main": "dist/index.js",
   "typings": "index.d.ts",

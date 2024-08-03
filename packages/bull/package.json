@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bull",
-  "version": "3.16.5",
+  "version": "3.16.8",
   "description": "midway component for bull",
   "main": "dist/index.js",
   "typings": "index.d.ts",
