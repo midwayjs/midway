@@ -47,13 +47,16 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
     const listEntities = listModule('sequelize:core');
     client.addModels(listEntities);
 
-    await client.authenticate();
+    const isConnected = await this.checkConnected(client);
 
-    if (config.sync) {
+    if (isConnected && config.sync) {
       await client.sync(config.syncOptions);
     }
 
-    this.coreLogger.info('[midway:sequelize] connecting and start');
+    this.coreLogger.info(
+      '[midway:sequelize] client created: %s',
+      dataSourceName
+    );
     return client;
   }
 
