@@ -1,31 +1,23 @@
-import { createReadStream } from 'fs';
-import { ServerSendEventStream } from './sse';
-import { ServerResponseStream } from './stream';
 import { Transform } from 'stream';
-import { ServerSendEventStreamOptions } from './interface';
-import { Readable } from 'node:stream';
+import { IMidwayContext } from '../interface';
 
-export class ServerResponse {
-  private readonly ctx: any;
-  private isSuccess = true;
+export class ServerResponse<CTX extends IMidwayContext = IMidwayContext> {
+  protected readonly ctx: any;
+  protected isSuccess = true;
 
-  constructor(ctx) {
+  constructor(ctx: CTX) {
     this.ctx = ctx;
   }
 
-  static SUCCESS_TPL = (data: string) => {
+  static SUCCESS_TPL = (data: string | Record<string, any>) => {
     return {
-      code: 0,
-      status: 200,
       success: 'true',
       data,
     } as any;
   };
 
-  static FAIL_TPL = (data: string) => {
+  static FAIL_TPL = (data: string | Record<string, any>) => {
     return {
-      code: -1,
-      status: 500,
       success: 'false',
       message: data || 'fail',
     } as any;
@@ -63,21 +55,7 @@ export class ServerResponse {
     return data;
   };
 
-  static FILE_TPL = (
-    data: Readable,
-    isSuccess: boolean,
-    proto: typeof ServerResponse = ServerResponse
-  ) => {
-    return data;
-  };
-
-  status(code: number) {
-    this.ctx.res.statusCode = code;
-    return this;
-  }
-
   json(data: Record<any, any>) {
-    this.ctx.res.writeHead('Content-Type', 'application/json');
     return ServerResponse.JSON_TPL(
       data,
       this.isSuccess,
@@ -86,7 +64,6 @@ export class ServerResponse {
   }
 
   text(data: string) {
-    this.ctx.res.writeHead('Content-Type', 'text/plain');
     return ServerResponse.TEXT_TPL(
       data,
       this.isSuccess,
@@ -94,20 +71,7 @@ export class ServerResponse {
     );
   }
 
-  file(filePath: string, mimeType?: string) {
-    this.ctx.res.writeHead(
-      'Content-Type',
-      mimeType || 'application/octet-stream'
-    );
-    return ServerResponse.FILE_TPL(
-      createReadStream(filePath),
-      this.isSuccess,
-      this.constructor as typeof ServerResponse
-    );
-  }
-
   blob(data: Buffer) {
-    this.ctx.res.writeHead('Content-Type', 'application/octet-stream');
     return ServerResponse.BLOB_TPL(
       data,
       this.isSuccess,
@@ -123,14 +87,6 @@ export class ServerResponse {
   fail() {
     this.isSuccess = false;
     return this;
-  }
-
-  sse(options: ServerSendEventStreamOptions = {}): ServerSendEventStream {
-    return new ServerSendEventStream(this.ctx, options);
-  }
-
-  stream(): ServerResponseStream {
-    return new ServerResponseStream(this.ctx);
   }
 
   custom(stream: Transform) {

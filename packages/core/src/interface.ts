@@ -1217,3 +1217,14 @@ export interface HealthResults {
     reason?: string;
   }>;
 }
+
+export interface ServerSendEventMessage {
+  data?: string | object;
+  event?: string;
+  id?: string;
+  retry?: number;
+}
+
+export interface ServerSendEventStreamOptions {
+  closeEvent?: string;
+}

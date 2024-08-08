@@ -1,12 +1,15 @@
 import { Transform } from 'stream';
-import {
-  EventData,
-  MessageEvent,
-  ServerSendEventStreamOptions,
-} from './interface';
+import { ServerSendEventStreamOptions } from '../interface';
+
+interface MessageEvent {
+  data?: string | object;
+  event?: string;
+  id?: string;
+  retry?: number;
+}
 
 export class ServerSendEventStream extends Transform {
-  private ctx: any;
+  private readonly ctx: any;
   private isActive = false;
   private closeEvent: string;
 
@@ -24,20 +27,24 @@ export class ServerSendEventStream extends Transform {
 
   _transform(chunk, encoding, callback) {
     try {
-      let senderObject,
-        dataLines,
+      let dataLines,
         prefix = 'data: ';
 
       const commentReg = /^\s*:\s*/;
       const res = [];
       if (!this.isActive) {
         this.isActive = true;
-        this.ctx.set({
+        const defaultHeader = {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache, no-transform',
           Connection: 'keep-alive',
           'X-Accel-Buffering': 'no',
-        });
+        };
+
+        for (const key in defaultHeader) {
+          this.ctx.res.setHeader(key, defaultHeader[key]);
+        }
+
         this.ctx.req.socket.setTimeout(0);
         this.ctx.req.socket.setNoDelay(true);
         this.ctx.req.socket.setKeepAlive(true);
@@ -46,11 +53,8 @@ export class ServerSendEventStream extends Transform {
         });
       }
 
-      if (typeof chunk === 'string') {
-        senderObject = { data: chunk };
-      } else {
-        senderObject = chunk;
-      }
+      const senderObject = chunk;
+
       if (senderObject.event) res.push('event: ' + senderObject.event);
       if (senderObject.retry) res.push('retry: ' + senderObject.retry);
       if (senderObject.id) res.push('id: ' + senderObject.id);
@@ -99,14 +103,12 @@ export class ServerSendEventStream extends Transform {
     });
   }
 
-  sendEnd(data?: EventData) {
-    this.send({
-      data,
-      event: this.closeEvent,
-    });
+  sendEnd(message?: MessageEvent) {
+    message.event = this.closeEvent;
+    this.send(message);
   }
 
-  send(message: MessageEvent | EventData): void {
+  send(message: MessageEvent): void {
     super.write(message);
   }
 
