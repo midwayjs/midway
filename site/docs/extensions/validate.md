@@ -228,7 +228,7 @@ import { UserDTO } from './dto/user';
 
 @Controller('/api/user')
 export class HomeController {
-  @get('/')
+  @Get('/')
   async getUser(@Valid(RuleType.number().required()) @Query('id') id: number) {
     // ...
   }
