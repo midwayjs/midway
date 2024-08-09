@@ -1,3 +1,4 @@
+// import whyIsNodeRunning from 'why-is-node-running'
 import * as EventSource from 'eventsource';
 import { HttpServerResponse, sleep } from '../../src';
 import { createServer, request } from 'http';
@@ -10,11 +11,12 @@ describe('response/http.test.ts', () => {
         const stream =  new HttpServerResponse({
           req,
           res,
-          logger: console,
+          logger: console
         } as any).sse();
         Promise.resolve().then(async () => {
           stream.send({
             data: 'abc',
+            retry: 0,
           });
           await sleep();
           stream.send({
@@ -62,6 +64,9 @@ describe('response/http.test.ts', () => {
 
       expect(result).toEqual(['abc', 'bcd', 'bcd'.repeat(1000), '{"a":1}']);
       server.close();
+
+      // logs out active handles that are keeping node running
+      // setImmediate(() => whyIsNodeRunning())
     });
 
     it('should send base format', async () => {
@@ -247,9 +252,9 @@ describe('response/http.test.ts', () => {
         });
         req.end();
       });
-
-      expect(result).toEqual('abcbcd' + 'bcd'.repeat(1000));
       server.close();
+      await sleep(1000);
+      expect(result).toEqual('abcbcd' + 'bcd'.repeat(1000));
     });
 
     it('should server response throw error', async () => {
@@ -296,9 +301,9 @@ describe('response/http.test.ts', () => {
         });
         req.end();
       });
-
-      expect(result).toEqual('<body>hello');
       server.close();
+      await sleep(1000);
+      expect(result).toEqual('<body>hello');
     });
   });
 });
