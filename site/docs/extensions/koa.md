@@ -231,7 +231,7 @@ export default {
 | subdomainOffset        | number                                   | 可选，子域名的偏移量，默认 2                            |
 | proxyIpHeader        | string                                   | 可选，获取代理 ip 的字段名，默认为 X-Forwarded-For |
 | maxIpsCount        | number                                   | 可选，获取的 ips 最大数量，默认为 0（全部返回）|
-| serverTimeout | number | 可选，服务端超时配置，默认为 2 * 60 * 1000（2 分钟），单位毫秒 |
+| serverTimeout | number | 可选，服务端超时配置，默认为 2 \* 60 \* 1000（2 分钟），单位毫秒 |
 | serverOptions | Record<string, any> | 可选，http Server [选项](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
 
 
