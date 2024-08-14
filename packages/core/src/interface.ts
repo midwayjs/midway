@@ -483,12 +483,12 @@ export type CreateDataSourceInstanceOptions = {
 }
 
 export type DataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY extends string = 'entities'> = {
-  default?: PowerPartial<OPTIONS>;
+  default?: OPTIONS;
   defaultDataSourceName?: string;
   dataSource?: {
     [key: string]: PowerPartial<{
       [keyName in ENTITY_CONFIG_KEY]: any[];
-    } & OPTIONS>;
+    }> & OPTIONS;
   };
 } & CreateDataSourceInstanceOptions;
 
