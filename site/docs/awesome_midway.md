@@ -14,7 +14,7 @@
 | [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 增强组件 支持 [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] 装饰器  并支持[传入泛型参数获得方法入参类型][otel-generics-cn] |
 | [@mwcp/jwt][@mwcp/jwt]                               | waitingsong | midway JWT 增强组件 支持 [`Public`][jwt-public] 装饰器                                                                                                                 |
 | [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件                                                                                                                                              |
-| [邮件组件][mailer-zh]                                | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]    [食用文档（国外）][mailer-en-doc]                                                              |
+| [邮件组件][mailer-zh]                                | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]    [食用文档（国外）][mailer-en-doc]                            |
 
 ## swagger
 
