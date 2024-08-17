@@ -13,6 +13,8 @@ The following lists high-quality community projects related to Midwayjs
 | [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `Transactional` decorator, intergrated [OpenTelemetry] trace                                                               |
 | [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component supports [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] decorators and supports generics for [obtaining method parameter type][otel-generics]  |
 | [@mwcp/jwt][@mwcp/jwt]                       | waitingsong | midway JWT component supports [`Public`][jwt-public] decorator                                                                                                                                      |
+| [@mwcp/pgmq][@mwcp/pgmq]                     | waitingsong | midway [pqmg-js] component, [PGMQ] is a lightweight message queue based on [PG] database, with native support for message persistence and delayed messages, similar to AWS SQS or RSMQ              |
+
 | [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                                                                                                                                                         |
 | [邮件组件][mailer-zh]                        | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]                                                                                              |
 ## swagger
@@ -70,6 +72,11 @@ Welcome everyone to contribute to the community, edit this page and add your fav
 
 [@mwcp/jwt]: https://github.com/waitingsong/midway-components/tree/main/packages/jwt
 [jwt-public]: https://github.com/waitingsong/midway-components/blob/main/packages/jwt/README.md#public-decorator
+
+[@mwcp/pgmq]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
+[PGMQ]: https://tembo-io.github.io/pgmq/
+[PG]: https://pigsty.cc/blog/pg/pg-eat-db-world/
+[pqmg-js]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js
 
 [midwayjs-knife4j2]: https://github.com/fangbao-0418/midway/tree/master/packages/swagger
 [yuntian001/midway-vite-view]: https://github.com/yuntian001/midway-vite-view
