@@ -837,6 +837,31 @@ describe('test @ApiTags', () => {
     expect(data.tags[0].name).toBe('tag1');
     expect(data.tags[1].name).toBe('tag2');
   });
+
+  it('should swagger tags on method', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiTags('tag1')
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @ApiTags('tag2')
+      @Post('/update_user_2')
+      async updateUser2() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    console.log('should swagger tags on method', data);
+    expect(data.tags.length).toBe(2);
+    expect(data.tags[0].name).toBe('tag1');
+    expect(data.tags[1].name).toBe('tag2');
+  });
 });
 
 describe('test @ApiResponse', () => {
