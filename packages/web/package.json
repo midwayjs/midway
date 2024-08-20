@@ -30,7 +30,7 @@
   "devDependencies": {
     "@midwayjs/logger": "^3.0.0",
     "@midwayjs/mock": "^3.16.5",
-    "dayjs": "1.11.12",
+    "dayjs": "1.11.13",
     "egg-logger": "3.5.0",
     "egg-mock": "4.2.1",
     "egg-scripts": "3.0.1",
