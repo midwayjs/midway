@@ -4,16 +4,16 @@ The following lists high-quality community projects related to Midwayjs
 
 ## Microservices
 
-| Name                                         | Author      | Description                                                                                                                                                                                         |
-| -------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                                                                                                                                                              |
-| [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                                                                                                                                                     |
-| [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components                                                                                                                                   |
-| [@mwcp/cache][@mwcp/cache]                   | waitingsong | midway Cache Component supports [`Cacheable`][Cacheable], [`CacheEvict`][CacheEvict], [`CachePut`][CachePut] decorators and supports generics for [obtaining method parameter type][cache-generics] |
-| [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `Transactional` decorator, intergrated [OpenTelemetry] trace                                                               |
-| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component supports [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] decorators and supports generics for [obtaining method parameter type][otel-generics]  |
-| [@mwcp/jwt][@mwcp/jwt]                       | waitingsong | midway JWT component supports [`Public`][jwt-public] decorator                                                                                                                                      |
-| [@mwcp/pgmq][@mwcp/pgmq]                     | waitingsong | midway [pqmg-js] component, [PGMQ] is a lightweight message queue based on [PG] database, with native support for message persistence and delayed messages, similar to AWS SQS or RSMQ              |
+| Name                                         | Author      | Description                                                                                                                                                                                                                                                       |
+| -------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                                                                                                                                                                                                                            |
+| [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                                                                                                                                                                                                                   |
+| [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components                                                                                                                                                                                                 |
+| [@mwcp/cache][@mwcp/cache]                   | waitingsong | midway Cache Component supports [`Cacheable`][Cacheable], [`CacheEvict`][CacheEvict], [`CachePut`][CachePut] decorators and supports generics for [obtaining method parameter type][cache-generics]                                                               |
+| [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `Transactional` decorator, intergrated [OpenTelemetry] trace                                                                                                                             |
+| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component supports [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] decorators and supports generics for [obtaining method parameter type][otel-generics]                                                                |
+| [@mwcp/jwt][@mwcp/jwt]                       | waitingsong | midway JWT component supports [`Public`][jwt-public] decorator                                                                                                                                                                                                    |
+| [@mwcp/pgmq][@mwcp/pgmq]                     | waitingsong | midway [pqmg-js] component supports [`Consumer`][Consumer], [`PgmqListener`][PgmqListener] decorators. [PGMQ] is a lightweight message queue based on [PG] database, with native support for message persistence and delayed messages, similar to AWS SQS or RSMQ |
 
 | [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                                                                                                                                                         |
 | [邮件组件][mailer-zh]                        | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]                                                                                              |
@@ -77,6 +77,8 @@ Welcome everyone to contribute to the community, edit this page and add your fav
 [PGMQ]: https://tembo-io.github.io/pgmq/
 [PG]: https://pigsty.cc/blog/pg/pg-eat-db-world/
 [pqmg-js]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js
+[Consumer]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js#consumer-decorator
+[PgmqListener]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js#consumer-decorator
 
 [midwayjs-knife4j2]: https://github.com/fangbao-0418/midway/tree/master/packages/swagger
 [yuntian001/midway-vite-view]: https://github.com/yuntian001/midway-vite-view

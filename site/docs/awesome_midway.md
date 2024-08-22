@@ -4,18 +4,18 @@
 
 ## 微服务
 
-| 名称                                                 | 作者        | 描述                                                                                                                                                                   |
-| ---------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [@letscollab/midway-nacos][@letscollab/midway-nacos] | Nawbc       | midway nacos 组件                                                                                                                                                      |
-| [midway-elasticsearch][midway-elasticsearch]         | ddzyan      | midway elasticsearch 组件                                                                                                                                              |
-| [midway-apollo][midway-apollo]                       | helloHT     | midway 携程异步动态配置 apollo 组件                                                                                                                                    |
-| [@mwcp/cache][@mwcp/cache]                           | waitingsong | midway Cache 增强组件 支持 [`Cacheable`][Cacheable], [`CacheEvict`][CacheEvict], [`CachePut`][CachePut] 装饰器 并支持[传入泛型参数获得方法入参类型][cache-generics-cn] |
-| [@mwcp/kmore][@mwcp/kmore]                           | waitingsong | midway 数据库组件 基于 [Knex]，通过 `Transactional` 装饰器支持声明式事务，支持自动分页、智能连表，集成 [OpenTelemetry] 链路追踪                                        |
-| [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 增强组件 支持 [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] 装饰器  并支持[传入泛型参数获得方法入参类型][otel-generics-cn] |
-| [@mwcp/jwt][@mwcp/jwt]                               | waitingsong | midway JWT 增强组件 支持 [`Public`][jwt-public] 装饰器                                                                                                                 |
-| [@mwcp/pgmq][@mwcp/pgmq]                             | waitingsong | midway [pqmg-js] 组件，[PGMQ] 是一个基于 [PG] 数据库扩展的轻量级消息队列，原生支持消息持久化和延迟消息，类似 `AWS SQS` 或  `RSMQ`                                      |
-| [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件                                                                                                                                              |
-| [邮件组件][mailer-zh]                                | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]    [食用文档（国外）][mailer-en-doc]                            |
+| 名称                                                 | 作者        | 描述                                                                                                                                                                                                   |
+| ---------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [@letscollab/midway-nacos][@letscollab/midway-nacos] | Nawbc       | midway nacos 组件                                                                                                                                                                                      |
+| [midway-elasticsearch][midway-elasticsearch]         | ddzyan      | midway elasticsearch 组件                                                                                                                                                                              |
+| [midway-apollo][midway-apollo]                       | helloHT     | midway 携程异步动态配置 apollo 组件                                                                                                                                                                    |
+| [@mwcp/cache][@mwcp/cache]                           | waitingsong | midway Cache 增强组件 支持 [`Cacheable`][Cacheable], [`CacheEvict`][CacheEvict], [`CachePut`][CachePut] 装饰器 并支持[传入泛型参数获得方法入参类型][cache-generics-cn]                                 |
+| [@mwcp/kmore][@mwcp/kmore]                           | waitingsong | midway 数据库组件 基于 [Knex]，通过 `Transactional` 装饰器支持声明式事务，支持自动分页、智能连表，集成 [OpenTelemetry] 链路追踪                                                                        |
+| [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 增强组件 支持 [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] 装饰器  并支持[传入泛型参数获得方法入参类型][otel-generics-cn]                                 |
+| [@mwcp/jwt][@mwcp/jwt]                               | waitingsong | midway JWT 增强组件 支持 [`Public`][jwt-public] 装饰器                                                                                                                                                 |
+| [@mwcp/pgmq][@mwcp/pgmq]                             | waitingsong | midway [pqmg-js] 组件 支持 [`Consumer`][Consumer], [`PgmqListener`][PgmqListener] 装饰器。  [PGMQ] 是一个基于 [PG] 数据库扩展的轻量级消息队列，原生支持消息持久化和延迟消息，类似 `AWS SQS` 或  `RSMQ` |
+| [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件                                                                                                                                                                              |
+| [邮件组件][mailer-zh]                                | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]    [食用文档（国外）][mailer-en-doc]                                                            |
 
 ## swagger
 
@@ -77,6 +77,8 @@
 [PGMQ]: https://tembo-io.github.io/pgmq/
 [PG]: https://pigsty.cc/zh/blog/pg/pg-eat-db-world/
 [pqmg-js]: https://github.com/waitingsong/pgmq-js/tree/main/packages/pgmq-js
+[Consumer]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js#consumer-decorator
+[PgmqListener]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js#consumer-decorator
 
 [midwayjs-knife4j2]: https://github.com/fangbao-0418/midway/tree/master/packages/swagger
 [yuntian001/midway-vite-view]: https://github.com/yuntian001/midway-vite-view
