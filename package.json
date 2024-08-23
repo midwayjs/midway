@@ -15,7 +15,7 @@
     "madge": "6.1.0",
     "mwts": "1.3.0",
     "tree-kill": "1.2.2",
-    "ts-jest": "29.2.4",
+    "ts-jest": "29.2.5",
     "ts-node": "10.9.2",
     "typedoc": "^0.26.0",
     "typescript": "4.9.5",
