@@ -8,6 +8,10 @@ import { HttpStreamResponse } from './stream';
 export class HttpServerResponse<
   CTX extends IMidwayContext
 > extends ServerResponse<CTX> {
+  constructor(ctx: CTX) {
+    super(ctx);
+  }
+
   static SUCCESS_TPL = (data: string | object) => {
     return {
       success: 'true',
@@ -47,8 +51,18 @@ export class HttpServerResponse<
     return this;
   }
 
+  header(key: string, value: string) {
+    this.ctx.res.setHeader(key, value);
+    return this;
+  }
+
+  headers(headers: Record<string, string>) {
+    this.ctx.res.setHeaders(headers);
+    return this;
+  }
+
   json(data: Record<any, any>) {
-    this.ctx.res.writeHead('Content-Type', 'application/json');
+    this.header('Content-Type', 'application/json');
     return HttpServerResponse.JSON_TPL(
       data,
       this.isSuccess,
@@ -57,7 +71,7 @@ export class HttpServerResponse<
   }
 
   text(data: string) {
-    this.ctx.res.writeHead('Content-Type', 'text/plain');
+    this.header('Content-Type', 'text/plain');
     return HttpServerResponse.TEXT_TPL(
       data,
       this.isSuccess,
@@ -66,10 +80,8 @@ export class HttpServerResponse<
   }
 
   file(filePath: string, mimeType?: string) {
-    this.ctx.res.writeHead(
-      'Content-Type',
-      mimeType || 'application/octet-stream'
-    );
+    this.header('Content-Type', mimeType || 'application/octet-stream');
+    this.header('Content-Disposition', `attachment; filename=${filePath}`);
     return HttpServerResponse.FILE_TPL(
       createReadStream(filePath),
       this.isSuccess,
@@ -78,7 +90,7 @@ export class HttpServerResponse<
   }
 
   blob(data: Buffer) {
-    this.ctx.res.writeHead('Content-Type', 'application/octet-stream');
+    this.header('Content-Type', 'application/octet-stream');
     return HttpServerResponse.BLOB_TPL(
       data,
       this.isSuccess,
