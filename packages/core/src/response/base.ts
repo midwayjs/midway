@@ -1,4 +1,3 @@
-import { Transform } from 'stream';
 import { IMidwayContext } from '../interface';
 
 export class ServerResponse<CTX extends IMidwayContext = IMidwayContext> {
@@ -9,73 +8,46 @@ export class ServerResponse<CTX extends IMidwayContext = IMidwayContext> {
     this.ctx = ctx;
   }
 
-  static SUCCESS_TPL = (data: string | Record<string, any>) => {
-    return {
-      success: 'true',
-      data,
-    } as any;
+  static TEXT_TPL = (data: string, isSuccess: boolean): unknown => {
+    return data;
   };
 
-  static FAIL_TPL = (data: string | Record<string, any>) => {
-    return {
-      success: 'false',
-      message: data || 'fail',
-    } as any;
-  };
-
-  static TEXT_TPL = (
-    data: string,
-    isSuccess: boolean,
-    proto: typeof ServerResponse = ServerResponse
-  ) => {
+  static JSON_TPL = (data: Record<any, any>, isSuccess: boolean): unknown => {
     if (isSuccess) {
-      return proto.SUCCESS_TPL(data);
+      return {
+        success: 'true',
+        data,
+      };
     } else {
-      return proto.FAIL_TPL(data);
+      return {
+        success: 'false',
+        message: data || 'fail',
+      };
     }
   };
 
-  static JSON_TPL = (
-    data: Record<any, any>,
-    isSuccess: boolean,
-    proto: typeof ServerResponse = ServerResponse
-  ) => {
-    if (isSuccess) {
-      return proto.SUCCESS_TPL(JSON.stringify(data));
-    } else {
-      return proto.FAIL_TPL(JSON.stringify(data));
-    }
-  };
-
-  static BLOB_TPL = (
-    data: Buffer,
-    isSuccess: boolean,
-    proto: typeof ServerResponse = ServerResponse
-  ) => {
+  static BLOB_TPL = (data: Buffer, isSuccess: boolean): unknown => {
     return data;
   };
 
   json(data: Record<any, any>) {
-    return ServerResponse.JSON_TPL(
+    return Object.getPrototypeOf(this).constructor.JSON_TPL(
       data,
-      this.isSuccess,
-      this.constructor as typeof ServerResponse
+      this.isSuccess
     );
   }
 
   text(data: string) {
-    return ServerResponse.TEXT_TPL(
+    return Object.getPrototypeOf(this).constructor.TEXT_TPL(
       data,
-      this.isSuccess,
-      this.constructor as typeof ServerResponse
+      this.isSuccess
     );
   }
 
   blob(data: Buffer) {
-    return ServerResponse.BLOB_TPL(
+    return Object.getPrototypeOf(this).constructor.BLOB_TPL(
       data,
-      this.isSuccess,
-      this.constructor as typeof ServerResponse
+      this.isSuccess
     );
   }
 
@@ -87,9 +59,5 @@ export class ServerResponse<CTX extends IMidwayContext = IMidwayContext> {
   fail() {
     this.isSuccess = false;
     return this;
-  }
-
-  custom(stream: Transform) {
-    return stream;
   }
 }

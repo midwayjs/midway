@@ -4,6 +4,7 @@ import { ServerResponse } from './base';
 import { ServerSendEventStream } from './sse';
 import { Readable } from 'stream';
 import { HttpStreamResponse } from './stream';
+import { basename } from 'path';
 
 export class HttpServerResponse<
   CTX extends IMidwayContext
@@ -12,37 +13,7 @@ export class HttpServerResponse<
     super(ctx);
   }
 
-  static SUCCESS_TPL = (data: string | object) => {
-    return {
-      success: 'true',
-      data,
-    } as any;
-  };
-
-  static FAIL_TPL = (data: string | object) => {
-    return {
-      success: 'false',
-      message: data || 'fail',
-    } as any;
-  };
-
-  static JSON_TPL = (
-    data: Record<any, any>,
-    isSuccess: boolean,
-    proto: typeof ServerResponse = ServerResponse
-  ) => {
-    if (isSuccess) {
-      return proto.SUCCESS_TPL(data);
-    } else {
-      return proto.FAIL_TPL(data);
-    }
-  };
-
-  static FILE_TPL = (
-    data: Readable,
-    isSuccess: boolean,
-    proto: typeof ServerResponse = ServerResponse
-  ) => {
+  static FILE_TPL = (data: Readable, isSuccess: boolean) => {
     return data;
   };
 
@@ -57,44 +28,43 @@ export class HttpServerResponse<
   }
 
   headers(headers: Record<string, string>) {
-    this.ctx.res.setHeaders(headers);
+    this.ctx.res.setHeaders(new Map(Object.entries(headers)));
     return this;
   }
 
   json(data: Record<any, any>) {
     this.header('Content-Type', 'application/json');
-    return HttpServerResponse.JSON_TPL(
+    return Object.getPrototypeOf(this).constructor.JSON_TPL(
       data,
-      this.isSuccess,
-      this.constructor as typeof ServerResponse
+      this.isSuccess
     );
   }
 
   text(data: string) {
     this.header('Content-Type', 'text/plain');
-    return HttpServerResponse.TEXT_TPL(
+    return Object.getPrototypeOf(this).constructor.TEXT_TPL(
       data,
-      this.isSuccess,
-      this.constructor as typeof ServerResponse
+      this.isSuccess
     );
   }
 
   file(filePath: string, mimeType?: string) {
     this.header('Content-Type', mimeType || 'application/octet-stream');
-    this.header('Content-Disposition', `attachment; filename=${filePath}`);
-    return HttpServerResponse.FILE_TPL(
-      createReadStream(filePath),
-      this.isSuccess,
-      this.constructor as typeof ServerResponse
+    this.header(
+      'Content-Disposition',
+      `attachment; filename=${basename(filePath)}`
+    );
+    return Object.getPrototypeOf(this).constructor.FILE_TPL(
+      typeof filePath === 'string' ? createReadStream(filePath) : filePath,
+      this.isSuccess
     );
   }
 
-  blob(data: Buffer) {
-    this.header('Content-Type', 'application/octet-stream');
-    return HttpServerResponse.BLOB_TPL(
+  blob(data: Buffer, mimeType?: string) {
+    this.header('Content-Type', mimeType || 'application/octet-stream');
+    return Object.getPrototypeOf(this).constructor.BLOB_TPL(
       data,
-      this.isSuccess,
-      this.constructor as typeof ServerResponse
+      this.isSuccess
     );
   }
 

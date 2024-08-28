@@ -1,34 +1,26 @@
 import { ServerResponse } from '../../src';
 
 describe('response/base.test.ts', () => {
-  it('should test base server response', () => {
-    const response = new ServerResponse({} as any);
-    expect(ServerResponse.SUCCESS_TPL).toBeDefined();
-    expect(response.constructor['SUCCESS_TPL']).toEqual(ServerResponse.SUCCESS_TPL);
-
-    class ServerResponseNew extends ServerResponse {}
-    const responseNew = new ServerResponseNew({} as any);
-    expect(ServerResponseNew['SUCCESS_TPL']).toEqual(ServerResponse.SUCCESS_TPL);
-    expect(responseNew.constructor['SUCCESS_TPL']).toEqual(response.constructor['SUCCESS_TPL'])
-
-    expect(ServerResponseNew.SUCCESS_TPL).toBeDefined();
-  });
-
   it('should test response with different type', () => {
     class ServerResponseNew extends ServerResponse {}
     const response = new ServerResponseNew({} as any);
 
     // success
-    let res = response.success().text('abc');
-    expect(res).toEqual({ success: 'true', data: 'abc' });
+    let res: any = response.success().text('abc');
+    expect(res).toEqual('abc');
+    expect(response.text('bcd')).toEqual('bcd');
 
     // fail
     res = response.fail().text('abc');
-    expect(res).toEqual({ success: 'false', message: 'abc' });
+    expect(res).toEqual('abc');
 
     // json
     res = response.success().json({ a: 1 });
-    expect(res).toEqual({ success: 'true', data: '{"a":1}' });
+    expect(res).toEqual({
+      success: 'true', data: {
+        'a': 1
+      }
+    });
 
     // blob
     res = response.success().blob(Buffer.from('abc'));
@@ -39,34 +31,40 @@ describe('response/base.test.ts', () => {
     class ServerResponseNew extends ServerResponse {}
     const response = new ServerResponseNew({} as any);
     let res = response.success().text('abc');
-    expect(res).toEqual({ success: 'true', data: 'abc' });
+    expect(res).toEqual('abc');
 
-    // success
-    ServerResponseNew.SUCCESS_TPL = (data: string) => {
-      return {
+    ServerResponseNew.TEXT_TPL = (data: string, isSuccess) => {
+      return isSuccess ? {
         bbb: 0,
         data,
-      }
+      } : {
+        bbb: -1,
+        message: data || 'fail',
+      };
     }
+
+    ServerResponseNew.JSON_TPL = (data: Record<any, any>, isSuccess) => {
+      return isSuccess ? {
+        bbb: 2,
+        data,
+      } : {
+        bbb: 2,
+        message: data || 'fail2',
+      };
+    }
+
     res = response.success().text('abc');
     expect(res).toEqual({ bbb: 0, data: 'abc' });
 
-    // fail
-    ServerResponseNew.FAIL_TPL = (data: string) => {
-      return {
-        bbb: -1,
-        message: data || 'fail',
-      }
-    }
     res = response.fail().text('abc');
     expect(res).toEqual({ bbb: -1, message: 'abc' });
 
     // json
     res = response.success().json({ a: 1 });
-    expect(res).toEqual({ bbb: 0, data: '{"a":1}' });
+    expect(res).toEqual({ bbb: 2, data: { a: 1 } });
 
     res = response.fail().json({ a: 1 });
-    expect(res).toEqual({ bbb: -1, message: '{"a":1}' });
+    expect(res).toEqual({ bbb: 2, message: { a: 1 } });
 
     // blob
     res = response.success().blob(Buffer.from('abc'));

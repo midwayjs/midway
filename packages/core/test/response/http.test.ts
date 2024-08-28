@@ -1,7 +1,11 @@
 // import whyIsNodeRunning from 'why-is-node-running'
 import * as EventSource from 'eventsource';
 import { HttpServerResponse, sleep } from '../../src';
-import { createServer, request } from 'http';
+import { createServer, request, ServerResponse } from 'http';
+import { join } from 'path';
+import { createWriteStream, readFileSync, unlinkSync } from 'fs';
+import { once } from 'events';
+import { existsSync } from 'fs-extra';
 
 describe('response/http.test.ts', () => {
   describe('test sse in base http', () => {
@@ -304,6 +308,96 @@ describe('response/http.test.ts', () => {
       server.close();
       await sleep(1000);
       expect(result).toEqual('<body>hello');
+    });
+  });
+
+  describe('test base response', () => {
+    it('should test set status and header', () => {
+      const ctx = {
+        logger: console,
+        res: new ServerResponse({} as any),
+      } as any;
+      const res = new HttpServerResponse(ctx);
+      res.status(200);
+      expect(ctx.res.statusCode).toEqual(200);
+      res.header('Content-Type', 'text/html');
+      expect(ctx.res.getHeader('Content-Type')).toEqual('text/html');
+      res.headers({
+        'Content-Type': 'text/plain',
+        'Content-Length': '100'
+      });
+
+      expect(ctx.res.getHeader('Content-Type')).toEqual('text/plain');
+      expect(ctx.res.getHeader('Content-Length')).toEqual('100');
+    });
+
+    it('should test json and text', () => {
+      const ctx = {
+        logger: console,
+        res: new ServerResponse({} as any),
+      } as any;
+      const res = new HttpServerResponse(ctx);
+      const json = res.success().json({ a: 1 });
+      expect(JSON.stringify(json)).toEqual('{"success":"true","data":{"a":1}}');
+      let text = res.fail().text('hello');
+      expect(text).toEqual('hello');
+      HttpServerResponse.TEXT_TPL = (data: string, isSuccess) => {
+        return isSuccess ? {
+          success: 'true',
+          data,
+        } : {
+          success: 'false',
+          message: data || 'fail',
+        };
+      }
+      text = res.fail().text('hello');
+      expect(JSON.stringify(text)).toEqual('{"success":"false","message":"hello"}');
+    });
+
+    it('should test file with default content type', async () => {
+      const ctx = {
+        logger: console,
+        res: new ServerResponse({} as any),
+      } as any;
+      const res = new HttpServerResponse(ctx);
+      const filePath = join(__dirname, '../../package.json');
+      const file = res.file(filePath);
+
+      expect(ctx.res.getHeader('Content-Type')).toBe('application/octet-stream');
+      expect(ctx.res.getHeader('Content-Disposition')).toBe('attachment; filename=package.json');
+
+      // create stream get data from res
+      let fileStream = createWriteStream(join(__dirname, 'package.json'));
+      file.pipe(fileStream);
+      await once(fileStream, 'finish');
+      expect(existsSync(join(__dirname, 'package.json'))).toBeTruthy();
+      // read
+      const content = readFileSync(join(__dirname, 'package.json'), 'utf-8');
+      expect(content).toMatch(/@midwayjs\/core/);
+      unlinkSync(join(__dirname, 'package.json'));
+    });
+
+    it('should test file', async () => {
+      const ctx = {
+        logger: console,
+        res: new ServerResponse({} as any),
+      } as any;
+      const res = new HttpServerResponse(ctx);
+      const filePath = join(__dirname, '../../package.json');
+      const file = res.file(filePath, 'application/json');
+
+      expect(ctx.res.getHeader('Content-Type')).toBe('application/json');
+      expect(ctx.res.getHeader('Content-Disposition')).toBe('attachment; filename=package.json');
+
+      // create stream get data from res
+      let fileStream = createWriteStream(join(__dirname, 'package.json'));
+      file.pipe(fileStream);
+      await once(fileStream, 'finish');
+      expect(existsSync(join(__dirname, 'package.json'))).toBeTruthy();
+      // read
+      const content = readFileSync(join(__dirname, 'package.json'), 'utf-8');
+      expect(content).toMatch(/@midwayjs\/core/);
+      unlinkSync(join(__dirname, 'package.json'));
     });
   });
 });
