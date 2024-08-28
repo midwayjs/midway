@@ -28,7 +28,13 @@ export class HttpServerResponse<
   }
 
   headers(headers: Record<string, string>) {
-    this.ctx.res.setHeaders(new Map(Object.entries(headers)));
+    if (this.ctx.res.setHeaders) {
+      this.ctx.res.setHeaders(new Map(Object.entries(headers)));
+    } else {
+      for (const key in headers) {
+        this.header(key, headers[key]);
+      }
+    }
     return this;
   }
 
