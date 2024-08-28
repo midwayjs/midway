@@ -1,6 +1,6 @@
 // import whyIsNodeRunning from 'why-is-node-running'
 import * as EventSource from 'eventsource';
-import { HttpServerResponse, sleep } from '../../src';
+import { HttpServerResponse, ServerSendEventMessage, sleep } from '../../src';
 import { createServer, request, ServerResponse } from 'http';
 import { join } from 'path';
 import { createWriteStream, readFileSync, unlinkSync } from 'fs';
@@ -211,6 +211,73 @@ describe('response/http.test.ts', () => {
       clearInterval(handler);
       server.close();
     });
+
+    it('should test with tpl', async () => {
+      const port = 7001;
+      const server = createServer((req, res) => {
+
+        HttpServerResponse.SSE_TPL = (chunk: ServerSendEventMessage) => {
+          chunk.data = 'hhhh';
+          return chunk;
+        };
+
+        const stream =  new HttpServerResponse({
+          req,
+          res,
+          logger: console
+        } as any).sse();
+        Promise.resolve().then(async () => {
+          stream.send({
+            data: 'abc',
+            retry: 0,
+          });
+          await sleep();
+          stream.send({
+            data: 'bcd'
+          });
+          await sleep();
+          stream.send({
+            data: 'bcd'.repeat(1000)
+          });
+          stream.send({
+            data: {
+              a: 1
+            },
+          });
+          stream.sendEnd({
+            data: '你好',
+          });
+        });
+        stream.pipe(res);
+      }).listen(port);
+
+      let result = [];
+      await new Promise<void>(resolve => {
+        const eventSource = new EventSource('http://localhost:' + port + '/sse');
+        eventSource.onopen = function(event) {
+          console.log('SSE open');
+        };
+
+        eventSource.onmessage = ({ data }) => {
+          console.log(data);
+          result.push(data);
+        };
+
+        eventSource.onerror = function(e) {
+          console.log('error', e);
+        }
+
+        eventSource.addEventListener('close', function(e) {
+          expect(e.data).toEqual('hhhh');
+          // 只能客户端主动关闭
+          eventSource.close();
+          resolve();
+        });
+      })
+
+      expect(result).toEqual(['hhhh', 'hhhh', 'hhhh', 'hhhh']);
+      server.close();
+    });
   });
 
   describe('test stream in base http', () => {
@@ -308,6 +375,59 @@ describe('response/http.test.ts', () => {
       server.close();
       await sleep(1000);
       expect(result).toEqual('<body>hello');
+    });
+
+    it('should test stream write with tpl', async () => {
+      const port = 7001;
+      const server = createServer((req, res) => {
+
+        HttpServerResponse.STREAM_TPL = (chunk) => {
+          chunk += 'hhhh';
+          return chunk;
+        };
+
+        const stream = new HttpServerResponse({
+          req,
+          res,
+          logger: console,
+        } as any).stream();
+        Promise.resolve().then(async () => {
+          stream.send('abc');
+          await sleep();
+          stream.send('bcd');
+          await sleep();
+          stream.send('bcd'.repeat(1000));
+          stream.end();
+        }).catch(console.error);
+        stream.pipe(res);
+      }).listen(port);
+
+      let result = '';
+      await new Promise<void>(resolve => {
+        const req = request({
+          hostname: 'localhost',
+          port,
+        }, res => {
+          res.on('data', (chunk) => {
+            result += chunk.toString();
+          });
+
+          res.on('end', () => {
+            resolve();
+          });
+
+          res.on('error', (e) => {
+            console.error(e.message);
+          });
+        });
+        req.on('error', (e) => {
+          console.error(e.message);
+        });
+        req.end();
+      });
+      server.close();
+      await sleep(1000);
+      expect(result).toEqual('abchhhhbcdhhhh' + 'bcd'.repeat(1000) + 'hhhh');
     });
   });
 

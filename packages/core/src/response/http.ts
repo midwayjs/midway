@@ -1,5 +1,10 @@
 import { createReadStream } from 'fs';
-import { IMidwayContext, ServerSendEventStreamOptions } from '../interface';
+import {
+  IMidwayContext,
+  ServerSendEventMessage,
+  ServerSendEventStreamOptions,
+  ServerStreamOptions,
+} from '../interface';
 import { ServerResponse } from './base';
 import { ServerSendEventStream } from './sse';
 import { Readable } from 'stream';
@@ -14,6 +19,14 @@ export class HttpServerResponse<
   }
 
   static FILE_TPL = (data: Readable, isSuccess: boolean) => {
+    return data;
+  };
+
+  static SSE_TPL = (data: ServerSendEventMessage) => {
+    return data;
+  };
+
+  static STREAM_TPL = (data: unknown) => {
     return data;
   };
 
@@ -75,10 +88,16 @@ export class HttpServerResponse<
   }
 
   sse(options: ServerSendEventStreamOptions = {}) {
-    return new ServerSendEventStream(this.ctx, options);
+    return new ServerSendEventStream(this.ctx, {
+      tpl: Object.getPrototypeOf(this).constructor.SSE_TPL,
+      ...options,
+    });
   }
 
-  stream(options = {}) {
-    return new HttpStreamResponse(this.ctx, options);
+  stream(options: ServerStreamOptions = {}) {
+    return new HttpStreamResponse(this.ctx, {
+      tpl: Object.getPrototypeOf(this).constructor.STREAM_TPL,
+      ...options,
+    });
   }
 }

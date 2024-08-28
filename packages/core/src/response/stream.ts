@@ -1,16 +1,18 @@
 import { Transform } from 'stream';
-import { ServerSendEventStreamOptions } from '../interface';
+import { ServerStreamOptions } from '../interface';
 
 export class HttpStreamResponse extends Transform {
   private ctx: any;
   private isActive = false;
+  private options: ServerStreamOptions;
 
-  constructor(ctx, options: ServerSendEventStreamOptions = {}) {
+  constructor(ctx, options: ServerStreamOptions = {}) {
     super({
       objectMode: true,
       ...options,
     });
     this.ctx = ctx;
+    this.options = options;
   }
 
   _transform(chunk, encoding, callback) {
@@ -38,11 +40,11 @@ export class HttpStreamResponse extends Transform {
     }
   }
 
-  send(data) {
+  send(data: unknown) {
     if (!this.writable) {
       return;
     }
-    this.write(data);
+    this.write(this.options.tpl(data));
   }
 
   sendError(error) {

@@ -1225,6 +1225,11 @@ export interface ServerSendEventMessage {
   retry?: number;
 }
 
+export interface ServerStreamOptions {
+  tpl?: (data: unknown) => unknown;
+}
+
 export interface ServerSendEventStreamOptions {
   closeEvent?: string;
+  tpl?: (data: ServerSendEventMessage) => ServerSendEventMessage;
 }

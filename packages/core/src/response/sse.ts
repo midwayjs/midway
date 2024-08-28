@@ -11,7 +11,8 @@ interface MessageEvent {
 export class ServerSendEventStream extends Transform {
   private readonly ctx: any;
   private isActive = false;
-  private closeEvent: string;
+  private readonly closeEvent: string;
+  private options: ServerSendEventStreamOptions;
 
   constructor(ctx, options: ServerSendEventStreamOptions = {}) {
     super({
@@ -20,6 +21,7 @@ export class ServerSendEventStream extends Transform {
     });
     this.ctx = ctx;
     this.closeEvent = options.closeEvent || 'close';
+    this.options = options;
 
     // 监听客户端关闭连接
     this.ctx.req.on('close', this.handleClose.bind(this));
@@ -109,7 +111,7 @@ export class ServerSendEventStream extends Transform {
   }
 
   send(message: MessageEvent): void {
-    super.write(message);
+    super.write(this.options.tpl(message));
   }
 
   private handleClose() {
