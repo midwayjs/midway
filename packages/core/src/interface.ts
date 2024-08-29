@@ -847,8 +847,14 @@ export type IgnoreMatcher<CTX> = string | RegExp | ((ctx: CTX) => boolean);
  * Common middleware definition
  */
 export interface IMiddleware<CTX, R, N = unknown> {
-  resolve: (app: IMidwayApplication) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
+  resolve: (app: IMidwayApplication, options?: any) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
+  /**
+   * Which paths to ignore
+   */
   match?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
+  /**
+   * Match those paths with higher priority than ignore
+   */
   ignore?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
 }
 export type FunctionMiddleware<CTX, R, N = unknown> = N extends true
@@ -859,9 +865,16 @@ export type ClassMiddleware<CTX, R, N> = new (...args) => IMiddleware<
   R,
   N
 >;
+
+export type CompositionMiddleware<CTX, R, N> = {
+  middleware: ClassMiddleware<CTX, R, N>;
+  options: any;
+  name?: string;
+};
 export type CommonMiddleware<CTX, R, N> =
   | ClassMiddleware<CTX, R, N>
-  | FunctionMiddleware<CTX, R, N>;
+  | FunctionMiddleware<CTX, R, N>
+  | CompositionMiddleware<CTX, R, N>;
 export type CommonMiddlewareUnion<CTX, R, N> =
   | CommonMiddleware<CTX, R, N>
   | Array<CommonMiddleware<CTX, R, N>>;
