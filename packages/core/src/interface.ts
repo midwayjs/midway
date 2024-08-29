@@ -1216,3 +1216,19 @@ export interface HealthResults {
     reason?: string;
   }>;
 }
+
+export interface ServerSendEventMessage {
+  data?: string | object;
+  event?: string;
+  id?: string;
+  retry?: number;
+}
+
+export interface ServerStreamOptions {
+  tpl?: (data: unknown) => unknown;
+}
+
+export interface ServerSendEventStreamOptions {
+  closeEvent?: string;
+  tpl?: (data: ServerSendEventMessage) => ServerSendEventMessage;
+}
