@@ -3150,6 +3150,127 @@ exports[`test @ApiSecurity test OAuth2 1`] = `
 }
 `;
 
+exports[`test @ApiTags should add controller prefix for default tags when @ApiTag not set 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiTags should add router @ApiTags 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiTags should test multi-tags 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "tag1",
+          "tag2",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "",
+      "name": "tag1",
+    },
+    {
+      "description": "",
+      "name": "tag2",
+    },
+  ],
+}
+`;
+
 exports[`test Generics class should test with generics and multi implementation 1`] = `
 {
   "components": {

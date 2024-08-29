@@ -168,6 +168,9 @@ export class SwaggerExplorer {
       return;
     }
 
+    const generateTagForController =
+      this.swaggerConfig.generateTagForController ?? true;
+
     // 解析额外的模型
     this.parseExtraModel(target);
 
@@ -1240,4 +1243,10 @@ function parseTypeSchema(ref) {
       }
       return ref;
   }
+}
+
+function transformTags(tags: string[] = []) {
+  return tags.map(tag => {
+    return Array.isArray(tag) ? tag : [tag];
+  });
 }

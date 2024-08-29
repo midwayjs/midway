@@ -794,10 +794,38 @@ describe('test @ApiTags', () => {
 
     const explorer = new CustomSwaggerExplorer();
     explorer.generatePath(APIController);
-    const data = explorer.getData() as any;
-    expect(data.tags.length).toBe(2);
-    expect(data.tags[0].name).toBe('tag1');
-    expect(data.tags[1].name).toBe('tag2');
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should add controller prefix for default tags when @ApiTag not set', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should add router @ApiTags', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiTags('tag1')
+      @ApiTags('tag2')
+      // @ApiOperation({ tags: ['tag3'] })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
   });
 
   it('should swagger tags duplicate', () => {
