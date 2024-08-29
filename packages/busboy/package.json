@@ -1,0 +1,37 @@
+{
+  "name": "@midwayjs/busboy",
+  "version": "3.16.0",
+  "description": "Midway Component for upload",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "file-type": "16.5.4",
+    "busboy": "1.6.0",
+    "@types/busboy": "1.5.4"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "^3.16.2",
+    "@midwayjs/express": "^3.16.2",
+    "@midwayjs/faas": "^3.16.2",
+    "@midwayjs/koa": "^3.16.2",
+    "@midwayjs/mock": "^3.16.2",
+    "@midwayjs/web": "^3.16.2"
+  }
+}

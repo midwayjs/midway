@@ -166,6 +166,8 @@ async onReady() {
 }
 ```
 
+
+
 ## Ignore and match routes
 
 When middleware is executed, we can add logic that routes ignore.
@@ -271,6 +273,100 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
    }
 }
 ```
+
+
+
+## Reuse middleware
+
+The essence of middleware is function. Function can pass different configurations to reuse middleware, but it is difficult to implement in class scenario. Midway provides `createMiddleware` method to help create different middleware functions in class scenario.
+
+You can use `createMiddleare` to reuse in `useMiddleware` phase.
+
+```typescript
+// src/configuration.ts
+import { App, Configuration, createMiddleare } from '@midwayjs/core';
+import * as koa from '@midwayjs/koa';
+import { ReportMiddleware } from './middleware/user.middleware';
+
+@Configuration({
+imports: [koa]
+// ...
+})
+export class MainConfiguration {
+
+  @App()
+  app: koa.Application;
+
+  async onReady() {
+    // Add ReportMiddleware middleware
+    this.app.useMiddleware(ReportMiddleware);
+    // Add a ReportMiddleware with different parameters
+    this.app.useMiddleware(createMiddleare(ReportMiddleware, {
+      text: 'abc'
+    }, 'anotherReportMiddleare'));
+  }
+}
+
+```
+
+We can get this parameter in the middleware to execute different logic.
+
+```typescript
+import { Middleware, IMiddleware } from '@midwayjs/core';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+  initData = 'text1';
+
+  resolve(_, options?: {
+    text: string;
+  }) {
+    return async (ctx: Context, next: NextFunction) => {
+    	this.ctx.setAttr('data', options?.text || this.initData);
+    	return await next();
+    };
+  }
+}
+```
+
+`createMiddleare` method is defined as follows, containing three parameters.
+
+```typescript
+function createMiddleware(middlewareClass: new (...args) => IMiddleware, options, name?: string);
+```
+
+| Parameters      | Description               |
+| --------------- | ------------------------- |
+| middlewareClass | Middleware class          |
+| options         | Passed custom parameters  |
+| name            | Optional, middleware name |
+
+`options` can pass custom functions of middleware, which can be processed by the logic.
+
+`name` field is used for sorting and displaying middleware, and generally a string different from the original middleware name is selected.
+
+`createMiddleare` method can also be used in routing middleware.
+
+```typescript
+import { Controller, Get, createMiddleware } from '@midwayjs/core';
+import { ReportMiddleware } from '../middleware/report.middlweare';
+
+const anotherMiddleware = createMiddleware(ReportMiddleware, {
+  // ...
+});
+
+@Controller('/')
+export class HomeController {
+  @Get('/', {
+    middleware: [anotherMiddleware],
+  })
+  async home() {}
+}
+
+```
+
+Note that the decorator will be loaded before the framework is started. At this time, the parameters of `createMiddleware` cannot be obtained from the framework configuration and are generally fixed object values.
 
 
 

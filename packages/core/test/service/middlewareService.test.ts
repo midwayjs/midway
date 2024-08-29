@@ -1,4 +1,4 @@
-import { Provide, MidwayMiddlewareService, MidwayContainer, Init, IgnoreMatcher } from '../../src';
+import { Provide, MidwayMiddlewareService, MidwayContainer, Init, IgnoreMatcher, createMiddleware } from '../../src';
 import * as assert from 'assert';
 
 describe('/test/services/middlewareService.test.ts', () => {
@@ -460,6 +460,34 @@ describe('/test/services/middlewareService.test.ts', () => {
         return 'end';
       });
       expect(result).toEqual('end');
+    });
+
+    it('should test with composition middleware', async () => {
+      @Provide()
+      class TestMiddleware1 {
+        title = 'midway, ';
+        resolve(app, options: {text: string}) {
+          return async (ctx, next) => {
+            return (options?.text || this.title) + (await next() ?? '');
+          }
+        }
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware1);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([
+        TestMiddleware1,
+        createMiddleware(TestMiddleware1, { text: 'hello ' }),
+        createMiddleware(TestMiddleware1, { text: 'world' })
+      ], {} as any);
+      const result = await fn({}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('midway, hello world');
     });
   });
 
