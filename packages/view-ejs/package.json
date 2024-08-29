@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/view-ejs",
-  "version": "3.16.8",
+  "version": "3.17.0",
   "description": "Midway Component for ejs render",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -28,12 +28,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/view": "^3.16.8",
+    "@midwayjs/view": "^3.17.0",
     "ejs": "3.1.10"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.16.2",
-    "@midwayjs/koa": "^3.16.8",
-    "@midwayjs/mock": "^3.16.5"
+    "@midwayjs/core": "^3.17.0",
+    "@midwayjs/koa": "^3.17.0",
+    "@midwayjs/mock": "^3.17.0"
   }
 }

@@ -1,6 +1,51 @@
 # Change Log
 
 
+## v3.17.0 (2024-08-29)
+
+#### :rocket: New Feature
+* `core`
+  * [#3982](https://github.com/midwayjs/midway/pull/3982) feat: support response helper and sse util ([@czy88840616](https://github.com/czy88840616))
+* `busboy`, `core`
+  * [#3875](https://github.com/midwayjs/midway/pull/3875) refactor: upload component use busboy ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `i18n`
+  * [#3931](https://github.com/midwayjs/midway/pull/3931) fix: Incorrect group format is used in i18n component ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `core`
+  * [#4013](https://github.com/midwayjs/midway/pull/4013) fix(core): DataSourceManagerConfigOption generic OPTIONS now no changes by PowerPartial ([@waitingsong](https://github.com/waitingsong))
+* `busboy`, `core`
+  * [#3875](https://github.com/midwayjs/midway/pull/3875) refactor: upload component use busboy ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#4018](https://github.com/midwayjs/midway/pull/4018) docs(awesome_midway): add @mwcp/pgmq ([@waitingsong](https://github.com/waitingsong))
+* [#4008](https://github.com/midwayjs/midway/pull/4008) docs: extensions koa typo ([@Nokic233](https://github.com/Nokic233))
+* [#4007](https://github.com/midwayjs/midway/pull/4007) docs: fix typo ([@Nokic233](https://github.com/Nokic233))
+
+#### :package: Dependencies
+* Other
+  * [#4036](https://github.com/midwayjs/midway/pull/4036) chore(deps): update dependency @types/node to v20.16.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#4011](https://github.com/midwayjs/midway/pull/4011) fix(deps): update dependency axios to v1.7.4 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#4015](https://github.com/midwayjs/midway/pull/4015) fix(deps): update bull monorepo to v5.21.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4005](https://github.com/midwayjs/midway/pull/4005) fix(deps): update bull monorepo to v5.21.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#4016](https://github.com/midwayjs/midway/pull/4016) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#4030](https://github.com/midwayjs/midway/pull/4030) fix(deps): update dependency ali-oss to v6.21.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4031](https://github.com/midwayjs/midway/pull/4031) fix(deps): update dependency mqtt to v5.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- NoKic233 ([@Nokic233](https://github.com/Nokic233))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.16.8 (2024-08-03)
 
 #### :bug: Bug Fix
