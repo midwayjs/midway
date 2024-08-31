@@ -64,6 +64,7 @@
         "service_factory",
         "data_listener",
         "data_source",
+        "data_response",
         "retry"
       ]
     },

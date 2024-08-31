@@ -977,6 +977,10 @@ export class HomeController {
 
 
 
+### 高级响应处理
+
+从 v3.17.0 开始，框架提供了一个新的的 `HttpServerResponse` 来处理返回数据，除了普通的数据之外，还提供了自定义状态模版，文件下载，SSE 等能力支持，具体请查看 [数据响应章节](/docs/data_response)
+
 
 
 ## 内部重定向
@@ -1012,8 +1016,6 @@ export class HomeController {
 * 2、重定向只能在相同的 http method 中进行
 
 * 3、重定向不会再执行一遍 Web Middleware，不会执行守卫，但是会执行拦截器和参数装饰器
-
-  
 
 
 
