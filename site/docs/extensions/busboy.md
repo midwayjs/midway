@@ -506,7 +506,7 @@ export default {
 }
 ```
 
-除此之外，还可以设置一些其他的 [限制]((https://github.com/mscdex/busboy/tree/master?tab=readme-ov-file#exports)。)。
+除此之外，还可以设置一些其他的 [限制](https://github.com/mscdex/busboy/tree/master?tab=readme-ov-file#exports)。
 
 
 

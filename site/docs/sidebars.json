@@ -230,7 +230,7 @@
         "extensions/express",
         "extensions/security",
         "extensions/render",
-        "extensions/upload",
+        "extensions/busboy",
         "extensions/passport",
         "extensions/casbin",
         "extensions/static_file",
@@ -310,6 +310,7 @@
       "collapsible": false,
       "items": [
         "extensions/cache",
+        "extensions/upload",
         "legacy/mongodb",
         "legacy/sequelize",
         "legacy/orm",
