@@ -73,4 +73,44 @@ describe('response/base.test.ts', () => {
     res = response.fail().blob(Buffer.from('abc'));
     expect(res).toEqual(Buffer.from('abc'));
   });
+
+  it("should test with ctx", () => {
+    class ServerResponseNew extends ServerResponse {}
+    const response = new ServerResponseNew({
+      data: {
+        text: '123',
+      }
+    } as any);
+    let res = response.success().text('abc');
+    expect(res).toEqual('abc');
+
+    ServerResponseNew.TEXT_TPL = (data: string, isSuccess, ctx: any) => {
+      return isSuccess ? {
+        bbb: 0,
+        data,
+        ...ctx.data,
+      } : {
+        bbb: -1,
+        message: data || 'fail',
+      };
+    }
+
+    ServerResponseNew.JSON_TPL = (data: Record<any, any>, isSuccess, ctx: any) => {
+      return isSuccess ? {
+        bbb: 2,
+        data,
+        ...ctx.data,
+      } : {
+        bbb: 2,
+        message: data || 'fail2',
+      };
+    }
+
+    res = response.success().text('abc');
+    expect(res).toEqual({ bbb: 0, data: 'abc', text: '123' });
+
+    // json
+    res = response.success().json({ a: 1 });
+    expect(res).toEqual({ bbb: 2, data: { a: 1 }, text: '123' });
+  });
 })
