@@ -135,9 +135,13 @@ export class MidwayKafkaFramework extends BaseFramework<
                         const result = await fn(ctx);
                         // 返回为undefined，下面永远不会执行
                         if (result) {
-                          const res = await this.app.connection.commitOffsets(
-                            message.offset
-                          );
+                          const res = await this.app.connection.commitOffsets([
+                            {
+                              topic: topic,
+                              partition: partition,
+                              offset: message.offset,
+                            },
+                          ]);
                           return res;
                         }
                       } catch (error) {
