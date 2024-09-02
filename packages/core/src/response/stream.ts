@@ -1,12 +1,12 @@
 import { Transform } from 'stream';
-import { ServerStreamOptions } from '../interface';
+import { IMidwayContext, ServerStreamOptions } from '../interface';
 
-export class HttpStreamResponse extends Transform {
-  private ctx: any;
+export class HttpStreamResponse<CTX extends IMidwayContext> extends Transform {
+  private ctx: CTX & { res: any; req: any };
   private isActive = false;
-  private options: ServerStreamOptions;
+  private options: ServerStreamOptions<CTX>;
 
-  constructor(ctx, options: ServerStreamOptions = {}) {
+  constructor(ctx, options: ServerStreamOptions<CTX> = {}) {
     super({
       objectMode: true,
       ...options,
@@ -44,7 +44,7 @@ export class HttpStreamResponse extends Transform {
     if (!this.writable) {
       return;
     }
-    this.write(this.options.tpl(data));
+    this.write(this.options.tpl(data, this.ctx));
   }
 
   sendError(error) {

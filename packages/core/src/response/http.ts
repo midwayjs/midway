@@ -18,15 +18,30 @@ export class HttpServerResponse<
     super(ctx);
   }
 
-  static FILE_TPL = (data: Readable, isSuccess: boolean) => {
+  static FILE_TPL = <CTX extends IMidwayContext>(
+    data: Readable,
+    isSuccess: boolean,
+    ctx: CTX
+  ) => {
     return data;
   };
 
-  static SSE_TPL = (data: ServerSendEventMessage) => {
+  static SSE_TPL = <CTX extends IMidwayContext>(
+    data: ServerSendEventMessage,
+    ctx: CTX
+  ) => {
     return data;
   };
 
-  static STREAM_TPL = (data: unknown) => {
+  static STREAM_TPL = <CTX extends IMidwayContext>(data: unknown, ctx: CTX) => {
+    return data;
+  };
+
+  static HTML_TPL = <CTX extends IMidwayContext>(
+    data: string,
+    isSuccess: boolean,
+    ctx: CTX
+  ): unknown => {
     return data;
   };
 
@@ -55,7 +70,8 @@ export class HttpServerResponse<
     this.header('Content-Type', 'application/json');
     return Object.getPrototypeOf(this).constructor.JSON_TPL(
       data,
-      this.isSuccess
+      this.isSuccess,
+      this.ctx
     );
   }
 
@@ -63,7 +79,8 @@ export class HttpServerResponse<
     this.header('Content-Type', 'text/plain');
     return Object.getPrototypeOf(this).constructor.TEXT_TPL(
       data,
-      this.isSuccess
+      this.isSuccess,
+      this.ctx
     );
   }
 
@@ -75,7 +92,8 @@ export class HttpServerResponse<
     );
     return Object.getPrototypeOf(this).constructor.FILE_TPL(
       typeof filePath === 'string' ? createReadStream(filePath) : filePath,
-      this.isSuccess
+      this.isSuccess,
+      this.ctx
     );
   }
 
@@ -83,18 +101,39 @@ export class HttpServerResponse<
     this.header('Content-Type', mimeType || 'application/octet-stream');
     return Object.getPrototypeOf(this).constructor.BLOB_TPL(
       data,
-      this.isSuccess
+      this.isSuccess,
+      this.ctx
     );
   }
 
-  sse(options: ServerSendEventStreamOptions = {}) {
+  html(data: string) {
+    this.header('Content-Type', 'text/html');
+    return Object.getPrototypeOf(this).constructor.HTML_TPL(
+      data,
+      this.isSuccess,
+      this.ctx
+    );
+  }
+
+  redirect(url: string, status = 302) {
+    this.status(status);
+    if (this.ctx.redirect) {
+      return this.ctx.redirect(url);
+    } else if (this.ctx.res.redirect) {
+      return this.ctx.res.redirect(url);
+    } else {
+      this.header('Location', url);
+    }
+  }
+
+  sse(options: ServerSendEventStreamOptions<CTX> = {}) {
     return new ServerSendEventStream(this.ctx, {
       tpl: Object.getPrototypeOf(this).constructor.SSE_TPL,
       ...options,
     });
   }
 
-  stream(options: ServerStreamOptions = {}) {
+  stream(options: ServerStreamOptions<CTX> = {}) {
     return new HttpStreamResponse(this.ctx, {
       tpl: Object.getPrototypeOf(this).constructor.STREAM_TPL,
       ...options,

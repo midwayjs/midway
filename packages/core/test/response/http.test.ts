@@ -519,5 +519,30 @@ describe('response/http.test.ts', () => {
       expect(content).toMatch(/@midwayjs\/core/);
       unlinkSync(join(__dirname, 'package.json'));
     });
+
+    it("should test html response", () => {
+      HttpServerResponse.HTML_TPL = (data, isSuccess, ctx) => {
+        return `<div>${data}</div>`;
+      }
+      const ctx = {
+        logger: console,
+        res: new ServerResponse({} as any),
+      } as any;
+      const res = new HttpServerResponse(ctx);
+      const html = res.html('hello');
+      expect(html).toEqual('<div>hello</div>');
+      expect(ctx.res.getHeader('Content-Type')).toBe('text/html');
+    });
+
+    it("should test redirect response", () => {
+      const ctx = {
+        logger: console,
+        res: new ServerResponse({} as any),
+      } as any;
+      const res = new HttpServerResponse(ctx);
+      res.redirect('https://www.baidu.com');
+      expect(ctx.res.getHeader('Location')).toBe('https://www.baidu.com');
+      expect(ctx.res.statusCode).toBe(302);
+    });
   });
 });
