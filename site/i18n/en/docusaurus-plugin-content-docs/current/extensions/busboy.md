@@ -91,7 +91,7 @@ import { UploadMiddleware } from '@midwayjs/busboy';
 @Controller('/')
 export class HomeController {
 
-  @Post('/upload', middleares: [UploadMiddleware])
+  @Post('/upload', {middleares: [UploadMiddleware]})
   async upload(/*...*/) {
     // ...
   }
@@ -222,7 +222,7 @@ import { UploadFileInfo } from '@midwayjs/busboy';
 export class HomeController {
 
   @Post('/upload')
-  async upload(@Files() files Array<UploadFileInfo>, @Fields() fields: Record<string, string) {
+  async upload(@Files() files: Array<UploadFileInfo>, @Fields() fields: Record<string, string) {
     /*
     files = [
       {
