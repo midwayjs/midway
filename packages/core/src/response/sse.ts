@@ -1,5 +1,5 @@
 import { Transform } from 'stream';
-import { ServerSendEventStreamOptions } from '../interface';
+import { IMidwayContext, ServerSendEventStreamOptions } from '../interface';
 
 interface MessageEvent {
   data?: string | object;
@@ -8,13 +8,15 @@ interface MessageEvent {
   retry?: number;
 }
 
-export class ServerSendEventStream extends Transform {
+export class ServerSendEventStream<
+  CTX extends IMidwayContext
+> extends Transform {
   private readonly ctx: any;
   private isActive = false;
   private readonly closeEvent: string;
-  private options: ServerSendEventStreamOptions;
+  private options: ServerSendEventStreamOptions<CTX>;
 
-  constructor(ctx, options: ServerSendEventStreamOptions = {}) {
+  constructor(ctx, options: ServerSendEventStreamOptions<CTX> = {}) {
     super({
       objectMode: true,
       ...options,
@@ -111,7 +113,7 @@ export class ServerSendEventStream extends Transform {
   }
 
   send(message: MessageEvent): void {
-    super.write(this.options.tpl(message));
+    super.write(this.options.tpl(message, this.ctx));
   }
 
   private handleClose() {

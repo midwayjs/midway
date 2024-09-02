@@ -1238,11 +1238,11 @@ export interface ServerSendEventMessage {
   retry?: number;
 }
 
-export interface ServerStreamOptions {
-  tpl?: (data: unknown) => unknown;
+export interface ServerStreamOptions<CTX extends IMidwayContext> {
+  tpl?: (data: unknown, ctx: CTX) => unknown;
 }
 
-export interface ServerSendEventStreamOptions {
+export interface ServerSendEventStreamOptions<CTX extends IMidwayContext> {
   closeEvent?: string;
-  tpl?: (data: ServerSendEventMessage) => ServerSendEventMessage;
+  tpl?: (data: ServerSendEventMessage, ctx: CTX) => ServerSendEventMessage;
 }
