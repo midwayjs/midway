@@ -115,10 +115,6 @@ export class HttpServerResponse<
     );
   }
 
-  notFound(status = 404, text = 'Not Found') {
-    return this.status(status).text(text);
-  }
-
   redirect(url: string, status = 302) {
     this.status(status);
     if (this.ctx.redirect) {
