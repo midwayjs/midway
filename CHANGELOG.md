@@ -1,6 +1,28 @@
 # Change Log
 
 
+## v3.17.1 (2024-09-02)
+
+#### :bug: Bug Fix
+* `kafka`
+  * [#4046](https://github.com/midwayjs/midway/pull/4046) fix(kafkajs): Fix the issue where the consumer method of the kafkajs component returns true to trigger a commit parameter error. ([@Yuliang-Lee](https://github.com/Yuliang-Lee))
+
+#### :nail_care: Polish
+* `core`
+  * [#4047](https://github.com/midwayjs/midway/pull/4047) feat: add ctx for the static tpl of response ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `axios`, `http-proxy`
+  * [#4040](https://github.com/midwayjs/midway/pull/4040) fix(deps): update dependency axios to v1.7.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#4041](https://github.com/midwayjs/midway/pull/4041) fix(deps): update dependency bull to v4.16.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- xlaoyu ([@Yuliang-Lee](https://github.com/Yuliang-Lee))
+
+
+
 ## v3.17.0 (2024-08-29)
 
 #### :rocket: New Feature
