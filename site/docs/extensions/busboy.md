@@ -92,7 +92,7 @@ import { UploadMiddleware } from '@midwayjs/busboy';
 @Controller('/')
 export class HomeController {
 
-  @Post('/upload', {middleares: [UploadMiddleware]})
+  @Post('/upload', { middleware: [UploadMiddleware] })
   async upload(/*...*/) {
     // ...
   }
@@ -196,11 +196,13 @@ export class MainConfiguration {
 
 ## 配置
 
+组件使用 `busboy` 作为配置的 key。
+
 ### 上传模式 - file
 
 `file` 为默认值，也是框架的推荐值。
 
-配置 upload 的 mode 为 `file` 字符串。
+配置 mode 为 `file` 字符串。
 
 ```typescript
 // src/config/config.default.ts
@@ -222,7 +224,7 @@ import { UploadFileInfo } from '@midwayjs/busboy';
 @Controller('/')
 export class HomeController {
 
-  @Post('/upload')
+  @Post('/upload', /*...*/)
   async upload(@Files() files: Array<UploadFileInfo>, @Fields() fields: Record<string, string) {
     /*
     files = [
@@ -296,7 +298,7 @@ import { UploadStreamFileInfo } from '@midwayjs/busboy';
 @Controller('/')
 export class HomeController {
 
-  @Post('/upload')
+  @Post('/upload', /*...*/)
   async upload(@Files() files: Array<UploadStreamFileInfo>, @Fields() fields: Record<string, string) {
     /*
     files = [
@@ -549,12 +551,12 @@ import { UploadFileInfo, UploadMiddleware } from '@midwayjs/busboy';
 
 @Controller('/')
 export class HomeController {
-  @Post('/upload1', { middlewares: [ createMiddleware(UploadMiddleware, {mode: 'file'}) ]})
+  @Post('/upload1', { middleware: [ createMiddleware(UploadMiddleware, {mode: 'file'}) ]})
   async upload1(@Files() files Array<UploadFileInfo>) {
     // ...
   }
   
-  @Post('/upload2', { middlewares: [ createMiddleware(UploadMiddleware, {mode: 'stream'}) ]})
+  @Post('/upload2', { middleware: [ createMiddleware(UploadMiddleware, {mode: 'stream'}) ]})
   async upload2(@Files() files Array<UploadFileInfo>) {
     // ...
   }

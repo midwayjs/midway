@@ -91,7 +91,7 @@ import { UploadMiddleware } from '@midwayjs/busboy';
 @Controller('/')
 export class HomeController {
 
-  @Post('/upload', {middleares: [UploadMiddleware]})
+  @Post('/upload', { middleware: [UploadMiddleware] })
   async upload(/*...*/) {
     // ...
   }
@@ -195,11 +195,13 @@ export class MainConfiguration {
 
 ## Configuration
 
+The component uses `busboy` as the configuration key.
+
 ### Upload mode - file
 
 `file` is the default value and the recommended value of the framework.
 
-Configure the upload mode to be the `file` string.
+Configure mode as a `file` string.
 
 ```typescript
 // src/config/config.default.ts
@@ -221,7 +223,7 @@ import { UploadFileInfo } from '@midwayjs/busboy';
 @Controller('/')
 export class HomeController {
 
-  @Post('/upload')
+  @Post('/upload', /*...*/)
   async upload(@Files() files: Array<UploadFileInfo>, @Fields() fields: Record<string, string) {
     /*
     files = [
@@ -292,7 +294,7 @@ import { UploadStreamFileInfo } from '@midwayjs/busboy';
 @Controller('/')
 export class HomeController {
 
-  @Post('/upload')
+  @Post('/upload', /*...*/)
   async upload(@Files() files: Array<UploadStreamFileInfo>, @Fields() fields: Record<string, string) {
     /*
     files = [
@@ -538,12 +540,12 @@ import { UploadFileInfo, UploadMiddleware } from '@midwayjs/busboy';
 
 @Controller('/')
 export class HomeController {
-  @Post('/upload1', { middlewares: [ createMiddleware(UploadMiddleware, {mode: 'file'}) ]})
+  @Post('/upload1', { middleware: [ createMiddleware(UploadMiddleware, {mode: 'file'}) ]})
   async upload1(@Files() files Array<UploadFileInfo>) {
     // ...
   }
   
-  @Post('/upload2', { middlewares: [ createMiddleware(UploadMiddleware, {mode: 'stream'}) ]})
+  @Post('/upload2', { middleware: [ createMiddleware(UploadMiddleware, {mode: 'stream'}) ]})
   async upload2(@Files() files Array<UploadFileInfo>) {
     // ...
   }

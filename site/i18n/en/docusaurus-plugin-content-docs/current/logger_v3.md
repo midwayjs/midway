@@ -809,8 +809,9 @@ export default {
    midwayLogger: {
      default: {
        transports: {
+         file: false,
          json: {
-           // ...
+           fileLogName: 'midway-app.json.log'
          }
        }
      }

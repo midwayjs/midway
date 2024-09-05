@@ -282,7 +282,7 @@ export class HomeController {
   @Get('/')
   async home() {
     const filePath = join(__dirname, '../../package.json');
-    return new HttpServerResponse(this.ctx, 'application/json').file(filePath);
+    return new HttpServerResponse(this.ctx).file(filePath, 'application/json');
   }
 }
 ```
