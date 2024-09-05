@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.17.2 (2024-09-05)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#4050](https://github.com/midwayjs/midway/pull/4050) fix(swagger): miss dto  description from schema ([@lengyuxuan](https://github.com/lengyuxuan))
+
+#### Committers: 1
+- fangjin ([@lengyuxuan](https://github.com/lengyuxuan))
+
+
+
 ## v3.17.1 (2024-09-02)
 
 #### :bug: Bug Fix

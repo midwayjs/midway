@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/version",
-  "version": "3.17.1",
+  "version": "3.17.2",
   "description": "Midway Package Version Manager",
   "main": "index.js",
   "scripts": {
