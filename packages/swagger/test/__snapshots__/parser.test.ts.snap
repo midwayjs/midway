@@ -1821,6 +1821,7 @@ exports[`test @ApiQuery should get class type from DTO 1`] = `
         "operationId": "apicontroller_getuser",
         "parameters": [
           {
+            "description": "The name of the user",
             "in": "query",
             "name": "name",
             "required": false,
@@ -1830,6 +1831,7 @@ exports[`test @ApiQuery should get class type from DTO 1`] = `
             },
           },
           {
+            "description": "The uid of the user",
             "in": "query",
             "name": "id",
             "required": false,
@@ -1899,6 +1901,7 @@ exports[`test @ApiQuery should get class type from DTO with required 1`] = `
         "operationId": "apicontroller_getuser",
         "parameters": [
           {
+            "description": "The name of the user",
             "in": "query",
             "name": "name",
             "required": true,
@@ -1908,6 +1911,7 @@ exports[`test @ApiQuery should get class type from DTO with required 1`] = `
             },
           },
           {
+            "description": "The uid of the user",
             "in": "query",
             "name": "id",
             "required": false,
@@ -3698,6 +3702,87 @@ exports[`test post args without @ApiBody should test with @Files and any type 1`
           "description": undefined,
           "required": true,
         },
+        "responses": {
+          "200": {
+            "description": "OK",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiQuery should get class type from DTO with description 1`] = `
+{
+  "components": {
+    "schemas": {
+      "UserDTO": {
+        "properties": {
+          "id": {
+            "description": "The uid of the user",
+            "required": false,
+            "type": "number",
+          },
+          "name": {
+            "description": "The name of the user",
+            "type": "string",
+          },
+        },
+        "required": [
+          "name",
+        ],
+        "type": "object",
+      },
+    },
+  },
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/get_user": {
+      "get": {
+        "description": undefined,
+        "operationId": "apicontroller_getuser",
+        "parameters": [
+          {
+            "description": "The name of the user",
+            "in": "query",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "description": "The name of the user",
+              "type": "string",
+            },
+          },
+          {
+            "description": "The uid of the user",
+            "in": "query",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "description": "The uid of the user",
+              "required": false,
+              "type": "number",
+            },
+          },
+        ],
         "responses": {
           "200": {
             "description": "OK",

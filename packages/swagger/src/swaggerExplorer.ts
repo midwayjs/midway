@@ -21,7 +21,12 @@ import {
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/core';
-import { MixDecoratorMetadata, PathItemObject, Type } from './interfaces';
+import {
+  MixDecoratorMetadata,
+  PathItemObject,
+  SchemaObject,
+  Type,
+} from './interfaces';
 import {
   DECORATORS,
   DECORATORS_CLASS_METADATA,
@@ -501,6 +506,8 @@ export class SwaggerExplorer {
             const pp = {
               name: pName,
               in: p.in,
+              description: (schema.properties[pName] as SchemaObject)
+                ?.description,
               schema: schema.properties[pName],
               required: schema.required?.includes(pName) || false,
             };
