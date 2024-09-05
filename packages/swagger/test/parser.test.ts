@@ -2095,6 +2095,34 @@ describe('test @ApiQuery', () => {
     explorer.generatePath(APIController);
     expect(explorer.getData()).toMatchSnapshot();
   });
+
+  it('should get class type from DTO with description', () => {
+    class UserDTO {
+      @ApiProperty({
+        description: 'The name of the user',
+        required: true,
+      })
+      name: string;
+
+      @ApiProperty({
+        description: 'The uid of the user',
+        required: false,
+      })
+      id: number;
+    }
+
+    @Controller('/api')
+    class APIController {
+      @Get('/get_user')
+      async getUser(@Query() user: UserDTO) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
 });
 
 describe('test post args without @ApiBody', () => {
