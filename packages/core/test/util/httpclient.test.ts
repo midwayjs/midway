@@ -157,4 +157,20 @@ describe('/test/util/httpclient.test.ts', function () {
     expect(result.data['headers']['x-power-by']).toEqual('midway');
     manager.close();
   });
+
+  it("should not override default options", async () => {
+    const manager = await createHttpServer();
+    const httpclient = new HttpClient({
+      headers: {
+        'x-power-by': 'midway',
+      },
+    });
+
+    await httpclient.request(`http://127.1:${manager.getPort()}/`, {
+      dataType: 'json'
+    });
+
+    expect(httpclient.defaultOptions['dataType']).toBeUndefined();
+    manager.close();
+  });
 });
