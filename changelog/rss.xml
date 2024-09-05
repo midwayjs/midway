@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Mon, 02 Sep 2024 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 05 Sep 2024 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2024 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.17.2]]></title>
+            <link>https://midwayjs.org/changelog/v3.17.2</link>
+            <guid>https://midwayjs.org/changelog/v3.17.2</guid>
+            <pubDate>Thu, 05 Sep 2024 20:00:00 GMT</pubDate>
+            <description><![CDATA[Bug Fix]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="🐛 Bug Fix的直接链接" title="🐛 Bug Fix的直接链接">​</a></h2><ul><li><code>swagger</code><ul><li><a href="https://github.com/midwayjs/midway/pull/4050" target="_blank" rel="noopener noreferrer">#4050</a> fix(swagger): miss dto  description from schema (<a href="https://github.com/lengyuxuan" target="_blank" rel="noopener noreferrer">@lengyuxuan</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Committers: 1的直接链接" title="Committers: 1的直接链接">​</a></h2><ul><li>fangjin (<a href="https://github.com/lengyuxuan" target="_blank" rel="noopener noreferrer">@lengyuxuan</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.17.1]]></title>
             <link>https://midwayjs.org/changelog/v3.17.1</link>

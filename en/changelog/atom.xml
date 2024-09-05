@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://midwayjs.org/en/changelog</id>
     <title>Midway changelog</title>
-    <updated>2024-09-02T20:00:00.000Z</updated>
+    <updated>2024-09-05T20:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://midwayjs.org/en/changelog"/>
     <subtitle>Keep yourself up-to-date about new features in every release</subtitle>
     <icon>https://midwayjs.org/en/img/logo.svg</icon>
     <rights>Copyright © 2024 Facebook, Inc.</rights>
+    <entry>
+        <title type="html"><![CDATA[v3.17.2]]></title>
+        <id>https://midwayjs.org/en/changelog/v3.17.2</id>
+        <link href="https://midwayjs.org/en/changelog/v3.17.2"/>
+        <updated>2024-09-05T20:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Bug Fix]]></summary>
+        <content type="html"><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>swagger</code><ul><li><a href="https://github.com/midwayjs/midway/pull/4050" target="_blank" rel="noopener noreferrer">#4050</a> fix(swagger): miss dto  description from schema (<a href="https://github.com/lengyuxuan" target="_blank" rel="noopener noreferrer">@lengyuxuan</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>fangjin (<a href="https://github.com/lengyuxuan" target="_blank" rel="noopener noreferrer">@lengyuxuan</a>)</li></ul>]]></content>
+        <author>
+            <name>fangjin</name>
+            <uri>https://github.com/lengyuxuan</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[v3.17.1]]></title>
         <id>https://midwayjs.org/en/changelog/v3.17.1</id>
