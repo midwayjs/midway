@@ -156,6 +156,10 @@ export class SwaggerExplorer {
     return this.documentBuilder.build();
   }
 
+  public getDocumentBuilder() {
+    return this.documentBuilder;
+  }
+
   protected generatePath(target: Type) {
     // 获取控制器元数据
     const excludeClassMeta = getClassMetadata(
@@ -168,8 +172,8 @@ export class SwaggerExplorer {
       return;
     }
 
-    const generateTagForController =
-      this.swaggerConfig.generateTagForController ?? true;
+    const isGenerateTagForController =
+      this.swaggerConfig.isGenerateTagForController ?? true;
 
     // 解析额外的模型
     this.parseExtraModel(target);
@@ -198,33 +202,32 @@ export class SwaggerExplorer {
     const controllerTags = [];
     // 如果存在标签，则将其添加到文档构建器中
     if (tags.length > 0) {
-      for (const t of tags) {
-        // 这里 metadata => string[]
-        strTags = strTags.concat(t.metadata);
-        controllerTags.push(
-          Array.isArray(t.metadata) ? [t.metadata] : t.metadata
-        );
-        // this.documentBuilder.addTag(t.metadata);
-      }
+      strTags = parseTags(tags);
+      strTags.forEach(tag => {
+        addTag(tag, controllerTags);
+      });
     } else {
-      // 如果不存在标签，则根据控制器选项生成标签
-      const tag = { name: '', description: '' };
-      if (prefix !== '/') {
-        tag.name =
-          controllerOption?.routerOptions.tagName ||
-          (/^\//.test(prefix) ? prefix.split('/')[1] : prefix);
-        tag.description =
-          controllerOption?.routerOptions.description || tag.name;
+      if (isGenerateTagForController) {
+        // 如果不存在标签，则根据控制器选项生成标签
+        const tag = { name: '', description: '' };
+        if (prefix !== '/') {
+          tag.name =
+            controllerOption?.routerOptions.tagName ||
+            (/^\//.test(prefix) ? prefix.split('/')[1] : prefix);
+          tag.description =
+            controllerOption?.routerOptions.description || tag.name;
+        } else {
+          tag.name = controllerOption?.routerOptions.tagName;
+          tag.description =
+            controllerOption?.routerOptions.description || tag.name;
+        }
+        // 如果标签名存在，则将其添加到文档构建器中
+        if (tag.name) {
+          strTags.push(tag.name);
+          addTag([tag.name, tag.description], controllerTags);
+        }
       } else {
-        tag.name = controllerOption?.routerOptions.tagName;
-        tag.description =
-          controllerOption?.routerOptions.description || tag.name;
-      }
-      // 如果标签名存在，则将其添加到文档构建器中
-      if (tag.name) {
-        strTags.push(tag.name);
-        controllerTags.push([tag.name, tag.description]);
-        // this.documentBuilder.addTag(tag.name, tag.description);
+        // 否则不添加标签
       }
     }
 
@@ -310,7 +313,13 @@ export class SwaggerExplorer {
         // 如果当前路径的标签长度为0，则赋值标签
         if (paths[url][webRouter.requestMethod].tags.length === 0) {
           paths[url][webRouter.requestMethod].tags = strTags;
+        } else {
+          // 如果 tags 不在全局中，则添加
+          paths[url][webRouter.requestMethod].tags.forEach(tag => {
+            addTag(tag, controllerTags);
+          });
         }
+
         // 过滤出扩展信息
         const exts = metaForMethods.filter(
           item =>
@@ -375,6 +384,14 @@ export class SwaggerExplorer {
         item.propertyName === webRouter.method
     )[0];
 
+    const routerTagsMeta = metaForMethods.filter(
+      item =>
+        item.key === DECORATORS.API_TAGS &&
+        item.propertyName === webRouter.method
+    );
+
+    const routerTags = parseTags(routerTagsMeta);
+
     let opts: PathItemObject = paths[url];
     if (!opts) {
       opts = {};
@@ -389,7 +406,7 @@ export class SwaggerExplorer {
       operationId:
         operMeta?.metadata?.operationId ||
         this.getOperationId(target.name, webRouter),
-      tags: operMeta?.metadata?.tags || [],
+      tags: routerTags.length ? routerTags : operMeta?.metadata?.tags ?? [],
     };
     if (operMeta?.metadata?.deprecated != null) {
       opts[webRouter.requestMethod].deprecated =
@@ -686,93 +703,6 @@ export class SwaggerExplorer {
     return this.operationIdFactory(controllerKey, webRouter);
   }
 
-  /**
-   * 提取参数
-   * @param params
-   * @param p
-   */
-  protected parseFromParamsToP(paramMeta: any, p: any) {
-    if (paramMeta) {
-      const param = paramMeta.metadata;
-
-      if (param) {
-        p.description = param.description;
-        if (!p.name && param.name) {
-          p.name = param.name;
-        }
-        if (param.in === 'query') {
-          p.allowEmptyValue = param.allowEmptyValue || false;
-        }
-        if (typeof param.example !== undefined) {
-          p.example = param.example;
-        }
-        if (param.examples) {
-          p.examples = param.examples;
-        }
-        if (param.deprecated) {
-          p.deprecated = param.deprecated;
-        }
-        if (param.contentType) {
-          p.contentType = param.contentType;
-        }
-        p.in = param?.in ?? p.in;
-        p.required = param?.required ?? p.required;
-        if (p.in === 'query') {
-          p.style = 'form';
-        } else if (p.in === 'path' || p.in === 'header') {
-          p.style = 'simple';
-        } else if (p.in === 'cookie') {
-          p.style = 'form';
-        }
-        p.explode = p.style === 'form';
-        // response content
-        if (param?.content) {
-          p.content = param?.content;
-        }
-        if (param.schema) {
-          p.schema = param.schema;
-        } else {
-          if (param.type) {
-            if (Types.isClass(param.type)) {
-              this.parseClzz(param.type);
-
-              p.schema = {
-                $ref: '#/components/schemas/' + param.type.name,
-              };
-            }
-
-            if (param.isArray) {
-              let ref;
-              if (p?.schema?.$ref) {
-                ref = p.schema.$ref;
-              }
-
-              p.schema = {
-                type: 'array',
-                items: {
-                  format: param.format,
-                },
-              };
-              if (ref) {
-                p.schema.items.$ref = ref;
-              } else {
-                p.schema.items.type = convertSchemaType(param.type);
-              }
-            } else {
-              if (!p.schema) {
-                p.schema = {
-                  type: param.type ? convertSchemaType(param.type) : p.type,
-                  format: param.format || p.format,
-                };
-              }
-            }
-          } else if (param.format) {
-            p.schema.format = param.format;
-          }
-        }
-      }
-    }
-  }
   /**
    * 解析 ApiExtraModel
    * @param clzz
@@ -1245,8 +1175,38 @@ function parseTypeSchema(ref) {
   }
 }
 
-function transformTags(tags: string[] = []) {
-  return tags.map(tag => {
-    return Array.isArray(tag) ? tag : [tag];
-  });
+function parseTags(
+  tags: Array<{
+    metadata: string;
+  }>
+) {
+  let strTags: string[] = [];
+  if (tags.length > 0) {
+    for (const t of tags) {
+      // 这里 metadata => string[]
+      strTags = strTags.concat(t.metadata);
+    }
+  }
+  return strTags;
+}
+
+function addTag(newTag: string | string[], tags = []) {
+  /**
+   * tag 结构
+   * ['name', 'description'] 或者 'name'
+   */
+  if (
+    // 处理重复的标签
+    tags.find(t => {
+      if (Array.isArray(newTag)) {
+        return t === newTag[0];
+      } else {
+        return t === newTag;
+      }
+    })
+  ) {
+    // ignore
+  } else {
+    tags.push(newTag);
+  }
 }

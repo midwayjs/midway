@@ -440,7 +440,7 @@ export interface SwaggerOptions {
   /**
    * Weather to generate the Tag for controller
    */
-  generateTagForController?: boolean;
+  isGenerateTagForController?: boolean;
 }
 
 export interface MixDecoratorMetadata {
