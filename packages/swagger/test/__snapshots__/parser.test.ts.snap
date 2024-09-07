@@ -1174,6 +1174,16 @@ exports[`test @ApiOperation should test tags 1`] = `
       "externalDocs": undefined,
       "name": "api",
     },
+    {
+      "description": "",
+      "externalDocs": undefined,
+      "name": "tag1",
+    },
+    {
+      "description": "",
+      "externalDocs": undefined,
+      "name": "tag2",
+    },
   ],
 }
 `;
@@ -3293,7 +3303,8 @@ exports[`test @ApiTags should add router @ApiTags 1`] = `
         },
         "summary": undefined,
         "tags": [
-          "api",
+          "tag2",
+          "tag1",
         ],
       },
     },
@@ -3304,6 +3315,16 @@ exports[`test @ApiTags should add router @ApiTags 1`] = `
       "description": "api",
       "externalDocs": undefined,
       "name": "api",
+    },
+    {
+      "description": "",
+      "externalDocs": undefined,
+      "name": "tag2",
+    },
+    {
+      "description": "",
+      "externalDocs": undefined,
+      "name": "tag1",
     },
   ],
 }
@@ -3386,10 +3407,12 @@ exports[`test @ApiTags should test multi-tags 1`] = `
   "tags": [
     {
       "description": "",
+      "externalDocs": undefined,
       "name": "tag1",
     },
     {
       "description": "",
+      "externalDocs": undefined,
       "name": "tag2",
     },
   ],
