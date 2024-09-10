@@ -138,15 +138,18 @@ export class MainConfiguration {
 代码示例如下。
 
 ```typescript
+import { Consumer, Inject, KafkaListener, MSListenerType, Provide, ILogger } from "@midwayjs/core";
+import { Context, KafkaMessage } from "@midwayjs/kafka";
+
 @Provide()
 @Consumer(MSListenerType.KAFKA)
 export class UserConsumer {
 
   @Inject()
-  ctx: IMidwayKafkaContext;
+  ctx: Context;
 
   @Inject()
-  logger;
+  logger: ILogger;
 
   @KafkaListener('topic-test')
   async gotData(message: KafkaMessage) {
@@ -328,7 +331,7 @@ export interface KafkaListenerOptions {
 ```typeScript
 import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
-import { Context, Application } from '../../../../../src';
+import { Context, Application } from '@midwayjs/kafka';
 
 @Provide()
 @Consumer(MSListenerType.KAFKA)
