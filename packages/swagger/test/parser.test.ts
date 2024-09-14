@@ -794,10 +794,38 @@ describe('test @ApiTags', () => {
 
     const explorer = new CustomSwaggerExplorer();
     explorer.generatePath(APIController);
-    const data = explorer.getData() as any;
-    expect(data.tags.length).toBe(2);
-    expect(data.tags[0].name).toBe('tag1');
-    expect(data.tags[1].name).toBe('tag2');
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should add controller prefix for default tags when @ApiTag not set', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should add router @ApiTags', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiTags('tag1')
+      @ApiTags('tag2')
+      // @ApiOperation({ tags: ['tag3'] })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
   });
 
   it('should swagger tags duplicate', () => {
@@ -836,6 +864,181 @@ describe('test @ApiTags', () => {
     expect(data.tags.length).toBe(2);
     expect(data.tags[0].name).toBe('tag1');
     expect(data.tags[1].name).toBe('tag2');
+  });
+
+  it("should test priority router greater than controller", () => {
+    @Controller('/api')
+    @ApiTags('tag1')
+    class APIController {
+      @ApiTags('tag2')
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should test priority @ApiOperation greater than controller", () => {
+    @Controller('/api')
+    @ApiTags('tag1')
+    class APIController {
+      @ApiOperation({ tags: ['tag3'] })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should test priority router greater than controller and @ApiOperation", () => {
+    @Controller('/api')
+    @ApiTags('tag1')
+    class APIController {
+      @ApiTags('tag2')
+      @ApiOperation({ tags: ['tag3'] })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should test priority router greater than controller and @ApiOperation but will merge tags", () => {
+    @Controller('/api')
+    @ApiTags(['tag1', 'tag2', 'tag3'])
+    class APIController {
+      @ApiTags('tag2')
+      @ApiOperation({ tags: ['tag3'] })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should test priority router greater than controller and @ApiOperation but will merge tags 2", () => {
+    @Controller('/api')
+    @ApiTags(['tag1', 'tag2', 'tag3'])
+    class APIController {
+      @ApiTags(['tag2', 'tag4'])
+      @ApiOperation({ tags: ['tag3'] })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should test priority router greater without controller tag", () => {
+    @Controller('/api')
+    class APIController {
+      @ApiTags('tag2')
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Post('/update_user_1')
+      async updateUser1() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'].isGenerateTagForController = false;
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should test priority @ApiOperation without controller tag", () => {
+    @Controller('/api')
+    class APIController {
+      @ApiOperation({ tags: ['tag3'] })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+
+      @Post('/update_user_1')
+      async updateUser1() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'].isGenerateTagForController = false;
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should test priority router greater without controller tag", () => {
+    @Controller('/api')
+    class APIController {
+      @ApiTags('tag2')
+      @ApiOperation({ tags: ['tag3'] })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+      @Post('/update_user_1')
+      async updateUser1() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'].isGenerateTagForController = false;
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should test add tag description in controller", () => {
+    @Controller('/api', { middleware: []})
+    class APIController {
+      @Post('/update_user')
+      @ApiOperation({
+        tags: ['tag1'],
+        summary: 'it is summary',
+        description: 'tag1 description'
+      })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    explorer.getDocumentBuilder().addTag('tag1', 'tag1 description');
+    const data = explorer.getData() as any;
+    expect(data).toMatchSnapshot();
   });
 });
 

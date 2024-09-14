@@ -13,4 +13,5 @@ export const swagger: SwaggerOptions = {
       ? renderSwaggerUIDist
       : renderSwaggerUIRemote,
   swaggerUIRenderOptions: {},
+  isGenerateTagForController: true,
 };
