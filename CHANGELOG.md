@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.17.3 (2024-09-14)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#4075](https://github.com/midwayjs/midway/pull/4075) fix: swagger body array type ([@czy88840616](https://github.com/czy88840616))
+  * [#4062](https://github.com/midwayjs/midway/pull/4062) fix: swagger api tag for router ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `cos`
+  * [#4073](https://github.com/midwayjs/midway/pull/4073) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4067](https://github.com/midwayjs/midway/pull/4067) fix(deps): update dependency express to v4.20.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4066](https://github.com/midwayjs/midway/pull/4066) fix(deps): update dependency body-parser to v1.20.3 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`, `bull`
+  * [#4072](https://github.com/midwayjs/midway/pull/4072) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4059](https://github.com/midwayjs/midway/pull/4059) fix(deps): update dependency @grpc/grpc-js to v1.11.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#4060](https://github.com/midwayjs/midway/pull/4060) fix(deps): update dependency axios to v1.7.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.17.2 (2024-09-05)
 
 #### :bug: Bug Fix

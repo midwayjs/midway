@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/static-file",
   "description": "midway static file component",
-  "version": "3.17.1",
+  "version": "3.17.3",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -19,7 +19,7 @@
     "@midwayjs/faas": "^3.17.1",
     "@midwayjs/koa": "^3.17.1",
     "@midwayjs/mock": "^3.17.1",
-    "@midwayjs/serverless-app": "^3.17.1"
+    "@midwayjs/serverless-app": "^3.17.3"
   },
   "keywords": [
     "midway",
