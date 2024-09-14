@@ -30,7 +30,7 @@ The differences from the upload component are:
 
 * 2. The middleware is no longer loaded by default, and can be manually configured to the global or route
 
-* 3. The fieldName field is no longer provided for streaming upload, and the input parameter definition type is adjusted to `UploadStreamFileInfo`
+* 3. the input parameter definition type is adjusted to `UploadStreamFileInfo`
 
 * 4. The configuration of `fileSize` has been adjusted
 
@@ -231,6 +231,7 @@ export class HomeController {
         filename: 'test.pdf',        // file name
         data: '/var/tmp/xxx.pdf',    // Server temporary file address
         mimeType: 'application/pdf', // mime
+        fieldName: 'file'            // field name
       },
       // ...Support uploading multiple files at the same time under file
     ]
@@ -302,6 +303,7 @@ export class HomeController {
         filename: 'test.pdf',        // file name
         data: ReadStream,    				 // file stream
         mimeType: 'application/pdf', // mime
+        fieldName: 'file'            // field name
       },
     ]
 

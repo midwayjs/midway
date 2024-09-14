@@ -1,4 +1,4 @@
-import { Configuration, Controller, Fields, Inject, Post, File, Get, App } from '@midwayjs/core';
+import { Configuration, Controller, Fields, Inject, Post, Get, App, Files } from "@midwayjs/core";
 import * as koa from '@midwayjs/koa';
 import { createWriteStream, statSync } from 'fs'
 import { join } from 'path';
@@ -40,21 +40,26 @@ export class HomeController {
     return 'home'
   }
   @Post('/upload')
-  async upload(@File() file: upload.UploadStreamFileInfo, @Fields() fields) {
-    const path = join(__dirname, '../logs/test.pdf');
-    const stream = createWriteStream(path);
-    const end = new Promise(resolve => {
-      stream.on('close', () => {
-        resolve(void 0)
+  async upload(@Files() files: Array<upload.UploadStreamFileInfo>, @Fields() fields) {
+    for(let file of files) {
+      const path = join(__dirname, `../logs/${file.fieldName}.pdf`);
+      const stream = createWriteStream(path);
+      const end = new Promise(resolve => {
+        stream.on('close', () => {
+          resolve(void 0)
+        });
       });
-    });
-    file.data.pipe(stream);
-    await end;
-    const stat = statSync(path);
+
+      file.data.pipe(stream);
+      await end;
+    }
+
+    const stat = statSync(join(__dirname, `../logs/${files[0].fieldName}.pdf`));
     return {
       size: stat.size,
-      files: [file],
-      fields
+      files,
+      fields,
+      fieldName: files[0].fieldName,
     }
   }
 }

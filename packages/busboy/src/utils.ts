@@ -1,5 +1,6 @@
 import { promises, constants } from 'fs';
 import { join } from 'path';
+import { Readable } from 'stream';
 const { readdir, access, stat, unlink, mkdir } = promises;
 let autoRemoveUploadTmpFileTimeoutHandler;
 let autoRemoveUploadTmpFilePromise;
@@ -91,3 +92,11 @@ export const formatExt = (ext: string): string => {
     })
     .toString();
 };
+
+export async function* streamToAsyncIterator(
+  stream: Readable
+): AsyncGenerator<any> {
+  for await (const chunk of stream) {
+    yield chunk;
+  }
+}

@@ -28,7 +28,7 @@ import TabItem from '@theme/TabItem';
 
 * 1、配置的 key 从 `upload` 调整为 `busboy`
 * 2、中间件不再默认加载，手动可配置到全局或者路由
-* 3、流式上传时不再提供 fieldName 字段，入参定义类型调整为 `UploadStreamFileInfo`
+* 3、入参定义类型调整为 `UploadStreamFileInfo`
 * 4、`fileSize` 的配置有调整
 
 :::
@@ -232,6 +232,7 @@ export class HomeController {
         filename: 'test.pdf',        // 文件原名
         data: '/var/tmp/xxx.pdf',    // 服务器临时文件地址
         mimeType: 'application/pdf', // mime
+        fieldName: 'file'            // field name
       },
       // ...file 下支持同时上传多个文件
     ]
@@ -304,8 +305,9 @@ export class HomeController {
     files = [
       {
         filename: 'test.pdf',        // 文件原名
-        data: ReadStream,    				 // 文件流
+        data: ReadStream,            // 文件流
         mimeType: 'application/pdf', // mime
+        fieldName: 'file'            // field name
       },
     ]
 

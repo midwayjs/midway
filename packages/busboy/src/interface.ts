@@ -2,7 +2,7 @@ import { Readable } from 'stream';
 import { IgnoreMatcher, IMidwayContext } from '@midwayjs/core';
 import { BusboyConfig } from 'busboy';
 
-export type UploadMode = 'stream' | 'file';
+export type UploadMode = 'stream' | 'file' | 'asyncIterator';
 
 export interface UploadOptions extends BusboyConfig {
   /**
@@ -52,6 +52,10 @@ export interface UploadFileInfo {
    * file data, a string of path
    */
   data: string;
+  /**
+   * field name
+   */
+  fieldName: string;
 }
 
 export interface UploadStreamFileInfo {
@@ -66,7 +70,21 @@ export interface UploadStreamFileInfo {
   /**
    * file data, Readable stream
    */
-  data: Readable ;
+  data: Readable;
+  /**
+   * field name
+   */
+  fieldName: string;
 }
 
+export interface UploadStreamFieldInfo {
+  /**
+   * field name
+   */
+  name: string;
+  /**
+   * field value
+   */
+  value: any;
+}
 
