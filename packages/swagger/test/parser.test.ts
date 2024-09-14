@@ -416,6 +416,37 @@ describe('test @ApiBody', () => {
     expect(explorer.getData()).toMatchSnapshot();
   });
 
+  it('should test ApiBody with array false', () => {
+    class Cat {
+      /**
+       * The name of the Catcomment
+       * @example Kitty
+       */
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+
+      @ApiProperty({ example: 1, description: 'The age of the Cat' })
+      age: number;
+    }
+
+    @Controller('/api')
+    @ApiExtraModel(Cat)
+    class APIController {
+      @Post('/update_user')
+      @ApiBody({
+        type: Cat,
+        isArray: false,
+      })
+      async updateUser(@Body() cat: Cat[]) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
   it('should test ApiBody with example', () => {
     class Cat {
       @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })

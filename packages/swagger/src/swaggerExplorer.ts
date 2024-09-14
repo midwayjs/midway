@@ -438,7 +438,7 @@ export class SwaggerExplorer {
           param.metadata.schema['type'] = param.metadata.type;
           delete param.metadata.type;
         }
-        if (param.metadata.isArray !== undefined) {
+        if (param.metadata.isArray) {
           param.metadata.schema['items'] = {
             type: param.metadata.schema['type'],
           };
