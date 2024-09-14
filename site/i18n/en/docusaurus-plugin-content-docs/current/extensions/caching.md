@@ -403,7 +403,9 @@ export default {
      clients: {
        default: {
          store: 'memory',
-         refreshThreshold: 3 * 1000,
+         options: {
+           refreshThreshold: 3 * 1000,
+         },
        },
      },
    }
