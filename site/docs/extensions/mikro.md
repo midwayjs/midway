@@ -100,6 +100,7 @@ export class MainConfiguration {
 ```
 
 
+
 ## 基础使用
 
 和其他 orm 框架类似，都是分为几个步骤：
@@ -109,6 +110,29 @@ export class MainConfiguration {
 - 3、获取 EntityModel 进行调用
 
 下面的更多 Entity 代码请查看 [示例](https://github.com/midwayjs/midway/tree/main/packages/mikro/test/fixtures/base-fn-origin)。
+
+
+
+### 目录结构
+
+一个基础的参考目录结构如下。
+
+```
+MyProject
+├── src
+│   ├── config
+│   │   └── config.default.ts
+│   ├── entity
+│   │   ├── book.entity.ts
+│   │   ├── index.ts
+│   │   └── base.ts
+│   ├── configuration.ts
+│   └── service
+├── .gitignore
+├── package.json
+├── README.md
+└── tsconfig.json
+```
 
 
 
@@ -137,9 +161,10 @@ export abstract class BaseEntity {
 定义实际的 Entity，包含一对多，多对多等关系。
 
 ```typescript
+// src/entity/book.entity.ts
 import { Cascade, Collection, Entity, ManyToMany, ManyToOne, Property } from '@mikro-orm/core';
 import { Author, BookTag, Publisher } from './index';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntity } from './base';
 
 @Entity()
 export class Book extends BaseEntity {
@@ -194,10 +219,16 @@ export default (appInfo) => {
     mikro: {
       dataSource: {
         default: {
-          entities: [Author, Book, BookTag, Publisher, BaseEntity],
           dbName: join(__dirname, '../../test.sqlite'),
           driver: SqliteDriver,		// 这里使用了 sqlite 做示例
           allowGlobalContext: true,
+          // 实体形式
+          entities: [Author, Book, BookTag, Publisher, BaseEntity],
+          // 支持如下的扫描形式，为了兼容我们可以同时进行.js和.ts匹配️
+          entities: [
+            'entity',                        // 指定目录
+            '**/entity/*.entity.{j,t}s',     // 通配加后缀匹配
+          ],
         }
       }
     }
@@ -219,10 +250,16 @@ export default (appInfo) => {
     mikro: {
       dataSource: {
         default: {
-          entities: [Author, Book, BookTag, Publisher, BaseEntity],
           dbName: join(__dirname, '../../test.sqlite'),
           type: 'sqlite',			// 这里使用了 sqlite 做示例
           allowGlobalContext: true,
+          // 实体形式
+          entities: [Author, Book, BookTag, Publisher, BaseEntity],
+          // 支持如下的扫描形式，为了兼容我们可以同时进行.js和.ts匹配️
+          entities: [
+            'entity',                        // 指定目录
+            '**/entity/*.entity.{j,t}s',     // 通配加后缀匹配
+          ],
         }
       }
     }
@@ -233,7 +270,11 @@ export default (appInfo) => {
 </TabItem>
 </Tabs>
 
-如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
+:::tip
+
+mikro 的 `entities` 字段配置已经经过框架处理，该字段配置请不要参考原始文档。
+
+:::
 
 
 
@@ -249,7 +290,8 @@ export default (appInfo) => {
 :::
 
 ```typescript
-import { Book } from './entity';
+// src/service/book.service.ts
+import { Book } from './entity/book.entity';
 import { Provide } from '@midwayjs/core';
 import { InjectEntityManager, InjectRepository } from '@midwayjs/mikro';
 import { QueryOrder } from '@mikro-orm/core';

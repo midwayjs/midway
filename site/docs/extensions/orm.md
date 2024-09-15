@@ -431,20 +431,16 @@ export default {
         username: '*******',
         password: '*******',
         database: undefined,
-        synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
+        synchronize: false,		    // 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
         logging: false,
 
         // 配置实体模型
         entities: [Photo],
 
-        // 支持如下的扫描形式，为了兼容我们可以同时进行.js和.ts匹配，⬇️
+        // 支持如下的扫描形式，为了兼容我们可以同时进行.js和.ts匹配
         entities: [
-          'entity',             // 特定目录
-          '**/abc/**',          // 仅获取包含 abc 字符的目录下的文件
-          'abc/**/*.{j,t}s',        // 特定目录 + 通配
-          'abc/*.entity.{j,t}s',    // 匹配后缀
+          'entity',                 // 特定目录
           '**/*.entity.{j,t}s',     // 通配加后缀匹配
-          '**/*.{j,t}s',        // 后缀匹配
         ]
       }
     }
@@ -453,13 +449,9 @@ export default {
 ```
 :::tip
 
-如果使用的数据库已经有表结构同步的功能，比如云数据库，最好不要开启。如果一定要使用，synchronize 配置最好仅在开发阶段，或者第一次使用，避免造成一致性问题。
-
+- 1. 如果使用的数据库已经有表结构同步的功能，比如云数据库，最好不要开启。如果一定要使用，synchronize 配置最好仅在开发阶段，或者第一次使用，避免造成一致性问题。
+- 2. `entities` 字段配置已经经过框架处理，该字段配置请不要参考原始文档。
 :::
-
-如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
-
-
 
 
  `type` 字段你可以使用其他的数据库类型，包括`mysql`, `mariadb`, `postgres`, `cockroachdb`, `sqlite`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
