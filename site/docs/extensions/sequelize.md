@@ -86,6 +86,28 @@ npm install mongodb --save
 
 下面的文档，我们将以 `mysql2` 作为示例。
 
+
+### Directory structure
+
+一个基础的参考目录结构如下。
+
+
+```
+MyProject
+├── src
+│   ├── config
+│   │   └── config.default.ts
+│   ├── entity
+│   │   └── person.entity.ts
+│   ├── configuration.ts
+│   └── service
+├── .gitignore
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
+
 ## 启用组件
 
 在 `src/configuration.ts` 文件中启用组件。
@@ -113,10 +135,10 @@ export class MainConfiguration implements ILifeCycle {
 
 我们通过模型和数据库关联，在应用中的模型就是数据库表，在 Sequelize 中，模型是和实体绑定的，每一个实体（Entity) 文件，即是 Model，也是实体（Entity）。
 
-在示例中，需要一个实体，我们这里拿 `person` 举例。新建 entity 目录，在其中添加实体文件 `person.ts` ，一个简单的实体如下。
+在示例中，需要一个实体，我们这里拿 `person` 举例。新建 entity 目录，在其中添加实体文件 `person.entity.ts` ，一个简单的实体如下。
 
 ```typescript
-// src/entity/person.ts
+// src/entity/person.entity.ts
 import { Table, Model, Column, HasMany } from 'sequelize-typescript';
 
 @Table
@@ -255,7 +277,7 @@ export class Person extends Model {
 ```typescript
 // src/config/config.default.ts
 
-import { Person } from '../entity/person';
+import { Person } from '../entity/person.entity';
 
 export default {
   // ...
@@ -272,9 +294,17 @@ export default {
         dialect: 'mysql',
         define: { charset: 'utf8' },
         timezone: '+08:00',
-        entities: [Person],
         // 本地的时候，可以通过 sync: true 直接 createTable
         sync: false,
+        
+        // 实体形式
+        entities: [Person],
+
+        // 支持如下的扫描形式，为了兼容我们可以同时进行.js和.ts匹配️
+        entities: [
+          'entity',                        // 指定目录
+          '**/entity/*.entity.{j,t}s',     // 通配加后缀匹配
+        ],
       },
 
       // 第二个数据源
@@ -285,8 +315,6 @@ export default {
   },
 };
 ```
-
-如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
 
 
 
@@ -387,7 +415,7 @@ books: Array<Book & {BookAuthor: BookAuthor}>;
 
 ```typescript
 import { Table, Column, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
-import { User } from './User';
+import { User } from './user.entity';
 
 @Table
 export class Photo extends Model {
@@ -427,7 +455,7 @@ ReferenceError: Cannot access 'Photo' before initialization
 
 ```typescript
 import { Table, Column, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
-import { User } from './User';
+import { User } from './user.entity';
 
 @Table
 export class Photo extends Model {
@@ -451,7 +479,7 @@ export class Photo extends Model {
 
 ```typescript
 import { Provide } from '@midwayjs/core';
-import { Person } from '../entity/person';
+import { Person } from '../entity/person.entity';
 
 @Provide()
 export class PersonService {
@@ -466,7 +494,7 @@ export class PersonService {
 
 ```typescript
 import { Provide } from '@midwayjs/core';
-import { Person } from '../entity/person';
+import { Person } from '../entity/person.entity';
 
 @Provide()
 export class PersonService {
@@ -499,7 +527,7 @@ Repository 模式可以将查找、创建等静态操作从模型定义中分离
 ```typescript
 // src/config/config.default.ts
 
-import { Person } from '../entity/person';
+import { Person } from '../entity/person.entity';
 
 export default {
   // ...
@@ -529,8 +557,8 @@ export default {
 ```typescript
 import { Controller, Get } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
-import { Photo } from '../entity/photo';
-import { User } from '../entity/user';
+import { Photo } from '../entity/photo.entity';
+import { User } from '../entity/user.entity';
 import { Op } from 'sequelize';
 import { Repository } from 'sequelize-typescript';
 
@@ -585,8 +613,8 @@ export class HomeController {
 ```typescript
 import { Controller } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
-import { Photo } from '../entity/photo';
-import { User } from '../entity/user';
+import { Photo } from '../entity/photo.entity';
+import { User } from '../entity/user.entity';
 import { Repository } from 'sequelize-typescript';
 
 @Controller('/')

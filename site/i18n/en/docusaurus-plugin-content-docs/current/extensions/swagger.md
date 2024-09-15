@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Swagger
 Based on the latest [OpenAPI 3.0.3](https://swagger.io/specification/), the new version of Swagger components is implemented.
 
@@ -499,8 +502,6 @@ export class CreateCatDto {
 ```
 
 The Swagger UI shows:
-
-Swagger UI 中展示：
 ![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
 
 
@@ -699,8 +700,21 @@ There are more ways to write in Swagger, and the framework supports them. For mo
 
 ## Advanced usage
 
-### Routing label
-Swagger labels paths. If no labels are defined in the Controller, they are grouped under default by default. Controller labels can be customized by ```@ApiTags([...])```.
+### Route Tags
+Swagger can add tags to each route for grouping.
+
+There are two ways to add tags.
+
+<Tabs>
+<TabItem value="controller" label="Add to Controller">
+By default, the framework generates tags based on the Controller's path. For example, the following code will generate a `hello` tag, which will apply to all routes in this controller.
+
+```typescript
+@Controller('/hello')
+export class HelloController {}
+```
+
+If you need to customize the tags, you can use `@ApiTags([...])` to customize the Controller tags.
 
 ```typescript
 @ApiTags(['hello'])
@@ -708,7 +722,56 @@ Swagger labels paths. If no labels are defined in the Controller, they are group
 export class HelloController {}
 ```
 
-A description can be added to Tag through configuration.
+Starting from `v3.17.3`, you can control whether to automatically generate Controller tags by configuring `isGenerateTagForController`.
+
+```typescript
+// src/config/config.default.ts
+export default {
+  swagger: {
+    isGenerateTagForController: false
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="router" label="@ApiTags and @ApiOperation">
+
+You can add `@ApiTags` directly to the route method.
+
+```typescript
+// ...
+export class HomeController {
+  @ApiTags(['bbb'])
+  @Get('/')
+  async home(): Promise<string> {
+    // ...
+  }
+}
+```
+
+You can also add tags through `@ApiOperation`.
+
+```typescript
+// ...
+export class HomeController {
+  @ApiOperation({ tags: ['bbb'] })
+  @Get('/')
+  async home(): Promise<string> {
+    // ...
+  }
+}
+```
+
+The priority of `@ApiTags` is higher than `@ApiOperation`. If both exist, `@ApiTags` will override `@ApiOperation`.
+
+Similarly, `@ApiTags` on the route will also override `@ApiTags` on the controller.
+
+</TabItem>
+
+</Tabs>
+
+You can add descriptions to Tags by configuring.
 
 ```typescript
 // src/config/config.default.ts
@@ -727,21 +790,8 @@ export default {
     ]
   }
 }
-
 ```
 
-It can also be added to the routing method.
-
-```typescript
-// ...
-export class HomeController {
-  @ApiTags(['bbb'])
-  @Get('/')
-  async home(@Body() dto?: Photo): Promise<string> {
-    return 'Hello Midwayjs!';
-  }
-}
-```
 
 
 
@@ -777,7 +827,7 @@ export class HelloController {}
 
 #### **bearer**
 
-启用 bearer 验证（bearerFormat 为 JWT）
+Enable bearer authentication (with bearerFormat set to JWT).
 
 ```typescript
 // src/config/config.default.ts

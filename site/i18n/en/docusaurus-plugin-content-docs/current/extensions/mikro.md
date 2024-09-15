@@ -112,6 +112,28 @@ Similar to other orm frameworks, they are divided into several steps:
 For more information about Entity code, see [Example](https://github.com/midwayjs/midway/tree/main/packages/mikro/test/fixtures/base-fn-origin).
 
 
+### Directory structure
+
+A basic reference directory structure is as follows.
+
+
+```
+MyProject
+├── src
+│   ├── config
+│   │   └── config.default.ts
+│   ├── entity
+│   │   ├── book.entity.ts
+│   │   ├── index.ts
+│   │   └── base.ts
+│   ├── configuration.ts
+│   └── service
+├── .gitignore
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
 
 ### Define Entity
 
@@ -138,9 +160,10 @@ export abstract class BaseEntity {
 Define the actual Entity, including one-to-many, many-to-many relationships.
 
 ```typescript
+// src/entity/book.entity.ts
 import { Cascade, Collection, Entity, ManyToMany, ManyToOne, Property } from '@mikro-orm/core';
 import { Author, BookTag, Publisher } from './index';
-import { BaseEntity } from './BaseEntity';
+import { BaseEntity } from './base';
 
 @Entity()
 export class Book extends BaseEntity {
@@ -195,10 +218,16 @@ export default (appInfo) => {
     mikro: {
       dataSource: {
         default: {
-          entities: [Author, Book, BookTag, Publisher, BaseEntity],
           dbName: join(__dirname, '../../test.sqlite'),
           driver: SqliteDriver,		// SQLite is used as an example here.
           allowGlobalContext: true,
+          // Object format
+          entities: [Author, Book, BookTag, Publisher, BaseEntity],
+          // The following scanning form is supported. For compatibility, we can match both .js and .ts files at the same time
+          entities: [
+            'entity',                        // Specify the directory
+            '**/entity/*.entity.{j,t}s',     // Wildcard with suffix matching
+          ],
         }
       }
     }
@@ -221,10 +250,16 @@ export default (appInfo) => {
     mikro: {
       dataSource: {
         default: {
-          entities: [Author, Book, BookTag, Publisher, BaseEntity]
           dbName: join(__dirname, '../../test.sqlite')
           Type: 'sqlite', // SQLite is used as an example here.
-          allowGlobalContext: true
+          allowGlobalContext: true,
+          // Object format
+          entities: [Author, Book, BookTag, Publisher, BaseEntity],
+          // The following scanning form is supported. For compatibility, we can match both .js and .ts files at the same time
+          entities: [
+            'entity',                        // Specify the directory
+            '**/entity/*.entity.{j,t}s',     // Wildcard with suffix matching
+          ],
         }
       }
     }
@@ -236,7 +271,11 @@ export default (appInfo) => {
 </TabItem>
 </Tabs>
 
-For association in the form of a directory scan, please refer to [Data Source Management](../data_source).
+:::tip
+
+The `entities` field configuration of mikro has been processed by the framework, please do not refer to the original document.
+
+:::
 
 
 
@@ -253,7 +292,8 @@ You can also get `EntityManager` by calling `repository.getEntityManger()`.
 :::
 
 ```typescript
-import { Book } from './entity';
+// src/service/book.service.ts
+import { Book } from './entity/book.entity';
 import { Provide } from '@midwayjs/core';
 import { InjectEntityManager, InjectRepository } from '@midwayjs/mikro';
 import { QueryOrder } from '@mikro-orm/core';

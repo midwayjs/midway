@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Swagger
 基于最新的 [OpenAPI 3.0.3](https://swagger.io/specification/) 实现了新版的 Swagger 组件。
 
@@ -701,13 +704,76 @@ Swagger 中还有更多的写法，框架都进行了支持，更多用法可以
 ## 更多配置
 
 ### 路由标签
-Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则会默认归组到 default 下。可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
+Swagger 可以对每个路由添加标签，进行分组。
+
+标签添加有两种形式。
+
+<Tabs>
+<TabItem value="controller" label="添加到控制器">
+默认情况下，框架会根据 Controller 的路径来生成标签，比如下面的代码，会生成一个 `hello` 的标签，这个标签会应用到这个控制器所有的路由上。
+
+```typescript
+@Controller('/hello')
+export class HelloController {}
+```
+
+如果需要自定义标签，可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
 
 ```typescript
 @ApiTags(['hello'])
 @Controller('/hello')
 export class HelloController {}
 ```
+
+从 `v3.17.3` 开始，可以通过配置 `isGenerateTagForController` 来控制是否自动生成 Controller 标签。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  swagger: {
+    isGenerateTagForController: false
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="router" label="@ApiTags 和 @ApiOperation">
+
+可以将 `@ApiTags` 标签直接加在路由方法上。
+
+```typescript
+// ...
+export class HomeController {
+  @ApiTags(['bbb'])
+  @Get('/')
+  async home(): Promise<string> {
+    // ...
+  }
+}
+```
+
+也可以通过 `@ApiOperation` 来添加标签。
+
+```typescript
+// ...
+export class HomeController {
+  @ApiOperation({ tags: ['bbb'] })
+  @Get('/')
+  async home(): Promise<string> {
+    // ...
+  }
+}
+```
+
+`@ApiTags` 的优先级比 `@ApiOperation` 更高，如果两者同时存在，`@ApiTags` 会覆盖 `@ApiOperation`。
+
+同理，路由上的 `@ApiTags` 也会覆盖控制器上的 `@ApiTags`。
+
+</TabItem>
+
+</Tabs>
+
 
 可以通过配置给 Tag 添加描述。
 
@@ -730,22 +796,6 @@ export default {
 }
 
 ```
-
-也可以加在路由方法上。
-
-```typescript
-// ...
-export class HomeController {
-  @ApiTags(['bbb'])
-  @Get('/')
-  async home(@Body() dto?: Photo): Promise<string> {
-    return 'Hello Midwayjs!';
-  }
-}
-```
-
-
-
 
 
 ### 授权验证
