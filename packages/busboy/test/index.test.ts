@@ -118,7 +118,13 @@ describe('/test/index.test.ts', () => {
     class APIController {
       @Post('/upload', { middleware: [UploadMiddleware]})
       async upload(ctx) {
-        // TODO
+        // throw error
+        // const fs = createWriteStream(join(tmpdir(), ctx.files[0].filename));
+        // ctx.files[0].data.pipe(fs);
+        //
+        // await new Promise(resolve => {
+        //   fs.on('finish', resolve);
+        // });
       }
     }
 

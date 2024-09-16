@@ -101,8 +101,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         return next();
       }
 
-      const { mode, tmpdir } = uploadConfig;
-      const useAsyncIterator = mode === 'asyncIterator';
+      const useAsyncIterator = uploadConfig.mode === 'asyncIterator';
 
       // create new map include custom white list
       const currentContextWhiteListMap = new Map([
@@ -149,258 +148,322 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       };
 
       if (this.isReadableStream(req, isExpress)) {
-        let isStreamResolve = false;
-        const { files = [], fields = [] } = await new Promise<any>(
-          (resolveP, reject) => {
-            const bb = busboy({
-              headers: req.headers,
-              ...uploadConfig,
-            });
-            let fields:
-              | Array<UploadStreamFieldInfo>
-              | AsyncGenerator<UploadStreamFieldInfo>;
-            let files:
-              | Array<UploadFileInfo | UploadStreamFileInfo>
-              | AsyncGenerator;
-
-            if (useAsyncIterator) {
-              const fileReadable = new Readable({
-                objectMode: true,
-                read() {},
-              });
-
-              const fieldReadable = new Readable({
-                objectMode: true,
-                read() {},
-              });
-
-              bb.on('file', (name, file, info) => {
-                const { filename, encoding, mimeType } = info;
-                const ext = this.checkAndGetExt(
-                  filename,
-                  currentContextWhiteListMap
-                );
-                if (!ext) {
-                  reject(new MultipartInvalidFilenameError(filename));
-                }
-
-                file.once('limit', () => {
-                  reject(new MultipartFileSizeLimitError(filename));
-                });
-
-                fileReadable.push({
-                  fieldName: name,
-                  filename,
-                  mimeType,
-                  encoding,
-                  data: file,
-                });
-              });
-
-              bb.on('field', (name, value, info) => {
-                fieldReadable.push({
-                  name,
-                  value,
-                  info,
-                });
-              });
-
-              bb.on('close', () => {
-                fileReadable.push(null);
-                fieldReadable.push(null);
-              });
-              files = streamToAsyncIterator(fileReadable);
-              fields = streamToAsyncIterator(fieldReadable);
-            } else {
-              files = [];
-              fields = [];
-              bb.on('file', async (name, file, info) => {
-                const { filename, encoding, mimeType } = info;
-                const ext = this.checkAndGetExt(
-                  filename,
-                  currentContextWhiteListMap
-                );
-                if (!ext) {
-                  reject(new MultipartInvalidFilenameError(filename));
-                }
-
-                file.once('limit', () => {
-                  reject(new MultipartFileSizeLimitError(filename));
-                });
-
-                if (mode === 'stream') {
-                  if (isStreamResolve) {
-                    // will be skip
-                    file.resume();
-                    return;
-                  }
-                  (files as Array<any>).push({
-                    fieldName: name,
-                    filename,
-                    encoding,
-                    mimeType,
-                    data: file,
-                  });
-                  isStreamResolve = true;
-                  // busboy 这里无法触发 close 事件，所以这里直接 resolve
-                  return resolveP({
-                    fields,
-                    files,
-                  });
-                } else {
-                  // file mode
-                  const requireId = `upload_${Date.now()}.${Math.random()}`;
-                  // read stream pipe to temp file
-                  const tempFile = resolve(tmpdir, `${requireId}${ext}`);
-                  // get buffer from stream, and check file type
-                  file.once('data', async chunk => {
-                    const { passed, mime, current } = await this.checkFileType(
-                      ext as string,
-                      chunk,
-                      currentContextMimeTypeWhiteListMap
-                    );
-                    if (!passed) {
-                      file.pause();
-                      reject(
-                        new MultipartInvalidFileTypeError(
-                          filename,
-                          current,
-                          mime
-                        )
-                      );
-                    }
-                  });
-                  const writeStream = file.pipe(createWriteStream(tempFile));
-                  writeStream.on('error', reject);
-                  writeStream.on('finish', () => {
-                    (files as Array<any>).push({
-                      filename,
-                      mimeType,
-                      encoding,
-                      fieldName: name,
-                      data: tempFile,
-                    });
-                  });
-                }
-              });
-              bb.on('field', (name, value, info) => {
-                (fields as Array<any>).push({
-                  name,
-                  value,
-                  info,
-                });
-              });
-            }
-
-            bb.on('error', (err: Error) => {
-              reject(new MultipartError(err));
-            });
-            bb.on('partsLimit', () => {
-              reject(new MultipartPartsLimitError());
-            });
-            bb.on('filesLimit', () => {
-              reject(new MultipartFileLimitError());
-            });
-            bb.on('fieldsLimit', () => {
-              reject(new MultipartFieldsLimitError());
-            });
-            bb.on('close', () => {
-              resolveP({
-                fields,
-                files,
-              });
-            });
-
-            req.pipe(bb);
-
-            if (useAsyncIterator) {
-              // 迭代器需要手动返回
-              resolveP({
-                fields,
-                files,
-              });
-            }
-          }
-        );
-        ctxOrReq.files = files;
-
         if (useAsyncIterator) {
-          ctxOrReq.fields = fields;
+          await this.processAsyncIterator(
+            req,
+            uploadConfig,
+            currentContextWhiteListMap,
+            ctxOrReq
+          );
         } else {
-          ctxOrReq.fields = fields.reduce((accumulator, current) => {
-            accumulator[current.name] = current.value;
-            return accumulator;
-          }, {});
+          await this.processFileOrStream(
+            req,
+            uploadConfig,
+            currentContextWhiteListMap,
+            currentContextMimeTypeWhiteListMap,
+            ctxOrReq
+          );
         }
       } else {
-        let body;
-        if (
-          req?.originEvent?.body &&
-          (typeof req.originEvent.body === 'string' ||
-            Buffer.isBuffer(req.originEvent.body))
-        ) {
-          body = req.originEvent.body;
-        } else {
-          body = req.body;
-        }
-
-        const data = await parseMultipart(body, boundary, uploadConfig);
-        if (!data) {
-          return next();
-        }
-
-        ctxOrReq.fields = data.fields;
-        const requireId = `upload_${Date.now()}.${Math.random()}`;
-        const files = data.files;
-        for (const fileInfo of files) {
-          const ext = this.checkAndGetExt(
-            fileInfo.filename,
-            currentContextWhiteListMap
-          );
-          if (!ext) {
-            throw new MultipartInvalidFilenameError(fileInfo.filename);
-          }
-          const { passed, mime, current } = await this.checkFileType(
-            ext as string,
-            fileInfo.data,
-            currentContextMimeTypeWhiteListMap
-          );
-          if (!passed) {
-            throw new MultipartInvalidFileTypeError(
-              fileInfo.filename,
-              current,
-              mime
-            );
-          }
-
-          fileInfo[EXT_KEY] = ext;
-        }
-        ctxOrReq.files = await Promise.all(
-          files.map(async (file, index) => {
-            const { data } = file;
-            if (mode === 'file') {
-              const ext = file[EXT_KEY];
-              const tmpFileName = resolve(
-                tmpdir,
-                `${requireId}.${index}${ext}`
-              );
-              await writeFile(tmpFileName, data, 'binary');
-              file.data = tmpFileName;
-            } else if (mode === 'stream') {
-              file.data = new Readable({
-                read() {
-                  this.push(data);
-                  this.push(null);
-                },
-              });
-            }
-            return file;
-          })
+        await this.processServerlessUpload(
+          req,
+          boundary,
+          uploadConfig,
+          next,
+          currentContextWhiteListMap,
+          currentContextMimeTypeWhiteListMap,
+          ctxOrReq
         );
       }
 
       await next();
     };
+  }
+
+  private async processFileOrStream(
+    req,
+    uploadConfig,
+    currentContextWhiteListMap,
+    currentContextMimeTypeWhiteListMap,
+    ctxOrReq
+  ) {
+    let isStreamResolve = false;
+    const { mode, tmpdir } = uploadConfig;
+    const { files = [], fields = [] } = await new Promise<any>(
+      (resolveP, reject) => {
+        const bb = busboy({
+          headers: req.headers,
+          ...uploadConfig,
+        });
+        const fields: Array<UploadStreamFieldInfo> = [];
+        const files: Array<UploadFileInfo | UploadStreamFileInfo> = [];
+        let fileModeCount = 0;
+        bb.on('file', async (name, file, info) => {
+          const { filename, encoding, mimeType } = info;
+          const ext = this.checkAndGetExt(filename, currentContextWhiteListMap);
+          if (!ext) {
+            reject(new MultipartInvalidFilenameError(filename));
+          }
+
+          file.once('limit', () => {
+            reject(new MultipartFileSizeLimitError(filename));
+          });
+
+          if (mode === 'stream') {
+            if (isStreamResolve) {
+              // will be skip
+              file.resume();
+              return;
+            }
+            (files as Array<any>).push(
+              new Promise(resolve => {
+                resolve({
+                  fieldName: name,
+                  filename,
+                  encoding,
+                  mimeType,
+                  data: file,
+                });
+              })
+            );
+            isStreamResolve = true;
+            // busboy 这里无法触发 close 事件，所以这里直接 resolve
+            return resolveP({
+              fields,
+              files: await Promise.all(files),
+            });
+          } else {
+            fileModeCount++;
+            // file mode
+            const requireId = `upload_${Date.now()}.${Math.random()}`;
+            // read stream pipe to temp file
+            const tempFile = resolve(tmpdir, `${requireId}${ext}`);
+            // get buffer from stream, and check file type
+            file.once('data', async chunk => {
+              const { passed, mime, current } = await this.checkFileType(
+                ext as string,
+                chunk,
+                currentContextMimeTypeWhiteListMap
+              );
+              if (!passed) {
+                file.pause();
+                reject(
+                  new MultipartInvalidFileTypeError(filename, current, mime)
+                );
+              }
+            });
+            const writeStream = file.pipe(createWriteStream(tempFile));
+            file.on('end', () => {
+              fileModeCount--;
+            });
+            writeStream.on('error', reject);
+            writeStream.on('finish', () => {
+              (files as Array<any>).push({
+                filename,
+                mimeType,
+                encoding,
+                fieldName: name,
+                data: tempFile,
+              });
+
+              if (fileModeCount === 0) {
+                // 文件模式下，要等所有文件都处理完毕
+                return resolveP({
+                  fields,
+                  files,
+                });
+              }
+            });
+          }
+        });
+        bb.on('field', (name, value, info) => {
+          (fields as Array<any>).push({
+            name,
+            value,
+            info,
+          });
+        });
+
+        bb.on('error', (err: Error) => {
+          reject(new MultipartError(err));
+        });
+        bb.on('partsLimit', () => {
+          reject(new MultipartPartsLimitError());
+        });
+        bb.on('filesLimit', () => {
+          reject(new MultipartFileLimitError());
+        });
+        bb.on('fieldsLimit', () => {
+          reject(new MultipartFieldsLimitError());
+        });
+        req.pipe(bb);
+      }
+    );
+
+    ctxOrReq.files = files;
+    ctxOrReq.fields = fields.reduce((accumulator, current) => {
+      accumulator[current.name] = current.value;
+      return accumulator;
+    }, {});
+  }
+
+  private async processAsyncIterator(
+    req,
+    uploadConfig,
+    currentContextWhiteListMap,
+    ctxOrReq
+  ) {
+    const { files = [], fields = [] } = await new Promise<any>(resolveP => {
+      const bb = busboy({
+        headers: req.headers,
+        ...uploadConfig,
+      });
+
+      const fileReadable = new Readable({
+        objectMode: true,
+        read() {},
+      });
+
+      const fieldReadable = new Readable({
+        objectMode: true,
+        read() {},
+      });
+
+      bb.on('file', (name, file, info) => {
+        const { filename, encoding, mimeType } = info;
+        const ext = this.checkAndGetExt(filename, currentContextWhiteListMap);
+        if (!ext) {
+          fileReadable.emit(
+            'error',
+            new MultipartInvalidFilenameError(filename)
+          );
+        }
+
+        file.once('limit', () => {
+          fileReadable.emit('error', new MultipartFileSizeLimitError(filename));
+        });
+
+        fileReadable.push({
+          fieldName: name,
+          filename,
+          mimeType,
+          encoding,
+          data: file,
+        });
+      });
+
+      bb.on('field', (name, value, info) => {
+        fieldReadable.push({
+          name,
+          value,
+          info,
+        });
+      });
+
+      bb.on('close', () => {
+        fileReadable.push(null);
+        fieldReadable.push(null);
+      });
+      const files = streamToAsyncIterator(fileReadable);
+      const fields = streamToAsyncIterator(fieldReadable);
+
+      bb.on('error', (err: Error) => {
+        fileReadable.emit('error', new MultipartError(err));
+      });
+      bb.on('partsLimit', () => {
+        fileReadable.emit('error', new MultipartPartsLimitError());
+      });
+      bb.on('filesLimit', () => {
+        fileReadable.emit('error', new MultipartFileLimitError());
+      });
+      bb.on('fieldsLimit', () => {
+        fieldReadable.emit('error', new MultipartFieldsLimitError());
+      });
+      req.pipe(bb);
+
+      // 迭代器需要手动返回
+      resolveP({
+        fields,
+        files,
+      });
+    });
+
+    ctxOrReq.fields = fields;
+    ctxOrReq.files = files;
+  }
+
+  private async processServerlessUpload(
+    req,
+    boundary,
+    uploadConfig,
+    next,
+    currentContextWhiteListMap,
+    currentContextMimeTypeWhiteListMap,
+    ctxOrReq
+  ) {
+    let body;
+    if (
+      req?.originEvent?.body &&
+      (typeof req.originEvent.body === 'string' ||
+        Buffer.isBuffer(req.originEvent.body))
+    ) {
+      body = req.originEvent.body;
+    } else {
+      body = req.body;
+    }
+
+    const { mode, tmpdir } = uploadConfig;
+    const data = await parseMultipart(body, boundary, uploadConfig);
+    if (!data) {
+      return next();
+    }
+
+    const requireId = `upload_${Date.now()}.${Math.random()}`;
+    for (const fileInfo of data.files) {
+      const ext = this.checkAndGetExt(
+        fileInfo.filename,
+        currentContextWhiteListMap
+      );
+      if (!ext) {
+        throw new MultipartInvalidFilenameError(fileInfo.filename);
+      }
+      const { passed, mime, current } = await this.checkFileType(
+        ext as string,
+        fileInfo.data,
+        currentContextMimeTypeWhiteListMap
+      );
+      if (!passed) {
+        throw new MultipartInvalidFileTypeError(
+          fileInfo.filename,
+          current,
+          mime
+        );
+      }
+
+      fileInfo[EXT_KEY] = ext;
+    }
+    const files = await Promise.all(
+      data.files.map(async (file, index) => {
+        const { data } = file;
+        if (mode === 'file') {
+          const ext = file[EXT_KEY];
+          const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
+          await writeFile(tmpFileName, data, 'binary');
+          file.data = tmpFileName;
+        } else if (mode === 'stream') {
+          file.data = new Readable({
+            read() {
+              this.push(data);
+              this.push(null);
+            },
+          });
+        }
+        return file;
+      })
+    );
+
+    ctxOrReq.fields = data.fields;
+    ctxOrReq.files = files;
   }
 
   static getName() {

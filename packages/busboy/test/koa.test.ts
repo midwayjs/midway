@@ -233,7 +233,11 @@ describe('test/koa.test.ts', function () {
       @Controller('/')
       class HomeController {
         @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, { mode: 'asyncIterator' }) ] })
-        async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>, @Fields() fieldIterator: AsyncGenerator<busboy.UploadStreamFieldInfo>, @File() singleFileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
+        async uploadMore(
+          @Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>,
+          @Fields() fieldIterator: AsyncGenerator<busboy.UploadStreamFieldInfo>,
+          @File() singleFileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>)
+        {
           assert(singleFileIterator === fileIterator);
           const files = [], fields = [];
           for await (const file of fileIterator) {
@@ -293,6 +297,8 @@ describe('test/koa.test.ts', function () {
       expect(response.body.files[1].fieldName).toBe('file2');
       expect(response.body.fields[0].value).toBe('form');
       expect(response.body.fields[1].value).toBe('form2');
+
+      await close(app);
     });
 
     it('upload stream mode and multi file with read fields', async () => {
@@ -351,6 +357,125 @@ describe('test/koa.test.ts', function () {
       expect(response.body.files[0].fieldName).toBe('file123');
       expect(response.body.files[1].filename).toBe('test.pdf');
       expect(response.body.files[1].fieldName).toBe('file2');
+
+      await close(app);
+    });
+
+    it('upload stream mode and multi file and trigger limit error', async () => {
+      @Controller('/')
+      class HomeController {
+        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
+          mode: 'asyncIterator',
+          limits: {
+            fileSize: 1
+          }
+        }) ] })
+        async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
+          const files = [];
+          for await (const file of fileIterator) {
+            const path = join(resourceDir, `${file.fieldName}.pdf`);
+            const stream = createWriteStream(path);
+            const end = new Promise(resolve => {
+              stream.on('close', () => {
+                resolve(void 0)
+              });
+            });
+
+            file.data.pipe(stream);
+            await end;
+            files.push(file);
+          }
+
+          const stat = statSync(join(resourceDir, `${files[0].fieldName}.pdf`));
+          return {
+            size: stat.size,
+            files,
+          }
+        }
+      }
+      const app = await createLightApp({
+        imports: [
+          koa,
+          busboy,
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          busboy: {}
+        },
+      });
+
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      const response = await request.post('/upload-multi')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file123', pdfPath)
+        .attach('file2', pdfPath);
+
+      expect(response.status).toBe(400);
+      await close(app);
+    });
+
+    it('upload stream mode trigger limit error and catch it', async () => {
+      @Controller('/')
+      class HomeController {
+        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
+            mode: 'asyncIterator',
+            limits: {
+              fileSize: 1
+            }
+          }) ] })
+        async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
+          const files = [];
+          try {
+            for await (const file of fileIterator) {
+              const path = join(resourceDir, `${file.fieldName}.pdf`);
+              const stream = createWriteStream(path);
+              const end = new Promise(resolve => {
+                stream.on('close', () => {
+                  resolve(void 0)
+                });
+              });
+
+              file.data.pipe(stream);
+              await end;
+              files.push(file);
+            }
+          } catch (err) {
+            console.error(err.message);
+          }
+
+          const stat = statSync(join(resourceDir, `${files[0].fieldName}.pdf`));
+          return {
+            size: stat.size,
+            files,
+          }
+        }
+      }
+      const app = await createLightApp({
+        imports: [
+          koa,
+          busboy,
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          busboy: {}
+        },
+      });
+
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      const response = await request.post('/upload-multi')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file123', pdfPath)
+        .attach('file2', pdfPath);
+
+      expect(response.status).toBe(200);
+      expect(response.body.size).toBe(1);
+      await close(app);
     });
   });
 });
