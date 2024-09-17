@@ -153,6 +153,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
             req,
             uploadConfig,
             currentContextWhiteListMap,
+            currentContextMimeTypeWhiteListMap,
             ctxOrReq
           );
         } else {
@@ -311,82 +312,115 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     req,
     uploadConfig,
     currentContextWhiteListMap,
+    currentContextMimeTypeWhiteListMap,
     ctxOrReq
   ) {
-    const { files = [], fields = [] } = await new Promise<any>(resolveP => {
-      const bb = busboy({
-        headers: req.headers,
-        ...uploadConfig,
-      });
+    const bb = busboy({
+      headers: req.headers,
+      ...uploadConfig,
+    });
 
-      const fileReadable = new Readable({
-        objectMode: true,
-        read() {},
-      });
+    const fileReadable = new Readable({
+      objectMode: true,
+      read() {},
+      autoDestroy: true,
+    });
+    const fieldReadable = new Readable({
+      objectMode: true,
+      read() {},
+      autoDestroy: true,
+    });
 
-      const fieldReadable = new Readable({
-        objectMode: true,
-        read() {},
-      });
-
-      bb.on('file', (name, file, info) => {
-        const { filename, encoding, mimeType } = info;
-        const ext = this.checkAndGetExt(filename, currentContextWhiteListMap);
-        if (!ext) {
-          fileReadable.emit(
-            'error',
-            new MultipartInvalidFilenameError(filename)
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    async function* streamToAsyncIteratorWithError(
+      stream: Readable
+    ): AsyncGenerator<any> {
+      for await (const chunk of stream) {
+        chunk.data.once('data', async chunk => {
+          const { passed, mime, current } = await self.checkFileType(
+            chunk.ext,
+            chunk,
+            currentContextMimeTypeWhiteListMap
           );
-        }
-
-        file.once('limit', () => {
-          fileReadable.emit('error', new MultipartFileSizeLimitError(filename));
+          if (!passed) {
+            throw new MultipartInvalidFileTypeError(
+              chunk.filename,
+              current,
+              mime
+            );
+          }
         });
 
-        fileReadable.push({
-          fieldName: name,
-          filename,
-          mimeType,
-          encoding,
-          data: file,
-        });
+        yield chunk;
+      }
+    }
+
+    const files = streamToAsyncIteratorWithError(fileReadable);
+    const fields = streamToAsyncIterator(fieldReadable);
+
+    bb.on('file', (name, file, info) => {
+      const { filename, encoding, mimeType } = info;
+      const ext = this.checkAndGetExt(filename, currentContextWhiteListMap);
+      if (!ext) {
+        fileReadable.emit('error', new MultipartInvalidFilenameError(filename));
+      }
+
+      file.once('limit', () => {
+        fileReadable.emit('error', new MultipartFileSizeLimitError(filename));
       });
 
-      bb.on('field', (name, value, info) => {
-        fieldReadable.push({
-          name,
-          value,
-          info,
-        });
-      });
+      // file.once('data', async chunk => {
+      //   const { passed, mime, current } = await this.checkFileType(
+      //     ext as string,
+      //     chunk,
+      //     currentContextMimeTypeWhiteListMap
+      //   );
+      //   if (!passed) {
+      //     file.pause();
+      //     fileReadable.emit(
+      //       'error',
+      //       new MultipartInvalidFileTypeError(filename, current, mime)
+      //     );
+      //   }
+      // });
 
-      bb.on('close', () => {
-        fileReadable.push(null);
-        fieldReadable.push(null);
-      });
-      const files = streamToAsyncIterator(fileReadable);
-      const fields = streamToAsyncIterator(fieldReadable);
-
-      bb.on('error', (err: Error) => {
-        fileReadable.emit('error', new MultipartError(err));
-      });
-      bb.on('partsLimit', () => {
-        fileReadable.emit('error', new MultipartPartsLimitError());
-      });
-      bb.on('filesLimit', () => {
-        fileReadable.emit('error', new MultipartFileLimitError());
-      });
-      bb.on('fieldsLimit', () => {
-        fieldReadable.emit('error', new MultipartFieldsLimitError());
-      });
-      req.pipe(bb);
-
-      // 迭代器需要手动返回
-      resolveP({
-        fields,
-        files,
+      fileReadable.push({
+        fieldName: name,
+        filename,
+        mimeType,
+        encoding,
+        data: file,
+        ext,
       });
     });
+
+    bb.on('field', (name, value, info) => {
+      fieldReadable.push({
+        name,
+        value,
+        info,
+      });
+    });
+
+    bb.on('close', () => {
+      fileReadable.push(null);
+      fieldReadable.push(null);
+    });
+
+    // bb.on('error', (err: Error) => {
+    //   fileReadable.emit('error', new MultipartError(err));
+    // });
+    bb.on('partsLimit', () => {
+      fileReadable.emit('error', new MultipartPartsLimitError());
+    });
+    bb.on('filesLimit', () => {
+      fileReadable.emit('error', new MultipartFileLimitError());
+    });
+    bb.on('fieldsLimit', () => {
+      fieldReadable.emit('error', new MultipartFieldsLimitError());
+    });
+    req.pipe(bb);
 
     ctxOrReq.fields = fields;
     ctxOrReq.files = files;

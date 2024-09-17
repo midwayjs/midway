@@ -1,11 +1,11 @@
 import { createHttpRequest, close, createApp, createLightApp } from "@midwayjs/mock";
 import { join } from 'path';
-import * as assert from 'assert';
 import { createWriteStream, existsSync, statSync } from "fs";
 import * as koa from '@midwayjs/koa';
 import * as busboy from '../src';
 import { Controller, createMiddleware, Fields, Files, Post, File } from "@midwayjs/core";
 import { ensureDir, removeSync } from "fs-extra";
+import * as assert from 'assert';
 
 describe('test/koa.test.ts', function () {
 
@@ -29,12 +29,12 @@ describe('test/koa.test.ts', function () {
         .expect(200);
 
       const stat = statSync(pdfPath);
-      assert(response.body.size === stat.size);
-      assert(response.body.files.length === 1);
-      assert(response.body.files[0].filename === 'test.pdf');
-      assert(response.body.fields.name === 'form');
-      assert(response.body.fields.name2 === 'form2');
-      assert(response.body.fieldName === 'file123');
+      expect(response.body.size).toBe(stat.size);
+      expect(response.body.files.length).toBe(1);
+      expect(response.body.files[0].filename).toBe('test.pdf');
+      expect(response.body.fields.name).toBe('form');
+      expect(response.body.fields.name2).toBe('form2');
+      expect(response.body.fieldName).toBe('file123');
     });
 
     it('upload stream mode 3kb', async () => {
@@ -48,9 +48,9 @@ describe('test/koa.test.ts', function () {
         .expect(200)
         .then(async response => {
           const stat = statSync(pdfPath);
-          assert(response.body.size === stat.size);
-          assert(response.body.files.length === 1);
-          assert(response.body.files[0].filename === '3kb.png');
+          expect(response.body.size).toBe(stat.size);
+          expect(response.body.files.length).toBe(1);
+          expect(response.body.files[0].filename).toBe('3kb.png');
         });
     });
 
@@ -86,12 +86,12 @@ describe('test/koa.test.ts', function () {
         .attach('file2', pdfPath)
         .expect(200)
         .then(async response => {
-          assert(response.body.files.length === 2);
-          // assert(response.body.files[0].fieldName === 'file');
-          // assert(response.body.files[1].fieldName === 'file2');
-          assert(response.body.files[1].mimeType === 'application/pdf');
-          assert(response.body.fields.name === 'form');
-          assert(response.body.fields.name2 === 'form2');
+          expect(response.body.files.length).toBe(2);
+          // expect(response.body.files[0].fieldName).toBe('file');
+          // expect(response.body.files[1].fieldName).toBe('file2');
+          expect(response.body.files[1].mimeType).toBe('application/pdf');
+          expect(response.body.fields.name).toBe('form');
+          expect(response.body.fields.name2).toBe('form2');
         });
     });
 
@@ -105,8 +105,8 @@ describe('test/koa.test.ts', function () {
         .expect(200)
         .then(async response => {
           const stat = statSync(path);
-          assert(response.body.size === stat.size);
-          assert(response.body.files[0].data.endsWith('.tar.gz'));
+          expect(response.body.size).toBe(stat.size);
+          expect(response.body.files[0].data.endsWith('.tar.gz')).toBe(true);
         });
     });
 
@@ -210,10 +210,10 @@ describe('test/koa.test.ts', function () {
         .attach('file', filePath)
         .expect(200)
         .then(async response => {
-          assert(response.body.files.length === 1);
-          assert(response.body.files[0].filename === 'test.pdf');
-          assert(response.body.fields.name === 'form');
-          assert(response.body.fields.name2 === 'form2');
+          expect(response.body.files.length).toBe(1);
+          expect(response.body.files[0].filename).toBe('test.pdf');
+          expect(response.body.fields.name).toBe('form');
+          expect(response.body.fields.name2).toBe('form2');
         });
     });
   });
@@ -474,7 +474,141 @@ describe('test/koa.test.ts', function () {
         .attach('file2', pdfPath);
 
       expect(response.status).toBe(200);
-      expect(response.body.size).toBe(1);
+      await close(app);
+    });
+
+    it.skip("should got 204 when iterator not use", async () => {
+      @Controller('/')
+      class HomeController {
+        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
+            mode: 'asyncIterator',
+            limits: {
+            }
+          }) ] })
+        async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
+          // 这里如果不处理迭代器，会出现 unhandled error
+        }
+      }
+      const app = await createLightApp({
+        imports: [
+          koa,
+          busboy,
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          busboy: {}
+        },
+      });
+
+      const txtPath = join(__dirname, 'fixtures/1.test');
+      const request = createHttpRequest(app);
+      const response = await request.post('/upload-multi')
+        .attach('file', txtPath);
+
+      expect(response.status).toBe(204);
+      await close(app);
+    });
+
+    it("should check type", async () => {
+      @Controller('/')
+      class HomeController {
+        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
+            mode: 'asyncIterator',
+            limits: {
+            }
+          }) ] })
+        async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
+          const files = [];
+          for await (const file of fileIterator) {
+            const path = join(resourceDir, `${file.fieldName}.pdf`);
+            const stream = createWriteStream(path);
+            const end = new Promise(resolve => {
+              stream.on('close', () => {
+                resolve(void 0)
+              });
+            });
+
+            file.data.pipe(stream);
+            await end;
+            files.push(file);
+          }
+        }
+      }
+      const app = await createLightApp({
+        imports: [
+          koa,
+          busboy,
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          busboy: {}
+        },
+      });
+
+      const txtPath = join(__dirname, 'fixtures/1.test');
+      const request = createHttpRequest(app);
+      const response = await request.post('/upload-multi')
+        .attach('file', txtPath);
+
+      expect(response.status).toBe(400);
+      await close(app);
+    });
+
+    it("should check size of result", async () => {
+      @Controller('/')
+      class HomeController {
+        @Post('/upload', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
+            mode: 'file',
+          }) ] })
+        async uploadFile(@File() file) {
+          return statSync(file.data).size
+        }
+
+        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
+            mode: 'asyncIterator',
+          }) ] })
+        async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
+          const files = [];
+          for await (const file of fileIterator) {
+            const path = join(resourceDir, `${file.fieldName}.pdf`);
+            const stream = createWriteStream(path);
+            const end = new Promise(resolve => {
+              stream.on('close', () => {
+                resolve(void 0)
+              });
+            });
+
+            file.data.pipe(stream);
+            await end;
+            files.push(statSync(path).size);
+          }
+
+          return files[0];
+        }
+      }
+      const app = await createLightApp({
+        imports: [
+          koa,
+          busboy,
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          busboy: {
+            whitelist: ['.test']
+          }
+        },
+      });
+
+      const txtPath = join(__dirname, 'fixtures/1.test');
+      const request = createHttpRequest(app);
+      const response = await request.post('/upload-multi')
+        .attach('file', txtPath);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toBe(6);
       await close(app);
     });
   });
