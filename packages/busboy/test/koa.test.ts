@@ -6,6 +6,8 @@ import * as busboy from '../src';
 import { Controller, createMiddleware, Fields, Files, Post, File } from "@midwayjs/core";
 import { ensureDir, removeSync } from "fs-extra";
 import * as assert from 'assert';
+import { tmpdir } from "os";
+import { randomUUID } from "node:crypto";
 
 describe('test/koa.test.ts', function () {
 
@@ -220,9 +222,10 @@ describe('test/koa.test.ts', function () {
 
   describe('koa iterator', () => {
 
-    const resourceDir = join(__dirname, 'tmp');
+    let resourceDir: string;
 
     beforeEach(() => {
+      resourceDir = join(tmpdir(), randomUUID());
       if (existsSync(resourceDir)) {
         removeSync(resourceDir);
       }
