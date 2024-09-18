@@ -364,26 +364,12 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       const ext = this.checkAndGetExt(filename, currentContextWhiteListMap);
       if (!ext) {
         fileReadable.emit('error', new MultipartInvalidFilenameError(filename));
+        return;
       }
 
       file.once('limit', () => {
         fileReadable.emit('error', new MultipartFileSizeLimitError(filename));
       });
-
-      // file.once('data', async chunk => {
-      //   const { passed, mime, current } = await this.checkFileType(
-      //     ext as string,
-      //     chunk,
-      //     currentContextMimeTypeWhiteListMap
-      //   );
-      //   if (!passed) {
-      //     file.pause();
-      //     fileReadable.emit(
-      //       'error',
-      //       new MultipartInvalidFileTypeError(filename, current, mime)
-      //     );
-      //   }
-      // });
 
       fileReadable.push({
         fieldName: name,
@@ -408,9 +394,10 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       fieldReadable.push(null);
     });
 
-    // bb.on('error', (err: Error) => {
-    //   fileReadable.emit('error', new MultipartError(err));
-    // });
+    bb.on('error', (err: Error) => {
+      fileReadable.emit('error', new MultipartError(err));
+    });
+
     bb.on('partsLimit', () => {
       fileReadable.emit('error', new MultipartPartsLimitError());
     });
