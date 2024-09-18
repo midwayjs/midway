@@ -363,12 +363,12 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       const { filename, encoding, mimeType } = info;
       const ext = this.checkAndGetExt(filename, currentContextWhiteListMap);
       if (!ext) {
-        fileReadable.emit('error', new MultipartInvalidFilenameError(filename));
+        fileReadable.destroy(new MultipartInvalidFilenameError(filename));
         return;
       }
 
       file.once('limit', () => {
-        fileReadable.emit('error', new MultipartFileSizeLimitError(filename));
+        fileReadable.destroy(new MultipartFileSizeLimitError(filename));
       });
 
       fileReadable.push({
@@ -395,17 +395,17 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     });
 
     bb.on('error', (err: Error) => {
-      fileReadable.emit('error', new MultipartError(err));
+      fileReadable.destroy(new MultipartError(err));
     });
 
     bb.on('partsLimit', () => {
-      fileReadable.emit('error', new MultipartPartsLimitError());
+      fileReadable.destroy(new MultipartPartsLimitError());
     });
     bb.on('filesLimit', () => {
-      fileReadable.emit('error', new MultipartFileLimitError());
+      fileReadable.destroy(new MultipartFileLimitError());
     });
     bb.on('fieldsLimit', () => {
-      fieldReadable.emit('error', new MultipartFieldsLimitError());
+      fieldReadable.destroy(new MultipartFieldsLimitError());
     });
     req.pipe(bb);
 

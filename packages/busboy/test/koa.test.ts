@@ -448,12 +448,7 @@ describe('test/koa.test.ts', function () {
           } catch (err) {
             console.error(err.message);
           }
-
-          const stat = statSync(join(resourceDir, `${files[0].fieldName}.pdf`));
-          return {
-            size: stat.size,
-            files,
-          }
+          return 'ok';
         }
       }
       const app = await createLightApp({
