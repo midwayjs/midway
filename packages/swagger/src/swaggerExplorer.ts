@@ -643,7 +643,35 @@ export class SwaggerExplorer {
       for (const k of keys) {
         // 这里是引用，赋值可以直接更改
         const tt = resp[k];
-        if (tt.type) {
+
+        /**
+         * 针对直接配置了scheme的写法 适用于统一的响应格式的情况
+         * 
+         * 例如以下例子，只需要配置data的类型即可
+         * ApiOkResponse({
+         *  description: '请求成功描述',
+         *  schema: {
+         *    title: `响应数据`,
+         *    allOf: [
+         *      {
+         *        $ref: getSchemaPath(ResponsOkDto),
+         *      },
+         *      {
+         *        properties: {
+         *          data: Data,
+         *        },
+         *      },
+         *    ],
+         *  },
+         * })
+         */
+        if (tt.schema) {
+          tt.content = {
+            'application/json': {
+              schema: tt.schema
+            }
+          }
+        } else if (tt.type) {
           if (Types.isClass(tt.type)) {
             this.parseClzz(tt.type);
 
