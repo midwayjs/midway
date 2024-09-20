@@ -59,7 +59,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   ignore: IgnoreMatcher<any>[];
 
   @Init()
-  async init() {
+  protected async init() {
     if (this.uploadConfig.match) {
       this.match = [].concat(this.uploadConfig.match || []);
     } else {
