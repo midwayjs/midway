@@ -243,8 +243,8 @@ describe('test/koa.test.ts', function () {
         {
           assert(singleFileIterator === fileIterator);
           const files = [], fields = [];
-          for await (const file of fileIterator) {
-            const path = join(resourceDir, `${file.fieldName}.pdf`);
+          for await (const { data, fieldName, filename } of fileIterator) {
+            const path = join(resourceDir, `${fieldName}.pdf`);
             const stream = createWriteStream(path);
             const end = new Promise(resolve => {
               stream.on('close', () => {
@@ -252,10 +252,13 @@ describe('test/koa.test.ts', function () {
               });
             });
 
-            file.data.pipe(stream);
+            data.pipe(stream);
             await end;
 
-            files.push(file);
+            files.push({
+              fieldName,
+              filename,
+            });
           }
 
           for await (const field of fieldIterator) {
@@ -367,12 +370,14 @@ describe('test/koa.test.ts', function () {
     it('upload stream mode and multi file and trigger limit error', async () => {
       @Controller('/')
       class HomeController {
-        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
-          mode: 'asyncIterator',
-          limits: {
-            fileSize: 1
-          }
-        }) ] })
+        @Post("/upload-multi", {
+          middleware: [createMiddleware(busboy.UploadMiddleware, {
+            mode: "asyncIterator",
+            limits: {
+              fileSize: 1
+            }
+          })]
+        })
         async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
           const files = [];
           for await (const file of fileIterator) {
@@ -423,12 +428,14 @@ describe('test/koa.test.ts', function () {
     it('upload stream mode trigger limit error and catch it', async () => {
       @Controller('/')
       class HomeController {
-        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
-            mode: 'asyncIterator',
+        @Post("/upload-multi", {
+          middleware: [createMiddleware(busboy.UploadMiddleware, {
+            mode: "asyncIterator",
             limits: {
               fileSize: 1
             }
-          }) ] })
+          })]
+        })
         async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
           const files = [];
           try {
@@ -476,17 +483,19 @@ describe('test/koa.test.ts', function () {
     });
 
     it.skip("should got 204 when iterator not use", async () => {
-      @Controller('/')
+      @Controller("/")
       class HomeController {
-        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
-            mode: 'asyncIterator',
-            limits: {
-            }
-          }) ] })
+        @Post("/upload-multi", {
+          middleware: [createMiddleware(busboy.UploadMiddleware, {
+            mode: "asyncIterator",
+            limits: {}
+          })]
+        })
         async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
           // 这里如果不处理迭代器，会出现 unhandled error
         }
       }
+
       const app = await createLightApp({
         imports: [
           koa,
@@ -494,36 +503,37 @@ describe('test/koa.test.ts', function () {
           HomeController
         ],
         globalConfig: {
-          keys: '123',
+          keys: "123",
           busboy: {}
-        },
+        }
       });
 
-      const txtPath = join(__dirname, 'fixtures/1.test');
+      const txtPath = join(__dirname, "fixtures/1.test");
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .attach('file', txtPath);
+      const response = await request.post("/upload-multi")
+        .attach("file", txtPath);
 
       expect(response.status).toBe(204);
       await close(app);
     });
 
     it("should check type", async () => {
-      @Controller('/')
+      @Controller("/")
       class HomeController {
-        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
-            mode: 'asyncIterator',
-            limits: {
-            }
-          }) ] })
+        @Post("/upload-multi", {
+          middleware: [createMiddleware(busboy.UploadMiddleware, {
+            mode: "asyncIterator",
+            limits: {}
+          })]
+        })
         async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
           const files = [];
           for await (const file of fileIterator) {
             const path = join(resourceDir, `${file.fieldName}.pdf`);
             const stream = createWriteStream(path);
             const end = new Promise(resolve => {
-              stream.on('close', () => {
-                resolve(void 0)
+              stream.on("close", () => {
+                resolve(void 0);
               });
             });
 
@@ -533,6 +543,7 @@ describe('test/koa.test.ts', function () {
           }
         }
       }
+
       const app = await createLightApp({
         imports: [
           koa,
@@ -540,9 +551,9 @@ describe('test/koa.test.ts', function () {
           HomeController
         ],
         globalConfig: {
-          keys: '123',
+          keys: "123",
           busboy: {}
-        },
+        }
       });
 
       const txtPath = join(__dirname, 'fixtures/1.test');
@@ -555,26 +566,30 @@ describe('test/koa.test.ts', function () {
     });
 
     it("should check size of result", async () => {
-      @Controller('/')
+      @Controller("/")
       class HomeController {
-        @Post('/upload', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
-            mode: 'file',
-          }) ] })
+        @Post("/upload", {
+          middleware: [createMiddleware(busboy.UploadMiddleware, {
+            mode: "file"
+          })]
+        })
         async uploadFile(@File() file) {
-          return statSync(file.data).size
+          return statSync(file.data).size;
         }
 
-        @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, {
-            mode: 'asyncIterator',
-          }) ] })
+        @Post("/upload-multi", {
+          middleware: [createMiddleware(busboy.UploadMiddleware, {
+            mode: "asyncIterator"
+          })]
+        })
         async uploadMore(@Files() fileIterator: AsyncGenerator<busboy.UploadStreamFileInfo>) {
           const files = [];
           for await (const file of fileIterator) {
             const path = join(resourceDir, `${file.fieldName}.pdf`);
             const stream = createWriteStream(path);
             const end = new Promise(resolve => {
-              stream.on('close', () => {
-                resolve(void 0)
+              stream.on("close", () => {
+                resolve(void 0);
               });
             });
 
