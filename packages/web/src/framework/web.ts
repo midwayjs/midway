@@ -237,6 +237,7 @@ export class MidwayWebFramework extends BaseFramework<
           serverOptions.cert
         );
         serverOptions.ca = PathFileUtil.getFileContentSync(serverOptions.ca);
+        process.env.MIDWAY_HTTP_SSL = 'true';
 
         if (serverOptions.http2) {
           this.server = require('http2').createSecureServer(

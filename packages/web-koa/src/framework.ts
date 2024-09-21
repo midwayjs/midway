@@ -269,6 +269,7 @@ export class MidwayKoaFramework extends BaseFramework<
       serverOptions.key = PathFileUtil.getFileContentSync(serverOptions.key);
       serverOptions.cert = PathFileUtil.getFileContentSync(serverOptions.cert);
       serverOptions.ca = PathFileUtil.getFileContentSync(serverOptions.ca);
+      process.env.MIDWAY_HTTP_SSL = 'true';
 
       if (serverOptions.http2) {
         this.server = require('http2').createSecureServer(
