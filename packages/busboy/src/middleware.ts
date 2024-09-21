@@ -198,8 +198,8 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         });
         const fields: Array<UploadStreamFieldInfo> = [];
         const files: Array<UploadFileInfo | UploadStreamFileInfo> = [];
-        let fileModeCount = 0;
         bb.on('file', async (name, file, info) => {
+          this.logger.debug('[busboy]: busboy file event');
           const { filename, encoding, mimeType } = info;
           const ext = this.checkAndGetExt(filename, currentContextWhiteListMap);
           if (!ext) {
@@ -234,7 +234,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
               files: await Promise.all(files),
             });
           } else {
-            fileModeCount++;
+            this.logger.debug('[busboy]: file mode, file data event');
             // file mode
             const requireId = `upload_${Date.now()}.${Math.random()}`;
             // read stream pipe to temp file
@@ -253,30 +253,32 @@ export class UploadMiddleware implements IMiddleware<any, any> {
                 );
               }
             });
-            const writeStream = file.pipe(createWriteStream(tempFile));
-            file.on('end', () => {
-              fileModeCount--;
-            });
-            writeStream.on('error', reject);
-            writeStream.on('finish', () => {
-              (files as Array<any>).push({
-                filename,
-                mimeType,
-                encoding,
-                fieldName: name,
-                data: tempFile,
-              });
-
-              if (fileModeCount === 0) {
-                // 文件模式下，要等所有文件都处理完毕
-                return resolveP({
-                  fields,
-                  files,
+            const fp = new Promise(resolve => {
+              const writeStream = file.pipe(createWriteStream(tempFile));
+              writeStream.on('error', reject);
+              writeStream.on('finish', () => {
+                resolve({
+                  filename,
+                  mimeType,
+                  encoding,
+                  fieldName: name,
+                  data: tempFile,
                 });
-              }
+              });
             });
+
+            (files as Array<any>).push(fp);
           }
         });
+
+        bb.on('close', async () => {
+          this.logger.debug('[busboy]: busboy close');
+          resolveP({
+            fields,
+            files: await Promise.all(files),
+          });
+        });
+
         bb.on('field', (name, value, info) => {
           (fields as Array<any>).push({
             name,
