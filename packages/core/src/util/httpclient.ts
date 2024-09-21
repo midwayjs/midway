@@ -148,6 +148,9 @@ export class HttpClient {
     url: string,
     options?: HttpClientOptions
   ): Promise<HttpClientResponse> {
-    return makeHttpRequest(url, Object.assign(this.defaultOptions, options));
+    return makeHttpRequest(
+      url,
+      Object.assign({}, this.defaultOptions, options)
+    );
   }
 }
