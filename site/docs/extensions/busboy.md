@@ -28,7 +28,7 @@ import TabItem from '@theme/TabItem';
 
 * 1、配置的 key 从 `upload` 调整为 `busboy`
 * 2、中间件不再默认加载，手动可配置到全局或者路由
-* 3、流式上传时不再提供 fieldName 字段，入参定义类型调整为 `UploadStreamFileInfo`
+* 3、入参定义类型调整为 `UploadStreamFileInfo`
 * 4、`fileSize` 的配置有调整
 
 :::
@@ -198,11 +198,18 @@ export class MainConfiguration {
 
 组件使用 `busboy` 作为配置的 key。
 
-### 上传模式 - file
 
-`file` 为默认值，也是框架的推荐值。
 
-配置 mode 为 `file` 字符串。
+### 上传模式
+
+上传分为三种模式，文件模式，流式模式以及新增的异步迭代器模式。
+
+代码中使用 `@Files()` 装饰器获取上传的文件， `@Fields` 装饰器获取其他上传表单字段。
+
+<Tabs>
+<TabItem value="file" label="文件模式">
+
+`file` 为默认值，配置 mode 为 `file` 字符串。
 
 ```typescript
 // src/config/config.default.ts
@@ -212,10 +219,9 @@ export default {
     mode: 'file',
   },
 }
-
 ```
 
-在代码中获取上传的文件。
+在代码中获取上传的文件，支持同时上传多个文件。
 
 ```typescript
 import { Controller, Post, Files, Fields } from '@midwayjs/core';
@@ -225,61 +231,178 @@ import { UploadFileInfo } from '@midwayjs/busboy';
 export class HomeController {
 
   @Post('/upload', /*...*/)
-  async upload(@Files() files: Array<UploadFileInfo>, @Fields() fields: Record<string, string) {
+  async upload(@Files() files: Array<UploadFileInfo>, @Fields() fields: Record<string, string>) {
     /*
     files = [
       {
         filename: 'test.pdf',        // 文件原名
         data: '/var/tmp/xxx.pdf',    // 服务器临时文件地址
         mimeType: 'application/pdf', // mime
+        fieldName: 'file'            // field name
       },
-      // ...file 下支持同时上传多个文件
     ]
     */
-    return {
-      files,
-      fields
-    }
   }
 }
 ```
 
-使用 file 模式时，通过 `this.ctx.files` 中获取的 `data` 为上传的文件在服务器的 `临时文件地址`，后续可以再通过 `fs.createReadStream` 等方式来处理此文件内容。
+使用 file 模式时， 获取的 `data` 为上传的文件在服务器的 `临时文件地址`，后续可以再通过 `fs.createReadStream` 等方式来处理此文件内容，支持同时上传多个文件，多个文件会以数组的形式存放。
 
-使用 file 模式时，支持同时上传多个文件，多个文件会以数组的形式存放在 `this.ctx.files` 中。
+每个数组内的对象包含以下几个字段
+
+```typescript
+export interface UploadFileInfo {
+  /**
+   * 上传的文件名
+   */
+  filename: string;
+  /**
+   * 上传文件 mime 类型
+   */
+  mimeType: string;
+  /**
+   * 上传服务端保存的路径
+   */
+  data: string;
+  /**
+   * 上传的表单字段名
+   */
+  fieldName: string;
+}
+```
 
 
+
+</TabItem>
+
+<TabItem value="asyncIterator" label="异步迭代器模式">
+
+从 `v3.18.0` 提供，替代原有的 `stream` 模式，该模式支持多个文件流式上传。
+
+配置 upload 的 mode 为 `asyncIterator` 字符串。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  busboy: {
+    mode: 'asyncIterator',
+  },
+}
+```
+
+在代码中获取上传的文件。
+
+```typescript
+import { Controller, Post, Files, Fields } from '@midwayjs/core';
+import { UploadStreamFileInfo, UploadStreamFieldInfo } from '@midwayjs/busboy';
+
+@Controller('/')
+export class HomeController {
+
+  @Post('/upload', /*...*/)
+  async upload(
+  	@Files() fileIterator: AsyncGenerator<UploadStreamFileInfo>,
+    @Fields() fieldIterator: AsyncGenerator<UploadStreamFieldInfo>
+  ) {
+    // ...
+  }
+}
+```
+
+在该模式下，`@Files` 和 `@File` 装饰器会提供同一个 `AsyncGenerator` ，而 `@Fields` 会也同样会提供一个 `AsyncGenerator`。
+
+通过循环 `AsyncGenerator` ，可以针对每个上传文件的 `ReadStream` 做处理。
+
+```typescript
+import { Controller, Post, Files, Fields } from '@midwayjs/core';
+import { UploadStreamFileInfo, UploadStreamFieldInfo } from '@midwayjs/busboy';
+import { tmpdir } from 'os';
+import { createWriteStream } from 'fs';
+
+@Controller('/')
+export class HomeController {
+
+  @Post('/upload', /*...*/)
+  async upload(
+  	@Files() fileIterator: AsyncGenerator<UploadStreamFileInfo>,
+    @Fields() fieldIterator: AsyncGenerator<UploadStreamFieldInfo>
+  ) {
+    for await (const file of fileIterator) {
+      const { filename, data } = file;
+      const p = join(tmpdir, filename);
+      const stream = createWriteStream(p);
+      data.pipe(stream);
+    }
+
+    for await (const { name, value } of fieldIterator) {
+      // ...
+    }
+
+    // ...
+  }
+}
+```
+
+注意，如果一次上传中任意一个文件抛出了错误，本次上传流会直接关闭，所有未传输完成的文件都会异常。
+
+异步迭代器中的上传对象包含以下几个字段。
+
+```typescript
+export interface UploadStreamFieldInfo {
+  /**
+   * 上传的文件名
+   */
+  filename: string;
+  /**
+   * 上传文件 mime 类型
+   */
+  mimeType: string;
+  /**
+   * 上传文件的文件流
+   */
+  data: Readable;
+  /**
+   * 上传的表单字段名
+   */
+  fieldName: string;
+}
+```
+
+异步迭代器中的 `@Fields` 的对象略有不同，返回的数据会包含 `name` 和 `value` 字段。
+
+```typescript
+export interface UploadStreamFieldInfo {
+  /**
+   * 表单名
+   */
+  name: string;
+  /**
+   * 表单值
+   */
+  value: any;
+}
+```
+
+
+
+</TabItem>
+
+<TabItem value="stream" label="流模式">
 
 :::caution
 
-当采取 `file` 模式时，由于上传组件会在接收到请求时，会根据请求的 `method` 和 `headers` 中的部分标志性内容进行匹配，如果认为是一个文件上传请求，就会对请求进行解析，将其中的文件 `写入` 到服务器的临时缓存目录，您可以通过本组件的 `match` 或 `ignore` 配置来设置允许解析文件的路径。
-
-配置 `match` 或 `ignore`后，则可以保证您的普通 post 等请求接口，不会被用户非法用作上传，可以 `避免` 服务器缓存被充满的风险。
-
- 您可以查看下面的 `配置 允许(match) 或 忽略(ignore)的上传路径` 章节，来进行配置。
+不再推荐使用。
 
 :::
 
+配置 mode 为 `stream` 字符串。
 
 
-:::caution
-
-如果同时开启了 swagger 组件，请务必添加上传参数的类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错，更多请参考 swagger 的文件上传章节。
-
-:::
+使用 stream 模式时，通过 `@Files` 中获取的 `data` 为 `ReadStream`，后续可以再通过 `pipe` 等方式继续将数据流转至其他 `WriteStream` 或 `TransformStream`。
 
 
-
-
-### 上传模式 - stream
-
-配置 upload 的 mode 为 `stream` 字符串。
-
-
-使用 stream 模式时，通过 `this.ctx.files` 中获取的 `data` 为 `ReadStream`，后续可以再通过 `pipe` 等方式继续将数据流转至其他 `WriteStream` 或 `TransformStream`。
-
-
-使用 stream 模式时，仅同时上传一个文件，即 `this.ctx.files` 数组中只有一个文件数据对象。
+使用 stream 模式时，仅同时上传一个文件，即 `@Files` 数组中只有一个文件数据对象。
 
 另外，stream 模式 `不会` 在服务器上产生临时文件，所以获取到上传的内容后无需手动清理临时文件缓存。
 
@@ -304,25 +427,43 @@ export class HomeController {
     files = [
       {
         filename: 'test.pdf',        // 文件原名
-        data: ReadStream,    				 // 文件流
+        data: ReadStream,            // 文件流
         mimeType: 'application/pdf', // mime
+        fieldName: 'file'            // field name
       },
     ]
 
     */
-    return {
-      files,
-      fields
-    }
   }
 }
 ```
 
-:::caution
+流式模式中的对象包含以下几个字段。
 
-如果同时开启了 swagger 组件，请务必添加上传参数的类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错，更多请参考 swagger 的文件上传章节。
+```typescript
+export interface UploadStreamFieldInfo {
+  /**
+   * 上传的文件名
+   */
+  filename: string;
+  /**
+   * 上传文件 mime 类型
+   */
+  mimeType: string;
+  /**
+   * 上传文件的文件流
+   */
+  data: Readable;
+  /**
+   * 上传的表单字段名
+   */
+  fieldName: string;
+}
+```
 
-:::
+</TabItem>
+
+</Tabs>
 
 
 

@@ -30,7 +30,7 @@ The differences from the upload component are:
 
 * 2. The middleware is no longer loaded by default, and can be manually configured to the global or route
 
-* 3. The fieldName field is no longer provided for streaming upload, and the input parameter definition type is adjusted to `UploadStreamFileInfo`
+* 3. the input parameter definition type is adjusted to `UploadStreamFileInfo`
 
 * 4. The configuration of `fileSize` has been adjusted
 
@@ -197,11 +197,19 @@ export class MainConfiguration {
 
 The component uses `busboy` as the configuration key.
 
-### Upload mode - file
+### Upload mode
 
-`file` is the default value and the recommended value of the framework.
+### Upload Modes
 
-Configure mode as a `file` string.
+There are three upload modes: file mode, stream mode, and the newly added async iterator mode.
+
+In the code, the `@Files()` decorator is used to obtain the uploaded files, and the `@Fields` decorator is used to get other upload form fields.
+
+
+<Tabs>  
+<TabItem value="file" label="File Mode">
+
+`file` is the default value, with `mode` configured as the string `file`.
 
 ```typescript
 // src/config/config.default.ts
@@ -214,7 +222,8 @@ export default {
 
 ```
 
-Get the uploaded file in the code.
+In the code, the uploaded files can be retrieved, and multiple files can be uploaded simultaneously.
+
 
 ```typescript
 import { Controller, Post, Files, Fields } from '@midwayjs/core';
@@ -224,58 +233,173 @@ import { UploadFileInfo } from '@midwayjs/busboy';
 export class HomeController {
 
   @Post('/upload', /*...*/)
-  async upload(@Files() files: Array<UploadFileInfo>, @Fields() fields: Record<string, string) {
+  async upload(@Files() files: Array<UploadFileInfo>, @Fields() fields: Record<string, string>) {
     /*
     files = [
       {
         filename: 'test.pdf',        // file name
         data: '/var/tmp/xxx.pdf',    // Server temporary file address
         mimeType: 'application/pdf', // mime
+        fieldName: 'file'            // field name
       },
       // ...Support uploading multiple files at the same time under file
     ]
     */
-    return {
-      files,
-      fields
-    }
   }
 }
 ```
 
-When using file mode, the `data` obtained from `this.ctx.files` is the `temporary file address` of the uploaded file on the server. The content of this file can be processed later by `fs.createReadStream` and other methods.
+When using the file mode, the retrieved `data` represents the `temporary file path` of the uploaded file on the server. You can later handle the file contents using methods like `fs.createReadStream`. Multiple files can be uploaded at once, and they will be stored in an array.
 
-When using file mode, it supports uploading multiple files at the same time, and multiple files will be stored in `this.ctx.files` in the form of an array.
+Each object in the array contains the following fields:
 
+```typescript
+export interface UploadFileInfo {
+  /**
+   * The name of the uploaded file
+   */
+  filename: string;
+  /**
+   * The MIME type of the uploaded file
+   */
+  mimeType: string;
+  /**
+   * The path where the file is saved on the server
+   */
+  data: string;
+  /**
+   * The form field name of the uploaded file
+   */
+  fieldName: string;
+}
+```
 
+</TabItem>
+
+<TabItem value="asyncIterator" label="Async Iterator Mode">
+
+Available since `v3.18.0`, this mode replaces the previous `stream` mode and supports streaming uploads of multiple files.
+
+Configure the upload `mode` as the string `asyncIterator`.
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  busboy: {
+    mode: 'asyncIterator',
+  },
+}
+```
+
+Retrieve the uploaded files in the code.
+
+```typescript
+import { Controller, Post, Files, Fields } from '@midwayjs/core';
+import { UploadStreamFileInfo, UploadStreamFieldInfo } from '@midwayjs/busboy';
+
+@Controller('/')
+export class HomeController {
+
+  @Post('/upload', /*...*/)
+  async upload(
+    @Files() fileIterator: AsyncGenerator<UploadStreamFileInfo>,
+    @Fields() fieldIterator: AsyncGenerator<UploadStreamFieldInfo>
+  ) {
+    // ...
+  }
+}
+```
+
+In this mode, both `@Files` and `@File` decorators provide the same `AsyncGenerator`, and `@Fields` also provides an `AsyncGenerator`.
+
+By looping through the `AsyncGenerator`, you can handle the `ReadStream` of each uploaded file.
+
+```typescript
+import { Controller, Post, Files, Fields } from '@midwayjs/core';
+import { UploadStreamFileInfo, UploadStreamFieldInfo } from '@midwayjs/busboy';
+import { tmpdir } from 'os';
+import { createWriteStream } from 'fs';
+
+@Controller('/')
+export class HomeController {
+
+  @Post('/upload', /*...*/)
+  async upload(
+    @Files() fileIterator: AsyncGenerator<UploadStreamFileInfo>,
+    @Fields() fieldIterator: AsyncGenerator<UploadStreamFieldInfo>
+  ) {
+    for await (const file of fileIterator) {
+      const { filename, data } = file;
+      const p = join(tmpdir, filename);
+      const stream = createWriteStream(p);
+      data.pipe(stream);
+    }
+
+    for await (const { name, value } of fieldIterator) {
+      // ...
+    }
+
+    // ...
+  }
+}
+```
+
+Note that if any file throws an error during the upload process, the entire upload stream will close, and all incomplete file uploads will fail.
+
+The upload object in the async iterator contains the following fields.
+
+```typescript
+export interface UploadStreamFieldInfo {
+  /**
+   * The name of the uploaded file
+   */
+  filename: string;
+  /**
+   * The MIME type of the uploaded file
+   */
+  mimeType: string;
+  /**
+   * The file stream of the uploaded file
+   */
+  data: Readable;
+  /**
+   * The form field name of the uploaded file
+   */
+  fieldName: string;
+}
+```
+
+The object for `@Fields` in the async iterator is slightly different, with the returned data containing `name` and `value` fields.
+
+```typescript
+export interface UploadStreamFieldInfo {
+  /**
+   * Form name
+   */
+  name: string;
+  /**
+   * Form value
+   */
+  value: any;
+}
+```
+
+</TabItem>
+
+<TabItem value="stream" label="Stream Mode">
 
 :::caution
 
-When using the `file` mode, the upload component will match the `method` of the request and some of the iconic contents in the `headers` when receiving the request. If it is a file upload request, it will parse the request and `write` the file in it to the temporary cache directory of the server. You can set the path that allows parsing files through the `match` or `ignore` configuration of this component.
-
-After configuring `match` or `ignore`, you can ensure that your ordinary post and other request interfaces will not be illegally used by users for upload, and you can `avoid` the risk of the server cache being full.
-
-You can view the `Configure the upload path allowed (match) or ignored (ignore)` section below to configure it.
+No longer recommended for use.
 
 :::
 
+Configure `mode` as the string `stream`.
 
+When using stream mode, the `data` obtained from `@Files` is a `ReadStream`, and the data can be transferred to other `WriteStream` or `TransformStream` through `pipe` and other methods.
 
-:::caution
-
-If the swagger component is enabled at the same time, be sure to add the type of the upload parameter (the type corresponding to the decorator and the type in @ApiBody), otherwise an error will be reported. For more information, please refer to the file upload section of swagger.
-
-:::
-
-
-
-### Upload mode - stream
-
-Configure the upload mode to be a `stream` string.
-
-When using stream mode, the `data` obtained from `this.ctx.files` is a `ReadStream`, and the data can be transferred to other `WriteStream` or `TransformStream` through `pipe` and other methods.
-
-When using stream mode, only one file is uploaded at a time, that is, there is only one file data object in the `this.ctx.files` array.
+When using stream mode, only one file is uploaded at a time, that is, there is only one file data object in the `@Files` array.
 
 In addition, stream mode `does not` generate temporary files on the server, so there is no need to manually clean up the temporary file cache after obtaining the uploaded content.
 
@@ -302,23 +426,41 @@ export class HomeController {
         filename: 'test.pdf',        // file name
         data: ReadStream,    				 // file stream
         mimeType: 'application/pdf', // mime
+        fieldName: 'file'            // field name
       },
     ]
 
     */
-    return {
-      files,
-      fields
-    }
   }
 }
 ```
 
-:::caution
+The object in stream mode contains the following fields:
 
-If the swagger component is enabled at the same time, be sure to add the type of the upload parameter (the type corresponding to the decorator and the type in @ApiBody), otherwise an error will be reported. For more information, please refer to the file upload section of swagger.
+```typescript
+export interface UploadStreamFieldInfo {
+  /**
+   * The name of the uploaded file
+   */
+  filename: string;
+  /**
+   * The MIME type of the uploaded file
+   */
+  mimeType: string;
+  /**
+   * The file stream of the uploaded file
+   */
+  data: Readable;
+  /**
+   * The form field name of the uploaded file
+   */
+  fieldName: string;
+}
+```
 
-:::
+</TabItem>
+
+</Tabs>
 
 
 

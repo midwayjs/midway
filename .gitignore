@@ -25,3 +25,4 @@ site/changelog
 .changelog
 **/test/*.txt
 .audit
+packages/**/test/tmp

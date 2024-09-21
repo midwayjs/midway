@@ -18,6 +18,7 @@ describe('/test/index.test.ts', () => {
         const fields = ctx.fields;
         const fileName = join(tmpdir(), Date.now() + '_' + files[0].filename);
         const fsWriteStream = createWriteStream(fileName);
+        const fieldName = files[0].fieldName;
 
         await new Promise(resolve => {
           fsWriteStream.on('close', resolve);
@@ -28,7 +29,8 @@ describe('/test/index.test.ts', () => {
         return {
           size: stat.size,
           files,
-          fields
+          fields,
+          fieldName,
         }
       }
     }
@@ -57,7 +59,7 @@ describe('/test/index.test.ts', () => {
     for (let i = 0; i < 10; i++) {
       await request.post('/upload')
         .field('name', 'form')
-        .attach('file', filePath)
+        .attach('file12', filePath)
         .expect(200)
         .then(async response => {
           const stat = statSync(filePath);
@@ -65,6 +67,7 @@ describe('/test/index.test.ts', () => {
           assert(response.body.files.length === 1);
           assert(response.body.files[0].filename === 'default.txt');
           assert(response.body.fields.name === 'form');
+          assert(response.body.fieldName === 'file12');
         });
     }
 
@@ -115,7 +118,13 @@ describe('/test/index.test.ts', () => {
     class APIController {
       @Post('/upload', { middleware: [UploadMiddleware]})
       async upload(ctx) {
-        // TODO
+        // throw error
+        // const fs = createWriteStream(join(tmpdir(), ctx.files[0].filename));
+        // ctx.files[0].data.pipe(fs);
+        //
+        // await new Promise(resolve => {
+        //   fs.on('finish', resolve);
+        // });
       }
     }
 
@@ -198,12 +207,12 @@ describe('/test/index.test.ts', () => {
     const request = await createHttpRequest(app);
     await request.post('/upload')
       .field('name', 'form')
-      .attach('file', filePath)
+      .attach('file1', filePath)
       .expect(200);
 
     await request.post('/upload1')
       .field('name', 'form')
-      .attach('file', filePath)
+      .attach('file2', filePath)
       .expect(200);
 
     await close(app);
