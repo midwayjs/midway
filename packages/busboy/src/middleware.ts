@@ -273,6 +273,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
         bb.on('close', async () => {
           this.logger.debug('[busboy]: busboy close');
+          // close 事件会在 busboy 解析完所有数据后触发，但是这个时候有可能没有写完文件，所以使用 Promise.all 等待所有文件写入完成
           resolveP({
             fields,
             files: await Promise.all(files),
