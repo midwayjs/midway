@@ -18,6 +18,13 @@ import * as upload from '../../../../src';
           whitelist: uploadWhiteList.filter(ext => {
             return ext !== '.gz';
           }).concat('.tar.gz')
+        },
+        midwayLogger: {
+          clients: {
+            appLogger: {
+              level: 'debug',
+            }
+          }
         }
       }
     }
@@ -41,6 +48,7 @@ export class HomeController {
   @Post('/upload')
   async upload(@Fields() fields, @Files() files: UploadFileInfo[]) {
     const stat = statSync(files[0].data);
+
     return {
       size: stat.size,
       files,

@@ -26,3 +26,4 @@ site/changelog
 **/test/*.txt
 .audit
 pnpm-lock.yaml
+packages/**/test/tmp

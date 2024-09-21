@@ -39,7 +39,11 @@ export const extractKoaLikeValue = (key, data, paramType?) => {
         if (ctx.getFileStream) {
           return ctx.getFileStream(data);
         } else if (ctx.files) {
-          return ctx.files[0];
+          if (Array.isArray(ctx.files)) {
+            return ctx.files[0];
+          } else {
+            return ctx.files;
+          }
         } else {
           return undefined;
         }
