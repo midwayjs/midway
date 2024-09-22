@@ -4,11 +4,19 @@
         <title>Midway changelog</title>
         <link>https://midwayjs.org/en/changelog</link>
         <description>Keep yourself up-to-date about new features in every release</description>
-        <lastBuildDate>Sat, 14 Sep 2024 20:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 22 Sep 2024 20:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <copyright>Copyright © 2024 Facebook, Inc.</copyright>
+        <item>
+            <title><![CDATA[v3.18.0]]></title>
+            <link>https://midwayjs.org/en/changelog/v3.18.0</link>
+            <guid>https://midwayjs.org/en/changelog/v3.18.0</guid>
+            <pubDate>Sun, 22 Sep 2024 20:00:00 GMT</pubDate>
+            <description><![CDATA[New Feature]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-new-feature">🚀 New Feature<a href="#-new-feature" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>busboy</code>, <code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/4074" target="_blank" rel="noopener noreferrer">#4074</a> feat: busboy support async generator mode (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-bug-fix">🐛 Bug Fix<a href="#-bug-fix" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>mock</code>, <code>web-express</code>, <code>web-koa</code>, <code>web</code><ul><li><a href="https://github.com/midwayjs/midway/pull/4082" target="_blank" rel="noopener noreferrer">#4082</a> fix: showcase of ssl with mwtsc (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>core</code><ul><li><a href="https://github.com/midwayjs/midway/pull/4058" target="_blank" rel="noopener noreferrer">#4058</a> fix: http client will be override default options (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li><li><code>core</code>, <code>mongoose</code><ul><li><a href="https://github.com/midwayjs/midway/pull/4061" target="_blank" rel="noopener noreferrer">#4061</a> fix: dataSourcePriority missing default value (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="-dependencies">📦 Dependencies<a href="#-dependencies" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li><code>grpc</code><ul><li><a href="https://github.com/midwayjs/midway/pull/4079" target="_blank" rel="noopener noreferrer">#4079</a> fix(deps): update dependency @grpc/grpc-js to v1.11.3 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li><li><code>jwt</code><ul><li><a href="https://github.com/midwayjs/midway/pull/4080" target="_blank" rel="noopener noreferrer">#4080</a> fix(deps): update dependency @types/jsonwebtoken to v9.0.7 (<a href="https://github.com/apps/renovate" target="_blank" rel="noopener noreferrer">@renovate[bot]</a>)</li></ul></li></ul><h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="committers-1">Committers: 1<a href="#committers-1" class="hash-link" aria-label="Lien direct vers le titre" title="Lien direct vers le titre">​</a></h2><ul><li>Harry Chen (<a href="https://github.com/czy88840616" target="_blank" rel="noopener noreferrer">@czy88840616</a>)</li></ul>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[v3.17.3]]></title>
             <link>https://midwayjs.org/en/changelog/v3.17.3</link>
