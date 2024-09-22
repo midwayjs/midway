@@ -2953,6 +2953,62 @@ exports[`test @ApiResponse should test response with type 1`] = `
 }
 `;
 
+exports[`test @ApiResponse should test use ApiOkResponse 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The record has been successfully created.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Cat",
+                },
+                {
+                  "properties": {
+                    "age": {
+                      "example": 1,
+                      "type": "number",
+                    },
+                  },
+                  "type": "object",
+                },
+              ],
+              "title": "response data",
+            },
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
 exports[`test @ApiResponse should test with array type 1`] = `
 {
   "components": {
@@ -3048,6 +3104,117 @@ exports[`test @ApiResponse should test with content and content type 1`] = `
               },
             },
             "description": "",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiResponse should test with schema 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "The record has been successfully created.",
+            "schema": {
+              "properties": {
+                "name": {
+                  "description": "The name of the Cat",
+                  "example": "Kitty",
+                  "type": "string",
+                },
+              },
+              "type": "object",
+            },
+          },
+          "403": {
+            "description": "Forbidden.",
+          },
+        },
+        "summary": undefined,
+        "tags": [
+          "api",
+        ],
+      },
+    },
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "api",
+      "externalDocs": undefined,
+      "name": "api",
+    },
+  ],
+}
+`;
+
+exports[`test @ApiResponse should test with schema and set ref 1`] = `
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.1",
+  "paths": {
+    "/api/update_user": {
+      "post": {
+        "description": undefined,
+        "operationId": "apicontroller_updateuser",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "The record has been successfully created.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Cat",
+                },
+                {
+                  "properties": {
+                    "age": {
+                      "example": 1,
+                      "type": "number",
+                    },
+                  },
+                  "type": "object",
+                },
+              ],
+              "title": "response data",
+            },
+          },
+          "403": {
+            "description": "Forbidden.",
           },
         },
         "summary": undefined,

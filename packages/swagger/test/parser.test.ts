@@ -1093,6 +1093,115 @@ describe('test @ApiResponse', () => {
     expect(explorer.getData()).toMatchSnapshot();
   });
 
+  it('should test with schema', () => {
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      @ApiResponse({
+        status: 201,
+        description: 'The record has been successfully created.',
+        schema: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              description: 'The name of the Cat',
+              example: 'Kitty',
+            },
+          },
+        },
+      })
+      @ApiResponse({ status: 403, description: 'Forbidden.' })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test with schema and set ref', () => {
+    class Cat {
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+    }
+
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      @ApiResponse({
+        status: 201,
+        description: 'The record has been successfully created.',
+        schema: {
+          title: `response data`,
+          allOf: [
+            {
+              $ref: getSchemaPath(Cat),
+            },
+            {
+              type: 'object',
+              properties: {
+                age: {
+                  type: 'number',
+                  example: 1,
+                },
+              },
+            },
+          ],
+        },
+      })
+      @ApiResponse({ status: 403, description: 'Forbidden.' })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
+  it('should test use ApiOkResponse', () => {
+    class Cat {
+      @ApiProperty({ example: 'Kitty', description: 'The name of the Cat' })
+      name: string;
+    }
+
+    @Controller('/api')
+    class APIController {
+      @Post('/update_user')
+      @ApiOkResponse({
+        description: 'The record has been successfully created.',
+        schema: {
+          title: `response data`,
+          allOf: [
+            {
+              $ref: getSchemaPath(Cat),
+            },
+            {
+              type: 'object',
+              properties: {
+                age: {
+                  type: 'number',
+                  example: 1,
+                },
+              },
+            },
+          ],
+        },
+      })
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    expect(explorer.getData()).toMatchSnapshot();
+  });
+
   it('should test pre-defined response decorator', () => {
     // @ApiOkResponse()
     // @ApiCreatedResponse()
