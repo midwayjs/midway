@@ -279,7 +279,7 @@ export interface UploadFileInfo {
 
 从 `v3.18.0` 提供，替代原有的 `stream` 模式，该模式支持多个文件流式上传。
 
-配置 upload 的 mode 为 `asyncIterator` 字符串。
+配置 mode 为 `asyncIterator` 字符串。
 
 ```typescript
 // src/config/config.default.ts
@@ -709,6 +709,8 @@ export class HomeController {
 
 
 ## 内置错误
+
+以下的错误在不同上传模式下均会自动触发。
 
 * `MultipartInvalidFilenameError` 无效文件名
 * `MultipartInvalidFileTypeError` 无效文件类型
