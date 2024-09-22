@@ -205,8 +205,7 @@ There are three upload modes: file mode, stream mode, and the newly added async 
 
 In the code, the `@Files()` decorator is used to obtain the uploaded files, and the `@Fields` decorator is used to get other upload form fields.
 
-
-<Tabs>  
+<Tabs>
 <TabItem value="file" label="File Mode">
 
 `file` is the default value, with `mode` configured as the string `file`.
@@ -280,7 +279,7 @@ export interface UploadFileInfo {
 
 Available since `v3.18.0`, this mode replaces the previous `stream` mode and supports streaming uploads of multiple files.
 
-Configure the upload `mode` as the string `asyncIterator`.
+Configure the `mode` as the string `asyncIterator`.
 
 ```typescript
 // src/config/config.default.ts
@@ -699,6 +698,8 @@ Currently the configurations that can be passed include `mode` and `busboy`'s ow
 
 
 ## Built-in errors
+
+The following errors will be automatically triggered in different modes.
 
 * `MultipartInvalidFilenameError` Invalid file name
 * `MultipartInvalidFileTypeError` Invalid file type
