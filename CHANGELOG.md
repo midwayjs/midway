@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.18.0 (2024-09-22)
+
+#### :rocket: New Feature
+* `busboy`, `core`
+  * [#4074](https://github.com/midwayjs/midway/pull/4074) feat: busboy support async generator mode ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `mock`, `web-express`, `web-koa`, `web`
+  * [#4082](https://github.com/midwayjs/midway/pull/4082) fix: showcase of ssl with mwtsc ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#4058](https://github.com/midwayjs/midway/pull/4058) fix: http client will be override default options ([@czy88840616](https://github.com/czy88840616))
+* `core`, `mongoose`
+  * [#4061](https://github.com/midwayjs/midway/pull/4061) fix: dataSourcePriority missing default value ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `grpc`
+  * [#4079](https://github.com/midwayjs/midway/pull/4079) fix(deps): update dependency @grpc/grpc-js to v1.11.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#4080](https://github.com/midwayjs/midway/pull/4080) fix(deps): update dependency @types/jsonwebtoken to v9.0.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.17.3 (2024-09-14)
 
 #### :bug: Bug Fix

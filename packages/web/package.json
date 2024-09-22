@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "3.17.1",
+  "version": "3.18.0",
   "description": "Midway Web Framework for Egg.js",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -29,7 +29,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/logger": "^3.0.0",
-    "@midwayjs/mock": "^3.17.1",
+    "@midwayjs/mock": "^3.18.0",
     "dayjs": "1.11.13",
     "egg-logger": "3.5.0",
     "egg-mock": "4.2.1",
@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
-    "@midwayjs/core": "^3.17.1",
+    "@midwayjs/core": "^3.18.0",
     "egg": "^2.28.0",
     "egg-cluster": "^1.27.1",
     "find-up": "5.0.0",

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mqtt",
-  "version": "3.17.1",
+  "version": "3.18.0",
   "description": "Midway Framework for mqtt",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -23,8 +23,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.17.1",
-    "@midwayjs/mock": "^3.17.1"
+    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/mock": "^3.18.0"
   },
   "dependencies": {
     "mqtt": "5.10.0"

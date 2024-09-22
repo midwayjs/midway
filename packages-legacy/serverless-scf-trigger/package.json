@@ -1,19 +1,19 @@
 {
   "name": "@midwayjs/serverless-scf-trigger",
   "private": true,
-  "version": "3.17.3",
+  "version": "3.18.0",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/faas-typings": "^3.10.13",
     "@midwayjs/runtime-mock": "^3.7.0",
-    "@midwayjs/serverless-fc-starter": "^3.17.1",
+    "@midwayjs/serverless-fc-starter": "^3.18.0",
     "@midwayjs/serverless-scf-starter": "^3.14.0",
     "body-parser": "1.20.3",
     "express": "4.20.0"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.17.1"
+    "@midwayjs/core": "^3.18.0"
   },
   "engines": {
     "node": ">=12"
