@@ -1,6 +1,483 @@
 # Change Log
 
 
+## v3.18.0 (2024-09-22)
+
+#### :rocket: New Feature
+* `busboy`, `core`
+  * [#4074](https://github.com/midwayjs/midway/pull/4074) feat: busboy support async generator mode ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `mock`, `web-express`, `web-koa`, `web`
+  * [#4082](https://github.com/midwayjs/midway/pull/4082) fix: showcase of ssl with mwtsc ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#4058](https://github.com/midwayjs/midway/pull/4058) fix: http client will be override default options ([@czy88840616](https://github.com/czy88840616))
+* `core`, `mongoose`
+  * [#4061](https://github.com/midwayjs/midway/pull/4061) fix: dataSourcePriority missing default value ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `grpc`
+  * [#4079](https://github.com/midwayjs/midway/pull/4079) fix(deps): update dependency @grpc/grpc-js to v1.11.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#4080](https://github.com/midwayjs/midway/pull/4080) fix(deps): update dependency @types/jsonwebtoken to v9.0.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.17.3 (2024-09-14)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#4075](https://github.com/midwayjs/midway/pull/4075) fix: swagger body array type ([@czy88840616](https://github.com/czy88840616))
+  * [#4062](https://github.com/midwayjs/midway/pull/4062) fix: swagger api tag for router ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `cos`
+  * [#4073](https://github.com/midwayjs/midway/pull/4073) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4067](https://github.com/midwayjs/midway/pull/4067) fix(deps): update dependency express to v4.20.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4066](https://github.com/midwayjs/midway/pull/4066) fix(deps): update dependency body-parser to v1.20.3 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`, `bull`
+  * [#4072](https://github.com/midwayjs/midway/pull/4072) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4059](https://github.com/midwayjs/midway/pull/4059) fix(deps): update dependency @grpc/grpc-js to v1.11.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#4060](https://github.com/midwayjs/midway/pull/4060) fix(deps): update dependency axios to v1.7.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.17.2 (2024-09-05)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#4050](https://github.com/midwayjs/midway/pull/4050) fix(swagger): miss dto  description from schema ([@lengyuxuan](https://github.com/lengyuxuan))
+
+#### Committers: 1
+- fangjin ([@lengyuxuan](https://github.com/lengyuxuan))
+
+
+
+## v3.17.1 (2024-09-02)
+
+#### :bug: Bug Fix
+* `kafka`
+  * [#4046](https://github.com/midwayjs/midway/pull/4046) fix(kafkajs): Fix the issue where the consumer method of the kafkajs component returns true to trigger a commit parameter error. ([@Yuliang-Lee](https://github.com/Yuliang-Lee))
+
+#### :nail_care: Polish
+* `core`
+  * [#4047](https://github.com/midwayjs/midway/pull/4047) feat: add ctx for the static tpl of response ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `axios`, `http-proxy`
+  * [#4040](https://github.com/midwayjs/midway/pull/4040) fix(deps): update dependency axios to v1.7.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#4041](https://github.com/midwayjs/midway/pull/4041) fix(deps): update dependency bull to v4.16.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- xlaoyu ([@Yuliang-Lee](https://github.com/Yuliang-Lee))
+
+
+
+## v3.17.0 (2024-08-29)
+
+#### :rocket: New Feature
+* `core`
+  * [#3982](https://github.com/midwayjs/midway/pull/3982) feat: support response helper and sse util ([@czy88840616](https://github.com/czy88840616))
+* `busboy`, `core`
+  * [#3875](https://github.com/midwayjs/midway/pull/3875) refactor: upload component use busboy ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `i18n`
+  * [#3931](https://github.com/midwayjs/midway/pull/3931) fix: Incorrect group format is used in i18n component ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `core`
+  * [#4013](https://github.com/midwayjs/midway/pull/4013) fix(core): DataSourceManagerConfigOption generic OPTIONS now no changes by PowerPartial ([@waitingsong](https://github.com/waitingsong))
+* `busboy`, `core`
+  * [#3875](https://github.com/midwayjs/midway/pull/3875) refactor: upload component use busboy ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#4018](https://github.com/midwayjs/midway/pull/4018) docs(awesome_midway): add @mwcp/pgmq ([@waitingsong](https://github.com/waitingsong))
+* [#4008](https://github.com/midwayjs/midway/pull/4008) docs: extensions koa typo ([@Nokic233](https://github.com/Nokic233))
+* [#4007](https://github.com/midwayjs/midway/pull/4007) docs: fix typo ([@Nokic233](https://github.com/Nokic233))
+
+#### :package: Dependencies
+* Other
+  * [#4036](https://github.com/midwayjs/midway/pull/4036) chore(deps): update dependency @types/node to v20.16.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#4011](https://github.com/midwayjs/midway/pull/4011) fix(deps): update dependency axios to v1.7.4 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#4015](https://github.com/midwayjs/midway/pull/4015) fix(deps): update bull monorepo to v5.21.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4005](https://github.com/midwayjs/midway/pull/4005) fix(deps): update bull monorepo to v5.21.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#4016](https://github.com/midwayjs/midway/pull/4016) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#4030](https://github.com/midwayjs/midway/pull/4030) fix(deps): update dependency ali-oss to v6.21.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4031](https://github.com/midwayjs/midway/pull/4031) fix(deps): update dependency mqtt to v5.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- NoKic233 ([@Nokic233](https://github.com/Nokic233))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
+## v3.16.8 (2024-08-03)
+
+#### :bug: Bug Fix
+* `sequelize`
+  * [#3993](https://github.com/midwayjs/midway/pull/3993) fix: remove authenticate when create data source ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `web-koa`, `web`
+  * [#3995](https://github.com/midwayjs/midway/pull/3995) fix(deps): update dependency qs to v6.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `ws`
+  * [#3988](https://github.com/midwayjs/midway/pull/3988) fix(deps): update dependency @types/ws to v8.5.12 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3990](https://github.com/midwayjs/midway/pull/3990) fix(deps): update dependency bull to v4.16.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3991](https://github.com/midwayjs/midway/pull/3991) fix(deps): update dependency mqtt to v5.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3989](https://github.com/midwayjs/midway/pull/3989) fix(deps): update dependency axios to v1.7.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.16.7 (2024-07-26)
+
+#### :bug: Bug Fix
+* `upload`
+  * [#3981](https://github.com/midwayjs/midway/pull/3981) fix: single field when allowFieldsDuplication enabled ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `cos`
+  * [#3973](https://github.com/midwayjs/midway/pull/3973) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.16.6 (2024-07-26)
+
+#### :nail_care: Polish
+* `upload`
+  * [#3971](https://github.com/midwayjs/midway/pull/3971) feat: add allowFieldsDuplication options ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `web-koa`, `web`
+  * [#3974](https://github.com/midwayjs/midway/pull/3974) fix(deps): update dependency qs to v6.12.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3975](https://github.com/midwayjs/midway/pull/3975) fix(deps): update bull monorepo to v5.21.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`
+  * [#3977](https://github.com/midwayjs/midway/pull/3977) fix(deps): update dependency @midwayjs/event-bus to v1.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3976](https://github.com/midwayjs/midway/pull/3976) fix(deps): update dependency @grpc/grpc-js to v1.11.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `ws`
+  * [#3958](https://github.com/midwayjs/midway/pull/3958) fix(deps): update dependency @types/ws to v8.5.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3959](https://github.com/midwayjs/midway/pull/3959) fix(deps): update dependency mqtt to v5.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.16.5 (2024-07-15)
+
+#### :memo: Documentation
+* [#3929](https://github.com/midwayjs/midway/pull/3929) docs: update awesome_midway.md ([@MrDotYan](https://github.com/MrDotYan))
+
+#### :package: Dependencies
+* `cos`
+  * [#3948](https://github.com/midwayjs/midway/pull/3948) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3947](https://github.com/midwayjs/midway/pull/3947) fix(deps): update dependency @grpc/grpc-js to v1.10.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3939](https://github.com/midwayjs/midway/pull/3939) chore(deps): update dependency why-is-node-running to v2.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3937](https://github.com/midwayjs/midway/pull/3937) fix(deps): update dependency mqtt to v5.8.0 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#3938](https://github.com/midwayjs/midway/pull/3938) fix(deps): update dependency ws to v8.18.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#3932](https://github.com/midwayjs/midway/pull/3932) fix(deps): update dependency qs to v6.12.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3933](https://github.com/midwayjs/midway/pull/3933) fix(deps): update dependency bull to v4.15.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@MrDotYan](https://github.com/MrDotYan)
+
+
+
+## v3.16.4 (2024-06-29)
+
+#### :memo: Documentation
+* [#3899](https://github.com/midwayjs/midway/pull/3899) docs(site): update awesome_midway.md ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* `mqtt`
+  * [#3928](https://github.com/midwayjs/midway/pull/3928) fix(deps): update dependency mqtt to v5.7.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3918](https://github.com/midwayjs/midway/pull/3918) fix(deps): update dependency joi to v17.13.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#3912](https://github.com/midwayjs/midway/pull/3912) fix(deps): update dependency ws to v8.17.1 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3924](https://github.com/midwayjs/midway/pull/3924) fix(deps): update dependency @grpc/grpc-js to v1.10.10 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3901](https://github.com/midwayjs/midway/pull/3901) fix(deps): update dependency @grpc/grpc-js to v1.10.9 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`, `bull`
+  * [#3917](https://github.com/midwayjs/midway/pull/3917) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3925](https://github.com/midwayjs/midway/pull/3925) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3904](https://github.com/midwayjs/midway/pull/3904) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#3905](https://github.com/midwayjs/midway/pull/3905) fix(deps): update dependency bull to v4.13.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cache-manager`
+  * [#3897](https://github.com/midwayjs/midway/pull/3897) chore(deps): update dependency cache-manager-ioredis-yet to v2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#3898](https://github.com/midwayjs/midway/pull/3898) chore(deps): update dependency egg-scripts to v3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
+## v3.16.3 (2024-06-06)
+
+#### :bug: Bug Fix
+* `cache-manager`
+  * [#3889](https://github.com/midwayjs/midway/pull/3889) fix: get origin value from redis store ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `otel`
+  * [#3894](https://github.com/midwayjs/midway/pull/3894) fix(deps): update dependency @opentelemetry/api to v1.9.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3895](https://github.com/midwayjs/midway/pull/3895) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3893](https://github.com/midwayjs/midway/pull/3893) fix(deps): update bull monorepo to v5.20.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3896](https://github.com/midwayjs/midway/pull/3896) fix(deps): update dependency mqtt to v5.7.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3845](https://github.com/midwayjs/midway/pull/3845) chore(deps): update dependency @types/node to v20 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.16.2 (2024-06-01)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3886](https://github.com/midwayjs/midway/pull/3886) fix(swagger): miss dto required from schema ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3871](https://github.com/midwayjs/midway/pull/3871) docs: update release schedule docs, mark v2 as EOL ([@Yuliang-Lee](https://github.com/Yuliang-Lee))
+* [#3854](https://github.com/midwayjs/midway/pull/3854) docs: fix typo in mock.md ([@wjw-gavin](https://github.com/wjw-gavin))
+* [#3849](https://github.com/midwayjs/midway/pull/3849) docs: update en version tenant.md ([@tuohuang](https://github.com/tuohuang))
+* [#3848](https://github.com/midwayjs/midway/pull/3848) docs: update tenant.md ([@tuohuang](https://github.com/tuohuang))
+
+#### :package: Dependencies
+* `bull-board`, `bull`
+  * [#3881](https://github.com/midwayjs/midway/pull/3881) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3844](https://github.com/midwayjs/midway/pull/3844) fix(deps): update bull monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#3882](https://github.com/midwayjs/midway/pull/3882) fix(deps): update dependency axios to v1.7.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#3874](https://github.com/midwayjs/midway/pull/3874) chore(deps): update dependency swagger-ui-dist to v5.17.13 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3869](https://github.com/midwayjs/midway/pull/3869) fix(deps): update dependency @grpc/grpc-js to v1.10.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#3870](https://github.com/midwayjs/midway/pull/3870) chore(deps): update supercharge/mongodb-github-action action to v1.11.0 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3860](https://github.com/midwayjs/midway/pull/3860) chore(deps): update dependency ts-jest to v29.1.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#3781](https://github.com/midwayjs/midway/pull/3781) chore(deps): update mongoose monorepo (major) ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3856](https://github.com/midwayjs/midway/pull/3856) chore(deps): update mikro-orm monorepo to v6.2.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 4
+- Gavin ([@wjw-gavin](https://github.com/wjw-gavin))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- xlaoyu ([@Yuliang-Lee](https://github.com/Yuliang-Lee))
+- 拓荒 ([@tuohuang](https://github.com/tuohuang))
+
+
+
+## v3.16.1 (2024-05-09)
+
+#### :bug: Bug Fix
+* `tenant`
+  * [#3840](https://github.com/midwayjs/midway/pull/3840) fix: export named error for tenant component ([@czy88840616](https://github.com/czy88840616))
+* `web-koa`
+  * [#3842](https://github.com/midwayjs/midway/pull/3842) fix: make request.query writeable ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3833](https://github.com/midwayjs/midway/pull/3833) docs: update orm.md ([@flyingcrp](https://github.com/flyingcrp))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- 陈十一 ([@flyingcrp](https://github.com/flyingcrp))
+
+
+
+## v3.16.0 (2024-05-06)
+
+#### :rocket: New Feature
+* `web-koa`
+  * [#3751](https://github.com/midwayjs/midway/pull/3751) feat: parse array query by qs ([@czy88840616](https://github.com/czy88840616))
+* `core`, `tenant`
+  * [#3762](https://github.com/midwayjs/midway/pull/3762) feat: add tenant component with tenant manager ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#3756](https://github.com/midwayjs/midway/pull/3756) refactor: Refactor swagger module ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#3700](https://github.com/midwayjs/midway/pull/3700) fix: health check missing this resolver ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `core`
+  * [#3710](https://github.com/midwayjs/midway/pull/3710) feat: add instance args for parameter decorator options ([@czy88840616](https://github.com/czy88840616))
+* `mock`, `mqtt`
+  * [#3699](https://github.com/midwayjs/midway/pull/3699) feat: support dynamic create mqtt consumer ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `casbin-redis-adapter`, `redis`
+  * [#3827](https://github.com/midwayjs/midway/pull/3827) fix(deps): update dependency ioredis to v5.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3825](https://github.com/midwayjs/midway/pull/3825) fix(deps): update bull monorepo to v5.17.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#3811](https://github.com/midwayjs/midway/pull/3811) fix(deps): update dependency qs to v6.12.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#3824](https://github.com/midwayjs/midway/pull/3824) fix(deps): update dependency tablestore to v5.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3823](https://github.com/midwayjs/midway/pull/3823) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.13.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `ws`
+  * [#3829](https://github.com/midwayjs/midway/pull/3829) fix(deps): update dependency ws to v8.17.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3828](https://github.com/midwayjs/midway/pull/3828) fix(deps): update dependency joi to v17.13.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#3826](https://github.com/midwayjs/midway/pull/3826) fix(deps): update dependency casbin to v5.30.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#3775](https://github.com/midwayjs/midway/pull/3775) fix(deps): update dependency reflect-metadata to v0.2.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3818](https://github.com/midwayjs/midway/pull/3818) fix(deps): update dependency @grpc/proto-loader to v0.7.13 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#3817](https://github.com/midwayjs/midway/pull/3817) fix(deps): update dependency @grpc/grpc-js to v1.10.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#3822](https://github.com/midwayjs/midway/pull/3822) chore(deps): update dependency swagger-ui-dist to v5.17.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3819](https://github.com/midwayjs/midway/pull/3819) chore(deps): update mikro-orm monorepo to v6.2.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3810](https://github.com/midwayjs/midway/pull/3810) fix(deps): update dependency mqtt to v5.5.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.15.11 (2024-04-25)
+
+#### :bug: Bug Fix
+* `express-session`, `web-express`, `web-koa`, `web`
+  * [#3807](https://github.com/midwayjs/midway/pull/3807) fix: certificate error in web scene ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `otel`
+  * [#3805](https://github.com/midwayjs/midway/pull/3805) chore(deps): update dependency @opentelemetry/sdk-node to v0.51.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#3806](https://github.com/midwayjs/midway/pull/3806) chore(deps): update mikro-orm monorepo to v6.2.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.15.10 (2024-04-19)
+
+#### :nail_care: Polish
+* `bull-board`
+  * [#3798](https://github.com/midwayjs/midway/pull/3798) refactor: add the bullBoardManager class along with documentation ([@czy88840616](https://github.com/czy88840616))
+  * [#3791](https://github.com/midwayjs/midway/pull/3791) feat(bull-board): save the result of createBullBoard ([@DanielXuuuuu](https://github.com/DanielXuuuuu))
+* `web-express`, `web-koa`, `web`
+  * [#3797](https://github.com/midwayjs/midway/pull/3797) feat Support http server opts ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#3788](https://github.com/midwayjs/midway/pull/3788) fix(docs): typo ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* `bull-board`, `view-ejs`
+  * [#3792](https://github.com/midwayjs/midway/pull/3792) fix(deps): update dependency ejs to v3.1.10 ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#3793](https://github.com/midwayjs/midway/pull/3793) fix(deps): update dependency leoric to v2.12.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Daniel Xu ([@DanielXuuuuu](https://github.com/DanielXuuuuu))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
+## v3.15.9 (2024-04-14)
+
+#### :bug: Bug Fix
+* `cron`
+  * [#3786](https://github.com/midwayjs/midway/pull/3786) fix: remove typings from the cron module since it includes its own types ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.15.8 (2024-04-12)
+
+#### :bug: Bug Fix
+* `socketio`
+  * [#3764](https://github.com/midwayjs/midway/pull/3764) fix: socket with regexp namespace ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* Other
+  * [#3780](https://github.com/midwayjs/midway/pull/3780) chore(deps): update dessant/lock-threads action to v5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#3769](https://github.com/midwayjs/midway/pull/3769) fix(deps): update socket.io packages to v4.7.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#3777](https://github.com/midwayjs/midway/pull/3777) fix(deps): update dependency qs to v6.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `static-file`
+  * [#3778](https://github.com/midwayjs/midway/pull/3778) fix(deps): update dependency ylru to v1.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#3776](https://github.com/midwayjs/midway/pull/3776) fix(deps): update dependency @opentelemetry/api to v1.8.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#3774](https://github.com/midwayjs/midway/pull/3774) fix(deps): update dependency tablestore to v5.5.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#3773](https://github.com/midwayjs/midway/pull/3773) fix(deps): update dependency mqtt to v5.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#3772](https://github.com/midwayjs/midway/pull/3772) fix(deps): update dependency casbin to v5.29.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cron`
+  * [#3771](https://github.com/midwayjs/midway/pull/3771) fix(deps): update dependency @types/cron to v2.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#3770](https://github.com/midwayjs/midway/pull/3770) fix(deps): update bull monorepo to v5.15.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`
+  * [#3767](https://github.com/midwayjs/midway/pull/3767) fix(deps): update dependency joi to v17.12.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `web-koa`
+  * [#3768](https://github.com/midwayjs/midway/pull/3768) fix(deps): update dependency koa to v2.15.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#3747](https://github.com/midwayjs/midway/pull/3747) fix(deps): update dependency @grpc/grpc-js to v1.10.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#3748](https://github.com/midwayjs/midway/pull/3748) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.13.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.15.7 (2024-04-01)
 
 #### :bug: Bug Fix

@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/tenant",
   "description": "midway tenant component",
-  "version": "3.15.6",
+  "version": "3.18.0",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -10,10 +10,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.15.6",
-    "@midwayjs/mock": "^3.15.6"
+    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/mock": "^3.18.0"
   },
-  "dependencies": {},
   "keywords": [
     "midway",
     "tenant"

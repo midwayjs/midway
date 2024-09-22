@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/decorator",
-  "version": "3.15.6",
+  "version": "3.18.0",
   "description": "definition decorator for midway project",
   "private": true,
   "main": "dist/index.js",
@@ -13,7 +13,7 @@
     "link": "npm link"
   },
   "dependencies": {
-    "@midwayjs/core": "^3.15.6"
+    "@midwayjs/core": "^3.18.0"
   },
   "devDependencies": {
     "mm": "3.4.0"

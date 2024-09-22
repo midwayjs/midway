@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mock",
-  "version": "3.15.6",
+  "version": "3.18.0",
   "description": "create your test app from midway framework",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -29,7 +29,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.15.6",
+    "@midwayjs/core": "^3.18.0",
     "@midwayjs/logger": "^3.0.0",
     "@types/amqplib": "0.10.5",
     "amqplib": "0.10.4",
@@ -39,7 +39,7 @@
     "ws": "8.18.0"
   },
   "dependencies": {
-    "@midwayjs/async-hooks-context-manager": "^3.15.6",
+    "@midwayjs/async-hooks-context-manager": "^3.18.0",
     "@types/superagent": "4.1.14",
     "@types/supertest": "2.0.16",
     "js-yaml": "4.1.0",
