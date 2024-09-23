@@ -39,6 +39,7 @@ import {
   SwaggerOptions,
 } from './interfaces/';
 import { BodyContentType } from '.';
+import { getEnumValues } from './common/enum.utils';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -643,7 +644,16 @@ export class SwaggerExplorer {
       for (const k of keys) {
         // 这里是引用，赋值可以直接更改
         const tt = resp[k];
-        if (tt.type) {
+
+        if (tt.schema) {
+          // response 的 schema 需要包含在 content 内
+          tt.content = {
+            'application/json': {
+              schema: this.formatType(tt.schema),
+            },
+          };
+          delete tt.schema;
+        } else if (tt.type) {
           if (Types.isClass(tt.type)) {
             this.parseClzz(tt.type);
 
@@ -856,8 +866,13 @@ export class SwaggerExplorer {
 
     // 如果有枚举，单独处理
     if (metadata.enum) {
-      // enum 不需要处理
-      metadata.enum.map(item => this.formatType(item));
+      if (Array.isArray(metadata.enum)) {
+        // enum 不需要处理
+        metadata.enum.map(item => this.formatType(item));
+      } else {
+        // 枚举类型需要处理
+        metadata.enum = getEnumValues(metadata.enum);
+      }
     }
 
     if (metadata.not) {

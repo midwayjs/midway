@@ -12,22 +12,11 @@ export function getEnumValues(enumType: SwaggerEnumType): string[] | number[] {
     return [];
   }
 
-  const values = [];
-  const uniqueValues = {};
+  const values = Object.keys(enumType)
+    .filter(key => isNaN(Number(key)))
+    .map(key => enumType[key]);
 
-  for (const key in enumType) {
-    const value = enumType[key];
-    /* eslint-disable no-prototype-builtins */
-    // filter out cases where enum key also becomes its value (A: B, B: A)
-    if (
-      !uniqueValues.hasOwnProperty(value) &&
-      !uniqueValues.hasOwnProperty(key)
-    ) {
-      values.push(value);
-      uniqueValues[value] = value;
-    }
-  }
-  return values;
+  return Array.from(new Set(values));
 }
 
 export function getEnumType(values: (string | number)[]): 'string' | 'number' {

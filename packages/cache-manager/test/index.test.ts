@@ -1,15 +1,14 @@
 import * as path from 'path';
 import * as assert from 'assert';
 import { createLightApp, close } from '@midwayjs/mock';
-import { caching } from 'cache-manager';
+import { createCache } from 'cache-manager';
 import { sleep } from '@midwayjs/core';
 
 describe(`index.test.ts`, ()=>{
 
   describe('cache manager', () => {
     it('test cache manager wrap method', async () => {
-      const memoryCache = await caching('memory', {
-        max: 100,
+      const memoryCache = await createCache({
         ttl: 10
       });
       let i = 0;
