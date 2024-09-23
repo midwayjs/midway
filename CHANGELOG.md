@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.18.1 (2024-09-23)
+
+#### :bug: Bug Fix
+* `cache-manager`, `swagger`
+  * [#4083](https://github.com/midwayjs/midway/pull/4083) fix: ensure compatibility with Swagger response schema and fix the parsing of enum types ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.18.0 (2024-09-22)
 
 #### :rocket: New Feature

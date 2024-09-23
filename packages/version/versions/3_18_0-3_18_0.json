@@ -8,8 +8,14 @@
   "@midwayjs/bull": "3.18.0",
   "@midwayjs/bull-board": "3.18.0",
   "@midwayjs/busboy": "3.18.0",
-  "@midwayjs/cache-manager": "3.18.0",
-  "@midwayjs/captcha": "3.18.0",
+  "@midwayjs/cache-manager": [
+    "3.18.0",
+    "3.18.1"
+  ],
+  "@midwayjs/captcha": [
+    "3.18.0",
+    "3.18.1"
+  ],
   "@midwayjs/casbin": "3.18.0",
   "@midwayjs/casbin-redis-adapter": "3.18.0",
   "@midwayjs/casbin-typeorm-adapter": "3.18.0",
@@ -47,7 +53,10 @@
   "@midwayjs/session": "3.18.0",
   "@midwayjs/socketio": "3.18.0",
   "@midwayjs/static-file": "3.18.0",
-  "@midwayjs/swagger": "3.18.0",
+  "@midwayjs/swagger": [
+    "3.18.0",
+    "3.18.1"
+  ],
   "@midwayjs/tablestore": "3.18.0",
   "@midwayjs/tags": "3.18.0",
   "@midwayjs/tenant": "3.18.0",
@@ -55,7 +64,10 @@
   "@midwayjs/typeorm": "3.18.0",
   "@midwayjs/upload": "3.18.0",
   "@midwayjs/validate": "3.18.0",
-  "@midwayjs/version": "3.18.0",
+  "@midwayjs/version": [
+    "3.18.0",
+    "3.18.1"
+  ],
   "@midwayjs/view": "3.18.0",
   "@midwayjs/view-ejs": "3.18.0",
   "@midwayjs/view-nunjucks": "3.18.0",
