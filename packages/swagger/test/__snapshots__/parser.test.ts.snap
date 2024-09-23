@@ -2971,24 +2971,28 @@ exports[`test @ApiResponse should test use ApiOkResponse 1`] = `
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The record has been successfully created.",
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/Cat",
-                },
-                {
-                  "properties": {
-                    "age": {
-                      "example": 1,
-                      "type": "number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Cat",
                     },
-                  },
-                  "type": "object",
+                    {
+                      "properties": {
+                        "age": {
+                          "example": 1,
+                          "type": "number",
+                        },
+                      },
+                      "type": "object",
+                    },
+                  ],
+                  "title": "response data",
                 },
-              ],
-              "title": "response data",
+              },
             },
+            "description": "The record has been successfully created.",
           },
         },
         "summary": undefined,
@@ -3142,17 +3146,20 @@ exports[`test @ApiResponse should test with schema 1`] = `
         "parameters": [],
         "responses": {
           "201": {
-            "description": "The record has been successfully created.",
-            "schema": {
-              "properties": {
-                "name": {
-                  "description": "The name of the Cat",
-                  "example": "Kitty",
-                  "type": "string",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "age": {
+                      "example": 1,
+                      "type": "number",
+                    },
+                  },
+                  "type": "object",
                 },
               },
-              "type": "object",
             },
+            "description": "The record has been successfully created.",
           },
           "403": {
             "description": "Forbidden.",
@@ -3194,24 +3201,28 @@ exports[`test @ApiResponse should test with schema and set ref 1`] = `
         "parameters": [],
         "responses": {
           "201": {
-            "description": "The record has been successfully created.",
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/Cat",
-                },
-                {
-                  "properties": {
-                    "age": {
-                      "example": 1,
-                      "type": "number",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Cat",
                     },
-                  },
-                  "type": "object",
+                    {
+                      "properties": {
+                        "age": {
+                          "example": 1,
+                          "type": "number",
+                        },
+                      },
+                      "type": "object",
+                    },
+                  ],
+                  "title": "response data",
                 },
-              ],
-              "title": "response data",
+              },
             },
+            "description": "The record has been successfully created.",
           },
           "403": {
             "description": "Forbidden.",
