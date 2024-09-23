@@ -1100,13 +1100,16 @@ describe('test @ApiResponse', () => {
       @ApiResponse({
         status: 201,
         description: 'The record has been successfully created.',
-        schema: {
-          type: 'object',
-          properties: {
-            name: {
-              type: 'string',
-              description: 'The name of the Cat',
-              example: 'Kitty',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                age: {
+                  type: 'number',
+                  example: 1,
+                },
+              },
             },
           },
         },
@@ -2141,6 +2144,23 @@ describe('test property metadata parse', () => {
       type: 'string',
       nullable: true,
       enum: ['a', 'b', 'c', null]
+    });
+  });
+
+  it("should format enum with enum type", () => {
+    enum StatusEnum {
+      Disabled,
+      Enabled,
+    }
+
+    const result = swaggerExplorer.formatType({
+      type: 'enum',
+      enum: StatusEnum
+    });
+
+    expect(result).toEqual({
+      type: 'enum',
+      enum: [0, 1],
     });
   });
 
