@@ -1,5 +1,5 @@
 import { Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/core';
-import * as cacheManager from 'cache-manager';
+const cacheManager = require('cache-manager');
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
