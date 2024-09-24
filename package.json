@@ -5,7 +5,7 @@
   "devDependencies": {
     "@nrwl/tao": "16.10.0",
     "@types/jest": "29.5.13",
-    "@types/node": "20.16.5",
+    "@types/node": "20.16.6",
     "@vercel/ncc": "0.38.2",
     "autocannon": "7.15.0",
     "@babel/plugin-proposal-decorators": "7.24.7",
