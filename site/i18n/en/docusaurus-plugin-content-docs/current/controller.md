@@ -263,7 +263,7 @@ export class UserController {
 }
 ```
 
-::caution
+:::caution
 **Note** EggJS is different from other frameworks. When the key in the Query String is repeated, `ctx.query` only takes the value of the first occurrence of the key, and subsequent occurrences will be ignored.
 
 For example, the value obtained by `GET /user?uid=1&uid=2` through `ctx.query` is `{ uid: '1' }`.
