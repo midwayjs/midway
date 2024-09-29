@@ -1776,6 +1776,26 @@ describe('test @ApiProperty', () => {
     const explorer = new CustomSwaggerExplorer();
     expect(explorer.parse(Cat)).toMatchSnapshot();
   });
+
+  it('should format enum type with array', () => {
+    enum Animal {
+      Cat = 0,
+      Dog = 1,
+      Pig = 2,
+    }
+
+    class Dto {
+      @ApiProperty({
+        type: 'enum',
+        enum: Animal,
+        isArray: true,
+      })
+      animal: Animal[];
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    expect(explorer.parse(Dto)).toMatchSnapshot();
+  })
 });
 
 describe('test property metadata parse', () => {
@@ -2208,26 +2228,6 @@ describe('test property metadata parse', () => {
       additionalProperties: true
     });
   });
-
-  it('should format enum type with array', () => {
-    enum Animal {
-      Cat = 0,
-      Dog = 1,
-      Pig = 2,
-    }
-
-    const result = swaggerExplorer.formatType({
-      type: 'enum',
-      enum: Animal,
-      isArray: true,
-    });
-
-    expect(result).toEqual({
-      type: 'enum',
-      isArray: true,
-      enum: [0, 1, 2],
-    });
-  })
 });
 
 describe('test @ApiOperation', () => {
