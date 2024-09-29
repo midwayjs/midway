@@ -12,8 +12,6 @@
     "@midwayjs/cookies": "^1.0.2",
     "@midwayjs/logger": "^3.0.0",
     "@midwayjs/mock": "^3.18.0",
-    "@midwayjs/serverless-fc-starter": "^3.18.0",
-    "@midwayjs/serverless-scf-starter": "^3.14.0",
     "mm": "3.4.0"
   },
   "engines": {
