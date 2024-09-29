@@ -1794,7 +1794,25 @@ describe('test @ApiProperty', () => {
     }
 
     const explorer = new CustomSwaggerExplorer();
-    expect(explorer.parse(Dto)).toMatchSnapshot();
+    const result = explorer.parse(Dto)
+    // expect(explorer.parse(Dto)).toMatchSnapshot();
+    expect(result).toEqual({
+      properties: {
+        animal: {
+          isArray: true,
+          items: {
+            enum: [
+              0,
+              1,
+              2,
+            ],
+            type: 'number',
+          },
+          type: 'array',
+        },
+      },
+      type: 'object',
+    })
   })
 });
 
