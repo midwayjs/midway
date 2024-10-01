@@ -12,9 +12,9 @@
     "@midwayjs/core": "^3.18.0",
     "@midwayjs/koa": "^3.18.0",
     "@midwayjs/mock": "^3.18.0",
-    "@mikro-orm/core": "6.3.11",
-    "@mikro-orm/entity-generator": "6.3.11",
-    "@mikro-orm/sqlite": "6.3.11"
+    "@mikro-orm/core": "6.3.12",
+    "@mikro-orm/entity-generator": "6.3.12",
+    "@mikro-orm/sqlite": "6.3.12"
   },
   "author": {
     "name": "czy88840616",
