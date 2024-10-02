@@ -2,6 +2,8 @@ import * as EventEmitter from 'events';
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
 
+export type ClassType = new (...args: any[]) => any;
+
 export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
 };
@@ -341,9 +343,9 @@ export interface IMethodAspect {
 }
 
 export interface IModuleStore {
-  listModule(key: string);
-  saveModule(key: string, module: any);
-  transformModule?(moduleMap: Map<string, Set<any>>);
+  listModule(key: ObjectIdentifier);
+  saveModule(key: ObjectIdentifier, module: any);
+  transformModule?(moduleMap: Map<ObjectIdentifier, Set<any>>);
 }
 
 export interface TSDesignType<OriginType = unknown> {

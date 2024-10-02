@@ -1,8 +1,8 @@
-import { ALL, RouteParamTypes } from '../decorator';
+import { ALL_VALUE_KEY, RouteParamTypes } from '../decorator';
 import { transformRequestObjectByType } from './index';
 
 export const extractKoaLikeValue = (key, data, paramType?) => {
-  if (ALL === data) {
+  if (ALL_VALUE_KEY === data) {
     data = undefined;
   }
 
@@ -82,7 +82,7 @@ export const extractKoaLikeValue = (key, data, paramType?) => {
 };
 
 export const extractExpressLikeValue = (key, data, paramType?) => {
-  if (ALL === data) {
+  if (ALL_VALUE_KEY === data) {
     data = undefined;
   }
   return function (req, res, next) {

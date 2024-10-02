@@ -1,18 +1,12 @@
 import {
   CONFIGURATION_KEY,
-  getClassExtendedMetadata,
-  getClassMetadata,
-  getObjectDefinition,
-  getPropertyInject,
-  getProviderName,
-  getProviderUUId,
+  DecoratorManager,
   IComponentInfo,
   INJECT_CUSTOM_PROPERTY,
   InjectionConfigurationOptions,
-  listModule,
   MAIN_MODULE_KEY,
-  saveModule,
-  saveProviderId,
+  OBJECT_DEFINITION_KEY,
+  PROPERTY_INJECT_KEY,
 } from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -47,6 +41,7 @@ import EventEmitter from 'events';
 import { MidwayDefinitionNotFoundError } from '../error';
 import { Types } from '../util/types';
 import { Utils } from '../util';
+import { MetadataManager } from '../decorator/metadataManager';
 
 const debug = util.debuglog('midway:debug');
 const debugBind = util.debuglog('midway:bind');
@@ -78,7 +73,7 @@ class ContainerConfiguration {
         configurationOptions = configurationExport.getConfigurationOptions();
       } else {
         // 普通类写法
-        configurationOptions = getClassMetadata(
+        configurationOptions = MetadataManager.getOwnMetadata(
           CONFIGURATION_KEY,
           configurationExport
         );
@@ -180,8 +175,8 @@ class ContainerConfiguration {
       // 函数式写法不需要绑定到容器
     } else {
       // 普通类写法
-      saveProviderId(undefined, clzz);
-      const id = getProviderUUId(clzz);
+      DecoratorManager.saveProviderId(undefined, clzz);
+      const id = DecoratorManager.getProviderUUId(clzz);
       this.container.bind(id, clzz, {
         namespace: namespace,
         scope: ScopeEnum.Singleton,
@@ -189,12 +184,12 @@ class ContainerConfiguration {
     }
 
     // configuration 手动绑定去重
-    const configurationMods = listModule(CONFIGURATION_KEY);
+    const configurationMods = DecoratorManager.listModule(CONFIGURATION_KEY);
     const exists = configurationMods.find(mod => {
       return mod.target === clzz;
     });
     if (!exists) {
-      saveModule(CONFIGURATION_KEY, {
+      DecoratorManager.saveModule(CONFIGURATION_KEY, {
         target: clzz,
         namespace: namespace,
       });
@@ -373,7 +368,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     let definition;
     if (Types.isClass(target)) {
       definition = new ObjectDefinition();
-      definition.name = getProviderName(target);
+      definition.name = DecoratorManager.getProviderName(target);
     } else {
       definition = new FunctionDefinition();
       if (!Types.isAsyncFunction(target)) {
@@ -398,7 +393,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     // inject properties
-    const props = getPropertyInject(target);
+    const props = MetadataManager.getMetadata(PROPERTY_INJECT_KEY, target);
 
     for (const p in props) {
       const propertyMeta = props[p];
@@ -416,7 +411,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     // inject custom properties
-    const customProps = getClassExtendedMetadata(
+    const customProps = MetadataManager.getMetadata(
       INJECT_CUSTOM_PROPERTY,
       target
     );
@@ -431,7 +426,8 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     // @async, @init, @destroy @scope
-    const objDefOptions = getObjectDefinition(target) ?? {};
+    const objDefOptions =
+      MetadataManager.getMetadata(OBJECT_DEFINITION_KEY, target) ?? {};
 
     if (objDefOptions.initMethod) {
       debugBind(
@@ -486,7 +482,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   protected bindModule(module: any, options: Partial<IObjectDefinition>) {
     if (Types.isClass(module)) {
-      const providerId = getProviderUUId(module);
+      const providerId = DecoratorManager.getProviderUUId(module);
       if (providerId) {
         this.identifierMapping.saveClassRelation(module, options?.namespace);
         this.bind(providerId, module, options);
@@ -532,7 +528,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   }
 
   protected getIdentifier(target: any) {
-    return getProviderUUId(target);
+    return DecoratorManager.getProviderUUId(target);
   }
 
   protected getManagedResolverFactory() {

@@ -1,11 +1,6 @@
-import {
-  saveClassMetadata,
-  saveModule,
-  WS_CONTROLLER_KEY,
-  Provide,
-  Scope,
-} from '../';
+import { WS_CONTROLLER_KEY, Provide, Scope, DecoratorManager } from '../';
 import { ScopeEnum, MiddlewareParamArray } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export interface WSControllerOption {
   namespace: string;
@@ -23,8 +18,8 @@ export function WSController(
   }
 ): ClassDecorator {
   return (target: any) => {
-    saveModule(WS_CONTROLLER_KEY, target);
-    saveClassMetadata(
+    DecoratorManager.saveModule(WS_CONTROLLER_KEY, target);
+    MetadataManager.defineMetadata(
       WS_CONTROLLER_KEY,
       {
         namespace,

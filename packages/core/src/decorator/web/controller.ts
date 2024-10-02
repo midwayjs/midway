@@ -1,11 +1,6 @@
-import {
-  saveClassMetadata,
-  saveModule,
-  CONTROLLER_KEY,
-  Provide,
-  Scope,
-} from '../';
+import { CONTROLLER_KEY, DecoratorManager, Provide, Scope } from '../';
 import { ScopeEnum, MiddlewareParamArray } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export interface ControllerOption {
   prefix: string;
@@ -30,9 +25,9 @@ export function Controller(
   } = { middleware: [], sensitive: true }
 ): ClassDecorator {
   return (target: any) => {
-    saveModule(CONTROLLER_KEY, target);
+    DecoratorManager.saveModule(CONTROLLER_KEY, target);
     if (prefix)
-      saveClassMetadata(
+      MetadataManager.defineMetadata(
         CONTROLLER_KEY,
         {
           prefix,

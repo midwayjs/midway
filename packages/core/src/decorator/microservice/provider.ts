@@ -1,15 +1,13 @@
 import {
-  saveClassMetadata,
-  saveModule,
   MS_PROVIDER_KEY,
-  attachClassMetadata,
-  savePropertyMetadata,
   MS_GRPC_METHOD_KEY,
   MS_DUBBO_METHOD_KEY,
   Provide,
   Scope,
+  DecoratorManager,
 } from '../';
 import { GRPCMetadata, MSProviderType, ScopeEnum } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export function Provider(
   type: MSProviderType.GRPC,
@@ -24,8 +22,8 @@ export function Provider(
   metadata: any = {}
 ): ClassDecorator {
   return (target: any) => {
-    saveModule(MS_PROVIDER_KEY, target);
-    saveClassMetadata(
+    DecoratorManager.saveModule(MS_PROVIDER_KEY, target);
+    MetadataManager.defineMetadata(
       MS_PROVIDER_KEY,
       {
         type,
@@ -56,7 +54,7 @@ export function GrpcMethod(
     if (!methodOptions.type) {
       methodOptions.type = GrpcStreamTypeEnum.BASE;
     }
-    savePropertyMetadata(
+    MetadataManager.defineMetadata(
       MS_GRPC_METHOD_KEY,
       {
         methodName: methodOptions.methodName || propertyName,
@@ -73,7 +71,7 @@ export function GrpcMethod(
 
 export function DubboMethod(methodName?: string): MethodDecorator {
   return (target, propertyName, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       MS_DUBBO_METHOD_KEY,
       {
         methodName: methodName || propertyName,

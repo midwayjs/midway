@@ -8,10 +8,10 @@ import {
 import {
   Destroy,
   Init,
-  listModule,
   Provide,
   Scope,
   MOCK_KEY,
+  DecoratorManager,
 } from '../decorator';
 
 @Provide()
@@ -167,7 +167,7 @@ export class MidwayMockService {
 
   public async initSimulation() {
     const simulationModule: Array<new (...args) => ISimulation> =
-      listModule(MOCK_KEY);
+      DecoratorManager.listModule(MOCK_KEY);
 
     for (const module of simulationModule) {
       const instance = await this.applicationContext.getAsync(module);

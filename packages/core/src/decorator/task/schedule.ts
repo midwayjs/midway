@@ -1,11 +1,6 @@
-import {
-  saveClassMetadata,
-  saveModule,
-  SCHEDULE_KEY,
-  Provide,
-  Scope,
-} from '../';
+import { SCHEDULE_KEY, Provide, Scope, DecoratorManager } from '../';
 import { ScopeEnum } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export interface CommonSchedule {
   exec(ctx?);
@@ -30,8 +25,8 @@ export interface ScheduleOpts {
 
 export function Schedule(scheduleOpts: ScheduleOpts | string) {
   return function (target: any): void {
-    saveModule(SCHEDULE_KEY, target);
-    saveClassMetadata(SCHEDULE_KEY, scheduleOpts, target);
+    DecoratorManager.saveModule(SCHEDULE_KEY, target);
+    MetadataManager.defineMetadata(SCHEDULE_KEY, scheduleOpts, target);
     Scope(ScopeEnum.Request)(target);
     Provide()(target);
   };

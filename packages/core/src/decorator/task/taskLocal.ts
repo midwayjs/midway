@@ -1,8 +1,9 @@
-import { saveModule, attachClassMetadata } from '../';
 import {
   MODULE_TASK_TASK_LOCAL_KEY,
   MODULE_TASK_TASK_LOCAL_OPTIONS,
 } from '../constant';
+import { DecoratorManager } from '../decoratorManager';
+import { MetadataManager } from '../metadataManager';
 
 export function TaskLocal(options) {
   return function (
@@ -10,8 +11,8 @@ export function TaskLocal(options) {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    saveModule(MODULE_TASK_TASK_LOCAL_KEY, target.constructor);
-    attachClassMetadata(
+    DecoratorManager.saveModule(MODULE_TASK_TASK_LOCAL_KEY, target.constructor);
+    MetadataManager.attachMetadata(
       MODULE_TASK_TASK_LOCAL_OPTIONS,
       {
         options,

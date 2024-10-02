@@ -1,5 +1,4 @@
 import {
-  getClassMetadata,
   Init,
   Inject,
   Provide,
@@ -7,8 +6,6 @@ import {
   INJECT_CUSTOM_METHOD,
   APPLICATION_CONTEXT_KEY,
   INJECT_CUSTOM_PARAM,
-  getMethodParamTypes,
-  transformTypeFromTSDesign,
 } from '../decorator';
 import {
   MethodDecoratorMetaData,
@@ -26,6 +23,7 @@ import { MidwayAspectService } from './aspectService';
 import { MidwayCommonError, MidwayParameterError } from '../error';
 import * as util from 'util';
 import { isClass } from '../util/types';
+import { MetadataManager } from '../decorator/metadataManager';
 
 const debug = util.debuglog('midway:debug');
 
@@ -49,7 +47,7 @@ export class MidwayDecoratorService {
     this.applicationContext.onBeforeBind(Clzz => {
       // find custom method decorator metadata, include method decorator information array
       const methodDecoratorMetadataList: MethodDecoratorMetaData[] =
-        getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
+        MetadataManager.getOwnMetadata(INJECT_CUSTOM_METHOD, Clzz);
 
       if (methodDecoratorMetadataList) {
         // loop it, save this order for decorator run
@@ -82,7 +80,7 @@ export class MidwayDecoratorService {
       // find custom param decorator metadata
       const parameterDecoratorMetadata: {
         [methodName: string]: Array<ParameterDecoratorMetaData>;
-      } = getClassMetadata(INJECT_CUSTOM_PARAM, Clzz);
+      } = MetadataManager.getOwnMetadata(INJECT_CUSTOM_PARAM, Clzz);
 
       if (parameterDecoratorMetadata) {
         // loop it, save this order for decorator run
@@ -121,7 +119,10 @@ export class MidwayDecoratorService {
                     };
                   }
 
-                  const paramTypes = getMethodParamTypes(Clzz, propertyName);
+                  const paramTypes = MetadataManager.getMethodParamTypes(
+                    Clzz,
+                    propertyName
+                  );
                   let skipPipes = false;
                   try {
                     newArgs[parameterIndex] = await parameterDecoratorHandler({
@@ -173,7 +174,7 @@ export class MidwayDecoratorService {
                     newArgs[parameterIndex] = await transform(
                       newArgs[parameterIndex],
                       {
-                        metaType: transformTypeFromTSDesign(
+                        metaType: MetadataManager.transformTypeFromTSDesign(
                           paramTypes[parameterIndex]
                         ),
                         metadata,

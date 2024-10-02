@@ -1,5 +1,5 @@
 import { IMidwayContainer, ObjectIdentifier } from '../interface';
-import { getProviderName } from '../decorator';
+import { DecoratorManager } from '../decorator';
 
 interface IPipelineInfo {
   /**
@@ -402,7 +402,7 @@ function getName(target) {
     if (typeof target === 'string') {
       return target;
     } else {
-      return getProviderName(target);
+      return DecoratorManager.getProviderName(target);
     }
   }
   return null;

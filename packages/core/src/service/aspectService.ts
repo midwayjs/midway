@@ -6,14 +6,9 @@ import {
   JoinPoint,
   ScopeEnum,
 } from '../interface';
-import {
-  ASPECT_KEY,
-  getClassMetadata,
-  listModule,
-  Provide,
-  Scope,
-} from '../decorator';
+import { ASPECT_KEY, DecoratorManager, Provide, Scope } from '../decorator';
 import { Types } from '../util/types';
+import { MetadataManager } from '../decorator/metadataManager';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -25,11 +20,11 @@ export class MidwayAspectService {
    */
   public async loadAspect() {
     // for aop implementation
-    const aspectModules = listModule(ASPECT_KEY);
+    const aspectModules = DecoratorManager.listModule(ASPECT_KEY);
     // sort for aspect target
     let aspectDataList = [];
     for (const module of aspectModules) {
-      const data = getClassMetadata(ASPECT_KEY, module);
+      const data = MetadataManager.getOwnMetadata(ASPECT_KEY, module);
       aspectDataList = aspectDataList.concat(
         data.map(el => {
           el.aspectModule = module;

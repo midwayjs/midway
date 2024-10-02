@@ -1,5 +1,6 @@
-import { saveClassMetadata, CONFIGURATION_KEY } from '../';
+import { CONFIGURATION_KEY } from '../';
 import { IFileDetector } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export interface IComponentInfo {
   component: any;
@@ -29,6 +30,6 @@ export function Configuration(
   options: InjectionConfigurationOptions = {}
 ): ClassDecorator {
   return (target: any) => {
-    saveClassMetadata(CONFIGURATION_KEY, options, target);
+    MetadataManager.defineMetadata(CONFIGURATION_KEY, options, target);
   };
 }

@@ -1,6 +1,5 @@
 // got all value with no property name
-export const ALL = 'common:all_value_key';
-
+export const ALL_VALUE_KEY = 'common:all_value_key';
 // common
 export const SCHEDULE_KEY = 'common:schedule';
 export const CONFIGURATION_KEY = 'common:configuration';
@@ -11,6 +10,15 @@ export const MATCH_KEY = 'common:match';
 export const GUARD_KEY = 'common:guard';
 export const MOCK_KEY = 'common:mock';
 export const FACTORY_SERVICE_CLIENT_KEY = 'common:service_factory:client';
+export const PRELOAD_MODULE_KEY = 'common:preload_module';
+export const OBJECT_DEFINITION_KEY = 'common:object_definition';
+export const PROVIDE_KEY = 'common:provide';
+// used to store property inject
+export const PROPERTY_INJECT_KEY = 'common:property_inject';
+// used to store class to be injected
+export const TAGGED_CLS = 'common:tagged_class';
+// used to store function to be injected
+export const TAGGED_FUN = 'common:tagged_function';
 
 // faas
 export const FUNC_KEY = 'faas:func';
@@ -68,8 +76,6 @@ export const CLASS_KEY_CONSTRUCTOR = 'midway:class_key_constructor';
 // Used for named bindings
 export const NAMED_TAG = 'named';
 
-// The name of the target at design time
-export const INJECT_TAG = 'inject';
 // The name inject custom property decorator with resolver
 export const INJECT_CUSTOM_PROPERTY = 'inject_custom_property';
 // The name inject custom param decorator with resolver
@@ -82,14 +88,6 @@ export const INJECT_CUSTOM_PARAM = 'inject_custom_param';
 //
 // // used to store class properties tags
 // export const TAGGED_PROP = 'injection:tagged_props';
-
-// used to store class to be injected
-export const TAGGED_CLS = 'injection:tagged_class';
-
-// used to store function to be injected
-export const TAGGED_FUN = 'injection:tagged_function';
-
-export const OBJ_DEF_CLS = 'injection:object_definition_class';
 
 // pipeline
 export const PIPELINE_IDENTIFIER = '__pipeline_identifier__';

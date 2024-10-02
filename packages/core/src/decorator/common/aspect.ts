@@ -1,6 +1,7 @@
-import { ASPECT_KEY, attachClassMetadata, Provide, saveModule } from '../';
+import { ASPECT_KEY, DecoratorManager, Provide } from '../';
 import { Scope } from './objectDef';
 import { ScopeEnum } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export function Aspect(
   aspectTarget: any | any[],
@@ -8,10 +9,10 @@ export function Aspect(
   priority?: number
 ) {
   return function (target) {
-    saveModule(ASPECT_KEY, target);
+    DecoratorManager.saveModule(ASPECT_KEY, target);
     const aspectTargets = [].concat(aspectTarget);
     for (const aspectTarget of aspectTargets) {
-      attachClassMetadata(
+      MetadataManager.attachMetadata(
         ASPECT_KEY,
         {
           aspectTarget,

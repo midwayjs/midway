@@ -1,12 +1,7 @@
 import {
   CONTROLLER_KEY,
   ControllerOption,
-  getClassMetadata,
-  getPropertyDataFromClass,
-  getPropertyMetadata,
-  getProviderName,
-  getProviderUUId,
-  listModule,
+  DecoratorManager,
   Provide,
   RouterOption,
   Scope,
@@ -24,6 +19,7 @@ import * as util from 'util';
 import { PathToRegexpUtil } from '../util/pathToRegexp';
 import { Types } from '../util/types';
 import { ServerlessTriggerType, ScopeEnum, FaaSMetadata } from '../interface';
+import { MetadataManager } from '../decorator/metadataManager';
 
 const debug = util.debuglog('midway:debug');
 
@@ -162,10 +158,10 @@ export class MidwayWebRouterService {
   }
 
   protected analyzeController() {
-    const controllerModules = listModule(CONTROLLER_KEY);
+    const controllerModules = DecoratorManager.listModule(CONTROLLER_KEY);
 
     for (const module of controllerModules) {
-      const controllerOption: ControllerOption = getClassMetadata(
+      const controllerOption: ControllerOption = MetadataManager.getOwnMetadata(
         CONTROLLER_KEY,
         module
       );
@@ -235,9 +231,9 @@ export class MidwayWebRouterService {
       resourceOptions = {};
     }
 
-    const controllerId = getProviderName(controllerClz);
+    const controllerId = DecoratorManager.getProviderName(controllerClz);
     debug(`[core]: Found Controller ${controllerId}.`);
-    const id = getProviderUUId(controllerClz);
+    const id = DecoratorManager.getProviderUUId(controllerClz);
 
     controllerOption.routerOptions = controllerOption.routerOptions || {};
 
@@ -301,7 +297,7 @@ export class MidwayWebRouterService {
       });
     }
 
-    const webRouterInfo: RouterOption[] = getClassMetadata(
+    const webRouterInfo: RouterOption[] = MetadataManager.getOwnMetadata(
       WEB_ROUTER_KEY,
       controllerClz
     );
@@ -309,14 +305,14 @@ export class MidwayWebRouterService {
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
         const routeArgsInfo =
-          getPropertyDataFromClass(
+          MetadataManager.getOwnMetadata(
             WEB_ROUTER_PARAM_KEY,
             controllerClz,
             webRouter.method
           ) || [];
 
         const routerResponseData =
-          getPropertyMetadata(
+          MetadataManager.getOwnMetadata(
             WEB_RESPONSE_KEY,
             controllerClz,
             webRouter.method

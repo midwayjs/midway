@@ -1,11 +1,6 @@
 import {
+  DecoratorManager,
   FUNC_KEY,
-  getClassMetadata,
-  getPropertyDataFromClass,
-  getPropertyMetadata,
-  getProviderName,
-  getProviderUUId,
-  listModule,
   Provide,
   Scope,
   SERVERLESS_FUNC_KEY,
@@ -18,6 +13,7 @@ import {
   RouterInfo,
 } from './webRouterService';
 import { FaaSMetadata, ScopeEnum } from '../interface';
+import { MetadataManager } from '../decorator/metadataManager';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -54,7 +50,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
   }
 
   protected analyzeFunction() {
-    const fnModules = listModule(FUNC_KEY);
+    const fnModules = DecoratorManager.listModule(FUNC_KEY);
     for (const module of fnModules) {
       this.collectFunctionRoute(module);
     }
@@ -62,13 +58,11 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
 
   protected collectFunctionRoute(module) {
     // serverlessTrigger metadata
-    const webRouterInfo: Array<FaaSMetadata.TriggerMetadata> = getClassMetadata(
-      FUNC_KEY,
-      module
-    );
+    const webRouterInfo: Array<FaaSMetadata.TriggerMetadata> =
+      MetadataManager.getOwnMetadata(FUNC_KEY, module);
 
-    const controllerId = getProviderName(module);
-    const id = getProviderUUId(module);
+    const controllerId = DecoratorManager.getProviderName(module);
+    const id = DecoratorManager.getProviderUUId(module);
 
     const prefix = '/';
 
@@ -88,14 +82,14 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
       // 新的 @ServerlessTrigger 写法
       if (webRouter['metadata']?.['path']) {
         const routeArgsInfo =
-          getPropertyDataFromClass(
+          MetadataManager.getOwnMetadata(
             WEB_ROUTER_PARAM_KEY,
             module,
             webRouter['methodName']
           ) || [];
 
         const routerResponseData =
-          getPropertyMetadata(
+          MetadataManager.getOwnMetadata(
             WEB_RESPONSE_KEY,
             module,
             webRouter['methodName']
@@ -119,7 +113,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
           responseMetadata: routerResponseData,
         };
         const functionMeta =
-          getPropertyMetadata(
+          MetadataManager.getOwnMetadata(
             SERVERLESS_FUNC_KEY,
             module,
             webRouter['methodName']
@@ -143,7 +137,7 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
         this.checkDuplicateAndPush(prefix, data);
       } else {
         const functionMeta =
-          getPropertyMetadata(
+          MetadataManager.getOwnMetadata(
             SERVERLESS_FUNC_KEY,
             module,
             webRouter['methodName']
@@ -240,5 +234,9 @@ export class MidwayServerlessFunctionService extends MidwayWebRouterService {
 }
 
 function createFunctionName(target, functionName) {
-  return getProviderName(target).replace(/[:#]/g, '-') + '-' + functionName;
+  return (
+    DecoratorManager.getProviderName(target).replace(/[:#]/g, '-') +
+    '-' +
+    functionName
+  );
 }

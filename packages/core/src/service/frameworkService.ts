@@ -1,18 +1,17 @@
 import {
-  ALL,
+  ALL_VALUE_KEY,
   APPLICATION_KEY,
   CONFIG_KEY,
   FRAMEWORK_KEY,
-  getProviderUUId,
   Init,
   Inject,
-  listModule,
   LOGGER_KEY,
   PIPELINE_IDENTIFIER,
   PLUGIN_KEY,
   Provide,
   Scope,
   FACTORY_SERVICE_CLIENT_KEY,
+  DecoratorManager,
 } from '../decorator';
 import {
   IMidwayContainer,
@@ -67,7 +66,7 @@ export class MidwayFrameworkService {
     this.decoratorService.registerPropertyHandler(
       CONFIG_KEY,
       (propertyName, meta) => {
-        if (meta.identifier === ALL) {
+        if (meta.identifier === ALL_VALUE_KEY) {
           return this.configService.getConfiguration();
         } else {
           return this.configService.getConfiguration(
@@ -146,7 +145,8 @@ export class MidwayFrameworkService {
       }
     );
 
-    let frameworks: Array<new (...args) => any> = listModule(FRAMEWORK_KEY);
+    let frameworks: Array<new (...args) => any> =
+      DecoratorManager.listModule(FRAMEWORK_KEY);
     // filter proto
     frameworks = filterProtoFramework(frameworks);
 
@@ -155,7 +155,9 @@ export class MidwayFrameworkService {
     if (frameworks.length) {
       for (const frameworkClz of frameworks) {
         if (
-          !this.applicationContext.hasDefinition(getProviderUUId(frameworkClz))
+          !this.applicationContext.hasDefinition(
+            DecoratorManager.getProviderUUId(frameworkClz)
+          )
         ) {
           debug(
             `[core]: Found Framework "${frameworkClz.name}" but missing definition, skip initialize.`
@@ -185,7 +187,7 @@ export class MidwayFrameworkService {
         }
         // app init
         const definition = this.applicationContext.registry.getDefinition(
-          getProviderUUId(frameworkClz)
+          DecoratorManager.getProviderUUId(frameworkClz)
         );
         // set framework namespace here
         frameworkInstance.setNamespace(definition?.namespace);

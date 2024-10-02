@@ -1,18 +1,29 @@
-import { saveObjectDefinition } from '../decoratorManager';
 import { Provide } from './provide';
 import { ScopeEnum } from '../../interface';
+import { MetadataManager } from '../metadataManager';
+import { OBJECT_DEFINITION_KEY } from '../constant';
 
 export function Init(): MethodDecorator {
   return function (target: any, propertyKey: string) {
-    saveObjectDefinition(target, { initMethod: propertyKey });
+    MetadataManager.attachMetadata(
+      OBJECT_DEFINITION_KEY,
+      {
+        initMethod: propertyKey,
+      },
+      target
+    );
   };
 }
 
 export function Destroy(): MethodDecorator {
   return function (target: any, propertyKey: string) {
-    saveObjectDefinition(target, {
-      destroyMethod: propertyKey,
-    });
+    MetadataManager.attachMetadata(
+      OBJECT_DEFINITION_KEY,
+      {
+        destroyMethod: propertyKey,
+      },
+      target
+    );
   };
 }
 
@@ -21,7 +32,11 @@ export function Scope(
   scopeOptions?: { allowDowngrade?: boolean }
 ): ClassDecorator {
   return function (target: any): void {
-    saveObjectDefinition(target, { scope, ...scopeOptions });
+    MetadataManager.attachMetadata(
+      OBJECT_DEFINITION_KEY,
+      { scope, ...scopeOptions },
+      target
+    );
   };
 }
 

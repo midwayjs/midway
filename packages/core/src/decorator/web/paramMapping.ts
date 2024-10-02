@@ -1,4 +1,4 @@
-import { createCustomParamDecorator, WEB_ROUTER_PARAM_KEY } from '../';
+import { DecoratorManager, WEB_ROUTER_PARAM_KEY } from '../';
 import {
   IMidwayContext,
   ParamDecoratorOptions,
@@ -34,7 +34,7 @@ const createParamMapping = function (type: RouteParamTypes) {
       options.pipes = propertyOrPipes;
       propertyData = undefined;
     }
-    return createCustomParamDecorator(
+    return DecoratorManager.createCustomParamDecorator(
       WEB_ROUTER_PARAM_KEY,
       {
         type,

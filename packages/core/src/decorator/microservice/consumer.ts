@@ -1,11 +1,6 @@
-import {
-  saveClassMetadata,
-  saveModule,
-  MS_CONSUMER_KEY,
-  Provide,
-  Scope,
-} from '../';
+import { MS_CONSUMER_KEY, Provide, Scope, DecoratorManager } from '../';
 import { MSListenerType, ScopeEnum } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export function Consumer(type: MSListenerType.MQTT): ClassDecorator;
 export function Consumer(
@@ -18,8 +13,8 @@ export function Consumer(
 ): ClassDecorator;
 export function Consumer(type: any, options: any = {}): ClassDecorator {
   return (target: any) => {
-    saveModule(MS_CONSUMER_KEY, target);
-    saveClassMetadata(
+    DecoratorManager.saveModule(MS_CONSUMER_KEY, target);
+    MetadataManager.defineMetadata(
       MS_CONSUMER_KEY,
       {
         type,

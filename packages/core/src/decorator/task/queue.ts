@@ -1,10 +1,11 @@
-import { saveModule, saveClassMetadata, Provide } from '../';
+import { Provide, DecoratorManager } from '../';
 import { MODULE_TASK_QUEUE_KEY, MODULE_TASK_QUEUE_OPTIONS } from '../constant';
+import { MetadataManager } from '../metadataManager';
 
 export function Queue(options?: any): ClassDecorator {
   return function (target) {
-    saveModule(MODULE_TASK_QUEUE_KEY, target);
-    saveClassMetadata(
+    DecoratorManager.saveModule(MODULE_TASK_QUEUE_KEY, target);
+    MetadataManager.defineMetadata(
       MODULE_TASK_QUEUE_OPTIONS,
       {
         options,

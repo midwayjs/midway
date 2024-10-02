@@ -1,8 +1,9 @@
 /**
  * 'HEAD', 'OPTIONS', 'GET', 'PUT', 'PATCH', 'POST', 'DELETE' 封装
  */
-import { attachClassMetadata, WEB_ROUTER_KEY } from '../';
+import { WEB_ROUTER_KEY } from '../';
 import { MiddlewareParamArray } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export interface RouterOption {
   /**
@@ -68,7 +69,7 @@ export const RequestMapping = (
   const middleware = metadata.middleware;
 
   return (target, key, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       WEB_ROUTER_KEY,
       {
         path,

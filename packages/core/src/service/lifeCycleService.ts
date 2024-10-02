@@ -1,9 +1,9 @@
 import { ILifeCycle, IMidwayContainer, ScopeEnum } from '../interface';
 import {
   CONFIGURATION_KEY,
+  DecoratorManager,
   Init,
   Inject,
-  listModule,
   Provide,
   Scope,
 } from '../decorator';
@@ -44,7 +44,7 @@ export class MidwayLifeCycleService {
     await this.mockService.initSimulation();
 
     // run lifecycle
-    const cycles = listModule(CONFIGURATION_KEY) as Array<{
+    const cycles = DecoratorManager.listModule(CONFIGURATION_KEY) as Array<{
       target: any;
       namespace: string;
       instance?: any;
@@ -121,7 +121,7 @@ export class MidwayLifeCycleService {
   public async stop() {
     await this.mockService.runSimulatorTearDown();
     // stop lifecycle
-    const cycles = listModule(CONFIGURATION_KEY) || [];
+    const cycles = DecoratorManager.listModule(CONFIGURATION_KEY) || [];
 
     for (const cycle of cycles.reverse()) {
       let inst;

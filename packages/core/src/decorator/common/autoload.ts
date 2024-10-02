@@ -1,9 +1,9 @@
-import { savePreloadModule } from '../decoratorManager';
+import { DecoratorManager } from '../decoratorManager';
 import { Provide } from './provide';
 
 export function Autoload() {
   return function (target) {
-    savePreloadModule(target);
+    DecoratorManager.savePreloadModule(target);
     Provide()(target);
   };
 }

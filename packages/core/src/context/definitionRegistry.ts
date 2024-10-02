@@ -1,13 +1,13 @@
 /**
  * Object Definition Registry 实现
  */
-import { getProviderId, getProviderName, getProviderUUId } from '../decorator';
 import {
   IIdentifierRelationShip,
   IObjectDefinition,
   IObjectDefinitionRegistry,
   ObjectIdentifier,
 } from '../interface';
+import { DecoratorManager } from '../decorator';
 
 const PREFIX = '_id_default_';
 
@@ -16,21 +16,24 @@ class LegacyIdentifierRelation
   implements IIdentifierRelationShip
 {
   saveClassRelation(module: any, namespace?: string) {
-    const providerId = getProviderUUId(module);
+    const providerId = DecoratorManager.getProviderUUId(module);
     // save uuid
     this.set(providerId, providerId);
     if (providerId) {
       // save alias id
-      const aliasId = getProviderId(module);
+      const aliasId = DecoratorManager.getProviderId(module);
       if (aliasId) {
         // save alias Id
         this.set(aliasId, providerId);
       }
       // save className alias
-      this.set(getProviderName(module), providerId);
+      this.set(DecoratorManager.getProviderName(module), providerId);
       // save namespace alias
       if (namespace) {
-        this.set(namespace + ':' + getProviderName(module), providerId);
+        this.set(
+          namespace + ':' + DecoratorManager.getProviderName(module),
+          providerId
+        );
       }
     }
   }

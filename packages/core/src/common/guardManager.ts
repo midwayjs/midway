@@ -1,5 +1,6 @@
 import { CommonGuardUnion, IGuard, IMidwayContext } from '../interface';
-import { getClassMetadata, getPropertyMetadata, GUARD_KEY } from '../decorator';
+import { GUARD_KEY } from '../decorator';
+import { MetadataManager } from '../decorator/metadataManager';
 
 export class GuardManager<
   CTX extends IMidwayContext = IMidwayContext
@@ -27,7 +28,10 @@ export class GuardManager<
     }
 
     // check class Guard
-    const classGuardList = getClassMetadata(GUARD_KEY, supplierClz);
+    const classGuardList = MetadataManager.getOwnMetadata(
+      GUARD_KEY,
+      supplierClz
+    );
     if (classGuardList) {
       for (const Guard of classGuardList) {
         const guard = await ctx.requestContext.getAsync<IGuard<any>>(Guard);
@@ -39,7 +43,7 @@ export class GuardManager<
     }
 
     // check method Guard
-    const methodGuardList = getPropertyMetadata(
+    const methodGuardList = MetadataManager.getOwnMetadata(
       GUARD_KEY,
       supplierClz,
       methodName

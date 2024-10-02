@@ -1,5 +1,6 @@
-import { WS_EVENT_KEY, attachClassMetadata } from '../';
+import { WS_EVENT_KEY } from '../';
 import { MiddlewareParamArray } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export enum WSEventTypeEnum {
   ON_CONNECTION = 'ws:onConnection',
@@ -42,7 +43,7 @@ export function OnWSConnection(
   } = {}
 ): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       WS_EVENT_KEY,
       {
         eventType: WSEventTypeEnum.ON_CONNECTION,
@@ -57,7 +58,7 @@ export function OnWSConnection(
 
 export function OnWSDisConnection(): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       WS_EVENT_KEY,
       {
         eventType: WSEventTypeEnum.ON_DISCONNECTION,
@@ -76,7 +77,7 @@ export function OnWSMessage(
   } = {}
 ): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       WS_EVENT_KEY,
       {
         eventType: WSEventTypeEnum.ON_MESSAGE,
@@ -95,7 +96,7 @@ export function WSEmit(
   roomName: string | string[] = []
 ): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       WS_EVENT_KEY,
       {
         eventType: WSEventTypeEnum.EMIT,
@@ -114,7 +115,7 @@ export function WSBroadCast(
   roomName: string | string[] = []
 ): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       WS_EVENT_KEY,
       {
         eventType: WSEventTypeEnum.BROADCAST,

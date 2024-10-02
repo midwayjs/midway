@@ -1,5 +1,6 @@
-import { saveModule, attachClassMetadata } from '../';
 import { MODULE_TASK_KEY, MODULE_TASK_METADATA } from '../constant';
+import { DecoratorManager } from '../decoratorManager';
+import { MetadataManager } from '../metadataManager';
 
 export function Task(options) {
   return function (
@@ -7,8 +8,8 @@ export function Task(options) {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    saveModule(MODULE_TASK_KEY, target.constructor);
-    attachClassMetadata(
+    DecoratorManager.saveModule(MODULE_TASK_KEY, target.constructor);
+    MetadataManager.attachMetadata(
       MODULE_TASK_METADATA,
       {
         options,

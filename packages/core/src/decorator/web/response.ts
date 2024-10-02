@@ -1,5 +1,4 @@
 import {
-  attachPropertyMetadata,
   WEB_RESPONSE_REDIRECT,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_HEADER,
@@ -7,10 +6,11 @@ import {
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_RENDER,
 } from '../';
+import { MetadataManager } from '../metadataManager';
 
 export function Redirect(url: string, code = 302) {
   return (target, key, descriptor: PropertyDescriptor) => {
-    attachPropertyMetadata(
+    MetadataManager.attachMetadata(
       WEB_RESPONSE_KEY,
       {
         type: WEB_RESPONSE_REDIRECT,
@@ -27,7 +27,7 @@ export function Redirect(url: string, code = 302) {
 
 export function HttpCode(code: number) {
   return (target, key, descriptor: PropertyDescriptor) => {
-    attachPropertyMetadata(
+    MetadataManager.attachMetadata(
       WEB_RESPONSE_KEY,
       {
         type: WEB_RESPONSE_HTTP_CODE,
@@ -52,7 +52,7 @@ export function SetHeader(
     } else {
       headerObject = headerKey as Record<string, any>;
     }
-    attachPropertyMetadata(
+    MetadataManager.attachMetadata(
       WEB_RESPONSE_KEY,
       {
         type: WEB_RESPONSE_HEADER,
@@ -68,7 +68,7 @@ export function SetHeader(
 
 export function ContentType(contentType: string) {
   return (target, key, descriptor: PropertyDescriptor) => {
-    attachPropertyMetadata(
+    MetadataManager.attachMetadata(
       WEB_RESPONSE_KEY,
       {
         type: WEB_RESPONSE_CONTENT_TYPE,
@@ -88,7 +88,7 @@ export function createRender(RenderEngine: {
 }) {
   return (templateName: string) => {
     return (target, key, descriptor: PropertyDescriptor) => {
-      attachPropertyMetadata(
+      MetadataManager.attachMetadata(
         WEB_RESPONSE_KEY,
         {
           type: WEB_RESPONSE_RENDER,

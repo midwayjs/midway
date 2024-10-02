@@ -1,167 +1,548 @@
-type ClassType = new (...args: any[]) => any;
+import 'reflect-metadata';
+import { isClass, isNullOrUndefined } from '../util/types';
+import { ClassType, TSDesignType } from '../interface';
 
+type CleanHook = (keyToClear: string) => boolean;
+
+const separator = '\u200A'; // Hair Space
+
+/**
+ * A class that manages metadata for classes and properties
+ * This class is a simplified version of the Reflect Metadata API
+ * Provides a way to retrieve, define, delete and copy metadata
+ *
+ * @since 4.0.0
+ */
 export class MetadataManager {
-  private _metadata: WeakMap<ClassType, any> = new WeakMap();
+  protected static readonly metadataSymbol = Symbol.for('midway.metadata');
+  protected static readonly metadataClassSymbol = Symbol.for(
+    'midway.metadata.class'
+  );
+  protected static readonly metadataPropertySymbol = Symbol.for(
+    'midway.metadata.property'
+  );
+  protected static readonly cacheSymbol = Symbol.for('midway.metadata.cache');
+  protected static readonly cleanHooksSymbol = Symbol.for('midway.clean.hooks');
+  /**
+   * A symbol that represents an empty value
+   */
+  public static readonly emptyValueSymbol = Symbol.for('midway.metadata.empty');
 
   /**
    * Defines metadata for a target class or property
+   * Value will replace the existing metadata
    */
-  public defineMetadata(
-    metadataKey,
-    metadataValue,
-    target: ClassType,
-    propertyKey?: string
+  public static defineMetadata(
+    metadataKey: string | symbol,
+    metadataValue: any,
+    target: ClassType | object,
+    propertyKey?: string | symbol
   ): void {
-    this.setMetadata(metadataKey, metadataValue, target, propertyKey);
+    target = this.formatTarget(target, propertyKey);
+    this.setMetadata(
+      metadataKey,
+      metadataValue,
+      target as ClassType,
+      propertyKey
+    );
+    this.invalidateCache(metadataKey, target as ClassType, propertyKey);
+  }
+
+  /**
+   * Attaches metadata for a target class or property
+   * Value will push to the end of the metadata array and save for own metadata
+   */
+  public static attachMetadata(
+    metadataKey: string | symbol,
+    metadataValue: any,
+    target: ClassType | object,
+    propertyKey?: string | symbol
+  ): void {
+    target = this.formatTarget(target, propertyKey);
+
+    const currentMetadata = this.getMetadata(metadataKey, target, propertyKey);
+    if (Array.isArray(currentMetadata)) {
+      currentMetadata.push(metadataValue);
+      this.defineMetadata(metadataKey, currentMetadata, target, propertyKey);
+    } else {
+      this.defineMetadata(metadataKey, [metadataValue], target, propertyKey);
+    }
   }
 
   /**
    * Retrieves metadata for a target class or property
    */
-  public getMetadata(
-    metadataKey,
-    target: ClassType,
-    propertyKey?: string
-  ): any {
-    while (target) {
-      if (this.hasOwnMetadata(metadataKey, target, propertyKey)) {
-        return this.getOwnMetadata(metadataKey, target, propertyKey);
-      }
-      target = Object.getPrototypeOf(target);
+  public static getMetadata<T = any>(
+    metadataKey: string | symbol,
+    target: ClassType | object,
+    propertyKey?: string | symbol
+  ): T {
+    target = this.formatTarget(target, propertyKey);
+    // find cache first
+    const cache = this.getCache(metadataKey, target as ClassType, propertyKey);
+    if (cache === this.emptyValueSymbol) {
+      return undefined;
     }
+    if (cache !== undefined) {
+      return cache;
+    }
+
+    // find metadata with prototype chain
+    let currentTarget: ClassType | null = target as ClassType;
+    while (currentTarget) {
+      const metadata = this.getOwnMetadata(
+        metadataKey,
+        currentTarget,
+        propertyKey
+      );
+      if (metadata !== undefined) {
+        this.setCache(
+          metadataKey,
+          target as ClassType,
+          currentTarget,
+          metadata,
+          propertyKey
+        );
+        return metadata;
+      }
+      currentTarget = Object.getPrototypeOf(currentTarget);
+    }
+
+    this.setCache(
+      metadataKey,
+      target as ClassType,
+      target as ClassType,
+      this.emptyValueSymbol,
+      propertyKey
+    );
+    return undefined;
   }
 
   /**
    * Retrieves own metadata for a target class or property
    */
-  public getOwnMetadata(
-    metadataKey,
+  public static getOwnMetadata<T = any>(
+    metadataKey: string | symbol,
     target: ClassType,
-    propertyKey?: string
-  ): any {
-    if (this.checkMetadataStructureValid(target, propertyKey)) {
-      if (propertyKey) {
-        return this._metadata.get(target).properties[propertyKey][metadataKey];
-      } else {
-        return this._metadata.get(target).class[metadataKey];
-      }
+    propertyKey?: string | symbol
+  ): T {
+    target = this.formatTarget(target, propertyKey);
+    const _metadata = this.getOrCreateMetaObject(target);
+    if (propertyKey) {
+      return _metadata[this.metadataPropertySymbol][propertyKey]?.[metadataKey];
+    } else {
+      return _metadata[this.metadataClassSymbol][metadataKey];
     }
   }
 
   /**
    * Checks if metadata exists for a target class or property
    */
-  public hasMetadata(
-    metadataKey,
+  public static hasMetadata(
+    metadataKey: string | symbol,
     target: ClassType,
-    propertyKey?: string
+    propertyKey?: string | symbol
   ): boolean {
-    while (target) {
-      if (this.hasOwnMetadata(metadataKey, target, propertyKey)) {
-        return true;
-      }
-      target = Object.getPrototypeOf(target);
-    }
+    target = this.formatTarget(target, propertyKey);
+    return this.getMetadata(metadataKey, target, propertyKey) !== undefined;
   }
 
   /**
    * Checks if own metadata exists for a target class or property
    */
-  public hasOwnMetadata(
-    metadataKey,
+  public static hasOwnMetadata(
+    metadataKey: string | symbol,
     target: ClassType,
-    propertyKey?: string
+    propertyKey?: string | symbol
   ): boolean {
-    if (this.checkMetadataStructureValid(target, propertyKey)) {
-      if (propertyKey) {
-        return !!this._metadata.get(target).properties[propertyKey][
-          metadataKey
-        ];
-      } else {
-        return !!this._metadata.get(target).class[metadataKey];
-      }
-    }
+    return this.getOwnMetadata(metadataKey, target, propertyKey) !== undefined;
   }
 
   /**
    * Deletes metadata for a target class or property
    */
-  public deleteMetadata(
-    metadataKey,
+  public static deleteMetadata(
+    metadataKey: string | symbol,
     target: ClassType,
-    propertyKey?: string
-  ): boolean {
-    if (this.checkMetadataStructureValid(target, propertyKey)) {
-      if (propertyKey) {
-        return delete this._metadata.get(target).properties[propertyKey][
-          metadataKey
-        ];
-      } else {
-        return delete this._metadata.get(target).class[metadataKey];
-      }
-    }
-  }
-
-  /**
-   * Retrieves all metadata keys for a target class or property
-   */
-  public getMetadataKeys(target: ClassType, propertyKey?: string): string[] {
-    if (this.checkMetadataStructureValid(target, propertyKey)) {
-      if (propertyKey) {
-        return Object.keys(this._metadata.get(target).properties[propertyKey]);
-      } else {
-        return Object.keys(this._metadata.get(target).class);
-      }
-    }
-  }
-
-  /**
-   * Initializes metadata for a target class or property
-   */
-  private initMetadata(target: ClassType, property?: string): void {
-    if (!this._metadata.has(target)) {
-      this._metadata.set(target, {
-        class: {},
-        properties: {},
-      });
-    }
-
-    if (property && !this._metadata.get(target).properties[property]) {
-      this._metadata.get(target).properties[property] = {};
-    }
-  }
-
-  /**
-   * Checks if the metadata structure is valid for a target class or property
-   */
-  private checkMetadataStructureValid(
-    target: ClassType,
-    propertyKey?: string
-  ): boolean {
-    if (!this._metadata.has(target)) {
-      return false;
-    }
+    propertyKey?: string | symbol
+  ): void {
+    target = this.formatTarget(target, propertyKey);
+    const _metadata = this.getOrCreateMetaObject(target);
     if (propertyKey) {
-      return !!this._metadata.get(target).properties;
+      delete _metadata[this.metadataPropertySymbol][propertyKey]?.[metadataKey];
+    } else {
+      delete _metadata[this.metadataClassSymbol][metadataKey];
     }
-    return !!this._metadata.get(target).class;
+    this.invalidateCache(metadataKey, target, propertyKey);
+  }
+
+  /**
+   * Get all metadata keys on the entire prototype chain
+   * Because we need to get metadata on the entire prototype chain, we do not use cache here, so the performance is poor
+   */
+  public static getMetadataKeys(
+    target: ClassType,
+    propertyKey?: string | symbol
+  ): string[] {
+    target = this.formatTarget(target, propertyKey);
+    const keys = new Set<string>();
+
+    let currentTarget = target;
+    while (currentTarget) {
+      const ownKeys = this.getOwnMetadataKeys(currentTarget, propertyKey);
+      ownKeys.forEach(key => keys.add(key));
+      currentTarget = Object.getPrototypeOf(currentTarget);
+    }
+
+    return Array.from(keys);
+  }
+
+  /**
+   * Get metadata keys on the current class or object
+   */
+  public static getOwnMetadataKeys(
+    target: ClassType,
+    propertyKey?: string | symbol
+  ): string[] {
+    target = this.formatTarget(target, propertyKey);
+    const _metadata = this.getOrCreateMetaObject(target);
+    if (propertyKey) {
+      return Object.keys(
+        _metadata[this.metadataPropertySymbol][propertyKey] || {}
+      );
+    } else {
+      return Object.keys(_metadata[this.metadataClassSymbol]);
+    }
+  }
+
+  /**
+   * Copies metadata from a source class or property to a target class or property
+   */
+  public static copyMetadata(
+    source: ClassType,
+    target: ClassType,
+    options?: {
+      metadataFilter?: (
+        metadataKey: string | symbol,
+        propertyKey?: string | symbol
+      ) => boolean;
+      overwrite?: boolean;
+    }
+  ): void {
+    const { metadataFilter, overwrite = true } = options || {};
+
+    // 合并后的临时存储类级别元数据和属性级别元数据
+    const tempClassMetadata: Record<string | symbol, any> = {};
+    const tempPropertyMetadata: Record<string | symbol, any> = {};
+
+    // Step 1: 收集原型链上的所有元数据（当前存在的跳过）
+    let currentSource: ClassType | null = source;
+    while (currentSource) {
+      const sourceMetadata = this.getOrCreateMetaObject(currentSource);
+
+      // 处理类级别元数据
+      const classMetadata = sourceMetadata?.[this.metadataClassSymbol];
+      for (const key in classMetadata) {
+        if (tempClassMetadata[key] === undefined) {
+          tempClassMetadata[key] = classMetadata[key];
+        }
+      }
+
+      // 处理属性级别元数据
+      const propertyMetadata = sourceMetadata?.[this.metadataPropertySymbol];
+      for (const propertyKey in propertyMetadata) {
+        if (!tempPropertyMetadata[propertyKey]) {
+          tempPropertyMetadata[propertyKey] = {};
+        }
+        const propertyMetadataKeys = Object.keys(propertyMetadata[propertyKey]);
+        for (const key of propertyMetadataKeys) {
+          if (tempPropertyMetadata[propertyKey][key] === undefined) {
+            tempPropertyMetadata[propertyKey][key] =
+              propertyMetadata[propertyKey][key];
+          }
+        }
+      }
+
+      currentSource = Object.getPrototypeOf(currentSource);
+    }
+
+    // Step 2: 将合并后的元数据应用到目标对象，考虑 options 中的参数
+    this.copyClassAndPropertyMetadata(
+      target,
+      metadataFilter,
+      overwrite,
+      tempClassMetadata,
+      tempPropertyMetadata
+    );
+  }
+
+  /**
+   * Copies own metadata from a source class or property to a target class or property
+   */
+  public static copyOwnMetadata(
+    source: ClassType,
+    target: ClassType,
+    options?: {
+      metadataFilter?: (
+        metadataKey: string | symbol,
+        propertyKey?: string | symbol
+      ) => boolean;
+      overwrite?: boolean;
+    }
+  ): void {
+    const { metadataFilter, overwrite = true } = options || {};
+    const sourceMetadata = this.getOrCreateMetaObject(source);
+
+    const classMetadata = sourceMetadata?.[this.metadataClassSymbol];
+    const propertyMetadata = sourceMetadata?.[this.metadataPropertySymbol];
+
+    this.copyClassAndPropertyMetadata(
+      target,
+      metadataFilter,
+      overwrite,
+      classMetadata,
+      propertyMetadata
+    );
+  }
+
+  /**
+   * Gets the type of a property from Reflect metadata
+   */
+  public static getMethodReturnTypes(
+    target: ClassType,
+    propertyKey: string | symbol
+  ): any {
+    target = this.formatTarget(target, propertyKey);
+    return Reflect.getMetadata('design:returntype', target, propertyKey);
+  }
+
+  /**
+   * Get parameters type by reflect-metadata
+   */
+  public static getMethodParamTypes(
+    target: ClassType,
+    methodName: string | symbol
+  ) {
+    if (!isClass(target)) {
+      target = target.prototype;
+    }
+    return Reflect.getMetadata('design:paramtypes', target, methodName);
+  }
+
+  /**
+   * Get property(method) type from metadata
+   */
+  public static getPropertyType(
+    target: ClassType,
+    propertyKey: string | symbol
+  ): TSDesignType {
+    target = this.formatTarget(target, propertyKey);
+    return this.transformTypeFromTSDesign(
+      Reflect.getMetadata('design:type', target, propertyKey)
+    );
+  }
+
+  public static transformTypeFromTSDesign(designFn: any): TSDesignType {
+    if (isNullOrUndefined(designFn)) {
+      return { name: 'undefined', isBaseType: true, originDesign: designFn };
+    }
+
+    switch (designFn.name) {
+      case 'String':
+        return { name: 'string', isBaseType: true, originDesign: designFn };
+      case 'Number':
+        return { name: 'number', isBaseType: true, originDesign: designFn };
+      case 'Boolean':
+        return { name: 'boolean', isBaseType: true, originDesign: designFn };
+      case 'Symbol':
+        return { name: 'symbol', isBaseType: true, originDesign: designFn };
+      case 'Object':
+        return { name: 'object', isBaseType: true, originDesign: designFn };
+      case 'Function':
+        return { name: 'function', isBaseType: true, originDesign: designFn };
+      default:
+        return {
+          name: designFn.name,
+          isBaseType: false,
+          originDesign: designFn,
+        };
+    }
+  }
+
+  private static copyClassAndPropertyMetadata(
+    target: ClassType,
+    metadataFilter: (
+      metadataKey: string | symbol,
+      propertyKey?: string | symbol
+    ) => boolean,
+    overwrite: boolean,
+    classMetadata: Record<string | symbol, any>,
+    propertyMetadata: Record<string | symbol, any>
+  ): void {
+    for (const key in classMetadata) {
+      if (!metadataFilter || metadataFilter(key)) {
+        const metadataValue = classMetadata[key];
+        // 如果不允许覆盖且目标已有元数据，跳过
+        if (!overwrite && this.hasOwnMetadata(key, target)) continue;
+        this.defineMetadata(key, metadataValue, target);
+      }
+    }
+
+    for (const propertyKey in propertyMetadata) {
+      const propertyMetadataKeys = Object.keys(propertyMetadata[propertyKey]);
+      for (const key of propertyMetadataKeys) {
+        if (!metadataFilter || metadataFilter(key, propertyKey)) {
+          const metadataValue = propertyMetadata[propertyKey][key];
+          // 如果不允许覆盖且目标已有元数据，跳过
+          if (!overwrite && this.hasOwnMetadata(key, target, propertyKey))
+            continue;
+          this.defineMetadata(key, metadataValue, target, propertyKey);
+        }
+      }
+    }
   }
 
   /**
    * Sets metadata for a target class or property
    */
-  private setMetadata(
-    metadataKey,
-    metadataValue,
-    key: ClassType,
-    propertyKey?: string
+  private static setMetadata(
+    metadataKey: string | symbol,
+    metadataValue: any,
+    target: ClassType,
+    propertyKey?: string | symbol
   ): void {
-    this.initMetadata(key, propertyKey);
-    if (propertyKey) {
-      this._metadata.get(key).properties[propertyKey][metadataKey] =
-        metadataValue;
-    } else {
-      this._metadata.get(key).class[metadataKey] = metadataValue;
+    const _metadata = this.getOrCreateMetaObject(target);
+    const metadataStorage = propertyKey
+      ? (_metadata[this.metadataPropertySymbol][propertyKey] ||= {})
+      : _metadata[this.metadataClassSymbol];
+    metadataStorage[metadataKey] = metadataValue;
+  }
+
+  /**
+   * Gets or creates the metadata object for a target class or property
+   */
+  private static getOrCreateMetaObject(target: ClassType): any {
+    /**
+     * metadata construct
+     * {
+     *  [metadataClassSymbol]: {
+     *    [metadataKey]: metadataValue
+     *  },
+     *  [metadataPropertySymbol]: {
+     *    [propertyKey]: {
+     *      [metadataKey]: metadataValue
+     *    }
+     *  }
+     */
+    // eslint-disable-next-line no-prototype-builtins
+    if (!target.hasOwnProperty(this.metadataSymbol)) {
+      const _metadata = {
+        [this.metadataClassSymbol]: Object.create(null),
+        [this.metadataPropertySymbol]: Object.create(null),
+      };
+      Object.defineProperty(target, this.metadataSymbol, {
+        value: _metadata,
+        enumerable: false,
+        configurable: false,
+      });
+      return _metadata;
     }
+    return target[this.metadataSymbol];
+  }
+
+  private static invalidateCache(
+    metadataKey: string | symbol,
+    target: ClassType,
+    propertyKey?: string | symbol
+  ): void {
+    // remove current cache
+    const unionKey = this.getUnionKey(metadataKey, propertyKey);
+
+    // Remove the specific cache
+    // eslint-disable-next-line no-prototype-builtins
+    if (target.hasOwnProperty(this.cacheSymbol)) {
+      delete target[this.cacheSymbol]?.[unionKey];
+    }
+
+    // Execute hooks, passing the unionKey to clear
+    const cleanHooks = target[this.cleanHooksSymbol] as Array<CleanHook>;
+    if (cleanHooks) {
+      target[this.cleanHooksSymbol] = cleanHooks.filter(
+        hook => !hook(unionKey)
+      );
+    }
+  }
+
+  private static setCache(
+    metadataKey: string | symbol,
+    target: ClassType,
+    protoTarget: ClassType,
+    value: any,
+    propertyKey?: string | symbol
+  ): void {
+    this.validCacheConstruct(target);
+    const unionKey = this.getUnionKey(metadataKey, propertyKey);
+    if (target !== protoTarget) {
+      this.validCacheConstruct(protoTarget);
+      // Register a clean hook to the prototype target and clean the cache when the prototype target value is changed
+      (protoTarget[this.cleanHooksSymbol] as Array<CleanHook>).push(
+        (keyToClear: string) => {
+          // Only delete cache if the key matches
+          if (keyToClear === unionKey) {
+            delete target[this.cacheSymbol]?.[unionKey];
+            // Indicates that this hook can be removed
+            return true;
+          }
+          return false;
+        }
+      );
+    }
+    target[this.cacheSymbol][unionKey] = value;
+  }
+
+  private static validCacheConstruct(target) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (!target.hasOwnProperty(this.cacheSymbol)) {
+      Object.defineProperty(target, this.cacheSymbol, {
+        value: Object.create(null),
+        enumerable: false,
+        configurable: false,
+      });
+    }
+    // eslint-disable-next-line no-prototype-builtins
+    if (!target.hasOwnProperty(this.cleanHooksSymbol)) {
+      Object.defineProperty(target, this.cleanHooksSymbol, {
+        value: [],
+        enumerable: false,
+        configurable: false,
+        writable: true,
+      });
+    }
+  }
+
+  protected static getCache(
+    metadataKey: string | symbol,
+    target: ClassType,
+    propertyKey?: string | symbol
+  ): any {
+    return target[this.cacheSymbol]?.[
+      this.getUnionKey(metadataKey, propertyKey)
+    ];
+  }
+
+  private static getUnionKey(
+    metadataKey: string | symbol,
+    propertyKey?: string | symbol
+  ) {
+    return propertyKey
+      ? `${propertyKey.toString()}${separator}${metadataKey.toString()}`
+      : metadataKey.toString();
+  }
+
+  private static formatTarget(target: any, propertyKey?: string | symbol) {
+    // 如果是类装饰器或者设置在类上的元数据，使用构造函数
+    return target.constructor !== target && !!propertyKey
+      ? target.constructor
+      : target;
   }
 }

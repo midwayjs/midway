@@ -1,8 +1,8 @@
-import { saveClassMetadata } from '../decoratorManager';
 import { CATCH_KEY, MATCH_KEY } from '../constant';
 import { Scope } from './objectDef';
 import { Provide } from './provide';
 import { ScopeEnum } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export function Catch(
   catchTarget?: any | any[],
@@ -12,7 +12,7 @@ export function Catch(
 ) {
   return function (target) {
     const catchTargets = catchTarget ? [].concat(catchTarget) : undefined;
-    saveClassMetadata(
+    MetadataManager.defineMetadata(
       CATCH_KEY,
       {
         catchTargets,
@@ -34,7 +34,7 @@ export type MatchPattern<CtxOrReq = any, Res = any> =
 
 export function Match(matchPattern: MatchPattern = true) {
   return function (target) {
-    saveClassMetadata(
+    MetadataManager.defineMetadata(
       MATCH_KEY,
       {
         matchPattern,

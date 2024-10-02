@@ -26,9 +26,7 @@ export {
   RouterCollectorOptions,
   MidwayWebRouterService,
 } from './service/webRouterService';
-export {
-  MidwayServerlessFunctionService,
-} from './service/slsFunctionService';
+export { MidwayServerlessFunctionService } from './service/slsFunctionService';
 export { DataSourceManager } from './common/dataSourceManager';
 export {
   DEFAULT_PRIORITY,
@@ -86,3 +84,6 @@ export { PathFileUtil } from './util/pathFileUtil';
 export { FileUtils } from './util/fs';
 export { FORMAT } from './util/format';
 export { ServerResponse, HttpServerResponse } from './response/index';
+
+export * from './decorator/metadataManager';
+export * from './legacy';

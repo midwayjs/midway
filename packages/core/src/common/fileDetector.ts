@@ -7,8 +7,8 @@ import { Types } from '../util/types';
 import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
-import { getProviderName } from '../decorator';
 import { loadModule } from '../util';
+import { DecoratorManager } from '../decorator';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
@@ -85,7 +85,7 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
             this.extraDetectorOptions.conflictCheck) &&
           Types.isClass(module)
         ) {
-          const name = getProviderName(module);
+          const name = DecoratorManager.getProviderName(module);
           if (name) {
             if (this.duplicateModuleCheckSet.has(name)) {
               throw new MidwayDuplicateClassNameError(
@@ -142,7 +142,7 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
             this.extraDetectorOptions.conflictCheck) &&
           Types.isClass(module)
         ) {
-          const name = getProviderName(module);
+          const name = DecoratorManager.getProviderName(module);
           if (name) {
             if (this.duplicateModuleCheckSet.has(name)) {
               throw new MidwayDuplicateClassNameError(

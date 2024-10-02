@@ -20,13 +20,10 @@ import {
   safeRequire,
   isTypeScriptEnvironment,
   MidwayPriorityManager,
+  DecoratorManager,
+  IModuleStore,
 } from './';
 import defaultConfig from './config/config.default';
-import {
-  bindContainer,
-  clearBindContainer,
-  listPreloadModule,
-} from './decorator';
 import * as util from 'util';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 import { join } from 'path';
@@ -88,7 +85,7 @@ export async function initializeGlobalApplicationContext(
   printStepDebugInfo('Init preload modules');
 
   // some preload module init
-  const modules = listPreloadModule();
+  const modules = DecoratorManager.listPreloadModule();
   for (const module of modules) {
     // preload init context
     await applicationContext.getAsync(module);
@@ -112,7 +109,7 @@ export async function destroyGlobalApplicationContext(
   await lifecycleService.stop();
   // stop container
   await applicationContext.stop();
-  clearBindContainer();
+  DecoratorManager.clearBindContainer();
   loggerFactory.close();
   global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
   global['MIDWAY_MAIN_FRAMEWORK'] = undefined;
@@ -137,7 +134,7 @@ export async function prepareGlobalApplicationContextAsync(
     globalOptions.applicationContext ?? new MidwayContainer();
   // bind container to decoratorManager
   debug('[core]: delegate module map from decoratorManager');
-  bindContainer(applicationContext);
+  DecoratorManager.bindContainer(applicationContext as IModuleStore);
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
 
@@ -291,7 +288,7 @@ export function prepareGlobalApplicationContext(
     globalOptions.applicationContext ?? new MidwayContainer();
   // bind container to decoratorManager
   debug('[core]: delegate module map from decoratorManager');
-  bindContainer(applicationContext);
+  DecoratorManager.bindContainer(applicationContext as IModuleStore);
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
 

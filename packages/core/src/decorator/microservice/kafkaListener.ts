@@ -1,4 +1,5 @@
-import { MS_CONSUMER_KEY, attachPropertyDataToClass } from '../';
+import { MS_CONSUMER_KEY } from '../';
+import { MetadataManager } from '../metadataManager';
 
 /**
  * @deprecated Replaced by ConsumerSubscribeTopics
@@ -33,6 +34,11 @@ export function KafkaListener(
   return (target: any, propertyKey: string) => {
     options.topic = topic;
     options.propertyKey = propertyKey;
-    attachPropertyDataToClass(MS_CONSUMER_KEY, options, target, propertyKey);
+    MetadataManager.attachMetadata(
+      MS_CONSUMER_KEY,
+      options,
+      target,
+      propertyKey
+    );
   };
 }

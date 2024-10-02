@@ -1,9 +1,4 @@
-import {
-  CATCH_KEY,
-  getClassMetadata,
-  MATCH_KEY,
-  MatchPattern,
-} from '../decorator';
+import { CATCH_KEY, MATCH_KEY, MatchPattern } from '../decorator';
 import {
   CommonFilterUnion,
   IFilter,
@@ -11,6 +6,7 @@ import {
   IMidwayContext,
 } from '../interface';
 import { toPathMatch } from '../util';
+import { MetadataManager } from '../decorator/metadataManager';
 
 export class FilterManager<
   CTX extends IMidwayContext = IMidwayContext,
@@ -37,10 +33,10 @@ export class FilterManager<
       Filters = [Filters];
     }
     for (const Filter of Filters) {
-      if (getClassMetadata(CATCH_KEY, Filter)) {
+      if (MetadataManager.getOwnMetadata(CATCH_KEY, Filter)) {
         this.errFilterList.push(Filter);
       }
-      if (getClassMetadata(MATCH_KEY, Filter)) {
+      if (MetadataManager.getOwnMetadata(MATCH_KEY, Filter)) {
         this.successFilterList.push(Filter);
       }
     }
@@ -50,7 +46,10 @@ export class FilterManager<
     // for catch exception
     for (const FilterClass of this.errFilterList) {
       const filter = await applicationContext.getAsync(FilterClass);
-      const exceptionMetadata = getClassMetadata(CATCH_KEY, FilterClass);
+      const exceptionMetadata = MetadataManager.getOwnMetadata(
+        CATCH_KEY,
+        FilterClass
+      );
       if (exceptionMetadata && exceptionMetadata.catchTargets) {
         exceptionMetadata.catchOptions = exceptionMetadata.catchOptions || {};
         for (const Exception of exceptionMetadata.catchTargets) {
@@ -79,7 +78,7 @@ export class FilterManager<
       const filter = await applicationContext.getAsync(FilterClass);
       const matchMetadata: {
         matchPattern?: MatchPattern<CTX>;
-      } = getClassMetadata(MATCH_KEY, FilterClass);
+      } = MetadataManager.getOwnMetadata(MATCH_KEY, FilterClass);
       if (matchMetadata && matchMetadata.matchPattern) {
         this.matchFnList.push({
           matchFn: toPathMatch(matchMetadata.matchPattern),

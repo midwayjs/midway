@@ -1,17 +1,12 @@
-import {
-  attachClassMetadata,
-  savePropertyMetadata,
-  FUNC_KEY,
-  SERVERLESS_FUNC_KEY,
-  saveModule,
-} from '../';
+import { DecoratorManager, FUNC_KEY, SERVERLESS_FUNC_KEY } from '../';
 import { FaaSMetadata, ServerlessTriggerType } from '../../interface';
+import { MetadataManager } from '../metadataManager';
 
 export function ServerlessFunction(
   options: FaaSMetadata.ServerlessFunctionOptions & Record<string, any>
 ): MethodDecorator {
   return (target, key, descriptor) => {
-    savePropertyMetadata(SERVERLESS_FUNC_KEY, options, target, key);
+    MetadataManager.defineMetadata(SERVERLESS_FUNC_KEY, options, target, key);
   };
 }
 
@@ -74,10 +69,10 @@ export function ServerlessTrigger(
     ) {
       metadata['method'] = metadata['method'] ?? 'get';
     }
-    saveModule(FUNC_KEY, target.constructor);
+    DecoratorManager.saveModule(FUNC_KEY, target.constructor);
     // new method decorator
     metadata = metadata || {};
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       FUNC_KEY,
       {
         type,
