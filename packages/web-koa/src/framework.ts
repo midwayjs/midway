@@ -24,7 +24,7 @@ import {
 } from './interface';
 import * as Router from '@koa/router';
 import type { DefaultState, Middleware, Next } from 'koa';
-import koa from 'koa';
+import * as koa from 'koa';
 import { Server } from 'http';
 import { setupOnError } from './onerror';
 import * as qs from 'qs';

@@ -28,8 +28,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit"
+    "test": "jest --runInBand",
+    "cov": "jest --runInBand --coverage --forceExit"
   },
   "repository": {
     "type": "git",
