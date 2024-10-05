@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [main]
+    branches: [v4-next]
     paths-ignore:
       - 'site/**'
       - '*.md'
@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        node-version: [16, 18, 'lts/*']
+        node-version: [16]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     services:
