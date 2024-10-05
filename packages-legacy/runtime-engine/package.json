@@ -6,7 +6,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest --runInBand --forceExit"
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --forceExit"
   },
   "engines": {
     "node": ">=12"

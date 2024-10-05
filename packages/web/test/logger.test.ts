@@ -1,5 +1,5 @@
 import { creatApp, closeApp, getFilepath, sleep, matchContentTimes } from './utils';
-import * as mm from 'mm';
+import mm = require('mm');
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, ensureDir, remove } from 'fs-extra';
 import { lstatSync } from 'fs';

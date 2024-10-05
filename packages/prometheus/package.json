@@ -6,8 +6,8 @@
   "typings": "index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest --runInBand",
-    "cov": "jest --runInBand --coverage --forceExit",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
     "ci": "npm run cov --ts"
   },
   "keywords": [

@@ -4,7 +4,7 @@
   "version": "3.18.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest --runInBand --forceExit"
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --forceExit"
   },
   "dependencies": {
     "request": "2.88.2"

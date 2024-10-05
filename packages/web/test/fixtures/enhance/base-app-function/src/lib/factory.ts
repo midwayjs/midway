@@ -1,6 +1,6 @@
-import { providerWrapper, IApplicationContext } from '@midwayjs/core';
+import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
 
-export function adapterFactory(context: IApplicationContext) {
+export function adapterFactory(context: IMidwayContainer) {
   return async (adapterName: string) => {
     if (adapterName === 'google') {
       return context.getAsync('googleAdapter');
