@@ -5,7 +5,7 @@ import { createServer, request, ServerResponse } from 'http';
 import { join } from 'path';
 import { createWriteStream, readFileSync, unlinkSync } from 'fs';
 import { once } from 'events';
-import { existsSync } from 'fs-extra';
+import { existsSync } from 'fs';
 
 describe('response/http.test.ts', () => {
   describe('test sse in base http', () => {

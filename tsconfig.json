@@ -12,9 +12,9 @@
     "noEmitOnError": false,
     "skipLibCheck": true,
     "module": "Node16",
-    "moduleResolution": "Node16",
-    "target": "ES2020",
-    "lib": ["ES2020"]
+    "moduleResolution": "NodeNext",
+    "target": "ES2021",
+    "lib": ["ES2021"]
   },
   "exclude": [
     "dist",

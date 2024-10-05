@@ -3,9 +3,9 @@ import {
   Inject,
   Provide,
   Scope,
-  INJECT_CUSTOM_METHOD,
   APPLICATION_CONTEXT_KEY,
-  INJECT_CUSTOM_PARAM,
+  CUSTOM_METHOD_INJECT_KEY,
+  CUSTOM_PARAM_INJECT_KEY,
 } from '../decorator';
 import {
   MethodDecoratorMetaData,
@@ -47,7 +47,7 @@ export class MidwayDecoratorService {
     this.applicationContext.onBeforeBind(Clzz => {
       // find custom method decorator metadata, include method decorator information array
       const methodDecoratorMetadataList: MethodDecoratorMetaData[] =
-        MetadataManager.getOwnMetadata(INJECT_CUSTOM_METHOD, Clzz);
+        MetadataManager.getMetadata(CUSTOM_METHOD_INJECT_KEY, Clzz);
 
       if (methodDecoratorMetadataList) {
         // loop it, save this order for decorator run
@@ -80,7 +80,10 @@ export class MidwayDecoratorService {
       // find custom param decorator metadata
       const parameterDecoratorMetadata: {
         [methodName: string]: Array<ParameterDecoratorMetaData>;
-      } = MetadataManager.getOwnMetadata(INJECT_CUSTOM_PARAM, Clzz);
+      } = MetadataManager.getOwnPropertiesWithMetadata(
+        CUSTOM_PARAM_INJECT_KEY,
+        Clzz
+      );
 
       if (parameterDecoratorMetadata) {
         // loop it, save this order for decorator run

@@ -1,10 +1,14 @@
 import {
   MethodDecoratorOptions,
+  ObjectDefinitionOptions,
   ObjectIdentifier,
   ParamDecoratorOptions,
+  TagPropsMetadata,
 } from '../interface';
 import { MetadataManager } from '../decorator/metadataManager';
-import { DecoratorManager } from '../decorator';
+import { DecoratorManager, PROPERTY_INJECT_KEY, SCOPE_KEY } from '../decorator';
+import { saveInjectMetadata } from '../decorator/common/inject';
+import { OBJ_DEF_CLS } from './constants';
 
 /**
  * the key for attach and list property data from class
@@ -82,11 +86,10 @@ export function getClassExtendedMetadata<T = any>(
   propertyName?: string,
   useCache?: boolean
 ): T {
-  return MetadataManager.getMetadata(
+  return MetadataManager.getPropertiesWithMetadata(
     decoratorNameKey as string | symbol,
-    target,
-    propertyName
-  );
+    target
+  ) as T;
 }
 
 /**
@@ -100,7 +103,7 @@ export function getClassMetadata<T = any>(
   decoratorNameKey: ObjectIdentifier,
   target
 ): T {
-  return MetadataManager.getMetadata<T>(
+  return MetadataManager.getOwnMetadata<T>(
     decoratorNameKey as string | symbol,
     target
   );
@@ -156,7 +159,9 @@ export function attachPropertyDataToClass(
     new Map();
 
   if (originMap.has(dataKey)) {
-    originMap.set(dataKey, originMap.get(dataKey).push(data));
+    const ret = originMap.get(dataKey);
+    ret.push(data);
+    originMap.set(dataKey, ret);
   } else {
     originMap.set(dataKey, [data]);
   }
@@ -478,4 +483,111 @@ export function getPropertyType(target, methodName: string | symbol) {
  */
 export function getMethodParamTypes(target, methodName: string | symbol) {
   return MetadataManager.getMethodParamTypes(target, methodName);
+}
+
+/**
+ * save property inject args
+ * @param opts 参数
+ * @since 2.3.0
+ * @deprecated
+ */
+export function savePropertyInject(opts: {
+  // id
+  identifier: ObjectIdentifier;
+  // class
+  target: any;
+  // propertyName
+  targetKey: string;
+  args?: any;
+}) {
+  saveInjectMetadata(opts.identifier, opts.target, opts.targetKey);
+}
+
+/**
+ * get property inject args
+ * @param target
+ * @param useCache
+ * @since 2.3.0
+ * @deprecated
+ */
+export function getPropertyInject(
+  target: any,
+  useCache?: boolean
+): {
+  [methodName: string]: TagPropsMetadata;
+} {
+  const ret = getClassExtendedMetadata(
+    PROPERTY_INJECT_KEY,
+    target,
+    undefined,
+    useCache
+  );
+
+  for (const key in ret) {
+    const element = ret[key];
+    if (Array.isArray(element) && element.length) {
+      ret[key] = element[element.length - 1];
+    }
+  }
+  return ret;
+}
+
+/**
+ * save class object definition
+ * @param target class
+ * @param props property data
+ * @since 2.3.0
+ * @deprecated
+ */
+export function saveObjectDefinition(target: any, props = {}) {
+  saveClassMetadata(OBJ_DEF_CLS, props, target);
+  return target;
+}
+
+/**
+ * get class object definition from metadata
+ * @param target
+ * @since 2.3.0
+ * @deprecated
+ */
+export function getObjectDefinition(target: any): ObjectDefinitionOptions {
+  /**
+   * Array(1) [{…}]
+   */
+  const ret = getClassExtendedMetadata(OBJ_DEF_CLS, target);
+  const scope = MetadataManager.getOwnMetadata(SCOPE_KEY, target);
+  if (Array.isArray(ret)) {
+    const res = {};
+    for (const v of ret) {
+      Object.assign(res, v);
+    }
+    return res;
+  } else {
+    // {
+    //   "abcde": [
+    //     {
+    //       "initMethod": "abcde"
+    //     }
+    //   ],
+    //   "destroy": [
+    //     {
+    //       "destroyMethod": "destroy"
+    //     }
+    //   ]
+    // }
+    // merge object and get
+    // {
+    //   "destroyMethod": "destroy",
+    //   "initMethod": "abcde",
+    // }
+    const res = {};
+    for (const key in ret) {
+      const element = ret[key];
+      for (const v of element) {
+        Object.assign(res, v);
+      }
+    }
+    // merge scope
+    return Object.assign(res, scope);
+  }
 }

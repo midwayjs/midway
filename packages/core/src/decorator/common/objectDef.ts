@@ -1,5 +1,3 @@
-import { Provide } from './provide';
-import { ScopeEnum } from '../../interface';
 import { MetadataManager } from '../metadataManager';
 import { OBJECT_DEFINITION_KEY } from '../constant';
 
@@ -10,7 +8,8 @@ export function Init(): MethodDecorator {
       {
         initMethod: propertyKey,
       },
-      target
+      target,
+      propertyKey
     );
   };
 }
@@ -22,27 +21,8 @@ export function Destroy(): MethodDecorator {
       {
         destroyMethod: propertyKey,
       },
-      target
+      target,
+      propertyKey
     );
-  };
-}
-
-export function Scope(
-  scope: ScopeEnum,
-  scopeOptions?: { allowDowngrade?: boolean }
-): ClassDecorator {
-  return function (target: any): void {
-    MetadataManager.attachMetadata(
-      OBJECT_DEFINITION_KEY,
-      { scope, ...scopeOptions },
-      target
-    );
-  };
-}
-
-export function Singleton(): ClassDecorator {
-  return function (target: any): void {
-    Scope(ScopeEnum.Singleton)(target);
-    Provide()(target);
   };
 }

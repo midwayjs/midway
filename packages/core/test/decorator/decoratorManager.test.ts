@@ -16,122 +16,116 @@ import {
   getPropertyType,
   savePropertyMetadata,
   getProviderName,
-  Utils,
+  Utils, saveModule, Init
 } from '../../src';
-import * as assert from 'assert';
 import { ManagerTest } from './fixtures/decorator/customClass';
-import mm = require('mm');
 import { Get, getMethodParamTypes } from '../../src';
 
 describe('/test/decoratorManager.test.ts', () => {
   it('should save data on class and get it', () => {
-    assert.ok(getClassMetadata('custom', ManagerTest) === 'test');
-    assert.ok(getClassMetadata('custom_method', ManagerTest) === 'testSomething');
+    expect(getClassMetadata('custom', ManagerTest)).toBe('test');
+    expect(getClassMetadata('custom_method', ManagerTest)).toBe('testSomething');
   });
 
   it('should save data to class and list it', () => {
     const dataRes = listPropertyDataFromClass('custom', ManagerTest);
-    assert.ok(dataRes.length === 1);
+    expect(dataRes.length).toBe(1);
 
     const { method, data } = getPropertyDataFromClass(
       'custom',
       ManagerTest,
       'testSomething'
     );
-    assert.ok(dataRes[0].method === method);
-    assert.ok(dataRes[0].data === data);
+    expect(dataRes[0].method).toBe(method);
+    expect(dataRes[0].data).toBe(data);
   });
 
   it('should get method meta data from method', () => {
     const m = new ManagerTest();
-    // 挂载到方法上的元信息必须有实例
-    assert.ok(getPropertyMetadata('custom', m, 'testSomething') === 'methodData');
+    expect(getPropertyMetadata('custom', m, 'testSomething')).toBe('methodData');
   });
 
   it('should list preload module', () => {
     let modules = listPreloadModule();
-    assert.ok(modules.length === 1);
+    expect(modules.length).toBe(1);
 
     resetModule(PRELOAD_MODULE_KEY);
     modules = listPreloadModule();
-    assert.ok(modules.length === 0);
+    expect(modules.length).toBe(0);
   });
 
   it('should list module', () => {
     const modules = listModule('custom');
-    assert.ok(modules.length === 1);
+    expect(modules.length).toBe(1);
 
     const nothings = listModule('c_custom_notfound');
-    assert.ok(nothings.length === 0);
+    expect(nothings.length).toBe(0);
   });
 
   it('should clear all module', () => {
-    let s = 'empty!';
-    mm(DecoratorManager.prototype, 'clear', () => {
-      s = 'clear';
-    });
+    saveModule('a', 'b');
+    expect(listModule('a').length).toBe(1);
     clearAllModule();
-    expect(s).toEqual('clear');
-    mm.restore();
+    expect(listModule('a').length).toBe(0);
   });
 
   it('should get function args', () => {
     let args = Utils.getParamNames((a, b, c) => {});
-    assert.ok(args.length === 3);
+    expect(args.length).toBe(3);
 
     args = Utils.getParamNames(() => {});
-    assert.ok(args.length === 0);
+    expect(args.length).toBe(0);
 
     args = Utils.getParamNames((a) => {});
-    assert.ok(args.length === 1);
+    expect(args.length).toBe(1);
 
-    args = Utils.getParamNames((a,b) => {});
-    assert.ok(args.length === 2);
+    args = Utils.getParamNames((a, b) => {});
+    expect(args.length).toBe(2);
 
-    args = Utils.getParamNames((a, b=1) => {});
-    assert.ok(args.length === 2);
+    args = Utils.getParamNames((a, b = 1) => {});
+    expect(args.length).toBe(2);
 
-    args = Utils.getParamNames((a = 1, b =2, c) => {});
-    assert.ok(args.length === 3);
+    args = Utils.getParamNames((a = 1, b = 2, c) => {});
+    expect(args.length).toBe(3);
   });
 
   it('should get attach data from method', () => {
     const m = new ManagerTest();
-    assert.ok(getPropertyMetadata('custom_attach', m, 'index').length === 3);
-    assert.ok(
-      getPropertyDataFromClass('custom_attach_to_class', ManagerTest, 'index')
-        .length === 3
-    );
+    expect(getPropertyMetadata('custom_attach', m, 'index').length).toBe(3);
+    expect(
+      getPropertyDataFromClass('custom_attach_to_class', ManagerTest, 'index').length
+    ).toBe(3);
   });
 
   it('should get attach data from class', () => {
-    assert.ok(getClassMetadata('custom_class_attach', ManagerTest).length === 4);
+    expect(getClassMetadata('custom_class_attach', ManagerTest).length).toBe(4);
   });
 
   it('should get name from class', () => {
-    expect(ManagerTest.name).toEqual('ManagerTest');
-    expect(getProviderName(ManagerTest)).toEqual('managerTest');
+    expect(ManagerTest.name).toBe('ManagerTest');
+    expect(getProviderName(ManagerTest)).toBe('managerTest');
     expect(getProviderName(class Test {})).toBeUndefined();
   });
 
   it('should get id from class', () => {
-    expect(getProviderId(ManagerTest)).toEqual('123');
+    expect(getProviderId(ManagerTest)).toBe('123');
   });
 
   it('should get property data', () => {
     const m = new ManagerTest();
-    assert.ok(
-      getPropertyMetadata('custom_property', m, 'testProperty') === 'property_a'
-    );
-    assert.ok(
-      getPropertyDataFromClass('custom_property_class', ManagerTest, 'testProperty')
-        .length === 3
-    );
+    expect(getPropertyMetadata('custom_property', m, 'testProperty')).toBe('property_a');
+    expect(
+      getPropertyDataFromClass('custom_property_class', ManagerTest, 'testProperty').length
+    ).toBe(3);
   });
 
   it('should get object definition metadata', () => {
+    class ManagerTest {
+      @Init()
+      async init() {}
+    }
     const objDefinition = getObjectDefinition(ManagerTest);
-    expect(objDefinition.scope).toEqual('Singleton');
+    expect(objDefinition).toStrictEqual({ 'initMethod': 'init' });
   });
 
   it('savePropertyDataToClass should be ok', () => {
@@ -155,12 +149,11 @@ describe('/test/decoratorManager.test.ts', () => {
   });
 
   it('should test getPropertyType', function () {
-
     function ApiProperty(): PropertyDecorator {
       return (target, propertyName) => {
         const data = getPropertyType(target, propertyName);
         savePropertyMetadata('propertyType', data, target, propertyName);
-      }
+      };
     }
 
     class AnotherCatDTO {
@@ -194,21 +187,20 @@ describe('/test/decoratorManager.test.ts', () => {
     }
 
     const catDTO = new CreateCatDto();
-    const getType = propertyName =>  {
+    const getType = (propertyName) => {
       return getPropertyMetadata('propertyType', catDTO, propertyName).name;
-    }
-    expect(getType('name')).toEqual('string');
-    expect(getType('age')).toEqual('number');
-    expect(getType('isMale')).toEqual('boolean');
-    expect(getType('uniqueKey')).toEqual('symbol');
-    expect(getType('emptyValue')).toEqual('undefined');
-    expect(getType('extraKey')).toEqual('object');
-    expect(getType('check')).toEqual('function');
-    // null is undefined
-    expect(getType('nullValue')).toEqual('undefined');
-    expect(getType('breed')).toEqual('Array');
-    expect(getType('mapObj')).toEqual('Map');
-    expect(getType('alias')).toEqual('AnotherCatDTO');
+    };
+    expect(getType('name')).toBe('string');
+    expect(getType('age')).toBe('number');
+    expect(getType('isMale')).toBe('boolean');
+    expect(getType('uniqueKey')).toBe('symbol');
+    expect(getType('emptyValue')).toBe('undefined');
+    expect(getType('extraKey')).toBe('object');
+    expect(getType('check')).toBe('function');
+    expect(getType('nullValue')).toBe('undefined');
+    expect(getType('breed')).toBe('Array');
+    expect(getType('mapObj')).toBe('Map');
+    expect(getType('alias')).toBe('AnotherCatDTO');
   });
 
   it('should test save module with container', function () {
@@ -219,7 +211,7 @@ describe('/test/decoratorManager.test.ts', () => {
       }
 
       listModule(key) {
-        return this.store.get(key);
+        return Array.from(this.store.get(key));
       }
 
       transformModule(map) {
@@ -230,28 +222,34 @@ describe('/test/decoratorManager.test.ts', () => {
     }
 
     const container = new Container();
-    const manager = new DecoratorManager();
-    manager.set('abc', '123');
-    manager.bindContainer(container);
+    DecoratorManager.saveModule('abc', '123');
+    DecoratorManager.bindContainer(container);
 
-    expect(container.listModule('abc')).toEqual('123');
+    expect(container.listModule('abc')[0]).toBe('123');
   });
 
   it('should test getMethodParamTypes', function () {
-    const obj = {ccc: 'd'}
+    const obj = { ccc: 'd' };
     class D {}
     class A {
       @Get()
-      async invoke(a: number, b: string, c: boolean, d: D, e: [], f: Map<string, any>, g: Set<any>) {}
+      async invoke(
+        a: number,
+        b: string,
+        c: boolean,
+        d: D,
+        e: [],
+        f: Map<string, any>,
+        g: Set<any>
+      ) {}
 
       @Get()
       async invoke2(a: Record<any, any>, b: unknown, c: any, d: typeof obj) {}
     }
     const paramTypes = getMethodParamTypes(A, 'invoke');
-    expect(paramTypes.length).toEqual(7);
+    expect(paramTypes.length).toBe(7);
 
     const paramTypes2 = getMethodParamTypes(A, 'invoke2');
-    expect(paramTypes2.length).toEqual(4);
+    expect(paramTypes2.length).toBe(4);
   });
-
 });

@@ -6,7 +6,8 @@ import {
   createCustomParamDecorator,
   JoinPoint,
   Provide,
-  Pipe, PipeTransform
+  Pipe,
+  PipeTransform
 } from '../../src';
 
 describe('/test/service/decoratorService.test.ts', () => {

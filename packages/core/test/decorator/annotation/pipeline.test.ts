@@ -2,7 +2,7 @@ import {
   Pipeline,
   Provide,
   INJECT_CUSTOM_PROPERTY,
-  getClassMetadata,
+  MetadataManager
 } from '../../../src';
 
 @Provide()
@@ -13,8 +13,6 @@ class Test {
 
 describe('/test/annotation/pipeline.test.ts', () => {
   it('pipeline decorator should be ok', () => {
-    let data = getClassMetadata(INJECT_CUSTOM_PROPERTY, Test);
-    expect(data).toMatchSnapshot();
-
+    expect(MetadataManager.getPropertiesWithMetadata(INJECT_CUSTOM_PROPERTY, Test)).toMatchSnapshot();
   });
 });

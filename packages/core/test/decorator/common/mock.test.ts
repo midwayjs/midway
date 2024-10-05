@@ -1,4 +1,4 @@
-import { getObjectDefinition, ISimulation, Mock, ScopeEnum } from '../../../src';
+import { MetadataManager, ISimulation, Mock, ScopeEnum, SCOPE_KEY } from '../../../src';
 
 describe('test/mock.test.ts', () => {
   it('should test mock decorator', function () {
@@ -14,7 +14,7 @@ describe('test/mock.test.ts', () => {
       }
     }
 
-    const def = getObjectDefinition(TestMock);
+    const def = MetadataManager.getOwnMetadata(SCOPE_KEY, TestMock);
     expect(def).toStrictEqual({
       scope: ScopeEnum.Singleton,
     });

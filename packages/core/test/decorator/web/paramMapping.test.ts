@@ -4,14 +4,14 @@ import {
   createRequestParamDecorator,
   File,
   Files,
-  getClassMetadata,
   Headers,
   INJECT_CUSTOM_PARAM,
+  MetadataManager,
   Param,
   Pipe,
   PipeTransform,
   Query,
-  Session,
+  Session
 } from '../../../src';
 
 @Pipe()
@@ -62,7 +62,7 @@ class Test {
 
 describe('/test/web/paramMapping.test.ts', () => {
   it('paramMapping decorator should be ok', () => {
-    const meta = getClassMetadata(INJECT_CUSTOM_PARAM, Test);
+    const meta = MetadataManager.getOwnPropertiesWithMetadata(INJECT_CUSTOM_PARAM, Test);
     expect(meta).toMatchSnapshot();
   });
 });

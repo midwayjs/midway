@@ -285,6 +285,9 @@ export abstract class FrameworkType {
   abstract name: string;
 }
 
+/**
+ * @deprecated
+ */
 export class MidwayFrameworkType extends FrameworkType {
   static WEB = new MidwayFrameworkType('@midwayjs/web');
   static WEB_KOA = new MidwayFrameworkType('@midwayjs/web-koa');

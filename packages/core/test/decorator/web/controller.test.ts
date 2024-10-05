@@ -3,13 +3,11 @@ import {
   CONTROLLER_KEY,
   listModule,
   getClassMetadata,
-  getObjectDefinition,
 } from '../../../src';
 import {
   ControllerOne,
   ControllerTwo,
 } from '../fixtures/decorator/customClass';
-import { ScopeEnum } from '../../../src';
 
 @Controller('/hhh', {
   sensitive: true,
@@ -42,11 +40,6 @@ describe('/test/web/controller.test.ts', () => {
         sensitive: true,
         middleware: [],
       },
-    });
-
-    const def = getObjectDefinition(TestController);
-    expect(def).toStrictEqual({
-      scope: ScopeEnum.Request,
     });
 
     const m = listModule(CONTROLLER_KEY);

@@ -1,5 +1,4 @@
-import { ASPECT_KEY, DecoratorManager, Provide } from '../';
-import { Scope } from './objectDef';
+import { ASPECT_KEY, DecoratorManager, Provide, Scope } from '../';
 import { ScopeEnum } from '../../interface';
 import { MetadataManager } from '../metadataManager';
 

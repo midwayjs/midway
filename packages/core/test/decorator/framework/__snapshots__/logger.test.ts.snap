@@ -2,21 +2,25 @@
 
 exports[`/test/framework/logger.test.ts logger decorator should be ok 1`] = `
 {
-  "bbb": {
-    "impl": true,
-    "key": "logger",
-    "metadata": {
-      "identifier": "bbb",
+  "bbb": [
+    {
+      "impl": true,
+      "key": "logger",
+      "metadata": {
+        "identifier": "bbb",
+      },
+      "propertyName": "bbb",
     },
-    "propertyName": "bbb",
-  },
-  "logger": {
-    "impl": true,
-    "key": "logger",
-    "metadata": {
-      "identifier": undefined,
+  ],
+  "logger": [
+    {
+      "impl": true,
+      "key": "logger",
+      "metadata": {
+        "identifier": undefined,
+      },
+      "propertyName": "logger",
     },
-    "propertyName": "logger",
-  },
+  ],
 }
 `;

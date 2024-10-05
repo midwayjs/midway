@@ -1,6 +1,6 @@
 import {App, Config, Destroy, Init, Inject, Provide, Plugin} from '../../src';
 
-export interface Warrior {
+interface Warrior {
   katana1;
   katana2;
 }

@@ -1,5 +1,5 @@
 import { MS_CONSUMER_KEY } from '../';
-import { MetadataManager } from '../metadataManager';
+import { attachPropertyDataToClass } from '../../legacy';
 
 export interface RabbitMQListenerOptions {
   propertyKey?: string;
@@ -57,11 +57,6 @@ export function RabbitMQListener(
   return (target: any, propertyKey: string) => {
     options.queueName = queueName;
     options.propertyKey = propertyKey;
-    MetadataManager.attachMetadata(
-      MS_CONSUMER_KEY,
-      options,
-      target,
-      propertyKey
-    );
+    attachPropertyDataToClass(MS_CONSUMER_KEY, options, target, propertyKey);
   };
 }

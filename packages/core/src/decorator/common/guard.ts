@@ -1,8 +1,8 @@
 import { CommonGuardUnion, ScopeEnum } from '../../interface';
 import { GUARD_KEY } from '../constant';
 import { Provide } from './provide';
-import { Scope } from './objectDef';
 import { MetadataManager } from '../metadataManager';
+import { Scope } from './scope';
 
 export function UseGuard(
   guardOrArr: CommonGuardUnion

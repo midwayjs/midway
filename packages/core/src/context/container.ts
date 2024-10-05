@@ -2,11 +2,12 @@ import {
   CONFIGURATION_KEY,
   DecoratorManager,
   IComponentInfo,
-  INJECT_CUSTOM_PROPERTY,
   InjectionConfigurationOptions,
   MAIN_MODULE_KEY,
   OBJECT_DEFINITION_KEY,
   PROPERTY_INJECT_KEY,
+  CUSTOM_PROPERTY_INJECT_KEY,
+  SCOPE_KEY,
 } from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -37,7 +38,7 @@ import {
 } from './managedResolverFactory';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import { MidwayDefinitionNotFoundError } from '../error';
 import { Types } from '../util/types';
 import { Utils } from '../util';
@@ -393,10 +394,13 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     // inject properties
-    const props = MetadataManager.getMetadata(PROPERTY_INJECT_KEY, target);
+    const props = MetadataManager.getPropertiesWithMetadata(
+      PROPERTY_INJECT_KEY,
+      target
+    );
 
     for (const p in props) {
-      const propertyMeta = props[p];
+      const propertyMeta = props[p][0];
       debugBind(
         `${' '.repeat(debugSpaceLength)}inject properties => [${JSON.stringify(
           propertyMeta
@@ -411,13 +415,13 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     // inject custom properties
-    const customProps = MetadataManager.getMetadata(
-      INJECT_CUSTOM_PROPERTY,
+    const customProps = MetadataManager.getPropertiesWithMetadata(
+      CUSTOM_PROPERTY_INJECT_KEY,
       target
     );
 
     for (const p in customProps) {
-      const propertyMeta = customProps[p] as {
+      const propertyMeta = customProps[p][0] as {
         propertyName: string;
         key: string;
         metadata: any;
@@ -425,9 +429,17 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       definition.handlerProps.push(propertyMeta);
     }
 
-    // @async, @init, @destroy @scope
-    const objDefOptions =
-      MetadataManager.getMetadata(OBJECT_DEFINITION_KEY, target) ?? {};
+    // @async, @init, @destroy
+    const objDefMetadata =
+      MetadataManager.getPropertiesWithMetadata(
+        OBJECT_DEFINITION_KEY,
+        target
+      ) ?? [];
+
+    const objDefOptions = {} as Partial<IObjectDefinition>;
+    for (const p in objDefMetadata) {
+      Object.assign(objDefOptions, objDefMetadata[p][0]);
+    }
 
     if (objDefOptions.initMethod) {
       debugBind(
@@ -447,20 +459,19 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       definition.destroyMethod = objDefOptions.destroyMethod;
     }
 
-    if (objDefOptions.scope) {
-      debugBind(
-        `${' '.repeat(debugSpaceLength)}register scope = ${objDefOptions.scope}`
-      );
-      definition.scope = objDefOptions.scope;
-    }
+    const scopeMetadata = MetadataManager.getOwnMetadata(SCOPE_KEY, target);
 
-    if (objDefOptions.allowDowngrade) {
+    if (scopeMetadata) {
+      const { scope, allowDowngrade } = scopeMetadata;
+      debugBind(`${' '.repeat(debugSpaceLength)}register scope = ${scope}`);
+      definition.scope = scope;
+
       debugBind(
-        `${' '.repeat(debugSpaceLength)}register allowDowngrade = ${
-          objDefOptions.allowDowngrade
-        }`
+        `${' '.repeat(
+          debugSpaceLength
+        )}register allowDowngrade = ${allowDowngrade}`
       );
-      definition.allowDowngrade = objDefOptions.allowDowngrade;
+      definition.allowDowngrade = allowDowngrade;
     }
 
     this.objectCreateEventTarget.emit(

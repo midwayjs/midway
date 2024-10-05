@@ -11,17 +11,18 @@ import {
   CONFIG_KEY,
   PLUGIN_KEY,
   INJECT_TAG,
-  getClassExtendedMetadata
+  getClassExtendedMetadata,
+  Inject,
+  Config,
+  Plugin,
+  App,
+  Provide,
 } from '../../src';
 import {
   Grandson,
-  Child,
-  Parent,
   BaseService,
   BaseServiceAsync,
   Katana,
-  Ninja,
-  SubCustom
 } from '../fixtures/class_sample';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
@@ -41,6 +42,10 @@ describe('/test/context/container.test.ts', () => {
   it('Should be able to store bindings', () => {
     const ninjaId = 'Ninja';
     const container = new Container();
+    class Ninja {
+      katana1;
+      katana2;
+    }
     container.bind<Ninja>(ninjaId, Ninja as any);
     const ninja = container.get(ninjaId);
     expect(ninja instanceof Ninja).toBeTruthy();
@@ -48,6 +53,19 @@ describe('/test/context/container.test.ts', () => {
 
   it('should inject attributes that on the prototype chain and property', () => {
     const container = new Container();
+    class Katana {}
+    class Parent {
+      @Inject('katana1')
+      katana1: Katana;
+    }
+    class Child extends Parent {
+      @Inject('katana2')
+      katana2: Katana;
+    }
+    class Grandson extends Child {
+      @Inject('katana3')
+      katana3: Katana;
+    }
     container.bind<Grandson>('grandson', Grandson as any);
     container.bind<Grandson>('katana1', Katana as any);
     container.bind<Grandson>('katana2', Katana as any);
@@ -62,6 +80,18 @@ describe('/test/context/container.test.ts', () => {
 
   it('should get all metaDatas that on the prototype chain and property', () => {
     const container = new Container();
+    class Parent {
+      @Inject('katana1')
+      katana1: Katana;
+    }
+    class Child extends Parent {
+      @Inject('katana2')
+      katana2: Katana;
+    }
+    class Grandson extends Child {
+      @Inject('katana3')
+      katana3: Katana;
+    }
     container.bind<Grandson>('grandson', Grandson as any);
     container.bind<Grandson>('child', Child as any);
     container.bind<Grandson>('parent', Parent as any);
@@ -79,15 +109,35 @@ describe('/test/context/container.test.ts', () => {
     const childMetadata = metadatas[1];
     const parentMetadata = metadatas[2];
 
-    expect(Object.keys(grandsonMetadata.recursiveMetadata)).toEqual(["katana1", "katana2", "katana3"]);
-    expect(Object.keys(childMetadata.recursiveMetadata)).toEqual(["katana1", "katana2"]);
+    expect(Object.keys(grandsonMetadata.recursiveMetadata)).toEqual(["katana3", "katana2", "katana1"]);
+    expect(Object.keys(childMetadata.recursiveMetadata)).toEqual(["katana2", "katana1"]);
     expect(Object.keys(parentMetadata.recursiveMetadata)).toEqual(["katana1"]);
   });
 
   it('should extends base with decorator be ok', async () => {
     const container = new Container();
-    container.bind(SubCustom);
+    class ParentCustom {
+      @Config('hello')
+      hello: any;
 
+      @App()
+      a: any;
+
+      @Plugin('hh')
+      p: any;
+    }
+    @Provide()
+    class SubCustom extends ParentCustom {
+      @Config('tt')
+      tt: any;
+
+      @App()
+      a: any;
+
+      @Plugin()
+      bb: any;
+    }
+    container.bind(SubCustom);
     container.bind(MidwayFrameworkService);
     container.bind(MidwayConfigService);
     container.bind(MidwayLoggerService);

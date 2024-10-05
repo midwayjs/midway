@@ -103,6 +103,12 @@ export abstract class BaseFramework<
      * Third party application initialization
      */
     await this.applicationInitialize(options);
+    /**
+     * define application properties if not exists
+     */
+    if (!this.app.getApplicationContext) {
+      this.defineApplicationProperties();
+    }
     await this.mockService.runSimulatorAppSetup(this.app);
   }
 

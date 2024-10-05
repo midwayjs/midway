@@ -461,5 +461,25 @@ describe('MetadataManager.test.ts', () => {
       expect(CacheMetadataManager.getMetadata('testKey', ChildClass)).toBe('newValue');
       expect(CacheMetadataManager.hooksSize(ParentClass)).toBe(2);
     });
+
+    it('should test inheritance with attach metadata and get properties', () => {
+      class ParentClass {}
+      class ChildClass extends ParentClass {}
+
+      CacheMetadataManager.attachMetadata('property_inject', 'a', ParentClass, 'propertyA');
+      CacheMetadataManager.attachMetadata('property_inject', 'b', ChildClass, 'propertyB');
+
+      expect(CacheMetadataManager.getMetadata('property_inject', ChildClass, 'propertyB')).toStrictEqual(['b']);
+      expect(CacheMetadataManager.getMetadata('property_inject', ParentClass, 'propertyA')).toStrictEqual(['a']);
+
+      expect(CacheMetadataManager.getOwnPropertiesWithMetadata('property_inject', ChildClass)).toStrictEqual({
+        propertyB: ['b']
+      });
+
+      expect(CacheMetadataManager.getPropertiesWithMetadata('property_inject', ChildClass)).toStrictEqual({
+        propertyB: ['b'],
+        propertyA: ['a']
+      });
+    });
   });
 });

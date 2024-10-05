@@ -12,13 +12,18 @@ export const MOCK_KEY = 'common:mock';
 export const FACTORY_SERVICE_CLIENT_KEY = 'common:service_factory:client';
 export const PRELOAD_MODULE_KEY = 'common:preload_module';
 export const OBJECT_DEFINITION_KEY = 'common:object_definition';
+// for @Provide
 export const PROVIDE_KEY = 'common:provide';
+// for Scope and @Singleton
+export const SCOPE_KEY = 'common:scope';
 // used to store property inject
 export const PROPERTY_INJECT_KEY = 'common:property_inject';
-// used to store class to be injected
-export const TAGGED_CLS = 'common:tagged_class';
-// used to store function to be injected
-export const TAGGED_FUN = 'common:tagged_function';
+// The name inject custom property decorator with resolver
+export const CUSTOM_PROPERTY_INJECT_KEY = 'common:custom_property_inject';
+// The name inject custom method decorator with resolver
+export const CUSTOM_METHOD_INJECT_KEY = 'common:custom_method_inject';
+// The name inject custom param decorator with resolver
+export const CUSTOM_PARAM_INJECT_KEY = 'common:custom_param_inject';
 
 // faas
 export const FUNC_KEY = 'faas:func';
@@ -47,11 +52,6 @@ export const MODULE_TASK_QUEUE_OPTIONS = 'task:task:queue:options';
 export const WS_CONTROLLER_KEY = 'ws:controller';
 export const WS_EVENT_KEY = 'ws:event';
 
-// RPC
-export const HSF_KEY = 'rpc:hsf';
-export const RPC_GRPC_KEY = 'rpc:grpc';
-export const RPC_DUBBO_KEY = 'rpc:dubbo';
-
 // microservice
 export const MS_CONSUMER_KEY = 'ms:consumer';
 export const MS_PRODUCER_KEY = 'ms:producer';
@@ -75,13 +75,6 @@ export const CLASS_KEY_CONSTRUCTOR = 'midway:class_key_constructor';
 
 // Used for named bindings
 export const NAMED_TAG = 'named';
-
-// The name inject custom property decorator with resolver
-export const INJECT_CUSTOM_PROPERTY = 'inject_custom_property';
-// The name inject custom param decorator with resolver
-export const INJECT_CUSTOM_METHOD = 'inject_custom_method';
-// The name inject custom param decorator with resolver
-export const INJECT_CUSTOM_PARAM = 'inject_custom_param';
 //
 // // used to store constructor arguments tags
 // export const TAGGED = 'injection:tagged';

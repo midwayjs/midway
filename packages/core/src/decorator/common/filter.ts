@@ -1,8 +1,8 @@
 import { CATCH_KEY, MATCH_KEY } from '../constant';
-import { Scope } from './objectDef';
 import { Provide } from './provide';
 import { ScopeEnum } from '../../interface';
 import { MetadataManager } from '../metadataManager';
+import { Scope } from './scope';
 
 export function Catch(
   catchTarget?: any | any[],

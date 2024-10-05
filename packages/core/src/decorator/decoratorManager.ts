@@ -7,11 +7,11 @@ import {
   TagClsMetadata,
 } from '../interface';
 import {
-  INJECT_CUSTOM_METHOD,
-  INJECT_CUSTOM_PARAM,
-  INJECT_CUSTOM_PROPERTY,
+  CUSTOM_METHOD_INJECT_KEY,
+  CUSTOM_PARAM_INJECT_KEY,
+  CUSTOM_PROPERTY_INJECT_KEY,
   PRELOAD_MODULE_KEY,
-  TAGGED_CLS,
+  PROVIDE_KEY,
 } from './constant';
 import { camelCase } from '../util/camelCase';
 import { generateRandomId } from '../util';
@@ -91,11 +91,11 @@ export class DecoratorManager {
   ) {
     if (this.isProvide(target)) {
       if (identifier) {
-        const meta = MetadataManager.getOwnMetadata(TAGGED_CLS, target);
+        const meta = MetadataManager.getOwnMetadata(PROVIDE_KEY, target);
         if (meta.id !== identifier) {
           meta.id = identifier;
           // save class id and uuid
-          MetadataManager.defineMetadata(TAGGED_CLS, meta, target);
+          MetadataManager.defineMetadata(PROVIDE_KEY, meta, target);
           debug(`update provide: ${target.name} -> ${meta.uuid}`);
         }
       }
@@ -104,7 +104,7 @@ export class DecoratorManager {
       const uuid = generateRandomId();
       // save class id and uuid
       MetadataManager.defineMetadata(
-        TAGGED_CLS,
+        PROVIDE_KEY,
         {
           id: identifier,
           originName: target.name,
@@ -121,7 +121,7 @@ export class DecoratorManager {
 
   public static getProviderId(module: ClassType): string {
     const metaData = MetadataManager.getOwnMetadata(
-      TAGGED_CLS,
+      PROVIDE_KEY,
       module
     ) as TagClsMetadata;
     if (metaData && metaData.id) {
@@ -131,7 +131,7 @@ export class DecoratorManager {
 
   public static getProviderName(module: ClassType): string {
     const metaData = MetadataManager.getOwnMetadata(
-      TAGGED_CLS,
+      PROVIDE_KEY,
       module
     ) as TagClsMetadata;
     if (metaData && metaData.name) {
@@ -141,7 +141,7 @@ export class DecoratorManager {
 
   public static getProviderUUId(module: ClassType): string {
     const metaData = MetadataManager.getOwnMetadata(
-      TAGGED_CLS,
+      PROVIDE_KEY,
       module
     ) as TagClsMetadata;
     if (metaData && metaData.uuid) {
@@ -150,7 +150,7 @@ export class DecoratorManager {
   }
 
   public static isProvide(target: any): boolean {
-    return !!MetadataManager.getOwnMetadata(TAGGED_CLS, target);
+    return !!MetadataManager.getOwnMetadata(PROVIDE_KEY, target);
   }
 
   public static createCustomPropertyDecorator(
@@ -160,7 +160,7 @@ export class DecoratorManager {
   ): PropertyDecorator {
     return function (target: any, propertyName: string): void {
       MetadataManager.attachMetadata(
-        INJECT_CUSTOM_PROPERTY,
+        CUSTOM_PROPERTY_INJECT_KEY,
         {
           propertyName,
           key: decoratorKey,
@@ -186,7 +186,7 @@ export class DecoratorManager {
     }
     return function (target: any, propertyName: string) {
       MetadataManager.attachMetadata(
-        INJECT_CUSTOM_METHOD,
+        CUSTOM_METHOD_INJECT_KEY,
         {
           propertyName,
           key: decoratorKey,
@@ -215,7 +215,7 @@ export class DecoratorManager {
       parameterIndex: number
     ) {
       MetadataManager.attachMetadata(
-        INJECT_CUSTOM_PARAM,
+        CUSTOM_PARAM_INJECT_KEY,
         {
           key: decoratorKey,
           parameterIndex,
