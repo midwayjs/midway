@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="All Tests in egg" type="JavaScriptTestRunnerJest" folderName="midway all test">
-    <config-file value="$PROJECT_DIR$/packages/web/jest.config.js" />
+    <config-file value="$PROJECT_DIR$/packages/web-egg/jest.config.js" />
     <node-interpreter value="project" />
-    <node-options value="--require=ts-node/register" />
+    <node-options value="-r ts-node/register" />
     <jest-package value="$PROJECT_DIR$/node_modules/jest" />
     <working-dir value="$PROJECT_DIR$" />
     <envs />
