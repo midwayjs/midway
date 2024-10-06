@@ -1,4 +1,4 @@
-import pm from 'picomatch';
+import * as pm from 'picomatch';
 import {
   IMidwayContainer,
   AspectMetadata,

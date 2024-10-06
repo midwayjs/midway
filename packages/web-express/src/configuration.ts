@@ -9,7 +9,7 @@ import {
 } from '@midwayjs/core';
 import * as session from '@midwayjs/express-session';
 import * as bodyParser from 'body-parser';
-import cookieParser = require('cookie-parser');
+import * as cookieParser from 'cookie-parser';
 import * as DefaultConfig from './config/config.default';
 import { MidwayExpressFramework } from './framework';
 

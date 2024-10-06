@@ -2,7 +2,7 @@ import {
   IConsulProviderInfoOptions,
   IConsulRegisterInfoOptions,
 } from '../interface';
-import Consul from 'consul';
+import * as Consul from 'consul';
 
 export class ConsulProvider {
   private readonly consul: Consul.Consul;

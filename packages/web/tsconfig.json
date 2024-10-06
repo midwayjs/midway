@@ -4,8 +4,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "jsx": "react",
-    "esModuleInterop": true
+    "jsx": "react"
   },
   "include": [
     "./src/**/*.ts"

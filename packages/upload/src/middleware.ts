@@ -19,7 +19,7 @@ import {
   UploadOptions,
 } from '.';
 import { parseFromReadableStream, parseMultipart } from './parse';
-import getRawBody from 'raw-body';
+import * as getRawBody from 'raw-body';
 import { fromBuffer } from 'file-type';
 import { formatExt } from './utils';
 

@@ -19,7 +19,7 @@ import {
 import * as path from 'path';
 import * as fs from 'fs';
 
-import pump from 'mz-modules/pump';
+import * as pump from 'mz-modules/pump';
 
 @Provide()
 @Controller('/param')

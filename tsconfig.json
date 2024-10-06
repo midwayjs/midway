@@ -15,7 +15,7 @@
     "moduleResolution": "NodeNext",
     "target": "ES2021",
     "lib": ["ES2021"],
-    "allowSyntheticDefaultImports": true
+    "esModuleInterop": false
   },
   "exclude": [
     "dist",

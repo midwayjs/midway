@@ -9,7 +9,7 @@ import {
 } from '@midwayjs/core';
 import * as assert from 'assert';
 import * as staticCache from 'koa-static-cache';
-import LRU from 'ylru';
+import * as LRU from 'ylru';
 import * as range from 'koa-range';
 import { DirectoryNotFoundError } from '../error';
 
