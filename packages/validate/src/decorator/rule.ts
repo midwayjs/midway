@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 import {
   attachClassMetadata,
   getClassExtendedMetadata,
-  getPropertyType
+  getPropertyType,
 } from '@midwayjs/core';
 import { RULES_KEY } from '../constants';
 
