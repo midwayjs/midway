@@ -32,6 +32,8 @@
     "@midwayjs/faas": "^3.18.0",
     "@midwayjs/koa": "^3.18.0",
     "@midwayjs/mock": "^3.18.0",
-    "@midwayjs/web": "^3.18.0"
+    "@midwayjs/web": "^3.18.0",
+    "@midwayjs/fc-starter": "^3.18.0",
+    "fs-extra": "11.2.0"
   }
 }

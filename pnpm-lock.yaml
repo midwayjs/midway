@@ -243,6 +243,9 @@ importers:
       '@midwayjs/faas':
         specifier: ^3.18.0
         version: link:../faas
+      '@midwayjs/fc-starter':
+        specifier: ^3.18.0
+        version: link:../../packages-serverless/midway-fc-starter
       '@midwayjs/koa':
         specifier: ^3.18.0
         version: link:../web-koa
@@ -252,6 +255,9 @@ importers:
       '@midwayjs/web':
         specifier: ^3.18.0
         version: link:../web
+      fs-extra:
+        specifier: 11.2.0
+        version: 11.2.0
 
   packages/cache-manager:
     dependencies:
