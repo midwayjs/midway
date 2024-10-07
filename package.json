@@ -27,7 +27,6 @@
     "test": "lerna run test",
     "link": "lerna run link",
     "cov": "lerna run cov --concurrency 2 --stream",
-    "test_legacy": "lerna run test --concurrency 2 --stream --scope={$(lerna list --all --parseable --toposort --long | grep packages-legacy | sed -E \"s/[^:]+:([^:]+).+/\\1/\" | paste -d , -s -)}",
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules && rm -rf pnpm-lock.yaml",
     "reset": "npm run purge && npm i && npm run ci",

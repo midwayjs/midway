@@ -1,6 +1,0 @@
-service: my-static-demo
-
-provider:
-  name: tencent
-
-deployType: static
