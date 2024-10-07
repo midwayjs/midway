@@ -596,8 +596,12 @@ export function getObjectDefinition(target: any): ObjectDefinitionOptions {
     const res = {};
     for (const key in ret) {
       const element = ret[key];
-      for (const v of element) {
-        Object.assign(res, v);
+      if (Array.isArray(element)) {
+        for (const v of element) {
+          Object.assign(res, v);
+        }
+      } else {
+        Object.assign(res, element);
       }
     }
     // merge scope
