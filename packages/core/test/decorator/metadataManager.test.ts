@@ -481,5 +481,19 @@ describe('MetadataManager.test.ts', () => {
         propertyA: ['a']
       });
     });
+
+    it('should test inheritance with same property and attach metadata', () => {
+      class ParentClass {
+        public property: string;
+      }
+      class ChildClass extends ParentClass {}
+
+      CacheMetadataManager.attachMetadata('property_inject', 'a', ParentClass, 'property');
+      CacheMetadataManager.attachMetadata('property_inject', 'b', ChildClass, 'property');
+
+      expect(CacheMetadataManager.getPropertiesWithMetadata('property_inject', ChildClass)).toStrictEqual({
+        property: ['b'],
+      });
+    });
   });
 });

@@ -369,7 +369,7 @@ export class MetadataManager {
         propertyKey => {
           const metadataValue =
             _metadata[this.metadataPropertySymbol][propertyKey]?.[metadataKey];
-          if (metadataValue !== undefined) {
+          if (metadataValue !== undefined && propertiesWithMetadata[propertyKey] === undefined) {
             propertiesWithMetadata[propertyKey] = metadataValue;
           }
         }

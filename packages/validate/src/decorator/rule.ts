@@ -1,8 +1,8 @@
 import * as Joi from 'joi';
 import {
   attachClassMetadata,
-  getClassMetadata,
-  getPropertyType,
+  getClassExtendedMetadata,
+  getPropertyType
 } from '@midwayjs/core';
 import { RULES_KEY } from '../constants';
 
@@ -34,7 +34,7 @@ export function Rule(
       // property decorator
       if (!Joi.isSchema(rule)) {
         // 老代码，待废弃
-        rule = Joi.object(getClassMetadata(RULES_KEY, rule)).meta({
+        rule = Joi.object(getClassExtendedMetadata(RULES_KEY, rule)).meta({
           id: rule.name,
         });
         if (getPropertyType(target, propertyKey).name === 'Array') {

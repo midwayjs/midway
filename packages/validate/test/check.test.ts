@@ -551,7 +551,11 @@ describe('/test/check.test.ts', () => {
         defaultLocale: 'en-US'
       }
 
-      validateService['validateConfig'] = {};
+      validateService['validateConfig'] = {
+        validationOptions: {
+          allowUnknown: true
+        }
+      };
       class CustomValidationPipe extends AbstractValidationPipe {
         transform(value: any, options: TransformOptions) {}
       }

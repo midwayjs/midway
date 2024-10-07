@@ -67,7 +67,8 @@ export function attachClassMetadata(
   return MetadataManager.attachMetadata(
     decoratorNameKey as string | symbol,
     data,
-    target
+    target,
+    groupBy
   );
 }
 
@@ -86,10 +87,22 @@ export function getClassExtendedMetadata<T = any>(
   propertyName?: string,
   useCache?: boolean
 ): T {
-  return MetadataManager.getPropertiesWithMetadata(
+  const ret = MetadataManager.getPropertiesWithMetadata(
     decoratorNameKey as string | symbol,
     target
   ) as T;
+
+  // array item to object
+  const res = {} as any;
+  for (const key in ret) {
+    const element = ret[key];
+    if (Array.isArray(element) && element.length) {
+      res[key] = element[element.length - 1];
+    } else {
+      res[key] = element;
+    }
+  }
+  return res;
 }
 
 /**
