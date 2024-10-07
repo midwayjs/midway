@@ -2,7 +2,6 @@
 import { close, createApp, createFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
-import * as ServerlessApp from '../../../packages-legacy/serverless-app/src';
 import { readFileSync, copy, writeFile, remove } from 'fs-extra';
 import { existsSync } from 'fs';
 const type = 'nosniff';
@@ -125,7 +124,7 @@ describe(`test/${type}.test.ts`, function () {
       await copy(csrfBase, appDir);
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {nosniff: { enable: true }};`);
-      app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
+      app = await createFunctionApp(appDir, {});
     });
 
     afterAll(async () => {

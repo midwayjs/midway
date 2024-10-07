@@ -90,7 +90,7 @@ describe('/test/index.test.ts', () => {
       const service = new RedisService();
       (service as any).serviceFactory = new Map();
       await service.init();
-    }).rejects.toThrowError(/instance not found/);
+    }).rejects.toThrow(/instance not found/);
   });
 
   it('should test health check', async () => {

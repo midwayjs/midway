@@ -33,6 +33,7 @@
     "passport-http-bearer": "1.0.1",
     "passport-jwt": "4.0.1",
     "passport-local": "1.0.0",
-    "passport-openidconnect": "0.1.2"
+    "passport-openidconnect": "0.1.2",
+    "after": "0.8.2"
   }
 }

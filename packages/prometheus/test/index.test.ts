@@ -1,7 +1,6 @@
-import { createApp, close } from '@midwayjs/mock';
+import { createApp, close, createHttpRequest } from '@midwayjs/mock';
 import { Framework } from '@midwayjs/koa';
 import { join } from 'path';
-const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
 
@@ -14,8 +13,7 @@ describe('/test/index.test.ts', () => {
     await close(app);
   })
   it('should get metrics', done => {
-
-    request(app.callback())
+    createHttpRequest(app)
       .get('/metrics')
       .expect(200, done)
   });

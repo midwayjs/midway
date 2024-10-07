@@ -27,7 +27,8 @@
     "@midwayjs/mock": "^3.18.0",
     "@midwayjs/prometheus": "^3.18.0",
     "@midwayjs/socketio": "^3.18.0",
-    "@midwayjs/web": "^3.18.0"
+    "@midwayjs/web": "^3.18.0",
+    "egg": "^2.28.0"
   },
   "engines": {
     "node": ">=12"

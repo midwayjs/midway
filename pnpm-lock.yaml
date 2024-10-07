@@ -26,6 +26,9 @@ importers:
       autocannon:
         specifier: 7.15.0
         version: 7.15.0
+      fs-extra:
+        specifier: 11.2.0
+        version: 11.2.0
       jest:
         specifier: 29.7.0
         version: 29.7.0(@types/node@20.16.10)(ts-node@10.9.2(@types/node@20.16.10)(typescript@5.3.3))
@@ -840,6 +843,12 @@ importers:
       '@opentelemetry/sdk-node':
         specifier: 0.53.0
         version: 0.53.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base':
+        specifier: 1.26.0
+        version: 1.26.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-node':
+        specifier: 1.26.0
+        version: 1.26.0(@opentelemetry/api@1.9.0)
 
   packages/passport:
     devDependencies:
@@ -864,6 +873,9 @@ importers:
       '@types/passport-local':
         specifier: 1.0.38
         version: 1.0.38
+      after:
+        specifier: 0.8.2
+        version: 0.8.2
       express-session:
         specifier: 1.18.0
         version: 1.18.0
@@ -895,6 +907,9 @@ importers:
       '@midwayjs/mock':
         specifier: ^3.18.0
         version: link:../mock
+      koa-bodyparser:
+        specifier: 4.4.1
+        version: 4.4.1
 
   packages/prometheus:
     dependencies:
@@ -938,6 +953,9 @@ importers:
       '@midwayjs/web':
         specifier: ^3.18.0
         version: link:../web
+      egg:
+        specifier: ^2.28.0
+        version: 2.37.0
 
   packages/rabbitmq:
     dependencies:

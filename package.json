@@ -20,7 +20,8 @@
     "typedoc": "^0.26.8",
     "typescript": "5.3.3",
     "why-is-node-running": "2.3.0",
-    "zx": "7.2.3"
+    "zx": "7.2.3",
+    "fs-extra": "11.2.0"
   },
   "scripts": {
     "install_npm": "sh scripts/install_npm.sh",

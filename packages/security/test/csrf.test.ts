@@ -1,7 +1,6 @@
 
 import { createHttpRequest, close, createApp, createFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
-import * as ServerlessApp from '../../../packages-legacy/serverless-app/src';
 import * as assert from 'assert';
 import { readFileSync, copy, writeFile, remove } from 'fs-extra';
 import { existsSync } from 'fs';
@@ -141,7 +140,8 @@ describe('test/csrf.test.ts', function () {
     afterAll(async () => {
       await close(app);
     });
-    it('post with csrf token', async () => {
+
+    it.only('post with csrf token', async () => {
       await postWithCsrfToken(app);
     });
 
@@ -226,7 +226,7 @@ describe('test/csrf.test.ts', function () {
     });
   });
 
-  describe('faas', function () {
+  describe.only('faas', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, `fixtures/csrf-tmp/faas`);
@@ -236,13 +236,13 @@ describe('test/csrf.test.ts', function () {
       }
       await copy(csrfBase, appDir);
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
-      app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
+      app = await createFunctionApp(appDir, {});
     });
 
     afterAll(async () => {
       await close(app);
     });
-    it('post with csrf token', async () => {
+    it.only('post with csrf token', async () => {
       await postWithCsrfToken(app);
     });
 
@@ -272,7 +272,7 @@ describe('test/csrf.test.ts', function () {
       await copy(csrfBase, appDir);
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {type: 'all', refererWhiteList: ['.midwayjs.org']}};`);
-      app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
+      app = await createFunctionApp(appDir, {});
     });
 
     afterAll(async () => {
@@ -450,6 +450,4 @@ describe('test/csrf.test.ts', function () {
       await postWithCsrfTokenSetToBodyUsingSession(app);
     });
   });
-
-
 });

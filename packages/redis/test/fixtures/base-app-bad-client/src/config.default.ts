@@ -1,10 +1,11 @@
 export const redis = {
   client: {
-    host: '128.0.0.2',
+    host: 'non_existent_host',
     port: 6379,
     password: '',
     db: '0',
-    connectTimeout: 2e3,
-    retryStrategy: () => null
+    connectTimeout: 100,
+    commandTimeout: 500,
+    retryStrategy: null,
   },
 };

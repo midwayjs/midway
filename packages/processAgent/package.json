@@ -27,7 +27,8 @@
   "devDependencies": {
     "@midwayjs/core": "^3.18.0",
     "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0"
+    "@midwayjs/mock": "^3.18.0",
+    "koa-bodyparser": "4.4.1"
   },
   "dependencies": {
     "request": "2.88.2"
