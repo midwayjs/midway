@@ -70,11 +70,7 @@ export class MidwayGRPCFramework extends BaseFramework<
 
     this.app = server as IMidwayGRPCApplication;
     this.server = server;
-  }
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
     await this.loadService();
   }
 
