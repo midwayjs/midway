@@ -188,7 +188,8 @@ export class SwaggerExplorer {
 
     // 获取参数的元数据
     const metaForParams =
-      MetadataManager.getPropertiesWithMetadata(INJECT_CUSTOM_PARAM, target) || [];
+      MetadataManager.getPropertiesWithMetadata(INJECT_CUSTOM_PARAM, target) ||
+      {};
 
     // 获取控制器选项
     const controllerOption: ControllerOption = getClassMetadata(
