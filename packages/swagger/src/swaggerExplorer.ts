@@ -20,6 +20,7 @@ import {
   Types,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
+  MetadataManager,
 } from '@midwayjs/core';
 import {
   MixDecoratorMetadata,
@@ -186,8 +187,8 @@ export class SwaggerExplorer {
       ) || [];
 
     // 获取参数的元数据
-    const metaForParams: any[] =
-      getClassMetadata(INJECT_CUSTOM_PARAM, target) || [];
+    const metaForParams =
+      MetadataManager.getPropertiesWithMetadata(INJECT_CUSTOM_PARAM, target) || [];
 
     // 获取控制器选项
     const controllerOption: ControllerOption = getClassMetadata(
