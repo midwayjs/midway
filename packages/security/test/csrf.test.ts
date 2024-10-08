@@ -141,7 +141,7 @@ describe('test/csrf.test.ts', function () {
       await close(app);
     });
 
-    it.only('post with csrf token', async () => {
+    it('post with csrf token', async () => {
       await postWithCsrfToken(app);
     });
 
@@ -226,7 +226,7 @@ describe('test/csrf.test.ts', function () {
     });
   });
 
-  describe.only('faas', function () {
+  describe('faas', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, `fixtures/csrf-tmp/faas`);

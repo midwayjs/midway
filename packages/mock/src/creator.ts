@@ -60,6 +60,38 @@ function getFileNameWithSuffix(fileName: string) {
   return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
 }
 
+function createMockWrapApplicationContext() {
+  const container = new MidwayContainer();
+  const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
+  // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
+  container.onBeforeBind(target => {
+    bindModuleMap.set(target, true);
+  });
+
+  const originMethod = container.listModule;
+
+  container.listModule = key => {
+    const modules = originMethod.call(container, key);
+    if (key === CONFIGURATION_KEY) {
+      return modules;
+    }
+
+    return modules.filter((module: any) => {
+      if (bindModuleMap.has(module)) {
+        return true;
+      } else {
+        debug(
+          '[mock] Filter "%o" module without binding when list module %s.',
+          module.name ?? module,
+          key
+        );
+        return false;
+      }
+    });
+  };
+  return container;
+}
+
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
@@ -182,35 +214,7 @@ export async function create<
       options.globalConfig = mergeGlobalConfig(options.globalConfig, sslConfig);
     }
 
-    const container = new MidwayContainer();
-    const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
-    // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
-    container.onBeforeBind(target => {
-      bindModuleMap.set(target, true);
-    });
-
-    const originMethod = container.listModule;
-
-    container.listModule = key => {
-      const modules = originMethod.call(container, key);
-      if (key === CONFIGURATION_KEY) {
-        return modules;
-      }
-
-      return modules.filter((module: any) => {
-        if (bindModuleMap.has(module)) {
-          return true;
-        } else {
-          debug(
-            '[mock] Filter "%o" module without binding when list module %s.',
-            module.name ?? module,
-            key
-          );
-          return false;
-        }
-      });
-    };
-
+    const container = createMockWrapApplicationContext();
     options.applicationContext = container;
 
     await initializeGlobalApplicationContext({
@@ -350,6 +354,7 @@ export async function createFunctionApp<
   }
 
   if (options.starter) {
+    options.applicationContext = createMockWrapApplicationContext();
     options.appDir = baseDir;
     debug(`[mock]: Create app, appDir="${options.appDir}"`);
 
