@@ -618,6 +618,9 @@ importers:
       '@midwayjs/web':
         specifier: ^3.18.0
         version: link:../web
+      nock:
+        specifier: 13.5.5
+        version: 13.5.5
 
   packages/i18n:
     dependencies:

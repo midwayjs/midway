@@ -34,6 +34,7 @@
     "@midwayjs/faas": "^3.18.0",
     "@midwayjs/koa": "^3.18.0",
     "@midwayjs/mock": "^3.18.0",
-    "@midwayjs/web": "^3.18.0"
+    "@midwayjs/web": "^3.18.0",
+    "nock": "13.5.5"
   }
 }

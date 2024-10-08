@@ -44,7 +44,7 @@ export class MidwayWSFramework extends BaseFramework<
     return this.configService.getConfiguration('webSocket');
   }
 
-  applicationInitialize(options: IMidwayBootstrapOptions) {
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.configurationOptions.noServer = true;
     const opts = Object.assign({}, this.configurationOptions, { port: null });
     this.app = new WebSocket.Server(opts) as IMidwayWSApplication;
@@ -62,14 +62,10 @@ export class MidwayWSFramework extends BaseFramework<
         return this.getConnectionMiddleware();
       },
     });
-  }
-  public app: IMidwayWSApplication;
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
     await this.loadMidwayController();
   }
+  public app: IMidwayWSApplication;
 
   public async run(): Promise<void> {
     let server: http.Server;
