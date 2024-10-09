@@ -1,10 +1,10 @@
 import {
   Config,
-  getPropertyMetadata,
   Guard,
   IGuard,
   IMidwayContext,
   Inject,
+  MetadataManager,
 } from '@midwayjs/core';
 import { CasbinEnforcerService } from './enforcer.service';
 import { CasbinConfigOptions, Permission } from './interface';
@@ -23,7 +23,7 @@ export class AuthGuard implements IGuard {
     supplierClz,
     methodName: string
   ): Promise<boolean> {
-    const permissions: Permission[] = getPropertyMetadata<Permission[]>(
+    const permissions: Permission[] = MetadataManager.getMetadata<Permission[]>(
       PERMISSIONS_METADATA_KEY,
       supplierClz,
       methodName

@@ -3,12 +3,12 @@ import {
   extend,
   IMidwayBootstrapOptions,
   Framework,
-  getClassMetadata,
-  listModule,
   Utils,
   MidwayInvokeForbiddenError,
   ILogger,
   Logger,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import {
   Application,
@@ -73,9 +73,9 @@ export class BullFramework
   }
 
   async run() {
-    const processorModules = listModule(BULL_PROCESSOR_KEY);
+    const processorModules = DecoratorManager.listModule(BULL_PROCESSOR_KEY);
     for (const mod of processorModules) {
-      const options = getClassMetadata(BULL_PROCESSOR_KEY, mod) as {
+      const options = MetadataManager.getOwnMetadata(BULL_PROCESSOR_KEY, mod) as {
         queueName: string;
         concurrency: number;
         jobOptions?: JobOptions;

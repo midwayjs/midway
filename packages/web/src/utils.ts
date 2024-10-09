@@ -14,7 +14,7 @@ import {
   isTypeScriptEnvironment,
 } from '@midwayjs/core';
 import {
-  ALL,
+  ALL_VALUE_KEY,
   APPLICATION_KEY,
   CONFIG_KEY,
   LOGGER_KEY,
@@ -123,7 +123,7 @@ export async function initializeAgentApplicationContext(agent) {
     decoratorService.registerPropertyHandler(
       CONFIG_KEY,
       (propertyName, meta) => {
-        if (meta.identifier === ALL) {
+        if (meta.identifier === ALL_VALUE_KEY) {
           return configService.getConfiguration();
         } else {
           return configService.getConfiguration(

@@ -6,12 +6,11 @@ import {
   CONFIGURATION_KEY,
   Init,
   Inject,
-  listModule,
-  listPreloadModule,
   Provide,
   Scope,
   ScopeEnum,
   FunctionalConfiguration,
+  DecoratorManager
 } from '@midwayjs/core';
 import { debuglog } from 'util';
 const debug = debuglog('midway:debug');
@@ -32,7 +31,7 @@ export class MidwayWebLifeCycleService {
   @Init()
   protected async init() {
     // run lifecycle
-    const cycles = listModule(CONFIGURATION_KEY);
+    const cycles = DecoratorManager.listModule(CONFIGURATION_KEY);
 
     debug(`[core]: Found Configuration length = ${cycles.length}`);
 
@@ -104,7 +103,7 @@ export class MidwayWebLifeCycleService {
     }
 
     // some preload module init
-    const modules = listPreloadModule();
+    const modules = DecoratorManager.listPreloadModule();
     for (const module of modules) {
       // preload init context
       await this.applicationContext.getAsync(module);
@@ -113,7 +112,7 @@ export class MidwayWebLifeCycleService {
 
   public async stop() {
     // stop lifecycle
-    const cycles = listModule(CONFIGURATION_KEY);
+    const cycles = DecoratorManager.listModule(CONFIGURATION_KEY);
 
     for (const cycle of cycles) {
       let inst;

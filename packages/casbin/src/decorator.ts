@@ -1,6 +1,6 @@
 import { Permission } from './interface';
 import { PERMISSIONS_METADATA_KEY } from './constants';
-import { IMidwayContext, savePropertyMetadata } from '@midwayjs/core';
+import { IMidwayContext, MetadataManager } from '@midwayjs/core';
 
 const defaultIsOwn = (ctx: IMidwayContext): boolean => false;
 
@@ -17,6 +17,6 @@ export function UsePermission(...permissions: Permission[]): MethodDecorator {
       return item;
     });
 
-    savePropertyMetadata(PERMISSIONS_METADATA_KEY, perms, target, propertyKey);
+    MetadataManager.defineMetadata(PERMISSIONS_METADATA_KEY, perms, target, propertyKey);
   };
 }
