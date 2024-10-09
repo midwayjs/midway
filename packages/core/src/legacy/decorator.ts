@@ -3,7 +3,7 @@ import {
   ObjectDefinitionOptions,
   ObjectIdentifier,
   ParamDecoratorOptions,
-  TagPropsMetadata
+  TagPropsMetadata,
 } from '../interface';
 import { MetadataManager } from '../decorator/metadataManager';
 import { DecoratorManager, PROPERTY_INJECT_KEY, SCOPE_KEY } from '../decorator';
@@ -44,14 +44,29 @@ export function saveClassMetadata(
   mergeIfExist?: boolean
 ) {
   if (mergeIfExist && typeof data === 'object') {
-    const originData = MetadataManager.getMetadata(decoratorNameKey as any, target);
+    const originData = MetadataManager.getMetadata(
+      decoratorNameKey as any,
+      target
+    );
     if (!originData) {
-      return MetadataManager.defineMetadata(decoratorNameKey as any, data, target);
+      return MetadataManager.defineMetadata(
+        decoratorNameKey as any,
+        data,
+        target
+      );
     }
     if (Array.isArray(originData)) {
-      return MetadataManager.defineMetadata(decoratorNameKey as any, originData.concat(data), target);
+      return MetadataManager.defineMetadata(
+        decoratorNameKey as any,
+        originData.concat(data),
+        target
+      );
     } else {
-      return MetadataManager.defineMetadata(decoratorNameKey as any, Object.assign(originData, data), target);
+      return MetadataManager.defineMetadata(
+        decoratorNameKey as any,
+        Object.assign(originData, data),
+        target
+      );
     }
   }
   return MetadataManager.defineMetadata(
@@ -125,7 +140,12 @@ export function getClassExtendedMetadata<T = any>(
 ): T {
   const ret = MetadataManager.getMetadata(decoratorNameKey as any, target);
   if (ret === undefined) {
-    const res = _getClassExtendedMetadata(decoratorNameKey, target, propertyName, useCache);
+    const res = _getClassExtendedMetadata(
+      decoratorNameKey,
+      target,
+      propertyName,
+      useCache
+    );
     if (res) {
       return res;
     }
@@ -582,7 +602,12 @@ export function getPropertyInject(
  * @deprecated Use MetadataManager.attachMetadata instead
  */
 export function saveObjectDefinition(target: any, props = {}) {
-  MetadataManager.attachMetadata(OBJ_DEF_CLS, props, target, '__fake_object_def_method');
+  MetadataManager.attachMetadata(
+    OBJ_DEF_CLS,
+    props,
+    target,
+    '__fake_object_def_method'
+  );
   return target;
 }
 

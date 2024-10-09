@@ -1,348 +1,153 @@
 import {
-  attachPropertyMetadata,
-  clearAllModule,
   DecoratorManager,
-  getClassMetadata,
-  getObjectDefinition,
-  getPropertyDataFromClass,
-  getPropertyMetadata,
-  getProviderId,
-  listModule,
-  listPreloadModule,
-  listPropertyDataFromClass,
+  Provide,
+  MidwayContainer,
   PRELOAD_MODULE_KEY,
-  resetModule,
-  savePropertyDataToClass,
-  getPropertyType,
-  savePropertyMetadata,
-  getProviderName,
-  Utils,
-  saveModule,
-  Init,
-  Get,
-  getMethodParamTypes,
-  attachClassMetadata,
-  attachPropertyDataToClass,
-  saveClassMetadata,
-  savePreloadModule,
-  saveProviderId,
+  MetadataManager,
+  CUSTOM_PARAM_INJECT_KEY,
+  CUSTOM_METHOD_INJECT_KEY,
+  CUSTOM_PROPERTY_INJECT_KEY
 } from '../../src';
 
-// 从 customClass.ts 复制的装饰器
-function customCls(): ClassDecorator {
-  return (target) => {
-    saveClassMetadata('custom', 'test', target);
-    saveModule('custom', target);
-  };
-}
-
-function preload(): ClassDecorator {
-  return (target) => {
-    savePreloadModule(target);
-  };
-}
-
-function customMethod(): MethodDecorator {
-  return (target: object, propertykey: string, descriptor: PropertyDescriptor) => {
-    savePropertyDataToClass('custom', {
-      method: propertykey,
-      data: 'customData',
-    }, target, propertykey);
-
-    savePropertyMetadata('custom', 'methodData', target, propertykey);
-    saveClassMetadata('custom_method', propertykey, target);
-  };
-}
-
-function attachMethod(data): MethodDecorator {
-  return (target: object, propertykey: string, descriptor: PropertyDescriptor) => {
-    attachPropertyMetadata('custom_attach', data, target, propertykey);
-    attachPropertyDataToClass('custom_attach_to_class', data, target, propertykey);
-  };
-}
-
-function attachClass(data): ClassDecorator {
-  return (target: object) => {
-    attachClassMetadata('custom_class_attach', data, target);
-  };
-}
-
-function propertyKeyA(data): PropertyDecorator {
-  return (target: object, propertyKey) => {
-    savePropertyMetadata('custom_property', data, target, propertyKey);
-  };
-}
-
-function propertyKeyB(data): PropertyDecorator {
-  return (target: object, propertyKey) => {
-    attachPropertyDataToClass('custom_property_class', data, target, propertyKey);
-  };
-}
-
 describe('/test/decoratorManager.test.ts', () => {
-
   afterEach(() => {
-    clearAllModule();
+    DecoratorManager.clearAllModule();
   });
 
-  it('should save data on class and get it', () => {
-    @customCls()
-    class TestClass {
-      @customMethod()
-      testSomething() {}
-    }
-    expect(getClassMetadata('custom', TestClass)).toBe('test');
-    expect(getClassMetadata('custom_method', TestClass)).toBe('testSomething');
-  });
-
-  it('should save data to class and list it', () => {
-    @customCls()
-    class TestClass {
-      @customMethod()
-      testSomething() {}
-    }
-    const dataRes = listPropertyDataFromClass('custom', TestClass);
-    expect(dataRes.length).toBe(1);
-
-    const { method, data } = getPropertyDataFromClass(
-      'custom',
-      TestClass,
-      'testSomething'
-    );
-    expect(dataRes[0].method).toBe(method);
-    expect(dataRes[0].data).toBe(data);
-  });
-
-  it('should get method meta data from method', () => {
-    class TestClass {
-      @customMethod()
-      testSomething() {}
-    }
-    const m = new TestClass();
-    expect(getPropertyMetadata('custom', m, 'testSomething')).toBe('methodData');
-  });
-
-  it('should list preload module', () => {
-    @preload()
+  it('should save and list preload module', () => {
     class TestClass {}
-    console.log(TestClass);
-    let modules = listPreloadModule();
-    expect(modules.length).toBe(1);
+    DecoratorManager.savePreloadModule(TestClass);
+    let modules = DecoratorManager.listPreloadModule();
+    expect(modules).toContain(TestClass);
 
-    resetModule(PRELOAD_MODULE_KEY);
-    modules = listPreloadModule();
-    expect(modules.length).toBe(0);
+    DecoratorManager.resetModule(PRELOAD_MODULE_KEY);
+    modules = DecoratorManager.listPreloadModule();
+    expect(modules).toHaveLength(0);
   });
 
-  it('should list module', () => {
-    @customCls()
+  it('should save and list module', () => {
     class TestClass {}
-    console.log(TestClass);
-    const modules = listModule('custom');
-    expect(modules.length).toBe(1);
+    DecoratorManager.saveModule('testKey', TestClass);
+    const modules = DecoratorManager.listModule('testKey');
+    expect(modules).toContain(TestClass);
 
-    const nothings = listModule('c_custom_notfound');
-    expect(nothings.length).toBe(0);
+    const nothings = DecoratorManager.listModule('c_custom_notfound');
+    expect(nothings).toHaveLength(0);
   });
 
-  it('should clear all module', () => {
-    saveModule('a', 'b');
-    expect(listModule('a').length).toBe(1);
-    clearAllModule();
-    expect(listModule('a').length).toBe(0);
+  it('should bind and clear container', () => {
+    const mockContainer = new MidwayContainer();
+    DecoratorManager.bindContainer(mockContainer);
+    DecoratorManager.clearBindContainer();
+    expect(DecoratorManager['container']).toBeNull();
   });
 
-  it('should get function args', () => {
-    let args = Utils.getParamNames((a, b, c) => {});
-    expect(args.length).toBe(3);
-
-    args = Utils.getParamNames(() => {});
-    expect(args.length).toBe(0);
-
-    args = Utils.getParamNames((a) => {});
-    expect(args.length).toBe(1);
-
-    args = Utils.getParamNames((a, b) => {});
-    expect(args.length).toBe(2);
-
-    args = Utils.getParamNames((a, b = 1) => {});
-    expect(args.length).toBe(2);
-
-    args = Utils.getParamNames((a = 1, b = 2, c) => {});
-    expect(args.length).toBe(3);
+  it('should save and get provider id', () => {
+    class TestClass {}
+    DecoratorManager.saveProviderId('testId', TestClass);
+    const result = DecoratorManager.getProviderId(TestClass);
+    expect(result).toBe('testId');
   });
 
-  it('should get attach data from method', () => {
+  it('should get provider name and uuid', () => {
+    class TestClass {}
+    DecoratorManager.saveProviderId('testId', TestClass);
+    expect(DecoratorManager.getProviderName(TestClass)).toBe('testClass');
+    expect(DecoratorManager.getProviderUUId(TestClass)).toBeDefined();
+  });
+
+  it('should check if class is provided', () => {
+    class TestClass {}
+    DecoratorManager.saveProviderId('testId', TestClass);
+    const result = DecoratorManager.isProvide(TestClass);
+    expect(result).toBe(true);
+  });
+
+  it('should create custom decorators', () => {
+    const propertyDecorator = DecoratorManager.createCustomPropertyDecorator('testKey', {});
+    const methodDecorator = DecoratorManager.createCustomMethodDecorator('testKey', {});
+    const paramDecorator = DecoratorManager.createCustomParamDecorator('testKey', {});
+
+    expect(typeof propertyDecorator).toBe('function');
+    expect(typeof methodDecorator).toBe('function');
+    expect(typeof paramDecorator).toBe('function');
+  });
+
+  it('should handle Provide decorator', () => {
+    @Provide()
+    class TestClass {}
+    expect(DecoratorManager.getProviderId(TestClass)).toBeUndefined();
+    expect(DecoratorManager.getProviderName(TestClass)).toBe('testClass');
+    expect(DecoratorManager.getProviderUUId(TestClass)).toBeDefined();
+  });
+
+  it('should save and list module with filter', () => {
+    class TestClass1 {}
+    class TestClass2 {}
+    DecoratorManager.saveModule('testKey', TestClass1);
+    DecoratorManager.saveModule('testKey', TestClass2);
+    const modules = DecoratorManager.listModule('testKey', (module) => module === TestClass1);
+    expect(modules).toContain(TestClass1);
+    expect(modules).not.toContain(TestClass2);
+  });
+
+  it('should reset module', () => {
+    class TestClass {}
+    DecoratorManager.saveModule('testKey', TestClass);
+    expect(DecoratorManager.listModule('testKey')).toContain(TestClass);
+    DecoratorManager.resetModule('testKey');
+    expect(DecoratorManager.listModule('testKey')).toHaveLength(0);
+  });
+
+  it('should get provider UUID', () => {
+    @Provide()
+    class TestClass {}
+    const uuid = DecoratorManager.getProviderUUId(TestClass);
+    expect(uuid).toBeDefined();
+    expect(typeof uuid).toBe('string');
+  });
+
+  it('should create custom property decorator', () => {
+    const decorator = DecoratorManager.createCustomPropertyDecorator('testKey', { test: 'value' });
     class TestClass {
-      @attachMethod('test')
-      index() {}
-    }
-    const m = new TestClass();
-    expect(getPropertyMetadata('custom_attach', m, 'index').length).toBe(1);
-    expect(
-      getPropertyDataFromClass('custom_attach_to_class', TestClass, 'index').length
-    ).toBe(1);
-  });
-
-  it('should get attach data from class', () => {
-    @attachClass('test')
-    class TestClass {}
-    expect(getClassMetadata('custom_class_attach', TestClass).length).toBe(1);
-  });
-
-  it('should get name from class', () => {
-    class TestClass {}
-    saveProviderId('123', TestClass);
-    expect(TestClass.name).toBe('TestClass');
-    expect(getProviderName(TestClass)).toBe('testClass');
-    expect(getProviderName(class Test {})).toBeUndefined();
-  });
-
-  it('should get id from class', () => {
-    class TestClass {}
-    DecoratorManager.saveProviderId('123', TestClass);
-    expect(getProviderId(TestClass)).toBe('123');
-  });
-
-  it('should get property data', () => {
-    class TestClass {
-      @propertyKeyA('property_a')
-      @propertyKeyB('test_b')
+      @decorator
       testProperty: string;
     }
-    const m = new TestClass();
-    expect(getPropertyMetadata('custom_property', m, 'testProperty')).toBe('property_a');
-    expect(
-      getPropertyDataFromClass('custom_property_class', TestClass, 'testProperty').length
-    ).toBe(1);
-  });
-
-  it('should get object definition metadata', () => {
-    class TestClass {
-      @Init()
-      async init() {}
-    }
-    const objDefinition = getObjectDefinition(TestClass);
-    expect(objDefinition).toStrictEqual({ 'initMethod': 'init' });
-  });
-
-  it('savePropertyDataToClass should be ok', () => {
-    class TestOne {}
-    savePropertyDataToClass('hello1', { a: 1 }, TestOne, 'hello');
-
-    const data = listPropertyDataFromClass('hello1', TestOne);
-    expect(data).toStrictEqual([
-      {
-        a: 1,
-      },
-    ]);
-  });
-
-  it('attachPropertyMetadata should be ok', () => {
-    class TestTwo {}
-    attachPropertyMetadata('ttt', { a: 1, b: 22 }, TestTwo, 'hhh');
-
-    const meta = getPropertyMetadata('ttt', TestTwo, 'hhh');
-    expect(meta).toStrictEqual([{ a: 1, b: 22 }]);
-  });
-
-  it('should test getPropertyType', function () {
-    function ApiProperty(): PropertyDecorator {
-      return (target, propertyName) => {
-        const data = getPropertyType(target, propertyName);
-        savePropertyMetadata('propertyType', data, target, propertyName);
-      };
-    }
-
-    class CreateCatDto {
-      @ApiProperty()
-      name: string;
-      @ApiProperty()
-      age: number;
-      @ApiProperty()
-      isMale: boolean;
-      @ApiProperty()
-      uniqueKey: symbol;
-      @ApiProperty()
-      emptyValue: undefined;
-      @ApiProperty()
-      extraKey: object;
-      @ApiProperty()
-      check: () => boolean;
-      @ApiProperty()
-      nullValue: null = null;
-      @ApiProperty()
-      breed: [string];
-      @ApiProperty()
-      mapObj: Map<string, any>;
-      @ApiProperty()
-      alias: CreateCatDto;
-    }
-
-    const catDTO = new CreateCatDto();
-    const getType = (propertyName) => {
-      return getPropertyMetadata('propertyType', catDTO, propertyName).name;
-    };
-    expect(getType('name')).toBe('string');
-    expect(getType('age')).toBe('number');
-    expect(getType('isMale')).toBe('boolean');
-    expect(getType('uniqueKey')).toBe('symbol');
-    expect(getType('emptyValue')).toBe('undefined');
-    expect(getType('extraKey')).toBe('object');
-    expect(getType('check')).toBe('function');
-    expect(getType('nullValue')).toBe('undefined');
-    expect(getType('breed')).toBe('Array');
-    expect(getType('mapObj')).toBe('Map');
-    expect(getType('alias')).toBe('CreateCatDto');
-  });
-
-  it('should test save module with container', function () {
-    class Container {
-      store = new Map();
-      saveModule(key: string, module: any) {
-        this.store.set(key, module);
-      }
-
-      listModule(key) {
-        return Array.from(this.store.get(key));
-      }
-
-      transformModule(map) {
-        for (const key of map.keys()) {
-          this.store.set(key, map.get(key));
+    const metadata = MetadataManager.getOwnPropertiesWithMetadata(CUSTOM_PROPERTY_INJECT_KEY, TestClass);
+    expect(metadata).toEqual({
+      "testProperty": [
+        {
+          "impl": true,
+          "key": "testKey",
+          "metadata": {
+            "test": "value"
+          },
+          "propertyName": "testProperty"
         }
-      }
-    }
-
-    const container = new Container();
-    DecoratorManager.saveModule('abc', '123');
-    DecoratorManager.bindContainer(container);
-
-    expect(container.listModule('abc')[0]).toBe('123');
+      ]
+    });
   });
 
-  it('should test getMethodParamTypes', function () {
-    const obj = { ccc: 'd' };
-    class D {}
-    class A {
-      @Get()
-      async invoke(
-        a: number,
-        b: string,
-        c: boolean,
-        d: D,
-        e: [],
-        f: Map<string, any>,
-        g: Set<any>
-      ) {}
-
-      @Get()
-      async invoke2(a: Record<any, any>, b: unknown, c: any, d: typeof obj) {}
+  it('should create custom method decorator', () => {
+    const decorator = DecoratorManager.createCustomMethodDecorator('testKey', { test: 'value' });
+    class TestClass {
+      @decorator
+      testMethod() {}
     }
-    const paramTypes = getMethodParamTypes(A, 'invoke');
-    expect(paramTypes.length).toBe(7);
+    const metadata = MetadataManager.getMetadata(CUSTOM_METHOD_INJECT_KEY, TestClass);
+    expect(metadata).toEqual([{"key": "testKey", "metadata": {"test": "value"}, "options": {"impl": true}, "propertyName": "testMethod"}]);
+  });
 
-    const paramTypes2 = getMethodParamTypes(A, 'invoke2');
-    expect(paramTypes2.length).toBe(4);
+  it('should create custom param decorator', () => {
+    const decorator = DecoratorManager.createCustomParamDecorator('testKey', { test: 'value' });
+    class TestClass {
+      testMethod(@decorator param: string) {}
+    }
+
+    const metadata = MetadataManager.getOwnPropertiesWithMetadata(
+      CUSTOM_PARAM_INJECT_KEY,
+      TestClass
+    )
+    expect(metadata).toEqual({"testMethod": [{"key": "testKey", "metadata": {"test": "value"}, "options": {"impl": true}, "parameterIndex": 0, "propertyName": "testMethod"}]});
   });
 });
