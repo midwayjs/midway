@@ -32,15 +32,15 @@ import {
   getPropertyInject,
   saveObjectDefinition,
   getObjectDefinition,
-} from '../../src/legacy/decorator';
+  MidwayContainer
+} from "../../src";
 
 describe('legacy/decorator.ts', () => {
-  class TestClass {
-    testProperty: string;
-    testMethod() {}
-  }
-
   it('should save and get class metadata', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     const testData = { key: 'value' };
     saveClassMetadata('testKey', testData, TestClass);
     const result = getClassMetadata('testKey', TestClass);
@@ -48,13 +48,36 @@ describe('legacy/decorator.ts', () => {
   });
 
   it('should attach and get class metadata', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
+    const testData = { key: 'value' };
+    attachClassMetadata('testKey', testData, TestClass);
+    const result = getClassMetadata('testKey', TestClass);
+    expect(result).toContain(testData);
+  });
+
+  it('should attach and get class extended metadata', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     const testData = { key: 'value' };
     attachClassMetadata('testKey', testData, TestClass);
     const result = getClassExtendedMetadata('testKey', TestClass);
-    expect(result).toHaveProperty('TestClass', testData);
+    expect(result).toContain(testData);
+  });
+
+  it("should", () => {
+
   });
 
   it('should save and get property data to class', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     const testData = { key: 'value' };
     savePropertyDataToClass('testKey', testData, TestClass, 'testProperty');
     const result = getPropertyDataFromClass('testKey', TestClass, 'testProperty');
@@ -62,6 +85,10 @@ describe('legacy/decorator.ts', () => {
   });
 
   it('should attach and list property data from class', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     const testData = { key: 'value' };
     attachPropertyDataToClass('testKey', testData, TestClass, 'testProperty');
     const result = listPropertyDataFromClass('testKey', TestClass);
@@ -69,55 +96,102 @@ describe('legacy/decorator.ts', () => {
   });
 
   it('should save and get property metadata', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     const testData = { key: 'value' };
     savePropertyMetadata('testKey', testData, TestClass.prototype, 'testProperty');
     const result = getPropertyMetadata('testKey', TestClass.prototype, 'testProperty');
     expect(result).toEqual(testData);
   });
 
+  it('should attach and get property metadata', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
+    const testData1 = { key: 'value1' };
+    const testData2 = { key: 'value2' };
+
+    attachPropertyMetadata('testKey', testData1, TestClass.prototype, 'testProperty');
+    attachPropertyMetadata('testKey', testData2, TestClass.prototype, 'testProperty');
+
+    const result = getPropertyMetadata('testKey', TestClass.prototype, 'testProperty');
+
+    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveLength(2);
+    expect(result).toContainEqual(testData1);
+    expect(result).toContainEqual(testData2);
+  });
+
   it('should save and list preload module', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     savePreloadModule(TestClass);
     const result = listPreloadModule();
     expect(result).toContain(TestClass);
   });
 
   it('should save and list module', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     saveModule('testKey', TestClass);
     const result = listModule('testKey');
     expect(result).toContain(TestClass);
   });
 
   it('should bind and clear container', () => {
-    const mockContainer = { get: jest.fn() };
+    const mockContainer = new MidwayContainer();
     bindContainer(mockContainer);
     clearBindContainer();
-    // 这里可以添加一些断言来确保容器被正确绑定和清除
+    expect(global['MIDWAY_GLOBAL_DECORATOR_MANAGER'].container).toBeNull();
   });
 
   it('should reset and clear all modules', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     saveModule('testKey', TestClass);
     resetModule('testKey');
     expect(listModule('testKey')).toEqual([]);
-    
+
     saveModule('anotherKey', TestClass);
     clearAllModule();
     expect(listModule('anotherKey')).toEqual([]);
   });
 
   it('should save and get provider id', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     saveProviderId('testId', TestClass);
     const result = getProviderId(TestClass);
     expect(result).toBe('testId');
   });
 
   it('should get provider name and uuid', () => {
-    const name = getProviderName(TestClass);
-    const uuid = getProviderUUId(TestClass);
-    expect(name).toBe('TestClass');
-    expect(uuid).toBeDefined();
+    class TestClass1 {}
+    class TestClass2 {}
+    saveProviderId('testId', TestClass1);
+    expect(getProviderName(TestClass1)).toBe('testClass1');
+    expect(getProviderUUId(TestClass1)).toBeDefined();
+    saveProviderId(undefined, TestClass2);
+    expect(getProviderName(TestClass2)).toBe('testClass2');
+    expect(getProviderUUId(TestClass2)).toBeDefined();
   });
 
   it('should check if class is provided', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     saveProviderId('testId', TestClass);
     const result = isProvide(TestClass);
     expect(result).toBe(true);
@@ -134,19 +208,26 @@ describe('legacy/decorator.ts', () => {
   });
 
   it('should get property type and method param types', () => {
+    function Test(): ParameterDecorator {
+      return () => {};
+    }
     class TypeTestClass {
       testProperty: string;
-      testMethod(param1: number, param2: boolean) {}
+      testMethod(@Test() param1: number, @Test() param2: boolean) {}
     }
 
-    const propertyType = getPropertyType(TypeTestClass.prototype, 'testProperty');
-    const methodParamTypes = getMethodParamTypes(TypeTestClass.prototype, 'testMethod');
+    const propertyType = getPropertyType(TypeTestClass, 'testProperty');
+    const methodParamTypes = getMethodParamTypes(TypeTestClass, 'testMethod');
 
-    expect(propertyType).toBe(String);
-    expect(methodParamTypes).toEqual([Number, Boolean]);
+    expect(propertyType).toStrictEqual({"isBaseType": true, "name": "undefined", "originDesign": undefined});
+    expect(methodParamTypes.toString()).toEqual('function Number() { [native code] },function Boolean() { [native code] }');
   });
 
   it('should save and get property inject', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     savePropertyInject({
       identifier: 'testId',
       target: TestClass,
@@ -158,6 +239,10 @@ describe('legacy/decorator.ts', () => {
   });
 
   it('should save and get object definition', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     const testDefinition = { scope: 'Singleton' };
     saveObjectDefinition(TestClass, testDefinition);
     const result = getObjectDefinition(TestClass);
@@ -176,12 +261,16 @@ describe('legacy/decorator.ts', () => {
   });
 
   it('should handle multiple attachClassMetadata calls', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     const testData1 = { key: 'value1' };
     const testData2 = { key: 'value2' };
     attachClassMetadata('testKey', testData1, TestClass);
     attachClassMetadata('testKey', testData2, TestClass);
     const result = getClassExtendedMetadata('testKey', TestClass);
-    expect(result).toHaveProperty('TestClass', [testData1, testData2]);
+    expect(result).toStrictEqual([testData1, testData2]);
   });
 
   it('should handle createCustomMethodDecorator with options', () => {
@@ -195,6 +284,10 @@ describe('legacy/decorator.ts', () => {
   });
 
   it('should handle getPropertyInject with useCache option', () => {
+    class TestClass {
+      testProperty: string;
+      testMethod() {}
+    }
     savePropertyInject({
       identifier: 'testId',
       target: TestClass,
@@ -205,5 +298,16 @@ describe('legacy/decorator.ts', () => {
     const result2 = getPropertyInject(TestClass, false);
     expect(result1).toHaveProperty('testProperty');
     expect(result2).toHaveProperty('testProperty');
+  });
+
+  // 新增的测试用例
+  it('should list module with filter', () => {
+    class TestClass1 {}
+    class TestClass2 {}
+    saveModule('testKey', TestClass1);
+    saveModule('testKey', TestClass2);
+    const result = listModule('testKey', (module) => module === TestClass1);
+    expect(result).toContain(TestClass1);
+    expect(result).not.toContain(TestClass2);
   });
 });

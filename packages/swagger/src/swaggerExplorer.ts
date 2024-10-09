@@ -20,24 +20,24 @@ import {
   Types,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-  MetadataManager,
+  MetadataManager
 } from '@midwayjs/core';
 import {
   MixDecoratorMetadata,
   PathItemObject,
   SchemaObject,
-  Type,
+  Type
 } from './interfaces';
 import {
   DECORATORS,
   DECORATORS_CLASS_METADATA,
-  DECORATORS_METHOD_METADATA,
+  DECORATORS_METHOD_METADATA
 } from './constants';
 import { DocumentBuilder } from './documentBuilder';
 import {
   AuthOptions,
   SecuritySchemeObject,
-  SwaggerOptions,
+  SwaggerOptions
 } from './interfaces/';
 import { BodyContentType } from '.';
 import { getEnumValues } from './common/enum.utils';
@@ -369,6 +369,7 @@ export class SwaggerExplorer {
       });
     }
   }
+
   /**
    * 构造 router 提取方法
    */
@@ -409,7 +410,7 @@ export class SwaggerExplorer {
       operationId:
         operMeta?.metadata?.operationId ||
         this.getOperationId(target.name, webRouter),
-      tags: routerTags.length ? routerTags : operMeta?.metadata?.tags ?? [],
+      tags: routerTags.length ? routerTags : operMeta?.metadata?.tags ?? []
     };
     if (operMeta?.metadata?.deprecated != null) {
       opts[webRouter.requestMethod].deprecated =
@@ -419,12 +420,12 @@ export class SwaggerExplorer {
      * [{"key":"web:router_param","parameterIndex":1,"propertyName":"create","metadata":{"type":2}},
      * {"key":"web:router_param","parameterIndex":0,"propertyName":"create","metadata":{"type":1,"propertyData":"createCatDto"}}]
      */
-    // WEB_ROUTER_PARAM_KEY
+      // WEB_ROUTER_PARAM_KEY
     const args: any[] = routerArgs.filter(
-      item =>
-        item.key === WEB_ROUTER_PARAM_KEY &&
-        item?.metadata?.type !== RouteParamTypes.CUSTOM
-    );
+        item =>
+          item.key === WEB_ROUTER_PARAM_KEY &&
+          item?.metadata?.type !== RouteParamTypes.CUSTOM
+      );
     const types = getMethodParamTypes(target, webRouter.method);
     const params = metaForMethods.filter(
       item =>
@@ -443,7 +444,7 @@ export class SwaggerExplorer {
         }
         if (param.metadata.isArray) {
           param.metadata.schema['items'] = {
-            type: param.metadata.schema['type'],
+            type: param.metadata.schema['type']
           };
           param.metadata.schema['type'] = 'array';
           delete param.metadata.isArray;
@@ -468,9 +469,9 @@ export class SwaggerExplorer {
         p.content = p.content ?? {};
         if (Object.keys(p.content).length === 0) {
           p.content[p.contentType || 'application/json'] = p.content[
-            p.contentType || 'application/json'
-          ] ?? {
-            schema: p.schema,
+          p.contentType || 'application/json'
+            ] ?? {
+            schema: p.schema
           };
         }
 
@@ -497,7 +498,7 @@ export class SwaggerExplorer {
       const p: any = {
         name: arg?.metadata?.propertyData,
         in: convertTypeToString(arg.metadata?.type),
-        required: false,
+        required: false
       };
 
       const existsParam = parameters.find(item => {
@@ -532,7 +533,7 @@ export class SwaggerExplorer {
               description: (schema.properties[pName] as SchemaObject)
                 ?.description,
               schema: schema.properties[pName],
-              required: schema.required?.includes(pName) || false,
+              required: schema.required?.includes(pName) || false
             };
             parameters.push(pp);
           });
@@ -542,7 +543,7 @@ export class SwaggerExplorer {
             continue;
           }
           p.schema = {
-            type: convertSchemaType(currentType?.name ?? currentType),
+            type: convertSchemaType(currentType?.name ?? currentType)
           };
         }
       } else if (p.in === 'body') {
@@ -565,12 +566,12 @@ export class SwaggerExplorer {
                   type: 'array',
                   items: {
                     type: 'string',
-                    format: 'binary',
+                    format: 'binary'
                   },
-                  description: p.description,
-                },
-              },
-            },
+                  description: p.description
+                }
+              }
+            }
           };
         } else if (arg.metadata?.type === RouteParamTypes.FILESTREAM) {
           p.content = {};
@@ -581,28 +582,28 @@ export class SwaggerExplorer {
                 file: {
                   type: 'string',
                   format: 'binary',
-                  description: p.description,
-                },
-              },
-            },
+                  description: p.description
+                }
+              }
+            }
           };
         } else {
           if (Types.isClass(currentType)) {
             p.content = {
               'application/json': {
                 schema: {
-                  $ref: '#/components/schemas/' + currentType.name,
-                },
-              },
+                  $ref: '#/components/schemas/' + currentType.name
+                }
+              }
             };
           } else {
             // base type
             p.content = {
               'text/plain': {
                 schema: {
-                  type: convertSchemaType(currentType?.name ?? currentType),
-                },
-              },
+                  type: convertSchemaType(currentType?.name ?? currentType)
+                }
+              }
             };
           }
         }
@@ -610,7 +611,7 @@ export class SwaggerExplorer {
         opts[webRouter.requestMethod].requestBody = {
           required: true,
           description: p.description || p.name,
-          content: p.content,
+          content: p.content
         };
         // in body 不需要处理
         continue;
@@ -651,8 +652,8 @@ export class SwaggerExplorer {
           // response 的 schema 需要包含在 content 内
           tt.content = {
             'application/json': {
-              schema: this.formatType(tt.schema),
-            },
+              schema: this.formatType(tt.schema)
+            }
           };
           delete tt.schema;
         } else if (tt.type) {
@@ -665,27 +666,27 @@ export class SwaggerExplorer {
                   schema: {
                     type: 'array',
                     items: {
-                      $ref: '#/components/schemas/' + tt.type.name,
-                    },
-                  },
-                },
+                      $ref: '#/components/schemas/' + tt.type.name
+                    }
+                  }
+                }
               };
             } else {
               tt.content = {
                 'application/json': {
                   schema: {
-                    $ref: '#/components/schemas/' + tt.type.name,
-                  },
-                },
+                    $ref: '#/components/schemas/' + tt.type.name
+                  }
+                }
               };
             }
           } else {
             tt.content = {
               'text/plan': {
                 schema: {
-                  type: convertSchemaType(tt.type),
-                },
-              },
+                  type: convertSchemaType(tt.type)
+                }
+              }
             };
           }
         }
@@ -703,8 +704,8 @@ export class SwaggerExplorer {
     } else {
       opts[webRouter.requestMethod].responses = {
         200: {
-          description: 'OK',
-        },
+          description: 'OK'
+        }
       };
     }
 
@@ -745,7 +746,7 @@ export class SwaggerExplorer {
       typeMeta = {
         type: metadata?.type,
         enum: metadata?.enum,
-        default: metadata?.default,
+        default: metadata?.default
       };
 
       if (metadata?.description) {
@@ -758,7 +759,7 @@ export class SwaggerExplorer {
       typeMeta = {
         type: metadata?.type,
         items: metadata?.items,
-        default: metadata?.default,
+        default: metadata?.default
       };
 
       if (metadata?.description) {
@@ -781,7 +782,7 @@ export class SwaggerExplorer {
 
     if (metadata?.oneOf) {
       typeMeta = {
-        oneOf: [],
+        oneOf: []
       };
       metadata?.oneOf.forEach((item: any) => {
         typeMeta.push(this.parseSubPropertyType(item));
@@ -796,12 +797,12 @@ export class SwaggerExplorer {
         typeMeta = {
           type: 'array',
           items: {
-            $ref: '#/components/schemas/' + currentType?.name,
-          },
+            $ref: '#/components/schemas/' + currentType?.name
+          }
         };
       } else {
         typeMeta = {
-          $ref: '#/components/schemas/' + currentType?.name,
+          $ref: '#/components/schemas/' + currentType?.name
         };
       }
 
@@ -816,14 +817,14 @@ export class SwaggerExplorer {
 
           typeMeta = {
             type: 'array',
-            items: metadata?.items,
+            items: metadata?.items
           };
         } else {
           typeMeta = {
             type: 'array',
             items: {
-              type: convertSchemaType(currentType?.name || currentType),
-            },
+              type: convertSchemaType(currentType?.name || currentType)
+            }
           };
         }
 
@@ -831,7 +832,7 @@ export class SwaggerExplorer {
       } else {
         typeMeta = {
           type: currentType,
-          format: metadata?.format,
+          format: metadata?.format
         };
 
         // Date 类型支持
@@ -970,12 +971,12 @@ export class SwaggerExplorer {
 
     const tt: any = {
       type: 'object',
-      properties: {},
+      properties: {}
     };
 
     // 先添加到 schema，防止递归循环
     this.documentBuilder.addSchema({
-      [clzz.name]: tt,
+      [clzz.name]: tt
     });
 
     if (props) {
@@ -1041,6 +1042,7 @@ export class SwaggerExplorer {
     // just for test
     return tt;
   }
+
   /**
    * 授权验证
    * @param opts
@@ -1054,61 +1056,56 @@ export class SwaggerExplorer {
     delete opts.authType;
     // TODO 加 security
     switch (authType) {
-      case 'basic':
-        {
-          const name = opts.name;
-          delete opts.name;
-          this.documentBuilder.addBasicAuth(opts as SecuritySchemeObject, name);
-        }
+      case 'basic': {
+        const name = opts.name;
+        delete opts.name;
+        this.documentBuilder.addBasicAuth(opts as SecuritySchemeObject, name);
+      }
         break;
-      case 'bearer':
-        {
-          const name = opts.name;
-          delete opts.name;
-          this.documentBuilder.addBearerAuth(
-            opts as SecuritySchemeObject,
-            name
-          );
-        }
+      case 'bearer': {
+        const name = opts.name;
+        delete opts.name;
+        this.documentBuilder.addBearerAuth(
+          opts as SecuritySchemeObject,
+          name
+        );
+      }
         break;
-      case 'cookie':
-        {
-          const cname = opts.cookieName;
-          const secName = opts.securityName;
-          delete opts.cookieName;
-          delete opts.securityName;
-          this.documentBuilder.addCookieAuth(
-            cname,
-            opts as SecuritySchemeObject,
-            secName
-          );
-        }
+      case 'cookie': {
+        const cname = opts.cookieName;
+        const secName = opts.securityName;
+        delete opts.cookieName;
+        delete opts.securityName;
+        this.documentBuilder.addCookieAuth(
+          cname,
+          opts as SecuritySchemeObject,
+          secName
+        );
+      }
         break;
-      case 'oauth2':
-        {
-          const name = opts.name;
-          delete opts.name;
-          this.documentBuilder.addOAuth2(opts as SecuritySchemeObject, name);
-        }
+      case 'oauth2': {
+        const name = opts.name;
+        delete opts.name;
+        this.documentBuilder.addOAuth2(opts as SecuritySchemeObject, name);
+      }
         break;
-      case 'apikey':
-        {
-          const name = opts.name;
-          delete opts.name;
-          this.documentBuilder.addApiKey(opts as SecuritySchemeObject, name);
-        }
+      case 'apikey': {
+        const name = opts.name;
+        delete opts.name;
+        this.documentBuilder.addApiKey(opts as SecuritySchemeObject, name);
+      }
         break;
-      case 'custom':
-        {
-          this.documentBuilder.addSecurity(
-            opts?.name,
-            opts as SecuritySchemeObject
-          );
-        }
+      case 'custom': {
+        this.documentBuilder.addSecurity(
+          opts?.name,
+          opts as SecuritySchemeObject
+        );
+      }
         break;
     }
   }
 }
+
 /**
  * 解释路由上的参数
  * @param url
@@ -1123,6 +1120,7 @@ function parseParamsInPath(url: string) {
   });
   return names;
 }
+
 /**
  * 替换成 openapi 的url
  * @param url

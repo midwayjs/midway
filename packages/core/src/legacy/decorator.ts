@@ -3,7 +3,7 @@ import {
   ObjectDefinitionOptions,
   ObjectIdentifier,
   ParamDecoratorOptions,
-  TagPropsMetadata,
+  TagPropsMetadata
 } from '../interface';
 import { MetadataManager } from '../decorator/metadataManager';
 import { DecoratorManager, PROPERTY_INJECT_KEY, SCOPE_KEY } from '../decorator';
@@ -40,8 +40,20 @@ function getDecoratorClsMethodKey(
 export function saveClassMetadata(
   decoratorNameKey: ObjectIdentifier,
   data: any,
-  target: any
+  target: any,
+  mergeIfExist?: boolean
 ) {
+  if (mergeIfExist && typeof data === 'object') {
+    const originData = MetadataManager.getMetadata(decoratorNameKey as any, target);
+    if (!originData) {
+      return MetadataManager.defineMetadata(decoratorNameKey as any, data, target);
+    }
+    if (Array.isArray(originData)) {
+      return MetadataManager.defineMetadata(decoratorNameKey as any, originData.concat(data), target);
+    } else {
+      return MetadataManager.defineMetadata(decoratorNameKey as any, Object.assign(originData, data), target);
+    }
+  }
   return MetadataManager.defineMetadata(
     decoratorNameKey as string | symbol,
     data,
@@ -72,16 +84,7 @@ export function attachClassMetadata(
   );
 }
 
-/**
- * get data from class and proto
- * @param decoratorNameKey
- * @param target
- * @param propertyName
- * @param useCache
- * @since 2.3.0
- * @deprecated
- */
-export function getClassExtendedMetadata<T = any>(
+function _getClassExtendedMetadata<T = any>(
   decoratorNameKey: ObjectIdentifier,
   target,
   propertyName?: string,
@@ -103,6 +106,31 @@ export function getClassExtendedMetadata<T = any>(
     }
   }
   return res;
+}
+
+/**
+ * get data from class and proto
+ * @param decoratorNameKey
+ * @param target
+ * @param propertyName
+ * @param useCache
+ * @since 2.3.0
+ * @deprecated
+ */
+export function getClassExtendedMetadata<T = any>(
+  decoratorNameKey: ObjectIdentifier,
+  target,
+  propertyName?: string,
+  useCache?: boolean
+): T {
+  const ret = MetadataManager.getMetadata(decoratorNameKey as any, target);
+  if (ret === undefined) {
+    const res = _getClassExtendedMetadata(decoratorNameKey, target, propertyName, useCache);
+    if (res) {
+      return res;
+    }
+  }
+  return ret;
 }
 
 /**
@@ -529,7 +557,7 @@ export function getPropertyInject(
 ): {
   [methodName: string]: TagPropsMetadata;
 } {
-  const ret = getClassExtendedMetadata(
+  const ret = _getClassExtendedMetadata(
     PROPERTY_INJECT_KEY,
     target,
     undefined,
@@ -553,7 +581,7 @@ export function getPropertyInject(
  * @deprecated
  */
 export function saveObjectDefinition(target: any, props = {}) {
-  saveClassMetadata(OBJ_DEF_CLS, props, target);
+  MetadataManager.attachMetadata(OBJ_DEF_CLS, props, target, '__fake_object_def_method');
   return target;
 }
 
@@ -567,7 +595,7 @@ export function getObjectDefinition(target: any): ObjectDefinitionOptions {
   /**
    * Array(1) [{…}]
    */
-  const ret = getClassExtendedMetadata(OBJ_DEF_CLS, target);
+  const ret = _getClassExtendedMetadata(OBJ_DEF_CLS, target);
   const scope = MetadataManager.getOwnMetadata(SCOPE_KEY, target);
   if (Array.isArray(ret)) {
     const res = {};
