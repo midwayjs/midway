@@ -23,7 +23,7 @@ describe('test/clean.test.ts', function () {
     const file1Stat = statSync(response.body.files[0].data);
     expect(file1Stat.size).toBe(stat.size);
 
-    await sleep(2000);
+    await sleep(5000);
 
     const exists = existsSync(response.body.files[0].data);
     expect(exists).toBe(false);

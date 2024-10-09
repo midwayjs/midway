@@ -16,24 +16,97 @@ import {
   getPropertyType,
   savePropertyMetadata,
   getProviderName,
-  Utils, saveModule, Init
+  Utils,
+  saveModule,
+  Init,
+  Get,
+  getMethodParamTypes,
+  attachClassMetadata,
+  attachPropertyDataToClass,
+  saveClassMetadata,
+  savePreloadModule,
+  saveProviderId,
 } from '../../src';
-import { ManagerTest } from './fixtures/decorator/customClass';
-import { Get, getMethodParamTypes } from '../../src';
+
+// 从 customClass.ts 复制的装饰器
+function customCls(): ClassDecorator {
+  return (target) => {
+    saveClassMetadata('custom', 'test', target);
+    saveModule('custom', target);
+  };
+}
+
+function preload(): ClassDecorator {
+  return (target) => {
+    savePreloadModule(target);
+  };
+}
+
+function customMethod(): MethodDecorator {
+  return (target: object, propertykey: string, descriptor: PropertyDescriptor) => {
+    savePropertyDataToClass('custom', {
+      method: propertykey,
+      data: 'customData',
+    }, target, propertykey);
+
+    savePropertyMetadata('custom', 'methodData', target, propertykey);
+    saveClassMetadata('custom_method', propertykey, target);
+  };
+}
+
+function attachMethod(data): MethodDecorator {
+  return (target: object, propertykey: string, descriptor: PropertyDescriptor) => {
+    attachPropertyMetadata('custom_attach', data, target, propertykey);
+    attachPropertyDataToClass('custom_attach_to_class', data, target, propertykey);
+  };
+}
+
+function attachClass(data): ClassDecorator {
+  return (target: object) => {
+    attachClassMetadata('custom_class_attach', data, target);
+  };
+}
+
+function propertyKeyA(data): PropertyDecorator {
+  return (target: object, propertyKey) => {
+    savePropertyMetadata('custom_property', data, target, propertyKey);
+  };
+}
+
+function propertyKeyB(data): PropertyDecorator {
+  return (target: object, propertyKey) => {
+    attachPropertyDataToClass('custom_property_class', data, target, propertyKey);
+  };
+}
 
 describe('/test/decoratorManager.test.ts', () => {
+
+  afterEach(() => {
+    clearAllModule();
+  });
+
   it('should save data on class and get it', () => {
-    expect(getClassMetadata('custom', ManagerTest)).toBe('test');
-    expect(getClassMetadata('custom_method', ManagerTest)).toBe('testSomething');
+    @customCls()
+    class TestClass {
+      @customMethod()
+      testSomething() {}
+    }
+    expect(getClassMetadata('custom', TestClass)).toBe('test');
+    expect(getClassMetadata('custom_method', TestClass)).toBe('testSomething');
   });
 
   it('should save data to class and list it', () => {
-    const dataRes = listPropertyDataFromClass('custom', ManagerTest);
+    @customCls()
+    class TestClass {
+      @customMethod()
+      testSomething() {}
+    }
+    const dataRes = listPropertyDataFromClass('custom', TestClass);
     expect(dataRes.length).toBe(1);
 
     const { method, data } = getPropertyDataFromClass(
       'custom',
-      ManagerTest,
+      TestClass,
       'testSomething'
     );
     expect(dataRes[0].method).toBe(method);
@@ -41,11 +114,18 @@ describe('/test/decoratorManager.test.ts', () => {
   });
 
   it('should get method meta data from method', () => {
-    const m = new ManagerTest();
+    class TestClass {
+      @customMethod()
+      testSomething() {}
+    }
+    const m = new TestClass();
     expect(getPropertyMetadata('custom', m, 'testSomething')).toBe('methodData');
   });
 
   it('should list preload module', () => {
+    @preload()
+    class TestClass {}
+    console.log(TestClass);
     let modules = listPreloadModule();
     expect(modules.length).toBe(1);
 
@@ -55,6 +135,9 @@ describe('/test/decoratorManager.test.ts', () => {
   });
 
   it('should list module', () => {
+    @customCls()
+    class TestClass {}
+    console.log(TestClass);
     const modules = listModule('custom');
     expect(modules.length).toBe(1);
 
@@ -90,41 +173,56 @@ describe('/test/decoratorManager.test.ts', () => {
   });
 
   it('should get attach data from method', () => {
-    const m = new ManagerTest();
-    expect(getPropertyMetadata('custom_attach', m, 'index').length).toBe(3);
+    class TestClass {
+      @attachMethod('test')
+      index() {}
+    }
+    const m = new TestClass();
+    expect(getPropertyMetadata('custom_attach', m, 'index').length).toBe(1);
     expect(
-      getPropertyDataFromClass('custom_attach_to_class', ManagerTest, 'index').length
-    ).toBe(3);
+      getPropertyDataFromClass('custom_attach_to_class', TestClass, 'index').length
+    ).toBe(1);
   });
 
   it('should get attach data from class', () => {
-    expect(getClassMetadata('custom_class_attach', ManagerTest).length).toBe(4);
+    @attachClass('test')
+    class TestClass {}
+    expect(getClassMetadata('custom_class_attach', TestClass).length).toBe(1);
   });
 
   it('should get name from class', () => {
-    expect(ManagerTest.name).toBe('ManagerTest');
-    expect(getProviderName(ManagerTest)).toBe('managerTest');
+    class TestClass {}
+    saveProviderId('123', TestClass);
+    expect(TestClass.name).toBe('TestClass');
+    expect(getProviderName(TestClass)).toBe('testClass');
     expect(getProviderName(class Test {})).toBeUndefined();
   });
 
   it('should get id from class', () => {
-    expect(getProviderId(ManagerTest)).toBe('123');
+    class TestClass {}
+    DecoratorManager.saveProviderId('123', TestClass);
+    expect(getProviderId(TestClass)).toBe('123');
   });
 
   it('should get property data', () => {
-    const m = new ManagerTest();
+    class TestClass {
+      @propertyKeyA('property_a')
+      @propertyKeyB('test_b')
+      testProperty: string;
+    }
+    const m = new TestClass();
     expect(getPropertyMetadata('custom_property', m, 'testProperty')).toBe('property_a');
     expect(
-      getPropertyDataFromClass('custom_property_class', ManagerTest, 'testProperty').length
-    ).toBe(3);
+      getPropertyDataFromClass('custom_property_class', TestClass, 'testProperty').length
+    ).toBe(1);
   });
 
   it('should get object definition metadata', () => {
-    class ManagerTest {
+    class TestClass {
       @Init()
       async init() {}
     }
-    const objDefinition = getObjectDefinition(ManagerTest);
+    const objDefinition = getObjectDefinition(TestClass);
     expect(objDefinition).toStrictEqual({ 'initMethod': 'init' });
   });
 
@@ -156,11 +254,6 @@ describe('/test/decoratorManager.test.ts', () => {
       };
     }
 
-    class AnotherCatDTO {
-      @ApiProperty()
-      name: string;
-    }
-
     class CreateCatDto {
       @ApiProperty()
       name: string;
@@ -183,7 +276,7 @@ describe('/test/decoratorManager.test.ts', () => {
       @ApiProperty()
       mapObj: Map<string, any>;
       @ApiProperty()
-      alias: AnotherCatDTO;
+      alias: CreateCatDto;
     }
 
     const catDTO = new CreateCatDto();
@@ -200,7 +293,7 @@ describe('/test/decoratorManager.test.ts', () => {
     expect(getType('nullValue')).toBe('undefined');
     expect(getType('breed')).toBe('Array');
     expect(getType('mapObj')).toBe('Map');
-    expect(getType('alias')).toBe('AnotherCatDTO');
+    expect(getType('alias')).toBe('CreateCatDto');
   });
 
   it('should test save module with container', function () {

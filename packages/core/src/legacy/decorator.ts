@@ -35,7 +35,7 @@ function getDecoratorClsMethodKey(
  * @param target
  * @param mergeIfExist
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.defineMetadata instead
  */
 export function saveClassMetadata(
   decoratorNameKey: ObjectIdentifier,
@@ -68,7 +68,7 @@ export function saveClassMetadata(
  * @param target
  * @param groupBy
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.attachMetadata instead
  */
 export function attachClassMetadata(
   decoratorNameKey: ObjectIdentifier,
@@ -115,7 +115,7 @@ function _getClassExtendedMetadata<T = any>(
  * @param propertyName
  * @param useCache
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.getMetadata instead
  */
 export function getClassExtendedMetadata<T = any>(
   decoratorNameKey: ObjectIdentifier,
@@ -138,7 +138,7 @@ export function getClassExtendedMetadata<T = any>(
  * @param decoratorNameKey
  * @param target
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.getOwnMetadata instead
  */
 export function getClassMetadata<T = any>(
   decoratorNameKey: ObjectIdentifier,
@@ -157,7 +157,7 @@ export function getClassMetadata<T = any>(
  * @param target
  * @param propertyName
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.defineMetadata instead
  */
 export function savePropertyDataToClass(
   decoratorNameKey: ObjectIdentifier,
@@ -220,7 +220,7 @@ export function attachPropertyDataToClass(
  * @param target
  * @param propertyName
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.getOwnMetadata instead
  */
 export function getPropertyDataFromClass<T = any>(
   decoratorNameKey: ObjectIdentifier,
@@ -267,7 +267,7 @@ export function listPropertyDataFromClass(
  * @param target
  * @param propertyName
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.defineMetadata instead
  */
 export function savePropertyMetadata(
   decoratorNameKey: ObjectIdentifier,
@@ -312,7 +312,7 @@ export function attachPropertyMetadata(
  * @param target
  * @param propertyName
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.getOwnMetadata instead
  */
 export function getPropertyMetadata<T = any>(
   decoratorNameKey: ObjectIdentifier,
@@ -330,7 +330,7 @@ export function getPropertyMetadata<T = any>(
  * save preload module by target
  * @param target
  * @since 2.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.savePreloadModule instead
  */
 export function savePreloadModule(target) {
   return DecoratorManager.savePreloadModule(target);
@@ -339,7 +339,7 @@ export function savePreloadModule(target) {
 /**
  * list preload module
  * @since 2.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.listPreloadModule instead
  */
 export function listPreloadModule(): any[] {
   return DecoratorManager.listPreloadModule();
@@ -350,7 +350,7 @@ export function listPreloadModule(): any[] {
  * @param decoratorNameKey
  * @param target
  * @since 2.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.saveModule instead
  */
 export function saveModule(decoratorNameKey: ObjectIdentifier, target) {
   return DecoratorManager.saveModule(decoratorNameKey, target);
@@ -358,14 +358,15 @@ export function saveModule(decoratorNameKey: ObjectIdentifier, target) {
 
 /**
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.bindContainer instead
  */
 export function bindContainer(container) {
   return DecoratorManager.bindContainer(container);
 }
 /**
+ * Clear the container which is bound by bindContainer
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.clearBindContainer instead
  */
 export function clearBindContainer() {
   return DecoratorManager.clearBindContainer();
@@ -376,7 +377,7 @@ export function clearBindContainer() {
  * @param decoratorNameKey
  * @param filter
  * @since 2.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.listModule instead
  */
 export function listModule(
   decoratorNameKey: ObjectIdentifier,
@@ -389,7 +390,7 @@ export function listModule(
  * reset module
  * @param decoratorNameKey
  * @since 2.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.resetModule instead
  */
 export function resetModule(decoratorNameKey: ObjectIdentifier): void {
   return DecoratorManager.resetModule(decoratorNameKey);
@@ -398,7 +399,7 @@ export function resetModule(decoratorNameKey: ObjectIdentifier): void {
 /**
  * clear all module
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.clearAllModule instead
  */
 export function clearAllModule() {
   return DecoratorManager.clearAllModule();
@@ -407,7 +408,7 @@ export function clearAllModule() {
 /**
  * class provider id
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use DecoratorManager.saveProviderId instead
  */
 export function saveProviderId(identifier: ObjectIdentifier, target: any) {
   return DecoratorManager.saveProviderId(identifier, target);
@@ -416,7 +417,7 @@ export function saveProviderId(identifier: ObjectIdentifier, target: any) {
 /**
  * get provider id from module
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.getProviderId instead
  */
 export function getProviderId(module): string {
   return DecoratorManager.getProviderId(module);
@@ -424,7 +425,7 @@ export function getProviderId(module): string {
 
 /**
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.getProviderName instead
  */
 export function getProviderName(module): string {
   return DecoratorManager.getProviderName(module);
@@ -433,7 +434,7 @@ export function getProviderName(module): string {
 /**
  * get provider uuid from module
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.getProviderUUId instead
  */
 export function getProviderUUId(module): string {
   return DecoratorManager.getProviderUUId(module);
@@ -442,7 +443,7 @@ export function getProviderUUId(module): string {
 /**
  * use @Provide decorator or not
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.isProvide instead
  */
 export function isProvide(target: any): boolean {
   return DecoratorManager.isProvide(target);
@@ -454,7 +455,7 @@ export function isProvide(target: any): boolean {
  * @param metadata
  * @param impl default true, configuration need decoratorService.registerMethodHandler
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.createCustomPropertyDecorator instead
  */
 export function createCustomPropertyDecorator(
   decoratorKey: string,
@@ -473,7 +474,7 @@ export function createCustomPropertyDecorator(
  * @param metadata
  * @param implOrOptions
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.createCustomMethodDecorator instead
  */
 export function createCustomMethodDecorator(
   decoratorKey: string,
@@ -492,7 +493,7 @@ export function createCustomMethodDecorator(
  * @param metadata
  * @param implOrOptions
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use DecoratorManager.createCustomParamDecorator instead
  */
 export function createCustomParamDecorator(
   decoratorKey: string,
@@ -511,7 +512,7 @@ export function createCustomParamDecorator(
  * @param target
  * @param methodName
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use MetadataManager.getPropertyType instead
  */
 export function getPropertyType(target, methodName: string | symbol) {
   return MetadataManager.getPropertyType(target, methodName);
@@ -520,7 +521,7 @@ export function getPropertyType(target, methodName: string | symbol) {
 /**
  * get parameters type by reflect-metadata
  * @since 3.0.0
- * @deprecated
+ * @deprecated Use MetadataManager.getMethodParamTypes instead
  */
 export function getMethodParamTypes(target, methodName: string | symbol) {
   return MetadataManager.getMethodParamTypes(target, methodName);
@@ -530,7 +531,7 @@ export function getMethodParamTypes(target, methodName: string | symbol) {
  * save property inject args
  * @param opts 参数
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.attachMetadata instead
  */
 export function savePropertyInject(opts: {
   // id
@@ -549,7 +550,7 @@ export function savePropertyInject(opts: {
  * @param target
  * @param useCache
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.getMetadata instead
  */
 export function getPropertyInject(
   target: any,
@@ -578,7 +579,7 @@ export function getPropertyInject(
  * @param target class
  * @param props property data
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.attachMetadata instead
  */
 export function saveObjectDefinition(target: any, props = {}) {
   MetadataManager.attachMetadata(OBJ_DEF_CLS, props, target, '__fake_object_def_method');
@@ -589,7 +590,7 @@ export function saveObjectDefinition(target: any, props = {}) {
  * get class object definition from metadata
  * @param target
  * @since 2.3.0
- * @deprecated
+ * @deprecated Use MetadataManager.getPropertiesWithMetadata instead
  */
 export function getObjectDefinition(target: any): ObjectDefinitionOptions {
   /**
