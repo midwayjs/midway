@@ -1,7 +1,4 @@
-import {
-  DecoratorManager,
-  MetadataManager,
-} from '@midwayjs/core';
+import { DecoratorManager, MetadataManager } from '@midwayjs/core';
 import {
   DECORATORS,
   DECORATORS_CLASS_METADATA,
@@ -13,7 +10,11 @@ export function createPropertyDecorator<T extends Record<string, any> = any>(
   metakey: string,
   metadata: T
 ): PropertyDecorator {
-  return DecoratorManager.createCustomPropertyDecorator(metakey, metadata, false);
+  return DecoratorManager.createCustomPropertyDecorator(
+    metakey,
+    metadata,
+    false
+  );
 }
 
 export function createMixedDecorator<T = any>(

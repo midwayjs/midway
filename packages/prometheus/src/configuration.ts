@@ -59,7 +59,10 @@ export class PrometheusConfiguration {
       }
     }
     for (const module of modules) {
-      const rules = MetadataManager.getOwnMetadata('prometheus:master:options', module);
+      const rules = MetadataManager.getOwnMetadata(
+        'prometheus:master:options',
+        module
+      );
       for (const rule of rules) {
         if (isMaster()) {
           handlers[rule.name] = async (...args) => {

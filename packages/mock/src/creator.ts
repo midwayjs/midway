@@ -18,7 +18,7 @@ import {
   sleep,
   ObjectIdentifier,
   isTypeScriptEnvironment,
-  DecoratorManager
+  DecoratorManager,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
@@ -516,7 +516,8 @@ export async function createFunctionApp<
               funcInfo = Array.from(framework['funMappingStore'].values()).find(
                 (item: any) => {
                   return (
-                    item.id === DecoratorManager.getProviderUUId(serviceClass as any) &&
+                    item.id ===
+                      DecoratorManager.getProviderUUId(serviceClass as any) &&
                     item.method === prop
                   );
                 }

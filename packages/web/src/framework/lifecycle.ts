@@ -10,7 +10,7 @@ import {
   Scope,
   ScopeEnum,
   FunctionalConfiguration,
-  DecoratorManager
+  DecoratorManager,
 } from '@midwayjs/core';
 import { debuglog } from 'util';
 const debug = debuglog('midway:debug');

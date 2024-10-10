@@ -67,7 +67,8 @@ export class TypegooseConfiguration {
     const Models = DecoratorManager.listModule(ENTITY_MODEL_KEY);
     // 兼容老代码
     for (const Model of Models) {
-      const metadata = MetadataManager.getOwnMetadata(ENTITY_MODEL_KEY, Model) ?? {};
+      const metadata =
+        MetadataManager.getOwnMetadata(ENTITY_MODEL_KEY, Model) ?? {};
       const connectionName = metadata.connectionName ?? 'default';
       const conn = connectionFactory.getDataSource(connectionName);
       if (conn) {

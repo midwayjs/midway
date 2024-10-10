@@ -78,12 +78,10 @@ export class MidwayDecoratorService {
       }
 
       // find custom param decorator metadata
-      const parameterDecoratorMetadata = MetadataManager.getOwnPropertiesWithMetadata<{
-        [methodName: string]: Array<ParameterDecoratorMetaData>;
-      }>(
-        CUSTOM_PARAM_INJECT_KEY,
-        Clzz
-      );
+      const parameterDecoratorMetadata =
+        MetadataManager.getOwnPropertiesWithMetadata<{
+          [methodName: string]: Array<ParameterDecoratorMetaData>;
+        }>(CUSTOM_PARAM_INJECT_KEY, Clzz);
 
       if (parameterDecoratorMetadata) {
         // loop it, save this order for decorator run

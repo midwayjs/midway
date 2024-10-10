@@ -1,9 +1,4 @@
-import {
-  DecoratorManager,
-  Provide,
-  Scope,
-  ScopeEnum,
-} from '@midwayjs/core';
+import { DecoratorManager, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { EntityTarget, EventSubscriber } from 'typeorm';
 
 export const ENTITY_MODEL_KEY = 'typeorm:entity_model_key';

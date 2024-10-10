@@ -44,7 +44,8 @@ export class MidwayMQTTFramework extends BaseFramework<
       );
     }
     // find subscriber
-    const mqttSubscriberModules = DecoratorManager.listModule(MQTT_DECORATOR_KEY);
+    const mqttSubscriberModules =
+      DecoratorManager.listModule(MQTT_DECORATOR_KEY);
     const mqttSubscriberMap = {};
     for (const subscriberModule of mqttSubscriberModules) {
       const subscriberName = MetadataManager.getOwnMetadata(

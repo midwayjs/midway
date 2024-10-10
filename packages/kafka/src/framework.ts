@@ -49,13 +49,14 @@ export class MidwayKafkaFramework extends BaseFramework<
   }
 
   private async loadSubscriber() {
-    const subscriberModules = DecoratorManager.listModule(MS_CONSUMER_KEY, module => {
-      const metadata: ConsumerMetadata.ConsumerMetadata = MetadataManager.getOwnMetadata(
-        MS_CONSUMER_KEY,
-        module
-      );
-      return metadata.type === MSListenerType.KAFKA;
-    });
+    const subscriberModules = DecoratorManager.listModule(
+      MS_CONSUMER_KEY,
+      module => {
+        const metadata: ConsumerMetadata.ConsumerMetadata =
+          MetadataManager.getOwnMetadata(MS_CONSUMER_KEY, module);
+        return metadata.type === MSListenerType.KAFKA;
+      }
+    );
     for (const module of subscriberModules) {
       const data = MetadataManager.getOwnMetadata(MS_CONSUMER_KEY, module);
       const topicTitles = [...new Set(data.map(e => e[0].topic))];

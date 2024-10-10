@@ -57,7 +57,10 @@ export class ProcessAgentConfiguration {
       }
     }
     for (const module of modules) {
-      const rules = MetadataManager.getOwnMetadata('primary:primary:options', module);
+      const rules = MetadataManager.getOwnMetadata(
+        'primary:primary:options',
+        module
+      );
       for (const rule of rules) {
         if (isPrimary()) {
           handlers[rule.name] = async (...args) => {

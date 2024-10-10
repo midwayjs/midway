@@ -52,8 +52,11 @@ export abstract class AbstractValidationPipe implements PipeTransform {
 
   protected parseValidationOptions(options: TransformOptions): ValidateOptions {
     const validateOptions: ValidateOptions =
-      MetadataManager.getMetadata(VALIDATE_KEY, options.target, options.methodName) ||
-      {};
+      MetadataManager.getMetadata(
+        VALIDATE_KEY,
+        options.target,
+        options.methodName
+      ) || {};
 
     if (!validateOptions.locale) {
       const maybeCtx = options.target[REQUEST_OBJ_CTX_KEY];

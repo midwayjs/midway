@@ -183,8 +183,10 @@ export class SwaggerExplorer {
 
     // 获取参数的元数据
     const metaForParams =
-      MetadataManager.getPropertiesWithMetadata(CUSTOM_PARAM_INJECT_KEY, target) ||
-      {};
+      MetadataManager.getPropertiesWithMetadata(
+        CUSTOM_PARAM_INJECT_KEY,
+        target
+      ) || {};
 
     // 获取控制器选项
     const controllerOption: ControllerOption = MetadataManager.getOwnMetadata(
@@ -962,9 +964,13 @@ export class SwaggerExplorer {
     this.parseExtraModel(clzz);
     // 解析类上的 ApiProperty
     // TODO 这里后面不能用这个方法
-    const props = MetadataManager.getPropertiesWithMetadata(CUSTOM_PROPERTY_INJECT_KEY, clzz) || {};
+    const props =
+      MetadataManager.getPropertiesWithMetadata(
+        CUSTOM_PROPERTY_INJECT_KEY,
+        clzz
+      ) || {};
     // 这里属性值唯一，取数组最后一个
-    for(const key in props) {
+    for (const key in props) {
       props[key] = props[key][props[key].length - 1];
     }
 
@@ -983,7 +989,10 @@ export class SwaggerExplorer {
         const metadata = props[key].metadata || {};
         if (!metadata.type) {
           // 推导类型
-          metadata.type = MetadataManager.getPropertyType(clzz.prototype, key).name;
+          metadata.type = MetadataManager.getPropertyType(
+            clzz.prototype,
+            key
+          ).name;
         }
         tt.properties[key] = tt.properties[key] || {};
 

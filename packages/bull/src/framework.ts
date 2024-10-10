@@ -75,7 +75,10 @@ export class BullFramework
   async run() {
     const processorModules = DecoratorManager.listModule(BULL_PROCESSOR_KEY);
     for (const mod of processorModules) {
-      const options = MetadataManager.getOwnMetadata(BULL_PROCESSOR_KEY, mod) as {
+      const options = MetadataManager.getOwnMetadata(
+        BULL_PROCESSOR_KEY,
+        mod
+      ) as {
         queueName: string;
         concurrency: number;
         jobOptions?: JobOptions;

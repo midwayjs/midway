@@ -75,10 +75,8 @@ export class MidwayGRPCFramework extends BaseFramework<
   protected async loadService() {
     // find all code service
     const gRPCModules = DecoratorManager.listModule(MS_PROVIDER_KEY, module => {
-      const info: GRPCMetadata.ProviderMetadata = MetadataManager.getOwnMetadata(
-        MS_PROVIDER_KEY,
-        module
-      );
+      const info: GRPCMetadata.ProviderMetadata =
+        MetadataManager.getOwnMetadata(MS_PROVIDER_KEY, module);
       return info.type === MSProviderType.GRPC;
     });
 
@@ -99,10 +97,8 @@ export class MidwayGRPCFramework extends BaseFramework<
     // register method to service
     for (const module of gRPCModules) {
       const providerName = DecoratorManager.getProviderName(module);
-      const info: GRPCMetadata.ProviderMetadata = MetadataManager.getOwnMetadata(
-        MS_PROVIDER_KEY,
-        module
-      );
+      const info: GRPCMetadata.ProviderMetadata =
+        MetadataManager.getOwnMetadata(MS_PROVIDER_KEY, module);
       const classMetadata = info.metadata;
       const serviceName =
         classMetadata.serviceName || Utils.pascalCase(providerName);

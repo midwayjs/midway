@@ -5,7 +5,7 @@ import {
   ObjectIdentifier,
   ParamDecoratorOptions,
   PropertyDecoratorOptions,
-  TagClsMetadata
+  TagClsMetadata,
 } from '../interface';
 import {
   CUSTOM_METHOD_INJECT_KEY,
@@ -159,9 +159,12 @@ export class DecoratorManager {
     metadata: any,
     implOrOptions: boolean | PropertyDecoratorOptions = { impl: true }
   ): PropertyDecorator {
-    const implOrOpt = typeof implOrOptions === 'boolean' ? {
-      impl: implOrOptions,
-    } : implOrOptions;
+    const implOrOpt =
+      typeof implOrOptions === 'boolean'
+        ? {
+            impl: implOrOptions,
+          }
+        : implOrOptions;
     implOrOpt.impl = implOrOpt.impl ?? true;
     return function (target: any, propertyName: string): void {
       MetadataManager.attachMetadata(
@@ -183,9 +186,12 @@ export class DecoratorManager {
     metadata: any,
     implOrOptions: boolean | MethodDecoratorOptions = { impl: true }
   ): MethodDecorator {
-    const implOrOpt = typeof implOrOptions === 'boolean' ? {
-      impl: implOrOptions,
-    } : implOrOptions;
+    const implOrOpt =
+      typeof implOrOptions === 'boolean'
+        ? {
+            impl: implOrOptions,
+          }
+        : implOrOptions;
     implOrOpt.impl = implOrOpt.impl ?? true;
     return function (target: any, propertyName: string) {
       MetadataManager.attachMetadata(

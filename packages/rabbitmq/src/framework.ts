@@ -64,13 +64,14 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 
   private async loadSubscriber() {
     // create channel
-    const subscriberModules = DecoratorManager.listModule(MS_CONSUMER_KEY, module => {
-      const metadata: ConsumerMetadata.ConsumerMetadata = MetadataManager.getOwnMetadata(
-        MS_CONSUMER_KEY,
-        module
-      );
-      return metadata.type === MSListenerType.RABBITMQ;
-    });
+    const subscriberModules = DecoratorManager.listModule(
+      MS_CONSUMER_KEY,
+      module => {
+        const metadata: ConsumerMetadata.ConsumerMetadata =
+          MetadataManager.getOwnMetadata(MS_CONSUMER_KEY, module);
+        return metadata.type === MSListenerType.RABBITMQ;
+      }
+    );
     for (const module of subscriberModules) {
       const data: RabbitMQListenerOptions[][] = MetadataManager.getOwnMetadata(
         MS_CONSUMER_KEY,

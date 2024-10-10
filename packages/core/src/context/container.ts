@@ -22,7 +22,7 @@ import {
   ObjectContext,
   ObjectIdentifier,
   ObjectLifeCycleEvent,
-  ScopeEnum
+  ScopeEnum,
 } from '../interface';
 import {
   CONTAINER_OBJ_SCOPE,
@@ -421,17 +421,16 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     );
 
     for (const p in customProps) {
-      for(const propertyMeta of customProps[p]) {
+      for (const propertyMeta of customProps[p]) {
         definition.handlerProps.push(propertyMeta);
       }
     }
 
     // @async, @init, @destroy
-    const objDefMetadata =
-      MetadataManager.getPropertiesWithMetadata(
-        OBJECT_DEFINITION_KEY,
-        target
-      );
+    const objDefMetadata = MetadataManager.getPropertiesWithMetadata(
+      OBJECT_DEFINITION_KEY,
+      target
+    );
 
     const objDefOptions = {} as Partial<IObjectDefinition>;
     for (const p in objDefMetadata) {

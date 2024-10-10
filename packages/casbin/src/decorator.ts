@@ -17,6 +17,11 @@ export function UsePermission(...permissions: Permission[]): MethodDecorator {
       return item;
     });
 
-    MetadataManager.defineMetadata(PERMISSIONS_METADATA_KEY, perms, target, propertyKey);
+    MetadataManager.defineMetadata(
+      PERMISSIONS_METADATA_KEY,
+      perms,
+      target,
+      propertyKey
+    );
   };
 }

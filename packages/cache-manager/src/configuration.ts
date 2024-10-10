@@ -12,7 +12,13 @@ import { CACHE_DECORATOR_KEY } from './decorator/cacheKey';
 import { CachingFactory } from './factory';
 
 export function getClassMethodDefaultCacheKey(target, methodName: string) {
-  return target.name + '-' + DecoratorManager.getProviderUUId(target) + '-' + methodName;
+  return (
+    target.name +
+    '-' +
+    DecoratorManager.getProviderUUId(target) +
+    '-' +
+    methodName
+  );
 }
 
 @Configuration({
