@@ -117,10 +117,12 @@ describe('/test/decoratorManager.test.ts', () => {
     expect(metadata).toEqual({
       "testProperty": [
         {
-          "impl": true,
           "key": "testKey",
           "metadata": {
             "test": "value"
+          },
+          "options": {
+            "impl": true
           },
           "propertyName": "testProperty"
         }
@@ -135,7 +137,18 @@ describe('/test/decoratorManager.test.ts', () => {
       testMethod() {}
     }
     const metadata = MetadataManager.getMetadata(CUSTOM_METHOD_INJECT_KEY, TestClass);
-    expect(metadata).toEqual([{"key": "testKey", "metadata": {"test": "value"}, "options": {"impl": true}, "propertyName": "testMethod"}]);
+    expect(metadata).toEqual([
+      {
+        "key": "testKey",
+        "metadata": {
+          "test": "value"
+        },
+        "options": {
+          "impl": true
+        },
+        "propertyName": "testMethod"
+      }
+    ]);
   });
 
   it('should create custom param decorator', () => {

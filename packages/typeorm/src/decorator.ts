@@ -1,5 +1,5 @@
 import {
-  createCustomPropertyDecorator,
+  DecoratorManager,
   Provide,
   Scope,
   ScopeEnum,
@@ -15,7 +15,7 @@ export function InjectEntityModel(
   modelKey: EntityTarget<unknown>,
   connectionName?: string
 ) {
-  return createCustomPropertyDecorator(ORM_MODEL_KEY, {
+  return DecoratorManager.createCustomPropertyDecorator(ORM_MODEL_KEY, {
     modelKey,
     connectionName,
   });
@@ -34,7 +34,7 @@ export function EventSubscriberModel(): ClassDecorator {
 }
 
 export function InjectDataSource(dataSourceName?: string) {
-  return createCustomPropertyDecorator(ORM_DATA_SOURCE_KEY, {
+  return DecoratorManager.createCustomPropertyDecorator(ORM_DATA_SOURCE_KEY, {
     dataSourceName,
   });
 }

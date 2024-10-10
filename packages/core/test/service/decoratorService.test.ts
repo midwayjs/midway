@@ -2,8 +2,7 @@ import {
   MidwayAspectService,
   MidwayContainer,
   MidwayDecoratorService,
-  createCustomMethodDecorator,
-  createCustomParamDecorator,
+  DecoratorManager,
   JoinPoint,
   Provide,
   Pipe,
@@ -15,13 +14,13 @@ describe('/test/service/decoratorService.test.ts', () => {
   it('method decorator change method return value should be ok', async () => {
 
     function CustomMethod(name: string) {
-      return createCustomMethodDecorator('aabbcc', {
+      return DecoratorManager.createCustomMethodDecorator('aabbcc', {
         name
       });
     }
 
     function CustomMethod2(name: string) {
-      return createCustomMethodDecorator('aabbccdd', {
+      return DecoratorManager.createCustomMethodDecorator('aabbccdd', {
         name
       });
     }
@@ -74,19 +73,19 @@ describe('/test/service/decoratorService.test.ts', () => {
   it('parameter decorator change method return value should be ok', async () => {
 
     function CustomMethod(name: string) {
-      return createCustomMethodDecorator('aabbcc', {
-        name
+      return DecoratorManager.createCustomMethodDecorator('aabbcc', {
+        name,
       });
     }
 
     function CustomParam1(name: string) {
-      return createCustomParamDecorator('ggg', {
+      return DecoratorManager.createCustomParamDecorator('ggg', {
         name
       });
     }
 
     function CustomParam2(name: string) {
-      return createCustomParamDecorator('fff', {
+      return DecoratorManager.createCustomParamDecorator('fff', {
         name
       });
     }
@@ -136,7 +135,7 @@ describe('/test/service/decoratorService.test.ts', () => {
 
   it('test parameter decorator and not register impl', async () => {
     function CustomParam1(name: string) {
-      return createCustomParamDecorator('ggg', {
+      return DecoratorManager.createCustomParamDecorator('ggg', {
         name
       });
     }
@@ -171,7 +170,7 @@ describe('/test/service/decoratorService.test.ts', () => {
 
   it('test parameter decorator and throw error in implementation will be ignore', async () => {
     function CustomParam1(name: string) {
-      return createCustomParamDecorator('ggg', {
+      return DecoratorManager.createCustomParamDecorator('ggg', {
         name
       });
     }
@@ -212,7 +211,7 @@ describe('/test/service/decoratorService.test.ts', () => {
 
   it('test parameter decorator and throw error when set throwError options true', async () => {
     function CustomParam1(name: string) {
-      return createCustomParamDecorator('ggg', {
+      return DecoratorManager.createCustomParamDecorator('ggg', {
         name
       }, {
         throwError: true
@@ -254,13 +253,13 @@ describe('/test/service/decoratorService.test.ts', () => {
   it('should test parameter and method decorator sequence', async () => {
 
     function CustomMethod(name: string) {
-      return createCustomMethodDecorator('aabbcc', {
+      return DecoratorManager.createCustomMethodDecorator('aabbcc', {
         name
       });
     }
 
     function CustomParam1(name) {
-      return createCustomParamDecorator('ggg', {
+      return DecoratorManager.createCustomParamDecorator('ggg', {
         name
       });
     }
@@ -306,7 +305,7 @@ describe('/test/service/decoratorService.test.ts', () => {
 
   it('fix #1610 when method invoked', async () => {
     function CustomParam(name: string) {
-      return createCustomParamDecorator('ggg', {
+      return DecoratorManager.createCustomParamDecorator('ggg', {
         name
       });
     }
@@ -347,7 +346,7 @@ describe('/test/service/decoratorService.test.ts', () => {
   describe('test pipe for parameter decorator', () => {
     it('should test parameter decorator add pipe', async () => {
       function CustomParam(name: string, pipes: any[]) {
-        return createCustomParamDecorator('CustomParam', {
+        return DecoratorManager.createCustomParamDecorator('CustomParam', {
           name,
         }, {
           pipes
@@ -413,7 +412,7 @@ describe('/test/service/decoratorService.test.ts', () => {
 
     it('should test pipe reverse registration', async () => {
       function CustomParam(name: string) {
-        return createCustomParamDecorator('CustomParam', {
+        return DecoratorManager.createCustomParamDecorator('CustomParam', {
           name,
         });
       }

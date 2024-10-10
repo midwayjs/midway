@@ -1,4 +1,4 @@
-import { saveModule, attachClassMetadata } from '@midwayjs/core';
+import { DecoratorManager, MetadataManager } from '@midwayjs/core';
 import * as request from 'request';
 import * as path from 'path';
 import * as os from 'os';
@@ -11,7 +11,7 @@ export function Master() {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    saveModule('prometheus:master', target.constructor);
+    DecoratorManager.saveModule('prometheus:master', target.constructor);
     const sockFile = path.join(os.tmpdir(), 'midway-master.sock');
     if (!isMaster()) {
       descriptor.value = (...args) => {
@@ -31,7 +31,7 @@ export function Master() {
         });
       };
     }
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       'prometheus:master:options',
       {
         name: `${target.constructor.name}_${propertyKey}`,

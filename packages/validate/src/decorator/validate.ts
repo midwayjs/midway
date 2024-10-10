@@ -1,4 +1,4 @@
-import { savePropertyMetadata } from '@midwayjs/core';
+import { MetadataManager } from '@midwayjs/core';
 import { VALIDATE_KEY } from '../constants';
 import * as Joi from 'joi';
 
@@ -10,6 +10,6 @@ export interface ValidateOptions {
 
 export function Validate(options: ValidateOptions = {}) {
   return (target, methodName, descriptor) => {
-    savePropertyMetadata(VALIDATE_KEY, options, target, methodName);
+    MetadataManager.defineMetadata(VALIDATE_KEY, options, target, methodName);
   };
 }

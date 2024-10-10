@@ -2,13 +2,12 @@ import {
   BaseFramework,
   ConsumerMetadata,
   Framework,
-  getClassMetadata,
-  listModule,
-  listPropertyDataFromClass,
   MidwayFrameworkType,
   MSListenerType,
   MS_CONSUMER_KEY,
   MidwayInvokeForbiddenError,
+  MetadataManager,
+  DecoratorManager,
 } from '@midwayjs/core';
 import {
   IMidwayConsumerConfig,
@@ -50,20 +49,20 @@ export class MidwayKafkaFramework extends BaseFramework<
   }
 
   private async loadSubscriber() {
-    const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
-      const metadata: ConsumerMetadata.ConsumerMetadata = getClassMetadata(
+    const subscriberModules = DecoratorManager.listModule(MS_CONSUMER_KEY, module => {
+      const metadata: ConsumerMetadata.ConsumerMetadata = MetadataManager.getOwnMetadata(
         MS_CONSUMER_KEY,
         module
       );
       return metadata.type === MSListenerType.KAFKA;
     });
     for (const module of subscriberModules) {
-      const data = listPropertyDataFromClass(MS_CONSUMER_KEY, module);
+      const data = MetadataManager.getOwnMetadata(MS_CONSUMER_KEY, module);
       const topicTitles = [...new Set(data.map(e => e[0].topic))];
       const midwayConsumerConfigs: IMidwayConsumerConfig[] = topicTitles.map(
         e => {
           const midwayConsumerConfig: IMidwayConsumerConfig = {
-            topic: e,
+            topic: e as string,
             subscription: {},
             runConfig: {},
           };

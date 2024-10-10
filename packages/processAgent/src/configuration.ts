@@ -1,8 +1,8 @@
 import {
   App,
   Configuration,
-  getClassMetadata,
-  listModule,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import { isPrimary, closeLock } from './utils/utils';
 import * as os from 'os';
@@ -21,7 +21,7 @@ export class ProcessAgentConfiguration {
   app;
 
   async onReady() {
-    const modules = listModule('primary:primary');
+    const modules = DecoratorManager.listModule('primary:primary');
     const handlers = {};
     let sockFile = path.join(os.tmpdir(), 'midway-primary.sock');
     if (process.platform === 'win32') {
@@ -57,7 +57,7 @@ export class ProcessAgentConfiguration {
       }
     }
     for (const module of modules) {
-      const rules = getClassMetadata('primary:primary:options', module);
+      const rules = MetadataManager.getOwnMetadata('primary:primary:options', module);
       for (const rule of rules) {
         if (isPrimary()) {
           handlers[rule.name] = async (...args) => {

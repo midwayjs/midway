@@ -1,18 +1,18 @@
 import {
   Configuration,
-  getProviderUUId,
   ILifeCycle,
   IMidwayContainer,
   Inject,
   JoinPoint,
   MidwayDecoratorService,
   REQUEST_OBJ_CTX_KEY,
+  DecoratorManager,
 } from '@midwayjs/core';
 import { CACHE_DECORATOR_KEY } from './decorator/cacheKey';
 import { CachingFactory } from './factory';
 
 export function getClassMethodDefaultCacheKey(target, methodName: string) {
-  return target.name + '-' + getProviderUUId(target) + '-' + methodName;
+  return target.name + '-' + DecoratorManager.getProviderUUId(target) + '-' + methodName;
 }
 
 @Configuration({

@@ -2,8 +2,8 @@ import {
   App,
   Config,
   Configuration,
-  getClassMetadata,
-  listModule,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import * as PromClient from 'prom-client';
 import { isMaster, closeLock } from './utils/utils';
@@ -35,7 +35,7 @@ export class PrometheusConfiguration {
 
   async onReady() {
     PromClient.collectDefaultMetrics(this.prometheusConfig);
-    const modules = listModule('prometheus:master');
+    const modules = DecoratorManager.listModule('prometheus:master');
     const handlers = {};
     let sockFile = path.join(os.tmpdir(), 'midway-master.sock');
     if (process.platform === 'win32') {
@@ -59,7 +59,7 @@ export class PrometheusConfiguration {
       }
     }
     for (const module of modules) {
-      const rules = getClassMetadata('prometheus:master:options', module);
+      const rules = MetadataManager.getOwnMetadata('prometheus:master:options', module);
       for (const rule of rules) {
         if (isMaster()) {
           handlers[rule.name] = async (...args) => {

@@ -86,4 +86,4 @@ export { FORMAT } from './util/format';
 export { ServerResponse, HttpServerResponse } from './response/index';
 
 export * from './decorator/metadataManager';
-// export * from './legacy';
+export * from './legacy';

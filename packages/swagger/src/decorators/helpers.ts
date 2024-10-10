@@ -1,7 +1,6 @@
 import {
-  attachClassMetadata,
-  attachPropertyDataToClass,
-  createCustomPropertyDecorator,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import {
   DECORATORS,
@@ -14,7 +13,7 @@ export function createPropertyDecorator<T extends Record<string, any> = any>(
   metakey: string,
   metadata: T
 ): PropertyDecorator {
-  return createCustomPropertyDecorator(metakey, metadata, false);
+  return DecoratorManager.createCustomPropertyDecorator(metakey, metadata, false);
 }
 
 export function createMixedDecorator<T = any>(
@@ -23,7 +22,7 @@ export function createMixedDecorator<T = any>(
 ): ClassDecorator & MethodDecorator {
   return (target, methodName?: string) => {
     if (methodName) {
-      attachPropertyDataToClass(
+      MetadataManager.attachMetadata(
         DECORATORS_METHOD_METADATA,
         {
           key: metakey,
@@ -34,7 +33,7 @@ export function createMixedDecorator<T = any>(
         methodName
       );
     } else {
-      attachClassMetadata(
+      MetadataManager.attachMetadata(
         DECORATORS_CLASS_METADATA,
         {
           key: metakey,
