@@ -73,19 +73,7 @@ export const APPLICATION_CONTEXT_KEY = '__midway_application_context__';
 // constructor key
 export const CLASS_KEY_CONSTRUCTOR = 'midway:class_key_constructor';
 
-// Used for named bindings
-export const NAMED_TAG = 'named';
-//
-// // used to store constructor arguments tags
-// export const TAGGED = 'injection:tagged';
-//
-// // used to store class properties tags
-// export const TAGGED_PROP = 'injection:tagged_props';
-
 // pipeline
 export const PIPELINE_IDENTIFIER = '__pipeline_identifier__';
-// lifecycle interface
-export const LIFECYCLE_IDENTIFIER_PREFIX = '__lifecycle__';
 
 export const MAIN_MODULE_KEY = '__main__';
-export const PRIVATE_META_DATA_KEY = '__midway_private_meta_data__';

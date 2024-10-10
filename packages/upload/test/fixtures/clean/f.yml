@@ -1,5 +1,3 @@
-service: serverless-midway-test
-
 provider:
   name: aliyun
-  runtime: nodejs12
+  starter: '@midwayjs/fc-starter'

@@ -1,16 +1,16 @@
 import {
   Provide,
-  saveModule,
   Scope,
   ScopeEnum,
-  saveClassMetadata,
+  MetadataManager,
+  DecoratorManager,
 } from '@midwayjs/core';
 export const MQTT_DECORATOR_KEY = 'rpc:mqtt';
 
 export function MqttSubscriber(subscriberName: string): ClassDecorator {
   return target => {
-    saveModule(MQTT_DECORATOR_KEY, target);
-    saveClassMetadata(MQTT_DECORATOR_KEY, subscriberName, target);
+    DecoratorManager.saveModule(MQTT_DECORATOR_KEY, target);
+    MetadataManager.defineMetadata(MQTT_DECORATOR_KEY, subscriberName, target);
     Scope(ScopeEnum.Request)(target);
     Provide()(target);
   };

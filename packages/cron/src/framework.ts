@@ -2,12 +2,11 @@ import {
   BaseFramework,
   extend,
   Framework,
-  getClassMetadata,
-  getProviderUUId,
+  DecoratorManager,
   IMidwayBootstrapOptions,
-  listModule,
   MidwayInvokeForbiddenError,
   Utils,
+  MetadataManager,
 } from '@midwayjs/core';
 import {
   Application,
@@ -43,7 +42,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
   }
 
   async run() {
-    const jobModules = listModule(CRON_JOB_KEY);
+    const jobModules = DecoratorManager.listModule(CRON_JOB_KEY);
     for (const mod of jobModules) {
       this.addJob(mod);
     }
@@ -64,11 +63,11 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
     if (typeof name === 'string') {
       jobName = name;
     } else {
-      const options = getClassMetadata(CRON_JOB_KEY, name) as {
+      const options = MetadataManager.getOwnMetadata(CRON_JOB_KEY, name) as {
         jobOptions?: CronJobParameters;
         name?: string;
       };
-      jobName = options.name || getProviderUUId(name);
+      jobName = options.name || DecoratorManager.getProviderUUId(name);
       jobOptions = extend(
         true,
         {},
@@ -135,11 +134,11 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
     if (typeof name === 'string') {
       return name;
     } else {
-      const options = getClassMetadata(CRON_JOB_KEY, name) as {
+      const options = MetadataManager.getOwnMetadata(CRON_JOB_KEY, name) as {
         jobOptions?: CronJobParameters;
         name?: string;
       };
-      return options.name || getProviderUUId(name);
+      return options.name || DecoratorManager.getProviderUUId(name);
     }
   }
 }

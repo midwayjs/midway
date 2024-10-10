@@ -113,6 +113,9 @@ export async function destroyGlobalApplicationContext(
   loggerFactory.close();
   global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
   global['MIDWAY_MAIN_FRAMEWORK'] = undefined;
+
+  // reset counter
+  stepIdx = 1;
 }
 
 /**

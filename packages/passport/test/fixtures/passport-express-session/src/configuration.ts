@@ -1,6 +1,5 @@
 import { App, Configuration, Middleware } from '@midwayjs/core';
-import * as passport from 'passport';
-import { PassportMiddleware, PassportStrategy, CustomStrategy as Strategy } from '../../../../src';
+import { PassportMiddleware, PassportStrategy, CustomStrategy as Strategy, AuthenticateOptions } from '../../../../src';
 import * as path from 'path';
 import * as LocalStrategy from 'passport-local';
 import * as express from '@midwayjs/express';
@@ -31,7 +30,7 @@ export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy) {
 @Middleware()
 export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
 
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions {
     return {
       failureRedirect: '/login',
     }

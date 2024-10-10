@@ -31,7 +31,7 @@ import {
 import { parseMultipart } from './parse';
 import { fromBuffer } from 'file-type';
 import { formatExt, streamToAsyncIterator } from './utils';
-import busboy from 'busboy';
+import * as busboy from 'busboy';
 import { BusboyConfig } from 'busboy';
 import { EXT_KEY } from './constants';
 

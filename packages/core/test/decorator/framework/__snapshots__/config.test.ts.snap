@@ -4,20 +4,24 @@ exports[`/test/framework/config.test.ts config decorator should be ok 1`] = `
 {
   "bbb": [
     {
-      "impl": true,
       "key": "config",
       "metadata": {
         "identifier": "bbb",
+      },
+      "options": {
+        "impl": true,
       },
       "propertyName": "bbb",
     },
   ],
   "hhh": [
     {
-      "impl": true,
       "key": "config",
       "metadata": {
         "identifier": undefined,
+      },
+      "options": {
+        "impl": true,
       },
       "propertyName": "hhh",
     },

@@ -12,7 +12,7 @@ import * as upload from '../../../../src';
       default: {
         busboy: {
           mode: 'file',
-          cleanTimeout: 1,
+          cleanTimeout: 100,
         },
       }
     }

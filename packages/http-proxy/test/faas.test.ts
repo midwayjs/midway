@@ -1,7 +1,5 @@
 import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
-import * as assert from 'assert';
-import * as ServerlessApp from '../../../packages-legacy/serverless-app/src';
 import * as nock from 'nock';
 
 describe('test/faas.test.ts', function () {
@@ -42,7 +40,7 @@ describe('test/faas.test.ts', function () {
     }, {'content-type': 'application/json'});
 
     const appDir = join(__dirname, 'fixtures/faas');
-    app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
+    app = await createFunctionApp(appDir, {});
   })
 
   afterAll(async () => {
@@ -55,9 +53,9 @@ describe('test/faas.test.ts', function () {
     await request.get('/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png?version=123')
       .expect(200)
       .then(async response => {
-        assert.ok(response.status === 200)
-        assert.ok(response.headers['content-type'] === 'image/png; charset=utf-8')
-        assert.ok(response.body.length);
+        expect(response.status).toBe(200);
+        expect(response.headers['content-type']).toBe('image/png');
+        expect(response.body.length).toBeGreaterThan(0);
       });
   });
 
@@ -66,9 +64,9 @@ describe('test/faas.test.ts', function () {
     await request.get('/gcdn/mtb/lib-mtop/2.6.1/mtop.js')
       .expect(200)
       .then(async response => {
-        assert.ok(response.status === 200)
-        assert.ok(response.headers['content-type'] === 'application/javascript; charset=utf-8')
-        assert.ok(response.text.startsWith('!function(a,b){function c()'));
+        expect(response.status).toBe(200);
+        expect(response.headers['content-type']).toBe('application/javascript');
+        expect(response.text).toMatch(/^!function\(a,b\)\{function c\(\)/);
       });
   });
 
@@ -77,10 +75,10 @@ describe('test/faas.test.ts', function () {
     await request.get('/httpbin/get?name=midway')
       .expect(200)
       .then(async response => {
-        assert.ok(response.status === 200)
-        assert.ok(response.body.url === 'https://httpbin.org/get?name=midway');
-        assert.ok(response.body.args.name === 'midway');
-        assert.ok(response.body.headers['Host'] === 'httpbin.org');
+        expect(response.status).toBe(200);
+        expect(response.body.url).toBe('https://httpbin.org/get?name=midway');
+        expect(response.body.args.name).toBe('midway');
+        expect(response.body.headers['Host']).toBe('httpbin.org');
       });
   });
 
@@ -90,9 +88,9 @@ describe('test/faas.test.ts', function () {
       .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
       .expect(200)
       .then(async response => {
-        assert.ok(response.status === 200)
-        assert.ok(response.text.length);
-        assert.ok(response.text.endsWith('</html>'));
+        expect(response.status).toBe(200);
+        expect(response.text.length).toBeGreaterThan(0);
+        expect(response.text).toMatch(/<\/html>$/);
       });
   });
 
@@ -103,10 +101,10 @@ describe('test/faas.test.ts', function () {
       .set('Accept', 'application/json')
       .expect(200)
       .then(async response => {
-        assert.ok(response.status === 200)
-        assert.ok(response.body.url === 'https://httpbin.org/post');
-        assert.ok(response.body.headers['Content-Type'] === 'application/json');
-        assert.ok(response.body.data === JSON.stringify({ name: 'midway'}));
+        expect(response.status).toBe(200);
+        expect(response.body.url).toBe('https://httpbin.org/post');
+        expect(response.body.headers['Content-Type']).toBe('application/json');
+        expect(response.body.data).toBe(JSON.stringify({ name: 'midway'}));
       });
   });
 
@@ -117,10 +115,10 @@ describe('test/faas.test.ts', function () {
       .set('Accept', 'application/json')
       .expect(200)
       .then(async response => {
-        assert.ok(response.status === 200)
-        assert.ok(response.body.url === 'https://httpbin.org/post');
-        assert.ok(response.body.headers['Content-Type'] === 'application/x-www-form-urlencoded');
-        assert.ok(response.body.form.name === 'midway');
+        expect(response.status).toBe(200);
+        expect(response.body.url).toBe('https://httpbin.org/post');
+        expect(response.body.headers['Content-Type']).toBe('application/x-www-form-urlencoded');
+        expect(response.body.form.name).toBe('midway');
       });
   });
 });

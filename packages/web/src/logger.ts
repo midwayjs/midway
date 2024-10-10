@@ -177,7 +177,7 @@ class MidwayLoggers extends Map<string, ILogger> {
         // v3
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        (value as any).get('console')?.level = 'none';
+        value.get('console') && (value.get('console').level = 'none');
       }
     }
   }

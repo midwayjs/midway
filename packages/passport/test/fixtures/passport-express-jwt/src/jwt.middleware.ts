@@ -1,11 +1,10 @@
-import { PassportMiddleware } from '../../../../src';
+import { PassportMiddleware, AuthenticateOptions } from '../../../../src';
 import { Provide } from '@midwayjs/core';
 import { JwtStrategy } from './jwt.strategy';
-import * as passport from 'passport';
 
 @Provide()
 export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions {
     return {};
   }
 }

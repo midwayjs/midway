@@ -1,8 +1,7 @@
 import {
-  createCustomPropertyDecorator,
+  DecoratorManager,
+  MetadataManager,
   Provide,
-  saveClassMetadata,
-  saveModule,
   Scope,
   ScopeEnum,
 } from '@midwayjs/core';
@@ -20,8 +19,8 @@ export function Job(jobName: any, jobOptions?: CronJobOptions): ClassDecorator {
       jobOptions = jobName;
       jobName = undefined;
     }
-    saveModule(CRON_JOB_KEY, target);
-    saveClassMetadata(
+    DecoratorManager.saveModule(CRON_JOB_KEY, target);
+    MetadataManager.defineMetadata(
       CRON_JOB_KEY,
       {
         jobOptions,
@@ -37,7 +36,7 @@ export function Job(jobName: any, jobOptions?: CronJobOptions): ClassDecorator {
 export function InjectJob(
   jobName: string | (new (...args) => IJob)
 ): PropertyDecorator {
-  return createCustomPropertyDecorator(CRON_JOB_KEY, {
+  return DecoratorManager.createCustomPropertyDecorator(CRON_JOB_KEY, {
     jobName,
   });
 }

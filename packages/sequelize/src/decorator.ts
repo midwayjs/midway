@@ -1,4 +1,4 @@
-import { createCustomPropertyDecorator, saveModule } from '@midwayjs/core';
+import { DecoratorManager } from '@midwayjs/core';
 import {
   setModelName,
   addOptions,
@@ -7,7 +7,7 @@ import {
 } from 'sequelize-typescript';
 
 /**
- * @deprecated
+ * @deprecated Use MetadataManager.attachMetadata instead
  * @param options
  * @constructor
  */
@@ -17,12 +17,12 @@ export function BaseTable<M extends Model = Model>(
 export function BaseTable(target: any): void;
 export function BaseTable(arg?: any) {
   if (typeof arg === 'function') {
-    saveModule('sequelize:core', arg);
+    DecoratorManager.saveModule('sequelize:core', arg);
     annotate(arg);
   } else {
     const options = Object.assign({}, arg);
     return target => {
-      saveModule('sequelize:core', target);
+      DecoratorManager.saveModule('sequelize:core', target);
       annotate(target, options);
     };
   }
@@ -40,14 +40,14 @@ export function InjectRepository(
   modelKey: { new (): Model<any, any> },
   connectionName?: string
 ) {
-  return createCustomPropertyDecorator(ENTITY_MODEL_KEY, {
+  return DecoratorManager.createCustomPropertyDecorator(ENTITY_MODEL_KEY, {
     modelKey,
     connectionName,
   });
 }
 
 export function InjectDataSource(dataSourceName?: string) {
-  return createCustomPropertyDecorator(DATA_SOURCE_KEY, {
+  return DecoratorManager.createCustomPropertyDecorator(DATA_SOURCE_KEY, {
     dataSourceName,
   });
 }

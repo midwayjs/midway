@@ -10,7 +10,7 @@ import {
   safelyGet,
   safeRequire,
   extend,
-  listModule,
+  DecoratorManager,
   MidwayFrameworkService,
   HTTP_SERVER_KEY,
 } from '@midwayjs/core';
@@ -308,7 +308,7 @@ export const createAgentWorkerLoader = () => {
         super.load();
 
         debug('[egg]: start runAgent decorator');
-        const runInAgentModules = listModule(RUN_IN_AGENT_KEY);
+        const runInAgentModules = DecoratorManager.listModule(RUN_IN_AGENT_KEY);
         for (const module of runInAgentModules) {
           await this.app.applicationContext.getAsync(module);
         }

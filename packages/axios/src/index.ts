@@ -1,4 +1,4 @@
-import axios from 'axios';
+import * as axios from 'axios';
 import * as Axios from 'axios';
 
 export { AxiosConfiguration as Configuration } from './configuration';

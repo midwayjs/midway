@@ -1,4 +1,4 @@
-import { createCustomParamDecorator, PipeUnionTransform } from '@midwayjs/core';
+import { DecoratorManager, PipeUnionTransform } from '@midwayjs/core';
 import { AnySchema } from 'joi';
 import { VALID_KEY } from '../constants';
 import { DecoratorValidPipe } from '../pipe';
@@ -13,7 +13,7 @@ export function Valid(
   } else {
     pipes = pipes || [];
   }
-  return createCustomParamDecorator(
+  return DecoratorManager.createCustomParamDecorator(
     VALID_KEY,
     {
       schema: schemaOrPipes,

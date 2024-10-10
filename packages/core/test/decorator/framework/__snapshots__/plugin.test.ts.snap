@@ -4,20 +4,24 @@ exports[`/test/framework/plugin.test.ts plugin decorator should be ok 1`] = `
 {
   "bbb": [
     {
-      "impl": true,
       "key": "plugin",
       "metadata": {
         "identifier": "bbb",
+      },
+      "options": {
+        "impl": true,
       },
       "propertyName": "bbb",
     },
   ],
   "test": [
     {
-      "impl": true,
       "key": "plugin",
       "metadata": {
         "identifier": undefined,
+      },
+      "options": {
+        "impl": true,
       },
       "propertyName": "test",
     },

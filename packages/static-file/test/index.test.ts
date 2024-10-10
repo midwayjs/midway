@@ -1,6 +1,6 @@
 import { close, createApp, createFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
-import * as ServerlessApp from '@midwayjs/serverless-app';
+import { Framework } from '@midwayjs/faas';
 
 describe('test/index.test.ts', () => {
   it('serve with dirs with same prefix', async () => {
@@ -30,7 +30,7 @@ describe('test/index.test.ts', () => {
 
   it('should test faas use static', async () => {
     const appDir = join(__dirname, 'fixtures/faas-with-dirs');
-    const app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp.Framework);
+    const app = await createFunctionApp<Framework>(appDir);
     const result = await createHttpRequest(app).get('/foo.js');
     expect(result.text).toMatch('console');
     await close(app);

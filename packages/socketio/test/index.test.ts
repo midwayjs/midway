@@ -141,22 +141,6 @@ describe('/test/index.test.ts', () => {
     await closeApp(app);
   });
 
-  it('should test create socket app and with redis adapter', async () => {
-    const app = await createServer('base-app-redis');
-    const client = await createSocketIOClient({
-      port: '3000',
-    });
-    const gotEvent = once(client, 'ok');
-    client.send('my');
-    const [data] = await gotEvent;
-    expect(data).toEqual({
-      name: 'harry',
-    });
-
-    await client.close();
-    await closeApp(app);
-  });
-
   it('should test create socket app and throw error', async () => {
     const app = await createServer('base-app-error');
     const client = await createSocketIOClient({

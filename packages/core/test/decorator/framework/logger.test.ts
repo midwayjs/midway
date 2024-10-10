@@ -1,7 +1,7 @@
 import {
   Logger,
-  INJECT_CUSTOM_PROPERTY,
-  MetadataManager
+  MetadataManager,
+  CUSTOM_PROPERTY_INJECT_KEY
 } from '../../../src';
 
 class Test {
@@ -14,6 +14,6 @@ class Test {
 
 describe('/test/framework/logger.test.ts', () => {
   it('logger decorator should be ok', () => {
-    expect(MetadataManager.getPropertiesWithMetadata(INJECT_CUSTOM_PROPERTY, Test)).toMatchSnapshot();
+    expect(MetadataManager.getPropertiesWithMetadata(CUSTOM_PROPERTY_INJECT_KEY, Test)).toMatchSnapshot();
   });
 });

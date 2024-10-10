@@ -11,7 +11,7 @@ import {
   MidwayCommonError,
 } from '@midwayjs/core';
 import * as assert from 'assert';
-import COS from 'cos-nodejs-sdk-v5';
+import * as COS from 'cos-nodejs-sdk-v5';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

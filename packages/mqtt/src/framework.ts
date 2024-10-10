@@ -1,9 +1,9 @@
 import {
-  getClassMetadata,
-  listModule,
   Framework,
   BaseFramework,
   Logger,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import {
   IMidwayMQTTApplication,
@@ -44,10 +44,11 @@ export class MidwayMQTTFramework extends BaseFramework<
       );
     }
     // find subscriber
-    const mqttSubscriberModules = listModule(MQTT_DECORATOR_KEY);
+    const mqttSubscriberModules =
+      DecoratorManager.listModule(MQTT_DECORATOR_KEY);
     const mqttSubscriberMap = {};
     for (const subscriberModule of mqttSubscriberModules) {
-      const subscriberName = getClassMetadata(
+      const subscriberName = MetadataManager.getOwnMetadata(
         MQTT_DECORATOR_KEY,
         subscriberModule
       ) as string;

@@ -1,4 +1,4 @@
-import { saveModule, attachClassMetadata } from '@midwayjs/core';
+import { DecoratorManager, MetadataManager } from '@midwayjs/core';
 import * as request from 'request';
 import * as path from 'path';
 import * as os from 'os';
@@ -11,7 +11,7 @@ export function RunInPrimary() {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    saveModule('primary:primary', target.constructor);
+    DecoratorManager.saveModule('primary:primary', target.constructor);
     const sockFile = path.join(os.tmpdir(), 'midway-primary.sock');
     if (!isPrimary()) {
       descriptor.value = (...args) => {
@@ -44,7 +44,7 @@ export function RunInPrimary() {
         });
       };
     }
-    attachClassMetadata(
+    MetadataManager.attachMetadata(
       'primary:primary:options',
       {
         name: `${target.constructor.name}_${propertyKey}`,

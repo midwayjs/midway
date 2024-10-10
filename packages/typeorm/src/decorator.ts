@@ -1,9 +1,4 @@
-import {
-  createCustomPropertyDecorator,
-  Provide,
-  Scope,
-  ScopeEnum,
-} from '@midwayjs/core';
+import { DecoratorManager, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { EntityTarget, EventSubscriber } from 'typeorm';
 
 export const ENTITY_MODEL_KEY = 'typeorm:entity_model_key';
@@ -15,7 +10,7 @@ export function InjectEntityModel(
   modelKey: EntityTarget<unknown>,
   connectionName?: string
 ) {
-  return createCustomPropertyDecorator(ORM_MODEL_KEY, {
+  return DecoratorManager.createCustomPropertyDecorator(ORM_MODEL_KEY, {
     modelKey,
     connectionName,
   });
@@ -34,7 +29,7 @@ export function EventSubscriberModel(): ClassDecorator {
 }
 
 export function InjectDataSource(dataSourceName?: string) {
-  return createCustomPropertyDecorator(ORM_DATA_SOURCE_KEY, {
+  return DecoratorManager.createCustomPropertyDecorator(ORM_DATA_SOURCE_KEY, {
     dataSourceName,
   });
 }

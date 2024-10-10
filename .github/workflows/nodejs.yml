@@ -16,13 +16,8 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        node-version: [16, 18]
+        node-version: [18]
         os: [ubuntu-latest]
-        include:
-          - node-version: 16
-            pnpm-version: 8
-          - node-version: 18
-            pnpm-version: 9
     runs-on: ${{ matrix.os }}
     services:
       redis:
@@ -92,7 +87,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: ${{ matrix.pnpm-version }}
+          version: 9
           run_install: false
 
       - name: Use Node.js ${{ matrix.node-version }}

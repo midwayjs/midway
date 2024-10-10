@@ -1,10 +1,9 @@
 import {
-  createCustomPropertyDecorator,
   Provide,
-  saveClassMetadata,
-  saveModule,
   Scope,
   ScopeEnum,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import { JobOptions, QueueOptions } from 'bull';
 import { BULL_PROCESSOR_KEY, BULL_QUEUE_KEY } from './constants';
@@ -32,8 +31,8 @@ export function Processor(
       jobOptions = { ...concurrency };
       concurrency = 1;
     }
-    saveModule(BULL_PROCESSOR_KEY, target);
-    saveClassMetadata(
+    DecoratorManager.saveModule(BULL_PROCESSOR_KEY, target);
+    MetadataManager.defineMetadata(
       BULL_PROCESSOR_KEY,
       {
         queueName,
@@ -49,7 +48,7 @@ export function Processor(
 }
 
 export function InjectQueue(queueName: string): PropertyDecorator {
-  return createCustomPropertyDecorator(BULL_QUEUE_KEY, {
+  return DecoratorManager.createCustomPropertyDecorator(BULL_QUEUE_KEY, {
     queueName,
   });
 }

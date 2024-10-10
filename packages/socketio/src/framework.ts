@@ -5,6 +5,8 @@ import {
   HTTP_SERVER_KEY,
   MidwayFrameworkType,
   MidwayInvokeForbiddenError,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import { debuglog } from 'util';
 const debug = debuglog('midway:socket.io');
@@ -22,8 +24,6 @@ import {
   WSControllerOption,
   WSEventInfo,
   WSEventTypeEnum,
-  getClassMetadata,
-  listModule,
   Framework,
 } from '@midwayjs/core';
 
@@ -102,14 +102,14 @@ export class MidwaySocketIOFramework extends BaseFramework<
 
   private async loadMidwayController() {
     // create room
-    const controllerModules = listModule(WS_CONTROLLER_KEY);
+    const controllerModules = DecoratorManager.listModule(WS_CONTROLLER_KEY);
     for (const module of controllerModules) {
       await this.addNamespace(module);
     }
   }
 
   private async addNamespace(target: any) {
-    const controllerOption: WSControllerOption = getClassMetadata(
+    const controllerOption: WSControllerOption = MetadataManager.getOwnMetadata(
       WS_CONTROLLER_KEY,
       target
     );
@@ -141,7 +141,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
         )
         .then(connectFn => connectFn(socket));
 
-      const wsEventInfos: WSEventInfo[] = getClassMetadata(
+      const wsEventInfos: WSEventInfo[] = MetadataManager.getMetadata(
         WS_EVENT_KEY,
         target
       );

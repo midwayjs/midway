@@ -4,7 +4,7 @@ import type {
   AxiosResponse,
   CreateAxiosDefaults,
 } from 'axios';
-import axios from 'axios';
+import * as axios from 'axios';
 import {
   Config,
   Init,

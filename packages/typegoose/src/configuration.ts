@@ -1,14 +1,14 @@
 import {
   Config,
   Configuration,
-  getClassMetadata,
   Init,
   Inject,
-  listModule,
   App,
   IMidwayApplication,
   IMidwayContainer,
   MidwayDecoratorService,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import * as mongoose from '@midwayjs/mongoose';
 import { ENTITY_MODEL_KEY } from './interface';
@@ -64,10 +64,11 @@ export class TypegooseConfiguration {
       }
     }
 
-    const Models = listModule(ENTITY_MODEL_KEY);
+    const Models = DecoratorManager.listModule(ENTITY_MODEL_KEY);
     // 兼容老代码
     for (const Model of Models) {
-      const metadata = getClassMetadata(ENTITY_MODEL_KEY, Model) ?? {};
+      const metadata =
+        MetadataManager.getOwnMetadata(ENTITY_MODEL_KEY, Model) ?? {};
       const connectionName = metadata.connectionName ?? 'default';
       const conn = connectionFactory.getDataSource(connectionName);
       if (conn) {

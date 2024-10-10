@@ -15,7 +15,7 @@ export class APIController {
   ctx: Context;
 
   @Inject()
-  req: IMidwayExpressRequest;
+  req: IMidwayExpressRequest & { user: string };
 
   @Get('/', { middleware: []})
   async home() {

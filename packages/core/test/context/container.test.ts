@@ -11,12 +11,12 @@ import {
   CONFIG_KEY,
   PLUGIN_KEY,
   INJECT_TAG,
-  getClassExtendedMetadata,
   Inject,
   Config,
   Plugin,
   App,
   Provide,
+  MetadataManager
 } from '../../src';
 import {
   Grandson,
@@ -102,7 +102,7 @@ describe('/test/context/container.test.ts', () => {
       const defition = container.registry.getDefinition(identifier);
       const tareget = defition.path;
       return {
-        recursiveMetadata: getClassExtendedMetadata(INJECT_TAG, tareget),
+        recursiveMetadata: MetadataManager.getPropertiesWithMetadata(INJECT_TAG, tareget),
       };
     });
     const grandsonMetadata = metadatas[0];

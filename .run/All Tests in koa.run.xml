@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="All Tests in koa" type="JavaScriptTestRunnerJest" folderName="midway all test">
+    <config-file value="$PROJECT_DIR$/packages/web-koa/jest.config.js" />
+    <node-interpreter value="project" />
+    <node-options value="-r ts-node/register" />
+    <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+    <working-dir value="$PROJECT_DIR$" />
+    <envs />
+    <scope-kind value="ALL" />
+    <method v="2" />
+  </configuration>
+</component>

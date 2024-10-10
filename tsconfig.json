@@ -11,10 +11,11 @@
     "strict": false,
     "noEmitOnError": false,
     "skipLibCheck": true,
-    "module": "Node16",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2021",
-    "lib": ["ES2021"]
+    "lib": ["ES2021"],
+    "esModuleInterop": false
   },
   "exclude": [
     "dist",

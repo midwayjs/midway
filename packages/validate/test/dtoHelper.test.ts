@@ -4,7 +4,7 @@ import {
   PickDto,
   OmitDto,
 } from '../src';
-import { getClassExtendedMetadata } from '@midwayjs/core';
+import { MetadataManager } from '@midwayjs/core';
 import { RULES_KEY } from '../src/constants';
 
 class BaseDto {
@@ -47,7 +47,7 @@ describe('/test/util/dtoHelper.test.ts', () => {
       @Rule(RuleType.string())
       comment: string;
     }
-    const rules = getClassExtendedMetadata(RULES_KEY, ChildDto);
+    const rules = MetadataManager.getPropertiesWithMetadata(RULES_KEY, ChildDto);
     const ruleKeys = Object.keys(rules);
     expect(ruleKeys.length).toBe(7);
     expect(ruleKeys.includes('id')).toBeTruthy();
@@ -59,7 +59,7 @@ describe('/test/util/dtoHelper.test.ts', () => {
 
   it('should test PickDto', async () => {
     class PickedDto extends PickDto(TestDto, ['createTime', 'price']) {}
-    const rules = getClassExtendedMetadata(RULES_KEY, PickedDto);
+    const rules = MetadataManager.getPropertiesWithMetadata(RULES_KEY, PickedDto);
     const ruleKeys = Object.keys(rules);
     expect(ruleKeys.length).toBe(2);
     expect(ruleKeys.includes('quantity')).toBeFalsy();
@@ -68,7 +68,7 @@ describe('/test/util/dtoHelper.test.ts', () => {
 
   it('should test OmitDto', async () => {
     class OmittedDto extends OmitDto(TestDto, ['productName']) {}
-    const rules = getClassExtendedMetadata(RULES_KEY, OmittedDto);
+    const rules = MetadataManager.getPropertiesWithMetadata(RULES_KEY, OmittedDto);
     const ruleKeys = Object.keys(rules);
     expect(ruleKeys.length).toBe(4);
     expect(ruleKeys.includes('productName')).toBeFalsy();
