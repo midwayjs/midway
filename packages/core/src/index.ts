@@ -32,8 +32,6 @@ export {
   DEFAULT_PRIORITY,
   MidwayPriorityManager,
 } from './common/priorityManager';
-export * from './service/pipelineService';
-
 export * from './common/loggerFactory';
 export * from './common/serviceFactory';
 export * from './common/dataListener';

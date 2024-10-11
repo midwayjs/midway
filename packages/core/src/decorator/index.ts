@@ -2,7 +2,6 @@
 export * from './common/provide';
 export { Inject, InjectClient } from './common/inject';
 export * from './common/scope';
-export * from './common/pipeline';
 export * from './common/aspect';
 export * from './common/autoload';
 export * from './common/configuration';
