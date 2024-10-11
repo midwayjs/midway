@@ -1,4 +1,4 @@
-import { MainApp, Configuration } from '@midwayjs/core';
+import { App, Configuration } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as casbin from '../../../../src';
 import { join } from 'path';
