@@ -7,7 +7,6 @@ import {
   Init,
   Inject,
   LOGGER_KEY,
-  PIPELINE_IDENTIFIER,
   PLUGIN_KEY,
   Provide,
   Scope,
@@ -23,13 +22,11 @@ import {
 import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';
 import { BaseFramework } from '../baseFramework';
-import { MidwayPipelineService } from './pipelineService';
 import { MidwayDecoratorService } from './decoratorService';
 import { MidwayAspectService } from './aspectService';
 import { MidwayApplicationManager } from '../common/applicationManager';
 import * as util from 'util';
 import { MidwayCommonError, MidwayParameterError } from '../error';
-import { REQUEST_OBJ_CTX_KEY } from '../constants';
 
 const debug = util.debuglog('midway:debug');
 
@@ -81,17 +78,6 @@ export class MidwayFrameworkService {
       LOGGER_KEY,
       (propertyName, meta) => {
         return this.loggerService.getLogger(meta.identifier ?? propertyName);
-      }
-    );
-
-    this.decoratorService.registerPropertyHandler(
-      PIPELINE_IDENTIFIER,
-      (key, meta, instance) => {
-        return new MidwayPipelineService(
-          instance[REQUEST_OBJ_CTX_KEY]?.requestContext ??
-            this.applicationContext,
-          meta.valves
-        );
       }
     );
 

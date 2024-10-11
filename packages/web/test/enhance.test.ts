@@ -288,12 +288,6 @@ describe('/test/enhance.test.ts', () => {
         .expect(200);
     });
 
-    it('pipeline ctx should be ok', async () => {
-      await request(app.callback())
-        .get('/hello/stage')
-        .expect(200);
-    });
-
     it('circular shoule be ok', async () => {
       await request(app.callback())
         .get('/circular/test')

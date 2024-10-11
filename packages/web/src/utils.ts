@@ -6,19 +6,17 @@ import {
   MidwayAspectService,
   MidwayConfigService,
   MidwayDecoratorService,
-  MidwayPipelineService,
   MidwayLoggerService,
-  REQUEST_OBJ_CTX_KEY,
   MidwayEnvironmentService,
   MidwayInformationService,
   isTypeScriptEnvironment,
+  MAIN_APPLICATION_KEY,
 } from '@midwayjs/core';
 import {
   ALL_VALUE_KEY,
   APPLICATION_KEY,
   CONFIG_KEY,
   LOGGER_KEY,
-  PIPELINE_IDENTIFIER,
   PLUGIN_KEY,
 } from '@midwayjs/core';
 import { MidwayWebFramework } from './framework/web';
@@ -141,17 +139,6 @@ export async function initializeAgentApplicationContext(agent) {
       }
     );
 
-    decoratorService.registerPropertyHandler(
-      PIPELINE_IDENTIFIER,
-      (key, meta, instance) => {
-        return new MidwayPipelineService(
-          instance[REQUEST_OBJ_CTX_KEY]?.requestContext ??
-            this.applicationContext,
-          meta.valves
-        );
-      }
-    );
-
     // register @App decorator handler
     decoratorService.registerPropertyHandler(
       APPLICATION_KEY,
@@ -160,6 +147,15 @@ export async function initializeAgentApplicationContext(agent) {
       }
     );
 
+    // register @MainApp decorator handler
+    decoratorService.registerPropertyHandler(
+      MAIN_APPLICATION_KEY,
+      (key, target) => {
+        return agent;
+      }
+    );
+
+    // register @Plugin decorator handler
     decoratorService.registerPropertyHandler(PLUGIN_KEY, (key, target) => {
       return agent[key];
     });

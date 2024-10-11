@@ -1,6 +1,5 @@
 import { MidwayContainer } from './container';
 import { IMidwayContainer } from '../interface';
-import { PIPELINE_IDENTIFIER } from '../decorator';
 import { REQUEST_CTX_KEY } from '../constants';
 
 export class MidwayRequestContainer extends MidwayContainer {
@@ -43,10 +42,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     const definition =
       this.applicationContext.registry.getDefinition(identifier);
     if (definition) {
-      if (
-        definition.isRequestScope() ||
-        definition.id === PIPELINE_IDENTIFIER
-      ) {
+      if (definition.isRequestScope()) {
         // create object from applicationContext definition for requestScope
         return this.getManagedResolverFactory().create({
           definition,
@@ -72,10 +68,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     const definition =
       this.applicationContext.registry.getDefinition(identifier);
     if (definition) {
-      if (
-        definition.isRequestScope() ||
-        definition.id === PIPELINE_IDENTIFIER
-      ) {
+      if (definition.isRequestScope()) {
         // create object from applicationContext definition for requestScope
         return this.getManagedResolverFactory().createAsync({
           definition,

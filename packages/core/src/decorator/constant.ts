@@ -74,7 +74,4 @@ export const APPLICATION_CONTEXT_KEY = 'common:application_context';
 // constructor key
 export const CLASS_KEY_CONSTRUCTOR = 'midway:class_key_constructor';
 
-// pipeline
-export const PIPELINE_IDENTIFIER = '__pipeline_identifier__';
-
 export const MAIN_MODULE_KEY = '__main__';
