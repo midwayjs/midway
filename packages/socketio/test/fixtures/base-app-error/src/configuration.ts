@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 import { ILifeCycle } from '@midwayjs/core';
 import { Application } from '../../../../src';
 

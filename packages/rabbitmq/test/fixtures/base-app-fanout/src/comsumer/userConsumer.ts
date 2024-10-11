@@ -1,4 +1,4 @@
-import { Provide, Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/core';
+import { Provide, Consumer, MSListenerType, RabbitMQListener, Inject, MainApp } from '@midwayjs/core';
 import { Context, Application } from '../../../../../src';
 import { ConsumeMessage } from 'amqplib';
 

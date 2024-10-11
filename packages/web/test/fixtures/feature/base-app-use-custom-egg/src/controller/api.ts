@@ -7,7 +7,7 @@ import {
   Query,
   Body,
   SetHeader,
-  App
+  MainApp
 } from '@midwayjs/core';
 import { UserService } from '../service/user';
 
