@@ -1,6 +1,7 @@
 import {
   ALL_VALUE_KEY,
   APPLICATION_KEY,
+  MAIN_APPLICATION_KEY,
   CONFIG_KEY,
   FRAMEWORK_KEY,
   Init,
@@ -107,6 +108,14 @@ export class MidwayFrameworkService {
         } else {
           return this.getMainApp();
         }
+      }
+    );
+
+    // register @MainApp decorator handler
+    this.decoratorService.registerPropertyHandler(
+      MAIN_APPLICATION_KEY,
+      (propertyName, meta) => {
+        return this.getMainApp();
       }
     );
 

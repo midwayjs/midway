@@ -66,8 +66,9 @@ export const MS_HSF_METHOD_KEY = 'ms:hsf:method';
 export const CONFIG_KEY = 'config';
 export const PLUGIN_KEY = 'plugin';
 export const LOGGER_KEY = 'logger';
-export const APPLICATION_KEY = '__midway_framework_app__';
-export const APPLICATION_CONTEXT_KEY = '__midway_application_context__';
+export const APPLICATION_KEY = 'common:application';
+export const MAIN_APPLICATION_KEY = 'common:main_application';
+export const APPLICATION_CONTEXT_KEY = 'common:application_context';
 
 ////////////////////////////////////////// inject keys
 // constructor key

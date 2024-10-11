@@ -2,7 +2,8 @@ import {
   App,
   ApplicationContext,
   CUSTOM_PROPERTY_INJECT_KEY,
-  MetadataManager
+  MetadataManager,
+  MainApp
 } from '../../../src';
 
 class Test {
@@ -11,6 +12,9 @@ class Test {
 
   @ApplicationContext()
   container: any;
+
+  @MainApp()
+  mainApp: any;
 }
 
 describe('/test/framework/app.test.ts', () => {
