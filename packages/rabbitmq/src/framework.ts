@@ -9,6 +9,7 @@ import {
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
+  listPropertyDataFromClass,
 } from '@midwayjs/core';
 import {
   IMidwayRabbitMQApplication,
@@ -73,7 +74,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
       }
     );
     for (const module of subscriberModules) {
-      const data: RabbitMQListenerOptions[][] = MetadataManager.getOwnMetadata(
+      const data: RabbitMQListenerOptions[][] = listPropertyDataFromClass(
         MS_CONSUMER_KEY,
         module
       );

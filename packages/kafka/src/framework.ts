@@ -8,6 +8,7 @@ import {
   MidwayInvokeForbiddenError,
   MetadataManager,
   DecoratorManager,
+  listPropertyDataFromClass,
 } from '@midwayjs/core';
 import {
   IMidwayConsumerConfig,
@@ -58,7 +59,7 @@ export class MidwayKafkaFramework extends BaseFramework<
       }
     );
     for (const module of subscriberModules) {
-      const data = MetadataManager.getOwnMetadata(MS_CONSUMER_KEY, module);
+      const data = listPropertyDataFromClass(MS_CONSUMER_KEY, module);
       const topicTitles = [...new Set(data.map(e => e[0].topic))];
       const midwayConsumerConfigs: IMidwayConsumerConfig[] = topicTitles.map(
         e => {
