@@ -42,9 +42,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     const definition =
       this.applicationContext.registry.getDefinition(identifier);
     if (definition) {
-      if (
-        definition.isRequestScope()
-      ) {
+      if (definition.isRequestScope()) {
         // create object from applicationContext definition for requestScope
         return this.getManagedResolverFactory().create({
           definition,
@@ -70,9 +68,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     const definition =
       this.applicationContext.registry.getDefinition(identifier);
     if (definition) {
-      if (
-        definition.isRequestScope()
-      ) {
+      if (definition.isRequestScope()) {
         // create object from applicationContext definition for requestScope
         return this.getManagedResolverFactory().createAsync({
           definition,
