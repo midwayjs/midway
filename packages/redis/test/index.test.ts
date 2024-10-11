@@ -82,7 +82,7 @@ describe('/test/index.test.ts', () => {
   it('should fail when unable to connect redis', async () => {
     await expect(
       createLightApp(join(__dirname, './fixtures/base-app-bad-client'))
-    ).rejects.toThrow('connect ETIMEDOUT');
+    ).rejects.toThrow('getaddrinfo EAI_AGAIN non_existent_host');
   });
 
   it('should throw error when instance not found', async () => {
@@ -90,7 +90,7 @@ describe('/test/index.test.ts', () => {
       const service = new RedisService();
       (service as any).serviceFactory = new Map();
       await service.init();
-    }).rejects.toThrowError(/instance not found/);
+    }).rejects.toThrow(/instance not found/);
   });
 
   it('should test health check', async () => {
@@ -112,7 +112,7 @@ describe('/test/index.test.ts', () => {
       .getAsync(RedisServiceFactory);
     const client = redisServiceFactory.get('default');
     // light app 不执行 configuration 的 onReady
-    expect(client.status).toEqual('connect');
+    expect(client.status).toEqual('ready');
     const configuration = await app
       .getApplicationContext()
       .getAsync(RedisConfiguration);
@@ -121,8 +121,8 @@ describe('/test/index.test.ts', () => {
     );
     expect(result).toMatchInlineSnapshot(`
       {
-        "reason": "redis client "default" is not ready",
-        "status": false,
+        "reason": "",
+        "status": true,
       }
     `);
     await close(app);
@@ -150,7 +150,7 @@ describe('/test/index.test.ts', () => {
       .getAsync(RedisServiceFactory);
     const client = redisServiceFactory.get('default');
     // light app 不执行 configuration 的 onReady
-    expect(client.status).toEqual('connect');
+    expect(client.status).toEqual('ready');
     const configuration = await app
       .getApplicationContext()
       .getAsync(RedisConfiguration);

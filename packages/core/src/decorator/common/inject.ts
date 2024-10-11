@@ -32,7 +32,7 @@ export function saveInjectMetadata(identifier, target, targetKey) {
       injectMode = InjectModeEnum.PropertyName;
     }
   }
-  MetadataManager.attachMetadata(
+  MetadataManager.defineMetadata(
     PROPERTY_INJECT_KEY,
     {
       targetKey,

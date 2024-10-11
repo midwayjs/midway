@@ -6,9 +6,9 @@ import {
   Scope,
   Inject,
   ScopeEnum,
-  listModule,
   DataSourceManager,
   ILogger,
+  DecoratorManager,
 } from '@midwayjs/core';
 import { Sequelize } from 'sequelize-typescript';
 
@@ -44,7 +44,7 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
     }
 
     // 兼容老写法，但是这里可能有问题，会添加到所有的数据源之中
-    const listEntities = listModule('sequelize:core');
+    const listEntities = DecoratorManager.listModule('sequelize:core');
     client.addModels(listEntities);
 
     const isConnected = await this.checkConnected(client);

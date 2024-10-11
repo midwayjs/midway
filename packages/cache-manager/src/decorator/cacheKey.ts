@@ -1,4 +1,4 @@
-import { createCustomMethodDecorator, IMidwayContext } from '@midwayjs/core';
+import { DecoratorManager, IMidwayContext } from '@midwayjs/core';
 
 export const CACHE_DECORATOR_KEY = 'cache-manager:caching';
 export type CachingDecoratorKeyOptions =
@@ -18,7 +18,7 @@ export function Caching(
     ttl = cacheKeyOrTTL;
     cacheKeyOrTTL = undefined;
   }
-  return createCustomMethodDecorator(CACHE_DECORATOR_KEY, {
+  return DecoratorManager.createCustomMethodDecorator(CACHE_DECORATOR_KEY, {
     cacheInstanceName,
     cacheKey: cacheKeyOrTTL,
     ttl,

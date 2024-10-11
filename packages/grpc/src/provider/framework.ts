@@ -10,12 +10,8 @@ import {
 import {
   Config,
   Framework,
-  getClassMetadata,
-  getPropertyMetadata,
-  getProviderName,
   GRPCMetadata,
   GrpcStreamTypeEnum,
-  listModule,
   MS_GRPC_METHOD_KEY,
   MS_PROVIDER_KEY,
   MSProviderType,
@@ -25,6 +21,8 @@ import {
   MidwayCommonError,
   MidwayFrameworkType,
   MidwayInvokeForbiddenError,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import {
   Context,
@@ -70,21 +68,15 @@ export class MidwayGRPCFramework extends BaseFramework<
 
     this.app = server as IMidwayGRPCApplication;
     this.server = server;
-  }
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
     await this.loadService();
   }
 
   protected async loadService() {
     // find all code service
-    const gRPCModules = listModule(MS_PROVIDER_KEY, module => {
-      const info: GRPCMetadata.ProviderMetadata = getClassMetadata(
-        MS_PROVIDER_KEY,
-        module
-      );
+    const gRPCModules = DecoratorManager.listModule(MS_PROVIDER_KEY, module => {
+      const info: GRPCMetadata.ProviderMetadata =
+        MetadataManager.getOwnMetadata(MS_PROVIDER_KEY, module);
       return info.type === MSProviderType.GRPC;
     });
 
@@ -104,11 +96,9 @@ export class MidwayGRPCFramework extends BaseFramework<
 
     // register method to service
     for (const module of gRPCModules) {
-      const providerName = getProviderName(module);
-      const info: GRPCMetadata.ProviderMetadata = getClassMetadata(
-        MS_PROVIDER_KEY,
-        module
-      );
+      const providerName = DecoratorManager.getProviderName(module);
+      const info: GRPCMetadata.ProviderMetadata =
+        MetadataManager.getOwnMetadata(MS_PROVIDER_KEY, module);
       const classMetadata = info.metadata;
       const serviceName =
         classMetadata.serviceName || Utils.pascalCase(providerName);
@@ -140,7 +130,7 @@ export class MidwayGRPCFramework extends BaseFramework<
               methodName: string;
               type: GrpcStreamTypeEnum;
               onEnd: string;
-            } = getPropertyMetadata(
+            } = MetadataManager.getMetadata(
               MS_GRPC_METHOD_KEY,
               module,
               Utils.camelCase(method)

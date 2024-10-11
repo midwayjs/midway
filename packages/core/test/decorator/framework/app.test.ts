@@ -1,7 +1,7 @@
 import {
   App,
-  INJECT_CUSTOM_PROPERTY,
   ApplicationContext,
+  CUSTOM_PROPERTY_INJECT_KEY,
   MetadataManager
 } from '../../../src';
 
@@ -15,6 +15,6 @@ class Test {
 
 describe('/test/framework/app.test.ts', () => {
   it('app decorator should be ok', () => {
-    expect(MetadataManager.getPropertiesWithMetadata(INJECT_CUSTOM_PROPERTY, Test)).toMatchSnapshot();
+    expect(MetadataManager.getPropertiesWithMetadata(CUSTOM_PROPERTY_INJECT_KEY, Test)).toMatchSnapshot();
   });
 });

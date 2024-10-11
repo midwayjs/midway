@@ -1,11 +1,13 @@
-import { createCustomPropertyDecorator } from '@midwayjs/core';
+import { DecoratorManager } from '@midwayjs/core';
 import { ClassLikeBone } from './interface';
 
 export const MODEL_KEY = 'leoric:model_key';
 export const DATA_SOURCE_KEY = 'leoric:data_source_key';
 
 export function InjectDataSource(dataSourceName?: string) {
-  return createCustomPropertyDecorator(DATA_SOURCE_KEY, { dataSourceName });
+  return DecoratorManager.createCustomPropertyDecorator(DATA_SOURCE_KEY, {
+    dataSourceName,
+  });
 }
 
 export function InjectModel(
@@ -14,7 +16,7 @@ export function InjectModel(
 ): (target: object, propertyKey: string | symbol) => void {
   return (target: object, propertyKey: string | symbol) => {
     if (!modelName) modelName = propertyKey.toString();
-    return createCustomPropertyDecorator(MODEL_KEY, {
+    return DecoratorManager.createCustomPropertyDecorator(MODEL_KEY, {
       modelName,
       dataSourceName,
     })(target, propertyKey);

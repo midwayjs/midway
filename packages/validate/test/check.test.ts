@@ -18,7 +18,7 @@ import * as Joi from 'joi';
 import * as valid from '../src';
 
 import * as assert from 'assert';
-import { createCustomParamDecorator, Provide, TransformOptions } from '@midwayjs/core';
+import { DecoratorManager, Provide, TransformOptions } from '@midwayjs/core';
 describe('/test/check.test.ts', () => {
   it('check with check', async () => {
     const app = await createLightApp('', {
@@ -27,13 +27,11 @@ describe('/test/check.test.ts', () => {
 
     class TO {}
 
-    @Rule(TO)
     class UserDTO extends TO {
       @Rule(RuleType.number().max(10))
       age: number;
     }
 
-    @Rule(UserDTO)
     class HelloDTO extends UserDTO {
     }
 
@@ -66,7 +64,6 @@ describe('/test/check.test.ts', () => {
       age: number;
     }
 
-    @Rule(UserDTO)
     class HelloDTO extends UserDTO {
 
       @Rule(RuleType.number().min(4))
@@ -103,7 +100,7 @@ describe('/test/check.test.ts', () => {
       @Rule(RuleType.number().max(10))
       age: number;
 
-      @Rule(WorldDTO, {required: false})
+      @Rule(getSchema(WorldDTO))
       world?: WorldDTO;
     }
 
@@ -138,7 +135,7 @@ describe('/test/check.test.ts', () => {
       @Rule(RuleType.number().max(10))
       age: number;
 
-      @Rule(WorldDTO)
+      @Rule(RuleType.array().items(getSchema(WorldDTO)))
       world: WorldDTO[];
     }
 
@@ -260,7 +257,7 @@ describe('/test/check.test.ts', () => {
       @Rule(RuleType.number().max(10))
       age: number;
 
-      @Rule(WorldDTO)
+      @Rule(getSchema(WorldDTO))
       world: WorldDTO;
     }
 
@@ -297,7 +294,7 @@ describe('/test/check.test.ts', () => {
       @Rule(RuleType.number().max(10))
       age: number;
 
-      @Rule(WorldDTO)
+      @Rule(getSchema(WorldDTO))
       world: WorldDTO;
     }
 
@@ -340,7 +337,7 @@ describe('/test/check.test.ts', () => {
       @Rule(RuleType.number().max(10))
       age: number;
 
-      @Rule(WorldDTO)
+      @Rule(RuleType.array().items(getSchema(WorldDTO)))
       worlds: WorldDTO[];
     }
 
@@ -479,7 +476,6 @@ describe('/test/check.test.ts', () => {
   });
 
   it.skip('should support extends schema for class and property', async () => {
-    @Rule(getSchema(UserDTO).or('name', 'nickName'))
     class UserDTO {
       @Rule(RuleType.string())
       name?: string;
@@ -511,11 +507,10 @@ describe('/test/check.test.ts', () => {
     //   }
     // }
 
-    const a = getSchema(UserDTO);
-    a.validate;
-    expect(getSchema(UserDTO)).toBeDefined();
-    expect(getSchema(UserDTO).validate({name: 'abc'}).value).toEqual({name: 'abc'});
-    expect(getSchema(UserDTO).validate({}).error.message).toMatch('contain at least one of [name, nickName]');
+    const rule = getSchema(UserDTO).or('name', 'nickName');
+    expect(rule).toBeDefined();
+    expect(rule.validate({name: 'abc'}).value).toEqual({name: 'abc'});
+    expect(rule.validate({}).error.message).toMatch('contain at least one of [name, nickName]');
 
     expect(getSchema(Child)).toBeDefined();
     const schema = getSchema(Child);
@@ -551,7 +546,11 @@ describe('/test/check.test.ts', () => {
         defaultLocale: 'en-US'
       }
 
-      validateService['validateConfig'] = {};
+      validateService['validateConfig'] = {
+        validationOptions: {
+          allowUnknown: true
+        }
+      };
       class CustomValidationPipe extends AbstractValidationPipe {
         transform(value: any, options: TransformOptions) {}
       }
@@ -646,7 +645,7 @@ describe('/test/check.test.ts', () => {
     it('should test ParseIntPipe', async () => {
 
       function TestPipe(pipe: any) {
-        return createCustomParamDecorator('testPipe', '', {
+        return DecoratorManager.createCustomParamDecorator('testPipe', '', {
           impl: false,
           pipes: [pipe]
         });
@@ -691,7 +690,7 @@ describe('/test/check.test.ts', () => {
     it('should test ParseFloatPipe', async () => {
 
       function TestPipe(pipe: any) {
-        return createCustomParamDecorator('testPipe', '', {
+        return DecoratorManager.createCustomParamDecorator('testPipe', '', {
           impl: false,
           pipes: [pipe]
         });
@@ -736,7 +735,7 @@ describe('/test/check.test.ts', () => {
 
     it('should test ParseBoolPipe', async () => {
       function TestPipe(pipe: any) {
-        return createCustomParamDecorator('testPipe', '', {
+        return DecoratorManager.createCustomParamDecorator('testPipe', '', {
           impl: false,
           pipes: [pipe]
         });
@@ -791,7 +790,7 @@ describe('/test/check.test.ts', () => {
 
     it('should test DefaultValuePipe', async () => {
       function TestPipe(pipe: any) {
-        return createCustomParamDecorator('testPipe', '', {
+        return DecoratorManager.createCustomParamDecorator('testPipe', '', {
           impl: false,
           pipes: [pipe]
         });
@@ -817,7 +816,7 @@ describe('/test/check.test.ts', () => {
 
     it('should test @Valid with other decorator', async () => {
       function TestPipe(pipe: any) {
-        return createCustomParamDecorator('testPipe', '', {
+        return DecoratorManager.createCustomParamDecorator('testPipe', '', {
           impl: false,
           pipes: [pipe]
         });

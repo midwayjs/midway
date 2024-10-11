@@ -2,15 +2,7 @@ import {
   Config,
   CONTROLLER_KEY,
   ControllerOption,
-  getClassExtendedMetadata,
-  getClassMetadata,
-  getMethodParamTypes,
-  getPropertyDataFromClass,
-  getPropertyType,
   Init,
-  INJECT_CUSTOM_PARAM,
-  INJECT_CUSTOM_PROPERTY,
-  listModule,
   Provide,
   RequestMethod,
   RouteParamTypes,
@@ -20,6 +12,10 @@ import {
   Types,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
+  MetadataManager,
+  DecoratorManager,
+  CUSTOM_PARAM_INJECT_KEY,
+  CUSTOM_PROPERTY_INJECT_KEY,
 } from '@midwayjs/core';
 import {
   MixDecoratorMetadata,
@@ -142,7 +138,7 @@ export class SwaggerExplorer {
   }
 
   public scanApp() {
-    const routes = listModule(CONTROLLER_KEY);
+    const routes = DecoratorManager.listModule(CONTROLLER_KEY);
 
     for (const route of routes) {
       this.generatePath(route);
@@ -163,7 +159,7 @@ export class SwaggerExplorer {
 
   protected generatePath(target: Type) {
     // 获取控制器元数据
-    const excludeClassMeta = getClassMetadata(
+    const excludeClassMeta = MetadataManager.getOwnMetadata(
       DECORATORS.API_EXCLUDE_CONTROLLER,
       target
     );
@@ -180,17 +176,20 @@ export class SwaggerExplorer {
     this.parseExtraModel(target);
 
     const metaForClass =
-      getClassMetadata<MixDecoratorMetadata[]>(
+      MetadataManager.getOwnMetadata<MixDecoratorMetadata[]>(
         DECORATORS_CLASS_METADATA,
         target
       ) || [];
 
     // 获取参数的元数据
-    const metaForParams: any[] =
-      getClassMetadata(INJECT_CUSTOM_PARAM, target) || [];
+    const metaForParams =
+      MetadataManager.getPropertiesWithMetadata(
+        CUSTOM_PARAM_INJECT_KEY,
+        target
+      ) || {};
 
     // 获取控制器选项
-    const controllerOption: ControllerOption = getClassMetadata(
+    const controllerOption: ControllerOption = MetadataManager.getOwnMetadata(
       CONTROLLER_KEY,
       target
     );
@@ -233,7 +232,7 @@ export class SwaggerExplorer {
     }
 
     // 获取路由信息
-    const webRouterInfo: RouterOption[] = getClassMetadata(
+    const webRouterInfo: RouterOption[] = MetadataManager.getMetadata(
       WEB_ROUTER_KEY,
       target
     );
@@ -262,7 +261,7 @@ export class SwaggerExplorer {
 
         // 方法元数据
         const metaForMethods =
-          getPropertyDataFromClass<MixDecoratorMetadata[]>(
+          MetadataManager.getMetadata<MixDecoratorMetadata[]>(
             DECORATORS_METHOD_METADATA,
             target,
             webRouter.method
@@ -367,6 +366,7 @@ export class SwaggerExplorer {
       });
     }
   }
+
   /**
    * 构造 router 提取方法
    */
@@ -423,7 +423,7 @@ export class SwaggerExplorer {
         item.key === WEB_ROUTER_PARAM_KEY &&
         item?.metadata?.type !== RouteParamTypes.CUSTOM
     );
-    const types = getMethodParamTypes(target, webRouter.method);
+    const types = MetadataManager.getMethodParamTypes(target, webRouter.method);
     const params = metaForMethods.filter(
       item =>
         item.key === DECORATORS.API_PARAMETERS &&
@@ -719,7 +719,7 @@ export class SwaggerExplorer {
    */
   private parseExtraModel(clzz: any) {
     const metaForClass =
-      getClassMetadata<MixDecoratorMetadata[]>(
+      MetadataManager.getOwnMetadata<MixDecoratorMetadata[]>(
         DECORATORS_CLASS_METADATA,
         clzz
       ) || [];
@@ -964,7 +964,15 @@ export class SwaggerExplorer {
     this.parseExtraModel(clzz);
     // 解析类上的 ApiProperty
     // TODO 这里后面不能用这个方法
-    const props = getClassExtendedMetadata(INJECT_CUSTOM_PROPERTY, clzz);
+    const props =
+      MetadataManager.getPropertiesWithMetadata(
+        CUSTOM_PROPERTY_INJECT_KEY,
+        clzz
+      ) || {};
+    // 这里属性值唯一，取数组最后一个
+    for (const key in props) {
+      props[key] = props[key][props[key].length - 1];
+    }
 
     const tt: any = {
       type: 'object',
@@ -981,7 +989,10 @@ export class SwaggerExplorer {
         const metadata = props[key].metadata || {};
         if (!metadata.type) {
           // 推导类型
-          metadata.type = getPropertyType(clzz.prototype, key).name;
+          metadata.type = MetadataManager.getPropertyType(
+            clzz.prototype,
+            key
+          ).name;
         }
         tt.properties[key] = tt.properties[key] || {};
 
@@ -1039,6 +1050,7 @@ export class SwaggerExplorer {
     // just for test
     return tt;
   }
+
   /**
    * 授权验证
    * @param opts
@@ -1107,6 +1119,7 @@ export class SwaggerExplorer {
     }
   }
 }
+
 /**
  * 解释路由上的参数
  * @param url
@@ -1121,6 +1134,7 @@ function parseParamsInPath(url: string) {
   });
   return names;
 }
+
 /**
  * 替换成 openapi 的url
  * @param url

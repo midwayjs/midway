@@ -1,7 +1,6 @@
 import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
-import * as ServerlessApp from '../../../packages-legacy/serverless-app/src';
 import { existsSync, statSync } from 'fs';
 import { sleep } from '@midwayjs/core';
 
@@ -10,7 +9,7 @@ describe('test/clan.test.ts', function () {
   it('upload file auto clean', async () => {
     const appDir = join(__dirname, 'fixtures/clean');
     const imagePath = join(__dirname, 'fixtures/1.jpg');
-    const app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
+    const app = await createFunctionApp(appDir, {});
     const request = await createHttpRequest(app);
     const stat = statSync(imagePath);
     await request.post('/upload')

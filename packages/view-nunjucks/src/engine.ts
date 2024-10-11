@@ -1,5 +1,5 @@
 import {
-  ALL,
+  ALL_VALUE_KEY,
   App,
   Config,
   Init,
@@ -42,7 +42,7 @@ export class NunjucksEnvironment {
   @App()
   protected app;
 
-  @Config(ALL)
+  @Config(ALL_VALUE_KEY)
   protected globalConfig;
 
   @Init()

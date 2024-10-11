@@ -400,7 +400,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     );
 
     for (const p in props) {
-      const propertyMeta = props[p][0];
+      const propertyMeta = props[p];
       debugBind(
         `${' '.repeat(debugSpaceLength)}inject properties => [${JSON.stringify(
           propertyMeta
@@ -421,20 +421,16 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     );
 
     for (const p in customProps) {
-      const propertyMeta = customProps[p][0] as {
-        propertyName: string;
-        key: string;
-        metadata: any;
-      };
-      definition.handlerProps.push(propertyMeta);
+      for (const propertyMeta of customProps[p]) {
+        definition.handlerProps.push(propertyMeta);
+      }
     }
 
     // @async, @init, @destroy
-    const objDefMetadata =
-      MetadataManager.getPropertiesWithMetadata(
-        OBJECT_DEFINITION_KEY,
-        target
-      ) ?? [];
+    const objDefMetadata = MetadataManager.getPropertiesWithMetadata(
+      OBJECT_DEFINITION_KEY,
+      target
+    );
 
     const objDefOptions = {} as Partial<IObjectDefinition>;
     for (const p in objDefMetadata) {

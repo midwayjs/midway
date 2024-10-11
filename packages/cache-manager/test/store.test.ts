@@ -1,4 +1,4 @@
-import * as cacheManager from '@midwayjs/cache-manager';
+import * as cacheManager from '../src';
 import * as redis from '@midwayjs/redis';
 import { createLightApp, close } from '@midwayjs/mock';
 import { CachingFactory, createRedisStore } from '../src';

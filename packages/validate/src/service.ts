@@ -1,11 +1,11 @@
 import {
   Config,
-  getClassExtendedMetadata,
   Provide,
   Scope,
   ScopeEnum,
   Inject,
   Init,
+  MetadataManager,
 } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { RULES_KEY } from './constants';
@@ -107,7 +107,7 @@ export class ValidateService {
 export function getSchema<T extends new (...args) => any>(
   ClzType: T
 ): ObjectSchema<any> {
-  const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
+  const rules = MetadataManager.getPropertiesWithMetadata(RULES_KEY, ClzType);
   if (rules) {
     return Joi.object(rules);
   }

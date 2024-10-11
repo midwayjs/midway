@@ -1,6 +1,6 @@
 import { Configuration, Controller, Inject, Post, Get } from '@midwayjs/core';
 import * as framework from '${framework}';
-import * as defaultConcig from './config/config.default';
+import * as defaultConfig from './config/config.default';
 
 @Configuration({
   imports: [
@@ -9,7 +9,7 @@ import * as defaultConcig from './config/config.default';
   ],
   importConfigs: [
     {
-      default: defaultConcig
+      default: defaultConfig
     }
   ]
 })
@@ -21,7 +21,6 @@ export class HomeController {
 
   @Inject()
   ctx;
-
 
   @Inject()
   res

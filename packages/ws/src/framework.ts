@@ -10,11 +10,11 @@ import {
   WS_EVENT_KEY,
   WSEventInfo,
   WSEventTypeEnum,
-  getClassMetadata,
-  listModule,
   Framework,
   WSControllerOption,
   MidwayInvokeForbiddenError,
+  DecoratorManager,
+  MetadataManager,
 } from '@midwayjs/core';
 import * as http from 'http';
 import { debuglog } from 'util';
@@ -44,7 +44,7 @@ export class MidwayWSFramework extends BaseFramework<
     return this.configService.getConfiguration('webSocket');
   }
 
-  applicationInitialize(options: IMidwayBootstrapOptions) {
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.configurationOptions.noServer = true;
     const opts = Object.assign({}, this.configurationOptions, { port: null });
     this.app = new WebSocket.Server(opts) as IMidwayWSApplication;
@@ -62,14 +62,10 @@ export class MidwayWSFramework extends BaseFramework<
         return this.getConnectionMiddleware();
       },
     });
-  }
-  public app: IMidwayWSApplication;
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
     await this.loadMidwayController();
   }
+  public app: IMidwayWSApplication;
 
   public async run(): Promise<void> {
     let server: http.Server;
@@ -122,7 +118,7 @@ export class MidwayWSFramework extends BaseFramework<
 
   private async loadMidwayController() {
     // create room
-    const controllerModules = listModule(WS_CONTROLLER_KEY);
+    const controllerModules = DecoratorManager.listModule(WS_CONTROLLER_KEY);
     if (controllerModules.length > 0) {
       // ws just one namespace
       await this.addNamespace(controllerModules[0]);
@@ -130,7 +126,7 @@ export class MidwayWSFramework extends BaseFramework<
   }
 
   private async addNamespace(target: any) {
-    const controllerOption: WSControllerOption = getClassMetadata(
+    const controllerOption: WSControllerOption = MetadataManager.getOwnMetadata(
       WS_CONTROLLER_KEY,
       target
     );
@@ -164,7 +160,7 @@ export class MidwayWSFramework extends BaseFramework<
         );
         await connectFn(socket);
 
-        const wsEventInfos: WSEventInfo[] = getClassMetadata(
+        const wsEventInfos: WSEventInfo[] = MetadataManager.getMetadata(
           WS_EVENT_KEY,
           target
         );
