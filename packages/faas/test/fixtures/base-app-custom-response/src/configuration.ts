@@ -1,11 +1,11 @@
-import { Configuration, App, MidwayMockService, Inject } from '@midwayjs/core';
+import { Configuration, MainApp, MidwayMockService, Inject } from '@midwayjs/core';
 @Configuration({
   importConfigs: [
   ],
 })
 export class MainConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   @Inject()

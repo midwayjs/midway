@@ -4,7 +4,7 @@ import {
   IMidwayContainer,
   MidwayDecoratorService,
   MidwayCommonError,
-  App,
+  MainApp,
   Configuration,
   Init,
   Inject,
@@ -41,7 +41,7 @@ import {
   namespace: 'typeorm',
 })
 export class OrmConfiguration implements ILifeCycle {
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   @Inject()

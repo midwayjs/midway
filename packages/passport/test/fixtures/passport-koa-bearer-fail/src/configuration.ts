@@ -1,4 +1,4 @@
-import { Configuration, App, Provide } from '@midwayjs/core';
+import { Configuration, MainApp, Provide } from '@midwayjs/core';
 import * as path from 'path';
 import * as HttpBearerStrategy from 'passport-http-bearer';
 import {
@@ -37,7 +37,7 @@ export class AuthMiddleware extends PassportMiddleware(BearerStrategy) {
   importConfigs: [path.join(__dirname, 'config')],
 })
 export class ContainerLifeCycle {
-  @App()
+  @MainApp()
   app;
 
   async onReady() {

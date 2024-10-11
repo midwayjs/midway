@@ -13,7 +13,7 @@ import { httpError } from '@midwayjs/core';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app: IMidwayExpressApplication;
 
   async onReady() {

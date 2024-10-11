@@ -11,7 +11,7 @@ import { JwtPassportMiddleware } from './jwt.middleware';
   importConfigs: [path.join(__dirname, './config')],
 })
 export class ContainerLifeCycle {
-  @App()
+  @MainApp()
   app: koa.Application;
 
   async onReady() {

@@ -1,6 +1,6 @@
 import {
   Configuration,
-  App,
+  MainApp,
   Inject,
 } from '@midwayjs/core';
 import { Framework } from '../../../../src';
@@ -17,7 +17,7 @@ import { Framework } from '../../../../src';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   @Inject()

@@ -8,7 +8,7 @@ import * as rabbitmq from '../../../../src/index';
 })
 export class AutoConfiguration implements ILifeCycle {
 
-  @App()
+  @MainApp()
   app: IMidwayRabbitMQApplication;
 
   async onReady() {

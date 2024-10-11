@@ -5,7 +5,7 @@ import { App } from '@midwayjs/core';
 @EventSubscriberModel()
 export class EverythingSubscriber implements EntitySubscriberInterface {
 
-  @App()
+  @MainApp()
   app;
 
   /**

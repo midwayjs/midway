@@ -1,4 +1,4 @@
-import { App, Configuration, Middleware } from '@midwayjs/core';
+import { MainApp, Configuration, Middleware } from '@midwayjs/core';
 import { join } from 'path';
 
 @Middleware()
@@ -18,7 +18,7 @@ export class CustomMiddleware {
 })
 export class AutoConfiguration {
 
-  @App()
+  @MainApp()
   app;
   async onReady() {
     this.app.useMiddleware(CustomMiddleware);

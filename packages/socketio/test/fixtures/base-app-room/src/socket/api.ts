@@ -16,7 +16,7 @@ export class APIController {
   @Inject()
   ctx: Context;
 
-  @App()
+  @MainApp()
   app: Application;
 
   @Inject()

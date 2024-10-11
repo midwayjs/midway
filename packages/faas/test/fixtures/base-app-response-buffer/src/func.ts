@@ -7,7 +7,7 @@ export class HelloEventService {
   @Inject()
   ctx: Context; // context
 
-  @App()
+  @MainApp()
   app;
   @ServerlessTrigger(ServerlessTriggerType.SSR)
   async handler(@Event() event) {

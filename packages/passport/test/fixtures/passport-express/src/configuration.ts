@@ -1,4 +1,4 @@
-import { App, Configuration, Provide } from '@midwayjs/core';
+import { MainApp, Configuration, Provide } from '@midwayjs/core';
 import { PassportMiddleware, PassportStrategy, CustomStrategy, AuthenticateOptions } from '../../../../src';
 import * as path from 'path';
 import * as LocalStrategy from 'passport-local';
@@ -36,7 +36,7 @@ export class AuthMiddleware extends PassportMiddleware(MyStrategy) {
 })
 export class ContainerLifeCycle {
 
-  @App()
+  @MainApp()
   app;
 
   async onReady() {

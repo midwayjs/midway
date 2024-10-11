@@ -9,7 +9,7 @@ import { IMidwayKoaApplication } from '../../../../src';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app: IMidwayKoaApplication;
 
   async onReady(container) {

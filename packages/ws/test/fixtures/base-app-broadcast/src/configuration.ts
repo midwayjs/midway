@@ -15,7 +15,7 @@ import { Application } from '../../../../src';
 })
 export class AutoConfiguration implements ILifeCycle {
 
-  @App()
+  @MainApp()
   app: Application;
 
   async onReady() {

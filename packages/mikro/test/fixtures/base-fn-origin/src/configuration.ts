@@ -1,4 +1,4 @@
-import { App, Configuration, Inject } from '@midwayjs/core';
+import { MainApp, Configuration, Inject } from '@midwayjs/core';
 import * as mikro from '../../../../src';
 import { join } from 'path';
 import {
@@ -23,7 +23,7 @@ export class ContainerConfiguration {
   @InjectEntityManager()
   em: EntityManager;
 
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   @Inject()

@@ -12,7 +12,7 @@ import { IMidwayExpressApplication, IMidwayExpressRequest } from '../../../../sr
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app: IMidwayExpressApplication;
 
   async onReady() {

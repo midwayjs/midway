@@ -1,5 +1,5 @@
 import {
-  App,
+  MainApp,
   Configuration,
   DecoratorManager,
   MetadataManager,
@@ -17,7 +17,7 @@ import * as qs from 'querystring';
 export class ProcessAgentConfiguration {
   http_server: any;
 
-  @App()
+  @MainApp()
   app;
 
   async onReady() {

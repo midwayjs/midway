@@ -1,4 +1,4 @@
-import { FORMAT, App} from '@midwayjs/core';
+import { FORMAT, MainApp} from '@midwayjs/core';
 import { IMidwayApplication } from '@midwayjs/core';
 import { IProcessor, Processor } from '../../../../../src';
 
@@ -8,7 +8,7 @@ import { IProcessor, Processor } from '../../../../../src';
   }
 })
 export class HelloTask implements IProcessor {
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   async execute() {

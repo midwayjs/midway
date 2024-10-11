@@ -1,4 +1,4 @@
-import { Configuration, App, Inject } from '@midwayjs/core';
+import { Configuration, MainApp, Inject } from '@midwayjs/core';
 import { join } from 'path';
 import { Framework } from '../../../../src';
 import * as Koa from '../../../../src';
@@ -14,7 +14,7 @@ import * as Koa from '../../../../src';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   @Inject()

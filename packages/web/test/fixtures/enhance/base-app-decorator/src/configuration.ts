@@ -14,7 +14,7 @@ export class LifeCycleTest implements ILifeCycle {
   @Logger()
   logger: any;
 
-  @App()
+  @MainApp()
   appx: IMidwayApplication;
 
   async onReady(container: IMidwayContainer): Promise<void> {

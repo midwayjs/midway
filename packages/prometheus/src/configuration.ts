@@ -1,5 +1,5 @@
 import {
-  App,
+  MainApp,
   Config,
   Configuration,
   DecoratorManager,
@@ -28,7 +28,7 @@ export class PrometheusConfiguration {
   @Config('prometheus')
   prometheusConfig: PrometheusConfig;
 
-  @App()
+  @MainApp()
   app;
 
   http_server: any;

@@ -1,4 +1,4 @@
-import { App, Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
+import { MainApp, Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/core';
 import * as web from '@midwayjs/web';
 import * as defaultConfig from './config/config.default';
 import * as upload from '../../../../src';
@@ -15,7 +15,7 @@ import { UploadFileInfo } from '../../../../src';
   ]
 })
 export class AutoConfiguration {
-  @App()
+  @MainApp()
   app;
   async onReady() {
     this.app.useMiddleware(upload.UploadMiddleware);

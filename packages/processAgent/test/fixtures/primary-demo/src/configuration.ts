@@ -17,7 +17,7 @@ import * as primary from '../../../../src'
   ]
 })
 export class ContainerLifeCycle {
-  @App()
+  @MainApp()
   app: Application;
 
   async onReady() {

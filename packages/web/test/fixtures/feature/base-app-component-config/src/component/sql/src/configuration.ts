@@ -12,7 +12,7 @@ export class ContainerLifeCycle {
   @Config()
   mock;
 
-  @App()
+  @MainApp()
   app;
 
   onReady() {

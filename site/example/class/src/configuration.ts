@@ -14,7 +14,7 @@ import { join } from 'path';
   ]
 })
 export class ContainerLifeCycle {
-  @App()
+  @MainApp()
   app: Application;
 
   async onReady() {

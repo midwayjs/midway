@@ -7,7 +7,7 @@ export class HelloService {
   @Inject()
   ctx; // context
 
-  @App()
+  @MainApp()
   app;
 
   @Plugin()

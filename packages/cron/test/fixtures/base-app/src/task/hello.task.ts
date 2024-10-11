@@ -1,4 +1,4 @@
-import { App, Inject, sleep } from '@midwayjs/core';
+import { MainApp, Inject, sleep } from '@midwayjs/core';
 import { Job, IJob, Context, Application } from '../../../../../src/';
 let idx = 0;
 
@@ -8,7 +8,7 @@ let idx = 0;
   // runOnInit: true,
 })
 export class HelloTask implements IJob {
-  @App()
+  @MainApp()
   app: Application;
 
   @Inject()

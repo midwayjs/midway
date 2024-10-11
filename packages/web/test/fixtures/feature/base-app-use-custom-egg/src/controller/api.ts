@@ -20,7 +20,7 @@ export class APIController {
   @Inject()
   userService: UserService;
 
-  @App()
+  @MainApp()
   app;
 
   @Post()

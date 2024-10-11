@@ -1,11 +1,11 @@
-import { Configuration, App, Plugin } from '@midwayjs/core';
+import { Configuration, MainApp, Plugin } from '@midwayjs/core';
 import * as assert from 'assert';
 
 @Configuration({
 })
 export class AutoConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   @Plugin()

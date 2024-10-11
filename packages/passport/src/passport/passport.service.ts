@@ -1,5 +1,5 @@
 import {
-  App,
+  MainApp,
   Config,
   Init,
   Inject,
@@ -79,7 +79,7 @@ export function PassportMiddleware(
     @Config('passport')
     passportConfig;
 
-    @App()
+    @MainApp()
     app;
 
     @Inject()

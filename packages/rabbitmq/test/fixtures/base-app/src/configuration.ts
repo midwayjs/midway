@@ -13,7 +13,7 @@ import { IMidwayRabbitMQApplication } from '../../../../src';
 })
 export class AutoConfiguration implements ILifeCycle {
 
-  @App()
+  @MainApp()
   app: IMidwayRabbitMQApplication;
 
   async onReady() {

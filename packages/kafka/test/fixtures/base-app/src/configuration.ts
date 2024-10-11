@@ -20,7 +20,7 @@ import { IMidwayKafkaApplication } from '../../../../src';
   ],
 })
 export class AutoConfiguration implements ILifeCycle {
-  @App()
+  @MainApp()
   app: IMidwayKafkaApplication;
 
   async onReady() {}

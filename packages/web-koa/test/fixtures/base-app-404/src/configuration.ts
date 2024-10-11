@@ -12,7 +12,7 @@ import { Application } from '../../../../src';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app: Application;
 
   async onReady() {

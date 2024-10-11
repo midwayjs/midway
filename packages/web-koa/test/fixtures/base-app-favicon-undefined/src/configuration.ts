@@ -11,7 +11,7 @@ import { join } from 'path';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   async onReady() {

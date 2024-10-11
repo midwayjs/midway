@@ -13,7 +13,7 @@ export class ContainerConfiguration {
   @Logger()
   logger;
 
-  @App()
+  @MainApp()
   app: Application;
 
   async onReady() {

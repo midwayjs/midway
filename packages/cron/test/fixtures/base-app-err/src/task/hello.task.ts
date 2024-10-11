@@ -1,4 +1,4 @@
-import { App, Inject } from '@midwayjs/core';
+import { MainApp, Inject } from '@midwayjs/core';
 import { Job, IJob, Context, Application } from '../../../../../src/';
 
 @Job('HelloTask', {
@@ -7,7 +7,7 @@ import { Job, IJob, Context, Application } from '../../../../../src/';
   // runOnInit: true,
 })
 export class HelloTask implements IJob {
-  @App()
+  @MainApp()
   app: Application;
 
   @Inject()

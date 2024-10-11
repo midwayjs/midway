@@ -11,7 +11,7 @@ import { AuthMiddleware } from './local.middleware';
 })
 export class ContainerLifeCycle {
 
-  @App()
+  @MainApp()
   app;
 
   onReady() {

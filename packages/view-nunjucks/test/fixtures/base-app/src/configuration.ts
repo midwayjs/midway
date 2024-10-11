@@ -1,4 +1,4 @@
-import { App, Configuration, Inject } from '@midwayjs/core';
+import { MainApp, Configuration, Inject } from '@midwayjs/core';
 import * as view from '../../../../src';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path'
@@ -9,7 +9,7 @@ import { join } from 'path'
 })
 export class AutoConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   @Inject()

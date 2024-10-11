@@ -7,7 +7,7 @@ import { TestMiddleware } from './mw/test';
 })
 export class AutoConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   async onReady(container) {

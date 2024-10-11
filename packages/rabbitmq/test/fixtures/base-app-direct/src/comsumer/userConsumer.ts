@@ -6,7 +6,7 @@ import { ConsumeMessage } from 'amqplib';
 @Consumer(MSListenerType.RABBITMQ)
 export class UserConsumer {
 
-  @App()
+  @MainApp()
   app: Application;
 
   @Inject()
