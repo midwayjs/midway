@@ -1,6 +1,6 @@
 import { EventSubscriberModel } from '../../../../src';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from 'typeorm';
-import { App } from '@midwayjs/core';
+import { MainApp } from '@midwayjs/core';
 
 @EventSubscriberModel()
 export class EverythingSubscriber implements EntitySubscriberInterface {
