@@ -6,7 +6,7 @@ import {
   Inject,
   Fields,
   Files,
-  App
+  MainApp
 } from '@midwayjs/core';
 import * as faas from '@midwayjs/faas';
 import * as upload from '../../../../src';
