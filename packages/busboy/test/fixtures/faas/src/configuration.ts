@@ -6,7 +6,7 @@ import {
   Inject,
   Fields,
   Files,
-  App
+  MainApp
 } from '@midwayjs/core';
 import * as faas from '@midwayjs/faas';
 import * as upload from '../../../../src';
@@ -28,7 +28,7 @@ import * as upload from '../../../../src';
   ]
 })
 export class AutoConfiguration {
-  @App()
+  @MainApp()
   app;
   async onReady() {
     this.app.useMiddleware(upload.UploadMiddleware);

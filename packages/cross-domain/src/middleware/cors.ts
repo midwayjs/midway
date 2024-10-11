@@ -1,9 +1,4 @@
-import {
-  Config,
-  Middleware,
-  MidwayFrameworkType,
-  IMiddleware,
-} from '@midwayjs/core';
+import { Config, Middleware, IMiddleware } from '@midwayjs/core';
 import { CORSOptions } from '../interface';
 import * as vary from 'vary';
 @Middleware()
@@ -12,7 +7,7 @@ export class CorsMiddleware implements IMiddleware<any, any> {
   cors: CORSOptions;
 
   resolve(app) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       return async (req: any, res: any, next: any) => {
         return this.compatibleMiddleware(req, res, next);
       };

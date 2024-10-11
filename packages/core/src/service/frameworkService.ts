@@ -1,6 +1,7 @@
 import {
   ALL_VALUE_KEY,
   APPLICATION_KEY,
+  MAIN_APPLICATION_KEY,
   CONFIG_KEY,
   FRAMEWORK_KEY,
   Init,
@@ -18,7 +19,6 @@ import {
   IMidwayFramework,
   IServiceFactory,
   ScopeEnum,
-  MidwayFrameworkType,
 } from '../interface';
 import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';
@@ -111,6 +111,14 @@ export class MidwayFrameworkService {
       }
     );
 
+    // register @MainApp decorator handler
+    this.decoratorService.registerPropertyHandler(
+      MAIN_APPLICATION_KEY,
+      (propertyName, meta) => {
+        return this.getMainApp();
+      }
+    );
+
     this.decoratorService.registerPropertyHandler(
       PLUGIN_KEY,
       (propertyName, meta) => {
@@ -166,7 +174,7 @@ export class MidwayFrameworkService {
         }
 
         const frameworkInstance = await this.applicationContext.getAsync<
-          IMidwayFramework<any, any, any>
+          BaseFramework<any, any, any>
         >(frameworkClz, [this.applicationContext]);
         // if enable, just init framework
         if (frameworkInstance.isEnable()) {
@@ -193,9 +201,21 @@ export class MidwayFrameworkService {
         frameworkInstance.setNamespace(definition?.namespace);
         // link framework to application manager
         this.applicationManager.addFramework(
-          definition?.namespace ?? frameworkInstance.getFrameworkName(),
+          frameworkInstance.getFrameworkName() ?? definition?.namespace,
           frameworkInstance
         );
+
+        // Namespace associates unique framework
+        if (
+          definition?.namespace &&
+          !this.applicationManager.hasFramework(definition.namespace)
+        ) {
+          this.applicationManager.addFramework(
+            definition.namespace,
+            frameworkInstance
+          );
+        }
+
         this.globalFrameworkList.push(frameworkInstance);
       }
 
@@ -235,8 +255,8 @@ export class MidwayFrameworkService {
     return this.mainFramework;
   }
 
-  public getFramework(namespaceOrFrameworkType: string | MidwayFrameworkType) {
-    return this.applicationManager.getFramework(namespaceOrFrameworkType);
+  public getFramework(namespace: string) {
+    return this.applicationManager.getFramework(namespace);
   }
 
   public async runFramework() {

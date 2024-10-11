@@ -4,7 +4,6 @@ import {
   ContextMiddlewareManager,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
-  MidwayFrameworkType,
   Types,
   WS_CONTROLLER_KEY,
   WS_EVENT_KEY,
@@ -110,10 +109,6 @@ export class MidwayWSFramework extends BaseFramework<
       });
       this.server.close();
     });
-  }
-
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WS;
   }
 
   private async loadMidwayController() {
@@ -327,7 +322,7 @@ export class MidwayWSFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:ws';
+    return 'webSocket';
   }
 
   public useConnectionMiddleware(

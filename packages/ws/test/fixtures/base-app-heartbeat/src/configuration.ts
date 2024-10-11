@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 import { ILifeCycle } from '@midwayjs/core';
 import { Application } from '../../../../src';
 
@@ -17,7 +17,7 @@ import { Application } from '../../../../src';
 })
 export class AutoConfiguration implements ILifeCycle {
 
-  @App()
+  @MainApp()
   app: Application;
 
   async onReady() {

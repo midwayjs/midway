@@ -1,4 +1,4 @@
-import { App, Configuration, MidwayFrameworkType } from '@midwayjs/core';
+import { App, Configuration } from '@midwayjs/core';
 import { ILifeCycle } from '@midwayjs/core';
 import { Application as SocketApplication } from '@midwayjs/socketio';
 import { join } from 'path';
@@ -18,7 +18,7 @@ import * as SocketIO from '@midwayjs/socketio';
   conflictCheck: true,
 })
 export class ContainerLifeCycle implements ILifeCycle {
-  @App(MidwayFrameworkType.WS_IO)
+  @App('socketIO')
   socketApp: SocketApplication;
 
   async onReady() {

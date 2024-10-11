@@ -1,4 +1,4 @@
-import { Configuration, App, Logger } from '@midwayjs/core';
+import { Configuration, MainApp, Logger } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -8,7 +8,7 @@ import { join } from 'path';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   @Logger()

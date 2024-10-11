@@ -7,7 +7,7 @@ import {
   Query,
   Body,
   SetHeader,
-  App
+  MainApp
 } from '@midwayjs/core';
 import { UserService } from '../service/user';
 
@@ -20,7 +20,7 @@ export class APIController {
   @Inject()
   userService: UserService;
 
-  @App()
+  @MainApp()
   app;
 
   @Post()

@@ -1,9 +1,9 @@
-import { Provide, App, Inject, Logger, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
+import { Provide, MainApp, Inject, Logger, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
 import * as assert from 'assert';
 
 @Provide()
 export class HelloService {
-  @App()
+  @MainApp()
   app;
 
   @Inject()

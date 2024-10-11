@@ -1,4 +1,4 @@
-import { Configuration, App, Inject, ServerlessTriggerType } from '@midwayjs/core';
+import { Configuration, MainApp, Inject, ServerlessTriggerType } from '@midwayjs/core';
 import { MidwayServerlessFunctionService } from '@midwayjs/core';
 
 @Configuration({
@@ -6,7 +6,7 @@ import { MidwayServerlessFunctionService } from '@midwayjs/core';
   ],
 })
 export class AutoConfiguration {
-  @App()
+  @MainApp()
   app;
 
   @Inject()

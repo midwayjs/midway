@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 import * as passport from '../../../../../passport/src';
 import * as jwt from '@midwayjs/jwt';
 import * as path from 'path';
@@ -11,7 +11,7 @@ import { JwtPassportMiddleware } from './jwt.middleware';
   importConfigs: [path.join(__dirname, './config')],
 })
 export class ContainerLifeCycle {
-  @App()
+  @MainApp()
   app: koa.Application;
 
   async onReady() {

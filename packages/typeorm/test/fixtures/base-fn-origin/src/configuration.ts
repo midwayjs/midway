@@ -1,4 +1,4 @@
-import { App, Configuration } from '@midwayjs/core';
+import { MainApp, Configuration } from '@midwayjs/core';
 import * as orm from '../../../../src';
 import { join } from 'path';
 import { InjectDataSource, InjectEntityModel } from '../../../../src';
@@ -24,7 +24,7 @@ export class ContainerConfiguration {
   @InjectDataSource('default')
   namedDataSource: DataSource;
 
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   async onReady() {

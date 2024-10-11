@@ -1,11 +1,11 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 @Configuration({
   importConfigs: [
   ],
 })
 export class MainConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   async onReady(container) {

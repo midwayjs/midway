@@ -1,5 +1,5 @@
 import {
-  App,
+  MainApp,
   Init,
   Provide,
   Scope,
@@ -13,7 +13,7 @@ import { context, Span, SpanKind, trace } from '@opentelemetry/api';
 export class TraceService {
   private currentTracerName: string;
 
-  @App()
+  @MainApp()
   protected app: IMidwayApplication;
 
   @Init()

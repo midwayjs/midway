@@ -13,8 +13,11 @@ import {
   getCurrentAsyncContextManager,
   ASYNC_CONTEXT_MANAGER_KEY,
   APPLICATION_KEY,
-  MidwayFrameworkType,
-  Provide, IMidwayContainer, DefaultConsoleLoggerFactory, ILogger
+  Provide,
+  IMidwayContainer,
+  DefaultConsoleLoggerFactory,
+  ILogger,
+  BaseFramework
 } from '../src';
 import { createFramework, createLightFramework } from './util';
 import sinon = require('sinon');
@@ -41,7 +44,7 @@ describe('/test/baseFramework.test.ts', () => {
     expect(ns).toEqual('empty');
 
     // set namespace
-    framework.setNamespace('test');
+    (framework as BaseFramework<any, any, any>).setNamespace('test');
     expect(framework.getNamespace()).toEqual('test');
   });
 
@@ -408,11 +411,9 @@ describe('/test/baseFramework.test.ts', () => {
 
     const applicationContext = framework.getApplicationContext();
     const frameworkService = await applicationContext.getAsync(MidwayFrameworkService);
-    expect(frameworkService.getFramework(MidwayFrameworkType.LIGHT)).toBeUndefined();
-    expect(frameworkService.getFramework(MidwayFrameworkType.FAAS)).toBeDefined();
 
-    const framework1 = frameworkService.getFramework(MidwayFrameworkType.EMPTY);
-    const framework2 = frameworkService.getFramework(MidwayFrameworkType.MS_GRPC);
+    const framework1 = frameworkService.getFramework('light');
+    const framework2 = frameworkService.getFramework('grpc');
 
     expect(framework1.getApplicationContext()).toEqual(framework2.getApplicationContext());
     // share application context data

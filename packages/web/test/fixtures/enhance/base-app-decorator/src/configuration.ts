@@ -1,6 +1,6 @@
 import { Logger } from '@midwayjs/core';
 import { ILifeCycle, IMidwayContainer, IMidwayApplication } from '@midwayjs/core';
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 
 @Configuration({
   imports: [
@@ -14,7 +14,7 @@ export class LifeCycleTest implements ILifeCycle {
   @Logger()
   logger: any;
 
-  @App()
+  @MainApp()
   appx: IMidwayApplication;
 
   async onReady(container: IMidwayContainer): Promise<void> {

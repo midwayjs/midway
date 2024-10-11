@@ -1,6 +1,6 @@
 import {
   ALL_VALUE_KEY,
-  App,
+  MainApp,
   Config,
   Init,
   Provide,
@@ -39,7 +39,7 @@ class MidwayNunjucksEnvironment extends Environment {
 export class NunjucksEnvironment {
   protected nunjucksEnvironment: Environment;
 
-  @App()
+  @MainApp()
   protected app;
 
   @Config(ALL_VALUE_KEY)

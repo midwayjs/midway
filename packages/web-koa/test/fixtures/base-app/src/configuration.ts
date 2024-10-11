@@ -1,4 +1,4 @@
-import { Configuration, App, Inject } from '@midwayjs/core';
+import { Configuration, MainApp, Inject } from '@midwayjs/core';
 import { join } from 'path';
 import { Framework } from '../../../../src';
 import * as Validate from '../../../../../validate';
@@ -15,7 +15,7 @@ import { TestMiddleware } from './middleware/test';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   @Inject()

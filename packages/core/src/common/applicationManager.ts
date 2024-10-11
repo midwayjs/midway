@@ -1,9 +1,4 @@
-import {
-  IMidwayApplication,
-  IMidwayFramework,
-  FrameworkType,
-  ScopeEnum,
-} from '../interface';
+import { IMidwayApplication, IMidwayFramework, ScopeEnum } from '../interface';
 import { Provide, Scope } from '../decorator';
 
 @Provide()
@@ -14,60 +9,40 @@ export class MidwayApplicationManager {
     IMidwayFramework<any, any, any>
   >();
 
-  private globalFrameworkTypeMap = new WeakMap<
-    FrameworkType,
-    IMidwayFramework<any, any, any>
-  >();
+  public addFramework(
+    frameworkNameOrNamespace: string,
+    framework: IMidwayFramework<any, any, any>
+  ) {
+    this.globalFrameworkMap.set(frameworkNameOrNamespace, framework);
+  }
 
-  public addFramework(namespace, framework: IMidwayFramework<any, any, any>) {
-    this.globalFrameworkMap.set(namespace, framework);
-    if (framework['getFrameworkType']) {
-      this.globalFrameworkTypeMap.set(
-        framework['getFrameworkType'](),
-        framework
-      );
+  public hasFramework(frameworkNameOrNamespace: string) {
+    return this.globalFrameworkMap.has(frameworkNameOrNamespace);
+  }
+
+  public getFramework(frameworkNameOrNamespace: string) {
+    if (this.globalFrameworkMap.has(frameworkNameOrNamespace)) {
+      return this.globalFrameworkMap.get(frameworkNameOrNamespace);
     }
   }
 
-  public getFramework(namespaceOrFrameworkType: string | FrameworkType) {
-    if (typeof namespaceOrFrameworkType === 'string') {
-      if (this.globalFrameworkMap.has(namespaceOrFrameworkType)) {
-        return this.globalFrameworkMap.get(namespaceOrFrameworkType);
-      }
-    } else {
-      if (this.globalFrameworkTypeMap.has(namespaceOrFrameworkType)) {
-        return this.globalFrameworkTypeMap.get(namespaceOrFrameworkType);
-      }
-    }
-  }
-
-  public getApplication(
-    namespaceOrFrameworkType: string | FrameworkType
-  ): IMidwayApplication {
-    if (typeof namespaceOrFrameworkType === 'string') {
-      if (this.globalFrameworkMap.has(namespaceOrFrameworkType)) {
-        return this.globalFrameworkMap
-          .get(namespaceOrFrameworkType)
-          .getApplication();
-      }
-    } else {
-      if (this.globalFrameworkTypeMap.has(namespaceOrFrameworkType)) {
-        return this.globalFrameworkTypeMap
-          .get(namespaceOrFrameworkType)
-          .getApplication();
-      }
+  public getApplication(frameworkNameOrNamespace: string): IMidwayApplication {
+    if (this.globalFrameworkMap.has(frameworkNameOrNamespace)) {
+      return this.globalFrameworkMap
+        .get(frameworkNameOrNamespace)
+        .getApplication();
     }
   }
 
   public getApplications(
-    namespaces?: Array<string | FrameworkType>
+    frameworkNameOrNamespace?: Array<string>
   ): IMidwayApplication[] {
-    if (!namespaces) {
+    if (!frameworkNameOrNamespace) {
       return Array.from(this.globalFrameworkMap.values()).map(framework => {
         return framework.getApplication();
       });
     } else {
-      return namespaces
+      return frameworkNameOrNamespace
         .map(namespace => {
           return this.getApplication(namespace);
         })

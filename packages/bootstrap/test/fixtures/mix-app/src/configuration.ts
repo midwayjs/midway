@@ -1,4 +1,4 @@
-import { ALL, App, Config, Configuration, Inject, MidwayFrameworkType } from '@midwayjs/core';
+import { ALL, MainApp, Config, Configuration, Inject } from '@midwayjs/core';
 import { join } from 'path';
 import * as assert from 'assert';
 import { RemoteConfigService } from './service/remoteConfigService';
@@ -22,7 +22,7 @@ export class AutoConfiguration implements ILifeCycle {
   @Inject()
   configService: RemoteConfigService;
 
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   async onConfigLoad() {
@@ -34,6 +34,6 @@ export class AutoConfiguration implements ILifeCycle {
     assert.ok(this.prepareConfig['prepare'] === 'remote data');
     assert.ok(this.prepareConfig['id'] === this.configService.innerData);
     assert.ok(getCurrentApplicationContext() === this.app.getApplicationContext());
-    assert.ok((getCurrentMainFramework() as any).getFrameworkType() === MidwayFrameworkType.WEB);
+    assert.ok((getCurrentMainFramework() as any).getNamespace() === 'egg');
   }
 }

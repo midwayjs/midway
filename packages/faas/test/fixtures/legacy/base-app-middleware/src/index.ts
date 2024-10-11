@@ -1,5 +1,5 @@
 import { Inject, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { App } from '@midwayjs/core';
+import { MainApp } from '@midwayjs/core';
 import { Context } from '../../../../../src';
 
 @Provide()
@@ -7,7 +7,7 @@ export class HelloService {
   @Inject()
   ctx: Context; // context
 
-  @App()
+  @MainApp()
   app;
 
   @ServerlessTrigger(ServerlessTriggerType.EVENT)

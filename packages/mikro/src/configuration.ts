@@ -4,7 +4,7 @@ import {
   IMidwayContainer,
   MidwayApplicationManager,
   MidwayDecoratorService,
-  App,
+  MainApp,
   Configuration,
   Init,
   Inject,
@@ -28,7 +28,7 @@ import { EntityName, RequestContext } from '@mikro-orm/core';
   namespace: 'mikro',
 })
 export class MikroConfiguration implements ILifeCycle {
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   @Inject()

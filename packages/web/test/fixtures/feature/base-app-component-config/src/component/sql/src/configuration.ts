@@ -1,5 +1,5 @@
 // src/configuration.ts
-import { Configuration, Config, App } from '@midwayjs/core';
+import { Configuration, Config, MainApp } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -12,7 +12,7 @@ export class ContainerLifeCycle {
   @Config()
   mock;
 
-  @App()
+  @MainApp()
   app;
 
   onReady() {

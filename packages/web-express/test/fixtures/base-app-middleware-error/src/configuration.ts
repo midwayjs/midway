@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 import { join } from 'path';
 import { IMidwayExpressApplication } from '../../../../src';
 import { httpError } from '@midwayjs/core';
@@ -13,7 +13,7 @@ import { httpError } from '@midwayjs/core';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app: IMidwayExpressApplication;
 
   async onReady() {

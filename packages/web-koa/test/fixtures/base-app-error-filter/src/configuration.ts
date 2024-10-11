@@ -1,4 +1,4 @@
-import { Configuration, App, Catch } from '@midwayjs/core';
+import { Configuration, MainApp, Catch } from '@midwayjs/core';
 import { join } from 'path';
 import { Application } from '../../../../src';
 
@@ -24,7 +24,7 @@ export class GlobalError {
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app: Application;
 
   async onReady() {

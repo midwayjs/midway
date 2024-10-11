@@ -1,4 +1,11 @@
-import { App, Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/core';
+import {
+  MainApp,
+  Config,
+  Init,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/core';
 import * as assert from 'assert';
 import * as path from 'path';
 import { constants, existsSync, promises } from 'fs';
@@ -7,7 +14,7 @@ import { IViewEngine } from './interface';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class ViewManager extends Map {
-  @App()
+  @MainApp()
   protected app;
 
   @Config('view')

@@ -1,4 +1,4 @@
-import { App, Configuration, MidwayFrameworkType } from '../../../../src';
+import { App, Configuration } from '../../../../src';
 
 let idx = {num: 0};
 let idx2 = {num: 0};
@@ -9,7 +9,7 @@ export class AutoConfiguration {
   @App()
   app;
 
-  @App(MidwayFrameworkType.MS_GRPC)
+  @App('grpc')
   gRPCApp;
 
   async onReady() {

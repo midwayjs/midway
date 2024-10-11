@@ -4,7 +4,7 @@ exports[`/test/framework/app.test.ts app decorator should be ok 1`] = `
 {
   "container": [
     {
-      "key": "__midway_application_context__",
+      "key": "common:application_context",
       "metadata": {},
       "options": {
         "impl": true,
@@ -14,7 +14,7 @@ exports[`/test/framework/app.test.ts app decorator should be ok 1`] = `
   ],
   "hhh": [
     {
-      "key": "__midway_framework_app__",
+      "key": "common:application",
       "metadata": {
         "type": undefined,
       },
@@ -22,6 +22,16 @@ exports[`/test/framework/app.test.ts app decorator should be ok 1`] = `
         "impl": true,
       },
       "propertyName": "hhh",
+    },
+  ],
+  "mainApp": [
+    {
+      "key": "common:main_application",
+      "metadata": {},
+      "options": {
+        "impl": true,
+      },
+      "propertyName": "mainApp",
     },
   ],
 }

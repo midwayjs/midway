@@ -1,4 +1,4 @@
-import { Configuration, Controller, Fields, Inject, Post, Get, App, Files } from "@midwayjs/core";
+import { Configuration, Controller, Fields, Inject, Post, Get, MainApp, Files } from "@midwayjs/core";
 import * as koa from '@midwayjs/koa';
 import { createWriteStream, statSync } from 'fs'
 import { join } from 'path';
@@ -21,7 +21,7 @@ import * as upload from '../../../../src';
   ]
 })
 export class AutoConfiguration {
-  @App()
+  @MainApp()
   app;
   async onReady() {
     this.app.useMiddleware(upload.UploadMiddleware);

@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 import { join } from 'path';
 
 @Configuration({
@@ -11,7 +11,7 @@ import { join } from 'path';
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   async onReady() {

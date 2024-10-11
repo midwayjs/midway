@@ -1,11 +1,11 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 import { TestMiddleware } from './mw/test';
 
 @Configuration({
 })
 export class AutoConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   async onReady(container) {

@@ -1,5 +1,5 @@
 import {
-  App,
+  MainApp,
   Configuration,
   Inject,
   Init,
@@ -21,7 +21,7 @@ export class EggConfiguration {
   @Inject()
   appDir;
 
-  @App()
+  @MainApp()
   app: IMidwayWebApplication;
 
   @Inject()

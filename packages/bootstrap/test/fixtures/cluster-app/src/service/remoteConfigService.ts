@@ -1,11 +1,11 @@
-import { App, Provide, Scope, ScopeEnum, sleep } from '@midwayjs/core';
+import { MainApp, Provide, Scope, ScopeEnum, sleep } from '@midwayjs/core';
 import { IMidwayApplication } from '@midwayjs/core';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class RemoteConfigService {
 
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   innerData = Math.random();

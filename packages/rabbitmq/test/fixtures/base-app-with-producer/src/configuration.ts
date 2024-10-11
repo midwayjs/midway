@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 import { ILifeCycle } from '@midwayjs/core';
 import { IMidwayRabbitMQApplication } from '../../../../src';
 import * as rabbitmq from '../../../../src/index';
@@ -8,7 +8,7 @@ import * as rabbitmq from '../../../../src/index';
 })
 export class AutoConfiguration implements ILifeCycle {
 
-  @App()
+  @MainApp()
   app: IMidwayRabbitMQApplication;
 
   async onReady() {

@@ -3,7 +3,7 @@ import {
   Configuration,
   Init,
   Inject,
-  App,
+  MainApp,
   IMidwayApplication,
   IMidwayContainer,
   MidwayDecoratorService,
@@ -25,7 +25,7 @@ export class TypegooseConfiguration {
 
   legacyMode = false;
 
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   @Inject()

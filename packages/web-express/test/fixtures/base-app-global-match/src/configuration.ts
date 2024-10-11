@@ -1,4 +1,4 @@
-import { Configuration, App, Catch, Match } from '@midwayjs/core';
+import { Configuration, MainApp, Catch, Match } from '@midwayjs/core';
 import { join } from 'path';
 import { IMidwayExpressApplication } from '../../../../src';
 
@@ -34,7 +34,7 @@ export class GlobalFilter {
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app: IMidwayExpressApplication;
 
   async onReady() {

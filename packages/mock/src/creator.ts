@@ -6,7 +6,6 @@ import {
   IMidwayBootstrapOptions,
   IMidwayFramework,
   MidwayFrameworkService,
-  MidwayFrameworkType,
   loadModule,
   MidwayContainer,
   MidwayCommonError,
@@ -295,7 +294,7 @@ export async function close(
       if (options.cleanLogsDir && !isWin32()) {
         await removeFile(join(app.getAppDir(), 'logs'));
       }
-      if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
+      if ('egg' === app.getNamespace()) {
         if (options.cleanTempDir && !isWin32()) {
           await removeFile(join(app.getAppDir(), 'run'));
         }
@@ -417,7 +416,7 @@ export async function createFunctionApp<
     const framework = frameworkService.getMainFramework();
 
     const appManager = appCtx.get(MidwayApplicationManager);
-    const app = appManager.getApplication(MidwayFrameworkType.FAAS);
+    const app = appManager.getApplication('faas');
 
     const faasConfig = configService.getConfiguration('faas') ?? {};
     const customPort =
@@ -593,7 +592,7 @@ export async function createFunctionApp<
     const framework = await createApp(baseDir, options);
     const appCtx = framework.getApplicationContext();
     const appManager = appCtx.get(MidwayApplicationManager);
-    return appManager.getApplication(MidwayFrameworkType.SERVERLESS_APP);
+    return appManager.getApplication('serverless-app');
   }
 }
 
@@ -601,10 +600,6 @@ export async function createFunctionApp<
  * 一个全量的空框架
  */
 class LightFramework extends BaseFramework<any, any, any, any, any> {
-  getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.LIGHT;
-  }
-
   async run(): Promise<void> {}
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
@@ -623,7 +618,7 @@ class LightFramework extends BaseFramework<any, any, any, any, any> {
 
 class BootstrapAppStarter implements IBootstrapAppStarter {
   constructor(protected options: MockBootstrapOptions) {}
-  getApp(type: MidwayFrameworkType | string): IMidwayApplication<any> {
+  getApp(type: string): IMidwayApplication<any> {
     const applicationContext = getCurrentApplicationContext();
     const applicationManager = applicationContext.get(MidwayApplicationManager);
     return applicationManager.getApplication(type);

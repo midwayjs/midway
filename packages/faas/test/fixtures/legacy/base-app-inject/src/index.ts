@@ -1,5 +1,5 @@
 import { Inject, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/core';
-import { Plugin, App } from '@midwayjs/core';
+import { Plugin, MainApp } from '@midwayjs/core';
 import * as assert from 'assert';
 
 @Provide()
@@ -7,7 +7,7 @@ export class HelloService {
   @Inject()
   ctx; // context
 
-  @App()
+  @MainApp()
   app;
 
   @Plugin()

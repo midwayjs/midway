@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, MainApp } from '@midwayjs/core';
 import { ILifeCycle } from '@midwayjs/core';
 import { IMidwayKafkaApplication } from '../../../../src';
 
@@ -20,7 +20,7 @@ import { IMidwayKafkaApplication } from '../../../../src';
   ],
 })
 export class AutoConfiguration implements ILifeCycle {
-  @App()
+  @MainApp()
   app: IMidwayKafkaApplication;
 
   async onReady() {}

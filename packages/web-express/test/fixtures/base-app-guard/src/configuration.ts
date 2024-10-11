@@ -1,4 +1,4 @@
-import { Configuration, App, Guard, IGuard } from '@midwayjs/core';
+import { Configuration, MainApp, Guard, IGuard } from '@midwayjs/core';
 import { join } from 'path';
 import { IMidwayExpressApplication, Context } from '../../../../src';
 
@@ -19,7 +19,7 @@ export class MainGuard implements IGuard<Context> {
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app: IMidwayExpressApplication;
 
   async onReady() {

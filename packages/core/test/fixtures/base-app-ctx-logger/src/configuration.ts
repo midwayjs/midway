@@ -1,4 +1,4 @@
-import { Configuration, App, Logger } from '../../../../src';
+import { Configuration, Logger, MainApp } from '../../../../src';
 import { IMidwayApplication } from '../../../../src';
 import { ILogger } from '@midwayjs/logger';
 
@@ -19,7 +19,7 @@ import { ILogger } from '@midwayjs/logger';
 })
 export class AutoConfiguration {
 
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   @Logger()

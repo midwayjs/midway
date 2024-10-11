@@ -5,7 +5,7 @@ import {
   OnWSMessage,
   Provide,
   WSController,
-  App
+  MainApp
 } from '@midwayjs/core';
 import { UserService } from '../service/user';
 import { Context, Application } from '../../../../../src';
@@ -16,7 +16,7 @@ export class APIController {
   @Inject()
   ctx: Context;
 
-  @App()
+  @MainApp()
   app: Application;
 
   @Inject()

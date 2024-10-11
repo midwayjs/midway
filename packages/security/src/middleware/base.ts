@@ -1,10 +1,4 @@
-import {
-  Config,
-  MidwayFrameworkType,
-  IMiddleware,
-  Init,
-  IgnoreMatcher,
-} from '@midwayjs/core';
+import { Config, IMiddleware, Init, IgnoreMatcher } from '@midwayjs/core';
 import { SecurityOptions } from '../interface';
 
 export abstract class BaseMiddleware implements IMiddleware<any, any> {
@@ -24,7 +18,7 @@ export abstract class BaseMiddleware implements IMiddleware<any, any> {
   }
 
   resolve(app) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       return async (req: any, res, next) => {
         return this.compatibleMiddleware(req, req, res, next);
       };

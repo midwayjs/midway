@@ -1,4 +1,4 @@
-import { Configuration, App, Inject, Get, Controller, } from '@midwayjs/core';
+import { Configuration, MainApp, Inject, Get, Controller, } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -34,7 +34,7 @@ export class HomeController {
 })
 export class ContainerConfiguration {
 
-  @App()
+  @MainApp()
   app;
 
   async onReady() {

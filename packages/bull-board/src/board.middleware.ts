@@ -9,7 +9,6 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-  MidwayFrameworkType,
 } from '@midwayjs/core';
 import { extname } from 'path';
 import * as bull from '@midwayjs/bull';
@@ -74,7 +73,7 @@ export class BoardMiddleware
   }
 
   resolve(app: IMidwayApplication) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       return async (req: any, res: any, next: NextFunction) => {
         const pathname = req.path;
         if (pathname.indexOf(this.basePath) === -1) {

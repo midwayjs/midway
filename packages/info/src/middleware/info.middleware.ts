@@ -1,9 +1,4 @@
-import {
-  Config,
-  Inject,
-  Middleware,
-  MidwayFrameworkType,
-} from '@midwayjs/core';
+import { Config, Inject, Middleware } from '@midwayjs/core';
 import { InfoService } from '../infoService';
 
 @Middleware()
@@ -15,7 +10,7 @@ export class InfoMiddleware {
   protected infoService: InfoService;
 
   resolve(app) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       return async (req: any, res: any, next: any) => {
         if (req.path === this.infoPath) {
           // return html

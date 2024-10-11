@@ -1,4 +1,4 @@
-import { Configuration, App, Provide } from '@midwayjs/core';
+import { Configuration, MainApp, Provide } from '@midwayjs/core';
 import * as path from 'path';
 import { Strategy } from 'passport-openidconnect';
 
@@ -43,7 +43,7 @@ export class AuthMiddleware extends PassportMiddleware(CRCCStrategy) {
   importConfigs: [path.join(__dirname, 'config')],
 })
 export class ContainerLifeCycle {
-  @App()
+  @MainApp()
   app;
 
   async onReady() {

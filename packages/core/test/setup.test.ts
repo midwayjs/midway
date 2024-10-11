@@ -6,7 +6,6 @@ import {
   IMidwayBootstrapOptions,
   initializeGlobalApplicationContext,
   MidwayConfigService,
-  MidwayFrameworkType,
   Configuration,
   Framework,
   Inject,
@@ -129,10 +128,6 @@ describe('/test/setup.test.ts', () => {
      */
     @Framework()
     class EmptyFramework extends BaseFramework<any, any, any> {
-      getFrameworkType(): MidwayFrameworkType {
-        return MidwayFrameworkType.EMPTY;
-      }
-
       async run(): Promise<void> {
       }
 
