@@ -1,5 +1,4 @@
 import {
-  MidwayFrameworkType,
   ConsumerMetadata,
   MS_CONSUMER_KEY,
   MSListenerType,
@@ -57,10 +56,6 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 
   protected async beforeStop(): Promise<void> {
     await this.app.close();
-  }
-
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.MS_RABBITMQ;
   }
 
   private async loadSubscriber() {
@@ -123,6 +118,6 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:rabbitmq';
+    return 'rabbitmq';
   }
 }

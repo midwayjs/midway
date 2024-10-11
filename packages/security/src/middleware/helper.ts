@@ -1,11 +1,11 @@
-import { IMiddleware, Middleware, MidwayFrameworkType } from '@midwayjs/core';
+import { IMiddleware, Middleware } from '@midwayjs/core';
 import * as escape from 'escape-html';
 import { filterXSS } from 'xss';
 
 @Middleware()
 export class SecurityHelper implements IMiddleware<any, any> {
   resolve(app) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       return async (req: any, res, next) => {
         return this.compatibleMiddleware(req, req, res, next);
       };

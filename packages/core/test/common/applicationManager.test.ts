@@ -1,4 +1,4 @@
-import { MidwayApplicationManager, BaseFramework, MidwayFrameworkType, MidwayMockService } from '../../src';
+import { MidwayApplicationManager, BaseFramework, MidwayMockService } from '../../src';
 
 describe('test/common/applicationManager.test.ts', () => {
   it('should test application manager', async () => {
@@ -14,10 +14,6 @@ describe('test/common/applicationManager.test.ts', () => {
         return {};
       }
 
-      getFrameworkType() {
-        return MidwayFrameworkType.EMPTY;
-      }
-
       run(): Promise<void> {
         return Promise.resolve(undefined);
       }
@@ -30,8 +26,7 @@ describe('test/common/applicationManager.test.ts', () => {
     manager.addFramework('test', framework);
 
     expect(manager.getApplication('test')).toBeDefined();
-    expect(manager.getApplication(MidwayFrameworkType.EMPTY)).toBeDefined();
     expect(manager.getApplication('xxxx')).toBeUndefined();
-    expect(manager.getApplications([MidwayFrameworkType.EMPTY, 'test', 'xxx']).length).toEqual(2);
+    expect(manager.getApplications(['test', 'xxx']).length).toEqual(1);
   });
 });

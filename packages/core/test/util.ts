@@ -5,7 +5,6 @@ import {
   IMidwayBootstrapOptions,
   IMidwayFramework,
   initializeGlobalApplicationContext,
-  MidwayFrameworkType,
   safeRequire,
   MidwayContainer,
   Configuration,
@@ -70,9 +69,6 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
   @Framework()
   class EmptyFramework extends BaseFramework<any, any, any> {
     private isStopped = false;
-    getFrameworkType(): MidwayFrameworkType {
-      return MidwayFrameworkType.EMPTY;
-    }
 
     async run(): Promise<void> {
     }
@@ -91,6 +87,10 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
 
     configure() {
       return {};
+    }
+
+    getFrameworkName(): string {
+      return 'light';
     }
   }
 

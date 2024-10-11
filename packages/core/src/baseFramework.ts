@@ -91,7 +91,11 @@ export abstract class BaseFramework<
     return this;
   }
 
-  abstract configure(options?: OPT);
+  public abstract configure(options?: OPT): OPT;
+  public abstract applicationInitialize(
+    options: IMidwayBootstrapOptions
+  ): void | Promise<void>;
+  public abstract run(): Promise<void>;
 
   isEnable(): boolean {
     return true;
@@ -127,10 +131,6 @@ export abstract class BaseFramework<
   public getApplication(): APP {
     return this.app;
   }
-
-  public abstract applicationInitialize(options: IMidwayBootstrapOptions);
-
-  public abstract run(): Promise<void>;
 
   protected createContextLogger(ctx: CTX, name?: string): ILogger {
     if (name && name !== 'appLogger') {
@@ -201,12 +201,6 @@ export abstract class BaseFramework<
 
       getConfig: (key?: string) => {
         return this.getConfiguration(key);
-      },
-
-      getFrameworkType: () => {
-        if (this['getFrameworkType']) {
-          return this['getFrameworkType']();
-        }
       },
 
       getProcessType: () => {

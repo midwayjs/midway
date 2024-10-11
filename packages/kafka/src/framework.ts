@@ -2,7 +2,6 @@ import {
   BaseFramework,
   ConsumerMetadata,
   Framework,
-  MidwayFrameworkType,
   MSListenerType,
   MS_CONSUMER_KEY,
   MidwayInvokeForbiddenError,
@@ -161,14 +160,10 @@ export class MidwayKafkaFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:kafka';
+    return 'kafka';
   }
 
   protected async beforeStop(): Promise<void> {
     await this.app.close();
-  }
-
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.MS_KAFKA;
   }
 }

@@ -9,7 +9,7 @@ import {
   APPLICATION_CONTEXT_KEY,
   DecoratorManager,
 } from '../';
-import { FrameworkType, ScopeEnum } from '../../interface';
+import { ScopeEnum } from '../../interface';
 
 export function Framework(): ClassDecorator {
   return (target: any) => {
@@ -31,11 +31,9 @@ export function Config(identifier?: string): PropertyDecorator {
   });
 }
 
-export function App(
-  typeOrNamespace?: FrameworkType | string
-): PropertyDecorator {
+export function App(namespace?: string): PropertyDecorator {
   return DecoratorManager.createCustomPropertyDecorator(APPLICATION_KEY, {
-    type: typeOrNamespace,
+    type: namespace,
   });
 }
 

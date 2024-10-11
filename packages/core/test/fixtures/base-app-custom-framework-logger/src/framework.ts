@@ -2,7 +2,7 @@ import { BaseFramework, Framework, IMidwayBootstrapOptions } from '../../../../s
 
 @Framework()
 export class CustomFramework extends BaseFramework<any, any, any> {
-  applicationInitialize(options: IMidwayBootstrapOptions) {
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {};
   }
 

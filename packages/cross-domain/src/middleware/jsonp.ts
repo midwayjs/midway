@@ -1,10 +1,4 @@
-import {
-  Config,
-  Middleware,
-  MidwayFrameworkType,
-  Match,
-  IMiddleware,
-} from '@midwayjs/core';
+import { Config, Middleware, Match, IMiddleware } from '@midwayjs/core';
 import { JSONPService } from '../jsonp';
 import { JSONPCSRFError } from '../error';
 import { JSONPOptions } from '../interface';
@@ -23,7 +17,7 @@ export class JSONPMiddleware implements IMiddleware<any, any> {
   jsonp: JSONPOptions;
 
   resolve(app) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       app.useFilter(JSONPFilter);
       return async (req: any, res: any, next: any) => {
         return this.compatibleMiddleware(req, next);

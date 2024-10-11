@@ -4,7 +4,6 @@ import {
   CommonMiddlewareUnion,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
-  MidwayFrameworkType,
   PathFileUtil,
   RouterInfo,
   WebControllerGenerator,
@@ -329,12 +328,8 @@ export class MidwayKoaFramework extends BaseFramework<
     }
   }
 
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WEB_KOA;
-  }
-
   public getFrameworkName() {
-    return 'web:koa';
+    return 'koa';
   }
 
   public getServer() {

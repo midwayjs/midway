@@ -1,4 +1,4 @@
-import { App, Configuration, MidwayFrameworkType } from '../../../../src';
+import { App, Configuration } from '../../../../src';
 import { IMidwayApplication } from '../../../../src';
 import { TestFilter, TestFilter2 } from './filter/testFilter';
 
@@ -17,7 +17,7 @@ export class AutoConfiguration {
   }
 
   onAppError(err, app: IMidwayApplication) {
-    if (app.getFrameworkType() === MidwayFrameworkType.LIGHT) {
+    if (app.getNamespace() === 'light') {
       this.app.getLogger().error(err.message);
     }
   }

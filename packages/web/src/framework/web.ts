@@ -10,7 +10,6 @@ import {
   WebControllerGenerator,
   Framework,
   Inject,
-  MidwayFrameworkType,
 } from '@midwayjs/core';
 import {
   IMidwayWebConfigurationOptions,
@@ -213,10 +212,6 @@ export class MidwayWebFramework extends BaseFramework<
     this.app.use = (this.app as any).originUse;
 
     debug(`[egg]: current middleware = ${this.middlewareManager.getNames()}`);
-  }
-
-  getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WEB;
   }
 
   async run(): Promise<void> {

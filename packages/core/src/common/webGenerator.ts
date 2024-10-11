@@ -11,7 +11,7 @@ import {
   WEB_RESPONSE_REDIRECT,
 } from '../decorator';
 import * as util from 'util';
-import { IMidwayApplication, MidwayFrameworkType } from '../interface';
+import { IMidwayApplication } from '../interface';
 import {
   MidwayWebRouterService,
   RouterInfo,
@@ -147,7 +147,7 @@ export abstract class WebControllerGenerator<
           methodMiddlewares.push(routeMiddlewareFn);
         }
 
-        if (this.app.getFrameworkType() === MidwayFrameworkType.WEB_KOA) {
+        if (this.app.getNamespace() === 'koa') {
           // egg use path-to-regexp v1 but koa use v6
           if (typeof routeInfo.url === 'string' && /\*$/.test(routeInfo.url)) {
             routeInfo.url = routeInfo.url.replace('*', '(.*)');

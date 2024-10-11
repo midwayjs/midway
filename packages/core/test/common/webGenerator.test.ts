@@ -22,7 +22,7 @@ describe('test/common/web_generator.test.ts', function () {
       getCoreLogger: () => {
         return console;
       },
-      getFrameworkType: () => {
+      getNamespace: () => {
         return 'web';
       }
     } as unknown as IMidwayApplication;

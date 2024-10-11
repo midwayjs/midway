@@ -140,6 +140,6 @@ export class MidwayMQTTFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:mqtt';
+    return 'mqtt';
   }
 }

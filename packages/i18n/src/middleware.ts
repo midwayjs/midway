@@ -4,7 +4,6 @@ import {
   Config,
   Match,
   Middleware,
-  MidwayFrameworkType,
 } from '@midwayjs/core';
 import { I18N_ATTR_KEY, I18nOptions } from './interface';
 import { MidwayI18nService } from './i18nService';
@@ -53,7 +52,7 @@ export class I18nMiddleware implements IMiddleware<any, any> {
   i18nConfig: I18nOptions;
 
   resolve(app: IMidwayApplication) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       // add a filter for i18n cookie
       app.useFilter(I18nFilter);
       return async (req, res, next) => {

@@ -1,4 +1,4 @@
-import { IMidwayApplication, IMidwayBootstrapOptions, MidwayFrameworkType } from '@midwayjs/core';
+import { IMidwayApplication, IMidwayBootstrapOptions } from '@midwayjs/core';
 
 export interface MockAppConfigurationOptions extends IMidwayBootstrapOptions {
   cleanLogsDir?: boolean;
@@ -16,6 +16,6 @@ export type ComponentModule = {
 };
 
 export interface IBootstrapAppStarter {
-  getApp?(type: MidwayFrameworkType | string): IMidwayApplication<any>;
+  getApp?(type: string): IMidwayApplication<any>;
   close(options?: { sleep?: number }): Promise<void>;
 }

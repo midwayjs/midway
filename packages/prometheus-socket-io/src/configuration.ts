@@ -1,9 +1,4 @@
-import {
-  App,
-  Configuration,
-  Inject,
-  MidwayFrameworkType,
-} from '@midwayjs/core';
+import { App, Configuration, Inject } from '@midwayjs/core';
 import { Application as SocketApplication } from '@midwayjs/socketio';
 import { DataService } from '@midwayjs/prometheus';
 import * as prometheus from '@midwayjs/prometheus';
@@ -13,7 +8,7 @@ import * as prometheus from '@midwayjs/prometheus';
   namespace: 'prometheus-socket-io',
 })
 export class PrometheusSocketIOConfiguration {
-  @App(MidwayFrameworkType.WS_IO)
+  @App('socketIO')
   socketApp: SocketApplication;
 
   @Inject()

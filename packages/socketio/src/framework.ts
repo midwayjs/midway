@@ -3,7 +3,6 @@ import {
   CommonMiddlewareUnion,
   ContextMiddlewareManager,
   HTTP_SERVER_KEY,
-  MidwayFrameworkType,
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
@@ -41,7 +40,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     return this.configService.getConfiguration('socketIO');
   }
 
-  applicationInitialize() {
+  async applicationInitialize() {
     this.app = new Server(this.configurationOptions) as Application;
     this.defineApplicationProperties({
       useConnectionMiddleware: (
@@ -94,10 +93,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
         }, 1000);
       });
     });
-  }
-
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WS_IO;
   }
 
   private async loadMidwayController() {
@@ -333,7 +328,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:socketIO';
+    return 'socketIO';
   }
 
   public useConnectionMiddleware(

@@ -3,15 +3,13 @@ import {
   BaseFramework,
   Framework,
   IMidwayBootstrapOptions,
-  MidwayFrameworkType, IMidwayApplication, destroyGlobalApplicationContext
+  IMidwayApplication,
+  destroyGlobalApplicationContext
 } from '../../../../src';
 
 @Framework()
 export class AFramework extends BaseFramework<any, any, any> {
   private isStopped = false;
-  getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.EMPTY;
-  }
 
   async run(): Promise<void> {
   }

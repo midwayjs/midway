@@ -14,7 +14,6 @@ import {
   FunctionMiddleware,
   IMidwayBootstrapOptions,
   MidwayEnvironmentService,
-  MidwayFrameworkType,
   MidwayMiddlewareService,
   MidwayServerlessFunctionService,
   RouterInfo,
@@ -189,10 +188,6 @@ export class MidwayFaaSFramework extends BaseFramework<
         this.respond = this.app.callback();
       }, LOCK_KEY);
     }
-  }
-
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.FAAS;
   }
 
   /**
@@ -545,7 +540,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:faas';
+    return 'faas';
   }
 
   public getServer() {

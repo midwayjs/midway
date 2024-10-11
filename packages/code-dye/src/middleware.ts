@@ -1,4 +1,4 @@
-import { Middleware, Config, MidwayFrameworkType } from '@midwayjs/core';
+import { Middleware, Config } from '@midwayjs/core';
 import { toHTML } from './html';
 import { CodeDyeOptions } from './interface';
 import { asyncRunWrapper } from './reqInfo';
@@ -9,7 +9,7 @@ export class CodeDyeMW {
   codeDye: CodeDyeOptions;
 
   resolve(app) {
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       return async (req: any, res: any, next: any) => {
         return this.compatibleMiddleware(req, res, next);
       };

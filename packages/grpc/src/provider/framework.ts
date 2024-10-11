@@ -19,7 +19,6 @@ import {
   BaseFramework,
   IMidwayBootstrapOptions,
   MidwayCommonError,
-  MidwayFrameworkType,
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
@@ -268,15 +267,11 @@ export class MidwayGRPCFramework extends BaseFramework<
     });
   }
 
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.MS_GRPC;
-  }
-
   public getServer() {
     return this.server;
   }
 
   public getFrameworkName() {
-    return 'midway:gRPC';
+    return 'gRPC';
   }
 }

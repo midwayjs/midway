@@ -3,7 +3,6 @@ import {
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MiddlewareRespond,
-  MidwayFrameworkType,
   PathFileUtil,
   RouterInfo,
   httpError,
@@ -207,10 +206,6 @@ export class MidwayExpressFramework extends BaseFramework<
     }
   }
 
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WEB_EXPRESS;
-  }
-
   /**
    * wrap controller string to middleware function
    */
@@ -396,6 +391,6 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:express';
+    return 'express';
   }
 }

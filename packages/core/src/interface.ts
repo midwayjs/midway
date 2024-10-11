@@ -281,33 +281,6 @@ export namespace FaaSMetadata {
   }
 }
 
-export abstract class FrameworkType {
-  abstract name: string;
-}
-
-/**
- * @deprecated
- */
-export class MidwayFrameworkType extends FrameworkType {
-  static WEB = new MidwayFrameworkType('@midwayjs/web');
-  static WEB_KOA = new MidwayFrameworkType('@midwayjs/web-koa');
-  static WEB_EXPRESS = new MidwayFrameworkType('@midwayjs/express');
-  static FAAS = new MidwayFrameworkType('@midwayjs/faas');
-  static MS_GRPC = new MidwayFrameworkType('@midwayjs/grpc');
-  static MS_RABBITMQ = new MidwayFrameworkType('@midwayjs/rabbitmq');
-  static MS_KAFKA = new MidwayFrameworkType('@midwayjs/kafka');
-  static WS_IO = new MidwayFrameworkType('@midwayjs/socketio');
-  static WS = new MidwayFrameworkType('@midwayjs/ws');
-  static SERVERLESS_APP = new MidwayFrameworkType('@midwayjs/serverless-app');
-  static CUSTOM = new MidwayFrameworkType('');
-  static EMPTY = new MidwayFrameworkType('empty');
-  static LIGHT = new MidwayFrameworkType('light');
-  static TASK = new MidwayFrameworkType('@midwayjs/task');
-  constructor(public name: string) {
-    super();
-  }
-}
-
 export enum ServerlessTriggerType {
   EVENT = 'event',
   HTTP = 'http',
@@ -979,12 +952,6 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   getFramework(): IMidwayFramework<this, CTX, unknown>;
 
   /**
-   * @deprecated
-   * Get current framework type in MidwayFrameworkType enum
-   */
-  getFrameworkType(): FrameworkType;
-
-  /**
    * Get current running process type, app or agent, just for egg
    */
   getProcessType(): MidwayProcessTypeEnum;
@@ -1127,7 +1094,7 @@ export interface IMidwayFramework<
 > {
   app: APP;
   configurationOptions: CONFIG;
-  configure(options?: CONFIG);
+  configure(options?: CONFIG): CONFIG;
   isEnable(): boolean;
   initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
   run(): Promise<void>;
@@ -1152,7 +1119,6 @@ export interface IMidwayFramework<
   useGuard(guard: CommonGuardUnion<CTX>): void;
   runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean>;
   getNamespace(): string;
-  setNamespace(namespace: string): void;
 }
 
 export interface MidwayAppInfo {

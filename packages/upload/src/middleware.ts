@@ -3,7 +3,6 @@ import {
   Logger,
   Middleware,
   Init,
-  MidwayFrameworkType,
   IMiddleware,
   ILogger,
   IgnoreMatcher,
@@ -70,7 +69,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         this.uploadFileMimeTypeMap.set(ext, mime);
       }
     }
-    if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
+    if ('express' === app.getNamespace()) {
       return async (req: any, res: any, next: any) => {
         return this.execUpload(req, req, res, next, true);
       };
