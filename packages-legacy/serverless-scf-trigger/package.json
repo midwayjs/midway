@@ -10,7 +10,7 @@
     "@midwayjs/serverless-fc-starter": "^3.18.0",
     "@midwayjs/serverless-scf-starter": "^3.14.0",
     "body-parser": "1.20.3",
-    "express": "4.20.0"
+    "express": "4.21.1"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.18.0"
