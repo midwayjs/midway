@@ -18,7 +18,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "leoric": "2.12.3"
+    "leoric": "2.13.1"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
