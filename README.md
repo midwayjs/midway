@@ -152,7 +152,7 @@ cd my_midway_app && npm run dev
 ## 贡献
 
 <a href="https://github.com/midwayjs/midway/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=midwayjs/midway" />
+  <img src="https://contrib.rocks/image?repo=midwayjs/midway&max=200" />
 </a>
 
 请告知我们可以为你做些什么，不过在此之前，请检查一下是否有 [已经存在的Bug或者意见](http://github.com/midwayjs/midway/issues)。

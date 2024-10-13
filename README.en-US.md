@@ -119,7 +119,7 @@ Please make sure to read the [Issue Reporting Checklist](CONTRIBUTING.md#reporti
 ## Contributors
 
 <a href="https://github.com/midwayjs/midway/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=midwayjs/midway" />
+  <img src="https://contrib.rocks/image?repo=midwayjs/midway&max=200" />
 </a>
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/typeorm",
-  "version": "3.18.0",
+  "version": "3.18.2",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "bin": {
@@ -14,7 +14,7 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/mock": "^3.18.2",
     "sqlite3": "5.1.7",
     "typeorm": "0.3.20"
   },

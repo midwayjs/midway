@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/etcd",
   "description": "midway etcd component",
-  "version": "3.18.0",
+  "version": "3.18.2",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -11,7 +11,7 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0"
+    "@midwayjs/mock": "^3.18.2"
   },
   "dependencies": {
     "etcd3": "1.1.2"

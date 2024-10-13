@@ -1,6 +1,38 @@
 # Change Log
 
 
+## v3.18.2 (2024-10-13)
+
+#### :memo: Documentation
+* [#4096](https://github.com/midwayjs/midway/pull/4096) docs(awesome_midway.md): update @mwcp/pgmq ([@waitingsong](https://github.com/waitingsong))
+
+#### :package: Dependencies
+* `leoric`
+  * [#4117](https://github.com/midwayjs/midway/pull/4117) fix(deps): update dependency leoric to v2.13.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#4118](https://github.com/midwayjs/midway/pull/4118) fix(deps): update socket.io packages to v4.8.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4116](https://github.com/midwayjs/midway/pull/4116) fix(deps): update dependency express to v4.21.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#4115](https://github.com/midwayjs/midway/pull/4115) fix(deps): update dependency casbin to v5.31.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4105](https://github.com/midwayjs/midway/pull/4105) fix(deps): update dependency @grpc/grpc-js to v1.12.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `express-session`, `passport`
+  * [#4111](https://github.com/midwayjs/midway/pull/4111) chore(deps): update dependency express-session to v1.18.1 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull-board`
+  * [#4104](https://github.com/midwayjs/midway/pull/4104) fix(deps): update bull monorepo to v5.23.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4093](https://github.com/midwayjs/midway/pull/4093) fix(deps): update dependency mqtt to v5.10.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#4092](https://github.com/midwayjs/midway/pull/4092) fix(deps): update dependency @types/qs to v6.9.16 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4086](https://github.com/midwayjs/midway/pull/4086) chore(deps): update dependency @types/node to v20.16.6 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- waiting ([@waitingsong](https://github.com/waitingsong))
+
+
+
 ## v3.18.1 (2024-09-23)
 
 #### :bug: Bug Fix
