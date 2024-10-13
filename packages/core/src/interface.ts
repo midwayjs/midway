@@ -62,7 +62,7 @@ export enum ScopeEnum {
 export enum InjectModeEnum {
   Identifier = 'Identifier',
   Class = 'Class',
-  PropertyName = 'PropertyName',
+  SelfName = 'SelfName',
 }
 
 /**

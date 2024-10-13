@@ -29,7 +29,7 @@ export function saveInjectMetadata(identifier, target, targetKey) {
     if (!identifier) {
       // 3、use identifier by property name
       identifier = targetKey;
-      injectMode = InjectModeEnum.PropertyName;
+      injectMode = InjectModeEnum.SelfName;
     }
   }
   MetadataManager.defineMetadata(
