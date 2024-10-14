@@ -190,16 +190,10 @@ describe('/test/context/container.test.ts', () => {
     expect(function () { container.get('grandson'); }).toThrow(/Grandson/);
     expect(function () { container.get('nograndson'); }).toThrow(/nograndson/);
 
-    try {
-      await container.getAsync('grandson');
-    } catch (error) {
-      expect(function () { throw error; }).toThrow(/Grandson/);
-    }
-    try {
-      await container.getAsync('nograndson');
-    } catch (error) {
-      expect(function () { throw error; }).toThrow(/nograndson/);
-    }
+    await container.getAsyncLegacy('grandson');
+
+    await expect(container.getAsync('grandson')).rejects.toThrow(/Grandson/);
+    await expect(container.getAsync('nograndson')).rejects.toThrow(/nograndson/);
   });
 
   it('should bind class directly', () => {
@@ -481,7 +475,7 @@ describe('/test/context/container.test.ts', () => {
       container.bind(B);
       container.bind(C);
 
-      const a = await container.getAsyncWithQueue(A);
+      const a = await container.getAsync(A);
       expect(a.name).toEqual('a');
       expect(a.b.name).toEqual('b');
       expect(a.b.c.name).toEqual('c');
@@ -515,7 +509,7 @@ describe('/test/context/container.test.ts', () => {
       container.bind(A);
       container.bind(B);
 
-      const a = await container.getAsyncWithQueue(A);
+      const a = await container.getAsync(A);
       expect(a.name).toBe('e');
     });
 
@@ -574,7 +568,7 @@ describe('/test/context/container.test.ts', () => {
       container.bind(B);
       container.bind(C);
 
-      const a = await container.getAsyncWithQueue(A);
+      const a = await container.getAsync(A);
       expect(await a.getData()).toEqual('fed');
     });
 
@@ -635,30 +629,211 @@ describe('/test/context/container.test.ts', () => {
       container.bind(B);
       container.bind(C);
 
-      const a = await container.getAsyncWithQueue(A);
+      const a = await container.getAsync(A);
       expect(await a.getData()).toEqual('ef');
     });
 
-    it('should test new get async method with circular', async () => {
+    it('should handle complex dependencies and avoid duplicate initialization', async () => {
+      let initCount = {
+        a: 0,
+        b: 0,
+        c: 0,
+        d: 0
+      };
+
+      @Provide()
+      class D {
+        name = 'd';
+
+        @Init()
+        async init() {
+          await sleep(100);
+          initCount.d++;
+          this.name = 'd_initialized';
+        }
+      }
+
       @Provide()
       class C {
         name = 'c';
         @Inject()
-        a: typeof A;
+        d: D;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          initCount.c++;
+          this.name = 'c_initialized';
+        }
       }
 
       @Provide()
       class B {
         name = 'b';
         @Inject()
-        c: C
+        c: C;
+        @Inject()
+        d: D;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          initCount.b++;
+          this.name = 'b_initialized';
+        }
       }
 
       @Provide()
       class A {
         name = 'a';
         @Inject()
-        b: B
+        b: B;
+        @Inject()
+        c: C;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          initCount.a++;
+          this.name = this.b.name + '_' + this.c.name;
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+      container.bind(D);
+
+      const a = await container.getAsync(A);
+
+      expect(a.name).toBe('b_initialized_c_initialized');
+      expect(a.b.name).toBe('b_initialized');
+      expect(a.c.name).toBe('c_initialized');
+      expect(a.b.c.name).toBe('c_initialized');
+      expect(a.b.d.name).toBe('d_initialized');
+      expect(a.c.d.name).toBe('d_initialized');
+
+      // 验证每个类只被初始化一次
+      expect(initCount).toEqual({
+        a: 1,
+        b: 1,
+        c: 1,
+        d: 1
+      });
+
+      expect(a === await container.getAsync(A)).toBeTruthy();
+      expect(a.c.d === a.b.d).toBeTruthy();
+    });
+
+    it('should initialize dependencies in correct order without duplication', async () => {
+      let initOrder: string[] = [];
+
+      @Provide()
+      class D {
+        value = 0;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.value = 1;
+          initOrder.push('D');
+        }
+      }
+
+      @Provide()
+      class C {
+        @Inject()
+        d: D;
+
+        value = 0;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.value = this.d.value * 2;
+          initOrder.push('C');
+        }
+      }
+
+      @Provide()
+      class B {
+        @Inject()
+        c: C;
+        @Inject()
+        d: D;
+
+        value = 0;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.value = this.c.value + this.d.value;
+          initOrder.push('B');
+        }
+      }
+
+      @Provide()
+      class A {
+        @Inject()
+        b: B;
+        @Inject()
+        c: C;
+
+        value = 0;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.value = this.b.value + this.c.value;
+          initOrder.push('A');
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+      container.bind(D);
+
+      const a = await container.getAsync(A);
+      const b = await container.getAsync(B);
+
+      // 检查初始化顺序
+      expect(initOrder).toEqual(['D', 'C', 'B', 'A']);
+
+      // 检查计算结果
+      expect(a.value).toBe(5);  // (1*2) + (2+1) = 2 + 3 = 5
+      expect(a.b.value).toBe(3);  // 2 + 1 = 3
+      expect(a.c.value).toBe(2);  // 1 * 2 = 2
+      expect(a.b.c.value).toBe(2);
+      expect(a.b.d.value).toBe(1);
+      expect(a.c.d.value).toBe(1);
+
+      // 检查实例共享
+      expect(a.b.c).toBe(a.c);
+      expect(a.b.d).toBe(a.c.d);
+
+      expect(a.c).toBe(b.c);
+    });
+
+    it('should detect circular dependencies', async () => {
+      @Provide()
+      class A {
+        @Inject()
+        b;
+      }
+
+      @Provide()
+      class B {
+        @Inject()
+        c;
+      }
+
+      @Provide()
+      class C {
+        @Inject()
+        a: A;
       }
 
       const container = new Container();
@@ -666,11 +841,7 @@ describe('/test/context/container.test.ts', () => {
       container.bind(B);
       container.bind(C);
 
-      const a = await container.getAsyncWithQueue(A);
-      expect(a.name).toEqual('a');
-      expect(a.b.name).toEqual('b');
-      expect(a.b.c.name).toEqual('c');
-      expect(a.b.c.a.name).toEqual('a');
+      await expect(container.getAsync(A)).rejects.toThrow('Circular dependency detected: A -> B -> C -> A');
     });
   });
 });
