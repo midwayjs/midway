@@ -625,6 +625,34 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return this.getManagedResolverFactory().createAsync({ definition, args });
   }
 
+  async getAsyncWithQueue(
+    identifier: any,
+    args?: any[],
+    objectContext?: ObjectContext
+  ): Promise<any> {
+    args = args ?? [];
+    objectContext = objectContext ?? { originName: identifier };
+    if (typeof identifier !== 'string') {
+      objectContext.originName = identifier.name;
+      identifier = this.getIdentifier(identifier);
+    }
+    if (this.registry.hasObject(identifier)) {
+      return this.registry.getObject(identifier);
+    }
+
+    const definition = this.registry.getDefinition(identifier);
+    if (!definition && this.parent) {
+      return this.parent.getAsync(identifier, args);
+    }
+
+    if (!definition) {
+      throw new MidwayDefinitionNotFoundError(
+        objectContext?.originName ?? identifier
+      );
+    }
+
+    return this.getManagedResolverFactory().createAsyncWithQueue({ definition, args });
+  }
   /**
    * proxy registry.registerObject
    * @param {ObjectIdentifier} identifier

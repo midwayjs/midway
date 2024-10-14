@@ -578,4 +578,127 @@ export class ManagedResolverFactory {
       });
     }
   }
+
+  createInstance(definition, key, args = [], pendingInitQueue: Map<any, any>) {
+    if (this.context.registry.hasObject(definition.id)) {
+      return this.context.registry.getObject(definition.id);
+    }
+
+    if (
+      definition.isSingletonScope() &&
+      this.singletonCache.has(definition.id)
+    ) {
+      debug(
+        `id = ${definition.id}(${definition.name}) get from singleton cache.`
+      );
+      return this.singletonCache.get(definition.id);
+    }
+
+    // get class from definition
+    const Clzz = definition.creator.load();
+
+    // get constructor args
+    // let constructorArgs = [];
+    // if (args && Array.isArray(args) && args.length > 0) {
+    //   constructorArgs = args;
+    // }
+
+    // create instance
+    let inst = Reflect.construct(Clzz, args);
+
+    // binding ctx object
+    if (
+      definition.isRequestScope() &&
+      definition.constructor.name === 'ObjectDefinition'
+    ) {
+      debug('id = %s inject ctx', definition.id);
+      // set related ctx
+      Object.defineProperty(inst, REQUEST_OBJ_CTX_KEY, {
+        value: this.context.get(REQUEST_CTX_KEY),
+        writable: false,
+        enumerable: false,
+      });
+    }
+
+    if (definition.id) {
+      if (definition.isSingletonScope()) {
+        debug(
+          `id = ${definition.id}(${definition.name}) set to singleton cache`
+        );
+        this.singletonCache.set(definition.id, inst);
+        this.setInstanceScope(inst, ScopeEnum.Singleton);
+      } else if (definition.isRequestScope()) {
+        debug(
+          `id = ${definition.id}(${definition.name}) set to register object`
+        );
+        this.context.registerObject(definition.id, inst);
+        this.setInstanceScope(inst, ScopeEnum.Request);
+      } else {
+        this.setInstanceScope(inst, ScopeEnum.Prototype);
+      }
+    }
+
+    // set properties
+    if (definition.properties) {
+      const keys = definition.properties.propertyKeys() as string[];
+      for (const key of keys) {
+        this.checkSingletonInvokeRequest(definition, key);
+        const resolver = definition.properties.get(key);
+        const propertyDefinition = this.context.registry.getDefinition(resolver.name);
+        inst[key] = this.createInstance(propertyDefinition, key, resolver.args, pendingInitQueue);
+      }
+    }
+
+    // 将初始化函数添加到待处理队列
+    pendingInitQueue.set(inst, () => definition.creator.doInitAsync(inst) as any);
+
+    return inst;
+  }
+
+  async createAsyncWithQueue(opt: IManagedResolverFactoryCreateOptions): Promise<any> {
+    const pendingInitQueue = new Map<any, () => Promise<any>>();
+    const instance = this.createInstance(opt.definition, opt.definition.id, opt.args, pendingInitQueue);
+    await this.initializeInstance(instance, opt.definition, pendingInitQueue);
+    return instance;
+  }
+
+  private async initializeInstance(
+    instance: any, 
+    definition: IObjectDefinition, 
+    pendingInitQueue: Map<any, () => Promise<void>>
+  ): Promise<void> {
+    const visited = new Set<any>();
+    const initStack: any[] = [];
+
+    const dfs = (obj: any, def: IObjectDefinition) => {
+      if (visited.has(obj)) return;
+      visited.add(obj);
+
+      // 初始化所有的依赖
+      if (def.properties) {
+        const keys = def.properties.propertyKeys() as string[];
+        for (const key of keys) {
+          const propertyValue = obj[key];
+          if (propertyValue && typeof propertyValue === 'object') {
+            const resolver = def.properties.get(key);
+            const propertyDefinition = this.context.registry.getDefinition(resolver.name);
+            dfs(propertyValue, propertyDefinition);
+          }
+        }
+      }
+
+      // 将当前对象加入初始化栈
+      initStack.push(obj);
+    };
+
+    dfs(instance, definition);
+
+    // 按照依赖顺序执行初始化
+    for (const obj of initStack) {
+      const initFunc = pendingInitQueue.get(obj);
+      if (initFunc) {
+        await initFunc();
+      }
+    }
+  }
 }

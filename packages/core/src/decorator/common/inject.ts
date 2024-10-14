@@ -9,7 +9,7 @@ import { FACTORY_SERVICE_CLIENT_KEY, PROPERTY_INJECT_KEY } from '../constant';
 import { isClass } from '../../util/types';
 import { MetadataManager } from '../metadataManager';
 
-export function saveInjectMetadata(identifier, target, targetKey) {
+export function saveInjectMetadata(identifier, target, targetKey, parameterIndex?: number) {
   // 1、use identifier by user
   // let identifier = opts.identifier;
   let injectMode = InjectModeEnum.Identifier;
@@ -44,9 +44,9 @@ export function saveInjectMetadata(identifier, target, targetKey) {
   );
 }
 
-export function Inject(identifier?: ObjectIdentifier) {
-  return function (target: any, targetKey: string): void {
-    saveInjectMetadata(identifier, target, targetKey);
+export function Inject(identifier?: ObjectIdentifier): PropertyDecorator & ParameterDecorator {
+  return function (target: any, targetKey: string, parameterIndex?: number) {
+    return saveInjectMetadata(identifier, target, targetKey, parameterIndex);
   };
 }
 

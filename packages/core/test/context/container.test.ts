@@ -16,7 +16,9 @@ import {
   Plugin,
   App,
   Provide,
-  MetadataManager
+  MetadataManager,
+  Init,
+  sleep
 } from '../../src';
 import {
   Grandson,
@@ -450,6 +452,225 @@ describe('/test/context/container.test.ts', () => {
       const fn = arr[2] as any;
       expect(s.getInstance()).toEqual('alisingleton');
       expect(await fn()).toEqual('alisingleton');
+    });
+  });
+
+  describe('new get async', () => {
+    it('should test new get async method', async () => {
+      @Provide()
+      class C {
+        name = 'c';
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsyncWithQueue(A);
+      expect(a.name).toEqual('a');
+      expect(a.b.name).toEqual('b');
+      expect(a.b.c.name).toEqual('c');
+    });
+
+    it('should test new get async method 2', async () => {
+      @Provide()
+      class B {
+        name = 'b';
+
+        @Init()
+        async init() {
+          await sleep(200);
+          this.name = 'e';
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+
+        @Init()
+        async init() {
+          this.name = this.b.name;
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+
+      const a = await container.getAsyncWithQueue(A);
+      expect(a.name).toBe('e');
+    });
+
+    it('should test new get async method and with async init', async () => {
+      @Provide()
+      class C {
+        name = 'c';
+
+        @Init()
+        async init() {
+          await sleep(300);
+          this.name = 'f';
+        }
+
+        async getData() {
+          return this.name;
+        }
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C
+
+        @Init()
+        async init() {
+          await sleep(200);
+          this.name = 'e';
+        }
+
+        async getData() {
+          return await this.c.getData() + this.name;
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.name = 'd';
+        }
+
+        async getData() {
+          return await this.b.getData() + this.name;
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsyncWithQueue(A);
+      expect(await a.getData()).toEqual('fed');
+    });
+
+    it('should test new get async method and with async init 2', async () => {
+      @Provide()
+      class C {
+        name = 'c';
+
+        @Init()
+        async init() {
+          await sleep(300);
+          this.name = 'f';
+        }
+
+        async getData() {
+          return this.name;
+        }
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C
+
+        @Init()
+        async init() {
+          await sleep(200);
+          this.name = 'e';
+        }
+
+        async getData() {
+          return this.name;
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+
+        @Inject()
+        c: C
+
+        @Init()
+        async init() {
+          this.name = await this.b.getData() + await this.c.getData();
+        }
+
+        async getData() {
+          return this.name;
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsyncWithQueue(A);
+      expect(await a.getData()).toEqual('ef');
+    });
+
+    it('should test new get async method with circular', async () => {
+      @Provide()
+      class C {
+        name = 'c';
+        @Inject()
+        a: typeof A;
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsyncWithQueue(A);
+      expect(a.name).toEqual('a');
+      expect(a.b.name).toEqual('b');
+      expect(a.b.c.name).toEqual('c');
+      expect(a.b.c.a.name).toEqual('a');
     });
   });
 });
