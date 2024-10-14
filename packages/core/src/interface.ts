@@ -531,13 +531,11 @@ export interface IObjectFactory {
   ): T;
   getAsync<T>(
     identifier: new (...args) => T,
-    args?: any[],
-    objectContext?: ObjectContext
+    args?: any[]
   ): Promise<T>;
   getAsync<T>(
     identifier: ObjectIdentifier,
-    args?: any[],
-    objectContext?: ObjectContext
+    args?: any[]
   ): Promise<T>;
 }
 

@@ -187,10 +187,8 @@ describe('/test/context/container.test.ts', () => {
     const container = new Container();
     container.bind<Grandson>('grandson', Grandson as any);
 
-    expect(function () { container.get('grandson'); }).toThrow(/Grandson/);
-    expect(function () { container.get('nograndson'); }).toThrow(/nograndson/);
-
-    await container.getAsyncLegacy('grandson');
+    expect(() => container.get('grandson')).toThrow(/Grandson/);
+    expect(() => container.get('nograndson')).toThrow(/nograndson/);
 
     await expect(container.getAsync('grandson')).rejects.toThrow(/Grandson/);
     await expect(container.getAsync('nograndson')).rejects.toThrow(/nograndson/);

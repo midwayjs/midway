@@ -30,6 +30,7 @@ import {
   MidwayResolverMissingError,
   MidwaySingletonInjectRequestError,
 } from '../error';
+import { DecoratorManager } from '../decorator';
 
 const debug = util.debuglog('midway:managedresolver');
 const debugLog = util.debuglog('midway:debug');
@@ -86,9 +87,7 @@ class RefResolver {
         throw new MidwayMissingImportComponentError(originName);
       }
     }
-    return this.factory.context.getAsync(mr.name, mr.args, {
-      originName,
-    });
+    return this.factory.context.getAsync(mr.name, mr.args);
   }
 }
 
@@ -199,10 +198,10 @@ export class ManagedResolverFactory {
         try {
           inst[key] = this.resolveManaged(definition.properties.get(key), key);
         } catch (error) {
-          if (MidwayDefinitionNotFoundError.isClosePrototypeOf(error)) {
-            const className = definition.path.name;
-            error.updateErrorMsg(className);
-          }
+          // if (MidwayDefinitionNotFoundError.isClosePrototypeOf(error)) {
+          //   const className = definition.path.name;
+          //   error.updateErrorMsg(className);
+          // }
           this.removeCreateStatus(definition, true);
           throw error;
         }
@@ -327,11 +326,11 @@ export class ManagedResolverFactory {
             key
           );
         } catch (error) {
-          if (MidwayDefinitionNotFoundError.isClosePrototypeOf(error)) {
-            const className = definition.path.name;
-            error.updateErrorMsg(className);
-          }
-          this.removeCreateStatus(definition, false);
+          // if (MidwayDefinitionNotFoundError.isClosePrototypeOf(error)) {
+          //   const className = definition.path.name;
+          //   error.updateErrorMsg(className);
+          // }
+          // this.removeCreateStatus(definition, false);
           throw error;
         }
       }
@@ -579,10 +578,12 @@ export class ManagedResolverFactory {
     }
   }
 
-  createInstance(definition: IObjectDefinition, args = [], pendingInitQueue: Map<any, any>) {
+  createInstance(definition: IObjectDefinition, args = [], pendingInitQueue: Map<any, any>, creationPath: string[] = []) {
     if (this.context.registry.hasObject(definition.id)) {
       return this.context.registry.getObject(definition.id);
     }
+
+    creationPath.push(definition.path?.name ?? definition.name ?? definition.id);
 
     if (
       definition.isSingletonScope() &&
@@ -599,7 +600,10 @@ export class ManagedResolverFactory {
       for (const dep of definition.dependsOn) {
         debug('id = %s init depend %s.', definition.id, dep);
         const depDefinition = this.context.registry.getDefinition(dep);
-        this.createInstance(depDefinition, depDefinition.constructorArgs, pendingInitQueue);
+        if (!depDefinition) {
+          throw new MidwayDefinitionNotFoundError(dep as string, creationPath);
+        }
+        this.createInstance(depDefinition, depDefinition.constructorArgs, pendingInitQueue, [...creationPath]);
       }
     }
 
@@ -670,9 +674,9 @@ export class ManagedResolverFactory {
         const resolver = definition.properties.get(key);
         const propertyDefinition = this.context.registry.getDefinition(resolver.name);
         if (!propertyDefinition) {
-          throw new MidwayDefinitionNotFoundError(resolver.name);
+          throw new MidwayDefinitionNotFoundError(resolver.name, creationPath);
         }
-        inst[key] = this.createInstance(propertyDefinition, resolver.args, pendingInitQueue);
+        inst[key] = this.createInstance(propertyDefinition, resolver.args, pendingInitQueue, [...creationPath]);
       }
     }
 
@@ -690,11 +694,32 @@ export class ManagedResolverFactory {
     return inst;
   }
 
-  async createAsync(opt: IManagedResolverFactoryCreateOptions): Promise<any> {
+  async createAsync(identifier, args = []): Promise<any> {
+    args = args ?? [];
+    let name = identifier.name ?? identifier;
+    if (typeof identifier !== 'string') {
+      identifier = this.getIdentifier(identifier);
+    }
+    if (this.context.registry.hasObject(identifier)) {
+      return this.context.registry.getObject(identifier);
+    }
+
+    const definition = this.context.registry.getDefinition(identifier);
+    if (!definition && this.context.parent) {
+      return this.context.parent.getAsync(identifier, args);
+    }
+
+    if (!definition) {
+      throw new MidwayDefinitionNotFoundError(name);
+    }
     const pendingInitQueue = new Map<any, () => Promise<any>>();
-    const instance = this.createInstance(opt.definition, opt.args, pendingInitQueue);
-    const newInstance = await this.initializeInstance(instance, opt.definition, pendingInitQueue, new Set<any>());
+    const instance = this.createInstance(definition, args, pendingInitQueue);
+    const newInstance = await this.initializeInstance(instance, definition, pendingInitQueue, new Set<any>());
     return newInstance ?? instance;
+  }
+
+  protected getIdentifier(target: any) {
+    return DecoratorManager.getProviderUUId(target);
   }
 
   private async initializeInstance(

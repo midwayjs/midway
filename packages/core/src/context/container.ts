@@ -534,6 +534,9 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return this.attrMap.get(key);
   }
 
+  /**
+   * @deprecated
+   */
   protected getIdentifier(target: any) {
     return DecoratorManager.getProviderUUId(target);
   }
@@ -579,9 +582,8 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       return this.parent.get(identifier, args);
     }
     if (!definition) {
-      throw new MidwayDefinitionNotFoundError(
-        objectContext?.originName ?? identifier
-      );
+      // TODO
+      throw new MidwayDefinitionNotFoundError('', []);
     }
     return this.getManagedResolverFactory().create({ definition, args });
   }
@@ -617,9 +619,9 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     if (!definition) {
-      throw new MidwayDefinitionNotFoundError(
-        objectContext?.originName ?? identifier
-      );
+      // throw new MidwayDefinitionNotFoundError(
+      //   objectContext?.originName ?? identifier
+      // );
     }
 
     return this.getManagedResolverFactory().createAsyncLegacy({ definition, args });
@@ -628,40 +630,16 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   async getAsync<T>(
     identifier: { new (...args): T },
     args?: any[],
-    objectContext?: ObjectContext
   ): Promise<T>;
   async getAsync<T>(
     identifier: ObjectIdentifier,
     args?: any[],
-    objectContext?: ObjectContext
   ): Promise<T>;
   async getAsync(
     identifier: any,
     args?: any[],
-    objectContext?: ObjectContext
   ): Promise<any> {
-    args = args ?? [];
-    objectContext = objectContext ?? { originName: identifier };
-    if (typeof identifier !== 'string') {
-      objectContext.originName = identifier.name;
-      identifier = this.getIdentifier(identifier);
-    }
-    if (this.registry.hasObject(identifier)) {
-      return this.registry.getObject(identifier);
-    }
-
-    const definition = this.registry.getDefinition(identifier);
-    if (!definition && this.parent) {
-      return this.parent.getAsync(identifier, args);
-    }
-
-    if (!definition) {
-      throw new MidwayDefinitionNotFoundError(
-        objectContext?.originName ?? identifier
-      );
-    }
-
-    return this.getManagedResolverFactory().createAsync({ definition, args });
+    return this.getManagedResolverFactory().createAsync(identifier, args);
   }
 
   /**
