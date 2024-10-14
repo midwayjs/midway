@@ -136,109 +136,25 @@ export class ManagedResolverFactory {
    * 同步创建对象
    * @param opt
    */
-  create(opt: IManagedResolverFactoryCreateOptions): any {
-    const { definition, args } = opt;
-    if (
-      definition.isSingletonScope() &&
-      this.singletonCache.has(definition.id)
-    ) {
-      return this.singletonCache.get(definition.id);
-    }
-    // 如果非 null 表示已经创建 proxy
-    let inst = this.createProxyReference(definition);
-    if (inst) {
-      return inst;
+  create(identifier, args = []): any {
+    let name = identifier.name ?? identifier;
+    identifier = this.context.getIdentifier(identifier);
+    if (this.context.registry.hasObject(identifier)) {
+      return this.context.registry.getObject(identifier);
     }
 
-    this.compareAndSetCreateStatus(definition);
-    // 预先初始化依赖
-    if (definition.hasDependsOn()) {
-      for (const dep of definition.dependsOn) {
-        this.context.get(dep, args);
-      }
+    const definition = this.context.registry.getDefinition(identifier);
+    if (!definition && this.context.parent) {
+      return this.context.parent.get(identifier, args);
     }
 
-    debugLog(`[core]: Create id = "${definition.name}" ${definition.id}.`);
-
-    const Clzz = definition.creator.load();
-
-    let constructorArgs = [];
-    if (args && Array.isArray(args) && args.length > 0) {
-      constructorArgs = args;
+    if (!definition) {
+      throw new MidwayDefinitionNotFoundError(name);
     }
-
-    this.getObjectEventTarget().emit(
-      ObjectLifeCycleEvent.BEFORE_CREATED,
-      Clzz,
-      {
-        constructorArgs,
-        definition,
-        context: this.context,
-      }
-    );
-
-    inst = definition.creator.doConstruct(Clzz, constructorArgs, this.context);
-
-    // binding ctx object
-    if (
-      definition.isRequestScope() &&
-      definition.constructor.name === 'ObjectDefinition'
-    ) {
-      Object.defineProperty(inst, REQUEST_OBJ_CTX_KEY, {
-        value: this.context.get(REQUEST_CTX_KEY),
-        writable: false,
-        enumerable: false,
-      });
-    }
-
-    if (definition.properties) {
-      const keys = definition.properties.propertyKeys() as string[];
-      for (const key of keys) {
-        this.checkSingletonInvokeRequest(definition, key);
-        try {
-          inst[key] = this.resolveManaged(definition.properties.get(key), key);
-        } catch (error) {
-          // if (MidwayDefinitionNotFoundError.isClosePrototypeOf(error)) {
-          //   const className = definition.path.name;
-          //   error.updateErrorMsg(className);
-          // }
-          this.removeCreateStatus(definition, true);
-          throw error;
-        }
-      }
-    }
-
-    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.AFTER_CREATED, inst, {
-      context: this.context,
-      definition,
-      replaceCallback: ins => {
-        inst = ins;
-      },
-    });
-
-    // after properties set then do init
-    definition.creator.doInit(inst);
-
-    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.AFTER_INIT, inst, {
-      context: this.context,
-      definition,
-    });
-
-    if (definition.id) {
-      if (definition.isSingletonScope()) {
-        this.singletonCache.set(definition.id, inst);
-        this.setInstanceScope(inst, ScopeEnum.Singleton);
-      } else if (definition.isRequestScope()) {
-        this.context.registerObject(definition.id, inst);
-        this.setInstanceScope(inst, ScopeEnum.Request);
-      } else {
-        this.setInstanceScope(inst, ScopeEnum.Prototype);
-      }
-    }
-
-    this.removeCreateStatus(definition, true);
-
-    return inst;
+    const pendingInitQueue = new Map<any, () => Promise<any>>();
+    const instance = this.createInstance(definition, args, false, pendingInitQueue);
+    const newInstance = await this.initializeInstance(instance, definition, pendingInitQueue, new Set<any>());
+    return newInstance ?? instance;
   }
 
   /**
@@ -578,7 +494,7 @@ export class ManagedResolverFactory {
     }
   }
 
-  createInstance(definition: IObjectDefinition, args = [], pendingInitQueue: Map<any, any>, creationPath: string[] = []) {
+  createInstance(definition: IObjectDefinition, args = [], isAsync: boolean, pendingInitQueue: Map<any, any>, creationPath: string[] = []) {
     if (this.context.registry.hasObject(definition.id)) {
       return this.context.registry.getObject(definition.id);
     }
@@ -603,7 +519,7 @@ export class ManagedResolverFactory {
         if (!depDefinition) {
           throw new MidwayDefinitionNotFoundError(dep as string, creationPath);
         }
-        this.createInstance(depDefinition, depDefinition.constructorArgs, pendingInitQueue, [...creationPath]);
+        this.createInstance(depDefinition, depDefinition.constructorArgs, isAsync, pendingInitQueue, [...creationPath]);
       }
     }
 
@@ -676,7 +592,7 @@ export class ManagedResolverFactory {
         if (!propertyDefinition) {
           throw new MidwayDefinitionNotFoundError(resolver.name, creationPath);
         }
-        inst[key] = this.createInstance(propertyDefinition, resolver.args, pendingInitQueue, [...creationPath]);
+        inst[key] = this.createInstance(propertyDefinition, resolver.args, isAsync, pendingInitQueue, [...creationPath]);
       }
     }
 
@@ -689,17 +605,18 @@ export class ManagedResolverFactory {
     });
 
     // 将初始化函数添加到待处理队列
-    pendingInitQueue.set(inst, () => definition.creator.doInitAsync(inst));
+    if (isAsync) {
+      pendingInitQueue.set(inst, () => definition.creator.doInitAsync(inst));
+    } else {
+      pendingInitQueue.set(inst, () => definition.creator.doInit(inst));
+    }
 
     return inst;
   }
 
   async createAsync(identifier, args = []): Promise<any> {
-    args = args ?? [];
     let name = identifier.name ?? identifier;
-    if (typeof identifier !== 'string') {
-      identifier = this.getIdentifier(identifier);
-    }
+    identifier = this.context.getIdentifier(identifier);
     if (this.context.registry.hasObject(identifier)) {
       return this.context.registry.getObject(identifier);
     }
@@ -713,13 +630,9 @@ export class ManagedResolverFactory {
       throw new MidwayDefinitionNotFoundError(name);
     }
     const pendingInitQueue = new Map<any, () => Promise<any>>();
-    const instance = this.createInstance(definition, args, pendingInitQueue);
+    const instance = this.createInstance(definition, args, true, pendingInitQueue);
     const newInstance = await this.initializeInstance(instance, definition, pendingInitQueue, new Set<any>());
     return newInstance ?? instance;
-  }
-
-  protected getIdentifier(target: any) {
-    return DecoratorManager.getProviderUUId(target);
   }
 
   private async initializeInstance(

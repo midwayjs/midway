@@ -1,5 +1,5 @@
 import { MidwayContainer } from './container';
-import { IMidwayContainer } from '../interface';
+import { ClassType, IMidwayContainer } from '../interface';
 import { REQUEST_CTX_KEY } from '../constants';
 
 export class MidwayRequestContainer extends MidwayContainer {
@@ -30,11 +30,8 @@ export class MidwayRequestContainer extends MidwayContainer {
     // do nothing
   }
 
-  get<T = any>(identifier: any, args?: any): T {
-    if (typeof identifier !== 'string') {
-      identifier = this.getIdentifier(identifier);
-    }
-
+  get<T = any>(identifier: ClassType<T> | string, args?: any): T {
+    identifier = this.getIdentifier(identifier);
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
     }
@@ -56,10 +53,8 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
   }
 
-  async getAsync<T = any>(identifier: any, args?: any): Promise<T> {
-    if (typeof identifier !== 'string') {
-      identifier = this.getIdentifier(identifier);
-    }
+  async getAsync<T = any>(identifier: ClassType<T> | string, args?: any): Promise<T> {
+    identifier = this.getIdentifier(identifier);
 
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
@@ -67,14 +62,12 @@ export class MidwayRequestContainer extends MidwayContainer {
 
     const definition =
       this.applicationContext.registry.getDefinition(identifier);
-    if (definition) {
-      if (definition.isRequestScope()) {
-        // create object from applicationContext definition for requestScope
-        return this.getManagedResolverFactory().createAsync({
-          definition,
-          args,
-        });
-      }
+    if (definition && definition.isRequestScope()) {
+      // create object from applicationContext definition for requestScope
+      return this.getManagedResolverFactory().createAsync({
+        definition,
+        args,
+      });
     }
 
     if (this.parent) {

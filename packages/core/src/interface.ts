@@ -2,7 +2,7 @@ import * as EventEmitter from 'events';
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
 
-export type ClassType = new (...args: any[]) => any;
+export type ClassType<T = any> = new (...args: any[]) => T;
 
 export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
@@ -520,21 +520,11 @@ export type ObjectContext = {
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
   get<T>(
-    identifier: new (...args) => T,
-    args?: any[],
-    objectContext?: ObjectContext
-  ): T;
-  get<T>(
-    identifier: ObjectIdentifier,
-    args?: any[],
-    objectContext?: ObjectContext
-  ): T;
-  getAsync<T>(
-    identifier: new (...args) => T,
+    identifier: ClassType<T> | string,
     args?: any[]
-  ): Promise<T>;
+  ): T;
   getAsync<T>(
-    identifier: ObjectIdentifier,
+    identifier: ClassType<T> | string,
     args?: any[]
   ): Promise<T>;
 }
@@ -759,6 +749,10 @@ export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycl
    * @param instance
    */
   getInstanceScope(instance: any): ScopeEnum | undefined;
+  /**
+   * Get IoC identifier
+   */
+  getIdentifier(identifier: (ClassType | string)): string;
 }
 
 export interface IFileDetector {

@@ -13,6 +13,7 @@ import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
 import { ObjectDefinitionRegistry } from './definitionRegistry';
 import {
+  ClassType,
   IFileDetector,
   IIdentifierRelationShip,
   IMidwayContainer,
@@ -22,7 +23,7 @@ import {
   ObjectContext,
   ObjectIdentifier,
   ObjectLifeCycleEvent,
-  ScopeEnum,
+  ScopeEnum
 } from '../interface';
 import {
   CONTAINER_OBJ_SCOPE,
@@ -269,13 +270,6 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   set registry(registry) {
     this._registry = registry;
-  }
-
-  get managedResolverFactory() {
-    if (!this._resolverFactory) {
-      this._resolverFactory = new ManagedResolverFactory(this);
-    }
-    return this._resolverFactory;
   }
 
   get identifierMapping(): IIdentifierRelationShip {
@@ -534,11 +528,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return this.attrMap.get(key);
   }
 
-  /**
-   * @deprecated
-   */
-  protected getIdentifier(target: any) {
-    return DecoratorManager.getProviderUUId(target);
+  public getIdentifier(identifier: ClassType | string): string {
+    if (typeof identifier !== 'string') {
+      identifier = DecoratorManager.getProviderUUId(identifier);
+    }
+    return identifier;
   }
 
   protected getManagedResolverFactory() {
@@ -557,88 +551,14 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return this.loadDefinitions();
   }
 
-  get<T>(
-    identifier: { new (...args): T },
-    args?: any[],
-    objectContext?: ObjectContext
-  ): T;
-  get<T>(
-    identifier: ObjectIdentifier,
-    args?: any[],
-    objectContext?: ObjectContext
-  ): T;
-  get(identifier: any, args?: any[], objectContext?: ObjectContext): any {
-    args = args ?? [];
-    objectContext = objectContext ?? { originName: identifier };
-    if (typeof identifier !== 'string') {
-      objectContext.originName = identifier.name;
-      identifier = this.getIdentifier(identifier);
-    }
-    if (this.registry.hasObject(identifier)) {
-      return this.registry.getObject(identifier);
-    }
-    const definition = this.registry.getDefinition(identifier);
-    if (!definition && this.parent) {
-      return this.parent.get(identifier, args);
-    }
-    if (!definition) {
-      // TODO
-      throw new MidwayDefinitionNotFoundError('', []);
-    }
-    return this.getManagedResolverFactory().create({ definition, args });
-  }
-
-  async getAsyncLegacy<T>(
-    identifier: { new (...args): T },
-    args?: any[],
-    objectContext?: ObjectContext
-  ): Promise<T>;
-  async getAsyncLegacy<T>(
-    identifier: ObjectIdentifier,
-    args?: any[],
-    objectContext?: ObjectContext
-  ): Promise<T>;
-  async getAsyncLegacy(
-    identifier: any,
-    args?: any[],
-    objectContext?: ObjectContext
-  ): Promise<any> {
-    args = args ?? [];
-    objectContext = objectContext ?? { originName: identifier };
-    if (typeof identifier !== 'string') {
-      objectContext.originName = identifier.name;
-      identifier = this.getIdentifier(identifier);
-    }
-    if (this.registry.hasObject(identifier)) {
-      return this.registry.getObject(identifier);
-    }
-
-    const definition = this.registry.getDefinition(identifier);
-    if (!definition && this.parent) {
-      return this.parent.getAsync(identifier, args);
-    }
-
-    if (!definition) {
-      // throw new MidwayDefinitionNotFoundError(
-      //   objectContext?.originName ?? identifier
-      // );
-    }
-
-    return this.getManagedResolverFactory().createAsyncLegacy({ definition, args });
+  get<T>(identifier: ClassType<T> | string, args?: any[]): T {
+    return this.getManagedResolverFactory().create(identifier, args);
   }
 
   async getAsync<T>(
-    identifier: { new (...args): T },
+    identifier: ClassType<T> | string,
     args?: any[],
-  ): Promise<T>;
-  async getAsync<T>(
-    identifier: ObjectIdentifier,
-    args?: any[],
-  ): Promise<T>;
-  async getAsync(
-    identifier: any,
-    args?: any[],
-  ): Promise<any> {
+  ): Promise<T> {
     return this.getManagedResolverFactory().createAsync(identifier, args);
   }
 
