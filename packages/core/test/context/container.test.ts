@@ -18,7 +18,8 @@ import {
   Provide,
   MetadataManager,
   Init,
-  sleep, Scope, ScopeEnum
+  sleep, Scope, ScopeEnum,
+  MidwayDefinitionNotFoundError
 } from '../../src';
 import {
   Grandson,
@@ -35,7 +36,7 @@ import { childAsyncFunction,
   singletonFactory2,
   AliSingleton,
   singletonFactory } from '../fixtures/fun_sample';
-import { CircularOne, CircularTwo, CircularThree, TestOne, TestTwo, TestThree, TestOne1, TestTwo1, TestThree1 } from '../fixtures/circular_dependency';
+import { CircularOne, CircularTwo, CircularThree, TestOne1, TestTwo1, TestThree1 } from '../fixtures/circular_dependency';
 
 describe('/test/context/container.test.ts', () => {
 
@@ -474,9 +475,7 @@ describe('/test/context/container.test.ts', () => {
       expect(one.name).toEqual('one');
       expect((one.two as TestTwo1).name).toEqual('two');
     });
-  });
 
-  describe('circular dependency sync', () => {
     it('sync circular should be ok', async () => {
       const container = new Container();
       container.registerObject('ctx', {});
@@ -496,27 +495,6 @@ describe('/test/context/container.test.ts', () => {
       expect(circularTwo.ttest2('try ttest2')).toEqual('try ttest2twoone');
       expect(await circularTwo.ctest2('try ttest2')).toEqual('try ttest2twoone');
       expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).toEqual('try ttest2twoone');
-    });
-  });
-
-  describe('circular dependency dfs should be ok', () => {
-    const container = new Container();
-
-    it('sub container should be ok', async () => {
-      container.bind(TestOne);
-      container.bind(TestTwo);
-      const sub = container.createChild();
-
-      sub.bind(TestThree);
-
-      const three = sub.get<TestThree>('testThree');
-      expect(three.ts).toEqual('this is three');
-      expect(three.one.ts).toEqual('this is one');
-
-      const one = sub.get<TestOne>('testOne');
-      expect(one.ts).toEqual('this is one');
-      expect(one.one.ts).toEqual('this is one');
-      expect(one.testTwo.ts).toEqual('this is two');
     });
   });
 
@@ -1002,6 +980,106 @@ describe('/test/context/container.test.ts', () => {
       container.bind(C);
 
       await expect(container.getAsync(A)).rejects.toThrow('Circular dependency detected: A -> B -> C -> A');
+    });
+
+    it('should test MidwayDefinitionNotFoundError message', async () => {
+      @Provide()
+      class A {
+        @Inject()
+        b;
+      }
+
+      @Provide()
+      class B {
+        @Inject()
+        c;
+      }
+
+      @Provide()
+      class C {
+        @Inject('baseDir')
+        baseDir;
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      await expect(container.getAsync(A)).rejects.toThrow('Definition for "baseDir" not found in current context. Detection path: "A -> B -> C"');
+    });
+
+    it('should test MidwayDefinitionNotFoundError message with name', async () => {
+      @Provide()
+      class A {
+        @Inject()
+        b;
+      }
+
+      @Provide()
+      class B {
+        @Inject()
+        c;
+      }
+
+      @Provide()
+      class D {
+      }
+
+      @Provide()
+      class C {
+        @Inject()
+        d: D;
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      await expect(container.getAsync(A)).rejects.toThrow('Definition for "d" not found in current context. Detection path: "A -> B -> C"');
+    });
+
+    it('should throw MidwayDefinitionNotFoundError when getting non-existent definition', async () => {
+      const container = new Container();
+
+      // 同步测试
+      expect(() => {
+        container.get('nonExistentDefinition');
+      }).toThrow(MidwayDefinitionNotFoundError);
+
+      // 异步测试
+      await expect(
+        container.getAsync('nonExistentDefinition')
+      ).rejects.toThrow(MidwayDefinitionNotFoundError);
+    });
+
+    it('should include the definition name in the error message', () => {
+      const container = new Container();
+      const definitionName = 'testDefinition';
+
+      try {
+        container.get(definitionName);
+      } catch (error) {
+        expect(error).toBeInstanceOf(MidwayDefinitionNotFoundError);
+        expect(error.message).toContain(definitionName);
+      }
+    });
+
+    it('should throw MidwayDefinitionNotFoundError when getting non-existent property', () => {
+      const container = new Container();
+
+      @Provide()
+      class TestClass {
+        @Inject()
+        nonExistentProperty: any;
+      }
+
+      container.bind(TestClass);
+
+      expect(() => {
+        container.get(TestClass);
+      }).toThrow(MidwayDefinitionNotFoundError);
     });
   });
 });

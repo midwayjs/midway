@@ -3,129 +3,39 @@
  */
 import {
   CONTAINER_OBJ_SCOPE,
-  KEYS,
   REQUEST_CTX_KEY,
   REQUEST_OBJ_CTX_KEY,
   SINGLETON_CONTAINER_CTX,
 } from '../constants';
 import {
-  IManagedInstance,
-  IManagedResolver,
+  ClassType,
   IMidwayContainer,
-  InjectModeEnum,
   IObjectDefinition,
   ObjectIdentifier,
-  ObjectLifeCycleEvent,
-  ScopeEnum,
+  ObjectLifeCycleEvent, PropertyInjectMetadata,
+  ScopeEnum
 } from '../interface';
-
 import * as util from 'util';
 import * as EventEmitter from 'events';
 import {
   MidwayCommonError,
   MidwayDefinitionNotFoundError,
-  MidwayInconsistentVersionError,
-  MidwayMissingImportComponentError,
-  MidwayResolverMissingError,
   MidwaySingletonInjectRequestError,
 } from '../error';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 
 const debug = util.debuglog('midway:debug');
 
-export class ManagedReference implements IManagedInstance {
-  type = KEYS.REF_ELEMENT;
-  name: string;
-  injectMode: InjectModeEnum;
-  args?: any;
-}
-
-/**
- * 解析ref
- */
-class RefResolver {
-  constructor(readonly factory: ManagedResolverFactory) {}
-  get type(): string {
-    return KEYS.REF_ELEMENT;
-  }
-
-  resolve(managed: IManagedInstance, originName: string): any {
-    const mr = managed as ManagedReference;
-    if (
-      mr.injectMode === InjectModeEnum.Class &&
-      !(this.factory.context.parent ?? this.factory.context).hasDefinition(
-        mr.name
-      )
-    ) {
-      if (originName === 'loggerService') {
-        throw new MidwayInconsistentVersionError();
-      } else {
-        throw new MidwayMissingImportComponentError(originName);
-      }
-    }
-    return this.factory.context.get(mr.name, mr.args);
-  }
-
-  async resolveAsync(
-    managed: IManagedInstance,
-    originName: string
-  ): Promise<any> {
-    const mr = managed as ManagedReference;
-    if (
-      mr.injectMode === InjectModeEnum.Class &&
-      !(this.factory.context.parent ?? this.factory.context).hasDefinition(
-        mr.name
-      )
-    ) {
-      if (originName === 'loggerService') {
-        throw new MidwayInconsistentVersionError();
-      } else {
-        throw new MidwayMissingImportComponentError(originName);
-      }
-    }
-    return this.factory.context.getAsync(mr.name, mr.args);
-  }
-}
-
 /**
  * 解析工厂
  */
 export class ManagedResolverFactory {
-  private resolvers = {};
   private creating = new Map<string, boolean>();
   singletonCache = new Map<ObjectIdentifier, any>();
   context: IMidwayContainer;
 
   constructor(context: IMidwayContainer) {
     this.context = context;
-
-    // 初始化解析器
-    this.resolvers = {
-      ref: new RefResolver(this),
-    };
-  }
-
-  registerResolver(resolver: IManagedResolver) {
-    this.resolvers[resolver.type] = resolver;
-  }
-
-  resolveManaged(managed: IManagedInstance, originPropertyName: string): any {
-    const resolver = this.resolvers[managed.type];
-    if (!resolver || resolver.type !== managed.type) {
-      throw new MidwayResolverMissingError(managed.type);
-    }
-    return resolver.resolve(managed, originPropertyName);
-  }
-
-  async resolveManagedAsync(
-    managed: IManagedInstance,
-    originPropertyName: string
-  ): Promise<any> {
-    const resolver = this.resolvers[managed.type];
-    if (!resolver || resolver.type !== managed.type) {
-      throw new MidwayResolverMissingError(managed.type);
-    }
-    return resolver.resolveAsync(managed, originPropertyName);
   }
 
   /**
@@ -133,7 +43,7 @@ export class ManagedResolverFactory {
    * @param opt
    */
   create<T = any>(identifier, args = []): T {
-    let name = identifier.name ?? identifier;
+    const name = identifier.name ?? identifier;
     identifier = this.context.getIdentifier(identifier);
     if (this.context.registry.hasObject(identifier)) {
       return this.context.registry.getObject(identifier);
@@ -145,18 +55,32 @@ export class ManagedResolverFactory {
     }
 
     if (!definition) {
-      throw new MidwayDefinitionNotFoundError(name);
+      throw new MidwayDefinitionNotFoundError(identifier, name);
     }
-    const pendingInitQueue = new Map<any, [() => any, (newValue: any) => void]>();
+    const pendingInitQueue = new Map<
+      any,
+      [() => any, (newValue: any) => void]
+    >();
     const pendingObjectCache = new Map<string, any>();
-    const instance = this.createInstance(definition, args, false, pendingObjectCache, pendingInitQueue);
+    const instance = this.createInstance(
+      identifier,
+      name,
+      args,
+      false,
+      pendingObjectCache,
+      pendingInitQueue
+    );
     pendingObjectCache.clear();
-    const newInstance = this.initializeInstance(instance, definition, pendingInitQueue);
+    const newInstance = this.initializeInstance(
+      instance,
+      definition,
+      pendingInitQueue
+    );
     return newInstance ?? instance;
   }
 
   async createAsync<T = any>(identifier, args = []): Promise<T> {
-    let name = identifier.name ?? identifier;
+    const name = identifier.name ?? identifier;
     identifier = this.context.getIdentifier(identifier);
     if (this.context.registry.hasObject(identifier)) {
       return this.context.registry.getObject(identifier);
@@ -168,14 +92,28 @@ export class ManagedResolverFactory {
     }
 
     if (!definition) {
-      throw new MidwayDefinitionNotFoundError(name);
+      throw new MidwayDefinitionNotFoundError(identifier, name);
     }
 
-    const pendingInitQueue = new Map<any, [() => Promise<any>, (newValue: any) => void]>();
+    const pendingInitQueue = new Map<
+      any,
+      [() => Promise<any>, (newValue: any) => void]
+    >();
     const pendingObjectCache = new Map<string, any>();
-    const instance = this.createInstance(definition, args, true, pendingObjectCache, pendingInitQueue);
+    const instance = this.createInstance(
+      identifier,
+      definition.name,
+      args,
+      true,
+      pendingObjectCache,
+      pendingInitQueue
+    );
     pendingObjectCache.clear();
-    const newInstance = await this.initializeInstanceAsync(instance, definition, pendingInitQueue);
+    const newInstance = await this.initializeInstanceAsync(
+      instance,
+      definition,
+      pendingInitQueue
+    );
     return newInstance ?? instance;
   }
 
@@ -244,9 +182,24 @@ export class ManagedResolverFactory {
     }
   }
 
-  private createInstance(definition: IObjectDefinition, args = [], isAsync: boolean, pendingObjectCache: Map<string, any>, pendingInitQueue: Map<any, [() => any, (newValue: any) => void]>, creationPath: string[] = [], replaceCallback?: (newValue: any) => void): any {
-    if (this.context.registry.hasObject(definition.id)) {
-      return this.context.registry.getObject(definition.id);
+  private createInstance(
+    identifier: ClassType | string,
+    name: string,
+    args = [],
+    isAsync: boolean,
+    pendingObjectCache: Map<string, any>,
+    pendingInitQueue: Map<any, [() => any, (newValue: any) => void]>,
+    creationPath: string[] = [],
+    replaceCallback?: (newValue: any) => void
+  ): any {
+    identifier = this.context.getIdentifier(identifier);
+    if (this.context.registry.hasObject(identifier)) {
+      return this.context.registry.getObject(identifier);
+    }
+
+    const definition = this.context.registry.getDefinition(identifier);
+    if (!definition) {
+      throw new MidwayDefinitionNotFoundError(identifier as string, name, creationPath);
     }
 
     if (
@@ -263,17 +216,23 @@ export class ManagedResolverFactory {
       return pendingObjectCache.get(definition.id);
     }
 
-    creationPath.push(definition.path?.name ?? definition.name ?? definition.id);
+    creationPath.push(
+      definition.path?.name ?? definition.name ?? definition.id
+    );
 
     // Pre-initialize dependencies
     if (definition.hasDependsOn()) {
       for (const dep of definition.dependsOn) {
         debug('id = %s init depend %s.', definition.id, dep);
-        const depDefinition = this.context.registry.getDefinition(dep);
-        if (!depDefinition) {
-          throw new MidwayDefinitionNotFoundError(dep as string, creationPath);
-        }
-        this.createInstance(depDefinition, depDefinition.constructorArgs, isAsync, pendingObjectCache, pendingInitQueue, [...creationPath]);
+        this.createInstance(
+          dep as string,
+          dep as string,
+          [],
+          isAsync,
+          pendingObjectCache,
+          pendingInitQueue,
+          [...creationPath]
+        );
       }
     }
 
@@ -326,14 +285,19 @@ export class ManagedResolverFactory {
       const keys = definition.properties.propertyKeys() as string[];
       for (const key of keys) {
         this.checkSingletonInvokeRequest(definition, key);
-        const resolver = definition.properties.get(key);
-        const propertyDefinition = this.context.registry.getDefinition(resolver.name);
-        if (!propertyDefinition) {
-          throw new MidwayDefinitionNotFoundError(resolver.name, creationPath);
-        }
-        inst[key] = this.createInstance(propertyDefinition, resolver.args, isAsync, pendingObjectCache, pendingInitQueue, [...creationPath], (newValue) => {
-          inst[key] = newValue;
-        });
+        const resolver: PropertyInjectMetadata = definition.properties.get(key);
+        inst[key] = this.createInstance(
+          resolver.id || resolver.name,
+          resolver.name,
+          resolver.args,
+          isAsync,
+          pendingObjectCache,
+          pendingInitQueue,
+          [...creationPath],
+          newValue => {
+            inst[key] = newValue;
+          }
+        );
       }
     }
 
@@ -347,9 +311,15 @@ export class ManagedResolverFactory {
 
     // Set init function to pending init queue
     if (isAsync) {
-      pendingInitQueue.set(inst, [() => definition.creator.doInitAsync(inst, this.context), replaceCallback]);
+      pendingInitQueue.set(inst, [
+        () => definition.creator.doInitAsync(inst, this.context),
+        replaceCallback,
+      ]);
     } else {
-      pendingInitQueue.set(inst, [() => definition.creator.doInit(inst, this.context), replaceCallback]);
+      pendingInitQueue.set(inst, [
+        () => definition.creator.doInit(inst, this.context),
+        replaceCallback,
+      ]);
     }
 
     return inst;
@@ -358,7 +328,7 @@ export class ManagedResolverFactory {
   private initializeInstance(
     instance: any,
     definition: IObjectDefinition,
-    pendingInitQueue: Map<any, [() => any, (newValue: any) => void]>,
+    pendingInitQueue: Map<any, [() => any, (newValue: any) => void]>
   ): any {
     const initializingSet = new Map<string, any>();
     const initializedInstances = new Map<string, any>();
@@ -368,7 +338,11 @@ export class ManagedResolverFactory {
       if (initializedInstances.has(def.id)) return;
       if (initializingSet.has(def.id)) {
         const cycle = path.slice(path.indexOf(obj)).concat(obj);
-        throw new MidwayCommonError(`Circular dependency detected: ${cycle.map(o => o.constructor.name).join(' -> ')}`);
+        throw new MidwayCommonError(
+          `Circular dependency detected: ${cycle
+            .map(o => o.constructor.name)
+            .join(' -> ')}`
+        );
       }
 
       initializingSet.set(def.id, obj);
@@ -382,7 +356,9 @@ export class ManagedResolverFactory {
             const propertyValue = obj[key];
             if (propertyValue) {
               const resolver = def.properties.get(key);
-              const propertyDefinition = this.context.registry.getDefinition(resolver.name);
+              const propertyDefinition = this.context.registry.getDefinition(
+                resolver.id ?? resolver.name
+              );
               dfs(propertyValue, propertyDefinition, [...path]);
             }
           }
@@ -405,13 +381,17 @@ export class ManagedResolverFactory {
         initializingSet.delete(def.id);
         this.storeInstanceScope(obj, def);
 
-        this.getObjectEventTarget().emit(ObjectLifeCycleEvent.AFTER_CREATED, instance, {
-          context: this.context,
-          definition,
-          // replaceCallback: ins => {
-          //   newInstance = ins;
-          // },
-        });
+        this.getObjectEventTarget().emit(
+          ObjectLifeCycleEvent.AFTER_CREATED,
+          instance,
+          {
+            context: this.context,
+            definition,
+            // replaceCallback: ins => {
+            //   newInstance = ins;
+            // },
+          }
+        );
       }
     };
 
@@ -422,7 +402,7 @@ export class ManagedResolverFactory {
   private async initializeInstanceAsync(
     instance: any,
     definition: IObjectDefinition,
-    pendingInitQueue: Map<any, [() => Promise<void>, (newValue: any) => void]>,
+    pendingInitQueue: Map<any, [() => Promise<void>, (newValue: any) => void]>
   ): Promise<any> {
     const initializingSet = new Map<string, any>();
     const initializedInstances = new Map<string, any>();
@@ -432,7 +412,11 @@ export class ManagedResolverFactory {
       if (initializedInstances.has(def.id)) return;
       if (initializingSet.has(def.id)) {
         const cycle = path.slice(path.indexOf(obj)).concat(obj);
-        throw new MidwayCommonError(`Circular dependency detected: ${cycle.map(o => o.constructor.name).join(' -> ')}`);
+        throw new MidwayCommonError(
+          `Circular dependency detected: ${cycle
+            .map(o => o.constructor.name)
+            .join(' -> ')}`
+        );
       }
 
       initializingSet.set(def.id, obj);
@@ -446,7 +430,9 @@ export class ManagedResolverFactory {
             const propertyValue = obj[key];
             if (propertyValue) {
               const resolver = def.properties.get(key);
-              const propertyDefinition = this.context.registry.getDefinition(resolver.name);
+              const propertyDefinition = this.context.registry.getDefinition(
+                resolver.id ?? resolver.name
+              );
               await dfs(propertyValue, propertyDefinition, [...path]);
             }
           }
@@ -469,13 +455,17 @@ export class ManagedResolverFactory {
         initializingSet.delete(def.id);
         this.storeInstanceScope(obj, def);
 
-        this.getObjectEventTarget().emit(ObjectLifeCycleEvent.AFTER_CREATED, instance, {
-          context: this.context,
-          definition,
-          // replaceCallback: ins => {
-          //   newInstance = ins;
-          // },
-        });
+        this.getObjectEventTarget().emit(
+          ObjectLifeCycleEvent.AFTER_CREATED,
+          instance,
+          {
+            context: this.context,
+            definition,
+            // replaceCallback: ins => {
+            //   newInstance = ins;
+            // },
+          }
+        );
       }
     };
 
@@ -483,7 +473,10 @@ export class ManagedResolverFactory {
     return initializedInstances.get(definition.id);
   }
 
-  private storeInstanceScope(instance: any, definition: IObjectDefinition): void {
+  private storeInstanceScope(
+    instance: any,
+    definition: IObjectDefinition
+  ): void {
     if (definition.id) {
       if (definition.isSingletonScope()) {
         debug(

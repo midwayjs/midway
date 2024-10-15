@@ -41,10 +41,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     if (definition) {
       if (definition.isRequestScope()) {
         // create object from applicationContext definition for requestScope
-        return this.getManagedResolverFactory().create({
-          definition,
-          args,
-        });
+        return this.getManagedResolverFactory().create(identifier, args);
       }
     }
 
@@ -53,7 +50,10 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
   }
 
-  async getAsync<T = any>(identifier: ClassType<T> | string, args?: any): Promise<T> {
+  async getAsync<T = any>(
+    identifier: ClassType<T> | string,
+    args?: any
+  ): Promise<T> {
     identifier = this.getIdentifier(identifier);
 
     if (this.registry.hasObject(identifier)) {
@@ -64,10 +64,7 @@ export class MidwayRequestContainer extends MidwayContainer {
       this.applicationContext.registry.getDefinition(identifier);
     if (definition && definition.isRequestScope()) {
       // create object from applicationContext definition for requestScope
-      return this.getManagedResolverFactory().createAsync({
-        definition,
-        args,
-      });
+      return this.getManagedResolverFactory().createAsync(identifier, args);
     }
 
     if (this.parent) {

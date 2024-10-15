@@ -21,7 +21,7 @@ import {
   IObjectDefinition,
   IObjectDefinitionRegistry,
   ObjectIdentifier,
-  ObjectLifeCycleEvent,
+  ObjectLifeCycleEvent, PropertyInjectMetadata,
   ScopeEnum
 } from '../interface';
 import {
@@ -32,10 +32,7 @@ import {
 } from '../constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
-import {
-  ManagedReference,
-  ManagedResolverFactory,
-} from './managedResolverFactory';
+import { ManagedResolverFactory } from './managedResolverFactory';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
 import { EventEmitter } from 'events';
@@ -392,18 +389,14 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     );
 
     for (const p in props) {
-      const propertyMeta = props[p];
+      const propertyMeta: PropertyInjectMetadata = props[p];
       debugBind(
         `${' '.repeat(debugSpaceLength)}inject properties => [${JSON.stringify(
           propertyMeta
         )}]`
       );
-      const refManaged = new ManagedReference();
-      refManaged.args = propertyMeta.args;
-      refManaged.name = propertyMeta.value as any;
-      refManaged.injectMode = propertyMeta['injectMode'];
 
-      definition.properties.set(propertyMeta['targetKey'], refManaged);
+      definition.properties.set(propertyMeta.targetKey, propertyMeta);
     }
 
     // inject custom properties
@@ -555,7 +548,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   async getAsync<T>(
     identifier: ClassType<T> | string,
-    args?: any[],
+    args?: any[]
   ): Promise<T> {
     return this.getManagedResolverFactory().createAsync(identifier, args);
   }

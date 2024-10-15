@@ -4,7 +4,7 @@
  */
 export const KEYS = {
   REF_ELEMENT: 'ref',
-  REF_CUSTOM: 'ref_custom'
+  REF_CUSTOM: 'ref_custom',
 };
 
 export const FUNCTION_INJECT_KEY = 'midway:function_inject_key';

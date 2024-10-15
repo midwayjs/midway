@@ -39,8 +39,15 @@ export class MidwayParameterError extends MidwayError {
 }
 // Definition for "katana3" not found. This identifier is not valid in the current context. Creation path: Grandson
 export class MidwayDefinitionNotFoundError extends MidwayError {
-  constructor(name: string, creationPath?: string[]) {
-    super(creationPath ? `Definition for \"${name}\" not found in current context. Detection path: \"${creationPath.join(' -> ')}\"` : `Definition for \"${name}\" not found in current context.\"`, FrameworkErrorEnum.DEFINITION_NOT_FOUND);
+  constructor(id: string, name: string, creationPath?: string[]) {
+    super(
+      creationPath
+        ? `Definition for "${name ?? id}" not found in current context. Detection path: "${creationPath.join(
+            ' -> '
+          )}"`
+        : `Definition for "${name ?? id}" not found in current context.`,
+      FrameworkErrorEnum.DEFINITION_NOT_FOUND
+    );
   }
 }
 
@@ -76,15 +83,6 @@ export class MidwayInvalidConfigError extends MidwayError {
     super(
       'Invalid config file \n' + message,
       FrameworkErrorEnum.INVALID_CONFIG
-    );
-  }
-}
-
-export class MidwayResolverMissingError extends MidwayError {
-  constructor(type: string) {
-    super(
-      `Resolver "${type}" is missing.`,
-      FrameworkErrorEnum.MISSING_RESOLVER
     );
   }
 }

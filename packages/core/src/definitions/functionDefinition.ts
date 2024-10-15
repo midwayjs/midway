@@ -2,10 +2,9 @@ import {
   IProperties,
   IObjectCreator,
   IObjectDefinition,
-  IManagedInstance,
   ObjectIdentifier,
   ScopeEnum,
-  IMidwayContainer
+  IMidwayContainer,
 } from '../interface';
 import { ObjectCreator } from './objectCreator';
 
@@ -30,7 +29,7 @@ export class FunctionDefinition implements IObjectDefinition {
   }
 
   constructMethod: string;
-  constructorArgs: IManagedInstance[] = [];
+  constructorArgs: any [] = [];
   creator: IObjectCreator;
   dependsOn: ObjectIdentifier[];
   destroyMethod: string;

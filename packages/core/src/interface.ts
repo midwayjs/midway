@@ -51,7 +51,6 @@ export type WithoutFn<T> = {
 
 export type MiddlewareParamArray = Array<string | any>;
 export type ObjectIdentifier = string | Symbol;
-export type GroupModeType = 'one' | 'multi';
 
 export enum ScopeEnum {
   Singleton = 'Singleton',
@@ -66,12 +65,14 @@ export enum InjectModeEnum {
 }
 
 /**
- * 内部管理的属性、json、ref等解析实例存储
+ * inject property metadata
  */
-export interface IManagedInstance {
-  type: string;
-  value?: any;
-  args?: any;
+export interface PropertyInjectMetadata {
+  args: any[];
+  id: string;
+  name: string;
+  injectMode: InjectModeEnum;
+  targetKey: string;
 }
 
 export interface ObjectDefinitionOptions {
@@ -586,7 +587,7 @@ export interface IObjectDefinition {
   path: any;
   export: string;
   dependsOn: ObjectIdentifier[];
-  constructorArgs: IManagedInstance[];
+  constructorArgs: any[];
   properties: IProperties;
   scope: ScopeEnum;
   isAsync(): boolean;
@@ -656,22 +657,6 @@ export interface IProperties extends Map<ObjectIdentifier, any> {
   getProperty(key: ObjectIdentifier, defaultValue?: any): any;
   setProperty(key: ObjectIdentifier, value: any): any;
   propertyKeys(): ObjectIdentifier[];
-}
-
-/**
- * 解析内部管理的属性、json、ref等实例的解析器
- * 同时创建这些对象的实际使用的对象
- */
-export interface IManagedResolver {
-  type: string;
-  resolve(managed: IManagedInstance): any;
-  resolveAsync(managed: IManagedInstance): Promise<any>;
-}
-
-export interface IManagedResolverFactoryCreateOptions {
-  definition: IObjectDefinition;
-  args?: any;
-  namespace?: string;
 }
 
 export type HandlerFunction = (
