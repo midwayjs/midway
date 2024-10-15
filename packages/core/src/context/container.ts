@@ -543,14 +543,14 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   }
 
   get<T>(identifier: ClassType<T> | string, args?: any[]): T {
-    return this.getManagedResolverFactory().create(identifier, args);
+    return this.getManagedResolverFactory().create(identifier, undefined, args);
   }
 
   async getAsync<T>(
     identifier: ClassType<T> | string,
     args?: any[]
   ): Promise<T> {
-    return this.getManagedResolverFactory().createAsync(identifier, args);
+    return this.getManagedResolverFactory().createAsync(identifier, undefined, args);
   }
 
   /**

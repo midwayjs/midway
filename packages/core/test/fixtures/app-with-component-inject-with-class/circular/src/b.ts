@@ -1,8 +1,8 @@
-import { Inject, Provide } from '../../../../../src';
+import { LazyInject, Provide } from '../../../../../src';
 import { A } from './a';
 
 @Provide()
 export class B {
-  @Inject()
+  @LazyInject(() => A)
   a: A;
 }

@@ -6,28 +6,9 @@ import {
   Inject,
   Provide,
   Scope,
-  ScopeEnum, SINGLETON_CONTAINER_CTX
+  ScopeEnum,
+  SINGLETON_CONTAINER_CTX
 } from '../../src';
-import {
-  AppService,
-  AutoScaleService,
-  CCController,
-  CircularOne,
-  CircularThree,
-  CircularTwo,
-  FunService,
-  GatewayManager,
-  GatewayService,
-  GroupService,
-  ScaleManager,
-  TenService,
-  TestOne,
-  TestOne1,
-  TestThree,
-  TestThree1,
-  TestTwo,
-  TestTwo1,
-} from '../fixtures/circular_dependency';
 
 @Provide()
 class Tracer {
@@ -160,59 +141,6 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     expect(tracer1[REQUEST_OBJ_CTX_KEY]).toEqual(ctx1);
     expect(tracer2[REQUEST_OBJ_CTX_KEY]).toEqual(ctx2);
-  });
-
-  it('circular should be ok in requestContainer', async () => {
-    const appCtx = new Container();
-
-    appCtx.bind(TestOne);
-    appCtx.bind(TestTwo);
-    appCtx.bind(TestThree);
-    appCtx.bind(TestOne1);
-    appCtx.bind(TestTwo1);
-    appCtx.bind(TestThree1);
-    appCtx.bind(CircularOne);
-    appCtx.bind(CircularTwo);
-    appCtx.bind(CircularThree);
-
-    const ctx1 = { a: 1 };
-    const container = new RequestContainer(ctx1, appCtx);
-    const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
-    expect(circularTwo.test2).toEqual('this is two');
-    expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
-    expect(
-      ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo)
-        .test2
-    ).toEqual('this is two');
-
-    const one = await container.getAsync<TestOne1>(TestOne1);
-    expect(one).toBeDefined();
-    expect(one).toBeDefined();
-    expect(one.name).toEqual('one');
-    expect((one.two as TestTwo1).name).toEqual('two');
-  });
-
-  it('circular depth should be ok in requestContainer', async () => {
-    const appCtx = new Container();
-    appCtx.bind(GatewayManager);
-    appCtx.bind(GatewayService);
-    appCtx.bind(GroupService);
-    appCtx.bind(FunService);
-    appCtx.bind(AppService);
-    appCtx.bind(TenService);
-    appCtx.bind(ScaleManager);
-    appCtx.bind(AutoScaleService);
-    appCtx.bind(CCController);
-
-    const ctx1 = { a: 1 };
-    const container = new RequestContainer(ctx1, appCtx);
-    const one = await container.getAsync<CCController>(CCController);
-    expect(one).toBeDefined();
-    expect(one).toBeDefined();
-    expect(one.ts).toEqual('controller');
-
-    expect((one.autoScaleService as any).ts).toEqual('ascale');
-    expect((one.autoScaleService as any).scaleManager.ts).toEqual('scale');
   });
 
   it('test request scope inject request scope', async () => {

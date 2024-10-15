@@ -64,8 +64,13 @@ export function Inject(
 }
 
 export function LazyInject(
-  identifier?: () => ObjectIdentifier
+  identifier?: ObjectIdentifier | (() => ObjectIdentifier | ClassType)
 ): PropertyDecorator {
+  if (identifier && typeof identifier !== 'function') {
+    identifier = (() => {
+      return identifier;
+    }) as any;
+  }
   return DecoratorManager.createCustomPropertyDecorator(LAZY_INJECT_KEY, {
     identifier,
   });
