@@ -190,6 +190,8 @@ describe('/test/context/container.test.ts', () => {
     expect(() => container.get('grandson')).toThrow(/Grandson/);
     expect(() => container.get('nograndson')).toThrow(/nograndson/);
 
+    // container.get('grandson')
+
     await expect(container.getAsync('grandson')).rejects.toThrow(/Grandson/);
     await expect(container.getAsync('nograndson')).rejects.toThrow(/nograndson/);
   });
@@ -722,6 +724,74 @@ describe('/test/context/container.test.ts', () => {
 
       expect(a === await container.getAsync(A)).toBeTruthy();
       expect(a.c.d === a.b.d).toBeTruthy();
+    });
+
+    it('should handle complex dependencies and avoid duplicate initialization 2', async () => {
+      let initCount = {
+        a: 0,
+        b: 0,
+        c: 0,
+      };
+
+      let initOrder: string[] = [];
+
+      @Provide()
+      class C {
+        name = 'c';
+
+        @Init()
+        async init() {
+          initCount.c++;
+          initOrder.push('C');
+        }
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C;
+
+        @Init()
+        async init() {
+          initCount.b++;
+          initOrder.push('B');
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B;
+        @Inject()
+        c: C;
+
+        @Init()
+        async init() {
+          initCount.a++;
+          initOrder.push('A');
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsync(A);
+      const b = await container.getAsync(B);
+
+      expect(initOrder).toEqual(['C', 'B', 'A']);
+      // 验证每个类只被初始化一次
+      expect(initCount).toEqual({
+        a: 1,
+        b: 1,
+        c: 1,
+      });
+
+      expect(a === await container.getAsync(A)).toBeTruthy();
+      expect(b === await container.getAsync(B)).toBeTruthy();
     });
 
     it('should initialize dependencies in correct order without duplication', async () => {

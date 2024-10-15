@@ -20,7 +20,6 @@ import {
   IModuleStore,
   IObjectDefinition,
   IObjectDefinitionRegistry,
-  ObjectContext,
   ObjectIdentifier,
   ObjectLifeCycleEvent,
   ScopeEnum
@@ -40,7 +39,6 @@ import {
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
 import { EventEmitter } from 'events';
-import { MidwayDefinitionNotFoundError } from '../error';
 import { Types } from '../util/types';
 import { Utils } from '../util';
 import { MetadataManager } from '../decorator/metadataManager';
