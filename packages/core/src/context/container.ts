@@ -21,8 +21,9 @@ import {
   IObjectDefinition,
   IObjectDefinitionRegistry,
   ObjectIdentifier,
-  ObjectLifeCycleEvent, PropertyInjectMetadata,
-  ScopeEnum
+  ObjectLifeCycleEvent,
+  PropertyInjectMetadata,
+  ScopeEnum,
 } from '../interface';
 import {
   CONTAINER_OBJ_SCOPE,
@@ -550,7 +551,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     identifier: ClassType<T> | string,
     args?: any[]
   ): Promise<T> {
-    return this.getManagedResolverFactory().createAsync(identifier, undefined, args);
+    return this.getManagedResolverFactory().createAsync(
+      identifier,
+      undefined,
+      args
+    );
   }
 
   /**

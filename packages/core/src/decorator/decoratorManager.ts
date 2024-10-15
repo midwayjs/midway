@@ -19,6 +19,7 @@ import { generateRandomId } from '../util';
 import { getModuleRequirePathList } from '../util/pathFileUtil';
 import { MetadataManager } from './metadataManager';
 import { isClass } from '../util/types';
+import { MidwayInconsistentVersionError } from '../error';
 
 const debug = require('util').debuglog('midway:core');
 
@@ -239,19 +240,21 @@ export class DecoratorManager {
   }
 }
 
-if (typeof globalThis === 'object') {
-  if (globalThis['MIDWAY_GLOBAL_DECORATOR_MANAGER']) {
-    console.warn(
-      'DecoratorManager not singleton and please check @midwayjs/core version by "npm ls @midwayjs/core"'
-    );
-    const coreModulePathList = getModuleRequirePathList('@midwayjs/core');
-    if (coreModulePathList.length) {
-      console.info('The module may be located in:');
-      coreModulePathList.forEach((path, index) => {
-        console.info(`${index + 1}. ${path}`);
-      });
-    }
-  } else {
-    globalThis['MIDWAY_GLOBAL_DECORATOR_MANAGER'] = DecoratorManager;
+if (
+  typeof globalThis === 'object' &&
+  globalThis['MIDWAY_GLOBAL_DECORATOR_MANAGER']
+) {
+  console.warn(
+    'DecoratorManager not singleton and please check @midwayjs/core version by "npm ls @midwayjs/core"'
+  );
+  const coreModulePathList = getModuleRequirePathList('@midwayjs/core');
+  if (coreModulePathList.length) {
+    console.info('The module may be located in:');
+    coreModulePathList.forEach((path, index) => {
+      console.info(`${index + 1}. ${path}`);
+    });
   }
+  throw new MidwayInconsistentVersionError();
+} else {
+  globalThis['MIDWAY_GLOBAL_DECORATOR_MANAGER'] = DecoratorManager;
 }

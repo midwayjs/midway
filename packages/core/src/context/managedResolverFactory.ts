@@ -12,8 +12,9 @@ import {
   IMidwayContainer,
   IObjectDefinition,
   ObjectIdentifier,
-  ObjectLifeCycleEvent, PropertyInjectMetadata,
-  ScopeEnum
+  ObjectLifeCycleEvent,
+  PropertyInjectMetadata,
+  ScopeEnum,
 } from '../interface';
 import * as util from 'util';
 import * as EventEmitter from 'events';
@@ -204,7 +205,11 @@ export class ManagedResolverFactory {
     if (!definition) {
       definition = this.getObjectDefinition(identifier);
       if (!definition) {
-        throw new MidwayDefinitionNotFoundError(identifier as string, name, creationPath);
+        throw new MidwayDefinitionNotFoundError(
+          identifier as string,
+          name,
+          creationPath
+        );
       }
     }
 
@@ -212,11 +217,17 @@ export class ManagedResolverFactory {
 
     if (definition.isSingletonScope()) {
       currentContext = context.parent ?? context;
-      if (currentContext['getManagedResolverFactory']().singletonCache.has(definition.id)) {
+      if (
+        currentContext['getManagedResolverFactory']().singletonCache.has(
+          definition.id
+        )
+      ) {
         debug(
           `id = ${definition.id}(${definition.name}) get from singleton cache.`
         );
-        return currentContext['getManagedResolverFactory']().singletonCache.get(definition.id);
+        return currentContext['getManagedResolverFactory']().singletonCache.get(
+          definition.id
+        );
       }
     }
 
@@ -296,6 +307,19 @@ export class ManagedResolverFactory {
       for (const key of keys) {
         this.checkSingletonInvokeRequest(definition, key, currentContext);
         const resolver: PropertyInjectMetadata = definition.properties.get(key);
+        // if (
+        //   resolver.injectMode === InjectModeEnum.Class &&
+        //   !(this.getRootContext(currentContext)).hasDefinition(
+        //     resolver.id
+        //   )
+        // ) {
+        //   if (resolver.name === 'loggerService') {
+        //     throw new MidwayInconsistentVersionError();
+        //   } else {
+        //     throw new MidwayMissingImportComponentError(resolver.name);
+        //   }
+        // }
+
         inst[key] = this.createInstance(
           resolver.id || resolver.name,
           resolver.name,
@@ -347,7 +371,8 @@ export class ManagedResolverFactory {
     // let newInstance;
 
     const dfs = (obj: any, def: IObjectDefinition, path: any[] = []) => {
-      if (!pendingInitQueue.has(obj) || initializedInstances.has(def.id)) return;
+      if (!pendingInitQueue.has(obj) || initializedInstances.has(def.id))
+        return;
       if (initializingSet.has(def.id)) {
         const cycle = path.slice(path.indexOf(obj)).concat(obj);
         throw new MidwayCommonError(
@@ -368,7 +393,9 @@ export class ManagedResolverFactory {
             const propertyValue = obj[key];
             if (propertyValue) {
               const resolver = def.properties.get(key);
-              const propertyDefinition = this.getObjectDefinition(resolver.id ?? resolver.name);
+              const propertyDefinition = this.getObjectDefinition(
+                resolver.id ?? resolver.name
+              );
               dfs(propertyValue, propertyDefinition, [...path]);
             }
           }
@@ -392,14 +419,11 @@ export class ManagedResolverFactory {
         this.storeInstanceScope(obj, def);
 
         this.getObjectEventTarget().emit(
-          ObjectLifeCycleEvent.AFTER_CREATED,
+          ObjectLifeCycleEvent.AFTER_INIT,
           instance,
           {
-            context: this.context,
+            context: this.getRootContext(this.context),
             definition,
-            // replaceCallback: ins => {
-            //   newInstance = ins;
-            // },
           }
         );
       }
@@ -419,7 +443,8 @@ export class ManagedResolverFactory {
     // let newInstance;
 
     const dfs = async (obj: any, def: IObjectDefinition, path: any[] = []) => {
-      if (!pendingInitQueue.has(obj) || initializedInstances.has(def.id)) return;
+      if (!pendingInitQueue.has(obj) || initializedInstances.has(def.id))
+        return;
       if (initializingSet.has(def.id)) {
         const cycle = path.slice(path.indexOf(obj)).concat(obj);
         throw new MidwayCommonError(
@@ -440,7 +465,9 @@ export class ManagedResolverFactory {
             const propertyValue = obj[key];
             if (propertyValue) {
               const resolver = def.properties.get(key);
-              const propertyDefinition = this.getObjectDefinition(resolver.id ?? resolver.name);
+              const propertyDefinition = this.getObjectDefinition(
+                resolver.id ?? resolver.name
+              );
               await dfs(propertyValue, propertyDefinition, [...path]);
             }
           }
@@ -464,14 +491,11 @@ export class ManagedResolverFactory {
         this.storeInstanceScope(obj, def);
 
         this.getObjectEventTarget().emit(
-          ObjectLifeCycleEvent.AFTER_CREATED,
+          ObjectLifeCycleEvent.AFTER_INIT,
           instance,
           {
-            context: this.context,
+            context: this.getRootContext(this.context),
             definition,
-            // replaceCallback: ins => {
-            //   newInstance = ins;
-            // },
           }
         );
       }
@@ -491,7 +515,10 @@ export class ManagedResolverFactory {
           `id = ${definition.id}(${definition.name}) set to singleton cache`
         );
         if (this.context.parent) {
-          this.context.parent['getManagedResolverFactory']().singletonCache.set(definition.id, instance);
+          this.context.parent['getManagedResolverFactory']().singletonCache.set(
+            definition.id,
+            instance
+          );
         } else {
           this.singletonCache.set(definition.id, instance);
         }
@@ -514,5 +541,9 @@ export class ManagedResolverFactory {
       definition = this.context.parent.registry.getDefinition(identifier);
     }
     return definition;
+  }
+
+  private getRootContext(context: IMidwayContainer): IMidwayContainer {
+    return context.parent ?? context;
   }
 }

@@ -23,15 +23,17 @@ describe('/test/annotation/inject.test.ts', () => {
   it('inject decorator should be ok', () => {
     let meta = getPropertyInject(Test);
     expect(meta['aa']).toEqual({
+      id: 'aa',
       injectMode: 'SelfName',
-      value: 'aa',
+      name: 'aa',
       targetKey: 'aa'
     });
     expect(meta['ee']['targetKey']).toEqual('ee');
-    expect(meta['ee']['value'].length).toEqual(32);
+    expect(meta['ee']['name']).toEqual('ee');
     expect(meta['ff']).toEqual({
+      id: 'ff',
       injectMode: 'SelfName',
-      value: 'ff',
+      name: 'ff',
       targetKey: 'ff'
     });
   });

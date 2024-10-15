@@ -42,7 +42,9 @@ export class MidwayDefinitionNotFoundError extends MidwayError {
   constructor(id: string, name: string, creationPath?: string[]) {
     super(
       creationPath
-        ? `Definition for "${name ?? id}" not found in current context. Detection path: "${creationPath.join(
+        ? `Definition for "${
+            name ?? id
+          }" not found in current context. Detection path: "${creationPath.join(
             ' -> '
           )}"`
         : `Definition for "${name ?? id}" not found in current context.`,
@@ -132,7 +134,7 @@ export class MidwayUtilHttpClientTimeoutError extends MidwayError {
 export class MidwayInconsistentVersionError extends MidwayError {
   constructor() {
     const text =
-      'We find a latest dependency package installed, please remove the lock file and use "npm update" to upgrade all dependencies first.';
+      'We find a different "@midwayjs/core" package installed, please remove the lock file and use "(p)npm update" to upgrade all dependencies first.';
     super(text, FrameworkErrorEnum.INCONSISTENT_VERSION);
   }
 }

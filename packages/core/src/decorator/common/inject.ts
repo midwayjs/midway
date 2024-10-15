@@ -31,9 +31,7 @@ export function saveInjectMetadata(
       isClass(type.originDesign) &&
       DecoratorManager.isProvide(type.originDesign)
     ) {
-      id = DecoratorManager.getProviderUUId(
-        type.originDesign as ClassType
-      );
+      id = DecoratorManager.getProviderUUId(type.originDesign as ClassType);
       injectMode = InjectModeEnum.Class;
     }
     if (!id) {

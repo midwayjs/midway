@@ -48,7 +48,14 @@ export class ObjectCreator implements IObjectCreator {
     if (!Clzz) {
       return Object.create(null);
     }
-    return Reflect.construct(Clzz, args);
+    let inst;
+    if (this.definition.constructMethod) {
+      // eslint-disable-next-line prefer-spread
+      inst = Clzz[this.definition.constructMethod].apply(Clzz, args);
+    } else {
+      inst = Reflect.construct(Clzz, args);
+    }
+    return inst;
   }
 
   /**

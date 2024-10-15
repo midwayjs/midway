@@ -29,7 +29,7 @@ export class FunctionDefinition implements IObjectDefinition {
   }
 
   constructMethod: string;
-  constructorArgs: any [] = [];
+  constructorArgs: any[] = [];
   creator: IObjectCreator;
   dependsOn: ObjectIdentifier[];
   destroyMethod: string;
