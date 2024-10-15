@@ -2,31 +2,25 @@ import {
   IProperties,
   IObjectCreator,
   IObjectDefinition,
-  IMidwayContainer,
   IManagedInstance,
   ObjectIdentifier,
   ScopeEnum,
+  IMidwayContainer
 } from '../interface';
 import { ObjectCreator } from './objectCreator';
 
 class FunctionWrapperCreator extends ObjectCreator {
-  doConstruct(Clzz: any, args?: any, context?: IMidwayContainer): any {
-    if (!Clzz) {
-      return null;
-    }
-    return Clzz(context, args);
+  type = 'function';
+  doConstruct(Clzz: any, args?: any[]): any {
+    return Clzz;
   }
 
-  async doConstructAsync(
-    Clzz: any,
-    args?: any,
-    context?: IMidwayContainer
-  ): Promise<any> {
-    if (!Clzz) {
-      return null;
-    }
+  doInit(obj: any, context: IMidwayContainer): any {
+    return obj(context);
+  }
 
-    return Clzz(context, args);
+  async doInitAsync(obj: any, context: IMidwayContainer): Promise<void> {
+    return obj(context);
   }
 }
 

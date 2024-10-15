@@ -618,15 +618,11 @@ export interface IObjectDefinition {
 }
 
 export interface IObjectCreator {
+  type: string;
   load(): any;
-  doConstruct(Clzz: any, args?: any, context?: IMidwayContainer): any;
-  doConstructAsync(
-    Clzz: any,
-    args?: any,
-    context?: IMidwayContainer
-  ): Promise<any>;
-  doInit(obj: any): void;
-  doInitAsync(obj: any): Promise<void>;
+  doConstruct(Clzz: any, args?: any[]): any;
+  doInit(obj: any, context: IMidwayContainer): any;
+  doInitAsync(obj: any, context: IMidwayContainer): Promise<any>;
   doDestroy(obj: any): void;
   doDestroyAsync(obj: any): Promise<void>;
 }

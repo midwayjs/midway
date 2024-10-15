@@ -1,9 +1,10 @@
-import type { IObjectCreator, IObjectDefinition } from '../interface';
+import { IMidwayContainer, IObjectCreator, IObjectDefinition } from '../interface';
 import { MidwayUseWrongMethodError } from '../error';
 import { Types } from '../util/types';
 
 export class ObjectCreator implements IObjectCreator {
   protected definition: IObjectDefinition;
+  type = 'object';
 
   constructor(definition: IObjectDefinition) {
     this.definition = definition;
@@ -39,44 +40,11 @@ export class ObjectCreator implements IObjectCreator {
    * @param args 对象初始化参数
    * @returns {any} 返回创建的对象实例
    */
-  doConstruct(Clzz: any, args?: any): any {
+  doConstruct(Clzz: any, args?: any[]): any {
     if (!Clzz) {
       return Object.create(null);
     }
-
-    let inst;
-    if (this.definition.constructMethod) {
-      // eslint-disable-next-line prefer-spread
-      inst = Clzz[this.definition.constructMethod].apply(Clzz, args);
-    } else {
-      inst = Reflect.construct(Clzz, args);
-    }
-    return inst;
-  }
-
-  /**
-   * 异步构造对象
-   * @param Clzz 对象class，通过load加载
-   * @param args 对象初始化参数
-   * @returns {any} 返回创建的对象实例
-   */
-  async doConstructAsync(Clzz: any, args?: any): Promise<any> {
-    if (!Clzz) {
-      return Object.create(null);
-    }
-
-    let inst;
-    if (this.definition.constructMethod) {
-      const fn = Clzz[this.definition.constructMethod];
-      if (Types.isAsyncFunction(fn)) {
-        inst = await fn.apply(Clzz, args);
-      } else {
-        inst = fn.apply(Clzz, args);
-      }
-    } else {
-      inst = Reflect.construct(Clzz, args);
-    }
-    return inst;
+    return Reflect.construct(Clzz, args);
   }
 
   /**
@@ -84,7 +52,7 @@ export class ObjectCreator implements IObjectCreator {
    * @param obj 对象，由doConstruct返回
    * @returns {void}
    */
-  doInit(obj: any): void {
+  doInit(obj: any, context: IMidwayContainer): any {
     const inst = obj;
     // after properties set then do init
     if (this.definition.initMethod && inst[this.definition.initMethod]) {
@@ -115,7 +83,7 @@ export class ObjectCreator implements IObjectCreator {
    * @param obj 对象，由doConstructAsync返回
    * @returns {void}
    */
-  async doInitAsync(obj: any): Promise<void> {
+  async doInitAsync(obj: any, context: IMidwayContainer): Promise<any> {
     const inst = obj;
     if (this.definition.initMethod && inst[this.definition.initMethod]) {
       const initFn = inst[this.definition.initMethod];

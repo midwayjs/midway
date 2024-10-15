@@ -18,7 +18,7 @@ import {
   Provide,
   MetadataManager,
   Init,
-  sleep
+  sleep, Scope, ScopeEnum
 } from '../../src';
 import {
   Grandson,
@@ -35,8 +35,6 @@ import { childAsyncFunction,
   singletonFactory2,
   AliSingleton,
   singletonFactory } from '../fixtures/fun_sample';
-import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
-import { HelloSingleton, HelloErrorInitSingleton, HelloErrorSingleton } from '../fixtures/singleton_sample';
 import { CircularOne, CircularTwo, CircularThree, TestOne, TestTwo, TestThree, TestOne1, TestTwo1, TestThree1 } from '../fixtures/circular_dependency';
 
 describe('/test/context/container.test.ts', () => {
@@ -272,9 +270,49 @@ describe('/test/context/container.test.ts', () => {
   });
 
   describe('mix suit', () => {
-    const container = new Container();
-
     it('should use factory dynamic create object', () => {
+      const container = new Container();
+      interface Engine {
+        capacity;
+      }
+
+      @Scope(ScopeEnum.Prototype)
+      @Provide('petrol')
+      class PetrolEngine implements Engine {
+        capacity = 10;
+      }
+
+      @Scope(ScopeEnum.Prototype)
+      @Provide('diesel')
+      class DieselEngine implements Engine {
+        capacity = 20;
+      }
+
+      function engineFactory(context) {
+        return (named: string) => {
+          return context.get(named);
+        };
+      }
+
+      @Provide()
+      class DieselCar {
+        dieselEngine: Engine;
+        backUpDieselEngine: Engine;
+
+        @Inject('engineFactory')
+        factory: (category: string) => Engine;
+
+        @Init()
+        init() {
+          this.dieselEngine = this.factory('diesel') as Engine;
+          this.backUpDieselEngine = this.factory('diesel') as Engine;
+        }
+
+        run() {
+          this.dieselEngine.capacity -= 5;
+        }
+      }
+
       container.bind('engineFactory', engineFactory);
       container.bind(DieselCar);
       container.bind(PetrolEngine);
@@ -284,13 +322,67 @@ describe('/test/context/container.test.ts', () => {
       expect(result.dieselEngine.capacity).toEqual(15);
       expect(result.backUpDieselEngine.capacity).toEqual(20);
     });
-
   });
 
   describe('singleton case', () => {
     const container = new Container();
 
     it('singleton lock should be ok', async () => {
+      Scope(ScopeEnum.Singleton)
+      @Provide()
+      class HelloSingleton {
+        ts: number;
+        end: number;
+
+        @Init()
+        async doinit(): Promise<void> {
+          this.ts = Date.now();
+          return new Promise<void>(resolve => {
+            setTimeout(() => {
+              this.end = Date.now();
+              resolve();
+            }, 500);
+          });
+        }
+      }
+
+      @Scope(ScopeEnum.Singleton)
+      @Provide()
+      class HelloErrorSingleton {
+        public ts: number;
+        public end: number;
+        @Inject()
+        public helloErrorInitSingleton;
+
+        @Init()
+        async doinit(): Promise<true> {
+          this.ts = Date.now();
+          return new Promise<any>(resolve => {
+            this.end = Date.now();
+            setTimeout(resolve, 600);
+          });
+        }
+      }
+
+      @Scope(ScopeEnum.Singleton)
+      @Provide()
+      class HelloErrorInitSingleton {
+        public ts: number;
+        public end: number;
+        @Inject()
+        public helloErrorSingleton;
+
+        @Init()
+        async doinit(): Promise<void> {
+          this.ts = Date.now();
+          return new Promise<void>((resolve, reject) => {
+            setTimeout(() => {
+              this.end = Date.now();
+              resolve();
+            }, 800);
+          });
+        }
+      }
       container.bind(HelloSingleton);
       container.bind(HelloErrorSingleton);
       container.bind(HelloErrorInitSingleton);
