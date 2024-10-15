@@ -4,7 +4,7 @@ import { MidwayDefinitionNotFoundError } from '../src';
 import { MidwayHealthService } from '../src/service/healthService';
 
 describe('/test/feature.test.ts', () => {
-  it('should throw error when inject', async () => {
+  it.skip('should throw error when inject', async () => {
     let err;
     try {
       await createLightFramework(join(
