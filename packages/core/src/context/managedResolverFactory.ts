@@ -368,7 +368,6 @@ export class ManagedResolverFactory {
   ): any {
     const initializingSet = new Map<string, any>();
     const initializedInstances = new Map<string, any>();
-    // let newInstance;
 
     const dfs = (obj: any, def: IObjectDefinition, path: any[] = []) => {
       if (!pendingInitQueue.has(obj) || initializedInstances.has(def.id))
@@ -440,7 +439,6 @@ export class ManagedResolverFactory {
   ): Promise<any> {
     const initializingSet = new Map<string, any>();
     const initializedInstances = new Map<string, any>();
-    // let newInstance;
 
     const dfs = async (obj: any, def: IObjectDefinition, path: any[] = []) => {
       if (!pendingInitQueue.has(obj) || initializedInstances.has(def.id))
