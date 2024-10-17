@@ -8,6 +8,8 @@ Midway 内置了一个简单的 HTTP 请求客户端，无需引入三方包即�
 
 默认 Get 请求，返回数据为 Buffer。
 
+内置的 Http 客户端只提供最简单的能力，仅满足大部分的前端接口数据获取，如需复杂的功能，比如文件上传等，请使用其他的客户端，如 fetch，axios，got 等。
+
 
 
 ### 简单方法形式
@@ -98,12 +100,6 @@ try {
   err = e;
 }
 ```
-
-:::tip
-
-内置的 Http 客户端只提供最简单的能力，如需复杂的功能（前后拦截或是其他额外的配置），请使用 axios。
-
-:::
 
 
 
@@ -416,18 +412,18 @@ export class MainConfiguration {
 }
 ```
 
-### 直接使用Axios
+### 直接使用 Axios
 
 `@midayjs/axios`导出了原始的`axios`实例，在非应用环境中可以直接使用。
 
 ```typescript
-import { axios } from '@midwayjs/axios';
+import { Axios } from '@midwayjs/axios';
 import { ReadStream, createWriteStream } from 'fs';
 import { finished } from 'stream/promises';
 
 async function download(url: string, filename: string) {
   const writer = await createWriteStream(filename);
-  const res = axios.get<ReadStream>(url, {
+  const res = Axios.get<ReadStream>(url, {
     responseType: 'stream',
   });
   res.data.pipe(writer);

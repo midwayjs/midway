@@ -57,7 +57,7 @@ export class MainConfiguration {}
 启动我们的应用，此时访问的时候多了一个 `${host}:${port}/metrics` 。
 
 :::info
-Prometheus 基于 HTTP 获取监控数据，请加载 web/koa/express 任一框架，并使用多框架模式启动。
+Prometheus 基于 HTTP 获取监控数据，请包含 web/koa/express 其中任一组件。
 :::
 
 访问接口，返回如下，里面的内容是当前的指标。

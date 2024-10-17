@@ -67,6 +67,40 @@ export class AutoConfiguration {
 }
 ```
 
+Another example for [connect-redis](https://github.com/tj/connect-redis).
+
+```ts
+import { Configuration, Inject } from '@midwayjs/core';
+import * as session from '@midwayjs/express-session';
+import RedisStore from "connect-redis"
+import {createClient} from "redis"
+
+// Initialize client.
+let redisClient = createClient()
+redisClient.connect().catch(console.error)
+
+@Configuration({
+  imports: [
+    express,
+    session,
+  ],
+  //...
+})
+export class AutoConfiguration {
+  @Inject()
+  sessionStoreManager: session.SessionStoreManager;
+
+  async onReady() {
+    // Initialize store.
+    this.sessionStoreManager.setSessionStore(RedisStore, {
+      client: redisClient,
+      prefix: "myapp:",
+      // ...
+    });
+  }
+}
+```
+
 ## Questions & Suggestions
 
 Please open an issue [here](https://github.com/midwayjs/midway/issues/).

@@ -1,5 +1,5 @@
 import { Readable } from 'stream';
-import { IgnoreMatcher } from '@midwayjs/core';
+import { IgnoreMatcher, IMidwayContext } from '@midwayjs/core';
 
 export type UploadMode = 'stream' | 'file';
 
@@ -15,7 +15,7 @@ export interface UploadOptions {
   /**
    * The white ext file names
    */
-  whitelist?: string[] | null;
+  whitelist?: string[] | null | ((ctx: IMidwayContext<any>) => string[]);
   /**
    * Temporary file directory
    */
@@ -39,7 +39,11 @@ export interface UploadOptions {
   /**
    * Mime type white list
    */
-  mimeTypeWhiteList?: Record<string, string | string[]>;
+  mimeTypeWhiteList?: Record<string, string | string[]> | ((ctx: IMidwayContext<any>) => string | string[]);
+  /**
+   * Whether to allow fields duplication, default is `false`
+   */
+  allowFieldsDuplication?: boolean;
 }
 
 

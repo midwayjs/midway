@@ -17,7 +17,6 @@ The `@midwayjs/koa` package uses `koa @2` and integrates `@koa/router` as the ba
 
 ```bash
 $ npm i @midwayjs/koa@3 --save
-$ npm i @types/koa --save-dev
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -28,10 +27,6 @@ Or reinstall the following dependencies in `package.json`.
     "@midwayjs/koa": "^3.0.0",
     // ...
   },
-  "devDependencies": {
-    "@types/koa": "^2.13.4 ",
-    // ...
-  }
 }
 ```
 
@@ -230,11 +225,13 @@ All attributes are described as follows:
 | cert | string \| Buffer \| Array<Buffer\|Object> | Optional, Https cert, server certificate |
 | ca | string \| Buffer \| Array<Buffer\|Object> | Optional, Https ca |
 | http2 | boolean | Optional, supported by http2, default false |
-| proxy | boolean | Optional. Whether to enable the proxy. If true, the host / protocol / ip in the request request is obtained from the X-Forwarded-Host / X-Forwarded-Proto / X-Forwarded-For in the Header field. The default value is false |
+| proxy | boolean | Optional, whether to enable the proxy. If it is true, the IP in the request request will be obtained first from the X-Forwarded-For in the Header field. The default is false. |
 | subdomainOffset | number | optional, the offset of the subdomain name, default 2. |
 | proxyIpHeader | string | optional. obtains the field name of the proxy ip address. the default value is X-Forwarded-For |
 | maxIpsCount | number | optional. the maximum number of ips obtained, which is 0 by default. |
-| serverTimeout | number | Optional, server-side timeout configuration, unit seconds. |
+| serverTimeout | number | Optional, server timeout configuration, the default is 2 * 60 * 1000 (2 minutes), in milliseconds |
+| serverOptions | Record<string, any> | Optional，http Server [Options](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
+
 
 
 ### Modify port
@@ -272,6 +269,35 @@ In addition, you can also temporarily modify the port by `midway-bin dev-ts-port
 ### Global prefix
 
 For more information about this feature, see [Global Prefixes](../controller# Global Routing Prefix).
+
+
+
+### Reverse proxy configuration
+
+If you use a reverse proxy such as Nginx, please enable the `proxy` configuration.
+
+```typescript
+// src/config/config.default
+export default {
+   // ...
+   koa: {
+     proxy: true,
+   },
+}
+```
+
+The `X-Forwarded-For` Header is used by default. If the proxy configuration is different, please configure a different Header yourself.
+
+```typescript
+// src/config/config.default
+export default {
+   // ...
+   koa: {
+     proxy: true,
+     proxyIpHeader: 'X-Forwarded-Host'
+   },
+}
+```
 
 
 
@@ -349,4 +375,120 @@ export default {
     // ...
   },
 };
+```
+
+
+
+### Query array parsing
+
+By default, koa uses `querystring` to parse query parameters, and when it encounters an array, it will split the data in the array.
+
+for example:
+
+```
+GET /query?a[0]=1&a[1]=2
+```
+
+The result obtained is:
+
+```json
+{
+     "a[0]": 1,
+     "a[1]": 2,
+}
+```
+
+The framework provides some parameters to handle this situation.
+
+```typescript
+// src/config/config.default
+export default {
+   // ...
+   koa: {
+     queryParseMode: 'extended',
+     // ...
+   },
+}
+```
+
+The `queryParseMode` parameter can choose from three values: `extended`, `strict`, and `first`.
+
+  When `queryParseMode` has a value, the `qs` module will be used to process the query, and the effect is the same as the `koa-qs` module.
+
+When the request parameter is `/query?a=1&b=2&a=3&c[0]=1&c[1]=2'`.
+
+Default effect (using `querystring`)
+
+```JSON
+{
+   "a": ["1", "3" ],
+   "b": "2",
+   "c[0]": "1",
+   "c[1]": "2"
+}
+```
+
+  `extended` effect
+
+```JSON
+{
+   "a": ["1", "3" ],
+   "b": ["2"],
+   "c": ["1", "2"]
+}
+```
+
+  `strict` effect
+
+```JSON
+{
+   "a": ["1", "3" ],
+   "b": "2",
+   "c": ["1", "2"]
+}
+```
+
+  `first` effect
+
+```JSON
+{
+   "a": "1",
+   "b": "2",
+   "c": "1"
+}
+
+### Timeout Configuration
+
+RequestTimeout and ServerTimeout are two different timeout scenarios.
+
+- `serverTimeout`: Used to set the timeout for the server to wait for the client to send data after receiving a request. If the client does not send any data within this time, the server will close the connection. This timeout applies to the entire request-response cycle, including request headers, request body, and response.
+- `requestTimeout`: Used to set the timeout for the server to wait for the client to send a complete request. This timeout applies specifically to request headers and request body. If the complete request is not received within this time, the server will abort the request.
+
+By default, `serverTimeout` is set to 0 and does not trigger a timeout.
+
+If needed, you can modify the configuration by specifying the timeout in milliseconds.
+
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    serverTimeout: 100_000
+  },
+}
+```
+
+If you encounter the `ERR_HTTP_REQUEST_TIMEOUT` error, it means that the `requestTimeout` has been triggered, which defaults to `300_000` (5 minutes) in milliseconds. You can modify this timeout by configuring as follows.
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    serverOptions: {
+      requestTimeout: 600_000
+    }
+  },
+}
 ```

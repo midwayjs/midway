@@ -9,7 +9,7 @@ In most cases, the startup failure we talk about is generally a server environme
 
 1. Use `ps aux | grep node` to check whether processes exist and whether the number of processes is correct.
 
-2. Open the [project log directory](../logger# Configure log root directory), view the contents of the `common-error.log` file, and check the cause based on the latest stack.
+2. Open the [project log directory](/docs/logger_v3# Configure log root directory), view the contents of the `common-error.log` file, and check the cause based on the latest stack.
 
 3. Console logs that are started, such as `pm2 logs`
 

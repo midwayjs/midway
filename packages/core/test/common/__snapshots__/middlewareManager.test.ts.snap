@@ -321,8 +321,10 @@ ContextMiddlewareManager [
 
 exports[`test/common/middlewareManager.test.ts should test manager like array insert first 1`] = `
 ContextMiddlewareManager [
+  "mw8",
   "MW4",
   "MW3",
+  "mw7",
   "mw2",
   "mw1",
 ]

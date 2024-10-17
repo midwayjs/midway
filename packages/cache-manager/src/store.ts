@@ -32,7 +32,13 @@ function createStore(redisCache: Redis, options?: Config) {
     async get<T>(key: string) {
       const val = await redisCache.get(key);
       if (val === undefined || val === null) return undefined;
-      else return JSON.parse(val) as T;
+      else {
+        try {
+          return JSON.parse(val) as T;
+        } catch (e) {
+          return val;
+        }
+      }
     },
     async set(key, value, ttl) {
       if (!isCacheable(value))
@@ -64,15 +70,19 @@ function createStore(redisCache: Redis, options?: Config) {
         );
     },
     mget: (...args) =>
-      redisCache
-        .mget(args)
-        .then(x =>
-          x.map(x =>
-            x === null || x === undefined
-              ? undefined
-              : (JSON.parse(x) as unknown)
-          )
-        ),
+      redisCache.mget(args).then(x =>
+        x.map(x => {
+          if (x === null || x === undefined) {
+            return undefined;
+          } else {
+            try {
+              return JSON.parse(x) as unknown;
+            } catch {
+              return x;
+            }
+          }
+        })
+      ),
     async mdel(...args) {
       await redisCache.del(args);
     },

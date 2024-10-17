@@ -485,7 +485,7 @@ describe('/test/index.test.ts', () => {
 
     // 关闭客户端
     await client.close();
- 		// 关闭服务端
+    // 关闭服务端
     await close(app);
   });
 
@@ -524,7 +524,7 @@ describe('/test/index.test.ts', () => {
 
     // 关闭客户端
     await client.close();
- 		// 关闭服务端
+    // 关闭服务端
     await close(app);
   });
 
@@ -583,7 +583,7 @@ describe('/test/index.test.ts', () => {
 
     // 关闭客户端
     await client.close();
- 		// 关闭服务端
+    // 关闭服务端
     await close(app);
   });
 
@@ -608,7 +608,7 @@ export class HelloSocketController {
   @Inject()
   ctx: Context;
 
-  @App()
+  @App('socketIO')
   app: Application;
 
   @OnWSMessage('myEvent')
@@ -659,7 +659,7 @@ this.ctx.nsp.emit("bigger-announcement", "the tournament will start soon");
 this.app.local.emit("hi", "my lovely babies");
 ```
 
-## Appliation（io 对象）
+## Application（io 对象）
 
 
 传统的 Socket.io 服务端创建代码如下：

@@ -1,6 +1,8 @@
 import { createApp, createHttpRequest, close } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
+import * as session from '../src';
+import { Store } from 'express-session';
 
 describe('test/index.test.ts', function () {
 
@@ -111,5 +113,35 @@ describe('test/index.test.ts', function () {
       });
 
     await close(app);
+  });
+
+  it('should set different type to store', async () => {
+    class MockStore extends Store {
+      destroy(sid: string, callback?: (err?: any) => void): void {
+      }
+
+      get(sid: string, callback: (err: any, session?: any) => void) {
+      }
+
+      set(sid: string, session: any, callback?: (err?: any) => void): void {
+      }
+    }
+
+    let sessionStoreManager = new session.SessionStoreManager();
+    sessionStoreManager.setSessionStore(MockStore);
+    let store = sessionStoreManager.getSessionStore();
+    expect(store).toBeInstanceOf(MockStore);
+
+    sessionStoreManager = new session.SessionStoreManager();
+    sessionStoreManager.setSessionStore(() => MockStore);
+    store = sessionStoreManager.getSessionStore();
+    expect(store).toBeInstanceOf(MockStore);
+
+    sessionStoreManager = new session.SessionStoreManager();
+    const ins = new MockStore();
+    sessionStoreManager.setSessionStore(ins);
+    store = sessionStoreManager.getSessionStore();
+    expect(store).toBeInstanceOf(MockStore);
+    expect(store).toBe(ins);
   });
 });

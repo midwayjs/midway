@@ -833,3 +833,27 @@ await (this.app as any).mysql.query(sql);
 
 Or you can add extended definitions by yourself.
 
+### 6、Get Http Server
+
+The original HttpServer is sealed inside Eggjs and needs to be accessed through events.
+
+```typescript
+// src/configuration.ts
+import { Configuration, App } from '@midwayjs/core';
+import { Application } from '@midwayjs/web';
+
+@Configuration(/***/)
+export class MainConfiguration {
+  
+  @App('egg')
+  app: Application;
+  
+  // ...
+  async onServerReady() {
+    this.app.once('server', (server) => {
+      // ...
+    })
+  }
+}
+```
+

@@ -1,7 +1,9 @@
 import { close, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { Schema } from 'mongoose';
-import { MongooseConnectionServiceFactory, MongooseConnectionService } from '../src';
+import { MongooseConnectionServiceFactory, MongooseConnectionService } from "../src";
+import * as mongoose from '../src';
+import { MidwayHealthService } from '@midwayjs/core';
 
 interface User {
   name: string;
@@ -58,5 +60,31 @@ describe('/test/index.test.ts', () => {
       }
       await service.init();
     }).rejects.toThrowError(/instance not found/);
+  });
+
+  it("should test health check", async () => {
+    const app = await createLightApp({
+      imports: [
+        mongoose
+      ],
+      globalConfig: {
+        mongoose: {
+          dataSource: {
+            default: {
+              uri: 'mongodb://a.b.c:27017/test',
+              options: {
+                serverSelectionTimeoutMS: 100,
+              },
+            }
+          }
+        }
+      },
+    });
+
+    const healthService = await app.getApplicationContext().getAsync(MidwayHealthService);
+    const re = await healthService.getStatus();
+    expect(re.status).toBe(false);
+    expect(re.reason).toMatch("is not ready");
+    await close(app);
   });
 });

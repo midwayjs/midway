@@ -47,7 +47,11 @@ We can use `retryWithAsync` method to package and simplify the whole process.
 ```typescript
 import { retryWithAsync } from '@midwayjs/core';
 
-async function invoke() {
+async function invoke(id) {
+  // ...
+}
+
+async function someServiceMethod() {
   // The default call, plus two retries, can be executed up to three times.
   const invokeNew = retryWithAsync(invoke, 2);
 
@@ -177,7 +181,11 @@ The `MidwayRetryExceededMaxTimesError` is the default exception of the framework
 ```typescript
 import { retryWithAsync, MidwayRetryExceededMaxTimesError } from '@midwayjs/core';
 
-async function invoke() {
+async function invoke(id) {
+  // ...
+}
+
+async function someServiceMethod() {
   // The default call, plus two retries, can be executed up to three times.
   const invokeNew = retryWithAsync(invoke, 2);
 

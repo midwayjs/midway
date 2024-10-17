@@ -1,0 +1,118 @@
+{
+  "@midwayjs/faas-typings": "3.10.13",
+  "@midwayjs/fc-starter": "3.15.6",
+  "@midwayjs/serverless-http-parser": "3.14.0",
+  "@midwayjs/async-hooks-context-manager": "3.15.6",
+  "@midwayjs/axios": "3.15.6",
+  "@midwayjs/bootstrap": "3.15.6",
+  "@midwayjs/bull": "3.15.6",
+  "@midwayjs/bull-board": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/cache-manager": "3.15.6",
+  "@midwayjs/captcha": "3.15.6",
+  "@midwayjs/casbin": "3.15.6",
+  "@midwayjs/casbin-redis-adapter": "3.15.6",
+  "@midwayjs/casbin-typeorm-adapter": "3.15.6",
+  "@midwayjs/code-dye": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/consul": "3.15.6",
+  "@midwayjs/core": "3.15.6",
+  "@midwayjs/cos": "3.15.6",
+  "@midwayjs/cron": "3.15.6",
+  "@midwayjs/cross-domain": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/decorator": "3.15.6",
+  "@midwayjs/etcd": "3.15.6",
+  "@midwayjs/express-session": "3.15.6",
+  "@midwayjs/faas": "3.15.6",
+  "@midwayjs/grpc": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/http-proxy": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/i18n": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/info": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/jwt": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/kafka": "3.15.6",
+  "@midwayjs/leoric": "3.15.6",
+  "@midwayjs/mikro": "3.15.6",
+  "@midwayjs/mock": "3.15.6",
+  "@midwayjs/mongoose": "3.15.6",
+  "@midwayjs/mqtt": "3.15.6",
+  "@midwayjs/oss": "3.15.6",
+  "@midwayjs/otel": "3.15.6",
+  "@midwayjs/passport": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/process-agent": "3.15.6",
+  "@midwayjs/prometheus": "3.15.6",
+  "@midwayjs/prometheus-socket-io": "3.15.6",
+  "@midwayjs/rabbitmq": "3.15.6",
+  "@midwayjs/redis": "3.15.6",
+  "@midwayjs/security": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/sequelize": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/session": "3.15.6",
+  "@midwayjs/socketio": "3.15.6",
+  "@midwayjs/static-file": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/swagger": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/tablestore": "3.15.6",
+  "@midwayjs/tags": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/typegoose": "3.15.6",
+  "@midwayjs/typeorm": "3.15.6",
+  "@midwayjs/upload": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/validate": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/version": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/view": "3.15.6",
+  "@midwayjs/view-ejs": "3.15.6",
+  "@midwayjs/view-nunjucks": "3.15.6",
+  "@midwayjs/web": "3.15.6",
+  "@midwayjs/express": [
+    "3.15.6",
+    "3.15.7"
+  ],
+  "@midwayjs/koa": "3.15.6",
+  "@midwayjs/ws": "3.15.6"
+}

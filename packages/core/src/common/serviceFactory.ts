@@ -61,11 +61,14 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
     config,
     clientName
   ): Promise<T | void> | (T | void);
-  protected async destroyClient(client: T): Promise<void> {}
+  protected async destroyClient(
+    client: T,
+    clientName?: string
+  ): Promise<void> {}
 
   public async stop(): Promise<void> {
-    for (const value of this.clients.values()) {
-      await this.destroyClient(value);
+    for (const [name, value] of this.clients.entries()) {
+      await this.destroyClient(value, name);
     }
   }
 

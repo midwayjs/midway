@@ -607,7 +607,7 @@ export class HelloSocketController {
   @Inject()
   ctx: Context;
 
-  @App()
+  @App('socketIO')
   app: Application;
 
   @OnWSMessage('myEvent')
@@ -658,7 +658,7 @@ Send to all clients connected to the current node (when there are multiple nodes
 this.app.local.emit("hi", "my lovely babies");
 ```
 
-## Appliation(io object)
+## Application(io object)
 
 
 The code created by the traditional Socket.io server is as follows:
@@ -667,7 +667,7 @@ The code created by the traditional Socket.io server is as follows:
 const io = require("socket.io")(3000);
 
 io.on("connection", socket => {
-  }
+  // ...
 });
 ```
 

@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Swagger
 Based on the latest [OpenAPI 3.0.3](https://swagger.io/specification/), the new version of Swagger components is implemented.
 
@@ -434,71 +437,73 @@ async upateUser(@Body() dto: UserDTO) {
 
 For additional details, please use `@ApiBody` enhancement.
 
-### File upload definition
+Note that Swagger stipulates that there can only be one `Body` definition. If `@ApiBody` is configured, the data extracted by the type will be automatically overwritten.
 
-Set `contentType` with ```@ApiBody```
+For example, in the following example, the type of `Body` will be replaced with `Cat`.
 
 ```typescript
-@Post('/:id', { summary: 'test'})
 @ApiBody({
-  description: 'this is body',
-  contentType: BodyContentType.Multipart
+  type: Cat
 })
-@ApiParam({ description: 'this is id' })
-async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
-  return this.catsService.create(createCatDto);
+async upateUser(@Body() dto: UserDTO) {
+  // ...
 }
 ```
 
+### File upload definition
 
+File upload is a special case in Post request.
 
-Use `@ApiProperty` to add `format` in `CreateCatDto`
+You can implement multiple files and `Fields` types by defining properties in DTO.
+
 
 ```typescript
-@ApiProperty({
-  type: 'string',
-  format: 'binary',
-  description: 'this is file test'
+import { ApiProperty, BodyContentType } from "@midwayjs/swagger";
+
+export class CreateCatDto {
+  // ...
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'string',
+      format: 'binary',
+    }
+  })
+  files: any;
+}
+
+// ...
+
+@Post('/test1')
+@ApiBody({
+  contentType: BodyContentType.Multipart,
+  schema: {
+    type: CreateCatDto,
+  }
 })
-file: any;
+async upload1(@Files() files, @Fields() fields) {
+  // ...
+}
+```
+The Swagger UI shows:
+![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
+
+If you don't need multiple files, use schema definition.
+
+```typescript
+export class CreateCatDto {
+  // ...
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+  })
+  file: any;
+}
 ```
 
 The Swagger UI shows:
 ![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
 
-:::caution
-
-If you want to display the upload information swagger, please add the type (the type corresponding to the decorator and the type in the @ApiBody), otherwise an error will be reported.
-
-:::
-
-Compatible with Upload components, add ```@ApiBody()``` decorator description
-
-```typescript
-@Post('/test')
-@ApiBody({ description: 'hello file' })
-@ApiBody({ description: 'hello fields', type: Cat })
-async upload(@File() f: any, @Fields() data: Cat) {
-  // ...
-}
-```
-
-The Swagger UI shows:
-![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
-
-Do not add ```@ApiBody()``` decorator description
-
-```typescript
-@Post('/test1')
-async upload1(@Files() f: any[], @Fields() data: Cat) {
-  // ...
-}
-```
-
-
-
-The Swagger UI shows:
-![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
 
 ### Request Header
 
@@ -639,7 +644,15 @@ For example, we need to add some common package structure to the return value.
 To do this, we can write a method where the input parameter is the returned data and returns a wrapped class.
 
 ```typescript
-export function SuccessWrapper<T extends Type>(ResourceCls: T) {
+import { Type } from '@midwayjs/swagger';
+
+type Res<T> = {
+  code: number;
+  message: string;
+  data: T;
+}
+
+export function SuccessWrapper<T>(ResourceCls: Type<T>): Type<Res<T>> {
   class Successed {
     @ApiProperty({ description: 'Status Code'})
     code: number;
@@ -660,7 +673,7 @@ export function SuccessWrapper<T extends Type>(ResourceCls: T) {
 We can implement our own return class based on this method.
 
 ```typescript
-class ViewCat extends SuccessWrapper(Cat) {}
+class ViewCat extends SuccessWrapper<Cat>(Cat) {}
 ```
 
 When using, you can directly specify this class.
@@ -672,17 +685,36 @@ When using, you can directly specify this class.
   description: 'The found record',
   type: ViewCat
 })
-findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
+async findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
   // ...
 }
 ```
 
 
 
+## More definition examples
+
+There are more ways to write in Swagger, and the framework supports them. For more usage, please refer to our [test case](https://github.com/midwayjs/midway/blob/main/packages/swagger/test/parser.test.ts).
+
+
+
 ## Advanced usage
 
-### Routing label
-Swagger labels paths. If no labels are defined in the Controller, they are grouped under default by default. Controller labels can be customized by ```@ApiTags([...])```.
+### Route Tags
+Swagger can add tags to each route for grouping.
+
+There are two ways to add tags.
+
+<Tabs>
+<TabItem value="controller" label="Add to Controller">
+By default, the framework generates tags based on the Controller's path. For example, the following code will generate a `hello` tag, which will apply to all routes in this controller.
+
+```typescript
+@Controller('/hello')
+export class HelloController {}
+```
+
+If you need to customize the tags, you can use `@ApiTags([...])` to customize the Controller tags.
 
 ```typescript
 @ApiTags(['hello'])
@@ -690,7 +722,56 @@ Swagger labels paths. If no labels are defined in the Controller, they are group
 export class HelloController {}
 ```
 
-A description can be added to Tag through configuration.
+Starting from `v3.17.3`, you can control whether to automatically generate Controller tags by configuring `isGenerateTagForController`.
+
+```typescript
+// src/config/config.default.ts
+export default {
+  swagger: {
+    isGenerateTagForController: false
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="router" label="@ApiTags and @ApiOperation">
+
+You can add `@ApiTags` directly to the route method.
+
+```typescript
+// ...
+export class HomeController {
+  @ApiTags(['bbb'])
+  @Get('/')
+  async home(): Promise<string> {
+    // ...
+  }
+}
+```
+
+You can also add tags through `@ApiOperation`.
+
+```typescript
+// ...
+export class HomeController {
+  @ApiOperation({ tags: ['bbb'] })
+  @Get('/')
+  async home(): Promise<string> {
+    // ...
+  }
+}
+```
+
+The priority of `@ApiTags` is higher than `@ApiOperation`. If both exist, `@ApiTags` will override `@ApiOperation`.
+
+Similarly, `@ApiTags` on the route will also override `@ApiTags` on the controller.
+
+</TabItem>
+
+</Tabs>
+
+You can add descriptions to Tags by configuring.
 
 ```typescript
 // src/config/config.default.ts
@@ -709,21 +790,8 @@ export default {
     ]
   }
 }
-
 ```
 
-It can also be added to the routing method.
-
-```typescript
-// ...
-export class HomeController {
-  @ApiTags(['bbb'])
-  @Get('/')
-  async home(@Body() dto?: Photo): Promise<string> {
-    return 'Hello Midwayjs!';
-  }
-}
-```
 
 
 
@@ -759,7 +827,7 @@ export class HelloController {}
 
 #### **bearer**
 
-启用 bearer 验证（bearerFormat 为 JWT）
+Enable bearer authentication (with bearerFormat set to JWT).
 
 ```typescript
 // src/config/config.default.ts
@@ -896,6 +964,26 @@ Association Controller
 @ApiSecurity('mycustom')
 @Controller('/hello')
 export class HelloController {}
+```
+
+
+
+### Ignore routing verification
+
+You can set `@ApiExcludeSecurity` to ignore validation of a route.
+
+```typescript
+@Controller('/api')
+@ApiSecurity('api_key')
+class APIController {
+  // ...
+
+  @Get('/get_user')
+  @ApiExcludeSecurity()
+  async getUser() {
+    // ...
+  }
+}
 ```
 
 
@@ -1096,8 +1184,9 @@ All decorators of the component refer to the design of [@nestjs/swagger](https:/
 | ```@ApiCookieAuth``` | Controller |
 | ```@ApiOAuth2``` | Controller |
 | ```@ApiSecurity``` | Controller |
+| ```@ApiExcludeSecurity``` | Method |
 | ```@ApiParam``` | Method |
-| ```@ApiExtraModel``` | Controller/Model |
+| ```@ApiExtraModel``` | Controller |
 
 
 

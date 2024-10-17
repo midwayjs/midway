@@ -128,7 +128,7 @@ export class UserService {
 ```typescript
 await this.cacheManager.set(key, value, {ttl: 1000});	// ttl的单位为秒
 ```
-如果你想要禁止 Cache 不过期，则将 TTL 设置为 null 即可。
+如果你想要 Cache 不过期，则将 TTL 设置为 null 即可。
 ```typescript
 await this.cacheManager.set(key, value, {ttl: null});
 ```

@@ -431,15 +431,16 @@ export default {
         username: '*******',
         password: '*******',
         database: undefined,
-        synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
+        synchronize: false,		    // 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
         logging: false,
 
         // 配置实体模型
         entities: [Photo],
 
-        // 或者扫描形式
+        // 支持如下的扫描形式，为了兼容我们可以同时进行.js和.ts匹配
         entities: [
-          '**/entity/*.entity{.ts,.js}'
+          'entity',                 // 特定目录
+          '**/*.entity.{j,t}s',     // 通配加后缀匹配
         ]
       }
     }
@@ -448,13 +449,9 @@ export default {
 ```
 :::tip
 
-如果使用的数据库已经有表结构同步的功能，比如云数据库，最好不要开启。如果一定要使用，synchronize 配置最好仅在开发阶段，或者第一次使用，避免造成一致性问题。
-
+- 1. 如果使用的数据库已经有表结构同步的功能，比如云数据库，最好不要开启。如果一定要使用，synchronize 配置最好仅在开发阶段，或者第一次使用，避免造成一致性问题。
+- 2. `entities` 字段配置已经经过框架处理，该字段配置请不要参考原始文档。
 :::
-
-如需以目录扫描形式关联，请参考 [数据源管理](../data_source)。
-
-
 
 
  `type` 字段你可以使用其他的数据库类型，包括`mysql`, `mariadb`, `postgres`, `cockroachdb`, `sqlite`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
@@ -1624,10 +1621,17 @@ export default {
 如果使用了 `@CreateDateColumn` 和 `@UpdateDateColumn` ，可以调整实体返回类型。
 
 ```typescript
-  @CreateDateColumn({
-    type: 'timestamp',
-  })
-  createdDate: string;
+@UpdateDateColumn({
+  name: "gmt_modified",
+  type: 'timestamp'
+})
+gmtModified: string;
+
+@CreateDateColumn({
+  name: "gmt_create",
+  type: 'timestamp',
+})
+gmtCreate: string;
 ```
 
 
@@ -1643,7 +1647,7 @@ gmtCreate: 2021-12-13T03:49:43.000Z
 **配置后：**
 
 ```typescript
-gmtModified: '2021-12-13 11:49:43.725949',
+gmtModified: '2021-12-13 11:49:43',
 gmtCreate: '2021-12-13 11:49:43'
 ```
 
@@ -1680,4 +1684,3 @@ export default {
 
 - 1、检查 `config.default.ts` 中的 `entities` 配置是否正确
 - 2、检查 `configuration.ts` 文件，确认是否引入 orm
-

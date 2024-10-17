@@ -51,7 +51,7 @@ export class MongooseConfiguration implements ILifeCycle {
     let clientName: any;
     for (const name of clientNames) {
       if (
-        (await this.mongooseDataSourceManager.isConnected(name)) &&
+        !(await this.mongooseDataSourceManager.isConnected(name)) &&
         !this.mongooseDataSourceManager.isLowPriority(name)
       ) {
         clientName = name;

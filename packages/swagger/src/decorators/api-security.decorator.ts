@@ -1,11 +1,11 @@
-import { createCustomMethodDecorator } from '@midwayjs/core';
 import { DECORATORS } from '../constants';
 import { SecurityRequirementObject } from '../interfaces';
+import { createMixedDecorator } from './helpers';
 
 export function ApiSecurity(
   name: string | SecurityRequirementObject,
   requirements: string[] = []
-): any {
+): ClassDecorator {
   let metadata: SecurityRequirementObject;
 
   if (typeof name === 'string') {
@@ -13,6 +13,9 @@ export function ApiSecurity(
   } else {
     metadata = name;
   }
+  return createMixedDecorator(DECORATORS.API_SECURITY, metadata);
+}
 
-  return createCustomMethodDecorator(DECORATORS.API_SECURITY, metadata, false);
+export function ApiExcludeSecurity(): MethodDecorator {
+  return createMixedDecorator(DECORATORS.API_EXCLUDE_SECURITY, true);
 }

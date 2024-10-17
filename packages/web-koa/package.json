@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa",
-  "version": "3.14.12",
+  "version": "3.18.2",
   "description": "Midway Web Framework for KOA",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -24,18 +24,20 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^3.14.12",
+    "@midwayjs/mock": "^3.18.2",
     "@types/koa-router": "7.4.8",
     "fs-extra": "11.2.0"
   },
   "dependencies": {
-    "@koa/router": "^11.0.0",
+    "@koa/router": "^12.0.0",
     "@midwayjs/cookies": "^1.0.2",
-    "@midwayjs/core": "^3.14.12",
-    "@midwayjs/session": "^3.14.12",
-    "@types/koa": "2.14.0",
-    "koa": "2.15.0",
-    "koa-bodyparser": "4.4.1"
+    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/session": "^3.18.2",
+    "@types/koa": "2.15.0",
+    "@types/qs": "6.9.16",
+    "koa": "2.15.3",
+    "koa-bodyparser": "4.4.1",
+    "qs": "6.13.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

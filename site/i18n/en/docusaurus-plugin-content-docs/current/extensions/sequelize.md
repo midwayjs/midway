@@ -84,6 +84,27 @@ npm install mongodb --save
 
 In the following example, `mysql2` is used as an example.
 
+### Directory structure
+
+A basic reference directory structure is as follows.
+
+
+```
+MyProject
+├── src
+│   ├── config
+│   │   └── config.default.ts
+│   ├── entity
+│   │   └── person.entity.ts
+│   ├── configuration.ts
+│   └── service
+├── .gitignore
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
+
 ## Enable components
 
 Enable components in the `src/configuration.ts` file.
@@ -111,10 +132,10 @@ export class MainConfiguration implements ILifeCycle {
 
 We associate with the database through the model. The model in the application is the database table. In the Sequelize, the model is bound to the entity. Each Entity file is a Model and an Entity.
 
-In the example, you need an entity. Let's take `person` as an example. Create an entity directory and add the entity file `person.ts` to the entity directory. A simple entity is as follows.
+In the example, you need an entity. Let's take `person` as an example. Create an entity directory and add the entity file `person.entity.ts` to the entity directory. A simple entity is as follows.
 
 ```typescript
-// src/entity/person.ts
+// src/entity/person.entity.ts
 import { Table, Model, Column, HasMany } from 'sequelize-typescript';
 
 @Table
@@ -253,7 +274,7 @@ In the new version, we have enabled the [data source mechanism](../data_source) 
 ```typescript
 // src/config/config.default.ts
 
-import { Person } from '../entity/person';
+import { Person } from '../entity/person.entity';
 
 export default {
    // ...
@@ -270,9 +291,17 @@ export default {
          dialect: 'mysql',
          define: { charset: 'utf8' },
          timezone: '+08:00',
-         entities: [Person],
          // Locally, you can createTable directly through sync: true
          sync: false,
+
+         // Object format
+         entities: [Person],
+
+         // The following scanning form is supported. For compatibility, we can match both .js and .ts files at the same time
+         entities: [
+           'entity',                        // Specify the directory
+           '**/entity/*.entity.{j,t}s',     // Wildcard with suffix matching
+         ],
        },
 
        // second data source
@@ -284,7 +313,6 @@ export default {
 };
 ```
 
-For more information, see [Data source management](../data_source).
 
 ## Model association
 
@@ -377,7 +405,7 @@ For example:
 
 ```typescript
 import { Table, Column, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
-import { User } from './User';
+import { User } from './user.entity';
 
 @Table
 export class Photo extends Model {
@@ -417,7 +445,7 @@ You can wrap types with `ReturnType`.
 
 ```typescript
 import { Table, Column, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
-import { User } from './User';
+import { User } from './user.entity';
 
 @Table
 export class Photo extends Model {
@@ -443,7 +471,7 @@ Where it needs to be called, use the entity model to operate.
 
 ```typescript
 import { Provide } from '@midwayjs/core';
-import { Person } from '../entity/person';
+import { Person } from '../entity/person.entity';
 
 @Provide()
 export class PersonService {
@@ -458,7 +486,7 @@ export class PersonService {
 
 ```typescript
 import { Provide } from '@midwayjs/core';
-import { Person } from '../entity/person';
+import { Person } from '../entity/person.entity';
 
 @Provide()
 export class PersonService {
@@ -491,7 +519,7 @@ Same as data source configuration, except that there is one more attribute.
 ```typescript
 // src/config/config.default.ts
 
-import { Person } from '../entity/person';
+import { Person } from '../entity/person.entity';
 
 export default {
   // ...
@@ -521,8 +549,8 @@ The basic API is the same as the static operation. Midway has made some simple p
 ```typescript
 import { Controller, Get } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
-import { Photo } from '../entity/photo';
-import { User } from '../entity/user';
+import { Photo } from '../entity/photo.entity';
+import { User } from '../entity/user.entity';
 import { Op } from 'sequelize';
 import { Repository } from 'sequelize-typescript';
 
@@ -577,8 +605,8 @@ In Repository mode, we can specify a specific data source in the `InjectReposito
 ```typescript
 import { Controller } from '@midwayjs/core';
 import { InjectRepository } from '@midwayjs/sequelize';
-import { Photo } from '../entity/photo';
-import { User } from '../entity/user';
+import { Photo } from '../entity/photo.entity';
+import { User } from '../entity/user.entity';
 import { Repository } from 'sequelize-typescript';
 
 @Controller('/')

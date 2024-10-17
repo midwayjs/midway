@@ -795,6 +795,38 @@ export default {
 }
 ```
 
+In addition, the component provides the `BullBoardManager` class, which can add queues dynamically created.
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import * as bull from '@midwayjs/bull';
+import * as bullBoard from '@midwayjs/bull-board';
+
+@Configuration({
+  imports: [
+    // ...
+    bull,
+    bullBoard
+  ]
+})
+export class MainConfiguration {
+
+  @Inject()
+  bullFramework: bull.Framework;
+  
+  @Inject()
+  bullBoardManager: bullBoard.BullBoardManager;
+
+  async onReady() {
+    const testQueue = this.bullFramework.createQueue('test', {
+      // ...
+    });
+
+    this.bullBoardManager.addQueue(testQueue);
+  }
+}
+```
+
 
 
 
@@ -809,5 +841,36 @@ This problem is basically clear, the problem will appear on the clustered versio
 
 The reason is that redis does hash on the key to determine the storage slot, and the key of @midwayjs/bull hits a different slot in this step under the cluster.
 
-The workaround is to include {} in the prefix configuration of the task and force redis to only calculate the hash in {}, e.g. `prefix: '{midway-task}'`.
+Solution: The prefix configuration in the task is included with {} to force redis to only calculate the hash in {}, for example `prefix: '{midway-task}'`.
 
+### 2. EVAL inside MULTI is not allowed error
+
+This shows that task queue API calls such as `queue.createBulk()` and `job.moveToFailed()` are invalid and the following error occurs.
+
+```
+ReplyError: EXECABORT Transaction discarded because of previous errors.
+     at parseError (<project_dir>/node_modules/redis-parser/lib/parser.js:179:12)
+     at parseType (<project_dir>/node_modules/redis-parser/lib/parser.js:302:14) {
+   command: { name: 'exec', args: [] },
+   previousErrors: [
+     ReplyError: ERR 'EVAL' inside MULTI is not allowed
+         at parseError (<project_dir>/node_modules/redis-parser/lib/parser.js:179:12)
+         at parseType (<project_dir>/node_modules/redis-parser/lib/parser.js:302:14) {
+       command: [Object]
+     }
+   ]
+}
+```
+
+:::tip
+
+Often occurs when using Alibaba Cloud Redis service.
+
+:::
+
+Since EVAL or EVALSHA are used in the Redis Lua scripts that these APIs depend on, when Alibaba Cloud Redis uses proxy mode to connect, additional restrictions will be placed on Lua script calls, including [EVAL commands are not allowed to be executed in MULTI transactions] (https:// help.aliyun.com/zh/redis/support/usage-of-lua-scripts?#section-8f7-qgv-dlv), the document also mentions that this verification can be turned off through parameter configuration script_check_enable, but the verification is invalid.
+
+Solution:
+
+* 1. Open the direct connection address in the Alibaba Cloud console and switch the service to direct connection mode.
+* 2. Switch the client to cluster mode. Refer to the above "Redis Cluster" chapter to switch the configuration mode.

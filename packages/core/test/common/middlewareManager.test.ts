@@ -1,4 +1,4 @@
-import { ContextMiddlewareManager } from '../../src';
+import { ContextMiddlewareManager, createMiddleware } from '../../src';
 
 const mw1 = async (ctx, next) => {};
 mw1._name = 'mw1';
@@ -12,15 +12,27 @@ const mw4 = class MW4 {resolve() {}} as any;
 function mw5(){}
 function mw6(){}
 
+const MW = class MW7 {
+  resolve(app, options) {
+    return async (ctx, next) => {};
+  }
+} as any
+
+const mw7 = createMiddleware(MW, {}, 'mw7')
+const mw8 = createMiddleware(MW, {
+  a: 1
+}, 'mw8')
+
 describe('test/common/middlewareManager.test.ts', function () {
   it('should test manager like array insert first', function () {
     const manager = new ContextMiddlewareManager();
     // insert first
     manager.insertFirst(mw1);
     manager.insertFirst(mw2);
-    manager.insertFirst([mw4, mw3]);
+    manager.insertFirst([mw4, mw3, mw7]);
+    manager.insertFirst(mw8);
 
-    expect(manager.length).toEqual(4);
+    expect(manager.length).toEqual(6);
     expect(manager.getNames()).toMatchSnapshot();
   });
 

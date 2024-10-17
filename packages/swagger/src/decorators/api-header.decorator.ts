@@ -1,8 +1,7 @@
 import { DECORATORS } from '../constants';
 import { SwaggerEnumType, ParameterObject, Type } from '../interfaces';
 import { getEnumType, getEnumValues } from '../common/enum.utils';
-import { createParamDecorator } from './helpers';
-import { createCustomMethodDecorator } from '@midwayjs/core';
+import { createMixedDecorator } from './helpers';
 
 export interface ApiHeaderOptions extends Omit<ParameterObject, 'in'> {
   enum?: SwaggerEnumType;
@@ -38,13 +37,13 @@ export function ApiHeader(options: ApiHeaderOptions): any {
     descriptor?: TypedPropertyDescriptor<any>
   ): any => {
     if (descriptor) {
-      return createParamDecorator(param, defaultHeaderOptions as any)(
+      return createMixedDecorator(DECORATORS.API_HEADERS, param)(
         target,
         key,
         descriptor
       );
     }
-    return createCustomMethodDecorator(DECORATORS.API_HEADERS, param, false)(
+    return createMixedDecorator(DECORATORS.API_HEADERS, param)(
       target,
       undefined,
       undefined

@@ -126,11 +126,11 @@ g, alice, superuser
 g, bob, guest
 g, tom, manager
 
-g, users_list, user
-g, user_roles, user
-g, user_permissions, user
-g, roles_list, role
-g, role_permissions, role
+g2, users_list, user
+g2, user_roles, user
+g2, user_permissions, user
+g2, roles_list, role
+g2, role_permissions, role
 ```
 
 Save it in the `basic_policy.csv` file in the project root directory.

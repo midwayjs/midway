@@ -1,6 +1,14 @@
 import { Provide } from '@midwayjs/core';
 import { Caching } from '../../../../../src';
 
+function cacheBy({methodArgs, ctx, target}) {
+  if (methodArgs[0] === 'harry' || methodArgs[0] === 'mike') {
+    return 'cache1';
+  } else {
+    return 'cache2';
+  }
+}
+
 @Provide()
 export class UserService {
 
@@ -26,5 +34,10 @@ export class UserService {
     } else {
       throw new Error('error');
     }
+  }
+
+  @Caching('default', cacheBy, 10)
+  async getCustomUser(name: string){
+    return 'hello ' + name;
   }
 }

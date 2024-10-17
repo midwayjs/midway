@@ -27,6 +27,8 @@ import type { DefaultState, Middleware, Next } from 'koa';
 import * as koa from 'koa';
 import { Server } from 'http';
 import { setupOnError } from './onerror';
+import * as qs from 'qs';
+import * as querystring from 'querystring';
 
 const COOKIES = Symbol('context#cookies');
 
@@ -127,6 +129,53 @@ export class MidwayKoaFramework extends BaseFramework<
       },
     });
 
+    const converter =
+      this.configurationOptions.queryParseMode === 'strict'
+        ? function (value) {
+            return !Array.isArray(value) ? [value] : value;
+          }
+        : this.configurationOptions.queryParseMode === 'first'
+        ? function (value) {
+            return Array.isArray(value) ? value[0] : value;
+          }
+        : undefined;
+
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    // fix query with array params
+    Object.defineProperty(this.app.request, 'query', {
+      get() {
+        const str = this.querystring;
+        const c = (this._querycache = this._querycache || {});
+
+        // find cache
+        if (c[str]) return c[str];
+
+        if (self.configurationOptions.queryParseMode) {
+          // use qs module to parse query
+          c[str] = qs.parse(
+            str,
+            self.configurationOptions.queryParseOptions || {}
+          );
+        } else {
+          // use querystring to parse query by default
+          c[str] = querystring.parse(str);
+        }
+
+        if (converter) {
+          for (const key in c[str]) {
+            c[str][key] = converter(c[str][key]);
+          }
+        }
+
+        return c[str];
+      },
+      set(value) {
+        this._querycache = this._querycache || {};
+        this._querycache[this.querystring] = value;
+      },
+    });
+
     const onerrorConfig = this.configService.getConfiguration('onerror');
     setupOnError(this.app, onerrorConfig, this.logger);
 
@@ -210,34 +259,40 @@ export class MidwayKoaFramework extends BaseFramework<
     // restore use method
     this.app.use = (this.app as any).originUse;
 
-    // https config
-    if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key = PathFileUtil.getFileContentSync(
-        this.configurationOptions.key
-      );
-      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
-        this.configurationOptions.cert
-      );
-      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
-        this.configurationOptions.ca
-      );
+    const serverOptions = {
+      ...this.configurationOptions,
+      ...this.configurationOptions.serverOptions,
+    };
 
-      if (this.configurationOptions.http2) {
+    // https config
+    if (serverOptions.key && serverOptions.cert) {
+      serverOptions.key = PathFileUtil.getFileContentSync(serverOptions.key);
+      serverOptions.cert = PathFileUtil.getFileContentSync(serverOptions.cert);
+      serverOptions.ca = PathFileUtil.getFileContentSync(serverOptions.ca);
+      process.env.MIDWAY_HTTP_SSL = 'true';
+
+      if (serverOptions.http2) {
         this.server = require('http2').createSecureServer(
-          this.configurationOptions,
+          serverOptions,
           this.app.callback()
         );
       } else {
         this.server = require('https').createServer(
-          this.configurationOptions,
+          serverOptions,
           this.app.callback()
         );
       }
     } else {
-      if (this.configurationOptions.http2) {
-        this.server = require('http2').createServer(this.app.callback());
+      if (serverOptions.http2) {
+        this.server = require('http2').createServer(
+          serverOptions,
+          this.app.callback()
+        );
       } else {
-        this.server = require('http').createServer(this.app.callback());
+        this.server = require('http').createServer(
+          serverOptions,
+          this.app.callback()
+        );
       }
     }
     // register httpServer to applicationContext

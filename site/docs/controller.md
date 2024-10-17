@@ -203,9 +203,9 @@ Midway 提供了更多从 Query、Body 、Header 等位置获取值的装饰器�
 | @Headers(name?: string) | req.headers / req.headers[name] | ctx.headers / ctx.headers[name] |
 
 :::caution
-**注意 **@Queries 装饰器和 @Query **有所区别**。
+**注意** EggJS 和其他框架不同，`@Queries` 装饰器和 `@Query` **有所区别**。
 
-Queries 会将相同的 key 聚合到一起，变为数组。当用户访问的接口参数为 `/?name=a&name=b` 时，@Queries 会返回 {name: [a, b]}，而 Query 只会返回 {name: b}
+Queries 会将相同的 key 聚合到一起，变为数组。当用户访问的接口参数为 `/?name=a&name=b` 时，@Queries 会返回 `{name: [a, b]}`，而 Query 只会返回 `{name: b}`。
 :::
 
 
@@ -259,11 +259,12 @@ export class UserController {
 }
 ```
 
-当 Query String 中的 key 重复时，`ctx.query` 只取 key 第一次出现时的值，后面再出现的都会被忽略。
+:::caution
+**注意** EggJS 和其他框架不同，在 当 Query String 中的 key 重复时，`ctx.query` 只取 key 第一次出现时的值，后面再出现的都会被忽略。
 
 比如 `GET /user?uid=1&uid=2` 通过 `ctx.query` 拿到的值是 `{ uid: '1' }`。
 
-
+:::
 
 ### Body
 
@@ -947,6 +948,41 @@ export class HomeController {
 
 
 
+### 流式响应
+
+如果希望以流式返回数据，可以使用 Node.js 原始的 response 对象上的 `write` 和 `end` 方法。
+
+```typescript
+import { Controller, Get, Inject, sleep } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+  
+  @Get('/')
+  async home() {
+    this.ctx.status = 200;
+    this.ctx.set('Transfer-Encoding', 'chunked');
+    for (let i = 0; i < 100; i++) {
+      await sleep(100);
+      this.ctx.res.write('abc'.repeat(100));
+    }
+    
+    this.ctx.res.end();
+  }
+}
+```
+
+
+
+### 高级响应处理
+
+从 v3.17.0 开始，框架提供了一个新的的 `HttpServerResponse` 来处理返回数据，除了普通的数据之外，还提供了自定义状态模版，文件下载，SSE 等能力支持，具体请查看 [数据响应章节](/docs/data_response)
+
+
+
 ## 内部重定向
 
 从 v3.12.0 开始，框架提供了一个内部重定向 API `ctx.forward(url)`，仅支持 koa/egg 类型。 
@@ -980,8 +1016,6 @@ export class HomeController {
 * 2、重定向只能在相同的 http method 中进行
 
 * 3、重定向不会再执行一遍 Web Middleware，不会执行守卫，但是会执行拦截器和参数装饰器
-
-  
 
 
 

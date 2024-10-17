@@ -226,4 +226,23 @@ describe('/test/index.test.ts', () => {
     await client1.close();
     await closeApp(app);
   });
+
+  it('should test create socket app and use regexp namespace', async () => {
+    const app = await createServer('base-app-namespace-regexp');
+    const client = await createSocketIOClient({
+      port: 3000,
+      namespace: '/abc123'
+    });
+
+    const gotEvent = once(client, 'ok');
+    client.send('my', 1, 2, 3);
+    const [data] = await gotEvent;
+    expect(data).toEqual({
+      name: 'harry',
+      result: 6,
+    });
+
+    await client.close();
+    await closeApp(app);
+  });
 });

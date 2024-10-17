@@ -122,6 +122,18 @@ export class DocumentBuilder {
         description,
         externalDocs,
       });
+    } else {
+      // update description and externalDocs
+      tags.forEach(tag => {
+        if (tag.name === name) {
+          if (description) {
+            tag.description = description;
+          }
+          if (externalDocs) {
+            tag.externalDocs = externalDocs;
+          }
+        }
+      });
     }
     this.document.tags = tags;
     return this;

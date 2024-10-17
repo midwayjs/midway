@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cache-manager",
-  "version": "3.14.12",
+  "version": "3.18.2",
   "description": "midway cache manager",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -28,10 +28,11 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.14.12",
-    "@midwayjs/mock": "^3.14.12",
-    "@midwayjs/redis": "^3.14.12",
-    "cache-manager-ioredis-yet": "1.2.2"
+    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/mock": "^3.18.2",
+    "@midwayjs/redis": "^3.18.2",
+    "cache-manager": "6.0.0",
+    "cache-manager-ioredis-yet": "2.1.2"
   },
   "dependencies": {
     "lodash.clonedeep": "4.5.0",

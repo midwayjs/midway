@@ -50,17 +50,17 @@ export class MikroConfiguration implements ILifeCycle {
           connectionName?: string;
         }
       ) => {
-        if (RequestContext.getEntityManager()) {
-          return RequestContext.getEntityManager().getRepository(meta.modelKey);
+        const name =
+          meta.connectionName ||
+          this.dataSourceManager.getDefaultDataSourceName();
+
+        if (RequestContext.getEntityManager(name)) {
+          return RequestContext.getEntityManager(name).getRepository(
+            meta.modelKey
+          );
         } else {
           return this.dataSourceManager
-            .getDataSource(
-              meta.connectionName ||
-                this.dataSourceManager.getDataSourceNameByModel(
-                  meta.modelKey
-                ) ||
-                this.dataSourceManager.getDefaultDataSourceName()
-            )
+            .getDataSource(name)
             .em.getRepository(meta.modelKey);
         }
       }
@@ -69,13 +69,13 @@ export class MikroConfiguration implements ILifeCycle {
     this.decoratorService.registerPropertyHandler(
       ENTITY_MANAGER_KEY,
       (propertyName, meta: { connectionName?: string }) => {
-        if (RequestContext.getEntityManager()) {
-          return RequestContext.getEntityManager();
+        const name =
+          meta.connectionName ||
+          this.dataSourceManager.getDefaultDataSourceName();
+        if (RequestContext.getEntityManager(name)) {
+          return RequestContext.getEntityManager(name);
         } else {
-          return this.dataSourceManager.getDataSource(
-            meta.connectionName ||
-              this.dataSourceManager.getDefaultDataSourceName()
-          ).em;
+          return this.dataSourceManager.getDataSource(name).em;
         }
       }
     );
@@ -98,6 +98,25 @@ export class MikroConfiguration implements ILifeCycle {
 
   async onReady(container: IMidwayContainer) {
     this.dataSourceManager = await container.getAsync(MikroDataSourceManager);
+    const names = this.dataSourceManager.getDataSourceNames();
+    const entityManagers = names.map(name => {
+      return this.dataSourceManager.getDataSource(name).em;
+    });
+    if (names.length > 0) {
+      // create mikro request scope
+      // https://mikro-orm.io/docs/identity-map
+      this.applicationManager.getApplications().forEach(app => {
+        app.useMiddleware(async (ctx, next) => {
+          if (RequestContext['createAsync']) {
+            // mikro-orm 5.x
+            return await RequestContext['createAsync'](entityManagers, next);
+          } else {
+            // mikro-orm 6.x
+            return await RequestContext.create(entityManagers, next);
+          }
+        });
+      });
+    }
   }
 
   async onStop(container: IMidwayContainer) {

@@ -8,6 +8,8 @@ Midway has a built-in simple HTTP request client, which can be used without intr
 
 The default Get request, and the returned data is Buffer.
 
+The built-in Http client only provides the simplest capabilities and can only meet most of the front-end interface data acquisition needs. If you need complex functions, such as file upload, please use other clients, such as fetch, axios, got, etc.
+
 
 
 ### Simple method form
@@ -98,12 +100,6 @@ try {
   err = e;
 }
 ```
-
-:::tip
-
-The built-in Http client only provides the simplest capabilities. If you need complex functions (front and back interception or other additional configurations), please use axios.
-
-:::
 
 
 
@@ -404,7 +400,7 @@ export class MainConfiguration {
   async onReady(container: IMidwayContainer) {
   	const httpServiceFactory = await container.getAsync(axios.HttpServiceFactory);
     const customAxios = httpServiceFactory.get('customAxios');
-    customAxios.interceptors.request.use (
+    customAxios.interceptors.request.use(
       config => {
         //...
       },
@@ -421,13 +417,13 @@ export class MainConfiguration {
 `@midayjs/axios` also exported the original instance of `axios`, which could be useful in helper functions.
 
 ```typescript
-import { axios } from '@midwayjs/axios';
+import { Axios } from '@midwayjs/axios';
 import { ReadStream, createWriteStream } from 'fs';
 import { finished } from 'stream/promises';
 
 async function download(url: string, filename: string) {
   const writer = await createWriteStream(filename);
-  const res = axios.get<ReadStream>(url, {
+  const res = Axios.get<ReadStream>(url, {
     responseType: 'stream',
   });
   res.data.pipe(writer);

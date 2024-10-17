@@ -107,7 +107,7 @@ describe('test/koa.test.ts', function () {
         });
     });
 
-    it('upload unsupport ext file using file', async () => {
+    it('upload unsupported ext file using file', async () => {
       const filePath = join(__dirname, 'fixtures/1.test');
       const request = await createHttpRequest(app);
       await request.post('/upload')
@@ -160,7 +160,7 @@ describe('test/koa.test.ts', function () {
         .expect(200);
     });
 
-    it('normal file type', async () => {
+    it('normal file type 2', async () => {
       const filePath = join(__dirname, 'fixtures/1.more');
       const request = await createHttpRequest(app);
       await request.post('/upload')
@@ -184,6 +184,63 @@ describe('test/koa.test.ts', function () {
         .expect(200);
 
       await close(app);
+    });
+  });
+
+  describe('koa function whitelist and mimeTypeWhiteList', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, 'fixtures/koa-function-whitelist');
+      app = await createApp(appDir);
+    });
+
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('upload with function whitelist and mimeTypeWhiteList', async () => {
+      const filePath = join(__dirname, 'fixtures/test.pdf');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', filePath)
+        .expect(200)
+        .then(async response => {
+          assert(response.body.files.length === 1);
+          assert(response.body.files[0].filename === 'test.pdf');
+          assert(response.body.fields.name === 'form');
+          assert(response.body.fields.name2 === 'form2');
+        });
+    });
+  });
+
+  describe('koa function with duplicate fields', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, 'fixtures/koa-function-duplicate-fields');
+      app = await createApp(appDir);
+    });
+
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('allow fields duplication', async () => {
+      const filePath = join(__dirname, 'fixtures/test.pdf');
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .field('name', 'form2')
+        .field('nameOther', 'other')
+        .attach('file', filePath)
+        .expect(200)
+        .then(async response => {
+          assert(response.body.files.length === 1);
+          assert(response.body.files[0].filename === 'test.pdf');
+          assert(JSON.stringify(response.body.fields.name) === JSON.stringify(['form', 'form2']));
+          assert(response.body.fields.nameOther === 'other');
+        });
     });
   });
 });

@@ -24,7 +24,7 @@ export abstract class DataSourceManager<
   protected options: DataSourceManagerConfigOption<ConnectionOpts> = {};
   protected modelMapping = new WeakMap();
   private innerDefaultDataSourceName: string;
-  protected dataSourcePriority: Record<string, string>;
+  protected dataSourcePriority: Record<string, string> = {};
 
   @Inject()
   protected appDir: string;

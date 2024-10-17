@@ -13,7 +13,7 @@ export default defineConfig({
   // allowGlobalContext: true,
   timezone: '+08:00',
   loadStrategy: LoadStrategy.JOINED,
-  allowGlobalContext: true,
+  allowGlobalContext: false,
   // forceUtcTimezone: true, //可以强制将日期保存在不带时区的日期
   // driverOptions: { connection: { timezone: '+08:00' } },
 });

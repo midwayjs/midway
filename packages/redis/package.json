@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/redis",
   "description": "midway redis component",
-  "version": "3.14.12",
+  "version": "3.18.2",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -10,11 +10,11 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.14.12",
-    "@midwayjs/mock": "^3.14.12"
+    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/mock": "^3.18.2"
   },
   "dependencies": {
-    "ioredis": "5.3.2"
+    "ioredis": "5.4.1"
   },
   "keywords": [
     "redis"

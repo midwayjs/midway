@@ -444,8 +444,7 @@ export class DataController {
 
 ```typescript
 // src/configuration.ts
-import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject, MidwayWebRouterService } from '@midwayjs/core';
 import { DataController } from './controller/data.controller';
 
 @Configuration({
@@ -481,8 +480,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { MidwayWebRouterService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject, MidwayWebRouterService } from '@midwayjs/core';
 
 @Configuration({
   // ...
@@ -524,8 +522,7 @@ export class MainConfiguration {
 
 ```typescript
 // src/configuration.ts
-import { MidwayServerlessFunctionService } from '@midwayjs/core';
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject, MidwayServerlessFunctionService } from '@midwayjs/core';
 
 @Configuration({
   // ...

@@ -224,34 +224,43 @@ export class MidwayWebFramework extends BaseFramework<
     if (!this.isClusterMode) {
       // load controller
       await this.loadMidwayController();
-      // https config
-      if (this.configurationOptions.key && this.configurationOptions.cert) {
-        this.configurationOptions.key = PathFileUtil.getFileContentSync(
-          this.configurationOptions.key
-        );
-        this.configurationOptions.cert = PathFileUtil.getFileContentSync(
-          this.configurationOptions.cert
-        );
-        this.configurationOptions.ca = PathFileUtil.getFileContentSync(
-          this.configurationOptions.ca
-        );
 
-        if (this.configurationOptions.http2) {
+      const serverOptions = {
+        ...this.configurationOptions,
+        ...this.configurationOptions.serverOptions,
+      };
+
+      // https config
+      if (serverOptions.key && serverOptions.cert) {
+        serverOptions.key = PathFileUtil.getFileContentSync(serverOptions.key);
+        serverOptions.cert = PathFileUtil.getFileContentSync(
+          serverOptions.cert
+        );
+        serverOptions.ca = PathFileUtil.getFileContentSync(serverOptions.ca);
+        process.env.MIDWAY_HTTP_SSL = 'true';
+
+        if (serverOptions.http2) {
           this.server = require('http2').createSecureServer(
-            this.configurationOptions,
+            serverOptions,
             this.app.callback()
           );
         } else {
           this.server = require('https').createServer(
-            this.configurationOptions,
+            serverOptions,
             this.app.callback()
           );
         }
       } else {
-        if (this.configurationOptions.http2) {
-          this.server = require('http2').createServer(this.app.callback());
+        if (serverOptions.http2) {
+          this.server = require('http2').createServer(
+            serverOptions,
+            this.app.callback()
+          );
         } else {
-          this.server = require('http').createServer(this.app.callback());
+          this.server = require('http').createServer(
+            serverOptions,
+            this.app.callback()
+          );
         }
       }
       // emit egg-ready message in agent and application

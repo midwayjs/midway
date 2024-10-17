@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Swagger
 基于最新的 [OpenAPI 3.0.3](https://swagger.io/specification/) 实现了新版的 Swagger 组件。
 
@@ -302,7 +305,7 @@ export class CreateCatDto {
 
 如果某个属性的类型是个复杂的数组类型，写法略有不同。
 
-首先`type` 必须声明为 `array`，然后除了设置`type`，我们还可以使用 `getSchemaPath` 方法额外导入一个不同的类型（上面的复杂对象也可以使用它设置$ref）。
+首先`type` 必须声明为 `array`，除了设置`type`，我们还可以使用 `getSchemaPath` 方法额外导入一个不同的类型（上面的复杂对象也可以使用它设置$ref）。
 
 此外，如果 `Cat` 类型没有在其他属性的 `type` 字段中声明过，需要使用 `@ApiExtraModel` 装饰器额外声明引入外部类型。
 
@@ -432,71 +435,76 @@ async upateUser(@Body() dto: UserDTO) {
 
 如需其他细节，请使用 `@ApiBody` 增强。
 
-### 文件上传定义
+注意，Swagger 规定，`Body` 定义只能存在一个，如果配置了  `@ApiBody` ，则类型提取的数据会自动被覆盖。
 
-使用 ```@ApiBody``` 设置 `contentType`
+比如下面示例中，`Body` 的类型会被替换为 `Cat`。
 
 ```typescript
-@Post('/:id', { summary: 'test'})
 @ApiBody({
-  description: 'this is body',
-  contentType: BodyContentType.Multipart
+  type: Cat
 })
-@ApiParam({ description: 'this is id' })
-async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
-  return this.catsService.create(createCatDto);
+async upateUser(@Body() dto: UserDTO) {
+  // ...
 }
 ```
 
 
 
-在 `CreateCatDto` 中使用 `@ApiProperty` 添加  `format`
+### 文件上传定义
+
+文件上传是 Post 请求中较为特殊的一类场景。
+
+可以通过在 DTO 中定义属性来实现多个文件以及 `Fields` 的类型。
 
 ```typescript
-@ApiProperty({
-  type: 'string',
-  format: 'binary',
-  description: 'this is file test'
+import { ApiProperty, BodyContentType } from "@midwayjs/swagger";
+
+export class CreateCatDto {
+  // ...
+  @ApiProperty({
+    type: 'array',
+    items: {
+      type: 'string',
+      format: 'binary',
+    }
+  })
+  files: any;
+}
+
+// ...
+
+@Post('/test1')
+@ApiBody({
+  contentType: BodyContentType.Multipart,
+  schema: {
+    type: CreateCatDto,
+  }
 })
-file: any;
+async upload1(@Files() files, @Fields() fields) {
+  // ...
+}
+```
+
+Swagger UI 中展示：
+![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
+
+如果不需要多个文件，使用 schema 定义即可。
+
+```typescript
+export class CreateCatDto {
+  // ...
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+  })
+  file: any;
+}
 ```
 
 Swagger UI 中展示：
 ![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
 
-:::caution
 
-如需 swagger 展示上传信息，请务必添加类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错。
-
-:::
-
-兼容 Upload 组件，添加 ```@ApiBody()``` 装饰器描述
-
-```typescript
-@Post('/test')
-@ApiBody({ description: 'hello file' })
-@ApiBody({ description: 'hello fields', type: Cat })
-async upload(@File() f: any, @Fields() data: Cat) {
-  // ...
-}
-```
-
-Swagger UI 中展示：
-![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
-
-不添加 ```@ApiBody()``` 装饰器描述
-
-```typescript
-@Post('/test1')
-async upload1(@Files() f: any[], @Fields() data: Cat) {
-  // ...
-}
-```
-
-
-
-Swagger UI 中展示：
-![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
 
 ### 请求 Header
 
@@ -511,6 +519,8 @@ Swagger UI 中展示：
 @Controller('/hello')
 export class HelloController {}
 ```
+
+![](https://img.alicdn.com/imgextra/i1/O1CN01n8Xgn729GphI6XzXk_!!6000000008041-2-tps-1234-584.png)
 
 ### 请求 Response
 
@@ -637,7 +647,15 @@ Swagger 本身不支持泛型数据，泛型作为 Typescript 的一种类型，
 为此，我们可以编写一个方法，入参是返回的 data，返回一个包裹的类。
 
 ```typescript
-export function SuccessWrapper<T extends Type>(ResourceCls: T) {
+import { Type } from '@midwayjs/swagger';
+
+type Res<T> = {
+  code: number;
+  message: string;
+  data: T;
+}
+
+export function SuccessWrapper<T>(ResourceCls: Type<T>): Type<Res<T>> {
   class Successed {
     @ApiProperty({ description: '状态码' })
     code: number;
@@ -658,7 +676,7 @@ export function SuccessWrapper<T extends Type>(ResourceCls: T) {
 我们可以基于这个方法，来实现我们自己的返回类。
 
 ```typescript
-class ViewCat extends SuccessWrapper(Cat) {}
+class ViewCat extends SuccessWrapper<Cat>(Cat) {}
 ```
 
 在使用的时候，可以直接指定这个类即可。
@@ -670,25 +688,92 @@ class ViewCat extends SuccessWrapper(Cat) {}
   description: 'The found record',
   type: ViewCat,
 })
-findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
+async findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
   // ...
 }
 ```
 
 
 
+## 更多的定义示例
+
+Swagger 中还有更多的写法，框架都进行了支持，更多用法可以查看我们的 [测试用例](https://github.com/midwayjs/midway/blob/main/packages/swagger/test/parser.test.ts)。
+
 
 
 ## 更多配置
 
 ### 路由标签
-Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则会默认归组到 default 下。可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
+Swagger 可以对每个路由添加标签，进行分组。
+
+标签添加有两种形式。
+
+<Tabs>
+<TabItem value="controller" label="添加到控制器">
+默认情况下，框架会根据 Controller 的路径来生成标签，比如下面的代码，会生成一个 `hello` 的标签，这个标签会应用到这个控制器所有的路由上。
+
+```typescript
+@Controller('/hello')
+export class HelloController {}
+```
+
+如果需要自定义标签，可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
 
 ```typescript
 @ApiTags(['hello'])
 @Controller('/hello')
 export class HelloController {}
 ```
+
+从 `v3.17.3` 开始，可以通过配置 `isGenerateTagForController` 来控制是否自动生成 Controller 标签。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  swagger: {
+    isGenerateTagForController: false
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="router" label="@ApiTags 和 @ApiOperation">
+
+可以将 `@ApiTags` 标签直接加在路由方法上。
+
+```typescript
+// ...
+export class HomeController {
+  @ApiTags(['bbb'])
+  @Get('/')
+  async home(): Promise<string> {
+    // ...
+  }
+}
+```
+
+也可以通过 `@ApiOperation` 来添加标签。
+
+```typescript
+// ...
+export class HomeController {
+  @ApiOperation({ tags: ['bbb'] })
+  @Get('/')
+  async home(): Promise<string> {
+    // ...
+  }
+}
+```
+
+`@ApiTags` 的优先级比 `@ApiOperation` 更高，如果两者同时存在，`@ApiTags` 会覆盖 `@ApiOperation`。
+
+同理，路由上的 `@ApiTags` 也会覆盖控制器上的 `@ApiTags`。
+
+</TabItem>
+
+</Tabs>
+
 
 可以通过配置给 Tag 添加描述。
 
@@ -711,22 +796,6 @@ export default {
 }
 
 ```
-
-也可以加在路由方法上。
-
-```typescript
-// ...
-export class HomeController {
-  @ApiTags(['bbb'])
-  @Get('/')
-  async home(@Body() dto?: Photo): Promise<string> {
-    return 'Hello Midwayjs!';
-  }
-}
-```
-
-
-
 
 
 ### 授权验证
@@ -899,6 +968,8 @@ export default {
 @Controller('/hello')
 export class HelloController {}
 ```
+
+
 
 
 
@@ -1099,8 +1170,9 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
 | ```@ApiCookieAuth```        | Controller        |
 | ```@ApiOAuth2```            | Controller        |
 | ```@ApiSecurity```          | Controller        |
+| ```@ApiExcludeSecurity```   | Method            |
 | ```@ApiParam```             | Method            |
-| ```@ApiExtraModel```        | Controller/Model  |
+| ```@ApiExtraModel```        | Controller        |
 
 
 

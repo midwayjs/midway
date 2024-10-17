@@ -24,7 +24,7 @@ const { join } = require('path');
   process.send({
     title: 'server-ready',
     port: process.env.MIDWAY_HTTP_PORT,
-    ssl: args.ssl,
+    ssl: args.ssl || process.env.MIDWAY_HTTP_SSL === 'true',
   });
 
   function onSignal() {

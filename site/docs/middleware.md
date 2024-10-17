@@ -277,6 +277,99 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
 
 
+## 复用中间件
+
+中间件的本质是函数，函数可以传递不同的配置来复用中间件，但是在 class 场景下较难实现。Midway 提供了 `createMiddleware` 方法辅助 class 场景下创建不同的中间件函数。
+
+可以在 `useMiddleware` 阶段使用 `createMiddleare` 复用。
+
+```typescript
+// src/configuration.ts
+import { App, Configuration, createMiddleare } from '@midwayjs/core';
+import * as koa from '@midwayjs/koa';
+import { ReportMiddleware } from './middleware/user.middleware';
+
+@Configuration({
+  imports: [koa]
+  // ...
+})
+export class MainConfiguration {
+
+  @App()
+  app: koa.Application;
+
+  async onReady() {
+    // 添加 ReportMiddleware 中间件
+    this.app.useMiddleware(ReportMiddleware);
+    // 添加一个不同参数的 ReportMiddleware
+    this.app.useMiddleware(createMiddleare(ReportMiddleware, {
+      text: 'abc'
+    }, 'anotherReportMiddleare'));
+  }
+}
+
+```
+
+我们可以在中间件中获取到这个参数，从而执行不同的逻辑,。
+
+```typescript
+import { Middleware, IMiddleware } from '@midwayjs/core';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+  initData = 'text1';
+  
+  resolve(_, options?: {
+    text: string;
+  }) {
+    return async (ctx: Context, next: NextFunction) => {
+      this.ctx.setAttr('data', options?.text || this.initData);
+      return await next();
+    };
+  }
+}
+```
+
+`createMiddleare` 方法定义如下，包含三个参数。
+
+```typescript
+function createMiddleware(middlewareClass: new (...args) => IMiddleware, options, name?: string);
+```
+
+| 参数            | 描述             |
+| --------------- | ---------------- |
+| middlewareClass | 中间件类         |
+| options         | 传递的自定义参数 |
+| name            | 可选，中间件名称 |
+
+`options` 可以传递中间件的自定义函数，在逻辑中可以自行进行处理。
+
+`name` 字段用于中间件的排序和展示，一般会选择一个和原中间件名不同的字符串。
+
+`createMiddleare` 方法还可以在路由中间件使用。
+
+```typescript
+import { Controller, Get, createMiddleware } from '@midwayjs/core';
+import { ReportMiddleware } from '../middleware/report.middlweare';
+
+const anotherMiddleware = createMiddleware(ReportMiddleware, {
+  // ...
+});
+
+@Controller('/')
+export class HomeController {
+  @Get('/', {
+    middleware: [anotherMiddleware],
+  })
+  async home() {}
+}
+```
+
+注意，装饰器会在框架启动前加载，这个时候  `createMiddleware` 的参数无法从框架配置中获取，一般为固定的对象值。
+
+
+
 ## 函数中间件
 
 Midway 依旧支持函数中间件的形式，并且可以使用 `useMiddleware` 来加入到中间件列表。

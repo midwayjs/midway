@@ -437,4 +437,14 @@ export interface SwaggerOptions {
    * 自定义路由过滤器
    */
   routerFilter?: (url: string, options: RouterOption) => boolean;
+  /**
+   * Weather to generate the Tag for controller
+   */
+  isGenerateTagForController?: boolean;
+}
+
+export interface MixDecoratorMetadata {
+  key: string;
+  metadata: any;
+  propertyName?: string;
 }

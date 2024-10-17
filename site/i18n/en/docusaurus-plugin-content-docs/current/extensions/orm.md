@@ -133,14 +133,14 @@ We take a simple project as an example, please refer to other structures.
 
 ```
 MyProject
-├── src              							    // TS root directory
+├── src              					// TS root directory
 │   ├── config
 │   │   └── config.default.ts 		    // Application Profile
-│   ├── entity       							    // entity (database Model) directory
-│   │   └── photo.entity.ts  					// entity file
+│   ├── entity       					// entity (database Model) directory
+│   │   └── photo.entity.ts  			// entity file
 │   │   └── photoMetadata.ts
-│   ├── configuration.ts     			    // Midway configuration file
-│   └── service      							    // Other service directory
+│   ├── configuration.ts     			// Midway configuration file
+│   └── service      					// Other service directory
 ├── .gitignore
 ├── package.json
 ├── README.md
@@ -433,15 +433,16 @@ export default {
         username: '*******',
         password: '*******',
         database: undefined,
-        synchronize: false,		// If it is used for the first time, there is no table, and there is a need for synchronization, you can write true
+        synchronize: false,		    // If it is used for the first time, there is no table, and there is a need for synchronization, you can write true
         logging: false,
 
         // Configure the entity model
         entities: [Photo],
 
-        // or scan format
+        // or scan format,For compatibility we can match .js and .ts at the same time
         entities: [
-          '**/entity/*.entity{.ts,.js}'
+          'entity',                 // Specific directory
+          '**/*.entity.{j,t}s',     // wildcard path + suffix matching
         ]
       }
     }
@@ -450,13 +451,10 @@ export default {
 ```
 :::tip
 
-If the database you are using already has the function of table structure synchronization, such as cloud database, it is better not to open it. If it must be used, it is best to use the synchronize configuration only in the development phase or for the first time to avoid consistency problems.
-
+- 1. If the database you are using already has the function of table structure synchronization, such as cloud database, it is better not to open it. If it must be used, it is best to use the synchronize configuration only in the development phase or for the first time to avoid consistency problems.
+- 2. The `entities` field configuration has been processed by the framework, please do not refer to the original document for this field configuration.
 :::
 
-
-
-For more information, see [Data source management](../data_source).
 
 
 You can use other database types for the `type` field, including `mysql`, `mariadb`, `postgres`, `cockroachdb`, `sqlite`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
@@ -1625,10 +1623,17 @@ export default {
 Entity return types can be adjusted if `@CreateDateColumn` and `@UpdateDateColumn` are used.
 
 ```typescript
-  @CreateDateColumn({
-    type: 'timestamp',
-  })
-  createdDate: string;
+@UpdateDateColumn({
+  name: "gmt_modified",
+  type: 'timestamp'
+})
+gmtModified: string;
+
+@CreateDateColumn({
+  name: "gmt_create",
+  type: 'timestamp',
+})
+gmtCreate: string;
 ```
 
 

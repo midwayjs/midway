@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/express-session",
   "description": "midway session component for express",
-  "version": "3.14.12",
+  "version": "3.18.2",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -10,14 +10,14 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.14.12",
-    "@midwayjs/mock": "^3.14.12",
-    "@types/express-session": "1.17.10",
+    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/mock": "^3.18.2",
+    "@types/express-session": "1.18.0",
     "memorystore": "1.6.7"
   },
   "dependencies": {
     "cookie-session": "^2.0.0",
-    "express-session": "1.18.0"
+    "express-session": "1.18.1"
   },
   "keywords": [
     "midway",

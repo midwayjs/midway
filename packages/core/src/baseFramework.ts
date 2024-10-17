@@ -18,7 +18,7 @@ import {
   ASYNC_CONTEXT_KEY,
   ASYNC_CONTEXT_MANAGER_KEY,
 } from './constants';
-import { Inject, Destroy, Init } from './decorator';
+import { Inject, Init } from './decorator';
 import { MidwayRequestContainer } from './context/requestContainer';
 import { MidwayEnvironmentService } from './service/environmentService';
 import { MidwayConfigService } from './service/configService';
@@ -185,7 +185,6 @@ export abstract class BaseFramework<
     }
   }
 
-  @Destroy()
   public async stop(): Promise<void> {
     await this.mockService.runSimulatorAppTearDown(this.app);
     await this.beforeStop();

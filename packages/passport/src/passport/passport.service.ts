@@ -235,6 +235,9 @@ export function PassportMiddleware(
               redirect(url) {
                 ctx.redirect(url);
               },
+              setHeader(key, value) {
+                ctx.set(key, value);
+              },
             });
             return;
           }

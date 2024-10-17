@@ -64,6 +64,7 @@
         "service_factory",
         "data_listener",
         "data_source",
+        "data_response",
         "retry"
       ]
     },
@@ -99,68 +100,16 @@
     },
     {
       "type": "category",
-      "label": "一体化",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "hooks/intro",
-          "label": "介绍"
-        },
-        {
-          "type": "category",
-          "label": "基础功能",
-          "collapsed": false,
-          "collapsible": false,
-          "items": [
-            "hooks/api",
-            "hooks/builtin-hooks",
-            "hooks/validate",
-            "hooks/middleware",
-            "hooks/cors",
-            "hooks/component",
-            "hooks/prisma",
-            "hooks/test",
-            "hooks/config",
-            "hooks/file-route",
-            "hooks/safe",
-            "hooks/upload"
-          ]
-        },
-        {
-          "type": "category",
-          "label": "一体化",
-          "collapsed": false,
-          "collapsible": false,
-          "items": [
-            "hooks/fullstack",
-            "hooks/client"
-          ]
-        },
-        {
-          "type": "category",
-          "label": "进阶",
-          "collapsed": false,
-          "collapsible": false,
-          "items": [
-            "hooks/deploy"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
       "label": "开发工具",
       "collapsed": true,
       "collapsible": true,
       "items": [
         "tool/create_midway",
         "tool/mwtsc",
+        "tool/version_check",
         "tool/mwts",
         "tool/luckyeye",
-        "tool/egg-ts-helper",
-        "tool/cli"
+        "tool/egg-ts-helper"
       ]
     },
     {
@@ -196,7 +145,60 @@
       "collapsed": true,
       "collapsible": true,
       "items": [
-        "logger"
+        "logger",
+        "tool/cli",
+        {
+          "type": "category",
+          "label": "一体化",
+          "collapsed": true,
+          "collapsible": true,
+          "items": [
+            {
+              "type": "doc",
+              "id": "hooks/intro",
+              "label": "介绍"
+            },
+            {
+              "type": "category",
+              "label": "基础功能",
+              "collapsed": false,
+              "collapsible": false,
+              "items": [
+                "hooks/api",
+                "hooks/builtin-hooks",
+                "hooks/validate",
+                "hooks/middleware",
+                "hooks/cors",
+                "hooks/component",
+                "hooks/prisma",
+                "hooks/test",
+                "hooks/config",
+                "hooks/file-route",
+                "hooks/safe",
+                "hooks/upload"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "一体化",
+              "collapsed": false,
+              "collapsible": false,
+              "items": [
+                "hooks/fullstack",
+                "hooks/client"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "进阶",
+              "collapsed": false,
+              "collapsible": false,
+              "items": [
+                "hooks/deploy"
+              ]
+            }
+          ]
+        }
       ]
     }
   ],
@@ -228,13 +230,14 @@
         "extensions/express",
         "extensions/security",
         "extensions/render",
-        "extensions/upload",
+        "extensions/busboy",
         "extensions/passport",
         "extensions/casbin",
         "extensions/static_file",
         "extensions/cross_domain",
         "extensions/http-proxy",
-        "extensions/captcha"
+        "extensions/captcha",
+        "extensions/tenant"
       ]
     },
     {
@@ -282,7 +285,8 @@
       "collapsible": false,
       "items": [
         "extensions/rabbitmq",
-        "extensions/kafka"
+        "extensions/kafka",
+        "extensions/mqtt"
       ]
     },
     {
@@ -306,6 +310,7 @@
       "collapsible": false,
       "items": [
         "extensions/cache",
+        "extensions/upload",
         "legacy/mongodb",
         "legacy/sequelize",
         "legacy/orm",

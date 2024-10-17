@@ -33,6 +33,7 @@ import {
 } from '../interface';
 import { loadProto } from '../util';
 import { PackageDefinition } from '@grpc/proto-loader';
+import type { EventEmitter } from 'events';
 
 @Framework()
 export class MidwayGRPCFramework extends BaseFramework<
@@ -160,7 +161,7 @@ export class MidwayGRPCFramework extends BaseFramework<
               grpcMethodData.type === GrpcStreamTypeEnum.READABLE
             ) {
               // listen data and trigger binding method
-              call.on('data', async data => {
+              (call as EventEmitter).on('data', async data => {
                 await this.handleContextMethod({
                   service,
                   ctx,
@@ -169,7 +170,7 @@ export class MidwayGRPCFramework extends BaseFramework<
                   grpcMethodData,
                 });
               });
-              call.on('end', async () => {
+              (call as EventEmitter).on('end', async () => {
                 if (grpcMethodData.onEnd) {
                   try {
                     const endResult = await service[grpcMethodData.onEnd]();

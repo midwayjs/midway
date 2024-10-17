@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/passport",
   "description": "midway passport component",
-  "version": "3.14.12",
+  "version": "3.18.2",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -22,14 +22,15 @@
   "author": "Nawbc",
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.14.12",
-    "@midwayjs/express": "^3.14.12",
-    "@midwayjs/jwt": "^3.14.12",
-    "@midwayjs/koa": "^3.14.12",
-    "@midwayjs/mock": "^3.14.12",
-    "@midwayjs/web": "^3.14.12",
+    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/express": "^3.18.2",
+    "@midwayjs/jwt": "^3.18.2",
+    "@midwayjs/koa": "^3.18.2",
+    "@midwayjs/mock": "^3.18.2",
+    "@midwayjs/web": "^3.18.2",
     "@types/passport-local": "1.0.38",
-    "express-session": "1.18.0",
+    "express-session": "1.18.1",
+    "passport-http-bearer": "1.0.1",
     "passport-jwt": "4.0.1",
     "passport-local": "1.0.0",
     "passport-openidconnect": "0.1.2"

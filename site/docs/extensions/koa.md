@@ -17,7 +17,6 @@ Midway 默认的示例都是基于该包。
 
 ```bash
 $ npm i @midwayjs/koa@3 --save
-$ npm i @types/koa --save-dev
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -28,10 +27,6 @@ $ npm i @types/koa --save-dev
     "@midwayjs/koa": "^3.0.0",
     // ...
   },
-  "devDependencies": {
-    "@types/koa": "^2.13.4",
-    // ...
-  }
 }
 ```
 
@@ -232,11 +227,12 @@ export default {
 | cert         | string \| Buffer \| Array<Buffer\|Object> | 可选，Https cert，服务端证书                            |
 | ca           | string \| Buffer \| Array<Buffer\|Object> | 可选，Https ca                                          |
 | http2        | boolean                                   | 可选，http2 支持，默认 false                            |
-| proxy        | boolean                                   | 可选，是否开启代理，如果为 true 则对于 request 请求中的 host / protocol / ip分别优先从 Header 字段中 X-Forwarded-Host / X-Forwarded-Proto / X-Forwarded-For 获取，默认 false                            |
+| proxy        | boolean                                   | 可选，是否开启代理，如果为 true 则对于 request 请求中的 ip 优先从 Header 字段中 X-Forwarded-For 获取，默认 false           |
 | subdomainOffset        | number                                   | 可选，子域名的偏移量，默认 2                            |
 | proxyIpHeader        | string                                   | 可选，获取代理 ip 的字段名，默认为 X-Forwarded-For |
 | maxIpsCount        | number                                   | 可选，获取的 ips 最大数量，默认为 0（全部返回）|
-| serverTimeout | number | 可选，服务端超时配置，单位秒。 |
+| serverTimeout | number | 可选，服务端超时配置，默认为 2 \* 60 \* 1000（2 分钟），单位毫秒 |
+| serverOptions | Record<string, any> | 可选，http Server [选项](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
 
 
 
@@ -275,6 +271,37 @@ export default {
 ### 全局前缀
 
 此功能请参考 [全局前缀](../controller#全局路由前缀)。
+
+
+
+### 反向代理配置
+
+如果使用了 Nginx 等反向代理，请开启 `proxy` 配置。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    proxy: true,
+  },
+}
+```
+
+默认使用 `X-Forwarded-For` Header，如果代理配置不同，请自行配置不同的 Header。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    proxy: true,
+    proxyIpHeader: 'X-Forwarded-Host'
+  },
+}
+```
+
+
 
 
 
@@ -352,5 +379,121 @@ export default {
     // ...
   },
 };
+```
+
+
+### Query 数组解析
+
+默认情况下，koa 使用 `querystring` 解析 query 参数，当碰到数组时，会将数组的数据拆开。
+
+比如：
+
+```
+GET /query?a[0]=1&a[1]=2
+```
+
+拿到的结果是：
+
+```json
+{
+    "a[0]": 1,
+    "a[1]": 2,
+}
+```
+
+框架提供了一些参数来处理这种情况。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    queryParseMode: 'extended',
+    // ...
+  },
+}
+```
+
+`queryParseMode` 参数可以选择 `extended`、 `strict`、`first` 三种值。
+
+ 当 `queryParseMode` 有值时，会使用 `qs` 模块处理 query，效果同 `koa-qs` 模块。
+
+当请求参数为 `/query?a=1&b=2&a=3&c[0]=1&c[1]=2'` 时。
+
+默认效果（使用 `querystring`）
+
+```JSON
+{
+  "a": ["1", "3" ],
+  "b": "2",
+  "c[0]": "1",
+  "c[1]": "2"
+}
+```
+
+ `extended` 效果
+
+```JSON
+{
+  "a": ["1", "3" ],
+  "b": ["2"],
+  "c": ["1", "2"]
+}
+```
+
+ `strict` 效果
+
+```JSON
+{
+  "a": ["1", "3" ],
+  "b": "2",
+  "c": ["1", "2"]
+}
+```
+
+ `first` 效果
+
+```JSON
+{
+  "a": "1",
+  "b": "2",
+  "c": "1"
+}
+```
+
+
+### 超时配置
+
+RequestTiemout 和 ServerTimeout 是两种不同的超时情况。
+
+- `serverTimeout`：用于设置服务器接收到请求后，等待客户端发送数据的超时时间。如果在该时间内客户端没有发送任何数据，则服务器将关闭连接。此超时适用于整个请求-响应周期，包括请求头、请求主体以及响应。
+- `requestTimeout`：用于设置服务器等待客户端发送完整请求的超时时间。这个超时是针对请求头和请求主体的，服务器将在该时间内等待客户端发送完整的请求。如果在超时时间内没有收到完整的请求，则服务器将中止该请求。
+
+默认情况下，`serverTimeout` 为 0，不会触发超时。
+
+如有需求，可以通过配置修改，单位毫秒。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    serverTimeout: 100_000
+  },
+}
+```
+
+如果程序出现 `ERR_HTTP_REQUEST_TIMEOUT` 这个错误，说明是触发了 `requestTimeout`，默认为 `300_000` （五分钟），单位毫秒，可以通过以下配置修改。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    serverOptions: {
+      requestTimeout: 600_000
+    }
+  },
+}
 ```
 

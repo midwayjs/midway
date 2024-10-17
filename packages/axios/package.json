@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/axios",
   "description": "midway http client with axios",
-  "version": "3.14.13",
+  "version": "3.18.2",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -10,12 +10,12 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.14.12",
-    "@midwayjs/mock": "^3.14.12",
-    "nock": "13.5.3"
+    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/mock": "^3.18.2",
+    "nock": "13.5.5"
   },
   "dependencies": {
-    "axios": "1.6.7"
+    "axios": "1.7.7"
   },
   "keywords": [
     "http client",

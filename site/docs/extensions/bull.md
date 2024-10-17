@@ -798,13 +798,43 @@ export default {
 }
 ```
 
+此外，组件提供了 `BullBoardManager` ，可以添加动态创建的队列。
 
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import * as bull from '@midwayjs/bull';
+import * as bullBoard from '@midwayjs/bull-board';
+
+@Configuration({
+  imports: [
+    // ...
+    bull,
+    bullBoard
+  ]
+})
+export class MainConfiguration {
+
+  @Inject()
+  bullFramework: bull.Framework;
+  
+  @Inject()
+  bullBoardManager: bullBoard.BullBoardManager;
+
+  async onReady() {
+    const testQueue = this.bullFramework.createQueue('test', {
+      // ...
+    });
+
+    this.bullBoardManager.addQueue(testQueue);
+  }
+}
+```
 
 
 
 ## 常见问题
 
-### 1、EVALSHA错误
+### 1、EVALSHA 错误
 
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01KfjCKT1yypmNPDkIL_!!6000000006648-2-tps-3540-102.png)
 
@@ -812,5 +842,36 @@ export default {
 
 原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步 @midwayjs/bull 的 key 命中了不同的 slot。
 
-解决办法是 task 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
+解决方案： task 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
 
+### 2、EVAL inside MULTI is not allowed 错误
+
+表现为 `queue.createBulk()`、`job.moveToFailed()` 等任务队列 API 调用无效，并出现下面的错误。
+
+```
+ReplyError: EXECABORT Transaction discarded because of previous errors.
+    at parseError (<project_dir>/node_modules/redis-parser/lib/parser.js:179:12)
+    at parseType (<project_dir>/node_modules/redis-parser/lib/parser.js:302:14) {
+  command: { name: 'exec', args: [] },
+  previousErrors: [
+    ReplyError: ERR 'EVAL' inside MULTI is not allowed
+        at parseError (<project_dir>/node_modules/redis-parser/lib/parser.js:179:12)
+        at parseType (<project_dir>/node_modules/redis-parser/lib/parser.js:302:14) {
+      command: [Object]
+    }
+  ]
+}
+```
+
+:::tip
+
+常出现于使用阿里云 Redis 服务。
+
+:::
+
+由于这些 API 依赖的 Redis Lua 脚本中使用了 EVAL 或者 EVALSHA，阿里云 Redis 使用代理模式连接时，会对 Lua 脚本调用做额外限制，包括 [不允许在 MULTI 事务中执行 EVAL 命令](https://help.aliyun.com/zh/redis/support/usage-of-lua-scripts?#section-8f7-qgv-dlv)，文档中还提到可以通过参数配置 script_check_enable 关闭这一校验，但是验证无效。
+
+解决方案：
+
+* 1、在阿里云控制台操作开启直连地址，将服务切换到直连模式
+* 2、客户端切换成集群模式，参考上述「Redis 集群」章节，切换配置方式
