@@ -1,4 +1,4 @@
-import { Provide, Inject } from '@midwayjs/core';
+import { Provide, Inject, LazyInject } from '@midwayjs/core';
 import { PlanA } from './planA';
 
 // @Provide()
@@ -9,7 +9,7 @@ import { PlanA } from './planA';
 
 @Provide()
 export class PlanB {
-  @Inject()
+  @LazyInject()
   planA: PlanA;
   @Inject()
   helloService: any;

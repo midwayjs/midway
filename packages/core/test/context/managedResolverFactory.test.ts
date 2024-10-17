@@ -34,13 +34,13 @@ describe('/test/context/managedResolverFactory.test.ts', () => {
     context.registry.registerDefinition(definition.id, definition);
     context.registry.registerDefinition(definition1.id, definition1);
 
-    let r = resolver.create(definition.id, definition,[[ 2, 3, 4 ]]);
+    let r = resolver.create(definition.id, [[ 2, 3, 4 ]], context);
     expect(r.aa).toEqual(123);
     expect(r.args).toStrictEqual([2, 3, 4]);
 
     await resolver.destroyCache();
 
-    r = await resolver.createAsync(definition.id, definition, [[ 2, 3, 4 ]]);
+    r = await resolver.createAsync(definition.id, [[ 2, 3, 4 ]], context);
     expect(r.aa).toEqual(123);
     expect(r.args).toStrictEqual([2, 3, 4]);
 
@@ -57,7 +57,7 @@ describe('/test/context/managedResolverFactory.test.ts', () => {
     definition1.constructMethod = 'returnNull';
 
     try {
-      await resolver.createAsync(definition1.id, definition1);
+      await resolver.createAsync(definition1.id, [], context);
     } catch (e) {
       callback(e.message);
     }

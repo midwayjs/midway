@@ -1,14 +1,14 @@
 import {
   IConfigurationOptions,
   IMidwayApplication,
-  IMidwayContainer,
   IMidwayFramework,
   IMidwayContext,
+  IMidwayGlobalContainer,
 } from '../interface';
 import { AsyncContextManager } from '../common/asyncContextManager';
 import { ASYNC_CONTEXT_MANAGER_KEY } from '../constants';
 
-export const getCurrentApplicationContext = (): IMidwayContainer => {
+export const getCurrentApplicationContext = (): IMidwayGlobalContainer => {
   return global['MIDWAY_APPLICATION_CONTEXT'];
 };
 

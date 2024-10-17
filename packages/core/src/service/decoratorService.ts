@@ -11,13 +11,13 @@ import {
   MethodDecoratorMetaData,
   ParameterDecoratorMetaData,
   HandlerFunction,
-  IMidwayContainer,
   MethodHandlerFunction,
   ParameterHandlerFunction,
   JoinPoint,
   ScopeEnum,
   PipeUnionTransform,
   PipeTransform,
+  IMidwayGlobalContainer,
 } from '../interface';
 import { MidwayAspectService } from './aspectService';
 import { MidwayCommonError, MidwayParameterError } from '../error';
@@ -39,7 +39,7 @@ export class MidwayDecoratorService {
   @Inject()
   private aspectService: MidwayAspectService;
 
-  constructor(readonly applicationContext: IMidwayContainer) {}
+  constructor(readonly applicationContext: IMidwayGlobalContainer) {}
 
   @Init()
   protected init() {

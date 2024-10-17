@@ -4,12 +4,14 @@
 import {
   CONTAINER_OBJ_SCOPE,
   REQUEST_CTX_KEY,
+  REQUEST_CTX_UNIQUE_KEY,
   REQUEST_OBJ_CTX_KEY,
   SINGLETON_CONTAINER_CTX,
 } from '../constants';
 import {
   ClassType,
   IMidwayContainer,
+  IMidwayGlobalContainer,
   IObjectDefinition,
   ObjectIdentifier,
   ObjectLifeCycleEvent,
@@ -33,28 +35,41 @@ const debug = util.debuglog('midway:debug');
 export class ManagedResolverFactory {
   private creating = new Map<string, boolean>();
   singletonCache = new Map<ObjectIdentifier, any>();
-  context: IMidwayContainer;
+  context: IMidwayGlobalContainer;
 
-  constructor(context: IMidwayContainer) {
+  constructor(context: IMidwayGlobalContainer) {
     this.context = context;
   }
 
   /**
    * 同步创建对象
-   * @param opt
+   * @param identifier
+   * @param args
+   * @param currentContext
    */
-  create<T = any>(identifier, definition: IObjectDefinition, args = []): T {
-    const name = identifier.name ?? identifier;
-    identifier = this.context.getIdentifier(identifier);
-    if (this.context.registry.hasObject(identifier)) {
-      return this.context.registry.getObject(identifier);
+  create<T = any>(
+    identifier: ClassType<T> | string,
+    args = [],
+    currentContext: IMidwayContainer
+  ): T {
+    const name = typeof identifier === 'string' ? identifier : identifier.name;
+    identifier = currentContext.getIdentifier(identifier);
+    if (currentContext.hasObject(identifier)) {
+      return currentContext.getObject(identifier);
+    }
+
+    const definition = this.getObjectDefinition(identifier);
+
+    if (
+      !definition &&
+      currentContext !== this.context &&
+      this.context.hasObject(identifier)
+    ) {
+      return this.context.getObject(identifier);
     }
 
     if (!definition) {
-      definition = this.getObjectDefinition(identifier);
-      if (!definition) {
-        throw new MidwayDefinitionNotFoundError(identifier, name);
-      }
+      throw new MidwayDefinitionNotFoundError(identifier, name);
     }
 
     const pendingInitQueue = new Map<
@@ -68,7 +83,7 @@ export class ManagedResolverFactory {
       args,
       definition,
       false,
-      this.context,
+      currentContext,
       pendingObjectCache,
       pendingInitQueue
     );
@@ -81,19 +96,29 @@ export class ManagedResolverFactory {
     return newInstance ?? instance;
   }
 
-  async createAsync<T = any>(identifier, definition, args = []): Promise<T> {
-    const name = identifier.name ?? identifier;
-    identifier = this.context.getIdentifier(identifier);
-    if (this.context.registry.hasObject(identifier)) {
-      return this.context.registry.getObject(identifier);
+  async createAsync<T = any>(
+    identifier: ClassType<T> | string,
+    args = [],
+    currentContext: IMidwayContainer
+  ): Promise<T> {
+    const name = typeof identifier === 'string' ? identifier : identifier.name;
+    identifier = currentContext.getIdentifier(identifier);
+    if (currentContext.hasObject(identifier)) {
+      return currentContext.getObject(identifier);
+    }
+
+    const definition = this.getObjectDefinition(identifier);
+
+    if (
+      !definition &&
+      currentContext !== this.context &&
+      this.context.hasObject(identifier)
+    ) {
+      return this.context.getObject(identifier);
     }
 
     if (!definition) {
-      definition = this.getObjectDefinition(identifier);
-
-      if (!definition) {
-        throw new MidwayDefinitionNotFoundError(identifier, name);
-      }
+      throw new MidwayDefinitionNotFoundError(identifier, name);
     }
 
     const pendingInitQueue = new Map<
@@ -103,11 +128,11 @@ export class ManagedResolverFactory {
     const pendingObjectCache = new Map<string, any>();
     const instance = this.createInstance(
       identifier,
-      definition.name,
+      definition?.name ?? name,
       args,
       definition,
       true,
-      this.context,
+      currentContext,
       pendingObjectCache,
       pendingInitQueue
     );
@@ -122,7 +147,7 @@ export class ManagedResolverFactory {
 
   async destroyCache(): Promise<void> {
     for (const key of this.singletonCache.keys()) {
-      const definition = this.context.registry.getDefinition(key);
+      const definition = this.getObjectDefinition(key);
       if (definition.creator) {
         const inst = this.singletonCache.get(key);
         this.getObjectEventTarget().emit(
@@ -141,19 +166,14 @@ export class ManagedResolverFactory {
   }
 
   private getObjectEventTarget(): EventEmitter {
-    if (this.context.parent) {
-      return this.context.parent.objectCreateEventTarget;
-    }
     return this.context.objectCreateEventTarget;
   }
 
-  private checkSingletonInvokeRequest(definition, key, context) {
+  private checkSingletonInvokeRequest(definition, key, currentContext) {
     if (definition.isSingletonScope()) {
       const managedRef: PropertyInjectMetadata = definition.properties.get(key);
-      if (context.hasDefinition(managedRef?.id)) {
-        const propertyDefinition = context.registry.getDefinition(
-          managedRef.id
-        );
+      if (currentContext.hasDefinition(managedRef?.id)) {
+        const propertyDefinition = currentContext.getDefinition(managedRef.id);
         if (
           propertyDefinition.isRequestScope() &&
           !propertyDefinition.allowDowngrade
@@ -191,43 +211,42 @@ export class ManagedResolverFactory {
     args = [],
     definition: IObjectDefinition,
     isAsync: boolean,
-    context: IMidwayContainer,
+    currentContext: IMidwayContainer,
     pendingObjectCache: Map<string, any>,
     pendingInitQueue: Map<any, [() => any, (newValue: any) => void]>,
     creationPath: string[] = [],
     replaceCallback?: (newValue: any) => void
   ): any {
-    identifier = context.getIdentifier(identifier);
-    if (context.registry.hasObject(identifier)) {
-      return context.registry.getObject(identifier);
+    identifier = currentContext.getIdentifier(identifier);
+    if (currentContext.hasObject(identifier)) {
+      return currentContext.getObject(identifier);
+    }
+
+    definition = definition ?? currentContext.getDefinition(identifier);
+
+    if (
+      !definition &&
+      currentContext !== this.context &&
+      this.context.hasObject(identifier)
+    ) {
+      return this.context.getObject(identifier);
     }
 
     if (!definition) {
-      definition = this.getObjectDefinition(identifier);
-      if (!definition) {
-        throw new MidwayDefinitionNotFoundError(
-          identifier as string,
-          name,
-          creationPath
-        );
-      }
+      throw new MidwayDefinitionNotFoundError(
+        identifier as string,
+        name,
+        creationPath
+      );
     }
 
-    let currentContext = context;
-
     if (definition.isSingletonScope()) {
-      currentContext = context.parent ?? context;
-      if (
-        currentContext['getManagedResolverFactory']().singletonCache.has(
-          definition.id
-        )
-      ) {
+      currentContext = this.context;
+      if (this.singletonCache.has(definition.id)) {
         debug(
           `id = ${definition.id}(${definition.name}) get from singleton cache.`
         );
-        return currentContext['getManagedResolverFactory']().singletonCache.get(
-          definition.id
-        );
+        return this.singletonCache.get(definition.id);
       }
     }
 
@@ -421,7 +440,7 @@ export class ManagedResolverFactory {
           ObjectLifeCycleEvent.AFTER_INIT,
           instance,
           {
-            context: this.getRootContext(this.context),
+            context: this.getCurrentMatchedContext(instance),
             definition,
           }
         );
@@ -492,7 +511,7 @@ export class ManagedResolverFactory {
           ObjectLifeCycleEvent.AFTER_INIT,
           instance,
           {
-            context: this.getRootContext(this.context),
+            context: this.getCurrentMatchedContext(instance),
             definition,
           }
         );
@@ -512,20 +531,16 @@ export class ManagedResolverFactory {
         debug(
           `id = ${definition.id}(${definition.name}) set to singleton cache`
         );
-        if (this.context.parent) {
-          this.context.parent['getManagedResolverFactory']().singletonCache.set(
-            definition.id,
-            instance
-          );
-        } else {
-          this.singletonCache.set(definition.id, instance);
-        }
+        this.singletonCache.set(definition.id, instance);
         this.setInstanceScope(instance, ScopeEnum.Singleton);
       } else if (definition.isRequestScope()) {
         debug(
           `id = ${definition.id}(${definition.name}) set to register object`
         );
-        this.context.registerObject(definition.id, instance);
+        this.getCurrentMatchedContext(instance).registerObject(
+          definition.id,
+          instance
+        );
         this.setInstanceScope(instance, ScopeEnum.Request);
       } else {
         this.setInstanceScope(instance, ScopeEnum.Prototype);
@@ -534,14 +549,16 @@ export class ManagedResolverFactory {
   }
 
   private getObjectDefinition(identifier: ObjectIdentifier): IObjectDefinition {
-    let definition = this.context.registry.getDefinition(identifier);
-    if (!definition && this.context.parent) {
-      definition = this.context.parent.registry.getDefinition(identifier);
-    }
-    return definition;
+    return this.context.getDefinition(identifier);
   }
 
-  private getRootContext(context: IMidwayContainer): IMidwayContainer {
-    return context.parent ?? context;
+  private getCurrentMatchedContext(instance): IMidwayContainer {
+    if (instance[REQUEST_OBJ_CTX_KEY]) {
+      return (
+        instance[REQUEST_OBJ_CTX_KEY]?.[REQUEST_CTX_UNIQUE_KEY] ?? this.context
+      );
+    }
+
+    return this.context;
   }
 }

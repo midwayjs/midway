@@ -17,7 +17,7 @@ import {
   IFileDetector,
   IIdentifierRelationShip,
   IMidwayContainer,
-  IModuleStore,
+  IMidwayGlobalContainer,
   IObjectDefinition,
   IObjectDefinitionRegistry,
   ObjectIdentifier,
@@ -49,7 +49,7 @@ class ContainerConfiguration {
   private loadedMap = new WeakMap();
   private namespaceList = [];
   private configurationOptionsList: Array<InjectionConfigurationOptions> = [];
-  constructor(readonly container: IMidwayContainer) {}
+  constructor(readonly container: IMidwayGlobalContainer) {}
 
   load(module) {
     let namespace = MAIN_MODULE_KEY;
@@ -226,25 +226,19 @@ class ContainerConfiguration {
   }
 }
 
-export class MidwayContainer implements IMidwayContainer, IModuleStore {
+export class MidwayContainer implements IMidwayGlobalContainer {
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
   private _identifierMapping = null;
   private moduleMap = null;
   private _objectCreateEventTarget: EventEmitter;
-  public parent: IMidwayContainer = null;
   // 仅仅用于兼容 requestContainer 的 ctx
   protected ctx = SINGLETON_CONTAINER_CTX;
   private fileDetector: IFileDetector | false | undefined;
   private attrMap: Map<string, any> = new Map();
   private _namespaceSet: Set<string> = null;
 
-  constructor(parent?: IMidwayContainer) {
-    this.parent = parent;
-    this.init();
-  }
-
-  protected init() {
+  constructor() {
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
     this.registerObject(REQUEST_CTX_KEY, this.ctx);
@@ -508,10 +502,6 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     this.fileDetector = fileDetector;
   }
 
-  createChild(): IMidwayContainer {
-    return new MidwayContainer(this);
-  }
-
   public setAttr(key: string, value) {
     this.attrMap.set(key, value);
   }
@@ -527,7 +517,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return identifier;
   }
 
-  protected getManagedResolverFactory() {
+  public getManagedResolverFactory() {
     if (!this._resolverFactory) {
       this._resolverFactory = new ManagedResolverFactory(this);
     }
@@ -544,18 +534,14 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   }
 
   get<T>(identifier: ClassType<T> | string, args?: any[]): T {
-    return this.getManagedResolverFactory().create(identifier, undefined, args);
+    return this.getManagedResolverFactory().create(identifier, args, this);
   }
 
   async getAsync<T>(
     identifier: ClassType<T> | string,
     args?: any[]
   ): Promise<T> {
-    return this.getManagedResolverFactory().createAsync(
-      identifier,
-      undefined,
-      args
-    );
+    return this.getManagedResolverFactory().createAsync(identifier, args, this);
   }
 
   /**
@@ -657,8 +643,16 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return this.registry.hasDefinition(identifier);
   }
 
+  getDefinition(identifier: ObjectIdentifier) {
+    return this.registry.getDefinition(identifier);
+  }
+
   hasObject(identifier: ObjectIdentifier) {
     return this.registry.hasObject(identifier);
+  }
+
+  getObject<T>(identifier: ObjectIdentifier): T {
+    return this.registry.getObject(identifier);
   }
 
   getInstanceScope(instance: any): ScopeEnum | undefined {

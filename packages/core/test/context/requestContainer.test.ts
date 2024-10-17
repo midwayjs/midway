@@ -57,9 +57,12 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     const reqCtx1 = new RequestContainer({}, appCtx);
     const reqCtx2 = new RequestContainer({}, appCtx);
-    expect(reqCtx1.get<Tracer>(ChildTracer).parentId).toEqual(
-      reqCtx2.get<Tracer>(ChildTracer).parentId
-    );
+
+    const tracer1 = reqCtx1.get<Tracer>(ChildTracer);
+    const tracer2 = reqCtx2.get<Tracer>(ChildTracer);
+
+    expect(tracer1.parentId).toEqual(tracer2.parentId);
+    expect(tracer1 !== tracer2).toBeTruthy();
     expect((await reqCtx1.getAsync(ChildTracer)).parentId).toEqual(
       (await reqCtx2.getAsync(ChildTracer)).parentId
     );
@@ -320,5 +323,48 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     expect(requestContainer.getInstanceScope(a1)).toEqual(ScopeEnum.Singleton);
     expect(requestContainer.getInstanceScope(b1)).toEqual(ScopeEnum.Request);
+  });
+
+  it('should test find object from request container to global container', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Request, { allowDowngrade: true})
+    class B {
+      bid = Math.random();
+      @Inject()
+      a;
+      @Inject()
+      c;
+    }
+
+    const appCtx = new Container();
+    appCtx.bind(B);
+    appCtx.registerObject('a', 'a');
+    appCtx.registerObject('c', 'c');
+
+    const ctx = {};
+
+    // 创建请求作用域
+    const requestContainer = new RequestContainer(ctx, appCtx);
+    requestContainer.registerObject('a', 'b');
+
+    const c = await appCtx.getAsync('c');
+    expect(c).toEqual('c');
+    const c1 = await requestContainer.getAsync('c');
+    expect(c1).toEqual('c');
+
+    const b = await appCtx.getAsync(B);
+    const b1 = await requestContainer.getAsync(B);
+
+    expect(b !== b1).toBeTruthy();
+    expect(b.a).toEqual('a');
+    expect(b.c).toEqual('c');
+    expect(b1.a).toEqual('b');
+    expect(b1.c).toEqual('c');
+
+    const b2 = await appCtx.getAsync(B);
+    expect(b2).toEqual(b);
+
+    const b3 = await requestContainer.getAsync(B);
+    expect(b3).toEqual(b1);
   });
 });

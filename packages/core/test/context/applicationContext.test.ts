@@ -81,12 +81,11 @@ describe('/test/context/applicationContext.test.ts', () => {
 
       await app.ready();
 
-      const subApp = new MidwayContainer(app);
-      const d: any = await subApp.getAsync('hello2');
+      const d: any = await app.getAsync('hello2');
       expect(d).toBeDefined()
       expect(d.aa).toEqual(123);
 
-      const b: any = subApp.get('hello1');
+      const b: any = app.get('hello1');
       expect(b).toBeDefined()
       expect(b.aa).toEqual(1231);
 

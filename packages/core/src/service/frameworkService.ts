@@ -15,8 +15,8 @@ import {
   LAZY_INJECT_KEY,
 } from '../decorator';
 import {
-  IMidwayContainer,
   IMidwayFramework,
+  IMidwayGlobalContainer,
   IServiceFactory,
   ObjectIdentifier,
   ScopeEnum,
@@ -51,7 +51,7 @@ export class MidwayFrameworkService {
   applicationManager: MidwayApplicationManager;
 
   constructor(
-    readonly applicationContext: IMidwayContainer,
+    readonly applicationContext: IMidwayGlobalContainer,
     readonly globalOptions
   ) {}
 

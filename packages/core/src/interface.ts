@@ -1,6 +1,7 @@
-import * as EventEmitter from 'events';
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
+import { ManagedResolverFactory } from './context/managedResolverFactory';
+import type { EventEmitter } from 'events';
 
 export type ClassType<T = any> = new (...args: any[]) => T;
 
@@ -687,58 +688,67 @@ export type ParameterHandlerFunction = (options: {
 }) => any;
 
 export interface IIdentifierRelationShip {
-  saveClassRelation(module: any, namespace?: string);
-  saveFunctionRelation(ObjectIdentifier, uuid);
+  saveClassRelation(module: any, namespace?: string): void;
+  saveFunctionRelation(id: ObjectIdentifier, uuid: string): void;
   hasRelation(id: ObjectIdentifier): boolean;
   getRelation(id: ObjectIdentifier): string;
 }
 
-export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycle> {
-  parent: IMidwayContainer;
+export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle>, IModuleStore {
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
-  ready(): void | Promise<void>;
-  stop(): Promise<void>;
-  registerObject(identifier: ObjectIdentifier, target: any);
-  load(module: any | any[]);
-  hasNamespace(namespace: string): boolean;
+  load(module: any | any[]): void;
   getNamespaceList(): string[];
-  hasDefinition(identifier: ObjectIdentifier);
-  hasObject(identifier: ObjectIdentifier);
   bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
     options?: Partial<IObjectDefinition>
   ): void;
-  bindClass(exports, options?: Partial<IObjectDefinition>);
-  setFileDetector(fileDetector: IFileDetector);
-  createChild(): IMidwayContainer;
+  bindClass(exports, options?: Partial<IObjectDefinition>): void;
+  setFileDetector(fileDetector: IFileDetector): void;
+  ready(): void | Promise<void>;
+  stop(): Promise<void>;
+  getManagedResolverFactory(): ManagedResolverFactory;
+}
+
+export interface IMidwayRequestContainer extends IMidwayContainer {
+  parent: IMidwayContainer;
+  getContext(): IMidwayContext;
+}
+
+export interface IMidwayContainer extends IObjectFactory {
+  registerObject(identifier: ObjectIdentifier, target: any): void;
+  hasDefinition(identifier: ObjectIdentifier): boolean;
+  getDefinition(identifier: ObjectIdentifier): IObjectDefinition;
+  hasObject(identifier: ObjectIdentifier): boolean;
+  getObject<T>(identifier: ObjectIdentifier): T;
   /**
    * Set value to app attribute map
    * @param key
    * @param value
    */
-  setAttr(key: string, value: any);
+  setAttr(key: string, value: any): void;
   /**
    * Get value from app attribute map
    * @param key
    */
   getAttr<T>(key: string): T;
   /**
+   * Get IoC identifier
+   */
+  getIdentifier(identifier: (ClassType | string)): string;
+  /**
    * Get instance IoC container scope
    * @param instance
    */
   getInstanceScope(instance: any): ScopeEnum | undefined;
-  /**
-   * Get IoC identifier
-   */
-  getIdentifier(identifier: (ClassType | string)): string;
+  hasNamespace(namespace: string): boolean;
 }
 
 export interface IFileDetector {
   run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>): void | Promise<void>;
-  setExtraDetectorOptions(detectorOptions: Record<string, any>);
+  setExtraDetectorOptions(detectorOptions: Record<string, any>): void;
 }
 
 export interface IConfigService {
@@ -932,7 +942,7 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   /**
    * Get global Midway IoC Container
    */
-  getApplicationContext(): IMidwayContainer;
+  getApplicationContext(): IMidwayGlobalContainer;
 
   /**
    * Get all configuration values or get the specified configuration through parameters
@@ -1034,7 +1044,7 @@ export interface IMidwayBootstrapOptions {
   [customPropertyKey: string]: any;
   baseDir?: string;
   appDir?: string;
-  applicationContext?: IMidwayContainer;
+  applicationContext?: IMidwayGlobalContainer;
   preloadModules?: any[];
   imports?: any | any[];
   moduleLoadType?: ModuleLoadType;
@@ -1073,7 +1083,7 @@ export interface IMidwayFramework<
   run(): Promise<void>;
   stop(): Promise<void>;
   getApplication(): APP;
-  getApplicationContext(): IMidwayContainer;
+  getApplicationContext(): IMidwayGlobalContainer;
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
   getFrameworkName(): string;

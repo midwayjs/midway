@@ -3,7 +3,6 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayBootstrapOptions,
-  IMidwayContainer,
   IMidwayContext,
   IMidwayFramework,
   MidwayProcessTypeEnum,
@@ -12,6 +11,7 @@ import {
   CommonGuardUnion,
   ILogger,
   MidwayLoggerOptions,
+  IMidwayGlobalContainer,
 } from './interface';
 import {
   REQUEST_CTX_LOGGER_CACHE_KEY,
@@ -78,7 +78,7 @@ export abstract class BaseFramework<
   @Inject()
   mockService: MidwayMockService;
 
-  constructor(readonly applicationContext: IMidwayContainer) {}
+  constructor(readonly applicationContext: IMidwayGlobalContainer) {}
 
   @Init()
   async init() {
@@ -116,7 +116,7 @@ export abstract class BaseFramework<
     await this.mockService.runSimulatorAppSetup(this.app);
   }
 
-  public getApplicationContext(): IMidwayContainer {
+  public getApplicationContext(): IMidwayGlobalContainer {
     return this.applicationContext;
   }
 
@@ -240,7 +240,6 @@ export abstract class BaseFramework<
             ctx,
             this.getApplicationContext()
           );
-          ctx.requestContext.ready();
         }
         if (!ctx.getLogger) {
           ctx.getLogger = name => {

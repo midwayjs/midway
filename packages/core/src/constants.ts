@@ -14,6 +14,7 @@ export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
 export const CONTAINER_OBJ_SCOPE = '_obj_scope';
 export const HTTP_SERVER_KEY = '_midway_http_server';
 export const REQUEST_CTX_LOGGER_CACHE_KEY = '_midway_ctx_logger_cache';
+export const REQUEST_CTX_UNIQUE_KEY = '_midway_ctx_unique_key';
 
 export const ASYNC_CONTEXT_KEY = Symbol('ASYNC_CONTEXT_KEY');
 export const ASYNC_CONTEXT_MANAGER_KEY = 'MIDWAY_ASYNC_CONTEXT_MANAGER_KEY';
