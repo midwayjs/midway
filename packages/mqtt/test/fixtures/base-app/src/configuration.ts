@@ -12,7 +12,7 @@ import * as mqtt from '../../../../src';
           sub: {
             test: {
               connectOptions: {
-                host: 'test.mosquitto.org',
+                host: '127.0.0.1',
                 port: 1883,
               },
               subscribeOptions: {
@@ -23,7 +23,7 @@ import * as mqtt from '../../../../src';
           pub: {
             clients: {
               default: {
-                host: 'test.mosquitto.org',
+                host: '127.0.0.1',
                 port: 1883,
               }
             }

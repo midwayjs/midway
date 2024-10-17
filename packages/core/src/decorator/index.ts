@@ -1,6 +1,6 @@
 // common
 export * from './common/provide';
-export { Inject, InjectClient } from './common/inject';
+export { Inject, InjectClient, LazyInject } from './common/inject';
 export * from './common/scope';
 export * from './common/aspect';
 export * from './common/autoload';

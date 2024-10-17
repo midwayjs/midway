@@ -42,9 +42,19 @@ describe('test', () => {
       }
     }
 
+    function ConstructorF(): ParameterDecorator {
+      return (target, propertyKey, parameterIndex) => {
+        console.log('F constructor decorator', target, propertyKey, parameterIndex);
+      }
+    }
+
     @ClassA()
     @ClassB()
     class Test {
+
+      constructor(@ConstructorF() a: string) {
+        console.log('constructor', a);
+      }
 
       @PropertyB()
       abc;

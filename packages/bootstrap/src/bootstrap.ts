@@ -1,6 +1,5 @@
 import {
   IMidwayBootstrapOptions,
-  IMidwayContainer,
   MidwayApplicationManager,
   initializeGlobalApplicationContext,
   destroyGlobalApplicationContext,
@@ -8,9 +7,10 @@ import {
   isTypeScriptEnvironment,
   MidwayMainFrameworkMissingError,
   MidwayFrameworkService,
+  IMidwayGlobalContainer,
 } from '@midwayjs/core';
 import { join } from 'path';
-import { ILogger, MidwayLoggerContainer, loggers } from '@midwayjs/logger';
+import { ILogger, LoggerFactory, loggers } from '@midwayjs/logger';
 import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 import {
   ChildProcessEventBus,
@@ -24,7 +24,7 @@ export class BootstrapStarter {
   protected baseDir: string;
   protected globalOptions: Partial<IMidwayBootstrapOptions> = {};
   protected globalConfig: any;
-  private applicationContext: IMidwayContainer;
+  private applicationContext: IMidwayGlobalContainer;
   private eventBus: IEventBus<any>;
 
   public configure(options: IMidwayBootstrapOptions = {}) {
@@ -118,7 +118,7 @@ export class Bootstrap {
   protected static starter: BootstrapStarter;
   protected static logger: ILogger;
   protected static configured = false;
-  protected static bootstrapLoggerFactory = new MidwayLoggerContainer();
+  protected static bootstrapLoggerFactory = new LoggerFactory();
 
   /**
    * set global configuration for midway
@@ -264,7 +264,7 @@ export class Bootstrap {
     this.logger.error(err);
   }
 
-  static getApplicationContext(): IMidwayContainer {
+  static getApplicationContext(): IMidwayGlobalContainer {
     return this.getStarter().getApplicationContext();
   }
 }

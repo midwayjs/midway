@@ -33,10 +33,10 @@ describe('/test/common/util.test.ts', () => {
   it('util savePropertyInject should be ok', () => {
     let p = getPropertyInject(Test);
     expect(p['hello']).toEqual({
-      args: undefined,
-      injectMode: 'Identifier',
-      targetKey: 'hello',
-      value: '@testpackage',
+      'id': '@testpackage',
+      'injectMode': 'Identifier',
+      'name': 'hello',
+      'targetKey': 'hello'
     });
 
     savePropertyInject({
@@ -51,10 +51,10 @@ describe('/test/common/util.test.ts', () => {
     });
     p = getPropertyInject(Test, false);
     expect(p['hello']).toEqual({
-      args: undefined,
       injectMode: 'Identifier',
       targetKey: 'hello',
-      value: '@testpackage2',
+      id: '@testpackage2',
+      name: 'hello',
     });
   });
 

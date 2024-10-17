@@ -101,7 +101,7 @@ export class OrmConfiguration implements ILifeCycle {
   }
 
   async onReady(container: IMidwayContainer) {
-    useContainer(container);
+    useContainer(container as any);
     this.dataSourceManager = await container.getAsync(TypeORMDataSourceManager);
   }
 

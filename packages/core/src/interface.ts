@@ -1,8 +1,9 @@
-import * as EventEmitter from 'events';
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
+import { ManagedResolverFactory } from './context/managedResolverFactory';
+import type { EventEmitter } from 'events';
 
-export type ClassType = new (...args: any[]) => any;
+export type ClassType<T = any> = new (...args: any[]) => T;
 
 export type PowerPartial<T> = {
   [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
@@ -51,7 +52,6 @@ export type WithoutFn<T> = {
 
 export type MiddlewareParamArray = Array<string | any>;
 export type ObjectIdentifier = string | Symbol;
-export type GroupModeType = 'one' | 'multi';
 
 export enum ScopeEnum {
   Singleton = 'Singleton',
@@ -62,16 +62,18 @@ export enum ScopeEnum {
 export enum InjectModeEnum {
   Identifier = 'Identifier',
   Class = 'Class',
-  PropertyName = 'PropertyName',
+  SelfName = 'SelfName',
 }
 
 /**
- * 内部管理的属性、json、ref等解析实例存储
+ * inject property metadata
  */
-export interface IManagedInstance {
-  type: string;
-  value?: any;
-  args?: any;
+export interface PropertyInjectMetadata {
+  args: any[];
+  id: string;
+  name: string;
+  injectMode: InjectModeEnum;
+  targetKey: string;
 }
 
 export interface ObjectDefinitionOptions {
@@ -520,24 +522,12 @@ export type ObjectContext = {
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
   get<T>(
-    identifier: new (...args) => T,
-    args?: any[],
-    objectContext?: ObjectContext
-  ): T;
-  get<T>(
-    identifier: ObjectIdentifier,
-    args?: any[],
-    objectContext?: ObjectContext
+    identifier: ClassType<T> | string,
+    args?: any[]
   ): T;
   getAsync<T>(
-    identifier: new (...args) => T,
-    args?: any[],
-    objectContext?: ObjectContext
-  ): Promise<T>;
-  getAsync<T>(
-    identifier: ObjectIdentifier,
-    args?: any[],
-    objectContext?: ObjectContext
+    identifier: ClassType<T> | string,
+    args?: any[]
   ): Promise<T>;
 }
 
@@ -598,7 +588,7 @@ export interface IObjectDefinition {
   path: any;
   export: string;
   dependsOn: ObjectIdentifier[];
-  constructorArgs: IManagedInstance[];
+  constructorArgs: any[];
   properties: IProperties;
   scope: ScopeEnum;
   isAsync(): boolean;
@@ -630,15 +620,11 @@ export interface IObjectDefinition {
 }
 
 export interface IObjectCreator {
+  type: string;
   load(): any;
-  doConstruct(Clzz: any, args?: any, context?: IMidwayContainer): any;
-  doConstructAsync(
-    Clzz: any,
-    args?: any,
-    context?: IMidwayContainer
-  ): Promise<any>;
-  doInit(obj: any): void;
-  doInitAsync(obj: any): Promise<void>;
+  doConstruct(Clzz: any, args?: any[]): any;
+  doInit(obj: any, context: IMidwayContainer): any;
+  doInitAsync(obj: any, context: IMidwayContainer): Promise<any>;
   doDestroy(obj: any): void;
   doDestroyAsync(obj: any): Promise<void>;
 }
@@ -674,22 +660,6 @@ export interface IProperties extends Map<ObjectIdentifier, any> {
   propertyKeys(): ObjectIdentifier[];
 }
 
-/**
- * 解析内部管理的属性、json、ref等实例的解析器
- * 同时创建这些对象的实际使用的对象
- */
-export interface IManagedResolver {
-  type: string;
-  resolve(managed: IManagedInstance): any;
-  resolveAsync(managed: IManagedInstance): Promise<any>;
-}
-
-export interface IManagedResolverFactoryCreateOptions {
-  definition: IObjectDefinition;
-  args?: any;
-  namespace?: string;
-}
-
 export type HandlerFunction = (
   /**
    * decorator uuid key
@@ -718,54 +688,67 @@ export type ParameterHandlerFunction = (options: {
 }) => any;
 
 export interface IIdentifierRelationShip {
-  saveClassRelation(module: any, namespace?: string);
-  saveFunctionRelation(ObjectIdentifier, uuid);
+  saveClassRelation(module: any, namespace?: string): void;
+  saveFunctionRelation(id: ObjectIdentifier, uuid: string): void;
   hasRelation(id: ObjectIdentifier): boolean;
   getRelation(id: ObjectIdentifier): string;
 }
 
-export interface IMidwayContainer extends IObjectFactory, WithFn<IObjectLifeCycle> {
-  parent: IMidwayContainer;
+export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle>, IModuleStore {
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
-  ready(): void | Promise<void>;
-  stop(): Promise<void>;
-  registerObject(identifier: ObjectIdentifier, target: any);
-  load(module: any | any[]);
-  hasNamespace(namespace: string): boolean;
+  load(module: any | any[]): void;
   getNamespaceList(): string[];
-  hasDefinition(identifier: ObjectIdentifier);
-  hasObject(identifier: ObjectIdentifier);
   bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
     options?: Partial<IObjectDefinition>
   ): void;
-  bindClass(exports, options?: Partial<IObjectDefinition>);
-  setFileDetector(fileDetector: IFileDetector);
-  createChild(): IMidwayContainer;
+  bindClass(exports, options?: Partial<IObjectDefinition>): void;
+  setFileDetector(fileDetector: IFileDetector): void;
+  ready(): void | Promise<void>;
+  stop(): Promise<void>;
+  getManagedResolverFactory(): ManagedResolverFactory;
+}
+
+export interface IMidwayRequestContainer extends IMidwayContainer {
+  parent: IMidwayContainer;
+  getContext(): IMidwayContext;
+}
+
+export interface IMidwayContainer extends IObjectFactory {
+  registerObject(identifier: ObjectIdentifier, target: any): void;
+  hasDefinition(identifier: ObjectIdentifier): boolean;
+  getDefinition(identifier: ObjectIdentifier): IObjectDefinition;
+  hasObject(identifier: ObjectIdentifier): boolean;
+  getObject<T>(identifier: ObjectIdentifier): T;
   /**
    * Set value to app attribute map
    * @param key
    * @param value
    */
-  setAttr(key: string, value: any);
+  setAttr(key: string, value: any): void;
   /**
    * Get value from app attribute map
    * @param key
    */
   getAttr<T>(key: string): T;
   /**
+   * Get IoC identifier
+   */
+  getIdentifier(identifier: (ClassType | string)): string;
+  /**
    * Get instance IoC container scope
    * @param instance
    */
   getInstanceScope(instance: any): ScopeEnum | undefined;
+  hasNamespace(namespace: string): boolean;
 }
 
 export interface IFileDetector {
   run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>): void | Promise<void>;
-  setExtraDetectorOptions(detectorOptions: Record<string, any>);
+  setExtraDetectorOptions(detectorOptions: Record<string, any>): void;
 }
 
 export interface IConfigService {
@@ -959,7 +942,7 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   /**
    * Get global Midway IoC Container
    */
-  getApplicationContext(): IMidwayContainer;
+  getApplicationContext(): IMidwayGlobalContainer;
 
   /**
    * Get all configuration values or get the specified configuration through parameters
@@ -1061,7 +1044,7 @@ export interface IMidwayBootstrapOptions {
   [customPropertyKey: string]: any;
   baseDir?: string;
   appDir?: string;
-  applicationContext?: IMidwayContainer;
+  applicationContext?: IMidwayGlobalContainer;
   preloadModules?: any[];
   imports?: any | any[];
   moduleLoadType?: ModuleLoadType;
@@ -1100,7 +1083,7 @@ export interface IMidwayFramework<
   run(): Promise<void>;
   stop(): Promise<void>;
   getApplication(): APP;
-  getApplicationContext(): IMidwayContainer;
+  getApplicationContext(): IMidwayGlobalContainer;
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
   getFrameworkName(): string;

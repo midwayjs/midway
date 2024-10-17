@@ -1,4 +1,4 @@
-import { Provide, Inject, Scope, ScopeEnum } from '../../src';
+import { Provide, Inject, Scope, ScopeEnum, LazyInject } from '../../src';
 
 @Provide()
 export class TestOne1 {
@@ -50,7 +50,7 @@ export class CircularOne {
   constructor() {
     this.ts = Date.now();
   }
-  @Inject()
+  @LazyInject()
   public circularTwo: any;
   public ts: number;
 
