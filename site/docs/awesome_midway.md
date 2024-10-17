@@ -17,6 +17,12 @@
 | [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件                                                                                                                                                                                                                                    |
 | [邮件组件][mailer-zh]                                | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]    [食用文档（国外）][mailer-en-doc]                                                                                                                  |
 
+
+## 插件
+
+| 名称                                   | 作者  | 描述                  |
+| -------------------------------------- | ----- | --------------------- |
+| [邮件组件][mailer-zh]                   | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[文档（国内）][mailer-zh-doc]    [文档（国外）][mailer-en-doc]                                                                                                                  |
 ## swagger
 
 | 名称                                   | 作者  | 描述                  |
@@ -38,6 +44,7 @@
 | [midway-boot][midway-boot]         | 码道功臣      | 一个比较完整的后端功能最佳实践，包含：增删改查及基类封装、数据库操作、缓存操作、用户安全认证及访问安全控制、JWT 访问凭证、分布式访问状态管理、密码加解密、统一返回结果封装、统一异常管理、Snowflake 主键生成、Swagger 集成及支持访问认证、环境变量的使用、Docker 镜像构建、Serverless 发布等 |
 | [midway-vue3-ssr][midway-vue3-ssr] | LiQingSong    | 基于 Midway、Vue 3 组装的 SSR 框架，简单、易学易用、方便扩展、集成 Midway 框架，您一直想要的 Vue SSR 框架。                                                                                                                                                                                  |
 | [midway-learn][midway-learn]       | hbsjmsjwj     | 一个学习midway的demo，包含 midway3 + egg + 官方的组件&扩展（consul, jwt, typeorm, prometheus, swagger, mysql2,grpc,rabbitmq）                                                                                                                                                                |
+| [midway-admin][midwayjs-admin]       | MrDotYan     | 一套GeekerAdmin+Midwayjs构建的后台管理框架                                                                                                                                                      |
 
 ## 学习资料
 
@@ -96,3 +103,4 @@
 [mailer-zh-doc]:https://gitee.com/onlymry_admin/midwayjs_mailer/blob/main/readme.md
 [mailer-en]:https://github.com/MrDotYan/midwayjs_mailer
 [mailer-en-doc]:https://github.com/MrDotYan/midwayjs_mailer/blob/main/readme.md
+[midwayjs-admin]:https://gitee.com/yncykj/midway-admin.git
