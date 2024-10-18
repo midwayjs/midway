@@ -390,9 +390,6 @@ export class MetadataManager {
     target: ClassType,
     propertyKey: string | symbol
   ): any {
-    if (isClass(target)) {
-      target = target.prototype;
-    }
     return Reflect.getMetadata('design:returntype', target, propertyKey);
   }
 
@@ -401,12 +398,14 @@ export class MetadataManager {
    */
   public static getMethodParamTypes(
     target: ClassType,
-    methodName: string | symbol
+    methodName: string | symbol,
+    parameterIndex?: number
   ) {
-    if (isClass(target)) {
-      target = target.prototype;
+    const types = Reflect.getMetadata('design:paramtypes', target, methodName);
+    if (parameterIndex !== undefined && types) {
+      return types[parameterIndex];
     }
-    return Reflect.getMetadata('design:paramtypes', target, methodName);
+    return types;
   }
 
   /**
@@ -415,10 +414,8 @@ export class MetadataManager {
   public static getPropertyType(
     target: ClassType,
     propertyKey: string | symbol
-  ): TSDesignType {
-    return this.transformTypeFromTSDesign(
-      Reflect.getMetadata('design:type', target, propertyKey)
-    );
+  ) {
+    return Reflect.getMetadata('design:type', target, propertyKey)
   }
 
   public static transformTypeFromTSDesign(designFn: any): TSDesignType {

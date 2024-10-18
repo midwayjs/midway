@@ -1,5 +1,4 @@
 import {
-  IProperties,
   IObjectCreator,
   IObjectDefinition,
   ObjectIdentifier,
@@ -39,7 +38,7 @@ export class FunctionDefinition implements IObjectDefinition {
   initMethod: string;
   srcPath: string;
   path: any;
-  properties: IProperties;
+  properties: Map<string, any>;
   namespace = '';
   asynchronous = true;
   handlerProps = [];

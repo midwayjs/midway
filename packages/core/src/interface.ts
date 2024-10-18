@@ -66,7 +66,7 @@ export enum InjectModeEnum {
 }
 
 /**
- * inject property metadata
+ * Metadata when using @Inject property injection
  */
 export interface PropertyInjectMetadata {
   args: any[];
@@ -74,6 +74,13 @@ export interface PropertyInjectMetadata {
   name: string;
   injectMode: InjectModeEnum;
   targetKey: string;
+}
+
+/**
+ * Metadata when using @Inject constructor injection
+ */
+export interface ConstructorInjectMetadata extends PropertyInjectMetadata {
+  parameterIndex: number;
 }
 
 export interface ObjectDefinitionOptions {
@@ -511,10 +518,6 @@ export interface ILifeCycle extends Partial<IObjectLifeCycle> {
   ): Promise<void>;
 }
 
-export type ObjectContext = {
-  originName?: string;
-};
-
 /**
  * Abstract Object Factory
  * 对象容器抽象
@@ -588,8 +591,8 @@ export interface IObjectDefinition {
   path: any;
   export: string;
   dependsOn: ObjectIdentifier[];
-  constructorArgs: any[];
-  properties: IProperties;
+  constructorArgs: ConstructorInjectMetadata[];
+  properties: Map<string, PropertyInjectMetadata>;
   scope: ScopeEnum;
   isAsync(): boolean;
   isSingletonScope(): boolean;
@@ -650,14 +653,6 @@ export interface IObjectDefinitionRegistry {
   getObject(identifier: ObjectIdentifier): any;
   getIdentifierRelation(): IIdentifierRelationShip;
   setIdentifierRelation(identifierRelation: IIdentifierRelationShip);
-}
-/**
- * 属性配置抽象
- */
-export interface IProperties extends Map<ObjectIdentifier, any> {
-  getProperty(key: ObjectIdentifier, defaultValue?: any): any;
-  setProperty(key: ObjectIdentifier, value: any): any;
-  propertyKeys(): ObjectIdentifier[];
 }
 
 export type HandlerFunction = (

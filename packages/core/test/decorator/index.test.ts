@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 describe('test', () => {
   it('test decorator run', async () => {
     function ClassA(): ClassDecorator {
@@ -44,7 +46,8 @@ describe('test', () => {
 
     function ConstructorF(): ParameterDecorator {
       return (target, propertyKey, parameterIndex) => {
-        console.log('F constructor decorator', target, propertyKey, parameterIndex);
+        const paramTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey);
+        console.log('F constructor decorator', target, propertyKey, parameterIndex, paramTypes[0]);
       }
     }
 

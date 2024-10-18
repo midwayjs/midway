@@ -244,7 +244,7 @@ export class ManagedResolverFactory {
       currentContext = this.context;
       if (this.singletonCache.has(definition.id)) {
         debug(
-          `id = ${definition.id}(${definition.name}) get from singleton cache.`
+          `[core]: "${definition.id}(${definition.name})" get from singleton cache.`
         );
         return this.singletonCache.get(definition.id);
       }
@@ -261,7 +261,7 @@ export class ManagedResolverFactory {
     // Pre-initialize dependencies
     if (definition.hasDependsOn()) {
       for (const dep of definition.dependsOn) {
-        debug('id = %s init depend %s.', definition.id, dep);
+        debug('[core]: id = %s init depend %s.', definition.id, dep);
         this.createInstance(
           dep as string,
           dep as string,
@@ -280,9 +280,27 @@ export class ManagedResolverFactory {
     const Clzz = definition.creator.load();
 
     // Get constructor args
-    let constructorArgs = [];
+    let constructorArgs = new Array(definition.constructorArgs.length);
     if (args && Array.isArray(args) && args.length > 0) {
       constructorArgs = args;
+    } else {
+      // init constructor args
+      for (let i = 0; i < definition.constructorArgs.length; i++) {
+        const arg = definition.constructorArgs[i];
+        if (arg === undefined) continue;
+        debug('[core]: constructor arg "%s(%s)", pos=%s, in "%s".', arg.id, arg.name, arg.parameterIndex, name);
+        constructorArgs[i] = this.createInstance(
+          arg.id,
+          arg.name,
+          [],
+          undefined,
+          isAsync,
+          currentContext,
+          pendingObjectCache,
+          pendingInitQueue,
+          [...creationPath]
+        );
+      }
     }
 
     // Emit before created event
@@ -309,7 +327,7 @@ export class ManagedResolverFactory {
       definition.isRequestScope() &&
       definition.constructor.name === 'ObjectDefinition'
     ) {
-      debug('id = %s inject ctx', definition.id);
+      debug('[core]: "%s(%s)" inject ctx', definition.id, definition.name);
       // set related ctx
       Object.defineProperty(inst, REQUEST_OBJ_CTX_KEY, {
         value: currentContext.get(REQUEST_CTX_KEY),
@@ -322,7 +340,7 @@ export class ManagedResolverFactory {
 
     // Set properties
     if (definition.properties) {
-      const keys = definition.properties.propertyKeys() as string[];
+      const keys = Array.from(definition.properties.keys());
       for (const key of keys) {
         this.checkSingletonInvokeRequest(definition, key, currentContext);
         const resolver: PropertyInjectMetadata = definition.properties.get(key);
@@ -338,7 +356,7 @@ export class ManagedResolverFactory {
         //     throw new MidwayMissingImportComponentError(resolver.name);
         //   }
         // }
-
+        debug('[core]: property "%s(%s)", in "%s".', resolver.id || resolver.name, resolver.name, name);
         inst[key] = this.createInstance(
           resolver.id || resolver.name,
           resolver.name,
@@ -404,9 +422,17 @@ export class ManagedResolverFactory {
       path.push(obj);
 
       try {
+        if (def.constructorArgs && def.constructorArgs.length) {
+          for (const arg of def.constructorArgs) {
+            const argDef = this.getObjectDefinition(arg.id);
+            if (argDef) {
+              dfs(obj, argDef, [...path]);
+            }
+          }
+        }
         // 初始化所有的依赖
         if (def.properties) {
-          const keys = def.properties.propertyKeys() as string[];
+          const keys = Array.from(def.properties.keys());
           for (const key of keys) {
             const propertyValue = obj[key];
             if (propertyValue) {
@@ -422,6 +448,7 @@ export class ManagedResolverFactory {
         // 初始化当前对象
         const initFunc = pendingInitQueue.get(obj);
         if (initFunc) {
+          debug('[core]: run init object "%s(%s)".', def.id, def.name);
           const res = initFunc[0]();
           if (def instanceof FunctionDefinition) {
             initializedInstances.set(def.id, res);
@@ -475,9 +502,17 @@ export class ManagedResolverFactory {
       path.push(obj);
 
       try {
+        if (def.constructorArgs && def.constructorArgs.length) {
+          for (const arg of def.constructorArgs) {
+            const argDef = this.getObjectDefinition(arg.id);
+            if (argDef) {
+              await dfs(obj, argDef, [...path]);
+            }
+          }
+        }
         // 初始化所有的依赖
         if (def.properties) {
-          const keys = def.properties.propertyKeys() as string[];
+          const keys = Array.from(def.properties.keys());
           for (const key of keys) {
             const propertyValue = obj[key];
             if (propertyValue) {
@@ -529,13 +564,13 @@ export class ManagedResolverFactory {
     if (definition.id) {
       if (definition.isSingletonScope()) {
         debug(
-          `id = ${definition.id}(${definition.name}) set to singleton cache`
+          `[core]: "${definition.id}(${definition.name})" set to singleton cache`
         );
         this.singletonCache.set(definition.id, instance);
         this.setInstanceScope(instance, ScopeEnum.Singleton);
       } else if (definition.isRequestScope()) {
         debug(
-          `id = ${definition.id}(${definition.name}) set to register object`
+          `[core]: "${definition.id}(${definition.name})" set to register object`
         );
         this.getCurrentMatchedContext(instance).registerObject(
           definition.id,

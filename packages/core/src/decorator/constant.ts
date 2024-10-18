@@ -16,8 +16,10 @@ export const OBJECT_DEFINITION_KEY = 'common:object_definition';
 export const PROVIDE_KEY = 'common:provide';
 // for Scope and @Singleton
 export const SCOPE_KEY = 'common:scope';
-// used to store property inject
+// used to store property inject for @Inject
 export const PROPERTY_INJECT_KEY = 'common:property_inject';
+// The name inject constructor with resolver @Inject
+export const CONSTRUCTOR_INJECT_KEY = 'common:constructor_inject';
 // The name inject custom property decorator with resolver
 export const CUSTOM_PROPERTY_INJECT_KEY = 'common:custom_property_inject';
 // The name inject custom method decorator with resolver

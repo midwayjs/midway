@@ -21,7 +21,9 @@ import {
   Inject,
   LazyInject,
   MidwayPriorityManager,
-  MidwayApplicationManager
+  MidwayApplicationManager,
+  sleep,
+  Init,
 } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
@@ -285,6 +287,60 @@ describe('/test/context/midwayContainer.test.ts', () => {
       error = err;
     }
     expect(error.message).toEqual('Definition for "NoBindClass" not found in current context.');
+  });
+
+  it('should inject dependencies via constructor', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Singleton)
+    class Dependency {
+      data;
+      getValue() {
+        return 'dependency value ' + this.data;
+      }
+
+      @Init()
+      async init() {
+        await sleep(100);
+        this.data = 'init data';
+      }
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Request)
+    class Dependency1 {
+      data;
+      getValue() {
+        return 'dependency1 value ' + this.data;
+      }
+
+      @Init()
+      async init() {
+        await sleep(50);
+        this.data = 'init data1';
+      }
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Singleton)
+    class MainService {
+
+      constructor(
+        @Inject() protected dependency: Dependency,
+        holder,
+        @Inject() protected dependency1: Dependency1) {}
+
+      getDependencyValue() {
+        return this.dependency.getValue() + this.dependency1.getValue();
+      }
+    }
+
+    const container = new MidwayContainer();
+    container.bind(Dependency);
+    container.bind(MainService);
+    container.bind(Dependency1);
+
+    const mainService = await container.getAsync(MainService);
+    expect(mainService.getDependencyValue()).toEqual('dependency value init data');
   });
 
   describe('test @LazyInject()', () => {
