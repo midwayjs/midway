@@ -13,6 +13,7 @@
 | [@mwcp/kmore][@mwcp/kmore]                           | waitingsong | midway 数据库组件 基于 [Knex]，通过 `Transactional` 装饰器支持声明式事务，支持自动分页、智能连表，集成 [OpenTelemetry] 链路追踪                                                                                                                              |
 | [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 增强组件 支持 [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] 装饰器  并支持[传入泛型参数获得方法入参类型][otel-generics-cn]                                                                                       |
 | [@mwcp/jwt][@mwcp/jwt]                               | waitingsong | midway JWT 增强组件 支持 [`Public`][jwt-public] 装饰器                                                                                                                                                                                                       |
+| [@mwcp/paradedb][@mwcp/paradedb]                     | waitingsong | midway [ParadeDb] 组件。首个基于 Postgres 的 Elasticsearch 开源替代，采用 Rust 编写, 旨在提供快速的全文检索、语义检索和混合检索能力，适用于搜索场景                                                                                                          |
 | [@mwcp/pgmq][@mwcp/pgmq]                             | waitingsong | midway [pqmg-js] 组件 支持 [`Consumer`][Consumer], [`PgmqListener`][PgmqListener] 装饰器， 支持事务以及事务保护的类似 MQ `Exchange` 概念的路由。  [PGMQ] 是一个基于 [PG] 数据库扩展的轻量级消息队列，原生支持消息持久化和延迟消息，类似 `AWS SQS` 或  `RSMQ` |
 | [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件                                                                                                                                                                                                                                    |
 
@@ -77,6 +78,9 @@
 
 [@mwcp/jwt]: https://github.com/waitingsong/midway-components/tree/main/packages/jwt
 [jwt-public]: https://github.com/waitingsong/midway-components/blob/main/packages/jwt/README.md#public-decorator
+
+[@mwcp/paradedb]: https://github.com/waitingsong/paradedb/tree/main/packages/mwcp-paradedb
+[ParadeDB]: https://pigsty.cc/zh/blog/pg/paradedb/
 
 [@mwcp/pgmq]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
 [PGMQ]: https://tembo-io.github.io/pgmq/
