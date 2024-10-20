@@ -989,9 +989,8 @@ export class SwaggerExplorer {
         const metadata = props[key].metadata || {};
         if (!metadata.type) {
           // 推导类型
-          metadata.type = MetadataManager.getPropertyType(
-            clzz.prototype,
-            key
+          metadata.type = MetadataManager.transformTypeFromTSDesign(
+            MetadataManager.getPropertyType(clzz.prototype, key)
           ).name;
         }
         tt.properties[key] = tt.properties[key] || {};

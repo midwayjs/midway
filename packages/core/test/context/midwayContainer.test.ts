@@ -16,6 +16,14 @@ import {
   LOGGER_KEY,
   PLUGIN_KEY,
   Provide,
+  Scope,
+  ScopeEnum,
+  Inject,
+  LazyInject,
+  MidwayPriorityManager,
+  MidwayApplicationManager,
+  sleep,
+  Init,
 } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
@@ -271,14 +279,386 @@ describe('/test/context/midwayContainer.test.ts', () => {
     } catch (err) {
       error = err;
     }
-    expect(error.message).toEqual('NoBindClass is not valid in current context');
+    expect(error.message).toEqual('Definition for "NoBindClass" not found in current context.');
 
     try {
       container.get(NoBindClass);
     } catch (err) {
       error = err;
     }
-    expect(error.message).toEqual('NoBindClass is not valid in current context');
+    expect(error.message).toEqual('Definition for "NoBindClass" not found in current context.');
+  });
+
+  it('should inject dependencies via constructor', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Singleton)
+    class Dependency {
+      data;
+      getValue() {
+        return 'dependency value ' + this.data;
+      }
+
+      @Init()
+      async init() {
+        await sleep(100);
+        this.data = 'init data';
+      }
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Request)
+    class Dependency1 {
+      data;
+      getValue() {
+        return 'dependency1 value ' + this.data;
+      }
+
+      @Init()
+      async init() {
+        await sleep(50);
+        this.data = 'init data1';
+      }
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Singleton)
+    class MainService {
+
+      constructor(
+        @Inject() protected dependency: Dependency,
+        holder,
+        @Inject() protected dependency1: Dependency1) {}
+
+      getDependencyValue() {
+        return this.dependency.getValue() + '-' + this.dependency1.getValue();
+      }
+    }
+
+    const container = new MidwayContainer();
+    container.bind(Dependency);
+    container.bind(MainService);
+    container.bind(Dependency1);
+
+    const mainService = await container.getAsync(MainService);
+    expect(mainService.getDependencyValue()).toEqual('dependency value init data-dependency1 value init data1');
+  });
+
+  describe('test @LazyInject()', () => {
+    it('should test circular should be ok', async () => {
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularTwo {
+        @Inject('circularOne')
+        public ooo;
+        constructor() {
+          this.ts = Date.now();
+        }
+        @Inject()
+        public circularOne: any;
+        public ts: number;
+
+        public test2 = 'this is two';
+
+        public async ctest2(a: any): Promise<any> {
+          return a + (await this.circularOne.ctest1('two'));
+        }
+
+        public ttest2(b: any) {
+          return b + this.circularOne.test2('two');
+        }
+      }
+
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularOne {
+        constructor() {
+          this.ts = Date.now();
+        }
+        @LazyInject()
+        public circularTwo: any;
+        public ts: number;
+
+        public test1 = 'this is one';
+
+        public async ctest1(a: any): Promise<any> {
+          return a + 'one';
+        }
+
+        public test2(b: any) {
+          return b + 'one';
+        }
+      }
+
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularThree {
+        constructor() {
+          this.ts = Date.now();
+        }
+        @Inject()
+        public circularTwo: any;
+        public ts: number;
+      }
+      const container = new MidwayContainer();
+
+      container.bind(MidwayFrameworkService);
+      container.bind(MidwayConfigService);
+      container.bind(MidwayLoggerService);
+      container.bind(MidwayEnvironmentService);
+      container.bind(MidwayInformationService);
+      container.bind(MidwayAspectService);
+      container.bind(MidwayDecoratorService);
+      container.bind(MidwayPriorityManager);
+      container.bind(MidwayApplicationManager);
+      container.registerObject('appDir', '');
+      container.registerObject('baseDir', '');
+      container.bind(CircularOne);
+      container.bind(CircularTwo);
+      container.bind(CircularThree);
+
+      await container.getAsync(MidwayDecoratorService, [
+        container
+      ]);
+
+      await container.getAsync(MidwayFrameworkService, [
+        container
+      ]);
+
+      container.registerObject('ctx', {});
+
+      const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
+      const circularThree: CircularThree = await container.getAsync(CircularThree);
+
+      expect(circularTwo.test2).toEqual('this is two');
+      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
+      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
+      expect(circularThree.circularTwo.test2).toEqual('this is two');
+      expect(circularTwo.ts).toEqual(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
+      expect(circularTwo.ttest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await circularTwo.ctest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).toEqual('try ttest2twoone');
+
+      const circularTwoSync: CircularTwo = container.get(CircularTwo);
+      const circularOneSync: CircularOne = container.get(CircularOne);
+
+      expect(circularTwoSync.test2).toEqual('this is two');
+      expect(circularOneSync.test1).toEqual('this is one');
+      expect(circularTwoSync.ttest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await circularTwoSync.ctest2('try ttest2')).toEqual('try ttest2twoone');
+    });
+
+    it('alias circular should be ok', async () => {
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularTwo {
+        @Inject('circularOne')
+        public ooo;
+        constructor() {
+          this.ts = Date.now();
+        }
+        @Inject()
+        public circularOne: any;
+        public ts: number;
+
+        public test2 = 'this is two';
+
+        public async ctest2(a: any): Promise<any> {
+          return a + (await this.circularOne.ctest1('two'));
+        }
+
+        public ttest2(b: any) {
+          return b + this.circularOne.test2('two');
+        }
+      }
+
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularOne {
+        constructor() {
+          this.ts = Date.now();
+        }
+        @LazyInject()
+        public circularTwo: any;
+        public ts: number;
+
+        public test1 = 'this is one';
+
+        public async ctest1(a: any): Promise<any> {
+          return a + 'one';
+        }
+
+        public test2(b: any) {
+          return b + 'one';
+        }
+      }
+
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularThree {
+        constructor() {
+          this.ts = Date.now();
+        }
+        @Inject()
+        public circularTwo: any;
+        public ts: number;
+      }
+      @Provide()
+      class TestOne1 {
+        name = 'one';
+
+        @Inject('testTwo1')
+        two: any;
+      }
+      @Provide()
+      class TestTwo1 {
+        name = 'two';
+
+        @LazyInject('testOne1')
+        testOne: any;
+      }
+      @Provide()
+      class TestThree1 {
+        name = 'three';
+
+        @Inject('testTwo1')
+        two: any;
+      }
+
+      const container = new MidwayContainer();
+
+      container.bind(MidwayFrameworkService);
+      container.bind(MidwayConfigService);
+      container.bind(MidwayLoggerService);
+      container.bind(MidwayEnvironmentService);
+      container.bind(MidwayInformationService);
+      container.bind(MidwayAspectService);
+      container.bind(MidwayDecoratorService);
+      container.bind(MidwayPriorityManager);
+      container.bind(MidwayApplicationManager);
+      container.registerObject('appDir', '');
+      container.registerObject('baseDir', '');
+      container.bind(CircularOne);
+      container.bind(CircularTwo);
+      container.bind(CircularThree);
+      container.bind(TestOne1);
+      container.bind(TestTwo1);
+      container.bind(TestThree1);
+
+      await container.getAsync(MidwayDecoratorService, [
+        container
+      ]);
+
+      await container.getAsync(MidwayFrameworkService, [
+        container
+      ]);
+      container.registerObject('ctx', {});
+
+      const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
+      expect(circularTwo.test2).toEqual('this is two');
+      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
+      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
+
+      const one = await container.getAsync<TestOne1>(TestOne1);
+      expect(one).toBeDefined();
+      expect(one).toBeDefined();
+      expect(one.name).toEqual('one');
+      expect((one.two as TestTwo1).name).toEqual('two');
+    });
+
+    it('sync circular should be ok', async () => {
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularTwo {
+        @Inject('circularOne')
+        public ooo;
+        constructor() {
+          this.ts = Date.now();
+        }
+        @Inject()
+        public circularOne: any;
+        public ts: number;
+
+        public test2 = 'this is two';
+
+        public async ctest2(a: any): Promise<any> {
+          return a + (await this.circularOne.ctest1('two'));
+        }
+
+        public ttest2(b: any) {
+          return b + this.circularOne.test2('two');
+        }
+      }
+
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularOne {
+        constructor() {
+          this.ts = Date.now();
+        }
+        @LazyInject(() => CircularTwo)
+        public circularTwo: CircularTwo;
+        public ts: number;
+
+        public test1 = 'this is one';
+
+        public async ctest1(a: any): Promise<any> {
+          return a + 'one';
+        }
+
+        public test2(b: any) {
+          return b + 'one';
+        }
+      }
+
+      @Provide()
+      @Scope(ScopeEnum.Request)
+      class CircularThree {
+        constructor() {
+          this.ts = Date.now();
+        }
+        @Inject()
+        public circularTwo: any;
+        public ts: number;
+      }
+      const container = new MidwayContainer();
+
+      container.bind(MidwayFrameworkService);
+      container.bind(MidwayConfigService);
+      container.bind(MidwayLoggerService);
+      container.bind(MidwayEnvironmentService);
+      container.bind(MidwayInformationService);
+      container.bind(MidwayAspectService);
+      container.bind(MidwayDecoratorService);
+      container.bind(MidwayPriorityManager);
+      container.bind(MidwayApplicationManager);
+      container.registerObject('appDir', '');
+      container.registerObject('baseDir', '');
+      container.bind(CircularOne);
+      container.bind(CircularTwo);
+      container.bind(CircularThree);
+
+      await container.getAsync(MidwayDecoratorService, [
+        container
+      ]);
+
+      await container.getAsync(MidwayFrameworkService, [
+        container
+      ]);
+
+      container.registerObject('ctx', {});
+
+      const circularTwo: CircularTwo = container.get(CircularTwo);
+      const circularThree: CircularThree = container.get(CircularThree);
+
+      expect(circularTwo.test2).toEqual('this is two');
+      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
+      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
+      expect(circularThree.circularTwo.test2).toEqual('this is two');
+      expect(circularTwo.ts).toEqual(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
+      expect(circularTwo.ttest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await circularTwo.ctest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).toEqual('try ttest2twoone');
+    });
   });
 
 });

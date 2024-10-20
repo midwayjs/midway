@@ -2,7 +2,6 @@ import {
   FrameworkErrorEnum, MidwayConfigMissingError, MidwayFeatureNoLongerSupportedError, MidwayFeatureNotImplementedError,
   MidwayInconsistentVersionError,
   MidwayInvokeForbiddenError,
-  MidwayResolverMissingError
 } from '../../src';
 
 describe('/test/error/framework.test.ts', function () {
@@ -20,14 +19,8 @@ describe('/test/error/framework.test.ts', function () {
 
   it('should test MidwayInconsistentVersionError', function () {
     const err = new MidwayInconsistentVersionError()
-    expect(err.message).toEqual('We find a latest dependency package installed, please remove the lock file and use "npm update" to upgrade all dependencies first.');
+    expect(err.message).toMatch('please remove the lock file and use');
     expect(err.code).toEqual(FrameworkErrorEnum.INCONSISTENT_VERSION);
-  });
-
-  it('should test MidwayResolverMissingError', function () {
-    const err = new MidwayResolverMissingError('test');
-    expect(err.message).toEqual('Resolver "test" is missing.');
-    expect(err.code).toEqual(FrameworkErrorEnum.MISSING_RESOLVER);
   });
 
   it('should test MidwayConfigMissingError', function () {

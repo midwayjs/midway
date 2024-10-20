@@ -71,7 +71,9 @@ export class OrmConfiguration implements ILifeCycle {
             `DataSource ${meta.connectionName} not found with current model ${meta.modelKey}, please check it.`
           );
         }
-        const type = MetadataManager.getPropertyType(instance, propertyName);
+        const type = MetadataManager.transformTypeFromTSDesign(
+          MetadataManager.getPropertyType(instance, propertyName)
+        );
         if (type.originDesign === Repository) {
           return dataSource.getRepository(meta.modelKey);
         } else if (type.originDesign === TreeRepository) {
@@ -101,7 +103,7 @@ export class OrmConfiguration implements ILifeCycle {
   }
 
   async onReady(container: IMidwayContainer) {
-    useContainer(container);
+    useContainer(container as any);
     this.dataSourceManager = await container.getAsync(TypeORMDataSourceManager);
   }
 

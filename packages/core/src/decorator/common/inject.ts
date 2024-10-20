@@ -5,48 +5,135 @@ import {
   InjectModeEnum,
   ClassType,
 } from '../../interface';
-import { FACTORY_SERVICE_CLIENT_KEY, PROPERTY_INJECT_KEY } from '../constant';
+import {
+  CONSTRUCTOR_INJECT_KEY,
+  FACTORY_SERVICE_CLIENT_KEY,
+  PROPERTY_INJECT_KEY,
+} from '../constant';
 import { isClass } from '../../util/types';
 import { MetadataManager } from '../metadataManager';
+import { getParamNames } from '../../util';
 
-export function saveInjectMetadata(identifier, target, targetKey) {
+function getConstructParamNames(target) {
+  let paramNames = MetadataManager.getOwnMetadata(
+    'constructorParamNames',
+    target
+  );
+  if (!paramNames) {
+    // cache constructor param names
+    paramNames = getParamNames(target);
+    MetadataManager.defineMetadata('constructorParamNames', paramNames, target);
+  }
+  return paramNames;
+}
+
+export function saveInjectMetadata(
+  identifier,
+  target,
+  targetKey,
+  isLazyInject = false,
+  parameterIndex?: number
+) {
   // 1、use identifier by user
   // let identifier = opts.identifier;
   let injectMode = InjectModeEnum.Identifier;
+  let id = identifier;
+  const isConstructor = parameterIndex !== undefined;
   // 2、use identifier by class uuid
-  if (!identifier) {
-    const type = MetadataManager.getPropertyType(target, targetKey);
-    if (
-      !type.isBaseType &&
-      isClass(type.originDesign) &&
-      DecoratorManager.isProvide(type.originDesign)
-    ) {
-      identifier = DecoratorManager.getProviderUUId(
-        type.originDesign as ClassType
+  if (isConstructor) {
+    const paramNames = getConstructParamNames(target);
+
+    if (!id) {
+      const argsTypes = MetadataManager.getMethodParamTypes(target, targetKey);
+      const type = MetadataManager.transformTypeFromTSDesign(
+        argsTypes[parameterIndex]
       );
-      injectMode = InjectModeEnum.Class;
+      if (
+        !type.isBaseType &&
+        isClass(type.originDesign) &&
+        DecoratorManager.isProvide(type.originDesign)
+      ) {
+        id = DecoratorManager.getProviderUUId(type.originDesign as ClassType);
+        injectMode = InjectModeEnum.Class;
+      }
+      if (!id) {
+        // 3、use identifier by property name
+        id = paramNames[parameterIndex];
+        injectMode = InjectModeEnum.SelfName;
+      }
     }
-    if (!identifier) {
-      // 3、use identifier by property name
-      identifier = targetKey;
-      injectMode = InjectModeEnum.PropertyName;
+    MetadataManager.attachMetadata(
+      CONSTRUCTOR_INJECT_KEY,
+      {
+        targetKey,
+        id,
+        name: paramNames[parameterIndex],
+        injectMode,
+        isLazyInject,
+        parameterIndex,
+      },
+      target,
+      'default'
+    );
+  } else {
+    if (!id) {
+      const type = MetadataManager.transformTypeFromTSDesign(
+        MetadataManager.getPropertyType(target, targetKey)
+      );
+      if (
+        !type.isBaseType &&
+        isClass(type.originDesign) &&
+        DecoratorManager.isProvide(type.originDesign)
+      ) {
+        id = DecoratorManager.getProviderUUId(type.originDesign as ClassType);
+        injectMode = InjectModeEnum.Class;
+      }
+      if (!id) {
+        // 3、use identifier by property name
+        id = targetKey;
+        injectMode = InjectModeEnum.SelfName;
+      }
     }
+    MetadataManager.defineMetadata(
+      PROPERTY_INJECT_KEY,
+      {
+        targetKey,
+        id,
+        name: targetKey,
+        isLazyInject,
+        injectMode,
+      },
+      target,
+      targetKey
+    );
   }
-  MetadataManager.defineMetadata(
-    PROPERTY_INJECT_KEY,
-    {
-      targetKey,
-      value: identifier,
-      injectMode,
-    },
-    target,
-    targetKey
-  );
 }
 
-export function Inject(identifier?: ObjectIdentifier) {
-  return function (target: any, targetKey: string): void {
-    saveInjectMetadata(identifier, target, targetKey);
+export function Inject(
+  identifier?: ObjectIdentifier
+): PropertyDecorator & ParameterDecorator {
+  return function (target: any, targetKey: string, parameterIndex?: number) {
+    return saveInjectMetadata(
+      identifier,
+      target,
+      targetKey,
+      false,
+      parameterIndex
+    );
+  };
+}
+
+export function LazyInject(
+  identifier?: ObjectIdentifier | (() => ObjectIdentifier | ClassType)
+): PropertyDecorator & ParameterDecorator {
+  let id = identifier;
+  if (id && typeof id !== 'function') {
+    id = (() => {
+      return identifier;
+    }) as any;
+  }
+  return function (target: any, targetKey: string, parameterIndex?: number) {
+    return saveInjectMetadata(id, target, targetKey, true, parameterIndex);
   };
 }
 

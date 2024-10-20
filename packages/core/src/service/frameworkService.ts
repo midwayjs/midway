@@ -14,8 +14,8 @@ import {
   DecoratorManager,
 } from '../decorator';
 import {
-  IMidwayContainer,
   IMidwayFramework,
+  IMidwayGlobalContainer,
   IServiceFactory,
   ScopeEnum,
 } from '../interface';
@@ -49,7 +49,7 @@ export class MidwayFrameworkService {
   applicationManager: MidwayApplicationManager;
 
   constructor(
-    readonly applicationContext: IMidwayContainer,
+    readonly applicationContext: IMidwayGlobalContainer,
     readonly globalOptions
   ) {}
 

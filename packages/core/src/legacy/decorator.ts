@@ -535,7 +535,9 @@ export function createCustomParamDecorator(
  * @deprecated Use MetadataManager.getPropertyType instead
  */
 export function getPropertyType(target, methodName: string | symbol) {
-  return MetadataManager.getPropertyType(target, methodName);
+  return MetadataManager.transformTypeFromTSDesign(
+    MetadataManager.getPropertyType(target, methodName)
+  );
 }
 
 /**

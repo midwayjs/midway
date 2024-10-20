@@ -4,7 +4,6 @@ import {
   MidwayEnvironmentService,
   MidwayInformationService,
   IMidwayBootstrapOptions,
-  IMidwayContainer,
   MidwayLoggerService,
   MidwayFrameworkService,
   MidwayAspectService,
@@ -22,6 +21,7 @@ import {
   MidwayPriorityManager,
   DecoratorManager,
   IModuleStore,
+  IMidwayGlobalContainer,
 } from './';
 import defaultConfig from './config/config.default';
 import * as util from 'util';
@@ -41,7 +41,7 @@ function printStepDebugInfo(stepInfo: string) {
  */
 export async function initializeGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
-): Promise<IMidwayContainer> {
+): Promise<IMidwayGlobalContainer> {
   const applicationContext = await prepareGlobalApplicationContextAsync(
     globalOptions
   );
@@ -97,7 +97,7 @@ export async function initializeGlobalApplicationContext(
 }
 
 export async function destroyGlobalApplicationContext(
-  applicationContext: IMidwayContainer
+  applicationContext: IMidwayGlobalContainer
 ) {
   const loggerService = await applicationContext.getAsync(MidwayLoggerService);
   const loggerFactory = loggerService.getCurrentLoggerFactory();
@@ -137,7 +137,7 @@ export async function prepareGlobalApplicationContextAsync(
     globalOptions.applicationContext ?? new MidwayContainer();
   // bind container to decoratorManager
   debug('[core]: delegate module map from decoratorManager');
-  DecoratorManager.bindContainer(applicationContext as IModuleStore);
+  DecoratorManager.bindContainer(applicationContext);
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
 

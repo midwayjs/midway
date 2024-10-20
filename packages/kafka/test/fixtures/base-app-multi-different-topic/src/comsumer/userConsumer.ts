@@ -1,4 +1,4 @@
-import { Provide, Consumer, MSListenerType, Inject, MainApp, KafkaListener } from '@midwayjs/core';
+import { Provide, Consumer, MSListenerType, Inject, KafkaListener, App } from '@midwayjs/core';
 import { KafkaMessage } from 'kafkajs';
 import { Context, Application } from '../../../../../src';
 
@@ -6,7 +6,7 @@ import { Context, Application } from '../../../../../src';
 @Consumer(MSListenerType.KAFKA)
 export class UserConsumer {
 
-  @MainApp()
+  @App('kafka')
   app: Application;
 
   @Inject()

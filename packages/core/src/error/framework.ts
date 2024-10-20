@@ -1,5 +1,4 @@
 import { MidwayError, registerErrorCode } from './base';
-import { ObjectIdentifier } from '../interface';
 
 export const FrameworkErrorEnum = registerErrorCode('midway', {
   UNKNOWN: 10000,
@@ -38,28 +37,19 @@ export class MidwayParameterError extends MidwayError {
     super(message ?? 'Parameter type not match', FrameworkErrorEnum.PARAM_TYPE);
   }
 }
-
+// Definition for "katana3" not found. This identifier is not valid in the current context. Creation path: Grandson
 export class MidwayDefinitionNotFoundError extends MidwayError {
-  static readonly type = Symbol.for('#NotFoundError');
-  static isClosePrototypeOf(ins: MidwayDefinitionNotFoundError): boolean {
-    return ins
-      ? ins[MidwayDefinitionNotFoundError.type] ===
-          MidwayDefinitionNotFoundError.type
-      : false;
-  }
-  constructor(identifier: ObjectIdentifier) {
+  constructor(id: string, name: string, creationPath?: string[]) {
     super(
-      `${identifier} is not valid in current context`,
+      creationPath
+        ? `Definition for "${
+            name ?? id
+          }" not found in current context. Detection path: "${creationPath.join(
+            ' -> '
+          )}"`
+        : `Definition for "${name ?? id}" not found in current context.`,
       FrameworkErrorEnum.DEFINITION_NOT_FOUND
     );
-    this[MidwayDefinitionNotFoundError.type] =
-      MidwayDefinitionNotFoundError.type;
-  }
-  updateErrorMsg(className: string): void {
-    const identifier = this.message.split(
-      ' is not valid in current context'
-    )[0];
-    this.message = `${identifier} in class ${className} is not valid in current context`;
   }
 }
 
@@ -95,15 +85,6 @@ export class MidwayInvalidConfigError extends MidwayError {
     super(
       'Invalid config file \n' + message,
       FrameworkErrorEnum.INVALID_CONFIG
-    );
-  }
-}
-
-export class MidwayResolverMissingError extends MidwayError {
-  constructor(type: string) {
-    super(
-      `Resolver "${type}" is missing.`,
-      FrameworkErrorEnum.MISSING_RESOLVER
     );
   }
 }
@@ -153,7 +134,7 @@ export class MidwayUtilHttpClientTimeoutError extends MidwayError {
 export class MidwayInconsistentVersionError extends MidwayError {
   constructor() {
     const text =
-      'We find a latest dependency package installed, please remove the lock file and use "npm update" to upgrade all dependencies first.';
+      'We find a different "@midwayjs/core" package installed, please remove the lock file and use "(p)npm update" to upgrade all dependencies first.';
     super(text, FrameworkErrorEnum.INCONSISTENT_VERSION);
   }
 }

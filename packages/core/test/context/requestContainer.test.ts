@@ -6,28 +6,9 @@ import {
   Inject,
   Provide,
   Scope,
-  ScopeEnum, SINGLETON_CONTAINER_CTX
+  ScopeEnum,
+  SINGLETON_CONTAINER_CTX
 } from '../../src';
-import {
-  AppService,
-  AutoScaleService,
-  CCController,
-  CircularOne,
-  CircularThree,
-  CircularTwo,
-  FunService,
-  GatewayManager,
-  GatewayService,
-  GroupService,
-  ScaleManager,
-  TenService,
-  TestOne,
-  TestOne1,
-  TestThree,
-  TestThree1,
-  TestTwo,
-  TestTwo1,
-} from '../fixtures/circular_dependency';
 
 @Provide()
 class Tracer {
@@ -76,9 +57,12 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     const reqCtx1 = new RequestContainer({}, appCtx);
     const reqCtx2 = new RequestContainer({}, appCtx);
-    expect(reqCtx1.get<Tracer>(ChildTracer).parentId).toEqual(
-      reqCtx2.get<Tracer>(ChildTracer).parentId
-    );
+
+    const tracer1 = reqCtx1.get<Tracer>(ChildTracer);
+    const tracer2 = reqCtx2.get<Tracer>(ChildTracer);
+
+    expect(tracer1.parentId).toEqual(tracer2.parentId);
+    expect(tracer1 !== tracer2).toBeTruthy();
     expect((await reqCtx1.getAsync(ChildTracer)).parentId).toEqual(
       (await reqCtx2.getAsync(ChildTracer)).parentId
     );
@@ -160,59 +144,6 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     expect(tracer1[REQUEST_OBJ_CTX_KEY]).toEqual(ctx1);
     expect(tracer2[REQUEST_OBJ_CTX_KEY]).toEqual(ctx2);
-  });
-
-  it('circular should be ok in requestContainer', async () => {
-    const appCtx = new Container();
-
-    appCtx.bind(TestOne);
-    appCtx.bind(TestTwo);
-    appCtx.bind(TestThree);
-    appCtx.bind(TestOne1);
-    appCtx.bind(TestTwo1);
-    appCtx.bind(TestThree1);
-    appCtx.bind(CircularOne);
-    appCtx.bind(CircularTwo);
-    appCtx.bind(CircularThree);
-
-    const ctx1 = { a: 1 };
-    const container = new RequestContainer(ctx1, appCtx);
-    const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
-    expect(circularTwo.test2).toEqual('this is two');
-    expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
-    expect(
-      ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo)
-        .test2
-    ).toEqual('this is two');
-
-    const one = await container.getAsync<TestOne1>(TestOne1);
-    expect(one).toBeDefined();
-    expect(one).toBeDefined();
-    expect(one.name).toEqual('one');
-    expect((one.two as TestTwo1).name).toEqual('two');
-  });
-
-  it('circular depth should be ok in requestContainer', async () => {
-    const appCtx = new Container();
-    appCtx.bind(GatewayManager);
-    appCtx.bind(GatewayService);
-    appCtx.bind(GroupService);
-    appCtx.bind(FunService);
-    appCtx.bind(AppService);
-    appCtx.bind(TenService);
-    appCtx.bind(ScaleManager);
-    appCtx.bind(AutoScaleService);
-    appCtx.bind(CCController);
-
-    const ctx1 = { a: 1 };
-    const container = new RequestContainer(ctx1, appCtx);
-    const one = await container.getAsync<CCController>(CCController);
-    expect(one).toBeDefined();
-    expect(one).toBeDefined();
-    expect(one.ts).toEqual('controller');
-
-    expect((one.autoScaleService as any).ts).toEqual('ascale');
-    expect((one.autoScaleService as any).scaleManager.ts).toEqual('scale');
   });
 
   it('test request scope inject request scope', async () => {
@@ -392,5 +323,48 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     expect(requestContainer.getInstanceScope(a1)).toEqual(ScopeEnum.Singleton);
     expect(requestContainer.getInstanceScope(b1)).toEqual(ScopeEnum.Request);
+  });
+
+  it('should test find object from request container to global container', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Request, { allowDowngrade: true})
+    class B {
+      bid = Math.random();
+      @Inject()
+      a;
+      @Inject()
+      c;
+    }
+
+    const appCtx = new Container();
+    appCtx.bind(B);
+    appCtx.registerObject('a', 'a');
+    appCtx.registerObject('c', 'c');
+
+    const ctx = {};
+
+    // 创建请求作用域
+    const requestContainer = new RequestContainer(ctx, appCtx);
+    requestContainer.registerObject('a', 'b');
+
+    const c = await appCtx.getAsync('c');
+    expect(c).toEqual('c');
+    const c1 = await requestContainer.getAsync('c');
+    expect(c1).toEqual('c');
+
+    const b = await appCtx.getAsync(B);
+    const b1 = await requestContainer.getAsync(B);
+
+    expect(b !== b1).toBeTruthy();
+    expect(b.a).toEqual('a');
+    expect(b.c).toEqual('c');
+    expect(b1.a).toEqual('b');
+    expect(b1.c).toEqual('c');
+
+    const b2 = await appCtx.getAsync(B);
+    expect(b2).toEqual(b);
+
+    const b3 = await requestContainer.getAsync(B);
+    expect(b3).toEqual(b1);
   });
 });

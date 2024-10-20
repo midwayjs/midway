@@ -13,7 +13,11 @@ describe('/test/index.test.ts', () => {
       mock: false,
     });
     await producer.connect();
-    const app = await creatApp('base-app');
+    const app = await creatApp('base-app', {
+      import: [
+        require('../src')
+      ]
+    });
     await sleep(3000);
     await producer.send({
       // compression: CompressionTypes.GZIP,
@@ -38,7 +42,11 @@ describe('/test/index.test.ts', () => {
       mock: false,
     });
     await producer.connect();
-    const app = await creatApp('base-app-multi-some-topic');
+    const app = await creatApp('base-app-multi-some-topic', {
+      import: [
+        require('../src')
+      ]
+    });
     // 采用fromBeginning为false,使用最新的偏移量的时候，因为分组可能会出现rebalancing, a rejoin is needed需要时间，
     // 生产者需要在消费者后发送消息一段时间后保证可以收取到信息,至于在发布信息在前或者在后都没影响。
     // error: The group is rebalancing, so a rejoin is needed
@@ -50,8 +58,9 @@ describe('/test/index.test.ts', () => {
     });
     await sleep(3000);
     await producer.disconnect();
-    await closeApp(app);
+
     expect(app.getAttr('total')).toEqual(2);
+    await closeApp(app);
   });
   // 多个不同主题时的消费情况
   it('should test create producer and consumer with the multi different topic', async () => {
@@ -64,7 +73,11 @@ describe('/test/index.test.ts', () => {
       mock: false,
     });
     await producer.connect();
-    const app = await creatApp('base-app-multi-different-topic');
+    const app = await creatApp('base-app-multi-different-topic', {
+      import: [
+        require('../src')
+      ]
+    });
     await sleep(3000);
     // send data to topic
     await producer.send({
@@ -78,9 +91,9 @@ describe('/test/index.test.ts', () => {
       messages: [{ key: 'message-key2', value: 'hello consumer 22 !' }],
     });
     await sleep(3000);
+    expect(app.getAttr('total')).toEqual(2);
     await producer.disconnect();
     await closeApp(app);
-    expect(app.getAttr('total')).toEqual(2);
   });
 
   it('should test create producer and consumer with auto commit', async () => {
@@ -93,7 +106,11 @@ describe('/test/index.test.ts', () => {
       mock: false,
     });
     await producer.connect();
-    const app = await creatApp('base-app-auto-commit');
+    const app = await creatApp('base-app-auto-commit', {
+      import: [
+        require('../src')
+      ]
+    });
     await sleep(3000);
     // send data to topic
     await producer.send({
@@ -102,8 +119,8 @@ describe('/test/index.test.ts', () => {
     });
     await sleep(3000);
     await producer.disconnect();
-    await closeApp(app);
     expect(app.getAttr('total')).toEqual(1);
+    await closeApp(app);
   });
   it('should test create producer and consumer with manual committing', async () => {
     // create a producer
@@ -115,7 +132,11 @@ describe('/test/index.test.ts', () => {
       mock: false,
     });
     await producer.connect();
-    let app = await creatApp('base-app-manual-committing');
+    let app = await creatApp('base-app-manual-committing', {
+      import: [
+        require('../src')
+      ]
+    });
     await sleep(3000);
     // send data to topic
     await producer.send({
@@ -124,7 +145,7 @@ describe('/test/index.test.ts', () => {
     });
     await sleep(3000);
     await producer.disconnect();
-    await closeApp(app);
     expect([1, 2]).toContain(app.getAttr('total'))
+    await closeApp(app);
   });
 });

@@ -1,6 +1,6 @@
 import { FunctionDefinition } from '../../src/definitions/functionDefinition';
-import { ScopeEnum } from '../../src';
-import sinon = require('sinon');
+import { ScopeEnum, IMidwayContainer } from '../../src';
+import * as sinon from 'sinon';
 
 describe('/test/definitions/functionDefinition.test.ts', () => {
   it('function definition should be ok', async () => {
@@ -20,35 +20,48 @@ describe('/test/definitions/functionDefinition.test.ts', () => {
     expect(fun.isRequestScope()).toBeTruthy();
     expect(fun.isSingletonScope()).toBeFalsy();
 
-    expect(await fun.creator.doConstructAsync(null)).toBeNull();
+    expect(await fun.creator.doConstruct(null)).toBeNull();
 
     const callback = sinon.spy();
 
-    const clzz = function (a, args) {
-      callback(args[0]);
-      return args[0];
+    const clzz = function (context, args) {
+      callback(args?.[0]);
+      return args?.[0];
     };
 
-    expect(await fun.creator.doConstructAsync(clzz, [1])).toEqual(1);
-    expect(callback.withArgs(1).calledOnce).toBeTruthy();
+    expect(await fun.creator.doConstruct(clzz, [1])).toBe(clzz);
+    expect(callback.called).toBeFalsy();
 
     expect(fun.creator.doConstruct(null)).toBeNull();
 
-    expect(fun.creator.doConstruct(clzz, [123])).toEqual(123);
-    expect(callback.withArgs(123).calledOnce).toBeTruthy();
+    expect(fun.creator.doConstruct(clzz, [123])).toBe(clzz);
+    expect(callback.called).toBeFalsy();
 
     let count = 0;
-    const clzzNoArgs = (a) => {
+    const clzzNoArgs = (context) => {
       count++;
       callback('noArgs' + count);
       return 'noArgs' + count;
     };
 
-    expect(fun.creator.doConstruct(clzzNoArgs)).toEqual('noArgs1');
-    expect(callback.withArgs('noArgs1').calledOnce).toBeTruthy();
-    expect(count).toEqual(1);
+    expect(fun.creator.doConstruct(clzzNoArgs)).toBe(clzzNoArgs);
+    expect(callback.called).toBeFalsy();
+    expect(count).toEqual(0);
 
-    expect(await fun.creator.doConstructAsync(clzzNoArgs)).toEqual('noArgs2');
-    expect(callback.withArgs('noArgs2').calledOnce).toBeTruthy();
+    expect(await fun.creator.doConstruct(clzzNoArgs)).toBe(clzzNoArgs);
+    expect(callback.called).toBeFalsy();
+    expect(count).toEqual(0);
+
+    // Test doInit and doInitAsync
+    const mockContext: IMidwayContainer = {
+      get: () => ({}),
+    } as any;
+
+    expect(await fun.creator.doInit(clzz, mockContext)).toBe(undefined);
+    expect(callback.calledWith(undefined)).toBeTruthy();
+
+    expect(await fun.creator.doInitAsync(clzzNoArgs, mockContext)).toBe('noArgs1');
+    expect(callback.calledWith('noArgs1')).toBeTruthy();
+    expect(count).toEqual(1);
   });
 });

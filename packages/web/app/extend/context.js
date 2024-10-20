@@ -11,7 +11,6 @@ module.exports = {
   get requestContext() {
     if (!this[rc]) {
       this[rc] = new MidwayRequestContainer(this, this.app.applicationContext);
-      this[rc].ready();
     }
     return this[rc];
   },

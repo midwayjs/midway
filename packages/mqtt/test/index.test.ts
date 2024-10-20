@@ -1,6 +1,7 @@
 import { close, createApp, createLightApp } from '@midwayjs/mock';
 import { IMidwayApplication, Provide, Scope, ScopeEnum, sleep } from '@midwayjs/core';
 import { Framework, IMqttSubscriber, Mqtt, MqttProducerFactory } from '../src';
+import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
 
@@ -10,7 +11,7 @@ describe('/test/index.test.ts', () => {
 
   it('should test subscribe topic and send message', async () => {
     // create app and got data
-    const app = await createApp('base-app');
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app'));
     await sleep();
     expect(app.getAttr('subscribe')).toBe(true);
     await close(app);
@@ -18,7 +19,7 @@ describe('/test/index.test.ts', () => {
 
   it('should test subscribe with no pub and sub', async () => {
     // create app and got data
-    const app = await createApp('base-app-no-pub-sub');
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app-no-pub-sub'));
     await sleep();
     await close(app);
   });
@@ -41,7 +42,7 @@ describe('/test/index.test.ts', () => {
       ]
     });
     await (app.getFramework() as Framework).createSubscriber({
-      host: 'test.mosquitto.org',
+      host: '127.0.0.1',
       port: 1883,
     }, {
       topicObject: 'test_midway_dynamic',
@@ -52,7 +53,7 @@ describe('/test/index.test.ts', () => {
     // send
     const producerService = await app.getApplicationContext().getAsync(MqttProducerFactory);
     const producer = await producerService.createInstance({
-      host: 'test.mosquitto.org',
+      host: '127.0.0.1',
       port: 1883,
     }, 'test');
 

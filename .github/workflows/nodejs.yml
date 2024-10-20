@@ -101,6 +101,14 @@ jobs:
         with:
           mongodb-version: 4.2
 
+      - name: Start Mosquitto
+        uses: namoshek/mosquitto-github-action@v1
+        with:
+          version: 'latest'
+          ports: '1883:1883 8883:8883'
+          config: ${{ github.workspace }}/packages/mqtt/scripts/mosquitto.conf
+          container-name: 'mqtt'
+
       - name: Install dependencies
         run: pnpm install
 

@@ -16,7 +16,14 @@ import {
   Plugin,
   App,
   Provide,
-  MetadataManager
+  MetadataManager,
+  Init,
+  sleep,
+  Scope,
+  ScopeEnum,
+  MidwayDefinitionNotFoundError,
+  MidwayContainer,
+  LazyInject
 } from '../../src';
 import {
   Grandson,
@@ -32,10 +39,8 @@ import { childAsyncFunction,
   testInjectFunction,
   singletonFactory2,
   AliSingleton,
-  singletonFactory } from '../fixtures/fun_sample';
-import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
-import { HelloSingleton, HelloErrorInitSingleton, HelloErrorSingleton } from '../fixtures/singleton_sample';
-import { CircularOne, CircularTwo, CircularThree, TestOne, TestTwo, TestThree, TestOne1, TestTwo1, TestThree1 } from '../fixtures/circular_dependency';
+  singletonFactory
+} from '../fixtures/fun_sample';
 
 describe('/test/context/container.test.ts', () => {
 
@@ -185,19 +190,13 @@ describe('/test/context/container.test.ts', () => {
     const container = new Container();
     container.bind<Grandson>('grandson', Grandson as any);
 
-    expect(function () { container.get('grandson'); }).toThrow(/Grandson/);
-    expect(function () { container.get('nograndson'); }).toThrow(/nograndson/);
+    expect(() => container.get('grandson')).toThrow(/Grandson/);
+    expect(() => container.get('nograndson')).toThrow(/nograndson/);
 
-    try {
-      await container.getAsync('grandson');
-    } catch (error) {
-      expect(function () { throw error; }).toThrow(/Grandson/);
-    }
-    try {
-      await container.getAsync('nograndson');
-    } catch (error) {
-      expect(function () { throw error; }).toThrow(/nograndson/);
-    }
+    // container.get('grandson')
+
+    await expect(container.getAsync('grandson')).rejects.toThrow(/Grandson/);
+    await expect(container.getAsync('nograndson')).rejects.toThrow(/nograndson/);
   });
 
   it('should bind class directly', () => {
@@ -276,9 +275,49 @@ describe('/test/context/container.test.ts', () => {
   });
 
   describe('mix suit', () => {
-    const container = new Container();
-
     it('should use factory dynamic create object', () => {
+      const container = new Container();
+      interface Engine {
+        capacity;
+      }
+
+      @Scope(ScopeEnum.Prototype)
+      @Provide('petrol')
+      class PetrolEngine implements Engine {
+        capacity = 10;
+      }
+
+      @Scope(ScopeEnum.Prototype)
+      @Provide('diesel')
+      class DieselEngine implements Engine {
+        capacity = 20;
+      }
+
+      function engineFactory(context) {
+        return (named: string) => {
+          return context.get(named);
+        };
+      }
+
+      @Provide()
+      class DieselCar {
+        dieselEngine: Engine;
+        backUpDieselEngine: Engine;
+
+        @Inject('engineFactory')
+        factory: (category: string) => Engine;
+
+        @Init()
+        init() {
+          this.dieselEngine = this.factory('diesel') as Engine;
+          this.backUpDieselEngine = this.factory('diesel') as Engine;
+        }
+
+        run() {
+          this.dieselEngine.capacity -= 5;
+        }
+      }
+
       container.bind('engineFactory', engineFactory);
       container.bind(DieselCar);
       container.bind(PetrolEngine);
@@ -287,148 +326,6 @@ describe('/test/context/container.test.ts', () => {
       result.run();
       expect(result.dieselEngine.capacity).toEqual(15);
       expect(result.backUpDieselEngine.capacity).toEqual(20);
-    });
-
-  });
-
-  describe('singleton case', () => {
-    const container = new Container();
-
-    it('singleton lock should be ok', async () => {
-      container.bind(HelloSingleton);
-      container.bind(HelloErrorSingleton);
-      container.bind(HelloErrorInitSingleton);
-
-      await container.ready();
-
-      /*
-      const later = async () => {
-        return new Promise(resolve => {
-          setTimeout(async () => {
-            resolve(await Promise.all([
-              container.getAsync(HelloSingleton), container.getAsync(HelloSingleton)
-            ]));
-          }, 90);
-        });
-      };
-
-      const arr = await Promise.all([container.getAsync(HelloSingleton),
-        container.getAsync(HelloSingleton), container.getAsync(HelloSingleton), later()]);
-      const inst0 = <HelloSingleton>arr[0];
-      const inst1 = <HelloSingleton>arr[3][0];
-      expect(inst0.ts).toEqual(inst1.ts);
-      expect(inst0.end).toEqual(inst1.end);
-      */
-
-      const arr1 = await Promise.all([
-        container.getAsync(HelloErrorSingleton),
-        container.getAsync(HelloErrorInitSingleton)
-      ]);
-      const inst: HelloErrorSingleton = arr1[0] as HelloErrorSingleton;
-      const inst2: HelloErrorInitSingleton = arr1[1] as HelloErrorInitSingleton;
-
-      expect(inst.ts).toEqual(inst2.helloErrorSingleton.ts);
-      expect(inst.end).toEqual(inst2.helloErrorSingleton.end);
-      expect(inst2.ts).toEqual(inst.helloErrorInitSingleton.ts);
-      expect(inst2.end).toEqual(inst.helloErrorInitSingleton.end);
-    });
-  });
-
-  describe('circular dependency', () => {
-    it('circular should be ok', async () => {
-      const container = new Container();
-      container.registerObject('ctx', {});
-
-      container.bind(CircularOne);
-      container.bind(CircularTwo);
-      container.bind(CircularThree);
-
-      const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
-      const circularThree: CircularThree = await container.getAsync(CircularThree);
-
-      expect(circularTwo.test2).toEqual('this is two');
-      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
-      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
-      expect(circularThree.circularTwo.test2).toEqual('this is two');
-      expect(circularTwo.ts).toEqual(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
-      expect(circularTwo.ttest2('try ttest2')).toEqual('try ttest2twoone');
-      expect(await circularTwo.ctest2('try ttest2')).toEqual('try ttest2twoone');
-      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).toEqual('try ttest2twoone');
-
-      const circularTwoSync: CircularTwo = container.get(CircularTwo);
-      const circularOneSync: CircularOne = container.get(CircularOne);
-
-      expect(circularTwoSync.test2).toEqual('this is two');
-      expect(circularOneSync.test1).toEqual('this is one');
-      expect(circularTwoSync.ttest2('try ttest2')).toEqual('try ttest2twoone');
-      expect(await circularTwoSync.ctest2('try ttest2')).toEqual('try ttest2twoone');
-    });
-
-    it('alias circular should be ok', async () => {
-      const container = new Container();
-      container.registerObject('ctx', {});
-
-      container.bind(TestOne1);
-      container.bind(TestTwo1);
-      container.bind(TestThree1);
-      container.bind(CircularOne);
-      container.bind(CircularTwo);
-      container.bind(CircularThree);
-
-      const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
-      expect(circularTwo.test2).toEqual('this is two');
-      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
-      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
-
-      const one = await container.getAsync<TestOne1>(TestOne1);
-      expect(one).toBeDefined();
-      expect(one).toBeDefined();
-      expect(one.name).toEqual('one');
-      expect((one.two as TestTwo1).name).toEqual('two');
-    });
-  });
-
-  describe('circular dependency sync', () => {
-    it('sync circular should be ok', async () => {
-      const container = new Container();
-      container.registerObject('ctx', {});
-
-      container.bind(CircularOne);
-      container.bind(CircularTwo);
-      container.bind(CircularThree);
-
-      const circularTwo: CircularTwo = container.get(CircularTwo);
-      const circularThree: CircularThree = container.get(CircularThree);
-
-      expect(circularTwo.test2).toEqual('this is two');
-      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
-      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
-      expect(circularThree.circularTwo.test2).toEqual('this is two');
-      expect(circularTwo.ts).toEqual(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
-      expect(circularTwo.ttest2('try ttest2')).toEqual('try ttest2twoone');
-      expect(await circularTwo.ctest2('try ttest2')).toEqual('try ttest2twoone');
-      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).toEqual('try ttest2twoone');
-    });
-  });
-
-  describe('circular dependency dfs should be ok', () => {
-    const container = new Container();
-
-    it('sub container should be ok', async () => {
-      container.bind(TestOne);
-      container.bind(TestTwo);
-      const sub = container.createChild();
-
-      sub.bind(TestThree);
-
-      const three = sub.get<TestThree>('testThree');
-      expect(three.ts).toEqual('this is three');
-      expect(three.one.ts).toEqual('this is one');
-
-      const one = sub.get<TestOne>('testOne');
-      expect(one.ts).toEqual('this is one');
-      expect(one.one.ts).toEqual('this is one');
-      expect(one.testTwo.ts).toEqual('this is two');
     });
   });
 
@@ -450,6 +347,650 @@ describe('/test/context/container.test.ts', () => {
       const fn = arr[2] as any;
       expect(s.getInstance()).toEqual('alisingleton');
       expect(await fn()).toEqual('alisingleton');
+    });
+  });
+
+  describe('new get object and async object', () => {
+    it('should test new get async method', async () => {
+      @Provide()
+      class C {
+        name = 'c';
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsync(A);
+      expect(a.name).toEqual('a');
+      expect(a.b.name).toEqual('b');
+      expect(a.b.c.name).toEqual('c');
+    });
+
+    it('should test new get async method 2', async () => {
+      @Provide()
+      class B {
+        name = 'b';
+
+        @Init()
+        async init() {
+          await sleep(200);
+          this.name = 'e';
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+
+        @Init()
+        async init() {
+          this.name = this.b.name;
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+
+      const a = await container.getAsync(A);
+      expect(a.name).toBe('e');
+    });
+
+    it('should test new get async method and with async init', async () => {
+      @Provide()
+      class C {
+        name = 'c';
+
+        @Init()
+        async init() {
+          await sleep(300);
+          this.name = 'f';
+        }
+
+        async getData() {
+          return this.name;
+        }
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C
+
+        @Init()
+        async init() {
+          await sleep(200);
+          this.name = 'e';
+        }
+
+        async getData() {
+          return await this.c.getData() + this.name;
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.name = 'd';
+        }
+
+        async getData() {
+          return await this.b.getData() + this.name;
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsync(A);
+      expect(await a.getData()).toEqual('fed');
+    });
+
+    it('should test new get async method and with async init 2', async () => {
+      @Provide()
+      class C {
+        name = 'c';
+
+        @Init()
+        async init() {
+          await sleep(300);
+          this.name = 'f';
+        }
+
+        async getData() {
+          return this.name;
+        }
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C
+
+        @Init()
+        async init() {
+          await sleep(200);
+          this.name = 'e';
+        }
+
+        async getData() {
+          return this.name;
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B
+
+        @Inject()
+        c: C
+
+        @Init()
+        async init() {
+          this.name = await this.b.getData() + await this.c.getData();
+        }
+
+        async getData() {
+          return this.name;
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsync(A);
+      expect(await a.getData()).toEqual('ef');
+    });
+
+    it('should handle complex dependencies and avoid duplicate initialization', async () => {
+      let initCount = {
+        a: 0,
+        b: 0,
+        c: 0,
+        d: 0
+      };
+
+      @Provide()
+      class D {
+        name = 'd';
+
+        @Init()
+        async init() {
+          await sleep(100);
+          initCount.d++;
+          this.name = 'd_initialized';
+        }
+      }
+
+      @Provide()
+      class C {
+        name = 'c';
+        @Inject()
+        d: D;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          initCount.c++;
+          this.name = 'c_initialized';
+        }
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C;
+        @Inject()
+        d: D;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          initCount.b++;
+          this.name = 'b_initialized';
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B;
+        @Inject()
+        c: C;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          initCount.a++;
+          this.name = this.b.name + '_' + this.c.name;
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+      container.bind(D);
+
+      const a = await container.getAsync(A);
+
+      expect(a.name).toBe('b_initialized_c_initialized');
+      expect(a.b.name).toBe('b_initialized');
+      expect(a.c.name).toBe('c_initialized');
+      expect(a.b.c.name).toBe('c_initialized');
+      expect(a.b.d.name).toBe('d_initialized');
+      expect(a.c.d.name).toBe('d_initialized');
+
+      // 验证每个类只被初始化一次
+      expect(initCount).toEqual({
+        a: 1,
+        b: 1,
+        c: 1,
+        d: 1
+      });
+
+      expect(a === await container.getAsync(A)).toBeTruthy();
+      expect(a.c.d === a.b.d).toBeTruthy();
+    });
+
+    it('should handle complex dependencies and avoid duplicate initialization 2', async () => {
+      let initCount = {
+        a: 0,
+        b: 0,
+        c: 0,
+      };
+
+      let initOrder: string[] = [];
+
+      @Provide()
+      class C {
+        name = 'c';
+
+        @Init()
+        async init() {
+          initCount.c++;
+          initOrder.push('C');
+        }
+      }
+
+      @Provide()
+      class B {
+        name = 'b';
+        @Inject()
+        c: C;
+
+        @Init()
+        async init() {
+          initCount.b++;
+          initOrder.push('B');
+        }
+      }
+
+      @Provide()
+      class A {
+        name = 'a';
+        @Inject()
+        b: B;
+        @Inject()
+        c: C;
+
+        @Init()
+        async init() {
+          initCount.a++;
+          initOrder.push('A');
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      const a = await container.getAsync(A);
+      const b = await container.getAsync(B);
+
+      expect(initOrder).toEqual(['C', 'B', 'A']);
+      // 验证每个类只被初始化一次
+      expect(initCount).toEqual({
+        a: 1,
+        b: 1,
+        c: 1,
+      });
+
+      expect(a === await container.getAsync(A)).toBeTruthy();
+      expect(b === await container.getAsync(B)).toBeTruthy();
+    });
+
+    it('should initialize dependencies in correct order without duplication', async () => {
+      let initOrder: string[] = [];
+
+      @Provide()
+      class D {
+        value = 0;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.value = 1;
+          initOrder.push('D');
+        }
+      }
+
+      @Provide()
+      class C {
+        @Inject()
+        d: D;
+
+        value = 0;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.value = this.d.value * 2;
+          initOrder.push('C');
+        }
+      }
+
+      @Provide()
+      class B {
+        @Inject()
+        c: C;
+        @Inject()
+        d: D;
+
+        value = 0;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.value = this.c.value + this.d.value;
+          initOrder.push('B');
+        }
+      }
+
+      @Provide()
+      class A {
+        @Inject()
+        b: B;
+        @Inject()
+        c: C;
+
+        value = 0;
+
+        @Init()
+        async init() {
+          await sleep(100);
+          this.value = this.b.value + this.c.value;
+          initOrder.push('A');
+        }
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+      container.bind(D);
+
+      const a = await container.getAsync(A);
+      const b = await container.getAsync(B);
+
+      // 检查初始化顺序
+      expect(initOrder).toEqual(['D', 'C', 'B', 'A']);
+
+      // 检查计算结果
+      expect(a.value).toBe(5);  // (1*2) + (2+1) = 2 + 3 = 5
+      expect(a.b.value).toBe(3);  // 2 + 1 = 3
+      expect(a.c.value).toBe(2);  // 1 * 2 = 2
+      expect(a.b.c.value).toBe(2);
+      expect(a.b.d.value).toBe(1);
+      expect(a.c.d.value).toBe(1);
+
+      // 检查实例共享
+      expect(a.b.c).toBe(a.c);
+      expect(a.b.d).toBe(a.c.d);
+
+      expect(a.c).toBe(b.c);
+    });
+
+    it('should detect circular dependencies', async () => {
+      @Provide()
+      class A {
+        @Inject()
+        b;
+      }
+
+      @Provide()
+      class B {
+        @Inject()
+        c;
+      }
+
+      @Provide()
+      class C {
+        @Inject()
+        a: A;
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      await expect(container.getAsync(A)).rejects.toThrow('Circular dependency detected: A -> B -> C -> A');
+    });
+
+    it('should recognize property name circular dependencies', () => {
+      @Provide()
+      class TestA {
+        @Inject('testB')
+        b;
+      }
+      @Provide()
+      class TestB {
+        @Inject()
+        a: TestA;
+      }
+      const container = new MidwayContainer();
+      container.bind(TestA);
+      container.bind(TestB);
+
+      expect(() => {container.get(TestA)}).toThrow('Circular dependency detected: TestA -> TestB -> TestA');
+    });
+
+    it('should resolve property name circular dependencies', () => {
+      @Provide()
+      class TestA {
+        data = 'a';
+        @Inject('testB')
+        b;
+      }
+      @Provide()
+      class TestB {
+        data = 'b';
+        @LazyInject()
+        a: TestA;
+      }
+      const container = new MidwayContainer();
+      container.bind(TestA);
+      container.bind(TestB);
+
+      const a = container.get(TestA);
+      expect(a.b.a.data).toEqual('a');
+    });
+
+    it('should recognize constructor circular dependencies', () => {
+      @Provide()
+      class TestA {
+        data = 'a';
+        constructor(@Inject('testB') public b) {
+        }
+      }
+      @Provide()
+      class TestB {
+        data = 'b';
+        constructor(@Inject() public a: TestA) {
+        }
+      }
+      const container = new MidwayContainer();
+      container.bind(TestA);
+      container.bind(TestB);
+
+      expect(() => {container.get(TestA)}).toThrow('Circular dependency detected: TestA -> TestB -> TestA');
+    });
+
+    it('should resolve constructor circular dependencies', () => {
+      @Provide()
+      class TestA {
+        data = 'a';
+        constructor(@Inject('testB') public b) {
+        }
+      }
+      @Provide()
+      class TestB {
+        data = 'b';
+        constructor(@LazyInject() public a: TestA) {
+        }
+      }
+      const container = new MidwayContainer();
+      container.bind(TestA);
+      container.bind(TestB);
+
+      const a = container.get(TestA);
+      expect(a.b.a.data).toEqual('a');
+    });
+
+    it('should test MidwayDefinitionNotFoundError message', async () => {
+      @Provide()
+      class A {
+        @Inject()
+        b;
+      }
+
+      @Provide()
+      class B {
+        @Inject()
+        c;
+      }
+
+      @Provide()
+      class C {
+        @Inject('baseDir')
+        baseDir;
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      await expect(container.getAsync(A)).rejects.toThrow('Definition for "baseDir" not found in current context. Detection path: "A -> B -> C"');
+    });
+
+    it('should test MidwayDefinitionNotFoundError message with name', async () => {
+      @Provide()
+      class A {
+        @Inject()
+        b;
+      }
+
+      @Provide()
+      class B {
+        @Inject()
+        c;
+      }
+
+      @Provide()
+      class D {
+      }
+
+      @Provide()
+      class C {
+        @Inject()
+        d: D;
+      }
+
+      const container = new Container();
+      container.bind(A);
+      container.bind(B);
+      container.bind(C);
+
+      await expect(container.getAsync(A)).rejects.toThrow('Definition for "d" not found in current context. Detection path: "A -> B -> C"');
+    });
+
+    it('should throw MidwayDefinitionNotFoundError when getting non-existent definition', async () => {
+      const container = new Container();
+
+      // 同步测试
+      expect(() => {
+        container.get('nonExistentDefinition');
+      }).toThrow(MidwayDefinitionNotFoundError);
+
+      // 异步测试
+      await expect(
+        container.getAsync('nonExistentDefinition')
+      ).rejects.toThrow(MidwayDefinitionNotFoundError);
+    });
+
+    it('should include the definition name in the error message', () => {
+      const container = new Container();
+      const definitionName = 'testDefinition';
+
+      try {
+        container.get(definitionName);
+      } catch (error) {
+        expect(error).toBeInstanceOf(MidwayDefinitionNotFoundError);
+        expect(error.message).toContain(definitionName);
+      }
+    });
+
+    it('should throw MidwayDefinitionNotFoundError when getting non-existent property', () => {
+      const container = new Container();
+
+      @Provide()
+      class TestClass {
+        @Inject()
+        nonExistentProperty: any;
+      }
+
+      container.bind(TestClass);
+
+      expect(() => {
+        container.get(TestClass);
+      }).toThrow(MidwayDefinitionNotFoundError);
     });
   });
 });

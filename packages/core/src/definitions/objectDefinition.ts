@@ -2,12 +2,11 @@ import {
   IObjectCreator,
   IObjectDefinition,
   ObjectIdentifier,
+  PropertyInjectMetadata,
   ScopeEnum,
 } from '../interface';
-import { ObjectProperties } from './properties';
 import { ObjectCreator } from './objectCreator';
 
-/* tslint:disable:variable-name */
 export class ObjectDefinition implements IObjectDefinition {
   protected _attrs = new Map<ObjectIdentifier, any>();
   protected _asynchronous = false;
@@ -23,7 +22,7 @@ export class ObjectDefinition implements IObjectDefinition {
   path: any = null;
   export: string = null;
   dependsOn: ObjectIdentifier[] = [];
-  properties = new ObjectProperties();
+  properties = new Map<string, PropertyInjectMetadata>();
   namespace = '';
   handlerProps = [];
   createFrom;
