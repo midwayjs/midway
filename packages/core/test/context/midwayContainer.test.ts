@@ -330,7 +330,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
         @Inject() protected dependency1: Dependency1) {}
 
       getDependencyValue() {
-        return this.dependency.getValue() + this.dependency1.getValue();
+        return this.dependency.getValue() + '-' + this.dependency1.getValue();
       }
     }
 
@@ -340,7 +340,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.bind(Dependency1);
 
     const mainService = await container.getAsync(MainService);
-    expect(mainService.getDependencyValue()).toEqual('dependency value init data');
+    expect(mainService.getDependencyValue()).toEqual('dependency value init data-dependency1 value init data1');
   });
 
   describe('test @LazyInject()', () => {

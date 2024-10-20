@@ -1,8 +1,9 @@
 import {
   IObjectCreator,
   IObjectDefinition,
-  ObjectIdentifier, PropertyInjectMetadata,
-  ScopeEnum
+  ObjectIdentifier,
+  PropertyInjectMetadata,
+  ScopeEnum,
 } from '../interface';
 import { ObjectCreator } from './objectCreator';
 

@@ -36,7 +36,7 @@ import {
   Get,
   DecoratorManager,
   PRELOAD_MODULE_KEY,
-  Init
+  Init, Inject
 } from '../../src';
 
 describe('legacy/decorator.test.ts', () => {
@@ -564,8 +564,11 @@ describe('legacy/decorator.test.ts', () => {
         const obj = { ccc: 'd' };
         class D {}
         class A {
+          constructor(@Inject() a: string) {
+          }
           @Get()
           async invoke(
+            @Inject()
             a: number,
             b: string,
             c: boolean,
@@ -580,6 +583,9 @@ describe('legacy/decorator.test.ts', () => {
         }
         const paramTypes = getMethodParamTypes(A, 'invoke');
         expect(paramTypes.length).toBe(7);
+
+        const paramTypes1 = getMethodParamTypes(A, undefined);
+        expect(paramTypes1.length).toBe(1);
 
         const paramTypes2 = getMethodParamTypes(A, 'invoke2');
         expect(paramTypes2.length).toBe(4);

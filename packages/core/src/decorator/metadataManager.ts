@@ -390,6 +390,9 @@ export class MetadataManager {
     target: ClassType,
     propertyKey: string | symbol
   ): any {
+    if (isClass(target)) {
+      target = target.prototype;
+    }
     return Reflect.getMetadata('design:returntype', target, propertyKey);
   }
 
@@ -401,6 +404,10 @@ export class MetadataManager {
     methodName: string | symbol,
     parameterIndex?: number
   ) {
+    // 构造器参数必须传递 class，而方法参数需要传递原型对象
+    if (methodName && isClass(target)) {
+      target = target.prototype;
+    }
     const types = Reflect.getMetadata('design:paramtypes', target, methodName);
     if (parameterIndex !== undefined && types) {
       return types[parameterIndex];
@@ -415,7 +422,10 @@ export class MetadataManager {
     target: ClassType,
     propertyKey: string | symbol
   ) {
-    return Reflect.getMetadata('design:type', target, propertyKey)
+    if (isClass(target)) {
+      target = target.prototype;
+    }
+    return Reflect.getMetadata('design:type', target, propertyKey);
   }
 
   public static transformTypeFromTSDesign(designFn: any): TSDesignType {

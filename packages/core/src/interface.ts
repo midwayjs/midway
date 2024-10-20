@@ -70,10 +70,11 @@ export enum InjectModeEnum {
  */
 export interface PropertyInjectMetadata {
   args: any[];
-  id: string;
+  id: ObjectIdentifier | (() => ObjectIdentifier | ClassType);
   name: string;
   injectMode: InjectModeEnum;
   targetKey: string;
+  isLazyInject: boolean;
 }
 
 /**

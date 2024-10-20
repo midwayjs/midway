@@ -26,8 +26,6 @@ export const CUSTOM_PROPERTY_INJECT_KEY = 'common:custom_property_inject';
 export const CUSTOM_METHOD_INJECT_KEY = 'common:custom_method_inject';
 // The name inject custom param decorator with resolver
 export const CUSTOM_PARAM_INJECT_KEY = 'common:custom_param_inject';
-// The name for @LazyInject
-export const LAZY_INJECT_KEY = 'common:lazy_property_inject';
 
 // faas
 export const FUNC_KEY = 'faas:func';

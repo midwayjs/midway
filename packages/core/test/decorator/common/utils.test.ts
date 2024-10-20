@@ -35,6 +35,7 @@ describe('/test/common/util.test.ts', () => {
     expect(p['hello']).toEqual({
       'id': '@testpackage',
       'injectMode': 'Identifier',
+      'isLazyInject': false,
       'name': 'hello',
       'targetKey': 'hello'
     });
@@ -53,6 +54,7 @@ describe('/test/common/util.test.ts', () => {
     expect(p['hello']).toEqual({
       injectMode: 'Identifier',
       targetKey: 'hello',
+      isLazyInject: false,
       id: '@testpackage2',
       name: 'hello',
     });

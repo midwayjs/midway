@@ -12,13 +12,11 @@ import {
   Scope,
   FACTORY_SERVICE_CLIENT_KEY,
   DecoratorManager,
-  LAZY_INJECT_KEY,
 } from '../decorator';
 import {
   IMidwayFramework,
   IMidwayGlobalContainer,
   IServiceFactory,
-  ObjectIdentifier,
   ScopeEnum,
 } from '../interface';
 import { MidwayConfigService } from './configService';
@@ -138,20 +136,6 @@ export class MidwayFrameworkService {
             );
           }
         }
-      }
-    );
-
-    this.decoratorService.registerPropertyHandler(
-      LAZY_INJECT_KEY,
-      (
-        propertyName,
-        meta: {
-          identifier?: () => ObjectIdentifier;
-        }
-      ) => {
-        return this.applicationContext.get(
-          (meta.identifier?.() as string) ?? propertyName
-        );
       }
     );
 

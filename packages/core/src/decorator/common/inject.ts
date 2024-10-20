@@ -8,17 +8,30 @@ import {
 import {
   CONSTRUCTOR_INJECT_KEY,
   FACTORY_SERVICE_CLIENT_KEY,
-  LAZY_INJECT_KEY,
-  PROPERTY_INJECT_KEY
+  PROPERTY_INJECT_KEY,
 } from '../constant';
 import { isClass } from '../../util/types';
 import { MetadataManager } from '../metadataManager';
 import { getParamNames } from '../../util';
 
+function getConstructParamNames(target) {
+  let paramNames = MetadataManager.getOwnMetadata(
+    'constructorParamNames',
+    target
+  );
+  if (!paramNames) {
+    // cache constructor param names
+    paramNames = getParamNames(target);
+    MetadataManager.defineMetadata('constructorParamNames', paramNames, target);
+  }
+  return paramNames;
+}
+
 export function saveInjectMetadata(
   identifier,
   target,
   targetKey,
+  isLazyInject = false,
   parameterIndex?: number
 ) {
   // 1、use identifier by user
@@ -28,16 +41,13 @@ export function saveInjectMetadata(
   const isConstructor = parameterIndex !== undefined;
   // 2、use identifier by class uuid
   if (isConstructor) {
-    let paramNames = MetadataManager.getOwnMetadata('constructorParamNames', target);
-    if (!paramNames) {
-      // cache constructor param names
-      paramNames = getParamNames(target);
-      MetadataManager.defineMetadata('constructorParamNames', paramNames, target);
-    }
+    const paramNames = getConstructParamNames(target);
 
     if (!id) {
       const argsTypes = MetadataManager.getMethodParamTypes(target, targetKey);
-      const type = MetadataManager.transformTypeFromTSDesign(argsTypes[parameterIndex]);
+      const type = MetadataManager.transformTypeFromTSDesign(
+        argsTypes[parameterIndex]
+      );
       if (
         !type.isBaseType &&
         isClass(type.originDesign) &&
@@ -59,14 +69,17 @@ export function saveInjectMetadata(
         id,
         name: paramNames[parameterIndex],
         injectMode,
-        parameterIndex
+        isLazyInject,
+        parameterIndex,
       },
       target,
       'default'
     );
   } else {
     if (!id) {
-      const type = MetadataManager.transformTypeFromTSDesign(MetadataManager.getPropertyType(target, targetKey));
+      const type = MetadataManager.transformTypeFromTSDesign(
+        MetadataManager.getPropertyType(target, targetKey)
+      );
       if (
         !type.isBaseType &&
         isClass(type.originDesign) &&
@@ -87,6 +100,7 @@ export function saveInjectMetadata(
         targetKey,
         id,
         name: targetKey,
+        isLazyInject,
         injectMode,
       },
       target,
@@ -99,21 +113,28 @@ export function Inject(
   identifier?: ObjectIdentifier
 ): PropertyDecorator & ParameterDecorator {
   return function (target: any, targetKey: string, parameterIndex?: number) {
-    return saveInjectMetadata(identifier, target, targetKey, parameterIndex);
+    return saveInjectMetadata(
+      identifier,
+      target,
+      targetKey,
+      false,
+      parameterIndex
+    );
   };
 }
 
 export function LazyInject(
   identifier?: ObjectIdentifier | (() => ObjectIdentifier | ClassType)
-): PropertyDecorator {
-  if (identifier && typeof identifier !== 'function') {
-    identifier = (() => {
+): PropertyDecorator & ParameterDecorator {
+  let id = identifier;
+  if (id && typeof id !== 'function') {
+    id = (() => {
       return identifier;
     }) as any;
   }
-  return DecoratorManager.createCustomPropertyDecorator(LAZY_INJECT_KEY, {
-    identifier,
-  });
+  return function (target: any, targetKey: string, parameterIndex?: number) {
+    return saveInjectMetadata(id, target, targetKey, true, parameterIndex);
+  };
 }
 
 export function InjectClient(

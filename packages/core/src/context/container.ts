@@ -7,13 +7,15 @@ import {
   OBJECT_DEFINITION_KEY,
   PROPERTY_INJECT_KEY,
   CUSTOM_PROPERTY_INJECT_KEY,
-  SCOPE_KEY, CONSTRUCTOR_INJECT_KEY
+  SCOPE_KEY,
+  CONSTRUCTOR_INJECT_KEY,
 } from '../decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
 import { ObjectDefinitionRegistry } from './definitionRegistry';
 import {
-  ClassType, ConstructorInjectMetadata,
+  ClassType,
+  ConstructorInjectMetadata,
   IFileDetector,
   IIdentifierRelationShip,
   IMidwayContainer,
@@ -23,7 +25,7 @@ import {
   ObjectIdentifier,
   ObjectLifeCycleEvent,
   PropertyInjectMetadata,
-  ScopeEnum
+  ScopeEnum,
 } from '../interface';
 import {
   CONTAINER_OBJ_SCOPE,
@@ -379,20 +381,17 @@ export class MidwayContainer implements IMidwayGlobalContainer {
 
     // inject constructor
     const constructorProps = MetadataManager.getPropertiesWithMetadata<{
-      'default': ConstructorInjectMetadata[];
-    }>(
-      CONSTRUCTOR_INJECT_KEY,
-      target
-    );
+      default: ConstructorInjectMetadata[];
+    }>(CONSTRUCTOR_INJECT_KEY, target);
 
     if (constructorProps['default']) {
       const argsLen = constructorProps['default'].length;
       const constructorArgs = new Array(argsLen);
       for (const constructorMeta of constructorProps['default']) {
         debugBind(
-          `${' '.repeat(debugSpaceLength)}inject constructor => [${JSON.stringify(
-            constructorMeta
-          )}]`
+          `${' '.repeat(
+            debugSpaceLength
+          )}inject constructor => [${JSON.stringify(constructorMeta)}]`
         );
 
         constructorArgs[constructorMeta.parameterIndex] = constructorMeta;

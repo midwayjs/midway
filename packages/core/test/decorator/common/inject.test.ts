@@ -25,6 +25,7 @@ describe('/test/annotation/inject.test.ts', () => {
     expect(meta['aa']).toEqual({
       id: 'aa',
       injectMode: 'SelfName',
+      isLazyInject: false,
       name: 'aa',
       targetKey: 'aa'
     });
@@ -33,6 +34,7 @@ describe('/test/annotation/inject.test.ts', () => {
     expect(meta['ff']).toEqual({
       id: 'ff',
       injectMode: 'SelfName',
+      isLazyInject: false,
       name: 'ff',
       targetKey: 'ff'
     });

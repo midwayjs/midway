@@ -18,8 +18,12 @@ import {
   Provide,
   MetadataManager,
   Init,
-  sleep, Scope, ScopeEnum,
-  MidwayDefinitionNotFoundError
+  sleep,
+  Scope,
+  ScopeEnum,
+  MidwayDefinitionNotFoundError,
+  MidwayContainer,
+  LazyInject
 } from '../../src';
 import {
   Grandson,
@@ -346,7 +350,7 @@ describe('/test/context/container.test.ts', () => {
     });
   });
 
-  describe('new get async', () => {
+  describe('new get object and async object', () => {
     it('should test new get async method', async () => {
       @Provide()
       class C {
@@ -807,6 +811,86 @@ describe('/test/context/container.test.ts', () => {
       container.bind(C);
 
       await expect(container.getAsync(A)).rejects.toThrow('Circular dependency detected: A -> B -> C -> A');
+    });
+
+    it('should recognize property name circular dependencies', () => {
+      @Provide()
+      class TestA {
+        @Inject('testB')
+        b;
+      }
+      @Provide()
+      class TestB {
+        @Inject()
+        a: TestA;
+      }
+      const container = new MidwayContainer();
+      container.bind(TestA);
+      container.bind(TestB);
+
+      expect(() => {container.get(TestA)}).toThrow('Circular dependency detected: TestA -> TestB -> TestA');
+    });
+
+    it('should resolve property name circular dependencies', () => {
+      @Provide()
+      class TestA {
+        data = 'a';
+        @Inject('testB')
+        b;
+      }
+      @Provide()
+      class TestB {
+        data = 'b';
+        @LazyInject()
+        a: TestA;
+      }
+      const container = new MidwayContainer();
+      container.bind(TestA);
+      container.bind(TestB);
+
+      const a = container.get(TestA);
+      expect(a.b.a.data).toEqual('a');
+    });
+
+    it('should recognize constructor circular dependencies', () => {
+      @Provide()
+      class TestA {
+        data = 'a';
+        constructor(@Inject('testB') public b) {
+        }
+      }
+      @Provide()
+      class TestB {
+        data = 'b';
+        constructor(@Inject() public a: TestA) {
+        }
+      }
+      const container = new MidwayContainer();
+      container.bind(TestA);
+      container.bind(TestB);
+
+      expect(() => {container.get(TestA)}).toThrow('Circular dependency detected: TestA -> TestB -> TestA');
+    });
+
+    it('should resolve constructor circular dependencies', () => {
+      @Provide()
+      class TestA {
+        data = 'a';
+        constructor(@Inject('testB') public b) {
+        }
+      }
+      @Provide()
+      class TestB {
+        data = 'b';
+        constructor(@LazyInject() public a: TestA) {
+        }
+      }
+      const container = new MidwayContainer();
+      container.bind(TestA);
+      container.bind(TestB);
+
+      const a = container.get(TestA);
+      expect(a.b.a.data).toEqual('a');
     });
 
     it('should test MidwayDefinitionNotFoundError message', async () => {
