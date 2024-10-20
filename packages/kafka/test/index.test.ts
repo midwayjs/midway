@@ -58,8 +58,9 @@ describe('/test/index.test.ts', () => {
     });
     await sleep(3000);
     await producer.disconnect();
-    await closeApp(app);
+
     expect(app.getAttr('total')).toEqual(2);
+    await closeApp(app);
   });
   // 多个不同主题时的消费情况
   it('should test create producer and consumer with the multi different topic', async () => {
@@ -118,8 +119,8 @@ describe('/test/index.test.ts', () => {
     });
     await sleep(3000);
     await producer.disconnect();
-    await closeApp(app);
     expect(app.getAttr('total')).toEqual(1);
+    await closeApp(app);
   });
   it('should test create producer and consumer with manual committing', async () => {
     // create a producer
@@ -144,7 +145,7 @@ describe('/test/index.test.ts', () => {
     });
     await sleep(3000);
     await producer.disconnect();
-    await closeApp(app);
     expect([1, 2]).toContain(app.getAttr('total'))
+    await closeApp(app);
   });
 });
