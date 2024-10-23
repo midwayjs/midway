@@ -8,7 +8,7 @@ import {
   Init,
   MidwayWebRouterService,
   IMidwayApplication,
-  MidwayServerlessFunctionService,
+  MidwayServerlessFunctionService, Config
 } from '@midwayjs/core';
 import next from 'next';
 // eslint-disable-next-line node/no-deprecated-api
@@ -23,12 +23,14 @@ export class NextJSMiddleware implements IMiddleware<Context, NextFunction> {
     | MidwayWebRouterService
     | MidwayServerlessFunctionService;
 
+  @Config('next')
+  protected nextConfig;
+
   @Init()
   async init() {
     const app = next({
       dev: this.env.isDevelopmentEnvironment(),
-      hostname: 'localhost',
-      port: 7001,
+      ...this.nextConfig,
     });
     this.handle = app.getRequestHandler();
     await app.prepare();

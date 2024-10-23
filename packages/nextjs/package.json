@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/nextjs",
   "description": "midway nextjs component",
-  "version": "1.0.0",
+  "version": "3.18.0",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -10,7 +10,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "next": "14.0.4",
+    "next": "14.2.15",
+    "react": "^18",
+    "react-dom": "^18",
     "@midwayjs/core": "^3.14.4",
     "@midwayjs/mock": "^3.14.4"
   },
