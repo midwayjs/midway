@@ -12,7 +12,7 @@
     "@midwayjs/core": "^3.18.0",
     "@midwayjs/koa": "^3.18.2",
     "@midwayjs/mock": "^3.18.2",
-    "sequelize": "6.37.4",
+    "sequelize": "6.37.5",
     "sequelize-typescript": "2.1.6",
     "sqlite3": "5.1.7"
   },
