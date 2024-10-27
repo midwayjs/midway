@@ -170,6 +170,37 @@ it('should test create koa app with new mode with mock', async () => {
 });
 ```
 
+### 分组
+
+从 `3.19.0` 开始，Midway 的 mock 功能支持通过分组来管理不同的 mock 数据。你可以在创建 mock 时指定一个分组名称，这样可以在需要时单独恢复或清理某个分组的 mock 数据。
+
+
+```typescript
+import { mockContext, restoreMocks } from '@midwayjs/mock';
+
+it('should test mock with groups', async () => {
+  const app = await createApp();
+
+  // 创建普通对象的 mock
+  const a = {};
+  mockProperty(a, 'getUser', async () => {
+    return 'midway';
+  }, 'group1');
+
+  // 创建上下文的 mock
+  mockContext(app, 'user', 'midway', 'group1');
+  mockContext(app, 'role', 'admin', 'group2');
+
+  // 恢复单个分组
+  restoreMocks('group1');
+
+  // 恢复所有分组
+  restoreAllMocks();
+});
+```
+
+通过分组，你可以更灵活地管理和控制 mock 数据，特别是在复杂的测试场景中。
+
 
 
 ### 清理 mock
@@ -187,6 +218,16 @@ it('should test create koa app with new mode with mock', async () => {
 });
 ```
 
+从 `3.19.0` 开始，支持指定 group 清理。
+
+```typescript
+import { restoreMocks } from '@midwayjs/mock';
+
+it('should test create koa app with new mode with mock', async () => {
+  restoreMocks('group1');();
+  // ...
+});
+```
 
 
 ## 标准 Mock 服务
@@ -387,4 +428,5 @@ export class InitDataMock implements ISimulation {
   }
 }
 ```
+
 
