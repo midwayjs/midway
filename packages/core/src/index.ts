@@ -87,3 +87,4 @@ export { PathFileUtil } from './util/pathFileUtil';
 export { FileUtils } from './util/fs';
 export { FORMAT } from './util/format';
 export { ServerResponse, HttpServerResponse } from './response/index';
+export { MidwayPerformanceManager } from './common/performanceManager';

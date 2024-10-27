@@ -13,6 +13,7 @@ import { MidwayConfigService } from './configService';
 import { debuglog } from 'util';
 import { MidwayMockService } from './mockService';
 import { MidwayHealthService } from './healthService';
+import { MidwayInitializerPerformanceManager } from '../common/performanceManager';
 const debug = debuglog('midway:debug');
 
 @Provide()
@@ -195,9 +196,18 @@ export class MidwayLifeCycleService {
         debug(
           `[core]: Lifecycle run ${cycle.instance.constructor.name} ${lifecycle}`
         );
-        return this.applicationContext[lifecycle](
+        MidwayInitializerPerformanceManager.lifecycleStart(
+          cycle.namespace,
+          lifecycle
+        );
+        const result = await this.applicationContext[lifecycle](
           cycle.instance[lifecycle].bind(cycle.instance)
         );
+        MidwayInitializerPerformanceManager.lifecycleEnd(
+          cycle.namespace,
+          lifecycle
+        );
+        return result;
       }
     }
   }
