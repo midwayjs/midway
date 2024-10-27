@@ -113,7 +113,7 @@ export class HomeController {
 
 ## MidwayConfigService
 
-Midway 内置的多环境配置服务，提供配置的加载，获取，它也是 `@Config` 装饰器的数据源。
+Midway 内置的多环境配置服务，提供配置的加载，获取它也是 `@Config` 装饰器的数据源。
 
 可以通过注入获取。
 
@@ -337,17 +337,15 @@ API 如下
 
 | API                                          | 返回类型 | 描述                               |
 | -------------------------------------------- | -------- | ---------------------------------- |
-| mockClassProperty(clzz, propertyName, value) |          | mock 一个class 上的属性（方法 ）   |
-| mockProperty(obj, key, value)                |          | mock 一个普通对象上的属性（方法 ） |
-| mockContext(app, key, vlue)                  |          | mock 上下文对象上的属性            |
-| restore()                                    |          | 清空所有 mock 数据                 |
-
+| mockClassProperty(clzz, propertyName, value, group?) |          | mock 一个 class 上的属性（方法），支持分组，默认分组为 `default` |
+| mockProperty(obj, key, value, group?)        |          | mock 一个普通对象上的属性（方法），支持分组，默认分组为 `default` |
+| mockContext(app, key, value, group?)         |          | mock 上下文对象上的属性，支持分组，默认分组为 `default` |
+| restore(group?)                              |          | 恢复指定分组的 mock 数据，未指定则恢复所有 |
+| restoreAll()                                 |          | 清空所有 mock 数据                 |
 
 ### mockClassProperty
 
-用于模拟类的某个属性或者方法。
-
-比如某个类。
+用于模拟类的某个属性或者方法。支持通过 `group` 参数指定分组。如果不传 `group` 参数，默认使用 `default` 分组。
 
 ```typescript
 @Provide()
@@ -372,15 +370,15 @@ class TestMockService {
   mockService: MidwayMockService;
 
   mock() {
-    // 模拟方法
+    // 模拟属性，使用默认分组
     this.mockService.mockClassProperty(UserService, 'getUser', async () => {
       return 'midway';
     });
 
-    // 模拟属性
+    // 模拟属性，指定分组
     this.mockService.mockClassProperty(UserService, 'data', {
       bbb: '1'
-    });
+    }, 'group2');
   }
 }
 ```
@@ -389,7 +387,7 @@ class TestMockService {
 
 ### mockProperty
 
-使用 `mockProperty` 方法来模拟对象的属性。
+使用 `mockProperty` 方法来模拟对象的属性。支持通过 `group` 参数指定分组。
 
 ```typescript
 import { MidwayMockService, Provide, Inject } from '@midwayjs/core';
@@ -401,14 +399,16 @@ class TestMockService {
 
   mock() {
     const a = {};
-    // 模拟属性
+    // 默认分组
     this.mockService.mockProperty(a, 'name', 'hello');
+    // 模拟属性，自定义分组
+    this.mockService.mockProperty(a, 'name', 'hello', 'group1');
     // a['name'] => 'hello'
 
     // 模拟方法
     this.mockService.mockProperty(a, 'getUser', async () => {
       return 'midway';
-    });
+    }, 'group2');
     // await a.getUser() => 'midway'
   }
 }
@@ -419,7 +419,7 @@ class TestMockService {
 
 ### mockContext
 
-由于 Midway 的 Context 和 app 关联，所以在模拟的时候需要传入 app 实例。
+由于 Midway 的 Context 和 app 关联，所以在模拟的时候需要传入 app 实例。支持通过 `group` 参数指定分组。
 
 使用 `mockContext` 方法来模拟上下文。
 
@@ -435,8 +435,10 @@ export class MainConfiguration {
   app;
 
   async onReady() {
-    // 模拟上下文
-    mockContext(app, 'user', 'midway');
+    // 模拟上下文， 默认分组
+    this.mockService.mockContext(app, 'user', 'midway');
+    // 自定义分组
+    this.mockService.mockContext(app, 'user', 'midway', 'group1');
   }
 }
 
@@ -458,9 +460,9 @@ export class MainConfiguration {
 
   async onReady() {
     // 模拟上下文
-    mockContext(app, (ctx) => {
+    this.mockService.mockContext(app, (ctx) => {
       ctx.user = 'midway';
-    });
+    }, 'group2');
   }
 }
 
@@ -639,3 +641,5 @@ export default {
 ```
 
 健康检查的执行端在业务或者组件的生命周期中实现，具体请查看 [生命周期](/docs/lifecycle#onhealthcheck)。
+
+

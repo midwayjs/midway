@@ -167,4 +167,20 @@ describe('/service/mockService.test.ts', () => {
 
     expect(mockService.isMocked(obj, 'method', 'testGroup')).toBeFalsy();
   });
+
+  it('should test mock without specifying group', async () => {
+    const obj = { method: () => 'original' };
+
+    // 不传 group，使用默认分组
+    mockService.mockProperty(obj, 'method', () => 'mocked');
+
+    expect(mockService.isMocked(obj, 'method')).toBeTruthy();
+    expect(obj.method()).toEqual('mocked');
+
+    // 恢复默认分组
+    mockService.restore();
+
+    expect(mockService.isMocked(obj, 'method')).toBeFalsy();
+    expect(obj.method()).toEqual('original');
+  });
 });
