@@ -31,7 +31,10 @@ import * as util from 'util';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 import { join } from 'path';
 import { MidwayHealthService } from './service/healthService';
-import { MidwayInitializerPerformanceManager } from './common/performanceManager';
+import {
+  MidwayInitializerPerformanceManager,
+  MidwayPerformanceManager,
+} from './common/performanceManager';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -155,8 +158,7 @@ export async function destroyGlobalApplicationContext(
   await applicationContext.stop();
   clearBindContainer();
   loggerFactory.close();
-  performance.clearMarks();
-  performance.clearMeasures();
+  MidwayPerformanceManager.cleanAll();
 
   global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
   global['MIDWAY_MAIN_FRAMEWORK'] = undefined;

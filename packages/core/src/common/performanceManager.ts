@@ -10,11 +10,10 @@ export class MidwayPerformanceManager {
     INITIALIZE: 'MidwayInitialize',
   };
   private observer: PerformanceObserver | null = null;
-  private group: string;
+  private marks: Set<string> = new Set();
+  private measures: Set<string> = new Set();
 
-  private constructor(group: string) {
-    this.group = group;
-  }
+  private constructor(private readonly group: string) {}
 
   static getInstance(group: string): MidwayPerformanceManager {
     if (!this.instances.has(group)) {
@@ -28,16 +27,21 @@ export class MidwayPerformanceManager {
   }
 
   public markStart(key: string) {
-    performance.mark(this.formatKey(key, 'start'));
+    const markKey = this.formatKey(key, 'start');
+    performance.mark(markKey);
+    this.marks.add(markKey);
   }
 
   public markEnd(key: string) {
-    performance.mark(this.formatKey(key, 'end'));
-    performance.measure(
-      `${this.group}:${key}`,
-      this.formatKey(key, 'start'),
-      this.formatKey(key, 'end')
-    );
+    const startKey = this.formatKey(key, 'start');
+    const endKey = this.formatKey(key, 'end');
+    const measureKey = `${this.group}:${key}`;
+
+    performance.mark(endKey);
+    this.marks.add(endKey);
+
+    performance.measure(measureKey, startKey, endKey);
+    this.measures.add(measureKey);
   }
 
   public observeMeasure(
@@ -71,6 +75,33 @@ export class MidwayPerformanceManager {
 
   public getGroup() {
     return this.group;
+  }
+
+  public clean() {
+    this.marks.forEach(mark => {
+      try {
+        performance.clearMarks(mark);
+      } catch (error) {
+        console.warn(`Failed to clear mark ${mark}: ${error}`);
+      }
+    });
+    this.marks.clear();
+
+    this.measures.forEach(measure => {
+      try {
+        performance.clearMeasures(measure);
+      } catch (error) {
+        console.warn(`Failed to clear measure ${measure}: ${error}`);
+      }
+    });
+    this.measures.clear();
+
+    this.disconnect();
+  }
+
+  public static cleanAll() {
+    this.instances.forEach(instance => instance.clean());
+    this.instances.clear();
   }
 }
 
