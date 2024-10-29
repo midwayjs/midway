@@ -11,45 +11,126 @@ import {
   MidwayInvokeForbiddenError,
 } from '@midwayjs/core';
 import {
+  IKafkaSubscriber,
   IMidwayConsumerConfig,
   IMidwayKafkaApplication,
   IMidwayKafkaContext,
 } from './interface';
 import { KafkaConsumerServer } from './kafka';
+import { KAFKA_DECORATOR_KEY } from './decorator';
+import {
+  ConsumerConfig,
+  ConsumerRunConfig,
+  ConsumerSubscribeTopic,
+  ConsumerSubscribeTopics,
+  Kafka,
+  KafkaConfig,
+  Consumer,
+} from 'kafkajs';
 
+/**
+ * 1、解决 sub 多实例的问题, 用类似 mqtt 的 sub 方案配置
+ * 2、解决不能多个文件订阅的问题， 用 ref(‘xxx') 的方式
+ * 3、考虑复用现有 kafka 实例的问题，提前创建好 kafka 实例，但是不做 connect
+ * 4、consumer 上有方法，也要考虑怎么拿出来，加一个 @InjectConsumer('xxx') 的装饰器
+ */
 @Framework()
 export class MidwayKafkaFramework extends BaseFramework<
   any,
   IMidwayKafkaContext,
   any
 > {
+  protected kafkaMap: Map<string, Kafka> = new Map();
+  protected subscriberMap: Map<string, Consumer> = new Map();
   configure() {
     return this.configService.getConfiguration('kafka');
   }
 
   async applicationInitialize() {
     // Create a connection manager
-    this.app = new KafkaConsumerServer({
-      logger: this.logger,
-      ...this.configurationOptions,
-    }) as unknown as IMidwayKafkaApplication;
-  }
-
-  public async run(): Promise<void> {
-    try {
-      await this.app.connect(
-        this.configurationOptions.kafkaConfig,
-        this.configurationOptions.consumerConfig
-      );
-      await this.loadSubscriber();
-      this.logger.info('Kafka consumer server start success');
-    } catch (error) {
-      this.logger.error('Kafka consumer connect fail', error);
-      await this.app.closeConnection();
+    if (this.configurationOptions['kafkaConfig']) {
+      this.app = new KafkaConsumerServer({
+        logger: this.logger,
+        ...this.configurationOptions,
+      }) as unknown as IMidwayKafkaApplication;
+    } else {
+      this.app = {} as any;
     }
   }
 
-  private async loadSubscriber() {
+  public async run(): Promise<void> {
+    if (this.configurationOptions['kafkaConfig']) {
+      try {
+        await this.app.connect(
+          this.configurationOptions.kafkaConfig,
+          this.configurationOptions.consumerConfig
+        );
+        await this.loadLegacySubscriber();
+        this.logger.info('Kafka consumer server start success');
+      } catch (error) {
+        this.logger.error('Kafka consumer connect fail', error);
+        await this.app.closeConnection();
+      }
+    } else {
+      const { sub } = this.configurationOptions;
+      const subscriberMap = {};
+      // find subscriber
+      const subscriberModules = listModule(KAFKA_DECORATOR_KEY);
+      for (const subscriberModule of subscriberModules) {
+        const subscriberName = getClassMetadata(
+          KAFKA_DECORATOR_KEY,
+          subscriberModule
+        ) as string;
+        subscriberMap[subscriberName] = subscriberModule;
+      }
+
+      for (const customKey in sub) {
+        await this.createSubscriber(
+          sub[customKey].connectionOptions,
+          sub[customKey].consumerOptions,
+          sub[customKey].subscribeOptions,
+          sub[customKey].consumerRunConfig,
+          subscriberMap[customKey],
+          customKey
+        );
+      }
+    }
+  }
+
+  public async createSubscriber(
+    connectionOptions: KafkaConfig,
+    consumerOptions: ConsumerConfig,
+    subscribeOptions: ConsumerSubscribeTopics | ConsumerSubscribeTopic,
+    consumerRunConfig: ConsumerRunConfig,
+    ClzProvider: new () => IKafkaSubscriber,
+    clientName?: string
+  ) {
+    const client = new Kafka(connectionOptions);
+    const consumer = client.consumer(consumerOptions);
+    await consumer.connect();
+    await consumer.subscribe(subscribeOptions);
+
+    this.kafkaMap.set(clientName, client);
+    this.subscriberMap.set(clientName, consumer);
+
+    const runMethod = ClzProvider.prototype['eachBatch']
+      ? 'eachBatch'
+      : 'eachMessage';
+
+    await consumer.run({
+      eachBatch: async payload => {
+        const ctx = this.app.createAnonymousContext();
+        const fn = await this.applyMiddleware(async ctx => {
+          const instance = await ctx.requestContext.getAsync(ClzProvider);
+          return await instance[runMethod].call(instance, payload, ctx);
+        });
+        return await fn(ctx);
+      },
+      ...consumerRunConfig,
+    });
+  }
+
+  private async loadLegacySubscriber() {
     const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
       const metadata: ConsumerMetadata.ConsumerMetadata = getClassMetadata(
         MS_CONSUMER_KEY,
@@ -164,7 +245,12 @@ export class MidwayKafkaFramework extends BaseFramework<
   }
 
   protected async beforeStop(): Promise<void> {
-    await this.app.close();
+    if (this.app.close) {
+      await this.app.close();
+    }
+    for (const consumer of this.subscriberMap.values()) {
+      await consumer.disconnect();
+    }
   }
 
   public getFrameworkType(): MidwayFrameworkType {

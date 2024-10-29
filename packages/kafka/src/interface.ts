@@ -2,19 +2,23 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction,
-} from '@midwayjs/core';
-import { Kafka, KafkaConfig } from 'kafkajs';
+  NextFunction as BaseNextFunction, ServiceFactoryConfigOption
+} from "@midwayjs/core";
+import {
+  ConsumerConfig,
+  ConsumerRunConfig, ConsumerSubscribeTopic, ConsumerSubscribeTopics,
+  EachBatchHandler,
+  EachMessageHandler,
+  Kafka,
+  KafkaConfig,
+  ProducerConfig
+} from 'kafkajs';
 
 export interface IKafkaApplication {
 }
 
 export type IMidwayKafkaApplication = IMidwayApplication<IMidwayKafkaContext> &
   IKafkaApplication;
-
-export interface IMidwayKafkaConfigurationOptions
-  extends IConfigurationOptions,
-    KafkaConfig {}
 
 export type IMidwayKafkaContext = IMidwayContext<{
   topic: any;
@@ -35,4 +39,24 @@ export interface IMidwayConsumerConfig {
   topic: string;
   subscription: any;
   runConfig: any;
+}
+
+export interface IMidwayKafkaConfigurationOptions extends IConfigurationOptions {
+  sub: {
+    [name: string]: Partial<{
+      connectionOptions: KafkaConfig;
+      consumerOptions: ConsumerConfig;
+      subscribeOptions: ConsumerSubscribeTopics | ConsumerSubscribeTopic;
+      consumerRunConfig: ConsumerRunConfig;
+    }>;
+  },
+  pub: ServiceFactoryConfigOption<Partial<{
+    connectOptions: KafkaConfig;
+    producerOptions: ProducerConfig;
+  }>>
+}
+
+export interface IKafkaSubscriber {
+  eachBatch?: EachBatchHandler;
+  eachMessage?: EachMessageHandler;
 }

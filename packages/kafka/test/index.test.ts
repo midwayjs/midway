@@ -127,4 +127,36 @@ describe('/test/index.test.ts', () => {
     await closeApp(app);
     expect([1, 2]).toContain(app.getAttr('total'))
   });
+
+
+  describe('new features', () => {
+    it('should test create producer and consumer with the multi different topic', async () => {
+      // create a producer
+      const producer = await createKafkaProducer({
+        kafkaConfig: {
+          clientId: 'my-app',
+          brokers: [process.env.KAFKA_BROKERS as string || 'localhost:9092'],
+        },
+        mock: false,
+      });
+      await producer.connect();
+      const app = await creatApp('base-app-multi-different-topic-new');
+      await sleep(3000);
+      // send data to topic
+      await producer.send({
+        // compression: CompressionTypes.GZIP,
+        topic: 'topic-test',
+        messages: [{ key: 'message-key1', value: 'hello consumer 11 !' }],
+      });
+      await producer.send({
+        // compression: CompressionTypes.GZIP,
+        topic: 'topic-test2',
+        messages: [{ key: 'message-key2', value: 'hello consumer 22 !' }],
+      });
+      await sleep(3000);
+      await producer.disconnect();
+      await closeApp(app);
+      expect(app.getAttr('total')).toEqual(2);
+    });
+  })
 });
