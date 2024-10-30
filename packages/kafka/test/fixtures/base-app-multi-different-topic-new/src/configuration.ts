@@ -16,8 +16,7 @@ export class UserConsumer implements IKafkaSubscriber {
 
   async eachMessage(payload: EachMessagePayload) {
     const message = payload.message;
-    console.info('gotData info');
-    this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
+    this.logger.info('test 1 output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
     this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
   }
 }
@@ -35,8 +34,7 @@ export class UserConsumer2 implements IKafkaSubscriber {
 
   async eachMessage(payload: EachMessagePayload) {
     const message = payload.message;
-    console.info('gotData2 info');
-    this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
+    this.logger.info('test 2 output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
     this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
   }
 }
@@ -56,21 +54,16 @@ export class UserConsumer2 implements IKafkaSubscriber {
                 groupId: 'groupId-test',
               },
               subscribeOptions: {
-                topics: ['topic-test'],
-                fromBeginning: true
+                topics: ['topic-test-1'],
               }
             },
             sub2: {
-              connectionOptions: {
-                clientId: 'my-app',
-                brokers: [process.env.KAFKA_URL || 'localhost:9092'],
-              },
+              instanceRef: 'sub1',
               consumerOptions: {
-                groupId: 'groupId-test',
+                groupId: 'groupId-test-2',
               },
               subscribeOptions: {
-                topics: ['topic-test2'],
-                fromBeginning: true
+                topics: ['topic-test-2'],
               }
             }
           }

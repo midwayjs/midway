@@ -145,12 +145,12 @@ describe('/test/index.test.ts', () => {
       // send data to topic
       await producer.send({
         // compression: CompressionTypes.GZIP,
-        topic: 'topic-test',
+        topic: 'topic-test-1',
         messages: [{ key: 'message-key1', value: 'hello consumer 11 !' }],
       });
       await producer.send({
         // compression: CompressionTypes.GZIP,
-        topic: 'topic-test2',
+        topic: 'topic-test-2',
         messages: [{ key: 'message-key2', value: 'hello consumer 22 !' }],
       });
       await sleep(3000);

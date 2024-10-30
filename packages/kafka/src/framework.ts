@@ -9,6 +9,8 @@ import {
   MSListenerType,
   MS_CONSUMER_KEY,
   MidwayInvokeForbiddenError,
+  ILogger,
+  Logger,
 } from '@midwayjs/core';
 import {
   IKafkaSubscriber,
@@ -26,7 +28,23 @@ import {
   Kafka,
   KafkaConfig,
   Consumer,
+  logLevel,
 } from 'kafkajs';
+
+const toMidwayLogLevel = level => {
+  switch (level) {
+    case logLevel.NOTHING:
+      return 'none';
+    case logLevel.ERROR:
+      return 'error';
+    case logLevel.WARN:
+      return 'warn';
+    case logLevel.INFO:
+      return 'info';
+    case logLevel.DEBUG:
+      return 'debug';
+  }
+};
 
 /**
  * 1、解决 sub 多实例的问题, 用类似 mqtt 的 sub 方案配置
@@ -42,15 +60,29 @@ export class MidwayKafkaFramework extends BaseFramework<
 > {
   protected kafkaMap: Map<string, Kafka> = new Map();
   protected subscriberMap: Map<string, Consumer> = new Map();
+  protected LogCreator: any;
   configure() {
     return this.configService.getConfiguration('kafka');
   }
 
+  @Logger('kafkaLogger')
+  kafKaLogger: ILogger;
+
   async applicationInitialize() {
+    this.LogCreator = logLevel => {
+      const logger = this.kafKaLogger;
+
+      return ({ level, log }) => {
+        const lvl = toMidwayLogLevel(level);
+        const { message, ...extra } = log;
+        logger?.[lvl](message, extra);
+      };
+    };
+
     // Create a connection manager
     if (this.configurationOptions['kafkaConfig']) {
       this.app = new KafkaConsumerServer({
-        logger: this.logger,
+        logCreator: this.LogCreator,
         ...this.configurationOptions,
       }) as unknown as IMidwayKafkaApplication;
     } else {
@@ -66,9 +98,9 @@ export class MidwayKafkaFramework extends BaseFramework<
           this.configurationOptions.consumerConfig
         );
         await this.loadLegacySubscriber();
-        this.logger.info('Kafka consumer server start success');
+        this.kafKaLogger.info('Kafka consumer server start success');
       } catch (error) {
-        this.logger.error('Kafka consumer connect fail', error);
+        this.kafKaLogger.error('Kafka consumer connect fail', error);
         await this.app.closeConnection();
       }
     } else {
@@ -91,7 +123,8 @@ export class MidwayKafkaFramework extends BaseFramework<
           sub[customKey].subscribeOptions,
           sub[customKey].consumerRunConfig,
           subscriberMap[customKey],
-          customKey
+          customKey,
+          sub[customKey].instanceRef
         );
       }
     }
@@ -103,9 +136,19 @@ export class MidwayKafkaFramework extends BaseFramework<
     subscribeOptions: ConsumerSubscribeTopics | ConsumerSubscribeTopic,
     consumerRunConfig: ConsumerRunConfig,
     ClzProvider: new () => IKafkaSubscriber,
-    clientName?: string
+    clientName?: string,
+    instanceRef?: string
   ) {
-    const client = new Kafka(connectionOptions);
+    let client;
+    if (instanceRef) {
+      client = this.kafkaMap.get(instanceRef);
+    } else {
+      client = new Kafka({
+        ...connectionOptions,
+        logCreator: this.LogCreator,
+      });
+    }
+
     const consumer = client.consumer(consumerOptions);
     await consumer.connect();
     await consumer.subscribe(subscribeOptions);
@@ -117,17 +160,20 @@ export class MidwayKafkaFramework extends BaseFramework<
       ? 'eachBatch'
       : 'eachMessage';
 
-    await consumer.run({
-      eachBatch: async payload => {
-        const ctx = this.app.createAnonymousContext();
-        const fn = await this.applyMiddleware(async ctx => {
-          const instance = await ctx.requestContext.getAsync(ClzProvider);
-          return await instance[runMethod].call(instance, payload, ctx);
-        });
-        return await fn(ctx);
-      },
+    const runConfig = {
       ...consumerRunConfig,
-    });
+    };
+    runConfig[runMethod] = async payload => {
+      const ctx = this.app.createAnonymousContext();
+      const fn = await this.applyMiddleware(async ctx => {
+        ctx.payload = payload;
+        const instance = await ctx.requestContext.getAsync(ClzProvider);
+        return await instance[runMethod].call(instance, payload, ctx);
+      });
+      return await fn(ctx);
+    };
+
+    await consumer.run(runConfig);
   }
 
   private async loadLegacySubscriber() {
@@ -240,14 +286,19 @@ export class MidwayKafkaFramework extends BaseFramework<
     }
   }
 
+  public getSubscriber(subscriberNameOrInstanceName: string) {
+    return this.subscriberMap.get(subscriberNameOrInstanceName);
+  }
+
+  public getConnectionInstance(instanceName: string) {
+    return this.kafkaMap.get(instanceName);
+  }
+
   public getFrameworkName() {
     return 'midway:kafka';
   }
 
   protected async beforeStop(): Promise<void> {
-    if (this.app.close) {
-      await this.app.close();
-    }
     for (const consumer of this.subscriberMap.values()) {
       await consumer.disconnect();
     }
