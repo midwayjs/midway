@@ -83,7 +83,6 @@ export class MidwayKafkaFramework extends BaseFramework<
     if (this.configurationOptions['kafkaConfig']) {
       this.app = new KafkaConsumerServer({
         logger: this.kafKaLogger,
-        logCreator: this.LogCreator,
         ...this.configurationOptions,
       }) as unknown as IMidwayKafkaApplication;
     } else {

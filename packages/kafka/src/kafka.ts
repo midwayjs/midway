@@ -4,12 +4,10 @@ import { EventEmitter } from 'stream';
 
 export class KafkaConsumerServer extends EventEmitter {
   protected loggers: ILogger;
-  protected logCreator: any;
   public connection: Consumer = null;
 
   constructor(options: any = {}) {
     super();
-    this.logCreator = options.logCreator;
     this.loggers = options.logger;
     this.bindError();
   }
@@ -21,10 +19,7 @@ export class KafkaConsumerServer extends EventEmitter {
   }
 
   async connect(options: KafkaConfig, consumerOptions: ConsumerConfig) {
-    this.connection = new Kafka({
-      logCreator: this.logCreator,
-      ...options,
-    }).consumer(consumerOptions);
+    this.connection = new Kafka(options).consumer(consumerOptions);
     this.connection.on('consumer.connect', () => {
       this.loggers.info('Kafka consumer connected!');
     });
