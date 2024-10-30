@@ -82,6 +82,7 @@ export class MidwayKafkaFramework extends BaseFramework<
     // Create a connection manager
     if (this.configurationOptions['kafkaConfig']) {
       this.app = new KafkaConsumerServer({
+        logger: this.kafKaLogger,
         logCreator: this.LogCreator,
         ...this.configurationOptions,
       }) as unknown as IMidwayKafkaApplication;
