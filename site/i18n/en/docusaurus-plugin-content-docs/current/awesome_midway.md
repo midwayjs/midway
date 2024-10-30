@@ -4,18 +4,16 @@ The following lists high-quality community projects related to Midwayjs
 
 ## Microservices
 
-| Name                                         | Author      | Description                                                                                                                                                                                         |
-| -------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                                                                                                                                                              |
-| [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                                                                                                                                                     |
-| [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components                                                                                                                                   |
-| [@mwcp/cache][@mwcp/cache]                   | waitingsong | midway Cache Component supports [`Cacheable`][Cacheable], [`CacheEvict`][CacheEvict], [`CachePut`][CachePut] decorators and supports generics for [obtaining method parameter type][cache-generics] |
-| [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `Transactional` decorator, intergrated [OpenTelemetry] trace                                                               |
-| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component supports [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] decorators and supports generics for [obtaining method parameter type][otel-generics]  |
-| [@mwcp/jwt][@mwcp/jwt]                       | waitingsong | midway JWT component supports [`Public`][jwt-public] decorator                                                                                                                                      |
-
-
-|  [@mwcp/paradedb][@mwcp/paradedb]                    | waitingsong | midway [ParadeDb] component. Postgres for Search & Analytics —— Modern Elasticsearch Alternative built on Postgres  |
+| Name                                         | Author      | Description                                                                                                                                                                                                                                                       |
+| -------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [@letscollab/midway-nacos][@lnulls]          | Nawbc       | midway nacos component                                                                                                                                                                                                                                            |
+| [midway-elasticsearch][midway-elasticsearch] | ddzyan      | Mi1dway elasticsearch component                                                                                                                                                                                                                                   |
+| [midway-apollo][midway-apollo]               | helloHT     | Midway Ctrip Asynchronous Dynamic Configuration apollo Components                                                                                                                                                                                                 |
+| [@mwcp/cache][@mwcp/cache]                   | waitingsong | midway Cache Component supports [`Cacheable`][Cacheable], [`CacheEvict`][CacheEvict], [`CachePut`][CachePut] decorators and supports generics for [obtaining method parameter type][cache-generics]                                                               |
+| [@mwcp/kmore][@mwcp/kmore]                   | waitingsong | midway Database QueryBuilder base on [Knex], declarative transaction via `Transactional` decorator, intergrated [OpenTelemetry] trace                                                                                                                             |
+| [@mwcp/otel][@mwcp/otel]                     | waitingsong | midway [OpenTelemetry] component supports HTTP and [gRPC (Unary)], supports [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] decorators and supports generics for [obtaining method parameter type][otel-generics]                              |
+| [@mwcp/jwt][@mwcp/jwt]                       | waitingsong | midway JWT component supports [`Public`][jwt-public] decorator                                                                                                                                                                                                    |
+| [@mwcp/paradedb][@mwcp/paradedb]             | waitingsong | midway [ParadeDb] component. Postgres for Search & Analytics —— Modern Elasticsearch Alternative built on Postgres                                                                                                                                                |
 | [@mwcp/pgmq][@mwcp/pgmq]                     | waitingsong | midway [pqmg-js] component supports [`Consumer`][Consumer], [`PgmqListener`][PgmqListener] decorators. [PGMQ] is a lightweight message queue based on [PG] database, with native support for message persistence and delayed messages, similar to AWS SQS or RSMQ |
 
 | [midway-throttler][midway-throttler]         | larryzhuo   | midway throttler current limiting component                                                                                                                                                         |
@@ -98,3 +96,5 @@ Welcome everyone to contribute to the community, edit this page and add your fav
 
 [Knex]: https://knexjs.org/
 [OpenTelemetry]: https://github.com/open-telemetry
+
+[gRPC (Unary)]: https://github.com/midwayjs/midway/tree/main/packages/grpc
