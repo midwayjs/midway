@@ -65,6 +65,10 @@ export interface IGRPCClientServiceOptions extends IGRPCServiceOptions {
    * Client options. Optional.
    */
   clientOptions?: ClientOptions;
+  /**
+   * Service name. Optional.
+   */
+  service?: string;
 }
 
 export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {

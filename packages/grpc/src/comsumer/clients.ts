@@ -135,5 +135,10 @@ export const createGRPCConsumer = async <T>(
   };
 
   await clients.initService();
+  if (typeof options.service === 'string' && options.service) {
+    const pkg = clients.grpcConfig.services[0].package
+    const name = options.service.startsWith(`${pkg}.`) ? options.service : `${pkg}.${options.service}`
+    return clients.getService(name);
+  }
   return Array.from(clients.values())[0];
 };
