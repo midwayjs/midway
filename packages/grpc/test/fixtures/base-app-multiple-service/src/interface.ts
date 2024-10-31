@@ -15,6 +15,13 @@ export namespace hero {
     id?: number;
     name?: string;
   }
+
+  export interface HeroService2 {
+    findOne2(data: HeroById, metadata?: Metadata): Promise<Hero>;
+  }
+  export interface HeroService2Client {
+    findOne2(options?: IClientOptions): IClientUnaryService<HeroById, Hero>;
+  }
 }
 
 export namespace helloworld {
