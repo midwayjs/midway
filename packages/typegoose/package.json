@@ -28,6 +28,6 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@typegoose/typegoose": "12.8.0",
-    "mongoose": "8.8.0"
+    "mongoose": "8.7.3"
   }
 }
