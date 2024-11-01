@@ -51,10 +51,11 @@ export class UserConsumer2 implements IKafkaSubscriber {
                 brokers: [process.env.KAFKA_URL || 'localhost:9092'],
               },
               consumerOptions: {
-                groupId: 'groupId-test',
+                groupId: 'groupId-test-1',
               },
               subscribeOptions: {
                 topics: ['topic-test-1'],
+                fromBeginning: false,
               }
             },
             sub2: {
@@ -64,6 +65,7 @@ export class UserConsumer2 implements IKafkaSubscriber {
               },
               subscribeOptions: {
                 topics: ['topic-test-2'],
+                fromBeginning: false,
               }
             }
           }
