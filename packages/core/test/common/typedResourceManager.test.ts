@@ -36,7 +36,7 @@ describe('test/common/typedResourceManager.test.ts', () => {
   it('should start resources', async () => {
     await typedResourceManager.init();
     await typedResourceManager.start();
-    expect(mockResourceStart).toHaveBeenCalledWith('mockResource', { configKey: 'configValue' });
+    expect(mockResourceStart).toHaveBeenCalledWith('mockResource', { configKey: 'configValue' }, 'mockBindingResult');
   });
 
   it('should destroy resources', async () => {
@@ -48,7 +48,7 @@ describe('test/common/typedResourceManager.test.ts', () => {
   it('should start resources in parallel', async () => {
     await typedResourceManager.init();
     await typedResourceManager.startParallel();
-    expect(mockResourceStart).toHaveBeenCalledWith('mockResource', { configKey: 'configValue' });
+    expect(mockResourceStart).toHaveBeenCalledWith('mockResource', { configKey: 'configValue' }, 'mockBindingResult');
   });
 
   it('should destroy resources in parallel', async () => {
