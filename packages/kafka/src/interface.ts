@@ -5,10 +5,12 @@ import {
   NextFunction as BaseNextFunction, ServiceFactoryConfigOption
 } from "@midwayjs/core";
 import {
+  AdminConfig,
+  Consumer,
   ConsumerConfig,
   ConsumerRunConfig, ConsumerSubscribeTopic, ConsumerSubscribeTopics,
-  EachBatchHandler,
-  EachMessageHandler,
+  EachBatchHandler, EachBatchPayload,
+  EachMessageHandler, EachMessagePayload,
   Kafka,
   KafkaConfig,
   ProducerConfig
@@ -21,10 +23,24 @@ export type IMidwayKafkaApplication = IMidwayApplication<IMidwayKafkaContext> &
   IKafkaApplication;
 
 export type IMidwayKafkaContext = IMidwayContext<{
-  topic: any;
-  partition: any;
-  message: any;
-  commitOffsets(data: any): void;
+  /**
+   * @deprecated please use `ctx.payload` instead
+   */
+  topic?: any;
+  /**
+   * @deprecated please use `ctx.payload` instead
+   */
+  partition?: any;
+  /**
+   * @deprecated please use `ctx.payload` instead
+   */
+  message?: any;
+  /**
+   * @deprecated please use `ctx.consumer.commitOffsets` instead
+   */
+  commitOffsets?(data: any): void;
+  payload: EachMessagePayload | EachBatchPayload;
+  consumer: Consumer;
 }>;
 
 export type Application = IMidwayKafkaApplication;
@@ -41,19 +57,50 @@ export interface IMidwayConsumerConfig {
   runConfig: any;
 }
 
+/**
+ * The options for the kafka consumer initialization in midway
+ */
+export interface IKafkaConsumerInitOptions {
+  /**
+   * The connection options for the kafka instance
+   */
+  connectionOptions: KafkaConfig;
+  /**
+   * The consumer options for the kafka consumer
+   */
+  consumerOptions: ConsumerConfig;
+  subscribeOptions: ConsumerSubscribeTopics | ConsumerSubscribeTopic;
+  consumerRunConfig: ConsumerRunConfig;
+  kafkaInstanceRef?: string;
+}
+
+/**
+ * The options for the kafka producer initialization in midway
+ */
+export interface IMidwayKafkaProducerInitOptions {
+  connectionOptions: KafkaConfig;
+  producerOptions: ProducerConfig;
+  kafkaInstanceRef?: string;
+}
+
+/**
+ * The options for the kafka admin initialization in midway
+ */
+export interface IMidwayKafkaAdminInitOptions {
+  kafkaInstanceRef?: string;
+  connectionOptions: KafkaConfig;
+  /**
+   * The options for the kafka admin initialization
+   */
+  adminOptions: AdminConfig;
+}
+
 export interface IMidwayKafkaConfigurationOptions extends IConfigurationOptions {
-  sub: {
-    [name: string]: Partial<{
-      connectionOptions: KafkaConfig;
-      consumerOptions: ConsumerConfig;
-      subscribeOptions: ConsumerSubscribeTopics | ConsumerSubscribeTopic;
-      consumerRunConfig: ConsumerRunConfig;
-    }>;
+  consumer: {
+    [name: string]: Partial<IKafkaConsumerInitOptions>;
   },
-  pub: ServiceFactoryConfigOption<Partial<{
-    connectOptions: KafkaConfig;
-    producerOptions: ProducerConfig;
-  }>>
+  producer: ServiceFactoryConfigOption<Partial<IMidwayKafkaProducerInitOptions>>,
+  admin: ServiceFactoryConfigOption<Partial<IMidwayKafkaAdminInitOptions>>
 }
 
 export interface IKafkaSubscriber {

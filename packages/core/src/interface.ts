@@ -1246,3 +1246,5 @@ export interface ServerSendEventStreamOptions<CTX extends IMidwayContext> {
   closeEvent?: string;
   tpl?: (data: ServerSendEventMessage, ctx: CTX) => ServerSendEventMessage;
 }
+
+export type ClassType<T = any> = new (...args: any[]) => T;

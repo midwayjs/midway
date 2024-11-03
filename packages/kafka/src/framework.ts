@@ -11,8 +11,11 @@ import {
   MidwayInvokeForbiddenError,
   ILogger,
   Logger,
+  TypedResourceManager,
+  MidwayCommonError,
 } from '@midwayjs/core';
 import {
+  IKafkaConsumerInitOptions,
   IKafkaSubscriber,
   IMidwayConsumerConfig,
   IMidwayKafkaApplication,
@@ -20,16 +23,8 @@ import {
 } from './interface';
 import { KafkaConsumerServer } from './kafka';
 import { KAFKA_DECORATOR_KEY } from './decorator';
-import {
-  ConsumerConfig,
-  ConsumerRunConfig,
-  ConsumerSubscribeTopic,
-  ConsumerSubscribeTopics,
-  Kafka,
-  KafkaConfig,
-  Consumer,
-  logLevel,
-} from 'kafkajs';
+import { ConsumerRunConfig, Kafka, Consumer, logLevel } from 'kafkajs';
+import { KafkaManager } from './manager';
 
 const toMidwayLogLevel = level => {
   switch (level) {
@@ -46,21 +41,18 @@ const toMidwayLogLevel = level => {
   }
 };
 
-/**
- * 1、解决 sub 多实例的问题, 用类似 mqtt 的 sub 方案配置
- * 2、解决不能多个文件订阅的问题， 用 ref(‘xxx') 的方式
- * 3、考虑复用现有 kafka 实例的问题，提前创建好 kafka 实例，但是不做 connect
- * 4、consumer 上有方法，也要考虑怎么拿出来，加一个 @InjectConsumer('xxx') 的装饰器
- */
 @Framework()
 export class MidwayKafkaFramework extends BaseFramework<
   any,
   IMidwayKafkaContext,
   any
 > {
-  protected kafkaMap: Map<string, Kafka> = new Map();
-  protected subscriberMap: Map<string, Consumer> = new Map();
   protected LogCreator: any;
+  protected typedResourceManager: TypedResourceManager<
+    Consumer,
+    IKafkaConsumerInitOptions,
+    IKafkaSubscriber
+  >;
   configure() {
     return this.configService.getConfiguration('kafka');
   }
@@ -104,7 +96,8 @@ export class MidwayKafkaFramework extends BaseFramework<
         await this.app.closeConnection();
       }
     } else {
-      const { sub } = this.configurationOptions;
+      const { consumer } = this.configurationOptions;
+      if (!consumer) return;
       const subscriberMap = {};
       // find subscriber
       const subscriberModules = listModule(KAFKA_DECORATOR_KEY);
@@ -116,64 +109,76 @@ export class MidwayKafkaFramework extends BaseFramework<
         subscriberMap[subscriberName] = subscriberModule;
       }
 
-      for (const customKey in sub) {
-        await this.createSubscriber(
-          sub[customKey].connectionOptions,
-          sub[customKey].consumerOptions,
-          sub[customKey].subscribeOptions,
-          sub[customKey].consumerRunConfig,
-          subscriberMap[customKey],
-          customKey,
-          sub[customKey].instanceRef
-        );
-      }
-    }
-  }
+      this.typedResourceManager = new TypedResourceManager<
+        Consumer,
+        IKafkaConsumerInitOptions,
+        IKafkaSubscriber
+      >({
+        initializeValue: consumer,
+        initializeClzProvider: subscriberMap,
+        resourceInitialize: async (resourceInitializeConfig, resourceName) => {
+          let client;
+          if (resourceInitializeConfig.kafkaInstanceRef) {
+            client = KafkaManager.getInstance().getKafkaInstance(
+              resourceInitializeConfig.kafkaInstanceRef
+            );
+            if (!client) {
+              throw new MidwayCommonError(
+                `kafka instance ${resourceInitializeConfig.kafkaInstanceRef} not found`
+              );
+            }
+          } else {
+            client = new Kafka({
+              logCreator: this.LogCreator,
+              ...resourceInitializeConfig.connectionOptions,
+            });
+            KafkaManager.getInstance().addKafkaInstance(resourceName, client);
+          }
 
-  public async createSubscriber(
-    connectionOptions: KafkaConfig,
-    consumerOptions: ConsumerConfig,
-    subscribeOptions: ConsumerSubscribeTopics | ConsumerSubscribeTopic,
-    consumerRunConfig: ConsumerRunConfig,
-    ClzProvider: new () => IKafkaSubscriber,
-    clientName?: string,
-    instanceRef?: string
-  ) {
-    let client;
-    if (instanceRef) {
-      client = this.kafkaMap.get(instanceRef);
-    } else {
-      client = new Kafka({
-        ...connectionOptions,
-        logCreator: this.LogCreator,
+          const consumer = client.consumer(
+            resourceInitializeConfig.consumerOptions
+          );
+          await consumer.connect();
+          await consumer.subscribe(resourceInitializeConfig.subscribeOptions);
+          return consumer;
+        },
+        resourceBinding: async (
+          ClzProvider,
+          resourceInitializeConfig,
+          consumer
+        ): Promise<ConsumerRunConfig> => {
+          const runMethod = ClzProvider.prototype['eachBatch']
+            ? 'eachBatch'
+            : 'eachMessage';
+          const runConfig = {
+            ...resourceInitializeConfig.consumerRunConfig,
+          };
+          runConfig[runMethod] = async payload => {
+            const ctx = this.app.createAnonymousContext();
+            const fn = await this.applyMiddleware(async ctx => {
+              ctx.payload = payload;
+              ctx.consumer = consumer;
+              const instance = await ctx.requestContext.getAsync(ClzProvider);
+              return await instance[runMethod].call(instance, payload, ctx);
+            });
+            return await fn(ctx);
+          };
+          return runConfig;
+        },
+        resourceStart: async (
+          resource: Consumer,
+          resourceInitializeConfig,
+          resourceBindingResult: ConsumerRunConfig
+        ) => {
+          await resource.run(resourceBindingResult);
+        },
+        resourceDestroy: async (resource: Consumer) => {
+          await resource.disconnect();
+        },
       });
+      await this.typedResourceManager.init();
+      await this.typedResourceManager.start();
     }
-
-    const consumer = client.consumer(consumerOptions);
-    await consumer.connect();
-    await consumer.subscribe(subscribeOptions);
-
-    this.kafkaMap.set(clientName, client);
-    this.subscriberMap.set(clientName, consumer);
-
-    const runMethod = ClzProvider.prototype['eachBatch']
-      ? 'eachBatch'
-      : 'eachMessage';
-
-    const runConfig = {
-      ...consumerRunConfig,
-    };
-    runConfig[runMethod] = async payload => {
-      const ctx = this.app.createAnonymousContext();
-      const fn = await this.applyMiddleware(async ctx => {
-        ctx.payload = payload;
-        const instance = await ctx.requestContext.getAsync(ClzProvider);
-        return await instance[runMethod].call(instance, payload, ctx);
-      });
-      return await fn(ctx);
-    };
-
-    await consumer.run(runConfig);
   }
 
   private async loadLegacySubscriber() {
@@ -221,7 +226,8 @@ export class MidwayKafkaFramework extends BaseFramework<
           );
           await this.app.connection.run(
             Object.assign(e.runConfig, {
-              eachMessage: async ({ topic, partition, message }) => {
+              eachMessage: async payload => {
+                const { topic, partition, message } = payload;
                 let propertyKey: string | number;
                 for (const methodBindListeners of data) {
                   for (const listenerOptions of methodBindListeners) {
@@ -240,6 +246,8 @@ export class MidwayKafkaFramework extends BaseFramework<
                             },
                           ]);
                         },
+                        payload,
+                        consumer: this.app.connection,
                       } as unknown as IMidwayKafkaContext;
                       this.app.createAnonymousContext(ctx);
 
@@ -286,12 +294,16 @@ export class MidwayKafkaFramework extends BaseFramework<
     }
   }
 
-  public getSubscriber(subscriberNameOrInstanceName: string) {
-    return this.subscriberMap.get(subscriberNameOrInstanceName);
+  public getConsumer(subscriberNameOrInstanceName: string) {
+    if (this.typedResourceManager) {
+      return this.typedResourceManager.getResource(
+        subscriberNameOrInstanceName
+      );
+    }
   }
 
-  public getConnectionInstance(instanceName: string) {
-    return this.kafkaMap.get(instanceName);
+  public getKafka(instanceName: string) {
+    return KafkaManager.getInstance().getKafkaInstance(instanceName);
   }
 
   public getFrameworkName() {
@@ -299,8 +311,8 @@ export class MidwayKafkaFramework extends BaseFramework<
   }
 
   protected async beforeStop(): Promise<void> {
-    for (const consumer of this.subscriberMap.values()) {
-      await consumer.disconnect();
+    if (this.typedResourceManager) {
+      await this.typedResourceManager.destroy();
     }
   }
 

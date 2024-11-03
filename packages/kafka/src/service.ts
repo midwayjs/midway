@@ -1,26 +1,31 @@
 import {
   Config,
+  Destroy,
   ILogger,
   Init,
   Logger,
-  Provide,
-  Scope,
-  ScopeEnum,
+  MidwayCommonError,
   ServiceFactory,
   ServiceFactoryConfigOption,
+  Singleton,
 } from '@midwayjs/core';
-import { Producer, ProducerConfig, Kafka, KafkaConfig } from 'kafkajs';
+import { Producer, Kafka, Admin } from 'kafkajs';
+import {
+  IMidwayKafkaAdminInitOptions,
+  IMidwayKafkaProducerInitOptions,
+} from './interface';
+import { KafkaManager } from './manager';
 
-@Provide()
-@Scope(ScopeEnum.Singleton)
+@Singleton()
 export class KafkaProducerFactory extends ServiceFactory<Producer> {
   @Logger('kafkaLogger')
   logger: ILogger;
 
-  @Config('kafka.pub')
-  pubConfig: ServiceFactoryConfigOption<ProducerConfig>;
+  @Config('kafka.producer')
+  pubConfig: ServiceFactoryConfigOption<IMidwayKafkaProducerInitOptions>;
+
   getName(): string {
-    return 'kafka';
+    return 'kafka:producer';
   }
 
   @Init()
@@ -29,50 +34,88 @@ export class KafkaProducerFactory extends ServiceFactory<Producer> {
   }
 
   protected async createClient(
-    config: {
-      connectOptions: KafkaConfig;
-      producerOptions: ProducerConfig;
-    },
+    config: IMidwayKafkaProducerInitOptions,
     clientName: any
   ): Promise<Producer> {
-    const client = new Kafka(config.connectOptions).producer(
-      config.producerOptions
-    );
-    client.on('producer.connect', () => {
-      this.logger.info('[midway-kafka] producer: %s is connect', clientName);
+    const { connectionOptions, producerOptions, kafkaInstanceRef } = config;
+    let client: Kafka;
+    if (kafkaInstanceRef) {
+      client = KafkaManager.getInstance().getKafkaInstance(kafkaInstanceRef);
+      if (!client) {
+        throw new MidwayCommonError(
+          `[midway:kafka] kafka instance ${kafkaInstanceRef} not found`
+        );
+      }
+    } else {
+      client = new Kafka(connectionOptions);
+      KafkaManager.getInstance().addKafkaInstance(kafkaInstanceRef, client);
+    }
+    const producer = client.producer(producerOptions);
+
+    producer.on('producer.connect', () => {
+      this.logger.info('[midway:kafka] producer: %s is connect', clientName);
     });
-    await client.connect();
-    return client;
+    await producer.connect();
+    return producer;
   }
 
   async destroyClient(producer: Producer, name: string) {
     await producer.disconnect();
-    this.logger.info('[midway-kafka] producer: %s is close', name);
+    this.logger.info('[midway:kafka] producer: %s is close', name);
+  }
+
+  @Destroy()
+  async destroy() {
+    await super.stop();
   }
 }
-//
-// @Provide()
-// @Scope(ScopeEnum.Singleton)
-// export class DefaultKafkaProducer implements Producer {
-//   @Inject()
-//   private kafkaProducerFactory: KafkaProducerFactory;
-//
-//   protected instance: Producer;
-//
-//   @Init()
-//   async init() {
-//     this.instance = this.kafkaProducerFactory.get(
-//       this.kafkaProducerFactory.getDefaultClientName() || 'default'
-//     );
-//     if (!this.instance) {
-//       throw new MidwayCommonError('kafka default producer instance not found.');
-//     }
-//   }
-// }
-//
-// // eslint-disable-next-line @typescript-eslint/no-empty-interface
-// export interface DefaultKafkaProducer extends Producer {
-//   // empty
-// }
-//
-// delegateTargetAllPrototypeMethod(DefaultKafkaProducer, Producer);
+
+@Singleton()
+export class KafkaAdminFactory extends ServiceFactory<Admin> {
+  @Logger('kafkaLogger')
+  logger: ILogger;
+
+  @Config('kafka.admin')
+  adminConfig: ServiceFactoryConfigOption<IMidwayKafkaProducerInitOptions>;
+
+  getName(): string {
+    return 'kafka:admin';
+  }
+
+  @Init()
+  async init() {
+    await this.initClients(this.adminConfig);
+  }
+
+  protected async createClient(
+    config: IMidwayKafkaAdminInitOptions,
+    clientName: any
+  ): Promise<Admin> {
+    const { connectionOptions, adminOptions, kafkaInstanceRef } = config;
+    let client: Kafka;
+    if (kafkaInstanceRef) {
+      client = KafkaManager.getInstance().getKafkaInstance(kafkaInstanceRef);
+      if (!client) {
+        throw new MidwayCommonError(
+          `[midway:kafka] kafka instance ${kafkaInstanceRef} not found`
+        );
+      }
+    } else {
+      client = new Kafka(connectionOptions);
+      KafkaManager.getInstance().addKafkaInstance(kafkaInstanceRef, client);
+    }
+    const admin = client.admin(adminOptions);
+    await admin.connect();
+    return admin;
+  }
+
+  async destroyClient(admin: Admin, name: string) {
+    await admin.disconnect();
+    this.logger.info('[midway:kafka] admin: %s is close', name);
+  }
+
+  @Destroy()
+  async destroy() {
+    await super.stop();
+  }
+}

@@ -1,6 +1,4 @@
-import { Configuration, IMidwayContainer, Inject } from '@midwayjs/core';
-// import { KafkaProducerFactory } from './service';
-import { MidwayKafkaFramework } from './framework';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'kafka',
@@ -21,15 +19,4 @@ import { MidwayKafkaFramework } from './framework';
     },
   ],
 })
-export class KafkaConfiguration {
-  @Inject()
-  framework: MidwayKafkaFramework;
-  // factory: KafkaProducerFactory;
-  async onReady(container: IMidwayContainer) {
-    // this.factory = await container.getAsync(KafkaProducerFactory);
-  }
-
-  async onStop() {
-    // await this.factory.stop();
-  }
-}
+export class KafkaConfiguration {}
