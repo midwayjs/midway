@@ -189,6 +189,9 @@ export abstract class DataSourceManager<
   protected abstract checkConnected(dataSource: T): Promise<boolean>;
   protected abstract destroyDataSource(dataSource: T): Promise<void>;
 
+  /**
+   * Call destroyDataSource() on all data sources
+   */
   public async stop(): Promise<void> {
     const arr = Array.from(this.dataSource.values());
     await Promise.all(
