@@ -27,7 +27,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.18.0",
     "@midwayjs/mock": "^3.18.2",
-    "@typegoose/typegoose": "12.8.0",
-    "mongoose": "8.7.3"
+    "@typegoose/typegoose": "12.9.0",
+    "mongoose": "8.8.0"
   }
 }
