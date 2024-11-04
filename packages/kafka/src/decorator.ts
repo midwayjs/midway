@@ -7,10 +7,10 @@ import {
 } from '@midwayjs/core';
 export const KAFKA_DECORATOR_KEY = 'rpc:kafka';
 
-export function KafkaSubscriber(subscriberName: string): ClassDecorator {
+export function KafkaConsumer(consumerName: string): ClassDecorator {
   return target => {
     saveModule(KAFKA_DECORATOR_KEY, target);
-    saveClassMetadata(KAFKA_DECORATOR_KEY, subscriberName, target);
+    saveClassMetadata(KAFKA_DECORATOR_KEY, consumerName, target);
     Scope(ScopeEnum.Request)(target);
     Provide()(target);
   };

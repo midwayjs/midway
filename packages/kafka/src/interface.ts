@@ -2,15 +2,20 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction, ServiceFactoryConfigOption
+  NextFunction as BaseNextFunction,
+  ServiceFactoryConfigOption
 } from "@midwayjs/core";
 import {
   AdminConfig,
   Consumer,
   ConsumerConfig,
-  ConsumerRunConfig, ConsumerSubscribeTopic, ConsumerSubscribeTopics,
-  EachBatchHandler, EachBatchPayload,
-  EachMessageHandler, EachMessagePayload,
+  ConsumerRunConfig,
+  ConsumerSubscribeTopic,
+  ConsumerSubscribeTopics,
+  EachBatchHandler,
+  EachBatchPayload,
+  EachMessageHandler,
+  EachMessagePayload,
   Kafka,
   KafkaConfig,
   ProducerConfig
@@ -50,6 +55,7 @@ export type DefaultConfig = string | Kafka;
 
 /**
  * 客户端的相关配置，在midwayjs的自定义配置项
+ * @deprecated
  */
 export interface IMidwayConsumerConfig {
   topic: string;
@@ -103,7 +109,7 @@ export interface IMidwayKafkaConfigurationOptions extends IConfigurationOptions 
   admin: ServiceFactoryConfigOption<Partial<IMidwayKafkaAdminInitOptions>>
 }
 
-export interface IKafkaSubscriber {
+export interface IKafkaConsumer {
   eachBatch?: EachBatchHandler;
   eachMessage?: EachMessageHandler;
 }

@@ -16,7 +16,7 @@ import {
 } from '@midwayjs/core';
 import {
   IKafkaConsumerInitOptions,
-  IKafkaSubscriber,
+  IKafkaConsumer,
   IMidwayConsumerConfig,
   IMidwayKafkaApplication,
   IMidwayKafkaContext,
@@ -51,7 +51,7 @@ export class MidwayKafkaFramework extends BaseFramework<
   protected typedResourceManager: TypedResourceManager<
     Consumer,
     IKafkaConsumerInitOptions,
-    IKafkaSubscriber
+    IKafkaConsumer
   >;
   configure() {
     return this.configService.getConfiguration('kafka');
@@ -112,7 +112,7 @@ export class MidwayKafkaFramework extends BaseFramework<
       this.typedResourceManager = new TypedResourceManager<
         Consumer,
         IKafkaConsumerInitOptions,
-        IKafkaSubscriber
+        IKafkaConsumer
       >({
         initializeValue: consumer,
         initializeClzProvider: subscriberMap,

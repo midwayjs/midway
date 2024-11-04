@@ -1,9 +1,9 @@
 import { createKafkaProducer, createLightApp } from '@midwayjs/mock';
 import { closeApp, creatApp } from './utils';
-import { sleep } from '@midwayjs/core';
-import { IKafkaSubscriber, KafkaSubscriber } from '../src';
+import { sleep, Inject } from '@midwayjs/core';
+import { IKafkaConsumer, KafkaConsumer, Context } from '../src';
 import * as Kafka from '../src';
-import { EachMessagePayload, Kafka as KafkaJs } from 'kafkajs';
+import { EachMessagePayload, Kafka as KafkaJs, Partitioners } from 'kafkajs';
 
 describe('/test/index.test.ts', () => {
   it('should test create producer with method', async () => {
@@ -135,15 +135,15 @@ describe('/test/index.test.ts', () => {
   describe('new features', () => {
     it('should test create producer and consumer with the multi different topic', async () => {
       let total = 0;
-      @KafkaSubscriber('sub1')
-      class UserConsumer implements IKafkaSubscriber {
+      @KafkaConsumer('sub1')
+      class UserConsumer implements IKafkaConsumer {
         async eachMessage(payload: EachMessagePayload) {
           total++;
         }
       }
 
-      @KafkaSubscriber('sub2')
-      class UserConsumer2 implements IKafkaSubscriber {
+      @KafkaConsumer('sub2')
+      class UserConsumer2 implements IKafkaConsumer {
         async eachMessage(payload: EachMessagePayload) {
           total++;
         }
@@ -217,8 +217,8 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should test throw error in trigger', async () => {
-      @KafkaSubscriber('sub1')
-      class UserConsumer implements IKafkaSubscriber {
+      @KafkaConsumer('sub1')
+      class UserConsumer implements IKafkaConsumer {
         async eachMessage(payload: EachMessagePayload) {
           throw new Error('test error');
         }
@@ -371,6 +371,70 @@ describe('/test/index.test.ts', () => {
       const groups = await admin.listGroups();
       expect(groups).not.toContain('my-group');
       await closeApp(app);
-    })
+    });
+
+    it('should test share same kafka instance with consumer and producer', async () => {
+      let total = 0;
+      @KafkaConsumer('sub1')
+      class UserConsumer implements IKafkaConsumer {
+        @Inject()
+        ctx: Context;
+        async eachMessage(payload: EachMessagePayload) {
+          this.ctx.logger.info(payload.message.value?.toString());
+          total++;
+        }
+      }
+
+      const app = await createLightApp({
+        imports: [
+          Kafka,
+        ],
+        preloadModules: [UserConsumer],
+        globalConfig: {
+          kafka: {
+            consumer: {
+              sub1: {
+                connectionOptions: {
+                  clientId: 'my-app',
+                  brokers: [process.env.KAFKA_BROKERS as string || 'localhost:9092'],
+                },
+                consumerOptions: {
+                  groupId: 'groupId-test-' + Math.random(),
+                },
+                subscribeOptions: {
+                  topics: ['topic-test-1'],
+                  fromBeginning: false,
+                }
+              }
+            },
+            producer: {
+              clients: {
+                producer1: {
+                  kafkaInstanceRef: 'sub1',
+                  producerOptions: {
+                    createPartitioner: Partitioners.DefaultPartitioner,
+                  }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      await sleep(1000);
+
+      // get producer
+      const producerFactory = await app.getApplicationContext().getAsync(Kafka.KafkaProducerFactory);
+      const producer = producerFactory.get('producer1');
+      await producer.send({
+        topic: 'topic-test-1',
+        messages: [{ key: 'message-key1', value: 'hello consumer 11 !' }],
+      });
+
+      await sleep(3000);
+      expect(total).toEqual(1);
+
+      await closeApp(app);
+    });
   })
 });
