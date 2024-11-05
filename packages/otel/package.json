@@ -13,7 +13,7 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "@opentelemetry/sdk-node": "0.54.0",
+    "@opentelemetry/sdk-node": "0.54.1",
     "@opentelemetry/sdk-trace-base": "1.26.0",
     "@opentelemetry/sdk-trace-node": "1.26.0"
   },
