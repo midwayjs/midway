@@ -1,10 +1,12 @@
-import { constants, promises } from 'fs';
+import { readdirSync } from 'fs';
 
 export async function exists(p) {
-  return promises
-    .access(p, constants.F_OK)
-    .then(() => true)
-    .catch(() => false);
+  try{
+    readdirSync(p)
+    return true
+  }catch(e){
+    return false
+  }
 }
 
 export const FileUtils = {
