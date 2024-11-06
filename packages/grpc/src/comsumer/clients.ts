@@ -1,4 +1,4 @@
-import * as  assert from 'assert';
+import * as assert from 'assert';
 import {
   Config,
   Init,
@@ -60,8 +60,13 @@ export class GRPCClients extends Map {
 
         for (const methodName of Object.keys(packageDefinition[definition])) {
           const originMethod = connectionService[methodName];
-          assert(originMethod, 'No method found in proto file, path:'
-            + options.protoPath + ` method: ${methodName}, definition: ${definition}, serviceName: ${serviceName}`);
+          const msg: string[] = [
+            `No method found in proto file, path: ${options.protoPath}`,
+            `method: ${methodName}`,
+            `definition: ${definition}`,
+            `serviceName: ${serviceName}`,
+          ];
+          assert(originMethod, msg.join(', '));
 
           connectionService[methodName] = (
             clientOptions: IClientOptions = {}
@@ -136,8 +141,10 @@ export const createGRPCConsumer = async <T>(
 
   await clients.initService();
   if (typeof options.service === 'string' && options.service) {
-    const pkg = clients.grpcConfig.services[0].package
-    const name = options.service.startsWith(`${pkg}.`) ? options.service : `${pkg}.${options.service}`
+    const pkg = clients.grpcConfig.services[0].package;
+    const name = options.service.startsWith(`${pkg}.`)
+      ? options.service
+      : `${pkg}.${options.service}`;
     return clients.getService(name);
   }
   return Array.from(clients.values())[0];
