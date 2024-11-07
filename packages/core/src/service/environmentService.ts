@@ -32,6 +32,6 @@ export class MidwayEnvironmentService implements IEnvironmentService {
   }
 
   public isPkgEnvironment() {
-    return process.pkg !== undefined;
+    return typeof process.pkg !== 'undefined';
   }
 }
