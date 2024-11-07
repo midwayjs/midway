@@ -102,7 +102,7 @@ export class MidwayPerformanceManager {
 
   public static getInitialPerformanceEntries(): any[] {
     const entries: any[] = [];
-    performance.getEntries().forEach(entry => {
+    performance?.getEntries().forEach(entry => {
       if (entry.name.startsWith(this.DEFAULT_GROUP.INITIALIZE)) {
         entries.push(entry.toJSON());
       }
