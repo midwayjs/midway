@@ -170,9 +170,7 @@ function dispatch(options: DispatchOptions): Promise<unknown> {
           index: options.index,
         } as any)
       ).then(result => {
-        debug(
-          `[middleware]: out ${middlewareName} +${Date.now() - startTime}`
-        );
+        debug(`[middleware]: out ${middlewareName} +${Date.now() - startTime}`);
         return result;
       });
     }
