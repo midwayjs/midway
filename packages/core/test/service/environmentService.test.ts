@@ -8,9 +8,9 @@ describe('MidwayEnvironmentService', () => {
   });
 
   it('should return true when process.pkg is defined', () => {
-    process.pkg = {};
+    process['pkg'] = {};
     expect(environmentService.isPkgEnvironment()).toBe(true);
-    delete process.pkg;
+    delete process['pkg'];
   });
 
   it('should return false when process.pkg is undefined', () => {
