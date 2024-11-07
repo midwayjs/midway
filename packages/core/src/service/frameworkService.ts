@@ -258,10 +258,16 @@ export class MidwayFrameworkService {
     for (const frameworkInstance of this.globalFrameworkList) {
       // if enable, just init framework
       if (frameworkInstance.isEnable()) {
+        MidwayInitializerPerformanceManager.frameworkRunStart(
+          frameworkInstance.getFrameworkName()
+        );
         // app init
         await frameworkInstance.run();
         debug(
           `[core]: Found Framework "${frameworkInstance.getFrameworkName()}" and run.`
+        );
+        MidwayInitializerPerformanceManager.frameworkRunEnd(
+          frameworkInstance.getFrameworkName()
         );
       }
     }

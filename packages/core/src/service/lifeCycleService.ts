@@ -14,6 +14,7 @@ import { debuglog } from 'util';
 import { MidwayMockService } from './mockService';
 import { MidwayHealthService } from './healthService';
 import { MidwayInitializerPerformanceManager } from '../common/performanceManager';
+
 const debug = debuglog('midway:debug');
 
 @Provide()
@@ -157,6 +158,10 @@ export class MidwayLifeCycleService {
           debug(
             `[core]: Lifecycle run ${cycle.instance.constructor.name} ${lifecycle}`
           );
+          MidwayInitializerPerformanceManager.lifecycleStart(
+            cycle.namespace,
+            lifecycle
+          );
           const result = await cycle.instance[lifecycle](
             this.applicationContext,
             this.frameworkService.getMainApp()
@@ -164,13 +169,17 @@ export class MidwayLifeCycleService {
           if (resultHandler) {
             resultHandler(result);
           }
+          MidwayInitializerPerformanceManager.lifecycleEnd(
+            cycle.namespace,
+            lifecycle
+          );
         }
       }
     } else {
       if (typeof lifecycleInstanceOrList[lifecycle] === 'function') {
-        debug(
-          `[core]: Lifecycle run ${lifecycleInstanceOrList.constructor.name} ${lifecycle}`
-        );
+        const name = lifecycleInstanceOrList.constructor.name;
+        debug(`[core]: Lifecycle run ${name} ${lifecycle}`);
+        MidwayInitializerPerformanceManager.lifecycleStart(name, lifecycle);
         const result = await lifecycleInstanceOrList[lifecycle](
           this.applicationContext,
           this.frameworkService.getMainApp()
@@ -178,6 +187,7 @@ export class MidwayLifeCycleService {
         if (resultHandler) {
           resultHandler(result);
         }
+        MidwayInitializerPerformanceManager.lifecycleEnd(name, lifecycle);
       }
     }
   }
@@ -196,18 +206,9 @@ export class MidwayLifeCycleService {
         debug(
           `[core]: Lifecycle run ${cycle.instance.constructor.name} ${lifecycle}`
         );
-        MidwayInitializerPerformanceManager.lifecycleStart(
-          cycle.namespace,
-          lifecycle
-        );
-        const result = await this.applicationContext[lifecycle](
+        return await this.applicationContext[lifecycle](
           cycle.instance[lifecycle].bind(cycle.instance)
         );
-        MidwayInitializerPerformanceManager.lifecycleEnd(
-          cycle.namespace,
-          lifecycle
-        );
-        return result;
       }
     }
   }

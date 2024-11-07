@@ -73,10 +73,6 @@ export class MidwayPerformanceManager {
     }
   }
 
-  public getGroup() {
-    return this.group;
-  }
-
   public clean() {
     this.marks.forEach(mark => {
       try {
@@ -103,6 +99,16 @@ export class MidwayPerformanceManager {
     this.instances.forEach(instance => instance.clean());
     this.instances.clear();
   }
+
+  public static getInitialPerformanceEntries(): any[] {
+    const entries: any[] = [];
+    performance.getEntries().forEach(entry => {
+      if (entry.name.startsWith(this.DEFAULT_GROUP.INITIALIZE)) {
+        entries.push(entry.toJSON());
+      }
+    });
+    return entries;
+  }
 }
 
 export class MidwayInitializerPerformanceManager {
@@ -114,9 +120,9 @@ export class MidwayInitializerPerformanceManager {
     CONFIG_LOAD: 'ConfigLoad',
     LOGGER_PREPARE: 'LoggerPrepare',
     FRAMEWORK_PREPARE: 'FrameworkPrepare',
-    CUSTOM_FRAMEWORK_PREPARE: 'CustomFrameworkPrepare',
+    FRAMEWORK_INITIALIZE: 'FrameworkInitialize',
+    FRAMEWORK_RUN: 'FrameworkRun',
     LIFECYCLE_PREPARE: 'LifecyclePrepare',
-    CUSTOM_LIFECYCLE_PREPARE: 'CustomLifecyclePrepare',
     PRELOAD_MODULE_PREPARE: 'PreloadModulePrepare',
   };
 
@@ -136,25 +142,31 @@ export class MidwayInitializerPerformanceManager {
 
   static frameworkInitializeStart(frameworkName: string) {
     this.markStart(
-      `${this.MEASURE_KEYS.CUSTOM_FRAMEWORK_PREPARE}:${frameworkName}`
+      `${this.MEASURE_KEYS.FRAMEWORK_INITIALIZE}:${frameworkName}`
     );
   }
 
   static frameworkInitializeEnd(frameworkName: string) {
-    this.markEnd(
-      `${this.MEASURE_KEYS.CUSTOM_FRAMEWORK_PREPARE}:${frameworkName}`
-    );
+    this.markEnd(`${this.MEASURE_KEYS.FRAMEWORK_INITIALIZE}:${frameworkName}`);
+  }
+
+  static frameworkRunStart(frameworkName: string) {
+    this.markStart(`${this.MEASURE_KEYS.FRAMEWORK_RUN}:${frameworkName}`);
+  }
+
+  static frameworkRunEnd(frameworkName: string) {
+    this.markEnd(`${this.MEASURE_KEYS.FRAMEWORK_RUN}:${frameworkName}`);
   }
 
   static lifecycleStart(namespace: string, lifecycleName: string) {
     this.markStart(
-      `${this.MEASURE_KEYS.CUSTOM_LIFECYCLE_PREPARE}:${namespace}:${lifecycleName}`
+      `${this.MEASURE_KEYS.LIFECYCLE_PREPARE}:${namespace}:${lifecycleName}`
     );
   }
 
   static lifecycleEnd(namespace: string, lifecycleName: string) {
     this.markEnd(
-      `${this.MEASURE_KEYS.CUSTOM_LIFECYCLE_PREPARE}:${namespace}:${lifecycleName}`
+      `${this.MEASURE_KEYS.LIFECYCLE_PREPARE}:${namespace}:${lifecycleName}`
     );
   }
 }
