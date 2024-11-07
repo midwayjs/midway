@@ -1,9 +1,13 @@
 syntax = "proto3";
 
-package hero;
+package hero2;
 
 service HeroService {
   rpc FindOne (HeroById) returns (Hero) {}
+}
+
+service HeroService2 {
+  rpc FindOne2 (HeroById) returns (Hero) {}
 }
 
 message HeroById {
