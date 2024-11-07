@@ -91,72 +91,97 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
     const composeFn = (context: T, next?) => {
       const supportBody = isIncludeProperty(context, 'body');
       // last called middleware #
-      let index = -1;
-      return dispatch(0);
-
-      function dispatch(i) {
-        if (i <= index)
-          return Promise.reject(
-            new MidwayCommonError('next() called multiple times')
-          );
-        index = i;
-        let fn = (newMiddlewareArr as Array<FunctionMiddleware<T, R, N>>)[i];
-        if (i === newMiddlewareArr.length) fn = next;
-        if (!fn) return Promise.resolve();
-        const middlewareName = `${name ? `${name}.` : ''}${index} ${
-          (fn as any)._name || fn.name || 'anonymous'
-        }`;
-        const startTime = Date.now();
-        debug(`[middleware]: in ${middlewareName} +0`);
-        try {
-          if (supportBody) {
-            return Promise.resolve(
-              fn(context, dispatch.bind(null, i + 1), {
-                index,
-              } as any)
-            ).then(result => {
-              /**
-               * 1、return 和 ctx.body，return 的优先级更高
-               * 2、如果 result 有值（非 undefined），则不管什么情况，都会覆盖当前 body，注意，这里有可能赋值 null，导致 status 为 204，会在中间件处进行修正
-               * 3、如果 result 没值，且 ctx.body 已经赋值，则向 result 赋值
-               */
-              if (result !== undefined) {
-                context['body'] = result;
-              } else if (context['body'] !== undefined) {
-                result = context['body'];
-              }
-              debug(
-                `[middleware]: out ${middlewareName} +${
-                  Date.now() - startTime
-                } with body`
-              );
-              return result;
-            });
-          } else {
-            return Promise.resolve(
-              fn(context, dispatch.bind(null, i + 1), {
-                index,
-              } as any)
-            ).then(result => {
-              debug(
-                `[middleware]: out ${middlewareName} +${Date.now() - startTime}`
-              );
-              return result;
-            });
-          }
-        } catch (err) {
-          debug(
-            `[middleware]: out ${middlewareName} +${
-              Date.now() - startTime
-            } with err ${err.message}`
-          );
-          return Promise.reject(err);
-        }
-      }
+      const opts: DispatchOptions = {
+        context,
+        i: 0,
+        index: -1,
+        name,
+        newMiddlewareArr,
+        next,
+        supportBody,
+      };
+      return dispatch(opts);
     };
     if (name) {
       composeFn._name = name;
     }
     return composeFn;
+  }
+}
+
+interface DispatchOptions {
+  context: any;
+  i: number;
+  index: number;
+  name: string;
+  newMiddlewareArr: unknown[];
+  next: FunctionMiddleware<any, any>;
+  supportBody: boolean;
+}
+
+function dispatch(options: DispatchOptions): Promise<unknown> {
+  const { i, context, newMiddlewareArr, name, next, supportBody } = options;
+
+  if (i <= options.index) {
+    return Promise.reject(
+      new MidwayCommonError('next() called multiple times')
+    );
+  }
+  options.index = i;
+  let fn = (newMiddlewareArr as Array<FunctionMiddleware<any, any>>)[i];
+  if (i === newMiddlewareArr.length) {
+    fn = next;
+  }
+  if (!fn) return Promise.resolve();
+  const middlewareName = `${name ? `${name}.` : ''}${options.index} ${
+    (fn as any)._name || fn.name || 'anonymous'
+  }`;
+  const startTime = Date.now();
+  debug(`[middleware]: in ${middlewareName} +0`);
+  try {
+    if (supportBody) {
+      const opts = { ...options, i: i + 1 };
+      return Promise.resolve(
+        fn(context, dispatch.bind(null, opts), {
+          index: options.index,
+        } as any)
+      ).then(result => {
+        /**
+         * 1、return 和 ctx.body，return 的优先级更高
+         * 2、如果 result 有值（非 undefined），则不管什么情况，都会覆盖当前 body，注意，这里有可能赋值 null，导致 status 为 204，会在中间件处进行修正
+         * 3、如果 result 没值，且 ctx.body 已经赋值，则向 result 赋值
+         */
+        if (result !== undefined) {
+          context['body'] = result;
+        } else if (context['body'] !== undefined) {
+          result = context['body'];
+        }
+        debug(
+          `[middleware]: out ${middlewareName} +${
+            Date.now() - startTime
+          } with body`
+        );
+        return result;
+      });
+    } else {
+      const opts = { ...options, i: i + 1 };
+      return Promise.resolve(
+        fn(context, dispatch.bind(null, opts), {
+          index: options.index,
+        } as any)
+      ).then(result => {
+        debug(
+          `[middleware]: out ${middlewareName} +${Date.now() - startTime}`
+        );
+        return result;
+      });
+    }
+  } catch (err) {
+    debug(
+      `[middleware]: out ${middlewareName} +${
+        Date.now() - startTime
+      } with err ${err.message}`
+    );
+    return Promise.reject(err);
   }
 }
