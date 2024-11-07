@@ -30,4 +30,8 @@ export class MidwayEnvironmentService implements IEnvironmentService {
   public getModuleLoadType() {
     return this.moduleLoadType;
   }
+
+  public isPkgEnvironment() {
+    return process.pkg !== undefined;
+  }
 }
