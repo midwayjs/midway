@@ -1,5 +1,6 @@
 const { createFunctionApp, close, processArgsParser } = require('./dist');
 const { join } = require('path');
+const { MidwayPerformanceManager } = require('@midwayjs/core');
 
 (async () => {
   process.env.MIDWAY_TS_MODE = 'false';
@@ -25,6 +26,13 @@ const { join } = require('path');
     port: process.env.MIDWAY_HTTP_PORT,
     ssl: args.ssl,
   });
+
+  setTimeout(() => {
+    process.send({
+      title: 'perf-init',
+      data: MidwayPerformanceManager.getInitialPerformanceEntries(),
+    });
+  }, 500);
 
   function onSignal() {
     close(app).then(() => {

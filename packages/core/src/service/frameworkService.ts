@@ -27,6 +27,7 @@ import { MidwayAspectService } from './aspectService';
 import { MidwayApplicationManager } from '../common/applicationManager';
 import * as util from 'util';
 import { MidwayCommonError, MidwayParameterError } from '../error';
+import { MidwayInitializerPerformanceManager } from '../common/performanceManager';
 
 const debug = util.debuglog('midway:debug');
 
@@ -164,12 +165,19 @@ export class MidwayFrameworkService {
         >(frameworkClz, [this.applicationContext]);
         // if enable, just init framework
         if (frameworkInstance.isEnable()) {
+          MidwayInitializerPerformanceManager.frameworkInitializeStart(
+            frameworkInstance.getFrameworkName()
+          );
           // app init
           await frameworkInstance.initialize({
             applicationContext: this.applicationContext,
             namespace: frameworkInstance.getNamespace(),
             ...this.globalOptions,
           });
+
+          MidwayInitializerPerformanceManager.frameworkInitializeEnd(
+            frameworkInstance.getFrameworkName()
+          );
 
           debug(
             `[core]: Found Framework "${frameworkInstance.getFrameworkName()}" and initialize.`
@@ -262,10 +270,16 @@ export class MidwayFrameworkService {
     for (const frameworkInstance of this.globalFrameworkList) {
       // if enable, just init framework
       if (frameworkInstance.isEnable()) {
+        MidwayInitializerPerformanceManager.frameworkRunStart(
+          frameworkInstance.getFrameworkName()
+        );
         // app init
         await frameworkInstance.run();
         debug(
           `[core]: Found Framework "${frameworkInstance.getFrameworkName()}" and run.`
+        );
+        MidwayInitializerPerformanceManager.frameworkRunEnd(
+          frameworkInstance.getFrameworkName()
         );
       }
     }
