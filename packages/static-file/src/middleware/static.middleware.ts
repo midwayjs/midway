@@ -6,12 +6,14 @@ import {
   Logger,
   FileUtils,
   MidwayMiddlewareService,
+  MidwayEnvironmentService,
 } from '@midwayjs/core';
 import * as assert from 'assert';
 import * as staticCache from 'koa-static-cache';
 import * as LRU from 'ylru';
 import * as range from 'koa-range';
 import { DirectoryNotFoundError } from '../error';
+import * as fs from 'fs';
 
 @Middleware()
 export class StaticMiddleware {
@@ -20,6 +22,9 @@ export class StaticMiddleware {
 
   @Inject()
   middlewareService: MidwayMiddlewareService<any, any>;
+
+  @Inject()
+  environmentService: MidwayEnvironmentService;
 
   @Logger('coreLogger')
   logger;
@@ -59,8 +64,14 @@ export class StaticMiddleware {
       }
 
       // ensure directory exists
-      if (!(await FileUtils.exists(newOptions.dir))) {
-        throw new DirectoryNotFoundError(newOptions.dir);
+      if (this.environmentService.isPkgEnvironment()) {
+        if (!fs.existsSync(newOptions.dir)) {
+          throw new DirectoryNotFoundError(newOptions.dir);
+        }
+      } else {
+        if (!(await FileUtils.exists(newOptions.dir))) {
+          throw new DirectoryNotFoundError(newOptions.dir);
+        }
       }
 
       this.logger.info(
