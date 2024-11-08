@@ -113,7 +113,7 @@ export class HomeController {
 
 ## MidwayConfigService
 
-Midway 内置的多环境配置服务，提供配置的加载，获取它也是 `@Config` 装饰器的数据源。
+Midway 内置的多环境配置服务，提供配置的加载和获取，它也是 `@Config` 装饰器的数据源。
 
 可以通过注入获取。
 
