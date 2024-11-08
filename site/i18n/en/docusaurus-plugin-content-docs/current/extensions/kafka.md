@@ -1,79 +1,71 @@
 # Kafka
 
-In the architecture of complex systems, event flow is a very important part, including real-time capture of data from event sources (databases, sensors, mobile devices, etc.) in the form of event flow, persistence of event flow for easy retrieval, and real-time and review of operations to process response event flow.
+In the architecture of complex systems, event streams are a crucial part, including capturing data in real-time from event sources (databases, sensors, mobile devices, etc.) as event streams, persisting event streams for easy retrieval, and processing and responding to event streams in real-time and retrospectively.
 
-It is used for payment and financial transactions, tracking and monitoring the flow of information in industries such as automobiles, capturing and analyzing Internet of Things data, and so on.
+Applicable to industries such as payment and financial transactions, implementing tracking and monitoring of automotive information flow, capturing and analyzing IoT data, etc.
 
+In Midway, we provide the ability to subscribe to Kafka to meet such user needs.
 
-In Midway, we provide the ability to subscribe to Kafka to meet such needs of users.
+Related Information:
 
-Related information:
+**Subscription Service**
 
-**Subscribe to service**
-
-| Description |      |
+| Description       |      |
 | ----------------- | ---- |
-| Can be used for standard projects | ✅ |
-| Can be used for Serverless | ❌ |
-| Can be used for integration | ✅ |
-| Contains independent main framework | ✅ |
-| Contains independent logs | ❌ |
+| Available for standard projects | ✅    |
+| Available for Serverless | ❌    |
+| Available for integrated projects | ✅    |
+| Includes standalone main framework | ✅     |
+| Includes standalone logging | ✅     |
 
-
-
-## Basic concept
-
+## Basic Concepts
 
 Distributed stream processing platform
-* Publish and subscribe (stream) information
-* Fault tolerance (failover) Store information (flow), store event flow
-* When the message flow occurs, handle the event flow.
+* Publish-subscribe (stream) information
+* Fault-tolerant (failover) storage of information (streams), storing event streams
+* Process event streams as they occur
 
-Understanding Producer (Producer)
+Understanding Producer
 
-* Publish messages to one topic or topics.
+* Publish messages to one or more topics.
 
-Understanding Consumer (Subject Consumers)
+Understanding Consumer
 * Subscribe to one or more topics and process the generated information.
 
-Understand Stream API
-* Act as a stream processor, consume input streams from one or more topics, and produce an output stream to one or more output topics, effectively converting the input stream to the output stream.
+Understanding Stream API
+* Acts as a stream processor, consuming input streams from one or more topics and producing an output stream to one or more output topics, effectively transforming input streams into output streams.
 
 Understanding Broker
-* Published messages are kept in a group of servers, called a Kafka cluster. Each server in the cluster is a broker. Consumers can consume these published messages by subscribing to one or more topics and pulling data from the Broker.
-
+* Published messages are stored in a set of servers called a Kafka cluster. Each server in the cluster is a broker. Consumers can subscribe to one or more topics and pull data from brokers to consume these published messages.
 
 ![image.png](https://kafka.apache.org/images/streams-and-tables-p1_p4.png)
 
+:::tip
+From v3.19, the Kafka component has been refactored, and the configuration and usage methods of the Kafka component have changed significantly from before. The original usage method is compatible, but the documentation is no longer retained.
+:::
 
+## Install Dependencies
 
-## Consumer  Usage
+Install the `@midwayjs/kafka` module.
 
-
-### Installation dependency
-
-
-Midway provides the ability to subscribe to Kafka and can be deployed and used independently. Install the `@midwayjs/kafka` module and its definition.
 ```bash
-$ npm i @midwayjs/kafka@3 --save
-$ npm i kafkajs --save
+$ npm i @midwayjs/kafka --save
 ```
 
-Or reinstall the following dependencies in `package.json`.
+Or add the following dependency to `package.json` and reinstall.
 
 ```json
 {
   "dependencies": {
     "@midwayjs/kafka": "^3.0.0",
-    "kafka": "^2.0.0 ",
     // ...
   }
 }
 ```
 
-## Open the component
+## Enable Component
 
-`@midwayjs/kafka` can be used as an independent main framework.
+`@midwayjs/kafka` can be used as a standalone main framework.
 
 ```typescript
 // src/configuration.ts
@@ -82,7 +74,7 @@ import * as kafka from '@midwayjs/kafka';
 
 @Configuration({
   imports: [
-    Kafka
+    kafka
   ],
   // ...
 })
@@ -115,15 +107,15 @@ export class MainConfiguration {
 }
 ```
 
-### Directory structure
+Since Kafka is divided into **Consumer** and **Producer** parts, both can be used independently, and we will introduce them separately.
 
+## Consumer
 
-We generally divide capabilities into producers and consumers, and subscriptions are the capabilities of consumers.
+### Directory Structure
 
-
-We usually put consumers in consumer catalogues. For example, `src/consumer/userConsumer.ts`.
+We usually place consumers in the consumer directory, such as `src/consumer/user.consumer.ts`.
 ```
-➜ my_midway_app tree
+➜  my_midway_app tree
 .
 ├── src
 │   ├── consumer
@@ -135,340 +127,447 @@ We usually put consumers in consumer catalogues. For example, `src/consumer/user
 ├── package.json
 └── tsconfig.json
 ```
-The code example is as follows.
 
-```typescript
-@Provide()
-@Consumer(MSListenerType.KAFKA)
-export class UserConsumer {
+### Basic Configuration
 
-  @Inject()
-  ctx: IMidwayKafkaContext;
+We can configure multiple consumers through the `consumer` field and the `@KafkaConsumer` decorator.
 
-  @Inject()
-  logger;
-
-  @KafkaListener('topic-test')
-  async gotData(message: KafkaMessage) {
-    this.logger.info('test output =>', message.offset + '' + message.key + '' + message.value.toString('utf8'));
-  }
-}
-```
-The `@Consumer` decorator provides the consumer identifier, and its parameters specify the type of a certain consumption framework. For example, here we specify the `MSListenerType.KFAKA` type, which refers to the kafka type.
-
-
-The class that identifies the `@Consumer` can bind a topic after using the `@KafkaListener` decorator for the method.
-
-
-The parameter of the method is the received message of type `ConsumeMessage`. Automatic confirmation is set by default. When is manual confirmation set? When an exception occurs, it is necessary to set the commitOffsets offset to the abnormal position for re-consumption.
-
-If you need to subscribe to multiple topics, you can use multiple methods or multiple files.
-
-
-### Kafka message context
-
-
-The context for subscribing to `Kafka` data is the same as the Web, which contains a `requestContext` and a data binding for each message received.
-
-The entire ctx is defined:
-```typescript
-export type Context = {
-  requestContext: IMidwayContainer;
-};
-```
-
-
-You can get the definition from the framework
-```typescript
-import { Context } from '@midwayjs/kafka';
-```
-
-
-### Configure consumers
-
-We need to specify the address of Kafka in the configuration.
+For example, `sub1` and `sub2` below are two different consumers.
 
 ```typescript
 // src/config/config.default
-import { MidwayConfig } from '@midwayjs/core';
-
 export default {
-  // ...
   kafka: {
-    kafkaConfig: {
-      clientId: 'my-app',
-      brokers: [process.env.KAFKA_URL || 'localhost:9092']
-    },
-    consumerConfig: {
-      groupId: 'groupId-test'
+    consumer: {
+      sub1: {
+        // ...
+      },
+      sub2: {
+        // ...
+      },
     }
-  },
-} as MidwayConfig;
+  }
+}
 ```
 
-More configurations (see https://kafka.js.org/docs/consuming for more detailed configurations):
-
-| Property | Description |
-| --- | --- |
-| kafkaConfig | Kafka connection information |
-| - clientId | Specify client ID |
-| - brokers | Kafka cluster brokers |
-| consumerConfig | Consumer Configuration |
-| - groupId | Packet ID |
-
-
-
-### Manual-committing
-
-Manually submit settings. By default, components submit automatically.
+The simplest consumer configuration requires several fields: Kafka connection configuration, consumer configuration, and subscription configuration.
 
 ```typescript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
-import { KafkaMessage } from 'kafkajs';
-import { Context, Application } from '../../../../../src';
-
-@Provide()
-@Consumer(MSListenerType.KAFKA)
-export class UserConsumer {
-
-  @App()
-  app: Application;
-
-  @Inject()
-  ctx: Context;
-
-  @Inject()
-  logger;
-
-  @KafkaListener('topic-test0', {
-    subscription: {
-      fromBeginning: false
-    },
-    runConfig: {
-      autoCommit: false
-    }
-  })
-  async gotData(message: KafkaMessage) {
-    console.info('gotData info');
-    this.logger.info('test output =>', message.offset + '' + message.key + '' + message.value.toString('utf8'));
-    try {
-      // Throws an exception. When an exception occurs, you need to set the commitOffsets offset to the location of the exception to re-execute the consumption, so the consumption that should occur here is 2 times, and the total is 2
-      throw new Error("error");
-    } catch (error) {
-      this.ctx.commitOffsets(message.offset);
-    }
-    this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
-  }
-}
-```
-
-### Multi different Topic
-the subscription of topic1 and topic2, and the consumption of both topics are called.
-
-```typescript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
-import { KafkaMessage } from 'kafkajs';
-import { Context, Application } from '../../../../../src';
-
-@Provide()
-@Consumer(MSListenerType.KAFKA)
-export class UserConsumer {
-
-  @App()
-  app: Application;
-
-  @Inject()
-  ctx: Context;
-
-  @Inject()
-  logger;
-
-  @KafkaListener('topic-test')
-  async gotData(message: KafkaMessage) {
-    console.info('gotData info');
-    this.logger.info('test output =>', message.offset + '' + message.key + '' + message.value.toString('utf8'));
-    this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
-  }
-
-  @KafkaListener('topic-test2')
-  async gotData2(message: KafkaMessage) {
-    console.info('gotData2 info');
-    this.logger.info('test output =>', message.offset + '' + message.key + '' + message.value.toString('utf8'));
-    this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
-  }
-
-}
-
-```
-
-### Decorator parameters
-
-
-`@kafkaListener` the first parameter of the decorator is topic, which represents the topic to be consumed.
-
-
-The second parameter is an object, including the registered configuration `subscription`, the running configuration `runConfig` and other parameters. The detailed definition is as follows:
-
-```typescript
-export interface KafkaListenerOptions {
-  propertyKey?: string;
-  topic?: string;
-
-  subscription?: ConsumerSubscribeTopics | ConsumerSubscribeTopic;
-  runConfig?: ConsumerRunConfig;
-}
-```
-
-
-
-**Example 1**
-
-
-Create a manual submission, set the offset of the latest submission to be used by the consumer when starting to get the message `fromBeginning: false`, and set the submission method at runtime to manual submission `autoCommit: false`
-```typeScript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
-import { KafkaMessage } from 'kafkajs';
-import { Context, Application } from '../../../../../src';
-
-@Provide()
-@Consumer(MSListenerType.KAFKA)
-export class UserConsumer {
-
-  @App()
-  app: Application;
-
-  @Inject()
-  ctx: Context;
-
-  @Inject()
-  logger;
-
-  @KafkaListener('topic-test0', {
-    subscription: {
-      fromBeginning: false
-    },
-    runConfig: {
-      autoCommit: false
-    }
-  })
-  async gotData(message: KafkaMessage) {
-    console.info('gotData info');
-    this.logger.info('test output =>', message.offset + '' + message.key + '' + message.value.toString('utf8'));
-    try {
-      // Throws an exception. When an exception occurs, you need to set the commitOffsets offset to the location of the exception to re-execute the consumption.
-      throw new Error("error");
-    } catch (error) {
-      this.ctx.commitOffsets(message.offset);
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          // ...
+        },
+        consumerOptions: {
+          // ...
+        },
+        subscribeOptions: {
+          // ...
+        },
+      },
     }
   }
 }
-
 ```
-
-
-
-
-## Producer Usage Method
-
-
-The producer (Producer) is also the message producer in the first section. In short, it will create a client and send messages to the Kafka service.
-
-
-Note: Midway currently does not use components to support message sending. The example shown here is only the writing method of pure SDK in Midway.
-
-
-### Install dependencies
-
-
-```bash
-$ npm i kafkajs --save
-```
-
-
-### Call the service to send a message
-
-
-For example, we add a `Kafka. ts` file under the service file.
-```typescript
-import {
-  Provide,
-  Scope,
-  ScopeEnum,
-  Init,
-  Autoload,
-  Destroy,
-  Config,
-} from '@midwayjs/core';
-import { ProducerRecord } from 'kafkajs';
-const { Kafka } = require('kafkajs');
-
-@Autoload()
-@Provide()
-@Scope(ScopeEnum.Singleton) // Singleton singleton, globally unique (process level)
-export class KafkaService {
-  @Config('kafka')
-  kafkaConfig: any;
-
-  private producer;
-
-  @Init()
-  async connect() {
-    // To create a connection, you can put the configuration in Config and inject it into it.
-    const { brokers, clientId, producerConfig = {} } = this.kafkaConfig;
-    const client = new Kafka({
-      clientId: clientId
-      brokers: brokers
-    });
-    this.producer = client.producer(producerConfig);
-    await this.producer.connect();
-  }
-
-  // Send a message
-  public async send(producerRecord: ProducerRecord) {
-    return this.producer.send(producerRecord);
-  }
-
-  @Destroy()
-  async close() {
-    await this.producer.disconnect();
-  }
-}
-
-```
-Probably created a service to encapsulate message communication, and it is the only Singleton singleton in the world. Due to the addition of `@AutoLoad` decorator, initialization can be self-executed.
-
-
-In this way, the basic calling service is abstract. You only need to call the `send` method where it is used.
-
 
 For example:
 
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          clientId: 'my-app',
+          brokers: ['localhost:9092'],
+        },
+        consumerOptions: {
+          groupId: 'groupId-test-1',
+        },
+        subscribeOptions: {
+          topics: ['topic-test-1'],
+        }
+      },
+    }
+  }
+}
+```
+
+Complete configurable parameters include:
+
+- `connectionOptions`: Kafka connection configuration, i.e., parameters for `new Kafka(consumerOptions)`
+- `consumerOptions`: Kafka consumer configuration, i.e., parameters for `kafka.consumer(consumerOptions)`
+- `subscribeOptions`: Kafka subscription configuration, i.e., parameters for `consumer.subscribe(subscribeOptions)`
+- `consumerRunConfig`: Consumer run configuration, i.e., parameters for `consumer.run(consumerRunConfig)`
+
+For detailed explanations of these parameters, refer to the [KafkaJS Consumer](https://kafka.js.org/docs/consuming) documentation.
+
+### Reuse Kafka Instance
+
+If you need to reuse a Kafka instance, you can specify it through the `kafkaInstanceRef` field.
 
 ```typescript
-@Provide()
-export class UserService {
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          clientId: 'my-app',
+          brokers: ['localhost:9092'],
+        },
+        consumerOptions: {
+          groupId: 'groupId-test-1',
+        },
+        subscribeOptions: {
+          topics: ['topic-test-1'],
+        }
+      },
+      sub2: {
+        kafkaInstanceRef: 'sub1',
+        consumerOptions: {
+          groupId: 'groupId-test-2',
+        },
+        subscribeOptions: {
+          topics: ['topic-test-2'],
+        }
+      }
+    }
+  }
+}
+```
+
+Note that `sub1` and `sub2` above are two different consumers, but they share the same Kafka instance, and `sub2`'s `groupId` needs to be different from `sub1`.
+
+The Kafka SDK writing is similar to the following:
+
+```typescript
+const kafka = new Kafka({
+  clientId: 'my-app',
+  brokers: ['localhost:9092'],
+});
+
+const consumer1 = kafka.consumer({ groupId: 'groupId-test-1' });
+const consumer2 = kafka.consumer({ groupId: 'groupId-test-2' });
+```
+
+### Consumer Implementation
+
+We can provide a standard consumer implementation in the directory, such as `src/consumer/sub1.consumer.ts`.
+
+```typescript
+// src/consumer/sub1.consumer.ts
+import { KafkaConsumer, IKafkaConsumer, EachMessagePayload } from '@midwayjs/kafka';
+
+@KafkaConsumer('sub1')
+class Sub1Consumer implements IKafkaConsumer {
+  async eachMessage(payload: EachMessagePayload) {
+    // ...
+  }
+}
+```
+
+`sub1` is the consumer name, using the `sub1` consumer in the configuration.
+
+You can also implement the `eachBatch` method to process batch messages.
+
+```typescript
+// src/consumer/sub1.consumer.ts
+import { KafkaConsumer, IKafkaConsumer, EachBatchPayload } from '@midwayjs/kafka';
+
+@KafkaConsumer('sub1')
+class Sub1Consumer implements IKafkaConsumer {
+  async eachBatch(payload: EachBatchPayload) {
+    // ...
+  }
+}
+```
+
+### Message Context
+
+Like other message subscription mechanisms, the message itself is passed through the `Context` field.
+
+```typescript
+// src/consumer/sub1.consumer.ts
+import { KafkaConsumer, IKafkaConsumer, EachMessagePayload, Context } from '@midwayjs/kafka';
+import { Inject } from '@midwayjs/core';
+
+@KafkaConsumer('sub1')
+class Sub1Consumer implements IKafkaConsumer {
 
   @Inject()
-  kafkaService: KafkaService;
+  ctx: Context;
 
-  async invoke() {
-    // TODO
+  async eachMessage(payload: EachMessagePayload) {
+    // ...
+  }
+}
+```
 
-    // Send a message
-    const result = this.kafkaService.send({
-      topic: 'test',
-      messages: [
-        {
-          value: JSON.stringify(messageValue)
+The `Context` field includes several properties:
+
+| Property     | Type                           | Description      |
+| ------------ | ------------------------------ | ---------------- |
+| ctx.payload  | EachMessagePayload, EachBatchPayload | Message content  |
+| ctx.consumer | Consumer                       | Consumer instance |
+
+You can call Kafka's API through `ctx.consumer`, such as `ctx.consumer.commitOffsets` to manually commit offsets or `ctx.consumer.pause` to pause consumption.
+
+## Producer
+
+### Basic Configuration
+
+Service producers also need to create instances, and the configuration itself uses the [Service Factory](/docs/service_factory) design pattern.
+
+The configuration is as follows:
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    producer: {
+      clients: {
+        pub1: {
+          // ...
         },
-      ],
+        pub2: {
+          // ...
+        }
+      }
+    }
+  }
+}
+```
+
+Each Producer instance's configuration also includes `connectionOptions` and `producerOptions`.
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    producer: {
+      clients: {
+        pub1: {
+          connectionOptions: {
+            clientId: 'my-app',
+            brokers: ['localhost:9092'],
+          },
+          producerOptions: {
+            // ...
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+For specific parameters, refer to the [KafkaJS Producer](https://kafka.js.org/docs/producing) documentation.
+
+Additionally, since Kafka Consumer and Producer can both be created from the same Kafka instance, they can reuse the same Kafka instance.
+
+If the Producer is created after the Consumer, it can also reuse the Kafka instance using the `kafkaInstanceRef` field.
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          clientId: 'my-app',
+          brokers: ['localhost:9092'],
+        },
+      }
+    },
+    producer: {
+      clients: {
+        pub1: {
+          kafkaInstanceRef: 'sub1',
+        }
+      }
+    }
+  }
+}
+```
+
+### Using Producer
+
+There is no default instance for Producer. Since the service factory design pattern is used, it can be injected through `@InjectClient()`.
+
+```typescript
+// src/service/user.service.ts
+import { Provide, InjectClient } from '@midwayjs/core';
+import { KafkaProducerFactory, Producer } from '@midwayjs/kafka';
+
+@Provide()
+export class UserService {
+  
+  @InjectClient(KafkaProducerFactory, 'pub1')
+  producer: Producer;
+  
+  async invoke() {
+    await this.producer.send({
+      topic: 'topic-test-1',
+      messages: [{ key: 'message-key1', value: 'hello consumer 11 !' }],
     });
   }
 }
 ```
 
+## Admin
 
-## Reference document
+Kafka's Admin functionality can be used to create, delete, view topics, view configurations, and ACLs, etc.
+
+### Basic Configuration
+
+Like Producer, Admin also uses the service factory design pattern.
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    admin: {
+      clients: {
+        admin1: {
+          // ...
+        }
+      }
+    }
+  }
+}
+```
+
+Similarly, Admin can also reuse the Kafka instance.
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          clientId: 'my-app',
+          brokers: ['localhost:9092'],
+        },
+      }
+    },
+    admin: {
+      clients: {
+        admin1: {
+          kafkaInstanceRef: 'sub1',
+        }
+      }
+    }
+  }
+}
+```
+
+### Using Admin
+
+There is no default instance for Admin. Since the service factory design pattern is used, it can be injected through `@InjectClient()`.
+
+```typescript
+// src/service/admin.service.ts
+import { Provide, InjectClient } from '@midwayjs/core';
+import { KafkaAdminFactory, Admin } from '@midwayjs/kafka';
+
+@Provide()
+export class AdminService {
+  
+  @InjectClient(KafkaAdminFactory, 'admin1')
+  admin: Admin;
+}
+```
+
+For more Admin usage methods, refer to the [KafkaJS Admin](https://kafka.js.org/docs/admin) documentation.
+
+## Component Logging
+
+The Kafka component uses the `kafkaLogger` log by default, which will record `ctx.logger` in `midway-kafka.log`.
+
+You can modify it through configuration.
+
+```typescript
+// src/config/config.default
+export default {
+  midwayLogger: {
+    clients: {
+      kafkaLogger: {
+        fileLogName: 'midway-kafka.log',
+      },
+    },
+  },
+}
+```
+
+The output format of this log can also be configured separately.
+
+```typescript
+export default {
+  kafka: {
+    // ...
+    contextLoggerFormat: info => {
+      const { jobId, from } = info.ctx;
+      return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.message}`;
+    },
+  }
+}
+```
+
+## Access KafkaJS Module
+
+The KafkaJS module can be accessed through the `KafkaJS` field of `@midwayjs/kafka`.
+
+```typescript
+import { KafkaJS } from '@midwayjs/kafka';
+
+const { ConfigResourceTypes } = KafkaJS;
+// ...
+```
+
+## Warning About Partitions
+
+If you are using KafkaJS version v2.0.0, you may see the following warning:
+
+```
+2024-11-04 23:47:28.228 WARN 31729 KafkaJS v2.0.0 switched default partitioner. To retain the same partitioning behavior as in previous versions, create the producer with the option "createPartitioner: Partitioners.LegacyPartitioner". See the migration guide at https://kafka.js.org/docs/migration-guide-v2.0.0#producer-new-default-partitioner for details. Silence this warning by setting the environment variable "KAFKAJS_NO_PARTITIONER_WARNING=1" { timestamp: '2024-11-04T15:47:28.228Z', logger: 'kafkajs' }
+```
+
+This warning is due to KafkaJS version v2.0.0 using a new partitioner by default. If you accept the new partitioner behavior but want to turn off this warning message, you can eliminate this warning by setting the environment variable `KAFKAJS_NO_PARTITIONER_WARNING=1`.
+
+Or explicitly declare the partitioner.
+
+```typescript
+// src/config/config.default
+import { KafkaJS } from '@midwayjs/kafka';
+const { Partitioners } = KafkaJS;
+
+export default {
+  kafka: {
+    producer: {
+      clients: {
+        pub1: {
+          // ...
+          producerOptions: {
+            createPartitioner: Partitioners.DefaultPartitioner,
+            // ...
+            createPartitioner: Partitioners.LegacyPartitioner,
+          },
+        },
+      },
+    },
+  }
+}
+```
+
+It is recommended to check the KafkaJS v2.0.0 [migration guide](https://kafka.js.org/docs/migration-guide-v2.0.0#producer-new-default-partitioner) for more details.
+
+## Reference Documentation
 
 - [KafkaJS](https://kafka.js.org/docs/introduction)
-- [apache kafka official website](https://kafka.apache.org/intro)
+- [Apache Kafka Official Website](https://kafka.apache.org/intro)

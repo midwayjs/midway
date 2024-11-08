@@ -5,11 +5,18 @@ import { Configuration } from '@midwayjs/core';
   importConfigs: [
     {
       default: {
-        kafka: {},
+        kafka: {
+          contextLoggerApplyLogger: 'kafkaLogger',
+        },
+        midwayLogger: {
+          clients: {
+            kafkaLogger: {
+              fileLogName: 'midway-kafka.log',
+            },
+          },
+        },
       },
     },
   ],
 })
-export class KafkaConfiguration {
-  async onReady() {}
-}
+export class KafkaConfiguration {}

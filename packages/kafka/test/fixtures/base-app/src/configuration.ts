@@ -12,7 +12,7 @@ import { IMidwayKafkaApplication } from '../../../../src';
             brokers: [process.env.KAFKA_URL || 'localhost:9092'],
           },
           consumerConfig: {
-            groupId: 'groupId-test'
+            groupId: 'groupId-test-' + Math.random(),
           }
         },
       },

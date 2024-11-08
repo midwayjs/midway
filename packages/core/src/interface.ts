@@ -1201,3 +1201,4 @@ export interface InjectionConfigurationOptions {
 }
 
 export type FunctionalConfigurationOptions = InjectionConfigurationOptions & ILifeCycle;
+
