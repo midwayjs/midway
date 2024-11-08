@@ -13,17 +13,35 @@ import {
   MOCK_KEY,
   DecoratorManager,
 } from '../decorator';
+import { isClass } from '../util/types';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MidwayMockService {
-  protected mocks = [];
-  protected contextMocks: Array<{
-    app: IMidwayApplication;
-    key: string | ((ctx: IMidwayContext) => void);
-    value: any;
-  }> = [];
-  protected cache = new Map();
+  /**
+   * Save class prototype and object property mocks
+   */
+  protected mocks: Map<
+    string,
+    Array<{
+      obj: any;
+      key: string;
+      descriptor: PropertyDescriptor;
+      hasOwnProperty: boolean;
+    }>
+  > = new Map();
+  /**
+   * Save context mocks
+   */
+  protected contextMocks: Map<
+    string,
+    Array<{
+      app: IMidwayApplication;
+      key: string | ((ctx: IMidwayContext) => void);
+      value: any;
+    }>
+  > = new Map();
+  protected cache: Map<string, Map<any, Set<string>>> = new Map();
   protected simulatorList: Array<ISimulation> = [];
   constructor(readonly applicationContext: IMidwayContainer) {}
 
@@ -31,59 +49,80 @@ export class MidwayMockService {
   async init() {
     if (MidwayMockService.prepareMocks.length > 0) {
       for (const item of MidwayMockService.prepareMocks) {
-        this.mockProperty(item.obj, item.key, item.value);
+        this.mockProperty(item.obj, item.key, item.value, item.group);
       }
       MidwayMockService.prepareMocks = [];
     }
   }
 
+  /**
+   * Prepare mocks before the service is initialized
+   */
   static prepareMocks = [];
 
   static mockClassProperty(
     clzz: new (...args) => any,
     propertyName: string,
-    value: any
+    value: any,
+    group = 'default'
   ) {
-    this.mockProperty(clzz.prototype, propertyName, value);
+    this.mockProperty(clzz.prototype, propertyName, value, group);
   }
 
-  static mockProperty(obj: new (...args) => any, key: string, value: any) {
+  static mockProperty(
+    obj: new (...args) => any,
+    key: string,
+    value: any,
+    group = 'default'
+  ) {
     this.prepareMocks.push({
       obj,
       key,
       value,
+      group,
     });
   }
 
   public mockClassProperty(
     clzz: new (...args) => any,
     propertyName: string,
-    value: any
+    value: any,
+    group = 'default'
   ) {
-    return this.mockProperty(clzz.prototype, propertyName, value);
+    return this.mockProperty(clzz.prototype, propertyName, value, group);
   }
 
-  public mockProperty(obj: any, key: string, value) {
+  public mockProperty(obj: any, key: string, value: any, group = 'default') {
     // eslint-disable-next-line no-prototype-builtins
     const hasOwnProperty = obj.hasOwnProperty(key);
-    this.mocks.push({
+    const mockItem = {
       obj,
       key,
       descriptor: Object.getOwnPropertyDescriptor(obj, key),
       // Make sure the key exists on object not the prototype
       hasOwnProperty,
-    });
+    };
 
-    // Delete the origin key, redefine it below
+    if (!this.mocks.has(group)) {
+      this.mocks.set(group, []);
+    }
+    this.mocks.get(group).push(mockItem);
+
     if (hasOwnProperty) {
       delete obj[key];
     }
 
     // Set a flag that checks if it is mocked
-    let flag = this.cache.get(obj);
+    let groupCache = this.cache.get(group);
+    if (!groupCache) {
+      groupCache = new Map();
+      this.cache.set(group, groupCache);
+    }
+
+    let flag = groupCache.get(obj);
     if (!flag) {
       flag = new Set();
-      this.cache.set(obj, flag);
+      groupCache.set(obj, flag);
     }
     flag.add(key);
 
@@ -94,42 +133,68 @@ export class MidwayMockService {
   public mockContext(
     app: IMidwayApplication,
     key: string | ((ctx: IMidwayContext) => void),
-    value?: PropertyDescriptor | any
+    value?: PropertyDescriptor | any,
+    group = 'default'
   ) {
-    this.contextMocks.push({
+    if (!this.contextMocks.has(group)) {
+      this.contextMocks.set(group, []);
+    }
+    this.contextMocks.get(group).push({
       app,
       key,
       value,
     });
   }
 
+  public restore(group = 'default') {
+    this.restoreGroup(group);
+  }
+
   @Destroy()
-  restore() {
-    for (let i = this.mocks.length - 1; i >= 0; i--) {
-      const m = this.mocks[i];
+  public restoreAll() {
+    const groups = new Set([
+      ...this.mocks.keys(),
+      ...this.contextMocks.keys(),
+      ...this.cache.keys(),
+    ]);
+
+    for (const group of groups) {
+      this.restoreGroup(group);
+    }
+
+    this.simulatorList = [];
+  }
+
+  private restoreGroup(group: string) {
+    const groupMocks = this.mocks.get(group) || [];
+    for (let i = groupMocks.length - 1; i >= 0; i--) {
+      const m = groupMocks[i];
       if (!m.hasOwnProperty) {
-        // Delete the mock key, use key on the prototype
         delete m.obj[m.key];
       } else {
-        // Redefine the origin key instead of the mock key
         Object.defineProperty(m.obj, m.key, m.descriptor);
       }
     }
-    this.mocks = [];
-    this.contextMocks = [];
-    this.cache.clear();
-    this.simulatorList = [];
-    MidwayMockService.prepareMocks = [];
+    this.mocks.delete(group);
+    this.contextMocks.delete(group);
+    this.cache.delete(group);
+    this.simulatorList = this.simulatorList.filter(
+      sim => sim['group'] !== group
+    );
   }
 
-  isMocked(obj, key) {
-    const flag = this.cache.get(obj);
+  public isMocked(obj, key, group = 'default') {
+    if (isClass(obj)) {
+      obj = obj.prototype;
+    }
+    const groupCache = this.cache.get(group);
+    const flag = groupCache ? groupCache.get(obj) : undefined;
     return flag ? flag.has(key) : false;
   }
 
   applyContextMocks(app: IMidwayApplication, ctx: IMidwayContext) {
-    if (this.contextMocks.length > 0) {
-      for (const mockItem of this.contextMocks) {
+    for (const [, groupMocks] of this.contextMocks) {
+      for (const mockItem of groupMocks) {
         if (mockItem.app === app) {
           const descriptor = this.overridePropertyDescriptor(mockItem.value);
           if (typeof mockItem.key === 'string') {
@@ -143,7 +208,10 @@ export class MidwayMockService {
   }
 
   getContextMocksSize() {
-    return this.contextMocks.length;
+    return Array.from(this.contextMocks.values()).reduce(
+      (sum, group) => sum + group.length,
+      0
+    );
   }
 
   private overridePropertyDescriptor(value) {
@@ -165,13 +233,14 @@ export class MidwayMockService {
     return descriptor;
   }
 
-  public async initSimulation() {
+  public async initSimulation(group = 'default') {
     const simulationModule: Array<new (...args) => ISimulation> =
       DecoratorManager.listModule(MOCK_KEY);
 
     for (const module of simulationModule) {
       const instance = await this.applicationContext.getAsync(module);
       if (await instance.enableCondition()) {
+        instance['group'] = group;
         this.simulatorList.push(instance);
       }
     }
