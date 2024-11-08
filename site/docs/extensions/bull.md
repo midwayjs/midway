@@ -710,11 +710,13 @@ testQueue.on('completed', function (job, result) {
 ```typescript
 export default {
   midwayLogger: {
-    // ...
-    bullLogger: {
-      fileLogName: 'midway-bull.log',
+    clients: {
+      // ...
+      bullLogger: {
+        fileLogName: 'midway-bull.log',
+      },
     },
-  }
+  },
 }
 ```
 
