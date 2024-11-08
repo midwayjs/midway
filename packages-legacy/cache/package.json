@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cache",
-  "version": "3.18.2",
+  "version": "3.19.0",
   "description": "midway cache manager",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -29,8 +29,8 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/mock": "^3.18.2"
+    "@midwayjs/core": "^3.19.0",
+    "@midwayjs/mock": "^3.19.0"
   },
   "dependencies": {
     "cache-manager": "3.6.3"
