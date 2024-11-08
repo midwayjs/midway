@@ -1,6 +1,8 @@
-import * as Kafkajs from 'kafkajs';
+import * as KafkaJS from 'kafkajs';
 
 export { MidwayKafkaFramework as Framework } from './framework';
-export * from './interface';
 export { KafkaConfiguration as Configuration } from './configuration';
-export { Kafkajs };
+export * from './interface';
+export * from './decorator';
+export * from './service';
+export { KafkaJS };

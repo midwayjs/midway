@@ -9,13 +9,37 @@ import {
   MSListenerType,
   MS_CONSUMER_KEY,
   MidwayInvokeForbiddenError,
+  ILogger,
+  Logger,
+  TypedResourceManager,
+  MidwayCommonError,
 } from '@midwayjs/core';
 import {
+  IKafkaConsumerInitOptions,
+  IKafkaConsumer,
   IMidwayConsumerConfig,
   IMidwayKafkaApplication,
   IMidwayKafkaContext,
 } from './interface';
 import { KafkaConsumerServer } from './kafka';
+import { KAFKA_DECORATOR_KEY } from './decorator';
+import { ConsumerRunConfig, Kafka, Consumer, logLevel } from 'kafkajs';
+import { KafkaManager } from './manager';
+
+const toMidwayLogLevel = level => {
+  switch (level) {
+    case logLevel.NOTHING:
+      return 'none';
+    case logLevel.ERROR:
+      return 'error';
+    case logLevel.WARN:
+      return 'warn';
+    case logLevel.INFO:
+      return 'info';
+    case logLevel.DEBUG:
+      return 'debug';
+  }
+};
 
 @Framework()
 export class MidwayKafkaFramework extends BaseFramework<
@@ -23,33 +47,141 @@ export class MidwayKafkaFramework extends BaseFramework<
   IMidwayKafkaContext,
   any
 > {
+  protected LogCreator: any;
+  protected typedResourceManager: TypedResourceManager<
+    Consumer,
+    IKafkaConsumerInitOptions,
+    IKafkaConsumer
+  >;
   configure() {
     return this.configService.getConfiguration('kafka');
   }
 
-  async applicationInitialize() {
-    // Create a connection manager
-    this.app = new KafkaConsumerServer({
-      logger: this.logger,
-      ...this.configurationOptions,
-    }) as unknown as IMidwayKafkaApplication;
-  }
+  @Logger('kafkaLogger')
+  kafKaLogger: ILogger;
 
-  public async run(): Promise<void> {
-    try {
-      await this.app.connect(
-        this.configurationOptions.kafkaConfig,
-        this.configurationOptions.consumerConfig
-      );
-      await this.loadSubscriber();
-      this.logger.info('Kafka consumer server start success');
-    } catch (error) {
-      this.logger.error('Kafka consumer connect fail', error);
-      await this.app.closeConnection();
+  async applicationInitialize() {
+    this.LogCreator = logLevel => {
+      const logger = this.kafKaLogger;
+
+      return ({ level, log }) => {
+        const lvl = toMidwayLogLevel(level);
+        const { message, ...extra } = log;
+        logger?.[lvl](message, extra);
+      };
+    };
+
+    // Create a connection manager
+    if (this.configurationOptions['kafkaConfig']) {
+      this.app = new KafkaConsumerServer({
+        logger: this.kafKaLogger,
+        ...this.configurationOptions,
+      }) as unknown as IMidwayKafkaApplication;
+    } else {
+      this.app = {} as any;
     }
   }
 
-  private async loadSubscriber() {
+  public async run(): Promise<void> {
+    if (this.configurationOptions['kafkaConfig']) {
+      try {
+        await this.app.connect(
+          this.configurationOptions.kafkaConfig,
+          this.configurationOptions.consumerConfig
+        );
+        await this.loadLegacySubscriber();
+        this.kafKaLogger.info('Kafka consumer server start success');
+      } catch (error) {
+        this.kafKaLogger.error('Kafka consumer connect fail', error);
+        await this.app.closeConnection();
+      }
+    } else {
+      const { consumer } = this.configurationOptions;
+      if (!consumer) return;
+      const subscriberMap = {};
+      // find subscriber
+      const subscriberModules = listModule(KAFKA_DECORATOR_KEY);
+      for (const subscriberModule of subscriberModules) {
+        const subscriberName = getClassMetadata(
+          KAFKA_DECORATOR_KEY,
+          subscriberModule
+        ) as string;
+        subscriberMap[subscriberName] = subscriberModule;
+      }
+
+      this.typedResourceManager = new TypedResourceManager<
+        Consumer,
+        IKafkaConsumerInitOptions,
+        IKafkaConsumer
+      >({
+        initializeValue: consumer,
+        initializeClzProvider: subscriberMap,
+        resourceInitialize: async (resourceInitializeConfig, resourceName) => {
+          let client;
+          if (resourceInitializeConfig.kafkaInstanceRef) {
+            client = KafkaManager.getInstance().getKafkaInstance(
+              resourceInitializeConfig.kafkaInstanceRef
+            );
+            if (!client) {
+              throw new MidwayCommonError(
+                `kafka instance ${resourceInitializeConfig.kafkaInstanceRef} not found`
+              );
+            }
+          } else {
+            client = new Kafka({
+              logCreator: this.LogCreator,
+              ...resourceInitializeConfig.connectionOptions,
+            });
+            KafkaManager.getInstance().addKafkaInstance(resourceName, client);
+          }
+
+          const consumer = client.consumer(
+            resourceInitializeConfig.consumerOptions
+          );
+          await consumer.connect();
+          await consumer.subscribe(resourceInitializeConfig.subscribeOptions);
+          return consumer;
+        },
+        resourceBinding: async (
+          ClzProvider,
+          resourceInitializeConfig,
+          consumer
+        ): Promise<ConsumerRunConfig> => {
+          const runMethod = ClzProvider.prototype['eachBatch']
+            ? 'eachBatch'
+            : 'eachMessage';
+          const runConfig = {
+            ...resourceInitializeConfig.consumerRunConfig,
+          };
+          runConfig[runMethod] = async payload => {
+            const ctx = this.app.createAnonymousContext();
+            const fn = await this.applyMiddleware(async ctx => {
+              ctx.payload = payload;
+              ctx.consumer = consumer;
+              const instance = await ctx.requestContext.getAsync(ClzProvider);
+              return await instance[runMethod].call(instance, payload, ctx);
+            });
+            return await fn(ctx);
+          };
+          return runConfig;
+        },
+        resourceStart: async (
+          resource: Consumer,
+          resourceInitializeConfig,
+          resourceBindingResult: ConsumerRunConfig
+        ) => {
+          await resource.run(resourceBindingResult);
+        },
+        resourceDestroy: async (resource: Consumer) => {
+          await resource.disconnect();
+        },
+      });
+      await this.typedResourceManager.init();
+      await this.typedResourceManager.start();
+    }
+  }
+
+  private async loadLegacySubscriber() {
     const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
       const metadata: ConsumerMetadata.ConsumerMetadata = getClassMetadata(
         MS_CONSUMER_KEY,
@@ -94,7 +226,8 @@ export class MidwayKafkaFramework extends BaseFramework<
           );
           await this.app.connection.run(
             Object.assign(e.runConfig, {
-              eachMessage: async ({ topic, partition, message }) => {
+              eachMessage: async payload => {
+                const { topic, partition, message } = payload;
                 let propertyKey: string | number;
                 for (const methodBindListeners of data) {
                   for (const listenerOptions of methodBindListeners) {
@@ -113,6 +246,8 @@ export class MidwayKafkaFramework extends BaseFramework<
                             },
                           ]);
                         },
+                        payload,
+                        consumer: this.app.connection,
                       } as unknown as IMidwayKafkaContext;
                       this.app.createAnonymousContext(ctx);
 
@@ -159,12 +294,26 @@ export class MidwayKafkaFramework extends BaseFramework<
     }
   }
 
+  public getConsumer(subscriberNameOrInstanceName: string) {
+    if (this.typedResourceManager) {
+      return this.typedResourceManager.getResource(
+        subscriberNameOrInstanceName
+      );
+    }
+  }
+
+  public getKafka(instanceName: string) {
+    return KafkaManager.getInstance().getKafkaInstance(instanceName);
+  }
+
   public getFrameworkName() {
     return 'midway:kafka';
   }
 
   protected async beforeStop(): Promise<void> {
-    await this.app.close();
+    if (this.typedResourceManager) {
+      await this.typedResourceManager.destroy();
+    }
   }
 
   public getFrameworkType(): MidwayFrameworkType {

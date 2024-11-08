@@ -17,7 +17,7 @@
 | 可用于 Serverless | ❌    |
 | 可用于一体化      | ✅    |
 | 包含独立主框架    | ✅     |
-| 包含独立日志      | ❌    |
+| 包含独立日志      | ✅     |
 
 
 
@@ -29,7 +29,7 @@
 * 容错（故障转移）存储信息（流），存储事件流
 * 在消息流发生的时候进行处理，处理事件流
 
-理解Producer（生产者）
+理解 Producer（生产者）
 
 * 发布消息到一个主题或多个 topic (主题)。
 
@@ -45,18 +45,18 @@
 
 ![image.png](https://kafka.apache.org/images/streams-and-tables-p1_p4.png)
 
+:::tip
+从 v3.19 开始，Kafka 组件做了一次重构，Kafka 组件的配置、使用方法和之前都有较大差异，原有使用方式兼容，但是文档不再保留。
+:::
 
 
-## 消费者（Consumer）使用方法
+## 安装依赖
 
 
-### 安装依赖
+安装 `@midwayjs/kafka` 模块。
 
-
-Midway 提供了订阅 Kafka 的能力，并能够独立部署和使用。安装 `@midwayjs/kafka` 模块及其定义。
 ```bash
 $ npm i @midwayjs/kafka --save
-$ npm i kafkajs --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -65,7 +65,6 @@ $ npm i kafkajs --save
 {
   "dependencies": {
     "@midwayjs/kafka": "^3.0.0",
-    "kafka": "^2.0.0",
     // ...
   }
 }
@@ -115,13 +114,14 @@ export class MainConfiguration {
 }
 ```
 
+由于 Kafka 分为 **消费者（Consumer）** 和 **生产者（Producer）** 两部分，两个可以独立使用，我们将分别介绍。
+
+## 消费者（Consumer）
+
 ### 目录结构
 
 
-我们一般把能力分为生产者和消费者，而订阅正是消费者的能力。
-
-
-我们一般把消费者放在 consumer 目录。比如 `src/consumer/userConsumer.ts`  。
+我们一般把消费者放在 consumer 目录。比如 `src/consumer/user.consumer.ts`  。
 ```
 ➜  my_midway_app tree
 .
@@ -135,337 +135,454 @@ export class MainConfiguration {
 ├── package.json
 └── tsconfig.json
 ```
-代码示例如下。
-
-```typescript
-@Provide()
-@Consumer(MSListenerType.KAFKA)
-export class UserConsumer {
-
-  @Inject()
-  ctx: IMidwayKafkaContext;
-
-  @Inject()
-  logger;
-
-  @KafkaListener('topic-test')
-  async gotData(message: KafkaMessage) {
-    this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
-  }
-}
-```
-`@Consumer` 装饰器，提供消费者标识，并且它的参数，指定了某种消费框架的类型，比如，我们这里指定了 `MSListenerType.KFAKA` 这个类型，指的就是 kafka 类型。
 
 
-标识了 `@Consumer` 的类，对方法使用 `@KafkaListener` 装饰器后，可以绑定一个topic。
+### 基础配置
 
+通过 `consumer` 字段和 `@KafkaConsumer` 装饰器，我们可以配置多个消费者。
 
-方法的参数为接收到的消息，类型为 `ConsumeMessage` 。默认设置了自动确认，什么时候设置手动确认？当出现异常的时候，需要设置commitOffsets偏移到异常的位置，用于重新执行消费。
-
-如果需要订阅多个topic，可以使用多个方法，也可以使用多个文件。
-
-
-### Kafka 消息上下文
-
-
-订阅 `Kafka` 数据的上下文，和 Web 同样的，其中包含一个 `requestContext` ，和每次接收消息的数据绑定。
-
-整个 ctx 的定义为：
-```typescript
-export type Context = {
-  requestContext: IMidwayContainer;
-};
-```
-
-
-可以从框架获取定义
-```typescript
-import { Context } from '@midwayjs/kafka';
-```
-
-
-### 配置消费者
-
-我们需要在配置中指定 kafka 的地址。
+比如，下面的 `sub1` 和 `sub2` 就是两个不同的消费者。
 
 ```typescript
 // src/config/config.default
-import { MidwayConfig } from '@midwayjs/core';
-
 export default {
-  // ...
   kafka: {
-    kafkaConfig: {
-      clientId: 'my-app',
-      brokers: [process.env.KAFKA_URL || 'localhost:9092'],
-    },
-    consumerConfig: {
-      groupId: 'groupId-test'
+    consumer: {
+      sub1: {
+        // ...
+      },
+      sub2: {
+        // ...
+      },
     }
-  },
-} as MidwayConfig;
+  }
+}
 ```
 
-更多配置(更详细的配置，参考 https://kafka.js.org/docs/consuming)：
-
-| 属性 | 描述 |
-| --- | --- |
-| kafkaConfig | kafka 的连接信息 |
-| - clientId | 指定客户端ID |
-| - brokers | Kafka集群brokers |
-| consumerConfig | 消费者配置 |
-| - groupId | 分组ID |
-
-
-
-### Manual-committing
-
-手动提交设置，组件默认是自动提交。
+最简单的消费者配置需要几个字段，Kafka 的连接配置、消费者配置以及订阅配置。
 
 ```typescript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
-import { KafkaMessage } from 'kafkajs';
-import { Context, Application } from '../../../../../src';
-
-@Provide()
-@Consumer(MSListenerType.KAFKA)
-export class UserConsumer {
-
-  @App()
-  app: Application;
-
-  @Inject()
-  ctx: Context;
-
-  @Inject()
-  logger;
-
-  @KafkaListener('topic-test0', {
-    subscription: {
-      fromBeginning: false,
-    },
-    runConfig: {
-      autoCommit: false,
-    }
-  })
-  async gotData(message: KafkaMessage) {
-    console.info('gotData info');
-    this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
-    try {
-      // 抛出异常，当出现异常的时候，需要设置commitOffsets偏移到异常的位置，用于重新执行消费，所以这里应该出现的消费是2次，total为2
-      throw new Error("error");
-    } catch (error) {
-      this.ctx.commitOffsets(message.offset);
-    }
-    this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
-  }
-}
-```
-
-### Multi different Topic
-订阅的 topic1 和 topic2， 两个主题的消费都会被调用。
-
-```typescript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
-import { KafkaMessage } from 'kafkajs';
-import { Context, Application } from '../../../../../src';
-
-@Provide()
-@Consumer(MSListenerType.KAFKA)
-export class UserConsumer {
-
-  @App()
-  app: Application;
-
-  @Inject()
-  ctx: Context;
-
-  @Inject()
-  logger;
-
-  @KafkaListener('topic-test')
-  async gotData(message: KafkaMessage) {
-    console.info('gotData info');
-    this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
-    this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
-  }
-
-  @KafkaListener('topic-test2')
-  async gotData2(message: KafkaMessage) {
-    console.info('gotData2 info');
-    this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
-    this.app.setAttr('total', this.app.getAttr<number>('total') + 1);
-  }
-
-}
-
-```
-
-### 装饰器参数
-
-
-`@kafkaListener` 装饰器的第一个参数为 topic ，代表需要消费的主题。
-
-
-第二个参数是一个对象，包含注册的配置`subscription`、运行的配置`runConfig`等参数，详细定义如下：
-
-```typescript
-export interface KafkaListenerOptions {
-  propertyKey?: string;
-  topic?: string;
-
-  subscription?: ConsumerSubscribeTopics | ConsumerSubscribeTopic;
-  runConfig?: ConsumerRunConfig;
-}
-```
-
-
-
-**示例一**
-
-
-创建一个手动提交，设置消费者在开始获取消息时将使用最新提交的偏移量`fromBeginning: false`，设置运行时的提交方式为手动提交`autoCommit: false`
-```typeScript
-import { Provide, Consumer, MSListenerType, Inject, App, KafkaListener } from '@midwayjs/core';
-import { KafkaMessage } from 'kafkajs';
-import { Context, Application } from '../../../../../src';
-
-@Provide()
-@Consumer(MSListenerType.KAFKA)
-export class UserConsumer {
-
-  @App()
-  app: Application;
-
-  @Inject()
-  ctx: Context;
-
-  @Inject()
-  logger;
-
-  @KafkaListener('topic-test0', {
-    subscription: {
-      fromBeginning: false,
-    },
-    runConfig: {
-      autoCommit: false,
-    }
-  })
-  async gotData(message: KafkaMessage) {
-    console.info('gotData info');
-    this.logger.info('test output =>', message.offset + ' ' + message.key + ' ' + message.value.toString('utf8'));
-    try {
-      // 抛出异常，当出现异常的时候，需要设置commitOffsets偏移到异常的位置，用于重新执行消费
-      throw new Error("error");
-    } catch (error) {
-      this.ctx.commitOffsets(message.offset);
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          // ...
+        },
+        consumerOptions: {
+          // ...
+        },
+        subscribeOptions: {
+          // ...
+        },
+      },
     }
   }
 }
-
 ```
-
-
-
-
-## 生产者（Producer）使用方法
-
-
-生产者（Producer）也就是第一节中的消息生产者，简单的来说就是会创建一个客户端，将消息发送到 Kafka 服务。
-
-
-注意：当前 Midway 并没有使用组件来支持消息发送，这里展示的示例只是使用纯 SDK 在 Midway 中的写法。
-
-
-### 安装依赖
-
-
-```bash
-$ npm i kafkajs --save
-```
-
-
-### 调用服务发送消息
-
-
-比如，我们在 service 文件下，新增一个 `kafka.ts` 文件。
-```typescript
-import {
-  Provide,
-  Scope,
-  ScopeEnum,
-  Init,
-  Autoload,
-  Destroy,
-  Config,
-} from '@midwayjs/core';
-import { ProducerRecord } from 'kafkajs';
-const { Kafka } = require('kafkajs');
-
-@Autoload()
-@Provide()
-@Scope(ScopeEnum.Singleton) // Singleton 单例，全局唯一（进程级别）
-export class KafkaService {
-  @Config('kafka')
-  kafkaConfig: any;
-
-  private producer;
-
-  @Init()
-  async connect() {
-    // 创建连接，你可以把配置放在 Config 中，然后注入进来
-    const { brokers, clientId, producerConfig = {} } = this.kafkaConfig;
-    const client = new Kafka({
-      clientId: clientId,
-      brokers: brokers,
-    });
-    this.producer = client.producer(producerConfig);
-    await this.producer.connect();
-  }
-
-  // 发送消息
-  public async send(producerRecord: ProducerRecord) {
-    return this.producer.send(producerRecord);
-  }
-
-  @Destroy()
-  async close() {
-    await this.producer.disconnect();
-  }
-}
-
-```
-大概就是创建了一个用来封装消息通信的 service，同时他是全局唯一的 Singleton 单例。由于增加了 `@AutoLoad` 装饰器，可以自执行初始化。
-
-
-这样基础的调用服务就抽象好了，我们只需要在用到的地方，调用 `send` 方法即可。
-
 
 比如：
 
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          clientId: 'my-app',
+          brokers: ['localhost:9092'],
+        },
+        consumerOptions: {
+          groupId: 'groupId-test-1',
+        },
+        subscribeOptions: {
+          topics: ['topic-test-1'],
+        }
+      },
+    }
+  }
+}
+```
+
+完整可配置参数包括：
+
+- `connectionOptions`：Kafka 的连接配置，即 `new Kafka(consumerOptions)` 的参数
+- `consumerOptions`：Kafka 的消费者配置，即 `kafka.consumer(consumerOptions)` 的参数
+- `subscribeOptions`：Kafka 的订阅配置，即 `consumer.subscribe(subscribeOptions)` 的参数
+- `consumerRunConfig`：消费者运行配置，即 `consumer.run(consumerRunConfig)` 的参数
+
+这些参数的详细说明，可以参考 [KafkaJS Consumer](https://kafka.js.org/docs/consuming) 文档。
+
+### 复用 Kafka 实例
+
+如果如果需要复用 Kafka 实例，可以通过 `kafkaInstanceRef` 字段来指定。
 
 ```typescript
-@Provide()
-export class UserService {
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          clientId: 'my-app',
+          brokers: ['localhost:9092'],
+        },
+        consumerOptions: {
+          groupId: 'groupId-test-1',
+        },
+        subscribeOptions: {
+          topics: ['topic-test-1'],
+        }
+      },
+      sub2: {
+        kafkaInstanceRef: 'sub1',
+        consumerOptions: {
+          groupId: 'groupId-test-2',
+        },
+        subscribeOptions: {
+          topics: ['topic-test-2'],
+        }
+      }
+    }
+  }
+}
+```
+
+注意，上述的 `sub1` 和 `sub2` 是两个不同的消费者，但是它们共享同一个 Kafka 实例，且 `sub2` 的 `groupId` 需要和 `sub1` 不同。
+
+用 Kafka SDK 写法类似如下：
+
+```typescript
+const kafka = new Kafka({
+  clientId: 'my-app',
+  brokers: ['localhost:9092'],
+});
+
+const consumer1 = kafka.consumer({ groupId: 'groupId-test-1' });
+const consumer2 = kafka.consumer({ groupId: 'groupId-test-2' });
+```
+
+### 消费者实现
+
+我们可以在目录中提供一个标准的消费者实现，比如 `src/consumer/sub1.consumer.ts`。
+
+```typescript
+// src/consumer/sub1.consumer.ts
+import { KafkaConsumer, IKafkaConsumer, EachMessagePayload } from '@midwayjs/kafka';
+
+@KafkaConsumer('sub1')
+class Sub1Consumer implements IKafkaConsumer {
+  async eachMessage(payload: EachMessagePayload) {
+    // ...
+  }
+}
+```
+
+`sub1` 是消费者名称，使用的是配置中的 `sub1` 消费者。
+
+也可以实现 `eachBatch` 方法，处理批量消息。
+
+```typescript
+// src/consumer/sub1.consumer.ts
+import { KafkaConsumer, IKafkaConsumer, EachBatchPayload } from '@midwayjs/kafka';
+
+@KafkaConsumer('sub1')
+class Sub1Consumer implements IKafkaConsumer {
+  async eachBatch(payload: EachBatchPayload) {
+    // ...
+  }
+}
+```
+
+
+### 消息上下文
+
+
+和其他消息订阅机制一样，消息本身通过 `Context` 字段来传递。
+
+```typescript
+// src/consumer/sub1.consumer.ts
+import { KafkaConsumer, IKafkaConsumer, EachMessagePayload, Context } from '@midwayjs/kafka';
+import { Inject } from '@midwayjs/core';
+
+@KafkaConsumer('sub1')
+class Sub1Consumer implements IKafkaConsumer {
 
   @Inject()
-  kafkaService: KafkaService;
+  ctx: Context;
 
-  async invoke() {
-    // TODO
+  async eachMessage(payload: EachMessagePayload) {
+    // ...
+  }
+}
+```
 
-    // 发送消息
-    const result = this.kafkaService.send({
-      topic: 'test',
-      messages: [
-        {
-          value: JSON.stringify(messageValue),
+`Context` 字段包括几个属性：
+
+| 属性        | 类型                           | 描述             |
+| ----------- | ------------------------------ | ---------------- |
+| ctx.payload   | EachMessagePayload, EachBatchPayload | 消息内容         |
+| ctx.consumer  | Consumer             | 消费者实例         |
+
+
+你可以通过 `ctx.consumer` 来调用 Kafka 的 API，比如 `ctx.consumer.commitOffsets` 来手动提交偏移量或者 `ctx.consumer.pause` 来暂停消费。
+
+
+## 生产者（Producer）
+
+### 基础配置
+
+服务生产者也需要创建实例，配置本身使用了 [服务工厂](/docs/service_factory) 的设计模式。
+
+配置如下：
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    producer: {
+      clients: {
+        pub1: {
+          // ...
         },
-      ],
+        pub2: {
+          // ...
+        }
+      }
+    }
+  }
+}
+```
+
+每个 Producer 实例的配置，同样包括 `connectionOptions` 和 `producerOptions`。
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    producer: {
+      clients: {
+        pub1: {
+          connectionOptions: {
+            clientId: 'my-app',
+            brokers: ['localhost:9092'],
+          },
+          producerOptions: {
+            // ...
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+具体参数可以参考 [KafkaJS Producer](https://kafka.js.org/docs/producing) 文档。
+
+此外，由于 Kafka Consumer 和 Producer 都可以从同一个 Kafka 实例创建，所以它们可以复用同一个 Kafka 实例。
+
+Producer 后于 Consumer 创建，也同样可以使用 `kafkaInstanceRef` 字段来复用 Kafka 实例。
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          clientId: 'my-app',
+          brokers: ['localhost:9092'],
+        },
+      }
+    },
+    producer: {
+      clients: {
+        pub1: {
+          kafkaInstanceRef: 'sub1',
+        }
+      }
+    }
+  }
+}
+```
+
+### 使用 Producer
+
+Producer 不存在默认实例，由于使用了服务工厂的设计模式，所以可以通过 `@InjectClient()` 来注入。
+
+
+```typescript
+// src/service/user.service.ts
+import { Provide, InjectClient } from '@midwayjs/core';
+import { KafkaProducerFactory, Producer } from '@midwayjs/kafka';
+
+@Provide()
+export class UserService {
+  
+  @InjectClient(KafkaProducerFactory, 'pub1')
+  producer: Producer;
+  
+  async invoke() {
+    await this.producer.send({
+      topic: 'topic-test-1',
+      messages: [{ key: 'message-key1', value: 'hello consumer 11 !' }],
     });
   }
 }
 ```
+
+## Admin
+
+Kafka 的 Admin 功能，可以用来创建、删除、查看主题，查看配置和 ACL 等。
+
+### 基础配置
+
+和 Producer 类似，Admin 也使用了服务工厂的设计模式。
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    admin: {
+      clients: {
+        admin1: {
+          // ...
+        }
+      }
+    }
+  }
+}
+```
+
+同样的，Admin 也可以复用 Kafka 实例。
+
+```typescript
+// src/config/config.default
+export default {
+  kafka: {
+    consumer: {
+      sub1: {
+        connectionOptions: {
+          clientId: 'my-app',
+          brokers: ['localhost:9092'],
+        },
+      }
+    },
+    admin: {
+      clients: {
+        admin1: {
+          kafkaInstanceRef: 'sub1',
+        }
+      }
+    }
+  }
+}
+```
+
+### 使用 Admin
+
+Admin 不存在默认实例，由于使用了服务工厂的设计模式，所以可以通过 `@InjectClient()` 来注入。
+
+```typescript
+// src/service/admin.service.ts
+import { Provide, InjectClient } from '@midwayjs/core';
+import { KafkaAdminFactory, Admin } from '@midwayjs/kafka';
+
+@Provide()
+export class AdminService {
+  
+  @InjectClient(KafkaAdminFactory, 'admin1')
+  admin: Admin;
+}
+```
+
+更多的 Admin 使用方法，可以参考 [KafkaJS Admin](https://kafka.js.org/docs/admin) 文档。
+
+
+## 组件日志
+
+Kafka 组件默认使用 `kafkaLogger` 日志，默认会将 `ctx.logger` 记录在 `midway-kafka.log`。
+
+你可以通过配置修改。
+
+```typescript
+// src/config/config.default
+export default {
+  midwayLogger: {
+    clients: {
+      kafkaLogger: {
+        fileLogName: 'midway-kafka.log',
+      },
+    },
+  },
+}
+```
+
+这个日志的输出格式，我们也可以单独配置。
+
+```typescript
+export default {
+  kafka: {
+    // ...
+    contextLoggerFormat: info => {
+      const { jobId, from } = info.ctx;
+      return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.message}`;
+    },
+  }
+}
+```
+
+
+## 获取 KafkaJS 模块
+
+KafkaJS 模块，可以通过 `@midwayjs/kafka` 的 `KafkaJS` 字段来获取。
+
+```typescript
+import { KafkaJS } from '@midwayjs/kafka';
+
+const { ConfigResourceTypes } = KafkaJS;
+// ...
+```
+
+## 关于分区的警告
+
+如果你使用的是 KafkaJS 的 v2.0.0 版本，你可能会看到如下的警告：
+
+```
+2024-11-04 23:47:28.228 WARN 31729 KafkaJS v2.0.0 switched default partitioner. To retain the same partitioning behavior as in previous versions, create the producer with the option "createPartitioner: Partitioners.LegacyPartitioner". See the migration guide at https://kafka.js.org/docs/migration-guide-v2.0.0#producer-new-default-partitioner for details. Silence this warning by setting the environment variable "KAFKAJS_NO_PARTITIONER_WARNING=1" { timestamp: '2024-11-04T15:47:28.228Z', logger: 'kafkajs' }
+```
+
+这个警告是由于 KafkaJS 的 v2.0.0 版本默认使用了新的分区器，如果接受新的分区器行为，但想要关闭这个警告消息，可以通过设置环境变量 `KAFKAJS_NO_PARTITIONER_WARNING=1` 来消除这个警告。
+
+或者显示声明分区器。
+
+```typescript
+// src/config/config.default
+import { KafkaJS } from '@midwayjs/kafka';
+const { Partitioners } = KafkaJS;
+
+export default {
+  kafka: {
+    producer: {
+      clients: {
+        pub1: {
+          // ...
+          producerOptions: {
+            createPartitioner: Partitioners.DefaultPartitioner,
+            // ...
+            createPartitioner: Partitioners.LegacyPartitioner,
+          },
+        },
+      },
+    },
+  }
+}
+```
+
+建议你查看 KafkaJS v2.0.0 的 [迁移指南](https://kafka.js.org/docs/migration-guide-v2.0.0#producer-new-default-partitioner) 了解更多细节。
+
 
 
 ## 参考文档
