@@ -25,6 +25,22 @@ export namespace hero {
   }
 }
 
+export namespace hero2 {
+  export interface HeroServiceClient {
+    findOne(options?: IClientOptions): IClientUnaryService<HeroById, Hero>;
+  }
+  export interface HeroById {
+    id?: number;
+  }
+  export interface Hero {
+    id?: number;
+    name?: string;
+  }
+  export interface HeroService2Client {
+    findOne2(options?: IClientOptions): IClientUnaryService<HeroById, Hero>;
+  }
+}
+
 export namespace helloworld {
   export interface GreeterClient {
     sayHello (options?: IClientOptions): IClientUnaryService<HelloRequest, HelloReply>
@@ -60,7 +76,6 @@ export namespace math {
     addMany(options?: IClientOptions): IClientWritableStreamService<AddArgs, Num>;
   }
 }
-
 
 describe('/test/index.test.ts', function () {
 
@@ -108,18 +123,36 @@ describe('/test/index.test.ts', function () {
 
   it('should create multiple grpc service in one server', async () => {
     const app = await createServer('base-app-multiple-service');
-
-    const service = await createGRPCConsumer<hero.HeroServiceClient>({
+    const opts = {
       package: 'hero',
       protoPath: join(__dirname, 'fixtures/proto/hero.proto'),
       url: 'localhost:6565'
-    });
-
-    const result = await service.findOne().sendMessage({
-      id: 123
-    });
-
+    }
+    const service = await createGRPCConsumer<hero.HeroServiceClient>({ ...opts, });
+    const result = await service.findOne().sendMessage({ id: 123 });
     expect(result).toEqual({ id: 1, name: 'bbbb-Hello harry' })
+    await closeApp(app);
+  });
+
+  it('should create multiple grpc service in one server 2', async () => {
+    const app = await createServer('base-app-multiple-service-2');
+    const opts = {
+      package: 'hero2',
+      protoPath: join(__dirname, 'fixtures/proto/hero2.proto'),
+      url: 'localhost:6566'
+    }
+
+    const service = await createGRPCConsumer<hero2.HeroServiceClient>({ ...opts, });
+    const result = await service.findOne().sendMessage({ id: 123 });
+    expect(result).toEqual({ id: 1, name: 'bbbb-Hello harry' })
+
+    const service2 = await createGRPCConsumer<hero2.HeroService2Client>({ service: 'HeroService2', ...opts, });
+    const result2 = await service2.findOne2().sendMessage({ id: 123 });
+    expect(result2).toEqual({ id: 1, name: 'bbbb-Hello harry' })
+
+    const service3 = await createGRPCConsumer<hero2.HeroService2Client>({ ...opts, service: 'hero2.HeroService2' });
+    const result3 = await service3.findOne2().sendMessage({ id: 123 });
+    expect(result3).toEqual({ id: 1, name: 'bbbb-Hello harry' })
     await closeApp(app);
   });
 

@@ -52,9 +52,7 @@ export class ServerSendEventStream<
         this.ctx.req.socket.setTimeout(0);
         this.ctx.req.socket.setNoDelay(true);
         this.ctx.req.socket.setKeepAlive(true);
-        res.push({
-          data: ':ok',
-        });
+        res.push(': ok');
       }
 
       const senderObject = chunk;

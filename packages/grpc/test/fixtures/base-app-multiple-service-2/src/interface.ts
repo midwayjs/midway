@@ -1,7 +1,8 @@
 import { Metadata } from '@grpc/grpc-js';
 import { IClientOptions, IClientUnaryService } from '../../../../src';
 
-export namespace hero {
+
+export namespace hero2 {
   export interface HeroService {
     findOne(data: HeroById, metadata?: Metadata): Promise<Hero>;
   }

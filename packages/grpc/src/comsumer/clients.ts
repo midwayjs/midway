@@ -1,3 +1,4 @@
+import * as assert from 'assert';
 import {
   Config,
   Init,
@@ -40,23 +41,33 @@ export class GRPCClients extends Map {
     }
   }
 
-  async createClient<T>(options: IGRPCClientServiceOptions): Promise<T> {
+  async createClient<T>(options: IGRPCClientServiceOptions): Promise<void> {
     const packageDefinition = await loadProto({
       loaderOptions: options.loaderOptions,
       protoPath: options.protoPath,
     });
     const allProto = loadPackageDefinition(packageDefinition);
     const packageProto: any = finePackageProto(allProto, options.package);
+
     for (const definition in packageDefinition) {
       if (!packageDefinition[definition]['format']) {
         const serviceName = definition.replace(`${options.package}.`, '');
-        const connectionService = new packageProto[serviceName](
+        const connectionService: T = new packageProto[serviceName](
           options.url,
           credentials.createInsecure(),
           options.clientOptions
         );
+
         for (const methodName of Object.keys(packageDefinition[definition])) {
           const originMethod = connectionService[methodName];
+          const msg: string[] = [
+            `No method found in proto file, path: ${options.protoPath}`,
+            `method: ${methodName}`,
+            `definition: ${definition}`,
+            `serviceName: ${serviceName}`,
+          ];
+          assert(originMethod, msg.join(', '));
+
           connectionService[methodName] = (
             clientOptions: IClientOptions = {}
           ) => {
@@ -70,7 +81,6 @@ export class GRPCClients extends Map {
             connectionService[methodName];
         }
         this.set(definition, connectionService);
-        return connectionService;
       }
     }
   }
@@ -130,5 +140,12 @@ export const createGRPCConsumer = async <T>(
   };
 
   await clients.initService();
+  if (typeof options.service === 'string' && options.service) {
+    const pkg = clients.grpcConfig.services[0].package;
+    const name = options.service.startsWith(`${pkg}.`)
+      ? options.service
+      : `${pkg}.${options.service}`;
+    return clients.getService(name);
+  }
   return Array.from(clients.values())[0];
 };

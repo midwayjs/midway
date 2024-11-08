@@ -172,11 +172,43 @@ it('should test create koa app with new mode with mock', async () => {
 
 
 
-### Clean up mock
+### Grouping
+
+Starting from version `3.19.0`, Midway's mock functionality supports managing different mock data through grouping. You can specify a group name when creating a mock, allowing you to restore or clean up a specific group of mock data as needed.
+
+```typescript
+import { mockContext, restoreMocks } from '@midwayjs/mock';
+
+it('should test mock with groups', async () => {
+  const app = await createApp();
+
+  // Create a mock for a regular object
+  const a = {};
+  mockProperty(a, 'getUser', async () => {
+    return 'midway';
+  }, 'group1');
+
+  // Create a mock for the context
+  mockContext(app, 'user', 'midway', 'group1');
+  mockContext(app, 'role', 'admin', 'group2');
+
+  // Restore a single group
+  restoreMocks('group1');
+
+  // Restore all groups
+  restoreAllMocks();
+});
+```
+
+By using groups, you can manage and control mock data more flexibly, especially in complex testing scenarios.
+
+
+
+### Cleaning up mocks
 
 Every time the `close` method is called, all mock data is automatically cleared.
 
-If you want to clean up manually, you can also perform method `restoreAllMocks`.
+If you want to clean up manually, you can also execute the `restoreAllMocks` method.
 
 ```typescript
 import { restoreAllMocks } from '@midwayjs/mock';
@@ -187,9 +219,18 @@ it('should test create koa app with new mode with mock', async () => {
 });
 ```
 
+Starting from version `3.19.0`, it supports cleaning up by specifying a group.
 
+```typescript
+import { restoreMocks } from '@midwayjs/mock';
 
-## Standard Mock service
+it('should test create koa app with new mode with mock', async () => {
+  restoreMocks('group1');
+  // ...
+});
+```
+
+### Standard Mock service
 
 Midway provides standard MidwayMockService services for simulating data in code.
 
