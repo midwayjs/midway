@@ -9,7 +9,7 @@ import {
   Utils,
   ILogger,
 } from '@midwayjs/core';
-import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
+import { credentials, loadPackageDefinition, Metadata } from '@grpc/grpc-js';
 import {
   DefaultConfig,
   IClientOptions,
@@ -71,6 +71,15 @@ export class GRPCClients extends Map {
           connectionService[methodName] = (
             clientOptions: IClientOptions = {}
           ) => {
+            const meta = new Metadata();
+
+            if (clientOptions.metadata) {
+              meta.merge(clientOptions.metadata);
+              clientOptions.metadata = meta;
+            } else {
+              clientOptions.metadata = meta;
+            }
+
             return this.getClientRequestImpl(
               connectionService,
               originMethod,
@@ -89,14 +98,26 @@ export class GRPCClients extends Map {
     return this.get(serviceName);
   }
 
-  getClientRequestImpl(client, originalFunction, options = {}) {
+  getClientRequestImpl(client, originalFunction, options: IClientOptions = {}) {
     const genericFunctionSelector =
       (originalFunction.requestStream ? 2 : 0) |
       (originalFunction.responseStream ? 1 : 0);
 
+    const meta = new Metadata();
+    if (options.metadata) {
+      meta.merge(options.metadata);
+      options.metadata = meta;
+    } else {
+      options.metadata = meta;
+    }
+
     let genericFunctionName;
+    const rpcMethod = options.metadata.get('rpc.method.type')?.[0];
     switch (genericFunctionSelector) {
       case 0:
+        if (!rpcMethod) {
+          options.metadata.set('rpc.method.type', 'unary');
+        }
         genericFunctionName = new ClientUnaryRequest(
           client,
           originalFunction,
@@ -104,6 +125,9 @@ export class GRPCClients extends Map {
         );
         break;
       case 1:
+        if (!rpcMethod) {
+          options.metadata.set('rpc.method.type', 'server'); // server streaming
+        }
         genericFunctionName = new ClientReadableRequest(
           client,
           originalFunction,
@@ -111,6 +135,9 @@ export class GRPCClients extends Map {
         );
         break;
       case 2:
+        if (!rpcMethod) {
+          options.metadata.set('rpc.method.type', 'client'); // client streaming
+        }
         genericFunctionName = new ClientWritableRequest(
           client,
           originalFunction,
@@ -118,6 +145,9 @@ export class GRPCClients extends Map {
         );
         break;
       case 3:
+        if (!rpcMethod) {
+          options.metadata.set('rpc.method.type', 'bidi'); // bidirectional streaming
+        }
         genericFunctionName = new ClientDuplexStreamRequest(
           client,
           originalFunction,

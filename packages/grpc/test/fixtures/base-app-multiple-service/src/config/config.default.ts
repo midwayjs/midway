@@ -3,7 +3,7 @@ import { join } from 'path';
 export const grpc = {
   services: [
     {
-      url: 'localhost:6565',
+      url: 'localhost:6575',
       protoPath: join(__dirname, '../../../proto/helloworld.proto'),
       package: 'helloworld',
       clientOptions: {
@@ -14,6 +14,7 @@ export const grpc = {
 }
 
 export const grpcServer = {
+  url: 'localhost:6575',
   services: [
     {
       protoPath: join(__dirname, '../../../proto/hero.proto'),
