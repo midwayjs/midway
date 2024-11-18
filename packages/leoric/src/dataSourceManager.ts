@@ -29,6 +29,11 @@ export class LeoricDataSourceManager extends DataSourceManager<
 
   @Init()
   async init() {
+    if (Object.keys(this.leoricConfig.dataSource).length > 1) {
+      for (const dataSource of Object.values(this.leoricConfig.dataSource)) {
+        dataSource.subclass = true;
+      }
+    }
     await this.initDataSource(this.leoricConfig, {
       baseDir: this.baseDir,
       entitiesConfigKey: 'models',
