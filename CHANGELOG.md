@@ -1,6 +1,33 @@
 # Change Log
 
 
+## v3.19.1 (2024-11-18)
+
+#### :bug: Bug Fix
+* `leoric`
+  * [#4192](https://github.com/midwayjs/midway/pull/4192) fix(leoric): keep multiple datasources from conflicting base model ([@cyjake](https://github.com/cyjake))
+
+#### :package: Dependencies
+* `otel`
+  * [#4193](https://github.com/midwayjs/midway/pull/4193) chore(deps): update dependency @opentelemetry/sdk-node to v0.55.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4191](https://github.com/midwayjs/midway/pull/4191) chore(deps): update dependency @vercel/ncc to v0.38.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4190](https://github.com/midwayjs/midway/pull/4190) fix(deps): update dependency mqtt to v5.10.2 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#4189](https://github.com/midwayjs/midway/pull/4189) fix(deps): update dependency bull to v4.16.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#4185](https://github.com/midwayjs/midway/pull/4185) chore(deps): update dependency mongoose to v8.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#4188](https://github.com/midwayjs/midway/pull/4188) chore(deps): update mikro-orm monorepo to v6.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `consul`
+  * [#4187](https://github.com/midwayjs/midway/pull/4187) chore(deps): update dependency nock to v13.5.6 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Chen Yangjian ([@cyjake](https://github.com/cyjake))
+
+
+
 ## v3.19.0 (2024-11-08)
 
 #### :rocket: New Feature

@@ -3,10 +3,19 @@
   "@midwayjs/fc-starter": "3.19.0",
   "@midwayjs/serverless-http-parser": "3.14.0",
   "@midwayjs/async-hooks-context-manager": "3.19.0",
-  "@midwayjs/axios": "3.19.0",
+  "@midwayjs/axios": [
+    "3.19.0",
+    "3.19.1"
+  ],
   "@midwayjs/bootstrap": "3.19.0",
-  "@midwayjs/bull": "3.19.0",
-  "@midwayjs/bull-board": "3.19.0",
+  "@midwayjs/bull": [
+    "3.19.0",
+    "3.19.1"
+  ],
+  "@midwayjs/bull-board": [
+    "3.19.0",
+    "3.19.1"
+  ],
   "@midwayjs/busboy": "3.19.0",
   "@midwayjs/cache-manager": "3.19.0",
   "@midwayjs/captcha": "3.19.0",
@@ -14,7 +23,10 @@
   "@midwayjs/casbin-redis-adapter": "3.19.0",
   "@midwayjs/casbin-typeorm-adapter": "3.19.0",
   "@midwayjs/code-dye": "3.19.0",
-  "@midwayjs/consul": "3.19.0",
+  "@midwayjs/consul": [
+    "3.19.0",
+    "3.19.1"
+  ],
   "@midwayjs/core": "3.19.0",
   "@midwayjs/cos": "3.19.0",
   "@midwayjs/cron": "3.19.0",
@@ -29,13 +41,28 @@
   "@midwayjs/info": "3.19.0",
   "@midwayjs/jwt": "3.19.0",
   "@midwayjs/kafka": "3.19.0",
-  "@midwayjs/leoric": "3.19.0",
-  "@midwayjs/mikro": "3.19.0",
+  "@midwayjs/leoric": [
+    "3.19.0",
+    "3.19.1"
+  ],
+  "@midwayjs/mikro": [
+    "3.19.0",
+    "3.19.1"
+  ],
   "@midwayjs/mock": "3.19.0",
-  "@midwayjs/mongoose": "3.19.0",
-  "@midwayjs/mqtt": "3.19.0",
+  "@midwayjs/mongoose": [
+    "3.19.0",
+    "3.19.1"
+  ],
+  "@midwayjs/mqtt": [
+    "3.19.0",
+    "3.19.1"
+  ],
   "@midwayjs/oss": "3.19.0",
-  "@midwayjs/otel": "3.19.0",
+  "@midwayjs/otel": [
+    "3.19.0",
+    "3.19.1"
+  ],
   "@midwayjs/passport": "3.19.0",
   "@midwayjs/process-agent": "3.19.0",
   "@midwayjs/prometheus": "3.19.0",
@@ -51,11 +78,17 @@
   "@midwayjs/tablestore": "3.19.0",
   "@midwayjs/tags": "3.19.0",
   "@midwayjs/tenant": "3.19.0",
-  "@midwayjs/typegoose": "3.19.0",
+  "@midwayjs/typegoose": [
+    "3.19.0",
+    "3.19.1"
+  ],
   "@midwayjs/typeorm": "3.19.0",
   "@midwayjs/upload": "3.19.0",
   "@midwayjs/validate": "3.19.0",
-  "@midwayjs/version": "3.19.0",
+  "@midwayjs/version": [
+    "3.19.0",
+    "3.19.1"
+  ],
   "@midwayjs/view": "3.19.0",
   "@midwayjs/view-ejs": "3.19.0",
   "@midwayjs/view-nunjucks": "3.19.0",

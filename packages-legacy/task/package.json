@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/task",
-  "version": "3.19.0",
+  "version": "3.19.1",
   "private": true,
   "description": "midway component for task and schedule",
   "main": "dist/index.js",
