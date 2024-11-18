@@ -3,6 +3,7 @@ export const ALL_VALUE_KEY = 'common:all_value_key';
 // common
 export const SCHEDULE_KEY = 'common:schedule';
 export const CONFIGURATION_KEY = 'common:configuration';
+export const CONFIGURATION_OBJECT_KEY = 'common:configuration_object';
 export const FRAMEWORK_KEY = 'common:framework';
 export const ASPECT_KEY = 'common:aspect';
 export const CATCH_KEY = 'common:catch';

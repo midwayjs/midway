@@ -12,17 +12,11 @@ import { DecoratorManager } from '../decorator';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
-  extraDetectorOptions: T;
   constructor(options?: T) {
     this.options = options;
-    this.extraDetectorOptions = {} as T;
   }
 
-  abstract run(container: IMidwayContainer): void | Promise<void>;
-
-  setExtraDetectorOptions(detectorOptions: T) {
-    this.extraDetectorOptions = detectorOptions;
-  }
+  abstract run(container: IMidwayContainer): Promise<void>;
 }
 
 const DEFAULT_GLOB_PATTERN = ['**/**.tsx'].concat(DEFAULT_PATTERN);
@@ -51,7 +45,7 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
 }> {
   private duplicateModuleCheckSet = new Map();
 
-  run(container) {
+  async run(container) {
     if (this.getType() === 'commonjs') {
       return this.loadSync(container);
     } else {
@@ -67,24 +61,18 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
 
     for (const dir of loadDirs) {
       const fileResults = run(
-        DEFAULT_GLOB_PATTERN.concat(this.options.pattern || []).concat(
-          this.extraDetectorOptions.pattern || []
-        ),
+        DEFAULT_GLOB_PATTERN.concat(this.options.pattern || []),
         {
           cwd: dir,
           ignore: DEFAULT_IGNORE_PATTERN.concat(
             this.options.ignore || []
-          ).concat(this.extraDetectorOptions.ignore || []),
+          ),
         }
       );
 
       // 检查重复模块
       const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {
-        if (
-          (this.options.conflictCheck ||
-            this.extraDetectorOptions.conflictCheck) &&
-          Types.isClass(module)
-        ) {
+        if (this.options.conflictCheck && Types.isClass(module)) {
           const name = DecoratorManager.getProviderName(module);
           if (name) {
             if (this.duplicateModuleCheckSet.has(name)) {
@@ -124,22 +112,19 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
 
     for (const dir of loadDirs) {
       const fileResults = run(
-        DEFAULT_GLOB_PATTERN.concat(this.options.pattern || []).concat(
-          this.extraDetectorOptions.pattern || []
-        ),
+        DEFAULT_GLOB_PATTERN.concat(this.options.pattern || []),
         {
           cwd: dir,
           ignore: DEFAULT_IGNORE_PATTERN.concat(
             this.options.ignore || []
-          ).concat(this.extraDetectorOptions.ignore || []),
+          ),
         }
       );
 
       // 检查重复模块
       const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {
         if (
-          (this.options.conflictCheck ||
-            this.extraDetectorOptions.conflictCheck) &&
+          this.options.conflictCheck &&
           Types.isClass(module)
         ) {
           const name = DecoratorManager.getProviderName(module);
@@ -200,5 +185,16 @@ export class CustomModuleDetector extends AbstractFileDetector<{
         createFrom: 'module',
       });
     }
+  }
+}
+
+export class ComponentFileDetector extends AbstractFileDetector<{
+  loadDir?: string | string[];
+  pattern?: string | string[];
+  ignore?: string | string[];
+  namespace?: string;
+}> {
+  async run(container: IMidwayContainer) {
+    this.options = this.options || {};
   }
 }

@@ -693,8 +693,9 @@ export interface IIdentifierRelationShip {
 export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle>, IModuleStore {
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
-  load(module: any | any[]): void;
+  // load(module: any | any[]): void;
   getNamespaceList(): string[];
+  addNamespace(namespace: string): void;
   bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
   bind<T>(
     identifier: ObjectIdentifier,
@@ -702,8 +703,8 @@ export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObject
     options?: Partial<IObjectDefinition>
   ): void;
   bindClass(exports, options?: Partial<IObjectDefinition>): void;
-  setFileDetector(fileDetector: IFileDetector): void;
-  ready(): void | Promise<void>;
+  // setFileDetector(fileDetector: IFileDetector): void;
+  // ready(): void | Promise<void>;
   stop(): Promise<void>;
   getManagedResolverFactory(): ManagedResolverFactory;
 }
@@ -743,8 +744,7 @@ export interface IMidwayContainer extends IObjectFactory {
 }
 
 export interface IFileDetector {
-  run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>): void | Promise<void>;
-  setExtraDetectorOptions(detectorOptions: Record<string, any>): void;
+  run(container: IMidwayContainer): Promise<void>;
 }
 
 export interface IConfigService {
@@ -1044,7 +1044,6 @@ export interface IMidwayBootstrapOptions {
   preloadModules?: any[];
   imports?: any | any[];
   moduleLoadType?: ModuleLoadType;
-  moduleDetector?: IFileDetector | false;
   logger?: boolean | ILogger;
   /**
    * @deprecated please set it from '@Configuration' decorator

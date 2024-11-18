@@ -1,22 +1,16 @@
 import {
-  CONFIGURATION_KEY,
   DecoratorManager,
-  IComponentInfo,
-  InjectionConfigurationOptions,
-  MAIN_MODULE_KEY,
   OBJECT_DEFINITION_KEY,
   PROPERTY_INJECT_KEY,
   CUSTOM_PROPERTY_INJECT_KEY,
   SCOPE_KEY,
   CONSTRUCTOR_INJECT_KEY,
 } from '../decorator';
-import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
 import { ObjectDefinitionRegistry } from './definitionRegistry';
 import {
   ClassType,
   ConstructorInjectMetadata,
-  IFileDetector,
   IIdentifierRelationShip,
   IMidwayContainer,
   IMidwayGlobalContainer,
@@ -36,8 +30,6 @@ import {
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedResolverFactory } from './managedResolverFactory';
-import { MidwayEnvironmentService } from '../service/environmentService';
-import { MidwayConfigService } from '../service/configService';
 import { EventEmitter } from 'events';
 import { Types } from '../util/types';
 import { Utils } from '../util';
@@ -47,187 +39,6 @@ const debug = util.debuglog('midway:debug');
 const debugBind = util.debuglog('midway:bind');
 const debugSpaceLength = 9;
 
-class ContainerConfiguration {
-  private loadedMap = new WeakMap();
-  private namespaceList = [];
-  private configurationOptionsList: Array<InjectionConfigurationOptions> = [];
-  constructor(readonly container: IMidwayGlobalContainer) {}
-
-  load(module) {
-    let namespace = MAIN_MODULE_KEY;
-    // 可能导出多个
-    const configurationExports = this.getConfigurationExport(module);
-    if (!configurationExports.length) return;
-    // 多个的情况，数据交给第一个保存
-    for (let i = 0; i < configurationExports.length; i++) {
-      const configurationExport = configurationExports[i];
-
-      if (this.loadedMap.get(configurationExport)) {
-        // 已经加载过就跳过循环
-        continue;
-      }
-
-      let configurationOptions: InjectionConfigurationOptions;
-      if (configurationExport instanceof FunctionalConfiguration) {
-        // 函数式写法
-        configurationOptions = configurationExport.getConfigurationOptions();
-      } else {
-        // 普通类写法
-        configurationOptions = MetadataManager.getOwnMetadata(
-          CONFIGURATION_KEY,
-          configurationExport
-        );
-      }
-
-      // 已加载标记，防止死循环
-      this.loadedMap.set(configurationExport, true);
-
-      if (configurationOptions) {
-        if (configurationOptions.namespace !== undefined) {
-          namespace = configurationOptions.namespace;
-          this.namespaceList.push(namespace);
-        }
-        this.configurationOptionsList.push(configurationOptions);
-        debug(`[core]: load configuration in namespace="${namespace}"`);
-        this.addImports(configurationOptions.imports);
-        this.addImportObjects(configurationOptions.importObjects);
-        this.addImportConfigs(configurationOptions.importConfigs);
-        this.addImportConfigFilter(configurationOptions.importConfigFilter);
-        this.bindConfigurationClass(configurationExport, namespace);
-      }
-    }
-
-    // bind module
-    this.container.bindClass(module, {
-      namespace,
-    });
-  }
-
-  addImportConfigs(
-    importConfigs:
-      | Array<{ [environmentName: string]: Record<string, any> }>
-      | Record<string, any>
-  ) {
-    if (importConfigs) {
-      if (Array.isArray(importConfigs)) {
-        this.container.get(MidwayConfigService).add(importConfigs);
-      } else {
-        this.container.get(MidwayConfigService).addObject(importConfigs);
-      }
-    }
-  }
-
-  addImportConfigFilter(
-    importConfigFilter: (config: Record<string, any>) => Record<string, any>
-  ) {
-    if (importConfigFilter) {
-      this.container.get(MidwayConfigService).addFilter(importConfigFilter);
-    }
-  }
-
-  addImports(imports: any[] = []) {
-    // 处理 imports
-    for (let importPackage of imports) {
-      if (!importPackage) continue;
-      if (typeof importPackage === 'string') {
-        importPackage = require(importPackage);
-      }
-      if ('Configuration' in importPackage) {
-        // component is object
-        this.load(importPackage);
-      } else if ('component' in importPackage) {
-        if ((importPackage as IComponentInfo)?.enabledEnvironment) {
-          if (
-            (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
-              this.container
-                .get(MidwayEnvironmentService)
-                .getCurrentEnvironment()
-            )
-          ) {
-            this.load((importPackage as IComponentInfo).component);
-          }
-        } else {
-          this.load((importPackage as IComponentInfo).component);
-        }
-      } else {
-        this.load(importPackage);
-      }
-    }
-  }
-
-  /**
-   * 注册 importObjects
-   * @param objs configuration 中的 importObjects
-   */
-  addImportObjects(objs: any) {
-    if (objs) {
-      const keys = Object.keys(objs);
-      for (const key of keys) {
-        if (typeof objs[key] !== undefined) {
-          this.container.registerObject(key, objs[key]);
-        }
-      }
-    }
-  }
-
-  bindConfigurationClass(clzz, namespace) {
-    if (clzz instanceof FunctionalConfiguration) {
-      // 函数式写法不需要绑定到容器
-    } else {
-      // 普通类写法
-      DecoratorManager.saveProviderId(undefined, clzz);
-      const id = DecoratorManager.getProviderUUId(clzz);
-      this.container.bind(id, clzz, {
-        namespace: namespace,
-        scope: ScopeEnum.Singleton,
-      });
-    }
-
-    // configuration 手动绑定去重
-    const configurationMods = DecoratorManager.listModule(CONFIGURATION_KEY);
-    const exists = configurationMods.find(mod => {
-      return mod.target === clzz;
-    });
-    if (!exists) {
-      DecoratorManager.saveModule(CONFIGURATION_KEY, {
-        target: clzz,
-        namespace: namespace,
-      });
-    }
-  }
-
-  private getConfigurationExport(exports): any[] {
-    const mods = [];
-    if (
-      Types.isClass(exports) ||
-      Types.isFunction(exports) ||
-      exports instanceof FunctionalConfiguration
-    ) {
-      mods.push(exports);
-    } else {
-      for (const m in exports) {
-        const module = exports[m];
-        if (
-          Types.isClass(module) ||
-          Types.isFunction(module) ||
-          module instanceof FunctionalConfiguration
-        ) {
-          mods.push(module);
-        }
-      }
-    }
-    return mods;
-  }
-
-  public getNamespaceList() {
-    return this.namespaceList;
-  }
-
-  public getConfigurationOptionsList() {
-    return this.configurationOptionsList;
-  }
-}
-
 export class MidwayContainer implements IMidwayGlobalContainer {
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
@@ -236,9 +47,8 @@ export class MidwayContainer implements IMidwayGlobalContainer {
   private _objectCreateEventTarget: EventEmitter;
   // 仅仅用于兼容 requestContainer 的 ctx
   protected ctx = SINGLETON_CONTAINER_CTX;
-  private fileDetector: IFileDetector | false | undefined;
   private attrMap: Map<string, any> = new Map();
-  private _namespaceSet: Set<string> = null;
+  private namespaceSet: Set<string> = new Set<string>();
 
   constructor() {
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
@@ -271,52 +81,49 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     return this._identifierMapping;
   }
 
-  get namespaceSet(): Set<string> {
-    if (!this._namespaceSet) {
-      this._namespaceSet = new Set();
-    }
-    return this._namespaceSet;
-  }
+  // load(module) {
+  //   if (!Array.isArray(module)) {
+  //     module = [module];
+  //   }
+  //   // load configuration
+  //   const configuration = new ComponentConfigurationLoader(this);
+  //
+  //   for (const mod of module) {
+  //     if (mod) {
+  //       configuration.load(mod);
+  //     }
+  //   }
+  //   for (const ns of configuration.getNamespaceList()) {
+  //     this.namespaceSet.add(ns);
+  //     debug(`[core]: load configuration in namespace="${ns}" complete`);
+  //   }
 
-  load(module) {
-    if (!Array.isArray(module)) {
-      module = [module];
-    }
-    // load configuration
-    const configuration = new ContainerConfiguration(this);
-
-    for (const mod of module) {
-      if (mod) {
-        configuration.load(mod);
-      }
-    }
-    for (const ns of configuration.getNamespaceList()) {
-      this.namespaceSet.add(ns);
-      debug(`[core]: load configuration in namespace="${ns}" complete`);
-    }
-
-    const configurationOptionsList =
-      configuration.getConfigurationOptionsList() ?? [];
+    // const configurationOptionsList =
+    //   configuration.getConfigurationOptionsList() ?? [];
 
     // find user code configuration it's without namespace
-    const userCodeConfiguration =
-      configurationOptionsList.find(options => !options.namespace) ?? {};
+    // const userCodeConfiguration =
+    //   configurationOptionsList.find(options => !options.namespace) ?? {};
 
-    this.fileDetector = userCodeConfiguration.detector ?? this.fileDetector;
+    // this.fileDetector = userCodeConfiguration.detector ?? this.fileDetector;
 
-    if (this.fileDetector) {
-      this.fileDetector.setExtraDetectorOptions({
-        conflictCheck: userCodeConfiguration.conflictCheck,
-        ...userCodeConfiguration.detectorOptions,
-      });
-    }
-  }
+    // if (this.fileDetector) {
+    //   this.fileDetector.setExtraDetectorOptions({
+    //     conflictCheck: userCodeConfiguration.conflictCheck,
+    //     ...userCodeConfiguration.detectorOptions,
+    //   });
+    // }
+  // }
 
-  protected loadDefinitions(): void | Promise<void> {
-    // load project file
-    if (this.fileDetector) {
-      return this.fileDetector.run(this);
-    }
+  // protected loadDefinitions(): void | Promise<void> {
+  //   // load project file
+  //   if (this.fileDetector) {
+  //     return this.fileDetector.run(this);
+  //   }
+  // }
+
+  public addNamespace(ns: string) {
+    this.namespaceSet.add(ns);
   }
 
   bindClass(exports, options?: Partial<IObjectDefinition>) {
@@ -520,10 +327,6 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     }
   }
 
-  setFileDetector(fileDetector: IFileDetector) {
-    this.fileDetector = fileDetector;
-  }
-
   public setAttr(key: string, value) {
     this.attrMap.set(key, value);
   }
@@ -552,9 +355,9 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     this.attrMap.clear();
   }
 
-  ready() {
-    return this.loadDefinitions();
-  }
+  // ready() {
+  //   return this.loadDefinitions();
+  // }
 
   get<T>(identifier: ClassType<T> | string, args?: any[]): T {
     return this.getManagedResolverFactory().create(identifier, args, this);

@@ -43,5 +43,14 @@
   "engines": {
     "node": ">=16"
   },
-  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./functional": {
+      "import": "./dist/functional/index.js",
+      "require": "./dist/functional/index.js"
+    }
+  }
 }

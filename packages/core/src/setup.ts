@@ -13,8 +13,6 @@ import {
   MidwayApplicationManager,
   MidwayMockService,
   MidwayWebRouterService,
-  ESModuleFileDetector,
-  CommonJSFileDetector,
   loadModule,
   safeRequire,
   isTypeScriptEnvironment,
@@ -28,6 +26,7 @@ import * as util from 'util';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 import { join } from 'path';
 import { MidwayHealthService } from './service/healthService';
+import { ComponentConfigurationLoader } from './context/componentLoader';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -170,24 +169,6 @@ export async function prepareGlobalApplicationContextAsync(
         ),
       ];
     }
-    if (globalOptions.moduleDetector === undefined) {
-      if (globalOptions.moduleLoadType === 'esm') {
-        applicationContext.setFileDetector(
-          new ESModuleFileDetector({
-            loadDir: baseDir,
-            ignore: globalOptions.ignore ?? [],
-          })
-        );
-        globalOptions.moduleLoadType = 'esm';
-      } else {
-        applicationContext.setFileDetector(
-          new CommonJSFileDetector({
-            loadDir: baseDir,
-            ignore: globalOptions.ignore ?? [],
-          })
-        );
-      }
-    }
   }
 
   printStepDebugInfo('Binding inner service');
@@ -244,14 +225,22 @@ export async function prepareGlobalApplicationContextAsync(
     'Load imports(component) and user code configuration module'
   );
 
-  applicationContext.load(
-    [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
-  );
+  // load configuration
+  const componentConfigurationLoader = new ComponentConfigurationLoader(applicationContext);
+  const importModules = [
+    ...globalOptions.imports ?? [],
+  ];
 
-  printStepDebugInfo('Run applicationContext ready method');
+  for (const mod of importModules) {
+    if (mod) {
+      await componentConfigurationLoader.load(mod);
+    }
+  }
 
-  // bind user code module
-  await applicationContext.ready();
+  for (const ns of componentConfigurationLoader.getNamespaceList()) {
+    applicationContext.addNamespace(ns);
+    debug(`[core]: load configuration in namespace="${ns}" complete`);
+  }
 
   if (globalOptions.globalConfig) {
     if (Array.isArray(globalOptions.globalConfig)) {
@@ -305,17 +294,17 @@ export function prepareGlobalApplicationContext(
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  if (globalOptions.moduleDetector !== false) {
-    if (globalOptions.moduleDetector === undefined) {
-      applicationContext.setFileDetector(
-        new CommonJSFileDetector({
-          ignore: globalOptions.ignore ?? [],
-        })
-      );
-    } else if (globalOptions.moduleDetector) {
-      applicationContext.setFileDetector(globalOptions.moduleDetector);
-    }
-  }
+  // if (globalOptions.moduleDetector !== false) {
+  //   if (globalOptions.moduleDetector === undefined) {
+  //     applicationContext.setFileDetector(
+  //       new CommonJSFileDetector({
+  //         ignore: globalOptions.ignore ?? [],
+  //       })
+  //     );
+  //   } else if (globalOptions.moduleDetector) {
+  //     applicationContext.setFileDetector(globalOptions.moduleDetector);
+  //   }
+  // }
 
   printStepDebugInfo('Binding inner service');
 
@@ -377,14 +366,14 @@ export function prepareGlobalApplicationContext(
     ];
   }
 
-  applicationContext.load(
-    [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
-  );
-
-  printStepDebugInfo('Run applicationContext ready method');
-
-  // bind user code module
-  applicationContext.ready();
+  // applicationContext.load(
+  //   [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
+  // );
+  //
+  // printStepDebugInfo('Run applicationContext ready method');
+  //
+  // // bind user code module
+  // applicationContext.ready();
 
   if (globalOptions.globalConfig) {
     if (Array.isArray(globalOptions.globalConfig)) {
