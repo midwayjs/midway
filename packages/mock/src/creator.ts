@@ -261,7 +261,7 @@ export async function create<
 export async function createApp<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
-  baseDir: string = process.cwd(),
+  baseDir: string | MockAppConfigurationOptions,
   options?: MockAppConfigurationOptions,
   customFramework?: { new (...args): T } | ComponentModule
 ): Promise<ReturnType<T['getApplication']>> {
