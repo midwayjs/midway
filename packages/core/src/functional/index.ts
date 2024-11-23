@@ -1,3 +1,3 @@
-export { defineConfiguration } from './configuration';
+export { defineConfiguration, FunctionalConfiguration } from './configuration';
 export * from './hooks';
 export * from './interface';

@@ -19,6 +19,7 @@ import {
   isTypeScriptEnvironment,
   DecoratorManager,
 } from '@midwayjs/core';
+import { FunctionalConfiguration } from '@midwayjs/core/functional';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
 import {
@@ -57,6 +58,52 @@ function formatPath(baseDir, p) {
 
 function getFileNameWithSuffix(fileName: string) {
   return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
+}
+
+async function findProjectEntryFile(appDir: string, baseDir: string, loadMode: 'commonjs' | 'esm') {
+  /**
+   * 查找常用文件中的 midway 入口，入口文件包括 Configuration 对象或者 defineConfiguration 函数
+   */
+  async function containsConfiguration(filePath: string) {
+    // 加载文件
+    const content = await loadModule(filePath, {
+      safeLoad: true,
+      loadMode,
+    });
+    if (content?.['Configuration'] || content?.['defineConfiguration']) {
+      return content;
+    }
+
+    if (content?.default && content.default instanceof FunctionalConfiguration) {
+      return content;
+    }
+  }
+
+
+  // 1. 找 package.json 中的 main 字段
+  const pkgJSON = await loadModule(join(appDir, 'package.json'), {
+    safeLoad: true,
+    enableCache: false,
+  });
+  if (pkgJSON?.['main']) {
+    const configuration = await containsConfiguration(formatPath(appDir, pkgJSON['main']));
+    if (configuration) {
+      return configuration;
+    }
+  }
+
+  // 2. 找 src/configuration.ts 或 src/configuration.js
+  const configurationFile = await containsConfiguration(join(baseDir, getFileNameWithSuffix('configuration')));
+
+  if (configurationFile) {
+    return configurationFile;
+  }
+
+  // 3. 找 src/index.ts 或 src/index.js
+  const indexFile = await containsConfiguration(join(baseDir, getFileNameWithSuffix('index')));
+  if (indexFile) {
+    return indexFile;
+  }
 }
 
 function createMockWrapApplicationContext() {
@@ -223,13 +270,7 @@ export async function create<
       loggerFactory: loggers,
       imports: [].concat(options.imports).concat(
         options.baseDir
-          ? await loadModule(
-              join(options.baseDir, getFileNameWithSuffix('configuration')),
-              {
-                safeLoad: true,
-                loadMode: options.moduleLoadType,
-              }
-            )
+          ? await findProjectEntryFile(appDir, options.baseDir, options.moduleLoadType)
           : []
       ),
     });

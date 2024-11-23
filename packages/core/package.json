@@ -46,11 +46,13 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./functional": {
       "import": "./dist/functional/index.js",
-      "require": "./dist/functional/index.js"
+      "require": "./dist/functional/index.js",
+      "types": "./dist/functional/index.d.ts"
     }
   }
 }

@@ -8,7 +8,7 @@ export default (appInfo: MidwayAppInfo): MidwayCoreDefaultConfig => {
       healthCheckTimeout: 1000,
     },
     asyncContextManager: {
-      enable: false,
+      enable: true,
     },
     midwayLogger: {
       default: {

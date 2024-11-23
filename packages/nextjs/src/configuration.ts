@@ -9,9 +9,14 @@ import { NextJSMiddleware } from './middleware';
   namespace: 'nextjs',
   importConfigs: [
     {
-      unittest: {
+      default: {
         next: {
           dev: false,
+        }
+      },
+      local: {
+        next: {
+          dev: true,
         }
       }
     }

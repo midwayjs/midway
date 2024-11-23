@@ -7,10 +7,11 @@ import {
   IMidwayApplication,
   MidwayConfig,
   ILogger,
-  getCurrentMainApp
+  getCurrentMainApp,
+  MidwayApplicationManager
 } from '../';
 
-export function useContext<T = any>(): T {
+export function useContext<T = any>(): T | undefined {
   const ctx = getCurrentAsyncContextManager()
     .active()
     .getValue(ASYNC_CONTEXT_KEY);
@@ -19,12 +20,19 @@ export function useContext<T = any>(): T {
 
 export function useLogger(loggerName?: string): ILogger {
   const ctx = useContext();
-  return ctx.logger;
+  if (ctx) {
+    if (loggerName) {
+      return ctx.logger.getLogger(loggerName);
+    }
+    return ctx.logger;
+  } else {
+    return useMainApp().getLogger(loggerName);
+  }
 }
 
 export function usePlugin(key: string): any {
   const ctx = useContext();
-  return ctx.app[key] || ctx[key];
+  return ctx ? (ctx.app[key] || ctx[key]) : useMainApp()[key];
 }
 
 export async function useInject<T = any>(
@@ -32,28 +40,26 @@ export async function useInject<T = any>(
   args?: any[]
 ): Promise<T> {
   const ctx = useContext();
-  const requestContext: IMidwayContainer = ctx['requestContext'];
+  const requestContext: IMidwayContainer = ctx ? ctx['requestContext'] : useMainApp().getApplicationContext();
   return requestContext.getAsync(identifier, args);
 }
 
 export function useInjectSync<T = any>(
   identifier: ClassType<T> | string,
   args?: any[]
-): T {
+): T {``
   const ctx = useContext();
-  const requestContext: IMidwayContainer = ctx['requestContext'];
+  const requestContext: IMidwayContainer = ctx ? ctx['requestContext'] : useMainApp().getApplicationContext();
   return requestContext.get(identifier, args);
 }
 
 export function useConfig(key?: string): MidwayConfig {
-  const ctx = useContext();
-  const requestContext: IMidwayContainer = ctx['requestContext'];
-  return requestContext.get(MidwayConfigService).getConfiguration(key);
+  return useMainApp().getApplicationContext().get(MidwayConfigService).getConfiguration(key);
 }
 
 export function useApp(appName: string): IMidwayApplication {
-  const ctx = useContext();
-  return ctx.app;
+  const applicationManager = useMainApp().getApplicationContext().get(MidwayApplicationManager);
+  return applicationManager.getApplication(appName);
 }
 
 export function useMainApp(): IMidwayApplication {

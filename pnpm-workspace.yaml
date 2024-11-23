@@ -2,4 +2,3 @@ packages:
   - 'packages/*'
   - 'packages-serverless/*'
   - 'packages-resource/*'
-  - 'e2e/*'

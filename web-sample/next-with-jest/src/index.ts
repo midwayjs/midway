@@ -1,6 +1,6 @@
+import { CustomModuleDetector, Provide } from '@midwayjs/core';
 import { defineConfiguration, useMainApp } from '@midwayjs/core/functional';
 import * as Next from '@midwayjs/nextjs';
-import { CustomModuleDetector, Provide } from '@midwayjs/core';
 import * as Koa from '@midwayjs/koa';
 
 @Provide()
@@ -11,14 +11,16 @@ class Test {
 }
 
 export default defineConfiguration({
-  importConfigs: {
-    koa: {
-      keys: ['test'],
-    },
-    next: {
-      dev: false,
-    },
-  },
+  importConfigs: [
+    {
+      default: {
+        koa: {
+          keys: ['test'],
+          port: 3000,
+        },
+      },
+    }
+  ],
   imports: [Koa, Next],
   detector: new CustomModuleDetector({
     modules: [

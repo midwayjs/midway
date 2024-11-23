@@ -5,15 +5,16 @@
     "build": "next build",
     "start": "next start",
     "test:client": "jest -c jest.client.config.js",
-    "test:server": "jest -c jest.server.config.js"
+    "test:server": "jest -c jest.server.config.js",
+    "dev:server": "MIDWAY_SERVER_ENV=local mwtsc --project tsconfig.midway.json --watch --run @midwayjs/mock/app.js"
   },
   "dependencies": {
     "next": "~15.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@midwayjs/nextjs": "workspace:*",
-    "@midwayjs/core": "workspace:*",
-    "@midwayjs/koa": "workspace:*"
+    "@midwayjs/nextjs": "file:../../../packages/nextjs",
+    "@midwayjs/core": "file:../../../packages/core",
+    "@midwayjs/koa": "file:../../../packages/koa"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "6.1.5",
@@ -23,6 +24,7 @@
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "typescript": "5.3.3",
-    "@midwayjs/mock": "workspace:*"
+    "@midwayjs/mock": "file:../../../packages/mock",
+    "mwtsc": "^1.13.0"
   }
 }
