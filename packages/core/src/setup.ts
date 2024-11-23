@@ -226,10 +226,10 @@ export async function prepareGlobalApplicationContextAsync(
   );
 
   // load configuration
-  const componentConfigurationLoader = new ComponentConfigurationLoader(applicationContext);
-  const importModules = [
-    ...globalOptions.imports ?? [],
-  ];
+  const componentConfigurationLoader = new ComponentConfigurationLoader(
+    applicationContext
+  );
+  const importModules = [...(globalOptions.imports ?? [])];
 
   for (const mod of importModules) {
     if (mod) {

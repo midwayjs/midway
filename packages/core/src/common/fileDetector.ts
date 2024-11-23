@@ -64,9 +64,7 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
         DEFAULT_GLOB_PATTERN.concat(this.options.pattern || []),
         {
           cwd: dir,
-          ignore: DEFAULT_IGNORE_PATTERN.concat(
-            this.options.ignore || []
-          ),
+          ignore: DEFAULT_IGNORE_PATTERN.concat(this.options.ignore || []),
         }
       );
 
@@ -115,18 +113,13 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
         DEFAULT_GLOB_PATTERN.concat(this.options.pattern || []),
         {
           cwd: dir,
-          ignore: DEFAULT_IGNORE_PATTERN.concat(
-            this.options.ignore || []
-          ),
+          ignore: DEFAULT_IGNORE_PATTERN.concat(this.options.ignore || []),
         }
       );
 
       // 检查重复模块
       const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {
-        if (
-          this.options.conflictCheck &&
-          Types.isClass(module)
-        ) {
+        if (this.options.conflictCheck && Types.isClass(module)) {
           const name = DecoratorManager.getProviderName(module);
           if (name) {
             if (this.duplicateModuleCheckSet.has(name)) {

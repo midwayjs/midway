@@ -8,7 +8,7 @@ import {
   MidwayConfig,
   ILogger,
   getCurrentMainApp,
-  MidwayApplicationManager
+  MidwayApplicationManager,
 } from '../';
 
 export function useContext<T = any>(): T | undefined {
@@ -32,7 +32,7 @@ export function useLogger(loggerName?: string): ILogger {
 
 export function usePlugin(key: string): any {
   const ctx = useContext();
-  return ctx ? (ctx.app[key] || ctx[key]) : useMainApp()[key];
+  return ctx ? ctx.app[key] || ctx[key] : useMainApp()[key];
 }
 
 export async function useInject<T = any>(
@@ -40,25 +40,35 @@ export async function useInject<T = any>(
   args?: any[]
 ): Promise<T> {
   const ctx = useContext();
-  const requestContext: IMidwayContainer = ctx ? ctx['requestContext'] : useMainApp().getApplicationContext();
+  const requestContext: IMidwayContainer = ctx
+    ? ctx['requestContext']
+    : useMainApp().getApplicationContext();
   return requestContext.getAsync(identifier, args);
 }
 
 export function useInjectSync<T = any>(
   identifier: ClassType<T> | string,
   args?: any[]
-): T {``
+): T {
+  ``;
   const ctx = useContext();
-  const requestContext: IMidwayContainer = ctx ? ctx['requestContext'] : useMainApp().getApplicationContext();
+  const requestContext: IMidwayContainer = ctx
+    ? ctx['requestContext']
+    : useMainApp().getApplicationContext();
   return requestContext.get(identifier, args);
 }
 
 export function useConfig(key?: string): MidwayConfig {
-  return useMainApp().getApplicationContext().get(MidwayConfigService).getConfiguration(key);
+  return useMainApp()
+    .getApplicationContext()
+    .get(MidwayConfigService)
+    .getConfiguration(key);
 }
 
 export function useApp(appName: string): IMidwayApplication {
-  const applicationManager = useMainApp().getApplicationContext().get(MidwayApplicationManager);
+  const applicationManager = useMainApp()
+    .getApplicationContext()
+    .get(MidwayApplicationManager);
   return applicationManager.getApplication(appName);
 }
 

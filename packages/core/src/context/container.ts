@@ -98,21 +98,21 @@ export class MidwayContainer implements IMidwayGlobalContainer {
   //     debug(`[core]: load configuration in namespace="${ns}" complete`);
   //   }
 
-    // const configurationOptionsList =
-    //   configuration.getConfigurationOptionsList() ?? [];
+  // const configurationOptionsList =
+  //   configuration.getConfigurationOptionsList() ?? [];
 
-    // find user code configuration it's without namespace
-    // const userCodeConfiguration =
-    //   configurationOptionsList.find(options => !options.namespace) ?? {};
+  // find user code configuration it's without namespace
+  // const userCodeConfiguration =
+  //   configurationOptionsList.find(options => !options.namespace) ?? {};
 
-    // this.fileDetector = userCodeConfiguration.detector ?? this.fileDetector;
+  // this.fileDetector = userCodeConfiguration.detector ?? this.fileDetector;
 
-    // if (this.fileDetector) {
-    //   this.fileDetector.setExtraDetectorOptions({
-    //     conflictCheck: userCodeConfiguration.conflictCheck,
-    //     ...userCodeConfiguration.detectorOptions,
-    //   });
-    // }
+  // if (this.fileDetector) {
+  //   this.fileDetector.setExtraDetectorOptions({
+  //     conflictCheck: userCodeConfiguration.conflictCheck,
+  //     ...userCodeConfiguration.detectorOptions,
+  //   });
+  // }
   // }
 
   // protected loadDefinitions(): void | Promise<void> {

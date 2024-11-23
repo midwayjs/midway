@@ -1,8 +1,10 @@
 import {
   CONFIGURATION_KEY,
-  CONFIGURATION_OBJECT_KEY, DecoratorManager, IComponentInfo,
+  CONFIGURATION_OBJECT_KEY,
+  DecoratorManager,
+  IComponentInfo,
   InjectionConfigurationOptions,
-  MAIN_MODULE_KEY
+  MAIN_MODULE_KEY,
 } from '../decorator';
 import { IMidwayGlobalContainer, ScopeEnum } from '../interface';
 import { FunctionalConfiguration } from '../functional/configuration';

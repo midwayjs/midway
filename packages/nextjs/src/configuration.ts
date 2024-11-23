@@ -12,15 +12,15 @@ import { NextJSMiddleware } from './middleware';
       default: {
         next: {
           dev: false,
-        }
+        },
       },
       local: {
         next: {
           dev: true,
-        }
-      }
-    }
-  ]
+        },
+      },
+    },
+  ],
 })
 export class NextJSConfiguration {
   @Inject()

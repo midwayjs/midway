@@ -60,7 +60,11 @@ function getFileNameWithSuffix(fileName: string) {
   return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
 }
 
-async function findProjectEntryFile(appDir: string, baseDir: string, loadMode: 'commonjs' | 'esm') {
+async function findProjectEntryFile(
+  appDir: string,
+  baseDir: string,
+  loadMode: 'commonjs' | 'esm'
+) {
   /**
    * 查找常用文件中的 midway 入口，入口文件包括 Configuration 对象或者 defineConfiguration 函数
    */
@@ -74,11 +78,13 @@ async function findProjectEntryFile(appDir: string, baseDir: string, loadMode: '
       return content;
     }
 
-    if (content?.default && content.default instanceof FunctionalConfiguration) {
+    if (
+      content?.default &&
+      content.default instanceof FunctionalConfiguration
+    ) {
       return content;
     }
   }
-
 
   // 1. 找 package.json 中的 main 字段
   const pkgJSON = await loadModule(join(appDir, 'package.json'), {
@@ -86,21 +92,27 @@ async function findProjectEntryFile(appDir: string, baseDir: string, loadMode: '
     enableCache: false,
   });
   if (pkgJSON?.['main']) {
-    const configuration = await containsConfiguration(formatPath(appDir, pkgJSON['main']));
+    const configuration = await containsConfiguration(
+      formatPath(appDir, pkgJSON['main'])
+    );
     if (configuration) {
       return configuration;
     }
   }
 
   // 2. 找 src/configuration.ts 或 src/configuration.js
-  const configurationFile = await containsConfiguration(join(baseDir, getFileNameWithSuffix('configuration')));
+  const configurationFile = await containsConfiguration(
+    join(baseDir, getFileNameWithSuffix('configuration'))
+  );
 
   if (configurationFile) {
     return configurationFile;
   }
 
   // 3. 找 src/index.ts 或 src/index.js
-  const indexFile = await containsConfiguration(join(baseDir, getFileNameWithSuffix('index')));
+  const indexFile = await containsConfiguration(
+    join(baseDir, getFileNameWithSuffix('index'))
+  );
   if (indexFile) {
     return indexFile;
   }
@@ -268,11 +280,17 @@ export async function create<
       appDir,
       asyncContextManager: createContextManager(),
       loggerFactory: loggers,
-      imports: [].concat(options.imports).concat(
-        options.baseDir
-          ? await findProjectEntryFile(appDir, options.baseDir, options.moduleLoadType)
-          : []
-      ),
+      imports: []
+        .concat(options.imports)
+        .concat(
+          options.baseDir
+            ? await findProjectEntryFile(
+                appDir,
+                options.baseDir,
+                options.moduleLoadType
+              )
+            : []
+        ),
     });
 
     if (customFramework) {
