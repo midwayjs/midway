@@ -8,7 +8,8 @@ import {
   Init,
   MidwayWebRouterService,
   IMidwayApplication,
-  MidwayServerlessFunctionService, Config
+  MidwayServerlessFunctionService,
+  Config,
 } from '@midwayjs/core';
 import next from 'next';
 // eslint-disable-next-line node/no-deprecated-api
@@ -26,10 +27,15 @@ export class NextJSMiddleware implements IMiddleware<Context, NextFunction> {
   @Config('next')
   protected nextConfig;
 
+  @Inject()
+  appDir: string;
+
   @Init()
   async init() {
     const app = next({
       dev: this.env.isDevelopmentEnvironment(),
+      // dir: this.appDir,
+      customServer: true,
       ...this.nextConfig,
     });
     this.handle = app.getRequestHandler();
@@ -56,14 +62,16 @@ export class NextJSMiddleware implements IMiddleware<Context, NextFunction> {
         ctx['method']
       );
       if (routeInfo) {
-        await next();
+        return await next();
       } else {
+        // 给个默认值
+        ctx['res'].statusCode = 200;
         await nextHandler(ctx['req'] || ctx, ctx['res']);
       }
     };
   }
 
   static getName(): string {
-    return 'nextjs';
+    return 'next';
   }
 }

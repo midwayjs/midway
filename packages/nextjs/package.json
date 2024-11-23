@@ -7,16 +7,18 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
-    "index.d.ts"
+    "index.d.ts",
+    "inject.js"
   ],
   "devDependencies": {
-    "next": "14.2.15",
-    "react": "^18",
-    "react-dom": "^18",
     "@midwayjs/core": "^3.14.4",
-    "@midwayjs/mock": "^3.14.4"
-  },
-  "dependencies": {
+    "@midwayjs/mock": "^3.14.4",
+    "@types/react": "^18.3.12",
+    "babel-loader": "^9.2.1",
+    "next": "~15.0.3",
+    "null-loader": "^4.0.1",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "keywords": [
     "midway",

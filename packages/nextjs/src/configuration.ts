@@ -7,6 +7,15 @@ import { NextJSMiddleware } from './middleware';
 
 @Configuration({
   namespace: 'nextjs',
+  importConfigs: [
+    {
+      unittest: {
+        next: {
+          dev: false,
+        }
+      }
+    }
+  ]
 })
 export class NextJSConfiguration {
   @Inject()
