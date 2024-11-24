@@ -32,7 +32,7 @@
     "@midwayjs/core": "^3.19.0",
     "@midwayjs/logger": "^3.0.0",
     "@types/amqplib": "0.10.5",
-    "amqplib": "0.10.4",
+    "amqplib": "0.10.5",
     "kafkajs": "2.2.4",
     "socket.io": "4.8.1",
     "socket.io-client": "4.8.1",
