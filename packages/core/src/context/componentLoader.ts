@@ -7,7 +7,7 @@ import {
   MAIN_MODULE_KEY,
 } from '../decorator';
 import { IMidwayGlobalContainer, ScopeEnum } from '../interface';
-import { FunctionalConfiguration } from '../functional/configuration';
+import { FunctionalConfiguration } from '../functional';
 import { MetadataManager } from '../decorator/metadataManager';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
@@ -22,7 +22,7 @@ export class ComponentConfigurationLoader {
   private configurationOptionsList: Array<InjectionConfigurationOptions> = [];
   constructor(readonly container: IMidwayGlobalContainer) {}
 
-  async load(module) {
+  public async load(module) {
     let namespace = MAIN_MODULE_KEY;
     // 可能导出多个
     const configurationExports = this.getConfigurationExport(module);
@@ -67,7 +67,7 @@ export class ComponentConfigurationLoader {
         this.addImportConfigFilter(configurationOptions.importConfigFilter);
 
         if (configurationOptions.detector) {
-          await configurationOptions.detector.run(this.container);
+          await configurationOptions.detector.run(this.container, namespace);
         }
 
         this.bindConfigurationClass(configurationExport, namespace);
@@ -80,7 +80,7 @@ export class ComponentConfigurationLoader {
     });
   }
 
-  addImportConfigs(
+  private addImportConfigs(
     importConfigs:
       | Array<{ [environmentName: string]: Record<string, any> }>
       | Record<string, any>
@@ -94,7 +94,7 @@ export class ComponentConfigurationLoader {
     }
   }
 
-  addImportConfigFilter(
+  private addImportConfigFilter(
     importConfigFilter: (config: Record<string, any>) => Record<string, any>
   ) {
     if (importConfigFilter) {
@@ -102,7 +102,7 @@ export class ComponentConfigurationLoader {
     }
   }
 
-  addImports(imports: any[] = []) {
+  private addImports(imports: any[] = []) {
     // 处理 imports
     for (let importPackage of imports) {
       if (!importPackage) continue;
@@ -136,7 +136,7 @@ export class ComponentConfigurationLoader {
    * 注册 importObjects
    * @param objs configuration 中的 importObjects
    */
-  addImportObjects(objs: any) {
+  private addImportObjects(objs: any) {
     if (objs) {
       const keys = Object.keys(objs);
       for (const key of keys) {
@@ -147,7 +147,7 @@ export class ComponentConfigurationLoader {
     }
   }
 
-  bindConfigurationClass(clzz, namespace) {
+  private bindConfigurationClass(clzz, namespace) {
     if (clzz instanceof FunctionalConfiguration) {
       // 函数式写法不需要绑定到容器
     } else {

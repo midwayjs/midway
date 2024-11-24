@@ -294,18 +294,6 @@ export function prepareGlobalApplicationContext(
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // if (globalOptions.moduleDetector !== false) {
-  //   if (globalOptions.moduleDetector === undefined) {
-  //     applicationContext.setFileDetector(
-  //       new CommonJSFileDetector({
-  //         ignore: globalOptions.ignore ?? [],
-  //       })
-  //     );
-  //   } else if (globalOptions.moduleDetector) {
-  //     applicationContext.setFileDetector(globalOptions.moduleDetector);
-  //   }
-  // }
-
   printStepDebugInfo('Binding inner service');
 
   // bind inner service

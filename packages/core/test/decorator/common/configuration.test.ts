@@ -3,11 +3,8 @@ import { Configuration, getClassMetadata, CONFIGURATION_KEY } from '../../../src
 @Configuration({
   importConfigs: ['./config.default'],
   importObjects: { aa: { bb: 1 } },
-  imports: ['./nodes'],
+  imports: [],
   namespace: 'hello',
-  detectorOptions: {
-    a: 1
-  }
 })
 class Test {}
 
@@ -20,11 +17,8 @@ describe('/test/annotation/configuration.test.ts', () => {
     expect(meta).toStrictEqual({
       importConfigs: ['./config.default'],
       importObjects: { aa: { bb: 1 } },
-      imports: ['./nodes'],
+      imports: [],
       namespace: 'hello',
-      detectorOptions: {
-        a: 1
-      },
     });
 
     const metaone = getClassMetadata(CONFIGURATION_KEY, TestOne);

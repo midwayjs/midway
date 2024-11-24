@@ -7,6 +7,7 @@ import {
   MidwayInformationService,
   Provide
 } from '../../src';
+import { ComponentConfigurationLoader } from '../../src/context/componentLoader';
 
 describe('test/functional/configuration.test.ts', function () {
   it('should test create functional configuration', async () => {
@@ -39,9 +40,11 @@ describe('test/functional/configuration.test.ts', function () {
     container.bind(MidwayInformationService);
     container.registerObject('appDir', __dirname);
     container.registerObject('baseDir', __dirname);
-    container.load(configuration);
 
-    expect(container.getNamespaceList()).toEqual(['hello']);
+    const loader = new ComponentConfigurationLoader(container);
+    await loader.load(configuration);
+
+    expect(loader.getNamespaceList()).toEqual(['hello']);
     const test = await container.getAsync<Test>(Test);
     expect(await test.hello()).toEqual('hello');
   });

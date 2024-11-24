@@ -744,7 +744,7 @@ export interface IMidwayContainer extends IObjectFactory {
 }
 
 export interface IFileDetector {
-  run(container: IMidwayContainer): Promise<void>;
+  run(container: IMidwayGlobalContainer, namespace: string): Promise<void>;
 }
 
 export interface IConfigService {
@@ -1045,10 +1045,6 @@ export interface IMidwayBootstrapOptions {
   imports?: any | any[];
   moduleLoadType?: ModuleLoadType;
   logger?: boolean | ILogger;
-  /**
-   * @deprecated please set it from '@Configuration' decorator
-   */
-  ignore?: string[];
   globalConfig?:
     | Array<{ [environmentName: string]: Record<string, any> }>
     | Record<string, any>;

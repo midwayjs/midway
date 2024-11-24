@@ -1,20 +1,19 @@
 import { CONFIGURATION_KEY } from '../';
-import { IFileDetector } from '../../interface';
+import { ClassType, IFileDetector, ILifeCycle } from '../../interface';
 import { MetadataManager } from '../metadataManager';
+import { FunctionalConfiguration } from '../../functional';
 
 export interface IComponentInfo {
-  component: any;
+  component: { Configuration: ClassType<ILifeCycle> } | FunctionalConfiguration;
   enabledEnvironment?: string[];
 }
 
-export interface ResolveFilter {
-  pattern: string | RegExp;
-  filter: (module, filter, bindModule) => any;
-  ignoreRequire?: boolean;
-}
-
 export interface InjectionConfigurationOptions {
-  imports?: Array<string | IComponentInfo | { Configuration: any }>;
+  imports?: Array<
+    | IComponentInfo
+    | { Configuration: ClassType<ILifeCycle> }
+    | FunctionalConfiguration
+  >;
   importObjects?: Record<string, unknown>;
   importConfigs?:
     | Array<{ [environmentName: string]: Record<string, any> }>
@@ -22,8 +21,6 @@ export interface InjectionConfigurationOptions {
   importConfigFilter?: (config: Record<string, any>) => Record<string, any>;
   namespace?: string;
   detector?: IFileDetector | false;
-  detectorOptions?: Record<string, any>;
-  conflictCheck?: boolean;
 }
 
 export function Configuration(

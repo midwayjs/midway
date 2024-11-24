@@ -24,7 +24,9 @@ describe('/test/feature.test.ts', () => {
     const framework = await createLightFramework(join(
       __dirname,
       './fixtures/app-with-configuration-detector/src'
-    ));
+    ), {}, {
+      defaultDetector: false,
+    });
     const b = framework.getApplicationContext().get('controllerB');
     expect(b).toBeDefined();
 
