@@ -6,7 +6,8 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/core';
-import { JobOptions, QueueOptions } from 'bull';
+import { QueueOptions } from 'bull';
+import { JobOptions } from './interface';
 import { BULL_PROCESSOR_KEY, BULL_QUEUE_KEY } from './constants';
 
 export function Processor(

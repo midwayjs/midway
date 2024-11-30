@@ -16,8 +16,9 @@ import {
   IProcessor,
   IQueue,
   IQueueManager,
+  JobOptions,
 } from './interface';
-import { Job, JobOptions, QueueOptions } from 'bull';
+import { Job, QueueOptions } from 'bull';
 import Bull = require('bull');
 import { BULL_PROCESSOR_KEY } from './constants';
 
@@ -82,7 +83,8 @@ export class BullFramework
         queueOptions?: QueueOptions;
       };
 
-      const { repeat, delay, ...otherOptions } = options.jobOptions ?? {};
+      const { repeat, delay, enabledEnvironment, ...otherOptions } =
+        options.jobOptions ?? {};
       const queueOptions = options.queueOptions ?? {};
       const currentQueue = this.ensureQueue(options.queueName, {
         ...queueOptions,
@@ -95,6 +97,14 @@ export class BullFramework
           await currentQueue.removeRepeatableByKey(job.key);
         }
       }
+
+      if (
+        enabledEnvironment &&
+        !enabledEnvironment.includes(this.app.getEnv())
+      ) {
+        return;
+      }
+
       await this.addProcessor(mod, options.queueName, options.concurrency);
       if (options.jobOptions?.repeat) {
         await this.runJob(options.queueName, {}, options.jobOptions);

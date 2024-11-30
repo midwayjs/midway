@@ -1,5 +1,9 @@
 import { IMidwayApplication, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
-import { JobId, Job } from 'bull';
+import { JobId, Job, JobOptions as JobOptionsBase } from 'bull';
+
+export interface JobOptions extends JobOptionsBase {
+  enabledEnvironment?: string[];
+}
 
 export interface IProcessor {
   execute(data: any);

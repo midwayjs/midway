@@ -338,6 +338,7 @@ export class TestProcessor implements IProcessor {
 | removeOnComplete | boolean \| number     | 如果为 true，则在成功完成后删除任务。如果设置数字，则为指定要保留的任务数量。默认行为是任务信息保留在已完成列表中。 |
 | removeOnFail     | boolean \| number     | 如果为 true，则在所有尝试后都失败时删除任务。如果设置数字，指定要保留的任务数量。默认行为是将任务信息保留在失败列表中。 |
 | stackTraceLimit  | number                | 限制将在堆栈跟踪中记录的堆栈跟踪行的数量。                   |
+| enableEnvironment | string[]             | 执行任务的环境变量列表, 若不指定该参数，则默认在所有的环境中执行 |
 
 
 
@@ -818,7 +819,7 @@ export class MainConfiguration {
 
   @Inject()
   bullFramework: bull.Framework;
-  
+
   @Inject()
   bullBoardManager: bullBoard.BullBoardManager;
 

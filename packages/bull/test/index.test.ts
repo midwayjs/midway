@@ -47,6 +47,27 @@ describe(`/test/index.test.ts`, () => {
     await close(app);
   });
 
+  it('test processor only create, not execute', async () => {
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app-only-create'), {}, bull);
+
+    await sleep(5 * 1000);
+
+    // run job
+    const bullFramework = app.getApplicationContext().get(bull.Framework);
+    expect(bullFramework.getCoreLogger()).toBeDefined();
+    const testQueue = bullFramework.getQueue('test');
+    expect(testQueue).toBeDefined();
+
+    const params = {
+      name: 'stone-jin',
+    };
+    const job = await testQueue?.runJob(params, { delay: 1000 });
+    expect(await job?.getState()).toEqual('delayed');
+    await sleep(1200);
+    expect(await job?.getState()).toEqual('delayed');
+
+    await close(app);
+  });
 });
 
 // describe('test another duplicated error', function () {
