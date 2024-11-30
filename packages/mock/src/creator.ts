@@ -73,6 +73,7 @@ async function findProjectEntryFile(
     const content = await loadModule(filePath, {
       safeLoad: true,
       loadMode,
+      warnOnLoadError: true,
     });
     if (content?.['Configuration'] || content?.['defineConfiguration']) {
       return content;

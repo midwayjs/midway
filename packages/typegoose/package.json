@@ -22,11 +22,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/mongoose": "^3.18.0"
+    "@midwayjs/mongoose": "workspace:^"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
     "@typegoose/typegoose": "12.8.0",
     "mongoose": "8.7.0"
   }

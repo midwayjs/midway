@@ -34,8 +34,7 @@ export class NextJSMiddleware implements IMiddleware<Context, NextFunction> {
   async init() {
     const app = next({
       dev: this.env.isDevelopmentEnvironment(),
-      // dir: this.appDir,
-      customServer: true,
+      dir: this.appDir,
       ...this.nextConfig,
     });
     this.handle = app.getRequestHandler();
@@ -72,6 +71,6 @@ export class NextJSMiddleware implements IMiddleware<Context, NextFunction> {
   }
 
   static getName(): string {
-    return 'next';
+    return 'nextjs';
   }
 }

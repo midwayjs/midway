@@ -28,12 +28,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/view": "^3.18.0",
+    "@midwayjs/view": "workspace:^",
     "ejs": "3.1.10"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0"
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^"
   }
 }

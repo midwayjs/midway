@@ -24,8 +24,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0"
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^"
   },
   "dependencies": {
     "bull": "4.16.3"

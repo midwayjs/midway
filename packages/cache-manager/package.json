@@ -28,9 +28,9 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
-    "@midwayjs/redis": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/redis": "workspace:^",
     "cache-manager": "6.0.0",
     "cache-manager-ioredis-yet": "2.1.2"
   },

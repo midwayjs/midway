@@ -11,8 +11,9 @@
     "inject.js"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.14.4",
-    "@midwayjs/mock": "^3.14.4",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
     "@types/react": "^18.3.12",
     "babel-loader": "^9.2.1",
     "next": "~15.0.3",
@@ -29,8 +30,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "test:prepare": "zx ./test/prepare.mjs",
+    "test": "npm run test:prepare && node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --runInBand",
+    "cov": "npm run test:prepare && node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
     "ci": "npm run test",
     "lint": "mwts check"
   },

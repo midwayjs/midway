@@ -63,19 +63,19 @@ importers:
         specifier: 2.3.0
         version: 2.3.0
       zx:
-        specifier: 7.2.3
-        version: 7.2.3
+        specifier: 8.2.2
+        version: 8.2.2
 
   packages-resource/midway-test-component:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../../packages/core
 
   packages-resource/midway-test-inner-component:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../../packages/core
 
   packages-serverless/faas-typings:
@@ -87,17 +87,17 @@ importers:
   packages-serverless/midway-fc-starter:
     dependencies:
       '@midwayjs/async-hooks-context-manager':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../../packages/async-hooks-context-manager
       '@midwayjs/faas':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../../packages/faas
       raw-body:
         specifier: 2.5.2
         version: 2.5.2
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../../packages/core
 
   packages-serverless/serverless-http-parser:
@@ -143,7 +143,7 @@ importers:
   packages/async-hooks-context-manager:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
 
   packages/axios:
@@ -153,11 +153,11 @@ importers:
         version: 1.7.7
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       nock:
         specifier: 13.5.5
         version: 13.5.5
@@ -165,14 +165,14 @@ importers:
   packages/bootstrap:
     dependencies:
       '@midwayjs/async-hooks-context-manager':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../async-hooks-context-manager
       '@midwayjs/event-bus':
         specifier: 1.10.0
         version: 1.10.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/logger':
         specifier: ^3.0.0
@@ -191,11 +191,11 @@ importers:
         version: 4.16.3
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/bull-board:
     dependencies:
@@ -213,17 +213,17 @@ importers:
         version: 3.1.10
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/busboy:
     dependencies:
@@ -238,26 +238,26 @@ importers:
         version: 16.5.4
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/faas':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../faas
       '@midwayjs/fc-starter':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../../packages-serverless/midway-fc-starter
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
       fs-extra:
         specifier: 11.2.0
         version: 11.2.0
@@ -272,14 +272,14 @@ importers:
         version: 7.18.3
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/redis':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../redis
       cache-manager:
         specifier: 6.0.0
         version: 6.0.0
@@ -303,14 +303,14 @@ importers:
         version: 1.4.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/casbin:
     dependencies:
@@ -319,33 +319,33 @@ importers:
         version: 5.30.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/casbin-redis-adapter:
     dependencies:
       '@midwayjs/casbin':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../casbin
       '@midwayjs/redis':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../redis
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       casbin:
         specifier: 5.30.0
         version: 5.30.0
@@ -356,21 +356,21 @@ importers:
   packages/casbin-typeorm-adapter:
     dependencies:
       '@midwayjs/casbin':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../casbin
       '@midwayjs/typeorm':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../typeorm
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       casbin:
         specifier: 5.30.0
         version: 5.30.0
@@ -379,28 +379,28 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.20
-        version: 0.3.20(ioredis@5.4.1)(mysql2@3.11.3)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.16.10)(typescript@5.3.3))
+        version: 0.3.20(ioredis@5.4.1)(mysql2@3.11.3)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.10.0)(typescript@5.3.3))
 
   packages/code-dye:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/faas':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../faas
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
 
   packages/consul:
     dependencies:
@@ -409,14 +409,14 @@ importers:
         version: 1.2.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@types/consul':
         specifier: 0.40.3
         version: 0.40.3
@@ -468,11 +468,11 @@ importers:
         version: 2.14.6
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -484,11 +484,11 @@ importers:
         version: 2.4.4
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/cross-domain:
     dependencies:
@@ -497,23 +497,23 @@ importers:
         version: 1.1.2
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/faas':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../faas
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
 
   packages/etcd:
     dependencies:
@@ -522,11 +522,11 @@ importers:
         version: 1.1.2
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/express-session:
     dependencies:
@@ -538,11 +538,11 @@ importers:
         version: 1.18.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@types/express-session':
         specifier: 1.18.0
         version: 1.18.0
@@ -553,7 +553,7 @@ importers:
   packages/faas:
     dependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/serverless-http-parser':
         specifier: ^3.14.0
@@ -568,9 +568,6 @@ importers:
       '@midwayjs/logger':
         specifier: ^3.0.0
         version: 3.4.2
-      '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
       mm:
         specifier: 3.4.0
         version: 3.4.0
@@ -583,13 +580,10 @@ importers:
       '@grpc/proto-loader':
         specifier: 0.7.13
         version: 0.7.13
-      '@midwayjs/core':
-        specifier: ^3.18.0
-        version: link:../core
     devDependencies:
-      '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
       fs-extra:
         specifier: 11.2.0
         version: 11.2.0
@@ -601,23 +595,23 @@ importers:
         version: 1.7.7
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/faas':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../faas
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
       nock:
         specifier: 13.5.5
         version: 13.5.5
@@ -629,17 +623,17 @@ importers:
         version: 2.3.1
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/info:
     dependencies:
@@ -648,17 +642,17 @@ importers:
         version: 2.3.1
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/jwt:
     dependencies:
@@ -670,20 +664,20 @@ importers:
         version: 9.0.2
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
 
   packages/kafka:
     dependencies:
@@ -692,11 +686,11 @@ importers:
         version: 2.2.4
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/leoric:
     dependencies:
@@ -705,14 +699,14 @@ importers:
         version: 2.12.3(mysql2@3.11.3)(sqlite3@5.1.7)
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       sqlite3:
         specifier: 5.1.7
         version: 5.1.7
@@ -720,14 +714,14 @@ importers:
   packages/mikro:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@mikro-orm/core':
         specifier: 6.3.10
         version: 6.3.10
@@ -741,7 +735,7 @@ importers:
   packages/mock:
     dependencies:
       '@midwayjs/async-hooks-context-manager':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../async-hooks-context-manager
       '@types/superagent':
         specifier: 4.1.14
@@ -760,7 +754,7 @@ importers:
         version: 6.3.3
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/logger':
         specifier: ^3.0.0
@@ -787,11 +781,11 @@ importers:
   packages/mongoose:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       mongoose:
         specifier: 8.6.3
         version: 8.6.3(socks@2.8.3)
@@ -803,20 +797,23 @@ importers:
         version: 5.10.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/nextjs:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.14.4
+        specifier: workspace:^
         version: link:../core
+      '@midwayjs/koa':
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.14.4
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.12
@@ -846,11 +843,11 @@ importers:
         version: 6.21.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -862,14 +859,14 @@ importers:
         version: 1.9.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@opentelemetry/sdk-node':
         specifier: 0.53.0
         version: 0.53.0(@opentelemetry/api@1.9.0)
@@ -883,23 +880,23 @@ importers:
   packages/passport:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/jwt':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../jwt
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
       '@types/passport-local':
         specifier: 1.0.38
         version: 1.0.38
@@ -929,14 +926,14 @@ importers:
         version: 2.88.2
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       koa-bodyparser:
         specifier: 4.4.1
         version: 4.4.1
@@ -951,14 +948,14 @@ importers:
         version: 2.88.2
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@types/request':
         specifier: 2.48.12
         version: 2.48.12
@@ -966,23 +963,23 @@ importers:
   packages/prometheus-socket-io:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/prometheus':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../prometheus
       '@midwayjs/socketio':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../socketio
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
       egg:
         specifier: ^2.28.0
         version: 2.37.0
@@ -990,15 +987,12 @@ importers:
   packages/rabbitmq:
     dependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       amqp-connection-manager:
         specifier: 4.1.14
         version: 4.1.14(amqplib@0.10.4)
     devDependencies:
-      '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
       '@types/amqplib':
         specifier: 0.10.5
         version: 0.10.5
@@ -1016,11 +1010,11 @@ importers:
         version: 5.4.1
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/security:
     dependencies:
@@ -1044,41 +1038,41 @@ importers:
         version: 1.0.15
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/faas':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../faas
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
 
   packages/sequelize:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       sequelize:
         specifier: 6.37.3
         version: 6.37.3(sqlite3@5.1.7)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@20.16.10)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.3(sqlite3@5.1.7))
+        version: 2.1.6(@types/node@22.10.0)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.3(sqlite3@5.1.7))
       sqlite3:
         specifier: 5.1.7
         version: 5.1.7
@@ -1090,24 +1084,21 @@ importers:
         version: 1.2.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/socketio:
     dependencies:
-      '@midwayjs/core':
-        specifier: ^3.18.0
-        version: link:../core
       socket.io:
         specifier: 4.7.5
         version: 4.7.5
     devDependencies:
-      '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
       fs-extra:
         specifier: 11.2.0
         version: 11.2.0
@@ -1128,32 +1119,32 @@ importers:
         version: 1.4.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/faas':
         specifier: ^3.18.0
         version: 3.18.2
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/swagger:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/validate':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../validate
       swagger-ui-dist:
         specifier: 5.17.14
         version: 5.17.14
@@ -1168,32 +1159,32 @@ importers:
         version: 5.5.1
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/tags:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/faas':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../faas
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
       mysql2:
         specifier: ^3.0.0
         version: 3.11.3
@@ -1201,24 +1192,24 @@ importers:
   packages/tenant:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/typegoose:
     dependencies:
       '@midwayjs/mongoose':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mongoose
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@typegoose/typegoose':
         specifier: 12.8.0
         version: 12.8.0(mongoose@8.7.0(socks@2.8.3))
@@ -1229,17 +1220,17 @@ importers:
   packages/typeorm:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       sqlite3:
         specifier: 5.1.7
         version: 5.1.7
       typeorm:
         specifier: 0.3.20
-        version: 0.3.20(ioredis@5.4.1)(mysql2@3.11.3)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.16.10)(typescript@5.3.3))
+        version: 0.3.20(ioredis@5.4.1)(mysql2@3.11.3)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.10.0)(typescript@5.3.3))
 
   packages/upload:
     dependencies:
@@ -1251,106 +1242,103 @@ importers:
         version: 2.5.2
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/faas':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../faas
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@midwayjs/web':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web
 
   packages/validate:
     dependencies:
       '@midwayjs/i18n':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../i18n
       joi:
         specifier: 17.13.3
         version: 17.13.3
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/express':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-express
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/version: {}
 
   packages/view:
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/view-ejs:
     dependencies:
       '@midwayjs/view':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../view
       ejs:
         specifier: 3.1.10
         version: 3.1.10
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/view-nunjucks:
     dependencies:
       '@midwayjs/view':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../view
       nunjucks:
         specifier: ^3.2.2
         version: 3.2.4(chokidar@3.6.0)
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/koa':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../web-koa
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
 
   packages/web:
     dependencies:
       '@eggjs/router':
         specifier: ^2.0.0
         version: 2.0.1
-      '@midwayjs/core':
-        specifier: ^3.18.0
-        version: link:../core
       egg:
         specifier: ^2.28.0
         version: 2.37.0
@@ -1370,12 +1358,15 @@ importers:
         specifier: 6.13.0
         version: 6.13.0
     devDependencies:
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
       '@midwayjs/logger':
         specifier: ^3.0.0
         version: 3.4.2
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@types/koa':
         specifier: 2.15.0
         version: 2.15.0
@@ -1427,12 +1418,9 @@ importers:
 
   packages/web-express:
     dependencies:
-      '@midwayjs/core':
-        specifier: ^3.18.0
-        version: link:../core
       '@midwayjs/express-session':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../express-session
       body-parser:
         specifier: 1.20.3
         version: 1.20.3
@@ -1443,9 +1431,12 @@ importers:
         specifier: 4.20.0
         version: 4.20.0
     devDependencies:
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@types/body-parser':
         specifier: 1.19.5
         version: 1.19.5
@@ -1464,12 +1455,9 @@ importers:
       '@midwayjs/cookies':
         specifier: ^1.0.2
         version: 1.2.0
-      '@midwayjs/core':
-        specifier: ^3.18.0
-        version: link:../core
       '@midwayjs/session':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../session
       '@types/koa':
         specifier: 2.15.0
         version: 2.15.0
@@ -1486,9 +1474,12 @@ importers:
         specifier: 6.13.0
         version: 6.13.0
     devDependencies:
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       '@types/koa-router':
         specifier: 7.4.8
         version: 7.4.8
@@ -1506,11 +1497,11 @@ importers:
         version: 8.18.0
     devDependencies:
       '@midwayjs/core':
-        specifier: ^3.18.0
+        specifier: workspace:^
         version: link:../core
       '@midwayjs/mock':
-        specifier: ^3.18.0
-        version: 3.18.2
+        specifier: workspace:^
+        version: link:../mock
       fs-extra:
         specifier: 11.2.0
         version: 11.2.0
@@ -2043,10 +2034,6 @@ packages:
     resolution: {integrity: sha512-GzScCIkAW3tg3+Yn/MKCH9963bzG+zpjGz2NdfYDlYWI7p0f/SH46v1dqpPpYmZ2E/m3JK8HjTNNNL8eIm8/YQ==}
     engines: {node: '>=18.0.0'}
 
-  '@midwayjs/async-hooks-context-manager@3.18.0':
-    resolution: {integrity: sha512-mZ9VyCKlX5oR5L9G0/Jsoex+LOIpqg2gsHrr6iYRMirMaRD3S5pHDvWhSrpHPuLqyoxsAHBdszSTkpWaQAy2rg==}
-    engines: {node: '>=12.17.0'}
-
   '@midwayjs/bull@3.18.2':
     resolution: {integrity: sha512-X8tL5rk92O0eKaR6iZMVs23Bq9PK4vVmW2nTboiM+jHHCC5zyuyemMxZlHivoSMet+qXvMSopZc2dyjS0HFmYg==}
     engines: {node: '>=12'}
@@ -2055,105 +2042,36 @@ packages:
     resolution: {integrity: sha512-6bNtLtf41jsvkKKO81mmNnttpXdXAW4d+paPxkMlXY9xrcXPILg3XOEhVzpvDmVAnlVuvpuSJ6CwsQLoqUuINw==}
     engines: {node: '>=12'}
 
-  '@midwayjs/casbin@3.18.2':
-    resolution: {integrity: sha512-2zCcQXsrqu+om1yehyor3eOHAmAiCtsiF4UXULj11WZBnShZNjmZezIKdtliVoBvKh2KFhoXOPQG1vZVNueJYg==}
-    engines: {node: '>=12'}
-
   '@midwayjs/cookies@1.2.0':
     resolution: {integrity: sha512-gdfAXk3+uL+9qcNo9lNnUFJCUGXXxCitBjyz9QJR08dcZ11mqTbxVNXhea525e3ZwKREy6f4PHAWofFwlPOZzQ==}
     engines: {node: '>=10'}
 
-  '@midwayjs/core@3.18.0':
-    resolution: {integrity: sha512-zvA5wC9XpnYwe3N06jEcmrMU3IIipyy6FIy5GMER43iYCTZa/J81tfMr7KttDTaW/FF9thx/jJNPqBiUiF6udQ==}
+  '@midwayjs/core@3.19.0':
+    resolution: {integrity: sha512-qFoaFeN8c0UcfJKwmXoFmFxhMVMIT+MwUcTt1A9r/7lGmuqTukUICv5dxhTFffIr6YJHhSMOXEK5u9FV/NxGGA==}
     engines: {node: '>=12'}
 
   '@midwayjs/event-bus@1.10.0':
     resolution: {integrity: sha512-s6quXAkUyGicWZzjmoIziriQiJIAGChYdUDpf6QBWaKv2LuJI0kl3+P+Fvt2/eEBIGrdM8EEYNNDol9SFRRfXA==}
     engines: {node: '>=12.11.0'}
 
-  '@midwayjs/express-session@3.18.2':
-    resolution: {integrity: sha512-P6BBAlZvlFHhZLEOd3cEZAiqAfKiL2MMwDetwJqu0KcoCiVaYredNxqukx/VESSArxXQAqDzY24Cg9STQyGORQ==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/express@3.18.2':
-    resolution: {integrity: sha512-+otfahnwudTNzWZ/TIwy75eJx0aVLn8q72hMB+K1qtsXShs4rSIBc34UJC+OMRIeVqsG4jp4iWMXffH2vzFJAw==}
-    engines: {node: '>=12'}
-
   '@midwayjs/faas@3.18.2':
     resolution: {integrity: sha512-FSecTQrWn58nJDGpa4CYozHII3djm4jITKIkvsaBD/uBVygQaHAKCogsdXW9gPhCBsI6K84tyrJcpTnKBMtneA==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/fc-starter@3.18.2':
-    resolution: {integrity: sha512-P0Osgf1jHbfQd0hnpHTWys9+quM7ZxqyOAiLCnqF+l+LYEuwn2AIw1XzKrFxR/k9TNqLModYdZJ9iNtl4sRT9g==}
     engines: {node: '>=12'}
 
   '@midwayjs/glob@1.1.1':
     resolution: {integrity: sha512-xoNU+JdCxE214KQrB0qgs88+Da7KYVICeuTL9VeKwaxZXj6a/PbpmEaH4+5BHLvZRRe78tHGR19+nKZrmMHBJg==}
 
-  '@midwayjs/i18n@3.18.2':
-    resolution: {integrity: sha512-8EX46AxZ3uy7M/MgEwn5C0o1vqdOnVaQgb2TeCgCpenPzrB7ogcRgBWqDFXMSpND/qoIkq6mTSPESvI3iOoa3g==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/jwt@3.18.2':
-    resolution: {integrity: sha512-aHdrdVsLU8ptuzp+53wUAZU5yMIF0jDh4sByKwr0ZmXGGYqxH8o+4/UHNmrPGIE5NoOZY0fa06mEKiwZGNvCCg==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/koa@3.18.2':
-    resolution: {integrity: sha512-3J+xSqDttJFOJreZy3kutuOk2rU7sTIsehIwO7ukqgO0cSxiEEZZ1IiQhpeIHd9D51nEZTT2ctS4SiTCzQlqXQ==}
-    engines: {node: '>=12'}
-
   '@midwayjs/logger@3.4.2':
     resolution: {integrity: sha512-BxSdSMog4jxeqpHwgauuKZT6iAiu/Vr1HDjO9l81iqU+l8c9veAJVeLT08nTqKdjUiQXnxTaW6nYlvnzF2HdMA==}
     engines: {node: '>=10'}
-
-  '@midwayjs/mock@3.18.2':
-    resolution: {integrity: sha512-wK6VH7hvoKRCVTghS+1/+KZVDfRmYmMKGw/TXY49oWYscU6h8O1YOVPJZXLVPDpem2O/KHggcysR2O3JpKyINQ==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/mongoose@3.18.2':
-    resolution: {integrity: sha512-Ql7KM3jZrhYJnva/J9m13pfoI/yMVEbYTJ3gAhn1fvX/dJhiOXRkR7BBDswcexDobyMN+kF25ztn3ewY9/OYwg==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/prometheus@3.18.2':
-    resolution: {integrity: sha512-3orUK1OMjJCm5ISM3NsG+PLCvufe0Do5tDHpLdQQXllws0PJlmq1MERitvcJqBLAZnpdSaC2W4ToZTBz/Te3aQ==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/redis@3.18.2':
-    resolution: {integrity: sha512-yAlwNzbKoE4P6/WuOFn2GOr0l6oHdtjz1SVAipnwEqyhdcR5RmcyAytAkT5rczADYzin6CtQjtmti66gUhf5+A==}
-    engines: {node: '>=12'}
 
   '@midwayjs/serverless-http-parser@3.14.0':
     resolution: {integrity: sha512-/QcB8txFWn7Y+nykgWbTba2WYFBvAph1c9TUsDNxnaCAhRxK+zlgwYvTrW/8iDHbCggPc9Zfw6jEEhm1u0ew3g==}
     engines: {node: '>=12'}
 
-  '@midwayjs/session@3.18.2':
-    resolution: {integrity: sha512-Ru/Wo4NF7St9v+zeyePeSb7IV7FxU7ofOlgd8gTuo3Ny2Kni7cVBBryJ9wBHLRvrkJeOCHGZGBNQ5RnRdGNVcw==}
-    engines: {node: '>=12'}
-
   '@midwayjs/simple-lock@1.2.2':
     resolution: {integrity: sha512-0VwK++J76FlvRUj0zfpD1vjV/PTJf8hnZ/OVsMwEUJWVSm2L4bEbcHa+ERKLiprK9tk+fIrDgeX3JB9K8iuGfw==}
     engines: {node: '>= 10'}
-
-  '@midwayjs/socketio@3.18.2':
-    resolution: {integrity: sha512-1KYyszKeqrvo9w4c+hjsBeH1yvnz9vPKvRfCOkRCLjJsEm6QtTzh852MLOrJQiCXnd5D+fj1pbqyU0xafkU3Vw==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/typeorm@3.18.2':
-    resolution: {integrity: sha512-Y4KDfIORd566+wgKYcI514nCtyG8XkXW/UL3Y2zDzCo4O+DaeOYO7uuw/wDkf49lUD+pgBW6uA4JXMdyl9zhEA==}
-    engines: {node: '>=12'}
-    hasBin: true
-
-  '@midwayjs/validate@3.18.2':
-    resolution: {integrity: sha512-JslPfIenh38WN3z/K81jL9jhBjK5xSv5jCXTPUhSZ+e4nygpA4D1S7QbCiM/0QojZFB5b6zRZunI7o/ykDmRnA==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/view@3.18.2':
-    resolution: {integrity: sha512-a1udiT6BiyxHiNn3ndptXbr0NKuJqUcqVPo8iIzoUqJg8hOqvOstdg8GolrSz7h/LJfCFHZKKjMAydUoE4ORCQ==}
-    engines: {node: '>=12'}
-
-  '@midwayjs/web@3.18.2':
-    resolution: {integrity: sha512-i4lijNVtnhSTBGK+6xQkvwPpvgOXv4hPRrbmayHwc6krU6C8xFK2dlc+koChpgsaWbIXKTKRSPkcbc/B4l32eg==}
-    engines: {node: '>=12'}
 
   '@mikro-orm/core@6.3.10':
     resolution: {integrity: sha512-Z41EbAYY3eESvJEV8V6jpFevGiy95qLUmII6iXGsQ3aU6yu3JLKilQ1xoP86q7raMXODWui1lhumdbCHD7KrRQ==}
@@ -3013,11 +2931,11 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
-  '@types/node@18.19.55':
-    resolution: {integrity: sha512-zzw5Vw52205Zr/nmErSEkN5FLqXPuKX/k5d1D7RKHATGqU7y6YfX9QxZraUzUrFGqH6XzOzG196BC35ltJC4Cw==}
-
   '@types/node@20.16.10':
     resolution: {integrity: sha512-vQUKgWTjEIRFCvK6CyriPH3MZYiYlNy0fKiEYHWbcoWLEgs4opurGGKlebrTLqdSMIbXImH6XExNiIyNUv3WpA==}
+
+  '@types/node@22.10.0':
+    resolution: {integrity: sha512-XC70cRZVElFHfIUB40FgZOBbgJYFKKMa5nb9lxcwYstFG/Mi+/Y0bGS+rs6Dmhmkpq4pnNiLiuZAbc02YCOnmA==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -3040,14 +2958,8 @@ packages:
   '@types/prop-types@15.7.13':
     resolution: {integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==}
 
-  '@types/ps-tree@1.1.6':
-    resolution: {integrity: sha512-PtrlVaOaI44/3pl3cvnlK+GxOM3re2526TJvPvh7W+keHIXdV4TE0ylpPBAcvFQCbGitaTXwL9u+RF7qtVeazQ==}
-
   '@types/qs@6.9.15':
     resolution: {integrity: sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==}
-
-  '@types/qs@6.9.16':
-    resolution: {integrity: sha512-7i+zxXdPD0T4cKDuxCUXJ4wHcsJLwENa6Z3dCu8cfCK743OGy5Nu1RmAGqDPsoTDINVEcdXKRvR/zre+P2Ku1A==}
 
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
@@ -3105,9 +3017,6 @@ packages:
 
   '@types/whatwg-url@11.0.5':
     resolution: {integrity: sha512-coYR071JRaHa+xoEvvYqvnIHaVqaYrLPbsufM9BF63HkwI5Lgmy2QR8Q5K/lYDYo5AK82wOvSOS0UsLTpTG7uQ==}
-
-  '@types/which@3.0.4':
-    resolution: {integrity: sha512-liyfuo/106JdlgSchJzXEQCVArk0CvevqPote8F8HgWgJ3dRCcTHgJIsLDuee0kxk/mhbInzIZk3QWSZJ8R+2w==}
 
   '@types/ws@8.5.12':
     resolution: {integrity: sha512-3tPRkv1EtkDpzlgyKyI8pGsGZAGPEaXeu0DOj5DI25Ja91bdAYddYHbADRYVrZMRbfW+1l5YwXVDKohDJNQxkQ==}
@@ -3726,6 +3635,11 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
+  browserslist@4.24.2:
+    resolution: {integrity: sha512-ZIc+Q62revdMcqC6aChtW4jz3My3klmCO1fEmINZY/8J3EpBg5/A/D0AKmBveUh6pgoeycoMkVMko84tuYS+Gg==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+
   bs-logger@0.2.6:
     resolution: {integrity: sha512-pd8DCoxmbgc7hyPKOvxtqNcjYoOsABPQdcCUjGp3d42VR2CX1ORhk2A87oqqu5R1kk+76nsxZupkmyd+MVtCog==}
     engines: {node: '>= 6'}
@@ -3857,14 +3771,14 @@ packages:
   caniuse-lite@1.0.30001667:
     resolution: {integrity: sha512-7LTwJjcRkzKFmtqGsibMeuXmvFDfZq/nzIjnmgCGzKKRVzjD72selLDK1oPF/Oxzmt4fNcPvTDvGqSDG4tCALw==}
 
+  caniuse-lite@1.0.30001684:
+    resolution: {integrity: sha512-G1LRwLIQjBQoyq0ZJGqGIJUXzJ8irpbjHLpVRXDvBEScFJ9b17sgK6vlx0GAJFE21okD7zXl08rRRUfq6HdoEQ==}
+
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
 
   casbin@5.30.0:
     resolution: {integrity: sha512-GDc8sImStd+ddBVBfLpe5fJPBWRjeEaz7fkiAGuw0+LTHF2TVvVsMALIMOx+ofzQhm+EHCH7mfiJsrS1Kgef2w==}
-
-  casbin@5.31.0:
-    resolution: {integrity: sha512-hA3be1bCfZEg4/uNOBw/fAJghEzU1YKODT9lIP5y50puyQwzRF5re1wztSP/fPdv8602z3sWBCdAcMZpkQuYAw==}
 
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
@@ -3887,10 +3801,6 @@ packages:
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
-
-  chalk@5.3.0:
-    resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
-    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
   chan@0.6.1:
     resolution: {integrity: sha512-/TdBP2UhbBmw7qnqkzo9Mk4rzvwRv4dlNPXFerqWy90T8oBspKagJNZxrDbExKHhx9uXXHjo3f9mHgs9iKO3nQ==}
@@ -4233,14 +4143,6 @@ packages:
     resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
     engines: {node: '>= 0.6'}
 
-  cookie@0.7.1:
-    resolution: {integrity: sha512-6DnInpx7SJ2AK3+CTUE/ZM0vWTUboZCegxhC2xiIydHR9jNuTAASBrfEpHhiGOZw/nX51bHt6YQl8jsGo4y/0w==}
-    engines: {node: '>= 0.6'}
-
-  cookie@0.7.2:
-    resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
-    engines: {node: '>= 0.6'}
-
   cookiejar@2.1.4:
     resolution: {integrity: sha512-LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==}
 
@@ -4339,10 +4241,6 @@ packages:
   dashdash@1.14.1:
     resolution: {integrity: sha512-jRFi8UDGo6j+odZiEpjazZaWqEal3w/basFjQHQEwVtZJGDpxbH1MeYluwCS8Xq5wmLJooDlMgvVarmWfGM44g==}
     engines: {node: '>=0.10'}
-
-  data-uri-to-buffer@4.0.1:
-    resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
-    engines: {node: '>= 12'}
 
   data-view-buffer@1.0.1:
     resolution: {integrity: sha512-0lht7OugA5x3iJLOWFhWK/5ehONdprk0ISXqVFn/NFrDu+cuc8iADFrGQz5BnRK7LLU3JmkbXSxaqX+/mXYtUA==}
@@ -4836,6 +4734,9 @@ packages:
   electron-to-chromium@1.5.33:
     resolution: {integrity: sha512-+cYTcFB1QqD4j4LegwLfpCNxifb6dDFUAwk6RsLusCwIaZI6or2f+q8rs5tTB2YC53HhOlIbEaqHMAAC8IOIwA==}
 
+  electron-to-chromium@1.5.65:
+    resolution: {integrity: sha512-PWVzBjghx7/wop6n22vS2MLU8tKGd4Q91aCEGhG/TYmW6PP5OcSXcdnxTe1NNt0T66N8D6jxh4kC8UsdzOGaIw==}
+
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
     engines: {node: '>=12'}
@@ -4896,10 +4797,6 @@ packages:
 
   engine.io@6.5.5:
     resolution: {integrity: sha512-C5Pn8Wk+1vKBoHghJODM63yk8MvrO9EWZUfkAt5HAqIgPE4/8FF0PEGHXtEd40l223+cE5ABWuPzm38PHFXfMA==}
-    engines: {node: '>=10.2.0'}
-
-  engine.io@6.6.2:
-    resolution: {integrity: sha512-gmNvsYi9C8iErnZdVcJnvCpSKbWTt1E8+JZo8b+daLninywUWi5NQ5STSHZ9rFjFO7imNcvb8Pc5pe/wMR5xEw==}
     engines: {node: '>=10.2.0'}
 
   enhanced-resolve@5.17.1:
@@ -5139,16 +5036,8 @@ packages:
     resolution: {integrity: sha512-m93QLWr0ju+rOwApSsyso838LQwgfs44QtOP/WBiwtAgPIo/SAh1a5c6nn2BR6mFNZehTpqKDESzP+fRHVbxwQ==}
     engines: {node: '>= 0.8.0'}
 
-  express-session@1.18.1:
-    resolution: {integrity: sha512-a5mtTqEaZvBCL9A9aqkrtfz+3SMDhOVUnjafjo+s7A9Txkq+SVX2DLvSp1Zrv4uCXa3lMSK3viWnh9Gg07PBUA==}
-    engines: {node: '>= 0.8.0'}
-
   express@4.20.0:
     resolution: {integrity: sha512-pLdae7I6QqShF5PnNTCVn4hI91Dx0Grkn2+IAsMTgMIKuQVte2dN9PeGSSAME2FR8anOhVA62QDIUaWVfEXVLw==}
-    engines: {node: '>= 0.10.0'}
-
-  express@4.21.1:
-    resolution: {integrity: sha512-YSFlK1Ee0/GC8QaO91tHcDxJiE/X4FbpAyQWkxAvG6AXCuR65YzK8ua6D9hvi/TzUfZMpc+BwuM1IPw8fmQBiQ==}
     engines: {node: '>= 0.10.0'}
 
   expression-eval@5.0.1:
@@ -5224,10 +5113,6 @@ packages:
   fb-watchman@2.0.2:
     resolution: {integrity: sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==}
 
-  fetch-blob@3.2.0:
-    resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
-    engines: {node: ^12.20 || >= 14.13}
-
   figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
     engines: {node: '>=8'}
@@ -5261,10 +5146,6 @@ packages:
 
   finalhandler@1.2.0:
     resolution: {integrity: sha512-5uXcUVftlQMFnWC9qu/svkWv3GTd2PfUhK/3PLkYNAe7FbqJMt3515HaxE6eRL74GdsriiwujiawdaB1BpEISg==}
-    engines: {node: '>= 0.8'}
-
-  finalhandler@1.3.1:
-    resolution: {integrity: sha512-6BN9trH7bp3qvnrRyzsBz+g3lZxTNZTbVO2EV1CS0WIcDbawYVdYvGflME/9QP0h0pYlCDBCTjYa9nZzMDpyxQ==}
     engines: {node: '>= 0.8'}
 
   find-cache-dir@4.0.0:
@@ -5344,10 +5225,6 @@ packages:
     resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
     engines: {node: '>= 6'}
 
-  formdata-polyfill@4.0.10:
-    resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
-    engines: {node: '>=12.20.0'}
-
   formidable@1.2.6:
     resolution: {integrity: sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==}
     deprecated: 'Please upgrade to latest, formidable@v2 or formidable@v3! Check these notes: https://bit.ly/2ZEqIau'
@@ -5411,10 +5288,6 @@ packages:
 
   functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
-
-  fx@35.0.0:
-    resolution: {integrity: sha512-O07q+Lknrom5RUX/u53tjo2KTTLUnL0K703JbqMYb19ORijfJNvijzFqqYXEjdk25T9R14S6t6wHD8fCWXCM0g==}
-    hasBin: true
 
   gals@1.0.2:
     resolution: {integrity: sha512-h5c1Q6Q2cnRkO2v8ZxbuFCNRpM96CjGxGuoNcThoNF3dAEEYagF166EqJmaa9r2/I+ryij8TO3yMmqrMvQ1YXw==}
@@ -5588,10 +5461,6 @@ packages:
   globby@11.1.0:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
     engines: {node: '>=10'}
-
-  globby@13.2.2:
-    resolution: {integrity: sha512-Y1zNGV+pzQdh7H39l9zgB4PJqjRNqydvdYCDG4HFXM4XuvSaQQlEc91IU1yALL8gUTDomgBAfz3XJdmUS+oo0w==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   globby@9.2.0:
     resolution: {integrity: sha512-ollPHROa5mcxDEkwg6bPt3QbEf4pDQSNtd6JPL1YvOvAo/7/0VAm9TccUeoTmarjPw4pfUthSCqcyfNB1I3ZSg==}
@@ -7394,10 +7263,6 @@ packages:
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
 
-  node-domexception@1.0.0:
-    resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
-    engines: {node: '>=10.5.0'}
-
   node-fetch@2.6.7:
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
     engines: {node: 4.x || >=6.0.0}
@@ -7406,10 +7271,6 @@ packages:
     peerDependenciesMeta:
       encoding:
         optional: true
-
-  node-fetch@3.3.1:
-    resolution: {integrity: sha512-cRVc/kyto/7E5shrWca1Wsea4y6tL9iYJE5FBCius3JQfb/4P4I295PfhgbJQBLTx6lATE4z+wK0rPM4VS2uow==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   node-gyp-build-optional-packages@5.2.2:
     resolution: {integrity: sha512-s+w+rBWnpTMwSFbaE0UXsRlg7hU4FjekKU4eyAih5T8nJuNZT1nNsskXpxmeqSK9UzkBl6UgRlnKc8hz8IEqOw==}
@@ -8683,10 +8544,6 @@ packages:
     resolution: {integrity: sha512-pDLK8zwl2eKaYrs8mrPZBJua4hMplRWJ1tIFksVC3FtBEBnl8dxgeHtsaMS8DhS9i4fLObaon6ABoc4/hQGdPA==}
     engines: {node: '>= 0.8.0'}
 
-  serve-static@1.16.2:
-    resolution: {integrity: sha512-VqpjJZKadQB/PEbEwvFdO43Ax5dFBZ2UECszz8bQ7pi7wt//PWe1P6MN7eCnjsatYtBT6EuiClbjSWP2WrIoTw==}
-    engines: {node: '>= 0.8.0'}
-
   set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
 
@@ -8792,10 +8649,6 @@ packages:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
 
-  slash@4.0.0:
-    resolution: {integrity: sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==}
-    engines: {node: '>=12'}
-
   slice-ansi@4.0.0:
     resolution: {integrity: sha512-qMCMfhY040cVHT43K9BFygqYbUPFZKHOg7K73mtTWJRb8pyP3fzf4Ixd5SzdEJQ6MRUg/WBnOLxghZtKKurENQ==}
     engines: {node: '>=10'}
@@ -8822,9 +8675,6 @@ packages:
   socket.io-adapter@1.1.2:
     resolution: {integrity: sha512-WzZRUj1kUjrTIrUKpZLEzFZ1OLj5FwLlAFQs9kuZJzJi5DKdU7FsWc36SNmA8iDOtwBQyT8FkrriRM8vXLYz8g==}
 
-  socket.io-adapter@2.2.0:
-    resolution: {integrity: sha512-rG49L+FwaVEwuAdeBRq49M97YI3ElVabJPzvHT9S6a2CWhDKnjSFasvwAwSYPRhQzfn4NtDIbCaGYgOCOU/rlg==}
-
   socket.io-adapter@2.5.5:
     resolution: {integrity: sha512-eLDQas5dzPgOWCk9GuuJC2lBqItuhKI4uxGgo9aIV7MYbk2h9Q6uULEh8WBzThoI7l+qU9Ast9fVUmkqPP9wYg==}
 
@@ -8849,20 +8699,11 @@ packages:
   socket.io-redis@5.4.0:
     resolution: {integrity: sha512-yCQm/Sywd3d08WXUfZRxt6O+JV2vWoPgWK6GVjiM0GkBtq5cpLOk8oILRPKbzTv1VEtSYmK41q0xzcgDinMbmQ==}
 
-  socket.io-redis@6.1.1:
-    resolution: {integrity: sha512-jeaXe3TGKC20GMSlPHEdwTUIWUpay/L7m5+S9TQcOf22p9Llx44/RkpJV08+buXTZ8E+aivOotj2RdeFJJWJJQ==}
-    engines: {node: '>=10.0.0'}
-    deprecated: 'This package has been renamed to ''@socket.io/redis-adapter'', please see the migration guide here: https://socket.io/docs/v4/redis-adapter/#migrating-from-socketio-redis'
-
   socket.io@2.5.1:
     resolution: {integrity: sha512-eaTE4tBKRD6RFoetquMbxgvcpvoDtRyIlkIMI/SMK2bsKvbENTsDeeu4GJ/z9c90yOWxB7b/eC+yKLPbHnH6bA==}
 
   socket.io@4.7.5:
     resolution: {integrity: sha512-DmeAkF6cwM9jSfmp6Dr/5/mfMwb5Z5qRrSXLpo3Fq5SqyU8CMF15jIN4ZhfSwu35ksM1qmHZDQ/DK5XTccSTvA==}
-    engines: {node: '>=10.2.0'}
-
-  socket.io@4.8.0:
-    resolution: {integrity: sha512-8U6BEgGjQOfGz3HHTYaC/L1GaxDCJ/KM0XTkJly0EhZ5U/du9uNEZy4ZgYzEzIqlx2CMm25CrCqr1ck899eLNA==}
     engines: {node: '>=10.2.0'}
 
   socks-proxy-agent@6.2.1:
@@ -9619,11 +9460,11 @@ packages:
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
 
-  undici-types@5.26.5:
-    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
-
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
+  undici-types@6.20.0:
+    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
   unescape@1.0.1:
     resolution: {integrity: sha512-O0+af1Gs50lyH1nUu3ZyYS1cRh01Q/kUKatTOkSs7jukXE6/NebucDVxyiDsA9AQ4JC1V1jUH9EO8JX2nMDgGQ==}
@@ -9823,10 +9664,6 @@ packages:
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
 
-  web-streams-polyfill@3.3.3:
-    resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
-    engines: {node: '>= 8'}
-
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
@@ -9847,10 +9684,6 @@ packages:
     peerDependenciesMeta:
       webpack-cli:
         optional: true
-
-  webpod@0.0.2:
-    resolution: {integrity: sha512-cSwwQIeg8v4i3p4ajHhwgR7N6VyxAf+KYSSsY6Pd3aETE+xEU4vbitz7qQkB0I321xnhDdgtxuiSfk5r/FVtjg==}
-    hasBin: true
 
   whatwg-url@13.0.0:
     resolution: {integrity: sha512-9WWbymnqj57+XEuqADHrCJ2eSXzn8WXIW/YSGaZtb2WKAInQ6CHfaUUcTyyver0p8BDg5StLQq8h1vtZuwmOig==}
@@ -9880,11 +9713,6 @@ packages:
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
-    hasBin: true
-
-  which@3.0.1:
-    resolution: {integrity: sha512-XA1b62dzQzLfaEOSQFTCOd5KFf/1VSzZo7/7TUjnya6u0vGGKzU96UQBZTAThCb2j4/xjBAyii1OhRLJEivHvg==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     hasBin: true
 
   which@4.0.0:
@@ -10106,9 +9934,9 @@ packages:
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
-  zx@7.2.3:
-    resolution: {integrity: sha512-QODu38nLlYXg/B/Gw7ZKiZrvPkEsjPN3LQ5JFXM7h0JvwhEdPNNl+4Ao1y4+o3CLNiDUNcwzQYZ4/Ko7kKzCMA==}
-    engines: {node: '>= 16.0.0'}
+  zx@8.2.2:
+    resolution: {integrity: sha512-HSIdpU5P2ONI0nssnhsUZNCH9Sd/Z8LIFk9n8QTbu6JufzJx7qR7ajrMN21s06JqWSApcN012377iWsv8Vs5bg==}
+    engines: {node: '>= 12.17.0'}
     hasBin: true
 
 snapshots:
@@ -10868,8 +10696,6 @@ snapshots:
       - supports-color
       - typescript
 
-  '@midwayjs/async-hooks-context-manager@3.18.0': {}
-
   '@midwayjs/bull@3.18.2':
     dependencies:
       bull: 4.16.3
@@ -10881,16 +10707,12 @@ snapshots:
       lodash.clonedeep: 4.5.0
       lru-cache: 7.18.3
 
-  '@midwayjs/casbin@3.18.2':
-    dependencies:
-      casbin: 5.31.0
-
   '@midwayjs/cookies@1.2.0':
     dependencies:
       scmp: 2.1.0
       should-send-same-site-none: 2.0.5
 
-  '@midwayjs/core@3.18.0':
+  '@midwayjs/core@3.19.0':
     dependencies:
       '@midwayjs/glob': 1.1.1
       class-transformer: 0.5.1
@@ -10899,90 +10721,20 @@ snapshots:
 
   '@midwayjs/event-bus@1.10.0': {}
 
-  '@midwayjs/express-session@3.18.2':
-    dependencies:
-      cookie-session: 2.1.0
-      express-session: 1.18.1
-    transitivePeerDependencies:
-      - supports-color
-
-  '@midwayjs/express@3.18.2':
-    dependencies:
-      '@midwayjs/core': 3.18.0
-      '@midwayjs/express-session': 3.18.2
-      body-parser: 1.20.3
-      cookie-parser: 1.4.6
-      express: 4.21.1
-    transitivePeerDependencies:
-      - supports-color
-
   '@midwayjs/faas@3.18.2':
     dependencies:
-      '@midwayjs/core': 3.18.0
+      '@midwayjs/core': 3.19.0
       '@midwayjs/serverless-http-parser': 3.14.0
       '@midwayjs/simple-lock': 1.2.2
-
-  '@midwayjs/fc-starter@3.18.2':
-    dependencies:
-      '@midwayjs/async-hooks-context-manager': 3.18.0
-      '@midwayjs/faas': 3.18.2
-      raw-body: 2.5.2
 
   '@midwayjs/glob@1.1.1':
     dependencies:
       picomatch: 2.3.1
 
-  '@midwayjs/i18n@3.18.2':
-    dependencies:
-      picomatch: 2.3.1
-
-  '@midwayjs/jwt@3.18.2':
-    dependencies:
-      '@types/jsonwebtoken': 9.0.7
-      jsonwebtoken: 9.0.2
-
-  '@midwayjs/koa@3.18.2':
-    dependencies:
-      '@koa/router': 12.0.2
-      '@midwayjs/cookies': 1.2.0
-      '@midwayjs/core': 3.18.0
-      '@midwayjs/session': 3.18.2
-      '@types/koa': 2.15.0
-      '@types/qs': 6.9.16
-      koa: 2.15.3
-      koa-bodyparser: 4.4.1
-      qs: 6.13.0
-    transitivePeerDependencies:
-      - supports-color
-
   '@midwayjs/logger@3.4.2':
     dependencies:
       dayjs: 1.11.13
       safe-stable-stringify: 2.5.0
-
-  '@midwayjs/mock@3.18.2':
-    dependencies:
-      '@midwayjs/async-hooks-context-manager': 3.18.0
-      '@types/superagent': 4.1.14
-      '@types/supertest': 2.0.16
-      js-yaml: 4.1.0
-      raw-body: 2.5.2
-      supertest: 6.3.3
-    transitivePeerDependencies:
-      - supports-color
-
-  '@midwayjs/mongoose@3.18.2': {}
-
-  '@midwayjs/prometheus@3.18.2':
-    dependencies:
-      prom-client: 14.2.0
-      request: 2.88.2
-
-  '@midwayjs/redis@3.18.2':
-    dependencies:
-      ioredis: 5.4.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@midwayjs/serverless-http-parser@3.14.0':
     dependencies:
@@ -10998,43 +10750,7 @@ snapshots:
       type-is: 1.6.18
       vary: 1.1.2
 
-  '@midwayjs/session@3.18.2':
-    dependencies:
-      '@midwayjs/cookies': 1.2.0
-
   '@midwayjs/simple-lock@1.2.2': {}
-
-  '@midwayjs/socketio@3.18.2':
-    dependencies:
-      '@midwayjs/core': 3.18.0
-      socket.io: 4.8.0
-      socket.io-redis: 6.1.1
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-
-  '@midwayjs/typeorm@3.18.2': {}
-
-  '@midwayjs/validate@3.18.2':
-    dependencies:
-      '@midwayjs/i18n': 3.18.2
-      joi: 17.13.3
-
-  '@midwayjs/view@3.18.2': {}
-
-  '@midwayjs/web@3.18.2':
-    dependencies:
-      '@eggjs/router': 2.0.1
-      '@midwayjs/core': 3.18.0
-      egg: 2.37.0
-      egg-cluster: 1.27.1
-      find-up: 5.0.0
-      mkdirp: 1.0.4
-      qs: 6.13.0
-    transitivePeerDependencies:
-      - proxy-agent
-      - supports-color
 
   '@mikro-orm/core@6.3.10':
     dependencies:
@@ -11858,11 +11574,11 @@ snapshots:
 
   '@types/depd@1.1.36':
     dependencies:
-      '@types/node': 20.16.10
+      '@types/node': 22.10.0
 
   '@types/empower-core@1.2.4':
     dependencies:
-      '@types/node': 20.16.10
+      '@types/node': 22.10.0
 
   '@types/empower@1.2.35':
     dependencies:
@@ -11903,11 +11619,12 @@ snapshots:
     dependencies:
       '@types/jsonfile': 6.1.4
       '@types/node': 20.16.10
+    optional: true
 
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.16.10
+      '@types/node': 22.10.0
 
   '@types/graceful-fs@4.1.9':
     dependencies:
@@ -11943,6 +11660,7 @@ snapshots:
   '@types/jsonfile@6.1.4':
     dependencies:
       '@types/node': 20.16.10
+    optional: true
 
   '@types/jsonwebtoken@9.0.7':
     dependencies:
@@ -11991,13 +11709,13 @@ snapshots:
 
   '@types/ms@0.7.34': {}
 
-  '@types/node@18.19.55':
-    dependencies:
-      undici-types: 5.26.5
-
   '@types/node@20.16.10':
     dependencies:
       undici-types: 6.19.8
+
+  '@types/node@22.10.0':
+    dependencies:
+      undici-types: 6.20.0
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -12025,11 +11743,7 @@ snapshots:
 
   '@types/prop-types@15.7.13': {}
 
-  '@types/ps-tree@1.1.6': {}
-
   '@types/qs@6.9.15': {}
-
-  '@types/qs@6.9.16': {}
 
   '@types/range-parser@1.2.7': {}
 
@@ -12097,8 +11811,6 @@ snapshots:
   '@types/whatwg-url@11.0.5':
     dependencies:
       '@types/webidl-conversions': 7.0.3
-
-  '@types/which@3.0.4': {}
 
   '@types/ws@8.5.12':
     dependencies:
@@ -12844,6 +12556,13 @@ snapshots:
       node-releases: 2.0.18
       update-browserslist-db: 1.1.1(browserslist@4.24.0)
 
+  browserslist@4.24.2:
+    dependencies:
+      caniuse-lite: 1.0.30001684
+      electron-to-chromium: 1.5.65
+      node-releases: 2.0.18
+      update-browserslist-db: 1.1.1(browserslist@4.24.2)
+
   bs-logger@0.2.6:
     dependencies:
       fast-json-stable-stringify: 2.1.0
@@ -13042,6 +12761,8 @@ snapshots:
 
   caniuse-lite@1.0.30001667: {}
 
+  caniuse-lite@1.0.30001684: {}
+
   capital-case@1.0.4:
     dependencies:
       no-case: 3.0.4
@@ -13049,14 +12770,6 @@ snapshots:
       upper-case-first: 2.0.2
 
   casbin@5.30.0:
-    dependencies:
-      await-lock: 2.2.2
-      buffer: 6.0.3
-      csv-parse: 5.5.6
-      expression-eval: 5.0.1
-      minimatch: 7.4.6
-
-  casbin@5.31.0:
     dependencies:
       await-lock: 2.2.2
       buffer: 6.0.3
@@ -13087,8 +12800,6 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-
-  chalk@5.3.0: {}
 
   chan@0.6.1: {}
 
@@ -13484,10 +13195,6 @@ snapshots:
 
   cookie@0.6.0: {}
 
-  cookie@0.7.1: {}
-
-  cookie@0.7.2: {}
-
   cookiejar@2.1.4: {}
 
   cookies@0.9.1:
@@ -13596,8 +13303,6 @@ snapshots:
   dashdash@1.14.1:
     dependencies:
       assert-plus: 1.0.0
-
-  data-uri-to-buffer@4.0.1: {}
 
   data-view-buffer@1.0.1:
     dependencies:
@@ -14267,6 +13972,8 @@ snapshots:
 
   electron-to-chromium@1.5.33: {}
 
+  electron-to-chromium@1.5.65: {}
+
   emittery@0.13.1: {}
 
   emoji-regex@7.0.3: {}
@@ -14363,23 +14070,6 @@ snapshots:
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.4.2
-      cors: 2.8.5
-      debug: 4.3.7
-      engine.io-parser: 5.2.3
-      ws: 8.17.1
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-
-  engine.io@6.6.2:
-    dependencies:
-      '@types/cookie': 0.4.1
-      '@types/cors': 2.8.17
-      '@types/node': 20.16.10
-      accepts: 1.3.8
-      base64id: 2.0.0
-      cookie: 0.7.2
       cors: 2.8.5
       debug: 4.3.7
       engine.io-parser: 5.2.3
@@ -14726,19 +14416,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  express-session@1.18.1:
-    dependencies:
-      cookie: 0.7.2
-      cookie-signature: 1.0.7
-      debug: 2.6.9
-      depd: 2.0.0
-      on-headers: 1.0.2
-      parseurl: 1.3.3
-      safe-buffer: 5.2.1
-      uid-safe: 2.1.5
-    transitivePeerDependencies:
-      - supports-color
-
   express@4.20.0:
     dependencies:
       accepts: 1.3.8
@@ -14767,42 +14444,6 @@ snapshots:
       safe-buffer: 5.2.1
       send: 0.19.0
       serve-static: 1.16.0
-      setprototypeof: 1.2.0
-      statuses: 2.0.1
-      type-is: 1.6.18
-      utils-merge: 1.0.1
-      vary: 1.1.2
-    transitivePeerDependencies:
-      - supports-color
-
-  express@4.21.1:
-    dependencies:
-      accepts: 1.3.8
-      array-flatten: 1.1.1
-      body-parser: 1.20.3
-      content-disposition: 0.5.4
-      content-type: 1.0.5
-      cookie: 0.7.1
-      cookie-signature: 1.0.6
-      debug: 2.6.9
-      depd: 2.0.0
-      encodeurl: 2.0.0
-      escape-html: 1.0.3
-      etag: 1.8.1
-      finalhandler: 1.3.1
-      fresh: 0.5.2
-      http-errors: 2.0.0
-      merge-descriptors: 1.0.3
-      methods: 1.1.2
-      on-finished: 2.4.1
-      parseurl: 1.3.3
-      path-to-regexp: 0.1.10
-      proxy-addr: 2.0.7
-      qs: 6.13.0
-      range-parser: 1.2.1
-      safe-buffer: 5.2.1
-      send: 0.19.0
-      serve-static: 1.16.2
       setprototypeof: 1.2.0
       statuses: 2.0.1
       type-is: 1.6.18
@@ -14904,11 +14545,6 @@ snapshots:
     dependencies:
       bser: 2.1.1
 
-  fetch-blob@3.2.0:
-    dependencies:
-      node-domexception: 1.0.0
-      web-streams-polyfill: 3.3.3
-
   figures@3.2.0:
     dependencies:
       escape-string-regexp: 1.0.5
@@ -14962,18 +14598,6 @@ snapshots:
     dependencies:
       debug: 2.6.9
       encodeurl: 1.0.2
-      escape-html: 1.0.3
-      on-finished: 2.4.1
-      parseurl: 1.3.3
-      statuses: 2.0.1
-      unpipe: 1.0.0
-    transitivePeerDependencies:
-      - supports-color
-
-  finalhandler@1.3.1:
-    dependencies:
-      debug: 2.6.9
-      encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
       parseurl: 1.3.3
@@ -15057,10 +14681,6 @@ snapshots:
       combined-stream: 1.0.8
       mime-types: 2.1.35
 
-  formdata-polyfill@4.0.10:
-    dependencies:
-      fetch-blob: 3.2.0
-
   formidable@1.2.6: {}
 
   formidable@2.1.2:
@@ -15122,8 +14742,6 @@ snapshots:
   functional-red-black-tree@1.0.1: {}
 
   functions-have-names@1.2.3: {}
-
-  fx@35.0.0: {}
 
   gals@1.0.2: {}
 
@@ -15338,14 +14956,6 @@ snapshots:
       ignore: 5.3.2
       merge2: 1.4.1
       slash: 3.0.0
-
-  globby@13.2.2:
-    dependencies:
-      dir-glob: 3.0.1
-      fast-glob: 3.3.2
-      ignore: 5.3.2
-      merge2: 1.4.1
-      slash: 4.0.0
 
   globby@9.2.0:
     dependencies:
@@ -17611,19 +17221,11 @@ snapshots:
 
   node-addon-api@7.1.1: {}
 
-  node-domexception@1.0.0: {}
-
   node-fetch@2.6.7(encoding@0.1.13):
     dependencies:
       whatwg-url: 5.0.0
     optionalDependencies:
       encoding: 0.1.13
-
-  node-fetch@3.3.1:
-    dependencies:
-      data-uri-to-buffer: 4.0.1
-      fetch-blob: 3.2.0
-      formdata-polyfill: 4.0.10
 
   node-gyp-build-optional-packages@5.2.2:
     dependencies:
@@ -19079,9 +18681,9 @@ snapshots:
 
   sequelize-pool@7.1.0: {}
 
-  sequelize-typescript@2.1.6(@types/node@20.16.10)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.3(sqlite3@5.1.7)):
+  sequelize-typescript@2.1.6(@types/node@22.10.0)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.3(sqlite3@5.1.7)):
     dependencies:
-      '@types/node': 20.16.10
+      '@types/node': 22.10.0
       '@types/validator': 13.12.2
       glob: 7.2.0
       reflect-metadata: 0.2.2
@@ -19128,15 +18730,6 @@ snapshots:
       escape-html: 1.0.3
       parseurl: 1.3.3
       send: 0.18.0
-    transitivePeerDependencies:
-      - supports-color
-
-  serve-static@1.16.2:
-    dependencies:
-      encodeurl: 2.0.0
-      escape-html: 1.0.3
-      parseurl: 1.3.3
-      send: 0.19.0
     transitivePeerDependencies:
       - supports-color
 
@@ -19292,8 +18885,6 @@ snapshots:
 
   slash@3.0.0: {}
 
-  slash@4.0.0: {}
-
   slice-ansi@4.0.0:
     dependencies:
       ansi-styles: 4.3.0
@@ -19331,8 +18922,6 @@ snapshots:
       - supports-color
 
   socket.io-adapter@1.1.2: {}
-
-  socket.io-adapter@2.2.0: {}
 
   socket.io-adapter@2.5.5:
     dependencies:
@@ -19405,16 +18994,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  socket.io-redis@6.1.1:
-    dependencies:
-      debug: 4.3.7
-      notepack.io: 2.2.0
-      redis: 3.1.2
-      socket.io-adapter: 2.2.0
-      uid2: 0.0.3
-    transitivePeerDependencies:
-      - supports-color
-
   socket.io@2.5.1:
     dependencies:
       debug: 4.1.1
@@ -19435,20 +19014,6 @@ snapshots:
       cors: 2.8.5
       debug: 4.3.7
       engine.io: 6.5.5
-      socket.io-adapter: 2.5.5
-      socket.io-parser: 4.2.4
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-
-  socket.io@4.8.0:
-    dependencies:
-      accepts: 1.3.8
-      base64id: 2.0.0
-      cors: 2.8.5
-      debug: 4.3.7
-      engine.io: 6.6.2
       socket.io-adapter: 2.5.5
       socket.io-parser: 4.2.4
     transitivePeerDependencies:
@@ -20061,6 +19626,25 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
+  ts-node@10.9.2(@types/node@22.10.0)(typescript@5.3.3):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.11
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 22.10.0
+      acorn: 8.12.1
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 5.3.3
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    optional: true
+
   tsconfig-paths@3.15.0:
     dependencies:
       '@types/json5': 0.0.29
@@ -20200,7 +19784,7 @@ snapshots:
       typescript: 5.3.3
       yaml: 2.5.1
 
-  typeorm@0.3.20(ioredis@5.4.1)(mysql2@3.11.3)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@20.16.10)(typescript@5.3.3)):
+  typeorm@0.3.20(ioredis@5.4.1)(mysql2@3.11.3)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.10.0)(typescript@5.3.3)):
     dependencies:
       '@sqltools/formatter': 1.2.5
       app-root-path: 3.1.0
@@ -20222,7 +19806,7 @@ snapshots:
       mysql2: 3.11.3
       redis: 3.1.2
       sqlite3: 5.1.7
-      ts-node: 10.9.2(@types/node@20.16.10)(typescript@5.3.3)
+      ts-node: 10.9.2(@types/node@22.10.0)(typescript@5.3.3)
     transitivePeerDependencies:
       - supports-color
 
@@ -20250,9 +19834,9 @@ snapshots:
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
 
-  undici-types@5.26.5: {}
-
   undici-types@6.19.8: {}
+
+  undici-types@6.20.0: {}
 
   unescape@1.0.1:
     dependencies:
@@ -20332,6 +19916,12 @@ snapshots:
   update-browserslist-db@1.1.1(browserslist@4.24.0):
     dependencies:
       browserslist: 4.24.0
+      escalade: 3.2.0
+      picocolors: 1.1.0
+
+  update-browserslist-db@1.1.1(browserslist@4.24.2):
+    dependencies:
+      browserslist: 4.24.2
       escalade: 3.2.0
       picocolors: 1.1.0
 
@@ -20479,8 +20069,6 @@ snapshots:
     dependencies:
       defaults: 1.0.4
 
-  web-streams-polyfill@3.3.3: {}
-
   webidl-conversions@3.0.1: {}
 
   webidl-conversions@7.0.0: {}
@@ -20495,7 +20083,7 @@ snapshots:
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
       acorn: 8.14.0
-      browserslist: 4.24.0
+      browserslist: 4.24.2
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.17.1
       es-module-lexer: 1.5.4
@@ -20516,8 +20104,6 @@ snapshots:
       - '@swc/core'
       - esbuild
       - uglify-js
-
-  webpod@0.0.2: {}
 
   whatwg-url@13.0.0:
     dependencies:
@@ -20559,10 +20145,6 @@ snapshots:
       isexe: 2.0.0
 
   which@2.0.2:
-    dependencies:
-      isexe: 2.0.0
-
-  which@3.0.1:
     dependencies:
       isexe: 2.0.0
 
@@ -20784,20 +20366,7 @@ snapshots:
 
   zwitch@2.0.4: {}
 
-  zx@7.2.3:
-    dependencies:
+  zx@8.2.2:
+    optionalDependencies:
       '@types/fs-extra': 11.0.4
-      '@types/minimist': 1.2.5
-      '@types/node': 18.19.55
-      '@types/ps-tree': 1.1.6
-      '@types/which': 3.0.4
-      chalk: 5.3.0
-      fs-extra: 11.2.0
-      fx: 35.0.0
-      globby: 13.2.2
-      minimist: 1.2.8
-      node-fetch: 3.3.1
-      ps-tree: 1.2.0
-      webpod: 0.0.2
-      which: 3.0.1
-      yaml: 2.5.1
+      '@types/node': 20.16.10

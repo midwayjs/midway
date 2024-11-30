@@ -11,6 +11,7 @@ import { safeParse, safeStringify } from './flatted';
 import * as crypto from 'crypto';
 import { Types } from './types';
 import { pathToFileURL } from 'url';
+import * as console from 'node:console';
 
 const debug = debuglog('midway:debug');
 
@@ -67,6 +68,7 @@ export const loadModule = async (
     enableCache?: boolean;
     loadMode?: 'commonjs' | 'esm';
     safeLoad?: boolean;
+    warnOnLoadError?: boolean;
   } = {}
 ) => {
   options.enableCache = options.enableCache ?? true;
@@ -114,6 +116,9 @@ export const loadModule = async (
     if (!options.safeLoad) {
       throw err;
     } else {
+      if (options.warnOnLoadError && err.code !== 'MODULE_NOT_FOUND') {
+        console.warn(err);
+      }
       debug(`[core]: SafeLoadModule Warning\n\n${err.message}\n`);
       return undefined;
     }

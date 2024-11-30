@@ -7,20 +7,6 @@ import { NextJSMiddleware } from './middleware';
 
 @Configuration({
   namespace: 'nextjs',
-  importConfigs: [
-    {
-      default: {
-        next: {
-          dev: false,
-        },
-      },
-      local: {
-        next: {
-          dev: true,
-        },
-      },
-    },
-  ],
 })
 export class NextJSConfiguration {
   @Inject()
