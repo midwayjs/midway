@@ -746,6 +746,7 @@ export interface IMidwayContainer extends IObjectFactory {
 
 export interface IFileDetector {
   run(container: IMidwayGlobalContainer, namespace: string): Promise<void>;
+  runSync(container: IMidwayGlobalContainer, namespace: string): void;
 }
 
 export interface IConfigService {

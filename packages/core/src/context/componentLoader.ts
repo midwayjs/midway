@@ -83,6 +83,64 @@ export class ComponentConfigurationLoader {
     });
   }
 
+  public loadSync(module) {
+    let namespace = MAIN_MODULE_KEY;
+    // 可能导出多个
+    const configurationExports = this.getConfigurationExport(module);
+    if (!configurationExports.length) return;
+    // 多个的情况，数据交给第一个保存
+    for (let i = 0; i < configurationExports.length; i++) {
+      const configurationExport = configurationExports[i];
+
+      if (this.loadedMap.get(configurationExport)) {
+        // 已经加载过就跳过循环
+        continue;
+      }
+
+      let configurationOptions: InjectionConfigurationOptions;
+      if (configurationExport instanceof FunctionalConfiguration) {
+        // 函数式写法
+        configurationOptions = MetadataManager.getOwnMetadata(
+          CONFIGURATION_OBJECT_KEY,
+          configurationExport
+        );
+      } else {
+        // 普通类写法
+        configurationOptions = MetadataManager.getOwnMetadata(
+          CONFIGURATION_KEY,
+          configurationExport
+        );
+      }
+
+      // 已加载标记，防止死循环
+      this.loadedMap.set(configurationExport, true);
+
+      if (configurationOptions) {
+        if (configurationOptions.namespace !== undefined) {
+          namespace = configurationOptions.namespace;
+          this.namespaceList.push(namespace);
+        }
+        this.configurationOptionsList.push(configurationOptions);
+        debug(`[core]: load configuration in namespace="${namespace}"`);
+        this.addImports(configurationOptions.imports);
+        this.addImportObjects(configurationOptions.importObjects);
+        this.addImportConfigs(configurationOptions.importConfigs);
+        this.addImportConfigFilter(configurationOptions.importConfigFilter);
+
+        if (configurationOptions.detector) {
+          configurationOptions.detector.runSync(this.container, namespace);
+        }
+
+        this.bindConfigurationClass(configurationExport, namespace);
+      }
+    }
+
+    // bind module
+    this.container.bindClass(module, {
+      namespace,
+    });
+  }
+
   private addImportConfigs(
     importConfigs:
       | Array<{ [environmentName: string]: Record<string, any> }>

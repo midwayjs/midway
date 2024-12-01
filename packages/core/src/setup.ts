@@ -13,7 +13,6 @@ import {
   MidwayApplicationManager,
   MidwayMockService,
   MidwayWebRouterService,
-  safeRequire,
   MidwayPriorityManager,
   DecoratorManager,
   IModuleStore,
@@ -22,10 +21,9 @@ import {
 import defaultConfig from './config/config.default';
 import * as util from 'util';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
-import { join } from 'path';
 import { MidwayHealthService } from './service/healthService';
 import { ComponentConfigurationLoader } from './context/componentLoader';
-import { findProjectEntryFile } from './util';
+import { findProjectEntryFile, findProjectEntryFileSync } from './util';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -143,7 +141,7 @@ export async function prepareGlobalApplicationContextAsync(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
-  debug('[core]: set default file detector and entry file');
+  debug('[core]: set default module load type and entry file');
 
   if (!globalOptions.moduleLoadType) {
     globalOptions.moduleLoadType = 'commonjs';
@@ -272,11 +270,17 @@ export function prepareGlobalApplicationContext(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
-  printStepDebugInfo('Ready module detector');
+  debug('[core]: set default module load type and entry file');
 
   if (!globalOptions.moduleLoadType) {
     globalOptions.moduleLoadType = 'commonjs';
   }
+
+  // set entry file
+  globalOptions.imports = [
+    ...(globalOptions.imports ?? []),
+    findProjectEntryFileSync(appDir, baseDir),
+  ];
 
   printStepDebugInfo('Binding inner service');
 
@@ -332,20 +336,22 @@ export function prepareGlobalApplicationContext(
     'Load imports(component) and user code configuration module'
   );
 
-  if (!globalOptions.imports) {
-    globalOptions.imports = [
-      safeRequire(join(globalOptions.baseDir, 'configuration')),
-    ];
+  // load configuration
+  const componentConfigurationLoader = new ComponentConfigurationLoader(
+    applicationContext
+  );
+  const importModules = [...(globalOptions.imports ?? [])];
+
+  for (const mod of importModules) {
+    if (mod) {
+      componentConfigurationLoader.loadSync(mod);
+    }
   }
 
-  // applicationContext.load(
-  //   [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
-  // );
-  //
-  // printStepDebugInfo('Run applicationContext ready method');
-  //
-  // // bind user code module
-  // applicationContext.ready();
+  for (const ns of componentConfigurationLoader.getNamespaceList()) {
+    applicationContext.addNamespace(ns);
+    debug(`[core]: load configuration in namespace="${ns}" complete`);
+  }
 
   if (globalOptions.globalConfig) {
     if (Array.isArray(globalOptions.globalConfig)) {

@@ -20,6 +20,8 @@ export abstract class AbstractFileDetector<T> implements IFileDetector {
     container: IMidwayGlobalContainer,
     namespace: string
   ): Promise<void>;
+
+  abstract runSync(container: IMidwayGlobalContainer, namespace: string): void;
 }
 
 const DEFAULT_GLOB_PATTERN = ['**/**.tsx'].concat(DEFAULT_PATTERN);
@@ -158,6 +160,12 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
   getType(): 'commonjs' | 'module' {
     return 'commonjs';
   }
+
+  runSync(container: IMidwayGlobalContainer, namespace: string): void {
+    if (this.getType() === 'commonjs') {
+      return this.loadSync(container, namespace);
+    }
+  }
 }
 
 /**
@@ -174,6 +182,10 @@ export class CustomModuleDetector extends AbstractFileDetector<{
   namespace?: string;
 }> {
   async run(container: IMidwayGlobalContainer) {
+    this.runSync(container, this.options.namespace);
+  }
+
+  runSync(container: IMidwayGlobalContainer, namespace: string): void {
     for (const module of this.options.modules) {
       container.bindClass(module, {
         namespace: this.options.namespace,
