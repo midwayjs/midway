@@ -1,4 +1,4 @@
-import { dirname, resolve, sep, posix } from 'path';
+import { dirname, resolve, sep, posix, join } from 'path';
 import { readFileSync } from 'fs';
 import { debuglog } from 'util';
 import * as transformer from 'class-transformer';
@@ -11,7 +11,8 @@ import { safeParse, safeStringify } from './flatted';
 import * as crypto from 'crypto';
 import { Types } from './types';
 import { pathToFileURL } from 'url';
-import * as console from 'node:console';
+import { normalizePath } from './pathFileUtil';
+import { FunctionalConfiguration } from '../functional/configuration';
 
 const debug = debuglog('midway:debug');
 
@@ -634,6 +635,70 @@ export async function createPromiseTimeoutInvokeChain<Result>(options: {
     return results;
   }
 }
+
+function getFileNameWithSuffix(fileName: string) {
+  return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
+}
+
+export async function findProjectEntryFile(
+  appDir: string,
+  baseDir: string,
+  loadMode: 'commonjs' | 'esm'
+) {
+  /**
+   * 查找常用文件中的 midway 入口，入口文件包括 Configuration 对象或者 defineConfiguration 函数
+   */
+  async function containsConfiguration(filePath: string) {
+    // 加载文件
+    const content = await loadModule(filePath, {
+      safeLoad: true,
+      loadMode,
+      warnOnLoadError: true,
+    });
+    if (content?.['Configuration'] || content?.['defineConfiguration']) {
+      return content;
+    }
+
+    if (
+      content?.default &&
+      content.default instanceof FunctionalConfiguration
+    ) {
+      return content;
+    }
+  }
+
+  // 1. 找 package.json 中的 main 字段
+  const pkgJSON = await loadModule(join(appDir, 'package.json'), {
+    safeLoad: true,
+    enableCache: false,
+  });
+  if (pkgJSON?.['main']) {
+    const configuration = await containsConfiguration(
+      normalizePath(appDir, pkgJSON['main'])
+    );
+    if (configuration) {
+      return configuration;
+    }
+  }
+
+  // 2. 找 src/configuration.ts 或 src/configuration.js
+  const configurationFile = await containsConfiguration(
+    join(baseDir, getFileNameWithSuffix('configuration'))
+  );
+
+  if (configurationFile) {
+    return configurationFile;
+  }
+
+  // 3. 找 src/index.ts 或 src/index.js
+  const indexFile = await containsConfiguration(
+    join(baseDir, getFileNameWithSuffix('index'))
+  );
+  if (indexFile) {
+    return indexFile;
+  }
+}
+
 
 export const Utils = {
   sleep,

@@ -1,4 +1,4 @@
-import { extname } from 'path';
+import { extname, isAbsolute, resolve } from 'path';
 import { readFileSync } from 'fs';
 
 export function isPath(p): boolean {
@@ -25,11 +25,25 @@ export function getFileContentSync(filePath: any, encoding?: BufferEncoding) {
     : filePath;
 }
 
-export const PathFileUtil = {
-  isPath,
-  isPathEqual,
-  getFileContentSync,
-};
+/**
+ * Normalize path, if p is absolute path, return p, otherwise join p with baseDir
+ *
+ * @example
+ * ```ts
+ * normalizePath('/a/b', 'c') => '/a/b/c'
+ * normalizePath('/a/b', '/c') => '/c'
+ * ```
+ *
+ * @param baseDir
+ * @param p
+ */
+export function normalizePath(baseDir, p) {
+  if (isAbsolute(p)) {
+    return p;
+  } else {
+    return resolve(baseDir, p);
+  }
+}
 
 export function getModuleRequirePathList(moduleName: string): string[] {
   const moduleNameList = [moduleName, moduleName.replace(/\//g, '_')];
@@ -57,3 +71,11 @@ export function getModuleRequirePathList(moduleName: string): string[] {
   moduleNameMap = undefined;
   return modulePathList;
 }
+
+
+export const PathFileUtil = {
+  isPath,
+  isPathEqual,
+  getFileContentSync,
+};
+

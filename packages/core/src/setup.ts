@@ -13,9 +13,7 @@ import {
   MidwayApplicationManager,
   MidwayMockService,
   MidwayWebRouterService,
-  loadModule,
   safeRequire,
-  isTypeScriptEnvironment,
   MidwayPriorityManager,
   DecoratorManager,
   IModuleStore,
@@ -27,6 +25,7 @@ import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 import { join } from 'path';
 import { MidwayHealthService } from './service/healthService';
 import { ComponentConfigurationLoader } from './context/componentLoader';
+import { findProjectEntryFile } from './util';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -144,32 +143,21 @@ export async function prepareGlobalApplicationContextAsync(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
-  debug('[core]: set default file detector');
+  debug('[core]: set default file detector and entry file');
 
   if (!globalOptions.moduleLoadType) {
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // set module detector
-  if (globalOptions.moduleDetector !== false) {
-    debug('[core]: set module load type = %s', globalOptions.moduleLoadType);
-
-    // set default entry file
-    if (!globalOptions.imports) {
-      globalOptions.imports = [
-        await loadModule(
-          join(
-            baseDir,
-            `configuration${isTypeScriptEnvironment() ? '.ts' : '.js'}`
-          ),
-          {
-            loadMode: globalOptions.moduleLoadType,
-            safeLoad: true,
-          }
-        ),
-      ];
-    }
-  }
+  // set entry file
+  globalOptions.imports = [
+    ...globalOptions.imports,
+    await findProjectEntryFile(
+      appDir,
+      baseDir,
+      globalOptions.moduleLoadType
+    )
+  ]
 
   printStepDebugInfo('Binding inner service');
 

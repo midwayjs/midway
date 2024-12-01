@@ -19,7 +19,6 @@ import {
   isTypeScriptEnvironment,
   DecoratorManager,
 } from '@midwayjs/core';
-import { FunctionalConfiguration } from '@midwayjs/core/functional';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
 import {
@@ -60,65 +59,6 @@ function getFileNameWithSuffix(fileName: string) {
   return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
 }
 
-async function findProjectEntryFile(
-  appDir: string,
-  baseDir: string,
-  loadMode: 'commonjs' | 'esm'
-) {
-  /**
-   * 查找常用文件中的 midway 入口，入口文件包括 Configuration 对象或者 defineConfiguration 函数
-   */
-  async function containsConfiguration(filePath: string) {
-    // 加载文件
-    const content = await loadModule(filePath, {
-      safeLoad: true,
-      loadMode,
-      warnOnLoadError: true,
-    });
-    if (content?.['Configuration'] || content?.['defineConfiguration']) {
-      return content;
-    }
-
-    if (
-      content?.default &&
-      content.default instanceof FunctionalConfiguration
-    ) {
-      return content;
-    }
-  }
-
-  // 1. 找 package.json 中的 main 字段
-  const pkgJSON = await loadModule(join(appDir, 'package.json'), {
-    safeLoad: true,
-    enableCache: false,
-  });
-  if (pkgJSON?.['main']) {
-    const configuration = await containsConfiguration(
-      formatPath(appDir, pkgJSON['main'])
-    );
-    if (configuration) {
-      return configuration;
-    }
-  }
-
-  // 2. 找 src/configuration.ts 或 src/configuration.js
-  const configurationFile = await containsConfiguration(
-    join(baseDir, getFileNameWithSuffix('configuration'))
-  );
-
-  if (configurationFile) {
-    return configurationFile;
-  }
-
-  // 3. 找 src/index.ts 或 src/index.js
-  const indexFile = await containsConfiguration(
-    join(baseDir, getFileNameWithSuffix('index'))
-  );
-  if (indexFile) {
-    return indexFile;
-  }
-}
-
 function createMockWrapApplicationContext() {
   const container = new MidwayContainer();
   const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
@@ -156,7 +96,6 @@ export async function create<
 >(
   appDir: string | MockAppConfigurationOptions,
   options: MockAppConfigurationOptions = {},
-  customFramework?: { new (...args): T } | ComponentModule
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
 
@@ -243,18 +182,6 @@ export async function create<
       );
     }
 
-    if (!options.imports && customFramework) {
-      options.imports = await transformFrameworkToConfiguration(
-        customFramework,
-        options.moduleLoadType
-      );
-    }
-
-    if (customFramework?.['Configuration']) {
-      options.imports = customFramework;
-      customFramework = customFramework['Framework'];
-    }
-
     if (options.ssl) {
       const sslConfig = {
         koa: {
@@ -281,33 +208,18 @@ export async function create<
       appDir,
       asyncContextManager: createContextManager(),
       loggerFactory: loggers,
-      imports: []
-        .concat(options.imports)
-        .concat(
-          options.baseDir
-            ? await findProjectEntryFile(
-                appDir,
-                options.baseDir,
-                options.moduleLoadType
-              )
-            : []
-        ),
     });
 
-    if (customFramework) {
-      return container.getAsync(customFramework as any);
+    const frameworkService = await container.getAsync(MidwayFrameworkService);
+    const mainFramework = frameworkService.getMainFramework() as T;
+    if (mainFramework) {
+      return mainFramework;
     } else {
-      const frameworkService = await container.getAsync(MidwayFrameworkService);
-      const mainFramework = frameworkService.getMainFramework() as T;
-      if (mainFramework) {
-        return mainFramework;
-      } else {
-        throw new Error(
-          `Can not get main framework, please check your ${getFileNameWithSuffix(
-            'configuration'
-          )}.`
-        );
-      }
+      throw new Error(
+        `Can not get main framework, please check your ${getFileNameWithSuffix(
+          'configuration'
+        )}.`
+      );
     }
   } catch (err) {
     // catch for jest beforeAll can't throw error
@@ -323,9 +235,8 @@ export async function createApp<
 >(
   baseDir: string | MockAppConfigurationOptions,
   options?: MockAppConfigurationOptions,
-  customFramework?: { new (...args): T } | ComponentModule
 ): Promise<ReturnType<T['getApplication']>> {
-  const framework: T = await create<T>(baseDir, options, customFramework);
+  const framework: T = await create<T>(baseDir, options);
   return framework.getApplication();
 }
 
@@ -655,6 +566,7 @@ export async function createFunctionApp<
     return appManager.getApplication('serverless-app');
   }
 }
+
 
 /**
  * 一个全量的空框架

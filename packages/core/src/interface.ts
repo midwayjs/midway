@@ -1,7 +1,8 @@
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
-import { ManagedResolverFactory } from './context/managedResolverFactory';
+import type { ManagedResolverFactory } from './context/managedResolverFactory';
 import type { EventEmitter } from 'events';
+import type { FunctionalConfiguration } from './functional';
 
 export type ClassType<T = any> = new (...args: any[]) => T;
 
@@ -1183,3 +1184,25 @@ export interface ServerSendEventStreamOptions<CTX extends IMidwayContext> {
   closeEvent?: string;
   tpl?: (data: ServerSendEventMessage, ctx: CTX) => ServerSendEventMessage;
 }
+
+export interface IComponentInfo {
+  component: { Configuration: ClassType<ILifeCycle> } | FunctionalConfiguration;
+  enabledEnvironment?: string[];
+}
+
+export interface InjectionConfigurationOptions {
+  imports?: Array<
+    | IComponentInfo
+    | { Configuration: ClassType<ILifeCycle> }
+    | FunctionalConfiguration
+  >;
+  importObjects?: Record<string, unknown>;
+  importConfigs?:
+    | Array<{ [environmentName: string]: Record<string, any> }>
+    | Record<string, any>;
+  importConfigFilter?: (config: Record<string, any>) => Record<string, any>;
+  namespace?: string;
+  detector?: IFileDetector | false;
+}
+
+export type FunctionalConfigurationOptions = InjectionConfigurationOptions & ILifeCycle;

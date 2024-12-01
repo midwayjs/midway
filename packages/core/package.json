@@ -43,6 +43,13 @@
   "engines": {
     "node": ">=16"
   },
+  "madge": {
+    "detectiveOptions": {
+      "ts": {
+        "skipTypeImports": true
+      }
+    }
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",

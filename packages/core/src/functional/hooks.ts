@@ -1,15 +1,8 @@
-import {
-  IMidwayContainer,
-  MidwayConfigService,
-  getCurrentAsyncContextManager,
-  ASYNC_CONTEXT_KEY,
-  ClassType,
-  IMidwayApplication,
-  MidwayConfig,
-  ILogger,
-  getCurrentMainApp,
-  MidwayApplicationManager,
-} from '../';
+import { getCurrentAsyncContextManager, getCurrentMainApp } from '../util/contextUtil';
+import { ASYNC_CONTEXT_KEY } from '../constants';
+import { MidwayApplicationManager } from '../common/applicationManager';
+import { ClassType, ILogger, IMidwayApplication, IMidwayContainer, MidwayConfig } from '../interface';
+import { MidwayConfigService } from '../service/configService';
 
 export function useContext<T = any>(): T | undefined {
   const ctx = getCurrentAsyncContextManager()

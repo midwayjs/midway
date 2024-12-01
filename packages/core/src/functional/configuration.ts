@@ -6,10 +6,10 @@ import {
   ObjectBeforeDestroyOptions,
   ObjectCreatedOptions,
   ObjectInitOptions,
+  FunctionalConfigurationOptions,
 } from '../interface';
 import { CONFIGURATION_OBJECT_KEY } from '../decorator';
 import { MetadataManager } from '../decorator/metadataManager';
-import { FunctionalConfigurationOptions } from './interface';
 
 export class FunctionalConfiguration implements ILifeCycle {
   constructor(protected options: FunctionalConfigurationOptions) {}
