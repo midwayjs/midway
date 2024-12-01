@@ -95,7 +95,7 @@ export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
   appDir: string | MockAppConfigurationOptions,
-  options: MockAppConfigurationOptions = {},
+  options: MockAppConfigurationOptions = {}
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
 
@@ -234,7 +234,7 @@ export async function createApp<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
   baseDir: string | MockAppConfigurationOptions,
-  options?: MockAppConfigurationOptions,
+  options?: MockAppConfigurationOptions
 ): Promise<ReturnType<T['getApplication']>> {
   const framework: T = await create<T>(baseDir, options);
   return framework.getApplication();
@@ -566,7 +566,6 @@ export async function createFunctionApp<
     return appManager.getApplication('serverless-app');
   }
 }
-
 
 /**
  * 一个全量的空框架

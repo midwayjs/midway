@@ -4,7 +4,12 @@ import {
   DecoratorManager,
   MAIN_MODULE_KEY,
 } from '../decorator';
-import { IComponentInfo, IMidwayGlobalContainer, InjectionConfigurationOptions, ScopeEnum } from '../interface';
+import {
+  IComponentInfo,
+  IMidwayGlobalContainer,
+  InjectionConfigurationOptions,
+  ScopeEnum,
+} from '../interface';
 import { FunctionalConfiguration } from '../functional';
 import { MetadataManager } from '../decorator/metadataManager';
 import { MidwayConfigService } from '../service/configService';
