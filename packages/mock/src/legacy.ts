@@ -1,4 +1,4 @@
-import { createApp, createFunctionApp } from './creator';
+import { createApp, createFunctionApp, createLightApp } from './creator';
 import { CommonJSFileDetector, IMidwayFramework } from '@midwayjs/core';
 import { defineConfiguration } from '@midwayjs/core/functional';
 
@@ -36,4 +36,18 @@ export async function createLegacyFunctionApp<
     }),
   ];
   return createFunctionApp(appDir, options);
+}
+
+export async function createLegacyLightApp(...args) {
+  const appDir = typeof args[0] === 'string' ? args[0] : (args[0] ?? {}).appDir;
+  const options = (typeof args[0] === 'string' ? args[1] : args[0]) ?? {};
+  options.imports = [
+    ...(options.imports ?? []),
+    defineConfiguration({
+      detector: new CommonJSFileDetector({
+        conflictCheck: true,
+      }),
+    }),
+  ];
+  return createLightApp(appDir, options);
 }

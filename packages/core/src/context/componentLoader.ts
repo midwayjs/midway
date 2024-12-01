@@ -40,7 +40,13 @@ export class ComponentConfigurationLoader {
       }
 
       let configurationOptions: InjectionConfigurationOptions;
-      if (configurationExport instanceof FunctionalConfiguration) {
+      // 函数式写法
+      if (
+        MetadataManager.hasOwnMetadata(
+          CONFIGURATION_OBJECT_KEY,
+          configurationExport
+        )
+      ) {
         // 函数式写法
         configurationOptions = MetadataManager.getOwnMetadata(
           CONFIGURATION_OBJECT_KEY,
@@ -98,7 +104,13 @@ export class ComponentConfigurationLoader {
       }
 
       let configurationOptions: InjectionConfigurationOptions;
-      if (configurationExport instanceof FunctionalConfiguration) {
+      // 函数式写法
+      if (
+        MetadataManager.hasOwnMetadata(
+          CONFIGURATION_OBJECT_KEY,
+          configurationExport
+        )
+      ) {
         // 函数式写法
         configurationOptions = MetadataManager.getOwnMetadata(
           CONFIGURATION_OBJECT_KEY,

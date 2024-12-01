@@ -35,7 +35,9 @@ import {
   HTTPResponse,
 } from '@midwayjs/serverless-http-parser';
 import * as http from 'http';
-import { types } from 'util';
+import { types, debuglog } from 'util';
+
+const debug = debuglog('midway:debug');
 
 const { isAnyArrayBuffer, isUint8Array } = types;
 const LOCK_KEY = '_faas_starter_start_key';
@@ -180,7 +182,11 @@ export class MidwayFaaSFramework extends BaseFramework<
         );
         const functionList =
           await this.serverlessFunctionService.getFunctionList();
+
+        debug(`[faas]: load ${functionList.length} function list`);
+
         for (const funcInfo of functionList) {
+          debug(`[faas]: load function ${funcInfo.funcHandlerName}, router = ${funcInfo.fullUrl}`);
           // store handler
           this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
         }
@@ -286,7 +292,7 @@ export class MidwayFaaSFramework extends BaseFramework<
         )(context.path);
         context.req.pathParameters = matchRes['params'] || {};
       } else {
-        // options request pass throuth to middleware
+        // options request pass through to middleware
         if (context.method?.toLowerCase() === 'options') {
           funOptions = {
             url: context.path,

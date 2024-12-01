@@ -1,13 +1,14 @@
 import {
   close,
-  createLightApp,
   createHttpRequest,
   mockContext,
   mockHeader,
   mockSession,
   mockProperty,
   mockClassProperty,
-  restoreAllMocks
+  restoreAllMocks,
+  createLegacyLightApp,
+  createFunctionApp
 } from '../src';
 import * as Web from '../../web/src';
 import * as Koa from '../../web-koa/src';
@@ -67,13 +68,14 @@ describe('/test/new.test.ts', () => {
         return 'hello';
       }
     }
+
     mockClassProperty(BBB, 'invoke', 'midway');
     expect(new BBB().invoke).toEqual('midway');
 
     restoreAllMocks();
     expect(new BBB().invoke()).toEqual('hello');
 
-    await close(app, { sleep: 200});
+    await close(app, { sleep: 200 });
   });
 
   it('should test with createLegacyFunctionApp with new mode', async () => {
@@ -81,7 +83,7 @@ describe('/test/new.test.ts', () => {
       imports: [
         faas
       ],
-      starter: new BootstrapStarter(),
+      starter: new BootstrapStarter()
     });
     const instance = await app.getServerlessInstance('eventService') as any;
     const result = await instance.handleEvent();
@@ -91,18 +93,18 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test createLightApp', async () => {
-    const app = await createLightApp(join(__dirname, 'fixtures/base-app-light'));
+    const app = await createLegacyLightApp(join(__dirname, 'fixtures/base-app-light'));
     expect(app).toBeDefined();
     await close(app);
   });
 
   it('should test repeat load', async () => {
-    const app1 = await createLightApp(join(__dirname, 'fixtures/base-app-replace-load/app1'));
+    const app1 = await createLegacyLightApp(join(__dirname, 'fixtures/base-app-replace-load/app1'));
     const homeController1 = await app1.getApplicationContext().getAsync('homeController') as any;
     expect(await homeController1.index()).toEqual('hello world 1111');
     await close(app1);
 
-    const app2 = await createLightApp(join(__dirname, 'fixtures/base-app-replace-load/app2'));
+    const app2 = await createLegacyLightApp(join(__dirname, 'fixtures/base-app-replace-load/app2'));
     const homeController2 = await app2.getApplicationContext().getAsync('homeController') as any;
     expect(await homeController2.index()).toEqual('hello world 2222');
     await close(app2);
@@ -114,6 +116,7 @@ describe('/test/new.test.ts', () => {
         return 'hello';
       }
     }
+
     mockClassProperty(BBB, 'invoke', 'midway');
 
     const b = new BBB();
@@ -128,7 +131,7 @@ describe('/test/new.test.ts', () => {
 
   it('should test with entry file', async () => {
     const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'), {
-      bootstrapMode: 'app',
+      bootstrapMode: 'app'
     });
     const app = bootstrap.getApp('koa');
 
@@ -143,7 +146,7 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test entry file with faas v3', async () => {
-    const app = await createLegacyFunctionApp(join(__dirname, 'fixtures/base-faas-without-yaml'), {
+    const app = await createFunctionApp(join(__dirname, 'fixtures/base-faas-without-yaml'), {
       entryFile: 'index.js'
     });
     const result = await createHttpRequest(app).get('/event').query({ name: 'harry' });

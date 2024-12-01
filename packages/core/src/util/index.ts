@@ -12,7 +12,8 @@ import * as crypto from 'crypto';
 import { Types } from './types';
 import { pathToFileURL } from 'url';
 import { normalizePath } from './pathFileUtil';
-import { FunctionalConfiguration } from '../functional/configuration';
+import { MetadataManager } from '../decorator/metadataManager';
+import { CONFIGURATION_KEY, CONFIGURATION_OBJECT_KEY } from '../decorator';
 
 const debug = debuglog('midway:debug');
 
@@ -697,15 +698,29 @@ export async function findProjectEntryFile(
       loadMode,
       warnOnLoadError: true,
     });
-    if (content?.['Configuration'] || content?.['defineConfiguration']) {
-      return content;
-    }
 
     if (
-      content?.default &&
-      content.default instanceof FunctionalConfiguration
+      content &&
+      (Types.isClass(content) ||
+        Types.isFunction(content) ||
+        MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, content) ||
+        MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, content))
     ) {
+      debug(`[core]: find configuration file ${filePath}`);
       return content;
+    } else {
+      for (const m in content) {
+        const module = content[m];
+        if (
+          Types.isClass(module) ||
+          Types.isFunction(module) ||
+          MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, content) ||
+          MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, content)
+        ) {
+          debug(`[core]: find configuration file ${filePath}`);
+          return content;
+        }
+      }
     }
   }
 
@@ -751,15 +766,28 @@ export function findProjectEntryFileSync(appDir: string, baseDir: string) {
       safeLoad: true,
       warnOnLoadError: true,
     });
-    if (content?.['Configuration'] || content?.['defineConfiguration']) {
-      return content;
-    }
-
     if (
-      content?.default &&
-      content.default instanceof FunctionalConfiguration
+      content &&
+      (Types.isClass(content) ||
+        Types.isFunction(content) ||
+        MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, content) ||
+        MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, content))
     ) {
+      debug(`[core]: find configuration file ${filePath}`);
       return content;
+    } else {
+      for (const m in content) {
+        const module = content[m];
+        if (
+          Types.isClass(module) ||
+          Types.isFunction(module) ||
+          MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, content) ||
+          MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, content)
+        ) {
+          debug(`[core]: find configuration file ${filePath}`);
+          return content;
+        }
+      }
     }
   }
 

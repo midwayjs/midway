@@ -153,9 +153,9 @@ export async function prepareGlobalApplicationContextAsync(
     await findProjectEntryFile(appDir, baseDir, globalOptions.moduleLoadType),
   ];
 
-  printStepDebugInfo('Binding inner service');
+  printStepDebugInfo('Binding built-in service');
 
-  // bind inner service
+  // bind built-in service
   applicationContext.bindClass(MidwayEnvironmentService);
   applicationContext.bindClass(MidwayInformationService);
   applicationContext.bindClass(MidwayAspectService);
@@ -282,9 +282,9 @@ export function prepareGlobalApplicationContext(
     findProjectEntryFileSync(appDir, baseDir),
   ];
 
-  printStepDebugInfo('Binding inner service');
+  printStepDebugInfo('Binding built-in service');
 
-  // bind inner service
+  // bind built-in service
   applicationContext.bindClass(MidwayEnvironmentService);
   applicationContext.bindClass(MidwayInformationService);
   applicationContext.bindClass(MidwayAspectService);
