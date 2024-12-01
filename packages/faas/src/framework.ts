@@ -186,7 +186,9 @@ export class MidwayFaaSFramework extends BaseFramework<
         debug(`[faas]: load ${functionList.length} function list`);
 
         for (const funcInfo of functionList) {
-          debug(`[faas]: load function ${funcInfo.funcHandlerName}, router = ${funcInfo.fullUrl}`);
+          debug(
+            `[faas]: load function ${funcInfo.funcHandlerName}, router = ${funcInfo.fullUrl}`
+          );
           // store handler
           this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
         }
