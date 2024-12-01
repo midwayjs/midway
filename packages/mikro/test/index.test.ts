@@ -2,7 +2,7 @@ import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
 import {
   close,
-  createApp,
+  createLegacyApp,
   createLightApp,
   createHttpRequest,
 } from '@midwayjs/mock';
@@ -32,7 +32,7 @@ describe('/test/index.test.ts', () => {
       cleanFile(join(__dirname, 'fixtures/multi-enitymanager', 'test.sqlite'));
       cleanFile(join(__dirname, 'fixtures/multi-enitymanager', 'test1.sqlite'));
 
-      const app: IMidwayApplication = await createApp(
+      const app: IMidwayApplication = await createLegacyApp(
         join(__dirname, 'fixtures/multi-enitymanager'),
         {}
       );

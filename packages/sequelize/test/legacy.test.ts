@@ -1,4 +1,4 @@
-import { createApp, close } from '@midwayjs/mock';
+import { createLegacyApp, close } from '@midwayjs/mock';
 import { Framework, IMidwayKoaApplication } from '@midwayjs/koa';
 import { join } from 'path';
 import { UserService } from './fixtures/sequelize-demo/src/service/user';
@@ -14,7 +14,7 @@ describe('/test/legacy.test.ts', () => {
   let app: IMidwayKoaApplication;
   beforeAll(async () => {
     cleanFile(join(__dirname, 'fixtures/sequelize-demo', 'database.sqlite'));
-    app = await createApp(
+    app = await createLegacyApp(
       join(__dirname, 'fixtures', 'sequelize-demo'),
       {},
       Framework

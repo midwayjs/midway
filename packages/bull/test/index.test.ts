@@ -1,4 +1,4 @@
-import { createApp, close } from '@midwayjs/mock';
+import { createLegacyApp, close } from '@midwayjs/mock';
 import { join } from 'path';
 import { sleep } from '@midwayjs/core';
 import * as bull from '../src';
@@ -6,7 +6,7 @@ import { readFileSync } from 'fs';
 
 describe(`/test/index.test.ts`, () => {
   it('test auto repeat processor', async () => {
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, bull);
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app'));
 
     await sleep(5 * 1000);
     let res = app.getAttr(`task`);
@@ -31,7 +31,7 @@ describe(`/test/index.test.ts`, () => {
   });
 
   it('test processor with redis', async () => {
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app-redis'), {}, bull);
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app-redis'));
 
     await sleep(5 * 1000);
 
@@ -41,7 +41,7 @@ describe(`/test/index.test.ts`, () => {
   });
 
   it('should test throw error when create service', async () => {
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app-error-out-of-job'), {}, bull);
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app-error-out-of-job'));
     await sleep(5 * 1000);
     expect(readFileSync(join(__dirname, 'fixtures', 'base-app-error-out-of-job', 'logs', 'ali-demo', 'midway-bull.log'), 'utf8').includes('MidwayDefinitionNotFoundError')).toBeTruthy();
     await close(app);
@@ -53,7 +53,7 @@ describe(`/test/index.test.ts`, () => {
 //   it('should throw error when start with duplicate task', async () => {
 //     let error;
 //     try {
-//       await createApp(
+//       await createLegacyApp(
 //         join(__dirname, 'fixtures', 'base-app-duplicate-task'),
 //         {},
 //         TaskModule
@@ -67,7 +67,7 @@ describe(`/test/index.test.ts`, () => {
 //   it('should throw error when start with duplicate local task', async () => {
 //     let error;
 //     try {
-//       await createApp(
+//       await createLegacyApp(
 //         join(__dirname, 'fixtures', 'base-app-duplicate-local-task'),
 //         {},
 //         TaskModule

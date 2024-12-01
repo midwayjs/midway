@@ -1,4 +1,4 @@
-import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
+import { createHttpRequest, close, createLegacyFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as nock from 'nock';
 
@@ -40,7 +40,7 @@ describe('test/faas.test.ts', function () {
     }, {'content-type': 'application/json'});
 
     const appDir = join(__dirname, 'fixtures/faas');
-    app = await createFunctionApp(appDir, {});
+    app = await createLegacyFunctionApp(appDir, {});
   })
 
   afterAll(async () => {

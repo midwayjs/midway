@@ -1,4 +1,4 @@
-import { createHttpRequest, close, createApp } from '@midwayjs/mock';
+import { createHttpRequest, close, createLegacyApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
 import { statSync } from 'fs';
@@ -8,7 +8,7 @@ describe('test/express.test.ts', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, 'fixtures/express-stream');
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -50,7 +50,7 @@ describe('test/express.test.ts', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, 'fixtures/express-file');
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {

@@ -1,4 +1,4 @@
-import { createApp, createHttpRequest, close } from '@midwayjs/mock';
+import { createLegacyApp, createHttpRequest, close } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as nock from 'nock';
@@ -39,7 +39,7 @@ describe('test/web.test.ts', function () {
       return body;
     }, {'content-type': 'application/json'});
     const appDir = join(__dirname, 'fixtures/web');
-    app = await createApp(appDir);
+    app = await createLegacyApp(appDir);
   })
 
   afterAll(async () => {

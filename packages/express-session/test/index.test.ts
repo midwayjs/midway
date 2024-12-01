@@ -1,4 +1,4 @@
-import { createApp, createHttpRequest, close } from '@midwayjs/mock';
+import { createLegacyApp, createHttpRequest, close } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as session from '../src';
@@ -7,7 +7,7 @@ import { Store } from 'express-session';
 describe('test/index.test.ts', function () {
 
   it('should test sessionStore', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/memory-session'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures/memory-session'));
     const request = createHttpRequest(app);
 
     await request.get('/set?foo=bar')
@@ -22,7 +22,7 @@ describe('test/index.test.ts', function () {
     let app;
     let request;
     beforeAll(async () => {
-      app = await createApp(join(__dirname, 'fixtures/cookie-session'));
+      app = await createLegacyApp(join(__dirname, 'fixtures/cookie-session'));
       request = createHttpRequest(app);
     })
 
@@ -99,7 +99,7 @@ describe('test/index.test.ts', function () {
   })
 
   it('should test sameSite=none', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/samesite-none-session'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures/samesite-none-session'));
     const request = createHttpRequest(app);
 
     await request.get('/set?foo=bar')

@@ -1,7 +1,7 @@
 import { SimpleSpanProcessor, InMemorySpanExporter} from '@opentelemetry/sdk-trace-base';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { join } from 'path';
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
+import { createLegacyApp, close, createHttpRequest } from '@midwayjs/mock';
 import { UserService } from './fixtures/base-app/src/user.service';
 
 describe('/test/index.test.ts', () => {
@@ -12,7 +12,7 @@ describe('/test/index.test.ts', () => {
     provider.addSpanProcessor(new SimpleSpanProcessor(inMemorySpanExporter));
     provider.register();
 
-    let app = await createApp(join(__dirname, './fixtures/base-app'));
+    let app = await createLegacyApp(join(__dirname, './fixtures/base-app'));
     const userService = await app.getApplicationContext().getAsync(UserService);
     const data = await userService.invoke();
     expect(data).toEqual({

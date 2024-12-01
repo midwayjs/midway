@@ -1,4 +1,4 @@
-import {close, createApp, createHttpRequest} from '@midwayjs/mock';
+import {close, createLegacyApp, createHttpRequest} from '@midwayjs/mock';
 import {IMidwayApplication} from '@midwayjs/core';
 import {IConsulBalancer} from '../src';
 import { mockConsulAPI } from './mock';
@@ -15,9 +15,9 @@ describe('/test/feature.test.ts', () => {
     beforeAll(async () => {
       // 如果使用真实的 server (consul agent --dev) 测试打开下面一行
       // 同时记得修改配置中的 consul.provide.host 参数
-      // app = await createApp('base-app', {}, '@midwayjs/koa');
+      // app = await createLegacyApp('base-app', {}, '@midwayjs/koa');
       mockConsulAPI();
-      app = await createApp(join(__dirname, 'fixtures', 'base-app'), {});
+      app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app'), {});
     });
 
     afterAll(async () => {

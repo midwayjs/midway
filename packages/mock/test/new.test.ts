@@ -1,9 +1,7 @@
 import {
   close,
-  createApp,
   createLightApp,
   createHttpRequest,
-  createFunctionApp,
   mockContext,
   mockHeader,
   mockSession,
@@ -19,10 +17,11 @@ import { existsSync } from 'fs';
 import { MidwayContainer, MidwayMockService } from '@midwayjs/core';
 import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
 import { createBootstrap } from '../src/creator';
+import { createLegacyApp, createLegacyFunctionApp } from '../src/legacy';
 
 describe('/test/new.test.ts', () => {
   it('should test create app with framework and with new mode', async () => {
-    const app = await createApp<Web.Framework>(join(__dirname, 'fixtures/base-app-egg'), {
+    const app = await createLegacyApp<Web.Framework>(join(__dirname, 'fixtures/base-app-egg'), {
       imports: [
         Web
       ]
@@ -36,12 +35,15 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test create koa app with new mode with mock', async () => {
-    const app = await createApp<Koa.Framework>(join(__dirname, 'fixtures/base-app-koa'), {
+    const app = await createLegacyApp<Koa.Framework>(join(__dirname, 'fixtures/base-app-koa'), {
       cleanLogsDir: true,
       globalConfig: {
         keys: '123'
-      }
-    }, Koa);
+      },
+      imports: [
+        Koa
+      ]
+    });
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');
@@ -74,8 +76,8 @@ describe('/test/new.test.ts', () => {
     await close(app, { sleep: 200});
   });
 
-  it('should test with createFunctionApp with new mode', async () => {
-    const app = await createFunctionApp<faas.Framework>(join(__dirname, 'fixtures/base-faas'), {
+  it('should test with createLegacyFunctionApp with new mode', async () => {
+    const app = await createLegacyFunctionApp<faas.Framework>(join(__dirname, 'fixtures/base-faas'), {
       imports: [
         faas
       ],
@@ -141,7 +143,7 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test entry file with faas v3', async () => {
-    const app = await createFunctionApp(join(__dirname, 'fixtures/base-faas-without-yaml'), {
+    const app = await createLegacyFunctionApp(join(__dirname, 'fixtures/base-faas-without-yaml'), {
       entryFile: 'index.js'
     });
     const result = await createHttpRequest(app).get('/event').query({ name: 'harry' });

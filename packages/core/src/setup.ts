@@ -151,7 +151,7 @@ export async function prepareGlobalApplicationContextAsync(
 
   // set entry file
   globalOptions.imports = [
-    ...globalOptions.imports,
+    ...globalOptions.imports ?? [],
     await findProjectEntryFile(appDir, baseDir, globalOptions.moduleLoadType),
   ];
 

@@ -1,5 +1,5 @@
 
-import { close, createApp, createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { close, createLegacyApp, createLegacyFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
 import { readFileSync, copy, writeFile, remove } from 'fs-extra';
 import { existsSync } from 'fs';
@@ -36,7 +36,7 @@ describe(`test/${type}.test.ts`, function () {
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { hsts: { enable: true }};`);
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -61,7 +61,7 @@ describe(`test/${type}.test.ts`, function () {
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`);
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -87,7 +87,7 @@ describe(`test/${type}.test.ts`, function () {
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`);
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -110,7 +110,7 @@ describe(`test/${type}.test.ts`, function () {
       await copy(csrfBase, appDir);
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true }};`);
-      app = await createFunctionApp(appDir, {});
+      app = await createLegacyFunctionApp(appDir, {});
     });
 
     afterAll(async () => {
@@ -136,7 +136,7 @@ describe(`test/${type}.test.ts`, function () {
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { hsts: { enable: true, includeSubdomains: true }};`);
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -161,7 +161,7 @@ describe(`test/${type}.test.ts`, function () {
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`);
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -187,7 +187,7 @@ describe(`test/${type}.test.ts`, function () {
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`);
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -210,7 +210,7 @@ describe(`test/${type}.test.ts`, function () {
       await copy(csrfBase, appDir);
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
       await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = {hsts: { enable: true, includeSubdomains: true }};`);
-      app = await createFunctionApp(appDir, {});
+      app = await createLegacyFunctionApp(appDir, {});
     });
 
     afterAll(async () => {

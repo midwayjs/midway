@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import * as mm from 'mm';
 import { createNewStarter, closeApp } from './utils';
-import { createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { createLegacyFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { Framework } from '../src';
 import { join } from 'path';
 import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
@@ -224,7 +224,7 @@ describe('test/new.test.ts', () => {
   it('should test new test method', async () => {
     mm(process.env, 'MIDWAY_SERVERLESS_FUNCTION_NAME',  'aaa');
     mm(process.env, 'MIDWAY_SERVERLESS_SERVICE_NAME',  'bbb');
-    const app = await createFunctionApp<Framework>(join(__dirname, 'fixtures/base-app-event-middleware'), {
+    const app = await createLegacyFunctionApp<Framework>(join(__dirname, 'fixtures/base-app-event-middleware'), {
       starter: new BootstrapStarter(),
       globalConfig: {
         faas: {

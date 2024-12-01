@@ -1,9 +1,9 @@
-import { createApp, createHttpRequest, close } from '@midwayjs/mock';
+import { createLegacyApp, createHttpRequest, close } from '@midwayjs/mock';
 import { IMidwayApplication, sleep } from '@midwayjs/core';
 
 describe('/test/index.test.ts', () => {
   it('should test read from redis', async () => {
-    const app = await createApp('base-app') as IMidwayApplication;
+    const app = await createLegacyApp('base-app') as IMidwayApplication;
     const response = await createHttpRequest(app).get('/?username=bob');
     expect(response.status).toEqual(403);
 

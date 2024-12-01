@@ -1,10 +1,10 @@
-import { createApp, createHttpRequest } from '@midwayjs/mock';
+import { createLegacyApp, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
 
 describe('test/helper.test.ts', () => {
   it('should test helper', async () => {
     const appDir = join(__dirname, `fixtures/helper`);
-    const app = await createApp(appDir);
+    const app = await createLegacyApp(appDir);
     const htmlResult = await createHttpRequest(app).get('/html');
     expect(htmlResult.text).toEqual('&lt;script&gt;alert(1)&lt;/script&gt;');
 
