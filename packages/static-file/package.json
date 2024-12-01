@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/faas": "^3.18.0",
+    "@midwayjs/faas": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^"
   },
