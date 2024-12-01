@@ -2,7 +2,9 @@ import { createApp, createFunctionApp } from './creator';
 import { CommonJSFileDetector, IMidwayFramework } from '@midwayjs/core';
 import { defineConfiguration } from '@midwayjs/core/functional';
 
-export async function createLegacyApp<T extends IMidwayFramework<any, any, any, any, any>>(
+export async function createLegacyApp<
+  T extends IMidwayFramework<any, any, any, any, any>
+>(
   ...args: Parameters<typeof createApp>
 ): Promise<ReturnType<T['getApplication']>> {
   const appDir = typeof args[0] === 'string' ? args[0] : (args[0] ?? {}).appDir;
@@ -14,11 +16,13 @@ export async function createLegacyApp<T extends IMidwayFramework<any, any, any, 
         conflictCheck: true,
       }),
     }),
-  ]
+  ];
   return createApp(appDir, options);
 }
 
-export async function createLegacyFunctionApp<T extends IMidwayFramework<any, any, any, any, any>>(
+export async function createLegacyFunctionApp<
+  T extends IMidwayFramework<any, any, any, any, any>
+>(
   ...args: Parameters<typeof createFunctionApp>
 ): Promise<ReturnType<T['getApplication']>> {
   const appDir = typeof args[0] === 'string' ? args[0] : (args[0] ?? {}).appDir;
@@ -30,6 +34,6 @@ export async function createLegacyFunctionApp<T extends IMidwayFramework<any, an
         conflictCheck: true,
       }),
     }),
-  ]
+  ];
   return createFunctionApp(appDir, options);
 }
