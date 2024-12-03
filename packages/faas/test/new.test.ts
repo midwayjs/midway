@@ -4,7 +4,7 @@ import { createNewStarter, closeApp } from './utils';
 import { createLegacyFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { Framework } from '../src';
 import { join } from 'path';
-import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
+import { BootstrapStarter } from '@midwayjs/fc-starter';
 
 describe('test/new.test.ts', () => {
 

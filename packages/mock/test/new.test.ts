@@ -10,13 +10,13 @@ import {
   createLegacyLightApp,
   createFunctionApp
 } from '../src';
-import * as Web from '../../web/src';
-import * as Koa from '../../web-koa/src';
-import * as faas from '../../faas/src';
+import * as Web from '@midwayjs/web';
+import * as Koa from '@midwayjs/koa';
+import * as faas from '@midwayjs/faas';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { MidwayContainer, MidwayMockService } from '@midwayjs/core';
-import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
+import { BootstrapStarter } from '@midwayjs/fc-starter';
 import { createBootstrap } from '../src/creator';
 import { createLegacyApp, createLegacyFunctionApp } from '../src/legacy';
 

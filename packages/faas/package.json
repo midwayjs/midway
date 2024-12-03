@@ -11,7 +11,8 @@
   "devDependencies": {
     "@midwayjs/cookies": "^1.0.2",
     "@midwayjs/logger": "^3.0.0",
-    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/fc-starter": "workspace:^",
     "mm": "3.4.0"
   },
   "engines": {

@@ -1,8 +1,8 @@
 import { Framework, Application } from '../src';
 import * as FaaS from '../src';
 import { join } from 'path';
-import { close, createLegacyApp, createLegacyFunctionApp } from '../../mock/src';
-import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
+import { close, createLegacyApp, createLegacyFunctionApp } from '@midwayjs/mock';
+import { BootstrapStarter } from '@midwayjs/fc-starter';
 
 const originReady = FaaS.Configuration.prototype.init;
 let isProxy = false;
