@@ -762,21 +762,9 @@ importers:
       '@midwayjs/core':
         specifier: workspace:^
         version: link:../core
-      '@midwayjs/faas':
-        specifier: workspace:^
-        version: link:../faas
-      '@midwayjs/fc-starter':
-        specifier: workspace:^
-        version: link:../../packages-serverless/midway-fc-starter
-      '@midwayjs/koa':
-        specifier: workspace:^
-        version: link:../web-koa
       '@midwayjs/logger':
         specifier: ^3.0.0
         version: 3.4.2
-      '@midwayjs/web':
-        specifier: workspace:^
-        version: link:../web
       '@types/amqplib':
         specifier: 0.10.5
         version: 0.10.5
