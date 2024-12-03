@@ -30,10 +30,6 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/web": "workspace:^",
-    "@midwayjs/koa": "workspace:^",
-    "@midwayjs/faas": "workspace:^",
-    "@midwayjs/fc-starter": "workspace:^",
     "@midwayjs/logger": "^3.0.0",
     "@types/amqplib": "0.10.5",
     "amqplib": "0.10.4",

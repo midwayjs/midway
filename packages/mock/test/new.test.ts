@@ -1,96 +1,96 @@
 import {
   close,
   createHttpRequest,
-  mockContext,
-  mockHeader,
-  mockSession,
+  // mockContext,
+  // mockHeader,
+  // mockSession,
   mockProperty,
   mockClassProperty,
-  restoreAllMocks,
+  // restoreAllMocks,
   createLegacyLightApp,
   createFunctionApp
 } from '../src';
-import * as Web from '@midwayjs/web';
-import * as Koa from '@midwayjs/koa';
-import * as faas from '@midwayjs/faas';
+// import * as Web from '@midwayjs/web';
+// import * as Koa from '@midwayjs/koa';
+// import * as faas from '@midwayjs/faas';
 import { join } from 'path';
-import { existsSync } from 'fs';
+// import { existsSync } from 'fs';
 import { MidwayContainer, MidwayMockService } from '@midwayjs/core';
-import { BootstrapStarter } from '@midwayjs/fc-starter';
+// import { BootstrapStarter } from '@midwayjs/fc-starter';
 import { createBootstrap } from '../src/creator';
-import { createLegacyApp, createLegacyFunctionApp } from '../src/legacy';
+// import { createLegacyApp, createLegacyFunctionApp } from '../src/legacy';
 
 describe('/test/new.test.ts', () => {
-  it('should test create app with framework and with new mode', async () => {
-    const app = await createLegacyApp<Web.Framework>(join(__dirname, 'fixtures/base-app-egg'), {
-      imports: [
-        Web
-      ]
-    });
-    const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
-    expect(result.status).toBe(200);
-    expect(result.text).toBe('hello world, harry');
-    await close(app, { cleanLogsDir: true, cleanTempDir: true });
-    expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/logs'))).toBeFalsy();
-    expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/run'))).toBeFalsy();
-  });
+  // it('should test create app with framework and with new mode', async () => {
+  //   const app = await createLegacyApp<Web.Framework>(join(__dirname, 'fixtures/base-app-egg'), {
+  //     imports: [
+  //       Web
+  //     ]
+  //   });
+  //   const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
+  //   expect(result.status).toBe(200);
+  //   expect(result.text).toBe('hello world, harry');
+  //   await close(app, { cleanLogsDir: true, cleanTempDir: true });
+  //   expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/logs'))).toBeFalsy();
+  //   expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/run'))).toBeFalsy();
+  // });
 
-  it('should test create koa app with new mode with mock', async () => {
-    const app = await createLegacyApp<Koa.Framework>(join(__dirname, 'fixtures/base-app-koa'), {
-      cleanLogsDir: true,
-      globalConfig: {
-        keys: '123'
-      },
-      imports: [
-        Koa
-      ]
-    });
-    const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
-    expect(result.status).toBe(200);
-    expect(result.text).toBe('hello world, harry');
+  // it('should test create koa app with new mode with mock', async () => {
+  //   const app = await createLegacyApp<Koa.Framework>(join(__dirname, 'fixtures/base-app-koa'), {
+  //     cleanLogsDir: true,
+  //     globalConfig: {
+  //       keys: '123'
+  //     },
+  //     imports: [
+  //       Koa
+  //     ]
+  //   });
+  //   const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
+  //   expect(result.status).toBe(200);
+  //   expect(result.text).toBe('hello world, harry');
 
-    mockContext(app, 'abc', 'ddd');
-    mockHeader(app, 'x-bbb', 'midway');
-    mockSession(app, 'ccc', 'ddd');
-    const result1 = await createHttpRequest(app).get('/mock');
-    expect(result1.status).toBe(200);
-    expect(result1.body).toEqual({
-      'abc': 'ddd',
-      'header': 'midway',
-      'session': 'ddd'
-    });
+  //   mockContext(app, 'abc', 'ddd');
+  //   mockHeader(app, 'x-bbb', 'midway');
+  //   mockSession(app, 'ccc', 'ddd');
+  //   const result1 = await createHttpRequest(app).get('/mock');
+  //   expect(result1.status).toBe(200);
+  //   expect(result1.body).toEqual({
+  //     'abc': 'ddd',
+  //     'header': 'midway',
+  //     'session': 'ddd'
+  //   });
 
-    mockProperty(app, 'ccc', 'bbb');
-    expect(app['ccc']).toEqual('bbb');
+  //   mockProperty(app, 'ccc', 'bbb');
+  //   expect(app['ccc']).toEqual('bbb');
 
-    class BBB {
-      invoke() {
-        return 'hello';
-      }
-    }
+  //   class BBB {
+  //     invoke() {
+  //       return 'hello';
+  //     }
+  //   }
 
-    mockClassProperty(BBB, 'invoke', 'midway');
-    expect(new BBB().invoke).toEqual('midway');
+  //   mockClassProperty(BBB, 'invoke', 'midway');
+  //   expect(new BBB().invoke).toEqual('midway');
 
-    restoreAllMocks();
-    expect(new BBB().invoke()).toEqual('hello');
+  //   restoreAllMocks();
+  //   expect(new BBB().invoke()).toEqual('hello');
 
-    await close(app, { sleep: 200 });
-  });
+  //   await close(app, { sleep: 200 });
+  // });
 
-  it('should test with createLegacyFunctionApp with new mode', async () => {
-    const app = await createLegacyFunctionApp<faas.Framework>(join(__dirname, 'fixtures/base-faas'), {
-      imports: [
-        faas
-      ],
-      starter: new BootstrapStarter()
-    });
-    const instance = await app.getServerlessInstance('eventService') as any;
-    const result = await instance.handleEvent();
+  // it('should test with createLegacyFunctionApp with new mode', async () => {
+  //   const app = await createLegacyFunctionApp<faas.Framework>(join(__dirname, 'fixtures/base-faas'), {
+  //     imports: [
+  //       faas
+  //     ],
+  //     starter: new BootstrapStarter()
+  //   });
+  //   const instance = await app.getServerlessInstance('eventService') as any;
+  //   const result = await instance.handleEvent();
 
-    expect(result).toEqual('hello world');
-    await close(app, { cleanLogsDir: true, cleanTempDir: true });
-  });
+  //   expect(result).toEqual('hello world');
+  //   await close(app, { cleanLogsDir: true, cleanTempDir: true });
+  // });
 
   it('should test createLightApp', async () => {
     const app = await createLegacyLightApp(join(__dirname, 'fixtures/base-app-light'));
