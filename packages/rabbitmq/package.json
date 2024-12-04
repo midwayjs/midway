@@ -25,7 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/mock": "^3.19.0",
-    "@types/amqplib": "0.10.5",
+    "@types/amqplib": "0.10.6",
     "amqplib": "0.10.5",
     "fs-extra": "11.2.0"
   },
