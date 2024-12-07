@@ -34,15 +34,6 @@ jobs:
           git-user: czy88840616
           git-password: ${{ secrets.GH_TOKEN }}
           deployment-branch: gh-pages
-      - name: 执行上传
-        uses: luochongfei/up2qn@master
-        with:
-          bucket: ${{ secrets.QINIU_BUCKET }}
-          zone: 东南亚
-          access_key: ${{ secrets.QINIU_ACCESS_KEY }}
-          secret_key: ${{ secrets.QINIU_SECRET_KEY }}
-          local_dir: 'site/build'
-          target_dir: /
       - name: Zip output
         run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
         working-directory: site
