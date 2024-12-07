@@ -565,9 +565,6 @@ importers:
       '@midwayjs/cookies':
         specifier: ^1.0.2
         version: 1.2.0
-      '@midwayjs/fc-starter':
-        specifier: workspace:^
-        version: link:../../packages-serverless/midway-fc-starter
       '@midwayjs/logger':
         specifier: ^3.0.0
         version: 3.4.2
