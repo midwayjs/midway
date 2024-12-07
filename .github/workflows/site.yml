@@ -34,6 +34,27 @@ jobs:
           git-user: czy88840616
           git-password: ${{ secrets.GH_TOKEN }}
           deployment-branch: gh-pages
+      - name: qiniu upload
+        uses: zhangwj0520/action-qiniu-upload@main
+        with:
+          # Your qiniu access key, required.
+          access_key: ${{ secrets.QINIU_ACCESS_KEY }}
+          # Your qiniu secret key, required.
+          secret_key: ${{ secrets.QINIU_SECRET_KEY }}
+          # Bucket name, required.
+          bucket: ${{ secrets.QINIU_BUCKET }}
+          # 是否覆盖已有文件
+          is_cover : true
+          # The local directory (or file) you want to upload to bucket.
+          # Default: './dist'
+          source_dir: 'site/build'
+          # The directory inside of the bucket you want to upload to, namely key prefix prepended to dest file key.
+          # Default: '/'
+          dest_dir: '/'
+          # Whether to ignore source maps.
+          # Default: true
+          ignore_source_map: true
+     
       - name: Zip output
         run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
         working-directory: site
