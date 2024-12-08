@@ -21,11 +21,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/async-hooks-context-manager": "^3.18.0",
+    "@midwayjs/async-hooks-context-manager": "workspace:^",
     "@midwayjs/event-bus": "1.10.0"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
     "@midwayjs/logger": "^3.0.0",
     "request": "2.88.2",
     "socket.io-client": "4.7.5"

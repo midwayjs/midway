@@ -11,7 +11,6 @@ import { TestMiddleware } from './middleware/test';
   imports: [
     Validate
   ],
-  conflictCheck: true,
 })
 export class ContainerConfiguration {
 

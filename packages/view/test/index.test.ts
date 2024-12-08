@@ -1,4 +1,4 @@
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
+import { createLegacyApp, close, createHttpRequest } from '@midwayjs/mock';
 import { Framework } from '@midwayjs/koa';
 import { join } from 'path';
 import { ContextView, ViewManager } from '../src';
@@ -6,7 +6,7 @@ import { ContextView, ViewManager } from '../src';
 describe('/test/index.test.ts', () => {
 
   it('should test create viewManager', async () => {
-    let app = await createApp<Framework>(join(__dirname, 'fixtures', 'base-app'), {});
+    let app = await createLegacyApp<Framework>(join(__dirname, 'fixtures', 'base-app'), {});
     let result = await createHttpRequest(app)
       .get('/render');
     expect(result.status).toEqual(200);
@@ -19,7 +19,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test defaultExtension', async () => {
-    let app = await createApp<Framework>(join(__dirname, 'fixtures', 'base-app-default'), {});
+    let app = await createLegacyApp<Framework>(join(__dirname, 'fixtures', 'base-app-default'), {});
     let result = await createHttpRequest(app)
       .get('/render');
     expect(result.status).toEqual(200);

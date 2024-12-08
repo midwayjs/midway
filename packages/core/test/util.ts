@@ -14,7 +14,7 @@ import {
   sleep,
   IMidwayContainer,
   loadModule,
-  DefaultConsoleLoggerFactory,
+  DefaultConsoleLoggerFactory, CommonJSFileDetector, MAIN_MODULE_KEY
 } from '../src';
 import { join } from 'path';
 import * as http from 'http';
@@ -62,7 +62,9 @@ function deepEqual(x, y) {
   ) : (x === y);
 }
 
-export async function createLightFramework(baseDir: string = '', bootstrapOptions: IMidwayBootstrapOptions = {}): Promise<IMidwayFramework<any, any, any>> {
+export async function createLightFramework(baseDir: string = '', bootstrapOptions: IMidwayBootstrapOptions = {}, extraOptions: {
+  defaultDetector?: boolean;
+} = {}): Promise<IMidwayFramework<any, any, any>> {
   /**
    * 一个全量的空框架
    */
@@ -94,9 +96,18 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
     }
   }
 
-  @Configuration({
-    namespace: 'empty'
-  })
+  const conf = {
+    namespace: 'empty',
+    detector: new CommonJSFileDetector({
+      conflictCheck: true,
+    }),
+  };
+
+  if (extraOptions.defaultDetector === false) {
+    delete conf.detector;
+  }
+
+  @Configuration(conf)
   class EmptyConfiguration {
 
     @Inject()
@@ -181,6 +192,14 @@ export async function createFramework(baseDir: string = '', globalConfig: any = 
       return bindModuleMap.has(module);
     });
   };
+
+  container.registerObject('baseDir', baseDir);
+
+  const detector = new CommonJSFileDetector({
+    conflictCheck: true,
+  });
+
+  await detector.run(container, MAIN_MODULE_KEY);
 
   return initializeGlobalApplicationContext({
     baseDir,

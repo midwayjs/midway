@@ -1,10 +1,10 @@
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
+import { createLegacyApp, close, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
   describe('Express passport', () => {
     it('basic local auth', async () => {
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-express'),
         {},
       );
@@ -27,7 +27,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should test passport all fail', async () => {
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-express-fail'),
         {},
       );
@@ -41,7 +41,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('passport with session', async () => {
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-express-session'),
         {},
       );
@@ -74,7 +74,7 @@ describe('/test/index.test.ts', () => {
 
     it('jwt passport with express', async () => {
       let token;
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-express-jwt'),
         {},
       );
@@ -96,7 +96,7 @@ describe('/test/index.test.ts', () => {
 
   describe('Egg passport', () => {
     it('test passport with egg', async () => {
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-web'),
         {},
       );
@@ -129,7 +129,7 @@ describe('/test/index.test.ts', () => {
 
   describe('koa passport', () => {
     it('should start koa app and session with passport', async () => {
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-koa-session'),
         {},
       );
@@ -160,7 +160,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should test passport all fail', async () => {
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-koa-fail'),
         {},
       );
@@ -174,7 +174,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should test passport all fail - http-bearer', async () => {
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-koa-bearer-fail'),
         {},
       );
@@ -190,7 +190,7 @@ describe('/test/index.test.ts', () => {
 
     it('jwt passport with koa', async () => {
       let token;
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-koa-jwt'),
         {},
       );
@@ -211,7 +211,7 @@ describe('/test/index.test.ts', () => {
 
     it('jwt passport with koa and global middleware', async () => {
       let token;
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-koa-jwt-global'),
         {},
       );
@@ -231,7 +231,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should test with open id', async () => {
-      const app = await createApp(
+      const app = await createLegacyApp(
         join(__dirname, 'fixtures', 'passport-koa-openid'),
         {},
       );

@@ -9,16 +9,16 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
     "casbin": "5.30.0",
     "sqlite3": "5.1.7",
     "typeorm": "0.3.20"
   },
   "dependencies": {
-    "@midwayjs/casbin": "^3.18.0",
-    "@midwayjs/typeorm": "^3.18.0"
+    "@midwayjs/casbin": "workspace:^",
+    "@midwayjs/typeorm": "workspace:^"
   },
   "keywords": [
     "midway",

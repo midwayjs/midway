@@ -10,7 +10,6 @@ import * as Express from '../../../../src';
   imports: [
     Express
   ],
-  conflictCheck: true,
 })
 export class ContainerConfiguration {
 

@@ -1,5 +1,5 @@
 import { MidwayI18nService } from '../src';
-import { createLightApp, close, createHttpRequest, createApp } from '@midwayjs/mock';
+import { createLightApp, close, createHttpRequest, createLegacyApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { formatWithArray, formatWithObject } from '../src/utils';
 import * as i18n from '../src';
@@ -206,7 +206,7 @@ describe('test/index.test.ts', () => {
 
   describe('i18n in koa', function () {
     it('should test with request by query', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-koa-query-locale'
       ));
@@ -222,7 +222,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with request by header', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-koa-header-locale'
       ));
@@ -238,7 +238,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with request by cookie', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-koa-cookie-locale'
       ));
@@ -266,7 +266,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with request by cookie and manual', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-koa-cookie-locale-manual'
       ));
@@ -283,7 +283,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test close resolver', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-koa-close-resolver'
       ));
@@ -300,7 +300,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with request ctx.locals', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-koa-ctx-locals'
       ));
@@ -318,7 +318,7 @@ describe('test/index.test.ts', () => {
 
   describe('i18n in express', function () {
     it('should test with request by query', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-express-query-locale'
       ));
@@ -334,7 +334,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with request by header', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-express-header-locale'
       ));
@@ -350,7 +350,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with request by cookie', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-express-cookie-locale'
       ));
@@ -378,7 +378,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test close resolver', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-express-close-resolver'
       ));
@@ -395,7 +395,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with request by cookie and manual', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-express-cookie-locale-manual'
       ));
@@ -412,7 +412,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with request req.locals', async () => {
-      const app = await createApp(join(
+      const app = await createLegacyApp(join(
         __dirname,
         './fixtures/base-app-express-req-locals'
       ));

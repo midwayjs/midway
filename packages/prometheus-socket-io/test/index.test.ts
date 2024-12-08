@@ -1,10 +1,10 @@
-import { createApp, createHttpRequest, close } from '@midwayjs/mock';
+import { createLegacyApp, createHttpRequest, close } from '@midwayjs/mock';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
 
   it('should get metrics', async() => {
-    const app = await createApp(join(__dirname, './fixtures/test-prometheus-socket-io'));
+    const app = await createLegacyApp(join(__dirname, './fixtures/test-prometheus-socket-io'));
     const result = await createHttpRequest(app)
       .get('/metrics');
 

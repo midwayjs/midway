@@ -1,6 +1,5 @@
-import { closeApp, creatApp, createHttpRequest } from './utils';
 import { IMidwayExpressApplication, MidwayExpressMiddlewareService } from '../src';
-import { createLightApp } from '@midwayjs/mock';
+import { createLightApp, createLegacyApp as creatApp, close as closeApp, createHttpRequest } from '@midwayjs/mock';
 
 describe('/test/feature.test.ts', () => {
 

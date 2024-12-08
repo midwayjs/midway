@@ -24,10 +24,13 @@ import {
   MidwayApplicationManager,
   sleep,
   Init,
+  Configuration,
 } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
 import * as assert from 'assert';
+import { ComponentConfigurationLoader } from '../../src/context/componentLoader';
+import { defineConfiguration } from '../../src/functional';
 
 function buildLoadDir(arr, baseDir) {
   return arr.map(dir => {
@@ -46,17 +49,25 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should create new loader', async () => {
     const container = new MidwayContainer();
-    container.setFileDetector(new CommonJSFileDetector({
-      loadDir: buildLoadDir(['app', 'lib', '../test_other'], path.join(__dirname, '../fixtures/base-app/src')),
-    }));
-    await container.ready();
+    const loader = new ComponentConfigurationLoader(container)
+
+    await loader.load(defineConfiguration({
+      detector: new CommonJSFileDetector({
+        loadDir: buildLoadDir(['app', 'lib', '../test_other'], path.join(__dirname, '../fixtures/base-app/src')),
+        conflictCheck: true
+      })
+    }))
+
     assert.ok(typeof (await container.getAsync('testOther')));
   });
 
   it('should load ts file and use config, plugin decorator', async () => {
     const container = new MidwayContainer();
-    container.setFileDetector(new CommonJSFileDetector({
-      loadDir: path.join(__dirname, '../fixtures/base-app-decorator/src')
+    const loader = new ComponentConfigurationLoader(container)
+    await loader.load(defineConfiguration({
+      detector: new CommonJSFileDetector({
+        loadDir: path.join(__dirname, '../fixtures/base-app-decorator/src')
+      }),
     }));
 
     container.bind(MidwayFrameworkService);
@@ -91,7 +102,6 @@ describe('/test/context/midwayContainer.test.ts', () => {
     frameworkService.registerPropertyHandler(LOGGER_KEY, (key, meta) => {
       return console;
     });
-    await container.ready();
     const appCtx = container;
     const baseService: any = await appCtx.getAsync('baseService');
     assert.ok(baseService.config === 'hello');
@@ -109,10 +119,16 @@ describe('/test/context/midwayContainer.test.ts', () => {
   });
 
   it('should load ts file and bindapp success', async () => {
+    @Configuration({
+      detector: new CommonJSFileDetector({
+        loadDir: path.join(__dirname, '../fixtures/base-app-forbindapp/src')
+      }),
+    })
+    class MainConfiguration {}
+
     const container = new MidwayContainer();
-    container.setFileDetector(new CommonJSFileDetector({
-      loadDir: path.join(__dirname, '../fixtures/base-app-forbindapp/src')
-    }));
+    const loader = new ComponentConfigurationLoader(container);
+    await loader.load(MainConfiguration);
 
     const tt: any = {
       getBaseDir() {
@@ -152,7 +168,6 @@ describe('/test/context/midwayContainer.test.ts', () => {
     frameworkService.registerPropertyHandler(LOGGER_KEY, (key, target) => {
       return console;
     });
-    await container.ready();
     const appCtx = container;
     const baseService: any = await appCtx.getAsync('baseService');
     assert.ok(baseService.config === 'hello');
@@ -162,10 +177,17 @@ describe('/test/context/midwayContainer.test.ts', () => {
   });
 
   it('load ts file support constructor inject', async () => {
+    @Configuration({
+      detector: new CommonJSFileDetector({
+        loadDir: path.join(__dirname, '../fixtures/base-app-constructor/src'),
+      }),
+    })
+    class MainConfiguration {}
+
     const container = new MidwayContainer();
-    container.setFileDetector(new CommonJSFileDetector({
-      loadDir: path.join(__dirname, '../fixtures/base-app-constructor/src'),
-    }));
+    const loader = new ComponentConfigurationLoader(container);
+    await loader.load(MainConfiguration);
+
     container.bind(MidwayFrameworkService);
     container.bind(MidwayConfigService);
     container.bind(MidwayLoggerService);
@@ -191,8 +213,6 @@ describe('/test/context/midwayContainer.test.ts', () => {
     frameworkService.registerPropertyHandler(LOGGER_KEY, key => {
       return console;
     });
-
-    await container.ready();
 
     const context = { logger: console };
     const requestCtx = new MidwayRequestContainer(
@@ -207,10 +227,17 @@ describe('/test/context/midwayContainer.test.ts', () => {
   });
 
   it('should auto load function file and inject by function name', async () => {
+    @Configuration({
+      detector: new CommonJSFileDetector({
+        loadDir: path.join(__dirname, '../fixtures/base-app-function/src'),
+      }),
+    })
+    class MainConfiguration {}
+
     const container = new MidwayContainer();
-    container.setFileDetector(new CommonJSFileDetector({
-      loadDir: path.join(__dirname, '../fixtures/base-app-function/src'),
-    }));
+    const loader = new ComponentConfigurationLoader(container);
+    await loader.load(MainConfiguration);
+
     container.bind(MidwayFrameworkService);
     container.bind(MidwayConfigService);
     container.bind(MidwayLoggerService);
@@ -236,9 +263,6 @@ describe('/test/context/midwayContainer.test.ts', () => {
     frameworkService.registerPropertyHandler(LOGGER_KEY, key => {
       return console;
     });
-
-    await container.ready();
-
     const context = { logger: console };
     const requestCtx = new MidwayRequestContainer(
       context,
@@ -249,12 +273,16 @@ describe('/test/context/midwayContainer.test.ts', () => {
   });
 
   it('should scan app dir and inject automatic', async () => {
-    const container = new MidwayContainer();
-    container.setFileDetector(new CommonJSFileDetector({
-      loadDir: path.join(__dirname, '../fixtures/ts-app-inject')
-    }));
+    @Configuration({
+      detector: new CommonJSFileDetector({
+        loadDir: path.join(__dirname, '../fixtures/ts-app-inject'),
+      }),
+    })
+    class MainConfiguration {}
 
-    await container.ready();
+    const container = new MidwayContainer();
+    const loader = new ComponentConfigurationLoader(container);
+    await loader.load(MainConfiguration);
 
     const tt = container.get<TestCons>('testCons');
     expect(tt.ts).toBeGreaterThan(0);

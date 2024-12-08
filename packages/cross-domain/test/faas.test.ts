@@ -1,4 +1,4 @@
-import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
+import { createHttpRequest, close, createLegacyFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { BootstrapStarter } from '../../../packages-serverless/midway-fc-starter/src';
 import * as assert from 'assert';
@@ -7,7 +7,7 @@ describe('test/faas.test.ts', function () {
   beforeAll(async () => {
     const appDir = join(__dirname, 'fixtures/faas');
     try {
-      app = await createFunctionApp(appDir, {starter: new BootstrapStarter()});
+      app = await createLegacyFunctionApp(appDir, {starter: new BootstrapStarter()});
     } catch (e) {
       console.log("e", e);
     }

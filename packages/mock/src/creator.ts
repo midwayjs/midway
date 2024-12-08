@@ -95,8 +95,7 @@ export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
   appDir: string | MockAppConfigurationOptions,
-  options: MockAppConfigurationOptions = {},
-  customFramework?: { new (...args): T } | ComponentModule
+  options: MockAppConfigurationOptions = {}
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
 
@@ -183,18 +182,6 @@ export async function create<
       );
     }
 
-    if (!options.imports && customFramework) {
-      options.imports = await transformFrameworkToConfiguration(
-        customFramework,
-        options.moduleLoadType
-      );
-    }
-
-    if (customFramework?.['Configuration']) {
-      options.imports = customFramework;
-      customFramework = customFramework['Framework'];
-    }
-
     if (options.ssl) {
       const sslConfig = {
         koa: {
@@ -221,33 +208,18 @@ export async function create<
       appDir,
       asyncContextManager: createContextManager(),
       loggerFactory: loggers,
-      imports: [].concat(options.imports).concat(
-        options.baseDir
-          ? await loadModule(
-              join(options.baseDir, getFileNameWithSuffix('configuration')),
-              {
-                safeLoad: true,
-                loadMode: options.moduleLoadType,
-              }
-            )
-          : []
-      ),
     });
 
-    if (customFramework) {
-      return container.getAsync(customFramework as any);
+    const frameworkService = await container.getAsync(MidwayFrameworkService);
+    const mainFramework = frameworkService.getMainFramework() as T;
+    if (mainFramework) {
+      return mainFramework;
     } else {
-      const frameworkService = await container.getAsync(MidwayFrameworkService);
-      const mainFramework = frameworkService.getMainFramework() as T;
-      if (mainFramework) {
-        return mainFramework;
-      } else {
-        throw new Error(
-          `Can not get main framework, please check your ${getFileNameWithSuffix(
-            'configuration'
-          )}.`
-        );
-      }
+      throw new Error(
+        `Can not get main framework, please check your ${getFileNameWithSuffix(
+          'configuration'
+        )}.`
+      );
     }
   } catch (err) {
     // catch for jest beforeAll can't throw error
@@ -261,11 +233,10 @@ export async function create<
 export async function createApp<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
-  baseDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions,
-  customFramework?: { new (...args): T } | ComponentModule
+  baseDir: string | MockAppConfigurationOptions,
+  options?: MockAppConfigurationOptions
 ): Promise<ReturnType<T['getApplication']>> {
-  const framework: T = await create<T>(baseDir, options, customFramework);
+  const framework: T = await create<T>(baseDir, options);
   return framework.getApplication();
 }
 

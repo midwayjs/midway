@@ -26,3 +26,4 @@ site/changelog
 **/test/*.txt
 .audit
 packages/**/test/tmp
+.swc

@@ -22,12 +22,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
-    "@midwayjs/prometheus": "^3.18.0",
-    "@midwayjs/socketio": "^3.18.0",
-    "@midwayjs/web": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/prometheus": "workspace:^",
+    "@midwayjs/socketio": "workspace:^",
+    "@midwayjs/web": "workspace:^",
     "egg": "^2.28.0"
   },
   "engines": {

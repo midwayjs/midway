@@ -7,7 +7,7 @@ import {
   Provide,
   Scope,
 } from '../decorator';
-import { FunctionalConfiguration } from '../functional/configuration';
+import { FunctionalConfiguration } from '../functional';
 import { MidwayFrameworkService } from './frameworkService';
 import { MidwayConfigService } from './configService';
 import { debuglog } from 'util';

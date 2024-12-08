@@ -1,4 +1,4 @@
-import { close, createApp, createHttpRequest } from '@midwayjs/mock';
+import { close, createLegacyApp, createHttpRequest } from '@midwayjs/mock';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 
@@ -7,7 +7,7 @@ describe('/test/index.test.ts', () => {
     let app;
     beforeAll(async () => {
       try {
-        app = await createApp(
+        app = await createLegacyApp(
           join(__dirname, 'fixtures/cats'),
           {
             globalConfig: {
@@ -89,7 +89,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should fix issue1976', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/issue1976'), {});
+    const app = await createLegacyApp(join(__dirname, 'fixtures/issue1976'), {});
     const result = await createHttpRequest(app).get('/swagger-ui/index.json');
     expect(result.type).toEqual('application/json');
     const body = result.body;
@@ -103,7 +103,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should fix issue2603', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/issue2603'), {});
+    const app = await createLegacyApp(join(__dirname, 'fixtures/issue2603'), {});
     const result = await createHttpRequest(app).get('/swagger-ui/index.json');
     expect(result.type).toEqual('application/json');
     const body = result.body;

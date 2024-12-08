@@ -24,13 +24,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
     "fs-extra": "11.2.0"
   },
   "dependencies": {
     "@grpc/grpc-js": "1.11.3",
-    "@grpc/proto-loader": "0.7.13",
-    "@midwayjs/core": "^3.18.0"
+    "@grpc/proto-loader": "0.7.13"
   },
   "engines": {
     "node": ">=12"

@@ -79,8 +79,6 @@ describe('/test/context/applicationContext.test.ts', () => {
       app.registry.registerDefinition(definition.id, definition);
       app.registry.registerDefinition(definition1.id, definition1);
 
-      await app.ready();
-
       const d: any = await app.getAsync('hello2');
       expect(d).toBeDefined()
       expect(d.aa).toEqual(123);

@@ -9,9 +9,9 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-  FunctionalConfiguration,
   DecoratorManager,
 } from '@midwayjs/core';
+import { FunctionalConfiguration } from '@midwayjs/core/functional';
 import { debuglog } from 'util';
 const debug = debuglog('midway:debug');
 

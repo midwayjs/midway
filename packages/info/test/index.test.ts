@@ -1,4 +1,4 @@
-import { close, createApp, createHttpRequest, createLightApp } from '@midwayjs/mock';
+import { close, createLegacyApp, createHttpRequest, createLightApp } from '@midwayjs/mock';
 import { InfoService } from '../src';
 import { join } from 'path';
 import * as info from '../src';
@@ -17,7 +17,7 @@ describe('test/index.test.ts', () => {
   });
 
   it('test koa middleware', async () => {
-    const app = await createApp(join(__dirname, './fixtures/web-koa'));
+    const app = await createLegacyApp(join(__dirname, './fixtures/web-koa'));
     const result = await createHttpRequest(app).get('/_test_route');
     expect(result.type).toEqual('text/html');
     expect(result.text).toMatch('xxx');
@@ -25,7 +25,7 @@ describe('test/index.test.ts', () => {
   });
 
   it('test express middleware', async () => {
-    const app = await createApp(join(__dirname, './fixtures/web-express'));
+    const app = await createLegacyApp(join(__dirname, './fixtures/web-express'));
     const result = await createHttpRequest(app).get('/_info');
     expect(result.type).toEqual('text/html');
     expect(result.text).toMatch('Midway Info');
