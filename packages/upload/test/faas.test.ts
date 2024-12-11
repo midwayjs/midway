@@ -1,4 +1,4 @@
-import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
+import { createHttpRequest, close, createLegacyFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
 import { existsSync, statSync } from 'fs';
@@ -7,7 +7,7 @@ describe('test/faas.test.ts', function () {
   let app;
   beforeAll(async () => {
     const appDir = join(__dirname, 'fixtures/faas');
-    app = await createFunctionApp(appDir, {});
+    app = await createLegacyFunctionApp(appDir, {});
   })
 
   afterAll(async () => {

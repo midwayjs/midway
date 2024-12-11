@@ -15,10 +15,10 @@
     "ylru": "1.4.0"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/faas": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0"
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/faas": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^"
   },
   "keywords": [
     "midway",

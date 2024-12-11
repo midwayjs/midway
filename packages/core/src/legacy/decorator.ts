@@ -377,22 +377,6 @@ export function saveModule(decoratorNameKey: ObjectIdentifier, target) {
 }
 
 /**
- * @since 3.0.0
- * @deprecated Use DecoratorManager.bindContainer instead
- */
-export function bindContainer(container) {
-  return DecoratorManager.bindContainer(container);
-}
-/**
- * Clear the container which is bound by bindContainer
- * @since 3.0.0
- * @deprecated Use DecoratorManager.clearBindContainer instead
- */
-export function clearBindContainer() {
-  return DecoratorManager.clearBindContainer();
-}
-
-/**
  * list module from decorator key
  * @param decoratorNameKey
  * @param filter

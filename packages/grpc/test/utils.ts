@@ -1,7 +1,7 @@
 import { Framework, IMidwayGRPCApplication, IMidwayGRPFrameworkOptions } from '../src';
 import * as grpc from '../src';
 import { join } from 'path';
-import { close, createApp } from '@midwayjs/mock';
+import { close, createLegacyApp } from '@midwayjs/mock';
 
 /**
  * create a gRPC server
@@ -9,7 +9,12 @@ import { close, createApp } from '@midwayjs/mock';
  * @param options
  */
 export async function createServer(name: string, options?: IMidwayGRPFrameworkOptions): Promise<IMidwayGRPCApplication> {
-  return createApp<Framework>(join(__dirname, 'fixtures', name), options, grpc);
+  return createLegacyApp<Framework>(join(__dirname, 'fixtures', name), {
+    imports: [
+      grpc,
+    ],
+    ...options,
+  });
 }
 
 export async function closeApp(app) {

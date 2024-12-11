@@ -1,4 +1,4 @@
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
+import { createLegacyApp, close, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
@@ -6,7 +6,7 @@ describe('/test/index.test.ts', () => {
   let app;
 
   beforeAll(async () => {
-    app = await createApp(join(__dirname, 'fixtures', 'base-app'), {});
+    app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app'), {});
   });
 
   afterAll(async () => {

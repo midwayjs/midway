@@ -10,8 +10,8 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0"
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^"
   },
   "dependencies": {
     "etcd3": "1.1.2"

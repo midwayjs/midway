@@ -10,7 +10,6 @@ import * as Koa from '../../../../src';
   imports: [
     Koa
   ],
-  conflictCheck: true,
 })
 export class ContainerConfiguration {
 

@@ -1,4 +1,4 @@
-import { createHttpRequest, close, createApp, createLightApp } from '@midwayjs/mock';
+import { createHttpRequest, close, createLegacyApp, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as captcha from '../src';
@@ -8,7 +8,7 @@ describe('test/index.test.ts', function () {
   let app;
   beforeAll(async () => {
     const appDir = join(__dirname, 'fixtures/koa');
-    app = await createApp(appDir);
+    app = await createLegacyApp(appDir);
   });
 
   afterAll(async () => {

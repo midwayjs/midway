@@ -1,9 +1,9 @@
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
+import { createLegacyApp, close, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
 
 describe('test/i18n.test.ts', function () {
   it('should test with locale in decorator options', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/base-app-koa'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures/base-app-koa'));
     const result = await createHttpRequest(app)
       .post('/user/')
       .send({
@@ -15,7 +15,7 @@ describe('test/i18n.test.ts', function () {
   });
 
   it('should test with locale global options', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/base-app-koa-global-locale'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures/base-app-koa-global-locale'));
     const result = await createHttpRequest(app)
       .post('/user/global_options')
       .send({
@@ -27,7 +27,7 @@ describe('test/i18n.test.ts', function () {
   });
 
   it('should test with query locale', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/base-app-koa-query-locale'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures/base-app-koa-query-locale'));
     const result = await createHttpRequest(app)
       .post('/user/')
       .query({
@@ -42,7 +42,7 @@ describe('test/i18n.test.ts', function () {
   });
 
   it('should test with locale fallback', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/base-app-koa-fallback'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures/base-app-koa-fallback'));
     const result = await createHttpRequest(app)
       .post('/user/')
       .send({
@@ -54,7 +54,7 @@ describe('test/i18n.test.ts', function () {
   });
 
   it('should test with locale fallback use custom message', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/base-app-koa-custom-message'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures/base-app-koa-custom-message'));
     const result = await createHttpRequest(app)
       .post('/user/')
       .send({

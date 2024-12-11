@@ -1,6 +1,6 @@
 import * as Web from '../src';
 import { join } from 'path';
-import { close, createApp } from '@midwayjs/mock';
+import { close, createLegacyApp } from '@midwayjs/mock';
 import { existsSync, readFileSync } from 'fs';
 import { remove } from 'fs-extra';
 import { fork } from 'child_process';
@@ -37,7 +37,7 @@ export async function closeCuster(master) {
 }
 
 export async function creatApp(name, options = {}) {
-  return createApp(join(__dirname, 'fixtures', name), Object.assign(options, {
+  return createLegacyApp(join(__dirname, 'fixtures', name), Object.assign(options, {
     imports: [Web]
   }))
 }

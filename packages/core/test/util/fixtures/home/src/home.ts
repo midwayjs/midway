@@ -1,7 +1,7 @@
 import {
   Controller,
   Get,
-} from '../../../src';
+} from '../../../../../src';
 
 // /api/ + /bbc
 @Controller('/', {})

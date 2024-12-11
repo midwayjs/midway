@@ -13,21 +13,16 @@ import {
   MidwayApplicationManager,
   MidwayMockService,
   MidwayWebRouterService,
-  ESModuleFileDetector,
-  CommonJSFileDetector,
-  loadModule,
-  safeRequire,
-  isTypeScriptEnvironment,
   MidwayPriorityManager,
   DecoratorManager,
-  IModuleStore,
   IMidwayGlobalContainer,
 } from './';
 import defaultConfig from './config/config.default';
 import * as util from 'util';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
-import { join } from 'path';
 import { MidwayHealthService } from './service/healthService';
+import { ComponentConfigurationLoader } from './context/componentLoader';
+import { findProjectEntryFile, findProjectEntryFileSync } from './util';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -109,7 +104,6 @@ export async function destroyGlobalApplicationContext(
   await lifecycleService.stop();
   // stop container
   await applicationContext.stop();
-  DecoratorManager.clearBindContainer();
   loggerFactory.close();
   global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
   global['MIDWAY_MAIN_FRAMEWORK'] = undefined;
@@ -135,9 +129,6 @@ export async function prepareGlobalApplicationContextAsync(
   // new container
   const applicationContext =
     globalOptions.applicationContext ?? new MidwayContainer();
-  // bind container to decoratorManager
-  debug('[core]: delegate module map from decoratorManager');
-  DecoratorManager.bindContainer(applicationContext);
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
 
@@ -145,54 +136,21 @@ export async function prepareGlobalApplicationContextAsync(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
-  debug('[core]: set default file detector');
+  debug('[core]: set default module load type and entry file');
 
   if (!globalOptions.moduleLoadType) {
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // set module detector
-  if (globalOptions.moduleDetector !== false) {
-    debug('[core]: set module load type = %s', globalOptions.moduleLoadType);
+  // set entry file
+  globalOptions.imports = [
+    ...(globalOptions.imports ?? []),
+    await findProjectEntryFile(appDir, baseDir, globalOptions.moduleLoadType),
+  ];
 
-    // set default entry file
-    if (!globalOptions.imports) {
-      globalOptions.imports = [
-        await loadModule(
-          join(
-            baseDir,
-            `configuration${isTypeScriptEnvironment() ? '.ts' : '.js'}`
-          ),
-          {
-            loadMode: globalOptions.moduleLoadType,
-            safeLoad: true,
-          }
-        ),
-      ];
-    }
-    if (globalOptions.moduleDetector === undefined) {
-      if (globalOptions.moduleLoadType === 'esm') {
-        applicationContext.setFileDetector(
-          new ESModuleFileDetector({
-            loadDir: baseDir,
-            ignore: globalOptions.ignore ?? [],
-          })
-        );
-        globalOptions.moduleLoadType = 'esm';
-      } else {
-        applicationContext.setFileDetector(
-          new CommonJSFileDetector({
-            loadDir: baseDir,
-            ignore: globalOptions.ignore ?? [],
-          })
-        );
-      }
-    }
-  }
+  printStepDebugInfo('Binding built-in service');
 
-  printStepDebugInfo('Binding inner service');
-
-  // bind inner service
+  // bind built-in service
   applicationContext.bindClass(MidwayEnvironmentService);
   applicationContext.bindClass(MidwayInformationService);
   applicationContext.bindClass(MidwayAspectService);
@@ -244,14 +202,22 @@ export async function prepareGlobalApplicationContextAsync(
     'Load imports(component) and user code configuration module'
   );
 
-  applicationContext.load(
-    [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
+  // load configuration
+  const componentConfigurationLoader = new ComponentConfigurationLoader(
+    applicationContext
   );
+  const importModules = [...(globalOptions.imports ?? [])];
 
-  printStepDebugInfo('Run applicationContext ready method');
+  for (const mod of importModules) {
+    if (mod) {
+      await componentConfigurationLoader.load(mod);
+    }
+  }
 
-  // bind user code module
-  await applicationContext.ready();
+  for (const ns of componentConfigurationLoader.getNamespaceList()) {
+    applicationContext.addNamespace(ns);
+    debug(`[core]: load configuration in namespace="${ns}" complete`);
+  }
 
   if (globalOptions.globalConfig) {
     if (Array.isArray(globalOptions.globalConfig)) {
@@ -289,9 +255,6 @@ export function prepareGlobalApplicationContext(
   // new container
   const applicationContext =
     globalOptions.applicationContext ?? new MidwayContainer();
-  // bind container to decoratorManager
-  debug('[core]: delegate module map from decoratorManager');
-  DecoratorManager.bindContainer(applicationContext as IModuleStore);
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
 
@@ -299,27 +262,21 @@ export function prepareGlobalApplicationContext(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
-  printStepDebugInfo('Ready module detector');
+  debug('[core]: set default module load type and entry file');
 
   if (!globalOptions.moduleLoadType) {
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  if (globalOptions.moduleDetector !== false) {
-    if (globalOptions.moduleDetector === undefined) {
-      applicationContext.setFileDetector(
-        new CommonJSFileDetector({
-          ignore: globalOptions.ignore ?? [],
-        })
-      );
-    } else if (globalOptions.moduleDetector) {
-      applicationContext.setFileDetector(globalOptions.moduleDetector);
-    }
-  }
+  // set entry file
+  globalOptions.imports = [
+    ...(globalOptions.imports ?? []),
+    findProjectEntryFileSync(appDir, baseDir),
+  ];
 
-  printStepDebugInfo('Binding inner service');
+  printStepDebugInfo('Binding built-in service');
 
-  // bind inner service
+  // bind built-in service
   applicationContext.bindClass(MidwayEnvironmentService);
   applicationContext.bindClass(MidwayInformationService);
   applicationContext.bindClass(MidwayAspectService);
@@ -371,20 +328,22 @@ export function prepareGlobalApplicationContext(
     'Load imports(component) and user code configuration module'
   );
 
-  if (!globalOptions.imports) {
-    globalOptions.imports = [
-      safeRequire(join(globalOptions.baseDir, 'configuration')),
-    ];
+  // load configuration
+  const componentConfigurationLoader = new ComponentConfigurationLoader(
+    applicationContext
+  );
+  const importModules = [...(globalOptions.imports ?? [])];
+
+  for (const mod of importModules) {
+    if (mod) {
+      componentConfigurationLoader.loadSync(mod);
+    }
   }
 
-  applicationContext.load(
-    [].concat(globalOptions.imports).concat(globalOptions.configurationModule)
-  );
-
-  printStepDebugInfo('Run applicationContext ready method');
-
-  // bind user code module
-  applicationContext.ready();
+  for (const ns of componentConfigurationLoader.getNamespaceList()) {
+    applicationContext.addNamespace(ns);
+    debug(`[core]: load configuration in namespace="${ns}" complete`);
+  }
 
   if (globalOptions.globalConfig) {
     if (Array.isArray(globalOptions.globalConfig)) {

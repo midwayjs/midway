@@ -9,15 +9,15 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
     "casbin": "5.30.0",
     "ioredis": "5.4.1"
   },
   "dependencies": {
-    "@midwayjs/casbin": "^3.18.0",
-    "@midwayjs/redis": "^3.18.0"
+    "@midwayjs/casbin": "workspace:^",
+    "@midwayjs/redis": "workspace:^"
   },
   "keywords": [
     "midway",

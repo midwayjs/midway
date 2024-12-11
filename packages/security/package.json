@@ -30,11 +30,11 @@
     "xss": "1.0.15"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/express": "^3.18.0",
-    "@midwayjs/faas": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
-    "@midwayjs/web": "^3.18.0"
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/express": "workspace:^",
+    "@midwayjs/faas": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/web": "workspace:^"
   }
 }

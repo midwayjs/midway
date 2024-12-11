@@ -1,0 +1,25 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "noImplicitThis": false,
+    "noUnusedLocals": true,
+    "stripInternal": true,
+    "skipLibCheck": true,
+    "pretty": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+    "src/index.ts"
+  ]
+}

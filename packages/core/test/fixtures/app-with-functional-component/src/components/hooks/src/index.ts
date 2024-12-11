@@ -1,9 +1,12 @@
 import {
-  createConfiguration, Provide, Inject
+  Provide,
+  Inject,
+  CustomModuleDetector,
 } from '../../../../../../../src';
+import { defineConfiguration } from '../../../../../../../src/functional';
 
 @Provide()
-export class FunctionContainer {
+class FunctionContainer {
   @Inject()
   ctx;
 
@@ -12,17 +15,15 @@ export class FunctionContainer {
   }
 }
 
-export const createHooks = (hooksOptions) => {
-
-  const configuration = createConfiguration({
-    namespace: 'hooks',
-  }).onReady(async () => {
+export default defineConfiguration({
+  detector: new CustomModuleDetector({
+    modules: [FunctionContainer],
+  }),
+  namespace: 'hooks',
+  async onReady() {
     console.log('on ready in hooks');
-  }).onStop(async () => {
+  },
+  async onStop() {
     console.log('on ready in hooks');
-  });
-
-  return {
-    Configuration: configuration,
   }
-}
+});

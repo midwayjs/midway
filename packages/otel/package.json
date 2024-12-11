@@ -10,9 +10,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
     "@opentelemetry/sdk-node": "0.53.0",
     "@opentelemetry/sdk-trace-base": "1.26.0",
     "@opentelemetry/sdk-trace-node": "1.26.0"

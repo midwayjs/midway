@@ -1,6 +1,6 @@
-import http = require('http');
-import https = require('https');
-import url = require('url');
+import * as http from 'http';
+import * as https from 'https';
+import * as url from 'url';
 import { debuglog } from 'util';
 import { MidwayUtilHttpClientTimeoutError } from '../error';
 

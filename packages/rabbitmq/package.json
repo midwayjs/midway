@@ -24,13 +24,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
     "@types/amqplib": "0.10.5",
     "amqplib": "0.10.4",
     "fs-extra": "11.2.0"
   },
   "dependencies": {
-    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
     "amqp-connection-manager": "4.1.14"
   },
   "peerDependencies": {

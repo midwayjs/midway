@@ -1,4 +1,4 @@
-import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
+import { createHttpRequest, close, createLegacyFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { existsSync, statSync } from 'fs';
 import { sleep } from '@midwayjs/core';
@@ -9,7 +9,7 @@ describe('test/clean.test.ts', function () {
   it('upload file auto clean', async () => {
     const appDir = join(__dirname, 'fixtures/clean');
     const imagePath = join(__dirname, 'fixtures/1.jpg');
-    const app = await createFunctionApp<Framework>(appDir, {});
+    const app = await createLegacyFunctionApp<Framework>(appDir, {});
     const request = await createHttpRequest(app);
     const stat = statSync(imagePath);
     const response = await request.post('/upload')

@@ -19,7 +19,7 @@ describe('/test/setup.test.ts', () => {
     );
     const container = await initializeGlobalApplicationContext({
       baseDir,
-      configurationModule: [require(join(baseDir, 'configuration'))]
+      imports: [require(join(baseDir, 'configuration'))]
     });
 
     const configService = await container.getAsync(MidwayConfigService);
@@ -158,7 +158,7 @@ describe('/test/setup.test.ts', () => {
     );
     const container = await initializeGlobalApplicationContext({
       baseDir,
-      configurationModule: [require(join(baseDir, 'configuration')), {
+      imports: [require(join(baseDir, 'configuration')), {
         Configuration: EmptyConfiguration,
         EmptyFramework,
       }]

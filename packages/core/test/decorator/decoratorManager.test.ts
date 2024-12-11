@@ -1,7 +1,6 @@
 import {
   DecoratorManager,
   Provide,
-  MidwayContainer,
   PRELOAD_MODULE_KEY,
   MetadataManager,
   CUSTOM_PARAM_INJECT_KEY,
@@ -33,13 +32,6 @@ describe('/test/decoratorManager.test.ts', () => {
 
     const nothings = DecoratorManager.listModule('c_custom_notfound');
     expect(nothings).toHaveLength(0);
-  });
-
-  it('should bind and clear container', () => {
-    const mockContainer = new MidwayContainer();
-    DecoratorManager.bindContainer(mockContainer);
-    DecoratorManager.clearBindContainer();
-    expect(DecoratorManager['container']).toBeNull();
   });
 
   it('should save and get provider id', () => {
