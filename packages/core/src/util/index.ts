@@ -683,6 +683,17 @@ function getFileNameWithSuffix(fileName: string) {
   return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
 }
 
+export function isConfigurationExport(exports): boolean {
+  return (
+    (Types.isClass(exports) && MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, exports)) ||
+    (Types.isObject(exports) &&
+      MetadataManager.hasOwnMetadata(
+        CONFIGURATION_OBJECT_KEY,
+        exports
+      ))
+  );
+}
+
 export async function findProjectEntryFile(
   appDir: string,
   baseDir: string,
@@ -699,24 +710,13 @@ export async function findProjectEntryFile(
       warnOnLoadError: true,
     });
 
-    if (
-      content &&
-      (Types.isClass(content) ||
-        Types.isFunction(content) ||
-        MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, content) ||
-        MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, content))
-    ) {
+    if (content && isConfigurationExport(content)) {
       debug(`[core]: find configuration file ${filePath}`);
       return content;
     } else {
       for (const m in content) {
         const module = content[m];
-        if (
-          Types.isClass(module) ||
-          Types.isFunction(module) ||
-          MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, content) ||
-          MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, content)
-        ) {
+        if (isConfigurationExport(module)) {
           debug(`[core]: find configuration file ${filePath}`);
           return content;
         }
@@ -724,21 +724,7 @@ export async function findProjectEntryFile(
     }
   }
 
-  // 1. 找 package.json 中的 main 字段
-  const pkgJSON = await loadModule(join(appDir, 'package.json'), {
-    safeLoad: true,
-    enableCache: false,
-  });
-  if (pkgJSON?.['main']) {
-    const configuration = await containsConfiguration(
-      normalizePath(appDir, pkgJSON['main'])
-    );
-    if (configuration) {
-      return configuration;
-    }
-  }
-
-  // 2. 找 src/configuration.ts 或 src/configuration.js
+  // 1. 找 src/configuration.ts 或 src/configuration.js
   const configurationFile = await containsConfiguration(
     join(baseDir, getFileNameWithSuffix('configuration'))
   );
@@ -747,12 +733,28 @@ export async function findProjectEntryFile(
     return configurationFile;
   }
 
-  // 3. 找 src/index.ts 或 src/index.js
+  // 2. 找 src/index.ts 或 src/index.js
   const indexFile = await containsConfiguration(
     join(baseDir, getFileNameWithSuffix('index'))
   );
   if (indexFile) {
     return indexFile;
+  }
+
+  // 3. 找 package.json 中的 main 字段
+  if (appDir) {
+    const pkgJSON = await loadModule(join(appDir, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+    if (pkgJSON?.['main']) {
+      const configuration = await containsConfiguration(
+        normalizePath(appDir, pkgJSON['main'])
+      );
+      if (configuration) {
+        return configuration;
+      }
+    }
   }
 }
 
@@ -766,24 +768,13 @@ export function findProjectEntryFileSync(appDir: string, baseDir: string) {
       safeLoad: true,
       warnOnLoadError: true,
     });
-    if (
-      content &&
-      (Types.isClass(content) ||
-        Types.isFunction(content) ||
-        MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, content) ||
-        MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, content))
-    ) {
+    if (content && isConfigurationExport(content)) {
       debug(`[core]: find configuration file ${filePath}`);
       return content;
     } else {
       for (const m in content) {
         const module = content[m];
-        if (
-          Types.isClass(module) ||
-          Types.isFunction(module) ||
-          MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, content) ||
-          MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, content)
-        ) {
+        if (isConfigurationExport(module)) {
           debug(`[core]: find configuration file ${filePath}`);
           return content;
         }
@@ -791,21 +782,7 @@ export function findProjectEntryFileSync(appDir: string, baseDir: string) {
     }
   }
 
-  // 1. 找 package.json 中的 main 字段
-  const pkgJSON = loadModuleSync(join(appDir, 'package.json'), {
-    safeLoad: true,
-    enableCache: false,
-  });
-  if (pkgJSON?.['main']) {
-    const configuration = containsConfiguration(
-      normalizePath(appDir, pkgJSON['main'])
-    );
-    if (configuration) {
-      return configuration;
-    }
-  }
-
-  // 2. 找 src/configuration.ts 或 src/configuration.js
+  // 1. 找 src/configuration.ts 或 src/configuration.js
   const configurationFile = containsConfiguration(
     join(baseDir, getFileNameWithSuffix('configuration'))
   );
@@ -814,12 +791,28 @@ export function findProjectEntryFileSync(appDir: string, baseDir: string) {
     return configurationFile;
   }
 
-  // 3. 找 src/index.ts 或 src/index.js
+  // 2. 找 src/index.ts 或 src/index.js
   const indexFile = containsConfiguration(
     join(baseDir, getFileNameWithSuffix('index'))
   );
   if (indexFile) {
     return indexFile;
+  }
+
+  if (appDir) {
+    // 3. 找 package.json 中的 main 字段
+    const pkgJSON = loadModuleSync(join(appDir, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+    if (pkgJSON?.['main']) {
+      const configuration = containsConfiguration(
+        normalizePath(appDir, pkgJSON['main'])
+      );
+      if (configuration) {
+        return configuration;
+      }
+    }
   }
 }
 

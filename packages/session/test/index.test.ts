@@ -5,18 +5,6 @@ import * as assert from 'assert';
 
 describe('test/index.test.ts', function () {
 
-  it('should test sessionStore', async () => {
-    const app = await createLegacyApp(join(__dirname, 'fixtures/memory-session'));
-    const request = createHttpRequest(app);
-
-    await request.get('/set?foo=bar')
-      .expect(200)
-      .expect({ foo: 'bar' })
-      .expect('set-cookie', /MW_SESS=.*?;/);
-
-    await close(app);
-  });
-
   describe('should test cookie session', () => {
 
     let app;
@@ -159,7 +147,7 @@ describe('test/index.test.ts', function () {
     await close(app);
   });
 
-  it('should change the session key, but not content', async () => {
+  it.only('should change the session key, but not content', async () => {
     const app = await createLegacyApp(join(__dirname, 'fixtures/change-session-key'));
     const request = createHttpRequest(app);
     let koaSession = null;
@@ -181,4 +169,17 @@ describe('test/index.test.ts', function () {
 
     await close(app);
   });
+
+  it.only('should test sessionStore', async () => {
+    const app = await createLegacyApp(join(__dirname, 'fixtures/memory-session'));
+    const request = createHttpRequest(app);
+
+    await request.get('/set?foo=bar')
+      .expect(200)
+      .expect({ foo: 'bar' })
+      .expect('set-cookie', /MW_SESS=.*?;/);
+
+    await close(app);
+  });
+
 });

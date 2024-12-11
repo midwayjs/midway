@@ -46,6 +46,17 @@ describe('/test/feature.test.ts', () => {
     expect(process.env.RUN_READY_FLAG).toEqual('b');
     await framework.stop();
     expect(process.env.RUN_STOP_FLAG).toEqual('a');
+
+    process.env.RUN_READY_FLAG = '';
+    process.env.RUN_STOP_FLAG = '';
+    const framework2 = await createLightFramework(join(
+      __dirname,
+      './fixtures/base-app-configuration-stop-reverse/src'
+    ));
+
+    expect(process.env.RUN_READY_FLAG).toEqual('b');
+    await framework2.stop();
+    expect(process.env.RUN_STOP_FLAG).toEqual('a');
   });
 
   it('should test health check service', async () => {

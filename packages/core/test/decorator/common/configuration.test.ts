@@ -22,6 +22,8 @@ describe('/test/annotation/configuration.test.ts', () => {
     });
 
     const metaone = getClassMetadata(CONFIGURATION_KEY, TestOne);
-    expect(metaone).toStrictEqual({});
+    expect(metaone).toStrictEqual({
+      "namespace": "__main__"
+    });
   });
 });

@@ -1,4 +1,4 @@
-import {  Controller, Get } from '../../../src';
+import {  Controller, Get } from '../../../../../src';
 
 @Controller('/')
 export class IndexController {

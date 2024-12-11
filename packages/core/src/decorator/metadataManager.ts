@@ -32,6 +32,7 @@ export class MetadataManager {
   protected static readonly isClassSymbol = Symbol.for(
     'midway.metadata.isClass'
   );
+  public static ObjectType = ObjectType;
   /**
    * A symbol that represents an empty value
    */
@@ -651,5 +652,18 @@ export class MetadataManager {
     }
 
     return ret === ObjectType.Instance ? target.constructor : target;
+  }
+
+  public static ensureTargetType(target: any, type: ObjectType): void {
+    let ret: ObjectType = target.hasOwnProperty(this.isClassSymbol)
+      ? target[this.isClassSymbol]
+      : undefined;
+    if (!ret) {
+      Object.defineProperty(target, this.isClassSymbol, {
+        value: type,
+        enumerable: false,
+        configurable: false,
+      });
+    }
   }
 }

@@ -43,7 +43,6 @@ export class MidwayContainer implements IMidwayGlobalContainer {
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
   private _identifierMapping = null;
-  private moduleMap = null;
   private _objectCreateEventTarget: EventEmitter;
   // 仅仅用于兼容 requestContainer 的 ctx
   protected ctx = SINGLETON_CONTAINER_CTX;
@@ -80,47 +79,6 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     }
     return this._identifierMapping;
   }
-
-  // load(module) {
-  //   if (!Array.isArray(module)) {
-  //     module = [module];
-  //   }
-  //   // load configuration
-  //   const configuration = new ComponentConfigurationLoader(this);
-  //
-  //   for (const mod of module) {
-  //     if (mod) {
-  //       configuration.load(mod);
-  //     }
-  //   }
-  //   for (const ns of configuration.getNamespaceList()) {
-  //     this.namespaceSet.add(ns);
-  //     debug(`[core]: load configuration in namespace="${ns}" complete`);
-  //   }
-
-  // const configurationOptionsList =
-  //   configuration.getConfigurationOptionsList() ?? [];
-
-  // find user code configuration it's without namespace
-  // const userCodeConfiguration =
-  //   configurationOptionsList.find(options => !options.namespace) ?? {};
-
-  // this.fileDetector = userCodeConfiguration.detector ?? this.fileDetector;
-
-  // if (this.fileDetector) {
-  //   this.fileDetector.setExtraDetectorOptions({
-  //     conflictCheck: userCodeConfiguration.conflictCheck,
-  //     ...userCodeConfiguration.detectorOptions,
-  //   });
-  // }
-  // }
-
-  // protected loadDefinitions(): void | Promise<void> {
-  //   // load project file
-  //   if (this.fileDetector) {
-  //     return this.fileDetector.run(this);
-  //   }
-  // }
 
   public addNamespace(ns: string) {
     this.namespaceSet.add(ns);
@@ -440,21 +398,6 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     ) => void
   ) {
     this.objectCreateEventTarget.on(ObjectLifeCycleEvent.BEFORE_DESTROY, fn);
-  }
-
-  saveModule(key, module) {
-    if (!this.moduleMap.has(key)) {
-      this.moduleMap.set(key, new Set());
-    }
-    this.moduleMap.get(key).add(module);
-  }
-
-  listModule(key: string) {
-    return Array.from(this.moduleMap.get(key) || {});
-  }
-
-  transformModule(moduleMap: Map<string, Set<any>>) {
-    this.moduleMap = new Map(moduleMap);
   }
 
   hasNamespace(ns: string) {

@@ -13,8 +13,6 @@ import {
   savePreloadModule,
   listPreloadModule,
   saveModule,
-  bindContainer,
-  clearBindContainer,
   listModule,
   resetModule,
   clearAllModule,
@@ -32,7 +30,6 @@ import {
   getPropertyInject,
   saveObjectDefinition,
   getObjectDefinition,
-  MidwayContainer,
   Get,
   DecoratorManager,
   PRELOAD_MODULE_KEY,
@@ -147,13 +144,6 @@ describe('legacy/decorator.test.ts', () => {
     saveModule('testKey', TestClass);
     const result = listModule('testKey');
     expect(result).toContain(TestClass);
-  });
-
-  it('should bind and clear container', () => {
-    const mockContainer = new MidwayContainer();
-    bindContainer(mockContainer);
-    clearBindContainer();
-    expect(global['MIDWAY_GLOBAL_DECORATOR_MANAGER'].container).toBeNull();
   });
 
   it('should reset and clear all modules', () => {

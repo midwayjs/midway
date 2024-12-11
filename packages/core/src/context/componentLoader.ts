@@ -1,21 +1,18 @@
 import {
   CONFIGURATION_KEY,
-  CONFIGURATION_OBJECT_KEY,
-  DecoratorManager,
-  MAIN_MODULE_KEY,
+  CONFIGURATION_OBJECT_KEY, DecoratorManager,
+  MAIN_MODULE_KEY
 } from '../decorator';
 import {
   IComponentInfo,
   IMidwayGlobalContainer,
   InjectionConfigurationOptions,
-  ScopeEnum,
 } from '../interface';
-import { FunctionalConfiguration } from '../functional';
 import { MetadataManager } from '../decorator/metadataManager';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
-import { Types } from '../util/types';
 import * as util from 'util';
+import { isConfigurationExport } from '../util';
 
 const debug = util.debuglog('midway:debug');
 
@@ -59,7 +56,6 @@ export class ComponentConfigurationLoader {
           configurationExport
         );
       }
-
       // 已加载标记，防止死循环
       this.loadedMap.set(configurationExport, true);
 
@@ -79,7 +75,10 @@ export class ComponentConfigurationLoader {
           await configurationOptions.detector.run(this.container, namespace);
         }
 
-        this.bindConfigurationClass(configurationExport, namespace);
+        DecoratorManager.saveModule(CONFIGURATION_KEY, {
+          target: configurationExport,
+          namespace,
+        });
       }
     }
 
@@ -143,7 +142,10 @@ export class ComponentConfigurationLoader {
           configurationOptions.detector.runSync(this.container, namespace);
         }
 
-        this.bindConfigurationClass(configurationExport, namespace);
+        DecoratorManager.saveModule(CONFIGURATION_KEY, {
+          target: configurationExport,
+          namespace,
+        });
       }
     }
 
@@ -220,48 +222,14 @@ export class ComponentConfigurationLoader {
     }
   }
 
-  private bindConfigurationClass(clzz, namespace) {
-    if (clzz instanceof FunctionalConfiguration) {
-      // 函数式写法不需要绑定到容器
-    } else {
-      // 普通类写法
-      DecoratorManager.saveProviderId(undefined, clzz);
-      const id = DecoratorManager.getProviderUUId(clzz);
-      this.container.bind(id, clzz, {
-        namespace: namespace,
-        scope: ScopeEnum.Singleton,
-      });
-    }
-
-    // configuration 手动绑定去重
-    const configurationMods = DecoratorManager.listModule(CONFIGURATION_KEY);
-    const exists = configurationMods.find(mod => {
-      return mod.target === clzz;
-    });
-    if (!exists) {
-      DecoratorManager.saveModule(CONFIGURATION_KEY, {
-        target: clzz,
-        namespace: namespace,
-      });
-    }
-  }
-
   private getConfigurationExport(exports): any[] {
     const mods = [];
-    if (
-      Types.isClass(exports) ||
-      Types.isFunction(exports) ||
-      exports instanceof FunctionalConfiguration
-    ) {
+    if (isConfigurationExport(exports)) {
       mods.push(exports);
     } else {
       for (const m in exports) {
         const module = exports[m];
-        if (
-          Types.isClass(module) ||
-          Types.isFunction(module) ||
-          module instanceof FunctionalConfiguration
-        ) {
+        if (isConfigurationExport(module)) {
           mods.push(module);
         }
       }

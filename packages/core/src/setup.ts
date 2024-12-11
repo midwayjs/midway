@@ -15,7 +15,6 @@ import {
   MidwayWebRouterService,
   MidwayPriorityManager,
   DecoratorManager,
-  IModuleStore,
   IMidwayGlobalContainer,
 } from './';
 import defaultConfig from './config/config.default';
@@ -105,7 +104,6 @@ export async function destroyGlobalApplicationContext(
   await lifecycleService.stop();
   // stop container
   await applicationContext.stop();
-  DecoratorManager.clearBindContainer();
   loggerFactory.close();
   global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
   global['MIDWAY_MAIN_FRAMEWORK'] = undefined;
@@ -131,9 +129,6 @@ export async function prepareGlobalApplicationContextAsync(
   // new container
   const applicationContext =
     globalOptions.applicationContext ?? new MidwayContainer();
-  // bind container to decoratorManager
-  debug('[core]: delegate module map from decoratorManager');
-  DecoratorManager.bindContainer(applicationContext);
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
 
@@ -260,9 +255,6 @@ export function prepareGlobalApplicationContext(
   // new container
   const applicationContext =
     globalOptions.applicationContext ?? new MidwayContainer();
-  // bind container to decoratorManager
-  debug('[core]: delegate module map from decoratorManager');
-  DecoratorManager.bindContainer(applicationContext as IModuleStore);
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
 

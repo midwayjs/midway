@@ -329,12 +329,6 @@ export interface IMethodAspect {
   around?(joinPoint: JoinPoint): any;
 }
 
-export interface IModuleStore {
-  listModule(key: ObjectIdentifier);
-  saveModule(key: ObjectIdentifier, module: any);
-  transformModule?(moduleMap: Map<ObjectIdentifier, Set<any>>);
-}
-
 export interface TSDesignType<OriginType = unknown> {
   name: string;
   originDesign: OriginType;
@@ -691,7 +685,7 @@ export interface IIdentifierRelationShip {
   getRelation(id: ObjectIdentifier): string;
 }
 
-export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle>, IModuleStore {
+export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle> {
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
   // load(module: any | any[]): void;
