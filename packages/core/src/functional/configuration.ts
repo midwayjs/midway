@@ -62,7 +62,10 @@ export const defineConfiguration = (
   options: FunctionalConfigurationOptions
 ) => {
   const configuration = new FunctionalConfiguration(options);
-  MetadataManager.ensureTargetType(configuration, MetadataManager.ObjectType.Object);
+  MetadataManager.ensureTargetType(
+    configuration,
+    MetadataManager.ObjectType.Object
+  );
   MetadataManager.defineMetadata(
     CONFIGURATION_OBJECT_KEY,
     options,

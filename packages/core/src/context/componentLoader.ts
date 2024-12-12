@@ -1,7 +1,8 @@
 import {
   CONFIGURATION_KEY,
-  CONFIGURATION_OBJECT_KEY, DecoratorManager,
-  MAIN_MODULE_KEY
+  CONFIGURATION_OBJECT_KEY,
+  DecoratorManager,
+  MAIN_MODULE_KEY,
 } from '../decorator';
 import {
   IComponentInfo,

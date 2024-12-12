@@ -682,14 +682,14 @@ export async function createLightApp(
   });
 
   const applicationManager = app.getApplicationContext().get(MidwayApplicationManager);
-  const appNames = applicationManager.getApplications();
-  if (appNames.length === 1) {
+  const apps = applicationManager.getApplications();
+  if (apps.length === 1) {
     return app;
   } else {
     // 如果有多个 app，则重置 main app
     const frameworkService = app.getApplicationContext().get(MidwayFrameworkService);
-    // 第一个因为是默认的 light framework，如果用户自己增加了 framework，则要做调整
-    frameworkService.setMainApp(appNames[1]);
+    // 这里调整是因为 createLightApp 会自动加一个 framework
+    frameworkService.setMainApp(apps[0].getNamespace());
     return frameworkService.getMainApp();
   }
 }

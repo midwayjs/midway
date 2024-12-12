@@ -655,7 +655,7 @@ export class MetadataManager {
   }
 
   public static ensureTargetType(target: any, type: ObjectType): void {
-    let ret: ObjectType = target.hasOwnProperty(this.isClassSymbol)
+    const ret: ObjectType = target.hasOwnProperty(this.isClassSymbol)
       ? target[this.isClassSymbol]
       : undefined;
     if (!ret) {

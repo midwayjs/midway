@@ -1,11 +1,12 @@
 import { ILifeCycle, IMidwayContainer, ScopeEnum } from '../interface';
 import {
-  CONFIGURATION_KEY, CONFIGURATION_OBJECT_KEY,
+  CONFIGURATION_KEY,
+  CONFIGURATION_OBJECT_KEY,
   DecoratorManager,
   Init,
   Inject,
   Provide,
-  Scope
+  Scope,
 } from '../decorator';
 import { FunctionalConfiguration } from '../functional';
 import { MidwayFrameworkService } from './frameworkService';
@@ -54,10 +55,9 @@ export class MidwayLifeCycleService {
     debug(`[core]: Found Configuration length = ${cycles.length}`);
 
     for (const cycle of cycles) {
-      if (MetadataManager.hasOwnMetadata(
-        CONFIGURATION_OBJECT_KEY,
-        cycle.target
-      )) {
+      if (
+        MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, cycle.target)
+      ) {
         // 函数式写法
         cycle.instance = cycle.target;
       } else {

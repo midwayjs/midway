@@ -685,12 +685,10 @@ function getFileNameWithSuffix(fileName: string) {
 
 export function isConfigurationExport(exports): boolean {
   return (
-    (Types.isClass(exports) && MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, exports)) ||
+    (Types.isClass(exports) &&
+      MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, exports)) ||
     (Types.isObject(exports) &&
-      MetadataManager.hasOwnMetadata(
-        CONFIGURATION_OBJECT_KEY,
-        exports
-      ))
+      MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, exports))
   );
 }
 

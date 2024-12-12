@@ -44,7 +44,7 @@ export class DecoratorManager {
     key: ObjectIdentifier,
     filter?: (module) => boolean
   ): any[] {
-    let modules = [...(this.moduleStore.get(key) || [])];
+    const modules = [...(this.moduleStore.get(key) || [])];
     if (filter) {
       return modules.filter(filter);
     } else {
