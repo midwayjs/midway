@@ -67,7 +67,9 @@ export async function transformFrameworkToConfiguration<
 
   assert.ok(CustomFramework, `can't found custom framework ${Framework}`);
 
-  @Configuration()
+  @Configuration({
+    namespace: new Framework().getFrameworkName(),
+  })
   class CustomConfiguration {
     async onServerReady(container: IMidwayContainer) {
       const customFramework = (await container.getAsync<T>(

@@ -17,7 +17,7 @@ import {
   CommonJSFileDetector,
   MAIN_MODULE_KEY,
   DecoratorManager,
-  CONFIGURATION_KEY, Types
+  CONFIGURATION_KEY
 } from '../src';
 import { join } from 'path';
 import * as http from 'http';
@@ -63,6 +63,37 @@ function deepEqual(x, y) {
     ok(x).length === ok(y).length &&
     ok(x).every(key => deepEqual(x[key], y[key]))
   ) : (x === y);
+}
+
+function hackDecoratorManager() {
+  if (!DecoratorManager['_mocked']) {
+    DecoratorManager['_listModule'] = DecoratorManager.listModule;
+    DecoratorManager['_saveModule'] = DecoratorManager.saveModule;
+    DecoratorManager.saveModule = (key, target) => {
+      if (key === CONFIGURATION_KEY) {
+        // 防止重复，测试的时候 configuration 会被重复 save
+        const modules = DecoratorManager['_listModule'](key);
+        if (modules.some((module: any) => module.target === target.target)) {
+          return;
+        } else {
+          DecoratorManager['_bindModuleMap'].set(target.target, true);
+          DecoratorManager['_saveModule'](key, target);
+        }
+      } else {
+        DecoratorManager['_saveModule'](key, target);
+      }
+    }
+    DecoratorManager.listModule = key => {
+      const modules = DecoratorManager['_listModule'](key);
+      return modules.filter((module: any) => {
+        if (key === CONFIGURATION_KEY) {
+          return DecoratorManager['_bindModuleMap'].has(module.target);
+        }
+        return DecoratorManager['_bindModuleMap'].has(module);
+      });
+    };
+    DecoratorManager['_mocked'] = true;
+  }
 }
 
 export async function createLightFramework(baseDir: string = '', bootstrapOptions: IMidwayBootstrapOptions = {}, extraOptions: {
@@ -151,35 +182,7 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
     bindModuleMap.set(target, true);
   });
   DecoratorManager['_bindModuleMap'] = bindModuleMap;
-  if (!DecoratorManager['_mocked']) {
-    DecoratorManager['_listModule'] = DecoratorManager.listModule;
-    DecoratorManager['_saveModule'] = DecoratorManager.saveModule;
-    DecoratorManager.saveModule = (key, target) => {
-      if (key === CONFIGURATION_KEY) {
-        // 防止重复，测试的时候 configuration 会被重复 save
-        const modules = DecoratorManager['_listModule'](key);
-        if (modules.some((module: any) => module.target === target.target)) {
-          return;
-        } else {
-          bindModuleMap.set(target.target, true);
-          DecoratorManager['_saveModule'](key, target);
-        }
-      } else {
-        DecoratorManager['_saveModule'](key, target);
-      }
-    }
-    DecoratorManager.listModule = key => {
-      const modules = DecoratorManager['_listModule'](key);
-      return modules.filter((module: any) => {
-        if (key === CONFIGURATION_KEY) {
-          return DecoratorManager['_bindModuleMap'].has(module.target);
-        }
-        return DecoratorManager['_bindModuleMap'].has(module);
-      });
-    };
-
-    DecoratorManager['_mocked'] = true;
-  }
+  hackDecoratorManager();
 
   await initializeGlobalApplicationContext({
     baseDir,
@@ -206,38 +209,7 @@ export async function createFramework(baseDir: string = '', globalConfig: any = 
   });
 
   DecoratorManager['_bindModuleMap'] = bindModuleMap;
-  if (!DecoratorManager['_mocked']) {
-    DecoratorManager['_listModule'] = DecoratorManager.listModule;
-    DecoratorManager['_saveModule'] = DecoratorManager.saveModule;
-    DecoratorManager.saveModule = (key, target) => {
-      if (key === CONFIGURATION_KEY) {
-        // 防止重复，测试的时候 configuration 会被重复 save
-        const modules = DecoratorManager['_listModule'](key);
-        if (modules.some((module: any) => module.target === target.target)) {
-          return;
-        } else {
-          bindModuleMap.set(target.target, true);
-          DecoratorManager['_saveModule'](key, target);
-        }
-      } else {
-        DecoratorManager['_saveModule'](key, target);
-      }
-    }
-    DecoratorManager.listModule = key => {
-      const modules = DecoratorManager['_listModule'](key);
-      return modules.filter((module: any) => {
-        if (key === CONFIGURATION_KEY) {
-          if (Types.isClass(module.target)) {
-            return DecoratorManager['_bindModuleMap'].has(module.target);
-          }
-          return true;
-        }
-        return DecoratorManager['_bindModuleMap'].has(module);
-      });
-    };
-
-    DecoratorManager['_mocked'] = true;
-  }
+  hackDecoratorManager();
 
   container.registerObject('baseDir', baseDir);
 

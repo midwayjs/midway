@@ -364,7 +364,7 @@ describe('/test/baseFramework.test.ts', () => {
     await framework.stop();
   });
 
-  it.only('should create logger and match property between framework and app', async () => {
+  it('should create logger and match property between framework and app', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,
       './fixtures/base-app-logger/src'
@@ -391,7 +391,7 @@ describe('/test/baseFramework.test.ts', () => {
     await framework.stop();
   });
 
-  it.only('should support functional configuration and hook load', async () => {
+  it('should support functional configuration and hook load', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,
       './fixtures/app-with-functional-component/src'

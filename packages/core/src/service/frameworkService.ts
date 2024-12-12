@@ -215,8 +215,8 @@ export class MidwayFrameworkService {
        */
       const namespaceList = this.applicationContext.getNamespaceList();
       for (const namespace of namespaceList) {
-        const framework = this.applicationManager.getApplication(namespace);
-        if (framework) {
+        const frameworkApp = this.applicationManager.getApplication(namespace);
+        if (frameworkApp) {
           mainNs = namespace;
           break;
         }
@@ -235,6 +235,10 @@ export class MidwayFrameworkService {
 
   public getMainApp() {
     return this.mainFramework?.getApplication();
+  }
+
+  public setMainApp(namespace: string) {
+    this.mainFramework = this.applicationManager.getFramework(namespace);
   }
 
   public getMainFramework() {

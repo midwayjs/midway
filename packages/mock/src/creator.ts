@@ -62,32 +62,50 @@ function getFileNameWithSuffix(fileName: string) {
 function createMockWrapApplicationContext() {
   const container = new MidwayContainer();
   const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
-  // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
+
   container.onBeforeBind(target => {
     bindModuleMap.set(target, true);
   });
+  DecoratorManager['_bindModuleMap'] = bindModuleMap;
 
-  const originMethod = container.listModule;
-
-  container.listModule = key => {
-    const modules = originMethod.call(container, key);
-    if (key === CONFIGURATION_KEY) {
-      return modules;
-    }
-
-    return modules.filter((module: any) => {
-      if (bindModuleMap.has(module)) {
-        return true;
+  // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
+  if (!DecoratorManager['_mocked']) {
+    DecoratorManager['_listModule'] = DecoratorManager.listModule;
+    DecoratorManager['_saveModule'] = DecoratorManager.saveModule;
+    DecoratorManager.saveModule = (key, target) => {
+      if (key === CONFIGURATION_KEY) {
+        // 防止重复，测试的时候 configuration 会被重复 save
+        const modules = DecoratorManager['_listModule'](key);
+        if (modules.some((module: any) => module.target === target.target)) {
+          return;
+        } else {
+          DecoratorManager['_bindModuleMap'].set(target.target, true);
+          DecoratorManager['_saveModule'](key, target);
+        }
       } else {
-        debug(
-          '[mock] Filter "%o" module without binding when list module %s.',
-          module.name ?? module,
-          key
-        );
-        return false;
+        DecoratorManager['_saveModule'](key, target);
       }
-    });
-  };
+    }
+    DecoratorManager.listModule = key => {
+      const modules = DecoratorManager['_listModule'](key);
+      return modules.filter((module: any) => {
+        if (key === CONFIGURATION_KEY) {
+          return DecoratorManager['_bindModuleMap'].has(module.target);
+        }
+        if (DecoratorManager['_bindModuleMap'].has(module)) {
+          return true;
+        } else {
+          debug(
+            '[mock] Filter "%o" module without binding when list module %s.',
+            module.name ?? module,
+            key
+          );
+          return false;
+        }
+      });
+    };
+    DecoratorManager['_mocked'] = true;
+  }
   return container;
 }
 
@@ -653,7 +671,7 @@ export async function createLightApp(
     options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
   }
 
-  return createApp(baseDirOrOptions as string, {
+  const app = await createApp(baseDirOrOptions as string, {
     ...options,
     imports: [
       await transformFrameworkToConfiguration(
@@ -662,6 +680,18 @@ export async function createLightApp(
       ),
     ].concat(options?.imports),
   });
+
+  const applicationManager = app.getApplicationContext().get(MidwayApplicationManager);
+  const appNames = applicationManager.getApplications();
+  if (appNames.length === 1) {
+    return app;
+  } else {
+    // 如果有多个 app，则重置 main app
+    const frameworkService = app.getApplicationContext().get(MidwayFrameworkService);
+    // 第一个因为是默认的 light framework，如果用户自己增加了 framework，则要做调整
+    frameworkService.setMainApp(appNames[1]);
+    return frameworkService.getMainApp();
+  }
 }
 
 export async function createBootstrap(
