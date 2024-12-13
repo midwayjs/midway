@@ -61,6 +61,7 @@ function getFileNameWithSuffix(fileName: string) {
 
 function createMockWrapApplicationContext() {
   const container = new MidwayContainer();
+  debug(`[mock]: Create mock MidwayContainer, id=${container.id}.`);
   const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
 
   container.onBeforeBind(target => {
@@ -90,7 +91,7 @@ function createMockWrapApplicationContext() {
       const modules = DecoratorManager['_listModule'](key);
       return modules.filter((module: any) => {
         if (key === CONFIGURATION_KEY) {
-          return DecoratorManager['_bindModuleMap'].has(module.target);
+          return DecoratorManager['_bindModuleMap'].has(module.target) && !module.instance;
         }
         if (DecoratorManager['_bindModuleMap'].has(module)) {
           return true;

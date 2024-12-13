@@ -92,7 +92,23 @@ describe('/test/new.test.ts', () => {
   //   await close(app, { cleanLogsDir: true, cleanTempDir: true });
   // });
 
-  it.only('should test createLightApp', async () => {
+  it('should test with entry file', async () => {
+    const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'), {
+      bootstrapMode: 'app'
+    });
+    const app = bootstrap.getApp('koa');
+
+    const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
+    expect(result.status).toBe(200);
+    expect(result.text).toBe('hello world, harry');
+    console.log('start close');
+    await bootstrap.close({
+      sleep: 2000
+    });
+    console.log('close complete');
+  });
+
+  it('should test createLightApp', async () => {
     const app = await createLegacyLightApp(join(__dirname, 'fixtures/base-app-light'));
     expect(app).toBeDefined();
     await close(app);
@@ -129,23 +145,7 @@ describe('/test/new.test.ts', () => {
     expect(b['ccc']).toEqual('ab');
   });
 
-  it.only('should test with entry file', async () => {
-    const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'), {
-      bootstrapMode: 'app'
-    });
-    const app = bootstrap.getApp('koa');
-
-    const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
-    expect(result.status).toBe(200);
-    expect(result.text).toBe('hello world, harry');
-    console.log('start close');
-    await bootstrap.close({
-      sleep: 2000
-    });
-    console.log('close complete');
-  });
-
-  it.only('should test entry file with faas v3', async () => {
+  it('should test entry file with faas v3', async () => {
     const app = await createFunctionApp(join(__dirname, 'fixtures/base-faas-without-yaml'), {
       entryFile: 'index.js'
     });
