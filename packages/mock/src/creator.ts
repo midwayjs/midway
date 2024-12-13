@@ -91,7 +91,7 @@ function createMockWrapApplicationContext() {
       const modules = DecoratorManager['_listModule'](key);
       return modules.filter((module: any) => {
         if (key === CONFIGURATION_KEY) {
-          return DecoratorManager['_bindModuleMap'].has(module.target) && !module.instance;
+          return DecoratorManager['_bindModuleMap'].has(module.target);
         }
         if (DecoratorManager['_bindModuleMap'].has(module)) {
           return true;
