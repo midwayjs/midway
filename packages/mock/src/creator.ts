@@ -85,7 +85,7 @@ function createMockWrapApplicationContext() {
       } else {
         DecoratorManager['_saveModule'](key, target);
       }
-    }
+    };
     DecoratorManager.listModule = key => {
       const modules = DecoratorManager['_listModule'](key);
       return modules.filter((module: any) => {
@@ -96,7 +96,7 @@ function createMockWrapApplicationContext() {
           return true;
         } else {
           debug(
-            '[mock] Filter "%o" module without binding when list module %s.',
+            '[mock]: Filter "%o" module without binding when list module %s.',
             module.name ?? module,
             key
           );
@@ -373,7 +373,6 @@ export async function createFunctionApp<
 
     options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
 
-    options = options || ({} as any);
     if (options.baseDir) {
       await loadModule(
         join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
@@ -681,13 +680,17 @@ export async function createLightApp(
     ].concat(options?.imports),
   });
 
-  const applicationManager = app.getApplicationContext().get(MidwayApplicationManager);
+  const applicationManager = app
+    .getApplicationContext()
+    .get(MidwayApplicationManager);
   const apps = applicationManager.getApplications();
   if (apps.length === 1) {
     return app;
   } else {
     // 如果有多个 app，则重置 main app
-    const frameworkService = app.getApplicationContext().get(MidwayFrameworkService);
+    const frameworkService = app
+      .getApplicationContext()
+      .get(MidwayFrameworkService);
     // 这里调整是因为 createLightApp 会自动加一个 framework
     frameworkService.setMainApp(apps[0].getNamespace());
     return frameworkService.getMainApp();

@@ -43,6 +43,10 @@ export abstract class AbstractBootstrapStarter {
       this.startedExports = this.onStart();
     }
     if (this.startedExports) {
+      if (options) {
+        // 单测时这里要再覆盖一次，不然外面的 options 传不进来
+        this.options = Object.assign(this.options, options);
+      }
       this.startedExports['getStarter'] = () => {
         return this;
       };

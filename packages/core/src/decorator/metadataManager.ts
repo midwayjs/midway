@@ -655,6 +655,7 @@ export class MetadataManager {
   }
 
   public static ensureTargetType(target: any, type: ObjectType): void {
+    // eslint-disable-next-line no-prototype-builtins
     const ret: ObjectType = target.hasOwnProperty(this.isClassSymbol)
       ? target[this.isClassSymbol]
       : undefined;

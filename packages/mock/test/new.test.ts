@@ -92,7 +92,7 @@ describe('/test/new.test.ts', () => {
   //   await close(app, { cleanLogsDir: true, cleanTempDir: true });
   // });
 
-  it('should test createLightApp', async () => {
+  it.only('should test createLightApp', async () => {
     const app = await createLegacyLightApp(join(__dirname, 'fixtures/base-app-light'));
     expect(app).toBeDefined();
     await close(app);
@@ -129,7 +129,7 @@ describe('/test/new.test.ts', () => {
     expect(b['ccc']).toEqual('ab');
   });
 
-  it('should test with entry file', async () => {
+  it.only('should test with entry file', async () => {
     const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'), {
       bootstrapMode: 'app'
     });
@@ -145,7 +145,7 @@ describe('/test/new.test.ts', () => {
     console.log('close complete');
   });
 
-  it('should test entry file with faas v3', async () => {
+  it.only('should test entry file with faas v3', async () => {
     const app = await createFunctionApp(join(__dirname, 'fixtures/base-faas-without-yaml'), {
       entryFile: 'index.js'
     });

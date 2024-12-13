@@ -48,6 +48,11 @@ export class MidwayContainer implements IMidwayGlobalContainer {
   protected ctx = SINGLETON_CONTAINER_CTX;
   private attrMap: Map<string, any> = new Map();
   private namespaceSet: Set<string> = new Set<string>();
+  private _id = Utils.generateRandomId();
+
+  get id() {
+    return this._id;
+  }
 
   constructor() {
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错

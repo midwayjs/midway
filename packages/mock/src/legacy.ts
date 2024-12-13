@@ -12,6 +12,7 @@ export async function createLegacyApp<
   options.imports = [
     ...(options.imports ?? []),
     defineConfiguration({
+      namespace: 'legacy',
       detector: new CommonJSFileDetector({
         conflictCheck: true,
       }),
@@ -30,6 +31,7 @@ export async function createLegacyFunctionApp<
   options.imports = [
     ...(options.imports ?? []),
     defineConfiguration({
+      namespace: 'legacy',
       detector: new CommonJSFileDetector({
         conflictCheck: true,
       }),
@@ -44,6 +46,7 @@ export async function createLegacyLightApp(...args) {
   options.imports = [
     ...(options.imports ?? []),
     defineConfiguration({
+      namespace: 'legacy',
       detector: new CommonJSFileDetector({
         conflictCheck: true,
       }),
