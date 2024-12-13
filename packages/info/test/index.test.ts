@@ -50,7 +50,7 @@ describe('test/index.test.ts', () => {
             SecretKey: 'tewqtewqvc',
             SecurityToken: 'fjkdlsajfdsaf'
           }
-        }
+        },
       },
       imports: [
         info
