@@ -9,6 +9,8 @@ import { MidwayDuplicateClassNameError } from '../error';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { loadModule } from '../util';
 import { DecoratorManager } from '../decorator';
+import { debuglog } from 'util';
+const debug = debuglog('midway:debug');
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
@@ -72,6 +74,8 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
         }
       );
 
+      debug(`[core]: load file from ${dir}, files: ${fileResults}`);
+
       // 检查重复模块
       const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {
         if (this.options.conflictCheck && Types.isClass(module)) {
@@ -120,6 +124,8 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
           ignore: DEFAULT_IGNORE_PATTERN.concat(this.options.ignore || []),
         }
       );
+
+      debug(`[core]: load file from ${dir}, files: ${fileResults}`);
 
       // 检查重复模块
       const checkDuplicatedHandler = (module, options?: IObjectDefinition) => {

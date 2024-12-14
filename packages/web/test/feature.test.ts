@@ -1,4 +1,4 @@
-import { closeApp, creatApp, createHttpRequest, matchContentTimes, sleep } from './utils';
+import { closeApp, creatApp, originalCreateApp, createHttpRequest, matchContentTimes, sleep } from './utils';
 import { IMidwayWebApplication } from '../src';
 import { join } from 'path';
 import { remove, existsSync } from 'fs-extra';
@@ -63,7 +63,7 @@ describe('/test/feature.test.ts', () => {
   });
 
   it('should test global use midway middleware id in egg', async () => {
-    const app = await creatApp('feature/base-app-middleware');
+    const app = await originalCreateApp('feature/base-app-middleware');
     const result = await createHttpRequest(app).get('/');
     expect(result.text).toEqual('11112222333344445555egg_middleware');
     await closeApp(app);

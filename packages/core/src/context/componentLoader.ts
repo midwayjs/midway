@@ -20,7 +20,6 @@ const debug = util.debuglog('midway:debug');
 export class ComponentConfigurationLoader {
   private loadedMap = new WeakMap();
   private namespaceList = [];
-  private configurationOptionsList: Array<InjectionConfigurationOptions> = [];
   constructor(readonly container: IMidwayGlobalContainer) {}
 
   public async load(module) {
@@ -65,7 +64,6 @@ export class ComponentConfigurationLoader {
           namespace = configurationOptions.namespace;
           this.namespaceList.push(namespace);
         }
-        this.configurationOptionsList.push(configurationOptions);
         debug(`[core]: load configuration in namespace="${namespace}"`);
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);
@@ -132,7 +130,6 @@ export class ComponentConfigurationLoader {
           namespace = configurationOptions.namespace;
           this.namespaceList.push(namespace);
         }
-        this.configurationOptionsList.push(configurationOptions);
         debug(`[core]: load configuration in namespace="${namespace}"`);
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);
@@ -240,9 +237,5 @@ export class ComponentConfigurationLoader {
 
   public getNamespaceList() {
     return this.namespaceList;
-  }
-
-  public getConfigurationOptionsList() {
-    return this.configurationOptionsList;
   }
 }

@@ -27,3 +27,4 @@ site/changelog
 .audit
 packages/**/test/tmp
 .swc
+.result
