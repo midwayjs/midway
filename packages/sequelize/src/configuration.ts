@@ -21,17 +21,6 @@ import { Model } from 'sequelize-typescript';
       },
     },
   ],
-  importConfigFilter: config => {
-    if (config['sequelize'] && config['sequelize']['options']) {
-      config['sequelize'].options.sync = config['sequelize'].sync || false;
-      const legacyDataSourceConfig = config['sequelize'].options;
-      delete config['sequelize']['options'];
-      config['sequelize'].dataSource = {
-        default: legacyDataSourceConfig,
-      };
-    }
-    return config;
-  },
 })
 export class SequelizeConfiguration {
   @Config('sequelize')

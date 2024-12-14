@@ -10,7 +10,6 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "sequelize": "6.37.3",
     "sequelize-typescript": "2.1.6",
@@ -22,8 +21,8 @@
     "sequelize"
   ],
   "author": {
-    "name": "stone-jin",
-    "email": "1520006273@qq.com"
+    "name": "czy88840616",
+    "email": "czy88840616@gmail.com"
   },
   "license": "MIT",
   "scripts": {
