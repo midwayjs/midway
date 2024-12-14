@@ -1,13 +1,13 @@
 import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
-import { close, createLightApp } from '@midwayjs/mock';
+import { close, createLegacyLightApp } from '@midwayjs/mock';
 import { IMidwayApplication } from '@midwayjs/core';
 
 describe('/test/index.test.ts', () => {
   it('should test base entity', async () => {
     cleanFile(join(__dirname, 'fixtures/base-fn-origin', 'default.sqlite'));
 
-    const app: IMidwayApplication = await createLightApp(join(__dirname, 'fixtures/base-fn-origin'), {});
+    const app: IMidwayApplication = await createLegacyLightApp(join(__dirname, 'fixtures/base-fn-origin'), {});
     const result = app.getAttr<string>('result');
 
     expect(result.includes('hello world')).toBeTruthy();
