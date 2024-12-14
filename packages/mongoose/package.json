@@ -24,6 +24,6 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "mongoose": "8.8.2"
+    "mongoose": "8.8.3"
   }
 }
