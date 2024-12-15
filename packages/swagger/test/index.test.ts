@@ -18,8 +18,8 @@ describe('/test/index.test.ts', () => {
                 },
               },
             },
+            imports: [koa],
           },
-          koa
         );
       } catch (e) {
         console.log(e);
