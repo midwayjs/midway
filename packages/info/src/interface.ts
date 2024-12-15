@@ -13,4 +13,5 @@ export interface InfoConfigOptions {
   title: string;
   infoPath: string;
   hiddenKey: Array<string>;
+  ignoreKey: Array<string>
 }

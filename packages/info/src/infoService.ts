@@ -44,6 +44,9 @@ export class InfoService {
   @Config('info.hiddenKey')
   defaultHiddenKey: string[];
 
+  @Config('info.ignoreKey')
+  ignoreKey: string[];
+
   secretMatchList: Array<any>;
 
   @ApplicationContext()
@@ -59,22 +62,33 @@ export class InfoService {
   }
 
   info(infoValueType?: InfoValueType) {
-    const info: TypeInfo[] = [];
-    info.push(this.projectInfo());
-    info.push(this.systemInfo());
-    info.push(this.resourceOccupationInfo());
-    info.push(this.softwareInfo());
-    info.push(this.midwayConfig());
-    info.push(this.midwayService());
-    info.push(this.timeInfo());
-    info.push(this.envInfo());
-    info.push(this.dependenciesInfo());
-    info.push(this.networkInfo());
+    const allInfo: TypeInfo[] = [];
+    allInfo.push(this.projectInfo());
+    allInfo.push(this.systemInfo());
+    allInfo.push(this.resourceOccupationInfo());
+    allInfo.push(this.softwareInfo());
+    allInfo.push(this.midwayConfig());
+    allInfo.push(this.midwayService());
+    allInfo.push(this.timeInfo());
+    allInfo.push(this.envInfo());
+    allInfo.push(this.dependenciesInfo());
+    allInfo.push(this.networkInfo());
+
+    // 过滤自定义隐藏的key
+    const newInfo = allInfo.map(({ type, info }) => {
+      const infoKeys = Object.keys(info);
+      const keys = infoKeys.filter(k => !this.ignoreKey.includes(k));
+      const infoByIgnore = {};
+      for (const key of keys) {
+        infoByIgnore[key] = info[key];
+      }
+      return { type, info: infoByIgnore };
+    });
 
     if (infoValueType === 'html') {
-      return renderToHtml(info, this.titleConfig);
+      return renderToHtml(newInfo, this.titleConfig);
     }
-    return info;
+    return newInfo;
   }
 
   projectInfo(): TypeInfo {
