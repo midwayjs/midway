@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "3.19.0",
+  "version": "3.19.2",
   "description": "Midway Web Framework for Egg.js",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -29,7 +29,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/logger": "^3.0.0",
-    "@midwayjs/mock": "^3.19.0",
+    "@midwayjs/mock": "^3.19.2",
     "dayjs": "1.11.13",
     "egg-logger": "3.6.0",
     "egg-mock": "4.2.1",
