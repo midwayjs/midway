@@ -420,9 +420,6 @@ importers:
       '@midwayjs/glob':
         specifier: ^1.0.2
         version: 1.1.1
-      class-transformer:
-        specifier: 0.5.1
-        version: 0.5.1
       picomatch:
         specifier: 2.3.1
         version: 2.3.1
@@ -3804,9 +3801,6 @@ packages:
 
   cjs-module-lexer@1.4.1:
     resolution: {integrity: sha512-cuSVIHi9/9E/+821Qjdvngor+xpnlwnuwIyZOaLmHBVdXL+gP+I6QQB9VkO7RI77YIcTV+S1W9AreJ5eN63JBA==}
-
-  class-transformer@0.5.1:
-    resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
 
   class-utils@0.3.6:
     resolution: {integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==}
@@ -12795,8 +12789,6 @@ snapshots:
   circular-json-for-egg@1.0.0: {}
 
   cjs-module-lexer@1.4.1: {}
-
-  class-transformer@0.5.1: {}
 
   class-utils@0.3.6:
     dependencies:
