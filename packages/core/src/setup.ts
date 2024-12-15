@@ -77,12 +77,12 @@ export async function initializeGlobalApplicationContext(
     applicationContext,
   ]);
 
-  printStepDebugInfo('Init preload modules');
+  printStepDebugInfo('Init pre-start modules');
 
-  // some preload module init
-  const modules = DecoratorManager.listPreloadModule();
+  // some pre-start module init
+  const modules = DecoratorManager.listPreStartModule();
   for (const module of modules) {
-    // preload init context
+    // pre-start init context
     await applicationContext.getAsync(module);
   }
 
@@ -167,15 +167,6 @@ export async function prepareGlobalApplicationContextAsync(
   applicationContext.bindClass(MidwayHealthService);
   applicationContext.bindClass(MidwayPriorityManager);
 
-  printStepDebugInfo('Binding preload module');
-
-  // bind preload module
-  if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
-    for (const preloadModule of globalOptions.preloadModules) {
-      applicationContext.bindClass(preloadModule);
-    }
-  }
-
   printStepDebugInfo(
     'Init MidwayConfigService, MidwayAspectService and MidwayDecoratorService'
   );
@@ -197,6 +188,15 @@ export async function prepareGlobalApplicationContextAsync(
 
   // init decorator service
   applicationContext.get(MidwayDecoratorService, [applicationContext]);
+
+  printStepDebugInfo('Binding preload module');
+
+  // bind preload module
+  if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
+    for (const preloadModule of globalOptions.preloadModules) {
+      applicationContext.bindClass(preloadModule);
+    }
+  }
 
   printStepDebugInfo(
     'Load imports(component) and user code configuration module'
@@ -293,15 +293,6 @@ export function prepareGlobalApplicationContext(
   applicationContext.bindClass(MidwayHealthService);
   applicationContext.bindClass(MidwayPriorityManager);
 
-  printStepDebugInfo('Binding preload module');
-
-  // bind preload module
-  if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
-    for (const preloadModule of globalOptions.preloadModules) {
-      applicationContext.bindClass(preloadModule);
-    }
-  }
-
   printStepDebugInfo(
     'Init MidwayConfigService, MidwayAspectService and MidwayDecoratorService'
   );
@@ -323,6 +314,15 @@ export function prepareGlobalApplicationContext(
 
   // init decorator service
   applicationContext.get(MidwayDecoratorService, [applicationContext]);
+
+  printStepDebugInfo('Binding preload module');
+
+  // bind preload module
+  if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
+    for (const preloadModule of globalOptions.preloadModules) {
+      applicationContext.bindClass(preloadModule);
+    }
+  }
 
   printStepDebugInfo(
     'Load imports(component) and user code configuration module'

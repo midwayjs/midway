@@ -3,7 +3,7 @@ import { Provide } from './provide';
 
 export function Autoload() {
   return function (target) {
-    DecoratorManager.savePreloadModule(target);
+    DecoratorManager.savePreStartModule(target);
     Provide()(target);
   };
 }

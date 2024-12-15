@@ -102,10 +102,10 @@ export class MidwayWebLifeCycleService {
       this.configService.clearConfigMergeOrder();
     }
 
-    // some preload module init
-    const modules = DecoratorManager.listPreloadModule();
+    // some pre-start module init
+    const modules = DecoratorManager.listPreStartModule();
     for (const module of modules) {
-      // preload init context
+      // pre-start init context
       await this.applicationContext.getAsync(module);
     }
   }

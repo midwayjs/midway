@@ -32,7 +32,7 @@ import {
   getObjectDefinition,
   Get,
   DecoratorManager,
-  PRELOAD_MODULE_KEY,
+  PRE_START_MODULE_KEY,
   Init, Inject
 } from '../../src';
 
@@ -403,7 +403,7 @@ describe('legacy/decorator.test.ts', () => {
       let modules = listPreloadModule();
       expect(modules.length).toBe(1);
 
-      resetModule(PRELOAD_MODULE_KEY);
+      resetModule(PRE_START_MODULE_KEY);
       modules = listPreloadModule();
       expect(modules.length).toBe(0);
     });

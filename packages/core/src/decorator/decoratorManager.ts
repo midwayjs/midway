@@ -10,7 +10,7 @@ import {
   CUSTOM_METHOD_INJECT_KEY,
   CUSTOM_PARAM_INJECT_KEY,
   CUSTOM_PROPERTY_INJECT_KEY,
-  PRELOAD_MODULE_KEY,
+  PRE_START_MODULE_KEY,
   PROVIDE_KEY,
 } from './constant';
 import { camelCase } from '../util/camelCase';
@@ -52,12 +52,12 @@ export class DecoratorManager {
     }
   }
 
-  public static savePreloadModule(module) {
-    this.saveModule(PRELOAD_MODULE_KEY, module);
+  public static savePreStartModule(module) {
+    this.saveModule(PRE_START_MODULE_KEY, module);
   }
 
-  public static listPreloadModule(): any[] {
-    return this.listModule(PRELOAD_MODULE_KEY);
+  public static listPreStartModule(): any[] {
+    return this.listModule(PRE_START_MODULE_KEY);
   }
 
   public static resetModule(key) {

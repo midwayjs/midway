@@ -11,7 +11,7 @@ export const MATCH_KEY = 'common:match';
 export const GUARD_KEY = 'common:guard';
 export const MOCK_KEY = 'common:mock';
 export const FACTORY_SERVICE_CLIENT_KEY = 'common:service_factory:client';
-export const PRELOAD_MODULE_KEY = 'common:preload_module';
+export const PRE_START_MODULE_KEY = 'common:pre_start_module';
 export const OBJECT_DEFINITION_KEY = 'common:object_definition';
 // for @Provide
 export const PROVIDE_KEY = 'common:provide';

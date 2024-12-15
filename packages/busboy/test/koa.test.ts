@@ -276,8 +276,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {}
@@ -338,8 +338,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {}
@@ -404,8 +404,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {}
@@ -461,8 +461,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {}
@@ -547,8 +547,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: "123",
           busboy: {}
@@ -604,8 +604,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {
