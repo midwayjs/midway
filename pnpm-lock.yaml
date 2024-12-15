@@ -1064,9 +1064,6 @@ importers:
       '@midwayjs/core':
         specifier: workspace:^
         version: link:../core
-      '@midwayjs/koa':
-        specifier: workspace:^
-        version: link:../web-koa
       '@midwayjs/mock':
         specifier: workspace:^
         version: link:../mock
