@@ -31,8 +31,9 @@
   "scripts": {
     "build": "tsc",
     "test:prepare": "zx ./test/prepare.mjs",
-    "test": "npm run test:prepare && node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --runInBand",
-    "cov": "npm run test:prepare && node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "test": "npm run test:prepare && node ../../node_modules/jest/bin/jest.js --runInBand --runInBand",
+    "cov:server": "npm run test:prepare && node ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "no-cache-test": "node -r hack.js ../../node_modules/jest/bin/jest.js --runInBand --no-cache",
     "ci": "npm run test",
     "lint": "mwts check"
   },

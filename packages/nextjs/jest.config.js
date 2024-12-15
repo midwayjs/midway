@@ -3,6 +3,6 @@ module.exports = {
   testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>/test/fixtures'],
   coveragePathIgnorePatterns: ['<rootDir>/test/', '<rootDir>/dist/'],
-  setupFilesAfterEnv: ['./jest.setup.js'],
+  setupFilesAfterEnv: ['./hack.js', './jest.setup.js'],
   coverageProvider: 'v8',
 };

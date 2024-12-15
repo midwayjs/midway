@@ -8,7 +8,6 @@ import {
   Provide,
   Scope,
 } from '../decorator';
-import { FunctionalConfiguration } from '../functional';
 import { MidwayFrameworkService } from './frameworkService';
 import { MidwayConfigService } from './configService';
 import { debuglog } from 'util';
@@ -125,20 +124,10 @@ export class MidwayLifeCycleService {
   public async stop() {
     await this.mockService.runSimulatorTearDown();
     // stop lifecycle
-    const cycles = DecoratorManager.listModule(CONFIGURATION_KEY) || [];
-
-    for (const cycle of cycles.reverse()) {
-      let inst;
-      if (cycle.target instanceof FunctionalConfiguration) {
-        // 函数式写法
-        inst = cycle.target;
-      } else {
-        inst = await this.applicationContext.getAsync<ILifeCycle>(cycle.target);
-      }
-
-      await this.runContainerLifeCycle(inst, 'onStop');
-    }
-
+    await this.runContainerLifeCycle(
+      this.lifecycleInstanceList.reverse(),
+      'onStop'
+    );
     // stop framework
     await this.frameworkService.stopFramework();
   }

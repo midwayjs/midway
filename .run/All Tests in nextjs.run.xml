@@ -2,10 +2,12 @@
   <configuration default="false" name="All Tests in nextjs" type="JavaScriptTestRunnerJest" folderName="midway all test">
     <config-file value="$PROJECT_DIR$/packages/nextjs/jest.config.js" />
     <node-interpreter value="project" />
-    <node-options value="-r ts-node/register" />
     <jest-package value="$PROJECT_DIR$/node_modules/jest" />
     <working-dir value="$PROJECT_DIR$" />
-    <envs />
+    <jest-options value="--no-cache" />
+    <envs>
+      <env name="NODE_DEBUG" value="midway:debug" />
+    </envs>
     <scope-kind value="ALL" />
     <method v="2" />
   </configuration>
