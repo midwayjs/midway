@@ -13,7 +13,7 @@ import {
   MidwayConfigService,
   MidwayEnvironmentService,
 } from '@midwayjs/core';
-import { InfoValueType, TypeInfo } from './interface';
+import { InfoType, InfoValueType, TypeInfo } from './interface';
 import { bitToMB, renderToHtml, safeContent, safeRequire } from './utils';
 import {
   hostname,
@@ -39,7 +39,7 @@ export class InfoService {
   environment: MidwayEnvironmentService;
 
   @Config('info.title')
-  titleConfig;
+  titleConfig: string;
 
   @Config('info.hiddenKey')
   defaultHiddenKey: string[];
@@ -93,7 +93,7 @@ export class InfoService {
 
   projectInfo(): TypeInfo {
     return {
-      type: 'Project',
+      type: InfoType.PROJECT,
       info: {
         Project: this.midwayInformationService.getProjectName(),
         AppDir: this.midwayInformationService.getAppDir(),
@@ -107,7 +107,7 @@ export class InfoService {
   systemInfo(): TypeInfo {
     const _platform = process.platform;
     return {
-      type: 'System',
+      type: InfoType.SYSTEM,
       info: {
         Platform: _platform === 'win32' ? 'Windows' : _platform,
         Node: process.versions.node,
@@ -126,7 +126,7 @@ export class InfoService {
     const memory = process.memoryUsage();
     const cpu = cpus();
     return {
-      type: 'Memory & CPU',
+      type: InfoType.MEMORY_CPU,
       info: {
         'Memory Total Occupy': bitToMB(memory.rss),
         'Heap Total Occupy': bitToMB(memory.heapTotal),
@@ -171,7 +171,7 @@ export class InfoService {
       }
     }
     return {
-      type: 'Software',
+      type: InfoType.SOFTWARE,
       info,
     };
   }
@@ -182,7 +182,7 @@ export class InfoService {
       env[envName] = this.filterSecretContent(envName, process.env[envName]);
     });
     return {
-      type: 'Environment Variable',
+      type: InfoType.ENVIRONMENT_VARIABLE,
       info: env,
     };
   }
@@ -190,7 +190,7 @@ export class InfoService {
   timeInfo(): TypeInfo {
     const t = new Date().toString().split(' ');
     return {
-      type: 'Time',
+      type: InfoType.TIME,
       info: {
         Current: Date.now(),
         Uptime: uptime(),
@@ -229,7 +229,7 @@ export class InfoService {
         .join(' / ');
     });
     return {
-      type: 'Network',
+      type: InfoType.NETWORK,
       info,
     };
   }
@@ -245,7 +245,7 @@ export class InfoService {
       })`;
     });
     return {
-      type: 'Dependencies',
+      type: InfoType.DEPENDENCIES,
       info,
     };
   }
@@ -263,7 +263,7 @@ export class InfoService {
     }
 
     return {
-      type: 'Midway Service',
+      type: InfoType.MIDWAY_SERVICE,
       info,
     };
   }
@@ -275,12 +275,12 @@ export class InfoService {
       info[key] = this.safeJson(this.filterSecretContent(key, config[key]));
     });
     return {
-      type: 'Midway Config',
+      type: InfoType.MIDWAY_CONFIG,
       info,
     };
   }
 
-  protected filterSecretContent(key, value) {
+  protected filterSecretContent(key: string, value: any) {
     if (typeof value === 'string') {
       const find = this.secretMatchList.some(isMatch => {
         return isMatch(key.toLowerCase());
