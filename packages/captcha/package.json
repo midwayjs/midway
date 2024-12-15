@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/captcha",
-  "version": "3.18.1",
+  "version": "4.0.0-alpha.1",
   "description": "Midway Component for Captcha(Verification Code)",
   "main": "dist/index.js",
   "typings": "index.d.ts",

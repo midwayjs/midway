@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/passport",
   "description": "midway passport component",
-  "version": "3.18.0",
+  "version": "4.0.0-alpha.1",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -29,11 +29,11 @@
     "@midwayjs/mock": "workspace:^",
     "@midwayjs/web": "workspace:^",
     "@types/passport-local": "1.0.38",
+    "after": "0.8.2",
     "express-session": "1.18.1",
     "passport-http-bearer": "1.0.1",
     "passport-jwt": "4.0.1",
     "passport-local": "1.0.0",
-    "passport-openidconnect": "0.1.2",
-    "after": "0.8.2"
+    "passport-openidconnect": "0.1.2"
   }
 }

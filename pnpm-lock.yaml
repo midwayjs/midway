@@ -194,8 +194,8 @@ importers:
         specifier: 5.23.0
         version: 5.23.0
       '@midwayjs/bull':
-        specifier: ^3.18.0
-        version: 3.19.1
+        specifier: ^4.0.0-alpha.1
+        version: link:../bull
       ejs:
         specifier: 3.1.10
         version: 3.1.10
@@ -541,7 +541,7 @@ importers:
         specifier: workspace:^
         version: link:../core
       '@midwayjs/serverless-http-parser':
-        specifier: ^3.14.0
+        specifier: ^4.0.0-alpha.1
         version: link:../../packages-serverless/serverless-http-parser
       '@midwayjs/simple-lock':
         specifier: ^1.1.4
@@ -2015,10 +2015,6 @@ packages:
   '@lerna/create@8.1.2':
     resolution: {integrity: sha512-GzScCIkAW3tg3+Yn/MKCH9963bzG+zpjGz2NdfYDlYWI7p0f/SH46v1dqpPpYmZ2E/m3JK8HjTNNNL8eIm8/YQ==}
     engines: {node: '>=18.0.0'}
-
-  '@midwayjs/bull@3.19.1':
-    resolution: {integrity: sha512-Dr+IO1VbiLBa6gfrsdQ/gN+1Py8j1jdwk4p2mqTcJYNUMVfNhfXEZA0O77bGxtv/XW3TZNCk5/ZGUZLy9n8I9Q==}
-    engines: {node: '>=12'}
 
   '@midwayjs/cookies@1.2.0':
     resolution: {integrity: sha512-gdfAXk3+uL+9qcNo9lNnUFJCUGXXxCitBjyz9QJR08dcZ11mqTbxVNXhea525e3ZwKREy6f4PHAWofFwlPOZzQ==}
@@ -10716,12 +10712,6 @@ snapshots:
       - supports-color
       - typescript
 
-  '@midwayjs/bull@3.19.1':
-    dependencies:
-      bull: 4.16.4
-    transitivePeerDependencies:
-      - supports-color
-
   '@midwayjs/cookies@1.2.0':
     dependencies:
       scmp: 2.1.0
@@ -16004,7 +15994,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.10.1
       merge-stream: 2.0.0
       supports-color: 8.1.1
 

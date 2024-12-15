@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/faas",
-  "version": "3.18.0",
+  "version": "4.0.0-alpha.1",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/serverless-http-parser": "^3.14.0",
+    "@midwayjs/serverless-http-parser": "^4.0.0-alpha.1",
     "@midwayjs/simple-lock": "^1.1.4"
   },
   "devDependencies": {

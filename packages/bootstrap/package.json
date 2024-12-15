@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bootstrap",
-  "version": "3.18.0",
+  "version": "4.0.0-alpha.1",
   "description": "midwayjs bootstrap",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

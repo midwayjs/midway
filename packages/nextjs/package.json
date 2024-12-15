@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/nextjs",
   "description": "midway nextjs component",
-  "version": "3.18.0",
+  "version": "4.0.0-alpha.1",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -12,8 +12,8 @@
   ],
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/mock": "workspace:^",
     "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
     "@types/react": "^18.3.12",
     "babel-loader": "^9.2.1",
     "next": "~15.0.3",

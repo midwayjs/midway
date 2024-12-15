@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/busboy",
-  "version": "3.18.0",
+  "version": "4.0.0-alpha.1",
   "description": "Midway Component for upload",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -30,10 +30,10 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/express": "workspace:^",
     "@midwayjs/faas": "workspace:^",
+    "@midwayjs/fc-starter": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@midwayjs/web": "workspace:^",
-    "@midwayjs/fc-starter": "workspace:^",
     "fs-extra": "11.2.0"
   }
 }
