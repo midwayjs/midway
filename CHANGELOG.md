@@ -1,6 +1,84 @@
 # Change Log
 
 
+## v3.19.1 (2024-11-18)
+
+#### :bug: Bug Fix
+* `leoric`
+  * [#4192](https://github.com/midwayjs/midway/pull/4192) fix(leoric): keep multiple datasources from conflicting base model ([@cyjake](https://github.com/cyjake))
+
+#### :package: Dependencies
+* `otel`
+  * [#4193](https://github.com/midwayjs/midway/pull/4193) chore(deps): update dependency @opentelemetry/sdk-node to v0.55.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4191](https://github.com/midwayjs/midway/pull/4191) chore(deps): update dependency @vercel/ncc to v0.38.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4190](https://github.com/midwayjs/midway/pull/4190) fix(deps): update dependency mqtt to v5.10.2 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#4189](https://github.com/midwayjs/midway/pull/4189) fix(deps): update dependency bull to v4.16.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#4185](https://github.com/midwayjs/midway/pull/4185) chore(deps): update dependency mongoose to v8.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#4188](https://github.com/midwayjs/midway/pull/4188) chore(deps): update mikro-orm monorepo to v6.4.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `consul`
+  * [#4187](https://github.com/midwayjs/midway/pull/4187) chore(deps): update dependency nock to v13.5.6 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Chen Yangjian ([@cyjake](https://github.com/cyjake))
+
+
+
+## v3.19.0 (2024-11-08)
+
+#### :rocket: New Feature
+* `core`, `mock`
+  * [#4151](https://github.com/midwayjs/midway/pull/4151) feat: add grouping for mock data ([@czy88840616](https://github.com/czy88840616))
+* `grpc`
+  * [#4159](https://github.com/midwayjs/midway/pull/4159) feat(grpc): GRPCClients.createClient() supports multi services in one .proto file  and returns void insted of T ([@waitingsong](https://github.com/waitingsong))
+
+#### :bug: Bug Fix
+* `core`, `static-file`
+  * [#4180](https://github.com/midwayjs/midway/pull/4180) fix: static file path handling in pkg environment ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#4176](https://github.com/midwayjs/midway/pull/4176) fix: wrong object format for sse response ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `core`, `kafka`
+  * [#4154](https://github.com/midwayjs/midway/pull/4154) feat(kafka): refactor framework and add factory service for producer and admin ([@czy88840616](https://github.com/czy88840616))
+* `core`, `mock`
+  * [#4150](https://github.com/midwayjs/midway/pull/4150) feat: add performance manager ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#4155](https://github.com/midwayjs/midway/pull/4155) docs(awesome_midway.md): update @mwcp/otel ([@waitingsong](https://github.com/waitingsong))
+* [#4131](https://github.com/midwayjs/midway/pull/4131) docs(awesome_midway.md): add @mwcp/paradedb ([@waitingsong](https://github.com/waitingsong))
+* [#4127](https://github.com/midwayjs/midway/pull/4127) docs: update awesome_midway.md ([@bossbaba](https://github.com/bossbaba))
+* [#4124](https://github.com/midwayjs/midway/pull/4124) docs: update awesome_midway.md ([@bossbaba](https://github.com/bossbaba))
+
+#### :package: Dependencies
+* `web-koa`
+  * [#4181](https://github.com/midwayjs/midway/pull/4181) fix(deps): update dependency @types/qs to v6.9.17 ([@renovate[bot]](https://github.com/apps/renovate))
+* `ws`
+  * [#4182](https://github.com/midwayjs/midway/pull/4182) fix(deps): update dependency @types/ws to v8.5.13 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#4179](https://github.com/midwayjs/midway/pull/4179) chore(deps): update dependency swagger-ui-dist to v5.18.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#4178](https://github.com/midwayjs/midway/pull/4178) chore(deps): update dependency @opentelemetry/sdk-node to v0.54.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#4164](https://github.com/midwayjs/midway/pull/4164) chore(deps): update mongoose monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `bootstrap`, `mock`, `socketio`
+  * [#4162](https://github.com/midwayjs/midway/pull/4162) fix(deps): update socket.io packages to v4.8.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4163](https://github.com/midwayjs/midway/pull/4163) chore(deps): update dependency @types/node to v22 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#4145](https://github.com/midwayjs/midway/pull/4145) fix(deps): update dependency casbin to v5.32.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- waiting ([@waitingsong](https://github.com/waitingsong))
+- yanzhifei ([@bossbaba](https://github.com/bossbaba))
+
+
+
 ## v3.18.2 (2024-10-13)
 
 #### :memo: Documentation

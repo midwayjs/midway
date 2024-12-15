@@ -11,12 +11,17 @@
 | [midway-apollo][midway-apollo]                       | helloHT     | midway 携程异步动态配置 apollo 组件                                                                                                                                                                                                                          |
 | [@mwcp/cache][@mwcp/cache]                           | waitingsong | midway Cache 增强组件 支持 [`Cacheable`][Cacheable], [`CacheEvict`][CacheEvict], [`CachePut`][CachePut] 装饰器 并支持[传入泛型参数获得方法入参类型][cache-generics-cn]                                                                                       |
 | [@mwcp/kmore][@mwcp/kmore]                           | waitingsong | midway 数据库组件 基于 [Knex]，通过 `Transactional` 装饰器支持声明式事务，支持自动分页、智能连表，集成 [OpenTelemetry] 链路追踪                                                                                                                              |
-| [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 增强组件 支持 [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] 装饰器  并支持[传入泛型参数获得方法入参类型][otel-generics-cn]                                                                                       |
+| [@mwcp/otel][@mwcp/otel]                             | waitingsong | midway [OpenTelemetry] 增强组件，协议支持 HTTP 和 [gRPC (Unary)] 支持 [`Trace`][Trace], [`TraceLog`][TraceLog], [`TraceInit`][TraceInit] 装饰器  并支持[传入泛型参数获得方法入参类型][otel-generics-cn]                                                      |
 | [@mwcp/jwt][@mwcp/jwt]                               | waitingsong | midway JWT 增强组件 支持 [`Public`][jwt-public] 装饰器                                                                                                                                                                                                       |
+| [@mwcp/paradedb][@mwcp/paradedb]                     | waitingsong | midway [ParadeDb] 组件。首个基于 Postgres 的 Elasticsearch 开源替代，采用 Rust 编写, 旨在提供快速的全文检索、语义检索和混合检索能力，适用于搜索场景                                                                                                          |
 | [@mwcp/pgmq][@mwcp/pgmq]                             | waitingsong | midway [pqmg-js] 组件 支持 [`Consumer`][Consumer], [`PgmqListener`][PgmqListener] 装饰器， 支持事务以及事务保护的类似 MQ `Exchange` 概念的路由。  [PGMQ] 是一个基于 [PG] 数据库扩展的轻量级消息队列，原生支持消息持久化和延迟消息，类似 `AWS SQS` 或  `RSMQ` |
 | [midway-throttler][midway-throttler]                 | larryzhuo   | midway throttler 限流组件                                                                                                                                                                                                                                    |
-| [邮件组件][mailer-zh]                                | MrDotYan    | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[食用文档（国内）][mailer-zh-doc]    [食用文档（国外）][mailer-en-doc]                                                                                                                  |
 
+## 插件
+
+| 名称                  | 作者     | 描述                                                                                                                                |
+| --------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [邮件组件][mailer-zh] | MrDotYan | midway 邮箱组件，基于nodemailer和midwayjs，以服务的形式注入控制器使用[文档（国内）][mailer-zh-doc]    [文档（国外）][mailer-en-doc] |
 ## swagger
 
 | 名称                                   | 作者  | 描述                  |
@@ -38,6 +43,7 @@
 | [midway-boot][midway-boot]         | 码道功臣      | 一个比较完整的后端功能最佳实践，包含：增删改查及基类封装、数据库操作、缓存操作、用户安全认证及访问安全控制、JWT 访问凭证、分布式访问状态管理、密码加解密、统一返回结果封装、统一异常管理、Snowflake 主键生成、Swagger 集成及支持访问认证、环境变量的使用、Docker 镜像构建、Serverless 发布等 |
 | [midway-vue3-ssr][midway-vue3-ssr] | LiQingSong    | 基于 Midway、Vue 3 组装的 SSR 框架，简单、易学易用、方便扩展、集成 Midway 框架，您一直想要的 Vue SSR 框架。                                                                                                                                                                                  |
 | [midway-learn][midway-learn]       | hbsjmsjwj     | 一个学习midway的demo，包含 midway3 + egg + 官方的组件&扩展（consul, jwt, typeorm, prometheus, swagger, mysql2,grpc,rabbitmq）                                                                                                                                                                |
+| [midway-admin][midwayjs-admin]     | MrDotYan      | 一套GeekerAdmin+Midwayjs构建的后台管理框架                                                                                                                                                                                                                                                   |
 
 ## 学习资料
 
@@ -73,6 +79,9 @@
 [@mwcp/jwt]: https://github.com/waitingsong/midway-components/tree/main/packages/jwt
 [jwt-public]: https://github.com/waitingsong/midway-components/blob/main/packages/jwt/README.md#public-decorator
 
+[@mwcp/paradedb]: https://github.com/waitingsong/paradedb/tree/main/packages/mwcp-paradedb
+[ParadeDB]: https://pigsty.cc/zh/blog/pg/paradedb/
+
 [@mwcp/pgmq]: https://github.com/waitingsong/pgmq-js/tree/main/packages/mwcp-pgmq-js
 [PGMQ]: https://tembo-io.github.io/pgmq/
 [PG]: https://pigsty.cc/zh/blog/pg/pg-eat-db-world/
@@ -96,3 +105,6 @@
 [mailer-zh-doc]:https://gitee.com/onlymry_admin/midwayjs_mailer/blob/main/readme.md
 [mailer-en]:https://github.com/MrDotYan/midwayjs_mailer
 [mailer-en-doc]:https://github.com/MrDotYan/midwayjs_mailer/blob/main/readme.md
+[midwayjs-admin]:https://gitee.com/yncykj/midway-admin.git
+
+[gRPC (Unary)]: https://github.com/midwayjs/midway/tree/main/packages/grpc

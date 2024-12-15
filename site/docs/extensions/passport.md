@@ -127,7 +127,7 @@ Midway 对此进行了改造，通过 `@CustomStrategy` 和 `PassportStrategy` �
 // src/strategy/local.strategy.ts
 
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
-import { Strategy } from 'passport-local';
+import { Strategy, IStrategyOptions } from 'passport-local';
 import { Repository } from 'typeorm';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { UserEntity } from './user';
@@ -141,19 +141,24 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   // 策略的验证
   async validate(username, password) {
     const user = await this.userModel.findOneBy({ username });
-    if (await bcrypt.compare(password, user.password)) {
-      throw new Error('error password ' + username);
+    if (!user) {
+      throw new Error('用户不存在 ' + username);
+    }
+    if (!await bcrypt.compare(password, user.password)) {
+      throw new Error('密码错误 ' + username);
     }
 
-    return {
-      username,
-      password,
-    };
+    return user;
   }
 
   // 当前策略的构造器参数
-  getStrategyOptions(): any {
-    return {};
+  getStrategyOptions(): IStrategyOptions {
+    return {
+      usernameField: 'username',
+      passwordField: 'password',
+      passReqToCallback: true,
+      session: false
+    };
   }
 }
 ```

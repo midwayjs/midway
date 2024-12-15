@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mikro",
-  "version": "3.18.2",
+  "version": "3.19.1",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -9,12 +9,12 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.2",
-    "@midwayjs/mock": "^3.18.2",
-    "@mikro-orm/core": "6.3.13",
-    "@mikro-orm/entity-generator": "6.3.13",
-    "@mikro-orm/sqlite": "6.3.13"
+    "@midwayjs/core": "^3.19.0",
+    "@midwayjs/koa": "^3.19.0",
+    "@midwayjs/mock": "^3.19.0",
+    "@mikro-orm/core": "6.4.0",
+    "@mikro-orm/entity-generator": "6.4.0",
+    "@mikro-orm/sqlite": "6.4.0"
   },
   "author": {
     "name": "czy88840616",

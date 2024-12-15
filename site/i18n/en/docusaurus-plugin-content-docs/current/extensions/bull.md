@@ -707,9 +707,11 @@ We can configure this logger object separately.
 ```typescript
 export default {
   midwayLogger: {
-    // ...
-    bullLogger: {
-      fileLogName: 'midway-bull.log',
+    clients: {
+      // ...
+      bullLogger: {
+        fileLogName: 'midway-bull.log',
+      },
     },
   }
 }

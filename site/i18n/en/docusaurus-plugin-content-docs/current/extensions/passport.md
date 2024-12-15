@@ -110,22 +110,21 @@ We use `passport-local` to introduce how to use the Passport policy in Midway. T
 
 ```typescript
 passport.use(
-   //Initialize a strategy
-   new LocalStrategy({
-       usernameField: 'username',
-       passwordField: 'password',
-       passReqToCallback: true,
-       session: false
-     },
-     function verify(username, password, done) {
-       User.findOne({ username: username }, function (err, user) {
-         if (err) { return done(err); }
-         if (!user) { return done(null, false); }
-         if (!user.verifyPassword(password)) { return done(null, false); }
-         return done(null, user);
-       });
-     }
-)
+  //Initialize a strategy
+  new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+    passReqToCallback: true,
+    session: false
+  },
+  function verify(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      if (!user.verifyPassword(password)) { return done(null, false); }
+      return done(null, user);
+    });
+  })
 );
 ```
 
@@ -139,7 +138,7 @@ The effect written in Midway is as follows:
 // src/strategy/local.strategy.ts
 
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
-import { Strategy } from 'passport-local';
+import { Strategy, IStrategyOptions } from 'passport-local';
 import { Repository } from 'typeorm';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { UserEntity } from './user';
@@ -153,19 +152,24 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
    //Verification of strategy
    async validate(username, password) {
      const user = await this.userModel.findOneBy({ username });
-     if (await bcrypt.compare(password, user.password)) {
-       throw new Error('error password ' + username);
+     if (!user) {
+       throw new Error('User does not exist ' + username);
+     }
+     if (!(await bcrypt.compare(password, user.password))) {
+       throw new Error('Password is incorrect ' + username);
      }
 
-     return {
-       username,
-       password,
-     };
+     return user;
    }
 
    // Constructor parameters of the current strategy
-   getStrategyOptions(): any {
-     return {};
+   getStrategyOptions(): IStrategyOptions {
+     return {
+      usernameField: 'username',
+      passwordField: 'password',
+      passReqToCallback: true,
+      session: false
+    };
    }
 }
 ```
