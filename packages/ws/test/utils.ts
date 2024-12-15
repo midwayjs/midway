@@ -9,7 +9,9 @@ import { close, createApp } from '@midwayjs/mock';
  * @param options
  */
 export async function createServer(name: string, options: IMidwayWSConfigurationOptions = {}): Promise<IMidwayWSApplication> {
-  return createApp<Framework>(join(__dirname, 'fixtures', name), options, ws);
+  return createApp<Framework>(join(__dirname, 'fixtures', name), Object.assign({
+    imports: [ws]
+  }, options));
 }
 
 export async function closeApp(app) {
