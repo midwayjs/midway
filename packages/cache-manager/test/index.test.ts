@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as assert from 'assert';
-import { createLightApp, close } from '@midwayjs/mock';
+import { createLegacyLightApp as createLightApp, close } from '@midwayjs/mock';
 import { createCache } from 'cache-manager';
 import { sleep } from '@midwayjs/core';
 
