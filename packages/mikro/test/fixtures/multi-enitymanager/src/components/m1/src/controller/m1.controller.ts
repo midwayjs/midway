@@ -7,7 +7,7 @@ import { EntityManager } from '@mikro-orm/core';
 import { User } from '../entity/user.entity';
 import { EntityRepository } from '@mikro-orm/sqlite';
 @Controller('/m1')
-export class HomeController {
+export class HomeController1 {
   @InjectEntityManager('default1')
   em: EntityManager;
 
