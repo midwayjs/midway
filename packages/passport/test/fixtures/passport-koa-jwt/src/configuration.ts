@@ -6,7 +6,6 @@ import * as koa from '@midwayjs/koa';
 
 @Configuration({
   imports: [koa, passport, jwt],
-  conflictCheck: true,
   importConfigs: [path.join(__dirname, './config')],
 })
 export class ContainerLifeCycle {}

@@ -1,5 +1,4 @@
-import { createApp, close, createLightApp } from '@midwayjs/mock';
-import { Framework, IMidwayKoaApplication } from '@midwayjs/koa';
+import { close, createLightApp, createLegacyLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
 import { UserService } from './fixtures/sequelize-new/src/service/user';
@@ -13,13 +12,12 @@ function cleanFile(file) {
 
 describe('/test/index.test.ts', () => {
   describe('test sequelize with new decorator', () => {
-    let app: IMidwayKoaApplication;
+    let app;
     beforeAll(async () => {
       cleanFile(join(__dirname, 'fixtures/sequelize-new', 'database.sqlite'));
-      app = await createApp(
+      app = await createLegacyLightApp(
         join(__dirname, 'fixtures', 'sequelize-new'),
         {},
-        Framework
       );
     });
 

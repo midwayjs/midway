@@ -1,4 +1,4 @@
-import { MainApp, Configuration } from '@midwayjs/core';
+import { MainApp, Configuration, CommonJSFileDetector } from '@midwayjs/core';
 import { IMidwayWebApplication } from '../../../../../src';
 import * as custom from './component/src';
 import { join } from 'path';
@@ -9,7 +9,12 @@ import { join } from 'path';
   ],
   imports: [
     custom,
-  ]
+  ],
+  detector: new CommonJSFileDetector({
+    ignore: [
+      '**/component/**',
+    ]
+  }),
 })
 export class ContainerConfiguration {
 

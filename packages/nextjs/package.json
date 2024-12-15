@@ -1,0 +1,47 @@
+{
+  "name": "@midwayjs/nextjs",
+  "description": "midway nextjs component",
+  "version": "3.18.0",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts",
+    "inject.js"
+  ],
+  "devDependencies": {
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@types/react": "^18.3.12",
+    "babel-loader": "^9.2.1",
+    "next": "~15.0.3",
+    "null-loader": "^4.0.1",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "keywords": [
+    "midway",
+    "nextjs",
+    "ssr"
+  ],
+  "author": "czy88840616 <czy88840616@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test:prepare": "zx ./test/prepare.mjs",
+    "test": "npm run test:prepare && node ../../node_modules/jest/bin/jest.js --runInBand --runInBand",
+    "cov:server": "npm run test:prepare && node ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "no-cache-test": "node -r hack.js ../../node_modules/jest/bin/jest.js --runInBand --no-cache",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  }
+}

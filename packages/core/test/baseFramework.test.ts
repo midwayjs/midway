@@ -397,6 +397,7 @@ describe('/test/baseFramework.test.ts', () => {
       './fixtures/app-with-functional-component/src'
     ));
     expect(framework.getConfiguration('a')).toEqual(1);
+    expect(framework.getApplicationContext().getNamespaceList()).toEqual(['hooks', 'empty']);
 
     await framework.stop();
 
@@ -570,7 +571,7 @@ describe('/test/baseFramework.test.ts', () => {
     ));
 
     const applicationContext: any = framework.getApplicationContext();
-    await applicationContext.getAsync('userService');
+    await applicationContext.getAsync('userService2');
     expect(framework.getApplication().getAttr('total')).toEqual(10);
   });
 
@@ -717,8 +718,10 @@ describe('/test/baseFramework.test.ts', () => {
   it('should test throw framework sequence error', async () => {
     const applicationContext = await createFramework(path.join(
       __dirname,
-      './fixtures/app-with-multi-framework-sequence-error/src'
-    ));
+      './fixtures/app-with-multi-framework-sequence-error/src',
+    ), undefined, undefined, {
+      defaultDetector: false,
+    });
 
     const midwayFrameworkService = applicationContext.get(MidwayFrameworkService);
 

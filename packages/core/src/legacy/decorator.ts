@@ -350,19 +350,19 @@ export function getPropertyMetadata<T = any>(
  * save preload module by target
  * @param target
  * @since 2.0.0
- * @deprecated Use DecoratorManager.savePreloadModule instead
+ * @deprecated Use DecoratorManager.savePreStartModule instead
  */
 export function savePreloadModule(target) {
-  return DecoratorManager.savePreloadModule(target);
+  return DecoratorManager.savePreStartModule(target);
 }
 
 /**
  * list preload module
  * @since 2.0.0
- * @deprecated Use DecoratorManager.listPreloadModule instead
+ * @deprecated Use DecoratorManager.listPreStartModule instead
  */
 export function listPreloadModule(): any[] {
-  return DecoratorManager.listPreloadModule();
+  return DecoratorManager.listPreStartModule();
 }
 
 /**
@@ -374,22 +374,6 @@ export function listPreloadModule(): any[] {
  */
 export function saveModule(decoratorNameKey: ObjectIdentifier, target) {
   return DecoratorManager.saveModule(decoratorNameKey, target);
-}
-
-/**
- * @since 3.0.0
- * @deprecated Use DecoratorManager.bindContainer instead
- */
-export function bindContainer(container) {
-  return DecoratorManager.bindContainer(container);
-}
-/**
- * Clear the container which is bound by bindContainer
- * @since 3.0.0
- * @deprecated Use DecoratorManager.clearBindContainer instead
- */
-export function clearBindContainer() {
-  return DecoratorManager.clearBindContainer();
 }
 
 /**

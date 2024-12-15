@@ -41,7 +41,6 @@ import * as http from 'http';
 import * as https from 'https';
 import * as yaml from 'js-yaml';
 import * as getRawBody from 'raw-body';
-import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 
 const debug = debuglog('midway:debug');
 
@@ -61,33 +60,52 @@ function getFileNameWithSuffix(fileName: string) {
 
 function createMockWrapApplicationContext() {
   const container = new MidwayContainer();
+  debug(`[mock]: Create mock MidwayContainer, id=${container.id}.`);
   const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
-  // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
+
   container.onBeforeBind(target => {
     bindModuleMap.set(target, true);
   });
+  DecoratorManager['_bindModuleMap'] = bindModuleMap;
 
-  const originMethod = container.listModule;
-
-  container.listModule = key => {
-    const modules = originMethod.call(container, key);
-    if (key === CONFIGURATION_KEY) {
-      return modules;
-    }
-
-    return modules.filter((module: any) => {
-      if (bindModuleMap.has(module)) {
-        return true;
+  // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
+  if (!DecoratorManager['_mocked']) {
+    DecoratorManager['_listModule'] = DecoratorManager.listModule;
+    DecoratorManager['_saveModule'] = DecoratorManager.saveModule;
+    DecoratorManager.saveModule = (key, target) => {
+      if (key === CONFIGURATION_KEY) {
+        // 防止重复，测试的时候 configuration 会被重复 save
+        const modules = DecoratorManager['_listModule'](key);
+        if (modules.some((module: any) => module.target === target.target)) {
+          return;
+        } else {
+          DecoratorManager['_bindModuleMap'].set(target.target, true);
+          DecoratorManager['_saveModule'](key, target);
+        }
       } else {
-        debug(
-          '[mock] Filter "%o" module without binding when list module %s.',
-          module.name ?? module,
-          key
-        );
-        return false;
+        DecoratorManager['_saveModule'](key, target);
       }
-    });
-  };
+    };
+    DecoratorManager.listModule = key => {
+      const modules = DecoratorManager['_listModule'](key);
+      return modules.filter((module: any) => {
+        if (key === CONFIGURATION_KEY) {
+          return DecoratorManager['_bindModuleMap'].has(module.target);
+        }
+        if (DecoratorManager['_bindModuleMap'].has(module)) {
+          return true;
+        } else {
+          debug(
+            '[mock]: Filter "%o" module without binding when list module %s.',
+            module.name ?? module,
+            key
+          );
+          return false;
+        }
+      });
+    };
+    DecoratorManager['_mocked'] = true;
+  }
   return container;
 }
 
@@ -95,8 +113,7 @@ export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
   appDir: string | MockAppConfigurationOptions,
-  options: MockAppConfigurationOptions = {},
-  customFramework?: { new (...args): T } | ComponentModule
+  options: MockAppConfigurationOptions = {}
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
 
@@ -183,18 +200,6 @@ export async function create<
       );
     }
 
-    if (!options.imports && customFramework) {
-      options.imports = await transformFrameworkToConfiguration(
-        customFramework,
-        options.moduleLoadType
-      );
-    }
-
-    if (customFramework?.['Configuration']) {
-      options.imports = customFramework;
-      customFramework = customFramework['Framework'];
-    }
-
     if (options.ssl) {
       const sslConfig = {
         koa: {
@@ -219,35 +224,19 @@ export async function create<
     await initializeGlobalApplicationContext({
       ...options,
       appDir,
-      asyncContextManager: createContextManager(),
       loggerFactory: loggers,
-      imports: [].concat(options.imports).concat(
-        options.baseDir
-          ? await loadModule(
-              join(options.baseDir, getFileNameWithSuffix('configuration')),
-              {
-                safeLoad: true,
-                loadMode: options.moduleLoadType,
-              }
-            )
-          : []
-      ),
     });
 
-    if (customFramework) {
-      return container.getAsync(customFramework as any);
+    const frameworkService = await container.getAsync(MidwayFrameworkService);
+    const mainFramework = frameworkService.getMainFramework() as T;
+    if (mainFramework) {
+      return mainFramework;
     } else {
-      const frameworkService = await container.getAsync(MidwayFrameworkService);
-      const mainFramework = frameworkService.getMainFramework() as T;
-      if (mainFramework) {
-        return mainFramework;
-      } else {
-        throw new Error(
-          `Can not get main framework, please check your ${getFileNameWithSuffix(
-            'configuration'
-          )}.`
-        );
-      }
+      throw new Error(
+        `Can not get main framework, please check your ${getFileNameWithSuffix(
+          'configuration'
+        )}.`
+      );
     }
   } catch (err) {
     // catch for jest beforeAll can't throw error
@@ -261,11 +250,10 @@ export async function create<
 export async function createApp<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
-  baseDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions,
-  customFramework?: { new (...args): T } | ComponentModule
+  baseDir: string | MockAppConfigurationOptions,
+  options?: MockAppConfigurationOptions
 ): Promise<ReturnType<T['getApplication']>> {
-  const framework: T = await create<T>(baseDir, options, customFramework);
+  const framework: T = await create<T>(baseDir, options);
   return framework.getApplication();
 }
 
@@ -384,7 +372,6 @@ export async function createFunctionApp<
 
     options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
 
-    options = options || ({} as any);
     if (options.baseDir) {
       await loadModule(
         join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
@@ -682,7 +669,7 @@ export async function createLightApp(
     options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
   }
 
-  return createApp(baseDirOrOptions as string, {
+  const app = await createApp(baseDirOrOptions as string, {
     ...options,
     imports: [
       await transformFrameworkToConfiguration(
@@ -691,6 +678,22 @@ export async function createLightApp(
       ),
     ].concat(options?.imports),
   });
+
+  const applicationManager = app
+    .getApplicationContext()
+    .get(MidwayApplicationManager);
+  const apps = applicationManager.getApplications();
+  if (apps.length === 1) {
+    return app;
+  } else {
+    // 如果有多个 app，则重置 main app
+    const frameworkService = app
+      .getApplicationContext()
+      .get(MidwayFrameworkService);
+    // 这里调整是因为 createLightApp 会自动加一个 framework
+    frameworkService.setMainApp(apps[0].getNamespace());
+    return frameworkService.getMainApp();
+  }
 }
 
 export async function createBootstrap(

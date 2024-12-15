@@ -2,6 +2,7 @@ const assert = require('assert');
 const request = require('supertest');
 import path = require('path');
 import { creatApp, closeApp } from './utils';
+import { createApp as originCreateApp} from '@midwayjs/mock';
 
 const mm = require('mm');
 const pedding = require('pedding');
@@ -93,7 +94,7 @@ describe('/test/enhance.test.ts', () => {
     it('should load controller conflicts', async () => {
       let error;
       try {
-        await creatApp('enhance/base-app-controller-conflicts');
+        await originCreateApp('enhance/base-app-controller-conflicts');
       } catch (err) {
         error = err;
       }

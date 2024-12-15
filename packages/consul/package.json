@@ -10,9 +10,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
     "@types/consul": "0.40.3",
     "@types/sinon": "17.0.3",
     "nock": "13.5.5"

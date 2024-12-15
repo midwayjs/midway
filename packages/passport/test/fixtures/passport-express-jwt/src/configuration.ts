@@ -7,7 +7,6 @@ import * as express from '@midwayjs/express';
 
 @Configuration({
   imports: [express, passport, jwt],
-  conflictCheck: true,
   importConfigs: [path.join(__dirname, './config')],
 })
 export class ContainerLifeCycle {

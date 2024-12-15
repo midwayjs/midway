@@ -1,7 +1,8 @@
 import type { AsyncContextManager } from './common/asyncContextManager';
 import type { LoggerFactory } from './common/loggerFactory';
-import { ManagedResolverFactory } from './context/managedResolverFactory';
+import type { ManagedResolverFactory } from './context/managedResolverFactory';
 import type { EventEmitter } from 'events';
+import type { FunctionalConfiguration } from './functional';
 
 export type ClassType<T = any> = new (...args: any[]) => T;
 
@@ -326,12 +327,6 @@ export interface IMethodAspect {
   afterThrow?(joinPoint: JoinPoint, error: Error): void;
   before?(joinPoint: JoinPoint): void;
   around?(joinPoint: JoinPoint): any;
-}
-
-export interface IModuleStore {
-  listModule(key: ObjectIdentifier);
-  saveModule(key: ObjectIdentifier, module: any);
-  transformModule?(moduleMap: Map<ObjectIdentifier, Set<any>>);
 }
 
 export interface TSDesignType<OriginType = unknown> {
@@ -690,11 +685,12 @@ export interface IIdentifierRelationShip {
   getRelation(id: ObjectIdentifier): string;
 }
 
-export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle>, IModuleStore {
+export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle> {
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
-  load(module: any | any[]): void;
+  // load(module: any | any[]): void;
   getNamespaceList(): string[];
+  addNamespace(namespace: string): void;
   bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
   bind<T>(
     identifier: ObjectIdentifier,
@@ -702,8 +698,8 @@ export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObject
     options?: Partial<IObjectDefinition>
   ): void;
   bindClass(exports, options?: Partial<IObjectDefinition>): void;
-  setFileDetector(fileDetector: IFileDetector): void;
-  ready(): void | Promise<void>;
+  // setFileDetector(fileDetector: IFileDetector): void;
+  // ready(): void | Promise<void>;
   stop(): Promise<void>;
   getManagedResolverFactory(): ManagedResolverFactory;
 }
@@ -743,8 +739,8 @@ export interface IMidwayContainer extends IObjectFactory {
 }
 
 export interface IFileDetector {
-  run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>): void | Promise<void>;
-  setExtraDetectorOptions(detectorOptions: Record<string, any>): void;
+  run(container: IMidwayGlobalContainer, namespace: string): Promise<void>;
+  runSync(container: IMidwayGlobalContainer, namespace: string): void;
 }
 
 export interface IConfigService {
@@ -1044,12 +1040,7 @@ export interface IMidwayBootstrapOptions {
   preloadModules?: any[];
   imports?: any | any[];
   moduleLoadType?: ModuleLoadType;
-  moduleDetector?: IFileDetector | false;
   logger?: boolean | ILogger;
-  /**
-   * @deprecated please set it from '@Configuration' decorator
-   */
-  ignore?: string[];
   globalConfig?:
     | Array<{ [environmentName: string]: Record<string, any> }>
     | Record<string, any>;
@@ -1188,3 +1179,25 @@ export interface ServerSendEventStreamOptions<CTX extends IMidwayContext> {
   closeEvent?: string;
   tpl?: (data: ServerSendEventMessage, ctx: CTX) => ServerSendEventMessage;
 }
+
+export interface IComponentInfo {
+  component: { Configuration: ClassType<ILifeCycle> } | FunctionalConfiguration;
+  enabledEnvironment?: string[];
+}
+
+export interface InjectionConfigurationOptions {
+  imports?: Array<
+    | IComponentInfo
+    | { Configuration: ClassType<ILifeCycle> }
+    | FunctionalConfiguration
+  >;
+  importObjects?: Record<string, unknown>;
+  importConfigs?:
+    | Array<{ [environmentName: string]: Record<string, any> }>
+    | Record<string, any>;
+  importConfigFilter?: (config: Record<string, any>) => Record<string, any>;
+  namespace?: string;
+  detector?: IFileDetector | false;
+}
+
+export type FunctionalConfigurationOptions = InjectionConfigurationOptions & ILifeCycle;

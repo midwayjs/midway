@@ -1,4 +1,4 @@
-import { close, createApp, createLightApp } from '@midwayjs/mock';
+import { close, createLegacyApp, createLightApp } from '@midwayjs/mock';
 import { IMidwayApplication, Provide, Scope, ScopeEnum, sleep } from '@midwayjs/core';
 import { Framework, IMqttSubscriber, Mqtt, MqttProducerFactory } from '../src';
 import { join } from 'path';
@@ -11,7 +11,7 @@ describe('/test/index.test.ts', () => {
 
   it('should test subscribe topic and send message', async () => {
     // create app and got data
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app'));
     await sleep();
     expect(app.getAttr('subscribe')).toBe(true);
     await close(app);
@@ -19,7 +19,7 @@ describe('/test/index.test.ts', () => {
 
   it('should test subscribe with no pub and sub', async () => {
     // create app and got data
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app-no-pub-sub'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app-no-pub-sub'));
     await sleep();
     await close(app);
   });

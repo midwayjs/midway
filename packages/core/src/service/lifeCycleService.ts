@@ -1,18 +1,19 @@
 import { ILifeCycle, IMidwayContainer, ScopeEnum } from '../interface';
 import {
   CONFIGURATION_KEY,
+  CONFIGURATION_OBJECT_KEY,
   DecoratorManager,
   Init,
   Inject,
   Provide,
   Scope,
 } from '../decorator';
-import { FunctionalConfiguration } from '../functional/configuration';
 import { MidwayFrameworkService } from './frameworkService';
 import { MidwayConfigService } from './configService';
 import { debuglog } from 'util';
 import { MidwayMockService } from './mockService';
 import { MidwayHealthService } from './healthService';
+import { MetadataManager } from '../decorator/metadataManager';
 const debug = debuglog('midway:debug');
 
 @Provide()
@@ -53,7 +54,9 @@ export class MidwayLifeCycleService {
     debug(`[core]: Found Configuration length = ${cycles.length}`);
 
     for (const cycle of cycles) {
-      if (cycle.target instanceof FunctionalConfiguration) {
+      if (
+        MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, cycle.target)
+      ) {
         // 函数式写法
         cycle.instance = cycle.target;
       } else {
@@ -121,20 +124,10 @@ export class MidwayLifeCycleService {
   public async stop() {
     await this.mockService.runSimulatorTearDown();
     // stop lifecycle
-    const cycles = DecoratorManager.listModule(CONFIGURATION_KEY) || [];
-
-    for (const cycle of cycles.reverse()) {
-      let inst;
-      if (cycle.target instanceof FunctionalConfiguration) {
-        // 函数式写法
-        inst = cycle.target;
-      } else {
-        inst = await this.applicationContext.getAsync<ILifeCycle>(cycle.target);
-      }
-
-      await this.runContainerLifeCycle(inst, 'onStop');
-    }
-
+    await this.runContainerLifeCycle(
+      this.lifecycleInstanceList.reverse(),
+      'onStop'
+    );
     // stop framework
     await this.frameworkService.stopFramework();
   }

@@ -1,4 +1,5 @@
 import {
+  AllConfig,
   Config,
   INJECT_CUSTOM_PROPERTY,
   MetadataManager
@@ -10,6 +11,9 @@ class Test {
 
   @Config('bbb')
   bbb: any;
+
+  @AllConfig()
+  allConfig: any;
 }
 
 describe('/test/framework/config.test.ts', () => {

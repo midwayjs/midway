@@ -6,7 +6,6 @@ const { InjectDataSource } = leoric;
 
 @Configuration({
   imports: [leoric],
-  conflictCheck: true,
   importConfigs: [path.join(__dirname, 'config')],
 })
 export class ContainerLifeCycle {

@@ -1,28 +1,16 @@
-import { createApp, createHttpRequest, close } from '@midwayjs/mock';
+import { createLegacyApp, createHttpRequest, close } from '@midwayjs/mock';
 import { sleep } from '@midwayjs/core';
 import { join } from 'path';
 import * as assert from 'assert';
 
 describe('test/index.test.ts', function () {
 
-  it('should test sessionStore', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/memory-session'));
-    const request = createHttpRequest(app);
-
-    await request.get('/set?foo=bar')
-      .expect(200)
-      .expect({ foo: 'bar' })
-      .expect('set-cookie', /MW_SESS=.*?;/);
-
-    await close(app);
-  });
-
   describe('should test cookie session', () => {
 
     let app;
     let request;
     beforeAll(async () => {
-      app = await createApp(join(__dirname, 'fixtures/cookie-session'));
+      app = await createLegacyApp(join(__dirname, 'fixtures/cookie-session'));
       request = createHttpRequest(app);
     })
 
@@ -143,7 +131,7 @@ describe('test/index.test.ts', function () {
   })
 
   it('should test sameSite=none', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/samesite-none-session'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures/samesite-none-session'));
     const request = createHttpRequest(app);
 
     await request.get('/set?foo=bar')
@@ -159,8 +147,8 @@ describe('test/index.test.ts', function () {
     await close(app);
   });
 
-  it('should change the session key, but not content', async () => {
-    const app = await createApp(join(__dirname, 'fixtures/change-session-key'));
+  it.only('should change the session key, but not content', async () => {
+    const app = await createLegacyApp(join(__dirname, 'fixtures/change-session-key'));
     const request = createHttpRequest(app);
     let koaSession = null;
     await request.get('/')
@@ -181,4 +169,17 @@ describe('test/index.test.ts', function () {
 
     await close(app);
   });
+
+  it.only('should test sessionStore', async () => {
+    const app = await createLegacyApp(join(__dirname, 'fixtures/memory-session'));
+    const request = createHttpRequest(app);
+
+    await request.get('/set?foo=bar')
+      .expect(200)
+      .expect({ foo: 'bar' })
+      .expect('set-cookie', /MW_SESS=.*?;/);
+
+    await close(app);
+  });
+
 });

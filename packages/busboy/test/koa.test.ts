@@ -1,4 +1,4 @@
-import { createHttpRequest, close, createApp, createLightApp } from "@midwayjs/mock";
+import { createHttpRequest, close, createLegacyApp, createLightApp } from "@midwayjs/mock";
 import { join } from 'path';
 import { createWriteStream, existsSync, statSync } from "fs";
 import * as koa from '@midwayjs/koa';
@@ -15,7 +15,7 @@ describe('test/koa.test.ts', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, 'fixtures/koa-stream');
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -71,7 +71,7 @@ describe('test/koa.test.ts', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, 'fixtures/koa-file');
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -127,7 +127,7 @@ describe('test/koa.test.ts', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, 'fixtures/koa-file-mime');
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -178,7 +178,7 @@ describe('test/koa.test.ts', function () {
   describe('test null set', function () {
     it('upload test ext set null', async () => {
       const appDir = join(__dirname, 'fixtures/koa-ext-null');
-      const app = await createApp(appDir);
+      const app = await createLegacyApp(appDir);
       const filePath = join(__dirname, 'fixtures/1.test');
       const request = createHttpRequest(app);
       await request.post('/upload')
@@ -195,7 +195,7 @@ describe('test/koa.test.ts', function () {
     let app;
     beforeAll(async () => {
       const appDir = join(__dirname, 'fixtures/koa-function-whitelist');
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -276,8 +276,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {}
@@ -338,8 +338,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {}
@@ -404,8 +404,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {}
@@ -461,8 +461,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {}
@@ -547,8 +547,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: "123",
           busboy: {}
@@ -604,8 +604,8 @@ describe('test/koa.test.ts', function () {
         imports: [
           koa,
           busboy,
-          HomeController
         ],
+        preloadModules: [HomeController],
         globalConfig: {
           keys: '123',
           busboy: {

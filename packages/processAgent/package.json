@@ -25,9 +25,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
     "koa-bodyparser": "4.4.1"
   },
   "dependencies": {

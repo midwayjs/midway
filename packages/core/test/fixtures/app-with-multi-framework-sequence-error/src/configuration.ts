@@ -5,10 +5,18 @@ import * as a from './a';
 
 @Configuration({
   imports: [
-    c,
-    a,
-    b
-  ]
+    {
+      Configuration: c.Configuration,
+    },
+    {
+      Configuration: a.Configuration,
+      AFramework: a.AFramework
+    } as any,
+    {
+      Configuration: b.Configuration,
+      BFramework: b.BFramework
+    }
+  ],
 })
 export class MainConfiguration {
 }

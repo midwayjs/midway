@@ -1,7 +1,6 @@
-import { dirname, resolve, sep, posix } from 'path';
+import { dirname, resolve, sep, posix, join } from 'path';
 import { readFileSync } from 'fs';
 import { debuglog } from 'util';
-import * as transformer from 'class-transformer';
 import { PathToRegexpUtil } from './pathToRegexp';
 import { MidwayCodeInvokeTimeoutError, MidwayCommonError } from '../error';
 import { FunctionMiddleware, IgnoreMatcher } from '../interface';
@@ -11,6 +10,9 @@ import { safeParse, safeStringify } from './flatted';
 import * as crypto from 'crypto';
 import { Types } from './types';
 import { pathToFileURL } from 'url';
+import { normalizePath } from './pathFileUtil';
+import { MetadataManager } from '../decorator/metadataManager';
+import { CONFIGURATION_KEY, CONFIGURATION_OBJECT_KEY } from '../decorator';
 
 const debug = debuglog('midway:debug');
 
@@ -67,6 +69,7 @@ export const loadModule = async (
     enableCache?: boolean;
     loadMode?: 'commonjs' | 'esm';
     safeLoad?: boolean;
+    warnOnLoadError?: boolean;
   } = {}
 ) => {
   options.enableCache = options.enableCache ?? true;
@@ -114,6 +117,51 @@ export const loadModule = async (
     if (!options.safeLoad) {
       throw err;
     } else {
+      if (options.warnOnLoadError && err.code !== 'MODULE_NOT_FOUND') {
+        console.warn(err);
+      }
+      debug(`[core]: SafeLoadModule Warning\n\n${err.message}\n`);
+      return undefined;
+    }
+  }
+};
+
+/**
+ * load module sync, and it must be commonjs mode
+ * @param p
+ * @param options
+ */
+export const loadModuleSync = (
+  p: string,
+  options: {
+    enableCache?: boolean;
+    safeLoad?: boolean;
+    warnOnLoadError?: boolean;
+  } = {}
+) => {
+  options.enableCache = options.enableCache ?? true;
+  options.safeLoad = options.safeLoad ?? false;
+
+  if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
+    p = resolve(dirname(module.parent.filename), p);
+  }
+
+  try {
+    if (options.enableCache) {
+      return require(p);
+    } else {
+      const content = readFileSync(p, {
+        encoding: 'utf-8',
+      });
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    if (!options.safeLoad) {
+      throw err;
+    } else {
+      if (options.warnOnLoadError && err.code !== 'MODULE_NOT_FOUND') {
+        console.warn(err);
+      }
       debug(`[core]: SafeLoadModule Warning\n\n${err.message}\n`);
       return undefined;
     }
@@ -315,16 +363,7 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
       }
       return Boolean(originValue);
     default:
-      if (originValue instanceof targetType) {
-        return originValue;
-      } else {
-        const transformToInstance =
-          transformer['plainToClass'] || transformer['plainToInstance'];
-        return transformToInstance(
-          targetType,
-          originValue
-        ) as typeof originValue;
-      }
+      return originValue;
   }
 };
 
@@ -627,6 +666,141 @@ export async function createPromiseTimeoutInvokeChain<Result>(options: {
       }
     }
     return results;
+  }
+}
+
+function getFileNameWithSuffix(fileName: string) {
+  return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
+}
+
+export function isConfigurationExport(exports): boolean {
+  return (
+    (Types.isClass(exports) &&
+      MetadataManager.hasOwnMetadata(CONFIGURATION_KEY, exports)) ||
+    (Types.isObject(exports) &&
+      MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, exports))
+  );
+}
+
+export async function findProjectEntryFile(
+  appDir: string,
+  baseDir: string,
+  loadMode: 'commonjs' | 'esm'
+) {
+  /**
+   * 查找常用文件中的 midway 入口，入口文件包括 Configuration 对象或者 defineConfiguration 函数
+   */
+  async function containsConfiguration(filePath: string) {
+    // 加载文件
+    const content = await loadModule(filePath, {
+      safeLoad: true,
+      loadMode,
+      warnOnLoadError: true,
+    });
+
+    if (content && isConfigurationExport(content)) {
+      debug(`[core]: find configuration file ${filePath}`);
+      return content;
+    } else {
+      for (const m in content) {
+        const module = content[m];
+        if (isConfigurationExport(module)) {
+          debug(`[core]: find configuration file ${filePath}`);
+          return content;
+        }
+      }
+    }
+  }
+
+  // 1. 找 src/configuration.ts 或 src/configuration.js
+  const configurationFile = await containsConfiguration(
+    join(baseDir, getFileNameWithSuffix('configuration'))
+  );
+
+  if (configurationFile) {
+    return configurationFile;
+  }
+
+  // 2. 找 src/index.ts 或 src/index.js
+  const indexFile = await containsConfiguration(
+    join(baseDir, getFileNameWithSuffix('index'))
+  );
+  if (indexFile) {
+    return indexFile;
+  }
+
+  // 3. 找 package.json 中的 main 字段
+  if (appDir) {
+    const pkgJSON = await loadModule(join(appDir, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+    if (pkgJSON?.['main']) {
+      const configuration = await containsConfiguration(
+        normalizePath(appDir, pkgJSON['main'])
+      );
+      if (configuration) {
+        return configuration;
+      }
+    }
+  }
+}
+
+export function findProjectEntryFileSync(appDir: string, baseDir: string) {
+  /**
+   * 查找常用文件中的 midway 入口，入口文件包括 Configuration 对象或者 defineConfiguration 函数
+   */
+  function containsConfiguration(filePath: string) {
+    // 加载文件
+    const content = loadModuleSync(filePath, {
+      safeLoad: true,
+      warnOnLoadError: true,
+    });
+    if (content && isConfigurationExport(content)) {
+      debug(`[core]: find configuration file ${filePath}`);
+      return content;
+    } else {
+      for (const m in content) {
+        const module = content[m];
+        if (isConfigurationExport(module)) {
+          debug(`[core]: find configuration file ${filePath}`);
+          return content;
+        }
+      }
+    }
+  }
+
+  // 1. 找 src/configuration.ts 或 src/configuration.js
+  const configurationFile = containsConfiguration(
+    join(baseDir, getFileNameWithSuffix('configuration'))
+  );
+
+  if (configurationFile) {
+    return configurationFile;
+  }
+
+  // 2. 找 src/index.ts 或 src/index.js
+  const indexFile = containsConfiguration(
+    join(baseDir, getFileNameWithSuffix('index'))
+  );
+  if (indexFile) {
+    return indexFile;
+  }
+
+  if (appDir) {
+    // 3. 找 package.json 中的 main 字段
+    const pkgJSON = loadModuleSync(join(appDir, 'package.json'), {
+      safeLoad: true,
+      enableCache: false,
+    });
+    if (pkgJSON?.['main']) {
+      const configuration = containsConfiguration(
+        normalizePath(appDir, pkgJSON['main'])
+      );
+      if (configuration) {
+        return configuration;
+      }
+    }
   }
 }
 

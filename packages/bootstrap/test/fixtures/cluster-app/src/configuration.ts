@@ -1,4 +1,4 @@
-import { ALL, MainApp, Config, Configuration, Inject } from '@midwayjs/core';
+import { MainApp, Configuration, Inject, CommonJSFileDetector, AllConfig } from '@midwayjs/core';
 import { join } from 'path';
 import * as assert from 'assert';
 import { RemoteConfigService } from './service/remoteConfigService';
@@ -11,6 +11,7 @@ import * as SocketIO from '../../../../../socketio';
   importConfigs: [
     join(__dirname, './config')
   ],
+  detector: new CommonJSFileDetector(),
   imports: [
     Web,
     SocketIO,
@@ -18,7 +19,7 @@ import * as SocketIO from '../../../../../socketio';
   ]
 })
 export class AutoConfiguration implements ILifeCycle {
-  @Config(ALL)
+  @AllConfig()
   prepareConfig;
 
   @Inject()

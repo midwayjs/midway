@@ -1,4 +1,4 @@
-import { close, createHttpRequest, createApp } from '@midwayjs/mock';
+import { close, createHttpRequest, createLegacyApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
 import { IMidwayApplication } from '@midwayjs/core';
@@ -17,7 +17,7 @@ describe('test/logger.test.ts', () => {
 
   beforeAll(async () => {
     cleanFile(join(__dirname, 'fixtures/logger', 'database.sqlite'));
-    app = await createApp(join(__dirname, 'fixtures', 'logger'));
+    app = await createLegacyApp(join(__dirname, 'fixtures', 'logger'));
     userService = await app
       .getApplicationContext()
       .getAsync(UserService);

@@ -45,11 +45,14 @@ export class MidwayDecoratorService {
   protected init() {
     // add custom method decorator listener
     this.applicationContext.onBeforeBind(Clzz => {
+      debug(`[core]: Bind class ${Clzz.name} in decorator service`);
+
       // find custom method decorator metadata, include method decorator information array
       const methodDecoratorMetadataList: MethodDecoratorMetaData[] =
         MetadataManager.getMetadata(CUSTOM_METHOD_INJECT_KEY, Clzz);
 
       if (methodDecoratorMetadataList) {
+        debug(`[core]: Find method decorator metadata in ${Clzz.name}`);
         // loop it, save this order for decorator run
         for (const meta of methodDecoratorMetadataList) {
           const { propertyName, key, metadata, options } = meta;
@@ -84,6 +87,7 @@ export class MidwayDecoratorService {
         }>(CUSTOM_PARAM_INJECT_KEY, Clzz);
 
       if (parameterDecoratorMetadata) {
+        debug(`[core]: Find parameter decorator metadata in ${Clzz.name}`);
         // loop it, save this order for decorator run
         for (const methodName of Object.keys(parameterDecoratorMetadata)) {
           // add aspect implementation first

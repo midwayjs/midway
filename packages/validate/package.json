@@ -23,13 +23,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/i18n": "^3.18.0",
+    "@midwayjs/i18n": "workspace:^",
     "joi": "17.13.3"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/express": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0"
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/express": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^"
   }
 }

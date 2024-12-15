@@ -4,10 +4,6 @@ export { MidwayRequestContainer } from './context/requestContainer';
 export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
 export * from './constants';
-export {
-  createConfiguration,
-  FunctionalConfiguration,
-} from './functional/configuration';
 export { MidwayConfigService } from './service/configService';
 export { MidwayEnvironmentService } from './service/environmentService';
 export { MidwayInformationService } from './service/informationService';

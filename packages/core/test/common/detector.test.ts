@@ -7,11 +7,10 @@ describe('test/common/detector.test.ts', function () {
       loadDir: join(__dirname, './glob_dir'),
       pattern: '',
       ignore: '',
-      namespace: 'test',
       conflictCheck: true,
     });
     const container = new MidwayContainer();
-    await detector.run(container);
+    await detector.run(container, 'test');
   });
 
   it('should test file detector with conflict', async () => {
@@ -19,16 +18,13 @@ describe('test/common/detector.test.ts', function () {
       loadDir: join(__dirname, './glob_dir_conflict'),
       pattern: '',
       ignore: '',
-      namespace: 'test',
-    });
-    detector.setExtraDetectorOptions({
       conflictCheck: true,
     });
     const container = new MidwayContainer();
 
     let err;
     try {
-      await detector.run(container);
+      await detector.run(container, 'test');
     } catch (e) {
       err = e;
     }

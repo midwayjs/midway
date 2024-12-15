@@ -16,6 +16,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0"
+    "@midwayjs/core": "workspace:^"
   }
 }

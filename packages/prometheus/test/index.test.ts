@@ -1,12 +1,14 @@
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
-import { Framework } from '@midwayjs/koa';
+import { createLegacyApp, close, createHttpRequest } from '@midwayjs/mock';
+import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
 
   let app = null;
   beforeAll(async () => {
-    app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, Framework);
+    app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app'), {
+      imports: [koa],
+    });
   });
 
   afterAll(async () => {

@@ -10,10 +10,10 @@
     "index.html"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0",
-    "@midwayjs/koa": "^3.18.0",
-    "@midwayjs/mock": "^3.18.0",
-    "@midwayjs/validate": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/validate": "workspace:^",
     "swagger-ui-dist": "5.17.14"
   },
   "author": "Kurten Chan <chinkurten@gmail.com>",

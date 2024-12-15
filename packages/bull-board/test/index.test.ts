@@ -1,10 +1,10 @@
-import { createApp, close, createHttpRequest, createLightApp } from '@midwayjs/mock';
+import { createLegacyApp, close, createHttpRequest, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as bullboard from '../src';
 
 describe(`/test/index.test.ts`, () => {
   it('test ui in koa', async () => {
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app-koa'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app-koa'));
 
     // page
     let result = await createHttpRequest(app).get('/ui');
@@ -29,7 +29,7 @@ describe(`/test/index.test.ts`, () => {
   });
 
   it('test ui in express', async () => {
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app-express'));
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app-express'));
 
     // page
     let result = await createHttpRequest(app).get('/bull-board');

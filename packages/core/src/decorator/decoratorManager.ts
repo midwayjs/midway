@@ -1,6 +1,5 @@
 import {
   ClassType,
-  IModuleStore,
   MethodDecoratorOptions,
   ObjectIdentifier,
   ParamDecoratorOptions,
@@ -11,7 +10,7 @@ import {
   CUSTOM_METHOD_INJECT_KEY,
   CUSTOM_PARAM_INJECT_KEY,
   CUSTOM_PROPERTY_INJECT_KEY,
-  PRELOAD_MODULE_KEY,
+  PRE_START_MODULE_KEY,
   PROVIDE_KEY,
 } from './constant';
 import { camelCase } from '../util/camelCase';
@@ -29,15 +28,11 @@ const debug = require('util').debuglog('midway:core');
  * @since 3.0.0
  */
 export class DecoratorManager {
-  private static container: IModuleStore;
   private static moduleStore: Map<ObjectIdentifier, Set<any>> = new Map();
 
   public static saveModule(key: ObjectIdentifier, module) {
     if (isClass(module)) {
       this.saveProviderId(undefined, module);
-    }
-    if (this.container) {
-      return this.container.saveModule(key, module);
     }
     if (!this.moduleStore.has(key)) {
       this.moduleStore.set(key, new Set());
@@ -49,12 +44,7 @@ export class DecoratorManager {
     key: ObjectIdentifier,
     filter?: (module) => boolean
   ): any[] {
-    let modules: any[];
-    if (this.container) {
-      modules = this.container.listModule(key);
-    } else {
-      modules = [...(this.moduleStore.get(key) || [])];
-    }
+    const modules = [...(this.moduleStore.get(key) || [])];
     if (filter) {
       return modules.filter(filter);
     } else {
@@ -62,12 +52,12 @@ export class DecoratorManager {
     }
   }
 
-  public static savePreloadModule(module) {
-    this.saveModule(PRELOAD_MODULE_KEY, module);
+  public static savePreStartModule(module) {
+    this.saveModule(PRE_START_MODULE_KEY, module);
   }
 
-  public static listPreloadModule(): any[] {
-    return this.listModule(PRELOAD_MODULE_KEY);
+  public static listPreStartModule(): any[] {
+    return this.listModule(PRE_START_MODULE_KEY);
   }
 
   public static resetModule(key) {
@@ -76,15 +66,6 @@ export class DecoratorManager {
 
   public static clearAllModule() {
     this.moduleStore.clear();
-  }
-
-  public static bindContainer(container: IModuleStore) {
-    this.container = container;
-    this.container.transformModule(this.moduleStore);
-  }
-
-  public static clearBindContainer() {
-    this.container = null;
   }
 
   public static saveProviderId(

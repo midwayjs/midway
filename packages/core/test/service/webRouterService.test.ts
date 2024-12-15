@@ -1,6 +1,7 @@
 import { createLightFramework } from '../util';
 import * as path from 'path';
-import { MidwayContainer, MidwayWebRouterService, bindContainer, clearAllModule } from '../../src';
+import { MidwayWebRouterService, clearAllModule } from '../../src';
+import { join } from 'path';
 
 describe('/test/service/webRouterService.test.ts', function () {
 
@@ -36,7 +37,7 @@ describe('/test/service/webRouterService.test.ts', function () {
       url: '/abc/dddd/*',
       requestMethod: 'GET',
     });
-   
+
     let routeInfo = await collector.getMatchedRouterInfo('/api', 'get');
     expect(routeInfo).toBeUndefined();
 
@@ -166,11 +167,8 @@ describe('/test/service/webRouterService.test.ts', function () {
 
   it('should test global prefix', async () => {
     clearAllModule();
-    const container = new MidwayContainer();
-    bindContainer(container);
-    container.bindClass(MidwayWebRouterService);
-    container.bindClass(require('../util/fixtures/home'));
-    const collector = await container.getAsync(MidwayWebRouterService, [{ globalPrefix: 'api'}]);
+    const framework = await createLightFramework(join(__dirname, '../util/fixtures/home'))
+    const collector = await framework.getApplicationContext().getAsync(MidwayWebRouterService, [{ globalPrefix: 'api'}]);
     const list = await collector.getRoutePriorityList();
     expect(list.length).toEqual(3);
     expect(list[0].prefix).toEqual('/api/test');
@@ -183,11 +181,8 @@ describe('/test/service/webRouterService.test.ts', function () {
 
   it('should test global prefix with router ignore', async () => {
     clearAllModule();
-    const container = new MidwayContainer();
-    bindContainer(container);
-    container.bindClass(MidwayWebRouterService);
-    container.bindClass(require('../util/fixtures/prefix-normal'));
-    const collector = await container.getAsync(MidwayWebRouterService, [{ globalPrefix: 'api'}]);
+    const framework = await createLightFramework(join(__dirname, '../util/fixtures/home-prefix'))
+    const collector = await framework.getApplicationContext().getAsync(MidwayWebRouterService, [{ globalPrefix: 'api'}]);
     const list = await collector.getRoutePriorityList();
     expect(list.length).toEqual(2);
   });

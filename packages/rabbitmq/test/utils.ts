@@ -1,7 +1,7 @@
 import { Framework, IMidwayRabbitMQApplication, IMidwayRabbitMQConfigurationOptions } from '../src';
 import * as rabbitmq from '../src';
 import { join } from 'path';
-import { close, createApp } from '@midwayjs/mock';
+import { close, createLegacyApp } from '@midwayjs/mock';
 
 /**
  * create a rabbitMQ app
@@ -9,7 +9,9 @@ import { close, createApp } from '@midwayjs/mock';
  * @param options
  */
 export async function creatApp(name: string, options?: IMidwayRabbitMQConfigurationOptions): Promise<IMidwayRabbitMQApplication> {
-  return createApp<Framework>(join(__dirname, 'fixtures', name), options, rabbitmq);
+  return createLegacyApp<Framework>(join(__dirname, 'fixtures', name), Object.assign({
+    imports: [rabbitmq]
+  }, options));
 }
 
 export async function closeApp(app) {

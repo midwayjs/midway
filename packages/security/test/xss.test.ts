@@ -1,5 +1,5 @@
 
-import { close, createApp, createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { close, createLegacyApp, createLegacyFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
 import { readFileSync, copy, writeFile, remove } from 'fs-extra';
 import { existsSync } from 'fs';
@@ -29,7 +29,7 @@ describe(`test/${type}.test.ts`, function () {
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`));
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -52,7 +52,7 @@ describe(`test/${type}.test.ts`, function () {
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`));
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -76,7 +76,7 @@ describe(`test/${type}.test.ts`, function () {
       await copy(csrfBase, appDir);
       await remove(join(appDir, 'f.yml'));
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`));
-      app = await createApp(appDir);
+      app = await createLegacyApp(appDir);
     });
 
     afterAll(async () => {
@@ -97,7 +97,7 @@ describe(`test/${type}.test.ts`, function () {
       }
       await copy(csrfBase, appDir);
       await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/faas`));
-      app = await createFunctionApp(appDir, {});
+      app = await createLegacyFunctionApp(appDir, {});
     });
 
     afterAll(async () => {

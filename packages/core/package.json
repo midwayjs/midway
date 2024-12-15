@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@midwayjs/glob": "^1.0.2",
-    "class-transformer": "0.5.1",
     "picomatch": "2.3.1",
     "reflect-metadata": "0.2.2"
   },
@@ -43,5 +42,23 @@
   "engines": {
     "node": ">=16"
   },
-  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+  "madge": {
+    "detectiveOptions": {
+      "ts": {
+        "skipTypeImports": true
+      }
+    }
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./functional": {
+      "import": "./dist/functional/index.js",
+      "require": "./dist/functional/index.js",
+      "types": "./dist/functional/index.d.ts"
+    }
+  }
 }

@@ -4,14 +4,14 @@
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/core": "^3.18.0",
+    "@midwayjs/core": "workspace:^",
     "@midwayjs/serverless-http-parser": "^3.14.0",
     "@midwayjs/simple-lock": "^1.1.4"
   },
   "devDependencies": {
     "@midwayjs/cookies": "^1.0.2",
     "@midwayjs/logger": "^3.0.0",
-    "@midwayjs/mock": "^3.18.0",
+    "@midwayjs/mock": "workspace:^",
     "mm": "3.4.0"
   },
   "engines": {

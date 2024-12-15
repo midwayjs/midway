@@ -4,12 +4,11 @@
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/async-hooks-context-manager": "^3.18.0",
-    "@midwayjs/faas": "^3.18.0",
+    "@midwayjs/faas": "workspace:^",
     "raw-body": "2.5.2"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.18.0"
+    "@midwayjs/core": "workspace:^"
   },
   "engines": {
     "node": ">=12"

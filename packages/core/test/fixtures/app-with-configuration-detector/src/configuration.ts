@@ -1,8 +1,8 @@
-import { Configuration } from '../../../../src';
+import { CommonJSFileDetector, Configuration } from '../../../../src';
 
 @Configuration({
-  detectorOptions: {
+  detector: new CommonJSFileDetector({
     ignore: ['**/testing/**']
-  }
+  }),
 })
 export class AutoConfiguration {}

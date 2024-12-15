@@ -1,10 +1,10 @@
-import { close, createApp, createFunctionApp, createHttpRequest } from '@midwayjs/mock';
+import { close, createLegacyApp, createLegacyFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { join } from 'path';
 import { Framework } from '@midwayjs/faas';
 
 describe('test/index.test.ts', () => {
   it('serve with dirs with same prefix', async () => {
-    const app = await createApp(join(__dirname, './fixtures/koa-with-dirs'));
+    const app = await createLegacyApp(join(__dirname, './fixtures/koa-with-dirs'));
     const result = await createHttpRequest(app).get('/foo.js');
     expect(result.text).toMatch('console');
 
@@ -14,7 +14,7 @@ describe('test/index.test.ts', () => {
   });
 
   it('serve with dirs with different prefix', async () => {
-    const app = await createApp(join(__dirname, './fixtures/koa-with-different-dirs'));
+    const app = await createLegacyApp(join(__dirname, './fixtures/koa-with-different-dirs'));
     const result = await createHttpRequest(app).get('/foo.js');
     expect(result.text).toMatch('console');
 
@@ -30,7 +30,7 @@ describe('test/index.test.ts', () => {
 
   it('should test faas use static', async () => {
     const appDir = join(__dirname, 'fixtures/faas-with-dirs');
-    const app = await createFunctionApp<Framework>(appDir);
+    const app = await createLegacyFunctionApp<Framework>(appDir);
     const result = await createHttpRequest(app).get('/foo.js');
     expect(result.text).toMatch('console');
     await close(app);

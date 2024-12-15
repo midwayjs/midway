@@ -8,13 +8,16 @@ import {
   safeRequire,
   MidwayContainer,
   Configuration,
-  CONFIGURATION_KEY,
   Framework,
   Inject,
   sleep,
   IMidwayContainer,
   loadModule,
   DefaultConsoleLoggerFactory,
+  CommonJSFileDetector,
+  MAIN_MODULE_KEY,
+  DecoratorManager,
+  CONFIGURATION_KEY
 } from '../src';
 import { join } from 'path';
 import * as http from 'http';
@@ -62,7 +65,40 @@ function deepEqual(x, y) {
   ) : (x === y);
 }
 
-export async function createLightFramework(baseDir: string = '', bootstrapOptions: IMidwayBootstrapOptions = {}): Promise<IMidwayFramework<any, any, any>> {
+function hackDecoratorManager() {
+  if (!DecoratorManager['_mocked']) {
+    DecoratorManager['_listModule'] = DecoratorManager.listModule;
+    DecoratorManager['_saveModule'] = DecoratorManager.saveModule;
+    DecoratorManager.saveModule = (key, target) => {
+      if (key === CONFIGURATION_KEY) {
+        // 防止重复，测试的时候 configuration 会被重复 save
+        const modules = DecoratorManager['_listModule'](key);
+        if (modules.some((module: any) => module.target === target.target)) {
+          return;
+        } else {
+          DecoratorManager['_bindModuleMap'].set(target.target, true);
+          DecoratorManager['_saveModule'](key, target);
+        }
+      } else {
+        DecoratorManager['_saveModule'](key, target);
+      }
+    }
+    DecoratorManager.listModule = key => {
+      const modules = DecoratorManager['_listModule'](key);
+      return modules.filter((module: any) => {
+        if (key === CONFIGURATION_KEY) {
+          return DecoratorManager['_bindModuleMap'].has(module.target);
+        }
+        return DecoratorManager['_bindModuleMap'].has(module);
+      });
+    };
+    DecoratorManager['_mocked'] = true;
+  }
+}
+
+export async function createLightFramework(baseDir: string = '', bootstrapOptions: IMidwayBootstrapOptions = {}, extraOptions: {
+  defaultDetector?: boolean;
+} = {}): Promise<IMidwayFramework<any, any, any>> {
   /**
    * 一个全量的空框架
    */
@@ -94,9 +130,18 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
     }
   }
 
-  @Configuration({
-    namespace: 'empty'
-  })
+  const conf = {
+    namespace: 'empty',
+    detector: new CommonJSFileDetector({
+      conflictCheck: true,
+    }),
+  };
+
+  if (extraOptions.defaultDetector === false) {
+    delete conf.detector;
+  }
+
+  @Configuration(conf)
   class EmptyConfiguration {
 
     @Inject()
@@ -120,6 +165,7 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
   const loadMode = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
 
   // set default entry file
+  const appDir = baseDir;
   if (baseDir) {
     imports.unshift(
       await loadModule(join(baseDir, 'configuration.ts'), {
@@ -135,22 +181,12 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
   container.onBeforeBind(target => {
     bindModuleMap.set(target, true);
   });
-
-  const originMethod = container.listModule;
-
-  container.listModule = key => {
-    const modules = originMethod.call(container, key);
-    if (key === CONFIGURATION_KEY) {
-      return modules;
-    }
-
-    return modules.filter((module: any) => {
-      return bindModuleMap.has(module);
-    });
-  };
+  DecoratorManager['_bindModuleMap'] = bindModuleMap;
+  hackDecoratorManager();
 
   await initializeGlobalApplicationContext({
     baseDir,
+    appDir,
     imports,
     applicationContext: container,
     loggerFactory: new DefaultConsoleLoggerFactory(),
@@ -161,26 +197,29 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
   return container.getAsync(EmptyFramework as any);
 }
 
-export async function createFramework(baseDir: string = '', globalConfig: any = {}, loggerFactory?): Promise<IMidwayContainer> {
+export async function createFramework(baseDir: string = '', globalConfig: any = {}, loggerFactory?, extraOptions: {
+  defaultDetector?: boolean;
+} = {}): Promise<IMidwayContainer> {
   const container = new MidwayContainer();
+
   const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
   // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
   container.onBeforeBind(target => {
     bindModuleMap.set(target, true);
   });
 
-  const originMethod = container.listModule;
+  DecoratorManager['_bindModuleMap'] = bindModuleMap;
+  hackDecoratorManager();
 
-  container.listModule = key => {
-    const modules = originMethod.call(container, key);
-    if (key === CONFIGURATION_KEY) {
-      return modules;
-    }
+  container.registerObject('baseDir', baseDir);
 
-    return modules.filter((module: any) => {
-      return bindModuleMap.has(module);
+
+  if (extraOptions.defaultDetector !== false) {
+    const detector = new CommonJSFileDetector({
+      conflictCheck: true,
     });
-  };
+    await detector.run(container, MAIN_MODULE_KEY);
+  }
 
   return initializeGlobalApplicationContext({
     baseDir,
@@ -190,6 +229,7 @@ export async function createFramework(baseDir: string = '', globalConfig: any = 
     applicationContext: container,
     globalConfig,
     loggerFactory,
+
   });
 }
 
