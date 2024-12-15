@@ -6,7 +6,7 @@
     "@babel/plugin-proposal-decorators": "7.25.9",
     "@nrwl/tao": "16.10.0",
     "@types/jest": "29.5.14",
-    "@types/node": "22.10.1",
+    "@types/node": "22.10.2",
     "@vercel/ncc": "0.38.3",
     "autocannon": "7.15.0",
     "fs-extra": "11.2.0",
