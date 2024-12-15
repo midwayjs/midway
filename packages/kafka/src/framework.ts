@@ -99,7 +99,8 @@ export class MidwayKafkaFramework extends BaseFramework<
       if (!consumer) return;
       const subscriberMap = {};
       // find subscriber
-      const subscriberModules = DecoratorManager.listModule(KAFKA_DECORATOR_KEY);
+      const subscriberModules =
+        DecoratorManager.listModule(KAFKA_DECORATOR_KEY);
       for (const subscriberModule of subscriberModules) {
         const subscriberName = MetadataManager.getOwnMetadata(
           KAFKA_DECORATOR_KEY,
@@ -181,13 +182,14 @@ export class MidwayKafkaFramework extends BaseFramework<
   }
 
   private async loadLegacySubscriber() {
-    const subscriberModules = DecoratorManager.listModule(MS_CONSUMER_KEY, module => {
-      const metadata: ConsumerMetadata.ConsumerMetadata = MetadataManager.getOwnMetadata(
-        MS_CONSUMER_KEY,
-        module
-      );
-      return metadata.type === MSListenerType.KAFKA;
-    });
+    const subscriberModules = DecoratorManager.listModule(
+      MS_CONSUMER_KEY,
+      module => {
+        const metadata: ConsumerMetadata.ConsumerMetadata =
+          MetadataManager.getOwnMetadata(MS_CONSUMER_KEY, module);
+        return metadata.type === MSListenerType.KAFKA;
+      }
+    );
     for (const module of subscriberModules) {
       const data = listPropertyDataFromClass(MS_CONSUMER_KEY, module);
       const topicTitles = [...new Set(data.map(e => e[0].topic))];
