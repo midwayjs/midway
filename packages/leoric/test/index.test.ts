@@ -1,4 +1,4 @@
-import { close, createLightApp } from '@midwayjs/mock';
+import { close, createLegacyLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
 import { UserService } from './fixtures/basic/src/service/user';
@@ -15,7 +15,7 @@ describe('test/index.test.ts', () => {
 
   beforeAll(async () => {
     cleanFile(join(__dirname, 'fixtures/basic', 'database.sqlite'));
-    app = await createLightApp(join(__dirname, 'fixtures', 'basic'));
+    app = await createLegacyLightApp(join(__dirname, 'fixtures', 'basic'));
   });
 
   afterAll(async () => {
