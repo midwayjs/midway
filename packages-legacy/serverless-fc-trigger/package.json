@@ -9,7 +9,7 @@
     "@midwayjs/runtime-mock": "^3.7.0",
     "@midwayjs/serverless-fc-starter": "^3.19.0",
     "body-parser": "1.20.3",
-    "express": "4.21.1"
+    "express": "4.21.2"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.19.0",
