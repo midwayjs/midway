@@ -8,7 +8,7 @@ import {
   LOGGER_KEY,
   APPLICATION_CONTEXT_KEY,
   MAIN_APPLICATION_KEY,
-  DecoratorManager,
+  DecoratorManager, ALL_VALUE_KEY
 } from '../';
 import { ScopeEnum } from '../../interface';
 
@@ -35,12 +35,28 @@ export function Plugin(identifier?: string): PropertyDecorator {
 }
 
 /**
+ * @deprecated Use @AllConfig() instead
+ * @since 2.0.0
+ */
+export function Config(): PropertyDecorator;
+/**
  * Config decorator, use to get config
  * @since 2.0.0
  */
-export function Config(identifier?: string): PropertyDecorator {
+export function Config(identifier: string): PropertyDecorator;
+export function Config(identifier?: string): PropertyDecorator{
   return DecoratorManager.createCustomPropertyDecorator(CONFIG_KEY, {
     identifier,
+  });
+}
+
+/**
+ * Config decorator, use to get all config
+ * @since 4.0.0
+ */
+export function AllConfig(): PropertyDecorator {
+  return DecoratorManager.createCustomPropertyDecorator(CONFIG_KEY, {
+    identifier: ALL_VALUE_KEY,
   });
 }
 

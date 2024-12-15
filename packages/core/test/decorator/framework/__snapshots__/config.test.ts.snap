@@ -2,6 +2,18 @@
 
 exports[`/test/framework/config.test.ts config decorator should be ok 1`] = `
 {
+  "allConfig": [
+    {
+      "key": "config",
+      "metadata": {
+        "identifier": "common:all_value_key",
+      },
+      "options": {
+        "impl": true,
+      },
+      "propertyName": "allConfig",
+    },
+  ],
   "bbb": [
     {
       "key": "config",

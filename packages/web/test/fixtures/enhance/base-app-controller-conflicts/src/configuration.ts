@@ -1,6 +1,8 @@
-import { Configuration } from '@midwayjs/core';
+import { CommonJSFileDetector, Configuration } from '@midwayjs/core';
 
 @Configuration({
-  conflictCheck: true
+  detector: new CommonJSFileDetector({
+    conflictCheck: true,
+  }),
 })
 export class MainConfiguration {}
