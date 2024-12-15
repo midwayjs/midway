@@ -9,7 +9,9 @@ import { close, createApp } from '@midwayjs/mock';
  * @param options
  */
 export async function creatApp(name: string, options?: IMidwayRabbitMQConfigurationOptions): Promise<IMidwayRabbitMQApplication> {
-  return createApp<Framework>(join(__dirname, 'fixtures', name), options, rabbitmq);
+  return createApp<Framework>(join(__dirname, 'fixtures', name), Object.assign({
+    imports: [rabbitmq]
+  }, options));
 }
 
 export async function closeApp(app) {
