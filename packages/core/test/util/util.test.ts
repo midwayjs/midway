@@ -186,21 +186,6 @@ describe('/test/pathFileUtil.test.ts', () => {
     // special
     expect(transformRequestObjectByType('0', Boolean)).toEqual(false);
     expect(transformRequestObjectByType('false', Boolean)).toEqual(false);
-
-    class A {
-      a: number;
-      b: number;
-      invoke() {
-        return this.a + this.b;
-      }
-    }
-
-    const result: A = transformRequestObjectByType({
-      a: 1,
-      b: 2
-    }, A);
-    expect(result instanceof A).toBeTruthy();
-    expect(result.invoke()).toEqual(3);
   });
 
   it('should test object property writable', function () {

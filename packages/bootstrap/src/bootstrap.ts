@@ -11,7 +11,6 @@ import {
 } from '@midwayjs/core';
 import { join } from 'path';
 import { ILogger, LoggerFactory, loggers } from '@midwayjs/logger';
-import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 import {
   ChildProcessEventBus,
   ThreadEventBus,
@@ -60,7 +59,6 @@ export class BootstrapStarter {
     }
 
     this.applicationContext = await initializeGlobalApplicationContext({
-      asyncContextManager: createContextManager(),
       loggerFactory: loggers,
       ...this.globalOptions,
     });

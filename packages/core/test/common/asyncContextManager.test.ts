@@ -15,10 +15,8 @@
  */
 
 import * as assert from 'assert';
-import {
-  AsyncHooksContextManager,
-} from '../src';
-import { ASYNC_ROOT_CONTEXT } from '@midwayjs/core';
+import { ASYNC_ROOT_CONTEXT, AsyncLocalStorageContextManager } from '../../src/common/asyncContextManager';
+
 
 /** Get a key to uniquely identify a context value */
 function createContextKey(description: string) {
@@ -31,13 +29,13 @@ function createContextKey(description: string) {
   return Symbol.for(description);
 }
 
-describe('AsyncHooksContextManager.test.ts', () => {
-  let contextManager: AsyncHooksContextManager;
+describe('AsyncLocalStorageContextManager.test.ts', () => {
+  let contextManager: AsyncLocalStorageContextManager;
   const key1 = createContextKey('test key 1');
-  let otherContextManager: AsyncHooksContextManager;
+  let otherContextManager: AsyncLocalStorageContextManager;
 
   beforeEach(() => {
-    contextManager = new AsyncHooksContextManager();
+    contextManager = new AsyncLocalStorageContextManager();
     contextManager.enable();
   });
 
@@ -49,7 +47,7 @@ describe('AsyncHooksContextManager.test.ts', () => {
   describe('.enable()', () => {
     it('should work', () => {
       assert.doesNotThrow(() => {
-        contextManager = new AsyncHooksContextManager();
+        contextManager = new AsyncLocalStorageContextManager();
         assert.ok(
           contextManager.enable() === contextManager,
           'should return this'
@@ -271,7 +269,7 @@ describe('AsyncHooksContextManager.test.ts', () => {
     });
 
     it('should not influence other instances', () => {
-      otherContextManager = new AsyncHooksContextManager();
+      otherContextManager = new AsyncLocalStorageContextManager();
       otherContextManager.enable();
 
       const context = ASYNC_ROOT_CONTEXT.setValue(key1, 2);
@@ -348,7 +346,7 @@ describe('AsyncHooksContextManager.test.ts', () => {
     });
 
     it('should not influence other instances', () => {
-      otherContextManager = new AsyncHooksContextManager();
+      otherContextManager = new AsyncLocalStorageContextManager();
       otherContextManager.enable();
 
       const context = ASYNC_ROOT_CONTEXT.setValue(key1, 2);

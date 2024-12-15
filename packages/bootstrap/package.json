@@ -21,7 +21,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/async-hooks-context-manager": "workspace:^",
     "@midwayjs/event-bus": "1.10.0"
   },
   "devDependencies": {

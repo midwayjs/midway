@@ -5,7 +5,6 @@ import {
 } from '@midwayjs/faas';
 import * as getRawBody from 'raw-body';
 import { IncomingMessage } from 'http';
-import { createContextManager } from '@midwayjs/async-hooks-context-manager';
 import { mockContext } from './mock';
 import { InitializeContext } from './interface';
 
@@ -74,7 +73,6 @@ export class BootstrapStarter extends AbstractBootstrapStarter {
           applicationAdapter,
         },
       },
-      asyncContextManager: createContextManager(),
       ...this.options,
     });
 

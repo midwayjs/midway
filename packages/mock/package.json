@@ -39,7 +39,6 @@
     "ws": "8.18.0"
   },
   "dependencies": {
-    "@midwayjs/async-hooks-context-manager": "workspace:^",
     "@types/superagent": "4.1.14",
     "@types/supertest": "2.0.16",
     "js-yaml": "4.1.0",

@@ -23,6 +23,7 @@ import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 import { MidwayHealthService } from './service/healthService';
 import { ComponentConfigurationLoader } from './context/componentLoader';
 import { findProjectEntryFile, findProjectEntryFileSync } from './util';
+import { AsyncLocalStorageContextManager } from './common/asyncContextManager';
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
@@ -135,6 +136,10 @@ export async function prepareGlobalApplicationContextAsync(
   // register baseDir and appDir
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
+
+  if (!globalOptions.asyncContextManager) {
+    globalOptions.asyncContextManager = new AsyncLocalStorageContextManager();
+  }
 
   debug('[core]: set default module load type and entry file');
 
@@ -261,6 +266,10 @@ export function prepareGlobalApplicationContext(
   // register baseDir and appDir
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
+
+  if (!globalOptions.asyncContextManager) {
+    globalOptions.asyncContextManager = new AsyncLocalStorageContextManager();
+  }
 
   debug('[core]: set default module load type and entry file');
 

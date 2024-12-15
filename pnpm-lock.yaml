@@ -86,9 +86,6 @@ importers:
 
   packages-serverless/midway-fc-starter:
     dependencies:
-      '@midwayjs/async-hooks-context-manager':
-        specifier: workspace:^
-        version: link:../../packages/async-hooks-context-manager
       '@midwayjs/faas':
         specifier: workspace:^
         version: link:../../packages/faas
@@ -140,12 +137,6 @@ importers:
         specifier: 3.4.0
         version: 3.4.0
 
-  packages/async-hooks-context-manager:
-    devDependencies:
-      '@midwayjs/core':
-        specifier: workspace:^
-        version: link:../core
-
   packages/axios:
     dependencies:
       axios:
@@ -164,9 +155,6 @@ importers:
 
   packages/bootstrap:
     dependencies:
-      '@midwayjs/async-hooks-context-manager':
-        specifier: workspace:^
-        version: link:../async-hooks-context-manager
       '@midwayjs/event-bus':
         specifier: 1.10.0
         version: 1.10.0
@@ -737,9 +725,6 @@ importers:
 
   packages/mock:
     dependencies:
-      '@midwayjs/async-hooks-context-manager':
-        specifier: workspace:^
-        version: link:../async-hooks-context-manager
       '@types/superagent':
         specifier: 4.1.14
         version: 4.1.14

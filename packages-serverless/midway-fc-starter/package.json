@@ -4,7 +4,6 @@
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/async-hooks-context-manager": "workspace:^",
     "@midwayjs/faas": "workspace:^",
     "raw-body": "2.5.2"
   },
