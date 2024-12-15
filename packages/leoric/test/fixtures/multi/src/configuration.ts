@@ -7,7 +7,6 @@ const { InjectDataSource } = leoric;
 
 @Configuration({
   imports: [koa, leoric],
-  conflictCheck: true,
   importConfigs: [path.join(__dirname, 'config')],
 })
 export class ContainerLifeCycle {
@@ -24,6 +23,6 @@ export class ContainerLifeCycle {
     expect(this.defaultDataSource).toBeDefined();
     expect(this.defaultDataSource).toEqual(this.namedDataSource);
     expect(this.defaultDataSource).not.toEqual(this.subsystemDataSource);
-    
+
   }
 }
