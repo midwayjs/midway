@@ -39,7 +39,6 @@ export class AuthMiddleware extends PassportMiddleware(CRCCStrategy) {
 
 @Configuration({
   imports: [koa, require('../../../../src')],
-  conflictCheck: true,
   importConfigs: [path.join(__dirname, 'config')],
 })
 export class ContainerLifeCycle {

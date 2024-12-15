@@ -15,7 +15,6 @@ import * as SocketIO from '@midwayjs/socketio';
     prometheusSocketIO
   ],
   importConfigs: [join(__dirname, './config')],
-  conflictCheck: true,
 })
 export class ContainerLifeCycle implements ILifeCycle {
   @App('socketIO')

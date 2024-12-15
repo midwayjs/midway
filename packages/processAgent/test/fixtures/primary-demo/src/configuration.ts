@@ -5,7 +5,6 @@ import * as primary from '../../../../src'
 
 @Configuration({
   imports: [primary],
-  conflictCheck: true,
   importConfigs: [
     {
       default: {

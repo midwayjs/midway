@@ -35,7 +35,6 @@ export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
 
 @Configuration({
   imports: [koa, require('../../../../src')],
-  conflictCheck: true,
   importConfigs: [path.join(__dirname, 'config')],
 })
 export class ContainerLifeCycle {

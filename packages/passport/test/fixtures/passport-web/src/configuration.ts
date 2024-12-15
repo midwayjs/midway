@@ -6,7 +6,6 @@ import { AuthMiddleware } from './local.middleware';
 
 @Configuration({
   imports: [egg, passport],
-  conflictCheck: true,
   importConfigs: [path.join(__dirname, 'config')],
 })
 export class ContainerLifeCycle {
