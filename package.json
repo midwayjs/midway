@@ -53,7 +53,7 @@
     "application",
     "webframework"
   ],
-  "homepage": "http://github.com/midwayjs/midway",
+  "homepage": "https://github.com/midwayjs/midway",
   "repository": {
     "type": "git",
     "url": "https://github.com/midwayjs/midway.git"

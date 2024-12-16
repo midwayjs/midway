@@ -100,4 +100,4 @@ it will create a new span in current trace.
 
 ## License
 
-[MIT]((http://github.com/midwayjs/midway/blob/master/LICENSE))
+[MIT]((https://github.com/midwayjs/midway/blob/master/LICENSE))

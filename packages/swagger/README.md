@@ -8,4 +8,4 @@ Document: [https://midwayjs.org](https://midwayjs.org)
 
 ## License
 
-[MIT]((http://github.com/midwayjs/midway/blob/master/LICENSE))
+[MIT]((https://github.com/midwayjs/midway/blob/master/LICENSE))

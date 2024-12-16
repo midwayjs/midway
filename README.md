@@ -12,7 +12,7 @@
     <a href="https://github.com/midwayjs/midway/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
     <a href="https://gitpod.io/#https://github.com/midwayjs/midway"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
     <a href="https://github.com/midwayjs/mwts"><img src="https://img.shields.io/badge/code%20style-midwayjs-brightgreen.svg" alt="Code Style: MidwayJS"></a>
-    <a href="https://opensource.alibaba.com/contribution_leaderboard/details?projectValue=midway"><img src="https://img.shields.io/badge/Midway-%E6%9F%A5%E7%9C%8B%E8%B4%A1%E7%8C%AE%E6%8E%92%E8%A1%8C%E6%A6%9C-orange" alt="Leaderboard">
+    <a href="https://opensource.alibaba.com/contribution_leaderboard/details?projectValue=midway"><img src="https://img.shields.io/badge/Midway-%E6%9F%A5%E7%9C%8B%E8%B4%A1%E7%8C%AE%E6%8E%92%E8%A1%8C%E6%A6%9C-orange" alt="Leaderboard"></a>
 </p>
 
 [English](./README.en-US.md) | 简体中文
@@ -155,7 +155,7 @@ cd my_midway_app && npm run dev
   <img src="https://contrib.rocks/image?repo=midwayjs/midway&max=200" />
 </a>
 
-请告知我们可以为你做些什么，不过在此之前，请检查一下是否有 [已经存在的Bug或者意见](http://github.com/midwayjs/midway/issues)。
+请告知我们可以为你做些什么，不过在此之前，请检查一下是否有 [已经存在的Bug或者意见](https://github.com/midwayjs/midway/issues)。
 
 如果你是一个代码贡献者，请参考代码贡献规范。
 
@@ -166,6 +166,6 @@ cd my_midway_app && npm run dev
 
 ## License
 
-我们的代码使用 [MIT](http://github.com/midwayjs/midway/blob/master/LICENSE) 协议，请放心使用。
+我们的代码使用 [MIT](https://github.com/midwayjs/midway/blob/master/LICENSE) 协议，请放心使用。
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway?ref=badge_large)
