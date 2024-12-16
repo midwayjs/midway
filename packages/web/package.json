@@ -34,7 +34,7 @@
     "dayjs": "1.11.13",
     "egg-logger": "3.6.0",
     "egg-mock": "4.2.1",
-    "egg-scripts": "3.0.1",
+    "egg-scripts": "3.1.0",
     "egg-socket.io": "4.1.6",
     "egg-view-nunjucks": "2.3.0",
     "fake-egg": "1.0.0",
