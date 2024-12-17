@@ -9,7 +9,7 @@ import { InfoService } from '../infoService';
 @Middleware()
 export class InfoMiddleware {
   @Config('info.infoPath')
-  protected infoPath;
+  protected infoPath: string;
 
   @Inject()
   protected infoService: InfoService;

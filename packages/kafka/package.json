@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/kafka",
-  "version": "3.19.0",
+  "version": "3.19.2",
   "description": "Midway Framework for kafka",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -34,7 +34,7 @@
   "homepage": "https://github.com/midwayjs/midway#readme",
   "devDependencies": {
     "@midwayjs/core": "^3.19.0",
-    "@midwayjs/mock": "^3.19.0"
+    "@midwayjs/mock": "^3.19.2"
   },
   "dependencies": {
     "kafkajs": "2.2.4"

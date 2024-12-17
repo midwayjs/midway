@@ -16,7 +16,7 @@ export function bitToMB(bit: number): string {
   return Number((bit || 0) / 1024 / 1024).toFixed(2) + ' MB';
 }
 
-export function renderToHtml(infoList: TypeInfo[], title): string {
+export function renderToHtml(infoList: TypeInfo[], title: string): string {
   let html = `<div style="padding: 24px; font-size: 36px;background: #9999cb;font-weight: bold;">${title}</div>`;
   html += infoList
     .map(info => {

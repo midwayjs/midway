@@ -4,4 +4,5 @@ export const info = {
   title: 'Midway Info',
   infoPath: '/_info',
   hiddenKey: DefaultHiddenKey,
+  ignoreKey: [],
 } as InfoConfigOptions;

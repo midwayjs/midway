@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/prometheus",
-  "version": "3.19.0",
+  "version": "3.19.2",
   "description": "midway component for prometheus",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -24,8 +24,8 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^3.19.0",
-    "@midwayjs/koa": "^3.19.0",
-    "@midwayjs/mock": "^3.19.0",
+    "@midwayjs/koa": "^3.19.2",
+    "@midwayjs/mock": "^3.19.2",
     "@types/request": "2.48.12"
   },
   "dependencies": {

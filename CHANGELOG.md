@@ -1,6 +1,58 @@
 # Change Log
 
 
+## v3.19.2 (2024-12-15)
+
+#### :nail_care: Polish
+* `info`
+  * [#4220](https://github.com/midwayjs/midway/pull/4220) refactor: add InfoType enumeration to supplement the missing ts syntax type ([@mmdapl](https://github.com/mmdapl))
+
+#### :package: Dependencies
+* `mikro`
+  * [#4223](https://github.com/midwayjs/midway/pull/4223) chore(deps): update mikro-orm monorepo to v6.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4227](https://github.com/midwayjs/midway/pull/4227) chore(deps): update dependency @types/node to v22.10.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4214](https://github.com/midwayjs/midway/pull/4214) chore(deps): update dependency typedoc to ^0.27.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4209](https://github.com/midwayjs/midway/pull/4209) chore(deps): update dependency @types/node to v22.10.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4202](https://github.com/midwayjs/midway/pull/4202) chore(deps): update dependency @types/node to v22.10.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4201](https://github.com/midwayjs/midway/pull/4201) chore(deps): update dependency @types/node to v22.9.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4199](https://github.com/midwayjs/midway/pull/4199) chore(deps): update dependency @types/node to v22.9.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4198](https://github.com/midwayjs/midway/pull/4198) chore(deps): update dependency @types/node to v22.9.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4195](https://github.com/midwayjs/midway/pull/4195) chore(deps): update dependency @types/node to v22.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4225](https://github.com/midwayjs/midway/pull/4225) fix(deps): update dependency express to v4.21.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#4224](https://github.com/midwayjs/midway/pull/4224) fix(deps): update dependency axios to v1.7.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4226](https://github.com/midwayjs/midway/pull/4226) fix(deps): update dependency mqtt to v5.10.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#4208](https://github.com/midwayjs/midway/pull/4208) chore(deps): update dependency mongoose to v8.8.3 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4194](https://github.com/midwayjs/midway/pull/4194) chore(deps): update dependency mongoose to v8.8.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4215](https://github.com/midwayjs/midway/pull/4215) fix(deps): update dependency @grpc/grpc-js to v1.12.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `captcha`, `security`
+  * [#4222](https://github.com/midwayjs/midway/pull/4222) fix(deps): update dependency nanoid to v3.3.8 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#4213](https://github.com/midwayjs/midway/pull/4213) chore(deps): update dependency egg-logger to v3.6.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#4212](https://github.com/midwayjs/midway/pull/4212) chore(deps): update dependency @opentelemetry/sdk-node to v0.56.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`, `oss`
+  * [#4211](https://github.com/midwayjs/midway/pull/4211) chore(deps): update dependency dotenv to v16.4.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `rabbitmq`
+  * [#4210](https://github.com/midwayjs/midway/pull/4210) chore(deps): update dependency @types/amqplib to v0.10.6 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4200](https://github.com/midwayjs/midway/pull/4200) chore(deps): update dependency amqplib to v0.10.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `express-session`
+  * [#4203](https://github.com/midwayjs/midway/pull/4203) chore(deps): update dependency @types/express-session to v1.18.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#4197](https://github.com/midwayjs/midway/pull/4197) fix(deps): update dependency qs to v6.13.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `typegoose`
+  * [#4196](https://github.com/midwayjs/midway/pull/4196) chore(deps): update dependency @typegoose/typegoose to v12.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- 142vip.cn ([@mmdapl](https://github.com/mmdapl))
+
+
+
 ## v3.19.1 (2024-11-18)
 
 #### :bug: Bug Fix

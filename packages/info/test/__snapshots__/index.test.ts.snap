@@ -7,7 +7,7 @@ exports[`test/index.test.ts should test get config and filter secret 1`] = `
     "core": "{"healthCheckTimeout":1000}",
     "cos": "{"default":{"SecretId":"df******af","SecretKey":"te******vc","SecurityToken":"fj*********af"}}",
     "debug": "{"recordConfigMergeOrder":true}",
-    "info": "{"title":"Midway Info","infoPath":"/_info","hiddenKey":["k***","****","*****n","********","p****"]}",
+    "info": "{"title":"Midway Info","infoPath":"/_info","hiddenKey":["k***","****","*****n","********","p****"],"ignoreKey":[]}",
     "keys": "["1*******5"]",
     "oss": "{"clients":{"default":{"accessKeyId":"123","accessKeySecret":"f*****f"}}}",
   },
