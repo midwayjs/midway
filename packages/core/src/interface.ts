@@ -1078,6 +1078,7 @@ export interface IMidwayFramework<
   getBaseDir(): string;
   getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
+  getFrameworkLogger(): ILogger;
   createLogger(name: string, options: MidwayLoggerOptions): ILogger;
   getProjectName(): string;
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
