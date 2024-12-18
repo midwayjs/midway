@@ -225,4 +225,4 @@ export const view = {
 
 ## License
 
-[MIT]((http://github.com/midwayjs/midway/blob/master/LICENSE))
+[MIT]((https://github.com/midwayjs/midway/blob/master/LICENSE))

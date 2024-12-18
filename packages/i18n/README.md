@@ -172,4 +172,4 @@ In the egg/koa/express/faas, current locale will be obtained based on query, hea
 
 ## License
 
-[MIT]((http://github.com/midwayjs/midway/blob/master/LICENSE))
+[MIT]((https://github.com/midwayjs/midway/blob/master/LICENSE))
