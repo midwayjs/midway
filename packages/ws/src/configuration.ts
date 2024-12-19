@@ -12,10 +12,10 @@ import { Configuration } from '@midwayjs/core';
         midwayLogger: {
           clients: {
             wsLogger: {
-              fileLogName: 'midway-ws.log'
-            }
-          }
-        }
+              fileLogName: 'midway-ws.log',
+            },
+          },
+        },
       },
     },
   ],

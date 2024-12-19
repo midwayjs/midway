@@ -31,9 +31,9 @@ export const midwayLogger = {
           req.url;
         return `${info.timestamp} ${info.LEVEL} ${info.pid} [${label}] ${info.message}`;
       },
-    }
-  }
-}
+    },
+  },
+};
 
 export const cookieParser: {
   enable?: boolean;

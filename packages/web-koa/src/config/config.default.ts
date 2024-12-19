@@ -28,9 +28,9 @@ export const midwayLogger = {
           ctx.url;
         return `${info.timestamp} ${info.LEVEL} ${info.pid} [${label}] ${info.message}`;
       },
-    }
-  }
-}
+    },
+  },
+};
 
 /**
  * The key that signing cookies. It can contain multiple keys seperated by `,`.

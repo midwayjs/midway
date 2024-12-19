@@ -297,7 +297,9 @@ export class MidwayWebFramework extends BaseFramework<
 
   public setContextLoggerClass() {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const contextFormat = this.configService.getConfiguration('midwayLogger.clients.appLogger.contextFormat');
+    const contextFormat = this.configService.getConfiguration(
+      'midwayLogger.clients.appLogger.contextFormat'
+    );
     class MidwayEggContextLogger extends MidwayContextLogger<Context> {
       constructor(ctx, appLogger) {
         super(ctx, appLogger, {
