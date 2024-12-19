@@ -1,78 +1,37 @@
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  CreateAxiosDefaults,
-} from 'axios';
-import axios from 'axios';
 import {
-  Config,
   Init,
   Inject,
+  MidwayCommonError,
   Provide,
   Scope,
   ScopeEnum,
-  MidwayCommonError,
-  ServiceFactory,
 } from '@midwayjs/core';
-import { AxiosHttpService } from './interface';
+import { Axios, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { HttpServiceFactory } from './http-service.factory';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
-  @Config('axios')
-  axiosConfig;
-
-  @Init()
-  async init() {
-    let axiosConfig = this.axiosConfig;
-    if (!this.axiosConfig['clients']) {
-      axiosConfig = {
-        default: {},
-        clients: {
-          default: this.axiosConfig,
-        },
-      };
-    }
-    await this.initClients(axiosConfig);
-  }
-
-  protected async createClient(
-    config: CreateAxiosDefaults,
-    clientName: any
-  ): Promise<AxiosInstance> {
-    return axios.create(config);
-  }
-
-  getName(): string {
-    return 'axios';
-  }
-}
-
-@Provide()
-@Scope(ScopeEnum.Singleton)
-export class HttpService implements AxiosHttpService {
+export class HttpService implements Axios {
   private instance: AxiosInstance;
 
   @Inject()
   private serviceFactory: HttpServiceFactory;
 
+  @Init()
+  protected async init() {
+    const clientName = this.serviceFactory.getDefaultClientName() || 'default';
+
+    this.instance = this.serviceFactory.get(clientName);
+    if (!this.instance) {
+      throw new MidwayCommonError('axios default instance not found.');
+    }
+  }
   get defaults() {
     return this.instance.defaults;
   }
 
   get interceptors() {
     return this.instance.interceptors;
-  }
-
-  @Init()
-  protected async init() {
-    this.instance = this.serviceFactory.get(
-      this.serviceFactory.getDefaultClientName?.() || 'default'
-    );
-    if (!this.instance) {
-      throw new MidwayCommonError('axios default instance not found.');
-    }
   }
 
   getUri(config?: AxiosRequestConfig): string {
