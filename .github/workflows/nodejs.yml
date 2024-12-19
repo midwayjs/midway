@@ -87,7 +87,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 9.6.0
           run_install: false
 
       - name: Use Node.js ${{ matrix.node-version }}
@@ -110,7 +110,7 @@ jobs:
           container-name: 'mqtt'
 
       - name: Install dependencies
-        run: pnpm install
+        run: ./scripts/ci
 
       - name: Install codecov
         run: pnpm add -g codecov
