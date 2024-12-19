@@ -833,15 +833,14 @@ describe('/test/baseFramework.test.ts', () => {
         appDir,
         'src'
       ), {
-        custom: {
-          contextLoggerApplyLogger: 'customFrameworkLogger',
-          contextLoggerFormat: info => {
-            return `[custom ctx] ${info.message}`;
-          },
-        },
+        custom: {},
         midwayLogger: {
           clients: {
-            customFrameworkLogger: {},
+            customFrameworkLogger: {
+              contextFormat: info => {
+                return `[custom ctx] ${info.message}`;
+              },
+            },
             customLogger: {
               format: info => {
                 return `[new custom] ${info.message}`;
