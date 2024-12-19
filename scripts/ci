@@ -6,13 +6,13 @@
 ##
 
 # NPM源
-NPM_REGISTRY="https://mirrors.tencent.com/npm/"
+#NPM_REGISTRY="https://mirrors.tencent.com/npm/"
 
 ## 获取所有参数
-echo "运行命令: export COREPACK_NPM_REGISTRY=$NPM_REGISTRY && corepack enable pnpm && pnpm i --registry $NPM_REGISTRY --frozen-lockfile $*"
+echo "运行命令: corepack enable pnpm && pnpm i  --frozen-lockfile $*"
 
-# 导出corepack环境变量，安装pnpm版本
-export COREPACK_NPM_REGISTRY=$NPM_REGISTRY &&  corepack enable pnpm
+# 安装pnpm版本
+corepack enable pnpm
 
 # 安装项目依赖
-pnpm i  --registry $NPM_REGISTRY --frozen-lockfile "$@"
+pnpm i --frozen-lockfile "$@"
