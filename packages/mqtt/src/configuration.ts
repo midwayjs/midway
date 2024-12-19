@@ -10,7 +10,6 @@ import { MqttProducerFactory } from './service';
         mqtt: {
           pub: {},
           sub: {},
-          contextLoggerApplyLogger: 'mqttLogger',
         },
         midwayLogger: {
           clients: {

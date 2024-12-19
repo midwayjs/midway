@@ -22,6 +22,7 @@ import {
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
+  ILogger,
 } from '@midwayjs/core';
 import {
   Context,
@@ -273,5 +274,9 @@ export class MidwayGRPCFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'gRPC';
+  }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('appLogger');
   }
 }

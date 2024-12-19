@@ -316,4 +316,8 @@ export class MidwayKafkaFramework extends BaseFramework<
       await this.typedResourceManager.destroy();
     }
   }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('kafkaLogger');
+  }
 }

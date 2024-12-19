@@ -7,6 +7,7 @@ import {
   MidwayInvokeForbiddenError,
   Utils,
   MetadataManager,
+  ILogger,
 } from '@midwayjs/core';
 import {
   Application,
@@ -39,6 +40,10 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
 
   getFrameworkName(): string {
     return 'cron';
+  }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('cronLogger');
   }
 
   async run() {

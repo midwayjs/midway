@@ -24,6 +24,7 @@ import {
   WSEventInfo,
   WSEventTypeEnum,
   Framework,
+  ILogger,
 } from '@midwayjs/core';
 
 @Framework()
@@ -343,5 +344,9 @@ export class MidwaySocketIOFramework extends BaseFramework<
     undefined
   > {
     return this.connectionMiddlewareManager;
+  }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('appLogger');
   }
 }

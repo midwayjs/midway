@@ -14,6 +14,7 @@ import {
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
+  ILogger,
 } from '@midwayjs/core';
 import * as http from 'http';
 import { debuglog } from 'util';
@@ -350,6 +351,10 @@ export class MidwayWSFramework extends BaseFramework<
         socket.ping();
       });
     }, this.configurationOptions.serverHeartbeatInterval);
+  }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('wsLogger');
   }
 }
 
