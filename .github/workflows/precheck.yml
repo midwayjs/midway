@@ -26,7 +26,7 @@ jobs:
     - name: Install pnpm
       uses: pnpm/action-setup@v4
       with:
-        version: 9
+        version: 9.6.0
         run_install: false
 
     - name: Use Node.js ${{ matrix.node-version }}
@@ -35,7 +35,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
 
-    - run: pnpm install
+    - run: ./scripts/ci
     - run: pnpm build --if-present
     - run: pnpm lint
     - run: pnpm lint:cycle
