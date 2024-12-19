@@ -12,6 +12,7 @@ import {
   MidwayWebRouterService,
   Framework,
   Types,
+  ILogger,
 } from '@midwayjs/core';
 import { Cookies } from '@midwayjs/cookies';
 import {
@@ -350,5 +351,9 @@ export class MidwayKoaFramework extends BaseFramework<
     Filter: CommonFilterUnion<IMidwayKoaContext, Next, unknown>
   ) {
     this.filterManager.useFilter(Filter);
+  }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('appLogger');
   }
 }

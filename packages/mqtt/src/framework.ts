@@ -4,6 +4,7 @@ import {
   Logger,
   DecoratorManager,
   MetadataManager,
+  ILogger,
 } from '@midwayjs/core';
 import {
   IMidwayMQTTApplication,
@@ -25,7 +26,7 @@ export class MidwayMQTTFramework extends BaseFramework<
   protected subscriberMap: Map<string, MqttClient> = new Map();
 
   @Logger('mqttLogger')
-  mqttLogger;
+  mqttLogger: ILogger;
 
   configure() {
     return this.configService.getConfiguration('mqtt');
@@ -141,5 +142,9 @@ export class MidwayMQTTFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'mqtt';
+  }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('mqttLogger');
   }
 }

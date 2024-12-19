@@ -50,8 +50,6 @@ export abstract class BaseFramework<
   protected logger: ILogger;
   protected appLogger: ILogger;
   protected defaultContext = {};
-  protected contextLoggerApplyLogger: string;
-  protected contextLoggerFormat: any;
   protected middlewareManager = this.createMiddlewareManager();
   protected filterManager = this.createFilterManager();
   protected guardManager = this.createGuardManager();
@@ -81,11 +79,8 @@ export abstract class BaseFramework<
   constructor(readonly applicationContext: IMidwayGlobalContainer) {}
 
   @Init()
-  async init() {
+  protected async init() {
     this.configurationOptions = this.configure() ?? ({} as OPT);
-    this.contextLoggerApplyLogger =
-      this.configurationOptions.contextLoggerApplyLogger ?? 'appLogger';
-    this.contextLoggerFormat = this.configurationOptions.contextLoggerFormat;
     this.logger = this.loggerService.getLogger('coreLogger');
     this.appLogger = this.loggerService.getLogger('appLogger');
     return this;
@@ -96,8 +91,9 @@ export abstract class BaseFramework<
     options: IMidwayBootstrapOptions
   ): void | Promise<void>;
   public abstract run(): Promise<void>;
+  public abstract getFrameworkLogger(): ILogger;
 
-  isEnable(): boolean {
+  public isEnable(): boolean {
     return true;
   }
 
@@ -153,14 +149,12 @@ export abstract class BaseFramework<
       ctxLoggerCache.set(name, ctxLogger);
       return ctxLogger;
     } else {
-      const appLogger = this.getLogger(name ?? this.contextLoggerApplyLogger);
+      const appLogger = name ? this.getLogger(name) : this.getFrameworkLogger();
       // avoid maximum call stack size exceeded
       if (ctx['_logger']) {
         return ctx['_logger'];
       }
-      ctx['_logger'] = this.loggerService.createContextLogger(ctx, appLogger, {
-        contextFormat: this.contextLoggerFormat,
-      });
+      ctx['_logger'] = this.loggerService.createContextLogger(ctx, appLogger);
       return ctx['_logger'];
     }
   }

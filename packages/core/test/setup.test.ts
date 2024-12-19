@@ -10,6 +10,7 @@ import {
   Framework,
   Inject,
 } from '../src';
+import { ILogger } from '@midwayjs/logger';
 
 describe('/test/setup.test.ts', () => {
   it('should test setup and config', async () => {
@@ -138,6 +139,10 @@ describe('/test/setup.test.ts', () => {
 
       configure() {
         return {};
+      }
+
+      getFrameworkLogger(): ILogger {
+        return undefined;
       }
     }
 

@@ -1,4 +1,5 @@
 import { MidwayApplicationManager, BaseFramework, MidwayMockService } from '../../src';
+import { ILogger } from '@midwayjs/logger';
 
 describe('test/common/applicationManager.test.ts', () => {
   it('should test application manager', async () => {
@@ -16,6 +17,10 @@ describe('test/common/applicationManager.test.ts', () => {
 
       run(): Promise<void> {
         return Promise.resolve(undefined);
+      }
+
+      getFrameworkLogger(): ILogger {
+        return undefined;
       }
     }
 

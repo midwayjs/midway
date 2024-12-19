@@ -18,6 +18,7 @@ import {
   ObjectIdentifier,
   isTypeScriptEnvironment,
   DecoratorManager,
+  ILogger,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
@@ -600,6 +601,10 @@ class LightFramework extends BaseFramework<any, any, any, any, any> {
 
   getFrameworkName(): string {
     return 'lightFramework';
+  }
+
+  getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('appLogger');
   }
 }
 
