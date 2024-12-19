@@ -14,6 +14,7 @@ import {
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
+  ILogger,
 } from '@midwayjs/core';
 import {
   IMidwayExpressApplication,
@@ -392,5 +393,9 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'express';
+  }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('appLogger');
   }
 }

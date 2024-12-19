@@ -14,7 +14,6 @@ import { JobNameOrClz } from './interface';
       default: {
         cron: {
           defaultCronJobOptions: {},
-          contextLoggerApplyLogger: 'cronLogger',
         },
         midwayLogger: {
           clients: {

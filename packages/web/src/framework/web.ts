@@ -10,6 +10,7 @@ import {
   WebControllerGenerator,
   Framework,
   Inject,
+  ILogger,
 } from '@midwayjs/core';
 import {
   IMidwayWebConfigurationOptions,
@@ -296,11 +297,11 @@ export class MidwayWebFramework extends BaseFramework<
 
   public setContextLoggerClass() {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
+    const contextFormat = this.configService.getConfiguration('midwayLogger.clients.appLogger.contextFormat');
     class MidwayEggContextLogger extends MidwayContextLogger<Context> {
       constructor(ctx, appLogger) {
         super(ctx, appLogger, {
-          contextFormat: self.contextLoggerFormat,
+          contextFormat,
         });
       }
     }
@@ -326,5 +327,9 @@ export class MidwayWebFramework extends BaseFramework<
 
   public setServer(server) {
     this.server = server;
+  }
+
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('appLogger');
   }
 }

@@ -72,6 +72,10 @@ export class BullFramework
     return 'bull';
   }
 
+  public getFrameworkLogger(): ILogger {
+    return this.loggerService.getLogger('bullLogger');
+  }
+
   async run() {
     const processorModules = DecoratorManager.listModule(BULL_PROCESSOR_KEY);
     for (const mod of processorModules) {

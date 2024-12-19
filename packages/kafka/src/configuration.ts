@@ -5,9 +5,7 @@ import { Configuration } from '@midwayjs/core';
   importConfigs: [
     {
       default: {
-        kafka: {
-          contextLoggerApplyLogger: 'kafkaLogger',
-        },
+        kafka: {},
         midwayLogger: {
           clients: {
             kafkaLogger: {
