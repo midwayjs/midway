@@ -11,8 +11,15 @@ export const midwayFeature = {
 }
 
 export const egg = {
-  contextLoggerFormat: info => {
-    const ctx = info.ctx;
-    return `${info.timestamp} ${info.LEVEL} ${info.pid} [${Date.now() - ctx.startTime}ms ${ctx.method} abcde] ${info.message}`;
-  },
+}
+
+export const midwayLogger = {
+  clients: {
+    appLogger: {
+      contextFormat: info => {
+        const ctx = info.ctx;
+        return `${info.timestamp} ${info.LEVEL} ${info.pid} [${Date.now() - ctx.startTime}ms ${ctx.method} abcde] ${info.message}`;
+      },
+    }
+  }
 }

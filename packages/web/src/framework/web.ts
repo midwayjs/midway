@@ -291,16 +291,18 @@ export class MidwayWebFramework extends BaseFramework<
     if (name) {
       return this.app.loggers[name] || loggers.getLogger(name);
     }
-    return this.appLogger;
+    return this.loggerService.getLogger(this.frameworkLoggerName);
   }
 
   public setContextLoggerClass() {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
+    const contextFormat = this.configService.getConfiguration(
+      'midwayLogger.clients.appLogger.contextFormat'
+    );
     class MidwayEggContextLogger extends MidwayContextLogger<Context> {
       constructor(ctx, appLogger) {
         super(ctx, appLogger, {
-          contextFormat: self.contextLoggerFormat,
+          contextFormat,
         });
       }
     }

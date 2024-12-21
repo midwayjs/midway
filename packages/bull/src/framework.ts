@@ -44,6 +44,7 @@ export class BullFramework
   private bullDefaultConcurrency: number;
   private bullClearRepeatJobWhenStart: boolean;
   private queueMap: Map<string, BullQueue> = new Map();
+  protected frameworkLoggerName = 'bullLogger';
 
   @Logger('bullLogger')
   protected bullLogger: ILogger;

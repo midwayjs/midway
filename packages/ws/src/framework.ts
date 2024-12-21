@@ -38,6 +38,7 @@ export class MidwayWSFramework extends BaseFramework<
   server: http.Server;
   protected heartBeatInterval: NodeJS.Timeout;
   protected connectionMiddlewareManager = this.createMiddlewareManager();
+  protected frameworkLoggerName = 'wsLogger';
 
   configure(): IMidwayWSConfigurationOptions {
     return this.configService.getConfiguration('webSocket');

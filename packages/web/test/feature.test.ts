@@ -92,7 +92,7 @@ describe('/test/feature.test.ts', () => {
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('hello world,harry');
     await sleep();
-    expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'GET abcde')).toEqual(4);
+    expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'GET abcde')).toEqual(5);
     expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'abcde] custom label')).toEqual(1);
     await closeApp(app);
   });
