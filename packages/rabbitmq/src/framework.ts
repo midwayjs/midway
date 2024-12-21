@@ -9,7 +9,6 @@ import {
   DecoratorManager,
   MetadataManager,
   listPropertyDataFromClass,
-  ILogger,
 } from '@midwayjs/core';
 import {
   IMidwayRabbitMQApplication,
@@ -120,9 +119,5 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'rabbitmq';
-  }
-
-  public getFrameworkLogger(): ILogger {
-    return this.loggerService.getLogger('appLogger');
   }
 }

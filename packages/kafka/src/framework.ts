@@ -52,6 +52,8 @@ export class MidwayKafkaFramework extends BaseFramework<
     IKafkaConsumerInitOptions,
     IKafkaConsumer
   >;
+  protected frameworkLoggerName = 'kafkaLogger';
+
   configure() {
     return this.configService.getConfiguration('kafka');
   }
@@ -315,9 +317,5 @@ export class MidwayKafkaFramework extends BaseFramework<
     if (this.typedResourceManager) {
       await this.typedResourceManager.destroy();
     }
-  }
-
-  public getFrameworkLogger(): ILogger {
-    return this.loggerService.getLogger('kafkaLogger');
   }
 }

@@ -10,7 +10,6 @@ import {
   WebControllerGenerator,
   Framework,
   Inject,
-  ILogger,
 } from '@midwayjs/core';
 import {
   IMidwayWebConfigurationOptions,
@@ -292,7 +291,7 @@ export class MidwayWebFramework extends BaseFramework<
     if (name) {
       return this.app.loggers[name] || loggers.getLogger(name);
     }
-    return this.appLogger;
+    return this.loggerService.getLogger(this.frameworkLoggerName);
   }
 
   public setContextLoggerClass() {
@@ -329,9 +328,5 @@ export class MidwayWebFramework extends BaseFramework<
 
   public setServer(server) {
     this.server = server;
-  }
-
-  public getFrameworkLogger(): ILogger {
-    return this.loggerService.getLogger('appLogger');
   }
 }

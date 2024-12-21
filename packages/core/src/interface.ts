@@ -1078,7 +1078,6 @@ export interface IMidwayFramework<
   getBaseDir(): string;
   getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
-  getFrameworkLogger(): ILogger;
   createLogger(name: string, options: MidwayLoggerOptions): ILogger;
   getProjectName(): string;
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
@@ -1090,6 +1089,7 @@ export interface IMidwayFramework<
   useGuard(guard: CommonGuardUnion<CTX>): void;
   runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean>;
   getNamespace(): string;
+  setFrameworkLoggerName(name: string): void;
 }
 
 export interface MidwayAppInfo {

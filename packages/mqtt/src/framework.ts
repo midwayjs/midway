@@ -1,10 +1,8 @@
 import {
   Framework,
   BaseFramework,
-  Logger,
   DecoratorManager,
   MetadataManager,
-  ILogger,
 } from '@midwayjs/core';
 import {
   IMidwayMQTTApplication,
@@ -24,9 +22,7 @@ export class MidwayMQTTFramework extends BaseFramework<
 > {
   public app: IMidwayMQTTApplication;
   protected subscriberMap: Map<string, MqttClient> = new Map();
-
-  @Logger('mqttLogger')
-  mqttLogger: ILogger;
+  protected frameworkLoggerName = 'mqttLogger';
 
   configure() {
     return this.configService.getConfiguration('mqtt');
@@ -40,7 +36,7 @@ export class MidwayMQTTFramework extends BaseFramework<
     const { sub } = this.configurationOptions;
 
     if (Object.keys(sub || {}).length === 0) {
-      this.mqttLogger.info(
+      this.logger.info(
         '[midway-mqtt] Not found consumer config, skip init consumer'
       );
     }
@@ -69,7 +65,7 @@ export class MidwayMQTTFramework extends BaseFramework<
   protected async beforeStop(): Promise<void> {
     for (const [name, consumer] of this.subscriberMap) {
       await consumer.endAsync();
-      this.mqttLogger.info(`[midway-mqtt] subscriber: ${name} is closed`);
+      this.logger.info(`[midway-mqtt] subscriber: ${name} is closed`);
     }
   }
 
@@ -107,7 +103,7 @@ export class MidwayMQTTFramework extends BaseFramework<
         resolve(client);
       });
       client.on('error', err => {
-        this.mqttLogger.error(err);
+        this.logger.error(err);
       });
     });
 
@@ -142,9 +138,5 @@ export class MidwayMQTTFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'mqtt';
-  }
-
-  public getFrameworkLogger(): ILogger {
-    return this.loggerService.getLogger('mqttLogger');
   }
 }

@@ -26,7 +26,6 @@ import {
   WEB_RESPONSE_REDIRECT,
   httpError,
   MidwayFeatureNotImplementedError,
-  ILogger,
 } from '@midwayjs/core';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
@@ -592,9 +591,5 @@ export class MidwayFaaSFramework extends BaseFramework<
 
   public getAllHandlerNames() {
     return Array.from(this.funMappingStore.keys());
-  }
-
-  public getFrameworkLogger(): ILogger {
-    return this.loggerService.getLogger('appLogger');
   }
 }

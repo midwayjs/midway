@@ -22,7 +22,6 @@ import {
 import { join } from 'path';
 import * as http from 'http';
 import * as getRawBody from 'raw-body';
-import { ILogger } from '@midwayjs/logger';
 
 /**
  * 任意一个数组中的对象，和预期的对象属性一致即可
@@ -128,10 +127,6 @@ export async function createLightFramework(baseDir: string = '', bootstrapOption
 
     getFrameworkName(): string {
       return 'light';
-    }
-
-    getFrameworkLogger(): ILogger {
-      return this.loggerService.getLogger('appLogger');
     }
   }
 

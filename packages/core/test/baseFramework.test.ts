@@ -859,7 +859,7 @@ describe('/test/baseFramework.test.ts', () => {
       const mainFramework = midwayFrameworkService.getMainFramework();
       const ctx = mainFramework.getApplication().createAnonymousContext();
       expect(ctx.logger.info('hello world')).toEqual('[custom ctx] hello world');
-      expect(ctx.getLogger('appLogger').info('hello world')).toEqual('[custom ctx] hello world');
+      expect(ctx.getLogger('customFrameworkLogger').info('hello world')).toEqual('[custom ctx] hello world');
       expect(ctx.getLogger('customLogger').info('hello world')).toEqual('[new custom ctx] hello world');
       expect(mainFramework.getLogger('customLogger').info('hello world')).toEqual('[new custom] hello world');
     });

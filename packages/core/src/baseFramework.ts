@@ -48,7 +48,7 @@ export abstract class BaseFramework<
   public app: APP;
   public configurationOptions: OPT;
   protected logger: ILogger;
-  protected appLogger: ILogger;
+  protected frameworkLoggerName = 'appLogger';
   protected defaultContext = {};
   protected middlewareManager = this.createMiddlewareManager();
   protected filterManager = this.createFilterManager();
@@ -82,7 +82,6 @@ export abstract class BaseFramework<
   protected async init() {
     this.configurationOptions = this.configure() ?? ({} as OPT);
     this.logger = this.loggerService.getLogger('coreLogger');
-    this.appLogger = this.loggerService.getLogger('appLogger');
     return this;
   }
 
@@ -91,7 +90,6 @@ export abstract class BaseFramework<
     options: IMidwayBootstrapOptions
   ): void | Promise<void>;
   public abstract run(): Promise<void>;
-  public abstract getFrameworkLogger(): ILogger;
 
   public isEnable(): boolean {
     return true;
@@ -129,7 +127,7 @@ export abstract class BaseFramework<
   }
 
   protected createContextLogger(ctx: CTX, name?: string): ILogger {
-    if (name && name !== 'appLogger') {
+    if (name && name !== this.frameworkLoggerName) {
       const appLogger = this.getLogger(name);
       let ctxLoggerCache = ctx.getAttr(REQUEST_CTX_LOGGER_CACHE_KEY) as Map<
         string,
@@ -149,7 +147,7 @@ export abstract class BaseFramework<
       ctxLoggerCache.set(name, ctxLogger);
       return ctxLogger;
     } else {
-      const appLogger = name ? this.getLogger(name) : this.getFrameworkLogger();
+      const appLogger = this.getLogger(name);
       // avoid maximum call stack size exceeded
       if (ctx['_logger']) {
         return ctx['_logger'];
@@ -371,7 +369,7 @@ export abstract class BaseFramework<
   }
 
   public getLogger(name?: string) {
-    return this.loggerService.getLogger(name) ?? this.appLogger;
+    return this.loggerService.getLogger(name ?? this.frameworkLoggerName);
   }
 
   public getCoreLogger() {
@@ -434,5 +432,13 @@ export abstract class BaseFramework<
 
   public getNamespace() {
     return this.namespace;
+  }
+
+  /**
+   * Set the default framework logger name
+   * @since 4.0.0
+   */
+  public setFrameworkLoggerName(loggerName: string) {
+    this.frameworkLoggerName = loggerName;
   }
 }
