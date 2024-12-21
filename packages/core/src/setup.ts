@@ -140,7 +140,6 @@ export async function initializeGlobalApplicationContext(
 export async function destroyGlobalApplicationContext(
   applicationContext: IMidwayGlobalContainer
 ) {
-
   printStepDebugInfo('Ready to destroy applicationContext');
   const loggerService = await applicationContext.getAsync(MidwayLoggerService);
   const loggerFactory = loggerService.getCurrentLoggerFactory();

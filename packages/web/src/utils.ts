@@ -87,6 +87,7 @@ export async function initializeAgentApplicationContext(agent) {
     MidwayEnvironmentService
   );
   agentFramework.loggerService = applicationContext.get(MidwayLoggerService);
+  agentFramework.loggerService.initSync();
   agentFramework.informationService = applicationContext.get(
     MidwayInformationService
   );
@@ -115,6 +116,8 @@ export async function initializeAgentApplicationContext(agent) {
 
     const loggerService =
       getCurrentApplicationContext().get(MidwayLoggerService);
+
+    loggerService.initSync();
 
     // framework/config/plugin/logger/app decorator support
     // register base config hook
