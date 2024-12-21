@@ -31,8 +31,9 @@ import {
 const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
+let projectIdx = 1;
 function printStepDebugInfo(stepInfo: string) {
-  debug(`\n\nStep ${stepIdx++}: ${stepInfo}\n`);
+  debug(`\n\nProject ${projectIdx} - Step ${stepIdx++}: ${stepInfo}\n`);
 }
 
 /**
@@ -139,17 +140,26 @@ export async function initializeGlobalApplicationContext(
 export async function destroyGlobalApplicationContext(
   applicationContext: IMidwayGlobalContainer
 ) {
+
+  printStepDebugInfo('Ready to destroy applicationContext');
   const loggerService = await applicationContext.getAsync(MidwayLoggerService);
   const loggerFactory = loggerService.getCurrentLoggerFactory();
 
+  printStepDebugInfo('Stopping lifecycle');
   // stop lifecycle
   const lifecycleService = await applicationContext.getAsync(
     MidwayLifeCycleService
   );
   await lifecycleService.stop();
+
+  printStepDebugInfo('Stopping applicationContext');
   // stop container
   await applicationContext.stop();
+
+  printStepDebugInfo('Closing loggerFactory');
   loggerFactory.close();
+
+  printStepDebugInfo('Cleaning performance manager');
   MidwayPerformanceManager.cleanAll();
 
   global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
@@ -157,6 +167,7 @@ export async function destroyGlobalApplicationContext(
 
   // reset counter
   stepIdx = 1;
+  projectIdx++;
 }
 
 /**

@@ -147,11 +147,11 @@ export abstract class BaseFramework<
       ctxLoggerCache.set(name, ctxLogger);
       return ctxLogger;
     } else {
-      const appLogger = this.getLogger(name);
       // avoid maximum call stack size exceeded
       if (ctx['_logger']) {
         return ctx['_logger'];
       }
+      const appLogger = this.getLogger(name);
       ctx['_logger'] = this.loggerService.createContextLogger(ctx, appLogger);
       return ctx['_logger'];
     }
