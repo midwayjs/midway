@@ -17,6 +17,13 @@ import { GRPCClients } from './comsumer/clients';
       default: {
         grpc: {},
         grpcServer: {},
+        midwayLogger: {
+          clients: {
+            grpcLogger: {
+              fileLogName: 'midway-grpc.log',
+            },
+          },
+        },
       },
     },
   ],

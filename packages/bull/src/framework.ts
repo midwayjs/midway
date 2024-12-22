@@ -5,8 +5,6 @@ import {
   Framework,
   Utils,
   MidwayInvokeForbiddenError,
-  ILogger,
-  Logger,
   DecoratorManager,
   MetadataManager,
 } from '@midwayjs/core';
@@ -45,9 +43,6 @@ export class BullFramework
   private bullClearRepeatJobWhenStart: boolean;
   private queueMap: Map<string, BullQueue> = new Map();
   protected frameworkLoggerName = 'bullLogger';
-
-  @Logger('bullLogger')
-  protected bullLogger: ILogger;
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as any;
@@ -120,7 +115,7 @@ export class BullFramework
     );
     this.queueMap.set(name, queue);
     queue.on('error', err => {
-      this.bullLogger.error(err);
+      this.logger.error(err);
     });
     return queue;
   }
