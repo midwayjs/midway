@@ -31,7 +31,6 @@
     "axios": "^1.1.3",
     "clsx": "^1.2.1",
     "codesandbox": "^2.2.3",
-    "docusaurus-plugin-typedoc-api": "^3.0.0",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.1.0",
     "lodash": "^4.17.21",
@@ -44,7 +43,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-fast-marquee": "1.3.5",
-    "typedoc": "0.24.4",
+    "typedoc": "^0.27.5",
     "url-loader": "4.1.1",
     "windups": "1.2.1"
   },
@@ -72,7 +71,6 @@
     ]
   },
   "engines": {
-    "node": ">=18",
-    "pnpm": ">=9"
+    "node": ">=18"
   }
 }

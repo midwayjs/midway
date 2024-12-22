@@ -24,8 +24,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm run build --if-present
+#      - run: npm install
+#      - run: npm run build --if-present
       - name: action-zip
         uses: montudor/action-zip@v1.0.0
       - uses: redkubes/docusaurus-deploy-action@master
