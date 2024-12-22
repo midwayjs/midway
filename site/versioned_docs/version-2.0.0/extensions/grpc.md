@@ -282,13 +282,14 @@ Bootstrap.load(grpcService).run();
 | services      | IGRPCServiceOptions[] | 必选，数组，需要暴露的 gRPC 服务信息，每个服务对应一个 proto 文件                                                                                |
 | loaderOptions | object                | 可选，使用  @grpc/proto-loader 加载的选项，具体参考[这里](https://github.com/grpc/grpc-node/blob/master/packages/proto-loader/README.md)，默认为 |
 
-{
+
+`{
   keepCase: true,
  longs: String,
  enums: String,
  defaults: true,
  oneofs: true,
-} |
+}` |
 | credentials | ServerCredentials | 可选，服务凭证，值参考[这里](https://grpc.github.io/grpc/node/grpc.ServerCredentials.html)，默认值为 ServerCredentials.createInsecure() |
 
 services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 服务。每个 service 的结构为：

@@ -143,13 +143,13 @@ export default {
 
 支持所有的 [koa-static-cache](https://github.com/koajs/static-cache) 配置，默认配置如下：
 
-| 属性名  | 默认值                                          | 描述                                                         |
-| ------- | ----------------------------------------------- | ------------------------------------------------------------ |
-| dirs    | {"default": {prefix: "/public", "dir": "xxxx"}} | 托管的目录，为了支持多个目录，是个对象。<br />除了 default 之外，其他的 key 可以随意添加，dirs 中的对象值会和外部默认值做合并 |
-| dynamic | true                                            | 动态加载文件，而不是在初始化读取后做缓存                     |
-| preload | false                                           | 是否在初始化缓存                                             |
-| maxAge  | prod 为 31536000，其他为 0                      | 缓存的最大时间                                               |
-| buffer  | prod 为 true，其余为 false                      | 使用 buffer 字符返回                                         |
+| 属性名  | 默认值                                               | 描述                                                         |
+| ------- |---------------------------------------------------| ------------------------------------------------------------ |
+| dirs    | \{"default": \{prefix: "/public", "dir": "xxxx"}} | 托管的目录，为了支持多个目录，是个对象。<br />除了 default 之外，其他的 key 可以随意添加，dirs 中的对象值会和外部默认值做合并 |
+| dynamic | true                                              | 动态加载文件，而不是在初始化读取后做缓存                     |
+| preload | false                                             | 是否在初始化缓存                                             |
+| maxAge  | prod 为 31536000，其他为 0                             | 缓存的最大时间                                               |
+| buffer  | prod 为 true，其余为 false                             | 使用 buffer 字符返回                                         |
 
 更多配置，请参考 [koa-static-cache](https://github.com/koajs/static-cache) 。
 

@@ -529,10 +529,7 @@ events 是一个由不同事件（触发器）组成的**对象数组**。这个
 | name | string | 可选，触发器名 |
 | bucket | string | 对象存储的 bucket 名 |
 | events | string | 触发函数执行的事件名 |
-| filter | {
-   prefix: string;
-   suffix: string;
- } | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
+| filter | `{prefix: string;suffix: string;}` | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
 | enable | boolean | 是否默认开启，默认 true |
 | role | string | 此角色用来可以触发函数执行 |
 | version | string | 阿里云云字段，服务版本，默认 "LATEST"。 |

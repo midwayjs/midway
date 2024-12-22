@@ -10,7 +10,10 @@ import clsx from 'clsx';
 import Translate from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
 import {HtmlClassNameProvider, ThemeClassNames} from '@docusaurus/theme-common';
-import {BlogPostProvider, useBlogPost} from '@docusaurus/theme-common/internal';
+import {
+  BlogPostProvider,
+  useBlogPost,
+} from '@docusaurus/plugin-content-blog/client';
 import BlogPostPageMetadata from '@theme/BlogPostPage/Metadata';
 import BlogLayout from '@theme/BlogLayout';
 import ChangelogItem from '@theme/ChangelogItem';
@@ -36,7 +39,7 @@ function ChangelogPageContent({
 }: {
   sidebar: BlogSidebar;
   children: ReactNode;
-}): JSX.Element {
+}): ReactNode {
   const {metadata, toc} = useBlogPost();
   const {nextItem, prevItem, frontMatter} = metadata;
   const {
@@ -70,7 +73,7 @@ function ChangelogPageContent({
 // This page doesn't change anything. It's just swapping BlogPostItem with our
 // own ChangelogItem. We don't want to apply the swizzled item to the actual
 // blog.
-export default function ChangelogPage(props: Props): JSX.Element {
+export default function ChangelogPage(props: Props): ReactNode {
   const ChangelogContent = props.content;
   return (
     <BlogPostProvider content={props.content} isBlogPostPage>

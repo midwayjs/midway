@@ -33,11 +33,11 @@ export class HelloAliyunService {
 
 ## OSS 触发器配置
 
-| 属性名 | 类型     | 描述                 |
-| ------ | -------- | -------------------- |
+| 属性名 | 类型       | 描述                 |
+| ------ |----------| -------------------- |
 | bucket | string   | 对象存储的 bucket 名 |
 | events | string[] | 触发函数执行的事件名 |
-| filter | {        |
+| filter | \{       |
 
 prefix: string;
    suffix: string;

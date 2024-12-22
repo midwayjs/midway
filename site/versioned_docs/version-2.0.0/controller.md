@@ -196,7 +196,7 @@ Midway 提供了更多从 Query、Body 、Header 等位置获取值的装饰器�
 :::caution
 **注意 **@Queries 装饰器和 @Query **有所区别**。
 
-Queries 会将相同的 key 聚合到一起，变为数组。当用户访问的接口参数为 `/?name=a&name=b` 时，@Queries 会返回 {name: [a, b]}，而 Query 只会返回 {name: b}
+Queries 会将相同的 key 聚合到一起，变为数组。当用户访问的接口参数为 `/?name=a&name=b` 时，@Queries 会返回 `{name: [a, b]}`，而 Query 只会返回 `{name: b}`
 :::
 
 **示例：获取单个 body**

@@ -507,16 +507,16 @@ export default {
 
 所有属性描述如下：
 
-| 属性         | 类型                                      | 描述                                                    |
-| ------------ | ----------------------------------------- | ------------------------------------------------------- |
-| port         | number                                    | 可选，启动的端口                                        |
-| globalPrefix | string                                    | 可选，全局的 http 前缀                                  |
-| keys         | string[]                                  | 可选，Cookies 签名，如果上层未写 keys，也可以在这里设置 |
-| hostname     | string                                    | 可选，监听的 hostname，默认 127.1                       |
-| key          | string \| Buffer \| Array<Buffer\|Object> | 可选，Https key，服务端私钥                             |
-| cert         | string \| Buffer \| Array<Buffer\|Object> | 可选，Https cert，服务端证书                            |
-| ca           | string \| Buffer \| Array<Buffer\|Object> | 可选，Https ca                                          |
-| http2        | boolean                                   | 可选，http2 支持，默认 false                            |
+| 属性         | 类型                                         | 描述                                                    |
+| ------------ |--------------------------------------------| ------------------------------------------------------- |
+| port         | number                                     | 可选，启动的端口                                        |
+| globalPrefix | string                                     | 可选，全局的 http 前缀                                  |
+| keys         | string[]                                   | 可选，Cookies 签名，如果上层未写 keys，也可以在这里设置 |
+| hostname     | string                                     | 可选，监听的 hostname，默认 127.1                       |
+| key          | string \| Buffer \| Array\<Buffer\|Object> | 可选，Https key，服务端私钥                             |
+| cert         | string \| Buffer \| Array\<Buffer\|Object> | 可选，Https cert，服务端证书                            |
+| ca           | string \| Buffer \| Array\<Buffer\|Object> | 可选，Https ca                                          |
+| http2        | boolean                                    | 可选，http2 支持，默认 false                            |
 
 
 

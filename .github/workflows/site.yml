@@ -2,7 +2,7 @@ name: site sync
 
 on:
   push:
-    branches: [main]
+    branches: [v4-next]
     paths:
       - site/**
       - CHANGELOG.md
@@ -34,15 +34,3 @@ jobs:
           git-user: czy88840616
           git-password: ${{ secrets.GH_TOKEN }}
           deployment-branch: gh-pages
-      - name: Zip output
-        run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
-        working-directory: site
-      - name: upload files to OSS
-        uses: fangbinwei/aliyun-oss-website-action@v1
-        with:
-          accessKeyId: ${{ secrets.DEPLOY_SITE_ACCESS_KEY_ID }}
-          accessKeySecret: ${{ secrets.DEPLOY_SITE_ACCESS_KEY_SECRET }}
-          bucket: midway-next-site-hk
-          # use your own endpoint
-          endpoint: oss-cn-hongkong.aliyuncs.com
-          folder: site/build

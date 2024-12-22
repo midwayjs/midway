@@ -217,22 +217,22 @@ export default {
 
 所有属性描述如下：
 
-| 属性         | 类型                                      | 描述                                                    |
-| ------------ | ----------------------------------------- | ------------------------------------------------------- |
-| port         | number                                    | 可选，启动的端口                                        |
-| globalPrefix | string                                    | 可选，全局的 http 前缀                                  |
-| keys         | string[]                                  | 可选，Cookies 签名，如果上层未写 keys，也可以在这里设置 |
-| hostname     | string                                    | 可选，监听的 hostname，默认 127.1                       |
-| key          | string \| Buffer \| Array<Buffer\|Object> | 可选，Https key，服务端私钥                             |
-| cert         | string \| Buffer \| Array<Buffer\|Object> | 可选，Https cert，服务端证书                            |
-| ca           | string \| Buffer \| Array<Buffer\|Object> | 可选，Https ca                                          |
-| http2        | boolean                                   | 可选，http2 支持，默认 false                            |
-| proxy        | boolean                                   | 可选，是否开启代理，如果为 true 则对于 request 请求中的 ip 优先从 Header 字段中 X-Forwarded-For 获取，默认 false           |
-| subdomainOffset        | number                                   | 可选，子域名的偏移量，默认 2                            |
-| proxyIpHeader        | string                                   | 可选，获取代理 ip 的字段名，默认为 X-Forwarded-For |
-| maxIpsCount        | number                                   | 可选，获取的 ips 最大数量，默认为 0（全部返回）|
-| serverTimeout | number | 可选，服务端超时配置，默认为 2 \* 60 \* 1000（2 分钟），单位毫秒 |
-| serverOptions | Record<string, any> | 可选，http Server [选项](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
+| 属性         | 类型                                         | 描述                                                    |
+| ------------ |--------------------------------------------| ------------------------------------------------------- |
+| port         | number                                     | 可选，启动的端口                                        |
+| globalPrefix | string                                     | 可选，全局的 http 前缀                                  |
+| keys         | string[]                                   | 可选，Cookies 签名，如果上层未写 keys，也可以在这里设置 |
+| hostname     | string                                     | 可选，监听的 hostname，默认 127.1                       |
+| key          | string \| Buffer \| Array\Buffer\|Object>  | 可选，Https key，服务端私钥                             |
+| cert         | string \| Buffer \| Array\<Buffer\|Object> | 可选，Https cert，服务端证书                            |
+| ca           | string \| Buffer \| Array\<Buffer\|Object> | 可选，Https ca                                          |
+| http2        | boolean                                    | 可选，http2 支持，默认 false                            |
+| proxy        | boolean                                    | 可选，是否开启代理，如果为 true 则对于 request 请求中的 ip 优先从 Header 字段中 X-Forwarded-For 获取，默认 false           |
+| subdomainOffset        | number                                     | 可选，子域名的偏移量，默认 2                            |
+| proxyIpHeader        | string                                     | 可选，获取代理 ip 的字段名，默认为 X-Forwarded-For |
+| maxIpsCount        | number                                     | 可选，获取的 ips 最大数量，默认为 0（全部返回）|
+| serverTimeout | number                                     | 可选，服务端超时配置，默认为 2 \* 60 \* 1000（2 分钟），单位毫秒 |
+| serverOptions | Record\<string, any>                       | 可选，http Server [选项](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
 
 
 

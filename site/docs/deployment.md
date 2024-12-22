@@ -316,15 +316,15 @@ Bootstrap
 
 
 
-| 属性           | 类型                                                         | 描述                                                         |
-| -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| appDir         | string                                                       | 可选，项目根目录，默认为 `process.cwd()`                     |
-| baseDir        | string                                                       | 可选，项目代码目录，研发时为 `src`，部署时为 `dist`          |
-| imports        | Component[]                                                  | 可选，显式的组件引用                                         |
-| moduleDetector | 'file' \| IFileDetector \| false                             | 可选，使用的模块加载方式，默认为 `file` ，使用依赖注入本地文件扫描方式，可以显式指定一个扫描器，也可以关闭扫描 |
-| logger         | Boolean \| ILogger                                           | 可选，bootstrap 中使用的 logger，默认为 consoleLogger        |
-| ignore         | string[]                                                     | 可选，依赖注入容器扫描忽略的路径，moduleDetector 为 false 时无效 |
-| globalConfig   | Array<{ [environmentName: string]: Record<string, any> }> \| Record<string, any> | 可选，全局传入的配置，如果传入对象，则直接以对象形式合并到当前的配置中，如果希望传入不同环境的配置，那么，以数组形式传入，结构和 `importConfigs` 一致。 |
+| 属性           | 类型                                                                                   | 描述                                                         |
+| -------------- |--------------------------------------------------------------------------------------| ------------------------------------------------------------ |
+| appDir         | string                                                                               | 可选，项目根目录，默认为 `process.cwd()`                     |
+| baseDir        | string                                                                               | 可选，项目代码目录，研发时为 `src`，部署时为 `dist`          |
+| imports        | Component[]                                                                          | 可选，显式的组件引用                                         |
+| moduleDetector | 'file' \| IFileDetector \| false                                                     | 可选，使用的模块加载方式，默认为 `file` ，使用依赖注入本地文件扫描方式，可以显式指定一个扫描器，也可以关闭扫描 |
+| logger         | Boolean \| ILogger                                                                   | 可选，bootstrap 中使用的 logger，默认为 consoleLogger        |
+| ignore         | string[]                                                                             | 可选，依赖注入容器扫描忽略的路径，moduleDetector 为 false 时无效 |
+| globalConfig   | Array\<\{ [environmentName: string]: Record\<string, any> }> \| Record\<string, any> | 可选，全局传入的配置，如果传入对象，则直接以对象形式合并到当前的配置中，如果希望传入不同环境的配置，那么，以数组形式传入，结构和 `importConfigs` 一致。 |
 
 
 

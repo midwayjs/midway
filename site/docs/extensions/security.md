@@ -257,17 +257,17 @@ export default {
 
 ### csrf
 
-| 配置项 | 类型 | 作用描述 | 默认值 |
-| --- | --- | --- | --- |
-| enable | boolean | 是否开启 | true |
+| 配置项 | 类型                                   | 作用描述 | 默认值 |
+| --- |--------------------------------------| --- | --- |
+| enable | boolean                              | 是否开启 | true |
 | type | 'all' / 'any' / 'ctoken' / 'referer' | csrf 校验类型，all/any 等于 ctoken + referer | 'ctoken' 从query/header/body 中获取 csrf token；；'referer' 则可以通过 refererWhiteList 配置白名单 |
-| useSession | boolean | csrf token 是否存放在 session 中 | false，默认存放在 cookies 中 |
-| cookieName | string | token 在 cookie 中存放的 字段 | 'csrfToken' |
-| sessionName | string | token 在 session 中存放的 字段 | 'csrfToken' |
-| headerName | string | token 在 header 中存放的 字段 | 'x-csrf-token' |
-| bodyName | string | token 在 body 中存放的 字段 | '_csrf' |
-| queryName | string | token 在 query 中存放的 字段 | '_csrf' |
-| refererWhiteList | Array<string\> | 允许的来源白名单 | [] |
+| useSession | boolean                              | csrf token 是否存放在 session 中 | false，默认存放在 cookies 中 |
+| cookieName | string                               | token 在 cookie 中存放的 字段 | 'csrfToken' |
+| sessionName | string                               | token 在 session 中存放的 字段 | 'csrfToken' |
+| headerName | string                               | token 在 header 中存放的 字段 | 'x-csrf-token' |
+| bodyName | string                               | token 在 body 中存放的 字段 | '_csrf' |
+| queryName | string                               | token 在 query 中存放的 字段 | '_csrf' |
+| refererWhiteList | Array\<string\>                      | 允许的来源白名单 | [] |
 
 #### 配置 refererWhiteList 不生效？
 + 原因一：refererWhiteList 中需要配置 referer 的 host 部分，例如 referer 为 `https://midway-demo.com:1234/docs`，则 refererWhiteList 中需要配置 `midway-demo.com:1234`。
@@ -310,12 +310,12 @@ xframe 用来配置 `X-Frame-Options` 响应头，用来给浏览器指示允许
 HTTP 响应头 `Content-Security-Policy` 允许站点管理者控制指定的页面加载哪些资源。这将帮助防止跨站脚本攻击（XSS）。
 
 
-| 配置项 | 类型 | 作用描述 | 默认值 |
-| --- | --- | --- | --- |
-| enable | boolean | 是否开启 | false |
-| policy | Object<key: string, value: string / string[] / boolean> | 策略列表 | {} |
-| reportOnly | boolean | 是否开启 | false |
-| supportIE | boolean | 是否支持IE浏览器 | false |
+| 配置项 | 类型                                                       | 作用描述 | 默认值 |
+| --- |----------------------------------------------------------| --- | --- |
+| enable | boolean                                                  | 是否开启 | false |
+| policy | Object\<key: string, value: string / string[] / boolean> | 策略列表 | {} |
+| reportOnly | boolean                                                  | 是否开启 | false |
+| supportIE | boolean                                                  | 是否支持IE浏览器 | false |
 
 详细的 `policy` 配置可以参考: [Content Security Policy (CSP) 是什么？阿里聚安全](https://www.zhihu.com/question/21979782/answer/122682029)
 

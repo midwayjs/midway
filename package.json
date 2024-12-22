@@ -60,7 +60,8 @@
     "url": "https://github.com/midwayjs/midway.git"
   },
   "engines": {
-    "node": ">= 16.0.0"
+    "node": ">= 18",
+    "pnpm": ">= 9"
   },
   "license": "MIT",
   "collective": {

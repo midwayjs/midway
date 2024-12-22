@@ -78,7 +78,7 @@ npm start
 
 ### 使用小程序开发工具预览
 
-打开微信小程序开发者工具，选择导入项目，微信小程序的目录是 <项目根目录>/build/wechat-miniprogram.
+打开微信小程序开发者工具，选择导入项目，微信小程序的目录是 \<项目根目录>/build/wechat-miniprogram.
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/98602/1630381124950-fd510d0e-fd14-42e3-a01a-6efa92be1ea2.png#clientId=u5ad910ea-f37d-4&from=paste&height=909&id=ufe8e37e3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=909&originWidth=1708&originalType=binary&ratio=1&size=125292&status=done&style=none&taskId=ud11606b5-14a1-42d3-9cd2-f09afba9eeb&width=1708" width="1708" />
 

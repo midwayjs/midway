@@ -5,15 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import Translate from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
+import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
-function TwitterLink() {
+function XLink() {
   return (
-    <Link href="https://twitter.com/docusaurus" className={styles.twitter}>
-      <b>Twitter</b>
+    <Link href="https://x.com/docusaurus" className={styles.x}>
+      <b>X</b>
       <svg
         style={{
           fill: '#1da1f2',
@@ -60,22 +61,24 @@ export default function ChangelogListHeader({
   blogTitle,
 }: {
   blogTitle: string;
-}): JSX.Element {
+}): ReactNode {
   return (
     <header className="margin-bottom--lg">
-      <h1 style={{fontSize: '3rem'}}>{blogTitle}</h1>
-      {/* <p>
+      <Heading as="h1" style={{fontSize: '3rem'}}>
+        {blogTitle}
+      </Heading>
+      <p>
         <Translate
           id="changelog.description"
           values={{
-            twitterLink: <TwitterLink />,
+            xLink: <XLink />,
             rssLink: <RssLink />,
           }}>
           {
-            'Subscribe through {rssLink} or follow us on {twitterLink} to stay up-to-date with new releases!'
+            'Subscribe through {rssLink} or follow us on {xLink} to stay up-to-date with new releases!'
           }
         </Translate>
-      </p> */}
+      </p>
     </header>
   );
 }
