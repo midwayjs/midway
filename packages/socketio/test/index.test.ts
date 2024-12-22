@@ -147,15 +147,14 @@ describe('/test/index.test.ts', () => {
       port: 3000,
     });
 
-    await new Promise<void>(async (resolve, reject) => {
+    const promise = new Promise<void>((resolve) => {
       client.on('connect_error', err => {
         console.log(err);
         resolve();
       });
-      client.send('my', 1, 2, 3);
-      await closeApp(app);
-    });
-
+    })
+    client.send('my', 1, 2, 3);
+    await Promise.all([closeApp(app), promise]);
     await client.close();
   });
 

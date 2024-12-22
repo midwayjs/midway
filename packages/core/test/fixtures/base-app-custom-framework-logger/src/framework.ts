@@ -2,6 +2,7 @@ import { BaseFramework, Framework, IMidwayBootstrapOptions } from '../../../../s
 
 @Framework()
 export class CustomFramework extends BaseFramework<any, any, any> {
+  frameworkLoggerName = 'customFrameworkLogger';
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {};
   }
@@ -11,7 +12,7 @@ export class CustomFramework extends BaseFramework<any, any, any> {
   }
 
   run(): Promise<void> {
-    this.app.getCoreLogger().info('run custom framework');
+    this.logger.info('run custom framework');
     return Promise.resolve(undefined);
   }
 }

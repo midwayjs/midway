@@ -9,6 +9,13 @@ import { Configuration } from '@midwayjs/core';
           enableServerHeartbeatCheck: false,
           serverHeartbeatInterval: 30000,
         },
+        midwayLogger: {
+          clients: {
+            wsLogger: {
+              fileLogName: 'midway-ws.log',
+            },
+          },
+        },
       },
     },
   ],

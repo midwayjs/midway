@@ -8,7 +8,6 @@ import {
   ServerUnaryCall,
 } from '@grpc/grpc-js';
 import {
-  Config,
   Framework,
   GRPCMetadata,
   GrpcStreamTypeEnum,
@@ -40,9 +39,7 @@ export class MidwayGRPCFramework extends BaseFramework<
 > {
   public app: IMidwayGRPCApplication;
   private server: Server;
-
-  @Config()
-  providerConfig;
+  protected frameworkLoggerName = 'grpcLogger';
 
   configure() {
     return this.configService.getConfiguration('grpcServer');
@@ -231,7 +228,6 @@ export class MidwayGRPCFramework extends BaseFramework<
             reject(err);
           }
 
-          this.server.start();
           this.logger.info(`Server port = ${bindPort} start success`);
           resolve();
         }
