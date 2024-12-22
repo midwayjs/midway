@@ -508,15 +508,15 @@ export default {
 All attributes are described as follows:
 
 | Property | Type | Description |
-| ------------ | ----------------------------------------- | ------------------------------------------------------- |
+| ------------ |--------------------------------------------| ------------------------------------------------------- |
 | port | number | Optional, port to start |
-| globalPrefix | string | optional. the global http prefix |
-| keys | string [] | Optional, Cookies signature, if the upper layer does not write keys, you can also set it here |
-| hostname | string | Optional. The hostname to listen to. Default 127.1 |
-| key | string \| Buffer \| Array<Buffer\|Object> | Optional, Https key, server private key |
-| cert | string \| Buffer \| Array<Buffer\|Object> | Optional, Https cert, server certificate |
-| ca | string \| Buffer \| Array<Buffer\|Object> | Optional, Https ca |
-| http2 | boolean | Optional, supported by http2, default false |
+| globalPrefix | string | Optional, global http prefix |
+| keys | string[] | Optional, Cookies signature, if the upper layer does not write keys, you can also set it here |
+| hostname | string | Optional, hostname to listen to, default 127.1 |
+| key | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https key, server private key |
+| cert | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https cert, server certificate |
+| ca | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https ca |
+| http2 | boolean | Optional, http2 support, default false |
 
 
 

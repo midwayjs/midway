@@ -2,7 +2,7 @@ name: site sync
 
 on:
   push:
-    branches: [v4-next]
+    branches: [main]
     paths:
       - site/**
       - CHANGELOG.md
@@ -24,13 +24,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-#      - run: npm install
-#      - run: npm run build --if-present
+      - run: npm install
+      - run: npm run build --if-present
       - name: action-zip
         uses: montudor/action-zip@v1.0.0
-      - uses: redkubes/docusaurus-deploy-action@master
+      - name: Zip output
+        run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
+        working-directory: site
+      - name: upload files to OSS
+        uses: fangbinwei/aliyun-oss-website-action@v1
         with:
-          source-folder: site
-          git-user: czy88840616
-          git-password: ${{ secrets.GH_TOKEN }}
-          deployment-branch: gh-pages
+          accessKeyId: ${{ secrets.DEPLOY_SITE_ACCESS_KEY_ID }}
+          accessKeySecret: ${{ secrets.DEPLOY_SITE_ACCESS_KEY_SECRET }}
+          bucket: midway-next-site-hk
+          # use your own endpoint
+          endpoint: oss-cn-hongkong.aliyuncs.com
+          folder: site/build
