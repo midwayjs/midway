@@ -28,12 +28,6 @@ jobs:
       - run: npm run build --if-present
       - name: action-zip
         uses: montudor/action-zip@v1.0.0
-      - uses: redkubes/docusaurus-deploy-action@master
-        with:
-          source-folder: site
-          git-user: czy88840616
-          git-password: ${{ secrets.GH_TOKEN }}
-          deployment-branch: gh-pages
       - name: Zip output
         run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
         working-directory: site
