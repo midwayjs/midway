@@ -30,11 +30,11 @@ jobs:
 
       # 安装根目录依赖
       - name: Install root dependencies
-        run: pnpm install
+        run: npm install
 
       # 构建根目录项目
       - name: Build root project
-        run: pnpm run build --if-present
+        run: npm run build --if-present
 
       # 安装和构建 site 目录
       - name: Install and build site

@@ -18,7 +18,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
+          cache: 'pnpm'
+
+      # 添加 pnpm 安装
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       # 安装根目录依赖
       - name: Install root dependencies
@@ -27,6 +31,13 @@ jobs:
       # 构建根目录项目
       - name: Build root project
         run: pnpm run build --if-present
+
+      # site 目录使用 npm，需要单独配置 npm 缓存
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: site/package-lock.json
 
       # 安装和构建 site 目录
       - name: Install and build site
