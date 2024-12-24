@@ -30,6 +30,7 @@ jobs:
       - name: action-zip
         uses: montudor/action-zip@v1.0.0
       - run: cd site
+      - run: pwd
       - run: npm install
       - run: npm run build
       - name: Zip output
