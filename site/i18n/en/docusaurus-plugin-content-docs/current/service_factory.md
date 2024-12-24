@@ -8,11 +8,12 @@ for example, our oss component creates multiple oss objects, so you need to leav
 `ServiceFactory` is an abstract class, and every service that needs to be implemented needs to be inherited.
 
 
-Take an http client as an example, we need to prepare a method to create an http client instance, which contains two parts:
+Take an http client as an example, we need to prepare a method to create an http client instance, which contains several parts:
 
 
 - 1. Method for creating a client instance
 - 2. Configuration of Client
+- 3. Instantiate service class
 
 ```typescript
 // Create client configuration
@@ -112,6 +113,27 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 }
 ```
 `initClients` method is implemented in the base class. It needs to pass a complete user configuration and call the `createClient` in a loop to create the object and save it to memory.
+
+
+### 3. Instantiate service class
+
+To make it easier for users to use, we also need to create the service class in advance. Generally speaking, we only need to instantiate it in the lifecycle of components or projects.
+
+```typescript
+import { Configuration } from '@midwayjs/core';
+
+@Configuration({
+  imports: [
+    // ...
+  ]
+})
+export class ContainerConfiguration {
+  async onReady(container) {
+    // Instantiate service class
+    await container.getAsync(HTTPClientServiceFactory);
+  }
+}
+```
 
 
 ## Get instance

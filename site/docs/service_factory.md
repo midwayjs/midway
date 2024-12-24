@@ -8,11 +8,12 @@
 `ServiceFactory` 是个抽象类，每个需要实现的服务，都需要继承他。
 
 
-我们以一个 http 客户端为例，需要准备一个创建 http 客户端实例的方法，其中包含两个部分：
+我们以一个 http 客户端为例，需要准备一个创建 http 客户端实例的方法，其中包含几个部分：
 
 
 - 1、创建客户端实例的方法
 - 2、客户端的配置
+- 3、实例化服务类
 
 ```typescript
 // 创建客户端的配置
@@ -113,6 +114,26 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 ```
 `initClients` 方法是基类中实现的，它需要传递一个完整的用户配置，并循环调用 `createClient` 来创建对象，保存到内存中。
 
+
+### 3、实例化服务类
+
+为了方便用户使用，我们还需要提前将服务类创建，一般来说，只需要在组件或者项目的生命周期中实例化即可。
+
+```typescript
+import { Configuration } from '@midwayjs/core';
+
+@Configuration({
+  imports: [
+    // ...
+  ]
+})
+export class ContainerConfiguration {
+  async onReady(container) {
+    // 实例化服务类
+    await container.getAsync(HTTPClientServiceFactory);
+  }
+}
+```
 
 
 ## 获取实例
