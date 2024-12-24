@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - .github/workflows/site.yml
       - site/**
       - CHANGELOG.md
   # repository_dispatch:
@@ -24,13 +25,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm run build --if-present
       - name: action-zip
         uses: montudor/action-zip@v1.0.0
-      - name: Zip output
-        run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
+
+      # 安装根目录依赖
+      - name: Install root dependencies
+        run: npm install
+
+      # 构建根目录项目
+      - name: Build root project
+        run: npm run build --if-present
+
+      # 安装和构建 site 目录
+      - name: Install and build site
         working-directory: site
+        run: |
+          npm install
+          npm run build
+
+      # 打包文档
+      - name: Zip output
+        working-directory: site
+        run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
       - name: upload files to OSS
         uses: fangbinwei/aliyun-oss-website-action@v1
         with:

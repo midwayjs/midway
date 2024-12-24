@@ -20,17 +20,25 @@ jobs:
           node-version: 18
           cache: npm
 
-      - run: cd site
+      # 安装根目录依赖
+      - name: Install root dependencies
+        run: pnpm install
 
-      - name: Install dependencies
-        run: npm install
-      - name: Build website
-        run: npm build
+      # 构建根目录项目
+      - name: Build root project
+        run: pnpm run build --if-present
+
+      # 安装和构建 site 目录
+      - name: Install and build site
+        working-directory: site
+        run: |
+          npm install
+          npm run build
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: site/build
 
   deploy:
     name: Deploy to GitHub Pages
