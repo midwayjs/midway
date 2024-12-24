@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - .github/workflows/site.yml
       - site/**
       - CHANGELOG.md
   # repository_dispatch:

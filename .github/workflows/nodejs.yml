@@ -4,10 +4,12 @@ on:
   push:
     branches: [main]
     paths-ignore:
+      - .github/workflows/site.yml
       - 'site/**'
       - '*.md'
   pull_request:
     paths-ignore:
+      - .github/workflows/site.yml
       - 'site/**'
       - '*.md'
 
