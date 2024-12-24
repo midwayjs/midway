@@ -2,14 +2,14 @@ name: Node.js CI
 
 on:
   push:
-    branches: [main]
+    branches: [v4-next]
     paths-ignore:
-      - .github/workflows/site.yml
+      - '.github/workflows/site.yml'
       - 'site/**'
       - '*.md'
   pull_request:
     paths-ignore:
-      - .github/workflows/site.yml
+      - '.github/workflows/site.yml'
       - 'site/**'
       - '*.md'
 
@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        node-version: [16, 18, 'lts/*']
+        node-version: [18]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     services:
@@ -86,20 +86,42 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
           mongodb-version: 4.2
 
-      - run: npm run install_npm
-      - run: npm install && npm install codecov
-      - run: npm run build --if-present
-      - run: npm run cov
+      - name: Start Mosquitto
+        uses: namoshek/mosquitto-github-action@v1
+        with:
+          version: 'latest'
+          ports: '1883:1883 8883:8883'
+          config: ${{ github.workspace }}/packages/mqtt/scripts/mosquitto.conf
+          container-name: 'mqtt'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install codecov
+        run: pnpm add -g codecov
+
+      - name: Build
+        run: pnpm run build --if-present
+
+      - name: Run tests and coverage
+        run: pnpm run cov
         env:
           RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
           ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
@@ -111,6 +133,7 @@ jobs:
           ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
           ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
           ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
 

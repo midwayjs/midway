@@ -10,32 +10,39 @@ on:
 jobs:
   build:
     name: Build Docusaurus
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          node-version: 18
+          version: 9
+          run_install: false
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-      # 添加 pnpm 安装
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      # 安装根目录依赖
       - name: Install root dependencies
         run: pnpm install
 
-      # 构建根目录项目
       - name: Build root project
         run: pnpm run build --if-present
 
       # site 目录使用 npm，需要单独配置 npm 缓存
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: site/package-lock.json
 
