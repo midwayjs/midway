@@ -20,7 +20,7 @@ jobs:
           node-version: 18
           cache: npm
 
-      - run: cd website
+      - run: cd site
 
       - name: Install dependencies
         run: npm install
