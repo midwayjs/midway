@@ -15,7 +15,9 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
-    "init": "pnpm install --ignore-workspace"
+    "init": "pnpm install --ignore-workspace",
+    "build:en": "docusaurus build --locale en",
+    "build:zh": "docusaurus build --locale zh"
   },
   "dependencies": {
     "@docusaurus/core": "3.6.3",

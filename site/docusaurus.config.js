@@ -81,6 +81,7 @@ const config = {
     ({
       favicon: 'img/logo.svg',
       metadata: [
+        {name: 'keywords', content: 'midway, midwayjs, midway, midwayjs, midwayjs.org, Node.js Framework'},
         {
           name: 'referrer',
           content: 'no-referrer',

@@ -1,4 +1,4 @@
-​	import Tabs from '@theme/Tabs';
+import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Routing and controller
