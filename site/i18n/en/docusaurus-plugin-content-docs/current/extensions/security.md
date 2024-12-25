@@ -313,7 +313,7 @@ There are three possible values for `X-Frame-Options`:
 | Configuration Item | Type | Description of action | Default |
 | --- | --- | --- | --- |
 | enable | boolean | Whether to open | false |
-| policy | Object<key: string, value: string / string[]/ boolean> | Policy list | {} |
+| policy | Object\<key: string, value: string / string[]/ boolean> | Policy list | {} |
 | reportOnly | boolean | Whether to open | false |
 | supportIE | boolean | Does IE browser support | false |
 

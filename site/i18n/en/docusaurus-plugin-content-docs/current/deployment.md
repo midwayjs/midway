@@ -318,13 +318,13 @@ Bootstrap
 
 | Property | Type | Description |
 | -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| appDir | string | Optional. The project root directory is `process.cwd()` by default. |
-| baseDir | string | Optional. The directory of the project code, which is `src` in R & D and `dist` in R & D. |
-| imports | Component [] | Optional, explicit component reference |
-| moduleDetector | 'file' \| IFileDetector \| false | Optional. The module loading method used. Default value: `file`. You can use the dependency injection local file scanning method. You can explicitly specify a scanner or disable scanning. |
-| logger | Boolean \| ILogger | optional. the logger used in the bootstrap. the default value is consoleLogger |
-| ignore | string [] | optional. the path ignored by the dependent injection container scan. the moduleDetector is invalid if false |
-| globalConfig | Array<{ [environmentName: string]: Record<string, any> }> \| Record<string, any> | Optionally, if the global incoming configuration is an object, it is directly merged into the current configuration in the form of an object. If you want to pass in the configuration of different environments, it is passed in in the form of an array with the same structure and `importConfigs`.  |
+| appDir | `string` | Optional. The project root directory is `process.cwd()` by default. |
+| baseDir | `string` | Optional. The directory of the project code, which is `src` in R & D and `dist` in R & D. |
+| imports | `Component[]` | Optional, explicit component reference |
+| moduleDetector | `'file' \| IFileDetector \| false` | Optional. The module loading method used. Default value: `file`. You can use the dependency injection local file scanning method. You can explicitly specify a scanner or disable scanning. |
+| logger | `boolean \| ILogger` | Optional. The logger used in the bootstrap. The default value is consoleLogger |
+| ignore | `string[]` | Optional. The path ignored by the dependent injection container scan. The moduleDetector is invalid if false |
+| globalConfig | `Record<string, any> \| Array<Record<string, any>>` | Optionally, if the global incoming configuration is an object, it is directly merged into the current configuration in the form of an object. If you want to pass in the configuration of different environments, it is passed in in the form of an array with the same structure and `importConfigs`. |
 
 
 

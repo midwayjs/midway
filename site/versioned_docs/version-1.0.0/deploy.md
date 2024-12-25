@@ -6,6 +6,14 @@ title: 部署
 
 由于 TypeScript 的特殊性，本地开发可以有 ts-node 等类似的工具进行开发，而在服务器端运行的时候，我们希望可以通过 js 来运行，这中间就需要编译工具。
 
+```typescript
+// 类型声明示例
+type Config = {
+  typescript: boolean;
+  srcDir: string;
+}
+```
+
 幸好 TypeScript 官方提供了 tsc 工具来帮助这个过程，而编译时会自动调用 `tsconfig.json` 来做一些编译时处理，midway 默认提供了一份该文件，用户也可以进行自定义。
 
 同时，在脚手架中，我们提供了 `build` 命令帮助用户更好的生成文件。
@@ -57,9 +65,9 @@ module.exports = (pandora) => {
 
 支持的参数见 [启动参数](https://github.com/eggjs/egg-cluster/blob/master/lib/master.js#L33)，同时，midway 框架额外增加了几个参数。
 
-- typescript {boolean} 如果为 true，则会开启 ts 模式，加载 src 或者 dist 目录，默认内部会进行判断，无需手动处理
-- srcDir {string} 源码路径，默认为 src
-- targetDir {string} 编译后路径，默认为 dist
+- typescript `{boolean}` 如果为 true，则会开启 ts 模式，加载 src 或者 dist 目录，默认内部会进行判断，无需手动处理
+- srcDir `{string}` 源码路径，默认为 src
+- targetDir `{string}` 编译后路径，默认为 dist
 
 ```json
 {

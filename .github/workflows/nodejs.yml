@@ -4,12 +4,14 @@ on:
   push:
     branches: [v4-next]
     paths-ignore:
-      - '.github/workflows/site.yml'
+      - '.github/workflows/**'
+      - '!.github/workflows/nodejs.yml'
       - 'site/**'
       - '*.md'
   pull_request:
     paths-ignore:
-      - '.github/workflows/site.yml'
+      - '.github/workflows/**'
+      - '!.github/workflows/nodejs.yml'
       - 'site/**'
       - '*.md'
 

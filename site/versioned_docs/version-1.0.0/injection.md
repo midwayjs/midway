@@ -14,7 +14,7 @@ midway 默认使用 [injection](https://www.npmjs.com/package/injection) 这个�
 
 :::info
 我们在 midway 包上做了自动导出，所以 injection 包中的模块，都能从 midway 中获取到。
-import {Container} from 'injection' 和 import {Container} from 'midway' 是一样的。
+`import {Container} from 'injection'` 和 `import {Container} from 'midway'` 是一样的。
 :::
 
 ## IoC 概览

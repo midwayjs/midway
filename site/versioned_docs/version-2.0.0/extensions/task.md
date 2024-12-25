@@ -397,7 +397,7 @@ export class QueueTask {
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1633771728525-1efeb2a6-cefd-4fc3-a16d-0e9a97f371d1.png#clientId=u52b8d912-3ffa-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=51&id=u0c96f70a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=102&originWidth=3540&originalType=binary&ratio=1&rotation=0&showTitle=false&size=164783&status=done&style=none&taskId=uc38084d4-e2cf-435d-a8b9-6a9bec80c9b&title=&width=1770" width="1770" />
 
-这个问题基本明确，问题会出现在 redis 的集群版本上。原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步@midwayjs/task 的 key 命中了不同的 slot。临时的解决办法是 taskConfig 里的 prefix 配置用{}包括，强制 redis 只计算{}里的 hash，例如 prefix: '{midway-task}'
+这个问题基本明确，问题会出现在 redis 的集群版本上。原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步@midwayjs/task 的 key 命中了不同的 slot。临时的解决办法是 taskConfig 里的 prefix 配置用{}包括，强制 redis 只计算{}里的 hash，例如 `prefix: '{midway-task}'`
 
 
 ### 历史日志删除
