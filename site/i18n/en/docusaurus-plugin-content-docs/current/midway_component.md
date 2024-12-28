@@ -2,11 +2,27 @@
 
 Components are Midway's extension mechanism. We will develop reusable business code, or logical and abstract common capabilities into components, so that these codes can be reused in all Midway scenarios.
 
+## Component Structure
 
+The normal project itself is also a component, and the entry file of the component is generally `src/index.ts` or `src/configuration.ts`.
+
+It will export a class with the `@Configuration` decorator.
+
+For example:
+
+```typescript
+// src/configuration.ts of application or function
+import { Configuration } from '@midwayjs/core';
+
+@Configuration({
+  // ...
+})
+export class MainConfiguration {}
+```
 
 ## Enable components
 
-Components are generally reused in the form of npm packages. Each component is a package of code that can be `required` directly. Let's take the `@midwayjs/validate` component as an example.
+Components are generally reused in the form of npm packages. Each component is a package of code that can be `required` or `imported` directly. Let's take the `@midwayjs/validate` component as an example.
 
 First, add dependencies to the application.
 
@@ -14,7 +30,7 @@ First, add dependencies to the application.
 // package.json
 {
   "dependencies": {
-    "@midwayjs/validate": "^3.0.0"
+    "@midwayjs/validate": "^4.0.0"
   }
 }
 ```

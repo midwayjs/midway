@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 依赖注入
 
 Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量特性，让依赖注入变的优雅，从而让开发过程变的便捷有趣。
@@ -131,7 +134,7 @@ await userController.handler();  // output 'world'
 ## 依赖注入作用域
 
 
-默认的未指定或者未声明的情况下，所有的 `@Provide` 出来的 Class 的作用域都为 **请求作用域**。这意味着这些 Class ，会在**每一次请求第一次调用时被实例化（new），请求结束后实例销毁。**我们默认情况下的控制器（Controller）和服务（Service）都是这种作用域。
+默认的未指定或者未声明的情况下，所有的 `@Provide` 出来的 Class 的作用域都为 **请求作用域**。这意味着这些 Class ，会在 **每一次请求第一次调用时被实例化（new），请求结束后实例销毁。** 我们默认情况下的控制器（Controller）和服务（Service）都是这种作用域。
 
 在 Midway 的依赖注入体系中，有三种作用域。
 
@@ -141,7 +144,7 @@ await userController.handler();  // output 'world'
 | Request   | **默认**，请求作用域，生命周期绑定 **请求链路**，实例在请求链路上唯一，请求结束立即销毁 |
 | Prototype | 原型作用域，每次调用都会重复创建一个新的对象                 |
 
-不同的作用域有不同的作用，**单例 **可以用来做进程级别的数据缓存，或者数据库连接等只需要执行一次的工作，同时单例由于全局唯一，只初始化一次，所以调用的时候速度比较快。而 **请求作用域 **则是大部分需要获取请求参数和数据的服务的选择，**原型作用域 **使用比较少，在一些特殊的场景下也有它独特的作用。
+不同的作用域有不同的作用，**单例** 可以用来做进程级别的数据缓存，或者数据库连接等只需要执行一次的工作，同时单例由于全局唯一，只初始化一次，所以调用的时候速度比较快。而 **请求作用域** 则是大部分需要获取请求参数和数据的服务的选择，**原型作用域** 使用比较少，在一些特殊的场景下也有它独特的作用。
 
 
 
@@ -172,7 +175,7 @@ export class UserService {
 
 ### 单例作用域
 
-在显式配置后，某个类的作用域就可以变成单例作用域。。
+在显式配置后，某个类的作用域就可以变成单例作用域。
 
 ```typescript
 // service
@@ -476,9 +479,16 @@ export class HomeController {
 
 Midway 支持多种方式的注入。
 
-### 基于 Class 的注入
+### 基于类型的注入
 
 导出一个 Class，注入的类型使用 Class，这是最简单的注入方式，大部分的业务和组件都是使用这样的方式。
+
+标准的注入有两种形式，**属性注入** 以及 **构造器注入**。
+
+<Tabs>
+<TabItem value="属性注入" label="属性注入">
+
+Midway 会自动使用 B 作为 b 这个属性的类型，在容器中实例化它。
 
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
@@ -498,15 +508,61 @@ export class A {
 }
 ```
 
-Midway 会自动使用 B 作为 b 这个属性的类型，在容器中实例化它。
+</TabItem>
 
-在这种情况下，Midway 会自动创建一个唯一的 uuid 关联这个 Class，同时这个 uuid 我们称为 **依赖注入标识符**。
+<TabItem value="构造器注入" label="构造器注入">
+
+在 `4.0.0` 版本中，我们恢复了构造器注入的特性，用户可以显式的在构造器中注入依赖。
+
+```typescript
+import { Provide, Inject } from '@midwayjs/core';
+
+@Provide()
+export class B {
+  //...
+}
+
+@Provide()
+export class A {
+  private b: B;
+
+  constructor(@Inject() b: B) {
+    this.b = b;
+  }
+}
+```
+
+Midway 会自动使用 B 作为 b 这个参数类型，在容器中实例化它。
+
+在 TypeScript 中，你也可以使用简化的写法，带有访问修饰符的参数会自动创建对应的属性。
+
+```typescript
+@Provide()
+export class A {
+  constructor(protected @Inject() b: B) {}
+}
+```
+
+:::tip
+
+仅有 `@Inject` 装饰器支持构造器注入。
+
+:::
+
+</TabItem>
+</Tabs>
+
+
+### 依赖注入标识符
+
+
+不管哪种注入方式，Midway 都会自动创建一个唯一的 uuid 关联这个 Class，同时这个 uuid 我们称为 **依赖注入标识符**。
 
 
 默认情况：
 
 
-- 1、 `@Provide` 会自动生成一个 uuid 作为依赖注入标识符
+- 1、 `@Provide` 会自动生成一个 uuid 作为 **依赖注入标识符**
 - 2、 `@Inject` 根据类型的 uuid 来查找
 
 如果要获取这个 uuid，可以使用下面的 API。
@@ -518,14 +574,12 @@ const uuid = getProviderUUId(B);
 // ...
 ```
 
-
-
-### 基于固定名字的注入
+可以通过 `@Provide` 装饰器和 `@Inject` 装饰器的参数指定 **依赖注入标识符**，比如指定一个字符串。
 
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 
-@Provide('bbbb')        // <------ 暴露一个 Class
+@Provide('bbbb')
 export class B {
   //...
 }
@@ -534,68 +588,24 @@ export class B {
 export class A {
 
   @Inject('bbbb')
-  b: B;                  // <------ 这里的属性使用 Class
+  b: B;
 
   //...
 }
 ```
 
-Midway 会将 `bbbb` 作为 B 这个 Class 的依赖注入标识符，在容器中实例化它。这种情况下，即使写了类型 B，依赖注入容器依旧会查找 `bbbb` 。
+Midway 会将 `bbbb` 作为 B 这个 Class 的依赖注入标识符，在容器中实例化它。这种情况下，即使写了类型 B，依赖注入容器依旧会优先使用 `bbbb` 。
 
 `@Provide` 和 `@Inject` 装饰器的参数是成对出现。
 
 规则如下：
 
 
-- 1、如果装饰器包含参数，则以 **参数 **作为依赖注入标识符
+- 1、如果装饰器包含参数，则以 **参数** 作为依赖注入标识符
 - 2、如果没有参数，标注的 TS 类型为 Class，则将类 `@Provide` 的 key 作为 key，如果没有 key，默认取 uuid
 - 3、如果没有参数，标注的 TS 类型为非 Class，则将 **属性名** 作为 key
 
 
-
-### 基于属性名的注入
-
-Midway 也可以基于接口进行注入，但是由于 Typescirpt 编译后会移除接口类型，不如使用类作为定义好用。
-
-比如，我们定义一个接口，以及它的实现类。
-
-```typescript
-export interface IPay {
-  payMoney()
-}
-
-@Provide('APay')
-export class A implements IPay {
-  async payMoney() {
-    // ...
-  }
-}
-
-@Provide('BPay')
-export class B implements IPay {
-  async payMoney() {
-    // ...
-  }
-}
-```
-
-这个时候，如果有个服务需要注入，可以使用下面显式声明的方式。
-
-```typescript
-@Provide()
-export class PaymentService {
-
-  @Inject('APay')
-  payService: IPay;         // 注意，这里的类型是接口，编译后类型信息会被移除
-
-  async orderGood() {
-    await this.payService.payMoney();
-  }
-
-}
-```
-
-由于接口类型会被移除，Midway 只能通过 `@Inject` 装饰器的 **参数** 或者 **属性名** 类来匹配注入的对象信息，类似 Java Spring 中的 `Autowire by name` 。
 
 ### 注入已有对象
 
@@ -623,7 +633,7 @@ export class MainConfiguration {
 
   async onReady(applicationContext: IMidwayContainer) {
     // 向依赖注入容器中添加一些全局对象
-  	applicationContext.registerObject('lodash', lodash);
+    applicationContext.registerObject('lodash', lodash);
   }
 }
 
@@ -648,10 +658,10 @@ export class BaseService {
 
 
 
-### 注入默认标识符
+### 内置的默认标识符
 
 
-Midway 会默认注入一些值，方便业务直接使用。
+Midway 会默认注入一些标识符，方便业务直接使用。
 
 | **标识符** | **值类型** | **作用域** | **描述**                                                     |
 | ---------- | ---------- | ---------- | ------------------------------------------------------------ |
@@ -680,6 +690,76 @@ export class BaseService {
 }
 ```
 
+## 循环依赖
+
+如果项目较大，则可能会出现循环依赖的问题。
+
+比如 A 依赖 B，B 依赖 C，C 依赖 A。
+
+```typescript
+@Provide()
+export class A {
+  @Inject()
+  b: B;
+}
+
+@Provide()
+export class B {
+  @Inject()
+  c: C;
+}
+
+@Provide()
+export class C {
+  @Inject()
+  a: A;
+}
+```
+
+以上代码会报错，因为 A 依赖 B，B 依赖 C，C 依赖 A，形成了循环依赖。
+
+### 识别循环依赖
+
+在 `4.0.0` 版本中，Midway 会自动识别循环依赖，并抛出错误。
+
+你会看到类似下面的错误信息。
+
+```typescript
+Circular dependency detected: A -> B -> C -> A
+```
+
+### 解决循环依赖
+
+可以通过框架提供的 `@LazyInject` 装饰器来解决循环依赖的问题。
+
+```typescript
+import { LazyInject, Inject, Provide } from '@midwayjs/core';
+
+@Provide()
+export class A {
+  @Inject()
+  b: B;
+}
+
+@Provide()
+export class B {
+  @Inject()
+  c: C;
+}
+
+@Provide()
+export class C {
+  @LazyInject(() => A)
+  a: A;
+}
+
+```
+
+:::tip
+
+仅在需要解决循环依赖的时候，才使用 `@LazyInject` 装饰器。
+
+:::
 
 
 ## 获取依赖注入容器
@@ -761,7 +841,7 @@ export class BootApp {
 ```
 
 
-除了普通的依赖注入容器之外，Midway 还提供了一个 **请求链路的依赖注入容器，**这个请求链路的依赖注入容器和全局的依赖注入容器关联，共享一个对象池。但是两者还是有所区别的。
+除了普通的依赖注入容器之外，Midway 还提供了一个 **请求链路的依赖注入容器** ，这个请求链路的依赖注入容器和全局的依赖注入容器关联，共享一个对象池。但是两者还是有所区别的。
 
 
 请求链路的依赖注入容器，是为了获取特有的请求作用域的对象，这个容器中获取的对象，都是**和请求绑定**，关联了当前的上下文。这意味着，**如果 Class 代码和请求关联，必须要从这个请求链路的依赖注入容器中获取**。
@@ -824,7 +904,7 @@ export class MainConfiguration {
 
 ### 动态获取实例
 
-拿到 **依赖注入容器 **或者 **请求链路的依赖 **注入容器之后，才可以通过容器的 API 获取到对象。
+拿到 **依赖注入容器** 或者 **请求链路的依赖** 注入容器之后，才可以通过容器的 API 获取到对象。
 
 我们可以使用标准的依赖注入容器 API 来获取实例。
 
@@ -1079,7 +1159,7 @@ export const getGlobalConfig = () => {
 
 ## 启动行为
 
-### 自动扫描绑定
+### 自动扫描和绑定
 
 上面提到，在容器初始化之后，我们会将现有的 class 注册绑定到容器中。
 
@@ -1089,38 +1169,217 @@ container.bind(UserController);
 container.bind(UserService);
 ```
 
-Midway 在启动过程中会自动扫描整个项目目录，自动处理这个行为，使得用户无需手动执行绑定的操作。
+在 `4.0.0` 版本中，我们引入了 `detector` 的概念，用于扫描文件并进行绑定。
 
 简单的来说，框架默认会递归扫描整个 `src` 目录下的 ts/js 文件，然后进行 require 操作，当文件导出的为 class，且显式或隐式包含 `@Provide()` 装饰器时，会执行 `container.bind` 逻辑。
 
-
-
-### 忽略扫描
-
-一般情况下，我们不应该把非 ts 文件放在 src 下（比如前端代码），特殊场景下，我们可以忽略某些目录，可以在 `@Configuration` 装饰器中配置。
-
-示例如下：
+下面的逻辑显式的声明了文件的加载行为，用户可以自定义文件探测器，来实现不同的文件加载行为。
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration, Logger } from '@midwayjs/core';
-// ...
+import { Configuration, CommonjsFileDetector } from '@midwayjs/core';
 
 @Configuration({
-  // ...
-  detectorOptions: {
-    ignore: [
-      '**/web/**'
-    ]
-  }
+  detector: new CommonjsFileDetector(),
 })
-export class MainConfiguration {
-  // ...
-}
-
+export class MainConfiguration {}
 ```
 
 
+### 文件探测器
+
+通过 `detector` 这个配置，我们可以自定义文件的加载行为。
+
+框架提供了 `CommonJSFileDetector` 和 `ESModuleFileDetector` 两个文件加载器，分别用于加载 Commonjs 和 ESM 格式的文件。
+
+<Tabs groupId="file-detector">
+<TabItem value="CommonJS" label="CommonJS">
+
+如果你希望加载 Commonjs 格式的文件，那么可以这样配置：
+
+```typescript
+// src/configuration.ts
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new CommonJSFileDetector(),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+
+<TabItem value="ESModule" label="ESModule">
+
+如果你希望加载 ESM 格式的文件，那么可以这样配置：
+
+```typescript
+// src/configuration.ts
+import { Configuration, ESModuleFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new ESModuleFileDetector(),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+</Tabs>
+
+默认情况下，会扫描 `src` 目录下的以下文件，并进行自动处理和绑定。
+
+```typescript
+export const DEFAULT_PATTERN = [
+  '**/**.tsx',
+  '**/**.ts',
+  '**/**.js',
+  '**/**.mts',
+  '**/**.mjs',
+  '**/**.cts',
+  '**/**.cjs',
+];
+```
+
+同时忽略以下目录和文件：
+
+```typescript
+export const DEFAULT_IGNORE_PATTERN = [
+  '**/logs/**',
+  '**/run/**',
+  '**/public/**', 
+  '**/app/view/**',
+  '**/app/views/**',
+  '**/app/extend/**',
+  '**/node_modules/**',
+  '**/**.test.ts',
+  '**/**.test.js',
+  '**/__test__/**',
+  '**/**.d.ts',
+  '**/**.d.mts',
+  '**/**.d.cts'
+];
+```
+
+在以上默认配置的基础上，我们可以通过一些配置来调整文件扫描行为。
+
+如果我们希望扫描忽略某些目录或者类型，那么可以配置 `ignore` 来实现。
+
+<Tabs groupId="file-detector">
+<TabItem value="CommonJS">
+
+```typescript
+// src/configuration.ts
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new CommonJSFileDetector({
+    ignore: [
+      '**/logs/**',
+    ],
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+
+<TabItem value="ESModule">
+
+```typescript
+// src/configuration.ts
+import { Configuration, ESModuleFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new ESModuleFileDetector({
+    ignore: [
+      '**/logs/**',
+    ],
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+</Tabs>
+
+可以通过配置 `pattern` 增加扫描的文件后缀和格式。
+
+<Tabs groupId="file-detector">
+<TabItem value="CommonJS">
+
+```typescript
+// src/configuration.ts
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new CommonJSFileDetector({
+    pattern: [
+      '**/**.jsx'
+    ],
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+
+<TabItem value="ESModule">
+
+```typescript
+// src/configuration.ts
+import { Configuration, ESModuleFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new ESModuleFileDetector({
+    pattern: [
+      '**/**.jsx'
+    ],
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+</Tabs>
+
+
+通过配置 `conflictCheck` 来处理导出的类名检查，默认情况下，如果检测到导出相同的名字，会抛出错误。
+
+可以通过配置 `conflictCheck` 来关闭这个检查。
+
+<Tabs groupId="file-detector">
+<TabItem value="CommonJS">
+
+```typescript
+// src/configuration.ts
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new CommonJSFileDetector({
+    conflictCheck: false,
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+
+<TabItem value="ESModule">
+
+```typescript
+// src/configuration.ts
+import { Configuration, ESModuleFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new ESModuleFileDetector({
+    conflictCheck: false,
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+</Tabs>
 
 
 
@@ -1234,7 +1493,7 @@ export class UserService {
 ### 错误：构造器中获取注入属性
 
 
-**请不要在构造器中 **获取注入的属性，这会使得拿到的结果为 undefined。原因是装饰器注入的属性，都在实例创建后（new）才会赋值。这种情况下，请使用 `@Init` 装饰器。
+**请不要在构造器中** 获取注入的属性，这会使得拿到的结果为 undefined。原因是装饰器注入的属性，都在实例创建后（new）才会赋值。这种情况下，请使用 `@Init` 装饰器。
 ```typescript
 @Provide()
 export class UserService {

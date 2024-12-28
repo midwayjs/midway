@@ -90,16 +90,17 @@ export default async function home () {
 ## 环境准备工作
 
 
-Midway 运行请预先安装 Node.js 环境和 npm，在国内可以使用 cnpm。
+Midway 运行请预先安装 Node.js 环境和 npm，在国内可以修改 npm 源，使用 pnpm 等。
 
 
 - 操作系统：支持 macOS，Linux，Windows
-- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 **12.11.0**。
+- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 **18.0.0**。
 
 在经过不断迭代之后，Midway 的版本要求如下：
 
 | Midway 版本   | 开发环境 Node.js 版本要求 | 部署环境 Node.js 版本要求 |
 | ------------- | ------------------------- | ------------------------- |
+| >=v4.0.0      | >= v18，推荐 LTS 版本     | >= v18.0.0                |
 | >=v3.9.0      | >= v14，推荐 LTS 版本     | >= v12.11.0               |
 | 3.0.0 ~ 3.9.0 | >= v12，推荐 LTS 版本     | >= v12.0.0                |
 | 2.x           | >= v12，推荐 LTS 版本     | >= v10.0.0                |

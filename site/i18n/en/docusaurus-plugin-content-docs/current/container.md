@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Dependency injection
 
 Midway uses a lot of dependency injection features. Through the lightweight features of decorators, dependency injection becomes elegant, thus making the development process convenient and interesting.
@@ -476,10 +479,17 @@ Midway supports injection in many ways.
 
 Export a Class, the type of injection uses Class, which is the simplest way to inject, and most businesses and components use this way.
 
+There are two standard forms of injection, **property injection** and **constructor injection**.
+
+<Tabs>
+<TabItem value="Property Injection" label="Property Injection">
+
+Midway will automatically use B as the type of property b and instantiate it in the container.
+
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
 
-@Provide() // <------ Expose a Class
+@Provide()               // <------ Expose a Class
 export class B {
   //...
 }
@@ -488,31 +498,55 @@ export class B {
 export class A {
 
   @Inject()
-  B: B; // <------ The attribute here uses Class
+  b: B;                  // <------ The attribute here uses Class
 
   //...
 }
 ```
 
-Midway will automatically use B as the type of the attribute B and instantiate it in the container.
+</TabItem>
 
-In this case, Midway automatically creates a unique uuid to associate with the class. This uuid is called a **dependency injection identifier**.
+<TabItem value="Constructor Injection" label="Constructor Injection">
 
-
-Default:
-
-
-- 1. `@Provide` will automatically generate a uuid as the dependency injection identifier
-- 2. `@Inject` searches for the uuid of the type.
-
-If you want to get this uuid, you can use the following API.
+In version `4.0.0`, we restored the constructor injection feature, allowing users to explicitly inject dependencies in the constructor.
 
 ```typescript
-import { getProviderUUId } from '@midwayjs/core';
+import { Provide, Inject } from '@midwayjs/core';
 
-const uuid = getProviderUUId(B);
-// ...
+@Provide()
+export class B {
+  //...
+}
+
+@Provide()
+export class A {
+  private b: B;
+
+  constructor(@Inject() b: B) {
+    this.b = b;
+  }
+}
 ```
+
+Midway will automatically use B as the type of parameter b and instantiate it in the container.
+
+In TypeScript, you can also use a simplified syntax where parameters with access modifiers automatically create corresponding properties.
+
+```typescript
+@Provide()
+export class A {
+  constructor(protected @Inject() b: B) {}
+}
+```
+
+:::tip
+
+Only the `@Inject` decorator supports constructor injection.
+
+:::
+
+</TabItem>
+</Tabs>
 
 
 
@@ -675,6 +709,77 @@ export class BaseService {
   }
 }
 ```
+
+
+## Circular Dependencies
+
+If the project is large, circular dependencies may occur.
+
+For example, A depends on B, B depends on C, and C depends on A.
+
+```typescript
+@Provide()
+export class A {
+  @Inject()
+  b: B;
+}
+
+@Provide()
+export class B {
+  @Inject()
+  c: C;
+}
+
+@Provide()
+export class C {
+  @Inject()
+  a: A;
+}
+```
+
+The above code will throw an error because A depends on B, B depends on C, and C depends on A, forming a circular dependency.
+
+### Detecting Circular Dependencies
+
+In version `4.0.0`, Midway will automatically detect circular dependencies and throw an error.
+
+You will see an error message similar to the following:
+
+```typescript
+Circular dependency detected: A -> B -> C -> A
+```
+
+### Resolving Circular Dependencies
+
+You can resolve circular dependencies using the `@LazyInject` decorator provided by the framework.
+
+```typescript
+import { LazyInject, Inject, Provide } from '@midwayjs/core';
+
+@Provide()
+export class A {
+  @Inject()
+  b: B;
+}
+
+@Provide()
+export class B {
+  @Inject()
+  c: C;
+}
+
+@Provide()
+export class C {
+  @LazyInject(() => A)
+  a: A;
+}
+```
+
+:::tip
+
+Only use the `@LazyInject` decorator when you need to resolve circular dependencies.
+
+:::
 
 
 
@@ -1073,7 +1178,7 @@ export const getGlobalConfig = () => {
 
 ## Start Behavior
 
-### Automatic scan binding
+### Automatic scanning and binding
 
 As mentioned above, after the container is initialized, we will bind the existing class registration to the container.
 
@@ -1083,38 +1188,215 @@ container.bind(UserController);
 container.bind(UserService);
 ```
 
-Midway will automatically scan the entire project directory during the startup process and automatically process this behavior, so that the user does not need to manually perform binding operations.
+In version `4.0.0`, we introduced the concept of `detector` for scanning files and binding.
 
 Simply put, the framework will recursively scan the ts/js files in the entire `src` directory by default, and then perform require operations. When the file is exported as a class and explicitly or implicitly contains the `@Provide()` decorator, it will execute the `container.bind` logic.
 
-### Ignore scanning
-
-In general, we should not put non-ts files under src (such as front-end code). In special scenarios, we can ignore some directories and configure them in the `@Configuration` decorator.
-
-An example is as follows:
+The following logic explicitly declares the file loading behavior, and users can customize the file detector to implement different file loading behaviors.
 
 ```typescript
 // src/configuration.ts
-import { App, Configuration, Logger } from '@midwayjs/core';
-// ...
+import { Configuration, CommonjsFileDetector } from '@midwayjs/core';
 
 @Configuration({
-  // ...
-  detectorOptions: {
-    ignore: [
-      '**/web/**'
-    ]
-  }
+  detector: new CommonjsFileDetector(),
 })
-export class MainConfiguration {
-  // ...
-}
-
+export class MainConfiguration {}
 ```
 
+### File Detector
 
+Through the `detector` configuration, we can customize the file loading behavior.
 
+The framework provides two file loaders, `CommonJSFileDetector` and `ESModuleFileDetector`, for loading Commonjs and ESM format files respectively.
 
+<Tabs groupId="file-detector">
+<TabItem value="CommonJS" label="CommonJS">
+
+If you want to load Commonjs format files, you can configure it like this:
+
+```typescript
+// src/configuration.ts
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new CommonJSFileDetector(),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+
+<TabItem value="ESModule" label="ESModule">
+
+If you want to load ESM format files, you can configure it like this:
+
+```typescript
+// src/configuration.ts
+import { Configuration, ESModuleFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new ESModuleFileDetector(),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+</Tabs>
+
+By default, the following files in the `src` directory will be scanned and automatically processed and bound.
+
+```typescript
+export const DEFAULT_PATTERN = [
+  '**/**.tsx',
+  '**/**.ts',
+  '**/**.js',
+  '**/**.mts',
+  '**/**.mjs',
+  '**/**.cts',
+  '**/**.cjs',
+];
+```
+
+At the same time, the following directories and files are ignored:
+
+```typescript
+export const DEFAULT_IGNORE_PATTERN = [
+  '**/logs/**',
+  '**/run/**',
+  '**/public/**', 
+  '**/app/view/**',
+  '**/app/views/**',
+  '**/app/extend/**',
+  '**/node_modules/**',
+  '**/**.test.ts',
+  '**/**.test.js',
+  '**/__test__/**',
+  '**/**.d.ts',
+  '**/**.d.mts',
+  '**/**.d.cts'
+];
+```
+
+Based on the above default configuration, we can adjust the file scanning behavior through some configurations.
+
+If we want to ignore certain directories or types when scanning, we can configure `ignore` to achieve this.
+
+<Tabs groupId="file-detector">
+<TabItem value="CommonJS">
+
+```typescript
+// src/configuration.ts
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new CommonJSFileDetector({
+    ignore: [
+      '**/logs/**',
+    ],
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+
+<TabItem value="ESModule">
+
+```typescript
+// src/configuration.ts
+import { Configuration, ESModuleFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new ESModuleFileDetector({
+    ignore: [
+      '**/logs/**',
+    ],
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+</Tabs>
+
+You can add file extensions and formats to scan through the `pattern` configuration.
+
+<Tabs groupId="file-detector">
+<TabItem value="CommonJS">
+
+```typescript
+// src/configuration.ts
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new CommonJSFileDetector({
+    pattern: [
+      '**/**.jsx'
+    ],
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+
+<TabItem value="ESModule">
+
+```typescript
+// src/configuration.ts
+import { Configuration, ESModuleFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new ESModuleFileDetector({
+    pattern: [
+      '**/**.jsx'
+    ],
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+</Tabs>
+
+Use `conflictCheck` to handle exported class name checks. By default, if the same name is detected for export, an error will be thrown.
+
+You can turn off this check by configuring `conflictCheck`.
+
+<Tabs groupId="file-detector">
+<TabItem value="CommonJS">
+
+```typescript
+// src/configuration.ts
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new CommonJSFileDetector({
+    conflictCheck: false,
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+
+<TabItem value="ESModule">
+
+```typescript
+// src/configuration.ts
+import { Configuration, ESModuleFileDetector } from '@midwayjs/core';
+
+@Configuration({
+  detector: new ESModuleFileDetector({
+    conflictCheck: false,
+  }),
+})
+export class MainConfiguration {}
+```
+
+</TabItem>
+</Tabs>
 
 ## Object lifecycle
 
