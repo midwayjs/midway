@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/otel",
   "description": "midway open telemetry component",
-  "version": "3.19.2",
+  "version": "3.19.3",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bull-board",
-  "version": "3.19.2",
+  "version": "3.19.3",
   "description": "midway component for bull",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -32,7 +32,7 @@
   "dependencies": {
     "@bull-board/api": "5.23.0",
     "@bull-board/ui": "5.23.0",
-    "@midwayjs/bull": "^3.19.2",
+    "@midwayjs/bull": "^3.19.3",
     "ejs": "3.1.10"
   },
   "engines": {

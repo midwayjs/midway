@@ -1,6 +1,47 @@
 # Change Log
 
 
+## v3.19.3 (2024-12-29)
+
+#### :bug: Bug Fix
+* `captcha`
+  * [#4242](https://github.com/midwayjs/midway/pull/4242) fix: use security svg-captcha and add more options ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* `async-hooks-context-manager`, `axios`, `bootstrap`, `bull-board`, `bull`, `busboy`, `cache-manager`, `captcha`, `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `consul`, `core`, `cos`, `cron`, `decorator`, `etcd`, `grpc`, `i18n`, `info`, `kafka`, `leoric`, `mikro`, `mock`, `mongoose`, `mqtt`, `oss`, `otel`, `rabbitmq`, `redis`, `sequelize`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `tenant`, `validate`, `view-ejs`, `view-nunjucks`, `view`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4232](https://github.com/midwayjs/midway/pull/4232) docs: use https for github domains ([@mmdapl](https://github.com/mmdapl))
+
+#### :package: Dependencies
+* `bootstrap`
+  * [#4248](https://github.com/midwayjs/midway/pull/4248) fix(deps): update dependency @midwayjs/event-bus to v1.11.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#4247](https://github.com/midwayjs/midway/pull/4247) chore(deps): update mikro-orm monorepo to v6.4.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bull`
+  * [#4243](https://github.com/midwayjs/midway/pull/4243) fix(deps): update dependency bull to v4.16.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#4245](https://github.com/midwayjs/midway/pull/4245) fix(deps): update dependency ali-oss to v6.22.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#4246](https://github.com/midwayjs/midway/pull/4246) fix(deps): update dependency casbin to v5.36.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `redis`
+  * [#4244](https://github.com/midwayjs/midway/pull/4244) fix(deps): update dependency ioredis to v5.4.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#4240](https://github.com/midwayjs/midway/pull/4240) chore(deps): update dependency egg-logger to v3.6.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4228](https://github.com/midwayjs/midway/pull/4228) chore(deps): update dependency egg-scripts to v3.1.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4239](https://github.com/midwayjs/midway/pull/4239) fix(deps): update dependency @grpc/grpc-js to v1.12.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mongoose`, `typegoose`
+  * [#4238](https://github.com/midwayjs/midway/pull/4238) chore(deps): update dependency mongoose to v8.9.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4233](https://github.com/midwayjs/midway/pull/4233) chore(deps): update dependency mongoose to v8.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4230](https://github.com/midwayjs/midway/pull/4230) chore(deps): update mongoose monorepo ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#4235](https://github.com/midwayjs/midway/pull/4235) chore(deps): update dependency @opentelemetry/sdk-node to v0.57.0 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- 142vip.cn ([@mmdapl](https://github.com/mmdapl))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.19.2 (2024-12-15)
 
 #### :nail_care: Polish

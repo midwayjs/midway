@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/casbin-redis-adapter",
   "description": "midway casbin redis adapter",
-  "version": "3.19.2",
+  "version": "3.19.3",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -16,8 +16,8 @@
     "ioredis": "5.4.2"
   },
   "dependencies": {
-    "@midwayjs/casbin": "^3.19.2",
-    "@midwayjs/redis": "^3.19.2"
+    "@midwayjs/casbin": "^3.19.3",
+    "@midwayjs/redis": "^3.19.3"
   },
   "keywords": [
     "midway",
