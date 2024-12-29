@@ -1,29 +1,24 @@
-interface BaseCaptchaOptions {
-  // 验证码长度，默认4
-  size?: number;
-  // 干扰线条的数量，默认1
-  noise?: number;
-  // 宽度、高度
-  width?: number;
-  height?: number;
-}
+import { ConfigObject } from 'svg-captcha-fixed';
 
-export interface CaptchaOptions extends BaseCaptchaOptions {
-  default?: BaseCaptchaOptions;
-  image?: ImageCaptchaOptions;
-  formula?: FormulaCaptchaOptions;
-  text?: TextCaptchaOptions;
-  // 验证码过期时间，默认为 1h
+export interface CaptchaCacheOptions {
+  // 验证码过期时间，单位秒
   expirationTime?: number;
-  // 验证码key 前缀
+  // 验证码 key 前缀
   idPrefix?: string;
 }
 
-export interface ImageCaptchaOptions extends BaseCaptchaOptions {
+export interface CaptchaOptions extends CaptchaCacheOptions {
+  default?: ConfigObject;
+  image?: ImageCaptchaOptions;
+  formula?: FormulaCaptchaOptions;
+  text?: TextCaptchaOptions;
+}
+
+export interface ImageCaptchaOptions extends ConfigObject {
   type?: 'number'|'letter'|'mixed';
 }
 
-export interface FormulaCaptchaOptions extends BaseCaptchaOptions {}
+export interface FormulaCaptchaOptions extends ConfigObject {}
 
 export interface TextCaptchaOptions {
   size?: number;
