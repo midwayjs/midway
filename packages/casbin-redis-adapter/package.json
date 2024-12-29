@@ -13,7 +13,7 @@
     "@midwayjs/koa": "^3.19.2",
     "@midwayjs/mock": "^3.19.2",
     "casbin": "5.32.0",
-    "ioredis": "5.4.1"
+    "ioredis": "5.4.2"
   },
   "dependencies": {
     "@midwayjs/casbin": "^3.19.2",
