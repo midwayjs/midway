@@ -196,6 +196,9 @@ export const captcha: CaptchaOptions = {
   idPrefix: 'midway:vc',
 }
 ```
+
+更多配置请参考 [svg-captcha](https://github.com/produck/svg-captcha)。
+
 ### 配置示例一
 
 获取一个 包含 `5个纯英文字母` 的图像验证码，图像宽度 `200` 像素，高度 `50` 像素，并且包含 `3` 条干扰线。
@@ -285,3 +288,7 @@ export default {
 **计算表达式**
 
  ![计算表达式](https://gw.alicdn.com/imgextra/i4/O1CN01u3Mj0q24lRx1md9pX_!!6000000007431-2-tps-120-40.png)
+
+## 注意
+
+* 为了防止机器学习破解，使用的 `svg-captcha` 包为 [安全修复后](https://juejin.cn/post/6872656117839691789) 的版本。

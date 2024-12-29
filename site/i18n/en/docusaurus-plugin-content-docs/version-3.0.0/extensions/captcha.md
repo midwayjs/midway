@@ -196,6 +196,8 @@ export const captcha: CaptchaOptions = {
 }
 ```
 
+More configurations can be found in [svg-captcha](https://github.com/produck/svg-captcha).
+
 ### Configuration Example 1
 
 Get an image captcha code containing `5 pure English letters`. The image's width  is `200` pixels, the height is `50` pixels, and it contains `3` noise lines.
@@ -286,3 +288,7 @@ If you want to replace it with 'redis' or other services, please refer to the [d
 **Calculation expression**
 
  ![计算表达式](https://gw.alicdn.com/imgextra/i4/O1CN01u3Mj0q24lRx1md9pX_!!6000000007431-2-tps-120-40.png)
+
+## Tips
+
+* In order to prevent machine learning cracking, the `svg-captcha` package used is the version after [security repair](https://juejin.cn/post/6872656117839691789).
