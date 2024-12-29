@@ -14,7 +14,7 @@
     "@midwayjs/mock": "workspace:^"
   },
   "dependencies": {
-    "ioredis": "5.4.1"
+    "ioredis": "5.4.2"
   },
   "keywords": [
     "redis"

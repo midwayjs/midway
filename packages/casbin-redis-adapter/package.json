@@ -13,7 +13,7 @@
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "casbin": "5.32.0",
-    "ioredis": "5.4.1"
+    "ioredis": "5.4.2"
   },
   "dependencies": {
     "@midwayjs/casbin": "workspace:^",
