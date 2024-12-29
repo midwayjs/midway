@@ -6,7 +6,7 @@ import {
   InjectClient,
 } from '@midwayjs/core';
 import { CachingFactory, MidwayCache } from '@midwayjs/cache-manager';
-import * as svgCaptcha from 'svg-captcha';
+import * as svgCaptcha from 'svg-captcha-fixed';
 import * as svgBase64 from 'mini-svg-data-uri';
 import { nanoid } from 'nanoid';
 import {
@@ -14,8 +14,15 @@ import {
   ImageCaptchaOptions,
   TextCaptchaOptions,
   CaptchaOptions,
+  CaptchaCacheOptions,
 } from './interface';
 import { letters, numbers } from './constants';
+
+const DEFAULT_IMAGE_IGNORE_CHARS = {
+  letter: numbers,
+  number: letters,
+};
+
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class CaptchaService {
@@ -25,69 +32,63 @@ export class CaptchaService {
   @Config('captcha')
   protected captcha: CaptchaOptions;
 
-  async image(options?: ImageCaptchaOptions): Promise<{
+  async image(
+    options?: ImageCaptchaOptions,
+    cacheOption?: CaptchaCacheOptions
+  ): Promise<{
     id: string;
     imageBase64: string;
   }> {
-    const { width, height, type, size, noise } = Object.assign(
-      {},
-      this.captcha,
-      this.captcha.default,
-      this.captcha.image,
-      options
-    );
-    let ignoreChars = '';
-    switch (type) {
-      case 'letter':
-        ignoreChars = numbers;
-        break;
-      case 'number':
-        ignoreChars = letters;
-        break;
-    }
+    // const { expirationTime, idPrefix } = this.captcha;
+    const { type, ...others }: ImageCaptchaOptions = {
+      ...this.captcha.default,
+      ...this.captcha.image,
+      ...options,
+    };
+
     const { data, text } = svgCaptcha.create({
-      ignoreChars,
-      width,
-      height,
-      size,
-      noise,
+      ignoreChars: DEFAULT_IMAGE_IGNORE_CHARS[type] ?? '',
+      ...others,
     });
-    const id = await this.set(text);
+    const id = await this.set(text, cacheOption);
     const imageBase64 = svgBase64(data);
     return { id, imageBase64 };
   }
 
-  async formula(options?: FormulaCaptchaOptions) {
-    const { width, height, noise } = Object.assign(
-      {},
-      this.captcha,
-      this.captcha.default,
-      this.captcha.formula,
-      options
-    );
-    const { data, text } = svgCaptcha.createMathExpr({
-      width,
-      height,
-      noise,
-    });
-    const id = await this.set(text);
+  async formula(
+    options?: FormulaCaptchaOptions,
+    cacheOption?: CaptchaCacheOptions
+  ): Promise<{
+    id: string;
+    imageBase64: string;
+  }> {
+    const formulaCaptchaOptions = {
+      ...this.captcha.default,
+      ...this.captcha.formula,
+      ...options,
+    };
+
+    const { data, text } = svgCaptcha.createMathExpr(formulaCaptchaOptions);
+    const id = await this.set(text, cacheOption);
     const imageBase64 = svgBase64(data);
     return { id, imageBase64 };
   }
 
-  async text(options?: TextCaptchaOptions): Promise<{
+  async text(
+    options?: TextCaptchaOptions,
+    cacheOption?: CaptchaCacheOptions
+  ): Promise<{
     id: string;
     text: string;
   }> {
-    const textOptions = Object.assign(
-      {},
-      this.captcha,
-      this.captcha.default,
-      this.captcha.text,
-      options
-    );
+    const { type, ...textOptions }: TextCaptchaOptions = {
+      ...this.captcha.default,
+      ...this.captcha.text,
+      ...options,
+    };
+
     let chars = '';
-    switch (textOptions.type) {
+    switch (type) {
       case 'letter':
         chars = letters;
         break;
@@ -102,25 +103,29 @@ export class CaptchaService {
     while (textOptions.size--) {
       text += chars[Math.floor(Math.random() * chars.length)];
     }
-    const id = await this.set(text);
+    const id = await this.set(text, cacheOption);
     return { id, text };
   }
 
-  async set(text: string): Promise<string> {
+  async set(text: string, cacheOptions?: CaptchaCacheOptions): Promise<string> {
     const id = nanoid();
     await this.captchaCaching.set(
-      this.getStoreId(id),
+      this.getStoreId(id, cacheOptions),
       (text || '').toLowerCase(),
-      this.captcha.expirationTime * 1000
+      (cacheOptions?.expirationTime ?? this.captcha.expirationTime) * 1000
     );
     return id;
   }
 
-  async check(id: string, value: string): Promise<boolean> {
+  async check(
+    id: string,
+    value: string,
+    cacheOptions?: CaptchaCacheOptions
+  ): Promise<boolean> {
     if (!id || !value) {
       return false;
     }
-    const storeId = this.getStoreId(id);
+    const storeId = this.getStoreId(id, cacheOptions);
     const storedValue = await this.captchaCaching.get(storeId);
     if (value.toLowerCase() !== storedValue) {
       return false;
@@ -129,10 +134,11 @@ export class CaptchaService {
     return true;
   }
 
-  private getStoreId(id: string): string {
-    if (!this.captcha.idPrefix) {
+  private getStoreId(id: string, cacheOptions?: CaptchaCacheOptions): string {
+    const idPrefix = cacheOptions?.idPrefix ?? this.captcha.idPrefix;
+    if (!idPrefix) {
       return id;
     }
-    return `${this.captcha.idPrefix}:${id}`;
+    return `${idPrefix}:${id}`;
   }
 }
