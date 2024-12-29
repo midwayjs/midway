@@ -7,6 +7,7 @@ import {
   ObjectCreatedOptions,
   ObjectInitOptions,
   FunctionalConfigurationOptions,
+  LifeCycleInvokeOptions,
 } from '../interface';
 import { CONFIGURATION_OBJECT_KEY } from '../decorator';
 import { MetadataManager } from '../decorator/metadataManager';
@@ -16,28 +17,42 @@ export class FunctionalConfiguration implements ILifeCycle {
 
   async onConfigLoad(
     container: IMidwayContainer,
-    mainApp: IMidwayApplication
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
   ): Promise<any> {
-    return this.options?.onConfigLoad?.(container, mainApp);
+    return this.options?.onConfigLoad?.(container, mainApp, options);
   }
 
-  async onReady(container: IMidwayContainer, mainApp: IMidwayApplication) {
-    return this.options?.onReady?.(container, mainApp);
+  async onReady(
+    container: IMidwayContainer,
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
+  ) {
+    return this.options?.onReady?.(container, mainApp, options);
   }
 
   async onServerReady(
     container: IMidwayContainer,
-    mainApp: IMidwayApplication
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
   ) {
-    return this.options?.onServerReady?.(container, mainApp);
+    return this.options?.onServerReady?.(container, mainApp, options);
   }
 
-  async onHealthCheck(container: IMidwayContainer) {
-    return this.options?.onHealthCheck?.(container);
+  async onHealthCheck(
+    container: IMidwayContainer,
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
+  ) {
+    return this.options?.onHealthCheck?.(container, mainApp, options);
   }
 
-  async onStop(container: IMidwayContainer, mainApp: IMidwayApplication) {
-    return this.options?.onStop?.(container, mainApp);
+  async onStop(
+    container: IMidwayContainer,
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
+  ) {
+    return this.options?.onStop?.(container, mainApp, options);
   }
 
   // object lifecycle

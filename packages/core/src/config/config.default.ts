@@ -5,7 +5,10 @@ export default (appInfo: MidwayAppInfo): MidwayCoreDefaultConfig => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   return {
     core: {
-      healthCheckTimeout: 1000,
+      healthCheckTimeout: 1_000,
+      configLoadTimeout: 10_000,
+      readyTimeout: 30_000,
+      serverReadyTimeout: 30_000,
     },
     asyncContextManager: {
       enable: true,
