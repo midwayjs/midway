@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/event-bus": "1.10.0"
+    "@midwayjs/event-bus": "1.11.1"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
