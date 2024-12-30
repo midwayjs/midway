@@ -440,6 +440,10 @@ export interface MidwayCoreDefaultConfig {
   };
   core?: {
     healthCheckTimeout?: number;
+    configLoadTimeout?: number;
+    readyTimeout?: number;
+    serverReadyTimeout?: number;
+    stopTimeout?: number;
   }
 }
 
@@ -488,6 +492,11 @@ export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T>
   : ConfigType<T>;
 
 
+export interface LifeCycleInvokeOptions {
+  abortController: AbortController;
+  timeout: number;
+}
+
 /**
  * Lifecycle Definition
  * 生命周期定义
@@ -495,22 +504,28 @@ export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T>
 export interface ILifeCycle extends Partial<IObjectLifeCycle> {
   onConfigLoad?(
     container: IMidwayContainer,
-    mainApp?: IMidwayApplication
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
   ): Promise<any>;
   onReady?(
     container: IMidwayContainer,
-    mainApp?: IMidwayApplication
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
   ): Promise<void>;
   onServerReady?(
     container: IMidwayContainer,
-    mainApp?: IMidwayApplication
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
   ): Promise<void>;
   onHealthCheck?(
-    container: IMidwayContainer
+    container: IMidwayContainer,
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
   ): Promise<HealthResult>;
   onStop?(
     container: IMidwayContainer,
-    mainApp?: IMidwayApplication
+    mainApp: IMidwayApplication,
+    options: LifeCycleInvokeOptions
   ): Promise<void>;
 }
 

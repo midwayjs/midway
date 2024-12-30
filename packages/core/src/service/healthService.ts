@@ -2,11 +2,14 @@ import { ApplicationContext, Inject, Provide, Scope } from '../decorator';
 import {
   HealthResult,
   HealthResults,
+  IMidwayApplication,
   IMidwayContainer,
+  LifeCycleInvokeOptions,
   ScopeEnum,
 } from '../interface';
 import { MidwayConfigService } from './configService';
-import { createPromiseTimeoutInvokeChain } from '../util';
+import { createPromiseTimeoutInvokeChain } from '../util/timeout';
+import { MidwayFrameworkService } from './frameworkService';
 
 interface InnerHealthResult extends HealthResult {
   namespace: string;
@@ -18,12 +21,19 @@ export class MidwayHealthService {
   @Inject()
   protected configService: MidwayConfigService;
 
+  @Inject()
+  protected frameworkService: MidwayFrameworkService;
+
   @ApplicationContext()
   protected applicationContext: IMidwayContainer;
 
   private healthCheckTimeout = 1000;
   private healthCheckMethods: Array<{
-    item: (container: IMidwayContainer) => Promise<HealthResult>;
+    item: (
+      container: IMidwayContainer,
+      app: IMidwayApplication,
+      options: LifeCycleInvokeOptions
+    ) => Promise<HealthResult>;
     meta: {
       namespace: string;
     };
@@ -62,11 +72,21 @@ export class MidwayHealthService {
       await createPromiseTimeoutInvokeChain<InnerHealthResult>({
         promiseItems: this.healthCheckMethods.map(item => {
           return {
-            item: item.item(this.applicationContext),
+            item: ab => {
+              return item.item(
+                this.applicationContext,
+                this.frameworkService.getMainApp(),
+                {
+                  abortController: ab,
+                  timeout: this.healthCheckTimeout,
+                }
+              );
+            },
             meta: item.meta,
+            itemName: item.meta.namespace,
           };
         }),
-        timeout: this.healthCheckTimeout,
+        itemTimeout: this.healthCheckTimeout,
         methodName: 'configuration.onHealthCheck',
         onSuccess: (result, meta) => {
           if (result['status'] !== undefined) {

@@ -2,7 +2,7 @@ import { dirname, resolve, sep, posix, join } from 'path';
 import { readFileSync } from 'fs';
 import { debuglog } from 'util';
 import { PathToRegexpUtil } from './pathToRegexp';
-import { MidwayCodeInvokeTimeoutError, MidwayCommonError } from '../error';
+import { MidwayCommonError } from '../error';
 import { FunctionMiddleware, IgnoreMatcher } from '../interface';
 import { camelCase, pascalCase } from './camelCase';
 import { randomUUID } from './uuid';
@@ -500,11 +500,16 @@ export function wrapAsync(handler) {
   };
 }
 
-export function sleep(sleepTime = 1000) {
+export function sleep(sleepTime = 1000, abortController?: AbortController) {
   return new Promise<void>(resolve => {
-    setTimeout(() => {
+    const timeoutHandler = setTimeout(() => {
       resolve();
     }, sleepTime);
+    if (abortController) {
+      abortController.signal.addEventListener('abort', () => {
+        clearTimeout(timeoutHandler);
+      });
+    }
   });
 }
 
@@ -573,100 +578,6 @@ export function isTypeScriptEnvironment() {
   }
   // eslint-disable-next-line node/no-deprecated-api
   return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
-}
-
-/**
- * Create a Promise that resolves after the specified time
- * @param options
- */
-export async function createPromiseTimeoutInvokeChain<Result>(options: {
-  promiseItems: Array<
-    Promise<any> | { item: Promise<any>; meta?: any; timeout?: number }
-  >;
-  timeout: number;
-  methodName: string;
-  onSuccess?: (result: any, meta: any) => Result | Promise<Result>;
-  onFail: (err: Error, meta: any) => Result | Promise<Result>;
-  isConcurrent?: boolean;
-}): Promise<Result[]> {
-  if (!options.onSuccess) {
-    options.onSuccess = async result => {
-      return result as Result;
-    };
-  }
-  options.isConcurrent = options.isConcurrent ?? true;
-  options.promiseItems = options.promiseItems.map(item => {
-    if (item instanceof Promise) {
-      return { item };
-    } else {
-      return item;
-    }
-  });
-
-  // filter promise
-  options.promiseItems = options.promiseItems.filter(item => {
-    return item['item'] instanceof Promise;
-  });
-
-  if (options.isConcurrent) {
-    // For each check item, we create a timeout Promise
-    const checkPromises = options.promiseItems.map(item => {
-      const timeoutPromise = new Promise((_, reject) => {
-        // The timeout Promise fails after the specified time
-        setTimeout(
-          () =>
-            reject(
-              new MidwayCodeInvokeTimeoutError(
-                options.methodName,
-                item['timeout'] ?? options.timeout
-              )
-            ),
-          item['timeout'] ?? options.timeout
-        );
-      });
-      // We use Promise.race to wait for either the check item or the timeout Promise
-      return (
-        Promise.race([item['item'], timeoutPromise])
-          // If the check item Promise resolves, we set the result to success
-          .then(re => {
-            return options.onSuccess(re, item['meta']);
-          })
-          // If the timeout Promise resolves (i.e., the check item Promise did not resolve in time), we set the result to failure
-          .catch(err => {
-            return options.onFail(err, item['meta']);
-          })
-      );
-    });
-    return Promise.all(checkPromises);
-  } else {
-    const results = [];
-    for (const item of options.promiseItems) {
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(
-          () =>
-            reject(
-              new MidwayCodeInvokeTimeoutError(
-                options.methodName,
-                item['timeout'] ?? options.timeout
-              )
-            ),
-          item['timeout'] ?? options.timeout
-        );
-      });
-      try {
-        const result = await Promise.race([item['item'], timeoutPromise]).then(
-          re => {
-            return options.onSuccess(re, item['meta']);
-          }
-        );
-        results.push(result);
-      } catch (error) {
-        results.push(options.onFail(error, item['meta']));
-        break;
-      }
-    }
-    return results;
-  }
 }
 
 function getFileNameWithSuffix(fileName: string) {

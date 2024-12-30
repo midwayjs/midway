@@ -15,8 +15,15 @@ import { MidwayMockService } from './mockService';
 import { MidwayHealthService } from './healthService';
 import { MetadataManager } from '../decorator/metadataManager';
 import { MidwayInitializerPerformanceManager } from '../common/performanceManager';
+import { createPromiseTimeoutInvokeChain } from '../util/timeout';
 
 const debug = debuglog('midway:debug');
+
+type LifecycleInstanceItem = {
+  target: any;
+  namespace: string;
+  instance?: any;
+};
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -33,11 +40,7 @@ export class MidwayLifeCycleService {
   @Inject()
   protected healthService: MidwayHealthService;
 
-  private lifecycleInstanceList: Array<{
-    target: any;
-    namespace: string;
-    instance?: any;
-  }> = [];
+  private lifecycleInstanceList: Array<LifecycleInstanceItem> = [];
 
   constructor(readonly applicationContext: IMidwayContainer) {}
 
@@ -47,11 +50,9 @@ export class MidwayLifeCycleService {
     await this.mockService.initSimulation();
 
     // run lifecycle
-    const cycles = DecoratorManager.listModule(CONFIGURATION_KEY) as Array<{
-      target: any;
-      namespace: string;
-      instance?: any;
-    }>;
+    const cycles = DecoratorManager.listModule(
+      CONFIGURATION_KEY
+    ) as Array<LifecycleInstanceItem>;
 
     debug(`[core]: Found Configuration length = ${cycles.length}`);
 
@@ -96,17 +97,22 @@ export class MidwayLifeCycleService {
     await this.runContainerLifeCycle(
       this.lifecycleInstanceList,
       'onConfigLoad',
-      configData => {
-        if (configData) {
-          this.configService.addObject(configData);
-        }
+      {
+        resultHandler: configData => {
+          if (configData) {
+            this.configService.addObject(configData);
+          }
+        },
+        timeout: this.configService.getConfiguration('core.configLoadTimeout'),
       }
     );
 
     await this.mockService.runSimulatorSetup();
 
     // exec onReady()
-    await this.runContainerLifeCycle(this.lifecycleInstanceList, 'onReady');
+    await this.runContainerLifeCycle(this.lifecycleInstanceList, 'onReady', {
+      timeout: this.configService.getConfiguration('core.readyTimeout'),
+    });
 
     // exec framework.run()
     await this.frameworkService.runFramework();
@@ -114,7 +120,10 @@ export class MidwayLifeCycleService {
     // exec onServerReady()
     await this.runContainerLifeCycle(
       this.lifecycleInstanceList,
-      'onServerReady'
+      'onServerReady',
+      {
+        timeout: this.configService.getConfiguration('core.serverReadyTimeout'),
+      }
     );
 
     // clear config merge cache
@@ -128,7 +137,10 @@ export class MidwayLifeCycleService {
     // stop lifecycle
     await this.runContainerLifeCycle(
       this.lifecycleInstanceList.reverse(),
-      'onStop'
+      'onStop',
+      {
+        timeout: this.configService.getConfiguration('core.stopTimeout'),
+      }
     );
     // stop framework
     await this.frameworkService.stopFramework();
@@ -138,50 +150,68 @@ export class MidwayLifeCycleService {
    * run some lifecycle in configuration
    * @param lifecycleInstanceOrList
    * @param lifecycle
-   * @param resultHandler
+   * @param runOptions
    */
-  private async runContainerLifeCycle(
-    lifecycleInstanceOrList,
-    lifecycle,
-    resultHandler?: (result: any) => void
+  protected async runContainerLifeCycle(
+    lifecycleInstanceOrList: LifecycleInstanceItem[],
+    lifecycle: string,
+    runOptions?: {
+      resultHandler?: (result: any) => void;
+      timeout?: number;
+    }
   ) {
-    if (Array.isArray(lifecycleInstanceOrList)) {
-      for (const cycle of lifecycleInstanceOrList) {
-        if (typeof cycle.instance[lifecycle] === 'function') {
-          debug(
-            `[core]: Lifecycle run ${cycle.instance.constructor.name} ${lifecycle}`
-          );
-          MidwayInitializerPerformanceManager.lifecycleStart(
-            cycle.namespace,
-            lifecycle
-          );
-          const result = await cycle.instance[lifecycle](
-            this.applicationContext,
-            this.frameworkService.getMainApp()
-          );
-          if (resultHandler) {
-            resultHandler(result);
-          }
-          MidwayInitializerPerformanceManager.lifecycleEnd(
-            cycle.namespace,
-            lifecycle
-          );
+    await createPromiseTimeoutInvokeChain({
+      promiseItems: lifecycleInstanceOrList.map(cycle => {
+        return {
+          item: async ab => {
+            return this.runLifeCycle(cycle, lifecycle, {
+              ...runOptions,
+              abortController: ab,
+            });
+          },
+          meta: { namespace: cycle.namespace },
+          itemName: cycle.namespace,
+        };
+      }),
+      itemTimeout: runOptions?.timeout,
+      isConcurrent: false,
+      methodName: `configuration.${lifecycle}`,
+    });
+  }
+
+  private async runLifeCycle(
+    cycle: LifecycleInstanceItem,
+    lifecycle: string,
+    runOptions: {
+      resultHandler?: (result: any) => void;
+      timeout?: number;
+      abortController?: AbortController;
+    }
+  ): Promise<any> {
+    if (typeof cycle.instance[lifecycle] === 'function') {
+      debug(
+        `[core]: Lifecycle run ${cycle.instance.constructor.name} ${lifecycle}`
+      );
+      MidwayInitializerPerformanceManager.lifecycleStart(
+        cycle.namespace,
+        lifecycle
+      );
+      const result = await cycle.instance[lifecycle](
+        this.applicationContext,
+        this.frameworkService.getMainApp(),
+        {
+          timeout: runOptions.timeout,
+          abortController: runOptions.abortController,
         }
+      );
+      if (runOptions?.resultHandler) {
+        runOptions.resultHandler(result);
       }
-    } else {
-      if (typeof lifecycleInstanceOrList[lifecycle] === 'function') {
-        const name = lifecycleInstanceOrList.constructor.name;
-        debug(`[core]: Lifecycle run ${name} ${lifecycle}`);
-        MidwayInitializerPerformanceManager.lifecycleStart(name, lifecycle);
-        const result = await lifecycleInstanceOrList[lifecycle](
-          this.applicationContext,
-          this.frameworkService.getMainApp()
-        );
-        if (resultHandler) {
-          resultHandler(result);
-        }
-        MidwayInitializerPerformanceManager.lifecycleEnd(name, lifecycle);
-      }
+      MidwayInitializerPerformanceManager.lifecycleEnd(
+        cycle.namespace,
+        lifecycle
+      );
+      return result;
     }
   }
 

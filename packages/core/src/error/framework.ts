@@ -185,9 +185,11 @@ export class MidwayInvokeForbiddenError extends MidwayError {
 }
 
 export class MidwayCodeInvokeTimeoutError extends MidwayError {
-  constructor(methodName: string, timeout: number) {
+  constructor(methodName: string, timeout: number, moduleName?: string) {
     super(
-      `Invoke "${methodName}" running timeout(${timeout}ms)`,
+      moduleName
+        ? `Function "${methodName}" of "${moduleName}" call more than ${timeout}ms`
+        : `Function "${methodName}" call more than ${timeout}ms`,
       FrameworkErrorEnum.CODE_INVOKE_TIMEOUT
     );
   }
