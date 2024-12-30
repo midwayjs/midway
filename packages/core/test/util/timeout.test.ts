@@ -343,13 +343,13 @@ describe('test create timeout handler', () => {
     const promise = createPromiseTimeoutInvokeChain({
       promiseItems: [{
         item: async (ac) => {
-          await sleep(100, ac);
+          await sleep(200, ac);
           return 3;
         },
         itemName: 'p1',
       }],
       methodName: 'configuration.onReady',
-      itemTimeout: 200,
+      itemTimeout: 100,
     });
 
     await expect(promise).rejects.toThrow('Function \"configuration.onReady\" of \"p1\" call more than 100ms');
