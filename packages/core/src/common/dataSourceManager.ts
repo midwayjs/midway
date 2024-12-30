@@ -58,47 +58,49 @@ export abstract class DataSourceManager<
       };
     }
 
-    for (const dataSourceName in dataSourceConfig.dataSource) {
-      const dataSourceOptions = dataSourceConfig.dataSource[dataSourceName];
-      const userEntities = dataSourceOptions[
-        baseDirOrOptions.entitiesConfigKey
-      ] as any[];
-      if (userEntities) {
-        const entities = new Set();
-        // loop entities and glob files to model
-        for (const entity of userEntities) {
-          if (typeof entity === 'string') {
-            // string will be glob file
-            const models = await globModels(
-              entity,
-              baseDirOrOptions.baseDir,
-              this.environmentService?.getModuleLoadType()
-            );
-            for (const model of models) {
-              entities.add(model);
-              this.modelMapping.set(model, dataSourceName);
+    await Promise.all(
+      Object.entries(dataSourceConfig.dataSource).map(async ([dataSourceName, dataSourceOptions]) => {
+        const userEntities = dataSourceOptions[
+          baseDirOrOptions.entitiesConfigKey
+        ] as any[];
+        if (userEntities) {
+          const entities = new Set();
+          // loop entities and glob files to model
+          await Promise.all(userEntities.map(async entity => {
+            if (typeof entity === 'string') {
+              // string will be glob file
+              const models = await globModels(
+                entity,
+                baseDirOrOptions.baseDir,
+                this.environmentService?.getModuleLoadType()
+              );
+              for (const model of models) {
+                entities.add(model);
+                this.modelMapping.set(model, dataSourceName);
+              }
+            } else {
+              // model will be added to array
+              entities.add(entity);
+              this.modelMapping.set(entity, dataSourceName);
             }
-          } else {
-            // model will be added to array
-            entities.add(entity);
-            this.modelMapping.set(entity, dataSourceName);
-          }
+          }));
+          
+          (dataSourceOptions[baseDirOrOptions.entitiesConfigKey] as any) =
+            Array.from(entities);
+          debug(
+            `[core]: DataManager load ${
+              dataSourceOptions[baseDirOrOptions.entitiesConfigKey].length
+            } models from ${dataSourceName}.`
+          );
         }
-        (dataSourceOptions[baseDirOrOptions.entitiesConfigKey] as any) =
-          Array.from(entities);
-        debug(
-          `[core]: DataManager load ${
-            dataSourceOptions[baseDirOrOptions.entitiesConfigKey].length
-          } models from ${dataSourceName}.`
-        );
-      }
-      // create data source
-      const opts = {
-        cacheInstance: dataSourceConfig.cacheInstance, // will default true
-        validateConnection: dataSourceConfig.validateConnection,
-      };
-      await this.createInstance(dataSourceOptions, dataSourceName, opts);
-    }
+        // create data source
+        const opts = {
+          cacheInstance: dataSourceConfig.cacheInstance, // will default true
+          validateConnection: dataSourceConfig.validateConnection,
+        };
+        return this.createInstance(dataSourceOptions, dataSourceName, opts);
+      })
+    );
   }
 
   /**

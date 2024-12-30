@@ -25,11 +25,12 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
       extend(true, options.clients['default'], options.client);
     }
 
-    // multi client
+    // multi client with concurrent initialization
     if (options.clients) {
-      for (const id of Object.keys(options.clients)) {
-        await this.createInstance(options.clients[id], id);
-      }
+      const clientInitPromises = Object.entries(options.clients).map(
+        ([id, config]) => this.createInstance(config, id)
+      );
+      await Promise.all(clientInitPromises);
     }
 
     // set priority
