@@ -1,13 +1,12 @@
-import { Configuration } from '@midwayjs/core';
-import { HttpServiceFactory } from './serviceManager';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
+import ConfigDefault from './config.default';
+import { HttpServiceFactory } from './http-service.factory';
 
 @Configuration({
   namespace: 'axios',
   importConfigs: [
     {
-      default: {
-        axios: {},
-      },
+      default: ConfigDefault,
     },
   ],
   importConfigFilter: config => {
@@ -31,7 +30,7 @@ import { HttpServiceFactory } from './serviceManager';
   },
 })
 export class AxiosConfiguration {
-  async onReady(container) {
+  public async onReady(container: IMidwayContainer): Promise<void> {
     await container.getAsync(HttpServiceFactory);
   }
 }

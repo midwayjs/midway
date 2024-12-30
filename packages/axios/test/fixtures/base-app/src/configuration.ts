@@ -5,6 +5,4 @@ import { Configuration } from '@midwayjs/core';
     require('../../../../src')
   ]
 })
-export class AutoConfiguration {
-
-}
+export class AutoConfiguration {}
