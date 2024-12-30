@@ -88,11 +88,10 @@ export abstract class DataSourceManager<
               })
             );
 
-            (dataSourceOptions[entitiesConfigKey] as any) = Array.from(entities);
+            (dataSourceOptions[entitiesConfigKey] as any) =
+              Array.from(entities);
             debug(
-              `[core]: DataManager load ${
-                dataSourceOptions[entitiesConfigKey].length
-              } models from ${dataSourceName}.`
+              `[core]: DataManager load ${dataSourceOptions[entitiesConfigKey].length} models from ${dataSourceName}.`
             );
           }
           // create data source
