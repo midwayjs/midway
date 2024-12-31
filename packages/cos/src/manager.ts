@@ -21,7 +21,9 @@ export class COSServiceFactory extends ServiceFactory<COS> {
 
   @Init()
   async init() {
-    await this.initClients(this.cosConfig);
+    await this.initClients(this.cosConfig, {
+      concurrent: true,
+    });
   }
 
   @Logger('coreLogger')

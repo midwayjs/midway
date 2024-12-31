@@ -25,7 +25,9 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
 
   @Init()
   protected async init() {
-    await this.initClients(this.redisConfig);
+    await this.initClients(this.redisConfig, {
+      concurrent: true,
+    });
   }
 
   @Logger('coreLogger')

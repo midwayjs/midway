@@ -28,7 +28,9 @@ export class MqttProducerFactory extends ServiceFactory<MqttClient> {
 
   @Init()
   async init() {
-    await this.initClients(this.pubConfig);
+    await this.initClients(this.pubConfig, {
+      concurrent: true,
+    });
   }
 
   protected async createClient(

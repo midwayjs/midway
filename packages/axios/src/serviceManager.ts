@@ -34,7 +34,9 @@ export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
         },
       };
     }
-    await this.initClients(axiosConfig);
+    await this.initClients(axiosConfig, {
+      concurrent: true,
+    });
   }
 
   protected async createClient(
