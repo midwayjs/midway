@@ -9,13 +9,21 @@ describe('test/common/dataSourceManager.test.ts', () => {
     getName() {
       return 'test';
     }
-    async init(options) {
-      return super.initDataSource(options, __dirname);
+    async init(options, initOptions?) {
+      return super.initDataSource(options, {
+        baseDir: __dirname,
+        ...initOptions
+      });
     }
 
     protected createDataSource(config, dataSourceName: string): any {
-      config.entitiesLength = config.entities.length;
-      return config;
+      return new Promise(resolve => {
+        setTimeout(() => {
+          config.entitiesLength = config.entities?.length || 0;
+          config.createdAt = Date.now();
+          resolve(config);
+        }, 100);
+      });
     }
 
     protected async checkConnected(dataSource: any) {
@@ -64,9 +72,17 @@ describe('test/common/dataSourceManager.test.ts', () => {
     })
     expect(instance.getDataSourceNames()).toEqual(['default', 'test']);
     expect(instance.hasDataSource('default')).toBeTruthy();
-    expect(instance.getDataSource('default')).toMatchSnapshot();
+    const defaultDataSource = instance.getDataSource('default');
+    expect({
+      ...defaultDataSource,
+      createdAt: undefined // 忽略 createdAt 字段
+    }).toMatchSnapshot();
     expect(instance.getDataSource('default').entitiesLength).toEqual(2);
-    expect(instance.getDataSource('test')).toMatchSnapshot();
+    const testDataSource = instance.getDataSource('test');
+    expect({
+      ...testDataSource,
+      createdAt: undefined // 忽略 createdAt 字段
+    }).toMatchSnapshot();
     expect(instance.getDataSource('test').entitiesLength).toEqual(1);
     expect(instance.getDataSource('fff')).not.toBeDefined();
 
@@ -109,7 +125,11 @@ describe('test/common/dataSourceManager.test.ts', () => {
       },
     })
     expect(instance.getDataSourceNames()).toEqual(['test']);
-    expect(instance.getDataSource('test')).toMatchSnapshot();
+    const dataSource = instance.getDataSource('test');
+    expect({
+      ...dataSource,
+      createdAt: undefined // 忽略 createdAt 字段
+    }).toMatchSnapshot();
   });
 
   it('should createInstance() without cacheInstance (default true)', async () => {
@@ -243,6 +263,120 @@ describe('test/common/dataSourceManager.test.ts', () => {
 
     result = await globModels('**/*.{j,t}s', join(__dirname, 'glob_dir_pattern'));
     expect(result.length).toEqual(6);
+  });
+
+  describe('test concurrent initialization', () => {
+    class EntityA {}
+    class EntityB {}
+
+    it('should initialize data sources serially by default', async () => {
+      const instance = new CustomDataSourceFactory();
+      const startTime = Date.now();
+      
+      await instance.init({
+        dataSource: {
+          ds1: {
+            entities: [EntityA]
+          },
+          ds2: {
+            entities: [EntityB]
+          },
+          ds3: {
+            entities: [EntityA, EntityB]
+          }
+        }
+      });
+
+      const dataSources = Array.from(instance.getAllDataSources().values());
+      const creationTimes = dataSources.map(ds => ds.createdAt);
+      
+      // 验证数据源是按顺序创建的
+      for (let i = 1; i < creationTimes.length; i++) {
+        expect(creationTimes[i] - creationTimes[i-1]).toBeGreaterThanOrEqual(90);
+      }
+      
+      // 总时间应该接近 300ms (3个数据源 * 100ms)
+      expect(Date.now() - startTime).toBeGreaterThanOrEqual(290);
+    });
+
+    it('should initialize data sources concurrently when concurrent option is true', async () => {
+      const instance = new CustomDataSourceFactory();
+      const startTime = Date.now();
+      
+      await instance.init({
+        dataSource: {
+          ds1: {
+            entities: [EntityA]
+          },
+          ds2: {
+            entities: [EntityB]
+          },
+          ds3: {
+            entities: [EntityA, EntityB]
+          }
+        }
+      }, { concurrent: true });
+
+      const dataSources = Array.from(instance.getAllDataSources().values());
+      const creationTimes = dataSources.map(ds => ds.createdAt);
+      
+      // 验证所有数据源创建时间应该接近
+      for (let i = 1; i < creationTimes.length; i++) {
+        expect(creationTimes[i] - creationTimes[i-1]).toBeLessThan(50);
+      }
+      
+      // 总时间应该接近 100ms
+      expect(Date.now() - startTime).toBeLessThan(200);
+    });
+
+    it('should handle errors in concurrent initialization', async () => {
+      class ErrorDataSourceFactory extends CustomDataSourceFactory {
+        protected createDataSource(config: any, dataSourceName: string): any {
+          if (dataSourceName === 'ds2') {
+            throw new Error('Test error');
+          }
+          return super.createDataSource(config, dataSourceName);
+        }
+      }
+
+      const instance = new ErrorDataSourceFactory();
+      
+      await expect(instance.init({
+        dataSource: {
+          ds1: {
+            entities: [EntityA]
+          },
+          ds2: {
+            entities: [EntityB]
+          },
+          ds3: {
+            entities: [EntityA, EntityB]
+          }
+        }
+      }, { concurrent: true })).rejects.toThrow('Test error');
+
+      // 验证在出错时没有数据源被创建
+      expect(instance.getAllDataSources().size).toBe(0);
+    });
+
+    it('should handle entity loading concurrently', async () => {
+      const instance = new CustomDataSourceFactory();
+      const startTime = Date.now();
+      
+      await instance.init({
+        dataSource: {
+          ds1: {
+            entities: ['/abc', '/abc', '/abc'] // 使用多个需要异步加载的实体
+          }
+        }
+      }, { concurrent: true });
+
+      // 由于实体加载也是并发的，总时间应该远小于串行加载的时间
+      expect(Date.now() - startTime).toBeLessThan(300);
+      
+      const ds = instance.getDataSource('ds1');
+      expect(ds.entitiesLength).toBeGreaterThan(0);
+    });
   });
 
 });

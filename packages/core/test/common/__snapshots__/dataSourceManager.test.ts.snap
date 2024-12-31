@@ -2,6 +2,7 @@
 
 exports[`test/common/dataSourceManager.test.ts should test base data source 1`] = `
 {
+  "createdAt": undefined,
   "dialect": "mysql",
   "entities": [
     [Function],
@@ -20,6 +21,7 @@ exports[`test/common/dataSourceManager.test.ts should test base data source 1`] 
 
 exports[`test/common/dataSourceManager.test.ts should test base data source 2`] = `
 {
+  "createdAt": undefined,
   "dataSourceGroup": "bb",
   "dialect": "mysql",
   "entities": [
@@ -38,6 +40,7 @@ exports[`test/common/dataSourceManager.test.ts should test base data source 2`] 
 
 exports[`test/common/dataSourceManager.test.ts should test with glob model 1`] = `
 {
+  "createdAt": undefined,
   "dialect": "mysql",
   "entities": [
     [Function],

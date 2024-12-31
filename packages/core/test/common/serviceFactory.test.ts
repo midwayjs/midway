@@ -4,22 +4,27 @@ describe('test/common/serviceFactory.test.ts', () => {
 
   class TestServiceFactory extends ServiceFactory<any> {
     protected createClient(config: any): any {
-      const client =  {
-        aaa: 123,
-        isClose: false,
-        async close() {
-          client.isClose = true;
-        }
-      };
-      return client;
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const client = {
+            aaa: 123,
+            isClose: false,
+            async close() {
+              client.isClose = true;
+            },
+            createdAt: Date.now()
+          };
+          resolve(client);
+        }, 100);
+      });
     }
 
     getName() {
       return 'test';
     }
 
-    async initClients(options) {
-      return super.initClients(options);
+    async initClients(options, initOptions?) {
+      return super.initClients(options, initOptions);
     }
 
     protected async destroyClient(client: any): Promise<void> {
@@ -134,6 +139,80 @@ describe('test/common/serviceFactory.test.ts', () => {
       expect(instance.isHighPriority('defaultPriorityClient')).toBeFalsy();
       expect(instance.isMediumPriority('defaultPriorityClient')).toBeTruthy();
       expect(instance.isLowPriority('defaultPriorityClient')).toBeFalsy();
+    });
+  });
+
+  describe('test concurrent initialization', () => {
+    it('should initialize clients serially by default', async () => {
+      const instance = new TestServiceFactory();
+      const startTime = Date.now();
+      
+      await instance.initClients({
+        clients: {
+          client1: {},
+          client2: {},
+          client3: {}
+        }
+      });
+
+      const clients = instance.getClients();
+      const creationTimes = Array.from(clients.values()).map(client => client.createdAt);
+      
+      // 验证客户端是按顺序创建的
+      for (let i = 1; i < creationTimes.length; i++) {
+        expect(creationTimes[i] - creationTimes[i-1]).toBeGreaterThanOrEqual(90);
+      }
+      
+      // 总时间应该接近 300ms (3个客户端 * 100ms)
+      expect(Date.now() - startTime).toBeGreaterThanOrEqual(290);
+    });
+
+    it('should initialize clients concurrently when concurrent option is true', async () => {
+      const instance = new TestServiceFactory();
+      const startTime = Date.now();
+      
+      await instance.initClients({
+        clients: {
+          client1: {},
+          client2: {},
+          client3: {}
+        }
+      }, { concurrent: true });
+
+      const clients = instance.getClients();
+      const creationTimes = Array.from(clients.values()).map(client => client.createdAt);
+      
+      // 验证所有客户端创建时间应该接近
+      for (let i = 1; i < creationTimes.length; i++) {
+        expect(creationTimes[i] - creationTimes[i-1]).toBeLessThan(50);
+      }
+      
+      // 总时间应该接近 100ms
+      expect(Date.now() - startTime).toBeLessThan(200);
+    });
+
+    it('should handle errors in concurrent initialization', async () => {
+      class ErrorTestServiceFactory extends TestServiceFactory {
+        protected createClient(config: any, clientName?: string): any {
+          if (clientName === 'client2') {
+            throw new Error('Test error');
+          }
+          return super.createClient(config);
+        }
+      }
+
+      const instance = new ErrorTestServiceFactory();
+      
+      await expect(instance.initClients({
+        clients: {
+          client1: {},
+          client2: {},
+          client3: {}
+        }
+      }, { concurrent: true })).rejects.toThrow('Test error');
+
+      // 验证在出错时没有客户端被创建
+      expect(instance.getClients().size).toBe(0);
     });
   });
 
