@@ -30,7 +30,10 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
 
   @Init()
   async init() {
-    await this.initDataSource(this.typeormConfig, this.baseDir);
+    await this.initDataSource(this.typeormConfig, {
+      baseDir: this.baseDir,
+      concurrent: true,
+    });
   }
 
   getName(): string {

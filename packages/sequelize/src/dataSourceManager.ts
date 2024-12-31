@@ -25,7 +25,10 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
 
   @Init()
   async init() {
-    await this.initDataSource(this.sequelizeConfig, this.baseDir);
+    await this.initDataSource(this.sequelizeConfig, {
+      baseDir: this.baseDir,
+      concurrent: true,
+    });
   }
 
   getName(): string {

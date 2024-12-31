@@ -26,7 +26,10 @@ export class MikroDataSourceManager extends DataSourceManager<
 
   @Init()
   async init() {
-    await this.initDataSource(this.mikroConfig, this.baseDir);
+    await this.initDataSource(this.mikroConfig, {
+      baseDir: this.baseDir,
+      concurrent: true,
+    });
   }
 
   getName(): string {

@@ -37,6 +37,7 @@ export class LeoricDataSourceManager extends DataSourceManager<
     await this.initDataSource(this.leoricConfig, {
       baseDir: this.baseDir,
       entitiesConfigKey: 'models',
+      concurrent: true,
     });
   }
 
