@@ -15,7 +15,12 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
   @Inject()
   protected priorityManager: MidwayPriorityManager;
 
-  protected async initClients(options: any = {}): Promise<void> {
+  protected async initClients(
+    options: any = {},
+    initOptions: {
+      concurrent?: boolean;
+    } = {}
+  ): Promise<void> {
     this.options = options;
 
     // merge options.client to options.clients['default']
@@ -25,12 +30,19 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
       extend(true, options.clients['default'], options.client);
     }
 
-    // multi client with concurrent initialization
     if (options.clients) {
-      const clientInitPromises = Object.entries(options.clients).map(
-        ([id, config]) => this.createInstance(config, id)
-      );
-      await Promise.all(clientInitPromises);
+      if (initOptions.concurrent) {
+        // multi client with concurrent initialization
+        const clientInitPromises = Object.entries(options.clients).map(
+          ([id, config]) => this.createInstance(config, id)
+        );
+        await Promise.all(clientInitPromises);
+      } else {
+        // multi client with serial initialization
+        for (const [id, config] of Object.entries(options.clients)) {
+          await this.createInstance(config, id);
+        }
+      }
     }
 
     // set priority

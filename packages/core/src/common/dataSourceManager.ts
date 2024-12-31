@@ -41,6 +41,7 @@ export abstract class DataSourceManager<
       | {
           baseDir: string;
           entitiesConfigKey?: string;
+          concurrent?: boolean;
         }
       | string
   ): Promise<void> {
@@ -55,54 +56,75 @@ export abstract class DataSourceManager<
       baseDirOrOptions = {
         baseDir: baseDirOrOptions,
         entitiesConfigKey: 'entities',
+        concurrent: false,
       };
     }
 
-    const { baseDir, entitiesConfigKey = 'entities' } = baseDirOrOptions;
+    const {
+      baseDir,
+      entitiesConfigKey = 'entities',
+      concurrent,
+    } = baseDirOrOptions;
 
-    await Promise.all(
-      Object.entries(dataSourceConfig.dataSource).map(
-        async ([dataSourceName, dataSourceOptions]) => {
-          const userEntities = dataSourceOptions[entitiesConfigKey] as any[];
-          if (userEntities) {
-            const entities = new Set();
-            // loop entities and glob files to model
-            await Promise.all(
-              userEntities.map(async entity => {
-                if (typeof entity === 'string') {
-                  // string will be glob file
-                  const models = await globModels(
-                    entity,
-                    baseDir,
-                    this.environmentService?.getModuleLoadType()
-                  );
-                  for (const model of models) {
-                    entities.add(model);
-                    this.modelMapping.set(model, dataSourceName);
-                  }
-                } else {
-                  // model will be added to array
-                  entities.add(entity);
-                  this.modelMapping.set(entity, dataSourceName);
-                }
-              })
-            );
+    const processDataSource = async (
+      dataSourceName: string,
+      dataSourceOptions: any
+    ) => {
+      const userEntities = dataSourceOptions[entitiesConfigKey] as any[];
+      if (userEntities) {
+        const entities = new Set();
 
-            (dataSourceOptions[entitiesConfigKey] as any) =
-              Array.from(entities);
-            debug(
-              `[core]: DataManager load ${dataSourceOptions[entitiesConfigKey].length} models from ${dataSourceName}.`
+        const processEntity = async (entity: any) => {
+          if (typeof entity === 'string') {
+            // string will be glob file
+            const models = await globModels(
+              entity,
+              baseDir,
+              this.environmentService?.getModuleLoadType()
             );
+            for (const model of models) {
+              entities.add(model);
+              this.modelMapping.set(model, dataSourceName);
+            }
+          } else {
+            // model will be added to array
+            entities.add(entity);
+            this.modelMapping.set(entity, dataSourceName);
           }
-          // create data source
-          const opts = {
-            cacheInstance: dataSourceConfig.cacheInstance, // will default true
-            validateConnection: dataSourceConfig.validateConnection,
-          };
-          return this.createInstance(dataSourceOptions, dataSourceName, opts);
+        };
+
+        if (concurrent) {
+          await Promise.all(userEntities.map(processEntity));
+        } else {
+          for (const entity of userEntities) {
+            await processEntity(entity);
+          }
         }
-      )
-    );
+
+        dataSourceOptions[entitiesConfigKey] = Array.from(entities);
+        debug(
+          `[core]: DataManager load ${dataSourceOptions[entitiesConfigKey].length} models from ${dataSourceName}.`
+        );
+      }
+
+      // create data source
+      const opts = {
+        cacheInstance: dataSourceConfig.cacheInstance,
+        validateConnection: dataSourceConfig.validateConnection,
+      };
+      return this.createInstance(dataSourceOptions, dataSourceName, opts);
+    };
+
+    const entries = Object.entries(dataSourceConfig.dataSource);
+    if (concurrent) {
+      await Promise.all(
+        entries.map(([name, options]) => processDataSource(name, options))
+      );
+    } else {
+      for (const [name, options] of entries) {
+        await processDataSource(name, options);
+      }
+    }
   }
 
   /**
