@@ -111,13 +111,11 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
   @Config('mysql')
   mysqlConfig;
 
-  @Inject()
-  baseDir: string;
-
   @Init()
   async init() {
-    // It should be noted that the second parameter here needs to pass in an entity class scan address
-    await this.initDataSource(this.mysqlConfig, this.baseDir);
+    await this.initDataSource(this.mysqlConfig, {
+      concurrent: true
+    });
   }
 
   // ...

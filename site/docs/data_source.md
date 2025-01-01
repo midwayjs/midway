@@ -111,20 +111,26 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
   @Config('mysql')
   mysqlConfig;
 
-  @Inject()
-  baseDir: string;
-
   @Init()
   async init() {
-    // 需要注意的是，这里第二个参数需要传入一个实体类扫描地址
-    await this.initDataSource(this.mysqlConfig, this.baseDir);
+    await this.initDataSource(this.mysqlConfig, {
+      concurrent: true
+    });
   }
 
   // ...
 }
 
-
 ```
+
+从 v4.0.0 开始，`initDataSource` 方法支持第二个参数，用于传递初始化选项。
+
+可选的值有：
+
+- `baseDir`: 实体类扫描起始地址，可选，默认是 `src` 或者 `dist`
+- `entitiesConfigKey`: 实体类配置键，框架会从配置中的这个 key 获取实体类，可选，默认是 `entities`
+- `concurrent`: 是否并发初始化，可选，为了向前兼容，默认是 `false`。
+
 
 在 `src/config/config.default` 中，我们可以提供多数据源的配置，来创建多个数据源。
 
@@ -155,6 +161,35 @@ export const mysql = {
 ```
 
 数据源天然就是为了多个实例而设计的，和服务工厂不同，没有单个和多个的配置区别。
+
+### 3、实例化数据源管理器
+
+为了方便用户使用，我们还需要提前将数据源管理器创建，一般来说，只需要在组件或者项目的 `onReady` 生命周期中实例化，在 `onStop` 生命周期中销毁。
+
+```typescript
+import { Configuration } from '@midwayjs/core';
+
+@Configuration({
+  imports: [
+    // ...
+  ]
+})
+export class ContainerConfiguration {
+  private mysqlDataSourceManager: MySqlDataSourceManager;
+
+  async onReady(container) {
+    // 实例化数据源管理器
+    this.mysqlDataSourceManager = await container.getAsync(MySqlDataSourceManager);
+  }
+
+  async onStop() {
+    // 销毁数据源管理器
+    if (this.mysqlDataSourceManager) {
+      await this.mysqlDataSourceManager.stop();
+    }
+  }
+}
+```
 
 
 

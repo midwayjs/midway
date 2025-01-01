@@ -23,15 +23,11 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
   applicationContext: IMidwayContainer;
 
   @Inject()
-  baseDir: string;
-
-  @Inject()
   loggerService: MidwayLoggerService;
 
   @Init()
   async init() {
     await this.initDataSource(this.typeormConfig, {
-      baseDir: this.baseDir,
       concurrent: true,
     });
   }

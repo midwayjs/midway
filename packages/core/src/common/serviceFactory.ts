@@ -83,6 +83,7 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
     for (const [name, value] of this.clients.entries()) {
       await this.destroyClient(value, name);
     }
+    this.clients.clear();
   }
 
   public getDefaultClientName(): string {

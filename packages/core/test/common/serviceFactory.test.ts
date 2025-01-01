@@ -59,9 +59,10 @@ describe('test/common/serviceFactory.test.ts', () => {
     });
     expect(instance.get('bbb')).toBeDefined();
     expect(instance.get('ccc')).toBeDefined();
-    expect(instance.get('bbb').isClose).toBeFalsy();
+    let ins = instance.get('bbb');
+    expect(ins.isClose).toBeFalsy();
     await instance.stop();
-    expect(instance.get('bbb').isClose).toBeTruthy();
+    expect(ins.isClose).toBeTruthy();
   });
 
   it('should test default client', async () => {
@@ -146,7 +147,7 @@ describe('test/common/serviceFactory.test.ts', () => {
     it('should initialize clients serially by default', async () => {
       const instance = new TestServiceFactory();
       const startTime = Date.now();
-      
+
       await instance.initClients({
         clients: {
           client1: {},
@@ -157,12 +158,12 @@ describe('test/common/serviceFactory.test.ts', () => {
 
       const clients = instance.getClients();
       const creationTimes = Array.from(clients.values()).map(client => client.createdAt);
-      
+
       // 验证客户端是按顺序创建的
       for (let i = 1; i < creationTimes.length; i++) {
         expect(creationTimes[i] - creationTimes[i-1]).toBeGreaterThanOrEqual(90);
       }
-      
+
       // 总时间应该接近 300ms (3个客户端 * 100ms)
       expect(Date.now() - startTime).toBeGreaterThanOrEqual(290);
     });
@@ -170,7 +171,7 @@ describe('test/common/serviceFactory.test.ts', () => {
     it('should initialize clients concurrently when concurrent option is true', async () => {
       const instance = new TestServiceFactory();
       const startTime = Date.now();
-      
+
       await instance.initClients({
         clients: {
           client1: {},
@@ -181,12 +182,12 @@ describe('test/common/serviceFactory.test.ts', () => {
 
       const clients = instance.getClients();
       const creationTimes = Array.from(clients.values()).map(client => client.createdAt);
-      
+
       // 验证所有客户端创建时间应该接近
       for (let i = 1; i < creationTimes.length; i++) {
         expect(creationTimes[i] - creationTimes[i-1]).toBeLessThan(50);
       }
-      
+
       // 总时间应该接近 100ms
       expect(Date.now() - startTime).toBeLessThan(200);
     });
@@ -202,7 +203,7 @@ describe('test/common/serviceFactory.test.ts', () => {
       }
 
       const instance = new ErrorTestServiceFactory();
-      
+
       await expect(instance.initClients({
         clients: {
           client1: {},

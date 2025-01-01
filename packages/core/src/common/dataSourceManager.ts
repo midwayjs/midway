@@ -27,7 +27,7 @@ export abstract class DataSourceManager<
   protected dataSourcePriority: Record<string, string> = {};
 
   @Inject()
-  protected appDir: string;
+  protected baseDir: string;
 
   @Inject()
   protected environmentService: MidwayEnvironmentService;
@@ -39,7 +39,7 @@ export abstract class DataSourceManager<
     dataSourceConfig: DataSourceManagerConfigOption<ConnectionOpts>,
     baseDirOrOptions:
       | {
-          baseDir: string;
+          baseDir?: string;
           entitiesConfigKey?: string;
           concurrent?: boolean;
         }
@@ -61,7 +61,7 @@ export abstract class DataSourceManager<
     }
 
     const {
-      baseDir,
+      baseDir = this.baseDir,
       entitiesConfigKey = 'entities',
       concurrent,
     } = baseDirOrOptions;
@@ -277,7 +277,7 @@ export function formatGlobString(globString: string): string[] {
 
 export async function globModels(
   globString: string,
-  appDir: string,
+  baseDir: string,
   loadMode?: ModuleLoadType
 ) {
   const pattern = formatGlobString(globString);
@@ -285,7 +285,7 @@ export async function globModels(
   const models = [];
   // string will be glob file
   const files = run(pattern, {
-    cwd: appDir,
+    cwd: baseDir,
     ignore: IGNORE_PATTERN,
   });
   for (const file of files) {
