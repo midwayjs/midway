@@ -11,9 +11,9 @@ import {
   IMidwayContainer,
   IServiceFactory,
   MidwayConfig,
+  IDataSourceManager,
 } from '../interface';
 import { MidwayConfigService } from '../service/configService';
-import { DataSourceManager } from '../common/dataSourceManager';
 
 export function useContext<T = any>(): T | undefined {
   const ctx = getCurrentAsyncContextManager()
@@ -80,18 +80,18 @@ export function useMainApp(): IMidwayApplication {
   return getCurrentMainApp();
 }
 
-export async function useInjectClient<T = any>(
-  serviceFactoryClz: new (...args) => IServiceFactory<T>,
+export async function useInjectClient<Client = any>(
+  serviceFactoryClz: new (...args) => IServiceFactory<Client>,
   clientName?: string
-): Promise<T> {
+): Promise<Client> {
   const factoryService = await useInject(serviceFactoryClz);
   return factoryService.get(clientName);
 }
 
-export async function useInjectDataSource<T = any>(
-  dataSourceManagerClz: new (...args) => DataSourceManager<T>,
+export async function useInjectDataSource<DataSource = any>(
+  dataSourceManagerClz: new (...args) => IDataSourceManager<DataSource, any>,
   dataSourceName: string
-) {
+): Promise<DataSource> {
   const dataSourceManager = await useInject(dataSourceManagerClz);
   return dataSourceManager.getDataSource(dataSourceName);
 }
