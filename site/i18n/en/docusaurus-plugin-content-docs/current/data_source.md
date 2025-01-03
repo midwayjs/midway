@@ -124,6 +124,16 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
 
 ```
 
+
+Starting from v4.0.0, the `initDataSource` method supports a second parameter for passing initialization options.
+
+Optional values are:
+
+- `baseDir`: Entity class scanning start address, optional, default is `src` or `dist`
+- `entitiesConfigKey`: Entity class configuration key, the framework will get entity classes from this key in the configuration, optional, default is `entities`
+- `concurrent`: Whether to initialize concurrently, optional, for backward compatibility, the default is `false`
+
+
 In the `src/config/config.default`, we can provide the configuration of multiple data sources to create multiple data sources.
 
 For example:
@@ -156,15 +166,55 @@ Data sources are naturally designed for multiple instances. Unlike service facto
 
 
 
+## Data Source Configuration
+
+In `src/config/config.default`, the configuration format for multiple data sources is similar to [service factory](./service_factory).
+
+The default configuration is agreed to be the `default` property.
+
+When creating a data source, both regular data source configurations and dynamically created data source configurations will be merged with the `default` configuration.
+
+Unlike service factories, data sources are naturally designed for multiple instances, and there is no single configuration case.
+
+The complete structure is as follows:
+
+```typescript
+// config.default.ts
+export const mysql = {
+  default: {
+    // Default data source configuration
+  }
+  dataSource: {
+    dataSource1: {
+      entities: [],
+      validateConnection: false,
+      // Data source configuration
+    },
+    dataSource2: {
+      // Data source configuration
+    },
+    dataSource3: {
+      // Data source configuration
+    },
+  }
+  // Other configurations
+}
+```
+
+:::tip
+- `entities` is a framework-specific configuration used to specify entity classes.
+- `validateConnection` is a framework-specific configuration used to specify whether to validate the connection through the `checkConnected` method.
+:::
 
 
-## Entity binding
+
+## Binding Entity Classes
 
 The most important part of the data source is the entity class, each data source can have its own entity class. For example, orm frameworks such as typeorm are designed based on this.
 
 
 
-### 1. Explicitly associate entity classes
+### Explicitly Associate Entity Classes
 
 Entity classes are generally the same class as the table structure.
 
@@ -220,7 +270,7 @@ The `entities` configuration of each data source can add its own entity class.
 
 
 
-### 2. Directory Scan Associated Entities
+### Directory Scan Associated Entities
 
 In some cases, we can also replace it with a matching path, such:
 
@@ -257,15 +307,16 @@ export default {
 
 Attention
 
-- 1. When filling in the directory string, use the second parameter of the initDataSource method as a relative path search, and the default is baseDir (src or dist)
+- 1. When filling in the directory string, use the `initDataSource` method's second parameter as a relative path search, and the default is baseDir (src or dist)
 - 2. If the suffix is matched, the path of entities should include the js and ts suffixes, otherwise the entity will not be found after compilation
 - 3. The writing method of the string path does not support [single-file build deployment](./deployment#single-file build deployment) (bundle mode)
 
 :::
 
 
+## Getting Data Sources
 
-### 2. Obtain the data source according to the entity
+### Getting Data Sources by Entity
 
 Generally, our API is on data source objects, such as `connection.query`.
 
@@ -327,7 +378,7 @@ export const mysql = {
 
 
 
-## Get data source
+### Dynamic API to Get Data Sources
 
 By injecting the data source manager, we can get the data source through the above methods.
 
@@ -360,4 +411,137 @@ this.mysqlDataSourceManager.getDataSourceNames();
 // Whether the data source is connected
 this.mysqlDataSourceManager.isConnected('dataSource1')
 ```
+
+
+## Dynamic Data Source Creation
+
+In addition to initializing data sources through configuration, we can also dynamically create data sources at runtime. This is very useful in scenarios where data sources need to be created based on different conditions.
+
+Use the `createInstance` method to dynamically create a data source:
+
+```typescript
+import { Provide, Inject } from '@midwayjs/core';
+import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager';
+
+@Provide()
+export class UserService {
+  @Inject()
+  mysqlDataSourceManager: MySqlDataSourceManager;
+
+  async createNewDataSource() {
+    // Create new data source
+    const dataSource = await this.mysqlDataSourceManager.createInstance({
+      host: 'localhost',
+      user: 'root',
+      database: 'new_db',
+      entities: ['entity/user.entity.ts'],
+      validateConnection: true
+    }, 'dynamicDB');
+
+    // Use the newly created data source
+    // ...
+  }
+}
+```
+
+The `createInstance` method accepts two parameters:
+- `config`: Data source configuration
+- `dataSourceName`: Data source name (optional)
+
+:::tip
+- 1. `dataSourceName` is the unique identifier of the data source, used to distinguish different data sources.
+- 2. If `dataSourceName` is not provided, the data source manager will not cache this data source, and users need to manage its lifecycle themselves after return.
+- 3. Dynamically created data sources will be merged with the `default` configuration.
+:::
+
+
+## Type Definition
+
+When using data sources, we need to correctly define types. Midway provides two core types to help you define data source configurations.
+
+#### BaseDataSourceManagerConfigOption
+
+Used to define basic data source configuration:
+
+```typescript
+import { BaseDataSourceManagerConfigOption } from '@midwayjs/core';
+
+// Define your data source configuration
+interface MySQLOptions {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+}
+
+// Use BaseDataSourceManagerConfigOption to define complete configuration
+// The first generic parameter is the data source configuration
+// The second generic parameter is the entity configuration key name (default is 'entities')
+type MySQLConfig = BaseDataSourceManagerConfigOption<MySQLOptions>;
+```
+
+#### DataSourceManagerConfigOption
+
+Adds data source management related configuration on top of the basic configuration:
+
+```typescript
+import { DataSourceManagerConfigOption } from '@midwayjs/core';
+
+interface MySQLOptions {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+}
+
+// Use DataSourceManagerConfigOption to define configuration
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    mysql?: DataSourceManagerConfigOption<MySQLOptions>;
+  }
+}
+```
+
+#### Usage Example
+
+```typescript
+// src/config/config.default.ts
+export default {
+  mysql: {
+    // Default data source configuration
+    default: {
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '123456',
+      database: 'test',
+      entities: ['entity/**/*.entity.ts'],
+      validateConnection: true
+    },
+    // Multiple data source configuration
+    dataSource: {
+      db1: {
+        host: 'localhost',
+        port: 3306,
+        username: 'root',
+        password: '123456',
+        database: 'db1',
+        entities: ['entity/db1/**/*.entity.ts']
+      }
+    }
+  }
+}
+```
+
+:::tip
+- `BaseDataSourceManagerConfigOption` is mainly used to define configuration for a single data source
+- `DataSourceManagerConfigOption` is used to define complete data source management configuration, including multiple data source support
+- If your ORM uses a different entity configuration key name, you can specify it through the second generic parameter, such as:
+  ```typescript
+  // Sequelize uses models instead of entities
+  type SequelizeConfig = DataSourceManagerConfigOption<SequelizeOptions, 'models'>;
+  ```
+:::
 

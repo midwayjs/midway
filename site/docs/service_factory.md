@@ -170,6 +170,9 @@ export class ContainerConfiguration {
 
 
 默认的配置，我们约定为 `default` 属性。
+
+在创建实例时，普通的实例配置以及动态创建的实例配置都会和 `default` 配置合并。
+
 ```typescript
 // config.default.ts
 export const httpClient = {
@@ -586,6 +589,29 @@ export class ContainerConfiguration {
     if (this.httpClientServiceFactory) {
       await this.httpClientServiceFactory.stop();
     }
+  }
+}
+```
+
+## 类型定义
+
+
+在使用服务工厂时，我们需要正确定义类型。Midway 提供了 `ServiceFactoryConfigOption` 核心类型来帮助你定义服务工厂配置。
+
+
+```typescript
+import { ServiceFactoryConfigOption } from '@midwayjs/core';
+
+// 定义 HTTPClient 配置
+interface HTTPClientConfig {
+  baseUrl: string;
+  timeout?: number;
+}
+
+// 使用 ServiceFactoryConfigOption 定义配置
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    httpClient?: ServiceFactoryConfigOption<HTTPClientConfig>;
   }
 }
 ```

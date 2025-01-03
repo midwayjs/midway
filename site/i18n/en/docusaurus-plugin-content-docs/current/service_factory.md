@@ -166,6 +166,9 @@ Let's explain separately,
 
 
 The default configuration, we agreed to `default` the attribute.
+
+When creating an instance, the normal instance configuration and dynamically created instance configuration will be merged with the `default` configuration.
+
 ```typescript
 // config.default.ts
 export const httpClient = {
@@ -581,6 +584,27 @@ export class ContainerConfiguration {
     if (this.httpClientServiceFactory) {
       await this.httpClientServiceFactory.stop();
     }
+  }
+}
+```
+
+## Type Definition
+
+When using the service factory, we need to correctly define the types. Midway provides the `ServiceFactoryConfigOption` core type to help you define service factory configuration.
+
+```typescript
+import { ServiceFactoryConfigOption } from '@midwayjs/core';
+
+// Define HTTPClient configuration
+interface HTTPClientConfig {
+  baseUrl: string;
+  timeout?: number;
+}
+
+// Use ServiceFactoryConfigOption to define configuration
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    httpClient?: ServiceFactoryConfigOption<HTTPClientConfig>;
   }
 }
 ```

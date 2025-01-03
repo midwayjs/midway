@@ -9,7 +9,12 @@ import { Types } from '../util/types';
 import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { debuglog } from 'util';
 import { loadModule } from '../util';
-import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
+import {
+  ModuleLoadType,
+  DataSourceManagerConfigOption,
+  IDataSourceManager,
+  BaseDataSourceManagerConfigOption,
+} from '../interface';
 import { Inject } from '../decorator';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayPriorityManager } from './priorityManager';
@@ -18,13 +23,23 @@ const debug = debuglog('midway:debug');
 
 export abstract class DataSourceManager<
   T,
-  ConnectionOpts extends Record<string, any> = Record<string, any>
-> {
+  ConnectionOpts extends BaseDataSourceManagerConfigOption<
+    Record<string, any>,
+    ENTITY_CONFIG_KEY
+  > = BaseDataSourceManagerConfigOption<Record<string, any>, 'entities'>,
+  ENTITY_CONFIG_KEY extends string = 'entities'
+> implements IDataSourceManager<T, ConnectionOpts>
+{
   protected dataSource: Map<string, T> = new Map();
-  protected options: DataSourceManagerConfigOption<ConnectionOpts> = {};
+  protected options: DataSourceManagerConfigOption<
+    ConnectionOpts,
+    ENTITY_CONFIG_KEY
+  > = {};
   protected modelMapping = new WeakMap();
   private innerDefaultDataSourceName: string;
   protected dataSourcePriority: Record<string, string> = {};
+  // for multi client with initialization
+  private creatingDataSources = new Map<string, Promise<any>>();
 
   @Inject()
   protected baseDir: string;
@@ -36,7 +51,10 @@ export abstract class DataSourceManager<
   protected priorityManager: MidwayPriorityManager;
 
   protected async initDataSource(
-    dataSourceConfig: DataSourceManagerConfigOption<ConnectionOpts>,
+    dataSourceConfig: DataSourceManagerConfigOption<
+      ConnectionOpts,
+      ENTITY_CONFIG_KEY
+    >,
     baseDirOrOptions:
       | {
           baseDir?: string;
@@ -77,7 +95,7 @@ export abstract class DataSourceManager<
         const processEntity = async (entity: any) => {
           if (typeof entity === 'string') {
             // string will be glob file
-            const models = await globModels(
+            const models = await DataSourceManager.globModels(
               entity,
               baseDir,
               this.environmentService?.getModuleLoadType()
@@ -160,43 +178,102 @@ export abstract class DataSourceManager<
     return inst ? this.checkConnected(inst) : false;
   }
 
+  public async createInstance(config: ConnectionOpts): Promise<T | void>;
   public async createInstance(
-    config: any,
-    clientName: any,
+    config: ConnectionOpts,
+    clientName: string,
+    options?: {
+      /**
+       * @deprecated
+       */
+      validateConnection?: boolean;
+      /**
+       * @deprecated
+       */
+      cacheInstance?: boolean | undefined;
+    }
+  ): Promise<T | void>;
+  public async createInstance(
+    config: ConnectionOpts,
+    clientName?: any,
     options?: {
       validateConnection?: boolean;
       cacheInstance?: boolean | undefined;
     }
   ): Promise<T | void> {
-    const cache =
-      options && typeof options.cacheInstance === 'boolean'
-        ? options.cacheInstance
-        : true;
-    const validateConnection = (options && options.validateConnection) || false;
+    if (clientName && typeof clientName !== 'string') {
+      options = clientName;
+      clientName = undefined;
+    }
+
+    if (clientName && options && options.cacheInstance === false) {
+      // 后面就用传不传 clientName 来判断是否缓存
+      clientName = undefined;
+    }
+
+    if (clientName) {
+      if (this.dataSource.has(clientName)) {
+        return this.dataSource.get(clientName);
+      }
+
+      if (this.creatingDataSources.has(clientName)) {
+        return this.creatingDataSources.get(clientName);
+      }
+    }
+
+    const validateConnection =
+      config.validateConnection ??
+      (options && options.validateConnection) ??
+      false;
 
     // options.clients[id] will be merged with options.default
     const configNow = extend(true, {}, this.options['default'], config);
-    const client = await this.createDataSource(configNow, clientName);
-    if (cache && clientName && client) {
-      this.dataSource.set(clientName, client);
-    }
 
-    if (validateConnection) {
-      if (!client) {
-        throw new MidwayCommonError(
-          `[DataSourceManager] ${clientName} initialization failed.`
+    const clientCreatingPromise = this.createDataSource(configNow, clientName);
+
+    if (clientCreatingPromise && Types.isPromise(clientCreatingPromise)) {
+      if (clientName) {
+        this.creatingDataSources.set(
+          clientName,
+          clientCreatingPromise as Promise<T>
         );
       }
 
-      const connected = await this.checkConnected(client);
-      if (!connected) {
-        throw new MidwayCommonError(
-          `[DataSourceManager] ${clientName} is not connected.`
-        );
-      }
+      return (clientCreatingPromise as Promise<T>)
+        .then(async client => {
+          if (clientName) {
+            this.dataSource.set(clientName, client);
+          }
+
+          if (validateConnection) {
+            if (!client) {
+              throw new MidwayCommonError(
+                `[DataSourceManager] ${clientName} initialization failed.`
+              );
+            }
+
+            const connected = await this.checkConnected(client);
+            if (!connected) {
+              throw new MidwayCommonError(
+                `[DataSourceManager] ${clientName} is not connected.`
+              );
+            }
+          }
+
+          return client;
+        })
+        .finally(() => {
+          if (clientName) {
+            this.creatingDataSources.delete(clientName);
+          }
+        });
     }
 
-    return client;
+    // 处理同步返回的情况
+    if (clientName) {
+      this.dataSource.set(clientName, clientCreatingPromise as T);
+    }
+    return clientCreatingPromise;
   }
 
   /**
@@ -258,50 +335,53 @@ export abstract class DataSourceManager<
   public isLowPriority(name: string) {
     return this.priorityManager.isLowPriority(this.dataSourcePriority[name]);
   }
-}
 
-export function formatGlobString(globString: string): string[] {
-  let pattern;
+  static formatGlobString(globString: string): string[] {
+    let pattern;
 
-  if (!/^\*/.test(globString)) {
-    globString = '/' + globString;
-  }
-  const parsePattern = parse(globString);
-  if (parsePattern.base && (/\*/.test(parsePattern.base) || parsePattern.ext)) {
-    pattern = [globString];
-  } else {
-    pattern = [...DEFAULT_PATTERN.map(p => join(globString, p))];
-  }
-  return pattern;
-}
-
-export async function globModels(
-  globString: string,
-  baseDir: string,
-  loadMode?: ModuleLoadType
-) {
-  const pattern = formatGlobString(globString);
-
-  const models = [];
-  // string will be glob file
-  const files = run(pattern, {
-    cwd: baseDir,
-    ignore: IGNORE_PATTERN,
-  });
-  for (const file of files) {
-    const exports = await loadModule(file, {
-      loadMode,
-    });
-    if (Types.isClass(exports)) {
-      models.push(exports);
+    if (!/^\*/.test(globString)) {
+      globString = '/' + globString;
+    }
+    const parsePattern = parse(globString);
+    if (
+      parsePattern.base &&
+      (/\*/.test(parsePattern.base) || parsePattern.ext)
+    ) {
+      pattern = [globString];
     } else {
-      for (const m in exports) {
-        const module = exports[m];
-        if (Types.isClass(module)) {
-          models.push(module);
+      pattern = [...DEFAULT_PATTERN.map(p => join(globString, p))];
+    }
+    return pattern;
+  }
+
+  static async globModels(
+    globString: string,
+    baseDir: string,
+    loadMode?: ModuleLoadType
+  ) {
+    const pattern = this.formatGlobString(globString);
+
+    const models = [];
+    // string will be glob file
+    const files = run(pattern, {
+      cwd: baseDir,
+      ignore: IGNORE_PATTERN,
+    });
+    for (const file of files) {
+      const exports = await loadModule(file, {
+        loadMode,
+      });
+      if (Types.isClass(exports)) {
+        models.push(exports);
+      } else {
+        for (const m in exports) {
+          const module = exports[m];
+          if (Types.isClass(module)) {
+            models.push(module);
+          }
         }
       }
     }
+    return models;
   }
-  return models;
 }
