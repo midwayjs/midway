@@ -111,20 +111,26 @@ export class MySqlDataSourceManager extends DataSourceManager<mysql.Connection> 
   @Config('mysql')
   mysqlConfig;
 
-  @Inject()
-  baseDir: string;
-
   @Init()
   async init() {
-    // 需要注意的是，这里第二个参数需要传入一个实体类扫描地址
-    await this.initDataSource(this.mysqlConfig, this.baseDir);
+    await this.initDataSource(this.mysqlConfig, {
+      concurrent: true
+    });
   }
 
   // ...
 }
 
-
 ```
+
+从 v4.0.0 开始，`initDataSource` 方法支持第二个参数，用于传递初始化选项。
+
+可选的值有：
+
+- `baseDir`: 实体类扫描起始地址，可选，默认是 `src` 或者 `dist`
+- `entitiesConfigKey`: 实体类配置键，框架会从配置中的这个 key 获取实体类，可选，默认是 `entities`
+- `concurrent`: 是否并发初始化，可选，为了向前兼容，默认是 `false`。
+
 
 在 `src/config/config.default` 中，我们可以提供多数据源的配置，来创建多个数据源。
 
@@ -156,15 +162,83 @@ export const mysql = {
 
 数据源天然就是为了多个实例而设计的，和服务工厂不同，没有单个和多个的配置区别。
 
+### 3、实例化数据源管理器
+
+为了方便用户使用，我们还需要提前将数据源管理器创建，一般来说，只需要在组件或者项目的 `onReady` 生命周期中实例化，在 `onStop` 生命周期中销毁。
+
+```typescript
+import { Configuration } from '@midwayjs/core';
+
+@Configuration({
+  imports: [
+    // ...
+  ]
+})
+export class ContainerConfiguration {
+  private mysqlDataSourceManager: MySqlDataSourceManager;
+
+  async onReady(container) {
+    // 实例化数据源管理器
+    this.mysqlDataSourceManager = await container.getAsync(MySqlDataSourceManager);
+  }
+
+  async onStop() {
+    // 销毁数据源管理器
+    if (this.mysqlDataSourceManager) {
+      await this.mysqlDataSourceManager.stop();
+    }
+  }
+}
+```
+
+## 数据源配置
+
+在 `src/config/config.default` 中，多个数据源配置格式和 [服务工厂](./service_factory) 类似。
+
+默认的配置，我们约定为 `default` 属性。
+
+在创建数据源时，普通的数据源配置以及动态创建的数据源配置都会和 `default` 配置合并。
+
+和服务工厂略有不同，数据源天然就是为了多个实例而设计的，没有单个配置的情况。
+
+完整结构如下：
+
+```typescript
+// config.default.ts
+export const mysql = {
+  default: {
+    // 默认数据源配置
+  }
+  dataSource: {
+    dataSource1: {
+      entities: [],
+      validateConnection: false,
+      // 数据源配置
+    },
+    dataSource2: {
+      // 数据源配置
+    },
+    dataSource3: {
+      // 数据源配置
+    },
+  }
+  // 其他配置
+}
+```
+
+:::tip
+- `entities` 是框架提供的特有的配置，用于指定实体类。
+- `validateConnection` 是框架提供的特有的配置，用于指定是否通过 `checkConnected` 方法验证连接。
+:::
 
 
-## 实体绑定
+
+## 绑定实体类
 
 数据源最重要的一环是实体类，每个数据源都可以拥有自己的实体类。比如 typeorm 等 orm 框架，都是基于此来设计的。
 
 
-
-### 1、显式关联实体类
+### 显式关联实体类
 
 实体类一般是和表结构相同的类。
 
@@ -220,7 +294,7 @@ export default {
 
 
 
-### 2、目录扫描关联实体
+### 目录扫描关联实体
 
 在某些情况下，我们也可以通过通配的路径来替代，比如：
 
@@ -257,15 +331,17 @@ export default {
 
 注意
 
-- 1、填写目录字符串时，以 initDataSource 方法的第二个参数作为相对路径查找，默认为 baseDir（src 或者 dist）
-- 2、如果匹配后缀，entities 的路径注意包括 js 和 ts 后缀，否则编译后会找不到实体
+- 1、填写目录字符串时，以 `initDataSource` 方法的第二个参数作为相对路径查找，默认为 `baseDir`（`src` 或者 `dist`）
+- 2、如果匹配后缀，`entities` 的路径注意包括 `js` 和 `ts` 后缀，否则编译后会找不到实体
 - 3、字符串路径的写法不支持 [单文件构建部署](./deployment#单文件构建部署)（bundle模式）
 
 :::
 
 
+## 获取数据源
 
-### 2、根据实体获取数据源
+
+### 根据实体获取数据源
 
 一般我们的 API 都是在数据源对象上，比如 `connection.query`。
 
@@ -328,7 +404,7 @@ export const mysql = {
 
 
 
-## 获取数据源
+### 动态 API 获取数据源
 
 通过注入数据源管理器，我们可以通过其上面的方法来拿到数据源。
 
@@ -361,4 +437,137 @@ this.mysqlDataSourceManager.getDataSourceNames();
 // 数据源是否连接
 this.mysqlDataSourceManager.isConnected('dataSource1')
 ```
+
+
+
+## 动态创建数据源
+
+除了通过配置初始化数据源外，我们还可以在运行时动态创建数据源。这在需要根据不同条件创建数据源的场景下非常有用。
+
+使用 `createInstance` 方法可以动态创建数据源：
+
+```typescript
+import { Provide, Inject } from '@midwayjs/core';
+import { MySqlDataSourceManager } from './manager/mysqlDataSourceManager';
+
+@Provide()
+export class UserService {
+  @Inject()
+  mysqlDataSourceManager: MySqlDataSourceManager;
+
+  async createNewDataSource() {
+    // 创建新的数据源
+    const dataSource = await this.mysqlDataSourceManager.createInstance({
+      host: 'localhost',
+      user: 'root',
+      database: 'new_db',
+      entities: ['entity/user.entity.ts'],
+      validateConnection: true
+    }, 'dynamicDB');
+
+    // 使用新创建的数据源
+    // ...
+  }
+}
+```
+
+`createInstance` 方法接受两个参数：
+- `config`: 数据源配置
+- `dataSourceName`: 数据源名称（可选）
+
+:::tip
+- 1、`dataSourceName` 是数据源的唯一标识，用于区分不同的数据源。
+- 2、如果不提供 `dataSourceName`，则数据源管理器不会缓存该数据源，返回后需要用户自行管理其生命周期。
+- 3、动态创建的数据源，会和 `default` 配置合并。
+:::
+
+## 类型定义
+
+在使用数据源时，我们需要正确定义类型。Midway 提供了两个核心类型来帮助你定义数据源配置。
+
+#### BaseDataSourceManagerConfigOption
+
+用于定义基础数据源配置：
+
+```typescript
+import { BaseDataSourceManagerConfigOption } from '@midwayjs/core';
+
+// 定义你的数据源配置
+interface MySQLOptions {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+}
+
+// 使用 BaseDataSourceManagerConfigOption 定义完整配置
+// 第一个泛型参数是数据源配置
+// 第二个泛型参数是实体配置的键名（默认为 'entities'）
+type MySQLConfig = BaseDataSourceManagerConfigOption<MySQLOptions>;
+```
+
+#### DataSourceManagerConfigOption
+
+在基础配置的基础上，增加了数据源管理相关的配置：
+
+```typescript
+import { DataSourceManagerConfigOption } from '@midwayjs/core';
+
+interface MySQLOptions {
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+}
+
+// 使用 DataSourceManagerConfigOption 定义配置
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    mysql?: DataSourceManagerConfigOption<MySQLOptions>;
+  }
+}
+```
+
+#### 使用示例
+
+```typescript
+// src/config/config.default.ts
+export default {
+  mysql: {
+    // 默认数据源配置
+    default: {
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '123456',
+      database: 'test',
+      entities: ['entity/**/*.entity.ts'],
+      validateConnection: true
+    },
+    // 多数据源配置
+    dataSource: {
+      db1: {
+        host: 'localhost',
+        port: 3306,
+        username: 'root',
+        password: '123456',
+        database: 'db1',
+        entities: ['entity/db1/**/*.entity.ts']
+      }
+    }
+  }
+}
+```
+
+:::tip
+- `BaseDataSourceManagerConfigOption` 主要用于定义单个数据源的配置
+- `DataSourceManagerConfigOption` 用于定义完整的数据源管理配置，包括多数据源支持
+- 如果你的 ORM 使用不同的实体配置键名，可以通过第二个泛型参数指定，如：
+  ```typescript
+  // Sequelize 使用 models 而不是 entities
+  type SequelizeConfig = DataSourceManagerConfigOption<SequelizeOptions, 'models'>;
+  ```
+:::
 

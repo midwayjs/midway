@@ -15,9 +15,7 @@ import { Model } from 'sequelize-typescript';
   importConfigs: [
     {
       default: {
-        sequelize: {
-          validateConnection: true,
-        },
+        sequelize: {},
       },
     },
   ],

@@ -73,9 +73,9 @@ describe('/test/index.test.ts', () => {
                 dialect: 'mysql',
                 host: '',
                 port: 3306,
+                validateConnection: false,  
               },
             },
-            validateConnection: false,
           },
         },
       });

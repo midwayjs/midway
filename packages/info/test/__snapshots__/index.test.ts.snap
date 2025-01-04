@@ -4,7 +4,7 @@ exports[`test/index.test.ts should test get config and filter secret 1`] = `
 {
   "info": {
     "asyncContextManager": "{"enable":true}",
-    "core": "{"healthCheckTimeout":1000}",
+    "core": "{"healthCheckTimeout":1000,"configLoadTimeout":10000,"readyTimeout":30000,"serverReadyTimeout":30000}",
     "cos": "{"default":{"SecretId":"df******af","SecretKey":"te******vc","SecurityToken":"fj*********af"}}",
     "debug": "{"recordConfigMergeOrder":true}",
     "info": "{"title":"Midway Info","infoPath":"/_info","hiddenKey":["k***","****","*****n","********","p****"],"ignoreKey":[]}",

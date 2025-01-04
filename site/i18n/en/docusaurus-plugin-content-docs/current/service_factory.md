@@ -114,6 +114,17 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 ```
 `initClients` method is implemented in the base class. It needs to pass a complete user configuration and call the `createClient` in a loop to create the object and save it to memory.
 
+Starting from v4.0.0, the `initClients` method supports a second parameter for passing initialization options.
+
+You can control whether to initialize concurrently through the `concurrent` parameter. For backward compatibility, the default is `false`.
+
+If you are sure that there is no interference between all instance initializations, you can set it to `true` to improve initialization speed.
+
+```typescript
+await this.initClients(this.httpClientConfig, {
+  concurrent: true
+});
+```
 
 ### 3. Instantiate service class
 
@@ -155,6 +166,9 @@ Let's explain separately,
 
 
 The default configuration, we agreed to `default` the attribute.
+
+When creating an instance, the normal instance configuration and dynamically created instance configuration will be merged with the `default` configuration.
+
 ```typescript
 // config.default.ts
 export const httpClient = {
@@ -528,5 +542,69 @@ export class HTTPClientService implements HTTPClient {
      this.serviceFactory.isMediumPriority('default');
      this.serviceFactory.isLowPriority('default');
    }
+}
+```
+
+## Destroy service class and instances
+
+The service factory provides a `destroyClient` method, which will be automatically called when the service factory class `stop` method is called, used to destroy instances. If you don't need to destroy instances, you don't need to implement it.
+
+```typescript
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
+  // ...
+
+  async destroyClient(client: HTTPClient, clientName: string) {
+    // Destroy instance
+  }
+}
+```
+
+In addition to implementing the `destroyClient` method, you also need to explicitly call the `stop` method in the lifecycle.
+
+```typescript
+import { Configuration } from '@midwayjs/core';
+
+@Configuration({
+  imports: [
+    // ...
+  ]
+})
+export class ContainerConfiguration {
+  private httpClientServiceFactory: HTTPClientServiceFactory;
+
+  async onReady(container) {
+    // Instantiate service class
+    this.httpClientServiceFactory = await container.getAsync(HTTPClientServiceFactory);
+  }
+
+  async onStop() {
+    // Destroy service class
+    if (this.httpClientServiceFactory) {
+      await this.httpClientServiceFactory.stop();
+    }
+  }
+}
+```
+
+## Type Definition
+
+When using the service factory, we need to correctly define the types. Midway provides the `ServiceFactoryConfigOption` core type to help you define service factory configuration.
+
+```typescript
+import { ServiceFactoryConfigOption } from '@midwayjs/core';
+
+// Define HTTPClient configuration
+interface HTTPClientConfig {
+  baseUrl: string;
+  timeout?: number;
+}
+
+// Use ServiceFactoryConfigOption to define configuration
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    httpClient?: ServiceFactoryConfigOption<HTTPClientConfig>;
+  }
 }
 ```

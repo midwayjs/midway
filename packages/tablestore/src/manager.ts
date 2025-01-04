@@ -20,7 +20,9 @@ export class TableStoreServiceFactory extends ServiceFactory<TableStoreClient> {
 
   @Init()
   async init() {
-    await this.initClients(this.tableStoreConfig);
+    await this.initClients(this.tableStoreConfig, {
+      concurrent: true,
+    });
   }
 
   async createClient(config): Promise<TableStoreClient> {

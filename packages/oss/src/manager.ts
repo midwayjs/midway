@@ -38,7 +38,9 @@ export class OSSServiceFactory<
 
   @Init()
   async init() {
-    await this.initClients(this.ossConfig);
+    await this.initClients(this.ossConfig, {
+      concurrent: true,
+    });
   }
 
   async createClient(

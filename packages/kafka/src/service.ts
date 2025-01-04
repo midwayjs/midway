@@ -30,7 +30,9 @@ export class KafkaProducerFactory extends ServiceFactory<Producer> {
 
   @Init()
   async init() {
-    await this.initClients(this.pubConfig);
+    await this.initClients(this.pubConfig, {
+      concurrent: true,
+    });
   }
 
   protected async createClient(
@@ -84,7 +86,9 @@ export class KafkaAdminFactory extends ServiceFactory<Admin> {
 
   @Init()
   async init() {
-    await this.initClients(this.adminConfig);
+    await this.initClients(this.adminConfig, {
+      concurrent: true,
+    });
   }
 
   protected async createClient(

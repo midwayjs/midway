@@ -4,7 +4,6 @@ import {
   Logger,
   Provide,
   Scope,
-  Inject,
   ScopeEnum,
   DataSourceManager,
   ILogger,
@@ -20,12 +19,11 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
   @Logger('coreLogger')
   coreLogger: ILogger;
 
-  @Inject()
-  baseDir: string;
-
   @Init()
   async init() {
-    await this.initDataSource(this.sequelizeConfig, this.baseDir);
+    await this.initDataSource(this.sequelizeConfig, {
+      concurrent: true,
+    });
   }
 
   getName(): string {

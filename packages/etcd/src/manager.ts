@@ -20,7 +20,9 @@ export class ETCDServiceFactory extends ServiceFactory<Etcd3> {
 
   @Init()
   async init() {
-    await this.initClients(this.etcdConfig);
+    await this.initClients(this.etcdConfig, {
+      concurrent: true,
+    });
   }
 
   @Logger('coreLogger')

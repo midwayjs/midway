@@ -81,12 +81,12 @@ describe('/test/feature.test.ts', () => {
 
     const resultFail = await healthService.getStatus();
     expect(resultFail).toEqual({
-      "reason": "Invoke \"configuration.onHealthCheck\" running timeout(50ms)",
+      "reason": "Function \"configuration.onHealthCheck\" of \"__main__\" call more than 50ms",
       "namespace": "__main__",
       "results": [
         {
           "namespace": "__main__",
-          "reason": "Invoke \"configuration.onHealthCheck\" running timeout(50ms)",
+          "reason": "Function \"configuration.onHealthCheck\" of \"__main__\" call more than 50ms",
           "status": false
         }
       ],

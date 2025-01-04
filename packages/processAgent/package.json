@@ -1,6 +1,7 @@
 {
   "name": "@midwayjs/process-agent",
   "version": "4.0.0-alpha.1",
+  "private": true,
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
