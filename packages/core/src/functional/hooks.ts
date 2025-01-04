@@ -9,7 +9,9 @@ import {
   ILogger,
   IMidwayApplication,
   IMidwayContainer,
+  IServiceFactory,
   MidwayConfig,
+  IDataSourceManager,
 } from '../interface';
 import { MidwayConfigService } from '../service/configService';
 
@@ -76,4 +78,20 @@ export function useApp(appName: string): IMidwayApplication {
 
 export function useMainApp(): IMidwayApplication {
   return getCurrentMainApp();
+}
+
+export async function useInjectClient<Client = any>(
+  serviceFactoryClz: new (...args) => IServiceFactory<Client>,
+  clientName?: string
+): Promise<Client> {
+  const factoryService = await useInject(serviceFactoryClz);
+  return factoryService.get(clientName);
+}
+
+export async function useInjectDataSource<DataSource = any>(
+  dataSourceManagerClz: new (...args) => IDataSourceManager<DataSource, any>,
+  dataSourceName: string
+): Promise<DataSource> {
+  const dataSourceManager = await useInject(dataSourceManagerClz);
+  return dataSourceManager.getDataSource(dataSourceName);
 }

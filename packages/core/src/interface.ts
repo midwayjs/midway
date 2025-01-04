@@ -461,24 +461,26 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
 
 export type CreateDataSourceInstanceOptions = {
   /**
-   * @default false
+   * @deprecated
    */
   validateConnection?: boolean;
   /**
-   * @default true
+   * @deprecated
    */
   cacheInstance?: boolean | undefined;
 }
 
-export type DataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY extends string = 'entities'> = {
-  default?: OPTIONS;
+export type BaseDataSourceManagerConfigOption<OPTIONS extends Record<string, any>, ENTITY_CONFIG_KEY extends string = 'entities'> = OPTIONS & {
+  validateConnection?: boolean;
+} & {
+  [key in ENTITY_CONFIG_KEY]?: any[];
+};
+
+export interface DataSourceManagerConfigOption<OPTIONS extends Record<string, any>, ENTITY_CONFIG_KEY extends string = 'entities'> extends CreateDataSourceInstanceOptions {
+  default?: BaseDataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY>;
   defaultDataSourceName?: string;
-  dataSource?: {
-    [key: string]: PowerPartial<{
-      [keyName in ENTITY_CONFIG_KEY]: any[];
-    }> & OPTIONS;
-  };
-} & CreateDataSourceInstanceOptions;
+  dataSource?: BaseDataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY>;
+}
 
 type ConfigType<T> = T extends (...args: any[]) => any
   ? Writable<PowerPartial<ReturnType<T>>>
@@ -1137,6 +1139,21 @@ export interface IServiceFactory<Client> {
   isHighPriority(clientName: string): boolean;
   isMediumPriority(clientName: string): boolean;
   isLowPriority(clientName: string) : boolean;
+}
+
+export interface IDataSourceManager<DataSource, DataSourceConfig> {
+  createInstance(config: DataSourceConfig): Promise<DataSource | void>;
+  getDataSource(dataSourceName: string): DataSource;
+  getDataSourceNames(): string[];
+  getAllDataSources(): Map<string, DataSource>;
+  hasDataSource(dataSourceName: string): boolean;
+  isConnected(dataSourceName: string): Promise<boolean>;
+  getDefaultDataSourceName(): string;
+  stop(): Promise<void>;
+  getDataSourcePriority(dataSourceName: string): string;
+  isHighPriority(dataSourceName: string): boolean;
+  isMediumPriority(dataSourceName: string): boolean;
+  isLowPriority(dataSourceName: string): boolean;
 }
 
 export interface ISimulation {

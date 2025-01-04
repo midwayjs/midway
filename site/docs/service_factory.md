@@ -48,7 +48,7 @@ import { ServiceFactory, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
-	// ...
+  // ...
 }
 ```
 由于是抽象类，我们需要实现其中的两个方法。
@@ -83,7 +83,7 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 ```typescript
 // config.default.ts
 export const httpClient = {
-	// ...
+  // ...
 }
 ```
 然后注入到服务工厂中，同时，我们还需要在初始化时，调用创建多个实例的方法。
@@ -112,7 +112,20 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
   }
 }
 ```
+
 `initClients` 方法是基类中实现的，它需要传递一个完整的用户配置，并循环调用 `createClient` 来创建对象，保存到内存中。
+
+从 v4.0.0 开始，`initClients` 方法支持第二个参数，用于传递初始化选项。
+
+你可以通过 `concurrent` 参数来控制是否并发初始化，为了向前兼容，默认是 `false`。
+
+如果确认所有实例的初始化之间没有干扰，可以设置为 `true`，以提高初始化速度。
+
+```typescript
+await this.initClients(this.httpClientConfig, {
+  concurrent: true
+});
+```
 
 
 ### 3、实例化服务类
@@ -128,6 +141,7 @@ import { Configuration } from '@midwayjs/core';
   ]
 })
 export class ContainerConfiguration {
+
   async onReady(container) {
     // 实例化服务类
     await container.getAsync(HTTPClientServiceFactory);
@@ -156,6 +170,9 @@ export class ContainerConfiguration {
 
 
 默认的配置，我们约定为 `default` 属性。
+
+在创建实例时，普通的实例配置以及动态创建的实例配置都会和 `default` 配置合并。
+
 ```typescript
 // config.default.ts
 export const httpClient = {
@@ -177,7 +194,7 @@ export const httpClient = {
     timeout: 3000
   },
   client: {
-  	baseUrl: ''
+    baseUrl: ''
   }
 }
 ```
@@ -211,11 +228,11 @@ export const httpClient = {
     timeout: 3000
   },
   clients: {
-  	aaa: {
-    	baseUrl: ''
+    aaa: {
+      baseUrl: ''
     },
     bbb: {
-    	baseUrl: ''
+      baseUrl: ''
     }
   }
 }
@@ -265,7 +282,7 @@ export class UserService {
 
   async invoke() {
     // this.aaaInstance.xxx
-		// this.bbbInstance.xxx
+    // this.bbbInstance.xxx
     // ...
   }
 }
@@ -339,7 +356,7 @@ export class UserService {
 // config.default.ts
 export const httpClient = {
   client: {
-  	baseUrl: ''
+    baseUrl: ''
   }
 }
 ```
@@ -461,7 +478,7 @@ export class UserService {
   httpClientService: HTTPClientService;
 
   async invoke() {
-		// this.httpClientService 中指向的是 default2
+    // this.httpClientService 中指向的是 default2
   }
 }
 ```
@@ -472,7 +489,7 @@ export class UserService {
 
 从 v3.14.0 开始，服务工厂的实例可以增加一个优先级属性，在不同的场景，会根据优先级做一些不同处理。
 
-实例的优先级有 `L1`，`L2`, `L3`三个等级，分别对应高，中，低三个层级。
+实例的优先级有 `L1`，`L2`, `L3` 三个等级，分别对应高，中，低三个层级。
 
 定义如下：
 
@@ -532,3 +549,69 @@ export class HTTPClientService implements HTTPClient {
 }
 ```
 
+
+## 销毁服务类和实例
+
+服务工厂提供了 `destroyClient` 方法，会在服务工厂类 `stop` 方法调用时被自动调用，用于销毁实例，如果不需要销毁实例，可以不实现。
+
+```typescript
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
+  // ...
+
+  async destroyClient(client: HTTPClient, clientName: string) {
+    // 销毁实例
+  }
+}
+```
+
+除了实现 `destroyClient` 方法，还需要在生命周期中显式调用 `stop` 方法。
+
+```typescript
+import { Configuration } from '@midwayjs/core';
+
+@Configuration({
+  imports: [
+    // ...
+  ]
+})
+export class ContainerConfiguration {
+  private httpClientServiceFactory: HTTPClientServiceFactory;
+
+  async onReady(container) {
+    // 实例化服务类
+    this.httpClientServiceFactory = await container.getAsync(HTTPClientServiceFactory);
+  }
+
+  async onStop() {
+    // 销毁服务类
+    if (this.httpClientServiceFactory) {
+      await this.httpClientServiceFactory.stop();
+    }
+  }
+}
+```
+
+## 类型定义
+
+
+在使用服务工厂时，我们需要正确定义类型。Midway 提供了 `ServiceFactoryConfigOption` 核心类型来帮助你定义服务工厂配置。
+
+
+```typescript
+import { ServiceFactoryConfigOption } from '@midwayjs/core';
+
+// 定义 HTTPClient 配置
+interface HTTPClientConfig {
+  baseUrl: string;
+  timeout?: number;
+}
+
+// 使用 ServiceFactoryConfigOption 定义配置
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    httpClient?: ServiceFactoryConfigOption<HTTPClientConfig>;
+  }
+}
+```

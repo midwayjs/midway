@@ -19,14 +19,13 @@ export class MikroDataSourceManager extends DataSourceManager<
   mikroConfig;
 
   @Inject()
-  baseDir: string;
-
-  @Inject()
   loggerService: MidwayLoggerService;
 
   @Init()
   async init() {
-    await this.initDataSource(this.mikroConfig, this.baseDir);
+    await this.initDataSource(this.mikroConfig, {
+      concurrent: true,
+    });
   }
 
   getName(): string {

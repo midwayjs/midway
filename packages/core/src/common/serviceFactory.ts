@@ -2,6 +2,7 @@ import { extend } from '../util/extend';
 import { IServiceFactory } from '../interface';
 import { MidwayPriorityManager } from './priorityManager';
 import { Inject } from '../decorator';
+import { Types } from '../util/types';
 
 /**
  * 多客户端工厂实现
@@ -15,7 +16,15 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
   @Inject()
   protected priorityManager: MidwayPriorityManager;
 
-  protected async initClients(options: any = {}): Promise<void> {
+  // for multi client with initialization
+  private creatingClients = new Map<string, Promise<any>>();
+
+  protected async initClients(
+    options: any = {},
+    initOptions: {
+      concurrent?: boolean;
+    } = {}
+  ): Promise<void> {
     this.options = options;
 
     // merge options.client to options.clients['default']
@@ -25,10 +34,18 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
       extend(true, options.clients['default'], options.client);
     }
 
-    // multi client
     if (options.clients) {
-      for (const id of Object.keys(options.clients)) {
-        await this.createInstance(options.clients[id], id);
+      const entries = Object.entries(options.clients);
+      if (initOptions.concurrent) {
+        // multi client with concurrent initialization
+        await Promise.all(
+          entries.map(([id, config]) => this.createInstance(config, id))
+        );
+      } else {
+        // multi client with serial initialization
+        for (const [id, config] of entries) {
+          await this.createInstance(config, id);
+        }
       }
     }
 
@@ -44,16 +61,48 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
     return this.clients.has(id);
   }
 
-  public async createInstance(config, clientName?): Promise<T | undefined> {
+  public async createInstance(config: any, clientName?: string): Promise<any> {
+    if (clientName) {
+      if (this.has(clientName)) {
+        return this.get(clientName);
+      }
+
+      if (this.creatingClients.has(clientName)) {
+        return this.creatingClients.get(clientName);
+      }
+    }
+
     // options.default will be merge in to options.clients[id]
     config = extend(true, {}, this.options['default'], config);
-    const client = await this.createClient(config, clientName);
-    if (client) {
+
+    const clientCreatingPromise = this.createClient(config, clientName);
+
+    if (clientCreatingPromise && Types.isPromise(clientCreatingPromise)) {
       if (clientName) {
-        this.clients.set(clientName, client);
+        this.creatingClients.set(
+          clientName,
+          clientCreatingPromise as Promise<T>
+        );
       }
-      return client;
+      return (clientCreatingPromise as Promise<T>)
+        .then(client => {
+          if (clientName) {
+            this.clients.set(clientName, client as T);
+          }
+          return client;
+        })
+        .finally(() => {
+          if (clientName) {
+            this.creatingClients.delete(clientName);
+          }
+        });
     }
+
+    // 处理同步返回的情况
+    if (clientName) {
+      this.clients.set(clientName, clientCreatingPromise as T);
+    }
+    return clientCreatingPromise;
   }
 
   public abstract getName(): string;
@@ -70,6 +119,7 @@ export abstract class ServiceFactory<T> implements IServiceFactory<T> {
     for (const [name, value] of this.clients.entries()) {
       await this.destroyClient(value, name);
     }
+    this.clients.clear();
   }
 
   public getDefaultClientName(): string {

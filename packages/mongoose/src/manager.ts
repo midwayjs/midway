@@ -22,9 +22,6 @@ export class MongooseDataSourceManager extends DataSourceManager<mongoose.Connec
   @Logger('coreLogger')
   logger;
 
-  @Inject()
-  baseDir: string;
-
   @Init()
   async init() {
     if (this.config.client) {
@@ -41,7 +38,9 @@ export class MongooseDataSourceManager extends DataSourceManager<mongoose.Connec
       );
       this.config.dataSource = this.config.clients;
     }
-    await this.initDataSource(this.config, this.baseDir);
+    await this.initDataSource(this.config, {
+      concurrent: true,
+    });
   }
 
   protected async createDataSource(config: any, name: string) {

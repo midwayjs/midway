@@ -3,7 +3,6 @@ import {
   DataSourceManager,
   ILogger,
   Init,
-  Inject,
   Logger,
   Provide,
   Scope,
@@ -24,9 +23,6 @@ export class LeoricDataSourceManager extends DataSourceManager<
   @Logger('coreLogger')
   coreLogger: ILogger;
 
-  @Inject()
-  baseDir: string;
-
   @Init()
   async init() {
     if (Object.keys(this.leoricConfig.dataSource).length > 1) {
@@ -35,8 +31,8 @@ export class LeoricDataSourceManager extends DataSourceManager<
       }
     }
     await this.initDataSource(this.leoricConfig, {
-      baseDir: this.baseDir,
       entitiesConfigKey: 'models',
+      concurrent: true,
     });
   }
 
