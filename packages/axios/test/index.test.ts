@@ -67,7 +67,7 @@ describe('/test/index.test.ts', () => {
     }
   });
 
-  it('should test defaults and intercepters', () => {
+  it('should test defaults and interceptors', () => {
     expect(httpService.defaults).toStrictEqual(axios.defaults);
     expect(httpService.interceptors).toStrictEqual(axios.interceptors);
   });
