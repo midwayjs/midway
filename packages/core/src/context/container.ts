@@ -102,13 +102,13 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     }
   }
 
-  bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
+  bind<T>(target: T, options?: Partial<IObjectDefinition>): IObjectDefinition | undefined;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
     options?: Partial<IObjectDefinition>
-  ): void;
-  bind<T>(identifier: any, target: any, options?: any): void {
+  ): IObjectDefinition | undefined;
+  bind<T>(identifier: any, target: any, options?: any): IObjectDefinition | undefined {
     if (Types.isClass(identifier) || Types.isFunction(identifier)) {
       return this.bindModule(identifier, target);
     }
@@ -257,14 +257,16 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     if (definition) {
       this.registry.registerDefinition(definition.id, definition);
     }
+
+    return definition;
   }
 
-  protected bindModule(module: any, options: Partial<IObjectDefinition>) {
+  protected bindModule(module: any, options: Partial<IObjectDefinition>): IObjectDefinition | undefined {
     if (Types.isClass(module)) {
       const providerId = DecoratorManager.getProviderUUId(module);
       if (providerId) {
         this.identifierMapping.saveClassRelation(module, options?.namespace);
-        this.bind(providerId, module, options);
+        return this.bind(providerId, module, options);
       } else {
         // no provide or js class must be skip
       }
@@ -280,7 +282,7 @@ export class MidwayContainer implements IMidwayGlobalContainer {
         }
         const uuid = Utils.generateRandomId();
         this.identifierMapping.saveFunctionRelation(info.id, uuid);
-        this.bind(uuid, module, {
+        return this.bind(uuid, module, {
           scope: info.scope,
           namespace: options.namespace,
           srcPath: options.srcPath,

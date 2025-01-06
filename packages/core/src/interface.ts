@@ -705,18 +705,15 @@ export interface IIdentifierRelationShip {
 export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle> {
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
-  // load(module: any | any[]): void;
   getNamespaceList(): string[];
   addNamespace(namespace: string): void;
-  bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
+  bind<T>(target: T, options?: Partial<IObjectDefinition>): IObjectDefinition | undefined;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
     options?: Partial<IObjectDefinition>
-  ): void;
+  ): IObjectDefinition | undefined;
   bindClass(exports, options?: Partial<IObjectDefinition>): void;
-  // setFileDetector(fileDetector: IFileDetector): void;
-  // ready(): void | Promise<void>;
   stop(): Promise<void>;
   getManagedResolverFactory(): ManagedResolverFactory;
 }

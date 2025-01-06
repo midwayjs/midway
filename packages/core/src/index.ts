@@ -80,6 +80,7 @@ export { FORMAT } from './util/format';
 export { ServerResponse, HttpServerResponse } from './response/index';
 export { TypedResourceManager } from './common/typedResourceManager';
 export { MidwayPerformanceManager } from './common/performanceManager';
+export { DynamicMidwayContainer } from './context/dynamicContainer';
 
 export * from './decorator/metadataManager';
 export * from './legacy';
