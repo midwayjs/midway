@@ -1,5 +1,10 @@
 import { MidwayContainer } from './container';
-import { ClassType, IObjectDefinition, ModuleLoadType, ObjectIdentifier } from '../interface';
+import {
+  ClassType,
+  IObjectDefinition,
+  ModuleLoadType,
+  ObjectIdentifier,
+} from '../interface';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { loadModule } from '../util';
 import { Types } from '../util/types';
@@ -43,7 +48,7 @@ export class DynamicMidwayContainer extends MidwayContainer {
       }
     }
 
-    let nameList = {};
+    const nameList = {};
     // 拿到旧的标识符
     for (const oldDefinition of oldDefinitionList) {
       nameList[oldDefinition.name] = oldDefinition.id;
@@ -80,7 +85,7 @@ export class DynamicMidwayContainer extends MidwayContainer {
     }
   }
 
-  getIdentifier(identifier: (ClassType | string)): string {
+  getIdentifier(identifier: ClassType | string): string {
     // 从老的 id 映射成新的 id
     if (typeof identifier !== 'string') {
       identifier = DecoratorManager.getProviderUUId(identifier);
@@ -94,7 +99,9 @@ export class DynamicMidwayContainer extends MidwayContainer {
   private findDefinitionByPath(filePath: string): IObjectDefinition[] {
     const results = [];
     // 遍历 registry
-    for (const definition of (this.registry as unknown as Map<ObjectIdentifier, IObjectDefinition>).values()) {
+    for (const definition of (
+      this.registry as unknown as Map<ObjectIdentifier, IObjectDefinition>
+    ).values()) {
       if (definition.srcPath === filePath) {
         results.push(definition);
       }

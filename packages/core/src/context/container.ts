@@ -102,13 +102,20 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     }
   }
 
-  bind<T>(target: T, options?: Partial<IObjectDefinition>): IObjectDefinition | undefined;
+  bind<T>(
+    target: T,
+    options?: Partial<IObjectDefinition>
+  ): IObjectDefinition | undefined;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
     options?: Partial<IObjectDefinition>
   ): IObjectDefinition | undefined;
-  bind<T>(identifier: any, target: any, options?: any): IObjectDefinition | undefined {
+  bind<T>(
+    identifier: any,
+    target: any,
+    options?: any
+  ): IObjectDefinition | undefined {
     if (Types.isClass(identifier) || Types.isFunction(identifier)) {
       return this.bindModule(identifier, target);
     }
@@ -261,7 +268,10 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     return definition;
   }
 
-  protected bindModule(module: any, options: Partial<IObjectDefinition>): IObjectDefinition | undefined {
+  protected bindModule(
+    module: any,
+    options: Partial<IObjectDefinition>
+  ): IObjectDefinition | undefined {
     if (Types.isClass(module)) {
       const providerId = DecoratorManager.getProviderUUId(module);
       if (providerId) {
