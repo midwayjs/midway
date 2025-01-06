@@ -7,6 +7,8 @@ import {
   listModule,
   Utils,
   MidwayInvokeForbiddenError,
+  Logger,
+  ILogger,
 } from '@midwayjs/core';
 import {
   Application,
@@ -67,6 +69,9 @@ export class BullMQFramework
   private queueMap: Map<string, BullMQQueue> = new Map();
   /** keep a map of workers for gracefully shutdown  */
   private workerMap: Map<string, Worker> = new Map();
+
+  @Logger('bullMQLogger')
+  protected bullMQLogger: ILogger;
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as any;
@@ -150,7 +155,7 @@ export class BullMQFramework
     );
     this.queueMap.set(name, queue);
     queue.on('error', err => {
-      this.app.getCoreLogger().error(err);
+      this.bullMQLogger.error(err);
     });
     return queue;
   }

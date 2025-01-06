@@ -1,9 +1,5 @@
 export const bullmq = {
   prefix: '{midway-bullmq}',
-  connection: {
-    host: '127.0.0.1',
-    port: 6379,
-  },
   defaultQueueOptions: {
     defaultJobOptions: {
       removeOnComplete: 3,
@@ -14,6 +10,7 @@ export const bullmq = {
     concurrency: 1,
   },
   clearRepeatJobWhenStart: true,
+  contextLoggerApplyLogger: 'bullMQLogger',
   contextLoggerFormat: info => {
     const { jobId, from } = info.ctx;
     return `${info.timestamp} ${info.LEVEL} ${info.pid} [${jobId} ${from.name}] ${info.message}`;
@@ -22,8 +19,8 @@ export const bullmq = {
 
 export const midwayLogger = {
   clients: {
-    bullLogger: {
-      fileLogName: 'midway-bull.log',
+    bullMQLogger: {
+      fileLogName: 'midway-bullmq.log',
     },
   },
 };
