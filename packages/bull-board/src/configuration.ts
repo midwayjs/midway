@@ -1,4 +1,5 @@
 import * as bull from '@midwayjs/bull';
+import * as bullmq from '@midwayjs/bullmq';
 import {
   Configuration,
   Inject,
@@ -6,14 +7,16 @@ import {
   MidwayConfigService,
 } from '@midwayjs/core';
 import { BoardMiddleware } from './board.middleware';
+import { BullMQBoardMiddleware } from './bullmq.board.middleware';
 
 @Configuration({
   namespace: 'bull-board',
-  imports: [bull],
+  imports: [bull, bullmq],
   importConfigs: [
     {
       default: {
         bullBoard: {
+          package: 'bull',
           basePath: '/ui',
           uiConfig: {},
           adapterOptions: {
@@ -32,6 +35,8 @@ export class BullBoardConfiguration {
   configService: MidwayConfigService;
 
   async onReady() {
+    const queuePackage =
+      this.configService.getConfiguration('bullBoard.package');
     const apps = this.applicationManager.getApplications([
       'express',
       'egg',
@@ -39,7 +44,11 @@ export class BullBoardConfiguration {
     ]);
     if (apps.length) {
       apps.forEach(app => {
-        app.useMiddleware(BoardMiddleware);
+        if (queuePackage === 'bull') {
+          app.useMiddleware(BoardMiddleware);
+        } else if (queuePackage === 'bullmq') {
+          app.useMiddleware(BullMQBoardMiddleware);
+        }
       });
     }
   }

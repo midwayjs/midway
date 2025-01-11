@@ -13,6 +13,7 @@
     "midway",
     "IoC",
     "bull",
+    "bullmq",
     "bull-ui",
     "plugin"
   ],
@@ -33,6 +34,7 @@
     "@bull-board/api": "5.23.0",
     "@bull-board/ui": "5.23.0",
     "@midwayjs/bull": "^3.19.3",
+    "@midwayjs/bullmq": "^1.0.0",
     "ejs": "3.1.10"
   },
   "engines": {
