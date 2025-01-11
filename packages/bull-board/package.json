@@ -28,13 +28,13 @@
     "@midwayjs/core": "^3.19.0",
     "@midwayjs/express": "^3.19.2",
     "@midwayjs/koa": "^3.19.2",
-    "@midwayjs/mock": "^3.19.2"
+    "@midwayjs/mock": "^3.19.2",
+    "@midwayjs/bull": "^3.19.3",
+    "@midwayjs/bullmq": "^0.0.1"
   },
   "dependencies": {
     "@bull-board/api": "5.23.0",
     "@bull-board/ui": "5.23.0",
-    "@midwayjs/bull": "^3.19.3",
-    "@midwayjs/bullmq": "^1.0.0",
     "ejs": "3.1.10"
   },
   "engines": {

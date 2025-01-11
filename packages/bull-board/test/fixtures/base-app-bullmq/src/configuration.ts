@@ -14,13 +14,10 @@ import * as koa from '@midwayjs/koa';
       default: {
         keys: 123,
         bullmq: {
-          connection: {
+          defaultConnection: {
             host: '127.0.0.1',
             port: 6379,
           }
-        },
-        bullBoard: {
-          package: 'bullmq'
         },
       },
     },

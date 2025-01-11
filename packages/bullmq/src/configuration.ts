@@ -6,7 +6,11 @@ import {
 } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { BullMQFramework } from './framework';
-import { BULLMQ_FLOW_PRODUCER_KEY, BULLMQ_QUEUE_KEY, BULLMQ_WORKER_KEY } from './constants';
+import {
+  BULLMQ_FLOW_PRODUCER_KEY,
+  BULLMQ_QUEUE_KEY,
+  BULLMQ_WORKER_KEY,
+} from './constants';
 
 @Configuration({
   namespace: 'bullmq',

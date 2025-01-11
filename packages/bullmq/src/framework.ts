@@ -153,7 +153,9 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
         defaultJobOptions: otherOptions,
       });
       if (!currentQueue) {
-        throw new MidwayCommonError(`[midway:bullmq] Queue ${options.queueName} not found`);
+        throw new MidwayCommonError(
+          `[midway:bullmq] Queue ${options.queueName} not found`
+        );
       }
       // clear old repeat job when start
       if (this.clearRepeatJobWhenStart) {
@@ -218,7 +220,10 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
   /**
    * Ensure a queue by name and queueOptions
    */
-  protected ensureQueue(name: string, queueOptions: Partial<QueueOptions> = {}) {
+  protected ensureQueue(
+    name: string,
+    queueOptions: Partial<QueueOptions> = {}
+  ) {
     if (!this.queueMap.has(name)) {
       this.createQueue(name, queueOptions);
     }
