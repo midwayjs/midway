@@ -17,8 +17,8 @@ import { QueueOptions, WorkerOptions, JobsOptions } from 'bullmq';
 export function Processor(
   queueName: string,
   jobOptions?: JobsOptions,
-  workerOptions?: WorkerOptions,
-  queueOptions?: QueueOptions
+  workerOptions?: Partial<WorkerOptions>,
+  queueOptions?: Partial<QueueOptions>
 ): ClassDecorator {
   return function (target: any) {
     saveModule(BULLMQ_PROCESSOR_KEY, target);

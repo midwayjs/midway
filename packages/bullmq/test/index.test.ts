@@ -15,7 +15,7 @@ describe(`/test/index.test.ts`, () => {
     class HelloTask implements IProcessor {
       @App()
       app: Application;
-    
+
       async execute() {
         this.app.setAttr(`task`, 'task');
       }
@@ -48,7 +48,7 @@ describe(`/test/index.test.ts`, () => {
       ],
       globalConfig: {
         bullmq: {
-          connection: {
+          defaultConnection: {
             host: '127.0.0.1',
             port: 6379,
           }
@@ -116,7 +116,7 @@ describe(`/test/index.test.ts`, () => {
       imports: [bullmq],
       globalConfig: {
         bullmq: {
-          connection: {
+          defaultConnection: {
             host: '127.0.0.1',
             port: 6379,
           }
@@ -127,7 +127,7 @@ describe(`/test/index.test.ts`, () => {
 
     const bullFramework = app.getApplicationContext().get(bullmq.Framework);
     const retryQueue = bullFramework.getQueue('retryTask');
-    
+
     const job = await retryQueue?.runJob({}, {
       attempts: 3,
       backoff: {
@@ -140,7 +140,7 @@ describe(`/test/index.test.ts`, () => {
     expect(retryCount).toBe(3);
     expect(app.getAttr('retrySuccess')).toBe(true);
     expect(await job?.getState()).toBe('completed');
-    
+
     await close(app);
   });
 
@@ -160,7 +160,7 @@ describe(`/test/index.test.ts`, () => {
       imports: [bullmq],
       globalConfig: {
         bullmq: {
-          connection: {
+          defaultConnection: {
             host: '127.0.0.1',
             port: 6379,
           }
@@ -171,17 +171,17 @@ describe(`/test/index.test.ts`, () => {
 
     const bullFramework = app.getApplicationContext().get(bullmq.Framework);
     const priorityQueue = bullFramework.getQueue('priorityTask');
-    
+
     // 添加不同优先级的任务
     await priorityQueue?.runJob({ priority: 3 }, { priority: 1 }); // 低优先级
     await priorityQueue?.runJob({ priority: 1 }, { priority: 3 }); // 高优先级
     await priorityQueue?.runJob({ priority: 2 }, { priority: 2 }); // 中优先级
 
     await sleep(2000);
-    
+
     // 验证执行顺序是否按照优先级排序
     expect(executionOrder).toEqual([1, 2, 3]);
-    
+
     await close(app);
   });
 
@@ -193,7 +193,7 @@ describe(`/test/index.test.ts`, () => {
     class ProgressTask implements IProcessor {
       @App()
       app: Application;
-    
+
       async execute(params: any): Promise<void> {
         const job = await this.app.getApplicationContext().get('currentJob') as Job;
         for (let i = 0; i <= 100; i += 20) {
@@ -208,7 +208,7 @@ describe(`/test/index.test.ts`, () => {
       imports: [bullmq],
       globalConfig: {
         bullmq: {
-          connection: {
+          defaultConnection: {
             host: '127.0.0.1',
             port: 6379,
           }
@@ -219,9 +219,9 @@ describe(`/test/index.test.ts`, () => {
 
     const bullFramework = app.getApplicationContext().get(bullmq.Framework);
     const progressQueue = bullFramework.getQueue('progressTask');
-    
+
     const job = await progressQueue?.runJob({});
-    
+
     if (job) {
       const currentProgress = await job.progress;
       progressValue = typeof currentProgress === 'number' ? currentProgress : 0;
@@ -231,7 +231,7 @@ describe(`/test/index.test.ts`, () => {
     expect(progressValue).toBeGreaterThanOrEqual(0);
     await sleep(1000);
     expect(app.getAttr('finalProgress')).toBe(100);
-    
+
     await close(app);
   });
 
@@ -248,7 +248,7 @@ describe(`/test/index.test.ts`, () => {
       imports: [bullmq],
       globalConfig: {
         bullmq: {
-          connection: {
+          defaultConnection: {
             host: '127.0.0.1',
             port: 6379,
           }
@@ -259,7 +259,7 @@ describe(`/test/index.test.ts`, () => {
 
     const bullFramework = app.getApplicationContext().get(bullmq.Framework);
     const timeoutQueue = bullFramework.getQueue('timeoutTask');
-    
+
     const jobOptions: JobsOptions = {
       attempts: 1,
     };
@@ -267,7 +267,7 @@ describe(`/test/index.test.ts`, () => {
 
     await sleep(3000);
     expect(await job?.getState()).toBe('failed');
-    
+
     await close(app);
   });
 

@@ -1,5 +1,3 @@
-import '@midwayjs/bull';
-import '@midwayjs/bullmq';
 import { BullBoardOption } from './dist/index';
 export * from './dist/index';
 
