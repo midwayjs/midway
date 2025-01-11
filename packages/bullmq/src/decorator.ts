@@ -6,15 +6,19 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/core';
-import { IQueueOptions, IWorkerOptions } from './interface';
-import { BULLMQ_PROCESSOR_KEY, BULLMQ_QUEUE_KEY } from './constants';
-import { JobsOptions } from 'bullmq';
+import {
+  BULLMQ_FLOW_PRODUCER_KEY,
+  BULLMQ_PROCESSOR_KEY,
+  BULLMQ_QUEUE_KEY,
+  BULLMQ_WORKER_KEY,
+} from './constants';
+import { QueueOptions, WorkerOptions, JobsOptions } from 'bullmq';
 
 export function Processor(
   queueName: string,
   jobOptions?: JobsOptions,
-  workerOptions?: IWorkerOptions,
-  queueOptions?: IQueueOptions
+  workerOptions?: WorkerOptions,
+  queueOptions?: QueueOptions
 ): ClassDecorator {
   return function (target: any) {
     saveModule(BULLMQ_PROCESSOR_KEY, target);
@@ -23,8 +27,8 @@ export function Processor(
       {
         queueName,
         jobOptions,
-        queueOptions,
         workerOptions,
+        queueOptions,
       },
       target
     );
@@ -36,5 +40,17 @@ export function Processor(
 export function InjectQueue(queueName: string): PropertyDecorator {
   return createCustomPropertyDecorator(BULLMQ_QUEUE_KEY, {
     queueName,
+  });
+}
+
+export function InjectWorker(queueName: string): PropertyDecorator {
+  return createCustomPropertyDecorator(BULLMQ_WORKER_KEY, {
+    queueName,
+  });
+}
+
+export function InjectFlowProducer(producerName: string): PropertyDecorator {
+  return createCustomPropertyDecorator(BULLMQ_FLOW_PRODUCER_KEY, {
+    producerName,
   });
 }

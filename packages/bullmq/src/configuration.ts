@@ -6,7 +6,7 @@ import {
 } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
 import { BullMQFramework } from './framework';
-import { BULLMQ_QUEUE_KEY } from './constants';
+import { BULLMQ_FLOW_PRODUCER_KEY, BULLMQ_QUEUE_KEY, BULLMQ_WORKER_KEY } from './constants';
 
 @Configuration({
   namespace: 'bullmq',
@@ -34,6 +34,30 @@ export class BullConfiguration {
         }
       ) => {
         return this.framework.getQueue(meta.queueName);
+      }
+    );
+
+    this.decoratorService.registerPropertyHandler(
+      BULLMQ_WORKER_KEY,
+      (
+        propertyName,
+        meta: {
+          queueName: string;
+        }
+      ) => {
+        return this.framework.getWorker(meta.queueName);
+      }
+    );
+
+    this.decoratorService.registerPropertyHandler(
+      BULLMQ_FLOW_PRODUCER_KEY,
+      (
+        propertyName,
+        meta: {
+          producerName: string;
+        }
+      ) => {
+        return this.framework.getFlowProducer(meta.producerName);
       }
     );
   }
