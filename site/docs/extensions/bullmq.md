@@ -1,4 +1,4 @@
-# BullMQ 任务队列
+# 任务队列
 
 队列是一种强大的设计模式，可帮助您应对常见的应用程序扩展和性能挑战。队列可以帮助您解决的一些问题：
 
@@ -11,7 +11,11 @@ Midway 提供了 `@midwayjs/bullmq` 包作为 [BullMQ](https://github.com/taskfo
 BullMQ 使用 Redis 来保存作业数据，在使用 Redis 时，Queue 架构是完全分布式，和平台无关。例如，您可以在一个（或多个）节点（进程）中运行一些 Queue 生产者、消费者，而在其他节点上的运行其他生产者和消费者。
 
 :::tip
-bullmq 是一个分布式任务管理系统，必须依赖 redis
+BullMQ 是一个分布式任务管理系统，必须依赖 redis
+:::
+
+:::caution
+由于 BullMQ 是 Bull 的升级版，从 v3.20 开始，将由 BullMQ 替代 Bull 组件，如需使用 Bull 组件，请参考 [Bull 文档](./bull)
 :::
 
 相关信息：
