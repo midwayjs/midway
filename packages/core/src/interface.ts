@@ -488,7 +488,9 @@ export type DataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY extends str
   dataSource?: {
     [key: string]: PowerPartial<{
       [keyName in ENTITY_CONFIG_KEY]: any[];
-    }> & OPTIONS;
+    }> & OPTIONS & {
+      customDataSourceClass?: any;
+    };
   };
 } & CreateDataSourceInstanceOptions;
 
