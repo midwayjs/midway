@@ -1,9 +1,9 @@
-
 import { createLightApp, close } from '@midwayjs/mock';
-import { App, sleep, Inject, FORMAT } from '@midwayjs/core';
+import { App, sleep, Inject, FORMAT, MidwayCommonError } from '@midwayjs/core';
 import * as bullmq from '../src';
-import { Processor, Application, IProcessor } from '../src';
+import { Processor, Application, IProcessor, Context } from '../src';
 import { JobsOptions, Job } from 'bullmq';
+import * as assert from 'node:assert';
 
 describe(`/test/index.test.ts`, () => {
   it('test auto repeat processor', async () => {
@@ -173,9 +173,9 @@ describe(`/test/index.test.ts`, () => {
     const priorityQueue = bullFramework.getQueue('priorityTask');
 
     // 添加不同优先级的任务
-    await priorityQueue?.runJob({ priority: 3 }, { priority: 1 }); // 低优先级
-    await priorityQueue?.runJob({ priority: 1 }, { priority: 3 }); // 高优先级
+    await priorityQueue?.runJob({ priority: 3 }, { priority: 3 }); // 低优先级
     await priorityQueue?.runJob({ priority: 2 }, { priority: 2 }); // 中优先级
+    await priorityQueue?.runJob({ priority: 1 }, { priority: 1 }); // 高优先级
 
     await sleep(2000);
 
@@ -194,13 +194,16 @@ describe(`/test/index.test.ts`, () => {
       @App()
       app: Application;
 
-      async execute(params: any): Promise<void> {
-        const job = await this.app.getApplicationContext().get('currentJob') as Job;
+      @Inject()
+      ctx: Context;
+
+      async execute(params: any, job: Job): Promise<void> {
+        assert(job === this.ctx.job);
         for (let i = 0; i <= 100; i += 20) {
           await job.updateProgress(i);
           await sleep(100);
         }
-        this.app.setAttr('finalProgress', await job.progress);
+        this.app.setAttr('finalProgress', job.progress);
       }
     }
 
@@ -223,7 +226,7 @@ describe(`/test/index.test.ts`, () => {
     const job = await progressQueue?.runJob({});
 
     if (job) {
-      const currentProgress = await job.progress;
+      const currentProgress = job.progress;
       progressValue = typeof currentProgress === 'number' ? currentProgress : 0;
     }
 
@@ -237,10 +240,34 @@ describe(`/test/index.test.ts`, () => {
 
   // 测试任务超时
   it('should handle job timeouts', async () => {
+    // bullmq 不提供 timeout 配置，自行处理超时情况
     @Processor('timeoutTask')
     class TimeoutTask implements IProcessor {
       async execute(): Promise<void> {
-        await sleep(2000); // 任务执行时间超过超时设置
+        let controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 1000);
+
+        try {
+          await new Promise((resolve, reject) => {
+            const t = setTimeout(() => {
+              clearTimeout(timer);
+              resolve(true);
+            }, 2000);
+
+            controller.signal.addEventListener('abort', () => {
+              clearTimeout(t);
+              reject(new MidwayCommonError('Task execution timed out'))
+            });
+          });
+        } catch(err) {
+          if (err.name == "MidwayCommonError") {
+            throw err;
+          } else {
+            throw new MidwayCommonError('unknown error');
+          }
+        } finally {
+          clearTimeout(timer);
+        }
       }
     }
 
@@ -271,5 +298,168 @@ describe(`/test/index.test.ts`, () => {
     await close(app);
   });
 
+  // 测试动态创建队列和任务
+  it('should handle dynamic queue and job creation', async () => {
+    const app = await createLightApp({
+      imports: [bullmq],
+      globalConfig: {
+        bullmq: {
+          defaultConnection: {
+            host: '127.0.0.1',
+            port: 6379,
+          }
+        },
+      }
+    });
+
+    const bullFramework = app.getApplicationContext().get(bullmq.Framework);
+
+    // 测试动态创建队列
+    const dynamicQueue = bullFramework.createQueue('dynamicQueue', {
+      defaultJobOptions: {
+        removeOnComplete: 1,
+        removeOnFail: 1,
+      }
+    });
+
+    // 测试创建 worker
+    const results: string[] = [];
+    const worker = bullFramework.createWorker(
+      'dynamicQueue',
+      async (job) => {
+        results.push(job.data.message);
+        return job.data;
+      },
+      {
+        concurrency: 2
+      }
+    );
+
+    // 添加任务
+    await dynamicQueue.runJob({ message: 'task1' });
+    await dynamicQueue.runJob({ message: 'task2' });
+
+    await sleep(1000);
+    expect(results).toContain('task1');
+    expect(results).toContain('task2');
+
+    await worker.close();
+    await close(app);
+  });
+
+  // 测试 Flow Producer
+  it('should handle flow producer', async () => {
+    const app = await createLightApp({
+      imports: [bullmq],
+      globalConfig: {
+        bullmq: {
+          defaultConnection: {
+            host: '127.0.0.1',
+            port: 6379,
+          }
+        },
+      }
+    });
+
+    const bullFramework = app.getApplicationContext().get(bullmq.Framework);
+
+    // 创建队列
+    bullFramework.createQueue('flow-queue-1');
+    bullFramework.createQueue('flow-queue-2');
+
+    const results: string[] = [];
+
+    // 创建 workers
+    bullFramework.createWorker(
+      'flow-queue-1',
+      async (job) => {
+        results.push(`queue1-${job.data.value}`);
+        return { value: job.data.value + 1 };
+      }
+    );
+
+    bullFramework.createWorker(
+      'flow-queue-2',
+      async (job) => {
+        results.push(`queue2-${job.data.value}`);
+        return { value: job.data.value + 1 };
+      }
+    );
+
+    // 创建 flow producer
+    const flowProducer = bullFramework.createFlowProducer({}, 'test-flow');
+
+    // 创建任务流
+    await flowProducer.add({
+      name: 'flow-test',
+      queueName: 'flow-queue-1',
+      data: { value: 1 },
+      children: [
+        {
+          name: 'child-job',
+          queueName: 'flow-queue-2',
+          data: { value: 2 }
+        }
+      ]
+    });
+
+    await sleep(2000);
+    expect(results).toContain('queue1-1');
+    expect(results).toContain('queue2-2');
+    await close(app);
+  });
+
+  // 测试队列事件
+  it('should handle queue events', async () => {
+    const app = await createLightApp({
+      imports: [bullmq],
+      globalConfig: {
+        bullmq: {
+          defaultConnection: {
+            host: '127.0.0.1',
+            port: 6379,
+          }
+        },
+      }
+    });
+
+    const bullFramework = app.getApplicationContext().get(bullmq.Framework);
+    const eventQueue = bullFramework.createQueue('event-queue');
+
+    const events: string[] = [];
+    const queueEvents = eventQueue.createQueueEvents();
+
+    // 监听队列事件
+    queueEvents.on('completed', ({ jobId }) => {
+      events.push(`completed:${jobId}`);
+    });
+
+    queueEvents.on('failed', ({ jobId }) => {
+      events.push(`failed:${jobId}`);
+    });
+
+    // 创建成功和失败的任务
+    const worker = bullFramework.createWorker(
+      'event-queue',
+      async (job) => {
+        if (job.data.shouldFail) {
+          throw new Error('Task failed');
+        }
+        return job.data;
+      }
+    );
+
+    const job1 = await eventQueue.runJob({ shouldFail: false });
+    const job2 = await eventQueue.runJob({ shouldFail: true });
+
+    await sleep(2000);
+
+    expect(events).toContain(`completed:${job1.id}`);
+    expect(events).toContain(`failed:${job2.id}`);
+
+    await worker.close();
+    await queueEvents.close();
+    await close(app);
+  });
 });
 

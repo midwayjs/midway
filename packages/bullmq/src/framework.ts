@@ -328,13 +328,13 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
    * Create a flow producer, if producerName is provided, it will be store.
    */
   public createFlowProducer(
-    options?: QueueBaseOptions,
+    options?: Partial<QueueBaseOptions>,
     producerName?: string
   ): FlowProducer {
     const producer = new FlowProducer({
       ...this.defaultConnection,
       ...options,
-    });
+    } as QueueBaseOptions);
 
     if (producerName) {
       this.flowProducerMap.set(producerName, producer);
