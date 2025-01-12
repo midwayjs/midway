@@ -440,3 +440,93 @@ export default {
   }
 }
 ``` 
+
+## Bull UI
+
+In a distributed scenario, we can leverage the Bull UI to simplify management.
+
+Similar to the bull component, it needs to be installed and enabled independently.
+
+```bash
+$ npm i @midwayjs/bull-board@3 --save
+```
+
+Or reinstall it after adding the following dependencies to ``package.json``.
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/bull-board": "^3.0.0",
+    // ...
+  },
+}
+```
+
+Configure the bull-board component into the code.
+
+```typescript
+import { Configuration } from '@midwayjs/core';
+import * as bullmq from '@midwayjs/bullmq';
+import * as bullBoard from '@midwayjs/bull-board';
+
+@Configuration({
+  imports: [
+    // ...
+    bullmq,
+    bullBoard,
+  ]
+})
+export class MainConfiguration {
+  //...
+}
+```
+
+The default access path is: `http://127.1:7001/ui`.
+
+The effect is as follows.
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01j4wEFb1UacPxA06gs_!!6000000002534-2-tps-1932-1136.png)
+
+The base path can be modified by configuration.
+
+```typescript
+// src/config/config.prod.ts
+export default {
+  // ...
+  bullBoard: {
+    basePath: '/ui',
+  },
+}
+```
+
+In addition, the component provides the `BullBoardManager` class, which can add queues dynamically created.
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import * as bullmq from '@midwayjs/bullmq';
+import * as bullBoard from '@midwayjs/bull-board';
+
+@Configuration({
+  imports: [
+    // ...
+    bullmq,
+    bullBoard
+  ]
+})
+export class MainConfiguration {
+
+  @Inject()
+  bullmqFramework: bullmq.Framework;
+  
+  @Inject()
+  bullBoardManager: bullBoard.BullBoardManager;
+
+  async onReady() {
+    const testQueue = this.bullmqFramework.createQueue('test', {
+      // ...
+    });
+
+    this.bullBoardManager.addQueue(testQueue);
+  }
+}
+```

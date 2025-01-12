@@ -440,3 +440,93 @@ export default {
   }
 }
 ```
+
+## Bull UI
+
+在分布式场景中，我们可以资利用 Bull UI 来简化管理。
+
+和 bull 组件类似，需要独立安装和启用。
+
+```bash
+$ npm i @midwayjs/bull-board@3 --save
+```
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/bull-board": "^3.0.0",
+    // ...
+  },
+}
+```
+
+将 bull-board 组件配置到代码中。
+
+```typescript
+import { Configuration } from '@midwayjs/core';
+import * as bullmq from '@midwayjs/bullmq';
+import * as bullBoard from '@midwayjs/bull-board';
+
+@Configuration({
+  imports: [
+    // ...
+    bullmq,
+    bullBoard,
+  ]
+})
+export class MainConfiguration {
+  //...
+}
+```
+
+默认的访问路径为：`http://127.1:7001/ui`。
+
+效果如下：
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01j4wEFb1UacPxA06gs_!!6000000002534-2-tps-1932-1136.png)
+
+可以通过配置进行基础路径的修改。
+
+```typescript
+// src/config/config.prod.ts
+export default {
+  // ...
+  bullBoard: {
+    basePath: '/ui',
+  },
+}
+```
+
+此外，组件提供了 `BullBoardManager` ，可以添加动态创建的队列。
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import * as bullmq from '@midwayjs/bullmq';
+import * as bullBoard from '@midwayjs/bull-board';
+
+@Configuration({
+  imports: [
+    // ...
+    bullmq,
+    bullBoard
+  ]
+})
+export class MainConfiguration {
+
+  @Inject()
+  bullmqFramework: bullmq.Framework;
+  
+  @Inject()
+  bullBoardManager: bullBoard.BullBoardManager;
+
+  async onReady() {
+    const testQueue = this.bullmqFramework.createQueue('test', {
+      // ...
+    });
+
+    this.bullBoardManager.addQueue(testQueue);
+  }
+}
+```
