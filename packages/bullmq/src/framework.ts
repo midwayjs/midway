@@ -83,6 +83,13 @@ export class BullMQQueue extends Queue {
   public getQueueEventsProducerList() {
     return this.queueEventsProducerList;
   }
+
+  public async close() {
+    // 并发关闭
+    await Promise.all(this.queueEventsList.map(evt => evt.close()));
+    await Promise.all(this.queueEventsProducerList.map(producer => producer.close()));
+    await super.close();
+  }
 }
 
 @Framework()

@@ -438,7 +438,7 @@ describe(`/test/index.test.ts`, () => {
       events.push(`failed:${jobId}`);
     });
 
-    // 创建成功和失败的任务
+    // 创建 worker 并等待其准备就绪
     const worker = bullFramework.createWorker(
       'event-queue',
       async (job) => {
@@ -449,10 +449,17 @@ describe(`/test/index.test.ts`, () => {
       }
     );
 
+    // 等待 worker 准备就绪
+    await new Promise<void>(resolve => worker.on('ready', () => resolve()));
+
+    // 添加一个小延迟确保事件监听器已设置
+    await sleep(1000);
+
     const job1 = await eventQueue.runJob({ shouldFail: false });
     const job2 = await eventQueue.runJob({ shouldFail: true });
 
-    await sleep(2000);
+    // 增加等待时间，确保事件能够被正确捕获
+    await sleep(3000);
 
     expect(events).toContain(`completed:${job1.id}`);
     expect(events).toContain(`failed:${job2.id}`);
