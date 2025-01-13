@@ -49,11 +49,16 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
         this.loggerService.getLogger('typeormLogger')
       );
     }
-    const dataSource = new (
-      config['customDataSourceClass']
-        ? config['customDataSourceClass']
-        : DataSource
-    )(config);
+
+    const { customDataSourceClass, ...otherConfig } = config;
+
+    let dataSource: DataSource;
+    if (customDataSourceClass) {
+      dataSource = new customDataSourceClass(otherConfig);
+    } else {
+      dataSource = new DataSource(otherConfig);
+    }
+
     await dataSource.initialize();
     return dataSource;
   }
