@@ -9,6 +9,7 @@ import {
   Logger,
   ILogger,
   MidwayCommonError,
+  extend,
 } from '@midwayjs/core';
 import { Application, Context, IProcessor } from './interface';
 import {
@@ -197,11 +198,13 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
    * Create a queue with name and queueOptions
    */
   public createQueue(name: string, queueOptions: Partial<QueueOptions> = {}) {
-    const mergedOptions = {
-      ...this.defaultQueueConfig,
-      ...this.defaultConnection,
-      ...queueOptions,
-    };
+    const mergedOptions = extend(
+      true,
+      {},
+      this.defaultQueueConfig,
+      this.defaultConnection,
+      queueOptions
+    );
     const queue = new BullMQQueue(name, mergedOptions);
     this.queueMap.set(name, queue);
     queue.on('error', err => {
