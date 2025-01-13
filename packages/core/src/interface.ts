@@ -472,6 +472,7 @@ export type CreateDataSourceInstanceOptions = {
 
 export type BaseDataSourceManagerConfigOption<OPTIONS extends Record<string, any>, ENTITY_CONFIG_KEY extends string = 'entities'> = OPTIONS & {
   validateConnection?: boolean;
+  customDataSourceClass?: any;
 } & {
   [key in ENTITY_CONFIG_KEY]?: any[];
 };
