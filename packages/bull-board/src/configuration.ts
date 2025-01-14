@@ -1,6 +1,6 @@
-import * as bull from '@midwayjs/bull';
 import {
   Configuration,
+  IMidwayContainer,
   Inject,
   MidwayApplicationManager,
   MidwayConfigService,
@@ -9,7 +9,6 @@ import { BoardMiddleware } from './board.middleware';
 
 @Configuration({
   namespace: 'bull-board',
-  imports: [bull],
   importConfigs: [
     {
       default: {
@@ -31,7 +30,7 @@ export class BullBoardConfiguration {
   @Inject()
   configService: MidwayConfigService;
 
-  async onReady() {
+  async onReady(container: IMidwayContainer) {
     const apps = this.applicationManager.getApplications([
       'express',
       'egg',
@@ -39,7 +38,12 @@ export class BullBoardConfiguration {
     ]);
     if (apps.length) {
       apps.forEach(app => {
-        app.useMiddleware(BoardMiddleware);
+        if (
+          container.hasNamespace('bull') ||
+          container.hasNamespace('bullmq')
+        ) {
+          app.useMiddleware(BoardMiddleware);
+        }
       });
     }
   }

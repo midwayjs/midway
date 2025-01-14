@@ -1,5 +1,5 @@
 import { App, Inject } from '@midwayjs/core';
-import { Processor, Application } from '../../../../../src';
+import { Processor, Application } from '@midwayjs/bullmq';
 
 @Processor('test')
 export class QueueTask {

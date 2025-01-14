@@ -1,22 +1,8 @@
 import { IMidwayApplication, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
-import { WorkerOptions, QueueOptions, Job, Worker } from 'bullmq';
+import { WorkerOptions, QueueOptions, Job, ConnectionOptions } from 'bullmq';
 
 export interface IProcessor {
-  execute(data: any);
-}
-
-export interface IQueue<Job> {
-  runJob(data: Record<string, any>, options?: unknown): Promise<Job>;
-  getJob(name: string): Promise<Job>;
-  getQueueName(): string;
-}
-
-export interface IQueueManager<Queue extends IQueue<Job>, Job> {
-  runJob(queueName: string, jobData: any, options?: unknown): Promise<Job | undefined>;
-  getJob(queueName: string, jobName: string): Promise<Job | undefined>;
-  createQueue(queueName: string, queueOptions?: unknown): Queue;
-  getQueue(queueName: string): Queue | undefined;
-  getWorker(queueName: string): Worker | undefined;
+  execute(data: any, job: Job, token?: string): Promise<void>;
 }
 
 export interface Application extends IMidwayApplication<Context> { }
@@ -28,6 +14,12 @@ export interface Context extends IMidwayContext {
   from: new (...args) => IProcessor;
 }
 
-export type IWorkerOptions = Omit<WorkerOptions, 'connection' | 'prefix'>
-export type IQueueOptions = Omit<QueueOptions, 'connection' | 'prefix'>
-
+export interface BullMQConfig {
+  defaultConnection?: ConnectionOptions;
+  defaultPrefix?: string;
+  defaultQueueOptions?: Partial<QueueOptions>;
+  defaultWorkerOptions?: Partial<WorkerOptions>;
+  clearRepeatJobWhenStart?: boolean;
+  contextLoggerApplyLogger?: string;
+  contextLoggerFormat?: (info: any) => string;
+}

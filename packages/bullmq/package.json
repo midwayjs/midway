@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/bullmq",
-  "version": "1.0.0",
-  "description": "midway component for bullmq",
+  "version": "0.0.1",
+  "description": "midway component for BullMQ",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -13,7 +13,7 @@
     "midway",
     "IoC",
     "task",
-    "bullmq",
+    "BullMQ",
     "plugin"
   ],
   "author": "guo qicong",
