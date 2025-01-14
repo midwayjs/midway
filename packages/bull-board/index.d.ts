@@ -1,4 +1,3 @@
-import '@midwayjs/bull';
 import { BullBoardOption } from './dist/index';
 export * from './dist/index';
 

@@ -1,5 +1,7 @@
-export const bullmq = {
-  prefix: '{midway-bullmq}',
+import { BullMQConfig } from '../interface';
+
+export const bullmq: BullMQConfig = {
+  defaultPrefix: '{midway-bullmq}',
   defaultQueueOptions: {
     defaultJobOptions: {
       removeOnComplete: 3,

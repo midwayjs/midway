@@ -13,6 +13,7 @@
     "midway",
     "IoC",
     "bull",
+    "bullmq",
     "bull-ui",
     "plugin"
   ],
@@ -27,12 +28,13 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/express": "workspace:^",
     "@midwayjs/koa": "workspace:^",
-    "@midwayjs/mock": "workspace:^"
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/bull":"workspace:^",
+    "@midwayjs/bullmq": "workspace:^"
   },
   "dependencies": {
     "@bull-board/api": "5.23.0",
     "@bull-board/ui": "5.23.0",
-    "@midwayjs/bull": "^4.0.0-alpha.1",
     "ejs": "3.1.10"
   },
   "engines": {

@@ -9,14 +9,19 @@ import {
   Provide,
   Scope,
   ScopeEnum,
+  ApplicationContext,
+  IMidwayContainer,
+  MidwayFrameworkService,
 } from '@midwayjs/core';
 import { extname } from 'path';
-import * as bull from '@midwayjs/bull';
 import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { MidwayAdapter } from './adapter';
 import { BullBoardOption } from './interface';
 import { BullBoardManager } from './board.manager';
+import type { Framework as BullFramework } from '@midwayjs/bull';
+import type { Framework as BullMQFramework } from '@midwayjs/bullmq';
 
 const MIME_MAP = {
   '.html': 'text/html',
@@ -43,7 +48,7 @@ export class BoardMiddleware
   implements IMiddleware<IMidwayContext, NextFunction, unknown>
 {
   @Inject()
-  protected framework: bull.Framework;
+  protected frameworkService: MidwayFrameworkService;
 
   @Config('bullBoard')
   protected bullBoardConfig: BullBoardOption;
@@ -51,13 +56,34 @@ export class BoardMiddleware
   @Inject()
   protected bullBoardManager: BullBoardManager;
 
+  @ApplicationContext()
+  protected applicationContext: IMidwayContainer;
+
   private basePath: string;
   private serverAdapter: MidwayAdapter;
 
   @Init()
   protected async init() {
-    const queueList = this.framework.getQueueList();
-    const wrapQueues = queueList.map(queue => new BullAdapter(queue));
+    let framework: BullFramework | BullMQFramework =
+      this.frameworkService.getFramework('bull') as BullFramework;
+    if (!framework) {
+      framework = this.frameworkService.getFramework(
+        'bullmq'
+      ) as BullMQFramework;
+    }
+
+    if (!framework) {
+      return;
+    }
+
+    const queueList = framework.getQueueList();
+    const wrapQueues = queueList.map(queue => {
+      if (this.applicationContext.hasNamespace('bull')) {
+        return new BullAdapter(queue);
+      } else if (this.applicationContext.hasNamespace('bullmq')) {
+        return new BullMQAdapter(queue);
+      }
+    });
     this.basePath = this.bullBoardConfig.basePath;
 
     this.serverAdapter = new MidwayAdapter();

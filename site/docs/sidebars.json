@@ -214,7 +214,7 @@
         "extensions/info",
         "extensions/validate",
         "extensions/swagger",
-        "extensions/bull",
+        "extensions/bullmq",
         "extensions/cron",
         "extensions/jwt"
       ]

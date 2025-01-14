@@ -1,6 +1,7 @@
 import { createLegacyApp, close, createHttpRequest, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as bullboard from '../src';
+import * as bullmq from '@midwayjs/bullmq';
 
 describe(`/test/index.test.ts`, () => {
   it('test ui in koa', async () => {
@@ -71,6 +72,27 @@ describe(`/test/index.test.ts`, () => {
 
     manager.setBullBoard(bullBoard);
     expect(manager.getBullBoardOrigin()).toBe(bullBoard);
+
+    await close(app);
+  });
+
+  it('test using package bullmq', async () => {
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app-bullmq'));
+    
+    const bullFramework = app.getApplicationContext().get(bullmq.Framework);
+    const testQueue = bullFramework.getQueue('test');
+    await testQueue?.runJob({name: 'stone-jin'});
+    // page
+    let result = await createHttpRequest(app).get('/ui');
+    expect(result.status).toBe(200);
+    expect(result.text).toMatch(/doctype html/);
+    expect(result.headers['content-type']).toMatch(/text\/html/);
+
+    result = await createHttpRequest(app).get('/ui/api/queues?activeQueue=test&page=1&jobsPerPage=10');
+    expect(result.status).toBe(200);
+    expect(result.body.queues.length).toBe(1);
+    expect(result.body.queues[0].type).toBe('bullmq');
+    expect(result.headers['content-type']).toMatch('application/json');
 
     await close(app);
   });
