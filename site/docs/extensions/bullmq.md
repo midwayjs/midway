@@ -441,6 +441,16 @@ export default {
 }
 ```
 
+## BullMQ 原始对象
+
+组件导出了 BullMQ 的原始对象，可以进行更多的操作。
+
+```typescript
+import { BullMQ } from '@midwayjs/bullmq';
+```
+
+你可以通过 `BullMQ` 对象，获取到 `Queue`、`Worker`、`FlowProducer` 等对象定义。
+
 ## Bull UI
 
 在分布式场景中，我们可以资利用 Bull UI 来简化管理。

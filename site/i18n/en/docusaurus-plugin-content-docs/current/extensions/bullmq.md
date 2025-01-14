@@ -441,6 +441,16 @@ export default {
 }
 ``` 
 
+## BullMQ Original Objects
+
+The component exports the original BullMQ objects, which can be used for more operations.
+
+```typescript
+import { BullMQ } from '@midwayjs/bullmq';
+```
+
+Through the `BullMQ` object, you can access object definitions such as `Queue`, `Worker`, `FlowProducer`, etc.
+
 ## Bull UI
 
 In a distributed scenario, we can leverage the Bull UI to simplify management.

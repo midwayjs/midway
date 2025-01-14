@@ -87,7 +87,9 @@ export class BullMQQueue extends Queue {
   public async close() {
     // 并发关闭
     await Promise.all(this.queueEventsList.map(evt => evt.close()));
-    await Promise.all(this.queueEventsProducerList.map(producer => producer.close()));
+    await Promise.all(
+      this.queueEventsProducerList.map(producer => producer.close())
+    );
     await super.close();
   }
 }
@@ -188,17 +190,19 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
 
   protected async beforeStop() {
     // loop queueMap and stop all queue
-    for (const queue of this.queueMap.values()) {
-      await queue.close();
-    }
-    for (const worker of this.workerMap.values()) {
-      for (const w of worker) {
-        await w.close();
-      }
-    }
-    for (const producer of this.flowProducerMap.values()) {
-      await producer.close();
-    }
+    await Promise.all(
+      Array.from(this.queueMap.values()).map(queue => queue.close())
+    );
+    await Promise.all(
+      Array.from(this.workerMap.values()).map(worker =>
+        worker.map(w => w.close())
+      )
+    );
+    await Promise.all(
+      Array.from(this.flowProducerMap.values()).map(producer =>
+        producer.close()
+      )
+    );
   }
 
   /**
