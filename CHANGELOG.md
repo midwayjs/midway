@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v3.20.0 (2025-01-14)
+
+#### :nail_care: Polish
+* `bull-board`, `bullmq`
+  * [#4261](https://github.com/midwayjs/midway/pull/4261) refactor: bullmq ([@czy88840616](https://github.com/czy88840616))
+* `core`, `typeorm`
+  * [#4262](https://github.com/midwayjs/midway/pull/4262) feat: support custom data source ([@czy88840616](https://github.com/czy88840616))
+* `bull`, `bullmq`
+  * [#4257](https://github.com/midwayjs/midway/pull/4257) feat: add package bullmq ([@harperKKK](https://github.com/harperKKK))
+
+#### :wrench: Maintenance
+* `axios`
+  * [#4231](https://github.com/midwayjs/midway/pull/4231) refactor: axios component ([@mmdapl](https://github.com/mmdapl))
+
+#### :package: Dependencies
+* `mongoose`, `typegoose`
+  * [#4253](https://github.com/midwayjs/midway/pull/4253) chore(deps): update dependency mongoose to v8.9.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- 142vip.cn ([@mmdapl](https://github.com/mmdapl))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@harperKKK](https://github.com/harperKKK)
+
+
+
 ## v3.19.3 (2024-12-29)
 
 #### :bug: Bug Fix

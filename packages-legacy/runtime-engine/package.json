@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/runtime-engine",
   "private": true,
-  "version": "3.7.0",
+  "version": "3.20.0",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
