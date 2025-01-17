@@ -31,9 +31,15 @@
   "@midwayjs/jwt": "3.20.0",
   "@midwayjs/kafka": "3.20.0",
   "@midwayjs/leoric": "3.20.0",
-  "@midwayjs/mikro": "3.20.0",
+  "@midwayjs/mikro": [
+    "3.20.0",
+    "3.20.1"
+  ],
   "@midwayjs/mock": "3.20.0",
-  "@midwayjs/mongoose": "3.20.0",
+  "@midwayjs/mongoose": [
+    "3.20.0",
+    "3.20.1"
+  ],
   "@midwayjs/mqtt": "3.20.0",
   "@midwayjs/oss": "3.20.0",
   "@midwayjs/otel": "3.20.0",
@@ -48,15 +54,24 @@
   "@midwayjs/session": "3.20.0",
   "@midwayjs/socketio": "3.20.0",
   "@midwayjs/static-file": "3.20.0",
-  "@midwayjs/swagger": "3.20.0",
+  "@midwayjs/swagger": [
+    "3.20.0",
+    "3.20.1"
+  ],
   "@midwayjs/tablestore": "3.20.0",
   "@midwayjs/tags": "3.20.0",
   "@midwayjs/tenant": "3.20.0",
-  "@midwayjs/typegoose": "3.20.0",
+  "@midwayjs/typegoose": [
+    "3.20.0",
+    "3.20.1"
+  ],
   "@midwayjs/typeorm": "3.20.0",
   "@midwayjs/upload": "3.20.0",
   "@midwayjs/validate": "3.20.0",
-  "@midwayjs/version": "3.20.0",
+  "@midwayjs/version": [
+    "3.20.0",
+    "3.20.1"
+  ],
   "@midwayjs/view": "3.20.0",
   "@midwayjs/view-ejs": "3.20.0",
   "@midwayjs/view-nunjucks": "3.20.0",

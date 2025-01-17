@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.20.1 (2025-01-17)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#4263](https://github.com/midwayjs/midway/pull/4263) fix(swagger): correct typo from 'text/plan' to 'text/plain' ([@ghostker](https://github.com/ghostker))
+
+#### :package: Dependencies
+* `mongoose`, `typegoose`
+  * [#4264](https://github.com/midwayjs/midway/pull/4264) chore(deps): update dependency mongoose to v8.9.5 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4256](https://github.com/midwayjs/midway/pull/4256) chore(deps): update dependency @types/node to v22.10.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#4260](https://github.com/midwayjs/midway/pull/4260) chore(deps): update mikro-orm monorepo to v6.4.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Ghoster ([@ghostker](https://github.com/ghostker))
+
+
+
 ## v3.20.0 (2025-01-14)
 
 #### :nail_care: Polish
