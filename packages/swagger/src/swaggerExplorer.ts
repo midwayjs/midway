@@ -679,7 +679,7 @@ export class SwaggerExplorer {
             }
           } else {
             tt.content = {
-              'text/plan': {
+              'text/plain': {
                 schema: {
                   type: convertSchemaType(tt.type),
                 },
