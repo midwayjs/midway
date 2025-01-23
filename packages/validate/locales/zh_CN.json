@@ -1,5 +1,5 @@
 {
-  "alternatives.all": "{{#label}} 不能匹配上所以可选项",
+  "alternatives.all": "{{#label}} 不能匹配上所有可选项",
   "alternatives.any": "{{#label}} 不能匹配上任何可选项",
   "alternatives.match": "{{#label}} 不能匹配上任何可选项",
   "alternatives.one": "{{#label}} 匹配超过一个可选项",
