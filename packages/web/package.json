@@ -38,7 +38,7 @@
     "egg-socket.io": "4.1.6",
     "egg-view-nunjucks": "2.3.0",
     "fake-egg": "1.0.0",
-    "fs-extra": "11.2.0",
+    "fs-extra": "11.3.0",
     "is-type-of": "^2.1.0",
     "mm": "3.4.0",
     "mz-modules": "^2.1.0",

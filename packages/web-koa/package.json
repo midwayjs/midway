@@ -27,7 +27,7 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@types/koa-router": "7.4.8",
-    "fs-extra": "11.2.0"
+    "fs-extra": "11.3.0"
   },
   "dependencies": {
     "@koa/router": "^12.0.0",
