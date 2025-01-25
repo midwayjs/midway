@@ -1,4 +1,5 @@
-import { Configuration } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
+import { KafkaProducerFactory } from './service';
 
 @Configuration({
   namespace: 'kafka',
@@ -19,4 +20,8 @@ import { Configuration } from '@midwayjs/core';
     },
   ],
 })
-export class KafkaConfiguration {}
+export class KafkaConfiguration {
+  async onReady(container: IMidwayContainer) {
+    await container.getAsync(KafkaProducerFactory);
+  }
+}
