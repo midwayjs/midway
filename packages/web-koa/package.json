@@ -34,10 +34,10 @@
     "@midwayjs/cookies": "^1.0.2",
     "@midwayjs/session": "workspace:^",
     "@types/koa": "2.15.0",
-    "@types/qs": "6.9.17",
+    "@types/qs": "6.9.18",
     "koa": "2.15.3",
     "koa-bodyparser": "4.4.1",
-    "qs": "6.13.1"
+    "qs": "6.14.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
