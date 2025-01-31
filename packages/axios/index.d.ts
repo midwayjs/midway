@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from './dist/index';
 
 export * from './dist/index';
 

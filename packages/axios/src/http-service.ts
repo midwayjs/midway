@@ -6,8 +6,9 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/core';
-import { Axios, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { Axios, AxiosInstance } from 'axios';
 import { HttpServiceFactory } from './http-service.factory';
+import { AxiosRequestConfig, AxiosResponse } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
