@@ -96,6 +96,14 @@ jobs:
         with:
           mongodb-version: 4.2
 
+      - name: Start Mosquitto
+        uses: namoshek/mosquitto-github-action@v1
+        with:
+          version: 'latest'
+          ports: '1883:1883 8883:8883'
+          config: ${{ github.workspace }}/packages/mqtt/scripts/mosquitto.conf
+          container-name: 'mqtt'
+
       - run: npm run install_npm
       - run: npm install && npm install codecov
       - run: npm run build --if-present

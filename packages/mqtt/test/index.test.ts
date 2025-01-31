@@ -41,7 +41,7 @@ describe('/test/index.test.ts', () => {
       ]
     });
     await (app.getFramework() as Framework).createSubscriber({
-      host: 'test.mosquitto.org',
+      host: '127.0.0.1',
       port: 1883,
     }, {
       topicObject: 'test_midway_dynamic',
@@ -52,7 +52,7 @@ describe('/test/index.test.ts', () => {
     // send
     const producerService = await app.getApplicationContext().getAsync(MqttProducerFactory);
     const producer = await producerService.createInstance({
-      host: 'test.mosquitto.org',
+      host: '127.0.0.1',
       port: 1883,
     }, 'test');
 
