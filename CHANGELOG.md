@@ -1,6 +1,46 @@
 # Change Log
 
 
+## v3.20.2 (2025-01-31)
+
+#### :bug: Bug Fix
+* `kafka`
+  * [#4271](https://github.com/midwayjs/midway/pull/4271) fix: KafkaProducerFactory not init from decorator ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `axios`, `mqtt`
+  * [#4278](https://github.com/midwayjs/midway/pull/4278) feat: add custom axios config typings merge ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `web-koa`, `web`
+  * [#4276](https://github.com/midwayjs/midway/pull/4276) fix(deps): update dependency qs to v6.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#4279](https://github.com/midwayjs/midway/pull/4279) chore(deps): update dependency swagger-ui-dist to v5.18.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#4281](https://github.com/midwayjs/midway/pull/4281) fix(deps): update dependency @types/jsonwebtoken to v9.0.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4282](https://github.com/midwayjs/midway/pull/4282) chore(deps): update dependency @types/node to v22.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bullmq`
+  * [#4283](https://github.com/midwayjs/midway/pull/4283) fix(deps): update dependency bullmq to v5.39.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4275](https://github.com/midwayjs/midway/pull/4275) fix(deps): update dependency bullmq to v5.37.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`
+  * [#4284](https://github.com/midwayjs/midway/pull/4284) fix(deps): update dependency casbin to v5.38.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mikro`
+  * [#4280](https://github.com/midwayjs/midway/pull/4280) chore(deps): update mikro-orm monorepo to v6.4.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#4273](https://github.com/midwayjs/midway/pull/4273) fix(deps): update dependency leoric to v2.13.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `ws`
+  * [#4272](https://github.com/midwayjs/midway/pull/4272) fix(deps): update dependency @types/ws to v8.5.14 ([@renovate[bot]](https://github.com/apps/renovate))
+* `otel`
+  * [#4265](https://github.com/midwayjs/midway/pull/4265) chore(deps): update dependency @opentelemetry/sdk-node to v0.57.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`, `rabbitmq`, `socketio`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4266](https://github.com/midwayjs/midway/pull/4266) chore(deps): update dependency fs-extra to v11.3.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.1 (2025-01-17)
 
 #### :bug: Bug Fix

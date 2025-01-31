@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/captcha",
-  "version": "3.20.0",
+  "version": "3.20.2",
   "description": "Midway Component for Captcha(Verification Code)",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.20.0",
-    "@midwayjs/koa": "^3.20.0",
+    "@midwayjs/koa": "^3.20.2",
     "@midwayjs/mock": "^3.20.0"
   }
 }

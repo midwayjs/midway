@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bullmq",
-  "version": "3.20.0",
+  "version": "3.20.2",
   "description": "midway component for BullMQ",
   "main": "dist/index.js",
   "typings": "index.d.ts",

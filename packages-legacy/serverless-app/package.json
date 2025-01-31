@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/serverless-app",
   "private": true,
-  "version": "3.20.0",
+  "version": "3.20.2",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "dependencies": {
