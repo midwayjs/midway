@@ -559,9 +559,9 @@ describe('/test/baseFramework.test.ts', () => {
       './fixtures/base-app-autoload/src'
     ));
 
-    const applicationContext: any = framework.getApplicationContext();
+    const applicationContext = framework.getApplicationContext();
     const rid = applicationContext.identifierMapping.getRelation('userService');
-    expect(applicationContext.getManagedResolverFactory().singletonCache.has(rid)).toBeTruthy();
+    expect(applicationContext.hasObject(rid)).toBeTruthy();
   });
 
   it('should test object lifecycle', async () => {

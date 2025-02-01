@@ -18,8 +18,40 @@ const debug = debuglog('midway:container');
 export class DynamicMidwayContainer extends MidwayContainer {
   private moduleType: ModuleLoadType;
   private modifyClassMapping = new Map<string, string>();
+  private idRefMapping = new Map<string, string[]>();
 
-  async updateDefinition(modifyFilePath: string, newId: string) {
+  constructor() {
+    super();
+    this.onBeforeBind( (Clzz, options) => {
+      const definition = options.definition;
+      if (definition) {
+        // 处理属性
+        for (const propMetas of definition.properties.values()) {
+          // 这里未处理懒加载依赖
+          if (typeof propMetas.id === 'string') {
+            if (this.idRefMapping.has(propMetas.id)) {
+              this.idRefMapping.get(propMetas.id).push(definition.id);
+            } else {
+              this.idRefMapping.set(propMetas.id, [definition.id]);
+            }
+          }
+        }
+
+        // 处理构造器
+        for (const constructMeta of definition.constructorArgs) {
+          if (typeof constructMeta.id === 'string') {
+            if (this.idRefMapping.has(constructMeta.id)) {
+              this.idRefMapping.get(constructMeta.id).push(definition.id);
+            } else {
+              this.idRefMapping.set(constructMeta.id, [definition.id]);
+            }
+          }
+        }
+      }
+    });
+  }
+
+  async updateDefinition(modifyFilePath: string): Promise<boolean> {
     debug('updateDefinition %s', modifyFilePath);
     if (!this.moduleType) {
       const environmentService = await this.getAsync(MidwayEnvironmentService);
@@ -45,10 +77,26 @@ export class DynamicMidwayContainer extends MidwayContainer {
     debug('nameList %j', nameList);
 
     // 清除 require cache
-    this.findRequireCacheAndClear(modifyFilePath);
+    const requireCacheCleaned = this.findRequireCacheAndClear(modifyFilePath);
 
     // 清理历史 context 缓存
     for (const oldDefinition of oldDefinitionList) {
+      // 清理依赖的缓存
+      if (this.idRefMapping.has(oldDefinition.id)) {
+        for (const refId of this.idRefMapping.get(oldDefinition.id)) {
+          if (this.hasObject(refId)) {
+            this.removeObject(refId);
+          }
+        }
+      } else if (this.idRefMapping.has(oldDefinition.name)) {
+        for (const refId of this.idRefMapping.get(oldDefinition.name)) {
+          if (this.hasObject(refId)) {
+            this.removeObject(refId);
+          }
+        }
+      }
+
+      // 清理自身
       this.removeObject(oldDefinition.id);
     }
 
@@ -71,6 +119,7 @@ export class DynamicMidwayContainer extends MidwayContainer {
 
     debug('newClassList size %s', newClassList.length);
 
+    let remapping = false;
     if (Types.isClass(modLoaded) || Types.isFunction(modLoaded)) {
       const newId = DecoratorManager.getProviderUUId(modLoaded);
       const name = DecoratorManager.getProviderName(modLoaded);
@@ -80,6 +129,7 @@ export class DynamicMidwayContainer extends MidwayContainer {
       }
 
       debug('bindModule %s', newId);
+      remapping = true;
       this.bindModule(modLoaded, {
         namespace: MAIN_MODULE_KEY,
         srcPath: modifyFilePath,
@@ -98,6 +148,7 @@ export class DynamicMidwayContainer extends MidwayContainer {
             }
 
             debug('bindModule %s', newId);
+            remapping = true;
             this.bindModule(module, {
               namespace: MAIN_MODULE_KEY,
               srcPath: modifyFilePath,
@@ -107,6 +158,8 @@ export class DynamicMidwayContainer extends MidwayContainer {
         }
       }
     }
+
+    return requireCacheCleaned && oldDefinitionList.length > 0 && newClassList.length > 0 && remapping;
   }
 
   getIdentifier(identifier: ClassType | string): string {
@@ -139,13 +192,16 @@ export class DynamicMidwayContainer extends MidwayContainer {
     return results;
   }
 
-  private findRequireCacheAndClear(absolutePath: string) {
+  private findRequireCacheAndClear(absolutePath: string): boolean {
+    let cleaned = false
     const cacheKey = require.resolve(absolutePath);
     const cache = require.cache[cacheKey];
     if (cache) {
       debug('clear cache %s', cacheKey);
       delete require.cache[cacheKey];
+      cleaned = true;
     }
+    return cleaned;
   }
 
   private remapping(oldId, newId) {

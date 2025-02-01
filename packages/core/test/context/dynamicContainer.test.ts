@@ -176,7 +176,7 @@ describe('/test/context/dynamicContainer.test.ts', () => {
         }
       \`);
 
-      await container.updateDefinition('${testFilePath.replace(/\\/g, '\\\\')}', 'testService');
+      await container.updateDefinition('${testFilePath.replace(/\\/g, '\\\\')}');
       
       const newInstance = await container.getAsync<TestService>(oldModule.TestService);
       if(newInstance.getValue() !== 'new value') {
@@ -262,7 +262,7 @@ describe('/test/context/dynamicContainer.test.ts', () => {
       \`);
 
       process.stdout.write('Calling updateDefinition...\\n');
-      await container.updateDefinition('${dependencyPath.replace(/\\/g, '\\\\')}', depModule.DependencyService.name);
+      await container.updateDefinition('${dependencyPath.replace(/\\/g, '\\\\')}');
       
       process.stdout.write('Getting new instance...\\n');
       const newInstance = await container.getAsync(mainModule.MainService);
@@ -278,33 +278,96 @@ describe('/test/context/dynamicContainer.test.ts', () => {
     await runInChildProcess(testContent);
   });
 
-  it('should handle errors when file has syntax errors', async () => {
-    const invalidFilePath = join(tempDir, 'invalid.service.ts');
+  it('should handle dependency injection with class after update', async () => {
+    const dependencyPath = join(tempDir, 'dependency.service.ts');
+    const mainServicePath = join(tempDir, 'main.service.ts');
 
-    fs.writeFileSync(invalidFilePath, `
+    // 创建初始依赖文件
+    fs.writeFileSync(dependencyPath, `
       import { Provide } from '../../../src';
       @Provide()
-      export class InvalidService {
-        // 语法错误
-        constructor( {
+      export class DependencyService {
+        getData() {
+          process.stdout.write('DependencyService old value called\\n');
+          return 'old dependency';
+        }
+      }
+    `);
+
+    // 创建主服务文件
+    fs.writeFileSync(mainServicePath, `
+      import { Provide, Inject } from '../../../src';
+      import { DependencyService } from './dependency.service';
+      @Provide()
+      export class MainService {
+        @Inject()
+        dependencyService: DependencyService;
+
+        getData() {
+          process.stdout.write('MainService getData called\\n');
+          const result = this.dependencyService.getData() + '_main';
+          process.stdout.write('Result: ' + result + '\\n');
+          return result;
+        }
       }
     `);
 
     const testContent = `
+      process.stdout.write('Test starting...\\n');
       const container = new DynamicMidwayContainer();
       container.bind(MidwayEnvironmentService);
       
-      try {
-        await container.updateDefinition('${invalidFilePath.replace(/\\/g, '\\\\')}', 'invalidService');
-        throw new Error('Should throw syntax error');
-      } catch (err) {
-        // 期望抛出语法错误
-        if (!err.message.includes('SyntaxError')) {
-          throw new Error('Expected syntax error but got: ' + err.message);
-        }
+      const depModule = require('${dependencyPath.replace(/\\/g, '\\\\')}');
+      const mainModule = require('${mainServicePath.replace(/\\/g, '\\\\')}');
+      
+      process.stdout.write('Binding services...\\n');
+      
+      container.bind(depModule.DependencyService, {
+        srcPath: '${dependencyPath.replace(/\\/g, '\\\\')}',
+        createFrom: 'file',
+      });
+      container.bind(mainModule.MainService, {
+        srcPath: '${mainServicePath.replace(/\\/g, '\\\\')}',
+        createFrom: 'file',
+      });
+
+      process.stdout.write('Getting old instance...\\n');
+      const oldInstance = await container.getAsync(mainModule.MainService);
+      const oldValue = oldInstance.getData();
+      process.stdout.write('Old value: ' + oldValue + '\\n');
+      
+      if(oldValue !== 'old dependency_main') {
+        throw new Error('Old dependency value not matched: ' + oldValue);
       }
+
+      process.stdout.write('Updating dependency service...\\n');
+      // 更新依赖服务
+      require('fs').writeFileSync('${dependencyPath.replace(/\\/g, '\\\\')}', \`
+        import { Provide } from '../../../src';
+        @Provide()
+        export class DependencyService {
+          getData() {
+            process.stdout.write('DependencyService new value called\\\\n');
+            return 'new dependency';
+          }
+        }
+      \`);
+
+      process.stdout.write('Calling updateDefinition...\\n');
+      await container.updateDefinition('${dependencyPath.replace(/\\/g, '\\\\')}');
+      
+      process.stdout.write('Getting new instance...\\n');
+      const newInstance = await container.getAsync(mainModule.MainService);
+      const newValue = newInstance.getData();
+      process.stdout.write('New value: ' + newValue + '\\n');
+      
+      if(newValue !== 'new dependency_main') {
+        throw new Error('New dependency value not matched. Expected: new dependency_main, Got: ' + newValue);
+      }
+      process.stdout.write('Test completed successfully\\n');
     `;
 
     await runInChildProcess(testContent);
   });
+
 });
