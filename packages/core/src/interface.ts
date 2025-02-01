@@ -663,6 +663,7 @@ export interface IObjectDefinitionRegistry {
   clearAll(): void;
   hasObject(identifier: ObjectIdentifier): boolean;
   registerObject(identifier: ObjectIdentifier, target: any);
+  removeObject(identifier: ObjectIdentifier): void;
   getObject(identifier: ObjectIdentifier): any;
   getIdentifierRelation(): IIdentifierRelationShip;
   setIdentifierRelation(identifierRelation: IIdentifierRelationShip);
@@ -729,6 +730,7 @@ export interface IMidwayContainer extends IObjectFactory {
   getDefinition(identifier: ObjectIdentifier): IObjectDefinition;
   hasObject(identifier: ObjectIdentifier): boolean;
   getObject<T>(identifier: ObjectIdentifier): T;
+  removeObject(identifier: ObjectIdentifier): void;
   /**
    * Set value to app attribute map
    * @param key

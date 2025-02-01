@@ -9,8 +9,6 @@ import {
 } from '../interface';
 import { DecoratorManager } from '../decorator';
 
-const PREFIX = '_id_default_';
-
 class LegacyIdentifierRelation
   extends Map<ObjectIdentifier, string>
   implements IIdentifierRelationShip
@@ -57,8 +55,8 @@ export class ObjectDefinitionRegistry
   implements IObjectDefinitionRegistry
 {
   private singletonIds = [];
-  private _identifierRelation: IIdentifierRelationShip =
-    new LegacyIdentifierRelation();
+  private _identifierRelation: IIdentifierRelationShip = new LegacyIdentifierRelation();
+  private objectCache = new Map();
 
   get identifierRelation() {
     if (!this._identifierRelation) {
@@ -72,13 +70,7 @@ export class ObjectDefinitionRegistry
   }
 
   get identifiers() {
-    const ids = [];
-    for (const key of this.keys()) {
-      if (key.indexOf(PREFIX) === -1) {
-        ids.push(key);
-      }
-    }
-    return ids;
+    return Array.from(this.keys());
   }
 
   get count() {
@@ -126,21 +118,26 @@ export class ObjectDefinitionRegistry
 
   clearAll(): void {
     this.singletonIds = [];
+    this.objectCache.clear();
     this.clear();
   }
 
   hasObject(identifier: ObjectIdentifier): boolean {
     identifier = this.identifierRelation.getRelation(identifier) ?? identifier;
-    return this.has(PREFIX + identifier);
+    return this.objectCache.has(identifier);
   }
 
   registerObject(identifier: ObjectIdentifier, target: any) {
-    this.set(PREFIX + identifier, target);
+    this.objectCache.set(identifier, target);
+  }
+
+  removeObject(identifier: ObjectIdentifier) {
+    this.objectCache.delete(identifier);
   }
 
   getObject(identifier: ObjectIdentifier): any {
     identifier = this.identifierRelation.getRelation(identifier) ?? identifier;
-    return this.get(PREFIX + identifier);
+    return this.objectCache.get(identifier);
   }
 
   getIdentifierRelation(): IIdentifierRelationShip {

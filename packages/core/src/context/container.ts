@@ -354,6 +354,10 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     this.registry.registerObject(identifier, target);
   }
 
+  removeObject(identifier: ObjectIdentifier) {
+    this.registry.removeObject(identifier);
+  }
+
   onBeforeBind(
     fn: (
       Clzz: any,
