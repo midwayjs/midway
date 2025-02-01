@@ -55,7 +55,8 @@ export class ObjectDefinitionRegistry
   implements IObjectDefinitionRegistry
 {
   private singletonIds = [];
-  private _identifierRelation: IIdentifierRelationShip = new LegacyIdentifierRelation();
+  private _identifierRelation: IIdentifierRelationShip =
+    new LegacyIdentifierRelation();
   private objectCache = new Map();
 
   get identifierRelation() {

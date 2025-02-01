@@ -22,28 +22,32 @@ export class DynamicMidwayContainer extends MidwayContainer {
 
   constructor() {
     super();
-    this.onBeforeBind( (Clzz, options) => {
+    this.onBeforeBind((Clzz, options) => {
       const definition = options.definition;
       if (definition) {
-        // 处理属性
-        for (const propMetas of definition.properties.values()) {
-          // 这里未处理懒加载依赖
-          if (typeof propMetas.id === 'string') {
-            if (this.idRefMapping.has(propMetas.id)) {
-              this.idRefMapping.get(propMetas.id).push(definition.id);
-            } else {
-              this.idRefMapping.set(propMetas.id, [definition.id]);
+        if (definition.properties) {
+          // 处理属性
+          for (const propMetas of definition.properties.values()) {
+            // 这里未处理懒加载依赖
+            if (typeof propMetas.id === 'string') {
+              if (this.idRefMapping.has(propMetas.id)) {
+                this.idRefMapping.get(propMetas.id).push(definition.id);
+              } else {
+                this.idRefMapping.set(propMetas.id, [definition.id]);
+              }
             }
           }
         }
 
-        // 处理构造器
-        for (const constructMeta of definition.constructorArgs) {
-          if (typeof constructMeta.id === 'string') {
-            if (this.idRefMapping.has(constructMeta.id)) {
-              this.idRefMapping.get(constructMeta.id).push(definition.id);
-            } else {
-              this.idRefMapping.set(constructMeta.id, [definition.id]);
+        if (definition.constructorArgs) {
+          // 处理构造器
+          for (const constructMeta of definition.constructorArgs) {
+            if (typeof constructMeta.id === 'string') {
+              if (this.idRefMapping.has(constructMeta.id)) {
+                this.idRefMapping.get(constructMeta.id).push(definition.id);
+              } else {
+                this.idRefMapping.set(constructMeta.id, [definition.id]);
+              }
             }
           }
         }
@@ -159,7 +163,12 @@ export class DynamicMidwayContainer extends MidwayContainer {
       }
     }
 
-    return requireCacheCleaned && oldDefinitionList.length > 0 && newClassList.length > 0 && remapping;
+    return (
+      requireCacheCleaned &&
+      oldDefinitionList.length > 0 &&
+      newClassList.length > 0 &&
+      remapping
+    );
   }
 
   getIdentifier(identifier: ClassType | string): string {
@@ -173,7 +182,11 @@ export class DynamicMidwayContainer extends MidwayContainer {
     debug('check identifier from %s %s', name, identifier);
 
     if (this.modifyClassMapping.has(identifier)) {
-      debug('getIdentifier from modifyClassMapping %s -> %s', identifier, this.modifyClassMapping.get(identifier));
+      debug(
+        'getIdentifier from modifyClassMapping %s -> %s',
+        identifier,
+        this.modifyClassMapping.get(identifier)
+      );
       return this.modifyClassMapping.get(identifier);
     }
     return identifier;
@@ -193,7 +206,7 @@ export class DynamicMidwayContainer extends MidwayContainer {
   }
 
   private findRequireCacheAndClear(absolutePath: string): boolean {
-    let cleaned = false
+    let cleaned = false;
     const cacheKey = require.resolve(absolutePath);
     const cache = require.cache[cacheKey];
     if (cache) {
