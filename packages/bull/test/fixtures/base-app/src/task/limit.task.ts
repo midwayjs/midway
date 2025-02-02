@@ -2,7 +2,7 @@ import { App, Inject, sleep } from '@midwayjs/core';
 import { Processor, Application } from '../../../../../src';
 
 @Processor('limit',2,{},{limiter: { max: 3, duration: 1000 }})
-export class QueueTask {
+export class QueueTask1 {
   @App()
   app: Application;
 
