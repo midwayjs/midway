@@ -6,12 +6,13 @@ import {
   ScopeEnum,
   MidwayCommonError,
 } from '@midwayjs/core';
-import { Axios, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosInstance } from 'axios';
 import { HttpServiceFactory } from './http-service.factory';
+import { AxiosRequestConfig, AxiosResponse } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class HttpService implements Axios {
+export class HttpService {
   private instance: AxiosInstance;
 
   @Inject()
@@ -120,3 +121,5 @@ export class HttpService implements Axios {
     return this.instance.patchForm(url, data, config);
   }
 }
+
+export interface HttpService extends AxiosInstance {}

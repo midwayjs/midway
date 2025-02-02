@@ -412,6 +412,25 @@ export class MainConfiguration {
 }
 ```
 
+### 扩展 AxiosRequestConfig 类型
+
+当前 Axios 库中 [issue](https://github.com/axios/axios/issues?q=is%3Aissue%20state%3Aopen%20AxiosRequestConfig) 有不少扩展 `AxiosRequestConfig` 类型的需求，但是 axios 本身并不支持扩展这个类型，其中的泛型仅限于设置 data 属性的类型。
+
+Midway 中提供了 `AxiosRequestConfig` 的扩展，可以在组件层面增加新的属性。
+
+```typescript
+// interface.ts
+import '@midwayjs/axios';
+
+declare module '@midwayjs/axios/dist/interface' {
+  interface AxiosRequestConfig {
+    retryDelay?: number;
+    retry?: number;
+  }
+}
+```
+
+
 ### 直接使用 Axios
 
 `@midayjs/axios`导出了原始的`axios`实例，在非应用环境中可以直接使用。

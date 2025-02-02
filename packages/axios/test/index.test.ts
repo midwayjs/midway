@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { HttpService, axios } from '../src';
+import { HttpService, Axios } from '../src';
 import { createLightApp } from '@midwayjs/mock';
 import * as nock from 'nock';
 
@@ -68,8 +68,9 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test defaults and interceptors', () => {
-    expect(httpService.defaults).toStrictEqual(axios.defaults);
-    expect(httpService.interceptors).toStrictEqual(axios.interceptors);
+    expect(Axios.get).toBeDefined();
+    expect(httpService.defaults).toStrictEqual(Axios.defaults);
+    expect(httpService.interceptors).toStrictEqual(Axios.interceptors);
   });
 
   it('should test get method', async () => {

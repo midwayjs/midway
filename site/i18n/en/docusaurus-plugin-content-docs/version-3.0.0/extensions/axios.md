@@ -412,6 +412,24 @@ export class MainConfiguration {
 }
 ```
 
+### Extending AxiosRequestConfig Type
+
+There are many [issues](https://github.com/axios/axios/issues?q=is%3Aissue%20state%3Aopen%20AxiosRequestConfig) in the Axios repository requesting the addition of new properties to the AxiosRequestConfig type. However, Axios itself does not support extending this type, as its generics are limited to defining the type of the data property only.
+
+Midway provides an extension for `AxiosRequestConfig`, allowing you to add new properties at the component level.
+
+```typescript
+// interface.ts
+import '@midwayjs/axios';
+
+declare module '@midwayjs/axios/dist/interface' {
+  interface AxiosRequestConfig {
+    retryDelay?: number;
+    retry?: number;
+  }
+}
+```
+
 ### Use Axios directly
 
 `@midayjs/axios` also exported the original instance of `axios`, which could be useful in helper functions.
