@@ -663,6 +663,7 @@ export interface IObjectDefinitionRegistry {
   clearAll(): void;
   hasObject(identifier: ObjectIdentifier): boolean;
   registerObject(identifier: ObjectIdentifier, target: any);
+  removeObject(identifier: ObjectIdentifier): void;
   getObject(identifier: ObjectIdentifier): any;
   getIdentifierRelation(): IIdentifierRelationShip;
   setIdentifierRelation(identifierRelation: IIdentifierRelationShip);
@@ -705,18 +706,15 @@ export interface IIdentifierRelationShip {
 export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle> {
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
-  // load(module: any | any[]): void;
   getNamespaceList(): string[];
   addNamespace(namespace: string): void;
-  bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
+  bind<T>(target: T, options?: Partial<IObjectDefinition>): IObjectDefinition | undefined;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
     options?: Partial<IObjectDefinition>
-  ): void;
+  ): IObjectDefinition | undefined;
   bindClass(exports, options?: Partial<IObjectDefinition>): void;
-  // setFileDetector(fileDetector: IFileDetector): void;
-  // ready(): void | Promise<void>;
   stop(): Promise<void>;
   getManagedResolverFactory(): ManagedResolverFactory;
 }
@@ -732,6 +730,7 @@ export interface IMidwayContainer extends IObjectFactory {
   getDefinition(identifier: ObjectIdentifier): IObjectDefinition;
   hasObject(identifier: ObjectIdentifier): boolean;
   getObject<T>(identifier: ObjectIdentifier): T;
+  removeObject(identifier: ObjectIdentifier): void;
   /**
    * Set value to app attribute map
    * @param key

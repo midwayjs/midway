@@ -129,7 +129,11 @@ export class ObjectCreator implements IObjectCreator {
    * @returns {void}
    */
   async doDestroyAsync(obj: any): Promise<void> {
-    if (this.definition.destroyMethod && obj[this.definition.destroyMethod]) {
+    if (
+      obj &&
+      this.definition.destroyMethod &&
+      obj[this.definition.destroyMethod]
+    ) {
       const fn = obj[this.definition.destroyMethod];
       if (Types.isAsyncFunction(fn)) {
         await fn.call(obj);

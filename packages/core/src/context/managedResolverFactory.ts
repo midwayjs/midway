@@ -58,7 +58,6 @@ function formatObjectIdentifier(
  */
 export class ManagedResolverFactory {
   private creating = new Map<string, boolean>();
-  singletonCache = new Map<ObjectIdentifier, any>();
   context: IMidwayGlobalContainer;
 
   constructor(context: IMidwayGlobalContainer) {
@@ -174,10 +173,10 @@ export class ManagedResolverFactory {
   }
 
   async destroyCache(): Promise<void> {
-    for (const key of this.singletonCache.keys()) {
+    for (const key of this.context.registry.getSingletonDefinitionIds()) {
       const definition = this.getObjectDefinition(key);
       if (definition.creator) {
-        const inst = this.singletonCache.get(key);
+        const inst = this.context.getObject(key);
         this.getObjectEventTarget().emit(
           ObjectLifeCycleEvent.BEFORE_DESTROY,
           inst,
@@ -188,8 +187,10 @@ export class ManagedResolverFactory {
         );
         await definition.creator.doDestroyAsync(inst);
       }
+      // clean singleton object cache
+      this.context.removeObject(key);
     }
-    this.singletonCache.clear();
+
     this.creating.clear();
   }
 
@@ -273,12 +274,18 @@ export class ManagedResolverFactory {
 
     if (definition.isSingletonScope()) {
       currentContext = this.context;
-      if (this.singletonCache.has(definition.id)) {
+      if (this.context.hasObject(definition.id)) {
         debug(
           `[core]: "${definition.id}(${definition.name})" get from singleton cache.`
         );
-        return this.singletonCache.get(definition.id);
+        return this.context.getObject(definition.id);
       }
+      // if (this.singletonCache.has(definition.id)) {
+      //   debug(
+      //     `[core]: "${definition.id}(${definition.name})" get from singleton cache.`
+      //   );
+      //   return this.singletonCache.get(definition.id);
+      // }
     }
 
     // 使用 creationPath 检查循环依赖
@@ -575,7 +582,8 @@ export class ManagedResolverFactory {
         debug(
           `[core]: "${definition.id}(${definition.name})" set to singleton cache`
         );
-        this.singletonCache.set(definition.id, instance);
+        this.context.registerObject(definition.id, instance);
+        // this.singletonCache.set(definition.id, instance);
         this.setInstanceScope(instance, ScopeEnum.Singleton);
       } else if (definition.isRequestScope()) {
         debug(

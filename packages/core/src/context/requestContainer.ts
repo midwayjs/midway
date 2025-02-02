@@ -66,6 +66,10 @@ export class MidwayRequestContainer implements IMidwayRequestContainer {
     this.registry.registerObject(identifier, obj);
   }
 
+  removeObject(identifier: ObjectIdentifier) {
+    this.registry.removeObject(identifier);
+  }
+
   hasObject(identifier: ObjectIdentifier): boolean {
     return this.registry.hasObject(identifier);
   }

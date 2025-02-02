@@ -7,7 +7,6 @@ import {
   IMidwayFramework,
   MidwayFrameworkService,
   loadModule,
-  MidwayContainer,
   MidwayCommonError,
   MidwayApplicationManager,
   MidwayConfigService,
@@ -18,6 +17,7 @@ import {
   ObjectIdentifier,
   isTypeScriptEnvironment,
   DecoratorManager,
+  DynamicMidwayContainer,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
@@ -59,7 +59,7 @@ function getFileNameWithSuffix(fileName: string) {
 }
 
 function createMockWrapApplicationContext() {
-  const container = new MidwayContainer();
+  const container = new DynamicMidwayContainer();
   debug(`[mock]: Create mock MidwayContainer, id=${container.id}.`);
   const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
 

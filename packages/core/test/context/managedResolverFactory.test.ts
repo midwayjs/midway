@@ -6,6 +6,7 @@ describe('/test/context/managedResolverFactory.test.ts', () => {
   it('create get deps should be ok', async () => {
     const context = new MidwayContainer();
     const resolver = new ManagedResolverFactory(context);
+    context['_resolverFactory'] = resolver;
 
     const definition = new ObjectDefinition();
     definition.id = 'hello';
