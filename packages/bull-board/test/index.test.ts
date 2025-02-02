@@ -77,8 +77,8 @@ describe(`/test/index.test.ts`, () => {
   });
 
   it('test using package bullmq', async () => {
-    const app = await createApp(join(__dirname, 'fixtures', 'base-app-bullmq'));
-    
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app-bullmq'));
+
     const bullFramework = app.getApplicationContext().get(bullmq.Framework);
     const testQueue = bullFramework.getQueue('test');
     await testQueue?.runJob({name: 'stone-jin'});
