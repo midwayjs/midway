@@ -20,11 +20,11 @@
     "build:zh": "docusaurus build --locale zh"
   },
   "dependencies": {
-    "@docusaurus/core": "3.6.3",
-    "@docusaurus/preset-classic": "3.6.3",
-    "@docusaurus/theme-common": "3.6.3",
-    "@docusaurus/theme-search-algolia": "3.6.3",
-    "@docusaurus/plugin-content-blog": "3.6.3",
+    "@docusaurus/core": "^3.7.0",
+    "@docusaurus/plugin-content-blog": "^3.7.0",
+    "@docusaurus/preset-classic": "^3.7.0",
+    "@docusaurus/theme-common": "^3.7.0",
+    "@docusaurus/theme-search-algolia": "^3.7.0",
     "@mdx-js/react": "^3.0.0",
     "@react-hook/media-query": "^1.1.1",
     "@stitches/react": "^1.2.8",
@@ -50,9 +50,9 @@
     "windups": "1.2.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.6.3",
-    "@docusaurus/types": "3.0.0",
-    "@docusaurus/tsconfig": "3.0.0",
+    "@docusaurus/module-type-aliases": "^3.7.0",
+    "@docusaurus/tsconfig": "^3.7.0",
+    "@docusaurus/types": "^3.7.0",
     "@types/file-loader": "5.0.1",
     "@types/fs-extra": "9.0.13",
     "@types/lodash": "4.14.186",

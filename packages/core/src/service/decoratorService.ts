@@ -82,9 +82,9 @@ export class MidwayDecoratorService {
 
       // find custom param decorator metadata
       const parameterDecoratorMetadata =
-        MetadataManager.getOwnPropertiesWithMetadata<{
-          [methodName: string]: Array<ParameterDecoratorMetaData>;
-        }>(CUSTOM_PARAM_INJECT_KEY, Clzz);
+        MetadataManager.getOwnPropertiesWithMetadata<
+          Array<ParameterDecoratorMetaData>
+        >(CUSTOM_PARAM_INJECT_KEY, Clzz);
 
       if (parameterDecoratorMetadata) {
         debug(`[core]: Find parameter decorator metadata in ${Clzz.name}`);

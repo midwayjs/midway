@@ -157,9 +157,9 @@ export class MidwayContainer implements IMidwayGlobalContainer {
     }
 
     // inject constructor
-    const constructorProps = MetadataManager.getPropertiesWithMetadata<{
-      default: ConstructorInjectMetadata[];
-    }>(CONSTRUCTOR_INJECT_KEY, target);
+    const constructorProps = MetadataManager.getPropertiesWithMetadata<
+      ConstructorInjectMetadata[]
+    >(CONSTRUCTOR_INJECT_KEY, target);
 
     if (constructorProps['default']) {
       const argsLen = constructorProps['default'].length;

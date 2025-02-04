@@ -325,10 +325,12 @@ export class MetadataManager {
    * @param target - The target class to retrieve properties with metadata from.
    * @returns An object where the key is the property name and the value is the metadata value.
    */
-  public static getOwnPropertiesWithMetadata<T = Record<string, any>>(
+  public static getOwnPropertiesWithMetadata<T = any>(
     metadataKey: string | symbol,
     target: ClassType
-  ): T {
+  ): {
+    [key: string]: T;
+  } {
     // Ensure the target is a class
     target = this.formatTarget(target);
 
@@ -345,7 +347,9 @@ export class MetadataManager {
         }
         return result;
       },
-      {} as T
+      {} as {
+        [key: string]: T;
+      }
     );
   }
 
@@ -356,11 +360,15 @@ export class MetadataManager {
    * @param target - The target class to retrieve properties with metadata from.
    * @returns An object where the key is the property name and the value is the metadata value.
    */
-  public static getPropertiesWithMetadata<T = Record<string, any>>(
+  public static getPropertiesWithMetadata<T = any>(
     metadataKey: string | symbol,
     target: ClassType
-  ): T {
-    const propertiesWithMetadata = {} as T;
+  ): {
+    [key: string]: T;
+  } {
+    const propertiesWithMetadata = {} as {
+      [key: string]: T;
+    };
 
     // Traverse the prototype chain
     let currentTarget: ClassType | null = this.formatTarget(target);
