@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": [
+    "./src/**/*.ts"
+, "test/simple/prepend.test.ts", "test/simple/reconfigure.test.ts", "test/simple/setMax.test.ts", "test/simple/symbol.test.ts", "test/simple/ttl.test.ts"  ],
+  "noImplicitThis": false
+}

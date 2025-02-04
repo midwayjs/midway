@@ -216,7 +216,9 @@
         "extensions/swagger",
         "extensions/bullmq",
         "extensions/cron",
-        "extensions/jwt"
+        "extensions/jwt",
+        "extensions/tenant",
+        "extensions/events"
       ]
     },
     {
@@ -236,8 +238,7 @@
         "extensions/static_file",
         "extensions/cross_domain",
         "extensions/http-proxy",
-        "extensions/captcha",
-        "extensions/tenant"
+        "extensions/captcha"
       ]
     },
     {
