@@ -1,7 +1,4 @@
-import {
-  Configuration,
-  IMidwayContainer,
-} from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import { JoiValidationService } from './service';
 import * as validation from '@midwayjs/validation';
 
@@ -28,7 +25,9 @@ import * as validation from '@midwayjs/validation';
 export class ValidateConfiguration {
   async onReady(container: IMidwayContainer) {
     const validationService = await container.getAsync(JoiValidationService);
-    const validationServiceStore = await container.getAsync(validation.ValidationServiceStore);
+    const validationServiceStore = await container.getAsync(
+      validation.ValidationServiceStore
+    );
     validationServiceStore.setValidationService(validationService);
   }
 }

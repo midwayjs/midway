@@ -1,6 +1,11 @@
 import { Provide, Scope, ScopeEnum, Config } from '@midwayjs/core';
 import { z } from 'zod';
-import { getRuleMeta, IValidationService, MidwayValidationError, ValidationExtendOptions } from '@midwayjs/validation';
+import {
+  getRuleMeta,
+  IValidationService,
+  MidwayValidationError,
+  ValidationExtendOptions,
+} from '@midwayjs/validation';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -8,12 +13,20 @@ export class ZodValidationService implements IValidationService<z.ZodType> {
   @Config('validate')
   protected validateConfig;
 
-  async validate(clzType: any, value: any, options: ValidationExtendOptions = {}) {
+  async validate(
+    clzType: any,
+    value: any,
+    options: ValidationExtendOptions = {}
+  ) {
     const schema = this.getSchema(clzType);
     return this.validateWithSchema(schema, value, options);
   }
 
-  public validateWithSchema(schema: z.ZodType, value: any, options: ValidationExtendOptions = {}) {
+  public validateWithSchema(
+    schema: z.ZodType,
+    value: any,
+    options: ValidationExtendOptions = {}
+  ) {
     try {
       const result = schema.parse(value);
       return result;
@@ -49,4 +62,4 @@ export class ZodValidationService implements IValidationService<z.ZodType> {
   public getStringSchema(): z.ZodType<any, z.ZodTypeDef, any> {
     return z.string();
   }
-} 
+}

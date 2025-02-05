@@ -23,6 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@midwayjs/i18n": "workspace:^",
     "@midwayjs/validation": "workspace:^"
   },
   "devDependencies": {

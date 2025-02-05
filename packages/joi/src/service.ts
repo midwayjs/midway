@@ -1,15 +1,25 @@
-import {
-  Config,
-  Inject,
-  Singleton,
-} from '@midwayjs/core';
+import { Config, Inject, Singleton } from '@midwayjs/core';
 import * as Joi from 'joi';
-import { getRuleMeta, IValidationService, MidwayValidationError, ValidationExtendOptions } from '@midwayjs/validation';
+import {
+  getRuleMeta,
+  IValidationService,
+  MidwayValidationError,
+  ValidationExtendOptions,
+} from '@midwayjs/validation';
 import { MidwayI18nServiceSingleton, formatLocale } from '@midwayjs/i18n';
 
 @Singleton()
-export class JoiValidationService implements IValidationService<Joi.ObjectSchema<any> | Joi.NumberSchema<any> | Joi.BooleanSchema<any> | Joi.StringSchema<any> | Joi.ArraySchema<any> | Joi.ObjectSchema<any>> {
-
+export class JoiValidationService
+  implements
+    IValidationService<
+      | Joi.ObjectSchema<any>
+      | Joi.NumberSchema<any>
+      | Joi.BooleanSchema<any>
+      | Joi.StringSchema<any>
+      | Joi.ArraySchema<any>
+      | Joi.ObjectSchema<any>
+    >
+{
   @Config('validation')
   protected validateConfig;
 
@@ -19,12 +29,20 @@ export class JoiValidationService implements IValidationService<Joi.ObjectSchema
   @Inject()
   protected i18nService: MidwayI18nServiceSingleton;
 
-  public validate(ClzType: any, value: any, options: ValidationExtendOptions): Joi.ValidationResult<any> | undefined {
+  public validate(
+    ClzType: any,
+    value: any,
+    options: ValidationExtendOptions
+  ): Joi.ValidationResult<any> | undefined {
     const schema = this.getSchema(ClzType);
     return this.validateWithSchema(schema, value, options);
   }
 
-  public validateWithSchema(schema: Joi.ObjectSchema<any>, value: any, options: ValidationExtendOptions = {}): Joi.ValidationResult<any> | undefined {
+  public validateWithSchema(
+    schema: Joi.ObjectSchema<any>,
+    value: any,
+    options: ValidationExtendOptions = {}
+  ): Joi.ValidationResult<any> | undefined {
     if (!schema) {
       return undefined;
     }

@@ -41,10 +41,12 @@ export class ValidationService {
     value: any,
     options: ValidationOptions = {}
   ): any | undefined {
-    return this.validationServiceStore.getValidationService().validate(ClzType, value, {
-      ...options,
-      messages: this.messages,
-    });
+    return this.validationServiceStore
+      .getValidationService()
+      .validate(ClzType, value, {
+        ...options,
+        messages: this.messages,
+      });
   }
 
   public validateWithSchema<T>(
@@ -52,14 +54,18 @@ export class ValidationService {
     value: any,
     options: ValidationOptions = {}
   ): any | undefined {
-    return this.validationServiceStore.getValidationService().validateWithSchema(schema, value, {
-      ...options,
-      messages: this.messages,
-    });
+    return this.validationServiceStore
+      .getValidationService()
+      .validateWithSchema(schema, value, {
+        ...options,
+        messages: this.messages,
+      });
   }
 
   public getSchema(ClzType: any): any {
-    return this.validationServiceStore.getValidationService().getSchema(ClzType);
+    return this.validationServiceStore
+      .getValidationService()
+      .getSchema(ClzType);
   }
 }
 

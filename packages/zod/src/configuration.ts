@@ -7,15 +7,16 @@ import * as validation from '@midwayjs/validation';
   imports: [validation],
   importConfigs: [
     {
-      default: {
-      },
+      default: {},
     },
   ],
 })
 export class ZodValidateConfiguration {
   async onReady(container: IMidwayContainer) {
     const validationService = await container.getAsync(ZodValidationService);
-    const validationServiceStore = await container.getAsync(validation.ValidationServiceStore);
+    const validationServiceStore = await container.getAsync(
+      validation.ValidationServiceStore
+    );
     validationServiceStore.setValidationService(validationService);
   }
-} 
+}

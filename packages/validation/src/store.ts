@@ -1,6 +1,5 @@
-import { Singleton } from "@midwayjs/core";
-import { IValidationService } from "./interface";
-
+import { Singleton } from '@midwayjs/core';
+import { IValidationService } from './interface';
 
 @Singleton()
 export class ValidationServiceStore<Schema> {

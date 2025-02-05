@@ -27,13 +27,12 @@ export abstract class AbstractValidationPipe implements PipeTransform {
     schema: any
   ) {
     const validateOptions = this.parseValidationOptions(options);
-    return this.validationService.validate(
-      value,
-      {
+    return (
+      this.validationService.validate(value, {
         schema,
         validationOptions: validateOptions,
-      }
-    ) ?? value;
+      }) ?? value
+    );
   }
 
   public validate(value: any, options: TransformOptions) {
@@ -41,16 +40,20 @@ export abstract class AbstractValidationPipe implements PipeTransform {
     if (options.metaType.isBaseType) {
       return value;
     }
-    return this.validationService.validate(
-      options.metaType.originDesign as any,
-      value,
-      {
-        validateOptions,
-      }
-    ) ?? value;
+    return (
+      this.validationService.validate(
+        options.metaType.originDesign as any,
+        value,
+        {
+          validateOptions,
+        }
+      ) ?? value
+    );
   }
 
-  protected parseValidationOptions(options: TransformOptions): ValidationOptions {
+  protected parseValidationOptions(
+    options: TransformOptions
+  ): ValidationOptions {
     const validateOptions: ValidationOptions =
       MetadataManager.getMetadata(
         VALIDATE_KEY,
