@@ -2,7 +2,7 @@ import { IMidwayApplication, IMidwayContext, NextFunction as BaseNextFunction } 
 import { WorkerOptions, QueueOptions, Job, ConnectionOptions } from 'bullmq';
 
 export interface IProcessor {
-  execute(data: any, job: Job, token?: string): Promise<void>;
+  execute(data: any, job: Job, token?: string): Promise<any>;
 }
 
 export interface Application extends IMidwayApplication<Context> { }
