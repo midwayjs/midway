@@ -20,7 +20,7 @@ describe('/test/index.test.ts', () => {
         const fsWriteStream = createWriteStream(fileName);
         const fieldName = files[0].fieldName;
 
-        await new Promise(resolve => {
+        await new Promise<void>(resolve => {
           fsWriteStream.on('close', resolve);
           files[0].data.pipe(fsWriteStream);
         });
@@ -174,7 +174,7 @@ describe('/test/index.test.ts', () => {
         const fileName = join(tmpdir(), Date.now() + '_' + ctx.files[0].filename);
         const fsWriteStream = createWriteStream(fileName);
 
-        await new Promise(resolve => {
+        await new Promise<void>(resolve => {
           fsWriteStream.on('close', resolve);
           ctx.files[0].data.pipe(fsWriteStream);
         });
