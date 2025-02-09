@@ -673,6 +673,9 @@ importers:
 
   packages/joi:
     dependencies:
+      '@midwayjs/i18n':
+        specifier: workspace:^
+        version: link:../i18n
       '@midwayjs/validation':
         specifier: workspace:^
         version: link:../validation
@@ -1105,7 +1108,7 @@ importers:
         version: 6.37.5(sqlite3@5.1.7)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@22.13.0)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7))
+        version: 2.1.6(@types/node@22.13.1)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7))
       sqlite3:
         specifier: 5.1.7
         version: 5.1.7
@@ -1333,6 +1336,9 @@ importers:
       '@midwayjs/mock':
         specifier: workspace:^
         version: link:../mock
+      zod:
+        specifier: 3.24.1
+        version: 3.24.1
 
   packages/version: {}
 
@@ -3053,9 +3059,6 @@ packages:
 
   '@types/node@22.12.0':
     resolution: {integrity: sha512-Fll2FZ1riMjNmlmJOdAyY5pUbkftXslB5DgEzlIuNaiWhXd00FhWxVC/r4yV/4wBb9JfImTu+jiSvXTkJ7F/gA==}
-
-  '@types/node@22.13.0':
-    resolution: {integrity: sha512-ClIbNe36lawluuvq3+YYhnIN2CELi+6q8NpnM7PYp4hBn/TatfboPgVSm2rwKRfnV2M+Ty9GWDFI64KEe+kysA==}
 
   '@types/node@22.13.1':
     resolution: {integrity: sha512-jK8uzQlrvXqEU91UxiK5J7pKHyzgnI1Qnl0QDHIgVGuolJhRb9EEl28Cj9b3rGR8B2lhFCtvIm5os8lFnO/1Ew==}
@@ -11925,10 +11928,6 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
-  '@types/node@22.13.0':
-    dependencies:
-      undici-types: 6.20.0
-
   '@types/node@22.13.1':
     dependencies:
       undici-types: 6.20.0
@@ -16214,7 +16213,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.13.1
+      '@types/node': 22.12.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -18936,9 +18935,9 @@ snapshots:
 
   sequelize-pool@7.1.0: {}
 
-  sequelize-typescript@2.1.6(@types/node@22.13.0)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7)):
+  sequelize-typescript@2.1.6(@types/node@22.13.1)(@types/validator@13.12.2)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7)):
     dependencies:
-      '@types/node': 22.13.0
+      '@types/node': 22.13.1
       '@types/validator': 13.12.2
       glob: 7.2.0
       reflect-metadata: 0.2.2

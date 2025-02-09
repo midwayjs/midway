@@ -1,5 +1,6 @@
 import { Singleton } from '@midwayjs/core';
 import { IValidationService } from './interface';
+import { MidwayValidationStoreNotSetError } from './error';
 
 @Singleton()
 export class ValidationServiceStore<Schema> {
@@ -9,6 +10,9 @@ export class ValidationServiceStore<Schema> {
   }
 
   getValidationService() {
+    if (!this.validationService) {
+      throw new MidwayValidationStoreNotSetError();
+    }
     return this.validationService;
   }
 }

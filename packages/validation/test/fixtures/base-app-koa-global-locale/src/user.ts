@@ -1,8 +1,9 @@
 import { Controller, Post, Body } from '@midwayjs/core';
-import { Validate, Rule, RuleType } from '../../../../src';
+import { Validate, Rule } from '../../../../src';
+import { z } from 'zod';
 
 class UserDTO {
-  @Rule(RuleType.string().max(10))
+  @Rule(z.string().max(10))
   name: string;
 }
 

@@ -10,7 +10,7 @@ import * as i18n from '@midwayjs/i18n';
 import { VALIDATE_KEY } from './constants';
 import { ValidationServiceStore } from './store';
 import { ValidationService } from './service';
-import { ValidationOptions } from './interface';
+import { ValidateResult, ValidationOptions } from './interface';
 
 export abstract class AbstractValidationPipe implements PipeTransform {
   @Inject()
@@ -28,26 +28,26 @@ export abstract class AbstractValidationPipe implements PipeTransform {
   ) {
     const validateOptions = this.parseValidationOptions(options);
     return (
-      this.validationService.validate(value, {
+      this.validationService.validateWithSchema(
         schema,
-        validationOptions: validateOptions,
-      }) ?? value
+        value,
+        validateOptions
+      ) ?? value
     );
   }
 
-  public validate(value: any, options: TransformOptions) {
+  public validate(value: any, options: TransformOptions): ValidateResult | any {
     const validateOptions = this.parseValidationOptions(options);
-    if (options.metaType.isBaseType) {
+    // ValidationPipe 会走这个方法，所有的 @Get/@Post 等装饰器都会走一遍，所以为了性能考虑需要忽略基础类型和没有 schema 的类型
+    if (options.metaType.isBaseType || !options.metaType.originDesign) {
       return value;
     }
     return (
       this.validationService.validate(
         options.metaType.originDesign as any,
         value,
-        {
-          validateOptions,
-        }
-      ) ?? value
+        validateOptions
+      )?.value ?? value
     );
   }
 
@@ -67,6 +67,9 @@ export abstract class AbstractValidationPipe implements PipeTransform {
         validateOptions.locale = maybeCtx.getAttr(i18n.I18N_ATTR_KEY);
       }
     }
+
+    // pipe 的时候，固定抛出错误，不可配置
+    validateOptions.throwValidateError = true;
 
     return validateOptions;
   }
@@ -89,7 +92,7 @@ export abstract class ParsePipe extends AbstractValidationPipe {
       value,
       options,
       options.metadata['schema'] || this.getSchema()
-    );
+    )?.value;
   }
 }
 

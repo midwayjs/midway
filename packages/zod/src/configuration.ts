@@ -5,11 +5,6 @@ import * as validation from '@midwayjs/validation';
 @Configuration({
   namespace: 'zod',
   imports: [validation],
-  importConfigs: [
-    {
-      default: {},
-    },
-  ],
 })
 export class ZodValidateConfiguration {
   async onReady(container: IMidwayContainer) {

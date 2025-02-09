@@ -4,19 +4,25 @@ import {
   Init,
   MetadataManager,
   Singleton,
+  extend,
 } from '@midwayjs/core';
 import { RULES_KEY } from './constants';
-import { MidwayI18nServiceSingleton, formatLocale } from '@midwayjs/i18n';
+import {
+  MidwayI18nServiceSingleton,
+  formatLocale,
+  I18nOptions,
+} from '@midwayjs/i18n';
 import { ValidationServiceStore } from './store';
-import { ValidationOptions } from './interface';
+import { ValidateResult, ValidationOptions } from './interface';
+import { MidwayValidationError } from './error';
 
 @Singleton()
 export class ValidationService {
   @Config('validation')
-  protected validateConfig;
+  protected validateConfig: ValidationOptions;
 
   @Config('i18n')
-  protected i18nConfig;
+  protected i18nConfig: I18nOptions;
 
   @Inject()
   protected i18nService: MidwayI18nServiceSingleton;
@@ -30,9 +36,8 @@ export class ValidationService {
   protected async init() {
     const locales = Object.keys(this.i18nConfig.localeTable);
     locales.forEach(locale => {
-      this.messages[formatLocale(locale)] = Object.fromEntries(
-        this.i18nService.getLocaleMapping(locale, 'validate')
-      );
+      const mapping = this.i18nService.getLocaleMapping(locale, 'validate');
+      this.messages[formatLocale(locale)] = Object.fromEntries(mapping ?? []);
     });
   }
 
@@ -40,26 +45,39 @@ export class ValidationService {
     ClzType: T,
     value: any,
     options: ValidationOptions = {}
-  ): any | undefined {
-    return this.validationServiceStore
+  ): ValidateResult | undefined {
+    const anySchema = this.validationServiceStore
       .getValidationService()
-      .validate(ClzType, value, {
-        ...options,
-        messages: this.messages,
-      });
+      .getSchema(ClzType);
+    return this.validateWithSchema(anySchema, value, options);
   }
 
   public validateWithSchema<T>(
     schema: any,
     value: any,
     options: ValidationOptions = {}
-  ): any | undefined {
-    return this.validationServiceStore
+  ): ValidateResult | undefined {
+    if (!schema) {
+      return;
+    }
+
+    const newOptions = extend({}, this.validateConfig, options, {
+      messages: this.messages,
+    });
+
+    const res = this.validationServiceStore
       .getValidationService()
-      .validateWithSchema(schema, value, {
-        ...options,
-        messages: this.messages,
-      });
+      .validateWithSchema(schema, value, newOptions);
+
+    if (res.status === false && newOptions.throwValidateError) {
+      throw new MidwayValidationError(
+        res.message ?? 'validation failed',
+        newOptions.errorStatus || 422,
+        res.error
+      );
+    }
+
+    return res;
   }
 
   public getSchema(ClzType: any): any {

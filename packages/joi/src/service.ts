@@ -3,7 +3,8 @@ import * as Joi from 'joi';
 import {
   getRuleMeta,
   IValidationService,
-  MidwayValidationError,
+  ValidateResult,
+  ValidationOptions,
   ValidationExtendOptions,
 } from '@midwayjs/validation';
 import { MidwayI18nServiceSingleton, formatLocale } from '@midwayjs/i18n';
@@ -17,11 +18,10 @@ export class JoiValidationService
       | Joi.BooleanSchema<any>
       | Joi.StringSchema<any>
       | Joi.ArraySchema<any>
-      | Joi.ObjectSchema<any>
     >
 {
   @Config('validation')
-  protected validateConfig;
+  protected validateConfig: ValidationOptions;
 
   @Config('i18n')
   protected i18nConfig;
@@ -29,24 +29,11 @@ export class JoiValidationService
   @Inject()
   protected i18nService: MidwayI18nServiceSingleton;
 
-  public validate(
-    ClzType: any,
-    value: any,
-    options: ValidationExtendOptions
-  ): Joi.ValidationResult<any> | undefined {
-    const schema = this.getSchema(ClzType);
-    return this.validateWithSchema(schema, value, options);
-  }
-
   public validateWithSchema(
     schema: Joi.ObjectSchema<any>,
     value: any,
     options: ValidationExtendOptions = {}
-  ): Joi.ValidationResult<any> | undefined {
-    if (!schema) {
-      return undefined;
-    }
-
+  ): ValidateResult {
     options.validateOptions = options.validateOptions || {};
     options.validateOptions.errors = options.validateOptions.errors || {};
     options.validateOptions.errors.language = formatLocale(
@@ -58,25 +45,22 @@ export class JoiValidationService
       )
     );
 
-    const result = schema.validate(
-      value,
-      Object.assign(
-        {},
-        this.validateConfig.validationOptions ?? {},
-        {
-          messages: options.messages,
-        },
-        options.validateOptions ?? {}
-      )
-    );
+    const result = schema.validate(value, {
+      ...options.validateOptions,
+      messages: options.messages,
+    });
+
     if (result.error) {
-      throw new MidwayValidationError(
-        result.error.message,
-        options?.errorStatus ?? this.validateConfig.errorStatus,
-        result.error
-      );
+      return {
+        status: false,
+        error: result.error,
+        message: result.error.message,
+      };
     } else {
-      return result;
+      return {
+        status: true,
+        value: result.value,
+      };
     }
   }
 

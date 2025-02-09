@@ -1,45 +1,31 @@
-import { Provide, Scope, ScopeEnum, Config } from '@midwayjs/core';
+import { Singleton } from '@midwayjs/core';
 import { z } from 'zod';
 import {
   getRuleMeta,
   IValidationService,
-  MidwayValidationError,
+  ValidateResult,
   ValidationExtendOptions,
 } from '@midwayjs/validation';
 
-@Provide()
-@Scope(ScopeEnum.Singleton)
+@Singleton()
 export class ZodValidationService implements IValidationService<z.ZodType> {
-  @Config('validate')
-  protected validateConfig;
-
-  async validate(
-    clzType: any,
-    value: any,
-    options: ValidationExtendOptions = {}
-  ) {
-    const schema = this.getSchema(clzType);
-    return this.validateWithSchema(schema, value, options);
-  }
-
   public validateWithSchema(
     schema: z.ZodType,
     value: any,
     options: ValidationExtendOptions = {}
   ) {
-    try {
-      const result = schema.parse(value);
-      return result;
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        throw new MidwayValidationError(
-          err.message,
-          options.errorStatus || this.validateConfig?.errorStatus,
-          err
-        );
-      }
-      throw err;
+    const res = {} as ValidateResult;
+    const zodGlobalOptions = options.validateOptions;
+    const { success, data, error } = schema.safeParse(value, zodGlobalOptions);
+    if (success) {
+      res.status = true;
+      res.value = data;
+    } else {
+      res.status = false;
+      res.error = error;
+      res.message = error.errors.map(e => e.message).join(', ');
     }
+    return res;
   }
 
   public getSchema(ClzType: any): z.ZodType<any, z.ZodTypeDef, any> {
@@ -48,7 +34,7 @@ export class ZodValidationService implements IValidationService<z.ZodType> {
   }
 
   public getIntSchema(): z.ZodType<any, z.ZodTypeDef, any> {
-    return z.number();
+    return z.number().int();
   }
 
   public getBoolSchema(): z.ZodType<any, z.ZodTypeDef, any> {

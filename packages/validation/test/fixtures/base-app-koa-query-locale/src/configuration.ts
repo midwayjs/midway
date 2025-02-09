@@ -4,7 +4,10 @@ import * as koa from '@midwayjs/koa';
 @Catch()
 export class CatchAll {
   catch(err, ctx) {
-    return err.message;
+    return {
+      message: err.message,
+      locale: err.cause.locale,
+    };
   }
 }
 

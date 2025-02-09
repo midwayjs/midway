@@ -25,6 +25,7 @@
     "@midwayjs/i18n": "workspace:^"
   },
   "devDependencies": {
+    "zod": "3.24.1",
     "@midwayjs/core": "workspace:^",
     "@midwayjs/express": "workspace:^",
     "@midwayjs/koa": "workspace:^",

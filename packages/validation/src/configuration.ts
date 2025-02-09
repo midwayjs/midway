@@ -25,6 +25,7 @@ import { ValidationService } from './service';
       default: {
         validation: {
           errorStatus: 422,
+          throwValidateError: true,
         },
       },
     },
@@ -35,7 +36,7 @@ export class ValidationConfiguration {
   decoratorService: MidwayDecoratorService;
 
   @Inject()
-  validationService: ValidationService;
+  validateService: ValidationService;
 
   @Init()
   async init() {
@@ -43,7 +44,7 @@ export class ValidationConfiguration {
       VALID_KEY,
       ({ parameterIndex, originParamType, originArgs, metadata }) => {
         if (!metadata.schema) {
-          metadata.schema = this.validationService.getSchema(originParamType);
+          metadata.schema = this.validateService.getSchema(originParamType);
         }
         return originArgs[parameterIndex];
       }
@@ -56,16 +57,6 @@ export class ValidationConfiguration {
     await container.getAsync(ParseBoolPipe);
     await container.getAsync(ParseFloatPipe);
     await container.getAsync(DecoratorValidPipe);
-
-    this.decoratorService.registerParameterHandler(
-      VALID_KEY,
-      ({ parameterIndex, originParamType, originArgs, metadata }) => {
-        if (!metadata.schema) {
-          metadata.schema = this.validationService.getSchema(originParamType);
-        }
-        return originArgs[parameterIndex];
-      }
-    );
 
     // register web param default pipe
     this.decoratorService.registerParameterPipes(WEB_ROUTER_PARAM_KEY, [
