@@ -1,12 +1,3 @@
 import '@midwayjs/i18n';
-import * as Joi from 'joi';
+import '@midwayjs/validation';
 export * from './dist/index';
-
-declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig {
-    validate?: {
-      validationOptions?: Joi.ValidationOptions;
-      errorStatus?: number;
-    };
-  }
-}
