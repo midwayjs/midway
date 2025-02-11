@@ -1,0 +1,40 @@
+{
+  "name": "@midwayjs/zod",
+  "version": "4.0.0-alpha.1",
+  "description": "Midway Component for validation and use zod as validation tool",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "dependencies": {
+    "@midwayjs/validation": "workspace:^"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "workspace:^",
+    "zod": "3.24.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "zod",
+    "validate"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "MIT"
+} 

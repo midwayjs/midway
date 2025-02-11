@@ -173,10 +173,13 @@ export class MidwayI18nServiceSingleton {
    * @param locale
    * @param group
    */
-  public getLocaleMapping(locale: string, group = 'default') {
+  public getLocaleMapping(
+    locale: string,
+    group = 'default'
+  ): Map<string, any> | undefined {
     locale = formatLocale(locale);
     const langMap = this.localeTextMap.get(locale);
-    if (langMap) {
+    if (langMap && langMap.size > 0) {
       return langMap.get(group);
     }
   }
