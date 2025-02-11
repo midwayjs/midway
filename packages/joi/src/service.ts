@@ -85,3 +85,8 @@ export class JoiValidationService
     return Joi.string().required();
   }
 }
+
+export function getSchema(ClzType: any): Joi.ObjectSchema<any> {
+  const ruleMetas = getRuleMeta(ClzType);
+  return Joi.object(ruleMetas);
+}
