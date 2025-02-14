@@ -106,6 +106,9 @@ export class MikroConfiguration implements ILifeCycle {
       // create mikro request scope
       // https://mikro-orm.io/docs/identity-map
       this.applicationManager.getApplications().forEach(app => {
+        // some framework may not have an application instance initialized, such as grpc
+        // see: https://github.com/midwayjs/midway/issues/4293
+        if (!app) return;
         app.useMiddleware(async (ctx, next) => {
           if (RequestContext['createAsync']) {
             // mikro-orm 5.x
