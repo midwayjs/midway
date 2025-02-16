@@ -10,7 +10,7 @@ import {
 } from '@midwayjs/validation';
 import { createLightApp, close, createHttpRequest } from '@midwayjs/mock';
 import * as Joi from 'joi';
-import * as valid from '../src';
+import * as valid from '@midwayjs/validation';
 import {
   Provide,
   MetadataManager,
@@ -24,12 +24,20 @@ import {
 import * as assert from 'assert';
 import * as koa from '@midwayjs/koa';
 import { defineConfiguration } from '@midwayjs/core/functional';
+import joi from '../src';
 
 describe('test/index.test.ts', () => {
   describe('/test/check.test.ts', () => {
     it('check with check', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
 
       class TO {}
@@ -62,6 +70,13 @@ describe('test/index.test.ts', () => {
     it('check with check with extends', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
       class TO {}
 
@@ -95,6 +110,13 @@ describe('test/index.test.ts', () => {
     it('check with check with options', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
       class WorldDTO {
         @Rule(Joi.number().max(20))
@@ -129,6 +151,13 @@ describe('test/index.test.ts', () => {
     it('check with check with array', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
 
       class WorldDTO {
@@ -180,6 +209,13 @@ describe('test/index.test.ts', () => {
     it.skip('check with check and transform object', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
       class UserDTO {
         @Rule(Joi.number().max(10))
@@ -224,6 +260,13 @@ describe('test/index.test.ts', () => {
     it('check with no @Validate decorator', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
       class UserDTO {
         @Rule(Joi.number().max(10))
@@ -257,6 +300,13 @@ describe('test/index.test.ts', () => {
     it('check with check when vo have two level', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
       class WorldDTO {
         @Rule(Joi.number().max(20))
@@ -294,6 +344,13 @@ describe('test/index.test.ts', () => {
     it('check with check when vo have two level not equal', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
       class WorldDTO {
         @Rule(Joi.number().max(20))
@@ -339,6 +396,13 @@ describe('test/index.test.ts', () => {
     it('check with check when two level and array and not equal', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
       class WorldDTO {
         @Rule(Joi.number().max(20))
@@ -386,6 +450,13 @@ describe('test/index.test.ts', () => {
     it.skip('should transform string to number', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
       class UserNewDTO {
         @Rule(Joi.number().required())
@@ -421,6 +492,13 @@ describe('test/index.test.ts', () => {
     it('should test global validate config', async () => {
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
 
       class UserDTO {
@@ -464,7 +542,7 @@ describe('test/index.test.ts', () => {
       await close(app);
     });
 
-    it('test cascade with extends check', () => {
+    it('test cascade with extends check', async () => {
       class SchoolDTO {
         @Rule(Joi.string().required())
         name: string;
@@ -475,19 +553,34 @@ describe('test/index.test.ts', () => {
       class NewSchoolDTO extends OmitDto(SchoolDTO, ['address']) {}
 
       class UserDTO {
-        @Rule(Joi.array().items(getSchema(NewSchoolDTO)))
+        @Rule(() => Joi.array().items(getSchema(NewSchoolDTO)))
         schoolList: NewSchoolDTO[];
       }
 
-      const schema = getSchema(UserDTO);
-      const result = schema.validate({
+      const app = await createLightApp({
+        imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
+      });
+
+      const validateService = app.getApplicationContext().get(ValidationService);
+
+      const result = validateService.validate(UserDTO, {
         schoolList: [
           {
             address: 'abc',
           },
         ],
+      }, {
+        throwValidateError: false
       });
-      console.log(result);
+      expect(result.status).toBeFalsy();
+      expect(result.message).toEqual("\"schoolList[0].name\" is required");
     });
 
     it.skip('should support extends schema for class and property', async () => {
@@ -505,6 +598,13 @@ describe('test/index.test.ts', () => {
 
       const app = await createLightApp({
         imports: [valid],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
 
       // @Provide()
@@ -685,6 +785,11 @@ describe('test/index.test.ts', () => {
           i18n: {
             defaultLocale: 'zh_CN'
           },
+          validation: {
+            validators: {
+              joi,
+            },
+          }
         },
         preloadModules: [
           UserController,
@@ -738,6 +843,11 @@ describe('test/index.test.ts', () => {
           i18n: {
             defaultLocale: 'zh_CN'
           },
+          validation: {
+            validators: {
+              joi,
+            },
+          }
         },
       });
       const result = await createHttpRequest(app)
@@ -785,6 +895,11 @@ describe('test/index.test.ts', () => {
           i18n: {
             defaultLocale: 'en_US'
           },
+          validation: {
+            validators: {
+              joi,
+            },
+          }
         },
         preloadModules: [
           UserController,
@@ -847,6 +962,11 @@ describe('test/index.test.ts', () => {
           i18n: {
             defaultLocale: 'zh_CN'
           },
+          validation: {
+            validators: {
+              joi,
+            },
+          }
         },
       });
 
@@ -867,7 +987,7 @@ describe('test/index.test.ts', () => {
       }
 
       class UserDTO {
-        @Rule(Joi.string().max(10))
+        @Rule(Joi.string().max(10).message('hello world'))
         name: string;
       }
 
@@ -896,14 +1016,12 @@ describe('test/index.test.ts', () => {
           keys: '12345',
           i18n: {
             defaultLocale: 'zh_CN',
-            localeTable: {
-              zh_CN: {
-                validate: {
-                  'string.max': 'hello world',
-                },
-              },
-            },
           },
+          validation: {
+            validators: {
+              joi,
+            },
+          }
         },
       });
 
@@ -969,6 +1087,13 @@ describe('test/index.test.ts', () => {
         imports: [
           valid,
         ],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
 
       const validateService = await app.getApplicationContext().getAsync(ValidationService);
@@ -990,6 +1115,13 @@ describe('test/index.test.ts', () => {
         imports: [
           valid,
         ],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
 
       const validateService = await app.getApplicationContext().getAsync(ValidationService);
@@ -1014,6 +1146,13 @@ describe('test/index.test.ts', () => {
         imports: [
           valid,
         ],
+        globalConfig: {
+          validation: {
+            validators: {
+              joi,
+            },
+          }
+        }
       });
 
       const validateService = await app.getApplicationContext().getAsync(ValidationService);
@@ -1049,42 +1188,43 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           joi: {
             allowUnknown: true,
+          },
+          validation: {
+            validators: {
+              joi,
+            },
           }
         }
       });
 
       const validateService = await app.getApplicationContext().getAsync(ValidationService);
-      validateService.validate(
+      const result = validateService.validate(
         UserDTO,
         {
           age: 11,
+          t: 1
         },
-        {},
+        {
+          throwValidateError: false,
+        },
         {
           allowUnknown: false,
         }
       );
 
-      expect(
-        (validateService['validateConfig'] as any).validateOptions
-          .allowUnknown
-      ).toBe(true);
+      expect(result.error).toBeDefined();
 
       validateService.validateWithSchema(
         getSchema(UserDTO),
         {
           age: 11,
+          t: 1
         },
         {},
         {
-          allowUnknown: false,
+          allowUnknown: true,
         }
       );
-
-      expect(
-        (validateService['validateConfig'] as any).validateOptions
-          .allowUnknown
-      ).toBe(true);
     });
 
     it('should return undefined when schema is null', function () {

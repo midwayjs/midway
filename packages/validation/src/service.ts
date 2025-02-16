@@ -31,7 +31,7 @@ export class ValidationService {
   @ApplicationContext()
   protected applicationContext: IMidwayContainer;
 
-  protected validatorDefaultOptions = {};
+  defaultFallbackLocale: string;
 
   @Init()
   protected async init() {
@@ -40,16 +40,12 @@ export class ValidationService {
       registry.setDefaultValidator(this.validateConfig.defaultValidator);
     }
 
-    if (this.validateConfig.validators) {
-      // get validator default options
-      for (const name of Object.keys(this.validateConfig.validators)) {
-        this.validatorDefaultOptions[name] = this.configService.getConfiguration(name) || {};
-      }
-    } else {
+    if (!this.validateConfig.validators) {
       throw new MidwayCommonError('config.validation.validators is not set');
     }
 
     await registry.initValidators(this.applicationContext);
+    this.defaultFallbackLocale = formatLocale(this.i18nConfig.defaultLocale);
   }
 
   private getValidator(name: string) {
@@ -90,7 +86,8 @@ export class ValidationService {
     }
 
     const res = validator.validateWithSchema(schema, value, {
-      locale: formatLocale(validationOptions?.locale ?? this.i18nConfig.defaultLocale),
+      locale: formatLocale(validationOptions?.locale),
+      fallbackLocale: this.defaultFallbackLocale,
     }, validatorOptions);
 
     const throwValidateError = validationOptions?.throwValidateError ?? this.validateConfig.throwValidateError;

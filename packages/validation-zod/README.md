@@ -1,4 +1,4 @@
-# midway validate module
+# midway zod for validate module
 
 [![Package Quality](http://npm.packagequality.com/shield/@midwayjs/zod.svg)](http://packagequality.com/#?package=@midwayjs/zod)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)

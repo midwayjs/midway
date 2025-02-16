@@ -45,70 +45,6 @@ const lngMapping = {
 };
 
 const localeMapping = new Map();
-const zodValidator: IValidationService<z.ZodType> = {
-
-  async init(container) {
-    const i18nServiceSingleton = await container.getAsync(MidwayI18nServiceSingleton);
-
-    for (const locale of i18nServiceSingleton.getLocaleList('zod')) {
-      const instance = i18next.createInstance();
-      const newLocale = lngMapping[locale];
-      const cfg = {
-        lng: newLocale,
-        resources: {
-          [newLocale]: {
-            zod: i18nServiceSingleton.getOriginLocaleJSON(locale, 'zod'),
-          },
-        },
-      };
-      await instance.init(cfg);
-      localeMapping.set(locale, makeZodI18nMap(instance));
-    }
-  },
-
-  validateWithSchema(
-    schema: z.ZodType,
-    value: any,
-    options: ValidationExtendOptions,
-    validatorOptions: Partial<ParseParams> = {}
-  ) {
-    const res = {} as ValidateResult;
-    const locale = options.locale;
-    validatorOptions.errorMap = validatorOptions.errorMap || localeMapping.get(locale);
-
-    const { success, data, error } = schema.safeParse(value, validatorOptions);
-    if (success) {
-      res.status = true;
-      res.value = data;
-    } else {
-      res.status = false;
-      res.error = error;
-      res.message = fromError(error).toString();
-    }
-    return res;
-  },
-
-  getSchema(ClzType: any): z.ZodType<any, z.ZodTypeDef, any> {
-    const ruleMetas = getRuleMeta(ClzType);
-    return z.object(ruleMetas);
-  },
-
-  getIntSchema(): z.ZodType<any, z.ZodTypeDef, any> {
-    return z.number().int();
-  },
-
-  getBoolSchema(): z.ZodType<any, z.ZodTypeDef, any> {
-    return z.boolean();
-  },
-
-  getFloatSchema(): z.ZodType<any, z.ZodTypeDef, any> {
-    return z.number();
-  },
-
-  getStringSchema(): z.ZodType<any, z.ZodTypeDef, any> {
-    return z.string();
-  },
-}
 
 export default async (container: IMidwayContainer) => {
   const configService = container.get(MidwayConfigService);
@@ -124,5 +60,75 @@ export default async (container: IMidwayContainer) => {
       },
     }
   });
-  return zodValidator;
+  return new class implements IValidationService<z.ZodType> {
+    defaultZodOptions: z.ParseParams;
+
+    async init(container: IMidwayContainer) {
+      const i18nServiceSingleton = await container.getAsync(MidwayI18nServiceSingleton);
+      const configService = await container.getAsync(MidwayConfigService);
+      this.defaultZodOptions = configService.getConfiguration<z.ParseParams>('zod');
+
+      for (const locale of i18nServiceSingleton.getLocaleList('zod')) {
+        const instance = i18next.createInstance();
+        const newLocale = lngMapping[locale];
+        const cfg = {
+          lng: newLocale,
+          resources: {
+            [newLocale]: {
+              zod: i18nServiceSingleton.getOriginLocaleJSON(locale, 'zod'),
+            },
+          },
+        };
+        await instance.init(cfg);
+        localeMapping.set(locale, makeZodI18nMap(instance));
+      }
+    }
+
+    validateWithSchema(
+      schema: z.ZodType,
+      value: any,
+      options: ValidationExtendOptions,
+      validatorOptions: Partial<ParseParams> = {}
+    ) {
+      const res = {} as ValidateResult;
+      const locale = localeMapping.has(options.locale) ? options.locale : (localeMapping.has(options.fallbackLocale) ? options.fallbackLocale : 'en-us');
+      const newValidatorOptions = {
+        errorMap: localeMapping.get(locale),
+        ...this.defaultZodOptions,
+        ...validatorOptions,
+      }
+
+      const { success, data, error } = schema.safeParse(value, newValidatorOptions);
+      if (success) {
+        res.status = true;
+        res.value = data;
+      } else {
+        res.status = false;
+        res.error = error;
+        res.message = fromError(error).toString();
+      }
+      return res;
+    }
+
+    getSchema(ClzType: any): z.ZodType<any, z.ZodTypeDef, any> {
+      const ruleMetas = getRuleMeta(ClzType);
+      return z.object(ruleMetas);
+    }
+
+    getIntSchema(): z.ZodType<any, z.ZodTypeDef, any> {
+      return z.number().int();
+    }
+
+    getBoolSchema(): z.ZodType<any, z.ZodTypeDef, any> {
+      return z.boolean();
+    }
+
+    getFloatSchema(): z.ZodType<any, z.ZodTypeDef, any> {
+      return z.number();
+    }
+
+    getStringSchema(): z.ZodType<any, z.ZodTypeDef, any> {
+      return z.string();
+    }
+  };
 }

@@ -27,11 +27,14 @@ export default (container: IMidwayContainer) => {
   });
 
   return new class implements IValidationService<any> {
+    defaultValidatorOptions: Joi.ValidationOptions;
     async init() {
       const i18nServiceSingleton = await container.getAsync(MidwayI18nServiceSingleton);
       for (const locale of i18nServiceSingleton.getLocaleList('joi')) {
         localeMapping.set(locale, i18nServiceSingleton.getOriginLocaleJSON(locale, 'joi'));
       }
+
+      this.defaultValidatorOptions = configService.getConfiguration('joi');
     }
     public validateWithSchema(
       schema: Joi.ObjectSchema<any>,
@@ -39,11 +42,16 @@ export default (container: IMidwayContainer) => {
       options: ValidationExtendOptions,
       validatorOptions: any = {}
     ): ValidateResult {
-      const locale = options.locale;
-      validatorOptions.errors = validatorOptions.errors || {};
-      validatorOptions.errors.language = locale;
-      validatorOptions.messages = localeMapping.get(locale);
-      const result = schema.validate(value, validatorOptions);
+      const locale = localeMapping.has(options.locale) ? options.locale : (localeMapping.has(options.fallbackLocale) ? options.fallbackLocale : 'en-us');
+      const newValidatorOptions = {
+        errors: {
+          language: locale
+        },
+        messages: localeMapping.get(locale),
+        ...this.defaultValidatorOptions,
+        ...validatorOptions,
+      }
+      const result = schema.validate(value, newValidatorOptions);
 
       if (result.error) {
         return {

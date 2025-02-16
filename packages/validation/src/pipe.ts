@@ -9,7 +9,7 @@ import {
 import * as i18n from '@midwayjs/i18n';
 import { VALIDATE_KEY } from './constants';
 import { ValidationService } from './service';
-import { ValidateResult, ValidationOptions } from './interface';
+import { ValidationDecoratorOptions, ValidationOptions } from './interface';
 import { registry } from './registry';
 
 export abstract class AbstractValidationPipe implements PipeTransform {
@@ -22,30 +22,25 @@ export abstract class AbstractValidationPipe implements PipeTransform {
     value: any,
     options: TransformOptions,
     schema: any
-  ) {
-    const validateOptions = this.parseValidationOptions(options);
+  ): any {
+    const validateOptions: ValidationDecoratorOptions = this.parseValidationOptions(options);
     return (
       this.validationService.validateWithSchema(
         schema,
         value,
-        validateOptions
-      ) ?? value
+        validateOptions,
+        validateOptions?.validatorOptions
+      )?.value ?? value
     );
   }
 
-  public validate(value: any, options: TransformOptions): ValidateResult | any {
-    const validateOptions = this.parseValidationOptions(options);
+  public validate(value: any, options: TransformOptions): any {
     // ValidationPipe 会走这个方法，所有的 @Get/@Post 等装饰器都会走一遍，所以为了性能考虑需要忽略基础类型和没有 schema 的类型
     if (options.metaType.isBaseType || !options.metaType.originDesign) {
       return value;
     }
-    return (
-      this.validationService.validate(
-        options.metaType.originDesign as any,
-        value,
-        validateOptions
-      )?.value ?? value
-    );
+    const validateOptions: ValidationDecoratorOptions = this.parseValidationOptions(options);
+    return this.validationService.validate(options.metaType.originDesign as any, value, validateOptions, validateOptions?.validatorOptions)?.value ?? value;
   }
 
   protected parseValidationOptions(
@@ -89,7 +84,7 @@ export abstract class ParsePipe extends AbstractValidationPipe {
       value,
       options,
       options.metadata['schema'] || this.getSchema()
-    )?.value;
+    );
   }
 }
 

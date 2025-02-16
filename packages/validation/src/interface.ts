@@ -33,6 +33,10 @@ export interface ValidationExtendOptions {
    * The locale to use for validation messages.
    */
   locale: string;
+  /**
+   * The fallback locale to use for validation messages.
+   */
+  fallbackLocale: string;
 }
 
 export interface ValidateResult {

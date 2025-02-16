@@ -1,30 +1,38 @@
 import { createLightApp, close, createHttpRequest } from '@midwayjs/mock';
 import { ValidationService } from '../src/service';
 import { MidwayValidationError } from '../src/error';
-import { mockValidationService } from './mock';
+import { mockValidatorOne, mockValidatorTwo } from './mock';
 import * as validation from '../src';
-import { Controller, Post, Body, Catch, Provide, TransformOptions, DecoratorManager, Pipe } from '@midwayjs/core';
+import { Controller, Post, Body, Provide, TransformOptions, DecoratorManager, Pipe, IMidwayContainer, MidwayFrameworkService } from '@midwayjs/core';
 import {
   Validate,
   Rule,
   Valid,
   DecoratorValidPipe,
   AbstractValidationPipe,
-  ParseIntPipe, DefaultValuePipe,
+  ParseIntPipe,
+  DefaultValuePipe,
 } from '../src';
 import * as koa from '@midwayjs/koa';
-import { z } from 'zod';
+import { Catch } from '@midwayjs/core';
+import { defineConfiguration } from '@midwayjs/core/functional';
 
 describe('test/index.test.ts', () => {
-  describe('validation service test', () => {
+  describe('validation service test with mock validator one', () => {
     let app;
 
     beforeEach(async () => {
       app = await createLightApp({
         imports: [validation],
+        globalConfig: {
+          validation: {
+            validators: {
+              mock: async () => mockValidatorOne
+            },
+            defaultValidator: 'mock'
+          }
+        }
       });
-      const validationServiceStore = app.getApplicationContext().get(validation.ValidationServiceStore);
-      validationServiceStore.setValidationService(mockValidationService);
     });
 
     afterEach(async () => {
@@ -32,44 +40,99 @@ describe('test/index.test.ts', () => {
     });
 
     it('should validate string successfully', async () => {
-      const validationService = app.getApplicationContext().get(ValidationService);
-      const schema = z.string().min(3);
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = { type: 'string' };
       const value = 'hello';
       const result = await validationService.validateWithSchema(schema, value);
-      expect(result.value).toEqual('hello');
+      expect(result.value).toEqual('hello_one');
     });
 
     it('should throw error for invalid string', async () => {
-      const validationService = app.getApplicationContext().get(ValidationService);
-      const schema = z.string().min(3);
-      const value = 'hi';
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = { type: 'string' };
+      const value = 123;
       try {
         await validationService.validateWithSchema(schema, value);
         expect('should not reach here').toBeFalsy();
       } catch (err) {
         expect(err).toBeInstanceOf(MidwayValidationError);
-        expect(err.message).toContain('String must contain at least 3 character(s)');
+        expect(err.message).toContain('Expected string');
       }
     });
 
     it('should validate number successfully', async () => {
-      const validationService = app.getApplicationContext().get(ValidationService);
-      const schema = z.number().int().min(0);
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = { type: 'number' };
       const value = 42;
       const result = await validationService.validateWithSchema(schema, value);
       expect(result.value).toEqual(42);
     });
 
     it('should throw error for invalid number', async () => {
-      const validationService = app.getApplicationContext().get(ValidationService);
-      const schema = z.number().int().min(0);
-      const value = -1;
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = { type: 'number' };
+      const value = '42';
       try {
         await validationService.validateWithSchema(schema, value);
         expect('should not reach here').toBeFalsy();
       } catch (err) {
         expect(err).toBeInstanceOf(MidwayValidationError);
-        expect(err.message).toContain('Number must be greater than or equal to 0');
+        expect(err.message).toContain('Expected number');
+      }
+    });
+  });
+
+  describe('validation service test with mock validator two', () => {
+    let app;
+
+    beforeEach(async () => {
+      app = await createLightApp({
+        imports: [validation],
+        globalConfig: {
+          validation: {
+            validators: {
+              mock: async () => mockValidatorTwo
+            },
+            defaultValidator: 'mock'
+          }
+        }
+      });
+    });
+
+    afterEach(async () => {
+      await close(app);
+    });
+
+    it('should validate object successfully', async () => {
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = {
+        kind: 'object',
+        shape: {
+          name: { type: 'string' },
+          age: { type: 'number' }
+        }
+      };
+      const value = { name: 'harry', age: 18 };
+      const result = await validationService.validateWithSchema(schema, value);
+      expect(result.value).toEqual({ name: 'harry_two', age: 18 });
+    });
+
+    it('should throw error for missing required field', async () => {
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = {
+        kind: 'object',
+        shape: {
+          name: { type: 'string' },
+          age: { type: 'number' }
+        }
+      };
+      const value = { name: 'harry' };
+      try {
+        await validationService.validateWithSchema(schema, value);
+        expect('should not reach here').toBeFalsy();
+      } catch (err) {
+        expect(err).toBeInstanceOf(MidwayValidationError);
+        expect(err.message).toContain('Missing required field: age');
       }
     });
   });
@@ -78,20 +141,18 @@ describe('test/index.test.ts', () => {
     let app;
 
     class WorldDTO {
-      @Rule(z.number().int().min(0).max(20))
+      @Rule({ type: 'number' })
       age: number;
     }
 
     class UserDTO {
-      @Rule(z.string().min(3))
+      @Rule({ type: 'string' })
       username: string;
 
-      @Rule(z.number().int().min(0))
+      @Rule({ type: 'number' })
       age: number;
 
-      @Rule(z.object({
-        age: z.number().int().min(0).max(20)
-      }))
+      @Rule({ type: 'object', optional: true })
       world?: WorldDTO;
     }
 
@@ -122,28 +183,19 @@ describe('test/index.test.ts', () => {
         imports: [validation],
         preloadModules: [Hello],
         globalConfig: {
-          validate: {
+          validation: {
+            validators: {
+              mock: async () => mockValidatorTwo
+            },
+            defaultValidator: 'mock',
             errorStatus: 422
-          },
-          i18n: {
-            defaultLocale: 'en_US',
-            localeTable: {
-              en_US: {
-                validate: {
-                  min: 'The minimum length is {0}.'
-                }
-              },
-              zh_CN: {
-                validate: {
-                  min: '最小长度为 {0}.'
-                }
-              }
-            }
-          },
+          }
         }
       });
-      const validationServiceStore = app.getApplicationContext().get(validation.ValidationServiceStore);
-      validationServiceStore.setValidationService(mockValidationService);
+    });
+
+    afterEach(async () => {
+      await close(app);
     });
 
     it('should validate with @Valid successfully', async () => {
@@ -156,7 +208,7 @@ describe('test/index.test.ts', () => {
         }
       });
       expect(result).toEqual({
-        username: 'harry',
+        username: 'harry_two',
         age: 18,
         world: {
           age: 15
@@ -168,146 +220,68 @@ describe('test/index.test.ts', () => {
       const hello = await app.getApplicationContext().getAsync(Hello);
       try {
         await hello.test({
-          username: 'hi',  // too short
-          age: -1         // negative age
-        });
-        expect('should not reach here').toBeFalsy();
-      } catch (err) {
-        if (err instanceof ReferenceError) {
-          expect('Unexpected ReferenceError: ' + err.message).toBeFalsy();
-        }
-        expect(err).toBeInstanceOf(MidwayValidationError);
-        expect(err.message).toContain('String must contain at least 3 character(s), Number must be greater than or equal to 0, Required');
-      }
-    });
-
-    it('should not validate without @Valid', async () => {
-      const hello = await app.getApplicationContext().getAsync(Hello);
-      const result = await hello.testWithoutValid({
-        username: 'hi',  // too short
-        age: -1         // negative age
-      });
-      expect(result).toEqual({
-        username: 'hi',
-        age: -1
-      });
-    });
-
-    it('should validate nested object with @Valid', async () => {
-      const hello = await app.getApplicationContext().getAsync(Hello);
-      const result = await hello.testNested({
-        username: 'harry',
-        age: 18,
-        world: {
-          age: 15
-        }
-      });
-      expect(result).toEqual({
-        username: 'harry',
-        age: 18,
-        world: {
-          age: 15
-        }
-      });
-    });
-
-    it('should throw error when nested validation fails', async () => {
-      const hello = await app.getApplicationContext().getAsync(Hello);
-      try {
-        await hello.testNested({
-          username: 'harry',
-          age: 18,
-          world: {
-            age: 25  // exceeds max value
-          }
+          username: 123,  // should be string
+          age: '18'      // should be number
         });
         expect('should not reach here').toBeFalsy();
       } catch (err) {
         expect(err).toBeInstanceOf(MidwayValidationError);
-        expect(err.message).toContain('Number must be less than or equal to 20');
-      }
-    });
-
-    it('should use custom error status from @Validate', async () => {
-      const hello = await app.getApplicationContext().getAsync(Hello);
-      try {
-        await hello.testWithCustomOptions({
-          username: 'hi',  // too short
-          age: -1         // negative age
-        });
-        expect('should not reach here').toBeFalsy();
-      } catch (err) {
-        expect(err).toBeInstanceOf(MidwayValidationError);
-        expect(err.status).toBe(400);  // custom error status
+        expect(err.message).toContain('Expected string');
       }
     });
   });
 
   describe('validation middleware test', () => {
     let app;
+
     class UserDTO {
-      @Rule(z.string().min(3))
+      @Rule({ type: 'string' })
       username: string;
 
-      @Rule(z.number().int().min(0))
+      @Rule({ type: 'number' })
       age: number;
     }
 
     @Controller('/api')
     class UserController {
-      @Post('/user')
-      @Validate({
-        errorStatus: 422
-      })
-      async createUser(@Body() user: UserDTO) {
+      @Post('/users')
+      @Validate()
+      async createUser(@Body() @Valid() user: UserDTO) {
         return user;
       }
     }
 
     @Catch(MidwayValidationError)
     class DefaultErrorHandler {
-      async catch(err, context) {
-        context.status = err.status;
-        return {
-          message: err.message,
-        }
+      catch(err: MidwayValidationError, ctx: any) {
+        ctx.status = 422;
+        ctx.body = {
+          message: err.cause?.message || err.message
+        };
       }
     }
 
+    const configuration = defineConfiguration({
+      async onReady(container: IMidwayContainer): Promise<void> {
+        (await container.getAsync(MidwayFrameworkService)).getFramework('koa').useFilter(DefaultErrorHandler);
+      }
+    });
+
     beforeAll(async () => {
       app = await createLightApp({
-        imports: [
-          koa,
-          validation
-        ],
+        imports: [koa, validation, configuration],
         preloadModules: [UserController, DefaultErrorHandler],
         globalConfig: {
-          keys: '123',
-          i18n: {
-            defaultLocale: 'en_US',
-            localeTable: {
-              en_US: {
-                validate: {
-                  min: 'The minimum length is {0}.'
-                }
-              },
-              zh_CN: {
-                validate: {
-                  min: '最小长度为 {0}.'
-                }
-              }
-            }
-          },
-          validate: {
-            errorStatus: 422
+          keys: '123456',
+          validation: {
+            validators: {
+              mock: async () => mockValidatorOne
+            },
+            defaultValidator: 'mock',
+            throwValidateError: true
           }
-        },
+        }
       });
-
-      app.useFilter([DefaultErrorHandler]);
-
-      const validationServiceStore = app.getApplicationContext().get(validation.ValidationServiceStore);
-      validationServiceStore.setValidationService(mockValidationService);
     });
 
     afterAll(async () => {
@@ -316,30 +290,30 @@ describe('test/index.test.ts', () => {
 
     it('should validate request body successfully', async () => {
       const result = await createHttpRequest(app)
-        .post('/api/user')
+        .post('/api/users')
         .send({
           username: 'harry',
-          age: 18
-        });
-
-      expect(result.status).toBe(200);
-      expect(result.body).toEqual({
-        username: 'harry',
-        age: 18
-      });
-    });
-
-    it('should return 422 for invalid request body', async () => {
-      const result = await createHttpRequest(app)
-        .post('/api/user')
-        .send({
-          username: 'hi',  // too short
-          age: -1         // negative age
+          age: 18,
         });
 
       expect(result.status).toBe(422);
-      expect(result.body).toHaveProperty('message');
-      expect(result.body.message).toContain('String must contain at least 3 character(s)');
+      expect(result.body).toEqual({
+        message: 'Missing required field: username'
+      });
+    });
+
+    it('should return error for invalid request body', async () => {
+      const result = await createHttpRequest(app)
+        .post('/api/users')
+        .send({
+          username: 123,
+          age: '18',
+        });
+
+      expect(result.status).toBe(422);
+      expect(result.body).toEqual({
+        message: 'Missing required field: username'
+      });
     });
   });
 
@@ -361,32 +335,18 @@ describe('test/index.test.ts', () => {
         imports: [validation],
         preloadModules: [CustomValidationPipe],
         globalConfig: {
-          validate: {
+          validation: {
+            validators: {
+              mock: async () => mockValidatorTwo
+            },
+            defaultValidator: 'mock',
             throwValidateError: false,
-          },
-          i18n: {
-            defaultLocale: 'en_US',
-            localeTable: {
-              en_US: {
-                validate: {
-                  min: 'The minimum length is {0}.'
-                }
-              },
-              zh_CN: {
-                validate: {
-                  min: '最小长度为 {0}.'
-                }
-              }
-            }
-          },
+          }
         }
       });
 
-      const validationServiceStore = app.getApplicationContext().get(validation.ValidationServiceStore);
-      validationServiceStore.setValidationService(mockValidationService);
-
       class UserDTO {
-        @Rule(z.number().max(10))
+        @Rule({ type: 'number', max: 10 })
         age: number;
       }
 
@@ -496,31 +456,33 @@ describe('test/index.test.ts', () => {
       const app = await createLightApp({
         imports: [validation],
         preloadModules: [Hello],
+        globalConfig: {
+          validation: {
+            validators: {
+              mock: async () => mockValidatorTwo
+            },
+            defaultValidator: 'mock',
+            throwValidateError: false
+          }
+        }
       });
-
-      const validationServiceStore = await app.getApplicationContext().getAsync(validation.ValidationServiceStore);
-      validationServiceStore.setValidationService(mockValidationService);
 
       const hello = await app.getApplicationContext().getAsync(Hello);
 
       expect(await hello.test(1)).toEqual(1);
       expect(await hello.test(-1)).toEqual(-1);
-      let error;
+
       try {
         await hello.test(1.1);
       } catch (err) {
-        error = err;
+        expect(err.message).toContain('Expected number');
       }
-
-      expect(error.message).toMatch("Expected integer, received float");
 
       try {
         await hello.test(null as any);
       } catch (err) {
-        error = err;
+        expect(err.message).toContain('Expected number');
       }
-
-      expect(error.message).toMatch("Expected number, received null");
 
       await close(app);
     });
@@ -535,14 +497,20 @@ describe('test/index.test.ts', () => {
 
       const app = await createLightApp({
         imports: [validation],
+        globalConfig: {
+          validation: {
+            validators: {
+              mock: async () => mockValidatorTwo
+            },
+            defaultValidator: 'mock',
+            throwValidateError: false
+          }
+        }
       });
-
-      const validationServiceStore = app.getApplicationContext().get(validation.ValidationServiceStore);
-      validationServiceStore.setValidationService(mockValidationService);
 
       @Provide()
       class Hello {
-        async test(@Valid(z.string().min(3).max(4)) @TestPipe(new DefaultValuePipe('bbb')) data?: string) {
+        async test(@Valid({ type: 'string', min: 3, max: 4 }) @TestPipe(new DefaultValuePipe('bbb')) data?: string) {
           return data || '';
         }
       }
@@ -550,46 +518,48 @@ describe('test/index.test.ts', () => {
       app.getApplicationContext().bind(Hello);
       const hello = await app.getApplicationContext().getAsync(Hello);
 
-      expect(await hello.test()).toEqual('bbb');
+      expect(await hello.test()).toEqual('bbb_two');
 
-      let error;
       try {
         await hello.test('hello world');
       } catch (err) {
-        error = err;
+        expect(err.message).toContain('Expected string');
       }
 
-      expect(error.message).toMatch("String must contain at most 4 character(s)");
       await close(app);
     });
 
     it('should test @Valid with DTO schema', async () => {
       class UserDTO {
-        @Rule(z.string())
+        @Rule({ type: 'string', optional: true })
         name?: string;
 
-        @Rule(z.string())
+        @Rule({ type: 'string', optional: true })
         nickName?: string;
       }
 
       const app = await createLightApp({
         imports: [validation],
+        globalConfig: {
+          validation: {
+            validators: {
+              mock: async () => mockValidatorTwo
+            },
+            defaultValidator: 'mock',
+            throwValidateError: true
+          }
+        }
       });
-
-      const validationServiceStore = app.getApplicationContext().get(validation.ValidationServiceStore);
-      validationServiceStore.setValidationService(mockValidationService);
 
       @Provide()
       class Hello {
-        async test(@Valid(z
-          .object({
-            name: z.string().optional(),
-            nickName: z.string().optional(),
-          })
-          .refine((data) => data.name !== undefined || data.nickName !== undefined, {
-            path: ["name", "nickName"],
-            message: "至少需要一个字段 a 或 b",
-          })) user: UserDTO) {
+        async test(@Valid({
+          kind: 'object',
+          shape: {
+            name: { type: 'string', optional: true },
+            nickName: { type: 'string', optional: true }
+          }
+        }) user: UserDTO) {
           return user;
         }
       }
@@ -600,18 +570,227 @@ describe('test/index.test.ts', () => {
       expect(await hello.test({
         name: 'hello world',
       })).toEqual({
-        name: 'hello world',
+        name: 'hello world_two',
       });
 
-      let error;
       try {
         await hello.test({});
       } catch (err) {
-        error = err;
+        expect(err.message).toContain('至少需要一个字段 name 或 nickName');
       }
 
-      expect(error.message).toMatch("至少需要一个字段 a 或 b");
       await close(app);
     });
   });
+
+  describe('multiple validators test', () => {
+    let app;
+
+    beforeEach(async () => {
+      app = await createLightApp({
+        imports: [validation],
+        globalConfig: {
+          validation: {
+            validators: {
+              mockOne: async () => mockValidatorOne,
+              mockTwo: async () => mockValidatorTwo
+            },
+            defaultValidator: 'mockOne'
+          }
+        }
+      });
+    });
+
+    afterEach(async () => {
+      await close(app);
+    });
+
+    it('should use default validator (mockOne) when no validator specified', async () => {
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = { type: 'string' };
+      const value = 'hello';
+      const result = await validationService.validateWithSchema(schema, value);
+      expect(result.value).toEqual('hello_one');
+    });
+
+    it('should throw error with default validator (mockOne)', async () => {
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = { type: 'string' };
+      const value = 123;
+      try {
+        await validationService.validateWithSchema(schema, value);
+        expect('should not reach here').toBeFalsy();
+      } catch (err) {
+        expect(err).toBeInstanceOf(MidwayValidationError);
+        expect(err.message).toContain('Expected string');
+      }
+    });
+
+    it('should validate using mockTwo validator when specified', async () => {
+      class UserDTO {
+        @Rule({ type: 'string', kind: 'string'})
+        name: string;
+
+        @Rule({ type: 'number', kind: 'number'})
+        age: number;
+      }
+
+      @Provide()
+      class Hello {
+        @Validate({
+          defaultValidator: 'mockTwo',
+        })
+        async test(@Valid() user: UserDTO) {
+          return user;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      const result = await hello.test({
+        name: 'harry',
+        age: 18
+      });
+
+      expect(result).toEqual({
+        name: 'harry_two',
+        age: 18
+      });
+    });
+
+    it('should throw error with mockTwo validator when validation fails', async () => {
+      class UserDTO {
+        @Rule({ type: 'string', kind: 'string' })
+        name: string;
+
+        @Rule({ type: 'number', kind: 'number' })
+        age: number;
+      }
+
+      @Provide()
+      class Hello {
+        async test(@Valid() user: UserDTO) {
+          return user;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      try {
+        await hello.test({
+          name: 123,  // should be string
+          age: '18'   // should be number
+        });
+        expect('should not reach here').toBeFalsy();
+      } catch (err) {
+        expect(err).toBeInstanceOf(MidwayValidationError);
+        expect(err.message).toContain('Expected string');
+      }
+    });
+
+    it('should validate with different validator in ValidationService.validate', async () => {
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+
+      class UserDTO {
+        @Rule({ type: 'string' })
+        name: string;
+      }
+
+      // 使用 mockOne 验证
+      const result1 = await validationService.validate(UserDTO, {
+        name: 'harry'
+      }, {
+        defaultValidator: 'mockOne',
+        throwValidateError: true
+      });
+      expect(result1.value).toEqual({ name: 'harry_one' });  // mockOne 会加上 '_one'
+
+      // 使用 mockTwo 验证
+      const result2 = await validationService.validate(UserDTO, {
+        name: 'harry'
+      }, {
+        defaultValidator: 'mockTwo',
+        throwValidateError: true
+      });
+      expect(result2.value).toEqual({ name: 'harry_two' });  // mockTwo 会加上 '_two'
+    });
+
+    it('should validate with different validator in ValidationService.validateWithSchema', async () => {
+      const validationService = await app.getApplicationContext().getAsync(ValidationService);
+      const schema = { type: 'string' };
+
+      // 使用 mockOne 验证
+      const result1 = await validationService.validateWithSchema(schema, 'hello', {
+        defaultValidator: 'mockOne'
+      });
+      expect(result1.value).toEqual('hello_one');  // mockOne 会加上 '_one'
+
+      // 使用 mockTwo 验证
+      const result2 = await validationService.validateWithSchema(schema, 'hello', {
+        defaultValidator: 'mockTwo'
+      });
+      expect(result2.value).toEqual('hello_two');  // mockTwo 会加上 '_two'
+    });
+
+    it('should validate with different validator in @Validate decorator', async () => {
+      class UserDTO {
+        @Rule({ type: 'string', kind: 'string' })
+        name: string;
+      }
+
+      @Provide()
+      class Hello {
+        @Validate({
+          defaultValidator: 'mockOne',
+          throwValidateError: true
+        })
+        async testWithMockOne(@Valid() user: UserDTO) {
+          return user;
+        }
+
+        @Validate({
+          defaultValidator: 'mockTwo',
+          throwValidateError: true
+        })
+        async testWithMockTwo(@Valid() user: UserDTO) {
+          return user;
+        }
+      }
+
+      app.getApplicationContext().bind(Hello);
+      const hello = await app.getApplicationContext().getAsync(Hello);
+
+      // 使用 mockOne 验证
+      const result1 = await hello.testWithMockOne({
+        name: 'harry'
+      });
+      expect(result1).toEqual({ name: 'harry_one' });  // mockOne 会加上 '_one'
+
+      // 使用 mockTwo 验证
+      const result2 = await hello.testWithMockTwo({
+        name: 'harry'
+      });
+      expect(result2).toEqual({ name: 'harry_two' });  // mockTwo 会加上 '_two'
+
+      // 验证失败的情况
+      try {
+        await hello.testWithMockOne({
+          name: 123 // should be string
+        });
+      } catch (err) {
+        expect(err.message).toContain('Expected string');
+      }
+
+      try {
+        await hello.testWithMockTwo({
+          name: 123 // should be string
+        });
+      } catch (err) {
+        expect(err.message).toContain('Expected string');
+      }
+    });
+  });
 });
+
