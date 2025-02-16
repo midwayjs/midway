@@ -4,15 +4,13 @@ import {
   Init,
   MetadataManager,
   Singleton,
-  MidwayConfigService, MidwayCommonError,
+  MidwayConfigService,
+  MidwayCommonError,
   IMidwayContainer,
-  ApplicationContext
+  ApplicationContext,
 } from '@midwayjs/core';
 import { RULES_KEY } from './constants';
-import {
-  formatLocale,
-  I18nOptions,
-} from '@midwayjs/i18n';
+import { formatLocale, I18nOptions } from '@midwayjs/i18n';
 import { ValidateResult, ValidationOptions } from './interface';
 import { MidwayValidationError, MidwayValidatorNotFoundError } from './error';
 import { registry } from './registry';
@@ -63,10 +61,18 @@ export class ValidationService {
   ): ValidateResult | undefined {
     const validator = this.getValidator(validationOptions?.defaultValidator);
     if (!validator) {
-      throw new MidwayValidatorNotFoundError(validationOptions?.defaultValidator, 500);
+      throw new MidwayValidatorNotFoundError(
+        validationOptions?.defaultValidator,
+        500
+      );
     }
     const anySchema = validator.getSchema(ClzType);
-    return this.validateWithSchema(anySchema, value, validationOptions, validatorOptions);
+    return this.validateWithSchema(
+      anySchema,
+      value,
+      validationOptions,
+      validatorOptions
+    );
   }
 
   public validateWithSchema<T>(
@@ -82,16 +88,27 @@ export class ValidationService {
     const validator = this.getValidator(validationOptions?.defaultValidator);
 
     if (!validator) {
-      throw new MidwayValidatorNotFoundError(validationOptions?.defaultValidator, 500);
+      throw new MidwayValidatorNotFoundError(
+        validationOptions?.defaultValidator,
+        500
+      );
     }
 
-    const res = validator.validateWithSchema(schema, value, {
-      locale: formatLocale(validationOptions?.locale),
-      fallbackLocale: this.defaultFallbackLocale,
-    }, validatorOptions);
+    const res = validator.validateWithSchema(
+      schema,
+      value,
+      {
+        locale: formatLocale(validationOptions?.locale),
+        fallbackLocale: this.defaultFallbackLocale,
+      },
+      validatorOptions
+    );
 
-    const throwValidateError = validationOptions?.throwValidateError ?? this.validateConfig.throwValidateError;
-    const errorStatus = validationOptions?.errorStatus ?? this.validateConfig.errorStatus;
+    const throwValidateError =
+      validationOptions?.throwValidateError ??
+      this.validateConfig.throwValidateError;
+    const errorStatus =
+      validationOptions?.errorStatus ?? this.validateConfig.errorStatus;
 
     if (res.status === false && throwValidateError) {
       throw new MidwayValidationError(

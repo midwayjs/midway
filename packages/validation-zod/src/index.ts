@@ -1,11 +1,16 @@
 import { IMidwayContainer, MidwayConfigService } from '@midwayjs/core';
-import { getRuleMeta, IValidationService, ValidateResult, ValidationExtendOptions } from '@midwayjs/validation';
+import {
+  getRuleMeta,
+  IValidationService,
+  ValidateResult,
+  ValidationExtendOptions,
+} from '@midwayjs/validation';
 import { z, ParseParams } from 'zod';
 import { fromError } from 'zod-validation-error';
 import * as i18next from 'i18next';
 import { makeZodI18nMap } from 'zod-i18n-map';
-import * as en from "zod-i18n-map/locales/en/zod.json";
-import * as cn from "zod-i18n-map/locales/zh-CN/zod.json";
+import * as en from 'zod-i18n-map/locales/en/zod.json';
+import * as cn from 'zod-i18n-map/locales/zh-CN/zod.json';
 import { MidwayI18nServiceSingleton } from '@midwayjs/i18n';
 
 // 将 i18n 的标准 locale 转换为 zod-i18n-map 提供的 locale
@@ -41,7 +46,7 @@ const lngMapping = {
   'tr-tr': 'tr',
   'uk-ua': 'uk-UA',
   'zh-cn': 'zh-CN',
-  'zh-tw': 'zh-TW'
+  'zh-tw': 'zh-TW',
 };
 
 const localeMapping = new Map();
@@ -58,15 +63,18 @@ export default async (container: IMidwayContainer) => {
           zod: cn,
         },
       },
-    }
+    },
   });
-  return new class implements IValidationService<z.ZodType> {
+  return new (class implements IValidationService<z.ZodType> {
     defaultZodOptions: z.ParseParams;
 
     async init(container: IMidwayContainer) {
-      const i18nServiceSingleton = await container.getAsync(MidwayI18nServiceSingleton);
+      const i18nServiceSingleton = await container.getAsync(
+        MidwayI18nServiceSingleton
+      );
       const configService = await container.getAsync(MidwayConfigService);
-      this.defaultZodOptions = configService.getConfiguration<z.ParseParams>('zod');
+      this.defaultZodOptions =
+        configService.getConfiguration<z.ParseParams>('zod');
 
       for (const locale of i18nServiceSingleton.getLocaleList('zod')) {
         const instance = i18next.createInstance();
@@ -91,14 +99,21 @@ export default async (container: IMidwayContainer) => {
       validatorOptions: Partial<ParseParams> = {}
     ) {
       const res = {} as ValidateResult;
-      const locale = localeMapping.has(options.locale) ? options.locale : (localeMapping.has(options.fallbackLocale) ? options.fallbackLocale : 'en-us');
+      const locale = localeMapping.has(options.locale)
+        ? options.locale
+        : localeMapping.has(options.fallbackLocale)
+        ? options.fallbackLocale
+        : 'en-us';
       const newValidatorOptions = {
         errorMap: localeMapping.get(locale),
         ...this.defaultZodOptions,
         ...validatorOptions,
-      }
+      };
 
-      const { success, data, error } = schema.safeParse(value, newValidatorOptions);
+      const { success, data, error } = schema.safeParse(
+        value,
+        newValidatorOptions
+      );
       if (success) {
         res.status = true;
         res.value = data;
@@ -130,5 +145,5 @@ export default async (container: IMidwayContainer) => {
     getStringSchema(): z.ZodType<any, z.ZodTypeDef, any> {
       return z.string();
     }
-  };
-}
+  })();
+};

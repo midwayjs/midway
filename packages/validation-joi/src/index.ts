@@ -4,7 +4,7 @@ import {
   getRuleMeta,
   ValidateResult,
   ValidationExtendOptions,
-  IValidationService
+  IValidationService,
 } from '@midwayjs/validation';
 import { MidwayI18nServiceSingleton } from '@midwayjs/i18n';
 
@@ -23,15 +23,20 @@ export default (container: IMidwayContainer) => {
           joi: require('../locales/zh_CN.json'),
         },
       },
-    }
+    },
   });
 
-  return new class implements IValidationService<any> {
+  return new (class implements IValidationService<any> {
     defaultValidatorOptions: Joi.ValidationOptions;
     async init() {
-      const i18nServiceSingleton = await container.getAsync(MidwayI18nServiceSingleton);
+      const i18nServiceSingleton = await container.getAsync(
+        MidwayI18nServiceSingleton
+      );
       for (const locale of i18nServiceSingleton.getLocaleList('joi')) {
-        localeMapping.set(locale, i18nServiceSingleton.getOriginLocaleJSON(locale, 'joi'));
+        localeMapping.set(
+          locale,
+          i18nServiceSingleton.getOriginLocaleJSON(locale, 'joi')
+        );
       }
 
       this.defaultValidatorOptions = configService.getConfiguration('joi');
@@ -42,15 +47,19 @@ export default (container: IMidwayContainer) => {
       options: ValidationExtendOptions,
       validatorOptions: any = {}
     ): ValidateResult {
-      const locale = localeMapping.has(options.locale) ? options.locale : (localeMapping.has(options.fallbackLocale) ? options.fallbackLocale : 'en-us');
+      const locale = localeMapping.has(options.locale)
+        ? options.locale
+        : localeMapping.has(options.fallbackLocale)
+        ? options.fallbackLocale
+        : 'en-us';
       const newValidatorOptions = {
         errors: {
-          language: locale
+          language: locale,
         },
         messages: localeMapping.get(locale),
         ...this.defaultValidatorOptions,
         ...validatorOptions,
-      }
+      };
       const result = schema.validate(value, newValidatorOptions);
 
       if (result.error) {
@@ -87,5 +96,5 @@ export default (container: IMidwayContainer) => {
     public getStringSchema(): Joi.StringSchema<any> {
       return Joi.string().required();
     }
-  };
-}
+  })();
+};

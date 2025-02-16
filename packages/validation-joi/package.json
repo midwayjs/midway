@@ -23,11 +23,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@midwayjs/i18n": "workspace:^",
     "@midwayjs/validation": "workspace:^"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/express": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "joi": "17.13.3"

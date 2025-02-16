@@ -23,7 +23,8 @@ export abstract class AbstractValidationPipe implements PipeTransform {
     options: TransformOptions,
     schema: any
   ): any {
-    const validateOptions: ValidationDecoratorOptions = this.parseValidationOptions(options);
+    const validateOptions: ValidationDecoratorOptions =
+      this.parseValidationOptions(options);
     return (
       this.validationService.validateWithSchema(
         schema,
@@ -39,8 +40,16 @@ export abstract class AbstractValidationPipe implements PipeTransform {
     if (options.metaType.isBaseType || !options.metaType.originDesign) {
       return value;
     }
-    const validateOptions: ValidationDecoratorOptions = this.parseValidationOptions(options);
-    return this.validationService.validate(options.metaType.originDesign as any, value, validateOptions, validateOptions?.validatorOptions)?.value ?? value;
+    const validateOptions: ValidationDecoratorOptions =
+      this.parseValidationOptions(options);
+    return (
+      this.validationService.validate(
+        options.metaType.originDesign as any,
+        value,
+        validateOptions,
+        validateOptions?.validatorOptions
+      )?.value ?? value
+    );
   }
 
   protected parseValidationOptions(

@@ -3,6 +3,6 @@ import * as Joi from 'joi';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    joi?: Joi.ValidationOptions
+    joi?: Joi.ValidationOptions;
   }
 }

@@ -15,8 +15,13 @@ export class MidwayValidationError extends MidwayHttpError {
 
 export class MidwayValidatorNotFoundError extends MidwayHttpError {
   constructor(name: string, status: number, cause?: Error) {
-    super(`validator ${name} not found`, status, ValidateErrorCode.VALIDATOR_NOT_FOUND, {
-      cause,
-    });
+    super(
+      `validator ${name} not found`,
+      status,
+      ValidateErrorCode.VALIDATOR_NOT_FOUND,
+      {
+        cause,
+      }
+    );
   }
 }

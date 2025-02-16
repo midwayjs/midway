@@ -41,7 +41,6 @@ export class MidwayI18nServiceSingleton {
       });
     }
     // add origin locale json
-
   }
 
   /**

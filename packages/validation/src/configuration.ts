@@ -59,10 +59,18 @@ export class ValidationConfiguration {
       }
     );
 
-    const validators = this.configService.getConfiguration<Record<string, (container: IMidwayContainer) => Promise<IValidationService<any>>>>('validation.validators');
+    const validators = this.configService.getConfiguration<
+      Record<
+        string,
+        (container: IMidwayContainer) => Promise<IValidationService<any>>
+      >
+    >('validation.validators');
     if (validators) {
       for (const [name, validatorHandler] of Object.entries(validators)) {
-        registry.register(name, await validatorHandler(this.applicationContext));
+        registry.register(
+          name,
+          await validatorHandler(this.applicationContext)
+        );
       }
     }
   }
