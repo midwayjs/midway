@@ -1,3 +1,5 @@
+import { IMidwayContainer } from "@midwayjs/core";
+
 export interface ValidationOptions {
   /**
    * The status code to return when validation fails, default is 422.
@@ -13,18 +15,24 @@ export interface ValidationOptions {
    */
   locale?: string;
   /**
-   * The options to pass to the validation service.
-   * It will implement in the validation service of each extension.
+   * The validators to use for validation.
    */
-  validateOptions?: any;
+  validators?: Record<string, (container: IMidwayContainer) => Promise<IValidationService<any>>>;
+  /**
+   * The default validator to use for validation.
+   */
+  defaultValidator?: string;
 }
 
-export interface ValidationExtendOptions extends ValidationOptions {
+export interface ValidationDecoratorOptions extends ValidationOptions {
+  validatorOptions?: any;
+}
+
+export interface ValidationExtendOptions {
   /**
-   * The messages to use for validation.
-   * It will provide in the validation service of each extension.
+   * The locale to use for validation messages.
    */
-  messages?: any;
+  locale: string;
 }
 
 export interface ValidateResult {
@@ -51,10 +59,12 @@ export interface ValidateResult {
 }
 
 export interface IValidationService<Schema> {
+  init(container: IMidwayContainer): Promise<void>;
   validateWithSchema(
     schema: Schema,
     value: any,
-    options: ValidationExtendOptions
+    validationOptions: ValidationExtendOptions,
+    validatorOptions: any
   ): ValidateResult;
   getSchema(ClzType: any): any;
   getIntSchema(): Schema;

@@ -5,6 +5,8 @@ import {
   WEB_ROUTER_PARAM_KEY,
   IMidwayContainer,
   Init,
+  MidwayConfigService,
+  ApplicationContext,
 } from '@midwayjs/core';
 import * as i18n from '@midwayjs/i18n';
 import {
@@ -16,6 +18,8 @@ import {
 } from './pipe';
 import { VALID_KEY } from './constants';
 import { ValidationService } from './service';
+import { registry } from './registry';
+import { IValidationService } from './interface';
 
 @Configuration({
   namespace: 'validation',
@@ -36,6 +40,11 @@ export class ValidationConfiguration {
   decoratorService: MidwayDecoratorService;
 
   @Inject()
+  configService: MidwayConfigService;
+
+  @ApplicationContext()
+  applicationContext: IMidwayContainer;
+
   validateService: ValidationService;
 
   @Init()
@@ -49,9 +58,17 @@ export class ValidationConfiguration {
         return originArgs[parameterIndex];
       }
     );
+
+    const validators = this.configService.getConfiguration<Record<string, (container: IMidwayContainer) => Promise<IValidationService<any>>>>('validation.validators');
+    if (validators) {
+      for (const [name, validatorHandler] of Object.entries(validators)) {
+        registry.register(name, await validatorHandler(this.applicationContext));
+      }
+    }
   }
 
   async onReady(container: IMidwayContainer) {
+    this.validateService = await container.getAsync(ValidationService);
     await container.getAsync(ValidationPipe);
     await container.getAsync(ParseIntPipe);
     await container.getAsync(ParseBoolPipe);
@@ -62,5 +79,14 @@ export class ValidationConfiguration {
     this.decoratorService.registerParameterPipes(WEB_ROUTER_PARAM_KEY, [
       ValidationPipe,
     ]);
+
+    // register default validator if not set
+    if (!registry.getDefaultValidator()) {
+      registry.setFirstValidatorToDefault();
+    }
+  }
+
+  async onStop() {
+    registry.clear();
   }
 }

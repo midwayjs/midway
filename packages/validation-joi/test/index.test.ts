@@ -5,20 +5,30 @@ import {
   Valid,
   RULES_KEY,
   PickDto,
-  ValidationService
+  ValidationService,
+  getSchema,
 } from '@midwayjs/validation';
-import { createLightApp, close, createLegacyApp, createHttpRequest } from '@midwayjs/mock';
-import * as Joi from 'Joi';
+import { createLightApp, close, createHttpRequest } from '@midwayjs/mock';
+import * as Joi from 'joi';
 import * as valid from '../src';
-import { Provide, MetadataManager } from '@midwayjs/core';
+import {
+  Provide,
+  MetadataManager,
+  Controller,
+  Post,
+  Body,
+  Catch,
+  IMidwayContainer,
+  MidwayFrameworkService
+} from '@midwayjs/core';
 import * as assert from 'assert';
-import { getSchema } from '../src';
-import { join } from 'path';
+import * as koa from '@midwayjs/koa';
+import { defineConfiguration } from '@midwayjs/core/functional';
 
 describe('test/index.test.ts', () => {
   describe('/test/check.test.ts', () => {
     it('check with check', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
 
@@ -50,7 +60,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('check with check with extends', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
       class TO {}
@@ -83,7 +93,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('check with check with options', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
       class WorldDTO {
@@ -117,7 +127,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('check with check with array', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
 
@@ -168,7 +178,7 @@ describe('test/index.test.ts', () => {
     });
 
     it.skip('check with check and transform object', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
       class UserDTO {
@@ -212,7 +222,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('check with no @Validate decorator', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
       class UserDTO {
@@ -245,7 +255,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('check with check when vo have two level', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
       class WorldDTO {
@@ -282,7 +292,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('check with check when vo have two level not equal', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
       class WorldDTO {
@@ -327,7 +337,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('check with check when two level and array and not equal', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
       class WorldDTO {
@@ -374,7 +384,7 @@ describe('test/index.test.ts', () => {
     });
 
     it.skip('should transform string to number', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
       class UserNewDTO {
@@ -409,7 +419,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test global validate config', async () => {
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
 
@@ -421,7 +431,7 @@ describe('test/index.test.ts', () => {
       @Provide()
       class Hello {
         @Validate({
-          validateOptions: {
+          validatorOptions: {
             allowUnknown: true,
           },
           errorStatus: 400,
@@ -493,7 +503,7 @@ describe('test/index.test.ts', () => {
       // @Rule(getSchema(SubChild).and('name', 'nickName'))
       // class SubChild extends Child {}
 
-      const app = await createLightApp('', {
+      const app = await createLightApp({
         imports: [valid],
       });
 
@@ -633,9 +643,55 @@ describe('test/index.test.ts', () => {
 
   describe('test/i18n.test.ts', function () {
     it('should test with locale in decorator options', async () => {
-      const app = await createLegacyApp(
-        join(__dirname, 'fixtures/base-app-koa')
-      );
+      @Catch()
+      class CatchAll {
+        catch(err, ctx) {
+          return err.message;
+        }
+      }
+
+      class UserDTO {
+        @Rule(Joi.string().max(10))
+        name: string;
+      }
+
+      @Controller('/user')
+      class UserController {
+        @Post('/')
+        @Validate({
+          locale: 'zh_CN',
+        })
+        async aspectWithValidate(@Body() bodyData: UserDTO) {
+          return bodyData;
+        }
+
+        @Post('/global_options')
+        @Validate()
+        async global_options(@Body() bodyData: UserDTO) {
+          return bodyData;
+        }
+      }
+
+      const configuration = defineConfiguration({
+        async onReady(container: IMidwayContainer): Promise<void> {
+          (await container.getAsync(MidwayFrameworkService)).getFramework('koa').useFilter(CatchAll);
+        }
+      });
+
+      const app = await createLightApp({
+        imports: [koa, valid, configuration],
+        globalConfig: {
+          keys: '12345',
+          i18n: {
+            defaultLocale: 'zh_CN'
+          },
+        },
+        preloadModules: [
+          UserController,
+          CatchAll
+        ]
+      });
+
       const result = await createHttpRequest(app).post('/user/').send({
         name: 'abcdefghijklmn',
       });
@@ -645,9 +701,45 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with locale global options', async () => {
-      const app = await createLegacyApp(
-        join(__dirname, 'fixtures/base-app-koa-global-locale')
-      );
+      @Catch()
+      class CatchAll {
+        catch(err, ctx) {
+          return err.message;
+        }
+      }
+      class UserDTO {
+        @Rule(Joi.string().max(10))
+        name: string;
+      }
+
+      @Controller('/user')
+      class UserController {
+        @Post('/global_options')
+        @Validate()
+        async global_options(@Body() bodyData: UserDTO) {
+          return bodyData;
+        }
+      }
+
+      const configuration = defineConfiguration({
+        async onReady(container: IMidwayContainer): Promise<void> {
+          (await container.getAsync(MidwayFrameworkService)).getFramework('koa').useFilter(CatchAll);
+        }
+      });
+
+      const app = await createLightApp({
+        imports: [koa, valid, configuration],
+        preloadModules: [
+          UserController,
+          CatchAll
+        ],
+        globalConfig: {
+          keys: '12345',
+          i18n: {
+            defaultLocale: 'zh_CN'
+          },
+        },
+      });
       const result = await createHttpRequest(app)
         .post('/user/global_options')
         .send({
@@ -659,9 +751,46 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with query locale', async () => {
-      const app = await createLegacyApp(
-        join(__dirname, 'fixtures/base-app-koa-query-locale')
-      );
+      @Catch()
+      class CatchAll {
+        catch(err, ctx) {
+          return err.message;
+        }
+      }
+
+      class UserDTO {
+        @Rule(Joi.string().max(10))
+        name: string;
+      }
+
+      @Controller('/user')
+      class UserController {
+        @Post('/')
+        @Validate()
+        async aspectWithValidate(@Body() bodyData: UserDTO) {
+          return bodyData;
+        }
+      }
+
+      const configuration = defineConfiguration({
+        async onReady(container: IMidwayContainer): Promise<void> {
+          (await container.getAsync(MidwayFrameworkService)).getFramework('koa').useFilter(CatchAll);
+        }
+      });
+
+      const app = await createLightApp({
+        imports: [koa, valid, configuration],
+        globalConfig: {
+          keys: '12345',
+          i18n: {
+            defaultLocale: 'en_US'
+          },
+        },
+        preloadModules: [
+          UserController,
+          CatchAll
+        ],
+      });
       const result = await createHttpRequest(app)
         .post('/user/')
         .query({
@@ -676,9 +805,51 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with locale fallback', async () => {
-      const app = await createLegacyApp(
-        join(__dirname, 'fixtures/base-app-koa-fallback')
-      );
+
+      @Catch()
+      class CatchAll {
+        catch(err, ctx) {
+          return err.message;
+        }
+      }
+
+      class UserDTO {
+        @Rule(Joi.string().max(10))
+        name: string;
+      }
+
+      @Controller('/user')
+      class UserController {
+        @Post('/')
+        @Validate({
+          locale: 'tr_TR',
+        })
+        async aspectWithValidate(@Body() bodyData: UserDTO) {
+          return bodyData;
+        }
+      }
+
+
+      const configuration = defineConfiguration({
+        async onReady(container: IMidwayContainer): Promise<void> {
+          (await container.getAsync(MidwayFrameworkService)).getFramework('koa').useFilter(CatchAll);
+        }
+      });
+
+      const app = await createLightApp({
+        imports: [koa, valid, configuration],
+        preloadModules: [
+          UserController,
+          CatchAll
+        ],
+        globalConfig: {
+          keys: '12345',
+          i18n: {
+            defaultLocale: 'zh_CN'
+          },
+        },
+      });
+
       const result = await createHttpRequest(app).post('/user/').send({
         name: 'abcdefghijklmn',
       });
@@ -688,9 +859,54 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test with locale fallback use custom message', async () => {
-      const app = await createLegacyApp(
-        join(__dirname, 'fixtures/base-app-koa-custom-message')
-      );
+      @Catch()
+      class CatchAll {
+        catch(err, ctx) {
+          return err.message;
+        }
+      }
+
+      class UserDTO {
+        @Rule(Joi.string().max(10))
+        name: string;
+      }
+
+      @Controller('/user')
+      class UserController {
+        @Post('/')
+        @Validate()
+        async aspectWithValidate(@Body() bodyData: UserDTO) {
+          return bodyData;
+        }
+      }
+
+      const configuration = defineConfiguration({
+        async onReady(container: IMidwayContainer): Promise<void> {
+          (await container.getAsync(MidwayFrameworkService)).getFramework('koa').useFilter(CatchAll);
+        }
+      });
+
+      const app = await createLightApp({
+        imports: [koa, valid, configuration],
+        preloadModules: [
+          UserController,
+          CatchAll
+        ],
+        globalConfig:  {
+          keys: '12345',
+          i18n: {
+            defaultLocale: 'zh_CN',
+            localeTable: {
+              zh_CN: {
+                validate: {
+                  'string.max': 'hello world',
+                },
+              },
+            },
+          },
+        },
+      });
+
       const result = await createHttpRequest(app).post('/user/').send({
         name: 'abcdefghijklmn',
       });
@@ -700,7 +916,7 @@ describe('test/index.test.ts', () => {
     });
 
     it('should test invoke Joi with message and language', function () {
-      const result = require('Joi')
+      const result = Joi
         .string()
         .max(10)
         .validate('abcdefghijklmn', {
@@ -831,10 +1047,8 @@ describe('test/index.test.ts', () => {
           valid,
         ],
         globalConfig: {
-          validation: {
-            validateOptions: {
-              allowUnknown: true,
-            },
+          joi: {
+            allowUnknown: true,
           }
         }
       });
@@ -845,10 +1059,9 @@ describe('test/index.test.ts', () => {
         {
           age: 11,
         },
+        {},
         {
-          validateOptions: {
-            allowUnknown: false,
-          },
+          allowUnknown: false,
         }
       );
 
@@ -862,10 +1075,9 @@ describe('test/index.test.ts', () => {
         {
           age: 11,
         },
+        {},
         {
-          validateOptions: {
-            allowUnknown: false,
-          },
+          allowUnknown: false,
         }
       );
 

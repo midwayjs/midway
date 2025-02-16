@@ -4,17 +4,18 @@ import {
   Init,
   MetadataManager,
   Singleton,
-  extend,
+  MidwayConfigService, MidwayCommonError,
+  IMidwayContainer,
+  ApplicationContext
 } from '@midwayjs/core';
 import { RULES_KEY } from './constants';
 import {
-  MidwayI18nServiceSingleton,
   formatLocale,
   I18nOptions,
 } from '@midwayjs/i18n';
-import { ValidationServiceStore } from './store';
 import { ValidateResult, ValidationOptions } from './interface';
-import { MidwayValidationError } from './error';
+import { MidwayValidationError, MidwayValidatorNotFoundError } from './error';
+import { registry } from './registry';
 
 @Singleton()
 export class ValidationService {
@@ -25,54 +26,80 @@ export class ValidationService {
   protected i18nConfig: I18nOptions;
 
   @Inject()
-  protected i18nService: MidwayI18nServiceSingleton;
+  protected configService: MidwayConfigService;
 
-  @Inject()
-  protected validationServiceStore: ValidationServiceStore<any>;
+  @ApplicationContext()
+  protected applicationContext: IMidwayContainer;
 
-  protected messages = {};
+  protected validatorDefaultOptions = {};
 
   @Init()
   protected async init() {
-    const locales = Object.keys(this.i18nConfig.localeTable);
-    locales.forEach(locale => {
-      const mapping = this.i18nService.getLocaleMapping(locale, 'validate');
-      this.messages[formatLocale(locale)] = Object.fromEntries(mapping ?? []);
-    });
+    // set default validator if not set
+    if (this.validateConfig.defaultValidator) {
+      registry.setDefaultValidator(this.validateConfig.defaultValidator);
+    }
+
+    if (this.validateConfig.validators) {
+      // get validator default options
+      for (const name of Object.keys(this.validateConfig.validators)) {
+        this.validatorDefaultOptions[name] = this.configService.getConfiguration(name) || {};
+      }
+    } else {
+      throw new MidwayCommonError('config.validation.validators is not set');
+    }
+
+    await registry.initValidators(this.applicationContext);
+  }
+
+  private getValidator(name: string) {
+    if (name) {
+      return registry.getValidator(name);
+    }
+    return registry.getDefaultValidator();
   }
 
   public validate<T extends new (...args) => any>(
     ClzType: T,
     value: any,
-    options: ValidationOptions = {}
+    validationOptions?: ValidationOptions,
+    validatorOptions?: any
   ): ValidateResult | undefined {
-    const anySchema = this.validationServiceStore
-      .getValidationService()
-      .getSchema(ClzType);
-    return this.validateWithSchema(anySchema, value, options);
+    const validator = this.getValidator(validationOptions?.defaultValidator);
+    if (!validator) {
+      throw new MidwayValidatorNotFoundError(validationOptions?.defaultValidator, 500);
+    }
+    const anySchema = validator.getSchema(ClzType);
+    return this.validateWithSchema(anySchema, value, validationOptions, validatorOptions);
   }
 
   public validateWithSchema<T>(
     schema: any,
     value: any,
-    options: ValidationOptions = {}
+    validationOptions?: ValidationOptions,
+    validatorOptions?: any
   ): ValidateResult | undefined {
     if (!schema) {
       return;
     }
 
-    const newOptions = extend({}, this.validateConfig, options, {
-      messages: this.messages,
-    });
+    const validator = this.getValidator(validationOptions?.defaultValidator);
 
-    const res = this.validationServiceStore
-      .getValidationService()
-      .validateWithSchema(schema, value, newOptions);
+    if (!validator) {
+      throw new MidwayValidatorNotFoundError(validationOptions?.defaultValidator, 500);
+    }
 
-    if (res.status === false && newOptions.throwValidateError) {
+    const res = validator.validateWithSchema(schema, value, {
+      locale: formatLocale(validationOptions?.locale ?? this.i18nConfig.defaultLocale),
+    }, validatorOptions);
+
+    const throwValidateError = validationOptions?.throwValidateError ?? this.validateConfig.throwValidateError;
+    const errorStatus = validationOptions?.errorStatus ?? this.validateConfig.errorStatus;
+
+    if (res.status === false && throwValidateError) {
       throw new MidwayValidationError(
-        res.message ?? 'validation failed',
-        newOptions.errorStatus || 422,
+        res.message || 'validation failed',
+        errorStatus,
         res.error
       );
     }
@@ -80,15 +107,20 @@ export class ValidationService {
     return res;
   }
 
-  public getSchema(ClzType: any): any {
-    return this.validationServiceStore
-      .getValidationService()
-      .getSchema(ClzType);
+  public getSchema(ClzType: any, validatorName?: string): any {
+    const validator = this.getValidator(validatorName);
+    return validator.getSchema(ClzType);
   }
 }
 
 export function getRuleMeta<T extends new (...args) => any>(
   ClzType: T
 ): { [key: string]: any } {
-  return MetadataManager.getPropertiesWithMetadata(RULES_KEY, ClzType);
+  const props = MetadataManager.getPropertiesWithMetadata(RULES_KEY, ClzType);
+  for (const key in props) {
+    if (typeof props[key] === 'function') {
+      props[key] = props[key]();
+    }
+  }
+  return props;
 }

@@ -8,16 +8,13 @@ import {
 } from '@midwayjs/core';
 import * as i18n from '@midwayjs/i18n';
 import { VALIDATE_KEY } from './constants';
-import { ValidationServiceStore } from './store';
 import { ValidationService } from './service';
 import { ValidateResult, ValidationOptions } from './interface';
+import { registry } from './registry';
 
 export abstract class AbstractValidationPipe implements PipeTransform {
   @Inject()
   protected validationService: ValidationService;
-
-  @Inject()
-  protected validationServiceStore: ValidationServiceStore<any>;
 
   abstract transform(value: any, options: TransformOptions);
 
@@ -102,21 +99,21 @@ export class DecoratorValidPipe extends ParsePipe {}
 @Pipe()
 export class ParseIntPipe extends ParsePipe {
   getSchema(): any {
-    return this.validationServiceStore.getValidationService().getIntSchema();
+    return registry.getDefaultValidator().getIntSchema();
   }
 }
 
 @Pipe()
 export class ParseBoolPipe extends ParsePipe {
   getSchema(): any {
-    return this.validationServiceStore.getValidationService().getBoolSchema();
+    return registry.getDefaultValidator().getBoolSchema();
   }
 }
 
 @Pipe()
 export class ParseFloatPipe extends ParsePipe {
   getSchema(): any {
-    return this.validationServiceStore.getValidationService().getFloatSchema();
+    return registry.getDefaultValidator().getFloatSchema();
   }
 }
 

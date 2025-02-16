@@ -1,11 +1,15 @@
 {
-  "name": "@midwayjs/zod",
+  "name": "@midwayjs/validation-zod",
   "version": "4.0.0-alpha.1",
   "description": "Midway Component for validation and use zod as validation tool",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/validation": "workspace:^"
+    "@midwayjs/validation": "workspace:^",
+    "@midwayjs/i18n": "workspace:^",
+    "zod-validation-error": "3.4.0",
+    "zod-i18n-map": "2.27.0",
+    "i18next": "24.2.2"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
@@ -37,4 +41,4 @@
     "node": ">=12"
   },
   "license": "MIT"
-} 
+}

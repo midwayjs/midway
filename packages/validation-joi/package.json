@@ -1,5 +1,5 @@
 {
-  "name": "@midwayjs/joi",
+  "name": "@midwayjs/validation-joi",
   "version": "4.0.0-alpha.1",
   "description": "Midway Component for validation and use joi as validation tool",
   "main": "dist/index.js",
@@ -15,15 +15,14 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
-    "locales",
-    "index.d.ts"
+    "index.d.ts",
+    "locales"
   ],
   "engines": {
     "node": ">=12"
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/i18n": "workspace:^",
     "@midwayjs/validation": "workspace:^"
   },
   "devDependencies": {

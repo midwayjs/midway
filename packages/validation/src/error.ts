@@ -2,7 +2,7 @@ import { MidwayHttpError, registerErrorCode } from '@midwayjs/core';
 
 const ValidateErrorCode = registerErrorCode('validate', {
   VALIDATE_FAIL: 10000,
-  VALIDATE_STORE_NOT_SET: 10001,
+  VALIDATOR_NOT_FOUND: 10001,
 } as const);
 
 export class MidwayValidationError extends MidwayHttpError {
@@ -13,12 +13,10 @@ export class MidwayValidationError extends MidwayHttpError {
   }
 }
 
-export class MidwayValidationStoreNotSetError extends MidwayHttpError {
-  constructor() {
-    super(
-      'Validation store is not set',
-      500,
-      ValidateErrorCode.VALIDATE_STORE_NOT_SET
-    );
+export class MidwayValidatorNotFoundError extends MidwayHttpError {
+  constructor(name: string, status: number, cause?: Error) {
+    super(`validator ${name} not found`, status, ValidateErrorCode.VALIDATOR_NOT_FOUND, {
+      cause,
+    });
   }
 }

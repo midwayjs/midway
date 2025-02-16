@@ -23,6 +23,6 @@ export function formatWithObject(text, values) {
 }
 
 export function formatLocale(locale: string) {
-  // support zh_CN, en_US => zh-CN, en-US
+  // support zh_CN, en_US => zh-cn, en-us
   return locale.replace('_', '-').toLowerCase();
 }
