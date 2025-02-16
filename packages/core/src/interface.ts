@@ -957,7 +957,7 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
    * Get all configuration values or get the specified configuration through parameters
    * @param key config key
    */
-  getConfig(key?: string): any;
+  getConfig<T = any>(key?: string): T;
 
   /**
    * Get default logger object or get the specified logger through parameters
