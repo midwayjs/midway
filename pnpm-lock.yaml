@@ -652,19 +652,6 @@ importers:
         specifier: workspace:^
         version: link:../mock
 
-  packages/i18n-i18next:
-    dependencies:
-      i18next:
-        specifier: 24.2.2
-        version: 24.2.2(typescript@5.3.3)
-    devDependencies:
-      '@midwayjs/core':
-        specifier: workspace:^
-        version: link:../core
-      '@midwayjs/mock':
-        specifier: workspace:^
-        version: link:../mock
-
   packages/info:
     dependencies:
       picomatch:
@@ -1330,6 +1317,9 @@ importers:
 
   packages/validation-joi:
     dependencies:
+      '@midwayjs/i18n':
+        specifier: workspace:^
+        version: link:../i18n
       '@midwayjs/validation':
         specifier: workspace:^
         version: link:../validation
@@ -1337,9 +1327,6 @@ importers:
       '@midwayjs/core':
         specifier: workspace:^
         version: link:../core
-      '@midwayjs/express':
-        specifier: workspace:^
-        version: link:../web-express
       '@midwayjs/koa':
         specifier: workspace:^
         version: link:../web-koa
@@ -1352,6 +1339,9 @@ importers:
 
   packages/validation-zod:
     dependencies:
+      '@midwayjs/i18n':
+        specifier: workspace:^
+        version: link:../i18n
       '@midwayjs/validation':
         specifier: workspace:^
         version: link:../validation

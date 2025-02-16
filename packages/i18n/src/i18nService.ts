@@ -40,7 +40,6 @@ export class MidwayI18nServiceSingleton {
         locale: formatLocale(this.i18nConfig.fallbacks[rule]),
       });
     }
-    // add origin locale json
   }
 
   /**
