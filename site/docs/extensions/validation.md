@@ -1,6 +1,10 @@
 # 参数校验
 
-本模块自 v4.0.0 起替换 @midwayjs/validate 组件。新版本提供了更灵活的验证器扩展机制，支持多种验证器（如 Joi、Zod 等）的无缝切换，并提供了更好的类型支持和性能优化。
+我们经常要在方法调用时执行一些类型检查，参数转换的操作，Midway 提供了一种简单的能力来快速检查参数的类型
+
+本模块自 `v4.0.0` 起替换 `@midwayjs/validate` 组件。
+
+新版本提供了更灵活的验证器扩展机制，支持多种验证器（如 Joi、Zod 等）的无缝切换，并提供了更好的类型支持和性能优化。
 
 相关信息：
 
@@ -12,11 +16,13 @@
 | 包含独立主框架    | ❌    |
 | 包含独立日志      | ❌    |
 
+
+
 ## 背景
 
 最常用参数校验的地方是控制器（Controller），同时你也可以在任意的 Class 中使用这个能力。
 
-我们以控制器（Controller）中使用为例，还是那个 user。
+我们以控制器（Controller）中使用为例。
 
 ```typescript
 ➜  my_midway_app tree
@@ -66,17 +72,23 @@ export class HomeController {
 
 针对这种情况，Midway 提供了 Validation 组件。配合 `@Validate` 和 `@Rule` 装饰器，用来 **快速定义校验的规则**，帮助用户 **减少这些重复的代码**。
 
+下面的通用能力将以  [joi](https://joi.dev/api/)  来举例。
+
+
+
 ## 安装依赖
 
-首先，你需要安装 validation 组件和你选择的验证器：
+你需要安装 validation 组件以及对应验证器。
 
 ```bash
 ## 安装 validation 组件
 $ npm i @midwayjs/validation@4 --save
 
 ## 选择一个或多个验证器
-$ npm i @midwayjs/validation-joi@4 --save  # 使用 Joi 验证器
-$ npm i @midwayjs/validation-zod@4 --save  # 使用 Zod 验证器
+$ npm i @midwayjs/validation-joi@4 --save
+
+## 基础库
+$ npm i joi --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -85,8 +97,8 @@ $ npm i @midwayjs/validation-zod@4 --save  # 使用 Zod 验证器
 {
   "dependencies": {
     "@midwayjs/validation": "^4.0.0",
-    "@midwayjs/validation-joi": "^4.0.0",  // 使用 Joi 验证器
-    "@midwayjs/validation-zod": "^4.0.0",  // 使用 Zod 验证器
+    "@midwayjs/validation-joi": "^4.0.0",
+    "joi": "^17.13.3",
     // ...
   },
   "devDependencies": {
@@ -127,32 +139,26 @@ export class MainConfiguration {
 
 ```typescript
 // src/config/config.default.ts
-import * as joi from '@midwayjs/validation-joi';  // 导入 Joi 验证器
-import * as zod from '@midwayjs/validation-zod';  // 导入 Zod 验证器
+import * as joi from '@midwayjs/validation-joi';
 
 export default {
   // ...
   validation: {
     // 配置验证器
     validators: {
-      joi,      // 使用 Joi 验证器
-      zod,      // 使用 Zod 验证器
+      joi,
     },
     // 设置默认验证器
-    defaultValidator: 'joi'  // 或 'zod'
+    defaultValidator: 'joi'
   }
 }
 ```
 
-## 使用 Joi 验证器
 
-如果你选择使用 Joi 验证器，需要先安装 `joi` 包：
 
-```bash
-$ npm i joi --save
-```
+## 校验规则
 
-然后就可以使用 Joi 的验证规则：
+通过 `@Rule` 装饰器，可以传递校验规则。
 
 ```typescript
 import { Rule } from '@midwayjs/validation';
@@ -173,34 +179,7 @@ export class UserDTO {
 }
 ```
 
-## 使用 Zod 验证器
 
-如果你选择使用 Zod 验证器，需要先安装 `zod` 包：
-
-```bash
-$ npm i zod --save
-```
-
-然后就可以使用 Zod 的验证规则：
-
-```typescript
-import { Rule } from '@midwayjs/validation';
-import { z } from 'zod';
-
-export class UserDTO {
-  @Rule(z.number().min(1))
-  id: number;
-
-  @Rule(z.string().min(1))
-  firstName: string;
-
-  @Rule(z.string().max(10))
-  lastName: string;
-
-  @Rule(z.number().max(60))
-  age: number;
-}
-```
 
 ## 校验参数
 
@@ -348,48 +327,35 @@ export class ParseCustomDataPipe extends ParsePipe {
 }
 ```
 
+
+
 ## 多语言
 
-在 Validation 中，同时依赖了 [i18n](./i18n) 组件来实现校验消息的国际化。
+在 Validation 中，同时依赖了 [i18n](./i18n) 组件来实现校验消息的国际化，不同的校验器会各自包含多语言的资源。
 
-### Joi 多语言支持
-
-Joi 验证器默认提供了 `en_US` 和 `zh_CN` 两种校验的翻译文本。
-
-### Zod 多语言支持
-
-Zod 验证器使用了 `zod-i18n-map` 提供的翻译，支持更多的语言，包括：
-
-- 简体中文 (zh-CN)
-- 繁体中文 (zh-TW)
-- 英语 (en)
-- 日语 (ja)
-- 韩语 (ko)
-- 俄语 (ru)
-等多种语言。
-
-### 通过装饰器指定语言
+比如 Joi 验证器默认提供了 `en_US` 和 `zh_CN` 两种校验的翻译文本，如有需要，你可以增加其他语言的资源。
 
 ```typescript
-@Controller('/user')
-export class UserController {
-  @Post('/')
-  @Validate({
-    locale: 'en_US',  // 或其他支持的语言代码
-  })
-  async getUser(@Body() bodyData: UserDTO) {
-    // ...
-  }
+// src/config/config.default.ts
+
+export default {
+  // ...
+  i18n: {
+    localeTable: {
+      en_US: {
+        joi: require('../locales/en_US.json'),
+      },
+      zh_CN: {
+        joi: require('../locales/zh_CN.json'),
+      },
+    },
+  },
 }
 ```
 
-### 通过参数指定语言
 
-除了装饰器指定，我们也可以使用标准的 i18n 通过参数指定语言的方式。
 
-```
-Get /user/get_user?locale=zh_CN
-```
+
 
 ## 默认配置
 
@@ -401,6 +367,8 @@ Get /user/get_user?locale=zh_CN
 | locale            | string                        | 校验出错文本的默认语言，默认为 `en_US`，会根据 i18n 组件的规则切换 |
 | validators        | Record<string, Function>      | 配置要使用的验证器                                           |
 | defaultValidator  | string                        | 设置默认使用的验证器                                         |
+
+
 
 ## 独立的校验服务
 
@@ -426,7 +394,166 @@ export class UserService {
 }
 ```
 
-## 自定义验证器
+
+
+## 高级
+
+
+
+### 使用 Zod 验证器
+
+如果你选择使用 Zod 验证器，需要先安装 `zod` 和相关依赖包：
+
+```bash
+$ npm i @midwayjs/validation@4 @midwayjs/validation-zod@4 zod --save
+```
+
+在配置文件中设置验证器：
+
+```typescript
+// src/config/config.default.ts
+import * as zod from '@midwayjs/validation-zod';
+
+export default {
+  // ...
+  validation: {
+    // 配置验证器
+    validators: {
+      'zod': zod,
+    },
+    // 设置默认验证器
+    defaultValidator: 'zod'
+  }
+}
+```
+
+然后就可以使用 Zod 的验证规则：
+
+```typescript
+import { Rule } from '@midwayjs/validation';
+import { z } from 'zod';
+
+export class UserDTO {
+  @Rule(z.number().min(1))
+  id: number;
+
+  @Rule(z.string().min(1))
+  firstName: string;
+
+  @Rule(z.string().max(10))
+  lastName: string;
+
+  @Rule(z.number().max(60))
+  age: number;
+}
+```
+
+Zod 验证器使用了 `zod-i18n-map` 提供的翻译，支持更多的语言，包括：
+
+- 简体中文 (zh-CN)
+- 繁体中文 (zh-TW)
+- 英语 (en)
+- 日语 (ja)
+- 韩语 (ko)
+- 俄语 (ru)
+  等多种语言。
+
+
+
+### 混用验证器
+
+你可以在同一个项目中配置了多个验证器。
+
+```typescript
+// src/config/config.default.ts
+import * as joi from '@midwayjs/validation-joi';
+import * as zod from '@midwayjs/validation-zod';
+
+export default {
+  // ...
+  validation: {
+    // 配置验证器
+    validators: {
+      'joi': joi,
+      'zod': zod,
+    },
+    // 设置默认验证器
+    defaultValidator: 'joi'
+  }
+}
+```
+
+ `@Rule` 装饰器的参数可以使用不同的校验规则。
+
+```typescript
+import { Rule } from '@midwayjs/validation';
+import * as Joi from 'joi';
+import { z } from 'zod';
+
+export class UserDTO {
+  @Rule(Joi.number().required())
+  id: number;
+  
+  @Rule(Joi.string().required())
+  name: string;
+}
+
+export class AnotherUserDTO {
+  @Rule(z.number())
+  id: number;
+  
+  @Rule(z.string().min(1))
+  name: string;
+}
+```
+
+:::tip
+
+你不能在同一个类中使用不同的验证器。
+
+:::
+
+可以通过 `defaultValidator` 手动选择指定哪种验证器生效。
+
+```typescript
+@Controller('/user')
+export class UserController {
+  @Post('/')
+  @Validate({
+    defaultValidator: 'zod',
+  })
+  async getUser(@Body() bodyData: AnotherUserDTO) {
+    // ...
+  }
+}
+```
+
+在 `ValidationService` 中也可以使用。
+
+```typescript
+import { ValidationService } from '@midwayjs/validation';
+
+export class UserService {
+  @Inject()
+  validateService: ValidationService;
+
+  async invoke() {
+    // ...
+    const result = this.validateService.validate(UserDTO, {
+      name: 'harry',
+      nickName: 'harry',
+    }, {
+      defaultValidator: 'zod'
+    });
+  }
+}
+```
+
+
+
+
+
+### 自定义验证器
 
 除了使用内置的 Joi 和 Zod 验证器，你还可以实现自己的验证器。验证器需要实现 `IValidationService` 接口：
 
@@ -505,9 +632,11 @@ export default {
 };
 ```
 
+
+
 ## 常见问题
 
-### 1、允许未定义的字段
+### 1. Joi 中允许未定义的字段
 
 对于 Joi 验证器，可以通过以下配置允许未定义的字段：
 
@@ -521,19 +650,9 @@ export default {
 };
 ```
 
-对于 Zod 验证器：
 
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  zod: {
-    passthrough: true,
-  }
-};
-```
 
-### 2、处理校验错误
+### 2. 处理校验错误
 
 上面提到，Midway 会在校验失败时抛出 `MidwayValidationError` 错误，我们可以在 [异常处理器](../error_filter) 中处理。
 
@@ -554,22 +673,8 @@ export class ValidateErrorFilter {
 }
 ```
 
-### 3、验证器切换
 
-如果你在同一个项目中配置了多个验证器，可以通过 `@Rule` 装饰器的参数来选择使用哪个验证器：
 
-```typescript
-import { Rule } from '@midwayjs/validation';
-import * as Joi from 'joi';
-import { z } from 'zod';
+### 3. 多语言未生效
 
-export class UserDTO {
-  @Rule(Joi.number().required())  // 使用 Joi 验证器
-  id: number;
-
-  @Rule(z.string().min(1))       // 使用 Zod 验证器
-  name: string;
-}
-```
-
-验证器的选择会自动根据传入的规则类型来确定。 
+请使用浏览器，不要直接使用 Postman 来测试。

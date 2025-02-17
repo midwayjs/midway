@@ -1,0 +1,33 @@
+{
+  "name": "@midwayjs/validation-class-validator",
+  "version": "4.0.0",
+  "description": "Midway validation component based on class-validator",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "validation",
+    "class-validator"
+  ],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@midwayjs/validation": "workspace:*",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "workspace:*",
+    "@midwayjs/mock": "workspace:*"
+  }
+} 
