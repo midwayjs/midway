@@ -126,7 +126,7 @@ describe('/test/index.test.ts', function () {
     const opts = {
       package: 'hero',
       protoPath: join(__dirname, 'fixtures/proto/hero.proto'),
-      url: 'localhost:6565'
+      url: 'localhost:6575'
     }
     const service = await createGRPCConsumer<hero.HeroServiceClient>({ ...opts, });
     const result = await service.findOne().sendMessage({ id: 123 });
@@ -162,7 +162,105 @@ describe('/test/index.test.ts', function () {
     const service = await createGRPCConsumer<math.MathClient>({
       package: 'math',
       protoPath: join(__dirname, 'fixtures/proto/math.proto'),
-      url: 'localhost:6565'
+      url: 'localhost:6568'
+    });
+
+    // 使用发送消息的写法
+    let result1 = await service.add().sendMessage({
+      num: 2,
+    });
+
+    expect(result1.num).toEqual(4);
+
+    // 服务端推送
+    let total = 0;
+    let result2 = await service.sumMany().sendMessage({
+      num: 1,
+    });
+
+    result2.forEach(data => {
+      total += data.num;
+    });
+
+    expect(total).toEqual(9);
+
+    // 客户端推送
+    const data = await service.addMany()
+      .sendMessage({num: 1})
+      .sendMessage({num: 2})
+      .sendMessage({num: 3})
+      .end();
+
+    expect(data.num).toEqual(6);
+
+    // 双向流
+    const result3= await new Promise<number>((resolve, reject) => {
+      const duplexCall = service.addMore().getCall();
+      total = 0;
+      let idx = 0;
+
+      duplexCall.on('data', (data: math.Num) => {
+        total += data.num;
+        idx++;
+        if (idx === 2) {
+          duplexCall.end();
+          resolve(total);
+        }
+      });
+
+      duplexCall.write({
+        num: 3,
+      });
+
+      duplexCall.write({
+        num: 6,
+      });
+    });
+
+    expect(result3).toEqual(29);
+
+
+    // 保证顺序的双向流
+    const t = service.addMore({
+      messageKey: 'id'
+    });
+
+    const result4 = await new Promise<number>((resolve, reject) => {
+      total = 0;
+      t.sendMessage({
+        num: 2
+      })
+        .then(res => {
+          expect(res.num).toEqual(12);
+          total += res.num;
+        })
+        .catch(err => console.error(err))
+      ;
+      t.sendMessage({
+        num: 5
+      })
+        .then(res => {
+          expect(res.num).toEqual(15);
+          total += res.num;
+          resolve(total);
+        })
+        .catch(err => console.error(err))
+      ;
+      t.end();
+    });
+
+    expect(result4).toEqual(27);
+
+    await closeApp(app);
+  });
+
+  it('should support publish stream metadata gRPC server', async () => {
+    const app = await createServer('base-app-stream-meta');
+
+    const service = await createGRPCConsumer<math.MathClient>({
+      package: 'math',
+      protoPath: join(__dirname, 'fixtures/proto/math.proto'),
+      url: 'localhost:6571'
     });
 
     // 使用发送消息的写法
@@ -260,7 +358,7 @@ describe('/test/index.test.ts', function () {
     const service = await createGRPCConsumer<hello.world.GreeterClient>({
       package: 'hello.world',
       protoPath: join(__dirname, 'fixtures/proto/hello_world.proto'),
-      url: 'localhost:6565'
+      url: 'localhost:6569'
     });
 
     const result = await service.sayHello().sendMessage({
