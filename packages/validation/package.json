@@ -1,0 +1,34 @@
+{
+  "name": "@midwayjs/validation",
+  "version": "4.0.0-alpha.1",
+  "description": "Midway Component for validation",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [],
+  "author": "czy88840616@gmail.com",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@midwayjs/i18n": "workspace:^"
+  },
+  "devDependencies": {
+    "zod": "3.24.1",
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/express": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^"
+  }
+}

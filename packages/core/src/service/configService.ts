@@ -199,11 +199,11 @@ export class MidwayConfigService implements IConfigService {
     this.isReady = true;
   }
 
-  public getConfiguration(configKey?: string) {
+  public getConfiguration<T = any>(configKey?: string): T {
     if (configKey) {
-      return safelyGet(configKey, this.configuration);
+      return safelyGet(configKey, this.configuration) as T;
     }
-    return this.configuration;
+    return this.configuration as T;
   }
 
   public getConfigMergeOrder(): Array<ConfigMergeInfo> {
