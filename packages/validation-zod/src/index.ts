@@ -120,7 +120,9 @@ export default async (container: IMidwayContainer) => {
       } else {
         res.status = false;
         res.error = error;
+        res.errors = [error];
         res.message = fromError(error).toString();
+        res.messages = [fromError(error).toString()];
       }
       return res;
     }

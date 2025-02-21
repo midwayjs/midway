@@ -50,12 +50,22 @@ export interface ValidateResult {
   value?: any;
   /**
    * If the validation fails, the error or the message will be returned.
+   * if has multiple errors, the first error will be used.
    */
   error?: any;
   /**
+   * The errors to validate.
+   */
+  errors?: any[];
+  /**
    * The message to validate.
+   * if has multiple messages, the first message will be used.
    */
   message?: string;
+  /**
+   * The messages to validate.
+   */
+  messages?: string[];
   /**
    * The extra information to validate.
    */

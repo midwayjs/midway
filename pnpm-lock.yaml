@@ -1317,8 +1317,11 @@ importers:
 
   packages/validation-class-validator:
     dependencies:
+      '@midwayjs/i18n':
+        specifier: workspace:^
+        version: link:../i18n
       '@midwayjs/validation':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../validation
       class-transformer:
         specifier: ^0.5.1
@@ -1326,6 +1329,9 @@ importers:
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
+      class-validator-multi-lang-lite:
+        specifier: ^0.140.1
+        version: 0.140.1
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:*
@@ -4003,6 +4009,9 @@ packages:
   class-utils@0.3.6:
     resolution: {integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==}
     engines: {node: '>=0.10.0'}
+
+  class-validator-multi-lang-lite@0.140.1:
+    resolution: {integrity: sha512-gUuHWVN2g+DHxHRDajeRsnKMriXllE71FHhLXpE1yxHBfMrbTy3iohnFZ4rLJt3kZZFqoKnEFQWoeBefcxk0Vg==}
 
   class-validator@0.14.1:
     resolution: {integrity: sha512-2VEG9JICxIqTpoK1eMzZqaV+u/EiwEJkMGzTrZf6sU/fwsnOITVgYJ8yojSy6CaXtO9V0Cc6ZQZ8h8m4UBuLwQ==}
@@ -13110,6 +13119,12 @@ snapshots:
       define-property: 0.2.5
       isobject: 3.0.1
       static-extend: 0.1.2
+
+  class-validator-multi-lang-lite@0.140.1:
+    dependencies:
+      '@types/validator': 13.12.2
+      libphonenumber-js: 1.11.20
+      validator: 13.12.0
 
   class-validator@0.14.1:
     dependencies:

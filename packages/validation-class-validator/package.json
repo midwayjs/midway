@@ -18,16 +18,20 @@
   "author": "",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "i18n",
+    "index.d.ts"
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/validation": "workspace:*",
+    "@midwayjs/i18n": "workspace:^",
+    "@midwayjs/validation": "workspace:^",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1"
+    "class-validator": "^0.14.1",
+    "class-validator-multi-lang-lite": "^0.140.1"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:*",
     "@midwayjs/mock": "workspace:*"
   }
-} 
+}

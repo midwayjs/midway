@@ -13,6 +13,7 @@ const localeMapping = new Map();
 export default (container: IMidwayContainer) => {
   const configService = container.get(MidwayConfigService);
 
+  // add default language support
   configService.addObject({
     i18n: {
       localeTable: {
@@ -32,6 +33,8 @@ export default (container: IMidwayContainer) => {
       const i18nServiceSingleton = await container.getAsync(
         MidwayI18nServiceSingleton
       );
+
+      // get user configuration and merge with default configuration
       for (const locale of i18nServiceSingleton.getLocaleList('joi')) {
         localeMapping.set(
           locale,
@@ -47,11 +50,14 @@ export default (container: IMidwayContainer) => {
       options: ValidationExtendOptions,
       validatorOptions: any = {}
     ): ValidateResult {
+      // get locale from options or fallback to default
       const locale = localeMapping.has(options.locale)
         ? options.locale
         : localeMapping.has(options.fallbackLocale)
         ? options.fallbackLocale
         : 'en-us';
+
+      // merge to new validator options
       const newValidatorOptions = {
         errors: {
           language: locale,
@@ -60,13 +66,17 @@ export default (container: IMidwayContainer) => {
         ...this.defaultValidatorOptions,
         ...validatorOptions,
       };
+
+      // validate the value
       const result = schema.validate(value, newValidatorOptions);
 
       if (result.error) {
         return {
           status: false,
           error: result.error,
+          errors: [result.error],
           message: result.error.message,
+          messages: [result.error.message],
         };
       } else {
         return {
