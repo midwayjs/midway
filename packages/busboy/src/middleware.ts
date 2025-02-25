@@ -189,7 +189,8 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     ctxOrReq
   ) {
     let isStreamResolve = false;
-    const { mode, tmpdir } = uploadConfig;
+    const { mode, tmpdir, allowFieldsDuplication } =
+      uploadConfig as UploadOptions;
     const { files = [], fields = [] } = await new Promise<any>(
       (resolveP, reject) => {
         const bb = busboy({
@@ -305,10 +306,25 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     );
 
     ctxOrReq.files = files;
-    ctxOrReq.fields = fields.reduce((accumulator, current) => {
-      accumulator[current.name] = current.value;
-      return accumulator;
-    }, {});
+    if (allowFieldsDuplication) {
+      // 如果重复，则使用数组
+      ctxOrReq.fields = fields.reduce((accumulator, current) => {
+        if (accumulator[current.name]) {
+          if (!Array.isArray(accumulator[current.name])) {
+            accumulator[current.name] = [accumulator[current.name]];
+          }
+          accumulator[current.name].push(current.value);
+        } else {
+          accumulator[current.name] = current.value;
+        }
+        return accumulator;
+      }, {});
+    } else {
+      ctxOrReq.fields = fields.reduce((accumulator, current) => {
+        accumulator[current.name] = current.value;
+        return accumulator;
+      }, {});
+    }
   }
 
   private async processAsyncIterator(

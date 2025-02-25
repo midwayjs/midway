@@ -54,16 +54,6 @@ export class ValidateConfiguration {
     await container.getAsync(ParseFloatPipe);
     await container.getAsync(DecoratorValidPipe);
 
-    this.decoratorService.registerParameterHandler(
-      VALID_KEY,
-      ({ parameterIndex, originParamType, originArgs, metadata }) => {
-        if (!metadata.schema) {
-          metadata.schema = this.validateService.getSchema(originParamType);
-        }
-        return originArgs[parameterIndex];
-      }
-    );
-
     // register web param default pipe
     this.decoratorService.registerParameterPipes(WEB_ROUTER_PARAM_KEY, [
       ValidationPipe,

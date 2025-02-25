@@ -37,6 +37,10 @@ export interface UploadOptions extends BusboyConfig {
    * Mime type white list
    */
   mimeTypeWhiteList?: Record<string, string | string[]> | ((ctx: IMidwayContext<any>) => string | string[]);
+  /**
+   * Whether to allow fields duplication, default is `false`, only for `file` and `stream` mode
+   */
+  allowFieldsDuplication?: boolean;
 }
 
 export interface UploadFileInfo {
