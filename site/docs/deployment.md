@@ -688,7 +688,7 @@ Bootstrap.configure({
 包含三个部分
 
 - `bundle` 是将所有的项目代码以组件的形式导出，并生成一个 `src/index.ts` 文件，该命令是 `@midwayjs/bundle-helper` 提供的
-- `npm run buid` 是基础的 ts 项目构建，将 `src/**/*.ts` 构建为 `dist/**/*.js`
+- `npm run build` 是基础的 ts 项目构建，将 `src/**/*.ts` 构建为 `dist/**/*.js`
 - `ncc build bootstrap.js -o build` 以 `bootstrap.js` 为入口构建为一个单文件，最终生成到 `build/index.js`
 
 
