@@ -155,8 +155,8 @@ export class MainConfiguration {
   async onServerReady() {
     // 获取 Processor 相关的队列
     const testQueue = this.bullmqFramework.getQueue('test');
-    // 立即执行这个任务
-    await testQueue?.runJob();
+    // 立即添加这个任务
+    await testQueue?.addJob();
   }
 }
 ```
@@ -175,18 +175,18 @@ export class TestProcessor implements IProcessor {
 
 // invoke
 const testQueue = this.bullmqFramework.getQueue('test');
-await testQueue?.runJob({
+await testQueue?.addJob({
   name: 'harry'
 });
 ```
 
 ### 任务状态和管理
 
-执行 `runJob` 后，我们可以获取到一个 `Job` 对象。
+执行 `addJob` 后，我们可以获取到一个 `Job` 对象。
 
 ```typescript
 const testQueue = this.bullmqFramework.getQueue('test');
-const job = await testQueue?.runJob();
+const job = await testQueue?.addJob();
 
 // 更新进度
 await job.updateProgress(60);
@@ -209,7 +209,7 @@ const state = await job.getState();
 
 ```typescript
 const testQueue = this.bullmqFramework.getQueue('test');
-await testQueue?.runJob({}, { delay: 1000 });
+await testQueue?.addJob({}, { delay: 1000 });
 ```
 
 ### 任务重试
@@ -218,7 +218,7 @@ BullMQ 支持任务失败重试机制。
 
 ```typescript
 const testQueue = this.bullmqFramework.getQueue('test');
-await testQueue?.runJob({}, {
+await testQueue?.addJob({}, {
   attempts: 3,  // 最多重试 3 次
   backoff: {    // 重试策略
     type: 'exponential',  // 指数退避
@@ -234,9 +234,9 @@ await testQueue?.runJob({}, {
 ```typescript
 const testQueue = this.bullmqFramework.getQueue('test');
 // priority 值越大优先级越高
-await testQueue?.runJob({ priority: 1 }, { priority: 3 }); // 高优先级
-await testQueue?.runJob({ priority: 2 }, { priority: 2 }); // 中优先级
-await testQueue?.runJob({ priority: 3 }, { priority: 1 }); // 低优先级
+await testQueue?.addJob({ priority: 1 }, { priority: 3 }); // 高优先级
+await testQueue?.addJob({ priority: 2 }, { priority: 2 }); // 中优先级
+await testQueue?.addJob({ priority: 3 }, { priority: 1 }); // 低优先级
 ```
 
 ### 中间件和错误处理
