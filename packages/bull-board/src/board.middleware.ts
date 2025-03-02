@@ -4,6 +4,7 @@ import {
   IMidwayContext,
   NextFunction,
   Config,
+  Init,
   Inject,
   Provide,
   Scope,
@@ -60,12 +61,9 @@ export class BoardMiddleware
 
   private basePath: string;
   private serverAdapter: MidwayAdapter;
-  private inited = false;
 
-  protected init() {
-    // 如果使用 @Init 在服务器上会在 egg-cluster willReady 和 serverReady 之间执行
-    // 这个时候 queue 不确保完全被初始化，serverAdapter 可能并没有 register 所有队列
-    // 所以会出现 bull-board 刷新时不时缺少队列，改成在调用时，判断 this.inited 执行
+  @Init()
+  protected async init() {
     let framework: BullFramework | BullMQFramework =
       this.frameworkService.getFramework('bull') as BullFramework;
     if (!framework) {
@@ -98,7 +96,6 @@ export class BoardMiddleware
     });
     this.serverAdapter.setBasePath(this.basePath);
     this.bullBoardManager.setBullBoard(bullBoard);
-    this.inited = true;
   }
 
   resolve(app: IMidwayApplication) {
@@ -108,7 +105,6 @@ export class BoardMiddleware
         if (pathname.indexOf(this.basePath) === -1) {
           return next();
         }
-        if (!this.inited) this.init();
         const routePath: string = pathname.replace(this.basePath, '') || '/';
 
         let content;
@@ -152,7 +148,6 @@ export class BoardMiddleware
         if (pathname.indexOf(this.basePath) === -1) {
           return next();
         }
-        if (!this.inited) this.init();
 
         const routePath: string = pathname.replace(this.basePath, '') || '/';
 

@@ -40,6 +40,9 @@ export class MidwayApplicationManager {
     if (!frameworkNameOrNamespace) {
       return Array.from(this.globalFrameworkMap.values()).map(framework => {
         return framework.getApplication();
+      })
+      .filter(app => {
+        return !!app;
       });
     } else {
       return frameworkNameOrNamespace
