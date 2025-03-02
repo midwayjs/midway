@@ -39,8 +39,7 @@ export class BullMQQueue extends Queue {
     super(queueName, queueOptions);
   }
 
-  // runJob 与 @midwayjs/bull 保持一致，如果想要使用 jobName 则可以直接调用 queue.add
-  public async runJob(data: any, options?: JobsOptions): Promise<Job> {
+  public async addJobToQueue(data: any, options?: JobsOptions): Promise<Job> {
     const { repeat, ...OtherOptions } = options ?? {};
     if (repeat) {
       return this.upsertJobScheduler(this.name, repeat, {
@@ -50,6 +49,14 @@ export class BullMQQueue extends Queue {
       });
     }
     return this.add('jobName', data || {}, options);
+  }
+
+  /**
+   * @deprecated use addJobToQueue instead
+   */
+  // runJob 与 @midwayjs/bull 保持一致，如果想要使用 jobName 则可以直接调用 queue.add
+  public async runJob(data: any, options?: JobsOptions): Promise<Job> {
+    return this.addJobToQueue(data, options);
   }
 
   public getQueueName(): string {
@@ -183,7 +190,10 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
       await this.addProcessor(mod, options.queueName, options.workerOptions);
       if (repeat) {
         // add repeatable job
-        await this.getQueue(options.queueName)?.runJob({}, options.jobOptions);
+        await this.getQueue(options.queueName)?.addJobToQueue(
+          {},
+          options.jobOptions
+        );
       }
     }
   }
@@ -336,6 +346,31 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
       },
       workerOptions
     );
+  }
+
+  /**
+   * Add a job to the queue
+   */
+  public async addJobToQueue(
+    queueName: string,
+    jobData: any,
+    options?: JobsOptions
+  ): Promise<Job | undefined> {
+    const queue = this.queueMap.get(queueName);
+    if (queue) {
+      return await queue.addJobToQueue(jobData, options);
+    }
+  }
+
+  /**
+   * @deprecated use addJobToQueue instead
+   */
+  public async runJob(
+    queueName: string,
+    jobData: any,
+    options?: JobsOptions
+  ): Promise<Job | undefined> {
+    return this.addJobToQueue(queueName, jobData, options);
   }
 
   /**

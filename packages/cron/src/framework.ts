@@ -66,9 +66,9 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
     } else {
       const options = getClassMetadata(CRON_JOB_KEY, name) as {
         jobOptions?: CronJobParameters;
-        name?: string;
+        jobName?: string;
       };
-      jobName = options.name || getProviderUUId(name);
+      jobName = options.jobName || getProviderUUId(name);
       jobOptions = extend(
         true,
         {},
@@ -137,9 +137,9 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
     } else {
       const options = getClassMetadata(CRON_JOB_KEY, name) as {
         jobOptions?: CronJobParameters;
-        name?: string;
+        jobName?: string;
       };
-      return options.name || getProviderUUId(name);
+      return options.jobName || getProviderUUId(name);
     }
   }
 }

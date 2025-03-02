@@ -1,7 +1,8 @@
-import { createApp, close } from '@midwayjs/mock';
+import { createApp, close, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 import { sleep } from '@midwayjs/core';
 import * as cron from '../src';
+import { IJob, Job } from '../src';
 
 describe(`/test/index.test.ts`, () => {
   it('test job with decorator and start', async () => {
@@ -16,5 +17,29 @@ describe(`/test/index.test.ts`, () => {
     const app = await createApp(join(__dirname, 'fixtures', 'base-app-err'), {}, cron);
     await sleep(5 * 1000);
     await close(app);
+  });
+
+  it('should test get job name with string and class', async () => {
+    @Job('syncJob', {
+      cronTime: '*/2 * * * * *', // 每隔 2s 执行
+    })
+    class DataSyncCheckerJob implements IJob {
+      async onTick() {
+        console.log('syncJob');
+      }
+    }
+    const app = await createLightApp({
+      imports: [
+        cron
+      ],
+      preloadModules: [
+        DataSyncCheckerJob
+      ]
+    });
+
+    const framework = app.getFramework() as cron.Framework;
+
+    expect(framework.getJob(DataSyncCheckerJob)).toBeTruthy();
+    expect(framework.getJob('syncJob')).toBeTruthy();
   });
 });

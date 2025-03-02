@@ -63,9 +63,13 @@ export class MidwayApplicationManager {
     namespaces?: Array<string | FrameworkType>
   ): IMidwayApplication[] {
     if (!namespaces) {
-      return Array.from(this.globalFrameworkMap.values()).map(framework => {
-        return framework.getApplication();
-      });
+      return Array.from(this.globalFrameworkMap.values())
+        .map(framework => {
+          return framework.getApplication();
+        })
+        .filter(app => {
+          return !!app;
+        });
     } else {
       return namespaces
         .map(namespace => {
