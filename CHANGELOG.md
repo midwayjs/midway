@@ -1,6 +1,28 @@
 # Change Log
 
 
+## v3.20.3 (2025-03-02)
+
+#### :bug: Bug Fix
+* `bull-board`, `bull`, `bullmq`, `busboy`, `core`, `cron`, `validate`
+  * [#4290](https://github.com/midwayjs/midway/pull/4290) fix: #4295 #4293 #4299 #4294 ([@czy88840616](https://github.com/czy88840616))
+* `bull-board`, `bullmq`
+  * [#4286](https://github.com/midwayjs/midway/pull/4286) fix(bull-board): init bull board in resolve ([@harperKKK](https://github.com/harperKKK))
+
+#### :package: Dependencies
+* Other
+  * [#4274](https://github.com/midwayjs/midway/pull/4274) chore(deps): update supercharge/mongodb-github-action action to v1.12.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4289](https://github.com/midwayjs/midway/pull/4289) fix(deps): update dependency @grpc/grpc-js to v1.12.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#4291](https://github.com/midwayjs/midway/pull/4291) fix(deps): update dependency koa to v2.15.4 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@harperKKK](https://github.com/harperKKK)
+
+
+
 ## v3.20.2 (2025-01-31)
 
 #### :bug: Bug Fix

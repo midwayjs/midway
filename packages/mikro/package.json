@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mikro",
-  "version": "3.20.2",
+  "version": "3.20.3",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -9,9 +9,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.20.0",
-    "@midwayjs/koa": "^3.20.2",
-    "@midwayjs/mock": "^3.20.0",
+    "@midwayjs/core": "^3.20.3",
+    "@midwayjs/koa": "^3.20.3",
+    "@midwayjs/mock": "^3.20.3",
     "@mikro-orm/core": "6.4.5",
     "@mikro-orm/entity-generator": "6.4.5",
     "@mikro-orm/sqlite": "6.4.5"
