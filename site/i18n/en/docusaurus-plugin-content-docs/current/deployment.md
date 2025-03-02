@@ -683,7 +683,7 @@ We can write the above process as the following two commands, and put them in th
 Contains three parts
 
 - `bundle` is to export all project codes as components and generate a `src/index.ts` file, this command is provided by `@midwayjs/bundle-helper`
-- `npm run buid` is the basic ts project build, build `src/**/*.ts` to `dist/**/*.js`
+- `npm run build` is the basic ts project build, build `src/**/*.ts` to `dist/**/*.js`
 - `ncc build bootstrap.js -o build` uses `bootstrap.js` as the entry to build a single file, and finally generates it into `build/index.js`
 
 
