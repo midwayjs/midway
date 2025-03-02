@@ -156,7 +156,7 @@ export class MainConfiguration {
     // Get the queue associated with the Processor
     const testQueue = this.bullmqFramework.getQueue('test');
     // Execute the task immediately
-    await testQueue?.runJob();
+    await testQueue?.addJobToQueue();
   }
 }
 ```
@@ -175,18 +175,19 @@ export class TestProcessor implements IProcessor {
 
 // invoke
 const testQueue = this.bullmqFramework.getQueue('test');
-await testQueue?.runJob({
-  name: 'harry'
+await testQueue?.addJobToQueue({
+  aaa: 1,
+  bbb: 2,
 });
 ```
 
 ### Task Status and Management
 
-After executing `runJob`, we get a `Job` object.
+After executing `addJobToQueue`, we get a `Job` object.
 
 ```typescript
 const testQueue = this.bullmqFramework.getQueue('test');
-const job = await testQueue?.runJob();
+const job = await testQueue?.addJobToQueue();
 
 // Update progress
 await job.updateProgress(60);
@@ -209,7 +210,7 @@ For example, to delay execution by 1 second:
 
 ```typescript
 const testQueue = this.bullmqFramework.getQueue('test');
-await testQueue?.runJob({}, { delay: 1000 });
+await testQueue?.addJobToQueue({}, { delay: 1000 });
 ```
 
 ### Task Retry
@@ -218,7 +219,7 @@ BullMQ supports task failure retry mechanism.
 
 ```typescript
 const testQueue = this.bullmqFramework.getQueue('test');
-await testQueue?.runJob({}, {
+await testQueue?.addJobToQueue({}, {
   attempts: 3,  // Maximum 3 retry attempts
   backoff: {    // Retry strategy
     type: 'exponential',  // Exponential backoff
@@ -234,9 +235,9 @@ Tasks can be assigned priorities, with higher priority tasks executing first.
 ```typescript
 const testQueue = this.bullmqFramework.getQueue('test');
 // Higher priority value means higher priority
-await testQueue?.runJob({ priority: 1 }, { priority: 3 }); // High priority
-await testQueue?.runJob({ priority: 2 }, { priority: 2 }); // Medium priority
-await testQueue?.runJob({ priority: 3 }, { priority: 1 }); // Low priority
+await testQueue?.addJobToQueue({ priority: 1 }, { priority: 3 }); // High priority
+await testQueue?.addJobToQueue({ priority: 2 }, { priority: 2 }); // Medium priority
+await testQueue?.addJobToQueue({ priority: 3 }, { priority: 1 }); // Low priority
 ```
 
 ### Middleware and Error Handling
