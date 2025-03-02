@@ -183,7 +183,7 @@ export class MainConfiguration {
     // 获取 Processor 相关的队列
     const testQueue = this.bullFramework.getQueue('test');
     // 立即添加这个任务
-    await testQueue?.addJob();
+    await testQueue?.addJobToQueue();
   }
 }
 ```
@@ -206,7 +206,7 @@ export class TestProcessor implements IProcessor {
 // invoke
 const testQueue = this.bullFramework.getQueue('test');
 // 立即添加这个任务
-await testQueue?.addJob({
+await testQueue?.addJobToQueue({
   aaa: 1,
   bbb: 2,
 });
@@ -216,12 +216,12 @@ await testQueue?.addJob({
 
 ### 任务状态和管理
 
-执行 `addJob` 后，我们可以获取到一个 `Job` 对象。
+执行 `addJobToQueue` 后，我们可以获取到一个 `Job` 对象。
 
 ```typescript
 // invoke
 const testQueue = this.bullFramework.getQueue('test');
-const job = await testQueue?.addJob();
+const job = await testQueue?.addJobToQueue();
 ```
 
 通过这个 Job 对象，我们可以做进度管理。
@@ -255,7 +255,7 @@ const state = await job.getState();
 ```typescript
 const testQueue = this.bullFramework.getQueue('test');
 // 立即添加这个任务
-await testQueue?.addJob({}, { delay: 1000 });
+await testQueue?.addJobToQueue({}, { delay: 1000 });
 ```
 
 

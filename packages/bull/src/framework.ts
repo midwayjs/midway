@@ -26,12 +26,12 @@ export class BullQueue extends Bull implements IQueue<Job> {
     super(queueName, queueOptions);
   }
 
-  public async addJob(data: any, options?: JobOptions): Promise<Job> {
+  public async addJobToQueue(data: any, options?: JobOptions): Promise<Job> {
     return this.add(data || {}, options) as unknown as Job;
   }
 
   /**
-   * @deprecated use addJob instead
+   * @deprecated use addJobToQueue instead
    */
   public async runJob(data: any, options?: JobOptions): Promise<Job> {
     return this.add(data || {}, options) as unknown as Job;
@@ -104,7 +104,7 @@ export class BullFramework
       }
       await this.addProcessor(mod, options.queueName, options.concurrency);
       if (options.jobOptions?.repeat) {
-        await this.addJob(options.queueName, {}, options.jobOptions);
+        await this.addJobToQueue(options.queueName, {}, options.jobOptions);
       }
     }
   }
@@ -189,14 +189,14 @@ export class BullFramework
     });
   }
 
-  public async addJob(
+  public async addJobToQueue(
     queueName: string,
     jobData: any,
     options?: JobOptions
   ): Promise<Job | undefined> {
     const queue = this.queueMap.get(queueName);
     if (queue) {
-      return await queue.addJob(jobData, options);
+      return await queue.addJobToQueue(jobData, options);
     }
   }
 
@@ -208,7 +208,7 @@ export class BullFramework
     jobData: any,
     options?: JobOptions
   ): Promise<Job | undefined> {
-    return this.addJob(queueName, jobData, options);
+    return this.addJobToQueue(queueName, jobData, options);
   }
 
   public async getJob(queueName: string, jobName: string): Promise<Job> {
