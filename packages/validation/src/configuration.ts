@@ -19,7 +19,7 @@ import {
 import { VALID_KEY } from './constants';
 import { ValidationService } from './service';
 import { registry } from './registry';
-import { IValidationService } from './interface';
+import { IValidator } from './interface';
 
 @Configuration({
   namespace: 'validation',
@@ -60,17 +60,11 @@ export class ValidationConfiguration {
     );
 
     const validators = this.configService.getConfiguration<
-      Record<
-        string,
-        (container: IMidwayContainer) => Promise<IValidationService<any>>
-      >
+      Record<string, IValidator<any>>
     >('validation.validators');
     if (validators) {
-      for (const [name, validatorHandler] of Object.entries(validators)) {
-        registry.register(
-          name,
-          await validatorHandler(this.applicationContext)
-        );
+      for (const [name, validator] of Object.entries(validators)) {
+        registry.register(name, validator);
       }
     }
   }

@@ -66,7 +66,7 @@ export class ValidationService {
         500
       );
     }
-    const anySchema = validator.getSchema(ClzType);
+    const anySchema = validator.schemaHelper.getSchema(ClzType);
     return this.validateWithSchema(
       anySchema,
       value,
@@ -94,7 +94,7 @@ export class ValidationService {
       );
     }
 
-    const res = validator.validateWithSchema(
+    const res = validator.validateService.validateWithSchema(
       schema,
       value,
       {
@@ -123,7 +123,7 @@ export class ValidationService {
 
   public getSchema(ClzType: any, validatorName?: string): any {
     const validator = this.getValidator(validatorName);
-    return validator.getSchema(ClzType);
+    return validator.schemaHelper.getSchema(ClzType);
   }
 }
 

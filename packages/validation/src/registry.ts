@@ -1,10 +1,10 @@
 import { IMidwayContainer, MidwayCommonError } from '@midwayjs/core';
-import { IValidationService } from './interface';
+import { IValidator } from './interface';
 
 class ValidatorRegistry {
   private static instance: ValidatorRegistry;
-  private validators: Map<string, IValidationService<any>> = new Map();
-  private defaultValidator: IValidationService<any>;
+  private validators: Map<string, IValidator<any>> = new Map();
+  private defaultValidator: IValidator<any>;
 
   static getInstance(): ValidatorRegistry {
     if (!ValidatorRegistry.instance) {
@@ -13,7 +13,7 @@ class ValidatorRegistry {
     return ValidatorRegistry.instance;
   }
 
-  register(name: string, validator: IValidationService<any>) {
+  register(name: string, validator: IValidator<any>) {
     this.validators.set(name, validator);
   }
 
@@ -43,7 +43,10 @@ class ValidatorRegistry {
 
   async initValidators(container: IMidwayContainer) {
     for (const validator of this.validators.values()) {
-      await validator.init(container);
+      validator.validateService = await validator.validateServiceHandler(
+        container
+      );
+      await validator.validateService.init(container);
     }
   }
 
@@ -58,12 +61,12 @@ export const registry = ValidatorRegistry.getInstance();
 // 导出统一的 getSchema 方法
 export function getSchema(ClzType: any, validatorName?: string) {
   if (validatorName) {
-    return registry.getValidator(validatorName).getSchema(ClzType);
+    return registry.getValidator(validatorName).schemaHelper.getSchema(ClzType);
   }
   if (!registry.getDefaultValidator()) {
     throw new MidwayCommonError(
       'No default validator has been registered. Please use the "@rule(() => schema)" pattern instead.'
     );
   }
-  return registry.getDefaultValidator().getSchema(ClzType);
+  return registry.getDefaultValidator().schemaHelper.getSchema(ClzType);
 }

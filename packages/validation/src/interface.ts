@@ -17,7 +17,7 @@ export interface ValidationOptions {
   /**
    * The validators to use for validation.
    */
-  validators?: Record<string, (container: IMidwayContainer) => Promise<IValidationService<any>>>;
+  validators?: Record<string, IValidator<any>>;
   /**
    * The default validator to use for validation.
    */
@@ -72,6 +72,12 @@ export interface ValidateResult {
   extra?: any;
 }
 
+export interface IValidator<Schema> {
+  schemaHelper: SchemaHelper<Schema>;
+  validateService?: IValidationService<Schema>;
+  validateServiceHandler: (container: IMidwayContainer) => Promise<IValidationService<Schema>>;
+}
+
 export interface IValidationService<Schema> {
   init(container: IMidwayContainer): Promise<void>;
   validateWithSchema(
@@ -80,6 +86,13 @@ export interface IValidationService<Schema> {
     validationOptions: ValidationExtendOptions,
     validatorOptions: any
   ): ValidateResult;
+}
+
+export interface SchemaHelper<Schema> {
+  isRequired(ClzType: any, propertyName: string): boolean;
+  isOptional(ClzType: any, propertyName: string): boolean;
+  setRequired(ClzType: any, propertyName?: string): void;
+  setOptional(ClzType: any, propertyName?: string): void;
   getSchema(ClzType: any): any;
   getIntSchema(): Schema;
   getBoolSchema(): Schema;

@@ -27,7 +27,7 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           validation: {
             validators: {
-              mock: async () => mockValidatorOne
+              mock: mockValidatorOne,
             },
             defaultValidator: 'mock'
           }
@@ -91,7 +91,7 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           validation: {
             validators: {
-              mock: async () => mockValidatorTwo
+              mock: mockValidatorTwo
             },
             defaultValidator: 'mock'
           }
@@ -185,7 +185,7 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           validation: {
             validators: {
-              mock: async () => mockValidatorTwo
+              mock: mockValidatorTwo
             },
             defaultValidator: 'mock',
             errorStatus: 422
@@ -275,7 +275,7 @@ describe('test/index.test.ts', () => {
           keys: '123456',
           validation: {
             validators: {
-              mock: async () => mockValidatorOne
+              mock: mockValidatorOne
             },
             defaultValidator: 'mock',
             throwValidateError: true
@@ -337,7 +337,7 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           validation: {
             validators: {
-              mock: async () => mockValidatorTwo
+              mock: mockValidatorTwo
             },
             defaultValidator: 'mock',
             throwValidateError: false,
@@ -459,7 +459,7 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           validation: {
             validators: {
-              mock: async () => mockValidatorTwo
+              mock: mockValidatorTwo
             },
             defaultValidator: 'mock',
             throwValidateError: false
@@ -500,7 +500,7 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           validation: {
             validators: {
-              mock: async () => mockValidatorTwo
+              mock: mockValidatorTwo
             },
             defaultValidator: 'mock',
             throwValidateError: false
@@ -523,7 +523,7 @@ describe('test/index.test.ts', () => {
       try {
         await hello.test('hello world');
       } catch (err) {
-        expect(err.message).toContain('Expected string');
+        expect(err.message).toContain('String length must be at most 4');
       }
 
       await close(app);
@@ -543,7 +543,7 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           validation: {
             validators: {
-              mock: async () => mockValidatorTwo
+              mock: mockValidatorTwo
             },
             defaultValidator: 'mock',
             throwValidateError: true
@@ -592,8 +592,8 @@ describe('test/index.test.ts', () => {
         globalConfig: {
           validation: {
             validators: {
-              mockOne: async () => mockValidatorOne,
-              mockTwo: async () => mockValidatorTwo
+              mockOne: mockValidatorOne,
+              mockTwo: mockValidatorTwo
             },
             defaultValidator: 'mockOne'
           }

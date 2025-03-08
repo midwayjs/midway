@@ -27,10 +27,10 @@
     "@midwayjs/i18n": "workspace:^",
     "@midwayjs/validation": "workspace:^",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
     "class-validator-multi-lang-lite": "^0.140.1"
   },
   "devDependencies": {
+    "class-validator": "^0.14.1",
     "@midwayjs/core": "workspace:*",
     "@midwayjs/mock": "workspace:*"
   }

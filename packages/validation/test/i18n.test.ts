@@ -10,7 +10,7 @@ describe('test/i18n.test.ts', () => {
       globalConfig: {
         validation: {
           validators: {
-            mock: async () => mockValidatorOne
+            mock: mockValidatorOne
           },
           defaultValidator: 'mock'
         }
@@ -36,7 +36,7 @@ describe('test/i18n.test.ts', () => {
       globalConfig: {
         validation: {
           validators: {
-            mock: async () => mockValidatorTwo
+            mock: mockValidatorTwo
           },
           defaultValidator: 'mock'
         }

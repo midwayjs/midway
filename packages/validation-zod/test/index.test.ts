@@ -124,7 +124,7 @@ describe('test/index.test.ts', () => {
         @Rule(z.number().max(10))
         age: number;
 
-        @Rule(getSchema(WorldDTO).optional())
+        @Rule(z.number().max(10))
         world?: WorldDTO;
       }
 
@@ -433,6 +433,233 @@ describe('test/index.test.ts', () => {
         age: 11,
       });
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe('test/schemaHelper', () => {
+    class TestDTO {
+      @Rule(z.string())
+      name: string;
+
+      @Rule(z.number().optional())
+      age?: number;
+
+      @Rule(z.string().optional())
+      description?: string;
+    }
+
+    const { schemaHelper } = zod;
+
+    it('should test basic schema helpers', () => {
+      expect(schemaHelper.getIntSchema().safeParse(42).success).toBeTruthy();
+      expect(schemaHelper.getIntSchema().safeParse(42.5).success).toBeFalsy();
+
+      expect(schemaHelper.getBoolSchema().safeParse(true).success).toBeTruthy();
+      expect(schemaHelper.getBoolSchema().safeParse('true').success).toBeFalsy();
+
+      expect(schemaHelper.getFloatSchema().safeParse(42.5).success).toBeTruthy();
+      expect(schemaHelper.getFloatSchema().safeParse('42.5').success).toBeFalsy();
+
+      expect(schemaHelper.getStringSchema().safeParse('test').success).toBeTruthy();
+      expect(schemaHelper.getStringSchema().safeParse(42).success).toBeFalsy();
+    });
+
+    it('should test isRequired and isOptional', () => {
+      expect(schemaHelper.isRequired(TestDTO, 'name')).toBeTruthy();
+      expect(schemaHelper.isRequired(TestDTO, 'age')).toBeFalsy();
+      expect(schemaHelper.isOptional(TestDTO, 'age')).toBeTruthy();
+      expect(schemaHelper.isOptional(TestDTO, 'name')).toBeFalsy();
+    });
+
+    it('should test setRequired for single property', () => {
+      class RequiredTestDTO {
+        @Rule(z.string())
+        name: string;
+
+        @Rule(z.number().optional())
+        age?: number;
+      }
+
+      // 先验证初始状态
+      const initialSchema = schemaHelper.getSchema(RequiredTestDTO);
+      const initialResult = initialSchema.safeParse({
+        name: 'test'  // age 是可选的，可以不提供
+      });
+      expect(initialResult.success).toBeTruthy();
+
+      // 检查初始状态
+      const initialIsOptional = schemaHelper.isOptional(RequiredTestDTO, 'age');
+      expect(initialIsOptional).toBeTruthy();
+
+      // 设置 age 为必需并验证状态
+      schemaHelper.setRequired(RequiredTestDTO, 'age');
+      const afterSetRequired = schemaHelper.isRequired(RequiredTestDTO, 'age');
+      expect(afterSetRequired).toBeTruthy();
+
+      const schema = schemaHelper.getSchema(RequiredTestDTO);
+      const result = schema.safeParse({
+        name: 'test'  // 现在缺少必需的 age
+      });
+      expect(result.success).toBeFalsy();
+
+      // 验证提供所有字段时能通过
+      const fullResult = schema.safeParse({
+        name: 'test',
+        age: 18
+      });
+      expect(fullResult.success).toBeTruthy();
+    });
+
+    it('should test setOptional for single property', () => {
+      class SingleDTO {
+        @Rule(z.string())
+        name: string;
+
+        @Rule(z.number())
+        age: number;
+      }
+
+      // 先验证初始状态
+      const initialSchema = schemaHelper.getSchema(SingleDTO);
+      const initialResult = initialSchema.safeParse({
+        age: 18  // 不提供 name
+      });
+      expect(initialResult.success).toBeFalsy();
+
+      // 设置为可选并验证状态
+      schemaHelper.setOptional(SingleDTO, 'name');
+      expect(schemaHelper.isOptional(SingleDTO, 'name')).toBeTruthy();
+
+      const schema = schemaHelper.getSchema(SingleDTO);
+      const result = schema.safeParse({
+        age: 18  // 不提供 name
+      });
+
+      // 验证一个完整的对象也能通过
+      const fullResult = schema.safeParse({
+        name: 'test',
+        age: 18
+      });
+      expect(fullResult.success).toBeTruthy();
+
+      // 验证只提供可选字段也能通过
+      const optionalOnlyResult = schema.safeParse({
+        name: 'test'  // 只提供可选字段
+      }).success;
+      expect(optionalOnlyResult).toBeFalsy(); // age 仍然是必需的
+
+      expect(result.success).toBeTruthy();
+    });
+
+    it('should test setOptional with nested schema', () => {
+      class NestedDTO {
+        @Rule(z.object({
+          firstName: z.string(),
+          lastName: z.string()
+        }))
+        name: {
+          firstName: string;
+          lastName: string;
+        };
+
+        @Rule(z.number())
+        age: number;
+      }
+
+      schemaHelper.setOptional(NestedDTO, 'name');
+      const schema = schemaHelper.getSchema(NestedDTO);
+
+      expect(schema.safeParse({
+        age: 18
+      }).success).toBeTruthy();
+    });
+
+    it('should test setRequired for all properties', () => {
+      schemaHelper.setRequired(TestDTO);
+
+      expect(schemaHelper.isRequired(TestDTO, 'name')).toBeTruthy();
+      expect(schemaHelper.isRequired(TestDTO, 'age')).toBeTruthy();
+      expect(schemaHelper.isRequired(TestDTO, 'description')).toBeTruthy();
+
+      const schema = schemaHelper.getSchema(TestDTO);
+      expect(schema.safeParse({
+        name: 'test',
+        age: 18
+        // 缺少 description
+      }).success).toBeFalsy();
+    });
+
+    it('should test setOptional for all properties', () => {
+      schemaHelper.setOptional(TestDTO);
+
+      expect(schemaHelper.isOptional(TestDTO, 'name')).toBeTruthy();
+      expect(schemaHelper.isOptional(TestDTO, 'age')).toBeTruthy();
+      expect(schemaHelper.isOptional(TestDTO, 'description')).toBeTruthy();
+
+      const schema = schemaHelper.getSchema(TestDTO);
+      expect(schema.safeParse({}).success).toBeTruthy();
+    });
+
+    it('should test getSchema with complex validations', () => {
+      class RangeDTO {
+        @Rule(z.number().min(1).max(10))
+        value: number;
+
+        @Rule(z.array(z.string()).min(1).max(3))
+        tags: string[];
+      }
+
+      const schema = schemaHelper.getSchema(RangeDTO);
+
+      // 测试有效数据
+      expect(schema.safeParse({
+        value: 5,
+        tags: ['a', 'b']
+      }).success).toBeTruthy();
+
+      // 测试数值范围
+      expect(schema.safeParse({
+        value: 0,
+        tags: ['a']
+      }).success).toBeFalsy();
+
+      expect(schema.safeParse({
+        value: 11,
+        tags: ['a']
+      }).success).toBeFalsy();
+
+      // 测试数组长度
+      expect(schema.safeParse({
+        value: 5,
+        tags: []
+      }).success).toBeFalsy();
+
+      expect(schema.safeParse({
+        value: 5,
+        tags: ['a', 'b', 'c', 'd']
+      }).success).toBeFalsy();
+    });
+
+    it('should maintain other validations after changing required/optional', () => {
+      class RangeDTO {
+        @Rule(z.number().min(1).max(10))
+        value: number;
+      }
+
+      schemaHelper.setOptional(RangeDTO);
+      const schema1 = schemaHelper.getSchema(RangeDTO);
+
+      // 虽然是可选的，但如果提供了值，仍然要符合范围要求
+      expect(schema1.safeParse({
+        value: 20  // 超出最大值
+      }).success).toBeFalsy();
+
+      schemaHelper.setRequired(RangeDTO);
+      const schema2 = schemaHelper.getSchema(RangeDTO);
+
+      expect(schema2.safeParse({
+        value: 0   // 小于最小值
+      }).success).toBeFalsy();
     });
   });
 });

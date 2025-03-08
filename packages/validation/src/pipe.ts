@@ -103,21 +103,21 @@ export class DecoratorValidPipe extends ParsePipe {}
 @Pipe()
 export class ParseIntPipe extends ParsePipe {
   getSchema(): any {
-    return registry.getDefaultValidator().getIntSchema();
+    return registry.getDefaultValidator().schemaHelper.getIntSchema();
   }
 }
 
 @Pipe()
 export class ParseBoolPipe extends ParsePipe {
   getSchema(): any {
-    return registry.getDefaultValidator().getBoolSchema();
+    return registry.getDefaultValidator().schemaHelper.getBoolSchema();
   }
 }
 
 @Pipe()
 export class ParseFloatPipe extends ParsePipe {
   getSchema(): any {
-    return registry.getDefaultValidator().getFloatSchema();
+    return registry.getDefaultValidator().schemaHelper.getFloatSchema();
   }
 }
 
