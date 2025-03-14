@@ -1,0 +1,11 @@
+export { ValidationConfiguration as Configuration } from './configuration';
+export * from './registry';
+export * from './decorator/rule';
+export * from './decorator/validate';
+export * from './decorator/valid';
+export * from './dtoHelper';
+export * from './service';
+export * from './error';
+export * from './pipe';
+export * from './constants';
+export * from './interface';

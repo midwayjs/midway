@@ -19,6 +19,7 @@ export class MidwayI18nServiceSingleton {
   private i18nConfig: I18nOptions;
 
   private localeTextMap: Map<string, Map<string, any>> = new Map();
+  private localeJSONMap: Map<string, any> = new Map();
   private defaultLocale: string;
   private fallbackMatch: Array<{
     pattern: any;
@@ -47,8 +48,10 @@ export class MidwayI18nServiceSingleton {
    * @param localeTextMapping
    */
   public addLocale(locale: string, localeTextMapping: Record<string, any>) {
-    const currentLangMap = getMap(this.localeTextMap, locale, true);
+    locale = formatLocale(locale);
+    const currentLangMap = getMap(this.localeTextMap, locale);
 
+    // set to text map
     for (const key in localeTextMapping) {
       if (typeof localeTextMapping[key] === 'string') {
         // set to default
@@ -63,6 +66,9 @@ export class MidwayI18nServiceSingleton {
         }
       }
     }
+
+    // set to origin json map
+    this.localeJSONMap.set(locale, localeTextMapping);
   }
 
   /**
@@ -173,12 +179,38 @@ export class MidwayI18nServiceSingleton {
    * @param locale
    * @param group
    */
-  public getLocaleMapping(locale: string, group = 'default') {
+  public getLocaleMapping(
+    locale: string,
+    group = 'default'
+  ): Map<string, any> | undefined {
     locale = formatLocale(locale);
     const langMap = this.localeTextMap.get(locale);
-    if (langMap) {
+    if (langMap && langMap.size > 0) {
       return langMap.get(group);
     }
+  }
+
+  /**
+   * get locale list by group
+   * @since 4.0.0
+   */
+  public getLocaleList(group = 'default') {
+    const list = [];
+    for (const key of this.localeTextMap.keys()) {
+      if (this.localeTextMap.get(key).has(group)) {
+        list.push(key);
+      }
+    }
+    return list;
+  }
+
+  /**
+   * get origin locale json
+   * @since 4.0.0
+   */
+  public getOriginLocaleJSON(locale: string, group = 'default') {
+    locale = formatLocale(locale);
+    return this.localeJSONMap.get(locale)?.[group];
   }
 
   /**
@@ -288,8 +320,7 @@ function getES6Object(o) {
   return o;
 }
 
-function getMap(o: Map<string, any>, key: string, formatKey = false) {
-  key = formatKey ? formatLocale(key) : key;
+function getMap(o: Map<string, any>, key: string) {
   if (!o.has(key)) {
     o.set(key, new Map());
   }

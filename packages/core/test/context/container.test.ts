@@ -992,5 +992,33 @@ describe('/test/context/container.test.ts', () => {
         container.get(TestClass);
       }).toThrow(MidwayDefinitionNotFoundError);
     });
+
+    it('should test inject with multi-level extends', () => {
+
+      @Provide()
+      class Katana {}
+
+      class GrandParent {
+        @Inject()
+        katana1: Katana;
+      }
+
+      class Parent extends GrandParent {
+      }
+
+      @Provide()
+      class Child extends Parent {
+        @Inject()
+        katana2: Katana;
+      }
+
+      const container = new Container();
+      container.bind(Child);
+      container.bind(Katana);
+
+      const child = container.get(Child);
+      expect(child.katana1).toBeDefined();
+      expect(child.katana2).toBeDefined();
+    });
   });
 });
