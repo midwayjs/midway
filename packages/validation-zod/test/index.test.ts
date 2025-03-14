@@ -124,7 +124,7 @@ describe('test/index.test.ts', () => {
         @Rule(z.number().max(10))
         age: number;
 
-        @Rule(z.number().max(10))
+        @Rule(z.number().max(10).optional())
         world?: WorldDTO;
       }
 
