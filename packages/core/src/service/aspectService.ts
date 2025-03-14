@@ -80,97 +80,126 @@ export class MidwayAspectService {
    * @param aspectObject aspect object, before, round, etc.
    */
   public interceptPrototypeMethod(
-    Clz: new (...args) => any,
+    Clz: new (...args: any[]) => any,
     methodName: string,
     aspectObject: IMethodAspect | (() => IMethodAspect)
   ) {
     const originMethod = Clz.prototype[methodName];
 
     if (Types.isAsyncFunction(Clz.prototype[methodName])) {
-      Clz.prototype[methodName] = async function (...args) {
-        let error, result;
-        const newProceed = (...args) => {
-          return originMethod.apply(this, args);
-        };
-        const joinPoint = {
+      Clz.prototype[methodName] = async function (...args: unknown[]): Promise<unknown> {
+        const opts: ProcessOptions = {
+          args,
           methodName,
           target: this,
-          args: args,
-          proceed: newProceed,
-          proceedIsAsyncFunction: true,
-        } as JoinPoint;
-
-        if (typeof aspectObject === 'function') {
-          aspectObject = aspectObject();
-        }
-
-        try {
-          await aspectObject.before?.(joinPoint);
-          if (aspectObject.around) {
-            result = await aspectObject.around(joinPoint);
-          } else {
-            result = await originMethod.call(this, ...joinPoint.args);
-          }
-          joinPoint.proceed = undefined;
-          const resultTemp = await aspectObject.afterReturn?.(
-            joinPoint,
-            result
-          );
-          result = typeof resultTemp === 'undefined' ? result : resultTemp;
-          return result;
-        } catch (err) {
-          joinPoint.proceed = undefined;
-          error = err;
-          if (aspectObject.afterThrow) {
-            await aspectObject.afterThrow(joinPoint, error);
-          } else {
-            throw err;
-          }
-        } finally {
-          await aspectObject.after?.(joinPoint, result, error);
-        }
+        };
+        return processAsync(aspectObject, originMethod, opts);
       };
     } else {
-      Clz.prototype[methodName] = function (...args) {
-        let error, result;
-        const newProceed = (...args) => {
-          return originMethod.apply(this, args);
-        };
-        const joinPoint = {
+      Clz.prototype[methodName] = function (...args: unknown[]) {
+        const opts: ProcessOptions = {
+          args,
           methodName,
           target: this,
-          args: args,
-          proceed: newProceed,
-          proceedIsAsyncFunction: false,
-        } as JoinPoint;
-
-        if (typeof aspectObject === 'function') {
-          aspectObject = aspectObject();
-        }
-
-        try {
-          aspectObject.before?.(joinPoint);
-          if (aspectObject.around) {
-            result = aspectObject.around(joinPoint);
-          } else {
-            result = originMethod.call(this, ...joinPoint.args);
-          }
-          joinPoint.proceed = undefined;
-          const resultTemp = aspectObject.afterReturn?.(joinPoint, result);
-          result = typeof resultTemp === 'undefined' ? result : resultTemp;
-          return result;
-        } catch (err) {
-          joinPoint.proceed = undefined;
-          error = err;
-          if (aspectObject.afterThrow) {
-            aspectObject.afterThrow(joinPoint, error);
-          } else {
-            throw err;
-          }
-        } finally {
-          aspectObject.after?.(joinPoint, result, error);
-        }
+        };
+        return processSync(aspectObject, originMethod, opts);
       };
     }
+  }
+}
+
+interface ProcessOptions {
+  args: unknown[],
+  methodName: string;
+  target: any
+}
+async function processAsync(
+  aspectObjectInput: IMethodAspect | (() => IMethodAspect),
+  originMethod: Function,
+  options: ProcessOptions
+): Promise<unknown> {
+
+  let error: Error;
+  let result: unknown;
+  const newProceed = (...args: unknown[]) => {
+    return originMethod.apply(this, args);
+  };
+  const joinPoint = Object.assign({}, options, {proceed: newProceed, proceedIsAsyncFunction: true}) as JoinPoint;
+
+  let aspectObject: IMethodAspect;
+  if (typeof aspectObjectInput === 'function') {
+    aspectObject = aspectObjectInput();
+  } else {
+    aspectObject = aspectObjectInput;
+  }
+
+  try {
+    await aspectObject.before?.(joinPoint);
+    if (aspectObject.around) {
+      result = await aspectObject.around(joinPoint);
+    } else {
+      result = await originMethod.call(this, ...joinPoint.args);
+    }
+    joinPoint.proceed = undefined;
+    const resultTemp = await aspectObject.afterReturn?.(
+      joinPoint,
+      result
+    );
+    result = typeof resultTemp === 'undefined' ? result : resultTemp;
+    return result;
+  } catch (err) {
+    joinPoint.proceed = undefined;
+    error = err;
+    if (aspectObject.afterThrow) {
+      await aspectObject.afterThrow(joinPoint, error);
+    } else {
+      throw err;
+    }
+  } finally {
+    await aspectObject.after?.(joinPoint, result, error);
+  }
+}
+
+function processSync(
+  aspectObjectInput: IMethodAspect | (() => IMethodAspect),
+  originMethod: Function,
+  options: ProcessOptions
+): unknown {
+
+  let error: Error;
+  let result: unknown;
+  const newProceed = (...args: unknown[]) => {
+    return originMethod.apply(this, args);
+  };
+  const joinPoint = Object.assign({}, options, {proceed: newProceed, proceedIsAsyncFunction: false}) as JoinPoint;
+
+  let aspectObject: IMethodAspect;
+  if (typeof aspectObjectInput === 'function') {
+    aspectObject = aspectObjectInput();
+  } else {
+    aspectObject = aspectObjectInput;
+  }
+
+  try {
+    aspectObject.before?.(joinPoint);
+    if (aspectObject.around) {
+      result = aspectObject.around(joinPoint);
+    } else {
+      result = originMethod.call(this, ...joinPoint.args);
+    }
+    joinPoint.proceed = undefined;
+    const resultTemp = aspectObject.afterReturn?.(joinPoint, result);
+    result = typeof resultTemp === 'undefined' ? result : resultTemp;
+    return result;
+  } catch (err) {
+    joinPoint.proceed = undefined;
+    error = err;
+    if (aspectObject.afterThrow) {
+      aspectObject.afterThrow(joinPoint, error);
+    } else {
+      throw err;
+    }
+  } finally {
+    aspectObject.after?.(joinPoint, result, error);
   }
 }
