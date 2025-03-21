@@ -298,6 +298,7 @@ The Http exceptions built into the following frameworks can be found and used in
 - `PayloadTooLargeError`
 - `UnsupportedMediaTypeError`
 - `UnprocessableEntityError`
+- `TooManyRequestsError`
 - `InternalServerErrorError`
 - `NotImplementedError`
 - `BadGatewayError`

@@ -148,6 +148,15 @@ export class UnprocessableEntityError extends MidwayHttpError {
 }
 
 /**
+ * 429 http error, Means that client has sent too many requests in a given amount of time and that's why the server won't accept the request.
+ */
+export class TooManyRequestsError extends MidwayHttpError {
+  constructor(resOrMessage?: ResOrMessage) {
+    super(resOrMessage, HttpStatus.TOO_MANY_REQUESTS);
+  }
+}
+
+/**
  * 500 http error, Is a generic error and users receive this error message when there is no more suitable specific message.
  */
 export class InternalServerErrorError extends MidwayHttpError {
@@ -204,6 +213,7 @@ export const httpError = {
   PayloadTooLargeError,
   UnsupportedMediaTypeError,
   UnprocessableEntityError,
+  TooManyRequestsError,
   InternalServerErrorError,
   NotImplementedError,
   BadGatewayError,

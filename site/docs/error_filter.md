@@ -298,6 +298,7 @@ export class DefaultErrorFilter {
 - `PayloadTooLargeError`
 - `UnsupportedMediaTypeError`
 - `UnprocessableEntityError`
+- `TooManyRequestsError`
 - `InternalServerErrorError`
 - `NotImplementedError`
 - `BadGatewayError`
