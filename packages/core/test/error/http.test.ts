@@ -47,6 +47,10 @@ describe('test/error/http.test.ts', function () {
     }).toThrowError(httpError.UnprocessableEntityError);
 
     expect(() => {
+      throw new httpError.TooManyRequestsError();
+    }).toThrowError(httpError.TooManyRequestsError);
+
+    expect(() => {
       throw new httpError.InternalServerErrorError();
     }).toThrowError(httpError.InternalServerErrorError);
 
