@@ -1235,3 +1235,57 @@ export interface InjectionConfigurationOptions {
 
 export type FunctionalConfigurationOptions = InjectionConfigurationOptions & ILifeCycle;
 
+export interface ServiceInstance {
+  id: string;
+  serviceName: string;
+  host: string;
+  port: number;
+  metadata?: Record<string, any>;
+  status?: 'UP' | 'DOWN';
+}
+
+export interface ServiceDiscoveryOptions {
+  namespace?: string;
+  timeout?: number;
+  retryTimes?: number;
+  retryInterval?: number;
+  loadBalancer?: ILoadBalancer;
+}
+
+/**
+ * 负载均衡策略接口
+ */
+export interface ILoadBalancer {
+  /**
+   * 从服务实例列表中选择一个实例
+   * @param instances 服务实例列表
+   */
+  select(instances: ServiceInstance[]): ServiceInstance;
+}
+
+
+export interface IServiceDiscovery<Client> {
+  /**
+   * 获取服务列表
+   * @param serviceName 服务名称
+   */
+  getInstances(serviceName: string): Promise<ServiceInstance[]>;
+
+  /**
+   * 获取所有服务名称
+   */
+  getServiceNames(): Promise<string[]>;
+
+  /**
+   * 监听服务变更
+   * @param serviceName 服务名称
+   * @param callback 回调函数
+   */
+  watch(serviceName: string, callback: (instances: ServiceInstance[]) => void): void;
+
+  /**
+   * 停止服务发现
+   */
+  stop(): Promise<void>;
+}
+

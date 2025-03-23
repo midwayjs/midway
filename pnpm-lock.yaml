@@ -408,9 +408,12 @@ importers:
 
   packages/consul:
     dependencies:
+      '@types/consul':
+        specifier: 2.0.0
+        version: 2.0.0
       consul:
-        specifier: 1.2.0
-        version: 1.2.0
+        specifier: 2.0.1
+        version: 2.0.1
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -421,9 +424,6 @@ importers:
       '@midwayjs/mock':
         specifier: workspace:^
         version: link:../mock
-      '@types/consul':
-        specifier: 0.40.3
-        version: 0.40.3
       '@types/sinon':
         specifier: 17.0.3
         version: 17.0.3
@@ -2965,8 +2965,9 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
-  '@types/consul@0.40.3':
-    resolution: {integrity: sha512-SLGbeLxfKJFO/3qpJTK226v0vVQzofy4g68uADDUElTmMeBPMircp7gS5ob6Ix0QGzo1dnu5oXNt/BldR5OwDQ==}
+  '@types/consul@2.0.0':
+    resolution: {integrity: sha512-IyvUaJNOrU+X/Zh46/zwwUPHOEULuC4zod8KNUDElBqN8d9XwtPdyvEeHBZ/HPmkWN9EqR4KbfnzQuRLlWt9+Q==}
+    deprecated: This is a stub types definition. consul provides its own type definitions, so you do not need this installed.
 
   '@types/content-disposition@0.5.8':
     resolution: {integrity: sha512-QVSSvno3dE0MgO76pJhmv4Qyi/j0Yk9pBp0Y7TJ2Tlj+KCgJWY6qX7nnxCOLkZ3VYRSIk1WTxCvwUSdx6CCLdg==}
@@ -4225,8 +4226,8 @@ packages:
   constant-case@3.0.4:
     resolution: {integrity: sha512-I2hSBi7Vvs7BEuJDr5dDHfzb/Ruj3FyvFyh7KLilAjNQw3Be+xgqUBA2W6scVEcL0hL1dwPRtIqEPVUCKkSsyQ==}
 
-  consul@1.2.0:
-    resolution: {integrity: sha512-xWMEDRszShfzKI7XQKq12gr3359VUHUFOrAC2ETNpNe8PFO6AUnY0sbscB7JW5WhUEfuveDcI5ScYqM//20bow==}
+  consul@2.0.1:
+    resolution: {integrity: sha512-91ExUUelOJ1yyB0etYAR0w1p6Ues1VosEyBVxPcWJdnQDTKqAEFzL0MHfOqZWYI2d4HZ4FgotHZkAPW2A/xahA==}
 
   content-disposition@0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
@@ -9792,6 +9793,10 @@ packages:
   uuid-parse@1.1.0:
     resolution: {integrity: sha512-OdmXxA8rDsQ7YpNVbKSJkNzTw2I+S5WsbMDnCtIWSQaosNAcWtFuI/YK1TjzUI6nbkgiqEyh8gWngfcv8Asd9A==}
 
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
+
   uuid@3.4.0:
     resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
     deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
@@ -11818,9 +11823,9 @@ snapshots:
     dependencies:
       '@types/node': 22.12.0
 
-  '@types/consul@0.40.3':
+  '@types/consul@2.0.0':
     dependencies:
-      '@types/node': 22.12.0
+      consul: 2.0.1
 
   '@types/content-disposition@0.5.8': {}
 
@@ -13373,9 +13378,10 @@ snapshots:
       tslib: 2.8.1
       upper-case: 2.0.2
 
-  consul@1.2.0:
+  consul@2.0.1:
     dependencies:
       papi: 1.1.2
+      uuid: 10.0.0
 
   content-disposition@0.5.4:
     dependencies:
@@ -20338,6 +20344,8 @@ snapshots:
   utils-merge@1.0.1: {}
 
   uuid-parse@1.1.0: {}
+
+  uuid@10.0.0: {}
 
   uuid@3.4.0: {}
 
