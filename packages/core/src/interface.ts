@@ -1244,12 +1244,25 @@ export interface ServiceInstance {
   status?: 'UP' | 'DOWN';
 }
 
+/**
+ * 负载均衡策略类型
+ */
+export const LoadBalancerType = {
+  RANDOM: 'random',
+  ROUND_ROBIN: 'roundRobin',
+  WEIGHTED: 'weighted',
+  LEAST_CONNECTION: 'leastConnection',
+  CONSISTENT_HASH: 'consistentHash'
+} as const;
+
+export type LoadBalancerType = typeof LoadBalancerType[keyof typeof LoadBalancerType];
+
 export interface ServiceDiscoveryOptions {
   namespace?: string;
   timeout?: number;
   retryTimes?: number;
   retryInterval?: number;
-  loadBalancer?: ILoadBalancer;
+  loadBalancer?: LoadBalancerType | ILoadBalancer;
 }
 
 /**

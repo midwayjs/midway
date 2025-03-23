@@ -1,14 +1,21 @@
 import { Etcd3 } from 'etcd3';
 import { ServiceDiscovery, ServiceInstance, ServiceDiscoveryOptions, Singleton, Inject, Init, ServiceDiscoveryAdapter } from '@midwayjs/core';
 import { ETCDServiceFactory } from '../manager';
+import { EtcdServiceDiscoveryOptions } from '../interface';
 
 export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
   private namespace: string;
   private leaseId?: number;
+  private renewTimer?: NodeJS.Timeout;
+  private readonly ttl: number;
+  private readonly renewInterval: number;
 
-  constructor(client: Etcd3, serviceDiscoveryOptions: ServiceDiscoveryOptions) {
+  constructor(client: Etcd3, serviceDiscoveryOptions: EtcdServiceDiscoveryOptions) {
     super(client, serviceDiscoveryOptions);
     this.namespace = serviceDiscoveryOptions.namespace || 'services';
+    this.ttl = serviceDiscoveryOptions.ttl || 30;
+    // 续约间隔设置为 TTL 的 1/3，确保有足够的容错时间
+    this.renewInterval = Math.floor(this.ttl / 3) * 1000;
   }
 
   private getServiceKey(serviceName: string): string {
@@ -21,8 +28,37 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
 
   private async createLease(ttl: number = 30): Promise<number> {
     const lease = this.client.lease(ttl);
-    const leaseGrant = await lease.grant();
-    return Number(leaseGrant.id);
+    const leaseId = await lease.grant();
+    return Number(leaseId);
+  }
+
+  private async renewLease(): Promise<void> {
+    if (!this.leaseId) {
+      return;
+    }
+
+    try {
+      const lease = this.client.lease(this.leaseId);
+      await lease.keepaliveOnce();
+    } catch (error) {
+      console.error('Failed to renew lease:', error);
+      // 如果续约失败，尝试重新创建租约
+      this.leaseId = await this.createLease(this.ttl);
+    }
+  }
+
+  private startRenewTimer(): void {
+    // 清除可能存在的旧定时器
+    if (this.renewTimer) {
+      clearInterval(this.renewTimer);
+    }
+    
+    // 启动新的续约定时器
+    this.renewTimer = setInterval(() => {
+      this.renewLease().catch(error => {
+        console.error('Error in lease renewal timer:', error);
+      });
+    }, this.renewInterval);
   }
 
   async register(instance: ServiceInstance): Promise<void> {
@@ -30,7 +66,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
     const value = JSON.stringify(instance);
     
     // 创建租约
-    this.leaseId = await this.createLease();
+    this.leaseId = await this.createLease(this.ttl);
     
     // 注册服务实例
     await this.client
@@ -38,6 +74,9 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
       .value(value)
       .lease(this.leaseId)
       .exec();
+
+    // 启动自动续约
+    this.startRenewTimer();
   }
 
   async deregister(instance: ServiceInstance): Promise<void> {
@@ -119,6 +158,13 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
   }
 
   async stop(): Promise<void> {
+    // 清除续约定时器
+    if (this.renewTimer) {
+      clearInterval(this.renewTimer);
+      this.renewTimer = undefined;
+    }
+
+    // 撤销租约
     if (this.leaseId) {
       await this.client.lease(this.leaseId).revoke();
     }

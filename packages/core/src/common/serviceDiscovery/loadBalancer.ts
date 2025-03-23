@@ -1,4 +1,4 @@
-import { ILoadBalancer, ServiceInstance } from '../../interface';
+import { ILoadBalancer, ServiceInstance, LoadBalancerType } from '../../interface';
 
 /**
  * 随机负载均衡策略
@@ -75,19 +75,6 @@ export class LeastConnectionLoadBalancer implements ILoadBalancer {
     });
   }
 }
-
-/**
- * 负载均衡策略类型
- */
-export const LoadBalancerType = {
-  RANDOM: 'random',
-  ROUND_ROBIN: 'roundRobin',
-  WEIGHTED: 'weighted',
-  LEAST_CONNECTION: 'leastConnection',
-  CONSISTENT_HASH: 'consistentHash'
-} as const;
-
-export type LoadBalancerType = typeof LoadBalancerType[keyof typeof LoadBalancerType];
 
 /**
  * 负载均衡工厂

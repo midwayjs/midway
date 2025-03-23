@@ -1,11 +1,12 @@
 import { IOptions } from 'etcd3';
-export * from './dist/index';
+import { EtcdServiceDiscoveryOptions } from './dist/index';
 import { ServiceDiscoveryOptions } from '@midwayjs/core';
+export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
     etcd?: ServiceFactoryConfigOption<IOptions> & {
-      serviceDiscovery?: ServiceDiscoveryOptions;
+      serviceDiscovery?: EtcdServiceDiscoveryOptions;
     };
   }
 }

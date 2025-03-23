@@ -17,8 +17,7 @@
     "nock": "13.5.6"
   },
   "dependencies": {
-    "consul": "2.0.1",
-    "@types/consul": "2.0.0"
+    "consul": "2.0.1"
   },
   "keywords": [
     "consul"

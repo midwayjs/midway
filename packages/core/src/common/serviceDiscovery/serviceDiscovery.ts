@@ -1,6 +1,7 @@
 import { Destroy } from '../../decorator';
 import { IServiceDiscovery, ServiceDiscoveryOptions, ServiceInstance, ILoadBalancer } from '../../interface';
-import { LoadBalancerType, LoadBalancerFactory } from './loadBalancer';
+import { LoadBalancerFactory } from './loadBalancer';
+import { LoadBalancerType } from '../../interface';
 
 export abstract class ServiceDiscoveryAdapter<Client> implements IServiceDiscovery<Client> {
   protected options: ServiceDiscoveryOptions = {};
@@ -12,6 +13,11 @@ export abstract class ServiceDiscoveryAdapter<Client> implements IServiceDiscove
   constructor(client: Client, serviceDiscoveryOptions: ServiceDiscoveryOptions) {
     this.client = client;
     this.options = serviceDiscoveryOptions;
+    if (this.options.loadBalancer) {
+      this.setLoadBalancer(this.options.loadBalancer);
+    } else {
+      this.setLoadBalancer(LoadBalancerType.ROUND_ROBIN);
+    }
   }
 
   /**
@@ -35,8 +41,12 @@ export abstract class ServiceDiscoveryAdapter<Client> implements IServiceDiscove
   /**
    * 设置负载均衡策略
    */
-  setLoadBalancer(type: LoadBalancerType): void {
-    this.loadBalancer = LoadBalancerFactory.create(type);
+  setLoadBalancer(type: LoadBalancerType | ILoadBalancer): void {
+    if (typeof type === 'string') {
+      this.loadBalancer = LoadBalancerFactory.create(type);
+    } else {
+      this.loadBalancer = type as ILoadBalancer;
+    }
   }
 
   /**
