@@ -76,7 +76,12 @@ export abstract class ServiceDiscoveryAdapter<Client> implements IServiceDiscove
   /**
    * 停止服务发现
    */
-  abstract stop(): Promise<void>;
+  stop(): Promise<void> {
+    this.watchers.clear();
+    if (this.instance) {
+      return this.deregister(this.instance);
+    }
+  }
 
   /**
    * 注册服务实例

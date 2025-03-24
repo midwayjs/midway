@@ -88,13 +88,4 @@ export class ConsulConfiguration implements ILifeCycle {
     await this.registerConsul(container, app);
   }
 
-  async onStop(): Promise<void> {
-    if (
-      this.consulProviderConfig.register &&
-      this.consulProviderConfig.deregister
-    ) {
-      const { id } = this.consulRegisterConfig;
-      await this.consulProvider.deregisterService({ id });
-    }
-  }
 }

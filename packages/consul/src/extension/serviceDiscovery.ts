@@ -1,6 +1,6 @@
 import Consul = require('consul');
 import { ServiceDiscovery, ServiceInstance, ServiceDiscoveryOptions, Singleton, Inject, Init, ServiceDiscoveryAdapter } from '@midwayjs/core';
-import { ConsulProvider } from '../lib/provider';
+import { ConsulServiceFactory } from '../manager';
 
 interface ConsulServiceDiscoveryOptions extends ServiceDiscoveryOptions {
   check?: {
@@ -41,6 +41,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
     };
 
     await this.client.agent.service.register(serviceDef);
+    this.instance = instance;
   }
 
   async deregister(instance: ServiceInstance): Promise<void> {
@@ -51,7 +52,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
   async updateStatus(instance: ServiceInstance, status: 'UP' | 'DOWN'): Promise<void> {
     const serviceId = `${instance.serviceName}:${instance.id}`;
     const checkId = `service:${serviceId}`;
-    
+
     if (status === 'UP') {
       await this.client.agent.check.pass(checkId);
     } else {
@@ -124,22 +125,17 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
       console.error('Error watching service:', err);
     });
   }
-
-  async stop(): Promise<void> {
-    // Consul 客户端不需要特别的清理操作
-    // 服务实例的注销应该在应用关闭时通过 deregister 方法处理
-  }
 }
 
 @Singleton()
 export class ConsulServiceDiscovery extends ServiceDiscovery<InstanceType<typeof Consul>> {
   @Inject()
-  private consulProvider: ConsulProvider;
+  private consulServiceFactory: ConsulServiceFactory;
 
   @Init()
   async init(serviceDiscoveryOptions: ServiceDiscoveryOptions = {}) {
     this.defaultAdapter = new ConsulServiceDiscoverAdapter(
-      this.consulProvider.getConsul(),
+      this.consulServiceFactory.get(this.consulServiceFactory.getDefaultClientName() || 'default'),
       serviceDiscoveryOptions
     );
   }
