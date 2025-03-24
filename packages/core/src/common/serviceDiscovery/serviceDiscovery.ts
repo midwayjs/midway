@@ -1,16 +1,27 @@
 import { Destroy } from '../../decorator';
-import { IServiceDiscovery, ServiceDiscoveryOptions, ServiceInstance, ILoadBalancer } from '../../interface';
+import {
+  IServiceDiscovery,
+  ServiceDiscoveryOptions,
+  ServiceInstance,
+  ILoadBalancer,
+} from '../../interface';
 import { LoadBalancerFactory } from './loadBalancer';
 import { LoadBalancerType } from '../../interface';
 
-export abstract class ServiceDiscoveryAdapter<Client> implements IServiceDiscovery<Client> {
+export abstract class ServiceDiscoveryAdapter<Client>
+  implements IServiceDiscovery<Client>
+{
   protected options: ServiceDiscoveryOptions = {};
-  protected watchers: Map<string, Set<(instances: ServiceInstance[]) => void>> = new Map();
+  protected watchers: Map<string, Set<(instances: ServiceInstance[]) => void>> =
+    new Map();
   protected loadBalancer: ILoadBalancer;
   protected instance?: ServiceInstance;
   protected client: Client;
 
-  constructor(client: Client, serviceDiscoveryOptions: ServiceDiscoveryOptions) {
+  constructor(
+    client: Client,
+    serviceDiscoveryOptions: ServiceDiscoveryOptions
+  ) {
     this.client = client;
     this.options = serviceDiscoveryOptions;
     if (this.options.loadBalancer) {
@@ -52,7 +63,10 @@ export abstract class ServiceDiscoveryAdapter<Client> implements IServiceDiscove
   /**
    * 监听服务变更
    */
-  watch(serviceName: string, callback: (instances: ServiceInstance[]) => void): void {
+  watch(
+    serviceName: string,
+    callback: (instances: ServiceInstance[]) => void
+  ): void {
     if (!this.watchers.has(serviceName)) {
       this.watchers.set(serviceName, new Set());
     }
@@ -62,14 +76,20 @@ export abstract class ServiceDiscoveryAdapter<Client> implements IServiceDiscove
   /**
    * 移除服务监听
    */
-  unwatch(serviceName: string, callback: (instances: ServiceInstance[]) => void): void {
+  unwatch(
+    serviceName: string,
+    callback: (instances: ServiceInstance[]) => void
+  ): void {
     this.watchers.get(serviceName)?.delete(callback);
   }
 
   /**
    * 通知服务变更
    */
-  protected notifyWatchers(serviceName: string, instances: ServiceInstance[]): void {
+  protected notifyWatchers(
+    serviceName: string,
+    instances: ServiceInstance[]
+  ): void {
     this.watchers.get(serviceName)?.forEach(callback => callback(instances));
   }
 
@@ -96,19 +116,26 @@ export abstract class ServiceDiscoveryAdapter<Client> implements IServiceDiscove
   /**
    * 更新服务实例状态
    */
-  abstract updateStatus(instance: ServiceInstance, status: 'UP' | 'DOWN'): Promise<void>;
+  abstract updateStatus(
+    instance: ServiceInstance,
+    status: 'UP' | 'DOWN'
+  ): Promise<void>;
 
   /**
    * 更新服务实例元数据
    */
-  abstract updateMetadata(instance: ServiceInstance, metadata: Record<string, any>): Promise<void>;
+  abstract updateMetadata(
+    instance: ServiceInstance,
+    metadata: Record<string, any>
+  ): Promise<void>;
 }
 
 /**
  * 服务发现抽象类
  */
-export abstract class ServiceDiscovery<Client> implements IServiceDiscovery<Client> {
-
+export abstract class ServiceDiscovery<Client>
+  implements IServiceDiscovery<Client>
+{
   private adapters = new Map<string, ServiceDiscoveryAdapter<Client>>();
   protected defaultAdapter: ServiceDiscoveryAdapter<Client>;
 
@@ -126,12 +153,17 @@ export abstract class ServiceDiscovery<Client> implements IServiceDiscovery<Clie
     return this.defaultAdapter.getServiceNames();
   }
 
-  watch(serviceName: string, callback: (instances: ServiceInstance[]) => void): void {
+  watch(
+    serviceName: string,
+    callback: (instances: ServiceInstance[]) => void
+  ): void {
     this.defaultAdapter.watch(serviceName, callback);
   }
 
   @Destroy()
   stop(): Promise<any> {
-    return Promise.all(Array.from(this.adapters.values()).map(adapter => adapter.stop()));
+    return Promise.all(
+      Array.from(this.adapters.values()).map(adapter => adapter.stop())
+    );
   }
 }

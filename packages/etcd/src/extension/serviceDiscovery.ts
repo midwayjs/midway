@@ -1,5 +1,13 @@
 import { Etcd3 } from 'etcd3';
-import { ServiceDiscovery, ServiceInstance, ServiceDiscoveryOptions, Singleton, Inject, Init, ServiceDiscoveryAdapter } from '@midwayjs/core';
+import {
+  ServiceDiscovery,
+  ServiceInstance,
+  ServiceDiscoveryOptions,
+  Singleton,
+  Inject,
+  Init,
+  ServiceDiscoveryAdapter,
+} from '@midwayjs/core';
 import { ETCDServiceFactory } from '../manager';
 import { EtcdServiceDiscoveryOptions } from '../interface';
 
@@ -10,7 +18,10 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
   private readonly ttl: number;
   private readonly renewInterval: number;
 
-  constructor(client: Etcd3, serviceDiscoveryOptions: EtcdServiceDiscoveryOptions) {
+  constructor(
+    client: Etcd3,
+    serviceDiscoveryOptions: EtcdServiceDiscoveryOptions
+  ) {
     super(client, serviceDiscoveryOptions);
     this.namespace = serviceDiscoveryOptions.namespace || 'services';
     this.ttl = serviceDiscoveryOptions.ttl || 30;
@@ -26,7 +37,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
     return `${this.getServiceKey(serviceName)}/${instanceId}`;
   }
 
-  private async createLease(ttl: number = 30): Promise<number> {
+  private async createLease(ttl = 30): Promise<number> {
     const lease = this.client.lease(ttl);
     const leaseId = await lease.grant();
     return Number(leaseId);
@@ -52,7 +63,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
     if (this.renewTimer) {
       clearInterval(this.renewTimer);
     }
-    
+
     // 启动新的续约定时器
     this.renewTimer = setInterval(() => {
       this.renewLease().catch(error => {
@@ -64,16 +75,12 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
   async register(instance: ServiceInstance): Promise<void> {
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(instance);
-    
+
     // 创建租约
     this.leaseId = await this.createLease(this.ttl);
-    
+
     // 注册服务实例
-    await this.client
-      .put(key)
-      .value(value)
-      .lease(this.leaseId)
-      .exec();
+    await this.client.put(key).value(value).lease(this.leaseId).exec();
 
     // 启动自动续约
     this.startRenewTimer();
@@ -84,48 +91,48 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
     await this.client.delete().key(key).exec();
   }
 
-  async updateStatus(instance: ServiceInstance, status: 'UP' | 'DOWN'): Promise<void> {
+  async updateStatus(
+    instance: ServiceInstance,
+    status: 'UP' | 'DOWN'
+  ): Promise<void> {
     const updatedInstance = { ...instance, status };
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(updatedInstance);
-    
-    await this.client
-      .put(key)
-      .value(value)
-      .lease(this.leaseId)
-      .exec();
+
+    await this.client.put(key).value(value).lease(this.leaseId).exec();
   }
 
-  async updateMetadata(instance: ServiceInstance, metadata: Record<string, any>): Promise<void> {
+  async updateMetadata(
+    instance: ServiceInstance,
+    metadata: Record<string, any>
+  ): Promise<void> {
     const updatedInstance = { ...instance, metadata };
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(updatedInstance);
-    
-    await this.client
-      .put(key)
-      .value(value)
-      .lease(this.leaseId)
-      .exec();
+
+    await this.client.put(key).value(value).lease(this.leaseId).exec();
   }
 
   async getInstances(serviceName: string): Promise<ServiceInstance[]> {
     const key = this.getServiceKey(serviceName);
     const response = await this.client.getAll().prefix(key).exec();
-    
-    return response.kvs.map(kv => {
-      try {
-        return JSON.parse(kv.value.toString());
-      } catch (error) {
-        console.error('Failed to parse service instance:', error);
-        return null;
-      }
-    }).filter(Boolean) as ServiceInstance[];
+
+    return response.kvs
+      .map(kv => {
+        try {
+          return JSON.parse(kv.value.toString());
+        } catch (error) {
+          console.error('Failed to parse service instance:', error);
+          return null;
+        }
+      })
+      .filter(Boolean) as ServiceInstance[];
   }
 
   async getServiceNames(): Promise<string[]> {
     const key = this.namespace;
     const response = await this.client.getAll().prefix(key).exec();
-    
+
     const serviceNames = new Set<string>();
     response.kvs.forEach(kv => {
       const parts = kv.key.toString().split('/');
@@ -133,15 +140,19 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
         serviceNames.add(parts[1]);
       }
     });
-    
+
     return Array.from(serviceNames);
   }
 
-  watch(serviceName: string, callback: (instances: ServiceInstance[]) => void): void {
+  watch(
+    serviceName: string,
+    callback: (instances: ServiceInstance[]) => void
+  ): void {
     super.watch(serviceName, callback);
-    
+
     const key = this.getServiceKey(serviceName);
-    this.client.watch()
+    this.client
+      .watch()
       .prefix(key)
       .create()
       .then(watcher => {
@@ -149,7 +160,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
           const instances = await this.getInstances(serviceName);
           this.notifyWatchers(serviceName, instances);
         });
-        
+
         watcher.on('delete', async () => {
           const instances = await this.getInstances(serviceName);
           this.notifyWatchers(serviceName, instances);
@@ -174,12 +185,16 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
 
 @Singleton()
 export class EtcdServiceDiscovery extends ServiceDiscovery<Etcd3> {
-
   @Inject()
   private etcdServiceFactory: ETCDServiceFactory;
 
   @Init()
   async init(serviceDiscoveryOptions: ServiceDiscoveryOptions = {}) {
-    this.defaultAdapter = new EtcdServiceDiscoverAdapter(this.etcdServiceFactory.get(this.etcdServiceFactory.getDefaultClientName() || 'default'), serviceDiscoveryOptions);
+    this.defaultAdapter = new EtcdServiceDiscoverAdapter(
+      this.etcdServiceFactory.get(
+        this.etcdServiceFactory.getDefaultClientName() || 'default'
+      ),
+      serviceDiscoveryOptions
+    );
   }
 }

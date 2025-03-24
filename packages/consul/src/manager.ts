@@ -11,7 +11,9 @@ import {
 import Consul = require('consul');
 
 @Singleton()
-export class ConsulServiceFactory extends ServiceFactory<InstanceType<typeof Consul>> {
+export class ConsulServiceFactory extends ServiceFactory<
+  InstanceType<typeof Consul>
+> {
   @Config('consul')
   consulConfig;
 
@@ -62,4 +64,4 @@ export interface ConsulService extends InstanceType<typeof Consul> {
   // empty
 }
 
-delegateTargetAllPrototypeMethod(ConsulService, Consul); 
+delegateTargetAllPrototypeMethod(ConsulService, Consul);

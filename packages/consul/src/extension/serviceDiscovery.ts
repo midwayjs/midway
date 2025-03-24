@@ -1,5 +1,13 @@
 import Consul = require('consul');
-import { ServiceDiscovery, ServiceInstance, ServiceDiscoveryOptions, Singleton, Inject, Init, ServiceDiscoveryAdapter } from '@midwayjs/core';
+import {
+  ServiceDiscovery,
+  ServiceInstance,
+  ServiceDiscoveryOptions,
+  Singleton,
+  Inject,
+  Init,
+  ServiceDiscoveryAdapter,
+} from '@midwayjs/core';
 import { ConsulServiceFactory } from '../manager';
 
 interface ConsulServiceDiscoveryOptions extends ServiceDiscoveryOptions {
@@ -14,10 +22,15 @@ interface ConsulServiceDiscoveryOptions extends ServiceDiscoveryOptions {
   };
 }
 
-export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<InstanceType<typeof Consul>> {
+export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
+  InstanceType<typeof Consul>
+> {
   private readonly check: ConsulServiceDiscoveryOptions['check'];
 
-  constructor(consul: InstanceType<typeof Consul>, serviceDiscoveryOptions: ConsulServiceDiscoveryOptions) {
+  constructor(
+    consul: InstanceType<typeof Consul>,
+    serviceDiscoveryOptions: ConsulServiceDiscoveryOptions
+  ) {
     super(consul, serviceDiscoveryOptions);
     this.check = serviceDiscoveryOptions.check;
   }
@@ -36,8 +49,8 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
         tcp: `${instance.host}:${instance.port}`,
         interval: '3s',
         timeout: '1s',
-        ...this.check
-      }
+        ...this.check,
+      },
     };
 
     await this.client.agent.service.register(serviceDef);
@@ -49,7 +62,10 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
     await this.client.agent.service.deregister(serviceId);
   }
 
-  async updateStatus(instance: ServiceInstance, status: 'UP' | 'DOWN'): Promise<void> {
+  async updateStatus(
+    instance: ServiceInstance,
+    status: 'UP' | 'DOWN'
+  ): Promise<void> {
     const serviceId = `${instance.serviceName}:${instance.id}`;
     const checkId = `service:${serviceId}`;
 
@@ -60,7 +76,10 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
     }
   }
 
-  async updateMetadata(instance: ServiceInstance, metadata: Record<string, any>): Promise<void> {
+  async updateMetadata(
+    instance: ServiceInstance,
+    metadata: Record<string, any>
+  ): Promise<void> {
     const serviceId = `${instance.serviceName}:${instance.id}`;
     const serviceDef = {
       id: serviceId,
@@ -68,7 +87,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
       address: instance.host,
       port: instance.port,
       tags: metadata.tags || [],
-      meta: metadata
+      meta: metadata,
     };
 
     await this.client.agent.service.register(serviceDef);
@@ -94,9 +113,9 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
         port: service.ServicePort,
         metadata: {
           ...service.ServiceMeta,
-          tags: service.ServiceTags
+          tags: service.ServiceTags,
         },
-        status: 'UP'
+        status: 'UP',
       }));
   }
 
@@ -105,14 +124,17 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
     return Object.keys(services);
   }
 
-  watch(serviceName: string, callback: (instances: ServiceInstance[]) => void): void {
+  watch(
+    serviceName: string,
+    callback: (instances: ServiceInstance[]) => void
+  ): void {
     super.watch(serviceName, callback);
 
     const watcher = this.client.watch({
       method: this.client.health.service,
       options: {
-        service: serviceName
-      }
+        service: serviceName,
+      },
     });
 
     watcher.on('change', () => {
@@ -121,21 +143,25 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Instan
         .catch(error => console.error('Error getting instances:', error));
     });
 
-    watcher.on('error', (err) => {
+    watcher.on('error', err => {
       console.error('Error watching service:', err);
     });
   }
 }
 
 @Singleton()
-export class ConsulServiceDiscovery extends ServiceDiscovery<InstanceType<typeof Consul>> {
+export class ConsulServiceDiscovery extends ServiceDiscovery<
+  InstanceType<typeof Consul>
+> {
   @Inject()
   private consulServiceFactory: ConsulServiceFactory;
 
   @Init()
   async init(serviceDiscoveryOptions: ServiceDiscoveryOptions = {}) {
     this.defaultAdapter = new ConsulServiceDiscoverAdapter(
-      this.consulServiceFactory.get(this.consulServiceFactory.getDefaultClientName() || 'default'),
+      this.consulServiceFactory.get(
+        this.consulServiceFactory.getDefaultClientName() || 'default'
+      ),
       serviceDiscoveryOptions
     );
   }

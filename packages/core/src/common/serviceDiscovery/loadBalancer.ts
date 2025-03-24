@@ -1,4 +1,8 @@
-import { ILoadBalancer, ServiceInstance, LoadBalancerType } from '../../interface';
+import {
+  ILoadBalancer,
+  ServiceInstance,
+  LoadBalancerType,
+} from '../../interface';
 
 /**
  * 随机负载均衡策略
@@ -96,4 +100,4 @@ export class LoadBalancerFactory {
         throw new Error(`Unsupported load balancer type: ${type}`);
     }
   }
-} 
+}

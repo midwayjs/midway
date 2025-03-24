@@ -1,4 +1,12 @@
-import { ServiceDiscovery, ServiceInstance, ServiceDiscoveryOptions, Singleton, Inject, Init, ServiceDiscoveryAdapter } from '@midwayjs/core';
+import {
+  ServiceDiscovery,
+  ServiceInstance,
+  ServiceDiscoveryOptions,
+  Singleton,
+  Inject,
+  Init,
+  ServiceDiscoveryAdapter,
+} from '@midwayjs/core';
 import { RedisServiceFactory } from '../manager';
 import Redis from 'ioredis';
 
@@ -18,7 +26,10 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
   private readonly prefix: string;
   private readonly pubsub: any;
 
-  constructor(redis: InstanceType<typeof Redis>, serviceDiscoveryOptions: RedisServiceDiscoveryOptions) {
+  constructor(
+    redis: InstanceType<typeof Redis>,
+    serviceDiscoveryOptions: RedisServiceDiscoveryOptions
+  ) {
     super(redis, serviceDiscoveryOptions);
     this.ttl = serviceDiscoveryOptions.ttl || 30;
     this.prefix = serviceDiscoveryOptions.prefix || 'services:';
@@ -36,7 +47,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
   async register(instance: ServiceInstance): Promise<void> {
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(instance);
-    
+
     // 使用 Redis 事务确保原子性
     const multi = this.client.multi();
     multi.set(key, value);
@@ -44,11 +55,14 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
     await multi.exec();
 
     // 发布服务变更消息
-    await this.pubsub.publish('service:change', JSON.stringify({
-      type: 'register',
-      service: instance.serviceName,
-      instance
-    }));
+    await this.pubsub.publish(
+      'service:change',
+      JSON.stringify({
+        type: 'register',
+        service: instance.serviceName,
+        instance,
+      })
+    );
 
     this.instance = instance;
   }
@@ -58,53 +72,68 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
     await this.client.del(key);
 
     // 发布服务变更消息
-    await this.pubsub.publish('service:change', JSON.stringify({
-      type: 'deregister',
-      service: instance.serviceName,
-      instance
-    }));
+    await this.pubsub.publish(
+      'service:change',
+      JSON.stringify({
+        type: 'deregister',
+        service: instance.serviceName,
+        instance,
+      })
+    );
 
     if (this.instance?.id === instance.id) {
       this.instance = undefined;
     }
   }
 
-  async updateStatus(instance: ServiceInstance, status: 'UP' | 'DOWN'): Promise<void> {
+  async updateStatus(
+    instance: ServiceInstance,
+    status: 'UP' | 'DOWN'
+  ): Promise<void> {
     const updatedInstance = { ...instance, status };
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(updatedInstance);
-    
+
     await this.client.set(key, value);
     await this.client.expire(key, this.ttl);
 
     // 发布服务状态变更消息
-    await this.pubsub.publish('service:change', JSON.stringify({
-      type: 'status',
-      service: instance.serviceName,
-      instance: updatedInstance
-    }));
+    await this.pubsub.publish(
+      'service:change',
+      JSON.stringify({
+        type: 'status',
+        service: instance.serviceName,
+        instance: updatedInstance,
+      })
+    );
   }
 
-  async updateMetadata(instance: ServiceInstance, metadata: Record<string, any>): Promise<void> {
+  async updateMetadata(
+    instance: ServiceInstance,
+    metadata: Record<string, any>
+  ): Promise<void> {
     const updatedInstance = { ...instance, metadata };
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(updatedInstance);
-    
+
     await this.client.set(key, value);
     await this.client.expire(key, this.ttl);
 
     // 发布服务元数据变更消息
-    await this.pubsub.publish('service:change', JSON.stringify({
-      type: 'metadata',
-      service: instance.serviceName,
-      instance: updatedInstance
-    }));
+    await this.pubsub.publish(
+      'service:change',
+      JSON.stringify({
+        type: 'metadata',
+        service: instance.serviceName,
+        instance: updatedInstance,
+      })
+    );
   }
 
   async getInstances(serviceName: string): Promise<ServiceInstance[]> {
     const pattern = this.getInstanceKey(serviceName, '*');
     const keys = await this.client.keys(pattern);
-    
+
     if (keys.length === 0) {
       return [];
     }
@@ -125,7 +154,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
   async getServiceNames(): Promise<string[]> {
     const pattern = `${this.prefix}*`;
     const keys = await this.client.keys(pattern);
-    
+
     const serviceNames = new Set<string>();
     keys.forEach(key => {
       const parts = key.split(':');
@@ -133,11 +162,14 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
         serviceNames.add(parts[1]);
       }
     });
-    
+
     return Array.from(serviceNames);
   }
 
-  watch(serviceName: string, callback: (instances: ServiceInstance[]) => void): void {
+  watch(
+    serviceName: string,
+    callback: (instances: ServiceInstance[]) => void
+  ): void {
     super.watch(serviceName, callback);
 
     // 订阅服务变更消息
@@ -162,7 +194,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
   async stop(): Promise<void> {
     // 取消订阅
     await this.pubsub.unsubscribe();
-    
+
     // 如果有当前注册的实例，进行注销
     if (this.instance) {
       await this.deregister(this.instance);
@@ -178,8 +210,10 @@ export class RedisServiceDiscovery extends ServiceDiscovery<Redis> {
   @Init()
   async init(serviceDiscoveryOptions: ServiceDiscoveryOptions = {}) {
     this.defaultAdapter = new RedisServiceDiscoverAdapter(
-      this.redisServiceFactory.get(this.redisServiceFactory.getDefaultClientName() || 'default'),
+      this.redisServiceFactory.get(
+        this.redisServiceFactory.getDefaultClientName() || 'default'
+      ),
       serviceDiscoveryOptions
     );
   }
-} 
+}
