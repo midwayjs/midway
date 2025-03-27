@@ -408,9 +408,6 @@ importers:
 
   packages/consul:
     dependencies:
-      '@types/consul':
-        specifier: 2.0.0
-        version: 2.0.0
       consul:
         specifier: 2.0.1
         version: 2.0.1
@@ -2964,10 +2961,6 @@ packages:
 
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
-
-  '@types/consul@2.0.0':
-    resolution: {integrity: sha512-IyvUaJNOrU+X/Zh46/zwwUPHOEULuC4zod8KNUDElBqN8d9XwtPdyvEeHBZ/HPmkWN9EqR4KbfnzQuRLlWt9+Q==}
-    deprecated: This is a stub types definition. consul provides its own type definitions, so you do not need this installed.
 
   '@types/content-disposition@0.5.8':
     resolution: {integrity: sha512-QVSSvno3dE0MgO76pJhmv4Qyi/j0Yk9pBp0Y7TJ2Tlj+KCgJWY6qX7nnxCOLkZ3VYRSIk1WTxCvwUSdx6CCLdg==}
@@ -11822,10 +11815,6 @@ snapshots:
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 22.12.0
-
-  '@types/consul@2.0.0':
-    dependencies:
-      consul: 2.0.1
 
   '@types/content-disposition@0.5.8': {}
 
