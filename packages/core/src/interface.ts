@@ -1050,7 +1050,6 @@ export type IMidwayApplication<
 export type ModuleLoadType = 'commonjs' | 'esm';
 
 export interface IMidwayBootstrapOptions {
-  [customPropertyKey: string]: any;
   baseDir?: string;
   appDir?: string;
   applicationContext?: IMidwayGlobalContainer;
@@ -1083,7 +1082,7 @@ export interface IMidwayFramework<
   configurationOptions: CONFIG;
   configure(options?: CONFIG): CONFIG;
   isEnable(): boolean;
-  initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
+  initialize(options: IMidwayBootstrapOptions): Promise<void>;
   run(): Promise<void>;
   stop(): Promise<void>;
   getApplication(): APP;
@@ -1238,8 +1237,11 @@ export type FunctionalConfigurationOptions = InjectionConfigurationOptions & ILi
 export interface ServiceInstance {
   id: string;
   serviceName: string;
+  protocol: string;
   host: string;
   port: number;
+  host_v6?: string;
+  port_v6?: number;
   metadata?: Record<string, any>;
   status?: 'UP' | 'DOWN';
 }

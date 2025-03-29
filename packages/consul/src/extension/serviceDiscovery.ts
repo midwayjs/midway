@@ -1,4 +1,3 @@
-import Consul = require('consul');
 import {
   ServiceDiscovery,
   ServiceInstance,
@@ -7,28 +6,20 @@ import {
   Inject,
   Init,
   ServiceDiscoveryAdapter,
+  Config,
+  NetworkUtils,
 } from '@midwayjs/core';
 import { ConsulServiceFactory } from '../manager';
+import { ConsulServiceDiscoveryOptions, ConsulClient } from '../interface';
 
-interface ConsulServiceDiscoveryOptions extends ServiceDiscoveryOptions {
-  check?: {
-    tcp?: string;
-    http?: string;
-    script?: string;
-    interval?: string;
-    ttl?: string;
-    notes?: string;
-    status?: string;
-  };
-}
 
 export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
-  InstanceType<typeof Consul>
+  ConsulClient
 > {
   private readonly check: ConsulServiceDiscoveryOptions['check'];
 
   constructor(
-    consul: InstanceType<typeof Consul>,
+    consul: ConsulClient,
     serviceDiscoveryOptions: ConsulServiceDiscoveryOptions
   ) {
     super(consul, serviceDiscoveryOptions);
@@ -147,22 +138,46 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       console.error('Error watching service:', err);
     });
   }
+
 }
 
 @Singleton()
-export class ConsulServiceDiscovery extends ServiceDiscovery<
-  InstanceType<typeof Consul>
-> {
+export class ConsulServiceDiscovery extends ServiceDiscovery<ConsulClient> {
+  public protocol = 'consul';
+
   @Inject()
   private consulServiceFactory: ConsulServiceFactory;
 
+  @Config('consul.serviceDiscovery')
+  consulServiceDiscoveryOptions: ConsulServiceDiscoveryOptions;
+
   @Init()
-  async init(serviceDiscoveryOptions: ServiceDiscoveryOptions = {}) {
-    this.defaultAdapter = new ConsulServiceDiscoverAdapter(
-      this.consulServiceFactory.get(
-        this.consulServiceFactory.getDefaultClientName() || 'default'
-      ),
-      serviceDiscoveryOptions
-    );
+  async init(serviceDiscoveryOptions?: ServiceDiscoveryOptions) {
+
+    const serviceDiscoveryOption = serviceDiscoveryOptions ?? this.consulServiceDiscoveryOptions;
+
+    if (serviceDiscoveryOption) {
+      this.defaultAdapter = new ConsulServiceDiscoverAdapter(
+        this.consulServiceFactory.get(
+          this.consulServiceFactory.getDefaultClientName() || 'default'
+        ),
+        serviceDiscoveryOption
+      );
+    }
+  }
+
+  serviceInstanceTpl(protocol: string): ServiceInstance {
+    // id 再加一个 6 位字母或者数字随机串
+    const random = Math.random().toString(36).substring(2, 8);
+    return {
+      id: `${NetworkUtils.getHostname()}-${process.pid}-${random}`,
+      serviceName: `${protocol}-${NetworkUtils.getHostname()}`,
+      protocol,
+      host: NetworkUtils.getIpv4Address(),
+      host_v6: NetworkUtils.getIpv6Address(),
+      port: 80,
+      port_v6: 80,
+      metadata: {},
+    };
   }
 }

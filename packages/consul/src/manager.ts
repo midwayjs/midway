@@ -6,16 +6,17 @@ import {
   ServiceFactory,
   MidwayCommonError,
   delegateTargetAllPrototypeMethod,
+  ServiceFactoryConfigOption,
   Singleton,
+  ILogger
 } from '@midwayjs/core';
 import Consul = require('consul');
+import { ConsulClient, ConsulOptions } from './interface';
 
 @Singleton()
-export class ConsulServiceFactory extends ServiceFactory<
-  InstanceType<typeof Consul>
-> {
+export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
   @Config('consul')
-  consulConfig;
+  consulConfig: ServiceFactoryConfigOption<ConsulOptions>;
 
   @Init()
   async init() {
@@ -25,10 +26,10 @@ export class ConsulServiceFactory extends ServiceFactory<
   }
 
   @Logger('coreLogger')
-  logger;
+  logger: ILogger;
 
-  async createClient(config: any): Promise<InstanceType<typeof Consul>> {
-    this.logger.info('[midway:consul] init %s', config.host);
+  async createClient(config: ConsulOptions, clientName: string): Promise<InstanceType<typeof Consul>> {
+    this.logger.info(`[midway:consul] init %s at %s:%s`, clientName, config.host, config.port);
     return new Consul(config);
   }
 
@@ -36,7 +37,8 @@ export class ConsulServiceFactory extends ServiceFactory<
     return 'consul';
   }
 
-  async destroyClient(client: InstanceType<typeof Consul>) {
+  async destroyClient(client: InstanceType<typeof Consul>, clientName: string) {
+    this.logger.info('[midway:consul] destroy %s', clientName);
     client.destroy();
   }
 }

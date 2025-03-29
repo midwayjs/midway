@@ -1,14 +1,14 @@
 import { IMidwayApplication, IMidwayBootstrapOptions } from '@midwayjs/core';
 
-export interface MockAppConfigurationOptions extends IMidwayBootstrapOptions {
+export interface MockBootstrapOptions extends IMidwayBootstrapOptions {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
   ssl?: boolean;
-}
-
-export interface MockBootstrapOptions extends MockAppConfigurationOptions {
+  bootstrapTimeout?: number;
+  starter?: any;
   entryFile?: string;
   bootstrapMode?: 'faas' | 'app';
+  initializeMethodName?: string;
 }
 
 export type ComponentModule = {

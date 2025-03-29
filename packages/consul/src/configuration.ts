@@ -4,14 +4,13 @@ import {
   IMidwayApplication,
   IMidwayContainer,
 } from '@midwayjs/core';
-import * as DefaultConfig from './config/config.default';
 import { ConsulServiceFactory } from './manager';
 
 @Configuration({
   namespace: 'consul',
   importConfigs: [
     {
-      default: DefaultConfig,
+      default: {},
     },
   ],
 })
@@ -21,5 +20,10 @@ export class ConsulConfiguration implements ILifeCycle {
     app?: IMidwayApplication
   ): Promise<void> {
     await container.getAsync(ConsulServiceFactory);
+  }
+
+  async onStop(container: IMidwayContainer): Promise<void> {
+    const factory = await container.getAsync(ConsulServiceFactory);
+    await factory.stop();
   }
 }

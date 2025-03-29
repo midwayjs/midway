@@ -7,6 +7,7 @@ import {
 } from '../../interface';
 import { LoadBalancerFactory } from './loadBalancer';
 import { LoadBalancerType } from '../../interface';
+import { NetworkUtils } from '../../util/network';
 
 export abstract class ServiceDiscoveryAdapter<Client>
   implements IServiceDiscovery<Client>
@@ -138,6 +139,7 @@ export abstract class ServiceDiscovery<Client>
 {
   private adapters = new Map<string, ServiceDiscoveryAdapter<Client>>();
   protected defaultAdapter: ServiceDiscoveryAdapter<Client>;
+  abstract protocol: string;
 
   abstract init(options?: ServiceDiscoveryOptions): Promise<void>;
 
@@ -165,5 +167,14 @@ export abstract class ServiceDiscovery<Client>
     return Promise.all(
       Array.from(this.adapters.values()).map(adapter => adapter.stop())
     );
+  }
+
+  serviceInstanceTpl(): ServiceInstance {
+    return {
+      ...super.serviceInstanceTpl(),
+      port: 8080,
+      port_v6: 8080,
+      metadata: {},
+    }
   }
 }
