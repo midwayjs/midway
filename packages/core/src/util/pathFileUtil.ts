@@ -72,7 +72,7 @@ export function getModuleRequirePathList(moduleName: string): string[] {
   return modulePathList;
 }
 
-export const PathFileUtil = {
+export const PathFileUtils = {
   isPath,
   isPathEqual,
   getFileContentSync,
