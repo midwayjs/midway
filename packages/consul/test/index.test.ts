@@ -41,11 +41,19 @@ describe('/test/feature.test.ts', () => {
               port: 8500,
             },
             serviceDiscovery: {
-              namespace: 'test',
-              timeout: 5000,
-              retryTimes: 3,
-              retryInterval: 1000,
-              loadBalancer: 'roundRobin',
+              selfRegister: true,
+              serviceOptions: (meta) => {
+                return {
+                  id: meta.id,
+                  name: meta.serviceName,
+                  tags: ['test'],
+                  address: meta.host,
+                  port: 8500,
+                  meta: {
+                    version: '1.0.0',
+                  },
+                }
+              }
             }
           }
         }
@@ -57,6 +65,9 @@ describe('/test/feature.test.ts', () => {
       const serviceNames = await consulServiceDiscovery.getServiceNames();
       expect(serviceNames).toBeDefined();
       expect(serviceNames.length).toBeGreaterThan(0);
+
+      const instances = await consulServiceDiscovery.getInstances(serviceNames[1]);
+      expect(instances).toBeDefined();
 
       await close(app);
     });

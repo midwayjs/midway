@@ -1,64 +1,69 @@
 import {
   ServiceDiscovery,
-  ServiceInstance,
   ServiceDiscoveryOptions,
   Singleton,
   Inject,
   Init,
   ServiceDiscoveryAdapter,
   Config,
-  NetworkUtils,
+  MidwayConfigMissingError,
 } from '@midwayjs/core';
 import { ConsulServiceFactory } from '../manager';
-import { ConsulServiceDiscoveryOptions, ConsulClient } from '../interface';
-
+import {
+  ConsulServiceDiscoveryOptions,
+  ConsulClient,
+  ConsulInstanceMetadata,
+} from '../interface';
 
 export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
-  ConsulClient
+  ConsulClient,
+  ConsulInstanceMetadata
 > {
-  private readonly check: ConsulServiceDiscoveryOptions['check'];
+  public protocol = 'consul';
 
   constructor(
     consul: ConsulClient,
     serviceDiscoveryOptions: ConsulServiceDiscoveryOptions
   ) {
     super(consul, serviceDiscoveryOptions);
-    this.check = serviceDiscoveryOptions.check;
   }
 
-  async register(instance: ServiceInstance): Promise<void> {
-    const serviceId = `${instance.serviceName}:${instance.id}`;
-    const serviceDef = {
-      id: serviceId,
-      name: instance.serviceName,
-      address: instance.host,
-      port: instance.port,
-      tags: instance.metadata?.tags || [],
-      meta: instance.metadata || {},
-      check: {
-        name: `service:${serviceId}`,
-        tcp: `${instance.host}:${instance.port}`,
-        interval: '3s',
-        timeout: '1s',
-        ...this.check,
-      },
-    };
+  async register(instance: ConsulInstanceMetadata): Promise<void> {
+    if (!instance) {
+      const serviceOptions: ConsulInstanceMetadata =
+        typeof this.options.serviceOptions === 'function'
+          ? this.options.serviceOptions(this.getDefaultInstanceMeta())
+          : this.options.serviceOptions;
+      if (serviceOptions) {
+        serviceOptions.getMetadata = () => {
+          return instance.meta;
+        };
+        instance = serviceOptions;
+      } else {
+        // throw error
+        throw new MidwayConfigMissingError(
+          'consul.serviceDiscovery.serviceOptions'
+        );
+      }
+    }
 
-    await this.client.agent.service.register(serviceDef);
+    await this.client.agent.service.register(instance);
     this.instance = instance;
   }
 
-  async deregister(instance: ServiceInstance): Promise<void> {
-    const serviceId = `${instance.serviceName}:${instance.id}`;
-    await this.client.agent.service.deregister(serviceId);
+  async deregister(instance?: ConsulInstanceMetadata): Promise<void> {
+    instance = instance ?? this.instance;
+    if (instance) {
+      await this.client.agent.service.deregister(instance.id);
+      this.instance = undefined;
+    }
   }
 
   async updateStatus(
-    instance: ServiceInstance,
+    instance: ConsulInstanceMetadata,
     status: 'UP' | 'DOWN'
   ): Promise<void> {
-    const serviceId = `${instance.serviceName}:${instance.id}`;
-    const checkId = `service:${serviceId}`;
+    const checkId = instance.id;
 
     if (status === 'UP') {
       await this.client.agent.check.pass(checkId);
@@ -68,23 +73,13 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
   }
 
   async updateMetadata(
-    instance: ServiceInstance,
+    instance: ConsulInstanceMetadata,
     metadata: Record<string, any>
   ): Promise<void> {
-    const serviceId = `${instance.serviceName}:${instance.id}`;
-    const serviceDef = {
-      id: serviceId,
-      name: instance.serviceName,
-      address: instance.host,
-      port: instance.port,
-      tags: metadata.tags || [],
-      meta: metadata,
-    };
-
-    await this.client.agent.service.register(serviceDef);
+    await this.client.agent.service.register(instance);
   }
 
-  async getInstances(serviceName: string): Promise<ServiceInstance[]> {
+  async getInstances(serviceName: string): Promise<ConsulInstanceMetadata[]> {
     const services = await this.client.catalog.service.nodes(serviceName);
     const checks = await this.client.health.checks(serviceName);
 
@@ -95,19 +90,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
         .map(check => check.ServiceID)
     );
 
-    return services
-      .filter(service => passingServiceIds.has(service.ServiceID))
-      .map(service => ({
-        id: service.ServiceID.split(':')[1],
-        serviceName: service.ServiceName,
-        host: service.ServiceAddress || service.Address,
-        port: service.ServicePort,
-        metadata: {
-          ...service.ServiceMeta,
-          tags: service.ServiceTags,
-        },
-        status: 'UP',
-      }));
+    return services.filter(service => passingServiceIds.has(service.ServiceID));
   }
 
   async getServiceNames(): Promise<string[]> {
@@ -117,7 +100,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
 
   watch(
     serviceName: string,
-    callback: (instances: ServiceInstance[]) => void
+    callback: (instances: ConsulInstanceMetadata[]) => void
   ): void {
     super.watch(serviceName, callback);
 
@@ -138,11 +121,13 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       console.error('Error watching service:', err);
     });
   }
-
 }
 
 @Singleton()
-export class ConsulServiceDiscovery extends ServiceDiscovery<ConsulClient> {
+export class ConsulServiceDiscovery extends ServiceDiscovery<
+  ConsulClient,
+  ConsulInstanceMetadata
+> {
   public protocol = 'consul';
 
   @Inject()
@@ -152,32 +137,21 @@ export class ConsulServiceDiscovery extends ServiceDiscovery<ConsulClient> {
   consulServiceDiscoveryOptions: ConsulServiceDiscoveryOptions;
 
   @Init()
-  async init(serviceDiscoveryOptions?: ServiceDiscoveryOptions) {
-
-    const serviceDiscoveryOption = serviceDiscoveryOptions ?? this.consulServiceDiscoveryOptions;
+  async init(options?: ServiceDiscoveryOptions<ConsulInstanceMetadata>) {
+    const serviceDiscoveryOption = options
+      ? {
+          ...options,
+          healthCheckType: 'self' as const,
+        }
+      : this.consulServiceDiscoveryOptions;
 
     if (serviceDiscoveryOption) {
       this.defaultAdapter = new ConsulServiceDiscoverAdapter(
         this.consulServiceFactory.get(
           this.consulServiceFactory.getDefaultClientName() || 'default'
         ),
-        serviceDiscoveryOption
+        serviceDiscoveryOption as ConsulServiceDiscoveryOptions
       );
     }
-  }
-
-  serviceInstanceTpl(protocol: string): ServiceInstance {
-    // id 再加一个 6 位字母或者数字随机串
-    const random = Math.random().toString(36).substring(2, 8);
-    return {
-      id: `${NetworkUtils.getHostname()}-${process.pid}-${random}`,
-      serviceName: `${protocol}-${NetworkUtils.getHostname()}`,
-      protocol,
-      host: NetworkUtils.getIpv4Address(),
-      host_v6: NetworkUtils.getIpv6Address(),
-      port: 80,
-      port_v6: 80,
-      metadata: {},
-    };
   }
 }

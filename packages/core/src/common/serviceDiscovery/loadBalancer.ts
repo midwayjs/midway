@@ -1,13 +1,16 @@
 import {
   ILoadBalancer,
-  ServiceInstance,
   LoadBalancerType,
+  ServiceDiscoveryBaseInstance,
 } from '../../interface';
 
 /**
  * 随机负载均衡策略
  */
-export class RandomLoadBalancer implements ILoadBalancer {
+export class RandomLoadBalance<
+  ServiceInstance extends ServiceDiscoveryBaseInstance
+> implements ILoadBalancer<ServiceInstance>
+{
   select(instances: ServiceInstance[]): ServiceInstance {
     if (!instances.length) {
       throw new Error('No available instances');
@@ -20,7 +23,10 @@ export class RandomLoadBalancer implements ILoadBalancer {
 /**
  * 轮询负载均衡策略
  */
-export class RoundRobinLoadBalancer implements ILoadBalancer {
+export class RoundRobinLoadBalancer<
+  ServiceInstance extends ServiceDiscoveryBaseInstance
+> implements ILoadBalancer<ServiceInstance>
+{
   private currentIndex = 0;
 
   select(instances: ServiceInstance[]): ServiceInstance {
@@ -36,7 +42,10 @@ export class RoundRobinLoadBalancer implements ILoadBalancer {
 /**
  * 权重负载均衡策略
  */
-export class WeightedLoadBalancer implements ILoadBalancer {
+export class WeightedLoadBalancer<
+  ServiceInstance extends ServiceDiscoveryBaseInstance
+> implements ILoadBalancer<ServiceInstance>
+{
   select(instances: ServiceInstance[]): ServiceInstance {
     if (!instances.length) {
       throw new Error('No available instances');
@@ -44,14 +53,14 @@ export class WeightedLoadBalancer implements ILoadBalancer {
 
     // 计算总权重
     const totalWeight = instances.reduce((sum, instance) => {
-      const weight = instance.metadata?.weight || 1;
+      const weight = instance.getMetadata()?.weight || 1;
       return sum + weight;
     }, 0);
 
     // 随机选择
     let random = Math.random() * totalWeight;
     for (const instance of instances) {
-      const weight = instance.metadata?.weight || 1;
+      const weight = instance.getMetadata()?.weight || 1;
       if (random <= weight) {
         return instance;
       }
@@ -66,15 +75,18 @@ export class WeightedLoadBalancer implements ILoadBalancer {
 /**
  * 最小连接数负载均衡策略
  */
-export class LeastConnectionLoadBalancer implements ILoadBalancer {
+export class LeastConnectionLoadBalancer<
+  ServiceInstance extends ServiceDiscoveryBaseInstance
+> implements ILoadBalancer<ServiceInstance>
+{
   select(instances: ServiceInstance[]): ServiceInstance {
     if (!instances.length) {
       throw new Error('No available instances');
     }
 
     return instances.reduce((min, current) => {
-      const minConnections = min.metadata?.connections || 0;
-      const currentConnections = current.metadata?.connections || 0;
+      const minConnections = min.getMetadata()?.connections || 0;
+      const currentConnections = current.getMetadata()?.connections || 0;
       return currentConnections < minConnections ? current : min;
     });
   }
@@ -84,10 +96,12 @@ export class LeastConnectionLoadBalancer implements ILoadBalancer {
  * 负载均衡工厂
  */
 export class LoadBalancerFactory {
-  static create(type: LoadBalancerType): ILoadBalancer {
+  static create<ServiceInstance extends ServiceDiscoveryBaseInstance>(
+    type: LoadBalancerType
+  ): ILoadBalancer<ServiceInstance> {
     switch (type) {
       case LoadBalancerType.RANDOM:
-        return new RandomLoadBalancer();
+        return new RandomLoadBalance();
       case LoadBalancerType.ROUND_ROBIN:
         return new RoundRobinLoadBalancer();
       case LoadBalancerType.WEIGHTED:

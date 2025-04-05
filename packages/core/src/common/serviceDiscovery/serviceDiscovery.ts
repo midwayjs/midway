@@ -2,34 +2,63 @@ import { Destroy } from '../../decorator';
 import {
   IServiceDiscovery,
   ServiceDiscoveryOptions,
-  ServiceInstance,
   ILoadBalancer,
+  IServiceDiscoveryHealthCheck,
+  ServiceDiscoveryBaseInstance,
+  DefaultInstanceMetadata,
 } from '../../interface';
 import { LoadBalancerFactory } from './loadBalancer';
 import { LoadBalancerType } from '../../interface';
 import { NetworkUtils } from '../../util/network';
+import { ServiceDiscoveryHealthCheckFactory } from './healthCheck';
 
-export abstract class ServiceDiscoveryAdapter<Client>
-  implements IServiceDiscovery<Client>
+export abstract class ServiceDiscoveryAdapter<
+  Client,
+  ServiceInstance extends ServiceDiscoveryBaseInstance
+> implements IServiceDiscovery<Client, ServiceInstance>
 {
-  protected options: ServiceDiscoveryOptions = {};
+  protected options: ServiceDiscoveryOptions<ServiceInstance> = {};
   protected watchers: Map<string, Set<(instances: ServiceInstance[]) => void>> =
     new Map();
-  protected loadBalancer: ILoadBalancer;
+  protected loadBalancer: ILoadBalancer<ServiceInstance>;
   protected instance?: ServiceInstance;
   protected client: Client;
-
+  abstract protocol: string;
+  protected healthCheck?: IServiceDiscoveryHealthCheck<ServiceInstance>;
   constructor(
     client: Client,
-    serviceDiscoveryOptions: ServiceDiscoveryOptions
+    serviceDiscoveryOptions: ServiceDiscoveryOptions<ServiceInstance>
   ) {
     this.client = client;
     this.options = serviceDiscoveryOptions;
+    // set default load balancer
     if (this.options.loadBalancer) {
       this.setLoadBalancer(this.options.loadBalancer);
     } else {
       this.setLoadBalancer(LoadBalancerType.ROUND_ROBIN);
     }
+
+    // set default health check
+    if (this.options.healthCheckType) {
+      this.healthCheck = ServiceDiscoveryHealthCheckFactory.create(
+        this.options.healthCheckType,
+        this.options.healthCheckOptions
+      );
+    }
+  }
+
+  public getDefaultInstanceMeta(): DefaultInstanceMetadata {
+    // id 再加一个 6 位字母或者数字随机串
+    const random = Math.random().toString(36).substring(2, 8);
+    return {
+      id: `${NetworkUtils.getHostname()}-${process.pid}-${random}`,
+      serviceName: `${this.protocol}-${NetworkUtils.getHostname()}`,
+      host: NetworkUtils.getIpv4Address(),
+      port: 0,
+      protocol: this.protocol,
+      metadata: {},
+      status: 'UP',
+    };
   }
 
   /**
@@ -53,11 +82,13 @@ export abstract class ServiceDiscoveryAdapter<Client>
   /**
    * 设置负载均衡策略
    */
-  setLoadBalancer(type: LoadBalancerType | ILoadBalancer): void {
+  setLoadBalancer(
+    type: LoadBalancerType | ILoadBalancer<ServiceInstance>
+  ): void {
     if (typeof type === 'string') {
       this.loadBalancer = LoadBalancerFactory.create(type);
     } else {
-      this.loadBalancer = type as ILoadBalancer;
+      this.loadBalancer = type as ILoadBalancer<ServiceInstance>;
     }
   }
 
@@ -107,12 +138,12 @@ export abstract class ServiceDiscoveryAdapter<Client>
   /**
    * 注册服务实例
    */
-  abstract register(instance: ServiceInstance): Promise<void>;
+  abstract register(instance?: ServiceInstance): Promise<void>;
 
   /**
    * 注销服务实例
    */
-  abstract deregister(instance: ServiceInstance): Promise<void>;
+  abstract deregister(instance?: ServiceInstance): Promise<void>;
 
   /**
    * 更新服务实例状态
@@ -134,17 +165,27 @@ export abstract class ServiceDiscoveryAdapter<Client>
 /**
  * 服务发现抽象类
  */
-export abstract class ServiceDiscovery<Client>
-  implements IServiceDiscovery<Client>
+export abstract class ServiceDiscovery<
+  Client,
+  ServiceInstance extends ServiceDiscoveryBaseInstance
+> implements IServiceDiscovery<Client, ServiceInstance>
 {
-  private adapters = new Map<string, ServiceDiscoveryAdapter<Client>>();
-  protected defaultAdapter: ServiceDiscoveryAdapter<Client>;
-  abstract protocol: string;
+  private adapters = new Map<
+    string,
+    ServiceDiscoveryAdapter<Client, ServiceInstance>
+  >();
+  protected defaultAdapter: ServiceDiscoveryAdapter<Client, ServiceInstance>;
 
-  abstract init(options?: ServiceDiscoveryOptions): Promise<void>;
+  abstract init(
+    options?: ServiceDiscoveryOptions<ServiceInstance>
+  ): Promise<void>;
 
-  register(instance: ServiceInstance): Promise<void> {
+  register(instance?: ServiceInstance): Promise<void> {
     return this.defaultAdapter.register(instance);
+  }
+
+  deregister(instance?: ServiceInstance): Promise<void> {
+    return this.defaultAdapter.deregister(instance);
   }
 
   getInstances(serviceName: string): Promise<ServiceInstance[]> {
@@ -167,14 +208,5 @@ export abstract class ServiceDiscovery<Client>
     return Promise.all(
       Array.from(this.adapters.values()).map(adapter => adapter.stop())
     );
-  }
-
-  serviceInstanceTpl(): ServiceInstance {
-    return {
-      ...super.serviceInstanceTpl(),
-      port: 8080,
-      port_v6: 8080,
-      metadata: {},
-    }
   }
 }

@@ -5,13 +5,11 @@ import { Configuration } from '@midwayjs/core';
   importConfigs: [
     {
       default: {
-        mcp: {
-        },
+        mcp: {},
       },
     },
   ],
 })
 export class MCPConfiguration {
-  async onReady() {
-  }
-} 
+  async onReady() {}
+}

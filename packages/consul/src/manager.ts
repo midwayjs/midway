@@ -8,7 +8,7 @@ import {
   delegateTargetAllPrototypeMethod,
   ServiceFactoryConfigOption,
   Singleton,
-  ILogger
+  ILogger,
 } from '@midwayjs/core';
 import Consul = require('consul');
 import { ConsulClient, ConsulOptions } from './interface';
@@ -28,8 +28,16 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
   @Logger('coreLogger')
   logger: ILogger;
 
-  async createClient(config: ConsulOptions, clientName: string): Promise<InstanceType<typeof Consul>> {
-    this.logger.info(`[midway:consul] init %s at %s:%s`, clientName, config.host, config.port);
+  async createClient(
+    config: ConsulOptions,
+    clientName: string
+  ): Promise<InstanceType<typeof Consul>> {
+    this.logger.info(
+      '[midway:consul] init %s at %s:%s',
+      clientName,
+      config.host,
+      config.port
+    );
     return new Consul(config);
   }
 

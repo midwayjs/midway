@@ -15,7 +15,7 @@ import {
   IMcpPrompt,
 } from './interface';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { MCP_TOOL_KEY } from './decorator';
 
@@ -40,7 +40,11 @@ export class MidwayMCPFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    const { serverInfo, serverOptions, transportType = 'stdio' } = this.configurationOptions;
+    const {
+      serverInfo,
+      serverOptions,
+      transportType = 'stdio',
+    } = this.configurationOptions;
 
     // Create an MCP server
     this.server = new McpServer(serverInfo, serverOptions);
@@ -51,37 +55,45 @@ export class MidwayMCPFramework extends BaseFramework<
       await this.server.connect(transport);
     } else if (transportType === 'sse') {
       if (this.applicationContext.hasObject(HTTP_SERVER_KEY)) {
-        const routerService = this.applicationContext.get(MidwayWebRouterService);
+        const routerService = this.applicationContext.get(
+          MidwayWebRouterService
+        );
         // to support multiple simultaneous connections we have a lookup object from
         // sessionId to transport
-        const transports: {[sessionId: string]: SSEServerTransport} = {};
+        const transports: { [sessionId: string]: SSEServerTransport } = {};
 
-        routerService.addRouter(async (ctx) => {
-          const transport = new SSEServerTransport('/messages', ctx.response);
-          transports[transport.sessionId] = transport;
-          ctx.response.on("close", () => {
-            delete transports[transport.sessionId];
-          });
-          await this.server.connect(transport);
-        }, {
-          prefix: '/',
-          requestMethod: 'GET',
-          url: '/sse',
-        });
-
-        routerService.addRouter(async (ctx) => {
-          const sessionId = ctx.request.query.sessionId as string;
-          const transport = transports[sessionId];
-          if (transport) {
-            await transport.handlePostMessage(ctx.request, ctx.response);
-          } else {
-            ctx.response.status(400).send('No transport found for sessionId');
+        routerService.addRouter(
+          async ctx => {
+            const transport = new SSEServerTransport('/messages', ctx.response);
+            transports[transport.sessionId] = transport;
+            ctx.response.on('close', () => {
+              delete transports[transport.sessionId];
+            });
+            await this.server.connect(transport);
+          },
+          {
+            prefix: '/',
+            requestMethod: 'GET',
+            url: '/sse',
           }
-        }, {
-          prefix: '/',
-          requestMethod: 'POST',
-          url: '/messages',
-        });
+        );
+
+        routerService.addRouter(
+          async ctx => {
+            const sessionId = ctx.request.query.sessionId as string;
+            const transport = transports[sessionId];
+            if (transport) {
+              await transport.handlePostMessage(ctx.request, ctx.response);
+            } else {
+              ctx.response.status(400).send('No transport found for sessionId');
+            }
+          },
+          {
+            prefix: '/',
+            requestMethod: 'POST',
+            url: '/messages',
+          }
+        );
 
         this.logger.info(
           '[midway:mcp] MCP server start success and attach to web server'
@@ -101,7 +113,9 @@ export class MidwayMCPFramework extends BaseFramework<
         async (...args) => {
           const ctx = this.app.createAnonymousContext();
           const fn = await this.applyMiddleware(async ctx => {
-            const instance = await ctx.requestContext.getAsync(tool) as IMcpTool;
+            const instance = (await ctx.requestContext.getAsync(
+              tool
+            )) as IMcpTool;
             // eslint-disable-next-line prefer-spread
             return await instance['execute'].call(instance, ...args);
           });
@@ -111,10 +125,9 @@ export class MidwayMCPFramework extends BaseFramework<
     }
   }
 
-  protected async beforeStop(): Promise<void> {
-  }
+  protected async beforeStop(): Promise<void> {}
 
   public getFrameworkName() {
     return 'mcp';
   }
-} 
+}
