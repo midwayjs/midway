@@ -1,33 +1,24 @@
 import {
   ServiceDiscovery,
-  ServiceInstance,
-  ServiceDiscoveryOptions,
+  ServiceDiscoveryAdapter,
   Singleton,
   Inject,
   Init,
-  ServiceDiscoveryAdapter,
+  Config,
+  MidwayConfigMissingError,
 } from '@midwayjs/core';
 import { RedisServiceFactory } from '../manager';
+import { RedisServiceDiscoveryOptions, RedisInstanceMetadata } from '../interface';
 import Redis from 'ioredis';
 
-interface RedisServiceDiscoveryOptions extends ServiceDiscoveryOptions {
-  /**
-   * 服务信息的过期时间（秒）
-   */
-  ttl?: number;
-  /**
-   * 服务信息的 key 前缀
-   */
-  prefix?: string;
-}
-
-export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> {
+export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis, RedisInstanceMetadata> {
   private readonly ttl: number;
   private readonly prefix: string;
-  private readonly pubsub: any;
+  private readonly pubsub: Redis;
+  public protocol = 'redis';
 
   constructor(
-    redis: InstanceType<typeof Redis>,
+    redis: Redis,
     serviceDiscoveryOptions: RedisServiceDiscoveryOptions
   ) {
     super(redis, serviceDiscoveryOptions);
@@ -44,14 +35,31 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
     return `${this.getServiceKey(serviceName)}:${instanceId}`;
   }
 
-  async register(instance: ServiceInstance): Promise<void> {
+  async register(instance: RedisInstanceMetadata): Promise<void> {
+    if (!instance) {
+      const serviceOptions: RedisInstanceMetadata =
+        typeof this.options.serviceOptions === 'function'
+          ? this.options.serviceOptions(this.getDefaultInstanceMeta())
+          : this.options.serviceOptions;
+      if (serviceOptions) {
+        serviceOptions.getMetadata = () => {
+          return instance.meta;
+        };
+        instance = serviceOptions;
+      } else {
+        throw new MidwayConfigMissingError(
+          'redis.serviceDiscovery.serviceOptions'
+        );
+      }
+    }
+
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(instance);
 
     // 使用 Redis 事务确保原子性
     const multi = this.client.multi();
     multi.set(key, value);
-    multi.expire(key, this.ttl);
+    multi.expire(key, instance.ttl || this.ttl);
     await multi.exec();
 
     // 发布服务变更消息
@@ -67,27 +75,28 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
     this.instance = instance;
   }
 
-  async deregister(instance: ServiceInstance): Promise<void> {
-    const key = this.getInstanceKey(instance.serviceName, instance.id);
-    await this.client.del(key);
+  async deregister(instance?: RedisInstanceMetadata): Promise<void> {
+    instance = instance ?? this.instance;
+    if (instance) {
+      const key = this.getInstanceKey(instance.serviceName, instance.id);
+      await this.client.del(key);
 
-    // 发布服务变更消息
-    await this.pubsub.publish(
-      'service:change',
-      JSON.stringify({
-        type: 'deregister',
-        service: instance.serviceName,
-        instance,
-      })
-    );
+      // 发布服务变更消息
+      await this.pubsub.publish(
+        'service:change',
+        JSON.stringify({
+          type: 'deregister',
+          service: instance.serviceName,
+          instance,
+        })
+      );
 
-    if (this.instance?.id === instance.id) {
       this.instance = undefined;
     }
   }
 
   async updateStatus(
-    instance: ServiceInstance,
+    instance: RedisInstanceMetadata,
     status: 'UP' | 'DOWN'
   ): Promise<void> {
     const updatedInstance = { ...instance, status };
@@ -95,7 +104,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
     const value = JSON.stringify(updatedInstance);
 
     await this.client.set(key, value);
-    await this.client.expire(key, this.ttl);
+    await this.client.expire(key, instance.ttl || this.ttl);
 
     // 发布服务状态变更消息
     await this.pubsub.publish(
@@ -109,7 +118,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
   }
 
   async updateMetadata(
-    instance: ServiceInstance,
+    instance: RedisInstanceMetadata,
     metadata: Record<string, any>
   ): Promise<void> {
     const updatedInstance = { ...instance, metadata };
@@ -117,7 +126,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
     const value = JSON.stringify(updatedInstance);
 
     await this.client.set(key, value);
-    await this.client.expire(key, this.ttl);
+    await this.client.expire(key, instance.ttl || this.ttl);
 
     // 发布服务元数据变更消息
     await this.pubsub.publish(
@@ -130,7 +139,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
     );
   }
 
-  async getInstances(serviceName: string): Promise<ServiceInstance[]> {
+  async getInstances(serviceName: string): Promise<RedisInstanceMetadata[]> {
     const pattern = this.getInstanceKey(serviceName, '*');
     const keys = await this.client.keys(pattern);
 
@@ -148,7 +157,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
           return null;
         }
       })
-      .filter(Boolean) as ServiceInstance[];
+      .filter(Boolean) as RedisInstanceMetadata[];
   }
 
   async getServiceNames(): Promise<string[]> {
@@ -168,7 +177,7 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
 
   watch(
     serviceName: string,
-    callback: (instances: ServiceInstance[]) => void
+    callback: (instances: RedisInstanceMetadata[]) => void
   ): void {
     super.watch(serviceName, callback);
 
@@ -203,17 +212,24 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis> 
 }
 
 @Singleton()
-export class RedisServiceDiscovery extends ServiceDiscovery<Redis> {
+export class RedisServiceDiscovery extends ServiceDiscovery<Redis, RedisInstanceMetadata> {
   @Inject()
   private redisServiceFactory: RedisServiceFactory;
 
+  @Config('redis.serviceDiscovery')
+  redisServiceDiscoveryOptions: RedisServiceDiscoveryOptions;
+
   @Init()
-  async init(serviceDiscoveryOptions: ServiceDiscoveryOptions = {}) {
-    this.defaultAdapter = new RedisServiceDiscoverAdapter(
-      this.redisServiceFactory.get(
-        this.redisServiceFactory.getDefaultClientName() || 'default'
-      ),
-      serviceDiscoveryOptions
-    );
+  async init(options?: RedisServiceDiscoveryOptions) {
+    const serviceDiscoveryOption = options ?? this.redisServiceDiscoveryOptions;
+
+    if (serviceDiscoveryOption) {
+      this.defaultAdapter = new RedisServiceDiscoverAdapter(
+        this.redisServiceFactory.get(
+          this.redisServiceFactory.getDefaultClientName() || 'default'
+        ),
+        serviceDiscoveryOption
+      );
+    }
   }
 }

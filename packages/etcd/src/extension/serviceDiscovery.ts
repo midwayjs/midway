@@ -1,22 +1,23 @@
 import { Etcd3 } from 'etcd3';
 import {
   ServiceDiscovery,
-  ServiceInstance,
-  ServiceDiscoveryOptions,
+  ServiceDiscoveryAdapter,
   Singleton,
   Inject,
   Init,
-  ServiceDiscoveryAdapter,
+  Config,
+  MidwayConfigMissingError,
 } from '@midwayjs/core';
 import { ETCDServiceFactory } from '../manager';
-import { EtcdServiceDiscoveryOptions } from '../interface';
+import { EtcdServiceDiscoveryOptions, EtcdInstanceMetadata } from '../interface';
 
-export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
+export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3, EtcdInstanceMetadata> {
   private namespace: string;
   private leaseId?: number;
   private renewTimer?: NodeJS.Timeout;
   private readonly ttl: number;
   private readonly renewInterval: number;
+  public protocol = 'etcd';
 
   constructor(
     client: Etcd3,
@@ -72,27 +73,50 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
     }, this.renewInterval);
   }
 
-  async register(instance: ServiceInstance): Promise<void> {
+  async register(instance: EtcdInstanceMetadata): Promise<void> {
+    if (!instance) {
+      const serviceOptions: EtcdInstanceMetadata =
+        typeof this.options.serviceOptions === 'function'
+          ? this.options.serviceOptions(this.getDefaultInstanceMeta())
+          : this.options.serviceOptions;
+      if (serviceOptions) {
+        serviceOptions.getMetadata = () => {
+          return instance.meta;
+        };
+        instance = serviceOptions;
+      } else {
+        throw new MidwayConfigMissingError(
+          'etcd.serviceDiscovery.serviceOptions'
+        );
+      }
+    }
+
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(instance);
 
     // 创建租约
-    this.leaseId = await this.createLease(this.ttl);
+    this.leaseId = await this.createLease(instance.ttl || this.ttl);
 
     // 注册服务实例
     await this.client.put(key).value(value).lease(this.leaseId).exec();
 
     // 启动自动续约
     this.startRenewTimer();
+
+    this.instance = instance;
   }
 
-  async deregister(instance: ServiceInstance): Promise<void> {
-    const key = this.getInstanceKey(instance.serviceName, instance.id);
-    await this.client.delete().key(key).exec();
+  async deregister(instance?: EtcdInstanceMetadata): Promise<void> {
+    instance = instance ?? this.instance;
+    if (instance) {
+      const key = this.getInstanceKey(instance.serviceName, instance.id);
+      await this.client.delete().key(key).exec();
+      this.instance = undefined;
+    }
   }
 
   async updateStatus(
-    instance: ServiceInstance,
+    instance: EtcdInstanceMetadata,
     status: 'UP' | 'DOWN'
   ): Promise<void> {
     const updatedInstance = { ...instance, status };
@@ -103,7 +127,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
   }
 
   async updateMetadata(
-    instance: ServiceInstance,
+    instance: EtcdInstanceMetadata,
     metadata: Record<string, any>
   ): Promise<void> {
     const updatedInstance = { ...instance, metadata };
@@ -113,7 +137,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
     await this.client.put(key).value(value).lease(this.leaseId).exec();
   }
 
-  async getInstances(serviceName: string): Promise<ServiceInstance[]> {
+  async getInstances(serviceName: string): Promise<EtcdInstanceMetadata[]> {
     const key = this.getServiceKey(serviceName);
     const response = await this.client.getAll().prefix(key).exec();
 
@@ -126,7 +150,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
           return null;
         }
       })
-      .filter(Boolean) as ServiceInstance[];
+      .filter(Boolean) as EtcdInstanceMetadata[];
   }
 
   async getServiceNames(): Promise<string[]> {
@@ -146,7 +170,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
 
   watch(
     serviceName: string,
-    callback: (instances: ServiceInstance[]) => void
+    callback: (instances: EtcdInstanceMetadata[]) => void
   ): void {
     super.watch(serviceName, callback);
 
@@ -184,17 +208,24 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3> {
 }
 
 @Singleton()
-export class EtcdServiceDiscovery extends ServiceDiscovery<Etcd3> {
+export class EtcdServiceDiscovery extends ServiceDiscovery<Etcd3, EtcdInstanceMetadata> {
   @Inject()
   private etcdServiceFactory: ETCDServiceFactory;
 
+  @Config('etcd.serviceDiscovery')
+  etcdServiceDiscoveryOptions: EtcdServiceDiscoveryOptions;
+
   @Init()
-  async init(serviceDiscoveryOptions: ServiceDiscoveryOptions = {}) {
-    this.defaultAdapter = new EtcdServiceDiscoverAdapter(
-      this.etcdServiceFactory.get(
-        this.etcdServiceFactory.getDefaultClientName() || 'default'
-      ),
-      serviceDiscoveryOptions
-    );
+  async init(options?: EtcdServiceDiscoveryOptions) {
+    const serviceDiscoveryOption = options ?? this.etcdServiceDiscoveryOptions;
+
+    if (serviceDiscoveryOption) {
+      this.defaultAdapter = new EtcdServiceDiscoverAdapter(
+        this.etcdServiceFactory.get(
+          this.etcdServiceFactory.getDefaultClientName() || 'default'
+        ),
+        serviceDiscoveryOption
+      );
+    }
   }
 }
