@@ -9,9 +9,15 @@ import {
   MidwayConfigMissingError,
 } from '@midwayjs/core';
 import { ETCDServiceFactory } from '../manager';
-import { EtcdServiceDiscoveryOptions, EtcdInstanceMetadata } from '../interface';
+import {
+  EtcdServiceDiscoveryOptions,
+  EtcdInstanceMetadata,
+} from '../interface';
 
-export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3, EtcdInstanceMetadata> {
+export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
+  Etcd3,
+  EtcdInstanceMetadata
+> {
   private namespace: string;
   private leaseId?: number;
   private renewTimer?: NodeJS.Timeout;
@@ -208,7 +214,10 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Etcd3, E
 }
 
 @Singleton()
-export class EtcdServiceDiscovery extends ServiceDiscovery<Etcd3, EtcdInstanceMetadata> {
+export class EtcdServiceDiscovery extends ServiceDiscovery<
+  Etcd3,
+  EtcdInstanceMetadata
+> {
   @Inject()
   private etcdServiceFactory: ETCDServiceFactory;
 

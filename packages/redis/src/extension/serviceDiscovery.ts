@@ -8,10 +8,16 @@ import {
   MidwayConfigMissingError,
 } from '@midwayjs/core';
 import { RedisServiceFactory } from '../manager';
-import { RedisServiceDiscoveryOptions, RedisInstanceMetadata } from '../interface';
+import {
+  RedisServiceDiscoveryOptions,
+  RedisInstanceMetadata,
+} from '../interface';
 import Redis from 'ioredis';
 
-export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis, RedisInstanceMetadata> {
+export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
+  Redis,
+  RedisInstanceMetadata
+> {
   private readonly ttl: number;
   private readonly prefix: string;
   private readonly pubsub: Redis;
@@ -212,7 +218,10 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<Redis, 
 }
 
 @Singleton()
-export class RedisServiceDiscovery extends ServiceDiscovery<Redis, RedisInstanceMetadata> {
+export class RedisServiceDiscovery extends ServiceDiscovery<
+  Redis,
+  RedisInstanceMetadata
+> {
   @Inject()
   private redisServiceFactory: RedisServiceFactory;
 
