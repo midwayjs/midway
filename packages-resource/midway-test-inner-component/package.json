@@ -1,7 +1,7 @@
 {
   "name": "midway-test-inner-component",
   "private": true,
-  "version": "3.20.3",
+  "version": "3.20.4",
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -16,6 +16,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.20.3"
+    "@midwayjs/core": "^3.20.4"
   }
 }

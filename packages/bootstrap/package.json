@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bootstrap",
-  "version": "3.20.3",
+  "version": "3.20.4",
   "description": "midwayjs bootstrap",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -21,11 +21,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/async-hooks-context-manager": "^3.20.3",
+    "@midwayjs/async-hooks-context-manager": "^3.20.4",
     "@midwayjs/event-bus": "1.11.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.20.3",
+    "@midwayjs/core": "^3.20.4",
     "@midwayjs/logger": "^3.0.0",
     "request": "2.88.2",
     "socket.io-client": "4.8.1"

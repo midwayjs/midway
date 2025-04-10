@@ -1,6 +1,35 @@
 # Change Log
 
 
+## v3.20.4 (2025-04-10)
+
+#### :nail_care: Polish
+* `core`
+  * [#4311](https://github.com/midwayjs/midway/pull/4311) chore: add TooManyRequestsError to http error ([@liuyuan512](https://github.com/liuyuan512))
+
+#### :package: Dependencies
+* `core`, `web-koa`
+  * [#4322](https://github.com/midwayjs/midway/pull/4322) fix(deps): update dependency koa to v2.16.1 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`
+  * [#4310](https://github.com/midwayjs/midway/pull/4310) fix(deps): update dependency axios to v1.8.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4307](https://github.com/midwayjs/midway/pull/4307) fix(deps): update dependency axios to v1.8.3 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4305](https://github.com/midwayjs/midway/pull/4305) fix(deps): update dependency axios to v1.8.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `captcha`, `security`
+  * [#4319](https://github.com/midwayjs/midway/pull/4319) fix(deps): update dependency nanoid to v3.3.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`
+  * [#4318](https://github.com/midwayjs/midway/pull/4318) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.14.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4308](https://github.com/midwayjs/midway/pull/4308) fix(deps): update dependency mqtt to v5.10.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#4302](https://github.com/midwayjs/midway/pull/4302) fix(deps): update dependency @types/jsonwebtoken to v9.0.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#4303](https://github.com/midwayjs/midway/pull/4303) fix(deps): update dependency leoric to v2.13.5 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Aaron Liu ([@liuyuan512](https://github.com/liuyuan512))
+
+
+
 ## v3.20.3 (2025-03-02)
 
 #### :bug: Bug Fix

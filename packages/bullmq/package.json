@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bullmq",
-  "version": "3.20.3",
+  "version": "3.20.4",
   "description": "midway component for BullMQ",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -24,8 +24,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.20.3",
-    "@midwayjs/mock": "^3.20.3"
+    "@midwayjs/core": "^3.20.4",
+    "@midwayjs/mock": "^3.20.4"
   },
   "dependencies": {
     "bullmq": "5.39.1"
