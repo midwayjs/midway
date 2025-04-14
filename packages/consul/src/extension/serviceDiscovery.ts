@@ -6,7 +6,7 @@ import {
   Init,
   ServiceDiscoveryAdapter,
   Config,
-  MidwayConfigMissingError,
+  MidwayConfigMissingError, Logger, ILogger
 } from '@midwayjs/core';
 import { ConsulServiceFactory } from '../manager';
 import {
@@ -14,6 +14,7 @@ import {
   ConsulClient,
   ConsulInstanceMetadata,
 } from '../interface';
+import { formatObjectErrorToError, isObjectError } from '../utils';
 
 export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
   ConsulClient,
@@ -23,7 +24,8 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
 
   constructor(
     consul: ConsulClient,
-    serviceDiscoveryOptions: ConsulServiceDiscoveryOptions
+    serviceDiscoveryOptions: ConsulServiceDiscoveryOptions,
+    protected readonly logger: ILogger
   ) {
     super(consul, serviceDiscoveryOptions);
   }
@@ -47,14 +49,22 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       }
     }
 
-    await this.client.agent.service.register(instance);
+    const res = await this.client.agent.service.register(instance);
+    if (res && isObjectError(res)) {
+      throw formatObjectErrorToError(res);
+    }
+    this.logger.info(`[midway:consul] register service: ${instance.id}`);
     this.instance = instance;
   }
 
   async deregister(instance?: ConsulInstanceMetadata): Promise<void> {
     instance = instance ?? this.instance;
     if (instance) {
-      await this.client.agent.service.deregister(instance.id);
+      const res = await this.client.agent.service.deregister(instance.id);
+      if (res && isObjectError(res)) {
+        throw formatObjectErrorToError(res);
+      }
+      this.logger.info(`[midway:consul] deregister service: ${instance.id}`);
       this.instance = undefined;
     }
   }
@@ -76,25 +86,44 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     instance: ConsulInstanceMetadata,
     metadata: Record<string, any>
   ): Promise<void> {
-    await this.client.agent.service.register(instance);
+    const res = this.client.agent.service.register(instance);
+    if (res && isObjectError(res)) {
+      throw formatObjectErrorToError(res);
+    }
+    this.logger.info(
+      `[midway:consul] update metadata for service: ${instance.id}`
+    );
   }
 
   async getInstances(serviceName: string): Promise<ConsulInstanceMetadata[]> {
     const services = await this.client.catalog.service.nodes(serviceName);
+    if (services && isObjectError(services)) {
+      throw formatObjectErrorToError(services);
+    }
     const checks = await this.client.health.checks(serviceName);
+    if (checks && isObjectError(checks)) {
+      throw formatObjectErrorToError(checks);
+    }
 
-    // 获取所有通过健康检查的服务 ID
-    const passingServiceIds = new Set(
-      checks
-        .filter(check => check.Status === 'passing')
-        .map(check => check.ServiceID)
-    );
+    if (Array.isArray(checks)) {
+      // 获取所有通过健康检查的服务 ID
+      const passingServiceIds = new Set(
+        checks
+          .filter(check => check.Status === 'passing')
+          .map(check => check.ServiceID)
+      );
 
-    return services.filter(service => passingServiceIds.has(service.ServiceID));
+      return services.filter(service => passingServiceIds.has(service.ServiceID));
+    }
+
+    return [];
   }
 
   async getServiceNames(): Promise<string[]> {
     const services = await this.client.catalog.services();
+    if (services && isObjectError(services)) {
+      throw formatObjectErrorToError(services);
+    }
     return Object.keys(services);
   }
 
@@ -136,6 +165,9 @@ export class ConsulServiceDiscovery extends ServiceDiscovery<
   @Config('consul.serviceDiscovery')
   consulServiceDiscoveryOptions: ConsulServiceDiscoveryOptions;
 
+  @Logger()
+  coreLogger;
+
   @Init()
   async init(options?: ServiceDiscoveryOptions<ConsulInstanceMetadata>) {
     const serviceDiscoveryOption = options
@@ -150,7 +182,8 @@ export class ConsulServiceDiscovery extends ServiceDiscovery<
         this.consulServiceFactory.get(
           this.consulServiceFactory.getDefaultClientName() || 'default'
         ),
-        serviceDiscoveryOption as ConsulServiceDiscoveryOptions
+        serviceDiscoveryOption as ConsulServiceDiscoveryOptions,
+        this.coreLogger
       );
     }
   }

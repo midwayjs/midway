@@ -67,7 +67,7 @@ describe('/test/feature.test.ts', () => {
       expect(serviceNames.length).toBeGreaterThan(0);
 
       const instances = await consulServiceDiscovery.getInstances(serviceNames[1]);
-      expect(instances).toBeDefined();
+      expect(instances.length).toBeGreaterThan(0);
 
       await close(app);
     });
