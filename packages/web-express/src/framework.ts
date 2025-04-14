@@ -3,7 +3,7 @@ import {
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MiddlewareRespond,
-  PathFileUtil,
+  PathFileUtils,
   RouterInfo,
   httpError,
   CommonMiddlewareUnion,
@@ -165,9 +165,9 @@ export class MidwayExpressFramework extends BaseFramework<
 
     // https config
     if (serverOptions.key && serverOptions.cert) {
-      serverOptions.key = PathFileUtil.getFileContentSync(serverOptions.key);
-      serverOptions.cert = PathFileUtil.getFileContentSync(serverOptions.cert);
-      serverOptions.ca = PathFileUtil.getFileContentSync(serverOptions.ca);
+      serverOptions.key = PathFileUtils.getFileContentSync(serverOptions.key);
+      serverOptions.cert = PathFileUtils.getFileContentSync(serverOptions.cert);
+      serverOptions.ca = PathFileUtils.getFileContentSync(serverOptions.ca);
       process.env.MIDWAY_HTTP_SSL = 'true';
 
       if (serverOptions.http2) {
