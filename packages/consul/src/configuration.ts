@@ -50,6 +50,7 @@ export class ConsulConfiguration implements ILifeCycle {
     if (config.selfRegister) {
       const serviceDiscovery = await container.getAsync(ConsulServiceDiscovery);
       await serviceDiscovery.register();
+      await serviceDiscovery.updateStatus('UP');
       this.isSelfRegister = true;
     }
   }

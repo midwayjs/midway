@@ -52,6 +52,9 @@ describe('/test/feature.test.ts', () => {
                   meta: {
                     version: '1.0.0',
                   },
+                  check: {
+                    ttl: '10s',
+                  }
                 }
               }
             }

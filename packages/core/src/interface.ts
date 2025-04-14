@@ -1362,7 +1362,7 @@ export interface ServiceDiscoveryOptions<ServiceInstance extends ServiceDiscover
   serviceOptions?: Record<string, any>;
   loadBalancer?: LoadBalancerType | ILoadBalancer<ServiceInstance>;
   healthCheckType?: ServiceDiscoveryHealthCheckType;
-  healthCheckOptions?: ServiceDiscoveryHealthCheckType extends 'self' 
+  healthCheckOptions?: ServiceDiscoveryHealthCheckType extends 'self'
     ? Record<string, any>
     : ServiceDiscoveryHealthCheckType extends 'ttl'
       ? TTLServiceDiscoveryHealthCheckOptions

@@ -32,7 +32,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     super(consul, serviceDiscoveryOptions);
   }
 
-  async register(instance: ConsulInstanceMetadata): Promise<void> {
+  async register(instance?: ConsulInstanceMetadata): Promise<void> {
     if (!instance) {
       const serviceOptions: ConsulInstanceMetadata =
         typeof this.options.serviceOptions === 'function'
@@ -75,7 +75,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     instance: ConsulInstanceMetadata,
     status: 'UP' | 'DOWN'
   ): Promise<void> {
-    const checkId = instance.id;
+    const checkId = `service:${instance.id}`;
 
     if (status === 'UP') {
       await this.client.agent.check.pass(checkId);

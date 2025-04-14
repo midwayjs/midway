@@ -61,6 +61,10 @@ export abstract class ServiceDiscoveryAdapter<
     };
   }
 
+  public getCurrentServiceInstance(): ServiceInstance {
+    return this.instance;
+  }
+
   /**
    * 获取服务列表
    */
@@ -180,12 +184,12 @@ export abstract class ServiceDiscovery<
     options?: ServiceDiscoveryOptions<ServiceInstance>
   ): Promise<void>;
 
-  register(instance?: ServiceInstance): Promise<void> {
-    return this.defaultAdapter.register(instance);
+  register(): Promise<void> {
+    return this.defaultAdapter.register();
   }
 
-  deregister(instance?: ServiceInstance): Promise<void> {
-    return this.defaultAdapter.deregister(instance);
+  deregister(): Promise<void> {
+    return this.defaultAdapter.deregister();
   }
 
   getInstances(serviceName: string): Promise<ServiceInstance[]> {
@@ -194,6 +198,13 @@ export abstract class ServiceDiscovery<
 
   getServiceNames(): Promise<string[]> {
     return this.defaultAdapter.getServiceNames();
+  }
+
+  updateStatus(status: 'UP' | 'DOWN'): Promise<void> {
+    return this.defaultAdapter.updateStatus(
+      this.defaultAdapter.getCurrentServiceInstance(),
+      status
+    );
   }
 
   watch(
