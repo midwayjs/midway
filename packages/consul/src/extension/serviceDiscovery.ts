@@ -6,7 +6,9 @@ import {
   Init,
   ServiceDiscoveryAdapter,
   Config,
-  MidwayConfigMissingError, Logger, ILogger
+  MidwayConfigMissingError,
+  Logger,
+  ILogger,
 } from '@midwayjs/core';
 import { ConsulServiceFactory } from '../manager';
 import {
@@ -113,7 +115,9 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
           .map(check => check.ServiceID)
       );
 
-      return services.filter(service => passingServiceIds.has(service.ServiceID));
+      return services.filter(service =>
+        passingServiceIds.has(service.ServiceID)
+      );
     }
 
     return [];
