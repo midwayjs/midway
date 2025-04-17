@@ -85,6 +85,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
             listenerOptions,
             async (data: ConsumeMessage, channel, channelWrapper) => {
               const ctx = {
+                data,
                 channel,
                 queueName: listenerOptions.queueName,
                 ack: data => {

@@ -11,20 +11,29 @@ import type { ConfirmChannel, Channel, Options as AmqpOptions } from 'amqplib';
 export interface IRabbitMQApplication {
   connect(...args): Promise<void>;
   createChannel(): Promise<Channel | ConfirmChannel>;
-  createConsumer(listenerOptions: RabbitMQListenerOptions, listenerCallback: (msg: ConsumeMessage | null, channel: Channel, channelWrapper) => Promise<void>): Promise<void>;
+  createConsumer(
+    listenerOptions: RabbitMQListenerOptions,
+    listenerCallback: (
+      msg: ConsumeMessage | null,
+      channel: Channel,
+      channelWrapper
+    ) => Promise<void>
+  ): Promise<void>;
   close(): Promise<void>;
 }
 
-export type IMidwayRabbitMQApplication = IMidwayApplication<IMidwayRabbitMQContext> & IRabbitMQApplication;
+export type IMidwayRabbitMQApplication =
+  IMidwayApplication<IMidwayRabbitMQContext> & IRabbitMQApplication;
 
 export interface IRabbitMQExchange {
-  name: string,
-  type: string,
-  options?: Options.AssertExchange
+  name: string;
+  type: string;
+  options?: Options.AssertExchange;
 }
 
-export interface IMidwayRabbitMQConfigurationOptions extends IConfigurationOptions {
-  url: string | Options.Connect,
+export interface IMidwayRabbitMQConfigurationOptions
+  extends IConfigurationOptions {
+  url: string | Options.Connect;
   socketOptions?: any;
   reconnectTime?: number;
   exchanges?: IRabbitMQExchange[];
@@ -32,6 +41,7 @@ export interface IMidwayRabbitMQConfigurationOptions extends IConfigurationOptio
 }
 
 export type IMidwayRabbitMQContext = IMidwayContext<{
+  data: ConsumeMessage;
   channel: Channel;
   queueName: string;
   ack: (data: any) => void;
