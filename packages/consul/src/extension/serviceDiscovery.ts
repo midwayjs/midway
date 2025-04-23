@@ -56,6 +56,11 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       throw formatObjectErrorToError(res);
     }
     this.logger.info(`[midway:consul] register service: ${instance.id}`);
+
+    // set status to UP
+    await this.updateStatus(instance, 'UP');
+    this.logger.info(`[midway:consul] set status to UP for service: ${instance.id}`);
+
     this.instance = instance;
   }
 
@@ -170,7 +175,7 @@ export class ConsulServiceDiscovery extends ServiceDiscovery<
   consulServiceDiscoveryOptions: ConsulServiceDiscoveryOptions;
 
   @Logger()
-  coreLogger;
+  coreLogger: ILogger;
 
   @Init()
   async init(options?: ServiceDiscoveryOptions<ConsulInstanceMetadata>) {
