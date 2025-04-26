@@ -72,6 +72,7 @@ export class MidwayKoaFramework extends BaseFramework<
     }
 
     const cookieOptions = this.configService.getConfiguration('cookies');
+    const cookieGetOptions = this.configService.getConfiguration('cookiesGet');
 
     this.app = new koa<DefaultState, IMidwayKoaContext>({
       keys: [].concat(appKeys),
@@ -84,7 +85,12 @@ export class MidwayKoaFramework extends BaseFramework<
     Object.defineProperty(this.app.context, 'cookies', {
       get() {
         if (!this[COOKIES]) {
-          this[COOKIES] = new Cookies(this, this.app.keys, cookieOptions);
+          this[COOKIES] = new Cookies(
+            this,
+            this.app.keys,
+            cookieOptions,
+            cookieGetOptions
+          );
         }
         return this[COOKIES];
       },
