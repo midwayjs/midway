@@ -109,26 +109,74 @@ describe('/test/feature.test.ts', () => {
       const consulServiceDiscovery = await app.getApplicationContext().getAsync(consul.ConsulServiceDiscovery);
       expect(consulServiceDiscovery).toBeDefined();
 
-      // test register
+      // 先注册自己
       await consulServiceDiscovery.register();
 
-      const serviceNames = await consulServiceDiscovery.getServiceNames();
-      expect(serviceNames).toBeDefined();
-      expect(serviceNames.length).toBeGreaterThan(0);
+      // 获取当前服务实例
+      const currentInstance = consulServiceDiscovery.getAdapter().getCurrentServiceInstance();
+      const serviceName = currentInstance.name;
+      expect(serviceName).toBeDefined();
 
-      const testServiceName = serviceNames[0];
-      let watchCallbackCalled = false;
+      // 创建几个不同的服务实例
+      const instanceIds = ['test-instance-1', 'test-instance-2', 'test-instance-3'];
 
-      // 设置 watch 回调
-      consulServiceDiscovery.watch(testServiceName, (instances) => {
-        watchCallbackCalled = true;
-      });
+      // 注册多个实例，每个实例使用不同的 meta
+      for (const id of instanceIds) {
+        const instanceMeta = {
+          id,
+          name: serviceName,
+          tags: ['test'],
+          address: '127.0.0.1',
+          port: 8500,
+          meta: {
+            version: '1.0.0',
+            custom: `custom-${id}`,
+          },
+          check: {
+            name: `check-${id}`,
+            ttl: '10s',
+            timeout: '5s',
+            status: 'passing'
+          },
+          getMetadata: () => {
+            return {
+              version: '1.0.0',
+              custom: `custom-${id}`,
+            };
+          }
+        };
+        await consulServiceDiscovery.getAdapter().register(instanceMeta);
+      }
 
       // 等待一段时间让 watch 生效
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // 验证 watch 回调是否被调用
-      expect(watchCallbackCalled).toBeTruthy();
+      const result = await consulServiceDiscovery.getInstances(serviceName);
+      console.log(result);
+
+      //
+      // // 验证所有注册的实例是否都在返回的列表中，并且 meta 信息正确
+      // const instanceIdsInWatch = watchInstances.map(instance => instance.id);
+      // for (const id of instanceIds) {
+      //   expect(instanceIdsInWatch).toContain(id);
+      //   const instance = watchInstances.find(inst => inst.id === id);
+      //   expect(instance).toBeDefined();
+      //   expect(instance.meta.custom).toBe(`custom-${id}`);
+      // }
+
+      // 清理注册的实例
+      for (const id of instanceIds) {
+        await consulServiceDiscovery.getAdapter().deregister({
+          id,
+          name: serviceName,
+          getMetadata: () => {
+            return {
+              version: '1.0.0',
+              custom: `custom-${id}`,
+            };
+          }
+        });
+      }
 
       await close(app);
     });

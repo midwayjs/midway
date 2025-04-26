@@ -1,11 +1,12 @@
 import {
   Configuration,
-  ILifeCycle,
+  ILifeCycle, ILogger,
   IMidwayApplication,
   IMidwayContainer,
   Inject,
   LifeCycleInvokeOptions,
-  MidwayConfigService,
+  Logger,
+  MidwayConfigService
 } from '@midwayjs/core';
 import { ConsulServiceFactory } from './manager';
 import { ConsulServiceDiscovery } from './extension/serviceDiscovery';
@@ -30,6 +31,9 @@ export class ConsulConfiguration implements ILifeCycle {
   @Inject()
   private configService: MidwayConfigService;
 
+  @Logger()
+  private coreLogger: ILogger;
+
   private isSelfRegister = false;
 
   async onReady(
@@ -48,6 +52,7 @@ export class ConsulConfiguration implements ILifeCycle {
       'consul.serviceDiscovery'
     );
     if (config.selfRegister) {
+      this.coreLogger.info('[midway:consul] start to register current node to service discovery');
       const serviceDiscovery = await container.getAsync(ConsulServiceDiscovery);
       await serviceDiscovery.register();
       this.isSelfRegister = true;

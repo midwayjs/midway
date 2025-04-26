@@ -129,10 +129,13 @@ export abstract class ServiceDiscoveryAdapter<
     this.watchers.get(serviceName)?.forEach(callback => callback(instances));
   }
 
+  abstract beforeStop(): Promise<void>;
+
   /**
    * 停止服务发现
    */
-  stop(): Promise<void> {
+  async stop(): Promise<void> {
+    await this.beforeStop();
     this.watchers.clear();
     if (this.instance) {
       return this.deregister(this.instance);
@@ -174,15 +177,15 @@ export abstract class ServiceDiscovery<
   ServiceInstance extends ServiceDiscoveryBaseInstance
 > implements IServiceDiscovery<Client, ServiceInstance>
 {
-  private adapters = new Map<
-    string,
-    ServiceDiscoveryAdapter<Client, ServiceInstance>
-  >();
   protected defaultAdapter: ServiceDiscoveryAdapter<Client, ServiceInstance>;
 
   abstract init(
     options?: ServiceDiscoveryOptions<ServiceInstance>
   ): Promise<void>;
+
+  getAdapter(): ServiceDiscoveryAdapter<Client, ServiceInstance> {
+    return this.defaultAdapter;
+  }
 
   register(): Promise<void> {
     return this.defaultAdapter.register();
@@ -191,6 +194,7 @@ export abstract class ServiceDiscovery<
   deregister(): Promise<void> {
     return this.defaultAdapter.deregister();
   }
+
 
   getInstances(serviceName: string): Promise<ServiceInstance[]> {
     return this.defaultAdapter.getInstances(serviceName);
@@ -216,8 +220,6 @@ export abstract class ServiceDiscovery<
 
   @Destroy()
   stop(): Promise<any> {
-    return Promise.all(
-      Array.from(this.adapters.values()).map(adapter => adapter.stop())
-    );
+    return this.defaultAdapter.stop();
   }
 }

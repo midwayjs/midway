@@ -14,3 +14,50 @@ export interface ConsulServiceDiscoveryOptions extends Omit<ServiceDiscoveryOpti
   serviceOptions?: ConsulInstanceMetadata | ((meta: DefaultInstanceMetadata ) => ConsulInstanceMetadata);
   healthCheckType?: 'self';
 }
+
+export interface ConsulHealthItem {
+  Node: {
+    ID: string;
+    Node: string;
+    Address: string;
+    Datacenter: string;
+    TaggedAddresses: Record<string, any>;
+    Meta: Record<string, any>;
+    CreateIndex: number;
+    ModifyIndex: number;
+  };
+  Service: {
+    ID: string;
+    Service: string;
+    Tags: string[];
+    Address: string;
+    TaggedAddresses: Record<string, any>;
+    Meta: Record<string, any>;
+    Port: number;
+    Weights: Record<string, any>;
+    EnableTagOverride: boolean;
+    Proxy: Record<string, any>;
+    Connect: Record<string, any>;
+    PeerName: string;
+    CreateIndex: number;
+    ModifyIndex: number;
+  };
+  Checks: Array<{
+    Node: string;
+    CheckID: string;
+    Name: string;
+    Status: 'passing' | 'warning' | 'critical';
+    Notes: string;
+    Output: string;
+    ServiceID: string;
+    ServiceName: string;
+    ServiceTags: string[];
+    Type: string;
+    Interval: string;
+    Timeout: string;
+    ExposedPort: number;
+    Definition: Record<string, any>;
+    CreateIndex: number;
+    ModifyIndex: number;
+  }>;
+}

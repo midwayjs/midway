@@ -15,6 +15,7 @@ import {
   ConsulServiceDiscoveryOptions,
   ConsulClient,
   ConsulInstanceMetadata,
+  ConsulHealthItem,
 } from '../interface';
 import { formatObjectErrorToError, isObjectError } from '../utils';
 
@@ -23,6 +24,8 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
   ConsulInstanceMetadata
 > {
   public protocol = 'consul';
+  private watcher;
+  private healthStore: Map<string, ConsulHealthItem>;
 
   constructor(
     consul: ConsulClient,
@@ -49,19 +52,45 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
           'consul.serviceDiscovery.serviceOptions'
         );
       }
+      this.instance = instance;
+
+      if (!this.healthStore) {
+        await this.initHealthStore(instance.name);
+      }
+
+      // start watch
+      this.watcher = this.client.watch({
+        method: this.client.health.service,
+        options: {
+          service: instance.name,
+        },
+      });
+
+      this.watcher.on('change', (healthItems: ConsulHealthItem[], res) => {
+        if (Array.isArray(healthItems) && healthItems.length > 0) {
+          for (const healthItem of healthItems) {
+            this.healthStore.set(healthItem.Service.ID, healthItem);
+          }
+        }
+        this.logger.info(
+          '[midway:consul] get data %j', healthItems
+        );
+      });
+
+      this.watcher.on('error', err => {
+        this.logger.error('[midway:consul] Error watching service:', err);
+      });
     }
 
     const res = await this.client.agent.service.register(instance);
     if (res && isObjectError(res)) {
       throw formatObjectErrorToError(res);
     }
-    this.logger.info(`[midway:consul] register service: ${instance.id}`);
+    this.logger.info(`[midway:consul] register instance: ${instance.id} for service: ${instance.name}`);
 
     // set status to UP
     await this.updateStatus(instance, 'UP');
-    this.logger.info(`[midway:consul] set status to UP for service: ${instance.id}`);
-
-    this.instance = instance;
+    this.logger.info(`[midway:consul] set status to UP for instance: ${instance.id} and service: ${instance.name}`);
   }
 
   async deregister(instance?: ConsulInstanceMetadata): Promise<void> {
@@ -71,7 +100,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       if (res && isObjectError(res)) {
         throw formatObjectErrorToError(res);
       }
-      this.logger.info(`[midway:consul] deregister service: ${instance.id}`);
+      this.logger.info(`[midway:consul] deregister instance: ${instance.id} for service: ${instance.id}`);
       this.instance = undefined;
     }
   }
@@ -102,7 +131,9 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     );
   }
 
-  async getInstances(serviceName: string): Promise<ConsulInstanceMetadata[]> {
+  private async initHealthStore(serviceName) {
+    this.healthStore = new Map<string, ConsulHealthItem>();
+    // init
     const services = await this.client.catalog.service.nodes(serviceName);
     if (services && isObjectError(services)) {
       throw formatObjectErrorToError(services);
@@ -112,20 +143,28 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       throw formatObjectErrorToError(checks);
     }
 
-    if (Array.isArray(checks)) {
-      // 获取所有通过健康检查的服务 ID
-      const passingServiceIds = new Set(
-        checks
-          .filter(check => check.Status === 'passing')
-          .map(check => check.ServiceID)
-      );
-
-      return services.filter(service =>
-        passingServiceIds.has(service.ServiceID)
-      );
+    for (const service of services) {
+      this.healthStore.set(service.ServiceID, {
+        Service: service,
+        Checks: null,
+        Node: null,
+      });
     }
 
-    return [];
+    for (const check of checks) {
+      const healthItem = this.healthStore.get(check.ServiceID);
+      if (healthItem) {
+        healthItem.Checks = check as any;
+      }
+    }
+  }
+
+  async getInstances(serviceName: string): Promise<ConsulInstanceMetadata[]> {
+    if (!this.healthStore) {
+      await this.initHealthStore(serviceName);
+    }
+
+    return Array.from(this.healthStore.values()) as any;
   }
 
   async getServiceNames(): Promise<string[]> {
@@ -146,18 +185,25 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       method: this.client.health.service,
       options: {
         service: serviceName,
+        passing: 'UP',
       },
     });
 
-    watcher.on('change', () => {
-      this.getInstances(serviceName)
-        .then(instances => this.notifyWatchers(serviceName, instances))
-        .catch(error => console.error('Error getting instances:', error));
+    watcher.on('change', (healthItems: ConsulHealthItem[], res) => {
+      for (const healthItem of healthItems) {
+        this.healthStore.set(healthItem.Service.ID, healthItem);
+      }
     });
 
     watcher.on('error', err => {
-      console.error('Error watching service:', err);
+      this.logger.error('[midway:consul] Error watching service:', err);
     });
+  }
+
+  async beforeStop() {
+    if (this.watcher) {
+      this.watcher.end();
+    }
   }
 }
 
