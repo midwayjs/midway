@@ -49,6 +49,12 @@ export const cookies = {
   // httpOnly: true | false,
   // sameSite: 'none|lax|strict',
 };
+/**
+ * default cookie get options
+ */
+export const cookiesGet = {
+  // sign: false,
+};
 
 export const onerror = {};
 
