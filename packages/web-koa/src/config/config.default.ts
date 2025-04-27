@@ -45,8 +45,10 @@ export const cookies = {
 /**
  * default cookie get options
  */
-export const cookiesGet = {
-  // sign: false,
+export const cookiesExtra = {
+  defaultGetOptions: {
+    // sign: false,
+  },
 };
 
 export const onerror = {};
