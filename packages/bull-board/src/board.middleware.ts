@@ -79,9 +79,9 @@ export class BoardMiddleware
     const queueList = framework.getQueueList();
     const wrapQueues = queueList.map(queue => {
       if (this.applicationContext.hasNamespace('bull')) {
-        return new BullAdapter(queue);
+        return new BullAdapter(queue) as any;
       } else if (this.applicationContext.hasNamespace('bullmq')) {
-        return new BullMQAdapter(queue);
+        return new BullMQAdapter(queue) as any;
       }
     });
     this.basePath = this.bullBoardConfig.basePath;
