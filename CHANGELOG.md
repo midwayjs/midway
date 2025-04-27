@@ -1,6 +1,26 @@
 # Change Log
 
 
+## v3.20.5 (2025-04-27)
+
+#### :nail_care: Polish
+* `bull-board`, `bullmq`, `web-koa`
+  * [#4330](https://github.com/midwayjs/midway/pull/4330) chore: upgrade bullmq version and update cookie extra options ([@czy88840616](https://github.com/czy88840616))
+* `session`, `web-koa`
+  * [#4329](https://github.com/midwayjs/midway/pull/4329) feat: support new cookies options ([@czy88840616](https://github.com/czy88840616))
+* `rabbitmq`
+  * [#4326](https://github.com/midwayjs/midway/pull/4326) feat(rabbitmq): add msg into rabbitmq ctx ([@larryzhuo](https://github.com/larryzhuo))
+
+#### :package: Dependencies
+* `grpc`
+  * [#4324](https://github.com/midwayjs/midway/pull/4324) fix(deps): update dependency @grpc/grpc-js to v1.13.3 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- larry zhuo ([@larryzhuo](https://github.com/larryzhuo))
+
+
+
 ## v3.20.4 (2025-04-10)
 
 #### :nail_care: Polish

@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/info",
   "description": "midway info",
-  "version": "3.20.4",
+  "version": "3.20.5",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -15,7 +15,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.20.4",
     "@midwayjs/express": "^3.20.4",
-    "@midwayjs/koa": "^3.20.4",
+    "@midwayjs/koa": "^3.20.5",
     "@midwayjs/mock": "^3.20.4",
     "@midwayjs/serverless-fc-starter": "^3.20.4",
     "@midwayjs/serverless-scf-starter": "^3.20.0"

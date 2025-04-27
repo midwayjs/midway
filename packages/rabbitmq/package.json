@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/rabbitmq",
-  "version": "3.20.4",
+  "version": "3.20.5",
   "description": "Midway Framework for rabbitmq",
   "main": "dist/index.js",
   "typings": "index.d.ts",
