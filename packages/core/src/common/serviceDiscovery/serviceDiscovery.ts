@@ -3,31 +3,25 @@ import {
   IServiceDiscovery,
   ServiceDiscoveryOptions,
   ILoadBalancer,
-  IServiceDiscoveryHealthCheck,
-  ServiceDiscoveryBaseInstance,
   DefaultInstanceMetadata,
 } from '../../interface';
 import { LoadBalancerFactory } from './loadBalancer';
 import { LoadBalancerType } from '../../interface';
 import { NetworkUtils } from '../../util/network';
-import { ServiceDiscoveryHealthCheckFactory } from './healthCheck';
 
 export abstract class ServiceDiscoveryAdapter<
   Client,
-  ServiceInstance extends ServiceDiscoveryBaseInstance
-> implements IServiceDiscovery<Client, ServiceInstance>
+  RegisterServiceInstance,
+  QueryServiceInstance = RegisterServiceInstance,
+> implements IServiceDiscovery<QueryServiceInstance>
 {
-  protected options: ServiceDiscoveryOptions<ServiceInstance> = {};
-  protected watchers: Map<string, Set<(instances: ServiceInstance[]) => void>> =
-    new Map();
-  protected loadBalancer: ILoadBalancer<ServiceInstance>;
-  protected instance?: ServiceInstance;
+  protected options: ServiceDiscoveryOptions<QueryServiceInstance> = {};
+  protected loadBalancer: ILoadBalancer<QueryServiceInstance>;
+  protected instance?: RegisterServiceInstance;
   protected client: Client;
-  abstract protocol: string;
-  protected healthCheck?: IServiceDiscoveryHealthCheck<ServiceInstance>;
-  constructor(
+  protected constructor(
     client: Client,
-    serviceDiscoveryOptions: ServiceDiscoveryOptions<ServiceInstance>
+    serviceDiscoveryOptions: ServiceDiscoveryOptions<QueryServiceInstance>
   ) {
     this.client = client;
     this.options = serviceDiscoveryOptions;
@@ -37,49 +31,36 @@ export abstract class ServiceDiscoveryAdapter<
     } else {
       this.setLoadBalancer(LoadBalancerType.ROUND_ROBIN);
     }
-
-    // set default health check
-    if (this.options.healthCheckType) {
-      this.healthCheck = ServiceDiscoveryHealthCheckFactory.create(
-        this.options.healthCheckType,
-        this.options.healthCheckOptions
-      );
-    }
   }
 
   public getDefaultInstanceMeta(): DefaultInstanceMetadata {
-    // id 再加一个 6 位字母或者数字随机串
-    const random = Math.random().toString(36).substring(2, 8);
     return {
-      id: `${NetworkUtils.getHostname()}-${process.pid}-${random}`,
-      serviceName: `${this.protocol}-${NetworkUtils.getHostname()}`,
+      id: `${NetworkUtils.getHostname()}-${process.pid}`,
+      serviceName: `${NetworkUtils.getHostname()}`,
       host: NetworkUtils.getIpv4Address(),
       port: 0,
-      protocol: this.protocol,
       metadata: {},
-      status: 'UP',
     };
   }
 
-  public getCurrentServiceInstance(): ServiceInstance {
+  public getSelfInstance(): RegisterServiceInstance {
     return this.instance;
   }
 
   /**
-   * 获取服务列表
+   * 获取可用服务列表
    */
-  abstract getInstances(serviceName: string): Promise<ServiceInstance[]>;
+  abstract getInstances<getInstanceOptions>(
+    serviceNameOrOptions: string | getInstanceOptions
+  ): Promise<QueryServiceInstance[]>;
 
   /**
-   * 获取所有服务名称
+   * 获取一个可用服务实例（带负载均衡）
    */
-  abstract getServiceNames(): Promise<string[]>;
-
-  /**
-   * 获取服务实例（带负载均衡）
-   */
-  async getInstance(serviceName: string): Promise<ServiceInstance> {
-    const instances = await this.getInstances(serviceName);
+  async getInstance<getInstanceOptions>(
+    serviceNameOrOptions: string | getInstanceOptions
+  ): Promise<QueryServiceInstance> {
+    const instances = await this.getInstances(serviceNameOrOptions);
     return this.loadBalancer.select(instances);
   }
 
@@ -87,46 +68,13 @@ export abstract class ServiceDiscoveryAdapter<
    * 设置负载均衡策略
    */
   setLoadBalancer(
-    type: LoadBalancerType | ILoadBalancer<ServiceInstance>
+    type: LoadBalancerType | ILoadBalancer<QueryServiceInstance>
   ): void {
     if (typeof type === 'string') {
       this.loadBalancer = LoadBalancerFactory.create(type);
     } else {
-      this.loadBalancer = type as ILoadBalancer<ServiceInstance>;
+      this.loadBalancer = type as ILoadBalancer<QueryServiceInstance>;
     }
-  }
-
-  /**
-   * 监听服务变更
-   */
-  watch(
-    serviceName: string,
-    callback: (instances: ServiceInstance[]) => void
-  ): void {
-    if (!this.watchers.has(serviceName)) {
-      this.watchers.set(serviceName, new Set());
-    }
-    this.watchers.get(serviceName)?.add(callback);
-  }
-
-  /**
-   * 移除服务监听
-   */
-  unwatch(
-    serviceName: string,
-    callback: (instances: ServiceInstance[]) => void
-  ): void {
-    this.watchers.get(serviceName)?.delete(callback);
-  }
-
-  /**
-   * 通知服务变更
-   */
-  protected notifyWatchers(
-    serviceName: string,
-    instances: ServiceInstance[]
-  ): void {
-    this.watchers.get(serviceName)?.forEach(callback => callback(instances));
   }
 
   abstract beforeStop(): Promise<void>;
@@ -136,7 +84,6 @@ export abstract class ServiceDiscoveryAdapter<
    */
   async stop(): Promise<void> {
     await this.beforeStop();
-    this.watchers.clear();
     if (this.instance) {
       return this.deregister(this.instance);
     }
@@ -145,28 +92,22 @@ export abstract class ServiceDiscoveryAdapter<
   /**
    * 注册服务实例
    */
-  abstract register(instance?: ServiceInstance): Promise<void>;
+  abstract register(instance?: RegisterServiceInstance): Promise<void>;
 
   /**
    * 注销服务实例
    */
-  abstract deregister(instance?: ServiceInstance): Promise<void>;
+  abstract deregister(instance?: RegisterServiceInstance): Promise<void>;
 
   /**
-   * 更新服务实例状态
+   * 上线服务实例
    */
-  abstract updateStatus(
-    instance: ServiceInstance,
-    status: 'UP' | 'DOWN'
-  ): Promise<void>;
+  abstract online(instance?: RegisterServiceInstance): Promise<void>;
 
   /**
-   * 更新服务实例元数据
+   * 下线服务实例
    */
-  abstract updateMetadata(
-    instance: ServiceInstance,
-    metadata: Record<string, any>
-  ): Promise<void>;
+  abstract offline(instance?: RegisterServiceInstance): Promise<void>;
 }
 
 /**
@@ -174,16 +115,21 @@ export abstract class ServiceDiscoveryAdapter<
  */
 export abstract class ServiceDiscovery<
   Client,
-  ServiceInstance extends ServiceDiscoveryBaseInstance
-> implements IServiceDiscovery<Client, ServiceInstance>
+  RegisterServiceInstance,
+  QueryServiceInstance = RegisterServiceInstance
+> implements IServiceDiscovery<QueryServiceInstance>
 {
-  protected defaultAdapter: ServiceDiscoveryAdapter<Client, ServiceInstance>;
+  protected defaultAdapter: ServiceDiscoveryAdapter<
+    Client,
+    RegisterServiceInstance,
+    QueryServiceInstance
+  >;
 
   abstract init(
-    options?: ServiceDiscoveryOptions<ServiceInstance>
+    options?: ServiceDiscoveryOptions<QueryServiceInstance>
   ): Promise<void>;
 
-  getAdapter(): ServiceDiscoveryAdapter<Client, ServiceInstance> {
+  getAdapter(): ServiceDiscoveryAdapter<Client, RegisterServiceInstance, QueryServiceInstance> {
     return this.defaultAdapter;
   }
 
@@ -195,27 +141,28 @@ export abstract class ServiceDiscovery<
     return this.defaultAdapter.deregister();
   }
 
-
-  getInstances(serviceName: string): Promise<ServiceInstance[]> {
+  getInstances<GetInstanceOptions>(
+    serviceName: string | GetInstanceOptions
+  ): Promise<QueryServiceInstance[]> {
     return this.defaultAdapter.getInstances(serviceName);
   }
 
-  getServiceNames(): Promise<string[]> {
-    return this.defaultAdapter.getServiceNames();
+  getInstance<GetInstanceOptions>(
+    serviceName: string | GetInstanceOptions
+  ): Promise<QueryServiceInstance> {
+    return this.defaultAdapter.getInstance(serviceName);
   }
 
-  updateStatus(status: 'UP' | 'DOWN'): Promise<void> {
-    return this.defaultAdapter.updateStatus(
-      this.defaultAdapter.getCurrentServiceInstance(),
-      status
+  online(): Promise<void> {
+    return this.defaultAdapter.online(
+      this.defaultAdapter.getSelfInstance()
     );
   }
 
-  watch(
-    serviceName: string,
-    callback: (instances: ServiceInstance[]) => void
-  ): void {
-    this.defaultAdapter.watch(serviceName, callback);
+  offline(): Promise<void> {
+    return this.defaultAdapter.offline(
+      this.defaultAdapter.getSelfInstance()
+    );
   }
 
   @Destroy()

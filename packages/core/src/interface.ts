@@ -1240,9 +1240,6 @@ export type FunctionalConfigurationOptions = InjectionConfigurationOptions & ILi
 export const LoadBalancerType = {
   RANDOM: 'random',
   ROUND_ROBIN: 'roundRobin',
-  WEIGHTED: 'weighted',
-  LEAST_CONNECTION: 'leastConnection',
-  CONSISTENT_HASH: 'consistentHash'
 } as const;
 
 export type LoadBalancerType = typeof LoadBalancerType[keyof typeof LoadBalancerType];
@@ -1339,9 +1336,7 @@ export interface DefaultInstanceMetadata {
   serviceName: string;
   host: string;
   port: number;
-  protocol: string;
   metadata: Record<string, any>;
-  status: 'UP' | 'DOWN';
 }
 
 /**
@@ -1353,30 +1348,21 @@ export interface ServiceDiscoveryHealthCheckResult {
   timestamp: number;
 }
 
-export interface IServiceDiscoveryHealthCheck<ServiceInstance extends ServiceDiscoveryBaseInstance> {
+export interface IServiceDiscoveryHealthCheck<ServiceInstance> {
   check(instance: ServiceInstance): Promise<ServiceDiscoveryHealthCheckResult>;
 }
 
-export interface ServiceDiscoveryOptions<ServiceInstance extends ServiceDiscoveryBaseInstance> {
+export interface ServiceDiscoveryOptions<ServiceInstance> {
   selfRegister?: boolean;
+  serviceDiscoveryClient?: string;
   serviceOptions?: Record<string, any>;
   loadBalancer?: LoadBalancerType | ILoadBalancer<ServiceInstance>;
-  healthCheckType?: ServiceDiscoveryHealthCheckType;
-  healthCheckOptions?: ServiceDiscoveryHealthCheckType extends 'self'
-    ? Record<string, any>
-    : ServiceDiscoveryHealthCheckType extends 'ttl'
-      ? TTLServiceDiscoveryHealthCheckOptions
-      : ServiceDiscoveryHealthCheckType extends 'http'
-        ? HTTPServiceDiscoveryHealthCheckOptions
-        : ServiceDiscoveryHealthCheckType extends 'tcp'
-          ? TCPServiceDiscoveryHealthCheckOptions
-          : ServiceDiscoveryHealthCheckOptions;
 }
 
 /**
  * 负载均衡策略接口
  */
-export interface ILoadBalancer<ServiceInstance extends ServiceDiscoveryBaseInstance> {
+export interface ILoadBalancer<ServiceInstance> {
   /**
    * 从服务实例列表中选择一个实例
    * @param instances 服务实例列表
@@ -1385,28 +1371,27 @@ export interface ILoadBalancer<ServiceInstance extends ServiceDiscoveryBaseInsta
 }
 
 
-export interface IServiceDiscovery<Client, ServiceInstance extends ServiceDiscoveryBaseInstance> {
+export interface IServiceDiscovery<ServiceInstance> {
   /**
-   * 获取服务列表
+   * 注册服务实例
+   */
+  register(): Promise<void>;
+  /**
+   * 上线服务实例
+   */
+  online(): Promise<void>;
+  /**
+   * 下线服务实例
+   */
+  offline(): Promise<void>;
+  /**
+   * 获取所有可用的服务列表
    * @param serviceName 服务名称
    */
-  getInstances(serviceName: string): Promise<ServiceInstance[]>;
-
+  getInstances<GetInstanceOptions>(serviceName: string | GetInstanceOptions): Promise<ServiceInstance[]>;
   /**
-   * 获取所有服务名称
-   */
-  getServiceNames(): Promise<string[]>;
-
-  /**
-   * 监听服务变更
+   * 获取一个可用的服务实例
    * @param serviceName 服务名称
-   * @param callback 回调函数
    */
-  watch(serviceName: string, callback: (instances: ServiceInstance[]) => void): void;
-
-  /**
-   * 停止服务发现
-   */
-  stop(): Promise<void>;
+  getInstance<GetInstanceOptions>(serviceName: string | GetInstanceOptions): Promise<ServiceInstance>;
 }
-
