@@ -13,6 +13,7 @@ export interface ConsulInstanceMetadata extends RegisterOptions {}
 
 export interface ConsulServiceDiscoveryOptions extends ServiceDiscoveryOptions<ConsulHealthItem> {
   serviceOptions?: ConsulInstanceMetadata | ((meta: DefaultInstanceMetadata ) => ConsulInstanceMetadata);
+  autoHealthCheck?: boolean;
 }
 
 export interface ConsulHealthItem {

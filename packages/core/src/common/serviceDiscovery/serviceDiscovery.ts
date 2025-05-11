@@ -12,7 +12,7 @@ import { NetworkUtils } from '../../util/network';
 export abstract class ServiceDiscoveryAdapter<
   Client,
   RegisterServiceInstance,
-  QueryServiceInstance = RegisterServiceInstance,
+  QueryServiceInstance = RegisterServiceInstance
 > implements IServiceDiscovery<QueryServiceInstance>
 {
   protected options: ServiceDiscoveryOptions<QueryServiceInstance> = {};
@@ -129,7 +129,13 @@ export abstract class ServiceDiscovery<
     options?: ServiceDiscoveryOptions<QueryServiceInstance>
   ): Promise<void>;
 
-  getAdapter(): ServiceDiscoveryAdapter<Client, RegisterServiceInstance, QueryServiceInstance> {
+  abstract getServiceDiscoveryClient(): Client;
+
+  getAdapter(): ServiceDiscoveryAdapter<
+    Client,
+    RegisterServiceInstance,
+    QueryServiceInstance
+  > {
     return this.defaultAdapter;
   }
 
@@ -154,15 +160,11 @@ export abstract class ServiceDiscovery<
   }
 
   online(): Promise<void> {
-    return this.defaultAdapter.online(
-      this.defaultAdapter.getSelfInstance()
-    );
+    return this.defaultAdapter.online(this.defaultAdapter.getSelfInstance());
   }
 
   offline(): Promise<void> {
-    return this.defaultAdapter.offline(
-      this.defaultAdapter.getSelfInstance()
-    );
+    return this.defaultAdapter.offline(this.defaultAdapter.getSelfInstance());
   }
 
   @Destroy()

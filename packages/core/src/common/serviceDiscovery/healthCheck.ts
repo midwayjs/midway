@@ -15,7 +15,8 @@ import * as net from 'net';
 /**
  * 抽象健康检查类
  */
-export abstract class AbstractHealthCheck<ServiceInstance> implements IServiceDiscoveryHealthCheck<ServiceInstance>
+export abstract class AbstractHealthCheck<ServiceInstance>
+  implements IServiceDiscoveryHealthCheck<ServiceInstance>
 {
   protected options: ServiceDiscoveryHealthCheckOptions;
   protected lastCheckTime = 0;

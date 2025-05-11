@@ -1,14 +1,10 @@
-import {
-  ILoadBalancer,
-  LoadBalancerType,
-} from '../../interface';
+import { ILoadBalancer, LoadBalancerType } from '../../interface';
 
 /**
  * 随机负载均衡策略
  */
-export class RandomLoadBalance<
-  ServiceInstance
-> implements ILoadBalancer<ServiceInstance>
+export class RandomLoadBalance<ServiceInstance>
+  implements ILoadBalancer<ServiceInstance>
 {
   select(instances: ServiceInstance[]): ServiceInstance {
     if (!instances.length) {
@@ -22,9 +18,8 @@ export class RandomLoadBalance<
 /**
  * 轮询负载均衡策略
  */
-export class RoundRobinLoadBalancer<
-  ServiceInstance
-> implements ILoadBalancer<ServiceInstance>
+export class RoundRobinLoadBalancer<ServiceInstance>
+  implements ILoadBalancer<ServiceInstance>
 {
   private currentIndex = 0;
 
@@ -43,7 +38,7 @@ export class RoundRobinLoadBalancer<
  */
 export class LoadBalancerFactory {
   static create<ServiceInstance>(
-    type: LoadBalancerType,
+    type: LoadBalancerType
   ): ILoadBalancer<ServiceInstance> {
     switch (type) {
       case LoadBalancerType.RANDOM:

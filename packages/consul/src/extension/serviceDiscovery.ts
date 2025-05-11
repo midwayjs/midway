@@ -10,7 +10,8 @@ import {
   Logger,
   ILogger,
   DataListener,
-  DefaultInstanceMetadata, MidwayParameterError
+  DefaultInstanceMetadata,
+  MidwayParameterError,
 } from '@midwayjs/core';
 import { ConsulServiceFactory } from '../manager';
 import {
@@ -18,29 +19,31 @@ import {
   ConsulClient,
   ConsulInstanceMetadata,
   ConsulHealthItem,
-  GetHealthServiceOptions
+  GetHealthServiceOptions,
 } from '../interface';
-import { formatObjectErrorToError, hashServiceOptions, isObjectError } from '../utils';
+import {
+  formatObjectErrorToError,
+  hashServiceOptions,
+  isObjectError,
+} from '../utils';
 
 /**
  * The data listener for consul service discovery
  * @since 4.0.0
  */
-class ConsulDataListener extends DataListener<Map<string, ConsulHealthItem>, ConsulHealthItem[]> {
+class ConsulDataListener extends DataListener<ConsulHealthItem[]> {
   private watcher: any;
 
-  constructor(protected readonly client: ConsulClient, protected readonly options: GetHealthServiceOptions, protected readonly logger: ILogger) {
+  constructor(
+    protected readonly client: ConsulClient,
+    protected readonly options: GetHealthServiceOptions,
+    protected readonly logger: ILogger
+  ) {
     super();
   }
 
   async init() {
     await super.init();
-  }
-
-  private setInnerData(map: Map<string, ConsulHealthItem>, arr: ConsulHealthItem[]) {
-    for (const item of arr) {
-      map.set(item.Service.ID, item);
-    }
   }
 
   // 初始化数据
@@ -49,9 +52,7 @@ class ConsulDataListener extends DataListener<Map<string, ConsulHealthItem>, Con
     if (services && isObjectError(services)) {
       throw formatObjectErrorToError(services);
     }
-    const map = new Map<string, ConsulHealthItem>();
-    this.setInnerData(map, services);
-    return map;
+    return services;
   }
 
   // 更新数据
@@ -62,18 +63,12 @@ class ConsulDataListener extends DataListener<Map<string, ConsulHealthItem>, Con
     });
 
     this.watcher.on('change', (healthItems: ConsulHealthItem[], res) => {
-      console.log(healthItems)
-      this.setInnerData(this.innerData, healthItems);
-      setData(this.innerData);
+      setData(healthItems);
     });
 
     this.watcher.on('error', err => {
       this.logger.error('[midway:consul] Error watching service:', err);
     });
-  }
-
-  protected override transformData(data: Map<string, ConsulHealthItem>) {
-    return Array.from(data.values());
   }
 
   async destroyListener() {
@@ -115,7 +110,9 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
           'consul.serviceDiscovery.serviceOptions'
         );
       }
-      instance = this.transformDefaultMetaToConsulInstance(serviceOptions as any);
+      instance = this.transformDefaultMetaToConsulInstance(
+        serviceOptions as any
+      );
       this.instance = instance;
     }
 
@@ -129,11 +126,15 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     if (res && isObjectError(res)) {
       throw formatObjectErrorToError(res);
     }
-    this.logger.info(`[midway:consul] register instance: ${instance.id} for service: ${instance.name}`);
+    this.logger.info(
+      `[midway:consul] register instance: ${instance.id} for service: ${instance.name}`
+    );
 
     // set status to UP
     await this.online(instance);
-    this.logger.info(`[midway:consul] set status to UP for instance: ${instance.id} and service: ${instance.name}`);
+    this.logger.info(
+      `[midway:consul] set status to UP for instance: ${instance.id} and service: ${instance.name}`
+    );
   }
 
   async deregister(instance?: ConsulInstanceMetadata): Promise<void> {
@@ -143,12 +144,16 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       if (res && isObjectError(res)) {
         throw formatObjectErrorToError(res);
       }
-      this.logger.info(`[midway:consul] deregister instance: ${instance.id} for service: ${instance.id}`);
+      this.logger.info(
+        `[midway:consul] deregister instance: ${instance.id} for service: ${instance.id}`
+      );
       this.instance = undefined;
     }
   }
 
-  private transformDefaultMetaToConsulInstance(instance: DefaultInstanceMetadata): ConsulInstanceMetadata {
+  private transformDefaultMetaToConsulInstance(
+    instance: DefaultInstanceMetadata
+  ): ConsulInstanceMetadata {
     return {
       name: instance?.serviceName,
       address: instance?.host,
@@ -157,7 +162,9 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     };
   }
 
-  private async getListener(options: GetHealthServiceOptions): Promise<ConsulDataListener> {
+  private async getListener(
+    options: GetHealthServiceOptions
+  ): Promise<ConsulDataListener> {
     const cacheKey = hashServiceOptions(options as GetHealthServiceOptions);
 
     if (!this.listenerStore.has(cacheKey)) {
@@ -173,8 +180,13 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     return this.listenerStore.get(cacheKey);
   }
 
-  async getInstances(serviceNameOrOptions: string | GetHealthServiceOptions): Promise<ConsulHealthItem[]> {
-    let options = typeof serviceNameOrOptions === 'string' ? { service: serviceNameOrOptions } : serviceNameOrOptions;
+  async getInstances(
+    serviceNameOrOptions: string | GetHealthServiceOptions
+  ): Promise<ConsulHealthItem[]> {
+    const options =
+      typeof serviceNameOrOptions === 'string'
+        ? { service: serviceNameOrOptions }
+        : serviceNameOrOptions;
     const listener = await this.getListener({
       passing: true,
       ...options,
@@ -204,7 +216,11 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
   }
 
   async beforeStop() {
-    await Promise.all(Array.from(this.listenerStore.values()).map(listener => listener.destroyListener()));
+    await Promise.all(
+      Array.from(this.listenerStore.values()).map(listener =>
+        listener.destroyListener()
+      )
+    );
     this.listenerStore.clear();
   }
 }
@@ -228,20 +244,30 @@ export class ConsulServiceDiscovery extends ServiceDiscovery<
   @Logger()
   coreLogger: ILogger;
 
+  private defaultServiceDiscoveryClient: ConsulClient;
+
   @Init()
   async init(options?: ServiceDiscoveryOptions<ConsulHealthItem>) {
-    const serviceDiscoveryOption = options ?? this.consulServiceDiscoveryOptions;
+    const serviceDiscoveryOption =
+      options ?? this.consulServiceDiscoveryOptions;
 
     if (serviceDiscoveryOption) {
       this.defaultAdapter = new ConsulServiceDiscoverAdapter(
-        this.consulServiceFactory.get(
-          serviceDiscoveryOption.serviceDiscoveryClient ||
-            this.consulServiceFactory.getDefaultClientName() ||
-            'default'
-        ),
+        this.getServiceDiscoveryClient(),
         serviceDiscoveryOption as ConsulServiceDiscoveryOptions,
         this.coreLogger
       );
     }
+  }
+
+  getServiceDiscoveryClient() {
+    if (this.defaultServiceDiscoveryClient) {
+      this.defaultServiceDiscoveryClient = this.consulServiceFactory.get(
+        this.consulServiceDiscoveryOptions.serviceDiscoveryClient ||
+          this.consulServiceFactory.getDefaultClientName() ||
+          'default'
+      );
+    }
+    return this.defaultServiceDiscoveryClient;
   }
 }

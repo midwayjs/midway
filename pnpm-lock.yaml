@@ -411,6 +411,9 @@ importers:
       consul:
         specifier: 2.0.1
         version: 2.0.1
+      ms:
+        specifier: 2.1.3
+        version: 2.1.3
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
