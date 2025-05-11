@@ -261,7 +261,7 @@ export class ConsulServiceDiscovery extends ServiceDiscovery<
   }
 
   getServiceDiscoveryClient() {
-    if (this.defaultServiceDiscoveryClient) {
+    if (!this.defaultServiceDiscoveryClient) {
       this.defaultServiceDiscoveryClient = this.consulServiceFactory.get(
         this.consulServiceDiscoveryOptions.serviceDiscoveryClient ||
           this.consulServiceFactory.getDefaultClientName() ||
