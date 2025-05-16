@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "1.13.3",
-    "@grpc/proto-loader": "0.7.13",
+    "@grpc/proto-loader": "0.7.15",
     "@midwayjs/core": "^3.20.4"
   },
   "engines": {
