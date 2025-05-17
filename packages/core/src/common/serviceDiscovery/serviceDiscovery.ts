@@ -11,20 +11,21 @@ import { NetworkUtils } from '../../util/network';
 
 export abstract class ServiceDiscoveryAdapter<
   Client,
+  ServiceDiscoveryConfigOptions extends ServiceDiscoveryOptions<QueryServiceInstance>,
   RegisterServiceInstance,
   QueryServiceInstance = RegisterServiceInstance
 > implements IServiceDiscovery<QueryServiceInstance>
 {
-  protected options: ServiceDiscoveryOptions<QueryServiceInstance> = {};
+  protected options: ServiceDiscoveryConfigOptions;
   protected loadBalancer: ILoadBalancer<QueryServiceInstance>;
   protected instance?: RegisterServiceInstance;
   protected client: Client;
   protected constructor(
     client: Client,
-    serviceDiscoveryOptions: ServiceDiscoveryOptions<QueryServiceInstance>
+    serviceDiscoveryOptions: ServiceDiscoveryConfigOptions
   ) {
     this.client = client;
-    this.options = serviceDiscoveryOptions;
+    this.options = serviceDiscoveryOptions ?? {} as ServiceDiscoveryConfigOptions;
     // set default load balancer
     if (this.options.loadBalancer) {
       this.setLoadBalancer(this.options.loadBalancer);
@@ -115,24 +116,27 @@ export abstract class ServiceDiscoveryAdapter<
  */
 export abstract class ServiceDiscovery<
   Client,
+  ServiceDiscoveryConfigOptions extends ServiceDiscoveryOptions<QueryServiceInstance>,
   RegisterServiceInstance,
   QueryServiceInstance = RegisterServiceInstance
 > implements IServiceDiscovery<QueryServiceInstance>
 {
   protected defaultAdapter: ServiceDiscoveryAdapter<
     Client,
+    ServiceDiscoveryConfigOptions,
     RegisterServiceInstance,
     QueryServiceInstance
   >;
 
   abstract init(
-    options?: ServiceDiscoveryOptions<QueryServiceInstance>
+    options?: ServiceDiscoveryConfigOptions
   ): Promise<void>;
 
   abstract getServiceDiscoveryClient(): Client;
 
   getAdapter(): ServiceDiscoveryAdapter<
     Client,
+    ServiceDiscoveryConfigOptions,
     RegisterServiceInstance,
     QueryServiceInstance
   > {

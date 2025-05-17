@@ -1352,10 +1352,10 @@ export interface IServiceDiscoveryHealthCheck<ServiceInstance> {
   check(instance: ServiceInstance): Promise<ServiceDiscoveryHealthCheckResult>;
 }
 
-export interface ServiceDiscoveryOptions<ServiceInstance> {
+export interface ServiceDiscoveryOptions<ServiceInstance, serviceOptions = Record<string, any>> {
   selfRegister?: boolean;
   serviceDiscoveryClient?: string;
-  serviceOptions?: Record<string, any>;
+  serviceOptions?: serviceOptions;
   loadBalancer?: LoadBalancerType | ILoadBalancer<ServiceInstance>;
 }
 
