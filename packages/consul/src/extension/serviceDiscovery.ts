@@ -84,6 +84,7 @@ class ConsulDataListener extends DataListener<ConsulHealthItem[]> {
  */
 export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
   ConsulClient,
+  ConsulServiceDiscoveryOptions,
   ConsulInstanceMetadata,
   ConsulHealthItem
 > {
@@ -118,7 +119,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
 
     if (!instance.name) {
       throw new MidwayParameterError(
-        'instance.name is required when register service'
+        'instance.name is required when register service in consul'
       );
     }
 
@@ -145,7 +146,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
         throw formatObjectErrorToError(res);
       }
       this.logger.info(
-        `[midway:consul] deregister instance: ${instance.id} for service: ${instance.id}`
+        `[midway:consul] deregister instance: ${instance.id} for service: ${instance.name}`
       );
       this.instance = undefined;
     }
@@ -232,6 +233,7 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
 @Singleton()
 export class ConsulServiceDiscovery extends ServiceDiscovery<
   ConsulClient,
+  ConsulServiceDiscoveryOptions,
   ConsulInstanceMetadata,
   ConsulHealthItem
 > {

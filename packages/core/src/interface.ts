@@ -1327,9 +1327,7 @@ export interface TCPServiceDiscoveryHealthCheckOptions extends BaseServiceDiscov
  */
 export type ServiceDiscoveryHealthCheckOptions = TTLServiceDiscoveryHealthCheckOptions | HTTPServiceDiscoveryHealthCheckOptions | TCPServiceDiscoveryHealthCheckOptions;
 
-export interface ServiceDiscoveryBaseInstance {
-  getMetadata(): Record<string, any>;
-}
+export interface ServiceDiscoveryBaseInstance {}
 
 export interface DefaultInstanceMetadata {
   id: string;

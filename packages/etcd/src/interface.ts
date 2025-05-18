@@ -1,4 +1,10 @@
-import { ServiceDiscoveryBaseInstance, ServiceDiscoveryOptions, DefaultInstanceMetadata } from '@midwayjs/core';
+import {
+  ServiceDiscoveryBaseInstance,
+  ServiceDiscoveryOptions,
+  DefaultInstanceMetadata,
+  ServiceFactoryConfigOption
+} from '@midwayjs/core';
+import { IOptions } from 'etcd3';
 
 export interface EtcdInstanceMetadata extends ServiceDiscoveryBaseInstance {
   /**
@@ -40,4 +46,8 @@ export interface EtcdServiceDiscoveryOptions extends ServiceDiscoveryOptions<Etc
    * 服务实例配置
    */
   serviceOptions?: EtcdInstanceMetadata | ((meta: DefaultInstanceMetadata) => EtcdInstanceMetadata);
+}
+
+export type MidwayEtcdConfigOptions = ServiceFactoryConfigOption<IOptions> & {
+  serviceDiscovery?: EtcdServiceDiscoveryOptions;
 }

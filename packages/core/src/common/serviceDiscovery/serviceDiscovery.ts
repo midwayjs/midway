@@ -25,7 +25,8 @@ export abstract class ServiceDiscoveryAdapter<
     serviceDiscoveryOptions: ServiceDiscoveryConfigOptions
   ) {
     this.client = client;
-    this.options = serviceDiscoveryOptions ?? {} as ServiceDiscoveryConfigOptions;
+    this.options =
+      serviceDiscoveryOptions ?? ({} as ServiceDiscoveryConfigOptions);
     // set default load balancer
     if (this.options.loadBalancer) {
       this.setLoadBalancer(this.options.loadBalancer);
@@ -128,9 +129,7 @@ export abstract class ServiceDiscovery<
     QueryServiceInstance
   >;
 
-  abstract init(
-    options?: ServiceDiscoveryConfigOptions
-  ): Promise<void>;
+  abstract init(options?: ServiceDiscoveryConfigOptions): Promise<void>;
 
   abstract getServiceDiscoveryClient(): Client;
 
