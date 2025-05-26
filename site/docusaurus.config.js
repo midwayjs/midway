@@ -111,7 +111,6 @@ const config = {
         lastVersion: 'current',
       },
     ],
-    './src/plugins/aem/index.js',
   ],
   presets: [
     [
