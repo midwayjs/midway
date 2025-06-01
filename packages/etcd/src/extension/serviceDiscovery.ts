@@ -75,13 +75,14 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
   protected client: Etcd3;
   protected options: EtcdServiceDiscoveryOptions;
   protected instance?: EtcdInstanceMetadata;
-  private namespace: string;
-  private leaseId?: number;
+  private readonly namespace: string;
+  private lease?: any; // etcd3 的 Lease 实例
   private renewTimer?: NodeJS.Timeout;
   private readonly ttl: number;
   private readonly renewInterval: number;
   public protocol = 'etcd';
   private listenerStore: Map<string, EtcdDataListener> = new Map();
+  private logger: ILogger;
 
   constructor(
     client: Etcd3,
@@ -95,6 +96,7 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     this.ttl = serviceDiscoveryOptions.ttl || 30;
     // 续约间隔设置为 TTL 的 1/3，确保有足够的容错时间
     this.renewInterval = Math.floor(this.ttl / 3) * 1000;
+    this.logger = logger;
   }
 
   private getServiceKey(serviceName: string): string {
@@ -105,24 +107,43 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     return `${this.getServiceKey(serviceName)}/${instanceId}`;
   }
 
-  private async createLease(ttl = 30): Promise<number> {
+  private async createLease(ttl = 30): Promise<any> {
     const lease = this.client.lease(ttl);
-    const leaseId = await lease.grant();
-    return Number(leaseId);
+    await lease.grant();
+    return lease;
+  }
+
+  private async revokeLeaseIfExists() {
+    if (this.lease) {
+      try {
+        await this.lease.revoke();
+      } catch (e) {
+        console.log(
+          '[etcd][debug] revokeLease error',
+          this.lease.id.toString(),
+          e
+        );
+      }
+      this.lease = undefined;
+    }
   }
 
   private async renewLease(): Promise<void> {
-    if (!this.leaseId) {
+    if (!this.lease) {
       return;
     }
-
     try {
-      const lease = this.client.lease(this.leaseId);
-      await lease.keepaliveOnce();
+      console.log('[etcd][debug] renewLease', this.lease.id.toString());
+      await this.lease.keepaliveOnce();
     } catch (error) {
-      console.error('Failed to renew lease:', error);
-      // 如果续约失败，尝试重新创建租约
-      this.leaseId = await this.createLease(this.ttl);
+      console.log(
+        '[etcd][debug] renewLease failed, will revoke and recreate',
+        this.lease.id.toString(),
+        error
+      );
+      // 续约失败，revoke 旧 lease 并新建
+      await this.revokeLeaseIfExists();
+      this.lease = await this.createLease(this.ttl);
     }
   }
 
@@ -141,6 +162,8 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
   }
 
   async register(instance: EtcdInstanceMetadata): Promise<void> {
+    // 新增：注册前先 revoke 旧 lease
+    await this.revokeLeaseIfExists();
     if (!instance) {
       const serviceOptions: EtcdInstanceMetadata =
         typeof this.options.serviceOptions === 'function'
@@ -158,11 +181,14 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     const key = this.getInstanceKey(instance.serviceName, instance.id);
     const value = JSON.stringify(instance);
 
-    // 创建租约
-    this.leaseId = await this.createLease(instance.ttl || this.ttl);
+    this.lease = await this.createLease(instance.ttl || this.ttl);
 
     // 注册服务实例
-    await this.client.put(key).value(value).lease(this.leaseId).exec();
+    await this.lease.put(key).value(value);
+
+    this.logger.info(
+      `[midway:etcd] register instance: ${instance.id} for service: ${instance.serviceName}`
+    );
 
     // 启动自动续约
     this.startRenewTimer();
@@ -175,30 +201,15 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     if (instance) {
       const key = this.getInstanceKey(instance.serviceName, instance.id);
       await this.client.delete().key(key).exec();
+
+      this.logger.info(
+        `[midway:etcd] deregister instance: ${instance.id} for service: ${instance.serviceName}`
+      );
+
       this.instance = undefined;
     }
-  }
-
-  async updateStatus(
-    instance: EtcdInstanceMetadata,
-    status: 'UP' | 'DOWN'
-  ): Promise<void> {
-    const updatedInstance = { ...instance, status };
-    const key = this.getInstanceKey(instance.serviceName, instance.id);
-    const value = JSON.stringify(updatedInstance);
-
-    await this.client.put(key).value(value).lease(this.leaseId).exec();
-  }
-
-  async updateMetadata(
-    instance: EtcdInstanceMetadata,
-    metadata: Record<string, any>
-  ): Promise<void> {
-    const updatedInstance = { ...instance, metadata };
-    const key = this.getInstanceKey(instance.serviceName, instance.id);
-    const value = JSON.stringify(updatedInstance);
-
-    await this.client.put(key).value(value).lease(this.leaseId).exec();
+    // 新增：注销后 revoke lease
+    await this.revokeLeaseIfExists();
   }
 
   private async getListener(serviceName: string): Promise<EtcdDataListener> {
@@ -215,35 +226,6 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     return listener.getData();
   }
 
-  async getServiceNames(): Promise<string[]> {
-    const key = this.namespace;
-    const response = await this.client.getAll().prefix(key).exec();
-
-    const serviceNames = new Set<string>();
-    response.kvs.forEach(kv => {
-      const parts = kv.key.toString().split('/');
-      if (parts.length >= 2) {
-        serviceNames.add(parts[1]);
-      }
-    });
-
-    return Array.from(serviceNames);
-  }
-
-  async stop(): Promise<void> {
-    // 清除续约定时器
-    if (this.renewTimer) {
-      clearInterval(this.renewTimer);
-      this.renewTimer = undefined;
-    }
-
-    // 撤销租约
-    if (this.leaseId) {
-      await this.client.lease(this.leaseId).revoke();
-    }
-    await this.client.close();
-  }
-
   async beforeStop(): Promise<void> {
     await Promise.all(
       Array.from(this.listenerStore.values()).map(listener =>
@@ -257,10 +239,10 @@ export class EtcdServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
       this.renewTimer = undefined;
     }
     // 撤销租约
-    if (this.leaseId) {
-      await this.client.lease(this.leaseId).revoke();
+    if (this.lease) {
+      await this.lease.revoke();
     }
-    await this.client.close();
+    this.client.close();
   }
 
   async online(instance?: EtcdInstanceMetadata): Promise<void> {
