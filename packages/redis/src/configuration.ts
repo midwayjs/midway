@@ -39,7 +39,7 @@ export class RedisConfiguration implements ILifeCycle {
     const config = this.configService.getConfiguration(
       'redis.serviceDiscovery'
     ) as RedisServiceDiscoveryOptions;
-    if (config.selfRegister) {
+    if (config?.selfRegister) {
       this.coreLogger.info(
         '[midway:redis] start to register current node to service discovery'
       );
