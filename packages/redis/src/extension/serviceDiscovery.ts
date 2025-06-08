@@ -1,14 +1,14 @@
 import {
   ServiceDiscovery,
-  ServiceDiscoveryAdapter,
+  ServiceDiscoveryClient,
   Singleton,
   Inject,
-  Init,
-  Config,
   MidwayConfigMissingError,
   DataListener,
   ILogger,
   Logger,
+  Init,
+  MidwayConfigService,
 } from '@midwayjs/core';
 import { RedisServiceFactory } from '../manager';
 import {
@@ -181,42 +181,173 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
   }
 }
 
-export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
+export class RedisServiceDiscoverClient extends ServiceDiscoveryClient<
   Redis,
   RedisServiceDiscoveryOptions,
   RedisInstanceMetadata
 > {
-  private readonly prefix: string;
-  private readonly pubsub: Redis;
-  private logger: ILogger;
-  // 缓存 listener
-  private listenerStore: Map<string, RedisDataListener> = new Map();
+  private registeredInstance: RedisInstanceMetadata = null;
+  private onlineInstanceData: RedisInstanceMetadata = null;
 
   constructor(
-    redis: Redis,
-    serviceDiscoveryOptions: RedisServiceDiscoveryOptions,
-    logger: ILogger
+    protected redis: Redis,
+    protected pubsub: Redis,
+    protected serviceDiscoveryOptions: RedisServiceDiscoveryOptions,
+    protected logger: ILogger,
+    protected getListener: (serviceName: string) => Promise<RedisDataListener>
   ) {
     super(redis, serviceDiscoveryOptions);
-    this.prefix = serviceDiscoveryOptions.prefix || 'services:';
-    this.pubsub = redis.duplicate();
-    this.logger = logger;
   }
 
-  // 新增：获取 listener
+  async register(instance: RedisInstanceMetadata): Promise<void> {
+    this.registeredInstance = instance;
+    if (!instance.serviceName) {
+      throw new MidwayConfigMissingError(
+        'instance.serviceName is required when register service in redis'
+      );
+    }
+    // 注册时默认上线
+    await this.online();
+  }
+
+  async deregister(): Promise<void> {
+    if (this.onlineInstanceData) {
+      await this.offline();
+    }
+    if (this.registeredInstance) {
+      // 发布服务变更消息
+      await this.client.publish(
+        `service:change:${this.registeredInstance.serviceName}`,
+        JSON.stringify({
+          type: 'deregister',
+          service: this.registeredInstance.serviceName,
+          instance: this.registeredInstance,
+        })
+      );
+      this.logger.info(
+        `[midway:redis] deregister instance: ${this.registeredInstance.id} for service: ${this.registeredInstance.serviceName}`
+      );
+      this.registeredInstance = null;
+    }
+  }
+
+  async online(): Promise<void> {
+    if (!this.registeredInstance) {
+      throw new Error('No instance registered, cannot online.');
+    }
+    // 已经上线则忽略
+    if (this.onlineInstanceData) {
+      return;
+    }
+    const listener = await this.getListener(
+      this.registeredInstance.serviceName
+    );
+    await listener.onlineInstance(this.registeredInstance);
+    this.onlineInstanceData = this.registeredInstance;
+    // 发布上线消息
+    await this.client.publish(
+      `service:change:${this.registeredInstance.serviceName}`,
+      JSON.stringify({
+        type: 'online',
+        service: this.registeredInstance.serviceName,
+        instance: this.registeredInstance,
+      })
+    );
+  }
+
+  async offline(): Promise<void> {
+    // 已经下线则忽略
+    if (!this.onlineInstanceData) {
+      return;
+    }
+    const listener = await this.getListener(
+      this.onlineInstanceData.serviceName
+    );
+    await listener.offlineInstance(this.onlineInstanceData);
+    // 发布下线消息
+    await this.client.publish(
+      `service:change:${this.onlineInstanceData.serviceName}`,
+      JSON.stringify({
+        type: 'offline',
+        service: this.onlineInstanceData.serviceName,
+        instance: this.onlineInstanceData,
+      })
+    );
+    this.onlineInstanceData = null;
+  }
+
+  async beforeStop(): Promise<void> {}
+}
+
+@Singleton()
+export class RedisServiceDiscovery extends ServiceDiscovery<
+  Redis,
+  RedisServiceDiscoveryOptions,
+  RedisInstanceMetadata,
+  RedisInstanceMetadata,
+  string
+> {
+  @Inject()
+  private redisServiceFactory: RedisServiceFactory;
+
+  @Inject()
+  private configService: MidwayConfigService;
+
+  @Logger()
+  private coreLogger: ILogger;
+
+  private redisServiceDiscoveryOptions: RedisServiceDiscoveryOptions;
+
+  private listenerStore: Map<string, RedisDataListener> = new Map();
+
+  private pubsub: Redis;
+
+  @Init()
+  async init() {
+    this.redisServiceDiscoveryOptions = this.configService.getConfiguration(
+      'redis.serviceDiscovery',
+      {}
+    );
+    this.redisServiceDiscoveryOptions.prefix =
+      this.redisServiceDiscoveryOptions.prefix || 'services:';
+  }
+
+  getServiceClient() {
+    return this.redisServiceFactory.get(
+      this.redisServiceDiscoveryOptions.serviceDiscoveryClient ||
+        this.redisServiceFactory.getDefaultClientName() ||
+        'default'
+    );
+  }
+
+  protected createServiceDiscoverClientImpl(
+    options: RedisServiceDiscoveryOptions
+  ): RedisServiceDiscoverClient {
+    return new RedisServiceDiscoverClient(
+      this.getServiceClient(),
+      this.pubsub,
+      options,
+      this.coreLogger,
+      serviceName => this.getListener(serviceName)
+    );
+  }
+
+  protected getDefaultServiceDiscoveryOptions(): RedisServiceDiscoveryOptions {
+    return this.redisServiceDiscoveryOptions;
+  }
+
   private async getListener(serviceName: string): Promise<RedisDataListener> {
+    if (!this.pubsub) {
+      this.pubsub = this.getServiceClient().duplicate();
+    }
+
     if (!this.listenerStore.has(serviceName)) {
-      const options: RedisServiceDiscoveryOptions = {
-        ...this.options,
-        prefix: this.prefix,
-        serviceOptions: this.options.serviceOptions as RedisInstanceMetadata,
-      };
       const listener = new RedisDataListener(
         serviceName,
-        this.client,
+        this.getServiceClient(),
         this.pubsub,
-        options,
-        this.logger
+        this.redisServiceDiscoveryOptions,
+        this.coreLogger
       );
       this.listenerStore.set(serviceName, listener);
       await listener.init();
@@ -224,136 +355,25 @@ export class RedisServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     return this.listenerStore.get(serviceName);
   }
 
-  async register(instance?: RedisInstanceMetadata): Promise<void> {
-    if (!instance) {
-      if (this.instance) {
-        instance = this.instance;
-      } else {
-        const serviceOptions: RedisInstanceMetadata =
-          typeof this.options.serviceOptions === 'function'
-            ? this.options.serviceOptions(this.getDefaultInstanceMeta())
-            : this.options.serviceOptions;
-        if (serviceOptions) {
-          instance = serviceOptions;
-        } else {
-          throw new MidwayConfigMissingError(
-            'redis.serviceDiscovery.serviceOptions'
-          );
-        }
-        this.instance = instance;
-      }
-    }
-
-    if (!instance.serviceName) {
-      throw new MidwayConfigMissingError(
-        'instance.serviceName is required when register service in redis'
-      );
-    }
-
-    // init listener
-    const listener = await this.getListener(instance.serviceName);
-
-    // set status to UP
-    await listener.onlineInstance(instance);
-
-    this.logger.info(
-      `[midway:redis] register and set status to UP for instance: ${instance.id} and service: ${instance.serviceName}`
-    );
-    // 发布服务变更消息
-    await this.client.publish(
-      `service:change:${instance.serviceName}`,
-      JSON.stringify({
-        type: 'register',
-        service: instance.serviceName,
-        instance,
-      })
-    );
-  }
-
-  async deregister(instance?: RedisInstanceMetadata): Promise<void> {
-    instance = instance ?? this.instance;
-    if (instance) {
-      const listener = await this.getListener(instance.serviceName);
-      // 注销实例
-      await listener.offlineInstance();
-      // 发布服务变更消息
-      await this.client.publish(
-        `service:change:${instance.serviceName}`,
-        JSON.stringify({
-          type: 'deregister',
-          service: instance.serviceName,
-          instance,
-        })
-      );
-      this.logger.info(
-        `[midway:redis] deregister instance: ${instance.id} for service: ${instance.serviceName}`
-      );
-      this.instance = undefined;
-    }
-  }
-
-  async online(instance?: RedisInstanceMetadata): Promise<void> {
-    await this.register(instance);
-  }
-
-  async offline(instance?: RedisInstanceMetadata): Promise<void> {
-    await this.deregister(instance);
-  }
-
-  // 修改：getInstances 通过 listener 获取
-  async getInstances(serviceName: string): Promise<RedisInstanceMetadata[]> {
+  public async getInstances(
+    serviceName: string
+  ): Promise<RedisInstanceMetadata[]> {
     // 优先从 listener 的缓存获取数据
     const listener = await this.getListener(serviceName);
     return listener.getData();
   }
 
-  async beforeStop(): Promise<void> {
+  async beforeStop() {
     await Promise.all(
       Array.from(this.listenerStore.values()).map(listener =>
         listener.destroyListener()
       )
     );
     this.listenerStore.clear();
-    // 取消订阅
-    await this.pubsub.unsubscribe();
-    // 关闭连接
-    await this.pubsub.quit();
-  }
-}
-
-@Singleton()
-export class RedisServiceDiscovery extends ServiceDiscovery<
-  Redis,
-  RedisServiceDiscoveryOptions,
-  RedisInstanceMetadata
-> {
-  @Inject()
-  private redisServiceFactory: RedisServiceFactory;
-
-  @Config('redis.serviceDiscovery')
-  redisServiceDiscoveryOptions: RedisServiceDiscoveryOptions;
-
-  @Logger()
-  coreLogger: ILogger;
-
-  @Init()
-  async init(options?: RedisServiceDiscoveryOptions) {
-    const serviceDiscoveryOption = options ?? this.redisServiceDiscoveryOptions;
-
-    if (serviceDiscoveryOption) {
-      this.defaultAdapter = new RedisServiceDiscoverAdapter(
-        this.getServiceDiscoveryClient(),
-        serviceDiscoveryOption,
-        this.coreLogger
-      );
+    if (this.pubsub) {
+      await this.pubsub.unsubscribe();
+      await this.pubsub.quit();
+      this.pubsub = null;
     }
-  }
-
-  getServiceDiscoveryClient() {
-    return this.redisServiceFactory.get(
-      this.redisServiceDiscoveryOptions.serviceDiscoveryClient ||
-        this.redisServiceFactory.getDefaultClientName() ||
-        'default'
-    );
   }
 }

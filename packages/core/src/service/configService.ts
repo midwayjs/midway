@@ -199,9 +199,10 @@ export class MidwayConfigService implements IConfigService {
     this.isReady = true;
   }
 
-  public getConfiguration<T = any>(configKey?: string): T {
+  public getConfiguration<T = any>(configKey?: string, defaultValue?: any): T {
     if (configKey) {
-      return safelyGet(configKey, this.configuration) as T;
+      const res = safelyGet(configKey, this.configuration) as T;
+      return res === undefined ? defaultValue : res;
     }
     return this.configuration as T;
   }

@@ -1,6 +1,6 @@
 import { close, createLightApp } from '@midwayjs/mock';
 import * as consul from '../src';
-import { DefaultInstanceMetadata, sleep } from '@midwayjs/core';
+import { sleep } from '@midwayjs/core';
 
 describe('test consul service discovery', () => {
   const fix_service_name = 'test-service';
@@ -15,24 +15,6 @@ describe('test consul service discovery', () => {
             host: 'localhost',
             port: 8500
           },
-          serviceDiscovery: {
-            selfRegister: true,
-            serviceOptions: (meta) => {
-              return {
-                id: meta.id,
-                name: fix_service_name,
-                tags: ['test'],
-                address: meta.host,
-                port: 8500,
-                meta: {
-                  version: '1.0.0'
-                },
-                check: {
-                  ttl: '10s'
-                }
-              };
-            }
-          }
         }
       }
     });
@@ -40,8 +22,27 @@ describe('test consul service discovery', () => {
     const consulServiceDiscovery = await app.getApplicationContext().getAsync(consul.ConsulServiceDiscovery);
     expect(consulServiceDiscovery).toBeDefined();
 
+    const client = consulServiceDiscovery.createClient();
+    await client.register({
+      id: client.defaultMeta.id,
+      name: fix_service_name,
+      tags: ['test'],
+      address: client.defaultMeta.host,
+      port: 8500,
+      meta: {
+        version: '1.0.0'
+      },
+      check: {
+        name: 'TTL Health Check',
+        timeout: '30s',
+        ttl: '10s'
+      }
+    });
+
+    await sleep(1000);
+
     const instances = await consulServiceDiscovery.getInstances({
-      service: fix_service_name
+      service: fix_service_name,
     });
     expect(instances.length).toBeGreaterThan(0);
 
@@ -64,24 +65,6 @@ describe('test consul service discovery', () => {
             host: 'localhost',
             port: 8500
           },
-          serviceDiscovery: {
-            selfRegister: false,
-            serviceOptions: (meta: DefaultInstanceMetadata) => {
-              return {
-                id: meta.id,
-                serviceName: fix_service_name,
-                tags: ['test'],
-                address: meta.host,
-                port: 8500,
-                meta: {
-                  version: '1.0.0'
-                },
-                check: {
-                  ttl: '30s'
-                }
-              };
-            }
-          }
         }
       }
     });
@@ -89,20 +72,39 @@ describe('test consul service discovery', () => {
     const consulServiceDiscovery = await app.getApplicationContext().getAsync(consul.ConsulServiceDiscovery);
 
     console.log('开始注册');
+    const client1 = consulServiceDiscovery.createClient();
 
-    await consulServiceDiscovery.register();
+    await client1.register({
+      id: client1.defaultMeta.id,
+      name: fix_service_name,
+      tags: ['test'],
+      address: client1.defaultMeta.host,
+      port: 8500,
+      meta: {
+        version: '1.0.0'
+      },
+      check: {
+        name: 'TTL Health Check',
+        timeout: '30s',
+        ttl: '10s'
+      }
+    });
 
-    const instances = await consulServiceDiscovery.getInstances(fix_service_name);
+    const instances = await consulServiceDiscovery.getInstances({
+      service: fix_service_name
+    });
     expect(instances.length).toBeGreaterThan(0);
 
     console.log('开始下线');
 
     // offline
-    await consulServiceDiscovery.offline();
+    await client1.offline();
 
     await sleep(1000);
 
-    const instances1 = await consulServiceDiscovery.getInstances(fix_service_name);
+    const instances1 = await consulServiceDiscovery.getInstances({
+      service: fix_service_name
+    });
     expect(instances1.length).toBe(0);
 
     await close(app);

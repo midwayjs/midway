@@ -7,7 +7,19 @@ export type ConsulClient = InstanceType<typeof Consul>;
 type GetRegisterFn<T> = T extends { register(options: any): any } ? T['register'] : never;
 type GetFirstParam<T> = T extends { (options: infer P, ...args: any[]): any; (name: string): any } ? P : never;
 export type RegisterOptions = GetFirstParam<GetRegisterFn<ConsulClient['agent']['service']>>;
-export type GetHealthServiceOptions = GetFirstParam<GetRegisterFn<ConsulClient['health']['service']>>;
+/**
+ * From ConsulClient['health']['service']
+ */
+export type GetHealthServiceOptions = {
+  service: string;
+  dc?: string;
+  near?: string;
+  tag?: string;
+  passing?: boolean;
+  filter?: string;
+  peer?: string;
+  ns?: string;
+}
 
 export interface ConsulInstanceMetadata extends RegisterOptions {}
 

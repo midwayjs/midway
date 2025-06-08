@@ -1,17 +1,17 @@
 import {
   ServiceDiscovery,
-  ServiceDiscoveryOptions,
   Singleton,
   Inject,
-  Init,
-  ServiceDiscoveryAdapter,
-  Config,
-  MidwayConfigMissingError,
+  ServiceDiscoveryClient,
   Logger,
   ILogger,
   DataListener,
   DefaultInstanceMetadata,
   MidwayParameterError,
+  MidwayWebRouterService,
+  MidwayApplicationManager,
+  Init,
+  MidwayConfigService,
 } from '@midwayjs/core';
 import { ConsulServiceFactory } from '../manager';
 import {
@@ -26,6 +26,12 @@ import {
   hashServiceOptions,
   isObjectError,
 } from '../utils';
+import {
+  calculateTTL,
+  HTTPHealthCheck,
+  TCPHealthCheck,
+  TTLHeartbeat,
+} from './helper';
 
 /**
  * The data listener for consul service discovery
@@ -59,7 +65,7 @@ class ConsulDataListener extends DataListener<ConsulHealthItem[]> {
   onData(setData) {
     this.watcher = this.client.watch({
       method: this.client.health.service,
-      options: this.options,
+      options: this.options as Record<any, any>,
     });
 
     this.watcher.on('change', (healthItems: ConsulHealthItem[], res) => {
@@ -82,40 +88,30 @@ class ConsulDataListener extends DataListener<ConsulHealthItem[]> {
  * The adapter for consul service discovery
  * @since 4.0.0
  */
-export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
+export class ConsulServiceDiscoverClient extends ServiceDiscoveryClient<
   ConsulClient,
   ConsulServiceDiscoveryOptions,
   ConsulInstanceMetadata,
   ConsulHealthItem
 > {
-  private listenerStore: Map<string, ConsulDataListener> = new Map();
+  private ttlHeartbeat?: TTLHeartbeat;
+  private httpHealthCheck?: HTTPHealthCheck;
+  private tcpHealthCheck?: TCPHealthCheck;
 
   constructor(
-    consul: ConsulClient,
+    protected consul: ConsulClient,
     serviceDiscoveryOptions: ConsulServiceDiscoveryOptions,
+    protected readonly applicationManager: MidwayApplicationManager,
+    protected readonly webRouterService: MidwayWebRouterService,
     protected readonly logger: ILogger
   ) {
     super(consul, serviceDiscoveryOptions);
   }
 
-  async register(instance?: ConsulInstanceMetadata): Promise<void> {
-    if (!instance) {
-      const serviceOptions: ConsulInstanceMetadata =
-        typeof this.options.serviceOptions === 'function'
-          ? this.options.serviceOptions(this.getDefaultInstanceMeta())
-          : this.options.serviceOptions;
+  async register(instance: ConsulInstanceMetadata): Promise<void> {
+    instance = this.transformDefaultMetaToConsulInstance(instance as any);
 
-      if (!serviceOptions) {
-        // throw error
-        throw new MidwayConfigMissingError(
-          'consul.serviceDiscovery.serviceOptions'
-        );
-      }
-      instance = this.transformDefaultMetaToConsulInstance(
-        serviceOptions as any
-      );
-      this.instance = instance;
-    }
+    this.instance = instance;
 
     if (!instance.name) {
       throw new MidwayParameterError(
@@ -132,10 +128,46 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     );
 
     // set status to UP
-    await this.online(instance);
+    await this.online();
     this.logger.info(
       `[midway:consul] set status to UP for instance: ${instance.id} and service: ${instance.name}`
     );
+
+    if (this.options.autoHealthCheck) {
+      if (instance['check']?.['ttl']) {
+        this.ttlHeartbeat = new TTLHeartbeat({
+          consul: this.client,
+          checkId: `service:${instance.id}`,
+          interval: calculateTTL(instance['check']['ttl']),
+        });
+        this.ttlHeartbeat.start();
+      } else if (instance['check']?.['http']) {
+        // 这里要判断下是否启动了 http 服务
+        const applications = this.applicationManager.getApplications([
+          'egg',
+          'koa',
+          'express',
+        ]);
+        if (applications.length !== 0) {
+          const url = new URL(instance['check']['http']);
+          this.webRouterService.addRouter(
+            async _ => {
+              return 'success';
+            },
+            {
+              url: url.pathname,
+              requestMethod: 'GET',
+            }
+          );
+        } else {
+          this.httpHealthCheck = new HTTPHealthCheck(instance['check']['http']);
+          this.httpHealthCheck.start();
+        }
+      } else if (instance['check']?.['tcp']) {
+        this.tcpHealthCheck = new TCPHealthCheck(instance['check']['tcp']);
+        this.tcpHealthCheck.start();
+      }
+    }
   }
 
   async deregister(instance?: ConsulInstanceMetadata): Promise<void> {
@@ -163,38 +195,6 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     };
   }
 
-  private async getListener(
-    options: GetHealthServiceOptions
-  ): Promise<ConsulDataListener> {
-    const cacheKey = hashServiceOptions(options as GetHealthServiceOptions);
-
-    if (!this.listenerStore.has(cacheKey)) {
-      const listener = new ConsulDataListener(
-        this.client,
-        options as GetHealthServiceOptions,
-        this.logger
-      );
-      this.listenerStore.set(cacheKey, listener);
-      await listener.init();
-    }
-
-    return this.listenerStore.get(cacheKey);
-  }
-
-  async getInstances(
-    serviceNameOrOptions: string | GetHealthServiceOptions
-  ): Promise<ConsulHealthItem[]> {
-    const options =
-      typeof serviceNameOrOptions === 'string'
-        ? { service: serviceNameOrOptions }
-        : serviceNameOrOptions;
-    const listener = await this.getListener({
-      passing: true,
-      ...options,
-    } as GetHealthServiceOptions);
-    return listener.getData();
-  }
-
   private async updateStatus(
     instance: ConsulInstanceMetadata,
     status: 'UP' | 'DOWN'
@@ -208,21 +208,28 @@ export class ConsulServiceDiscoverAdapter extends ServiceDiscoveryAdapter<
     }
   }
 
-  async online(instance?: ConsulInstanceMetadata): Promise<void> {
-    await this.updateStatus(instance, 'UP');
+  async online(): Promise<void> {
+    await this.updateStatus(this.instance, 'UP');
   }
 
-  async offline(instance?: ConsulInstanceMetadata): Promise<void> {
-    await this.updateStatus(instance, 'DOWN');
+  async offline(): Promise<void> {
+    await this.updateStatus(this.instance, 'DOWN');
   }
 
   async beforeStop() {
-    await Promise.all(
-      Array.from(this.listenerStore.values()).map(listener =>
-        listener.destroyListener()
-      )
-    );
-    this.listenerStore.clear();
+    await this.deregister();
+
+    if (this.ttlHeartbeat) {
+      this.ttlHeartbeat.stop();
+    }
+
+    if (this.httpHealthCheck) {
+      this.httpHealthCheck.stop();
+    }
+
+    if (this.tcpHealthCheck) {
+      this.tcpHealthCheck.stop();
+    }
   }
 }
 
@@ -235,41 +242,99 @@ export class ConsulServiceDiscovery extends ServiceDiscovery<
   ConsulClient,
   ConsulServiceDiscoveryOptions,
   ConsulInstanceMetadata,
-  ConsulHealthItem
+  ConsulHealthItem,
+  GetHealthServiceOptions
 > {
   @Inject()
   private consulServiceFactory: ConsulServiceFactory;
 
-  @Config('consul.serviceDiscovery')
-  consulServiceDiscoveryOptions: ConsulServiceDiscoveryOptions;
+  private consulServiceDiscoveryOptions: ConsulServiceDiscoveryOptions;
+
+  @Inject()
+  private applicationManager: MidwayApplicationManager;
+
+  @Inject()
+  private webRouterService: MidwayWebRouterService;
 
   @Logger()
-  coreLogger: ILogger;
+  private coreLogger: ILogger;
 
-  private defaultServiceDiscoveryClient: ConsulClient;
+  private defaultServiceClient: ConsulClient;
+
+  private listenerStore: Map<string, ConsulDataListener> = new Map();
+
+  @Inject()
+  private configService: MidwayConfigService;
 
   @Init()
-  async init(options?: ServiceDiscoveryOptions<ConsulHealthItem>) {
-    const serviceDiscoveryOption =
-      options ?? this.consulServiceDiscoveryOptions;
-
-    if (serviceDiscoveryOption) {
-      this.defaultAdapter = new ConsulServiceDiscoverAdapter(
-        this.getServiceDiscoveryClient(),
-        serviceDiscoveryOption as ConsulServiceDiscoveryOptions,
-        this.coreLogger
-      );
-    }
+  async init() {
+    this.consulServiceDiscoveryOptions = this.configService.getConfiguration(
+      'consul.serviceDiscovery',
+      {}
+    );
   }
 
-  getServiceDiscoveryClient() {
-    if (!this.defaultServiceDiscoveryClient) {
-      this.defaultServiceDiscoveryClient = this.consulServiceFactory.get(
+  protected getServiceClient() {
+    if (!this.defaultServiceClient) {
+      this.defaultServiceClient = this.consulServiceFactory.get(
         this.consulServiceDiscoveryOptions.serviceDiscoveryClient ||
           this.consulServiceFactory.getDefaultClientName() ||
           'default'
       );
     }
-    return this.defaultServiceDiscoveryClient;
+    return this.defaultServiceClient;
+  }
+
+  protected createServiceDiscoverClientImpl(
+    options: ConsulServiceDiscoveryOptions
+  ): ConsulServiceDiscoverClient {
+    return new ConsulServiceDiscoverClient(
+      this.getServiceClient(),
+      options,
+      this.applicationManager,
+      this.webRouterService,
+      this.coreLogger
+    );
+  }
+
+  protected getDefaultServiceDiscoveryOptions(): ConsulServiceDiscoveryOptions {
+    return this.consulServiceDiscoveryOptions;
+  }
+
+  private async getListener(
+    options: GetHealthServiceOptions
+  ): Promise<ConsulDataListener> {
+    const cacheKey = hashServiceOptions(options as GetHealthServiceOptions);
+
+    if (!this.listenerStore.has(cacheKey)) {
+      const listener = new ConsulDataListener(
+        this.getServiceClient(),
+        options as GetHealthServiceOptions,
+        this.coreLogger
+      );
+      this.listenerStore.set(cacheKey, listener);
+      await listener.init();
+    }
+
+    return this.listenerStore.get(cacheKey);
+  }
+
+  public async getInstances(
+    options: GetHealthServiceOptions
+  ): Promise<ConsulHealthItem[]> {
+    const listener = await this.getListener({
+      passing: true,
+      ...(options as GetHealthServiceOptions),
+    });
+    return listener.getData();
+  }
+
+  async beforeStop() {
+    await Promise.all(
+      Array.from(this.listenerStore.values()).map(listener =>
+        listener.destroyListener()
+      )
+    );
+    this.listenerStore.clear();
   }
 }

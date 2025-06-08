@@ -1,6 +1,6 @@
-import { Destroy } from '../../decorator';
+import { Destroy, Init } from '../../decorator';
 import {
-  IServiceDiscovery,
+  IServiceDiscoveryClient,
   ServiceDiscoveryOptions,
   ILoadBalancer,
   DefaultInstanceMetadata,
@@ -8,16 +8,16 @@ import {
 import { LoadBalancerFactory } from './loadBalancer';
 import { LoadBalancerType } from '../../interface';
 import { NetworkUtils } from '../../util/network';
+import { extend } from '../../util/extend';
 
-export abstract class ServiceDiscoveryAdapter<
+export abstract class ServiceDiscoveryClient<
   Client,
   ServiceDiscoveryConfigOptions extends ServiceDiscoveryOptions<QueryServiceInstance>,
   RegisterServiceInstance,
   QueryServiceInstance = RegisterServiceInstance
-> implements IServiceDiscovery<QueryServiceInstance>
+> implements IServiceDiscoveryClient<QueryServiceInstance>
 {
   protected options: ServiceDiscoveryConfigOptions;
-  protected loadBalancer: ILoadBalancer<QueryServiceInstance>;
   protected instance?: RegisterServiceInstance;
   protected client: Client;
   protected constructor(
@@ -27,15 +27,18 @@ export abstract class ServiceDiscoveryAdapter<
     this.client = client;
     this.options =
       serviceDiscoveryOptions ?? ({} as ServiceDiscoveryConfigOptions);
-    // set default load balancer
-    if (this.options.loadBalancer) {
-      this.setLoadBalancer(this.options.loadBalancer);
-    } else {
-      this.setLoadBalancer(LoadBalancerType.ROUND_ROBIN);
-    }
   }
 
-  public getDefaultInstanceMeta(): DefaultInstanceMetadata {
+  private _defaultMeta: DefaultInstanceMetadata;
+
+  get defaultMeta(): DefaultInstanceMetadata {
+    if (!this._defaultMeta) {
+      this._defaultMeta = this.getDefaultInstanceMeta();
+    }
+    return this._defaultMeta;
+  }
+
+  private getDefaultInstanceMeta(): DefaultInstanceMetadata {
     return {
       id: `${NetworkUtils.getHostname()}-${process.pid}`,
       serviceName: `${NetworkUtils.getHostname()}`,
@@ -49,36 +52,6 @@ export abstract class ServiceDiscoveryAdapter<
     return this.instance;
   }
 
-  /**
-   * 获取可用服务列表
-   */
-  abstract getInstances<getInstanceOptions>(
-    serviceNameOrOptions: string | getInstanceOptions
-  ): Promise<QueryServiceInstance[]>;
-
-  /**
-   * 获取一个可用服务实例（带负载均衡）
-   */
-  async getInstance<getInstanceOptions>(
-    serviceNameOrOptions: string | getInstanceOptions
-  ): Promise<QueryServiceInstance> {
-    const instances = await this.getInstances(serviceNameOrOptions);
-    return this.loadBalancer.select(instances);
-  }
-
-  /**
-   * 设置负载均衡策略
-   */
-  setLoadBalancer(
-    type: LoadBalancerType | ILoadBalancer<QueryServiceInstance>
-  ): void {
-    if (typeof type === 'string') {
-      this.loadBalancer = LoadBalancerFactory.create(type);
-    } else {
-      this.loadBalancer = type as ILoadBalancer<QueryServiceInstance>;
-    }
-  }
-
   abstract beforeStop(): Promise<void>;
 
   /**
@@ -87,29 +60,29 @@ export abstract class ServiceDiscoveryAdapter<
   async stop(): Promise<void> {
     await this.beforeStop();
     if (this.instance) {
-      return this.deregister(this.instance);
+      return this.deregister();
     }
   }
 
   /**
    * 注册服务实例
    */
-  abstract register(instance?: RegisterServiceInstance): Promise<void>;
+  abstract register(instance: RegisterServiceInstance): Promise<void>;
 
   /**
    * 注销服务实例
    */
-  abstract deregister(instance?: RegisterServiceInstance): Promise<void>;
+  abstract deregister(): Promise<void>;
 
   /**
    * 上线服务实例
    */
-  abstract online(instance?: RegisterServiceInstance): Promise<void>;
+  abstract online(): Promise<void>;
 
   /**
    * 下线服务实例
    */
-  abstract offline(instance?: RegisterServiceInstance): Promise<void>;
+  abstract offline(): Promise<void>;
 }
 
 /**
@@ -119,59 +92,102 @@ export abstract class ServiceDiscovery<
   Client,
   ServiceDiscoveryConfigOptions extends ServiceDiscoveryOptions<QueryServiceInstance>,
   RegisterServiceInstance,
-  QueryServiceInstance = RegisterServiceInstance
-> implements IServiceDiscovery<QueryServiceInstance>
-{
-  protected defaultAdapter: ServiceDiscoveryAdapter<
+  QueryServiceInstance = RegisterServiceInstance,
+  GetInstanceOptions = RegisterServiceInstance
+> {
+  protected serviceDiscoveryClientStore: Set<
+    ServiceDiscoveryClient<
+      Client,
+      ServiceDiscoveryConfigOptions,
+      RegisterServiceInstance,
+      QueryServiceInstance
+    >
+  > = new Set();
+
+  protected abstract getServiceClient(): Client;
+
+  protected loadBalancer: ILoadBalancer<QueryServiceInstance>;
+
+  @Init()
+  async init() {
+    // set default load balancer
+    if (this.getDefaultServiceDiscoveryOptions().loadBalancer) {
+      this.setLoadBalancer(
+        this.getDefaultServiceDiscoveryOptions().loadBalancer
+      );
+    } else {
+      this.setLoadBalancer(LoadBalancerType.ROUND_ROBIN);
+    }
+  }
+
+  public createClient(
+    options?: ServiceDiscoveryOptions<QueryServiceInstance>
+  ): ServiceDiscoveryClient<
+    Client,
+    ServiceDiscoveryConfigOptions,
+    RegisterServiceInstance,
+    QueryServiceInstance
+  > {
+    const serviceDiscoveryOption = extend(
+      {},
+      options,
+      this.getDefaultServiceDiscoveryOptions()
+    ) as ServiceDiscoveryConfigOptions;
+    const client = this.createServiceDiscoverClientImpl(serviceDiscoveryOption);
+
+    this.serviceDiscoveryClientStore.add(client);
+    return client;
+  }
+
+  protected abstract createServiceDiscoverClientImpl(
+    options: ServiceDiscoveryOptions<QueryServiceInstance>
+  ): ServiceDiscoveryClient<
     Client,
     ServiceDiscoveryConfigOptions,
     RegisterServiceInstance,
     QueryServiceInstance
   >;
 
-  abstract init(options?: ServiceDiscoveryConfigOptions): Promise<void>;
+  protected abstract getDefaultServiceDiscoveryOptions(): ServiceDiscoveryConfigOptions;
 
-  abstract getServiceDiscoveryClient(): Client;
+  protected async beforeStop(): Promise<void> {}
 
-  getAdapter(): ServiceDiscoveryAdapter<
-    Client,
-    ServiceDiscoveryConfigOptions,
-    RegisterServiceInstance,
-    QueryServiceInstance
-  > {
-    return this.defaultAdapter;
-  }
+  /**
+   * 获取可用服务列表
+   */
+  public abstract getInstances(
+    options: GetInstanceOptions
+  ): Promise<QueryServiceInstance[]>;
 
-  register(): Promise<void> {
-    return this.defaultAdapter.register();
-  }
-
-  deregister(): Promise<void> {
-    return this.defaultAdapter.deregister();
-  }
-
-  getInstances<GetInstanceOptions>(
-    serviceName: string | GetInstanceOptions
-  ): Promise<QueryServiceInstance[]> {
-    return this.defaultAdapter.getInstances(serviceName);
-  }
-
-  getInstance<GetInstanceOptions>(
-    serviceName: string | GetInstanceOptions
+  /**
+   * 获取一个可用服务实例（带负载均衡）
+   */
+  public async getInstance(
+    options: GetInstanceOptions
   ): Promise<QueryServiceInstance> {
-    return this.defaultAdapter.getInstance(serviceName);
+    const instances = await this.getInstances(options);
+    return this.loadBalancer.select(instances);
   }
 
-  online(): Promise<void> {
-    return this.defaultAdapter.online(this.defaultAdapter.getSelfInstance());
-  }
-
-  offline(): Promise<void> {
-    return this.defaultAdapter.offline(this.defaultAdapter.getSelfInstance());
+  /**
+   * 设置负载均衡策略
+   */
+  public setLoadBalancer(
+    type: LoadBalancerType | ILoadBalancer<QueryServiceInstance>
+  ): void {
+    if (typeof type === 'string') {
+      this.loadBalancer = LoadBalancerFactory.create(type);
+    } else {
+      this.loadBalancer = type as ILoadBalancer<QueryServiceInstance>;
+    }
   }
 
   @Destroy()
-  stop(): Promise<any> {
-    return this.defaultAdapter.stop();
+  protected async destroy() {
+    await this.beforeStop();
+    for (const client of this.serviceDiscoveryClientStore) {
+      await client.stop();
+    }
+    this.serviceDiscoveryClientStore.clear();
   }
 }

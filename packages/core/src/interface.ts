@@ -1351,7 +1351,6 @@ export interface IServiceDiscoveryHealthCheck<ServiceInstance> {
 }
 
 export interface ServiceDiscoveryOptions<ServiceInstance, serviceOptions = Record<string, any>> {
-  selfRegister?: boolean;
   serviceDiscoveryClient?: string;
   serviceOptions?: serviceOptions;
   loadBalancer?: LoadBalancerType | ILoadBalancer<ServiceInstance>;
@@ -1369,11 +1368,11 @@ export interface ILoadBalancer<ServiceInstance> {
 }
 
 
-export interface IServiceDiscovery<ServiceInstance> {
+export interface IServiceDiscoveryClient<ServiceInstance> {
   /**
    * 注册服务实例
    */
-  register(): Promise<void>;
+  register(instance: unknown): Promise<void>;
   /**
    * 上线服务实例
    */
@@ -1382,14 +1381,4 @@ export interface IServiceDiscovery<ServiceInstance> {
    * 下线服务实例
    */
   offline(): Promise<void>;
-  /**
-   * 获取所有可用的服务列表
-   * @param serviceName 服务名称
-   */
-  getInstances<GetInstanceOptions>(serviceName: string | GetInstanceOptions): Promise<ServiceInstance[]>;
-  /**
-   * 获取一个可用的服务实例
-   * @param serviceName 服务名称
-   */
-  getInstance<GetInstanceOptions>(serviceName: string | GetInstanceOptions): Promise<ServiceInstance>;
 }

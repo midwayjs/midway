@@ -1,8 +1,19 @@
 import { close, createLightApp } from '@midwayjs/mock';
 import * as redis from '../src';
-import { DefaultInstanceMetadata, sleep } from '@midwayjs/core';
+import { sleep } from '@midwayjs/core';
 
 describe('/test/serviceDiscovery.test.ts', () => {
+
+  beforeAll(async () => {
+    // use redis client to flushall
+    const client = new redis.Redis({
+      host: '127.0.0.1',
+      port: 6379,
+    });
+    await client.flushall();
+    await client.quit();
+  });
+
   const fix_service_name = 'test-service';
   it('should test service discovery', async () => {
     const app = await createLightApp({
@@ -17,18 +28,6 @@ describe('/test/serviceDiscovery.test.ts', () => {
               host: '127.0.0.1',
             },
           },
-          serviceDiscovery: {
-            selfRegister: true,
-            serviceOptions: (meta: DefaultInstanceMetadata) => {
-              return {
-                id: meta.id,
-                serviceName: fix_service_name,
-                host: meta.host,
-                port: meta.port,
-                ttl: 600,
-              };
-            }
-          }
         },
       },
     });
@@ -38,12 +37,23 @@ describe('/test/serviceDiscovery.test.ts', () => {
     const redisServiceDiscovery = await app.getApplicationContext().getAsync(redis.RedisServiceDiscovery);
     expect(redisServiceDiscovery).toBeDefined();
 
+    const client = redisServiceDiscovery.createClient();
+    await client.register({
+      id: client.defaultMeta.id,
+      serviceName: fix_service_name,
+      host: client.defaultMeta.host,
+      port: client.defaultMeta.port,
+      ttl: 600,
+    });
+
+    await sleep(1000);
+
     const instances = await redisServiceDiscovery.getInstances(fix_service_name);
 
     expect(instances.length).toEqual(1);
 
     // test deregister
-    await redisServiceDiscovery.deregister();
+    await client.deregister();
 
     await sleep(1000);
 
@@ -66,17 +76,6 @@ describe('/test/serviceDiscovery.test.ts', () => {
               host: '127.0.0.1',
             },
           },
-          serviceDiscovery: {
-            selfRegister: true,
-            serviceOptions: (meta: DefaultInstanceMetadata) => {
-              return {
-                id: meta.id,
-                serviceName: fix_service_name,
-                host: meta.host,
-                port: meta.port,
-              };
-            }
-          }
         },
       },
     });
@@ -84,23 +83,33 @@ describe('/test/serviceDiscovery.test.ts', () => {
     await sleep(1000);
 
     const redisServiceDiscovery = await app.getApplicationContext().getAsync(redis.RedisServiceDiscovery);
-    const instances = await redisServiceDiscovery.getInstances(fix_service_name);
 
+    const client = redisServiceDiscovery.createClient();
+    await client.register({
+      id: client.defaultMeta.id,
+      serviceName: fix_service_name,
+      host: client.defaultMeta.host,
+      port: client.defaultMeta.port,
+    })
+
+    await sleep(1000);
+
+    const instances = await redisServiceDiscovery.getInstances(fix_service_name);
     expect(instances.length).toEqual(1);
 
-    await redisServiceDiscovery.offline();
+    await client.offline();
     await sleep(1000);
 
     const instances1 = await redisServiceDiscovery.getInstances(fix_service_name);
     expect(instances1.length).toEqual(0);
 
-    await redisServiceDiscovery.online();
+    await client.online();
     await sleep(1000);
 
     const instances2 = await redisServiceDiscovery.getInstances(fix_service_name);
     expect(instances2.length).toEqual(1);
 
-    await redisServiceDiscovery.deregister();
+    await client.deregister();
     await sleep(1000);
 
     const instances3 = await redisServiceDiscovery.getInstances(fix_service_name);
@@ -122,18 +131,6 @@ describe('/test/serviceDiscovery.test.ts', () => {
               host: '127.0.0.1',
             },
           },
-          serviceDiscovery: {
-            selfRegister: true,
-            serviceOptions: (meta: DefaultInstanceMetadata) => {
-              return {
-                id: meta.id,
-                serviceName: fix_service_name,
-                host: meta.host,
-                port: meta.port,
-                ttl: 600,
-              };
-            }
-          }
         },
       },
     });
@@ -142,18 +139,107 @@ describe('/test/serviceDiscovery.test.ts', () => {
 
     const redisServiceDiscovery = await app.getApplicationContext().getAsync(redis.RedisServiceDiscovery);
 
-    await redisServiceDiscovery.online();
-    await redisServiceDiscovery.online();
+    const client = redisServiceDiscovery.createClient();
+    await client.register({
+      id: client.defaultMeta.id,
+      serviceName: fix_service_name,
+      host: client.defaultMeta.host,
+      port: client.defaultMeta.port,
+      ttl: 600,
+    });
+
+    await client.online();
+    await client.online();
+
+    await sleep(1000);
 
     const instances = await redisServiceDiscovery.getInstances(fix_service_name);
-
     expect(instances.length).toEqual(1);
 
-    await redisServiceDiscovery.offline();
-    await redisServiceDiscovery.offline();
+    await client.offline();
+    await client.offline();
+
+    await sleep(1000);
 
     const instances1 = await redisServiceDiscovery.getInstances(fix_service_name);
     expect(instances1.length).toEqual(0);
+
+    await client.deregister();
+    await close(app);
+  });
+
+  it('should keep state correct for multiple register/online/offline/deregister', async () => {
+    const app = await createLightApp({
+      imports: [redis],
+      globalConfig: {
+        redis: {
+          clients: {
+            default: {
+              port: 6379,
+              host: '127.0.0.1',
+            },
+          },
+        },
+      },
+    });
+
+    await sleep(500);
+
+    const redisServiceDiscovery = await app.getApplicationContext().getAsync(redis.RedisServiceDiscovery);
+    const client = redisServiceDiscovery.createClient();
+    const meta = {
+      id: client.defaultMeta.id,
+      serviceName: 'test-state-service',
+      host: client.defaultMeta.host,
+      port: client.defaultMeta.port,
+      ttl: 600,
+    };
+
+    // 多次 register 只会生效一次
+    await client.register(meta);
+    await client.register(meta);
+    await client.register(meta);
+
+    await sleep(500);
+
+    let instances = await redisServiceDiscovery.getInstances(meta.serviceName);
+    expect(instances.length).toEqual(1);
+
+    // 多次 online 只会生效一次
+    await client.online();
+    await client.online();
+    await client.online();
+
+    await sleep(500);
+
+    instances = await redisServiceDiscovery.getInstances(meta.serviceName);
+    expect(instances.length).toEqual(1);
+
+    // 多次 offline 只会生效一次
+    await client.offline();
+    await client.offline();
+    await client.offline();
+
+    await sleep(500);
+
+    instances = await redisServiceDiscovery.getInstances(meta.serviceName);
+    expect(instances.length).toEqual(0);
+
+    // offline 后还能 online
+    await client.online();
+    await sleep(500);
+    instances = await redisServiceDiscovery.getInstances(meta.serviceName);
+    expect(instances.length).toEqual(1);
+
+    // 多次 deregister 只会生效一次
+    await client.deregister();
+    await client.deregister();
+    await client.deregister();
+
+    await sleep(500);
+
+    instances = await redisServiceDiscovery.getInstances(meta.serviceName);
+    expect(instances.length).toEqual(0);
 
     await close(app);
   });

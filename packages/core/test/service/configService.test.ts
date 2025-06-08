@@ -393,4 +393,16 @@ describe('/test/service/configService.test.ts', () => {
     expect(cfg.getConfiguration('test')).toEqual(undefined);
     mm.restore()
   });
+
+  it('should return default value when config key not exist', async () => {
+    const cfg: any = await createConfigService();
+    cfg.isReady = true;
+    cfg.configuration = { foo: { bar: 123 } };
+    // 存在的 key
+    assert.equal(cfg.getConfiguration('foo.bar', 456), 123, '存在的 key 应该返回实际值');
+    // 不存在的 key
+    assert.equal(cfg.getConfiguration('foo.notExist', 456), 456, '不存在的 key 应该返回默认值');
+    // 不存在的 key 且默认值为 undefined
+    assert.equal(cfg.getConfiguration('foo.notExist'), undefined, '不存在的 key 且未传默认值应返回 undefined');
+  });
 });
