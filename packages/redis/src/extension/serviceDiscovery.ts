@@ -52,7 +52,9 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
     // 订阅当前 serviceName 的变更消息
     const channel = `service:change:${this.serviceName}`;
     const handler = async (channelName, message) => {
-      this.logger.info(`[midway:redis] pubsub event received: channel=${channelName}, message=${message}`);
+      this.logger.debug(
+        `[midway:redis] pubsub event received: channel=${channelName}, message=${message}`
+      );
       if (channelName !== channel) return;
       try {
         // 变更时重新拉取全量数据
@@ -88,7 +90,11 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
     this.instanceKey = this.getInstanceKey(instance.serviceName, instance.id);
     const data = { ...instance, status: 'UP' };
     const ttl = instance.ttl || this.options.ttl || 30;
-    this.logger.info(`[midway:redis] set key: ${this.instanceKey}, value: ${JSON.stringify(data)}, ttl: ${ttl}`);
+    this.logger.debug(
+      `[midway:redis] set key: ${this.instanceKey}, value: ${JSON.stringify(
+        data
+      )}, ttl: ${ttl}`
+    );
     await this.client.set(this.instanceKey, JSON.stringify(data), 'EX', ttl);
     this.startTTLRefresh();
 
@@ -99,7 +105,9 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
       'COUNT',
       100
     );
-    this.logger.info(`[midway:redis] after set, scan test: ${JSON.stringify(testKeys)}`);
+    this.logger.debug(
+      `[midway:redis] after set, scan test: ${JSON.stringify(testKeys)}`
+    );
   }
 
   // 新增：下线时清理 TTL 刷新
@@ -168,7 +176,11 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
       cursor = nextCursor;
       keys = keys.concat(foundKeys);
     } while (cursor !== '0');
-    this.logger.info(`[midway:redis] scanKeys pattern=${pattern}, found keys=${JSON.stringify(keys)}`);
+    this.logger.debug(
+      `[midway:redis] scanKeys pattern=${pattern}, found keys=${JSON.stringify(
+        keys
+      )}`
+    );
     return keys;
   }
 
@@ -180,7 +192,6 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
   ): Promise<RedisInstanceMetadata[]> {
     if (keys.length === 0) return [];
     const values = await this.client.mget(keys);
-    this.logger.info(`[midway:redis] fetchInstancesByKeys, keys=${JSON.stringify(keys)}, values=${JSON.stringify(values)}`);
     return values
       .map(value => {
         try {
@@ -246,21 +257,31 @@ export class RedisServiceDiscoverClient extends ServiceDiscoveryClient<
   }
 
   async online(): Promise<void> {
-    this.logger.info('[midway:redis] online() called');
-    this.logger.info(`[midway:redis] registeredInstance: ${JSON.stringify(this.registeredInstance)}`);
+    this.logger.debug('[midway:redis] online() called');
+    this.logger.debug(
+      `[midway:redis] registeredInstance: ${JSON.stringify(
+        this.registeredInstance
+      )}`
+    );
     if (!this.registeredInstance) {
-      this.logger.error('[midway:redis] online() failed: No instance registered.');
+      this.logger.error(
+        '[midway:redis] online() failed: No instance registered.'
+      );
       throw new Error('No instance registered, cannot online.');
     }
     // 已经上线则忽略
     if (this.onlineInstanceData) {
-      this.logger.info('[midway:redis] online() ignored: already online.');
+      this.logger.debug('[midway:redis] online() ignored: already online.');
       return;
     }
-    const listener = await this.getListener(this.registeredInstance.serviceName);
+    const listener = await this.getListener(
+      this.registeredInstance.serviceName
+    );
     await listener.onlineInstance(this.registeredInstance);
     this.onlineInstanceData = this.registeredInstance;
-    this.logger.info(`[midway:redis] online() success: instance ${this.registeredInstance.id} for service ${this.registeredInstance.serviceName}`);
+    this.logger.info(
+      `[midway:redis] online() success: instance ${this.registeredInstance.id} for service ${this.registeredInstance.serviceName}`
+    );
     // 发布上线消息
     await this.client.publish(
       `service:change:${this.registeredInstance.serviceName}`,
@@ -273,16 +294,24 @@ export class RedisServiceDiscoverClient extends ServiceDiscoveryClient<
   }
 
   async offline(): Promise<void> {
-    this.logger.info('[midway:redis] offline() called');
-    this.logger.info(`[midway:redis] onlineInstanceData: ${JSON.stringify(this.onlineInstanceData)}`);
+    this.logger.debug('[midway:redis] offline() called');
+    this.logger.debug(
+      `[midway:redis] onlineInstanceData: ${JSON.stringify(
+        this.onlineInstanceData
+      )}`
+    );
     // 已经下线则忽略
     if (!this.onlineInstanceData) {
       this.logger.info('[midway:redis] offline() ignored: already offline.');
       return;
     }
-    const listener = await this.getListener(this.onlineInstanceData.serviceName);
+    const listener = await this.getListener(
+      this.onlineInstanceData.serviceName
+    );
     await listener.offlineInstance(this.onlineInstanceData);
-    this.logger.info(`[midway:redis] offline() success: instance ${this.onlineInstanceData.id} for service ${this.onlineInstanceData.serviceName}`);
+    this.logger.info(
+      `[midway:redis] offline() success: instance ${this.onlineInstanceData.id} for service ${this.onlineInstanceData.serviceName}`
+    );
     // 发布下线消息
     await this.client.publish(
       `service:change:${this.onlineInstanceData.serviceName}`,
@@ -360,24 +389,36 @@ export class RedisServiceDiscovery extends ServiceDiscovery<
     }
 
     // 日志：打印当前请求的 serviceName
-    this.coreLogger.info(`[midway:redis] getListener called for serviceName: ${serviceName}`);
+    this.coreLogger.debug(
+      `[midway:redis] getListener called for serviceName: ${serviceName}`
+    );
     // 日志：打印当前 listenerStore keys
-    this.coreLogger.info(`[midway:redis] listenerStore keys: ${Array.from(this.listenerStore.keys()).join(',')}`);
+    this.coreLogger.debug(
+      `[midway:redis] listenerStore keys: ${Array.from(
+        this.listenerStore.keys()
+      ).join(',')}`
+    );
 
     if (!this.listenerStore.has(serviceName)) {
-      this.coreLogger.info(`[midway:redis] listener for ${serviceName} not found, creating new listener.`);
+      this.coreLogger.debug(
+        `[midway:redis] listener for ${serviceName} not found, creating new listener.`
+      );
       const listener = new RedisDataListener(
         serviceName,
         this.getServiceClient(),
         this.pubsub,
         this.redisServiceDiscoveryOptions,
-        this.coreLogger,
+        this.coreLogger
       );
       this.listenerStore.set(serviceName, listener);
       await listener.init();
-      this.coreLogger.info(`[midway:redis] listener for ${serviceName} initialized.`);
+      this.coreLogger.debug(
+        `[midway:redis] listener for ${serviceName} initialized.`
+      );
     } else {
-      this.coreLogger.info(`[midway:redis] listener for ${serviceName} found in cache.`);
+      this.coreLogger.debug(
+        `[midway:redis] listener for ${serviceName} found in cache.`
+      );
     }
     return this.listenerStore.get(serviceName);
   }
