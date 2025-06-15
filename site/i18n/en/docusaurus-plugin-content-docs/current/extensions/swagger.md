@@ -862,7 +862,7 @@ Field description
 | addSecurityRequirements  | Optional, enable globally                      |
 
 
-Associate Controller
+Take effect at the controller level.
 
 ```typescript
 @ApiBasicAuth()
@@ -899,7 +899,7 @@ Field description
 | addSecurityRequirements  | Optional, enable globally                      |
 
 
-Associate Controller
+Take effect at the controller level.
 
 ```typescript
 @ApiBearerAuth()
@@ -970,7 +970,7 @@ The available parameters for the above four Flow types are as follows:
 | scopes             | Authorization scopes           | ✅ Required       | ✅ Required       | ✅ Required | ✅ Required |
 
 
-Associate Controller
+Take effect at the controller level.
 
 ```typescript
 @ApiOAuth2()
@@ -1007,7 +1007,7 @@ Field description
 | addSecurityRequirements  | Optional, enable globally                      |
 
 
-Associate Controller
+Take effect at the controller level.
 
 ```typescript
 @ApiCookieAuth('testforcookie')
@@ -1045,7 +1045,7 @@ Field description
 | addSecurityRequirements  | Optional, enable globally                                            |
 
 
-Associate Controller
+Take effect at the controller level.
 
 ```typescript
 @ApiSecurity('api_key')
@@ -1071,7 +1071,7 @@ export default {
 }
 ```
 
-Associate Controller
+Take effect at the controller level.
 
 ```typescript
 @ApiSecurity('mycustom')
