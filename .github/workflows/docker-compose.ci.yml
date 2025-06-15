@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  redis:
+    image: redis:latest
+
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - 5672:5672
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: wurstmeister/kafka
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    ports:
+      - 9092:9092
+
+  etcd:
+    image: bitnami/etcd
+    environment:
+      ALLOW_NONE_AUTHENTICATION: yes
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd:2379
+    ports:
+      - 2379:2379
+
+  mongodb:
+    image: mongo:4.2
+    ports:
+      - 27017:27017
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    ports:
+      - 1883:1883
