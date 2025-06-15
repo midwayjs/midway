@@ -4,24 +4,15 @@ import {
   IMidwayContext,
   NextFunction,
   Config,
-  Init,
   Inject,
   Provide,
   Scope,
   ScopeEnum,
-  ApplicationContext,
-  IMidwayContainer,
-  MidwayFrameworkService,
 } from '@midwayjs/core';
 import { extname } from 'path';
-import { createBullBoard } from '@bull-board/api';
-import { BullAdapter } from '@bull-board/api/bullAdapter';
-import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { MidwayAdapter } from './adapter';
 import { BullBoardOption } from './interface';
 import { BullBoardManager } from './board.manager';
-import type { Framework as BullFramework } from '@midwayjs/bull';
-import type { Framework as BullMQFramework } from '@midwayjs/bullmq';
 
 const MIME_MAP = {
   '.html': 'text/html',
@@ -47,58 +38,19 @@ const MIME_MAP = {
 export class BoardMiddleware
   implements IMiddleware<IMidwayContext, NextFunction, unknown>
 {
-  @Inject()
-  protected frameworkService: MidwayFrameworkService;
-
   @Config('bullBoard')
   protected bullBoardConfig: BullBoardOption;
 
   @Inject()
   protected bullBoardManager: BullBoardManager;
 
-  @ApplicationContext()
-  protected applicationContext: IMidwayContainer;
-
   private basePath: string;
   private serverAdapter: MidwayAdapter;
 
-  @Init()
-  protected async init() {
-    let framework: BullFramework | BullMQFramework =
-      this.frameworkService.getFramework('bull') as BullFramework;
-    if (!framework) {
-      framework = this.frameworkService.getFramework(
-        'bullmq'
-      ) as BullMQFramework;
-    }
-
-    if (!framework) {
-      return;
-    }
-
-    const queueList = framework.getQueueList();
-    const wrapQueues = queueList.map(queue => {
-      if (this.applicationContext.hasNamespace('bull')) {
-        return new BullAdapter(queue) as any;
-      } else if (this.applicationContext.hasNamespace('bullmq')) {
-        return new BullMQAdapter(queue) as any;
-      }
-    });
-    this.basePath = this.bullBoardConfig.basePath;
-
-    this.serverAdapter = new MidwayAdapter();
-    const bullBoard = createBullBoard({
-      queues: wrapQueues,
-      serverAdapter: this.serverAdapter,
-      options: {
-        uiConfig: this.bullBoardConfig.uiConfig,
-      },
-    });
-    this.serverAdapter.setBasePath(this.basePath);
-    this.bullBoardManager.setBullBoard(bullBoard);
-  }
-
   resolve(app: IMidwayApplication) {
+    this.basePath = this.bullBoardManager.getBasePath();
+    this.serverAdapter = this.bullBoardManager.getServerAdapter();
+
     if ('express' === app.getNamespace()) {
       return async (req: any, res: any, next: NextFunction) => {
         const pathname = req.path;

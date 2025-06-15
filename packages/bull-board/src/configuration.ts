@@ -6,6 +6,7 @@ import {
   MidwayConfigService,
 } from '@midwayjs/core';
 import { BoardMiddleware } from './board.middleware';
+import { BullBoardManager } from './board.manager';
 
 @Configuration({
   namespace: 'bull-board',
@@ -46,5 +47,9 @@ export class BullBoardConfiguration {
         }
       });
     }
+  }
+
+  async onServerReady(container: IMidwayContainer) {
+    await container.getAsync(BullBoardManager);
   }
 }
