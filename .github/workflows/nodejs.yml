@@ -108,6 +108,15 @@ jobs:
           config: ${{ github.workspace }}/packages/mqtt/scripts/mosquitto.conf
           container-name: 'mqtt'
 
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for RabbitMQ..."
+          for i in {1..20}; do
+            nslookup rabbitmq && nc -z rabbitmq 5672 && break
+            echo "RabbitMQ not ready, waiting..."
+            sleep 3
+          done
+
       - run: npm run install_npm
       - run: npm install && npm install codecov
       - run: npm run build --if-present
