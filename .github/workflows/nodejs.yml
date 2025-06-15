@@ -43,7 +43,7 @@ jobs:
 
       - name: Wait for containers to be ready
         run: |
-          docker-compose ps
+          docker compose ps
           sleep 20  # docker-compose 内部 DNS 很稳，简单 sleep 即可
 
       - name: Install dependencies
