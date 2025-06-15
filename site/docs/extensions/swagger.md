@@ -771,7 +771,7 @@ export default {
 
 
 
-关联 Controller
+在控制器层面生效。
 
 ```typescript
 @ApiBasicAuth()
@@ -809,7 +809,7 @@ export default {
 
 
 
-关联 Controller
+在控制器层面生效。
 
 ```typescript
 @ApiBearerAuth()
@@ -883,7 +883,7 @@ flows 是其中最复杂的字段配置，包括不同的参数，目前主要�
 
 
 
-关联 Controller
+在控制器层面生效。
 
 ```typescript
 @ApiOAuth2()
@@ -923,7 +923,7 @@ export default {
 
 
 
-关联 Controller
+在控制器层面生效。
 
 ```typescript
 @ApiCookieAuth('testforcookie')
@@ -966,7 +966,7 @@ export default {
 
 
 
-关联 Controller
+在控制器层面生效。
 
 ```typescript
 @ApiSecurity('api_key')
@@ -994,7 +994,7 @@ export default {
 }
 ```
 
-关联 Controller
+在控制器层面生效。
 
 ```typescript
 @ApiSecurity('mycustom')
