@@ -46,6 +46,15 @@ jobs:
           docker compose -f docker-compose.ci.yml ps
           sleep 20  # docker-compose 内部 DNS 很稳，简单 sleep 即可
 
+      - name: Wait for RabbitMQ management API
+        run: |
+          for i in {1..60}; do
+            curl -u guest:guest -f http://localhost:15672/api/overview && echo "RabbitMQ management API is ready" && exit 0
+            echo "Waiting for RabbitMQ management API..."
+            sleep 2
+          done
+          echo "RabbitMQ management API did not become ready in time" && exit 1
+
       - name: Install dependencies
         run: npm run install_npm && npm install && npm install codecov
 
