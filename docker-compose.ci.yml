@@ -70,3 +70,4 @@ services:
       - "1883:1883"
       - "8883:8883"
     volumes:
+      - ./packages/mqtt/scripts/mosquitto.conf:/mosquitto/config/mosquitto.conf
