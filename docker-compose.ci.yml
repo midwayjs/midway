@@ -1,42 +1,72 @@
+version: "3.9"
 services:
   redis:
-    image: redis:latest
+    image: redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
-      - 6379:6379
+      - "6379:6379"
 
   rabbitmq:
     image: rabbitmq:latest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "node_health_check"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
-      - 5672:5672
+      - "5672:5672"
 
   zookeeper:
     image: wurstmeister/zookeeper
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    healthcheck:
+      test: ["CMD", "sh", "-c", "echo mntr | nc -w 2 -q 2 localhost 2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
-      - 2181:2181
+      - "2181:2181"
 
   kafka:
     image: wurstmeister/kafka
     environment:
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092  # 保留你原本配置
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ADVERTISED_PORT: 9092
+    healthcheck:
+      test: ["CMD", "sh", "-c", "kafka-broker-api-versions.sh --version"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
-      - 9092:9092
+      - "9092:9092"
+    depends_on:
+      - zookeeper
 
   etcd:
     image: bitnami/etcd
     environment:
-      ALLOW_NONE_AUTHENTICATION: yes
-      ETCD_ADVERTISE_CLIENT_URLS: http://etcd:2379
+      ALLOW_NONE_AUTHENTICATION: "yes"
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd-server:2379
+    container_name: Etcd-server
     ports:
-      - 2379:2379
+      - "2379:2379"
+      - "2380:2380"
 
   mongodb:
     image: mongo:4.2
     ports:
-      - 27017:27017
+      - "27017:27017"
 
   mosquitto:
     image: eclipse-mosquitto:latest
     ports:
-      - 1883:1883
+      - "1883:1883"
+      - "8883:8883"
+    volumes:
