@@ -695,9 +695,356 @@ async findOne(@Param('id') id: string, @Query('test') test: any): ViewCat {
 
 
 
-## 更多的定义示例
+### 更多的定义示例
 
 Swagger 中还有更多的写法，框架都进行了支持，更多用法可以查看我们的 [测试用例](https://github.com/midwayjs/midway/blob/main/packages/swagger/test/parser.test.ts)。
+
+
+
+## 授权验证
+
+组件可以通过添加授权验证配置来设置验证方式，我们支持配置 ```basic```、```bearer```、```cookie```、```oauth2```、```apikey```、```custom```。
+
+可以使用 `auth` 字段定义验证类型。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'basic',
+    },
+  },
+}
+```
+
+支持数组，配置多个验证类型。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: [
+      {
+        name: 'basicAuth1',
+        authType: 'basic',
+      },
+      {
+        name: 'basicAuth2',
+        authType: 'basic',
+      }
+    ],
+  },
+}
+```
+
+
+
+### basic
+
+启用 basic 验证
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      name: 'BasicAuth',
+      authType: 'basic',
+      description: 'Basic Auth',
+    },
+  },
+}
+```
+
+字段描述
+
+| **字段**                | **说明**                              |
+| ----------------------- | ------------------------------------- |
+| name                    | 可选，验证字段的 key，可以自行修改    |
+| authType                | 固定为 basic                          |
+| description             | 可选，仅文档用途（swagger-ui 展示用） |
+| addSecurityRequirements | 可选，是否全局启用                    |
+
+
+
+在控制器层面生效。
+
+```typescript
+@ApiBasicAuth()
+@Controller('/hello')
+export class HelloController {}
+```
+
+### bearer
+
+启用 bearer 验证（bearerFormat 为 JWT）
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      name: 'BearerAuth',
+      authType: 'bearer',
+      description: 'Bearer Auth',
+    },
+  },
+}
+```
+
+字段描述
+
+| **字段**                | **说明**                              |
+| ----------------------- | ------------------------------------- |
+| name                    | 可选，验证字段的 key，可以自行修改    |
+| authType                | 固定为 bearer                         |
+| bearerFormat            | 可选，bearer 类型默认为 JWT           |
+| description             | 可选，仅文档用途（swagger-ui 展示用） |
+| addSecurityRequirements | 可选，是否全局启用                    |
+
+
+
+在控制器层面生效。
+
+```typescript
+@ApiBearerAuth()
+@Controller('/hello')
+export class HelloController {}
+```
+
+
+
+### oauth2
+
+OAuth2 是 OpenAPI 里最复杂但最强大的认证类型，所有授权交互流程都能被描述清楚，swagger-ui 全自动支持。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      name: 'testOAuth2'
+      authType: 'oauth2',
+      flows: {
+        implicit: {
+          authorizationUrl: 'http://example.org/api/oauth/dialog',
+          scopes: {
+            'write:pets': 'modify pets in your account',
+            'read:pets': 'read your pets'
+          }
+        },
+        authorizationCode: {
+          authorizationUrl: 'https://example.com/api/oauth/dialog',
+          tokenUrl: 'https://example.com/api/oauth/token',
+          scopes: {
+            'write:pets': 'modify pets in your account',
+            'read:pets': 'read your pets'
+          }
+        },
+      },
+    },
+  },
+}
+```
+
+字段描述
+
+| **字段**                | **说明**                              |
+| ----------------------- | ------------------------------------- |
+| name                    | 必选，你的 API Key 的字段名           |
+| authType                | 固定为 oauth2                         |
+| flows                   | 必选，四种授权模式                    |
+| description             | 可选，仅文档用途（swagger-ui 展示用） |
+| addSecurityRequirements | 可选，是否全局启用                    |
+
+flows 是其中最复杂的字段配置，包括不同的参数，目前主要使用 **authorizationCode** 和 **clientCredentials**。
+
+| **Flow 类型**         | **简介**                                                     | **适用场景**                                                 | **当前状态**                              |
+| --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------------- |
+| **authorizationCode** | 标准授权码模式。用户通过授权服务器跳转登录，拿到授权码后再换取 access token。支持前端+后端安全配合。 | Web 应用、移动端应用（如 Google 登录、GitHub OAuth）。现代主流通用模式。 | ✅ 推荐使用（最安全、最通用）              |
+| **clientCredentials** | 客户端凭证模式。没有用户参与，直接用 client_id 和 client_secret 拿 token，机器与机器之间认证。 | 微服务、后台服务、系统集成、API 网关                         | ✅ 推荐使用（服务器到服务器通信首选）      |
+| **password**          | 密码模式。直接用用户名和密码换取 token，跳过授权服务器跳转。 | 内部系统、测试、历史遗留系统。风险高，暴露用户密码。         | ❌ 已废弃（RFC 6749 明确不推荐新系统使用） |
+| **implicit**          | 隐式模式。前端单页应用直接在浏览器获取 token，不经后端，早期为避免前端暴露 client_secret 设计。 | 早期 SPA、浏览器端应用。现已被 authorizationCode + PKCE 替代。 | ❌ 已废弃（OAuth 2.1 标准已移除）          |
+
+上述四种 Flow 类型可用的参数如下：
+
+| **参数**         | **描述**                 | authorizationCode | clientCredentials | password | implicit |
+| ---------------- | ------------------------ | ----------------- | ----------------- | -------- | -------- |
+| authorizationUrl | 用户授权页面跳转地址     | ✅ 必须            | ❌ 无              | ❌ 无     | ✅ 必须   |
+| tokenUrl         | 获取 access token 的地址 | ✅ 必须            | ✅ 必须            | ✅ 必须   | ❌ 无     |
+| refreshUrl       | 刷新 access token 的地址 | ⚪ 可选            | ⚪ 可选            | ⚪ 可选   | ⚪ 可选   |
+| scopes           | 授权范围，权限粒度控制   | ✅ 必须            | ✅ 必须            | ✅ 必须   | ✅ 必须   |
+
+
+
+在控制器层面生效。
+
+```typescript
+@ApiOAuth2()
+@Controller('/hello')
+export class HelloController {}
+```
+
+
+
+### cookie
+
+启用 cookie 验证，底层会转换为 apikey。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'cookie',
+      securityName: 'testforcookie',
+      cookieName: 'connect.sid',
+    },
+  },
+}
+```
+
+字段描述
+
+| **字段**                | **说明**                              |
+| ----------------------- | ------------------------------------- |
+| securityName            | 可选，验证字段的 key，可以自行修改    |
+| authType                | 固定为 cookie                         |
+| cookieName              | cookie 中的 key                       |
+| description             | 可选，仅文档用途（swagger-ui 展示用） |
+| addSecurityRequirements | 可选，是否全局启用                    |
+
+
+
+在控制器层面生效。
+
+```typescript
+@ApiCookieAuth('testforcookie')
+@Controller('/hello')
+export class HelloController {}
+```
+
+
+
+
+
+### apikey
+
+apiKey 是 OpenAPI 里最灵活的认证模式。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      name: 'x-api-key',
+      authType: 'apikey',
+      in: 'header',
+      description: 'ApiKey Auth',
+    },
+  },
+}
+```
+
+字段描述
+
+| **字段**                | **说明**                                                     |
+| ----------------------- | ------------------------------------------------------------ |
+| name                    | 必选，你的 API Key 的字段名（header 里的名字 / query 参数名 / cookie 名） |
+| authType                | 固定为 apikey，注意是小写                                    |
+| in                      | API Key 放在请求的哪个位置，可选值：header / query / cookie  |
+| description             | 可选，仅文档用途（swagger-ui 展示用）                        |
+| addSecurityRequirements | 可选，是否全局启用                                           |
+
+
+
+在控制器层面生效。
+
+```typescript
+@ApiSecurity('api_key')
+@Controller('/hello')
+export class HelloController {}
+```
+
+
+
+### custom 验证
+
+自定义验证方式，需要自己设计参数配置
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'custom',
+      name: 'mycustom'
+      // ...
+    },
+  },
+}
+```
+
+在控制器层面生效。
+
+```typescript
+@ApiSecurity('mycustom')
+@Controller('/hello')
+export class HelloController {}
+```
+
+
+
+### 全局开启验证
+
+一般情况下仅对特定的路由开启验证，如需全局开启，可以在某个验证方式上添加 `addSecurityRequirements` 属性。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      name: 'BasicAuth',
+      authType: 'basic',
+      description: 'Basic Auth',
+      addSecurityRequirements: true,
+    },
+  },
+}
+```
+
+
+
+### 忽略验证
+
+可以使用 `@ApiExcludeSecurity` 来忽略设置，支持类和方法。
+
+```typescript
+@Controller('/api')
+@ApiSecurity('api_key')
+class APIController {
+  @Post('/update_user')
+  async updateUser() {
+    // ...
+  }
+
+  @Get('/get_user')
+  @ApiExcludeSecurity()
+  async getUser() {
+    // ...
+  }
+}
+```
 
 
 
@@ -795,178 +1142,6 @@ export default {
   }
 }
 
-```
-
-
-### 授权验证
-
-组件可以通过添加授权验证配置来设置验证方式，我们支持配置 ```basic```、```bearer```、```cookie```、```oauth2```、```apikey```、```custom```。
-
-
-
-#### basic
-
-启用 basic 验证
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  swagger: {
-    auth: {
-      authType: 'basic',
-    },
-  },
-}
-```
-
-关联 Controller
-
-```typescript
-@ApiBasicAuth()
-@Controller('/hello')
-export class HelloController {}
-```
-
-#### bearer
-
-启用 bearer 验证（bearerFormat 为 JWT）
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  swagger: {
-    auth: {
-      authType: 'bearer',
-    },
-  },
-}
-```
-
-关联 Controller
-
-```typescript
-@ApiBearerAuth()
-@Controller('/hello')
-export class HelloController {}
-```
-
-#### oauth2
-
-启用 oauth2 验证
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  swagger: {
-    auth: {
-      authType: 'oauth2',
-      flows: {
-        implicit: {
-          authorizationUrl: 'http://example.org/api/oauth/dialog',
-          scopes: {
-            'write:pets': 'modify pets in your account',
-            'read:pets': 'read your pets'
-          }
-        },
-        authorizationCode: {
-          authorizationUrl: 'https://example.com/api/oauth/dialog',
-          tokenUrl: 'https://example.com/api/oauth/token',
-          scopes: {
-            'write:pets': 'modify pets in your account',
-            'read:pets': 'read your pets'
-          }
-        },
-      },
-    },
-  },
-}
-```
-
-关联 Controller
-
-```typescript
-@ApiOAuth2()
-@Controller('/hello')
-export class HelloController {}
-```
-
-#### cookie
-启用 cookie 验证
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  swagger: {
-    auth: {
-      authType: 'cookie',
-      securityName: 'testforcookie',
-      cookieName: 'connect.sid',
-    },
-  },
-}
-```
-
-关联 Controller
-
-```typescript
-@ApiCookieAuth('testforcookie')
-@Controller('/hello')
-export class HelloController {}
-```
-
-#### apikey
-
-启用 cookie 验证
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  swagger: {
-    auth: {
-      authType: 'apikey',
-    	name: 'api_key'
-    },
-  },
-}
-```
-
-关联 Controller
-
-```typescript
-@ApiSecurity('api_key')
-@Controller('/hello')
-export class HelloController {}
-```
-
-#### custom 验证
-
-自定义验证方式，需要自己设计参数配置
-
-```typescript
-// src/config/config.default.ts
-export default {
-  // ...
-  swagger: {
-    auth: {
-      authType: 'custom',
-      name: 'mycustom'
-      // ...
-    },
-  },
-}
-```
-
-关联 Controller
-
-```typescript
-@ApiSecurity('mycustom')
-@Controller('/hello')
-export class HelloController {}
 ```
 
 
@@ -1165,12 +1340,12 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
 | ```@ApiResponse```          | Method            |
 | ```@ApiTags```              | Controller/Method |
 | ```@ApiExtension```         | Method            |
-| ```@ApiBasicAuth```         | Controller        |
-| ```@ApiBearerAuth```        | Controller        |
-| ```@ApiCookieAuth```        | Controller        |
-| ```@ApiOAuth2```            | Controller        |
-| ```@ApiSecurity```          | Controller        |
-| ```@ApiExcludeSecurity```   | Method            |
+| ```@ApiBasicAuth```         | Controller/Method |
+| ```@ApiBearerAuth```        | Controller/Method |
+| ```@ApiCookieAuth```        | Controller/Method |
+| ```@ApiOAuth2```            | Controller/Method |
+| ```@ApiSecurity```          | Controller/Method |
+| ```@ApiExcludeSecurity```   | Controller/Method |
 | ```@ApiParam```             | Method            |
 | ```@ApiExtraModel```        | Controller        |
 

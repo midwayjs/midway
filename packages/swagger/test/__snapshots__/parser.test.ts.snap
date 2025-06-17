@@ -3311,6 +3311,7 @@ exports[`test @ApiSecurity should test ApiSecurity and @ApiExcludeSecurity 1`] =
             "description": "OK",
           },
         },
+        "security": [],
         "summary": undefined,
         "tags": [
           "api",

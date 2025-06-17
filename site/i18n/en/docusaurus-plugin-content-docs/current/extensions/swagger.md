@@ -795,15 +795,11 @@ export default {
 
 
 
-### Authorization verification
+### Authorization Verification
 
-You can add authorization and authentication configurations to configure authentication methods. You can configure ```basic```, ```bearer```, ```cookie```, ```oauth2```, ```apikey```, and ```custom```.
+You can configure authentication methods by adding authorization configuration. We support `basic`, `bearer`, `cookie`, `oauth2`, `apikey`, and `custom`.
 
-
-
-#### basic
-
-Enable basic authentication
+You can use the `auth` field to define the authentication type.
 
 ```typescript
 // src/config/config.default.ts
@@ -817,7 +813,56 @@ export default {
 }
 ```
 
-Association Controller
+Supports array, configure multiple authentication types.
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: [
+      {
+        name: 'basicAuth1',
+        authType: 'basic',
+      },
+      {
+        name: 'basicAuth2',
+        authType: 'basic',
+      }
+    ],
+  },
+}
+```
+
+### basic
+
+Enable basic authentication
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      name: 'BasicAuth',
+      authType: 'basic',
+      description: 'Basic Auth',
+    },
+  },
+}
+```
+
+Field description
+
+| **Field**                | **Description**                                 |
+| ------------------------ | ----------------------------------------------- |
+| name                     | Optional, the key of the authentication field   |
+| authType                 | Must be 'basic'                                |
+| description              | Optional, for documentation (swagger-ui)        |
+| addSecurityRequirements  | Optional, enable globally                      |
+
+
+Take effect at the controller level.
 
 ```typescript
 @ApiBasicAuth()
@@ -825,9 +870,9 @@ Association Controller
 export class HelloController {}
 ```
 
-#### **bearer**
+### bearer
 
-Enable bearer authentication (with bearerFormat set to JWT).
+Enable bearer authentication (bearerFormat is JWT)
 
 ```typescript
 // src/config/config.default.ts
@@ -835,13 +880,26 @@ export default {
   // ...
   swagger: {
     auth: {
+      name: 'BearerAuth',
       authType: 'bearer',
+      description: 'Bearer Auth',
     },
   },
 }
 ```
 
-Association Controller
+Field description
+
+| **Field**                | **Description**                                 |
+| ------------------------ | ----------------------------------------------- |
+| name                     | Optional, the key of the authentication field   |
+| authType                 | Must be 'bearer'                               |
+| bearerFormat             | Optional, default is JWT                       |
+| description              | Optional, for documentation (swagger-ui)        |
+| addSecurityRequirements  | Optional, enable globally                      |
+
+
+Take effect at the controller level.
 
 ```typescript
 @ApiBearerAuth()
@@ -849,9 +907,9 @@ Association Controller
 export class HelloController {}
 ```
 
-#### oauth2
+### oauth2
 
-Enable oauth2 authentication
+OAuth2 is the most complex and powerful authentication type in OpenAPI. All authorization interaction flows can be described, and swagger-ui fully supports it automatically.
 
 ```typescript
 // src/config/config.default.ts
@@ -859,6 +917,7 @@ export default {
   // ...
   swagger: {
     auth: {
+      name: 'testOAuth2',
       authType: 'oauth2',
       flows: {
         implicit: {
@@ -882,7 +941,36 @@ export default {
 }
 ```
 
-Association Controller
+Field description
+
+| **Field**                | **Description**                                 |
+| ------------------------ | ----------------------------------------------- |
+| name                     | Required, your API Key field name               |
+| authType                 | Must be 'oauth2'                               |
+| flows                    | Required, four authorization modes              |
+| description              | Optional, for documentation (swagger-ui)        |
+| addSecurityRequirements  | Optional, enable globally                      |
+
+flows is the most complex field configuration, including different parameters. Currently, mainly use **authorizationCode** and **clientCredentials**.
+
+| **Flow Type**         | **Description**                                                                 | **Scenario**                                              | **Status**                                 |
+| --------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------- | ------------------------------------------ |
+| **authorizationCode** | Standard authorization code mode. User logs in via authorization server, then exchanges code for access token. Supports frontend+backend security. | Web apps, mobile apps (e.g. Google Login, GitHub OAuth). Modern mainstream. | ✅ Recommended (most secure, most general) |
+| **clientCredentials** | Client credentials mode. No user involved, use client_id and client_secret to get token, machine-to-machine authentication. | Microservices, backend services, system integration, API gateway | ✅ Recommended (server-to-server)          |
+| **password**          | Password mode. Use username and password to get token, skip authorization server. | Internal systems, testing, legacy. Risky, exposes password. | ❌ Deprecated (RFC 6749 not recommended)   |
+| **implicit**          | Implicit mode. SPA gets token in browser, no backend, designed to avoid exposing client_secret. | Early SPA, browser apps. Now replaced by authorizationCode + PKCE. | ❌ Deprecated (OAuth 2.1 removed)          |
+
+The available parameters for the above four Flow types are as follows:
+
+| **Parameter**      | **Description**                | authorizationCode | clientCredentials | password | implicit |
+| ------------------ | ------------------------------ | ----------------- | ----------------- | -------- | -------- |
+| authorizationUrl   | User authorization page URL    | ✅ Required       | ❌ None           | ❌ None  | ✅ Required |
+| tokenUrl           | Access token URL               | ✅ Required       | ✅ Required       | ✅ Required | ❌ None |
+| refreshUrl         | Refresh token URL              | ⚪ Optional       | ⚪ Optional       | ⚪ Optional | ⚪ Optional |
+| scopes             | Authorization scopes           | ✅ Required       | ✅ Required       | ✅ Required | ✅ Required |
+
+
+Take effect at the controller level.
 
 ```typescript
 @ApiOAuth2()
@@ -890,8 +978,9 @@ Association Controller
 export class HelloController {}
 ```
 
-#### cookie
-Enable cookie authentication
+### cookie
+
+Enable cookie authentication, which is implemented as apikey under the hood.
 
 ```typescript
 // src/config/config.default.ts
@@ -907,7 +996,18 @@ export default {
 }
 ```
 
-Association Controller
+Field description
+
+| **Field**                | **Description**                                 |
+| ------------------------ | ----------------------------------------------- |
+| securityName             | Optional, the key of the authentication field   |
+| authType                 | Must be 'cookie'                                |
+| cookieName               | The key in the cookie                           |
+| description              | Optional, for documentation (swagger-ui)        |
+| addSecurityRequirements  | Optional, enable globally                      |
+
+
+Take effect at the controller level.
 
 ```typescript
 @ApiCookieAuth('testforcookie')
@@ -915,9 +1015,9 @@ Association Controller
 export class HelloController {}
 ```
 
-#### apikey
+### apikey
 
-Enable cookie authentication
+apiKey is the most flexible authentication mode in OpenAPI.
 
 ```typescript
 // src/config/config.default.ts
@@ -925,14 +1025,27 @@ export default {
   // ...
   swagger: {
     auth: {
+      name: 'x-api-key',
       authType: 'apikey',
-    	name: 'api_key'
+      in: 'header',
+      description: 'ApiKey Auth',
     },
   },
 }
 ```
 
-Association Controller
+Field description
+
+| **Field**                | **Description**                                                     |
+| ------------------------ | ------------------------------------------------------------------- |
+| name                     | Required, your API Key field name (header/query/cookie)              |
+| authType                 | Must be 'apikey' (lowercase)                                         |
+| in                       | Where the API Key is placed: header / query / cookie                 |
+| description              | Optional, for documentation (swagger-ui)                             |
+| addSecurityRequirements  | Optional, enable globally                                            |
+
+
+Take effect at the controller level.
 
 ```typescript
 @ApiSecurity('api_key')
@@ -940,9 +1053,9 @@ Association Controller
 export class HelloController {}
 ```
 
-#### custom verification
+### custom authentication
 
-Custom verification method, you need to design your own parameter configuration.
+Custom authentication method, you need to design the parameter configuration yourself.
 
 ```typescript
 // src/config/config.default.ts
@@ -951,14 +1064,14 @@ export default {
   swagger: {
     auth: {
       authType: 'custom',
-      name: 'mycustom'
+      name: 'mycustom',
       // ...
     },
   },
 }
 ```
 
-Association Controller
+Take effect at the controller level.
 
 ```typescript
 @ApiSecurity('mycustom')
@@ -966,17 +1079,37 @@ Association Controller
 export class HelloController {}
 ```
 
+### Enable authentication globally
 
+Usually, authentication is only enabled for specific routes. If you want to enable it globally, you can add the `addSecurityRequirements` property to an authentication method.
 
-### Ignore routing verification
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      name: 'BasicAuth',
+      authType: 'basic',
+      description: 'Basic Auth',
+      addSecurityRequirements: true,
+    },
+  },
+}
+```
 
-You can set `@ApiExcludeSecurity` to ignore validation of a route.
+### Ignore authentication
+
+You can use `@ApiExcludeSecurity` to ignore authentication, supported on both class and method.
 
 ```typescript
 @Controller('/api')
 @ApiSecurity('api_key')
 class APIController {
-  // ...
+  @Post('/update_user')
+  async updateUser() {
+    // ...
+  }
 
   @Get('/get_user')
   @ApiExcludeSecurity()
@@ -985,52 +1118,6 @@ class APIController {
   }
 }
 ```
-
-
-
-### Ignore routing
-
-Configuring `@ApiExcludeController` can ignore the entire Controller's routing.
-
-```typescript
-@ApiExcludeController()
-@Controller('/hello')
-export class HelloController {}
-```
-
-Configure `@ApiExcludeEndpoint` to ignore individual routes.
-
-```typescript
-@Controller('/hello')
-export class HelloController {
-  
-   @ApiExcludeEndpoint()
-   @Get()
-   async getUser() {
-     // ...
-   }
-}
-```
-
-If you need to meet more dynamic scenarios, you can configure routing filters to filter in batches.
-
-```typescript
-// src/config/config.default.ts
-import { RouterOption } from '@midwayjs/core';
-
-export default {
-   // ...
-   swagger: {
-     routerFilter: (url: string, options: RouterOption) => {
-       return url === '/hello/getUser';
-     }
-   },
-}
-```
-
-`routerFilter` is used to pass in a filter function, including `url` and `routerOptions` two parameters. `routerOptions` contains basic routing information.
-
-Whenever a route is matched, the `routerFilter` method will be automatically executed. When `routerFilter` returns true, it means that this route will be filtered.
 
 
 

@@ -19,23 +19,42 @@ jobs:
         node-version: ['lts/*']
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
+
     steps:
-    - name: Git checkout
-      uses: actions/checkout@v4
+      - name: Git checkout
+        uses: actions/checkout@v4
 
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9
-        run_install: false
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+      # ✅ 安装最新 docker compose v2.37.1
+      - name: Install Docker Compose v2
+        run: |
+          mkdir -p ~/.docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/download/v2.37.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
 
-    - run: pnpm install
-    - run: pnpm build --if-present
-    - run: pnpm lint
-    - run: pnpm lint:cycle
+      # ✅ 启动所有依赖服务（redis, rabbitmq, kafka, zookeeper等）
+      - name: Start services via docker compose
+        run: docker compose -f docker-compose.ci.yml up -d
+
+      # ✅ 简单 sleep 确保服务就绪
+      - name: Wait for services to be ready
+        run: sleep 20
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+
+      # ✅ 各种业务逻辑执行不变
+      - run: pnpm install
+      - run: pnpm build --if-present
+      - run: pnpm lint
+      - run: pnpm lint:cycle

@@ -338,6 +338,10 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
    * authType = cookie 时可以修改，cookie 的名称
    */
   cookieName?: string;
+  /**
+   * 添加全局默认要求
+   */
+  addSecurityRequirements?: boolean;
 }
 /**
  * see https://swagger.io/specification/

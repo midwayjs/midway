@@ -1,6 +1,8 @@
-import { close, createLegacyApp, createHttpRequest } from '@midwayjs/mock';
+import { close, createLegacyApp, createHttpRequest, createLightApp } from '@midwayjs/mock';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
+import { MidwayWebRouterService } from '@midwayjs/core';
+import * as SwaggerParser from "@apidevtools/swagger-parser";
 
 describe('/test/index.test.ts', () => {
   describe('test swagger', () => {
@@ -110,5 +112,288 @@ describe('/test/index.test.ts', () => {
     expect(body).toMatchSnapshot();
     console.log(JSON.stringify(body));
     await close(app);
+  });
+
+  describe('test auth type with security', () => {
+    it('should test basic auth', async () => {
+      const app = await createLightApp({
+        imports: [koa],
+        globalConfig: {
+          keys: 'testKeys',
+          swagger: {
+            auth: {
+              name: 'basicAuth',
+              authType: 'basic',
+              description: 'basic auth',
+            }
+          },
+        },
+      });
+
+      const webRouterService = await app.getApplicationContext().getAsync(MidwayWebRouterService);
+      webRouterService.addRouter(async ctx => {
+        return 'hello world';
+      }, {
+        url: '/test',
+        requestMethod: 'GET',
+      });
+
+      const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+      await SwaggerParser.validate(result.body, {
+        parse: {
+          json: true
+        }
+      });
+      expect(JSON.stringify(result.body)).toMatch(/basicAuth/);
+
+      await close(app);
+    });
+
+    it('should test bearer auth', async () => {
+      const app = await createLightApp({
+        imports: [koa],
+        globalConfig: {
+          keys: 'testKeys',
+          swagger: {
+            auth: {
+              name: 'bearerAuth',
+              authType: 'bearer',
+              description: 'bearer auth',
+            }
+          },
+        },
+      });
+
+      const webRouterService = await app.getApplicationContext().getAsync(MidwayWebRouterService);
+      webRouterService.addRouter(async ctx => {
+        return 'hello world';
+      }, {
+        url: '/test',
+        requestMethod: 'GET',
+      });
+
+      const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+      await SwaggerParser.validate(result.body, {
+        parse: {
+          json: true
+        }
+      });
+      expect(JSON.stringify(result.body)).toMatch(/bearerAuth/);
+
+      await close(app);
+    });
+
+    it('should test apiKey auth', async () => {
+      const app = await createLightApp({
+        imports: [koa],
+        globalConfig: {
+          keys: 'testKeys',
+          swagger: {
+            auth: {
+              name: 'apiKeyAuth',
+              authType: 'apikey',
+              description: 'apiKey auth',
+              in: 'header',
+            }
+          },
+        },
+      });
+
+      const webRouterService = await app.getApplicationContext().getAsync(MidwayWebRouterService);
+      webRouterService.addRouter(async ctx => {
+        return 'hello world';
+      }, {
+        url: '/test',
+        requestMethod: 'GET',
+      });
+
+      const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+      await SwaggerParser.validate(result.body, {
+        parse: {
+          json: true
+        }
+      });
+      expect(JSON.stringify(result.body)).toMatch(/apiKeyAuth/);
+
+      await close(app);
+    });
+
+    it('should test cookie auth', async () => {
+      const app = await createLightApp({
+        imports: [koa],
+        globalConfig: {
+          keys: 'testKeys',
+          swagger: {
+            auth: {
+              authType: 'cookie',
+              cookieName: 'myCookie',
+              securityName: 'cookieAuth',
+              description: 'cookie auth',
+            }
+          },
+        },
+      });
+
+      const webRouterService = await app.getApplicationContext().getAsync(MidwayWebRouterService);
+      webRouterService.addRouter(async ctx => {
+        return 'hello world';
+      }, {
+        url: '/test',
+        requestMethod: 'GET',
+      });
+
+      const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+
+      // 校验 cookieAuth 的结构
+      const securitySchemes = result.body.components.securitySchemes;
+      expect(securitySchemes.cookieAuth).toBeDefined();
+      expect(securitySchemes.cookieAuth.type).toBe('apiKey');
+      expect(securitySchemes.cookieAuth.in).toBe('cookie');
+      await SwaggerParser.validate(result.body, {
+        parse: {
+          json: true
+        }
+      });
+      expect(JSON.stringify(result.body)).toMatch(/cookieAuth/);
+
+      await close(app);
+    });
+
+    it('should test oauth2 auth', async () => {
+      const app = await createLightApp({
+        imports: [koa],
+        globalConfig: {
+          keys: 'testKeys',
+          swagger: {
+            auth: {
+              name: 'oauth2Auth',
+              authType: 'oauth2',
+              description: 'oauth2 auth',
+              flows: {
+                authorizationCode: {
+                  authorizationUrl: 'https://example.com/auth',
+                  tokenUrl: 'https://example.com/token',
+                  scopes: {
+                    'read': 'Read access',
+                    'write': 'Write access'
+                  }
+                }
+              }
+            }
+          },
+        },
+      });
+
+      const webRouterService = await app.getApplicationContext().getAsync(MidwayWebRouterService);
+      webRouterService.addRouter(async ctx => {
+        return 'hello world';
+      }, {
+        url: '/test',
+        requestMethod: 'GET',
+      });
+
+      const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+
+      // 校验 oauth2Auth 的结构
+      const securitySchemes = result.body.components.securitySchemes;
+      expect(securitySchemes.oauth2Auth).toBeDefined();
+      expect(securitySchemes.oauth2Auth.type).toBe('oauth2');
+      expect(securitySchemes.oauth2Auth.flows).toBeDefined();
+      expect(securitySchemes.oauth2Auth.flows.authorizationCode).toBeDefined();
+      expect(securitySchemes.oauth2Auth.flows.authorizationCode.authorizationUrl).toBe('https://example.com/auth');
+      expect(securitySchemes.oauth2Auth.flows.authorizationCode.tokenUrl).toBe('https://example.com/token');
+      expect(securitySchemes.oauth2Auth.flows.authorizationCode.scopes).toBeDefined();
+      expect(securitySchemes.oauth2Auth.flows.authorizationCode.scopes.read).toBe('Read access');
+      expect(securitySchemes.oauth2Auth.flows.authorizationCode.scopes.write).toBe('Write access');
+      await SwaggerParser.validate(result.body, {
+        parse: {
+          json: true
+        }
+      });
+      expect(JSON.stringify(result.body)).toMatch(/oauth2Auth/);
+
+      await close(app);
+    });
+
+    it('should test custom auth', async () => {
+      const app = await createLightApp({
+        imports: [koa],
+        globalConfig: {
+          keys: 'testKeys',
+          swagger: {
+            auth: {
+              name: 'customAuth',
+              authType: 'custom',
+              type: 'http',
+              scheme: 'custom',
+              description: 'custom auth',
+            }
+          },
+        },
+      });
+
+      const webRouterService = await app.getApplicationContext().getAsync(MidwayWebRouterService);
+      webRouterService.addRouter(async ctx => {
+        return 'hello world';
+      }, {
+        url: '/test',
+        requestMethod: 'GET',
+      });
+
+      const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+      await SwaggerParser.validate(result.body, {
+        parse: {
+          json: true
+        }
+      });
+      expect(JSON.stringify(result.body)).toMatch(/customAuth/);
+
+      await close(app);
+    });
+
+    it('should test addSecurityRequirements config', async () => {
+      const app = await createLightApp({
+        imports: [koa],
+        globalConfig: {
+          keys: 'testKeys',
+          swagger: {
+            auth: {
+              name: 'basicAuth',
+              authType: 'basic',
+              description: 'basic auth',
+              addSecurityRequirements: true,
+            }
+          },
+        },
+      });
+
+      const webRouterService = await app.getApplicationContext().getAsync(MidwayWebRouterService);
+      webRouterService.addRouter(async ctx => {
+        return 'hello world';
+      }, {
+        url: '/test',
+        requestMethod: 'GET',
+      });
+
+      const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+      // 校验全局 security 字段
+      expect(result.body.security).toBeDefined();
+      expect(Array.isArray(result.body.security)).toBe(true);
+      expect(result.body.security.some(item => Object.keys(item).includes('basicAuth'))).toBe(true);
+      // 校验 paths 下的接口 method 没有单独的 security 字段
+      Object.values(result.body.paths).forEach(pathItem => {
+        Object.values(pathItem).forEach(methodItem => {
+          expect(methodItem.security).toBeUndefined();
+        });
+      });
+      await SwaggerParser.validate(result.body, {
+        parse: {
+          json: true
+        }
+      });
+      expect(JSON.stringify(result.body)).toMatch(/basicAuth/);
+
+      await close(app);
+    });
   });
 });

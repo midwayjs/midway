@@ -245,8 +245,8 @@ export class SwaggerExplorer {
       headers = headers.map(item => item.metadata);
     }
 
-    // 过滤出安全信息
-    const security = metaForClass.filter(
+    // 过滤出安全信息（方法优先）
+    const classSecurity = metaForClass.filter(
       item => item.key === DECORATORS.API_SECURITY
     );
 
@@ -266,6 +266,10 @@ export class SwaggerExplorer {
             target,
             webRouter.method
           ) || [];
+
+        const methodSecurity = metaForMethods.filter(
+          item => item.key === DECORATORS.API_SECURITY
+        );
 
         // 判断是否忽略当前路由
         const endpoints = metaForMethods.filter(
@@ -333,22 +337,28 @@ export class SwaggerExplorer {
           }
         }
 
-        const excludeSecurity = metaForMethods.find(item => {
-          return item.key === DECORATORS.API_EXCLUDE_SECURITY;
-        });
+        // 优先级处理：method exclude > method security > class exclude > class security
+        const hasMethodExclude = metaForMethods.find(
+          item => item.key === DECORATORS.API_EXCLUDE_SECURITY
+        );
+        const hasMethodSecurity = methodSecurity.length > 0;
+        const hasClassExclude = metaForClass.find(
+          item => item.key === DECORATORS.API_EXCLUDE_SECURITY
+        );
+        const hasClassSecurity = classSecurity.length > 0;
 
-        // 如果存在安全信息，则将其添加到路径中
-        if (security.length > 0 && !excludeSecurity) {
-          if (!paths[url][webRouter.requestMethod].security) {
-            paths[url][webRouter.requestMethod].security = [];
-          }
-
-          for (const s of security) {
-            if (!s.metadata) {
-              continue;
-            }
-            paths[url][webRouter.requestMethod].security.push(s.metadata);
-          }
+        if (hasMethodExclude) {
+          paths[url][webRouter.requestMethod].security = [];
+        } else if (hasMethodSecurity) {
+          paths[url][webRouter.requestMethod].security = methodSecurity
+            .map(s => s.metadata)
+            .filter(Boolean);
+        } else if (hasClassExclude) {
+          paths[url][webRouter.requestMethod].security = [];
+        } else if (hasClassSecurity) {
+          paths[url][webRouter.requestMethod].security = classSecurity
+            .map(s => s.metadata)
+            .filter(Boolean);
         }
       }
     }
@@ -1059,62 +1069,64 @@ export class SwaggerExplorer {
     if (!opts) {
       return;
     }
-    const authType = opts.authType;
-    delete opts.authType;
-    // TODO 加 security
+    const {
+      authType,
+      name = '',
+      addSecurityRequirements = false,
+      ...otherOptions
+    } = opts;
+    if (!authType) {
+      return;
+    }
     switch (authType) {
-      case 'basic':
-        {
-          const name = opts.name;
-          delete opts.name;
-          this.documentBuilder.addBasicAuth(opts as SecuritySchemeObject, name);
-        }
+      case 'basic': {
+        this.documentBuilder.addBasicAuth(
+          otherOptions as SecuritySchemeObject,
+          name
+        );
         break;
-      case 'bearer':
-        {
-          const name = opts.name;
-          delete opts.name;
-          this.documentBuilder.addBearerAuth(
-            opts as SecuritySchemeObject,
-            name
-          );
-        }
+      }
+      case 'bearer': {
+        this.documentBuilder.addBearerAuth(
+          otherOptions as SecuritySchemeObject,
+          name
+        );
         break;
-      case 'cookie':
-        {
-          const cname = opts.cookieName;
-          const secName = opts.securityName;
-          delete opts.cookieName;
-          delete opts.securityName;
-          this.documentBuilder.addCookieAuth(
-            cname,
-            opts as SecuritySchemeObject,
-            secName
-          );
-        }
+      }
+      case 'cookie': {
+        const { cookieName, securityName, ...options } = otherOptions;
+        this.documentBuilder.addCookieAuth(
+          cookieName,
+          options as SecuritySchemeObject,
+          securityName
+        );
         break;
-      case 'oauth2':
-        {
-          const name = opts.name;
-          delete opts.name;
-          this.documentBuilder.addOAuth2(opts as SecuritySchemeObject, name);
-        }
+      }
+      case 'oauth2': {
+        this.documentBuilder.addOAuth2(
+          otherOptions as SecuritySchemeObject,
+          name
+        );
         break;
-      case 'apikey':
-        {
-          const name = opts.name;
-          delete opts.name;
-          this.documentBuilder.addApiKey(opts as SecuritySchemeObject, name);
-        }
+      }
+      case 'apikey': {
+        this.documentBuilder.addApiKey(
+          otherOptions as SecuritySchemeObject,
+          name
+        );
         break;
-      case 'custom':
-        {
-          this.documentBuilder.addSecurity(
-            opts?.name,
-            opts as SecuritySchemeObject
-          );
-        }
+      }
+      case 'custom': {
+        this.documentBuilder.addSecurity(
+          name,
+          otherOptions as SecuritySchemeObject
+        );
         break;
+      }
+    }
+    if (addSecurityRequirements) {
+      // 添加安全要求
+      this.documentBuilder.addSecurityRequirements(name);
     }
   }
 }

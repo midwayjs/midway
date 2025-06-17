@@ -18,71 +18,12 @@ on:
 jobs:
   build:
     timeout-minutes: 60
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version: [18]
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    services:
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-      rabbitmq:
-        image: rabbitmq:latest
-        ports:
-          - 5672/tcp
-        options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
-      zookeeper:
-        image: wurstmeister/zookeeper
-        ports:
-          - 2181:2181
-        env:
-          ALLOW_ANONYMOUS_LOGIN: yes
-        options: >-
-          --health-cmd "echo mntr | nc -w 2 -q 2 localhost 2181"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      kafka:
-        image: wurstmeister/kafka
-        ports:
-          - 9092:9092
-        options: >-
-          --health-cmd "kafka-broker-api-versions.sh --version"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        env:
-          KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092    ## 修改:宿主机IP
-          KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-          KAFKA_ADVERTISED_PORT: 9092
 
-      #      postgres:
-      #        image: postgres:alpine
-      #        ports:
-      #          - 5432:5432
-      #        env:
-      #          POSTGRES_DB: db_ci_test
-      #          POSTGRES_USER: postgres
-      #          POSTGRES_PASSWORD: postgres
-      #        # needed because the postgres container does not provide a healthcheck
-      #        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-      etcd:
-        image: bitnami/etcd
-        options: >-
-          --name Etcd-server
-          --publish 2379:2379
-          --publish 2380:2380
-          --env ALLOW_NONE_AUTHENTICATION=yes
-          --env ETCD_ADVERTISE_CLIENT_URLS=http://etcd-server:2379
 
     steps:
       - name: Git checkout
@@ -100,18 +41,29 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.12.0
-        with:
-          mongodb-version: 4.2
+      - name: Install Docker Compose v2
+        run: |
+          mkdir -p ~/.docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/download/v2.37.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
 
-      - name: Start Mosquitto
-        uses: namoshek/mosquitto-github-action@v1
-        with:
-          version: 'latest'
-          ports: '1883:1883 8883:8883'
-          config: ${{ github.workspace }}/packages/mqtt/scripts/mosquitto.conf
-          container-name: 'mqtt'
+      - name: Set up Docker Compose
+        run: docker compose -f docker-compose.ci.yml up -d
+
+      - name: Wait for containers to be ready
+        run: |
+          docker compose -f docker-compose.ci.yml ps
+          sleep 20  # docker-compose 内部 DNS 很稳，简单 sleep 即可
+
+      - name: Wait for RabbitMQ management API
+        run: |
+          for i in {1..60}; do
+            curl -u guest:guest -f http://localhost:15672/api/overview && echo "RabbitMQ management API is ready" && exit 0
+            echo "Waiting for RabbitMQ management API..."
+            sleep 2
+          done
+          echo "RabbitMQ management API did not become ready in time" && exit 1
 
       - name: Install dependencies
         run: pnpm install
@@ -125,7 +77,7 @@ jobs:
       - name: Run tests and coverage
         run: pnpm run cov
         env:
-          RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
+          RABBITMQ_URL: amqp://localhost:5672
           ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
           ALI_SDK_OSS_ENDPOINT: ${{ secrets.ALI_SDK_OSS_ENDPOINT }}
           ALI_SDK_OSS_ID: ${{ secrets.ALI_SDK_OSS_ID }}

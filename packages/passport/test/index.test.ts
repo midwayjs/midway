@@ -106,7 +106,7 @@ describe('/test/index.test.ts', () => {
       let result = await request.get('/')
 
       expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/login\">/login</a>.');
+      expect(result.text).toEqual('Redirecting to /login.');
 
       result = await request
         .get('/')
@@ -139,7 +139,7 @@ describe('/test/index.test.ts', () => {
       let result = await request.get('/')
 
       expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/login\">/login</a>.');
+      expect(result.text).toEqual('Redirecting to /login.');
 
       result = await request
         .get('/')
