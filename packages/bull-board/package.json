@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/bull-board",
   "version": "3.20.6",
-  "description": "midway component for bull",
+  "description": "midway component for bull-board",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
