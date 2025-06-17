@@ -8,7 +8,8 @@
   "@midwayjs/bull": "3.20.4",
   "@midwayjs/bull-board": [
     "3.20.4",
-    "3.20.5"
+    "3.20.5",
+    "3.20.6"
   ],
   "@midwayjs/bullmq": [
     "3.20.4",
@@ -56,7 +57,8 @@
   "@midwayjs/faas": "3.20.4",
   "@midwayjs/grpc": [
     "3.20.4",
-    "3.20.5"
+    "3.20.5",
+    "3.20.6"
   ],
   "@midwayjs/http-proxy": [
     "3.20.4",
@@ -86,7 +88,10 @@
   "@midwayjs/mock": "3.20.4",
   "@midwayjs/mongoose": "3.20.4",
   "@midwayjs/mqtt": "3.20.4",
-  "@midwayjs/oss": "3.20.4",
+  "@midwayjs/oss": [
+    "3.20.4",
+    "3.20.6"
+  ],
   "@midwayjs/otel": [
     "3.20.4",
     "3.20.5"
@@ -131,7 +136,8 @@
   ],
   "@midwayjs/swagger": [
     "3.20.4",
-    "3.20.5"
+    "3.20.5",
+    "3.20.6"
   ],
   "@midwayjs/tablestore": "3.20.4",
   "@midwayjs/tags": [
@@ -151,7 +157,8 @@
   ],
   "@midwayjs/version": [
     "3.20.4",
-    "3.20.5"
+    "3.20.5",
+    "3.20.6"
   ],
   "@midwayjs/view": [
     "3.20.4",

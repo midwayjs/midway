@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/oss",
   "description": "midway oss component",
-  "version": "3.20.4",
+  "version": "3.20.6",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [

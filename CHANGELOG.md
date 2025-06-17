@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v3.20.6 (2025-06-17)
+
+#### :nail_care: Polish
+* `passport`, `swagger`
+  * [#4350](https://github.com/midwayjs/midway/pull/4350) feat: Add global security requirements ([@czy88840616](https://github.com/czy88840616))
+* `bull-board`
+  * [#4346](https://github.com/midwayjs/midway/pull/4346) feat: create board manager on server ready ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#4343](https://github.com/midwayjs/midway/pull/4343) docs: update mqtt.md ([@miraizhao](https://github.com/miraizhao))
+
+#### :package: Dependencies
+* `grpc`
+  * [#4337](https://github.com/midwayjs/midway/pull/4337) fix(deps): update dependency @grpc/proto-loader to v0.7.15 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#4338](https://github.com/midwayjs/midway/pull/4338) fix(deps): update dependency ali-oss to v6.23.0 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Mirai Zhao ([@miraizhao](https://github.com/miraizhao))
+
+
+
 ## v3.20.5 (2025-04-27)
 
 #### :nail_care: Polish
