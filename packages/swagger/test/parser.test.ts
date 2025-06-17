@@ -751,6 +751,69 @@ describe('test @ApiSecurity', () => {
     expect(explorer.getData()).toMatchSnapshot();
   });
 
+  it('should support class @ApiExcludeSecurity only', () => {
+    @ApiExcludeSecurity()
+    @Controller('/api')
+    class APIController {
+      @Get('/public')
+      async publicApi() {
+        return 'public';
+      }
+      @Get('/secure')
+      async secureApi() {
+        return 'secure';
+      }
+    }
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/secure'].get.security).toEqual([]);
+    expect(data.paths['/api/public'].get.security).toEqual([]);
+  });
+
+  it('should support method @ApiSecurity only', () => {
+    @Controller('/api')
+    class APIController {
+      @Get('/public')
+      async publicApi() {
+        return 'public';
+      }
+      @ApiSecurity('apiKeyAuth')
+      @Get('/secure')
+      async secureApi() {
+        return 'secure';
+      }
+    }
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/secure'].get.security).toEqual([{ apiKeyAuth: [] }]);
+    expect(data.paths['/api/public'].get.security).toBeUndefined();
+  });
+
+  it('should support method @ApiSecurity and class @ApiExcludeSecurity', () => {
+    @ApiExcludeSecurity()
+    @Controller('/api')
+    class APIController {
+      @Get('/public')
+      async publicApi() {
+        return 'public';
+      }
+
+      @ApiSecurity('apiKeyAuth')
+      @Get('/secure')
+      async secureApi() {
+        return 'secure';
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    expect(data.paths['/api/secure'].get.security).toEqual([{ apiKeyAuth: [] }]);
+    expect(data.paths['/api/public'].get.security).toEqual([]);
+  });
+
   it('should test @ApiBasicAuth', () => {
     @Controller('/api')
     @ApiBasicAuth()

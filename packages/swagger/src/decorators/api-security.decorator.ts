@@ -5,7 +5,7 @@ import { createMixedDecorator } from './helpers';
 export function ApiSecurity(
   name: string | SecurityRequirementObject,
   requirements: string[] = []
-): ClassDecorator {
+): ClassDecorator & MethodDecorator {
   let metadata: SecurityRequirementObject;
 
   if (typeof name === 'string') {
@@ -16,6 +16,6 @@ export function ApiSecurity(
   return createMixedDecorator(DECORATORS.API_SECURITY, metadata);
 }
 
-export function ApiExcludeSecurity(): MethodDecorator {
+export function ApiExcludeSecurity(): ClassDecorator & MethodDecorator {
   return createMixedDecorator(DECORATORS.API_EXCLUDE_SECURITY, true);
 }
