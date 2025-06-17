@@ -819,12 +819,12 @@ export class MainConfiguration {
   @Inject()
   bullBoardManager: bullBoard.BullBoardManager;
 
-  async onReady() {
+  async onServerReady() {
     const testQueue = this.bullFramework.createQueue('test', {
       // ...
     });
 
-    this.bullBoardManager.addQueue(testQueue);
+    this.bullBoardManager.addQueue(new bullBoard.BullAdapter(testQueue));
   }
 }
 ```
