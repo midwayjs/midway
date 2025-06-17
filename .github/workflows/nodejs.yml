@@ -64,7 +64,7 @@ jobs:
       - name: Run tests with coverage
         run: npm run cov
         env:
-          RABBITMQ_URL: amqp://rabbitmq:5672
+          RABBITMQ_URL: amqp://localhost:5672
           ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
           ALI_SDK_OSS_ENDPOINT: ${{ secrets.ALI_SDK_OSS_ENDPOINT }}
           ALI_SDK_OSS_ID: ${{ secrets.ALI_SDK_OSS_ID }}
