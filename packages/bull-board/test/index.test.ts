@@ -2,6 +2,8 @@ import { createLegacyApp, close, createHttpRequest, createLightApp } from '@midw
 import { join } from 'path';
 import * as bullboard from '../src';
 import * as bullmq from '@midwayjs/bullmq';
+import * as bull from '@midwayjs/bull';
+import * as koa from '@midwayjs/koa';
 
 describe(`/test/index.test.ts`, () => {
   it('test ui in koa', async () => {
@@ -92,6 +94,68 @@ describe(`/test/index.test.ts`, () => {
     expect(result.status).toBe(200);
     expect(result.body.queues.length).toBe(1);
     expect(result.body.queues[0].type).toBe('bullmq');
+    expect(result.headers['content-type']).toMatch('application/json');
+
+    await close(app);
+  });
+
+  it('test dynamic add queue with bullmq', async () => {
+    const app = await createLightApp('', {
+      imports: [koa, bullboard, bullmq],
+      globalConfig: {
+        keys: 123,
+        bullmq: {
+          defaultConnection: {
+            host: '127.0.0.1',
+            port: 6379,
+          }
+        },
+      }
+    });
+
+    const bullFramework = app.getApplicationContext().get(bullmq.Framework);
+    const testQueue = bullFramework.createQueue('test');
+    await testQueue?.addJobToQueue({name: 'stone-jin'});
+
+    const manager = await app.getApplicationContext().getAsync(bullboard.BullBoardManager);
+    manager.addQueue(new bullboard.BullMQAdapter(testQueue) as any);
+
+    const result = await createHttpRequest(app).get('/ui/api/queues?activeQueue=test&page=1&jobsPerPage=10');
+    expect(result.status).toBe(200);
+    expect(result.body.queues.length).toBe(1);
+    expect(result.body.queues[0].type).toBe('bullmq');
+    expect(result.headers['content-type']).toMatch('application/json');
+
+    await close(app);
+  });
+
+  it('test dynamic add queue with bull', async () => {
+    const app = await createLightApp('', {
+      imports: [koa, bullboard, bull],
+      globalConfig: {
+        keys: 123,
+        bull: {
+          defaultQueueOptions: {
+            redis: {
+              port: 6379,
+              host: '127.0.0.1',
+            },
+          }
+        },
+      }
+    });
+
+    const bullFramework = app.getApplicationContext().get(bull.Framework);
+    const testQueue = bullFramework.createQueue('test-bull-board');
+    await testQueue?.addJobToQueue({name: 'stone-jin'});
+
+    const manager = await app.getApplicationContext().getAsync(bullboard.BullBoardManager);
+    manager.addQueue(new bullboard.BullAdapter(testQueue));
+
+    const result = await createHttpRequest(app).get('/ui/api/queues?activeQueue=test&page=1&jobsPerPage=10');
+    expect(result.status).toBe(200);
+    expect(result.body.queues.length).toBe(1);
+    expect(result.body.queues[0].type).toBe('bull');
     expect(result.headers['content-type']).toMatch('application/json');
 
     await close(app);

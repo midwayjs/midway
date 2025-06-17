@@ -532,12 +532,14 @@ export class MainConfiguration {
   @Inject()
   bullBoardManager: bullBoard.BullBoardManager;
 
-  async onReady() {
+  async onServerReady() {
     const testQueue = this.bullmqFramework.createQueue('test', {
       // ...
     });
 
-    this.bullBoardManager.addQueue(testQueue);
+    this.bullBoardManager.addQueue(new bullBoard.BullMQAdapter(testQueue) as any);
   }
 }
 ```
+
+> Note: The latest bull-board requires Node.js v20 or above, so Midway v3 cannot upgrade bull-board; in bull-board v5.23.0 there is a type definition issue, so we use `as any` to bypass it.
