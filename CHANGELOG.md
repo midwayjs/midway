@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.7 (2025-06-18)
+
+#### :bug: Bug Fix
+* `bull-board`
+  * [#4351](https://github.com/midwayjs/midway/pull/4351) fix: bull-board missing export adapter ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.6 (2025-06-17)
 
 #### :nail_care: Polish
