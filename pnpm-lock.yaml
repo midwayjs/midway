@@ -140,8 +140,8 @@ importers:
   packages/axios:
     dependencies:
       axios:
-        specifier: 1.7.9
-        version: 1.7.9
+        specifier: 1.8.4
+        version: 1.8.4
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -219,8 +219,8 @@ importers:
   packages/bullmq:
     dependencies:
       bullmq:
-        specifier: 5.39.1
-        version: 5.39.1
+        specifier: 5.51.1
+        version: 5.51.1
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -300,8 +300,8 @@ importers:
         specifier: 1.4.4
         version: 1.4.4
       nanoid:
-        specifier: 3.3.8
-        version: 3.3.8
+        specifier: 3.3.11
+        version: 3.3.11
       svg-captcha-fixed:
         specifier: 1.5.2
         version: 1.5.2
@@ -450,8 +450,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       koa:
-        specifier: 2.15.3
-        version: 2.15.3
+        specifier: 2.16.1
+        version: 2.16.1
       mm:
         specifier: 3.4.0
         version: 3.4.0
@@ -465,8 +465,8 @@ importers:
   packages/cos:
     dependencies:
       cos-nodejs-sdk-v5:
-        specifier: 2.14.6
-        version: 2.14.6
+        specifier: 2.14.7
+        version: 2.14.7
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -592,11 +592,11 @@ importers:
   packages/grpc:
     dependencies:
       '@grpc/grpc-js':
-        specifier: 1.12.5
-        version: 1.12.5
+        specifier: 1.13.3
+        version: 1.13.3
       '@grpc/proto-loader':
-        specifier: 0.7.13
-        version: 0.7.13
+        specifier: 0.7.15
+        version: 0.7.15
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -608,8 +608,8 @@ importers:
   packages/http-proxy:
     dependencies:
       axios:
-        specifier: 1.7.9
-        version: 1.7.9
+        specifier: 1.8.4
+        version: 1.8.4
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -674,8 +674,8 @@ importers:
   packages/jwt:
     dependencies:
       '@types/jsonwebtoken':
-        specifier: 9.0.8
-        version: 9.0.8
+        specifier: 9.0.9
+        version: 9.0.9
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
@@ -712,8 +712,8 @@ importers:
   packages/leoric:
     dependencies:
       leoric:
-        specifier: 2.13.4
-        version: 2.13.4(mysql2@3.12.0)(sqlite3@5.1.7)
+        specifier: 2.13.5
+        version: 2.13.5(mysql2@3.12.0)(sqlite3@5.1.7)
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -820,8 +820,8 @@ importers:
   packages/mqtt:
     dependencies:
       mqtt:
-        specifier: 5.10.3
-        version: 5.10.3
+        specifier: 5.10.4
+        version: 5.10.4
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -866,8 +866,8 @@ importers:
         specifier: 6.16.11
         version: 6.16.11
       ali-oss:
-        specifier: 6.22.0
-        version: 6.22.0
+        specifier: 6.23.0
+        version: 6.23.0
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -1052,8 +1052,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       nanoid:
-        specifier: 3.3.8
-        version: 3.3.8
+        specifier: 3.3.11
+        version: 3.3.11
       picomatch:
         specifier: 2.3.1
         version: 2.3.1
@@ -1104,8 +1104,8 @@ importers:
   packages/session:
     dependencies:
       '@midwayjs/cookies':
-        specifier: ^1.0.2
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -1157,6 +1157,9 @@ importers:
 
   packages/swagger:
     devDependencies:
+      '@apidevtools/swagger-parser':
+        specifier: 11.0.1
+        version: 11.0.1(openapi-types@12.1.3)
       '@midwayjs/core':
         specifier: workspace:^
         version: link:../core
@@ -1571,8 +1574,8 @@ importers:
         specifier: ^12.0.0
         version: 12.0.2
       '@midwayjs/cookies':
-        specifier: ^1.0.2
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
       '@midwayjs/session':
         specifier: workspace:^
         version: link:../session
@@ -1583,8 +1586,8 @@ importers:
         specifier: 6.9.18
         version: 6.9.18
       koa:
-        specifier: 2.15.3
-        version: 2.15.3
+        specifier: 2.16.1
+        version: 2.16.1
       koa-bodyparser:
         specifier: 4.4.1
         version: 4.4.1
@@ -1633,6 +1636,22 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
+
+  '@apidevtools/json-schema-ref-parser@13.0.2':
+    resolution: {integrity: sha512-ThpknSFmb1zJXU16ba8cFbDRL3WRs6WETW323gOhj7Gwdj9GUqNpA5JFhdAINxINyAz03gqgF5Y4UydAjE3Pdg==}
+    engines: {node: '>= 16'}
+
+  '@apidevtools/openapi-schemas@2.1.0':
+    resolution: {integrity: sha512-Zc1AlqrJlX3SlpupFGpiLi2EbteyP7fXmUOGup6/DnkRgjP9bgMM/ag+n91rsv0U1Gpz0H3VILA/o3bW7Ua6BQ==}
+    engines: {node: '>=10'}
+
+  '@apidevtools/swagger-methods@3.0.2':
+    resolution: {integrity: sha512-QAkD5kK2b1WfjDS/UQn/qQkbwF31uqRjPTrsCs5ZG9BQGAkjwvqGFjjPqAuzac/IYzpPtRzjCP1WrTuAIjMrXg==}
+
+  '@apidevtools/swagger-parser@11.0.1':
+    resolution: {integrity: sha512-0OzWjKPUr7dvXOgQi6hsNLpwgQRtPgyQoYMuaIB+Zj50Qjbwxph/nu4BndwOA446FtQUTwkR3BxLnORpVYLHYw==}
+    peerDependencies:
+      openapi-types: '>=7'
 
   '@assemblyscript/loader@0.19.23':
     resolution: {integrity: sha512-ulkCYfFbYj01ie1MDOyxv2F6SpRN1TOj7fQxbP07D6HmeR+gr2JLSmINKjga2emB+b1L2KGrFKBTc+e00p54nw==}
@@ -1900,8 +1919,17 @@ packages:
     resolution: {integrity: sha512-d3iiHxdpg5+ZcJ6jnDSOT8Z0O0VMVGy34jAnYLUX8yd36b1qn8f1TwOA/Lc7TsOh03IkPJ38eGI5qD2EjNkoEA==}
     engines: {node: '>=12.10.0'}
 
+  '@grpc/grpc-js@1.13.3':
+    resolution: {integrity: sha512-FTXHdOoPbZrBjlVLHuKbDZnsTxXv2BlHF57xw6LuThXacXvtkahEPED0CKMk6obZDf65Hv4k3z62eyPNpvinIg==}
+    engines: {node: '>=12.10.0'}
+
   '@grpc/proto-loader@0.7.13':
     resolution: {integrity: sha512-AiXO/bfe9bmxBjxxtYxFAXGZvMaN5s8kO+jBHAJCON8rJoB5YS/D6X7ZNc6XQkuHNmyl4CYaMI1fJ/Gn27RGGw==}
+    engines: {node: '>=6'}
+    hasBin: true
+
+  '@grpc/proto-loader@0.7.15':
+    resolution: {integrity: sha512-tMXdRCfYVixjuFK+Hk0Q1s38gV9zDiDJfWL3h1rv4Qc39oILCu1TRTDt7+fGUI8K4G1Fj125Hx/ru3azECWTyQ==}
     engines: {node: '>=6'}
     hasBin: true
 
@@ -2153,6 +2181,10 @@ packages:
 
   '@midwayjs/cookies@1.2.0':
     resolution: {integrity: sha512-gdfAXk3+uL+9qcNo9lNnUFJCUGXXxCitBjyz9QJR08dcZ11mqTbxVNXhea525e3ZwKREy6f4PHAWofFwlPOZzQ==}
+    engines: {node: '>=10'}
+
+  '@midwayjs/cookies@1.3.0':
+    resolution: {integrity: sha512-jcgGZq2+Ty6qkZ5rQF+ViIn6ntV6n/JuvZ/OmgDsAkS+/SyNc3UuNPlUHzzGrrVWgtJq2w8MzjXbl7a3paIVdw==}
     engines: {node: '>=10'}
 
   '@midwayjs/event-bus@1.11.1':
@@ -3063,8 +3095,8 @@ packages:
   '@types/jsonfile@6.1.4':
     resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
 
-  '@types/jsonwebtoken@9.0.8':
-    resolution: {integrity: sha512-7fx54m60nLFUVYlxAB1xpe9CBWX2vSrk50Y6ogRJ1v5xxtba7qXTg5BgYDN5dq+yuQQ9HaVlHJyAAt1/mxryFg==}
+  '@types/jsonwebtoken@9.0.9':
+    resolution: {integrity: sha512-uoe+GxEuHbvy12OUQct2X9JenKM3qAscquYymuQN4fMWG9DBQtykrQEFcAbVACF7qaLw9BePSodUL0kquqBJpQ==}
 
   '@types/keygrip@1.0.6':
     resolution: {integrity: sha512-lZuNAY9xeJt7Bx4t4dx0rYCDqGPW8RXhQZK1td7d4H6E9zYbLoOtjBvfwdTKpsyxQI/2jv+armjX/RW+ZNpXOQ==}
@@ -3430,6 +3462,14 @@ packages:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
 
+  ajv-draft-04@1.0.0:
+    resolution: {integrity: sha512-mv00Te6nmYbRp5DCwclxtt7yV/joXJPGS7nM+97GdxvuttCOfgI3K4U25zboyeX0O+myI8ERluxQe5wljMmVIw==}
+    peerDependencies:
+      ajv: ^8.5.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+
   ajv-formats@1.6.1:
     resolution: {integrity: sha512-4CjkH20If1lhR5CGtqkrVg3bbOtFEG80X9v6jDOIUhbzzbB+UzPBGy8GQhUNVZ0yvMHdMpawCOcy5ydGMsagGQ==}
     peerDependencies:
@@ -3465,8 +3505,8 @@ packages:
   ajv@8.17.1:
     resolution: {integrity: sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==}
 
-  ali-oss@6.22.0:
-    resolution: {integrity: sha512-X8CHo+wsjCBvDaEvuibFOi3SZxiCBZSRUURrXH0upoVwu3SuW3e+PTVK7xw+uN6EyTcAESqrngrQimhp8iBzsQ==}
+  ali-oss@6.23.0:
+    resolution: {integrity: sha512-FipRmyd16Pr/tEey/YaaQ/24Pc3HEpLM9S1DRakEuXlSLXNIJnu1oJtHM53eVYpvW3dXapSjrip3xylZUTIZVQ==}
     engines: {node: '>=8'}
 
   amqp-connection-manager@4.1.14:
@@ -3689,8 +3729,8 @@ packages:
   aws4@1.13.2:
     resolution: {integrity: sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==}
 
-  axios@1.7.9:
-    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
+  axios@1.8.4:
+    resolution: {integrity: sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==}
 
   babel-jest@29.7.0:
     resolution: {integrity: sha512-BrvGY3xZSwEcCzKvKsCi2GgHqDqsYkOP4/by5xCgIwGXQxIEh+8ew3gmrE1y7XRR6LHZIj6yLYnUi/mm2KXKBg==}
@@ -3852,8 +3892,8 @@ packages:
     resolution: {integrity: sha512-lDsx2BzkKe7gkCYiT5Acj02DpTwDznl/VNN7Psn7M3USPG7Vs/BaClZJJTAG+ufAR9++N1/NiUTdaFBWDIl5TQ==}
     engines: {node: '>=12'}
 
-  bullmq@5.39.1:
-    resolution: {integrity: sha512-z6ovgX3mMly0L9F3dStCuiMQOk3bqiwqgr83mbjRlX5yGRcStwP9kZsrO0a5VrjPuU0oUgwmWXv37jcSbGaERQ==}
+  bullmq@5.51.1:
+    resolution: {integrity: sha512-JEZokH5Sb6p66HRjbfQjPNYuSilDRcB8UREmJzOBqTTaJFza8I92vsBF3J/zmtzd7KVv3dxhZyH9CYSLOJALRA==}
 
   busboy@0.2.14:
     resolution: {integrity: sha512-InWFDomvlkEj+xWLBfU3AvnbVYqeTWmQopiW0tWWEy5yehYm2YkGEc59sUmw/4ty5Zj/b0WHGs1LgecuBSBGrg==}
@@ -4354,8 +4394,8 @@ packages:
     resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}
     engines: {node: '>= 0.10'}
 
-  cos-nodejs-sdk-v5@2.14.6:
-    resolution: {integrity: sha512-b5PIJ0fqzIPCC1tq0GOBlJU0wlo4F0HQgTAqvdk73jYlxrNiMd1RTU9GsLwwX2fGOA2J+TOlcy76FebjlO0Smg==}
+  cos-nodejs-sdk-v5@2.14.7:
+    resolution: {integrity: sha512-2Ww9JeSzJTVBnKCWTHwWtU0mVwl2yxn2VUw8KhOnMKbqEbRpsBr0p1ZugB9/7h43bMZA0YlY3+P52k0KN4M9lQ==}
     engines: {node: '>= 6'}
 
   cosmiconfig@8.3.6:
@@ -6753,16 +6793,16 @@ packages:
     resolution: {integrity: sha512-abVWOHY6z6qSTvNtapWMAnvHS9SUiUCaQQQubClSAT9ybQPsZ6ioKcRarnownS4fMD0sXQgQ5ey8CYEuwoa1Yg==}
     engines: {node: '>= 7.6.0'}
 
-  koa@2.15.3:
-    resolution: {integrity: sha512-j/8tY9j5t+GVMLeioLaxweJiKUayFhlGqNTzf2ZGwL0ZCQijd2RLHK0SLW5Tsko8YyyqCZC2cojIb0/s62qTAg==}
+  koa@2.16.1:
+    resolution: {integrity: sha512-umfX9d3iuSxTQP4pnzLOz0HKnPg0FaUUIKcye2lOiz3KPu1Y3M3xlz76dISdFPQs37P9eJz1wUpcTS6KDPn9fA==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
   latest-version@5.1.0:
     resolution: {integrity: sha512-weT+r0kTkRQdCdYCNtkMwWXQTMEswKrFBkm4ckQOMVhhqhIMI1UT2hMj+1iigIhgSZm5gTmrRXBNoGUgaTY1xA==}
     engines: {node: '>=8'}
 
-  leoric@2.13.4:
-    resolution: {integrity: sha512-m0DQb1FZcmMu8deDK7H13BardlQjlotrujptavwJmzkwifQ/mf2lWlrE0ZpXtPCAOJqeQsbe9XjJh+uAddJ8KQ==}
+  leoric@2.13.5:
+    resolution: {integrity: sha512-d2Tl+5F1DJRXkiedu/tX1ybeTNUCEQiCvQirZABKfXvK0gJTRfWPASdeFXw+DX4ymrI5/s7EitMklqfOIh5xEg==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
       mysql: ^2.17.1
@@ -7362,8 +7402,8 @@ packages:
   mqtt-packet@9.0.1:
     resolution: {integrity: sha512-koZF1V/X2RZUI6uD9wN5OK1JxxcG1ofAR4H3LjCw1FkeKzruZQ26aAA6v2m1lZyWONZIR5wMMJFrZJDRNzbiQw==}
 
-  mqtt@5.10.3:
-    resolution: {integrity: sha512-hA/6YrUS4fywhBGCjH/XXUuLeueJiPqruVVWjK2A24Ma4KcWfZ/x8x07aoesBV+HXDWBC08tbT4IWfSXNW0Jtw==}
+  mqtt@5.10.4:
+    resolution: {integrity: sha512-wN+SuhT2/ZaG6NPxca0N6YtRivnMxk6VflxQUEeqDH4erKdj+wPAGhHmcTLzvqfE4sJRxrEJ+XJxUc0No0E7eQ==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
@@ -7433,8 +7473,8 @@ packages:
     resolution: {integrity: sha512-eLoBxg6wE/rZkJPhU/xRX1WTpkFEwDJEN96oxFrTsqBdbT5ec295Q+CoHrL9IT0DipqKhmGcaZmwOt8OON5x1w==}
     engines: {node: '>=12.0.0'}
 
-  nanoid@3.3.8:
-    resolution: {integrity: sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==}
+  nanoid@3.3.11:
+    resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -7782,6 +7822,9 @@ packages:
   open@8.4.2:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
+
+  openapi-types@12.1.3:
+    resolution: {integrity: sha512-N4YtSYJqghVu4iek2ZUvcN/0aqH1kRDuNqzcycDxhOUpg7GdvLa2F3DgS6yBNhInhv2r/6I0Flkn7CqL8+nIcw==}
 
   opentype.js@0.7.3:
     resolution: {integrity: sha512-Veui5vl2bLonFJ/SjX/WRWJT3SncgiZNnKUyahmXCc2sa1xXW15u3R/3TN5+JFiP7RsjK5ER4HA5eWaEmV9deA==}
@@ -10299,6 +10342,25 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
+  '@apidevtools/json-schema-ref-parser@13.0.2':
+    dependencies:
+      '@types/json-schema': 7.0.15
+      js-yaml: 4.1.0
+
+  '@apidevtools/openapi-schemas@2.1.0': {}
+
+  '@apidevtools/swagger-methods@3.0.2': {}
+
+  '@apidevtools/swagger-parser@11.0.1(openapi-types@12.1.3)':
+    dependencies:
+      '@apidevtools/json-schema-ref-parser': 13.0.2
+      '@apidevtools/openapi-schemas': 2.1.0
+      '@apidevtools/swagger-methods': 3.0.2
+      ajv: 8.17.1
+      ajv-draft-04: 1.0.0(ajv@8.17.1)
+      call-me-maybe: 1.0.2
+      openapi-types: 12.1.3
+
   '@assemblyscript/loader@0.19.23': {}
 
   '@babel/code-frame@7.12.11':
@@ -10628,10 +10690,22 @@ snapshots:
 
   '@grpc/grpc-js@1.12.5':
     dependencies:
-      '@grpc/proto-loader': 0.7.13
+      '@grpc/proto-loader': 0.7.15
+      '@js-sdsl/ordered-map': 4.4.2
+
+  '@grpc/grpc-js@1.13.3':
+    dependencies:
+      '@grpc/proto-loader': 0.7.15
       '@js-sdsl/ordered-map': 4.4.2
 
   '@grpc/proto-loader@0.7.13':
+    dependencies:
+      lodash.camelcase: 4.3.0
+      long: 5.3.0
+      protobufjs: 7.4.0
+      yargs: 17.7.2
+
+  '@grpc/proto-loader@0.7.15':
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.3.0
@@ -11035,6 +11109,11 @@ snapshots:
       - typescript
 
   '@midwayjs/cookies@1.2.0':
+    dependencies:
+      scmp: 2.1.0
+      should-send-same-site-none: 2.0.5
+
+  '@midwayjs/cookies@1.3.0':
     dependencies:
       scmp: 2.1.0
       should-send-same-site-none: 2.0.5
@@ -11461,7 +11540,7 @@ snapshots:
 
   '@opentelemetry/exporter-logs-otlp-grpc@0.57.1(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.12.5
+      '@grpc/grpc-js': 1.13.3
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-grpc-exporter-base': 0.57.1(@opentelemetry/api@1.9.0)
@@ -11490,7 +11569,7 @@ snapshots:
 
   '@opentelemetry/exporter-metrics-otlp-grpc@0.57.1(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.12.5
+      '@grpc/grpc-js': 1.13.3
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/exporter-metrics-otlp-http': 0.57.1(@opentelemetry/api@1.9.0)
@@ -11528,7 +11607,7 @@ snapshots:
 
   '@opentelemetry/exporter-trace-otlp-grpc@0.57.1(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.12.5
+      '@grpc/grpc-js': 1.13.3
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-grpc-exporter-base': 0.57.1(@opentelemetry/api@1.9.0)
@@ -11582,7 +11661,7 @@ snapshots:
 
   '@opentelemetry/otlp-grpc-exporter-base@0.57.1(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.12.5
+      '@grpc/grpc-js': 1.13.3
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-exporter-base': 0.57.1(@opentelemetry/api@1.9.0)
@@ -12067,7 +12146,7 @@ snapshots:
       '@types/node': 22.12.0
     optional: true
 
-  '@types/jsonwebtoken@9.0.8':
+  '@types/jsonwebtoken@9.0.9':
     dependencies:
       '@types/ms': 2.1.0
       '@types/node': 22.12.0
@@ -12511,6 +12590,10 @@ snapshots:
       clean-stack: 2.2.0
       indent-string: 4.0.0
 
+  ajv-draft-04@1.0.0(ajv@8.17.1):
+    optionalDependencies:
+      ajv: 8.17.1
+
   ajv-formats@1.6.1(ajv@7.2.4):
     optionalDependencies:
       ajv: 7.2.4
@@ -12549,7 +12632,7 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  ali-oss@6.22.0:
+  ali-oss@6.23.0:
     dependencies:
       address: 1.2.2
       agentkeepalive: 3.5.3
@@ -12766,7 +12849,7 @@ snapshots:
 
   aws4@1.13.2: {}
 
-  axios@1.7.9:
+  axios@1.8.4:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.2
@@ -13020,7 +13103,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  bullmq@5.39.1:
+  bullmq@5.51.1:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.4.2
@@ -13645,7 +13728,7 @@ snapshots:
       object-assign: 4.1.1
       vary: 1.1.2
 
-  cos-nodejs-sdk-v5@2.14.6:
+  cos-nodejs-sdk-v5@2.14.7:
     dependencies:
       conf: 9.0.2
       fast-xml-parser: 4.2.5
@@ -14153,7 +14236,7 @@ snapshots:
       get-ready: 2.0.1
       globby: 10.0.2
       is-type-of: 1.4.0
-      koa: 2.15.3
+      koa: 2.16.1
       koa-convert: 1.2.0
       node-homedir: 1.1.1
       ready-callback: 2.1.0
@@ -14299,7 +14382,7 @@ snapshots:
       koa-compose: 4.1.0
       matcher: 1.1.1
       methods: 1.1.2
-      nanoid: 3.3.8
+      nanoid: 3.3.11
       platform: 1.3.6
       statuses: 1.5.0
       type-is: 1.6.18
@@ -16763,7 +16846,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  koa@2.15.3:
+  koa@2.16.1:
     dependencies:
       accepts: 1.3.8
       cache-content-type: 1.0.1
@@ -16795,7 +16878,7 @@ snapshots:
     dependencies:
       package-json: 6.5.0
 
-  leoric@2.13.4(mysql2@3.12.0)(sqlite3@5.1.7):
+  leoric@2.13.5(mysql2@3.12.0)(sqlite3@5.1.7):
     dependencies:
       dayjs: 1.11.13
       debug: 3.2.7
@@ -17542,7 +17625,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mqtt@5.10.3:
+  mqtt@5.10.4:
     dependencies:
       '@types/readable-stream': 4.0.18
       '@types/ws': 8.5.14
@@ -17668,7 +17751,7 @@ snapshots:
     dependencies:
       lru-cache: 7.18.3
 
-  nanoid@3.3.8: {}
+  nanoid@3.3.11: {}
 
   nanomatch@1.2.13:
     dependencies:
@@ -17992,7 +18075,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.46
       '@zkochan/js-yaml': 0.0.6
-      axios: 1.7.9
+      axios: 1.8.4
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
@@ -18043,7 +18126,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.46
       '@zkochan/js-yaml': 0.0.6
-      axios: 1.7.9
+      axios: 1.8.4
       chalk: 4.1.0
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
@@ -18154,6 +18237,8 @@ snapshots:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
+
+  openapi-types@12.1.3: {}
 
   opentype.js@0.7.3:
     dependencies:
@@ -18499,13 +18584,13 @@ snapshots:
 
   postcss@8.4.31:
     dependencies:
-      nanoid: 3.3.8
+      nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
   postcss@8.5.2:
     dependencies:
-      nanoid: 3.3.8
+      nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
