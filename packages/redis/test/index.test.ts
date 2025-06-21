@@ -82,7 +82,7 @@ describe('/test/index.test.ts', () => {
   it('should fail when unable to connect redis', async () => {
     await expect(
       createLightApp(join(__dirname, './fixtures/base-app-bad-client'))
-    ).rejects.toThrow('Command timed out');
+    ).rejects.toThrow('connect ETIMEDOUT');
   });
 
   it('should throw error when instance not found', async () => {
