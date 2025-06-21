@@ -1,5 +1,5 @@
 import { createLightApp, close } from '@midwayjs/mock';
-import { App, sleep, Inject, FORMAT, MidwayCommonError } from '@midwayjs/core';
+import { MainApp, sleep, Inject, FORMAT, MidwayCommonError } from '@midwayjs/core';
 import * as bullmq from '../src';
 import { Processor, Application, IProcessor, Context } from '../src';
 import { JobsOptions, Job } from 'bullmq';
@@ -13,7 +13,7 @@ describe(`/test/index.test.ts`, () => {
       }
     })
     class HelloTask implements IProcessor {
-      @App()
+      @MainApp()
       app: Application;
 
       async execute() {
@@ -30,7 +30,7 @@ describe(`/test/index.test.ts`, () => {
 
     @Processor('test')
     class QueueTask1 {
-      @App()
+      @MainApp()
       app: Application;
 
       @Inject()
@@ -100,7 +100,7 @@ describe(`/test/index.test.ts`, () => {
 
     @Processor('retryTask')
     class RetryTask implements IProcessor {
-      @App()
+      @MainApp()
       app: Application;
 
       async execute(params: any): Promise<void> {
@@ -173,9 +173,9 @@ describe(`/test/index.test.ts`, () => {
     const priorityQueue = bullFramework.getQueue('priorityTask');
 
     // 添加不同优先级的任务
-    await priorityQueue?.runJob({ priority: 3 }, { priority: 3, delay: 100 }); // 低优先级
-    await priorityQueue?.runJob({ priority: 2 }, { priority: 2, delay: 100 }); // 中优先级
-    await priorityQueue?.runJob({ priority: 1 }, { priority: 1, delay: 100 }); // 高优先级
+    await priorityQueue?.runJob({ priority: 3 }, { priority: 3, delay: 1000 }); // 低优先级
+    await priorityQueue?.runJob({ priority: 2 }, { priority: 2, delay: 1000 }); // 中优先级
+    await priorityQueue?.runJob({ priority: 1 }, { priority: 1, delay: 1000 }); // 高优先级
 
     await sleep(2000);
 
@@ -191,7 +191,7 @@ describe(`/test/index.test.ts`, () => {
 
     @Processor('progressTask')
     class ProgressTask implements IProcessor {
-      @App()
+      @MainApp()
       app: Application;
 
       @Inject()

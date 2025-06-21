@@ -1,83 +1,76 @@
-import * as Consul from 'consul';
-import type { ConsulOptions } from 'consul';
-import RegisterOptions = Consul.Agent.Service.RegisterOptions;
+import { ServiceDiscoveryOptions, DefaultInstanceMetadata } from '@midwayjs/core';
+import Consul = require('consul');
 
-export interface IServiceBalancer {
-  /**
-   * 根据服务名称选择实例
-   * @param serviceName 注册的服务名称
-   * @param passingOnly 只返回通过健康检查的实例，默认为 true
-   */
-  select(serviceName: string, passingOnly?: boolean): any | never;
+export type ConsulOptions = ConstructorParameters<typeof Consul>[0];
+export type ConsulClient = InstanceType<typeof Consul>;
+
+type GetRegisterFn<T> = T extends { register(options: any): any } ? T['register'] : never;
+type GetFirstParam<T> = T extends { (options: infer P, ...args: any[]): any; (name: string): any } ? P : never;
+export type RegisterOptions = GetFirstParam<GetRegisterFn<ConsulClient['agent']['service']>>;
+/**
+ * From ConsulClient['health']['service']
+ */
+export type GetHealthServiceOptions = {
+  service: string;
+  dc?: string;
+  near?: string;
+  tag?: string;
+  passing?: boolean;
+  filter?: string;
+  peer?: string;
+  ns?: string;
 }
 
-export interface IConsulBalancer {
-  /**
-   * 根绝策略返回负载均衡器
-   * @param strategy 负载均衡策略
-   */
-  getServiceBalancer(strategy?: string): IServiceBalancer;
+export interface ConsulInstanceMetadata extends RegisterOptions {}
+
+export interface ConsulServiceDiscoveryOptions extends ServiceDiscoveryOptions<ConsulHealthItem> {
+  serviceOptions?: ConsulInstanceMetadata | ((meta: DefaultInstanceMetadata ) => ConsulInstanceMetadata);
+  autoHealthCheck?: boolean;
 }
 
-export interface IConsulProviderInfoOptions extends ConsulOptions {
-  /**
-   * 本服务是否注册到 consul 服务器，默认是 NO 不会执行注册
-   */
-  register?: boolean;
-
-  /**
-   * 应用正常关闭的额时候自动反注册，默认是 YES 会执行反注册
-   * 如果 register=false 改参数无效
-   */
-  deregister?: boolean;
-
-  /**
-   * 调用服务负载均衡的策略(default、random)，默认是 random 随机
-   */
-  strategy?: string;
-}
-
-export interface IConsulRegisterInfoOptions extends RegisterOptions {
-  /**
-   * 注册 id 标识，默认是 name:address:port 的组合
-   */
-  id?: string;
-
-  /**
-   * 服务名称
-   */
-  name: string;
-
-  /**
-   * 服务地址
-   */
-  address: string;
-
-  /**
-   * 服务端口
-   */
-  port: number;
-
-  /**
-   * 服务标签
-   */
-  tags?: string[];
-
-  /**
-   * 健康检查配置，组件默认会配置一个(检查间隔是3秒)，如果指定 check=false 则关闭 consul 健康检查
-   */
-  check?: {
-    tcp?: string;
-    http?: string;
-    script?: string;
-    interval?: string;
-    ttl?: string;
-    notes?: string;
-    status?: string;
+export interface ConsulHealthItem {
+  Node: {
+    ID: string;
+    Node: string;
+    Address: string;
+    Datacenter: string;
+    TaggedAddresses: Record<string, any>;
+    Meta: Record<string, any>;
+    CreateIndex: number;
+    ModifyIndex: number;
   };
-}
-
-export interface ConsulConfig {
-  provider?: IConsulProviderInfoOptions;
-  service?: IConsulRegisterInfoOptions;
+  Service: {
+    ID: string;
+    Service: string;
+    Tags: string[];
+    Address: string;
+    TaggedAddresses: Record<string, any>;
+    Meta: Record<string, any>;
+    Port: number;
+    Weights: Record<string, any>;
+    EnableTagOverride: boolean;
+    Proxy: Record<string, any>;
+    Connect: Record<string, any>;
+    PeerName: string;
+    CreateIndex: number;
+    ModifyIndex: number;
+  };
+  Checks: Array<{
+    Node: string;
+    CheckID: string;
+    Name: string;
+    Status: 'passing' | 'warning' | 'critical';
+    Notes: string;
+    Output: string;
+    ServiceID: string;
+    ServiceName: string;
+    ServiceTags: string[];
+    Type: string;
+    Interval: string;
+    Timeout: string;
+    ExposedPort: number;
+    Definition: Record<string, any>;
+    CreateIndex: number;
+    ModifyIndex: number;
+  }>;
 }

@@ -1050,7 +1050,6 @@ export type IMidwayApplication<
 export type ModuleLoadType = 'commonjs' | 'esm';
 
 export interface IMidwayBootstrapOptions {
-  [customPropertyKey: string]: any;
   baseDir?: string;
   appDir?: string;
   applicationContext?: IMidwayGlobalContainer;
@@ -1083,7 +1082,7 @@ export interface IMidwayFramework<
   configurationOptions: CONFIG;
   configure(options?: CONFIG): CONFIG;
   isEnable(): boolean;
-  initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
+  initialize(options: IMidwayBootstrapOptions): Promise<void>;
   run(): Promise<void>;
   stop(): Promise<void>;
   getApplication(): APP;
@@ -1235,3 +1234,151 @@ export interface InjectionConfigurationOptions {
 
 export type FunctionalConfigurationOptions = InjectionConfigurationOptions & ILifeCycle;
 
+/**
+ * 负载均衡策略类型
+ */
+export const LoadBalancerType = {
+  RANDOM: 'random',
+  ROUND_ROBIN: 'roundRobin',
+} as const;
+
+export type LoadBalancerType = typeof LoadBalancerType[keyof typeof LoadBalancerType];
+
+export const ServiceDiscoveryHealthCheckType = {
+  SELF: 'self',
+  TTL: 'ttl',
+  HTTP: 'http',
+  TCP: 'tcp',
+  CUSTOM: 'custom'
+} as const;
+
+export type ServiceDiscoveryHealthCheckType = typeof ServiceDiscoveryHealthCheckType[keyof typeof ServiceDiscoveryHealthCheckType];
+
+/**
+ * 基础健康检查配置
+ */
+export interface BaseServiceDiscoveryHealthCheckOptions {
+  /**
+   * 检查间隔（毫秒）
+   */
+  interval?: number;
+  /**
+   * 检查超时时间（毫秒）
+   */
+  timeout?: number;
+  /**
+   * 最大重试次数
+   */
+  maxRetries?: number;
+  /**
+   * 重试间隔（毫秒）
+   */
+  retryInterval?: number;
+}
+
+/**
+ * TTL 健康检查配置
+ */
+export interface TTLServiceDiscoveryHealthCheckOptions extends BaseServiceDiscoveryHealthCheckOptions {
+  /**
+   * TTL 时间（秒）
+   */
+  ttl: number;
+}
+
+/**
+ * HTTP 健康检查配置
+ */
+export interface HTTPServiceDiscoveryHealthCheckOptions extends BaseServiceDiscoveryHealthCheckOptions {
+  /**
+   * 健康检查 URL
+   */
+  url: string;
+  /**
+   * HTTP 方法
+   */
+  method?: string;
+  /**
+   * HTTP 请求头
+   */
+  headers?: Record<string, string>;
+  /**
+   * 期望的 HTTP 状态码
+   */
+  expectedStatus?: number;
+}
+
+/**
+ * TCP 健康检查配置
+ */
+export interface TCPServiceDiscoveryHealthCheckOptions extends BaseServiceDiscoveryHealthCheckOptions {
+  /**
+   * 主机地址
+   */
+  host: string;
+  /**
+   * 端口号
+   */
+  port: number;
+}
+
+/**
+ * 健康检查配置联合类型
+ */
+export type ServiceDiscoveryHealthCheckOptions = TTLServiceDiscoveryHealthCheckOptions | HTTPServiceDiscoveryHealthCheckOptions | TCPServiceDiscoveryHealthCheckOptions;
+
+export interface ServiceDiscoveryBaseInstance {}
+
+export interface DefaultInstanceMetadata {
+  id: string;
+  serviceName: string;
+  host: string;
+  port: number;
+  metadata: Record<string, any>;
+}
+
+/**
+ * 健康检查结果
+ */
+export interface ServiceDiscoveryHealthCheckResult {
+  status: 'passing' | 'warning' | 'critical' | 'unknown';
+  message?: string;
+  timestamp: number;
+}
+
+export interface IServiceDiscoveryHealthCheck<ServiceInstance> {
+  check(instance: ServiceInstance): Promise<ServiceDiscoveryHealthCheckResult>;
+}
+
+export interface ServiceDiscoveryOptions<ServiceInstance, serviceOptions = Record<string, any>> {
+  serviceDiscoveryClient?: string;
+  serviceOptions?: serviceOptions;
+  loadBalancer?: LoadBalancerType | ILoadBalancer<ServiceInstance>;
+}
+
+/**
+ * 负载均衡策略接口
+ */
+export interface ILoadBalancer<ServiceInstance> {
+  /**
+   * 从服务实例列表中选择一个实例
+   * @param instances 服务实例列表
+   */
+  select(instances: ServiceInstance[]): ServiceInstance;
+}
+
+
+export interface IServiceDiscoveryClient<ServiceInstance> {
+  /**
+   * 注册服务实例
+   */
+  register(instance: unknown): Promise<void>;
+  /**
+   * 上线服务实例
+   */
+  online(): Promise<void>;
+  /**
+   * 下线服务实例
+   */
+  offline(): Promise<void>;
+}

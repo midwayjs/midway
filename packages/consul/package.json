@@ -13,12 +13,12 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "@types/consul": "0.40.3",
     "@types/sinon": "17.0.3",
     "nock": "13.5.6"
   },
   "dependencies": {
-    "consul": "1.2.0"
+    "consul": "2.0.1",
+    "ms": "2.1.3"
   },
   "keywords": [
     "consul"

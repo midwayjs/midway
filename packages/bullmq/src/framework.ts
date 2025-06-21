@@ -2,8 +2,8 @@ import {
   BaseFramework,
   IMidwayBootstrapOptions,
   Framework,
-  getClassMetadata,
-  listModule,
+  DecoratorManager,
+  MetadataManager,
   Utils,
   MidwayInvokeForbiddenError,
   Logger,
@@ -155,9 +155,12 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
   }
 
   async run() {
-    const processorModules = listModule(BULLMQ_PROCESSOR_KEY);
+    const processorModules = DecoratorManager.listModule(BULLMQ_PROCESSOR_KEY);
     for (const mod of processorModules) {
-      const options = getClassMetadata(BULLMQ_PROCESSOR_KEY, mod) as {
+      const options = MetadataManager.getMetadata(
+        BULLMQ_PROCESSOR_KEY,
+        mod
+      ) as {
         queueName: string;
         jobOptions?: JobsOptions;
         workerOptions?: WorkerOptions;

@@ -7,6 +7,7 @@ import {
 import { dirname, join } from 'path';
 import { Provide, Inject, Init, Scope } from '../decorator';
 import { existsSync, readFileSync } from 'fs';
+import { NetworkUtils } from '../util/network';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -62,5 +63,17 @@ export class MidwayInformationService implements IInformationService {
   getRoot(): string {
     const isDevelopmentEnv = isDevelopmentEnvironment(getCurrentEnvironment());
     return isDevelopmentEnv ? this.getAppDir() : this.getHome();
+  }
+
+  getHostname(): string {
+    return NetworkUtils.getHostname();
+  }
+
+  getIpv4Address(): string {
+    return NetworkUtils.getIpv4Address();
+  }
+
+  getIpv6Address(): string {
+    return NetworkUtils.getIpv6Address();
   }
 }

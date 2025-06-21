@@ -1,12 +1,16 @@
 import { Destroy, Init } from '../decorator';
 
-export abstract class DataListener<T> {
-  private innerData: T;
+export abstract class DataListener<T, U = T> {
+  protected innerData: T;
+  private isReady = false;
 
   @Init()
   protected async init() {
-    this.innerData = await this.initData();
-    await this.onData(this.setData.bind(this));
+    if (!this.isReady) {
+      this.innerData = await this.initData();
+      await this.onData(this.setData.bind(this));
+      this.isReady = true;
+    }
   }
 
   abstract initData(): T | Promise<T>;
@@ -16,8 +20,12 @@ export abstract class DataListener<T> {
     this.innerData = data;
   }
 
-  public getData(): T {
-    return this.innerData;
+  public getData(): U {
+    return this.transformData(this.innerData);
+  }
+
+  protected transformData(data: T): U {
+    return data as unknown as U;
   }
 
   @Destroy()
