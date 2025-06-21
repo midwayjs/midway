@@ -173,9 +173,9 @@ describe(`/test/index.test.ts`, () => {
     const priorityQueue = bullFramework.getQueue('priorityTask');
 
     // 添加不同优先级的任务
-    await priorityQueue?.runJob({ priority: 3 }, { priority: 3, delay: 100 }); // 低优先级
-    await priorityQueue?.runJob({ priority: 2 }, { priority: 2, delay: 100 }); // 中优先级
-    await priorityQueue?.runJob({ priority: 1 }, { priority: 1, delay: 100 }); // 高优先级
+    await priorityQueue?.runJob({ priority: 3 }, { priority: 3, delay: 1000 }); // 低优先级
+    await priorityQueue?.runJob({ priority: 2 }, { priority: 2, delay: 1000 }); // 中优先级
+    await priorityQueue?.runJob({ priority: 1 }, { priority: 1, delay: 1000 }); // 高优先级
 
     await sleep(2000);
 
