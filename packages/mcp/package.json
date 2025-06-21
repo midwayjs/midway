@@ -27,7 +27,7 @@
     "@midwayjs/mock": "workspace:^"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.8.0"
+    "@modelcontextprotocol/sdk": "1.13.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
