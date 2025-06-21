@@ -1,5 +1,5 @@
 import { createLightApp, close } from '@midwayjs/mock';
-import { App, sleep, Inject, FORMAT, MidwayCommonError } from '@midwayjs/core';
+import { MainApp, sleep, Inject, FORMAT, MidwayCommonError } from '@midwayjs/core';
 import * as bullmq from '../src';
 import { Processor, Application, IProcessor, Context } from '../src';
 import { JobsOptions, Job } from 'bullmq';
@@ -13,7 +13,7 @@ describe(`/test/index.test.ts`, () => {
       }
     })
     class HelloTask implements IProcessor {
-      @App()
+      @MainApp()
       app: Application;
 
       async execute() {
@@ -30,7 +30,7 @@ describe(`/test/index.test.ts`, () => {
 
     @Processor('test')
     class QueueTask1 {
-      @App()
+      @MainApp()
       app: Application;
 
       @Inject()
@@ -100,7 +100,7 @@ describe(`/test/index.test.ts`, () => {
 
     @Processor('retryTask')
     class RetryTask implements IProcessor {
-      @App()
+      @MainApp()
       app: Application;
 
       async execute(params: any): Promise<void> {
@@ -191,7 +191,7 @@ describe(`/test/index.test.ts`, () => {
 
     @Processor('progressTask')
     class ProgressTask implements IProcessor {
-      @App()
+      @MainApp()
       app: Application;
 
       @Inject()

@@ -38,12 +38,13 @@ export class MidwayApplicationManager {
     frameworkNameOrNamespace?: Array<string>
   ): IMidwayApplication[] {
     if (!frameworkNameOrNamespace) {
-      return Array.from(this.globalFrameworkMap.values()).map(framework => {
-        return framework.getApplication();
-      })
-      .filter(app => {
-        return !!app;
-      });
+      return Array.from(this.globalFrameworkMap.values())
+        .map(framework => {
+          return framework.getApplication();
+        })
+        .filter(app => {
+          return !!app;
+        });
     } else {
       return frameworkNameOrNamespace
         .map(namespace => {
