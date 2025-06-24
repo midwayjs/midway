@@ -152,6 +152,7 @@ export class MidwayWSFramework extends BaseFramework<
         // create request context
         this.app.createAnonymousContext(socket);
         socket.requestContext.registerObject('socket', socket);
+        socket.request = request;
         socket.app = this.app;
 
         // run connection middleware
