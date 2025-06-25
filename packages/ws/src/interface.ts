@@ -7,6 +7,7 @@ import {
   IMidwayContext,
   NextFunction as BaseNextFunction
 } from '@midwayjs/core';
+import type { IncomingMessage } from 'http';
 
 export type IMidwayWSApplication = IMidwayApplication<IMidwayWSContext, {
   useConnectionMiddleware: (
@@ -31,6 +32,7 @@ export type IMidwayWSConfigurationOptions = {
 export type IMidwayWSContext = IMidwayContext<WebSocket & {
   app: IMidwayWSApplication;
   isAlive: boolean;
+  request: IncomingMessage
 }>;
 
 export type Application = IMidwayWSApplication;
