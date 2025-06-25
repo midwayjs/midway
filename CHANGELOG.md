@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.8 (2025-06-25)
+
+#### :nail_care: Polish
+* `ws`
+  * [#4354](https://github.com/midwayjs/midway/pull/4354) feat: add request to ws context ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.7 (2025-06-18)
 
 #### :bug: Bug Fix
