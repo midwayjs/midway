@@ -59,6 +59,10 @@ main() {
     check_service "Kafka" "nc -z localhost 9092"
     check_service "etcd-port" "nc -z localhost 2379"
 
+    # Consul 检查
+    check_service "Consul-port" "nc -z localhost 8500"
+    check_service "Consul" "curl -sf http://localhost:8500/v1/status/leader | grep -v '""'"
+
     # 检查 etcd 健康，失败时打印日志
     if ! check_service "etcd" "curl -sf http://localhost:2379/health | grep -q '\"health\":\"true\"'"; then
         log_error "etcd 健康检查失败，打印 etcd 容器日志："

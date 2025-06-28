@@ -88,3 +88,15 @@ services:
       - "8883:8883"
     volumes:
       - ./packages/mqtt/scripts/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  consul:
+    image: hashicorp/consul:1.16.2
+    command: agent -dev -client=0.0.0.0
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
