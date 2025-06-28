@@ -30,7 +30,7 @@ check_service() {
         fi
     done
     log_error "$service_name 服务在指定时间内未启动"
-    exit 1
+    return 1
 }
 
 get_container_id() {
