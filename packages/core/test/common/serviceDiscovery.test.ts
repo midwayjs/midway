@@ -170,7 +170,6 @@ describe('/test/common/serviceDiscovery.test.ts', () => {
 
     it('should register, online, offline, deregister and get instances', async () => {
       const serviceDiscovery = new RealisticConsulDiscovery();
-      await serviceDiscovery.init();
 
       // 创建 client 并注册
       const client = serviceDiscovery.createClient();
@@ -229,7 +228,6 @@ describe('/test/common/serviceDiscovery.test.ts', () => {
 
     it('should test get instance with load balance', async () => {
       const serviceDiscovery = new RealisticConsulDiscovery();
-      await serviceDiscovery.init();
 
       // 注册 5 个实例
       mockClientRealistic.register({ id: 'a', name: 'svc', meta: { v: 1 } });

@@ -1,4 +1,4 @@
-import { Destroy, Init } from '../../decorator';
+import { Destroy } from '../../decorator';
 import {
   IServiceDiscoveryClient,
   ServiceDiscoveryOptions,
@@ -108,18 +108,6 @@ export abstract class ServiceDiscovery<
 
   protected loadBalancer: ILoadBalancer<QueryServiceInstance>;
 
-  @Init()
-  async init() {
-    // set default load balancer
-    if (this.getDefaultServiceDiscoveryOptions().loadBalancer) {
-      this.setLoadBalancer(
-        this.getDefaultServiceDiscoveryOptions().loadBalancer
-      );
-    } else {
-      this.setLoadBalancer(LoadBalancerType.ROUND_ROBIN);
-    }
-  }
-
   public createClient(
     options?: ServiceDiscoveryOptions<QueryServiceInstance>
   ): ServiceDiscoveryClient<
@@ -166,6 +154,12 @@ export abstract class ServiceDiscovery<
     options: GetInstanceOptions
   ): Promise<QueryServiceInstance> {
     const instances = await this.getInstances(options);
+    if (!this.loadBalancer) {
+      this.setLoadBalancer(
+        this.getDefaultServiceDiscoveryOptions().loadBalancer ??
+          LoadBalancerType.ROUND_ROBIN
+      );
+    }
     return this.loadBalancer.select(instances);
   }
 
