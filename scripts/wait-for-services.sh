@@ -61,7 +61,19 @@ main() {
 
     # Consul 检查
     check_service "Consul-port" "nc -z localhost 8500"
-    check_service "Consul" "curl -sf http://localhost:8500/v1/status/leader | grep -v '""'"
+    if ! check_service "Consul" "curl -sf http://localhost:8500/v1/status/leader | grep -v '""'" 180 2; then
+        log_error "Consul 健康检查失败，打印 Consul 容器日志："
+        docker compose -f docker-compose.ci.yml logs consul || true
+        log_error "Consul 健康接口返回内容："
+        curl -v http://localhost:8500/v1/status/leader || true
+        log_error "当前 docker ps 输出："
+        docker ps -a || true
+        log_error "当前 docker compose ps 输出："
+        docker compose -f docker-compose.ci.yml ps || true
+        log_error "当前 8500 端口监听情况："
+        ss -lntup | grep 8500 || netstat -lntup | grep 8500 || true
+        exit 1
+    fi
 
     # 检查 etcd 健康，失败时打印日志
     if ! check_service "etcd" "curl -sf http://localhost:2379/health | grep -q '\"health\":\"true\"'"; then
