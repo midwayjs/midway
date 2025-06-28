@@ -156,7 +156,7 @@ export abstract class ServiceDiscovery<
     const instances = await this.getInstances(options);
     if (!this.loadBalancer) {
       this.setLoadBalancer(
-        this.getDefaultServiceDiscoveryOptions().loadBalancer ??
+        this.getDefaultServiceDiscoveryOptions()?.loadBalancer ??
           LoadBalancerType.ROUND_ROBIN
       );
     }
