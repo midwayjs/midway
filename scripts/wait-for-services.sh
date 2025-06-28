@@ -57,7 +57,17 @@ main() {
     check_service "RabbitMQ" "curl -u guest:guest -f http://localhost:15672/api/overview"
     check_service "Zookeeper" "echo 'mntr' | nc -w 2 -q 2 localhost 2181 | grep -q 'zk_version'"
     check_service "Kafka" "nc -z localhost 9092"
-    check_service "etcd" "curl -sf http://localhost:2379/health | grep -q '\"health\":true'"
+    check_service "etcd-port" "nc -z localhost 2379"
+
+    # 检查 etcd 健康，失败时打印日志
+    if ! check_service "etcd" "curl -sf http://localhost:2379/health | grep -q '\"health\":true'"; then
+        log_error "etcd 健康检查失败，打印 etcd 容器日志："
+        docker logs Etcd-server || true
+        log_error "etcd 健康接口返回内容："
+        curl -v http://localhost:2379/health || true
+        exit 1
+    fi
+
     check_service "MongoDB" "nc -z localhost 27017"
     check_service "Mosquitto" "nc -z localhost 1883"
 
