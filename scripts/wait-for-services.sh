@@ -60,7 +60,7 @@ main() {
     check_service "etcd-port" "nc -z localhost 2379"
 
     # 检查 etcd 健康，失败时打印日志
-    if ! check_service "etcd" "curl -sf http://localhost:2379/health | grep -q '\"health\":true'"; then
+    if ! check_service "etcd" "curl -sf http://localhost:2379/health | grep -q '\"health\":\"true\"'"; then
         log_error "etcd 健康检查失败，打印 etcd 容器日志："
         docker logs Etcd-server || true
         log_error "etcd 健康接口返回内容："
