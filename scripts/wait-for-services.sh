@@ -61,7 +61,7 @@ main() {
 
     # Consul 检查
     check_service "Consul-port" "nc -z localhost 8500"
-    if ! check_service "Consul" "curl -sf http://localhost:8500/v1/status/leader | grep -v '""'" 180 2; then
+    if ! check_service "Consul" "curl -sf http://localhost:8500/v1/status/leader | grep -qv '^""$'" 180 2; then
         log_error "Consul 健康检查失败，打印 Consul 容器日志："
         docker compose -f docker-compose.ci.yml logs consul || true
         log_error "Consul 健康接口返回内容："
