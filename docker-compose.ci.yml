@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   redis:
-    image: redis
+    image: redis:7.2.4
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
