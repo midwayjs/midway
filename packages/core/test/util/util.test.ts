@@ -13,7 +13,7 @@ import {
   loadModule,
   sleep,
 } from '../../src/util';
-import { PathFileUtil } from '../../src';
+import { PathFileUtils } from '../../src';
 import * as EventEmitter from 'events';
 import { fork } from 'child_process';
 
@@ -71,21 +71,21 @@ describe('/test/util/util.test.ts', () => {
 
 describe('/test/pathFileUtil.test.ts', () => {
   it('should test is path', () => {
-    assert.ok(PathFileUtil.isPath('@ali/abc') === false);
-    assert.ok(PathFileUtil.isPath('def') === false);
-    assert.ok(PathFileUtil.isPath('bbb-ccc') === false);
-    assert.ok(PathFileUtil.isPath('./hello') === true);
-    assert.ok(PathFileUtil.isPath('../hello') === true);
-    assert.ok(PathFileUtil.isPath('../../bbb') === true);
-    assert.ok(PathFileUtil.isPath('/home/admin/logs') === true);
-    assert.ok(PathFileUtil.isPath('C:\\Program Files') === true);
+    assert.ok(PathFileUtils.isPath('@ali/abc') === false);
+    assert.ok(PathFileUtils.isPath('def') === false);
+    assert.ok(PathFileUtils.isPath('bbb-ccc') === false);
+    assert.ok(PathFileUtils.isPath('./hello') === true);
+    assert.ok(PathFileUtils.isPath('../hello') === true);
+    assert.ok(PathFileUtils.isPath('../../bbb') === true);
+    assert.ok(PathFileUtils.isPath('/home/admin/logs') === true);
+    assert.ok(PathFileUtils.isPath('C:\\Program Files') === true);
   });
 
   it('should isPathEqual be ok', () => {
-    assert.ok(PathFileUtil.isPathEqual(null, null) === false);
-    assert.ok(PathFileUtil.isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', null) === false);
-    assert.ok(PathFileUtil.isPathEqual(null, '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration') === false);
-    assert.ok(PathFileUtil.isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration'));
+    assert.ok(PathFileUtils.isPathEqual(null, null) === false);
+    assert.ok(PathFileUtils.isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', null) === false);
+    assert.ok(PathFileUtils.isPathEqual(null, '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration') === false);
+    assert.ok(PathFileUtils.isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration'));
   });
 
   it('should test join url path', function () {

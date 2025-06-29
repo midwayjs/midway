@@ -1,4 +1,4 @@
-import { Configuration } from '@midwayjs/core';
+import { Configuration, IMidwayContainer } from '@midwayjs/core';
 import { ETCDServiceFactory } from './manager';
 import * as defaultConfig from './config.default';
 
@@ -13,5 +13,10 @@ import * as defaultConfig from './config.default';
 export class ETCDConfiguration {
   async onReady(container) {
     await container.getAsync(ETCDServiceFactory);
+  }
+
+  async onStop(container: IMidwayContainer): Promise<void> {
+    const factory = await container.getAsync(ETCDServiceFactory);
+    await factory.stop();
   }
 }

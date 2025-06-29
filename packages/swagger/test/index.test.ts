@@ -3,6 +3,7 @@ import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 import { MidwayWebRouterService } from '@midwayjs/core';
 import * as SwaggerParser from "@apidevtools/swagger-parser";
+import * as swagger from '../src';
 
 describe('/test/index.test.ts', () => {
   describe('test swagger', () => {
@@ -117,7 +118,7 @@ describe('/test/index.test.ts', () => {
   describe('test auth type with security', () => {
     it('should test basic auth', async () => {
       const app = await createLightApp({
-        imports: [koa],
+        imports: [koa, swagger],
         globalConfig: {
           keys: 'testKeys',
           swagger: {
@@ -139,6 +140,7 @@ describe('/test/index.test.ts', () => {
       });
 
       const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+
       await SwaggerParser.validate(result.body, {
         parse: {
           json: true
@@ -151,7 +153,7 @@ describe('/test/index.test.ts', () => {
 
     it('should test bearer auth', async () => {
       const app = await createLightApp({
-        imports: [koa],
+        imports: [koa, swagger],
         globalConfig: {
           keys: 'testKeys',
           swagger: {
@@ -185,7 +187,7 @@ describe('/test/index.test.ts', () => {
 
     it('should test apiKey auth', async () => {
       const app = await createLightApp({
-        imports: [koa],
+        imports: [koa, swagger],
         globalConfig: {
           keys: 'testKeys',
           swagger: {
@@ -220,7 +222,7 @@ describe('/test/index.test.ts', () => {
 
     it('should test cookie auth', async () => {
       const app = await createLightApp({
-        imports: [koa],
+        imports: [koa, swagger],
         globalConfig: {
           keys: 'testKeys',
           swagger: {
@@ -261,7 +263,7 @@ describe('/test/index.test.ts', () => {
 
     it('should test oauth2 auth', async () => {
       const app = await createLightApp({
-        imports: [koa],
+        imports: [koa, swagger],
         globalConfig: {
           keys: 'testKeys',
           swagger: {
@@ -317,7 +319,7 @@ describe('/test/index.test.ts', () => {
 
     it('should test custom auth', async () => {
       const app = await createLightApp({
-        imports: [koa],
+        imports: [koa, swagger],
         globalConfig: {
           keys: 'testKeys',
           swagger: {
@@ -353,7 +355,7 @@ describe('/test/index.test.ts', () => {
 
     it('should test addSecurityRequirements config', async () => {
       const app = await createLightApp({
-        imports: [koa],
+        imports: [koa, swagger],
         globalConfig: {
           keys: 'testKeys',
           swagger: {

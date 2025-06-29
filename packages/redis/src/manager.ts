@@ -33,19 +33,19 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
   @Logger('coreLogger')
   protected logger: ILogger;
 
-  protected async createClient(config): Promise<Redis> {
+  protected async createClient(config, name: string): Promise<Redis> {
     let client;
 
     if (config.cluster === true) {
       assert.ok(
         config.nodes && config.nodes.length !== 0,
-        '[midway:redis] cluster nodes configuration is required when use cluster redis'
+        `[midway:redis] client(${name}) cluster nodes configuration is required when use cluster redis`
       );
 
       config.nodes.forEach(client => {
         assert.ok(
           client.host && client.port,
-          `[midway:redis] 'host: ${client.host}', 'port: ${client.port}' are required on config`
+          `[midway:redis] client(${name}) 'host: ${client.host}', 'port: ${client.port}' are required on config`
         );
       });
       client = new Redis.Cluster(config.nodes, config);
@@ -53,38 +53,36 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
     } else if (config.sentinels) {
       assert.ok(
         config.sentinels && config.sentinels.length !== 0,
-        '[midway:redis] sentinels configuration is required when use redis sentinel'
+        `[midway:redis] client(${name}) sentinels configuration is required when use redis sentinel`
       );
 
       config.sentinels.forEach(sentinel => {
         assert.ok(
           sentinel.host && sentinel.port,
-          `[midway:redis] 'host: ${sentinel.host}', 'port: ${sentinel.port}' are required on config`
+          `[midway:redis] client(${name}) 'host: ${sentinel.host}', 'port: ${sentinel.port}' are required on config`
         );
       });
 
       client = new Redis(config);
-      this.logger.info('[midway:redis] sentinel is connecting');
+      this.logger.info(`[midway:redis] client(${name}) sentinel is connecting`);
     } else {
       assert.ok(
         config.host && config.port,
-        `[midway:redis] 'host: ${config.host}', 'port: ${config.port}' are required on config`
+        `[midway:redis] client(${name}) 'host: ${config.host}', 'port: ${config.port}' are required on config`
       );
       client = new Redis(config);
       this.logger.info(
-        '[midway:redis] server is connecting redis://:***@%s:%s',
-        config.host,
-        config.port
+        `[midway:redis] client(${name}) server is connecting redis://:***@${config.host}:${config.port}`
       );
     }
 
     await new Promise<void>((resolve, reject) => {
       client.on('ready', () => {
-        this.logger.info('[midway:redis] client connect success');
+        this.logger.info(`[midway:redis] client(${name}) connect success`);
         resolve();
       });
       client.on('error', err => {
-        this.logger.error('[midway:redis] client error: %s', err);
+        this.logger.error(`[midway:redis] client(${name}) error: ${err}`);
         reject(err);
       });
     });
@@ -96,16 +94,20 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
     return 'redis';
   }
 
-  protected async destroyClient(redisInstance) {
+  protected async destroyClient(redisInstance: Redis, name: string) {
     try {
       if (redisInstance) {
         const canQuit = !['end', 'close'].includes(redisInstance.status);
         if (canQuit) {
           await redisInstance.quit();
+          this.logger.info(`[midway:redis] client(${name}) quit success`);
         }
       }
     } catch (error) {
-      this.logger.error('[midway:redis] Redis quit failed.', error);
+      this.logger.error(
+        `[midway:redis] client(${name}) Redis quit failed.`,
+        error
+      );
     }
   }
 }

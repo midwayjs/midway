@@ -23,7 +23,6 @@ import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
 import {
   ComponentModule,
-  MockAppConfigurationOptions,
   IBootstrapAppStarter,
   MockBootstrapOptions,
 } from './interface';
@@ -112,8 +111,8 @@ function createMockWrapApplicationContext() {
 export async function create<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
-  appDir: string | MockAppConfigurationOptions,
-  options: MockAppConfigurationOptions = {}
+  appDir: string | MockBootstrapOptions,
+  options: MockBootstrapOptions = {}
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
 
@@ -250,8 +249,8 @@ export async function create<
 export async function createApp<
   T extends IMidwayFramework<any, any, any, any, any>
 >(
-  baseDir: string | MockAppConfigurationOptions,
-  options?: MockAppConfigurationOptions
+  baseDir: string | MockBootstrapOptions,
+  options?: MockBootstrapOptions
 ): Promise<ReturnType<T['getApplication']>> {
   const framework: T = await create<T>(baseDir, options);
   return framework.getApplication();
@@ -300,8 +299,8 @@ export async function createFunctionApp<
   T extends IMidwayFramework<any, any, any, any, any>,
   Y = ReturnType<T['getApplication']>
 >(
-  baseDir?: string | MockAppConfigurationOptions,
-  options: MockAppConfigurationOptions = {},
+  baseDir?: string | MockBootstrapOptions,
+  options: MockBootstrapOptions = {},
   customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
   process.env.MIDWAY_TS_MODE = process.env.MIDWAY_TS_MODE ?? 'true';
@@ -638,8 +637,8 @@ class BootstrapAppStarter implements IBootstrapAppStarter {
  * @param options
  */
 export async function createLightApp(
-  baseDirOrOptions: string | MockAppConfigurationOptions,
-  options: MockAppConfigurationOptions = {}
+  baseDirOrOptions: string | MockBootstrapOptions,
+  options: MockBootstrapOptions = {}
 ): Promise<IMidwayApplication> {
   if (baseDirOrOptions && typeof baseDirOrOptions === 'object') {
     options = baseDirOrOptions;

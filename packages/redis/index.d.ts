@@ -1,4 +1,4 @@
-import { RedisConfigOptions } from './dist';
+import { MidwayRedisConfigOptions } from './dist';
 export * from './dist/index';
 
 // Single Redis
@@ -48,6 +48,6 @@ export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    redis?: ServiceFactoryConfigOption<RedisConfigOptions>;
+    redis?: MidwayRedisConfigOptions;
   }
 }

@@ -74,13 +74,16 @@ export * from './util/pathToRegexp';
 export * from './util/httpclient';
 export { retryWithAsync, retryWith } from './util/retry';
 export { Types } from './util/types';
-export { PathFileUtil } from './util/pathFileUtil';
+export { PathFileUtils } from './util/pathFileUtil';
 export { FileUtils } from './util/fs';
 export { FORMAT } from './util/format';
+export { NetworkUtils } from './util/network';
 export { ServerResponse, HttpServerResponse } from './response/index';
 export { TypedResourceManager } from './common/typedResourceManager';
 export { MidwayPerformanceManager } from './common/performanceManager';
 export { DynamicMidwayContainer } from './context/dynamicContainer';
+export * from './common/serviceDiscovery/serviceDiscovery';
+export * from './common/serviceDiscovery/loadBalancer';
 
 export * from './decorator/metadataManager';
 export * from './legacy';

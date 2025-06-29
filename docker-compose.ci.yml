@@ -1,7 +1,6 @@
-version: "3.9"
 services:
   redis:
-    image: redis
+    image: redis:7.2.4
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -51,11 +50,27 @@ services:
       - zookeeper
 
   etcd:
-    image: bitnami/etcd
-    environment:
-      ALLOW_NONE_AUTHENTICATION: "yes"
-      ETCD_ADVERTISE_CLIENT_URLS: http://etcd-server:2379
-    container_name: Etcd-server
+    image: gcr.io/etcd-development/etcd:v3.5.12
+    command:
+      - /usr/local/bin/etcd
+      - --name
+      - s1
+      - --data-dir
+      - /etcd-data
+      - --listen-client-urls
+      - http://0.0.0.0:2379
+      - --advertise-client-urls
+      - http://0.0.0.0:2379
+      - --listen-peer-urls
+      - http://0.0.0.0:2380
+      - --initial-advertise-peer-urls
+      - http://0.0.0.0:2380
+      - --initial-cluster
+      - s1=http://0.0.0.0:2380
+      - --initial-cluster-token
+      - tkn
+      - --initial-cluster-state
+      - new
     ports:
       - "2379:2379"
       - "2380:2380"
@@ -72,3 +87,15 @@ services:
       - "8883:8883"
     volumes:
       - ./packages/mqtt/scripts/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  consul:
+    image: hashicorp/consul:1.20.5
+    command: agent -dev -client=0.0.0.0
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8500/v1/status/leader"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
