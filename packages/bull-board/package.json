@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bull-board",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-beta.1",
   "description": "midway component for bull",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -25,12 +25,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@midwayjs/bull": "workspace:^",
+    "@midwayjs/bullmq": "workspace:^",
     "@midwayjs/core": "workspace:^",
     "@midwayjs/express": "workspace:^",
     "@midwayjs/koa": "workspace:^",
-    "@midwayjs/mock": "workspace:^",
-    "@midwayjs/bull":"workspace:^",
-    "@midwayjs/bullmq": "workspace:^"
+    "@midwayjs/mock": "workspace:^"
   },
   "dependencies": {
     "@bull-board/api": "5.23.0",

@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/casbin-typeorm-adapter",
   "description": "midway casbin typeorm adapter",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-beta.1",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [

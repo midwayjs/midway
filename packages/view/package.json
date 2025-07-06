@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/view",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-beta.1",
   "description": "Midway Component for render view",
   "main": "dist/index.js",
   "typings": "index.d.ts",

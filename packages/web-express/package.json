@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/express",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-beta.1",
   "description": "Midway Web Framework for Express",
   "main": "dist/index.js",
   "typings": "index.d.ts",

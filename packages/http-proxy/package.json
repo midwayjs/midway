@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/http-proxy",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-beta.1",
   "description": "Midway Component for http proxy",
   "main": "dist/index.js",
   "typings": "index.d.ts",

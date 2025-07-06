@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/swagger",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-beta.1",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -10,12 +10,12 @@
     "index.html"
   ],
   "devDependencies": {
+    "@apidevtools/swagger-parser": "11.0.1",
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@midwayjs/validate": "workspace:^",
-    "swagger-ui-dist": "5.18.3",
-    "@apidevtools/swagger-parser": "11.0.1"
+    "swagger-ui-dist": "5.18.3"
   },
   "author": "Kurten Chan <chinkurten@gmail.com>",
   "license": "MIT",

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/validation",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0-beta.1",
   "description": "Midway Component for validation",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -25,10 +25,10 @@
     "@midwayjs/i18n": "workspace:^"
   },
   "devDependencies": {
-    "zod": "3.24.1",
     "@midwayjs/core": "workspace:^",
     "@midwayjs/express": "workspace:^",
     "@midwayjs/koa": "workspace:^",
-    "@midwayjs/mock": "workspace:^"
+    "@midwayjs/mock": "workspace:^",
+    "zod": "3.24.1"
   }
 }
