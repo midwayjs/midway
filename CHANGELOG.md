@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.20.9 (2025-07-13)
+
+#### :nail_care: Polish
+* `ws`
+  * [#4360](https://github.com/midwayjs/midway/pull/4360) feat: add ws upgrade handler ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#4359](https://github.com/midwayjs/midway/pull/4359) docs: update the wrong spelling of DefaultConfig ([@mmdapl](https://github.com/mmdapl))
+
+#### :package: Dependencies
+* `jwt`
+  * [#4356](https://github.com/midwayjs/midway/pull/4356) fix(deps): update dependency @types/jsonwebtoken to v9.0.10 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- 142vip.cn ([@mmdapl](https://github.com/mmdapl))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.8 (2025-06-25)
 
 #### :nail_care: Polish
