@@ -276,7 +276,100 @@ const client = new WebSocket('wss://websocket-echo.com/');
 client.on('ping', heartbeat);
 ```
 
+## Authentication
 
+Before establishing a WebSocket connection, you may need to authenticate the client. Midway provides the `onWebSocketUpgrade` method to perform authentication before the WebSocket handshake since v3.20.9.
+
+### Setting up Authentication Handler
+
+You can set up an authentication handler when the application starts:
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import { MidwayWSFramework } from '@midwayjs/ws';
+
+@Configuration()
+export class WSConfiguration {
+  @Inject()
+  wsFramework: MidwayWSFramework;
+
+  async onReady() {
+    // Set up pre-upgrade authentication handler
+    this.wsFramework.onWebSocketUpgrade(async (request, socket, head) => {
+      // Get token from URL parameters
+      const url = new URL(request.url, `http://${request.headers.host}`);
+      const token = url.searchParams.get('token');
+      
+      // Validate token
+      if (token === 'valid-token') {
+        return true; // Allow connection
+      }
+      
+      return false; // Reject connection
+    });
+  }
+}
+```
+
+### Authentication Handler Parameters
+
+The authentication handler receives three parameters:
+
+- `request`: HTTP request object (`http.IncomingMessage`)
+- `socket`: Raw socket object
+- `head`: WebSocket handshake header data (`Buffer`)
+
+The handler should return a `Promise<boolean>`:
+- `true`: Allow WebSocket connection
+- `false`: Reject WebSocket connection
+
+### Getting Authentication Information
+
+You can get authentication information from multiple sources:
+
+**URL Parameters**
+
+```typescript
+this.wsFramework.onWebSocketUpgrade(async (request, socket, head) => {
+  const url = new URL(request.url, `http://${request.headers.host}`);
+  const token = url.searchParams.get('token');
+  const userId = url.searchParams.get('userId');
+  
+  // Validation logic
+  return await this.validateToken(token, userId);
+});
+```
+
+**Request Headers**
+
+```typescript
+this.wsFramework.onWebSocketUpgrade(async (request, socket, head) => {
+  const authorization = request.headers.authorization;
+  
+  if (!authorization) {
+    return false;
+  }
+  
+  const token = authorization.replace('Bearer ', '');
+  return await this.validateToken(token);
+});
+```
+
+**Cookie**
+
+```typescript
+this.wsFramework.onWebSocketUpgrade(async (request, socket, head) => {
+  const cookie = request.headers.cookie;
+  
+  if (!cookie) {
+    return false;
+  }
+  
+  // Parse cookie to get session information
+  const sessionId = this.parseCookie(cookie).sessionId;
+  return await this.validateSession(sessionId);
+});
+```
 
 ## Local test
 

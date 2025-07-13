@@ -276,6 +276,101 @@ const client = new WebSocket('wss://websocket-echo.com/');
 client.on('ping', heartbeat);
 ```
 
+## 鉴权
+
+在 WebSocket 连接建立之前，您可能需要对客户端进行身份验证。从 v3.20.9 开始 Midway 提供了 `onWebSocketUpgrade` 方法来在 WebSocket 握手前进行鉴权。
+
+### 设置鉴权处理器
+
+您可以在应用启动时设置鉴权处理器：
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import { MidwayWSFramework } from '@midwayjs/ws';
+
+@Configuration()
+export class WSConfiguration {
+  @Inject()
+  wsFramework: MidwayWSFramework;
+
+  async onReady() {
+    // 设置升级前鉴权处理器
+    this.wsFramework.onWebSocketUpgrade(async (request, socket, head) => {
+      // 从 URL 参数中获取 token
+      const url = new URL(request.url, `http://${request.headers.host}`);
+      const token = url.searchParams.get('token');
+      
+      // 验证 token
+      if (token === 'valid-token') {
+        return true; // 允许连接
+      }
+      
+      return false; // 拒绝连接
+    });
+  }
+}
+```
+
+### 鉴权处理器参数
+
+鉴权处理器接收三个参数：
+
+- `request`: HTTP 请求对象 (`http.IncomingMessage`)
+- `socket`: 原始 socket 对象
+- `head`: WebSocket 握手的头部数据 (`Buffer`)
+
+处理器需要返回一个 `Promise<boolean>`：
+- `true`: 允许 WebSocket 连接
+- `false`: 拒绝 WebSocket 连接
+
+### 获取鉴权信息
+
+您可以从多个来源获取鉴权信息：
+
+**URL 参数**
+
+```typescript
+this.wsFramework.onWebSocketUpgrade(async (request, socket, head) => {
+  const url = new URL(request.url, `http://${request.headers.host}`);
+  const token = url.searchParams.get('token');
+  const userId = url.searchParams.get('userId');
+  
+  // 验证逻辑
+  return await this.validateToken(token, userId);
+});
+```
+
+**请求头**
+
+```typescript
+this.wsFramework.onWebSocketUpgrade(async (request, socket, head) => {
+  const authorization = request.headers.authorization;
+  
+  if (!authorization) {
+    return false;
+  }
+  
+  const token = authorization.replace('Bearer ', '');
+  return await this.validateToken(token);
+});
+```
+
+**Cookie**
+
+```typescript
+this.wsFramework.onWebSocketUpgrade(async (request, socket, head) => {
+  const cookie = request.headers.cookie;
+  
+  if (!cookie) {
+    return false;
+  }
+  
+  // 解析 cookie 获取 session 信息
+  const sessionId = this.parseCookie(cookie).sessionId;
+  return await this.validateSession(sessionId);
+});
+```
+
 
 
 ## 本地测试
