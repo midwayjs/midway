@@ -1,4 +1,4 @@
-import { closeApp, createServer } from './utils';
+import { closeApp, createServer, testConnectionRejected } from './utils';
 import { sleep } from '@midwayjs/core';
 import { once } from 'events';
 import { createWebSocketClient } from '@midwayjs/mock';
@@ -107,6 +107,33 @@ describe('/test/index.test.ts', () => {
     // 看一下服务端的 clients
     expect(app.clients.size).toEqual(0);
 
+    await closeApp(app);
+  });
+
+  it('should test onWebSocketUpgrade authentication', async () => {
+    const app = await createServer('base-app-upgrade-auth');
+
+    // 测试1: 没有 token 的连接应该被拒绝
+    const rejected1 = await testConnectionRejected('ws://localhost:3000');
+    expect(rejected1).toBe(true);
+
+    // 测试2: 无效 token 的连接应该被拒绝
+    const rejected2 = await testConnectionRejected('ws://localhost:3000?token=invalid-token');
+    expect(rejected2).toBe(true);
+
+    // 测试3: 有效 token 的连接应该成功
+    const client3 = await createWebSocketClient(`ws://localhost:3000?token=valid-token`);
+
+    // 发送消息测试连接是否正常工作
+    client3.send('test-message');
+    const gotEvent = once(client3, 'message');
+    const [data] = await gotEvent;
+    const response = JSON.parse(data);
+
+    expect(response.echo).toEqual('test-message');
+    expect(response.timestamp).toBeDefined();
+
+    await client3.close();
     await closeApp(app);
   });
 });

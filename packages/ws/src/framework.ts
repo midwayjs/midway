@@ -26,6 +26,7 @@ import {
   IMidwayWSConfigurationOptions,
   IMidwayWSContext,
   NextFunction,
+  UpgradeAuthHandler,
 } from './interface';
 import * as WebSocket from 'ws';
 
@@ -38,6 +39,7 @@ export class MidwayWSFramework extends BaseFramework<
   server: http.Server;
   protected heartBeatInterval: NodeJS.Timeout;
   protected connectionMiddlewareManager = this.createMiddlewareManager();
+  protected upgradeAuthHandler: UpgradeAuthHandler | null = null;
   protected frameworkLoggerName = 'wsLogger';
 
   configure(): IMidwayWSConfigurationOptions {
@@ -61,10 +63,14 @@ export class MidwayWSFramework extends BaseFramework<
       > => {
         return this.getConnectionMiddleware();
       },
+      onWebSocketUpgrade: (handler: UpgradeAuthHandler) => {
+        return this.onWebSocketUpgrade(handler);
+      },
     });
 
     await this.loadMidwayController();
   }
+
   public app: IMidwayWSApplication;
 
   public async run(): Promise<void> {
@@ -78,7 +84,35 @@ export class MidwayWSFramework extends BaseFramework<
       server = this.configurationOptions.server ?? http.createServer();
     }
 
-    server.on('upgrade', (request, socket: any, head: Buffer) => {
+    server.on('upgrade', async (request, socket: any, head: Buffer) => {
+      // check if the upgrade auth handler is set
+      if (this.upgradeAuthHandler) {
+        try {
+          const authResult = await this.upgradeAuthHandler(
+            request,
+            socket,
+            head
+          );
+          if (!authResult) {
+            this.logger.warn(
+              '[midway:ws] WebSocket upgrade authentication failed'
+            );
+            socket.destroy();
+            return;
+          }
+          this.logger.debug(
+            '[midway:ws] WebSocket upgrade authentication passed'
+          );
+        } catch (error) {
+          this.logger.error(
+            '[midway:ws] WebSocket upgrade authentication error:',
+            error
+          );
+          socket.destroy();
+          return;
+        }
+      }
+
       this.app.handleUpgrade(request, socket, head, ws => {
         this.app.emit('connection', ws, request);
       });
@@ -110,6 +144,23 @@ export class MidwayWSFramework extends BaseFramework<
       });
       this.server.close();
     });
+  }
+
+  /**
+   * 设置升级前鉴权处理函数
+   * @param handler 鉴权处理函数，传入 null 可以禁用鉴权
+   */
+  public onWebSocketUpgrade(handler: UpgradeAuthHandler | null): void {
+    this.upgradeAuthHandler = handler;
+    if (handler) {
+      this.logger.info(
+        '[midway:ws] WebSocket upgrade authentication handler set'
+      );
+    } else {
+      this.logger.info(
+        '[midway:ws] WebSocket upgrade authentication handler removed'
+      );
+    }
   }
 
   private async loadMidwayController() {
