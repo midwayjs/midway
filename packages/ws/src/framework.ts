@@ -91,15 +91,26 @@ export class MidwayWSFramework extends BaseFramework<
       // check if the upgrade auth handler is set
       if (this.upgradeAuthHandler) {
         try {
-          const authResult = await this.upgradeAuthHandler(request, socket, head);
+          const authResult = await this.upgradeAuthHandler(
+            request,
+            socket,
+            head
+          );
           if (!authResult) {
-            this.logger.warn('[midway:ws] WebSocket upgrade authentication failed');
+            this.logger.warn(
+              '[midway:ws] WebSocket upgrade authentication failed'
+            );
             socket.destroy();
             return;
           }
-          this.logger.debug('[midway:ws] WebSocket upgrade authentication passed');
+          this.logger.debug(
+            '[midway:ws] WebSocket upgrade authentication passed'
+          );
         } catch (error) {
-          this.logger.error('[midway:ws] WebSocket upgrade authentication error:', error);
+          this.logger.error(
+            '[midway:ws] WebSocket upgrade authentication error:',
+            error
+          );
           socket.destroy();
           return;
         }
