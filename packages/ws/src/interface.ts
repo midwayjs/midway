@@ -14,6 +14,7 @@ export type IMidwayWSApplication = IMidwayApplication<IMidwayWSContext, {
     middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>
   ) => void;
   getConnectionMiddleware: ContextMiddlewareManager<Context, NextFunction, undefined>;
+  onWebSocketUpgrade: (handler: UpgradeAuthHandler | null) => void;
 }> & WebSocket.Server;
 
 export type IMidwayWSConfigurationOptions = {
@@ -38,3 +39,12 @@ export type IMidwayWSContext = IMidwayContext<WebSocket & {
 export type Application = IMidwayWSApplication;
 export type NextFunction = BaseNextFunction;
 export interface Context extends IMidwayWSContext {}
+
+/**
+ * WebSocket 升级前鉴权处理函数类型
+ */
+export type UpgradeAuthHandler = (
+  request: IncomingMessage,
+  socket: any,
+  head: Buffer
+) => Promise<boolean>;
