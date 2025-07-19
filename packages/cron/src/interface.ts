@@ -1,9 +1,9 @@
 import { IMidwayApplication, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
-import { CronJob, CronJobParameters } from 'cron';
+import { CronJob, CronJobParams } from 'cron';
 
 export { CronJob } from 'cron';
 
-export type CronJobOptions = Omit<CronJobParameters, 'onTick'|'onComplete'>;
+export type CronJobOptions = Omit<CronJobParams, 'onTick'|'onComplete'>;
 export interface CronOptions {
   defaultCronJobOptions?: CronJobOptions;
 }

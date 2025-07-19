@@ -16,7 +16,7 @@ import {
   IJob,
   JobNameOrClz,
 } from './interface';
-import { CronJob, CronJobParameters } from 'cron';
+import { CronJob, CronJobParams } from 'cron';
 import { CRON_JOB_KEY } from './constants';
 
 @Framework()
@@ -58,14 +58,14 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
 
   public addJob(
     name: JobNameOrClz,
-    jobOptions: Partial<CronJobParameters> = {}
+    jobOptions: Partial<CronJobParams> = {}
   ): CronJob {
     let jobName: string;
     if (typeof name === 'string') {
       jobName = name;
     } else {
       const options = getClassMetadata(CRON_JOB_KEY, name) as {
-        jobOptions?: CronJobParameters;
+        jobOptions?: CronJobParams;
         jobName?: string;
       };
       jobName = options.jobName || getProviderUUId(name);
@@ -112,7 +112,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
         });
       };
     }
-    const job = new CronJob(jobOptions as CronJobParameters);
+    const job = CronJob.from(jobOptions as CronJobParams);
     this.jobs.set(jobName, job);
     return job;
   }
@@ -136,7 +136,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
       return name;
     } else {
       const options = getClassMetadata(CRON_JOB_KEY, name) as {
-        jobOptions?: CronJobParameters;
+        jobOptions?: CronJobParams;
         jobName?: string;
       };
       return options.jobName || getProviderUUId(name);
