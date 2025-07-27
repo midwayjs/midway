@@ -1,7 +1,9 @@
 import { closeApp, createServer, testConnectionRejected } from './utils';
 import { sleep } from '@midwayjs/core';
 import { once } from 'events';
-import { createWebSocketClient } from '@midwayjs/mock';
+import { createLightApp, createWebSocketClient } from '@midwayjs/mock';
+import * as ws from '../src';
+import * as koa from '@midwayjs/koa';
 
 describe('/test/index.test.ts', () => {
   it('should test create websocket app', async () => {
@@ -78,6 +80,60 @@ describe('/test/index.test.ts', () => {
     await sleep();
 
     await client.close();
+    await closeApp(app);
+  });
+
+  it('should test heartbeat', async () => {
+    const app = await createLightApp('', {
+      globalConfig: {
+        webSocket: {
+          port: 3000,
+          enableServerHeartbeatCheck: true,
+          serverHeartbeatInterval: 1000,
+        },
+      },
+      imports: [
+        ws,
+      ],
+    })
+
+    await new Promise<void>(async (resolve, reject) => {
+      const client = await createWebSocketClient(`ws://localhost:3000`);
+      client.on('ping', () => {
+        client.terminate();
+        resolve();
+      });
+    });
+
+    await closeApp(app);
+  });
+
+  it('should test heartbeat with koa', async () => {
+    const app = await createLightApp('', {
+      globalConfig: {
+        koa: {
+          keys: ['test'],
+          port: 3000,
+        },
+        webSocket: {
+          enableServerHeartbeatCheck: true,
+          serverHeartbeatInterval: 1000,
+        },
+      },
+      imports: [
+        koa,
+        ws,
+      ],
+    });
+
+    await new Promise<void>(async (resolve, reject) => {
+      const client = await createWebSocketClient(`ws://localhost:3000`);
+      client.on('ping', () => {
+        client.terminate();
+        resolve();
+      });
+    });
+
     await closeApp(app);
   });
 
