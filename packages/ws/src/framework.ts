@@ -84,6 +84,16 @@ export class MidwayWSFramework extends BaseFramework<
       server = this.configurationOptions.server ?? http.createServer();
     }
 
+    if (this.configurationOptions.enableServerHeartbeatCheck) {
+      if (server.listening) {
+        this.startHeartBeat();
+      } else {
+        server.on('listening', () => {
+          this.startHeartBeat();
+        });
+      }
+    }
+
     server.on('upgrade', async (request, socket: any, head: Buffer) => {
       // check if the upgrade auth handler is set
       if (this.upgradeAuthHandler) {
@@ -126,13 +136,21 @@ export class MidwayWSFramework extends BaseFramework<
           this.logger.info(
             `[midway:ws] WebSocket server port = ${this.configurationOptions.port} start success.`
           );
-          if (this.configurationOptions.enableServerHeartbeatCheck) {
-            this.startHeartBeat();
-          }
           resolve();
         });
       });
     }
+
+    this.app.on('error', err => {
+      this.logger.error('socket server got error', err);
+    });
+
+    this.app.on('close', () => {
+      if (this.heartBeatInterval) {
+        clearInterval(this.heartBeatInterval);
+      }
+      this.logger.info('socket server close');
+    });
   }
 
   protected async beforeStop(): Promise<void> {
@@ -330,17 +348,6 @@ export class MidwayWSFramework extends BaseFramework<
         }
       }
     );
-
-    this.app.on('error', err => {
-      this.logger.error('socket server got error', err);
-    });
-
-    this.app.on('close', () => {
-      if (this.heartBeatInterval) {
-        clearInterval(this.heartBeatInterval);
-      }
-      this.logger.info('socket server close');
-    });
   }
 
   private async bindSocketResponse(
