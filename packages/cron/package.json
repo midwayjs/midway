@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cron",
-  "version": "3.20.4",
+  "version": "3.20.10",
   "description": "Midway Component for Cron",
   "main": "dist/index.js",
   "typings": "index.d.ts",

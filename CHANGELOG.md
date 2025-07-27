@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v3.20.10 (2025-07-27)
+
+#### :bug: Bug Fix
+* `ws`
+  * [#4364](https://github.com/midwayjs/midway/pull/4364) fix: heartbeat does not take effect in koa scenario ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `cron`
+  * [#4361](https://github.com/midwayjs/midway/pull/4361) breaking: upgrade cron to 3.5.0, support waitForComplete ([@denghongcai](https://github.com/denghongcai))
+
+#### :package: Dependencies
+* [#4362](https://github.com/midwayjs/midway/pull/4362) fix(deps): update dependency statuses to v2.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Hongcai Deng ([@denghongcai](https://github.com/denghongcai))
+
+
+
 ## v3.20.9 (2025-07-13)
 
 #### :nail_care: Polish

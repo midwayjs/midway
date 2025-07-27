@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/serverless-vercel-starter",
   "private": true,
-  "version": "3.20.4",
+  "version": "3.20.10",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/runtime-engine": "^3.20.0",
-    "@midwayjs/serverless-http-parser": "^3.20.0",
+    "@midwayjs/serverless-http-parser": "^3.20.10",
     "parseurl": "1.3.3"
   },
   "devDependencies": {
