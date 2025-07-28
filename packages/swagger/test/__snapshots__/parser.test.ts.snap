@@ -1350,6 +1350,26 @@ exports[`test @ApiParam should test with @Param decorator 1`] = `
 }
 `;
 
+exports[`test @ApiProperty should format enum type with array 1`] = `
+{
+  "properties": {
+    "animal": {
+      "isArray": true,
+      "items": {
+        "enum": [
+          0,
+          1,
+          2,
+        ],
+        "type": "number",
+      },
+      "type": "array",
+    },
+  },
+  "type": "object",
+}
+`;
+
 exports[`test @ApiProperty should parse base type 1`] = `
 {
   "properties": {
