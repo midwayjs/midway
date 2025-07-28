@@ -25,7 +25,7 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "@midwayjs/koa": "workspace^",
+    "@midwayjs/koa": "workspace:^",
     "fs-extra": "11.3.0"
   },
   "dependencies": {
