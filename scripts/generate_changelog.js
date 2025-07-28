@@ -4,10 +4,6 @@ const { join } = require('path');
 
 const currentVersion = require('../lerna.json').version;
 
-if (/beta/.test(currentVersion) || /alpha/.test(currentVersion)) {
-  return;
-}
-
 if (!process.env.GITHUB_AUTH) {
   console.error('Must provide GITHUB_AUTH');
   process.exit(1);

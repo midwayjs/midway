@@ -3,9 +3,6 @@ const { writeFileSync } = require('fs');
 const { join } = require('path');
 
 const currentVersion = require('../lerna.json').version;
-if (/beta/.test(currentVersion) || /alpha/.test(currentVersion)) {
-  return;
-}
 
 const originData = execSync('npx lerna changed --json').toString();
 const data = JSON.parse(originData);
