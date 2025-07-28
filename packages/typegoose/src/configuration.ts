@@ -1,7 +1,6 @@
 import {
   Config,
   Configuration,
-  getClassMetadata,
   Init,
   Inject,
   listModule,
@@ -9,6 +8,7 @@ import {
   IMidwayApplication,
   IMidwayContainer,
   MidwayDecoratorService,
+  MidwayCommonError,
 } from '@midwayjs/core';
 import * as mongoose from '@midwayjs/mongoose';
 import { ENTITY_MODEL_KEY } from './interface';
@@ -31,7 +31,7 @@ export class TypegooseConfiguration {
   @Inject()
   decoratorService: MidwayDecoratorService;
 
-  modelMap = new WeakMap();
+  dataSourceManager: mongoose.MongooseDataSourceManager;
 
   @Init()
   async init() {
@@ -44,39 +44,27 @@ export class TypegooseConfiguration {
           connectionName: string;
         }
       ) => {
-        return this.modelMap.get(meta.modelKey);
+        // get connection
+        const conn = this.dataSourceManager.getDataSource(
+          meta.connectionName ||
+            this.dataSourceManager.getDataSourceNameByModel(meta.modelKey) ||
+            this.dataSourceManager.getDefaultDataSourceName()
+        );
+        if (!conn) {
+          throw new MidwayCommonError(
+            `DataSource ${meta.connectionName} not found with current model ${meta.modelKey}, please check it.`
+          );
+        }
+        return getModelForClass(meta.modelKey, { existingConnection: conn });
       }
     );
   }
 
   async onReady(container: IMidwayContainer) {
-    const connectionFactory = await container.getAsync(
+    this.dataSourceManager = await container.getAsync(
       mongoose.MongooseDataSourceManager
     );
-
-    for (const dataSourceName of connectionFactory.getDataSourceNames()) {
-      const conn = connectionFactory.getDataSource(dataSourceName);
-      if (conn && (conn as any).entities) {
-        for (const Model of (conn as any).entities) {
-          const model = getModelForClass(Model, { existingConnection: conn });
-          this.modelMap.set(Model, model);
-        }
-      }
-    }
-
     const Models = listModule(ENTITY_MODEL_KEY);
-    // 兼容老代码
-    for (const Model of Models) {
-      const metadata = getClassMetadata(ENTITY_MODEL_KEY, Model) ?? {};
-      const connectionName = metadata.connectionName ?? 'default';
-      const conn = connectionFactory.getDataSource(connectionName);
-      if (conn) {
-        const model = getModelForClass(Model, { existingConnection: conn });
-        this.modelMap.set(Model, model);
-      } else {
-        throw new Error(`connection name ${metadata.connectionName} not found`);
-      }
-    }
 
     // 兼容老代码
     if (Models.length === 0 && this.oldMongooseConfig['uri']) {
