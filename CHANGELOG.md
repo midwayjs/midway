@@ -1,6 +1,21 @@
 # Change Log
 
 
+## v3.20.11 (2025-08-02)
+
+#### :nail_care: Polish
+* `typeorm`
+  * [#4369](https://github.com/midwayjs/midway/pull/4369) feat: add config allow typeorm migrations ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `core`, `web-koa`
+  * [#4366](https://github.com/midwayjs/midway/pull/4366) fix(deps): update dependency koa to v2.16.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.10 (2025-07-27)
 
 #### :bug: Bug Fix

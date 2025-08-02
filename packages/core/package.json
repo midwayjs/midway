@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "3.20.4",
+  "version": "3.20.11",
   "description": "midway core",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
