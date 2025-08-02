@@ -35,7 +35,7 @@
     "@midwayjs/session": "workspace:^",
     "@types/koa": "2.15.0",
     "@types/qs": "6.9.18",
-    "koa": "2.16.1",
+    "koa": "2.16.2",
     "koa-bodyparser": "4.4.1",
     "qs": "6.14.0"
   },

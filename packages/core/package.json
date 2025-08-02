@@ -24,7 +24,7 @@
   "devDependencies": {
     "@midwayjs/logger": "^3.0.0",
     "eventsource": "2.0.2",
-    "koa": "2.16.1",
+    "koa": "2.16.2",
     "mm": "3.4.0",
     "raw-body": "2.5.2",
     "sinon": "17.0.2"
