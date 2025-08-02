@@ -12,12 +12,13 @@ import {
 } from '@midwayjs/core';
 import { DataSource } from 'typeorm';
 import { TypeORMLogger } from './logger';
+import { typeormConfigOptions } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
   @Config('typeorm')
-  typeormConfig;
+  typeormConfig: typeormConfigOptions;
 
   @ApplicationContext()
   applicationContext: IMidwayContainer;
@@ -41,9 +42,12 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
     config: any,
     dataSourceName: string
   ): Promise<DataSource> {
-    if (config['migrations']) {
-      delete config['migrations'];
+    if (!this.typeormConfig['allowExecuteMigrations']) {
+      if (config['migrations']) {
+        delete config['migrations'];
+      }
     }
+
     if (config['logging'] === undefined) {
       config['logger'] = new TypeORMLogger(
         this.loggerService.getLogger('typeormLogger')

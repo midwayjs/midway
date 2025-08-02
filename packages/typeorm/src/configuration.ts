@@ -24,7 +24,9 @@ import {
   importConfigs: [
     {
       default: {
-        typeorm: {},
+        typeorm: {
+          allowExecuteMigrations: false,
+        },
         midwayLogger: {
           clients: {
             typeormLogger: {
