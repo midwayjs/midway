@@ -224,3 +224,7 @@ export default {
   static: false,
 } as EggPlugin;
 ```
+
+### 4、Internal Server Error, real status: 500
+
+如果使用staticFile配置的静态目录不存在，则服务可能会抛出500错误，请确保您配置的静态目录已被正确创建。
