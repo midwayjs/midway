@@ -33,7 +33,6 @@ import { getFreePort } from './utils';
 
 const COOKIES = Symbol('context#cookies');
 
-
 class KoaControllerGenerator extends WebControllerGenerator<Router> {
   constructor(readonly app, readonly webRouterService: MidwayWebRouterService) {
     super(app, webRouterService);

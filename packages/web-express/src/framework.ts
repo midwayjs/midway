@@ -195,7 +195,7 @@ export class MidwayExpressFramework extends BaseFramework<
     if (customPort === 0) {
       customPort = await getFreePort();
     }
- 
+
     if (customPort) {
       new Promise<void>(resolve => {
         const args: any[] = [customPort];
