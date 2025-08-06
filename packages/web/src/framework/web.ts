@@ -23,6 +23,7 @@ import { loggers, MidwayContextLogger } from '@midwayjs/logger';
 import { resolve } from 'path';
 import { Server } from 'net';
 import { debuglog } from 'util';
+import { getFreePort } from '../utils';
 
 const debug = debuglog('midway:debug');
 
@@ -274,7 +275,12 @@ export class MidwayWebFramework extends BaseFramework<
 
       const eggConfig = this.configService.getConfiguration('egg');
       if (!this.isClusterMode && eggConfig) {
-        const customPort = process.env.MIDWAY_HTTP_PORT ?? eggConfig.port;
+        let customPort = process.env.MIDWAY_HTTP_PORT ?? eggConfig.port;
+
+        if (customPort === 0) {
+          customPort = await getFreePort();
+        }
+
         if (customPort) {
           new Promise<void>(resolve => {
             const args: any[] = [customPort];

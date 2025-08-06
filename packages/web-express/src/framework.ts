@@ -29,7 +29,7 @@ import {
   MidwayExpressMiddlewareService,
 } from './middlewareService';
 import { debuglog } from 'util';
-import { sendData } from './util';
+import { getFreePort, sendData } from './util';
 const debug = debuglog('midway:debug');
 
 @Framework()
@@ -189,8 +189,13 @@ export class MidwayExpressFramework extends BaseFramework<
     // register httpServer to applicationContext
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
 
-    const customPort =
+    let customPort =
       process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
+
+    if (customPort === 0) {
+      customPort = await getFreePort();
+    }
+ 
     if (customPort) {
       new Promise<void>(resolve => {
         const args: any[] = [customPort];
@@ -391,7 +396,7 @@ export class MidwayExpressFramework extends BaseFramework<
     return this.server;
   }
 
-  public getPort() {
+  public getPort(): string {
     return process.env.MIDWAY_HTTP_PORT;
   }
 
