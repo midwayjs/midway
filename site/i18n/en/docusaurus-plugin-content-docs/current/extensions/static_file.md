@@ -222,3 +222,7 @@ export default {
    static: false,
 } as EggPlugin;
 ```
+
+### 4.Internal Server Error, real status: 500
+
+If the static directory configured with staticFile does not exist, the server may throw a 500 error. Please ensure that the static directory you configured has been properly created.
