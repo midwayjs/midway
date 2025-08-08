@@ -24,7 +24,6 @@ import {
 import { MidwayWebFramework } from './framework/web';
 import { debuglog } from 'util';
 import { EGG_AGENT_APP_KEY } from './interface';
-import { AddressInfo, createServer } from 'net';
 
 const debug = debuglog('midway:debug');
 
@@ -177,19 +176,4 @@ export async function initializeAgentApplicationContext(agent) {
   }
 
   return applicationContext;
-}
-
-export async function getFreePort() {
-  return new Promise<number>((resolve, reject) => {
-    const server = createServer();
-    server.listen(0, () => {
-      try {
-        const port = (server.address() as AddressInfo).port;
-        server.close();
-        resolve(port);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  });
 }
