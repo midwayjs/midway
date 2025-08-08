@@ -76,7 +76,7 @@ services:
       - "2380:2380"
 
   mongodb:
-    image: mongo:4.2
+    image: mongo:4.4
     ports:
       - "27017:27017"
 
