@@ -1,3 +1,5 @@
+import { AddressInfo, createServer } from 'net';
+
 export function detectStatus(err) {
   // detect status
   let status = err.status || 500;
@@ -159,4 +161,19 @@ export function escapeHtml(string) {
   }
 
   return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
+}
+
+export async function getFreePort() {
+  return new Promise<number>((resolve, reject) => {
+    const server = createServer();
+    server.listen(0, () => {
+      try {
+        const port = (server.address() as AddressInfo).port;
+        server.close();
+        resolve(port);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
 }

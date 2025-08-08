@@ -1,5 +1,5 @@
 import { closeApp, creatApp, createHttpRequest } from './utils';
-import { IMidwayKoaApplication } from '../src';
+import { IMidwayKoaApplication, Framework } from '../src';
 import { Controller, Get, makeHttpRequest } from '@midwayjs/core';
 import { createLightApp } from '@midwayjs/mock';
 
@@ -477,6 +477,25 @@ describe('/test/feature.test.ts', () => {
 
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('hello world');
+
+    await closeApp(app);
+  });
+
+  it('should test get random port', async () => {
+    const app = await createLightApp('', {
+      imports: [
+        require('../src'),
+      ],
+      globalConfig: {
+        keys: '123',
+        koa: {
+          port: 0,
+        }
+      }
+    });
+
+    const port = (app.getFramework() as Framework).getPort();
+    expect(port).not.toBe('0');
 
     await closeApp(app);
   });
