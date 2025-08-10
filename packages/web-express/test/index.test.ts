@@ -1,4 +1,4 @@
-import { IMidwayExpressApplication, MidwayExpressMiddlewareService } from '../src';
+import { IMidwayExpressApplication, MidwayExpressMiddlewareService, Framework } from '../src';
 import { createLightApp, createLegacyApp as creatApp, close as closeApp, createHttpRequest } from '@midwayjs/mock';
 
 describe('/test/feature.test.ts', () => {
@@ -333,6 +333,23 @@ describe('/test/feature.test.ts', () => {
     result = await createHttpRequest(app)
       .post('/api');
     expect(result.status).toEqual(403);
+    await closeApp(app);
+  });
+
+  it('should test get free port', async () => {
+    const app = await createLightApp('', {
+      imports: require('../src'),
+      globalConfig: {
+        keys: '12345',
+        express: {
+          port: 0,
+        }
+      }
+    });
+
+    const port = (app.getFramework() as Framework).getPort();
+    expect(port).not.toBe('0');
+    console.log(process.env.MIDWAY_HTTP_PORT);
     await closeApp(app);
   });
 });
