@@ -17,7 +17,7 @@
     "@midwayjs/serverless-scf-starter": "^3.20.10",
     "@midwayjs/serverless-scf-trigger": "^3.20.11",
     "body-parser": "1.20.3",
-    "express": "4.21.2",
+    "express": "5.1.0",
     "supertest": "6.3.3"
   },
   "engines": {
