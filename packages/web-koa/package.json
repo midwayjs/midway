@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa",
-  "version": "3.20.11",
+  "version": "3.20.12",
   "description": "Midway Web Framework for KOA",
   "main": "dist/index.js",
   "typings": "index.d.ts",

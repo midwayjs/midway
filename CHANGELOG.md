@@ -1,6 +1,28 @@
 # Change Log
 
 
+## v3.20.12 (2025-08-10)
+
+#### :nail_care: Polish
+* `web-express`, `web-koa`, `web`
+  * [#4371](https://github.com/midwayjs/midway/pull/4371) feat: add random free port ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#4372](https://github.com/midwayjs/midway/pull/4372) docs: update static_file.md for static directory not found ([@heyongsheng](https://github.com/heyongsheng))
+* [#4370](https://github.com/midwayjs/midway/pull/4370) docs: update static_file.md for static directory not found ([@heyongsheng](https://github.com/heyongsheng))
+
+#### :package: Dependencies
+* `grpc`
+  * [#4355](https://github.com/midwayjs/midway/pull/4355) fix(deps): update dependency @grpc/grpc-js to v1.13.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4373](https://github.com/midwayjs/midway/pull/4373) chore(deps): update mongo docker tag to v4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- He Yongsheng ([@heyongsheng](https://github.com/heyongsheng))
+
+
+
 ## v3.20.11 (2025-08-02)
 
 #### :nail_care: Polish
