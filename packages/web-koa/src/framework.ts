@@ -29,6 +29,7 @@ import { Server } from 'http';
 import { setupOnError } from './onerror';
 import * as qs from 'qs';
 import * as querystring from 'querystring';
+import { getFreePort } from './utils';
 
 const COOKIES = Symbol('context#cookies');
 
@@ -312,8 +313,13 @@ export class MidwayKoaFramework extends BaseFramework<
     }
 
     // set port and listen server
-    const customPort =
+    let customPort =
       process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
+
+    if (customPort === 0) {
+      customPort = await getFreePort();
+    }
+
     if (customPort) {
       new Promise<void>(resolve => {
         const args: any[] = [customPort];
@@ -349,7 +355,7 @@ export class MidwayKoaFramework extends BaseFramework<
     return this.server;
   }
 
-  public getPort() {
+  public getPort(): string {
     return process.env.MIDWAY_HTTP_PORT;
   }
 
