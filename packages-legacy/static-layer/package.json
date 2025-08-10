@@ -16,7 +16,7 @@
     "@midwayjs/serverless-scf-trigger": "^3.20.11",
     "koa": "2.16.2",
     "koa-static-cache": "5.1.4",
-    "path-to-regexp": "6.3.0",
+    "path-to-regexp": "8.2.0",
     "request": "2.88.2",
     "supertest": "6.3.3"
   },
