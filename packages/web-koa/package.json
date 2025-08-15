@@ -34,7 +34,7 @@
     "@midwayjs/core": "^3.20.11",
     "@midwayjs/session": "^3.20.11",
     "@types/koa": "2.15.0",
-    "@types/qs": "6.9.18",
+    "@types/qs": "6.14.0",
     "koa": "2.16.2",
     "koa-bodyparser": "4.4.1",
     "qs": "6.14.0"
