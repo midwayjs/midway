@@ -267,7 +267,7 @@ export default {
 | headerName | string | token 在 header 中存放的 字段 | 'x-csrf-token' |
 | bodyName | string | token 在 body 中存放的 字段 | '_csrf' |
 | queryName | string | token 在 query 中存放的 字段 | '_csrf' |
-| refererWhiteList | Array<string\> | 允许的来源白名单 | [] |
+| refererWhiteList | Array\<string\> | 允许的来源白名单 | [] |
 
 #### 配置 refererWhiteList 不生效？
 + 原因一：refererWhiteList 中需要配置 referer 的 host 部分，例如 referer 为 `https://midway-demo.com:1234/docs`，则 refererWhiteList 中需要配置 `midway-demo.com:1234`。
@@ -313,7 +313,7 @@ HTTP 响应头 `Content-Security-Policy` 允许站点管理者控制指定的页
 | 配置项 | 类型 | 作用描述 | 默认值 |
 | --- | --- | --- | --- |
 | enable | boolean | 是否开启 | false |
-| policy | Object<key: string, value: string / string[] / boolean> | 策略列表 | {} |
+| policy | Object\<key: string, value: string / string[] / boolean\> | 策略列表 | {} |
 | reportOnly | boolean | 是否开启 | false |
 | supportIE | boolean | 是否支持IE浏览器 | false |
 
