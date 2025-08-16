@@ -1,233 +1,353 @@
 import React from 'react';
-import { Block } from './Block';
-import Collapse from 'rc-collapse';
-import 'rc-collapse/assets/index.css';
-import { VAR } from '../var';
-import CodeSandbox from '@uiw/react-codesandbox';
-import { collapseMotion } from './Preview/motion';
-import ClassDemo from './Preview/class.json';
-import FunctionDemo from './Preview/function.json';
 import { styled } from '../styled';
-import { useMediaQuery } from '@react-hook/media-query';
+import { keyframes } from '@stitches/react';
 
-const activeVariants = {
-  variants: {
-    active: {
-      true: {
-        color: VAR.title,
-        borderColor: VAR.title,
-      },
-      false: {
-        color: VAR.text,
-        borderColor: VAR.text,
-      },
-    },
-  },
-};
-
-const IndexIndicator = styled('div', {
-  width: 40,
-  height: 40,
-  borderRadius: 8,
-  borderStyle: 'solid',
-  borderWidth: 2,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  fontFamily: 'DINAlternate-Bold',
-  fontSize: '1.375rem',
-  ...activeVariants,
+const fadeInUp = keyframes({
+  '0%': { opacity: 0, transform: 'translateY(30px)' },
+  '100%': { opacity: 1, transform: 'translateY(0)' },
 });
 
-const FeatureHeaderContainer = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
+const slideInLeft = keyframes({
+  '0%': { opacity: 0, transform: 'translateX(-30px)' },
+  '100%': { opacity: 1, transform: 'translateX(0)' },
 });
 
-const FeatureHeaderTitle = styled('span', {
-  fontFamily: 'Inter-Medium',
-  fontSize: '1.375rem',
-  marginLeft: 16,
-  ...activeVariants,
-});
-
-const Descrption = styled('span', {
-  fontSize: '1.25rem',
-  ...activeVariants,
+const slideInRight = keyframes({
+  '0%': { opacity: 0, transform: 'translateX(30px)' },
+  '100%': { opacity: 1, transform: 'translateX(0)' },
 });
 
 const Container = styled('div', {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: '60px',
+  alignItems: 'start',
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 24px',
+  
+  '@mobile': {
+    gridTemplateColumns: '1fr',
+    gap: '40px',
+    padding: '0 16px',
+  }
+});
+
+const TutorialCard = styled('div', {
+  background: 'var(--ifm-color-background)',
+  backdropFilter: 'blur(20px)',
+  borderRadius: '24px',
+  padding: '48px 32px',
+  border: '1px solid var(--ifm-color-emphasis-200)',
+  boxShadow: '0 8px 32px var(--ifm-color-emphasis-200)',
+  transition: 'all 0.4s ease',
+  position: 'relative',
+  overflow: 'hidden',
+  cursor: 'pointer',
+  
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '4px',
+    background: 'linear-gradient(90deg, var(--ifm-color-primary), var(--ifm-color-primary-darker))',
+    transform: 'scaleX(0)',
+    transition: 'transform 0.4s ease',
+  },
+  
+  '&:hover': {
+    transform: 'translateY(-8px)',
+    boxShadow: '0 20px 60px var(--ifm-color-emphasis-300)',
+    borderColor: 'var(--ifm-color-emphasis-300)',
+    
+    '&::before': {
+      transform: 'scaleX(1)',
+    },
+    
+    '& .icon': {
+      transform: 'scale(1.1) rotate(5deg)',
+    },
+  },
+  
+  '@mobile': {
+    padding: '32px 24px',
+  }
+});
+
+const IconContainer = styled('div', {
+  width: '80px',
+  height: '80px',
+  borderRadius: '20px',
+  background: 'linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-darker) 100%)',
   display: 'flex',
-  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: '32px',
+  transition: 'all 0.4s ease',
+  
+  '@mobile': {
+    width: '64px',
+    height: '64px',
+    marginBottom: '24px',
+  }
 });
 
-const CodeSandBoxContainer = styled('div', {
-  width: 833,
-  height: 509,
-  marginLeft: 50,
-  // '@mobile': {
-  //   display: 'none',
-  // },
+const Icon = styled('i', {
+  fontSize: '36px',
+  color: '#ffffff',
+  transition: 'all 0.4s ease',
+  
+  '@mobile': {
+    fontSize: '28px',
+  }
 });
 
-type HeaderProps = {
-  index?: number;
-  title: string;
-  active: boolean;
+const CardTitle = styled('h3', {
+  fontSize: '1.75rem',
+  fontWeight: 700,
+  color: 'var(--ifm-color-emphasis-900)',
+  margin: '0 0 20px 0',
+  lineHeight: 1.3,
+  
+  '@mobile': {
+    fontSize: '1.5rem',
+    marginBottom: '16px',
+  }
+});
+
+const CardDescription = styled('p', {
+  fontSize: '1.1rem',
+  color: 'var(--ifm-color-emphasis-700)',
+  lineHeight: 1.6,
+  margin: '0 0 24px 0',
+  
+  '@mobile': {
+    fontSize: '1rem',
+    marginBottom: '20px',
+  }
+});
+
+const CardFeatures = styled('ul', {
+  listStyle: 'none',
+  padding: 0,
+  margin: '0 0 32px 0',
+  
+  '@mobile': {
+    marginBottom: '24px',
+  }
+});
+
+const FeatureItem = styled('li', {
+  fontSize: '0.95rem',
+  color: 'var(--ifm-color-emphasis-600)',
+  lineHeight: 1.5,
+  marginBottom: '8px',
+  paddingLeft: '20px',
+  position: 'relative',
+  
+  '&::before': {
+    content: '✓',
+    position: 'absolute',
+    left: 0,
+    color: 'var(--ifm-color-primary)',
+    fontWeight: 'bold',
+  }
+});
+
+const StartButton = styled('a', {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '12px 24px',
+  borderRadius: '12px',
+  fontSize: '1rem',
+  fontWeight: 600,
+  textDecoration: 'none',
+  backgroundColor: 'var(--ifm-color-emphasis-300)',
+  color: 'var(--ifm-color-emphasis-600)',
+  transition: 'all 0.3s ease',
+  cursor: 'not-allowed',
+  opacity: 0.6,
+  
+  '&:hover': {
+    backgroundColor: 'var(--ifm-color-emphasis-300)',
+    transform: 'none',
+    textDecoration: 'none',
+    color: 'var(--ifm-color-emphasis-600)',
+  },
+  
+  '@mobile': {
+    padding: '10px 20px',
+    fontSize: '0.9rem',
+  }
+});
+
+const DisabledButton = styled('div', {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '12px 24px',
+  borderRadius: '12px',
+  fontSize: '1rem',
+  fontWeight: 600,
+  backgroundColor: 'var(--ifm-color-emphasis-300)',
+  color: 'var(--ifm-color-emphasis-600)',
+  opacity: 0.6,
+  cursor: 'not-allowed',
+  
+  '@mobile': {
+    padding: '10px 20px',
+    fontSize: '0.9rem',
+  }
+});
+
+const EnhancedBlock = styled('div', {
+  padding: '120px 0',
+  position: 'relative',
+  overflow: 'hidden',
+  background: 'var(--ifm-color-emphasis-50)',
+  
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'radial-gradient(circle at 30% 70%, var(--ifm-color-emphasis-200) 0%, transparent 50%), radial-gradient(circle at 70% 30%, var(--ifm-color-emphasis-300) 0%, transparent 50%)',
+    opacity: 0.3,
+  },
+  
+  '@mobile': {
+    padding: '80px 0',
+  }
+});
+
+const BlockContent = styled('div', {
+  position: 'relative',
+  zIndex: 2,
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 24px',
+  
+  '@mobile': {
+    padding: '0 16px',
+  }
+});
+
+const BlockTitle = styled('h2', {
+  fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+  fontWeight: 800,
+  textAlign: 'center',
+  margin: '0 0 24px 0',
+  lineHeight: 1.2,
+  color: 'var(--ifm-color-emphasis-900)',
+  background: 'linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-darker) 100%)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+});
+
+const BlockSubtitle = styled('p', {
+  fontSize: '1.25rem',
+  textAlign: 'center',
+  maxWidth: '600px',
+  margin: '0 auto 80px',
+  lineHeight: 1.6,
+  color: 'var(--ifm-color-emphasis-600)',
+  
+  '@mobile': {
+    fontSize: '1.1rem',
+    marginBottom: '60px',
+  }
+});
+
+const LeftCard = styled('div', {
+  animation: `${slideInLeft} 0.8s ease-out`,
+});
+
+const RightCard = styled('div', {
+  animation: `${slideInRight} 0.8s ease-out 0.2s both`,
+});
+
+const classTutorialData = {
+  icon: 'icon-nintendogamecube',
+  title: 'Class 语法教程',
+  description: '使用 IoC + 装饰器构建优雅的 Node.js 应用架构',
+  features: [
+    '基于装饰器的路由定义',
+    '依赖注入与服务管理',
+    'TypeORM 数据库集成',
+    '组件化开发模式'
+  ],
+  href: '/tutorials/class-syntax',
+  disabled: true
 };
 
-function FeatureHeader(props: HeaderProps) {
-  return (
-    <FeatureHeaderContainer>
-      <IndexIndicator active={props.active}>{props.index + 1}</IndexIndicator>
-      <FeatureHeaderTitle active={props.active}>{props.title}</FeatureHeaderTitle>
-    </FeatureHeaderContainer>
-  );
-}
-
-interface FeatureProps extends HeaderProps {
-  description: string;
-  query?: string;
-}
-
-function Features(props: { features: FeatureProps[]; onChange: (key: string) => void; activeIndex: number }) {
-  return (
-    <Collapse
-      style={{
-        backgroundColor: 'transparent',
-        border: 'none',
-      }}
-      openMotion={collapseMotion}
-      accordion={true}
-      defaultActiveKey="0"
-      onChange={props.onChange}
-    >
-      {props.features.map((feature, index) => {
-        const isActive = props.activeIndex === index;
-        return (
-          <Collapse.Panel
-            key={index}
-            showArrow={false}
-            header={<FeatureHeader active={isActive} title={feature.title} index={index} />}
-            headerClass="rc-collapse-override"
-            style={{
-              width: 306,
-            }}
-          >
-            <Descrption active={isActive}>{feature.description}</Descrption>
-          </Collapse.Panel>
-        );
-      })}
-    </Collapse>
-  );
-}
-
-const ClassSyntaxFeatures = [
-  {
-    title: 'Router',
-    description: 'Midway.js 路由功能完善，支持通过装饰器定义路由，路由前缀等',
-    query: 'module=/src/controller/home.ts',
-  },
-  {
-    title: 'Service',
-    description: '使用依赖注入，提供更为优雅的架构',
-    query: 'module=/src/controller/api.ts&initialpath=/api/get_user?uid=123456',
-  },
-  {
-    title: 'Model',
-    description: '基于 TypeORM 轻松使用数据库',
-    query: 'module=/src/entity/photo.ts&initialpath=/api/get_photo',
-  },
-  {
-    title: 'Component',
-    description: '使用 Midway 组件快速开发',
-    query: 'module=/src/configuration.ts',
-  },
-] as FeatureProps[];
-
-type PreviewContainerProps = {
-  title: string;
-  subtitle: string;
-  background: 'light' | 'dark';
-  features: FeatureProps[];
-  demo: {
-    files: any;
-  };
+const functionTutorialData = {
+  icon: 'icon-huojiancopy',
+  title: 'Function 语法教程',
+  description: '使用函数 + Hooks 进行快速全栈应用开发',
+  features: [
+    '前后端一体化开发',
+    '函数式 API 设计',
+    'React Hooks 后端开发',
+    '零 API 调用模式'
+  ],
+  href: '/tutorials/function-syntax',
+  disabled: true
 };
 
-function PreviewContainer(props: PreviewContainerProps) {
-  const isMobile = useMediaQuery('(max-width: 640px)');
-  const [index, setIndex] = React.useState(0);
-
-  const handleChange = (key: string) => {
-    if (!key) {
-      return
-    }
-    setIndex(Number(key));
-    props.demo.files = { ...props.demo.files };
-  };
-
+function TutorialCardComponent({ data }: { data: typeof classTutorialData }) {
   return (
-    <Block title={props.title} subtitle={props.subtitle} background={props.background}>
-      <Container>
-        <Features onChange={handleChange} activeIndex={index} features={props.features} />
-        {!isMobile && (
-          <CodeSandBoxContainer>
-            <CodeSandbox
-              embed
-              files={props.demo.files}
-              query={`${props.features[index].query}&codemirror=1&hidenavigation=1&fontsize=14`}
-            />
-          </CodeSandBoxContainer>
-        )}
-      </Container>
-    </Block>
+    <TutorialCard>
+      <IconContainer className="icon">
+        <Icon className={`iconfont ${data.icon}`} />
+      </IconContainer>
+      <CardTitle>{data.title}</CardTitle>
+      <CardDescription>{data.description}</CardDescription>
+      <CardFeatures>
+        {data.features.map((feature, index) => (
+          <FeatureItem key={index}>{feature}</FeatureItem>
+        ))}
+      </CardFeatures>
+      {data.disabled ? (
+        <DisabledButton>
+          🚧 即将开放
+        </DisabledButton>
+      ) : (
+        <StartButton href={data.href}>
+          开始学习 →
+        </StartButton>
+      )}
+    </TutorialCard>
   );
 }
 
 export function PreviewClassSyntax() {
   return (
-    <PreviewContainer
-      title="Preview - Class Syntax"
-      subtitle="Use IoC + Decorator to provide better Architecture"
-      background="light"
-      demo={ClassDemo}
-      features={ClassSyntaxFeatures}
-    />
+    <EnhancedBlock>
+      <BlockContent>
+        <BlockTitle>🚧 交互式教程 (开发中)</BlockTitle>
+        <BlockSubtitle>
+          WebContainer 功能正在开发中，即将提供真实的开发环境体验，边学边练，快速掌握 Midway.js
+        </BlockSubtitle>
+        
+        <Container>
+          <LeftCard>
+            <TutorialCardComponent data={classTutorialData} />
+          </LeftCard>
+          <RightCard>
+            <TutorialCardComponent data={functionTutorialData} />
+          </RightCard>
+        </Container>
+      </BlockContent>
+    </EnhancedBlock>
   );
 }
 
-const FunctionSyntaxFeatures = [
-  {
-    title: 'FullStack',
-    description: '前后端一体化项目开发，效率更高',
-    query: 'module=/src/App.tsx',
-  },
-  {
-    title: 'Function as API',
-    description: '使用函数开发接口，更简洁 & 更快速',
-    query: 'module=/src/apis/lambda/index.ts&initialpath=/api',
-  },
-  {
-    title: 'Hooks',
-    description: '使用 “React Hooks” 开发后端',
-    query: 'highlights=4,5,6&module=/src/apis/lambda/index.ts&initialpath=/api',
-  },
-  {
-    title: 'Zero API',
-    description: '“零” API 调用，从后端导入函数而不是手动发起 Ajax 请求',
-    query: 'highlights=3,9,10,11,12,13,14,15,16,17&module=/src/App.tsx&initialpath=/',
-  },
-] as FeatureProps[];
-
 export function PreviewFunctionSyntax() {
-  return (
-    <PreviewContainer
-      title="Preview - Function Syntax"
-      subtitle="Using Function + Hooks for rapid application development"
-      background="dark"
-      demo={FunctionDemo}
-      features={FunctionSyntaxFeatures}
-    />
-  );
+  return null; // 这个组件现在不需要了，因为合并到了上面的教程引导中
 }
