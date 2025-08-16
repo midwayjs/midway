@@ -430,6 +430,7 @@ declare module '@midwayjs/axios/dist/interface' {
 }
 ```
 
+
 ### 直接使用 Axios
 
 `@midayjs/axios`导出了原始的`axios`实例，在非应用环境中可以直接使用。

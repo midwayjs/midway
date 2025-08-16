@@ -289,6 +289,7 @@ export default {
 
  ![计算表达式](https://gw.alicdn.com/imgextra/i4/O1CN01u3Mj0q24lRx1md9pX_!!6000000007431-2-tps-120-40.png)
 
+
 ## 注意
 
 * 为了防止机器学习破解，使用的 `svg-captcha` 包为 [安全修复后](https://juejin.cn/post/6872656117839691789) 的版本。

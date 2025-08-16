@@ -141,13 +141,13 @@ export default {
 
 All [koa-static-cache](https://github.com/koajs/static-cache) configurations are supported. The default configuration is as follows:
 
-| Property | Default | Description |
-| ------- |---------------------------------------------------| ------------------------------------------------------------ |
-| dirs | \{"default": \{prefix: "/public", "dir": "xxxx"}} | Managed directories, in order to support multiple directories, are objects. <br />In addition to the default, other keys can be added at will, and the object values in dirs will be merged with the external default values |
-| dynamic | true | Load files dynamically instead of caching after initialization reading |
+| Attribute name | Default | Description |
+| ------- | ----------------------------------------------- | ------------------------------------------------------------ |
+| dirs | {"default": {prefix: "/public", "dir": "xxxx"}} | Managed directories, in order to support multiple directories, are objects. <br />In addition to the default, other keys can be added at will, and the object values in dirs will be merged with the external default values. |
+| dynamic | true | Load files dynamically instead of caching after initialization reading. |
 | preload | false | Whether the cache is being initialized |
-| maxAge | prod is 31536000, others are 0 | Maximum cache time |
-| buffer | prod is true and the rest is false | Use buffer character to return |
+| maxAge | Prod is 31536000, others are 0 | Maximum cache time |
+| buffer | Prod is true and the rest is false | Use buffer character to return |
 
 For more configuration, please refer to [koa-static-cache](https://github.com/koajs/static-cache) .
 
@@ -204,7 +204,7 @@ export default {
      // ...
    },
 }
-```
+````
 
 
 
@@ -222,3 +222,7 @@ export default {
    static: false,
 } as EggPlugin;
 ```
+
+### 4.Internal Server Error, real status: 500
+
+If the static directory configured with staticFile does not exist, the server may throw a 500 error. Please ensure that the static directory you configured has been properly created.

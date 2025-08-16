@@ -177,10 +177,10 @@ export default defineConfig({
 例子：
 
 - `/lambda/[name]/project.ts` → `/api/about/:name/project`
-  - `/about/midwayjs/project` -> `{ name: 'midwayjs' }`
+  - /about/midwayjs/project -> { name: 'midwayjs' }
 - `/lambda/[type]/[page].ts` → `/api/about/:type/:page`
-  - `/blog/1` -> `{ type: 'blog', page: '1' }`
-  - `/articles/3` -> `{ type: 'articles', page: '3' }`
+  - /blog/1 -> { type: 'blog', page: '1' }
+  - /articles/3 -> { type: 'articles', page: '3' }
 
 使用路径参数时，后端接口仅支持使用 `Api()` 开发，并使用 `Params<T>` 标注类型。
 

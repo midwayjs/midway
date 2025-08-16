@@ -551,7 +551,7 @@ As shown in the above example, the following parameters are supported:
 - Whether `--daemon` is allowed in the background mode without nohup. If Docker is used, it is recommended to run directly at the foreground.
 - `--env=prod` running environment of the framework. By default, the environment variable process.env.EGG_SERVER_ENV will be read. If it is not passed, the built-in environment prod of the framework will be used.
 - `--workers=2` Number of Worker threads in the framework. By default, the number of app workers equivalent to the number of CPU cores will be created, which can make full use of CPU resources.
-- `--title=egg-server-showcase` is used to facilitate grep in ps processes. the default value is `egg-server-${appname}`.
+- `--title=egg-server-showcase` is used to facilitate grep in ps processes. the default value is egg-server-${appname}.
 - `--framework=yadan` If the application uses a [custom framework](https://eggjs.org/zh-cn/advanced/framework.html), you can configure the egg.framework of the package.json or specify this parameter.
 - `--ignore-stderr`.
 - `--https.key` specifies the full path of the key file that is required for HTTPS.

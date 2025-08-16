@@ -137,7 +137,7 @@ We can provide a standard subscriber implementation in a directory, such as `src
 import { ILogger, Inject } from '@midwayjs/core';
 import { Context, IMqttSubscriber, MqttSubscriber } from '@midwayjs/mqtt';
 
-@MqttSubscriber('test')
+@MqttSubscriber('sub1')
 export class Sub1Subscriber implements IMqttSubscriber {
 
    @Inject()

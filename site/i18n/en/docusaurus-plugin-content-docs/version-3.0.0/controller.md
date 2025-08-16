@@ -1,4 +1,4 @@
-import Tabs from '@theme/Tabs';
+​	import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Routing and controller
@@ -207,7 +207,7 @@ The following are these decorators and the corresponding equivalent frame values
 :::caution
 **Note** @Queries decorator is **different from** @Query.
 
-Queries will aggregate the same keys together and become an array. When the interface parameter accessed by the user is `/? When name = a & name = B`, `@Queries` will return `{name: [a, B] }`, while `@Query` will only return `{name: B}`.
+Queries will aggregate the same keys together and become an array. When the interface parameter accessed by the user is `/? When name = a & name = B`, @Queries will return {name: [a, B] }, while Query will only return {name: B}
 :::
 
 

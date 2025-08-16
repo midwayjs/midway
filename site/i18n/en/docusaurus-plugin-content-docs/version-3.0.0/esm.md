@@ -134,13 +134,13 @@ Therefore, the configuration part must use the object mode.
 
 ```typescript
 import { Configuration } from '@midwayjs/core';
-import DefulatConfig from './config/config.default.js';
+import DefaultConfig from './config/config.default.js';
 import UnittestConfig from './config/config.unittest.js';
 
 @Configuration({
    importConfigs: [
      {
-       default: DefulatConfig,
+       default: DefaultConfig,
        unittest: UnittestConfig,
      },
    ],

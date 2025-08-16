@@ -503,14 +503,14 @@ export class MainConfiguration {
 
 API 如下
 
-| API                                               | 返回类型                                 | 描述                                   |
-| ------------------------------------------------- |--------------------------------------| -------------------------------------- |
-| addController(controllerClz, controllerOption)    |                                      | 动态添加一个 Controller                |
-| addRouter(routerFunction, routerInfoOption)       |                                      | 动态添加一个路由函数                   |
-| getRouterTable()                                  | Promise\<Map\<string, RouterInfo[]>> | 获取带层级的路由                       |
-| getFlattenRouterTable()                           | Promise\<RouterInfo[]>               | 获取扁平化路由列表                     |
-| getRoutePriorityList()                            | Promise\<RouterPriority[]>           | 获取路由前缀列表                       |
-| getMatchedRouterInfo(url: string, method: string) | Promise\<RouterInfo \| undefined>    | 根据访问的路径，返回当前匹配的路由信息 |
+| API                                               | 返回类型                           | 描述                                   |
+| ------------------------------------------------- | ---------------------------------- | -------------------------------------- |
+| addController(controllerClz, controllerOption)    |                                    | 动态添加一个 Controller                |
+| addRouter(routerFunction, routerInfoOption)       |                                    | 动态添加一个路由函数                   |
+| getRouterTable()                                  | Promise<Map<string, RouterInfo[]>> | 获取带层级的路由                       |
+| getFlattenRouterTable()                           | Promise<RouterInfo[]>              | 获取扁平化路由列表                     |
+| getRoutePriorityList()                            | Promise<RouterPriority[]>          | 获取路由前缀列表                       |
+| getMatchedRouterInfo(url: string, method: string) | Promise<RouterInfo \| undefined>   | 根据访问的路径，返回当前匹配的路由信息 |
 
 更多使用请参考 [Web 路由表](#router_table)。
 
@@ -551,10 +551,10 @@ export class MainConfiguration {
 
 API 如下
 
-| API                                                        | 返回类型                     | 描述             |
-| ---------------------------------------------------------- |--------------------------| ---------------- |
-| addServerlessFunction(fn, triggerOptions, functionOptions) |                          | 动态添加一个函数 |
-| getFunctionList()                                          | Promise\<RouterInfo\[\]> | 获取所有函数列表 |
+| API                                                        | 返回类型              | 描述             |
+| ---------------------------------------------------------- | --------------------- | ---------------- |
+| addServerlessFunction(fn, triggerOptions, functionOptions) |                       | 动态添加一个函数 |
+| getFunctionList()                                          | Promise<RouterInfo[]> | 获取所有函数列表 |
 
 更多使用请参考 [Web 路由表](#router_table)。
 
@@ -610,10 +610,10 @@ export class MainConfiguration {
 
 API 如下
 
-| API                              | 返回类型                     | 描述             |
-| -------------------------------- |--------------------------| ---------------- |
-| getStatus()                      | Promise\<HealthResults\> | 动态添加一个函数 |
-| setCheckTimeout(timeout: number) | void                     | 设置超时时间     |
+| API                              | 返回类型                    | 描述             |
+| -------------------------------- |-------------------------| ---------------- |
+| getStatus()                      | Promise<HealthResults\> | 动态添加一个函数 |
+| setCheckTimeout(timeout: number) | void                    | 设置超时时间     |
 
 `getStatus` 方法用于外部调用轮询 `configuration` 中的 `onHealthCheck` 方法，返回一个符合 `HealthResults` 结构的数据。
 

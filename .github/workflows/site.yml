@@ -1,40 +1,54 @@
-name: site sync
+name: Deploy Site
 
 on:
   push:
-    branches: [main]
+    branches:
+      - v4-next
     paths:
       - .github/workflows/site.yml
       - site/**
       - CHANGELOG.md
-  # repository_dispatch:
-  #   types: [update-hooks-docs]
+    # Review gh actions docs if you want to further define triggers, paths, etc
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    name: Build Docusaurus
     strategy:
       matrix:
         node-version: [20.x]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: action-zip
-        uses: montudor/action-zip@v1.0.0
+          cache: 'pnpm'
 
-      # 安装根目录依赖
       - name: Install root dependencies
-        run: npm install
+        run: pnpm install
 
-      # 构建根目录项目
       - name: Build root project
-        run: npm run build --if-present
+        run: pnpm run build --if-present
+
+      # site 目录使用 npm，需要单独配置 npm 缓存
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: site/package-lock.json
 
       # 安装和构建 site 目录
       - name: Install and build site
@@ -43,7 +57,7 @@ jobs:
           npm install
           npm run build
 
-      # 打包文档
+      # 打包文档，部署到阿里云 OSS
       - name: Zip output
         working-directory: site
         run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
@@ -56,3 +70,29 @@ jobs:
           # use your own endpoint
           endpoint: oss-cn-hongkong.aliyuncs.com
           folder: site/build
+
+      # 部署到 GitHub Pages
+      - name: Upload Build Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/build
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

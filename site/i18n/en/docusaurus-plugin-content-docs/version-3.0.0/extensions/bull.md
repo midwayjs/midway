@@ -183,7 +183,7 @@ export class MainConfiguration {
     // Get the Processor-related queue
     const testQueue = this.bullFramework.getQueue('test');
     // Execute this task immediately
-    await testQueue?.runJob();
+    await testQueue?.addJobToQueue();
   }
 }
 ```
@@ -206,7 +206,7 @@ export class TestProcessor implements IProcessor {
 // invoke
 const testQueue = this.bullFramework.getQueue('test');
 // Execute this task immediately
-await testQueue?.runJob({
+await testQueue?.addJobToQueue({
   aaa: 1,
   bbb: 2,
 });
@@ -216,12 +216,12 @@ await testQueue?.runJob({
 
 ### Task status and management
 
-After executing `runJob`, we can get a `Job` object.
+After executing `addJobToQueue`, we can get a `Job` object.
 
 ```typescript
 // invoke
 const testQueue = this.bullFramework.getQueue('test');
-const job = await testQueue?.runJob();
+const job = await testQueue?.addJobToQueue();
 ```
 
 With this Job object, we can do progress management.
@@ -255,7 +255,7 @@ For example, delay execution by 1s.
 ```typescript
 const testQueue = this.bullFramework.getQueue('test');
 // Execute this task immediately
-await testQueue?.runJob({}, { delay: 1000 });
+await testQueue?.addJobToQueue({}, { delay: 1000 });
 ```
 
 
@@ -819,12 +819,12 @@ export class MainConfiguration {
   @Inject()
   bullBoardManager: bullBoard.BullBoardManager;
 
-  async onReady() {
+  async onServerReady() {
     const testQueue = this.bullFramework.createQueue('test', {
       // ...
     });
 
-    this.bullBoardManager.addQueue(testQueue);
+    this.bullBoardManager.addQueue(new bullBoard.BullAdapter(testQueue));
   }
 }
 ```

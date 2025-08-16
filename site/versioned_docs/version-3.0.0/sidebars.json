@@ -214,7 +214,7 @@
         "extensions/info",
         "extensions/validate",
         "extensions/swagger",
-        "extensions/bull",
+        "extensions/bullmq",
         "extensions/cron",
         "extensions/jwt"
       ]
@@ -305,12 +305,13 @@
     },
     {
       "type": "category",
-      "label": "历史废弃组件",
+      "label": "历史组件",
       "collapsed": false,
       "collapsible": false,
       "items": [
         "extensions/cache",
         "extensions/upload",
+        "extensions/bull",
         "legacy/mongodb",
         "legacy/sequelize",
         "legacy/orm",
