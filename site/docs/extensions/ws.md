@@ -286,12 +286,12 @@ client.on('ping', heartbeat);
 
 ```typescript
 import { Configuration, Inject } from '@midwayjs/core';
-import { MidwayWSFramework } from '@midwayjs/ws';
+import { Framework } from '@midwayjs/ws';
 
 @Configuration()
 export class WSConfiguration {
   @Inject()
-  wsFramework: MidwayWSFramework;
+  wsFramework: Framework;
 
   async onReady() {
     // 设置升级前鉴权处理器
