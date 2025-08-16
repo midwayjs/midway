@@ -450,8 +450,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       koa:
-        specifier: 2.16.1
-        version: 2.16.1
+        specifier: 2.16.2
+        version: 2.16.2
       mm:
         specifier: 3.4.0
         version: 3.4.0
@@ -592,8 +592,8 @@ importers:
   packages/grpc:
     dependencies:
       '@grpc/grpc-js':
-        specifier: 1.13.3
-        version: 1.13.3
+        specifier: 1.13.4
+        version: 1.13.4
       '@grpc/proto-loader':
         specifier: 0.7.15
         version: 0.7.15
@@ -1586,8 +1586,8 @@ importers:
         specifier: 6.9.18
         version: 6.9.18
       koa:
-        specifier: 2.16.1
-        version: 2.16.1
+        specifier: 2.16.2
+        version: 2.16.2
       koa-bodyparser:
         specifier: 4.4.1
         version: 4.4.1
@@ -1922,8 +1922,8 @@ packages:
     resolution: {integrity: sha512-d3iiHxdpg5+ZcJ6jnDSOT8Z0O0VMVGy34jAnYLUX8yd36b1qn8f1TwOA/Lc7TsOh03IkPJ38eGI5qD2EjNkoEA==}
     engines: {node: '>=12.10.0'}
 
-  '@grpc/grpc-js@1.13.3':
-    resolution: {integrity: sha512-FTXHdOoPbZrBjlVLHuKbDZnsTxXv2BlHF57xw6LuThXacXvtkahEPED0CKMk6obZDf65Hv4k3z62eyPNpvinIg==}
+  '@grpc/grpc-js@1.13.4':
+    resolution: {integrity: sha512-GsFaMXCkMqkKIvwCQjCrwH+GHbPKBjhwo/8ZuUkWHqbI73Kky9I+pQltrlT0+MWpedCoosda53lgjYfyEPgxBg==}
     engines: {node: '>=12.10.0'}
 
   '@grpc/proto-loader@0.7.13':
@@ -6797,8 +6797,8 @@ packages:
     resolution: {integrity: sha512-abVWOHY6z6qSTvNtapWMAnvHS9SUiUCaQQQubClSAT9ybQPsZ6ioKcRarnownS4fMD0sXQgQ5ey8CYEuwoa1Yg==}
     engines: {node: '>= 7.6.0'}
 
-  koa@2.16.1:
-    resolution: {integrity: sha512-umfX9d3iuSxTQP4pnzLOz0HKnPg0FaUUIKcye2lOiz3KPu1Y3M3xlz76dISdFPQs37P9eJz1wUpcTS6KDPn9fA==}
+  koa@2.16.2:
+    resolution: {integrity: sha512-+CCssgnrWKx9aI3OeZwroa/ckG4JICxvIFnSiOUyl2Uv+UTI+xIw0FfFrWS7cQFpoePpr9o8csss7KzsTzNL8Q==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
   latest-version@5.1.0:
@@ -10697,7 +10697,7 @@ snapshots:
       '@grpc/proto-loader': 0.7.15
       '@js-sdsl/ordered-map': 4.4.2
 
-  '@grpc/grpc-js@1.13.3':
+  '@grpc/grpc-js@1.13.4':
     dependencies:
       '@grpc/proto-loader': 0.7.15
       '@js-sdsl/ordered-map': 4.4.2
@@ -11545,7 +11545,7 @@ snapshots:
 
   '@opentelemetry/exporter-logs-otlp-grpc@0.57.1(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.13.3
+      '@grpc/grpc-js': 1.13.4
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-grpc-exporter-base': 0.57.1(@opentelemetry/api@1.9.0)
@@ -11574,7 +11574,7 @@ snapshots:
 
   '@opentelemetry/exporter-metrics-otlp-grpc@0.57.1(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.13.3
+      '@grpc/grpc-js': 1.13.4
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/exporter-metrics-otlp-http': 0.57.1(@opentelemetry/api@1.9.0)
@@ -11612,7 +11612,7 @@ snapshots:
 
   '@opentelemetry/exporter-trace-otlp-grpc@0.57.1(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.13.3
+      '@grpc/grpc-js': 1.13.4
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-grpc-exporter-base': 0.57.1(@opentelemetry/api@1.9.0)
@@ -11666,7 +11666,7 @@ snapshots:
 
   '@opentelemetry/otlp-grpc-exporter-base@0.57.1(@opentelemetry/api@1.9.0)':
     dependencies:
-      '@grpc/grpc-js': 1.13.3
+      '@grpc/grpc-js': 1.13.4
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/otlp-exporter-base': 0.57.1(@opentelemetry/api@1.9.0)
@@ -14241,7 +14241,7 @@ snapshots:
       get-ready: 2.0.1
       globby: 10.0.2
       is-type-of: 1.4.0
-      koa: 2.16.1
+      koa: 2.16.2
       koa-convert: 1.2.0
       node-homedir: 1.1.1
       ready-callback: 2.1.0
@@ -16851,7 +16851,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  koa@2.16.1:
+  koa@2.16.2:
     dependencies:
       accepts: 1.3.8
       cache-content-type: 1.0.1
