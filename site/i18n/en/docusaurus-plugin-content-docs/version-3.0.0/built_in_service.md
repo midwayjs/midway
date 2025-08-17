@@ -500,10 +500,10 @@ API is as follows
 | ------------------------------------------------- | ---------------------------------- | -------------------------------------- |
 | addController(controllerClz, controllerOption) |                                    | Dynamically add a Controller |
 | addRouter(routerFunction, routerInfoOption) |                                    | Dynamically add a routing function |
-| getRouterTable() | Promise<Map<string, RouterInfo [] >> | Get hierarchical routes |
-| getFlattenRouterTable() | Promise<RouterInfo [] > | Get a list of flat routes |
-| getRoutePriorityList() | Promise<RouterPriority [] > | Get the route prefix list |
-| getMatchedRouterInfo(url: string, method: string) | Promise<RouterInfo \| undefined> | Returns the current matching route information based on the access path. |
+| getRouterTable() | Promise\<Map\<string, RouterInfo[]>> | Get hierarchical routes |
+| getFlattenRouterTable() | Promise\<RouterInfo[]> | Get a list of flat routes |
+| getRoutePriorityList() | Promise\<RouterPriority[]> | Get the route prefix list |
+| getMatchedRouterInfo(url: string, method: string) | Promise\<RouterInfo \| undefined> | Returns the current matching route information based on the access path. |
 
 For more information, see [Web route table](# router_table).
 
@@ -547,7 +547,7 @@ API is as follows
 | API | Return type | Description |
 | ---------------------------------------------------------- | --------------------- | ---------------- |
 | addServerlessFunction(fn, triggerOptions, functionOptions) |                       | Dynamically add a function |
-| getFunctionList() | Promise<RouterInfo [] > | Get a list of all functions |
+| getFunctionList() | Promise\<RouterInfo[]> | Get a list of all functions |
 
 For more information, see [Web route table](# router_table).
 
@@ -605,7 +605,7 @@ The API is as follows
 
 | API                              | Return Type             | Description                |
 | -------------------------------- |-------------------------| -------------------------- |
-| getStatus()                      | Promise<HealthResults\> | Dynamically add a function |
+| getStatus()                      | Promise\<HealthResults\> | Dynamically add a function |
 | setCheckTimeout(timeout: number) | void                    | Set timeout                |
 
 The `getStatus` method is used to externally call the `onHealthCheck` method in polling `configuration` and return a data that conforms to the `HealthResults` structure.

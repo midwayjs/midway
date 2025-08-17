@@ -221,16 +221,16 @@ All attributes are described as follows:
 | globalPrefix | string | optional. the global http prefix |
 | keys | string[] | Optional, Cookies signature, if the upper layer does not write keys, you can also set it here |
 | hostname | string | Optional. The hostname to listen to. Default 127.1 |
-| Key | string \| Buffer \| Array<Buffer\|Object> | Optional, Https key, server private key |
-| cert | string \| Buffer \| Array<Buffer\|Object> | Optional, Https cert, server certificate |
-| ca | string \| Buffer \| Array<Buffer\|Object> | Optional, Https ca |
+| Key | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https key, server private key |
+| cert | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https cert, server certificate |
+| ca | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https ca |
 | http2 | boolean | Optional, supported by http2, default false |
 | proxy | boolean | Optional, whether to enable the proxy. If it is true, the IP in the request request will be obtained first from the X-Forwarded-For in the Header field. The default is false. |
 | subdomainOffset | number | optional, the offset of the subdomain name, default 2. |
 | proxyIpHeader | string | optional. obtains the field name of the proxy ip address. the default value is X-Forwarded-For |
 | maxIpsCount | number | optional. the maximum number of ips obtained, which is 0 by default. |
 | serverTimeout | number | Optional, server timeout configuration, the default is 2 * 60 * 1000 (2 minutes), in milliseconds |
-| serverOptions | Record<string, any> | Optional，http Server [Options](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
+| serverOptions | Record\<string, any> | Optional，http Server [Options](https://nodejs.org/docs/latest/api/http.html#httpcreateserveroptions-requestlistener) |
 
 
 

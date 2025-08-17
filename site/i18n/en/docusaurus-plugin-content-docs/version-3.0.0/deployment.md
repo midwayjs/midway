@@ -324,7 +324,7 @@ Bootstrap
 | moduleDetector | 'file' \| IFileDetector \| false | Optional. The module loading method used. Default value: `file`. You can use the dependency injection local file scanning method. You can explicitly specify a scanner or disable scanning. |
 | logger | Boolean \| ILogger | optional. the logger used in the bootstrap. the default value is consoleLogger |
 | ignore | string [] | optional. the path ignored by the dependent injection container scan. the moduleDetector is invalid if false |
-| globalConfig | Array<{ [environmentName: string]: Record<string, any> }> \| Record<string, any> | Optionally, if the global incoming configuration is an object, it is directly merged into the current configuration in the form of an object. If you want to pass in the configuration of different environments, it is passed in in the form of an array with the same structure and `importConfigs`.  |
+| globalConfig | Array\<\{ [environmentName: string]: Record\<string, any> }> \| Record\<string, any> | Optionally, if the global incoming configuration is an object, it is directly merged into the current configuration in the form of an object. If you want to pass in the configuration of different environments, it is passed in in the form of an array with the same structure and `importConfigs`.  |
 
 
 
