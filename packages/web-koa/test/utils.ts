@@ -2,6 +2,7 @@ import { IMidwayKoaConfigurationOptions, Framework, IMidwayKoaApplication } from
 import * as koaModule from '../src';
 import { join } from 'path';
 import { createApp, close } from '@midwayjs/mock';
+import axios from 'axios';
 
 export async function creatApp(name: string, options: IMidwayKoaConfigurationOptions = {}): Promise<IMidwayKoaApplication> {
   return createApp<Framework>(join(__dirname, 'fixtures', name), options, koaModule);
@@ -54,32 +55,33 @@ export async function createRealHttpRequest(
   let response;
   try {
     // 发送请求
-    response = await fetch(fullUrl, {
+    response = await axios({
       method: options.method || 'GET',
+      url: fullUrl,
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
       },
-      body: options.body ? JSON.stringify(options.body) : undefined,
+      data: options.body,
     });
   } catch (err) {
-    throw new Error(`Failed to fetch ${fullUrl}: ${err.message}`);
+    throw new Error(`Failed to request ${fullUrl}: ${err.message}`);
   }
 
-  const text = await response.text();
+  const text = response.data;
   let body: any;
   
   try {
-    body = JSON.parse(text);
+    body = typeof text === 'string' ? JSON.parse(text) : text;
   } catch {
     body = text;
   }
 
   return {
     status: response.status,
-    text,
+    text: typeof text === 'string' ? text : JSON.stringify(text),
     body,
-    headers: Object.fromEntries(response.headers.entries()),
+    headers: response.headers,
   };
 }
 
