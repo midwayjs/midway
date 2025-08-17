@@ -46,14 +46,14 @@ jobs:
             ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-
       - name: Install Dependencies
         run: |
-          npm i --no-audit -g autocannon zx
+          pnpm i --no-audit -g autocannon zx
           # npm run purge # if you want to clean up the cache
-          npm i --no-audit
+          pnpm i --no-audit
       - name: Build
         run: |
           sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
           lerna run build --concurrency=2
-      - run: npm run link
+      - run: pnpm run link
       - name: Benchmark application-koa-v3
         timeout-minutes: 10
         run: |
