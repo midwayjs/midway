@@ -4,6 +4,7 @@ import * as bullboard from '../src';
 import * as bullmq from '@midwayjs/bullmq';
 import * as bull from '@midwayjs/bull';
 import * as koa from '@midwayjs/koa';
+import { MidwayFrameworkService } from '@midwayjs/core';
 
 describe(`/test/index.test.ts`, () => {
   it('test ui in koa', async () => {
@@ -113,6 +114,9 @@ describe(`/test/index.test.ts`, () => {
       }
     });
 
+    const frameworkService = app.getApplicationContext().get(MidwayFrameworkService);
+    frameworkService.setMainApp('koa');
+
     const bullFramework = app.getApplicationContext().get(bullmq.Framework);
     const testQueue = bullFramework.createQueue('test');
     await testQueue?.addJobToQueue({name: 'stone-jin'});
@@ -120,7 +124,7 @@ describe(`/test/index.test.ts`, () => {
     const manager = await app.getApplicationContext().getAsync(bullboard.BullBoardManager);
     manager.addQueue(new bullboard.BullMQAdapter(testQueue) as any);
 
-    const result = await createHttpRequest(app).get('/ui/api/queues?activeQueue=test&page=1&jobsPerPage=10');
+    const result = await createHttpRequest(frameworkService.getMainApp()).get('/ui/api/queues?activeQueue=test&page=1&jobsPerPage=10');
     expect(result.status).toBe(200);
     expect(result.body.queues.length).toBe(1);
     expect(result.body.queues[0].type).toBe('bullmq');
@@ -145,6 +149,9 @@ describe(`/test/index.test.ts`, () => {
       }
     });
 
+    const frameworkService = app.getApplicationContext().get(MidwayFrameworkService);
+    frameworkService.setMainApp('koa');
+
     const bullFramework = app.getApplicationContext().get(bull.Framework);
     const testQueue = bullFramework.createQueue('test-bull-board');
     await testQueue?.addJobToQueue({name: 'stone-jin'});
@@ -152,7 +159,7 @@ describe(`/test/index.test.ts`, () => {
     const manager = await app.getApplicationContext().getAsync(bullboard.BullBoardManager);
     manager.addQueue(new bullboard.BullAdapter(testQueue));
 
-    const result = await createHttpRequest(app).get('/ui/api/queues?activeQueue=test&page=1&jobsPerPage=10');
+    const result = await createHttpRequest(frameworkService.getMainApp()).get('/ui/api/queues?activeQueue=test&page=1&jobsPerPage=10');
     expect(result.status).toBe(200);
     expect(result.body.queues.length).toBe(1);
     expect(result.body.queues[0].type).toBe('bull');
