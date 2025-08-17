@@ -44,6 +44,19 @@ const config = {
         },
       },
     ],
+    [
+      '@signalwire/docusaurus-plugin-llms-txt',
+      {
+        siteTitle: 'My Documentation',
+        siteDescription: 'Comprehensive guide to our platform',
+        depth: 2,
+        content: {
+          includeBlog: true,
+          includePages: true,
+          enableLlmsFullTxt: true  // Optional: generates llms-full.txt
+        }
+      }
+    ]
   ],
   presets: [
     [

@@ -27,6 +27,7 @@
     "@docusaurus/theme-search-algolia": "^3.8.0",
     "@mdx-js/react": "^3.0.0",
     "@react-hook/media-query": "^1.1.1",
+    "@signalwire/docusaurus-plugin-llms-txt": "^1.2.2",
     "@stitches/react": "^1.2.8",
     "@svgr/webpack": "^5.5.0",
     "@uiw/react-codesandbox": "^1.1.5",
