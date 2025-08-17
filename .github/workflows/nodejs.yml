@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [main]
+    branches: [3.x]
     paths-ignore:
       - .github/workflows/site.yml
       - 'site/**'

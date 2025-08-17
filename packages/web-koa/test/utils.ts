@@ -12,3 +12,93 @@ export async function closeApp(app) {
 }
 
 export { createHttpRequest } from '@midwayjs/mock';
+
+/**
+ * 真正启动服务器并发送 HTTP 请求的测试方法
+ * 用于测试 listenOptions 等需要真正启动端口的配置
+ */
+export async function createRealHttpRequest(
+  app: IMidwayKoaApplication,
+  path: string,
+  options: {
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+    headers?: Record<string, string>;
+    body?: any;
+    query?: Record<string, string>;
+  } = {}
+): Promise<{
+  status: number;
+  text: string;
+  body: any;
+  headers: Record<string, string>;
+}> {
+  const framework = app.getFramework() as Framework;
+  const server = framework.getServer();
+  
+  if (!server) {
+    throw new Error('Server not started');
+  }
+
+  const port = framework.getPort();
+  const host = '127.0.0.1';
+  const url = `http://${host}:${port}${path}`;
+
+  // 构建查询字符串
+  let fullUrl = url;
+  if (options.query && Object.keys(options.query).length > 0) {
+    const queryString = new URLSearchParams(options.query).toString();
+    fullUrl = `${url}?${queryString}`;
+  }
+
+
+  let response;
+  try {
+    // 发送请求
+    response = await fetch(fullUrl, {
+      method: options.method || 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    });
+  } catch (err) {
+    throw new Error(`Failed to fetch ${fullUrl}: ${err.message}`);
+  }
+
+  const text = await response.text();
+  let body: any;
+  
+  try {
+    body = JSON.parse(text);
+  } catch {
+    body = text;
+  }
+
+  return {
+    status: response.status,
+    text,
+    body,
+    headers: Object.fromEntries(response.headers.entries()),
+  };
+}
+
+/**
+ * 等待服务器启动完成
+ */
+export async function waitForServer(app: IMidwayKoaApplication): Promise<void> {
+  const framework = app.getFramework() as Framework;
+  const server = framework.getServer();
+  
+  if (!server) {
+    throw new Error('Server not started');
+  }
+
+  return new Promise<void>((resolve) => {
+    if (server.listening) {
+      resolve();
+    } else {
+      server.once('listening', () => resolve());
+    }
+  });
+}
