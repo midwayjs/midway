@@ -2,6 +2,7 @@ import React from 'react'
 import { styled } from '../styled'
 import { keyframes } from '@stitches/react'
 import Marquee from 'react-fast-marquee'
+import Translate from '@docusaurus/Translate';
 
 const fadeInUp = keyframes({
   '0%': { opacity: 0, transform: 'translateY(30px)' },
@@ -194,9 +195,15 @@ export function UsedBy() {
       </FloatingElements>
       
       <BlockContent>
-        <BlockTitle>信任我们的团队</BlockTitle>
+        <BlockTitle>
+          <Translate id="homepage.usedby.title">
+            信任我们的团队
+          </Translate>
+        </BlockTitle>
         <BlockSubtitle>
-          来自各大互联网公司的优秀团队都在使用 Midway.js，共同构建更好的应用
+          <Translate id="homepage.usedby.subtitle">
+            来自各大互联网公司的优秀团队都在使用 Midway.js，共同构建更好的应用
+          </Translate>
         </BlockSubtitle>
         
         <MarqueeContainer>

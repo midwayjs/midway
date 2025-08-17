@@ -2,6 +2,7 @@ import { Block } from './Block'
 import React from 'react'
 import { styled } from '../styled'
 import { keyframes } from '@stitches/react'
+import Translate from '@docusaurus/Translate'
 
 const fadeInUp = keyframes({
   '0%': { opacity: 0, transform: 'translateY(30px)' },
@@ -226,9 +227,15 @@ export function EssentialsComponents() {
   return (
     <EnhancedBlock>
       <BlockContent>
-        <BlockTitle>核心组件</BlockTitle>
+        <BlockTitle>
+          <Translate id="homepage.essentials.title">
+            核心组件
+          </Translate>
+        </BlockTitle>
         <BlockSubtitle>
-          提供丰富的企业级组件，满足各种开发需求，让开发更加高效
+          <Translate id="homepage.essentials.subtitle">
+            提供丰富的企业级组件，满足各种开发需求，让开发更加高效
+          </Translate>
         </BlockSubtitle>
         
         <Grid>

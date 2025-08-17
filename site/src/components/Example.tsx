@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled } from '../styled'
 import { keyframes } from '@stitches/react'
+import Translate from '@docusaurus/Translate'
 
 const fadeInUp = keyframes({
   '0%': { opacity: 0, transform: 'translateY(30px)' },
@@ -146,9 +147,15 @@ export function Example() {
   return (
     <EnhancedBlock>
       <BlockContent>
-        <BlockTitle>应用案例</BlockTitle>
+        <BlockTitle>
+          <Translate id="homepage.example.title">
+            应用案例
+          </Translate>
+        </BlockTitle>
         <BlockSubtitle>
-          探索 Midway.js 在各种场景下的应用，了解其强大的适应性和灵活性
+          <Translate id="homepage.example.subtitle">
+            探索 Midway.js 在各种场景下的应用，了解其强大的适应性和灵活性
+          </Translate>
         </BlockSubtitle>
         
         <Container>

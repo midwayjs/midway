@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from '../styled';
 import { keyframes } from '@stitches/react';
+import Translate from '@docusaurus/Translate';
 
 const fadeInUp = keyframes({
   '0%': { opacity: 0, transform: 'translateY(30px)' },
@@ -165,9 +166,15 @@ export function Recommend() {
   return (
     <EnhancedBlock>
       <BlockContent>
-        <BlockTitle>推荐项目</BlockTitle>
+        <BlockTitle>
+          <Translate id="homepage.recommend.title">
+            推荐项目
+          </Translate>
+        </BlockTitle>
         <BlockSubtitle>
-          来自开源社区的优秀扩展和项目，与 Midway.js 完美配合
+          <Translate id="homepage.recommend.subtitle">
+            来自开源社区的优秀扩展和项目，与 Midway.js 完美配合
+          </Translate>
         </BlockSubtitle>
         
         <Container>
@@ -180,7 +187,11 @@ export function Recommend() {
                   className="extension-image"
                 />
                 <CardOverlay className="card-overlay">
-                  <CardTitle className="card-title">{item.title}</CardTitle>
+                  <CardTitle className="card-title">
+                    <Translate id="homepage.recommend.cooljs.title">
+                      {item.title}
+                    </Translate>
+                  </CardTitle>
                 </CardOverlay>
               </ExtensionCard>
             </div>

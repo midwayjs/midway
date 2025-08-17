@@ -16,7 +16,7 @@ const float = keyframes({
 type FeatureProps = {
   icon: string
   title: string
-  description: string
+  description: React.ReactNode
   isMiddle?: boolean
 }
 
@@ -235,9 +235,7 @@ function Feature(props: FeatureProps) {
       </IconContainer>
       <Title>{props.title}</Title>
       <Description>
-        <Translate id={`homepage.feature.desc.${props.title}`}>
-          {props.description}
-        </Translate>
+        {props.description}
       </Description>
     </FeatureCard>
   )
@@ -247,18 +245,32 @@ const features = [
   {
     icon: 'icon-huojiancopy',
     title: 'Reliable & Fast',
-    description: `Class + IoC = 更优雅的架构\nFunction + Hooks = 更高的研发效率`,
+    description: (
+      <>
+        <Translate id="homepage.corefeatures.reliable.line1">
+          Class + IoC = 更优雅的架构
+        </Translate>
+        <br />
+        <Translate id="homepage.corefeatures.reliable.line2">
+          Function + Hooks = 更高的研发效率
+        </Translate>
+      </>
+    ),
   },
   {
     icon: 'icon-nintendogamecube',
     title: 'API & Fullstack',
-    description: '不仅支持开发 API 服务，也提供业界首创的一体化全栈开发模式',
+    description: <Translate id="homepage.corefeatures.api.description">
+      不仅支持开发 API 服务，也提供业界首创的一体化全栈开发模式
+    </Translate>,
     isMiddle: true
   },
   {
     icon: 'icon-MPIS-Upgrade',
     title: 'Progressive',
-    description: '渐进式设计，提供从基础到入门再到企业级的升级方案，解决应用维护与拓展性难题',
+    description: <Translate id="homepage.corefeatures.progressive.description">
+      渐进式设计，提供从基础到入门再到企业级的升级方案，解决应用维护与拓展性难题
+    </Translate>,
   },
 ] as FeatureProps[]
 
@@ -266,9 +278,15 @@ export function CoreFeatures() {
   return (
     <Container>
       <SectionTitle>
-        <SectionHeading>核心特性</SectionHeading>
+        <SectionHeading>
+          <Translate id="homepage.corefeatures.title">
+            核心特性
+          </Translate>
+        </SectionHeading>
         <SectionSubtitle>
-          专为现代 Node.js 应用设计，提供企业级的开发体验和性能表现
+          <Translate id="homepage.corefeatures.subtitle">
+            专为现代 Node.js 应用设计，提供企业级的开发体验和性能表现
+          </Translate>
         </SectionSubtitle>
       </SectionTitle>
       

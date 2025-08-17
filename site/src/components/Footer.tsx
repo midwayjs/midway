@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled } from '../styled'
 import { keyframes } from '@stitches/react'
+import Translate from '@docusaurus/Translate'
 
 const fadeInUp = keyframes({
   '0%': { opacity: 0, transform: 'translateY(30px)' },
@@ -153,10 +154,14 @@ export function Footer() {
       
       <Content>
         <Title>
-          Develop. Build. Ship.
+          <Translate id="homepage.footer.title">
+            Develop. Build. Ship.
+          </Translate>
         </Title>
         <Motto>
-          让 Node.js 开发更加高效，让应用部署更加简单
+          <Translate id="homepage.footer.motto">
+            让 Node.js 开发更加高效，让应用部署更加简单
+          </Translate>
         </Motto>
       </Content>
     </Container>

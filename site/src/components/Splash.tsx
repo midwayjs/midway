@@ -2,6 +2,7 @@ import React from 'react';
 import { useWindupString, CharWrapper } from 'windups';
 import { styled } from '../styled';
 import { keyframes } from '@stitches/react';
+import Translate from '@docusaurus/Translate';
 
 const gradientAnimation = keyframes({
   '0%': { backgroundPosition: '0% 50%' },
@@ -535,7 +536,9 @@ export function Splash() {
       <Content>
         <Title>Midway</Title>
         <SubTitle>
-          Node.js Framework For "
+          <Translate id="homepage.splash.frameworkFor">
+            Node.js Framework For "
+          </Translate>
           <DynamicTextContainer>
             {text.split('').map((char, index) => (
               <Description key={char + index}>{char}</Description>
@@ -547,10 +550,14 @@ export function Splash() {
         <VersionInfo>
           <VersionButtons>
             <VersionButton type="stable" href="/docs/intro">
-              📖 稳定版文档 (v3.x)
+              <Translate id="homepage.splash.stableDoc">
+                📖 稳定版文档 (v3.x)
+              </Translate>
             </VersionButton>
             <VersionButton type="beta" href="/docs/next/intro">
-              🚧 Beta 版文档 (v4)
+              <Translate id="homepage.splash.betaDoc">
+                🚧 Beta 版文档 (v4)
+              </Translate>
             </VersionButton>
           </VersionButtons>
         </VersionInfo>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from '../styled';
 import { keyframes } from '@stitches/react';
+import Translate from '@docusaurus/Translate';
 
 const fadeInUp = keyframes({
   '0%': { opacity: 0, transform: 'translateY(30px)' },
@@ -273,28 +274,32 @@ const RightCard = styled('div', {
 });
 
 const classTutorialData = {
-  icon: 'icon-nintendogamecube',
-  title: 'Class 语法教程',
-  description: '使用 IoC + 装饰器构建优雅的 Node.js 应用架构',
+  icon: 'icon-class',
+  title: <Translate id="homepage.preview.class.title">Class 语法教程</Translate>,
+  description: <Translate id="homepage.preview.class.description">
+    学习如何使用 Class 语法开发 Midway.js 应用
+  </Translate>,
   features: [
-    '基于装饰器的路由定义',
-    '依赖注入与服务管理',
-    'TypeORM 数据库集成',
-    '组件化开发模式'
+    <Translate id="homepage.preview.class.feature1">基于装饰器的路由定义</Translate>,
+    <Translate id="homepage.preview.class.feature2">依赖注入与服务管理</Translate>,
+    <Translate id="homepage.preview.class.feature3">TypeORM 数据库集成</Translate>,
+    <Translate id="homepage.preview.class.feature4">组件化开发模式</Translate>
   ],
   href: '/tutorials/class-syntax',
   disabled: true
 };
 
 const functionTutorialData = {
-  icon: 'icon-huojiancopy',
-  title: 'Function 语法教程',
-  description: '使用函数 + Hooks 进行快速全栈应用开发',
+  icon: 'icon-function',
+  title: <Translate id="homepage.preview.function.title">Function 语法教程</Translate>,
+  description: <Translate id="homepage.preview.function.description">
+    学习如何使用 Function 语法开发 Midway.js 应用
+  </Translate>,
   features: [
-    '前后端一体化开发',
-    '函数式 API 设计',
-    'React Hooks 后端开发',
-    '零 API 调用模式'
+    <Translate id="homepage.preview.function.feature1">前后端一体化开发</Translate>,
+    <Translate id="homepage.preview.function.feature2">函数式 API 设计</Translate>,
+    <Translate id="homepage.preview.function.feature3">React Hooks 后端开发</Translate>,
+    <Translate id="homepage.preview.function.feature4">零 API 调用模式</Translate>
   ],
   href: '/tutorials/function-syntax',
   disabled: true
@@ -315,11 +320,15 @@ function TutorialCardComponent({ data }: { data: typeof classTutorialData }) {
       </CardFeatures>
       {data.disabled ? (
         <DisabledButton>
-          🚧 即将开放
+          <Translate id="homepage.preview.comingSoon">
+            🚧 即将开放
+          </Translate>
         </DisabledButton>
       ) : (
         <StartButton href={data.href}>
-          开始学习 →
+          <Translate id="homepage.preview.startLearning">
+            开始学习 →
+          </Translate>
         </StartButton>
       )}
     </TutorialCard>
@@ -330,9 +339,15 @@ export function PreviewClassSyntax() {
   return (
     <EnhancedBlock>
       <BlockContent>
-        <BlockTitle>🚧 交互式教程 (开发中)</BlockTitle>
+        <BlockTitle>
+          <Translate id="homepage.preview.title">
+            🚧 交互式教程 (开发中)
+          </Translate>
+        </BlockTitle>
         <BlockSubtitle>
-          WebContainer 功能正在开发中，即将提供真实的开发环境体验，边学边练，快速掌握 Midway.js
+          <Translate id="homepage.preview.subtitle">
+            WebContainer 功能正在开发中，即将提供真实的开发环境体验，边学边练，快速掌握 Midway.js
+          </Translate>
         </BlockSubtitle>
         
         <Container>
