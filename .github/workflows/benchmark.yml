@@ -2,12 +2,12 @@ name: Midway memory leak check
 
 on:
   push:
-    branches: [main]
+    branches: [v4-next]
     paths-ignore:
       - 'site/**'
       - '*.md'
   pull_request:
-    branches: [main]
+    branches: [v4-next]
     paths-ignore:
       - 'site/**'
       - '*.md'
