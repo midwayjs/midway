@@ -27,6 +27,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
       - name: Cache
         uses: actions/cache@v3
         id: cache-lerna
@@ -54,10 +59,10 @@ jobs:
           sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
           lerna run build --concurrency=2
       - run: pnpm run link
-      - name: Benchmark application-koa-v3
+      - name: Benchmark application-koa-v4
         timeout-minutes: 10
         run: |
-          ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-koa-v3
+          ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-koa-v4
 #      - name: Benchmark application-web-v3
 #        timeout-minutes: 10
 #        run: |
