@@ -51,9 +51,9 @@ jobs:
             ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-
       - name: Install Dependencies
         run: |
-          pnpm i --no-audit -g autocannon zx
+          pnpm i -g autocannon zx
           # npm run purge # if you want to clean up the cache
-          pnpm i --no-audit
+          pnpm i --frozen-lockfile
       - name: Build
         run: |
           sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
