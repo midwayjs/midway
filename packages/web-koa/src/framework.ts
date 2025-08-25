@@ -311,25 +311,36 @@ export class MidwayKoaFramework extends BaseFramework<
       this.server.setTimeout(this.configurationOptions.serverTimeout);
     }
 
-    // set port and listen server
-    let customPort =
-      process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
+    this.configurationOptions.listenOptions = {
+      port: this.configurationOptions.port,
+      host: this.configurationOptions.hostname,
+      ...this.configurationOptions.listenOptions,
+    };
 
-    if (customPort === 0) {
+    // set port and listen server
+    let customPort: string | number =
+      process.env.MIDWAY_HTTP_PORT ||
+      this.configurationOptions.listenOptions.port;
+
+    if (customPort === 0 || customPort === '0') {
       customPort = await getFreePort();
+      this.configurationOptions.listenOptions.port = customPort;
+      this.logger.info(
+        `Midway koa is listening on port ${customPort} (auto assigned)`
+      );
     }
 
-    if (customPort) {
+    if (this.configurationOptions.listenOptions.port) {
       new Promise<void>(resolve => {
-        const args: any[] = [customPort];
-        if (this.configurationOptions.hostname) {
-          args.push(this.configurationOptions.hostname);
-        }
-        args.push(() => {
+        // 使用 ListenOptions 对象启动服务器
+        this.server.listen(this.configurationOptions.listenOptions, () => {
           resolve();
         });
-        this.server.listen(...args);
-        process.env.MIDWAY_HTTP_PORT = String(customPort);
+
+        // 设置环境变量
+        process.env.MIDWAY_HTTP_PORT = String(
+          this.configurationOptions.listenOptions.port
+        );
       });
     }
   }
@@ -338,6 +349,7 @@ export class MidwayKoaFramework extends BaseFramework<
     if (this.server) {
       new Promise(resolve => {
         this.server.close(resolve);
+        process.env.MIDWAY_HTTP_PORT = '';
       });
     }
   }

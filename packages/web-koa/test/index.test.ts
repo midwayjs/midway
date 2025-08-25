@@ -1,6 +1,6 @@
-import { closeApp, creatApp, createHttpRequest } from './utils';
+import { closeApp, creatApp, createHttpRequest, createRealHttpRequest } from './utils';
 import { IMidwayKoaApplication, Framework } from '../src';
-import { Controller, Get, makeHttpRequest } from '@midwayjs/core';
+import { Controller, Get, makeHttpRequest, sleep } from '@midwayjs/core';
 import { createLightApp } from '@midwayjs/mock';
 
 describe('/test/feature.test.ts', () => {
@@ -274,6 +274,7 @@ describe('/test/feature.test.ts', () => {
       .get('/');
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('123');
+    await closeApp(app);
   });
 
   it('should test default onerror set status', async () => {
@@ -659,6 +660,118 @@ describe('/test/feature.test.ts', () => {
         .get('/set_query');
 
       expect(result.text).toEqual(JSON.stringify({'a': 1}));
+      await closeApp(app);
+    });
+  });
+
+  describe('test http listen options', () => {
+    @Controller()
+    class HomeController {
+      @Get('/')
+      async query() {
+        return 'hello world'
+      }
+    }
+
+    it('should test default port', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            port: 0, // 使用随机端口
+          }
+        }
+      });
+      await sleep();
+
+      // 验证端口配置
+      const framework = app.getFramework() as Framework;
+      const port = framework.getPort();
+      expect(port).toBeDefined();
+      expect(port).not.toBe('0');
+
+      // 使用真正的 HTTP 请求测试
+      const result = await createRealHttpRequest(app as IMidwayKoaApplication, '/');
+      expect(result.status).toBe(200);
+
+      await closeApp(app);
+    });
+
+    it('should test listenOptions configuration', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            listenOptions: {
+              port: 0, // 使用随机端口
+              host: '127.0.0.1'
+            }
+          }
+        }
+      });
+
+      // 等待服务器真正启动
+      await sleep();
+
+      // 验证端口配置
+      const framework = app.getFramework() as Framework;
+      const port = framework.getPort();
+      expect(port).toBeDefined();
+      expect(port).not.toBe('0');
+
+      // 使用真正的 HTTP 请求测试
+      const result = await createRealHttpRequest(app as IMidwayKoaApplication, '/');
+      expect(result.status).toBe(200);
+
+      await closeApp(app);
+    });
+
+    it('should test listenOptions with port priority', async () => {
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            port: 3000,
+            hostname: 'localhost',
+            listenOptions: {
+              port: 0, // listenOptions.port 应该优先于 port
+              host: '127.0.0.1', // listenOptions.host 应该优先于 hostname
+              backlog: 200,
+            }
+          }
+        }
+      });
+
+      await sleep();
+
+      // 验证端口配置 - listenOptions.port 应该优先于 port
+      const framework = app.getFramework() as Framework;
+      const port = framework.getPort();
+      expect(port).toBeDefined();
+      expect(port).not.toBe('3000'); // 应该使用 listenOptions.port (0) 而不是 port (3000)
+
+      // 使用真正的 HTTP 请求测试
+      const result = await createRealHttpRequest(app as IMidwayKoaApplication, '/');
+      expect(result.status).toBe(200);
+
       await closeApp(app);
     });
   });
