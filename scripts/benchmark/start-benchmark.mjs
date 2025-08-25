@@ -45,7 +45,7 @@ echo`[benchmark] script complete`
 
 cd(dir)
 
-await $`pwd && pnpm install --filter . --frozen-lockfile`
+await $`pwd && pnpm install --filter . --no-frozen-lockfile`
 await $`pnpm run build`
 echo(chalk.blue('[benchmark] build example complete'))
 
