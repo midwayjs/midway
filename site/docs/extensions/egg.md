@@ -112,7 +112,7 @@ export class MainConfiguration {
 |   ├── config
 |   |   ├── plugin.ts
 |   |   ├── config.default.ts
-|   │   ├── config.prod.ts
+|   |   ├── config.prod.ts
 |   |   ├── config.test.ts (可选)
 |   |   ├── config.local.ts (可选)
 |   |   └── config.unittest.ts (可选)
@@ -551,7 +551,7 @@ Copy
 - `--daemon` 是否允许在后台模式，无需 nohup。若使用 Docker 建议直接前台运行。
 - `--env=prod` 框架运行环境，默认会读取环境变量 process.env.EGG_SERVER_ENV， 如未传递将使用框架内置环境 prod。
 - `--workers=2` 框架 worker 线程数，默认会创建和 CPU 核数相当的 app worker 数，可以充分的利用 CPU 资源。
-- `--title=egg-server-showcase` 用于方便 ps 进程时 grep 用，默认为 `egg-server-${appname}`。
+- `--title=egg-server-showcase` 用于方便 ps 进程时 grep 用，默认为 `egg-server-\${appname}`。
 - `--framework=yadan` 如果应用使用了[自定义框架](https://eggjs.org/zh-cn/advanced/framework.html)，可以配置 package.json 的 egg.framework 或指定该参数。
 - `--ignore-stderr` 忽略启动期的报错。
 - `--https.key` 指定 HTTPS 所需密钥文件的完整路径。

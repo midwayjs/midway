@@ -1,4 +1,148 @@
 {
+  "homepage.splash.frameworkFor": {
+    "message": "Node.js Framework For \"",
+    "description": "The subtitle text for the homepage splash section"
+  },
+  "homepage.splash.stableDoc": {
+    "message": "📖 Stable Docs (v3.x)",
+    "description": "The text for the stable documentation button"
+  },
+  "homepage.splash.betaDoc": {
+    "message": "🚧 Beta Docs (v4)",
+    "description": "The text for the beta documentation button"
+  },
+  "homepage.recommend.title": {
+    "message": "Recommended Projects",
+    "description": "The title for the recommended projects section"
+  },
+  "homepage.recommend.subtitle": {
+    "message": "Excellent extensions and projects from the open source community, perfectly integrated with Midway.js",
+    "description": "The subtitle for the recommended projects section"
+  },
+  "homepage.recommend.cooljs.title": {
+    "message": "Cool js, a future-oriented backend development framework",
+    "description": "The title for the Cool js project"
+  },
+  "homepage.example.title": {
+    "message": "Application Cases",
+    "description": "The title for the example cases section"
+  },
+  "homepage.example.subtitle": {
+    "message": "Explore Midway.js applications in various scenarios and understand its powerful adaptability and flexibility",
+    "description": "The subtitle for the example cases section"
+  },
+  "homepage.essentials.title": {
+    "message": "Core Components",
+    "description": "The title for the core components section"
+  },
+  "homepage.essentials.subtitle": {
+    "message": "Provides rich enterprise-level components to meet various development needs and make development more efficient",
+    "description": "The subtitle for the core components section"
+  },
+  "homepage.usedby.title": {
+    "message": "Teams That Trust Us",
+    "description": "The title for the used by section"
+  },
+  "homepage.usedby.subtitle": {
+    "message": "Excellent teams from major internet companies are using Midway.js to build better applications together",
+    "description": "The subtitle for the used by section"
+  },
+  "homepage.footer.title": {
+    "message": "Develop. Build. Ship.",
+    "description": "The title for the footer section"
+  },
+  "homepage.footer.motto": {
+    "message": "Make Node.js development more efficient and application deployment simpler",
+    "description": "The motto for the footer section"
+  },
+  "homepage.preview.class.title": {
+    "message": "Class Syntax Tutorial",
+    "description": "The title for the class syntax tutorial"
+  },
+  "homepage.preview.function.title": {
+    "message": "Function Syntax Tutorial",
+    "description": "The title for the function syntax tutorial"
+  },
+  "homepage.corefeatures.title": {
+    "message": "Core Features",
+    "description": "The title for the core features section"
+  },
+  "homepage.corefeatures.subtitle": {
+    "message": "Designed for modern Node.js applications, providing enterprise-level development experience and performance",
+    "description": "The subtitle for the core features section"
+  },
+  "homepage.corefeatures.reliable.line1": {
+    "message": "Class + IoC = More elegant architecture",
+    "description": "First line for the Reliable & Fast feature"
+  },
+  "homepage.corefeatures.reliable.line2": {
+    "message": "Function + Hooks = Higher development efficiency",
+    "description": "Second line for the Reliable & Fast feature"
+  },
+  "homepage.corefeatures.api.description": {
+    "message": "Not only supports API service development, but also provides the industry's first integrated full-stack development model",
+    "description": "Description for the API & Fullstack feature"
+  },
+  "homepage.corefeatures.progressive.description": {
+    "message": "Progressive design, providing upgrade solutions from basic to entry-level to enterprise-level, solving application maintenance and scalability challenges",
+    "description": "Description for the Progressive feature"
+  },
+  "homepage.preview.title": {
+    "message": "🚧 Interactive Tutorials (In Development)",
+    "description": "The title for the preview section"
+  },
+  "homepage.preview.subtitle": {
+    "message": "WebContainer functionality is under development and will soon provide a real development environment experience. Learn by doing and quickly master Midway.js",
+    "description": "The subtitle for the preview section"
+  },
+  "homepage.preview.class.description": {
+    "message": "Learn how to develop Midway.js applications using Class syntax",
+    "description": "Description for the Class syntax tutorial"
+  },
+  "homepage.preview.class.feature1": {
+    "message": "Decorator-based route definition",
+    "description": "First feature of Class syntax tutorial"
+  },
+  "homepage.preview.class.feature2": {
+    "message": "Dependency injection and service management",
+    "description": "Second feature of Class syntax tutorial"
+  },
+  "homepage.preview.class.feature3": {
+    "message": "TypeORM database integration",
+    "description": "Third feature of Class syntax tutorial"
+  },
+  "homepage.preview.class.feature4": {
+    "message": "Component-based development model",
+    "description": "Fourth feature of Class syntax tutorial"
+  },
+  "homepage.preview.function.description": {
+    "message": "Learn how to develop Midway.js applications using Function syntax",
+    "description": "Description for the Function syntax tutorial"
+  },
+  "homepage.preview.function.feature1": {
+    "message": "Frontend and backend integrated development",
+    "description": "First feature of Function syntax tutorial"
+  },
+  "homepage.preview.function.feature2": {
+    "message": "Functional API design",
+    "description": "Second feature of Function syntax tutorial"
+  },
+  "homepage.preview.function.feature3": {
+    "message": "React Hooks backend development",
+    "description": "Third feature of Function syntax tutorial"
+  },
+  "homepage.preview.function.feature4": {
+    "message": "Zero API call mode",
+    "description": "Fourth feature of Function syntax tutorial"
+  },
+  "homepage.preview.comingSoon": {
+    "message": "🚧 Coming Soon",
+    "description": "Text for disabled tutorial button"
+  },
+  "homepage.preview.startLearning": {
+    "message": "Start Learning →",
+    "description": "Text for enabled tutorial button"
+  },
   "homepage.feature.desc.Reliable & Fast": {
     "message": "Choose to use an elegant dependency injection architecture or a functional programming model for higher development efficiency"
   },

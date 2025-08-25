@@ -1604,6 +1604,9 @@ importers:
       '@types/koa-router':
         specifier: 7.4.8
         version: 7.4.8
+      axios:
+        specifier: 1.8.4
+        version: 1.8.4
       fs-extra:
         specifier: 11.3.0
         version: 11.3.0

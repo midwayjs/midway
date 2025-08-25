@@ -724,7 +724,7 @@ export class UserDTO {
 | ----------------- | ----------------------------- | ------------------------------------------------------------ |
 | errorStatus       | number                        | 当校验出错时，返回的 Http 状态码，在 http 场景生效，默认 422 |
 | locale            | string                        | 校验出错文本的默认语言，默认为 `en_US`，会根据 i18n 组件的规则切换 |
-| validators        | Record<string, Function>      | 配置要使用的验证器                                           |
+| validators        | Record\<string, Function>      | 配置要使用的验证器                                           |
 | defaultValidator  | string                        | 设置默认使用的验证器，如果未设置，则使用用户 `require` 的第一个验证器 |
 
 

@@ -1,3 +1,9 @@
+---
+id: controller
+title: 路由和控制器
+sidebar_label: 路由和控制器
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -61,7 +67,6 @@ export class HomeController {
     return "Hello Midwayjs!";
   }
 }
-
 ```
 `@Controller` 装饰器告诉框架，这是一个 Web 控制器类型的类，而 `@Get` 装饰器告诉框架，被修饰的 `home` 方法，将被暴露为 `/` 这个路由，可以由 `GET` 请求来访问。
 
@@ -100,7 +105,6 @@ export class HomeController {
     return 'This is a post method'
   }
 }
-
 ```
 Midway 还提供了其他的装饰器，  `@Get` 、 `@Post` 、 `@Put()` 、 `@Del()` 、 `@Patch()` 、 `@Options()` 、 `@Head()`  和 `@All()` ，表示各自的 HTTP 请求方法。
 
@@ -239,7 +243,7 @@ export class UserController {
 
 ```typescript
 // src/controller/user.ts
-import { Controller, Get, Inject } from "@midwayjs/core";
+import { Controller, Get, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Controller('/user')

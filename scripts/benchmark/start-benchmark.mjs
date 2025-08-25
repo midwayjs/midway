@@ -1,8 +1,7 @@
 #!/usr/bin/env zx
 import assert from 'node:assert'
 import { join, basename } from 'node:path'
-import { stat, copyFile } from 'node:fs/promises'
-
+import { stat, copyFile, appendFile } from 'node:fs/promises'
 
 const repo = argv.repo ?? ''
 const pkgDir = argv.p ?? ''
@@ -14,6 +13,8 @@ assert(pkgDir, 'pkg dir is required with -p')
 await $`rm -rf ${pkgDir}`
 await $`npm init midway -- --template=${repo} ${pkgDir}`
 echo`[benchmark] create template complete`
+
+await appendFile(join(process.cwd(), 'pnpm-workspace.yaml'), `\n  - '${pkgDir}'\n`)
 
 const dir = join('.', pkgDir)
 try {
@@ -44,12 +45,12 @@ echo`[benchmark] script complete`
 
 cd(dir)
 
-await $`pwd && npm install`
-await $`npm run build`
+await $`pwd && pnpm install --filter . --no-frozen-lockfile`
+await $`pnpm run build`
 echo(chalk.blue('[benchmark] build example complete'))
 
-await $`npm link @midwayjs/web @midwayjs/core @midwayjs/decorator @midwayjs/mock @midwayjs/bootstrap`
-echo`[benchmark] link package complete`
+// await $`npm link @midwayjs/web @midwayjs/core @midwayjs/mock @midwayjs/bootstrap`
+// echo`[benchmark] link package complete`
 
 let gotError = false
 try {

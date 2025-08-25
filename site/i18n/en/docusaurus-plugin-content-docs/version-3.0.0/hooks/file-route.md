@@ -177,10 +177,10 @@ If you need to generate dynamic path parameters, the file name can be named in t
 Examples:
 
 - `/lambda/[name]/project.ts` → `/api/about/:name/project`
-   - /about/midwayjs/project -> { name: 'midwayjs'}
+   - `/about/midwayjs/project` -> `{ name: 'midwayjs'}`
 - `/lambda/[type]/[page].ts` → `/api/about/:type/:page`
-   - /blog/1 -> { type: 'blog', page: '1'}
-   - /articles/3 -> { type: 'articles', page: '3'}
+   - `/blog/1` -> `{ type: 'blog', page: '1'}`
+   - `/articles/3` -> `{ type: 'articles', page: '3'}`
 
 When you use the path parameters, you can only use `Api()` to develop backend interfaces and use `Params<T>` to mark types.
 

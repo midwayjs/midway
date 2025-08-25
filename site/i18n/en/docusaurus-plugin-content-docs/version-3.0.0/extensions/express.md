@@ -513,9 +513,9 @@ All attributes are described as follows:
 | globalPrefix | string | optional. the global http prefix |
 | keys | string [] | Optional, Cookies signature, if the upper layer does not write keys, you can also set it here |
 | hostname | string | Optional. The hostname to listen to. Default 127.1 |
-| key | string \| Buffer \| Array<Buffer\|Object> | Optional, Https key, server private key |
-| cert | string \| Buffer \| Array<Buffer\|Object> | Optional, Https cert, server certificate |
-| ca | string \| Buffer \| Array<Buffer\|Object> | Optional, Https ca |
+| key | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https key, server private key |
+| cert | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https cert, server certificate |
+| ca | string \| Buffer \| Array\<Buffer\|Object> | Optional, Https ca |
 | http2 | boolean | Optional, supported by http2, default false |
 
 
