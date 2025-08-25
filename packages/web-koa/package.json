@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa",
-  "version": "3.20.12",
+  "version": "3.20.13",
   "description": "Midway Web Framework for KOA",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -26,8 +26,8 @@
   "devDependencies": {
     "@midwayjs/mock": "^3.20.11",
     "@types/koa-router": "7.4.8",
-    "fs-extra": "11.3.0",
-    "axios": "1.8.4"
+    "axios": "1.8.4",
+    "fs-extra": "11.3.0"
   },
   "dependencies": {
     "@koa/router": "^12.0.0",

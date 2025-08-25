@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.13 (2025-08-25)
+
+#### :nail_care: Polish
+* `web-koa`
+  * [#4379](https://github.com/midwayjs/midway/pull/4379) feat: support listen options ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.12 (2025-08-10)
 
 #### :nail_care: Polish

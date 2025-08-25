@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/http-proxy",
-  "version": "3.20.12",
+  "version": "3.20.13",
   "description": "Midway Component for http proxy",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -32,7 +32,7 @@
     "@midwayjs/core": "^3.20.11",
     "@midwayjs/express": "^3.20.12",
     "@midwayjs/faas": "^3.20.11",
-    "@midwayjs/koa": "^3.20.12",
+    "@midwayjs/koa": "^3.20.13",
     "@midwayjs/mock": "^3.20.11",
     "@midwayjs/serverless-app": "^3.20.11",
     "@midwayjs/web": "^3.20.12"
