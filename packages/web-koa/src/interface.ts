@@ -3,6 +3,7 @@ import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/core';
 import * as qs from 'qs';
+import { ListenOptions } from 'net';
 
 export interface State extends DefaultState {}
 
@@ -18,6 +19,10 @@ export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<St
    * @param middlewareId
    */
   generateMiddleware(middlewareId: any): Promise<Middleware<State, IMidwayKoaContext>>;
+  /**
+   * Get the port that the application is listening on
+   */
+  getPort(): string;
 }>;
 
 /**
@@ -91,10 +96,14 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * qs options
    */
   queryParseOptions?: qs.IParseOptions;
-  /*
+  /**
    * https/https/http2 server options
    */
   serverOptions?: Record<string, any>;
+  /**
+   * listen options
+   */
+  listenOptions?: ListenOptions;
 }
 
 export type MiddlewareParamArray = Array<

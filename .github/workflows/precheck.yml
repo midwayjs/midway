@@ -2,7 +2,7 @@ name: Pre Check
 
 on:
   push:
-    branches: [main]
+    branches: [3.x]
     paths-ignore:
       - 'site/**'
       - '*.md'
