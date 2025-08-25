@@ -44,12 +44,12 @@ echo`[benchmark] script complete`
 
 cd(dir)
 
-await $`pwd && npm install`
-await $`npm run build`
+await $`pwd && pnpm install --filter . --frozen-lockfile`
+await $`pnpm run build`
 echo(chalk.blue('[benchmark] build example complete'))
 
-await $`npm link @midwayjs/web @midwayjs/core @midwayjs/decorator @midwayjs/mock @midwayjs/bootstrap`
-echo`[benchmark] link package complete`
+// await $`npm link @midwayjs/web @midwayjs/core @midwayjs/mock @midwayjs/bootstrap`
+// echo`[benchmark] link package complete`
 
 let gotError = false
 try {

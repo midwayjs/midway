@@ -32,23 +32,14 @@ jobs:
         with:
           version: 9
           run_install: false
-      - name: Cache
+      - name: Cache pnpm modules
         uses: actions/cache@v3
-        id: cache-lerna
-        env:
-          cache-name: cache-lerna
         with:
           path: |
-            node_modules
-            package-lock.json
-            packages/*/.eslintcache
-            packages/*/dist
-            packages/*/tsconfig.tsbuildinfo
-            packages/*/node_modules
-            packages/*/package-lock.json
-          key: ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-${{ hashFiles('**/package-lock.json') }}
+            ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-${{ github.ref }}-
+            ${{ runner.os }}-pnpm-
       - name: Install Dependencies
         run: |
           pnpm i -g autocannon zx
@@ -57,14 +48,14 @@ jobs:
       - name: Build
         run: |
           sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
-          lerna run build --concurrency=2
-      - run: pnpm run link
+          pnpm -r run build
       - name: Benchmark application-koa-v4
         timeout-minutes: 10
         run: |
+          echo "  - 'midway_benchmark_app'" >> pnpm-workspace.yaml
+          cat pnpm-workspace.yaml
           ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-koa-v4
 #      - name: Benchmark application-web-v3
 #        timeout-minutes: 10
 #        run: |
 #          ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-web-v3
-
