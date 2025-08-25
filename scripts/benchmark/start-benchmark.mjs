@@ -1,8 +1,7 @@
 #!/usr/bin/env zx
 import assert from 'node:assert'
 import { join, basename } from 'node:path'
-import { stat, copyFile } from 'node:fs/promises'
-
+import { stat, copyFile, appendFile } from 'node:fs/promises'
 
 const repo = argv.repo ?? ''
 const pkgDir = argv.p ?? ''
@@ -14,6 +13,8 @@ assert(pkgDir, 'pkg dir is required with -p')
 await $`rm -rf ${pkgDir}`
 await $`npm init midway -- --template=${repo} ${pkgDir}`
 echo`[benchmark] create template complete`
+
+await appendFile(join(process.cwd(), 'pnpm-workspace.yaml'), `\n  - '${pkgDir}'\n`)
 
 const dir = join('.', pkgDir)
 try {

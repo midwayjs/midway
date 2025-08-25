@@ -43,19 +43,11 @@ jobs:
       - name: Install Dependencies
         run: |
           pnpm i -g autocannon zx
-          # npm run purge # if you want to clean up the cache
           pnpm i --frozen-lockfile
       - name: Build
         run: |
-          sed -i 's/\(moduleResolution.\+,\)/\1 "incremental": true,/' tsconfig.json
           pnpm -r run build
       - name: Benchmark application-koa-v4
         timeout-minutes: 10
         run: |
-          echo "  - 'midway_benchmark_app'" >> pnpm-workspace.yaml
-          cat pnpm-workspace.yaml
           ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-koa-v4
-#      - name: Benchmark application-web-v3
-#        timeout-minutes: 10
-#        run: |
-#          ./scripts/benchmark/start-benchmark.mjs --p=midway_benchmark_app --repo=@midwayjs-examples/application-web-v3
