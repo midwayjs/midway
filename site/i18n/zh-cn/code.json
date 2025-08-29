@@ -1,0 +1,155 @@
+{
+  "homepage.splash.frameworkFor": {
+    "message": "Node.js Framework For \"",
+    "description": "首页splash部分的副标题文本"
+  },
+  "homepage.splash.stableDoc": {
+    "message": "📖 稳定版文档 (v3.x)",
+    "description": "稳定版文档按钮的文本"
+  },
+  "homepage.splash.betaDoc": {
+    "message": "🚧 Beta 版文档 (v4)",
+    "description": "Beta版文档按钮的文本"
+  },
+  "homepage.recommend.title": {
+    "message": "推荐项目",
+    "description": "推荐项目部分的标题"
+  },
+  "homepage.recommend.subtitle": {
+    "message": "来自开源社区的优秀扩展和项目，与 Midway.js 完美配合",
+    "description": "推荐项目部分的副标题"
+  },
+  "homepage.recommend.cooljs.title": {
+    "message": "Cool js, 面向未来的后台开发框架",
+    "description": "Cool js项目的标题"
+  },
+  "homepage.example.title": {
+    "message": "应用案例",
+    "description": "应用案例部分的标题"
+  },
+  "homepage.example.subtitle": {
+    "message": "探索 Midway.js 在各种场景下的应用，了解其强大的适应性和灵活性",
+    "description": "应用案例部分的副标题"
+  },
+  "homepage.essentials.title": {
+    "message": "核心组件",
+    "description": "核心组件部分的标题"
+  },
+  "homepage.essentials.subtitle": {
+    "message": "提供丰富的企业级组件，满足各种开发需求，让开发更加高效",
+    "description": "核心组件部分的副标题"
+  },
+  "homepage.usedby.title": {
+    "message": "信任我们的团队",
+    "description": "使用我们产品的团队部分的标题"
+  },
+  "homepage.usedby.subtitle": {
+    "message": "来自各大互联网公司的优秀团队都在使用 Midway.js，共同构建更好的应用",
+    "description": "使用我们产品的团队部分的副标题"
+  },
+  "homepage.footer.title": {
+    "message": "Develop. Build. Ship.",
+    "description": "页脚部分的标题"
+  },
+  "homepage.footer.motto": {
+    "message": "让 Node.js 开发更加高效，让应用部署更加简单",
+    "description": "页脚部分的格言"
+  },
+  "homepage.preview.class.title": {
+    "message": "Class 语法教程",
+    "description": "Class语法教程的标题"
+  },
+  "homepage.preview.function.title": {
+    "message": "Function 语法教程",
+    "description": "Function语法教程的标题"
+  },
+  "homepage.corefeatures.title": {
+    "message": "核心特性",
+    "description": "核心特性部分的标题"
+  },
+  "homepage.corefeatures.subtitle": {
+    "message": "专为现代 Node.js 应用设计，提供企业级的开发体验和性能表现",
+    "description": "核心特性部分的副标题"
+  },
+  "homepage.corefeatures.reliable.line1": {
+    "message": "Class + IoC = 更优雅的架构",
+    "description": "可靠与快速特性的第一行描述"
+  },
+  "homepage.corefeatures.reliable.line2": {
+    "message": "Function + Hooks = 更高的研发效率",
+    "description": "可靠与快速特性的第二行描述"
+  },
+  "homepage.corefeatures.api.description": {
+    "message": "不仅支持开发 API 服务，也提供业界首创的一体化全栈开发模式",
+    "description": "API与全栈特性的描述"
+  },
+  "homepage.corefeatures.progressive.description": {
+    "message": "渐进式设计，提供从基础到入门再到企业级的升级方案，解决应用维护与拓展性难题",
+    "description": "渐进式特性的描述"
+  },
+  "homepage.preview.title": {
+    "message": "🚧 交互式教程 (开发中)",
+    "description": "预览部分的标题"
+  },
+  "homepage.preview.subtitle": {
+    "message": "WebContainer 功能正在开发中，即将提供真实的开发环境体验，边学边练，快速掌握 Midway.js",
+    "description": "预览部分的副标题"
+  },
+  "homepage.preview.class.description": {
+    "message": "学习如何使用 Class 语法开发 Midway.js 应用",
+    "description": "Class语法教程的描述"
+  },
+  "homepage.preview.class.feature1": {
+    "message": "基于装饰器的路由定义",
+    "description": "Class语法教程的第一个特性"
+  },
+  "homepage.preview.class.feature2": {
+    "message": "依赖注入与服务管理",
+    "description": "Class语法教程的第二个特性"
+  },
+  "homepage.preview.class.feature3": {
+    "message": "TypeORM 数据库集成",
+    "description": "Class语法教程的第三个特性"
+  },
+  "homepage.preview.class.feature4": {
+    "message": "组件化开发模式",
+    "description": "Class语法教程的第四个特性"
+  },
+  "homepage.preview.function.description": {
+    "message": "学习如何使用 Function 语法开发 Midway.js 应用",
+    "description": "Function语法教程的描述"
+  },
+  "homepage.preview.function.feature1": {
+    "message": "前后端一体化开发",
+    "description": "Function语法教程的第一个特性"
+  },
+  "homepage.preview.function.feature2": {
+    "message": "函数式 API 设计",
+    "description": "Function语法教程的第二个特性"
+  },
+  "homepage.preview.function.feature3": {
+    "message": "React Hooks 后端开发",
+    "description": "Function语法教程的第三个特性"
+  },
+  "homepage.preview.function.feature4": {
+    "message": "零 API 调用模式",
+    "description": "Function语法教程的第四个特性"
+  },
+  "homepage.preview.comingSoon": {
+    "message": "🚧 即将开放",
+    "description": "禁用教程按钮的文本"
+  },
+  "homepage.preview.startLearning": {
+    "message": "开始学习 →",
+    "description": "启用教程按钮的文本"
+  },
+  "homepage.feature.desc.Reliable & Fast": {
+    "message": "选择使用优雅的依赖注入架构或函数式编程模型，获得更高的开发效率"
+  },
+  "homepage.feature.desc.API & Fullstack": {
+    "message": "不仅支持API服务开发，还提供业界首创的一体化全栈开发模型"
+  },
+  "homepage.feature.desc.Progressive": {
+    "message": "渐进式设计，提供从基础到入门级再到企业级的升级解决方案，解决应用维护和扩展问题"
+  }
+}

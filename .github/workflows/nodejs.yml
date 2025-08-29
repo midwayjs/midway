@@ -24,7 +24,6 @@ jobs:
       matrix:
         node-version: [18]
 
-
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
@@ -68,10 +67,7 @@ jobs:
         run: scripts/wait-for-services.sh
 
       - name: Install dependencies
-        run: pnpm install
-
-      - name: Install codecov
-        run: pnpm add -g codecov
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm run build --if-present

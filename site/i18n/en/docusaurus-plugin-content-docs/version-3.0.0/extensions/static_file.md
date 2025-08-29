@@ -143,7 +143,7 @@ All [koa-static-cache](https://github.com/koajs/static-cache) configurations are
 
 | Attribute name | Default | Description |
 | ------- | ----------------------------------------------- | ------------------------------------------------------------ |
-| dirs | {"default": {prefix: "/public", "dir": "xxxx"}} | Managed directories, in order to support multiple directories, are objects. <br />In addition to the default, other keys can be added at will, and the object values in dirs will be merged with the external default values. |
+| dirs | `{"default": {prefix: "/public", "dir": "xxxx"}}` | Managed directories, in order to support multiple directories, are objects. <br />In addition to the default, other keys can be added at will, and the object values in dirs will be merged with the external default values. |
 | dynamic | true | Load files dynamically instead of caching after initialization reading. |
 | preload | false | Whether the cache is being initialized |
 | maxAge | Prod is 31536000, others are 0 | Maximum cache time |

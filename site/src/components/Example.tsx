@@ -1,32 +1,123 @@
-import { Block } from './Block'
 import React from 'react'
 import { styled } from '../styled'
+import { keyframes } from '@stitches/react'
+import Translate from '@docusaurus/Translate'
 
-const Container = styled('div', {})
+const fadeInUp = keyframes({
+  '0%': { opacity: 0, transform: 'translateY(30px)' },
+  '100%': { opacity: 1, transform: 'translateY(0)' },
+});
+
+const scaleIn = keyframes({
+  '0%': { opacity: 0, transform: 'scale(0.8)' },
+  '100%': { opacity: 1, transform: 'scale(1)' },
+});
+
+const Container = styled('div', {
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 24px',
+  
+  '@mobile': {
+    padding: '0 16px',
+  }
+})
 
 const Grid = styled('div', {
   display: 'grid',
-  gridTemplateColumns: 'repeat(5, 1fr)',
-  columnGap: 32,
-  rowGap: 32,
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+  gap: '24px',
+  maxWidth: '1000px',
+  margin: '0 auto',
+  
   '@mobile': {
-    gridTemplateColumns: '1fr',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+    gap: '16px',
   }
 })
 
 const ShowCaseContainer = styled('a', {
-  boxShadow: `1px 1px 5px #ccc`,
-  borderRadius: 4,
-  display: 'inline-block',
-  height: 125,
+  display: 'block',
+  borderRadius: '16px',
+  overflow: 'hidden',
   cursor: 'pointer',
-  ':root[data-theme="dark"] &': {
-    boxShadow: 'none',
-  }
+  transition: 'all 0.3s ease',
+  background: 'rgba(255, 255, 255, 0.1)',
+  backdropFilter: 'blur(20px)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+  
+  '&:hover': {
+    transform: 'translateY(-8px) scale(1.02)',
+    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2)',
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+    
+    '& .showcase': {
+      transform: 'scale(1.1)',
+    },
+  },
 })
 
 const ShowCase = styled('img', {
-  height: 125,
+  width: '100%',
+  height: 'auto',
+  transition: 'transform 0.3s ease',
+  display: 'block',
+})
+
+const EnhancedBlock = styled('div', {
+  padding: '120px 0',
+  background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
+  position: 'relative',
+  overflow: 'hidden',
+  
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.2) 0%, transparent 50%)',
+  },
+  
+  '@mobile': {
+    padding: '80px 0',
+  }
+})
+
+const BlockContent = styled('div', {
+  position: 'relative',
+  zIndex: 2,
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 24px',
+  
+  '@mobile': {
+    padding: '0 16px',
+  }
+})
+
+const BlockTitle = styled('h2', {
+  fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+  fontWeight: 800,
+  color: '#ffffff',
+  textAlign: 'center',
+  margin: '0 0 24px 0',
+})
+
+const BlockSubtitle = styled('p', {
+  fontSize: '1.25rem',
+  color: 'rgba(255, 255, 255, 0.8)',
+  textAlign: 'center',
+  maxWidth: '600px',
+  margin: '0 auto 80px',
+  lineHeight: 1.6,
+  
+  '@mobile': {
+    fontSize: '1.1rem',
+    marginBottom: '60px',
+  }
 })
 
 type Case = {
@@ -54,18 +145,31 @@ const cases = [
 
 export function Example() {
   return (
-    <Block title="Examples" subtitle="Learn the usage of Midway.js" background="dark">
-      <Container>
-        <Grid>
-          {cases.map((cas) => {
-            return (
-              <ShowCaseContainer key={cas.image} href={cas.link || 'http://demo.midwayjs.org/'} target="_blank">
-                <ShowCase src={cas.image} />
-              </ShowCaseContainer>
-            )
-          })}
-        </Grid>
-      </Container>
-    </Block>
+    <EnhancedBlock>
+      <BlockContent>
+        <BlockTitle>
+          <Translate id="homepage.example.title">
+            应用案例
+          </Translate>
+        </BlockTitle>
+        <BlockSubtitle>
+          <Translate id="homepage.example.subtitle">
+            探索 Midway.js 在各种场景下的应用，了解其强大的适应性和灵活性
+          </Translate>
+        </BlockSubtitle>
+        
+        <Container>
+          <Grid>
+            {cases.map((cas, index) => (
+              <div key={cas.image} style={{ animation: `${scaleIn} 0.6s ease-out ${0.1 + index * 0.05}s both` }}>
+                <ShowCaseContainer href={cas.link || 'http://demo.midwayjs.org/'} target="_blank">
+                  <ShowCase src={cas.image} className="showcase" />
+                </ShowCaseContainer>
+              </div>
+            ))}
+          </Grid>
+        </Container>
+      </BlockContent>
+    </EnhancedBlock>
   )
 }

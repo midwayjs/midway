@@ -267,7 +267,7 @@ export default {
 | headerName | string | The field where the token is stored in the header. | 'x-csrf-token' |
 | bodyName | string | The field where the token is stored in the body. | '_csrf' |
 | queryName | string | The field where the token is stored in the query. | '_csrf' |
-| refererWhiteList | Array<string\> | White list of allowed sources | [] |
+| refererWhiteList | Array\<string\> | White list of allowed sources | [] |
 
 #### Does the configuration refererWhiteList not take effect?
 + Reason 1: You need to configure the host part of the referer in the refererWhiteList. For example, if the referer is `https:// midway-demo.com:1234/docs`, you need to configure `midway-demo.com:1234` in the refererWhiteList.
@@ -313,7 +313,7 @@ There are three possible values for `X-Frame-Options`:
 | Configuration Item | Type | Description of action | Default |
 | --- | --- | --- | --- |
 | enable | boolean | Whether to open | false |
-| policy | Object<key: string, value: string / string[]/ boolean> | Policy list | {} |
+| policy | Object\<key: string, value: string / string[]/ boolean\> | Policy list | {} |
 | reportOnly | boolean | Whether to open | false |
 | supportIE | boolean | Does IE browser support | false |
 

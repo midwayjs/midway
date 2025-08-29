@@ -1,3 +1,9 @@
+---
+id: controller
+title: Routing and controller
+sidebar_label: Routing and controller
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
