@@ -495,7 +495,7 @@ describe('/test/feature.test.ts', () => {
       }
     });
 
-    const port = (app.getFramework() as Framework).getPort();
+    const port = (app.getFramework() as unknown as Framework).getPort();
     expect(port).not.toBe('0');
 
     await closeApp(app);
@@ -691,13 +691,13 @@ describe('/test/feature.test.ts', () => {
       await sleep();
 
       // 验证端口配置
-      const framework = app.getFramework() as Framework;
+      const framework = app.getFramework() as unknown as Framework;
       const port = framework.getPort();
       expect(port).toBeDefined();
       expect(port).not.toBe('0');
 
       // 使用真正的 HTTP 请求测试
-      const result = await createRealHttpRequest(app as IMidwayKoaApplication, '/');
+      const result = await createRealHttpRequest(app as unknown as IMidwayKoaApplication, '/');
       expect(result.status).toBe(200);
 
       await closeApp(app);
@@ -726,13 +726,13 @@ describe('/test/feature.test.ts', () => {
       await sleep();
 
       // 验证端口配置
-      const framework = app.getFramework() as Framework;
+      const framework = app.getFramework() as unknown as Framework;
       const port = framework.getPort();
       expect(port).toBeDefined();
       expect(port).not.toBe('0');
 
       // 使用真正的 HTTP 请求测试
-      const result = await createRealHttpRequest(app as IMidwayKoaApplication, '/');
+      const result = await createRealHttpRequest(app as unknown as IMidwayKoaApplication, '/');
       expect(result.status).toBe(200);
 
       await closeApp(app);
@@ -763,13 +763,13 @@ describe('/test/feature.test.ts', () => {
       await sleep();
 
       // 验证端口配置 - listenOptions.port 应该优先于 port
-      const framework = app.getFramework() as Framework;
+      const framework = app.getFramework() as unknown as Framework;
       const port = framework.getPort();
       expect(port).toBeDefined();
       expect(port).not.toBe('3000'); // 应该使用 listenOptions.port (0) 而不是 port (3000)
 
       // 使用真正的 HTTP 请求测试
-      const result = await createRealHttpRequest(app as IMidwayKoaApplication, '/');
+      const result = await createRealHttpRequest(app as unknown as IMidwayKoaApplication, '/');
       expect(result.status).toBe(200);
 
       await closeApp(app);
