@@ -47,13 +47,13 @@ const config = {
     [
       '@signalwire/docusaurus-plugin-llms-txt',
       {
-        siteTitle: 'My Documentation',
-        siteDescription: 'Comprehensive guide to our platform',
-        depth: 2,
+        siteTitle: 'Midway Framework Documentation',
+        siteDescription: 'Midway is a future-proof, cloud-native Node.js framework for enterprise applications.',
+        depth: 3,
         content: {
           includeBlog: true,
           includePages: true,
-          enableLlmsFullTxt: true  // Optional: generates llms-full.txt
+          enableLlmsFullTxt: true  // 生成 llms-full.txt
         }
       }
     ]
