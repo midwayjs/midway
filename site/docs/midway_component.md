@@ -49,6 +49,8 @@ import * as validate from '@midwayjs/validate';
 export class MainConfiguration {}
 ```
 
+
+
 ## 不同环境启用组件
 
 有时候，我们需要在特殊环境下才使用组件，比如本地开发时。 `imports` 属性可以传入对象数组，我们可以在对象中针对组件启用的环境进行配置。

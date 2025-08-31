@@ -12,7 +12,7 @@ import TabItem from '@theme/TabItem';
 
 :::tip
 
-midway v4 支持从 node v18 起。
+midway v4 支持从 node v20 起。
 
 :::
 
@@ -21,31 +21,39 @@ midway v4 支持从 node v18 起。
 
 所有的组件包，核心包都将升级为 4.x 版本。
 
+> 目前处于 beta 阶段
+
 ```diff
 {
   "dependencies": {
 -    "@midwayjs/bootstrap": "^3.0.0",
 -    "@midwayjs/core": "^3.0.0",
 -    "@midwayjs/koa": "^3.0.0",
-+    "@midwayjs/bootstrap": "^4.0.0",
-+    "@midwayjs/core": "^4.0.0",
-+    "@midwayjs/koa": "^4.0.0",
+-    "@midwayjs/logger": "^3.0.0",
++    "@midwayjs/bootstrap": "^4.0.0-beta.1",
++    "@midwayjs/core": "^4.0.0-beta.1",
++    "@midwayjs/koa": "^4.0.0-beta.1",
++    "@midwayjs/logger": "^4.0.0",
   },
   "devDependencies": {
 -    "@midwayjs/mock": "^3.0.0",
-+    "@midwayjs/mock": "^4.0.0",
++    "@midwayjs/mock": "^4.0.0-beta.1",
     // ...
   }
 }
 
 ```
 
-`@midwyajs/luckeye`, `@midwayjs/logger` 的版本除外。
+`@midwyajs/luckeye` 的版本除外。
+
+
 
 
 ## 移除 `@midwayjs/decorator`
 
 从 v4 开始，移除了 `@midwayjs/decorator` 包，用户可以直接使用 `@midwayjs/core` 来代替。
+
+
 
 
 ## 入口自动扫描能力
@@ -63,6 +71,8 @@ export class MainContainer {
   // ...
 }
 ```
+
+
 
 ## 主框架日志配置
 
