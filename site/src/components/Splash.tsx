@@ -291,6 +291,10 @@ const SubTitle = styled('h2', {
   alignItems: 'center',
   flexWrap: 'nowrap',
   gap: '8px',
+
+  '@mobile': {
+    flexWrap: 'wrap', // 移动端允许换行
+  },
 });
 
 const DynamicTextContainer = styled('div', {
@@ -537,14 +541,15 @@ export function Splash() {
         <Title>Midway</Title>
         <SubTitle>
           <Translate id="homepage.splash.frameworkFor">
-            Node.js Framework For "
+            Node.js Framework For
           </Translate>
           <DynamicTextContainer>
+            "
             {text.split('').map((char, index) => (
               <Description key={char + index}>{char}</Description>
             ))}
+            "
           </DynamicTextContainer>
-          "
         </SubTitle>
         
         <VersionInfo>
