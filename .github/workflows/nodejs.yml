@@ -70,7 +70,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm run build --if-present
+        run: pnpm run build
 
       - name: Run tests and coverage
         run: pnpm run cov

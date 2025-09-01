@@ -41,7 +41,7 @@ jobs:
         run: pnpm install
 
       - name: Build root project
-        run: pnpm run build --if-present
+        run: pnpm run build
 
       # site 目录使用 npm，需要单独配置 npm 缓存
       - uses: actions/setup-node@v4
