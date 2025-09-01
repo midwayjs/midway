@@ -1,0 +1,80 @@
+name: Bun CI
+
+on:
+  push:
+    branches: [v4-next]
+    paths-ignore:
+      - '.github/workflows/**'
+      - '!.github/workflows/bun.yml'
+      - 'site/**'
+      - '*.md'
+  pull_request:
+    paths-ignore:
+      - '.github/workflows/**'
+      - '!.github/workflows/bun.yml'
+      - 'site/**'
+      - '*.md'
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        bun-version: [latest]
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ matrix.bun-version }}
+
+      - name: Install Docker Compose v2
+        run: |
+          mkdir -p ~/.docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/download/v2.37.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+          chmod +x ~/.docker/cli-plugins/docker-compose
+          docker compose version
+
+      - name: Set up Docker Compose
+        run: docker compose -f docker-compose.ci.yml up -d
+
+      - name: Wait for containers to be ready
+        run: |
+          docker compose -f docker-compose.ci.yml ps
+          sleep 20  # docker-compose 内部 DNS 很稳，简单 sleep 即可
+
+      - name: Install required tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y netcat-openbsd
+
+      - name: Make wait-for-services.sh executable
+        run: chmod +x scripts/wait-for-services.sh
+
+      - name: Wait for all services
+        run: scripts/wait-for-services.sh
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build --if-present
+
+      - name: Run tests with Bun
+        run: bun test
+        env:
+          RABBITMQ_URL: amqp://localhost:5672
+          ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
+          ALI_SDK_OSS_ENDPOINT: ${{ secrets.ALI_SDK_OSS_ENDPOINT }}
+          ALI_SDK_OSS_ID: ${{ secrets.ALI_SDK_OSS_ID }}
+          ALI_SDK_OSS_SECRET: ${{ secrets.ALI_SDK_OSS_SECRET }}
+          ALI_SDK_OSS_BUCKET: ${{ secrets.ALI_SDK_OSS_BUCKET }}
+          ALI_SDK_STS_ID: ${{ secrets.ALI_SDK_STS_ID }}
+          ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
+          ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
+          ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
