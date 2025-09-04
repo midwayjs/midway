@@ -231,8 +231,9 @@ export const parseHead = (headBuf: Buffer) => {
     if (name === 'content-disposition') {
       const headCol = {};
       value.split(/;\s+/).forEach((kv: string) => {
-        const [k, v] = kv.split('=');
-        headCol[k] = v ? v.replace(/^"/, '').replace(/"$/, '') : v ?? true;
+        const [k, ...v] = kv.split('=');
+        const mv = v.join('=');
+        headCol[k] = mv ? mv.replace(/^"/, '').replace(/"$/, '') : mv ?? true;
       });
       head[name] = headCol;
     } else {
