@@ -50,7 +50,7 @@ services:
       - zookeeper
 
   etcd:
-    image: gcr.io/etcd-development/etcd:v3.5.12
+    image: gcr.io/etcd-development/etcd:v3.6.4
     command:
       - /usr/local/bin/etcd
       - --name
