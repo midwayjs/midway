@@ -632,42 +632,13 @@ async getUser(@Query('id') id: boolean): Promise<User> {
 }
 ```
 
-If it is a complex type, if the specified type is Class, it will be automatically converted to an instance of the class.
-
-```typescript
-// class
-class UserDTO {
-  name: string;
-
-  getName() {
-    return this.name;
-  }
-}
-
-@Get('/')
-async getUser(@Query() query: UserDTO): Promise<User> {
-  // query.getName()
-}
-```
-
-If you do not want to be converted, you can use Interface.
-
-```typescript
-interface User {
-  name: string;
-}
-
-@Get('/')
-async getUser(@Query() query: User): Promise<User> {
-  // ...
-}
-```
+For other types, the framework will not handle them. If conversion is needed, please introduce the [validation component](./extensions/validation).
 
 
 
 ## Parameter verification
 
-The parameter verification function is provided by the validate component. For details, please refer to the [validate component](./extensions/validate).
+The parameter verification function is provided by the [validation component](./extensions/validation).
 
 
 

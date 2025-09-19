@@ -625,42 +625,11 @@ async getUser(@Query('id') id: boolean): Promise<User> {
 }
 ```
 
-如果是复杂类型，如果指定的类型是 Class，将会自动转换为该类的实例。
-
-```typescript
-// class
-class UserDTO {
-  name: string;
-
-  getName() {
-    return this.name;
-  }
-}
-
-@Get('/')
-async getUser(@Query() query: UserDTO): Promise<User> {
-  // query.getName()
-}
-```
-
-如果不希望被转换，可以使用 Interface。
-
-```typescript
-interface User {
-  name: string;
-}
-
-@Get('/')
-async getUser(@Query() query: User): Promise<User> {
-  // ...
-}
-```
-
-
+其他类型框架不会处理，如需转换请引入 [validation 组件](./extensions/validation)。
 
 ## 参数校验
 
-参数校验功能由 validate 组件提供，具体可以参考 [validate 组件](./extensions/validate)。
+参数校验功能由 [validation 组件](./extensions/validation) 提供。
 
 
 

@@ -22,7 +22,7 @@ export class MainConfiguration {}
 
 ## Enable components
 
-Components are generally reused in the form of npm packages. Each component is a package of code that can be `required` or `imported` directly. Let's take the `@midwayjs/validate` component as an example.
+Components are generally reused in the form of npm packages. Each component is a package of code that can be `required` or `imported` directly. Let's take the `@midwayjs/validation` component as an example.
 
 First, add dependencies to the application.
 
@@ -30,7 +30,7 @@ First, add dependencies to the application.
 // package.json
 {
   "dependencies": {
-    "@midwayjs/validate": "^4.0.0"
+    "@midwayjs/validation": "^4.0.0"
   }
 }
 ```
@@ -40,10 +40,10 @@ We need to enable this component in the code. Midway's component loading capabil
 ```typescript
 // src/configuration.ts of application or function
 import { Configuration } from '@midwayjs/core';
-import * as validate from '@midwayjs/validate';
+import * as validation from '@midwayjs/validation';
 
 @Configuration({
-  imports: [validate]
+  imports: [validation]
 })
 export class MainConfiguration {}
 ```
