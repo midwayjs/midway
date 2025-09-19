@@ -53,7 +53,7 @@ const config = {
         content: {
           includeBlog: true,
           includePages: true,
-          enableLlmsFullTxt: true  // 生成 llms-full.txt
+          enableLlmsFullTxt: true
         }
       }
     ]
@@ -225,7 +225,7 @@ const config = {
         //   src: 'https://img.alicdn.com/imgextra/i1/O1CN014B9spq1xrDad6enpX_!!6000000006496-2-tps-240-58.png',
         //   href: 'https://opensource.alibaba.com/',
         // },
-        copyright: `Copyright © ${new Date().getFullYear()} Alibaba Group. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} MidwayJS. Built with Docusaurus.`,
       },
     }),
 };

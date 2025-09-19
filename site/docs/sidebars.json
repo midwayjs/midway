@@ -212,7 +212,7 @@
         "extensions/axios",
         "extensions/i18n",
         "extensions/info",
-        "extensions/validate",
+        "extensions/validation",
         "extensions/swagger",
         "extensions/bullmq",
         "extensions/cron",
@@ -310,6 +310,7 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
+        "extensions/validate",
         "extensions/cache",
         "extensions/upload",
         "legacy/mongodb",
