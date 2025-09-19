@@ -205,9 +205,10 @@ export function Role(roleName: string | string[]): MethodDecorator {
 Write a guard for role authentication.
 
 ```typescript
-import { IMiddleware, Guard, IGuard, getPropertyMetadata } from '@midwayjs/core';
+// src/guard/auth.guard.ts
+import { Guard, IGuard, getPropertyMetadata } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
-import { ROLE_META_KEY } from '../decorator/role.decorator.ts';
+import { ROLE_META_KEY } from '../decorator/role.decorator';
 
 @Guard()
 export class AuthGuard implements IGuard<Context> {
@@ -228,9 +229,10 @@ export class AuthGuard implements IGuard<Context> {
 Use this guard on the route.
 
 ```typescript
-import { Controller, Get } from '@midwayjs/core';
+import { Controller, Get, UseGuard } from '@midwayjs/core';
 import { ReportMiddleware } from '../middleware/report.middlweare';
 import { AuthGuard } from '../guard/auth.guard';
+import { Role } from '../decorator/role.decorator';
 
 @UseGuard(AuthGuard)
 @Controller('/user')
