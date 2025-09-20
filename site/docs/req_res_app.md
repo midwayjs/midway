@@ -43,19 +43,22 @@ import { Application } from '@midwayjs/koa';
 
 ### 获取方式
 
-在所有被依赖注入容器管理的类中，都可以使用 `@App()` 装饰器来获取 **当前最主要** 的 Application。
+在所有被依赖注入容器管理的类中，都可以使用 `@MainApp()` 装饰器来获取 **当前最主要** 的 Application，使用 `@App('koa')` 和参数来获取具名的 Application。
 
 比如：
 
 ```typescript
-import { App, Controller, Get } from '@midwayjs/core';
+import { MainApp, App, Controller, Get } from '@midwayjs/core';
 import { Application } from '@midwayjs/koa';
 
 @Controller('/')
 export class HomeController {
 
-  @App()
+  @MainApp()
   app: Application;
+  
+  @App('koa')
+  koaApp: Application;
 
   @Get('/')
   async home() {
@@ -102,7 +105,7 @@ export class MainConfiguration implements ILifeCycle {
 ```typescript
 // src/configuration.ts
 
-import { Configuration, ILifeCycle } from '@midwayjs/core';
+import { MainApp, App, Configuration, ILifeCycle } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
@@ -110,7 +113,7 @@ import * as ws from '@midwayjs/ws';
   imports: [koa, ws]
 })
 export class MainConfiguration implements ILifeCycle {
-  @App()
+  @MainApp()
   koaApp: koa.Application;
 
   @App('webSocket')
@@ -141,6 +144,7 @@ export class MainConfiguration implements ILifeCycle {
 | @midwayjs/kafka    | kafka     |
 | @midwayjs/rabbitmq | rabbitMQ  |
 | @midwayjs/bull     | bull      |
+| @midwayjs/cron     | cron      |
 
 
 
@@ -284,7 +288,7 @@ Context 是一个**请求级别的对象**，在每一次收到用户请求时�
 ### 获取方式
 
 
-在 **默认的请求作用域 **中，也就是说在 控制器（Controller）或者普通的服务（Service）中，我们可以使用 `@Inject` 来注入对应的实例。
+在 **默认的请求作用域** 中，也就是说在 控制器（Controller）或者普通的服务（Service）中，我们可以使用 `@Inject` 来注入对应的实例。
 
 
 比如可以这样获取到对应的 ctx 实例。

@@ -21,6 +21,12 @@
 | MIDWAY_10014 | MidwayInvalidConfigError              | 无效的配置                   |
 | MIDWAY_10015 | MidwayDuplicateClassNameError         | 重复的类名                   |
 | MIDWAY_10016 | MidwayDuplicateControllerOptionsError | 重复的控制器参数             |
+| MIDWAY_10017 | MidwayRetryExceededMaxTimesError      | 重试次数超过最大限制         |
+| MIDWAY_10018 | MidwayInvokeForbiddenError            | 方法调用被禁止               |
+| MIDWAY_10019 | MidwayCodeInvokeTimeoutError          | 代码调用超时                 |
+| MIDWAY_10020 | MidwayMainFrameworkMissingError       | 主框架缺失                   |
+| MIDWAY_10021 | MidwayInvalidConfigPropertyError      | 无效的配置属性               |
+| MIDWAY_10022 | MidwayEmptyValueError                 | 空值错误                     |
 
 
 
@@ -276,6 +282,78 @@ export class MainConfiguration {
 **解决方案**
 
 将相同 `prefix` 的控制器代码进行合并，或者移除所有的 `options`。
+
+
+
+## MIDWAY_10017
+
+**问题描述**
+
+当使用重试功能时，如果重试次数超过了设定的最大重试次数，会抛出该错误。
+
+**解决方案**
+
+检查重试逻辑，确认是否需要增加重试次数，或者优化被重试的方法以减少失败率。
+
+
+
+## MIDWAY_10018
+
+**问题描述**
+
+当尝试调用被标记为禁止调用的方法时，会抛出该错误。
+
+**解决方案**
+
+检查方法的调用权限设置，确认是否有权限调用该方法，或者使用其他替代方法。
+
+
+
+## MIDWAY_10019
+
+**问题描述**
+
+当代码执行时间超过设定的超时时间时，会抛出该错误。
+
+**解决方案**
+
+优化代码执行效率，或者适当增加超时时间设置。检查是否存在死循环或者耗时的同步操作。
+
+
+
+## MIDWAY_10020
+
+**问题描述**
+
+当系统无法找到主框架时，会抛出该错误。通常发生在框架配置不正确的情况下。
+
+**解决方案**
+
+检查框架配置，确保正确配置了主框架。检查 `configuration.ts` 文件中的框架导入和配置。
+
+
+
+## MIDWAY_10021
+
+**问题描述**
+
+当配置属性的类型不符合预期时，会抛出该错误。
+
+**解决方案**
+
+检查配置文件中的属性类型，确保配置值符合预期的数据类型。参考文档中的配置说明进行修正。
+
+
+
+## MIDWAY_10022
+
+**问题描述**
+
+当遇到不允许的空值时，会抛出该错误。
+
+**解决方案**
+
+检查代码中的空值处理，确保在不允许空值的地方提供有效的值。添加必要的空值检查和默认值设置。
 
 
 

@@ -21,12 +21,12 @@
         "quickstart",
         "controller",
         "middleware",
-        "req_res_app",
         "service",
         "error_filter",
         "pipe",
         "guard",
         "midway_component",
+        "testing",
         "deployment"
       ]
     },
@@ -37,7 +37,7 @@
       "collapsible": true,
       "items": [
         "container",
-        "testing",
+        "req_res_app",
         "mock",
         "debugger",
         "environment",
