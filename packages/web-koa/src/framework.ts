@@ -236,7 +236,9 @@ export class MidwayKoaFramework extends BaseFramework<
   async loadMidwayController() {
     await this.generator.loadMidwayController(newRouter => {
       const dispatchFn = newRouter.middleware();
-      (dispatchFn as any)._name = `midwayController(${newRouter?.opts?.prefix || '/'})`;
+      (dispatchFn as any)._name = `midwayController(${
+        newRouter?.opts?.prefix || '/'
+      })`;
       this.app.use(dispatchFn);
     });
   }
