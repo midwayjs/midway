@@ -21,6 +21,12 @@ The following are the errors built into the framework, which will increase over 
 | MIDWAY_10014 | MidwayInvalidConfigError | Invalid configuration |
 | MIDWAY_10015 | MidwayDuplicateClassNameError | Duplicate class name |
 | MIDWAY_10016 | MidwayDuplicateControllerOptionsError | Repeated controller parameters |
+| MIDWAY_10017 | MidwayRetryExceededMaxTimesError | Retry count exceeded maximum limit |
+| MIDWAY_10018 | MidwayInvokeForbiddenError | Method invocation forbidden |
+| MIDWAY_10019 | MidwayCodeInvokeTimeoutError | Code invocation timeout |
+| MIDWAY_10020 | MidwayMainFrameworkMissingError | Main framework missing |
+| MIDWAY_10021 | MidwayInvalidConfigPropertyError | Invalid configuration property |
+| MIDWAY_10022 | MidwayEmptyValueError | Empty value error |
 
 
 
@@ -276,6 +282,78 @@ When different controllers are added, the same `prefix` is used, and different `
 **Solution**
 
 Merge the controller codes of the same `prefix` or remove all `options`.
+
+
+
+## MIDWAY_10017
+
+**Problem Description**
+
+When using the retry functionality, this error is thrown if the number of retries exceeds the set maximum retry count.
+
+**Solution**
+
+Check the retry logic to confirm whether the retry count needs to be increased, or optimize the method being retried to reduce the failure rate.
+
+
+
+## MIDWAY_10018
+
+**Problem Description**
+
+This error is thrown when attempting to call a method that is marked as forbidden to invoke.
+
+**Solution**
+
+Check the method's call permission settings to confirm whether you have permission to call the method, or use alternative methods.
+
+
+
+## MIDWAY_10019
+
+**Problem Description**
+
+This error is thrown when code execution time exceeds the set timeout period.
+
+**Solution**
+
+Optimize code execution efficiency, or appropriately increase the timeout setting. Check for infinite loops or time-consuming synchronous operations.
+
+
+
+## MIDWAY_10020
+
+**Problem Description**
+
+This error is thrown when the system cannot find the main framework. This usually occurs when the framework configuration is incorrect.
+
+**Solution**
+
+Check the framework configuration to ensure the main framework is properly configured. Check the framework import and configuration in the `configuration.ts` file.
+
+
+
+## MIDWAY_10021
+
+**Problem Description**
+
+This error is thrown when the configuration property type does not meet expectations.
+
+**Solution**
+
+Check the property types in the configuration file to ensure configuration values match the expected data types. Refer to the configuration instructions in the documentation for corrections.
+
+
+
+## MIDWAY_10022
+
+**Problem Description**
+
+This error is thrown when encountering disallowed empty values.
+
+**Solution**
+
+Check empty value handling in the code to ensure valid values are provided where empty values are not allowed. Add necessary empty value checks and default value settings.
 
 
 

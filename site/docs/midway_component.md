@@ -23,7 +23,7 @@ export class MainConfiguration {}
 
 ## 启用组件
 
-组件一般以 npm 包形式进行复用。每个组件都是一个可以被直接 `require` 或者 `import` 的代码包。我们以 `@midwayjs/validate` 组件为例。
+组件一般以 npm 包形式进行复用。每个组件都是一个可以被直接 `require` 或者 `import` 的代码包。我们以 `@midwayjs/validation` 组件为例。
 
 首先，在应用中加入依赖。
 
@@ -31,7 +31,7 @@ export class MainConfiguration {}
 // package.json
 {
   "dependencies": {
-    "@midwayjs/validate": "^4.0.0"
+    "@midwayjs/validation": "^4.0.0"
   }
 }
 ```
@@ -41,13 +41,15 @@ export class MainConfiguration {}
 ```typescript
 // 应用或者函数的 src/configuration.ts
 import { Configuration } from '@midwayjs/core';
-import * as validate from '@midwayjs/validate';
+import * as validation from '@midwayjs/validation';
 
 @Configuration({
-  imports: [validate],
+  imports: [validation],
 })
 export class MainConfiguration {}
 ```
+
+
 
 ## 不同环境启用组件
 

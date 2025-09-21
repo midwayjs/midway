@@ -43,19 +43,22 @@ import { Application } from '@midwayjs/koa';
 
 ### How to get
 
-In all classes that depend on injection container management, the `@App()` decorator can be used to obtain the **current most important** Application.
+In all classes that depend on injection container management, the `@MainApp()` decorator can be used to obtain the **current most important** Application, and `@App('koa')` with parameters can be used to obtain named Applications.
 
 For example:
 
 ```typescript
-import { App, Controller, Get } from '@midwayjs/core';
+import { MainApp, App, Controller, Get } from '@midwayjs/core';
 import { Application } from '@midwayjs/koa';
 
 @Controller('/')
 export class HomeController {
 
-  @App()
+  @MainApp()
   app: Application;
+  
+  @App('koa')
+  koaApp: Application;
 
   @Get('/')
   async home() {
@@ -102,7 +105,7 @@ For example, when multiple export Application components need to load middleware
 ```typescript
 // src/configuration.ts
 
-import { Configuration, ILifeCycle } from '@midwayjs/core';
+import { MainApp, App, Configuration, ILifeCycle } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as ws from '@midwayjs/ws';
 
@@ -110,7 +113,7 @@ import * as ws from '@midwayjs/ws';
   imports: [koa, ws]
 })
 export class MainConfiguration implements ILifeCycle {
-  @App()
+  @MainApp()
   koaApp: koa.Application;
 
   @App('webSocket')
@@ -141,6 +144,7 @@ Common namespaces are as follows:
 | @midwayjs/kafka    | kafka     |
 | @midwayjs/rabbitmq | rabbitMQ  |
 | @midwayjs/bull     | bull      |
+| @midwayjs/cron     | cron      |
 
 
 

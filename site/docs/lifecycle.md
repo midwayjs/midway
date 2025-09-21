@@ -446,3 +446,66 @@ export class MainConfiguration implements ILifeCycle {
 | options.context    | IMidwayContainer  | 依赖注入容器本身 |
 | options.definition | IObjectDefinition | 对象定义         |
 
+## 超时机制
+
+从 v4 开始，框架内置了超时机制，防止某些生命周期函数阻塞应用启动。
+
+### 默认超时时间
+
+不同生命周期方法有不同的默认超时时间：
+
+| 生命周期方法 | 默认超时时间 | 配置项 | 说明 |
+|-------------|-------------|--------|------|
+| `onConfigLoad` | 10 秒 | `core.configLoadTimeout` | 配置加载阶段 |
+| `onReady` | 30 秒 | `core.readyTimeout` | 容器准备阶段 |
+| `onServerReady` | 30 秒 | `core.serverReadyTimeout` | 服务启动阶段 |
+| `onStop` | 默认无限制 | `core.stopTimeout` | 应用停止阶段 |
+| `onHealthCheck` | 1 秒 | `core.healthCheckTimeout` | 健康检查阶段 |
+
+### 自定义超时时间
+
+可以通过配置修改每个生命周期的超时时间：
+
+:::tip
+注意，这个配置是全局的。
+:::
+
+
+```typescript
+// src/config/config.default.ts
+export default {
+  core: {
+    // 配置加载超时（毫秒）
+    configLoadTimeout: 15_000,  // 15秒
+  }
+} as MidwayConfig;
+```
+
+### 在生命周期中处理超时
+
+在生命周期方法中，可以通过入参获取到当前的超时配置，以及中断信号。
+
+```typescript
+@Configuration()
+export class MainConfiguration implements ILifeCycle {
+
+  async onReady(container: IMidwayContainer, app: IMidwayApplication, options: {
+    timeout?: number;
+    abortController?: AbortController;
+  }): Promise<void> {
+    
+    // 可以获取到超时配置
+    console.log('当前超时配置:', options.timeout); // 30000
+    
+    // 可以监听中断信号
+    if (options.abortController) {
+      options.abortController.signal.addEventListener('abort', () => {
+        console.log('生命周期被中断');
+      });
+    }
+    
+    // 执行初始化逻辑
+    await this.initializeServices();
+  }
+}
+```

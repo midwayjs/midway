@@ -21,12 +21,12 @@
         "quickstart",
         "controller",
         "middleware",
-        "req_res_app",
         "service",
         "error_filter",
         "pipe",
         "guard",
         "midway_component",
+        "testing",
         "deployment"
       ]
     },
@@ -37,7 +37,7 @@
       "collapsible": true,
       "items": [
         "container",
-        "testing",
+        "req_res_app",
         "mock",
         "debugger",
         "environment",
@@ -60,7 +60,6 @@
       "items": [
         "aspect",
         "auto_run",
-        "pipeline",
         "service_factory",
         "data_listener",
         "data_source",
@@ -212,7 +211,7 @@
         "extensions/axios",
         "extensions/i18n",
         "extensions/info",
-        "extensions/validate",
+        "extensions/validation",
         "extensions/swagger",
         "extensions/bullmq",
         "extensions/cron",
@@ -310,6 +309,7 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
+        "extensions/validate",
         "extensions/cache",
         "extensions/upload",
         "legacy/mongodb",

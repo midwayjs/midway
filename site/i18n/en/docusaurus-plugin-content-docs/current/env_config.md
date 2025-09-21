@@ -361,7 +361,7 @@ export class IndexHandler {
    userConfig;
 
    async handler() {
-   console.log(this.userConfig); // { appname: 'test'}
+     console.log(this.userConfig); // { appname: 'test'}
    }
 }
 ```
@@ -400,7 +400,7 @@ export class IndexHandler {
    data;
 
    async handler() {
-   console.log(this.data); // xxx
+     console.log(this.data); // xxx
    }
 }
 
@@ -410,19 +410,18 @@ export class IndexHandler {
 
 ### The entire configuration object
 
-
-You can also get the entire configuration object through the special attribute `ALL`.
+Starting from v4.0.0, use `@AllConfig()` to replace the original `@Config(ALL)` decorator to get all configurations.
 
 ```typescript
-import { Config, ALL } from '@midwayjs/core';
+import { AllConfig } from '@midwayjs/core';
 
 export class IndexHandler {
 
-   @Config(ALL)
+   @AllConfig()
    allConfig;
 
    async handler() {
-   console.log(this.allConfig); // { userService: { appname: 'test'}}
+     console.log(this.allConfig); // { userService: { appname: 'test'}}
    }
 }
 ```

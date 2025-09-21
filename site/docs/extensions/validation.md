@@ -1,6 +1,6 @@
 # 参数校验
 
-我们经常要在方法调用时执行一些类型检查，参数转换的操作，Midway 提供了一种简单的能力来快速检查参数的类型
+我们经常要在方法调用时执行一些类型检查，参数转换的操作，Midway 提供了一种简单的能力来快速检查参数的类型。
 
 本模块自 `v4.0.0` 起替换 `@midwayjs/validate` 组件。
 
@@ -24,7 +24,7 @@
 
 我们以控制器（Controller）中使用为例。
 
-```typescript
+```text
 ➜  my_midway_app tree
 .
 ├── src
@@ -183,7 +183,7 @@ export class UserDTO {
 
 ## 校验参数
 
-定义完类型之后，就可以直接在业务代码中使用了。
+定义完类型之后，就可以直接在业务代码中使用了，框架将自动帮你校验和转换 DTO。
 
 ```typescript
 // src/controller/home.ts

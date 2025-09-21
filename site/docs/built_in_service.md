@@ -135,11 +135,11 @@ export class HomeController {
 
 一般用来获取当前的配置，API 如下：
 
-| API                | 返回类型 | 描述                     |
-| ------------------ | -------- | ------------------------ |
-| addObject(obj)     |          | 动态添加配置对象         |
-| getConfiguration() | Object   | 返回当前合并好的配置对象 |
-| clearAllConfig()   |          | 清空所有配置             |
+| API                                         | 返回类型 | 描述                     |
+| ------------------------------------------- | -------- | ------------------------ |
+| addObject(obj)                              |          | 动态添加配置对象         |
+| getConfiguration('configKey', defaultValue) | Object   | 返回当前合并好的配置对象 |
+| clearAllConfig()                            |          | 清空所有配置             |
 
 
 
@@ -641,5 +641,4 @@ export default {
 ```
 
 健康检查的执行端在业务或者组件的生命周期中实现，具体请查看 [生命周期](/docs/lifecycle#onhealthcheck)。
-
 

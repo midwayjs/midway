@@ -441,3 +441,67 @@ The parameters are as follows:
 | options.context | IMidwayContainer | Dependent injection container itself |
 | options.definition | IObjectDefinition | Object definition |
 
+
+## Timeout Mechanism
+
+Starting from v4, the framework has built-in timeout mechanism to prevent certain lifecycle functions from blocking application startup.
+
+### Default Timeout Times
+
+Different lifecycle methods have different default timeout times:
+
+| Lifecycle Method | Default Timeout | Configuration | Description |
+|------------------|-----------------|---------------|-------------|
+| `onConfigLoad` | 10 seconds | `core.configLoadTimeout` | Configuration loading phase |
+| `onReady` | 30 seconds | `core.readyTimeout` | Container ready phase |
+| `onServerReady` | 30 seconds | `core.serverReadyTimeout` | Server startup phase |
+| `onStop` | No limit by default | `core.stopTimeout` | Application stop phase |
+| `onHealthCheck` | 1 second | `core.healthCheckTimeout` | Health check phase |
+
+### Custom Timeout Times
+
+You can modify the timeout time for each lifecycle through configuration:
+
+:::tip
+Note that this configuration is global.
+:::
+
+
+```typescript
+// src/config/config.default.ts
+export default {
+  core: {
+    // Configuration loading timeout (milliseconds)
+    configLoadTimeout: 15_000,  // 15 seconds
+  }
+} as MidwayConfig;
+```
+
+### Handling Timeout in Lifecycle Methods
+
+In lifecycle methods, you can get the current timeout configuration and abort signal through parameters.
+
+```typescript
+@Configuration()
+export class MainConfiguration implements ILifeCycle {
+
+  async onReady(container: IMidwayContainer, app: IMidwayApplication, options: {
+    timeout?: number;
+    abortController?: AbortController;
+  }): Promise<void> {
+    
+    // Get timeout configuration
+    console.log('Current timeout configuration:', options.timeout); // 30000
+    
+    // Listen to abort signal
+    if (options.abortController) {
+      options.abortController.signal.addEventListener('abort', () => {
+        console.log('Lifecycle was interrupted');
+      });
+    }
+    
+    // Execute initialization logic
+    await this.initializeServices();
+  }
+}
+```

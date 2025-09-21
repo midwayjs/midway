@@ -178,7 +178,7 @@ At the same time, the `package.json` of the component is also modified.
 
 The components and the application itself are slightly different, mainly in the following aspects.
 
-- 1. The code of the component needs to export a `Configuration` attribute, which must be a Class with a `@Configuration` decorator to configure the component's own capabilities
+- 1. The component code needs to have an entry point, which must be a file containing the `@Configuration` decorator or `defineConfiguration`, and it needs to be exported
 - 2. All  **explicitly exported codes** will be loaded by the dependent injection container. Simply put, all classes **decorated by decorators** need to be exported, including controllers, services, middleware, etc.
 
 For example:
