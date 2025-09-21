@@ -359,7 +359,7 @@ export class IndexHandler {
   userConfig;
 
   async handler() {
-  	console.log(this.userConfig);  // { appname: 'test'}
+    console.log(this.userConfig);  // { appname: 'test'}
   }
 }
 ```
@@ -378,7 +378,7 @@ export class IndexHandler {
 ```json
 {
   "userService": {
-  	"appname": {
+    "appname": {
       "test": {
       	"data": "xxx"
       }
@@ -396,7 +396,7 @@ export class IndexHandler {
   data;
 
   async handler() {
-  	console.log(this.data);  // xxx
+    console.log(this.data);  // xxx
   }
 }
 
@@ -406,18 +406,18 @@ export class IndexHandler {
 
 ### 整个配置对象
 
+从 v4.0.0 开始，使用 `@AllConfig()` 替换原来的 `@Config(ALL)`装饰器获取所有的配置。
 
-也可以通过 `ALL` 这个特殊属性，来获取整个配置的对象。
 ```typescript
-import { Config, ALL } from '@midwayjs/core';
+import { AllConfig } from '@midwayjs/core';
 
 export class IndexHandler {
 
-  @Config(ALL)
+  @AllConfig()
   allConfig;
 
   async handler() {
-  	console.log(this.allConfig);  // { userService: { appname: 'test'}}
+    console.log(this.allConfig);  // { userService: { appname: 'test'}}
   }
 }
 ```

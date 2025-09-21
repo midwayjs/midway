@@ -135,9 +135,9 @@ export class HomeController {
 Generally used to obtain the current configuration, the API is as follows:
 
 | API | Return type | Description |
-| ------------------ | -------- | ------------------------ |
+| ------------------------------------------- | -------- | ------------------------ |
 | addObject(obj) |          | Dynamically add configuration objects |
-| getConfiguration() | Object | Returns the currently merged configuration object |
+| getConfiguration('configKey', defaultValue) | Object | Returns the currently merged configuration object |
 | clearAllConfig() |          | Clear all configurations |
 
 
