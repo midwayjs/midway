@@ -1,6 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
+const { join } = require('path');
 const {themes} = require('prism-react-renderer');
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
@@ -56,7 +57,74 @@ const config = {
           enableLlmsFullTxt: true
         }
       }
-    ]
+    ],
+    [
+      'docusaurus-plugin-typedoc-api',
+      {
+        projectRoot: join(__dirname, '..'),
+        packages: [
+          "packages/async-hooks-context-manager",
+          "packages/axios",
+          "packages/bootstrap",
+          "packages/bull-board",
+          "packages/bull",
+          "packages/cache",
+          "packages/captcha",
+          "packages/casbin-redis-adapter",
+          "packages/casbin-typeorm-adapter",
+          "packages/casbin",
+          "packages/code-dye",
+          "packages/consul",
+          "packages/core",
+          "packages/cos",
+          "packages/cron",
+          "packages/cross-domain",
+          "packages/decorator",
+          "packages/etcd",
+          "packages/express-session",
+          "packages/faas",
+          "packages/grpc",
+          "packages/http-proxy",
+          "packages/i18n",
+          "packages/info",
+          "packages/jwt",
+          "packages/kafka",
+          "packages/mikro",
+          "packages/mock",
+          "packages/mongoose",
+          "packages/otel",
+          "packages/passport",
+          "packages/processAgent",
+          "packages/prometheus-socket-io",
+          "packages/prometheus",
+          "packages/rabbitmq",
+          "packages/redis",
+          "packages/security",
+          "packages/sequelize",
+          "packages/session",
+          "packages/socketio",
+          "packages/static-file",
+          "packages/swagger",
+          "packages/tablestore",
+          "packages/tags",
+          "packages/typegoose",
+          "packages/typeorm",
+          "packages/upload",
+          "packages/validate",
+          "packages/view-ejs",
+          "packages/view-nunjucks",
+          "packages/view",
+          "packages/web-express",
+          "packages/web-koa",
+          "packages/web",
+          "packages/ws"
+        ],
+        debug:true,
+        minimal: true,
+        gitRefName: '3.x',
+        lastVersion: '3.0.0',
+      },
+    ],
   ],
   presets: [
     [
