@@ -326,12 +326,11 @@ export class MidwayKoaFramework extends BaseFramework<
 
     if (customPort === 0 || customPort === '0') {
       customPort = await getFreePort();
-      this.configurationOptions.listenOptions.port = customPort;
       this.logger.info(
         `Midway koa is listening on port ${customPort} (auto assigned)`
       );
     }
-
+    this.configurationOptions.listenOptions.port = Number(customPort);
     if (this.configurationOptions.listenOptions.port) {
       new Promise<void>(resolve => {
         // 使用 ListenOptions 对象启动服务器
