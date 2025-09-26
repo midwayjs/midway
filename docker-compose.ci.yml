@@ -89,7 +89,7 @@ services:
       - ./packages/mqtt/scripts/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
   consul:
-    image: hashicorp/consul:1.21.4
+    image: hashicorp/consul:1.21.5
     command: agent -dev -client=0.0.0.0
     ports:
       - "8500:8500"
