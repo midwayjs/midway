@@ -865,7 +865,16 @@ Field description
 Take effect at the controller level.
 
 ```typescript
-@ApiBasicAuth()
+@ApiBasicAuth()  // default uses 'basic' as the name
+@Controller('/hello')
+export class HelloController {}
+```
+
+Note: The `@ApiBasicAuth()` decorator has a default name `'basic'`. If the `name` field in the configuration file is not `'basic'`, you need to explicitly specify the same name in the decorator:
+
+```typescript
+// When the name in the config file is 'BasicAuth'
+@ApiBasicAuth('BasicAuth')
 @Controller('/hello')
 export class HelloController {}
 ```
@@ -902,7 +911,16 @@ Field description
 Take effect at the controller level.
 
 ```typescript
-@ApiBearerAuth()
+@ApiBearerAuth()  // default uses 'bearer' as the name
+@Controller('/hello')
+export class HelloController {}
+```
+
+Note: The `@ApiBearerAuth()` decorator has a default name `'bearer'`. If the `name` field in the configuration file is not `'bearer'`, you need to explicitly specify the same name in the decorator:
+
+```typescript
+// When the name in the config file is 'BearerAuth'
+@ApiBearerAuth('BearerAuth')
 @Controller('/hello')
 export class HelloController {}
 ```
@@ -973,7 +991,16 @@ The available parameters for the above four Flow types are as follows:
 Take effect at the controller level.
 
 ```typescript
-@ApiOAuth2()
+@ApiOAuth2(['read:pets'])  // scopes must be specified, default uses 'oauth2' as the name
+@Controller('/hello')
+export class HelloController {}
+```
+
+Note: The `@ApiOAuth2()` decorator has a default name `'oauth2'`. If the `name` field in the configuration file is not `'oauth2'`, you need to explicitly specify the same name in the decorator:
+
+```typescript
+// When the name in the config file is 'testOAuth2'
+@ApiOAuth2(['read:pets'], 'testOAuth2')
 @Controller('/hello')
 export class HelloController {}
 ```
@@ -1010,6 +1037,15 @@ Field description
 Take effect at the controller level.
 
 ```typescript
+@ApiCookieAuth()  // default uses 'cookie' as the name
+@Controller('/hello')
+export class HelloController {}
+```
+
+Note: The `@ApiCookieAuth()` decorator has a default name `'cookie'`. If the `name` field in the configuration file is not `'cookie'`, you need to explicitly specify the same name in the decorator:
+
+```typescript
+// When the name in the config file is 'testforcookie'
 @ApiCookieAuth('testforcookie')
 @Controller('/hello')
 export class HelloController {}
@@ -1048,10 +1084,12 @@ Field description
 Take effect at the controller level.
 
 ```typescript
-@ApiSecurity('api_key')
+@ApiSecurity('api_key')  // name must be specified, no default value
 @Controller('/hello')
 export class HelloController {}
 ```
+
+Note: The `@ApiSecurity()` decorator must specify the name parameter, which should be consistent with the `name` field in the configuration file.
 
 ### custom authentication
 

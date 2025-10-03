@@ -774,7 +774,16 @@ export default {
 在控制器层面生效。
 
 ```typescript
-@ApiBasicAuth()
+@ApiBasicAuth()  // 默认使用 'basic' 作为名称
+@Controller('/hello')
+export class HelloController {}
+```
+
+**注意**：`@ApiBasicAuth()` 装饰器有默认值 `'basic'`。如果配置文件中的 `name` 字段不是 `'basic'`，需要在装饰器中显式指定相同的名称：
+
+```typescript
+// 配置文件中 name 为 'BasicAuth' 时 
+@ApiBasicAuth('BasicAuth')
 @Controller('/hello')
 export class HelloController {}
 ```
@@ -812,7 +821,16 @@ export default {
 在控制器层面生效。
 
 ```typescript
-@ApiBearerAuth()
+@ApiBearerAuth()  // 默认使用 'bearer' 作为名称
+@Controller('/hello')
+export class HelloController {}
+```
+
+**注意**：`@ApiBearerAuth()` 装饰器有默认值 `'bearer'`。如果配置文件中的 `name` 字段不是 `'bearer'`，需要在装饰器中显式指定相同的名称：
+
+```typescript
+// 配置文件中 name 为 'BearerAuth' 时 
+@ApiBearerAuth('BearerAuth')
 @Controller('/hello')
 export class HelloController {}
 ```
@@ -886,7 +904,16 @@ flows 是其中最复杂的字段配置，包括不同的参数，目前主要�
 在控制器层面生效。
 
 ```typescript
-@ApiOAuth2()
+@ApiOAuth2(['read:pets'])  // 必须指定权限范围，默认使用 'oauth2' 作为名称
+@Controller('/hello')
+export class HelloController {}
+```
+
+**注意**：`@ApiOAuth2()` 装饰器有默认值 `'oauth2'`。如果配置文件中的 `name` 字段不是 `'oauth2'`，需要在装饰器中显式指定相同的名称：
+
+```typescript
+// 配置文件中 name 为 'testOAuth2' 时 
+@ApiOAuth2(['read:pets'], 'testOAuth2')
 @Controller('/hello')
 export class HelloController {}
 ```
@@ -926,6 +953,15 @@ export default {
 在控制器层面生效。
 
 ```typescript
+@ApiCookieAuth()  // 默认使用 'cookie' 作为名称
+@Controller('/hello')
+export class HelloController {}
+```
+
+**注意**：`@ApiCookieAuth()` 装饰器有默认值 `'cookie'`。如果配置文件中的 `name` 字段不是 `'cookie'`，需要在装饰器中显式指定相同的名称：
+
+```typescript
+// 配置文件中 name 为 'testforcookie' 时 
 @ApiCookieAuth('testforcookie')
 @Controller('/hello')
 export class HelloController {}
@@ -969,10 +1005,12 @@ export default {
 在控制器层面生效。
 
 ```typescript
-@ApiSecurity('api_key')
+@ApiSecurity('api_key')  // 必须指定名称，无默认值
 @Controller('/hello')
 export class HelloController {}
 ```
+
+**注意**：`@ApiSecurity()` 装饰器必须指定名称参数，与配置文件中的 `name` 字段保持一致。
 
 
 
