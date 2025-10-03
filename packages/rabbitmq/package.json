@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@midwayjs/core": "workspace:^",
-    "amqp-connection-manager": "4.1.14"
+    "amqp-connection-manager": "4.1.15"
   },
   "peerDependencies": {
     "@types/amqplib": "*",
