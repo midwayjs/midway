@@ -40,7 +40,7 @@
     "url": "https://github.com/midwayjs/midway.git"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "madge": {
     "detectiveOptions": {

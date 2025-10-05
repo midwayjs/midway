@@ -114,8 +114,6 @@ export default {
   //   port: 3000,
   //   keys: ['mcp-secret-key']
   // },
-  // 或者如果使用 Egg.js
-  // keys: 'mcp-secret-key',
   
   mcp: {
     serverInfo: {
