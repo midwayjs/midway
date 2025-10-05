@@ -206,7 +206,7 @@
       "type": "category",
       "label": "通用",
       "collapsed": false,
-      "collapsible": false,
+      "collapsible": true,
       "items": [
         "extensions/axios",
         "extensions/i18n",
@@ -224,7 +224,7 @@
       "type": "category",
       "label": "Http 服务",
       "collapsed": false,
-      "collapsible": false,
+      "collapsible": true,
       "items": [
         "extensions/koa",
         "extensions/egg",
@@ -243,8 +243,8 @@
     {
       "type": "category",
       "label": "数据存储",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "extensions/orm",
         "extensions/sequelize",
@@ -260,8 +260,8 @@
     {
       "type": "category",
       "label": "微服务",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "extensions/grpc",
         "extensions/consul",
@@ -271,8 +271,8 @@
     {
       "type": "category",
       "label": "WebSocket",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "extensions/socketio",
         "extensions/ws"
@@ -281,8 +281,8 @@
     {
       "type": "category",
       "label": "消息",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "extensions/rabbitmq",
         "extensions/kafka",
@@ -291,9 +291,18 @@
     },
     {
       "type": "category",
+      "label": "AI",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        "extensions/mcp"
+      ]
+    },
+    {
+      "type": "category",
       "label": "运维",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "extensions/otel",
         "extensions/code_dye",
@@ -306,8 +315,8 @@
     {
       "type": "category",
       "label": "历史废弃组件",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "extensions/validate",
         "extensions/cache",

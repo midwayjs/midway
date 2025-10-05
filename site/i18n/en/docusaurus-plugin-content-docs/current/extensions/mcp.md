@@ -1,56 +1,56 @@
 # MCP (Model Context Protocol)
 
-MCP (Model Context Protocol) 是由 Anthropic 开发的开放标准协议，用于将 AI 模型与外部数据源和工具安全连接。它允许 AI 应用程序与各种服务进行语义集成，为 AI 模型提供了获取实时信息、执行操作和访问资源的标准化方式。
+MCP (Model Context Protocol) is an open standard developed by Anthropic for securely connecting AI models to external data sources and tools. It allows AI applications to semantically integrate with various services, providing AI models with a standardized way to access real-time information, perform actions, and retrieve resources.
 
 ![MCP Architecture](https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-simple-diagram.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=37d50a5429a8f662c1beb564b4df8e65)
 
-Midway 提供了对 MCP 的完整支持和封装，能够简单快速地创建 MCP 服务器。本章节演示了如何在 Midway 体系下，提供 MCP 服务的方法。
+Midway provides full support and wrapping for MCP, enabling you to quickly create an MCP server. This chapter demonstrates how to provide MCP services within the Midway ecosystem.
 
-Midway 当前采用了最新的 [MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk) 进行开发，并提供了装饰器和框架集成，用于快速发布 MCP 服务。
+Midway currently uses the latest [MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk), and offers decorators and framework integration to publish MCP services quickly.
 
-相关信息：
+Related information:
 
-**提供服务**
+**Service offering**
 
-| 描述              |      |
-| ----------------- | ---- |
-| 可用于标准项目    | ✅    |
-| 可用于 Serverless | ❌    |
-| 可用于一体化      | ✅    |
-| 包含独立主框架    | ✅    |
-| 包含独立日志      | ✅    |
+| Description            |      |
+| ---------------------- | ---- |
+| Available for standard projects | ✅    |
+| Available for Serverless        | ❌    |
+| Available for integrated apps   | ✅    |
+| Contains independent main framework | ✅    |
+| Contains independent logs       | ✅    |
 
-**传输类型支持**
+**Transport types supported**
 
-| 传输类型      | 描述                                    | 支持状态 |
-| ------------- | --------------------------------------- | -------- |
-| stdio         | 标准输入输出传输，适用于 CLI 应用       | ✅        |
-| stream-http   | HTTP 流传输，推荐的现代传输方式         | ✅        |
-| sse           | 服务器发送事件传输（已弃用，向下兼容）  | ✅        |
+| Transport type | Description                                   | Support |
+| -------------- | --------------------------------------------- | ------- |
+| stdio          | Standard input/output transport for CLI apps  | ✅       |
+| stream-http    | HTTP stream transport, the recommended modern approach | ✅       |
+| sse            | Server-Sent Events (deprecated, backward compatible) | ✅       |
 
-## 安装依赖
+## Install dependencies
 
-在现有项目中安装 MCP 的依赖。
+Install MCP dependencies in an existing project.
 
 ```bash
 $ npm i @midwayjs/mcp@4 --save
 $ npm i @modelcontextprotocol/sdk zod --save
 ```
 
-如果使用 `sse` 或 `stream-http` 传输类型，还需要安装 HTTP 框架组件（选择其中一个）：
+If you use the `sse` or `stream-http` transport, you also need to install one of the HTTP framework components (choose one):
 
 ```bash
-# Express 框架
+# Express framework
 $ npm i @midwayjs/express@4 --save
 
-# 或者 Koa 框架  
+# Or Koa framework
 $ npm i @midwayjs/koa@4 --save
 
-# 或者 Egg.js 框架
+# Or Egg.js framework
 $ npm i @midwayjs/web@4 --save
 ```
 
-或者在 `package.json` 中增加如下依赖后，重新安装。
+Or add the following dependencies to `package.json` and reinstall.
 
 ```json
 {
@@ -64,28 +64,28 @@ $ npm i @midwayjs/web@4 --save
 ```
 
 :::tip
-如果使用 `sse` 或 `stream-http` 传输类型，您需要选择并安装一个 HTTP 框架：
-- `@midwayjs/express` - Express 框架
-- `@midwayjs/koa` - Koa 框架  
-- `@midwayjs/web` - Egg.js 框架
+If you use the `sse` or `stream-http` transport, you need to choose and install an HTTP framework:
+- `@midwayjs/express` - Express framework
+- `@midwayjs/koa` - Koa framework
+- `@midwayjs/web` - Egg.js framework
 
-如果只使用 `stdio` 传输类型，则不需要安装 HTTP 框架组件。
+If you only use the `stdio` transport, HTTP framework components are not required.
 :::
 
-## 开启组件
+## Enable component
 
-在 `src/configuration.ts` 中导入 MCP 组件：
+Import the MCP component in `src/configuration.ts`:
 
 ```typescript
 import { Configuration } from '@midwayjs/core';
 import * as mcp from '@midwayjs/mcp';
-// 如果使用 sse/stream-http 传输类型，需要导入 HTTP 框架
+// If using sse/stream-http transports, import an HTTP framework
 import * as express from '@midwayjs/express';
 
 @Configuration({
   imports: [
-    express, // HTTP 框架（sse/stream-http 传输类型需要）
-    mcp      // 导入 MCP 组件
+    express, // HTTP framework (required for sse/stream-http)
+    mcp      // Import MCP component
   ],
   // ...
 })
@@ -93,28 +93,28 @@ export class MainConfiguration {}
 ```
 
 :::info
-**传输类型依赖说明**：
-- `stdio` 传输：只需要导入 `@midwayjs/mcp`
-- `sse` 或 `stream-http` 传输：需要同时导入 HTTP 框架组件（如 `@midwayjs/express`）
+Transport dependency notes:
+- `stdio` transport: only import `@midwayjs/mcp`
+- `sse` or `stream-http` transports: also import an HTTP framework component (e.g. `@midwayjs/express`)
 :::
 
-## 配置
+## Configuration
 
-在 `config.default.ts` 中配置 MCP 服务器信息：
+Configure MCP server information in `config.default.ts`:
 
 ```typescript
 export default {
-  // 如果使用 sse/stream-http 传输类型，需要配置 HTTP 框架
+  // When using sse/stream-http transports, configure the HTTP framework
   express: {
     port: 3000,
     keys: ['mcp-secret-key']
   },
-  // 或者如果使用 Koa
+  // Or if using Koa
   // koa: {
   //   port: 3000,
   //   keys: ['mcp-secret-key']
   // },
-  // 或者如果使用 Egg.js
+  // Or if using Egg.js
   // keys: 'mcp-secret-key',
   
   mcp: {
@@ -122,48 +122,48 @@ export default {
       name: 'my-mcp-server',
       version: '1.0.0',
     },
-    // 传输类型：stdio | stream-http | sse(已弃用)
+    // Transport type: stdio | stream-http | sse (deprecated)
     transportType: 'stream-http',
-    // 可选：自定义端点路径
+    // Optional: customize endpoint paths
     endpoints: {
-      streamHttp: '/mcp',     // StreamHTTP 端点
-      sse: '/sse',            // SSE 端点（向下兼容）
-      messages: '/messages'   // 消息端点
+      streamHttp: '/mcp',     // StreamHTTP endpoint
+      sse: '/sse',            // SSE endpoint (backward compatible)
+      messages: '/messages'   // Messages endpoint
     }
   }
 }
 ```
 
 :::warning
-- 当使用 `sse` 或 `stream-http` 传输类型时，**必须配置 HTTP 框架的端口和密钥**：
-- 如果只使用 `stdio` 传输类型，则不需要 HTTP 框架配置
+- When using the `sse` or `stream-http` transports, you must configure the HTTP framework port and keys.
+- If you only use the `stdio` transport, HTTP framework configuration is not required.
 :::
 
-### 传输类型说明
+### Transport types
 
-MCP 支持多种传输类型：
+MCP supports multiple transport types:
 
-- **stdio**: 适用于命令行工具和脚本，通过标准输入输出通信
-- **stream-http**: 推荐的 HTTP 传输方式，支持会话管理和并发请求
-- **sse**: 传统的服务器发送事件传输（已弃用，但保持向下兼容）
+- stdio: Suitable for command-line tools and scripts, communicating via standard input/output
+- stream-http: Recommended HTTP transport that supports session management and concurrent requests
+- sse: Traditional Server-Sent Events transport (deprecated but kept for backward compatibility)
 
 :::tip
-推荐使用 `stream-http` 传输类型，它提供了更好的性能和会话管理能力，同时兼容传统的 SSE 客户端。
+We recommend using the `stream-http` transport. It provides better performance and session management while remaining compatible with traditional SSE clients.
 :::
 
-### 默认端点配置
+### Default endpoint configuration
 
-当使用 `sse` 或 `stream-http` 传输类型时，Midway MCP 框架会自动配置以下默认端点：
+When using the `sse` or `stream-http` transports, Midway MCP automatically configures the following default endpoints:
 
-| 端点类型 | 默认路径 | 用途 | 支持的传输类型 |
-|---------|---------|------|----------------|
-| StreamHTTP | `/mcp` | 主要的 MCP 通信端点，推荐使用 | stream-http |
-| SSE | `/sse` | 传统 SSE 客户端兼容端点 | sse, stream-http (向下兼容) |
-| Messages | `/messages` | 消息处理端点 | stream-http, sse |
+| Endpoint type | Default path | Purpose | Supported transports |
+|--------------|--------------|---------|----------------------|
+| StreamHTTP   | `/mcp`       | Main MCP communication endpoint (recommended) | stream-http |
+| SSE          | `/sse`       | Legacy SSE client compatibility endpoint      | sse, stream-http (backward compatible) |
+| Messages     | `/messages`  | Message processing endpoint                   | stream-http, sse |
 
-**自定义端点配置**
+Customize endpoint configuration:
 
-您可以通过 `endpoints` 配置项自定义这些端点路径：
+You can customize these endpoint paths via the `endpoints` configuration:
 
 ```typescript
 export default {
@@ -174,31 +174,31 @@ export default {
     },
     transportType: 'stream-http',
     endpoints: {
-      streamHttp: '/api/mcp',        // 自定义 StreamHTTP 端点
-      sse: '/api/events',            // 自定义 SSE 端点
-      messages: '/api/messages'      // 自定义消息端点
+      streamHttp: '/api/mcp',        // Custom StreamHTTP endpoint
+      sse: '/api/events',            // Custom SSE endpoint
+      messages: '/api/messages'      // Custom messages endpoint
     }
   }
 }
 ```
 
-**端点访问示例**
+Endpoint access examples:
 
-假设服务器运行在 `http://localhost:3000`，默认端点访问地址为：
+Assuming the server runs at `http://localhost:3000`, the default endpoints are:
 
-- StreamHTTP 客户端：`http://localhost:3000/mcp`
-- SSE 客户端：`http://localhost:3000/sse`
-- 消息端点：`http://localhost:3000/messages`
+- StreamHTTP client: `http://localhost:3000/mcp`
+- SSE client: `http://localhost:3000/sse`
+- Messages endpoint: `http://localhost:3000/messages`
 
 :::info
-**向下兼容说明**：当服务器配置为 `stream-http` 传输类型时，传统的 SSE 客户端仍然可以通过 `/sse` 端点正常连接和通信。
+Backward compatibility: When the server is configured with the `stream-http` transport, legacy SSE clients can still connect and communicate via the `/sse` endpoint.
 :::
 
-## 使用方式
+## Usage
 
-### 工具（Tools）
+### Tools
 
-使用 `@Tool` 装饰器创建 MCP 工具：
+Create an MCP tool using the `@Tool` decorator:
 
 ```typescript
 import { Tool, IMcpTool, ToolConfig } from '@midwayjs/mcp';
@@ -215,7 +215,7 @@ const weatherConfig: ToolConfig<{ city: z.ZodString }> = {
 @Tool('get_weather', weatherConfig)
 export class WeatherTool implements IMcpTool {
   async execute(args: { city: string }): Promise<CallToolResult> {
-    // 模拟获取天气数据
+    // Simulate fetching weather data
     const weather = await this.getWeatherData(args.city);
     
     return {
@@ -229,7 +229,7 @@ export class WeatherTool implements IMcpTool {
   }
 
   private async getWeatherData(city: string) {
-    // 实际的天气 API 调用
+    // Actual weather API call
     return {
       temperature: 22,
       condition: 'Sunny'
@@ -238,9 +238,9 @@ export class WeatherTool implements IMcpTool {
 }
 ```
 
-### 提示（Prompts）
+### Prompts
 
-使用 `@Prompt` 装饰器创建 MCP 提示：
+Create an MCP prompt using the `@Prompt` decorator:
 
 ```typescript
 import { Prompt, IMcpPrompt, PromptConfig } from '@midwayjs/mcp';
@@ -278,9 +278,9 @@ export class ContentPrompt implements IMcpPrompt {
 }
 ```
 
-### 资源（Resources）
+### Resources
 
-使用 `@Resource` 装饰器创建 MCP 资源：
+Create an MCP resource using the `@Resource` decorator:
 
 ```typescript
 import { Resource, IMcpResource, ResourceConfig } from '@midwayjs/mcp';
@@ -315,7 +315,7 @@ export class UserResource implements IMcpResource {
   }
 
   private async getUserData(userId: string) {
-    // 实际的数据库查询
+    // Actual database query
     return {
       id: userId,
       name: 'John Doe',
@@ -325,9 +325,9 @@ export class UserResource implements IMcpResource {
 }
 ```
 
-## 完整示例
+## Full example
 
-这里是一个完整的 MCP 服务器示例：
+Here is a complete MCP server example:
 
 ```typescript
 // src/configuration.ts
@@ -415,9 +415,9 @@ export class CalculatorTool implements IMcpTool {
 }
 ```
 
-## 动态调用 API
+## Dynamic API calls
 
-您可以在运行时动态调用 MCP 服务器的原始 API 来注册工具、提示和资源：
+You can dynamically call the underlying MCP server API at runtime to register tools, prompts, and resources:
 
 ```typescript
 // src/configuration.ts
@@ -441,14 +441,14 @@ export class MainConfiguration {
   async onReady() {
     const server = this.mcpFramework.getServer();
     
-    // 动态注册工具
+    // Dynamically register a tool
     server.registerTool({
       name: 'dynamic_tool',
-      description: '动态注册的工具',
+      description: 'A dynamically registered tool',
       inputSchema: {
         type: 'object',
         properties: {
-          message: { type: 'string', description: '要处理的消息' }
+          message: { type: 'string', description: 'Message to process' }
         },
         required: ['message']
       }
@@ -456,19 +456,19 @@ export class MainConfiguration {
       return {
         content: [{
           type: 'text',
-          text: `动态处理: ${args.message}`
+          text: `Dynamic processing: ${args.message}`
         }]
       };
     });
     
-    // 动态注册提示
+    // Dynamically register a prompt
     server.registerPrompt({
       name: 'dynamic_prompt',
-      description: '动态生成的提示',
+      description: 'A dynamically generated prompt',
       argsSchema: {
         type: 'object',
         properties: {
-          topic: { type: 'string', description: '主题' }
+          topic: { type: 'string', description: 'Topic' }
         },
         required: ['topic']
       }
@@ -478,17 +478,17 @@ export class MainConfiguration {
           role: 'user',
           content: {
             type: 'text',
-            text: `请写一篇关于 ${args.topic} 的文章`
+            text: `Please write an article about ${args.topic}`
           }
         }]
       };
     });
     
-    // 动态注册资源
+    // Dynamically register a resource
     server.registerResource({
       uri: 'dynamic://config',
-      name: '动态配置',
-      description: '动态生成的配置资源',
+      name: 'Dynamic config',
+      description: 'A dynamically generated configuration resource',
       mimeType: 'application/json'
     }, async (uri) => {
       return {
@@ -507,36 +507,36 @@ export class MainConfiguration {
 ```
 
 :::tip
-动态注册的 API 适用于需要在运行时根据业务逻辑动态添加 MCP 功能的场景。与装饰器方式相比，动态注册提供了更大的灵活性，但需要手动管理注册逻辑。
+Dynamic registration APIs are suitable for scenarios where MCP features need to be added at runtime based on business logic. Compared with decorator-based registration, dynamic registration provides greater flexibility but requires you to manage registration logic manually.
 :::
 
-## 客户端连接
+## Client connections
 
-### StreamHTTP 客户端
+### StreamHTTP client
 
 ```typescript
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 
-// 创建客户端实例
+// Create a client instance
 const client = new Client({
   name: 'my-mcp-client',
   version: '1.0.0'
 });
 
-// 创建 StreamHTTP 传输
+// Create a StreamHTTP transport
 const transport = new StreamableHTTPClientTransport(
   new URL('http://localhost:3000/mcp')
 );
 
-// 连接到服务器
+// Connect to the server
 await client.connect(transport);
 
-// 列出可用工具
+// List available tools
 const { tools } = await client.listTools();
 console.log('Available tools:', tools);
 
-// 调用工具
+// Call a tool
 const result = await client.callTool({
   name: 'calculator',
   arguments: {
@@ -547,78 +547,78 @@ const result = await client.callTool({
 });
 console.log('Tool result:', result);
 
-// 使用完毕后关闭连接
+// Close the connection when done
 await client.close();
 ```
 
-### SSE 客户端 (传统方式)
+### SSE client (legacy)
 
 ```typescript
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 
-// 创建客户端实例
+// Create a client instance
 const client = new Client({
   name: 'my-mcp-client',
   version: '1.0.0'
 });
 
-// 创建 SSE 传输
+// Create an SSE transport
 const transport = new SSEClientTransport(
   new URL('http://localhost:3000/sse')
 );
 
-// 连接到服务器
+// Connect to the server
 await client.connect(transport);
 
-// 使用客户端...
+// Use the client...
 
-// 使用完毕后关闭连接
+// Close the connection when done
 await client.close();
 ```
 
-### Stdio 客户端 (进程通信)
+### Stdio client (process communication)
 
 ```typescript
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
-// 创建客户端实例
+// Create a client instance
 const client = new Client({
   name: 'my-mcp-client',
   version: '1.0.0'
 });
 
-// 创建 Stdio 传输，启动 MCP 服务器进程
+// Create a Stdio transport and start the MCP server process
 const transport = new StdioClientTransport({
   command: 'node',
   args: ['dist/bootstrap.js'],
   env: {
     NODE_ENV: 'production',
-    // 继承当前进程的环境变量
+    // Inherit environment variables from the current process
     ...process.env
   },
-  // 可选：设置工作目录
+  // Optional: set working directory
   cwd: '/path/to/mcp/server',
-  // 可选：处理 stderr 输出
+  // Optional: handle stderr output
   stderr: 'inherit' // 'pipe' | 'inherit' | 'ignore'
 });
 
-// 连接到服务器（会自动启动子进程）
+// Connect to the server (will automatically start the child process)
 await client.connect(transport);
 
-// 可选：监听 stderr 输出（当 stderr: 'pipe' 时）
+// Optionally listen to stderr output (when stderr: 'pipe')
 if (transport.stderr) {
   transport.stderr.on('data', (data) => {
     console.error('Server stderr:', data.toString());
   });
 }
 
-// 列出可用工具
+// List available tools
 const { tools } = await client.listTools();
 console.log('Available tools:', tools);
 
-// 调用工具
+// Call a tool
 const result = await client.callTool({
   name: 'calculator',
   arguments: {
@@ -629,22 +629,22 @@ const result = await client.callTool({
 });
 console.log('Tool result:', result);
 
-// 使用完毕后关闭连接（会终止子进程）
+// Close the connection when done (will terminate the child process)
 await client.close();
 ```
 
 :::tip
-**传输类型选择建议**：
-- **StreamHTTP**: 适用于网络服务、微服务架构、Web 应用集成
-- **SSE**: 传统方式，主要用于向下兼容
-- **Stdio**: 适用于命令行工具、本地脚本、桌面应用集成（如 Claude Desktop、Cursor 等 AI 编辑器）
+Transport selection suggestions:
+- StreamHTTP: Suitable for network services, microservices architectures, and web app integrations
+- SSE: Legacy approach, mainly for backward compatibility
+- Stdio: Suitable for command-line tools, local scripts, and desktop app integrations (e.g., Claude Desktop, Cursor, and other AI editors)
 :::
 
-### 与编辑器集成
+### Editor integration
 
-在 Cursor/Trae/Claude Desktop 等编辑器的配置文件中添加您的 MCP 服务器：
+Add your MCP server to the configuration files of editors like Cursor/Trae/Claude Desktop:
 
-stdio 示例如下：
+Example using stdio:
 
 ```json
 {
@@ -660,7 +660,7 @@ stdio 示例如下：
 }
 ```
 
-stream-http 示例如下：
+Example using stream-http:
 
 ```json
 {
@@ -672,17 +672,17 @@ stream-http 示例如下：
 }
 ```
 
-## 最佳实践
+## Best practices
 
-### 1. 类型安全
+### 1. Type safety
 
-使用 TypeScript 泛型确保类型安全：
+Use TypeScript generics to ensure type safety:
 
 ```typescript
 import { Tool, ToolConfig } from '@midwayjs/mcp';
 import { z } from 'zod';
 
-// 定义清晰的输入类型
+// Define a clear input type
 const userSchema = {
   userId: z.string().min(1),
   includeProfile: z.boolean().optional()
@@ -695,16 +695,16 @@ const userToolConfig: ToolConfig<typeof userSchema> = {
 
 @Tool('get_user', userToolConfig)
 export class UserTool implements IMcpTool {
-  // TypeScript 会自动推断 args 的类型
+  // TypeScript will infer the args type automatically
   async execute(args: { userId: string; includeProfile?: boolean }) {
-    // 实现逻辑
+    // Implementation
   }
 }
 ```
 
-### 2. 错误处理
+### 2. Error handling
 
-正确处理错误并返回有意义的错误信息：
+Handle errors correctly and return meaningful information:
 
 ```typescript
 @Tool('risky_operation', config)
@@ -728,9 +728,9 @@ export class RiskyTool implements IMcpTool {
 }
 ```
 
-### 3. 资源管理
+### 3. Resource management
 
-合理管理资源连接和清理：
+Manage resource connections and cleanup properly:
 
 ```typescript
 @Resource('database_query', config)
@@ -757,26 +757,26 @@ export class DatabaseResource implements IMcpResource {
 }
 ```
 
-## 常见问题
+## FAQ
 
-### Q: MCP 与传统 API 有什么区别？
+### Q: How is MCP different from traditional APIs?
 
-A: MCP 是专门为 AI 模型设计的协议，提供了语义化的接口描述、类型安全的参数验证和上下文感知的交互。与传统 REST API 相比，MCP 更适合 AI 模型理解和使用。
+A: MCP is a protocol designed specifically for AI models, offering semantic interface descriptions, type-safe parameter validation, and context-aware interactions. Compared to traditional REST APIs, MCP is better suited for model understanding and usage.
 
-### Q: 如何在生产环境中部署 MCP 服务？
+### Q: How do I deploy MCP services in production?
 
-A: 推荐使用 `stream-http` 传输类型，配合反向代理（如 Nginx）进行负载均衡。确保启用适当的安全措施和监控。
+A: We recommend using the `stream-http` transport with a reverse proxy (e.g., Nginx) for load balancing. Ensure proper security measures and monitoring are enabled.
 
-### Q: 可以在一个应用中同时提供多种传输类型吗？
+### Q: Can a single application provide multiple transport types at the same time?
 
-A: 当前版本每个应用实例只支持一种传输类型。如需支持多种传输类型，建议部署多个应用实例。
+A: The current version supports only one transport type per application instance. If you need multiple transport types, consider deploying multiple instances.
 
-### Q: 如何调试 MCP 服务？
+### Q: How do I debug MCP services?
 
-A: 使用日志记录、MCP 客户端工具进行测试，或者使用官方提供的 [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
+A: Use logging, MCP client tools for testing, or the official [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
 
-## 相关链接
+## Related links
 
-- [MCP 官方文档](https://modelcontextprotocol.io/)
+- [MCP Official Docs](https://modelcontextprotocol.io/)
 - [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
-- [Claude Desktop MCP 配置](https://docs.anthropic.com/claude/docs/mcp)
+- [Claude Desktop MCP Configuration](https://docs.anthropic.com/claude/docs/mcp)
