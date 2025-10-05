@@ -1,4 +1,4 @@
-import { Configuration, Inject, MidwayConfigService } from '@midwayjs/core';
+import { Configuration, Inject, MidwayApplicationManager, MidwayConfigService } from '@midwayjs/core';
 import { MidwayMCPFramework } from './framework';
 
 @Configuration({
@@ -18,6 +18,12 @@ export class MCPConfiguration {
   @Inject()
   configService: MidwayConfigService;
 
+  @Inject()
+  applicationManager: MidwayApplicationManager;
+
   async onReady() {
+    this.applicationManager.getApplications(['egg', 'express', 'koa']).forEach(app => {
+      this.framework.initializeMCPTransport(app);
+    });
   }
 }

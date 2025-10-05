@@ -5,14 +5,15 @@ import {
   MidwayWebRouterService,
   DecoratorManager,
   MetadataManager,
+  IMidwayApplication
 } from '@midwayjs/core';
 import {
   IMidwayMCPApplication,
   IMidwayMCPConfigurationOptions,
   IMidwayMCPContext,
-  IMcpResource,
+  // IMcpResource,
   IMcpTool,
-  IMcpPrompt,
+  // IMcpPrompt,
 } from './interface';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
@@ -27,9 +28,6 @@ export class MidwayMCPFramework extends BaseFramework<
   IMidwayMCPConfigurationOptions
 > {
   public app: IMidwayMCPApplication;
-  protected resourceMap: Map<string, IMcpResource> = new Map();
-  protected toolMap: Map<string, IMcpTool> = new Map();
-  protected promptMap: Map<string, IMcpPrompt> = new Map();
   protected frameworkLoggerName = 'mcpLogger';
   protected server: McpServer;
   configure() {
@@ -51,48 +49,49 @@ export class MidwayMCPFramework extends BaseFramework<
       const transport = new StdioServerTransport();
       await this.server.connect(transport);
     } else if (transportType === 'sse') {
-      const routerService = this.applicationContext.get(
-        MidwayWebRouterService
-      );
+      // const routerService = this.applicationContext.get(
+      //   MidwayWebRouterService
+      // );
       // to support multiple simultaneous connections we have a lookup object from
       // sessionId to transport
-      const transports: { [sessionId: string]: SSEServerTransport } = {};
-
-      routerService.addRouter(
-        async ctx => {
-          const transport = new SSEServerTransport('/messages', ctx.res);
-          transports[transport.sessionId] = transport;
-          ctx.res.on('close', () => {
-            delete transports[transport.sessionId];
-          });
-          await this.server.connect(transport);
-        },
-        {
-          prefix: '/',
-          requestMethod: 'GET',
-          url: '/sse',
-        }
-      );
-
-      routerService.addRouter(
-        async ctx => {
-          const sessionId = ctx.query.sessionId as string;
-          const transport = transports[sessionId];
-          if (transport) {
-            // if (!ctx['auth']) {
-            //   ctx.auth = {};
-            // }
-            await transport.handlePostMessage(ctx, ctx.res, ctx.body);
-          } else {
-            ctx.res.status(400).send('No transport found for sessionId');
-          }
-        },
-        {
-          prefix: '/',
-          requestMethod: 'POST',
-          url: '/messages',
-        }
-      );
+      // const transports: { [sessionId: string]: SSEServerTransport } = {};
+      //
+      // routerService.addRouter(
+      //   async ctx => {
+      //     const transport = new SSEServerTransport('/messages', ctx.res);
+      //     transports[transport.sessionId] = transport;
+      //     ctx.res.on('close', () => {
+      //       delete transports[transport.sessionId];
+      //     });
+      //     await this.server.connect(transport);
+      //   },
+      //   {
+      //     prefix: '/',
+      //     requestMethod: 'GET',
+      //     url: '/sse',
+      //   }
+      // );
+      //
+      // routerService.addRouter(
+      //   async ctx => {
+      //     const sessionId = ctx.query.sessionId as string;
+      //     const transport = transports[sessionId];
+      //     if (transport) {
+      //       // if (!ctx['auth']) {
+      //       //   ctx.auth = {};
+      //       // }
+      //       await transport.handlePostMessage(ctx, ctx.res, ctx.body);
+      //     } else {
+      //       ctx.res.statusCode = 400;
+      //       ctx.res.end('No transport found for sessionId');
+      //     }
+      //   },
+      //   {
+      //     prefix: '/',
+      //     requestMethod: 'POST',
+      //     url: '/messages',
+      //   }
+      // );
     } else if (transportType === 'stream-http') {
       const routerService = this.applicationContext.get(
         MidwayWebRouterService
@@ -132,15 +131,15 @@ export class MidwayMCPFramework extends BaseFramework<
             await this.server.connect(transport);
           } else {
             // Invalid request
-            ctx.status = 400;
-            ctx.body = {
+            ctx.res.statusCode = 400;
+            ctx.res.end(JSON.stringify({
               jsonrpc: '2.0',
               error: {
                 code: -32000,
                 message: 'Bad Request: No valid session ID provided'
               },
               id: null
-            };
+            }));
             return;
           }
           
@@ -224,6 +223,45 @@ export class MidwayMCPFramework extends BaseFramework<
         }
       );
     }
+  }
+
+  public async initializeMCPTransport(webApp: IMidwayApplication) {
+    // to support multiple simultaneous connections we have a lookup object from
+    // sessionId to transport
+    const transports: { [sessionId: string]: SSEServerTransport } = {};
+
+    webApp.useMiddleware(async (ctx: any, next) => {
+      if (ctx.path === '/sse' && ctx.method === 'GET') {
+        ctx.respond = false; // we will handle the response ourselves
+        // Handle SSE connection
+        const transport = new SSEServerTransport('/messages', ctx.res);
+        transports[transport.sessionId] = transport;
+        ctx.res.on('close', () => {
+          delete transports[transport.sessionId];
+        });
+        await this.server.connect(transport);
+      } else if (ctx.path === '/messages' && ctx.method === 'POST') {
+        ctx.respond = false; // we will handle the response ourselves
+        const sessionId = ctx.query.sessionId as string;
+        const transport = transports[sessionId];
+        if (transport) {
+          // if (!ctx['auth']) {
+          //   ctx.auth = {};
+          // }
+          if (webApp.getNamespace() === 'express') {
+            await transport.handlePostMessage(ctx, ctx.res, ctx.body);
+          } else {
+            // koa/egg
+            await transport.handlePostMessage(ctx.req, ctx.res, ctx.request.body);
+          }
+        } else {
+          ctx.res.statusCode = 400;
+          ctx.res.end('No transport found for sessionId');
+        }
+      } else {
+        return await next();
+      }
+    });
   }
 
   public async run(): Promise<void> {
