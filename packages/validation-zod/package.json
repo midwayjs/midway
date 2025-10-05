@@ -38,7 +38,7 @@
     "url": "https://github.com/midwayjs/midway.git"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=20"
   },
   "license": "MIT"
 }

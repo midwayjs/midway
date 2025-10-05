@@ -30,7 +30,7 @@
     "lint": "mwts check"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "repository": {
     "type": "git",

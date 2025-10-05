@@ -24,18 +24,19 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/mock": "workspace:^"
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@modelcontextprotocol/sdk": "1.19.1",
+    "zod": "3.24.1"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "1.13.0"
-  },
+  "dependencies": {},
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/midwayjs/midway.git"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
 }

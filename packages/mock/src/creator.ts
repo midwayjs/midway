@@ -40,6 +40,7 @@ import * as http from 'http';
 import * as https from 'https';
 import * as yaml from 'js-yaml';
 import * as getRawBody from 'raw-body';
+import { defineConfiguration } from '@midwayjs/core/functional';
 
 const debug = debuglog('midway:debug');
 
@@ -217,13 +218,34 @@ export async function create<
       options.globalConfig = mergeGlobalConfig(options.globalConfig, sslConfig);
     }
 
+    const anonymousConfiguration = defineConfiguration({
+      namespace: 'anonymous',
+      async onReady(...args) {
+        return options.onReady?.(...args);
+      },
+      async onStop(...args) {
+        return options.onStop?.(...args);
+      },
+      async onConfigLoad(...args) {
+        return options.onConfigLoad?.(...args);
+      },
+      async onServerReady(...args) {
+        return options.onServerReady?.(...args);
+      },
+      async onHealthCheck(...args) {
+        return options.onHealthCheck?.(...args);
+      },
+    });
+
     const container = createMockWrapApplicationContext();
     options.applicationContext = container;
+    options.imports = options.imports || [];
+    options.imports.push(anonymousConfiguration);
 
     await initializeGlobalApplicationContext({
+      loggerFactory: loggers,
       ...options,
       appDir,
-      loggerFactory: loggers,
     });
 
     const frameworkService = await container.getAsync(MidwayFrameworkService);

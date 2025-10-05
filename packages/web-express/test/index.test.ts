@@ -1,5 +1,6 @@
 import { IMidwayExpressApplication, MidwayExpressMiddlewareService, Framework } from '../src';
 import { createLightApp, createLegacyApp as creatApp, close as closeApp, createHttpRequest } from '@midwayjs/mock';
+import { IMidwayApplication, IMidwayContainer, LifeCycleInvokeOptions, MidwayWebRouterService } from '@midwayjs/core';
 
 describe('/test/feature.test.ts', () => {
 
@@ -350,6 +351,34 @@ describe('/test/feature.test.ts', () => {
     const port = (app.getFramework() as Framework).getPort();
     expect(port).not.toBe('0');
     console.log(process.env.MIDWAY_HTTP_PORT);
+    await closeApp(app);
+  });
+
+  it('should test with routeService', async () => {
+    const app = await createLightApp('', {
+      imports: require('../src'),
+      globalConfig: {
+        keys: '12345',
+        express: {}
+      },
+      async onReady(container: IMidwayContainer, mainApp: IMidwayApplication, options: LifeCycleInvokeOptions){
+        const routeService = mainApp.getApplicationContext().get(MidwayWebRouterService);
+        routeService.addRouter(
+          async ctx => {
+            return 'hello world';
+          },
+          {
+            prefix: '/',
+            requestMethod: 'GET',
+            url: '/sse',
+          }
+        )
+      }
+    });
+
+    let result = await createHttpRequest(app)
+      .get('/sse');
+    expect(result.text).toEqual('hello world');
     await closeApp(app);
   });
 });

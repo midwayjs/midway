@@ -3,3 +3,4 @@ export * from './rabbitMQ';
 export * from './socketio';
 export * from './ws.client';
 export * from './kafka';
+export * from './sse';

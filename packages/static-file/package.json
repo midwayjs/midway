@@ -35,7 +35,7 @@
     "ci": "npm run test"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=20"
   },
   "repository": {
     "type": "git",

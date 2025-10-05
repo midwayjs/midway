@@ -31,7 +31,7 @@
     "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=20"
   },
   "repository": {
     "type": "git",

@@ -25,7 +25,7 @@
     "function.js"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=20"
   },
   "license": "MIT",
   "devDependencies": {

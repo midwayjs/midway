@@ -13,6 +13,7 @@ import {
   Request as ExpressRequest,
   Response as ExpressResponse
 } from 'express';
+import { ListenOptions } from 'net';
 
 type Request = IMidwayContext<ExpressRequest>;
 export type Response = ExpressResponse;
@@ -85,6 +86,10 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
    * https/https/http2 server options
    */
   serverOptions?: Record<string, any>;
+  /**
+   * listen options
+   */
+  listenOptions?: ListenOptions;
 }
 
 export type Application = IMidwayExpressApplication;
