@@ -1,6 +1,83 @@
 # Change Log
 
 
+## v4.0.0-beta.2 (2025-10-06)
+
+#### :boom: Breaking Change
+* `web-koa`
+  * [#4396](https://github.com/midwayjs/midway/pull/4396) feat: upgrade koa to v3 ([@czy88840616](https://github.com/czy88840616))
+
+#### :rocket: New Feature
+* `axios`, `bootstrap`, `bull-board`, `bull`, `bullmq`, `busboy`, `cache-manager`, `captcha`, `casbin-redis-adapter`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `etcd`, `event-emitter`, `express-session`, `faas`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `mcp`, `mikro`, `mock`, `mongoose`, `mqtt`, `nextjs`, `oss`, `otel`, `processAgent`, `prometheus-socket-io`, `prometheus`, `rabbitmq`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `tablestore`, `tags`, `tenant`, `typegoose`, `typeorm`, `upload`, `validate`, `validation-joi`, `validation-zod`, `validation`, `view-ejs`, `view-nunjucks`, `view`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4404](https://github.com/midwayjs/midway/pull/4404) feat: support mcp ([@czy88840616](https://github.com/czy88840616))
+* `web-koa`
+  * [#4396](https://github.com/midwayjs/midway/pull/4396) feat: upgrade koa to v3 ([@czy88840616](https://github.com/czy88840616))
+* `bull-board`, `web-koa`
+  * [#4380](https://github.com/midwayjs/midway/pull/4380) feat: add new v4 main page ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `ws`
+  * [#4364](https://github.com/midwayjs/midway/pull/4364) fix: heartbeat does not take effect in koa scenario ([@czy88840616](https://github.com/czy88840616))
+* `bull-board`
+  * [#4351](https://github.com/midwayjs/midway/pull/4351) fix: bull-board missing export adapter ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `web-express`, `web-koa`, `web`
+  * [#4371](https://github.com/midwayjs/midway/pull/4371) feat: add random free port ([@czy88840616](https://github.com/czy88840616))
+* `typeorm`
+  * [#4369](https://github.com/midwayjs/midway/pull/4369) feat: add config allow typeorm migrations ([@czy88840616](https://github.com/czy88840616))
+* `ws`
+  * [#4361](https://github.com/midwayjs/midway/pull/4361) breaking: upgrade cron to 3.5.0, support waitForComplete ([@denghongcai](https://github.com/denghongcai))
+  * [#4360](https://github.com/midwayjs/midway/pull/4360) feat: add ws upgrade handler ([@czy88840616](https://github.com/czy88840616))
+  * [#4354](https://github.com/midwayjs/midway/pull/4354) feat: add request to ws context ([@czy88840616](https://github.com/czy88840616))
+* `cron`
+  * [#4361](https://github.com/midwayjs/midway/pull/4361) breaking: upgrade cron to 3.5.0, support waitForComplete ([@denghongcai](https://github.com/denghongcai))
+
+#### :memo: Documentation
+* [#4397](https://github.com/midwayjs/midway/pull/4397) docs: add api docs ([@czy88840616](https://github.com/czy88840616))
+* [#4394](https://github.com/midwayjs/midway/pull/4394) docs: Update guard.md ([@Nokic233](https://github.com/Nokic233))
+* [#4372](https://github.com/midwayjs/midway/pull/4372) docs: update static_file.md for static directory not found ([@heyongsheng](https://github.com/heyongsheng))
+* [#4370](https://github.com/midwayjs/midway/pull/4370) docs: update static_file.md for static directory not found ([@heyongsheng](https://github.com/heyongsheng))
+* [#4359](https://github.com/midwayjs/midway/pull/4359) docs: update the wrong spelling of DefaultConfig ([@mmdapl](https://github.com/mmdapl))
+
+#### :package: Dependencies
+* `grpc`
+  * [#4403](https://github.com/midwayjs/midway/pull/4403) fix(deps): update dependency @grpc/grpc-js to v1.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4355](https://github.com/midwayjs/midway/pull/4355) fix(deps): update dependency @grpc/grpc-js to v1.13.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4395](https://github.com/midwayjs/midway/pull/4395) chore(deps): update dependency @types/express to v4.17.23 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4400](https://github.com/midwayjs/midway/pull/4400) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.6.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4401](https://github.com/midwayjs/midway/pull/4401) chore(deps): update hashicorp/consul docker tag to v1.21.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4381](https://github.com/midwayjs/midway/pull/4381) fix(deps): update dependency cookie-session to v2.1.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4393](https://github.com/midwayjs/midway/pull/4393) chore(deps): update redis docker tag to v7.4.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4389](https://github.com/midwayjs/midway/pull/4389) chore(deps): update hashicorp/consul docker tag to v1.21.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4388](https://github.com/midwayjs/midway/pull/4388) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.6.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4373](https://github.com/midwayjs/midway/pull/4373) chore(deps): update mongo docker tag to v4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4362](https://github.com/midwayjs/midway/pull/4362) fix(deps): update dependency statuses to v2.0.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#4392](https://github.com/midwayjs/midway/pull/4392) fix(deps): update dependency leoric to v2.13.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `http-proxy`, `web-koa`
+  * [#4391](https://github.com/midwayjs/midway/pull/4391) fix(deps): update dependency axios to v1.12.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `validation-zod`
+  * [#4382](https://github.com/midwayjs/midway/pull/4382) fix(deps): update dependency i18next to v24.2.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `nextjs`
+  * [#4385](https://github.com/midwayjs/midway/pull/4385) chore(deps): update dependency next to ~15.4.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4377](https://github.com/midwayjs/midway/pull/4377) fix(deps): update dependency next [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `web-koa`
+  * [#4366](https://github.com/midwayjs/midway/pull/4366) fix(deps): update dependency koa to v2.16.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#4356](https://github.com/midwayjs/midway/pull/4356) fix(deps): update dependency @types/jsonwebtoken to v9.0.10 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 6
+- 142vip.cn ([@mmdapl](https://github.com/mmdapl))
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- He Yongsheng ([@heyongsheng](https://github.com/heyongsheng))
+- Hongcai Deng ([@denghongcai](https://github.com/denghongcai))
+- NoKic233 ([@Nokic233](https://github.com/Nokic233))
+- yuuang ([@zhangyuang](https://github.com/zhangyuang))
+
+
 ## v3.20.12 (2025-08-10)
 
 #### :nail_care: Polish
