@@ -12,6 +12,10 @@ for (const info of data) {
   result[info.name] = info.version;
 }
 
+if (!result['@midwayjs/decorator']) {
+  result['@midwayjs/decorator'] = '3.18.0';
+}
+
 const key =
   result['@midwayjs/decorator'].replace(/\./g, '_') +
   '-' +
