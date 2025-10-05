@@ -20,7 +20,7 @@
     "jwt"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=20"
   },
   "author": "Nawbc",
   "license": "MIT",
