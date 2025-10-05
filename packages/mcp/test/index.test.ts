@@ -1,7 +1,6 @@
 import { createApp, close } from '@midwayjs/mock';
 import * as mcp from '../src';
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-// import * as koa from '@midwayjs/koa';
+import { CallToolResult, GetPromptResult, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
 import * as express from '@midwayjs/express';
 import { SSEMCPClientManager } from './sse-client-utils';
 import { DefaultConsoleLoggerFactory } from '@midwayjs/core';
@@ -248,6 +247,159 @@ describe('/test/index.test.ts', () => {
       }
 
       console.log('✓ StreamHTTP client successfully connected to stream-http server');
+
+    } finally {
+      // Ensure cleanup always happens
+      await clientManager.closeAllClients();
+      if (app) {
+        await close(app);
+      }
+    }
+  });
+
+  it('should test mcp prompt functionality', async () => {
+    const clientManager = new SSEMCPClientManager();
+    let app: any;
+    
+    try {
+      // Start the app server with Prompt
+      @mcp.Prompt('testPrompt', { description: 'this is a test prompt' })
+      class TestPrompt implements mcp.IMcpPrompt {
+        async generate(): Promise<GetPromptResult> {
+          return {
+            messages: [
+              {
+                role: 'user',
+                content: {
+                  type: 'text',
+                  text: 'Hello from test prompt'
+                }
+              }
+            ]
+          };
+        }
+      }
+
+      app = await createApp({
+        baseDir: null,
+        imports: [
+          express,
+          mcp,
+        ],
+        preloadModules: [
+          TestPrompt,
+        ],
+        globalConfig: {
+          express: {
+            keys: ['test'],
+            port: 7006,
+          },
+          mcp: {
+            serverInfo: {
+              name: 'test-prompt-mcp',
+              version: '1.0.0',
+            },
+            transportType: 'stream-http',
+          }
+        },
+        loggerFactory: new DefaultConsoleLoggerFactory(),
+      });
+
+      // Create StreamHTTP MCP client
+      const client = await clientManager.createTestStreamHTTPClient('http://localhost:7006/mcp', 'test-prompt-client');
+
+      // List prompts
+      const { prompts } = await client.listPrompts();
+      const testPrompt = prompts.find(prompt => prompt.name === 'testPrompt');
+      
+      if (!testPrompt) {
+        throw new Error('testPrompt should be available');
+      }
+
+      // Get prompt
+      const result = await client.getPrompt({
+        name: 'testPrompt',
+        arguments: {}
+      });
+      
+      if (!result.messages || result.messages.length === 0 || result.messages[0].content.text !== 'Hello from test prompt') {
+        throw new Error('Prompt should return expected result');
+      }
+
+    } finally {
+      // Ensure cleanup always happens
+      await clientManager.closeAllClients();
+      if (app) {
+        await close(app);
+      }
+    }
+  });
+
+  it('should test mcp resource functionality', async () => {
+    const clientManager = new SSEMCPClientManager();
+    let app: any;
+    
+    try {
+      // Start the app server with Resource
+      @mcp.Resource('testResource', { uri: 'test://resource', description: 'this is a test resource' })
+      class TestResource implements mcp.IMcpResource {
+        async handle(): Promise<ReadResourceResult> {
+          return {
+            contents: [
+              {
+                uri: 'test://resource',
+                mimeType: 'text/plain',
+                text: 'Hello from test resource'
+              }
+            ]
+          };
+        }
+      }
+
+      app = await createApp({
+        baseDir: null,
+        imports: [
+          express,
+          mcp,
+        ],
+        preloadModules: [
+          TestResource,
+        ],
+        globalConfig: {
+          express: {
+            keys: ['test'],
+            port: 7007,
+          },
+          mcp: {
+            serverInfo: {
+              name: 'test-resource-mcp',
+              version: '1.0.0',
+            },
+            transportType: 'stream-http',
+          }
+        },
+        loggerFactory: new DefaultConsoleLoggerFactory(),
+      });
+
+      // Create StreamHTTP MCP client
+      const client = await clientManager.createTestStreamHTTPClient('http://localhost:7007/mcp', 'test-resource-client');
+
+      // List resources
+      const { resources } = await client.listResources();
+      const testResource = resources.find(resource => resource.name === 'testResource');
+      
+      if (!testResource) {
+        throw new Error('testResource should be available');
+      }
+
+      // Read resource
+      const result = await client.readResource({
+        uri: 'test://resource'
+      });
+      
+      if (!result.contents || result.contents.length === 0 || result.contents[0].text !== 'Hello from test resource') {
+        throw new Error('Resource should return expected result');
+      }
 
     } finally {
       // Ensure cleanup always happens
