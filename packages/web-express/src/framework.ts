@@ -188,25 +188,37 @@ export class MidwayExpressFramework extends BaseFramework<
     // register httpServer to applicationContext
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
 
-    let customPort =
-      process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
+    this.configurationOptions.listenOptions = {
+      port: this.configurationOptions.port,
+      host: this.configurationOptions.hostname,
+      ...this.configurationOptions.listenOptions,
+    };
 
-    if (customPort === 0) {
+    // set port and listen server
+    let customPort: string | number =
+      process.env.MIDWAY_HTTP_PORT ||
+      this.configurationOptions.listenOptions.port;
+
+    if (customPort === 0 || customPort === '0') {
       customPort = await getFreePort();
+      this.logger.info(`[midway:express] detect available port: ${customPort}`);
     }
 
-    if (customPort) {
+    this.configurationOptions.listenOptions.port = Number(customPort);
+
+    if (this.configurationOptions.listenOptions.port) {
       new Promise<void>(resolve => {
-        const args: any[] = [customPort];
-        if (this.configurationOptions.hostname) {
-          args.push(this.configurationOptions.hostname);
-        }
-        args.push(() => {
+        // 使用 ListenOptions 对象启动服务器
+        this.server.listen(this.configurationOptions.listenOptions, () => {
           resolve();
         });
 
-        this.server.listen(...args);
-        process.env.MIDWAY_HTTP_PORT = String(customPort);
+        process.env.MIDWAY_HTTP_PORT = String(
+          this.configurationOptions.listenOptions.port
+        );
+        this.logger.debug(`[midway:express] Server listening on http://${
+          this.configurationOptions.hostname || 'localhost'
+        }:${customPort}`);
       });
     }
   }
@@ -302,7 +314,7 @@ export class MidwayExpressFramework extends BaseFramework<
       this.getApplicationContext().bindClass(routerInfo.routerModule);
 
       this.logger.debug(
-        `Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
+        `[midway:express] Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
       );
 
       // new router
@@ -333,13 +345,13 @@ export class MidwayExpressFramework extends BaseFramework<
         }
 
         this.logger.debug(
-          `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
+          `[midway:express] Load Router "${routeInfo.requestMethod.toUpperCase()} ${
             routeInfo.url
           }"`
         );
 
         // apply controller from request context
-        newRouter[routeInfo.requestMethod].call(
+        newRouter[routeInfo.requestMethod.toLowerCase()].call(
           newRouter,
           routeInfo.url,
           ...routeMiddlewareList,
@@ -383,7 +395,9 @@ export class MidwayExpressFramework extends BaseFramework<
     if (this.server) {
       new Promise(resolve => {
         this.server.close(resolve);
+        process.env.MIDWAY_HTTP_PORT = '';
       });
+      this.logger.debug('[midway:express] server close');
     }
   }
 

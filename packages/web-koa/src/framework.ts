@@ -327,7 +327,7 @@ export class MidwayKoaFramework extends BaseFramework<
     if (customPort === 0 || customPort === '0') {
       customPort = await getFreePort();
       this.logger.info(
-        `Midway koa is listening on port ${customPort} (auto assigned)`
+        `[midway:koa] server has auto-assigned port ${customPort}`
       );
     }
     this.configurationOptions.listenOptions.port = Number(customPort);
@@ -343,6 +343,7 @@ export class MidwayKoaFramework extends BaseFramework<
           this.configurationOptions.listenOptions.port
         );
       });
+      this.logger.debug(`[midway:koa] server is listening on port ${customPort}`);
     }
   }
 
@@ -352,6 +353,7 @@ export class MidwayKoaFramework extends BaseFramework<
         this.server.close(resolve);
         process.env.MIDWAY_HTTP_PORT = '';
       });
+      this.logger.debug(`[midway:koa] server is stopped!`);
     }
   }
 

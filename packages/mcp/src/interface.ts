@@ -4,13 +4,13 @@ import {
   IMidwayContext,
   NextFunction as BaseNextFunction,
 } from '@midwayjs/core';
-import { Implementation } from '@modelcontextprotocol/sdk/types.js';
+import { Implementation, CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { ServerOptions} from '@modelcontextprotocol/sdk/server/index.js';
 
 export interface IMidwayMCPConfigurationOptions extends IConfigurationOptions {
   serverInfo: Implementation;
   serverOptions: ServerOptions;
-  transportType: 'stdio' | 'sse';
+  transportType: 'stdio' | 'sse' | 'stream-http';
 }
 
 export interface IMidwayMCPContext extends IMidwayContext {}
@@ -26,9 +26,9 @@ export interface IMcpResource {
 }
 
 export interface IMcpTool {
-  execute(ctx: IMidwayMCPContext): Promise<any>;
+  execute(ctx: IMidwayMCPContext): Promise<CallToolResult>;
 }
 
 export interface IMcpPrompt {
   generate(ctx: IMidwayMCPContext): Promise<any>;
-} 
+}

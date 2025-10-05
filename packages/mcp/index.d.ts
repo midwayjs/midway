@@ -1,9 +1,9 @@
-import { MikroConfigOptions } from './dist/index';
+import { IMidwayMCPConfigurationOptions } from './dist/index';
 
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    mikro?: PowerPartial<MikroConfigOptions>;
+    mcp?: PowerPartial<IMidwayMCPConfigurationOptions>;
   }
 }

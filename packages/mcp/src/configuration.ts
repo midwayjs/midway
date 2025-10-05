@@ -1,4 +1,5 @@
-import { Configuration } from '@midwayjs/core';
+import { Configuration, Inject, MidwayConfigService } from '@midwayjs/core';
+import { MidwayMCPFramework } from './framework';
 
 @Configuration({
   namespace: 'mcp',
@@ -11,5 +12,12 @@ import { Configuration } from '@midwayjs/core';
   ],
 })
 export class MCPConfiguration {
-  async onReady() {}
+  @Inject()
+  framework: MidwayMCPFramework
+
+  @Inject()
+  configService: MidwayConfigService;
+
+  async onReady() {
+  }
 }

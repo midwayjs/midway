@@ -17,14 +17,15 @@ import {
   ObjectIdentifier,
   isTypeScriptEnvironment,
   DecoratorManager,
-  DynamicMidwayContainer,
+  DynamicMidwayContainer
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
 import {
   ComponentModule,
   IBootstrapAppStarter,
-  MockBootstrapOptions,
+  LightAppBootstrapOptions,
+  MockBootstrapOptions
 } from './interface';
 import {
   findFirstExistModule,
@@ -40,6 +41,7 @@ import * as http from 'http';
 import * as https from 'https';
 import * as yaml from 'js-yaml';
 import * as getRawBody from 'raw-body';
+import { defineConfiguration } from '@midwayjs/core/functional';
 
 const debug = debuglog('midway:debug');
 
@@ -221,9 +223,9 @@ export async function create<
     options.applicationContext = container;
 
     await initializeGlobalApplicationContext({
+      loggerFactory: loggers,
       ...options,
       appDir,
-      loggerFactory: loggers,
     });
 
     const frameworkService = await container.getAsync(MidwayFrameworkService);
@@ -638,7 +640,7 @@ class BootstrapAppStarter implements IBootstrapAppStarter {
  */
 export async function createLightApp(
   baseDirOrOptions: string | MockBootstrapOptions,
-  options: MockBootstrapOptions = {}
+  options: LightAppBootstrapOptions = {}
 ): Promise<IMidwayApplication> {
   if (baseDirOrOptions && typeof baseDirOrOptions === 'object') {
     options = baseDirOrOptions;
@@ -668,6 +670,25 @@ export async function createLightApp(
     options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
   }
 
+  const anonymousConfiguration= defineConfiguration({
+    namespace: 'anonymous',
+    async onReady(...args) {
+      return options.onReady?.(...args);
+    },
+    async onStop(...args) {
+      return options.onStop?.(...args);
+    },
+    async onConfigLoad(...args) {
+      return options.onConfigLoad?.(...args);
+    },
+    async onServerReady(...args) {
+      return options.onServerReady?.(...args);
+    },
+    async onHealthCheck(...args) {
+      return options.onHealthCheck?.(...args);
+    },
+  })
+
   const app = await createApp(baseDirOrOptions as string, {
     ...options,
     imports: [
@@ -675,6 +696,7 @@ export async function createLightApp(
         LightFramework,
         options.moduleLoadType
       ),
+      anonymousConfiguration,
     ].concat(options?.imports),
   });
 

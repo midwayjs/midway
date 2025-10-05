@@ -19,10 +19,10 @@ export function Resource(): ClassDecorator {
 export function Tool(toolName: string, toolSchema: any): ClassDecorator {
   return (target: any) => {
     DecoratorManager.saveModule(MCP_TOOL_KEY, target);
-    MetadataManager.defineMetadata(target, MCP_TOOL_KEY, {
+    MetadataManager.defineMetadata(MCP_TOOL_KEY, {
       toolName,
       toolSchema,
-    });
+    }, target);
     Scope(ScopeEnum.Request)(target);
   };
 }
