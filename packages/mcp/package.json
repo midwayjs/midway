@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mcp",
-  "version": "4.0.0-beta.1",
+  "version": "4.0.0-beta.2",
   "description": "Midway Framework for mcp",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -29,7 +29,6 @@
     "@modelcontextprotocol/sdk": "1.19.1",
     "zod": "3.24.1"
   },
-  "dependencies": {},
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
     "type": "git",
