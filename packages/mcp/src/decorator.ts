@@ -14,7 +14,11 @@ export const MCP_PROMPT_KEY = 'mcp:prompt';
 
 // 从 MCP SDK 中提取类型
 type PromptArgsRawShape = {
-  [k: string]: import('zod').ZodType<string, import('zod').ZodTypeDef, string> | import('zod').ZodOptional<import('zod').ZodType<string, import('zod').ZodTypeDef, string>>;
+  [k: string]:
+    | import('zod').ZodType<string, import('zod').ZodTypeDef, string>
+    | import('zod').ZodOptional<
+        import('zod').ZodType<string, import('zod').ZodTypeDef, string>
+      >;
 };
 
 // 提取 registerPrompt 的 config 参数类型
@@ -25,7 +29,10 @@ export type PromptConfig<Args extends PromptArgsRawShape = any> = {
 };
 
 // 提取 registerTool 的 config 参数类型
-export type ToolConfig<InputArgs extends ZodRawShape = any, OutputArgs extends ZodRawShape = any> = {
+export type ToolConfig<
+  InputArgs extends ZodRawShape = any,
+  OutputArgs extends ZodRawShape = any
+> = {
   title?: string;
   description?: string;
   inputSchema?: InputArgs;
@@ -44,41 +51,59 @@ export type ResourceConfig = {
   _meta?: Record<string, unknown>;
 };
 
-export function Resource(resourceName: string, resourceConfig: string | ResourceTemplate | ResourceConfig): ClassDecorator {
+export function Resource(
+  resourceName: string,
+  resourceConfig: string | ResourceTemplate | ResourceConfig
+): ClassDecorator {
   return (target: any) => {
     DecoratorManager.saveModule(MCP_RESOURCE_KEY, target);
-    MetadataManager.defineMetadata(MCP_RESOURCE_KEY, {
-      resourceName,
-      resourceConfig,
-    }, target);
+    MetadataManager.defineMetadata(
+      MCP_RESOURCE_KEY,
+      {
+        resourceName,
+        resourceConfig,
+      },
+      target
+    );
     Scope(ScopeEnum.Request)(target);
   };
 }
 
-export function Tool<InputArgs extends ZodRawShape = any, OutputArgs extends ZodRawShape = any>(
-  toolName: string, 
+export function Tool<
+  InputArgs extends ZodRawShape = any,
+  OutputArgs extends ZodRawShape = any
+>(
+  toolName: string,
   toolConfig: ToolConfig<InputArgs, OutputArgs>
 ): ClassDecorator {
   return (target: any) => {
     DecoratorManager.saveModule(MCP_TOOL_KEY, target);
-    MetadataManager.defineMetadata(MCP_TOOL_KEY, {
-      toolName,
-      toolSchema: toolConfig,
-    }, target);
+    MetadataManager.defineMetadata(
+      MCP_TOOL_KEY,
+      {
+        toolName,
+        toolSchema: toolConfig,
+      },
+      target
+    );
     Scope(ScopeEnum.Request)(target);
   };
 }
 
 export function Prompt<Args extends PromptArgsRawShape = any>(
-  promptName: string, 
+  promptName: string,
   promptConfig: PromptConfig<Args>
 ): ClassDecorator {
   return (target: any) => {
     DecoratorManager.saveModule(MCP_PROMPT_KEY, target);
-    MetadataManager.defineMetadata(MCP_PROMPT_KEY, {
-      promptName,
-      promptConfig,
-    }, target);
+    MetadataManager.defineMetadata(
+      MCP_PROMPT_KEY,
+      {
+        promptName,
+        promptConfig,
+      },
+      target
+    );
     Scope(ScopeEnum.Request)(target);
   };
 }

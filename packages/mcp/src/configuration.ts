@@ -1,4 +1,10 @@
-import { Configuration, ILifeCycle, Inject, MidwayApplicationManager, MidwayConfigService } from '@midwayjs/core';
+import {
+  Configuration,
+  ILifeCycle,
+  Inject,
+  MidwayApplicationManager,
+  MidwayConfigService,
+} from '@midwayjs/core';
 import { MidwayMCPFramework } from './framework';
 
 @Configuration({
@@ -10,8 +16,8 @@ import { MidwayMCPFramework } from './framework';
           endpoints: {
             streamHttp: '/mcp',
             sse: '/sse',
-            messages: '/messages'
-          }
+            messages: '/messages',
+          },
         },
       },
     },
@@ -19,7 +25,7 @@ import { MidwayMCPFramework } from './framework';
 })
 export class MCPConfiguration implements ILifeCycle {
   @Inject()
-  framework: MidwayMCPFramework
+  framework: MidwayMCPFramework;
 
   @Inject()
   configService: MidwayConfigService;
@@ -30,12 +36,15 @@ export class MCPConfiguration implements ILifeCycle {
   async onReady() {
     const configurationOptions = this.configService.getConfiguration('mcp');
     const { transportType = 'stdio' } = configurationOptions;
-    const actualTransportType = transportType === 'sse' ? 'stream-http' : transportType;
+    const actualTransportType =
+      transportType === 'sse' ? 'stream-http' : transportType;
 
     if (actualTransportType === 'stream-http') {
-      this.applicationManager.getApplications(['egg', 'express', 'koa']).forEach(app => {
-        this.framework.initializeMCPTransport(app);
-      });
+      this.applicationManager
+        .getApplications(['egg', 'express', 'koa'])
+        .forEach(app => {
+          this.framework.initializeMCPTransport(app);
+        });
     }
   }
 }

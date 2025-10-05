@@ -1,6 +1,5 @@
 import * as http from 'http';
 import * as https from 'https';
-import * as url from 'url';
 import { EventEmitter } from 'events';
 
 export interface SSEClientOptions {
@@ -16,41 +15,42 @@ export class SSEClient extends EventEmitter {
   private shouldReconnect = true;
   private reconnectTimer?: NodeJS.Timeout;
 
-  constructor(
-    private url: string,
-    private options: SSEClientOptions = {}
-  ) {
+  constructor(private url: string, private options: SSEClientOptions = {}) {
     super();
     this.options = {
       timeout: 30000,
       reconnectInterval: 3000,
       maxReconnectAttempts: 5,
-      ...options
+      ...options,
     };
   }
 
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const parsedUrl = url.parse(this.url);
+      const parsedUrl = new URL(this.url);
       const isSecure = parsedUrl.protocol === 'https:';
       const httpModule = isSecure ? https : http;
 
       const requestOptions: http.RequestOptions = {
         hostname: parsedUrl.hostname,
         port: parsedUrl.port,
-        path: parsedUrl.path,
+        path: parsedUrl.pathname + parsedUrl.search,
         method: 'GET',
         headers: {
-          'Accept': 'text/event-stream',
+          Accept: 'text/event-stream',
           'Cache-Control': 'no-cache',
-          'Connection': 'keep-alive',
-          ...this.options.headers
-        }
+          Connection: 'keep-alive',
+          ...this.options.headers,
+        },
       };
 
-      this.request = httpModule.request(requestOptions, (response) => {
+      this.request = httpModule.request(requestOptions, response => {
         if (response.statusCode !== 200) {
-          reject(new Error(`SSE connection failed with status: ${response.statusCode}`));
+          reject(
+            new Error(
+              `SSE connection failed with status: ${response.statusCode}`
+            )
+          );
           return;
         }
 
@@ -59,7 +59,7 @@ export class SSEClient extends EventEmitter {
         resolve();
 
         response.setEncoding('utf8');
-        
+
         let buffer = '';
         response.on('data', (chunk: string) => {
           buffer += chunk;
@@ -73,19 +73,25 @@ export class SSEClient extends EventEmitter {
 
         response.on('end', () => {
           this.emit('disconnected');
-          if (this.shouldReconnect && this.reconnectAttempts < (this.options.maxReconnectAttempts || 5)) {
+          if (
+            this.shouldReconnect &&
+            this.reconnectAttempts < (this.options.maxReconnectAttempts || 5)
+          ) {
             this.scheduleReconnect();
           }
         });
 
-        response.on('error', (error) => {
+        response.on('error', error => {
           this.emit('error', error);
         });
       });
 
-      this.request.on('error', (error) => {
+      this.request.on('error', error => {
         reject(error);
-        if (this.shouldReconnect && this.reconnectAttempts < (this.options.maxReconnectAttempts || 5)) {
+        if (
+          this.shouldReconnect &&
+          this.reconnectAttempts < (this.options.maxReconnectAttempts || 5)
+        ) {
           this.scheduleReconnect();
         }
       });
@@ -137,7 +143,7 @@ export class SSEClient extends EventEmitter {
 
     this.reconnectAttempts++;
     this.reconnectTimer = setTimeout(() => {
-      this.connect().catch((error) => {
+      this.connect().catch(error => {
         this.emit('error', error);
       });
     }, this.options.reconnectInterval);

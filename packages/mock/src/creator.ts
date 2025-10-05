@@ -17,14 +17,14 @@ import {
   ObjectIdentifier,
   isTypeScriptEnvironment,
   DecoratorManager,
-  DynamicMidwayContainer
+  DynamicMidwayContainer,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
 import {
   ComponentModule,
   IBootstrapAppStarter,
-  MockBootstrapOptions
+  MockBootstrapOptions,
 } from './interface';
 import {
   findFirstExistModule,
@@ -218,7 +218,7 @@ export async function create<
       options.globalConfig = mergeGlobalConfig(options.globalConfig, sslConfig);
     }
 
-    const anonymousConfiguration= defineConfiguration({
+    const anonymousConfiguration = defineConfiguration({
       namespace: 'anonymous',
       async onReady(...args) {
         return options.onReady?.(...args);
@@ -235,7 +235,7 @@ export async function create<
       async onHealthCheck(...args) {
         return options.onHealthCheck?.(...args);
       },
-    })
+    });
 
     const container = createMockWrapApplicationContext();
     options.applicationContext = container;

@@ -4,7 +4,7 @@ import {
   HTTP_SERVER_KEY,
   DecoratorManager,
   MetadataManager,
-  IMidwayApplication
+  IMidwayApplication,
 } from '@midwayjs/core';
 import {
   IMidwayMCPApplication,
@@ -44,7 +44,8 @@ export class MidwayMCPFramework extends BaseFramework<
     this.server = new McpServer(serverInfo, serverOptions);
 
     // Handle backward compatibility: convert 'sse' to 'stream-http'
-    const actualTransportType = transportType === 'sse' ? 'stream-http' : transportType;
+    const actualTransportType =
+      transportType === 'sse' ? 'stream-http' : transportType;
 
     // Start receiving messages on stdin and sending messages on stdout
     if (actualTransportType === 'stdio') {
@@ -58,25 +59,29 @@ export class MidwayMCPFramework extends BaseFramework<
     const streamHttpPath = endpoints.streamHttp || '/mcp';
     const ssePath = endpoints.sse || '/sse';
     const messagesPath = endpoints.messages || '/messages';
-    
+
     // Map to store transports by session ID
-    const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
+    const transports: { [sessionId: string]: StreamableHTTPServerTransport } =
+      {};
     // Store SSE transports separately for legacy endpoint management
     const sseTransports: { [sessionId: string]: SSEServerTransport } = {};
 
     const isExpress = webApp.getNamespace() === 'express';
     webApp.useMiddleware(async (ctx: any, next) => {
       // Handle StreamHTTP endpoints (configurable path)
-      if (ctx.path === streamHttpPath && ['GET', 'POST', 'DELETE'].includes(ctx.method)) {
+      if (
+        ctx.path === streamHttpPath &&
+        ['GET', 'POST', 'DELETE'].includes(ctx.method)
+      ) {
         if (!isExpress) {
           ctx.respond = false; // we will handle the response ourselves
         }
-        
+
         const sessionId = ctx.headers['mcp-session-id'];
-        
+
         try {
           let transport: StreamableHTTPServerTransport;
-          
+
           if (sessionId && transports[sessionId]) {
             // Reuse existing transport
             transport = transports[sessionId];
@@ -86,9 +91,9 @@ export class MidwayMCPFramework extends BaseFramework<
               sessionIdGenerator: () => require('crypto').randomUUID(),
               onsessioninitialized: (sessionId: string) => {
                 transports[sessionId] = transport;
-              }
+              },
             });
-            
+
             // Set up cleanup on close
             transport.onclose = () => {
               const sid = transport.sessionId;
@@ -96,23 +101,24 @@ export class MidwayMCPFramework extends BaseFramework<
                 delete transports[sid];
               }
             };
-            
+
             // Connect to MCP server
             await this.server.connect(transport);
           } else {
             // Invalid request
             ctx.res.statusCode = 400;
-            ctx.res.end(JSON.stringify({
-              jsonrpc: '2.0',
-              error: {
-                code: -32000,
-                message: 'Bad Request: No valid session ID provided'
-              },
-              id: null
-            }));
+            ctx.res.end(
+              JSON.stringify({
+                jsonrpc: '2.0',
+                error: {
+                  code: -32000,
+                  message: 'Bad Request: No valid session ID provided',
+                },
+                id: null,
+              })
+            );
             return;
           }
-          
           // Handle the request with the transport
           if (isExpress) {
             await transport.handleRequest(ctx, ctx.res, ctx.body);
@@ -124,14 +130,16 @@ export class MidwayMCPFramework extends BaseFramework<
           this.logger.error('Error handling StreamHTTP request:', error);
           if (!ctx.response.headersSent) {
             ctx.res.statusCode = 500;
-            ctx.res.end(JSON.stringify({
-              jsonrpc: '2.0',
-              error: {
-                code: -32603,
-                message: 'Internal server error'
-              },
-              id: null
-            }));
+            ctx.res.end(
+              JSON.stringify({
+                jsonrpc: '2.0',
+                error: {
+                  code: -32603,
+                  message: 'Internal server error',
+                },
+                id: null,
+              })
+            );
           }
         }
       }
@@ -154,7 +162,11 @@ export class MidwayMCPFramework extends BaseFramework<
             await transport.handlePostMessage(ctx, ctx.res, ctx.body);
           } else {
             // koa/egg
-            await transport.handlePostMessage(ctx.req, ctx.res, ctx.request.body);
+            await transport.handlePostMessage(
+              ctx.req,
+              ctx.res,
+              ctx.request.body
+            );
           }
         } else {
           ctx.res.statusCode = 400;
@@ -226,7 +238,10 @@ export class MidwayMCPFramework extends BaseFramework<
   public loadResources() {
     const resources = DecoratorManager.listModule(MCP_RESOURCE_KEY);
     for (const resource of resources) {
-      const resourceMeta = MetadataManager.getMetadata(MCP_RESOURCE_KEY, resource);
+      const resourceMeta = MetadataManager.getMetadata(
+        MCP_RESOURCE_KEY,
+        resource
+      );
 
       this.server.registerResource(
         resourceMeta.resourceName,

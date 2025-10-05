@@ -343,7 +343,9 @@ export class MidwayKoaFramework extends BaseFramework<
           this.configurationOptions.listenOptions.port
         );
       });
-      this.logger.debug(`[midway:koa] server is listening on port ${customPort}`);
+      this.logger.debug(
+        `[midway:koa] server is listening on port ${customPort}`
+      );
     }
   }
 
@@ -353,7 +355,7 @@ export class MidwayKoaFramework extends BaseFramework<
         this.server.close(resolve);
         process.env.MIDWAY_HTTP_PORT = '';
       });
-      this.logger.debug(`[midway:koa] server is stopped!`);
+      this.logger.debug('[midway:koa] server is stopped!');
     }
   }
 

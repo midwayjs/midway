@@ -216,9 +216,11 @@ export class MidwayExpressFramework extends BaseFramework<
         process.env.MIDWAY_HTTP_PORT = String(
           this.configurationOptions.listenOptions.port
         );
-        this.logger.debug(`[midway:express] Server listening on http://${
-          this.configurationOptions.hostname || 'localhost'
-        }:${customPort}`);
+        this.logger.debug(
+          `[midway:express] Server listening on http://${
+            this.configurationOptions.hostname || 'localhost'
+          }:${customPort}`
+        );
       });
     }
   }
