@@ -24,7 +24,6 @@ import { clearAllLoggers, loggers } from '@midwayjs/logger';
 import {
   ComponentModule,
   IBootstrapAppStarter,
-  LightAppBootstrapOptions,
   MockBootstrapOptions
 } from './interface';
 import {
@@ -219,8 +218,29 @@ export async function create<
       options.globalConfig = mergeGlobalConfig(options.globalConfig, sslConfig);
     }
 
+    const anonymousConfiguration= defineConfiguration({
+      namespace: 'anonymous',
+      async onReady(...args) {
+        return options.onReady?.(...args);
+      },
+      async onStop(...args) {
+        return options.onStop?.(...args);
+      },
+      async onConfigLoad(...args) {
+        return options.onConfigLoad?.(...args);
+      },
+      async onServerReady(...args) {
+        return options.onServerReady?.(...args);
+      },
+      async onHealthCheck(...args) {
+        return options.onHealthCheck?.(...args);
+      },
+    })
+
     const container = createMockWrapApplicationContext();
     options.applicationContext = container;
+    options.imports = options.imports || [];
+    options.imports.push(anonymousConfiguration);
 
     await initializeGlobalApplicationContext({
       loggerFactory: loggers,
@@ -640,7 +660,7 @@ class BootstrapAppStarter implements IBootstrapAppStarter {
  */
 export async function createLightApp(
   baseDirOrOptions: string | MockBootstrapOptions,
-  options: LightAppBootstrapOptions = {}
+  options: MockBootstrapOptions = {}
 ): Promise<IMidwayApplication> {
   if (baseDirOrOptions && typeof baseDirOrOptions === 'object') {
     options = baseDirOrOptions;
@@ -670,25 +690,6 @@ export async function createLightApp(
     options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
   }
 
-  const anonymousConfiguration= defineConfiguration({
-    namespace: 'anonymous',
-    async onReady(...args) {
-      return options.onReady?.(...args);
-    },
-    async onStop(...args) {
-      return options.onStop?.(...args);
-    },
-    async onConfigLoad(...args) {
-      return options.onConfigLoad?.(...args);
-    },
-    async onServerReady(...args) {
-      return options.onServerReady?.(...args);
-    },
-    async onHealthCheck(...args) {
-      return options.onHealthCheck?.(...args);
-    },
-  })
-
   const app = await createApp(baseDirOrOptions as string, {
     ...options,
     imports: [
@@ -696,7 +697,6 @@ export async function createLightApp(
         LightFramework,
         options.moduleLoadType
       ),
-      anonymousConfiguration,
     ].concat(options?.imports),
   });
 

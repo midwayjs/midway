@@ -1,6 +1,6 @@
 import { ILifeCycle, IMidwayApplication, IMidwayBootstrapOptions } from '@midwayjs/core';
 
-export interface MockBootstrapOptions extends IMidwayBootstrapOptions {
+export interface MockBootstrapOptions extends IMidwayBootstrapOptions, ILifeCycle {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
   ssl?: boolean;
@@ -10,8 +10,6 @@ export interface MockBootstrapOptions extends IMidwayBootstrapOptions {
   bootstrapMode?: 'faas' | 'app';
   initializeMethodName?: string;
 }
-
-export interface LightAppBootstrapOptions extends MockBootstrapOptions, ILifeCycle {}
 
 export type ComponentModule = {
   Configuration: new () => any;
