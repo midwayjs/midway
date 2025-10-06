@@ -6,7 +6,7 @@
 <p align="center">
     <a href="https://github.com/midwayjs/midway/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/github/tag/midwayjs/midway.svg" alt="GitHub tag"></a>
-    <a href="#"><img src="https://github.com/midwayjs/midway/actions/workflows/nodejs.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="#"><img src="https://github.com/midwayjs/midway/actions/workflows/nodejs.yml/badge.svg?branch=3.x" alt="Build Status"></a>
     <a href="https://codecov.io/gh/midwayjs/midway/branch/master"><img src="https://img.shields.io/codecov/c/github/midwayjs/midway/master.svg" alt="Test Coverage"></a>
     <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg" alt="lerna"></a>
     <a href="https://github.com/midwayjs/midway/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>

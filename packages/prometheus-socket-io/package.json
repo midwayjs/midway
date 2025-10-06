@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/prometheus-socket-io",
   "version": "4.0.0-beta.2",
-  "description": "midway component for prometheus",
+  "description": "Midway Component for Prometheus with Socket.IO metrics",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
