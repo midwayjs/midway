@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.16 (2025-10-08)
+
+#### :bug: Bug Fix
+* `busboy`, `upload`
+  * [#4406](https://github.com/midwayjs/midway/pull/4406) fix: special in filename (#4405) ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.13 (2025-08-25)
 
 #### :nail_care: Polish
