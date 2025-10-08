@@ -67,6 +67,14 @@ export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <Re
     [_: string]: any;
   };
   state: State;
+  /**
+   * API version extracted from request
+   */
+  apiVersion?: string;
+  /**
+   * Original path before version processing
+   */
+  originalPath?: string;
 }
 /**
  * @deprecated since version 3.0.0
@@ -127,6 +135,39 @@ export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
    * https/https/http2 server options
    */
   serverOptions?: Record<string, any>;
+  /**
+   * API versioning configuration
+   */
+  versioning?: {
+    /**
+     * Enable versioning
+     */
+    enabled: boolean;
+    /**
+     * Versioning type
+     */
+    type?: 'URI' | 'HEADER' | 'MEDIA_TYPE' | 'CUSTOM';
+    /**
+     * Default version if none is specified
+     */
+    defaultVersion?: string;
+    /**
+     * Version prefix for URI versioning (default: 'v')
+     */
+    prefix?: string;
+    /**
+     * Header name for HEADER versioning (default: 'x-api-version')
+     */
+    header?: string;
+    /**
+     * Media type parameter name for MEDIA_TYPE versioning (default: 'version')
+     */
+    mediaTypeParam?: string;
+    /**
+     * Custom version extraction function
+     */
+    extractVersionFn?: (ctx: Context) => string | undefined;
+  };
 }
 
 /**

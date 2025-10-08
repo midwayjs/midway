@@ -187,6 +187,14 @@ export class MidwayKoaFramework extends BaseFramework<
     const onerrorConfig = this.configService.getConfiguration('onerror');
     setupOnError(this.app, onerrorConfig, this.logger);
 
+    // 版本控制配置
+    const versioningConfig = this.configurationOptions.versioning;
+
+    // 如果启用版本控制，添加版本处理中间件
+    if (versioningConfig?.enabled) {
+      this.app.use(this.createVersioningMiddleware(versioningConfig));
+    }
+
     // not found middleware
     const notFound = async (ctx, next) => {
       await next();
@@ -381,5 +389,63 @@ export class MidwayKoaFramework extends BaseFramework<
     Filter: CommonFilterUnion<IMidwayKoaContext, Next, unknown>
   ) {
     this.filterManager.useFilter(Filter);
+  }
+
+  private createVersioningMiddleware(config: any) {
+    return async (ctx: IMidwayKoaContext, next: Next) => {
+      // 提取版本信息
+      const version = this.extractVersion(ctx, config);
+      ctx.apiVersion = version;
+
+      // 对于 URI 版本控制，重写路径
+      if (config.type === 'URI' && version) {
+        const versionPrefix = `/${config.prefix || 'v'}${version}`;
+        if (ctx.path.startsWith(versionPrefix)) {
+          ctx.originalPath = ctx.path;
+          ctx.path = ctx.path.replace(versionPrefix, '') || '/';
+        }
+      }
+
+      await next();
+    };
+  }
+
+  private extractVersion(
+    ctx: IMidwayKoaContext,
+    config: any
+  ): string | undefined {
+    // 自定义提取函数优先
+    if (config.extractVersionFn) {
+      return config.extractVersionFn(ctx);
+    }
+
+    const type = config.type || 'URI';
+
+    switch (type) {
+      case 'HEADER': {
+        const headerName = config.header || 'x-api-version';
+        const headerValue = ctx.headers[headerName];
+        if (typeof headerValue === 'string') {
+          return headerValue.replace(/^v/, '');
+        }
+        return undefined;
+      }
+
+      case 'MEDIA_TYPE': {
+        const accept = ctx.headers.accept;
+        const paramName = config.mediaTypeParam || 'version';
+        const match = accept?.match(new RegExp(`${paramName}=(\\d+)`));
+        return match ? match[1] : undefined;
+      }
+
+      case 'URI': {
+        const prefix = config.prefix || 'v';
+        const uriMatch = ctx.path.match(new RegExp(`^/${prefix}(\\d+)`));
+        return uriMatch ? uriMatch[1] : undefined;
+      }
+
+      default:
+        return config.defaultVersion;
+    }
   }
 }

@@ -56,6 +56,15 @@ export class MidwayExpressFramework extends BaseFramework<
     debug('[express]: create express app');
     this.app = express() as unknown as IMidwayExpressApplication;
     debug('[express]: use root middleware');
+
+    // 版本控制配置
+    const versioningConfig = this.configurationOptions.versioning;
+
+    // 如果启用版本控制，添加版本处理中间件
+    if (versioningConfig?.enabled) {
+      this.app.use(this.createVersioningMiddleware(versioningConfig));
+    }
+
     // use root middleware
     this.app.use((req, res, next) => {
       const ctx = req as Context;
@@ -413,5 +422,61 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'express';
+  }
+
+  private createVersioningMiddleware(config: any) {
+    return (req: Context, res: Response, next: NextFunction) => {
+      // 提取版本信息
+      const version = this.extractVersion(req, config);
+      req.apiVersion = version;
+
+      // 对于 URI 版本控制，重写路径
+      if (config.type === 'URI' && version) {
+        const versionPrefix = `/${config.prefix || 'v'}${version}`;
+        if (req.path.startsWith(versionPrefix)) {
+          req.originalPath = req.path;
+          // Express 中需要修改 url 而不是 path
+          req.url = req.url.replace(versionPrefix, '') || '/';
+        }
+      }
+
+      next();
+    };
+  }
+
+  private extractVersion(req: Context, config: any): string | undefined {
+    // 自定义提取函数优先
+    if (config.extractVersionFn) {
+      return config.extractVersionFn(req);
+    }
+
+    const type = config.type || 'URI';
+
+    switch (type) {
+      case 'HEADER': {
+        const headerName = config.header || 'x-api-version';
+        const headerValue = req.headers[headerName];
+        if (typeof headerValue === 'string') {
+          return headerValue.replace(/^v/, '');
+        }
+        return undefined;
+      }
+
+      case 'MEDIA_TYPE': {
+        const accept = req.headers.accept;
+        const paramName = config.mediaTypeParam || 'version';
+        const match = accept?.match(new RegExp(`${paramName}=(\\\\d+)`));
+        return match ? match[1] : undefined;
+      }
+
+      case 'URI': {
+        const prefix = config.prefix || 'v';
+        const uriMatch = req.path.match(new RegExp(`^/${prefix}(\\\\d+)`));
+        return uriMatch ? uriMatch[1] : undefined;
+      }
+
+      default:
+        return config.defaultVersion;
+    }
   }
 }

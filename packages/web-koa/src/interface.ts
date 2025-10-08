@@ -104,6 +104,39 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * listen options
    */
   listenOptions?: ListenOptions;
+  /**
+   * 版本控制配置
+   */
+  versioning?: {
+    /**
+     * 是否启用版本控制
+     */
+    enabled?: boolean;
+    /**
+     * 默认版本控制类型
+     */
+    type?: 'URI' | 'HEADER' | 'MEDIA_TYPE' | 'CUSTOM';
+    /**
+     * 默认版本
+     */
+    defaultVersion?: string;
+    /**
+     * URI 版本前缀，默认为 'v'
+     */
+    prefix?: string;
+    /**
+     * Header 版本控制时的 header 名称
+     */
+    header?: string;
+    /**
+     * Media Type 版本控制时的参数名
+     */
+    mediaTypeParam?: string;
+    /**
+     * 自定义版本提取函数
+     */
+    extractVersionFn?: (ctx: IMidwayKoaContext) => string | undefined;
+  };
 }
 
 export type MiddlewareParamArray = Array<
@@ -118,6 +151,8 @@ export type Application = IMidwayKoaApplication;
 
 export interface Context extends IMidwayKoaContext {
   state: State;
+  apiVersion?: string;
+  originalPath?: string;
 }
 
 export interface BodyParserOptions {
