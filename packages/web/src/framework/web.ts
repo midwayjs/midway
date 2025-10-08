@@ -100,14 +100,6 @@ export class MidwayWebFramework extends BaseFramework<
       this.app = options['application'];
     }
 
-    // 版本控制配置
-    const versioningConfig = this.configurationOptions.versioning;
-
-    // 如果启用版本控制，添加版本处理中间件
-    if (versioningConfig?.enabled) {
-      this.app.use(this.createVersioningMiddleware(versioningConfig));
-    }
-
     // not found middleware
     const midwayRouterNotFound = async (ctx, next) => {
       await next();
@@ -116,10 +108,19 @@ export class MidwayWebFramework extends BaseFramework<
       }
     };
 
+    const applyMiddlewares = [midwayRouterNotFound];
+
+    const versioningConfig = this.configurationOptions.versioning;
+
+    // 如果启用版本控制，添加版本处理中间件
+    if (versioningConfig?.enabled) {
+      applyMiddlewares.push(this.createVersioningMiddleware(versioningConfig));
+    }
+
     // insert error handler
     const midwayRootMiddleware = async (ctx, next) => {
       await (
-        await this.applyMiddleware(midwayRouterNotFound)
+        await this.applyMiddleware(applyMiddlewares)
       )(ctx as any, next);
     };
     this.app.use(midwayRootMiddleware);

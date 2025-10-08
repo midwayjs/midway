@@ -195,11 +195,19 @@ export class MidwayKoaFramework extends BaseFramework<
       }
     };
 
+    const applyMiddlewares = [notFound];
+    // versioning middleware
+    const versioningConfig = this.configurationOptions.versioning;
+
+    if (versioningConfig?.enabled) {
+      applyMiddlewares.push(this.createVersioningMiddleware(versioningConfig));
+    }
+
     // root middleware
     const midwayRootMiddleware = async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
       await (
-        await this.applyMiddleware(notFound)
+        await this.applyMiddleware(applyMiddlewares)
       )(ctx, next);
 
       if (
@@ -213,12 +221,6 @@ export class MidwayKoaFramework extends BaseFramework<
     };
     this.app.use(midwayRootMiddleware);
 
-    // versioning middleware
-    const versioningConfig = this.configurationOptions.versioning;
-
-    if (versioningConfig?.enabled) {
-      this.app.use(this.createVersioningMiddleware(versioningConfig));
-    }
 
     this.webRouterService = await this.applicationContext.getAsync(
       MidwayWebRouterService,

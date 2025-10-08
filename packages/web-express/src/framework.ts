@@ -57,14 +57,6 @@ export class MidwayExpressFramework extends BaseFramework<
     this.app = express() as unknown as IMidwayExpressApplication;
     debug('[express]: use root middleware');
 
-    // 版本控制配置
-    const versioningConfig = this.configurationOptions.versioning;
-
-    // 如果启用版本控制，添加版本处理中间件
-    if (versioningConfig?.enabled) {
-      this.app.use(this.createVersioningMiddleware(versioningConfig));
-    }
-
     // use root middleware
     this.app.use((req, res, next) => {
       const ctx = req as Context;
@@ -74,6 +66,14 @@ export class MidwayExpressFramework extends BaseFramework<
       ctx.requestContext.registerObject('res', res);
       next();
     });
+
+    // 版本控制配置
+    const versioningConfig = this.configurationOptions.versioning;
+
+    // 如果启用版本控制，添加版本处理中间件
+    if (versioningConfig?.enabled) {
+      this.app.use(this.createVersioningMiddleware(versioningConfig));
+    }
 
     this.defineApplicationProperties({
       useMiddleware: (
