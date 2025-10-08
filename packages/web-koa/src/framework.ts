@@ -221,7 +221,6 @@ export class MidwayKoaFramework extends BaseFramework<
     };
     this.app.use(midwayRootMiddleware);
 
-
     this.webRouterService = await this.applicationContext.getAsync(
       MidwayWebRouterService,
       [
