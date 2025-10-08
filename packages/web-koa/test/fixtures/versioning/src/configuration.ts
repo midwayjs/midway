@@ -1,5 +1,5 @@
 import { Configuration } from '@midwayjs/core';
-import * as koa from '@midwayjs/koa';
+import * as koa from '../../../../src';
 import { join } from 'path';
 
 @Configuration({

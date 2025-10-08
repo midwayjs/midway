@@ -187,14 +187,6 @@ export class MidwayKoaFramework extends BaseFramework<
     const onerrorConfig = this.configService.getConfiguration('onerror');
     setupOnError(this.app, onerrorConfig, this.logger);
 
-    // 版本控制配置
-    const versioningConfig = this.configurationOptions.versioning;
-
-    // 如果启用版本控制，添加版本处理中间件
-    if (versioningConfig?.enabled) {
-      this.app.use(this.createVersioningMiddleware(versioningConfig));
-    }
-
     // not found middleware
     const notFound = async (ctx, next) => {
       await next();
@@ -220,6 +212,13 @@ export class MidwayKoaFramework extends BaseFramework<
       }
     };
     this.app.use(midwayRootMiddleware);
+
+    // versioning middleware
+    const versioningConfig = this.configurationOptions.versioning;
+
+    if (versioningConfig?.enabled) {
+      this.app.use(this.createVersioningMiddleware(versioningConfig));
+    }
 
     this.webRouterService = await this.applicationContext.getAsync(
       MidwayWebRouterService,
