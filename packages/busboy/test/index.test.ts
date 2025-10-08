@@ -1,7 +1,7 @@
 import { createHttpRequest, createLightApp, close } from '@midwayjs/mock';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
-import { createWriteStream, statSync } from 'fs';
+import { createWriteStream, statSync, writeFileSync, unlinkSync, existsSync } from 'fs';
 import * as assert from 'assert';
 import { Controller, createMiddleware, Post } from '@midwayjs/core';
 import { tmpdir } from 'os';
@@ -214,6 +214,150 @@ describe('/test/index.test.ts', () => {
       .field('name', 'form')
       .attach('file2', filePath)
       .expect(200);
+
+    await close(app);
+  });
+
+  it('should handle filename with = character correctly', async () => {
+    @Controller()
+    class APIController {
+      @Post('/upload', { middleware: [UploadMiddleware]})
+      async upload(ctx) {
+        const files = ctx.files as Array<UploadStreamFileInfo>;
+        const fields = ctx.fields;
+        const fileName = join(tmpdir(), Date.now() + '_' + files[0].filename);
+        const fsWriteStream = createWriteStream(fileName);
+        const fieldName = files[0].fieldName;
+
+        await new Promise<void>(resolve => {
+          fsWriteStream.on('close', resolve);
+          files[0].data.pipe(fsWriteStream);
+        });
+
+        const stat = statSync(fileName);
+        return {
+          size: stat.size,
+          files,
+          fields,
+          fieldName,
+        }
+      }
+    }
+
+    const app = await createLightApp({
+      imports: [
+        koa,
+        require('../src')
+      ],
+      globalConfig: {
+        keys: '123',
+        busboy: {
+          mode: 'stream',
+          whitelist: ['.txt'],
+        }
+      },
+      preloadModules: [
+        APIController
+      ]
+    });
+
+    // Create a test file with = in filename
+    const testContent = 'test content for upload';
+    const originalFilename = 'test=file.txt';
+    const tempFilePath = join(tmpdir(), originalFilename);
+
+    try {
+      writeFileSync(tempFilePath, testContent);
+
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .attach('file', tempFilePath)
+        .expect(200)
+        .then(response => {
+          assert(response.body.files.length === 1);
+          assert(response.body.files[0].filename === originalFilename);
+          assert(response.body.fields.name === 'form');
+          assert(response.body.fieldName === 'file');
+        });
+    } finally {
+      // Clean up
+      if (existsSync(tempFilePath)) {
+        unlinkSync(tempFilePath);
+      }
+    }
+
+    await close(app);
+  });
+
+  it('should handle multiple special characters in filename', async () => {
+    @Controller()
+    class APIController {
+      @Post('/upload', { middleware: [UploadMiddleware]})
+      async upload(ctx) {
+        const files = ctx.files as Array<UploadStreamFileInfo>;
+        const fields = ctx.fields;
+        const fileName = join(tmpdir(), Date.now() + '_' + files[0].filename);
+        const fsWriteStream = createWriteStream(fileName);
+        const fieldName = files[0].fieldName;
+
+        await new Promise<void>(resolve => {
+          fsWriteStream.on('close', resolve);
+          files[0].data.pipe(fsWriteStream);
+        });
+
+        const stat = statSync(fileName);
+        return {
+          size: stat.size,
+          files,
+          fields,
+          fieldName,
+        }
+      }
+    }
+
+    const app = await createLightApp({
+      imports: [
+        koa,
+        require('../src')
+      ],
+      globalConfig: {
+        keys: '123',
+        busboy: {
+          mode: 'stream',
+          whitelist: ['.txt'],
+        }
+      },
+      preloadModules: [
+        APIController
+      ]
+    });
+
+    // Create a test file with multiple = characters in filename
+    const testContent = 'test content for upload';
+    const originalFilename = 'test=file=name=special.txt';
+    const tempFilePath = join(tmpdir(), originalFilename);
+
+    try {
+      writeFileSync(tempFilePath, testContent);
+
+      const request = await createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .attach('file', tempFilePath)
+        .expect(200)
+        .then(response => {
+          assert(response.body.files.length === 1);
+          assert(response.body.files[0].filename === originalFilename);
+          assert(response.body.fields.name === 'form');
+          assert(response.body.fieldName === 'file');
+        });
+    } finally {
+      // Clean up
+      if (existsSync(tempFilePath)) {
+        unlinkSync(tempFilePath);
+      }
+    }
 
     await close(app);
   });
