@@ -45,6 +45,7 @@
         "lifecycle",
         "logger_v3",
         "cookie_session",
+        "versioning",
         "built_in_service",
         "router_table",
         "decorator_index",
