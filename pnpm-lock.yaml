@@ -219,8 +219,8 @@ importers:
   packages/bullmq:
     dependencies:
       bullmq:
-        specifier: 5.51.1
-        version: 5.51.1
+        specifier: 5.61.0
+        version: 5.61.0
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -1564,8 +1564,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       '@types/body-parser':
-        specifier: 1.19.5
-        version: 1.19.5
+        specifier: 1.19.6
+        version: 1.19.6
       '@types/express':
         specifier: 4.17.23
         version: 4.17.23
@@ -3045,8 +3045,8 @@ packages:
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
-  '@types/body-parser@1.19.5':
-    resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
+  '@types/body-parser@1.19.6':
+    resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
   '@types/busboy@1.5.4':
     resolution: {integrity: sha512-kG7WrUuAKK0NoyxfQHsVE6j1m01s6kMma64E+OZenQABMQyTJop1DumUWcLwAQ2JzpefU7PDYoRDKl8uZosFjw==}
@@ -3952,8 +3952,8 @@ packages:
     resolution: {integrity: sha512-lDsx2BzkKe7gkCYiT5Acj02DpTwDznl/VNN7Psn7M3USPG7Vs/BaClZJJTAG+ufAR9++N1/NiUTdaFBWDIl5TQ==}
     engines: {node: '>=12'}
 
-  bullmq@5.51.1:
-    resolution: {integrity: sha512-JEZokH5Sb6p66HRjbfQjPNYuSilDRcB8UREmJzOBqTTaJFza8I92vsBF3J/zmtzd7KVv3dxhZyH9CYSLOJALRA==}
+  bullmq@5.61.0:
+    resolution: {integrity: sha512-khaTjc1JnzaYFl4FrUtsSsqugAW/urRrcZ9Q0ZE+REAw8W+gkHFqxbGlutOu6q7j7n91wibVaaNlOUMdiEvoSQ==}
 
   busboy@0.2.14:
     resolution: {integrity: sha512-InWFDomvlkEj+xWLBfU3AvnbVYqeTWmQopiW0tWWEy5yehYm2YkGEc59sUmw/4ty5Zj/b0WHGs1LgecuBSBGrg==}
@@ -4345,6 +4345,7 @@ packages:
 
   consul@2.0.1:
     resolution: {integrity: sha512-91ExUUelOJ1yyB0etYAR0w1p6Ues1VosEyBVxPcWJdnQDTKqAEFzL0MHfOqZWYI2d4HZ4FgotHZkAPW2A/xahA==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   content-disposition@0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
@@ -9415,6 +9416,7 @@ packages:
   supertest@6.3.3:
     resolution: {integrity: sha512-EMCG6G8gDu5qEqRQ3JjjPs6+FYT1a7Hv5ApHvtSghmOFJYtsU5S+pSb6Y2EUeCEY3CmEL3mmQ8YWlPOzQomabA==}
     engines: {node: '>=6.4.0'}
+    deprecated: Please upgrade to supertest v7.1.3+, see release notes at https://github.com/forwardemail/supertest/releases/tag/v7.1.3 - maintenance is supported by Forward Email @ https://forwardemail.net
 
   supports-color@5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
@@ -10003,6 +10005,10 @@ packages:
 
   uuid@10.0.0:
     resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
+
+  uuid@11.1.0:
+    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
     hasBin: true
 
   uuid@3.4.0:
@@ -12090,7 +12096,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.28.4
 
-  '@types/body-parser@1.19.5':
+  '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
       '@types/node': 22.12.0
@@ -12162,7 +12168,7 @@ snapshots:
 
   '@types/express@4.17.23':
     dependencies:
-      '@types/body-parser': 1.19.5
+      '@types/body-parser': 1.19.6
       '@types/express-serve-static-core': 4.19.7
       '@types/qs': 6.9.18
       '@types/serve-static': 1.15.9
@@ -13194,7 +13200,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  bullmq@5.51.1:
+  bullmq@5.61.0:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.4.2
@@ -13202,7 +13208,7 @@ snapshots:
       node-abort-controller: 3.1.1
       semver: 7.7.3
       tslib: 2.8.1
-      uuid: 9.0.1
+      uuid: 11.1.0
     transitivePeerDependencies:
       - supports-color
 
@@ -20817,6 +20823,8 @@ snapshots:
   uuid-parse@1.1.0: {}
 
   uuid@10.0.0: {}
+
+  uuid@11.1.0: {}
 
   uuid@3.4.0: {}
 
