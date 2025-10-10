@@ -1022,8 +1022,8 @@ importers:
         specifier: workspace:^
         version: link:../core
       amqp-connection-manager:
-        specifier: 4.1.14
-        version: 4.1.14(amqplib@0.10.5)
+        specifier: 4.1.15
+        version: 4.1.15(amqplib@0.10.5)
     devDependencies:
       '@types/amqplib':
         specifier: 0.10.6
@@ -3568,8 +3568,8 @@ packages:
     resolution: {integrity: sha512-FipRmyd16Pr/tEey/YaaQ/24Pc3HEpLM9S1DRakEuXlSLXNIJnu1oJtHM53eVYpvW3dXapSjrip3xylZUTIZVQ==}
     engines: {node: '>=8'}
 
-  amqp-connection-manager@4.1.14:
-    resolution: {integrity: sha512-1km47dIvEr0HhMUazqovSvNwIlSvDX2APdUpULaINtHpiki1O+cLRaTeXb/jav4OLtH+k6GBXx5gsKOT9kcGKQ==}
+  amqp-connection-manager@4.1.15:
+    resolution: {integrity: sha512-YGi8MuO2K4u0qC4b1qAKVIK8CdBJF+PpEZpHKxmrL3x61pU1sAb2SHzQl7ypoqr6oECIfVqtG9DGdOZxaUq1Wg==}
     engines: {node: '>=10.0.0', npm: '>5.0.0'}
     peerDependencies:
       amqplib: '*'
@@ -12773,7 +12773,7 @@ snapshots:
       - proxy-agent
       - supports-color
 
-  amqp-connection-manager@4.1.14(amqplib@0.10.5):
+  amqp-connection-manager@4.1.15(amqplib@0.10.5):
     dependencies:
       amqplib: 0.10.5
       promise-breaker: 6.0.0
