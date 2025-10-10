@@ -5,7 +5,7 @@ import {
   NextFunction as BaseNextFunction,
 } from '@midwayjs/core';
 import { Implementation, CallToolResult, GetPromptResult, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
-import { ServerOptions} from '@modelcontextprotocol/sdk/server/index.js';
+import { ServerOptions } from '@modelcontextprotocol/sdk/server/index.js';
 
 export interface IMidwayMCPConfigurationOptions extends IConfigurationOptions {
   serverInfo: Implementation;
