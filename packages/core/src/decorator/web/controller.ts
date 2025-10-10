@@ -11,6 +11,10 @@ export interface ControllerOption {
     description?: string;
     tagName?: string;
     ignoreGlobalPrefix?: boolean;
+    // 版本控制配置
+    version?: string | string[];
+    versionType?: 'URI' | 'HEADER' | 'MEDIA_TYPE' | 'CUSTOM';
+    versionPrefix?: string;
   };
 }
 
@@ -22,6 +26,10 @@ export function Controller(
     description?: string;
     tagName?: string;
     ignoreGlobalPrefix?: boolean;
+    // 版本控制配置
+    version?: string | string[];
+    versionType?: 'URI' | 'HEADER' | 'MEDIA_TYPE' | 'CUSTOM';
+    versionPrefix?: string;
   } = { middleware: [], sensitive: true }
 ): ClassDecorator {
   return (target: any) => {

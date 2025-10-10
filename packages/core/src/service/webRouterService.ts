@@ -119,6 +119,21 @@ export interface RouterInfo {
    * url after wildcard and can be path-to-regexp by path-to-regexp v6
    */
   fullUrlFlattenString?: string;
+
+  /**
+   * version information for API versioning
+   */
+  version?: string | string[];
+
+  /**
+   * version type for API versioning
+   */
+  versionType?: 'URI' | 'HEADER' | 'MEDIA_TYPE' | 'CUSTOM';
+
+  /**
+   * version prefix for URI versioning
+   */
+  versionPrefix?: string;
 }
 
 export type DynamicRouterInfo = Omit<
@@ -248,9 +263,35 @@ export class MidwayWebRouterService {
       controllerOption.prefix || '/'
     );
     const ignorePrefix = controllerOption.prefix || '/';
+
     // if controller set ignore global prefix, all router will be ignore too.
     if (controllerIgnoreGlobalPrefix) {
       prefix = ignorePrefix;
+    }
+
+    // Apply version prefix for URI versioning
+    if (
+      controllerOption.routerOptions?.version &&
+      (!controllerOption.routerOptions?.versionType ||
+        controllerOption.routerOptions?.versionType === 'URI')
+    ) {
+      const versionPrefix =
+        controllerOption.routerOptions?.versionPrefix || 'v';
+      const version = Array.isArray(controllerOption.routerOptions.version)
+        ? controllerOption.routerOptions.version[0]
+        : controllerOption.routerOptions.version;
+
+      const versionedPrefix = `/${versionPrefix}${version}`;
+
+      if (controllerIgnoreGlobalPrefix) {
+        prefix = joinURLPath(versionedPrefix, ignorePrefix);
+      } else {
+        prefix = joinURLPath(
+          this.options.globalPrefix,
+          versionedPrefix,
+          controllerOption.prefix || '/'
+        );
+      }
     }
 
     if (/\*/.test(prefix)) {

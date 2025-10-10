@@ -18,7 +18,16 @@ import { ListenOptions } from 'net';
 type Request = IMidwayContext<ExpressRequest>;
 export type Response = ExpressResponse;
 export type NextFunction = ExpressNextFunction;
-export interface Context extends Request {}
+export interface Context extends Request {
+  /**
+   * API version extracted from request
+   */
+  apiVersion?: string;
+  /**
+   * Original path before version processing
+   */
+  originalPath?: string;
+}
 
 /**
  * @deprecated use Context
@@ -90,6 +99,39 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
    * listen options
    */
   listenOptions?: ListenOptions;
+  /**
+   * API versioning configuration
+   */
+  versioning?: {
+    /**
+     * Enable versioning
+     */
+    enabled: boolean;
+    /**
+     * Versioning type
+     */
+    type?: 'URI' | 'HEADER' | 'MEDIA_TYPE' | 'CUSTOM';
+    /**
+     * Default version if none is specified
+     */
+    defaultVersion?: string;
+    /**
+     * Version prefix for URI versioning (default: 'v')
+     */
+    prefix?: string;
+    /**
+     * Header name for HEADER versioning (default: 'x-api-version')
+     */
+    header?: string;
+    /**
+     * Media type parameter name for MEDIA_TYPE versioning (default: 'version')
+     */
+    mediaTypeParam?: string;
+    /**
+     * Custom version extraction function
+     */
+    extractVersionFn?: (ctx: Context) => string | undefined;
+  };
 }
 
 export type Application = IMidwayExpressApplication;
