@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v4.0.0-beta.3 (2025-10-10)
+
+#### :rocket: New Feature
+* `core`, `mcp`, `web-express`, `web-koa`, `web`
+  * [#4407](https://github.com/midwayjs/midway/pull/4407) feat: support route version for http ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `busboy`, `upload`
+  * [#4405](https://github.com/midwayjs/midway/pull/4405) fix: special in filename when upload file ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `web-express`
+  * [#4378](https://github.com/midwayjs/midway/pull/4378) chore(deps): update dependency @types/body-parser to v1.19.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `rabbitmq`
+  * [#4402](https://github.com/midwayjs/midway/pull/4402) fix(deps): update dependency amqp-connection-manager to v4.1.15 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4408](https://github.com/midwayjs/midway/pull/4408) chore(deps): update redis docker tag to v7.4.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bullmq`
+  * [#4409](https://github.com/midwayjs/midway/pull/4409) fix(deps): update dependency bullmq to v5.61.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.2 (2025-10-06)
 
 #### :boom: Breaking Change

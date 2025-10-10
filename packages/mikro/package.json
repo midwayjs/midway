@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mikro",
-  "version": "4.0.0-beta.2",
+  "version": "4.0.0-beta.3",
   "description": "Midway Component for MikroORM",
   "main": "dist/index.js",
   "typings": "index.d.ts",
