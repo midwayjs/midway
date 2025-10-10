@@ -1564,8 +1564,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       '@types/body-parser':
-        specifier: 1.19.5
-        version: 1.19.5
+        specifier: 1.19.6
+        version: 1.19.6
       '@types/express':
         specifier: 4.17.23
         version: 4.17.23
@@ -3045,8 +3045,8 @@ packages:
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
-  '@types/body-parser@1.19.5':
-    resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
+  '@types/body-parser@1.19.6':
+    resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
   '@types/busboy@1.5.4':
     resolution: {integrity: sha512-kG7WrUuAKK0NoyxfQHsVE6j1m01s6kMma64E+OZenQABMQyTJop1DumUWcLwAQ2JzpefU7PDYoRDKl8uZosFjw==}
@@ -4351,6 +4351,7 @@ packages:
 
   consul@2.0.1:
     resolution: {integrity: sha512-91ExUUelOJ1yyB0etYAR0w1p6Ues1VosEyBVxPcWJdnQDTKqAEFzL0MHfOqZWYI2d4HZ4FgotHZkAPW2A/xahA==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   content-disposition@0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
@@ -12108,7 +12109,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.28.4
 
-  '@types/body-parser@1.19.5':
+  '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
       '@types/node': 22.12.0
@@ -12180,7 +12181,7 @@ snapshots:
 
   '@types/express@4.17.23':
     dependencies:
-      '@types/body-parser': 1.19.5
+      '@types/body-parser': 1.19.6
       '@types/express-serve-static-core': 4.19.7
       '@types/qs': 6.9.18
       '@types/serve-static': 1.15.9
