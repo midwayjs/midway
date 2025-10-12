@@ -37,13 +37,24 @@ $ npm i @midwayjs/mcp@4 --save
 $ npm i @modelcontextprotocol/sdk zod --save
 ```
 
+:::warning
+**⚠️ Zod 版本兼容性重要提示**
+
+MCP SDK (`@modelcontextprotocol/sdk`) 当前使用 Zod v3.x 版本。为确保兼容性，您的项目**必须**使用 Zod 3.x 版本，不要使用 Zod v4.x 或更高版本，否则会导致类型兼容性问题。
+
+**推荐安装特定版本**：
+```bash
+$ npm i zod@^3.24.1 --save
+```
+:::
+
 如果使用 `sse` 或 `stream-http` 传输类型，还需要安装 HTTP 框架组件（选择其中一个）：
 
 ```bash
 # Express 框架
 $ npm i @midwayjs/express@4 --save
 
-# 或者 Koa 框架  
+# 或者 Koa 框架
 $ npm i @midwayjs/koa@4 --save
 
 # 或者 Egg.js 框架
@@ -57,7 +68,7 @@ $ npm i @midwayjs/web@4 --save
   "dependencies": {
     "@midwayjs/mcp": "^4.0.0",
     "@modelcontextprotocol/sdk": "^1.19.0",
-    "zod": "^3.24.0",
+    "zod": "^3.24.1",
     "@midwayjs/express": "^4.0.0"
   }
 }
@@ -191,6 +202,21 @@ export default {
 :::info
 **向下兼容说明**：当服务器配置为 `stream-http` 传输类型时，传统的 SSE 客户端仍然可以通过 `/sse` 端点正常连接和通信。
 :::
+
+### 日志配置
+
+MCP 组件默认志输出，可以通过 `mcpLogger` 进一步配置日志详情。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  midwayLogger: {
+    mcpLogger: {
+      // ...
+    }
+  },
+}
+```
 
 ## 使用方式
 

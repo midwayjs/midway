@@ -674,4 +674,164 @@ describe('/test/index.test.ts', () => {
       }
     }
   });
+
+  it('should test Tool with complex parameters', async () => {
+    const clientManager = new SSEMCPClientManager();
+    let app: any;
+
+    try {
+      // Start the app server with Tool that requires complex parameters
+      @mcp.Tool('complexParamTool', {
+        description: 'Tool that accepts complex parameters including nested objects and arrays',
+        inputSchema: {
+          user: z.object({
+            name: z.string().describe('User name'),
+            age: z.number().describe('User age'),
+            email: z.string().email().describe('User email')
+          }).describe('User information'),
+          preferences: z.array(z.string()).describe('User preferences'),
+          metadata: z.object({
+            source: z.string().describe('Data source'),
+            timestamp: z.string().optional().describe('Optional timestamp')
+          }).optional().describe('Optional metadata'),
+          action: z.enum(['create', 'update', 'delete']).describe('Action to perform')
+        }
+      })
+      class ComplexParamTool implements mcp.IMcpTool {
+        name = 'complexParamTool';
+
+        async execute(args: any): Promise<CallToolResult> {
+          const { user, preferences, metadata, action } = args;
+
+          const result = {
+            action,
+            user: `${user.name} (${user.age}, ${user.email})`,
+            preferences: preferences.join(', '),
+            metadata: metadata ? `Source: ${metadata.source}${metadata.timestamp ? `, Time: ${metadata.timestamp}` : ''}` : 'No metadata'
+          };
+
+          return {
+            content: [{
+              type: 'text',
+              text: `Action: ${result.action}\nUser: ${result.user}\nPreferences: ${result.preferences}\nMetadata: ${result.metadata}`
+            }]
+          };
+        }
+      }
+
+      app = await createApp({
+        baseDir: null,
+        imports: [
+          express,
+          mcp,
+        ],
+        preloadModules: [
+          ComplexParamTool,
+        ],
+        globalConfig: {
+          express: {
+            keys: ['test'],
+            port: 7010,
+          },
+          mcp: {
+            serverInfo: {
+              name: 'test-complex-param-mcp',
+              version: '1.0.0',
+            },
+            transportType: 'stream-http',
+          }
+        },
+        loggerFactory: new DefaultConsoleLoggerFactory(),
+      });
+
+      // Create StreamHTTP MCP client
+      const client = await clientManager.createTestStreamHTTPClient('http://localhost:7010/mcp', 'test-complex-param-client');
+
+      // List tools
+      const { tools } = await client.listTools();
+      const complexTool = tools.find(tool => tool.name === 'complexParamTool');
+
+      if (!complexTool) {
+        throw new Error('complexParamTool should be available');
+      }
+
+      // Test with all parameters
+      const fullResult = await client.callTool({
+        name: 'complexParamTool',
+        arguments: {
+          user: {
+            name: 'John Doe',
+            age: 30,
+            email: 'john@example.com'
+          },
+          preferences: ['coding', 'reading', 'gaming'],
+          metadata: {
+            source: 'api',
+            timestamp: '2023-01-01T00:00:00Z'
+          },
+          action: 'create'
+        }
+      });
+
+      if (!fullResult.content || !fullResult.content[0]?.text?.includes('Action: create') ||
+          !fullResult.content[0]?.text?.includes('User: John Doe (30, john@example.com)') ||
+          !fullResult.content[0]?.text?.includes('Preferences: coding, reading, gaming') ||
+          !fullResult.content[0]?.text?.includes('Source: api, Time: 2023-01-01T00:00:00Z')) {
+        throw new Error('Tool should return expected result with full parameters');
+      }
+
+      // Test with optional parameter omitted
+      const partialResult = await client.callTool({
+        name: 'complexParamTool',
+        arguments: {
+          user: {
+            name: 'Jane Smith',
+            age: 25,
+            email: 'jane@example.com'
+          },
+          preferences: ['music', 'travel'],
+          action: 'update'
+        }
+      });
+
+      if (!partialResult.content || !partialResult.content[0]?.text?.includes('Action: update') ||
+          !partialResult.content[0]?.text?.includes('User: Jane Smith (25, jane@example.com)') ||
+          !partialResult.content[0]?.text?.includes('Preferences: music, travel') ||
+          !partialResult.content[0]?.text?.includes('Metadata: No metadata')) {
+        throw new Error('Tool should work with optional parameters omitted');
+      }
+
+      // Test with partial metadata (timestamp omitted)
+      const partialMetadataResult = await client.callTool({
+        name: 'complexParamTool',
+        arguments: {
+          user: {
+            name: 'Bob Wilson',
+            age: 35,
+            email: 'bob@example.com'
+          },
+          preferences: ['sports'],
+          metadata: {
+            source: 'database'
+          },
+          action: 'delete'
+        }
+      });
+
+      if (!partialMetadataResult.content || !partialMetadataResult.content[0]?.text?.includes('Action: delete') ||
+          !partialMetadataResult.content[0]?.text?.includes('User: Bob Wilson (35, bob@example.com)') ||
+          !partialMetadataResult.content[0]?.text?.includes('Preferences: sports') ||
+          !partialMetadataResult.content[0]?.text?.includes('Source: database') ||
+          partialMetadataResult.content[0]?.text?.includes('Time:')) {
+        throw new Error('Tool should work with partial metadata (timestamp omitted)');
+      }
+
+    } finally {
+      // Ensure cleanup always happens
+      await clientManager.closeAllClients();
+      if (app) {
+        await close(app);
+      }
+    }
+  });
 })

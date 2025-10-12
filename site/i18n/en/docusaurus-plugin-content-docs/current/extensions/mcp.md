@@ -37,6 +37,17 @@ $ npm i @midwayjs/mcp@4 --save
 $ npm i @modelcontextprotocol/sdk zod --save
 ```
 
+:::warning
+Important Zod compatibility notice
+
+The MCP SDK (`@modelcontextprotocol/sdk`) currently uses Zod v3.x. To ensure compatibility, your project must use Zod 3.x. Do not use Zod v4.x or higher, otherwise type compatibility issues may occur.
+
+Recommended specific version:
+```bash
+$ npm i zod@^3.24.1 --save
+```
+:::
+
 If you use the `sse` or `stream-http` transport, you also need to install one of the HTTP framework components (choose one):
 
 ```bash
@@ -57,7 +68,7 @@ Or add the following dependencies to `package.json` and reinstall.
   "dependencies": {
     "@midwayjs/mcp": "^4.0.0",
     "@modelcontextprotocol/sdk": "^1.19.0",
-    "zod": "^3.24.0",
+    "zod": "^3.24.1",
     "@midwayjs/express": "^4.0.0"
   }
 }
@@ -191,6 +202,21 @@ Assuming the server runs at `http://localhost:3000`, the default endpoints are:
 :::info
 Backward compatibility: When the server is configured with the `stream-http` transport, legacy SSE clients can still connect and communicate via the `/sse` endpoint.
 :::
+
+### Logging configuration
+
+The MCP component outputs logs by default. You can further configure logging details via `mcpLogger`.
+
+```typescript
+// src/config/config.default.ts
+export default {
+  midwayLogger: {
+    mcpLogger: {
+      // ...
+    }
+  },
+}
+```
 
 ## Usage
 
