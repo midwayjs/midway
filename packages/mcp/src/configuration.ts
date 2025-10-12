@@ -25,7 +25,7 @@ import { MidwayMCPFramework } from './framework';
               fileLogName: 'midway-mcp.log',
             },
           },
-        }
+        },
       },
     },
   ],
