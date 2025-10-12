@@ -19,6 +19,13 @@ import { MidwayMCPFramework } from './framework';
             messages: '/messages',
           },
         },
+        midwayLogger: {
+          clients: {
+            mcpLogger: {
+              fileLogName: 'midway-mcp.log',
+            },
+          },
+        }
       },
     },
   ],
