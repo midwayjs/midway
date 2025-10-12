@@ -1,6 +1,23 @@
 # Change Log
 
 
+## v4.0.0-beta.4 (2025-10-12)
+
+#### :bug: Bug Fix
+* `mcp`
+  * [#4413](https://github.com/midwayjs/midway/pull/4413) fix: missing mcp logger config ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `prometheus`
+  * [#4411](https://github.com/midwayjs/midway/pull/4411) chore(deps): update dependency @types/request to v2.48.13 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4410](https://github.com/midwayjs/midway/pull/4410) chore(deps): update dependency @types/jest to v29.5.14 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.3 (2025-10-10)
 
 #### :rocket: New Feature
