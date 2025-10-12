@@ -108,6 +108,12 @@ export class MidwayI18nServiceSingleton {
         );
       }
     }
+
+    // If still no message found, use missingKeyHandler
+    if (!msg && this.i18nConfig.missingKeyHandler) {
+      msg = this.i18nConfig.missingKeyHandler(message, options);
+    }
+
     return msg;
   }
 
