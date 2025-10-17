@@ -465,8 +465,8 @@ importers:
   packages/cos:
     dependencies:
       cos-nodejs-sdk-v5:
-        specifier: 2.14.7
-        version: 2.14.7
+        specifier: 2.15.4
+        version: 2.15.4
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -4454,8 +4454,8 @@ packages:
     resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}
     engines: {node: '>= 0.10'}
 
-  cos-nodejs-sdk-v5@2.14.7:
-    resolution: {integrity: sha512-2Ww9JeSzJTVBnKCWTHwWtU0mVwl2yxn2VUw8KhOnMKbqEbRpsBr0p1ZugB9/7h43bMZA0YlY3+P52k0KN4M9lQ==}
+  cos-nodejs-sdk-v5@2.15.4:
+    resolution: {integrity: sha512-TP/iYTvKKKhRK89on9SRfSMGEw/9SFAAU8EC1kdT5Fmpx7dAwaCNM2+R2H1TSYoQt+03rwOs8QEfNkX8GOHjHQ==}
     engines: {node: '>= 6'}
 
   cosmiconfig@8.3.6:
@@ -13830,7 +13830,7 @@ snapshots:
       object-assign: 4.1.1
       vary: 1.1.2
 
-  cos-nodejs-sdk-v5@2.14.7:
+  cos-nodejs-sdk-v5@2.15.4:
     dependencies:
       conf: 9.0.2
       fast-xml-parser: 4.2.5
