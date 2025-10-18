@@ -797,7 +797,7 @@ A: 当前版本每个应用实例只支持一种传输类型。如需支持多�
 
 ### Q: 如何调试 MCP 服务？
 
-A: 使用日志记录、MCP 客户端工具进行测试，或者使用官方提供的 [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
+A: 使用日志记录、MCP 客户端工具进行测试，或者使用官方提供的 [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector)
 
 ## 相关链接
 

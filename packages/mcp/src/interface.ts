@@ -2,14 +2,16 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction,
+  NextFunction as BaseNextFunction
 } from '@midwayjs/core';
 import { Implementation, CallToolResult, GetPromptResult, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
 import { ServerOptions } from '@modelcontextprotocol/sdk/server/index.js';
+import { SSEServerTransportOptions } from '@modelcontextprotocol/sdk/server/sse.js';
+import { StreamableHTTPServerTransportOptions } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 
 export interface IMidwayMCPConfigurationOptions extends IConfigurationOptions {
   serverInfo: Implementation;
-  serverOptions: ServerOptions;
+  serverOptions?: ServerOptions;
   /**
    * Transport type for MCP communication
    * - 'stdio': Standard input/output transport for CLI applications
@@ -27,6 +29,15 @@ export interface IMidwayMCPConfigurationOptions extends IConfigurationOptions {
     sse?: string;
     /** Messages endpoint path for backward compatibility (default: '/messages') */
     messages?: string;
+  };
+  /**
+   * Transport-specific options using SDK types
+   */
+  transportOptions?: {
+    /** Options for SSE transport (from @modelcontextprotocol/sdk) */
+    sse?: SSEServerTransportOptions;
+    /** Options for StreamHTTP transport (from @modelcontextprotocol/sdk) */
+    streamHttp?: StreamableHTTPServerTransportOptions;
   };
 }
 

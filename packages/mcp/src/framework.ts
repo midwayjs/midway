@@ -19,6 +19,7 @@ import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { MCP_TOOL_KEY, MCP_PROMPT_KEY, MCP_RESOURCE_KEY } from './decorator';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { randomUUID } from 'crypto';
 
 @Framework()
 export class MidwayMCPFramework extends BaseFramework<
@@ -55,7 +56,7 @@ export class MidwayMCPFramework extends BaseFramework<
   }
 
   public async initializeMCPTransport(webApp: IMidwayApplication) {
-    const { endpoints = {} } = this.configurationOptions;
+    const { endpoints = {}, transportOptions = {} } = this.configurationOptions;
     const streamHttpPath = endpoints.streamHttp || '/mcp';
     const ssePath = endpoints.sse || '/sse';
     const messagesPath = endpoints.messages || '/messages';
@@ -67,7 +68,7 @@ export class MidwayMCPFramework extends BaseFramework<
     const sseTransports: { [sessionId: string]: SSEServerTransport } = {};
 
     const isExpress = webApp.getNamespace() === 'express';
-    webApp.useMiddleware(async (ctx: any, next) => {
+    const mcpMiddleware = async (ctx: any, next) => {
       // Handle StreamHTTP endpoints (configurable path)
       if (
         ctx.path === streamHttpPath &&
@@ -86,13 +87,16 @@ export class MidwayMCPFramework extends BaseFramework<
             // Reuse existing transport
             transport = transports[sessionId];
           } else if (ctx.method === 'POST' && !sessionId) {
-            // New initialization request
-            transport = new StreamableHTTPServerTransport({
-              sessionIdGenerator: () => require('crypto').randomUUID(),
+            // New initialization request - use configured transport options
+            const streamHttpOptions = transportOptions.streamHttp || {};
+            const transportConfig = {
+              sessionIdGenerator: () => randomUUID(),
               onsessioninitialized: (sessionId: string) => {
                 transports[sessionId] = transport;
               },
-            });
+              ...streamHttpOptions,
+            };
+            transport = new StreamableHTTPServerTransport(transportConfig);
 
             // Set up cleanup on close
             transport.onclose = () => {
@@ -146,8 +150,9 @@ export class MidwayMCPFramework extends BaseFramework<
       // Handle legacy SSE endpoints for backward compatibility (configurable paths)
       else if (ctx.path === ssePath && ctx.method === 'GET') {
         ctx.respond = false; // we will handle the response ourselves
-        // Handle SSE connection
-        const transport = new SSEServerTransport(messagesPath, ctx.res);
+        // Handle SSE connection - use configured transport options
+        const sseOptions = transportOptions.sse || {};
+        const transport = new SSEServerTransport(messagesPath, ctx.res, sseOptions);
         sseTransports[transport.sessionId] = transport;
         ctx.res.on('close', () => {
           delete sseTransports[transport.sessionId];
@@ -175,7 +180,9 @@ export class MidwayMCPFramework extends BaseFramework<
       } else {
         return await next();
       }
-    });
+    };
+
+    webApp.useMiddleware(mcpMiddleware);
   }
 
   public async run(): Promise<void> {

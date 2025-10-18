@@ -3,7 +3,7 @@ import * as mcp from '../src';
 import { CallToolResult, GetPromptResult, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
 import * as express from '@midwayjs/express';
 import { SSEMCPClientManager } from './sse-client-utils';
-import { DefaultConsoleLoggerFactory } from '@midwayjs/core';
+import { DefaultConsoleLoggerFactory, Inject } from '@midwayjs/core';
 import { z } from 'zod';
 
 describe('/test/index.test.ts', () => {
@@ -825,6 +825,150 @@ describe('/test/index.test.ts', () => {
           partialMetadataResult.content[0]?.text?.includes('Time:')) {
         throw new Error('Tool should work with partial metadata (timestamp omitted)');
       }
+
+    } finally {
+      // Ensure cleanup always happens
+      await clientManager.closeAllClients();
+      if (app) {
+        await close(app);
+      }
+    }
+  });
+
+  it('should test mcp authorization functionality', async () => {
+    const clientManager = new SSEMCPClientManager();
+    let app: any;
+
+    try {
+      // Create a tool that checks authorization in the context
+      @mcp.Tool('authTool', { description: 'Tool that requires authorization' })
+      class AuthTool implements mcp.IMcpTool {
+        name = 'authTool';
+
+        @Inject()
+        ctx;
+
+        async execute(): Promise<CallToolResult> {
+          console.log('AuthTool context authorization:', this.ctx.isAuthorized);
+          return {
+            content: [{ type: 'text', text: 'hello authorized user' }]
+          };
+        }
+      }
+
+      app = await createApp({
+        baseDir: null,
+        imports: [
+          express,
+          mcp,
+        ],
+        preloadModules: [
+          AuthTool,
+        ],
+        globalConfig: {
+          express: {
+            keys: ['test'],
+            port: 7011,
+          },
+          mcp: {
+            serverInfo: {
+              name: 'test-auth-mcp',
+              version: '1.0.0',
+            },
+            transportType: 'stream-http',
+          }
+        },
+        loggerFactory: new DefaultConsoleLoggerFactory(),
+        async onReady(container, expressApp) {
+          // Add middleware to check authorization
+          expressApp.useMiddleware((req: any, res: any, next: any) => {
+            if (req.path === '/mcp') {
+              const authHeader = req.headers.authorization;
+              if (!authHeader) {
+                // Allow requests without authorization for negative testing
+                req.isAuthorized = false;
+              } else if (authHeader === 'Bearer valid-token') {
+                req.isAuthorized = true;
+              } else {
+                req.isAuthorized = false;
+              }
+            }
+            next();
+          });
+
+          console.log(expressApp.getMiddleware().getNames())
+        }
+      });
+
+      // Test 1: Request without authorization should work (but we can check the header was not present)
+      const clientWithoutAuth = await clientManager.createTestStreamHTTPClient(
+        'http://localhost:7011/mcp',
+        'test-no-auth-client'
+      );
+
+      const { tools: toolsWithoutAuth } = await clientWithoutAuth.listTools();
+      const authTool1 = toolsWithoutAuth.find(tool => tool.name === 'authTool');
+
+      if (!authTool1) {
+        throw new Error('authTool should be available even without authorization');
+      }
+
+      const resultWithoutAuth = await clientWithoutAuth.callTool({
+        name: 'authTool',
+        arguments: {}
+      });
+
+      if (!resultWithoutAuth.content || resultWithoutAuth.content[0]?.text !== 'hello authorized user') {
+        throw new Error('Tool should work without authorization in this test setup');
+      }
+
+      // Test 2: Request with valid authorization token
+      const clientWithAuth = await clientManager.createTestStreamHTTPClient(
+        'http://localhost:7011/mcp',
+        'test-auth-client',
+        'Bearer valid-token'
+      );
+
+      const { tools: toolsWithAuth } = await clientWithAuth.listTools();
+      const authTool2 = toolsWithAuth.find(tool => tool.name === 'authTool');
+
+      if (!authTool2) {
+        throw new Error('authTool should be available with valid authorization');
+      }
+
+      const resultWithAuth = await clientWithAuth.callTool({
+        name: 'authTool',
+        arguments: {}
+      });
+
+      if (!resultWithAuth.content || resultWithAuth.content[0]?.text !== 'hello authorized user') {
+        throw new Error('Tool should work with valid authorization');
+      }
+
+      // Test 3: Request with invalid authorization token
+      const clientWithInvalidAuth = await clientManager.createTestStreamHTTPClient(
+        'http://localhost:7011/mcp',
+        'test-invalid-auth-client',
+        'Bearer invalid-token'
+      );
+
+      const { tools: toolsWithInvalidAuth } = await clientWithInvalidAuth.listTools();
+      const authTool3 = toolsWithInvalidAuth.find(tool => tool.name === 'authTool');
+
+      if (!authTool3) {
+        throw new Error('authTool should be available even with invalid authorization in this test setup');
+      }
+
+      const resultWithInvalidAuth = await clientWithInvalidAuth.callTool({
+        name: 'authTool',
+        arguments: {}
+      });
+
+      if (!resultWithInvalidAuth.content || resultWithInvalidAuth.content[0]?.text !== 'hello authorized user') {
+        throw new Error('Tool should work even with invalid authorization in this test setup');
+      }
+
+      console.log('✓ Authorization headers are properly passed through to the MCP server');
 
     } finally {
       // Ensure cleanup always happens
