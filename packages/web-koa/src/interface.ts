@@ -15,11 +15,6 @@ export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<St
     routerResponseData?: any []
   ): Middleware<State, IMidwayKoaContext>;
   /**
-   * @deprecated
-   * @param middlewareId
-   */
-  generateMiddleware(middlewareId: any): Promise<Middleware<State, IMidwayKoaContext>>;
-  /**
    * Get the port that the application is listening on
    */
   getPort(): string;
