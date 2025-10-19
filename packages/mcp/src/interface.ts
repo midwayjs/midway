@@ -2,14 +2,18 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction,
+  NextFunction as BaseNextFunction
 } from '@midwayjs/core';
 import { Implementation, CallToolResult, GetPromptResult, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
 import { ServerOptions } from '@modelcontextprotocol/sdk/server/index.js';
+import { SSEServerTransportOptions } from '@modelcontextprotocol/sdk/server/sse.js';
+import { StreamableHTTPServerTransportOptions } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { RequestHandlerExtra } from '@modelcontextprotocol/sdk/shared/protocol.js';
+import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 
 export interface IMidwayMCPConfigurationOptions extends IConfigurationOptions {
   serverInfo: Implementation;
-  serverOptions: ServerOptions;
+  serverOptions?: ServerOptions;
   /**
    * Transport type for MCP communication
    * - 'stdio': Standard input/output transport for CLI applications
@@ -28,9 +32,22 @@ export interface IMidwayMCPConfigurationOptions extends IConfigurationOptions {
     /** Messages endpoint path for backward compatibility (default: '/messages') */
     messages?: string;
   };
+  /**
+   * Transport-specific options using SDK types
+   */
+  transportOptions?: {
+    /** Options for SSE transport (from @modelcontextprotocol/sdk) */
+    sse?: SSEServerTransportOptions;
+    /** Options for StreamHTTP transport (from @modelcontextprotocol/sdk) */
+    streamHttp?: StreamableHTTPServerTransportOptions;
+  };
+  /** Enable built-in JWT authentication middleware (default: false) */
+  enableJwtAuthHelper?: boolean;
+  /** Custom JWT payload transformer function */
+  jwtAuthCustomPayloadTransformer?: (payload: any, token: string) => AuthInfo;
 }
 
-export interface IMidwayMCPContext extends IMidwayContext {}
+export interface IMidwayMCPContext extends IMidwayContext, Partial<RequestHandlerExtra<any, any>> {}
 
 export type IMidwayMCPApplication = IMidwayApplication<IMidwayMCPContext>;
 

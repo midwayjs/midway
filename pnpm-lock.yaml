@@ -729,6 +729,10 @@ importers:
         version: 5.1.7
 
   packages/mcp:
+    dependencies:
+      '@midwayjs/jwt':
+        specifier: workspace:^
+        version: link:../jwt
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^

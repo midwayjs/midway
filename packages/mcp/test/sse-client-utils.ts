@@ -24,6 +24,8 @@ export interface StreamHTTPMCPClientOptions {
   };
   /** StreamHTTP transport options */
   transportOptions?: StreamableHTTPClientTransportOptions;
+  /** Authorization token for requests */
+  authorization?: string;
 }
 
 /**
@@ -50,13 +52,27 @@ export async function createStreamHTTPMCPClient(options: StreamHTTPMCPClientOpti
   const transportOptions = {
     ...options.transportOptions,
   };
-  
+
+  // Add authorization header if provided
+  if (options.authorization) {
+    if (!transportOptions.requestInit) {
+      transportOptions.requestInit = {};
+    }
+    if (!transportOptions.requestInit.headers) {
+      transportOptions.requestInit.headers = {};
+    }
+    transportOptions.requestInit.headers = {
+      ...transportOptions.requestInit.headers,
+      'Authorization': options.authorization
+    };
+  }
+
   const transport = new StreamableHTTPClientTransport(new URL(options.url), transportOptions);
 
   const client = new Client(options.clientInfo);
-  
+
   await client.connect(transport);
-  
+
   return client;
 }
 
@@ -64,18 +80,21 @@ export async function createStreamHTTPMCPClient(options: StreamHTTPMCPClientOpti
  * Creates a test StreamHTTP MCP client with default configuration for testing
  * @param url The StreamHTTP endpoint URL
  * @param clientName Optional client name (defaults to 'test-client')
+ * @param authorization Optional authorization token
  * @returns Promise that resolves to connected MCP client
  */
 export async function createTestStreamHTTPMCPClient(
-  url: string, 
-  clientName: string = 'test-client'
+  url: string,
+  clientName: string = 'test-client',
+  authorization?: string
 ): Promise<Client> {
   return createStreamHTTPMCPClient({
     url,
     clientInfo: {
       name: clientName,
       version: '1.0.0'
-    }
+    },
+    authorization
   });
 }
 
@@ -134,8 +153,8 @@ export class SSEMCPClientManager {
   /**
    * Creates and tracks a test StreamHTTP MCP client
    */
-  async createTestStreamHTTPClient(url: string, clientName?: string): Promise<Client> {
-    const client = await createTestStreamHTTPMCPClient(url, clientName);
+  async createTestStreamHTTPClient(url: string, clientName?: string, authorization?: string): Promise<Client> {
+    const client = await createTestStreamHTTPMCPClient(url, clientName, authorization);
     this.clients.push(client);
     return client;
   }

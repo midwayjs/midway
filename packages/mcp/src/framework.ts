@@ -19,6 +19,8 @@ import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { MCP_TOOL_KEY, MCP_PROMPT_KEY, MCP_RESOURCE_KEY } from './decorator';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { randomUUID } from 'crypto';
+import { MCPAuthInfoMiddleware } from './middleware/auth.middleware';
 
 @Framework()
 export class MidwayMCPFramework extends BaseFramework<
@@ -55,7 +57,16 @@ export class MidwayMCPFramework extends BaseFramework<
   }
 
   public async initializeMCPTransport(webApp: IMidwayApplication) {
-    const { endpoints = {} } = this.configurationOptions;
+    const {
+      endpoints = {},
+      transportOptions = {},
+      enableJwtAuthHelper = false,
+    } = this.configurationOptions;
+
+    // 如果启用了JWT认证助手，自动注册中间件
+    if (enableJwtAuthHelper) {
+      webApp.useMiddleware(MCPAuthInfoMiddleware);
+    }
     const streamHttpPath = endpoints.streamHttp || '/mcp';
     const ssePath = endpoints.sse || '/sse';
     const messagesPath = endpoints.messages || '/messages';
@@ -67,7 +78,10 @@ export class MidwayMCPFramework extends BaseFramework<
     const sseTransports: { [sessionId: string]: SSEServerTransport } = {};
 
     const isExpress = webApp.getNamespace() === 'express';
-    webApp.useMiddleware(async (ctx: any, next) => {
+    const mcpMiddleware = async (ctx: any, resOrNext?: any, next?: any) => {
+      if (!isExpress) {
+        next = resOrNext;
+      }
       // Handle StreamHTTP endpoints (configurable path)
       if (
         ctx.path === streamHttpPath &&
@@ -86,13 +100,16 @@ export class MidwayMCPFramework extends BaseFramework<
             // Reuse existing transport
             transport = transports[sessionId];
           } else if (ctx.method === 'POST' && !sessionId) {
-            // New initialization request
-            transport = new StreamableHTTPServerTransport({
-              sessionIdGenerator: () => require('crypto').randomUUID(),
+            // New initialization request - use configured transport options
+            const streamHttpOptions = transportOptions.streamHttp || {};
+            const transportConfig = {
+              sessionIdGenerator: () => randomUUID(),
               onsessioninitialized: (sessionId: string) => {
                 transports[sessionId] = transport;
               },
-            });
+              ...streamHttpOptions,
+            };
+            transport = new StreamableHTTPServerTransport(transportConfig);
 
             // Set up cleanup on close
             transport.onclose = () => {
@@ -121,6 +138,7 @@ export class MidwayMCPFramework extends BaseFramework<
           }
           // Handle the request with the transport
           if (isExpress) {
+            // For Express: ctx 就是 req 对象
             await transport.handleRequest(ctx, ctx.res, ctx.body);
           } else {
             // koa/egg
@@ -146,8 +164,13 @@ export class MidwayMCPFramework extends BaseFramework<
       // Handle legacy SSE endpoints for backward compatibility (configurable paths)
       else if (ctx.path === ssePath && ctx.method === 'GET') {
         ctx.respond = false; // we will handle the response ourselves
-        // Handle SSE connection
-        const transport = new SSEServerTransport(messagesPath, ctx.res);
+        // Handle SSE connection - use configured transport options
+        const sseOptions = transportOptions.sse || {};
+        const transport = new SSEServerTransport(
+          messagesPath,
+          ctx.res,
+          sseOptions
+        );
         sseTransports[transport.sessionId] = transport;
         ctx.res.on('close', () => {
           delete sseTransports[transport.sessionId];
@@ -175,7 +198,9 @@ export class MidwayMCPFramework extends BaseFramework<
       } else {
         return await next();
       }
-    });
+    };
+
+    webApp.useMiddleware(mcpMiddleware);
   }
 
   public async run(): Promise<void> {
@@ -197,15 +222,23 @@ export class MidwayMCPFramework extends BaseFramework<
       this.server.registerTool(
         toolMeta.toolName,
         toolMeta.toolSchema,
-        async (...args) => {
-          const ctx = this.app.createAnonymousContext();
-          const fn = await this.applyMiddleware(async ctx => {
-            const instance = (await ctx.requestContext.getAsync(
-              tool
-            )) as IMcpTool;
-            // eslint-disable-next-line prefer-spread
-            return await instance['execute'].call(instance, ...args);
-          });
+        async (args, extra: any) => {
+          if (extra === undefined) {
+            extra = args;
+            args = {};
+          }
+          const ctx = this.app.createAnonymousContext(
+            extra
+          ) as IMidwayMCPContext;
+
+          const fn = await this.applyMiddleware(
+            async (ctx: IMidwayMCPContext) => {
+              const instance = (await ctx.requestContext.getAsync(
+                tool
+              )) as IMcpTool;
+              return await instance['execute'].call(instance, args);
+            }
+          );
           return await fn(ctx);
         }
       );
@@ -220,15 +253,22 @@ export class MidwayMCPFramework extends BaseFramework<
       this.server.registerPrompt(
         promptMeta.promptName,
         promptMeta.promptConfig,
-        async (...args) => {
-          const ctx = this.app.createAnonymousContext();
-          const fn = await this.applyMiddleware(async ctx => {
-            const instance = (await ctx.requestContext.getAsync(
-              prompt
-            )) as IMcpPrompt;
-            // eslint-disable-next-line prefer-spread
-            return await instance['generate'].call(instance, ...args);
-          });
+        async (args, extra) => {
+          const ctx = this.app.createAnonymousContext() as IMidwayMCPContext;
+
+          // 从 MCP SDK 的 MessageExtraInfo 中获取 authInfo
+          if (extra?.authInfo) {
+            ctx.authInfo = extra.authInfo;
+          }
+
+          const fn = await this.applyMiddleware(
+            async (ctx: IMidwayMCPContext) => {
+              const instance = (await ctx.requestContext.getAsync(
+                prompt
+              )) as IMcpPrompt;
+              return await instance['generate'].call(instance, args);
+            }
+          );
           return await fn(ctx);
         }
       );
@@ -247,15 +287,22 @@ export class MidwayMCPFramework extends BaseFramework<
         resourceMeta.resourceName,
         resourceMeta.resourceConfig.uri || resourceMeta.resourceConfig,
         resourceMeta.resourceConfig,
-        async (...args) => {
-          const ctx = this.app.createAnonymousContext();
-          const fn = await this.applyMiddleware(async ctx => {
-            const instance = (await ctx.requestContext.getAsync(
-              resource
-            )) as IMcpResource;
-            // eslint-disable-next-line prefer-spread
-            return await instance['handle'].call(instance, ...args);
-          });
+        async (uri, extra) => {
+          const ctx = this.app.createAnonymousContext() as IMidwayMCPContext;
+
+          // 从 MCP SDK 的 MessageExtraInfo 中获取 authInfo
+          if (extra?.authInfo) {
+            ctx.authInfo = extra.authInfo;
+          }
+
+          const fn = await this.applyMiddleware(
+            async (ctx: IMidwayMCPContext) => {
+              const instance = (await ctx.requestContext.getAsync(
+                resource
+              )) as IMcpResource;
+              return await instance['handle'].call(instance, uri);
+            }
+          );
           return await fn(ctx);
         }
       );

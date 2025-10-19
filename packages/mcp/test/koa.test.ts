@@ -1,9 +1,10 @@
-import { createApp, close } from '@midwayjs/mock';
+import { createApp, close, createLightApp } from '@midwayjs/mock';
 import * as mcp from '../src';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import * as koa from '@midwayjs/koa';
 import { SSEMCPClientManager } from './sse-client-utils';
-import { DefaultConsoleLoggerFactory } from '@midwayjs/core';
+import { DefaultConsoleLoggerFactory, Inject } from '@midwayjs/core';
+import { JwtService } from '@midwayjs/jwt';
 
 describe('/test/koa.test.ts', () => {
 
@@ -36,7 +37,7 @@ describe('/test/koa.test.ts', () => {
         globalConfig: {
           koa: {
             keys: ['test'],
-            port: 7012,
+            port: 7020,
           },
           mcp: {
             serverInfo: {
@@ -50,7 +51,7 @@ describe('/test/koa.test.ts', () => {
       });
 
       // Create SSE MCP client using utility
-      const client = await clientManager.createTestClient('http://localhost:7012/sse', 'test-sse-client-koa');
+      const client = await clientManager.createTestClient('http://localhost:7020/sse', 'test-sse-client-koa');
 
       // List tools
       const { tools } = await client.listTools();
@@ -108,7 +109,7 @@ describe('/test/koa.test.ts', () => {
         globalConfig: {
           koa: {
             keys: ['test'],
-            port: 7013,
+            port: 7021,
           },
           mcp: {
             serverInfo: {
@@ -122,7 +123,7 @@ describe('/test/koa.test.ts', () => {
       });
 
       // Create StreamHTTP MCP client using utility
-      const client = await clientManager.createTestStreamHTTPClient('http://localhost:7013/mcp', 'test-stream-http-client-koa');
+      const client = await clientManager.createTestStreamHTTPClient('http://localhost:7021/mcp', 'test-stream-http-client-koa');
 
       // List tools
       const { tools } = await client.listTools();
@@ -180,7 +181,7 @@ describe('/test/koa.test.ts', () => {
         globalConfig: {
           koa: {
             keys: ['test'],
-            port: 7015,
+            port: 7022,
           },
           mcp: {
             serverInfo: {
@@ -199,7 +200,7 @@ describe('/test/koa.test.ts', () => {
       // Test 1: SSE client should now work with backward compatibility
       try {
         // With backward compatibility, SSE clients can connect via /sse endpoint
-        const sseClient = await clientManager.createTestClient('http://localhost:7015/sse', 'test-sse-compat-client-koa');
+        const sseClient = await clientManager.createTestClient('http://localhost:7022/sse', 'test-sse-compat-client-koa');
         
         // List tools
         const { tools } = await sseClient.listTools();
@@ -226,7 +227,7 @@ describe('/test/koa.test.ts', () => {
       }
 
       // Test 2: Verify StreamHTTP client still works
-      const streamHttpClient = await clientManager.createTestStreamHTTPClient('http://localhost:7015/mcp', 'test-streamhttp-compat-client-koa');
+      const streamHttpClient = await clientManager.createTestStreamHTTPClient('http://localhost:7022/mcp', 'test-streamhttp-compat-client-koa');
       
       // List tools
       const { tools } = await streamHttpClient.listTools();
@@ -250,6 +251,145 @@ describe('/test/koa.test.ts', () => {
 
     } finally {
       // Ensure cleanup always happens
+      await clientManager.closeAllClients();
+      if (app) {
+        await close(app);
+      }
+    }
+  });
+
+  it('should pass JWT AuthInfo to Tool context using MCPAuthInfoMiddleware', async () => {
+    const clientManager = new SSEMCPClientManager();
+    let app: any;
+
+    try {
+      @mcp.Tool('authContextTool_koa', { description: 'Tool that checks auth context for Koa' })
+      class AuthContextTool implements mcp.IMcpTool {
+        name = 'authContextTool_koa';
+
+        @Inject()
+        ctx;
+
+        async execute(): Promise<CallToolResult> {
+          const auth = this.ctx.authInfo;
+
+          console.log('Tool context (Koa):', {
+            hasAuth: !!auth,
+            contextKeys: Object.keys(this.ctx),
+            auth: auth
+          });
+
+          if (!auth) {
+            return {
+              content: [{ type: 'text', text: `No auth info available. Context keys: ${Object.keys(this.ctx).join(', ')}` }],
+              isError: true
+            };
+          }
+
+          return {
+            content: [{
+              type: 'text',
+              text: `Auth info received:\n` +
+                    `- Token: ${auth.token}\n` +
+                    `- Client ID: ${auth.clientId}\n` +
+                    `- Scopes: ${auth.scopes.join(', ')}\n` +
+                    `- Expires At: ${auth.expiresAt}\n` +
+                    `- Resource: ${auth.resource?.toString()}\n` +
+                    `- Extra: ${JSON.stringify(auth.extra)}`
+            }]
+          };
+        }
+      }
+
+      app = await createLightApp({
+        imports: [
+          koa,
+          mcp,
+        ],
+        preloadModules: [
+          AuthContextTool,
+        ],
+        globalConfig: {
+          koa: {
+            keys: ['test'],
+            port: 7019,
+          },
+          mcp: {
+            serverInfo: {
+              name: 'test-jwt-auth-mcp-koa',
+              version: '1.0.0',
+            },
+            transportType: 'stream-http',
+            enableJwtAuthHelper: true,  // 启用内置JWT认证助手
+          },
+          jwt: {
+            secret: 'test-jwt-secret-key-for-mcp-koa',
+            sign: {
+              expiresIn: '1h'
+            }
+          }
+        },
+        loggerFactory: new DefaultConsoleLoggerFactory(),
+      });
+
+      // 生成真实的 JWT token
+      const jwtService = await app.getApplicationContext().getAsync(JwtService);
+      const payload = {
+        sub: 'user-123',
+        aud: 'test-mcp-client-koa',
+        scope: 'mcp:read mcp:write mcp:tool',
+        resource: 'https://mcp.example.com/resources',
+        iss: 'https://auth.example.com',
+        extra: {
+          username: 'testuser',
+          role: 'admin'
+        }
+      };
+      const jwtToken = await jwtService.sign(payload);
+
+      // 测试带有真实 JWT Authorization 头的请求
+      const clientWithAuth = await clientManager.createTestStreamHTTPClient(
+        'http://localhost:7019/mcp',
+        'test-auth-context-client-koa',
+        `Bearer ${jwtToken}`
+      );
+
+      const result = await clientWithAuth.callTool({
+        name: 'authContextTool_koa',
+        arguments: {}
+      });
+
+      if (!result.content || result.isError) {
+        throw new Error('Tool should receive auth info successfully');
+      }
+
+      const responseText = result.content[0]?.text || '';
+
+      // 验证认证信息是否正确传递
+      if (!responseText.includes(`Token: ${jwtToken}`)) {
+        throw new Error('JWT token should be passed correctly');
+      }
+
+      if (!responseText.includes('Client ID: test-mcp-client-koa')) {
+        throw new Error('Client ID should match JWT aud claim');
+      }
+
+      if (!responseText.includes('Scopes: mcp:read, mcp:write, mcp:tool')) {
+        throw new Error('Scopes should match JWT scope claim');
+      }
+
+      if (!responseText.includes('Resource: https://mcp.example.com/resources')) {
+        throw new Error('Resource should match JWT resource claim');
+      }
+
+      if (!responseText.includes('sub":"user-123')) {
+        throw new Error('Extra user data should be passed correctly');
+      }
+
+      console.log('✓ OAuth AuthInfo correctly passed to Tool context (Koa)');
+      console.log('Auth response (Koa):', responseText);
+
+    } finally {
       await clientManager.closeAllClients();
       if (app) {
         await close(app);

@@ -696,6 +696,208 @@ Example using stream-http:
 }
 ```
 
+## Security Authentication
+
+### Built-in JWT Helper
+
+The Midway MCP framework provides a built-in JWT authentication helper that can automatically handle JWT token verification and pass authentication information to MCP tools, prompts, and resources.
+
+Enable the JWT authentication helper in configuration:
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // JWT configuration
+  jwt: {
+    secret: 'your-jwt-secret-key',
+    sign: {
+      expiresIn: '1h'
+    }
+  },
+
+  mcp: {
+    serverInfo: {
+      name: 'my-mcp-server',
+      version: '1.0.0',
+    },
+    transportType: 'stream-http',
+    // Enable built-in JWT authentication helper
+    enableJwtAuthHelper: true,
+  }
+}
+```
+
+The authentication helper is a middleware that can convert JWT payload information into AuthInfo defined in the MCP SDK.
+
+You can use authentication information through `ctx.authInfo`.
+
+```typescript
+import { Tool, IMcpTool, ToolConfig, Context } from '@midwayjs/mcp';
+import { Inject } from '@midwayjs/core';
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+@Tool('secure_operation', { description: 'A tool that requires authentication' })
+export class SecureTool implements IMcpTool {
+  @Inject()
+  ctx: Context;
+
+  async execute(args: any): Promise<CallToolResult> {
+    const authInfo = this.ctx.authInfo;
+    // ...
+  }
+}
+```
+
+The JWT payload should contain the following standard fields:
+
+```json
+{
+  "aud": "client-id",                           // Client ID, maps to authInfo.clientId
+  "scope": "mcp:read mcp:write",               // Permission scope, maps to authInfo.scopes
+  "exp": 1234567890,                           // Expiration time, maps to authInfo.expiresAt
+  "resource": "https://api.example.com",       // Resource URL, maps to authInfo.resource
+  "sub": "user-123",                           // User ID
+  "iss": "https://auth.example.com",           // Issuer
+  "extra": {                                   // Other custom fields will be placed in authInfo.extra
+    "username": "testuser",
+    "role": "admin"
+  }
+}
+```
+
+Client usage example:
+
+```typescript
+// Client sends request with JWT token
+const client = new Client({
+  name: 'my-client',
+  version: '1.0.0'
+});
+
+const transport = new StreamableHTTPClientTransport(
+  new URL('http://localhost:3000/mcp'),
+  {
+    headers: {
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+    }
+  }
+);
+
+await client.connect(transport);
+
+// Now all tool calls will automatically include authentication information
+const result = await client.callTool({
+  name: 'secure_operation',
+  arguments: {}
+});
+```
+
+
+
+### Non-standard Data Transformation
+
+If the incoming JWT structure is non-standard, you need to provide a transformation function in the configuration.
+
+```typescript
+// src/config/config.default.ts
+import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+
+export default {
+  // JWT configuration
+  jwt: {
+    secret: 'your-jwt-secret-key',
+    sign: {
+      expiresIn: '1h'
+    }
+  },
+
+  mcp: {
+    serverInfo: {
+      name: 'my-mcp-server',
+      version: '1.0.0',
+    },
+    transportType: 'stream-http',
+    // Enable built-in JWT authentication helper
+    enableJwtAuthHelper: true,
+    // Custom function
+    jwtAuthCustomPayloadTransformer: (payload: any, token: string): AuthInfo => {
+      return {
+        // ...use standard JWT fields to map AuthInfo
+        token: token,
+        clientId: payload.aud,
+        // ...
+      };
+    }
+  }
+}
+```
+
+
+
+
+
+### Additional Authentication
+
+In other authentication scenarios, you can also use Midway components or write middleware to complete authentication.
+
+For example, you can use the `passport` component to complete OAuth authentication.
+
+After authentication is completed, according to the MCP SDK specification, you need to place the authentication information in `req.auth`.
+
+For example:
+
+```typescript
+// src/configuration.ts
+import { Configuration, Inject } from '@midwayjs/core';
+import * as express from '@midwayjs/express';
+import * as mcp from '@midwayjs/mcp';
+import { MidwayMCPFramework } from '@midwayjs/mcp';
+import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+
+@Configuration({
+  imports: [
+    express,
+    // ...
+    mcp
+  ],
+  importConfigs: ['./config']
+})
+export class MainConfiguration {
+  @Inject()
+  mcpFramework: MidwayMCPFramework;
+
+  async onReady(container: IMidwayContainer, mainApp: IMidwayApplication) {
+    const authMiddleware = async (req, res, next) => {
+      // ...
+      const userInfo = {
+        user: 'zhangsan',
+        role: 'admin'
+      }
+      
+      // This field must be set
+      req.auth = {
+        token: req.headers.authorization,
+        clientId: 'test-client-id',
+        scopes: ['mcp:read', 'mcp:write'],
+        resource: new URL('https://mcp.example.com/resources'),
+        extra: userInfo,
+      } as AuthInfo;
+      
+      // For Koa, place it on ctx.req.auth
+
+      await next();
+    }
+    
+    // Note that mainApp here is Express
+    mainApp.getMiddleware().insertBefore(authMiddleware, 'mcpMiddleware');
+  }
+}
+```
+
+
+
+
+
 ## Best practices
 
 ### 1. Type safety

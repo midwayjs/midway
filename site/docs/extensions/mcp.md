@@ -218,6 +218,8 @@ export default {
 }
 ```
 
+
+
 ## 使用方式
 
 ### 工具（Tools）
@@ -348,6 +350,210 @@ export class UserResource implements IMcpResource {
   }
 }
 ```
+
+
+
+## 安全认证
+
+### 内置的 JWT 助手
+
+Midway MCP 框架提供了内置的 JWT 认证助手，可以自动处理 JWT token 验证并将认证信息传递给 MCP 工具、提示和资源。
+
+在配置中启用 JWT 认证助手：
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // JWT 配置
+  jwt: {
+    secret: 'your-jwt-secret-key',
+    sign: {
+      expiresIn: '1h'
+    }
+  },
+
+  mcp: {
+    serverInfo: {
+      name: 'my-mcp-server',
+      version: '1.0.0',
+    },
+    transportType: 'stream-http',
+    // 启用内置 JWT 认证助手
+    enableJwtAuthHelper: true,
+  }
+}
+```
+
+认证助手是一个中间件，能将 jwt 的 payload 信息转化为 MCP SDK 中定义的 AuthInfo。
+
+可以通过 `ctx.authInfo` 使用认证信息。
+
+```typescript
+import { Tool, IMcpTool, ToolConfig, Context } from '@midwayjs/mcp';
+import { Inject } from '@midwayjs/core';
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+@Tool('secure_operation', { description: 'A tool that requires authentication' })
+export class SecureTool implements IMcpTool {
+  @Inject()
+  ctx: Context;
+
+  async execute(args: any): Promise<CallToolResult> {
+    const authInfo = this.ctx.authInfo;
+    // ...
+  }
+}
+```
+
+JWT payload 应包含以下标准字段：
+
+```json
+{
+  "aud": "client-id",           						// 客户端 ID，映射到 authInfo.clientId
+  "scope": "mcp:read mcp:write",  					// 权限范围，映射到 authInfo.scopes
+  "exp": 1234567890,           							// 过期时间，映射到 authInfo.expiresAt
+  "resource": "https://api.example.com", 		// 资源 URL，映射到 authInfo.resource
+  "sub": "user-123",           							// 用户 ID
+  "iss": "https://auth.example.com", 				// 签发者
+  "extra": {																// 其他自定义字段会放入 authInfo.extra
+    "username": "testuser",
+    "role": "admin"
+  }      										
+}
+```
+
+客户端使用示例。
+
+```typescript
+// 客户端发送带有 JWT token 的请求
+const client = new Client({
+  name: 'my-client',
+  version: '1.0.0'
+});
+
+const transport = new StreamableHTTPClientTransport(
+  new URL('http://localhost:3000/mcp'),
+  {
+    headers: {
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+    }
+  }
+);
+
+await client.connect(transport);
+
+// 现在所有的工具调用都会自动包含认证信息
+const result = await client.callTool({
+  name: 'secure_operation',
+  arguments: {}
+});
+```
+
+
+
+### 非标数据转换
+
+如果传入的 jwt 结构为非标，需要在配置中自行提供转换函数。
+
+```typescript
+// src/config/config.default.ts
+import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+
+export default {
+  // JWT 配置
+  jwt: {
+    secret: 'your-jwt-secret-key',
+    sign: {
+      expiresIn: '1h'
+    }
+  },
+
+  mcp: {
+    serverInfo: {
+      name: 'my-mcp-server',
+      version: '1.0.0',
+    },
+    transportType: 'stream-http',
+    // 启用内置 JWT 认证助手
+    enableJwtAuthHelper: true,
+    // 自定义函数
+    jwtAuthCustomPayloadTransformer: (payload: any, token: string): AuthInfo => {
+      return {
+        // ...使用标准JWT字段映射AuthInfo
+        token: token,
+        clientId: payload.aud,
+        // ...
+      };
+    }
+  }
+}
+```
+
+
+
+
+
+### 更多认证
+
+在其他的认证场景下，也可以使用 Midway 组件或者编写中间件完整。
+
+比如你可以使用 `passport` 组件完成 OAuth 认证。
+
+在认证完成后，按照 MCP SDK 规范，需将认证信息放到 `req.auth` 中。
+
+如：
+
+```typescript
+// src/configuration.ts
+import { Configuration, Inject } from '@midwayjs/core';
+import * as express from '@midwayjs/express';
+import * as mcp from '@midwayjs/mcp';
+import { MidwayMCPFramework } from '@midwayjs/mcp';
+import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+
+@Configuration({
+  imports: [
+    express,
+    // ...
+    mcp
+  ],
+  importConfigs: ['./config']
+})
+export class MainConfiguration {
+  @Inject()
+  mcpFramework: MidwayMCPFramework;
+
+  async onReady(container: IMidwayContainer, mainApp: IMidwayApplication) {
+    const authMiddleware = async (req, res, next) => {
+      // ...
+      const userInfo = {
+        user: 'zhangsan',
+        role: 'admin'
+      }
+      
+      // 必须要设置这个字段
+      req.auth = {
+        token: req.headers.authorization,
+        clientId: 'test-client-id',
+        scopes: ['mcp:read', 'mcp:write'],
+        resource: new URL('https://mcp.example.com/resources'),
+        extra: userInfo,
+      } as AuthInfo;
+      
+      // koa 就放到 ctx.req.auth 上
+
+      await next();
+    }
+    
+    // 注意这里的 mainApp 是 Express
+    mainApp.getMiddleware().insertBefore(authMiddleware, 'mcpMiddleware');
+  }
+}
+```
+
+
+
+
 
 ## 完整示例
 
@@ -797,7 +1003,7 @@ A: 当前版本每个应用实例只支持一种传输类型。如需支持多�
 
 ### Q: 如何调试 MCP 服务？
 
-A: 使用日志记录、MCP 客户端工具进行测试，或者使用官方提供的 [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
+A: 使用日志记录、MCP 客户端工具进行测试，或者使用官方提供的 [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector)
 
 ## 相关链接
 

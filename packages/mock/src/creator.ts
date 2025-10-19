@@ -122,7 +122,7 @@ export async function create<
     appDir = options.appDir || '';
   }
 
-  debug(`[mock]: Create app, appDir="${appDir}"`);
+  debug(`[mock]: Create app, appDir="${appDir}", will be initialized.`);
 
   try {
     if (appDir) {
@@ -219,7 +219,7 @@ export async function create<
     }
 
     const anonymousConfiguration = defineConfiguration({
-      namespace: 'anonymous',
+      namespace: 'mock-anonymous',
       async onReady(...args) {
         return options.onReady?.(...args);
       },
