@@ -37,7 +37,7 @@ describe('/test/koa.test.ts', () => {
         globalConfig: {
           koa: {
             keys: ['test'],
-            port: 7012,
+            port: 7020,
           },
           mcp: {
             serverInfo: {
@@ -51,7 +51,7 @@ describe('/test/koa.test.ts', () => {
       });
 
       // Create SSE MCP client using utility
-      const client = await clientManager.createTestClient('http://localhost:7012/sse', 'test-sse-client-koa');
+      const client = await clientManager.createTestClient('http://localhost:7020/sse', 'test-sse-client-koa');
 
       // List tools
       const { tools } = await client.listTools();
@@ -109,7 +109,7 @@ describe('/test/koa.test.ts', () => {
         globalConfig: {
           koa: {
             keys: ['test'],
-            port: 7013,
+            port: 7021,
           },
           mcp: {
             serverInfo: {
@@ -123,7 +123,7 @@ describe('/test/koa.test.ts', () => {
       });
 
       // Create StreamHTTP MCP client using utility
-      const client = await clientManager.createTestStreamHTTPClient('http://localhost:7013/mcp', 'test-stream-http-client-koa');
+      const client = await clientManager.createTestStreamHTTPClient('http://localhost:7021/mcp', 'test-stream-http-client-koa');
 
       // List tools
       const { tools } = await client.listTools();
@@ -181,7 +181,7 @@ describe('/test/koa.test.ts', () => {
         globalConfig: {
           koa: {
             keys: ['test'],
-            port: 7015,
+            port: 7022,
           },
           mcp: {
             serverInfo: {
@@ -200,7 +200,7 @@ describe('/test/koa.test.ts', () => {
       // Test 1: SSE client should now work with backward compatibility
       try {
         // With backward compatibility, SSE clients can connect via /sse endpoint
-        const sseClient = await clientManager.createTestClient('http://localhost:7015/sse', 'test-sse-compat-client-koa');
+        const sseClient = await clientManager.createTestClient('http://localhost:7022/sse', 'test-sse-compat-client-koa');
         
         // List tools
         const { tools } = await sseClient.listTools();
@@ -227,7 +227,7 @@ describe('/test/koa.test.ts', () => {
       }
 
       // Test 2: Verify StreamHTTP client still works
-      const streamHttpClient = await clientManager.createTestStreamHTTPClient('http://localhost:7015/mcp', 'test-streamhttp-compat-client-koa');
+      const streamHttpClient = await clientManager.createTestStreamHTTPClient('http://localhost:7022/mcp', 'test-streamhttp-compat-client-koa');
       
       // List tools
       const { tools } = await streamHttpClient.listTools();
