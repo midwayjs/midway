@@ -794,6 +794,48 @@ const result = await client.callTool({
 
 
 
+### Non-standard Data Transformation
+
+If the incoming JWT structure is non-standard, you need to provide a transformation function in the configuration.
+
+```typescript
+// src/config/config.default.ts
+import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+
+export default {
+  // JWT configuration
+  jwt: {
+    secret: 'your-jwt-secret-key',
+    sign: {
+      expiresIn: '1h'
+    }
+  },
+
+  mcp: {
+    serverInfo: {
+      name: 'my-mcp-server',
+      version: '1.0.0',
+    },
+    transportType: 'stream-http',
+    // Enable built-in JWT authentication helper
+    enableJwtAuthHelper: true,
+    // Custom function
+    jwtAuthCustomPayloadTransformer: (payload: any, token: string): AuthInfo => {
+      return {
+        // ...use standard JWT fields to map AuthInfo
+        token: token,
+        clientId: payload.aud,
+        // ...
+      };
+    }
+  }
+}
+```
+
+
+
+
+
 ### Additional Authentication
 
 In other authentication scenarios, you can also use Midway components or write middleware to complete authentication.

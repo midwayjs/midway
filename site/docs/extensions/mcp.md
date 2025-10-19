@@ -451,6 +451,48 @@ const result = await client.callTool({
 
 
 
+### 非标数据转换
+
+如果传入的 jwt 结构为非标，需要在配置中自行提供转换函数。
+
+```typescript
+// src/config/config.default.ts
+import { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+
+export default {
+  // JWT 配置
+  jwt: {
+    secret: 'your-jwt-secret-key',
+    sign: {
+      expiresIn: '1h'
+    }
+  },
+
+  mcp: {
+    serverInfo: {
+      name: 'my-mcp-server',
+      version: '1.0.0',
+    },
+    transportType: 'stream-http',
+    // 启用内置 JWT 认证助手
+    enableJwtAuthHelper: true,
+    // 自定义函数
+    jwtAuthCustomPayloadTransformer: (payload: any, token: string): AuthInfo => {
+      return {
+        // ...使用标准JWT字段映射AuthInfo
+        token: token,
+        clientId: payload.aud,
+        // ...
+      };
+    }
+  }
+}
+```
+
+
+
+
+
 ### 更多认证
 
 在其他的认证场景下，也可以使用 Midway 组件或者编写中间件完整。
