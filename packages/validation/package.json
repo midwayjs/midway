@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/validation",
-  "version": "4.0.0-beta.4",
+  "version": "4.0.0-beta.5",
   "description": "Midway Component for validation",
   "main": "dist/index.js",
   "typings": "index.d.ts",

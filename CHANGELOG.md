@@ -1,6 +1,23 @@
 # Change Log
 
 
+## v4.0.0-beta.5 (2025-10-19)
+
+#### :nail_care: Polish
+* `mcp`, `mock`
+  * [#4420](https://github.com/midwayjs/midway/pull/4420) feat: support mcp auth ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `cos`
+  * [#4418](https://github.com/midwayjs/midway/pull/4418) fix(deps): update dependency cos-nodejs-sdk-v5 to v2.15.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4419](https://github.com/midwayjs/midway/pull/4419) fix(deps): update dependency mqtt to v5.14.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.4 (2025-10-12)
 
 #### :bug: Bug Fix
