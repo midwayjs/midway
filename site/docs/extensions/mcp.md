@@ -416,8 +416,8 @@ JWT payload 应包含以下标准字段：
   "sub": "user-123",           							// 用户 ID
   "iss": "https://auth.example.com", 				// 签发者
   "extra": {																// 其他自定义字段会放入 authInfo.extra
-    username: 'testuser',
-    role: 'admin'
+    "username": "testuser",
+    "role": "admin"
   }      										
 }
 ```
@@ -491,7 +491,7 @@ export class MainConfiguration {
       
       // 必须要设置这个字段
       req.auth = {
-        token: ctx.req.headers.authorization,
+        token: req.headers.authorization,
         clientId: 'test-client-id',
         scopes: ['mcp:read', 'mcp:write'],
         resource: new URL('https://mcp.example.com/resources'),
