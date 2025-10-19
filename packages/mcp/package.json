@@ -22,6 +22,9 @@
     "index.d.ts"
   ],
   "license": "MIT",
+  "dependencies": {
+    "@midwayjs/jwt": "workspace:^"
+  },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",

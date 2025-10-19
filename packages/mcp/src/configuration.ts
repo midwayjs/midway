@@ -5,10 +5,12 @@ import {
   MidwayApplicationManager,
   MidwayConfigService,
 } from '@midwayjs/core';
+import * as jwt from '@midwayjs/jwt';
 import { MidwayMCPFramework } from './framework';
 
 @Configuration({
   namespace: 'mcp',
+  imports: [jwt],
   importConfigs: [
     {
       default: {
@@ -18,6 +20,7 @@ import { MidwayMCPFramework } from './framework';
             sse: '/sse',
             messages: '/messages',
           },
+          enableJwtAuthHelper: false,
         },
         midwayLogger: {
           clients: {
