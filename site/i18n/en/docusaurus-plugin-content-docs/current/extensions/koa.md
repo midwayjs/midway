@@ -184,7 +184,7 @@ declare module '@midwayjs/koa/dist/interface' {
     abc: string;
   }
 
-  interface State{
+  interface State {
     bbb: string;
     ccc: number;
   }
@@ -192,6 +192,33 @@ declare module '@midwayjs/koa/dist/interface' {
 ```
 
 
+
+## Get Port
+
+You can get the port through the `getPort()` method on the framework or app.
+
+```typescript
+import { App, Configuration } from '@midwayjs/core';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+  imports: [
+    koa,
+    // ...
+  ]
+  // ...
+})
+export class MainConfiguration {
+  @Inject()
+  framework: koa.Framework;
+
+  async onServerReady(container, mainApp: koa.Application) {
+    const port = this.framework.getPort();
+    const port = this.mainApp.getPort();
+    // ...
+  }
+}
+```
 
 
 

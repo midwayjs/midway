@@ -186,7 +186,7 @@ declare module '@midwayjs/koa/dist/interface' {
     abc: string;
   }
 
-  interface State{
+  interface State {
     bbb: string;
     ccc: number;
   }
@@ -194,6 +194,33 @@ declare module '@midwayjs/koa/dist/interface' {
 ```
 
 
+
+## 获取端口
+
+通过 framework 或者 app 上的 `getPort()` 方法可以获取端口。
+
+```typescript
+import { App, Configuration } from '@midwayjs/core';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+  imports: [
+    koa,
+    // ...
+  ]
+	// ...
+})
+export class MainConfiguration {
+  @Inject()
+  framework: koa.Framework;
+
+  async onServerReady(container, mainApp: koa.Application) {
+    const port = this.framework.getPort();
+    const port = this.mainApp.getPort();
+    // ...
+  }
+}
+```
 
 
 
