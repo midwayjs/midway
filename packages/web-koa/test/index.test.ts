@@ -774,5 +774,37 @@ describe('/test/feature.test.ts', () => {
 
       await closeApp(app);
     });
+
+    it('should test app methods existence', async () => {
+      @Controller()
+      class HomeController {
+        @Get('/')
+        async query() {
+          return 'hello world'
+        }
+      }
+      const app = await createLightApp('', {
+        imports: [
+          require('../src'),
+        ],
+        preloadModules: [
+          HomeController
+        ],
+        globalConfig: {
+          keys: '123',
+          koa: {
+            port: null, // 不监听端口
+          }
+        }
+      }) as IMidwayKoaApplication;
+
+      await sleep();
+
+      // 验证 app 实例上的方法是否存在
+      expect(typeof app.generateController).toBe('function');
+      expect(typeof app.getPort).toBe('function');
+
+      await closeApp(app);
+    });
   });
 });

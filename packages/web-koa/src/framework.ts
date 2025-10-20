@@ -19,7 +19,6 @@ import {
   IMidwayKoaApplication,
   IMidwayKoaConfigurationOptions,
   IMidwayKoaContext,
-  IWebMiddleware,
 } from './interface';
 import * as Router from '@koa/router';
 import type { DefaultState, Middleware, Next } from 'koa';
@@ -234,7 +233,10 @@ export class MidwayKoaFramework extends BaseFramework<
       this.webRouterService
     );
 
-    this.defineApplicationProperties();
+    this.defineApplicationProperties({
+      generateController: this.generateController.bind(this),
+      getPort: this.getPort.bind(this),
+    });
 
     // hack use method
     (this.app as any).originUse = this.app.use;
@@ -258,17 +260,6 @@ export class MidwayKoaFramework extends BaseFramework<
     routeInfo: RouterInfo
   ): Middleware<DefaultState, IMidwayKoaContext> {
     return this.generator.generateKoaController(routeInfo);
-  }
-
-  /**
-   * @deprecated
-   * @param middlewareId
-   */
-  public async generateMiddleware(middlewareId: any) {
-    const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
-      middlewareId
-    );
-    return mwIns.resolve();
   }
 
   public async run(): Promise<void> {
