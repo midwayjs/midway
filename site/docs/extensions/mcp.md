@@ -422,32 +422,7 @@ JWT payload 应包含以下标准字段：
 }
 ```
 
-客户端使用示例。
 
-```typescript
-// 客户端发送带有 JWT token 的请求
-const client = new Client({
-  name: 'my-client',
-  version: '1.0.0'
-});
-
-const transport = new StreamableHTTPClientTransport(
-  new URL('http://localhost:3000/mcp'),
-  {
-    headers: {
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-    }
-  }
-);
-
-await client.connect(transport);
-
-// 现在所有的工具调用都会自动包含认证信息
-const result = await client.callTool({
-  name: 'secure_operation',
-  arguments: {}
-});
-```
 
 
 
@@ -756,7 +731,14 @@ const client = new Client({
 
 // 创建 StreamHTTP 传输
 const transport = new StreamableHTTPClientTransport(
-  new URL('http://localhost:3000/mcp')
+  new URL('http://localhost:3000/mcp'),
+  {
+    requestInit: {
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+      }
+    }
+  }
 );
 
 // 连接到服务器
@@ -781,31 +763,7 @@ console.log('Tool result:', result);
 await client.close();
 ```
 
-### SSE 客户端 (传统方式)
 
-```typescript
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
-
-// 创建客户端实例
-const client = new Client({
-  name: 'my-mcp-client',
-  version: '1.0.0'
-});
-
-// 创建 SSE 传输
-const transport = new SSEClientTransport(
-  new URL('http://localhost:3000/sse')
-);
-
-// 连接到服务器
-await client.connect(transport);
-
-// 使用客户端...
-
-// 使用完毕后关闭连接
-await client.close();
-```
 
 ### Stdio 客户端 (进程通信)
 
@@ -822,7 +780,7 @@ const client = new Client({
 // 创建 Stdio 传输，启动 MCP 服务器进程
 const transport = new StdioClientTransport({
   command: 'node',
-  args: ['dist/bootstrap.js'],
+  args: ['bootstrap.js'],
   env: {
     NODE_ENV: 'production',
     // 继承当前进程的环境变量
@@ -867,7 +825,7 @@ await client.close();
 **传输类型选择建议**：
 - **StreamHTTP**: 适用于网络服务、微服务架构、Web 应用集成
 - **SSE**: 传统方式，主要用于向下兼容
-- **Stdio**: 适用于命令行工具、本地脚本、桌面应用集成（如 Claude Desktop、Cursor 等 AI 编辑器）
+- **Stdio**: 适用于命令行工具、本地脚本、桌面应用集成（如 Claude Desktop、Cursor、Trae 等 AI 编辑器）
 :::
 
 ### 与编辑器集成
@@ -881,7 +839,7 @@ stdio 示例如下：
   "mcpServers": {
     "my-midway-mcp-server": {
       "command": "node",
-      "args": ["dist/bootstrap.js"],
+      "args": ["bootstrap.js"],
       "env": {
         "NODE_ENV": "production"
       }
@@ -1004,6 +962,8 @@ A: 当前版本每个应用实例只支持一种传输类型。如需支持多�
 ### Q: 如何调试 MCP 服务？
 
 A: 使用日志记录、MCP 客户端工具进行测试，或者使用官方提供的 [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector)
+
+
 
 ## 相关链接
 

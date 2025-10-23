@@ -550,7 +550,14 @@ const client = new Client({
 
 // Create a StreamHTTP transport
 const transport = new StreamableHTTPClientTransport(
-  new URL('http://localhost:3000/mcp')
+  new URL('http://localhost:3000/mcp'),
+  {
+    requestInit: {
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+      }
+    }
+  }
 );
 
 // Connect to the server
@@ -575,31 +582,7 @@ console.log('Tool result:', result);
 await client.close();
 ```
 
-### SSE client (legacy)
 
-```typescript
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
-
-// Create a client instance
-const client = new Client({
-  name: 'my-mcp-client',
-  version: '1.0.0'
-});
-
-// Create an SSE transport
-const transport = new SSEClientTransport(
-  new URL('http://localhost:3000/sse')
-);
-
-// Connect to the server
-await client.connect(transport);
-
-// Use the client...
-
-// Close the connection when done
-await client.close();
-```
 
 ### Stdio client (process communication)
 
@@ -616,7 +599,7 @@ const client = new Client({
 // Create a Stdio transport and start the MCP server process
 const transport = new StdioClientTransport({
   command: 'node',
-  args: ['dist/bootstrap.js'],
+  args: ['bootstrap.js'],
   env: {
     NODE_ENV: 'production',
     // Inherit environment variables from the current process
@@ -661,7 +644,7 @@ await client.close();
 Transport selection suggestions:
 - StreamHTTP: Suitable for network services, microservices architectures, and web app integrations
 - SSE: Legacy approach, mainly for backward compatibility
-- Stdio: Suitable for command-line tools, local scripts, and desktop app integrations (e.g., Claude Desktop, Cursor, and other AI editors)
+- Stdio: Suitable for command-line tools, local scripts, and desktop app integrations (e.g., Claude Desktop, Cursor, Trae, and other AI editors)
 :::
 
 ### Editor integration
@@ -675,7 +658,7 @@ Example using stdio:
   "mcpServers": {
     "my-midway-mcp-server": {
       "command": "node",
-      "args": ["dist/bootstrap.js"],
+      "args": ["bootstrap.js"],
       "env": {
         "NODE_ENV": "production"
       }
@@ -765,32 +748,7 @@ The JWT payload should contain the following standard fields:
 }
 ```
 
-Client usage example:
 
-```typescript
-// Client sends request with JWT token
-const client = new Client({
-  name: 'my-client',
-  version: '1.0.0'
-});
-
-const transport = new StreamableHTTPClientTransport(
-  new URL('http://localhost:3000/mcp'),
-  {
-    headers: {
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-    }
-  }
-);
-
-await client.connect(transport);
-
-// Now all tool calls will automatically include authentication information
-const result = await client.callTool({
-  name: 'secure_operation',
-  arguments: {}
-});
-```
 
 
 
@@ -999,7 +957,7 @@ A: The current version supports only one transport type per application instance
 
 ### Q: How do I debug MCP services?
 
-A: Use logging, MCP client tools for testing, or the official [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
+A: Use logging, MCP client tools for testing, or the official `https://modelcontextprotocol.io/docs/tools/inspector`
 
 ## Related links
 
