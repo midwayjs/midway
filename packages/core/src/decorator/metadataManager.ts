@@ -20,7 +20,10 @@ enum ObjectType {
  * @since 4.0.0
  */
 export class MetadataManager {
-  protected static readonly metadataSymbol = Symbol.for('midway.metadata');
+  private static _metadataStore = new WeakMap<
+    ClassType | object,
+    Record<string | symbol, any>
+  >();
   protected static readonly metadataClassSymbol = Symbol.for(
     'midway.metadata.class'
   );
@@ -153,7 +156,7 @@ export class MetadataManager {
    */
   public static hasMetadata(
     metadataKey: string | symbol,
-    target: ClassType,
+    target: ClassType | object,
     propertyKey?: string | symbol
   ): boolean {
     target = this.formatTarget(target);
@@ -165,7 +168,7 @@ export class MetadataManager {
    */
   public static hasOwnMetadata(
     metadataKey: string | symbol,
-    target: ClassType,
+    target: ClassType | object,
     propertyKey?: string | symbol
   ): boolean {
     return this.getOwnMetadata(metadataKey, target, propertyKey) !== undefined;
@@ -176,7 +179,7 @@ export class MetadataManager {
    */
   public static deleteMetadata(
     metadataKey: string | symbol,
-    target: ClassType,
+    target: ClassType | object,
     propertyKey?: string | symbol
   ): void {
     target = this.formatTarget(target);
@@ -186,7 +189,7 @@ export class MetadataManager {
     } else {
       delete _metadata[this.metadataClassSymbol][metadataKey];
     }
-    this.invalidateCache(metadataKey, target, propertyKey);
+    this.invalidateCache(metadataKey, target as ClassType, propertyKey);
   }
 
   /**
@@ -529,20 +532,13 @@ export class MetadataManager {
      *    }
      *  }
      */
-    // eslint-disable-next-line no-prototype-builtins
-    if (!target.hasOwnProperty(this.metadataSymbol)) {
-      const _metadata = {
+    if (!this._metadataStore.has(target)) {
+      this._metadataStore.set(target, {
         [this.metadataClassSymbol]: Object.create(null),
         [this.metadataPropertySymbol]: Object.create(null),
-      };
-      Object.defineProperty(target, this.metadataSymbol, {
-        value: _metadata,
-        enumerable: false,
-        configurable: false,
       });
-      return _metadata;
     }
-    return target[this.metadataSymbol];
+    return this._metadataStore.get(target);
   }
 
   private static invalidateCache(
@@ -555,15 +551,20 @@ export class MetadataManager {
 
     // Remove the specific cache
     // eslint-disable-next-line no-prototype-builtins
-    if (target.hasOwnProperty(this.cacheSymbol)) {
-      delete target[this.cacheSymbol]?.[unionKey];
+    if (this.hasOwnProperty(target, this.cacheSymbol)) {
+      delete this.getOwnProperty(target, this.cacheSymbol)?.[unionKey];
     }
 
     // Execute hooks, passing the unionKey to clear
-    const cleanHooks = target[this.cleanHooksSymbol] as Array<CleanHook>;
+    const cleanHooks = this.getOwnProperty<Array<CleanHook>>(
+      target,
+      this.cleanHooksSymbol
+    );
     if (cleanHooks) {
-      target[this.cleanHooksSymbol] = cleanHooks.filter(
-        hook => !hook(unionKey)
+      this.setOwnProperty(
+        target,
+        this.cleanHooksSymbol,
+        cleanHooks.filter(hook => !hook(unionKey))
       );
     }
   }
@@ -580,38 +581,31 @@ export class MetadataManager {
     if (target !== protoTarget) {
       this.validCacheConstruct(protoTarget);
       // Register a clean hook to the prototype target and clean the cache when the prototype target value is changed
-      (protoTarget[this.cleanHooksSymbol] as Array<CleanHook>).push(
-        (keyToClear: string) => {
-          // Only delete cache if the key matches
-          if (keyToClear === unionKey) {
-            delete target[this.cacheSymbol]?.[unionKey];
-            // Indicates that this hook can be removed
-            return true;
-          }
-          return false;
+      this.getOwnProperty<Array<CleanHook>>(
+        protoTarget,
+        this.cleanHooksSymbol
+      ).push((keyToClear: string) => {
+        // Only delete cache if the key matches
+        if (keyToClear === unionKey) {
+          delete this.getOwnProperty(target, this.cacheSymbol)?.[unionKey];
+          // Indicates that this hook can be removed
+          return true;
         }
-      );
+        return false;
+      });
     }
-    target[this.cacheSymbol][unionKey] = value;
+    this.getOwnProperty(target, this.cacheSymbol)[unionKey] = value;
   }
 
   private static validCacheConstruct(target) {
+    const metadata = this.getOrCreateMetaObject(target);
     // eslint-disable-next-line no-prototype-builtins
-    if (!target.hasOwnProperty(this.cacheSymbol)) {
-      Object.defineProperty(target, this.cacheSymbol, {
-        value: Object.create(null),
-        enumerable: false,
-        configurable: false,
-      });
+    if (!metadata[this.cacheSymbol]) {
+      metadata[this.cacheSymbol] = Object.create(null);
     }
-    // eslint-disable-next-line no-prototype-builtins
-    if (!target.hasOwnProperty(this.cleanHooksSymbol)) {
-      Object.defineProperty(target, this.cleanHooksSymbol, {
-        value: [],
-        enumerable: false,
-        configurable: false,
-        writable: true,
-      });
+
+    if (!metadata[this.cleanHooksSymbol]) {
+      metadata[this.cleanHooksSymbol] = [];
     }
   }
 
@@ -620,12 +614,9 @@ export class MetadataManager {
     target: ClassType,
     propertyKey?: string | symbol
   ): any {
-    // eslint-disable-next-line no-prototype-builtins
-    if (target.hasOwnProperty(this.cacheSymbol)) {
-      return target[this.cacheSymbol]?.[
-        this.getUnionKey(metadataKey, propertyKey)
-      ];
-    }
+    return this.getOwnProperty(target, this.cacheSymbol)?.[
+      this.getUnionKey(metadataKey, propertyKey)
+    ];
   }
 
   private static getUnionKey(
@@ -638,10 +629,7 @@ export class MetadataManager {
   }
 
   private static formatTarget(target: any) {
-    // eslint-disable-next-line no-prototype-builtins
-    let ret: ObjectType = target.hasOwnProperty(this.isClassSymbol)
-      ? target[this.isClassSymbol]
-      : undefined;
+    let ret: ObjectType = this.getOwnProperty(target, this.isClassSymbol);
     if (!ret) {
       const isClassRet = isClass(target);
       if (isClassRet) {
@@ -652,11 +640,7 @@ export class MetadataManager {
         ret = ObjectType.Object;
       }
 
-      Object.defineProperty(target, this.isClassSymbol, {
-        value: ret,
-        enumerable: false,
-        configurable: false,
-      });
+      this.setOwnProperty(target, this.isClassSymbol, ret);
     }
 
     return ret === ObjectType.Instance ? target.constructor : target;
@@ -664,15 +648,41 @@ export class MetadataManager {
 
   public static ensureTargetType(target: any, type: ObjectType): void {
     // eslint-disable-next-line no-prototype-builtins
-    const ret: ObjectType = target.hasOwnProperty(this.isClassSymbol)
-      ? target[this.isClassSymbol]
-      : undefined;
+    const ret: ObjectType = this.getOwnProperty(target, this.isClassSymbol);
     if (!ret) {
-      Object.defineProperty(target, this.isClassSymbol, {
-        value: type,
-        enumerable: false,
-        configurable: false,
-      });
+      this.setOwnProperty(target, this.isClassSymbol, type);
     }
+  }
+
+  private static getOwnProperty<T>(
+    target,
+    propertyKey: string | symbol
+  ): T | undefined {
+    const _metadata = this.getOrCreateMetaObject(target);
+    return _metadata[propertyKey] ?? undefined;
+  }
+
+  private static hasOwnProperty(target, propertyKey: string | symbol): boolean {
+    if (!this._metadataStore.has(target)) {
+      return false;
+    }
+    const _metadata = this._metadataStore.get(target);
+    return _metadata[propertyKey] !== undefined;
+  }
+
+  private static setOwnProperty(
+    target,
+    propertyKey: string | symbol,
+    value: any
+  ): void {
+    const _metadata = this.getOrCreateMetaObject(target);
+    _metadata[propertyKey] = value;
+  }
+
+  public static clear(): void {
+    this._metadataStore = new WeakMap<
+      ClassType | object,
+      Record<string | symbol, any>
+    >();
   }
 }

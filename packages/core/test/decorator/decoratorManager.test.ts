@@ -11,6 +11,7 @@ import {
 describe('/test/decoratorManager.test.ts', () => {
   afterEach(() => {
     DecoratorManager.clearAllModule();
+    MetadataManager.clear();
   });
 
   it('should save and list preload module', () => {
