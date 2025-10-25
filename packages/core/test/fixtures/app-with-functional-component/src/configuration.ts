@@ -5,10 +5,10 @@ import { defineConfiguration } from '../../../../src/functional';
 export default defineConfiguration({
   imports: [createHooks],
   async onReady() {
-    console.log('on ready in hooks');
+    console.log('on ready in main');
   },
   async onStop() {
-    console.log('on ready in hooks');
+    console.log('on ready in main');
   },
   async onConfigLoad() {
     await sleep(50);

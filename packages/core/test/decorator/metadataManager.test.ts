@@ -501,4 +501,138 @@ describe('MetadataManager.test.ts', () => {
       });
     });
   });
+
+  describe('MetadataManager Object Type Tests', () => {
+    it('should handle Object type with ensureTargetType and defineMetadata', () => {
+      const configuration = {};
+      const options = {
+        namespace: 'test-namespace',
+        detector: 'test-detector',
+        onReady: () => console.log('ready')
+      };
+
+      // 模拟 defineConfiguration 的行为
+      MetadataManager.ensureTargetType(
+        configuration,
+        MetadataManager.ObjectType.Object
+      );
+      MetadataManager.defineMetadata(
+        'test-configuration-key',
+        options,
+        configuration
+      );
+
+      // 验证元数据能被正确存储和读取
+      expect(MetadataManager.hasOwnMetadata('test-configuration-key', configuration)).toBe(true);
+      expect(MetadataManager.getOwnMetadata('test-configuration-key', configuration)).toEqual(options);
+      expect(MetadataManager.getOwnMetadata('test-configuration-key', configuration).namespace).toBe('test-namespace');
+    });
+
+    it('should preserve all properties when storing Object metadata', () => {
+      const obj = {};
+      const complexOptions = {
+        namespace: 'hooks',
+        detector: { type: 'custom', modules: ['ModuleA', 'ModuleB'] },
+        imports: ['import1', 'import2'],
+        onReady: async () => 'ready',
+        onStop: async () => 'stop',
+        customProp: { nested: { value: 42 } }
+      };
+
+      MetadataManager.ensureTargetType(obj, MetadataManager.ObjectType.Object);
+      MetadataManager.defineMetadata('complex-config', complexOptions, obj);
+
+      const retrieved = MetadataManager.getOwnMetadata('complex-config', obj);
+      expect(retrieved).toEqual(complexOptions);
+      expect(retrieved.namespace).toBe('hooks');
+      expect(retrieved.detector.modules).toEqual(['ModuleA', 'ModuleB']);
+      expect(retrieved.customProp.nested.value).toBe(42);
+    });
+
+    it('should handle multiple metadata keys on same Object', () => {
+      const obj = {};
+      MetadataManager.ensureTargetType(obj, MetadataManager.ObjectType.Object);
+
+      MetadataManager.defineMetadata('key1', { value: 'test1' }, obj);
+      MetadataManager.defineMetadata('key2', { value: 'test2' }, obj);
+
+      expect(MetadataManager.hasOwnMetadata('key1', obj)).toBe(true);
+      expect(MetadataManager.hasOwnMetadata('key2', obj)).toBe(true);
+      expect(MetadataManager.getOwnMetadata('key1', obj).value).toBe('test1');
+      expect(MetadataManager.getOwnMetadata('key2', obj).value).toBe('test2');
+    });
+
+    it('should correctly handle functional configuration workflow with ensureTargetType', () => {
+      // 模拟 defineConfiguration 的完整工作流程
+      const CONFIGURATION_OBJECT_KEY = 'common:configuration_object';
+
+      // 创建一个功能配置选项，包含命名空间
+      const configOptions = {
+        namespace: 'hooks',
+        detector: { modules: ['TestModule'] },
+        onReady: async () => console.log('ready'),
+        onStop: async () => console.log('stop'),
+        imports: ['some-import']
+      };
+
+      // 创建配置对象
+      const configuration = { options: configOptions };
+
+      // 执行 defineConfiguration 的关键步骤
+      MetadataManager.ensureTargetType(
+        configuration,
+        MetadataManager.ObjectType.Object
+      );
+      MetadataManager.defineMetadata(
+        CONFIGURATION_OBJECT_KEY,
+        configOptions,
+        configuration
+      );
+
+      // 验证目标类型被正确设置（通过formatTarget的行为来验证）
+      // 如果ensureTargetType正确工作，formatTarget应该返回原对象
+      const formattedTarget = MetadataManager['formatTarget'](configuration);
+      expect(formattedTarget).toBe(configuration);
+
+      // 验证元数据被正确存储
+      expect(MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, configuration)).toBe(true);
+
+      // 验证配置选项完整性，特别是 namespace
+      const storedConfig = MetadataManager.getOwnMetadata(CONFIGURATION_OBJECT_KEY, configuration);
+      expect(storedConfig).toEqual(configOptions);
+      expect(storedConfig.namespace).toBe('hooks');
+      expect(storedConfig.detector.modules).toEqual(['TestModule']);
+
+      // 模拟组件加载器读取配置的过程
+      if (MetadataManager.hasOwnMetadata(CONFIGURATION_OBJECT_KEY, configuration)) {
+        const configurationOptions = MetadataManager.getOwnMetadata(CONFIGURATION_OBJECT_KEY, configuration);
+        expect(configurationOptions.namespace).toBe('hooks');
+        expect(configurationOptions).toBeDefined();
+      } else {
+        fail('Configuration metadata should be found');
+      }
+    });
+
+    it('should detect ensureTargetType implementation correctness', () => {
+      const obj = {};
+
+      // 清除任何可能存在的元数据
+      MetadataManager.clear();
+
+      // 调用 ensureTargetType
+      MetadataManager.ensureTargetType(obj, MetadataManager.ObjectType.Object);
+
+      // 关键测试：验证 isClassSymbol 是否被存储在元数据系统中
+      // 如果使用错误的 Object.defineProperty，这个测试会失败
+      const hasSymbolInMetadata = MetadataManager['hasOwnProperty'](obj, MetadataManager['isClassSymbol']);
+      expect(hasSymbolInMetadata).toBe(true);
+
+      // 验证能通过元数据系统读取到类型
+      const typeFromMetadata = MetadataManager['getOwnProperty'](obj, MetadataManager['isClassSymbol']);
+      expect(typeFromMetadata).toBe(MetadataManager.ObjectType.Object);
+
+      // 验证不会在对象本身上创建属性
+      expect(obj.hasOwnProperty(MetadataManager['isClassSymbol'])).toBe(false);
+    });
+  });
 });

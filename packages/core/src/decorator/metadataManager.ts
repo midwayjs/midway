@@ -156,7 +156,7 @@ export class MetadataManager {
    */
   public static hasMetadata(
     metadataKey: string | symbol,
-    target: ClassType,
+    target: ClassType | object,
     propertyKey?: string | symbol
   ): boolean {
     target = this.formatTarget(target);
@@ -168,7 +168,7 @@ export class MetadataManager {
    */
   public static hasOwnMetadata(
     metadataKey: string | symbol,
-    target: ClassType,
+    target: ClassType | object,
     propertyKey?: string | symbol
   ): boolean {
     return this.getOwnMetadata(metadataKey, target, propertyKey) !== undefined;
@@ -179,7 +179,7 @@ export class MetadataManager {
    */
   public static deleteMetadata(
     metadataKey: string | symbol,
-    target: ClassType,
+    target: ClassType | object,
     propertyKey?: string | symbol
   ): void {
     target = this.formatTarget(target);
@@ -189,7 +189,7 @@ export class MetadataManager {
     } else {
       delete _metadata[this.metadataClassSymbol][metadataKey];
     }
-    this.invalidateCache(metadataKey, target, propertyKey);
+    this.invalidateCache(metadataKey, target as ClassType, propertyKey);
   }
 
   /**
@@ -650,11 +650,7 @@ export class MetadataManager {
     // eslint-disable-next-line no-prototype-builtins
     const ret: ObjectType = this.getOwnProperty(target, this.isClassSymbol);
     if (!ret) {
-      Object.defineProperty(target, this.isClassSymbol, {
-        value: type,
-        enumerable: false,
-        configurable: false,
-      });
+      this.setOwnProperty(target, this.isClassSymbol, type);
     }
   }
 
