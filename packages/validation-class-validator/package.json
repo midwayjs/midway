@@ -2,10 +2,19 @@
   "name": "@midwayjs/validation-class-validator",
   "version": "4.0.0-beta.5",
   "description": "Midway validation component based on class-validator",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "typings": "index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup src/index.ts --format cjs,esm --dts --out-dir dist",
     "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
     "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
     "ci": "npm run test"
@@ -18,7 +27,9 @@
   "author": "",
   "files": [
     "dist/**/*.js",
+    "dist/**/*.mjs",
     "dist/**/*.d.ts",
+    "dist/**/*.d.mts",
     "i18n",
     "index.d.ts"
   ],
@@ -32,6 +43,7 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:*",
     "@midwayjs/mock": "workspace:*",
-    "class-validator": "^0.14.1"
+    "class-validator": "^0.14.1",
+    "tsup": "8.5.0"
   }
 }
