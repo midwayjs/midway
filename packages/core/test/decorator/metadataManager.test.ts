@@ -387,7 +387,12 @@ describe('MetadataManager.test.ts', () => {
       }
 
       public static hooksSize(target) {
-        return target[this.cleanHooksSymbol].length;
+        if (!this['_metadataStore'].has(target)) {
+          return 0;
+        }
+        const metadata = this['_metadataStore'].get(target);
+        const hooks = metadata?.[this.cleanHooksSymbol];
+        return hooks ? hooks.length : 0;
       }
     }
 

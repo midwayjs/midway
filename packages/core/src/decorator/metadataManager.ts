@@ -556,11 +556,16 @@ export class MetadataManager {
     }
 
     // Execute hooks, passing the unionKey to clear
-    const cleanHooks = this.getOwnProperty<Array<CleanHook>>(target, this.cleanHooksSymbol);
+    const cleanHooks = this.getOwnProperty<Array<CleanHook>>(
+      target,
+      this.cleanHooksSymbol
+    );
     if (cleanHooks) {
-      this.setOwnProperty(target, this.cleanHooksSymbol, cleanHooks.filter(
-        hook => !hook(unionKey)
-      ));
+      this.setOwnProperty(
+        target,
+        this.cleanHooksSymbol,
+        cleanHooks.filter(hook => !hook(unionKey))
+      );
     }
   }
 
@@ -576,17 +581,18 @@ export class MetadataManager {
     if (target !== protoTarget) {
       this.validCacheConstruct(protoTarget);
       // Register a clean hook to the prototype target and clean the cache when the prototype target value is changed
-      this.getOwnProperty<Array<CleanHook>>(protoTarget, this.cleanHooksSymbol).push(
-        (keyToClear: string) => {
-          // Only delete cache if the key matches
-          if (keyToClear === unionKey) {
-            delete this.getOwnProperty(target, this.cacheSymbol)?.[unionKey];
-            // Indicates that this hook can be removed
-            return true;
-          }
-          return false;
+      this.getOwnProperty<Array<CleanHook>>(
+        protoTarget,
+        this.cleanHooksSymbol
+      ).push((keyToClear: string) => {
+        // Only delete cache if the key matches
+        if (keyToClear === unionKey) {
+          delete this.getOwnProperty(target, this.cacheSymbol)?.[unionKey];
+          // Indicates that this hook can be removed
+          return true;
         }
-      );
+        return false;
+      });
     }
     this.getOwnProperty(target, this.cacheSymbol)[unionKey] = value;
   }
@@ -608,8 +614,9 @@ export class MetadataManager {
     target: ClassType,
     propertyKey?: string | symbol
   ): any {
-    const metadata = this.getOrCreateMetaObject(target);
-    return this.getOwnProperty(metadata, this.cacheSymbol)?.[this.getUnionKey(metadataKey, propertyKey)];
+    return this.getOwnProperty(target, this.cacheSymbol)?.[
+      this.getUnionKey(metadataKey, propertyKey)
+    ];
   }
 
   private static getUnionKey(
@@ -651,7 +658,10 @@ export class MetadataManager {
     }
   }
 
-  private static getOwnProperty<T>(target, propertyKey: string | symbol): T | undefined {
+  private static getOwnProperty<T>(
+    target,
+    propertyKey: string | symbol
+  ): T | undefined {
     const _metadata = this.getOrCreateMetaObject(target);
     return _metadata[propertyKey] ?? undefined;
   }
@@ -664,12 +674,19 @@ export class MetadataManager {
     return _metadata[propertyKey] !== undefined;
   }
 
-  private static setOwnProperty(target, propertyKey: string | symbol, value: any): void {
+  private static setOwnProperty(
+    target,
+    propertyKey: string | symbol,
+    value: any
+  ): void {
     const _metadata = this.getOrCreateMetaObject(target);
     _metadata[propertyKey] = value;
   }
 
   public static clear(): void {
-    this._metadataStore = new WeakMap<ClassType | object, Record<string | symbol, any>>();
+    this._metadataStore = new WeakMap<
+      ClassType | object,
+      Record<string | symbol, any>
+    >();
   }
 }
