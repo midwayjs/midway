@@ -1620,8 +1620,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       '@types/koa-router':
-        specifier: 7.4.8
-        version: 7.4.8
+        specifier: 7.4.9
+        version: 7.4.9
       axios:
         specifier: 1.12.0
         version: 1.12.0
@@ -3434,6 +3434,9 @@ packages:
 
   '@types/koa-router@7.4.8':
     resolution: {integrity: sha512-SkWlv4F9f+l3WqYNQHnWjYnyTxYthqt8W9az2RTdQW7Ay8bc00iRZcrb8MC75iEfPqnGcg2csEl8tTG1NQPD4A==}
+
+  '@types/koa-router@7.4.9':
+    resolution: {integrity: sha512-YibkqJrFWwwF55YtZo6dORpMj/1zfweHHIZA/qpA+2JPcVbBopAvLjejTcO1ojWAJfzf1tPC+CrPnLDuVRkUEA==}
 
   '@types/koa@2.15.0':
     resolution: {integrity: sha512-7QFsywoE5URbuVnG3loe03QXuGajrnotr3gQkXcEBShORai23MePfFYdhz90FEtBBpkyIYQbVD+evKtloCgX3g==}
@@ -12848,6 +12851,10 @@ snapshots:
       '@types/koa': 3.0.0
 
   '@types/koa-router@7.4.8':
+    dependencies:
+      '@types/koa': 3.0.0
+
+  '@types/koa-router@7.4.9':
     dependencies:
       '@types/koa': 3.0.0
 

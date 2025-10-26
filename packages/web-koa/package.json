@@ -26,7 +26,7 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "@types/koa-router": "7.4.8",
+    "@types/koa-router": "7.4.9",
     "axios": "1.12.0",
     "fs-extra": "11.3.0"
   },
