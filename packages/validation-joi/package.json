@@ -26,8 +26,7 @@
     "dist/**/*.mjs",
     "dist/**/*.d.ts",
     "dist/**/*.d.mts",
-    "index.d.ts",
-    "locales"
+    "index.d.ts"
   ],
   "engines": {
     "node": ">=20"

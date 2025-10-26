@@ -30,7 +30,6 @@
     "dist/**/*.mjs",
     "dist/**/*.d.ts",
     "dist/**/*.d.mts",
-    "i18n",
     "index.d.ts"
   ],
   "license": "MIT",
