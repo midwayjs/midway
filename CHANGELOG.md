@@ -1,6 +1,27 @@
 # Change Log
 
 
+## v4.0.0-beta.6 (2025-10-26)
+
+#### :bug: Bug Fix
+* `core`, `validation-class-validator`, `validation-joi`, `validation-zod`, `web-koa`
+  * [#4425](https://github.com/midwayjs/midway/pull/4425) fix: esm metadata support ([@czy88840616](https://github.com/czy88840616))
+* `web-koa`
+  * [#4422](https://github.com/midwayjs/midway/pull/4422) fix: add missing app property ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `web-express`
+  * [#4426](https://github.com/midwayjs/midway/pull/4426) chore(deps): update dependency @types/express to v4.17.24 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4421](https://github.com/midwayjs/midway/pull/4421) chore(deps): update dependency @vercel/ncc to v0.38.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `consul`
+  * [#4415](https://github.com/midwayjs/midway/pull/4415) chore(deps): update dependency @types/sinon to v17.0.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.5 (2025-10-19)
 
 #### :nail_care: Polish

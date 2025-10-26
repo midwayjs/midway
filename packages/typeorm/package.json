@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/typeorm",
-  "version": "4.0.0-beta.5",
+  "version": "4.0.0-beta.6",
   "description": "Midway Component for TypeORM",
   "main": "dist/index.js",
   "typings": "index.d.ts",
