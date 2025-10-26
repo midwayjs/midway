@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -8,5 +8,5 @@ export default defineConfig({
   platform: 'node',
   target: 'node20',
   // 只排除 devDependencies 中的关键包
-  external: ['zod', '@midwayjs/core']
-})
+  external: ['zod', '@midwayjs/core'],
+});
