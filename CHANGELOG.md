@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v4.0.0-beta.7 (2025-10-26)
+
+#### :bug: Bug Fix
+* `validation-class-validator`, `validation-joi`, `validation-zod`
+  * [#4428](https://github.com/midwayjs/midway/pull/4428) fix: esm pkg will exclude internal package ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.6 (2025-10-26)
 
 #### :bug: Bug Fix
