@@ -14,7 +14,7 @@
   },
   "typings": "index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --out-dir dist",
+    "build": "tsup",
     "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
     "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
     "ci": "npm run test"
