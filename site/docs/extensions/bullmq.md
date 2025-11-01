@@ -411,6 +411,40 @@ export default {
 }
 ```
 
+### 获取任务处理器
+
+通过内置的方法，我们可以获取到原始的任务处理器（Worker）。
+
+可以启动任意多个 Worker 监听同一个队列，在这种情况下 BullMQ 会把队列中的任务轮流（round-robin）分配给这些 Worker。
+
+当队列中有任务被添加时，BullMQ 会在这两个 Worker 之间自动分配任务。
+
+我们可以通过方法 `getWorker` 获取到首个监听的 Worker 对象，也可以通过方法 `getWorkers` 获取到该队列监听的所有 Worker 对象。
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import * as bullmq from '@midwayjs/bullmq';
+
+@Configuration({
+  imports: [
+    // ...
+    bullmq,
+  ]
+})
+export class MainConfiguration {
+
+  @Inject()
+  bullmqFramework: bullmq.Framework;
+
+  async onServerReady() {
+    const testWorker = this.bullmqFramework.getWorker('test');
+    const allWorkers = this.bullmqFramework.getWorkers('test');
+  }
+}
+
+```
+
+
 ## 组件日志
 
 组件有着自己的日志，默认会将 `ctx.logger` 记录在 `midway-bullmq.log` 中。

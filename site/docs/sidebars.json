@@ -321,6 +321,7 @@
       "items": [
         "extensions/validate",
         "extensions/cache",
+        "extensions/bull",
         "extensions/upload",
         "legacy/mongodb",
         "legacy/sequelize",

@@ -411,6 +411,40 @@ export default {
 }
 ```
 
+### Getting Task Processors
+
+Through built-in methods, we can get the original task processors (Workers).
+
+You can start any number of Workers to listen to the same queue. In this case, BullMQ will distribute tasks in the queue to these Workers in a round-robin manner.
+
+When tasks are added to the queue, BullMQ will automatically distribute tasks between these Workers.
+
+We can get the first listening Worker object through the `getWorker` method, or get all Worker objects listening to the queue through the `getWorkers` method.
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import * as bullmq from '@midwayjs/bullmq';
+
+@Configuration({
+  imports: [
+    // ...
+    bullmq,
+  ]
+})
+export class MainConfiguration {
+
+  @Inject()
+  bullmqFramework: bullmq.Framework;
+
+  async onServerReady() {
+    const testWorker = this.bullmqFramework.getWorker('test');
+    const allWorkers = this.bullmqFramework.getWorkers('test');
+  }
+}
+
+```
+
+
 ## Component Logging
 
 The component has its own logs, by default recording `ctx.logger` in `midway-bullmq.log`.
