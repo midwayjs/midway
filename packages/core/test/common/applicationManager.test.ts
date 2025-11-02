@@ -20,7 +20,7 @@ describe('test/common/applicationManager.test.ts', () => {
     }
 
     const framework = new CustomFramework1({} as any);
-    framework.mockService = mockService;
+    framework['mockService'] = mockService;
     await framework.initialize();
 
     manager.addFramework('test', framework);

@@ -137,7 +137,7 @@ describe('/test/context/container.test.ts', () => {
       tt: any;
 
       @App()
-      a: any;
+      declare a: any;
 
       @Plugin()
       bb: any;
