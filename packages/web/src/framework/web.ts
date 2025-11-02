@@ -138,6 +138,7 @@ export class MidwayWebFramework extends BaseFramework<
     );
 
     this.overwriteApplication('app');
+    this.app.loader.app = this.app;
 
     (this.app.loader as any).loadOrigin();
     // 这里拦截 app.use 方法，让他可以加到 midway 的 middlewareManager 中
