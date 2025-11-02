@@ -71,8 +71,6 @@ export class MidwayWSFramework extends BaseFramework<
     await this.loadMidwayController();
   }
 
-  public app: IMidwayWSApplication;
-
   public async run(): Promise<void> {
     let server: http.Server;
     if (!this.configurationOptions.port) {

@@ -143,7 +143,7 @@ describe('MetadataManager.test.ts', () => {
       public method() {}
 
       @TestProperty()
-      public property: string;
+      public declare property: string;
     }
 
     new Child().method();

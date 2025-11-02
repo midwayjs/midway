@@ -20,7 +20,6 @@ export class MidwayMQTTFramework extends BaseFramework<
   IMidwayMQTTContext,
   IMidwayMQTTConfigurationOptions
 > {
-  public app: IMidwayMQTTApplication;
   protected subscriberMap: Map<string, MqttClient> = new Map();
   protected frameworkLoggerName = 'mqttLogger';
 

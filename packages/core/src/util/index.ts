@@ -89,6 +89,8 @@ export const loadModule = async (
       } else {
         // if json file, import need add options
         if (p.endsWith('.json')) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           return (await import(p, { with: { type: 'json' } })).default;
         } else {
           return await import(pathToFileURL(p).href);

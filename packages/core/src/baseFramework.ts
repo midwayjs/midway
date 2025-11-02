@@ -59,22 +59,22 @@ export abstract class BaseFramework<
   private namespace: string;
 
   @Inject()
-  loggerService: MidwayLoggerService;
+  protected loggerService: MidwayLoggerService;
 
   @Inject()
-  environmentService: MidwayEnvironmentService;
+  protected environmentService: MidwayEnvironmentService;
 
   @Inject()
-  configService: MidwayConfigService;
+  protected configService: MidwayConfigService;
 
   @Inject()
-  informationService: MidwayInformationService;
+  protected informationService: MidwayInformationService;
 
   @Inject()
-  middlewareService: MidwayMiddlewareService<CTX, ResOrNext, Next>;
+  protected middlewareService: MidwayMiddlewareService<CTX, ResOrNext, Next>;
 
   @Inject()
-  mockService: MidwayMockService;
+  protected mockService: MidwayMockService;
 
   constructor(readonly applicationContext: IMidwayGlobalContainer) {}
 

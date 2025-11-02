@@ -33,7 +33,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOOptions
 > {
   private namespaceList = [];
-  public app: Application;
   protected connectionMiddlewareManager = this.createMiddlewareManager();
 
   configure(): IMidwaySocketIOOptions {
