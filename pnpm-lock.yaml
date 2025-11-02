@@ -382,8 +382,8 @@ importers:
         specifier: 5.1.7
         version: 5.1.7
       typeorm:
-        specifier: 0.3.20
-        version: 0.3.20(ioredis@5.8.1)(mysql2@3.15.1)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.3.3))
+        specifier: 0.3.26
+        version: 0.3.26(ioredis@5.8.1)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.15.1)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.3.3))
 
   packages/code-dye:
     devDependencies:
@@ -1265,8 +1265,8 @@ importers:
         specifier: 5.1.7
         version: 5.1.7
       typeorm:
-        specifier: 0.3.20
-        version: 0.3.20(ioredis@5.8.1)(mysql2@3.15.1)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.3.3))
+        specifier: 0.3.26
+        version: 0.3.26(ioredis@5.8.1)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.15.1)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.3.3))
 
   packages/upload:
     dependencies:
@@ -3898,6 +3898,10 @@ packages:
   ansi-styles@6.2.3:
     resolution: {integrity: sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==}
     engines: {node: '>=12'}
+
+  ansis@3.17.0:
+    resolution: {integrity: sha512-0qWUglt9JEqLFr3w1I1pbrChn1grhaiAR2ocX1PP/flRmxgtwTzPFFFnfIlD6aMOLQZgSuCRlidD70lvx8yhzg==}
+    engines: {node: '>=14'}
 
   any-promise@1.3.0:
     resolution: {integrity: sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==}
@@ -7078,6 +7082,7 @@ packages:
   keygrip@1.1.0:
     resolution: {integrity: sha512-iYSchDJ+liQ8iwbSI2QqsQOvqv58eJCEanyJPJi+Khyu8smkcKSFUCbPwzFcL7YVtZ6eONjqRX/38caJ7QjRAQ==}
     engines: {node: '>= 0.6'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   keyv@3.1.0:
     resolution: {integrity: sha512-9ykJ/46SN/9KPM/sichzQ7OvXyGDYKGTaDlKMGCAlg2UK8KRy4jb0d8sFc+0Tt0YYnThq8X2RZgCg74RPxgcVA==}
@@ -7722,11 +7727,6 @@ packages:
 
   mkdirp@1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
-    engines: {node: '>=10'}
-    hasBin: true
-
-  mkdirp@2.1.6:
-    resolution: {integrity: sha512-+hEnITedc8LAtIP9u3HJDFIdcLV2vXP33sqLLIzkv1Db1zO/1OxbvYf0Y1OC/S/Qo5dxHXepofhmxL02PsKe+A==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -9594,6 +9594,10 @@ packages:
   sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
 
+  sql-highlight@6.1.0:
+    resolution: {integrity: sha512-ed7OK4e9ywpE7pgRMkMQmZDPKSVdm0oX5IEtZiKnFucSF0zu6c80GZBe38UqHuVhTWJ9xsKgSMjCG2bml86KvA==}
+    engines: {node: '>=14'}
+
   sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
 
@@ -10215,36 +10219,34 @@ packages:
     peerDependencies:
       typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x
 
-  typeorm@0.3.20:
-    resolution: {integrity: sha512-sJ0T08dV5eoZroaq9uPKBoNcGslHBR4E4y+EBHs//SiGbblGe7IeduP/IH4ddCcj0qp3PHwDwGnuvqEAnKlq/Q==}
+  typeorm@0.3.26:
+    resolution: {integrity: sha512-o2RrBNn3lczx1qv4j+JliVMmtkPSqEGpG0UuZkt9tCfWkoXKu8MZnjvp2GjWPll1SehwemQw6xrbVRhmOglj8Q==}
     engines: {node: '>=16.13.0'}
     hasBin: true
     peerDependencies:
-      '@google-cloud/spanner': ^5.18.0
-      '@sap/hana-client': ^2.12.25
-      better-sqlite3: ^7.1.2 || ^8.0.0 || ^9.0.0
-      hdb-pool: ^0.1.6
+      '@google-cloud/spanner': ^5.18.0 || ^6.0.0 || ^7.0.0
+      '@sap/hana-client': ^2.14.22
+      better-sqlite3: ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0
       ioredis: ^5.0.4
-      mongodb: ^5.8.0
-      mssql: ^9.1.1 || ^10.0.1
+      mongodb: ^5.8.0 || ^6.0.0
+      mssql: ^9.1.1 || ^10.0.1 || ^11.0.1
       mysql2: ^2.2.5 || ^3.0.1
       oracledb: ^6.3.0
       pg: ^8.5.1
       pg-native: ^3.0.0
       pg-query-stream: ^4.0.0
-      redis: ^3.1.1 || ^4.0.0
+      redis: ^3.1.1 || ^4.0.0 || ^5.0.14
+      reflect-metadata: ^0.1.14 || ^0.2.0
       sql.js: ^1.4.0
       sqlite3: ^5.0.3
       ts-node: ^10.7.0
-      typeorm-aurora-data-api-driver: ^2.0.0
+      typeorm-aurora-data-api-driver: ^2.0.0 || ^3.0.0
     peerDependenciesMeta:
       '@google-cloud/spanner':
         optional: true
       '@sap/hana-client':
         optional: true
       better-sqlite3:
-        optional: true
-      hdb-pool:
         optional: true
       ioredis:
         optional: true
@@ -13414,6 +13416,8 @@ snapshots:
 
   ansi-styles@6.2.3: {}
 
+  ansis@3.17.0: {}
+
   any-promise@1.3.0: {}
 
   anymatch@3.1.3:
@@ -16263,7 +16267,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.5
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -18361,8 +18365,6 @@ snapshots:
 
   mkdirp@1.0.4: {}
 
-  mkdirp@2.1.6: {}
-
   mlly@1.8.0:
     dependencies:
       acorn: 8.15.0
@@ -18514,7 +18516,7 @@ snapshots:
       array-differ: 3.0.0
       array-union: 2.1.0
       arrify: 2.0.1
-      minimatch: 3.0.5
+      minimatch: 3.1.2
 
   mustache@2.3.2: {}
 
@@ -20720,6 +20722,8 @@ snapshots:
 
   sprintf-js@1.0.3: {}
 
+  sql-highlight@6.1.0: {}
+
   sqlite3@5.1.7:
     dependencies:
       bindings: 1.5.0
@@ -21432,30 +21436,32 @@ snapshots:
       typescript: 5.3.3
       yaml: 2.8.1
 
-  typeorm@0.3.20(ioredis@5.8.1)(mysql2@3.15.1)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.3.3)):
+  typeorm@0.3.26(ioredis@5.8.1)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.15.1)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.3.3)):
     dependencies:
       '@sqltools/formatter': 1.2.5
+      ansis: 3.17.0
       app-root-path: 3.1.0
       buffer: 6.0.3
-      chalk: 4.1.2
-      cli-highlight: 2.1.11
       dayjs: 1.11.13
       debug: 4.4.3
+      dedent: 1.7.0
       dotenv: 16.4.7
       glob: 10.4.5
-      mkdirp: 2.1.6
       reflect-metadata: 0.2.2
       sha.js: 2.4.12
+      sql-highlight: 6.1.0
       tslib: 2.8.1
-      uuid: 9.0.1
+      uuid: 11.1.0
       yargs: 17.7.2
     optionalDependencies:
       ioredis: 5.8.1
+      mongodb: 6.12.0(socks@2.8.7)
       mysql2: 3.15.1
       redis: 3.1.2
       sqlite3: 5.1.7
       ts-node: 10.9.2(@types/node@22.12.0)(typescript@5.3.3)
     transitivePeerDependencies:
+      - babel-plugin-macros
       - supports-color
 
   typescript@3.9.10: {}
