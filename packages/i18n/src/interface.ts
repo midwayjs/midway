@@ -20,6 +20,7 @@ export interface I18nOptions {
   writeCookie: boolean;
   resolver:  RequestResolver | false,
   localsField: string;
+  missingKeyHandler?: (message: string, options?: TranslateOptions) => string;
 }
 
 export const I18N_ATTR_KEY = 'i18n:locale';

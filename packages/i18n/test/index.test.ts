@@ -91,6 +91,92 @@ describe('test/index.test.ts', () => {
     await close(app);
   });
 
+  it('should test missingKeyHandler with default behavior', async () => {
+    const app = await createLightApp(join(__dirname, './fixtures/base-app'), {
+      globalConfig: {
+        i18n: {
+          defaultLocale: 'en_US',
+          localeTable: {
+            en_US: {
+              'hello': 'hello world'
+            }
+          }
+        }
+      }
+    });
+
+    const i18nService = await app.getApplicationContext().getAsync(MidwayI18nService);
+
+    // Test existing key
+    expect(i18nService.translate('hello')).toEqual('hello world');
+
+    // Test missing key with default missingKeyHandler (should return the key itself)
+    expect(i18nService.translate('nonexistent_key')).toEqual('nonexistent_key');
+
+    await close(app);
+  });
+
+  it('should test custom missingKeyHandler', async () => {
+    const app = await createLightApp(join(__dirname, './fixtures/base-app'), {
+      globalConfig: {
+        i18n: {
+          defaultLocale: 'en_US',
+          localeTable: {
+            en_US: {
+              'hello': 'hello world'
+            }
+          },
+          missingKeyHandler: (message, options) => {
+            return `[Missing: ${message}${options?.locale ? ` (${options.locale})` : ''}]`;
+          }
+        }
+      }
+    });
+
+    const i18nService = await app.getApplicationContext().getAsync(MidwayI18nService);
+
+    // Test existing key
+    expect(i18nService.translate('hello')).toEqual('hello world');
+
+    // Test missing key with custom missingKeyHandler
+    expect(i18nService.translate('nonexistent_key')).toEqual('[Missing: nonexistent_key]');
+    expect(i18nService.translate('nonexistent_key', { locale: 'zh_CN' })).toEqual('[Missing: nonexistent_key (zh_CN)]');
+
+    await close(app);
+  });
+
+  it('should test missingKeyHandler with groups', async () => {
+    const app = await createLightApp(join(__dirname, './fixtures/base-app'), {
+      globalConfig: {
+        i18n: {
+          defaultLocale: 'en_US',
+          localeTable: {
+            en_US: {
+              'user': {
+                'hello': 'Hello user'
+              }
+            }
+          },
+          missingKeyHandler: (message, options) => {
+            const group = options?.group || 'default';
+            return `[${group}.${message}]`;
+          }
+        }
+      }
+    });
+
+    const i18nService = await app.getApplicationContext().getAsync(MidwayI18nService);
+
+    // Test existing key in group
+    expect(i18nService.translate('hello', { group: 'user' })).toEqual('Hello user');
+
+    // Test missing key in group
+    expect(i18nService.translate('goodbye', { group: 'user' })).toEqual('[user.goodbye]');
+    expect(i18nService.translate('goodbye')).toEqual('[default.goodbye]');
+
+    await close(app);
+  });
+
   it('should test fallbacks', async () => {
     const app = await createLightApp(join(__dirname, './fixtures/base-app'), {
       globalConfig: {

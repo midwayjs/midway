@@ -20,4 +20,5 @@ export const i18n: I18nOptions = {
     },
   },
   localsField: 'i18n',
+  missingKeyHandler: message => message,
 };
