@@ -8,6 +8,8 @@ export class PostController {
 
   @Get('')
   async get() {
-    return await this.postService.get();
+    const data = await this.postService.get();
+    console.log(data);
+    return data;
   }
 }
