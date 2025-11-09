@@ -31,8 +31,8 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/logger": "^3.0.0",
-    "@types/amqplib": "0.10.6",
-    "amqplib": "0.10.5",
+    "@types/amqplib": "0.10.8",
+    "amqplib": "0.10.9",
     "kafkajs": "2.2.4",
     "socket.io": "4.8.1",
     "socket.io-client": "4.8.1",

@@ -25,8 +25,8 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@types/amqplib": "0.10.6",
-    "amqplib": "0.10.5",
+    "@types/amqplib": "0.10.8",
+    "amqplib": "0.10.9",
     "fs-extra": "11.3.0"
   },
   "dependencies": {
