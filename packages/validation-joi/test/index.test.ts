@@ -87,7 +87,7 @@ describe('test/index.test.ts', () => {
 
       class HelloDTO extends UserDTO {
         @Rule(Joi.number().min(4))
-        age: number;
+        declare age: number;
       }
 
       @Provide()
@@ -677,7 +677,7 @@ describe('test/index.test.ts', () => {
         id: number;
 
         @Rule(Joi.string())
-        quantity: number;
+        declare quantity: number;
 
         @Rule(Joi.string())
         comment: string;

@@ -84,7 +84,7 @@ describe('test/index.test.ts', () => {
 
       class HelloDTO extends UserDTO {
         @Rule(z.number().min(4))
-        age: number;
+        declare age: number;
       }
 
       @Provide()

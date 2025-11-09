@@ -53,7 +53,10 @@ export class LeoricConfiguration {
         );
         const model = dataSource.models[getModelName(meta.modelName)];
         const app = instance[APPLICATION_KEY];
-        if (this.applicationContext.getInstanceScope(instance) === ScopeEnum.Request) {
+        if (
+          this.applicationContext.getInstanceScope(instance) ===
+          ScopeEnum.Request
+        ) {
           const ctx = instance[REQUEST_OBJ_CTX_KEY];
           return class extends model {
             static get ctx() {
