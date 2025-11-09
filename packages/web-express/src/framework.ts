@@ -39,7 +39,6 @@ export class MidwayExpressFramework extends BaseFramework<
   Response,
   NextFunction
 > {
-  public app: IMidwayExpressApplication;
   private server: Server;
   private expressMiddlewareService: MidwayExpressMiddlewareService;
   private webRouterService: MidwayWebRouterService;

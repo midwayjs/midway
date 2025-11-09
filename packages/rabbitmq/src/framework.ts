@@ -24,9 +24,6 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   IMidwayRabbitMQContext,
   IMidwayRabbitMQConfigurationOptions
 > {
-  public app: IMidwayRabbitMQApplication;
-  public consumerHandlerList = [];
-
   configure() {
     return this.configService.getConfiguration('rabbitmq');
   }

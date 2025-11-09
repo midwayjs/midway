@@ -2,6 +2,8 @@ import {
   IMidwayContainer,
   MetadataManager,
   MidwayConfigService,
+  loadModule,
+  MidwayEnvironmentService,
 } from '@midwayjs/core';
 import {
   getRuleMeta,
@@ -14,8 +16,6 @@ import { z, ParseParams } from 'zod';
 import { fromError } from 'zod-validation-error';
 import * as i18next from 'i18next';
 import { makeZodI18nMap } from 'zod-i18n-map';
-import * as en from 'zod-i18n-map/locales/en/zod.json';
-import * as cn from 'zod-i18n-map/locales/zh-CN/zod.json';
 import { MidwayI18nServiceSingleton } from '@midwayjs/i18n';
 
 // 将 i18n 的标准 locale 转换为 zod-i18n-map 提供的 locale
@@ -57,7 +57,14 @@ const lngMapping = {
 const localeMapping = new Map();
 
 export default {
-  validateServiceHandler: (container: IMidwayContainer) => {
+  validateServiceHandler: async (container: IMidwayContainer) => {
+    const environmentService = container.get(MidwayEnvironmentService);
+    const en = await loadModule('zod-i18n-map/locales/en/zod.json', {
+      loadMode: environmentService.getModuleLoadType(),
+    });
+    const cn = await loadModule('zod-i18n-map/locales/zh-CN/zod.json', {
+      loadMode: environmentService.getModuleLoadType(),
+    });
     const configService = container.get(MidwayConfigService);
     configService.addObject({
       i18n: {

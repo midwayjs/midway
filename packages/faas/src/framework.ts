@@ -13,13 +13,10 @@ import {
   ContextMiddlewareManager,
   FunctionMiddleware,
   IMidwayBootstrapOptions,
-  MidwayEnvironmentService,
-  MidwayMiddlewareService,
   MidwayServerlessFunctionService,
   RouterInfo,
   PathToRegexpUtil,
   Framework,
-  Inject,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
@@ -50,9 +47,9 @@ export class MidwayFaaSFramework extends BaseFramework<
 > {
   protected defaultHandlerMethod = 'handler';
   protected funMappingStore: Map<string, RouterInfo> = new Map();
-  protected logger;
+  protected declare logger;
   private lock = new SimpleLock();
-  public app: Application;
+  public declare app: Application;
   private isReplaceLogger =
     process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
   private developmentRun = false;
@@ -64,12 +61,6 @@ export class MidwayFaaSFramework extends BaseFramework<
   protected eventMiddlewareManager = this.createMiddlewareManager();
   private legacyVersion = false;
   private loadedFunction = false;
-
-  @Inject()
-  environmentService: MidwayEnvironmentService;
-
-  @Inject()
-  middlewareService: MidwayMiddlewareService<Context, any>;
 
   configure(options: IFaaSConfigurationOptions) {
     const faasConfig = this.configService.getConfiguration('faas') ?? {};

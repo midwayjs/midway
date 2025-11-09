@@ -37,7 +37,6 @@ export class MidwayGRPCFramework extends BaseFramework<
   Context,
   IMidwayGRPFrameworkOptions
 > {
-  public app: IMidwayGRPCApplication;
   private server: Server;
   protected frameworkLoggerName = 'grpcLogger';
 

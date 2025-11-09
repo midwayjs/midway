@@ -1,11 +1,13 @@
 import {
   APPLICATION_KEY,
+  ApplicationContext,
   Configuration,
   IMidwayContainer,
   Init,
   Inject,
   MidwayDecoratorService,
   REQUEST_OBJ_CTX_KEY,
+  ScopeEnum,
 } from '@midwayjs/core';
 import { LeoricDataSourceManager } from './dataSourceManager';
 import { DATA_SOURCE_KEY, MODEL_KEY } from './decorator';
@@ -30,6 +32,9 @@ export class LeoricConfiguration {
   @Inject()
   decoratorService: MidwayDecoratorService;
 
+  @ApplicationContext()
+  applicationContext: IMidwayContainer;
+
   dataSourceManager: LeoricDataSourceManager;
 
   @Init()
@@ -47,9 +52,12 @@ export class LeoricConfiguration {
             this.dataSourceManager.getDefaultDataSourceName()
         );
         const model = dataSource.models[getModelName(meta.modelName)];
-        const ctx = instance[REQUEST_OBJ_CTX_KEY];
         const app = instance[APPLICATION_KEY];
-        if (ctx) {
+        if (
+          this.applicationContext.getInstanceScope(instance) ===
+          ScopeEnum.Request
+        ) {
+          const ctx = instance[REQUEST_OBJ_CTX_KEY];
           return class extends model {
             static get ctx() {
               return ctx;

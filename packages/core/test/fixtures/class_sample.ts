@@ -105,7 +105,7 @@ export class SubCustom extends ParentCustom {
   tt: any;
 
   @App()
-  a: any;
+  declare a: any;
 
   @Plugin()
   bb: any;

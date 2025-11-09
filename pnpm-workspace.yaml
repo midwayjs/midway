@@ -2,3 +2,6 @@ packages:
   - 'packages/*'
   - 'packages-serverless/*'
   - 'packages-resource/*'
+onlyBuiltDependencies: [
+  'sqlite3'
+]

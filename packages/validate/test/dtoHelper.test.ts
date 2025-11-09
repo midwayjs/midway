@@ -42,7 +42,7 @@ describe('/test/util/dtoHelper.test.ts', () => {
       id: number;
 
       @Rule(RuleType.string())
-      quantity: number;
+      declare quantity: number;
 
       @Rule(RuleType.string())
       comment: string;

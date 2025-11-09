@@ -28,7 +28,6 @@ export class MidwayMCPFramework extends BaseFramework<
   IMidwayMCPContext,
   IMidwayMCPConfigurationOptions
 > {
-  public app: IMidwayMCPApplication;
   protected frameworkLoggerName = 'mcpLogger';
   protected server: McpServer;
   configure() {

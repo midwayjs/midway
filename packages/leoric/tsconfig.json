@@ -4,7 +4,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "target": "ES2021"
   },
   "include": [
     "./src/**/*.ts"

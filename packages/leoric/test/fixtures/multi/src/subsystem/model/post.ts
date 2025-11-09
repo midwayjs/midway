@@ -10,9 +10,9 @@ export default class Post extends Bone {
   @Column(DataTypes.TEXT)
   content: string;
 
-  @Column()
+  @Column({name: 'created_at'})
   createdAt: Date;
 
-  @Column()
+  @Column({name: 'updated_at'})
   updatedAt: Date;
 }

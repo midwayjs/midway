@@ -82,12 +82,12 @@ export async function initializeAgentApplicationContext(agent) {
   agentFramework['logger'] = agent.coreLogger;
   agentFramework['appLogger'] = agent.logger;
   agentFramework.app = agent;
-  agentFramework.configService = applicationContext.get(MidwayConfigService);
-  agentFramework.environmentService = applicationContext.get(
+  agentFramework['configService'] = applicationContext.get(MidwayConfigService);
+  agentFramework['environmentService'] = applicationContext.get(
     MidwayEnvironmentService
   );
-  agentFramework.loggerService = applicationContext.get(MidwayLoggerService);
-  agentFramework.informationService = applicationContext.get(
+  agentFramework['loggerService'] = applicationContext.get(MidwayLoggerService);
+  agentFramework['informationService'] = applicationContext.get(
     MidwayInformationService
   );
   agentFramework.overwriteApplication('agent');
