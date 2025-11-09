@@ -1,6 +1,31 @@
 # Change Log
 
 
+## v4.0.0-beta.8 (2025-11-09)
+
+#### :bug: Bug Fix
+* `core`, `faas`, `grpc`, `leoric`, `mcp`, `mqtt`, `rabbitmq`, `socketio`, `validate`, `validation-joi`, `validation-zod`, `web-express`, `web`, `ws`
+  * [#4433](https://github.com/midwayjs/midway/pull/4433) fix: load zod json error under esm environment ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `i18n`
+  * [#4414](https://github.com/midwayjs/midway/pull/4414) feat: support i18n missing key handler ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `web-koa`
+  * [#4427](https://github.com/midwayjs/midway/pull/4427) chore(deps): update dependency @types/koa-router to v7.4.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4435](https://github.com/midwayjs/midway/pull/4435) chore(deps): update redis docker tag to v7.4.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#4436](https://github.com/midwayjs/midway/pull/4436) fix(deps): update dependency leoric to v2.13.9 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `typeorm`
+  * [#4432](https://github.com/midwayjs/midway/pull/4432) chore(deps): update dependency typeorm to v0.3.26 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.7 (2025-10-26)
 
 #### :bug: Bug Fix
