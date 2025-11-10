@@ -796,11 +796,11 @@ importers:
         specifier: ^3.0.0
         version: 3.4.2
       '@types/amqplib':
-        specifier: 0.10.6
-        version: 0.10.6
+        specifier: 0.10.8
+        version: 0.10.8
       amqplib:
-        specifier: 0.10.5
-        version: 0.10.5
+        specifier: 0.10.9
+        version: 0.10.9
       kafkajs:
         specifier: 2.2.4
         version: 2.2.4
@@ -1027,14 +1027,14 @@ importers:
         version: link:../core
       amqp-connection-manager:
         specifier: 4.1.15
-        version: 4.1.15(amqplib@0.10.5)
+        version: 4.1.15(amqplib@0.10.9)
     devDependencies:
       '@types/amqplib':
-        specifier: 0.10.6
-        version: 0.10.6
+        specifier: 0.10.8
+        version: 0.10.8
       amqplib:
-        specifier: 0.10.5
-        version: 0.10.5
+        specifier: 0.10.9
+        version: 0.10.9
       fs-extra:
         specifier: 11.3.0
         version: 11.3.0
@@ -1652,10 +1652,6 @@ importers:
         version: 11.3.0
 
 packages:
-
-  '@acuminous/bitsyntax@0.1.2':
-    resolution: {integrity: sha512-29lUK80d1muEQqiUsSo+3A0yP6CdspgC95EnKBMi22Xlwt79i/En4Vr67+cXhU+cZjbti3TgGGC5wy1stIywVQ==}
-    engines: {node: '>=0.8'}
 
   '@apidevtools/json-schema-ref-parser@13.0.2':
     resolution: {integrity: sha512-ThpknSFmb1zJXU16ba8cFbDRL3WRs6WETW323gOhj7Gwdj9GUqNpA5JFhdAINxINyAz03gqgF5Y4UydAjE3Pdg==}
@@ -3309,8 +3305,8 @@ packages:
   '@types/ali-oss@6.16.11':
     resolution: {integrity: sha512-/AyemPZy93ZXGzEokMsoPFgjH37snpzH4X/fwans/n63HLaCleriCG3PyrkHCPkgHEc9vj9Uo6paqsBN3vJ3OA==}
 
-  '@types/amqplib@0.10.6':
-    resolution: {integrity: sha512-vQLVypBS1JQcfTXhl1Td1EEeLdtb+vuulOb4TrzYiLyP2aYLMAEzB3pNmEA0jBm0xIXu946Y7Xwl19Eidl32SQ==}
+  '@types/amqplib@0.10.8':
+    resolution: {integrity: sha512-vtDp8Pk1wsE/AuQ8/Rgtm6KUZYqcnTgNvEHwzCkX8rL7AGsC6zqAfKAAJhUZXFhM/Pp++tbnUHiam/8vVpPztA==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -3862,8 +3858,8 @@ packages:
     peerDependencies:
       amqplib: '*'
 
-  amqplib@0.10.5:
-    resolution: {integrity: sha512-Dx5zmy0Ur+Q7LPPdhz+jx5IzmJBoHd15tOeAfQ8SuvEtyPJ20hBemhOBA4b1WeORCRa0ENM/kHCzmem1w/zHvQ==}
+  amqplib@0.10.9:
+    resolution: {integrity: sha512-jwSftI4QjS3mizvnSnOrPGYiUnm1vI2OP1iXeOUz5pb74Ua0nbf6nPyyTzuiCLEE3fMpaJORXh2K/TQ08H5xGA==}
     engines: {node: '>=10'}
 
   ansi-align@3.0.1:
@@ -10847,14 +10843,6 @@ packages:
 
 snapshots:
 
-  '@acuminous/bitsyntax@0.1.2':
-    dependencies:
-      buffer-more-ints: 1.0.0
-      debug: 4.4.3
-      safe-buffer: 5.1.2
-    transitivePeerDependencies:
-      - supports-color
-
   '@apidevtools/json-schema-ref-parser@13.0.2':
     dependencies:
       '@types/json-schema': 7.0.15
@@ -12677,7 +12665,7 @@ snapshots:
 
   '@types/ali-oss@6.16.11': {}
 
-  '@types/amqplib@0.10.6':
+  '@types/amqplib@0.10.8':
     dependencies:
       '@types/node': 22.12.0
 
@@ -13383,18 +13371,15 @@ snapshots:
       - proxy-agent
       - supports-color
 
-  amqp-connection-manager@4.1.15(amqplib@0.10.5):
+  amqp-connection-manager@4.1.15(amqplib@0.10.9):
     dependencies:
-      amqplib: 0.10.5
+      amqplib: 0.10.9
       promise-breaker: 6.0.0
 
-  amqplib@0.10.5:
+  amqplib@0.10.9:
     dependencies:
-      '@acuminous/bitsyntax': 0.1.2
       buffer-more-ints: 1.0.0
       url-parse: 1.5.10
-    transitivePeerDependencies:
-      - supports-color
 
   ansi-align@3.0.1:
     dependencies:
