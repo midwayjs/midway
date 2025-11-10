@@ -1,7 +1,6 @@
-version: "3.9"
 services:
   redis:
-    image: redis
+    image: redis:7.4.7
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -51,11 +50,27 @@ services:
       - zookeeper
 
   etcd:
-    image: bitnami/etcd
-    environment:
-      ALLOW_NONE_AUTHENTICATION: "yes"
-      ETCD_ADVERTISE_CLIENT_URLS: http://etcd-server:2379
-    container_name: Etcd-server
+    image: gcr.io/etcd-development/etcd:v3.6.5
+    command:
+      - /usr/local/bin/etcd
+      - --name
+      - s1
+      - --data-dir
+      - /etcd-data
+      - --listen-client-urls
+      - http://0.0.0.0:2379
+      - --advertise-client-urls
+      - http://0.0.0.0:2379
+      - --listen-peer-urls
+      - http://0.0.0.0:2380
+      - --initial-advertise-peer-urls
+      - http://0.0.0.0:2380
+      - --initial-cluster
+      - s1=http://0.0.0.0:2380
+      - --initial-cluster-token
+      - tkn
+      - --initial-cluster-state
+      - new
     ports:
       - "2379:2379"
       - "2380:2380"
