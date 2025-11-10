@@ -1,6 +1,18 @@
 # Change Log
 
 
+## v3.20.17 (2025-11-10)
+
+#### :nail_care: Polish
+* `i18n`
+  * [#4439](https://github.com/midwayjs/midway/pull/4439) feat: sync i18n missing handler ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- yuntian001 ([@yuntian001](https://github.com/yuntian001))
+
+
+
 ## v3.20.16 (2025-10-08)
 
 #### :bug: Bug Fix
