@@ -35,9 +35,7 @@ export class ViewConfiguration {
               const contextView = await this.requestContext.getAsync(
                 ContextView
               );
-              return contextView.render(...args).then(body => {
-                this.body = body;
-              });
+              this.body = await contextView.render(...args);
             },
           },
 
@@ -50,7 +48,7 @@ export class ViewConfiguration {
               const contextView = await this.requestContext.getAsync(
                 ContextView
               );
-              return contextView.render(...args);
+              return await contextView.render(...args);
             },
           },
 
@@ -63,7 +61,7 @@ export class ViewConfiguration {
               const contextView = await this.requestContext.getAsync(
                 ContextView
               );
-              return contextView.renderString(...args);
+              return await contextView.renderString(...args);
             },
           },
         });
