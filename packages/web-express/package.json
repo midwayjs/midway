@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@midwayjs/express-session": "workspace:^",
-    "body-parser": "1.20.3",
+    "body-parser": "2.2.1",
     "cookie-parser": "^1.4.6",
     "express": "4.21.2"
   },
