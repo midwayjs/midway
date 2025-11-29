@@ -34,6 +34,6 @@
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@midwayjs/web": "workspace:^",
-    "fs-extra": "11.2.0"
+    "fs-extra": "11.3.2"
   }
 }
