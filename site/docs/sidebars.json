@@ -62,6 +62,7 @@
         "aspect",
         "auto_run",
         "service_factory",
+        "service_discovery",
         "data_listener",
         "data_source",
         "data_response",

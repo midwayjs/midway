@@ -33,12 +33,10 @@ $ npm i @midwayjs/redis@3 --save
 ```
 
 
-
-
 ## 引入组件
 
 
-首先，引入 组件，在 `src/configuration.ts` 中导入：
+首先，引入组件，在 `src/configuration.ts` 中导入：
 ```typescript
 import { Configuration } from '@midwayjs/core';
 import * as redis from '@midwayjs/redis';
@@ -221,4 +219,90 @@ export class UserService {
   }
 }
 ```
+
+
+## 服务发现
+
+提供基于统一抽象的服务发现能力，虽然 Redis 一般不作为服务发现的注册中心，但是其拥有 pub/sub 能力可以变相提供功能，我们仍实现了 Redis 将作为服务发现的客户端能力。
+
+服务发现包括 **注册服务** 和 **获取服务** 两部分。
+
+
+### 配置服务发现
+
+你需要先配置一个客户端；若存在多个客户端，可通过 `serviceDiscoveryClient` 指定用于服务发现的客户端。
+
+通过 `serviceDiscovery` 配置服务发现选项：
+
+```typescript
+// src/config/config.default.ts
+export default {
+  redis: {
+    clients: {
+      default: {
+        host: '127.0.0.1',
+        port: 6379
+      }
+    },
+    serviceDiscovery: {
+      prefix: 'services:',
+      ttl: 30,
+      scanCount: 100
+    }
+  }
+}
+```
+
+### 注册服务发现
+
+服务启动后，将当前服务注册到 Redis：
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import { RedisServiceDiscovery } from '@midwayjs/redis';
+
+@Configuration({})
+export class MainConfiguration {
+  @Inject()
+  redisDiscovery: RedisServiceDiscovery;
+
+  async onServerReady() {
+    const client = this.redisDiscovery.createClient();
+
+    await client.register({
+      serviceName: 'order',
+      id: client.defaultMeta.id,
+      host: client.defaultMeta.host,
+      port: 7001,
+      ttl: 30,
+      meta: { version: '1.0.0' }
+    });
+    // 注册默认上线，无需显式 online
+  }
+}
+```
+
+说明：上线时写入实例键并设置 TTL，客户端会定时刷新 TTL 保持存活；下线删除实例键并清理刷新；注销发布变更消息以便 Listener 全量刷新。
+
+
+### 获取可用服务
+
+在任意位置获取可用实例或按负载均衡选择一个实例：
+
+````typescript
+@Provide()
+export class OrderService {
+  @Inject()
+  redisDiscovery: RedisServiceDiscovery;
+
+  async getService() {
+    const instances = await this.redisDiscovery.getInstances('order');
+    const one = await this.rediscovery.getInstance('order');
+    return { instances, one };
+  }
+}
+````
+
+返回的实例为注册时写入的对象，通常包含 `serviceName/id/host/port/ttl/meta/tags/status` 等字段。
+
 

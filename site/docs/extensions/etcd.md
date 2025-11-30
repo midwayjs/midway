@@ -192,3 +192,91 @@ export class UserService {
 }
 ```
 
+
+
+## 服务发现
+
+从 v4 开始提供基于统一抽象的服务发现能力，虽然 ETCD 并不太适合作为服务发现的注册中心来使用，但是我们仍实现了 ETCD 作为服务发现的客户端能力。
+
+服务发现包括 **注册服务** 和 **获取服务** 两部分。
+
+
+### 配置服务发现
+
+你需要先配置一个客户端；若存在多个客户端，可通过 `serviceDiscoveryClient` 指定用于服务发现的客户端。
+
+通过 `serviceDiscovery` 配置服务发现选项：
+
+```typescript
+// src/config/config.default.ts
+export default {
+  etcd: {
+    clients: {
+      default: { hosts: ['127.0.0.1:2379'] }
+    },
+    serviceDiscovery: {
+      namespace: 'services',
+      ttl: 30,
+      // 可选：loadBalancer: LoadBalancerType.ROUND_ROBIN
+    }
+  }
+}
+```
+
+说明：`namespace` 为键空间前缀，实例键结构为 `namespace/serviceName/instanceId`；`ttl` 为实例过期时间（秒）。
+
+
+### 注册服务发现
+
+服务启动后，将当前服务注册到 ETCD：
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import { EtcdServiceDiscovery } from '@midwayjs/etcd';
+
+@Configuration({})
+export class MainConfiguration {
+  @Inject()
+  etcdDiscovery: EtcdServiceDiscovery;
+
+  async onServerReady() {
+    // 创建服务发现客户端（可传入覆盖项）
+    const client = this.etcdDiscovery.createClient();
+
+    // 注册当前服务并上线（写入键并绑定租约）
+    await client.register({
+      id: client.defaultMeta.id,
+      serviceName: 'order',
+      ttl: 30,
+      meta: {
+        version: '1.0.0',
+        host: client.defaultMeta.host,
+        port: '7001'
+      }
+    });
+  }
+}
+```
+
+说明：注册时会默认上线，无需显式调用 `online`。ETCD 通过 Lease 维持 TTL，定时续约保证存活；`offline` 删除键并撤销租约；`deregister` 注销并清理状态。重复调用 `register/online/offline/deregister` 具有幂等性。
+
+
+### 获取可用服务
+
+在任意位置获取可用实例或按负载均衡选择一个实例：
+
+````typescript
+@Provide()
+export class OrderService {
+  @Inject()
+  etcdDiscovery: EtcdServiceDiscovery;
+
+  async getService() {
+    const instances = await this.etcdDiscovery.getInstances('order');
+    const one = await this.etcdDiscovery.getInstance('order');
+    return { instances, one };
+  }
+}
+````
+
+返回的实例为注册时写入的对象（`EtcdInstanceMetadata`），通常包含 `serviceName/id/ttl/meta/tags/status` 等字段。
