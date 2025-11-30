@@ -34,8 +34,9 @@ export function renderSwaggerUIDist(
   function replaceInfo(content: string): string {
     let str = `location.href.replace('${swaggerConfig.swaggerPath}/index.html', '${swaggerConfig.swaggerPath}/index.json'),\n validatorUrl: null,`;
     if (swaggerConfig.displayOptions) {
-      Object.keys(swaggerConfig.displayOptions).forEach(key => {
-        str += `\n${key}: ${swaggerConfig.displayOptions[key]},`;
+      Object.entries(swaggerConfig.displayOptions).forEach(([key, value]) => {
+        const variable = typeof value === 'string' ? `'${value}'` : value;
+        str += `\n${key}: ${variable},`;
       });
     }
     return content.replace(
