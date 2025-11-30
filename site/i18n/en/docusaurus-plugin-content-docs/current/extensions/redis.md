@@ -222,3 +222,87 @@ export class UserService {
 }
 ```
 
+
+## Service Discovery
+
+Midway provides a unified abstract service discovery capability. While Redis is not typically used as a registration center, its pub/sub capability can be leveraged. We implement Redis as a service discovery client.
+
+Service discovery includes service registration and service retrieval.
+
+
+### Configure service discovery
+
+Configure at least one client; if multiple clients exist, specify the one used for discovery via `serviceDiscoveryClient`.
+
+Set discovery options via `serviceDiscovery`:
+
+```typescript
+// src/config/config.default.ts
+export default {
+  redis: {
+    clients: {
+      default: {
+        host: '127.0.0.1',
+        port: 6379
+      }
+    },
+    serviceDiscovery: {
+      prefix: 'services:',
+      ttl: 30,
+      scanCount: 100
+    }
+  }
+}
+```
+
+### Register a service
+
+Register the current service to Redis after startup:
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import { RedisServiceDiscovery } from '@midwayjs/redis';
+
+@Configuration({})
+export class MainConfiguration {
+  @Inject()
+  redisDiscovery: RedisServiceDiscovery;
+
+  async onServerReady() {
+    const client = this.redisDiscovery.createClient();
+
+    await client.register({
+      serviceName: 'order',
+      id: client.defaultMeta.id,
+      host: client.defaultMeta.host,
+      port: 7001,
+      ttl: 30,
+      meta: { version: '1.0.0' }
+    });
+    // default is online after register; no explicit online needed
+  }
+}
+```
+
+Notes: When online, the instance key is written and TTL is set; the client periodically refreshes TTL to stay alive. Offline deletes the instance key and stops refreshing; deregister publishes a change message for listeners to refresh.
+
+
+### Get available services
+
+Fetch available instances or select one via the load balancer:
+
+````typescript
+@Provide()
+export class OrderService {
+  @Inject()
+  redisDiscovery: RedisServiceDiscovery;
+
+  async getService() {
+    const instances = await this.redisDiscovery.getInstances('order');
+    const one = await this.redisDiscovery.getInstance('order');
+    return { instances, one };
+  }
+}
+````
+
+Returned instances are the objects written during registration, typically including `serviceName/id/host/port/ttl/meta/tags/status` fields.

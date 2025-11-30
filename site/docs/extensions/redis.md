@@ -297,12 +297,11 @@ export class OrderService {
 
   async getService() {
     const instances = await this.redisDiscovery.getInstances('order');
-    const one = await this.rediscovery.getInstance('order');
+    const one = await this.redisDiscovery.getInstance('order');
     return { instances, one };
   }
 }
 ````
 
 返回的实例为注册时写入的对象，通常包含 `serviceName/id/host/port/ttl/meta/tags/status` 等字段。
-
 

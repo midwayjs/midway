@@ -93,7 +93,7 @@ import { join } from 'path';
 export class UserService {
 
   @Inject()
-  etcdService: etcdService;
+  etcdService: ETCDService;
 
   async invoke() {
 
@@ -165,6 +165,94 @@ export class UserService {
   }
 }
 ```
+
+
+## Service Discovery
+
+From v4, Midway provides a unified abstract service discovery capability. Although ETCD is not ideal as a registration center, we still implement ETCD as a service discovery client.
+
+Service discovery includes service registration and service retrieval.
+
+
+### Configure service discovery
+
+Configure at least one client; if multiple clients exist, specify the one used for discovery via `serviceDiscoveryClient`.
+
+Configure discovery options via `serviceDiscovery`:
+
+```typescript
+// src/config/config.default.ts
+export default {
+  etcd: {
+    clients: {
+      default: { hosts: ['127.0.0.1:2379'] }
+    },
+    serviceDiscovery: {
+      namespace: 'services',
+      ttl: 30,
+      // optional: loadBalancer: LoadBalancerType.ROUND_ROBIN
+    }
+  }
+}
+```
+
+Notes: `namespace` is the keyspace prefix; instance keys follow `namespace/serviceName/instanceId`. `ttl` is the expiration time in seconds.
+
+
+### Register a service
+
+Register the current service to ETCD after startup:
+
+```typescript
+import { Configuration, Inject } from '@midwayjs/core';
+import { EtcdServiceDiscovery } from '@midwayjs/etcd';
+
+@Configuration({})
+export class MainConfiguration {
+  @Inject()
+  etcdDiscovery: EtcdServiceDiscovery;
+
+  async onServerReady() {
+    // create discovery client (override options if needed)
+    const client = this.etcdDiscovery.createClient();
+
+    // register current service and bring it online (write key and bind lease)
+    await client.register({
+      id: client.defaultMeta.id,
+      serviceName: 'order',
+      ttl: 30,
+      meta: {
+        version: '1.0.0',
+        host: client.defaultMeta.host,
+        port: '7001'
+      }
+    });
+  }
+}
+```
+
+Notes: Registration brings the instance online by default; no need to call `online`. ETCD maintains TTL via Lease with periodic renewal; `offline` deletes the key and revokes the lease; `deregister` unregisters and cleans state. Repeated calls to `register/online/offline/deregister` are idempotent.
+
+
+### Get available services
+
+Fetch all healthy instances or select one according to the load balancer:
+
+````typescript
+@Provide()
+export class OrderService {
+  @Inject()
+  etcdDiscovery: EtcdServiceDiscovery;
+
+  async getService() {
+    const instances = await this.etcdDiscovery.getInstances('order');
+    const one = await this.etcdDiscovery.getInstance('order');
+    return { instances, one };
+  }
+}
+````
+
+Returned instances are the objects written during registration (`EtcdInstanceMetadata`), typically including `serviceName/id/ttl/meta/tags/status` fields.
 
 
 
