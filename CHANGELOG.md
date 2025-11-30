@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.18 (2025-11-30)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#4451](https://github.com/midwayjs/midway/pull/4451) fix: swagger ui displayOptions render string ([@TimonPeng](https://github.com/TimonPeng))
+
+#### Committers: 1
+- Timon Peng ([@TimonPeng](https://github.com/TimonPeng))
+
+
+
 ## v3.20.17 (2025-11-10)
 
 #### :nail_care: Polish
