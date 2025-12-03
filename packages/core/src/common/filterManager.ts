@@ -100,7 +100,7 @@ export class FilterManager<
   }> {
     let result, error;
     let matched = false;
-    if (this.exceptionMap.has((err as any).constructor)) {
+    if (err && this.exceptionMap.has((err as any).constructor)) {
       matched = true;
       const filterData = this.exceptionMap.get((err as any).constructor);
       result = await filterData.filter.catch(err, ctx, res, next);
