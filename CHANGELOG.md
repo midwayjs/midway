@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.19 (2025-12-03)
+
+#### :bug: Bug Fix
+* `core`
+  * [#4454](https://github.com/midwayjs/midway/pull/4454) fix: core error filter process empty error issue ([@TimonPeng](https://github.com/TimonPeng))
+
+#### Committers: 1
+- Timon Peng ([@TimonPeng](https://github.com/TimonPeng))
+
+
+
 ## v3.20.18 (2025-11-30)
 
 #### :bug: Bug Fix
