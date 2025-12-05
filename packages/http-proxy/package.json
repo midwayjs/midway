@@ -35,6 +35,6 @@
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@midwayjs/web": "workspace:^",
-    "nock": "13.5.5"
+    "nock": "13.5.6"
   }
 }
