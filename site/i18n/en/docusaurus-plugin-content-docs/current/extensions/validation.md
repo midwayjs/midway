@@ -139,7 +139,7 @@ Set the validator in the configuration file:
 
 ```typescript
 // src/config/config.default.ts
-import * as joi from '@midwayjs/validation-joi';
+import joi from '@midwayjs/validation-joi';
 
 export default {
   // ...
@@ -778,7 +778,7 @@ Set the validator in the configuration file:
 
 ```typescript
 // src/config/config.default.ts
-import * as zod from '@midwayjs/validation-zod';
+import zod from '@midwayjs/validation-zod';
 
 export default {
   // ...
@@ -855,7 +855,7 @@ Set the validator in the configuration file:
 
 ```typescript
 // src/config/config.default.ts
-import * as classValidator from '@midwayjs/validation-class-validator';
+import classValidator from '@midwayjs/validation-class-validator';
 
 export default {
   // ...
@@ -916,8 +916,8 @@ You can configure multiple validators in the same project.
 
 ```typescript
 // src/config/config.default.ts
-import * as joi from '@midwayjs/validation-joi';
-import * as zod from '@midwayjs/validation-zod';
+import joi from '@midwayjs/validation-joi';
+import zod from '@midwayjs/validation-zod';
 
 export default {
   // ...
