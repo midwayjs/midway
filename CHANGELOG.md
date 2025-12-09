@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.20 (2025-12-09)
+
+#### :bug: Bug Fix
+* `bull-board`
+  * [#4460](https://github.com/midwayjs/midway/pull/4460) fix: bull board support body ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.19 (2025-12-03)
 
 #### :bug: Bug Fix
