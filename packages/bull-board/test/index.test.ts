@@ -99,6 +99,20 @@ describe(`/test/index.test.ts`, () => {
     await close(app);
   });
 
+  it('post add job in bullmq', async () => {
+    const app = await createApp(join(__dirname, 'fixtures', 'base-app-bullmq'));
+
+    const result = await createHttpRequest(app)
+      .post('/ui/api/queues/test/add')
+      .send({ name: 'post-job', data: { x: 1 }, options: {} });
+
+    expect(result.status).toBe(200);
+    expect(result.headers['content-type']).toMatch('application/json');
+    expect(typeof result.body).toBe('object');
+
+    await close(app);
+  });
+
   it('test dynamic add queue with bullmq', async () => {
     const app = await createLightApp('', {
       imports: [koa, bullboard, bullmq],
