@@ -4,6 +4,8 @@ import * as bullboard from '../src';
 import * as bullmq from '@midwayjs/bullmq';
 import * as bull from '@midwayjs/bull';
 import * as koa from '@midwayjs/koa';
+import * as express from '@midwayjs/express';
+import { sleep } from '@midwayjs/core';
 
 describe(`/test/index.test.ts`, () => {
   it('test ui in koa', async () => {
@@ -52,6 +54,47 @@ describe(`/test/index.test.ts`, () => {
       "queues": []
     });
     expect(result.headers['content-type']).toMatch('application/json');
+
+    await close(app);
+  });
+
+  it('post add job in express', async () => {
+    const app = await createLightApp('', {
+      imports: [express, bullboard, bull],
+      globalConfig: {
+        keys: 123,
+        bull: {
+          defaultQueueOptions: {
+            redis: {
+              port: 6379,
+              host: '127.0.0.1',
+            },
+          },
+        },
+        bullBoard: {
+          basePath: '/bull-board',
+        },
+      },
+    });
+
+    const bullFramework = app.getApplicationContext().get(bull.Framework);
+    const testQueue = bullFramework.createQueue('test-express');
+    await testQueue?.addJobToQueue({ name: 'stone-jin' });
+
+    const manager = await app
+      .getApplicationContext()
+      .getAsync(bullboard.BullBoardManager);
+    manager.addQueue(new bullboard.BullAdapter(testQueue));
+
+    const result = await createHttpRequest(app)
+      .post('/bull-board/api/queues/test-express/add')
+      .send({ name: 'post-job', data: { x: 1 }, options: {} });
+
+    expect(result.status).toBe(200);
+    expect(result.headers['content-type']).toMatch('application/json');
+    expect(typeof result.body).toBe('object');
+
+    await sleep(1000);
 
     await close(app);
   });
