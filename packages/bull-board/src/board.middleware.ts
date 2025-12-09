@@ -78,7 +78,11 @@ export class BoardMiddleware
             routePath
           );
           if (matchRoute) {
-            content = await this.serverAdapter.runAPI(matchRoute, req.query);
+            content = await this.serverAdapter.runAPI(
+              matchRoute,
+              req.query,
+              req.body
+            );
           }
         }
 
@@ -124,7 +128,8 @@ export class BoardMiddleware
           if (matchRoute) {
             content = await this.serverAdapter.runAPI(
               matchRoute,
-              (ctx as any).query
+              (ctx as any).query,
+              (ctx as any).request && (ctx as any).request.body
             );
           }
         }

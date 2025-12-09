@@ -141,11 +141,12 @@ export class MidwayAdapter implements IServerAdapter {
     });
   }
 
-  public async runAPI(route, query) {
+  public async runAPI(route, query, body?) {
     const response = await route.handler({
       queues: this.bullBoardQueues as any,
       params: route.params,
       query,
+      body,
     });
 
     return response.body;
