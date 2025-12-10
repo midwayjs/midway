@@ -1,17 +1,23 @@
 import { MainApp } from '@midwayjs/core';
+import { join } from 'path';
 import { BackgroundTask, IBackgroundTask, Application } from '../../../../../src/';
-let idx = 0;
 
-@BackgroundTask('HelloBackgroundTask')
+@BackgroundTask({
+  taskName: 'HelloBackgroundTask',
+  worker: {
+    filename: join(__dirname, '../../worker/hello.worker.js'),
+    name: 'hello',
+  },
+})
 export class HelloBackgroundTask implements IBackgroundTask {
   @MainApp()
   app: Application;
 
   async execute() {
-    idx++;
-    this.app.setAttr('bg_task', idx);
-    return idx;
+    return 0;
   }
 
-  async onComplete() {}
+  async onComplete(result: number) {
+    this.app.setAttr('bg_task', result);
+  }
 }

@@ -1,6 +1,8 @@
 import { IMidwayApplication, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
 
-export interface BackgroundTaskOptions {}
+export interface BackgroundTaskOptions {
+  piscina?: Record<string, any>;
+}
 
 export interface IBackgroundTask {
   execute(): any;

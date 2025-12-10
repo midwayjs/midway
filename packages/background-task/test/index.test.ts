@@ -15,7 +15,13 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should get task by class and name', async () => {
-    @BackgroundTask('bgTest')
+    @BackgroundTask({
+      taskName: 'bgTest',
+      worker: {
+        filename: join(__dirname, 'fixtures/base-app/worker/hello.worker.js'),
+        name: 'hello',
+      },
+    })
     class BgTest implements IBackgroundTask {
       async execute() {}
     }
@@ -34,11 +40,16 @@ describe('/test/index.test.ts', () => {
       imports: [bg],
     });
     const framework = app.getFramework() as bg.Framework;
-    await framework.createTask('dynTask', async (ctx) => {
-      // @ts-ignore
-      ctx.app.setAttr('bg_task_dynamic', 1);
-      return 1;
-    });
+    await framework.createWorkerTask(
+      'dynTask',
+      join(__dirname, 'fixtures/base-app/worker/hello.worker.js'),
+      'hello',
+      {},
+      (res) => {
+        // @ts-ignore
+        app.setAttr('bg_task_dynamic', 1);
+      }
+    );
     await new Promise(resolve => setTimeout(resolve, 100));
     const res = app.getAttr('bg_task_dynamic');
     expect(res).toEqual(1);

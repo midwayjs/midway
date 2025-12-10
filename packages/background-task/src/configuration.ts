@@ -1,4 +1,9 @@
-import { Configuration, Init, Inject, MidwayDecoratorService } from '@midwayjs/core';
+import {
+  Configuration,
+  Init,
+  Inject,
+  MidwayDecoratorService,
+} from '@midwayjs/core';
 import { BackgroundTaskFramework } from './framework';
 import { BACKGROUND_TASK_KEY } from './constants';
 import { TaskNameOrClz } from './interface';
@@ -14,7 +19,9 @@ import { TaskNameOrClz } from './interface';
               fileLogName: 'midway-background-task.log',
               contextFormat: info => {
                 const { from } = info.ctx;
-                return `${info.timestamp} ${info.LEVEL} ${info.pid} [${from?.name || from}] ${info.message}`;
+                return `${info.timestamp} ${info.LEVEL} ${info.pid} [${
+                  from?.name || from
+                }] ${info.message}`;
               },
             },
           },

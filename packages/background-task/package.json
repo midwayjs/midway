@@ -29,5 +29,8 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^"
+  },
+  "dependencies": {
+    "piscina": "5.1.4"
   }
 }
