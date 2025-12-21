@@ -1,12 +1,4 @@
-import {
-  Configuration,
-  Init,
-  Inject,
-  MidwayDecoratorService,
-} from '@midwayjs/core';
-import { BackgroundTaskFramework } from './framework';
-import { BACKGROUND_TASK_KEY } from './constants';
-import { TaskNameOrClz } from './interface';
+import { Configuration } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'backgroundTask',
@@ -31,26 +23,5 @@ import { TaskNameOrClz } from './interface';
   ],
 })
 export class BackgroundTaskConfiguration {
-  @Inject()
-  framework: BackgroundTaskFramework;
-
-  @Inject()
-  decoratorService: MidwayDecoratorService;
-
-  @Init()
-  async init() {
-    this.decoratorService.registerPropertyHandler(
-      BACKGROUND_TASK_KEY,
-      (
-        propertyName,
-        meta: {
-          taskName: TaskNameOrClz;
-        }
-      ) => {
-        return this.framework.getTask(meta.taskName);
-      }
-    );
-  }
-
   async onReady() {}
 }
