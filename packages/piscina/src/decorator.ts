@@ -1,10 +1,16 @@
-import { DecoratorManager, MetadataManager, Provide, Scope, ScopeEnum } from '@midwayjs/core';
+import {
+  DecoratorManager,
+  MetadataManager,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/core';
 import { PISCINA_TASK_KEY } from './constants';
 
 /**
  * Piscina Task 装饰器
  * 用于标记 Worker 中的任务类
- * 
+ *
  * @example
  * ```typescript
  * @PiscinaTask('calculate')
@@ -24,4 +30,3 @@ export function PiscinaTask(handler: string): ClassDecorator {
     Scope(ScopeEnum.Request)(target);
   };
 }
-

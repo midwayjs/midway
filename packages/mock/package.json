@@ -30,7 +30,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/logger": "^3.0.0",
+    "@midwayjs/logger": "^4.0.0",
     "@types/amqplib": "0.10.8",
     "amqplib": "0.10.9",
     "kafkajs": "2.2.4",

@@ -7,7 +7,8 @@ import {
   MidwayCommonError,
   Inject,
   delegateTargetAllPrototypeMethod,
-  Singleton, MidwayEnvironmentService
+  Singleton,
+  MidwayEnvironmentService,
 } from '@midwayjs/core';
 import { Piscina } from 'piscina';
 import { join } from 'path';
@@ -81,7 +82,8 @@ export class PiscinaServiceFactory extends ServiceFactory<MidwayPiscina> {
       workerData: {
         _fullPath: workerFile,
         _mainAppDir: this.appDir,
-        _isDevelopmentEnvironment: this.environmentService.isDevelopmentEnvironment(),
+        _isDevelopmentEnvironment:
+          this.environmentService.isDevelopmentEnvironment(),
         ...piscinaOptions.workerData,
       },
     });

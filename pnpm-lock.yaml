@@ -163,8 +163,8 @@ importers:
         specifier: workspace:^
         version: link:../core
       '@midwayjs/logger':
-        specifier: ^3.0.0
-        version: 3.4.2
+        specifier: ^4.0.0
+        version: 4.0.1
       request:
         specifier: 2.88.2
         version: 2.88.2
@@ -444,8 +444,8 @@ importers:
         version: 0.2.2
     devDependencies:
       '@midwayjs/logger':
-        specifier: ^3.0.0
-        version: 3.4.2
+        specifier: ^4.0.0
+        version: 4.0.1
       eventsource:
         specifier: 2.0.2
         version: 2.0.2
@@ -580,8 +580,8 @@ importers:
         specifier: ^1.0.2
         version: 1.3.0
       '@midwayjs/logger':
-        specifier: ^3.0.0
-        version: 3.4.2
+        specifier: ^4.0.0
+        version: 4.0.1
       '@midwayjs/mock':
         specifier: workspace:^
         version: link:../mock
@@ -677,8 +677,8 @@ importers:
         specifier: 9.0.10
         version: 9.0.10
       jsonwebtoken:
-        specifier: 9.0.2
-        version: 9.0.2
+        specifier: 9.0.3
+        version: 9.0.3
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -793,8 +793,8 @@ importers:
         specifier: workspace:^
         version: link:../core
       '@midwayjs/logger':
-        specifier: ^3.0.0
-        version: 3.4.2
+        specifier: ^4.0.0
+        version: 4.0.1
       '@types/amqplib':
         specifier: 0.10.8
         version: 0.10.8
@@ -964,6 +964,9 @@ importers:
       '@midwayjs/core':
         specifier: workspace:^
         version: link:../core
+      '@midwayjs/logger':
+        specifier: ^4.0.0
+        version: 4.0.1
       '@midwayjs/mock':
         specifier: workspace:^
         version: link:../mock
@@ -1514,8 +1517,8 @@ importers:
         version: 6.14.0
     devDependencies:
       '@midwayjs/logger':
-        specifier: ^3.0.0
-        version: 3.4.2
+        specifier: ^4.0.0
+        version: 4.0.1
       '@midwayjs/mock':
         specifier: workspace:^
         version: link:../mock
@@ -2415,9 +2418,9 @@ packages:
   '@midwayjs/glob@1.1.1':
     resolution: {integrity: sha512-xoNU+JdCxE214KQrB0qgs88+Da7KYVICeuTL9VeKwaxZXj6a/PbpmEaH4+5BHLvZRRe78tHGR19+nKZrmMHBJg==}
 
-  '@midwayjs/logger@3.4.2':
-    resolution: {integrity: sha512-BxSdSMog4jxeqpHwgauuKZT6iAiu/Vr1HDjO9l81iqU+l8c9veAJVeLT08nTqKdjUiQXnxTaW6nYlvnzF2HdMA==}
-    engines: {node: '>=10'}
+  '@midwayjs/logger@4.0.1':
+    resolution: {integrity: sha512-8T+EHVGUhOyNtNZWKWz7we7EFCzGoTp4N0idBl9ggyqODj3A/S+o2xABdRsqq6OAthKzMI8zS9pY+Imgzp0KKQ==}
+    engines: {node: '>=20'}
 
   '@midwayjs/simple-lock@1.2.2':
     resolution: {integrity: sha512-0VwK++J76FlvRUj0zfpD1vjV/PTJf8hnZ/OVsMwEUJWVSm2L4bEbcHa+ERKLiprK9tk+fIrDgeX3JB9K8iuGfw==}
@@ -7207,8 +7210,8 @@ packages:
     resolution: {integrity: sha512-POQXvpdL69+CluYsillJ7SUhKvytYjW9vG/GKpnf+xP8UWgYEM/RaMzHHofbALDiKbbP1W8UEYmgGl39WkPZsg==}
     engines: {'0': node >= 0.2.0}
 
-  jsonwebtoken@9.0.2:
-    resolution: {integrity: sha512-PRp66vJ865SSqOlgqS8hujT5U4AOgMfhrwYIuIhfKaoSCZcirrmASQr8CX7cUg+RMih+hgznrjp99o+W4pJLHQ==}
+  jsonwebtoken@9.0.3:
+    resolution: {integrity: sha512-MT/xP0CrubFRNLNKvxJ2BYfy53Zkm++5bX9dtuPbqAeQpTVe0MQTFhao8+Cp//EmJp244xt6Drw/GVEGCUj40g==}
     engines: {node: '>=12', npm: '>=6'}
 
   jsprim@1.4.2:
@@ -7221,11 +7224,11 @@ packages:
   just-extend@6.2.0:
     resolution: {integrity: sha512-cYofQu2Xpom82S6qD778jBDpwvvy39s1l/hrYij2u9AMdQcGRpaBu6kY4mVhuno5kJVi1DAz4aiphA2WI1/OAw==}
 
-  jwa@1.4.2:
-    resolution: {integrity: sha512-eeH5JO+21J78qMvTIDdBXidBd6nG2kZjg5Ohz/1fpa28Z4CcsWUzJ1ZZyFq/3z3N17aZy+ZuBoHljASbL1WfOw==}
+  jwa@2.0.1:
+    resolution: {integrity: sha512-hRF04fqJIP8Abbkq5NKGN0Bbr3JxlQ+qhZufXVr0DvujKy93ZCbXZMHDL4EOtodSbCWxOqR8MS1tXA5hwqCXDg==}
 
-  jws@3.2.2:
-    resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
+  jws@4.0.1:
+    resolution: {integrity: sha512-EKI/M/yqPncGUUh44xz0PxSidXFr/+r0pA70+gIYhjv+et7yxM+s29Y+VGDkovRofQem0fs7Uvf4+YmAdyRduA==}
 
   kafkajs@2.2.4:
     resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
@@ -11908,9 +11911,9 @@ snapshots:
     dependencies:
       picomatch: 2.3.1
 
-  '@midwayjs/logger@3.4.2':
+  '@midwayjs/logger@4.0.1':
     dependencies:
-      dayjs: 1.11.13
+      dayjs: 1.11.19
       safe-stable-stringify: 2.5.0
 
   '@midwayjs/simple-lock@1.2.2': {}
@@ -17737,9 +17740,9 @@ snapshots:
 
   jsonparse@1.3.1: {}
 
-  jsonwebtoken@9.0.2:
+  jsonwebtoken@9.0.3:
     dependencies:
-      jws: 3.2.2
+      jws: 4.0.1
       lodash.includes: 4.3.0
       lodash.isboolean: 3.0.3
       lodash.isinteger: 4.0.4
@@ -17761,15 +17764,15 @@ snapshots:
 
   just-extend@6.2.0: {}
 
-  jwa@1.4.2:
+  jwa@2.0.1:
     dependencies:
       buffer-equal-constant-time: 1.0.1
       ecdsa-sig-formatter: 1.0.11
       safe-buffer: 5.2.1
 
-  jws@3.2.2:
+  jws@4.0.1:
     dependencies:
-      jwa: 1.4.2
+      jwa: 2.0.1
       safe-buffer: 5.2.1
 
   kafkajs@2.2.4: {}
@@ -19540,7 +19543,7 @@ snapshots:
 
   passport-jwt@4.0.1:
     dependencies:
-      jsonwebtoken: 9.0.2
+      jsonwebtoken: 9.0.3
       passport-strategy: 1.0.0
 
   passport-local@1.0.0:

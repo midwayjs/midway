@@ -29,7 +29,8 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/mock": "workspace:^"
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/logger": "^4.0.0"
   },
   "dependencies": {
     "piscina": "5.1.4"

@@ -54,7 +54,7 @@ export class PiscinaWorkerFramework extends BaseFramework<
     payload?: T
   ): Promise<R> {
     const TaskClass = this.taskHandlers.get(handler);
-    
+
     if (!TaskClass) {
       throw new MidwayCommonError(
         `Task handler "${handler}" not found. Did you forget to use @PiscinaTask('${handler}') decorator?`

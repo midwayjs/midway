@@ -4,7 +4,10 @@ const path = require('path');
 const fs = require('fs');
 const { workerData, threadId } = require('worker_threads');
 const { FunctionalConfiguration } = require('@midwayjs/core/functional');
-const { initializeGlobalApplicationContext, MidwayFrameworkService } = require('@midwayjs/core');
+const {
+  initializeGlobalApplicationContext,
+  MidwayFrameworkService,
+} = require('@midwayjs/core');
 const { loggers } = require('@midwayjs/logger');
 
 /**
@@ -35,29 +38,35 @@ function resolveWorkerFile(workerFile) {
 }
 
 // 从 workerData 获取 fullpath 并加载模块
-const { _fullPath: fullpath, _mainAppDir: mainAppDir, _isDevelopmentEnvironment: isDevelopmentEnvironment } = workerData || {};
+const {
+  _fullPath: fullpath,
+  _mainAppDir: mainAppDir,
+  _isDevelopmentEnvironment: isDevelopmentEnvironment,
+} = workerData || {};
 let workerModule = null;
 let resolvedFile = null;
 let baseDir = null;
 
 if (isDevelopmentEnvironment) {
-  process.env['MIDWAY_LOGGER_WRITEABLE_DIR'] = process.env['MIDWAY_LOGGER_WRITEABLE_DIR'] ?? mainAppDir;
+  process.env['MIDWAY_LOGGER_WRITEABLE_DIR'] =
+    process.env['MIDWAY_LOGGER_WRITEABLE_DIR'] ?? mainAppDir;
 }
 
 if (fullpath) {
   resolvedFile = resolveWorkerFile(fullpath);
   baseDir = path.dirname(resolvedFile);
-  
+
   // 如果是 .ts 文件，注册 ts-node 以支持 TypeScript
   if (resolvedFile.endsWith('.ts')) {
     try {
+      /* eslint-disable-next-line node/no-extraneous-require */
       require('ts-node').register();
     } catch (err) {
       // ts-node 可能不存在（生产环境），忽略错误
       // 如果真的需要 ts-node 但没安装，后续 require 会失败并报错
     }
   }
-  
+
   workerModule = require(resolvedFile);
 }
 
@@ -75,29 +84,43 @@ module.exports = async function workerEntry(message) {
   }
 
   // 支持 FunctionalConfiguration 的情况
-  if (applicationContext || workerModule.default instanceof FunctionalConfiguration) {
+  if (
+    applicationContext ||
+    workerModule.default instanceof FunctionalConfiguration
+  ) {
     if (!applicationContext) {
       applicationContext = await initializeGlobalApplicationContext({
         baseDir,
         loggerFactory: loggers,
       });
       // 获取 PiscinaWorkerFramework
-      const midwayFrameworkService = await applicationContext.getAsync(MidwayFrameworkService);
+      const midwayFrameworkService = await applicationContext.getAsync(
+        MidwayFrameworkService
+      );
       framework = midwayFrameworkService.getMainFramework();
       if (!framework) {
         throw new Error('Framework instance not found in application context');
       }
-      framework.getLogger().info(`[piscina:worker:${threadId}]: ApplicationContext initialized in worker`);
+      framework
+        .getLogger()
+        .info(
+          `[piscina:worker:${threadId}]: ApplicationContext initialized in worker`
+        );
     }
 
-    framework.getLogger().info(`[piscina:worker:${threadId}]: Executing task handler "${payload.handler}" with payload`, payload.data);
+    framework
+      .getLogger()
+      .info(
+        `[piscina:worker:${threadId}]: Executing task handler "${payload.handler}" with payload`,
+        payload.data
+      );
     // 执行容器中的任务
     return await framework.executeTask(payload.handler, payload.data);
   }
 
   // 获取处理函数
   let fn;
-  
+
   // 1. 如果指定了 handler，先查找具名导出
   if (handler && workerModule[handler]) {
     fn = workerModule[handler];
