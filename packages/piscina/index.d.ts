@@ -1,8 +1,8 @@
-import { BackgroundTaskOptions } from './dist/index';
+import { PiscinaConfig } from './dist/index';
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    backgroundTask?: Partial<BackgroundTaskOptions>;
+    piscina?: PiscinaConfig;
   }
 }

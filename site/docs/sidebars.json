@@ -219,7 +219,8 @@
         "extensions/cron",
         "extensions/jwt",
         "extensions/tenant",
-        "extensions/events"
+        "extensions/events",
+        "extensions/piscina"
       ]
     },
     {
