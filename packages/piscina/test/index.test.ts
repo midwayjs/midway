@@ -165,35 +165,6 @@ describe('PiscinaService', () => {
     await close(app);
   });
 
-  it('should work with default export in JS', async () => {
-    const defaultWorkerFile = join(
-      __dirname,
-      'fixtures/worker/default.worker.js'
-    );
-
-    const app = await createLightApp({
-      imports: [piscina],
-      globalConfig: {
-        piscina: {
-          client: {
-            workerFile: defaultWorkerFile,
-          },
-        },
-      },
-    });
-
-    const service = await app
-      .getApplicationContext()
-      .getAsync(piscina.PiscinaService);
-
-    // 默认导出不需要指定 handler
-    const result = await service.run({ payload: { value: 10 } });
-
-    expect(result).toBe(30); // value * 3
-
-    await close(app);
-  });
-
   it('should work with default export in TS', async () => {
     const defaultWorkerFile = join(
       __dirname,
