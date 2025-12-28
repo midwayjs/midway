@@ -59,8 +59,22 @@ if (fullpath) {
   // 如果是 .ts 文件，注册 ts-node 以支持 TypeScript
   if (resolvedFile.endsWith('.ts')) {
     try {
+      // 查找 worker 目录中的 tsconfig.json
+      const workerTsConfig = path.join(baseDir, 'tsconfig.json');
+      const hasWorkerTsConfig = fs.existsSync(workerTsConfig);
+      
       /* eslint-disable-next-line node/no-extraneous-require */
-      require('ts-node').register();
+      require('ts-node').register(
+        hasWorkerTsConfig
+          ? { project: workerTsConfig }
+          : {
+              transpileOnly: true,
+              compilerOptions: {
+                module: 'commonjs',
+                moduleResolution: 'node',
+              },
+            }
+      );
     } catch (err) {
       // ts-node 可能不存在（生产环境），忽略错误
       // 如果真的需要 ts-node 但没安装，后续 require 会失败并报错
