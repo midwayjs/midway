@@ -62,7 +62,7 @@ if (fullpath) {
       // 查找 worker 目录中的 tsconfig.json
       const workerTsConfig = path.join(baseDir, 'tsconfig.json');
       const hasWorkerTsConfig = fs.existsSync(workerTsConfig);
-      
+
       /* eslint-disable-next-line node/no-extraneous-require */
       require('ts-node').register(
         hasWorkerTsConfig
