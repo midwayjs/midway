@@ -28,7 +28,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/logger": "^3.0.0",
+    "@midwayjs/logger": "^4.0.0",
     "@midwayjs/mock": "workspace:^",
     "@types/koa": "2.15.0",
     "dayjs": "1.11.19",

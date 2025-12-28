@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "allowJs": true
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./src/worker-bootstrap.js"
+  ]
+}

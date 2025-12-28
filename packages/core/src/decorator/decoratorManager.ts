@@ -20,7 +20,7 @@ import { MetadataManager } from './metadataManager';
 import { isClass } from '../util/types';
 import { MidwayInconsistentVersionError } from '../error';
 
-const debug = require('util').debuglog('midway:core');
+const debug = require('util').debuglog('midway:debug');
 
 /**
  * This class is used to manage the decorator data of the class
@@ -79,7 +79,7 @@ export class DecoratorManager {
           meta.id = identifier;
           // save class id and uuid
           MetadataManager.defineMetadata(PROVIDE_KEY, meta, target);
-          debug(`update provide: ${target.name} -> ${meta.uuid}`);
+          debug(`[core]: Update provide: ${target.name} -> ${meta.uuid}`);
         }
       }
     } else {
@@ -96,7 +96,7 @@ export class DecoratorManager {
         },
         target
       );
-      debug(`save provide: ${target.name} -> ${uuid}`);
+      debug(`[core]: Save provide: ${target.name} -> ${uuid}`);
     }
 
     return target;

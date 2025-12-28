@@ -460,7 +460,7 @@ Default effect (using `querystring`)
 ```JSON
 {
    "a": ["1", "3" ],
-   "b": ["2"],
+   "b": "2",
    "c": ["1", "2"]
 }
 ```
@@ -470,7 +470,7 @@ Default effect (using `querystring`)
 ```JSON
 {
    "a": ["1", "3" ],
-   "b": "2",
+   "b": ["2"],
    "c": ["1", "2"]
 }
 ```

@@ -1,0 +1,38 @@
+{
+  "name": "@midwayjs/piscina",
+  "version": "4.0.0-beta.8",
+  "description": "Midway Component for Piscina worker thread pool",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "component",
+    "piscina",
+    "worker",
+    "thread"
+  ],
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@midwayjs/logger": "^4.0.0"
+  },
+  "dependencies": {
+    "piscina": "5.1.4"
+  }
+}

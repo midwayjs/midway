@@ -22,7 +22,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/logger": "^3.0.0",
+    "@midwayjs/logger": "^4.0.0",
     "eventsource": "2.0.2",
     "koa": "3.0.3",
     "mm": "3.4.0",
