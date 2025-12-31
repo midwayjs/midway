@@ -62,9 +62,12 @@ export default {
     const en = await loadModule('@semihbou/zod-i18n-map/locales/en/zod.json', {
       loadMode: environmentService.getModuleLoadType(),
     });
-    const cn = await loadModule('@semihbou/zod-i18n-map/locales/zh-CN/zod.json', {
-      loadMode: environmentService.getModuleLoadType(),
-    });
+    const cn = await loadModule(
+      '@semihbou/zod-i18n-map/locales/zh-CN/zod.json',
+      {
+        loadMode: environmentService.getModuleLoadType(),
+      }
+    );
     const configService = container.get(MidwayConfigService);
     configService.addObject({
       i18n: {
@@ -86,8 +89,7 @@ export default {
           MidwayI18nServiceSingleton
         );
         const configService = await container.getAsync(MidwayConfigService);
-        this.defaultZodOptions =
-          configService.getConfiguration('zod');
+        this.defaultZodOptions = configService.getConfiguration('zod');
 
         for (const locale of i18nServiceSingleton.getLocaleList('zod')) {
           const instance = i18next.createInstance();
@@ -102,7 +104,10 @@ export default {
           };
           await instance.init(cfg);
           // 使用已初始化的 instance 的 t 方法，namespace 为 'zod'
-          localeMapping.set(locale, makeZodI18nMap({ t: instance.t.bind(instance), ns: 'zod' }));
+          localeMapping.set(
+            locale,
+            makeZodI18nMap({ t: instance.t.bind(instance), ns: 'zod' })
+          );
         }
       }
 
