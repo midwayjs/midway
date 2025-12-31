@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 参数校验
 
 我们经常要在方法调用时执行一些类型检查，参数转换的操作，Midway 提供了一种简单的能力来快速检查参数的类型。
@@ -768,10 +771,18 @@ export class UserService {
 
 ### 使用 `zod` 验证器
 
-如果你选择使用 `zod` 验证器，需要先安装 `zod` 和相关依赖包：
+Midway 同时支持 Zod v3 和 Zod v4 两个版本，你可以根据项目需求选择：
+
+- `@midwayjs/validation-zod` - 支持 Zod v3 (3.x)
+- `@midwayjs/validation-zod4` - 支持 Zod v4 (4.x)
+
+<Tabs>
+<TabItem value="v3" label="Zod v3" default>
+
+如果你选择使用 Zod v3 验证器，需要先安装相关依赖包：
 
 ```bash
-$ npm i @midwayjs/validation@4 @midwayjs/validation-zod@4 zod --save
+$ npm i @midwayjs/validation@4 @midwayjs/validation-zod@4 zod@3 --save
 ```
 
 在配置文件中设置验证器：
@@ -832,7 +843,6 @@ Zod 验证器使用了 `zod-i18n-map` 提供的翻译，支持更多的语言，
 export default {
   // ...
   i18n: {
-    // 配置验证器
     localeTable: {
       zh_TW: {
         zod: require('zod-i18n-map/locales/zh-TW/zod.json'),
@@ -841,6 +851,85 @@ export default {
   }
 }
 ```
+
+</TabItem>
+<TabItem value="v4" label="Zod v4">
+
+如果你选择使用 Zod v4 验证器，需要先安装相关依赖包：
+
+```bash
+$ npm i @midwayjs/validation@4 @midwayjs/validation-zod4@4 zod@4 --save
+```
+
+在配置文件中设置验证器：
+
+```typescript
+// src/config/config.default.ts
+import zod from '@midwayjs/validation-zod4';
+
+export default {
+  // ...
+  validation: {
+    // 配置验证器
+    validators: {
+      'zod': zod,
+    },
+    // 设置默认验证器
+    defaultValidator: 'zod'
+  }
+}
+```
+
+可以直接使用 Zod 的验证规则：
+
+```typescript
+import { Rule } from '@midwayjs/validation';
+import { z } from 'zod';
+
+export class UserDTO {
+  @Rule(z.number().min(1))
+  id: number;
+
+  @Rule(z.string().min(1))
+  firstName: string;
+
+  @Rule(z.string().max(10))
+  lastName: string;
+
+  @Rule(z.number().max(60))
+  age: number;
+}
+```
+
+Zod v4 验证器使用了 `@semihbou/zod-i18n-map` 提供的翻译，支持更多的语言，包括：
+
+- 简体中文 (zh-CN)
+- 繁体中文 (zh-TW)
+- 英语 (en)
+- 日语 (ja)
+- 韩语 (ko)
+- 俄语 (ru)
+
+等多种语言。
+
+如有需要，可以参考 [@semihbou/zod-i18n-map](https://github.com/VC-Semih/zod-i18n) 的文档，添加更多的语言支持。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  i18n: {
+    localeTable: {
+      zh_TW: {
+        zod: require('@semihbou/zod-i18n-map/locales/zh-TW/zod.json'),
+      },
+    },
+  }
+}
+```
+
+</TabItem>
+</Tabs>
 
 
 ### 使用 `class-validator` 验证器

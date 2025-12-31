@@ -1,8 +1,8 @@
 export * from './dist/index';
-import { ParseParams } from 'zod';
+import type { ParseContext } from 'zod/v4/core';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    zod?: Partial<ParseParams>;
+    zod?: Partial<ParseContext>;
   }
 }

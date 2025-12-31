@@ -91,7 +91,6 @@ export default {
 
         for (const locale of i18nServiceSingleton.getLocaleList('zod')) {
           const instance = i18next.createInstance();
-          const t = i18next.getFixedT(null, 'common');
           const newLocale = lngMapping[locale];
           const cfg = {
             lng: newLocale,
@@ -102,7 +101,8 @@ export default {
             },
           };
           await instance.init(cfg);
-          localeMapping.set(locale, makeZodI18nMap({t, ns: 'common'}));
+          // 使用已初始化的 instance 的 t 方法，namespace 为 'zod'
+          localeMapping.set(locale, makeZodI18nMap({ t: instance.t.bind(instance), ns: 'zod' }));
         }
       }
 
