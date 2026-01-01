@@ -12,7 +12,7 @@ import { ConnectionMiddleware, PacketMiddleware } from './middleware/conn.middle
     {
       default: {
         socketIO: {
-          port: 3000
+          port: 0
         }
       }
     }

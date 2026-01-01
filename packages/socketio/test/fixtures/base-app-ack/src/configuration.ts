@@ -7,7 +7,7 @@ import { Application } from '../../../../src';
     {
       default: {
         socketIO: {
-          port: 3000,
+          port: 0,
           path: '/test'
         }
       }

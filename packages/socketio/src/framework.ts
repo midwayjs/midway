@@ -25,6 +25,7 @@ import {
   WSEventTypeEnum,
   Framework,
 } from '@midwayjs/core';
+import { getFreePort } from './utils';
 
 @Framework()
 export class MidwaySocketIOFramework extends BaseFramework<
@@ -34,6 +35,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
 > {
   private namespaceList = [];
   protected connectionMiddlewareManager = this.createMiddlewareManager();
+  protected socketServerPort: number;
 
   configure(): IMidwaySocketIOOptions {
     return this.configService.getConfiguration('socketIO');
@@ -65,13 +67,20 @@ export class MidwaySocketIOFramework extends BaseFramework<
     }
 
     // listen port when http server not exist
-    if (this.configurationOptions.port) {
-      this.app.listen(
-        this.configurationOptions.port,
-        this.configurationOptions
-      );
+    if (typeof this.configurationOptions.port === 'number') {
+      let customPort: number = this.configurationOptions.port;
+
+      if (customPort === 0) {
+        customPort = await getFreePort();
+        this.logger.info(
+          `[midway:socketio] server has auto-assigned port ${customPort}`
+        );
+      }
+
+      this.app.listen(customPort, this.configurationOptions);
+      this.socketServerPort = customPort;
       this.logger.info(
-        `[midway:socketio] Socket.io server port = ${this.configurationOptions.port} start success`
+        `[midway:socketio] Socket.io server port = ${customPort} start success`
       );
     } else if (this.applicationContext.hasObject(HTTP_SERVER_KEY)) {
       this.app.attach(
@@ -82,6 +91,10 @@ export class MidwaySocketIOFramework extends BaseFramework<
         '[midway:socketio] Socket.io server start success and attach to web server'
       );
     }
+  }
+
+  public getSocketServerPort(): number {
+    return this.socketServerPort;
   }
 
   protected async beforeStop(): Promise<void> {
