@@ -624,4 +624,67 @@ describe('test/koa.test.ts', function () {
       await close(app);
     });
   });
+
+  describe('koa file with validation', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, 'fixtures/koa-file-with-validation');
+      app = await createLegacyApp(appDir);
+    });
+
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('should upload file with validation success', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      const response = await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', pdfPath)
+        .expect(200);
+
+      expect(response.body.files.length).toBe(1);
+      expect(response.body.files[0].filename).toBe('test.pdf');
+      expect(response.body.fields.name).toBe('form');
+      expect(response.body.fields.name2).toBe('form2');
+    });
+
+    it('should return validation error when name is missing', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      await request.post('/upload')
+        .field('name2', 'form2')
+        .attach('file', pdfPath)
+        .expect(422);
+    });
+
+    it('should return validation error when name2 is missing', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .attach('file', pdfPath)
+        .expect(422);
+    });
+
+    it('should return validation error when both fields are missing', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      await request.post('/upload')
+        .attach('file', pdfPath)
+        .expect(422);
+    });
+
+    it('should return validation error when name is empty string', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', '')
+        .field('name2', 'form2')
+        .attach('file', pdfPath)
+        .expect(422);
+    });
+  });
 });

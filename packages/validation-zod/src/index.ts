@@ -17,6 +17,7 @@ import { fromError } from 'zod-validation-error';
 import * as i18next from 'i18next';
 import { makeZodI18nMap } from 'zod-i18n-map';
 import { MidwayI18nServiceSingleton } from '@midwayjs/i18n';
+import { join } from 'path';
 
 // 将 i18n 的标准 locale 转换为 zod-i18n-map 提供的 locale
 const lngMapping = {
@@ -61,9 +62,11 @@ export default {
     const environmentService = container.get(MidwayEnvironmentService);
     const en = await loadModule('zod-i18n-map/locales/en/zod.json', {
       loadMode: environmentService.getModuleLoadType(),
+      extraModuleRoot: [join(__dirname, '../')],
     });
     const cn = await loadModule('zod-i18n-map/locales/zh-CN/zod.json', {
       loadMode: environmentService.getModuleLoadType(),
+      extraModuleRoot: [join(__dirname, '../')],
     });
     const configService = container.get(MidwayConfigService);
     configService.addObject({

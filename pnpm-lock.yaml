@@ -259,12 +259,21 @@ importers:
       '@midwayjs/mock':
         specifier: workspace:^
         version: link:../mock
+      '@midwayjs/validation':
+        specifier: workspace:^
+        version: link:../validation
+      '@midwayjs/validation-zod':
+        specifier: workspace:^
+        version: link:../validation-zod
       '@midwayjs/web':
         specifier: workspace:^
         version: link:../web
       fs-extra:
         specifier: 11.3.2
         version: 11.3.2
+      zod:
+        specifier: 3.25.76
+        version: 3.25.76
 
   packages/cache-manager:
     dependencies:

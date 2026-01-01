@@ -36,7 +36,12 @@ export abstract class AbstractValidationPipe implements PipeTransform {
 
   validate(value: any, options: TransformOptions) {
     const validateOptions = this.parseValidationOptions(options);
-    if (options.metaType.isBaseType) {
+    if (
+      options.metaType.isBaseType ||
+      !options.metaType.originDesign ||
+      options.metadata?.type === 'files_stream' ||
+      options.metadata?.type === 'file_stream'
+    ) {
       return value;
     }
     const result = this.validateService.validate(

@@ -68,6 +68,7 @@ export const loadModule = async (
     loadMode?: 'commonjs' | 'esm';
     safeLoad?: boolean;
     warnOnLoadError?: boolean;
+    extraModuleRoot?: string[];
   } = {}
 ) => {
   options.enableCache = options.enableCache ?? true;
@@ -88,8 +89,13 @@ export const loadModule = async (
         try {
           return require(p);
         } catch (_) {
-          // find with current cwd and node_modules path
-          return require(require.resolve(p, { paths: [process.cwd()] }));
+          for (const extraPath of [process.cwd(), ...options.extraModuleRoot]) {
+            try {
+              return require(require.resolve(p, { paths: [extraPath] }));
+            } catch (_) {
+              // do nothing
+            }
+          }
         }
       } else {
         // if json file, import need add options
