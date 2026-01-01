@@ -2,12 +2,14 @@ import { closeApp, createServer } from './utils';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 import { sleep } from '@midwayjs/core';
+import { Framework } from '../src'
 
 describe('/test/index.test.ts', () => {
   it('should test create socket app and use default namespace', async () => {
     const app = await createServer('base-app');
+    const port = (app.getFramework() as Framework).getSocketServerPort();
     const client = await createSocketIOClient({
-      port: 3000,
+      port,
     });
 
     const gotEvent = once(client, 'ok');
@@ -24,8 +26,9 @@ describe('/test/index.test.ts', () => {
 
   it('should test create socket app and with emit ack', async () => {
     const app = await createServer('base-app-ack');
+    const port = (app.getFramework() as Framework).getSocketServerPort();
     const client = await createSocketIOClient({
-      port: 3000,
+      port,
       path: '/test'
     });
 
@@ -41,16 +44,17 @@ describe('/test/index.test.ts', () => {
 
   it('should test create socket app with different namespace', async () => {
     const app = await createServer('base-app-namespace');
+    const port = (app.getFramework() as Framework).getSocketServerPort();
     const client1 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/',
     });
     const client2 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/test',
     });
     const client3 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/test2',
     });
 
@@ -83,20 +87,21 @@ describe('/test/index.test.ts', () => {
 
   it('should test create socket app with room broadcast', async () => {
     const app = await createServer('base-app-room');
+    const port = (app.getFramework() as Framework).getSocketServerPort();
     const clientParent = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/',
     });
     const client1 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/',
     });
     const client2 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/',
     });
     const client3 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/',
     });
 
@@ -135,6 +140,7 @@ describe('/test/index.test.ts', () => {
 
     expect(total).toEqual(4);
 
+    await clientParent.close();
     await client1.close();
     await client2.close();
     await client3.close();
@@ -143,8 +149,9 @@ describe('/test/index.test.ts', () => {
 
   it('should test create socket app and throw error', async () => {
     const app = await createServer('base-app-error');
+    const port = (app.getFramework() as Framework).getSocketServerPort();
     const client = await createSocketIOClient({
-      port: 3000,
+      port,
     });
 
     const promise = new Promise<void>((resolve) => {
@@ -160,8 +167,9 @@ describe('/test/index.test.ts', () => {
 
   it('should test create socket and with middleware', async () => {
     const app = await createServer('base-app-middleware');
+    const port = (app.getFramework() as Framework).getSocketServerPort();
     const client1 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/',
     });
 
@@ -171,7 +179,7 @@ describe('/test/index.test.ts', () => {
     expect(data.result).toEqual(3);
 
     const client2 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/api',
     });
 
@@ -194,8 +202,9 @@ describe('/test/index.test.ts', () => {
 
   it('should test create socket and with filter', async () => {
     const app = await createServer('base-app-filter');
+    const port = (app.getFramework() as Framework).getSocketServerPort();
     const client1 = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/',
     });
 
@@ -212,8 +221,9 @@ describe('/test/index.test.ts', () => {
 
   it('should test create socket app and use regexp namespace', async () => {
     const app = await createServer('base-app-namespace-regexp');
+    const port = (app.getFramework() as Framework).getSocketServerPort();
     const client = await createSocketIOClient({
-      port: 3000,
+      port,
       namespace: '/abc123'
     });
 

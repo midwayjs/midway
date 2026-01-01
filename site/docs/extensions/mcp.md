@@ -37,16 +37,6 @@ $ npm i @midwayjs/mcp@4 --save
 $ npm i @modelcontextprotocol/sdk zod --save
 ```
 
-:::warning
-**⚠️ Zod 版本兼容性重要提示**
-
-MCP SDK (`@modelcontextprotocol/sdk`) 当前使用 Zod v3.x 版本。为确保兼容性，您的项目**必须**使用 Zod 3.x 版本，不要使用 Zod v4.x 或更高版本，否则会导致类型兼容性问题。
-
-**推荐安装特定版本**：
-```bash
-$ npm i zod@^3.24.1 --save
-```
-:::
 
 如果使用 `sse` 或 `stream-http` 传输类型，还需要安装 HTTP 框架组件（选择其中一个）：
 

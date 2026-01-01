@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Parameter Validation
 
 We often need to perform type checking and parameter conversion operations when calling methods. Midway provides a simple capability to quickly check parameter types.
@@ -768,10 +771,18 @@ export class UserService {
 
 ### Using `zod` Validator
 
-If you choose to use the `zod` validator, you need to first install `zod` and related dependency packages:
+Midway supports both Zod v3 and Zod v4 versions, you can choose according to project requirements:
+
+- `@midwayjs/validation-zod` - Supports Zod v3 (3.x)
+- `@midwayjs/validation-zod4` - Supports Zod v4 (4.x)
+
+<Tabs>
+<TabItem value="v3" label="Zod v3" default>
+
+If you choose to use the Zod v3 validator, you need to first install the related dependency packages:
 
 ```bash
-$ npm i @midwayjs/validation@4 @midwayjs/validation-zod@4 zod --save
+$ npm i @midwayjs/validation@4 @midwayjs/validation-zod@4 zod@3 --save
 ```
 
 Set the validator in the configuration file:
@@ -841,6 +852,85 @@ export default {
   }
 }
 ```
+
+</TabItem>
+<TabItem value="v4" label="Zod v4">
+
+If you choose to use the Zod v4 validator, you need to first install the related dependency packages:
+
+```bash
+$ npm i @midwayjs/validation@4 @midwayjs/validation-zod4@4 zod@4 --save
+```
+
+Set the validator in the configuration file:
+
+```typescript
+// src/config/config.default.ts
+import zod from '@midwayjs/validation-zod4';
+
+export default {
+  // ...
+  validation: {
+    // Configure validators
+    validators: {
+      'zod': zod,
+    },
+    // Set default validator
+    defaultValidator: 'zod'
+  }
+}
+```
+
+You can use Zod validation rules directly:
+
+```typescript
+import { Rule } from '@midwayjs/validation';
+import { z } from 'zod';
+
+export class UserDTO {
+  @Rule(z.number().min(1))
+  id: number;
+
+  @Rule(z.string().min(1))
+  firstName: string;
+
+  @Rule(z.string().max(10))
+  lastName: string;
+
+  @Rule(z.number().max(60))
+  age: number;
+}
+```
+
+The Zod v4 validator uses translations provided by `@semihbou/zod-i18n-map` and supports more languages, including:
+
+- Simplified Chinese (zh-CN)
+- Traditional Chinese (zh-TW)
+- English (en)
+- Japanese (ja)
+- Korean (ko)
+- Russian (ru)
+
+and many other languages.
+
+If needed, you can refer to the documentation of `https://github.com/VC-Semih/zod-i18n` to add support for more languages.
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  i18n: {
+    localeTable: {
+      zh_TW: {
+        zod: require('@semihbou/zod-i18n-map/locales/zh-TW/zod.json'),
+      },
+    },
+  }
+}
+```
+
+</TabItem>
+</Tabs>
 
 
 ### Using `class-validator` Validator

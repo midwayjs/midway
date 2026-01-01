@@ -19,7 +19,7 @@ export class DefaultFilter {
     {
       default: {
         socketIO: {
-          port: 3000
+          port: 0
         }
       }
     }

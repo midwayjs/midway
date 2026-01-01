@@ -214,7 +214,7 @@
         "extensions/info",
         "extensions/validate",
         "extensions/swagger",
-        "extensions/bull",
+        "extensions/bullmq",
         "extensions/cron",
         "extensions/jwt"
       ]
@@ -310,6 +310,7 @@
       "collapsible": false,
       "items": [
         "extensions/cache",
+        "extensions/bull",
         "extensions/upload",
         "legacy/mongodb",
         "legacy/sequelize",

@@ -85,7 +85,12 @@ export const loadModule = async (
   try {
     if (options.enableCache) {
       if (options.loadMode === 'commonjs') {
-        return require(p);
+        try {
+          return require(p);
+        } catch (_) {
+          // find with current cwd and node_modules path
+          return require(require.resolve(p, { paths: [process.cwd()] }));
+        }
       } else {
         // if json file, import need add options
         if (p.endsWith('.json')) {

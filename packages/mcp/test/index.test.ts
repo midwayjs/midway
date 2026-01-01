@@ -324,7 +324,7 @@ describe('/test/index.test.ts', () => {
         arguments: {}
       });
       
-      if (!result.messages || result.messages.length === 0 || result.messages[0].content.text !== 'Hello from test prompt') {
+      if (!result.messages || result.messages.length === 0 || (result.messages[0].content as any).text !== 'Hello from test prompt') {
         throw new Error('Prompt should return expected result');
       }
 
@@ -399,7 +399,7 @@ describe('/test/index.test.ts', () => {
         uri: 'test://resource'
       });
       
-      if (!result.contents || result.contents.length === 0 || result.contents[0].text !== 'Hello from test resource') {
+      if (!result.contents || result.contents.length === 0 || (result.contents[0] as any).text !== 'Hello from test resource') {
         throw new Error('Resource should return expected result');
       }
 
@@ -657,7 +657,7 @@ describe('/test/index.test.ts', () => {
         throw new Error('Resource should return content');
       }
 
-      const resourceContent = resourceResult.contents[0];
+      const resourceContent = resourceResult.contents[0] as any;
       if (resourceContent.mimeType !== 'application/json' || !resourceContent.text || typeof resourceContent.text !== 'string') {
         throw new Error('Resource should return JSON content');
       }
