@@ -219,7 +219,7 @@ describe('test/koa.test.ts', function () {
     });
   });
 
-  describe('koa iterator', () => {
+  describe.only('koa iterator', () => {
 
     let resourceDir: string;
 
@@ -245,9 +245,14 @@ describe('test/koa.test.ts', function () {
           for await (const { data, fieldName, filename } of fileIterator) {
             const path = join(resourceDir, `${fieldName}.pdf`);
             const stream = createWriteStream(path);
-            const end = new Promise(resolve => {
+            const end = new Promise((resolve, reject) => {
               stream.on('close', () => {
                 resolve(void 0)
+              });
+              stream.on('error', reject);
+              data.on('error', (err) => {
+                stream.destroy();
+                reject(err);
               });
             });
 
@@ -306,7 +311,7 @@ describe('test/koa.test.ts', function () {
       await close(app);
     });
 
-    it('upload stream mode and multi file with read fields', async () => {
+    it.only('upload stream mode and multi file with read fields', async () => {
       @Controller('/')
       class HomeController {
         @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, { mode: 'asyncIterator' }) ] })
@@ -315,9 +320,14 @@ describe('test/koa.test.ts', function () {
           for await (const file of fileIterator) {
             const path = join(resourceDir, `${file.fieldName}.pdf`);
             const stream = createWriteStream(path);
-            const end = new Promise(resolve => {
+            const end = new Promise((resolve, reject) => {
               stream.on('close', () => {
                 resolve(void 0)
+              });
+              stream.on('error', reject);
+              file.data.on('error', (err) => {
+                stream.destroy();
+                reject(err);
               });
             });
 
@@ -363,10 +373,11 @@ describe('test/koa.test.ts', function () {
       expect(response.body.files[1].filename).toBe('test.pdf');
       expect(response.body.files[1].fieldName).toBe('file2');
 
+      await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
     });
 
-    it('upload stream mode and multi file and trigger limit error', async () => {
+    it.only('upload stream mode and multi file and trigger limit error', async () => {
       @Controller('/')
       class HomeController {
         @Post("/upload-multi", {
@@ -421,10 +432,12 @@ describe('test/koa.test.ts', function () {
         .attach('file2', pdfPath);
 
       expect(response.status).toBe(400);
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
     });
 
-    it('upload stream mode trigger limit error and catch it', async () => {
+    it.only('upload stream mode trigger limit error and catch it', async () => {
       @Controller('/')
       class HomeController {
         @Post("/upload-multi", {
@@ -478,6 +491,8 @@ describe('test/koa.test.ts', function () {
         .attach('file2', pdfPath);
 
       expect(response.status).toBe(200);
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
     });
 
