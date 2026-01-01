@@ -221,7 +221,7 @@ export class MidwayMCPFramework extends BaseFramework<
       this.server.registerTool(
         toolMeta.toolName,
         toolMeta.toolSchema,
-        async (args, extra: any) => {
+        async (args: any, extra: any) => {
           if (extra === undefined) {
             extra = args;
             args = {};

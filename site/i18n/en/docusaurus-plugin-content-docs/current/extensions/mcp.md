@@ -37,16 +37,6 @@ $ npm i @midwayjs/mcp@4 --save
 $ npm i @modelcontextprotocol/sdk zod --save
 ```
 
-:::warning
-Important Zod compatibility notice
-
-The MCP SDK (`@modelcontextprotocol/sdk`) currently uses Zod v3.x. To ensure compatibility, your project must use Zod 3.x. Do not use Zod v4.x or higher, otherwise type compatibility issues may occur.
-
-Recommended specific version:
-```bash
-$ npm i zod@^3.24.1 --save
-```
-:::
 
 If you use the `sse` or `stream-http` transport, you also need to install one of the HTTP framework components (choose one):
 
