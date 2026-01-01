@@ -219,7 +219,7 @@ describe('test/koa.test.ts', function () {
     });
   });
 
-  describe.only('koa iterator', () => {
+  describe('koa iterator', () => {
 
     let resourceDir: string;
 
@@ -311,7 +311,7 @@ describe('test/koa.test.ts', function () {
       await close(app);
     });
 
-    it.only('upload stream mode and multi file with read fields', async () => {
+    it('upload stream mode and multi file with read fields', async () => {
       @Controller('/')
       class HomeController {
         @Post('/upload-multi', { middleware: [ createMiddleware(busboy.UploadMiddleware, { mode: 'asyncIterator' }) ] })
@@ -377,7 +377,7 @@ describe('test/koa.test.ts', function () {
       await close(app);
     });
 
-    it.only('upload stream mode and multi file and trigger limit error', async () => {
+    it('upload stream mode and multi file and trigger limit error', async () => {
       @Controller('/')
       class HomeController {
         @Post("/upload-multi", {
@@ -437,7 +437,7 @@ describe('test/koa.test.ts', function () {
       await close(app);
     });
 
-    it.only('upload stream mode trigger limit error and catch it', async () => {
+    it('upload stream mode trigger limit error and catch it', async () => {
       @Controller('/')
       class HomeController {
         @Post("/upload-multi", {
