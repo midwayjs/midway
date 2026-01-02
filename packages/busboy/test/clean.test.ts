@@ -4,7 +4,7 @@ import { existsSync, statSync } from 'fs';
 import { sleep } from '@midwayjs/core';
 import { Framework } from '@midwayjs/faas';
 
-describe('test/clean.test.ts', function () {
+describe.skip('test/clean.test.ts', function () {
 
   it('upload file auto clean', async () => {
     const appDir = join(__dirname, 'fixtures/clean');

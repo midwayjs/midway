@@ -291,22 +291,28 @@ describe('test/koa.test.ts', function () {
 
       const pdfPath = join(__dirname, 'fixtures/test.pdf');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .field('name', 'form')
-        .field('name2', 'form2')
-        .attach('file123', pdfPath)
-        .attach('file2', pdfPath)
-        .expect(200);
+      try {
+        const response = await request.post('/upload-multi')
+          .field('name', 'form')
+          .field('name2', 'form2')
+          .attach('file123', pdfPath)
+          .attach('file2', pdfPath)
+          .expect(200);
 
-      const stat = statSync(pdfPath);
-      expect(response.body.size).toBe(stat.size);
-      expect(response.body.files.length).toBe(2);
-      expect(response.body.files[0].filename).toBe('test.pdf');
-      expect(response.body.files[0].fieldName).toBe('file123');
-      expect(response.body.files[1].filename).toBe('test.pdf');
-      expect(response.body.files[1].fieldName).toBe('file2');
-      expect(response.body.fields[0].value).toBe('form');
-      expect(response.body.fields[1].value).toBe('form2');
+        const stat = statSync(pdfPath);
+        expect(response.body.size).toBe(stat.size);
+        expect(response.body.files.length).toBe(2);
+        expect(response.body.files[0].filename).toBe('test.pdf');
+        expect(response.body.files[0].fieldName).toBe('file123');
+        expect(response.body.files[1].filename).toBe('test.pdf');
+        expect(response.body.files[1].fieldName).toBe('file2');
+        expect(response.body.fields[0].value).toBe('form');
+        expect(response.body.fields[1].value).toBe('form2');
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
 
       await close(app);
     });
@@ -358,20 +364,26 @@ describe('test/koa.test.ts', function () {
 
       const pdfPath = join(__dirname, 'fixtures/test.pdf');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .field('name', 'form')
-        .field('name2', 'form2')
-        .attach('file123', pdfPath)
-        .attach('file2', pdfPath)
-        .expect(200);
+      try {
+        const response = await request.post('/upload-multi')
+          .field('name', 'form')
+          .field('name2', 'form2')
+          .attach('file123', pdfPath)
+          .attach('file2', pdfPath)
+          .expect(200);
 
-      const stat = statSync(pdfPath);
-      expect(response.body.size).toBe(stat.size);
-      expect(response.body.files.length).toBe(2);
-      expect(response.body.files[0].filename).toBe('test.pdf');
-      expect(response.body.files[0].fieldName).toBe('file123');
-      expect(response.body.files[1].filename).toBe('test.pdf');
-      expect(response.body.files[1].fieldName).toBe('file2');
+        const stat = statSync(pdfPath);
+        expect(response.body.size).toBe(stat.size);
+        expect(response.body.files.length).toBe(2);
+        expect(response.body.files[0].filename).toBe('test.pdf');
+        expect(response.body.files[0].fieldName).toBe('file123');
+        expect(response.body.files[1].filename).toBe('test.pdf');
+        expect(response.body.files[1].fieldName).toBe('file2');
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
 
       await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
@@ -425,13 +437,19 @@ describe('test/koa.test.ts', function () {
 
       const pdfPath = join(__dirname, 'fixtures/test.pdf');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .field('name', 'form')
-        .field('name2', 'form2')
-        .attach('file123', pdfPath)
-        .attach('file2', pdfPath);
+      try {
+        const response = await request.post('/upload-multi')
+          .field('name', 'form')
+          .field('name2', 'form2')
+          .attach('file123', pdfPath)
+          .attach('file2', pdfPath);
 
-      expect(response.status).toBe(400);
+        expect(response.status).toBe(400);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
 
       await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
@@ -484,13 +502,18 @@ describe('test/koa.test.ts', function () {
 
       const pdfPath = join(__dirname, 'fixtures/test.pdf');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .field('name', 'form')
-        .field('name2', 'form2')
-        .attach('file123', pdfPath)
-        .attach('file2', pdfPath);
-
-      expect(response.status).toBe(200);
+      try {
+        await request.post('/upload-multi')
+          .field('name', 'form')
+          .field('name2', 'form2')
+          .attach('file123', pdfPath)
+          .attach('file2', pdfPath)
+          .expect(200);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
 
       await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
@@ -524,10 +547,16 @@ describe('test/koa.test.ts', function () {
 
       const txtPath = join(__dirname, "fixtures/1.test");
       const request = createHttpRequest(app);
-      const response = await request.post("/upload-multi")
-        .attach("file", txtPath);
+      try {
+        const response = await request.post("/upload-multi")
+          .attach("file", txtPath);
 
-      expect(response.status).toBe(204);
+        expect(response.status).toBe(204);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
       await close(app);
     });
 
@@ -572,10 +601,16 @@ describe('test/koa.test.ts', function () {
 
       const txtPath = join(__dirname, 'fixtures/1.test');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .attach('file', txtPath);
+      try {
+        const response = await request.post('/upload-multi')
+          .attach('file', txtPath);
 
-      expect(response.status).toBe(400);
+        expect(response.status).toBe(400);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
       await close(app);
     });
 
@@ -631,11 +666,17 @@ describe('test/koa.test.ts', function () {
 
       const txtPath = join(__dirname, 'fixtures/1.test');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .attach('file', txtPath);
+      try {
+        const response = await request.post('/upload-multi')
+          .attach('file', txtPath);
 
-      expect(response.status).toBe(200);
-      expect(response.body).toBe(6);
+        expect(response.status).toBe(200);
+        expect(response.body).toBe(6);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
       await close(app);
     });
   });

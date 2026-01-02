@@ -89,7 +89,7 @@ export const loadModule = async (
         try {
           return require(p);
         } catch (_) {
-          for (const extraPath of [process.cwd(), ...options.extraModuleRoot]) {
+          for (const extraPath of [process.cwd(), ...(options.extraModuleRoot || [])]) {
             try {
               return require(require.resolve(p, { paths: [extraPath] }));
             } catch (_) {

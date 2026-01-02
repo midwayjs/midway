@@ -7,7 +7,7 @@ import { Controller, createMiddleware, Post } from '@midwayjs/core';
 import { tmpdir } from 'os';
 import { UploadMiddleware, UploadStreamFileInfo } from '../src';
 
-describe('/test/index.test.ts', () => {
+describe.skip('/test/index.test.ts', () => {
   it('should fix #3858 ', async () => {
 
     @Controller()

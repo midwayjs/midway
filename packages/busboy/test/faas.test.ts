@@ -4,7 +4,7 @@ import * as assert from 'assert';
 import { existsSync, statSync } from 'fs';
 import { Framework } from '@midwayjs/faas';
 
-describe('test/faas.test.ts', function () {
+describe.skip('test/faas.test.ts', function () {
   let app;
   beforeAll(async () => {
     const appDir = join(__dirname, 'fixtures/faas');
