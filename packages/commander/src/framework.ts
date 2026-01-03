@@ -11,7 +11,12 @@ import {
   IMidwayCommanderApplication,
   IMidwayContext,
 } from './interface';
-import { CLI_COMMAND_KEY, CLI_OPTION_KEY, CliCommandOptions, CliOptionOptions } from './decorator';
+import {
+  CLI_COMMAND_KEY,
+  CLI_OPTION_KEY,
+  CliCommandOptions,
+  CliOptionOptions,
+} from './decorator';
 import { Command } from 'commander';
 
 @Framework()
@@ -24,7 +29,9 @@ export class MidwayCommanderFramework extends BaseFramework<
   private program: Command;
   private isCommandsLoaded = false;
 
-  configure(options: ICommanderConfigurationOptions): ICommanderConfigurationOptions {
+  configure(
+    options: ICommanderConfigurationOptions
+  ): ICommanderConfigurationOptions {
     return this.configService.getConfiguration('commander');
   }
 
@@ -38,11 +45,11 @@ export class MidwayCommanderFramework extends BaseFramework<
   public async run(): Promise<void> {
     this.loadCommands();
     try {
-        await this.program.parseAsync(process.argv);
+      await this.program.parseAsync(process.argv);
     } catch (error) {
-        // ignore error in run, because it may be called by midway lifecycle
-        // and process.argv may be not compatible with commander
-        // console.warn('MidwayCommanderFramework.run error:', error);
+      // ignore error in run, because it may be called by midway lifecycle
+      // and process.argv may be not compatible with commander
+      // console.warn('MidwayCommanderFramework.run error:', error);
     }
   }
 
@@ -61,7 +68,7 @@ export class MidwayCommanderFramework extends BaseFramework<
         CLI_COMMAND_KEY,
         module
       );
-      
+
       const cmd = this.program.command(metadata.name);
       if (metadata.arguments) {
         cmd.arguments(metadata.arguments);
@@ -74,41 +81,48 @@ export class MidwayCommanderFramework extends BaseFramework<
       }
 
       const optionMetadataList: Array<{
-          propertyKey: string;
-          options: CliOptionOptions;
+        propertyKey: string;
+        options: CliOptionOptions;
       }> = MetadataManager.getMetadata(CLI_OPTION_KEY, module) || [];
 
       for (const optMeta of optionMetadataList) {
         const opt = optMeta.options;
         let parser;
         if (optMeta.propertyKey) {
-            parser = module.prototype[optMeta.propertyKey];
+          parser = module.prototype[optMeta.propertyKey];
         }
 
         if (opt.required) {
           if (parser) {
-             cmd.requiredOption(opt.flags, opt.description, parser, opt.defaultValue);
+            cmd.requiredOption(
+              opt.flags,
+              opt.description,
+              parser,
+              opt.defaultValue
+            );
           } else {
-             cmd.requiredOption(opt.flags, opt.description, opt.defaultValue);
+            cmd.requiredOption(opt.flags, opt.description, opt.defaultValue);
           }
         } else {
           if (parser) {
-             cmd.option(opt.flags, opt.description, parser, opt.defaultValue);
+            cmd.option(opt.flags, opt.description, parser, opt.defaultValue);
           } else {
-             cmd.option(opt.flags, opt.description, opt.defaultValue);
+            cmd.option(opt.flags, opt.description, opt.defaultValue);
           }
         }
       }
 
       cmd.action(async (...args: any[]) => {
-        const commandInstance = await this.applicationContext.getAsync(module) as CommandRunner;
+        const commandInstance = (await this.applicationContext.getAsync(
+          module
+        )) as CommandRunner;
         const commandObj = args[args.length - 1];
-        
+
         const actualArgs = args.slice(0, -2);
         const actualOptions = commandObj.opts();
 
         if (commandInstance.run) {
-           await commandInstance.run(actualArgs, actualOptions);
+          await commandInstance.run(actualArgs, actualOptions);
         }
       });
     }

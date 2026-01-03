@@ -1,4 +1,9 @@
-import { DecoratorManager, MetadataManager, Scope, ScopeEnum } from '@midwayjs/core';
+import {
+  DecoratorManager,
+  MetadataManager,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/core';
 
 export const CLI_COMMAND_KEY = 'cli:command';
 export const CLI_OPTION_KEY = 'cli:option';
@@ -28,7 +33,11 @@ export function Command(options: CliCommandOptions): ClassDecorator {
 }
 
 export function Option(options: CliOptionOptions): MethodDecorator {
-  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  return (
+    target: any,
+    propertyKey: string | symbol,
+    descriptor: PropertyDescriptor
+  ) => {
     MetadataManager.attachMetadata(
       CLI_OPTION_KEY,
       {
