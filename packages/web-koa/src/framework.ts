@@ -160,10 +160,13 @@ export class MidwayKoaFramework extends BaseFramework<
 
         if (self.configurationOptions.queryParseMode) {
           // use qs module to parse query
-          c[str] = qs.parse(
-            str,
-            self.configurationOptions.queryParseOptions || {}
-          );
+          const parseOptions: qs.IParseOptions = {
+            ...self.configurationOptions.queryParseOptions,
+            ...(self.configurationOptions.queryParseMode === 'first'
+              ? { duplicates: 'first' }
+              : {}),
+          };
+          c[str] = qs.parse(str, parseOptions);
         } else {
           // use querystring to parse query by default
           c[str] = querystring.parse(str);
