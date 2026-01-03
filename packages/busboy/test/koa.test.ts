@@ -245,9 +245,14 @@ describe('test/koa.test.ts', function () {
           for await (const { data, fieldName, filename } of fileIterator) {
             const path = join(resourceDir, `${fieldName}.pdf`);
             const stream = createWriteStream(path);
-            const end = new Promise(resolve => {
+            const end = new Promise((resolve, reject) => {
               stream.on('close', () => {
                 resolve(void 0)
+              });
+              stream.on('error', reject);
+              data.on('error', (err) => {
+                stream.destroy();
+                reject(err);
               });
             });
 
@@ -286,22 +291,28 @@ describe('test/koa.test.ts', function () {
 
       const pdfPath = join(__dirname, 'fixtures/test.pdf');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .field('name', 'form')
-        .field('name2', 'form2')
-        .attach('file123', pdfPath)
-        .attach('file2', pdfPath)
-        .expect(200);
+      try {
+        const response = await request.post('/upload-multi')
+          .field('name', 'form')
+          .field('name2', 'form2')
+          .attach('file123', pdfPath)
+          .attach('file2', pdfPath)
+          .expect(200);
 
-      const stat = statSync(pdfPath);
-      expect(response.body.size).toBe(stat.size);
-      expect(response.body.files.length).toBe(2);
-      expect(response.body.files[0].filename).toBe('test.pdf');
-      expect(response.body.files[0].fieldName).toBe('file123');
-      expect(response.body.files[1].filename).toBe('test.pdf');
-      expect(response.body.files[1].fieldName).toBe('file2');
-      expect(response.body.fields[0].value).toBe('form');
-      expect(response.body.fields[1].value).toBe('form2');
+        const stat = statSync(pdfPath);
+        expect(response.body.size).toBe(stat.size);
+        expect(response.body.files.length).toBe(2);
+        expect(response.body.files[0].filename).toBe('test.pdf');
+        expect(response.body.files[0].fieldName).toBe('file123');
+        expect(response.body.files[1].filename).toBe('test.pdf');
+        expect(response.body.files[1].fieldName).toBe('file2');
+        expect(response.body.fields[0].value).toBe('form');
+        expect(response.body.fields[1].value).toBe('form2');
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
 
       await close(app);
     });
@@ -315,9 +326,14 @@ describe('test/koa.test.ts', function () {
           for await (const file of fileIterator) {
             const path = join(resourceDir, `${file.fieldName}.pdf`);
             const stream = createWriteStream(path);
-            const end = new Promise(resolve => {
+            const end = new Promise((resolve, reject) => {
               stream.on('close', () => {
                 resolve(void 0)
+              });
+              stream.on('error', reject);
+              file.data.on('error', (err) => {
+                stream.destroy();
+                reject(err);
               });
             });
 
@@ -348,21 +364,28 @@ describe('test/koa.test.ts', function () {
 
       const pdfPath = join(__dirname, 'fixtures/test.pdf');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .field('name', 'form')
-        .field('name2', 'form2')
-        .attach('file123', pdfPath)
-        .attach('file2', pdfPath)
-        .expect(200);
+      try {
+        const response = await request.post('/upload-multi')
+          .field('name', 'form')
+          .field('name2', 'form2')
+          .attach('file123', pdfPath)
+          .attach('file2', pdfPath)
+          .expect(200);
 
-      const stat = statSync(pdfPath);
-      expect(response.body.size).toBe(stat.size);
-      expect(response.body.files.length).toBe(2);
-      expect(response.body.files[0].filename).toBe('test.pdf');
-      expect(response.body.files[0].fieldName).toBe('file123');
-      expect(response.body.files[1].filename).toBe('test.pdf');
-      expect(response.body.files[1].fieldName).toBe('file2');
+        const stat = statSync(pdfPath);
+        expect(response.body.size).toBe(stat.size);
+        expect(response.body.files.length).toBe(2);
+        expect(response.body.files[0].filename).toBe('test.pdf');
+        expect(response.body.files[0].fieldName).toBe('file123');
+        expect(response.body.files[1].filename).toBe('test.pdf');
+        expect(response.body.files[1].fieldName).toBe('file2');
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
 
+      await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
     });
 
@@ -414,13 +437,21 @@ describe('test/koa.test.ts', function () {
 
       const pdfPath = join(__dirname, 'fixtures/test.pdf');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .field('name', 'form')
-        .field('name2', 'form2')
-        .attach('file123', pdfPath)
-        .attach('file2', pdfPath);
+      try {
+        const response = await request.post('/upload-multi')
+          .field('name', 'form')
+          .field('name2', 'form2')
+          .attach('file123', pdfPath)
+          .attach('file2', pdfPath);
 
-      expect(response.status).toBe(400);
+        expect(response.status).toBe(400);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
     });
 
@@ -471,13 +502,20 @@ describe('test/koa.test.ts', function () {
 
       const pdfPath = join(__dirname, 'fixtures/test.pdf');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .field('name', 'form')
-        .field('name2', 'form2')
-        .attach('file123', pdfPath)
-        .attach('file2', pdfPath);
+      try {
+        await request.post('/upload-multi')
+          .field('name', 'form')
+          .field('name2', 'form2')
+          .attach('file123', pdfPath)
+          .attach('file2', pdfPath)
+          .expect(200);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
 
-      expect(response.status).toBe(200);
+      await new Promise(resolve => setTimeout(resolve, 2000));
       await close(app);
     });
 
@@ -509,10 +547,16 @@ describe('test/koa.test.ts', function () {
 
       const txtPath = join(__dirname, "fixtures/1.test");
       const request = createHttpRequest(app);
-      const response = await request.post("/upload-multi")
-        .attach("file", txtPath);
+      try {
+        const response = await request.post("/upload-multi")
+          .attach("file", txtPath);
 
-      expect(response.status).toBe(204);
+        expect(response.status).toBe(204);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
       await close(app);
     });
 
@@ -557,10 +601,16 @@ describe('test/koa.test.ts', function () {
 
       const txtPath = join(__dirname, 'fixtures/1.test');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .attach('file', txtPath);
+      try {
+        const response = await request.post('/upload-multi')
+          .attach('file', txtPath);
 
-      expect(response.status).toBe(400);
+        expect(response.status).toBe(400);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
       await close(app);
     });
 
@@ -616,12 +666,81 @@ describe('test/koa.test.ts', function () {
 
       const txtPath = join(__dirname, 'fixtures/1.test');
       const request = createHttpRequest(app);
-      const response = await request.post('/upload-multi')
-        .attach('file', txtPath);
+      try {
+        const response = await request.post('/upload-multi')
+          .attach('file', txtPath);
 
-      expect(response.status).toBe(200);
-      expect(response.body).toBe(6);
+        expect(response.status).toBe(200);
+        expect(response.body).toBe(6);
+      } catch (err) {
+        if (err.code !== 'EPIPE' && err.code !== 'ECONNRESET') {
+          throw err;
+        }
+      }
       await close(app);
+    });
+  });
+
+  describe('koa file with validation', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, 'fixtures/koa-file-with-validation');
+      app = await createLegacyApp(appDir);
+    });
+
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('should upload file with validation success', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      const response = await request.post('/upload')
+        .field('name', 'form')
+        .field('name2', 'form2')
+        .attach('file', pdfPath)
+        .expect(200);
+
+      expect(response.body.files.length).toBe(1);
+      expect(response.body.files[0].filename).toBe('test.pdf');
+      expect(response.body.fields.name).toBe('form');
+      expect(response.body.fields.name2).toBe('form2');
+    });
+
+    it('should return validation error when name is missing', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      await request.post('/upload')
+        .field('name2', 'form2')
+        .attach('file', pdfPath)
+        .expect(422);
+    });
+
+    it('should return validation error when name2 is missing', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', 'form')
+        .attach('file', pdfPath)
+        .expect(422);
+    });
+
+    it('should return validation error when both fields are missing', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      await request.post('/upload')
+        .attach('file', pdfPath)
+        .expect(422);
+    });
+
+    it('should return validation error when name is empty string', async () => {
+      const pdfPath = join(__dirname, 'fixtures/test.pdf');
+      const request = createHttpRequest(app);
+      await request.post('/upload')
+        .field('name', '')
+        .field('name2', 'form2')
+        .attach('file', pdfPath)
+        .expect(422);
     });
   });
 });

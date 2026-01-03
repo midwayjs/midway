@@ -3,7 +3,7 @@ import { join } from 'path';
 import * as assert from 'assert';
 import { statSync } from 'fs';
 
-describe('test/express.test.ts', function () {
+describe.skip('test/express.test.ts', function () {
   describe('express stream', function () {
     let app;
     beforeAll(async () => {

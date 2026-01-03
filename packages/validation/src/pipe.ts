@@ -37,7 +37,12 @@ export abstract class AbstractValidationPipe implements PipeTransform {
 
   public validate(value: any, options: TransformOptions): any {
     // ValidationPipe 会走这个方法，所有的 @Get/@Post 等装饰器都会走一遍，所以为了性能考虑需要忽略基础类型和没有 schema 的类型
-    if (options.metaType.isBaseType || !options.metaType.originDesign) {
+    if (
+      options.metaType.isBaseType ||
+      !options.metaType.originDesign ||
+      options.metadata?.type === 'files_stream' ||
+      options.metadata?.type === 'file_stream'
+    ) {
       return value;
     }
     const validateOptions: ValidationDecoratorOptions =

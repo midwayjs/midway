@@ -34,6 +34,9 @@
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@midwayjs/web": "workspace:^",
+    "@midwayjs/validation": "workspace:^",
+    "@midwayjs/validation-zod": "workspace:^",
+    "zod": "3.25.76",
     "fs-extra": "11.3.2"
   }
 }

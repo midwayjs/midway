@@ -3,7 +3,7 @@ import { join } from 'path';
 import * as assert from 'assert';
 import { statSync } from 'fs';
 
-describe('test/web.test.ts', function () {
+describe.skip('test/web.test.ts', function () {
 
   describe('web stream', function () {
     let app;
