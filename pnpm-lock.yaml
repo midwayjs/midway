@@ -579,7 +579,7 @@ importers:
         specifier: workspace:^
         version: link:../core
       '@midwayjs/serverless-http-parser':
-        specifier: ^4.0.0-beta.8
+        specifier: ^4.0.0-beta.9
         version: link:../../packages-serverless/serverless-http-parser
       '@midwayjs/simple-lock':
         specifier: ^1.1.4

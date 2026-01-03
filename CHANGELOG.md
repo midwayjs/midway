@@ -1,6 +1,66 @@
 # Change Log
 
 
+## v4.0.0-beta.9 (2026-01-03)
+
+#### :rocket: New Feature
+* `core`, `mcp`, `redis`, `socketio`, `validation-zod`, `validation-zod4`
+  * [#4472](https://github.com/midwayjs/midway/pull/4472) feat: support zod v4 ([@czy88840616](https://github.com/czy88840616))
+* `bootstrap`, `core`, `faas`, `mock`, `piscina`, `web`
+  * [#4459](https://github.com/midwayjs/midway/pull/4459) feat: add background task component ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `web-koa`, `web`
+  * [#4476](https://github.com/midwayjs/midway/pull/4476) fix: qs module parse in first value ([@czy88840616](https://github.com/czy88840616))
+* `busboy`, `core`, `validate`, `validation-class-validator`, `validation-joi`, `validation-zod`, `validation-zod4`, `validation`
+  * [#4473](https://github.com/midwayjs/midway/pull/4473) fix: validation in busboy and upload ([@czy88840616](https://github.com/czy88840616))
+* `swagger`
+  * [#4451](https://github.com/midwayjs/midway/pull/4451) fix: swagger ui displayOptions render string ([@TimonPeng](https://github.com/TimonPeng))
+* `view`
+  * [#4431](https://github.com/midwayjs/midway/pull/4431) fix: the async render trigger timing in the view component ([@yuntian001](https://github.com/yuntian001))
+
+#### :package: Dependencies
+* Other
+  * [#4463](https://github.com/midwayjs/midway/pull/4463) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.6.7 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4469](https://github.com/midwayjs/midway/pull/4469) chore(deps): update hashicorp/consul docker tag to v1.22.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4470](https://github.com/midwayjs/midway/pull/4470) chore(deps): update dependency next to v15.4.9 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4461](https://github.com/midwayjs/midway/pull/4461) chore(deps): update dependency next to v15.4.9 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4458](https://github.com/midwayjs/midway/pull/4458) chore(deps): update dependency next to v15.4.8 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4452](https://github.com/midwayjs/midway/pull/4452) chore(deps): update dependency class-validator to v0.14.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4450](https://github.com/midwayjs/midway/pull/4450) fix(deps): update dependency http-errors to v2.0.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4445](https://github.com/midwayjs/midway/pull/4445) chore(deps): update dependency zx to v8.8.5 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4443](https://github.com/midwayjs/midway/pull/4443) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.6.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bullmq`
+  * [#4474](https://github.com/midwayjs/midway/pull/4474) fix(deps): update dependency bullmq to v5.66.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4475](https://github.com/midwayjs/midway/pull/4475) fix(deps): update dependency express to v4.22.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4447](https://github.com/midwayjs/midway/pull/4447) fix(deps): update dependency body-parser to v2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4437](https://github.com/midwayjs/midway/pull/4437) chore(deps): update dependency @types/express to v4.17.25 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4464](https://github.com/midwayjs/midway/pull/4464) fix(deps): update dependency @grpc/grpc-js to v1.14.3 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4444](https://github.com/midwayjs/midway/pull/4444) fix(deps): update dependency @grpc/grpc-js to v1.14.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `jwt`
+  * [#4468](https://github.com/midwayjs/midway/pull/4468) fix(deps): update dependency jsonwebtoken to v9.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `http-proxy`
+  * [#4453](https://github.com/midwayjs/midway/pull/4453) chore(deps): update dependency nock to v13.5.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `busboy`, `grpc`, `rabbitmq`, `socketio`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4446](https://github.com/midwayjs/midway/pull/4446) chore(deps): update dependency fs-extra to v11.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#4449](https://github.com/midwayjs/midway/pull/4449) fix(deps): update dependency @types/ali-oss to v6.16.13 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#4440](https://github.com/midwayjs/midway/pull/4440) chore(deps): update dependency dayjs to v1.11.19 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`
+  * [#4442](https://github.com/midwayjs/midway/pull/4442) fix(deps): update dependency js-yaml to v4.1.1 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `rabbitmq`
+  * [#4438](https://github.com/midwayjs/midway/pull/4438) chore(deps): update dependency amqplib to v0.10.9 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Timon Peng ([@TimonPeng](https://github.com/TimonPeng))
+- yuntian001 ([@yuntian001](https://github.com/yuntian001))
+
+
+
 ## v4.0.0-beta.8 (2025-11-09)
 
 #### :bug: Bug Fix

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/piscina",
-  "version": "4.0.0-beta.8",
+  "version": "4.0.0-beta.9",
   "description": "Midway Component for Piscina worker thread pool",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -29,8 +29,8 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/mock": "workspace:^",
-    "@midwayjs/logger": "^4.0.0"
+    "@midwayjs/logger": "^4.0.0",
+    "@midwayjs/mock": "workspace:^"
   },
   "dependencies": {
     "piscina": "5.1.4"
