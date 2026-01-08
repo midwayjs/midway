@@ -1,0 +1,2 @@
+- 本项目是 midway v3 版本的源码
+- 使用 npm 来作为包管理器, lerna 作为 monorepo 来管理多个包

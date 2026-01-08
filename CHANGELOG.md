@@ -1,6 +1,53 @@
 # Change Log
 
 
+## v3.20.20 (2025-12-09)
+
+#### :bug: Bug Fix
+* `bull-board`
+  * [#4460](https://github.com/midwayjs/midway/pull/4460) fix: bull board support body ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
+## v3.20.19 (2025-12-03)
+
+#### :bug: Bug Fix
+* `core`
+  * [#4454](https://github.com/midwayjs/midway/pull/4454) fix: core error filter process empty error issue ([@TimonPeng](https://github.com/TimonPeng))
+
+#### Committers: 1
+- Timon Peng ([@TimonPeng](https://github.com/TimonPeng))
+
+
+
+## v3.20.18 (2025-11-30)
+
+#### :bug: Bug Fix
+* `swagger`
+  * [#4451](https://github.com/midwayjs/midway/pull/4451) fix: swagger ui displayOptions render string ([@TimonPeng](https://github.com/TimonPeng))
+
+#### Committers: 1
+- Timon Peng ([@TimonPeng](https://github.com/TimonPeng))
+
+
+
+## v3.20.17 (2025-11-10)
+
+#### :nail_care: Polish
+* `i18n`
+  * [#4439](https://github.com/midwayjs/midway/pull/4439) feat: sync i18n missing handler ([@czy88840616](https://github.com/czy88840616))
+* `view`
+  * [#4431](https://github.com/midwayjs/midway/pull/4431) fix: the async render trigger timing in the view component ([@yuntian001](https://github.com/yuntian001))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- yuntian001 ([@yuntian001](https://github.com/yuntian001))
+
+
+
 ## v3.20.16 (2025-10-08)
 
 #### :bug: Bug Fix
