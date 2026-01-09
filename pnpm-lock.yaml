@@ -881,8 +881,8 @@ importers:
   packages/oss:
     dependencies:
       '@types/ali-oss':
-        specifier: 6.16.13
-        version: 6.16.13
+        specifier: 6.23.0
+        version: 6.23.0
       ali-oss:
         specifier: 6.23.0
         version: 6.23.0
@@ -3498,8 +3498,8 @@ packages:
   '@types/accepts@1.3.7':
     resolution: {integrity: sha512-Pay9fq2lM2wXPWbteBsRAGiWH2hig4ZE2asK+mm7kUzlxRTfL961rj89I6zV/E3PcIkDqyuBEcMxFT7rccugeQ==}
 
-  '@types/ali-oss@6.16.13':
-    resolution: {integrity: sha512-Nxxs9JYESnJcVBI9mNv+dFNnbdz15tKS15mwckZqSIM75ttb8GcNYgeNfKG9gsykSIDpbSqcSnEqxdV5vSlbDg==}
+  '@types/ali-oss@6.23.0':
+    resolution: {integrity: sha512-1qUcJuD8CunaTVyBS1hx/CNZQntj5ghM4+lSoDZ/fnNYUKc53PBzBu1z/tCmMV/VE4vLCjf7rTaXd2d93nCUbA==}
 
   '@types/amqplib@0.10.8':
     resolution: {integrity: sha512-vtDp8Pk1wsE/AuQ8/Rgtm6KUZYqcnTgNvEHwzCkX8rL7AGsC6zqAfKAAJhUZXFhM/Pp++tbnUHiam/8vVpPztA==}
@@ -12979,7 +12979,7 @@ snapshots:
     dependencies:
       '@types/node': 22.12.0
 
-  '@types/ali-oss@6.16.13': {}
+  '@types/ali-oss@6.23.0': {}
 
   '@types/amqplib@0.10.8':
     dependencies:
