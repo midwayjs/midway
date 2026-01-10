@@ -1,4 +1,4 @@
-import { Command, Option, CommandRunner, Framework } from '../src';
+import { CliServerResponse, Command, Option, CommandRunner, Context, Framework } from '../src';
 import { Inject, Singleton } from '@midwayjs/core';
 import { createLightApp, close } from '@midwayjs/mock';
 
@@ -8,12 +8,20 @@ class TestService {
   public lastCommand?: string;
   public options: any;
   public args: any[];
+  public ctxCommandName?: string;
+  public ctxOptions?: any;
+  public ctxArgs?: string[];
+  public ctxCommand?: any;
 
   reset() {
     this.executed = false;
     this.lastCommand = undefined;
     this.options = undefined;
     this.args = undefined;
+    this.ctxCommandName = undefined;
+    this.ctxOptions = undefined;
+    this.ctxArgs = undefined;
+    this.ctxCommand = undefined;
   }
 }
 
@@ -146,15 +154,104 @@ class NumberOptionCommand implements CommandRunner {
   }
 }
 
+@Command({
+  name: 'withContext',
+  arguments: '<name>'
+})
+class WithContextCommand implements CommandRunner {
+  @Inject()
+  testService: TestService;
+
+  @Inject()
+  ctx: Context;
+
+  @Option({
+    flags: '-f, --foo [foo]'
+  })
+  parseFoo(val: string) {
+    return val;
+  }
+
+  async run(passedParams: string[], options?: Record<string, any>) {
+    this.testService.executed = true;
+    this.testService.lastCommand = 'withContext';
+    this.testService.args = passedParams;
+    this.testService.options = options;
+    this.testService.ctxCommandName = this.ctx.commandName;
+    this.testService.ctxOptions = this.ctx.options;
+    this.testService.ctxArgs = this.ctx.args;
+    this.testService.ctxCommand = this.ctx.command;
+  }
+}
+
+@Command({
+  name: 'returnText',
+})
+class ReturnTextCommand implements CommandRunner {
+  async run() {
+    return new CliServerResponse({} as any).success().text('hello');
+  }
+}
+
+@Command({
+  name: 'returnJson',
+})
+class ReturnJsonCommand implements CommandRunner {
+  async run() {
+    return new CliServerResponse({} as any).success().json({ a: 1 });
+  }
+}
+
+@Command({
+  name: 'returnStream',
+})
+class ReturnStreamCommand implements CommandRunner {
+  async run() {
+    const response = new CliServerResponse({} as any);
+    const stream = response.stream();
+    setImmediate(() => {
+      stream.send('a');
+      stream.send({ b: 2 });
+      stream.end();
+    });
+    return stream;
+  }
+}
+
+@Command({
+  name: 'returnAsyncIterable',
+})
+class ReturnAsyncIterableCommand implements CommandRunner {
+  async run() {
+    async function* remoteStream() {
+      yield 'a';
+      await new Promise(resolve => setTimeout(resolve, 10));
+      yield { b: 2 };
+      await new Promise(resolve => setTimeout(resolve, 10));
+      yield 'c';
+    }
+
+    return remoteStream();
+  }
+}
+
 describe('test/index.test.ts', () => {
   const originalArgv = process.argv;
+  const originalWrite = process.stdout.write;
+  let stdout = '';
 
   beforeEach(() => {
     process.argv = [ 'node', 'cli' ];
+    stdout = '';
+    process.stdout.write = ((chunk: any) => {
+      stdout += Buffer.isBuffer(chunk) ? chunk.toString('utf8') : String(chunk);
+      return true;
+    }) as any;
   });
 
   afterEach(() => {
     process.argv = originalArgv;
+    process.stdout.write = originalWrite;
   });
 
   async function createApp() {
@@ -169,6 +266,11 @@ describe('test/index.test.ts', () => {
         RequiredOptionCommand,
         MultiArgsCommand,
         NumberOptionCommand,
+        WithContextCommand,
+        ReturnTextCommand,
+        ReturnJsonCommand,
+        ReturnStreamCommand,
+        ReturnAsyncIterableCommand,
         TestService,
       ]
     });
@@ -257,6 +359,48 @@ describe('test/index.test.ts', () => {
     expect(testService.args).toEqual([ 'world' ]);
     expect(testService.options.num).toEqual(42);
 
+    await close(app);
+  });
+
+  it('should expose context for command execution', async () => {
+    const { app, framework, testService } = await createApp();
+    await framework.runCommand('withContext', 'world', '--foo', 'bar');
+
+    expect(testService.executed).toBeTruthy();
+    expect(testService.lastCommand).toEqual('withContext');
+    expect(testService.ctxCommandName).toEqual('withContext');
+    expect(testService.ctxArgs).toEqual([ 'world' ]);
+    expect(testService.ctxOptions.foo).toEqual('bar');
+    expect(testService.ctxCommand).toBeDefined();
+
+    await close(app);
+  });
+
+  it('should output text when command returns string', async () => {
+    const { app, framework } = await createApp();
+    await framework.runCommand('returnText');
+    expect(stdout).toEqual('hello');
+    await close(app);
+  });
+
+  it('should output json when command returns object', async () => {
+    const { app, framework } = await createApp();
+    await framework.runCommand('returnJson');
+    expect(stdout).toEqual(JSON.stringify({ success: 'true', data: { a: 1 } }));
+    await close(app);
+  });
+
+  it('should output stream chunks when command returns stream', async () => {
+    const { app, framework } = await createApp();
+    await framework.runCommand('returnStream');
+    expect(stdout).toEqual('a' + JSON.stringify({ b: 2 }));
+    await close(app);
+  });
+
+  it('should output async iterable chunks when command returns AsyncIterable', async () => {
+    const { app, framework } = await createApp();
+    await framework.runCommand('returnAsyncIterable');
+    expect(stdout).toEqual('a' + JSON.stringify({ b: 2 }) + 'c');
     await close(app);
   });
 });

@@ -117,6 +117,73 @@ $ node bootstrap.js hello world --foo baz
 $ node bootstrap.js hi world
 ```
 
+## 上下文
+
+每次命令执行都会创建请求上下文（request context），可以在命令类中注入 `Context` 获取运行时信息：
+
+```typescript
+import { Command, CommandRunner, Context } from '@midwayjs/commander';
+import { Inject } from '@midwayjs/core';
+
+@Command({ name: 'info', arguments: '<name>' })
+export class InfoCommand implements CommandRunner {
+  @Inject()
+  ctx: Context;
+
+  async run() {
+    this.ctx.commandName; // 命令名
+    this.ctx.args; // 位置参数数组
+    this.ctx.options; // commander 解析后的选项
+    this.ctx.command; // commander 的 Command 实例
+  }
+}
+```
+
+## 返回值与输出
+
+默认情况下，命令执行完毕后，如果 `run()` 有返回值，框架会将返回值输出到标准输出（stdout），方便用作脚本管道或在测试中断言输出内容。
+
+支持的返回值类型：
+
+- `string` / `Buffer`：直接写入 stdout
+- 普通对象：使用 `JSON.stringify` 后写入 stdout
+- `Readable`：会 pipe 到 stdout
+- `AsyncIterable`：会按迭代顺序逐段写入 stdout
+
+下面是一个返回文本/JSON 的例子（使用 core 的 `ServerResponse` 语义来组织输出格式）：
+
+```typescript
+import { Command, CommandRunner, CliServerResponse } from '@midwayjs/commander';
+
+@Command({ name: 'status' })
+export class StatusCommand implements CommandRunner {
+  async run() {
+    return new CliServerResponse({} as any).success().json({ ok: true });
+  }
+}
+```
+
+如果希望按 chunk 逐步输出，可以返回 `CliServerResponse().stream()`：
+
+```typescript
+import { Command, CommandRunner, CliServerResponse } from '@midwayjs/commander';
+
+@Command({ name: 'stream' })
+export class StreamCommand implements CommandRunner {
+  async run() {
+    const response = new CliServerResponse({} as any);
+    const stream = response.stream();
+
+    setImmediate(() => {
+      stream.send('a');
+      stream.send({ b: 2 });
+      stream.end();
+    });
+
+    return stream;
+  }
+}
+```
 
 ## 日志
 

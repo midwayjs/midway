@@ -9,7 +9,7 @@ import {
   CommandRunner,
   ICommanderConfigurationOptions,
   IMidwayCommanderApplication,
-  IMidwayContext,
+  IMidwayCommanderContext,
 } from './interface';
 import {
   CLI_COMMAND_KEY,
@@ -18,11 +18,12 @@ import {
   CliOptionOptions,
 } from './decorator';
 import { Command } from 'commander';
+import { Readable } from 'stream';
 
 @Framework()
 export class MidwayCommanderFramework extends BaseFramework<
   IMidwayCommanderApplication,
-  IMidwayContext,
+  IMidwayCommanderContext,
   ICommanderConfigurationOptions
 > {
   public declare app: IMidwayCommanderApplication;
@@ -62,6 +63,68 @@ export class MidwayCommanderFramework extends BaseFramework<
   public async runCommand(...args: string[]) {
     this.loadCommands();
     return this.program.parseAsync(args, { from: 'user' });
+  }
+
+  private async outputResult(result: unknown): Promise<void> {
+    if (result == null) {
+      return;
+    }
+
+    if (Buffer.isBuffer(result)) {
+      process.stdout.write(result);
+      return;
+    }
+
+    if (typeof result === 'string') {
+      process.stdout.write(result);
+      return;
+    }
+
+    if (this.isReadableLike(result)) {
+      await new Promise<void>((resolve, reject) => {
+        result.on('error', reject);
+        result.on('end', resolve);
+        result.pipe(process.stdout, { end: false });
+      });
+      return;
+    }
+
+    if (this.isAsyncIterableLike(result)) {
+      for await (const chunk of result) {
+        this.outputChunk(chunk);
+      }
+      return;
+    }
+
+    this.outputChunk(result);
+  }
+
+  private outputChunk(chunk: unknown) {
+    if (chunk == null) {
+      return;
+    }
+
+    if (Buffer.isBuffer(chunk) || typeof chunk === 'string') {
+      process.stdout.write(chunk);
+      return;
+    }
+
+    process.stdout.write(JSON.stringify(chunk));
+  }
+
+  private isReadableLike(value: unknown): value is NodeJS.ReadableStream {
+    return (
+      value instanceof Readable ||
+      (!!value &&
+        typeof (value as any).pipe === 'function' &&
+        typeof (value as any).on === 'function')
+    );
+  }
+
+  private isAsyncIterableLike(value: unknown): value is AsyncIterable<unknown> {
+    return (
+      !!value && typeof (value as any)[Symbol.asyncIterator] === 'function'
+    );
   }
 
   private loadCommands() {
@@ -119,17 +182,29 @@ export class MidwayCommanderFramework extends BaseFramework<
       }
 
       cmd.action(async (...args: any[]) => {
-        const commandInstance = (await this.applicationContext.getAsync(
-          module
-        )) as CommandRunner;
         const commandObj = args[args.length - 1];
-
         const actualArgs = args.slice(0, -2);
         const actualOptions = commandObj.opts();
-
-        if (commandInstance.run) {
-          await commandInstance.run(actualArgs, actualOptions);
-        }
+        const ctx = this.app.createAnonymousContext({
+          command: commandObj,
+          args: actualArgs,
+          options: actualOptions,
+          commandName: metadata.name,
+        }) as IMidwayCommanderContext;
+        ctx.command = commandObj;
+        ctx.args = actualArgs;
+        ctx.options = actualOptions;
+        ctx.commandName = metadata.name;
+        const fn = await this.applyMiddleware(async ctx => {
+          const commandInstance = (await ctx.requestContext.getAsync(
+            module
+          )) as CommandRunner;
+          if (commandInstance.run) {
+            return await commandInstance.run(actualArgs, actualOptions);
+          }
+        });
+        const result = await fn(ctx);
+        await this.outputResult(result);
       });
     }
     this.isCommandsLoaded = true;

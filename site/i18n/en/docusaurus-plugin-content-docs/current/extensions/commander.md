@@ -116,6 +116,74 @@ $ node bootstrap.js hello world --foo baz
 $ node bootstrap.js hi world
 ```
 
+## Context
+
+Each command execution creates a request context. You can inject `Context` in your command class to access runtime information:
+
+```typescript
+import { Command, CommandRunner, Context } from '@midwayjs/commander';
+import { Inject } from '@midwayjs/core';
+
+@Command({ name: 'info', arguments: '<name>' })
+export class InfoCommand implements CommandRunner {
+  @Inject()
+  ctx: Context;
+
+  async run() {
+    this.ctx.commandName; // command name
+    this.ctx.args; // positional arguments
+    this.ctx.options; // parsed options
+    this.ctx.command; // commander Command instance
+  }
+}
+```
+
+## Return values and output
+
+By default, after a command finishes, if `run()` returns a value, the framework writes it to standard output (stdout). This is useful for shell pipelines and for asserting output in tests.
+
+Supported return types:
+
+- `string` / `Buffer`: written to stdout directly
+- Plain objects: written as `JSON.stringify(value)`
+- `Readable`: piped to stdout
+- `AsyncIterable`: iterated and written chunk by chunk
+
+Example: return text/JSON using the same response semantics as core `ServerResponse`:
+
+```typescript
+import { Command, CommandRunner, CliServerResponse } from '@midwayjs/commander';
+
+@Command({ name: 'status' })
+export class StatusCommand implements CommandRunner {
+  async run() {
+    return new CliServerResponse({} as any).success().json({ ok: true });
+  }
+}
+```
+
+If you want streaming output, return `CliServerResponse().stream()`:
+
+```typescript
+import { Command, CommandRunner, CliServerResponse } from '@midwayjs/commander';
+
+@Command({ name: 'stream' })
+export class StreamCommand implements CommandRunner {
+  async run() {
+    const response = new CliServerResponse({} as any);
+    const stream = response.stream();
+
+    setImmediate(() => {
+      stream.send('a');
+      stream.send({ b: 2 });
+      stream.end();
+    });
+
+    return stream;
+  }
+}
+```
+
 ## Logger
 
 By default, the component registers a logger named `commanderLogger`, which writes to `midway-commander.log`.
