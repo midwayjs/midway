@@ -5,8 +5,8 @@ import {
   ScopeEnum,
 } from '@midwayjs/core';
 
-export const CLI_COMMAND_KEY = 'cli:command';
-export const CLI_OPTION_KEY = 'cli:option';
+export const CLI_COMMAND_KEY = 'commander:command';
+export const CLI_OPTION_KEY = 'commander:option';
 
 export interface CliCommandOptions {
   name: string;
@@ -36,8 +36,9 @@ export function Option(options: CliOptionOptions): MethodDecorator {
   return (
     target: any,
     propertyKey: string | symbol,
-    descriptor: PropertyDescriptor
+    _descriptor: PropertyDescriptor
   ) => {
+    void _descriptor;
     MetadataManager.attachMetadata(
       CLI_OPTION_KEY,
       {

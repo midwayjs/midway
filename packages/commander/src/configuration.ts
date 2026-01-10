@@ -4,7 +4,15 @@ import { Configuration } from '@midwayjs/core';
   namespace: 'commander',
   importConfigs: [
     {
-      default: {},
+      default: {
+        midwayLogger: {
+          clients: {
+            commanderLogger: {
+              fileLogName: 'midway-commander.log',
+            },
+          },
+        },
+      },
     },
   ],
 })

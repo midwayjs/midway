@@ -26,19 +26,21 @@ export class MidwayCommanderFramework extends BaseFramework<
   ICommanderConfigurationOptions
 > {
   public declare app: IMidwayCommanderApplication;
+  protected frameworkLoggerName = 'commanderLogger';
   private program: Command;
   private isCommandsLoaded = false;
 
   configure(
-    options: ICommanderConfigurationOptions
+    _options: ICommanderConfigurationOptions
   ): ICommanderConfigurationOptions {
+    void _options;
     return this.configService.getConfiguration('commander');
   }
 
-  async applicationInitialize(options: IMidwayBootstrapOptions) {
+  async applicationInitialize(_options: IMidwayBootstrapOptions) {
+    void _options;
     this.app = {} as IMidwayCommanderApplication;
     this.program = new Command();
-    // exitOverride allows to throw error instead of exit process
     this.program.exitOverride();
   }
 
@@ -47,9 +49,7 @@ export class MidwayCommanderFramework extends BaseFramework<
     try {
       await this.program.parseAsync(process.argv);
     } catch (error) {
-      // ignore error in run, because it may be called by midway lifecycle
-      // and process.argv may be not compatible with commander
-      // console.warn('MidwayCommanderFramework.run error:', error);
+      void error;
     }
   }
 
