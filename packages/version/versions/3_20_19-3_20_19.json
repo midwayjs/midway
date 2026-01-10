@@ -11,7 +11,10 @@
     "3.20.20"
   ],
   "@midwayjs/bullmq": "3.20.19",
-  "@midwayjs/busboy": "3.20.19",
+  "@midwayjs/busboy": [
+    "3.20.19",
+    "3.20.21"
+  ],
   "@midwayjs/cache-manager": "3.20.19",
   "@midwayjs/captcha": "3.20.19",
   "@midwayjs/casbin": "3.20.19",
@@ -61,7 +64,8 @@
   "@midwayjs/validate": "3.20.19",
   "@midwayjs/version": [
     "3.20.19",
-    "3.20.20"
+    "3.20.20",
+    "3.20.21"
   ],
   "@midwayjs/view": "3.20.19",
   "@midwayjs/view-ejs": "3.20.19",

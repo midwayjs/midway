@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.21 (2026-01-10)
+
+#### :bug: Bug Fix
+* `busboy`
+  * [#4480](https://github.com/midwayjs/midway/pull/4480) 3.x fix: busboy Type 'UploadFileInfo' is not generic.  ([@yuntian001](https://github.com/yuntian001))
+
+#### Committers: 1
+- yuntian001 ([@yuntian001](https://github.com/yuntian001))
+
+
+
 ## v3.20.20 (2025-12-09)
 
 #### :bug: Bug Fix
