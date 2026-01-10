@@ -46,9 +46,19 @@ export class MidwayCommanderFramework extends BaseFramework<
 
   public async run(): Promise<void> {
     this.loadCommands();
-    await this.program.parseAsync(process.argv);
+    try {
+      await this.program.parseAsync(process.argv);
+    } catch (error) {
+      void error;
+    }
   }
 
+  /**
+   * 适用于测试或编程式触发命令的场景。
+   *
+   * 与 run() 不同，这里不会读取 process.argv，而是解析传入的 args，
+   * 从而避免测试环境（Jest/Node）对命令行参数的污染。
+   */
   public async runCommand(...args: string[]) {
     this.loadCommands();
     return this.program.parseAsync(args, { from: 'user' });
