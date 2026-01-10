@@ -421,7 +421,7 @@ importers:
         specifier: workspace:^
         version: link:../core
       commander:
-        specifier: ^14.0.2
+        specifier: 14.0.2
         version: 14.0.2
     devDependencies:
       '@midwayjs/mock':
