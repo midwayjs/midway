@@ -46,11 +46,7 @@ export class MidwayCommanderFramework extends BaseFramework<
 
   public async run(): Promise<void> {
     this.loadCommands();
-    try {
-      await this.program.parseAsync(process.argv);
-    } catch (error) {
-      void error;
-    }
+    await this.program.parseAsync(process.argv);
   }
 
   public async runCommand(...args: string[]) {
