@@ -1,4 +1,4 @@
-# One-shot
+# 单次执行
 
 `@midwayjs/one-shot` 是一个只提供 Framework 的一次性脚本执行组件，适合用 IoC 容器组织依赖，并在应用内触发一次性的任务逻辑。
 

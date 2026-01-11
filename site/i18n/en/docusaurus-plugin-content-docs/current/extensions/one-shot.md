@@ -1,4 +1,4 @@
-# One-shot
+# One-time Execution
 
 `@midwayjs/one-shot` is a one-shot script framework that only provides a Framework. It is suitable for running tasks once with IoC-managed dependencies.
 

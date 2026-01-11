@@ -1,4 +1,4 @@
-# Commander（命令行）
+# 命令行
 
 `@midwayjs/commander` 是一个基于 Midway IoC 容器的命令行组件，底层使用 [commander.js](https://github.com/tj/commander.js#readme) 做参数解析与 help 输出。你可以用 Midway 熟悉的依赖注入方式组织命令、选项解析与业务逻辑，并将命令拆分为多个 Class。
 
