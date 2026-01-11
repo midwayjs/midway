@@ -26,7 +26,7 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "fs-extra": "11.3.2"
+    "fs-extra": "11.3.3"
   },
   "dependencies": {
     "@types/ws": "8.5.14",
