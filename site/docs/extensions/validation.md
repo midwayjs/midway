@@ -5,7 +5,10 @@ import TabItem from '@theme/TabItem';
 
 我们经常要在方法调用时执行一些类型检查，参数转换的操作，Midway 提供了一种简单的能力来快速检查参数的类型。
 
-本模块自 `v4.0.0` 起替换 `@midwayjs/validate` 组件。
+:::tip
+从 `v4.0.0` 起，`@midwayjs/validation` 作为 `@midwayjs/validate` 的升级替代方案推出，两者是不同的包。
+`@midwayjs/validation` 提供更上层的校验抽象，支持 joi/zod/class-validator，并预留自定义校验器扩展；`@midwayjs/validate` 仅基于 joi，仍可用但不再新增功能，建议逐步迁移。
+:::
 
 新版本提供了更灵活的验证器扩展机制，支持多种验证器（如 Joi、Zod 等）的无缝切换，并提供了更好的类型支持和性能优化。
 

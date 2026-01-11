@@ -221,7 +221,8 @@
         "extensions/tenant",
         "extensions/events",
         "extensions/piscina",
-        "extensions/commander"
+        "extensions/commander",
+        "extensions/one-shot"
       ]
     },
     {
