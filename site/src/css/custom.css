@@ -18,6 +18,18 @@
   --ifm-code-font-size: 95%;
   --ifm-container-width-xl: 1600px;
   --ifm-footer-title-color: #fff;
+
+  /* Style G: Light Mode (Laboratory Style) */
+  --midway-bg: #F2F4F8;
+  --midway-surface: rgba(255, 255, 255, 0.7);
+  --midway-border: rgba(0, 0, 0, 0.1);
+  --midway-primary: #4A00E0; /* Deep Purple */
+  --midway-secondary: #00D2FF; /* Cyan */
+  --midway-text-main: #1A202C;
+  --midway-text-sec: #5A6A85;
+  --midway-grid: rgba(0, 0, 0, 0.05);
+  --midway-glow: rgba(74, 0, 224, 0.15);
+  --midway-code-bg: #0E1116;
 }
 
 nav input:focus-visible {
@@ -38,6 +50,18 @@ nav input:focus-visible {
 
   --ice-users-fill-filter: drop-shadow(0 40px rgba(255, 255, 255, .72));
   --ice-users-fill-transform: translateY(-40px);
+
+  /* Style G: Dark Mode (Cyber Space Style) */
+  --midway-bg: #030308;
+  --midway-surface: rgba(20, 20, 35, 0.6);
+  --midway-border: rgba(255, 255, 255, 0.1);
+  --midway-primary: #00F0FF; /* Neon Cyan */
+  --midway-secondary: #BC13FE; /* Neon Purple */
+  --midway-text-main: #EAEAEA;
+  --midway-text-sec: #8892B0;
+  --midway-grid: rgba(0, 240, 255, 0.08);
+  --midway-glow: rgba(0, 240, 255, 0.15);
+  --midway-code-bg: #0E1116;
 }
 
 

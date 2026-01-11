@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midway.js - Swiss Style</title>
+    <style>
+        :root {
+            --bg: #F0F0F0;
+            --black: #000000;
+            --white: #FFFFFF;
+            --red: #FF3B30;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--black);
+            line-height: 1.1;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            min-height: 100vh;
+            border-left: 2px solid var(--black);
+            border-right: 2px solid var(--black);
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--white);
+        }
+
+        /* Grid Lines */
+        .col-span-4 { grid-column: span 4; }
+        .col-span-6 { grid-column: span 6; }
+        .col-span-8 { grid-column: span 8; }
+        .col-span-12 { grid-column: span 12; }
+
+        .block {
+            padding: 40px;
+            border-bottom: 2px solid var(--black);
+            border-right: 2px solid var(--black);
+        }
+        
+        .block:nth-child(3n) { border-right: none; } /* Rough fix for grid lines */
+
+        .no-border-right { border-right: none !important; }
+
+        /* Typography */
+        h1 {
+            font-size: 8rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            font-weight: 400;
+            max-width: 90%;
+        }
+
+        .label {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: block;
+            color: var(--red);
+        }
+
+        /* Hero */
+        .hero-block {
+            padding: 100px 60px;
+            background: var(--white);
+        }
+
+        /* Button */
+        .btn-large {
+            display: inline-block;
+            background: var(--black);
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 24px 48px;
+            text-decoration: none;
+            text-transform: uppercase;
+            margin-top: 40px;
+            transition: all 0.2s;
+        }
+
+        .btn-large:hover {
+            background: var(--red);
+        }
+
+        /* Features */
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            min-height: 300px;
+        }
+
+        .number {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ddd;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="grid-container">
+        
+        <!-- Header -->
+        <div class="col-span-12 block no-border-right hero-block">
+            <span class="label">The Node.js Framework</span>
+            <h1>Midway<br>Fullstack<br>Framework</h1>
+            <p>Develop. Build. Ship. Enterprise-grade Node.js development framework designed for scalability.</p>
+            <a href="#" class="btn-large">Get Started →</a>
+        </div>
+
+        <!-- Features -->
+        <div class="col-span-4 block">
+            <div class="feature-item">
+                <span class="number">01</span>
+                <div>
+                    <h2>Reliable</h2>
+                    <p style="font-size: 1.2rem;">Class + IoC Architecture.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-4 block">
+            <div class="feature-item">
+                <span class="number">02</span>
+                <div>
+                    <h2>Fast</h2>
+                    <p style="font-size: 1.2rem;">Function + Hooks.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-4 block no-border-right">
+            <div class="feature-item">
+                <span class="number">03</span>
+                <div>
+                    <h2>Scale</h2>
+                    <p style="font-size: 1.2rem;">Fullstack & Microservices.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Big Statement -->
+        <div class="col-span-8 block" style="background: var(--black); color: var(--white);">
+            <h2 style="color: var(--white); font-size: 4rem; line-height: 1;">
+                Write once,<br>run everywhere.
+            </h2>
+        </div>
+        <div class="col-span-4 block no-border-right" style="background: var(--red);">
+            <h2 style="color: white;">Midway<br>v3.0</h2>
+        </div>
+
+        <!-- Tutorials -->
+        <div class="col-span-6 block">
+            <span class="label">Tutorial 01</span>
+            <h2>Class Syntax</h2>
+            <p style="font-size: 1.2rem;">Traditional OOP approach with Decorators for large scale apps.</p>
+        </div>
+        <div class="col-span-6 block no-border-right">
+            <span class="label">Tutorial 02</span>
+            <h2>Function Syntax</h2>
+            <p style="font-size: 1.2rem;">Modern functional approach with Hooks for rapid development.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="col-span-12 block no-border-right" style="text-align: center; padding: 60px;">
+            <p style="font-size: 1rem; text-transform: uppercase; font-weight: 700;">© Midway Team 2024</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midway.js - Futuristic Style</title>
+    <style>
+        :root {
+            --bg: #050510;
+            --card-bg: rgba(20, 20, 40, 0.6);
+            --primary: #00F0FF;
+            --secondary: #7000FF;
+            --text-main: #E0E0E0;
+            --text-sec: #8080A0;
+            --border: rgba(0, 240, 255, 0.3);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Orbitron', 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Glow Effects */
+        .glow-spot {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(112, 0, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .glow-1 { top: -200px; left: -100px; }
+        .glow-2 { bottom: -200px; right: -100px; background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%); }
+
+        /* Typography */
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            color: white;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, var(--bg) 90%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            position: relative;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--text-sec);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            border: 1px solid var(--border);
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(5px);
+            clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+        }
+
+        /* Cyber Button */
+        .btn-cyber {
+            position: relative;
+            display: inline-block;
+            padding: 15px 40px;
+            color: var(--primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            font-size: 1rem;
+            overflow: hidden;
+            transition: 0.5s;
+            background: transparent;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            margin: 0 10px;
+        }
+
+        .btn-cyber:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 50px var(--primary);
+        }
+
+        /* Cards */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 100px;
+        }
+
+        .cyber-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 40px 30px;
+            position: relative;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+
+        .cyber-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .cyber-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        .cyber-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .cyber-card h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-glow {
+            margin-right: 15px;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* Hologram Preview */
+        .hologram-container {
+            border: 1px solid var(--border);
+            background: rgba(0, 240, 255, 0.02);
+            padding: 40px;
+            position: relative;
+            margin-bottom: 100px;
+        }
+
+        .hologram-container::after {
+            content: 'SYSTEM ONLINE';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: var(--primary);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .split-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .code-display {
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+            font-size: 0.9rem;
+            opacity: 0.8;
+            border-left: 2px solid var(--secondary);
+            padding-left: 20px;
+        }
+
+        /* Ecosystem Hexagon */
+        .eco-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .eco-item {
+            width: 150px;
+            height: 60px;
+            border: 1px solid var(--text-sec);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            position: relative;
+            background: rgba(255,255,255,0.02);
+            transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+
+        .eco-item:hover {
+            border-color: var(--secondary);
+            background: rgba(112, 0, 255, 0.1);
+            color: white;
+            text-shadow: 0 0 8px var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 80px;
+            color: var(--text-sec);
+            letter-spacing: 1px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="glow-spot glow-1"></div>
+    <div class="glow-spot glow-2"></div>
+
+    <div class="container">
+        
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <div style="font-size: 1rem; color: var(--primary); letter-spacing: 4px; margin-bottom: 20px;">FRAMEWORK V4.0 INITIALIZED</div>
+                <h1>Midway<br>Protocol</h1>
+                <p>Advanced Node.js architecture for mission-critical applications. <br>Fullstack capability enabled. Serverless mode active.</p>
+                <div>
+                    <a href="#" class="btn-cyber">Initialize</a>
+                    <a href="#" class="btn-cyber" style="filter: hue-rotate(90deg);">Documentation</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section>
+            <div style="text-align: center;"><h2>Core Modules</h2></div>
+            <div class="grid-3">
+                <div class="cyber-card">
+                    <h3><span class="icon-glow">⚡</span> Velocity</h3>
+                    <p>Class + IoC architecture maximizes structural integrity. Function + Hooks accelerates development velocity.</p>
+                </div>
+                <div class="cyber-card">
+                    <h3><span class="icon-glow">🔗</span> Integration</h3>
+                    <p>Unified fullstack protocol. Seamless integration between API and UI layers.</p>
+                </div>
+                <div class="cyber-card">
+                    <h3><span class="icon-glow">📈</span> Scalability</h3>
+                    <p>Progressive enhancement system. Scales from micro-function to galactic clusters.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Preview -->
+        <section class="hologram-container">
+            <div style="text-align: center; margin-bottom: 40px;"><h2>Training Simulation</h2></div>
+            <div class="split-view">
+                <div>
+                    <h3 style="color: var(--primary); margin-bottom: 20px;">>> CLASS_MODE</h3>
+                    <div class="code-display">
+                        @Controller('/')<br>
+                        export class CyberCore {<br>
+                        &nbsp;&nbsp;@Inject()<br>
+                        &nbsp;&nbsp;ctx: Context;<br>
+                        <br>
+                        &nbsp;&nbsp;@Get('/scan')<br>
+                        &nbsp;&nbsp;async scan() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return "Sector Clear";<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: var(--secondary); margin-bottom: 20px;">>> FUNCTION_MODE</h3>
+                    <div class="code-display" style="border-color: var(--primary); color: var(--secondary);">
+                        export default async () => {<br>
+                        &nbsp;&nbsp;const ctx = useContext();<br>
+                        &nbsp;&nbsp;return "System Ready";<br>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ecosystem -->
+        <section>
+            <div style="text-align: center; margin-bottom: 40px;"><h2>Extensions Loaded</h2></div>
+            <div class="eco-grid">
+                <div class="eco-item">ORM</div>
+                <div class="eco-item">REDIS</div>
+                <div class="eco-item">CACHE</div>
+                <div class="eco-item">OSS</div>
+                <div class="eco-item">SWAGGER</div>
+                <div class="eco-item">MONGODB</div>
+                <div class="eco-item">GRPC</div>
+                <div class="eco-item">RABBITMQ</div>
+            </div>
+        </section>
+
+        <footer>
+            <p>DEVELOP. BUILD. SHIP. // MIDWAY TEAM</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

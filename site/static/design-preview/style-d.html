@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midway.js - Bento Grid Style</title>
+    <style>
+        :root {
+            --bg: #F5F5F7;
+            --card-bg: #FFFFFF;
+            --text-main: #1D1D1F;
+            --text-sec: #86868B;
+            --blue: #0071E3;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Bento Grid Layout */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            gap: 24px;
+        }
+
+        .bento-item {
+            background: var(--card-bg);
+            border-radius: 28px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bento-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        /* Item Sizes */
+        .col-span-1 { grid-column: span 1; }
+        .col-span-2 { grid-column: span 2; }
+        .col-span-3 { grid-column: span 3; }
+        .col-span-4 { grid-column: span 4; }
+        .row-span-2 { grid-row: span 2; }
+
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-sec);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--text-sec);
+            line-height: 1.5;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        /* Specific Cards */
+        .hero-card {
+            background: #000;
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 400px;
+        }
+        
+        .hero-card h1 {
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-card p { color: #888; }
+
+        .feature-card {
+            background: white;
+        }
+
+        .feature-card.blue {
+            background: var(--blue);
+            color: white;
+        }
+        
+        .feature-card.blue p, .feature-card.blue h3 {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .icon-large {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+
+        .preview-img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            background: var(--blue);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 99px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 24px;
+        }
+        
+        .btn-white {
+            background: white;
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="bento-grid">
+            
+            <!-- Hero -->
+            <div class="bento-item col-span-4 row-span-2 hero-card">
+                <div>
+                    <h1>Midway</h1>
+                    <p style="font-size: 1.5rem;">Node.js Framework For Fullstack</p>
+                    <div style="margin-top: 32px;">
+                        <a href="#" class="btn btn-white">Get Started</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="bento-item col-span-2">
+                <div>
+                    <h3>Architecture</h3>
+                    <h2>Reliable & Fast</h2>
+                    <p>Class + IoC for better architecture.</p>
+                </div>
+                <div style="font-size: 80px; text-align: right; opacity: 0.1;">⚡️</div>
+            </div>
+
+            <div class="bento-item col-span-1 blue">
+                <div>
+                    <h3>Dev Exp</h3>
+                    <h2>Fullstack</h2>
+                    <p>One code, both sides.</p>
+                </div>
+            </div>
+
+            <div class="bento-item col-span-1">
+                <div style="text-align: center;">
+                    <div style="font-size: 40px; margin-bottom: 10px;">📦</div>
+                    <h2>Progressive</h2>
+                </div>
+            </div>
+
+            <!-- Tutorials -->
+            <div class="bento-item col-span-2 row-span-2" style="background: #F5F5F7; border: none;">
+                <!-- Just a placeholder wrapper -->
+                 <div style="background: white; padding: 32px; border-radius: 28px; height: 100%; display: flex; flex-direction: column;">
+                    <h3>Tutorial</h3>
+                    <h2>Class Syntax</h2>
+                    <p>Use decorators to define routing and injection.</p>
+                    <div style="background: #eee; height: 150px; border-radius: 12px; margin-top: auto;"></div>
+                 </div>
+            </div>
+
+            <div class="bento-item col-span-2 row-span-2" style="background: #F5F5F7; border: none;">
+                <div style="background: white; padding: 32px; border-radius: 28px; height: 100%; display: flex; flex-direction: column;">
+                    <h3>Tutorial</h3>
+                    <h2>Function Syntax</h2>
+                    <p>Use hooks for functional programming.</p>
+                    <div style="background: #eee; height: 150px; border-radius: 12px; margin-top: auto;"></div>
+                </div>
+            </div>
+
+            <!-- Ecosystem -->
+            <div class="bento-item col-span-1">
+                <h2>ORM</h2>
+            </div>
+            <div class="bento-item col-span-1">
+                <h2>Redis</h2>
+            </div>
+            <div class="bento-item col-span-1">
+                <h2>Cache</h2>
+            </div>
+            <div class="bento-item col-span-1">
+                <h2>OSS</h2>
+            </div>
+
+        </div>
+        
+        <div style="text-align: center; margin-top: 60px; color: var(--text-sec);">
+            <p>Develop. Build. Ship.</p>
+        </div>
+    </div>
+
+</body>
+</html>
