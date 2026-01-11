@@ -27,8 +27,8 @@ importers:
         specifier: 7.15.0
         version: 7.15.0
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
       jest:
         specifier: 29.7.0
         version: 29.7.0(@types/node@22.12.0)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
@@ -269,8 +269,8 @@ importers:
         specifier: workspace:^
         version: link:../web
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
       zod:
         specifier: 3.25.76
         version: 3.25.76
@@ -627,8 +627,8 @@ importers:
         specifier: workspace:^
         version: link:../core
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
 
   packages/http-proxy:
     dependencies:
@@ -1087,8 +1087,8 @@ importers:
         specifier: 0.10.9
         version: 0.10.9
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
 
   packages/redis:
     dependencies:
@@ -1184,8 +1184,8 @@ importers:
         specifier: workspace:^
         version: link:../core
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
       socket.io-client:
         specifier: 4.8.1
         version: 4.8.1
@@ -1610,8 +1610,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
       is-type-of:
         specifier: ^2.1.0
         version: 2.2.0
@@ -1662,8 +1662,8 @@ importers:
         specifier: 4.17.25
         version: 4.17.25
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
 
   packages/web-koa:
     dependencies:
@@ -1705,8 +1705,8 @@ importers:
         specifier: 1.12.0
         version: 1.12.0
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
 
   packages/ws:
     dependencies:
@@ -1727,8 +1727,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       fs-extra:
-        specifier: 11.3.2
-        version: 11.3.2
+        specifier: 11.3.3
+        version: 11.3.3
 
 packages:
 
@@ -6130,8 +6130,8 @@ packages:
     resolution: {integrity: sha512-Z4XaCL6dUDHfP/jT25jJKMmtxvuwbkrD1vNSMFlo9lNLY2c5FHYSQgHPRZUjAB26TpDEoW9HCOgplrdbaPV/ew==}
     engines: {node: '>=14.14'}
 
-  fs-extra@11.3.2:
-    resolution: {integrity: sha512-Xr9F6z6up6Ws+NjzMCZc6WXg2YFRlrLP9NQDO3VQrWrfiojdhS56TzueT88ze0uBdCTwEIhQ3ptnmKeWGFAe0A==}
+  fs-extra@11.3.3:
+    resolution: {integrity: sha512-VWSRii4t0AFm6ixFFmLLx1t7wS1gh+ckoa84aOeapGum0h+EZd1EhEumSB+ZdDLnEPuucsVB9oB7cxJHap6Afg==}
     engines: {node: '>=14.14'}
 
   fs-minipass@2.1.0:
@@ -11917,7 +11917,7 @@ snapshots:
       cosmiconfig: 8.3.6(typescript@4.9.5)
       dedent: 0.7.0
       execa: 5.0.0
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       get-stream: 6.0.0
       git-url-parse: 13.1.0
       glob-parent: 5.1.2
@@ -16389,7 +16389,7 @@ snapshots:
       jsonfile: 6.2.0
       universalify: 2.0.1
 
-  fs-extra@11.3.2:
+  fs-extra@11.3.3:
     dependencies:
       graceful-fs: 4.2.11
       jsonfile: 6.2.0
@@ -18098,7 +18098,7 @@ snapshots:
       dedent: 0.7.0
       envinfo: 7.8.1
       execa: 5.0.0
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       get-port: 5.1.1
       get-stream: 6.0.0
       git-url-parse: 13.1.0
@@ -19265,7 +19265,7 @@ snapshots:
       enquirer: 2.3.6
       figures: 3.2.0
       flat: 5.0.2
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       glob: 7.1.4
       ignore: 5.3.2
       jest-diff: 29.7.0
@@ -19316,7 +19316,7 @@ snapshots:
       enquirer: 2.3.6
       figures: 3.2.0
       flat: 5.0.2
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       ignore: 5.3.2
       jest-diff: 29.7.0
       js-yaml: 4.1.0
