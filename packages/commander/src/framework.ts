@@ -76,11 +76,19 @@ export class MidwayCommanderFramework extends BaseFramework<
       this.configurationOptions?.errorHandler ??
       (useDefault
         ? (err: Error) => {
+            if (this.isCommanderHelpExit(err)) {
+              return;
+            }
             this.logger.error(err);
             process.exit(1);
           }
         : undefined);
     handler?.(err);
+  }
+
+  private isCommanderHelpExit(err: Error): boolean {
+    const code = (err as any)?.code;
+    return code === 'commander.help' || code === 'commander.version';
   }
 
   private async outputResult(result: unknown): Promise<void> {

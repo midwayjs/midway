@@ -503,6 +503,28 @@ describe('test/index.test.ts', () => {
     await close(app);
   });
 
+  it('should run prompt with question set class', async () => {
+    const { app, testService } = await createApp();
+    const promptMock = enquirer.prompt as jest.Mock;
+    promptMock.mockClear();
+
+    const enquirerService = await app.getApplicationContext().getAsync(EnquirerService);
+    const answers = await enquirerService.prompt(ProfileQuestionSet, {
+      useNickname: true,
+    });
+    testService.promptAnswers = answers;
+
+    expect(testService.promptAnswers.age).toEqual(18);
+    expect(testService.promptAnswers.nickname).toEqual('neo');
+    const askedNames = promptMock.mock.calls.map(call => {
+      const question = call[0];
+      return Array.isArray(question) ? question[0].name : question.name;
+    });
+    expect(askedNames).toEqual([ 'age', 'nickname' ]);
+
+    await close(app);
+  });
+
   it('should output text when command returns string', async () => {
     const { app, framework } = await createApp();
     await framework.runCommand('returnText');

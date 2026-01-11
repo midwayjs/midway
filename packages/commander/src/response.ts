@@ -1,7 +1,4 @@
-import {
-  ServerResponse,
-  ServerStreamOptions,
-} from '@midwayjs/core';
+import { ServerResponse, ServerStreamOptions } from '@midwayjs/core';
 import { Transform } from 'stream';
 import { IMidwayCommanderContext } from './interface';
 

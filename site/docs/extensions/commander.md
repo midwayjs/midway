@@ -83,7 +83,7 @@ export class HelloCommand implements CommandRunner {
 
 ### `@Command()` 参数
 
-- `name`：命令名称
+ - `name`：命令名称（命令行调用与 `--help` 展示时使用）
 - `arguments`：命令位置参数声明（例如 `<name>`、`<a> [b]`）
 - `description`：命令描述，会展示在 `--help` 中
 - `argsDescription`：位置参数描述对象，会展示在 `--help` 中
@@ -158,7 +158,7 @@ import {
 } from '@midwayjs/commander';
 import { Inject } from '@midwayjs/core';
 
-@QuestionSet({ name: 'profile' })
+@QuestionSet()
 class ProfileQuestionSet {
   @Question({ type: 'input', name: 'age', message: 'Your age?' })
   parseAge(value: string) {
@@ -192,7 +192,7 @@ export class AskCommand implements CommandRunner {
   enquirerService: EnquirerService;
 
   async run(_passedParams: string[], options?: Record<string, any>) {
-    const answers = await this.enquirerService.prompt('profile', {
+    const answers = await this.enquirerService.prompt(ProfileQuestionSet, {
       useNickname: options?.useNickname,
     });
     // use answers.age / answers.nickname
@@ -205,6 +205,7 @@ export class AskCommand implements CommandRunner {
 - `@DefaultFor()` 会映射到 enquirer 的 `initial`。
 - `@WhenFor()` 支持根据已收集的答案决定是否提问。
 - 可用的 `@*For()` 装饰器：`ValidateFor`、`ChoicesFor`、`MessageFor`、`DefaultFor`、`WhenFor`。
+- `prompt()` 同时支持 `QuestionSet` 名称字符串或类引用，推荐使用类引用。
 
 ## 错误处理
 

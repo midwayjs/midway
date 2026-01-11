@@ -82,7 +82,7 @@ export class HelloCommand implements CommandRunner {
 
 ### `@Command()` parameters
 
-- `name`: command name
+- `name`: command name (used for CLI invocation and `--help` display)
 - `arguments`: positional arguments declaration (for example, `<name>`, `<a> [b]`)
 - `description`: command description, shown in `--help`
 - `argsDescription`: object describing positional arguments, shown in `--help`
@@ -157,7 +157,7 @@ import {
 } from '@midwayjs/commander';
 import { Inject } from '@midwayjs/core';
 
-@QuestionSet({ name: 'profile' })
+@QuestionSet()
 class ProfileQuestionSet {
   @Question({ type: 'input', name: 'age', message: 'Your age?' })
   parseAge(value: string) {
@@ -191,7 +191,7 @@ export class AskCommand implements CommandRunner {
   enquirerService: EnquirerService;
 
   async run(_passedParams: string[], options?: Record<string, any>) {
-    const answers = await this.enquirerService.prompt('profile', {
+    const answers = await this.enquirerService.prompt(ProfileQuestionSet, {
       useNickname: options?.useNickname,
     });
     // use answers.age / answers.nickname
@@ -204,6 +204,7 @@ Notes:
 - `@DefaultFor()` maps to enquirer's `initial`.
 - `@WhenFor()` decides whether to ask based on collected answers.
 - Available `@*For()` decorators: `ValidateFor`, `ChoicesFor`, `MessageFor`, `DefaultFor`, `WhenFor`.
+- `prompt()` accepts either a `QuestionSet` name string or a class reference, with class reference preferred.
 
 ## Error handling
 

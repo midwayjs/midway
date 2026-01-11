@@ -10,7 +10,7 @@ export const CLI_QUESTION_KEY = 'commander:question';
 export const CLI_QUESTION_FOR_KEY = 'commander:questionFor';
 
 export interface QuestionSetOptions {
-  name: string;
+  name?: string;
 }
 
 export type QuestionValue = unknown;
@@ -26,7 +26,9 @@ export type QuestionValidate = (
 
 export type QuestionChoices =
   | Array<unknown>
-  | ((answers?: Record<string, QuestionValue>) => Array<unknown> | Promise<Array<unknown>>);
+  | ((
+      answers?: Record<string, QuestionValue>
+    ) => Array<unknown> | Promise<Array<unknown>>);
 
 export type QuestionMessage =
   | string
@@ -34,7 +36,9 @@ export type QuestionMessage =
 
 export type QuestionInitial =
   | QuestionValue
-  | ((answers?: Record<string, QuestionValue>) => QuestionValue | Promise<QuestionValue>);
+  | ((
+      answers?: Record<string, QuestionValue>
+    ) => QuestionValue | Promise<QuestionValue>);
 
 export type QuestionResult = (
   value: QuestionValue,
@@ -76,11 +80,11 @@ export interface QuestionForMeta {
   type: QuestionForType;
 }
 
-export function QuestionSet(options: QuestionSetOptions): ClassDecorator {
+export function QuestionSet(options: QuestionSetOptions = {}): ClassDecorator {
   return (target: any) => {
     DecoratorManager.saveModule(CLI_QUESTION_SET_KEY, target);
     MetadataManager.defineMetadata(CLI_QUESTION_SET_KEY, options, target);
-    Scope(ScopeEnum.Request)(target);
+    Scope(ScopeEnum.Singleton)(target);
   };
 }
 

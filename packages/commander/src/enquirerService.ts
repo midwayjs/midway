@@ -26,31 +26,49 @@ export interface PromptResult {
   [key: string]: QuestionValue;
 }
 
-type QuestionSetModule = new (...args: unknown[]) => Record<PropertyKey, unknown>;
+type QuestionSetModule = new (...args: unknown[]) => object;
 type EnquirerPromptInput = Parameters<typeof enquirer.prompt>[0];
+type QuestionSetInput = string | QuestionSetModule;
 
 @Provide()
-@Scope(ScopeEnum.Request)
+@Scope(ScopeEnum.Singleton)
 export class EnquirerService {
   @ApplicationContext()
   private applicationContext: IMidwayContainer;
 
   async prompt<T extends PromptResult = PromptResult>(
-    questionSetName: string,
+    questionSet: string,
+    initialAnswers?: PromptResult
+  ): Promise<T>;
+  async prompt<T extends PromptResult = PromptResult>(
+    questionSet: QuestionSetModule,
+    initialAnswers?: PromptResult
+  ): Promise<T>;
+  async prompt<T extends PromptResult = PromptResult>(
+    questionSet: QuestionSetInput,
     initialAnswers: PromptResult = {}
   ): Promise<T> {
-    const questionSetModule = this.getQuestionSetModule(questionSetName);
-    const questionSet = await this.applicationContext.getAsync(
+    // Resolve question set by name or class reference.
+    const questionSetModule = this.resolveQuestionSetModule(questionSet);
+    const questionSetInstance = (await this.applicationContext.getAsync(
       questionSetModule
+    )) as Record<PropertyKey, unknown>;
+    // Build enquirer questions from decorators.
+    const questions = this.buildQuestions(
+      questionSetModule,
+      questionSetInstance
     );
-    const questions = this.buildQuestions(questionSetModule, questionSet);
     const answers = await this.runQuestions(questions, initialAnswers);
     return answers as T;
   }
 
-  private getQuestionSetModule(
-    questionSetName: string
+  private resolveQuestionSetModule(
+    questionSet: QuestionSetInput
   ): QuestionSetModule {
+    if (typeof questionSet !== 'string') {
+      return questionSet;
+    }
+    const questionSetName = questionSet;
     const modules = DecoratorManager.listModule(CLI_QUESTION_SET_KEY);
     for (const module of modules) {
       const metadata = MetadataManager.getMetadata(
@@ -61,9 +79,7 @@ export class EnquirerService {
         return module as QuestionSetModule;
       }
     }
-    throw new MidwayCommonError(
-      `QuestionSet "${questionSetName}" not found`
-    );
+    throw new MidwayCommonError(`QuestionSet "${questionSetName}" not found`);
   }
 
   private buildQuestions(
@@ -92,6 +108,7 @@ export class EnquirerService {
           ? (candidate as QuestionResult).bind(instance)
           : undefined;
       if (handler) {
+        // Question method acts as enquirer "result" transformer.
         question.result = handler;
       }
 
@@ -110,6 +127,7 @@ export class EnquirerService {
       }
 
       if (question.default !== undefined && question.initial === undefined) {
+        // Align "default" with enquirer "initial".
         question.initial = question.default;
         delete question.default;
       }
@@ -151,6 +169,7 @@ export class EnquirerService {
     const answers: PromptResult = { ...initialAnswers };
 
     for (const question of questions) {
+      // Evaluate "when" with accumulated answers to decide whether to ask.
       const shouldAsk = await this.resolveWhen(question.when, answers);
       if (!shouldAsk) {
         continue;
