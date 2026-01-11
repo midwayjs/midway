@@ -220,7 +220,8 @@
         "extensions/jwt",
         "extensions/tenant",
         "extensions/events",
-        "extensions/piscina"
+        "extensions/piscina",
+        "extensions/commander"
       ]
     },
     {

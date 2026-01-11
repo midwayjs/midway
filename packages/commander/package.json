@@ -1,0 +1,37 @@
+{
+  "name": "@midwayjs/commander",
+  "version": "4.0.0-beta.2",
+  "description": "Midway Commander Framework",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "keywords": [
+    "midway",
+    "component",
+    "commander"
+  ],
+  "author": "czy88840616 <czy88840616@gmail.com>",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "dependencies": {
+    "@midwayjs/core": "workspace:^",
+    "commander": "14.0.2",
+    "enquirer": "2.4.1"
+  },
+  "devDependencies": {
+    "@midwayjs/mock": "workspace:^"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
