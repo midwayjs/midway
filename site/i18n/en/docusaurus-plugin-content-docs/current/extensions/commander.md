@@ -1,4 +1,4 @@
-# Commander (Command Line)
+# Command Line
 
 `@midwayjs/commander` is a command-line component built on the Midway IoC container. It uses [commander.js](https://github.com/tj/commander.js#readme) under the hood for argument parsing and help output. You can organize commands, option parsing, and business logic with the familiar Midway dependency injection approach, and split commands into multiple classes.
 
@@ -47,7 +47,22 @@ export class MainConfiguration {}
 
 ## Write a command
 
+Example directory layout:
+
+```bash
+.
+├── src
+│   ├── commands
+│   │   ├── hello.command.ts
+│   │   └── status.command.ts
+│   ├── configuration.ts
+│   └── ...
+├── bootstrap.js
+└── package.json
+```
+
 Each command corresponds to a class, decorated with `@Command()`, and implements the `run()` method from the `CommandRunner` interface.
+
 
 ```typescript
 // src/commands/hello.command.ts

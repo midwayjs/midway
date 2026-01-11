@@ -1,4 +1,4 @@
-# Commander（命令行）
+# 命令行
 
 `@midwayjs/commander` 是一个基于 Midway IoC 容器的命令行组件，底层使用 [commander.js](https://github.com/tj/commander.js#readme) 做参数解析与 help 输出。你可以用 Midway 熟悉的依赖注入方式组织命令、选项解析与业务逻辑，并将命令拆分为多个 Class。
 
@@ -48,7 +48,22 @@ export class MainConfiguration {}
 
 ## 编写命令
 
+目录结构示例：
+
+```bash
+.
+├── src
+│   ├── commands
+│   │   ├── hello.command.ts
+│   │   └── status.command.ts
+│   ├── configuration.ts
+│   └── ...
+├── bootstrap.js
+└── package.json
+```
+
 一个命令对应一个 Class，使用 `@Command()` 修饰，并实现 `CommandRunner` 接口的 `run()` 方法。
+
 
 ```typescript
 // src/commands/hello.command.ts

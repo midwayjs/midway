@@ -5,7 +5,10 @@ import TabItem from '@theme/TabItem';
 
 We often need to perform type checking and parameter conversion operations when calling methods. Midway provides a simple capability to quickly check parameter types.
 
-This module replaces the `@midwayjs/validate` component starting from `v4.0.0`.
+:::tip
+Starting from `v4.0.0`, `@midwayjs/validation` is introduced as the upgraded replacement for `@midwayjs/validate`; they are different packages.
+`@midwayjs/validation` is a higher-level abstraction with Joi/Zod/class-validator support and room for custom validators, while `@midwayjs/validate` is Joi-only, still usable but no longer gaining new features, so migration is recommended.
+:::
 
 The new version provides a more flexible validator extension mechanism, supports seamless switching between multiple validators (such as Joi, Zod, etc.), and provides better type support and performance optimization.
 
