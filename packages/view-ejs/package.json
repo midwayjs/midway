@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/view-ejs",
-  "version": "4.0.0-beta.9",
+  "version": "4.0.0-beta.10",
   "description": "Midway Component for ejs render",
   "main": "dist/index.js",
   "typings": "index.d.ts",

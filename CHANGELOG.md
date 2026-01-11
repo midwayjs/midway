@@ -1,6 +1,27 @@
 # Change Log
 
 
+## v4.0.0-beta.10 (2026-01-11)
+
+#### :rocket: New Feature
+* `one-shot`
+  * [#4484](https://github.com/midwayjs/midway/pull/4484) feat: add one-shot component ([@czy88840616](https://github.com/czy88840616))
+* `commander`
+  * [#4478](https://github.com/midwayjs/midway/pull/4478) feat: add commander component ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `busboy`, `grpc`, `rabbitmq`, `socketio`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4477](https://github.com/midwayjs/midway/pull/4477) chore(deps): update dependency fs-extra to v11.3.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4482](https://github.com/midwayjs/midway/pull/4482) fix(deps): update dependency body-parser to v2.2.2 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#4483](https://github.com/midwayjs/midway/pull/4483) fix(deps): update dependency @types/ali-oss to v6.23.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.9 (2026-01-03)
 
 #### :rocket: New Feature
