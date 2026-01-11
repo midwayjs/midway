@@ -51,7 +51,7 @@ Each command corresponds to a class, decorated with `@Command()`, and implements
 
 ```typescript
 // src/commands/hello.command.ts
-import { Inject } from '@midwayjs/core';
+import { Inject, ILogger } from '@midwayjs/core';
 import { Command, CommandRunner, Option } from '@midwayjs/commander';
 
 @Command({
@@ -62,7 +62,7 @@ import { Command, CommandRunner, Option } from '@midwayjs/commander';
 })
 export class HelloCommand implements CommandRunner {
   @Inject()
-  logger;
+  logger: ILogger;
 
   @Option({
     flags: '-f, --foo [foo]',
