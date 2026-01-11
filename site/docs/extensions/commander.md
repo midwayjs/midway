@@ -139,6 +139,91 @@ export class InfoCommand implements CommandRunner {
 }
 ```
 
+## 交互式提问（Enquirer）
+
+组件内置了基于 [enquirer](https://github.com/enquirer/enquirer) 的交互式提问能力，适用于运行过程中补齐参数。你可以用 `@QuestionSet()` 组织问题集合，并在命令里通过 `EnquirerService` 触发。
+
+如果希望既支持命令行传参又支持交互补齐，请把对应选项设为可选（否则 commander 会在缺参时直接报错）。
+
+```typescript
+import {
+  Command,
+  CommandRunner,
+  QuestionSet,
+  Question,
+  ValidateFor,
+  DefaultFor,
+  WhenFor,
+  EnquirerService,
+} from '@midwayjs/commander';
+import { Inject } from '@midwayjs/core';
+
+@QuestionSet({ name: 'profile' })
+class ProfileQuestionSet {
+  @Question({ type: 'input', name: 'age', message: 'Your age?' })
+  parseAge(value: string) {
+    return Number.parseInt(value, 10);
+  }
+
+  @Question({ type: 'input', name: 'nickname', message: 'Nickname?' })
+  parseNickname(value: string) {
+    return value;
+  }
+
+  @ValidateFor({ name: 'age' })
+  validateAge(value: string) {
+    return value ? true : 'age required';
+  }
+
+  @DefaultFor({ name: 'nickname' })
+  defaultNickname() {
+    return 'neo';
+  }
+
+  @WhenFor({ name: 'nickname' })
+  whenNickname(answers: Record<string, unknown>) {
+    return Boolean(answers.useNickname);
+  }
+}
+
+@Command({ name: 'ask' })
+export class AskCommand implements CommandRunner {
+  @Inject()
+  enquirerService: EnquirerService;
+
+  async run(_passedParams: string[], options?: Record<string, any>) {
+    const answers = await this.enquirerService.prompt('profile', {
+      useNickname: options?.useNickname,
+    });
+    // use answers.age / answers.nickname
+  }
+}
+```
+
+说明：
+- `@Question()` 修饰的方法会作为 enquirer 的 `result`（用于转换用户输入）。
+- `@DefaultFor()` 会映射到 enquirer 的 `initial`。
+- `@WhenFor()` 支持根据已收集的答案决定是否提问。
+- 可用的 `@*For()` 装饰器：`ValidateFor`、`ChoicesFor`、`MessageFor`、`DefaultFor`、`WhenFor`。
+
+## 错误处理
+
+默认情况下，CLI 入口会捕获异常并输出日志后退出进程。你可以在配置里提供 `errorHandler` 来接管错误处理：
+
+```typescript
+// src/config/config.default.ts
+export default {
+  commander: {
+    errorHandler: (err: Error) => {
+      console.error(err);
+      process.exit(1);
+    },
+  },
+};
+```
+
+如果你在命令里使用了 `@Catch()` 错误过滤器（Midway Filter），会先走过滤器逻辑，再进入这里的兜底处理。
+
 ## 返回值与输出
 
 默认情况下，命令执行完毕后，如果 `run()` 有返回值，框架会将返回值输出到标准输出（stdout），方便用作脚本管道或在测试中断言输出内容。

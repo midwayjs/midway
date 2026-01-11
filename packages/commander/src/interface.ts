@@ -9,6 +9,7 @@ export { IMidwayContext } from '@midwayjs/core';
 
 export interface ICommanderConfigurationOptions extends IConfigurationOptions {
   // global config
+  errorHandler?: (err: Error) => void;
 }
 
 export interface IMidwayCommanderContext extends IMidwayContext {

@@ -138,6 +138,91 @@ export class InfoCommand implements CommandRunner {
 }
 ```
 
+## Interactive prompts (Enquirer)
+
+This component ships with [enquirer](https://github.com/enquirer/enquirer) integration for interactive CLI input. Define question sets with `@QuestionSet()` and trigger them from your command via `EnquirerService`.
+
+If you want both CLI options and interactive input for the same field, make the option optional; required options will make commander fail before the prompt runs.
+
+```typescript
+import {
+  Command,
+  CommandRunner,
+  QuestionSet,
+  Question,
+  ValidateFor,
+  DefaultFor,
+  WhenFor,
+  EnquirerService,
+} from '@midwayjs/commander';
+import { Inject } from '@midwayjs/core';
+
+@QuestionSet({ name: 'profile' })
+class ProfileQuestionSet {
+  @Question({ type: 'input', name: 'age', message: 'Your age?' })
+  parseAge(value: string) {
+    return Number.parseInt(value, 10);
+  }
+
+  @Question({ type: 'input', name: 'nickname', message: 'Nickname?' })
+  parseNickname(value: string) {
+    return value;
+  }
+
+  @ValidateFor({ name: 'age' })
+  validateAge(value: string) {
+    return value ? true : 'age required';
+  }
+
+  @DefaultFor({ name: 'nickname' })
+  defaultNickname() {
+    return 'neo';
+  }
+
+  @WhenFor({ name: 'nickname' })
+  whenNickname(answers: Record<string, unknown>) {
+    return Boolean(answers.useNickname);
+  }
+}
+
+@Command({ name: 'ask' })
+export class AskCommand implements CommandRunner {
+  @Inject()
+  enquirerService: EnquirerService;
+
+  async run(_passedParams: string[], options?: Record<string, any>) {
+    const answers = await this.enquirerService.prompt('profile', {
+      useNickname: options?.useNickname,
+    });
+    // use answers.age / answers.nickname
+  }
+}
+```
+
+Notes:
+- Methods decorated by `@Question()` become enquirer's `result` (for input transformation).
+- `@DefaultFor()` maps to enquirer's `initial`.
+- `@WhenFor()` decides whether to ask based on collected answers.
+- Available `@*For()` decorators: `ValidateFor`, `ChoicesFor`, `MessageFor`, `DefaultFor`, `WhenFor`.
+
+## Error handling
+
+By default, the CLI entry catches errors, logs them, and exits the process. You can override this behavior with `errorHandler` in your config:
+
+```typescript
+// src/config/config.default.ts
+export default {
+  commander: {
+    errorHandler: (err: Error) => {
+      console.error(err);
+      process.exit(1);
+    },
+  },
+};
+```
+
+If you use `@Catch()` filters (Midway Filter) inside commands, they run before the fallback handler is invoked.
+
 ## Return values and output
 
 By default, after a command finishes, if `run()` returns a value, the framework writes it to standard output (stdout). This is useful for shell pipelines and for asserting output in tests.

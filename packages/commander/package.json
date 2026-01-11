@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "@midwayjs/core": "workspace:^",
-    "commander": "14.0.2"
+    "commander": "14.0.2",
+    "enquirer": "2.4.1"
   },
   "devDependencies": {
     "@midwayjs/mock": "workspace:^"

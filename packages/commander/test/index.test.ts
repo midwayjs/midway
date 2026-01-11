@@ -1,6 +1,50 @@
-import { CliServerResponse, Command, Option, CommandRunner, Context, Framework } from '../src';
+import {
+  CliServerResponse,
+  Command,
+  Option,
+  CommandRunner,
+  Context,
+  Framework,
+  QuestionSet,
+  Question,
+  ValidateFor,
+  DefaultFor,
+  WhenFor,
+  EnquirerService,
+} from '../src';
 import { Inject, Singleton } from '@midwayjs/core';
 import { createLightApp, close } from '@midwayjs/mock';
+jest.mock('enquirer', () => ({
+  prompt: jest.fn(async questionInput => {
+    const question = Array.isArray(questionInput)
+      ? questionInput[0]
+      : questionInput;
+    let value: unknown;
+    if (question.name === 'age') {
+      value = '18';
+    } else if (question.name === 'nickname') {
+      value = undefined;
+    } else {
+      value = 'default';
+    }
+
+    if (question.validate) {
+      await question.validate(value);
+    }
+    if (question.result) {
+      value = await question.result(value);
+    }
+    if (value === undefined && question.initial !== undefined) {
+      value =
+        typeof question.initial === 'function'
+          ? await question.initial()
+          : question.initial;
+    }
+    return { [question.name]: value };
+  }),
+}));
+
+const enquirer = require('enquirer');
 
 @Singleton()
 class TestService {
@@ -12,6 +56,7 @@ class TestService {
   public ctxOptions?: any;
   public ctxArgs?: string[];
   public ctxCommand?: any;
+  public promptAnswers?: Record<string, any>;
 
   reset() {
     this.executed = false;
@@ -22,6 +67,7 @@ class TestService {
     this.ctxOptions = undefined;
     this.ctxArgs = undefined;
     this.ctxCommand = undefined;
+    this.promptAnswers = undefined;
   }
 }
 
@@ -184,6 +230,67 @@ class WithContextCommand implements CommandRunner {
   }
 }
 
+@QuestionSet({ name: 'profile' })
+class ProfileQuestionSet {
+  @Question({
+    type: 'input',
+    name: 'age',
+    message: 'age',
+  })
+  parseAge(value: string) {
+    return Number.parseInt(value, 10);
+  }
+
+  @Question({
+    type: 'input',
+    name: 'nickname',
+    message: 'nickname',
+  })
+  parseNickname(value: string) {
+    return value;
+  }
+
+  @ValidateFor({ name: 'age' })
+  validateAge(value: string) {
+    return value ? true : 'age required';
+  }
+
+  @DefaultFor({ name: 'nickname' })
+  defaultNickname() {
+    return 'neo';
+  }
+
+  @WhenFor({ name: 'nickname' })
+  whenNickname(answers: Record<string, unknown>) {
+    return Boolean(answers.useNickname);
+  }
+}
+
+@Command({
+  name: 'ask',
+})
+class AskCommand implements CommandRunner {
+  @Inject()
+  testService: TestService;
+
+  @Inject()
+  enquirerService: EnquirerService;
+
+  @Option({
+    flags: '--useNickname [useNickname]',
+  })
+  parseUseNickname(value: string) {
+    return value !== 'false';
+  }
+
+  async run(_passedParams: string[], options?: Record<string, any>) {
+    const answers = await this.enquirerService.prompt('profile', {
+      useNickname: options?.useNickname,
+    });
+    this.testService.promptAnswers = answers;
+  }
+}
+
 @Command({
   name: 'returnText',
 })
@@ -267,6 +374,8 @@ describe('test/index.test.ts', () => {
         MultiArgsCommand,
         NumberOptionCommand,
         WithContextCommand,
+        ProfileQuestionSet,
+        AskCommand,
         ReturnTextCommand,
         ReturnJsonCommand,
         ReturnStreamCommand,
@@ -372,6 +481,24 @@ describe('test/index.test.ts', () => {
     expect(testService.ctxArgs).toEqual([ 'world' ]);
     expect(testService.ctxOptions.foo).toEqual('bar');
     expect(testService.ctxCommand).toBeDefined();
+
+    await close(app);
+  });
+
+  it('should run prompt with enquirer service', async () => {
+    const { app, framework, testService } = await createApp();
+    const promptMock = enquirer.prompt as jest.Mock;
+    promptMock.mockClear();
+
+    await framework.runCommand('ask', '--useNickname');
+
+    expect(testService.promptAnswers.age).toEqual(18);
+    expect(testService.promptAnswers.nickname).toEqual('neo');
+    const askedNames = promptMock.mock.calls.map(call => {
+      const question = call[0];
+      return Array.isArray(question) ? question[0].name : question.name;
+    });
+    expect(askedNames).toEqual([ 'age', 'nickname' ]);
 
     await close(app);
   });

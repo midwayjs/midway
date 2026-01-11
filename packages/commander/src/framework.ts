@@ -50,7 +50,7 @@ export class MidwayCommanderFramework extends BaseFramework<
     try {
       await this.program.parseAsync(process.argv);
     } catch (error) {
-      void error;
+      this.handleError(error, true);
     }
   }
 
@@ -62,7 +62,25 @@ export class MidwayCommanderFramework extends BaseFramework<
    */
   public async runCommand(...args: string[]) {
     this.loadCommands();
-    return this.program.parseAsync(args, { from: 'user' });
+    try {
+      return await this.program.parseAsync(args, { from: 'user' });
+    } catch (error) {
+      this.handleError(error, false);
+      throw error;
+    }
+  }
+
+  private handleError(error: unknown, useDefault: boolean) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    const handler =
+      this.configurationOptions?.errorHandler ??
+      (useDefault
+        ? (err: Error) => {
+            this.logger.error(err);
+            process.exit(1);
+          }
+        : undefined);
+    handler?.(err);
   }
 
   private async outputResult(result: unknown): Promise<void> {
