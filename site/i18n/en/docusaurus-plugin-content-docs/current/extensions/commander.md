@@ -47,7 +47,22 @@ export class MainConfiguration {}
 
 ## Write a command
 
+Example directory layout:
+
+```bash
+.
+├── src
+│   ├── commands
+│   │   ├── hello.command.ts
+│   │   └── status.command.ts
+│   ├── configuration.ts
+│   └── ...
+├── bootstrap.js
+└── package.json
+```
+
 Each command corresponds to a class, decorated with `@Command()`, and implements the `run()` method from the `CommandRunner` interface.
+
 
 ```typescript
 // src/commands/hello.command.ts
