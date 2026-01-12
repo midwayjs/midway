@@ -71,7 +71,7 @@ export class MainConfiguration {}
 
 
 
-由于 MQTT 分为 **订阅者（subscriber）** 和 **发布者（publisher）**两部分，两个可以独立使用，我们将分别介绍。
+由于 MQTT 分为 **订阅者（subscriber）** 和 **发布者（publisher）** 两部分，两个可以独立使用，我们将分别介绍。
 
 
 
