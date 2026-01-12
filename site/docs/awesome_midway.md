@@ -27,6 +27,7 @@
 | 名称                                   | 作者  | 描述                  |
 | -------------------------------------- | ----- | --------------------- |
 | [midwayjs-knife4j2][midwayjs-knife4j2] | Junyi | midway swagger 新皮肤 |
+| [midway-scalar][midway-scalar] | nobu121 | midway scalar 组件，scalar是一个为 OpenAPI 标准构建的现代 API 平台 |
 
 ## 模板渲染
 
@@ -91,6 +92,7 @@
 
 [midwayjs-knife4j2]: https://github.com/fangbao-0418/midway/tree/master/packages/swagger
 [yuntian001/midway-vite-view]: https://github.com/yuntian001/midway-vite-view
+[midway-scalar]: https://github.com/nobu121/midway-scalar
 
 [midwayjs-crud]: https://github.com/developeryvan/midwayjs-crud
 [midway-practice]: https://github.com/ddzyan/midway-practice
