@@ -219,8 +219,8 @@ importers:
   packages/bullmq:
     dependencies:
       bullmq:
-        specifier: 5.66.4
-        version: 5.66.4
+        specifier: 5.66.5
+        version: 5.66.5
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -392,7 +392,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.26
-        version: 0.3.26(ioredis@5.8.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 0.3.26(ioredis@5.9.1)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/code-dye:
     devDependencies:
@@ -1317,7 +1317,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.26
-        version: 0.3.26(ioredis@5.8.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 0.3.26(ioredis@5.9.1)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/upload:
     dependencies:
@@ -2361,9 +2361,6 @@ packages:
     peerDependenciesMeta:
       '@types/node':
         optional: true
-
-  '@ioredis/commands@1.4.0':
-    resolution: {integrity: sha512-aFT2yemJJo+TZCmieA7qnYGQooOS7QfNmYrzGtsYd3g9j5iDP8AimYYAesf79ohjbLG12XxC4nG5DyEnC88AsQ==}
 
   '@ioredis/commands@1.5.0':
     resolution: {integrity: sha512-eUgLqrMf8nJkZxT24JvVRrQya1vZkQh8BBeYNwGDqa5I0VUi8ACx7uFvAaLxintokpTenkK6DASvo/bvNbBGow==}
@@ -4464,8 +4461,8 @@ packages:
     resolution: {integrity: sha512-lDsx2BzkKe7gkCYiT5Acj02DpTwDznl/VNN7Psn7M3USPG7Vs/BaClZJJTAG+ufAR9++N1/NiUTdaFBWDIl5TQ==}
     engines: {node: '>=12'}
 
-  bullmq@5.66.4:
-    resolution: {integrity: sha512-y2VRk2z7d1YNI2JQDD7iThoD0X/0iZZ3VEp8lqT5s5U0XDl9CIjXp1LQgmE9EKy6ReHtzmYXS1f328PnUbZGtQ==}
+  bullmq@5.66.5:
+    resolution: {integrity: sha512-DC1E7P03L+TfNHv+2SGxwNYvtb0oJPODWSKkWdfis0heU5zFW16vjM7fCjwlxMdGWw2w28EI3mTRfYLEHeQQSw==}
 
   bundle-require@5.1.0:
     resolution: {integrity: sha512-3WrrOuZiyaaZPWiEt4G3+IffISVC9HYlWueJEBWED4ZH4aIAC2PnkdnuRrR94M+w6yGWn4AglWtJtBI8YqvgoA==}
@@ -6701,8 +6698,8 @@ packages:
     resolution: {integrity: sha512-0SZXGNGZ+WzISQ67QDyZ2x0+wVxjjUndtD8oSeik/4ajifeiRufed8fCb8QW8VMyi4MXcS+UO1k/0NGhvq1PAg==}
     engines: {node: '>=12.22.0'}
 
-  ioredis@5.8.2:
-    resolution: {integrity: sha512-C6uC+kleiIMmjViJINWk80sOQw5lEzse1ZmvD+S/s8p8CWapftSaC+kocGTx6xrbrJ4WmYQGC08ffHLr6ToR6Q==}
+  ioredis@5.9.1:
+    resolution: {integrity: sha512-BXNqFQ66oOsR82g9ajFFsR8ZKrjVvYCLyeML9IvSMAsP56XH2VXBdZjmI11p65nXXJxTEt1hie3J2QeFJVgrtQ==}
     engines: {node: '>=12.22.0'}
 
   ip-address@10.1.0:
@@ -11667,8 +11664,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 22.12.0
 
-  '@ioredis/commands@1.4.0': {}
-
   '@ioredis/commands@1.5.0': {}
 
   '@isaacs/balanced-match@4.0.1': {}
@@ -14148,10 +14143,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  bullmq@5.66.4:
+  bullmq@5.66.5:
     dependencies:
       cron-parser: 4.9.0
-      ioredis: 5.8.2
+      ioredis: 5.9.1
       msgpackr: 1.11.5
       node-abort-controller: 3.1.1
       semver: 7.7.3
@@ -17079,9 +17074,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ioredis@5.8.2:
+  ioredis@5.9.1:
     dependencies:
-      '@ioredis/commands': 1.4.0
+      '@ioredis/commands': 1.5.0
       cluster-key-slot: 1.1.2
       debug: 4.4.3
       denque: 2.1.0
@@ -21803,7 +21798,7 @@ snapshots:
       typescript: 5.6.3
       yaml: 2.8.2
 
-  typeorm@0.3.26(ioredis@5.8.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
+  typeorm@0.3.26(ioredis@5.9.1)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
     dependencies:
       '@sqltools/formatter': 1.2.5
       ansis: 3.17.0
@@ -21821,7 +21816,7 @@ snapshots:
       uuid: 11.1.0
       yargs: 17.7.2
     optionalDependencies:
-      ioredis: 5.8.2
+      ioredis: 5.9.1
       mongodb: 6.12.0(socks@2.8.7)
       mysql2: 3.16.0
       redis: 3.1.2
