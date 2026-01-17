@@ -737,8 +737,8 @@ importers:
   packages/leoric:
     dependencies:
       leoric:
-        specifier: 2.13.9
-        version: 2.13.9(mysql2@3.16.0)(sqlite3@5.1.7)
+        specifier: 2.14.0
+        version: 2.14.0(mysql2@3.16.0)(sqlite3@5.1.7)
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -7432,8 +7432,8 @@ packages:
     resolution: {integrity: sha512-weT+r0kTkRQdCdYCNtkMwWXQTMEswKrFBkm4ckQOMVhhqhIMI1UT2hMj+1iigIhgSZm5gTmrRXBNoGUgaTY1xA==}
     engines: {node: '>=8'}
 
-  leoric@2.13.9:
-    resolution: {integrity: sha512-9F3Jezyxp4XNYspDjdl+gT6FCydHllydBgzUCqukbIbM0V5BgfAE5iwMKjyioaz8MAor9n91HVxXmgPUH5YVaw==}
+  leoric@2.14.0:
+    resolution: {integrity: sha512-b/kbYhZifknB2ie+7Gr5V+NsYEyYP3f89wP7oB/ZrHIzG2i2gXKEmlJO5mNJuM+R2M5H6TE/O9B09dRGCPR7gg==}
     engines: {node: '>= 18.0.0'}
     peerDependencies:
       mysql: ^2.17.1
@@ -18048,7 +18048,7 @@ snapshots:
     dependencies:
       package-json: 6.5.0
 
-  leoric@2.13.9(mysql2@3.16.0)(sqlite3@5.1.7):
+  leoric@2.14.0(mysql2@3.16.0)(sqlite3@5.1.7):
     dependencies:
       dayjs: 1.11.19
       debug: 3.2.7
