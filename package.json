@@ -26,6 +26,7 @@
   "scripts": {
     "install_npm": "sh scripts/install_npm.sh",
     "test": "lerna run test",
+    "test:dist": "lerna run test:dist --scope=@midwayjs/validation-zod --scope=@midwayjs/validation-zod4 --scope=@midwayjs/validation-joi --scope=@midwayjs/validation-class-validator",
     "link": "lerna run link",
     "cov": "lerna run cov --concurrency 2 --stream",
     "test_legacy": "lerna run test --concurrency 2 --stream --scope={$(lerna list --all --parseable --toposort --long | grep packages-legacy | sed -E \"s/[^:]+:([^:]+).+/\\1/\" | paste -d , -s -)}",
