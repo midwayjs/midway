@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/swagger",
-  "version": "4.0.0-beta.10",
+  "version": "4.0.0-beta.11",
   "description": "Midway Component for Swagger API Documentation",
   "main": "dist/index.js",
   "typings": "index.d.ts",

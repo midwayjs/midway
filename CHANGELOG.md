@@ -1,6 +1,26 @@
 # Change Log
 
 
+## v4.0.0-beta.11 (2026-01-25)
+
+#### :bug: Bug Fix
+* `validation-class-validator`, `validation-joi`, `validation-zod`, `validation-zod4`
+  * [#4492](https://github.com/midwayjs/midway/pull/4492) fix: add OpenSpec instructions and fix joi tsup package ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `oss`
+  * [#4490](https://github.com/midwayjs/midway/pull/4490) fix(deps): update dependency @types/ali-oss to v6.23.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bullmq`
+  * [#4488](https://github.com/midwayjs/midway/pull/4488) fix(deps): update dependency bullmq to v5.66.5 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `leoric`
+  * [#4489](https://github.com/midwayjs/midway/pull/4489) fix(deps): update dependency leoric to v2.14.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@nobu121](https://github.com/nobu121)
+
+
+
 ## v4.0.0-beta.10 (2026-01-11)
 
 #### :rocket: New Feature
