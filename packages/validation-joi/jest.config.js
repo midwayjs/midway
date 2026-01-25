@@ -5,4 +5,12 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/test/', '<rootDir>/dist/'],
   setupFilesAfterEnv: ['./jest.setup.js'],
   coverageProvider: 'v8',
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        allowSyntheticDefaultImports: true,
+        esModuleInterop: true,
+      },
+    },
+  },
 };

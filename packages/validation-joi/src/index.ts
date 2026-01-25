@@ -3,7 +3,7 @@ import {
   MidwayConfigService,
   MetadataManager,
 } from '@midwayjs/core';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import {
   getRuleMeta,
   ValidateResult,

@@ -72,6 +72,9 @@ jobs:
       - name: Build
         run: pnpm run build --if-present
 
+      - name: Test ESM dist artifacts
+        run: pnpm test:dist
+
       - name: Run tests and coverage
         run: pnpm run cov
         env:
