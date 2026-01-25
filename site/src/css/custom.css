@@ -37,6 +37,15 @@ nav input:focus-visible {
 }
 
 :root[data-theme='dark'] {
+  /* Dark Mode Primary: Neon Cyan #00F0FF */
+  --ifm-color-primary: #00F0FF;
+  --ifm-color-primary-dark: #00d8e6;
+  --ifm-color-primary-darker: #00ccd9;
+  --ifm-color-primary-darkest: #00a8b3;
+  --ifm-color-primary-light: #1affff;
+  --ifm-color-primary-lighter: #26ffff;
+  --ifm-color-primary-lightest: #4dffff;
+
   --ifm-color-title: #fff;
   --ifm-color-text: #cccbcb;
   --ifm-color-background: #2a2d31;

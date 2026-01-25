@@ -137,6 +137,17 @@ const CardDesc = styled('p', {
   lineHeight: 1.4,
 })
 
+const ArrowIcon = styled('i', {
+  position: 'absolute',
+  right: '16px',
+  top: '50%',
+  transform: 'translateY(-50%) translateX(-10px)',
+  fontSize: '16px',
+  color: 'var(--midway-primary)',
+  opacity: 0,
+  transition: 'all 0.3s ease',
+})
+
 type ComponentProps = {
   icon: string
   title: string
@@ -154,6 +165,7 @@ function Component(props: ComponentProps) {
         <CardTitle>{props.title}</CardTitle>
         <CardDesc>{props.description}</CardDesc>
       </TextWrapper>
+      <ArrowIcon className="iconfont icon-arrow-right arrow-icon" />
     </ComponentCard>
   )
 }

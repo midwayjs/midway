@@ -92,6 +92,7 @@ const CodeWindow = styled('div', {
   overflow: 'hidden',
   boxShadow: '0 20px 50px rgba(0,0,0,0.2)',
   transition: 'all 0.3s',
+  position: 'relative',
   
   '&:hover': {
     boxShadow: '0 20px 50px rgba(0,0,0,0.4)',
@@ -103,8 +104,32 @@ const CodeHeader = styled('div', {
   background: 'rgba(255,255,255,0.05)',
   padding: '12px 16px',
   display: 'flex',
-  gap: '8px',
+  justifyContent: 'space-between',
+  alignItems: 'center',
   borderBottom: '1px solid var(--midway-border)',
+})
+
+const WindowControls = styled('div', {
+  display: 'flex',
+  gap: '8px',
+})
+
+const FileName = styled('div', {
+  fontSize: '0.8rem',
+  color: 'var(--midway-text-sec)',
+  fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+})
+
+const CodeStatusBar = styled('div', {
+  background: 'rgba(255,255,255,0.02)',
+  padding: '4px 16px',
+  borderTop: '1px solid var(--midway-border)',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  gap: '16px',
+  fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+  fontSize: '0.7rem',
+  color: 'var(--midway-text-sec)',
 })
 
 const Dot = styled('div', {
@@ -181,11 +206,19 @@ export function PreviewClassSyntax() {
       
       <CodeWindow>
         <CodeHeader>
-          <Dot color="red" />
-          <Dot color="yellow" />
-          <Dot color="green" />
+          <WindowControls>
+            <Dot color="red" />
+            <Dot color="yellow" />
+            <Dot color="green" />
+          </WindowControls>
+          <FileName>home.controller.ts</FileName>
         </CodeHeader>
         <CodeContent dangerouslySetInnerHTML={{ __html: codeClass }} />
+        <CodeStatusBar>
+          <span>Ln 9, Col 1</span>
+          <span>UTF-8</span>
+          <span>TypeScript</span>
+        </CodeStatusBar>
       </CodeWindow>
     </Container>
   );
@@ -196,11 +229,19 @@ export function PreviewFunctionSyntax() {
     <Container>
       <CodeWindow css={{ '@mobile': { order: 2 } }}>
         <CodeHeader>
-          <Dot color="red" />
-          <Dot color="yellow" />
-          <Dot color="green" />
+          <WindowControls>
+            <Dot color="red" />
+            <Dot color="yellow" />
+            <Dot color="green" />
+          </WindowControls>
+          <FileName>function.service.ts</FileName>
         </CodeHeader>
         <CodeContent dangerouslySetInnerHTML={{ __html: codeFunction }} />
+        <CodeStatusBar>
+          <span>Ln 10, Col 1</span>
+          <span>UTF-8</span>
+          <span>TypeScript</span>
+        </CodeStatusBar>
       </CodeWindow>
       
       <div css={{ '@mobile': { order: 1 } }}>
@@ -218,6 +259,11 @@ export function PreviewFunctionSyntax() {
           <EcoTag>React Hooks</EcoTag>
           <EcoTag>Lightweight</EcoTag>
         </EcoStrip>
+        
+        <StartButton href="http://localhost:4321/1-class-syntax/1-introduction" target="_blank">
+          <Translate id="homepage.preview.start">Start Interactive Tutorial</Translate>
+          <i className="iconfont icon-arrow-right" />
+        </StartButton>
       </div>
     </Container>
   );

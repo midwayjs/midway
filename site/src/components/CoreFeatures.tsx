@@ -55,12 +55,50 @@ const FeatureCard = styled('div', {
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
+  overflow: 'hidden',
+  height: '100%',
   
+  // Circuit pattern background
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: `radial-gradient(var(--midway-grid) 1px, transparent 1px)`,
+    backgroundSize: '20px 20px',
+    opacity: 0.3,
+    zIndex: 0,
+  },
+
   '&:hover': {
     transform: 'translateY(-5px)',
     borderColor: 'var(--midway-secondary)',
     boxShadow: '0 10px 30px -10px var(--midway-glow)',
+    
+    '& .status-light': {
+      background: 'var(--midway-secondary)',
+      boxShadow: '0 0 10px var(--midway-secondary)',
+    },
+    
+    '& .icon-container': {
+      borderColor: 'var(--midway-secondary)',
+      color: 'var(--midway-secondary)',
+      boxShadow: '0 0 15px var(--midway-glow)',
+    }
   },
+})
+
+const StatusLight = styled('div', {
+  position: 'absolute',
+  top: '20px',
+  right: '20px',
+  width: '8px',
+  height: '8px',
+  borderRadius: '50%',
+  background: 'var(--midway-border)',
+  transition: 'all 0.3s',
 })
 
 // HUD Corners
@@ -72,6 +110,7 @@ const HudCorner = styled('div', {
   transition: 'all 0.3s',
   opacity: 0.7,
   pointerEvents: 'none',
+  zIndex: 1,
 
   variants: {
     pos: {
@@ -92,6 +131,9 @@ const IconContainer = styled('div', {
   background: 'var(--midway-bg)',
   color: 'var(--midway-primary)',
   borderRadius: '4px',
+  position: 'relative',
+  zIndex: 1,
+  transition: 'all 0.3s',
 })
 
 const Icon = styled('i', {
@@ -104,6 +146,8 @@ const Title = styled('h3', {
   color: 'var(--midway-text-main)',
   margin: '0 0 16px 0',
   lineHeight: 1.3,
+  position: 'relative',
+  zIndex: 1,
 })
 
 const Description = styled('div', {
@@ -111,6 +155,8 @@ const Description = styled('div', {
   color: 'var(--midway-text-sec)',
   lineHeight: 1.6,
   margin: 0,
+  position: 'relative',
+  zIndex: 1,
 })
 
 const SectionTitle = styled('div', {
@@ -164,8 +210,9 @@ function Feature(props: FeatureProps) {
     <FeatureCard>
       <HudCorner pos="tl" />
       <HudCorner pos="br" />
+      <StatusLight className="status-light" />
       
-      <IconContainer>
+      <IconContainer className="icon-container">
         <Icon className={`iconfont ${props.icon}`} />
       </IconContainer>
       <Title>{props.title}</Title>

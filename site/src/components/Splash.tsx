@@ -349,6 +349,55 @@ const targets = [
   'Serverless',
 ];
 
+const scroll = keyframes({
+  '0%': { transform: 'translateY(0)', opacity: 1 },
+  '100%': { transform: 'translateY(10px)', opacity: 0 },
+});
+
+const ScrollIndicator = styled('div', {
+  position: 'absolute',
+  bottom: '40px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '8px',
+  opacity: 0.7,
+  zIndex: 10,
+  
+  '@mobile': {
+    display: 'none',
+  }
+});
+
+const ScrollText = styled('span', {
+  fontSize: '0.75rem',
+  textTransform: 'uppercase',
+  letterSpacing: '0.2em',
+  color: 'var(--midway-text-sec)',
+});
+
+const ScrollArrow = styled('div', {
+  width: '1px',
+  height: '40px',
+  background: 'linear-gradient(to bottom, var(--midway-secondary) 0%, transparent 100%)',
+  position: 'relative',
+  
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: '50%',
+    width: '4px',
+    height: '4px',
+    background: 'var(--midway-secondary)',
+    borderRadius: '50%',
+    transform: 'translateX(-50%)',
+    animation: `${scroll} 2s infinite`,
+  }
+});
+
 export function Splash() {
   const [index, setIndex] = React.useState(0);
   const [text] = useWindupString(targets[index], {
@@ -368,7 +417,7 @@ export function Splash() {
       
       <Content>
         <TextColumn>
-          <Badge>Midway v3.0 // System Ready</Badge>
+          <Badge>Midway v4.0 // System Ready</Badge>
           
           <Title>
             <Translate id="homepage.splash.titleLine1">Fullstack Framework</Translate>
@@ -403,10 +452,15 @@ export function Splash() {
           <InnerCircle />
           <CenterCrosshair />
           <DataPoint pos="tl">SYS.READY</DataPoint>
-          <DataPoint pos="tr">V.3.0.0</DataPoint>
+          <DataPoint pos="tr">V.4.0.0</DataPoint>
           <DataPoint pos="bl">CORE.ACTIVE</DataPoint>
         </DecorativeHUD>
       </Content>
+
+      <ScrollIndicator>
+        <ScrollText>Scroll</ScrollText>
+        <ScrollArrow />
+      </ScrollIndicator>
     </Container>
   );
 }
