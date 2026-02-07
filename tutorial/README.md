@@ -1,149 +1,75 @@
-# TutorialKit Starter
+# Midway.js 交互式教程
 
-👋 Welcome to TutorialKit!
+这是一个基于 TutorialKit 构建的 Midway.js 交互式教程，帮助开发者从零开始学习 Midway.js 框架。
 
-This README includes everything you need to start writing your tutorial content quickly.
+## 教程内容
 
-## Project Structure
+### 第一部分：创建应用
+1. **项目结构介绍** - 了解 Midway 应用的基本结构
+2. **创建第一个 Controller** - 学习如何处理 HTTP 请求
+3. **获取请求参数** - 掌握各种参数获取方式
 
-```bash
-.
-├── astro.config.mjs    # TutorialKit uses Astro 🚀 (https://astro.build)
-├── src
-│   ├── ...
-│   ├── content
-│   │   └── tutorial    # Your tutorial content lives here
-│   └── templates       # Your templates (see below for more information)
-├── public
-│   ├── favicon.svg
-│   └── logo.svg        # Default logo used in top left for your tutorial
-├── ...
-├── theme.ts            # Customize the theme of the tutorial
-└── uno.config.ts       # UnoCSS config (https://unocss.dev/)
-```
+### 第二部分：依赖注入与 Service
+1. **创建第一个 Service** - 学习如何组织业务逻辑
+2. **依赖注入的使用** - 理解 IoC 容器和依赖注入
 
-## Getting Started
+### 第三部分：处理请求与响应
+1. **处理 POST 请求** - 学习 RESTful API 开发
+2. **错误处理** - 掌握异常处理和错误响应
 
-Make sure you have all dependencies installed and started the dev server:
+### 第四部分：中间件与配置
+1. **理解中间件** - 学习中间件的概念和使用
+2. **应用配置管理** - 掌握多环境配置
+
+### 第五部分：数据验证与最佳实践
+1. **数据验证** - 学习如何验证请求数据
+2. **最佳实践总结** - 了解开发规范和最佳实践
+
+## 特点
+
+✅ **交互式学习** - 边学边练，实时查看效果
+✅ **循序渐进** - 从基础到进阶，逐步深入
+✅ **代码示例** - 丰富的可运行代码示例
+✅ **最佳实践** - 学习业界认可的开发规范
+
+## 本地运行
+
+### 安装依赖
 
 ```bash
 pnpm install
-pnpm run dev
 ```
 
-## UI Structure
-
-```markdown
-┌─────────────────────────────────────────────────────┐
-│ ● ● ●                                               │
-├───────────────────────────┬─────────────────────────┤
-│                           │                         │
-│                           │                         │
-│                           │                         │
-│                           │                         │
-│                           │       Code Editor       │
-│                           │                         │
-│                           │                         │
-│                           │                         │
-│                           │                         │
-│          Content          ├─────────────────────────┤
-│                           │                         │
-│                           │                         │
-│                           │  Preview & Boot Screen  │
-│                           │                         │
-│                           │                         │
-│                           ├─────────────────────────┤
-│                           │                         │
-│                           │        Terminal         │
-│                           │                         │
-└───────────────────────────┴─────────────────────────┘
-```
-
-## Authoring Content
-
-A tutorial consists of parts, chapters, and lessons. For example:
-
-- Part 1: Basics of Vite
-  - Chapter 1: Introduction
-    - Lesson 1: Welcome!
-    - Lesson 2: Why Vite?
-    - …
-  - Chapter 2: Your first Vite project
-- Part 2: CLI
-  - …
-
-Your content is organized into lessons, with chapters and parts providing a structure and defining common metadata for these lessons.
-
-Here’s an example of how it would look like in `src/content/tutorial`:
+### 启动开发服务器
 
 ```bash
-tutorial
-├── 1-basics-of-vite
-│   ├── 1-introduction
-│   │   ├── 1-welcome
-│   │   │   ├── content.md    # The content of your lesson
-│   │   │   ├── _files        # Initial set of files
-│   │   │   │   └── ...
-│   │   │   └── _solution     # Solution of the lesson
-│   │   │       └── ...
-│   │   ├── 2-why-vite
-│   │   │   ├── content.md
-│   │   │   └── _files
-│   │   │       └── ...
-│   │   └── meta.md           # Metadata for the chapter
-│   └── meta.md               # Metadata for the part
-├── 2-advanced
-│   ├── ...
-│   └── meta.md
-└── meta.md                   # Metadata for the tutorial
+pnpm dev
 ```
 
-### Supported Content Formats
+访问 http://localhost:4321 开始学习。
 
-Content can be either written as Markdown (`.md`) files or using [MDX](https://mdxjs.com/) (`.mdx`). Files have a Front Matter at the top that contains the metadata and everything that comes after is the content of your lesson.
+### 构建生产版本
 
-**Example**
-
-```markdown
----
-type: lesson
-title: Welcome!
----
-
-# Welcome to TutorialKit!
-
-In this tutorial we'll walk you through how to setup your environment to
-write your first tutorial 🤩
+```bash
+pnpm build
 ```
 
-The metadata file (`meta.md`) of parts, chapters, and lessons do not contain any content. It only contains the Front Matter for configuration.
+## 技术栈
 
-### Metadata
+- [Astro](https://astro.build/) - 现代静态站点生成器
+- [TutorialKit](https://tutorialkit.dev/) - 交互式教程框架
+- [Midway.js](https://midwayjs.org/) - Node.js 框架
 
-Here is an overview of the properties that can be used as part of the Front Matter:
+## 反馈
 
-| Property        | Required | Type                        | Inherited | Description                                                                                                                                           |
-| --------------- | -------- | --------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type            | ✅       | `part \| chapter \| lesson` | ❌        | The type of the metadata.                                                                                                                             |
-| title           | ✅       | `string`                    | ❌        | The title of the part, chapter, or lesson.                                                                                                            |
-| slug            |          | `string`                    | ❌        | Let’s you customize the URL pathname which is `/:partSlug/:chapterSlug/:lessonSlug`.                                                                  |
-| previews        |          | `Preview[]`                 | ✅        | Configure which ports should be used for the previews. If not specified, the lowest port will be used.                                                |
-| autoReload      |          | `boolean`                   | ✅        | Navigating to a lesson that specifies `autoReload` will always reload the preview. This is typically only needed if your server does not support HMR. |
-| prepareCommands |          | `Command[]`                 | ✅        | List of commands to execute sequentially. They are typically used to install dependencies or to run scripts.                                          |
-| mainCommand     |          | `Command`                   | ✅        | The main command to be executed. This command will run after the `prepareCommands`.                                                                   |
+如果您在学习过程中遇到问题或有改进建议，欢迎提交 Issue。
 
-A `Command` has the following shape:
+## 相关链接
 
-```ts
-string | [command: string, title: string] | { command: string, title: string }
-```
+- [Midway.js 官方文档](https://midwayjs.org/)
+- [Midway.js GitHub](https://github.com/midwayjs/midway)
+- [TutorialKit 官网](https://tutorialkit.dev/)
 
-The `title` is used as part of the boot screen (see [UI Structure](#ui-structure)).
+## 许可证
 
-A `Preview` has the following shape:
-
-```ts
-string | [port: number, title: string] | { port: number, title: string }
-```
-
-In most cases, metadata is inherited. For example, if you specify a `mainCommand` on a chapter without specifying it on any of its lessons, each lesson will use the `mainCommand` from its respective chapter. This extends to chapter and parts as well.
+MIT
