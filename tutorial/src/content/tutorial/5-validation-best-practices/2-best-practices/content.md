@@ -1,6 +1,19 @@
 ---
 type: lesson
 title: 最佳实践总结
+focus: /src/configuration.ts
+prepareCommands:
+  - npm install
+mainCommand: npm run dev
+terminal:
+  open: false
+  panels:
+    - output
+    - terminal
+previews:
+  - port: 7001
+    title: Midway 应用
+autoReload: true
 ---
 
 # Midway.js 最佳实践
@@ -70,8 +83,8 @@ export class EmailService {
 @Provide()
 export class UserService {
   async findById(id: number) { }
-  async sendWelcomeEmail(email: string) { } // 应该在 EmailService
-  async uploadAvatar(file: any) { } // 应该在 FileService
+  async sendWelcomeEmail(email: string) { }
+  async uploadAvatar(file: any) { }
 }
 ```
 
@@ -92,7 +105,7 @@ export class UserRepository implements IUserRepository {
   async findById(id: number) {
     // 数据库查询
   }
-  
+
   async create(user: User) {
     // 数据库插入
   }
@@ -103,7 +116,7 @@ export class UserRepository implements IUserRepository {
 export class UserService {
   @Inject()
   userRepository: IUserRepository; // 依赖接口,不是具体实现
-  
+
   async getUser(id: number) {
     return this.userRepository.findById(id);
   }
@@ -145,27 +158,21 @@ export class UserService {
 ```typescript
 @Controller('/api/users')
 export class UserController {
-  // GET /api/users - 获取列表
   @Get('/')
   async list() { }
-  
-  // GET /api/users/:id - 获取详情
+
   @Get('/:id')
   async detail(@Param('id') id: string) { }
-  
-  // POST /api/users - 创建
+
   @Post('/')
   async create(@Body() dto: CreateUserDTO) { }
-  
-  // PUT /api/users/:id - 完整更新
+
   @Put('/:id')
   async update(@Param('id') id: string, @Body() dto: UpdateUserDTO) { }
-  
-  // PATCH /api/users/:id - 部分更新
+
   @Patch('/:id')
   async patch(@Param('id') id: string, @Body() dto: Partial<UpdateUserDTO>) { }
-  
-  // DELETE /api/users/:id - 删除
+
   @Del('/:id')
   async delete(@Param('id') id: string) { }
 }
@@ -189,7 +196,7 @@ export class UserController {
   @Get('/:id')
   async detail(@Param('id') id: string): Promise<ApiResponse> {
     const user = await this.userService.findById(parseInt(id));
-    
+
     if (!user) {
       return {
         success: false,
@@ -197,335 +204,137 @@ export class UserController {
         code: 'USER_NOT_FOUND',
       };
     }
-    
+
     return {
       success: true,
       data: user,
+      timestamp: new Date().toISOString(),
     };
   }
 }
 ```
 
-### 3. 分页规范
+## 单元测试最佳实践
 
-```typescript
-export interface PaginationQuery {
-  page?: number;
-  pageSize?: number;
-}
+Midway 推荐使用 `@midwayjs/mock` 配合 Jest 做接口测试。
 
-export interface PaginationResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}
-
-@Controller('/api/users')
-export class UserController {
-  @Get('/')
-  async list(@Query() query: PaginationQuery): Promise<ApiResponse> {
-    const page = query.page || 1;
-    const pageSize = query.pageSize || 10;
-    
-    const [items, total] = await this.userService.findAndCount(page, pageSize);
-    
-    return {
-      success: true,
-      data: {
-        items,
-        total,
-        page,
-        pageSize,
-        totalPages: Math.ceil(total / pageSize),
-      },
-    };
-  }
-}
-```
-
-## 错误处理最佳实践
-
-### 1. 自定义错误类
-
-```typescript
-// src/error/business.error.ts
-export class BusinessError extends Error {
-  constructor(
-    message: string,
-    public code: string,
-    public statusCode: number = 400
-  ) {
-    super(message);
-    this.name = 'BusinessError';
-  }
-}
-
-// 使用
-throw new BusinessError('用户名已存在', 'USERNAME_EXISTS', 400);
-```
-
-### 2. 全局错误处理
-
-```typescript
-import { Catch } from '@midwayjs/core';
-import { Context } from '@midwayjs/koa';
-
-@Catch()
-export class GlobalErrorFilter {
-  async catch(err: Error, ctx: Context) {
-    // 记录错误
-    ctx.logger.error(err);
-    
-    // 业务错误
-    if (err instanceof BusinessError) {
-      ctx.status = err.statusCode;
-      return {
-        success: false,
-        message: err.message,
-        code: err.code,
-      };
-    }
-    
-    // HTTP 错误
-    if (err instanceof MidwayHttpError) {
-      ctx.status = err.statusCode;
-      return {
-        success: false,
-        message: err.message,
-      };
-    }
-    
-    // 未知错误
-    ctx.status = 500;
-    return {
-      success: false,
-      message: '服务器内部错误',
-      code: 'INTERNAL_ERROR',
-    };
-  }
-}
-```
-
-## 安全最佳实践
-
-### 1. 参数验证
-
-```typescript
-// 始终验证用户输入
-@Post('/users')
-@Validate()
-async create(@Body() dto: CreateUserDTO) {
-  // 验证通过后才执行
-}
-```
-
-### 2. 敏感信息处理
-
-```typescript
-// ❌ 不要返回敏感信息
-@Get('/:id')
-async getUser(@Param('id') id: string) {
-  const user = await this.userService.findById(id);
-  return user; // 包含密码等敏感信息
-}
-
-// ✅ 过滤敏感信息
-@Get('/:id')
-async getUser(@Param('id') id: string) {
-  const user = await this.userService.findById(id);
-  const { password, ...safeUser } = user;
-  return {
-    success: true,
-    data: safeUser,
-  };
-}
-```
-
-### 3. SQL 注入防护
-
-```typescript
-// ✅ 使用参数化查询
-await this.repository.find({
-  where: { username: userInput }
-});
-
-// ❌ 不要拼接 SQL
-await this.repository.query(`SELECT * FROM users WHERE username = '${userInput}'`);
-```
-
-## 性能优化建议
-
-### 1. 合理使用缓存
-
-```typescript
-@Provide()
-export class UserService {
-  @Inject()
-  cacheService: CacheService;
-  
-  async getUserById(id: number) {
-    // 先查缓存
-    const cacheKey = `user:${id}`;
-    const cached = await this.cacheService.get(cacheKey);
-    if (cached) {
-      return cached;
-    }
-    
-    // 查数据库
-    const user = await this.userRepository.findById(id);
-    
-    // 写入缓存
-    await this.cacheService.set(cacheKey, user, 3600);
-    
-    return user;
-  }
-}
-```
-
-### 2. 避免 N+1 查询
-
-```typescript
-// ❌ N+1 查询
-async getPostsWithAuthors() {
-  const posts = await this.postRepository.findAll();
-  for (const post of posts) {
-    post.author = await this.userRepository.findById(post.authorId);
-  }
-  return posts;
-}
-
-// ✅ 使用关联查询
-async getPostsWithAuthors() {
-  return this.postRepository.find({
-    relations: ['author']
-  });
-}
-```
-
-## 配置管理最佳实践
-
-### 1. 分环境配置
-
-```typescript
-// config.default.ts - 基础配置
-export default {
-  database: {
-    type: 'mysql',
-    host: process.env.DB_HOST,
-    // ...
-  },
-};
-
-// config.prod.ts - 生产环境覆盖
-export default {
-  midwayLogger: {
-    default: {
-      level: 'warn', // 生产环境只记录警告
-    },
-  },
-};
-```
-
-### 2. 使用环境变量
+安装依赖：
 
 ```bash
-# .env
-NODE_ENV=local
-DB_HOST=localhost
-DB_PASSWORD=secret
-JWT_SECRET=your_secret_key
+npm install -D @midwayjs/mock
 ```
 
-```typescript
-// 读取环境变量
-export default {
-  jwt: {
-    secret: process.env.JWT_SECRET,
-  },
-};
+`package.json`：
+
+```json
+{
+  "devDependencies": {
+    "@midwayjs/mock": "^4.0.0"
+  }
+}
 ```
 
-## 测试最佳实践
-
-### 1. 单元测试
+示例测试：
 
 ```typescript
 import { createApp, close, createHttpRequest } from '@midwayjs/mock';
-import { Framework } from '@midwayjs/koa';
+import { Framework, Application } from '@midwayjs/koa';
 
-describe('test/controller/user.test.ts', () => {
-  let app: any;
+describe('test/controller/home.test.ts', () => {
+  let app: Application;
 
   beforeAll(async () => {
+    // 只创建一次 app，测试用例复用
     app = await createApp<Framework>();
   });
 
   afterAll(async () => {
+    // 关闭 app 释放资源
     await close(app);
   });
 
-  it('should GET /api/users/1', async () => {
-    const result = await createHttpRequest(app)
-      .get('/api/users/1');
-    
+  it('should GET /', async () => {
+    const result = await createHttpRequest(app).get('/');
+
     expect(result.status).toBe(200);
-    expect(result.body.success).toBe(true);
+    expect(result.text).toBe('Hello Midwayjs!');
   });
 });
 ```
 
-## 日志记录最佳实践
+## 安全性最佳实践
 
-```typescript
-@Provide()
-export class UserService {
-  @Logger()
-  logger;
+1. **输入验证**
+   - 所有用户输入必须验证
+   - 使用 DTO 和验证装饰器
 
-  async createUser(data: any) {
-    this.logger.info('创建用户', { data });
-    
-    try {
-      const user = await this.userRepository.create(data);
-      this.logger.info('用户创建成功', { userId: user.id });
-      return user;
-    } catch (error) {
-      this.logger.error('用户创建失败', error);
-      throw error;
-    }
-  }
-}
-```
+2. **身份认证**
+   - 使用 JWT 或 Session
+   - 重要操作需要二次验证
 
-## 下一步建议
+3. **权限控制**
+   - 基于角色的访问控制（RBAC）
+   - 最小权限原则
 
-恭喜您完成了 Midway.js 教程！接下来您可以：
+4. **敏感信息保护**
+   - 密码加密存储（bcrypt）
+   - API 密钥使用环境变量
+   - 不在日志中输出敏感数据
 
-1. **深入学习**
-   - 阅读官方文档了解更多组件
-   - 学习 TypeORM 进行数据库操作
-   - 了解微服务和 Serverless
+## 性能优化最佳实践
 
-2. **实践项目**
-   - 构建一个博客系统
-   - 开发 RESTful API
-   - 创建管理后台
+1. **缓存**
+   - 使用 Redis 缓存热点数据
+   - 设置合理的缓存过期时间
 
-3. **加入社区**
-   - GitHub: https://github.com/midwayjs/midway
-   - 官方文档: https://midwayjs.org
+2. **数据库优化**
+   - 避免 N+1 查询
+   - 使用索引优化查询
+   - 合理分页
+
+3. **异步任务**
+   - 耗时任务使用队列
+   - 邮件发送异步处理
+
+4. **限流**
+   - 防止接口被滥用
+   - 使用中间件实现限流
+
+## 日志与监控最佳实践
+
+1. **结构化日志**
+   - 记录关键业务日志
+   - 包含请求 ID 便于追踪
+
+2. **错误监控**
+   - 使用 Sentry 等工具
+   - 及时报警
+
+3. **性能监控**
+   - 监控接口响应时间
+   - 监控系统资源使用
+
+## 部署最佳实践
+
+1. **环境隔离**
+   - 开发/测试/生产环境严格分离
+   - 使用不同的配置文件
+
+2. **CI/CD**
+   - 自动化测试
+   - 自动化部署
+
+3. **容器化**
+   - 使用 Docker 部署
+   - 配合 Kubernetes 管理
 
 ## 小结
 
-✅ 遵循单一职责原则
 ✅ 合理组织项目结构
-✅ 使用 RESTful API 规范
+✅ 遵循单一职责原则
+✅ 设计规范的 RESTful API
 ✅ 统一响应格式
-✅ 完善错误处理
-✅ 注意安全问题
-✅ 编写测试用例
-✅ 合理使用日志
+✅ 使用测试保障质量
+✅ 关注安全、性能与监控
 
-祝您在 Midway.js 的学习之旅中收获满满！🎉
+恭喜！您已经完成了 Midway.js 的核心教程！

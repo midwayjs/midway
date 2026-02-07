@@ -6,9 +6,10 @@ prepareCommands:
   - npm install
 mainCommand: npm run dev
 terminal:
-  open: true
+  open: false
   panels:
     - output
+    - terminal
 previews:
   - port: 7001
     title: Midway 应用

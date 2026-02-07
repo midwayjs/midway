@@ -9,6 +9,7 @@ terminal:
   open: true
   panels:
     - output
+    - terminal
 previews:
   - port: 7001
     title: Midway 应用
@@ -155,6 +156,7 @@ export class MainConfiguration {
 ## 测试中间件
 
 启动应用后，访问任何接口，都会在控制台看到日志：
+你可以先访问 `GET /middleware-demo`，然后观察 `output` 面板中的请求日志。
 
 ```
 → GET /api/users
