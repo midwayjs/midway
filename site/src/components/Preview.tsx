@@ -84,6 +84,27 @@ const EcoTag = styled('div', {
   }
 })
 
+const StartButton = styled('a', {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px',
+  padding: '12px 20px',
+  marginTop: '28px',
+  backgroundColor: 'var(--midway-primary)',
+  color: '#ffffff',
+  borderRadius: '8px',
+  textDecoration: 'none',
+  fontWeight: 600,
+  transition: 'all 0.25s ease',
+
+  '&:hover': {
+    backgroundColor: 'var(--midway-secondary)',
+    color: '#ffffff',
+    textDecoration: 'none',
+    transform: 'translateY(-1px)',
+  },
+})
+
 // Code Window Components
 const CodeWindow = styled('div', {
   background: 'var(--midway-code-bg)',
@@ -260,7 +281,7 @@ export function PreviewFunctionSyntax() {
           <EcoTag>Lightweight</EcoTag>
         </EcoStrip>
         
-        <StartButton href="http://localhost:4321/1-class-syntax/1-introduction" target="_blank">
+        <StartButton href="/tutorial/class/zh-cn/">
           <Translate id="homepage.preview.start">Start Interactive Tutorial</Translate>
           <i className="iconfont icon-arrow-right" />
         </StartButton>
