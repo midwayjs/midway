@@ -1,12 +1,14 @@
 name: Deploy Site
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - v4-next
     paths:
       - .github/workflows/site.yml
       - site/**
+      - tutorial/**
       - CHANGELOG.md
     # Review gh actions docs if you want to further define triggers, paths, etc
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
@@ -50,6 +52,13 @@ jobs:
           cache: 'npm'
           cache-dependency-path: site/package-lock.json
 
+      # tutorial 目录使用 npm，需要单独配置 npm 缓存
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: tutorial/package-lock.json
+
       # 安装和构建 site 目录
       - name: Install and build site
         working-directory: site
@@ -57,11 +66,25 @@ jobs:
           npm install
           npm run build
 
+      # 安装并构建 tutorial 矩阵，然后合并到 site/build/tutorial
+      - name: Install and build tutorial matrix
+        working-directory: tutorial
+        run: |
+          npm install
+          npm run build:matrix
+
+      - name: Merge tutorial output into site build
+        run: |
+          rm -rf site/build/tutorial
+          mkdir -p site/build/tutorial
+          cp -R tutorial/dist-matrix/. site/build/tutorial/
+
       # 打包文档，部署到阿里云 OSS
       - name: Zip output
         working-directory: site
         run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
       - name: upload files to OSS
+        if: github.event_name == 'push' && github.ref == 'refs/heads/v4-next'
         uses: fangbinwei/aliyun-oss-website-action@v1
         with:
           accessKeyId: ${{ secrets.DEPLOY_SITE_ACCESS_KEY_ID }}
