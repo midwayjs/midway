@@ -6,6 +6,7 @@
   "scripts": {
     "astro": "astro",
     "build": "astro check && astro build",
+    "build:matrix": "node ./scripts/build-matrix.mjs",
     "dev": "astro dev",
     "preview": "astro preview",
     "start": "astro dev",

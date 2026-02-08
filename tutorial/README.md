@@ -54,6 +54,55 @@ pnpm dev
 pnpm build
 ```
 
+### 多教程 + 多语言构建
+
+当前支持通过“构建矩阵”产出四套静态站点：
+
+- `class/zh-cn`
+- `class/en`
+- `function/zh-cn`
+- `function/en`
+
+内容来源目录：
+
+```text
+sources/
+  class/zh-cn/tutorial
+  class/en/tutorial
+  function/zh-cn/tutorial
+  function/en/tutorial
+```
+
+执行构建：
+
+```bash
+npm run build:matrix
+```
+
+产物目录：
+
+```text
+dist-matrix/
+  index.html
+  class/zh-cn
+  class/en
+  function/zh-cn
+  function/en
+```
+
+默认会按 `midwayjs.org/tutorial/...` 路径生成路由前缀，例如：
+
+- `/tutorial/class/zh-cn/`
+- `/tutorial/class/en/`
+- `/tutorial/function/zh-cn/`
+- `/tutorial/function/en/`
+
+可通过环境变量覆盖前缀：
+
+```bash
+TUTORIAL_PATH_PREFIX=/custom npm run build:matrix
+```
+
 ## 技术栈
 
 - [Astro](https://astro.build/) - 现代静态站点生成器
