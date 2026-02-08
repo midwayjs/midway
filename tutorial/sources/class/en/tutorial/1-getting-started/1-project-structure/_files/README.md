@@ -1,32 +1,27 @@
-# Midway.js 项目
+# Midway.js Project
 
-一个标准的 Midway.js 项目结构。
+A standard Midway.js project structure.
 
-## 项目结构
+## Project Structure
 
 ```
 .
-├── src/                          # 源码目录
-│   ├── controller/               # 控制器目录
-│   │   └── home.controller.ts    # 主页控制器
-│   ├── service/                  # 服务目录
-│   ├── config/                   # 配置目录
-│   │   └── config.default.ts     # 默认配置
-│   └── configuration.ts          # 应用配置
-├── bootstrap.js                  # 启动文件
-├── package.json                  # 项目配置
-└── tsconfig.json                 # TypeScript 配置
+├── src/                          # Source directory
+│   ├── controller/               # Controller directory
+│   │   └── home.controller.ts    # Home controller
+│   ├── service/                  # Service directory
+│   ├── config/                   # Config directory
+│   │   └── config.default.ts     # Default config
+│   └── configuration.ts          # App configuration
+├── bootstrap.js                  # Bootstrap file
+├── package.json                  # Project config
+└── tsconfig.json                 # TypeScript config
 ```
 
-## 各目录说明
+## Directory Notes
 
-- **controller/** - 控制器，处理 HTTP 请求
-- **service/** - 服务，业务逻辑
-- **config/** - 配置文件
-- **configuration.ts** - 应用配置入口
-- **bootstrap.js** - 应用启动文件
-
-
-
-
-
+- **controller/** - Controller layer for HTTP handlers
+- **service/** - Service layer for business logic
+- **config/** - Configuration files
+- **configuration.ts** - App configuration entry
+- **bootstrap.js** - App bootstrap file

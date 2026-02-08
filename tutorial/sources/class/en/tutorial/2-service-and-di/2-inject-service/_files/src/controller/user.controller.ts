@@ -6,7 +6,7 @@ export class UserController {
   @Inject()
   userService: UserService;
 
-  // 获取所有用户
+  // List all users
   @Get('/')
   async list() {
     const users = await this.userService.getUsers();
@@ -16,14 +16,14 @@ export class UserController {
     };
   }
 
-  // 获取单个用户
+  // Get one user
   @Get('/:id')
   async getOne(@Param('id') id: string) {
     const user = await this.userService.getUserById(parseInt(id));
     if (!user) {
       return {
         success: false,
-        message: '用户不存在'
+        message: 'User not found'
       };
     }
     return {
@@ -32,7 +32,7 @@ export class UserController {
     };
   }
 
-  // 搜索用户
+  // Search users
   @Get('/search')
   async search(@Query('keyword') keyword: string) {
     const users = await this.userService.searchUsers(keyword || '');

@@ -12,20 +12,20 @@ export class HomeController {
     return {
       name: 'Midway.js',
       version: '4.0',
-      description: '一个面向未来的 Node.js 框架'
+      description: 'A future-ready Node.js framework'
     };
   }
 
   @Get('/greet')
   async greet(@Query('name') name: string) {
-    return `你好, ${name || '游客'}!`;
+    return `Hello, ${name || 'Guest'}!`;
   }
 
   @Get('/user/:id')
   async getUserById(@Param('id') id: string) {
     return {
       userId: id,
-      name: `用户${id}`,
+      name: `User ${id}`,
       email: `user${id}@example.com`
     };
   }
@@ -68,7 +68,7 @@ export class HomeController {
         result = num1 / num2;
         break;
       default:
-        return { error: '不支持的操作' };
+        return { error: 'Unsupported operation' };
     }
 
     return {

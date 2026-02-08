@@ -19,13 +19,13 @@ export class UserController {
     const { name, email } = body;
 
     if (!name || !email) {
-      throw new ValidationError('姓名和邮箱不能为空');
+      throw new ValidationError('Name and email are required');
     }
 
     const user = await this.userService.createUser(name, email);
     return {
       success: true,
-      message: '用户创建成功',
+      message: 'User created successfully',
       data: user,
     };
   }
@@ -35,12 +35,12 @@ export class UserController {
     const userId = parseInt(id);
 
     if (isNaN(userId)) {
-      throw new ValidationError('用户ID必须是数字');
+      throw new ValidationError('User ID must be a number');
     }
 
     const user = await this.userService.getUserById(userId);
     if (!user) {
-      throw new NotFoundError('用户');
+      throw new NotFoundError('User');
     }
 
     return {

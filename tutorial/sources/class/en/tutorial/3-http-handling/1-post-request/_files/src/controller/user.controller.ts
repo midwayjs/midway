@@ -41,7 +41,7 @@ export class UserController {
     if (!user) {
       return {
         success: false,
-        message: '用户不存在',
+        message: 'User not found',
       };
     }
     return {
@@ -55,7 +55,7 @@ export class UserController {
     const user = await this.userService.createUser(dto.name, dto.email);
     return {
       success: true,
-      message: '用户创建成功',
+      message: 'User created successfully',
       data: user,
     };
   }
@@ -66,12 +66,12 @@ export class UserController {
     if (!user) {
       return {
         success: false,
-        message: '用户不存在',
+        message: 'User not found',
       };
     }
     return {
       success: true,
-      message: '用户更新成功',
+      message: 'User updated successfully',
       data: user,
     };
   }
@@ -82,12 +82,12 @@ export class UserController {
     if (!success) {
       return {
         success: false,
-        message: '用户不存在',
+        message: 'User not found',
       };
     }
     return {
       success: true,
-      message: '用户删除成功',
+      message: 'User deleted successfully',
     };
   }
 

@@ -1,6 +1,6 @@
 ---
 type: lesson
-title: 应用配置管理
+title: Application Configuration
 focus: /src/config/config.default.ts
 prepareCommands:
   - npm install
@@ -12,17 +12,15 @@ terminal:
     - terminal
 previews:
   - port: 7001
-    title: Midway 应用
+    title: Midway App
 autoReload: true
 ---
 
-# 应用配置管理
+# Application Configuration
 
-这一节基于 `env_config` 文档，学习 Midway 的多环境配置最小实践。
+This lesson follows the `env_config` document and focuses on practical multi-environment setup.
 
-## 1. 配置文件约定
-
-配置放在 `src/config/`：
+## Config file conventions
 
 ```text
 src/config/
@@ -31,12 +29,10 @@ src/config/
   config.prod.ts
 ```
 
-- `config.default.ts`：所有环境都会加载
-- `config.{env}.ts`：只在对应环境加载，并覆盖同名配置
+- `config.default.ts`: loaded in all environments
+- `config.{env}.ts`: loaded only for a specific environment and overrides defaults
 
-## 2. 推荐写法：对象形式
-
-`env_config` 推荐使用对象形式（更直观，也更不容易误用）：
+## Recommended export format
 
 ```typescript
 import { MidwayConfig } from '@midwayjs/core';
@@ -53,9 +49,7 @@ export default {
 } as MidwayConfig;
 ```
 
-## 3. 在 configuration.ts 显式加载配置
-
-按文档建议，环境配置需要在 `importConfigs` 中显式声明：
+## Load config in `configuration.ts`
 
 ```typescript
 import { Configuration } from '@midwayjs/core';
@@ -73,13 +67,9 @@ import * as LocalConfig from './config/config.local';
 export class MainConfiguration {}
 ```
 
-当前课程 case 只放了 `config.default.ts`，所以重点先掌握默认配置。
+## Quick verification
 
-## 4. 快速验证
-
-这节不建议改端口（会影响当前预览）。用下面方式验证配置生效：
-
-把 `src/config/config.default.ts` 改成：
+Update `src/config/config.default.ts`:
 
 ```typescript
 app: {
@@ -88,14 +78,13 @@ app: {
 },
 ```
 
-保存后：
-- `output` 会显示服务重启
-- 预览仍在 `7001` 正常可访问（说明你没有破坏运行入口）
-- 访问默认路由 `GET /` 可以直接看到你刚改的配置值
+After save:
 
-## 5. 代码里读取配置
+- `output` should show app restart
+- Preview remains available on port `7001`
+- `GET /` should return updated config values
 
-可以用 `@Config()` 注入配置项：
+## Read config in code
 
 ```typescript
 import { Controller, Get, Config } from '@midwayjs/core';
@@ -118,12 +107,9 @@ export class HomeController {
 }
 ```
 
-本课 `_files` 已提供可直接使用的默认路由：
-- `GET /`
+## Summary
 
-## 小结
-
-✅ 使用 `config.default.ts + config.{env}.ts` 组织多环境配置
-✅ 优先使用对象形式导出配置
-✅ 在 `importConfigs` 显式声明环境配置
-✅ 配置通过覆盖规则合并，后者覆盖前者
+- Use `config.default.ts + config.{env}.ts`
+- Prefer object-based config exports
+- Declare env config explicitly in `importConfigs`
+- Override behavior follows later-layer precedence

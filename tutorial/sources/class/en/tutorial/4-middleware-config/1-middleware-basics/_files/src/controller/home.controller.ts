@@ -5,7 +5,7 @@ export class HomeController {
   @Get('/')
   async home() {
     return {
-      message: '中间件课程：访问 /middleware-demo 查看日志输出',
+      message: 'Middleware lesson: visit /middleware-demo to see logs',
     };
   }
 

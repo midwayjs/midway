@@ -2,24 +2,24 @@ import { Provide } from '@midwayjs/core';
 
 @Provide()
 export class UserService {
-  // 模拟用户数据库
+  // Mock user database
   private users = [
-    { id: 1, name: '张三', email: 'zhangsan@example.com' },
-    { id: 2, name: '李四', email: 'lisi@example.com' },
-    { id: 3, name: '王五', email: 'wangwu@example.com' },
+    { id: 1, name: 'Tom', email: 'zhangsan@example.com' },
+    { id: 2, name: 'Jerry', email: 'lisi@example.com' },
+    { id: 3, name: 'Kate', email: 'wangwu@example.com' },
   ];
 
-  // 获取所有用户
+  // List all users
   async getUsers() {
     return this.users;
   }
 
-  // 根据 ID 获取用户
+  // Get user by ID
   async getUserById(id: number) {
     return this.users.find(user => user.id === id);
   }
 
-  // 创建新用户
+  // Create user
   async createUser(name: string, email: string) {
     const newUser = {
       id: this.users.length + 1,
@@ -30,7 +30,7 @@ export class UserService {
     return newUser;
   }
 
-  // 更新用户信息
+  // Update user
   async updateUser(id: number, data: { name?: string; email?: string }) {
     const user = this.users.find(u => u.id === id);
     if (!user) {
@@ -41,7 +41,7 @@ export class UserService {
     return user;
   }
 
-  // 删除用户
+  // Delete user
   async deleteUser(id: number) {
     const index = this.users.findIndex(u => u.id === id);
     if (index === -1) {
@@ -51,7 +51,7 @@ export class UserService {
     return true;
   }
 
-  // 搜索用户
+  // Search users
   async searchUsers(keyword: string) {
     return this.users.filter(
       user =>

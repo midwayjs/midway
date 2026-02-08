@@ -1,6 +1,6 @@
 ---
 type: lesson
-title: 创建第一个 Controller
+title: Create Your First Controller
 focus: /src/controller/home.controller.ts
 prepareCommands:
   - npm install
@@ -12,23 +12,19 @@ terminal:
     - terminal
 previews:
   - port: 7001
-    title: Midway 应用
+    title: Midway App
 autoReload: true
 ---
 
-# 创建第一个 Controller
+# Create Your First Controller
 
-Controller（控制器）负责处理 HTTP 请求并返回响应。让我们创建一个简单的 API 接口。
+A controller handles HTTP requests and returns responses.
 
-## 什么是 Controller？
+## What is a Controller?
 
-在 Midway 中，Controller 是一个使用 `@Controller()` 装饰器标记的类，它的方法对应不同的 HTTP 路由。
+In Midway, a controller is a class decorated with `@Controller()`. Its methods are mapped to routes using decorators like `@Get()`.
 
-## 查看示例代码
-
-👉 打开右侧的 `src/controller/home.controller.ts` 文件。
-
-您会看到一个基本的 Controller：
+## Example
 
 ```typescript
 @Controller('/')
@@ -40,36 +36,29 @@ export class HomeController {
 }
 ```
 
-## 代码解析
+## How it works
 
-### 1. `@Controller('/')` 装饰器
-- 定义这是一个控制器类
-- 参数 `'/'` 是路由前缀，所有方法的路由都会加上这个前缀
+### `@Controller('/')`
+Defines a route prefix for all methods in this class.
 
-### 2. `@Get('/')` 装饰器
-- 定义这是一个 GET 请求的处理方法
-- 参数 `'/'` 是具体的路由路径
-- 完整路径 = 控制器前缀 + 方法路径 = `'/' + '/'` = `'/'`
+### `@Get('/')`
+Maps the method to an HTTP GET route.
 
-### 3. 方法返回值
-- 直接返回字符串，Midway 会自动处理响应
-- 也可以返回对象，会自动转换为 JSON
+### Return value
+- String values are returned as text responses.
+- Objects are returned as JSON.
 
-## 动手实践：修改返回内容
+## Try it
 
-尝试修改 `home()` 方法的返回值：
+Update the response text:
 
 ```typescript
 async home() {
-  return 'Hello Midwayjs! 欢迎来到交互式教程！';
+  return 'Hello Midwayjs! Welcome to the interactive tutorial!';
 }
 ```
 
-保存后，您应该能在预览窗口看到新的内容。
-
-## 添加更多路由
-
-让我们添加一个新的路由，返回 JSON 数据：
+## Add one more route
 
 ```typescript
 @Get('/info')
@@ -77,26 +66,23 @@ async info() {
   return {
     name: 'Midway.js',
     version: '4.0',
-    description: '一个面向未来的 Node.js 框架'
+    description: 'A future-ready Node.js framework',
   };
 }
 ```
 
-这个接口会返回 JSON 格式的数据。
+## Common method decorators
 
-## 常用的 HTTP 方法装饰器
+- `@Get()`
+- `@Post()`
+- `@Put()`
+- `@Del()`
+- `@Patch()`
 
-- `@Get()` - 处理 GET 请求
-- `@Post()` - 处理 POST 请求
-- `@Put()` - 处理 PUT 请求
-- `@Del()` - 处理 DELETE 请求
-- `@Patch()` - 处理 PATCH 请求
+## Summary
 
-## 小结
+- Controllers are defined with `@Controller()`
+- Routes are declared with HTTP decorators
+- Return values are automatically converted to HTTP responses
 
-✅ Controller 使用 `@Controller()` 装饰器定义
-✅ 路由使用 `@Get()`, `@Post()` 等装饰器声明
-✅ 返回值自动处理为 HTTP 响应
-✅ 支持返回字符串、对象等多种类型
-
-下一节，我们将学习如何获取请求参数！
+Next, let's read request parameters.

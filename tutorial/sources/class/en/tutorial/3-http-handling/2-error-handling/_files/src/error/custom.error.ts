@@ -11,7 +11,7 @@ export class BusinessError extends MidwayHttpError {
 
 export class NotFoundError extends MidwayHttpError {
   constructor(resource: string) {
-    super(`${resource}不存在`, 404);
+    super(`${resource} not found`, 404);
   }
 }
 

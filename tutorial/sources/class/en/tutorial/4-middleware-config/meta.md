@@ -1,15 +1,13 @@
 ---
 type: part
-title: 第四步：中间件与配置
+title: "Step 4: Middleware and Configuration"
 ---
 
-# 中间件与应用配置
+# Middleware and App Configuration
 
-在这一部分，您将学习：
+In this part, you'll learn:
 
-- 什么是中间件以及如何使用
-- 如何创建自定义中间件
-- 应用配置的最佳实践
-- 多环境配置管理
-
-中间件是 Web 框架中非常重要的概念，它可以让我们在请求到达 Controller 之前或响应返回客户端之前，执行一些通用的处理逻辑。
+- What middleware is and how it runs
+- How to write custom middleware
+- How to organize application config
+- How multi-environment config works in Midway

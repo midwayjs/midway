@@ -1,6 +1,6 @@
 ---
 type: lesson
-title: 项目结构介绍
+title: Project Structure
 focus: /README.md
 editor:
   fileTree:
@@ -9,48 +9,46 @@ terminal: false
 previews: false
 ---
 
-# 理解 Midway 项目结构
+# Understand the Midway Project Structure
 
-让我们先了解一下 Midway 应用的基本结构。
+Let's quickly walk through the standard Midway application layout.
 
-## 目录说明
+## Directory overview
 
-```
+```text
 my_midway_app/
-├── src/                          # 源码目录
-│   ├── controller/               # 控制器目录
-│   │   └── home.controller.ts    # 主页控制器
-│   ├── service/                  # 服务目录
-│   ├── config/                   # 配置目录
-│   │   └── config.default.ts     # 默认配置
-│   └── configuration.ts          # 应用配置
-├── bootstrap.js                  # 启动文件
-├── package.json                  # 项目配置
-└── tsconfig.json                 # TypeScript 配置
+├── src/
+│   ├── controller/
+│   │   └── home.controller.ts
+│   ├── service/
+│   ├── config/
+│   │   └── config.default.ts
+│   └── configuration.ts
+├── bootstrap.js
+├── package.json
+└── tsconfig.json
 ```
 
-## 核心文件说明
+## Core files
 
-### 1. bootstrap.js - 启动文件
-应用的入口文件，负责启动 Midway 框架。
+### `bootstrap.js`
+Application entry that starts Midway.
 
-### 2. configuration.ts - 配置入口
-定义应用使用哪些组件、配置等。
+### `src/configuration.ts`
+Defines imported components and config loading.
 
-### 3. controller/ - 控制器目录
-存放 Web 请求处理逻辑，负责接收请求并返回响应。
+### `src/controller/`
+Request handling layer.
 
-### 4. service/ - 服务目录
-存放业务逻辑，提供可复用的服务。
+### `src/service/`
+Reusable business logic.
 
-### 5. config/ - 配置目录
-存放应用配置文件，如端口号、数据库连接等。
+### `src/config/`
+Environment and framework configuration.
 
-## 查看代码
+## Code walkthrough
 
-让我们查看每个核心文件的内容：
-
-### bootstrap.js - 启动文件
+### `bootstrap.js`
 
 ```javascript title="bootstrap.js"
 const { Bootstrap } = require('@midwayjs/bootstrap');
@@ -58,9 +56,7 @@ const { Bootstrap } = require('@midwayjs/bootstrap');
 Bootstrap.run();
 ```
 
-这是应用的入口文件，负责启动 Midway 框架。
-
-### src/configuration.ts - 应用配置
+### `src/configuration.ts`
 
 ```typescript title="src/configuration.ts"
 import { Configuration, App } from '@midwayjs/core';
@@ -80,14 +76,12 @@ export class ContainerLifeCycle {
   app: koa.Application;
 
   async onReady() {
-    // 应用启动完成后执行
+    // executed when app is ready
   }
 }
 ```
 
-这个文件定义了应用使用哪些组件和配置。
-
-### src/controller/home.controller.ts - 控制器
+### `src/controller/home.controller.ts`
 
 ```typescript title="src/controller/home.controller.ts"
 import { Controller, Get } from '@midwayjs/core';
@@ -101,9 +95,7 @@ export class HomeController {
 }
 ```
 
-第一个控制器，处理根路径的 GET 请求。
-
-### src/config/config.default.ts - 配置文件
+### `src/config/config.default.ts`
 
 ```typescript title="src/config/config.default.ts"
 export default {
@@ -114,19 +106,14 @@ export default {
 };
 ```
 
-应用的基础配置，包括端口号等信息。
+## Common extra folders
 
-## 开发习惯
+- `middleware/`
+- `filter/`
+- `entity/` or `model/`
+- `util/`
+- `decorator/`
 
-Midway 鼓励按功能组织代码，常用的目录还包括：
+## Next step
 
-- `middleware/` - 中间件
-- `filter/` - 过滤器
-- `service/` - 服务逻辑
-- `entity/` 或 `model/` - 数据库实体
-- `util/` - 工具函数
-- `decorator/` - 自定义装饰器
-
-## 下一步
-
-现在您已经了解了项目结构，让我们创建第一个控制器！
+Now that you know the layout, let's build your first controller.

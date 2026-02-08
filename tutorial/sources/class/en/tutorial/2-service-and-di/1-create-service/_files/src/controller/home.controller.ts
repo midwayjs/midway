@@ -4,7 +4,7 @@ import { Controller, Get } from '@midwayjs/core';
 export class HomeController {
   @Get('/')
   async home() {
-    return 'Hello Midway! Service 已创建，下一课将学习如何使用。';
+    return 'Hello Midway! Service is ready. Next lesson: how to use it.';
   }
 
   @Get('/info')
@@ -12,8 +12,8 @@ export class HomeController {
     return {
       name: 'Midway.js',
       version: '4.0',
-      description: '一个面向未来的 Node.js 框架',
-      lesson: '第四课：创建第一个 Service'
+      description: 'A future-ready Node.js framework',
+      lesson: 'Lesson 4: Create Your First Service'
     };
   }
 }

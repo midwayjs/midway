@@ -1,15 +1,13 @@
 ---
 type: part
-title: 第五步：数据验证与最佳实践
+title: "Step 5: Validation and Best Practices"
 ---
 
-# 数据验证与最佳实践
+# Validation and Best Practices
 
-在这最后一部分，您将学习：
+In the final part, you'll learn:
 
-- 如何验证请求数据
-- 使用 DTO（数据传输对象）
-- 编写单元测试
-- 项目最佳实践
-
-数据验证是构建健壮应用的关键，它能防止错误数据进入系统，提高应用的安全性和稳定性。
+- Request data validation
+- DTO usage patterns
+- Testing and maintainability basics
+- Practical architecture best practices
