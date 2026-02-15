@@ -69,6 +69,10 @@ export const RequestMapping = (
   const middleware = metadata.middleware;
 
   return (target, key, descriptor: PropertyDescriptor) => {
+    const hasIgnoreGlobalPrefix = Object.prototype.hasOwnProperty.call(
+      metadata,
+      'ignoreGlobalPrefix'
+    );
     MetadataManager.attachMetadata(
       WEB_ROUTER_KEY,
       {
@@ -79,8 +83,10 @@ export const RequestMapping = (
         middleware,
         summary: metadata?.summary || '',
         description: metadata?.description || '',
-        // keep undefined so route-level option can inherit controller default
-        ignoreGlobalPrefix: metadata?.ignoreGlobalPrefix,
+        // decorator route keeps false by default; functional route can pass explicit undefined to inherit controller option
+        ignoreGlobalPrefix: hasIgnoreGlobalPrefix
+          ? metadata?.ignoreGlobalPrefix
+          : false,
       } as RouterOption,
       target
     );

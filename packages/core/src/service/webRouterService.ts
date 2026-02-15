@@ -409,20 +409,32 @@ export class MidwayWebRouterService {
           controllerMiddleware: middleware || [],
           requestMetadata: routeArgsInfo,
           responseMetadata: routerResponseData,
-          source: MetadataManager.getOwnMetadata(
-            FUNCTIONAL_API_CONTROLLER_KEY,
-            controllerClz
-          )
-            ? 'functional'
-            : 'decorator',
-          ignoreGlobalPrefix:
-            webRouter.ignoreGlobalPrefix !== undefined
-              ? !!webRouter.ignoreGlobalPrefix
-              : controllerIgnoreGlobalPrefix,
-          version: controllerVersion,
-          versionType: controllerVersionType,
-          versionPrefix: controllerVersionPrefix,
         };
+
+        const isFunctionalController = !!MetadataManager.getOwnMetadata(
+          FUNCTIONAL_API_CONTROLLER_KEY,
+          controllerClz
+        );
+        if (isFunctionalController) {
+          data.source = 'functional';
+        }
+        if (
+          webRouter.ignoreGlobalPrefix !== undefined ||
+          controllerIgnoreGlobalPrefix
+        ) {
+            const resolvedIgnoreGlobalPrefix =
+              webRouter.ignoreGlobalPrefix !== undefined
+                ? !!webRouter.ignoreGlobalPrefix
+                : controllerIgnoreGlobalPrefix;
+            if (resolvedIgnoreGlobalPrefix) {
+              data.ignoreGlobalPrefix = true;
+            }
+          }
+          if (controllerVersion) {
+            data.version = controllerVersion;
+            data.versionType = controllerVersionType;
+            data.versionPrefix = controllerVersionPrefix;
+        }
 
         if (functionMeta) {
           // get function information
