@@ -7,10 +7,10 @@ module.exports = {
     '^@midwayjs/core$': '<rootDir>/../core/src',
     '^@midwayjs/core/(.*)$': '<rootDir>/../core/src/$1',
     '^@midwayjs/core/functional$': '<rootDir>/../core/src/functional/index.ts',
-    '^@midwayjs/nextjs$': '<rootDir>/src',
+    '^@midwayjs/react$': '<rootDir>/src',
+    '^react$': '<rootDir>/../nextjs/node_modules/react',
+    '^react-dom/server$': '<rootDir>/../nextjs/node_modules/react-dom/server',
   },
-  testPathIgnorePatterns: ['<rootDir>/test/fixtures'],
   coveragePathIgnorePatterns: ['<rootDir>/test/', '<rootDir>/dist/'],
-  setupFilesAfterEnv: ['./hack.js', './jest.setup.js'],
   coverageProvider: 'v8',
 };

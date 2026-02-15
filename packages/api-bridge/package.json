@@ -1,0 +1,29 @@
+{
+  "name": "@midwayjs/api-bridge",
+  "version": "4.0.0-beta.11",
+  "description": "Midway API bridge contracts and runtime helpers",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "keywords": [
+    "midway",
+    "api-bridge",
+    "transport"
+  ],
+  "author": "Midway Team",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

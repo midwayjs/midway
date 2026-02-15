@@ -1,0 +1,50 @@
+import {
+  ApiBridgeOperation,
+  ApiModulesMap,
+  ClientFromApiModules,
+  CreateClientOptions,
+  createClient as createBridgeClient,
+  ApiClientDefinition,
+  ApiBridgeOptions,
+  createApiClientDefinition,
+  createApiClient,
+  resolveApiBridgeOptions,
+} from '@midwayjs/api-bridge';
+
+export interface NextjsApiBridgeOptions extends ApiBridgeOptions {}
+
+export function resolveNextjsApiBridgeOptions(
+  options: NextjsApiBridgeOptions = {}
+): Required<Pick<NextjsApiBridgeOptions, 'transport'>> &
+  Pick<NextjsApiBridgeOptions, 'adapter'> {
+  return resolveApiBridgeOptions(options);
+}
+
+export function createNextjsApiClient<TInput = unknown, TOutput = unknown>(
+  definition: ApiClientDefinition,
+  options: NextjsApiBridgeOptions = {}
+) {
+  return createApiClient<TInput, TOutput>(definition, options);
+}
+
+export function createNextjsApiClientFromOperations<
+  TInput = unknown,
+  TOutput = unknown
+>(
+  operations: ApiBridgeOperation[],
+  options: NextjsApiBridgeOptions = {}
+) {
+  return createNextjsApiClient<TInput, TOutput>(
+    createApiClientDefinition(operations),
+    options
+  );
+}
+
+export interface NextjsCreateClientOptions extends CreateClientOptions {}
+
+export function createClient<TModules extends ApiModulesMap>(
+  modules: TModules,
+  options: NextjsCreateClientOptions = {}
+): ClientFromApiModules<TModules> {
+  return createBridgeClient(modules, options);
+}

@@ -11,6 +11,7 @@
     "inject.js"
   ],
   "devDependencies": {
+    "@midwayjs/api-bridge": "workspace:^",
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",

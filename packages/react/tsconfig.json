@@ -15,6 +15,15 @@
       ],
       "@midwayjs/core/functional": [
         "../core/dist/functional/index.d.ts"
+      ],
+      "@midwayjs/react": [
+        "./src"
+      ],
+      "react": [
+        "../nextjs/node_modules/react"
+      ],
+      "react-dom/server": [
+        "../nextjs/node_modules/react-dom/server"
       ]
     }
   },

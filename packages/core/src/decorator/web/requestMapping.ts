@@ -79,7 +79,8 @@ export const RequestMapping = (
         middleware,
         summary: metadata?.summary || '',
         description: metadata?.description || '',
-        ignoreGlobalPrefix: metadata?.ignoreGlobalPrefix ?? false,
+        // keep undefined so route-level option can inherit controller default
+        ignoreGlobalPrefix: metadata?.ignoreGlobalPrefix,
       } as RouterOption,
       target
     );
