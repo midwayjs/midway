@@ -3,8 +3,6 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const appDir = dirname(fileURLToPath(import.meta.url));
-process.env.MIDWAY_HTTP_PORT =
-  process.env.MIDWAY_HTTP_PORT || process.env.PORT || '7001';
 
 export async function start() {
   await Bootstrap.configure({
