@@ -34,11 +34,11 @@ import { EventEmitter } from 'events';
 import { Types } from '../util/types';
 import { Utils } from '../util';
 import { MetadataManager } from '../decorator/metadataManager';
+import { FUNCTIONAL_API_CONTROLLER_CLASS_KEY } from '../functional/constants';
 
 const debug = util.debuglog('midway:debug');
 const debugBind = util.debuglog('midway:bind');
 const debugSpaceLength = 9;
-
 export class MidwayContainer implements IMidwayGlobalContainer {
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
@@ -97,6 +97,15 @@ export class MidwayContainer implements IMidwayGlobalContainer {
         const module = exports[m];
         if (Types.isClass(module) || Types.isFunction(module)) {
           this.bindModule(module, options);
+        } else if (module && typeof module === 'object') {
+          const functionalApiController =
+            MetadataManager.getOwnMetadata(
+              FUNCTIONAL_API_CONTROLLER_CLASS_KEY,
+              module
+            ) || module[FUNCTIONAL_API_CONTROLLER_CLASS_KEY];
+          if (Types.isClass(functionalApiController)) {
+            this.bindModule(functionalApiController, options);
+          }
         }
       }
     }

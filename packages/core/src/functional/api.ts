@@ -4,9 +4,43 @@ import {
   RequestMapping,
   RequestMethod,
   FUNCTIONAL_API_CONTROLLER_KEY,
+  CONTROLLER_KEY,
+  DecoratorManager,
 } from '../decorator';
 import { MidwayCommonError } from '../error';
 import { MetadataManager } from '../decorator/metadataManager';
+import { debuglog } from 'util';
+import { createHash } from 'crypto';
+import {
+  FUNCTIONAL_API_CONTROLLER_CLASS_KEY,
+  FUNCTIONAL_API_MODULE_META_KEY,
+} from './constants';
+
+const debug = debuglog('midway:debug');
+
+function normalizeClassNameSegment(input: string, fallback = 'root') {
+  const normalized = (input || '')
+    .replace(/[^a-zA-Z0-9_$]+/g, '_')
+    .replace(/^(\d)/, '_$1')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 40);
+  return normalized || fallback;
+}
+
+function createNamedFunctionalController(
+  prefix: string,
+  routeNames: string[]
+): new () => any {
+  const prefixPart = normalizeClassNameSegment(prefix);
+  const hash = createHash('sha1')
+    .update(`${prefix}|${routeNames.join('|')}`)
+    .digest('hex')
+    .slice(0, 8);
+  const className = `FunctionalApi_${prefixPart}_${hash}`;
+  return {
+    [className]: class {},
+  }[className] as new () => any;
+}
 
 export interface FunctionalRouteInput {
   params?: unknown;
@@ -59,8 +93,6 @@ export interface FunctionalApiModuleMeta {
   versionType?: 'URI' | 'HEADER' | 'MEDIA_TYPE' | 'CUSTOM';
   versionPrefix?: string;
 }
-
-export const FUNCTIONAL_API_MODULE_META_KEY = '__midwayApiMeta';
 
 export interface RouteBuilder {
   input(schema: FunctionalRouteOptions['input']): RouteBuilder;
@@ -287,10 +319,19 @@ export function defineApi(
 
   const definedRoutes = factory(routeFactory);
   const normalizedRoutes: Record<string, FunctionalRouteDefinition> = {};
+  const routeNames = Object.keys(definedRoutes || {});
 
-  class FunctionalApiController {}
+  const FunctionalApiController = createNamedFunctionalController(
+    prefix,
+    routeNames
+  );
+  const controllerClassName = FunctionalApiController.name;
 
-  for (const routeName of Object.keys(definedRoutes || {})) {
+  debug(
+    `[functional-api] begin register routes, controller="${controllerClassName}", prefix="${prefix}", count=${routeNames.length}`
+  );
+
+  for (const routeName of routeNames) {
     const route = normalizeRouteDefinition(routeName, definedRoutes[routeName]);
     normalizedRoutes[routeName] = route;
 
@@ -330,9 +371,43 @@ export function defineApi(
       description: route.options.description,
       ignoreGlobalPrefix: route.options.ignoreGlobalPrefix,
     })(FunctionalApiController.prototype, routeName, descriptor);
+
+    debug(
+      `[functional-api] register route, controller="${controllerClassName}", prefix="${prefix}", method=${String(
+        route.method
+      ).toUpperCase()}, path="${String(route.path)}", routeName="${routeName}", routerName="${
+        route.options.routerName || routeName
+      }"`
+    );
   }
 
   Controller(prefix, controllerOptions)(FunctionalApiController);
+  // Keep compatibility with mock container module filtering:
+  // class-based controllers are marked via container.bindClass(onBeforeBind),
+  // while defineApi creates an internal class that may not be bound directly.
+  // If mock bind map exists, mark this generated controller as bound.
+  const bindModuleMap = (DecoratorManager as any)?._bindModuleMap as
+    | WeakMap<any, boolean>
+    | undefined;
+  if (bindModuleMap && typeof bindModuleMap.set === 'function') {
+    bindModuleMap.set(FunctionalApiController, true);
+  }
+  // In some integration paths (e.g. mixed runtime loaders), make sure
+  // functional controllers are visible to the active/global decorator manager.
+  DecoratorManager.saveModule(CONTROLLER_KEY, FunctionalApiController);
+  const globalDecoratorManager = globalThis[
+    'MIDWAY_GLOBAL_DECORATOR_MANAGER'
+  ] as typeof DecoratorManager;
+  if (
+    globalDecoratorManager &&
+    globalDecoratorManager !== DecoratorManager &&
+    typeof globalDecoratorManager.saveModule === 'function'
+  ) {
+    globalDecoratorManager.saveModule(
+      CONTROLLER_KEY,
+      FunctionalApiController
+    );
+  }
   MetadataManager.defineMetadata(
     FUNCTIONAL_API_CONTROLLER_KEY,
     true,
@@ -347,6 +422,19 @@ export function defineApi(
       versionType: controllerOptions?.versionType,
       versionPrefix: controllerOptions?.versionPrefix,
     } as FunctionalApiModuleMeta,
+    enumerable: false,
+    configurable: false,
+    writable: false,
+  });
+
+  MetadataManager.defineMetadata(
+    FUNCTIONAL_API_CONTROLLER_CLASS_KEY,
+    FunctionalApiController,
+    normalizedRoutes
+  );
+  // Keep hidden property for compatibility with existing ecosystem reads.
+  Object.defineProperty(normalizedRoutes, FUNCTIONAL_API_CONTROLLER_CLASS_KEY, {
+    value: FunctionalApiController,
     enumerable: false,
     configurable: false,
     writable: false,
