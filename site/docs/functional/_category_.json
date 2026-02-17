@@ -1,0 +1,9 @@
+{
+  "label": "Functional",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "title": "Functional Docs",
+    "description": "Midway functional API 与一体化集成文档"
+  }
+}
