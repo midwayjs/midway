@@ -50,6 +50,7 @@ export function createApiRspackRule(options: ApiRspackLoaderOptions) {
   const normalized = normalizeOptions(options);
   const apiRoot = resolve(normalized.root!, normalized.apiDir);
   return {
+    enforce: 'pre' as const,
     test: /\.[cm]?[jt]sx?$/,
     include: [apiRoot],
     use: [

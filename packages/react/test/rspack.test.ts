@@ -44,6 +44,7 @@ describe('react rspack loader', () => {
       root: '/repo',
       apiDir: 'src/server/api',
     });
+    expect(rule.enforce).toBe('pre');
     expect(rule.include).toEqual(['/repo/src/server/api']);
     expect(String(rule.test)).toContain('[cm]?');
     expect(rule.use[0].loader).toBe('@midwayjs/react/rspack');
