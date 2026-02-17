@@ -1,1 +1,1 @@
-export { userApi } from './user.api.js';
+export { userApi } from './user.api';

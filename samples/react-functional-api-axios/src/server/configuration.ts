@@ -21,6 +21,6 @@ export default defineConfiguration({
     },
   ],
   detector: new ESModuleFileDetector({
-    ignore: ['**/api/index.ts'],
+    ignore: ['**/api/index.*'],
   }),
 });

@@ -1,7 +1,7 @@
 import * as MidwayReact from '@midwayjs/react';
 import { createAxiosAdapter } from '@midwayjs/api-bridge';
 import axios from 'axios';
-import { userApi } from '../../server/api/user.api.js';
+import { userApi } from '../../server/api/user.api';
 
 export const apiBridgeConfig = {
   browserBasePath: '/api',
