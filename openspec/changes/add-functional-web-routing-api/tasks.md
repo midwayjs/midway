@@ -81,4 +81,4 @@
 - [x] 5.3 运行 `openspec validate add-functional-web-routing-api --strict --no-interactive`
 - [ ] 5.4 运行变更评审并确认 Open Questions（命名与 core adapter 边界）
 - [ ] 5.5 评审通过后进入 apply 阶段
-- [ ] 5.6 增加纯函数式服务路径验收（无需前端集成即可独立运行）
+- [x] 5.6 增加纯函数式服务路径验收（无需前端集成即可独立运行）
