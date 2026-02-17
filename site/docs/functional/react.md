@@ -117,6 +117,31 @@ Rspack 场景推荐与后端分进程开发：
 - Vite + Axios 示例：`samples/react-functional-api-axios`
 - Rspack 示例：`samples/react-functional-api-rspack`
 
+## 自定义 Transport（tRPC 风格）
+
+```ts
+import { createClient } from '@midwayjs/react';
+import { userApi } from '../../server/api/user.api';
+import { trpc } from './trpc-client';
+
+export const api = createClient(
+  {
+    user: userApi,
+  },
+  {
+    adapter: async ({ operation, input }) => {
+      return trpc.call(operation.operationId, input);
+    },
+  }
+);
+```
+
+这类 adapter 适用于：
+
+- tRPC
+- RPC 网关
+- 内网自定义协议桥接
+
 ## 说明
 
 - `devPlugin`: 开发期内嵌 Midway runtime

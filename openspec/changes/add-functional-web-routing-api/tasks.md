@@ -53,7 +53,7 @@
 - [ ] 4.3 编写 Vue Router 适配示例（基于 route manifest）
 - [ ] 4.4 编写 Next Route Handler 适配示例（基于 route manifest）
 - [ ] 4.5 编写 Nest 适配示例（基于 route manifest）
-- [ ] 4.6 编写迁移指南（按 controller 粒度渐进迁移 + 混用避坑）
+- [x] 4.6 编写迁移指南（按 controller 粒度渐进迁移 + 混用避坑）
 - [x] 4.7 为每个新增 API 能力补充“最小可运行用户范例”（example-first gate）
 - [x] 4.8 在文档中明确“functional 与 class 为并行偏好，不是替代关系”
 - [x] 4.9 编写“同仓开发”示例（server + react）
@@ -65,7 +65,7 @@
 - [ ] 4.15 编写 Nuxt 集成设计与示例（module/$api composable，Phase 2）
 - [x] 4.16 编写 React 集成设计与示例（Vite/Rspack plugin + `server/api` 调用重写，Phase 1）
 - [ ] 4.17 编写 Vue 集成设计与示例（Vite plugin + useApiClient/$api，Phase 2）
-- [ ] 4.18 编写自定义 transport 示例（如 tRPC adapter）
+- [x] 4.18 编写自定义 transport 示例（如 tRPC adapter）
 - [x] 4.19 编写 HTTP 多客户端示例（fetch/axios 切换）
 - [ ] 4.20 编写 gRPC define API 与 client 适配示例
 - [ ] 4.21 编写 WS/Socket.IO define API 与 client 适配示例

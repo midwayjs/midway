@@ -101,3 +101,26 @@ const axiosApi = createClient(
   }
 );
 ```
+
+## 5. 自定义 Transport（tRPC 风格）示例
+
+```ts
+import { createClient } from '@midwayjs/react';
+import { userApi } from '@/server/api';
+import { trpc } from '@/web/trpc-client';
+
+const trpcApi = createClient(
+  { user: userApi },
+  {
+    adapter: async ({ operation, input }) => {
+      // operationId 由约定映射到 tRPC procedure
+      // 例如：user.getUser -> user.getUser
+      return trpc.call(operation.operationId, input);
+    },
+  }
+);
+
+const user = await trpcApi.user.getUser({
+  params: { id: 'u-1' },
+});
+```
