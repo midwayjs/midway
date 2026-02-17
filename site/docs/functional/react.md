@@ -79,8 +79,46 @@ export default defineConfig({
 });
 ```
 
+## Rspack 配置
+
+```ts
+import { defineConfig } from '@rspack/cli';
+import { createApiRspackRule } from '@midwayjs/react/rspack';
+
+export default defineConfig({
+  module: {
+    rules: [
+      createApiRspackRule({
+        root: process.cwd(),
+        apiDir: 'src/server/api',
+      }),
+    ],
+  },
+  devServer: {
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'http://127.0.0.1:7001',
+      },
+    ],
+  },
+});
+```
+
+Rspack 场景推荐与后端分进程开发：
+
+1. 启动 Midway server（如 `tsx watch src/server/bootstrap.ts`）
+2. 启动 `rspack serve`
+3. 通过 devServer proxy 转发 `/api` 到后端
+
+## 示例
+
+- Vite 示例：`samples/react-functional-api`
+- Rspack 示例：`samples/react-functional-api-rspack`
+
 ## 说明
 
 - `devPlugin`: 开发期内嵌 Midway runtime
 - `apiPlugin`: 改写 `server/api` 导入，保证浏览器端可运行
+- `createApiRspackRule`: 在 Rspack 中改写 `server/api` 导入为 web-safe 合同
 - 生产环境建议 server/web 独立构建发布
