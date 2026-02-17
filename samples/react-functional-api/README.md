@@ -63,3 +63,5 @@ pnpm -C samples/react-functional-api build
 - To use custom transport (axios/tRPC), pass `adapter` in `createClient(..., { adapter })`.
 - This sample imports `apiPlugin` from `@midwayjs/react/vite`.
 - This sample imports `devPlugin` from `@midwayjs/mock/vite`.
+- API file changes trigger Midway runtime reload (`close -> recreate`) during dev.
+- If your backend includes heavy long-lived connections (Redis/MQ/WebSocket), consider running backend independently and proxying `/api` from Vite.

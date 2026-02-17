@@ -130,3 +130,40 @@ const api = createReactApiClientFromOperations(manifestOperations, {
 2. Import `userApi` in web side.
 3. Create client with `createClient({ user: userApi }, ...)`.
 4. Call by namespaced operationId via hook: `useMidwayApiOperation('user.getUser')`.
+
+## Dev Workflow (Single Command)
+
+Use Vite with two plugins:
+
+- `@midwayjs/mock/vite` `devPlugin(...)` for embedded Midway HTTP runtime.
+- `@midwayjs/react/vite` `apiPlugin(...)` for browser-side contract transform.
+
+```ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { devPlugin } from '@midwayjs/mock/vite';
+import { apiPlugin } from '@midwayjs/react/vite';
+
+export default defineConfig({
+  plugins: [
+    devPlugin({
+      appDir: process.cwd(),
+      baseDir: 'src/server',
+      basePath: '/api',
+    }),
+    react(),
+    apiPlugin({
+      root: process.cwd(),
+      apiDir: 'src/server/api',
+    }),
+  ],
+});
+```
+
+## Hot Reload Notes
+
+- API source change (`src/server/**/*.ts`) triggers Midway app reload in dev.
+- Web-side import of `src/server/api` is transformed to browser-safe contracts and invalidated on hot update.
+- Dev reload strategy is `close old app -> create new app`, not in-place module patching.
+
+For heavy connection dependencies (Redis, MQ, long-lived sockets), prefer running backend as an independent process and proxy `/api` from Vite for a more stable dev loop.

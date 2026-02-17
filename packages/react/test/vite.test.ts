@@ -1,4 +1,8 @@
 import { transformDefineApiSource } from '../src/vite';
+import { promises as fs } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { apiPlugin } from '../src/vite';
 
 describe('react vite plugin', () => {
   it('should transform defineApi source to web-safe contract', () => {
@@ -77,5 +81,47 @@ describe('react vite plugin', () => {
         ignoreGlobalPrefix: true,
       },
     });
+  });
+
+  it('should invalidate virtual api module on hot update', async () => {
+    const root = await fs.mkdtemp(join(tmpdir(), 'midway-react-vite-'));
+    const apiDir = join(root, 'src/server/api');
+    const apiFile = join(apiDir, 'user.api.ts');
+    await fs.mkdir(apiDir, { recursive: true });
+    await fs.writeFile(
+      apiFile,
+      `
+import { defineApi } from '@midwayjs/core/functional';
+export const userApi = defineApi('/users', api => ({
+  getUser: api.get('/:id').handle(async () => ({})),
+}));
+      `.trim()
+    );
+
+    const plugin = apiPlugin({
+      root,
+      apiDir: 'src/server/api',
+    });
+
+    const id = plugin.resolveId(apiFile, undefined, {
+      ssr: false,
+    } as any) as string;
+    expect(id).toBeTruthy();
+
+    const virtualModule = { id };
+    const invalidateModule = jest.fn();
+    const updated = plugin.handleHotUpdate({
+      file: apiFile,
+      server: {
+        moduleGraph: {
+          getModuleById: (requestId: string) =>
+            requestId === id ? virtualModule : null,
+          invalidateModule,
+        },
+      },
+    } as any);
+
+    expect(invalidateModule).toHaveBeenCalledWith(virtualModule);
+    expect(updated).toEqual([virtualModule]);
   });
 });
