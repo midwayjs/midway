@@ -135,12 +135,20 @@ src/
 目标是在一体化开发中抹平前后端调用心智差异：
 
 ```ts
-// web side
-import { userApi } from '@/server/api/user.api';
+// web/api/client.ts
+import { createClient } from '@midwayjs/react';
+import { userApi } from '@/server/api';
 
-const user = await userApi.getUser({
-  params: { id: '1' },
-});
+export const api = createClient(
+  {
+    user: userApi,
+  },
+  {
+    basePath: '/api',
+  }
+);
+
+const user = await api.user.getUser({ params: { id: '1' } });
 ```
 
 设计原则：

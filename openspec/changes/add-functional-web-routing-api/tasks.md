@@ -60,7 +60,7 @@
 - [ ] 4.10 编写“同仓开发”示例（server + vue）
 - [x] 4.11 编写“web 直接依赖 server api 定义”示例
 - [x] 4.12 编写 Next.js 单应用示例（不拆分 server/web）
-- [ ] 4.13 编写 direct-like 调用示例（`import { userApi } from '@/server/api/...'; await userApi.getUser(...)`）
+- [x] 4.13 编写 direct-like 调用示例（`import { userApi } from '@/server/api/...'; await userApi.getUser(...)`）
 - [ ] 4.14 编写 Next.js 集成设计与示例（plugin 重写 `server/api` 调用，Phase 1）
 - [ ] 4.15 编写 Nuxt 集成设计与示例（module/$api composable，Phase 2）
 - [x] 4.16 编写 React 集成设计与示例（Vite/Rspack plugin + `server/api` 调用重写，Phase 1）
