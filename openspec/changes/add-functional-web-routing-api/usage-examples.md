@@ -69,3 +69,35 @@ const user = await api.user.getUser({
 - 路由语义：`@Controller('/users') + @Get('/:id')` 对齐 `defineApi('/users') + api.get('/:id')`
 - 运行时：都由现有 Web 路由系统统一注册与冲突检测
 - 并存策略：class 与 functional 可在同一项目共存，按团队偏好选用
+
+## 4. HTTP 多客户端（fetch / axios）切换示例
+
+```ts
+import { createClient } from '@midwayjs/react';
+import { userApi } from '@/server/api';
+import axios from 'axios';
+
+const fetchApi = createClient(
+  { user: userApi },
+  {
+    basePath: '/api',
+    // 默认 adapter 即 fetch，可省略
+  }
+);
+
+const axiosApi = createClient(
+  { user: userApi },
+  {
+    basePath: '/api',
+    adapter: async ({ operation, input }) => {
+      const res = await axios.request({
+        method: operation.method.toUpperCase(),
+        url: operation.fullPath,
+        params: input?.query,
+        data: input?.body,
+      });
+      return res.data;
+    },
+  }
+);
+```

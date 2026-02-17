@@ -66,7 +66,7 @@
 - [x] 4.16 编写 React 集成设计与示例（Vite/Rspack plugin + `server/api` 调用重写，Phase 1）
 - [ ] 4.17 编写 Vue 集成设计与示例（Vite plugin + useApiClient/$api，Phase 2）
 - [ ] 4.18 编写自定义 transport 示例（如 tRPC adapter）
-- [ ] 4.19 编写 HTTP 多客户端示例（fetch/axios 切换）
+- [x] 4.19 编写 HTTP 多客户端示例（fetch/axios 切换）
 - [ ] 4.20 编写 gRPC define API 与 client 适配示例
 - [ ] 4.21 编写 WS/Socket.IO define API 与 client 适配示例
 - [ ] 4.23 编写 Task/Queue define API 与调用示例
