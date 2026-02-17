@@ -1,9 +1,14 @@
 import { close as closeMidwayApp, createApp } from './creator';
+import { resolve } from 'node:path';
 
 export interface DevPluginOptions {
   appDir: string;
   baseDir?: string;
   basePath?: string;
+  watch?: {
+    include?: RegExp[];
+    exclude?: RegExp[];
+  };
   getRequestHandler?: (
     app: any
   ) => (req: any, res: any, next?: () => void) => any;
@@ -46,9 +51,40 @@ function getDefaultRequestHandler(app: any) {
 export function devPlugin(options: DevPluginOptions) {
   const appDir = options.appDir;
   const baseDir = options.baseDir;
+  const resolvedBaseDir = resolve(baseDir || resolve(appDir, 'src'));
   const basePath = options.basePath || '/api';
+  const watchInclude = options.watch?.include || [/\.(ts|tsx|js|mjs|cjs)$/];
+  const watchExclude = options.watch?.exclude || [/\.d\.ts$/];
   const getRequestHandler = options.getRequestHandler || getDefaultRequestHandler;
   let appPromise: Promise<any> | null = null;
+  let reloadingAppPromise: Promise<void> | null = null;
+
+  const shouldReloadFile = (file: string) => {
+    if (!file.startsWith(resolvedBaseDir)) {
+      return false;
+    }
+    if (watchExclude.some(reg => reg.test(file))) {
+      return false;
+    }
+    return watchInclude.some(reg => reg.test(file));
+  };
+
+  const reloadApp = async () => {
+    if (reloadingAppPromise) {
+      return reloadingAppPromise;
+    }
+    reloadingAppPromise = (async () => {
+      const oldAppPromise = appPromise;
+      appPromise = null;
+      if (oldAppPromise) {
+        const oldApp = await oldAppPromise;
+        await closeMidwayApp(oldApp);
+      }
+    })().finally(() => {
+      reloadingAppPromise = null;
+    });
+    return reloadingAppPromise;
+  };
 
   return {
     name: 'midway-dev-runtime',
@@ -64,10 +100,20 @@ export function devPlugin(options: DevPluginOptions) {
       };
 
       server.httpServer?.once('close', async () => {
-        if (appPromise) {
-          const app = await appPromise;
-          await closeMidwayApp(app);
+        await reloadApp();
+      });
+
+      server.watcher.on('all', async (eventName: string, file: string) => {
+        if (eventName !== 'add' && eventName !== 'change' && eventName !== 'unlink') {
+          return;
         }
+        if (!shouldReloadFile(file)) {
+          return;
+        }
+        server.config.logger.info(
+          `[midway:mock] detected server ${eventName}, reload midway app: ${file}`
+        );
+        await reloadApp();
       });
 
       server.middlewares.use(async (req: any, res: any, next: () => void) => {

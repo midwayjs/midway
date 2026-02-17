@@ -69,6 +69,7 @@ export const loadModule = async (
     safeLoad?: boolean;
     warnOnLoadError?: boolean;
     extraModuleRoot?: string[];
+    importQuery?: string;
   } = {}
 ) => {
   options.enableCache = options.enableCache ?? true;
@@ -107,7 +108,11 @@ export const loadModule = async (
           // @ts-ignore
           return (await import(p, { with: { type: 'json' } })).default;
         } else {
-          return await import(pathToFileURL(p).href);
+          const fileUrl = pathToFileURL(p);
+          if (options.importQuery) {
+            fileUrl.searchParams.set('mwImportQuery', options.importQuery);
+          }
+          return await import(fileUrl.href);
         }
       }
     } else {

@@ -209,8 +209,36 @@ export class MidwayWebRouterService {
 
   protected analyzeController() {
     const controllerModules = DecoratorManager.listModule(CONTROLLER_KEY);
+    const dedupedControllerModules: any[] = [];
+    const functionalControllerNameIndexMap = new Map<string, number>();
 
     for (const module of controllerModules) {
+      const isFunctionalController = !!MetadataManager.getOwnMetadata(
+        FUNCTIONAL_API_CONTROLLER_KEY,
+        module
+      );
+      if (!isFunctionalController) {
+        dedupedControllerModules.push(module);
+        continue;
+      }
+      const controllerName = module?.name;
+      if (!controllerName) {
+        dedupedControllerModules.push(module);
+        continue;
+      }
+      const existingIndex = functionalControllerNameIndexMap.get(controllerName);
+      if (typeof existingIndex === 'number') {
+        dedupedControllerModules[existingIndex] = module;
+      } else {
+        functionalControllerNameIndexMap.set(
+          controllerName,
+          dedupedControllerModules.length
+        );
+        dedupedControllerModules.push(module);
+      }
+    }
+
+    for (const module of dedupedControllerModules) {
       const controllerOption: ControllerOption = MetadataManager.getOwnMetadata(
         CONTROLLER_KEY,
         module

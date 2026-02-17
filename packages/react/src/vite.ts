@@ -330,6 +330,10 @@ function shouldTransformApiFile(filePath: string) {
   }
 }
 
+function toVirtualApiId(filePath: string) {
+  return `${VIRTUAL_PREFIX}${filePath}`;
+}
+
 export function apiPlugin(options: ApiPluginOptions) {
   if (!options?.apiDir) {
     throw new Error(
@@ -369,9 +373,25 @@ export function apiPlugin(options: ApiPluginOptions) {
         return null;
       }
       const filePath = id.slice(VIRTUAL_PREFIX.length);
+      this.addWatchFile(filePath);
       const source = readFileSync(filePath, 'utf-8');
       const modules = transformDefineApiSource(source);
       return toCode(modules);
+    },
+    handleHotUpdate(ctx: any) {
+      const filePath = ctx.file;
+      if (
+        filePath.startsWith(apiDir) &&
+        shouldTransformApiFile(filePath)
+      ) {
+        const virtualId = toVirtualApiId(filePath);
+        const mod = ctx.server.moduleGraph.getModuleById(virtualId);
+        if (mod) {
+          ctx.server.moduleGraph.invalidateModule(mod);
+          return [mod];
+        }
+      }
+      return null;
     },
   };
 }

@@ -96,6 +96,24 @@ describe('test/functional/api.test.ts', function () {
     });
   });
 
+  it('should not throw duplicate route error when same functional api is evaluated twice', async () => {
+    const register = () =>
+      defineApi('/users', api => ({
+        getUser: api.get('/:id').handle(async () => {
+          return null;
+        }),
+      }));
+
+    register();
+    register();
+
+    const collector = new MidwayWebRouterService();
+    const routes = await collector.getFlattenRouterTable();
+    const functionalRoutes = routes.filter(route => route.source === 'functional');
+    expect(functionalRoutes).toHaveLength(1);
+    expect(functionalRoutes[0].fullUrl).toBe('/users/:id');
+  });
+
   it('should validate input schema at invoke time', async () => {
     const inputSchema = {
       parse(value) {
