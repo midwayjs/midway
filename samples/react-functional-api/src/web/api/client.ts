@@ -1,5 +1,5 @@
 import * as MidwayReact from '@midwayjs/react';
-import { userApi } from '../../server/api/user.api';
+import { userApi } from '../../server/api/user.api.js';
 
 export const apiBridgeConfig = {
   browserBasePath: '/api',

@@ -13,6 +13,9 @@ assert(clzDefault.default.User.name === 'User');
 const clz = await loadModule(new URL('./clz.mts', import.meta.url).pathname, { loadMode: 'esm' });
 assert(clz.User.name === 'User');
 
+const reexport = await loadModule(new URL('./reexport.mts', import.meta.url).pathname, { loadMode: 'esm' });
+assert(reexport.User.name === 'User');
+
 const data = await loadModule(new URL('./data.json', import.meta.url).pathname, { loadMode: 'esm'});
 assert(data.test === 1);
 

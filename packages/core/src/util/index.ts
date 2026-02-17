@@ -1,5 +1,5 @@
 import { dirname, resolve, sep, posix, join } from 'path';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync, unlinkSync, existsSync } from 'fs';
 import { debuglog } from 'util';
 import { PathToRegexpUtil } from './pathToRegexp';
 import { MidwayCommonError } from '../error';
@@ -15,6 +15,107 @@ import { MetadataManager } from '../decorator/metadataManager';
 import { CONFIGURATION_KEY, CONFIGURATION_OBJECT_KEY } from '../decorator';
 
 const debug = debuglog('midway:debug');
+
+function resolveRelativeEsmSpecifierFallback(
+  importerFile: string,
+  specifier: string
+): string | undefined {
+  if (!specifier || (!specifier.startsWith('./') && !specifier.startsWith('../'))) {
+    return undefined;
+  }
+
+  const absolute = resolve(dirname(importerFile), specifier);
+  const candidates: string[] = [];
+
+  if (/\.(mjs|cjs|js)$/i.test(specifier)) {
+    candidates.push(
+      absolute.replace(/\.(mjs|cjs|js)$/i, '.mts'),
+      absolute.replace(/\.(mjs|cjs|js)$/i, '.cts'),
+      absolute.replace(/\.(mjs|cjs|js)$/i, '.ts'),
+      absolute.replace(/\.(mjs|cjs|js)$/i, '.tsx')
+    );
+  } else if (!/\.[a-z0-9]+$/i.test(specifier)) {
+    candidates.push(
+      `${absolute}.mts`,
+      `${absolute}.cts`,
+      `${absolute}.ts`,
+      `${absolute}.tsx`,
+      join(absolute, 'index.mts'),
+      join(absolute, 'index.cts'),
+      join(absolute, 'index.ts'),
+      join(absolute, 'index.tsx')
+    );
+  }
+
+  for (const item of candidates) {
+    if (existsSync(item)) {
+      const normalized = item.split(sep).join('/');
+      const baseDir = dirname(importerFile).split(sep).join('/');
+      if (normalized.startsWith(baseDir + '/')) {
+        return './' + normalized.slice(baseDir.length + 1);
+      }
+      return specifier;
+    }
+  }
+  return undefined;
+}
+
+function rewriteEsmSourceWithSpecifierFallback(
+  importerFile: string,
+  source: string
+): string {
+  let changed = false;
+  const rewriteByPattern = (pattern: RegExp, input: string) => {
+    return input.replace(pattern, (full, head, spec, tail) => {
+      const fallback = resolveRelativeEsmSpecifierFallback(importerFile, spec);
+      if (!fallback || fallback === spec) {
+        return full;
+      }
+      changed = true;
+      return `${head}${fallback}${tail}`;
+    });
+  };
+
+  let output = source;
+  output = rewriteByPattern(/(from\s+['"])([^'"]+)(['"])/g, output);
+  output = rewriteByPattern(/(import\s*\(\s*['"])([^'"]+)(['"]\s*\))/g, output);
+
+  return changed ? output : source;
+}
+
+async function importWithSpecifierFallback(
+  p: string,
+  fileUrl: URL,
+  importQuery?: string
+) {
+  try {
+    return await import(fileUrl.href);
+  } catch (originErr) {
+    const source = readFileSync(p, { encoding: 'utf-8' });
+    const rewritten = rewriteEsmSourceWithSpecifierFallback(p, source);
+    if (rewritten === source) {
+      throw originErr;
+    }
+
+    const tmpFile = `${p}.mw-esm-fallback-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2)}.ts`;
+    writeFileSync(tmpFile, rewritten, { encoding: 'utf-8' });
+    try {
+      const tmpUrl = pathToFileURL(tmpFile);
+      if (importQuery) {
+        tmpUrl.searchParams.set('mwImportQuery', importQuery);
+      }
+      return await import(tmpUrl.href);
+    } finally {
+      try {
+        unlinkSync(tmpFile);
+      } catch {
+        // ignore cleanup failure
+      }
+    }
+  }
+}
 
 /**
  * @since 2.0.0
@@ -112,7 +213,11 @@ export const loadModule = async (
           if (options.importQuery) {
             fileUrl.searchParams.set('mwImportQuery', options.importQuery);
           }
-          return await import(fileUrl.href);
+          return await importWithSpecifierFallback(
+            p,
+            fileUrl,
+            options.importQuery
+          );
         }
       }
     } else {

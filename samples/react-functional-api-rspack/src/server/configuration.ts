@@ -20,7 +20,5 @@ export default defineConfiguration({
       }
     },
   ],
-  detector: new ESModuleFileDetector({
-    ignore: ['**/api/index.*'],
-  }),
+  detector: new ESModuleFileDetector(),
 });

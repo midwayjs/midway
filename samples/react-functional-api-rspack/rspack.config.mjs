@@ -17,6 +17,11 @@ export default defineConfig({
   },
   resolve: {
     extensions: ['...', '.ts', '.tsx'],
+    extensionAlias: {
+      '.js': ['.ts', '.js'],
+      '.mjs': ['.mts', '.mjs'],
+      '.cjs': ['.cts', '.cjs'],
+    },
     alias: {
       '@': resolve(rootDir, 'src'),
     },
