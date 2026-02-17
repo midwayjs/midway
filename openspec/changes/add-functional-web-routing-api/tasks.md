@@ -48,7 +48,7 @@
 - [x] 3A.10 冻结协议插件模型（protocol plugin + client emitter + runtime adapter）
 
 ## 4. 用户文档与示例（设计阶段）
-- [ ] 4.1 编写“装饰器写法 vs functional 写法”一一对照示例
+- [x] 4.1 编写“装饰器写法 vs functional 写法”一一对照示例
 - [ ] 4.2 编写 React Router 适配示例（基于 route manifest）
 - [ ] 4.3 编写 Vue Router 适配示例（基于 route manifest）
 - [ ] 4.4 编写 Next Route Handler 适配示例（基于 route manifest）
