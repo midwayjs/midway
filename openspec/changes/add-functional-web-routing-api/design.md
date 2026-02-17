@@ -648,5 +648,9 @@ interface DuplicateRouteErrorPayload {
 2. 存量项目可按 controller 粒度逐步替换。
 3. 混用阶段通过统一冲突检测保证行为可预期。
 
-## Open Questions
-- 是否在 core 内提供“官方基础 adapter”（例如仅提供 `toRouteManifest()`），其余框架由独立包实现。
+## Open Questions (Reviewed)
+- Q1: 是否在 core 内提供“官方基础 adapter”（例如仅提供 `toRouteManifest()`），其余框架由独立包实现。
+  - 结论：是。core 仅保留协议定义、元数据复用与 route manifest 基础能力；客户端调用与框架桥接统一放在 bridge/framework 包（如 `@midwayjs/api-bridge`、`@midwayjs/react`、`@midwayjs/nextjs`）。
+- Q2: 命名是否采用统一入口或按协议分别导出。
+  - 结论：按协议分别导出，不做统一入口。当前冻结 HTTP 的 `defineApi`（位于 `@midwayjs/core/functional`）；其他协议 `defineXXX` 在对应组件包中后续推进。
+- 当前阶段无阻塞性未决问题，可进入后续 apply/扩展阶段。
