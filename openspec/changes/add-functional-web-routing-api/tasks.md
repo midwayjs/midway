@@ -75,7 +75,7 @@
 - [ ] 4.26 编写“装饰器 + 纯函数式模块”同项目共存示例
 
 ## 5. 验证与验收
-- [ ] 5.1 增加规范级测试计划（API 行为、默认值、冲突检测、版本路由、manifest 稳定性、compile pipeline、web-safe）
+- [x] 5.1 增加规范级测试计划（API 行为、默认值、冲突检测、版本路由、manifest 稳定性、compile pipeline、web-safe）
 - [x] 5.2 增加 Phase 1 最小集成样例测试（Next/React）
 - [ ] 5.2A 增加 Phase 2 最小集成样例测试（Nuxt/Vue）
 - [x] 5.3 运行 `openspec validate add-functional-web-routing-api --strict --no-interactive`
