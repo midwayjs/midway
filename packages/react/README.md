@@ -160,6 +160,19 @@ export default defineConfig({
 });
 ```
 
+### Plugin Options
+
+`devPlugin` (`@midwayjs/mock/vite`):
+
+- `appDir` (required): project root (recommended `process.cwd()`).
+- `baseDir` (optional): Midway server source root, default `src`.
+- `basePath` (optional): API prefix forwarded to Midway runtime, default `/api`.
+
+`apiPlugin` (`@midwayjs/react/vite`):
+
+- `root` (optional): project root, default `process.cwd()`.
+- `apiDir` (required): API definition directory (recommended `src/server/api`).
+
 ## Hot Reload Notes
 
 - API source change (`src/server/**/*.ts`) triggers Midway app reload in dev.

@@ -49,9 +49,17 @@ function getDefaultRequestHandler(app: any) {
 }
 
 export function devPlugin(options: DevPluginOptions) {
+  if (!options?.appDir) {
+    throw new Error(
+      '[midway:mock] devPlugin requires "appDir", e.g. devPlugin({ appDir: process.cwd() })'
+    );
+  }
+
   const appDir = options.appDir;
-  const baseDir = options.baseDir;
-  const resolvedBaseDir = resolve(baseDir || resolve(appDir, 'src'));
+  const baseDir = options.baseDir
+    ? resolve(appDir, options.baseDir)
+    : resolve(appDir, 'src');
+  const resolvedBaseDir = baseDir;
   const basePath = options.basePath || '/api';
   const watchInclude = options.watch?.include || [/\.(ts|tsx|js|mjs|cjs)$/];
   const watchExclude = options.watch?.exclude || [/\.d\.ts$/];
