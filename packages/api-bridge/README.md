@@ -86,6 +86,24 @@ export const api = createClient(
 默认会使用 `fetch` 作为 HTTP adapter（浏览器与 Node 18+ 可直接使用）。
 如果要切换到 axios/tRPC 等实现，传入 `adapter` 即可。
 
+## Axios Adapter
+
+```ts
+import axios from 'axios';
+import { createClient, createAxiosAdapter } from '@midwayjs/api-bridge';
+import { userApi } from '@/server/api';
+
+const api = createClient(
+  {
+    user: userApi,
+  },
+  {
+    basePath: '/api',
+    adapter: createAxiosAdapter(axios),
+  }
+);
+```
+
 ## End-to-end Example (Midway)
 
 ```ts

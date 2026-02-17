@@ -19,6 +19,24 @@ export type ApiBridgeTransportAdapter = <
   request: ApiBridgeTransportRequest<TInput>
 ) => Promise<TOutput>;
 
+export interface AxiosLikeResponse<TData = unknown> {
+  data: TData;
+  status: number;
+}
+
+export interface AxiosLikeRequestConfig {
+  url?: string;
+  method?: string;
+  headers?: Record<string, string>;
+  data?: unknown;
+}
+
+export interface AxiosLikeInstance {
+  request<TData = unknown>(
+    config: AxiosLikeRequestConfig
+  ): Promise<AxiosLikeResponse<TData>>;
+}
+
 export interface ApiBridgeOptions {
   transport?: ApiBridgeTransportName;
   adapter?: ApiBridgeTransportAdapter;
@@ -253,6 +271,62 @@ function createDefaultHttpAdapter(fetchImpl: typeof fetch): ApiBridgeTransportAd
     }
 
     return responseData as TOutput;
+  };
+}
+
+export function createAxiosAdapter(
+  axiosInstance: AxiosLikeInstance
+): ApiBridgeTransportAdapter {
+  if (!axiosInstance || typeof axiosInstance.request !== 'function') {
+    throw new Error(
+      'createAxiosAdapter requires an axios-like instance with request(config)'
+    );
+  }
+  return async <TInput = unknown, TOutput = unknown>({
+    operation,
+    input,
+  }: ApiBridgeTransportRequest<TInput>): Promise<TOutput> => {
+    const normalizedMethod = String(operation.method || 'get').toUpperCase();
+    const payload = (input || {}) as HttpClientInputShape;
+    const requestUrl = buildRequestPath(
+      operation.fullPath,
+      payload.params,
+      payload.query
+    );
+    const requestHeaders: Record<string, string> = {
+      ...(payload.headers || {}),
+    };
+
+    const requestData =
+      normalizedMethod === 'GET' || normalizedMethod === 'HEAD'
+        ? undefined
+        : payload.body;
+
+    try {
+      const response = await axiosInstance.request<TOutput>({
+        url: requestUrl,
+        method: normalizedMethod,
+        headers: requestHeaders,
+        data: requestData,
+      });
+      return response.data as TOutput;
+    } catch (error: any) {
+      const status = error?.response?.status;
+      const responseData = error?.response?.data;
+      const fallbackMessage = error?.message || String(error);
+      if (status) {
+        const detail =
+          typeof responseData === 'string'
+            ? responseData
+            : JSON.stringify(responseData);
+        throw new Error(
+          `API request failed: ${normalizedMethod} ${requestUrl} (${status}) ${detail}`
+        );
+      }
+      throw new Error(
+        `API request failed: ${normalizedMethod} ${requestUrl} ${fallbackMessage}`
+      );
+    }
   };
 }
 

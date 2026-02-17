@@ -4,6 +4,7 @@ import {
   createApiClientDefinition,
   createApiClient,
   createOperationsFromManifest,
+  createAxiosAdapter,
   resolveApiBridgeOptions,
 } from '../src';
 
@@ -81,6 +82,62 @@ describe('api bridge', () => {
     });
     expect(result).toEqual({ id: 'u-1', name: 'harry' });
     (globalThis as any).fetch = originalFetch;
+  });
+
+  it('should create axios adapter and call axios instance', async () => {
+    const request = jest.fn().mockResolvedValue({
+      status: 200,
+      data: { id: 'u-1', name: 'harry' },
+    });
+    const adapter = createAxiosAdapter({ request });
+    const bridge = createApiBridge({ adapter });
+    const result = await bridge.invoke(
+      {
+        operationId: 'getUser',
+        method: 'get',
+        path: '/:id',
+        fullPath: '/users/:id',
+      },
+      {
+        params: { id: 'u-1' },
+        query: { expand: 'profile' },
+        headers: { authorization: 'token' },
+      }
+    );
+    expect(request).toHaveBeenCalledWith({
+      url: '/users/u-1?expand=profile',
+      method: 'GET',
+      headers: { authorization: 'token' },
+      data: undefined,
+    });
+    expect(result).toEqual({ id: 'u-1', name: 'harry' });
+  });
+
+  it('should throw axios adapter error with status and detail', async () => {
+    const request = jest.fn().mockRejectedValue({
+      response: {
+        status: 422,
+        data: { code: 'INVALID_INPUT' },
+      },
+    });
+    const adapter = createAxiosAdapter({ request });
+    const bridge = createApiBridge({ adapter });
+
+    await expect(
+      bridge.invoke(
+        {
+          operationId: 'createUser',
+          method: 'post',
+          path: '/',
+          fullPath: '/users',
+        },
+        {
+          body: { name: '' },
+        }
+      )
+    ).rejects.toThrow(
+      'API request failed: POST /users (422) {"code":"INVALID_INPUT"}'
+    );
   });
 
   it('should create client and call operation by operationId', async () => {
