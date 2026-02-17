@@ -155,6 +155,7 @@ export default defineConfig({
     apiPlugin({
       root: process.cwd(),
       apiDir: 'src/server/api',
+      target: 'both',
     }),
   ],
 });
@@ -172,6 +173,10 @@ export default defineConfig({
 
 - `root` (optional): project root, default `process.cwd()`.
 - `apiDir` (required): API definition directory (recommended `src/server/api`).
+- `target` (optional): transform target, default `client`.
+  - `client`: transform browser imports only.
+  - `ssr`: transform SSR imports only.
+  - `both`: transform both browser and SSR imports.
 
 ## Hot Reload Notes
 

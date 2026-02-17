@@ -10,9 +10,14 @@ export default defineConfiguration({
         keys: 'midway-react-functional-api-sample-key',
         koa: {
           globalPrefix: '/api',
-          port: null,
+          port: 7001,
         },
       },
+      local: {
+        koa: {
+          port: null,
+        }
+      }
     },
   ],
   detector: new ESModuleFileDetector(),

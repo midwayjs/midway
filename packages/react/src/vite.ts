@@ -22,6 +22,7 @@ type ApiModuleContract = {
 export interface ApiPluginOptions {
   root?: string;
   apiDir: string;
+  target?: 'client' | 'ssr' | 'both';
 }
 
 function isWord(ch: string) {
@@ -298,8 +299,18 @@ function resolveCandidate(
 }
 
 function tryResolveTsFile(candidate: string): string | null {
+  const jsToTsCandidates: string[] = [];
+  if (candidate.endsWith('.js')) {
+    jsToTsCandidates.push(candidate.slice(0, -3) + '.ts');
+    jsToTsCandidates.push(candidate.slice(0, -3) + '.tsx');
+  } else if (candidate.endsWith('.mjs')) {
+    jsToTsCandidates.push(candidate.slice(0, -4) + '.mts');
+  } else if (candidate.endsWith('.cjs')) {
+    jsToTsCandidates.push(candidate.slice(0, -4) + '.cts');
+  }
   const withExt = [
     candidate,
+    ...jsToTsCandidates,
     `${candidate}.ts`,
     `${candidate}.tsx`,
     resolve(candidate, 'index.ts'),
@@ -342,14 +353,16 @@ export function apiPlugin(options: ApiPluginOptions) {
   }
   const rootDir = options.root || process.cwd();
   const apiDir = resolve(rootDir, options.apiDir);
+  const target = options.target || 'client';
+  const enableClientTransform = target === 'client' || target === 'both';
+  const enableSsrTransform = target === 'ssr' || target === 'both';
 
   return {
     name: 'midway-api-bridge',
     enforce: 'pre',
     resolveId(source: string, importer?: string, resolveOptions?: { ssr?: boolean }) {
-      // Keep server-side module loading untouched (e.g. vite dev middleware),
-      // only rewrite browser-facing imports to web-safe contracts.
-      if (resolveOptions?.ssr) {
+      const isSsr = !!resolveOptions?.ssr;
+      if ((isSsr && !enableSsrTransform) || (!isSsr && !enableClientTransform)) {
         return null;
       }
       const candidate = resolveCandidate(source, importer, rootDir);

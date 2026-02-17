@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "pnpm run build:server && pnpm run build:web",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:web": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@midwayjs/core": "workspace:*",
     "@midwayjs/koa": "workspace:*",
     "@midwayjs/react": "workspace:*",
+    "@midwayjs/bootstrap": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

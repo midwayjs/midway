@@ -356,4 +356,94 @@ describe('api bridge', () => {
       },
     });
   });
+
+  it('should resolve server basePath from runtime basePath object', async () => {
+    const adapter = jest.fn().mockResolvedValue({ ok: true });
+    const userApi = {
+      __midwayApiMeta: {
+        prefix: '/users',
+      },
+      getUser: {
+        method: 'get',
+        path: '/:id',
+      },
+    };
+
+    const api = createClient(
+      {
+        user: userApi,
+      },
+      {
+        basePath: {
+          browser: '/api-browser',
+          server: 'http://127.0.0.1:7001/api',
+        },
+        adapter,
+      }
+    );
+
+    await api.user.getUser({
+      params: { id: 'u-1' },
+    });
+    expect(adapter).toHaveBeenCalledWith({
+      operation: {
+        operationId: 'user.getUser',
+        method: 'get',
+        path: '/:id',
+        fullPath: 'http://127.0.0.1:7001/api/users/:id',
+      },
+      input: {
+        params: { id: 'u-1' },
+      },
+    });
+  });
+
+  it('should resolve browser basePath from runtime basePath object', async () => {
+    const adapter = jest.fn().mockResolvedValue({ ok: true });
+    const userApi = {
+      __midwayApiMeta: {
+        prefix: '/users',
+      },
+      getUser: {
+        method: 'get',
+        path: '/:id',
+      },
+    };
+
+    (globalThis as any).window = {
+      document: {},
+    };
+
+    try {
+      const api = createClient(
+        {
+          user: userApi,
+        },
+        {
+          basePath: {
+            browser: '/api-browser',
+            server: '/api-server',
+          },
+          adapter,
+        }
+      );
+
+      await api.user.getUser({
+        params: { id: 'u-1' },
+      });
+      expect(adapter).toHaveBeenCalledWith({
+        operation: {
+          operationId: 'user.getUser',
+          method: 'get',
+          path: '/:id',
+          fullPath: '/api-browser/users/:id',
+        },
+        input: {
+          params: { id: 'u-1' },
+        },
+      });
+    } finally {
+      delete (globalThis as any).window;
+    }
+  });
 });

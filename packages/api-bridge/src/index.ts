@@ -24,8 +24,19 @@ export interface ApiBridgeOptions {
   adapter?: ApiBridgeTransportAdapter;
 }
 
+export interface ApiBridgeBasePathOptions {
+  browser?: string;
+  server?: string;
+  default?: string;
+}
+
+export type ApiBridgeBasePath =
+  | string
+  | ApiBridgeBasePathOptions
+  | (() => string | undefined);
+
 export interface CreateClientOptions extends ApiBridgeOptions {
-  basePath?: string;
+  basePath?: ApiBridgeBasePath;
 }
 
 export interface ApiClientDefinition {
@@ -292,13 +303,47 @@ export function createApiClient<TInput = unknown, TOutput = unknown>(
 }
 
 function joinUrlPath(...segments: Array<string | undefined>) {
-  const cleaned = segments
+  const normalized = segments
     .filter(Boolean)
-    .map(segment => String(segment))
-    .map(segment => segment.trim())
+    .map(segment => String(segment).trim())
+    .filter(segment => segment.length > 0);
+  if (!normalized.length) {
+    return '/';
+  }
+  const first = normalized[0];
+  const rest = normalized.slice(1);
+  const isAbsoluteHttpUrl = /^https?:\/\//i.test(first);
+  if (isAbsoluteHttpUrl) {
+    const head = first.replace(/\/+$/g, '');
+    const tail = rest
+      .map(segment => segment.replace(/^\/+|\/+$/g, ''))
+      .filter(segment => segment.length > 0);
+    return tail.length ? `${head}/${tail.join('/')}` : head;
+  }
+  const cleaned = normalized
     .map(segment => segment.replace(/^\/+|\/+$/g, ''))
     .filter(segment => segment.length > 0);
   return '/' + cleaned.join('/');
+}
+
+function resolveRuntimeBasePath(basePath?: ApiBridgeBasePath): string {
+  if (!basePath) {
+    return '';
+  }
+  if (typeof basePath === 'string') {
+    return basePath;
+  }
+  if (typeof basePath === 'function') {
+    return basePath() || '';
+  }
+  const runtimeGlobal = globalThis as any;
+  const isBrowser =
+    typeof runtimeGlobal.window !== 'undefined' &&
+    typeof runtimeGlobal.window?.document !== 'undefined';
+  if (isBrowser) {
+    return basePath.browser || basePath.default || basePath.server || '';
+  }
+  return basePath.server || basePath.default || basePath.browser || '';
 }
 
 function isApiRouteLike(route: unknown): route is ApiRouteLike {
@@ -331,6 +376,7 @@ export function createClient<TModules extends ApiModulesMap>(
   options: CreateClientOptions = {}
 ): ClientFromApiModules<TModules> {
   const bridge = createApiBridge(options);
+  const runtimeBasePath = resolveRuntimeBasePath(options.basePath);
   const client: Record<string, Record<string, (input: unknown) => Promise<unknown>>> = {};
 
   for (const namespaceKey of Object.keys(modules || {})) {
@@ -353,7 +399,7 @@ export function createClient<TModules extends ApiModulesMap>(
           : !!moduleMeta?.ignoreGlobalPrefix;
       const fullPath = routeIgnoreGlobalPrefix
         ? joinUrlPath(prefix, routePath)
-        : joinUrlPath(options.basePath, prefix, routePath);
+        : joinUrlPath(runtimeBasePath, prefix, routePath);
       const operationId = `${namespaceKey}.${route.options?.routerName || routeKey}`;
       namespaceClient[routeKey] = (input: unknown) => {
         return bridge.invoke(

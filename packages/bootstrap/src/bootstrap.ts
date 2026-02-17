@@ -117,6 +117,7 @@ export class Bootstrap {
   protected static logger: ILogger;
   protected static configured = false;
   protected static bootstrapLoggerFactory = new LoggerFactory();
+  protected static runningPromise: Promise<IMidwayGlobalContainer> | null = null;
 
   /**
    * set global configuration for midway
@@ -161,6 +162,9 @@ export class Bootstrap {
   }
 
   static async run() {
+    if (this.runningPromise) {
+      return this.runningPromise;
+    }
     if (!this.configured) {
       this.configure();
     }
@@ -181,7 +185,7 @@ export class Bootstrap {
     this.unhandledRejectionHandler = this.unhandledRejectionHandler.bind(this);
     process.on('unhandledRejection', this.unhandledRejectionHandler);
 
-    return this.getStarter()
+    this.runningPromise = this.getStarter()
       .run()
       .then(() => {
         this.logger.info('[midway:bootstrap] current app started');
@@ -192,6 +196,8 @@ export class Bootstrap {
         this.logger.error(err);
         process.exit(1);
       });
+
+    return this.runningPromise;
   }
 
   static async stop() {
@@ -208,6 +214,7 @@ export class Bootstrap {
   static reset() {
     this.configured = false;
     this.starter = null;
+    this.runningPromise = null;
     this.bootstrapLoggerFactory.close();
   }
 

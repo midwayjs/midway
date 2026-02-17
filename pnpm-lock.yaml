@@ -1763,6 +1763,9 @@ importers:
 
   samples/react-functional-api:
     dependencies:
+      '@midwayjs/bootstrap':
+        specifier: workspace:*
+        version: link:../../packages/bootstrap
       '@midwayjs/core':
         specifier: workspace:*
         version: link:../../packages/core

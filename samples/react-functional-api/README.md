@@ -56,6 +56,16 @@ This single command starts a Vite dev server with embedded Midway HTTP runtime.
 pnpm -C samples/react-functional-api build
 ```
 
+Split outputs:
+
+```bash
+pnpm -C samples/react-functional-api build:server
+pnpm -C samples/react-functional-api build:web
+```
+
+- Server output: `dist/server`
+- Web output: `dist/web` (Vite)
+
 ## Notes
 
 - Client calls are sent to `/api` by default (`basePath: '/api'`).
@@ -63,5 +73,6 @@ pnpm -C samples/react-functional-api build
 - To use custom transport (axios/tRPC), pass `adapter` in `createClient(..., { adapter })`.
 - This sample imports `apiPlugin` from `@midwayjs/react/vite`.
 - This sample imports `devPlugin` from `@midwayjs/mock/vite`.
+- `apiPlugin({ target: 'both' })` is enabled so CSR and SSR builds can share the same API import style.
 - API file changes trigger Midway runtime reload (`close -> recreate`) during dev.
 - If your backend includes heavy long-lived connections (Redis/MQ/WebSocket), consider running backend independently and proxying `/api` from Vite.
