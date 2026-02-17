@@ -114,6 +114,7 @@ Rspack 场景推荐与后端分进程开发：
 ## 示例
 
 - Vite 示例：`samples/react-functional-api`
+- Vite + Axios 示例：`samples/react-functional-api-axios`
 - Rspack 示例：`samples/react-functional-api-rspack`
 
 ## 说明
