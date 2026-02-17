@@ -40,6 +40,10 @@ export interface RouterOption {
    * ignore global prefix
    */
   ignoreGlobalPrefix?: boolean;
+  /**
+   * internal flag for whether ignoreGlobalPrefix is explicitly configured on route
+   */
+  __ignoreGlobalPrefixConfigured?: boolean;
 }
 
 export const RequestMethod = {
@@ -69,27 +73,28 @@ export const RequestMapping = (
   const middleware = metadata.middleware;
 
   return (target, key, descriptor: PropertyDescriptor) => {
-    const hasIgnoreGlobalPrefix = Object.prototype.hasOwnProperty.call(
-      metadata,
-      'ignoreGlobalPrefix'
-    );
-    MetadataManager.attachMetadata(
-      WEB_ROUTER_KEY,
-      {
-        path,
-        requestMethod,
-        routerName,
-        method: key,
-        middleware,
-        summary: metadata?.summary || '',
-        description: metadata?.description || '',
-        // decorator route keeps false by default; functional route can pass explicit undefined to inherit controller option
-        ignoreGlobalPrefix: hasIgnoreGlobalPrefix
-          ? metadata?.ignoreGlobalPrefix
-          : false,
-      } as RouterOption,
-      target
-    );
+    const hasIgnoreGlobalPrefix =
+      Object.prototype.hasOwnProperty.call(metadata, 'ignoreGlobalPrefix') &&
+      metadata?.ignoreGlobalPrefix !== undefined;
+    const routerMeta = {
+      path,
+      requestMethod,
+      routerName,
+      method: key,
+      middleware,
+      summary: metadata?.summary || '',
+      description: metadata?.description || '',
+      ignoreGlobalPrefix: hasIgnoreGlobalPrefix
+        ? metadata?.ignoreGlobalPrefix
+        : false,
+    } as RouterOption;
+    Object.defineProperty(routerMeta, '__ignoreGlobalPrefixConfigured', {
+      value: hasIgnoreGlobalPrefix,
+      enumerable: false,
+      configurable: false,
+      writable: false,
+    });
+    MetadataManager.attachMetadata(WEB_ROUTER_KEY, routerMeta, target);
 
     return descriptor;
   };

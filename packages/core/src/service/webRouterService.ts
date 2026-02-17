@@ -210,7 +210,7 @@ export class MidwayWebRouterService {
   protected analyzeController() {
     const controllerModules = DecoratorManager.listModule(CONTROLLER_KEY);
     const dedupedControllerModules: any[] = [];
-    const functionalControllerNameIndexMap = new Map<string, number>();
+    const functionalControllerIndexMap = new Map<string, number>();
 
     for (const module of controllerModules) {
       const isFunctionalController = !!MetadataManager.getOwnMetadata(
@@ -221,17 +221,40 @@ export class MidwayWebRouterService {
         dedupedControllerModules.push(module);
         continue;
       }
-      const controllerName = module?.name;
-      if (!controllerName) {
+
+      const controllerOption: ControllerOption = MetadataManager.getOwnMetadata(
+        CONTROLLER_KEY,
+        module
+      );
+      const webRouterInfo: RouterOption[] = MetadataManager.getOwnMetadata(
+        WEB_ROUTER_KEY,
+        module
+      );
+      if (!controllerOption || !webRouterInfo) {
         dedupedControllerModules.push(module);
         continue;
       }
-      const existingIndex = functionalControllerNameIndexMap.get(controllerName);
+
+      // Deduplicate only when controller prefix + route signatures are exactly the same.
+      // This keeps "double evaluation of same module" safe while preserving distinct APIs
+      // that happen to share class name or route method names.
+      const routeSignatures = webRouterInfo
+        .map(item => {
+          return `${(item.requestMethod || '').toLowerCase()}|${String(
+            item.path || '/'
+          )}|${item.routerName || ''}|${item.method || ''}`;
+        })
+        .sort()
+        .join(';');
+      const controllerSignature = `${controllerOption.prefix || '/'}::${routeSignatures}`;
+
+      const existingIndex =
+        functionalControllerIndexMap.get(controllerSignature);
       if (typeof existingIndex === 'number') {
         dedupedControllerModules[existingIndex] = module;
       } else {
-        functionalControllerNameIndexMap.set(
-          controllerName,
+        functionalControllerIndexMap.set(
+          controllerSignature,
           dedupedControllerModules.length
         );
         dedupedControllerModules.push(module);
@@ -383,26 +406,33 @@ export class MidwayWebRouterService {
       }
     }
 
-    // set ignorePrefix
-    if (!this.routes.has(ignorePrefix)) {
-      this.routes.set(ignorePrefix, []);
-      this.routesPriority.push({
-        prefix: ignorePrefix,
-        priority: ignorePrefix === '/' && priority === undefined ? -999 : 0,
-        middleware,
-        routerOptions: controllerOption.routerOptions,
-        controllerId,
-        routerModule: controllerClz,
-      });
-    }
-
     const webRouterInfo: RouterOption[] = MetadataManager.getOwnMetadata(
       WEB_ROUTER_KEY,
       controllerClz
     );
+    const hasRouteIgnoreGlobalPrefix =
+      !!webRouterInfo &&
+      webRouterInfo.some(route => route?.ignoreGlobalPrefix === true);
+
+    // set ignorePrefix only when it can be matched
+    if (controllerIgnoreGlobalPrefix || hasRouteIgnoreGlobalPrefix) {
+      if (!this.routes.has(ignorePrefix)) {
+        this.routes.set(ignorePrefix, []);
+        this.routesPriority.push({
+          prefix: ignorePrefix,
+          priority: ignorePrefix === '/' && priority === undefined ? -999 : 0,
+          middleware,
+          routerOptions: controllerOption.routerOptions,
+          controllerId,
+          routerModule: controllerClz,
+        });
+      }
+    }
 
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
+        const isRouteIgnoreGlobalPrefixConfigured =
+          webRouter.__ignoreGlobalPrefixConfigured === true;
         const routeArgsInfo =
           MetadataManager.getOwnMetadata(
             WEB_ROUTER_PARAM_KEY,
@@ -421,7 +451,7 @@ export class MidwayWebRouterService {
           id,
           // route-level value overrides controller default when explicitly set
           prefix:
-            webRouter.ignoreGlobalPrefix !== undefined
+            isRouteIgnoreGlobalPrefixConfigured
               ? webRouter.ignoreGlobalPrefix
                 ? ignorePrefix
                 : prefixWithGlobal
@@ -452,21 +482,21 @@ export class MidwayWebRouterService {
           data.source = 'functional';
         }
         if (
-          webRouter.ignoreGlobalPrefix !== undefined ||
+          isRouteIgnoreGlobalPrefixConfigured ||
           controllerIgnoreGlobalPrefix
         ) {
-            const resolvedIgnoreGlobalPrefix =
-              webRouter.ignoreGlobalPrefix !== undefined
-                ? !!webRouter.ignoreGlobalPrefix
-                : controllerIgnoreGlobalPrefix;
-            if (resolvedIgnoreGlobalPrefix) {
-              data.ignoreGlobalPrefix = true;
-            }
+          const resolvedIgnoreGlobalPrefix =
+            isRouteIgnoreGlobalPrefixConfigured
+              ? !!webRouter.ignoreGlobalPrefix
+              : controllerIgnoreGlobalPrefix;
+          if (resolvedIgnoreGlobalPrefix) {
+            data.ignoreGlobalPrefix = true;
           }
-          if (controllerVersion) {
-            data.version = controllerVersion;
-            data.versionType = controllerVersionType;
-            data.versionPrefix = controllerVersionPrefix;
+        }
+        if (controllerVersion) {
+          data.version = controllerVersion;
+          data.versionType = controllerVersionType;
+          data.versionPrefix = controllerVersionPrefix;
         }
 
         if (functionMeta) {
