@@ -15,6 +15,11 @@
       "types": "./dist/vite.d.ts",
       "require": "./dist/vite.js",
       "import": "./dist/vite.mjs"
+    },
+    "./rspack": {
+      "types": "./dist/rspack.d.ts",
+      "require": "./dist/rspack.js",
+      "import": "./dist/rspack.mjs"
     }
   },
   "typings": "index.d.ts",

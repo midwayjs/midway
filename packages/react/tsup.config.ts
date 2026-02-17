@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/vite.ts'],
+  entry: ['src/index.ts', 'src/vite.ts', 'src/rspack.ts'],
   format: ['cjs', 'esm'],
   dts: true,
   outDir: 'dist',

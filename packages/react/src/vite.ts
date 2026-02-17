@@ -282,6 +282,10 @@ function toCode(modules: ApiModuleContract[]) {
   return lines.join('\n');
 }
 
+export function toWebSafeApiContractCode(source: string) {
+  return toCode(transformDefineApiSource(source));
+}
+
 function resolveCandidate(
   source: string,
   importer?: string,

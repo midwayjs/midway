@@ -161,6 +161,24 @@ export default defineConfig({
 });
 ```
 
+## Rspack Usage
+
+```ts
+import { defineConfig } from '@rspack/cli';
+import { createApiRspackRule } from '@midwayjs/react/rspack';
+
+export default defineConfig({
+  module: {
+    rules: [
+      createApiRspackRule({
+        root: process.cwd(),
+        apiDir: 'src/server/api',
+      }),
+    ],
+  },
+});
+```
+
 ### Plugin Options
 
 `devPlugin` (`@midwayjs/mock/vite`):
