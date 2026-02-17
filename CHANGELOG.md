@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.22 (2026-02-17)
+
+#### :bug: Bug Fix
+* `core`
+  * [#4501](https://github.com/midwayjs/midway/pull/4501) 修复中间件重复赋值body导致MaxListenersExceededWarning的问题 ([@yuntian001](https://github.com/yuntian001))
+
+#### Committers: 1
+- yuntian001 ([@yuntian001](https://github.com/yuntian001))
+
+
+
 ## v3.20.21 (2026-01-10)
 
 #### :bug: Bug Fix
