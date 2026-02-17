@@ -195,10 +195,10 @@ export default defineApi('/users', api => ({
 
 ### 1) Next.js（优先一体化）
 - 目录：`src/app` + `src/server/api`
-- 集成：通过 Next 插件在 dev/build 阶段重写 `server/api` 导入调用（用户代码保持不变）
+- 集成：提供 `@midwayjs/nextjs` 服务层桥接（typed client + transport adapter），不要求额外构建插件
 - 路由：优先使用 Next 自身 `app/api` 或 `pages/api` 路由体系
-- 调用：Client Component 直接使用 `server/api` 导出 API；Server Component/Route Handler 通过服务适配层访问 Midway 能力
-- 产物：`next build` 时剥离 server runtime，仅保留 client 调用代理与类型
+- 调用：Server Component/Route Handler 通过桥接客户端访问 API 定义；Client Component 通过 Next route/API 层间接访问
+- 产物：`next build` 仅保留 web-safe 调用代理与类型，不打入 Midway server runtime
 
 ### 2) Nuxt（全栈一体化）
 - 目录：`server/api` + `composables` + `server/midway-api`

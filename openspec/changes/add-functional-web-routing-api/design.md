@@ -568,9 +568,9 @@ interface ApiProtocolPlugin {
 
 ### Next.js (Phase 1)
 - 实现点：
-  1. 提供 Next plugin 读取业务侧已发现的 API 定义
-  2. 在 dev/build 阶段重写 `server/api` 导入调用与类型引用
-  3. 不接管 Next 路由匹配，仅适配服务层能力
+  1. 提供 `@midwayjs/nextjs` 桥接客户端（基于 `@midwayjs/api-bridge`）
+  2. 复用 `src/server/api` 类型与路由语义，在 Next Server Component / Route Handler 侧直接调用
+  3. 不接管 Next 路由匹配，仅适配服务层能力（`app/api`、`pages/api` 仍由 Next 管理）
 - 风险控制：
   - 明确 Client/Server Component 可用能力边界
   - route handler 与 client 调用的异常语义一致（状态码、错误体）
