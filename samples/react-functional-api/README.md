@@ -19,7 +19,6 @@ samples/react-functional-api/
     server/
       configuration.ts
       api/
-        index.ts
         user.api.ts
     web/
       app.tsx

@@ -21,7 +21,6 @@ samples/react-functional-api-rspack/
       configuration.ts
       bootstrap.ts
       api/
-        index.ts
         user.api.ts
     web/
       app.tsx

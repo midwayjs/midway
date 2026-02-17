@@ -19,7 +19,6 @@ samples/react-functional-api-axios/
     server/
       configuration.ts
       api/
-        index.ts
         user.api.ts
     web/
       app.tsx
