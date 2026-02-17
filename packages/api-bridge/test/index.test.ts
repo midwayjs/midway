@@ -70,11 +70,11 @@ describe('api bridge', () => {
       },
       {
         params: { id: 'u-1' },
-        query: { expand: 'profile' },
+        query: { expand: 'profile', tags: ['a', 'b'] },
       }
     );
 
-    expect(fetchMock).toHaveBeenCalledWith('/users/u-1?expand=profile', {
+    expect(fetchMock).toHaveBeenCalledWith('/users/u-1?expand=profile&tags=a&tags=b', {
       method: 'GET',
       headers: {},
       body: undefined,
@@ -314,6 +314,45 @@ describe('api bridge', () => {
       },
       input: {
         params: { id: 'a-1' },
+      },
+    });
+  });
+
+  it('should not add version segment to fullPath when versionType is HEADER', async () => {
+    const adapter = jest.fn().mockResolvedValue({ ok: true });
+    const profileApi = {
+      __midwayApiMeta: {
+        prefix: '/profiles',
+        version: '7',
+        versionType: 'HEADER' as const,
+        versionPrefix: 'v',
+      },
+      getProfile: {
+        method: 'get',
+        path: '/:id',
+      },
+    };
+    const api = createClient(
+      {
+        profile: profileApi,
+      },
+      {
+        basePath: '/api',
+        adapter,
+      }
+    );
+    await api.profile.getProfile({
+      params: { id: 'p-1' },
+    });
+    expect(adapter).toHaveBeenCalledWith({
+      operation: {
+        operationId: 'profile.getProfile',
+        method: 'get',
+        path: '/:id',
+        fullPath: '/api/profiles/:id',
+      },
+      input: {
+        params: { id: 'p-1' },
       },
     });
   });

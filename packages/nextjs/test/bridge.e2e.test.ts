@@ -135,5 +135,23 @@ describe('nextjs bridge e2e', () => {
         }),
       })
     );
+
+    const profile = await api.profile.getProfile({
+      params: { id: 'p-1' },
+      headers: { 'x-locale': 'zh-CN' },
+    });
+    expect(profile).toEqual({
+      id: 'p-1',
+      locale: 'zh-CN',
+    });
+
+    expect(adapter).toHaveBeenCalledWith(
+      expect.objectContaining({
+        operation: expect.objectContaining({
+          operationId: 'profile.getProfile',
+          fullPath: '/api/profiles/:id',
+        }),
+      })
+    );
   });
 });

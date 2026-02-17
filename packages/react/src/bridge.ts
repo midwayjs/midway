@@ -11,8 +11,8 @@ import {
   resolveApiBridgeOptions,
 } from '@midwayjs/api-bridge';
 
-import { ReactApiBridgeOptions } from './interface';
-export { ReactApiBridgeOptions } from './interface';
+import type { ReactApiBridgeOptions } from './interface';
+export type { ReactApiBridgeOptions } from './interface';
 
 export function resolveReactApiBridgeOptions(
   options: ReactApiBridgeOptions = {}

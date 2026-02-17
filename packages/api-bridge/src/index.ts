@@ -162,6 +162,15 @@ function buildRequestPath(
   }
   const qs = new URLSearchParams();
   for (const [key, value] of queryEntries) {
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        if (item === undefined || item === null) {
+          continue;
+        }
+        qs.append(key, String(item));
+      }
+      continue;
+    }
     qs.set(key, String(value));
   }
   return `${path}${path.includes('?') ? '&' : '?'}${qs.toString()}`;

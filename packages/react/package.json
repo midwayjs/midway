@@ -2,11 +2,27 @@
   "name": "@midwayjs/react",
   "version": "4.0.0-beta.11",
   "description": "Midway React API bridge component",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "require": "./dist/vite.js",
+      "import": "./dist/vite.mjs"
+    }
+  },
   "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
+    "dist/**/*.mjs",
     "dist/**/*.d.ts",
+    "dist/**/*.d.mts",
     "index.d.ts"
   ],
   "keywords": [
@@ -17,26 +33,25 @@
   "author": "Midway Team",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
     "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
     "ci": "npm run test",
     "lint": "mwts check"
   },
   "dependencies": {
-    "@midwayjs/api-bridge": "workspace:^",
-    "@midwayjs/core": "workspace:^"
+    "@midwayjs/api-bridge": "workspace:^"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@midwayjs/mock": "workspace:^",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "tsup": "8.5.0"
   },
   "engines": {
     "node": ">=20"

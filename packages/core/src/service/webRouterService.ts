@@ -2,6 +2,7 @@ import {
   CONTROLLER_KEY,
   ControllerOption,
   DecoratorManager,
+  Inject,
   Provide,
   RouterOption,
   Scope,
@@ -22,6 +23,7 @@ import { PathToRegexpUtil } from '../util/pathToRegexp';
 import { Types } from '../util/types';
 import { ServerlessTriggerType, ScopeEnum, FaaSMetadata } from '../interface';
 import { MetadataManager } from '../decorator/metadataManager';
+import { MidwayLoggerService } from './loggerService';
 
 const debug = util.debuglog('midway:debug');
 
@@ -194,6 +196,9 @@ export class MidwayWebRouterService {
   private isReady = false;
   protected routes = new Map<string, RouterInfo[]>();
   protected routesPriority: RouterPriority[] = [];
+
+  @Inject()
+  loggerService: MidwayLoggerService;
 
   constructor(readonly options: RouterCollectorOptions = {}) {}
 
@@ -710,6 +715,26 @@ export class MidwayWebRouterService {
       }
     }
     prefixList.push(routerInfo);
+    this.logRouteLoaded(routerInfo);
+  }
+
+  protected logRouteLoaded(routerInfo: RouterInfo) {
+    const fullPath =
+      routerInfo.fullUrl ||
+      (typeof routerInfo.url === 'string'
+        ? joinURLPath(routerInfo.prefix || '', routerInfo.url)
+        : `${routerInfo.prefix || ''}${routerInfo.url?.toString() || ''}`);
+    const logger = this.loggerService?.getLogger('appLogger');
+    if (!logger || typeof logger.info !== 'function') {
+      return;
+    }
+    logger.info(
+      '[midway:router] loaded route %s %s -> %s (%s)',
+      (routerInfo.requestMethod || 'ALL').toUpperCase(),
+      fullPath,
+      this.getRouterHandlerIdentity(routerInfo),
+      routerInfo.source ?? 'decorator'
+    );
   }
 
   protected getRouterHandlerIdentity(routerInfo: RouterInfo) {
