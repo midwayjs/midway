@@ -14,7 +14,6 @@ Functional 模式的目标是把 Midway 的 `@Controller` / `@Get` / `@Post` 等
 - [defineApi 基础用法](./define-api.md)
 - [一体化目录与边界](./workspace.md)
 - [React 集成（Vite / Rspack）](./react.md)
-- [Next.js 集成](./nextjs.md)
-- [Vue / Nuxt 集成设计](./vue-nuxt.md)
+- [Vue 集成](./vue.md)
 - [构建与部署](./build-deploy.md)
 - [迁移指南（class/hooks -> functional）](./migration.md)

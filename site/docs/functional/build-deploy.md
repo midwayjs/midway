@@ -31,7 +31,7 @@
 
 ## SSR / SSG 说明
 
-- Next/Nuxt 项目建议沿用各自官方构建部署流程
+- 沿用前端框架官方构建部署流程
 - Midway functional API 作为服务层契约，不替代框架 SSR/SSG pipeline
 - `basePath` 需要按浏览器与服务端运行时分别配置
 

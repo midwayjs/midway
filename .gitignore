@@ -30,3 +30,5 @@ packages/**/test/tmp
 .result
 .astro
 dist-matrix
+.next
+.nuxt
