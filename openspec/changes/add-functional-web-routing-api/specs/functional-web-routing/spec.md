@@ -46,11 +46,6 @@
 - **THEN** 前端可直接复用 `src/server/api` 的 API 定义
 - **AND** Vue 应用不需要直接依赖 Midway server 运行时代码
 
-#### Scenario: Next.js 单应用一体化开发
-- **WHEN** 用户选择 Next.js 单应用结构（页面与 API 同仓同应用）
-- **THEN** 系统支持在该结构下复用 server API 语义定义
-- **AND** 用户不需要强制拆分独立 server/web 工程
-
 ### Requirement: Server API As Single Source of Truth
 系统 SHALL 以 `src/server/api` 作为前后端 API 定义的单一真相源，避免重复维护 contracts。
 
@@ -283,7 +278,7 @@
 - **AND** 两种写法都保持官方支持地位
 
 ### Requirement: Shared Route Definition for Frontend Ecosystem
-系统 SHALL 暴露框架无关的 Route Definition，以支持 React、Vue、Next.js 及其他框架进行路由复用或适配。
+系统 SHALL 暴露框架无关的 Route Definition，以支持 React、Vue 及其他框架进行路由复用或适配。
 
 #### Scenario: 导出可被前端路由适配器消费的路由清单
 - **WHEN** 用户创建 functional controller 和 routes
@@ -292,7 +287,7 @@
 
 #### Scenario: 第三方框架基于统一协议适配
 - **WHEN** 适配层读取 Route Definition
-- **THEN** 适配层可无损映射到目标框架路由结构（如 React Router、Vue Router、Next handlers）
+- **THEN** 适配层可无损映射到目标框架路由结构（如 React Router、Vue Router）
 - **AND** 不需要解析装饰器反射元数据
 
 ### Requirement: Stable Route Manifest Contract
@@ -314,7 +309,7 @@
 - **AND** manifest 中 `fullPath` 与真实可访问路由保持一致
 
 ### Requirement: Adapter Contract for Frontend Frameworks
-系统 SHALL 定义统一的 adapter 输入契约，使 React/Vue/Next 等生态可基于 Route Manifest 适配，而不依赖 Midway 私有运行时。
+系统 SHALL 定义统一的 adapter 输入契约，使 React/Vue 等生态可基于 Route Manifest 适配，而不依赖 Midway 私有运行时。
 
 #### Scenario: adapter 以 manifest 为唯一输入
 - **WHEN** 开发者编写任意框架适配器
@@ -326,20 +321,8 @@
 - **THEN** `routerName`、`fullPath` 等字段可直接用于目标框架的 `name/path` 映射
 - **AND** method 信息可用于区分 loader/action/handler 注册策略
 
-### Requirement: Framework Integration Coverage (Next/Nuxt/React/Vue)
-系统 SHALL 为 Next.js、Nuxt、React、Vue 四类框架提供明确的一体化接入设计。
-
-#### Scenario: Next.js 集成方案可用
-- **WHEN** 用户在 Next.js 项目中启用 functional API 集成
-- **THEN** 系统可从 `src/server/api` 生成可调用 client 代理
-- **AND** 系统不接管 Next 原生路由匹配流程
-- **AND** Next client bundle 不包含 Midway runtime
-
-#### Scenario: Nuxt 集成方案可用
-- **WHEN** 用户在 Nuxt 项目中启用 functional API 集成
-- **THEN** 系统可生成 `$api` 或等价 composable 调用入口
-- **AND** 系统不接管 Nuxt/Nitro 原生路由匹配流程
-- **AND** Nitro server 与 client bundle 依赖边界保持清晰
+### Requirement: Framework Integration Coverage (React/Vue)
+系统 SHALL 为 React、Vue 两类框架提供明确的一体化接入设计。
 
 #### Scenario: React 集成方案可用
 - **WHEN** 用户在 React 项目中启用 functional API 集成
@@ -383,7 +366,7 @@
 - **AND** 文档不将 functional 描述为对 class 的废弃或强制迁移路径
 
 #### Scenario: 前端场景优先提供 functional 示例
-- **WHEN** 文档面向 React/Vue/Next 等前端或全栈场景
+- **WHEN** 文档面向 React/Vue 等前端场景
 - **THEN** 提供 functional 示例以降低理解门槛
 - **AND** 同时保留 class 对照示例便于团队按偏好选择
 

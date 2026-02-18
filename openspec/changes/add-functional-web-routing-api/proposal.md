@@ -1,7 +1,7 @@
 # Change: 提供 Midway Web 装饰器的 Functional API（前端一体化 + 纯函数式服务）
 
 ## Why
-Midway 目前在 Web 场景的主流入口仍然以 `@Controller`、`@Get`、`@Post` 等类/方法装饰器为核心。该模式在 Node.js 服务端体验成熟，但在 React、Vue、Next.js 以及更多前端工程化场景中，用户更常使用函数式声明、文件路由、组合式 API 与跨运行时共享模块。
+Midway 目前在 Web 场景的主流入口仍然以 `@Controller`、`@Get`、`@Post` 等类/方法装饰器为核心。该模式在 Node.js 服务端体验成熟，但在 React、Vue 等前端工程化场景中，用户更常使用函数式声明与跨运行时共享模块。
 
 虽然仓库已提供 `defineConfiguration`，但控制器与路由声明仍缺少与之对齐的 Functional 形态。这会导致：
 
@@ -16,7 +16,7 @@ Midway 目前在 Web 场景的主流入口仍然以 `@Controller`、`@Get`、`@P
 ## What Changes
 - 新增 capability：`functional-web-routing`。
 - 定义与 `@Controller`、`@Get`、`@Post` 等等价的 Functional 声明模型，首选 `defineApi('/prefix', api => ({ ... }))` 的链式 DSL，并将 API 放在 `@midwayjs/core/functional`。
-- 定义前端生态可消费的标准化路由描述对象（Route Definition），便于 React Router、Vue Router、Next Route Handler 等接入。
+- 定义前端生态可消费的标准化路由描述对象（Route Definition），便于 React Router、Vue Router 等接入。
 - 明确与现有 Decorator 元数据的一致性要求（prefix、method、middleware、version、ignoreGlobalPrefix 等）。
 - 明确 `defineApi` 复用现有 class 装饰器元数据定义与收集协议，不新增平行元数据体系。
 - 给出用户侧示例与迁移路径（装饰器与 functional 可并存，不破坏既有应用）。
@@ -77,25 +77,6 @@ export default defineConfiguration({
 
 ## Fullstack Integration Draft (React/Vue)
 目标：前后端在同一仓库开发，复用 API 定义与类型，构建产物分离。
-
-也支持 Next.js 的“前后端一体”模式（优先简化方案）。
-
-Next.js 一体化最小目录：
-
-```txt
-src/
-  app/
-    page.tsx
-    api/
-      users/[id]/route.ts
-  api/
-    user.api.ts             # defineApi（可选，与 route handler 映射）
-```
-
-在该模式下：
-1. 一个应用同时承载页面与接口。
-2. API 定义可直接由 `server/api` 作为单一真相源。
-3. 不强制拆分独立 `server` 与 `web` 工程。
 
 建议目录（默认示例，可配置）：
 
@@ -186,34 +167,20 @@ export default defineApi('/users', api => ({
 ```
 
 ## Framework Integration Blueprint
-下面是四种主流前端框架的集成设计重点。
+下面是两种前端框架的集成设计重点。
 
 实施优先级（冻结）：
-1. Phase 1：`@midwayjs/nextjs` + `@midwayjs/react`
-2. Phase 2：`@midwayjs/nuxt` + Vue 集成包
+1. Phase 1：`@midwayjs/react`
+2. Phase 2：`@midwayjs/vue`
 3. 所有 phase 共享同一 `src/server/api` 语义与 transport SPI，不回退 core 边界
 
-### 1) Next.js（优先一体化）
-- 目录：`src/app` + `src/server/api`
-- 集成：提供 `@midwayjs/nextjs` 服务层桥接（typed client + transport adapter），不要求额外构建插件
-- 路由：优先使用 Next 自身 `app/api` 或 `pages/api` 路由体系
-- 调用：Server Component/Route Handler 通过桥接客户端访问 API 定义；Client Component 通过 Next route/API 层间接访问
-- 产物：`next build` 仅保留 web-safe 调用代理与类型，不打入 Midway server runtime
-
-### 2) Nuxt（全栈一体化）
-- 目录：`server/api` + `composables` + `server/midway-api`
-- 集成：Nuxt module 在 dev 阶段扫描 `server/api`，生成 `$api` typed composable
-- 路由：优先使用 Nuxt/Nitro 自身路由体系
-- 调用：页面/组件中 `const { data } = await $api.users.getUser(...)`
-- 产物：Nitro server 与 client bundle 分离，client 不包含 Midway runtime
-
-### 3) React（分层单仓）
+### 1) React（分层单仓）
 - 目录：`src/server` + `src/web`
 - 集成：Vite/Rspack 插件在构建期重写 `src/server/api` 导入为 web-safe 调用
 - 调用：React 组件/数据层直接使用 `server/api` 导出 API，不手写路径
 - 产物：`web build` 只产出前端包；`server build` 独立运行
 
-### 4) Vue（分层单仓）
+### 2) Vue（分层单仓）
 - 目录：`src/server` + `src/web`
 - 集成：Vite 插件与 Vue plugin 注入 `$api` 或 `useApiClient()`
 - 调用：`const user = await api.users.getUser(...)`
@@ -226,9 +193,8 @@ export default defineApi('/users', api => ({
   - `packages/core/src/decorator/web/*` 或路由收集层（元数据对齐）
   - `packages/core/src/service/webRouterService.ts`（消费统一路由定义）
   - `packages/api-bridge/*`（通用 client runtime + transport SPI）
-  - `packages/nextjs/*`（Phase 1：Next.js 一体化桥接）
   - `packages/react/*`（Phase 1：React 桥接能力；如不存在则新增）
-  - `packages/nuxt/*`、`packages/vue/*`（Phase 2）
+  - `packages/vue/*`（Phase 2：Vue 桥接能力；如不存在则新增）
   - `site/docs/*`（新增 functional routing 文档）
 - Compatibility:
   - 向后兼容。装饰器 API 保持不变。

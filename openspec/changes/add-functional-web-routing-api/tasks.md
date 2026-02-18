@@ -39,9 +39,7 @@
 - [x] 3A.1 冻结目录配置模型（`serverDir/webDir/apiDir`，并给出默认示例 `src/server`、`src/web`、`src/server/api`）
 - [x] 3A.2 冻结依赖边界（前端依赖 `src/server/api`，禁止引入 server runtime）
 - [x] 3A.3 冻结构建流水线分层（server-api-check -> server-build -> web-build）
-- [x] 3A.4 冻结 Next.js 单应用模式作为可选简化路径
 - [x] 3A.5 冻结 dev 内存编译链路（server api 调用重写 + 类型映射）
-- [x] 3A.6 冻结 Next/Nuxt 路由边界：仅服务层适配，不接管原生路由
 - [x] 3A.7 冻结桥接层配置协议（detectorSource/apiEntry/emitMode/outDir/strictWebSafe）
 - [x] 3A.8 冻结单一 dev 命令入口（用户无需手动启动两个 dev）
 - [x] 3A.9 冻结 transport 配置协议（global transport + adapter 注入）
@@ -51,17 +49,13 @@
 - [x] 4.1 编写“装饰器写法 vs functional 写法”一一对照示例
 - [x] 4.2 编写 React Router 适配示例（基于 route manifest）
 - [x] 4.3 编写 Vue Router 适配示例（基于 route manifest）
-- [x] 4.4 编写 Next Route Handler 适配示例（基于 route manifest）
 - [x] 4.6 编写迁移指南（按 controller 粒度渐进迁移 + 混用避坑）
 - [x] 4.7 为每个新增 API 能力补充“最小可运行用户范例”（example-first gate）
 - [x] 4.8 在文档中明确“functional 与 class 为并行偏好，不是替代关系”
 - [x] 4.9 编写“同仓开发”示例（server + react）
 - [x] 4.10 编写“同仓开发”示例（server + vue）
 - [x] 4.11 编写“web 直接依赖 server api 定义”示例
-- [x] 4.12 编写 Next.js 单应用示例（不拆分 server/web）
 - [x] 4.13 编写 direct-like 调用示例（`import { userApi } from '@/server/api/...'; await userApi.getUser(...)`）
-- [x] 4.14 编写 Next.js 集成设计与示例（服务层适配 + Next 原生路由，Phase 1）
-- [x] 4.15 编写 Nuxt 集成设计与示例（module/$api composable，Phase 2）
 - [x] 4.16 编写 React 集成设计与示例（Vite/Rspack plugin + `server/api` 调用重写，Phase 1）
 - [x] 4.17 编写 Vue 集成设计与示例（Vite plugin + useApiClient/$api，Phase 2）
 - [x] 4.18 编写自定义 transport 示例（如 tRPC adapter）
@@ -75,8 +69,7 @@
 
 ## 5. 验证与验收
 - [x] 5.1 增加规范级测试计划（API 行为、默认值、冲突检测、版本路由、manifest 稳定性、compile pipeline、web-safe）
-- [x] 5.2 增加 Phase 1 最小集成样例测试（Next/React）
-- [ ] 5.2A 增加 Phase 2 最小集成样例测试（Nuxt/Vue）
+- [x] 5.2 增加 Phase 1 最小集成样例测试（React）
 - [x] 5.3 运行 `openspec validate add-functional-web-routing-api --strict --no-interactive`
 - [x] 5.4 运行变更评审并确认 Open Questions（命名与 core adapter 边界）
 - [ ] 5.5 评审通过后进入 apply 阶段

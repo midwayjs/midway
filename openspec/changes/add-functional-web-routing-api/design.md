@@ -5,7 +5,7 @@ Midway 已有 `defineConfiguration`，证明 functional 配置模式可行；但
 现有约束：
 - 不能破坏 `@Controller/@Get/@Post` 既有行为。
 - 路由最终仍需被 `MidwayWebRouterService` 统一消费。
-- 用户希望可在 React/Vue/Next 生态中使用同一套声明。
+- 用户希望可在 React/Vue 生态中使用同一套声明。
 
 ## Architecture Overview
 核心分为 4 层：
@@ -22,7 +22,7 @@ Midway 已有 `defineConfiguration`，证明 functional 配置模式可行；但
 - 附加能力：鉴权 header 注入、错误映射、超时重试策略（可配置）
 
 4. Service Bridge Layer
-- 职责：在 Next/Nuxt/React/Vue 生态中注入 Midway 服务能力
+- 职责：在 React/Vue 生态中注入 Midway 服务调用能力
 - 关键约束：不接管框架原生路由匹配
 
 数据流：
@@ -67,11 +67,6 @@ export type * from './order.api';
 约束：
 - 仅导出 `defineApi` 结果与类型，禁止导出 IoC 实例/运行时对象。
 - 前后端统一从 `src/server/api/index.ts` 导入，保证语义来源一致。
-
-简化可选：Next.js 一体化单应用
-- 单一 `src/app` 下同时承载页面与 API route handlers。
-- `defineApi` 可作为路由语义源，映射到 Next route handlers（按适配器策略）。
-- 不要求额外抽取独立 contracts 层。
 
 ## Draft API Surface
 以下为提案阶段建议的最小 API 面，目标是与装饰器语义对齐。
@@ -296,7 +291,7 @@ interface TypedClientBuildArtifact {
   - 理由：目标是降低前端理解成本，而不是改变现有服务端团队习惯。
 
 - Decision 9A: 纯函数式服务为一等场景
-  - 即使不接入 React/Vue/Next/Nuxt，用户也可仅基于 `defineApi + useInject` 构建 Midway 服务。
+  - 即使不接入 React/Vue，用户也可仅基于 `defineApi + useInject` 构建 Midway 服务。
   - 理由：functional 是编程范式入口，不是前端专用适配层。
 
 - Decision 10: 简化 API 注册模型
@@ -315,10 +310,9 @@ interface TypedClientBuildArtifact {
   - CI/CD 串行执行 `server-api-check -> server-build -> web-build`。
   - 理由：降低耦合，提高构建可预测性与缓存命中率。
 
-- Decision 13: 提供 Next.js 一体化落地路径
-  - Next.js/Nuxt 集成优先采用各自原生路由体系。
-  - Midway 在该模式下仅提供服务层适配（IoC、配置、日志、客户端生成）。
-  - 理由：避免框架路由能力冲突，降低迁移与理解成本。
+- Decision 13: 框架层只做服务适配
+  - Midway 在 React/Vue 场景下仅提供服务层适配（IoC、配置、日志、客户端生成）。
+  - 理由：避免与框架路由系统职责冲突，降低迁移与理解成本。
 
 - Decision 14: 引入 Direct-like Typed Client（开发体验层）
   - 前端直接导入 `server/api` 导出的 API 定义，调用方式接近直接函数调用。
@@ -327,7 +321,6 @@ interface TypedClientBuildArtifact {
 
 - Decision 14A: Client Runtime 下沉到 `@midwayjs/api-bridge`
   - typed client 与 transport SPI 的通用实现放在 `@midwayjs/api-bridge`。
-  - `@midwayjs/react`、`@midwayjs/nextjs` 等仅保留框架胶水（插件/hook/module）。
   - 理由：避免多框架重复实现与行为分叉。
 
 - Decision 15: 编译层强约束 web-safe 边界
@@ -396,11 +389,6 @@ interface RouteManifestItem {
   - 输出：`RouteRecordRaw[]`
   - 约束：`routerName` 对应 `name`，`fullPath` 对应 `path`
 
-- Next.js Route Handlers:
-  - 输入：`RouteManifestItem[]`
-  - 输出：按目录聚合的 handler 映射
-  - 约束：adapter 可选择按 `fullPath` 生成虚拟文件树或 runtime registry
-
 ## Local Dev Workflow (Example)
 1. 执行单一 `dev` 命令（例如 `pnpm dev`）。
 2. dev runner 内部统一拉起：
@@ -432,7 +420,6 @@ interface FunctionalApiBridgeConfig {
 ```
 
 默认策略：
-- Next/Nuxt：优先 `virtual`，SSR build 可切换 `file`
 - React/Vue：Vite/Rspack 下优先 `virtual`
 
 ## Direct-like Client Contract
@@ -525,13 +512,12 @@ interface ApiProtocolPlugin {
 
 ## Evolution Strategy
 分阶段演进：
-1. Phase 1（核心）：HTTP + `@midwayjs/nextjs` + `@midwayjs/react`
+1. Phase 1（落地）：HTTP + `@midwayjs/react` + `@midwayjs/vue`
 2. Phase 1.5（桥接沉淀）：抽象共用 bridge contract（供后续框架复用）
-3. Phase 2（扩展前端框架）：`@midwayjs/nuxt` + Vue 集成包
-4. Phase 3（实时）：WebSocket + Socket.IO
-5. Phase 4（服务通信）：gRPC + message listeners（Kafka/RabbitMQ）
-6. Phase 5（计算与调度）：Task/Queue
-7. Phase X（延后能力）：Serverless Trigger
+3. Phase 3（实时）：WebSocket + Socket.IO
+4. Phase 4（服务通信）：gRPC + message listeners（Kafka/RabbitMQ）
+5. Phase 5（计算与调度）：Task/Queue
+6. Phase X（延后能力）：Serverless Trigger
 
 每阶段要求：
 - 与现有装饰器行为对齐（语义与默认值）
@@ -552,7 +538,6 @@ interface ApiProtocolPlugin {
 每个错误必须包含：
 - file
 - operationId（如适用）
-- framework（next/nuxt/react/vue）
 - suggestedFix
 
 ## Framework-specific Integration
@@ -560,25 +545,6 @@ interface ApiProtocolPlugin {
 - API 定义源：`src/server/api`
 - 前端消费形态：直接导入 `server/api`（编译层重写）或框架注入对象
 - 运行时边界：浏览器端不引入 Midway runtime
-
-### Next.js (Phase 1)
-- 实现点：
-  1. 提供 `@midwayjs/nextjs` 桥接客户端（基于 `@midwayjs/api-bridge`）
-  2. 复用 `src/server/api` 类型与路由语义，在 Next Server Component / Route Handler 侧直接调用
-  3. 不接管 Next 路由匹配，仅适配服务层能力（`app/api`、`pages/api` 仍由 Next 管理）
-- 风险控制：
-  - 明确 Client/Server Component 可用能力边界
-  - route handler 与 client 调用的异常语义一致（状态码、错误体）
-
-### Nuxt (Phase 2)
-- 实现点：
-  1. 提供 Nuxt module + Nitro hook
-  2. 消费业务侧已发现 API 定义并生成 `$api` composable
-  3. 注入 `useApiClient()` 类型提示
-  4. 不接管 Nuxt/Nitro 路由匹配，仅适配服务层能力
-- 风险控制：
-  - 确保 Nitro server 与 client bundle 引用链分离
-  - 避免 module 注入顺序导致 `$api` 未注册
 
 ### React (Phase 1)
 - 实现点：
@@ -604,7 +570,6 @@ interface ApiProtocolPlugin {
 - API 扫描、类型提取、web-safe 违规检测
 
 2. Framework integration tests
-- Next/Nuxt/React/Vue 各一组最小样例验证
 - 验证 client bundle 不含 Midway runtime
 
 3. End-to-end tests
@@ -632,7 +597,7 @@ interface DuplicateRouteErrorPayload {
 - 风险：API 形态过多导致学习成本增加。
   - 缓解：坚持最小 API 面，仅覆盖装饰器高频能力。
 
-- 风险：跨框架适配期望不一致（例如 Next.js 文件路由优先）。
+- 风险：跨框架适配期望不一致。
   - 缓解：规范只保证“路由定义协议”，框架特定策略放在 adapter 文档。
 
 - 风险：装饰器与 functional 混用时冲突难定位。
@@ -645,7 +610,7 @@ interface DuplicateRouteErrorPayload {
 
 ## Open Questions (Reviewed)
 - Q1: 是否在 core 内提供“官方基础 adapter”（例如仅提供 `toRouteManifest()`），其余框架由独立包实现。
-  - 结论：是。core 仅保留协议定义、元数据复用与 route manifest 基础能力；客户端调用与框架桥接统一放在 bridge/framework 包（如 `@midwayjs/api-bridge`、`@midwayjs/react`、`@midwayjs/nextjs`）。
+  - 结论：是。core 仅保留协议定义、元数据复用与 route manifest 基础能力；客户端调用与框架桥接统一放在 bridge/framework 包（如 `@midwayjs/api-bridge`、`@midwayjs/react`、`@midwayjs/vue`）。
 - Q2: 命名是否采用统一入口或按协议分别导出。
   - 结论：按协议分别导出，不做统一入口。当前冻结 HTTP 的 `defineApi`（位于 `@midwayjs/core/functional`）；其他协议 `defineXXX` 在对应组件包中后续推进。
 - 当前阶段无阻塞性未决问题，可进入后续 apply/扩展阶段。
