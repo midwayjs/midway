@@ -7,8 +7,8 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@midwayjs/api-bridge": [
-        "../api-bridge/dist/index.d.ts"
+      "@midwayjs/web-bridge": [
+        "../web-bridge/dist/index.d.ts"
       ],
       "@midwayjs/core": [
         "../core/dist/index.d.ts"

@@ -5,14 +5,13 @@ Next.js 场景优先保持 Next 原生路由体系，Midway 只提供服务层�
 ## 安装
 
 ```bash
-npm i @midwayjs/nextjs @midwayjs/api-bridge @midwayjs/core
+npm i @midwayjs/nextjs @midwayjs/core
 ```
 
 ```json
 {
   "dependencies": {
     "@midwayjs/nextjs": "^4.0.0-beta.11",
-    "@midwayjs/api-bridge": "^4.0.0-beta.11",
     "@midwayjs/core": "^4.0.0-beta.11"
   }
 }

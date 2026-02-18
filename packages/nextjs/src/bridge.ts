@@ -9,7 +9,7 @@ import {
   createApiClientDefinition,
   createApiClient,
   resolveApiBridgeOptions,
-} from '@midwayjs/api-bridge';
+} from '@midwayjs/web-bridge';
 
 export interface NextjsApiBridgeOptions extends ApiBridgeOptions {}
 

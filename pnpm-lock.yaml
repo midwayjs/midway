@@ -871,10 +871,11 @@ importers:
         version: link:../mock
 
   packages/nextjs:
-    devDependencies:
-      '@midwayjs/api-bridge':
+    dependencies:
+      '@midwayjs/web-bridge':
         specifier: workspace:^
-        version: link:../api-bridge
+        version: link:../web-bridge
+    devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
         version: link:../core

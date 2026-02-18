@@ -5,14 +5,13 @@ Next.js bridge helpers for Midway functional API definitions.
 ## Install
 
 ```bash
-npm i @midwayjs/nextjs @midwayjs/api-bridge
+npm i @midwayjs/nextjs
 ```
 
 ```json
 {
   "dependencies": {
-    "@midwayjs/nextjs": "^4.0.0-beta.11",
-    "@midwayjs/api-bridge": "^4.0.0-beta.11"
+    "@midwayjs/nextjs": "^4.0.0-beta.11"
   }
 }
 ```

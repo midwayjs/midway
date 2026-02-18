@@ -1,4 +1,4 @@
-import { ApiBridgeTransportAdapter } from '@midwayjs/api-bridge';
+import { ApiBridgeTransportAdapter } from '@midwayjs/web-bridge';
 import { createClient } from '@midwayjs/nextjs';
 import {
   accountApi,

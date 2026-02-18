@@ -10,8 +10,10 @@
     "index.d.ts",
     "inject.js"
   ],
+  "dependencies": {
+    "@midwayjs/web-bridge": "workspace:^"
+  },
   "devDependencies": {
-    "@midwayjs/api-bridge": "workspace:^",
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
