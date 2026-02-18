@@ -50,20 +50,20 @@
 ## 4. 用户文档与示例（设计阶段）
 - [x] 4.1 编写“装饰器写法 vs functional 写法”一一对照示例
 - [x] 4.2 编写 React Router 适配示例（基于 route manifest）
-- [ ] 4.3 编写 Vue Router 适配示例（基于 route manifest）
+- [x] 4.3 编写 Vue Router 适配示例（基于 route manifest）
 - [x] 4.4 编写 Next Route Handler 适配示例（基于 route manifest）
 - [x] 4.6 编写迁移指南（按 controller 粒度渐进迁移 + 混用避坑）
 - [x] 4.7 为每个新增 API 能力补充“最小可运行用户范例”（example-first gate）
 - [x] 4.8 在文档中明确“functional 与 class 为并行偏好，不是替代关系”
 - [x] 4.9 编写“同仓开发”示例（server + react）
-- [ ] 4.10 编写“同仓开发”示例（server + vue）
+- [x] 4.10 编写“同仓开发”示例（server + vue）
 - [x] 4.11 编写“web 直接依赖 server api 定义”示例
 - [x] 4.12 编写 Next.js 单应用示例（不拆分 server/web）
 - [x] 4.13 编写 direct-like 调用示例（`import { userApi } from '@/server/api/...'; await userApi.getUser(...)`）
 - [x] 4.14 编写 Next.js 集成设计与示例（服务层适配 + Next 原生路由，Phase 1）
-- [ ] 4.15 编写 Nuxt 集成设计与示例（module/$api composable，Phase 2）
+- [x] 4.15 编写 Nuxt 集成设计与示例（module/$api composable，Phase 2）
 - [x] 4.16 编写 React 集成设计与示例（Vite/Rspack plugin + `server/api` 调用重写，Phase 1）
-- [ ] 4.17 编写 Vue 集成设计与示例（Vite plugin + useApiClient/$api，Phase 2）
+- [x] 4.17 编写 Vue 集成设计与示例（Vite plugin + useApiClient/$api，Phase 2）
 - [x] 4.18 编写自定义 transport 示例（如 tRPC adapter）
 - [x] 4.19 编写 HTTP 多客户端示例（fetch/axios 切换）
 - [ ] 4.20 编写 gRPC define API 与 client 适配示例

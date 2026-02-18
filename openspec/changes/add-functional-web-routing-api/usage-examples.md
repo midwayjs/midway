@@ -172,3 +172,92 @@ export async function GET(
   return NextResponse.json(data);
 }
 ```
+
+## 8. Vue Router 适配（基于 route manifest）
+
+```ts
+import type { RouteRecordRaw } from 'vue-router';
+import type { RouteManifestItem } from '@midwayjs/core';
+import { api } from '@/web/api/client';
+
+export function toVueRoutes(manifest: RouteManifestItem[]): RouteRecordRaw[] {
+  return manifest
+    .filter(item => item.method.toLowerCase() === 'get')
+    .map(item => ({
+      name: item.operationId,
+      path: item.fullPath,
+      component: () => import('@/web/pages/api-proxy-page.vue'),
+      props: route => ({ operationId: item.operationId, params: route.params }),
+      beforeEnter: async to => {
+        if (item.operationId === 'user.getUser') {
+          await api.user.getUser({ params: to.params });
+        }
+      },
+    }));
+}
+```
+
+## 9. 同仓开发示例（server + vue）
+
+```txt
+src/
+  server/
+    configuration.ts
+    api/
+      user.api.ts
+  web/
+    main.ts
+    app.vue
+    api/
+      client.ts
+```
+
+```ts
+// src/web/api/client.ts
+import { createClient } from '@midwayjs/api-bridge';
+import { userApi } from '../../server/api/user.api';
+
+export const api = createClient(
+  { user: userApi },
+  {
+    basePath: '/api',
+  }
+);
+```
+
+## 10. Nuxt 集成示例（module + $api composable）
+
+```ts
+// modules/midway-api.ts
+export default function midwayApiModule() {
+  this.addTemplate({
+    filename: 'midway-api.client.mjs',
+    getContents: () => `
+      import { createClient } from '@midwayjs/api-bridge';
+      import { userApi } from '~/server/api/user.api';
+      export const api = createClient({ user: userApi }, { basePath: '/api' });
+    `,
+  });
+
+  this.addPlugin({
+    src: this.addTemplate({
+      filename: 'midway-api.plugin.mjs',
+      getContents: () => `
+        import { api } from '#build/midway-api.client.mjs';
+        export default defineNuxtPlugin(() => ({ provide: { api } }));
+      `,
+    }).dst,
+  });
+}
+```
+
+```vue
+<!-- pages/users/[id].vue -->
+<script setup lang="ts">
+const { $api } = useNuxtApp();
+const route = useRoute();
+const user = await $api.user.getUser({
+  params: { id: String(route.params.id) },
+});
+</script>
+```
