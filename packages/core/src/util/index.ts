@@ -20,7 +20,10 @@ function resolveRelativeEsmSpecifierFallback(
   importerFile: string,
   specifier: string
 ): string | undefined {
-  if (!specifier || (!specifier.startsWith('./') && !specifier.startsWith('../'))) {
+  if (
+    !specifier ||
+    (!specifier.startsWith('./') && !specifier.startsWith('../'))
+  ) {
     return undefined;
   }
 

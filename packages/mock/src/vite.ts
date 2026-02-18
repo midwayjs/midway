@@ -83,7 +83,8 @@ export function devPlugin(options: DevPluginOptions) {
   const basePath = options.basePath || '/api';
   const watchInclude = options.watch?.include || [/\.(ts|tsx|js|mjs|cjs)$/];
   const watchExclude = options.watch?.exclude || [/\.d\.ts$/];
-  const getRequestHandler = options.getRequestHandler || getDefaultRequestHandler;
+  const getRequestHandler =
+    options.getRequestHandler || getDefaultRequestHandler;
   const routeManifestOptions =
     options.routeManifest && typeof options.routeManifest === 'object'
       ? options.routeManifest
@@ -163,7 +164,9 @@ export function devPlugin(options: DevPluginOptions) {
             '[midway:mock] can not resolve applicationContext for route manifest generation'
           );
         }
-        const webRouterService = await appContext.getAsync(MidwayWebRouterService);
+        const webRouterService = await appContext.getAsync(
+          MidwayWebRouterService
+        );
         let manifest = await webRouterService.getRouteManifest();
         if (typeof routeManifestFilter === 'function') {
           manifest = manifest.filter(routeManifestFilter);
@@ -201,7 +204,11 @@ export function devPlugin(options: DevPluginOptions) {
       });
 
       server.watcher.on('all', async (eventName: string, file: string) => {
-        if (eventName !== 'add' && eventName !== 'change' && eventName !== 'unlink') {
+        if (
+          eventName !== 'add' &&
+          eventName !== 'change' &&
+          eventName !== 'unlink'
+        ) {
           return;
         }
         if (!shouldReloadFile(file)) {

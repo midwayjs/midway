@@ -16,8 +16,8 @@ export default defineConfiguration({
       local: {
         koa: {
           port: null,
-        }
-      }
+        },
+      },
     },
   ],
   detector: new ESModuleFileDetector(),

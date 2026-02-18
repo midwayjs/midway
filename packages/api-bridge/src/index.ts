@@ -1,4 +1,4 @@
-export type ApiBridgeTransportName = 'http' | (string & {});
+export type ApiBridgeTransportName = 'http' | (string & Record<never, never>);
 
 export interface ApiBridgeOperation {
   operationId: string;
@@ -12,10 +12,7 @@ export interface ApiBridgeTransportRequest<TInput = unknown> {
   input: TInput;
 }
 
-export type ApiBridgeTransportAdapter = <
-  TInput = unknown,
-  TOutput = unknown
->(
+export type ApiBridgeTransportAdapter = <TInput = unknown, TOutput = unknown>(
   request: ApiBridgeTransportRequest<TInput>
 ) => Promise<TOutput>;
 
@@ -120,7 +117,10 @@ export type ClientFromApiModules<TModules extends ApiModulesMap> = {
 };
 
 export interface ApiCallClient {
-  call<TOutput = unknown>(operationId: string, input: unknown): Promise<TOutput>;
+  call<TOutput = unknown>(
+    operationId: string,
+    input: unknown
+  ): Promise<TOutput>;
   has(operationId: string): Promise<boolean> | boolean;
   operationIds(): Promise<string[]> | string[];
 }
@@ -223,7 +223,9 @@ function buildRequestPath(
   return `${path}${path.includes('?') ? '&' : '?'}${qs.toString()}`;
 }
 
-function createDefaultHttpAdapter(fetchImpl: typeof fetch): ApiBridgeTransportAdapter {
+function createDefaultHttpAdapter(
+  fetchImpl: typeof fetch
+): ApiBridgeTransportAdapter {
   return async <TInput = unknown, TOutput = unknown>({
     operation,
     input,
@@ -249,10 +251,7 @@ function createDefaultHttpAdapter(fetchImpl: typeof fetch): ApiBridgeTransportAd
           constructorName === 'FormData' ||
           constructorName === 'Blob' ||
           constructorName === 'ArrayBuffer';
-        if (
-          typeof bodyValue === 'string' ||
-          isNativeBodyLike
-        ) {
+        if (typeof bodyValue === 'string' || isNativeBodyLike) {
           body = bodyValue;
         } else {
           body = JSON.stringify(payload.body);
@@ -284,7 +283,9 @@ function createDefaultHttpAdapter(fetchImpl: typeof fetch): ApiBridgeTransportAd
           ? responseData
           : JSON.stringify(responseData);
       throw new Error(
-        `API request failed: ${normalizedMethod} ${requestUrl} (${(response as any).status}) ${message}`
+        `API request failed: ${normalizedMethod} ${requestUrl} (${
+          (response as any).status
+        }) ${message}`
       );
     }
 
@@ -590,18 +591,26 @@ export function createClient<TModules extends ApiModulesMap>(
       }
     }
     throw new Error(
-      `Cannot resolve operationId for "${cacheKey}" from manifest. candidates=${candidates.join(', ')}`
+      `Cannot resolve operationId for "${cacheKey}" from manifest. candidates=${candidates.join(
+        ', '
+      )}`
     );
   };
 
-  const client: Record<string, Record<string, (input: unknown) => Promise<unknown>>> = {};
+  const client: Record<
+    string,
+    Record<string, (input: unknown) => Promise<unknown>>
+  > = {};
   const operations: ApiBridgeOperation[] = [];
 
   for (const namespaceKey of Object.keys(modules || {})) {
     const module = modules[namespaceKey];
     const moduleMeta = module?.__midwayApiMeta;
     const prefix = resolveVersionedPrefix(moduleMeta);
-    const namespaceClient: Record<string, (input: unknown) => Promise<unknown>> = {};
+    const namespaceClient: Record<
+      string,
+      (input: unknown) => Promise<unknown>
+    > = {};
     for (const routeKey of Object.keys(module || {})) {
       if (routeKey === '__midwayApiMeta') {
         continue;
@@ -618,7 +627,9 @@ export function createClient<TModules extends ApiModulesMap>(
       const fullPath = routeIgnoreGlobalPrefix
         ? joinUrlPath(prefix, routePath)
         : joinUrlPath(runtimeBasePath, prefix, routePath);
-      const operationId = `${namespaceKey}.${route.options?.routerName || routeKey}`;
+      const operationId = `${namespaceKey}.${
+        route.options?.routerName || routeKey
+      }`;
       operations.push({
         operationId,
         method: route.method,
@@ -675,7 +686,10 @@ export function createClient<TModules extends ApiModulesMap>(
     client[namespaceKey] = namespaceClient;
   }
 
-  const apiClient = createApiClient(createApiClientDefinition(operations), options);
+  const apiClient = createApiClient(
+    createApiClientDefinition(operations),
+    options
+  );
   if (useManifestRuntime) {
     return Object.assign(client, {
       async call<TOutput = unknown>(operationId: string, input: unknown) {

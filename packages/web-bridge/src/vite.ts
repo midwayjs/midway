@@ -156,7 +156,10 @@ function parseSimpleObject(raw: string): Record<string, unknown> {
   for (const segment of splitTopLevel(body, ',')) {
     const idx = segment.indexOf(':');
     if (idx < 0) continue;
-    const key = segment.slice(0, idx).trim().replace(/^['"]|['"]$/g, '');
+    const key = segment
+      .slice(0, idx)
+      .trim()
+      .replace(/^['"]|['"]$/g, '');
     const valueRaw = segment.slice(idx + 1).trim();
     if (valueRaw === 'true' || valueRaw === 'false') {
       result[key] = valueRaw === 'true';
@@ -264,15 +267,15 @@ function toCode(modules: ApiModuleContract[]) {
   for (const mod of modules) {
     lines.push(`const ${mod.name} = ${JSON.stringify(mod.routes, null, 2)};`);
     lines.push(
-      `Object.defineProperty(${mod.name}, '__midwayApiMeta', { value: ${JSON.stringify(
-        {
-          prefix: mod.prefix,
-          ignoreGlobalPrefix: mod.controllerOptions.ignoreGlobalPrefix,
-          version: mod.controllerOptions.version,
-          versionType: mod.controllerOptions.versionType,
-          versionPrefix: mod.controllerOptions.versionPrefix,
-        }
-      )}, enumerable: false });`
+      `Object.defineProperty(${
+        mod.name
+      }, '__midwayApiMeta', { value: ${JSON.stringify({
+        prefix: mod.prefix,
+        ignoreGlobalPrefix: mod.controllerOptions.ignoreGlobalPrefix,
+        version: mod.controllerOptions.version,
+        versionType: mod.controllerOptions.versionType,
+        versionPrefix: mod.controllerOptions.versionPrefix,
+      })}, enumerable: false });`
     );
     lines.push(`export { ${mod.name} };`);
   }
@@ -364,9 +367,16 @@ export function apiPlugin(options: ApiPluginOptions) {
   return {
     name: 'midway-api-bridge',
     enforce: 'pre',
-    resolveId(source: string, importer?: string, resolveOptions?: { ssr?: boolean }) {
+    resolveId(
+      source: string,
+      importer?: string,
+      resolveOptions?: { ssr?: boolean }
+    ) {
       const isSsr = !!resolveOptions?.ssr;
-      if ((isSsr && !enableSsrTransform) || (!isSsr && !enableClientTransform)) {
+      if (
+        (isSsr && !enableSsrTransform) ||
+        (!isSsr && !enableClientTransform)
+      ) {
         return null;
       }
       const candidate = resolveCandidate(source, importer, rootDir);
@@ -397,10 +407,7 @@ export function apiPlugin(options: ApiPluginOptions) {
     },
     handleHotUpdate(ctx: any) {
       const filePath = ctx.file;
-      if (
-        filePath.startsWith(apiDir) &&
-        shouldTransformApiFile(filePath)
-      ) {
+      if (filePath.startsWith(apiDir) && shouldTransformApiFile(filePath)) {
         const virtualId = toVirtualApiId(filePath);
         const mod = ctx.server.moduleGraph.getModuleById(virtualId);
         if (mod) {

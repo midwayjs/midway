@@ -11,7 +11,7 @@ import {
   resolveApiBridgeOptions,
 } from '@midwayjs/web-bridge';
 
-export interface NextjsApiBridgeOptions extends ApiBridgeOptions {}
+export type NextjsApiBridgeOptions = ApiBridgeOptions;
 
 export function resolveNextjsApiBridgeOptions(
   options: NextjsApiBridgeOptions = {}
@@ -30,17 +30,14 @@ export function createNextjsApiClient<TInput = unknown, TOutput = unknown>(
 export function createNextjsApiClientFromOperations<
   TInput = unknown,
   TOutput = unknown
->(
-  operations: ApiBridgeOperation[],
-  options: NextjsApiBridgeOptions = {}
-) {
+>(operations: ApiBridgeOperation[], options: NextjsApiBridgeOptions = {}) {
   return createNextjsApiClient<TInput, TOutput>(
     createApiClientDefinition(operations),
     options
   );
 }
 
-export interface NextjsCreateClientOptions extends CreateClientOptions {}
+export type NextjsCreateClientOptions = CreateClientOptions;
 
 export function createClient<TModules extends ApiModulesMap>(
   modules: TModules,

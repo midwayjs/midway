@@ -44,17 +44,14 @@ export function createReactApiClient<TInput = unknown, TOutput = unknown>(
 export function createReactApiClientFromOperations<
   TInput = unknown,
   TOutput = unknown
->(
-  operations: ApiBridgeOperation[],
-  options: ReactApiBridgeOptions = {}
-) {
+>(operations: ApiBridgeOperation[], options: ReactApiBridgeOptions = {}) {
   return createReactApiClient<TInput, TOutput>(
     createApiClientDefinition(operations),
     options
   );
 }
 
-export interface ReactCreateClientOptions extends CreateClientOptions {}
+export type ReactCreateClientOptions = CreateClientOptions;
 
 export function createClient<TModules extends ApiModulesMap>(
   modules: TModules,

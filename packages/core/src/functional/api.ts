@@ -59,9 +59,7 @@ export interface FunctionalRouteDefinition {
   method: string;
   path: string | RegExp;
   options: FunctionalRouteOptions;
-  handle: (
-    args: FunctionalRouteHandlerArgs
-  ) => Promise<unknown> | unknown;
+  handle: (args: FunctionalRouteHandlerArgs) => Promise<unknown> | unknown;
 }
 
 export interface FunctionalRouteOptions {
@@ -98,12 +96,8 @@ export interface RouteBuilder {
   input(schema: FunctionalRouteOptions['input']): RouteBuilder;
   output(schema: FunctionalRouteOptions['output']): RouteBuilder;
   middleware(mw: any[]): RouteBuilder;
-  meta(
-    options: Omit<FunctionalRouteOptions, 'input' | 'output'>
-  ): RouteBuilder;
-  handle(
-    fn: FunctionalRouteDefinition['handle']
-  ): FunctionalRouteDefinition;
+  meta(options: Omit<FunctionalRouteOptions, 'input' | 'output'>): RouteBuilder;
+  handle(fn: FunctionalRouteDefinition['handle']): FunctionalRouteDefinition;
 }
 
 interface RouteBuilderInternal extends RouteBuilder {
@@ -234,7 +228,11 @@ async function validateInput(
   }
 
   return {
-    params: await runSchemaValidation(schema.params, input.params, 'input.params'),
+    params: await runSchemaValidation(
+      schema.params,
+      input.params,
+      'input.params'
+    ),
     query: await runSchemaValidation(schema.query, input.query, 'input.query'),
     body: await runSchemaValidation(schema.body, input.body, 'input.body'),
     headers: await runSchemaValidation(
@@ -254,7 +252,9 @@ function normalizeRouteDefinition(
     : (routeValue as FunctionalRouteDefinition);
 
   if (!route || typeof route !== 'object') {
-    throw new Error(`Functional route "${routeName}" must be a route definition`);
+    throw new Error(
+      `Functional route "${routeName}" must be a route definition`
+    );
   }
 
   if (typeof route.handle !== 'function') {
@@ -344,7 +344,10 @@ export function defineApi(
     Object.defineProperty(FunctionalApiController.prototype, routeName, {
       value: async function (ctx: any, next?: NextFunction) {
         const rawInput = getInputFromContext(ctx);
-        const validatedInput = await validateInput(route.options.input, rawInput);
+        const validatedInput = await validateInput(
+          route.options.input,
+          rawInput
+        );
         const result = await route.handle({
           input: validatedInput,
           ctx,
@@ -375,7 +378,9 @@ export function defineApi(
     debug(
       `[functional-api] register route, controller="${controllerClassName}", prefix="${prefix}", method=${String(
         route.method
-      ).toUpperCase()}, path="${String(route.path)}", routeName="${routeName}", routerName="${
+      ).toUpperCase()}, path="${String(
+        route.path
+      )}", routeName="${routeName}", routerName="${
         route.options.routerName || routeName
       }"`
     );
@@ -403,10 +408,7 @@ export function defineApi(
     globalDecoratorManager !== DecoratorManager &&
     typeof globalDecoratorManager.saveModule === 'function'
   ) {
-    globalDecoratorManager.saveModule(
-      CONTROLLER_KEY,
-      FunctionalApiController
-    );
+    globalDecoratorManager.saveModule(CONTROLLER_KEY, FunctionalApiController);
   }
   MetadataManager.defineMetadata(
     FUNCTIONAL_API_CONTROLLER_KEY,

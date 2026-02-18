@@ -34,11 +34,10 @@ function shouldTransform(source: string) {
   return source.includes('defineApi');
 }
 
-export function apiRspackLoader(
-  this: RspackLoaderContext,
-  source: string
-) {
-  const options = normalizeOptions(this.getOptions?.() as Partial<ApiRspackLoaderOptions>);
+export function apiRspackLoader(this: RspackLoaderContext, source: string) {
+  const options = normalizeOptions(
+    this.getOptions?.() as Partial<ApiRspackLoaderOptions>
+  );
   const filePath = this.resourcePath || '';
   if (!filePath || !inApiDir(filePath, options) || !shouldTransform(source)) {
     return source;

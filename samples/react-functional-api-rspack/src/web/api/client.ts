@@ -7,7 +7,6 @@ export const apiBridgeConfig = {
   apiDir: 'src/server/api',
 } as const;
 
-
 export const api = createClient(
   {
     user: userApi,

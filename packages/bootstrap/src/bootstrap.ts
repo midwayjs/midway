@@ -117,7 +117,8 @@ export class Bootstrap {
   protected static logger: ILogger;
   protected static configured = false;
   protected static bootstrapLoggerFactory = new LoggerFactory();
-  protected static runningPromise: Promise<IMidwayGlobalContainer> | null = null;
+  protected static runningPromise: Promise<IMidwayGlobalContainer> | null =
+    null;
 
   /**
    * set global configuration for midway

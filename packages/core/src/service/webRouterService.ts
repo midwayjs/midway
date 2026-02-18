@@ -246,7 +246,9 @@ export class MidwayWebRouterService {
         })
         .sort()
         .join(';');
-      const controllerSignature = `${controllerOption.prefix || '/'}::${routeSignatures}`;
+      const controllerSignature = `${
+        controllerOption.prefix || '/'
+      }::${routeSignatures}`;
 
       const existingIndex =
         functionalControllerIndexMap.get(controllerSignature);
@@ -450,14 +452,13 @@ export class MidwayWebRouterService {
         const data: RouterInfo = {
           id,
           // route-level value overrides controller default when explicitly set
-          prefix:
-            isRouteIgnoreGlobalPrefixConfigured
-              ? webRouter.ignoreGlobalPrefix
-                ? ignorePrefix
-                : prefixWithGlobal
-              : controllerIgnoreGlobalPrefix
+          prefix: isRouteIgnoreGlobalPrefixConfigured
+            ? webRouter.ignoreGlobalPrefix
               ? ignorePrefix
-              : prefixWithGlobal,
+              : prefixWithGlobal
+            : controllerIgnoreGlobalPrefix
+            ? ignorePrefix
+            : prefixWithGlobal,
           routerName: webRouter.routerName || '',
           url: webRouter.path,
           requestMethod: webRouter.requestMethod,
@@ -485,10 +486,9 @@ export class MidwayWebRouterService {
           isRouteIgnoreGlobalPrefixConfigured ||
           controllerIgnoreGlobalPrefix
         ) {
-          const resolvedIgnoreGlobalPrefix =
-            isRouteIgnoreGlobalPrefixConfigured
-              ? !!webRouter.ignoreGlobalPrefix
-              : controllerIgnoreGlobalPrefix;
+          const resolvedIgnoreGlobalPrefix = isRouteIgnoreGlobalPrefixConfigured
+            ? !!webRouter.ignoreGlobalPrefix
+            : controllerIgnoreGlobalPrefix;
           if (resolvedIgnoreGlobalPrefix) {
             data.ignoreGlobalPrefix = true;
           }
@@ -706,9 +706,10 @@ export class MidwayWebRouterService {
       path: route.url?.toString() || '',
       fullPath: route.fullUrl || '',
       routerName: route.routerName,
-      middlewareCount: (route.middleware?.length || 0) + (route.controllerMiddleware?.length || 0),
-      ignoreGlobalPrefix:
-        !!route.ignoreGlobalPrefix,
+      middlewareCount:
+        (route.middleware?.length || 0) +
+        (route.controllerMiddleware?.length || 0),
+      ignoreGlobalPrefix: !!route.ignoreGlobalPrefix,
       version: route.version,
       versionType: route.versionType,
       versionPrefix: route.versionPrefix,
@@ -827,7 +828,11 @@ export class MidwayWebRouterService {
       const exist = operationMap.get(route.operationId);
       if (exist) {
         throw new MidwayCommonError(
-          `Duplicate operationId "${route.operationId}" between "${exist.method.toUpperCase()} ${exist.fullPath}" and "${route.method.toUpperCase()} ${route.fullPath}"`
+          `Duplicate operationId "${
+            route.operationId
+          }" between "${exist.method.toUpperCase()} ${
+            exist.fullPath
+          }" and "${route.method.toUpperCase()} ${route.fullPath}"`
         );
       }
       operationMap.set(route.operationId, route);
