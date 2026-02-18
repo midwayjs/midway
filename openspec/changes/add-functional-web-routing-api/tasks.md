@@ -64,7 +64,7 @@
 - [ ] 4.21 编写 WS/Socket.IO define API 与 client 适配示例
 - [ ] 4.23 编写 Task/Queue define API 与调用示例
 - [ ] 4.24 编写 Kafka/RabbitMQ define API 与消费示例
-- [ ] 4.25 编写“纯函数式 Midway 服务”最小示例（不接入前端框架）
+- [x] 4.25 编写“纯函数式 Midway 服务”最小示例（不接入前端框架）
 - [ ] 4.26 编写“装饰器 + 纯函数式模块”同项目共存示例
 
 ## 5. 验证与验收
