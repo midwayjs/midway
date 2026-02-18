@@ -1,4 +1,4 @@
-import { ApiClient } from '@midwayjs/api-bridge';
+import { ApiClient } from '@midwayjs/web-bridge';
 import {
   createContext,
   createElement,

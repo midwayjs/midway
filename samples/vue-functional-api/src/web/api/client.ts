@@ -1,4 +1,4 @@
-import { createClient } from '@midwayjs/api-bridge';
+import { createClient } from '@midwayjs/vue';
 import { userApi } from '../../server/api/user.api.js';
 
 export const apiBridgeConfig = {

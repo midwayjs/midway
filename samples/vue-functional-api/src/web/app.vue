@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { api } from './api/client';
+import { useMidwayApiOperation } from '@midwayjs/vue';
 
 type User = {
   id: string;
@@ -10,15 +10,18 @@ type User = {
 const user = ref<User | null>(null);
 const loading = ref(false);
 const error = ref<string | null>(null);
+const callGetUser = useMidwayApiOperation<{
+  params: { id: string };
+}, User>('user.getUser');
 
 const loadUser = async () => {
   loading.value = true;
   error.value = null;
   try {
-    const data = await api.user.getUser({
+    const data = await callGetUser({
       params: { id: 'u-1' },
     });
-    user.value = data as User;
+    user.value = data;
   } catch (err: any) {
     error.value = err?.message || String(err);
   } finally {

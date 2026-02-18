@@ -16,7 +16,7 @@ function normalizeOptions(
 ): ApiRspackLoaderOptions {
   if (!raw?.apiDir || typeof raw.apiDir !== 'string') {
     throw new Error(
-      '[midway:react] apiRspackLoader requires "apiDir" option, e.g. apiRspackLoader({ root: process.cwd(), apiDir: "src/server/api" })'
+      '[midway:web-bridge] apiRspackLoader requires "apiDir" option, e.g. apiRspackLoader({ root: process.cwd(), apiDir: "src/server/api" })'
     );
   }
   return {
@@ -55,7 +55,7 @@ export function createApiRspackRule(options: ApiRspackLoaderOptions) {
     include: [apiRoot],
     use: [
       {
-        loader: '@midwayjs/react/rspack',
+        loader: '@midwayjs/web-bridge/rspack',
         options: normalized,
       },
     ],

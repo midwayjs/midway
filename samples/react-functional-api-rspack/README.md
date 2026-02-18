@@ -5,7 +5,7 @@ A runnable React (Rspack) project that demonstrates:
 - `defineApi` in `src/server/api`
 - direct import from web to server API definition
 - `createClient({ user: userApi })` usage with `@midwayjs/react`
-- `@midwayjs/react/rspack` loader rewriting API definitions to web-safe contracts
+- `@midwayjs/web-bridge/rspack` loader rewriting API definitions to web-safe contracts
 
 ## Directory
 
@@ -76,4 +76,4 @@ pnpm -C samples/react-functional-api-rspack build:web
 - Client calls are sent to `/api` by default (`basePath: '/api'`).
 - Backend is a real Midway Koa app (`imports: [koa]` in `src/server/configuration.ts`).
 - To use custom transport (axios/tRPC), pass `adapter` in `createClient(..., { adapter })`.
-- This sample uses `createApiRspackRule` from `@midwayjs/react/rspack`.
+- This sample uses `createApiRspackRule` from `@midwayjs/web-bridge/rspack`.

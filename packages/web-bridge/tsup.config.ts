@@ -1,11 +1,11 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/vite.ts', 'src/rspack.ts'],
   format: ['cjs', 'esm'],
   dts: true,
   outDir: 'dist',
   platform: 'node',
   target: 'node20',
-  external: ['react', 'react-dom', '@midwayjs/web-bridge'],
+  external: ['@midwayjs/api-bridge'],
 });

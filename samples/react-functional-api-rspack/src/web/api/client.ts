@@ -1,4 +1,4 @@
-import * as MidwayReact from '@midwayjs/react';
+import { createClient } from '@midwayjs/web-bridge';
 import { userApi } from '../../server/api/user.api.js';
 
 export const apiBridgeConfig = {
@@ -7,7 +7,6 @@ export const apiBridgeConfig = {
   apiDir: 'src/server/api',
 } as const;
 
-const { createClient } = MidwayReact;
 
 export const api = createClient(
   {

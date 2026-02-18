@@ -5,14 +5,14 @@ React bridge contracts for consuming Midway functional API definitions in web ap
 ## Install
 
 ```bash
-npm i @midwayjs/react @midwayjs/api-bridge
+npm i @midwayjs/react @midwayjs/web-bridge
 ```
 
 ```json
 {
   "dependencies": {
     "@midwayjs/react": "^4.0.0-beta.11",
-    "@midwayjs/api-bridge": "^4.0.0-beta.11"
+    "@midwayjs/web-bridge": "^4.0.0-beta.11"
   }
 }
 ```
@@ -136,13 +136,13 @@ const api = createReactApiClientFromOperations(manifestOperations, {
 Use Vite with two plugins:
 
 - `@midwayjs/mock/vite` `devPlugin(...)` for embedded Midway HTTP runtime.
-- `@midwayjs/react/vite` `apiPlugin(...)` for browser-side contract transform.
+- `@midwayjs/web-bridge/vite` `apiPlugin(...)` for browser-side contract transform.
 
 ```ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { devPlugin } from '@midwayjs/mock/vite';
-import { apiPlugin } from '@midwayjs/react/vite';
+import { apiPlugin } from '@midwayjs/web-bridge/vite';
 
 export default defineConfig({
   plugins: [
@@ -165,7 +165,7 @@ export default defineConfig({
 
 ```ts
 import { defineConfig } from '@rspack/cli';
-import { createApiRspackRule } from '@midwayjs/react/rspack';
+import { createApiRspackRule } from '@midwayjs/web-bridge/rspack';
 
 export default defineConfig({
   module: {
@@ -187,7 +187,7 @@ export default defineConfig({
 - `baseDir` (optional): Midway server source root, default `src`.
 - `basePath` (optional): API prefix forwarded to Midway runtime, default `/api`.
 
-`apiPlugin` (`@midwayjs/react/vite`):
+`apiPlugin` (`@midwayjs/web-bridge/vite`):
 
 - `root` (optional): project root, default `process.cwd()`.
 - `apiDir` (required): API definition directory (recommended `src/server/api`).

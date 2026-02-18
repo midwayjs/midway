@@ -5,7 +5,7 @@ export default defineConfig({
   format: ['cjs', 'esm'],
   dts: true,
   outDir: 'dist',
-  platform: 'node',
-  target: 'node20',
-  external: ['react', 'react-dom', '@midwayjs/web-bridge'],
+  platform: 'neutral',
+  target: 'es2020',
+  external: ['vue', '@midwayjs/web-bridge'],
 });

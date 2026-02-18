@@ -11,10 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@midwayjs/bootstrap": "workspace:*",
     "@midwayjs/core": "workspace:*",
     "@midwayjs/koa": "workspace:*",
-    "@midwayjs/react": "workspace:*",
-    "@midwayjs/bootstrap": "workspace:*",
+    "@midwayjs/web-bridge": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

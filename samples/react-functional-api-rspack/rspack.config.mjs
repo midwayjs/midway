@@ -1,6 +1,6 @@
 import { defineConfig } from '@rspack/cli';
 import { rspack } from '@rspack/core';
-import { createApiRspackRule } from '@midwayjs/react/rspack';
+import { createApiRspackRule } from '@midwayjs/web-bridge/rspack';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 

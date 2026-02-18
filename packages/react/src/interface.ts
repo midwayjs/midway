@@ -1,3 +1,3 @@
-import { ApiBridgeOptions } from '@midwayjs/api-bridge';
+import { ApiBridgeOptions } from '@midwayjs/web-bridge';
 
 export interface ReactApiBridgeOptions extends ApiBridgeOptions {}

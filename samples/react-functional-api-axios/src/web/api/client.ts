@@ -1,5 +1,5 @@
-import * as MidwayReact from '@midwayjs/react';
-import { createAxiosAdapter } from '@midwayjs/api-bridge';
+import { createClient } from '@midwayjs/web-bridge';
+import { createAxiosAdapter } from '@midwayjs/web-bridge';
 import axios from 'axios';
 import { userApi } from '../../server/api/user.api.js';
 
@@ -9,7 +9,6 @@ export const apiBridgeConfig = {
   apiDir: 'src/server/api',
 } as const;
 
-const { createClient } = MidwayReact;
 
 export const api = createClient(
   {

@@ -7,20 +7,17 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
+      "@midwayjs/api-bridge": [
+        "../api-bridge/dist/index.d.ts"
+      ],
       "@midwayjs/core": [
         "../core/dist/index.d.ts"
       ],
       "@midwayjs/core/functional": [
         "../core/dist/functional/index.d.ts"
       ],
-      "@midwayjs/react": [
+      "@midwayjs/web-bridge": [
         "./src"
-      ],
-      "react": [
-        "../nextjs/node_modules/react"
-      ],
-      "react-dom/server": [
-        "../nextjs/node_modules/react-dom/server"
       ]
     }
   },

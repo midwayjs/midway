@@ -1,6 +1,6 @@
 import { apiRspackLoader, createApiRspackRule } from '../src/rspack';
 
-describe('react rspack loader', () => {
+describe('web-bridge rspack loader', () => {
   it('should transform defineApi source under apiDir', () => {
     const source = `
       import { defineApi } from '@midwayjs/core/functional';
@@ -47,6 +47,6 @@ describe('react rspack loader', () => {
     expect(rule.enforce).toBe('pre');
     expect(rule.include).toEqual(['/repo/src/server/api']);
     expect(String(rule.test)).toContain('[cm]?');
-    expect(rule.use[0].loader).toBe('@midwayjs/react/rspack');
+    expect(rule.use[0].loader).toBe('@midwayjs/web-bridge/rspack');
   });
 });

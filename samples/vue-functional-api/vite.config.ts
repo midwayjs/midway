@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { fileURLToPath, URL } from 'node:url';
-import { apiPlugin } from '@midwayjs/react/vite';
+import { apiPlugin } from '@midwayjs/web-bridge/vite';
 import { devPlugin } from '@midwayjs/mock/vite';
 import { apiBridgeConfig } from './src/web/api/client';
 

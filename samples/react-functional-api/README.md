@@ -70,7 +70,7 @@ pnpm -C samples/react-functional-api build:web
 - Client calls are sent to `/api` by default (`basePath: '/api'`).
 - Backend is a real Midway Koa app (`imports: [koa]` in `src/server/configuration.ts`).
 - To use custom transport (axios/tRPC), pass `adapter` in `createClient(..., { adapter })`.
-- This sample imports `apiPlugin` from `@midwayjs/react/vite`.
+- This sample imports `apiPlugin` from `@midwayjs/web-bridge/vite`.
 - This sample imports `devPlugin` from `@midwayjs/mock/vite`.
 - `apiPlugin({ target: 'both' })` is enabled so CSR and SSR builds can share the same API import style.
 - API file changes trigger Midway runtime reload (`close -> recreate`) during dev.

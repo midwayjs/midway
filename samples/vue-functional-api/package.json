@@ -11,15 +11,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@midwayjs/api-bridge": "workspace:*",
     "@midwayjs/bootstrap": "workspace:*",
     "@midwayjs/core": "workspace:*",
     "@midwayjs/koa": "workspace:*",
+    "@midwayjs/web-bridge": "workspace:*",
+    "@midwayjs/vue": "workspace:*",
     "vue": "^3.5.22"
   },
   "devDependencies": {
     "@midwayjs/mock": "workspace:*",
-    "@midwayjs/react": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.4",
     "typescript": "5.6.3",
     "vite": "^5.4.11"

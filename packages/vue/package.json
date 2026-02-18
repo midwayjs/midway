@@ -1,7 +1,7 @@
 {
-  "name": "@midwayjs/react",
+  "name": "@midwayjs/vue",
   "version": "4.0.0-beta.11",
-  "description": "Midway React API bridge component",
+  "description": "Midway Vue API bridge component",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -22,7 +22,7 @@
   ],
   "keywords": [
     "midway",
-    "react",
+    "vue",
     "bridge"
   ],
   "author": "Midway Team",
@@ -38,15 +38,11 @@
     "@midwayjs/web-bridge": "workspace:^"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "vue": ">=3"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "react": "^18",
-    "react-dom": "^18",
-    "tsup": "8.5.0"
+    "tsup": "8.5.0",
+    "vue": "^3.5.22"
   },
   "engines": {
     "node": ">=20"

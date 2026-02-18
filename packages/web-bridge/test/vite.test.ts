@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { apiPlugin } from '../src/vite';
 
-describe('react vite plugin', () => {
+describe('web-bridge vite plugin', () => {
   it('should transform defineApi source to web-safe contract', () => {
     const source = `
       import { defineApi } from '@midwayjs/core/functional';

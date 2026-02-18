@@ -4,7 +4,7 @@ A runnable Vue (Vite) project that demonstrates:
 
 - `defineApi` in `src/server/api`
 - direct import from web to server API definition
-- `createClient({ user: userApi })` usage with `@midwayjs/api-bridge`
+- `createClient({ user: userApi })` usage with `@midwayjs/vue` (runtime bridge comes from `@midwayjs/web-bridge`)
 
 ## Directory
 
@@ -69,6 +69,6 @@ pnpm -C samples/vue-functional-api build:web
 
 - Client calls are sent to `/api` by default (`basePath: '/api'`).
 - Backend is a real Midway Koa app (`imports: [koa]` in `src/server/configuration.ts`).
-- This sample imports `apiPlugin` from `@midwayjs/react/vite` (temporary shared transform plugin).
+- This sample imports `apiPlugin` from `@midwayjs/web-bridge/vite` (temporary shared transform plugin).
 - This sample imports `devPlugin` from `@midwayjs/mock/vite`.
 - `apiPlugin({ target: 'both' })` is enabled so CSR and SSR builds can share the same API import style.

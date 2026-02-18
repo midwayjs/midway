@@ -9,7 +9,7 @@ import {
   createApiClient,
   createApiBridge,
   resolveApiBridgeOptions,
-} from '@midwayjs/api-bridge';
+} from '@midwayjs/web-bridge';
 
 import type { ReactApiBridgeOptions } from './interface';
 export type { ReactApiBridgeOptions } from './interface';

@@ -1101,9 +1101,9 @@ importers:
 
   packages/react:
     dependencies:
-      '@midwayjs/api-bridge':
+      '@midwayjs/web-bridge':
         specifier: workspace:^
-        version: link:../api-bridge
+        version: link:../web-bridge
     devDependencies:
       '@types/react':
         specifier: ^18.3.12
@@ -1583,6 +1583,19 @@ importers:
         specifier: workspace:^
         version: link:../mock
 
+  packages/vue:
+    dependencies:
+      '@midwayjs/web-bridge':
+        specifier: workspace:^
+        version: link:../web-bridge
+    devDependencies:
+      tsup:
+        specifier: 8.5.0
+        version: 8.5.0(postcss@8.5.6)(tsx@4.21.0)(typescript@5.6.3)(yaml@2.8.2)
+      vue:
+        specifier: ^3.5.22
+        version: 3.5.28(typescript@5.6.3)
+
   packages/web:
     dependencies:
       '@eggjs/router':
@@ -1664,6 +1677,16 @@ importers:
       supertest:
         specifier: 6.3.3
         version: 6.3.3
+
+  packages/web-bridge:
+    dependencies:
+      '@midwayjs/api-bridge':
+        specifier: workspace:^
+        version: link:../api-bridge
+    devDependencies:
+      tsup:
+        specifier: 8.5.0
+        version: 8.5.0(postcss@8.5.6)(tsx@4.21.0)(typescript@5.6.3)(yaml@2.8.2)
 
   packages/web-express:
     dependencies:
@@ -1772,9 +1795,9 @@ importers:
       '@midwayjs/koa':
         specifier: workspace:*
         version: link:../../packages/web-koa
-      '@midwayjs/react':
+      '@midwayjs/web-bridge':
         specifier: workspace:*
-        version: link:../../packages/react
+        version: link:../../packages/web-bridge
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1803,9 +1826,6 @@ importers:
 
   samples/react-functional-api-axios:
     dependencies:
-      '@midwayjs/api-bridge':
-        specifier: workspace:*
-        version: link:../../packages/api-bridge
       '@midwayjs/bootstrap':
         specifier: workspace:*
         version: link:../../packages/bootstrap
@@ -1815,9 +1835,9 @@ importers:
       '@midwayjs/koa':
         specifier: workspace:*
         version: link:../../packages/web-koa
-      '@midwayjs/react':
+      '@midwayjs/web-bridge':
         specifier: workspace:*
-        version: link:../../packages/react
+        version: link:../../packages/web-bridge
       axios:
         specifier: ^1.13.2
         version: 1.13.5
@@ -1858,9 +1878,9 @@ importers:
       '@midwayjs/koa':
         specifier: workspace:*
         version: link:../../packages/web-koa
-      '@midwayjs/react':
+      '@midwayjs/web-bridge':
         specifier: workspace:*
-        version: link:../../packages/react
+        version: link:../../packages/web-bridge
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1892,9 +1912,6 @@ importers:
 
   samples/vue-functional-api:
     dependencies:
-      '@midwayjs/api-bridge':
-        specifier: workspace:*
-        version: link:../../packages/api-bridge
       '@midwayjs/bootstrap':
         specifier: workspace:*
         version: link:../../packages/bootstrap
@@ -1904,6 +1921,12 @@ importers:
       '@midwayjs/koa':
         specifier: workspace:*
         version: link:../../packages/web-koa
+      '@midwayjs/vue':
+        specifier: workspace:*
+        version: link:../../packages/vue
+      '@midwayjs/web-bridge':
+        specifier: workspace:*
+        version: link:../../packages/web-bridge
       vue:
         specifier: ^3.5.22
         version: 3.5.28(typescript@5.6.3)
@@ -1911,9 +1934,6 @@ importers:
       '@midwayjs/mock':
         specifier: workspace:*
         version: link:../../packages/mock
-      '@midwayjs/react':
-        specifier: workspace:*
-        version: link:../../packages/react
       '@vitejs/plugin-vue':
         specifier: ^5.2.4
         version: 5.2.4(vite@5.4.21(@types/node@22.12.0)(terser@5.44.1))(vue@3.5.28(typescript@5.6.3))

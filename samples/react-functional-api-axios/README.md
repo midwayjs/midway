@@ -71,7 +71,7 @@ pnpm -C samples/react-functional-api-axios build:web
 - Client transport uses axios via `createAxiosAdapter(axios)`.
 - Backend is a real Midway Koa app (`imports: [koa]` in `src/server/configuration.ts`).
 - Adapter setup is in `src/web/api/client.ts`.
-- This sample imports `apiPlugin` from `@midwayjs/react/vite`.
+- This sample imports `apiPlugin` from `@midwayjs/web-bridge/vite`.
 - This sample imports `devPlugin` from `@midwayjs/mock/vite`.
 - `apiPlugin({ target: 'both' })` is enabled so CSR and SSR builds can share the same API import style.
 - API file changes trigger Midway runtime reload (`close -> recreate`) during dev.

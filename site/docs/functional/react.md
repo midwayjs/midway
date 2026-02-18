@@ -5,14 +5,14 @@ React 集成目标：直接复用 `src/server/api` 定义，前端写 `api.user.
 ## 安装
 
 ```bash
-npm i @midwayjs/react @midwayjs/api-bridge @midwayjs/mock
+npm i @midwayjs/react @midwayjs/web-bridge @midwayjs/mock
 ```
 
 ```json
 {
   "dependencies": {
     "@midwayjs/react": "^4.0.0-beta.11",
-    "@midwayjs/api-bridge": "^4.0.0-beta.11",
+    "@midwayjs/web-bridge": "^4.0.0-beta.11",
     "@midwayjs/mock": "^4.0.0-beta.11"
   }
 }
@@ -22,7 +22,7 @@ npm i @midwayjs/react @midwayjs/api-bridge @midwayjs/mock
 
 ```ts
 // src/web/api/client.ts
-import { createClient } from '@midwayjs/react';
+import { createClient } from '@midwayjs/web-bridge';
 import { userApi } from '../../server/api';
 
 export const api = createClient(
@@ -60,7 +60,7 @@ export function UserPage() {
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { devPlugin } from '@midwayjs/mock/vite';
-import { apiPlugin } from '@midwayjs/react/vite';
+import { apiPlugin } from '@midwayjs/web-bridge/vite';
 
 export default defineConfig({
   plugins: [
@@ -83,7 +83,7 @@ export default defineConfig({
 
 ```ts
 import { defineConfig } from '@rspack/cli';
-import { createApiRspackRule } from '@midwayjs/react/rspack';
+import { createApiRspackRule } from '@midwayjs/web-bridge/rspack';
 
 export default defineConfig({
   module: {
@@ -120,7 +120,7 @@ Rspack 场景推荐与后端分进程开发：
 ## 自定义 Transport（tRPC 风格）
 
 ```ts
-import { createClient } from '@midwayjs/react';
+import { createClient } from '@midwayjs/web-bridge';
 import { userApi } from '../../server/api/user.api';
 import { trpc } from './trpc-client';
 

@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-- `@midwayjs/vue`：未发布（尚未实现）
+- `@midwayjs/vue`：已提供 Vue 专属集成（provider/composable）
 - `@midwayjs/nuxt`：未发布（尚未实现）
-- 当前可用桥接能力为 `@midwayjs/api-bridge`，以及已落地的 `@midwayjs/react` / `@midwayjs/nextjs`
+- 通用桥接能力由 `@midwayjs/web-bridge` 提供，框架层由 `@midwayjs/react` / `@midwayjs/vue` / `@midwayjs/nextjs` 承接
 
 ## Vue（Vite）集成
 
@@ -20,7 +20,7 @@ Vue 目标与 React 一致：
 
 ```ts
 // src/web/api/client.ts
-import { createClient } from '@midwayjs/api-bridge';
+import { createClient } from '@midwayjs/vue';
 import { userApi } from '../../server/api';
 
 export const api = createClient(
@@ -94,7 +94,7 @@ Nuxt 侧原则：
 
 ```ts
 // composables/useApiClient.ts
-import { createClient } from '@midwayjs/api-bridge';
+import { createClient } from '@midwayjs/web-bridge';
 import { userApi } from '~/server/api';
 
 export const useApiClient = () =>
@@ -116,7 +116,7 @@ export default function midwayApiModule() {
   this.addTemplate({
     filename: 'midway-api.client.mjs',
     getContents: () => `
-      import { createClient } from '@midwayjs/api-bridge';
+      import { createClient } from '@midwayjs/web-bridge';
       import { userApi } from '~/server/api/user.api';
       export const api = createClient({ user: userApi }, { basePath: '/api' });
     `,

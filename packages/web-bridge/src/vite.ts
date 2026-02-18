@@ -352,7 +352,7 @@ function toVirtualApiId(filePath: string) {
 export function apiPlugin(options: ApiPluginOptions) {
   if (!options?.apiDir || typeof options.apiDir !== 'string') {
     throw new Error(
-      '[midway:react] apiPlugin requires "apiDir" option, e.g. apiPlugin({ root: process.cwd(), apiDir: "src/server/api" })'
+      '[midway:web-bridge] apiPlugin requires "apiDir" option, e.g. apiPlugin({ root: process.cwd(), apiDir: "src/server/api" })'
     );
   }
   const rootDir = options.root || process.cwd();
