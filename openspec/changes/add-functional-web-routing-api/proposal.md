@@ -1,7 +1,7 @@
 # Change: 提供 Midway Web 装饰器的 Functional API（前端一体化 + 纯函数式服务）
 
 ## Why
-Midway 目前在 Web 场景的主流入口仍然以 `@Controller`、`@Get`、`@Post` 等类/方法装饰器为核心。该模式在 Node.js 服务端体验成熟，但在 React、Vue、Next.js、NestJS 以及更多前端工程化场景中，用户更常使用函数式声明、文件路由、组合式 API 与跨运行时共享模块。
+Midway 目前在 Web 场景的主流入口仍然以 `@Controller`、`@Get`、`@Post` 等类/方法装饰器为核心。该模式在 Node.js 服务端体验成熟，但在 React、Vue、Next.js 以及更多前端工程化场景中，用户更常使用函数式声明、文件路由、组合式 API 与跨运行时共享模块。
 
 虽然仓库已提供 `defineConfiguration`，但控制器与路由声明仍缺少与之对齐的 Functional 形态。这会导致：
 
@@ -16,7 +16,7 @@ Midway 目前在 Web 场景的主流入口仍然以 `@Controller`、`@Get`、`@P
 ## What Changes
 - 新增 capability：`functional-web-routing`。
 - 定义与 `@Controller`、`@Get`、`@Post` 等等价的 Functional 声明模型，首选 `defineApi('/prefix', api => ({ ... }))` 的链式 DSL，并将 API 放在 `@midwayjs/core/functional`。
-- 定义前端生态可消费的标准化路由描述对象（Route Definition），便于 React Router、Vue Router、Next Route Handler、Nest Adapter 等接入。
+- 定义前端生态可消费的标准化路由描述对象（Route Definition），便于 React Router、Vue Router、Next Route Handler 等接入。
 - 明确与现有 Decorator 元数据的一致性要求（prefix、method、middleware、version、ignoreGlobalPrefix 等）。
 - 明确 `defineApi` 复用现有 class 装饰器元数据定义与收集协议，不新增平行元数据体系。
 - 给出用户侧示例与迁移路径（装饰器与 functional 可并存，不破坏既有应用）。

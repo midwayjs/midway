@@ -142,6 +142,28 @@ export const api = createClient(
 - RPC 网关
 - 内网自定义协议桥接
 
+## React Router（基于 manifest）
+
+```ts
+import type { RouteObject } from 'react-router-dom';
+import type { RouteManifestItem } from '@midwayjs/core';
+import { api } from '@/web/api/client';
+
+export function toReactRoutes(manifest: RouteManifestItem[]): RouteObject[] {
+  return manifest
+    .filter(item => item.method.toLowerCase() === 'get')
+    .map(item => ({
+      path: item.fullPath,
+      loader: async ({ params }) => {
+        if (item.operationId === 'user.getUser') {
+          return api.user.getUser({ params });
+        }
+        return null;
+      },
+    }));
+}
+```
+
 ## 说明
 
 - `devPlugin`: 开发期内嵌 Midway runtime

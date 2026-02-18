@@ -49,10 +49,9 @@
 
 ## 4. 用户文档与示例（设计阶段）
 - [x] 4.1 编写“装饰器写法 vs functional 写法”一一对照示例
-- [ ] 4.2 编写 React Router 适配示例（基于 route manifest）
+- [x] 4.2 编写 React Router 适配示例（基于 route manifest）
 - [ ] 4.3 编写 Vue Router 适配示例（基于 route manifest）
-- [ ] 4.4 编写 Next Route Handler 适配示例（基于 route manifest）
-- [ ] 4.5 编写 Nest 适配示例（基于 route manifest）
+- [x] 4.4 编写 Next Route Handler 适配示例（基于 route manifest）
 - [x] 4.6 编写迁移指南（按 controller 粒度渐进迁移 + 混用避坑）
 - [x] 4.7 为每个新增 API 能力补充“最小可运行用户范例”（example-first gate）
 - [x] 4.8 在文档中明确“functional 与 class 为并行偏好，不是替代关系”

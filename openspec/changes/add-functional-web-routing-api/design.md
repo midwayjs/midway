@@ -5,7 +5,7 @@ Midway 已有 `defineConfiguration`，证明 functional 配置模式可行；但
 现有约束：
 - 不能破坏 `@Controller/@Get/@Post` 既有行为。
 - 路由最终仍需被 `MidwayWebRouterService` 统一消费。
-- 用户希望可在 React/Vue/Next/Nest 生态中使用同一套声明。
+- 用户希望可在 React/Vue/Next 生态中使用同一套声明。
 
 ## Architecture Overview
 核心分为 4 层：
@@ -400,11 +400,6 @@ interface RouteManifestItem {
   - 输入：`RouteManifestItem[]`
   - 输出：按目录聚合的 handler 映射
   - 约束：adapter 可选择按 `fullPath` 生成虚拟文件树或 runtime registry
-
-- Nest Adapter:
-  - 输入：`RouteManifestItem[]`
-  - 输出：Nest 可注册的 controller/handler 描述
-  - 约束：不要求复用 Midway 注入容器，仅要求路由语义可映射
 
 ## Local Dev Workflow (Example)
 1. 执行单一 `dev` 命令（例如 `pnpm dev`）。

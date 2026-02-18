@@ -124,3 +124,51 @@ const user = await trpcApi.user.getUser({
   params: { id: 'u-1' },
 });
 ```
+
+## 6. React Router 适配（基于 route manifest）
+
+```ts
+import type { RouteObject } from 'react-router-dom';
+import type { RouteManifestItem } from '@midwayjs/core';
+
+export function toReactRouter(manifest: RouteManifestItem[]): RouteObject[] {
+  return manifest
+    .filter(item => item.method.toLowerCase() === 'get')
+    .map(item => ({
+      path: item.fullPath,
+      loader: async ({ params }) => {
+        // 根据 operationId/路径映射到客户端调用
+        // 示例：user.getUser
+        if (item.operationId === 'user.getUser') {
+          const { api } = await import('@/web/api/client');
+          return api.user.getUser({ params });
+        }
+        return null;
+      },
+    }));
+}
+```
+
+## 7. Next Route Handler 适配（基于 route manifest）
+
+```ts
+import { NextResponse } from 'next/server';
+import type { RouteManifestItem } from '@midwayjs/core';
+import { api } from '@/app/lib/api-client';
+
+const manifest: RouteManifestItem[] = []; // 由构建期或运行期注入
+
+export async function GET(
+  _req: Request,
+  context: { params: { id: string } }
+) {
+  const operation = manifest.find(item => item.operationId === 'user.getUser');
+  if (!operation) {
+    return NextResponse.json({ message: 'operation not found' }, { status: 404 });
+  }
+  const data = await api.user.getUser({
+    params: { id: context.params.id },
+  });
+  return NextResponse.json(data);
+}
+```

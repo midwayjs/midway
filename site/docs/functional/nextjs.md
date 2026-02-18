@@ -69,6 +69,31 @@ export async function GET(
 }
 ```
 
+## Route Handler（基于 manifest）
+
+```ts
+// src/app/api/users/[id]/route.ts
+import { NextResponse } from 'next/server';
+import type { RouteManifestItem } from '@midwayjs/core';
+import { api } from '@/app/lib/api-client';
+
+const manifest: RouteManifestItem[] = []; // 由构建期或运行期注入
+
+export async function GET(
+  _req: Request,
+  context: { params: { id: string } }
+) {
+  const operation = manifest.find(item => item.operationId === 'user.getUser');
+  if (!operation) {
+    return NextResponse.json({ message: 'operation not found' }, { status: 404 });
+  }
+  const user = await api.user.getUser({
+    params: { id: context.params.id },
+  });
+  return NextResponse.json(user);
+}
+```
+
 ## 关键点
 
 - 不接管 Next `app/api` 或 `pages/api` 路由匹配
