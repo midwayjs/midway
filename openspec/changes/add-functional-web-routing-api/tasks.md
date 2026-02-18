@@ -1,7 +1,7 @@
 # 实施任务清单
 
 ## 1. API 设计冻结
-- [ ] 1.1 冻结按协议分别导出的入口签名与命名（HTTP: `defineApi`，WS: `defineWebSocketApi`，等）
+- [x] 1.1 冻结按协议分别导出的入口签名与命名（HTTP: `defineApi`，WS: `defineWebSocketApi`，等）
 - [x] 1.2 冻结 `api.get/post/...` RouteBuilder 链式方法（`input/output/middleware/meta/handle`）
 - [x] 1.3 冻结默认值（prefix/path/middleware/ignoreGlobalPrefix）与参数校验规则
 - [x] 1.4 冻结与 `@Controller/@Get/@Post` 的语义映射表（字段级）
@@ -22,8 +22,8 @@
 - [x] 2.7 冻结 operationId 命名与唯一性规则
 - [x] 2.8 定义 transport adapter SPI（默认 http + 可插拔自定义）
 - [x] 2.9 定义同协议多客户端适配规范（HTTP fetch/axios 等）
-- [ ] 2.10 定义多协议扩展规范（grpc/ws/socket.io）及分协议导出契约
-- [ ] 2.11 定义 task/message 协议扩展规范（Serverless 延后）
+- [x] 2.10 定义多协议扩展规范（grpc/ws/socket.io）及分协议导出契约
+- [x] 2.11 定义 task/message 协议扩展规范（Serverless 延后）
 
 ## 3. 与核心路由系统对齐
 - [x] 3.1 设计 Functional 声明转统一路由表的映射规则
@@ -65,7 +65,7 @@
 - [ ] 4.23 编写 Task/Queue define API 与调用示例
 - [ ] 4.24 编写 Kafka/RabbitMQ define API 与消费示例
 - [x] 4.25 编写“纯函数式 Midway 服务”最小示例（不接入前端框架）
-- [ ] 4.26 编写“装饰器 + 纯函数式模块”同项目共存示例
+- [x] 4.26 编写“装饰器 + 纯函数式模块”同项目共存示例
 
 ## 5. 验证与验收
 - [x] 5.1 增加规范级测试计划（API 行为、默认值、冲突检测、版本路由、manifest 稳定性、compile pipeline、web-safe）
