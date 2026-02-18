@@ -21,8 +21,10 @@ export function App() {
 
 function UserPage() {
   const [user, setUser] = useState<User | null>(null);
+  const [manifestMessage, setManifestMessage] = useState<string>('Not loaded');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [manifestError, setManifestError] = useState<string | null>(null);
 
   const loadUser = () => {
     setLoading(true);
@@ -44,6 +46,32 @@ function UserPage() {
     loadUser();
   }, []);
 
+  const loadFromManifest = async () => {
+    setManifestError(null);
+    if (!import.meta.env.DEV) {
+      setManifestMessage('Only enabled in dev');
+      return;
+    }
+    try {
+      const data = (await api.call<{
+        name?: string;
+        id?: string;
+      }>('getUser', {
+        params: {
+          id: 'u-1',
+        },
+      })) as {
+        name?: string;
+        id?: string;
+      };
+      setManifestMessage(
+        data?.name && data?.id ? `${data.name} (${data.id})` : 'No data'
+      );
+    } catch (err: any) {
+      setManifestError(err?.message || String(err));
+    }
+  };
+
   return (
     <section style={{ marginTop: 16 }}>
       <div style={{ marginBottom: 12 }}>
@@ -60,6 +88,17 @@ function UserPage() {
           <strong>Request Error:</strong> {error}
         </div>
       )}
+      <div style={{ marginTop: 16 }}>
+        <button onClick={loadFromManifest}>Load Route Via Manifest</button>
+        <div style={{ marginTop: 8 }}>
+          <strong>Manifest Route:</strong> {manifestMessage}
+        </div>
+        {manifestError && (
+          <div style={{ marginTop: 8, color: 'crimson' }}>
+            <strong>Manifest Call Error:</strong> {manifestError}
+          </div>
+        )}
+      </div>
       <p style={{ marginTop: 12, color: '#666' }}>
         If backend routes are not running yet, you should still see this page
         with an error message instead of a blank screen.

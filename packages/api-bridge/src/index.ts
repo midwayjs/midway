@@ -55,6 +55,16 @@ export type ApiBridgeBasePath =
 
 export interface CreateClientOptions extends ApiBridgeOptions {
   basePath?: ApiBridgeBasePath;
+  manifest?:
+    | ApiRouteManifestLike[]
+    | Promise<ApiRouteManifestLike[]>
+    | (() => ApiRouteManifestLike[] | Promise<ApiRouteManifestLike[]>)
+    | string
+    | false;
+}
+
+export interface CreateManifestClientOptions extends CreateClientOptions {
+  manifest: Exclude<NonNullable<CreateClientOptions['manifest']>, false>;
 }
 
 export interface ApiClientDefinition {
@@ -108,6 +118,14 @@ export type ClientFromApiModules<TModules extends ApiModulesMap> = {
     ) => Promise<unknown>;
   };
 };
+
+export interface ApiCallClient {
+  call<TOutput = unknown>(operationId: string, input: unknown): Promise<TOutput>;
+  has(operationId: string): Promise<boolean> | boolean;
+  operationIds(): Promise<string[]> | string[];
+}
+
+const DEFAULT_MANIFEST_VIRTUAL_ID = 'virtual:midway-route-manifest';
 
 export interface ApiClient<TInput = unknown, TOutput = unknown> {
   transport: ApiBridgeTransportName;
@@ -420,6 +438,30 @@ function resolveRuntimeBasePath(basePath?: ApiBridgeBasePath): string {
   return basePath.server || basePath.default || basePath.browser || '';
 }
 
+function isManifestClientOptions(
+  input: unknown
+): input is CreateManifestClientOptions {
+  return !!(
+    input &&
+    typeof input === 'object' &&
+    Object.prototype.hasOwnProperty.call(input, 'manifest')
+  );
+}
+
+async function resolveManifestSource(
+  source: CreateManifestClientOptions['manifest']
+): Promise<ApiRouteManifestLike[]> {
+  if (typeof source === 'string') {
+    const mod = await import(/* @vite-ignore */ source);
+    return (mod?.default || []) as ApiRouteManifestLike[];
+  }
+  if (typeof source === 'function') {
+    const result = source();
+    return Promise.resolve(result || []);
+  }
+  return Promise.resolve(source || []);
+}
+
 function isApiRouteLike(route: unknown): route is ApiRouteLike {
   return !!(
     route &&
@@ -445,13 +487,115 @@ function resolveVersionedPrefix(moduleMeta?: ApiModuleMetaLike): string {
   return joinUrlPath(`/${versionPrefix}${normalizedVersion}`, prefix);
 }
 
+export function createClient(
+  options: CreateManifestClientOptions
+): ApiCallClient;
 export function createClient<TModules extends ApiModulesMap>(
   modules: TModules,
+  options?: CreateClientOptions
+): ClientFromApiModules<TModules> & ApiCallClient;
+export function createClient<TModules extends ApiModulesMap>(
+  modulesOrOptions: TModules | CreateManifestClientOptions,
   options: CreateClientOptions = {}
-): ClientFromApiModules<TModules> {
+): (ClientFromApiModules<TModules> & ApiCallClient) | ApiCallClient {
+  if (isManifestClientOptions(modulesOrOptions)) {
+    const clientOptions = modulesOrOptions;
+    let apiClientPromise: Promise<ApiClient<unknown, unknown>> | null = null;
+    const ensureManifestClient = async () => {
+      if (!apiClientPromise) {
+        apiClientPromise = (async () => {
+          const manifest = await resolveManifestSource(clientOptions.manifest);
+          const operations = createOperationsFromManifest(manifest);
+          const definition = createApiClientDefinition(operations);
+          return createApiClient(definition, clientOptions);
+        })();
+      }
+      return apiClientPromise;
+    };
+    return {
+      async call<TOutput = unknown>(operationId: string, input: unknown) {
+        const client = await ensureManifestClient();
+        return client.call(operationId, input) as Promise<TOutput>;
+      },
+      async has(operationId: string) {
+        const client = await ensureManifestClient();
+        return client.has(operationId);
+      },
+      async operationIds() {
+        const client = await ensureManifestClient();
+        return client.operationIds();
+      },
+    };
+  }
+
+  const modules = modulesOrOptions as TModules;
   const bridge = createApiBridge(options);
   const runtimeBasePath = resolveRuntimeBasePath(options.basePath);
+  const hasManifestField = Object.prototype.hasOwnProperty.call(
+    options,
+    'manifest'
+  );
+  const manifestSource =
+    options.manifest === undefined
+      ? DEFAULT_MANIFEST_VIRTUAL_ID
+      : options.manifest;
+  const useManifestRuntime = manifestSource !== false;
+  const strictManifestRuntime = hasManifestField && manifestSource !== false;
+  let manifestClientPromise: Promise<ApiClient<unknown, unknown>> | null = null;
+  let manifestUnavailable = false;
+  const resolvedManifestOperationIdCache = new Map<string, string>();
+
+  const ensureManifestBackedClient = async () => {
+    if (!useManifestRuntime) {
+      throw new Error('Manifest source is required for manifest runtime mode');
+    }
+    if (manifestUnavailable) {
+      return null;
+    }
+    if (!manifestClientPromise) {
+      manifestClientPromise = (async () => {
+        try {
+          const manifest = await resolveManifestSource(manifestSource);
+          const operations = createOperationsFromManifest(manifest);
+          const definition = createApiClientDefinition(operations);
+          return createApiClient(definition, options);
+        } catch (error) {
+          if (strictManifestRuntime) {
+            throw error;
+          }
+          manifestUnavailable = true;
+          return null;
+        }
+      })();
+    }
+    return manifestClientPromise;
+  };
+
+  const resolveManifestOperationId = async (
+    cacheKey: string,
+    candidates: string[]
+  ) => {
+    const cached = resolvedManifestOperationIdCache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+    const client = await ensureManifestBackedClient();
+    if (!client) {
+      return null;
+    }
+    for (const candidate of candidates) {
+      if (client.has(candidate)) {
+        resolvedManifestOperationIdCache.set(cacheKey, candidate);
+        return candidate;
+      }
+    }
+    throw new Error(
+      `Cannot resolve operationId for "${cacheKey}" from manifest. candidates=${candidates.join(', ')}`
+    );
+  };
+
   const client: Record<string, Record<string, (input: unknown) => Promise<unknown>>> = {};
+  const operations: ApiBridgeOperation[] = [];
 
   for (const namespaceKey of Object.keys(modules || {})) {
     const module = modules[namespaceKey];
@@ -475,7 +619,48 @@ export function createClient<TModules extends ApiModulesMap>(
         ? joinUrlPath(prefix, routePath)
         : joinUrlPath(runtimeBasePath, prefix, routePath);
       const operationId = `${namespaceKey}.${route.options?.routerName || routeKey}`;
+      operations.push({
+        operationId,
+        method: route.method,
+        path: routePath,
+        fullPath,
+      });
       namespaceClient[routeKey] = (input: unknown) => {
+        if (useManifestRuntime) {
+          const routerName = route.options?.routerName;
+          const cacheKey = `${namespaceKey}.${routeKey}`;
+          return resolveManifestOperationId(cacheKey, [
+            operationId,
+            routerName || routeKey,
+            routeKey,
+          ]).then(resolvedOperationId => {
+            if (!resolvedOperationId) {
+              return bridge.invoke(
+                {
+                  operationId,
+                  method: route.method,
+                  path: routePath,
+                  fullPath,
+                },
+                input
+              );
+            }
+            return ensureManifestBackedClient().then(manifestClient => {
+              if (!manifestClient) {
+                return bridge.invoke(
+                  {
+                    operationId,
+                    method: route.method,
+                    path: routePath,
+                    fullPath,
+                  },
+                  input
+                );
+              }
+              return manifestClient.call(resolvedOperationId, input);
+            });
+          });
+        }
         return bridge.invoke(
           {
             operationId,
@@ -490,5 +675,33 @@ export function createClient<TModules extends ApiModulesMap>(
     client[namespaceKey] = namespaceClient;
   }
 
-  return client as ClientFromApiModules<TModules>;
+  const apiClient = createApiClient(createApiClientDefinition(operations), options);
+  if (useManifestRuntime) {
+    return Object.assign(client, {
+      async call<TOutput = unknown>(operationId: string, input: unknown) {
+        const manifestClient = await ensureManifestBackedClient();
+        if (!manifestClient) {
+          return apiClient.call(operationId, input) as Promise<TOutput>;
+        }
+        return manifestClient.call(operationId, input) as Promise<TOutput>;
+      },
+      has(operationId: string) {
+        return apiClient.has(operationId);
+      },
+      operationIds() {
+        return apiClient.operationIds();
+      },
+    }) as ClientFromApiModules<TModules> & ApiCallClient;
+  }
+  return Object.assign(client, {
+    call<TOutput = unknown>(operationId: string, input: unknown) {
+      return apiClient.call(operationId, input) as Promise<TOutput>;
+    },
+    has(operationId: string) {
+      return apiClient.has(operationId);
+    },
+    operationIds() {
+      return apiClient.operationIds();
+    },
+  }) as ClientFromApiModules<TModules> & ApiCallClient;
 }

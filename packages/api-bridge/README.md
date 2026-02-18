@@ -61,6 +61,9 @@ const api = createClient(
 await api.user.getUser({ params: { id: '1' } });
 ```
 
+`createClient(modules, options)` keeps namespace typing (`api.user.getUser`) and also exposes `api.call(operationId, input)`.
+By default, it will try to use `virtual:midway-route-manifest` as runtime source in dev (when provided by bundler plugin), and automatically fallback to module-derived routing when unavailable.
+
 ## Single Source Entry
 
 ```ts
@@ -138,4 +141,21 @@ const api = createClient(
 );
 
 const user = await api.user.getUser({ params: { id: '1' } });
+```
+
+## Manifest Client (dev-friendly)
+
+When route manifest is available (for example by a dev virtual module), you can create a call-style client directly:
+
+```ts
+import { createClient } from '@midwayjs/api-bridge';
+
+const api = createClient({
+  manifest: 'virtual:midway-route-manifest',
+  basePath: '/api',
+});
+
+await api.call('getUser', {
+  params: { id: '1' },
+});
 ```

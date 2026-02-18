@@ -292,6 +292,86 @@ describe('api bridge', () => {
         body: { name: 'new-user' },
       },
     });
+
+    const byCall = await api.call('user.getUser', {
+      params: { id: 'u-1' },
+    });
+    expect(byCall).toEqual({ id: 'u-1' });
+    expect(api.has('user.getUser')).toBe(true);
+    expect(api.operationIds()).toEqual(
+      expect.arrayContaining(['user.getUser', 'user.createUser'])
+    );
+  });
+
+  it('should create manifest-based call client', async () => {
+    const adapter = jest.fn().mockResolvedValue({ id: 'u-2' });
+    const api = createClient({
+      manifest: [
+        {
+          operationId: 'getUser',
+          method: 'get',
+          path: '/:id',
+          fullPath: '/api/users/:id',
+        },
+      ],
+      adapter,
+    });
+
+    const user = await api.call('getUser', {
+      params: { id: 'u-2' },
+    });
+    expect(user).toEqual({ id: 'u-2' });
+    await expect(api.has('getUser')).resolves.toBe(true);
+    await expect(api.operationIds()).resolves.toEqual(['getUser']);
+  });
+
+  it('should route module method calls via manifest when manifest is provided', async () => {
+    const adapter = jest.fn().mockResolvedValue({ id: 'u-3' });
+    const userApi = {
+      __midwayApiMeta: {
+        prefix: '/users',
+      },
+      getUser: {
+        method: 'get',
+        path: '/:id',
+        options: {
+          routerName: 'getUser',
+        },
+      },
+    };
+
+    const api = createClient(
+      {
+        user: userApi,
+      },
+      {
+        manifest: [
+          {
+            operationId: 'getUser',
+            method: 'get',
+            path: '/:id',
+            fullPath: '/api/users/:id',
+          },
+        ],
+        adapter,
+      }
+    );
+
+    await api.user.getUser({
+      params: { id: 'u-3' },
+    });
+
+    expect(adapter).toHaveBeenCalledWith({
+      operation: {
+        operationId: 'getUser',
+        method: 'get',
+        path: '/:id',
+        fullPath: '/api/users/:id',
+      },
+      input: {
+        params: { id: 'u-3' },
+      },
+    });
   });
 
   it('should respect ignoreGlobalPrefix and URI version prefix when creating fullPath', async () => {
