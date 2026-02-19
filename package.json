@@ -14,7 +14,7 @@
     "lerna": "8.1.2",
     "lerna-changelog": "2.2.0",
     "madge": "6.1.0",
-    "mwts": "2.0.0",
+    "mwts": "2.0.3",
     "tree-kill": "1.2.2",
     "ts-jest": "29.2.5",
     "ts-node": "10.9.2",
