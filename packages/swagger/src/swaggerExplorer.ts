@@ -113,8 +113,8 @@ export class SwaggerExplorer {
       for (const a of authConfig) {
         this.setAuth(a);
       }
-    } else {
-      this.setAuth(this.swaggerConfig?.auth);
+    } else if (authConfig) {
+      this.setAuth(authConfig);
     }
   }
 
