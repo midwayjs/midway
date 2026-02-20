@@ -1,5 +1,5 @@
 import { ApiBridgeTransportAdapter } from '@midwayjs/web-bridge';
-import { createClient } from '@midwayjs/react';
+import { createClient } from '../../../../../../src';
 import {
   accountApi,
   orderApi,

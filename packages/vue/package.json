@@ -12,13 +12,11 @@
       "import": "./dist/index.mjs"
     }
   },
-  "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
     "dist/**/*.mjs",
     "dist/**/*.d.ts",
-    "dist/**/*.d.mts",
-    "index.d.ts"
+    "dist/**/*.d.mts"
   ],
   "keywords": [
     "midway",

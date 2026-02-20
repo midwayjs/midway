@@ -4,13 +4,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "esModuleInterop": true,
-    "baseUrl": ".",
-    "paths": {
-      "@midwayjs/vue": [
-        "./src"
-      ]
-    }
+    "esModuleInterop": true
   },
   "include": [
     "./src/**/*.ts"
