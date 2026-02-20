@@ -4,8 +4,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "esModuleInterop": true,
-    "composite": false
+    "esModuleInterop": true
   },
   "include": [
     "./src/**/*.ts"
