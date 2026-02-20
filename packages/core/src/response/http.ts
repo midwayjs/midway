@@ -12,7 +12,7 @@ import { HttpStreamResponse } from './stream';
 import { basename } from 'path';
 
 export class HttpServerResponse<
-  CTX extends IMidwayContext
+  CTX extends IMidwayContext,
 > extends ServerResponse<CTX> {
   constructor(ctx: CTX) {
     super(ctx);

@@ -28,7 +28,10 @@ import { AddressInfo, createServer } from 'net';
 const debug = debuglog('midway:debug');
 
 class EggControllerGenerator extends WebControllerGenerator<EggRouter> {
-  constructor(readonly app, readonly webRouterService: MidwayWebRouterService) {
+  constructor(
+    readonly app,
+    readonly webRouterService: MidwayWebRouterService
+  ) {
     super(app, webRouterService);
   }
 
@@ -312,7 +315,6 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   public setContextLoggerClass() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const contextFormat = this.configService.getConfiguration(
       'midwayLogger.clients.appLogger.contextFormat'
     );
@@ -327,9 +329,8 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   public async generateMiddleware(middlewareId: any) {
-    const mwIns: any = await this.getApplicationContext().getAsync(
-      middlewareId
-    );
+    const mwIns: any =
+      await this.getApplicationContext().getAsync(middlewareId);
     return mwIns.resolve();
   }
 

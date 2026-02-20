@@ -340,7 +340,6 @@ export class MidwayWebRouterService {
 
     controllerOption.routerOptions = controllerOption.routerOptions || {};
 
-    let priority;
     // implement middleware in controller
     const middleware = controllerOption.routerOptions.middleware;
     const controllerIgnoreGlobalPrefix =
@@ -388,7 +387,7 @@ export class MidwayWebRouterService {
       this.routes.set(prefixWithGlobal, []);
       this.routesPriority.push({
         prefix: prefixWithGlobal,
-        priority: prefixWithGlobal === '/' && priority === undefined ? -999 : 0,
+        priority: prefixWithGlobal === '/' ? -999 : 0,
         middleware,
         routerOptions: controllerOption.routerOptions,
         controllerId,
@@ -422,7 +421,7 @@ export class MidwayWebRouterService {
         this.routes.set(ignorePrefix, []);
         this.routesPriority.push({
           prefix: ignorePrefix,
-          priority: ignorePrefix === '/' && priority === undefined ? -999 : 0,
+          priority: ignorePrefix === '/' ? -999 : 0,
           middleware,
           routerOptions: controllerOption.routerOptions,
           controllerId,
@@ -457,8 +456,8 @@ export class MidwayWebRouterService {
               ? ignorePrefix
               : prefixWithGlobal
             : controllerIgnoreGlobalPrefix
-            ? ignorePrefix
-            : prefixWithGlobal,
+              ? ignorePrefix
+              : prefixWithGlobal,
           routerName: webRouter.routerName || '',
           url: webRouter.path,
           requestMethod: webRouter.requestMethod,

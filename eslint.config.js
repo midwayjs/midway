@@ -22,23 +22,30 @@ module.exports = [
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
-      globals: {
-        ...globals.jest,
-      },
       parserOptions: {
         project: [path.join(__dirname, 'tsconfig.json')],
         tsconfigRootDir: __dirname,
       },
     },
   },
+
+    // Jest JS: globals only
+  {
+    files: ['**/jest.setup.js', '**/*.test.js', '**/*.spec.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
+
   {
     rules: {
       'no-control-regex': 'off',
-      '@typescript-eslint/no-floating-promises': 'off',
-
       '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/no-wrapper-object-types': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-unsafe-declaration-merging': 'off',
     },
   },
 ];

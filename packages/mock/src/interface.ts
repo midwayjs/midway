@@ -1,6 +1,11 @@
-import { ILifeCycle, IMidwayApplication, IMidwayBootstrapOptions } from '@midwayjs/core';
+import {
+  ILifeCycle,
+  IMidwayApplication,
+  IMidwayBootstrapOptions,
+} from '@midwayjs/core';
 
-export interface MockBootstrapOptions extends IMidwayBootstrapOptions, ILifeCycle {
+export interface MockBootstrapOptions
+  extends IMidwayBootstrapOptions, ILifeCycle {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
   ssl?: boolean;

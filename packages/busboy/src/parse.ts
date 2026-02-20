@@ -98,7 +98,7 @@ export const parseHead = (headBuf: Buffer) => {
         const eqIndex = kv.indexOf('=');
         const k = eqIndex !== -1 ? kv.substring(0, eqIndex) : kv;
         const v = eqIndex !== -1 ? kv.substring(eqIndex + 1) : undefined;
-        headCol[k] = v ? v.replace(/^"/, '').replace(/"$/, '') : v ?? true;
+        headCol[k] = v ? v.replace(/^"/, '').replace(/"$/, '') : (v ?? true);
       });
       head[name] = headCol;
     } else {

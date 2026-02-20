@@ -82,7 +82,7 @@ interface TableStoreRecord {
     {
       ColumnName: string;
       Value: any;
-    }
+    },
   ];
   Columns: [
     {
@@ -90,12 +90,12 @@ interface TableStoreRecord {
       ColumnName: string;
       Value: any;
       Timestamp: number;
-    }
+    },
   ];
 }
 
 // TODO: prevent namespace usage
-// eslint-disable-next-line @typescript-eslint/no-namespace
+
 export namespace FC {
   export interface OSSEvent {
     events: SingleOSSEvent[];

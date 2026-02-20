@@ -213,7 +213,7 @@ export class ComponentConfigurationLoader {
     if (objs) {
       const keys = Object.keys(objs);
       for (const key of keys) {
-        if (typeof objs[key] !== undefined) {
+        if (typeof objs[key] !== 'undefined') {
           this.container.registerObject(key, objs[key]);
         }
       }

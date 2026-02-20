@@ -42,9 +42,8 @@ export abstract class BaseFramework<
   CTX extends IMidwayContext,
   OPT extends IConfigurationOptions,
   ResOrNext = unknown,
-  Next = unknown
-> implements IMidwayFramework<APP, CTX, OPT, ResOrNext, Next>
-{
+  Next = unknown,
+> implements IMidwayFramework<APP, CTX, OPT, ResOrNext, Next> {
   public app: APP;
   public configurationOptions: OPT;
   protected logger: ILogger;
@@ -328,7 +327,7 @@ export abstract class BaseFramework<
           // run simulator context setup
           await this.mockService.runSimulatorContextSetup(ctx, this.app);
           this.mockService.applyContextMocks(this.app, ctx);
-          let returnResult = undefined;
+          let returnResult;
           try {
             const result = await next();
             returnResult = await this.filterManager.runResultFilter(

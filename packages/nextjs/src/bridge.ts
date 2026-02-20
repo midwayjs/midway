@@ -29,7 +29,7 @@ export function createNextjsApiClient<TInput = unknown, TOutput = unknown>(
 
 export function createNextjsApiClientFromOperations<
   TInput = unknown,
-  TOutput = unknown
+  TOutput = unknown,
 >(operations: ApiBridgeOperation[], options: NextjsApiBridgeOptions = {}) {
   return createNextjsApiClient<TInput, TOutput>(
     createApiClientDefinition(operations),

@@ -3,7 +3,7 @@ import { Transform } from 'stream';
 import { IMidwayCommanderContext } from './interface';
 
 export class CliStreamResponse<
-  CTX extends IMidwayCommanderContext = IMidwayCommanderContext
+  CTX extends IMidwayCommanderContext = IMidwayCommanderContext,
 > extends Transform {
   private readonly ctx: CTX;
   private readonly options: ServerStreamOptions<CTX>;
@@ -47,7 +47,7 @@ export class CliStreamResponse<
 }
 
 export class CliServerResponse<
-  CTX extends IMidwayCommanderContext = IMidwayCommanderContext
+  CTX extends IMidwayCommanderContext = IMidwayCommanderContext,
 > extends ServerResponse<CTX> {
   static STREAM_TPL = <CTX extends IMidwayCommanderContext>(
     data: unknown,

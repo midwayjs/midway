@@ -40,7 +40,11 @@ export class ContextSession {
     if (session === false) return null;
 
     // create an empty session or init from cookie
-    this.store ? this.create() : this.initFromCookie();
+    if (this.store) {
+      this.create();
+    } else {
+      this.initFromCookie();
+    }
     return this.session;
   }
 

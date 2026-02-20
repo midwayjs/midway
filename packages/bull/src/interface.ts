@@ -1,4 +1,8 @@
-import { IMidwayApplication, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
+import {
+  IMidwayApplication,
+  IMidwayContext,
+  NextFunction as BaseNextFunction,
+} from '@midwayjs/core';
 import { JobId, Job } from 'bull';
 
 export interface IProcessor {
@@ -16,11 +20,19 @@ export interface IQueue<Job> {
 }
 
 export interface IQueueManager<Queue extends IQueue<Job>, Job> {
-  addJobToQueue(queueName: string, jobData: any, options?: unknown): Promise<Job|undefined>;
+  addJobToQueue(
+    queueName: string,
+    jobData: any,
+    options?: unknown
+  ): Promise<Job | undefined>;
   /**
    * @deprecated use addJobToQueue instead
    */
-  runJob(queueName: string, jobData: any, options?: unknown): Promise<Job|undefined>;
+  runJob(
+    queueName: string,
+    jobData: any,
+    options?: unknown
+  ): Promise<Job | undefined>;
   getJob(queueName: string, jobName: string): Promise<Job>;
   createQueue(queueName: string, queueOptions?: unknown): Queue;
   getQueue(queueName: string): Queue;

@@ -43,7 +43,7 @@ export function createReactApiClient<TInput = unknown, TOutput = unknown>(
 
 export function createReactApiClientFromOperations<
   TInput = unknown,
-  TOutput = unknown
+  TOutput = unknown,
 >(operations: ApiBridgeOperation[], options: ReactApiBridgeOptions = {}) {
   return createReactApiClient<TInput, TOutput>(
     createApiClientDefinition(operations),

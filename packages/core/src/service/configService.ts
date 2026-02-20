@@ -144,7 +144,6 @@ export class MidwayConfigService implements IConfigService {
     for (const [idx, filename] of [...defaultSet, ...currentEnvSet].entries()) {
       let config: Record<string, any> = this.loadConfig(filename);
       if (Types.isFunction(config)) {
-        // eslint-disable-next-line prefer-spread
         config = config.apply(null, [this.appInfo, target]);
       }
 

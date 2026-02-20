@@ -63,7 +63,6 @@ export class COSService implements COS {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface COSService extends COS {
   // empty
 }

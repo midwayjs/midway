@@ -18,7 +18,7 @@ export interface I18nOptions {
   localeTable: Record<string, Record<string, any>>;
   fallbacks: Record<string, any>;
   writeCookie: boolean;
-  resolver:  RequestResolver | false,
+  resolver: RequestResolver | false;
   localsField: string;
   missingKeyHandler?: (message: string, options?: TranslateOptions) => string;
 }

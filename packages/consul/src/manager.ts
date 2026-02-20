@@ -69,7 +69,6 @@ export class ConsulService implements InstanceType<typeof Consul> {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ConsulService extends InstanceType<typeof Consul> {
   // empty
 }

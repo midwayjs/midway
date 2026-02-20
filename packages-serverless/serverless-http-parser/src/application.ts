@@ -86,7 +86,9 @@ export class Application extends EventEmitter {
       return respond(ctx)
         .catch(onerror)
         .finally(() => {
-          ctx.res.end && ctx.res.end();
+          if (ctx.res.end) {
+            ctx.res.end();
+          }
         });
     };
   }

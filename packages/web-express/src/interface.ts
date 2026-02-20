@@ -5,13 +5,13 @@ import {
   IConfigurationOptions,
   IMiddleware,
   IMidwayApplication,
-  IMidwayContext
+  IMidwayContext,
 } from '@midwayjs/core';
 import {
   Application as ExpressApplication,
   NextFunction as ExpressNextFunction,
   Request as ExpressRequest,
-  Response as ExpressResponse
+  Response as ExpressResponse,
 } from 'express';
 import { ListenOptions } from 'net';
 
@@ -37,26 +37,41 @@ export type IMidwayExpressRequest = Context;
  * @deprecated use Context
  */
 export type IMidwayExpressContext = Context;
-export type IMidwayExpressMiddleware = IMiddleware<Context, ExpressResponse, ExpressNextFunction>;
-export interface IMidwayExpressApplication extends IMidwayApplication<Context, ExpressApplication> {
+export type IMidwayExpressMiddleware = IMiddleware<
+  Context,
+  ExpressResponse,
+  ExpressNextFunction
+>;
+export interface IMidwayExpressApplication extends IMidwayApplication<
+  Context,
+  ExpressApplication
+> {
   /**
    * mount router and middleware
    * @param routerPath
    * @param middleware
    */
-  useMiddleware<Response, NextFunction>(routerPath: string, ...middleware: FunctionMiddleware<Context, Response, NextFunction>[]): void;
+  useMiddleware<Response, NextFunction>(
+    routerPath: string,
+    ...middleware: FunctionMiddleware<Context, Response, NextFunction>[]
+  ): void;
   /**
    * add global middleware to app
    * @param middleware
    */
-  useMiddleware<Response, NextFunction>(middleware: CommonMiddlewareUnion<Context, Response, NextFunction>): void;
+  useMiddleware<Response, NextFunction>(
+    middleware: CommonMiddlewareUnion<Context, Response, NextFunction>
+  ): void;
 
   /**
    * get global middleware
    */
-  getMiddleware<Response, NextFunction>(): ContextMiddlewareManager<Context, Response, NextFunction>;
+  getMiddleware<Response, NextFunction>(): ContextMiddlewareManager<
+    Context,
+    Response,
+    NextFunction
+  >;
 }
-
 
 export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {
   /**

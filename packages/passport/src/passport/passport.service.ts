@@ -375,7 +375,7 @@ export function PassportMiddleware(
       }
 
       res.statusCode = rstatus || 401;
-      // eslint-disable-next-line eqeqeq
+
       if (res.statusCode === 401 && rchallenge.length) {
         res.setHeader('WWW-Authenticate', rchallenge);
       }
@@ -398,9 +398,7 @@ export function PassportMiddleware(
       ) => {
         if (typeof options === 'function') {
           done = options;
-          options = {};
         }
-        options = options || {};
 
         const property = this.passport.getUserProperty();
         req[property] = user;

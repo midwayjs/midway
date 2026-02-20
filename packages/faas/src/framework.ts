@@ -47,9 +47,9 @@ export class MidwayFaaSFramework extends BaseFramework<
 > {
   protected defaultHandlerMethod = 'handler';
   protected funMappingStore: Map<string, RouterInfo> = new Map();
-  protected declare logger;
+  declare protected logger;
   private lock = new SimpleLock();
-  public declare app: Application;
+  declare public app: Application;
   private isReplaceLogger =
     process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
   private developmentRun = false;
@@ -443,9 +443,8 @@ export class MidwayFaaSFramework extends BaseFramework<
   public async generateMiddleware(
     middlewareId: string
   ): Promise<FunctionMiddleware<Context, any>> {
-    const mwIns: any = await this.getApplicationContext().getAsync(
-      middlewareId
-    );
+    const mwIns: any =
+      await this.getApplicationContext().getAsync(middlewareId);
     return mwIns.resolve();
   }
 

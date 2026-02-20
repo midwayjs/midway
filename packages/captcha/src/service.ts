@@ -87,7 +87,7 @@ export class CaptchaService {
       ...options,
     };
 
-    let chars = '';
+    let chars;
     switch (type) {
       case 'letter':
         chars = letters;

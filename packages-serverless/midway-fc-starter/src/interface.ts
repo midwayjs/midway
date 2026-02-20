@@ -82,7 +82,7 @@ interface TableStoreRecord {
     {
       ColumnName: string;
       Value: any;
-    }
+    },
   ];
   Columns: [
     {
@@ -90,7 +90,7 @@ interface TableStoreRecord {
       ColumnName: string;
       Value: any;
       Timestamp: number;
-    }
+    },
   ];
 }
 

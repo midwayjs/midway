@@ -77,7 +77,9 @@ export class ProcessAgentConfiguration {
   async onStop() {
     if (isPrimary()) {
       closeLock();
-      this.http_server && this.http_server.close();
+      if (this.http_server) {
+        this.http_server.close();
+      }
     }
   }
 }

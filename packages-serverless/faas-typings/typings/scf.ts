@@ -60,7 +60,7 @@ interface CKafkaRecord {
 }
 
 // TODO: prevent namespace usage
-// eslint-disable-next-line @typescript-eslint/no-namespace
+
 export namespace SCF {
   export interface COSEvent {
     Records: COSRecord[];

@@ -110,7 +110,7 @@ function createMockWrapApplicationContext() {
 }
 
 export async function create<
-  T extends IMidwayFramework<any, any, any, any, any>
+  T extends IMidwayFramework<any, any, any, any, any>,
 >(
   appDir: string | MockBootstrapOptions,
   options: MockBootstrapOptions = {}
@@ -152,10 +152,13 @@ export async function create<
       require(options.entryFile);
 
       await new Promise<void>((resolve, reject) => {
-        const timeoutHandler = setTimeout(() => {
-          clearInterval(internalHandler);
-          reject(new Error('[midway]: bootstrap timeout'));
-        }, options.bootstrapTimeout || 30 * 1000);
+        const timeoutHandler = setTimeout(
+          () => {
+            clearInterval(internalHandler);
+            reject(new Error('[midway]: bootstrap timeout'));
+          },
+          options.bootstrapTimeout || 30 * 1000
+        );
         const internalHandler = setInterval(() => {
           if (global['MIDWAY_BOOTSTRAP_APP_READY'] === true) {
             clearInterval(internalHandler);
@@ -269,7 +272,7 @@ export async function create<
 }
 
 export async function createApp<
-  T extends IMidwayFramework<any, any, any, any, any>
+  T extends IMidwayFramework<any, any, any, any, any>,
 >(
   baseDir: string | MockBootstrapOptions,
   options?: MockBootstrapOptions
@@ -319,7 +322,7 @@ export async function close(
 
 export async function createFunctionApp<
   T extends IMidwayFramework<any, any, any, any, any>,
-  Y = ReturnType<T['getApplication']>
+  Y = ReturnType<T['getApplication']>,
 >(
   baseDir?: string | MockBootstrapOptions,
   options: MockBootstrapOptions = {},
@@ -637,7 +640,6 @@ class BootstrapAppStarter implements IBootstrapAppStarter {
       sleep?: number;
     } = {}
   ) {
-    // eslint-disable-next-line node/no-extraneous-require
     const BootstrapModule = await loadModule('@midwayjs/bootstrap', {
       loadMode: this.options.moduleLoadType,
       safeLoad: true,

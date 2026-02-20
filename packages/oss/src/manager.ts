@@ -31,7 +31,7 @@ function checkBucketConfig(config) {
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class OSSServiceFactory<
-  T extends OSSServiceFactoryReturnType = OSSServiceFactoryReturnType
+  T extends OSSServiceFactoryReturnType = OSSServiceFactoryReturnType,
 > extends ServiceFactory<T> {
   @Config('oss')
   ossConfig: OSSServiceFactoryCreateClientConfigType;
@@ -89,7 +89,6 @@ export class OSSService implements OSS {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface OSSService extends OSS {
   // empty
 }

@@ -15,7 +15,10 @@ export class SSEClient extends EventEmitter {
   private shouldReconnect = true;
   private reconnectTimer?: NodeJS.Timeout;
 
-  constructor(private url: string, private options: SSEClientOptions = {}) {
+  constructor(
+    private url: string,
+    private options: SSEClientOptions = {}
+  ) {
     super();
     this.options = {
       timeout: 30000,

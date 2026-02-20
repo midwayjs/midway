@@ -8,16 +8,20 @@ import {
 import { createMixedDecorator, getTypeIsArrayTuple } from './helpers';
 import { HttpStatus } from '../common/httpStatus';
 
-export interface ApiResponseMetadata
-  extends Omit<ResponseObject, 'description'> {
+export interface ApiResponseMetadata extends Omit<
+  ResponseObject,
+  'description'
+> {
   status?: number | 'default';
   type?: Type | string | Record<string, any>;
   isArray?: boolean;
   description?: string;
 }
 
-export interface ApiResponseSchemaHost
-  extends Omit<ResponseObject, 'description'> {
+export interface ApiResponseSchemaHost extends Omit<
+  ResponseObject,
+  'description'
+> {
   schema: SchemaObject & Partial<ReferenceObject>;
   status?: number;
   description?: string;

@@ -1,7 +1,7 @@
-import type { MidwayAppInfo, MidwayCoreDefaultConfig } from '../interface';
+import type { MidwayCoreDefaultConfig } from '../interface';
 import { getCurrentEnvironment, isDevelopmentEnvironment } from '../util/';
 
-export default (appInfo: MidwayAppInfo): MidwayCoreDefaultConfig => {
+export default (): MidwayCoreDefaultConfig => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   return {
     core: {

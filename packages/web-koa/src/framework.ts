@@ -32,7 +32,10 @@ import { getFreePort } from './utils';
 const COOKIES = Symbol('context#cookies');
 
 class KoaControllerGenerator extends WebControllerGenerator<Router> {
-  constructor(readonly app, readonly webRouterService: MidwayWebRouterService) {
+  constructor(
+    readonly app,
+    readonly webRouterService: MidwayWebRouterService
+  ) {
     super(app, webRouterService);
   }
 
@@ -142,10 +145,10 @@ export class MidwayKoaFramework extends BaseFramework<
             return !Array.isArray(value) ? [value] : value;
           }
         : this.configurationOptions.queryParseMode === 'first'
-        ? function (value) {
-            return Array.isArray(value) ? value[0] : value;
-          }
-        : undefined;
+          ? function (value) {
+              return Array.isArray(value) ? value[0] : value;
+            }
+          : undefined;
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;

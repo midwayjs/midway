@@ -11,11 +11,17 @@ interface Plus {
 }
 
 // 不同的 mongoose 版本 options 字段定义不同
-declare type ExtractConnectionOptionsFromConnection<T extends (...args: any[]) => any> = Parameters<T>[1];
+declare type ExtractConnectionOptionsFromConnection<
+  T extends (...args: any[]) => any,
+> = Parameters<T>[1];
 
-declare type ExtractConnectionOptions<T> =
-  T extends M5 ? T['ConnectionOptions'] :
-    T extends M6 ? T['ConnectOptions'] :
-      T extends Plus ? ExtractConnectionOptionsFromConnection<T['Connection']['prototype']['openUri']> :
-        never;
+declare type ExtractConnectionOptions<T> = T extends M5
+  ? T['ConnectionOptions']
+  : T extends M6
+    ? T['ConnectOptions']
+    : T extends Plus
+      ? ExtractConnectionOptionsFromConnection<
+          T['Connection']['prototype']['openUri']
+        >
+      : never;
 export type ConnectionOptions = ExtractConnectionOptions<typeof mongoose>;

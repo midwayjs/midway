@@ -692,7 +692,7 @@ export function isTypeScriptEnvironment() {
   if ('false' === TS_MODE_PROCESS_FLAG) {
     return false;
   }
-  // eslint-disable-next-line node/no-deprecated-api
+
   return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
 }
 

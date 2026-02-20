@@ -53,9 +53,8 @@ export class EventEmitterService {
 
         const listener = async (...args) => {
           try {
-            const instance = await this.applicationContext.getAsync(
-              eventModule
-            );
+            const instance =
+              await this.applicationContext.getAsync(eventModule);
             await instance[prop](...args);
           } catch (err) {
             if (!suppressErrors) {
@@ -128,5 +127,4 @@ export class EventEmitterService {
 
 delegateTargetPrototypeMethod(EventEmitterService, [EventEmitter]);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EventEmitterService extends EventEmitter {}

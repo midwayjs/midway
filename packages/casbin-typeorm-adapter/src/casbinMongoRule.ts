@@ -12,8 +12,8 @@ interface OldObj {
 declare type ExtractObjectID<T> = T extends NewObj
   ? T['ObjectId']
   : T extends OldObj
-  ? T['ObjectID']
-  : never;
+    ? T['ObjectID']
+    : never;
 
 @Entity()
 export class CasbinMongoRule extends BaseEntity {

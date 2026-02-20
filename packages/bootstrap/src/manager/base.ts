@@ -9,7 +9,7 @@ const debug = debuglog('midway:bootstrap');
 
 export abstract class AbstractForkManager<
   Worker,
-  ClusterOptions extends ForkOptions
+  ClusterOptions extends ForkOptions,
 > {
   private reforks = [];
   private disconnectCount = 0;

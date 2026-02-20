@@ -12,7 +12,7 @@ import {
   Config,
 } from '@midwayjs/core';
 import next from 'next';
-// eslint-disable-next-line node/no-deprecated-api
+
 import { parse } from 'url';
 
 @Middleware()

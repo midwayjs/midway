@@ -339,11 +339,13 @@ export function createAxiosAdapter(
             ? responseData
             : JSON.stringify(responseData);
         throw new Error(
-          `API request failed: ${normalizedMethod} ${requestUrl} (${status}) ${detail}`
+          `API request failed: ${normalizedMethod} ${requestUrl} (${status}) ${detail}`,
+          { cause: error }
         );
       }
       throw new Error(
-        `API request failed: ${normalizedMethod} ${requestUrl} ${fallbackMessage}`
+        `API request failed: ${normalizedMethod} ${requestUrl} ${fallbackMessage}`,
+        { cause: error }
       );
     }
   };

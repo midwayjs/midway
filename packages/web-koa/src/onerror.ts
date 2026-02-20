@@ -162,7 +162,7 @@ export function setupOnError(app, config, logger) {
     this.status = err.status;
 
     this.set(err.headers);
-    let type = 'text';
+    let type;
     if (errorOptions.accepts) {
       type = errorOptions.accepts.call(this, 'html', 'text', 'json');
     } else {

@@ -7,16 +7,18 @@ const formatToString = value => {
 export const formatRow = (row, filterColumn) => {
   filterColumn = filterColumn || {};
   const rowData = {};
-  row.primaryKey &&
+  if (row.primaryKey) {
     row.primaryKey.map(pk => {
       if (filterColumn[pk.name]) return;
       rowData[pk.name] = formatToString(pk.value);
     });
-  row.attributes &&
+  }
+  if (row.attributes) {
     row.attributes.map(item => {
       if (filterColumn[item.columnName]) return;
       rowData[item.columnName] = formatToString(item.columnValue);
     });
+  }
   return rowData;
 };
 

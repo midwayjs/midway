@@ -1,9 +1,9 @@
 export interface CORSOptions {
-  allowMethods: string |string[];
-  origin: string|Function;
-  exposeHeaders: string |string[];
-  allowHeaders: string |string[];
-  credentials: boolean|Function;
+  allowMethods: string | string[];
+  origin: string | ((...args: any[]) => any);
+  exposeHeaders: string | string[];
+  allowHeaders: string | string[];
+  credentials: boolean | ((...args: any[]) => any);
   keepHeadersOnError: boolean;
   maxAge: number;
 }

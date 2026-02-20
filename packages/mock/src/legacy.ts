@@ -3,7 +3,7 @@ import { CommonJSFileDetector, IMidwayFramework } from '@midwayjs/core';
 import { defineConfiguration } from '@midwayjs/core/functional';
 
 export async function createLegacyApp<
-  T extends IMidwayFramework<any, any, any, any, any>
+  T extends IMidwayFramework<any, any, any, any, any>,
 >(
   ...args: Parameters<typeof createApp>
 ): Promise<ReturnType<T['getApplication']>> {
@@ -22,7 +22,7 @@ export async function createLegacyApp<
 }
 
 export async function createLegacyFunctionApp<
-  T extends IMidwayFramework<any, any, any, any, any>
+  T extends IMidwayFramework<any, any, any, any, any>,
 >(
   ...args: Parameters<typeof createFunctionApp>
 ): Promise<ReturnType<T['getApplication']>> {

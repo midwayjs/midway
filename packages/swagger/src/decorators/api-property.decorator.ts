@@ -3,8 +3,10 @@ import { SchemaObjectMetadata } from '../interfaces';
 import { getEnumType, getEnumValues } from '../common/enum.utils';
 import { createPropertyDecorator, getTypeIsArrayTuple } from './helpers';
 
-export interface ApiPropertyOptions
-  extends Omit<SchemaObjectMetadata, 'name' | 'enum'> {
+export interface ApiPropertyOptions extends Omit<
+  SchemaObjectMetadata,
+  'name' | 'enum'
+> {
   name?: string;
   enum?: any[] | Record<string, any>;
   enumName?: string;

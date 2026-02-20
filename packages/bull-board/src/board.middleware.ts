@@ -35,9 +35,11 @@ const MIME_MAP = {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class BoardMiddleware
-  implements IMiddleware<IMidwayContext, NextFunction, unknown>
-{
+export class BoardMiddleware implements IMiddleware<
+  IMidwayContext,
+  NextFunction,
+  unknown
+> {
   @Config('bullBoard')
   protected bullBoardConfig: BullBoardOption;
 

@@ -15,9 +15,9 @@ import * as net from 'net';
 /**
  * 抽象健康检查类
  */
-export abstract class AbstractHealthCheck<ServiceInstance>
-  implements IServiceDiscoveryHealthCheck<ServiceInstance>
-{
+export abstract class AbstractHealthCheck<
+  ServiceInstance,
+> implements IServiceDiscoveryHealthCheck<ServiceInstance> {
   protected options: ServiceDiscoveryHealthCheckOptions;
   protected lastCheckTime = 0;
   protected lastCheckResult: ServiceDiscoveryHealthCheckResult | null = null;
@@ -76,7 +76,7 @@ export abstract class AbstractHealthCheck<ServiceInstance>
  * 用于 Redis/ETCD 等基于 TTL 的服务发现
  */
 export class TTLHealthCheck<
-  ServiceInstance
+  ServiceInstance,
 > extends AbstractHealthCheck<ServiceInstance> {
   private ttl: number;
 
@@ -112,7 +112,7 @@ export class TTLHealthCheck<
  * 用于支持 HTTP 检查的服务发现
  */
 export class HTTPHealthCheck<
-  ServiceInstance
+  ServiceInstance,
 > extends AbstractHealthCheck<ServiceInstance> {
   private checkUrl: string;
   private httpClient: HttpClient;
@@ -184,7 +184,7 @@ export class HTTPHealthCheck<
  * 用于支持 TCP 检查的服务发现
  */
 export class TCPHealthCheck<
-  ServiceInstance
+  ServiceInstance,
 > extends AbstractHealthCheck<ServiceInstance> {
   private host: string;
   private port: number;

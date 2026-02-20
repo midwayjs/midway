@@ -70,7 +70,9 @@ export class MidwayLifeCycleService {
         );
       }
 
-      cycle.instance && this.lifecycleInstanceList.push(cycle);
+      if (cycle.instance) {
+        this.lifecycleInstanceList.push(cycle);
+      }
     }
 
     // init health check service

@@ -90,8 +90,8 @@ export interface SecurityCSPOptions extends SecurityEnableOptions {
 }
 export interface SecurityEnableOptions {
   enable: boolean;
-  match?: IgnoreMatcher<any> | IgnoreMatcher<any> [];
-  ignore?: IgnoreMatcher<any> | IgnoreMatcher<any> [];
+  match?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  ignore?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
 }
 
 export type SecurityCSRFType = 'all' | 'any' | 'ctoken' | 'referer';

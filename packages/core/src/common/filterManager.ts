@@ -11,7 +11,7 @@ import { MetadataManager } from '../decorator/metadataManager';
 export class FilterManager<
   CTX extends IMidwayContext = IMidwayContext,
   R = any,
-  N = any
+  N = any,
 > {
   private errFilterList: Array<new (...args) => IFilter<CTX, R, N>> = [];
   private successFilterList: Array<new (...args) => IFilter<CTX, R, N>> = [];

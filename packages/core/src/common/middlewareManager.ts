@@ -256,15 +256,12 @@ export class ContextMiddlewareManager<CTX extends IMidwayContext, R, N>
 /**
  * Get middleware resolve options
  */
-type MiddlewareResolveOptions<T, CTX, R, N> = T extends ClassMiddleware<
-  CTX,
-  R,
-  N
->
-  ? InstanceType<T> extends { resolve: (...args: infer P) => any }
-    ? P[1]
-    : any
-  : never;
+type MiddlewareResolveOptions<T, CTX, R, N> =
+  T extends ClassMiddleware<CTX, R, N>
+    ? InstanceType<T> extends { resolve: (...args: infer P) => any }
+      ? P[1]
+      : any
+    : never;
 
 /**
  * wrap a middleware with options and composition a new middleware
@@ -273,7 +270,7 @@ export function createMiddleware<
   CTX extends IMidwayContext,
   R,
   N,
-  M extends ClassMiddleware<CTX, R, N>
+  M extends ClassMiddleware<CTX, R, N>,
 >(
   middleware: M,
   options: MiddlewareResolveOptions<M, CTX, R, N>,

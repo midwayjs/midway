@@ -47,9 +47,8 @@ export async function initializeGlobalApplicationContext(
     MidwayInitializerPerformanceManager.MEASURE_KEYS.INITIALIZE
   );
 
-  const applicationContext = await prepareGlobalApplicationContextAsync(
-    globalOptions
-  );
+  const applicationContext =
+    await prepareGlobalApplicationContextAsync(globalOptions);
 
   printStepDebugInfo('Init logger');
 

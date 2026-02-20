@@ -10,9 +10,9 @@ interface Line {
   v5: string;
 }
 
-export abstract class BaseAdapter<AdapterLine extends Line>
-  implements FilteredAdapter
-{
+export abstract class BaseAdapter<
+  AdapterLine extends Line,
+> implements FilteredAdapter {
   private filtered = false;
   private policies: AdapterLine[];
 

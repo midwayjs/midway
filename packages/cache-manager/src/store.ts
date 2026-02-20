@@ -14,9 +14,8 @@ export interface RedisStore extends Store {
 export function createRedisStore(instanceName: string) {
   return async (options: Config, container: IMidwayContainer) => {
     const { RedisServiceFactory } = safeRequire('@midwayjs/redis');
-    const redisServiceFactory: RedisServiceFactory = await container.getAsync(
-      RedisServiceFactory
-    );
+    const redisServiceFactory: RedisServiceFactory =
+      await container.getAsync(RedisServiceFactory);
     const redisInstance = redisServiceFactory.get(instanceName);
     return createStore(redisInstance, options);
   };

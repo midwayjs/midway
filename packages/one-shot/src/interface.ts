@@ -15,7 +15,8 @@ export interface IMidwayOneShotContext extends IMidwayContext {
   payload?: unknown;
 }
 
-export type IMidwayOneShotApplication = IMidwayApplication<IMidwayOneShotContext>;
+export type IMidwayOneShotApplication =
+  IMidwayApplication<IMidwayOneShotContext>;
 
 export type Application = IMidwayOneShotApplication;
 export type Context = IMidwayOneShotContext;

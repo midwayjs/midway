@@ -20,7 +20,10 @@ class EtcdDataListener {
   private watcher: any;
   private destroyed = false;
 
-  constructor(private client: Etcd3, private serviceName: string) {}
+  constructor(
+    private client: Etcd3,
+    private serviceName: string
+  ) {}
 
   async init() {
     await this.refresh();

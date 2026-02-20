@@ -131,7 +131,6 @@ export class RedisService implements Redis {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RedisService extends Redis {
   // empty
 }

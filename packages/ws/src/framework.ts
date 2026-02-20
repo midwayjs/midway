@@ -255,7 +255,6 @@ export class MidwayWSFramework extends BaseFramework<
                         );
                       }
 
-                      // eslint-disable-next-line prefer-spread
                       return controller[wsEventInfo.propertyName].apply(
                         controller,
                         [socket, request]

@@ -3,8 +3,8 @@ import {
   IMidwayApplication,
   IMidwayContext,
   NextFunction as BaseNextFunction,
-  ServiceFactoryConfigOption
-} from "@midwayjs/core";
+  ServiceFactoryConfigOption,
+} from '@midwayjs/core';
 import {
   AdminConfig,
   Consumer,
@@ -18,11 +18,10 @@ import {
   EachMessagePayload,
   Kafka,
   KafkaConfig,
-  ProducerConfig
+  ProducerConfig,
 } from 'kafkajs';
 
-export interface IKafkaApplication {
-}
+export interface IKafkaApplication {}
 
 export type IMidwayKafkaApplication = IMidwayApplication<IMidwayKafkaContext> &
   IKafkaApplication;
@@ -104,9 +103,11 @@ export interface IMidwayKafkaAdminInitOptions {
 export interface IMidwayKafkaConfigurationOptions extends IConfigurationOptions {
   consumer: {
     [name: string]: Partial<IKafkaConsumerInitOptions>;
-  },
-  producer: ServiceFactoryConfigOption<Partial<IMidwayKafkaProducerInitOptions>>,
-  admin: ServiceFactoryConfigOption<Partial<IMidwayKafkaAdminInitOptions>>
+  };
+  producer: ServiceFactoryConfigOption<
+    Partial<IMidwayKafkaProducerInitOptions>
+  >;
+  admin: ServiceFactoryConfigOption<Partial<IMidwayKafkaAdminInitOptions>>;
 }
 
 export interface IKafkaConsumer {
