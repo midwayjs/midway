@@ -174,10 +174,12 @@ class MidwayLoggers extends Map<string, ILogger> {
         (value as unknown as EggLogger).disable('console');
       } else if (isV3Logger) {
         // v3
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (value.get('console')) {
-          value.get('console').level = 'none';
+        const v3Logger = value as unknown as {
+          get?: (name: string) => { level: string } | undefined;
+        };
+        const consoleLogger = v3Logger.get?.('console');
+        if (consoleLogger) {
+          consoleLogger.level = 'none';
         }
       }
     }
