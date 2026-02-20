@@ -1106,6 +1106,9 @@ importers:
         specifier: workspace:^
         version: link:../web-bridge
     devDependencies:
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.27
@@ -19919,7 +19922,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 25.3.0
+      '@types/node': 22.12.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
