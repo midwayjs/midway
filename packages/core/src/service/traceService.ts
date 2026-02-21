@@ -142,7 +142,11 @@ export class MidwayTraceService {
             code: SpanStatusCode.OK,
           });
           if (options.responseCarrier) {
-            propagation.inject(context.active(), options.responseCarrier, setter);
+            propagation.inject(
+              context.active(),
+              options.responseCarrier,
+              setter
+            );
           }
           return result;
         } catch (err) {

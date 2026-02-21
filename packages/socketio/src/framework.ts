@@ -270,7 +270,11 @@ export class MidwaySocketIOFramework extends BaseFramework<
                             async (ctx, next) => {
                               const isPassed = await this.app
                                 .getFramework()
-                                .runGuard(ctx, target, wsEventInfo.propertyName);
+                                .runGuard(
+                                  ctx,
+                                  target,
+                                  wsEventInfo.propertyName
+                                );
                               if (!isPassed) {
                                 throw new MidwayInvokeForbiddenError(
                                   wsEventInfo.propertyName,

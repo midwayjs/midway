@@ -88,7 +88,8 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                   return channelWrapper.ack(data);
                 },
               } as IMidwayRabbitMQContext;
-              const traceService = this.applicationContext.get(MidwayTraceService);
+              const traceService =
+                this.applicationContext.get(MidwayTraceService);
               const headers = data?.properties?.headers ?? {};
               await traceService.runWithEntrySpan(
                 `rabbitmq ${listenerOptions.queueName}`,
@@ -112,7 +113,10 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                   }
                   const ins = await ctx.requestContext.getAsync(module);
                   const fn = await this.applyMiddleware(async ctx => {
-                    return await ins[listenerOptions.propertyKey].call(ins, data);
+                    return await ins[listenerOptions.propertyKey].call(
+                      ins,
+                      data
+                    );
                   });
 
                   try {

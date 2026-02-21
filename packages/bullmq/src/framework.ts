@@ -331,7 +331,9 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
               },
             },
             async () => {
-              ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
+              ctx.logger.info(
+                `start process job ${job.id} from ${processor.name}`
+              );
 
               const isPassed = await this.app
                 .getFramework()
@@ -344,11 +346,9 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
                 processor as any
               );
               const fn = await this.applyMiddleware(async ctx => {
-                return await Utils.toAsyncFunction(service.execute.bind(service))(
-                  job.data,
-                  job,
-                  token
-                );
+                return await Utils.toAsyncFunction(
+                  service.execute.bind(service)
+                )(job.data, job, token);
               });
               const result = await Promise.resolve(await fn(ctx));
               ctx.logger.info(

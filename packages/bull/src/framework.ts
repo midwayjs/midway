@@ -171,7 +171,9 @@ export class BullFramework
             },
           },
           async () => {
-            ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
+            ctx.logger.info(
+              `start process job ${job.id} from ${processor.name}`
+            );
 
             const isPassed = await this.app
               .getFramework()

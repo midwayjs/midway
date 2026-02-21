@@ -116,7 +116,8 @@ export class MidwayGRPCFramework extends BaseFramework<
             call: Parameters<UntypedHandleCall>[0],
             callback?: sendUnaryData<any>
           ) => {
-            const traceService = this.applicationContext.get(MidwayTraceService);
+            const traceService =
+              this.applicationContext.get(MidwayTraceService);
             const metadataCarrier =
               (call as ServerUnaryCall<any, any>).metadata?.getMap?.() ?? {};
 
