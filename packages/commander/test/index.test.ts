@@ -12,7 +12,7 @@ import {
   WhenFor,
   EnquirerService,
 } from '../src';
-import { Inject, Singleton } from '@midwayjs/core';
+import { Inject, MidwayTraceService, Singleton } from '@midwayjs/core';
 import { createLightApp, close } from '@midwayjs/mock';
 jest.mock('enquirer', () => ({
   prompt: jest.fn(async questionInput => {
@@ -550,6 +550,23 @@ describe('test/index.test.ts', () => {
     const { app, framework } = await createApp();
     await framework.runCommand('returnAsyncIterable');
     expect(stdout).toEqual('a' + JSON.stringify({ b: 2 }) + 'c');
+    await close(app);
+  });
+
+  it('should create entry span for command execution', async () => {
+    const { app, framework } = await createApp();
+    const traceService = await app
+      .getApplicationContext()
+      .getAsync(MidwayTraceService);
+    const rawRunWithEntrySpan = traceService.runWithEntrySpan.bind(traceService);
+    let called = 0;
+    traceService.runWithEntrySpan = async (...args: any[]) => {
+      called++;
+      return rawRunWithEntrySpan(...args);
+    };
+
+    await framework.runCommand('hello', 'world');
+    expect(called).toBeGreaterThan(0);
     await close(app);
   });
 });

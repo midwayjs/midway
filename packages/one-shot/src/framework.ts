@@ -3,6 +3,7 @@ import {
   Framework,
   IMidwayBootstrapOptions,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   IMidwayOneShotApplication,
@@ -48,16 +49,30 @@ export class MidwayOneShotFramework extends BaseFramework<
       payload,
     });
 
-    const fn = await this.applyMiddleware(async ctx => {
-      const instance = (await ctx.requestContext.getAsync(
-        Runner
-      )) as OneShotRunner<T, R>;
-      if (!instance?.run) {
-        throw new MidwayCommonError('One-shot runner must implement run().');
-      }
-      return await instance.run(payload, ctx);
-    });
+    const traceService = this.applicationContext.get(MidwayTraceService);
 
-    return (await fn(ctx)) as R;
+    return (await traceService.runWithEntrySpan(
+      `oneshot ${Runner.name || 'runner'}`,
+      {
+        attributes: {
+          'midway.protocol': 'one-shot',
+          'midway.oneshot.runner': Runner.name || 'runner',
+        },
+      },
+      async () => {
+        const fn = await this.applyMiddleware(async ctx => {
+          const instance = (await ctx.requestContext.getAsync(
+            Runner
+          )) as OneShotRunner<T, R>;
+          if (!instance?.run) {
+            throw new MidwayCommonError(
+              'One-shot runner must implement run().'
+            );
+          }
+          return await instance.run(payload, ctx);
+        });
+        return await fn(ctx);
+      }
+    )) as R;
   }
 }

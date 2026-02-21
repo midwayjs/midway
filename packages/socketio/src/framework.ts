@@ -372,6 +372,8 @@ export class MidwaySocketIOFramework extends BaseFramework<
       responseEvents?: WSEventInfo[];
     }
   ) {
+    const traceService = this.applicationContext.get(MidwayTraceService);
+
     if (result && methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
         if (wsEventInfo.eventType === WSEventTypeEnum.EMIT) {
@@ -380,14 +382,40 @@ export class MidwaySocketIOFramework extends BaseFramework<
               return socket.to(name);
             }, socket);
           }
-          // eslint-disable-next-line prefer-spread
-          socket.emit.apply(
-            socket,
-            [wsEventInfo.messageEventName].concat(result)
+          const carrier = {};
+          await traceService.runWithExitSpan(
+            `socketio.emit ${wsEventInfo.messageEventName}`,
+            {
+              carrier,
+              attributes: {
+                'midway.protocol': 'socketio',
+                'midway.socketio.event': wsEventInfo.messageEventName,
+              },
+            },
+            async () => {
+              // eslint-disable-next-line prefer-spread
+              socket.emit.apply(
+                socket,
+                [wsEventInfo.messageEventName].concat(result)
+              );
+            }
           );
         } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
-          // eslint-disable-next-line prefer-spread
-          socket.nsp.emit.apply(socket.nsp, [].concat(result));
+          const carrier = {};
+          await traceService.runWithExitSpan(
+            `socketio.broadcast ${propertyName}`,
+            {
+              carrier,
+              attributes: {
+                'midway.protocol': 'socketio',
+                'midway.socketio.event': propertyName,
+              },
+            },
+            async () => {
+              // eslint-disable-next-line prefer-spread
+              socket.nsp.emit.apply(socket.nsp, [].concat(result));
+            }
+          );
         }
       }
     }

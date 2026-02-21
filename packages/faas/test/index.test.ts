@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import { creatStarter, closeApp } from './utils';
+import { MidwayTraceService } from '@midwayjs/core';
 
 describe('test/index.test.ts', () => {
 
@@ -142,5 +143,35 @@ describe('test/index.test.ts', () => {
     expect(data).toEqual('bbb');
     expect(ctx.headers['ccc']).toEqual('ddd');
     expect(ctx.headers['bbb']).toEqual('aaa');
+  });
+
+  it('should create entry span for faas handler', async () => {
+    const starter = await creatStarter('base-app');
+    const traceService = await starter.applicationContext.getAsync(
+      MidwayTraceService
+    );
+    const rawRunWithEntrySpan = traceService.runWithEntrySpan.bind(traceService);
+    let called = 0;
+    traceService.runWithEntrySpan = async (...args: any[]) => {
+      called++;
+      return rawRunWithEntrySpan(...args);
+    };
+
+    const result = await starter.invokeTriggerFunction(
+      {
+        text: 'hello',
+        originContext: {},
+        originEvent: {
+          text: 'a',
+        },
+      },
+      'helloService.handler',
+      {
+        isHttpFunction: false,
+      }
+    );
+    expect(result).toEqual('ahello');
+    expect(called).toBeGreaterThan(0);
+    await closeApp(starter);
   });
 });

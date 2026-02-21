@@ -8,8 +8,21 @@ import {
   TextMapSetter,
   trace,
 } from '@opentelemetry/api';
-import { Init, Inject, MainApp, Provide, Scope } from '../decorator';
-import { IMidwayApplication, JoinPoint, ScopeEnum } from '../interface';
+import {
+  Config,
+  Init,
+  Inject,
+  Logger,
+  MainApp,
+  Provide,
+  Scope,
+} from '../decorator';
+import {
+  ILogger,
+  IMidwayApplication,
+  JoinPoint,
+  ScopeEnum,
+} from '../interface';
 import { TRACE_KEY } from '../decorator/common/tracer';
 import { MidwayDecoratorService } from './decoratorService';
 
@@ -17,6 +30,12 @@ import { MidwayDecoratorService } from './decoratorService';
 @Scope(ScopeEnum.Singleton)
 export class MidwayTraceService {
   private currentTracerName = 'midway';
+  private tracingConfig: {
+    enable?: boolean;
+    protocols?: Record<string, boolean>;
+    onError?: 'throw' | 'ignore';
+    logOnError?: boolean;
+  };
 
   @MainApp()
   protected app: IMidwayApplication;
@@ -24,9 +43,27 @@ export class MidwayTraceService {
   @Inject()
   protected decoratorService: MidwayDecoratorService;
 
+  @Config('tracing')
+  protected tracingOptions: {
+    enable?: boolean;
+    protocols?: Record<string, boolean>;
+    onError?: 'throw' | 'ignore';
+    logOnError?: boolean;
+  };
+
+  @Logger('coreLogger')
+  protected logger: ILogger;
+
   @Init()
   protected init() {
     this.currentTracerName = this.app?.getProjectName?.() ?? 'unknown_project';
+    this.tracingConfig = {
+      enable: true,
+      protocols: {},
+      onError: 'ignore',
+      logOnError: false,
+      ...(this.tracingOptions ?? {}),
+    };
 
     this.decoratorService.registerMethodHandler(TRACE_KEY, options => {
       return {
@@ -110,6 +147,37 @@ export class MidwayTraceService {
     },
   };
 
+  private getProtocolFromAttributes(attributes?: Record<string, any>) {
+    const protocol = attributes?.['midway.protocol'];
+    if (!protocol || typeof protocol !== 'string') {
+      return 'default';
+    }
+    return protocol;
+  }
+
+  private isProtocolEnabled(attributes?: Record<string, any>) {
+    if (this.tracingConfig?.enable === false) {
+      return false;
+    }
+    const protocol = this.getProtocolFromAttributes(attributes);
+    const protocolConfig = this.tracingConfig?.protocols ?? {};
+    if (protocol in protocolConfig) {
+      return protocolConfig[protocol] !== false;
+    }
+    return true;
+  }
+
+  private handleTraceError(err: unknown, phase: string) {
+    if (this.tracingConfig?.logOnError) {
+      this.logger?.warn?.(
+        `[midway:trace] ${phase} failed: ${(err as Error)?.message || err}`
+      );
+    }
+    if (this.tracingConfig?.onError === 'throw') {
+      throw err;
+    }
+  }
+
   runWithEntrySpan<T = unknown>(
     name: string,
     options: {
@@ -122,11 +190,24 @@ export class MidwayTraceService {
     },
     callback: (span: Span) => Promise<T> | T
   ): Promise<T> {
+    if (!this.isProtocolEnabled(options.attributes)) {
+      return Promise.resolve(callback(undefined as unknown as Span));
+    }
+
     const getter = options.getter ?? this.defaultGetter;
     const setter = options.setter ?? this.defaultSetter;
-    const parentContext = options.carrier
-      ? propagation.extract(context.active(), options.carrier, getter)
-      : context.active();
+    let parentContext = context.active();
+    if (options.carrier) {
+      try {
+        parentContext = propagation.extract(
+          context.active(),
+          options.carrier,
+          getter
+        );
+      } catch (err) {
+        this.handleTraceError(err, 'extract entry context');
+      }
+    }
 
     return trace.getTracer(this.currentTracerName).startActiveSpan(
       name,
@@ -142,11 +223,15 @@ export class MidwayTraceService {
             code: SpanStatusCode.OK,
           });
           if (options.responseCarrier) {
-            propagation.inject(
-              context.active(),
-              options.responseCarrier,
-              setter
-            );
+            try {
+              propagation.inject(
+                context.active(),
+                options.responseCarrier,
+                setter
+              );
+            } catch (err) {
+              this.handleTraceError(err, 'inject entry response context');
+            }
           }
           return result;
         } catch (err) {
@@ -173,6 +258,10 @@ export class MidwayTraceService {
     },
     callback: (span: Span) => Promise<T> | T
   ): Promise<T> {
+    if (!this.isProtocolEnabled(options.attributes)) {
+      return Promise.resolve(callback(undefined as unknown as Span));
+    }
+
     const setter = options.setter ?? this.defaultSetter;
     const carrier = options.carrier ?? {};
 
@@ -184,7 +273,11 @@ export class MidwayTraceService {
       },
       async span => {
         try {
-          propagation.inject(context.active(), carrier, setter);
+          try {
+            propagation.inject(context.active(), carrier, setter);
+          } catch (err) {
+            this.handleTraceError(err, 'inject exit context');
+          }
           const result = await callback(span);
           span.setStatus({
             code: SpanStatusCode.OK,
@@ -204,7 +297,15 @@ export class MidwayTraceService {
   }
 
   injectContext(carrier: any, setter?: TextMapSetter<any>) {
-    propagation.inject(context.active(), carrier, setter ?? this.defaultSetter);
+    try {
+      propagation.inject(
+        context.active(),
+        carrier,
+        setter ?? this.defaultSetter
+      );
+    } catch (err) {
+      this.handleTraceError(err, 'inject context');
+    }
     return carrier;
   }
 }

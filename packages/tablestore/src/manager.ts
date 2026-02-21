@@ -8,6 +8,7 @@ import {
   ServiceFactory,
   delegateTargetPrototypeMethod,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import * as TableStore from 'tablestore';
 import { TableStoreClient } from './interface';
@@ -18,6 +19,9 @@ export class TableStoreServiceFactory extends ServiceFactory<TableStoreClient> {
   @Config('tableStore')
   tableStoreConfig;
 
+  @Inject()
+  protected traceService: MidwayTraceService;
+
   @Init()
   async init() {
     await this.initClients(this.tableStoreConfig, {
@@ -26,7 +30,40 @@ export class TableStoreServiceFactory extends ServiceFactory<TableStoreClient> {
   }
 
   async createClient(config): Promise<TableStoreClient> {
-    return new TableStore.Client(config) as any;
+    const client = new TableStore.Client(config) as any;
+    this.bindTraceContext(client);
+    return client;
+  }
+
+  protected bindTraceContext(client: any) {
+    if (!client || !this.traceService) {
+      return;
+    }
+
+    const rawMakeRequest = client.makeRequest?.bind(client);
+    if (!rawMakeRequest) {
+      return;
+    }
+
+    client.makeRequest = (...args) => {
+      if (typeof args[1] === 'function' || typeof args[2] === 'function') {
+        return rawMakeRequest(...args);
+      }
+      const operation = args?.[0] || 'request';
+      return this.traceService.runWithExitSpan(
+        `tablestore.${String(operation).toLowerCase()}`,
+        {
+          carrier: {},
+          attributes: {
+            'midway.protocol': 'tablestore',
+            'midway.tablestore.operation': String(operation),
+          },
+        },
+        async () => {
+          return rawMakeRequest(...args);
+        }
+      );
+    };
   }
 
   getName() {

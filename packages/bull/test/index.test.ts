@@ -1,6 +1,6 @@
 import { createLegacyApp, close } from '@midwayjs/mock';
 import { join } from 'path';
-import { sleep } from '@midwayjs/core';
+import { MidwayTraceService, sleep } from '@midwayjs/core';
 import * as bull from '../src';
 import { readFileSync } from 'fs';
 
@@ -44,6 +44,26 @@ describe(`/test/index.test.ts`, () => {
     const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app-error-out-of-job'));
     await sleep(5 * 1000);
     expect(readFileSync(join(__dirname, 'fixtures', 'base-app-error-out-of-job', 'logs', 'ali-demo', 'midway-bull.log'), 'utf8').includes('MidwayDefinitionNotFoundError')).toBeTruthy();
+    await close(app);
+  });
+
+  it('should create entry span for bull processor', async () => {
+    const app = await createLegacyApp(join(__dirname, 'fixtures', 'base-app'));
+    const traceService = await app
+      .getApplicationContext()
+      .getAsync(MidwayTraceService);
+    const rawRunWithEntrySpan = traceService.runWithEntrySpan.bind(traceService);
+    let called = 0;
+    traceService.runWithEntrySpan = async (...args: any[]) => {
+      called++;
+      return rawRunWithEntrySpan(...args);
+    };
+
+    const bullFramework = app.getApplicationContext().get(bull.Framework);
+    const queue = bullFramework.getQueue('test');
+    await queue?.runJob({ name: 'trace-test' }, { delay: 100 });
+    await sleep(1200);
+    expect(called).toBeGreaterThan(0);
     await close(app);
   });
 

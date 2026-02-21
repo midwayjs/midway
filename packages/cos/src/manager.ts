@@ -9,6 +9,7 @@ import {
   ServiceFactory,
   delegateTargetPrototypeMethod,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import * as assert from 'assert';
 import * as COS from 'cos-nodejs-sdk-v5';
@@ -29,6 +30,9 @@ export class COSServiceFactory extends ServiceFactory<COS> {
   @Logger('coreLogger')
   logger;
 
+  @Inject()
+  protected traceService: MidwayTraceService;
+
   async createClient(config: COS.COSOptions): Promise<COS> {
     assert.ok(
       config.SecretKey && config.SecretId,
@@ -36,7 +40,41 @@ export class COSServiceFactory extends ServiceFactory<COS> {
     );
     this.logger.info('[midway:cos] init %s', config.SecretKey);
 
-    return new COS(config);
+    const client = new COS(config);
+    this.bindTraceContext(client);
+    return client;
+  }
+
+  protected bindTraceContext(client: COS) {
+    if (!client || !this.traceService) {
+      return;
+    }
+
+    const rawRequest = (client as any).request?.bind(client);
+    if (!rawRequest) {
+      return;
+    }
+
+    (client as any).request = async (...args) => {
+      if (typeof args[1] === 'function') {
+        return rawRequest(...args);
+      }
+      const params = args?.[0] || {};
+      const apiName = params.Action || params.action || 'request';
+      return await this.traceService.runWithExitSpan(
+        `cos.${String(apiName).toLowerCase()}`,
+        {
+          carrier: {},
+          attributes: {
+            'midway.protocol': 'cos',
+            'midway.cos.action': String(apiName),
+          },
+        },
+        async () => {
+          return await rawRequest(...args);
+        }
+      );
+    };
   }
 
   getName() {

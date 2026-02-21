@@ -11,6 +11,7 @@ import {
 
 import { Metadata } from '@grpc/grpc-js';
 import { hello } from './fixtures/base-app-multiple-package/src/interface';
+import { MidwayTraceService } from '@midwayjs/core';
 
 export namespace hero {
   export interface HeroServiceClient {
@@ -268,6 +269,32 @@ describe('/test/index.test.ts', function () {
     });
 
     expect(result).toEqual({ message: 'Hello harry' });
+    await closeApp(app);
+  });
+
+  it('should create entry span for grpc request', async () => {
+    const app = await createServer('base-app');
+    const traceService = await app
+      .getApplicationContext()
+      .getAsync(MidwayTraceService);
+    const rawRunWithEntrySpan = traceService.runWithEntrySpan.bind(traceService);
+    let called = 0;
+    traceService.runWithEntrySpan = async (...args: any[]) => {
+      called++;
+      return rawRunWithEntrySpan(...args);
+    };
+
+    const service = await createGRPCConsumer<helloworld.GreeterClient>({
+      package: 'helloworld',
+      protoPath: join(__dirname, 'fixtures/proto/helloworld.proto'),
+      url: 'localhost:6565'
+    });
+
+    const result = await service.sayHello().sendMessage({
+      name: 'harry'
+    });
+    expect(result).toEqual({ message: 'Hello harry' });
+    expect(called).toBeGreaterThan(0);
     await closeApp(app);
   });
 });

@@ -15,6 +15,7 @@
  */
 
 import * as assert from 'assert';
+import { EventEmitter } from 'events';
 import { ASYNC_ROOT_CONTEXT, AsyncLocalStorageContextManager } from '../../src/common/asyncContextManager';
 
 
@@ -266,6 +267,23 @@ describe('AsyncLocalStorageContextManager.test.ts', () => {
         assert.strictEqual(contextManager.active(), rootCtx);
         countDown();
       }, time2);
+    });
+
+    it('should keep context in event callback chain', done => {
+      const emitter = new EventEmitter();
+      const rootCtx = contextManager.active();
+      const eventCtx = rootCtx.setValue(Symbol('event'), 'event');
+
+      contextManager.with(eventCtx, () => {
+        emitter.on('tick', () => {
+          assert.strictEqual(contextManager.active(), eventCtx);
+          done();
+        });
+
+        setTimeout(() => {
+          emitter.emit('tick');
+        }, 5);
+      });
     });
 
     it('should not influence other instances', () => {

@@ -278,35 +278,32 @@ $ SERVICE_NAME=nodejs-opentelemetry-express AUTHENTICATION=****  ENDPOINT=grpc:/
 
 ## 框架能力支持
 
-注意，组件只是包裹了 otel 的接口，如果不需要下述接口使用，无需安装本组件
+从 Midway v4 开始，框架侧 tracing 能力已合并到 `@midwayjs/core`，不再需要安装和启用 `@midwayjs/otel` 组件。
 
-先安装依赖。
+### 依赖与配置
+
+无需新增框架 tracing 组件，保留 OpenTelemetry 官方依赖即可。
 
 ```bash
-$ npm i @midwayjs/otel@3 --save
+# 不再需要
+$ npm uninstall @midwayjs/otel
 ```
 
-启用 `otel` 组件。
-
-```typescript
-import { Configuration } from '@midwayjs/core';
-import * as otel from '@midwayjs/otel';
-
-@Configuration({
-  imports: [
-    // ...
-    otel
-  ]
-})
-export class MainConfiguration {
+```json
+{
+  "dependencies": {
+    "@midwayjs/core": "^4.0.0"
+  }
 }
 ```
+
+`Configuration` 中也无需再 `imports: [otel]`。
 
 
 
 ### ctx.traceId
 
-组件提供了 `ctx.traceId` 字段。
+`@midwayjs/core` 提供 `ctx.traceId` 字段。
 
 你可以在支持的组件下进行获取（egg/koa）。
 
@@ -320,9 +317,11 @@ ctx.traceId => *****
 
 Midway 针对用户侧的需求，添加一个装饰器用于增加链路节点。
 
-Otel 组件提供了一个 @Trace 装饰器，可以添加在方法上。
+`@midwayjs/core` 提供 `@Trace` 装饰器，可以添加在方法上。
 
 ```typescript
+import { Trace } from '@midwayjs/core';
+
 export class UserService {
 
   @Trace('user.get')
@@ -334,5 +333,39 @@ export class UserService {
 
 该装饰器需要传入一个节点名字，这样链路会自动添加一个该方法的链路节点，并记录执行的时间，方法执行成功或者失败。
 
+### TraceService
+
+如果你需要在业务中手动创建入口/出口 span，可注入 `MidwayTraceService`。
+
+```typescript
+import { Inject, MidwayTraceService } from '@midwayjs/core';
+
+export class UserService {
+  @Inject()
+  traceService: MidwayTraceService;
+}
+```
+
+## 从 @midwayjs/otel 迁移
+
+### 迁移说明
+
+- 包迁移：`@midwayjs/otel` -> `@midwayjs/core`
+- 配置迁移：删除 `imports: [otel]`
+- 使用方式：`ctx.traceId` 保持不变
+- 行为兼容：`@Trace` 与 TraceService 能力继续可用
+
+### 迁移清单
+
+1. 删除依赖
+   - `npm uninstall @midwayjs/otel`
+2. 删除配置
+   - 移除 `Configuration.imports` 中的 `otel`
+3. 更新导入路径
+   - `import { Trace } from '@midwayjs/otel'` -> `import { Trace } from '@midwayjs/core'`
+   - `import { TraceService } from '@midwayjs/otel'` -> `import { MidwayTraceService } from '@midwayjs/core'`
+4. 验证运行
+   - 确认 `ctx.traceId` 可读取
+   - 确认 `@Trace` 方法正常产生日志链路
 
 

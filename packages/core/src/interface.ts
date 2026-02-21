@@ -448,6 +448,12 @@ export interface MidwayCoreDefaultConfig {
     serverReadyTimeout?: number;
     stopTimeout?: number;
   };
+  tracing?: {
+    enable?: boolean;
+    protocols?: Record<string, boolean>;
+    onError?: 'throw' | 'ignore';
+    logOnError?: boolean;
+  };
 }
 
 export type ServiceFactoryConfigOption<OPTIONS> = {

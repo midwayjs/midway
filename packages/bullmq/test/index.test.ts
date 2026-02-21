@@ -1,5 +1,12 @@
 import { createLightApp, close } from '@midwayjs/mock';
-import { MainApp, sleep, Inject, FORMAT, MidwayCommonError } from '@midwayjs/core';
+import {
+  MainApp,
+  MidwayCommonError,
+  MidwayTraceService,
+  Inject,
+  FORMAT,
+  sleep,
+} from '@midwayjs/core';
 import * as bullmq from '../src';
 import { Processor, Application, IProcessor, Context } from '../src';
 import { JobsOptions, Job } from 'bullmq';
@@ -347,6 +354,45 @@ describe(`/test/index.test.ts`, () => {
     await close(app);
   });
 
+  it('should create entry span for bullmq processor', async () => {
+    @Processor('traceTask')
+    class TraceTask implements IProcessor {
+      async execute(): Promise<void> {
+        return;
+      }
+    }
+
+    const app = await createLightApp({
+      imports: [bullmq],
+      globalConfig: {
+        bullmq: {
+          defaultConnection: {
+            host: '127.0.0.1',
+            port: 6379,
+          },
+        },
+      },
+      preloadModules: [TraceTask],
+    });
+
+    const traceService = await app
+      .getApplicationContext()
+      .getAsync(MidwayTraceService);
+    const rawRunWithEntrySpan = traceService.runWithEntrySpan.bind(traceService);
+    let called = 0;
+    traceService.runWithEntrySpan = async (...args: any[]) => {
+      called++;
+      return rawRunWithEntrySpan(...args);
+    };
+
+    const bullFramework = app.getApplicationContext().get(bullmq.Framework);
+    const queue = bullFramework.getQueue('traceTask');
+    await queue?.runJob({});
+    await sleep(1000);
+    expect(called).toBeGreaterThan(0);
+    await close(app);
+  });
+
   // 测试 Flow Producer
   it('should handle flow producer', async () => {
     const app = await createLightApp({
@@ -469,4 +515,3 @@ describe(`/test/index.test.ts`, () => {
     await close(app);
   });
 });
-

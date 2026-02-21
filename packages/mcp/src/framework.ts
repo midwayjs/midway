@@ -5,6 +5,7 @@ import {
   DecoratorManager,
   MetadataManager,
   IMidwayApplication,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   IMidwayMCPApplication,
@@ -30,6 +31,25 @@ export class MidwayMCPFramework extends BaseFramework<
 > {
   protected frameworkLoggerName = 'mcpLogger';
   protected server: McpServer;
+
+  private async runWithMCPEntrySpan<T = unknown>(
+    name: string,
+    attributes: Record<string, string>,
+    callback: () => Promise<T>
+  ): Promise<T> {
+    const traceService = this.applicationContext.get(MidwayTraceService);
+    return await traceService.runWithEntrySpan(
+      name,
+      {
+        attributes: {
+          'midway.protocol': 'mcp',
+          ...attributes,
+        },
+      },
+      callback
+    );
+  }
+
   configure() {
     return this.configService.getConfiguration('mcp');
   }
@@ -230,15 +250,24 @@ export class MidwayMCPFramework extends BaseFramework<
             extra
           ) as IMidwayMCPContext;
 
-          const fn = await this.applyMiddleware(
-            async (ctx: IMidwayMCPContext) => {
-              const instance = (await ctx.requestContext.getAsync(
-                tool
-              )) as IMcpTool;
-              return await instance['execute'].call(instance, args);
+          return await this.runWithMCPEntrySpan(
+            `mcp.tool ${toolMeta.toolName}`,
+            {
+              'midway.mcp.kind': 'tool',
+              'midway.mcp.name': toolMeta.toolName,
+            },
+            async () => {
+              const fn = await this.applyMiddleware(
+                async (ctx: IMidwayMCPContext) => {
+                  const instance = (await ctx.requestContext.getAsync(
+                    tool
+                  )) as IMcpTool;
+                  return await instance['execute'].call(instance, args);
+                }
+              );
+              return await fn(ctx);
             }
           );
-          return await fn(ctx);
         }
       );
     }
@@ -260,15 +289,24 @@ export class MidwayMCPFramework extends BaseFramework<
             ctx.authInfo = extra.authInfo;
           }
 
-          const fn = await this.applyMiddleware(
-            async (ctx: IMidwayMCPContext) => {
-              const instance = (await ctx.requestContext.getAsync(
-                prompt
-              )) as IMcpPrompt;
-              return await instance['generate'].call(instance, args);
+          return await this.runWithMCPEntrySpan(
+            `mcp.prompt ${promptMeta.promptName}`,
+            {
+              'midway.mcp.kind': 'prompt',
+              'midway.mcp.name': promptMeta.promptName,
+            },
+            async () => {
+              const fn = await this.applyMiddleware(
+                async (ctx: IMidwayMCPContext) => {
+                  const instance = (await ctx.requestContext.getAsync(
+                    prompt
+                  )) as IMcpPrompt;
+                  return await instance['generate'].call(instance, args);
+                }
+              );
+              return await fn(ctx);
             }
           );
-          return await fn(ctx);
         }
       );
     }
@@ -294,15 +332,24 @@ export class MidwayMCPFramework extends BaseFramework<
             ctx.authInfo = extra.authInfo;
           }
 
-          const fn = await this.applyMiddleware(
-            async (ctx: IMidwayMCPContext) => {
-              const instance = (await ctx.requestContext.getAsync(
-                resource
-              )) as IMcpResource;
-              return await instance['handle'].call(instance, uri);
+          return await this.runWithMCPEntrySpan(
+            `mcp.resource ${resourceMeta.resourceName}`,
+            {
+              'midway.mcp.kind': 'resource',
+              'midway.mcp.name': resourceMeta.resourceName,
+            },
+            async () => {
+              const fn = await this.applyMiddleware(
+                async (ctx: IMidwayMCPContext) => {
+                  const instance = (await ctx.requestContext.getAsync(
+                    resource
+                  )) as IMcpResource;
+                  return await instance['handle'].call(instance, uri);
+                }
+              );
+              return await fn(ctx);
             }
           );
-          return await fn(ctx);
         }
       );
     }

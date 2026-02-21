@@ -7,6 +7,7 @@ import {
   MidwayInvokeForbiddenError,
   Utils,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   Application,
@@ -84,29 +85,43 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
             job: this,
             from: name,
           });
+          const traceService = self.applicationContext.get(MidwayTraceService);
 
-          ctx.logger.info(`start job ${name.name}`);
+          await traceService.runWithEntrySpan(
+            `cron ${name.name}`,
+            {
+              attributes: {
+                'midway.protocol': 'cron',
+                'midway.cron.job': name.name,
+              },
+            },
+            async () => {
+              ctx.logger.info(`start job ${name.name}`);
 
-          const isPassed = await self.app
-            .getFramework()
-            .runGuard(ctx, name, 'onTick');
-          if (!isPassed) {
-            throw new MidwayInvokeForbiddenError('onTick', name);
-          }
+              const isPassed = await self.app
+                .getFramework()
+                .runGuard(ctx, name, 'onTick');
+              if (!isPassed) {
+                throw new MidwayInvokeForbiddenError('onTick', name);
+              }
 
-          const service = await ctx.requestContext.getAsync<IJob>(name);
-          const fn = await self.applyMiddleware(async ctx => {
-            return await Utils.toAsyncFunction(service.onTick.bind(service))();
-          });
+              const service = await ctx.requestContext.getAsync<IJob>(name);
+              const fn = await self.applyMiddleware(async ctx => {
+                return await Utils.toAsyncFunction(
+                  service.onTick.bind(service)
+                )();
+              });
 
-          try {
-            const result = await Promise.resolve(await fn(ctx));
-            ctx.logger.info(`complete job ${name.name}`);
-            await service.onComplete?.(result);
-            return result;
-          } catch (err) {
-            ctx.logger.error(err);
-          }
+              try {
+                const result = await Promise.resolve(await fn(ctx));
+                ctx.logger.info(`complete job ${name.name}`);
+                await service.onComplete?.(result);
+                return result;
+              } catch (err) {
+                ctx.logger.error(err);
+              }
+            }
+          );
         })().catch(err => {
           self.logger.error(`error in job from ${name.name}: ${err.stack}`);
         });

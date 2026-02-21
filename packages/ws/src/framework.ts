@@ -405,26 +405,48 @@ export class MidwayWSFramework extends BaseFramework<
       responseEvents?: WSEventInfo[];
     }
   ) {
+    const traceService = this.applicationContext.get(MidwayTraceService);
+    const sendWithTrace = async (
+      currentSocket: IMidwayWSContext | WebSocket,
+      payload: any,
+      eventName: string
+    ) => {
+      const carrier = {};
+      await traceService.runWithExitSpan(
+        `ws.emit ${eventName}`,
+        {
+          carrier,
+          attributes: {
+            'midway.protocol': 'ws',
+            'midway.ws.event': eventName,
+          },
+        },
+        async () => {
+          currentSocket.send(formatResult(payload));
+        }
+      );
+    };
+
     if (!result) return;
     if (methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
         if (wsEventInfo.eventType === WSEventTypeEnum.EMIT) {
-          socket.send(formatResult(result));
+          await sendWithTrace(socket, result, wsEventInfo.messageEventName);
         } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
-          this.app.clients.forEach(client => {
+          for (const client of this.app.clients) {
             if (client.readyState === WebSocket.OPEN) {
-              client.send(formatResult(result));
+              await sendWithTrace(client, result, propertyName);
             }
-          });
+          }
         }
       }
       if (methodMap[propertyName].responseEvents.length === 0) {
         // no emit decorator
-        socket.send(formatResult(result));
+        await sendWithTrace(socket, result, propertyName);
       }
     } else {
       // just send
-      socket.send(formatResult(result));
+      await sendWithTrace(socket, result, propertyName);
     }
   }
 

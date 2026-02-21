@@ -5,6 +5,7 @@ import {
   DecoratorManager,
   MetadataManager,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import { Application, Context } from './interface';
 import { PISCINA_TASK_KEY } from './constants';
@@ -62,15 +63,27 @@ export class PiscinaWorkerFramework extends BaseFramework<
     }
 
     const ctx = this.app.createAnonymousContext();
-    const taskInstance = await ctx.requestContext.getAsync<any>(TaskClass);
+    const traceService = this.applicationContext.get(MidwayTraceService);
+    return await traceService.runWithEntrySpan(
+      `piscina ${handler}`,
+      {
+        attributes: {
+          'midway.protocol': 'piscina',
+          'midway.piscina.handler': handler,
+        },
+      },
+      async () => {
+        const taskInstance = await ctx.requestContext.getAsync<any>(TaskClass);
 
-    if (!taskInstance || typeof taskInstance.execute !== 'function') {
-      throw new MidwayCommonError(
-        `Task "${handler}" must implement execute method`
-      );
-    }
+        if (!taskInstance || typeof taskInstance.execute !== 'function') {
+          throw new MidwayCommonError(
+            `Task "${handler}" must implement execute method`
+          );
+        }
 
-    return await taskInstance.execute(payload);
+        return await taskInstance.execute(payload);
+      }
+    );
   }
 
   /**
