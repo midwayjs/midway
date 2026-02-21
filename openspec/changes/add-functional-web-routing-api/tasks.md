@@ -60,10 +60,6 @@
 - [x] 4.17 编写 Vue 集成设计与示例（Vite plugin + useApiClient/$api，Phase 2）
 - [x] 4.18 编写自定义 transport 示例（如 tRPC adapter）
 - [x] 4.19 编写 HTTP 多客户端示例（fetch/axios 切换）
-- [ ] 4.20 编写 gRPC define API 与 client 适配示例
-- [ ] 4.21 编写 WS/Socket.IO define API 与 client 适配示例
-- [ ] 4.23 编写 Task/Queue define API 与调用示例
-- [ ] 4.24 编写 Kafka/RabbitMQ define API 与消费示例
 - [x] 4.25 编写“纯函数式 Midway 服务”最小示例（不接入前端框架）
 - [x] 4.26 编写“装饰器 + 纯函数式模块”同项目共存示例
 
