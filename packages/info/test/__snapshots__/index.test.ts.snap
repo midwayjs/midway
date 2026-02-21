@@ -10,6 +10,7 @@ exports[`test/index.test.ts should test get config and filter secret 1`] = `
     "info": "{"title":"Midway Info","infoPath":"/_info","hiddenKey":["k***","****","*****n","********","p****"],"ignoreKey":[]}",
     "keys": "["1*******5"]",
     "oss": "{"clients":{"default":{"accessKeyId":"123","accessKeySecret":"f*****f"}}}",
+    "tracing": "{"enable":true,"protocols":{},"onError":"ignore","logOnError":false}",
   },
   "type": "Midway Config",
 }

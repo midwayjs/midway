@@ -320,7 +320,8 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
         });
         try {
           const traceService = this.applicationContext.get(MidwayTraceService);
-          const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+          const traceMetaResolver = (this.configurationOptions as any)?.tracing
+            ?.meta;
           const carrier = job?.data?.__midwayTraceCarrier ?? {};
           return await traceService.runWithEntrySpan(
             `bullmq ${queueName}`,
@@ -387,7 +388,8 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
     const queue = this.queueMap.get(queueName);
     if (queue) {
       const traceService = this.applicationContext.get(MidwayTraceService);
-      const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+      const traceMetaResolver = (this.configurationOptions as any)?.tracing
+        ?.meta;
       const payload = {
         ...(jobData ?? {}),
       };

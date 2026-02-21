@@ -90,8 +90,8 @@ export class MidwayRabbitMQFramework extends BaseFramework<
               } as IMidwayRabbitMQContext;
               const traceService =
                 this.applicationContext.get(MidwayTraceService);
-              const traceMetaResolver =
-                (this.configurationOptions as any)?.tracing?.meta;
+              const traceMetaResolver = (this.configurationOptions as any)
+                ?.tracing?.meta;
               const headers = data?.properties?.headers ?? {};
               await traceService.runWithEntrySpan(
                 `rabbitmq ${listenerOptions.queueName}`,

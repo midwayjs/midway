@@ -123,7 +123,8 @@ export class MidwayKafkaFramework extends BaseFramework<
         };
         runConfig[runMethod] = async payload => {
           const traceService = this.applicationContext.get(MidwayTraceService);
-          const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+          const traceMetaResolver = (this.configurationOptions as any)?.tracing
+            ?.meta;
           const headers = payload?.message?.headers ?? {};
           return await traceService.runWithEntrySpan(
             `kafka ${payload?.topic ?? 'consumer'}`,
