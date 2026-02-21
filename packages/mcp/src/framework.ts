@@ -35,9 +35,11 @@ export class MidwayMCPFramework extends BaseFramework<
   private async runWithMCPEntrySpan<T = unknown>(
     name: string,
     attributes: Record<string, string>,
+    metaArgs: Record<string, unknown>,
     callback: () => Promise<T>
   ): Promise<T> {
     const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
     return await traceService.runWithEntrySpan(
       name,
       {
@@ -45,6 +47,8 @@ export class MidwayMCPFramework extends BaseFramework<
           'midway.protocol': 'mcp',
           ...attributes,
         },
+        meta: traceMetaResolver,
+        metaArgs,
       },
       callback
     );
@@ -256,6 +260,14 @@ export class MidwayMCPFramework extends BaseFramework<
               'midway.mcp.kind': 'tool',
               'midway.mcp.name': toolMeta.toolName,
             },
+            {
+              ctx,
+              request: args,
+              custom: {
+                kind: 'tool',
+                name: toolMeta.toolName,
+              },
+            },
             async () => {
               const fn = await this.applyMiddleware(
                 async (ctx: IMidwayMCPContext) => {
@@ -294,6 +306,14 @@ export class MidwayMCPFramework extends BaseFramework<
             {
               'midway.mcp.kind': 'prompt',
               'midway.mcp.name': promptMeta.promptName,
+            },
+            {
+              ctx,
+              request: args,
+              custom: {
+                kind: 'prompt',
+                name: promptMeta.promptName,
+              },
             },
             async () => {
               const fn = await this.applyMiddleware(
@@ -337,6 +357,14 @@ export class MidwayMCPFramework extends BaseFramework<
             {
               'midway.mcp.kind': 'resource',
               'midway.mcp.name': resourceMeta.resourceName,
+            },
+            {
+              ctx,
+              request: uri,
+              custom: {
+                kind: 'resource',
+                name: resourceMeta.resourceName,
+              },
             },
             async () => {
               const fn = await this.applyMiddleware(

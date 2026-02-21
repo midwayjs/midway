@@ -22,6 +22,9 @@ export class TableStoreServiceFactory extends ServiceFactory<TableStoreClient> {
   @Inject()
   protected traceService: MidwayTraceService;
 
+  @Config('tableStore.tracing.meta')
+  protected traceMetaResolver;
+
   @Init()
   async init() {
     await this.initClients(this.tableStoreConfig, {
@@ -57,6 +60,13 @@ export class TableStoreServiceFactory extends ServiceFactory<TableStoreClient> {
           attributes: {
             'midway.protocol': 'tablestore',
             'midway.tablestore.operation': String(operation),
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            request: args,
+            custom: {
+              operation: String(operation),
+            },
           },
         },
         async () => {

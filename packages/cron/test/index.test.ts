@@ -50,9 +50,9 @@ describe(`/test/index.test.ts`, () => {
 
   it('should create entry span when cron job runs', async () => {
     @Job('traceJob', {
-      cronTime: '*/10 * * * * *',
+      cronTime: '*/1 * * * * *',
       start: true,
-      runOnInit: true,
+      runOnInit: false,
     })
     class TraceJob implements IJob {
       async onTick() {
@@ -74,7 +74,7 @@ describe(`/test/index.test.ts`, () => {
       return rawRunWithEntrySpan(...args);
     };
 
-    await sleep(1000);
+    await sleep(2200);
     expect(called).toBeGreaterThan(0);
     await close(app);
   });

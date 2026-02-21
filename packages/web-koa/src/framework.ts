@@ -214,6 +214,7 @@ export class MidwayKoaFramework extends BaseFramework<
       this.app.createAnonymousContext(ctx);
       const traceService = this.applicationContext.get(MidwayTraceService);
       const spanName = `${ctx.method} ${ctx.path || '/'}`;
+      const traceMetaResolver = this.configurationOptions?.tracing?.meta;
 
       await traceService.runWithEntrySpan(
         spanName,
@@ -222,6 +223,13 @@ export class MidwayKoaFramework extends BaseFramework<
           responseCarrier: ctx.response.res,
           attributes: {
             'midway.protocol': 'http',
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            ctx,
+            carrier: ctx.headers,
+            request: ctx.request,
+            response: ctx.response,
           },
         },
         async () => {

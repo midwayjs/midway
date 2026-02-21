@@ -160,6 +160,7 @@ export class BullFramework
 
       try {
         const traceService = this.applicationContext.get(MidwayTraceService);
+        const traceMetaResolver = this.configurationOptions?.tracing?.meta;
         const carrier = job?.data?.__midwayTraceCarrier ?? {};
         return await traceService.runWithEntrySpan(
           `bull ${queue.getQueueName()}`,
@@ -168,6 +169,15 @@ export class BullFramework
             attributes: {
               'midway.protocol': 'bull',
               'midway.bull.queue': queue.getQueueName(),
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx,
+              carrier,
+              request: job,
+              custom: {
+                queueName: queue.getQueueName(),
+              },
             },
           },
           async () => {
@@ -213,6 +223,7 @@ export class BullFramework
     const queue = this.queueMap.get(queueName);
     if (queue) {
       const traceService = this.applicationContext.get(MidwayTraceService);
+      const traceMetaResolver = this.configurationOptions?.tracing?.meta;
       const payload = {
         ...(jobData ?? {}),
       };
@@ -223,6 +234,14 @@ export class BullFramework
           attributes: {
             'midway.protocol': 'bull',
             'midway.bull.queue': queueName,
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            carrier: payload.__midwayTraceCarrier,
+            request: jobData,
+            custom: {
+              queueName,
+            },
           },
         },
         async () => undefined

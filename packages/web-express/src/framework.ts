@@ -67,6 +67,7 @@ export class MidwayExpressFramework extends BaseFramework<
 
       const traceService = this.applicationContext.get(MidwayTraceService);
       const spanName = `${req.method} ${req.path || req.url || '/'}`;
+      const traceMetaResolver = this.configurationOptions?.tracing?.meta;
 
       traceService
         .runWithEntrySpan(
@@ -76,6 +77,13 @@ export class MidwayExpressFramework extends BaseFramework<
             responseCarrier: res,
             attributes: {
               'midway.protocol': 'http',
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx,
+              carrier: req.headers,
+              request: req,
+              response: res,
             },
           },
           async () => {

@@ -19,6 +19,9 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
   @Config('consul')
   consulConfig: ServiceFactoryConfigOption<ConsulOptions>;
 
+  @Config('consul.tracing.meta')
+  traceMetaResolver;
+
   @Init()
   async init() {
     await this.initClients(this.consulConfig, {
@@ -82,6 +85,14 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
             'midway.protocol': 'consul',
             'midway.consul.client': clientName,
             'midway.consul.method': String(requestMethod),
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            request: requestOptions,
+            custom: {
+              clientName,
+              requestMethod: String(requestMethod),
+            },
           },
         },
         async () => rawRequest(...args)

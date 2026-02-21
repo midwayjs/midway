@@ -320,6 +320,7 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
         });
         try {
           const traceService = this.applicationContext.get(MidwayTraceService);
+          const traceMetaResolver = this.configurationOptions?.tracing?.meta;
           const carrier = job?.data?.__midwayTraceCarrier ?? {};
           return await traceService.runWithEntrySpan(
             `bullmq ${queueName}`,
@@ -328,6 +329,15 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
               attributes: {
                 'midway.protocol': 'bullmq',
                 'midway.bullmq.queue': queueName,
+              },
+              meta: traceMetaResolver,
+              metaArgs: {
+                ctx,
+                carrier,
+                request: job,
+                custom: {
+                  queueName,
+                },
               },
             },
             async () => {
@@ -377,6 +387,7 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
     const queue = this.queueMap.get(queueName);
     if (queue) {
       const traceService = this.applicationContext.get(MidwayTraceService);
+      const traceMetaResolver = this.configurationOptions?.tracing?.meta;
       const payload = {
         ...(jobData ?? {}),
       };
@@ -387,6 +398,14 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
           attributes: {
             'midway.protocol': 'bullmq',
             'midway.bullmq.queue': queueName,
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            carrier: payload.__midwayTraceCarrier,
+            request: jobData,
+            custom: {
+              queueName,
+            },
           },
         },
         async () => undefined

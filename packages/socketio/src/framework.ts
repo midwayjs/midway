@@ -118,6 +118,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
 
   private async addNamespace(target: any) {
     const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
     const controllerOption: WSControllerOption = MetadataManager.getOwnMetadata(
       WS_CONTROLLER_KEY,
       target
@@ -139,6 +140,15 @@ export class MidwaySocketIOFramework extends BaseFramework<
             attributes: {
               'midway.protocol': 'socketio',
               'midway.socketio.namespace': controllerOption.namespace || '/',
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx: socket,
+              carrier: socket?.handshake?.headers ?? {},
+              custom: {
+                namespace: controllerOption.namespace || '/',
+                eventName: 'connect',
+              },
             },
           },
           async () => {
@@ -196,6 +206,14 @@ export class MidwaySocketIOFramework extends BaseFramework<
                     attributes: {
                       'midway.protocol': 'socketio',
                       'midway.socketio.event': wsEventInfo.propertyName,
+                    },
+                    meta: traceMetaResolver,
+                    metaArgs: {
+                      ctx: socket,
+                      carrier: socket?.handshake?.headers ?? {},
+                      custom: {
+                        eventName: wsEventInfo.propertyName,
+                      },
                     },
                   },
                   async () => {
@@ -257,6 +275,14 @@ export class MidwaySocketIOFramework extends BaseFramework<
                     attributes: {
                       'midway.protocol': 'socketio',
                       'midway.socketio.event': wsEventInfo.messageEventName,
+                    },
+                    meta: traceMetaResolver,
+                    metaArgs: {
+                      ctx: socket,
+                      carrier: socket?.handshake?.headers ?? {},
+                      custom: {
+                        eventName: wsEventInfo.messageEventName,
+                      },
                     },
                   },
                   async () => {
@@ -326,6 +352,14 @@ export class MidwaySocketIOFramework extends BaseFramework<
                       'midway.protocol': 'socketio',
                       'midway.socketio.event': 'disconnect',
                     },
+                    meta: traceMetaResolver,
+                    metaArgs: {
+                      ctx: socket,
+                      carrier: socket?.handshake?.headers ?? {},
+                      custom: {
+                        eventName: 'disconnect',
+                      },
+                    },
                   },
                   async () =>
                     await controller[wsEventInfo.propertyName].apply(
@@ -373,6 +407,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     }
   ) {
     const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
 
     if (result && methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
@@ -390,6 +425,14 @@ export class MidwaySocketIOFramework extends BaseFramework<
               attributes: {
                 'midway.protocol': 'socketio',
                 'midway.socketio.event': wsEventInfo.messageEventName,
+              },
+              meta: traceMetaResolver,
+              metaArgs: {
+                ctx: socket,
+                carrier,
+                custom: {
+                  eventName: wsEventInfo.messageEventName,
+                },
               },
             },
             async () => {
@@ -409,6 +452,14 @@ export class MidwaySocketIOFramework extends BaseFramework<
               attributes: {
                 'midway.protocol': 'socketio',
                 'midway.socketio.event': propertyName,
+              },
+              meta: traceMetaResolver,
+              metaArgs: {
+                ctx: socket,
+                carrier,
+                custom: {
+                  eventName: propertyName,
+                },
               },
             },
             async () => {

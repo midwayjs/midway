@@ -86,6 +86,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
             from: name,
           });
           const traceService = self.applicationContext.get(MidwayTraceService);
+          const traceMetaResolver = self.configurationOptions?.tracing?.meta;
 
           await traceService.runWithEntrySpan(
             `cron ${name.name}`,
@@ -93,6 +94,14 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
               attributes: {
                 'midway.protocol': 'cron',
                 'midway.cron.job': name.name,
+              },
+              meta: traceMetaResolver,
+              metaArgs: {
+                ctx,
+                request: this,
+                custom: {
+                  jobName: name.name,
+                },
               },
             },
             async () => {

@@ -32,6 +32,9 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
   @Inject()
   protected traceService: MidwayTraceService;
 
+  @Config('cacheManager.tracing.meta')
+  protected traceMetaResolver;
+
   @Init()
   protected async init() {
     await this.initClients(this.cacheManagerConfig);
@@ -118,6 +121,15 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
               'midway.protocol': 'cache',
               'midway.cache.client': clientName,
               'midway.cache.method': methodName,
+            },
+            meta: this.traceMetaResolver,
+            metaArgs: {
+              carrier: {},
+              request: args,
+              custom: {
+                clientName,
+                methodName,
+              },
             },
           },
           async () => {

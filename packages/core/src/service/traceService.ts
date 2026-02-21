@@ -22,6 +22,9 @@ import {
   IMidwayApplication,
   JoinPoint,
   ScopeEnum,
+  TraceMetaRecord,
+  TraceMetaResolver,
+  TraceMetaResolverArgs,
 } from '../interface';
 import { TRACE_KEY } from '../decorator/common/tracer';
 import { MidwayDecoratorService } from './decoratorService';
@@ -178,6 +181,80 @@ export class MidwayTraceService {
     }
   }
 
+  private pickTraceMetaValue(meta: unknown): TraceMetaRecord {
+    if (!meta || typeof meta !== 'object') {
+      return {};
+    }
+    const result: TraceMetaRecord = {};
+    for (const [key, value] of Object.entries(meta)) {
+      if (value === null || value === undefined) {
+        continue;
+      }
+      if (
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'boolean'
+      ) {
+        result[key] = value;
+      }
+    }
+    return result;
+  }
+
+  resolveTraceMeta(
+    resolver: TraceMetaResolver | undefined,
+    args: TraceMetaResolverArgs
+  ): TraceMetaRecord {
+    if (!resolver) {
+      return {};
+    }
+
+    const mergeMeta = (
+      target: TraceMetaRecord,
+      source:
+        | TraceMetaRecord
+        | ((args: TraceMetaResolverArgs) => TraceMetaRecord)
+        | undefined
+    ) => {
+      if (!source) {
+        return;
+      }
+      const resolved =
+        typeof source === 'function'
+          ? source(args)
+          : (source as TraceMetaRecord);
+      Object.assign(target, this.pickTraceMetaValue(resolved));
+    };
+
+    if (typeof resolver === 'function') {
+      return this.pickTraceMetaValue(resolver(args));
+    }
+
+    const resolverWithDirection = resolver as {
+      common?:
+        | TraceMetaRecord
+        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+      entry?:
+        | TraceMetaRecord
+        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+      exit?:
+        | TraceMetaRecord
+        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+    };
+    if (
+      resolverWithDirection.common !== undefined ||
+      resolverWithDirection.entry !== undefined ||
+      resolverWithDirection.exit !== undefined
+    ) {
+      const result: TraceMetaRecord = {};
+      mergeMeta(result, resolverWithDirection.common);
+      mergeMeta(result, resolverWithDirection[args.direction]);
+      return result;
+    }
+
+    return this.pickTraceMetaValue(resolver as TraceMetaRecord);
+  }
+
   runWithEntrySpan<T = unknown>(
     name: string,
     options: {
@@ -187,10 +264,27 @@ export class MidwayTraceService {
       setter?: TextMapSetter<any>;
       kind?: SpanKind;
       attributes?: Record<string, any>;
+      meta?: TraceMetaResolver;
+      metaArgs?: Omit<
+        TraceMetaResolverArgs,
+        'direction' | 'protocol' | 'spanName'
+      >;
     },
     callback: (span: Span) => Promise<T> | T
   ): Promise<T> {
-    if (!this.isProtocolEnabled(options.attributes)) {
+    const protocol = this.getProtocolFromAttributes(options.attributes);
+    const traceMeta = this.resolveTraceMeta(options.meta, {
+      direction: 'entry',
+      protocol,
+      spanName: name,
+      ...(options.metaArgs ?? {}),
+    });
+    const spanAttributes = {
+      ...(options.attributes ?? {}),
+      ...traceMeta,
+    };
+
+    if (!this.isProtocolEnabled(spanAttributes)) {
       return Promise.resolve(callback(undefined as unknown as Span));
     }
 
@@ -213,7 +307,7 @@ export class MidwayTraceService {
       name,
       {
         kind: options.kind ?? SpanKind.SERVER,
-        attributes: options.attributes,
+        attributes: spanAttributes,
       },
       parentContext,
       async span => {
@@ -255,10 +349,27 @@ export class MidwayTraceService {
       setter?: TextMapSetter<any>;
       kind?: SpanKind;
       attributes?: Record<string, any>;
+      meta?: TraceMetaResolver;
+      metaArgs?: Omit<
+        TraceMetaResolverArgs,
+        'direction' | 'protocol' | 'spanName'
+      >;
     },
     callback: (span: Span) => Promise<T> | T
   ): Promise<T> {
-    if (!this.isProtocolEnabled(options.attributes)) {
+    const protocol = this.getProtocolFromAttributes(options.attributes);
+    const traceMeta = this.resolveTraceMeta(options.meta, {
+      direction: 'exit',
+      protocol,
+      spanName: name,
+      ...(options.metaArgs ?? {}),
+    });
+    const spanAttributes = {
+      ...(options.attributes ?? {}),
+      ...traceMeta,
+    };
+
+    if (!this.isProtocolEnabled(spanAttributes)) {
       return Promise.resolve(callback(undefined as unknown as Span));
     }
 
@@ -269,7 +380,7 @@ export class MidwayTraceService {
       name,
       {
         kind: options.kind ?? SpanKind.CLIENT,
-        attributes: options.attributes,
+        attributes: spanAttributes,
       },
       async span => {
         try {

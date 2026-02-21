@@ -33,6 +33,9 @@ export class COSServiceFactory extends ServiceFactory<COS> {
   @Inject()
   protected traceService: MidwayTraceService;
 
+  @Config('cos.tracing.meta')
+  protected traceMetaResolver;
+
   async createClient(config: COS.COSOptions): Promise<COS> {
     assert.ok(
       config.SecretKey && config.SecretId,
@@ -68,6 +71,13 @@ export class COSServiceFactory extends ServiceFactory<COS> {
           attributes: {
             'midway.protocol': 'cos',
             'midway.cos.action': String(apiName),
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            request: params,
+            custom: {
+              action: String(apiName),
+            },
           },
         },
         async () => {

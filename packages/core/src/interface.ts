@@ -456,6 +456,40 @@ export interface MidwayCoreDefaultConfig {
   };
 }
 
+export type TraceMetaDirection = 'entry' | 'exit';
+
+export type TraceMetaValue = string | number | boolean | undefined | null;
+
+export type TraceMetaRecord = Record<string, TraceMetaValue>;
+
+export interface TraceMetaResolverArgs {
+  direction: TraceMetaDirection;
+  protocol: string;
+  spanName: string;
+  span?: unknown;
+  ctx?: unknown;
+  carrier?: unknown;
+  request?: unknown;
+  response?: unknown;
+  error?: Error;
+  custom?: Record<string, unknown>;
+}
+
+export type TraceMetaResolver =
+  | TraceMetaRecord
+  | ((args: TraceMetaResolverArgs) => TraceMetaRecord)
+  | {
+      common?:
+        | TraceMetaRecord
+        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+      entry?:
+        | TraceMetaRecord
+        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+      exit?:
+        | TraceMetaRecord
+        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+    };
+
 export type ServiceFactoryConfigOption<OPTIONS> = {
   default?: PowerPartial<OPTIONS>;
   client?: PowerPartial<OPTIONS>;

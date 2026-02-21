@@ -64,12 +64,21 @@ export class PiscinaWorkerFramework extends BaseFramework<
 
     const ctx = this.app.createAnonymousContext();
     const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
     return await traceService.runWithEntrySpan(
       `piscina ${handler}`,
       {
         attributes: {
           'midway.protocol': 'piscina',
           'midway.piscina.handler': handler,
+        },
+        meta: traceMetaResolver,
+        metaArgs: {
+          ctx,
+          request: payload,
+          custom: {
+            handler,
+          },
         },
       },
       async () => {

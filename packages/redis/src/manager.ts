@@ -37,6 +37,9 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
   @Inject()
   protected traceService: MidwayTraceService;
 
+  @Config('redis.tracing.meta')
+  protected traceMetaResolver;
+
   protected async createClient(config, name: string): Promise<Redis> {
     let client;
 
@@ -117,6 +120,14 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
             'midway.protocol': 'redis',
             'midway.redis.command': commandName,
             'midway.redis.client': clientName,
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            request: command,
+            custom: {
+              clientName,
+              commandName,
+            },
           },
         },
         async () => {

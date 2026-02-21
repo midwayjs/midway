@@ -203,6 +203,7 @@ export class MidwayWSFramework extends BaseFramework<
       'connection',
       async (socket: IMidwayWSContext, request: http.IncomingMessage) => {
         const traceService = this.applicationContext.get(MidwayTraceService);
+        const traceMetaResolver = this.configurationOptions?.tracing?.meta;
         socket.isAlive = true;
         socket.on('error', error => {
           this.logger.error(`socket got error: ${error}`);
@@ -231,6 +232,12 @@ export class MidwayWSFramework extends BaseFramework<
             attributes: {
               'midway.protocol': 'ws',
               'midway.ws.event': 'connection',
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx: socket,
+              carrier: request.headers,
+              request,
             },
           },
           async () => {
@@ -262,6 +269,15 @@ export class MidwayWSFramework extends BaseFramework<
                     attributes: {
                       'midway.protocol': 'ws',
                       'midway.ws.event': wsEventInfo.propertyName,
+                    },
+                    meta: traceMetaResolver,
+                    metaArgs: {
+                      ctx: socket,
+                      carrier: request.headers,
+                      request,
+                      custom: {
+                        eventName: wsEventInfo.propertyName,
+                      },
                     },
                   },
                   async () => {
@@ -313,6 +329,15 @@ export class MidwayWSFramework extends BaseFramework<
                       attributes: {
                         'midway.protocol': 'ws',
                         'midway.ws.event': wsEventInfo.messageEventName,
+                      },
+                      meta: traceMetaResolver,
+                      metaArgs: {
+                        ctx: socket,
+                        carrier: request.headers,
+                        request,
+                        custom: {
+                          eventName: wsEventInfo.messageEventName,
+                        },
                       },
                     },
                     async () => {
@@ -367,6 +392,15 @@ export class MidwayWSFramework extends BaseFramework<
                         'midway.protocol': 'ws',
                         'midway.ws.event': 'disconnect',
                       },
+                      meta: traceMetaResolver,
+                      metaArgs: {
+                        ctx: socket,
+                        carrier: request.headers,
+                        request,
+                        custom: {
+                          eventName: 'disconnect',
+                        },
+                      },
                     },
                     async () => {
                       return await controller[wsEventInfo.propertyName].apply(
@@ -406,6 +440,7 @@ export class MidwayWSFramework extends BaseFramework<
     }
   ) {
     const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
     const sendWithTrace = async (
       currentSocket: IMidwayWSContext | WebSocket,
       payload: any,
@@ -419,6 +454,14 @@ export class MidwayWSFramework extends BaseFramework<
           attributes: {
             'midway.protocol': 'ws',
             'midway.ws.event': eventName,
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            ctx: socket,
+            carrier,
+            custom: {
+              eventName,
+            },
           },
         },
         async () => {

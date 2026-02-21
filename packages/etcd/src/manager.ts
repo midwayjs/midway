@@ -32,6 +32,9 @@ export class ETCDServiceFactory extends ServiceFactory<Etcd3> {
   @Inject()
   protected traceService: MidwayTraceService;
 
+  @Config('etcd.tracing.meta')
+  protected traceMetaResolver;
+
   async createClient(config: IOptions): Promise<Etcd3> {
     this.logger.info('[midway:etcd] init %s', config.hosts);
     const client = new Etcd3(config);
@@ -64,6 +67,14 @@ export class ETCDServiceFactory extends ServiceFactory<Etcd3> {
             'midway.protocol': 'etcd',
             'midway.etcd.service': String(serviceName),
             'midway.etcd.method': String(method),
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            request: payload,
+            custom: {
+              serviceName: String(serviceName),
+              method: String(method),
+            },
           },
         },
         async () => {

@@ -208,4 +208,75 @@ describe('/test/trace.test.ts', () => {
       await framework.stop();
     }
   });
+
+  it('should support tracing meta resolver for entry and exit', async () => {
+    const framework = await createLightFramework(
+      path.join(__dirname, './fixtures/base-app-trace/src')
+    );
+    const tracerSpy = jest.spyOn(otelTrace, 'getTracer');
+    try {
+      const appCtx = framework.getApplicationContext();
+      const traceService = await appCtx.getAsync(MidwayTraceService);
+      const spanAttrsList = [];
+
+      tracerSpy.mockReturnValue({
+        startActiveSpan: (
+          _name: string,
+          options: any,
+          ctxOrCb: any,
+          cbMaybe?: any
+        ) => {
+          spanAttrsList.push(options?.attributes ?? {});
+          const cb = typeof cbMaybe === 'function' ? cbMaybe : ctxOrCb;
+          return cb({
+            setStatus() {},
+            recordException() {},
+            end() {},
+          });
+        },
+      } as any);
+
+      const metaResolver = ({ direction }) => ({
+        'biz.direction': direction,
+        'biz.flag': true,
+      });
+
+      await traceService.runWithEntrySpan(
+        'entry.meta',
+        {
+          attributes: {
+            'midway.protocol': 'http',
+          },
+          meta: metaResolver,
+        },
+        async () => 'ok'
+      );
+
+      await traceService.runWithExitSpan(
+        'exit.meta',
+        {
+          carrier: {},
+          attributes: {
+            'midway.protocol': 'http-client',
+          },
+          meta: metaResolver,
+        },
+        async () => 'ok'
+      );
+
+      expect(spanAttrsList[0]).toMatchObject({
+        'midway.protocol': 'http',
+        'biz.direction': 'entry',
+        'biz.flag': true,
+      });
+      expect(spanAttrsList[1]).toMatchObject({
+        'midway.protocol': 'http-client',
+        'biz.direction': 'exit',
+        'biz.flag': true,
+      });
+    } finally {
+      tracerSpy.mockRestore();
+      await framework.stop();
+    }
+  });
 });

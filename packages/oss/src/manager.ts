@@ -40,6 +40,9 @@ export class OSSServiceFactory<
   @Inject()
   protected traceService: MidwayTraceService;
 
+  @Config('oss.tracing.meta')
+  protected traceMetaResolver;
+
   @Init()
   async init() {
     await this.initClients(this.ossConfig, {
@@ -93,6 +96,13 @@ export class OSSServiceFactory<
           attributes: {
             'midway.protocol': 'oss',
             'midway.oss.method': String(requestMethod),
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            request: args?.[0],
+            custom: {
+              requestMethod: String(requestMethod),
+            },
           },
         },
         async () => {

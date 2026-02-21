@@ -50,6 +50,7 @@ export class MidwayOneShotFramework extends BaseFramework<
     });
 
     const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
 
     return (await traceService.runWithEntrySpan(
       `oneshot ${Runner.name || 'runner'}`,
@@ -57,6 +58,14 @@ export class MidwayOneShotFramework extends BaseFramework<
         attributes: {
           'midway.protocol': 'one-shot',
           'midway.oneshot.runner': Runner.name || 'runner',
+        },
+        meta: traceMetaResolver,
+        metaArgs: {
+          ctx,
+          request: payload,
+          custom: {
+            runner: Runner.name || 'runner',
+          },
         },
       },
       async () => {

@@ -90,6 +90,8 @@ export class MidwayRabbitMQFramework extends BaseFramework<
               } as IMidwayRabbitMQContext;
               const traceService =
                 this.applicationContext.get(MidwayTraceService);
+              const traceMetaResolver =
+                this.configurationOptions?.tracing?.meta;
               const headers = data?.properties?.headers ?? {};
               await traceService.runWithEntrySpan(
                 `rabbitmq ${listenerOptions.queueName}`,
@@ -98,6 +100,15 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                   attributes: {
                     'midway.protocol': 'rabbitmq',
                     'midway.rabbitmq.queue': listenerOptions.queueName,
+                  },
+                  meta: traceMetaResolver,
+                  metaArgs: {
+                    ctx,
+                    carrier: headers,
+                    request: data,
+                    custom: {
+                      queueName: listenerOptions.queueName,
+                    },
                   },
                 },
                 async () => {
