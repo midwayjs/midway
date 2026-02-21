@@ -799,6 +799,7 @@ export interface Context {
    * Custom properties.
    */
   requestContext: IMidwayContainer;
+  traceId?: string;
   logger: ILogger;
   getLogger(name?: string): ILogger;
   startTime: number;

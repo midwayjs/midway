@@ -21,6 +21,7 @@ import defaultConfig from './config/config.default';
 import * as util from 'util';
 import { MidwayServerlessFunctionService } from './service/slsFunctionService';
 import { MidwayHealthService } from './service/healthService';
+import { MidwayTraceService } from './service/traceService';
 import { ComponentConfigurationLoader } from './context/componentLoader';
 import { findProjectEntryFile, findProjectEntryFileSync } from './util';
 import { AsyncLocalStorageContextManager } from './common/asyncContextManager';
@@ -90,6 +91,9 @@ export async function initializeGlobalApplicationContext(
     applicationContext,
     globalOptions,
   ]);
+
+  printStepDebugInfo('Init tracing');
+  await applicationContext.getAsync(MidwayTraceService);
 
   MidwayInitializerPerformanceManager.markEnd(
     MidwayInitializerPerformanceManager.MEASURE_KEYS.FRAMEWORK_PREPARE
@@ -245,6 +249,7 @@ export async function prepareGlobalApplicationContextAsync(
   applicationContext.bindClass(MidwayServerlessFunctionService);
   applicationContext.bindClass(MidwayHealthService);
   applicationContext.bindClass(MidwayPriorityManager);
+  applicationContext.bindClass(MidwayTraceService);
 
   printStepDebugInfo(
     'Init MidwayConfigService, MidwayAspectService and MidwayDecoratorService'

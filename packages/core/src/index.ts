@@ -23,6 +23,7 @@ export {
   MidwayWebRouterService,
 } from './service/webRouterService';
 export { MidwayServerlessFunctionService } from './service/slsFunctionService';
+export { MidwayTraceService } from './service/traceService';
 export { DataSourceManager } from './common/dataSourceManager';
 export {
   DEFAULT_PRIORITY,
