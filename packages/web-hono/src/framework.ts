@@ -12,11 +12,21 @@ import {
   httpError,
 } from '@midwayjs/core';
 import { Context as HonoContext, Hono } from 'hono';
-import { createServer, IncomingMessage, Server, ServerResponse } from 'node:http';
+import {
+  createServer,
+  IncomingMessage,
+  Server,
+  ServerResponse,
+} from 'node:http';
 import { IMidwayHonoConfigurationOptions } from './interface';
 
 @Framework()
-export class MidwayHonoFramework extends BaseFramework<any, any, IMidwayHonoConfigurationOptions, any> {
+export class MidwayHonoFramework extends BaseFramework<
+  any,
+  any,
+  IMidwayHonoConfigurationOptions,
+  any
+> {
   private server: Server;
   private webRouterService: MidwayWebRouterService;
 
@@ -47,7 +57,13 @@ export class MidwayHonoFramework extends BaseFramework<any, any, IMidwayHonoConf
     });
 
     (this.app as any).onError(async (err, c) => {
-      const { result, error } = await this.filterManager.runErrorFilter(err, c);
+      const req = this.createRequestAdapter(c);
+      const res = this.createResponseAdapter(c);
+      const { result, error } = await this.filterManager.runErrorFilter(
+        err,
+        req,
+        res
+      );
       const finalError = error ?? err;
       if (finalError) {
         const status = finalError.status ?? 500;
@@ -56,7 +72,9 @@ export class MidwayHonoFramework extends BaseFramework<any, any, IMidwayHonoConf
       return this.toResponse(c, result);
     });
 
-    const port = Number(process.env.MIDWAY_HTTP_PORT || this.configurationOptions.port || 7001);
+    const port = Number(
+      process.env.MIDWAY_HTTP_PORT || this.configurationOptions.port || 7001
+    );
     const hostname = this.configurationOptions.hostname || '127.0.0.1';
 
     this.server = createServer(async (req, res) => {
@@ -65,18 +83,23 @@ export class MidwayHonoFramework extends BaseFramework<any, any, IMidwayHonoConf
       await this.writeNodeResponse(res, response);
     });
 
-    await new Promise<void>(resolve => this.server.listen(port, hostname, () => resolve()));
+    await new Promise<void>(resolve =>
+      this.server.listen(port, hostname, () => resolve())
+    );
 
     process.env.MIDWAY_HTTP_PORT = String(port);
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
   }
 
   protected async loadMidwayController() {
-    this.webRouterService = await this.applicationContext.getAsync(MidwayWebRouterService, [
-      {
-        globalPrefix: this.configurationOptions.globalPrefix,
-      },
-    ]);
+    this.webRouterService = await this.applicationContext.getAsync(
+      MidwayWebRouterService,
+      [
+        {
+          globalPrefix: this.configurationOptions.globalPrefix,
+        },
+      ]
+    );
 
     const routerTable = await this.webRouterService.getRouterTable();
     const routerList = await this.webRouterService.getRoutePriorityList();
@@ -86,7 +109,10 @@ export class MidwayHonoFramework extends BaseFramework<any, any, IMidwayHonoConf
       const routes = routerTable.get(routerInfo.prefix);
       for (const routeInfo of routes) {
         const method = routeInfo.requestMethod.toLowerCase();
-        const fullPath = `${routerInfo.prefix}${routeInfo.url}`.replace(/\/+/g, "/");
+        const fullPath = `${routerInfo.prefix}${routeInfo.url}`.replace(
+          /\/+/g,
+          '/'
+        );
         (this.app as any)[method](fullPath, this.generateController(routeInfo));
       }
     }
@@ -94,15 +120,21 @@ export class MidwayHonoFramework extends BaseFramework<any, any, IMidwayHonoConf
 
   protected generateController(routeInfo: RouterInfo): any {
     return async (ctx: HonoContext, next) => {
+      const req = this.createRequestAdapter(ctx);
+      const res = this.createResponseAdapter(ctx);
+
       let result;
       if (typeof routeInfo.method !== 'string') {
-        result = await routeInfo.method(ctx, next);
+        result = await routeInfo.method(req, res, next);
       } else {
         const controller = await (ctx as any).requestContext.getAsync(routeInfo.id);
-        result = await controller[routeInfo.method].call(controller, ctx, next);
+        result = await controller[routeInfo.method].call(controller, req, res, next);
       }
 
-      if (Array.isArray(routeInfo.responseMetadata) && routeInfo.responseMetadata.length) {
+      if (
+        Array.isArray(routeInfo.responseMetadata) &&
+        routeInfo.responseMetadata.length
+      ) {
         for (const routerRes of routeInfo.responseMetadata) {
           switch (routerRes.type) {
             case WEB_RESPONSE_HTTP_CODE:
@@ -122,12 +154,59 @@ export class MidwayHonoFramework extends BaseFramework<any, any, IMidwayHonoConf
         }
       }
 
-      const { result: returnValue, error } = await this.filterManager.runResultFilter(result, ctx, next);
+      const { result: returnValue, error } = await this.filterManager.runResultFilter(
+        result,
+        req,
+        res,
+        next
+      );
       if (error) {
         throw error;
       }
       return this.toResponse(ctx, returnValue);
     };
+  }
+
+  private createRequestAdapter(ctx: HonoContext) {
+    return {
+      ...ctx,
+      ctx,
+      path: ctx.req.path,
+      baseUrl: ctx.req.path,
+      ip: ctx.req.header('x-forwarded-for') ?? '',
+      body: (ctx as any).requestBody,
+      params: ctx.req.param(),
+      query: ctx.req.query(),
+      headers: Object.fromEntries(ctx.req.raw.headers.entries()),
+      get: (name: string) => ctx.req.header(name),
+      requestContext: (ctx as any).requestContext,
+      logger: (ctx as any).logger,
+      session: (ctx as any).session,
+      files: (ctx as any).files,
+    };
+  }
+
+  private createResponseAdapter(ctx: HonoContext) {
+    const responseAdapter = {
+      status: (code: number) => {
+        ctx.status(code as any);
+        return responseAdapter;
+      },
+      set: (headers: Record<string, string>) => {
+        for (const [key, value] of Object.entries(headers)) {
+          ctx.header(key, value);
+        }
+        return responseAdapter;
+      },
+      type: (contentType: string) => {
+        ctx.header('content-type', contentType);
+        return responseAdapter;
+      },
+      redirect: (code: number, url: string) => {
+        return ctx.redirect(url, code as any);
+      },
+    };
+    return responseAdapter;
   }
 
   private toResponse(ctx: HonoContext, value: any) {
@@ -158,7 +237,10 @@ export class MidwayHonoFramework extends BaseFramework<any, any, IMidwayHonoConf
     });
   }
 
-  private async writeNodeResponse(res: ServerResponse, response: Response): Promise<void> {
+  private async writeNodeResponse(
+    res: ServerResponse,
+    response: Response
+  ): Promise<void> {
     res.statusCode = response.status;
     response.headers.forEach((value, key) => res.setHeader(key, value));
     const data = Buffer.from(await response.arrayBuffer());

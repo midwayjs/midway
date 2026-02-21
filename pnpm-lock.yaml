@@ -1725,9 +1725,6 @@ importers:
 
   packages/web-hono:
     dependencies:
-      '@hono/node-server':
-        specifier: 1.19.7
-        version: 1.19.7(hono@4.11.3)
       hono:
         specifier: 4.11.3
         version: 4.11.3

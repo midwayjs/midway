@@ -4,7 +4,7 @@ import {
   Inject,
   MidwayDecoratorService,
   WEB_ROUTER_PARAM_KEY,
-  RouteParamTypes,
+  extractExpressLikeValue,
 } from '@midwayjs/core';
 import { MidwayHonoFramework } from './framework';
 import * as DefaultConfig from './config/config.default';
@@ -26,30 +26,21 @@ export class HonoConfiguration {
 
   @Init()
   init() {
-    this.decoratorService.registerParameterHandler(WEB_ROUTER_PARAM_KEY, options => {
-      return (ctx, next) => {
-        const key = options.metadata.type;
-        const data = options.metadata.propertyData;
-        switch (key) {
-          case RouteParamTypes.NEXT:
-            return next;
-          case RouteParamTypes.BODY:
-            return data ? ctx.requestBody?.[data] : ctx.requestBody;
-          case RouteParamTypes.PARAM:
-            return data ? ctx.req.param(data) : ctx.req.param();
-          case RouteParamTypes.QUERY:
-            return data ? ctx.req.query(data) : ctx.req.query();
-          case RouteParamTypes.HEADERS:
-            return data ? ctx.req.header(data) : ctx.req.raw.headers;
-          case RouteParamTypes.REQUEST_PATH:
-            return ctx.req.path;
-          case RouteParamTypes.REQUEST_IP:
-            return ctx.req.header('x-forwarded-for') ?? '';
-          default:
-            return undefined;
-        }
-      };
-    });
+    // Reuse core express-like extractor to keep decorator behavior consistent.
+    this.decoratorService.registerParameterHandler(
+      WEB_ROUTER_PARAM_KEY,
+      options => {
+        return extractExpressLikeValue(
+          options.metadata.type,
+          options.metadata.propertyData,
+          options.originParamType
+        )(
+          options.originArgs[0],
+          options.originArgs[1],
+          options.originArgs[2]
+        );
+      }
+    );
   }
 
   async onReady() {
