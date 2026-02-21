@@ -121,8 +121,8 @@ export default {
         const locale = localeMapping.has(options.locale)
           ? options.locale
           : localeMapping.has(options.fallbackLocale)
-          ? options.fallbackLocale
-          : 'en-us';
+            ? options.fallbackLocale
+            : 'en-us';
         const newValidatorOptions = {
           error: localeMapping.get(locale),
           ...this.defaultZodOptions,

@@ -1,4 +1,4 @@
-import { IMidwayContainer } from "@midwayjs/core";
+import { IMidwayContainer } from '@midwayjs/core';
 
 export interface ValidationOptions {
   /**
@@ -75,7 +75,9 @@ export interface ValidateResult {
 export interface IValidator<Schema> {
   schemaHelper: SchemaHelper<Schema>;
   validateService?: IValidationService<Schema>;
-  validateServiceHandler: (container: IMidwayContainer) => Promise<IValidationService<Schema>>;
+  validateServiceHandler: (
+    container: IMidwayContainer
+  ) => Promise<IValidationService<Schema>>;
 }
 
 export interface IValidationService<Schema> {

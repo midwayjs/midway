@@ -1,9 +1,10 @@
 import { Metadata } from '@grpc/grpc-js';
 import { IClientReadableStreamService } from '../../interface';
 
-export class ClientReadableRequest<reqType, resType>
-  implements IClientReadableStreamService<reqType, resType>
-{
+export class ClientReadableRequest<
+  reqType,
+  resType,
+> implements IClientReadableStreamService<reqType, resType> {
   client;
   metadata;
   timeout;

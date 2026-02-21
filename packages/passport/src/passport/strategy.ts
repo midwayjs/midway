@@ -6,7 +6,6 @@ export abstract class Strategy {
   abstract authenticate(req: IncomingMessage, options?: any): any;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Strategy extends StrategyCreatedStatic {
   // empty
 }

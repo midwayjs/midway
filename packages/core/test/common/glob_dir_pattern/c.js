@@ -1,2 +1,2 @@
 console.log('c');
-module.exports = class EntityJSC {}
+module.exports = class EntityJSC {};

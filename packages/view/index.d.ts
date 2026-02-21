@@ -33,21 +33,18 @@ declare module '@midwayjs/core/dist/interface' {
 }
 
 declare module '@midwayjs/koa/dist/interface' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Context extends IViewEngine {
     //...
   }
 }
 
 declare module '@midwayjs/web/dist/interface' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Context extends IViewEngine {
     //...
   }
 }
 
 declare module '@midwayjs/faas/dist/interface' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Context extends IViewEngine {
     //...
   }

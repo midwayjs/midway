@@ -4,13 +4,14 @@ import {
   DefaultInstanceMetadata,
   ServiceDiscoveryBaseInstance,
   ServiceDiscoveryOptions,
-  ServiceFactoryConfigOption
+  ServiceFactoryConfigOption,
 } from '@midwayjs/core';
 
-export type RedisConfigOptions = Redis.RedisOptions
+export type RedisConfigOptions =
+  | Redis.RedisOptions
   | ({
-    nodes?: ClusterNode[];
-  } & ClusterOptions)
+      nodes?: ClusterNode[];
+    } & ClusterOptions);
 
 export interface RedisInstanceMetadata extends ServiceDiscoveryBaseInstance {
   /**
@@ -59,7 +60,9 @@ export interface RedisServiceDiscoveryOptions extends ServiceDiscoveryOptions<Re
   /**
    * 服务实例配置
    */
-  serviceOptions?: RedisInstanceMetadata | ((meta: DefaultInstanceMetadata) => RedisInstanceMetadata);
+  serviceOptions?:
+    | RedisInstanceMetadata
+    | ((meta: DefaultInstanceMetadata) => RedisInstanceMetadata);
   /**
    * 下线状态的 TTL（秒）
    */
@@ -70,10 +73,10 @@ export interface RedisServiceDiscoveryOptions extends ServiceDiscoveryOptions<Re
   scanCount?: number;
 }
 
-
-export type MidwayRedisConfigOptions = ServiceFactoryConfigOption<RedisConfigOptions> & {
-  /**
-   * Redis 服务发现配置
-   */
-  serviceDiscovery?: RedisServiceDiscoveryOptions;
-};
+export type MidwayRedisConfigOptions =
+  ServiceFactoryConfigOption<RedisConfigOptions> & {
+    /**
+     * Redis 服务发现配置
+     */
+    serviceDiscovery?: RedisServiceDiscoveryOptions;
+  };

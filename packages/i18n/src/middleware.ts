@@ -56,9 +56,8 @@ export class I18nMiddleware implements IMiddleware<any, any> {
       // add a filter for i18n cookie
       app.useFilter(I18nFilter);
       return async (req, res, next) => {
-        const i18nService = await req.requestContext.getAsync(
-          MidwayI18nService
-        );
+        const i18nService =
+          await req.requestContext.getAsync(MidwayI18nService);
 
         let requestLocale;
         if (this.resolverConfig) {
@@ -119,9 +118,8 @@ export class I18nMiddleware implements IMiddleware<any, any> {
               signed: false,
             });
 
-          const i18nService = await ctx.requestContext.getAsync(
-            MidwayI18nService
-          );
+          const i18nService =
+            await ctx.requestContext.getAsync(MidwayI18nService);
           if (!requestLocale) {
             // Accept-Language: zh-CN,zh;q=0.5
             // Accept-Language: zh-CN

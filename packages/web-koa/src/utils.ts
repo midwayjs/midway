@@ -29,7 +29,9 @@ export function sendToWormhole(stream): Promise<void> {
     }
 
     // unpipe it
-    stream.unpipe && stream.unpipe();
+    if (stream.unpipe) {
+      stream.unpipe();
+    }
     // enable resume first
     stream.resume();
 
@@ -128,7 +130,7 @@ export function escapeHtml(string) {
 
   let escape;
   let html = '';
-  let index = 0;
+  let index;
   let lastIndex = 0;
 
   for (index = match.index; index < str.length; index++) {

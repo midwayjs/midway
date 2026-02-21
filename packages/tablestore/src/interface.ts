@@ -5,7 +5,9 @@ import * as TableStore from 'tablestore';
 /**
  * protocol/proto_buffer
  */
-export type ExtraMetadata = typeof INF_MIN & typeof INF_MAX & typeof PK_AUTO_INCR;
+export type ExtraMetadata = typeof INF_MIN &
+  typeof INF_MAX &
+  typeof PK_AUTO_INCR;
 export type PrimaryKeyValue = Int64LE | string | Buffer;
 export type ColumnValue = number | boolean | PrimaryKeyValue;
 export type PrimaryKey = {
@@ -155,7 +157,7 @@ export interface CreateTableParams {
     primaryKey: {
       name: string;
       type: PrimaryKeyType;
-      option?: PrimaryKeyOption,
+      option?: PrimaryKeyOption;
     }[];
     definedColumn?: {
       name: string;
@@ -210,8 +212,7 @@ export interface DescribeTableParams {
   tableName: string;
 }
 
-export interface ColumnCondition {
-}
+export interface ColumnCondition {}
 
 export interface GetRowParams {
   tableName: string;
@@ -316,13 +317,14 @@ export interface BatchGetRowParams {
 
 export type BatchWriteRowItem = (
   | {
-  type: 'PUT' | 'DELETE';
-  attributeColumns?: AttributeColumn[];
-}
+      type: 'PUT' | 'DELETE';
+      attributeColumns?: AttributeColumn[];
+    }
   | {
-  type: 'UPDATE';
-  updateOfAttributeColumns: UpdateColumn[];
-}) & {
+      type: 'UPDATE';
+      updateOfAttributeColumns: UpdateColumn[];
+    }
+) & {
   primaryKey: PrimaryKey[];
   condition?: TableStoreCondition | null;
   returnContent?: {
@@ -373,127 +375,127 @@ export interface SearchIndexSetting {
 
 export type SearchIndexQuery =
   | {
-  queryType?: QueryType.MATCH_QUERY;
-  query?: {
-    fieldName: string;
-    text?: string;
-    minimumShouldMatch?: number;
-    operator?: QueryOperator;
-  };
-}
+      queryType?: QueryType.MATCH_QUERY;
+      query?: {
+        fieldName: string;
+        text?: string;
+        minimumShouldMatch?: number;
+        operator?: QueryOperator;
+      };
+    }
   | {
-  queryType?: QueryType.MATCH_PHRASE_QUERY;
-  query?: {
-    fieldName: string;
-    text?: string;
-  };
-}
+      queryType?: QueryType.MATCH_PHRASE_QUERY;
+      query?: {
+        fieldName: string;
+        text?: string;
+      };
+    }
   | {
-  queryType?: QueryType.TERM_QUERY;
-  query?: {
-    fieldName: string;
-    term: ColumnValue;
-  };
-}
+      queryType?: QueryType.TERM_QUERY;
+      query?: {
+        fieldName: string;
+        term: ColumnValue;
+      };
+    }
   | {
-  queryType?: QueryType.RANGE_QUERY;
-  query?: {
-    fieldName: string;
-    rangeFrom?: ColumnValue;
-    rangeTo?: ColumnValue;
-    includeLower?: boolean;
-    includeUpper?: boolean;
-  };
-}
+      queryType?: QueryType.RANGE_QUERY;
+      query?: {
+        fieldName: string;
+        rangeFrom?: ColumnValue;
+        rangeTo?: ColumnValue;
+        includeLower?: boolean;
+        includeUpper?: boolean;
+      };
+    }
   | {
-  queryType?: QueryType.PREFIX_QUERY;
-  query?: {
-    fieldName: string;
-    prefix?: string;
-  };
-}
+      queryType?: QueryType.PREFIX_QUERY;
+      query?: {
+        fieldName: string;
+        prefix?: string;
+      };
+    }
   | {
-  queryType?: QueryType.BOOL_QUERY;
-  query?: {
-    mustQueries?: SearchIndexQuery[];
-    mustNotQueries?: SearchIndexQuery[];
-    filterQueries?: SearchIndexQuery[];
-    shouldQueries?: SearchIndexQuery[];
-    minimumShouldMatch?: number;
-  };
-}
+      queryType?: QueryType.BOOL_QUERY;
+      query?: {
+        mustQueries?: SearchIndexQuery[];
+        mustNotQueries?: SearchIndexQuery[];
+        filterQueries?: SearchIndexQuery[];
+        shouldQueries?: SearchIndexQuery[];
+        minimumShouldMatch?: number;
+      };
+    }
   | {
-  queryType?: QueryType.CONST_SCORE_QUERY;
-  query?: {
-    filter: SearchIndexQuery;
-  };
-}
+      queryType?: QueryType.CONST_SCORE_QUERY;
+      query?: {
+        filter: SearchIndexQuery;
+      };
+    }
   | {
-  queryType?: QueryType.FUNCTION_SCORE_QUERY;
-  query?: {
-    query: SearchIndexQuery;
-    fieldValueFactor: { fieldName: string };
-  };
-}
+      queryType?: QueryType.FUNCTION_SCORE_QUERY;
+      query?: {
+        query: SearchIndexQuery;
+        fieldValueFactor: { fieldName: string };
+      };
+    }
   | {
-  type?: QueryType.NESTED_QUERY;
-  query?: {
-    path: string;
-    query: SearchIndexQuery;
-    /**
-     * @default
-     * ScoreMode.SCORE_MODE_AVG
-     */
-    scoreMode?: ScoreMode;
-  };
-}
+      type?: QueryType.NESTED_QUERY;
+      query?: {
+        path: string;
+        query: SearchIndexQuery;
+        /**
+         * @default
+         * ScoreMode.SCORE_MODE_AVG
+         */
+        scoreMode?: ScoreMode;
+      };
+    }
   | {
-  queryType?: QueryType.WILDCARD_QUERY;
-  query?: {
-    fieldName: string;
-    value?: string;
-  };
-}
+      queryType?: QueryType.WILDCARD_QUERY;
+      query?: {
+        fieldName: string;
+        value?: string;
+      };
+    }
   | {
-  queryType?: QueryType.MATCH_ALL_QUERY;
-  query?: {};
-}
+      queryType?: QueryType.MATCH_ALL_QUERY;
+      query?: {};
+    }
   | {
-  queryType?: QueryType.GEO_BOUNDING_BOX_QUERY;
-  query?: {
-    fieldName: string;
-    topLeft?: string;
-    bottomRight?: string;
-  };
-}
+      queryType?: QueryType.GEO_BOUNDING_BOX_QUERY;
+      query?: {
+        fieldName: string;
+        topLeft?: string;
+        bottomRight?: string;
+      };
+    }
   | {
-  queryType?: QueryType.GEO_DISTANCE_QUERY;
-  query?: {
-    fieldName: string;
-    centerPoint?: string;
-    distance?: number;
-  };
-}
+      queryType?: QueryType.GEO_DISTANCE_QUERY;
+      query?: {
+        fieldName: string;
+        centerPoint?: string;
+        distance?: number;
+      };
+    }
   | {
-  queryType?: QueryType.GEO_POLYGON_QUERY;
-  query?: {
-    fieldName: string;
-    points?: string[];
-  };
-}
+      queryType?: QueryType.GEO_POLYGON_QUERY;
+      query?: {
+        fieldName: string;
+        points?: string[];
+      };
+    }
   | {
-  queryType?: QueryType.TERMS_QUERY;
-  query?: {
-    fieldName: string;
-    terms?: ColumnValue[];
-  };
-}
+      queryType?: QueryType.TERMS_QUERY;
+      query?: {
+        fieldName: string;
+        terms?: ColumnValue[];
+      };
+    }
   | {
-  queryType?: QueryType.EXISTS_QUERY;
-  query?: {
-    fieldName: string;
-  };
-};
+      queryType?: QueryType.EXISTS_QUERY;
+      query?: {
+        fieldName: string;
+      };
+    };
 
 export interface SearchIndexNestedFilter {
   path?: string;
@@ -551,8 +553,8 @@ export interface SearchQuery {
     sorters: SearchIndexSorter[];
   };
   query?: {
-    queryType: QueryType
-  }
+    queryType: QueryType;
+  };
 }
 
 export interface SearchParams {
@@ -561,7 +563,12 @@ export interface SearchParams {
   searchQuery: SearchQuery;
   columnToGet:
     | { returnType: ColumnReturnType; returnNames: string[] }
-    | { returnType: Exclude<ColumnReturnType, ColumnReturnType.RETURN_SPECIFIED> };
+    | {
+        returnType: Exclude<
+          ColumnReturnType,
+          ColumnReturnType.RETURN_SPECIFIED
+        >;
+      };
   routingValues?: PrimaryKey[][];
 }
 
@@ -595,8 +602,8 @@ export interface TableStoreResult {
     {
       name: string;
       value: any;
-    }
-  ]
+    },
+  ];
 }
 
 export interface TableStoreClient {
@@ -702,7 +709,9 @@ export interface TableStoreClient {
   /**
    * 创建局部事务
    */
-  startLocalTransaction<R = any>(params: StartLocalTransactionParams): Promise<R>;
+  startLocalTransaction<R = any>(
+    params: StartLocalTransactionParams
+  ): Promise<R>;
 
   /**
    * 提交事务
@@ -759,7 +768,9 @@ export interface TableStoreCondition {
   columnCondition: ColumnCondition | null;
   rowExistenceExpectation: RowExistenceExpectation;
 
-  setRowExistenceExpectation(rowExistenceExpectation: RowExistenceExpectation): void;
+  setRowExistenceExpectation(
+    rowExistenceExpectation: RowExistenceExpectation
+  ): void;
 
   getRowExistenceExpectation(): RowExistenceExpectation;
 
@@ -780,7 +791,9 @@ export interface TableStoreLong {
   toNumber(): number;
 }
 
-export interface TableStoreSingleColumnCondition<T extends ColumnValue = ColumnValue> extends ColumnCondition {
+export interface TableStoreSingleColumnCondition<
+  T extends ColumnValue = ColumnValue,
+> extends ColumnCondition {
   columnName: string;
   columnValue: T;
   comparator: ComparatorType;

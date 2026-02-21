@@ -27,9 +27,8 @@ export abstract class DataSourceManager<
     Record<string, any>,
     ENTITY_CONFIG_KEY
   > = BaseDataSourceManagerConfigOption<Record<string, any>, 'entities'>,
-  ENTITY_CONFIG_KEY extends string = 'entities'
-> implements IDataSourceManager<T, ConnectionOpts>
-{
+  ENTITY_CONFIG_KEY extends string = 'entities',
+> implements IDataSourceManager<T, ConnectionOpts> {
   protected dataSource: Map<string, T> = new Map();
   protected options: DataSourceManagerConfigOption<
     ConnectionOpts,

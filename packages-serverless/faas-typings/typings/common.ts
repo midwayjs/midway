@@ -291,8 +291,7 @@ interface ContextDelegatedResponse {
 }
 
 export interface FaaSHTTPResponse
-  extends ContextDelegatedResponse,
-    Pick<Writable, 'write' | 'end'> {
+  extends ContextDelegatedResponse, Pick<Writable, 'write' | 'end'> {
   /**
    * Return response header.
    */
@@ -334,8 +333,7 @@ export interface FaaSHTTPResponse
 }
 
 export interface FaaSHTTPContext
-  extends ContextDelegatedRequest,
-    ContextDelegatedResponse {
+  extends ContextDelegatedRequest, ContextDelegatedResponse {
   /**
    * It's a http request mock object, please don't use it directly.
    */

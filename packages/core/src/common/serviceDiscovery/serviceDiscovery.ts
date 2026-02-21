@@ -12,11 +12,11 @@ import { extend } from '../../util/extend';
 
 export abstract class ServiceDiscoveryClient<
   Client,
-  ServiceDiscoveryConfigOptions extends ServiceDiscoveryOptions<QueryServiceInstance>,
+  ServiceDiscoveryConfigOptions extends
+    ServiceDiscoveryOptions<QueryServiceInstance>,
   RegisterServiceInstance,
-  QueryServiceInstance = RegisterServiceInstance
-> implements IServiceDiscoveryClient<QueryServiceInstance>
-{
+  QueryServiceInstance = RegisterServiceInstance,
+> implements IServiceDiscoveryClient<QueryServiceInstance> {
   protected options: ServiceDiscoveryConfigOptions;
   protected instance?: RegisterServiceInstance;
   protected client: Client;
@@ -90,10 +90,11 @@ export abstract class ServiceDiscoveryClient<
  */
 export abstract class ServiceDiscovery<
   Client,
-  ServiceDiscoveryConfigOptions extends ServiceDiscoveryOptions<QueryServiceInstance>,
+  ServiceDiscoveryConfigOptions extends
+    ServiceDiscoveryOptions<QueryServiceInstance>,
   RegisterServiceInstance,
   QueryServiceInstance = RegisterServiceInstance,
-  GetInstanceOptions = RegisterServiceInstance
+  GetInstanceOptions = RegisterServiceInstance,
 > {
   protected serviceDiscoveryClientStore: Set<
     ServiceDiscoveryClient<

@@ -113,7 +113,7 @@ export class MidwayMQTTFramework extends BaseFramework<
       ctx.message = message;
       const fn = await this.applyMiddleware(async ctx => {
         const instance = await ctx.requestContext.getAsync(ClzProvider);
-        // eslint-disable-next-line prefer-spread
+
         return await instance['subscribe'].call(instance, ctx);
       });
       return await fn(ctx);

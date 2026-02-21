@@ -1,4 +1,3 @@
-
 export interface INunjucksConfig {
   /**
    * controls if output with dangerous characters are escaped automatically.
@@ -31,4 +30,4 @@ export interface INunjucksConfig {
     commentStart?: string;
     commentEnd?: string;
   };
-};
+}

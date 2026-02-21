@@ -150,8 +150,10 @@ export interface EncodingPropertyObject {
   allowReserved?: boolean;
 }
 
-export interface ResponsesObject
-  extends Record<string, ResponseObject | ReferenceObject | undefined> {
+export interface ResponsesObject extends Record<
+  string,
+  ResponseObject | ReferenceObject | undefined
+> {
   default?: ResponseObject | ReferenceObject;
 }
 
@@ -295,8 +297,10 @@ export interface Type<T = any> {
   new (...args: any[]): T;
 }
 
-export interface SchemaObjectMetadata
-  extends Omit<SchemaObject, 'type' | 'required'> {
+export interface SchemaObjectMetadata extends Omit<
+  SchemaObject,
+  'type' | 'required'
+> {
   type?: Type<unknown> | [Type] | string | Record<string, any>;
   isArray?: boolean;
   required?: boolean;

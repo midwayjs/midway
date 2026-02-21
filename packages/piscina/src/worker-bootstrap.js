@@ -63,7 +63,6 @@ if (fullpath) {
       const workerTsConfig = path.join(baseDir, 'tsconfig.json');
       const hasWorkerTsConfig = fs.existsSync(workerTsConfig);
 
-      /* eslint-disable-next-line node/no-extraneous-require */
       require('ts-node').register(
         hasWorkerTsConfig
           ? { project: workerTsConfig }

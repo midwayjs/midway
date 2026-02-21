@@ -1,0 +1,31 @@
+{
+  "name": "@samples/react-functional-api-rspack",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm run dev:server\" \"pnpm run dev:web\"",
+    "dev:server": "tsx watch src/server/bootstrap.ts",
+    "dev:web": "rspack serve --config rspack.config.mjs --mode development",
+    "build": "pnpm run build:server && pnpm run build:web",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:web": "rspack build --config rspack.config.mjs --mode production"
+  },
+  "dependencies": {
+    "@midwayjs/bootstrap": "workspace:*",
+    "@midwayjs/core": "workspace:*",
+    "@midwayjs/koa": "workspace:*",
+    "@midwayjs/web-bridge": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@rspack/cli": "^1.5.6",
+    "@rspack/core": "^1.5.6",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "concurrently": "^9.2.1",
+    "tsx": "^4.20.5",
+    "typescript": "5.6.3"
+  }
+}

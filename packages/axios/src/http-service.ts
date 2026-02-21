@@ -122,5 +122,4 @@ export class HttpService {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HttpService extends AxiosInstance {}

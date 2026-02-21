@@ -38,7 +38,7 @@ export function findFirstExistModule(moduleList): ComponentModule {
  * @param Framework
  */
 export async function transformFrameworkToConfiguration<
-  T extends IMidwayFramework<any, any, any>
+  T extends IMidwayFramework<any, any, any>,
 >(
   Framework: any,
   loadMode: 'commonjs' | 'esm'

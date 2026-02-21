@@ -15,7 +15,7 @@ export const getCurrentApplicationContext = (): IMidwayGlobalContainer => {
 export const getCurrentMainFramework = <
   APP extends IMidwayApplication<CTX>,
   CTX extends IMidwayContext,
-  CONFIG extends IConfigurationOptions
+  CONFIG extends IConfigurationOptions,
 >(): IMidwayFramework<APP, CTX, CONFIG> => {
   return global['MIDWAY_MAIN_FRAMEWORK'] as IMidwayFramework<APP, CTX, CONFIG>;
 };

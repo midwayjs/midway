@@ -40,16 +40,18 @@ export interface StaticFileOption {
    */
   alias?: {
     [aliasName: string]: string;
-  },
+  };
   /**
    * filter files at init dir, for example - skip non build (source) files. If array set - allow only listed files
    */
-  filter?: Function | string[];
+  filter?: ((...args: any[]) => any) | string[];
 }
 
-
-export interface StaticFileOptions extends Omit<StaticFileOption, 'prefix' | 'dir'> {
+export interface StaticFileOptions extends Omit<
+  StaticFileOption,
+  'prefix' | 'dir'
+> {
   dirs?: {
     [pathName: string]: StaticFileOption;
-  },
+  };
 }

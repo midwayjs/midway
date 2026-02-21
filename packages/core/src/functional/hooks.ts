@@ -54,7 +54,6 @@ export function useInjectSync<T = any>(
   identifier: ClassType<T> | string,
   args?: any[]
 ): T {
-  ``;
   const ctx = useContext();
   const requestContext: IMidwayContainer = ctx
     ? ctx['requestContext']

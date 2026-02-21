@@ -56,9 +56,8 @@ export abstract class AbstractBootstrapStarter {
 
   public async initFramework(bootstrapOptions: IMidwayBootstrapOptions = {}) {
     // init midway
-    this.applicationContext = await initializeGlobalApplicationContext(
-      bootstrapOptions
-    );
+    this.applicationContext =
+      await initializeGlobalApplicationContext(bootstrapOptions);
 
     const midwayFrameworkService = this.applicationContext.get(
       MidwayFrameworkService

@@ -89,12 +89,33 @@ export class MidwayInvalidConfigError extends MidwayError {
   }
 }
 
+export interface DuplicateRouteErrorEntry {
+  source: 'functional' | 'decorator';
+  handler: string;
+}
+
+export interface DuplicateRouteErrorPayload {
+  code: 'MIDWAY_DUPLICATE_ROUTE';
+  method: string;
+  fullPath: string;
+  current: DuplicateRouteErrorEntry;
+  existing: DuplicateRouteErrorEntry;
+}
+
 export class MidwayDuplicateRouteError extends MidwayError {
-  constructor(routerUrl: string, existPos: string, existPosOther: string) {
+  payload?: DuplicateRouteErrorPayload;
+
+  constructor(
+    routerUrl: string,
+    existPos: string,
+    existPosOther: string,
+    payload?: DuplicateRouteErrorPayload
+  ) {
     super(
       `Duplicate router "${routerUrl}" at "${existPos}" and "${existPosOther}"`,
       FrameworkErrorEnum.DUPLICATE_ROUTER
     );
+    this.payload = payload;
   }
 }
 

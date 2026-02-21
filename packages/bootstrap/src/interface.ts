@@ -41,9 +41,10 @@ export interface IForkManager<T> {
   isPrimary(): boolean;
 }
 
-export type ClusterOptions = ForkOptions & ClusterSettings & {
-  sticky?: boolean;
-  stickyLoadBalancingMethod?: 'random' | 'round-robin' | 'least-connection';
-};
+export type ClusterOptions = ForkOptions &
+  ClusterSettings & {
+    sticky?: boolean;
+    stickyLoadBalancingMethod?: 'random' | 'round-robin' | 'least-connection';
+  };
 
 export type ThreadOptions = ForkOptions & WorkerOptions;

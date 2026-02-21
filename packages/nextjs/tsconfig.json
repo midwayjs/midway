@@ -4,7 +4,19 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@midwayjs/web-bridge": [
+        "../web-bridge/dist/index.d.ts"
+      ],
+      "@midwayjs/core": [
+        "../core/dist/index.d.ts"
+      ],
+      "@midwayjs/core/functional": [
+        "../core/dist/functional/index.d.ts"
+      ]
+    }
   },
   "include": [
     "./src/**/*.ts"

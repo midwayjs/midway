@@ -2,9 +2,14 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction
+  NextFunction as BaseNextFunction,
 } from '@midwayjs/core';
-import { Implementation, CallToolResult, GetPromptResult, ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
+import {
+  Implementation,
+  CallToolResult,
+  GetPromptResult,
+  ReadResourceResult,
+} from '@modelcontextprotocol/sdk/types.js';
 import { ServerOptions } from '@modelcontextprotocol/sdk/server/index.js';
 import { SSEServerTransportOptions } from '@modelcontextprotocol/sdk/server/sse.js';
 import { StreamableHTTPServerTransportOptions } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -47,7 +52,8 @@ export interface IMidwayMCPConfigurationOptions extends IConfigurationOptions {
   jwtAuthCustomPayloadTransformer?: (payload: any, token: string) => AuthInfo;
 }
 
-export interface IMidwayMCPContext extends IMidwayContext, Partial<RequestHandlerExtra<any, any>> {}
+export interface IMidwayMCPContext
+  extends IMidwayContext, Partial<RequestHandlerExtra<any, any>> {}
 
 export type IMidwayMCPApplication = IMidwayApplication<IMidwayMCPContext>;
 

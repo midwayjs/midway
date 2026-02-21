@@ -74,7 +74,6 @@ export class DefaultMqttProducer implements MqttClient {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DefaultMqttProducer extends MqttClient {
   // empty
 }

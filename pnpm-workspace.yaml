@@ -2,6 +2,7 @@ packages:
   - 'packages/*'
   - 'packages-serverless/*'
   - 'packages-resource/*'
+  - 'samples/*'
 onlyBuiltDependencies: [
   'sqlite3'
 ]

@@ -22,7 +22,7 @@ import { MidwayMiddlewareService } from '../service/middlewareService';
 const debug = util.debuglog('midway:debug');
 
 export abstract class WebControllerGenerator<
-  Router extends { use: (...args) => void }
+  Router extends { use: (...args) => void },
 > {
   protected constructor(
     readonly app: IMidwayApplication,
@@ -181,7 +181,9 @@ export abstract class WebControllerGenerator<
         );
       }
 
-      routerHandler && routerHandler(newRouter);
+      if (routerHandler) {
+        routerHandler(newRouter);
+      }
     }
   }
 

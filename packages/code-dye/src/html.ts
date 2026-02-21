@@ -39,8 +39,8 @@ export const foreach = (info, start, pi, level) => {
       </div>
       <div class="timeContainer">
         <div class="time ${info.end ? 'end' : 'not-end'}" style="width:${
-    timeUse / pi
-  }px;left: ${timeDiff / pi}px"><div class="timeValue">${timeUse} ms</div></div>
+          timeUse / pi
+        }px;left: ${timeDiff / pi}px"><div class="timeValue">${timeUse} ms</div></div>
       </div>
 
     </div>

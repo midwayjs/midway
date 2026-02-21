@@ -177,7 +177,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
                   [
                     ...(wsEventInfo?.eventOptions?.middleware || []),
                     async (ctx, next) => {
-                      // eslint-disable-next-line prefer-spread
                       return controller[wsEventInfo.propertyName].apply(
                         controller,
                         [socket]

@@ -1,85 +1,120 @@
-# Lint tools and formatting
+# Lint and formatting
 
-Midway's framework and business code are written by TypeScript. The default Midway provides a set of default lint, editor and formatting rules for more convenient development and testing.
+Midway framework and business code is mainly written in TypeScript. By default, Midway uses [mwts](https://github.com/midwayjs/mwts) to keep linting and formatting consistent.
 
-## Code style library
+## Code style package
 
-The code style library of Midway is called [mwts](https://github.com/midwayjs/mwts), which is derived from Google's [gts](https://github.com/google/gts). Mwts is Midway's TypeScript style guide and the configuration of formatter, linter and automatic code fix.
+`mwts` is Midway's TypeScript style toolkit, including:
+- ESLint checking (`check` / `lint`)
+- Auto fixes (`fix`)
+- Default formatting setup (default: `Prettier + ESLint`)
+
+`mwts` is inspired by [gts](https://github.com/google/gts), but it does not directly depend on the `gts` package.
 
 :::info
-In the midway project, we will add mwts by default. The following process is just to explain how to use mwts.
+In Midway projects, `mwts` is usually included by scaffolding. This page explains the configuration and migration flow.
 :::
 
-In order to use mwts, we need to add it to the development dependency.
+## Dependencies and runtime requirements
 
-```json
-  "devDependencies": {
-    "mwts": "^1.0.5 ",
-    "typescript": "^4.0.0"
-  },
-```
-
-## ESLint configuration
-
-Mwts provides a default set of ESLint configurations (TSLint has been abandoned and merged into ESLint).
-
-Create a `.eslintrc.json` file in the root directory of the project, with the following contents (usually scaffolding will bring it with it):
+For `mwts 2.x`, the recommended baseline is:
 
 ```json
 {
-  "extends": "./node_modules/mwts /",
-  "ignorePatterns": ["node_modules", "dist", "test", "jest.config.js", "interface.ts"]
-  "env": {
-    "jest": true
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "mwts": "^2.0.0",
+    "typescript": "^5.0.0"
   }
 }
 ```
 
-The above is the default configuration of midway project. Other project `ignorePatterns` and `env` can be adjusted according to ESLint.
+## Init and migration
 
-For more information about the default rules for mwts, see [here](https://github.com/midwayjs/mwts/blob/master/.eslintrc.json).
+For new projects:
 
-## Perform code checking and formatting
-
-You can run the `mwts check` command and the `mwts fix` command to check the code. For example, add script commands to the project (usually scaffolding will come with it).
-
-```typescript
-  "scripts": {
-    "lint": "mwts check ",
-    "lint:fix": "mwts fix",
-  },
+```bash
+npx mwts init
 ```
 
-## Prettier configuration
+For legacy `mwts 1.x` projects (`.eslintrc.json` based):
 
-Mwts provides a set of default prettier configurations, creating a `.prettierrc.js` file with the following configuration contents (usually scaffolding comes with it).
+```bash
+npx mwts migrate
+```
 
-```javascript
+After migration, `eslint.config.js` (ESLint Flat Config) will be generated.
+
+## ESLint config (mwts 2.x)
+
+`mwts 2.x` uses `eslint.config.js`. A recommended setup is:
+
+```js
+const mwtsConfig = require('mwts/eslint.config.js');
+
+module.exports = [
+  {
+    ignores: ['**/node_modules', '**/dist'],
+  },
+  ...mwtsConfig,
+];
+```
+
+If your project uses Jest, add Jest globals for test files:
+
+```js
+const globals = require('globals');
+
+module.exports = [
+  ...require('mwts/eslint.config.js'),
+  {
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/jest.setup.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
+];
+```
+
+## Run check and fix
+
+Common scripts (usually already included):
+
+```json
+{
+  "scripts": {
+    "lint": "mwts check",
+    "lint:fix": "mwts fix"
+  }
+}
+```
+
+`mwts check/lint/fix` also support file arguments:
+
+```bash
+mwts check src/index.ts
+mwts fix src/index.ts
+```
+
+## Prettier config
+
+In default mode, keep `.prettierrc.js`:
+
+```js
 module.exports = {
-  ...require('mwts/.prettierrc.json')
+  ...require('mwts/.prettierrc.json'),
 };
 ```
 
-## Configure save automatic formatting
+## Optional formatter modes
 
-Let's take VSCode as an example.
+`mwts init` supports three modes:
+- default: `Prettier + ESLint`
+- `--formatter stylistic`: `ESLint + Stylistic`
+- `--formatter biome`: `Biome + ESLint`
 
-The first step is to install the Prettier plug-in.
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618042429530-177c3636-aefc-419d-8d3a-5258cad13631.png)
-
-Open the configuration, search for "save", find "Format On Save" on the right, and check.
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618042494782-71b6cc3c-18ae-4344-987b-ec82084f2dd8.png)
-
-If saving the file has no effect, the editor usually has multiple formatting methods, you can right-click to make the default selection.
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125271116-845e8452-0f7b-46a9-a28a-388f2db9c5e3.png)
-
-Select Configure Default Formatters ".
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125381302-d3fe30c1-e56d-43f8-ada2-6e315f4ff2c4.png)
-
-Select Prettier.
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125423564-8e46b0f8-f422-4e3d-a805-3b0a1db037f8.png)
+If you choose non-default mode, follow the generated config files.

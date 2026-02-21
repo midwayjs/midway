@@ -2,20 +2,19 @@
 'use strict';
 
 const { join } = require('path');
-// eslint-disable-next-line node/no-unpublished-require
+
 const { CommandUtils } = require('typeorm/commands/CommandUtils');
-// eslint-disable-next-line node/no-unpublished-require
+
 const ImportUtils = require('typeorm/util/ImportUtils');
-// eslint-disable-next-line node/no-unpublished-require
+
 const { DataSource } = require('typeorm');
 
 const originLoadDataSource = CommandUtils.loadDataSource;
 
 CommandUtils.loadDataSource = async function (dataSourceFilePath) {
   try {
-    let dataSourceFileExports = await ImportUtils.importOrRequireFile(
-      dataSourceFilePath
-    );
+    let dataSourceFileExports =
+      await ImportUtils.importOrRequireFile(dataSourceFilePath);
     if (dataSourceFileExports[0] && dataSourceFileExports[0].default) {
       dataSourceFileExports = dataSourceFileExports[0].default;
       if (typeof dataSourceFileExports === 'function') {
@@ -41,10 +40,10 @@ CommandUtils.loadDataSource = async function (dataSourceFilePath) {
     }
   } catch (err) {
     throw new Error(
-      `Unable to open file: "${dataSourceFilePath}". ${err.message}`
+      `Unable to open file: "${dataSourceFilePath}". ${err.message}`,
+      { cause: err }
     );
   }
 };
 
-// eslint-disable-next-line node/no-unpublished-require
 require('typeorm/cli-ts-node-commonjs');

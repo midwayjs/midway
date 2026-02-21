@@ -139,7 +139,7 @@ export class HTTPRequest {
           try {
             this[BODY] = qs.parse(body);
           } catch (err) {
-            throw new Error('invalid urlencoded received');
+            throw new Error('invalid urlencoded received', { cause: err });
           }
         }
         break;

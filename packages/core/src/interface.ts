@@ -354,7 +354,10 @@ export interface PipeTransform<T = unknown, R = unknown> {
 
 export type PipeTransformFunction<T = any, R = any> = (value: T) => R;
 
-export type PipeUnionTransform<T = any, R = any> = PipeTransform<T, R> | (new (...args) => PipeTransform<T, R>) | PipeTransformFunction<T, R>;
+export type PipeUnionTransform<T = any, R = any> =
+  | PipeTransform<T, R>
+  | (new (...args) => PipeTransform<T, R>)
+  | PipeTransformFunction<T, R>;
 
 export interface PropertyDecoratorOptions {
   impl?: boolean;
@@ -444,7 +447,7 @@ export interface MidwayCoreDefaultConfig {
     readyTimeout?: number;
     serverReadyTimeout?: number;
     stopTimeout?: number;
-  }
+  };
 }
 
 export type ServiceFactoryConfigOption<OPTIONS> = {
@@ -456,7 +459,7 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
   defaultClientName?: string;
   clientPriority?: {
     [key: string]: number;
-  }
+  };
 };
 
 export type CreateDataSourceInstanceOptions = {
@@ -468,16 +471,22 @@ export type CreateDataSourceInstanceOptions = {
    * @deprecated
    */
   cacheInstance?: boolean | undefined;
-}
+};
 
-export type BaseDataSourceManagerConfigOption<OPTIONS extends Record<string, any>, ENTITY_CONFIG_KEY extends string = 'entities'> = OPTIONS & {
+export type BaseDataSourceManagerConfigOption<
+  OPTIONS extends Record<string, any>,
+  ENTITY_CONFIG_KEY extends string = 'entities',
+> = OPTIONS & {
   validateConnection?: boolean;
   customDataSourceClass?: any;
 } & {
   [key in ENTITY_CONFIG_KEY]?: any[];
 };
 
-export interface DataSourceManagerConfigOption<OPTIONS extends Record<string, any>, ENTITY_CONFIG_KEY extends string = 'entities'> extends CreateDataSourceInstanceOptions {
+export interface DataSourceManagerConfigOption<
+  OPTIONS extends Record<string, any>,
+  ENTITY_CONFIG_KEY extends string = 'entities',
+> extends CreateDataSourceInstanceOptions {
   default?: BaseDataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY>;
   defaultDataSourceName?: string;
   dataSource?: BaseDataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY>;
@@ -493,7 +502,6 @@ type ConfigType<T> = T extends (...args: any[]) => any
 export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T>
   ? Pick<ConfigType<T>, K>
   : ConfigType<T>;
-
 
 export interface LifeCycleInvokeOptions {
   abortController: AbortController;
@@ -538,14 +546,8 @@ export interface ILifeCycle extends Partial<IObjectLifeCycle> {
  */
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
-  get<T>(
-    identifier: ClassType<T> | string,
-    args?: any[]
-  ): T;
-  getAsync<T>(
-    identifier: ClassType<T> | string,
-    args?: any[]
-  ): Promise<T>;
+  get<T>(identifier: ClassType<T> | string, args?: any[]): T;
+  getAsync<T>(identifier: ClassType<T> | string, args?: any[]): Promise<T>;
 }
 
 export enum ObjectLifeCycleEvent {
@@ -704,12 +706,16 @@ export interface IIdentifierRelationShip {
   getRelation(id: ObjectIdentifier): string;
 }
 
-export interface IMidwayGlobalContainer extends IMidwayContainer, WithFn<IObjectLifeCycle> {
+export interface IMidwayGlobalContainer
+  extends IMidwayContainer, WithFn<IObjectLifeCycle> {
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
   getNamespaceList(): string[];
   addNamespace(namespace: string): void;
-  bind<T>(target: T, options?: Partial<IObjectDefinition>): IObjectDefinition | undefined;
+  bind<T>(
+    target: T,
+    options?: Partial<IObjectDefinition>
+  ): IObjectDefinition | undefined;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
@@ -746,7 +752,7 @@ export interface IMidwayContainer extends IObjectFactory {
   /**
    * Get IoC identifier
    */
-  getIdentifier(identifier: (ClassType | string)): string;
+  getIdentifier(identifier: ClassType | string): string;
   /**
    * Get instance IoC container scope
    * @param instance
@@ -823,24 +829,25 @@ export type IgnoreMatcher<CTX> = string | RegExp | ((ctx: CTX) => boolean);
  * Common middleware definition
  */
 export interface IMiddleware<CTX, R, N = unknown> {
-  resolve: (app: IMidwayApplication, options?: any) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
+  resolve: (
+    app: IMidwayApplication,
+    options?: any
+  ) => FunctionMiddleware<CTX, R, N> | Promise<FunctionMiddleware<CTX, R, N>>;
   /**
    * Which paths to ignore
    */
-  match?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
+  match?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX>[];
   /**
    * Match those paths with higher priority than ignore
    */
-  ignore?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX> [];
+  ignore?: IgnoreMatcher<CTX> | IgnoreMatcher<CTX>[];
 }
 export type FunctionMiddleware<CTX, R, N = unknown> = N extends true
   ? (req: CTX, res: R, next: N) => any
   : (context: CTX, next: R, options?: any) => any;
-export type ClassMiddleware<CTX, R, N> = new (...args) => IMiddleware<
-  CTX,
-  R,
-  N
->;
+export type ClassMiddleware<CTX, R, N> = new (
+  ...args
+) => IMiddleware<CTX, R, N>;
 
 export type CompositionMiddleware<CTX, R, N> = {
   middleware: ClassMiddleware<CTX, R, N>;
@@ -875,7 +882,11 @@ export type CommonFilterUnion<CTX, R, N> =
  * Guard definition
  */
 export interface IGuard<CTX = unknown> {
-  canActivate(ctx: CTX, supplierClz: new (...args) => any, methodName: string): boolean | Promise<boolean>;
+  canActivate(
+    ctx: CTX,
+    supplierClz: new (...args) => any,
+    methodName: string
+  ): boolean | Promise<boolean>;
 }
 
 export type CommonGuardUnion<CTX = unknown> =
@@ -1044,7 +1055,7 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
 
 export type IMidwayApplication<
   T extends IMidwayContext = IMidwayContext,
-  FrameworkApplication = unknown
+  FrameworkApplication = unknown,
 > = IMidwayBaseApplication<T> & FrameworkApplication;
 
 export type ModuleLoadType = 'commonjs' | 'esm';
@@ -1076,7 +1087,7 @@ export interface IMidwayFramework<
   CTX extends IMidwayContext,
   CONFIG extends IConfigurationOptions,
   ResOrNext = unknown,
-  Next = unknown
+  Next = unknown,
 > {
   app: APP;
   configurationOptions: CONFIG;
@@ -1103,7 +1114,11 @@ export interface IMidwayFramework<
   ): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
   useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>): void;
   useGuard(guard: CommonGuardUnion<CTX>): void;
-  runGuard(ctx: CTX, supplierClz: new (...args) => any, methodName: string): Promise<boolean>;
+  runGuard(
+    ctx: CTX,
+    supplierClz: new (...args) => any,
+    methodName: string
+  ): Promise<boolean>;
   getNamespace(): string;
   setFrameworkLoggerName(name: string): void;
 }
@@ -1137,7 +1152,7 @@ export interface IServiceFactory<Client> {
   getClientPriority(clientName: string): string;
   isHighPriority(clientName: string): boolean;
   isMediumPriority(clientName: string): boolean;
-  isLowPriority(clientName: string) : boolean;
+  isLowPriority(clientName: string): boolean;
 }
 
 export interface IDataSourceManager<DataSource, DataSourceConfig> {
@@ -1232,7 +1247,8 @@ export interface InjectionConfigurationOptions {
   detector?: IFileDetector | false;
 }
 
-export type FunctionalConfigurationOptions = InjectionConfigurationOptions & ILifeCycle;
+export type FunctionalConfigurationOptions = InjectionConfigurationOptions &
+  ILifeCycle;
 
 /**
  * 负载均衡策略类型
@@ -1242,17 +1258,19 @@ export const LoadBalancerType = {
   ROUND_ROBIN: 'roundRobin',
 } as const;
 
-export type LoadBalancerType = typeof LoadBalancerType[keyof typeof LoadBalancerType];
+export type LoadBalancerType =
+  (typeof LoadBalancerType)[keyof typeof LoadBalancerType];
 
 export const ServiceDiscoveryHealthCheckType = {
   SELF: 'self',
   TTL: 'ttl',
   HTTP: 'http',
   TCP: 'tcp',
-  CUSTOM: 'custom'
+  CUSTOM: 'custom',
 } as const;
 
-export type ServiceDiscoveryHealthCheckType = typeof ServiceDiscoveryHealthCheckType[keyof typeof ServiceDiscoveryHealthCheckType];
+export type ServiceDiscoveryHealthCheckType =
+  (typeof ServiceDiscoveryHealthCheckType)[keyof typeof ServiceDiscoveryHealthCheckType];
 
 /**
  * 基础健康检查配置
@@ -1325,7 +1343,10 @@ export interface TCPServiceDiscoveryHealthCheckOptions extends BaseServiceDiscov
 /**
  * 健康检查配置联合类型
  */
-export type ServiceDiscoveryHealthCheckOptions = TTLServiceDiscoveryHealthCheckOptions | HTTPServiceDiscoveryHealthCheckOptions | TCPServiceDiscoveryHealthCheckOptions;
+export type ServiceDiscoveryHealthCheckOptions =
+  | TTLServiceDiscoveryHealthCheckOptions
+  | HTTPServiceDiscoveryHealthCheckOptions
+  | TCPServiceDiscoveryHealthCheckOptions;
 
 export interface ServiceDiscoveryBaseInstance {}
 
@@ -1350,7 +1371,10 @@ export interface IServiceDiscoveryHealthCheck<ServiceInstance> {
   check(instance: ServiceInstance): Promise<ServiceDiscoveryHealthCheckResult>;
 }
 
-export interface ServiceDiscoveryOptions<ServiceInstance, serviceOptions = Record<string, any>> {
+export interface ServiceDiscoveryOptions<
+  ServiceInstance,
+  serviceOptions = Record<string, any>,
+> {
   serviceDiscoveryClient?: string;
   serviceOptions?: serviceOptions;
   loadBalancer?: LoadBalancerType | ILoadBalancer<ServiceInstance>;
@@ -1366,7 +1390,6 @@ export interface ILoadBalancer<ServiceInstance> {
    */
   select(instances: ServiceInstance[]): ServiceInstance;
 }
-
 
 export interface IServiceDiscoveryClient<ServiceInstance> {
   /**

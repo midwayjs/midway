@@ -31,8 +31,7 @@ export interface IRabbitMQExchange {
   options?: Options.AssertExchange;
 }
 
-export interface IMidwayRabbitMQConfigurationOptions
-  extends IConfigurationOptions {
+export interface IMidwayRabbitMQConfigurationOptions extends IConfigurationOptions {
   url: string | Options.Connect;
   socketOptions?: any;
   reconnectTime?: number;

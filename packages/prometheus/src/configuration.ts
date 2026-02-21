@@ -101,7 +101,9 @@ export class PrometheusConfiguration {
   async onStop() {
     if (isMaster()) {
       closeLock();
-      this.http_server && this.http_server.close();
+      if (this.http_server) {
+        this.http_server.close();
+      }
     }
   }
 }

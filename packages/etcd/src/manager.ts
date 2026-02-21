@@ -61,7 +61,6 @@ export class ETCDService implements Etcd3 {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ETCDService extends Etcd3 {
   // empty
 }

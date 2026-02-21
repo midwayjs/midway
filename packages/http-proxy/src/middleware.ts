@@ -124,10 +124,10 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     const proxyList: HttpProxyStrategy[] = this.httpProxy.match
       ? [this.httpProxy]
       : this.httpProxy.strategy
-      ? Object.values(this.httpProxy.strategy).map(item => {
-          return Object.assign({}, this.httpProxy.default, item);
-        })
-      : [];
+        ? Object.values(this.httpProxy.strategy).map(item => {
+            return Object.assign({}, this.httpProxy.default, item);
+          })
+        : [];
 
     for (const proxy of proxyList) {
       if (!proxy.match) {

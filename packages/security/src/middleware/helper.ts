@@ -47,7 +47,7 @@ const safeJS = (jsCode: string): string => {
   }
 
   let res = '';
-  let index = 0;
+  let index;
   let lastIndex = 0;
   let ascii;
 

@@ -28,13 +28,24 @@ export interface IPassportStrategy {
   transformAuthInfo?(info: any, done: (err: any, info: any) => void): void;
 }
 
-export interface IPassportMiddleware extends IMiddleware<any, any>{
-  authenticate?(options: AuthenticateOptions, callback: Function);
+export interface IPassportMiddleware extends IMiddleware<any, any> {
+  authenticate?(
+    options: AuthenticateOptions,
+    callback: (...args: any[]) => any
+  );
 }
 
-export abstract class AbstractPassportMiddleware implements Pick<IPassportMiddleware, 'authenticate'> {
-  abstract getAuthenticateOptions(): Promise<AuthenticateOptions> | AuthenticateOptions;
-  authenticate?(options: AuthenticateOptions, callback?: Function);
+export abstract class AbstractPassportMiddleware implements Pick<
+  IPassportMiddleware,
+  'authenticate'
+> {
+  abstract getAuthenticateOptions():
+    | Promise<AuthenticateOptions>
+    | AuthenticateOptions;
+  authenticate?(
+    options: AuthenticateOptions,
+    callback?: (...args: any[]) => any
+  );
   resolve(): any {}
 }
 

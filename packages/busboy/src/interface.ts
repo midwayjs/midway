@@ -8,7 +8,7 @@ export interface UploadOptions extends BusboyConfig {
   /**
    * Upload mode, default is `file`
    */
-  mode?: UploadMode,
+  mode?: UploadMode;
   /**
    * The white ext file names
    */
@@ -28,7 +28,7 @@ export interface UploadOptions extends BusboyConfig {
   /**
    * Which paths to ignore
    */
-  ignore?:  IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  ignore?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
   /**
    * Match those paths with higher priority than ignore
    */
@@ -36,7 +36,9 @@ export interface UploadOptions extends BusboyConfig {
   /**
    * Mime type white list
    */
-  mimeTypeWhiteList?: Record<string, string | string[]> | ((ctx: IMidwayContext<any>) => string | string[]);
+  mimeTypeWhiteList?:
+    | Record<string, string | string[]>
+    | ((ctx: IMidwayContext<any>) => string | string[]);
   /**
    * Whether to allow fields duplication, default is `false`, only for `file` and `stream` mode
    */
@@ -91,4 +93,3 @@ export interface UploadStreamFieldInfo {
    */
   value: any;
 }
-

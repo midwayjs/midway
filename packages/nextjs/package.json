@@ -2,6 +2,7 @@
   "name": "@midwayjs/nextjs",
   "description": "midway nextjs component",
   "version": "4.0.0-beta.11",
+  "private": true,
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
@@ -10,6 +11,9 @@
     "index.d.ts",
     "inject.js"
   ],
+  "dependencies": {
+    "@midwayjs/web-bridge": "workspace:^"
+  },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",
@@ -31,10 +35,8 @@
   "scripts": {
     "build": "tsc",
     "test:prepare": "zx ./test/prepare.mjs",
-    "test": "npm run test:prepare && node ../../node_modules/jest/bin/jest.js --runInBand --runInBand",
     "cov:server": "npm run test:prepare && node ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
     "no-cache-test": "node -r hack.js ../../node_modules/jest/bin/jest.js --runInBand --no-cache",
-    "ci": "npm run test",
     "lint": "mwts check"
   },
   "engines": {

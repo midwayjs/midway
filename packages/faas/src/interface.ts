@@ -10,7 +10,10 @@ import {
   ObjectIdentifier,
   ILogger,
 } from '@midwayjs/core';
-import { Application as ServerlessHttpApplication, HttpResponseOptions } from '@midwayjs/serverless-http-parser';
+import {
+  Application as ServerlessHttpApplication,
+  HttpResponseOptions,
+} from '@midwayjs/serverless-http-parser';
 import type { Cookies } from '@midwayjs/cookies';
 import { Writable } from 'stream';
 
@@ -302,8 +305,7 @@ interface ContextDelegatedResponse {
 }
 
 export interface FaaSHTTPResponse
-  extends ContextDelegatedResponse,
-    Pick<Writable, 'write' | 'end'> {
+  extends ContextDelegatedResponse, Pick<Writable, 'write' | 'end'> {
   /**
    * Return response header.
    */
@@ -345,8 +347,7 @@ export interface FaaSHTTPResponse
 }
 
 export interface FaaSHTTPContext
-  extends ContextDelegatedRequest,
-    ContextDelegatedResponse {
+  extends ContextDelegatedRequest, ContextDelegatedResponse {
   /**
    * It's a http request mock object, please don't use it directly.
    */
@@ -399,7 +400,6 @@ export interface FaaSHTTPContext
   throw(...properties: Array<number | string | Record<string, unknown>>): never;
 }
 
-
 export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
   logger: ILogger;
   env: string;
@@ -412,7 +412,6 @@ export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
 export type FaaSMiddleware =
   | ((context: Context, next: () => Promise<any>) => any)
   | string;
-
 
 export interface FormatResponseOptions {
   supportBufferResponse?: boolean;

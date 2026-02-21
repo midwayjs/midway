@@ -1,9 +1,10 @@
 import { Metadata, ClientUnaryCall } from '@grpc/grpc-js';
 import { IClientUnaryService } from '../../interface';
 
-export class ClientUnaryRequest<reqType, resType>
-  implements IClientUnaryService<reqType, resType>
-{
+export class ClientUnaryRequest<
+  reqType,
+  resType,
+> implements IClientUnaryService<reqType, resType> {
   client;
   metadata;
   timeout;
@@ -47,7 +48,9 @@ export class ClientUnaryRequest<reqType, resType>
           }
         }
       );
-      handler && handler(call);
+      if (handler) {
+        handler(call);
+      }
     });
   }
 

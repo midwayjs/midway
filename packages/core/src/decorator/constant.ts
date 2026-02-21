@@ -72,6 +72,7 @@ export const LOGGER_KEY = 'logger';
 export const APPLICATION_KEY = 'common:application';
 export const MAIN_APPLICATION_KEY = 'common:main_application';
 export const APPLICATION_CONTEXT_KEY = 'common:application_context';
+export const FUNCTIONAL_API_CONTROLLER_KEY = 'functional:api_controller';
 
 ////////////////////////////////////////// inject keys
 // constructor key

@@ -2,9 +2,16 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction, ServiceFactoryConfigOption,
+  NextFunction as BaseNextFunction,
+  ServiceFactoryConfigOption,
 } from '@midwayjs/core';
-import type { IClientOptions, IClientSubscribeOptions, IClientSubscribeProperties, ISubscriptionMap, IPublishPacket } from 'mqtt';
+import type {
+  IClientOptions,
+  IClientSubscribeOptions,
+  IClientSubscribeProperties,
+  ISubscriptionMap,
+  IPublishPacket,
+} from 'mqtt';
 
 export interface MqttSubscriberOptions {
   topicObject: string | string[] | ISubscriptionMap;
@@ -19,7 +26,7 @@ export interface IMidwayMQTTConfigurationOptions extends IConfigurationOptions {
       connectOptions: Partial<IClientOptions>;
       subscribeOptions: MqttSubscriberOptions;
     }>;
-  },
+  };
   pub: ServiceFactoryConfigOption<IClientOptions>;
 }
 
@@ -36,4 +43,3 @@ export type NextFunction = BaseNextFunction;
 export interface IMqttSubscriber {
   subscribe(ctx: IMidwayMQTTContext): Promise<any>;
 }
-

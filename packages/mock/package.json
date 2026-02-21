@@ -4,6 +4,18 @@
   "description": "create your test app from midway framework",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "require": "./dist/vite.js",
+      "import": "./dist/vite.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",

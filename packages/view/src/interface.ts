@@ -13,7 +13,11 @@ export interface IViewEngine {
    * @param {Object} [options] - view options, you can use `options.viewEngine` to specify view engine
    * @return {Promise<String>} result - return a promise with a render result
    */
-  render(name: string, locals?: Record<string, any>, options?: RenderOptions): Promise<string>;
+  render(
+    name: string,
+    locals?: Record<string, any>,
+    options?: RenderOptions
+  ): Promise<string>;
 
   /**
    * Render a template string by view engine

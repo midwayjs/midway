@@ -26,7 +26,7 @@ export class MidwayCommanderFramework extends BaseFramework<
   IMidwayCommanderContext,
   ICommanderConfigurationOptions
 > {
-  public declare app: IMidwayCommanderApplication;
+  declare public app: IMidwayCommanderApplication;
   protected frameworkLoggerName = 'commanderLogger';
   private program: Command;
   private isCommandsLoaded = false;

@@ -1,4 +1,8 @@
-import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import {
+  IConfigurationOptions,
+  IMidwayApplication,
+  IMidwayContext,
+} from '@midwayjs/core';
 import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/core';
@@ -8,17 +12,20 @@ import { ListenOptions } from 'net';
 export interface State extends DefaultState {}
 
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
-export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<State, IMidwayKoaContext> & {
-  generateController(
-    controllerMapping: string,
-    routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any []
-  ): Middleware<State, IMidwayKoaContext>;
-  /**
-   * Get the port that the application is listening on
-   */
-  getPort(): string;
-}>;
+export type IMidwayKoaApplication = IMidwayApplication<
+  IMidwayKoaContext,
+  koa<State, IMidwayKoaContext> & {
+    generateController(
+      controllerMapping: string,
+      routeArgsInfo?: RouterParamValue[],
+      routerResponseData?: any[]
+    ): Middleware<State, IMidwayKoaContext>;
+    /**
+     * Get the port that the application is listening on
+     */
+    getPort(): string;
+  }
+>;
 
 /**
  * @deprecated use NextFunction definition

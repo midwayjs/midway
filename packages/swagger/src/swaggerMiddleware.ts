@@ -17,9 +17,11 @@ import { SwaggerExplorer } from './swaggerExplorer';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class SwaggerMiddleware
-  implements IMiddleware<IMidwayContext, NextFunction, unknown>
-{
+export class SwaggerMiddleware implements IMiddleware<
+  IMidwayContext,
+  NextFunction,
+  unknown
+> {
   @Config('swagger')
   private swaggerConfig: SwaggerOptions;
 

@@ -1,11 +1,15 @@
-import { IMidwayApplication, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
+import {
+  IMidwayApplication,
+  IMidwayContext,
+  NextFunction as BaseNextFunction,
+} from '@midwayjs/core';
 import { WorkerOptions, QueueOptions, Job, ConnectionOptions } from 'bullmq';
 
 export interface IProcessor {
   execute(data: any, job: Job, token?: string): Promise<any>;
 }
 
-export interface Application extends IMidwayApplication<Context> { }
+export interface Application extends IMidwayApplication<Context> {}
 export type NextFunction = BaseNextFunction;
 
 export interface Context extends IMidwayContext {

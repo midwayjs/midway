@@ -148,7 +148,7 @@ export class MemoryDialectInstance implements ITagDialectInstance {
   }
 
   async bind(bindOptions?: ITagBindOptions): Promise<ITagOperResult> {
-    let tagList: ITagItem[] = [];
+    let tagList: ITagItem[];
     try {
       tagList = await Promise.all(
         bindOptions.tags.map(async tag => {

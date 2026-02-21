@@ -7,7 +7,7 @@ export interface UploadOptions {
   /**
    * Upload mode, default is `file`
    */
-  mode?: UploadMode,
+  mode?: UploadMode;
   /**
    * Max file size (in bytes), default is `10mb`
    */
@@ -31,7 +31,7 @@ export interface UploadOptions {
   /**
    * Which paths to ignore
    */
-  ignore?:  IgnoreMatcher<any> | IgnoreMatcher<any>[];
+  ignore?: IgnoreMatcher<any> | IgnoreMatcher<any>[];
   /**
    * Match those paths with higher priority than ignore
    */
@@ -39,18 +39,18 @@ export interface UploadOptions {
   /**
    * Mime type white list
    */
-  mimeTypeWhiteList?: Record<string, string | string[]> | ((ctx: IMidwayContext<any>) => string | string[]);
+  mimeTypeWhiteList?:
+    | Record<string, string | string[]>
+    | ((ctx: IMidwayContext<any>) => string | string[]);
   /**
    * Whether to allow fields duplication, default is `false`
    */
   allowFieldsDuplication?: boolean;
 }
 
-
-
 export interface UploadFileInfo<T> {
   filename: string;
   fieldName: string;
   mimeType: string;
-  data: T extends string ? string : Readable ;
+  data: T extends string ? string : Readable;
 }

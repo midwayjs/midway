@@ -1,7 +1,8 @@
 import type { ManagerOptions, SocketOptions } from 'socket.io-client';
 
-export interface MidwaySocketIOClientOptions
-  extends Partial<ManagerOptions & SocketOptions> {
+export interface MidwaySocketIOClientOptions extends Partial<
+  ManagerOptions & SocketOptions
+> {
   url?: string;
   protocol?: string;
   host?: string;

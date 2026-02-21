@@ -85,11 +85,9 @@ export class SwaggerExplorer {
         this.swaggerConfig?.externalDocs?.url
       );
     }
-    if (
-      this.swaggerConfig?.servers &&
-      Array.isArray(this.swaggerConfig?.servers)
-    ) {
-      for (const serv of this.swaggerConfig?.servers) {
+    const servers = this.swaggerConfig?.servers;
+    if (Array.isArray(servers)) {
+      for (const serv of servers) {
         this.documentBuilder.addServer(
           serv?.url,
           serv?.description,
@@ -97,8 +95,9 @@ export class SwaggerExplorer {
         );
       }
     }
-    if (this.swaggerConfig?.tags && Array.isArray(this.swaggerConfig?.tags)) {
-      for (const t of this.swaggerConfig?.tags) {
+    const tags = this.swaggerConfig?.tags;
+    if (Array.isArray(tags)) {
+      for (const t of tags) {
         this.documentBuilder.addTag(t.name, t.description, t.externalDocs);
       }
     }
@@ -109,12 +108,13 @@ export class SwaggerExplorer {
     }
 
     // 设置 auth 类型
-    if (Array.isArray(this.swaggerConfig?.auth)) {
-      for (const a of this.swaggerConfig?.auth) {
+    const authConfig = this.swaggerConfig?.auth;
+    if (Array.isArray(authConfig)) {
+      for (const a of authConfig) {
         this.setAuth(a);
       }
-    } else {
-      this.setAuth(this.swaggerConfig?.auth);
+    } else if (authConfig) {
+      this.setAuth(authConfig);
     }
   }
 
@@ -417,7 +417,7 @@ export class SwaggerExplorer {
       operationId:
         operMeta?.metadata?.operationId ||
         this.getOperationId(target.name, webRouter),
-      tags: routerTags.length ? routerTags : operMeta?.metadata?.tags ?? [],
+      tags: routerTags.length ? routerTags : (operMeta?.metadata?.tags ?? []),
     };
     if (operMeta?.metadata?.deprecated != null) {
       opts[webRouter.requestMethod].deprecated =

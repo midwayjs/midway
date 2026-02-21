@@ -20,7 +20,7 @@ export interface ISession {
   /**
    * get/set session maxAge
    */
-  maxAge: SessionOptions["maxAge"];
+  maxAge: SessionOptions['maxAge'];
 
   /**
    * commit this session's headers if autoCommit is set to false.
@@ -67,7 +67,7 @@ export interface SessionOptions extends Omit<CookieSetOptions, 'maxAge'> {
    * "session" will result in a cookie that expires when session/browser is closed
    * Warning: If a session cookie is stolen, this cookie will never expire
    */
-  maxAge?: number | "session" | undefined;
+  maxAge?: number | 'session' | undefined;
 
   /**
    * custom encode method
@@ -105,7 +105,7 @@ export interface SessionOptions extends Omit<CookieSetOptions, 'maxAge'> {
    * ContextStore must be a class which claims three instance methods demonstrated above.
    * new ContextStore(ctx) will be executed on every request.
    */
-  ContextStore?: { new(ctx: any): SessionStore } | undefined;
+  ContextStore?: { new (ctx: any): SessionStore } | undefined;
 
   /**
    * If you want to add prefix for all external session id, you can use options.prefix, it will not work if options.genid present.

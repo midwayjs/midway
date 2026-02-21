@@ -599,7 +599,7 @@ export class MetadataManager {
 
   private static validCacheConstruct(target) {
     const metadata = this.getOrCreateMetaObject(target);
-    // eslint-disable-next-line no-prototype-builtins
+
     if (!metadata[this.cacheSymbol]) {
       metadata[this.cacheSymbol] = Object.create(null);
     }
@@ -647,7 +647,6 @@ export class MetadataManager {
   }
 
   public static ensureTargetType(target: any, type: ObjectType): void {
-    // eslint-disable-next-line no-prototype-builtins
     const ret: ObjectType = this.getOwnProperty(target, this.isClassSymbol);
     if (!ret) {
       this.setOwnProperty(target, this.isClassSymbol, type);

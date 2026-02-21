@@ -2,16 +2,19 @@ import {
   CONTROLLER_KEY,
   ControllerOption,
   DecoratorManager,
+  Inject,
   Provide,
   RouterOption,
   Scope,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
+  FUNCTIONAL_API_CONTROLLER_KEY,
 } from '../decorator';
 import { joinURLPath } from '../util';
 import {
   MidwayCommonError,
+  DuplicateRouteErrorPayload,
   MidwayDuplicateControllerOptionsError,
   MidwayDuplicateRouteError,
 } from '../error';
@@ -20,6 +23,7 @@ import { PathToRegexpUtil } from '../util/pathToRegexp';
 import { Types } from '../util/types';
 import { ServerlessTriggerType, ScopeEnum, FaaSMetadata } from '../interface';
 import { MetadataManager } from '../decorator/metadataManager';
+import { MidwayLoggerService } from './loggerService';
 
 const debug = util.debuglog('midway:debug');
 
@@ -134,6 +138,34 @@ export interface RouterInfo {
    * version prefix for URI versioning
    */
   versionPrefix?: string;
+
+  /**
+   * route definition source
+   */
+  source?: 'functional' | 'decorator';
+
+  /**
+   * route-level ignore global prefix
+   */
+  ignoreGlobalPrefix?: boolean;
+}
+
+export interface RouteManifestItem {
+  source: 'functional' | 'decorator';
+  operationId: string;
+  controllerId?: string;
+  controllerPrefix: string;
+  method: string;
+  path: string;
+  fullPath: string;
+  routerName?: string;
+  middlewareCount: number;
+  ignoreGlobalPrefix: boolean;
+  version?: string | string[];
+  versionType?: 'URI' | 'HEADER' | 'MEDIA_TYPE' | 'CUSTOM';
+  versionPrefix?: string;
+  summary?: string;
+  description?: string;
 }
 
 export type DynamicRouterInfo = Omit<
@@ -165,6 +197,9 @@ export class MidwayWebRouterService {
   protected routes = new Map<string, RouterInfo[]>();
   protected routesPriority: RouterPriority[] = [];
 
+  @Inject()
+  loggerService: MidwayLoggerService;
+
   constructor(readonly options: RouterCollectorOptions = {}) {}
 
   protected async analyze() {
@@ -174,8 +209,61 @@ export class MidwayWebRouterService {
 
   protected analyzeController() {
     const controllerModules = DecoratorManager.listModule(CONTROLLER_KEY);
+    const dedupedControllerModules: any[] = [];
+    const functionalControllerIndexMap = new Map<string, number>();
 
     for (const module of controllerModules) {
+      const isFunctionalController = !!MetadataManager.getOwnMetadata(
+        FUNCTIONAL_API_CONTROLLER_KEY,
+        module
+      );
+      if (!isFunctionalController) {
+        dedupedControllerModules.push(module);
+        continue;
+      }
+
+      const controllerOption: ControllerOption = MetadataManager.getOwnMetadata(
+        CONTROLLER_KEY,
+        module
+      );
+      const webRouterInfo: RouterOption[] = MetadataManager.getOwnMetadata(
+        WEB_ROUTER_KEY,
+        module
+      );
+      if (!controllerOption || !webRouterInfo) {
+        dedupedControllerModules.push(module);
+        continue;
+      }
+
+      // Deduplicate only when controller prefix + route signatures are exactly the same.
+      // This keeps "double evaluation of same module" safe while preserving distinct APIs
+      // that happen to share class name or route method names.
+      const routeSignatures = webRouterInfo
+        .map(item => {
+          return `${(item.requestMethod || '').toLowerCase()}|${String(
+            item.path || '/'
+          )}|${item.routerName || ''}|${item.method || ''}`;
+        })
+        .sort()
+        .join(';');
+      const controllerSignature = `${
+        controllerOption.prefix || '/'
+      }::${routeSignatures}`;
+
+      const existingIndex =
+        functionalControllerIndexMap.get(controllerSignature);
+      if (typeof existingIndex === 'number') {
+        dedupedControllerModules[existingIndex] = module;
+      } else {
+        functionalControllerIndexMap.set(
+          controllerSignature,
+          dedupedControllerModules.length
+        );
+        dedupedControllerModules.push(module);
+      }
+    }
+
+    for (const module of dedupedControllerModules) {
       const controllerOption: ControllerOption = MetadataManager.getOwnMetadata(
         CONTROLLER_KEY,
         module
@@ -252,60 +340,54 @@ export class MidwayWebRouterService {
 
     controllerOption.routerOptions = controllerOption.routerOptions || {};
 
-    let priority;
     // implement middleware in controller
     const middleware = controllerOption.routerOptions.middleware;
     const controllerIgnoreGlobalPrefix =
       !!controllerOption.routerOptions?.ignoreGlobalPrefix;
+    const controllerVersion = controllerOption.routerOptions?.version;
+    const controllerVersionType = controllerVersion
+      ? controllerOption.routerOptions?.versionType || 'URI'
+      : undefined;
+    const controllerVersionPrefix =
+      controllerVersionType === 'URI'
+        ? controllerOption.routerOptions?.versionPrefix || 'v'
+        : controllerOption.routerOptions?.versionPrefix;
 
-    let prefix = joinURLPath(
+    let prefixWithGlobal = joinURLPath(
       this.options.globalPrefix,
       controllerOption.prefix || '/'
     );
-    const ignorePrefix = controllerOption.prefix || '/';
-
-    // if controller set ignore global prefix, all router will be ignore too.
-    if (controllerIgnoreGlobalPrefix) {
-      prefix = ignorePrefix;
-    }
+    const rawIgnorePrefix = controllerOption.prefix || '/';
+    let ignorePrefix = rawIgnorePrefix;
 
     // Apply version prefix for URI versioning
-    if (
-      controllerOption.routerOptions?.version &&
-      (!controllerOption.routerOptions?.versionType ||
-        controllerOption.routerOptions?.versionType === 'URI')
-    ) {
-      const versionPrefix =
-        controllerOption.routerOptions?.versionPrefix || 'v';
-      const version = Array.isArray(controllerOption.routerOptions.version)
-        ? controllerOption.routerOptions.version[0]
-        : controllerOption.routerOptions.version;
+    if (controllerVersion && controllerVersionType === 'URI') {
+      const version = Array.isArray(controllerVersion)
+        ? controllerVersion[0]
+        : controllerVersion;
 
-      const versionedPrefix = `/${versionPrefix}${version}`;
+      const versionedPrefix = `/${controllerVersionPrefix}${version}`;
 
-      if (controllerIgnoreGlobalPrefix) {
-        prefix = joinURLPath(versionedPrefix, ignorePrefix);
-      } else {
-        prefix = joinURLPath(
-          this.options.globalPrefix,
-          versionedPrefix,
-          controllerOption.prefix || '/'
-        );
-      }
+      prefixWithGlobal = joinURLPath(
+        this.options.globalPrefix,
+        versionedPrefix,
+        controllerOption.prefix || '/'
+      );
+      ignorePrefix = joinURLPath(versionedPrefix, rawIgnorePrefix);
     }
 
-    if (/\*/.test(prefix)) {
+    if (/\*/.test(prefixWithGlobal)) {
       throw new MidwayCommonError(
-        `Router prefix ${prefix} can't set string with *`
+        `Router prefix ${prefixWithGlobal} can't set string with *`
       );
     }
 
-    // set prefix
-    if (!this.routes.has(prefix)) {
-      this.routes.set(prefix, []);
+    // set prefix with global
+    if (!this.routes.has(prefixWithGlobal)) {
+      this.routes.set(prefixWithGlobal, []);
       this.routesPriority.push({
-        prefix,
-        priority: prefix === '/' && priority === undefined ? -999 : 0,
+        prefix: prefixWithGlobal,
+        priority: prefixWithGlobal === '/' ? -999 : 0,
         middleware,
         routerOptions: controllerOption.routerOptions,
         controllerId,
@@ -315,36 +397,43 @@ export class MidwayWebRouterService {
       // 不同的 controller，可能会有相同的 prefix，一旦 options 不同，就要报错
       if (middleware && middleware.length > 0) {
         const originRoute = this.routesPriority.filter(el => {
-          return el.prefix === prefix;
+          return el.prefix === prefixWithGlobal;
         })[0];
         throw new MidwayDuplicateControllerOptionsError(
-          prefix,
+          prefixWithGlobal,
           controllerId,
           originRoute.controllerId
         );
       }
     }
 
-    // set ignorePrefix
-    if (!this.routes.has(ignorePrefix)) {
-      this.routes.set(ignorePrefix, []);
-      this.routesPriority.push({
-        prefix: ignorePrefix,
-        priority: ignorePrefix === '/' && priority === undefined ? -999 : 0,
-        middleware,
-        routerOptions: controllerOption.routerOptions,
-        controllerId,
-        routerModule: controllerClz,
-      });
-    }
-
     const webRouterInfo: RouterOption[] = MetadataManager.getOwnMetadata(
       WEB_ROUTER_KEY,
       controllerClz
     );
+    const hasRouteIgnoreGlobalPrefix =
+      !!webRouterInfo &&
+      webRouterInfo.some(route => route?.ignoreGlobalPrefix === true);
+
+    // set ignorePrefix only when it can be matched
+    if (controllerIgnoreGlobalPrefix || hasRouteIgnoreGlobalPrefix) {
+      if (!this.routes.has(ignorePrefix)) {
+        this.routes.set(ignorePrefix, []);
+        this.routesPriority.push({
+          prefix: ignorePrefix,
+          priority: ignorePrefix === '/' ? -999 : 0,
+          middleware,
+          routerOptions: controllerOption.routerOptions,
+          controllerId,
+          routerModule: controllerClz,
+        });
+      }
+    }
 
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
+        const isRouteIgnoreGlobalPrefixConfigured =
+          webRouter.__ignoreGlobalPrefixConfigured === true;
         const routeArgsInfo =
           MetadataManager.getOwnMetadata(
             WEB_ROUTER_PARAM_KEY,
@@ -361,7 +450,14 @@ export class MidwayWebRouterService {
 
         const data: RouterInfo = {
           id,
-          prefix: webRouter.ignoreGlobalPrefix ? ignorePrefix : prefix,
+          // route-level value overrides controller default when explicitly set
+          prefix: isRouteIgnoreGlobalPrefixConfigured
+            ? webRouter.ignoreGlobalPrefix
+              ? ignorePrefix
+              : prefixWithGlobal
+            : controllerIgnoreGlobalPrefix
+              ? ignorePrefix
+              : prefixWithGlobal,
           routerName: webRouter.routerName || '',
           url: webRouter.path,
           requestMethod: webRouter.requestMethod,
@@ -378,12 +474,36 @@ export class MidwayWebRouterService {
           responseMetadata: routerResponseData,
         };
 
+        const isFunctionalController = !!MetadataManager.getOwnMetadata(
+          FUNCTIONAL_API_CONTROLLER_KEY,
+          controllerClz
+        );
+        if (isFunctionalController) {
+          data.source = 'functional';
+        }
+        if (
+          isRouteIgnoreGlobalPrefixConfigured ||
+          controllerIgnoreGlobalPrefix
+        ) {
+          const resolvedIgnoreGlobalPrefix = isRouteIgnoreGlobalPrefixConfigured
+            ? !!webRouter.ignoreGlobalPrefix
+            : controllerIgnoreGlobalPrefix;
+          if (resolvedIgnoreGlobalPrefix) {
+            data.ignoreGlobalPrefix = true;
+          }
+        }
+        if (controllerVersion) {
+          data.version = controllerVersion;
+          data.versionType = controllerVersionType;
+          data.versionPrefix = controllerVersionPrefix;
+        }
+
         if (functionMeta) {
           // get function information
           data.functionName = controllerId + '-' + webRouter.method;
           data.functionTriggerName = ServerlessTriggerType.HTTP;
           data.functionTriggerMetadata = {
-            path: joinURLPath(prefix, webRouter.path.toString()),
+            path: joinURLPath(data.prefix, webRouter.path.toString()),
             method: webRouter.requestMethod,
           } as FaaSMetadata.HTTPTriggerOptions;
           data.functionMetadata = {
@@ -574,6 +694,31 @@ export class MidwayWebRouterService {
     return matchedRouterInfo;
   }
 
+  public async getRouteManifest(): Promise<RouteManifestItem[]> {
+    const routes = await this.getFlattenRouterTable();
+    const manifest = routes.map(route => ({
+      source: route.source ?? 'decorator',
+      operationId: this.getOperationId(route),
+      controllerId: route.controllerId,
+      controllerPrefix: route.prefix || '',
+      method: route.requestMethod,
+      path: route.url?.toString() || '',
+      fullPath: route.fullUrl || '',
+      routerName: route.routerName,
+      middlewareCount:
+        (route.middleware?.length || 0) +
+        (route.controllerMiddleware?.length || 0),
+      ignoreGlobalPrefix: !!route.ignoreGlobalPrefix,
+      version: route.version,
+      versionType: route.versionType,
+      versionPrefix: route.versionPrefix,
+      summary: route.summary,
+      description: route.description,
+    }));
+    this.checkDuplicateOperationId(manifest);
+    return manifest;
+  }
+
   protected checkDuplicateAndPush(prefix, routerInfo: RouterInfo) {
     const prefixList = this.routes.get(prefix);
     const matched = prefixList.filter(item => {
@@ -585,10 +730,30 @@ export class MidwayWebRouterService {
       );
     });
     if (matched && matched.length) {
+      const existingRoute = matched[0];
+      const fullPath =
+        existingRoute.fullUrl ||
+        (typeof routerInfo.url === 'string'
+          ? joinURLPath(prefix, routerInfo.url)
+          : `${prefix}${routerInfo.url?.toString() || ''}`);
+      const payload: DuplicateRouteErrorPayload = {
+        code: 'MIDWAY_DUPLICATE_ROUTE',
+        method: (routerInfo.requestMethod || '').toUpperCase(),
+        fullPath,
+        existing: {
+          source: existingRoute.source ?? 'decorator',
+          handler: this.getRouterHandlerIdentity(existingRoute),
+        },
+        current: {
+          source: routerInfo.source ?? 'decorator',
+          handler: this.getRouterHandlerIdentity(routerInfo),
+        },
+      };
       throw new MidwayDuplicateRouteError(
         `${routerInfo.requestMethod} ${routerInfo.url}`,
-        `${matched[0].handlerName}`,
-        `${routerInfo.handlerName}`
+        payload.existing.handler,
+        payload.current.handler,
+        payload
       );
     }
     // format url
@@ -608,5 +773,68 @@ export class MidwayWebRouterService {
       }
     }
     prefixList.push(routerInfo);
+    this.logRouteLoaded(routerInfo);
+  }
+
+  protected logRouteLoaded(routerInfo: RouterInfo) {
+    const fullPath =
+      routerInfo.fullUrl ||
+      (typeof routerInfo.url === 'string'
+        ? joinURLPath(routerInfo.prefix || '', routerInfo.url)
+        : `${routerInfo.prefix || ''}${routerInfo.url?.toString() || ''}`);
+    const logger = this.loggerService?.getLogger('appLogger');
+    if (!logger || typeof logger.info !== 'function') {
+      return;
+    }
+    logger.info(
+      '[midway:router] loaded route %s %s -> %s (%s)',
+      (routerInfo.requestMethod || 'ALL').toUpperCase(),
+      fullPath,
+      this.getRouterHandlerIdentity(routerInfo),
+      routerInfo.source ?? 'decorator'
+    );
+  }
+
+  protected getRouterHandlerIdentity(routerInfo: RouterInfo) {
+    if (routerInfo.handlerName) {
+      return routerInfo.handlerName;
+    }
+    if (typeof routerInfo.method === 'string') {
+      return routerInfo.controllerId
+        ? `${routerInfo.controllerId}.${routerInfo.method}`
+        : routerInfo.method;
+    }
+    if (typeof routerInfo.method === 'function') {
+      return routerInfo.method.name || 'anonymous';
+    }
+    return 'unknown';
+  }
+
+  protected getOperationId(routeInfo: RouterInfo) {
+    if (routeInfo.routerName) {
+      return routeInfo.routerName;
+    }
+    const fullPath = routeInfo.fullUrl || routeInfo.url?.toString() || '/';
+    return `${(routeInfo.requestMethod || 'all').toLowerCase()}_${fullPath
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '')}`;
+  }
+
+  protected checkDuplicateOperationId(manifest: RouteManifestItem[]) {
+    const operationMap = new Map<string, RouteManifestItem>();
+    for (const route of manifest) {
+      const exist = operationMap.get(route.operationId);
+      if (exist) {
+        throw new MidwayCommonError(
+          `Duplicate operationId "${
+            route.operationId
+          }" between "${exist.method.toUpperCase()} ${
+            exist.fullPath
+          }" and "${route.method.toUpperCase()} ${route.fullPath}"`
+        );
+      }
+      operationMap.set(route.operationId, route);
+    }
   }
 }

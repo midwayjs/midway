@@ -19,7 +19,9 @@ export interface IMidwayWebBaseApplication {
   applicationContext: IMidwayContainer;
   getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
-  generateMiddleware?(middlewareId: any): Promise<Middleware<State, EggContext>>;
+  generateMiddleware?(
+    middlewareId: any
+  ): Promise<Middleware<State, EggContext>>;
   createLogger(name: string, options: LoggerOptions): ILogger;
 }
 
@@ -27,14 +29,21 @@ export interface IMidwayWebBaseApplication {
  * @deprecated since version 3.0.0
  * Please use Application from '@midwayjs/web'
  */
-export type IMidwayWebApplication = IMidwayApplication<Context, EggApplication & IMidwayWebBaseApplication>;
+export type IMidwayWebApplication = IMidwayApplication<
+  Context,
+  EggApplication & IMidwayWebBaseApplication
+>;
 export interface Application extends IMidwayWebApplication {}
 /**
  * @deprecated since version 3.0.0
  * Please use Context from '@midwayjs/web'
  */
-export type IMidwayWebContext <ResponseBodyT = unknown> = IMidwayContext<EggContext<ResponseBodyT>>;
-export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {
+export type IMidwayWebContext<ResponseBodyT = unknown> = IMidwayContext<
+  EggContext<ResponseBodyT>
+>;
+export interface Context<
+  ResponseBodyT = unknown,
+> extends IMidwayWebContext<ResponseBodyT> {
   session: {
     /**
      * JSON representation of the session.
@@ -90,7 +99,7 @@ export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
       enable: boolean;
       path?: string;
       package?: string;
-    }
+    };
   };
   typescript?: boolean;
   processType?: 'application' | 'agent';

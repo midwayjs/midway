@@ -28,3 +28,7 @@ site/changelog
 packages/**/test/tmp
 .swc
 .result
+.astro
+dist-matrix
+.next
+.nuxt

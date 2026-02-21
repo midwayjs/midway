@@ -3,14 +3,16 @@ export interface ITagServiceInitOptions {
   dialect?: ITagDialect;
 }
 
-
-export type ITagDialectOption = {
-  dialectType: 'memory'
-} | ITagMysqlDialectOption | ITagUserDialect;
+export type ITagDialectOption =
+  | {
+      dialectType: 'memory';
+    }
+  | ITagMysqlDialectOption
+  | ITagUserDialect;
 
 export interface ITagUserDialect {
   dialectType: string;
-  dialect: ITagDialect
+  dialect: ITagDialect;
 }
 export type IMysqlQuery = (sql: string, placeholder?: any[]) => [any, any];
 export interface ITagMysqlDialectOption {
@@ -51,17 +53,26 @@ export abstract class ITagDialectInstance {
   // 删除标签
   abstract remove(tagIdOrName: number | string): Promise<ITagOperResult>;
   // 更新标签
-  abstract update(tagIdOrName: number | string, params: Partial<ITagDefine>): Promise<ITagOperResult>;
+  abstract update(
+    tagIdOrName: number | string,
+    params: Partial<ITagDefine>
+  ): Promise<ITagOperResult>;
   // 列举标签
-  abstract list(listOptions?: ITagSearchOptions): Promise<ITagListResult<ITagItem>>;
+  abstract list(
+    listOptions?: ITagSearchOptions
+  ): Promise<ITagListResult<ITagItem>>;
   // 绑定实体
-  abstract bind(bindOptions: ITagBindOptions): Promise<ITagOperResult>
+  abstract bind(bindOptions: ITagBindOptions): Promise<ITagOperResult>;
   // 解绑实体
-  abstract unbind(unbindOptions: ITagUnBindOptions): Promise<ITagOperResult>
+  abstract unbind(unbindOptions: ITagUnBindOptions): Promise<ITagOperResult>;
   // 根据标签列举实体
-  abstract listObjects(listOptions?: ITagListInstanceOptions): Promise<ITagListResult<number>>;
+  abstract listObjects(
+    listOptions?: ITagListInstanceOptions
+  ): Promise<ITagListResult<number>>;
   // 根据实体获取标签
-  abstract listObjectTags(listOptions?: ITagListInstanceTagsOptions): Promise<ITagListResult<ITagItem>>;
+  abstract listObjectTags(
+    listOptions?: ITagListInstanceTagsOptions
+  ): Promise<ITagListResult<ITagItem>>;
 }
 
 export interface ITagOperResult {
@@ -74,7 +85,6 @@ export interface ITagListResult<ListType> {
   list: ListType[];
   total?: number;
 }
-
 
 export interface ITagSearchOptions extends ITagPages {
   tags?: Array<number | string>;
@@ -89,21 +99,21 @@ export interface ITagPages {
 
 export interface ITagBindOptions extends ITagInstance {
   // 标签列表
-  tags: Array<number | string>,
+  tags: Array<number | string>;
   // 不存在标签的话自动创建标签，并绑定，默认为false
   autoCreateTag?: boolean;
 }
 
 export interface ITagUnBindOptions extends ITagInstance {
   // 解绑的多个标签
-  tags: Array<number | string>
+  tags: Array<number | string>;
 }
 
-export interface ITagListInstanceTagsOptions extends ITagInstance, ITagPages{}
+export interface ITagListInstanceTagsOptions extends ITagInstance, ITagPages {}
 
 export interface ITagInstance {
   // 实体id
-  objectId: number,
+  objectId: number;
 }
 
 export enum MATCH_TYPE {
@@ -114,7 +124,7 @@ export enum MATCH_TYPE {
 }
 
 export interface ITagListInstanceOptions extends ITagPages {
-  tags?: Array<string|number>;
+  tags?: Array<string | number>;
   count?: boolean;
   type?: MATCH_TYPE;
 }

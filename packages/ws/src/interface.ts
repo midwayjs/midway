@@ -5,17 +5,25 @@ import {
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayContext,
-  NextFunction as BaseNextFunction
+  NextFunction as BaseNextFunction,
 } from '@midwayjs/core';
 import type { IncomingMessage } from 'http';
 
-export type IMidwayWSApplication = IMidwayApplication<IMidwayWSContext, {
-  useConnectionMiddleware: (
-    middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>
-  ) => void;
-  getConnectionMiddleware: ContextMiddlewareManager<Context, NextFunction, undefined>;
-  onWebSocketUpgrade: (handler: UpgradeAuthHandler | null) => void;
-}> & WebSocket.Server;
+export type IMidwayWSApplication = IMidwayApplication<
+  IMidwayWSContext,
+  {
+    useConnectionMiddleware: (
+      middleware: CommonMiddlewareUnion<Context, NextFunction, undefined>
+    ) => void;
+    getConnectionMiddleware: ContextMiddlewareManager<
+      Context,
+      NextFunction,
+      undefined
+    >;
+    onWebSocketUpgrade: (handler: UpgradeAuthHandler | null) => void;
+  }
+> &
+  WebSocket.Server;
 
 export type IMidwayWSConfigurationOptions = {
   pubClient?: any;
@@ -28,13 +36,16 @@ export type IMidwayWSConfigurationOptions = {
    * server heartbeat interval, default is 30000ms
    */
   serverHeartbeatInterval?: number;
-} & Partial<WebSocket.ServerOptions> & IConfigurationOptions;
+} & Partial<WebSocket.ServerOptions> &
+  IConfigurationOptions;
 
-export type IMidwayWSContext = IMidwayContext<WebSocket & {
-  app: IMidwayWSApplication;
-  isAlive: boolean;
-  request: IncomingMessage
-}>;
+export type IMidwayWSContext = IMidwayContext<
+  WebSocket & {
+    app: IMidwayWSApplication;
+    isAlive: boolean;
+    request: IncomingMessage;
+  }
+>;
 
 export type Application = IMidwayWSApplication;
 export type NextFunction = BaseNextFunction;

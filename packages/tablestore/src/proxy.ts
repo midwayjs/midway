@@ -16,7 +16,6 @@ export class CompositeCondition extends TableStore.CompositeCondition {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CompositeCondition extends TableStoreCompositeCondition {
   // empty
 }
@@ -30,7 +29,6 @@ export class Condition extends TableStore.Condition {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Condition extends TableStoreCondition {
   // empty
 }
@@ -53,9 +51,9 @@ export class SingleColumnCondition<T> extends TableStore.SingleColumnCondition {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SingleColumnCondition<T>
-  extends TableStoreSingleColumnCondition {
+export interface SingleColumnCondition<
+  T,
+> extends TableStoreSingleColumnCondition {
   // empty
 }
 

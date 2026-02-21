@@ -3,7 +3,7 @@ import { ClassType } from '../interface';
 export class TypedResourceManager<
   Resource = any,
   ResourceInitializeConfig = any,
-  ResourceProviderType = any
+  ResourceProviderType = any,
 > {
   private resourceMap: Map<string, Resource> = new Map();
   private resourceBindingMap: Map<string, any> = new Map();

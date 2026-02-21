@@ -3,7 +3,7 @@ import { GUARD_KEY } from '../decorator';
 import { MetadataManager } from '../decorator/metadataManager';
 
 export class GuardManager<
-  CTX extends IMidwayContext = IMidwayContext
+  CTX extends IMidwayContext = IMidwayContext,
 > extends Array<new (...args) => IGuard<any>> {
   public addGlobalGuard(guards: CommonGuardUnion<CTX>) {
     if (!Array.isArray(guards)) {

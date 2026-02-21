@@ -9,7 +9,7 @@ interface MessageEvent {
 }
 
 export class ServerSendEventStream<
-  CTX extends IMidwayContext
+  CTX extends IMidwayContext,
 > extends Transform {
   private readonly ctx: any;
   private isActive = false;

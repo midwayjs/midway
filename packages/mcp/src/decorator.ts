@@ -31,7 +31,7 @@ export type PromptConfig<Args extends PromptArgsRawShape = any> = {
 // 提取 registerTool 的 config 参数类型
 export type ToolConfig<
   InputArgs extends ZodRawShape = any,
-  OutputArgs extends ZodRawShape = any
+  OutputArgs extends ZodRawShape = any,
 > = {
   title?: string;
   description?: string;
@@ -71,7 +71,7 @@ export function Resource(
 
 export function Tool<
   InputArgs extends ZodRawShape = any,
-  OutputArgs extends ZodRawShape = any
+  OutputArgs extends ZodRawShape = any,
 >(
   toolName: string,
   toolConfig: ToolConfig<InputArgs, OutputArgs>

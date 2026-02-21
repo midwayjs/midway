@@ -156,8 +156,8 @@ export class ClassValidatorService implements IValidationService<any> {
     const locale = localeMapping.has(validationOptions.locale)
       ? validationOptions.locale
       : localeMapping.has(validationOptions.fallbackLocale)
-      ? validationOptions.fallbackLocale
-      : 'en-us';
+        ? validationOptions.fallbackLocale
+        : 'en-us';
 
     const errors = validateSync(instance, {
       ...this.defaultClassValidatorOptions,

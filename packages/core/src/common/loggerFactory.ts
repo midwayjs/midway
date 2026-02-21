@@ -20,9 +20,10 @@ export abstract class LoggerFactory<Logger extends ILogger, LoggerOptions> {
   ): ILogger;
 }
 
-export class DefaultConsoleLoggerFactory
-  implements LoggerFactory<ILogger, any>
-{
+export class DefaultConsoleLoggerFactory implements LoggerFactory<
+  ILogger,
+  any
+> {
   private instance: Map<string, ILogger> = new Map();
   createLogger(name: string, options: any): ILogger {
     this.instance.set(name, console);

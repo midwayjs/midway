@@ -5,7 +5,7 @@ export interface HttpProxyStrategy {
   proxyTimeout?: number;
   ignoreHeaders?: {
     [key: string]: boolean;
-  }
+  };
 }
 
 export interface HttpProxyConfig extends HttpProxyStrategy {
@@ -13,5 +13,5 @@ export interface HttpProxyConfig extends HttpProxyStrategy {
   default?: HttpProxyStrategy;
   strategy?: {
     [strategyName: string]: HttpProxyStrategy;
-  }
+  };
 }

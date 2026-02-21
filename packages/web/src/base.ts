@@ -177,9 +177,8 @@ export const createAppWorkerLoader = () => {
           );
 
           // 执行加载框架初始化
-          this.framework = await applicationContext.getAsync(
-            MidwayWebFramework
-          );
+          this.framework =
+            await applicationContext.getAsync(MidwayWebFramework);
         });
       }
     }
@@ -340,7 +339,6 @@ export const createEggApplication = () => {
     require(getFramework())?.Application || require('egg').Application;
   class EggApplication extends (Application as any) {
     constructor(options) {
-      // eslint-disable-next-line constructor-super
       super(options);
     }
 
@@ -384,7 +382,6 @@ export const createEggAgent = () => {
   const Agent = require(getFramework())?.Agent || require('egg').Agent;
   class EggAgent extends (Agent as any) {
     constructor(options) {
-      // eslint-disable-next-line constructor-super
       super(options);
     }
 

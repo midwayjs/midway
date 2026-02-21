@@ -132,7 +132,6 @@ export class PiscinaService implements MidwayPiscina {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PiscinaService extends MidwayPiscina {
   // empty
 }

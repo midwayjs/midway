@@ -15,12 +15,12 @@ export interface CaptchaOptions extends CaptchaCacheOptions {
 }
 
 export interface ImageCaptchaOptions extends ConfigObject {
-  type?: 'number'|'letter'|'mixed';
+  type?: 'number' | 'letter' | 'mixed';
 }
 
 export interface FormulaCaptchaOptions extends ConfigObject {}
 
 export interface TextCaptchaOptions {
   size?: number;
-  type?: 'number'|'letter'|'mixed';
+  type?: 'number' | 'letter' | 'mixed';
 }

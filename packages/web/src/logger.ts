@@ -100,14 +100,13 @@ class MidwayLoggers extends Map<string, ILogger> {
       }
     }
 
-    let loggerConfig = configService.getConfiguration('midwayLogger');
     // 这里属于 hack 了，cluster 模式下会先走这里，找不到默认值
     // 先合并一遍默认配置
     configService.addObject(
       loggers.getDefaultMidwayLoggerConfig(configService.getAppInfo()),
       true
     );
-    loggerConfig = configService.getConfiguration('midwayLogger');
+    const loggerConfig = configService.getConfiguration('midwayLogger');
 
     // 这里利用了 loggers 缓存的特性，提前初始化 logger
     if (loggerConfig) {
@@ -175,9 +174,13 @@ class MidwayLoggers extends Map<string, ILogger> {
         (value as unknown as EggLogger).disable('console');
       } else if (isV3Logger) {
         // v3
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        value.get('console') && (value.get('console').level = 'none');
+        const v3Logger = value as unknown as {
+          get?: (name: string) => { level: string } | undefined;
+        };
+        const consoleLogger = v3Logger.get?.('console');
+        if (consoleLogger) {
+          consoleLogger.level = 'none';
+        }
       }
     }
   }

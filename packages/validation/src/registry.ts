@@ -43,9 +43,8 @@ class ValidatorRegistry {
 
   async initValidators(container: IMidwayContainer) {
     for (const validator of this.validators.values()) {
-      validator.validateService = await validator.validateServiceHandler(
-        container
-      );
+      validator.validateService =
+        await validator.validateServiceHandler(container);
       await validator.validateService.init(container);
     }
   }

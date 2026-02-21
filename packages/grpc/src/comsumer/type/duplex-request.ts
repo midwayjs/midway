@@ -1,9 +1,10 @@
 import { Metadata } from '@grpc/grpc-js';
 import { IClientDuplexStreamService } from '../../interface';
 
-export class ClientDuplexStreamRequest<reqType, resType>
-  implements IClientDuplexStreamService<reqType, resType>
-{
+export class ClientDuplexStreamRequest<
+  reqType,
+  resType,
+> implements IClientDuplexStreamService<reqType, resType> {
   correlationId: number;
   timeout_message;
   queue;

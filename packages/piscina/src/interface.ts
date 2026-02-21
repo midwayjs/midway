@@ -1,4 +1,8 @@
-import { IMidwayApplication, IMidwayContext, ServiceFactoryConfigOption } from '@midwayjs/core';
+import {
+  IMidwayApplication,
+  IMidwayContext,
+  ServiceFactoryConfigOption,
+} from '@midwayjs/core';
 import type { Piscina } from 'piscina';
 
 /**

@@ -1,0 +1,74 @@
+# Vue + Midway Functional API Sample
+
+A runnable Vue (Vite) project that demonstrates:
+
+- `defineApi` in `src/server/api`
+- direct import from web to server API definition
+- `createClient({ user: userApi })` usage with `@midwayjs/vue` (runtime bridge comes from `@midwayjs/web-bridge`)
+
+## Directory
+
+```txt
+samples/vue-functional-api/
+  package.json
+  tsconfig.json
+  vite.config.ts
+  index.html
+  src/
+    main.ts
+    server/
+      configuration.ts
+      api/
+        user.api.ts
+    web/
+      app.vue
+      api/
+        client.ts
+```
+
+## Install
+
+From repository root:
+
+```bash
+pnpm install
+```
+
+Or only this sample:
+
+```bash
+pnpm -C samples/vue-functional-api install
+```
+
+## Run
+
+```bash
+pnpm -C samples/vue-functional-api dev
+```
+
+This single command starts a Vite dev server with embedded Midway HTTP runtime.
+`/api/*` requests are handled by real Midway routes from `src/server/api`.
+
+## Build
+
+```bash
+pnpm -C samples/vue-functional-api build
+```
+
+Split outputs:
+
+```bash
+pnpm -C samples/vue-functional-api build:server
+pnpm -C samples/vue-functional-api build:web
+```
+
+- Server output: `dist/server`
+- Web output: `dist/web` (Vite)
+
+## Notes
+
+- Client calls are sent to `/api` by default (`basePath: '/api'`).
+- Backend is a real Midway Koa app (`imports: [koa]` in `src/server/configuration.ts`).
+- This sample imports `apiPlugin` from `@midwayjs/web-bridge/vite` (temporary shared transform plugin).
+- This sample imports `devPlugin` from `@midwayjs/mock/vite`.
+- `apiPlugin({ target: 'both' })` is enabled so CSR and SSR builds can share the same API import style.
