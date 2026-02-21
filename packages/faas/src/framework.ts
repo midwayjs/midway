@@ -309,7 +309,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     }
 
     const traceService = this.applicationContext.get(MidwayTraceService);
-    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
     const entryCarrier = isHttpFunction
       ? context.headers || {}
       : context.originEvent?.headers ||

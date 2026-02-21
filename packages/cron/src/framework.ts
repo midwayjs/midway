@@ -86,7 +86,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
             from: name,
           });
           const traceService = self.applicationContext.get(MidwayTraceService);
-          const traceMetaResolver = self.configurationOptions?.tracing?.meta;
+          const traceMetaResolver = (self.configurationOptions as any)?.tracing?.meta;
 
           await traceService.runWithEntrySpan(
             `cron ${name.name}`,

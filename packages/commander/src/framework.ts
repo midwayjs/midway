@@ -223,7 +223,7 @@ export class MidwayCommanderFramework extends BaseFramework<
         ctx.options = actualOptions;
         ctx.commandName = metadata.name;
         const traceService = this.applicationContext.get(MidwayTraceService);
-        const traceMetaResolver = this.configurationOptions?.tracing?.meta;
+        const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
         const result = await traceService.runWithEntrySpan(
           `commander ${metadata.name}`,
           {

@@ -118,7 +118,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
 
   private async addNamespace(target: any) {
     const traceService = this.applicationContext.get(MidwayTraceService);
-    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
     const controllerOption: WSControllerOption = MetadataManager.getOwnMetadata(
       WS_CONTROLLER_KEY,
       target
@@ -407,7 +407,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     }
   ) {
     const traceService = this.applicationContext.get(MidwayTraceService);
-    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
 
     if (result && methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {

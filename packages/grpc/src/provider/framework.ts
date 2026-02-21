@@ -118,7 +118,7 @@ export class MidwayGRPCFramework extends BaseFramework<
           ) => {
             const traceService =
               this.applicationContext.get(MidwayTraceService);
-            const traceMetaResolver = this.configurationOptions?.tracing?.meta;
+            const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
             const metadataCarrier =
               (call as ServerUnaryCall<any, any>).metadata?.getMap?.() ?? {};
 

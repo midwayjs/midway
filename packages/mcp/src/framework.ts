@@ -39,7 +39,7 @@ export class MidwayMCPFramework extends BaseFramework<
     callback: () => Promise<T>
   ): Promise<T> {
     const traceService = this.applicationContext.get(MidwayTraceService);
-    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
     return await traceService.runWithEntrySpan(
       name,
       {

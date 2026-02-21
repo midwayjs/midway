@@ -50,7 +50,7 @@ export class MidwayOneShotFramework extends BaseFramework<
     });
 
     const traceService = this.applicationContext.get(MidwayTraceService);
-    const traceMetaResolver = this.configurationOptions?.tracing?.meta;
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
 
     return (await traceService.runWithEntrySpan(
       `oneshot ${Runner.name || 'runner'}`,
