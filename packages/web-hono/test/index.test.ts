@@ -1,8 +1,4 @@
-import {
-  createLegacyApp,
-  createHttpRequest,
-  close,
-} from '@midwayjs/mock';
+import { createLegacyApp, createHttpRequest, close } from '@midwayjs/mock';
 import { Configuration, Framework, IMidwayHonoApplication } from '../src';
 import * as defaultConfig from '../src/config/config.default';
 
@@ -27,7 +23,9 @@ describe('hono component', () => {
   });
 
   it('should support query parameter decorator', async () => {
-    const result = await createHttpRequest((app as any).getFramework().getServer())
+    const result = await createHttpRequest(
+      (app as any).getFramework().getServer()
+    )
       .get('/api/hello')
       .query({ name: 'midway' });
 

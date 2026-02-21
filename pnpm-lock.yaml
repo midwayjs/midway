@@ -1729,6 +1729,9 @@ importers:
         specifier: 4.11.3
         version: 4.11.3
     devDependencies:
+      '@hono/node-server':
+        specifier: 1.19.7
+        version: 1.19.7(hono@4.11.3)
       '@midwayjs/core':
         specifier: workspace:^
         version: link:../core

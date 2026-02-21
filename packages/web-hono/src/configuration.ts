@@ -34,11 +34,7 @@ export class HonoConfiguration {
           options.metadata.type,
           options.metadata.propertyData,
           options.originParamType
-        )(
-          options.originArgs[0],
-          options.originArgs[1],
-          options.originArgs[2]
-        );
+        )(options.originArgs[0], options.originArgs[1], options.originArgs[2]);
       }
     );
   }

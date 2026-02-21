@@ -34,7 +34,7 @@ export class MidwayHonoFramework extends BaseFramework<
     return this.configService.getConfiguration('hono');
   }
 
-  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
+  async applicationInitialize(_options: Partial<IMidwayBootstrapOptions>) {
     this.app = new Hono() as any;
 
     (this.app as any).use('*', async (ctx, next) => {
@@ -127,8 +127,15 @@ export class MidwayHonoFramework extends BaseFramework<
       if (typeof routeInfo.method !== 'string') {
         result = await routeInfo.method(req, res, next);
       } else {
-        const controller = await (ctx as any).requestContext.getAsync(routeInfo.id);
-        result = await controller[routeInfo.method].call(controller, req, res, next);
+        const controller = await (ctx as any).requestContext.getAsync(
+          routeInfo.id
+        );
+        result = await controller[routeInfo.method].call(
+          controller,
+          req,
+          res,
+          next
+        );
       }
 
       if (
@@ -154,12 +161,8 @@ export class MidwayHonoFramework extends BaseFramework<
         }
       }
 
-      const { result: returnValue, error } = await this.filterManager.runResultFilter(
-        result,
-        req,
-        res,
-        next
-      );
+      const { result: returnValue, error } =
+        await this.filterManager.runResultFilter(result, req, res, next);
       if (error) {
         throw error;
       }
