@@ -6,6 +6,7 @@ import {
   Inject,
   Logger,
   MidwayCommonError,
+  MidwayTraceService,
   Provide,
   Scope,
   ScopeEnum,
@@ -32,6 +33,9 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
 
   @Logger('coreLogger')
   protected logger: ILogger;
+
+  @Inject()
+  protected traceService: MidwayTraceService;
 
   protected async createClient(config, name: string): Promise<Redis> {
     let client;
@@ -87,7 +91,39 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
       });
     });
 
+    this.bindTraceContext(client, name);
+
     return client;
+  }
+
+  protected bindTraceContext(client: Redis, clientName: string) {
+    if (!client || !this.traceService) {
+      return;
+    }
+
+    const rawSendCommand = (client as any).sendCommand?.bind(client);
+    if (!rawSendCommand) {
+      return;
+    }
+
+    (client as any).sendCommand = (command: any, stream?: any) => {
+      const commandName =
+        command?.name?.toLowerCase?.() || command?.name || 'unknown';
+      return this.traceService.runWithExitSpan(
+        `redis.${commandName}`,
+        {
+          carrier: {},
+          attributes: {
+            'midway.protocol': 'redis',
+            'midway.redis.command': commandName,
+            'midway.redis.client': clientName,
+          },
+        },
+        async () => {
+          return rawSendCommand(command, stream);
+        }
+      );
+    };
   }
 
   getName() {
