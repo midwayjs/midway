@@ -1,11 +1,8 @@
-# 构建与部署
+# 构建部署
 
-## 目标
+Functional 一体化项目的实践建议是：开发一体化，部署分离化。
 
-- 开发期：一体化体验（前后端同仓）
-- 发布期：前后端产物分离（独立部署）
-
-## 建议脚本
+## 推荐脚本
 
 ```json
 {
@@ -18,24 +15,22 @@
 }
 ```
 
-## 产物
+## 产物说明
 
-- server: `dist/server`（Node 启动）
-- web: `dist/web`（静态资源）
+- `dist/server`：给 Node 运行
+- `dist/web`：静态资源（Nginx/CDN）
 
-## CSR 部署
+## 常见部署方式
 
-1. 启动 server（例如 `node dist/server/bootstrap.js`）
-2. 静态资源由 CDN/Nginx 或静态服务托管
-3. 前端请求指向 server API 地址（同域或反向代理）
+1. 启动服务端：`node dist/server/bootstrap.js`
+2. 将 `dist/web` 托管到静态服务
+3. 前端请求通过同域或反向代理转到服务端 API
 
-## SSR / SSG 说明
+## SSR / SSG 场景
 
-- 沿用前端框架官方构建部署流程
-- Midway functional API 作为服务层契约，不替代框架 SSR/SSG pipeline
-- `basePath` 需要按浏览器与服务端运行时分别配置
-
-示例：
+- 沿用前端框架官方流程
+- Midway Functional 负责 API 契约和服务逻辑
+- `basePath` 建议区分浏览器和服务端运行时配置
 
 ```ts
 basePath: {

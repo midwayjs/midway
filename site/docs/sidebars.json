@@ -55,6 +55,23 @@
     },
     {
       "type": "category",
+      "label": "函数式",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        "functional/intro",
+        "functional/fundamentals",
+        "functional/frontend-integration",
+        "functional/validation",
+        "functional/testing",
+        "functional/workspace",
+        "functional/build-deploy",
+        "functional/api-reference",
+        "functional/migration"
+      ]
+    },
+    {
+      "type": "category",
       "label": "设计模式",
       "collapsed": true,
       "collapsible": true,

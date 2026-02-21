@@ -1,11 +1,11 @@
 # React 集成
 
-React 集成目标：直接复用 `src/server/api` 定义，前端写 `api.user.getUser(...)`，不手写 method/path。
+本节按“能跑起来”为目标，给出最小接入步骤。
 
 ## 安装
 
 ```bash
-npm i @midwayjs/react @midwayjs/web-bridge @midwayjs/mock
+$ npm i @midwayjs/react @midwayjs/web-bridge @midwayjs/mock
 ```
 
 ```json
@@ -18,24 +18,20 @@ npm i @midwayjs/react @midwayjs/web-bridge @midwayjs/mock
 }
 ```
 
-## 客户端创建
+## 1. 创建客户端
 
 ```ts
 // src/web/api/client.ts
 import { createClient } from '@midwayjs/web-bridge';
-import { userApi } from '../../server/api';
+import { userApi } from '../../server/api/user.api';
 
 export const api = createClient(
-  {
-    user: userApi,
-  },
-  {
-    basePath: '/api',
-  }
+  { user: userApi },
+  { basePath: '/api' }
 );
 ```
 
-## 页面调用
+## 2. 在页面里调用
 
 ```tsx
 import { useEffect, useState } from 'react';
@@ -45,16 +41,16 @@ export function UserPage() {
   const [name, setName] = useState('');
 
   useEffect(() => {
-    api.user
-      .getUser({ params: { id: 'u-1' } })
-      .then(user => setName(user.name));
+    api.user.getUser({ params: { id: 'u-1' } }).then(user => {
+      setName(user.name);
+    });
   }, []);
 
   return <div>{name}</div>;
 }
 ```
 
-## Vite 插件
+## 3. 配置 Vite 插件（推荐）
 
 ```ts
 import { defineConfig } from 'vite';
@@ -79,7 +75,12 @@ export default defineConfig({
 });
 ```
 
-## Rspack 配置
+这两个插件的作用：
+
+- `devPlugin`：开发时把后端服务带起来
+- `apiPlugin`：让 `server/api` 导入在浏览器端可运行
+
+## 4. 如果你用 Rspack
 
 ```ts
 import { defineConfig } from '@rspack/cli';
@@ -95,78 +96,13 @@ export default defineConfig({
     ],
   },
   devServer: {
-    proxy: [
-      {
-        context: ['/api'],
-        target: 'http://127.0.0.1:7001',
-      },
-    ],
+    proxy: [{ context: ['/api'], target: 'http://127.0.0.1:7001' }],
   },
 });
 ```
 
-Rspack 场景推荐与后端分进程开发：
+## 示例仓库
 
-1. 启动 Midway server（如 `tsx watch src/server/bootstrap.ts`）
-2. 启动 `rspack serve`
-3. 通过 devServer proxy 转发 `/api` 到后端
-
-## 示例
-
-- Vite 示例：`samples/react-functional-api`
-- Vite + Axios 示例：`samples/react-functional-api-axios`
-- Rspack 示例：`samples/react-functional-api-rspack`
-
-## 自定义 Transport（tRPC 风格）
-
-```ts
-import { createClient } from '@midwayjs/web-bridge';
-import { userApi } from '../../server/api/user.api';
-import { trpc } from './trpc-client';
-
-export const api = createClient(
-  {
-    user: userApi,
-  },
-  {
-    adapter: async ({ operation, input }) => {
-      return trpc.call(operation.operationId, input);
-    },
-  }
-);
-```
-
-这类 adapter 适用于：
-
-- tRPC
-- RPC 网关
-- 内网自定义协议桥接
-
-## React Router（基于 manifest）
-
-```ts
-import type { RouteObject } from 'react-router-dom';
-import type { RouteManifestItem } from '@midwayjs/core';
-import { api } from '@/web/api/client';
-
-export function toReactRoutes(manifest: RouteManifestItem[]): RouteObject[] {
-  return manifest
-    .filter(item => item.method.toLowerCase() === 'get')
-    .map(item => ({
-      path: item.fullPath,
-      loader: async ({ params }) => {
-        if (item.operationId === 'user.getUser') {
-          return api.user.getUser({ params });
-        }
-        return null;
-      },
-    }));
-}
-```
-
-## 说明
-
-- `devPlugin`: 开发期内嵌 Midway runtime
-- `apiPlugin`: 改写 `server/api` 导入，保证浏览器端可运行
-- `createApiRspackRule`: 在 Rspack 中改写 `server/api` 导入为 web-safe 合同
-- 生产环境建议 server/web 独立构建发布
+- `samples/react-functional-api`
+- `samples/react-functional-api-axios`
+- `samples/react-functional-api-rspack`

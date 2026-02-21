@@ -1,85 +1,120 @@
 # Lint 和格式化
 
-Midway 的框架和业务代码都是由 TypeScript 编写的，默认 Midway 提供了一套默认的 lint、编辑器以及格式化规则，用于更方便的进行开发和测试。
+Midway 的框架和业务代码主要由 TypeScript 编写，默认使用 [mwts](https://github.com/midwayjs/mwts) 统一 lint 和格式化。
 
 ## 代码风格库
 
-Midway 的代码风格库叫 [mwts](https://github.com/midwayjs/mwts)，源自于 Google 的 [gts](https://github.com/google/gts)。mwts 是 Midway 的 TypeScript 样式指南，也是格式化程序，linter 和自动代码修复程序的配置。
+`mwts` 是 Midway 的 TypeScript 规范工具链，提供：
+- ESLint 检查（`check` / `lint`）
+- 自动修复（`fix`）
+- 默认格式化配置（默认 `Prettier + ESLint`）
+
+`mwts` 的设计思路来源于 [gts](https://github.com/google/gts)，但不直接依赖 `gts` 包。
 
 :::info
-在 midway 项目中，我们会默认添加 mwts，下面的流程只是为了说明如何使用 mwts。
+在 Midway 项目中，一般脚手架会默认集成 `mwts`，这里主要说明配置方式和升级方式。
 :::
 
-为了使用 mwts，我们需要把它添加到开发依赖中。
+## 依赖与运行时要求
 
-```json
-"devDependencies": {
-  "mwts": "^1.0.5",
-  "typescript": "^4.0.0"
-},
-```
-
-## ESLint 配置
-
-mwts 提供了一套默认的 ESLint 配置（TSLint 已经废弃，合并到了 ESLint 中）。
-
-在项目根目录创建 `.eslintrc.json` 文件，内容如下（一般脚手架会自带）：
+`mwts 2.x` 建议搭配：
 
 ```json
 {
-  "extends": "./node_modules/mwts/",
-  "ignorePatterns": ["node_modules", "dist", "test", "jest.config.js", "interface.ts"],
-  "env": {
-    "jest": true
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "mwts": "^2.0.0",
+    "typescript": "^5.0.0"
   }
 }
 ```
 
-上面是 midway 项目的默认配置，其他项目 `ignorePatterns` 和 `env` 可以自行根据 ESLint 自行调整。
+## 初始化与迁移
 
-整个 mwts 的默认规则请参考 [这里](https://github.com/midwayjs/mwts/blob/master/.eslintrc.json)，如有需求，可以自行调整。
+新项目可直接初始化：
 
-## 执行代码检查和格式化
+```bash
+npx mwts init
+```
 
-可以通过执行 `mwts check` 命令和 `mwts fix` 命令，来检查代码。比如在项目中增加脚本命令（一般脚手架会自带）。
+如果是历史 `mwts 1.x` 项目（`.eslintrc.json`），可执行一次迁移：
 
-```typescript
+```bash
+npx mwts migrate
+```
+
+迁移后会生成 `eslint.config.js`（ESLint Flat Config）。
+
+## ESLint 配置（mwts 2.x）
+
+`mwts 2.x` 使用 `eslint.config.js`，推荐配置如下（可按项目调整 `ignores`）：
+
+```js
+const mwtsConfig = require('mwts/eslint.config.js');
+
+module.exports = [
+  {
+    ignores: ['**/node_modules', '**/dist'],
+  },
+  ...mwtsConfig,
+];
+```
+
+如果你的项目使用 Jest，建议按需为测试文件增加 globals：
+
+```js
+const globals = require('globals');
+
+module.exports = [
+  ...require('mwts/eslint.config.js'),
+  {
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/jest.setup.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  },
+];
+```
+
+## 执行检查和修复
+
+常用脚本如下（仓库一般已内置）：
+
+```json
+{
   "scripts": {
     "lint": "mwts check",
-    "lint:fix": "mwts fix",
-  },
+    "lint:fix": "mwts fix"
+  }
+}
+```
+
+`mwts check/lint/fix` 也支持单文件参数，例如：
+
+```bash
+mwts check src/index.ts
+mwts fix src/index.ts
 ```
 
 ## Prettier 配置
 
-mwts 提供了一套默认的 prettier 配置，创建一个 `.prettierrc.js`  文件，配置内容如下即可（一般脚手架自带）。
+默认模式下，保留 `.prettierrc.js`：
 
-```javascript
+```js
 module.exports = {
   ...require('mwts/.prettierrc.json'),
 };
 ```
 
-## 配置保存自动格式化
+## 可选 formatter 模式
 
-我们以 VSCode 为例。
+`mwts init` 支持三种模式：
+- 默认：`Prettier + ESLint`
+- `--formatter stylistic`：`ESLint + Stylistic`
+- `--formatter biome`：`Biome + ESLint`
 
-第一步，安装 Prettier 插件。
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618042429530-177c3636-aefc-419d-8d3a-5258cad13631.png)
-
-打开配置，搜索 “save”，找到右侧的 "Format On Save"，勾选即可。
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618042494782-71b6cc3c-18ae-4344-987b-ec82084f2dd8.png)
-
-如果保存文件没有效果，一般是编辑器有多个格式化方式，可以右键进行默认选择。
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125271116-845e8452-0f7b-46a9-a28a-388f2db9c5e3.png)
-
-选择 “配置默认格式化程序”。
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125381302-d3fe30c1-e56d-43f8-ada2-6e315f4ff2c4.png)
-
-选择 Prettier 即可。
-
-![](https://cdn.nlark.com/yuque/0/2021/png/501408/1618125423564-8e46b0f8-f422-4e3d-a805-3b0a1db037f8.png)
+未使用默认模式时，按生成的配置文件执行即可。

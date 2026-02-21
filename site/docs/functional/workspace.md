@@ -1,65 +1,87 @@
-# 一体化目录与边界
+# 目录与编辑
 
-## 推荐目录（可配置）
+这一页解决两个常见问题：
+
+- 代码应该放在哪里？
+- 前端到底可以引用什么？
+
+## 推荐目录
 
 ```txt
-src/
-  server/
-    configuration.ts
-    api/
-      index.ts
-      user.api.ts
-  web/
-    main.tsx
-    app.tsx
-    api/
-      client.ts
+src
+├── server
+│   ├── index.ts          # Midway 服务端入口（也可命名为 configuration.ts）
+│   └── api
+│       └── user.api.ts   # 用户 API 定义（defineApi）
+└── web
+    ├── main.tsx          # 前端启动入口
+    ├── app.tsx           # 前端应用根组件
+    └── api
+        └── client.ts     # 前端 API 客户端创建
 ```
 
-默认示例约定：
+默认约定：
 
 - `serverDir`: `src/server`
 - `webDir`: `src/web`
 - `apiDir`: `src/server/api`
 
-这些不是强制目录，用户可以按项目结构配置。
+可改，不是强制。
 
-## 单一真相源
+## 前端可引用 / 不可引用
 
-`src/server/api` 同时承担：
+前端可引用：
 
-- 服务端路由语义（method/path/input/output）
-- 前端调用类型来源
+- `src/server/api` 导出的 API 定义
+- 类型和 schema
 
-前端不需要再维护一份 `shared-contracts`。
+前端不要引用：
 
-## 边界规则
+- Node-only 模块（`fs` / `path` / `net`）
+- 服务端运行时代码
+- handler 内部实现细节
 
-前端可依赖：
+## 为什么这样划分
 
-- `defineApi` 导出的 API 定义
-- schema/type 导出
+因为 `src/server/api/*.api.ts` 既是服务端路由契约，也是前端类型来源。
 
-前端不可打包：
+统一这一层后，可以减少重复定义和联调偏差。
 
-- Midway server runtime
-- Node-only 模块（`fs` / `path` / `net` 等）
-- handler 内部服务端实现细节
+## 开发和发布
 
-## 单命令开发
+开发期：建议一个 `npm run dev` 入口。  
+发布期：仍然前后端分离产物和部署。
 
-推荐单 dev 入口（例如 Vite）：
+## `web/api` 目录如何自定义
 
-1. 内嵌启动 Midway HTTP runtime（dev plugin）
-2. 前端构建期把 `server/api` 导入改写成 web-safe 客户端调用
+`src/web/api` 只是推荐目录，不是强制。你可以改成：
 
-用户只执行一个 `npm run dev`。
+- `src/client/api`
+- `src/web/sdk`
+- 或任意团队习惯目录
 
-## 发布分离
+重点是保持两件事一致：
 
-构建期拆分两份产物：
+1. 你的前端 client 文件导入路径
+2. 构建插件里的 `apiDir`（服务端 API 定义目录）
 
-- server 产物（Node 运行）
-- web 产物（浏览器运行）
+Vite 示例（把服务端 API 目录改为 `src/contracts/api`）：
 
-部署时按前后端独立发布。
+```ts
+apiPlugin({
+  root: process.cwd(),
+  apiDir: 'src/contracts/api',
+  target: 'both',
+});
+```
+
+Rspack 示例：
+
+```ts
+createApiRspackRule({
+  root: process.cwd(),
+  apiDir: 'src/contracts/api',
+});
+```
+
+如果你同时改了 server 根目录，也要同步调整 `devPlugin` 的 `baseDir`。

@@ -1,42 +1,36 @@
 # 迁移指南
 
-## 1. class 与 functional 共存
+迁移建议是“渐进式”，不要一次改完。
 
-可以按模块渐进迁移，不需要一次性替换。
+## 推荐迁移顺序
 
-- 旧模块保持 `@Controller`
-- 新模块用 `defineApi`
-- 冲突按 method + fullPath 检测并报错
+1. 保留现有 Service 层
+2. 新接口先用 `defineApi`
+3. 旧接口按模块逐步迁移
+4. 关键接口补齐 `input/output`
+5. 稳定后再删除旧 controller
 
-## 2. 从 class 迁移到 defineApi
+## 共存策略
 
-建议顺序：
+同一个项目里，`@Controller` 和 `defineApi` 可以直接共存，不需要强制分层或隔离。
 
-1. 保留原 service 层不动
-2. 把 controller 路由声明迁移为 `defineApi`
-3. `@Inject` 改为 `useInject`
-4. 增加 `input/output` 校验
-5. 删除旧 controller
+按场景选择即可：
 
-## 3. 从 hooks 思路迁移
+- 需要和前端协同开发：优先 `defineApi`
+- 纯后端 API 提供：两种写法都可用
 
-目标不是回到旧 hooks runtime，而是吸收其优势：
+Midway 会按 `method + fullPath` 做冲突检测。
 
-- 前后端一体化开发体验
-- 类型复用与 direct-like 调用体验
+## 常见问题
 
-同时保留 Midway 主线能力：
+### 前端可以直接执行后端 handler 吗？
 
-- IoC 与组件体系
-- class / functional 并行
-- 多框架与多协议扩展
+不能。前端只复用契约和类型，真实逻辑仍在服务端执行。
 
-## 4. 常见问题
+### 必须用 `src/server`、`src/web` 吗？
 
-### 为什么前端不能直接跑服务端 handler？
+不是，目录可以自定义。文档里的结构是推荐默认值。
 
-前端只消费 API 契约与类型。真实执行仍在服务端，避免把 Node runtime 打进浏览器。
+### 要一次性给所有接口补 schema 吗？
 
-### 是否必须 `src/server`、`src/web`？
-
-不是强制。目录可配置，文档中的路径是默认示例。
+不用。先覆盖高风险接口，再逐步补齐即可。
