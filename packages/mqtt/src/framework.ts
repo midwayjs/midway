@@ -3,6 +3,7 @@ import {
   BaseFramework,
   DecoratorManager,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   IMidwayMQTTApplication,
@@ -111,12 +112,26 @@ export class MidwayMQTTFramework extends BaseFramework<
       ctx.topic = topic;
       ctx.packet = packet;
       ctx.message = message;
-      const fn = await this.applyMiddleware(async ctx => {
-        const instance = await ctx.requestContext.getAsync(ClzProvider);
+      const traceService = this.applicationContext.get(MidwayTraceService);
+      const packetProperties = packet?.properties?.userProperties || {};
+      return await traceService.runWithEntrySpan(
+        `mqtt ${topic}`,
+        {
+          carrier: packetProperties,
+          attributes: {
+            'midway.protocol': 'mqtt',
+            'midway.mqtt.topic': topic,
+          },
+        },
+        async () => {
+          const fn = await this.applyMiddleware(async ctx => {
+            const instance = await ctx.requestContext.getAsync(ClzProvider);
 
-        return await instance['subscribe'].call(instance, ctx);
-      });
-      return await fn(ctx);
+            return await instance['subscribe'].call(instance, ctx);
+          });
+          return await fn(ctx);
+        }
+      );
     });
 
     await consumer.subscribeAsync(

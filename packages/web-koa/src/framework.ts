@@ -10,6 +10,7 @@ import {
   MidwayConfigMissingError,
   httpError,
   MidwayWebRouterService,
+  MidwayTraceService,
   Framework,
   Types,
 } from '@midwayjs/core';
@@ -211,18 +212,33 @@ export class MidwayKoaFramework extends BaseFramework<
     // root middleware
     const midwayRootMiddleware = async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
-      await (
-        await this.applyMiddleware(applyMiddlewares)
-      )(ctx, next);
+      const traceService = this.applicationContext.get(MidwayTraceService);
+      const spanName = `${ctx.method} ${ctx.path || '/'}`;
 
-      if (
-        ctx.body === undefined &&
-        !ctx.response._explicitStatus &&
-        ctx._matchedRoute
-      ) {
-        // 如果进了路由，重新赋值，防止 404
-        ctx.body = undefined;
-      }
+      await traceService.runWithEntrySpan(
+        spanName,
+        {
+          carrier: ctx.headers,
+          responseCarrier: ctx.response.res,
+          attributes: {
+            'midway.protocol': 'http',
+          },
+        },
+        async () => {
+          await (
+            await this.applyMiddleware(applyMiddlewares)
+          )(ctx, next);
+
+          if (
+            ctx.body === undefined &&
+            !ctx.response._explicitStatus &&
+            ctx._matchedRoute
+          ) {
+            // 如果进了路由，重新赋值，防止 404
+            ctx.body = undefined;
+          }
+        }
+      );
     };
     this.app.use(midwayRootMiddleware);
 

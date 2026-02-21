@@ -23,6 +23,7 @@ import {
   WEB_RESPONSE_REDIRECT,
   httpError,
   MidwayFeatureNotImplementedError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
@@ -307,48 +308,66 @@ export class MidwayFaaSFramework extends BaseFramework<
       this.configurationOptions.applicationAdapter.runContextHook(context);
     }
 
-    const result = await (
-      await this.applyMiddleware(async (ctx, next) => {
-        const fn = await this.middlewareService.compose(
-          [
-            ...(isHttpFunction
-              ? this.httpMiddlewareManager
-              : this.eventMiddlewareManager),
-            ...funOptions.controllerMiddleware,
-            ...funOptions.middleware,
-            async (ctx, next) => {
-              let args;
-              if (isHttpFunction) {
-                args = [ctx];
-              } else {
-                args = [ctx.originEvent, ctx.originContext];
-              }
-              // invoke handler
-              const result = await this.invokeHandler(
-                funOptions,
-                ctx,
-                args,
-                isHttpFunction
-              );
-              if (isHttpFunction && result !== undefined) {
-                if (result === null) {
-                  // 这样设置可以绕过 koa 的 _explicitStatus 赋值机制
-                  (ctx.response as any)._body = null;
-                } else {
-                  ctx.body = result;
-                }
-              }
-              // http 靠 ctx.body，否则会出现状态码不正确的问题
-              if (!isHttpFunction) {
-                return result;
-              }
-            },
-          ],
-          this.app
-        );
-        return await fn(ctx as Context, next);
-      })
-    )(context);
+    const traceService = this.applicationContext.get(MidwayTraceService);
+    const entryCarrier = isHttpFunction
+      ? context.headers || {}
+      : context.originEvent?.headers ||
+        context.originEvent?.properties ||
+        context.originEvent ||
+        {};
+    const result = await traceService.runWithEntrySpan(
+      `faas ${handlerMapping}`,
+      {
+        carrier: entryCarrier,
+        attributes: {
+          'midway.protocol': isHttpFunction ? 'faas-http' : 'faas-event',
+          'midway.faas.handler': handlerMapping,
+        },
+      },
+      async () =>
+        await (
+          await this.applyMiddleware(async (ctx, next) => {
+            const fn = await this.middlewareService.compose(
+              [
+                ...(isHttpFunction
+                  ? this.httpMiddlewareManager
+                  : this.eventMiddlewareManager),
+                ...funOptions.controllerMiddleware,
+                ...funOptions.middleware,
+                async (ctx, next) => {
+                  let args;
+                  if (isHttpFunction) {
+                    args = [ctx];
+                  } else {
+                    args = [ctx.originEvent, ctx.originContext];
+                  }
+                  // invoke handler
+                  const result = await this.invokeHandler(
+                    funOptions,
+                    ctx,
+                    args,
+                    isHttpFunction
+                  );
+                  if (isHttpFunction && result !== undefined) {
+                    if (result === null) {
+                      // 这样设置可以绕过 koa 的 _explicitStatus 赋值机制
+                      (ctx.response as any)._body = null;
+                    } else {
+                      ctx.body = result;
+                    }
+                  }
+                  // http 靠 ctx.body，否则会出现状态码不正确的问题
+                  if (!isHttpFunction) {
+                    return result;
+                  }
+                },
+              ],
+              this.app
+            );
+            return await fn(ctx as Context, next);
+          })
+        )(context)
+    );
 
     if (isHttpFunction) {
       if (options.isCustomHttpResponse) {

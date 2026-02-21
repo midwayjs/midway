@@ -4,6 +4,7 @@ import {
   IMidwayBootstrapOptions,
   DecoratorManager,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   CommandRunner,
@@ -221,15 +222,28 @@ export class MidwayCommanderFramework extends BaseFramework<
         ctx.args = actualArgs;
         ctx.options = actualOptions;
         ctx.commandName = metadata.name;
-        const fn = await this.applyMiddleware(async ctx => {
-          const commandInstance = (await ctx.requestContext.getAsync(
-            module
-          )) as CommandRunner;
-          if (commandInstance.run) {
-            return await commandInstance.run(actualArgs, actualOptions);
+        const traceService = this.applicationContext.get(MidwayTraceService);
+        const result = await traceService.runWithEntrySpan(
+          `commander ${metadata.name}`,
+          {
+            carrier: {},
+            attributes: {
+              'midway.protocol': 'commander',
+              'midway.command.name': metadata.name,
+            },
+          },
+          async () => {
+            const fn = await this.applyMiddleware(async ctx => {
+              const commandInstance = (await ctx.requestContext.getAsync(
+                module
+              )) as CommandRunner;
+              if (commandInstance.run) {
+                return await commandInstance.run(actualArgs, actualOptions);
+              }
+            });
+            return await fn(ctx);
           }
-        });
-        const result = await fn(ctx);
+        );
         await this.outputResult(result);
       });
     }

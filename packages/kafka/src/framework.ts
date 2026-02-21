@@ -5,6 +5,7 @@ import {
   DecoratorManager,
   TypedResourceManager,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   IKafkaConsumerInitOptions,
@@ -121,14 +122,28 @@ export class MidwayKafkaFramework extends BaseFramework<
           ...resourceInitializeConfig.consumerRunConfig,
         };
         runConfig[runMethod] = async payload => {
-          const ctx = this.app.createAnonymousContext();
-          const fn = await this.applyMiddleware(async ctx => {
-            ctx.payload = payload;
-            ctx.consumer = consumer;
-            const instance = await ctx.requestContext.getAsync(ClzProvider);
-            return await instance[runMethod].call(instance, payload, ctx);
-          });
-          return await fn(ctx);
+          const traceService = this.applicationContext.get(MidwayTraceService);
+          const headers = payload?.message?.headers ?? {};
+          return await traceService.runWithEntrySpan(
+            `kafka ${payload?.topic ?? 'consumer'}`,
+            {
+              carrier: headers,
+              attributes: {
+                'midway.protocol': 'kafka',
+                'midway.kafka.topic': payload?.topic,
+              },
+            },
+            async () => {
+              const ctx = this.app.createAnonymousContext();
+              const fn = await this.applyMiddleware(async ctx => {
+                ctx.payload = payload;
+                ctx.consumer = consumer;
+                const instance = await ctx.requestContext.getAsync(ClzProvider);
+                return await instance[runMethod].call(instance, payload, ctx);
+              });
+              return await fn(ctx);
+            }
+          );
         };
         return runConfig;
       },

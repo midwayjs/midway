@@ -21,6 +21,7 @@ import {
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   Context,
@@ -115,70 +116,86 @@ export class MidwayGRPCFramework extends BaseFramework<
             call: Parameters<UntypedHandleCall>[0],
             callback?: sendUnaryData<any>
           ) => {
-            // merge ctx and call
-            const ctx = call as Context;
-            ctx.method = method;
-            this.app.createAnonymousContext(ctx);
+            const traceService = this.applicationContext.get(MidwayTraceService);
+            const metadataCarrier =
+              (call as ServerUnaryCall<any, any>).metadata?.getMap?.() ?? {};
 
-            // get metadata from decorator
-            const grpcMethodData: {
-              methodName: string;
-              type: GrpcStreamTypeEnum;
-              onEnd: string;
-            } = MetadataManager.getMetadata(
-              MS_GRPC_METHOD_KEY,
-              module,
-              Utils.camelCase(method)
-            );
+            await traceService.runWithEntrySpan(
+              `grpc ${serviceName}.${method}`,
+              {
+                carrier: metadataCarrier,
+                attributes: {
+                  'midway.protocol': 'grpc',
+                  'midway.grpc.method': method,
+                },
+              },
+              async () => {
+                // merge ctx and call
+                const ctx = call as Context;
+                ctx.method = method;
+                this.app.createAnonymousContext(ctx);
 
-            const isPassed = await this.app
-              .getFramework()
-              .runGuard(ctx, module, ctx.method);
-            if (!isPassed) {
-              throw new MidwayInvokeForbiddenError(ctx.method, module);
-            }
+                // get metadata from decorator
+                const grpcMethodData: {
+                  methodName: string;
+                  type: GrpcStreamTypeEnum;
+                  onEnd: string;
+                } = MetadataManager.getMetadata(
+                  MS_GRPC_METHOD_KEY,
+                  module,
+                  Utils.camelCase(method)
+                );
 
-            // get service from request container
-            const service = await ctx.requestContext.getAsync(module);
-
-            if (
-              grpcMethodData.type === GrpcStreamTypeEnum.DUPLEX ||
-              grpcMethodData.type === GrpcStreamTypeEnum.READABLE
-            ) {
-              // listen data and trigger binding method
-              (call as EventEmitter).on('data', async data => {
-                await this.handleContextMethod({
-                  service,
-                  ctx,
-                  callback,
-                  data,
-                  grpcMethodData,
-                });
-              });
-              (call as EventEmitter).on('end', async () => {
-                if (grpcMethodData.onEnd) {
-                  try {
-                    const endResult = await service[grpcMethodData.onEnd]();
-                    if (callback) {
-                      callback(null, endResult);
-                    }
-                  } catch (err) {
-                    if (callback) {
-                      callback(err);
-                    }
-                  }
+                const isPassed = await this.app
+                  .getFramework()
+                  .runGuard(ctx, module, ctx.method);
+                if (!isPassed) {
+                  throw new MidwayInvokeForbiddenError(ctx.method, module);
                 }
-              });
-            } else {
-              // writable and base type will be got data directly
-              await this.handleContextMethod({
-                service,
-                ctx,
-                callback,
-                data: (call as ServerUnaryCall<any, any>).request,
-                grpcMethodData,
-              });
-            }
+
+                // get service from request container
+                const service = await ctx.requestContext.getAsync(module);
+
+                if (
+                  grpcMethodData.type === GrpcStreamTypeEnum.DUPLEX ||
+                  grpcMethodData.type === GrpcStreamTypeEnum.READABLE
+                ) {
+                  // listen data and trigger binding method
+                  (call as EventEmitter).on('data', async data => {
+                    await this.handleContextMethod({
+                      service,
+                      ctx,
+                      callback,
+                      data,
+                      grpcMethodData,
+                    });
+                  });
+                  (call as EventEmitter).on('end', async () => {
+                    if (grpcMethodData.onEnd) {
+                      try {
+                        const endResult = await service[grpcMethodData.onEnd]();
+                        if (callback) {
+                          callback(null, endResult);
+                        }
+                      } catch (err) {
+                        if (callback) {
+                          callback(err);
+                        }
+                      }
+                    }
+                  });
+                } else {
+                  // writable and base type will be got data directly
+                  await this.handleContextMethod({
+                    service,
+                    ctx,
+                    callback,
+                    data: (call as ServerUnaryCall<any, any>).request,
+                    grpcMethodData,
+                  });
+                }
+              }
+            );
           };
         }
         this.server.addService(serviceDefinition, serviceInstance);

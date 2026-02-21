@@ -9,6 +9,7 @@ import {
   DecoratorManager,
   MetadataManager,
   listPropertyDataFromClass,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   IMidwayRabbitMQApplication,
@@ -85,29 +86,43 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                   return channelWrapper.ack(data);
                 },
               } as IMidwayRabbitMQContext;
-              this.app.createAnonymousContext(ctx);
-              const isPassed = await this.app
-                .getFramework()
-                .runGuard(ctx, module, listenerOptions.propertyKey);
-              if (!isPassed) {
-                throw new MidwayInvokeForbiddenError(
-                  listenerOptions.propertyKey,
-                  module
-                );
-              }
-              const ins = await ctx.requestContext.getAsync(module);
-              const fn = await this.applyMiddleware(async ctx => {
-                return await ins[listenerOptions.propertyKey].call(ins, data);
-              });
+              const traceService = this.applicationContext.get(MidwayTraceService);
+              const headers = data?.properties?.headers ?? {};
+              await traceService.runWithEntrySpan(
+                `rabbitmq ${listenerOptions.queueName}`,
+                {
+                  carrier: headers,
+                  attributes: {
+                    'midway.protocol': 'rabbitmq',
+                    'midway.rabbitmq.queue': listenerOptions.queueName,
+                  },
+                },
+                async () => {
+                  this.app.createAnonymousContext(ctx);
+                  const isPassed = await this.app
+                    .getFramework()
+                    .runGuard(ctx, module, listenerOptions.propertyKey);
+                  if (!isPassed) {
+                    throw new MidwayInvokeForbiddenError(
+                      listenerOptions.propertyKey,
+                      module
+                    );
+                  }
+                  const ins = await ctx.requestContext.getAsync(module);
+                  const fn = await this.applyMiddleware(async ctx => {
+                    return await ins[listenerOptions.propertyKey].call(ins, data);
+                  });
 
-              try {
-                const result = await fn(ctx);
-                if (result) {
-                  return channelWrapper.ack(data);
+                  try {
+                    const result = await fn(ctx);
+                    if (result) {
+                      return channelWrapper.ack(data);
+                    }
+                  } catch (error) {
+                    this.logger.error(error);
+                  }
                 }
-              } catch (error) {
-                this.logger.error(error);
-              }
+              );
             }
           );
         }
