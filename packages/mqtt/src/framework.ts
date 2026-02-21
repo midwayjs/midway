@@ -113,7 +113,8 @@ export class MidwayMQTTFramework extends BaseFramework<
       ctx.packet = packet;
       ctx.message = message;
       const traceService = this.applicationContext.get(MidwayTraceService);
-      const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+      const traceMetaResolver = (this.configurationOptions as any)?.tracing
+        ?.meta;
       const packetProperties = packet?.properties?.userProperties || {};
       return await traceService.runWithEntrySpan(
         `mqtt ${topic}`,

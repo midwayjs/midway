@@ -203,7 +203,8 @@ export class MidwayWSFramework extends BaseFramework<
       'connection',
       async (socket: IMidwayWSContext, request: http.IncomingMessage) => {
         const traceService = this.applicationContext.get(MidwayTraceService);
-        const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+        const traceMetaResolver = (this.configurationOptions as any)?.tracing
+          ?.meta;
         socket.isAlive = true;
         socket.on('error', error => {
           this.logger.error(`socket got error: ${error}`);
