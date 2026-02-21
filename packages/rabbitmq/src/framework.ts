@@ -30,9 +30,11 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   async applicationInitialize(options) {
+    const traceService = this.applicationContext.get(MidwayTraceService);
     // Create a connection manager
     this.app = new RabbitMQServer({
       logger: this.logger,
+      traceService,
       ...this.configurationOptions,
     }) as unknown as IMidwayRabbitMQApplication;
   }

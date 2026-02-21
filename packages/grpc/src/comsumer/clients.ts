@@ -1,15 +1,17 @@
 import * as assert from 'assert';
 import {
   Config,
+  Inject,
   Init,
   Logger,
+  MidwayTraceService,
   Provide,
   Scope,
   ScopeEnum,
   Utils,
   ILogger,
 } from '@midwayjs/core';
-import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
+import { credentials, loadPackageDefinition, Metadata } from '@grpc/grpc-js';
 import {
   DefaultConfig,
   IClientOptions,
@@ -29,6 +31,9 @@ export class GRPCClients extends Map {
 
   @Logger()
   logger: ILogger;
+
+  @Inject()
+  traceService: MidwayTraceService;
 
   @Init()
   async initService() {
@@ -71,6 +76,14 @@ export class GRPCClients extends Map {
           connectionService[methodName] = (
             clientOptions: IClientOptions = {}
           ) => {
+            if (this.traceService) {
+              clientOptions.metadata = clientOptions.metadata || new Metadata();
+              this.traceService.injectContext(clientOptions.metadata, {
+                set(carrier, key, value) {
+                  carrier.set(key, String(value));
+                },
+              });
+            }
             return this.getClientRequestImpl(
               connectionService,
               originMethod,
