@@ -4,7 +4,6 @@ export function registerUserApi() {
   return defineApi('/users', api => ({
     getUser: api
       .get('/:id')
-      .meta({ routerName: 'getUser' })
       .handle(async ({ input }) => {
         return {
           id: input.params['id'],
@@ -13,7 +12,6 @@ export function registerUserApi() {
       }),
     createUser: api
       .post('/')
-      .meta({ routerName: 'createUser' })
       .handle(async ({ input }) => {
         return {
           id: 'u-created',

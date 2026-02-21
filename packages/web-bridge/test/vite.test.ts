@@ -9,7 +9,7 @@ describe('web-bridge vite plugin', () => {
     const source = `
       import { defineApi } from '@midwayjs/core/functional';
       export const userApi = defineApi('/users', api => ({
-        getUser: api.get('/:id').meta({ routerName: 'getUser' }).handle(async () => ({})),
+        getUser: api.get('/:id').handle(async () => ({})),
         list: api.get('/').handle(async () => ([])),
       }), {
         ignoreGlobalPrefix: true,
@@ -32,9 +32,7 @@ describe('web-bridge vite plugin', () => {
     expect(contracts[0].routes.getUser).toEqual({
       method: 'get',
       path: '/:id',
-      options: {
-        routerName: 'getUser',
-      },
+      options: {},
     });
     expect(contracts[0].routes.list).toEqual({
       method: 'get',
@@ -51,13 +49,12 @@ describe('web-bridge vite plugin', () => {
       export const userApi = defineApi('/users', api => ({
         getUser: api
           .get('/:id')
-          .meta({ routerName: 'getUser' })
           .handle(async ({ input }) => {
             return { id: input.params?.id };
           }),
         createUser: api
           .post('/')
-          .meta({ routerName: 'createUser', ignoreGlobalPrefix: true })
+          .meta({ ignoreGlobalPrefix: true })
           .handle(async ({ input }) => {
             return { name: input.body?.name };
           }),
@@ -69,15 +66,12 @@ describe('web-bridge vite plugin', () => {
     expect(contracts[0].routes.getUser).toEqual({
       method: 'get',
       path: '/:id',
-      options: {
-        routerName: 'getUser',
-      },
+      options: {},
     });
     expect(contracts[0].routes.createUser).toEqual({
       method: 'post',
       path: '/',
       options: {
-        routerName: 'createUser',
         ignoreGlobalPrefix: true,
       },
     });

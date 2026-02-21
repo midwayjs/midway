@@ -42,7 +42,7 @@ src/
 import { defineApi } from '@midwayjs/core/functional';
 
 export const userApi = defineApi('/users', api => ({
-  getUser: api.get('/:id').meta({ routerName: 'getUser' }).handle(async () => {
+  getUser: api.get('/:id').handle(async () => {
     return { id: '1', name: 'harry' };
   }),
 }));

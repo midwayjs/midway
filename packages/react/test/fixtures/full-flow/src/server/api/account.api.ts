@@ -5,7 +5,6 @@ export const accountApi = defineApi(
   api => ({
     getAccount: api
       .get('/:id')
-      .meta({ routerName: 'getAccount' })
       .handle(async ({ input }) => {
         return {
           id: input.params?.['id'],

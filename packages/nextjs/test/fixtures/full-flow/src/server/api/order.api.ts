@@ -9,7 +9,6 @@ export const orderApi = defineApi('/orders', api => ({
   }),
   createItem: api
     .post('/:id/items')
-    .meta({ routerName: 'createItem' })
     .handle(async ({ input }) => {
       return {
         id: input.params?.['id'],
