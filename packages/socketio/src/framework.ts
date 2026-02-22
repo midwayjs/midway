@@ -6,6 +6,7 @@ import {
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import { debuglog } from 'util';
 const debug = debuglog('midway:socket.io');
@@ -116,6 +117,12 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   private async addNamespace(target: any) {
+    const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceExtractor = (this.configurationOptions as any)?.tracing
+      ?.extractor;
     const controllerOption: WSControllerOption = MetadataManager.getOwnMetadata(
       WS_CONTROLLER_KEY,
       target
@@ -129,10 +136,47 @@ export class MidwaySocketIOFramework extends BaseFramework<
       controllerOption.routerOptions.connectionMiddleware ?? [];
 
     nsp.use((socket: any, next) => {
-      this.app.createAnonymousContext(socket);
-      socket.requestContext.registerObject('socket', socket);
-      socket.app = this.app;
-      next();
+      const entryCarrierDefault = socket?.handshake?.headers ?? {};
+      const entryCarrier =
+        typeof traceExtractor === 'function'
+          ? traceExtractor({
+              ctx: socket,
+              carrier: entryCarrierDefault,
+              request: socket?.handshake,
+              custom: {
+                namespace: controllerOption.namespace || '/',
+                eventName: 'connect',
+              },
+            })
+          : entryCarrierDefault;
+      traceService
+        .runWithEntrySpan(
+          `socketio.connect ${controllerOption.namespace || '/'}`,
+          {
+            enable: traceEnabled,
+            carrier: entryCarrier ?? entryCarrierDefault,
+            attributes: {
+              'midway.protocol': 'socketio',
+              'midway.socketio.namespace': controllerOption.namespace || '/',
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx: socket,
+              carrier: entryCarrier ?? entryCarrierDefault,
+              custom: {
+                namespace: controllerOption.namespace || '/',
+                eventName: 'connect',
+              },
+            },
+          },
+          async () => {
+            this.app.createAnonymousContext(socket);
+            socket.requestContext.registerObject('socket', socket);
+            socket.app = this.app;
+            next();
+          }
+        )
+        .catch(err => next(err));
     });
 
     // `connect`事件应该使用**同步**的方式调用以保证后续事件监听能够正常得到处理
@@ -173,19 +217,53 @@ export class MidwaySocketIOFramework extends BaseFramework<
               const controller = await socket.requestContext.getAsync(target);
 
               try {
-                const fn = await this.middlewareService.compose(
-                  [
-                    ...(wsEventInfo?.eventOptions?.middleware || []),
-                    async (ctx, next) => {
-                      return controller[wsEventInfo.propertyName].apply(
-                        controller,
-                        [socket]
-                      );
+                const onConnectionCarrierDefault =
+                  socket?.handshake?.headers ?? {};
+                const onConnectionCarrier =
+                  typeof traceExtractor === 'function'
+                    ? traceExtractor({
+                        ctx: socket,
+                        carrier: onConnectionCarrierDefault,
+                        custom: {
+                          eventName: wsEventInfo.propertyName,
+                        },
+                      })
+                    : onConnectionCarrierDefault;
+                const result = await traceService.runWithEntrySpan(
+                  `socketio.event ${wsEventInfo.propertyName}`,
+                  {
+                    enable: traceEnabled,
+                    carrier: onConnectionCarrier ?? onConnectionCarrierDefault,
+                    attributes: {
+                      'midway.protocol': 'socketio',
+                      'midway.socketio.event': wsEventInfo.propertyName,
                     },
-                  ],
-                  this.app
+                    meta: traceMetaResolver,
+                    metaArgs: {
+                      ctx: socket,
+                      carrier:
+                        onConnectionCarrier ?? onConnectionCarrierDefault,
+                      custom: {
+                        eventName: wsEventInfo.propertyName,
+                      },
+                    },
+                  },
+                  async () => {
+                    const fn = await this.middlewareService.compose(
+                      [
+                        ...(wsEventInfo?.eventOptions?.middleware || []),
+                        async (ctx, next) => {
+                          return controller[wsEventInfo.propertyName].apply(
+                            controller,
+                            [socket]
+                          );
+                        },
+                      ],
+                      this.app
+                    );
+                    return await fn(socket);
+                  }
                 );
-                const result = await fn(socket);
 
                 await this.bindSocketResponse(
                   result,
@@ -222,35 +300,72 @@ export class MidwaySocketIOFramework extends BaseFramework<
               debug('got message', wsEventInfo.messageEventName, args);
 
               try {
-                const result = await (
-                  await this.applyMiddleware(async (ctx, next) => {
-                    // add controller middleware
-                    const fn = await this.middlewareService.compose(
-                      [
-                        ...controllerMiddleware,
-                        ...(wsEventInfo?.eventOptions?.middleware || []),
-                        async (ctx, next) => {
-                          const isPassed = await this.app
-                            .getFramework()
-                            .runGuard(ctx, target, wsEventInfo.propertyName);
-                          if (!isPassed) {
-                            throw new MidwayInvokeForbiddenError(
-                              wsEventInfo.propertyName,
-                              target
-                            );
-                          }
-                          // eslint-disable-next-line prefer-spread
-                          return controller[wsEventInfo.propertyName].apply(
-                            controller,
-                            args
-                          );
+                const onMessageCarrierDefault =
+                  socket?.handshake?.headers ?? {};
+                const onMessageCarrier =
+                  typeof traceExtractor === 'function'
+                    ? traceExtractor({
+                        ctx: socket,
+                        carrier: onMessageCarrierDefault,
+                        custom: {
+                          eventName: wsEventInfo.messageEventName,
                         },
-                      ],
-                      this.app
-                    );
-                    return await fn(ctx, next);
-                  })
-                )(socket);
+                      })
+                    : onMessageCarrierDefault;
+                const result = await traceService.runWithEntrySpan(
+                  `socketio.message ${wsEventInfo.messageEventName}`,
+                  {
+                    enable: traceEnabled,
+                    carrier: onMessageCarrier ?? onMessageCarrierDefault,
+                    attributes: {
+                      'midway.protocol': 'socketio',
+                      'midway.socketio.event': wsEventInfo.messageEventName,
+                    },
+                    meta: traceMetaResolver,
+                    metaArgs: {
+                      ctx: socket,
+                      carrier: onMessageCarrier ?? onMessageCarrierDefault,
+                      custom: {
+                        eventName: wsEventInfo.messageEventName,
+                      },
+                    },
+                  },
+                  async () => {
+                    return await (
+                      await this.applyMiddleware(async (ctx, next) => {
+                        // add controller middleware
+                        const fn = await this.middlewareService.compose(
+                          [
+                            ...controllerMiddleware,
+                            ...(wsEventInfo?.eventOptions?.middleware || []),
+                            async (ctx, next) => {
+                              const isPassed = await this.app
+                                .getFramework()
+                                .runGuard(
+                                  ctx,
+                                  target,
+                                  wsEventInfo.propertyName
+                                );
+                              if (!isPassed) {
+                                throw new MidwayInvokeForbiddenError(
+                                  wsEventInfo.propertyName,
+                                  target
+                                );
+                              }
+                              // eslint-disable-next-line prefer-spread
+                              return controller[wsEventInfo.propertyName].apply(
+                                controller,
+                                args
+                              );
+                            },
+                          ],
+                          this.app
+                        );
+                        return await fn(ctx, next);
+                      })
+                    )(socket);
+                  }
+                );
                 if (typeof args[args.length - 1] === 'function') {
                   // ack
                   args[args.length - 1](result);
@@ -274,9 +389,42 @@ export class MidwaySocketIOFramework extends BaseFramework<
             socket.on('disconnect', async (reason: string) => {
               const controller = await socket.requestContext.getAsync(target);
               try {
-                const result = await controller[wsEventInfo.propertyName].apply(
-                  controller,
-                  [reason]
+                const onDisconnectCarrierDefault =
+                  socket?.handshake?.headers ?? {};
+                const onDisconnectCarrier =
+                  typeof traceExtractor === 'function'
+                    ? traceExtractor({
+                        ctx: socket,
+                        carrier: onDisconnectCarrierDefault,
+                        custom: {
+                          eventName: 'disconnect',
+                        },
+                      })
+                    : onDisconnectCarrierDefault;
+                const result = await traceService.runWithEntrySpan(
+                  `socketio.disconnect ${wsEventInfo.propertyName}`,
+                  {
+                    enable: traceEnabled,
+                    carrier: onDisconnectCarrier ?? onDisconnectCarrierDefault,
+                    attributes: {
+                      'midway.protocol': 'socketio',
+                      'midway.socketio.event': 'disconnect',
+                    },
+                    meta: traceMetaResolver,
+                    metaArgs: {
+                      ctx: socket,
+                      carrier:
+                        onDisconnectCarrier ?? onDisconnectCarrierDefault,
+                      custom: {
+                        eventName: 'disconnect',
+                      },
+                    },
+                  },
+                  async () =>
+                    await controller[wsEventInfo.propertyName].apply(
+                      controller,
+                      [reason]
+                    )
                 );
                 await this.bindSocketResponse(
                   result,
@@ -317,6 +465,12 @@ export class MidwaySocketIOFramework extends BaseFramework<
       responseEvents?: WSEventInfo[];
     }
   ) {
+    const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceInjector = (this.configurationOptions as any)?.tracing?.injector;
+
     if (result && methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
         if (wsEventInfo.eventType === WSEventTypeEnum.EMIT) {
@@ -325,14 +479,76 @@ export class MidwaySocketIOFramework extends BaseFramework<
               return socket.to(name);
             }, socket);
           }
-          // eslint-disable-next-line prefer-spread
-          socket.emit.apply(
-            socket,
-            [wsEventInfo.messageEventName].concat(result)
+          const carrier =
+            typeof traceInjector === 'function'
+              ? traceInjector({
+                  ctx: socket,
+                  request: result,
+                  custom: {
+                    eventName: wsEventInfo.messageEventName,
+                  },
+                }) || {}
+              : {};
+          await traceService.runWithExitSpan(
+            `socketio.emit ${wsEventInfo.messageEventName}`,
+            {
+              enable: traceEnabled,
+              carrier,
+              attributes: {
+                'midway.protocol': 'socketio',
+                'midway.socketio.event': wsEventInfo.messageEventName,
+              },
+              meta: traceMetaResolver,
+              metaArgs: {
+                ctx: socket,
+                carrier,
+                custom: {
+                  eventName: wsEventInfo.messageEventName,
+                },
+              },
+            },
+            async () => {
+              // eslint-disable-next-line prefer-spread
+              socket.emit.apply(
+                socket,
+                [wsEventInfo.messageEventName].concat(result)
+              );
+            }
           );
         } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
-          // eslint-disable-next-line prefer-spread
-          socket.nsp.emit.apply(socket.nsp, [].concat(result));
+          const carrier =
+            typeof traceInjector === 'function'
+              ? traceInjector({
+                  ctx: socket,
+                  request: result,
+                  custom: {
+                    eventName: propertyName,
+                  },
+                }) || {}
+              : {};
+          await traceService.runWithExitSpan(
+            `socketio.broadcast ${propertyName}`,
+            {
+              enable: traceEnabled,
+              carrier,
+              attributes: {
+                'midway.protocol': 'socketio',
+                'midway.socketio.event': propertyName,
+              },
+              meta: traceMetaResolver,
+              metaArgs: {
+                ctx: socket,
+                carrier,
+                custom: {
+                  eventName: propertyName,
+                },
+              },
+            },
+            async () => {
+              // eslint-disable-next-line prefer-spread
+              socket.nsp.emit.apply(socket.nsp, [].concat(result));
+            }
+          );
         }
       }
     }

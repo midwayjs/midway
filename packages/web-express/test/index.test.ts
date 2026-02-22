@@ -1,6 +1,12 @@
 import { IMidwayExpressApplication, MidwayExpressMiddlewareService, Framework } from '../src';
 import { createLightApp, createLegacyApp as creatApp, close as closeApp, createHttpRequest } from '@midwayjs/mock';
-import { IMidwayApplication, IMidwayContainer, LifeCycleInvokeOptions, MidwayWebRouterService } from '@midwayjs/core';
+import {
+  IMidwayApplication,
+  IMidwayContainer,
+  LifeCycleInvokeOptions,
+  MidwayTraceService,
+  MidwayWebRouterService,
+} from '@midwayjs/core';
 
 describe('/test/feature.test.ts', () => {
 
@@ -193,6 +199,24 @@ describe('/test/feature.test.ts', () => {
       expect(result1.text).toEqual('harryhello world11');
       await closeApp(app);
     });
+  });
+
+  it('should create entry span for http request', async () => {
+    const app = await creatApp('base-app');
+    const traceService = await app
+      .getApplicationContext()
+      .getAsync(MidwayTraceService);
+    const rawRunWithEntrySpan = traceService.runWithEntrySpan.bind(traceService);
+    let called = 0;
+    traceService.runWithEntrySpan = async (...args: any[]) => {
+      called++;
+      return rawRunWithEntrySpan(...args);
+    };
+
+    const result = await createHttpRequest(app).get('/api/').query({ name: 'harry' });
+    expect(result.status).toBe(201);
+    expect(called).toBeGreaterThan(0);
+    await closeApp(app);
   });
 
   it('should test global filter', async () => {

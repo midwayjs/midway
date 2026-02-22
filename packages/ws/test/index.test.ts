@@ -1,5 +1,5 @@
 import { closeApp, createServer, testConnectionRejected } from './utils';
-import { sleep } from '@midwayjs/core';
+import { MidwayTraceService, sleep } from '@midwayjs/core';
 import { once } from 'events';
 import { createLightApp, createWebSocketClient } from '@midwayjs/mock';
 import * as ws from '../src';
@@ -190,6 +190,39 @@ describe('/test/index.test.ts', () => {
     expect(response.timestamp).toBeDefined();
 
     await client3.close();
+    await closeApp(app);
+  });
+
+  it('should create entry and exit span for ws message flow', async () => {
+    const app = await createServer('base-app');
+    const traceService = await app
+      .getApplicationContext()
+      .getAsync(MidwayTraceService);
+    const rawRunWithEntrySpan = traceService.runWithEntrySpan.bind(traceService);
+    const rawRunWithExitSpan = traceService.runWithExitSpan.bind(traceService);
+    let entryCalled = 0;
+    let exitCalled = 0;
+
+    traceService.runWithEntrySpan = async (...args: any[]) => {
+      entryCalled++;
+      return rawRunWithEntrySpan(...args);
+    };
+    traceService.runWithExitSpan = async (...args: any[]) => {
+      exitCalled++;
+      return rawRunWithExitSpan(...args);
+    };
+
+    const client = await createWebSocketClient(`ws://localhost:3000`);
+    client.send(1);
+    const [data] = await once(client, 'message');
+    expect(JSON.parse(data)).toEqual({
+      name: 'harry',
+      result: 6,
+    });
+    expect(entryCalled).toBeGreaterThan(0);
+    expect(exitCalled).toBeGreaterThan(0);
+
+    await client.close();
     await closeApp(app);
   });
 });

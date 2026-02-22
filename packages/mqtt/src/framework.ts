@@ -3,6 +3,7 @@ import {
   BaseFramework,
   DecoratorManager,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   IMidwayMQTTApplication,
@@ -111,12 +112,46 @@ export class MidwayMQTTFramework extends BaseFramework<
       ctx.topic = topic;
       ctx.packet = packet;
       ctx.message = message;
-      const fn = await this.applyMiddleware(async ctx => {
-        const instance = await ctx.requestContext.getAsync(ClzProvider);
+      const traceService = this.applicationContext.get(MidwayTraceService);
+      const traceMetaResolver = (this.configurationOptions as any)?.tracing
+        ?.meta;
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceExtractor = (this.configurationOptions as any)?.tracing
+        ?.extractor;
+      const packetPropertiesDefault = packet?.properties?.userProperties || {};
+      const packetProperties =
+        typeof traceExtractor === 'function'
+          ? traceExtractor({ ctx, request: packet, custom: { topic } })
+          : packetPropertiesDefault;
+      return await traceService.runWithEntrySpan(
+        `mqtt ${topic}`,
+        {
+          enable: traceEnabled,
+          carrier: packetProperties ?? packetPropertiesDefault,
+          attributes: {
+            'midway.protocol': 'mqtt',
+            'midway.mqtt.topic': topic,
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            ctx,
+            carrier: packetProperties ?? packetPropertiesDefault,
+            request: packet,
+            custom: {
+              topic,
+            },
+          },
+        },
+        async () => {
+          const fn = await this.applyMiddleware(async ctx => {
+            const instance = await ctx.requestContext.getAsync(ClzProvider);
 
-        return await instance['subscribe'].call(instance, ctx);
-      });
-      return await fn(ctx);
+            return await instance['subscribe'].call(instance, ctx);
+          });
+          return await fn(ctx);
+        }
+      );
     });
 
     await consumer.subscribeAsync(

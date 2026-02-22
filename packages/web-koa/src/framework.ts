@@ -10,6 +10,7 @@ import {
   MidwayConfigMissingError,
   httpError,
   MidwayWebRouterService,
+  MidwayTraceService,
   Framework,
   Types,
 } from '@midwayjs/core';
@@ -211,18 +212,61 @@ export class MidwayKoaFramework extends BaseFramework<
     // root middleware
     const midwayRootMiddleware = async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
-      await (
-        await this.applyMiddleware(applyMiddlewares)
-      )(ctx, next);
+      const traceService = this.applicationContext.get(MidwayTraceService);
+      const spanName = `${ctx.method} ${ctx.path || '/'}`;
+      const traceMetaResolver = (this.configurationOptions as any)?.tracing
+        ?.meta;
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceExtractor = (this.configurationOptions as any)?.tracing
+        ?.extractor;
+      const traceInjector = (this.configurationOptions as any)?.tracing
+        ?.injector;
+      const requestCarrier =
+        typeof traceExtractor === 'function'
+          ? traceExtractor({
+              ctx,
+              request: ctx.request,
+              response: ctx.response,
+            })
+          : ctx.headers;
+      const responseCarrier =
+        typeof traceInjector === 'function'
+          ? traceInjector({ ctx, request: ctx.request, response: ctx.response })
+          : ctx.response.res;
 
-      if (
-        ctx.body === undefined &&
-        !ctx.response._explicitStatus &&
-        ctx._matchedRoute
-      ) {
-        // 如果进了路由，重新赋值，防止 404
-        ctx.body = undefined;
-      }
+      await traceService.runWithEntrySpan(
+        spanName,
+        {
+          enable: traceEnabled,
+          carrier: requestCarrier,
+          responseCarrier,
+          attributes: {
+            'midway.protocol': 'http',
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            ctx,
+            carrier: requestCarrier,
+            request: ctx.request,
+            response: ctx.response,
+          },
+        },
+        async () => {
+          await (
+            await this.applyMiddleware(applyMiddlewares)
+          )(ctx, next);
+
+          if (
+            ctx.body === undefined &&
+            !ctx.response._explicitStatus &&
+            ctx._matchedRoute
+          ) {
+            // 如果进了路由，重新赋值，防止 404
+            ctx.body = undefined;
+          }
+        }
+      );
     };
     this.app.use(midwayRootMiddleware);
 

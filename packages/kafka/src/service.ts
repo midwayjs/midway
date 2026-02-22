@@ -2,12 +2,14 @@ import {
   Config,
   Destroy,
   ILogger,
+  Inject,
   Init,
   Logger,
   MidwayCommonError,
   ServiceFactory,
   ServiceFactoryConfigOption,
   Singleton,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import { Producer, Kafka, Admin } from 'kafkajs';
 import {
@@ -23,6 +25,18 @@ export class KafkaProducerFactory extends ServiceFactory<Producer> {
 
   @Config('kafka.producer')
   pubConfig: ServiceFactoryConfigOption<IMidwayKafkaProducerInitOptions>;
+
+  @Inject()
+  traceService: MidwayTraceService;
+
+  @Config('kafka.tracing.enable')
+  traceEnabled: boolean;
+
+  @Config('kafka.tracing.injector')
+  traceInjector: (args: {
+    request?: unknown;
+    custom?: Record<string, unknown>;
+  }) => any;
 
   getName(): string {
     return 'kafka:producer';
@@ -53,12 +67,66 @@ export class KafkaProducerFactory extends ServiceFactory<Producer> {
       KafkaManager.getInstance().addKafkaInstance(kafkaInstanceRef, client);
     }
     const producer = client.producer(producerOptions);
+    this.bindTraceContext(producer);
 
     producer.on('producer.connect', () => {
       this.logger.info('[midway:kafka] producer: %s is connect', clientName);
     });
     await producer.connect();
     return producer;
+  }
+
+  private bindTraceContext(producer: Producer) {
+    const injectHeaders = (
+      headers: Record<string, any> | undefined,
+      custom?: Record<string, unknown>
+    ) => {
+      const configuredCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: headers,
+              custom,
+            })
+          : undefined;
+      const carrier = configuredCarrier ?? headers ?? {};
+      if (this.traceEnabled !== false) {
+        this.traceService.injectContext(carrier);
+      }
+      return carrier;
+    };
+
+    const rawSend = producer.send.bind(producer);
+    (producer as any).send = payload => {
+      const nextPayload = {
+        ...payload,
+        messages: (payload?.messages || []).map(message => ({
+          ...message,
+          headers: injectHeaders(message?.headers, {
+            sendMethod: 'send',
+            topic: payload?.topic,
+          }),
+        })),
+      };
+      return rawSend(nextPayload);
+    };
+
+    const rawSendBatch = producer.sendBatch.bind(producer);
+    (producer as any).sendBatch = payload => {
+      const nextPayload = {
+        ...payload,
+        topicMessages: (payload?.topicMessages || []).map(topicMessage => ({
+          ...topicMessage,
+          messages: (topicMessage?.messages || []).map(message => ({
+            ...message,
+            headers: injectHeaders(message?.headers, {
+              sendMethod: 'sendBatch',
+              topic: topicMessage?.topic,
+            }),
+          })),
+        })),
+      };
+      return rawSendBatch(nextPayload);
+    };
   }
 
   async destroyClient(producer: Producer, name: string) {

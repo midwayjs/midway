@@ -9,6 +9,7 @@ import {
   DecoratorManager,
   MetadataManager,
   listPropertyDataFromClass,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   IMidwayRabbitMQApplication,
@@ -29,9 +30,11 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   async applicationInitialize(options) {
+    const traceService = this.applicationContext.get(MidwayTraceService);
     // Create a connection manager
     this.app = new RabbitMQServer({
       logger: this.logger,
+      traceService,
       ...this.configurationOptions,
     }) as unknown as IMidwayRabbitMQApplication;
   }
@@ -85,29 +88,71 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                   return channelWrapper.ack(data);
                 },
               } as IMidwayRabbitMQContext;
-              this.app.createAnonymousContext(ctx);
-              const isPassed = await this.app
-                .getFramework()
-                .runGuard(ctx, module, listenerOptions.propertyKey);
-              if (!isPassed) {
-                throw new MidwayInvokeForbiddenError(
-                  listenerOptions.propertyKey,
-                  module
-                );
-              }
-              const ins = await ctx.requestContext.getAsync(module);
-              const fn = await this.applyMiddleware(async ctx => {
-                return await ins[listenerOptions.propertyKey].call(ins, data);
-              });
+              const traceService =
+                this.applicationContext.get(MidwayTraceService);
+              const traceMetaResolver = (this.configurationOptions as any)
+                ?.tracing?.meta;
+              const traceEnabled =
+                (this.configurationOptions as any)?.tracing?.enable !== false;
+              const traceExtractor = (this.configurationOptions as any)?.tracing
+                ?.extractor;
+              const headersDefault = data?.properties?.headers ?? {};
+              const headers =
+                typeof traceExtractor === 'function'
+                  ? traceExtractor({
+                      ctx,
+                      request: data,
+                      custom: { queueName: listenerOptions.queueName },
+                    })
+                  : headersDefault;
+              await traceService.runWithEntrySpan(
+                `rabbitmq ${listenerOptions.queueName}`,
+                {
+                  enable: traceEnabled,
+                  carrier: headers ?? headersDefault,
+                  attributes: {
+                    'midway.protocol': 'rabbitmq',
+                    'midway.rabbitmq.queue': listenerOptions.queueName,
+                  },
+                  meta: traceMetaResolver,
+                  metaArgs: {
+                    ctx,
+                    carrier: headers ?? headersDefault,
+                    request: data,
+                    custom: {
+                      queueName: listenerOptions.queueName,
+                    },
+                  },
+                },
+                async () => {
+                  this.app.createAnonymousContext(ctx);
+                  const isPassed = await this.app
+                    .getFramework()
+                    .runGuard(ctx, module, listenerOptions.propertyKey);
+                  if (!isPassed) {
+                    throw new MidwayInvokeForbiddenError(
+                      listenerOptions.propertyKey,
+                      module
+                    );
+                  }
+                  const ins = await ctx.requestContext.getAsync(module);
+                  const fn = await this.applyMiddleware(async ctx => {
+                    return await ins[listenerOptions.propertyKey].call(
+                      ins,
+                      data
+                    );
+                  });
 
-              try {
-                const result = await fn(ctx);
-                if (result) {
-                  return channelWrapper.ack(data);
+                  try {
+                    const result = await fn(ctx);
+                    if (result) {
+                      return channelWrapper.ack(data);
+                    }
+                  } catch (error) {
+                    this.logger.error(error);
+                  }
                 }
-              } catch (error) {
-                this.logger.error(error);
-              }
+              );
             }
           );
         }

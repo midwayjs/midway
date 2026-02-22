@@ -5,6 +5,7 @@ import {
   DecoratorManager,
   MetadataManager,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import { Application, Context } from './interface';
 import { PISCINA_TASK_KEY } from './constants';
@@ -62,15 +63,53 @@ export class PiscinaWorkerFramework extends BaseFramework<
     }
 
     const ctx = this.app.createAnonymousContext();
-    const taskInstance = await ctx.requestContext.getAsync<any>(TaskClass);
+    const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceExtractor = (this.configurationOptions as any)?.tracing
+      ?.extractor;
+    const entryCarrier =
+      typeof traceExtractor === 'function'
+        ? traceExtractor({
+            ctx,
+            request: payload,
+            custom: {
+              handler,
+            },
+          })
+        : {};
+    return await traceService.runWithEntrySpan(
+      `piscina ${handler}`,
+      {
+        enable: traceEnabled,
+        carrier: entryCarrier,
+        attributes: {
+          'midway.protocol': 'piscina',
+          'midway.piscina.handler': handler,
+        },
+        meta: traceMetaResolver,
+        metaArgs: {
+          ctx,
+          carrier: entryCarrier,
+          request: payload,
+          custom: {
+            handler,
+          },
+        },
+      },
+      async () => {
+        const taskInstance = await ctx.requestContext.getAsync<any>(TaskClass);
 
-    if (!taskInstance || typeof taskInstance.execute !== 'function') {
-      throw new MidwayCommonError(
-        `Task "${handler}" must implement execute method`
-      );
-    }
+        if (!taskInstance || typeof taskInstance.execute !== 'function') {
+          throw new MidwayCommonError(
+            `Task "${handler}" must implement execute method`
+          );
+        }
 
-    return await taskInstance.execute(payload);
+        return await taskInstance.execute(payload);
+      }
+    );
   }
 
   /**

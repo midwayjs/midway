@@ -9,6 +9,7 @@ import {
   ServiceFactory,
   delegateTargetPrototypeMethod,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import * as assert from 'assert';
 import * as COS from 'cos-nodejs-sdk-v5';
@@ -29,6 +30,18 @@ export class COSServiceFactory extends ServiceFactory<COS> {
   @Logger('coreLogger')
   logger;
 
+  @Inject()
+  protected traceService: MidwayTraceService;
+
+  @Config('cos.tracing.meta')
+  protected traceMetaResolver;
+
+  @Config('cos.tracing.enable')
+  protected traceEnabled;
+
+  @Config('cos.tracing.injector')
+  protected traceInjector;
+
   async createClient(config: COS.COSOptions): Promise<COS> {
     assert.ok(
       config.SecretKey && config.SecretId,
@@ -36,7 +49,61 @@ export class COSServiceFactory extends ServiceFactory<COS> {
     );
     this.logger.info('[midway:cos] init %s', config.SecretKey);
 
-    return new COS(config);
+    const client = new COS(config);
+    this.bindTraceContext(client);
+    return client;
+  }
+
+  protected bindTraceContext(client: COS) {
+    if (!client || !this.traceService) {
+      return;
+    }
+
+    const rawRequest = (client as any).request?.bind(client);
+    if (!rawRequest) {
+      return;
+    }
+
+    (client as any).request = async (...args) => {
+      if (typeof args[1] === 'function') {
+        return rawRequest(...args);
+      }
+      const params = args?.[0] || {};
+      const apiName = params.Action || params.action || 'request';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: params,
+              custom: {
+                action: String(apiName),
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
+      return await this.traceService.runWithExitSpan(
+        `cos.${String(apiName).toLowerCase()}`,
+        {
+          enable: this.traceEnabled !== false,
+          carrier,
+          attributes: {
+            'midway.protocol': 'cos',
+            'midway.cos.action': String(apiName),
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            carrier,
+            request: params,
+            custom: {
+              action: String(apiName),
+            },
+          },
+        },
+        async () => {
+          return await rawRequest(...args);
+        }
+      );
+    };
   }
 
   getName() {

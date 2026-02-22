@@ -5,6 +5,7 @@ import {
   DecoratorManager,
   TypedResourceManager,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   IKafkaConsumerInitOptions,
@@ -121,14 +122,48 @@ export class MidwayKafkaFramework extends BaseFramework<
           ...resourceInitializeConfig.consumerRunConfig,
         };
         runConfig[runMethod] = async payload => {
-          const ctx = this.app.createAnonymousContext();
-          const fn = await this.applyMiddleware(async ctx => {
-            ctx.payload = payload;
-            ctx.consumer = consumer;
-            const instance = await ctx.requestContext.getAsync(ClzProvider);
-            return await instance[runMethod].call(instance, payload, ctx);
-          });
-          return await fn(ctx);
+          const traceService = this.applicationContext.get(MidwayTraceService);
+          const traceMetaResolver = (this.configurationOptions as any)?.tracing
+            ?.meta;
+          const traceEnabled =
+            (this.configurationOptions as any)?.tracing?.enable !== false;
+          const traceExtractor = (this.configurationOptions as any)?.tracing
+            ?.extractor;
+          const headersDefault = payload?.message?.headers ?? {};
+          const headers =
+            typeof traceExtractor === 'function'
+              ? traceExtractor({ request: payload, custom: { runMethod } })
+              : headersDefault;
+          return await traceService.runWithEntrySpan(
+            `kafka ${payload?.topic ?? 'consumer'}`,
+            {
+              enable: traceEnabled,
+              carrier: headers ?? headersDefault,
+              attributes: {
+                'midway.protocol': 'kafka',
+                'midway.kafka.topic': payload?.topic,
+              },
+              meta: traceMetaResolver,
+              metaArgs: {
+                carrier: headers ?? headersDefault,
+                request: payload,
+                custom: {
+                  topic: payload?.topic,
+                  runMethod,
+                },
+              },
+            },
+            async () => {
+              const ctx = this.app.createAnonymousContext();
+              const fn = await this.applyMiddleware(async ctx => {
+                ctx.payload = payload;
+                ctx.consumer = consumer;
+                const instance = await ctx.requestContext.getAsync(ClzProvider);
+                return await instance[runMethod].call(instance, payload, ctx);
+              });
+              return await fn(ctx);
+            }
+          );
         };
         return runConfig;
       },

@@ -9,6 +9,7 @@ import {
   ServiceFactoryConfigOption,
   Singleton,
   ILogger,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import Consul = require('consul');
 import { ConsulClient, ConsulOptions } from './interface';
@@ -17,6 +18,15 @@ import { ConsulClient, ConsulOptions } from './interface';
 export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
   @Config('consul')
   consulConfig: ServiceFactoryConfigOption<ConsulOptions>;
+
+  @Config('consul.tracing.meta')
+  traceMetaResolver;
+
+  @Config('consul.tracing.enable')
+  traceEnabled;
+
+  @Config('consul.tracing.injector')
+  traceInjector;
 
   @Init()
   async init() {
@@ -28,6 +38,9 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
   @Logger('coreLogger')
   logger: ILogger;
 
+  @Inject()
+  traceService: MidwayTraceService;
+
   async createClient(
     config: ConsulOptions,
     clientName: string
@@ -38,7 +51,73 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
       config.host,
       config.port
     );
-    return new Consul(config);
+    const client = new Consul(config);
+    this.bindTraceContext(client as any, clientName);
+    return client;
+  }
+
+  protected bindTraceContext(client: any, clientName: string) {
+    if (!client || !this.traceService) {
+      return;
+    }
+
+    const rawRequest = client.request?.bind(client);
+    if (!rawRequest) {
+      return;
+    }
+
+    client.request = (...args) => {
+      const hasCallback = args.some(arg => typeof arg === 'function');
+      if (hasCallback) {
+        return rawRequest(...args);
+      }
+
+      const requestOptions = args?.[0] ?? {};
+      const isWatch = Boolean(
+        requestOptions?.watch ??
+        requestOptions?.qs?.watch ??
+        requestOptions?.query?.watch
+      );
+      if (isWatch) {
+        return rawRequest(...args);
+      }
+
+      const requestMethod = requestOptions?.method ?? 'request';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: requestOptions,
+              custom: {
+                clientName,
+                requestMethod: String(requestMethod),
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
+      return this.traceService.runWithExitSpan(
+        `consul.${String(requestMethod).toLowerCase()}`,
+        {
+          enable: this.traceEnabled !== false,
+          carrier,
+          attributes: {
+            'midway.protocol': 'consul',
+            'midway.consul.client': clientName,
+            'midway.consul.method': String(requestMethod),
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            carrier,
+            request: requestOptions,
+            custom: {
+              clientName,
+              requestMethod: String(requestMethod),
+            },
+          },
+        },
+        async () => rawRequest(...args)
+      );
+    };
   }
 
   getName() {

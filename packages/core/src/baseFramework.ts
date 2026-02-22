@@ -28,6 +28,7 @@ import { ContextMiddlewareManager } from './common/middlewareManager';
 import { MidwayMiddlewareService } from './service/middlewareService';
 import { FilterManager } from './common/filterManager';
 import { MidwayMockService } from './service/mockService';
+import { MidwayTraceService } from './service/traceService';
 import * as util from 'util';
 import {
   ASYNC_ROOT_CONTEXT,
@@ -246,6 +247,21 @@ export abstract class BaseFramework<
         ctx.getApp = () => {
           return this.getApplication();
         };
+        if (!Object.getOwnPropertyDescriptor(ctx, 'traceId')) {
+          Object.defineProperty(ctx, 'traceId', {
+            get: () => {
+              try {
+                return this.getApplicationContext()
+                  .get(MidwayTraceService)
+                  .getTraceId();
+              } catch {
+                return undefined;
+              }
+            },
+            enumerable: true,
+            configurable: true,
+          });
+        }
         return ctx;
       },
 

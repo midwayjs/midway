@@ -1,6 +1,8 @@
 import {
   Config,
+  Inject,
   Init,
+  MidwayTraceService,
   Provide,
   Scope,
   ScopeEnum,
@@ -14,6 +16,18 @@ import { AxiosInstance, CreateAxiosDefaults } from 'axios';
 export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
   @Config('axios')
   axiosConfig: any;
+
+  @Config('axios.tracing.enable')
+  traceEnabled: boolean;
+
+  @Config('axios.tracing.injector')
+  traceInjector: (args: {
+    request?: unknown;
+    custom?: Record<string, unknown>;
+  }) => any;
+
+  @Inject()
+  traceService: MidwayTraceService;
 
   @Init()
   async init() {
@@ -36,6 +50,27 @@ export class HttpServiceFactory extends ServiceFactory<AxiosInstance> {
     config: CreateAxiosDefaults,
     clientName: string
   ): Promise<AxiosInstance> {
-    return axios.create(config);
+    const client = axios.create(config);
+    client.interceptors.request.use(requestConfig => {
+      if (this.traceService && this.traceEnabled !== false) {
+        const configuredCarrier =
+          typeof this.traceInjector === 'function'
+            ? this.traceInjector({
+                request: requestConfig,
+                custom: {
+                  clientName,
+                },
+              })
+            : undefined;
+        const carrier =
+          configuredCarrier ??
+          requestConfig.headers ??
+          new axios.AxiosHeaders();
+        requestConfig.headers = carrier;
+        this.traceService.injectContext(carrier);
+      }
+      return requestConfig;
+    });
+    return client;
   }
 }

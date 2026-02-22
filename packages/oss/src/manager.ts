@@ -8,6 +8,7 @@ import {
   ServiceFactory,
   delegateTargetPrototypeMethod,
   MidwayCommonError,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import * as OSS from 'ali-oss';
 import * as assert from 'assert';
@@ -36,6 +37,18 @@ export class OSSServiceFactory<
   @Config('oss')
   ossConfig: OSSServiceFactoryCreateClientConfigType;
 
+  @Inject()
+  protected traceService: MidwayTraceService;
+
+  @Config('oss.tracing.meta')
+  protected traceMetaResolver;
+
+  @Config('oss.tracing.enable')
+  protected traceEnabled;
+
+  @Config('oss.tracing.injector')
+  protected traceInjector;
+
   @Init()
   async init() {
     await this.initClients(this.ossConfig, {
@@ -51,18 +64,71 @@ export class OSSServiceFactory<
     }
     if (config.clusters) {
       config.clusters.forEach(checkBucketConfig);
-      // @ts-expect-error because this code can return the correct type, but TS still reports an error
-      return new OSS.ClusterClient(config as MWOSSClusterOptions);
+      const client = new OSS.ClusterClient(
+        config as MWOSSClusterOptions
+      ) as unknown as T;
+      this.bindTraceContext(client as any);
+      return client;
     }
 
     if (config.sts === true) {
-      // @ts-expect-error because this code can return the correct type, but TS still reports an error
-      return new OSS.STS(config);
+      const client = new OSS.STS(config) as unknown as T;
+      this.bindTraceContext(client as any);
+      return client;
     }
 
     checkBucketConfig(config);
-    // @ts-expect-error because this code can return the correct type, but TS still reports an error
-    return new OSS(config);
+    const client = new OSS(config) as unknown as T;
+    this.bindTraceContext(client as any);
+    return client;
+  }
+
+  protected bindTraceContext(client: any) {
+    if (!client || !this.traceService) {
+      return;
+    }
+
+    const rawRequest = client.request?.bind(client);
+    if (!rawRequest) {
+      return;
+    }
+
+    client.request = async (...args) => {
+      const requestMethod = args?.[0]?.method || 'request';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: args?.[0],
+              custom: {
+                requestMethod: String(requestMethod),
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
+      return await this.traceService.runWithExitSpan(
+        `oss.${String(requestMethod).toLowerCase()}`,
+        {
+          enable: this.traceEnabled !== false,
+          carrier,
+          attributes: {
+            'midway.protocol': 'oss',
+            'midway.oss.method': String(requestMethod),
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            carrier,
+            request: args?.[0],
+            custom: {
+              requestMethod: String(requestMethod),
+            },
+          },
+        },
+        async () => {
+          return await rawRequest(...args);
+        }
+      );
+    };
   }
 
   getName() {

@@ -70,7 +70,13 @@ describe('/test/index.test.ts', () => {
   it('should test defaults and interceptors', () => {
     expect(Axios.get).toBeDefined();
     expect(httpService.defaults).toStrictEqual(Axios.defaults);
-    expect(httpService.interceptors).toStrictEqual(Axios.interceptors);
+    expect(httpService.interceptors.response).toStrictEqual(
+      Axios.interceptors.response
+    );
+    expect(httpService.interceptors.request.handlers.length).toBeGreaterThan(0);
+    expect(
+      typeof httpService.interceptors.request.handlers[0].fulfilled
+    ).toEqual('function');
   });
 
   it('should test get method', async () => {

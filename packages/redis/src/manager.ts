@@ -6,6 +6,7 @@ import {
   Inject,
   Logger,
   MidwayCommonError,
+  MidwayTraceService,
   Provide,
   Scope,
   ScopeEnum,
@@ -32,6 +33,18 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
 
   @Logger('coreLogger')
   protected logger: ILogger;
+
+  @Inject()
+  protected traceService: MidwayTraceService;
+
+  @Config('redis.tracing.meta')
+  protected traceMetaResolver;
+
+  @Config('redis.tracing.enable')
+  protected traceEnabled;
+
+  @Config('redis.tracing.injector')
+  protected traceInjector;
 
   protected async createClient(config, name: string): Promise<Redis> {
     let client;
@@ -87,7 +100,61 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
       });
     });
 
+    this.bindTraceContext(client, name);
+
     return client;
+  }
+
+  protected bindTraceContext(client: Redis, clientName: string) {
+    if (!client || !this.traceService) {
+      return;
+    }
+
+    const rawSendCommand = (client as any).sendCommand?.bind(client);
+    if (!rawSendCommand) {
+      return;
+    }
+
+    (client as any).sendCommand = (command: any, stream?: any) => {
+      const commandName =
+        command?.name?.toLowerCase?.() || command?.name || 'unknown';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: command,
+              custom: {
+                clientName,
+                commandName,
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
+      return this.traceService.runWithExitSpan(
+        `redis.${commandName}`,
+        {
+          enable: this.traceEnabled !== false,
+          carrier,
+          attributes: {
+            'midway.protocol': 'redis',
+            'midway.redis.command': commandName,
+            'midway.redis.client': clientName,
+          },
+          meta: this.traceMetaResolver,
+          metaArgs: {
+            carrier,
+            request: command,
+            custom: {
+              clientName,
+              commandName,
+            },
+          },
+        },
+        async () => {
+          return rawSendCommand(command, stream);
+        }
+      );
+    };
   }
 
   getName() {

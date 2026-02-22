@@ -10,6 +10,7 @@ import {
   ILogger,
   MidwayCommonError,
   extend,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import { Application, Context, IProcessor } from './interface';
 import {
@@ -318,30 +319,71 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
           from: processor,
         });
         try {
-          ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
+          const traceService = this.applicationContext.get(MidwayTraceService);
+          const traceMetaResolver = (this.configurationOptions as any)?.tracing
+            ?.meta;
+          const traceEnabled =
+            (this.configurationOptions as any)?.tracing?.enable !== false;
+          const traceExtractor = (this.configurationOptions as any)?.tracing
+            ?.extractor;
+          const carrierDefault = job?.data?.__midwayTraceCarrier ?? {};
+          const carrier =
+            typeof traceExtractor === 'function'
+              ? traceExtractor({
+                  ctx,
+                  carrier: carrierDefault,
+                  request: job,
+                  custom: {
+                    queueName,
+                  },
+                })
+              : carrierDefault;
+          return await traceService.runWithEntrySpan(
+            `bullmq ${queueName}`,
+            {
+              enable: traceEnabled,
+              carrier: carrier ?? carrierDefault,
+              attributes: {
+                'midway.protocol': 'bullmq',
+                'midway.bullmq.queue': queueName,
+              },
+              meta: traceMetaResolver,
+              metaArgs: {
+                ctx,
+                carrier: carrier ?? carrierDefault,
+                request: job,
+                custom: {
+                  queueName,
+                },
+              },
+            },
+            async () => {
+              ctx.logger.info(
+                `start process job ${job.id} from ${processor.name}`
+              );
 
-          const isPassed = await this.app
-            .getFramework()
-            .runGuard(ctx, processor, 'execute');
-          if (!isPassed) {
-            throw new MidwayInvokeForbiddenError('execute', processor);
-          }
+              const isPassed = await this.app
+                .getFramework()
+                .runGuard(ctx, processor, 'execute');
+              if (!isPassed) {
+                throw new MidwayInvokeForbiddenError('execute', processor);
+              }
 
-          const service = await ctx.requestContext.getAsync<IProcessor>(
-            processor as any
+              const service = await ctx.requestContext.getAsync<IProcessor>(
+                processor as any
+              );
+              const fn = await this.applyMiddleware(async ctx => {
+                return await Utils.toAsyncFunction(
+                  service.execute.bind(service)
+                )(job.data, job, token);
+              });
+              const result = await Promise.resolve(await fn(ctx));
+              ctx.logger.info(
+                `complete process job ${job.id} from ${processor.name}`
+              );
+              return result;
+            }
           );
-          const fn = await this.applyMiddleware(async ctx => {
-            return await Utils.toAsyncFunction(service.execute.bind(service))(
-              job.data,
-              job,
-              token
-            );
-          });
-          const result = await Promise.resolve(await fn(ctx));
-          ctx.logger.info(
-            `complete process job ${job.id} from ${processor.name}`
-          );
-          return result;
         } catch (err) {
           ctx.logger.error(err);
           return Promise.reject(err);
@@ -361,7 +403,49 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
   ): Promise<Job | undefined> {
     const queue = this.queueMap.get(queueName);
     if (queue) {
-      return await queue.addJobToQueue(jobData, options);
+      const traceService = this.applicationContext.get(MidwayTraceService);
+      const traceMetaResolver = (this.configurationOptions as any)?.tracing
+        ?.meta;
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceInjector = (this.configurationOptions as any)?.tracing
+        ?.injector;
+      const payload = {
+        ...(jobData ?? {}),
+      };
+      const rawCarrier =
+        typeof traceInjector === 'function'
+          ? traceInjector({
+              request: jobData,
+              custom: {
+                queueName,
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
+      payload.__midwayTraceCarrier = carrier;
+      await traceService.runWithExitSpan(
+        `bullmq.produce ${queueName}`,
+        {
+          enable: traceEnabled,
+          carrier,
+          attributes: {
+            'midway.protocol': 'bullmq',
+            'midway.bullmq.queue': queueName,
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            carrier,
+            request: jobData,
+            custom: {
+              queueName,
+            },
+          },
+        },
+        async () => undefined
+      );
+      return await queue.addJobToQueue(payload, options);
     }
   }
 

@@ -9,6 +9,7 @@ import {
   CommonMiddlewareUnion,
   FunctionMiddleware,
   MidwayWebRouterService,
+  MidwayTraceService,
   Framework,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
@@ -63,7 +64,81 @@ export class MidwayExpressFramework extends BaseFramework<
       (req as any).requestContext = ctx.requestContext;
       ctx.requestContext.registerObject('req', req);
       ctx.requestContext.registerObject('res', res);
-      next();
+
+      const traceService = this.applicationContext.get(MidwayTraceService);
+      const spanName = `${req.method} ${req.path || req.url || '/'}`;
+      const traceMetaResolver = (this.configurationOptions as any)?.tracing
+        ?.meta;
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceExtractor = (this.configurationOptions as any)?.tracing
+        ?.extractor;
+      const traceInjector = (this.configurationOptions as any)?.tracing
+        ?.injector;
+      const requestCarrier =
+        typeof traceExtractor === 'function'
+          ? traceExtractor({ ctx, request: req, response: res })
+          : req.headers;
+      const responseCarrier =
+        typeof traceInjector === 'function'
+          ? traceInjector({ ctx, request: req, response: res })
+          : res;
+
+      traceService
+        .runWithEntrySpan(
+          spanName,
+          {
+            enable: traceEnabled,
+            carrier: requestCarrier,
+            responseCarrier,
+            attributes: {
+              'midway.protocol': 'http',
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx,
+              carrier: requestCarrier,
+              request: req,
+              response: res,
+            },
+          },
+          async () => {
+            await new Promise<void>((resolve, reject) => {
+              let settled = false;
+              const done = (err?: Error) => {
+                if (settled) {
+                  return;
+                }
+                settled = true;
+                res.removeListener('finish', onFinish);
+                res.removeListener('close', onClose);
+                res.removeListener('error', onError);
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve();
+                }
+              };
+
+              const onFinish = () => done();
+              const onClose = () => done();
+              const onError = (err: Error) => done(err);
+
+              res.on('finish', onFinish);
+              res.on('close', onClose);
+              res.on('error', onError);
+
+              try {
+                next();
+              } catch (err) {
+                done(err as Error);
+              }
+            });
+          }
+        )
+        .catch(err => {
+          next(err);
+        });
     });
 
     // 版本控制配置

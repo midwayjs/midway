@@ -5,7 +5,11 @@
 import * as amqp from 'amqp-connection-manager';
 import { IRabbitMQApplication } from './interface';
 import { ConsumeMessage } from 'amqplib/properties';
-import { RabbitMQListenerOptions, ILogger } from '@midwayjs/core';
+import {
+  RabbitMQListenerOptions,
+  ILogger,
+  MidwayTraceService,
+} from '@midwayjs/core';
 import type { Channel } from 'amqplib';
 import { EventEmitter } from 'events';
 
@@ -16,11 +20,20 @@ export class RabbitMQServer
   protected channelManagerSet: Set<Channel> = new Set();
   protected connection: amqp.AmqpConnectionManager = null;
   protected logger: ILogger;
+  protected traceService: MidwayTraceService;
+  protected traceEnabled: boolean;
+  protected traceInjector: (args: {
+    request?: unknown;
+    custom?: Record<string, unknown>;
+  }) => any;
   protected reconnectTime;
 
   constructor(options: any = {}) {
     super();
     this.logger = options.logger;
+    this.traceService = options.traceService;
+    this.traceEnabled = options.traceEnabled ?? options?.tracing?.enable;
+    this.traceInjector = options.traceInjector ?? options?.tracing?.injector;
     this.reconnectTime = options.reconnectTime ?? 10 * 1000;
     this.bindError();
   }
@@ -33,9 +46,67 @@ export class RabbitMQServer
 
   createChannel(isConfirmChannel = false): Promise<any> {
     if (!isConfirmChannel) {
-      return this.connection.connection.createChannel();
+      return this.connection.connection.createChannel().then(channel => {
+        this.bindTraceContext(channel);
+        return channel;
+      });
     } else {
-      return this.connection.connection.createConfirmChannel();
+      return this.connection.connection.createConfirmChannel().then(channel => {
+        this.bindTraceContext(channel);
+        return channel;
+      });
+    }
+  }
+
+  private bindTraceContext(channel: any) {
+    if (!channel || !this.traceService) {
+      return;
+    }
+
+    const injectHeaders = (options?: any, custom?: Record<string, unknown>) => {
+      const nextOptions = options ?? {};
+      const configuredCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: nextOptions,
+              custom,
+            })
+          : undefined;
+      nextOptions.headers = configuredCarrier ?? nextOptions.headers ?? {};
+      if (this.traceEnabled !== false) {
+        this.traceService.injectContext(nextOptions.headers);
+      }
+      return nextOptions;
+    };
+
+    if (typeof channel.sendToQueue === 'function') {
+      const rawSendToQueue = channel.sendToQueue.bind(channel);
+      channel.sendToQueue = (queue, content, options) => {
+        return rawSendToQueue(
+          queue,
+          content,
+          injectHeaders(options, {
+            method: 'sendToQueue',
+            queue,
+          })
+        );
+      };
+    }
+
+    if (typeof channel.publish === 'function') {
+      const rawPublish = channel.publish.bind(channel);
+      channel.publish = (exchange, routingKey, content, options) => {
+        return rawPublish(
+          exchange,
+          routingKey,
+          content,
+          injectHeaders(options, {
+            method: 'publish',
+            exchange,
+            routingKey,
+          })
+        );
+      };
     }
   }
 

@@ -4,6 +4,7 @@ import {
   IMidwayBootstrapOptions,
   DecoratorManager,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   CommandRunner,
@@ -221,15 +222,56 @@ export class MidwayCommanderFramework extends BaseFramework<
         ctx.args = actualArgs;
         ctx.options = actualOptions;
         ctx.commandName = metadata.name;
-        const fn = await this.applyMiddleware(async ctx => {
-          const commandInstance = (await ctx.requestContext.getAsync(
-            module
-          )) as CommandRunner;
-          if (commandInstance.run) {
-            return await commandInstance.run(actualArgs, actualOptions);
+        const traceService = this.applicationContext.get(MidwayTraceService);
+        const traceMetaResolver = (this.configurationOptions as any)?.tracing
+          ?.meta;
+        const traceEnabled =
+          (this.configurationOptions as any)?.tracing?.enable !== false;
+        const traceExtractor = (this.configurationOptions as any)?.tracing
+          ?.extractor;
+        const entryCarrier =
+          typeof traceExtractor === 'function'
+            ? traceExtractor({
+                ctx,
+                custom: {
+                  commandName: metadata.name,
+                  args: actualArgs,
+                  options: actualOptions,
+                },
+              })
+            : {};
+        const result = await traceService.runWithEntrySpan(
+          `commander ${metadata.name}`,
+          {
+            enable: traceEnabled,
+            carrier: entryCarrier,
+            attributes: {
+              'midway.protocol': 'commander',
+              'midway.command.name': metadata.name,
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx,
+              carrier: entryCarrier,
+              custom: {
+                commandName: metadata.name,
+                args: actualArgs,
+                options: actualOptions,
+              },
+            },
+          },
+          async () => {
+            const fn = await this.applyMiddleware(async ctx => {
+              const commandInstance = (await ctx.requestContext.getAsync(
+                module
+              )) as CommandRunner;
+              if (commandInstance.run) {
+                return await commandInstance.run(actualArgs, actualOptions);
+              }
+            });
+            return await fn(ctx);
           }
-        });
-        const result = await fn(ctx);
+        );
         await this.outputResult(result);
       });
     }

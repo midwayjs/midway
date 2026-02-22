@@ -9,6 +9,8 @@ import {
   ScopeEnum,
   ServiceFactory,
   ServiceFactoryConfigOption,
+  Inject,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import { caching, multiCaching } from './base';
 import {
@@ -26,6 +28,18 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
 
   @ApplicationContext()
   protected applicationContext: IMidwayContainer;
+
+  @Inject()
+  protected traceService: MidwayTraceService;
+
+  @Config('cacheManager.tracing.meta')
+  protected traceMetaResolver;
+
+  @Config('cacheManager.tracing.enable')
+  protected traceEnabled;
+
+  @Config('cacheManager.tracing.injector')
+  protected traceInjector;
 
   @Init()
   protected async init() {
@@ -71,7 +85,9 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
           throw new MidwayCommonError('invalid cache config');
         }
       }
-      return await multiCaching(newFactory);
+      const cache = await multiCaching(newFactory);
+      this.bindTraceContext(cache, clientName);
+      return cache;
     } else {
       // single cache
       if (typeof config.store === 'function') {
@@ -85,8 +101,74 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
           `cache instance "${clientName}" store is undefined, please check your configuration.`
         );
       }
-      return await caching(config.store, config['options']);
+      const cache = await caching(config.store, config['options']);
+      this.bindTraceContext(cache, clientName);
+      return cache;
     }
+  }
+
+  protected bindTraceContext(cache: MidwayUnionCache, clientName: string) {
+    if (!cache || !this.traceService) {
+      return;
+    }
+
+    const wrapMethod = (target: any, methodName: string) => {
+      const rawMethod = target?.[methodName];
+      if (typeof rawMethod !== 'function') {
+        return;
+      }
+
+      target[methodName] = (...args) => {
+        const rawCarrier =
+          typeof this.traceInjector === 'function'
+            ? this.traceInjector({
+                request: args,
+                custom: {
+                  clientName,
+                  methodName,
+                },
+              })
+            : {};
+        const carrier =
+          rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
+        return this.traceService.runWithExitSpan(
+          `cache.${methodName}`,
+          {
+            enable: this.traceEnabled !== false,
+            carrier,
+            attributes: {
+              'midway.protocol': 'cache',
+              'midway.cache.client': clientName,
+              'midway.cache.method': methodName,
+            },
+            meta: this.traceMetaResolver,
+            metaArgs: {
+              carrier,
+              request: args,
+              custom: {
+                clientName,
+                methodName,
+              },
+            },
+          },
+          async () => {
+            return rawMethod.apply(target, args);
+          }
+        );
+      };
+    };
+
+    [
+      'get',
+      'set',
+      'del',
+      'wrap',
+      'methodWrap',
+      'mget',
+      'mset',
+      'mdel',
+      'reset',
+    ].forEach(methodName => wrapMethod(cache, methodName));
   }
 
   getName(): string {

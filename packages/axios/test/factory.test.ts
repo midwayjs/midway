@@ -1,7 +1,8 @@
 import { join } from 'path';
 import { HttpServiceFactory } from '../src';
-import { createLightApp } from '@midwayjs/mock';
+import { close, createLightApp } from '@midwayjs/mock';
 import * as nock from 'nock';
+import { MidwayTraceService } from '@midwayjs/core';
 
 describe('/test/factory.test.ts', () => {
 
@@ -157,5 +158,29 @@ describe('/test/factory.test.ts', () => {
     expect(httpService).toBeDefined();
     const result = await httpService.get('users/octocat/orgs');
     expect(result.status).toBe(200);
+  });
+
+  it('should inject context for outgoing http request', async () => {
+    const app = await createLightApp('', {
+      imports: [require(join(__dirname, '../src'))],
+      globalConfig: {
+        axios: {
+          baseURL: 'https://api.github.com/',
+        },
+      },
+    });
+
+    const traceService = await app
+      .getApplicationContext()
+      .getAsync(MidwayTraceService);
+    const injectSpy = jest.spyOn(traceService, 'injectContext');
+
+    const factory = await app
+      .getApplicationContext()
+      .getAsync(HttpServiceFactory);
+    const httpService = factory.get();
+    await httpService.get('users/octocat/orgs');
+    expect(injectSpy).toHaveBeenCalled();
+    await close(app);
   });
 });

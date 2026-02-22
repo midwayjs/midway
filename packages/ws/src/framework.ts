@@ -14,6 +14,7 @@ import {
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import * as http from 'http';
 import { debuglog } from 'util';
@@ -201,6 +202,22 @@ export class MidwayWSFramework extends BaseFramework<
     this.app.on(
       'connection',
       async (socket: IMidwayWSContext, request: http.IncomingMessage) => {
+        const traceService = this.applicationContext.get(MidwayTraceService);
+        const traceMetaResolver = (this.configurationOptions as any)?.tracing
+          ?.meta;
+        const traceEnabled =
+          (this.configurationOptions as any)?.tracing?.enable !== false;
+        const traceExtractor = (this.configurationOptions as any)?.tracing
+          ?.extractor;
+        const entryCarrierDefault = request.headers;
+        const entryCarrier =
+          typeof traceExtractor === 'function'
+            ? traceExtractor({
+                ctx: socket,
+                carrier: entryCarrierDefault,
+                request,
+              })
+            : entryCarrierDefault;
         socket.isAlive = true;
         socket.on('error', error => {
           this.logger.error(`socket got error: ${error}`);
@@ -222,7 +239,26 @@ export class MidwayWSFramework extends BaseFramework<
           ],
           this.app
         );
-        await connectFn(socket);
+        await traceService.runWithEntrySpan(
+          `ws.connect ${request.url || '/'}`,
+          {
+            enable: traceEnabled,
+            carrier: entryCarrier ?? entryCarrierDefault,
+            attributes: {
+              'midway.protocol': 'ws',
+              'midway.ws.event': 'connection',
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx: socket,
+              carrier: entryCarrier ?? entryCarrierDefault,
+              request,
+            },
+          },
+          async () => {
+            await connectFn(socket);
+          }
+        );
 
         const wsEventInfos: WSEventInfo[] = MetadataManager.getMetadata(
           WS_EVENT_KEY,
@@ -241,29 +277,51 @@ export class MidwayWSFramework extends BaseFramework<
             // on connection
             if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
               try {
-                const fn = await this.middlewareService.compose(
-                  [
-                    ...(wsEventInfo?.eventOptions?.middleware || []),
-                    async (ctx, next) => {
-                      const isPassed = await this.app
-                        .getFramework()
-                        .runGuard(ctx, target, wsEventInfo.propertyName);
-                      if (!isPassed) {
-                        throw new MidwayInvokeForbiddenError(
-                          wsEventInfo.propertyName,
-                          target
-                        );
-                      }
-
-                      return controller[wsEventInfo.propertyName].apply(
-                        controller,
-                        [socket, request]
-                      );
+                const result = await traceService.runWithEntrySpan(
+                  `ws.event ${wsEventInfo.propertyName}`,
+                  {
+                    enable: traceEnabled,
+                    carrier: entryCarrier ?? entryCarrierDefault,
+                    attributes: {
+                      'midway.protocol': 'ws',
+                      'midway.ws.event': wsEventInfo.propertyName,
                     },
-                  ],
-                  this.app
+                    meta: traceMetaResolver,
+                    metaArgs: {
+                      ctx: socket,
+                      carrier: entryCarrier ?? entryCarrierDefault,
+                      request,
+                      custom: {
+                        eventName: wsEventInfo.propertyName,
+                      },
+                    },
+                  },
+                  async () => {
+                    const fn = await this.middlewareService.compose(
+                      [
+                        ...(wsEventInfo?.eventOptions?.middleware || []),
+                        async (ctx, next) => {
+                          const isPassed = await this.app
+                            .getFramework()
+                            .runGuard(ctx, target, wsEventInfo.propertyName);
+                          if (!isPassed) {
+                            throw new MidwayInvokeForbiddenError(
+                              wsEventInfo.propertyName,
+                              target
+                            );
+                          }
+
+                          return controller[wsEventInfo.propertyName].apply(
+                            controller,
+                            [socket, request]
+                          );
+                        },
+                      ],
+                      this.app
+                    );
+                    return await fn(socket);
+                  }
                 );
-                const result = await fn(socket);
 
                 await this.bindSocketResponse(
                   result,
@@ -280,26 +338,47 @@ export class MidwayWSFramework extends BaseFramework<
                 debug('[ws]: got message', wsEventInfo.messageEventName, args);
 
                 try {
-                  const result = await (
-                    await this.applyMiddleware(async (ctx, next) => {
-                      // add controller middleware
-                      const fn = await this.middlewareService.compose(
-                        [
-                          ...controllerMiddleware,
-                          ...(wsEventInfo?.eventOptions?.middleware || []),
-                          async (ctx, next) => {
-                            // eslint-disable-next-line prefer-spread
-                            return controller[wsEventInfo.propertyName].apply(
-                              controller,
-                              args
-                            );
-                          },
-                        ],
-                        this.app
-                      );
-                      return await fn(ctx, next);
-                    })
-                  )(socket);
+                  const result = await traceService.runWithEntrySpan(
+                    `ws.message ${wsEventInfo.messageEventName}`,
+                    {
+                      enable: traceEnabled,
+                      carrier: entryCarrier ?? entryCarrierDefault,
+                      attributes: {
+                        'midway.protocol': 'ws',
+                        'midway.ws.event': wsEventInfo.messageEventName,
+                      },
+                      meta: traceMetaResolver,
+                      metaArgs: {
+                        ctx: socket,
+                        carrier: entryCarrier ?? entryCarrierDefault,
+                        request,
+                        custom: {
+                          eventName: wsEventInfo.messageEventName,
+                        },
+                      },
+                    },
+                    async () => {
+                      return await (
+                        await this.applyMiddleware(async (ctx, next) => {
+                          // add controller middleware
+                          const fn = await this.middlewareService.compose(
+                            [
+                              ...controllerMiddleware,
+                              ...(wsEventInfo?.eventOptions?.middleware || []),
+                              async (ctx, next) => {
+                                // eslint-disable-next-line prefer-spread
+                                return controller[
+                                  wsEventInfo.propertyName
+                                ].apply(controller, args);
+                              },
+                            ],
+                            this.app
+                          );
+                          return await fn(ctx, next);
+                        })
+                      )(socket);
+                    }
+                  );
                   if (typeof args[args.length - 1] === 'function') {
                     // ack
                     args[args.length - 1](result);
@@ -322,9 +401,32 @@ export class MidwayWSFramework extends BaseFramework<
               // on socket disconnect
               socket.on('close', async (reason: string) => {
                 try {
-                  const result = await controller[
-                    wsEventInfo.propertyName
-                  ].apply(controller, [reason]);
+                  const result = await traceService.runWithEntrySpan(
+                    `ws.disconnect ${wsEventInfo.propertyName}`,
+                    {
+                      enable: traceEnabled,
+                      carrier: entryCarrier ?? entryCarrierDefault,
+                      attributes: {
+                        'midway.protocol': 'ws',
+                        'midway.ws.event': 'disconnect',
+                      },
+                      meta: traceMetaResolver,
+                      metaArgs: {
+                        ctx: socket,
+                        carrier: entryCarrier ?? entryCarrierDefault,
+                        request,
+                        custom: {
+                          eventName: 'disconnect',
+                        },
+                      },
+                    },
+                    async () => {
+                      return await controller[wsEventInfo.propertyName].apply(
+                        controller,
+                        [reason]
+                      );
+                    }
+                  );
                   await this.bindSocketResponse(
                     result,
                     socket,
@@ -355,26 +457,68 @@ export class MidwayWSFramework extends BaseFramework<
       responseEvents?: WSEventInfo[];
     }
   ) {
+    const traceService = this.applicationContext.get(MidwayTraceService);
+    const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceInjector = (this.configurationOptions as any)?.tracing?.injector;
+    const sendWithTrace = async (
+      currentSocket: IMidwayWSContext | WebSocket,
+      payload: any,
+      eventName: string
+    ) => {
+      const carrier =
+        typeof traceInjector === 'function'
+          ? traceInjector({
+              ctx: socket,
+              request: payload,
+              custom: { eventName },
+            }) || {}
+          : {};
+      await traceService.runWithExitSpan(
+        `ws.emit ${eventName}`,
+        {
+          enable: traceEnabled,
+          carrier,
+          attributes: {
+            'midway.protocol': 'ws',
+            'midway.ws.event': eventName,
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            ctx: socket,
+            carrier,
+            custom: {
+              eventName,
+            },
+          },
+        },
+        async () => {
+          currentSocket.send(formatResult(payload));
+        }
+      );
+    };
+
     if (!result) return;
     if (methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
         if (wsEventInfo.eventType === WSEventTypeEnum.EMIT) {
-          socket.send(formatResult(result));
+          await sendWithTrace(socket, result, wsEventInfo.messageEventName);
         } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
-          this.app.clients.forEach(client => {
+          for (const client of this.app.clients) {
             if (client.readyState === WebSocket.OPEN) {
-              client.send(formatResult(result));
+              await sendWithTrace(client, result, propertyName);
             }
-          });
+          }
         }
       }
       if (methodMap[propertyName].responseEvents.length === 0) {
         // no emit decorator
-        socket.send(formatResult(result));
+        await sendWithTrace(socket, result, propertyName);
       }
     } else {
       // just send
-      socket.send(formatResult(result));
+      await sendWithTrace(socket, result, propertyName);
     }
   }
 

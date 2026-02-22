@@ -1,6 +1,6 @@
 import { createLegacyApp, close, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
-import { sleep } from '@midwayjs/core';
+import { MidwayTraceService, sleep } from '@midwayjs/core';
 import * as cron from '../src';
 import { IJob, Job } from '../src';
 
@@ -45,5 +45,37 @@ describe(`/test/index.test.ts`, () => {
 
     expect(framework.getJob(DataSyncCheckerJob)).toBeTruthy();
     expect(framework.getJob('syncJob')).toBeTruthy();
+    await close(app);
+  });
+
+  it('should create entry span when cron job runs', async () => {
+    @Job('traceJob', {
+      cronTime: '*/1 * * * * *',
+      start: true,
+      runOnInit: false,
+    })
+    class TraceJob implements IJob {
+      async onTick() {
+        return;
+      }
+    }
+
+    const app = await createLightApp({
+      imports: [cron],
+      preloadModules: [TraceJob],
+    });
+    const traceService = await app
+      .getApplicationContext()
+      .getAsync(MidwayTraceService);
+    const rawRunWithEntrySpan = traceService.runWithEntrySpan.bind(traceService);
+    let called = 0;
+    traceService.runWithEntrySpan = async (...args: any[]) => {
+      called++;
+      return rawRunWithEntrySpan(...args);
+    };
+
+    await sleep(2200);
+    expect(called).toBeGreaterThan(0);
+    await close(app);
   });
 });

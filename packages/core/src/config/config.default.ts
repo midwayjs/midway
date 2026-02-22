@@ -13,6 +13,11 @@ export default (): MidwayCoreDefaultConfig => {
     asyncContextManager: {
       enable: true,
     },
+    tracing: {
+      enable: true,
+      onError: 'ignore',
+      logOnError: false,
+    },
     midwayLogger: {
       default: {
         level: 'info',

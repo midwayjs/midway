@@ -7,6 +7,7 @@ import {
   MidwayInvokeForbiddenError,
   DecoratorManager,
   MetadataManager,
+  MidwayTraceService,
 } from '@midwayjs/core';
 import {
   Application,
@@ -158,29 +159,72 @@ export class BullFramework
       });
 
       try {
-        ctx.logger.info(`start process job ${job.id} from ${processor.name}`);
+        const traceService = this.applicationContext.get(MidwayTraceService);
+        const traceMetaResolver = (this.configurationOptions as any)?.tracing
+          ?.meta;
+        const traceEnabled =
+          (this.configurationOptions as any)?.tracing?.enable !== false;
+        const traceExtractor = (this.configurationOptions as any)?.tracing
+          ?.extractor;
+        const carrierDefault = job?.data?.__midwayTraceCarrier ?? {};
+        const carrier =
+          typeof traceExtractor === 'function'
+            ? traceExtractor({
+                ctx,
+                carrier: carrierDefault,
+                request: job,
+                custom: {
+                  queueName: queue.getQueueName(),
+                },
+              })
+            : carrierDefault;
+        return await traceService.runWithEntrySpan(
+          `bull ${queue.getQueueName()}`,
+          {
+            enable: traceEnabled,
+            carrier: carrier ?? carrierDefault,
+            attributes: {
+              'midway.protocol': 'bull',
+              'midway.bull.queue': queue.getQueueName(),
+            },
+            meta: traceMetaResolver,
+            metaArgs: {
+              ctx,
+              carrier: carrier ?? carrierDefault,
+              request: job,
+              custom: {
+                queueName: queue.getQueueName(),
+              },
+            },
+          },
+          async () => {
+            ctx.logger.info(
+              `start process job ${job.id} from ${processor.name}`
+            );
 
-        const isPassed = await this.app
-          .getFramework()
-          .runGuard(ctx, processor, 'execute');
-        if (!isPassed) {
-          throw new MidwayInvokeForbiddenError('execute', processor);
-        }
+            const isPassed = await this.app
+              .getFramework()
+              .runGuard(ctx, processor, 'execute');
+            if (!isPassed) {
+              throw new MidwayInvokeForbiddenError('execute', processor);
+            }
 
-        const service = await ctx.requestContext.getAsync<IProcessor>(
-          processor as any
+            const service = await ctx.requestContext.getAsync<IProcessor>(
+              processor as any
+            );
+            const fn = await this.applyMiddleware(async ctx => {
+              return await Utils.toAsyncFunction(service.execute.bind(service))(
+                job.data,
+                job
+              );
+            });
+            const result = await Promise.resolve(await fn(ctx));
+            ctx.logger.info(
+              `complete process job ${job.id} from ${processor.name}`
+            );
+            return result;
+          }
         );
-        const fn = await this.applyMiddleware(async ctx => {
-          return await Utils.toAsyncFunction(service.execute.bind(service))(
-            job.data,
-            job
-          );
-        });
-        const result = await Promise.resolve(await fn(ctx));
-        ctx.logger.info(
-          `complete process job ${job.id} from ${processor.name}`
-        );
-        return result;
       } catch (err) {
         ctx.logger.error(err);
         return Promise.reject(err);
@@ -195,7 +239,49 @@ export class BullFramework
   ): Promise<Job | undefined> {
     const queue = this.queueMap.get(queueName);
     if (queue) {
-      return await queue.addJobToQueue(jobData, options);
+      const traceService = this.applicationContext.get(MidwayTraceService);
+      const traceMetaResolver = (this.configurationOptions as any)?.tracing
+        ?.meta;
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceInjector = (this.configurationOptions as any)?.tracing
+        ?.injector;
+      const payload = {
+        ...(jobData ?? {}),
+      };
+      const rawCarrier =
+        typeof traceInjector === 'function'
+          ? traceInjector({
+              request: jobData,
+              custom: {
+                queueName,
+              },
+            })
+          : {};
+      const exitCarrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
+      payload.__midwayTraceCarrier = exitCarrier;
+      await traceService.runWithExitSpan(
+        `bull.produce ${queueName}`,
+        {
+          enable: traceEnabled,
+          carrier: exitCarrier,
+          attributes: {
+            'midway.protocol': 'bull',
+            'midway.bull.queue': queueName,
+          },
+          meta: traceMetaResolver,
+          metaArgs: {
+            carrier: exitCarrier,
+            request: jobData,
+            custom: {
+              queueName,
+            },
+          },
+        },
+        async () => undefined
+      );
+      return await queue.addJobToQueue(payload, options);
     }
   }
 

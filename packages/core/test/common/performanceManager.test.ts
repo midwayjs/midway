@@ -2,12 +2,15 @@ import { MidwayInitializerPerformanceManager, MidwayPerformanceManager } from ".
 import { sleep } from "../../src";
 
 describe('test/common/performanceManager.test.ts', () => {
+  afterEach(() => {
+    MidwayPerformanceManager.cleanAll();
+  });
+
   it('should mark start and end, and measure performance', async () => {
     const res = [];
     MidwayPerformanceManager.getInstance(MidwayPerformanceManager.DEFAULT_GROUP.INITIALIZE).observeMeasure((list) => {
       const entries = list.getEntries();
       res.push(...entries);
-      console.log(entries)
     });
 
     MidwayInitializerPerformanceManager.markStart(MidwayInitializerPerformanceManager.MEASURE_KEYS.INITIALIZE)
