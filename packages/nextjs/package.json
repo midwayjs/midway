@@ -20,7 +20,7 @@
     "@midwayjs/mock": "workspace:^",
     "@types/react": "^18.3.12",
     "babel-loader": "^9.2.1",
-    "next": "~16.0.0",
+    "next": "~16.1.0",
     "null-loader": "^4.0.1",
     "react": "^18",
     "react-dom": "^18"
