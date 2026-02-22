@@ -398,7 +398,13 @@ async getUser(@Query('name') name: string) {
 }
 ```
 
-If `@Query` is in the form of an object, you need to specify a name parameter in `@ApiQuery`, and the object type needs to be used with `@ApiProperty`, otherwise the form will become read-only.
+If `@Query` uses an object DTO, there are two options:
+
+1. Explicitly define fields with `@ApiProperty` (traditional way)
+2. Reuse `@midwayjs/validation` DTO rules (`@Rule`) to infer fields automatically (enabled by default)
+
+When auto inference is enabled (`swagger.useValidationSchema = true`, default), object Query DTO fields are expanded into multiple query parameters.
+Current inference is based on validator adapters in `@midwayjs/validation`, supporting joi, zod, and class-validator.
 
 ```typescript
 export class UserDTO {
@@ -421,7 +427,14 @@ async getUser(@Query() dto: UserDTO) {
 
 Use `@ApiBody` to define Body data.
 
-The `@Body` object type needs to be used with `@ApiProperty`.
+`@Body` object DTO supports the same two options:
+
+1. Explicitly define doc fields with `@ApiProperty`
+2. Infer fields from `@midwayjs/validation` DTO rules automatically
+
+When both exist, Swagger uses a **merge strategy**:
+- Explicit `@ApiProperty` metadata has priority
+- Inferred validation metadata only fills missing fields (for example `required`, basic `type`, etc.)
 
 ```typescript
 export class UserDTO {
@@ -562,7 +575,7 @@ Other decorators that do not require status are also available:
 * ```@ApiGatewayTimeoutResponse()```
 * ```@ApiDefaultResponse()```
 
-The definition of the data model returned by the HTTP request can also be specified by specifying the type. Of course, this data model needs to describe each field through the decorator ```@ApiProperty```.
+The response model can also be defined via `type`. For model fields, `@ApiProperty` is still recommended. If the same model also has `@midwayjs/validation` DTO rules, Swagger fills missing metadata according to the same merge strategy above.
 
 ```typescript
 import { ApiProperty } from '@midwayjs/swagger';
@@ -1253,6 +1266,11 @@ export interface SwaggerOptions {
       webRouter: RouterOption
     ) => string;
   };
+  /**
+   * default: true
+   * Whether to reuse @midwayjs/validation DTO metadata to infer Schema
+   */
+  useValidationSchema?: boolean;
 }
 /**
  * Inherited from https://swagger.io/specification/#security-scheme-object

@@ -996,7 +996,10 @@ export class SwaggerExplorer {
         }
         const existingMeta = props[key].metadata || {};
         const inferredMeta = inferredProps[key].metadata || {};
-        props[key].metadata = this.mergePropertyMetadata(existingMeta, inferredMeta);
+        props[key].metadata = this.mergePropertyMetadata(
+          existingMeta,
+          inferredMeta
+        );
       }
     }
 
@@ -1129,12 +1132,14 @@ export class SwaggerExplorer {
       {};
     const hasRuleMetadata = Object.keys(ruleProps).length > 0;
     const validateRuleProps =
-      MetadataManager.getPropertiesWithMetadata(VALIDATE_RULES_KEY, clzz) ||
-      {};
+      MetadataManager.getPropertiesWithMetadata(VALIDATE_RULES_KEY, clzz) || {};
     const hasValidateRuleMetadata = Object.keys(validateRuleProps).length > 0;
-    const hasClassValidatorMetadata =
-      this.hasClassValidatorMetadata(clzz);
-    if (!hasRuleMetadata && !hasClassValidatorMetadata && !hasValidateRuleMetadata) {
+    const hasClassValidatorMetadata = this.hasClassValidatorMetadata(clzz);
+    if (
+      !hasRuleMetadata &&
+      !hasClassValidatorMetadata &&
+      !hasValidateRuleMetadata
+    ) {
       return {};
     }
 
@@ -1181,8 +1186,7 @@ export class SwaggerExplorer {
   private inferValidateProperties(clzz: Type) {
     const inferredProps: Record<string, { metadata: Record<string, any> }> = {};
     const ruleProps =
-      MetadataManager.getPropertiesWithMetadata(VALIDATE_RULES_KEY, clzz) ||
-      {};
+      MetadataManager.getPropertiesWithMetadata(VALIDATE_RULES_KEY, clzz) || {};
     for (const key of Object.keys(ruleProps)) {
       let schema = ruleProps[key];
       if (typeof schema === 'function') {

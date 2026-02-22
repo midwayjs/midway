@@ -33,7 +33,9 @@ function mapJoiTypeToSchemaType(type: string): string {
   }
 }
 
-function inferJoiSwaggerPropertyMetadata(schema: any): Record<string, any> | null {
+function inferJoiSwaggerPropertyMetadata(
+  schema: any
+): Record<string, any> | null {
   if (!schema || typeof schema.describe !== 'function') {
     return null;
   }

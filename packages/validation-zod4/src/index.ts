@@ -74,7 +74,9 @@ function unwrapZodSchema(schema: any): any {
 
     if (typeName === 'ZodOptional' || typeName === 'ZodNullable') {
       currentSchema =
-        currentSchema._def?.innerType || currentSchema._def?.type || currentSchema;
+        currentSchema._def?.innerType ||
+        currentSchema._def?.type ||
+        currentSchema;
       continue;
     }
 
@@ -85,7 +87,9 @@ function unwrapZodSchema(schema: any): any {
       typeName === 'ZodBranded'
     ) {
       currentSchema =
-        currentSchema._def?.innerType || currentSchema._def?.type || currentSchema;
+        currentSchema._def?.innerType ||
+        currentSchema._def?.type ||
+        currentSchema;
       continue;
     }
 
@@ -144,7 +148,9 @@ function isZodOptionalSchema(schema: any): boolean {
   return false;
 }
 
-function inferZodSwaggerPropertyMetadata(schema: any): Record<string, any> | null {
+function inferZodSwaggerPropertyMetadata(
+  schema: any
+): Record<string, any> | null {
   const typeName = getZodTypeName(schema);
   if (!typeName) {
     return null;
@@ -175,7 +181,8 @@ function inferZodSwaggerPropertyMetadata(schema: any): Record<string, any> | nul
         unwrappedSchema?._def?.type || unwrappedSchema?._def?.itemType;
       const itemMetadata = inferZodSwaggerPropertyMetadata(itemSchema);
       if (itemMetadata) {
-        const { required: _required, ...other } = itemMetadata;
+        const other = { ...itemMetadata };
+        delete other.required;
         metadata.items = other;
       } else {
         metadata.items = { type: 'object' };
