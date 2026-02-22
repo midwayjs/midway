@@ -9,7 +9,8 @@
     "build:server": "tsc -p tsconfig.server.json",
     "build:web": "vite build",
     "preview": "vite preview",
-    "test": "cross-env NODE_ENV=unittest mocha"
+    "test": "cross-env NODE_ENV=unittest mocha",
+    "test:hmr:e2e": "node ../../scripts/samples-hmr-e2e.mjs --sample react-hybrid-api"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "workspace:*",

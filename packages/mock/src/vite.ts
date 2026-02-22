@@ -95,6 +95,7 @@ export function devPlugin(options: DevPluginOptions) {
   const routeManifestResolvedId = `\0${routeManifestVirtualId}`;
   const routeManifestFilter = routeManifestOptions?.filter;
   let appPromise: Promise<any> | null = null;
+  const hmrImportQueryEnvKey = 'MIDWAY_HMR_IMPORT_QUERY';
   let routeManifestPromise: Promise<RouteManifestLike[]> | null = null;
   let reloadingAppPromise: Promise<void> | null = null;
   let viteServer: any;
@@ -143,9 +144,17 @@ export function devPlugin(options: DevPluginOptions) {
 
   const ensureApp = async () => {
     if (!appPromise) {
+      const previousQuery = process.env[hmrImportQueryEnvKey];
+      process.env[hmrImportQueryEnvKey] = '1';
       appPromise = createApp({
         appDir,
         baseDir,
+      }).finally(() => {
+        if (previousQuery === undefined) {
+          delete process.env[hmrImportQueryEnvKey];
+        } else {
+          process.env[hmrImportQueryEnvKey] = previousQuery;
+        }
       });
     }
     return appPromise;

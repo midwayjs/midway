@@ -10,6 +10,7 @@ import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
 import { loadModule } from '../util';
 import { DecoratorManager } from '../decorator';
 import { debuglog } from 'util';
+import { resolve } from 'path';
 const debug = debuglog('midway:debug');
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
@@ -48,6 +49,7 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
   pattern?: string | string[];
   ignore?: string | string[];
   conflictCheck?: boolean;
+  importQuery?: boolean | string | (() => string);
 }> {
   private duplicateModuleCheckSet = new Map();
 
@@ -115,6 +117,18 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
     const loadDirs = [].concat(
       this.options.loadDir ?? container.get('baseDir')
     );
+    let importQuery: string | undefined;
+    const envImportQueryEnabled = process.env.MIDWAY_HMR_IMPORT_QUERY === '1';
+    const envImportQueryFile = process.env.MIDWAY_HMR_IMPORT_QUERY_FILE;
+    if (typeof this.options.importQuery === 'function') {
+      importQuery = this.options.importQuery();
+    } else if (typeof this.options.importQuery === 'string') {
+      importQuery = this.options.importQuery;
+    } else if (this.options.importQuery) {
+      importQuery = `${Date.now()}_${Math.random()}`;
+    } else if (envImportQueryEnabled && !envImportQueryFile) {
+      importQuery = `${Date.now()}_${Math.random()}`;
+    }
 
     for (const dir of loadDirs) {
       const fileResults = run(
@@ -146,8 +160,20 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
       };
 
       for (const file of fileResults) {
+        let currentImportQuery = importQuery;
+        if (
+          !this.options.importQuery &&
+          envImportQueryEnabled &&
+          envImportQueryFile
+        ) {
+          currentImportQuery =
+            resolve(file) === resolve(envImportQueryFile)
+              ? `${Date.now()}_${Math.random()}`
+              : undefined;
+        }
         const exports = await loadModule(file, {
           loadMode: 'esm',
+          importQuery: currentImportQuery,
         });
         // add module to set
         container.bindClass(exports, {
