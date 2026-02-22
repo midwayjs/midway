@@ -51,6 +51,19 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function getCandidateDevBaseUrls(url) {
+  if (!url) {
+    return [];
+  }
+  const urls = new Set([url]);
+  if (url.includes('://localhost')) {
+    urls.add(url.replace('://localhost', '://127.0.0.1'));
+  } else if (url.includes('://127.0.0.1')) {
+    urls.add(url.replace('://127.0.0.1', '://localhost'));
+  }
+  return Array.from(urls);
+}
+
 async function requestJson(url) {
   const resp = await fetch(url, {
     headers: {
@@ -180,11 +193,26 @@ async function runSample(sampleName, cfg) {
     process.stdout.write(`[${sampleName}] ${text}`);
   };
 
-  const getRequestUrl = () => {
+  const getRequestUrls = () => {
     if (devBaseUrl) {
-      return `${devBaseUrl}${cfg.apiPath}`;
+      return getCandidateDevBaseUrls(devBaseUrl).map(
+        baseUrl => `${baseUrl}${cfg.apiPath}`
+      );
     }
-    return cfg.fallbackApiUrl;
+    return [cfg.fallbackApiUrl];
+  };
+
+  const requestAnyJson = async () => {
+    const urls = getRequestUrls();
+    let lastErr;
+    for (const url of urls) {
+      try {
+        return await requestJson(url);
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+    throw lastErr || new Error('request failed');
   };
 
   try {
@@ -202,7 +230,7 @@ async function runSample(sampleName, cfg) {
 
     await poll(
       async () => {
-        const data = await requestJson(getRequestUrl());
+        const data = await requestAnyJson();
         if (!data || typeof data !== 'object') {
           throw new Error('invalid json response');
         }
@@ -220,7 +248,7 @@ async function runSample(sampleName, cfg) {
 
     const changed = await poll(
       async () => {
-        const data = await requestJson(getRequestUrl());
+        const data = await requestAnyJson();
         if (data?.name !== nextName) {
           throw new Error(`waiting name=${nextName}, got ${data?.name}`);
         }
