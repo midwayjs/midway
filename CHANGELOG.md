@@ -1,6 +1,41 @@
 # Change Log
 
 
+## v4.0.0-beta.12 (2026-02-22)
+
+#### :boom: Breaking Change
+* `axios`, `bull`, `bullmq`, `cache-manager`, `commander`, `consul`, `core`, `cos`, `cron`, `etcd`, `faas`, `grpc`, `info`, `kafka`, `mcp`, `mqtt`, `one-shot`, `oss`, `otel`, `piscina`, `rabbitmq`, `redis`, `socketio`, `tablestore`, `web-express`, `web-koa`, `ws`
+  * [#4507](https://github.com/midwayjs/midway/pull/4507) feat: add request entry async tracing ([@czy88840616](https://github.com/czy88840616))
+* `api-bridge`, `axios`, `bootstrap`, `bull-board`, `bull`, `bullmq`, `busboy`, `cache-manager`, `captcha`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `commander`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `etcd`, `event-emitter`, `faas`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `leoric`, `mcp`, `mikro`, `mock`, `mongoose`, `mqtt`, `nextjs`, `one-shot`, `oss`, `passport`, `piscina`, `processAgent`, `prometheus`, `rabbitmq`, `react`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `typegoose`, `typeorm`, `upload`, `validation-class-validator`, `validation-joi`, `validation-zod`, `validation-zod4`, `validation`, `version`, `view-nunjucks`, `view`, `vue`, `web-bridge`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4504](https://github.com/midwayjs/midway/pull/4504) feat: implement integration code ([@czy88840616](https://github.com/czy88840616))
+
+#### :rocket: New Feature
+* `axios`, `bull`, `bullmq`, `cache-manager`, `commander`, `consul`, `core`, `cos`, `cron`, `etcd`, `faas`, `grpc`, `info`, `kafka`, `mcp`, `mqtt`, `one-shot`, `oss`, `otel`, `piscina`, `rabbitmq`, `redis`, `socketio`, `tablestore`, `web-express`, `web-koa`, `ws`
+  * [#4507](https://github.com/midwayjs/midway/pull/4507) feat: add request entry async tracing ([@czy88840616](https://github.com/czy88840616))
+* `api-bridge`, `axios`, `bootstrap`, `bull-board`, `bull`, `bullmq`, `busboy`, `cache-manager`, `captcha`, `casbin-typeorm-adapter`, `casbin`, `code-dye`, `commander`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `etcd`, `event-emitter`, `faas`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `leoric`, `mcp`, `mikro`, `mock`, `mongoose`, `mqtt`, `nextjs`, `one-shot`, `oss`, `passport`, `piscina`, `processAgent`, `prometheus`, `rabbitmq`, `react`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `typegoose`, `typeorm`, `upload`, `validation-class-validator`, `validation-joi`, `validation-zod`, `validation-zod4`, `validation`, `version`, `view-nunjucks`, `view`, `vue`, `web-bridge`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4504](https://github.com/midwayjs/midway/pull/4504) feat: implement integration code ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `mqtt`
+  * [#4503](https://github.com/midwayjs/midway/pull/4503) fix(deps): update dependency mqtt to v5.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4505](https://github.com/midwayjs/midway/pull/4505) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.6.8 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#4502](https://github.com/midwayjs/midway/pull/4502) fix(deps): update dependency qs to v6.14.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `commander`
+  * [#4499](https://github.com/midwayjs/midway/pull/4499) fix(deps): update dependency commander to v14.0.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bullmq`
+  * [#4491](https://github.com/midwayjs/midway/pull/4491) fix(deps): update dependency bullmq to v5.67.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `nextjs`
+  * [#4494](https://github.com/midwayjs/midway/pull/4494) chore(deps): update dependency next to v16 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#4496](https://github.com/midwayjs/midway/pull/4496) fix(deps): update dependency @types/ali-oss to v6.23.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.11 (2026-01-25)
 
 #### :bug: Bug Fix

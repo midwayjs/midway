@@ -1,7 +1,7 @@
 {
   "name": "@samples/vue-functional-api",
   "private": true,
-  "version": "0.0.1",
+  "version": "4.0.0-beta.12",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,8 +14,8 @@
     "@midwayjs/bootstrap": "workspace:*",
     "@midwayjs/core": "workspace:*",
     "@midwayjs/koa": "workspace:*",
-    "@midwayjs/web-bridge": "workspace:*",
     "@midwayjs/vue": "workspace:*",
+    "@midwayjs/web-bridge": "workspace:*",
     "vue": "^3.5.22"
   },
   "devDependencies": {

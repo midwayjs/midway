@@ -398,7 +398,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.26
-        version: 0.3.26(ioredis@5.9.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 0.3.26(ioredis@5.9.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@25.3.0)(typescript@5.6.3))
 
   packages/code-dye:
     devDependencies:
@@ -604,7 +604,7 @@ importers:
         specifier: workspace:^
         version: link:../core
       '@midwayjs/serverless-http-parser':
-        specifier: ^4.0.0-beta.11
+        specifier: ^4.0.0-beta.12
         version: link:../../packages-serverless/serverless-http-parser
       '@midwayjs/simple-lock':
         specifier: ^1.1.4
@@ -1169,7 +1169,7 @@ importers:
         version: 6.37.5(sqlite3@5.1.7)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7))
+        version: 2.1.6(@types/node@25.3.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7))
       sqlite3:
         specifier: 5.1.7
         version: 5.1.7
@@ -1330,7 +1330,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.26
-        version: 0.3.26(ioredis@5.9.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 0.3.26(ioredis@5.9.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@25.3.0)(typescript@5.6.3))
 
   packages/upload:
     dependencies:
@@ -14580,7 +14580,6 @@ snapshots:
   '@types/node@25.3.0':
     dependencies:
       undici-types: 7.18.2
-    optional: true
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -22323,9 +22322,9 @@ snapshots:
 
   sequelize-pool@7.1.0: {}
 
-  sequelize-typescript@2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7)):
+  sequelize-typescript@2.1.6(@types/node@25.3.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7)):
     dependencies:
-      '@types/node': 22.12.0
+      '@types/node': 25.3.0
       '@types/validator': 13.15.10
       glob: 7.2.0
       reflect-metadata: 0.2.2
@@ -23399,6 +23398,25 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
+  ts-node@10.9.2(@types/node@25.3.0)(typescript@5.6.3):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.12
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 25.3.0
+      acorn: 8.15.0
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 5.6.3
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    optional: true
+
   tsconfig-paths@3.15.0:
     dependencies:
       '@types/json5': 0.0.29
@@ -23579,7 +23597,7 @@ snapshots:
       typescript: 5.6.3
       yaml: 2.8.2
 
-  typeorm@0.3.26(ioredis@5.9.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
+  typeorm@0.3.26(ioredis@5.9.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@25.3.0)(typescript@5.6.3)):
     dependencies:
       '@sqltools/formatter': 1.2.5
       ansis: 3.17.0
@@ -23602,7 +23620,7 @@ snapshots:
       mysql2: 3.16.0
       redis: 3.1.2
       sqlite3: 5.1.7
-      ts-node: 10.9.2(@types/node@22.12.0)(typescript@5.6.3)
+      ts-node: 10.9.2(@types/node@25.3.0)(typescript@5.6.3)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -23646,8 +23664,7 @@ snapshots:
 
   undici-types@6.20.0: {}
 
-  undici-types@7.18.2:
-    optional: true
+  undici-types@7.18.2: {}
 
   unescape@1.0.1:
     dependencies:
