@@ -455,7 +455,11 @@ async function resolveManifestSource(
   source: CreateManifestClientOptions['manifest']
 ): Promise<ApiRouteManifestLike[]> {
   if (typeof source === 'string') {
-    const mod = await import(/* @vite-ignore */ source);
+    const mod = await import(
+      /* webpackIgnore: true */
+      /* @vite-ignore */
+      source
+    );
     return (mod?.default || []) as ApiRouteManifestLike[];
   }
   if (typeof source === 'function') {
