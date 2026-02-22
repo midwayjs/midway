@@ -169,10 +169,12 @@ async function runSample(sampleName, cfg) {
     if (logs.length > 20000) {
       logs = logs.slice(-20000);
     }
-    if (!devBaseUrl && /(Local|Loopback):/i.test(text)) {
-      const m = text.match(/https?:\/\/[^\s/]+(?::\d+)?/);
+    if (!devBaseUrl) {
+      const m = logs.match(
+        /(?:Local|Loopback):\s*(https?:\/\/[^\s/]+(?::\d+)?)/i
+      );
       if (m?.[0]) {
-        devBaseUrl = m[0];
+        devBaseUrl = m[1];
       }
     }
     process.stdout.write(`[${sampleName}] ${text}`);
