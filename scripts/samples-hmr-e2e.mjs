@@ -133,12 +133,21 @@ async function stopDev(child) {
   if (!child) {
     return;
   }
-  killProcessTree(child);
+  treeKill(child.pid, 'SIGINT');
   await Promise.race([
     new Promise(resolve => child.once('exit', resolve)),
     sleep(5000),
   ]);
-  if (!child.killed) {
+
+  if (child.exitCode === null && child.signalCode === null) {
+    killProcessTree(child);
+    await Promise.race([
+      new Promise(resolve => child.once('exit', resolve)),
+      sleep(3000),
+    ]);
+  }
+
+  if (child.exitCode === null && child.signalCode === null) {
     treeKill(child.pid, 'SIGKILL');
     await sleep(500);
   }
