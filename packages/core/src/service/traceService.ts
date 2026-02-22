@@ -35,7 +35,6 @@ export class MidwayTraceService {
   private currentTracerName = 'midway';
   private tracingConfig: {
     enable?: boolean;
-    protocols?: Record<string, boolean>;
     onError?: 'throw' | 'ignore';
     logOnError?: boolean;
   };
@@ -49,7 +48,6 @@ export class MidwayTraceService {
   @Config('tracing')
   protected tracingOptions: {
     enable?: boolean;
-    protocols?: Record<string, boolean>;
     onError?: 'throw' | 'ignore';
     logOnError?: boolean;
   };
@@ -62,7 +60,6 @@ export class MidwayTraceService {
     this.currentTracerName = this.app?.getProjectName?.() ?? 'unknown_project';
     this.tracingConfig = {
       enable: true,
-      protocols: {},
       onError: 'ignore',
       logOnError: false,
       ...(this.tracingOptions ?? {}),
@@ -158,16 +155,8 @@ export class MidwayTraceService {
     return protocol;
   }
 
-  private isProtocolEnabled(attributes?: Record<string, any>) {
-    if (this.tracingConfig?.enable === false) {
-      return false;
-    }
-    const protocol = this.getProtocolFromAttributes(attributes);
-    const protocolConfig = this.tracingConfig?.protocols ?? {};
-    if (protocol in protocolConfig) {
-      return protocolConfig[protocol] !== false;
-    }
-    return true;
+  private isProtocolEnabled() {
+    return this.tracingConfig?.enable !== false;
   }
 
   private handleTraceError(err: unknown, phase: string) {
@@ -258,6 +247,7 @@ export class MidwayTraceService {
   runWithEntrySpan<T = unknown>(
     name: string,
     options: {
+      enable?: boolean;
       carrier?: any;
       responseCarrier?: any;
       getter?: TextMapGetter<any>;
@@ -284,7 +274,7 @@ export class MidwayTraceService {
       ...traceMeta,
     };
 
-    if (!this.isProtocolEnabled(spanAttributes)) {
+    if (!this.isProtocolEnabled() || options.enable === false) {
       return Promise.resolve(callback(undefined as unknown as Span));
     }
 
@@ -344,6 +334,7 @@ export class MidwayTraceService {
   runWithExitSpan<T = unknown>(
     name: string,
     options: {
+      enable?: boolean;
       carrier?: any;
       getter?: TextMapGetter<any>;
       setter?: TextMapSetter<any>;
@@ -369,7 +360,7 @@ export class MidwayTraceService {
       ...traceMeta,
     };
 
-    if (!this.isProtocolEnabled(spanAttributes)) {
+    if (!this.isProtocolEnabled() || options.enable === false) {
       return Promise.resolve(callback(undefined as unknown as Span));
     }
 

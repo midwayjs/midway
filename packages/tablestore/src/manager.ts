@@ -25,6 +25,12 @@ export class TableStoreServiceFactory extends ServiceFactory<TableStoreClient> {
   @Config('tableStore.tracing.meta')
   protected traceMetaResolver;
 
+  @Config('tableStore.tracing.enable')
+  protected traceEnabled;
+
+  @Config('tableStore.tracing.injector')
+  protected traceInjector;
+
   @Init()
   async init() {
     await this.initClients(this.tableStoreConfig, {
@@ -53,16 +59,29 @@ export class TableStoreServiceFactory extends ServiceFactory<TableStoreClient> {
         return rawMakeRequest(...args);
       }
       const operation = args?.[0] || 'request';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: args,
+              custom: {
+                operation: String(operation),
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
       return this.traceService.runWithExitSpan(
         `tablestore.${String(operation).toLowerCase()}`,
         {
-          carrier: {},
+          enable: this.traceEnabled !== false,
+          carrier,
           attributes: {
             'midway.protocol': 'tablestore',
             'midway.tablestore.operation': String(operation),
           },
           meta: this.traceMetaResolver,
           metaArgs: {
+            carrier,
             request: args,
             custom: {
               operation: String(operation),

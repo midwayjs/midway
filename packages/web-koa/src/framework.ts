@@ -216,19 +216,38 @@ export class MidwayKoaFramework extends BaseFramework<
       const spanName = `${ctx.method} ${ctx.path || '/'}`;
       const traceMetaResolver = (this.configurationOptions as any)?.tracing
         ?.meta;
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceExtractor = (this.configurationOptions as any)?.tracing
+        ?.extractor;
+      const traceInjector = (this.configurationOptions as any)?.tracing
+        ?.injector;
+      const requestCarrier =
+        typeof traceExtractor === 'function'
+          ? traceExtractor({
+              ctx,
+              request: ctx.request,
+              response: ctx.response,
+            })
+          : ctx.headers;
+      const responseCarrier =
+        typeof traceInjector === 'function'
+          ? traceInjector({ ctx, request: ctx.request, response: ctx.response })
+          : ctx.response.res;
 
       await traceService.runWithEntrySpan(
         spanName,
         {
-          carrier: ctx.headers,
-          responseCarrier: ctx.response.res,
+          enable: traceEnabled,
+          carrier: requestCarrier,
+          responseCarrier,
           attributes: {
             'midway.protocol': 'http',
           },
           meta: traceMetaResolver,
           metaArgs: {
             ctx,
-            carrier: ctx.headers,
+            carrier: requestCarrier,
             request: ctx.request,
             response: ctx.response,
           },

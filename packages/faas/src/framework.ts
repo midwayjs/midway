@@ -310,16 +310,33 @@ export class MidwayFaaSFramework extends BaseFramework<
 
     const traceService = this.applicationContext.get(MidwayTraceService);
     const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
-    const entryCarrier = isHttpFunction
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceExtractor = (this.configurationOptions as any)?.tracing
+      ?.extractor;
+    const entryCarrierDefault = isHttpFunction
       ? context.headers || {}
       : context.originEvent?.headers ||
         context.originEvent?.properties ||
         context.originEvent ||
         {};
+    const entryCarrier =
+      typeof traceExtractor === 'function'
+        ? traceExtractor({
+            ctx: context,
+            request: context.originEvent,
+            response: context.originContext,
+            custom: {
+              handlerMapping,
+              isHttpFunction,
+            },
+          })
+        : entryCarrierDefault;
     const result = await traceService.runWithEntrySpan(
       `faas ${handlerMapping}`,
       {
-        carrier: entryCarrier,
+        enable: traceEnabled,
+        carrier: entryCarrier ?? entryCarrierDefault,
         attributes: {
           'midway.protocol': isHttpFunction ? 'faas-http' : 'faas-event',
           'midway.faas.handler': handlerMapping,
@@ -327,7 +344,7 @@ export class MidwayFaaSFramework extends BaseFramework<
         meta: traceMetaResolver,
         metaArgs: {
           ctx: context,
-          carrier: entryCarrier,
+          carrier: entryCarrier ?? entryCarrierDefault,
           request: context.originEvent,
           response: context.originContext,
           custom: {

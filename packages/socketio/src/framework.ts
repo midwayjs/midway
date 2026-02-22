@@ -119,6 +119,10 @@ export class MidwaySocketIOFramework extends BaseFramework<
   private async addNamespace(target: any) {
     const traceService = this.applicationContext.get(MidwayTraceService);
     const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceExtractor = (this.configurationOptions as any)?.tracing
+      ?.extractor;
     const controllerOption: WSControllerOption = MetadataManager.getOwnMetadata(
       WS_CONTROLLER_KEY,
       target
@@ -132,11 +136,25 @@ export class MidwaySocketIOFramework extends BaseFramework<
       controllerOption.routerOptions.connectionMiddleware ?? [];
 
     nsp.use((socket: any, next) => {
+      const entryCarrierDefault = socket?.handshake?.headers ?? {};
+      const entryCarrier =
+        typeof traceExtractor === 'function'
+          ? traceExtractor({
+              ctx: socket,
+              carrier: entryCarrierDefault,
+              request: socket?.handshake,
+              custom: {
+                namespace: controllerOption.namespace || '/',
+                eventName: 'connect',
+              },
+            })
+          : entryCarrierDefault;
       traceService
         .runWithEntrySpan(
           `socketio.connect ${controllerOption.namespace || '/'}`,
           {
-            carrier: socket?.handshake?.headers ?? {},
+            enable: traceEnabled,
+            carrier: entryCarrier ?? entryCarrierDefault,
             attributes: {
               'midway.protocol': 'socketio',
               'midway.socketio.namespace': controllerOption.namespace || '/',
@@ -144,7 +162,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
             meta: traceMetaResolver,
             metaArgs: {
               ctx: socket,
-              carrier: socket?.handshake?.headers ?? {},
+              carrier: entryCarrier ?? entryCarrierDefault,
               custom: {
                 namespace: controllerOption.namespace || '/',
                 eventName: 'connect',
@@ -199,10 +217,23 @@ export class MidwaySocketIOFramework extends BaseFramework<
               const controller = await socket.requestContext.getAsync(target);
 
               try {
+                const onConnectionCarrierDefault =
+                  socket?.handshake?.headers ?? {};
+                const onConnectionCarrier =
+                  typeof traceExtractor === 'function'
+                    ? traceExtractor({
+                        ctx: socket,
+                        carrier: onConnectionCarrierDefault,
+                        custom: {
+                          eventName: wsEventInfo.propertyName,
+                        },
+                      })
+                    : onConnectionCarrierDefault;
                 const result = await traceService.runWithEntrySpan(
                   `socketio.event ${wsEventInfo.propertyName}`,
                   {
-                    carrier: socket?.handshake?.headers ?? {},
+                    enable: traceEnabled,
+                    carrier: onConnectionCarrier ?? onConnectionCarrierDefault,
                     attributes: {
                       'midway.protocol': 'socketio',
                       'midway.socketio.event': wsEventInfo.propertyName,
@@ -210,7 +241,8 @@ export class MidwaySocketIOFramework extends BaseFramework<
                     meta: traceMetaResolver,
                     metaArgs: {
                       ctx: socket,
-                      carrier: socket?.handshake?.headers ?? {},
+                      carrier:
+                        onConnectionCarrier ?? onConnectionCarrierDefault,
                       custom: {
                         eventName: wsEventInfo.propertyName,
                       },
@@ -268,10 +300,23 @@ export class MidwaySocketIOFramework extends BaseFramework<
               debug('got message', wsEventInfo.messageEventName, args);
 
               try {
+                const onMessageCarrierDefault =
+                  socket?.handshake?.headers ?? {};
+                const onMessageCarrier =
+                  typeof traceExtractor === 'function'
+                    ? traceExtractor({
+                        ctx: socket,
+                        carrier: onMessageCarrierDefault,
+                        custom: {
+                          eventName: wsEventInfo.messageEventName,
+                        },
+                      })
+                    : onMessageCarrierDefault;
                 const result = await traceService.runWithEntrySpan(
                   `socketio.message ${wsEventInfo.messageEventName}`,
                   {
-                    carrier: socket?.handshake?.headers ?? {},
+                    enable: traceEnabled,
+                    carrier: onMessageCarrier ?? onMessageCarrierDefault,
                     attributes: {
                       'midway.protocol': 'socketio',
                       'midway.socketio.event': wsEventInfo.messageEventName,
@@ -279,7 +324,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
                     meta: traceMetaResolver,
                     metaArgs: {
                       ctx: socket,
-                      carrier: socket?.handshake?.headers ?? {},
+                      carrier: onMessageCarrier ?? onMessageCarrierDefault,
                       custom: {
                         eventName: wsEventInfo.messageEventName,
                       },
@@ -344,10 +389,23 @@ export class MidwaySocketIOFramework extends BaseFramework<
             socket.on('disconnect', async (reason: string) => {
               const controller = await socket.requestContext.getAsync(target);
               try {
+                const onDisconnectCarrierDefault =
+                  socket?.handshake?.headers ?? {};
+                const onDisconnectCarrier =
+                  typeof traceExtractor === 'function'
+                    ? traceExtractor({
+                        ctx: socket,
+                        carrier: onDisconnectCarrierDefault,
+                        custom: {
+                          eventName: 'disconnect',
+                        },
+                      })
+                    : onDisconnectCarrierDefault;
                 const result = await traceService.runWithEntrySpan(
                   `socketio.disconnect ${wsEventInfo.propertyName}`,
                   {
-                    carrier: socket?.handshake?.headers ?? {},
+                    enable: traceEnabled,
+                    carrier: onDisconnectCarrier ?? onDisconnectCarrierDefault,
                     attributes: {
                       'midway.protocol': 'socketio',
                       'midway.socketio.event': 'disconnect',
@@ -355,7 +413,8 @@ export class MidwaySocketIOFramework extends BaseFramework<
                     meta: traceMetaResolver,
                     metaArgs: {
                       ctx: socket,
-                      carrier: socket?.handshake?.headers ?? {},
+                      carrier:
+                        onDisconnectCarrier ?? onDisconnectCarrierDefault,
                       custom: {
                         eventName: 'disconnect',
                       },
@@ -408,6 +467,9 @@ export class MidwaySocketIOFramework extends BaseFramework<
   ) {
     const traceService = this.applicationContext.get(MidwayTraceService);
     const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceInjector = (this.configurationOptions as any)?.tracing?.injector;
 
     if (result && methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
@@ -417,10 +479,20 @@ export class MidwaySocketIOFramework extends BaseFramework<
               return socket.to(name);
             }, socket);
           }
-          const carrier = {};
+          const carrier =
+            typeof traceInjector === 'function'
+              ? traceInjector({
+                  ctx: socket,
+                  request: result,
+                  custom: {
+                    eventName: wsEventInfo.messageEventName,
+                  },
+                }) || {}
+              : {};
           await traceService.runWithExitSpan(
             `socketio.emit ${wsEventInfo.messageEventName}`,
             {
+              enable: traceEnabled,
               carrier,
               attributes: {
                 'midway.protocol': 'socketio',
@@ -444,10 +516,20 @@ export class MidwaySocketIOFramework extends BaseFramework<
             }
           );
         } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
-          const carrier = {};
+          const carrier =
+            typeof traceInjector === 'function'
+              ? traceInjector({
+                  ctx: socket,
+                  request: result,
+                  custom: {
+                    eventName: propertyName,
+                  },
+                }) || {}
+              : {};
           await traceService.runWithExitSpan(
             `socketio.broadcast ${propertyName}`,
             {
+              enable: traceEnabled,
               carrier,
               attributes: {
                 'midway.protocol': 'socketio',

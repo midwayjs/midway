@@ -115,11 +115,20 @@ export class MidwayMQTTFramework extends BaseFramework<
       const traceService = this.applicationContext.get(MidwayTraceService);
       const traceMetaResolver = (this.configurationOptions as any)?.tracing
         ?.meta;
-      const packetProperties = packet?.properties?.userProperties || {};
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceExtractor = (this.configurationOptions as any)?.tracing
+        ?.extractor;
+      const packetPropertiesDefault = packet?.properties?.userProperties || {};
+      const packetProperties =
+        typeof traceExtractor === 'function'
+          ? traceExtractor({ ctx, request: packet, custom: { topic } })
+          : packetPropertiesDefault;
       return await traceService.runWithEntrySpan(
         `mqtt ${topic}`,
         {
-          carrier: packetProperties,
+          enable: traceEnabled,
+          carrier: packetProperties ?? packetPropertiesDefault,
           attributes: {
             'midway.protocol': 'mqtt',
             'midway.mqtt.topic': topic,
@@ -127,7 +136,7 @@ export class MidwayMQTTFramework extends BaseFramework<
           meta: traceMetaResolver,
           metaArgs: {
             ctx,
-            carrier: packetProperties,
+            carrier: packetProperties ?? packetPropertiesDefault,
             request: packet,
             custom: {
               topic,

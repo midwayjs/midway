@@ -69,20 +69,35 @@ export class MidwayExpressFramework extends BaseFramework<
       const spanName = `${req.method} ${req.path || req.url || '/'}`;
       const traceMetaResolver = (this.configurationOptions as any)?.tracing
         ?.meta;
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceExtractor = (this.configurationOptions as any)?.tracing
+        ?.extractor;
+      const traceInjector = (this.configurationOptions as any)?.tracing
+        ?.injector;
+      const requestCarrier =
+        typeof traceExtractor === 'function'
+          ? traceExtractor({ ctx, request: req, response: res })
+          : req.headers;
+      const responseCarrier =
+        typeof traceInjector === 'function'
+          ? traceInjector({ ctx, request: req, response: res })
+          : res;
 
       traceService
         .runWithEntrySpan(
           spanName,
           {
-            carrier: req.headers,
-            responseCarrier: res,
+            enable: traceEnabled,
+            carrier: requestCarrier,
+            responseCarrier,
             attributes: {
               'midway.protocol': 'http',
             },
             meta: traceMetaResolver,
             metaArgs: {
               ctx,
-              carrier: req.headers,
+              carrier: requestCarrier,
               request: req,
               response: res,
             },

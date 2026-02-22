@@ -40,6 +40,12 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
   @Config('redis.tracing.meta')
   protected traceMetaResolver;
 
+  @Config('redis.tracing.enable')
+  protected traceEnabled;
+
+  @Config('redis.tracing.injector')
+  protected traceInjector;
+
   protected async createClient(config, name: string): Promise<Redis> {
     let client;
 
@@ -112,10 +118,23 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
     (client as any).sendCommand = (command: any, stream?: any) => {
       const commandName =
         command?.name?.toLowerCase?.() || command?.name || 'unknown';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: command,
+              custom: {
+                clientName,
+                commandName,
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
       return this.traceService.runWithExitSpan(
         `redis.${commandName}`,
         {
-          carrier: {},
+          enable: this.traceEnabled !== false,
+          carrier,
           attributes: {
             'midway.protocol': 'redis',
             'midway.redis.command': commandName,
@@ -123,6 +142,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
           },
           meta: this.traceMetaResolver,
           metaArgs: {
+            carrier,
             request: command,
             custom: {
               clientName,

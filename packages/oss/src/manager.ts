@@ -43,6 +43,12 @@ export class OSSServiceFactory<
   @Config('oss.tracing.meta')
   protected traceMetaResolver;
 
+  @Config('oss.tracing.enable')
+  protected traceEnabled;
+
+  @Config('oss.tracing.injector')
+  protected traceInjector;
+
   @Init()
   async init() {
     await this.initClients(this.ossConfig, {
@@ -89,16 +95,29 @@ export class OSSServiceFactory<
 
     client.request = async (...args) => {
       const requestMethod = args?.[0]?.method || 'request';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: args?.[0],
+              custom: {
+                requestMethod: String(requestMethod),
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
       return await this.traceService.runWithExitSpan(
         `oss.${String(requestMethod).toLowerCase()}`,
         {
-          carrier: {},
+          enable: this.traceEnabled !== false,
+          carrier,
           attributes: {
             'midway.protocol': 'oss',
             'midway.oss.method': String(requestMethod),
           },
           meta: this.traceMetaResolver,
           metaArgs: {
+            carrier,
             request: args?.[0],
             custom: {
               requestMethod: String(requestMethod),

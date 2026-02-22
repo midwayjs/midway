@@ -48,6 +48,7 @@
         "versioning",
         "built_in_service",
         "router_table",
+        "tracing",
         "decorator_index",
         "error_code",
         "esm"
@@ -326,7 +327,6 @@
       "collapsed": true,
       "collapsible": true,
       "items": [
-        "extensions/otel",
         "extensions/code_dye",
         "extensions/pm2",
         "extensions/cfork",

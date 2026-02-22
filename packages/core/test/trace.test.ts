@@ -53,7 +53,38 @@ describe('/test/trace.test.ts', () => {
     }
   });
 
-  it('should fallback to callback when protocol tracing is disabled', async () => {
+  it('should fallback to callback when tracing is disabled', async () => {
+    const framework = await createLightFramework(
+      path.join(__dirname, './fixtures/base-app-trace/src')
+    );
+    try {
+      const appCtx = framework.getApplicationContext();
+      const traceService = await appCtx.getAsync(MidwayTraceService);
+      (traceService as any).tracingConfig = {
+        enable: false,
+        onError: 'ignore',
+      };
+
+      const result = await traceService.runWithEntrySpan(
+        'http request',
+        {
+          attributes: {
+            'midway.protocol': 'http',
+          },
+        },
+        async span => {
+          expect(span).toBeUndefined();
+          return 'ok';
+        }
+      );
+
+      expect(result).toEqual('ok');
+    } finally {
+      await framework.stop();
+    }
+  });
+
+  it('should fallback to callback when component tracing is disabled', async () => {
     const framework = await createLightFramework(
       path.join(__dirname, './fixtures/base-app-trace/src')
     );
@@ -62,15 +93,13 @@ describe('/test/trace.test.ts', () => {
       const traceService = await appCtx.getAsync(MidwayTraceService);
       (traceService as any).tracingConfig = {
         enable: true,
-        protocols: {
-          http: false,
-        },
         onError: 'ignore',
       };
 
       const result = await traceService.runWithEntrySpan(
         'http request',
         {
+          enable: false,
           attributes: {
             'midway.protocol': 'http',
           },

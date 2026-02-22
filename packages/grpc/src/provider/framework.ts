@@ -120,20 +120,33 @@ export class MidwayGRPCFramework extends BaseFramework<
               this.applicationContext.get(MidwayTraceService);
             const traceMetaResolver = (this.configurationOptions as any)
               ?.tracing?.meta;
+            const traceEnabled =
+              (this.configurationOptions as any)?.tracing?.enable !== false;
+            const traceExtractor = (this.configurationOptions as any)?.tracing
+              ?.extractor;
             const metadataCarrier =
+              typeof traceExtractor === 'function'
+                ? traceExtractor({
+                    request: call,
+                    custom: { method, serviceName },
+                  })
+                : ((call as ServerUnaryCall<any, any>).metadata?.getMap?.() ??
+                  {});
+            const metadataCarrierDefault =
               (call as ServerUnaryCall<any, any>).metadata?.getMap?.() ?? {};
 
             await traceService.runWithEntrySpan(
               `grpc ${serviceName}.${method}`,
               {
-                carrier: metadataCarrier,
+                enable: traceEnabled,
+                carrier: metadataCarrier ?? metadataCarrierDefault,
                 attributes: {
                   'midway.protocol': 'grpc',
                   'midway.grpc.method': method,
                 },
                 meta: traceMetaResolver,
                 metaArgs: {
-                  carrier: metadataCarrier,
+                  carrier: metadataCarrier ?? metadataCarrierDefault,
                   request: call,
                   custom: {
                     method,

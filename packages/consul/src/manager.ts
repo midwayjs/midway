@@ -22,6 +22,12 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
   @Config('consul.tracing.meta')
   traceMetaResolver;
 
+  @Config('consul.tracing.enable')
+  traceEnabled;
+
+  @Config('consul.tracing.injector')
+  traceInjector;
+
   @Init()
   async init() {
     await this.initClients(this.consulConfig, {
@@ -77,10 +83,23 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
       }
 
       const requestMethod = requestOptions?.method ?? 'request';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: requestOptions,
+              custom: {
+                clientName,
+                requestMethod: String(requestMethod),
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
       return this.traceService.runWithExitSpan(
         `consul.${String(requestMethod).toLowerCase()}`,
         {
-          carrier: {},
+          enable: this.traceEnabled !== false,
+          carrier,
           attributes: {
             'midway.protocol': 'consul',
             'midway.consul.client': clientName,
@@ -88,6 +107,7 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
           },
           meta: this.traceMetaResolver,
           metaArgs: {
+            carrier,
             request: requestOptions,
             custom: {
               clientName,

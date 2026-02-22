@@ -26,6 +26,16 @@ export class MqttProducerFactory extends ServiceFactory<MqttClient> {
 
   @Inject()
   traceService: MidwayTraceService;
+
+  @Config('mqtt.tracing.enable')
+  traceEnabled: boolean;
+
+  @Config('mqtt.tracing.injector')
+  traceInjector: (args: {
+    request?: unknown;
+    custom?: Record<string, unknown>;
+  }) => any;
+
   getName(): string {
     return 'mqtt';
   }
@@ -55,26 +65,44 @@ export class MqttProducerFactory extends ServiceFactory<MqttClient> {
   }
 
   private bindTraceContext(client: MqttClient) {
-    const injectCarrier = (options?: any) => {
+    const injectCarrier = (topic: string, options?: any) => {
       const publishOptions = options ?? {};
       if (!publishOptions.properties) {
         publishOptions.properties = {};
       }
+      const configuredCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: publishOptions,
+              custom: {
+                topic,
+              },
+            })
+          : undefined;
       publishOptions.properties.userProperties =
-        publishOptions.properties.userProperties || {};
-      this.traceService.injectContext(publishOptions.properties.userProperties);
+        configuredCarrier ?? publishOptions.properties.userProperties ?? {};
+      if (this.traceEnabled !== false) {
+        this.traceService.injectContext(
+          publishOptions.properties.userProperties
+        );
+      }
       return publishOptions;
     };
 
     const rawPublish = client.publish.bind(client);
     (client as any).publish = (topic, message, options?, callback?) => {
-      return rawPublish(topic, message, injectCarrier(options), callback);
+      return rawPublish(
+        topic,
+        message,
+        injectCarrier(topic, options),
+        callback
+      );
     };
 
     if (typeof (client as any).publishAsync === 'function') {
       const rawPublishAsync = (client as any).publishAsync.bind(client);
       (client as any).publishAsync = (topic, message, options?) => {
-        return rawPublishAsync(topic, message, injectCarrier(options));
+        return rawPublishAsync(topic, message, injectCarrier(topic, options));
       };
     }
   }

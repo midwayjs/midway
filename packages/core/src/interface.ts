@@ -450,7 +450,6 @@ export interface MidwayCoreDefaultConfig {
   };
   tracing?: {
     enable?: boolean;
-    protocols?: Record<string, boolean>;
     onError?: 'throw' | 'ignore';
     logOnError?: boolean;
   };

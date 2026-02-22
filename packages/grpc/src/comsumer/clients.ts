@@ -29,6 +29,15 @@ export class GRPCClients extends Map {
   @Config('grpc')
   grpcConfig: DefaultConfig;
 
+  @Config('grpc.tracing.enable')
+  traceEnabled: boolean;
+
+  @Config('grpc.tracing.injector')
+  traceInjector: (args: {
+    request?: unknown;
+    custom?: Record<string, unknown>;
+  }) => any;
+
   @Logger()
   logger: ILogger;
 
@@ -76,8 +85,21 @@ export class GRPCClients extends Map {
           connectionService[methodName] = (
             clientOptions: IClientOptions = {}
           ) => {
-            if (this.traceService) {
-              clientOptions.metadata = clientOptions.metadata || new Metadata();
+            if (this.traceService && this.traceEnabled !== false) {
+              const configuredCarrier =
+                typeof this.traceInjector === 'function'
+                  ? this.traceInjector({
+                      request: clientOptions,
+                      custom: {
+                        serviceName,
+                        methodName,
+                      },
+                    })
+                  : undefined;
+              clientOptions.metadata =
+                configuredCarrier instanceof Metadata
+                  ? configuredCarrier
+                  : clientOptions.metadata || new Metadata();
               this.traceService.injectContext(clientOptions.metadata, {
                 set(carrier, key, value) {
                   carrier.set(key, String(value));

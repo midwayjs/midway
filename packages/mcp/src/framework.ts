@@ -40,15 +40,36 @@ export class MidwayMCPFramework extends BaseFramework<
   ): Promise<T> {
     const traceService = this.applicationContext.get(MidwayTraceService);
     const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceExtractor = (this.configurationOptions as any)?.tracing
+      ?.extractor;
+    const customMeta =
+      (metaArgs?.custom as Record<string, unknown> | undefined) ?? {};
+    const entryCarrier =
+      typeof traceExtractor === 'function'
+        ? traceExtractor({
+            request: metaArgs?.request,
+            response: metaArgs?.response,
+            custom: {
+              ...customMeta,
+            },
+          })
+        : {};
     return await traceService.runWithEntrySpan(
       name,
       {
+        enable: traceEnabled,
+        carrier: entryCarrier,
         attributes: {
           'midway.protocol': 'mcp',
           ...attributes,
         },
         meta: traceMetaResolver,
-        metaArgs,
+        metaArgs: {
+          carrier: entryCarrier,
+          ...metaArgs,
+        },
       },
       callback
     );

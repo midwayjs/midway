@@ -36,6 +36,12 @@ export class COSServiceFactory extends ServiceFactory<COS> {
   @Config('cos.tracing.meta')
   protected traceMetaResolver;
 
+  @Config('cos.tracing.enable')
+  protected traceEnabled;
+
+  @Config('cos.tracing.injector')
+  protected traceInjector;
+
   async createClient(config: COS.COSOptions): Promise<COS> {
     assert.ok(
       config.SecretKey && config.SecretId,
@@ -64,16 +70,29 @@ export class COSServiceFactory extends ServiceFactory<COS> {
       }
       const params = args?.[0] || {};
       const apiName = params.Action || params.action || 'request';
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: params,
+              custom: {
+                action: String(apiName),
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
       return await this.traceService.runWithExitSpan(
         `cos.${String(apiName).toLowerCase()}`,
         {
-          carrier: {},
+          enable: this.traceEnabled !== false,
+          carrier,
           attributes: {
             'midway.protocol': 'cos',
             'midway.cos.action': String(apiName),
           },
           meta: this.traceMetaResolver,
           metaArgs: {
+            carrier,
             request: params,
             custom: {
               action: String(apiName),

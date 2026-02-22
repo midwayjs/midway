@@ -15,7 +15,6 @@ export default (): MidwayCoreDefaultConfig => {
     },
     tracing: {
       enable: true,
-      protocols: {},
       onError: 'ignore',
       logOnError: false,
     },

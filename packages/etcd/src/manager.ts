@@ -35,6 +35,12 @@ export class ETCDServiceFactory extends ServiceFactory<Etcd3> {
   @Config('etcd.tracing.meta')
   protected traceMetaResolver;
 
+  @Config('etcd.tracing.enable')
+  protected traceEnabled;
+
+  @Config('etcd.tracing.injector')
+  protected traceInjector;
+
   async createClient(config: IOptions): Promise<Etcd3> {
     this.logger.info('[midway:etcd] init %s', config.hosts);
     const client = new Etcd3(config);
@@ -59,10 +65,23 @@ export class ETCDServiceFactory extends ServiceFactory<Etcd3> {
       payload: unknown,
       options?: any
     ) => {
+      const rawCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: payload,
+              custom: {
+                serviceName: String(serviceName),
+                method: String(method),
+              },
+            })
+          : {};
+      const carrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
       return this.traceService.runWithExitSpan(
         `etcd.${String(method).toLowerCase()}`,
         {
-          carrier: {},
+          enable: this.traceEnabled !== false,
+          carrier,
           attributes: {
             'midway.protocol': 'etcd',
             'midway.etcd.service': String(serviceName),
@@ -70,6 +89,7 @@ export class ETCDServiceFactory extends ServiceFactory<Etcd3> {
           },
           meta: this.traceMetaResolver,
           metaArgs: {
+            carrier,
             request: payload,
             custom: {
               serviceName: String(serviceName),

@@ -162,11 +162,27 @@ export class BullFramework
         const traceService = this.applicationContext.get(MidwayTraceService);
         const traceMetaResolver = (this.configurationOptions as any)?.tracing
           ?.meta;
-        const carrier = job?.data?.__midwayTraceCarrier ?? {};
+        const traceEnabled =
+          (this.configurationOptions as any)?.tracing?.enable !== false;
+        const traceExtractor = (this.configurationOptions as any)?.tracing
+          ?.extractor;
+        const carrierDefault = job?.data?.__midwayTraceCarrier ?? {};
+        const carrier =
+          typeof traceExtractor === 'function'
+            ? traceExtractor({
+                ctx,
+                carrier: carrierDefault,
+                request: job,
+                custom: {
+                  queueName: queue.getQueueName(),
+                },
+              })
+            : carrierDefault;
         return await traceService.runWithEntrySpan(
           `bull ${queue.getQueueName()}`,
           {
-            carrier,
+            enable: traceEnabled,
+            carrier: carrier ?? carrierDefault,
             attributes: {
               'midway.protocol': 'bull',
               'midway.bull.queue': queue.getQueueName(),
@@ -174,7 +190,7 @@ export class BullFramework
             meta: traceMetaResolver,
             metaArgs: {
               ctx,
-              carrier,
+              carrier: carrier ?? carrierDefault,
               request: job,
               custom: {
                 queueName: queue.getQueueName(),
@@ -226,20 +242,37 @@ export class BullFramework
       const traceService = this.applicationContext.get(MidwayTraceService);
       const traceMetaResolver = (this.configurationOptions as any)?.tracing
         ?.meta;
+      const traceEnabled =
+        (this.configurationOptions as any)?.tracing?.enable !== false;
+      const traceInjector = (this.configurationOptions as any)?.tracing
+        ?.injector;
       const payload = {
         ...(jobData ?? {}),
       };
+      const rawCarrier =
+        typeof traceInjector === 'function'
+          ? traceInjector({
+              request: jobData,
+              custom: {
+                queueName,
+              },
+            })
+          : {};
+      const exitCarrier =
+        rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
+      payload.__midwayTraceCarrier = exitCarrier;
       await traceService.runWithExitSpan(
         `bull.produce ${queueName}`,
         {
-          carrier: (payload.__midwayTraceCarrier = {}),
+          enable: traceEnabled,
+          carrier: exitCarrier,
           attributes: {
             'midway.protocol': 'bull',
             'midway.bull.queue': queueName,
           },
           meta: traceMetaResolver,
           metaArgs: {
-            carrier: payload.__midwayTraceCarrier,
+            carrier: exitCarrier,
             request: jobData,
             custom: {
               queueName,

@@ -92,11 +92,24 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                 this.applicationContext.get(MidwayTraceService);
               const traceMetaResolver = (this.configurationOptions as any)
                 ?.tracing?.meta;
-              const headers = data?.properties?.headers ?? {};
+              const traceEnabled =
+                (this.configurationOptions as any)?.tracing?.enable !== false;
+              const traceExtractor = (this.configurationOptions as any)?.tracing
+                ?.extractor;
+              const headersDefault = data?.properties?.headers ?? {};
+              const headers =
+                typeof traceExtractor === 'function'
+                  ? traceExtractor({
+                      ctx,
+                      request: data,
+                      custom: { queueName: listenerOptions.queueName },
+                    })
+                  : headersDefault;
               await traceService.runWithEntrySpan(
                 `rabbitmq ${listenerOptions.queueName}`,
                 {
-                  carrier: headers,
+                  enable: traceEnabled,
+                  carrier: headers ?? headersDefault,
                   attributes: {
                     'midway.protocol': 'rabbitmq',
                     'midway.rabbitmq.queue': listenerOptions.queueName,
@@ -104,7 +117,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                   meta: traceMetaResolver,
                   metaArgs: {
                     ctx,
-                    carrier: headers,
+                    carrier: headers ?? headersDefault,
                     request: data,
                     custom: {
                       queueName: listenerOptions.queueName,

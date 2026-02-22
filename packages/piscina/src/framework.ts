@@ -65,9 +65,25 @@ export class PiscinaWorkerFramework extends BaseFramework<
     const ctx = this.app.createAnonymousContext();
     const traceService = this.applicationContext.get(MidwayTraceService);
     const traceMetaResolver = (this.configurationOptions as any)?.tracing?.meta;
+    const traceEnabled =
+      (this.configurationOptions as any)?.tracing?.enable !== false;
+    const traceExtractor = (this.configurationOptions as any)?.tracing
+      ?.extractor;
+    const entryCarrier =
+      typeof traceExtractor === 'function'
+        ? traceExtractor({
+            ctx,
+            request: payload,
+            custom: {
+              handler,
+            },
+          })
+        : {};
     return await traceService.runWithEntrySpan(
       `piscina ${handler}`,
       {
+        enable: traceEnabled,
+        carrier: entryCarrier,
         attributes: {
           'midway.protocol': 'piscina',
           'midway.piscina.handler': handler,
@@ -75,6 +91,7 @@ export class PiscinaWorkerFramework extends BaseFramework<
         meta: traceMetaResolver,
         metaArgs: {
           ctx,
+          carrier: entryCarrier,
           request: payload,
           custom: {
             handler,

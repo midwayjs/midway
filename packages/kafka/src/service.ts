@@ -29,6 +29,15 @@ export class KafkaProducerFactory extends ServiceFactory<Producer> {
   @Inject()
   traceService: MidwayTraceService;
 
+  @Config('kafka.tracing.enable')
+  traceEnabled: boolean;
+
+  @Config('kafka.tracing.injector')
+  traceInjector: (args: {
+    request?: unknown;
+    custom?: Record<string, unknown>;
+  }) => any;
+
   getName(): string {
     return 'kafka:producer';
   }
@@ -68,9 +77,21 @@ export class KafkaProducerFactory extends ServiceFactory<Producer> {
   }
 
   private bindTraceContext(producer: Producer) {
-    const injectHeaders = (headers?: Record<string, any>) => {
-      const carrier = headers ?? {};
-      this.traceService.injectContext(carrier);
+    const injectHeaders = (
+      headers: Record<string, any> | undefined,
+      custom?: Record<string, unknown>
+    ) => {
+      const configuredCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: headers,
+              custom,
+            })
+          : undefined;
+      const carrier = configuredCarrier ?? headers ?? {};
+      if (this.traceEnabled !== false) {
+        this.traceService.injectContext(carrier);
+      }
       return carrier;
     };
 
@@ -80,7 +101,10 @@ export class KafkaProducerFactory extends ServiceFactory<Producer> {
         ...payload,
         messages: (payload?.messages || []).map(message => ({
           ...message,
-          headers: injectHeaders(message?.headers),
+          headers: injectHeaders(message?.headers, {
+            sendMethod: 'send',
+            topic: payload?.topic,
+          }),
         })),
       };
       return rawSend(nextPayload);
@@ -94,7 +118,10 @@ export class KafkaProducerFactory extends ServiceFactory<Producer> {
           ...topicMessage,
           messages: (topicMessage?.messages || []).map(message => ({
             ...message,
-            headers: injectHeaders(message?.headers),
+            headers: injectHeaders(message?.headers, {
+              sendMethod: 'sendBatch',
+              topic: topicMessage?.topic,
+            }),
           })),
         })),
       };

@@ -35,6 +35,12 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
   @Config('cacheManager.tracing.meta')
   protected traceMetaResolver;
 
+  @Config('cacheManager.tracing.enable')
+  protected traceEnabled;
+
+  @Config('cacheManager.tracing.injector')
+  protected traceInjector;
+
   @Init()
   protected async init() {
     await this.initClients(this.cacheManagerConfig);
@@ -113,10 +119,23 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
       }
 
       target[methodName] = (...args) => {
+        const rawCarrier =
+          typeof this.traceInjector === 'function'
+            ? this.traceInjector({
+                request: args,
+                custom: {
+                  clientName,
+                  methodName,
+                },
+              })
+            : {};
+        const carrier =
+          rawCarrier && typeof rawCarrier === 'object' ? rawCarrier : {};
         return this.traceService.runWithExitSpan(
           `cache.${methodName}`,
           {
-            carrier: {},
+            enable: this.traceEnabled !== false,
+            carrier,
             attributes: {
               'midway.protocol': 'cache',
               'midway.cache.client': clientName,
@@ -124,7 +143,7 @@ export class CachingFactory extends ServiceFactory<MidwayUnionCache> {
             },
             meta: this.traceMetaResolver,
             metaArgs: {
-              carrier: {},
+              carrier,
               request: args,
               custom: {
                 clientName,

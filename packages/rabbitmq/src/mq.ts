@@ -21,12 +21,19 @@ export class RabbitMQServer
   protected connection: amqp.AmqpConnectionManager = null;
   protected logger: ILogger;
   protected traceService: MidwayTraceService;
+  protected traceEnabled: boolean;
+  protected traceInjector: (args: {
+    request?: unknown;
+    custom?: Record<string, unknown>;
+  }) => any;
   protected reconnectTime;
 
   constructor(options: any = {}) {
     super();
     this.logger = options.logger;
     this.traceService = options.traceService;
+    this.traceEnabled = options.traceEnabled ?? options?.tracing?.enable;
+    this.traceInjector = options.traceInjector ?? options?.tracing?.injector;
     this.reconnectTime = options.reconnectTime ?? 10 * 1000;
     this.bindError();
   }
@@ -56,17 +63,33 @@ export class RabbitMQServer
       return;
     }
 
-    const injectHeaders = (options?: any) => {
+    const injectHeaders = (options?: any, custom?: Record<string, unknown>) => {
       const nextOptions = options ?? {};
-      nextOptions.headers = nextOptions.headers || {};
-      this.traceService.injectContext(nextOptions.headers);
+      const configuredCarrier =
+        typeof this.traceInjector === 'function'
+          ? this.traceInjector({
+              request: nextOptions,
+              custom,
+            })
+          : undefined;
+      nextOptions.headers = configuredCarrier ?? nextOptions.headers ?? {};
+      if (this.traceEnabled !== false) {
+        this.traceService.injectContext(nextOptions.headers);
+      }
       return nextOptions;
     };
 
     if (typeof channel.sendToQueue === 'function') {
       const rawSendToQueue = channel.sendToQueue.bind(channel);
       channel.sendToQueue = (queue, content, options) => {
-        return rawSendToQueue(queue, content, injectHeaders(options));
+        return rawSendToQueue(
+          queue,
+          content,
+          injectHeaders(options, {
+            method: 'sendToQueue',
+            queue,
+          })
+        );
       };
     }
 
@@ -77,7 +100,11 @@ export class RabbitMQServer
           exchange,
           routingKey,
           content,
-          injectHeaders(options)
+          injectHeaders(options, {
+            method: 'publish',
+            exchange,
+            routingKey,
+          })
         );
       };
     }

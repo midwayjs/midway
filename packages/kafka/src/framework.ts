@@ -125,18 +125,27 @@ export class MidwayKafkaFramework extends BaseFramework<
           const traceService = this.applicationContext.get(MidwayTraceService);
           const traceMetaResolver = (this.configurationOptions as any)?.tracing
             ?.meta;
-          const headers = payload?.message?.headers ?? {};
+          const traceEnabled =
+            (this.configurationOptions as any)?.tracing?.enable !== false;
+          const traceExtractor = (this.configurationOptions as any)?.tracing
+            ?.extractor;
+          const headersDefault = payload?.message?.headers ?? {};
+          const headers =
+            typeof traceExtractor === 'function'
+              ? traceExtractor({ request: payload, custom: { runMethod } })
+              : headersDefault;
           return await traceService.runWithEntrySpan(
             `kafka ${payload?.topic ?? 'consumer'}`,
             {
-              carrier: headers,
+              enable: traceEnabled,
+              carrier: headers ?? headersDefault,
               attributes: {
                 'midway.protocol': 'kafka',
                 'midway.kafka.topic': payload?.topic,
               },
               meta: traceMetaResolver,
               metaArgs: {
-                carrier: headers,
+                carrier: headers ?? headersDefault,
                 request: payload,
                 custom: {
                   topic: payload?.topic,
