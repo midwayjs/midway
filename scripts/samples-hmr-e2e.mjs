@@ -236,15 +236,15 @@ async function runSample(sampleName, cfg) {
     const detail = logs.split('\n').slice(-80).join('\n');
     throw new Error(`[${sampleName}] ${err.message}\n---- recent dev logs ----\n${detail}`);
   } finally {
+    await stopDev(child);
+    await waitPortReleased(7001, 15000).catch(() => {
+      // ignore; next sample startup poll will fail if still occupied
+    });
     try {
       writeFileSync(targetFileAbs, original, 'utf8');
     } catch {
       // ignore
     }
-    await stopDev(child);
-    await waitPortReleased(7001, 15000).catch(() => {
-      // ignore; next sample startup poll will fail if still occupied
-    });
   }
 }
 
