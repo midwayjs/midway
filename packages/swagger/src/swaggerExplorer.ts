@@ -16,6 +16,7 @@ import {
   DecoratorManager,
   CUSTOM_PARAM_INJECT_KEY,
   CUSTOM_PROPERTY_INJECT_KEY,
+  safeRequire,
 } from '@midwayjs/core';
 import {
   MixDecoratorMetadata,
@@ -36,6 +37,8 @@ import {
 } from './interfaces/';
 import { BodyContentType } from '.';
 import { getEnumValues } from './common/enum.utils';
+
+const VALIDATION_RULES_KEY = 'validation:rules';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -983,6 +986,18 @@ export class SwaggerExplorer {
     for (const key in props) {
       props[key] = props[key][props[key].length - 1];
     }
+    if (this.swaggerConfig?.useValidationSchema) {
+      const inferredProps = this.inferValidationProperties(clzz);
+      for (const key of Object.keys(inferredProps)) {
+        if (!props[key]) {
+          props[key] = inferredProps[key];
+          continue;
+        }
+        const existingMeta = props[key].metadata || {};
+        const inferredMeta = inferredProps[key].metadata || {};
+        props[key].metadata = this.mergePropertyMetadata(existingMeta, inferredMeta);
+      }
+    }
 
     const tt: any = {
       type: 'object',
@@ -1058,6 +1073,103 @@ export class SwaggerExplorer {
     }
     // just for test
     return tt;
+  }
+
+  private mergePropertyMetadata(
+    swaggerMetadata: Record<string, any>,
+    inferredMetadata: Record<string, any>
+  ) {
+    const mergedMetadata = { ...swaggerMetadata };
+    const fillableKeys = [
+      'type',
+      'items',
+      'format',
+      'enum',
+      '$ref',
+      'pattern',
+      'default',
+    ];
+    for (const key of fillableKeys) {
+      if (
+        mergedMetadata[key] === undefined &&
+        inferredMetadata[key] !== undefined
+      ) {
+        mergedMetadata[key] = inferredMetadata[key];
+      }
+    }
+    if (
+      mergedMetadata.required === undefined &&
+      inferredMetadata.required !== undefined
+    ) {
+      mergedMetadata.required = inferredMetadata.required;
+    }
+    return mergedMetadata;
+  }
+
+  protected getValidationSchemaHelper() {
+    try {
+      const validationPkg = safeRequire('@midwayjs/validation');
+      const registry = validationPkg?.registry;
+      if (!registry?.getDefaultValidator) {
+        return;
+      }
+      return registry.getDefaultValidator()?.schemaHelper;
+    } catch {
+      // When @midwayjs/validate and @midwayjs/validation are both installed in
+      // the same process, loading validation package may throw duplicated error
+      // group exceptions. Swagger should degrade gracefully in this case.
+      return;
+    }
+  }
+
+  private inferValidationProperties(clzz: Type) {
+    const ruleProps =
+      MetadataManager.getPropertiesWithMetadata(VALIDATION_RULES_KEY, clzz) ||
+      {};
+    const hasRuleMetadata = Object.keys(ruleProps).length > 0;
+    const hasClassValidatorMetadata =
+      this.hasClassValidatorMetadata(clzz);
+    if (!hasRuleMetadata && !hasClassValidatorMetadata) {
+      return {};
+    }
+
+    const schemaHelper = this.getValidationSchemaHelper();
+    if (!schemaHelper) {
+      return {};
+    }
+    if (
+      typeof schemaHelper.getSwaggerPropertyKeys !== 'function' ||
+      typeof schemaHelper.getSwaggerPropertyMetadata !== 'function'
+    ) {
+      return {};
+    }
+
+    const inferredProps: Record<string, { metadata: Record<string, any> }> = {};
+    const propertyKeys = schemaHelper.getSwaggerPropertyKeys(clzz) || [];
+    for (const key of propertyKeys) {
+      const metadata = schemaHelper.getSwaggerPropertyMetadata(clzz, key);
+      if (metadata) {
+        inferredProps[key] = {
+          metadata,
+        };
+      }
+    }
+    return inferredProps;
+  }
+
+  protected hasClassValidatorMetadata(clzz: Type) {
+    try {
+      const classValidator = safeRequire('class-validator-multi-lang-lite');
+      const storage = classValidator?.getMetadataStorage?.();
+      if (!storage?.getTargetValidationMetadatas) {
+        return false;
+      }
+      const metadatas =
+        storage.getTargetValidationMetadatas(clzz, '', false, false) || [];
+      return metadatas.length > 0;
+    } catch {
+      return false;
+    }
   }
 
   /**

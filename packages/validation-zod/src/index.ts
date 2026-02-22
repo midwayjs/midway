@@ -57,6 +57,157 @@ const lngMapping = {
 
 const localeMapping = new Map();
 
+function getZodTypeName(schema: any): string | undefined {
+  if (!schema || !schema._def) {
+    return;
+  }
+  return schema._def.typeName || schema._def.type;
+}
+
+function unwrapZodSchema(schema: any): any {
+  let currentSchema = schema;
+  let guard = 0;
+  while (currentSchema && guard++ < 12) {
+    const typeName = getZodTypeName(currentSchema);
+    if (!typeName) {
+      return currentSchema;
+    }
+
+    if (typeName === 'ZodOptional' || typeName === 'ZodNullable') {
+      currentSchema =
+        currentSchema._def?.innerType || currentSchema._def?.type || currentSchema;
+      continue;
+    }
+
+    if (
+      typeName === 'ZodDefault' ||
+      typeName === 'ZodCatch' ||
+      typeName === 'ZodReadonly' ||
+      typeName === 'ZodBranded'
+    ) {
+      currentSchema =
+        currentSchema._def?.innerType || currentSchema._def?.type || currentSchema;
+      continue;
+    }
+
+    if (typeName === 'ZodEffects' || typeName === 'ZodPipeline') {
+      currentSchema =
+        currentSchema._def?.schema ||
+        currentSchema._def?.in ||
+        currentSchema._def?.innerType ||
+        currentSchema;
+      continue;
+    }
+
+    return currentSchema;
+  }
+  return currentSchema;
+}
+
+function isZodOptionalSchema(schema: any): boolean {
+  if (!schema) {
+    return false;
+  }
+  if (typeof schema.isOptional === 'function') {
+    try {
+      if (schema.isOptional()) {
+        return true;
+      }
+    } catch {
+      // ignore and fallback to type-name based inference
+    }
+  }
+
+  const typeName = getZodTypeName(schema);
+  if (!typeName) {
+    return false;
+  }
+
+  if (
+    typeName === 'ZodOptional' ||
+    typeName === 'ZodDefault' ||
+    typeName === 'ZodCatch'
+  ) {
+    return true;
+  }
+
+  if (
+    typeName === 'ZodEffects' ||
+    typeName === 'ZodPipeline' ||
+    typeName === 'ZodBranded' ||
+    typeName === 'ZodReadonly'
+  ) {
+    const nestedSchema =
+      schema?._def?.schema || schema?._def?.in || schema?._def?.innerType;
+    return isZodOptionalSchema(nestedSchema);
+  }
+
+  return false;
+}
+
+function inferZodSwaggerPropertyMetadata(schema: any): Record<string, any> | null {
+  const typeName = getZodTypeName(schema);
+  if (!typeName) {
+    return null;
+  }
+
+  const metadata: Record<string, any> = {};
+  metadata.required = !isZodOptionalSchema(schema);
+
+  const unwrappedSchema = unwrapZodSchema(schema);
+  const unwrappedType = getZodTypeName(unwrappedSchema);
+  switch (unwrappedType) {
+    case 'ZodString':
+      metadata.type = 'string';
+      break;
+    case 'ZodNumber':
+      metadata.type = 'number';
+      break;
+    case 'ZodBoolean':
+      metadata.type = 'boolean';
+      break;
+    case 'ZodDate':
+      metadata.type = 'string';
+      metadata.format = 'date-time';
+      break;
+    case 'ZodArray': {
+      metadata.type = 'array';
+      const itemSchema =
+        unwrappedSchema?._def?.type || unwrappedSchema?._def?.itemType;
+      const itemMetadata = inferZodSwaggerPropertyMetadata(itemSchema);
+      if (itemMetadata) {
+        const { required: _required, ...other } = itemMetadata;
+        metadata.items = other;
+      } else {
+        metadata.items = { type: 'object' };
+      }
+      break;
+    }
+    case 'ZodObject':
+      metadata.type = 'object';
+      break;
+    case 'ZodEnum':
+      metadata.type = 'string';
+      if (Array.isArray(unwrappedSchema?._def?.values)) {
+        metadata.enum = unwrappedSchema._def.values;
+      }
+      break;
+    case 'ZodNativeEnum':
+      metadata.type = 'string';
+      if (unwrappedSchema?._def?.values) {
+        metadata.enum = Object.values(unwrappedSchema._def.values).filter(
+          item => ['string', 'number'].includes(typeof item)
+        );
+      }
+      break;
+    default:
+      metadata.type = 'object';
+      break;
+  }
+
+  return metadata;
+}
+
 export default {
   validateServiceHandler: async (container: IMidwayContainer) => {
     const environmentService = container.get(MidwayEnvironmentService);
@@ -239,6 +390,14 @@ export default {
 
     getStringSchema(): z.ZodType<any, z.ZodTypeDef, any> {
       return z.string();
+    },
+    getSwaggerPropertyKeys: (ClzType: any): string[] => {
+      const schemas = getRuleMeta(ClzType);
+      return Object.keys(schemas);
+    },
+    getSwaggerPropertyMetadata: (ClzType: any, propertyName: string) => {
+      const schemas = getRuleMeta(ClzType);
+      return inferZodSwaggerPropertyMetadata(schemas[propertyName]);
     },
   },
 };

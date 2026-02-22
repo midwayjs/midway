@@ -57,7 +57,9 @@ import {
   File,
   Files,
   Param,
+  MetadataManager,
 } from '@midwayjs/core';
+import { Rule } from '@midwayjs/validation';
 
 class CustomSwaggerExplorer extends SwaggerExplorer {
   generatePath(target: Type) {
@@ -70,6 +72,155 @@ class CustomSwaggerExplorer extends SwaggerExplorer {
 
   formatType(metadata) {
     return super.formatType(metadata);
+  }
+}
+
+const VALIDATION_RULES_KEY = 'validation:rules';
+
+function getRuleSchema(ClzType: any, propertyName: string) {
+  const schemas =
+    MetadataManager.getPropertiesWithMetadata(VALIDATION_RULES_KEY, ClzType) ||
+    {};
+  let schema = schemas[propertyName];
+  if (typeof schema === 'function') {
+    schema = schema();
+  }
+  return schema;
+}
+
+class JoiValidationExplorer extends CustomSwaggerExplorer {
+  protected getValidationSchemaHelper() {
+    return {
+      getSwaggerPropertyKeys: (ClzType: any) => {
+        const schemas =
+          MetadataManager.getPropertiesWithMetadata(
+            VALIDATION_RULES_KEY,
+            ClzType
+          ) || {};
+        return Object.keys(schemas);
+      },
+      getSwaggerPropertyMetadata: (ClzType: any, propertyName: string) => {
+        const schema = getRuleSchema(ClzType, propertyName);
+        if (!schema || typeof schema.describe !== 'function') {
+          return null;
+        }
+        const desc = schema.describe();
+        const typeMap = {
+          string: 'string',
+          number: 'number',
+          boolean: 'boolean',
+          array: 'array',
+          date: 'string',
+          object: 'object',
+        };
+        const metadata: any = {
+          type: typeMap[desc.type] || 'object',
+          required: desc?.flags?.presence === 'required',
+        };
+        if (desc.type === 'array' && Array.isArray(desc.items)) {
+          metadata.items = {
+            type: typeMap[desc.items[0]?.type] || 'object',
+          };
+        }
+        if (desc.type === 'date') {
+          metadata.format = 'date-time';
+        }
+        if (Array.isArray(desc.allow)) {
+          const values = desc.allow.filter(
+            item => item !== '' && item !== null && item !== undefined
+          );
+          if (values.length) {
+            metadata.enum = values;
+          }
+        }
+        return metadata;
+      },
+    };
+  }
+}
+
+class ZodValidationExplorer extends CustomSwaggerExplorer {
+  protected getValidationSchemaHelper() {
+    const getTypeName = (schema: any) => schema?._def?.typeName;
+    const unwrap = (schema: any) => {
+      if (getTypeName(schema) === 'ZodOptional') {
+        return schema?._def?.innerType;
+      }
+      return schema;
+    };
+    const map = (schema: any): any => {
+      if (!schema) {
+        return null;
+      }
+      const required =
+        !(typeof schema.isOptional === 'function' && schema.isOptional());
+      const unwrapped = unwrap(schema);
+      const baseType = getTypeName(unwrapped);
+      const metadata: any = { required };
+      switch (baseType) {
+        case 'ZodString':
+          metadata.type = 'string';
+          break;
+        case 'ZodNumber':
+          metadata.type = 'number';
+          break;
+        case 'ZodBoolean':
+          metadata.type = 'boolean';
+          break;
+        case 'ZodDate':
+          metadata.type = 'string';
+          metadata.format = 'date-time';
+          break;
+        case 'ZodArray':
+          metadata.type = 'array';
+          metadata.items = map(unwrapped?._def?.type || unwrapped?._def?.itemType);
+          if (metadata.items) {
+            delete metadata.items.required;
+          }
+          break;
+        case 'ZodEnum':
+          metadata.type = 'string';
+          metadata.enum = unwrapped?._def?.values;
+          break;
+        default:
+          metadata.type = 'object';
+      }
+      return metadata;
+    };
+    return {
+      getSwaggerPropertyKeys: (ClzType: any) => {
+        const schemas =
+          MetadataManager.getPropertiesWithMetadata(
+            VALIDATION_RULES_KEY,
+            ClzType
+          ) || {};
+        return Object.keys(schemas);
+      },
+      getSwaggerPropertyMetadata: (ClzType: any, propertyName: string) => {
+        return map(getRuleSchema(ClzType, propertyName));
+      },
+    };
+  }
+}
+
+class ClassValidatorExplorer extends CustomSwaggerExplorer {
+  protected hasClassValidatorMetadata() {
+    return true;
+  }
+
+  protected getValidationSchemaHelper() {
+    return {
+      getSwaggerPropertyKeys: () => ['name', 'age'],
+      getSwaggerPropertyMetadata: (_clz: any, propertyName: string) => {
+        if (propertyName === 'name') {
+          return { type: 'string', required: true };
+        }
+        if (propertyName === 'age') {
+          return { type: 'number', required: false };
+        }
+        return null;
+      },
+    };
   }
 }
 
@@ -2548,6 +2699,142 @@ describe('test @ApiQuery', () => {
     const explorer = new CustomSwaggerExplorer();
     explorer.generatePath(APIController);
     expect(explorer.getData()).toMatchSnapshot();
+  });
+});
+
+describe('test validation schema inference', () => {
+  it('should infer joi-like validation metadata when enabled', () => {
+    const joiStringRequired = {
+      describe() {
+        return { type: 'string', flags: { presence: 'required' } };
+      },
+    };
+    const joiNumberOptional = {
+      describe() {
+        return { type: 'number', flags: { presence: 'optional' } };
+      },
+    };
+
+    class UserDTO {
+      @Rule(() => joiStringRequired)
+      name: string;
+      @Rule(() => joiNumberOptional)
+      id: number;
+    }
+
+    const explorer = new JoiValidationExplorer();
+    explorer['swaggerConfig'] = { useValidationSchema: true };
+    const schema = explorer.parse(UserDTO) as any;
+    expect(schema.properties.name.type).toEqual('string');
+    expect(schema.properties.id.type).toEqual('number');
+    expect(schema.required).toContain('name');
+    expect(schema.required).not.toContain('id');
+  });
+
+  it('should infer zod-like validation metadata when enabled', () => {
+    const zodString = {
+      _def: { typeName: 'ZodString' },
+      isOptional() {
+        return false;
+      },
+    };
+    const zodOptionalNumber = {
+      _def: { typeName: 'ZodOptional', innerType: { _def: { typeName: 'ZodNumber' }, isOptional: () => false } },
+      isOptional() {
+        return true;
+      },
+    };
+    class UserDTO {
+      @Rule(() => zodString)
+      name: string;
+      @Rule(() => zodOptionalNumber)
+      id: number;
+    }
+
+    const explorer = new ZodValidationExplorer();
+    explorer['swaggerConfig'] = { useValidationSchema: true };
+    const schema = explorer.parse(UserDTO) as any;
+    expect(schema.properties.name.type).toEqual('string');
+    expect(schema.properties.id.type).toEqual('number');
+    expect(schema.required).toContain('name');
+    expect(schema.required).not.toContain('id');
+  });
+
+  it('should infer class-validator metadata when enabled', () => {
+    function CV(): PropertyDecorator {
+      return () => {};
+    }
+    class UserDTO {
+      @CV()
+      name: string;
+      @CV()
+      age: number;
+    }
+
+    const explorer = new ClassValidatorExplorer();
+    explorer['swaggerConfig'] = { useValidationSchema: true };
+    const schema = explorer.parse(UserDTO) as any;
+    expect(schema.properties.name.type).toEqual('string');
+    expect(schema.properties.age.type).toEqual('number');
+    expect(schema.required).toContain('name');
+    expect(schema.required).not.toContain('age');
+  });
+
+  it('should keep ApiProperty priority over validation metadata', () => {
+    const joiStringRequired = {
+      describe() {
+        return { type: 'string', flags: { presence: 'required' } };
+      },
+    };
+    class UserDTO {
+      @Rule(() => joiStringRequired)
+      @ApiProperty({ type: 'number', required: false })
+      name: string;
+    }
+
+    const explorer = new JoiValidationExplorer();
+    explorer['swaggerConfig'] = { useValidationSchema: true };
+    const schema = explorer.parse(UserDTO) as any;
+    expect(schema.properties.name.type).toEqual('number');
+    expect(schema.required).toBeUndefined();
+  });
+
+  it('should expand query parameters from validation-inferred DTO schema', () => {
+    const joiStringRequired = {
+      describe() {
+        return { type: 'string', flags: { presence: 'required' } };
+      },
+    };
+    const joiNumberOptional = {
+      describe() {
+        return { type: 'number', flags: { presence: 'optional' } };
+      },
+    };
+    class QueryDTO {
+      @Rule(() => joiStringRequired)
+      keyword: string;
+      @Rule(() => joiNumberOptional)
+      page: number;
+    }
+    @Controller('/api')
+    class APIController {
+      @Get('/search')
+      async search(@Query() dto: QueryDTO) {
+        return dto;
+      }
+    }
+
+    const explorer = new JoiValidationExplorer();
+    explorer['swaggerConfig'] = { useValidationSchema: true };
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    const parameters = data.paths['/api/search'].get.parameters;
+    const keywordParam = parameters.find(item => item.name === 'keyword');
+    const pageParam = parameters.find(item => item.name === 'page');
+    expect(keywordParam.schema.type).toEqual('string');
+    expect(keywordParam.required).toEqual(true);
+    expect(pageParam.schema.type).toEqual('number');
+    expect(pageParam.required).toEqual(false);
   });
 });
 
