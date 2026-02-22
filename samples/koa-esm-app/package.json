@@ -1,0 +1,34 @@
+{
+  "name": "@samples/koa-esm-app",
+  "private": true,
+  "version": "4.0.0-beta.12",
+  "type": "module",
+  "scripts": {
+    "build": "node -e \"require('fs').rmSync('dist',{ recursive: true, force: true })\" && tsc -p tsconfig.json",
+    "start": "cross-env NODE_ENV=production node ./bootstrap.js",
+    "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/app",
+    "test": "cross-env NODE_ENV=unittest mocha"
+  },
+  "dependencies": {
+    "@midwayjs/bootstrap": "workspace:*",
+    "@midwayjs/core": "workspace:*",
+    "@midwayjs/info": "workspace:*",
+    "@midwayjs/koa": "workspace:*",
+    "@midwayjs/logger": "^4.0.0",
+    "@midwayjs/validation": "workspace:*",
+    "@midwayjs/validation-joi": "workspace:*",
+    "joi": "^17.13.3",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@midwayjs/mock": "workspace:*",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "20",
+    "cross-env": "^7.0.3",
+    "mocha": "^10.2.0",
+    "mwts": "^1.3.0",
+    "mwtsc": "^1.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "5.6.3"
+  }
+}

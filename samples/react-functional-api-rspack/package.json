@@ -9,7 +9,8 @@
     "dev:web": "rspack serve --config rspack.config.mjs --mode development",
     "build": "pnpm run build:server && pnpm run build:web",
     "build:server": "tsc -p tsconfig.server.json",
-    "build:web": "rspack build --config rspack.config.mjs --mode production"
+    "build:web": "rspack build --config rspack.config.mjs --mode production",
+    "test": "cross-env NODE_ENV=unittest mocha"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "workspace:*",
@@ -26,6 +27,10 @@
     "@types/react-dom": "^18.3.1",
     "concurrently": "^9.2.1",
     "tsx": "^4.20.5",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "@midwayjs/mock": "workspace:*",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2",
+    "cross-env": "^7.0.3"
   }
 }

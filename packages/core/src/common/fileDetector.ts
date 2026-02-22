@@ -115,7 +115,6 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
     const loadDirs = [].concat(
       this.options.loadDir ?? container.get('baseDir')
     );
-    const importQuery = `${Date.now()}_${Math.random()}`;
 
     for (const dir of loadDirs) {
       const fileResults = run(
@@ -149,7 +148,6 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
       for (const file of fileResults) {
         const exports = await loadModule(file, {
           loadMode: 'esm',
-          importQuery,
         });
         // add module to set
         container.bindClass(exports, {

@@ -1,0 +1,5 @@
+{
+  "extension": ["mjs"],
+  "node-option": ["no-warnings", "loader=ts-node/esm"],
+  "spec": ["test/**/*.test.mjs"]
+}
