@@ -39,6 +39,7 @@ import { BodyContentType } from '.';
 import { getEnumValues } from './common/enum.utils';
 
 const VALIDATION_RULES_KEY = 'validation:rules';
+const VALIDATE_RULES_KEY = 'common:rules';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -1127,27 +1128,67 @@ export class SwaggerExplorer {
       MetadataManager.getPropertiesWithMetadata(VALIDATION_RULES_KEY, clzz) ||
       {};
     const hasRuleMetadata = Object.keys(ruleProps).length > 0;
+    const validateRuleProps =
+      MetadataManager.getPropertiesWithMetadata(VALIDATE_RULES_KEY, clzz) ||
+      {};
+    const hasValidateRuleMetadata = Object.keys(validateRuleProps).length > 0;
     const hasClassValidatorMetadata =
       this.hasClassValidatorMetadata(clzz);
-    if (!hasRuleMetadata && !hasClassValidatorMetadata) {
-      return {};
-    }
-
-    const schemaHelper = this.getValidationSchemaHelper();
-    if (!schemaHelper) {
-      return {};
-    }
-    if (
-      typeof schemaHelper.getSwaggerPropertyKeys !== 'function' ||
-      typeof schemaHelper.getSwaggerPropertyMetadata !== 'function'
-    ) {
+    if (!hasRuleMetadata && !hasClassValidatorMetadata && !hasValidateRuleMetadata) {
       return {};
     }
 
     const inferredProps: Record<string, { metadata: Record<string, any> }> = {};
-    const propertyKeys = schemaHelper.getSwaggerPropertyKeys(clzz) || [];
-    for (const key of propertyKeys) {
-      const metadata = schemaHelper.getSwaggerPropertyMetadata(clzz, key);
+    if (hasRuleMetadata || hasClassValidatorMetadata) {
+      const schemaHelper = this.getValidationSchemaHelper();
+      if (
+        schemaHelper &&
+        typeof schemaHelper.getSwaggerPropertyKeys === 'function' &&
+        typeof schemaHelper.getSwaggerPropertyMetadata === 'function'
+      ) {
+        const propertyKeys = schemaHelper.getSwaggerPropertyKeys(clzz) || [];
+        for (const key of propertyKeys) {
+          const metadata = schemaHelper.getSwaggerPropertyMetadata(clzz, key);
+          if (metadata) {
+            inferredProps[key] = {
+              metadata,
+            };
+          }
+        }
+      }
+    }
+
+    if (hasValidateRuleMetadata) {
+      const validateInferredProps = this.inferValidateProperties(clzz);
+      for (const [key, value] of Object.entries(validateInferredProps)) {
+        if (!inferredProps[key]) {
+          inferredProps[key] = value;
+          continue;
+        }
+        const mergedMetadata = this.mergePropertyMetadata(
+          inferredProps[key].metadata || {},
+          value.metadata || {}
+        );
+        inferredProps[key] = {
+          metadata: mergedMetadata,
+        };
+      }
+    }
+
+    return inferredProps;
+  }
+
+  private inferValidateProperties(clzz: Type) {
+    const inferredProps: Record<string, { metadata: Record<string, any> }> = {};
+    const ruleProps =
+      MetadataManager.getPropertiesWithMetadata(VALIDATE_RULES_KEY, clzz) ||
+      {};
+    for (const key of Object.keys(ruleProps)) {
+      let schema = ruleProps[key];
+      if (typeof schema === 'function') {
+        schema = schema();
+      }
+      const metadata = inferJoiPropertyMetadata(schema);
       if (metadata) {
         inferredProps[key] = {
           metadata,
@@ -1301,6 +1342,56 @@ function convertSchemaType(value) {
     default:
       return 'object';
   }
+}
+
+function inferJoiPropertyMetadata(schema: any): Record<string, any> | null {
+  if (!schema || typeof schema.describe !== 'function') {
+    return null;
+  }
+  const desc = schema.describe();
+  if (!desc || typeof desc !== 'object') {
+    return null;
+  }
+
+  const typeMap = {
+    string: 'string',
+    number: 'number',
+    boolean: 'boolean',
+    array: 'array',
+    date: 'string',
+    object: 'object',
+  };
+
+  const metadata: Record<string, any> = {
+    type: typeMap[desc.type] || 'object',
+  };
+
+  if (desc?.flags?.presence === 'required') {
+    metadata.required = true;
+  } else if (desc?.flags?.presence === 'optional' || !desc?.flags?.presence) {
+    metadata.required = false;
+  }
+
+  if (desc.type === 'array' && Array.isArray(desc.items)) {
+    metadata.items = {
+      type: typeMap[desc.items[0]?.type] || 'object',
+    };
+  }
+
+  if (desc.type === 'date') {
+    metadata.format = 'date-time';
+  }
+
+  if (Array.isArray(desc.allow)) {
+    const enumValues = desc.allow.filter(
+      item => item !== '' && item !== null && item !== undefined
+    );
+    if (enumValues.length > 0) {
+      metadata.enum = enumValues;
+    }
+  }
+
+  return metadata;
 }
 
 function getNotEmptyValue(...args) {

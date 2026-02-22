@@ -2838,6 +2838,103 @@ describe('test validation schema inference', () => {
   });
 });
 
+describe('test validate schema inference', () => {
+  function ValidateRule(ruleFactory: any): PropertyDecorator {
+    return (target, propertyKey: string) => {
+      MetadataManager.defineMetadata(
+        'common:rules',
+        ruleFactory,
+        target.constructor,
+        propertyKey
+      );
+    };
+  }
+
+  function joiSchema(type: string, presence: 'required' | 'optional') {
+    return {
+      describe() {
+        return {
+          type,
+          flags: {
+            presence,
+          },
+        };
+      },
+    };
+  }
+
+  it('should infer metadata from validate common rules', () => {
+    class UserDTO {
+      @ValidateRule(() => joiSchema('string', 'required'))
+      name: string;
+
+      @ValidateRule(() => joiSchema('number', 'optional'))
+      age: number;
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'] = {
+      useValidationSchema: true,
+    };
+    const schema = explorer.parse(UserDTO) as any;
+    expect(schema.properties.name.type).toEqual('string');
+    expect(schema.properties.age.type).toEqual('number');
+    expect(schema.required).toContain('name');
+    expect(schema.required).not.toContain('age');
+  });
+
+  it('should merge with ApiProperty and keep ApiProperty priority for validate rules', () => {
+    class UserDTO {
+      @ValidateRule(() => joiSchema('string', 'required'))
+      @ApiProperty({
+        type: 'number',
+        required: false,
+      })
+      value: any;
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'] = {
+      useValidationSchema: true,
+    };
+    const schema = explorer.parse(UserDTO) as any;
+    expect(schema.properties.value.type).toEqual('number');
+    expect(schema.required).toBeUndefined();
+  });
+
+  it('should expand query parameters from validate common rules', () => {
+    class QueryDTO {
+      @ValidateRule(() => joiSchema('string', 'required'))
+      keyword: string;
+
+      @ValidateRule(() => joiSchema('number', 'optional'))
+      page: number;
+    }
+
+    @Controller('/api')
+    class APIController {
+      @Get('/search-v')
+      async search(@Query() dto: QueryDTO) {
+        return dto;
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer['swaggerConfig'] = {
+      useValidationSchema: true,
+    };
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    const parameters = data.paths['/api/search-v'].get.parameters;
+    const keywordParam = parameters.find(item => item.name === 'keyword');
+    const pageParam = parameters.find(item => item.name === 'page');
+    expect(keywordParam.schema.type).toEqual('string');
+    expect(keywordParam.required).toEqual(true);
+    expect(pageParam.schema.type).toEqual('number');
+    expect(pageParam.required).toEqual(false);
+  });
+});
+
 describe('test post args without @ApiBody', () => {
   it('post with any type', () => {
     @Controller('/api')
