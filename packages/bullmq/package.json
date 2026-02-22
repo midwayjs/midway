@@ -28,7 +28,7 @@
     "@midwayjs/mock": "workspace:^"
   },
   "dependencies": {
-    "bullmq": "5.67.2"
+    "bullmq": "5.70.0"
   },
   "engines": {
     "node": ">=20"

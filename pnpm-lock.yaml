@@ -225,8 +225,8 @@ importers:
   packages/bullmq:
     dependencies:
       bullmq:
-        specifier: 5.67.2
-        version: 5.67.2
+        specifier: 5.70.0
+        version: 5.70.0
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -5273,8 +5273,8 @@ packages:
     resolution: {integrity: sha512-lDsx2BzkKe7gkCYiT5Acj02DpTwDznl/VNN7Psn7M3USPG7Vs/BaClZJJTAG+ufAR9++N1/NiUTdaFBWDIl5TQ==}
     engines: {node: '>=12'}
 
-  bullmq@5.67.2:
-    resolution: {integrity: sha512-3KYqNqQptKcgksACO1li4YW9/jxEh6XWa1lUg4OFrHa80Pf0C7H9zeb6ssbQQDfQab/K3QCXopbZ40vrvcyrLw==}
+  bullmq@5.70.0:
+    resolution: {integrity: sha512-HlBSEJqG7MJ97+d/N/8rtGOcpisjGP3WD/zaXZia0hsmckJqAPTVWN6Yfw32FVfVSUVVInZQ2nUgMd2zCRghKg==}
 
   bundle-name@4.1.0:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
@@ -15623,13 +15623,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  bullmq@5.67.2:
+  bullmq@5.70.0:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.9.2
       msgpackr: 1.11.5
       node-abort-controller: 3.1.1
-      semver: 7.7.3
+      semver: 7.7.4
       tslib: 2.8.1
       uuid: 11.1.0
     transitivePeerDependencies:
@@ -16154,7 +16154,7 @@ snapshots:
       make-dir: 3.1.0
       onetime: 5.1.2
       pkg-up: 3.1.0
-      semver: 7.7.3
+      semver: 7.7.4
 
   confbox@0.1.8: {}
 
@@ -20756,7 +20756,7 @@ snapshots:
       nopt: 5.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
-      semver: 7.7.3
+      semver: 7.7.4
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -22443,7 +22443,7 @@ snapshots:
     dependencies:
       '@img/colour': 1.0.0
       detect-libc: 2.1.2
-      semver: 7.7.3
+      semver: 7.7.4
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.34.5
       '@img/sharp-darwin-x64': 0.34.5
@@ -23108,7 +23108,7 @@ snapshots:
       methods: 1.1.2
       mime: 2.6.0
       qs: 6.14.2
-      semver: 7.7.3
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
 
