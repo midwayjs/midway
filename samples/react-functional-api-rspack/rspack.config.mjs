@@ -1,6 +1,7 @@
 import { defineConfig } from '@rspack/cli';
 import { rspack } from '@rspack/core';
 import { createApiRspackRule } from '@midwayjs/web-bridge/rspack';
+import { devPlugin } from '@midwayjs/mock/rspack';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -46,7 +47,8 @@ export default defineConfig({
               react: {
                 runtime: 'automatic',
                 development: process.env.NODE_ENV !== 'production',
-                refresh: process.env.NODE_ENV !== 'production',
+                // Do not enable React Fast Refresh until refresh runtime/plugin is wired.
+                refresh: false,
               },
             },
           },
@@ -55,6 +57,11 @@ export default defineConfig({
     ],
   },
   plugins: [
+    devPlugin({
+      appDir: rootDir,
+      baseDir: 'src/server',
+      basePath: '/api',
+    }),
     new rspack.HtmlRspackPlugin({
       template: './index.html',
     }),
@@ -62,12 +69,7 @@ export default defineConfig({
   devServer: {
     host: '127.0.0.1',
     port: 5174,
+    allowedHosts: 'all',
     historyApiFallback: true,
-    proxy: [
-      {
-        context: ['/api'],
-        target: 'http://127.0.0.1:7001',
-      },
-    ],
   },
 });
