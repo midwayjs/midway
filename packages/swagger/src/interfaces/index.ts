@@ -449,6 +449,12 @@ export interface SwaggerOptions {
    * Weather to generate the Tag for controller
    */
   isGenerateTagForController?: boolean;
+  /**
+   * Enable inferring schema metadata from @midwayjs/validation DTO rules.
+   * When enabled, inferred metadata only fills fields that are not explicitly
+   * defined by @ApiProperty.
+   */
+  useValidationSchema?: boolean;
 }
 
 export interface MixDecoratorMetadata {

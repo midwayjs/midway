@@ -1,4 +1,8 @@
-import { IMidwayContainer, MidwayConfigService } from '@midwayjs/core';
+import {
+  IMidwayContainer,
+  MetadataManager,
+  MidwayConfigService,
+} from '@midwayjs/core';
 import {
   IValidationService,
   ValidateResult,
@@ -17,6 +21,37 @@ import { MidwayI18nServiceSingleton } from '@midwayjs/i18n';
 const EN_I18N_MESSAGES = require('../i18n/en.json');
 const ZH_I18N_MESSAGES = require('../i18n/zh.json');
 const localeMapping = new Map();
+
+function mapDesignTypeToSchemaType(typeName: string): string | undefined {
+  if (!typeName) {
+    return;
+  }
+  switch (typeName) {
+    case 'String':
+      return 'string';
+    case 'Number':
+      return 'number';
+    case 'Boolean':
+      return 'boolean';
+    case 'Array':
+      return 'array';
+    case 'Date':
+      return 'string';
+    case 'Object':
+      return 'object';
+    default:
+      return;
+  }
+}
+
+function getClassValidatorPropertyNames(ClzType: any): string[] {
+  const metadataStorage = getMetadataStorage();
+  const properties = metadataStorage
+    .getTargetValidationMetadatas(ClzType, '', false, false)
+    .map(meta => meta.propertyName as string)
+    .filter(Boolean);
+  return Array.from(new Set(properties));
+}
 
 function isFieldOptional(target: any, propertyKey: string): boolean {
   const metadataStorage = getMetadataStorage();
@@ -273,6 +308,21 @@ export default {
 
     getStringSchema(): any {
       return String;
+    },
+    getSwaggerPropertyKeys: (ClzType: any): string[] => {
+      return getClassValidatorPropertyNames(ClzType);
+    },
+    getSwaggerPropertyMetadata: (ClzType: any, propertyName: string) => {
+      const metadata: Record<string, any> = {};
+      const designType = MetadataManager.transformTypeFromTSDesign(
+        MetadataManager.getPropertyType(ClzType.prototype, propertyName)
+      );
+      const schemaType = mapDesignTypeToSchemaType(designType?.name);
+      if (schemaType) {
+        metadata.type = schemaType;
+      }
+      metadata.required = !isFieldOptional(ClzType, propertyName);
+      return metadata;
     },
   },
 };

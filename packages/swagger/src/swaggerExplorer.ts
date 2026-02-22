@@ -16,6 +16,7 @@ import {
   DecoratorManager,
   CUSTOM_PARAM_INJECT_KEY,
   CUSTOM_PROPERTY_INJECT_KEY,
+  safeRequire,
 } from '@midwayjs/core';
 import {
   MixDecoratorMetadata,
@@ -36,6 +37,9 @@ import {
 } from './interfaces/';
 import { BodyContentType } from '.';
 import { getEnumValues } from './common/enum.utils';
+
+const VALIDATION_RULES_KEY = 'validation:rules';
+const VALIDATE_RULES_KEY = 'common:rules';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -983,6 +987,21 @@ export class SwaggerExplorer {
     for (const key in props) {
       props[key] = props[key][props[key].length - 1];
     }
+    if (this.swaggerConfig?.useValidationSchema) {
+      const inferredProps = this.inferValidationProperties(clzz);
+      for (const key of Object.keys(inferredProps)) {
+        if (!props[key]) {
+          props[key] = inferredProps[key];
+          continue;
+        }
+        const existingMeta = props[key].metadata || {};
+        const inferredMeta = inferredProps[key].metadata || {};
+        props[key].metadata = this.mergePropertyMetadata(
+          existingMeta,
+          inferredMeta
+        );
+      }
+    }
 
     const tt: any = {
       type: 'object',
@@ -1058,6 +1077,144 @@ export class SwaggerExplorer {
     }
     // just for test
     return tt;
+  }
+
+  private mergePropertyMetadata(
+    swaggerMetadata: Record<string, any>,
+    inferredMetadata: Record<string, any>
+  ) {
+    const mergedMetadata = { ...swaggerMetadata };
+    const fillableKeys = [
+      'type',
+      'items',
+      'format',
+      'enum',
+      '$ref',
+      'pattern',
+      'default',
+    ];
+    for (const key of fillableKeys) {
+      if (
+        mergedMetadata[key] === undefined &&
+        inferredMetadata[key] !== undefined
+      ) {
+        mergedMetadata[key] = inferredMetadata[key];
+      }
+    }
+    if (
+      mergedMetadata.required === undefined &&
+      inferredMetadata.required !== undefined
+    ) {
+      mergedMetadata.required = inferredMetadata.required;
+    }
+    return mergedMetadata;
+  }
+
+  protected getValidationSchemaHelper() {
+    try {
+      const validationPkg = safeRequire('@midwayjs/validation');
+      const registry = validationPkg?.registry;
+      if (!registry?.getDefaultValidator) {
+        return;
+      }
+      return registry.getDefaultValidator()?.schemaHelper;
+    } catch {
+      // When @midwayjs/validate and @midwayjs/validation are both installed in
+      // the same process, loading validation package may throw duplicated error
+      // group exceptions. Swagger should degrade gracefully in this case.
+      return;
+    }
+  }
+
+  private inferValidationProperties(clzz: Type) {
+    const ruleProps =
+      MetadataManager.getPropertiesWithMetadata(VALIDATION_RULES_KEY, clzz) ||
+      {};
+    const hasRuleMetadata = Object.keys(ruleProps).length > 0;
+    const validateRuleProps =
+      MetadataManager.getPropertiesWithMetadata(VALIDATE_RULES_KEY, clzz) || {};
+    const hasValidateRuleMetadata = Object.keys(validateRuleProps).length > 0;
+    const hasClassValidatorMetadata = this.hasClassValidatorMetadata(clzz);
+    if (
+      !hasRuleMetadata &&
+      !hasClassValidatorMetadata &&
+      !hasValidateRuleMetadata
+    ) {
+      return {};
+    }
+
+    const inferredProps: Record<string, { metadata: Record<string, any> }> = {};
+    if (hasRuleMetadata || hasClassValidatorMetadata) {
+      const schemaHelper = this.getValidationSchemaHelper();
+      if (
+        schemaHelper &&
+        typeof schemaHelper.getSwaggerPropertyKeys === 'function' &&
+        typeof schemaHelper.getSwaggerPropertyMetadata === 'function'
+      ) {
+        const propertyKeys = schemaHelper.getSwaggerPropertyKeys(clzz) || [];
+        for (const key of propertyKeys) {
+          const metadata = schemaHelper.getSwaggerPropertyMetadata(clzz, key);
+          if (metadata) {
+            inferredProps[key] = {
+              metadata,
+            };
+          }
+        }
+      }
+    }
+
+    if (hasValidateRuleMetadata) {
+      const validateInferredProps = this.inferValidateProperties(clzz);
+      for (const [key, value] of Object.entries(validateInferredProps)) {
+        if (!inferredProps[key]) {
+          inferredProps[key] = value;
+          continue;
+        }
+        const mergedMetadata = this.mergePropertyMetadata(
+          inferredProps[key].metadata || {},
+          value.metadata || {}
+        );
+        inferredProps[key] = {
+          metadata: mergedMetadata,
+        };
+      }
+    }
+
+    return inferredProps;
+  }
+
+  private inferValidateProperties(clzz: Type) {
+    const inferredProps: Record<string, { metadata: Record<string, any> }> = {};
+    const ruleProps =
+      MetadataManager.getPropertiesWithMetadata(VALIDATE_RULES_KEY, clzz) || {};
+    for (const key of Object.keys(ruleProps)) {
+      let schema = ruleProps[key];
+      if (typeof schema === 'function') {
+        schema = schema();
+      }
+      const metadata = inferJoiPropertyMetadata(schema);
+      if (metadata) {
+        inferredProps[key] = {
+          metadata,
+        };
+      }
+    }
+    return inferredProps;
+  }
+
+  protected hasClassValidatorMetadata(clzz: Type) {
+    try {
+      const classValidator = safeRequire('class-validator-multi-lang-lite');
+      const storage = classValidator?.getMetadataStorage?.();
+      if (!storage?.getTargetValidationMetadatas) {
+        return false;
+      }
+      const metadatas =
+        storage.getTargetValidationMetadatas(clzz, '', false, false) || [];
+      return metadatas.length > 0;
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -1189,6 +1346,56 @@ function convertSchemaType(value) {
     default:
       return 'object';
   }
+}
+
+function inferJoiPropertyMetadata(schema: any): Record<string, any> | null {
+  if (!schema || typeof schema.describe !== 'function') {
+    return null;
+  }
+  const desc = schema.describe();
+  if (!desc || typeof desc !== 'object') {
+    return null;
+  }
+
+  const typeMap = {
+    string: 'string',
+    number: 'number',
+    boolean: 'boolean',
+    array: 'array',
+    date: 'string',
+    object: 'object',
+  };
+
+  const metadata: Record<string, any> = {
+    type: typeMap[desc.type] || 'object',
+  };
+
+  if (desc?.flags?.presence === 'required') {
+    metadata.required = true;
+  } else if (desc?.flags?.presence === 'optional' || !desc?.flags?.presence) {
+    metadata.required = false;
+  }
+
+  if (desc.type === 'array' && Array.isArray(desc.items)) {
+    metadata.items = {
+      type: typeMap[desc.items[0]?.type] || 'object',
+    };
+  }
+
+  if (desc.type === 'date') {
+    metadata.format = 'date-time';
+  }
+
+  if (Array.isArray(desc.allow)) {
+    const enumValues = desc.allow.filter(
+      item => item !== '' && item !== null && item !== undefined
+    );
+    if (enumValues.length > 0) {
+      metadata.enum = enumValues;
+    }
+  }
+
+  return metadata;
 }
 
 function getNotEmptyValue(...args) {

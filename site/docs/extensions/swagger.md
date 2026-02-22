@@ -396,7 +396,13 @@ async getUser(@Query('name') name: string) {
 }
 ```
 
-如果 `@Query`  以对象形式，需要在 `@ApiQuery` 指定一个 name 参数，对象类型需要配合 `@ApiProperty` 使用，否则表单会变为只读形式。
+如果 `@Query` 以对象形式，可以有两种方式：
+
+1. 使用 `@ApiProperty` 显式定义文档字段（传统方式）
+2. 使用 `@midwayjs/validation` DTO（`@Rule`）自动推导字段（默认开启）
+
+自动推导开启时（`swagger.useValidationSchema = true`，默认值），对象 Query 会按 DTO 字段展开为多个 query 参数。
+当前推导能力基于 `@midwayjs/validation` 的 validator adapter，支持 joi、zod、class-validator。
 
 ```typescript
 export class UserDTO {
@@ -419,7 +425,14 @@ async getUser(@Query() dto: UserDTO) {
 
 使用 `@ApiBody` 来定义 Body 数据。
 
- `@Body`  对象类型需要配合 `@ApiProperty` 使用。
+`@Body` 对象类型同样支持两种方式：
+
+1. `@ApiProperty` 显式定义文档字段
+2. `@midwayjs/validation` DTO 自动推导字段
+
+当两者同时存在时，采用 **merge 策略**：
+- `@ApiProperty` 显式字段优先
+- validation 推导只补齐缺失信息（例如 `required`、基础 `type` 等）
 
 ```typescript
 export class UserDTO {
@@ -565,7 +578,7 @@ findOne(@Param('id') id: string, @Query('test') test: any): Cat {
 * ```@ApiGatewayTimeoutResponse()```
 * ```@ApiDefaultResponse()```
 
-HTTP 请求返回的数据模型定义也可以通过指定 type，当然这个数据模型需要通过装饰器 ```@ApiProperty``` 来描述各个字段。
+HTTP 请求返回的数据模型定义也可以通过指定 type。对于模型字段，推荐优先使用 `@ApiProperty`；如果模型同时带有 `@midwayjs/validation` 的 DTO 规则，则会按上述 merge 规则补齐缺失信息。
 
 ```typescript
 import { ApiProperty } from '@midwayjs/swagger';
@@ -1326,6 +1339,11 @@ export interface SwaggerOptions {
       webRouter: RouterOption
     ) => string;
   };
+  /**
+   * 默认值: true
+   * 是否复用 @midwayjs/validation DTO 元数据推导 Schema
+   */
+  useValidationSchema?: boolean;
 }
 
 /**

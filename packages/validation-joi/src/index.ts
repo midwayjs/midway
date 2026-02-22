@@ -15,6 +15,71 @@ import { MidwayI18nServiceSingleton } from '@midwayjs/i18n';
 
 const localeMapping = new Map();
 
+function mapJoiTypeToSchemaType(type: string): string {
+  switch (type) {
+    case 'string':
+      return 'string';
+    case 'number':
+      return 'number';
+    case 'boolean':
+      return 'boolean';
+    case 'array':
+      return 'array';
+    case 'date':
+      return 'string';
+    case 'object':
+    default:
+      return 'object';
+  }
+}
+
+function inferJoiSwaggerPropertyMetadata(
+  schema: any
+): Record<string, any> | null {
+  if (!schema || typeof schema.describe !== 'function') {
+    return null;
+  }
+
+  const description = schema.describe();
+  if (!description || typeof description !== 'object') {
+    return null;
+  }
+
+  const metadata: Record<string, any> = {};
+  const type = mapJoiTypeToSchemaType(description.type);
+  if (type) {
+    metadata.type = type;
+  }
+
+  const presence = description?.flags?.presence;
+  if (presence === 'required') {
+    metadata.required = true;
+  } else if (presence === 'optional' || !presence) {
+    metadata.required = false;
+  }
+
+  if (description.type === 'array' && Array.isArray(description.items)) {
+    const itemDescription = description.items[0];
+    const itemType = mapJoiTypeToSchemaType(itemDescription?.type);
+    metadata.items = itemType ? { type: itemType } : { type: 'object' };
+  }
+
+  if (description.type === 'date') {
+    metadata.format = 'date-time';
+  }
+
+  if (Array.isArray(description.allow)) {
+    const enumValues = description.allow.filter(
+      item => item !== '' && item !== null && item !== undefined
+    );
+    if (enumValues.length > 0) {
+      metadata.enum = enumValues;
+    }
+  }
+
+  return metadata;
+}
+
 export default {
   validateServiceHandler: (container: IMidwayContainer) => {
     const configService = container.get(MidwayConfigService);
@@ -173,6 +238,14 @@ export default {
     },
     getStringSchema: (): Joi.StringSchema<any> => {
       return Joi.string().required();
+    },
+    getSwaggerPropertyKeys: (ClzType: any): string[] => {
+      const schemas = getRuleMeta(ClzType);
+      return Object.keys(schemas);
+    },
+    getSwaggerPropertyMetadata: (ClzType: any, propertyName: string) => {
+      const schemas = getRuleMeta(ClzType);
+      return inferJoiSwaggerPropertyMetadata(schemas[propertyName]);
     },
   },
 };

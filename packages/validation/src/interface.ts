@@ -100,4 +100,17 @@ export interface SchemaHelper<Schema> {
   getBoolSchema(): Schema;
   getFloatSchema(): Schema;
   getStringSchema(): Schema;
+  /**
+   * Optional adapter hook for OpenAPI property inference.
+   * Return all property names that can be inferred from current DTO.
+   */
+  getSwaggerPropertyKeys?(ClzType: any): string[];
+  /**
+   * Optional adapter hook for OpenAPI property inference.
+   * Return inferred OpenAPI metadata for a single DTO property.
+   */
+  getSwaggerPropertyMetadata?(
+    ClzType: any,
+    propertyName: string
+  ): Record<string, any> | null | undefined;
 }
