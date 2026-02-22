@@ -8,7 +8,9 @@
     "build": "pnpm run build:server && pnpm run build:web",
     "build:server": "tsc -p tsconfig.server.json",
     "build:web": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "cross-env NODE_ENV=unittest mocha",
+    "test:hmr:e2e": "node ../../scripts/samples-hmr-e2e.mjs --sample react-hybrid-api"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "workspace:*",
@@ -24,6 +26,9 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "5.6.3",
-    "vite": "^5.4.11"
+    "vite": "^5.4.11",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2",
+    "cross-env": "^7.0.3"
   }
 }

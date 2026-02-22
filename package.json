@@ -45,7 +45,9 @@
     "lint": "lerna exec mwts check",
     "lint:cycle": "lerna exec --ignore @midwayjs/version --ignore @midwayjs/faas-typings --ignore @midwayjs/*-layer --ignore @midwayjs/core -- madge --circular --extensions ts src",
     "lint:fix": "lerna exec mwts fix",
-    "changelog": "lerna-changelog"
+    "changelog": "lerna-changelog",
+    "test:samples": "pnpm -r --filter \"./samples/*\" --workspace-concurrency=1 run test",
+    "test:samples:hmr": "node scripts/samples-hmr-e2e.mjs"
   },
   "keywords": [
     "container",

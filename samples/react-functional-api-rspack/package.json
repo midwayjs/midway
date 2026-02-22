@@ -4,12 +4,13 @@
   "version": "4.0.0-beta.12",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"pnpm run dev:server\" \"pnpm run dev:web\"",
-    "dev:server": "tsx watch src/server/bootstrap.ts",
+    "dev": "pnpm run dev:web",
     "dev:web": "rspack serve --config rspack.config.mjs --mode development",
     "build": "pnpm run build:server && pnpm run build:web",
     "build:server": "tsc -p tsconfig.server.json",
-    "build:web": "rspack build --config rspack.config.mjs --mode production"
+    "build:web": "rspack build --config rspack.config.mjs --mode production",
+    "test": "cross-env NODE_ENV=unittest mocha",
+    "test:hmr:e2e": "node ../../scripts/samples-hmr-e2e.mjs --sample react-functional-api-rspack"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "workspace:*",
@@ -24,8 +25,11 @@
     "@rspack/core": "^1.5.6",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "concurrently": "^9.2.1",
     "tsx": "^4.20.5",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "@midwayjs/mock": "workspace:*",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2",
+    "cross-env": "^7.0.3"
   }
 }
