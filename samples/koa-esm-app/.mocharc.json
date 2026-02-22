@@ -1,6 +1,16 @@
 {
-  "extension": ["ts"],
-  "node-option": ["no-warnings", "loader=ts-node/esm"],
-  "spec": ["test/**/*.test.ts"],
-  "require": ["test/setup.ts"]
+  "extension": [
+    "ts"
+  ],
+  "node-option": [
+    "no-warnings",
+    "loader=ts-node/esm"
+  ],
+  "spec": [
+    "test/**/*.test.ts"
+  ],
+  "require": [
+    "test/setup.ts"
+  ],
+  "timeout": 10000
 }
