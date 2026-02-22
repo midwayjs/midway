@@ -1,6 +1,21 @@
 # Change Log
 
 
+## v4.0.0-beta.13 (2026-02-22)
+
+#### :bug: Bug Fix
+* `api-bridge`, `core`, `mock`
+  * [#4509](https://github.com/midwayjs/midway/pull/4509) fix: mock rspack dev runtime ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `bullmq`
+  * [#4498](https://github.com/midwayjs/midway/pull/4498) fix(deps): update dependency bullmq to v5.70.0 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.12 (2026-02-22)
 
 #### :boom: Breaking Change

@@ -1,7 +1,7 @@
 {
   "name": "@samples/react-functional-api-rspack",
   "private": true,
-  "version": "4.0.0-beta.12",
+  "version": "4.0.0-beta.13",
   "type": "module",
   "scripts": {
     "dev": "pnpm run dev:web",
@@ -21,15 +21,15 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@midwayjs/mock": "workspace:*",
     "@rspack/cli": "^1.5.6",
     "@rspack/core": "^1.5.6",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "tsx": "^4.20.5",
-    "typescript": "5.6.3",
-    "@midwayjs/mock": "workspace:*",
+    "cross-env": "^7.0.3",
     "mocha": "^10.2.0",
     "ts-node": "^10.9.2",
-    "cross-env": "^7.0.3"
+    "tsx": "^4.20.5",
+    "typescript": "5.6.3"
   }
 }

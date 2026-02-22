@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/one-shot",
-  "version": "4.0.0-beta.12",
+  "version": "4.0.0-beta.13",
   "description": "Midway One-shot Framework",
   "main": "dist/index.js",
   "typings": "index.d.ts",

@@ -1,7 +1,7 @@
 {
   "name": "@samples/vue-functional-api",
   "private": true,
-  "version": "4.0.0-beta.12",
+  "version": "4.0.0-beta.13",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -23,10 +23,10 @@
   "devDependencies": {
     "@midwayjs/mock": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.4",
-    "typescript": "5.6.3",
-    "vite": "^5.4.11",
+    "cross-env": "^7.0.3",
     "mocha": "^10.2.0",
     "ts-node": "^10.9.2",
-    "cross-env": "^7.0.3"
+    "typescript": "5.6.3",
+    "vite": "^5.4.11"
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@samples/functional-api-service",
   "private": true,
-  "version": "4.0.0-beta.12",
+  "version": "4.0.0-beta.13",
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -14,10 +14,10 @@
     "@midwayjs/koa": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "5.6.3",
     "@midwayjs/mock": "workspace:*",
+    "cross-env": "^7.0.3",
     "mocha": "^10.2.0",
     "ts-node": "^10.9.2",
-    "cross-env": "^7.0.3"
+    "typescript": "5.6.3"
   }
 }
