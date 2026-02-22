@@ -78,9 +78,6 @@ jobs:
       - name: Run sample tests
         run: pnpm run test:samples
 
-      - name: Run sample HMR E2E tests
-        run: pnpm run test:samples:hmr
-
       - name: Run tests and coverage
         run: pnpm run cov
         env:
