@@ -147,10 +147,10 @@ const config = {
           editUrl: 'https://github.com/midwayjs/midway/tree/main/site/',
           versions: {
             current: {
-              label: '4.0.0 🚧',
+              label: '4.0.0',
             },
           },
-          lastVersion: '3.0.0',
+          lastVersion: 'current',
           sidebarCollapsed: false,
         },
         blog: {
