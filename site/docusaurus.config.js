@@ -132,7 +132,12 @@ const config = {
         debug:true,
         minimal: true,
         gitRefName: '3.x',
-        lastVersion: '3.0.0',
+        versions: {
+          current: {
+            label: '4.0.0',
+          },
+        },
+        lastVersion: 'current',
       },
     ],
   ],
