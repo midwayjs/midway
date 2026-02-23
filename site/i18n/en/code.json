@@ -143,6 +143,14 @@
     "message": "Start Learning →",
     "description": "Text for enabled tutorial button"
   },
+  "homepage.preview.startClass": {
+    "message": "Start Class Tutorial",
+    "description": "Homepage button text for class tutorial"
+  },
+  "homepage.preview.startFunction": {
+    "message": "Start Functional Tutorial",
+    "description": "Homepage button text for functional tutorial"
+  },
   "homepage.feature.desc.Reliable & Fast": {
     "message": "Choose to use an elegant dependency injection architecture or a functional programming model for higher development efficiency"
   },

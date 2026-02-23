@@ -143,6 +143,14 @@
     "message": "开始学习 →",
     "description": "启用教程按钮的文本"
   },
+  "homepage.preview.startClass": {
+    "message": "开始 Class 教程",
+    "description": "首页 Class 教程入口按钮文本"
+  },
+  "homepage.preview.startFunction": {
+    "message": "开始 Functional 教程",
+    "description": "首页 Functional 教程入口按钮文本"
+  },
   "homepage.feature.desc.Reliable & Fast": {
     "message": "选择使用优雅的依赖注入架构或函数式编程模型，获得更高的开发效率"
   },

@@ -89,7 +89,7 @@ const StartButton = styled('a', {
   alignItems: 'center',
   gap: '8px',
   padding: '12px 20px',
-  marginTop: '28px',
+  marginTop: 0,
   backgroundColor: 'var(--midway-primary)',
   color: '#ffffff',
   borderRadius: '8px',
@@ -103,6 +103,17 @@ const StartButton = styled('a', {
     textDecoration: 'none',
     transform: 'translateY(-1px)',
   },
+})
+
+const StartButtonGroup = styled('div', {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '12px',
+  marginTop: '28px',
+})
+
+const MobileFirstPanel = styled('div', {
+  '@mobile': { order: 1 },
 })
 
 // Code Window Components
@@ -265,7 +276,7 @@ export function PreviewFunctionSyntax() {
         </CodeStatusBar>
       </CodeWindow>
       
-      <div css={{ '@mobile': { order: 1 } }}>
+      <MobileFirstPanel>
         <SectionLabel>03 // Agility</SectionLabel>
         <Title>
           <Translate id="homepage.preview.function.title">Function Syntax</Translate>
@@ -280,12 +291,18 @@ export function PreviewFunctionSyntax() {
           <EcoTag>React Hooks</EcoTag>
           <EcoTag>Lightweight</EcoTag>
         </EcoStrip>
-        
-        <StartButton href="/tutorial/class/zh-cn/">
-          <Translate id="homepage.preview.start">Start Interactive Tutorial</Translate>
-          <i className="iconfont icon-arrow-right" />
-        </StartButton>
-      </div>
+        <StartButtonGroup>
+          <StartButton href="/tutorial/class/zh-cn/">
+            <Translate id="homepage.preview.startClass">Start Class Tutorial</Translate>
+            <i className="iconfont icon-arrow-right" />
+          </StartButton>
+
+          <StartButton href="/tutorial/function/zh-cn/">
+            <Translate id="homepage.preview.startFunction">Start Functional Tutorial</Translate>
+            <i className="iconfont icon-arrow-right" />
+          </StartButton>
+        </StartButtonGroup>
+      </MobileFirstPanel>
     </Container>
   );
 }
