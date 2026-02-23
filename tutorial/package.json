@@ -10,7 +10,12 @@
     "dev": "astro dev",
     "preview": "astro preview",
     "start": "astro dev",
-    "verify:lessons": "bash ./scripts/verify-lessons.sh"
+    "verify:lessons": "bash ./scripts/verify-lessons.sh",
+    "use": "node ./scripts/use-source.mjs",
+    "use:class:zh-cn": "npm run use -- class zh-cn",
+    "use:class:en": "npm run use -- class en",
+    "use:function:zh-cn": "npm run use -- function zh-cn",
+    "use:function:en": "npm run use -- function en"
   },
   "dependencies": {
     "@tutorialkit/react": "1.6.0",
@@ -25,7 +30,7 @@
     "@tutorialkit/types": "1.6.0",
     "@types/node": "^20.14.6",
     "@types/react": "^18.3.3",
-    "astro": "^4.15.0",
+    "astro": "^4.16.19",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.4.5"
   }

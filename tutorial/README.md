@@ -122,3 +122,28 @@ TUTORIAL_PATH_PREFIX=/custom npm run build:matrix
 ## 许可证
 
 MIT
+
+### 本地快速切换教程源
+
+不再手动复制目录，直接使用脚本：
+
+```bash
+npm run use:function:zh-cn
+npm run dev
+```
+
+可用命令：
+
+```bash
+npm run use:class:zh-cn
+npm run use:class:en
+npm run use:function:zh-cn
+npm run use:function:en
+```
+
+也可使用通用命令：
+
+```bash
+npm run use -- function zh-cn
+npm run use -- class en
+```

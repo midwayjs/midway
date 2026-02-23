@@ -1,28 +1,11 @@
 ---
 type: part
-title: 第二步：依赖注入与 Service
+title: "Step 2: Service and Injection"
 ---
 
-# Service 与依赖注入
+# Service and Injection
 
-在这一部分，您将学习 Midway 最核心的特性之一：**依赖注入（Dependency Injection）**。
+This part focuses on decoupling:
 
-依赖注入是一种设计模式，它让代码更易于测试、维护和扩展。
-
-## 为什么需要 Service？
-
-随着应用变得复杂，如果把所有逻辑都写在 Controller 里，会导致：
-
-- ❌ 代码难以复用
-- ❌ 难以编写单元测试
-- ❌ 职责不清晰
-- ❌ 难以维护
-
-通过 Service 层，我们可以：
-
-- ✅ 分离业务逻辑
-- ✅ 提高代码复用性
-- ✅ 便于单元测试
-- ✅ 职责更清晰
-
-让我们开始学习如何创建和使用 Service！
+- service responsibilities
+- runtime injection with `useInject`

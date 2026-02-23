@@ -1,15 +1,12 @@
 ---
 type: part
-title: 第五步：数据验证与最佳实践
+title: "Step 5: Validation, Testing, and Release Checks"
 ---
 
-# 数据验证与最佳实践
+# Validation, Testing, and Release Checks
 
-在这最后一部分，您将学习：
+Final part focuses on production readiness:
 
-- 如何验证请求数据
-- 使用 DTO（数据传输对象）
-- 编写单元测试
-- 项目最佳实践
-
-数据验证是构建健壮应用的关键，它能防止错误数据进入系统，提高应用的安全性和稳定性。
+- `input/output` schema validation
+- error/log conventions
+- release checklist

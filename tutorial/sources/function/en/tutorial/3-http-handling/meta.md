@@ -1,16 +1,12 @@
 ---
 type: part
-title: 第三步：处理请求与响应
+title: "Step 3: Full-stack Integration Flow"
 ---
 
-# 处理 HTTP 请求与响应
+# Full-stack Integration Flow
 
-在这一部分，您将学习如何处理各种类型的 HTTP 请求，包括：
+Starting from this part, frontend files are included:
 
-- POST 请求和请求体数据
-- 上传文件
-- 设置响应头
-- 返回不同的状态码
-- 错误处理
-
-掌握这些技能后，您就能构建完整的 RESTful API 了！
+- `createClient`
+- page-level API calls
+- write operations + error handling
