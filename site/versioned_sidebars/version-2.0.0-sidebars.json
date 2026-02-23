@@ -66,7 +66,8 @@
         {
           "type": "doc",
           "id": "debugger",
-          "label": "本地调试"
+          "label": "本地调试",
+          "key": "debugger-local"
         },
         {
           "type": "doc",
@@ -183,7 +184,8 @@
           {
             "type": "doc",
             "id": "serverless/serverless_intro",
-            "label": "介绍"
+            "label": "介绍",
+            "key": "serverless-intro"
           },
           {
             "type": "doc",
@@ -228,7 +230,8 @@
               {
                 "type": "doc",
                 "id": "serverless/aliyun_trigger_timer",
-                "label": "Timer 触发器（定时任务）"
+                "label": "Timer 触发器（定时任务）",
+                "key": "aliyun-trigger-timer"
               },
               {
                 "type": "doc",
@@ -266,7 +269,8 @@
               {
                 "type": "doc",
                 "id": "serverless/tencent_trigger_timer",
-                "label": "Timer 触发器（定时任务）"
+                "label": "Timer 触发器（定时任务）",
+                "key": "tencent-trigger-timer"
               },
               {
                 "type": "doc",
@@ -334,13 +338,15 @@
     {
       "type": "category",
       "label": "一体化",
+      "key": "hooks-legacy",
       "collapsed": true,
       "collapsible": true,
       "items": [
         {
           "type": "doc",
           "id": "hooks/intro",
-          "label": "介绍"
+          "label": "介绍",
+          "key": "hooks-intro"
         },
         {
           "type": "category",
@@ -381,7 +387,8 @@
             {
               "type": "doc",
               "id": "hooks/hooks_debug",
-              "label": "本地调试"
+              "label": "本地调试",
+              "key": "hooks-local-debug"
             },
             {
               "type": "doc",
@@ -393,6 +400,7 @@
         {
           "type": "category",
           "label": "一体化",
+          "key": "hooks-legacy-fullstack",
           "collapsed": false,
           "collapsible": false,
           "items": [
