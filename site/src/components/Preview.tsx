@@ -2,6 +2,7 @@ import React from 'react';
 import { styled } from '../styled';
 import { keyframes } from '@stitches/react';
 import Translate from '@docusaurus/Translate';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 const fadeInUp = keyframes({
   '0%': { opacity: 0, transform: 'translateY(30px)' },
@@ -217,6 +218,9 @@ const codeFunction = `
 }`
 
 export function PreviewClassSyntax() {
+  const { i18n } = useDocusaurusContext();
+  const locale = i18n.currentLocale === 'en' ? 'en' : 'zh-cn';
+
   return (
     <Container>
       <div>
@@ -234,6 +238,13 @@ export function PreviewClassSyntax() {
           <EcoTag>IoC Container</EcoTag>
           <EcoTag>TypeORM</EcoTag>
         </EcoStrip>
+
+        <StartButtonGroup>
+          <StartButton href={`/tutorial/class/${locale}/`}>
+            <Translate id="homepage.preview.startClass">Start Class Tutorial</Translate>
+            <i className="iconfont icon-arrow-right" />
+          </StartButton>
+        </StartButtonGroup>
       </div>
       
       <CodeWindow>
@@ -257,6 +268,9 @@ export function PreviewClassSyntax() {
 }
 
 export function PreviewFunctionSyntax() {
+  const { i18n } = useDocusaurusContext();
+  const locale = i18n.currentLocale === 'en' ? 'en' : 'zh-cn';
+
   return (
     <Container>
       <CodeWindow css={{ '@mobile': { order: 2 } }}>
@@ -292,12 +306,7 @@ export function PreviewFunctionSyntax() {
           <EcoTag>Lightweight</EcoTag>
         </EcoStrip>
         <StartButtonGroup>
-          <StartButton href="/tutorial/class/zh-cn/">
-            <Translate id="homepage.preview.startClass">Start Class Tutorial</Translate>
-            <i className="iconfont icon-arrow-right" />
-          </StartButton>
-
-          <StartButton href="/tutorial/function/zh-cn/">
+          <StartButton href={`/tutorial/function/${locale}/`}>
             <Translate id="homepage.preview.startFunction">Start Functional Tutorial</Translate>
             <i className="iconfont icon-arrow-right" />
           </StartButton>
