@@ -10,6 +10,10 @@
       "require": "./dist/index.js",
       "import": "./dist/index.js"
     },
+    "./app": "./app.js",
+    "./app.js": "./app.js",
+    "./function": "./function.js",
+    "./function.js": "./function.js",
     "./vite": {
       "types": "./dist/vite.d.ts",
       "require": "./dist/vite.js",
