@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v4.0.0-beta.15 (2026-02-24)
+
+#### :bug: Bug Fix
+* `api-bridge`, `react`, `validation-class-validator`, `validation-zod`, `validation-zod4`, `vue`, `web-bridge`
+  * [#4512](https://github.com/midwayjs/midway/pull/4512) fix: strengthen esm dist runtime coverage ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.14 (2026-02-24)
 
 #### :rocket: New Feature

@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/faas",
-  "version": "4.0.0-beta.14",
+  "version": "4.0.0-beta.15",
   "description": "Midway Framework for FaaS (Function as a Service)",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/serverless-http-parser": "^4.0.0-beta.14",
+    "@midwayjs/serverless-http-parser": "^4.0.0-beta.15",
     "@midwayjs/simple-lock": "^1.1.4"
   },
   "devDependencies": {
