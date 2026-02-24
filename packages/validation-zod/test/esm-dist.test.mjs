@@ -6,6 +6,7 @@
 import assert from 'assert';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { MidwayConfigService, MidwayEnvironmentService } from '@midwayjs/core';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,6 +28,30 @@ try {
     'validateServiceHandler 应该是一个函数'
   );
   console.log('✅ validateServiceHandler 是函数');
+
+  const configService = {
+    addObject: () => {},
+  };
+  const environmentService = {
+    getModuleLoadType: () => undefined,
+  };
+  const validationService = await pkg.default.validateServiceHandler({
+    get: token => {
+      if (token === MidwayEnvironmentService) {
+        return environmentService;
+      }
+      if (token === MidwayConfigService) {
+        return configService;
+      }
+      throw new Error(`Unknown token: ${String(token)}`);
+    },
+  });
+  assert.strictEqual(
+    typeof validationService.validateWithSchema,
+    'function',
+    'validateServiceHandler 应该返回验证服务实例'
+  );
+  console.log('✅ validateServiceHandler 可在 ESM 环境执行');
 
   assert.ok(pkg.default.schemaHelper, 'schemaHelper 应该存在');
   console.log('✅ schemaHelper 对象存在');
