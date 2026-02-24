@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/security",
-  "version": "4.0.0-beta.13",
+  "version": "4.0.0-beta.14",
   "description": "Midway Security Component",
   "main": "dist/index.js",
   "typings": "index.d.ts",

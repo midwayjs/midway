@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v4.0.0-beta.14 (2026-02-24)
+
+#### :rocket: New Feature
+* `swagger`, `validation-class-validator`, `validation-joi`, `validation-zod`, `validation-zod4`, `validation`
+  * [#4510](https://github.com/midwayjs/midway/pull/4510) feat: add swagger validation dto reuse ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `core`, `mock`
+  * [#4511](https://github.com/midwayjs/midway/pull/4511) fix: mock app exports ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `nextjs`
+  * [#4497](https://github.com/midwayjs/midway/pull/4497) chore(deps): update dependency next to ~16.1.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.13 (2026-02-22)
 
 #### :bug: Bug Fix

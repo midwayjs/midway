@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/react",
-  "version": "4.0.0-beta.13",
+  "version": "4.0.0-beta.14",
   "description": "Midway React API bridge component",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
