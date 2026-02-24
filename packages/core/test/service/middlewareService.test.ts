@@ -545,6 +545,31 @@ describe('/test/services/middlewareService.test.ts', () => {
       expect(await fn({body: 0}, () => {})).toEqual(0);
     });
 
+    it('should not set body repeatedly when result and ctx.body are same reference', async () => {
+      const streamLikeBody = { name: 'stream-body' };
+      let body = streamLikeBody;
+      let bodySetCount = 0;
+      const ctx = {};
+      Object.defineProperty(ctx, 'body', {
+        get() {
+          return body;
+        },
+        set(value) {
+          bodySetCount++;
+          body = value;
+        },
+        enumerable: true,
+        configurable: true,
+      });
+
+      const fn = await middlewareService.compose([async () => {
+        return streamLikeBody;
+      }]);
+      const result = await fn(ctx, () => {});
+      expect(result).toEqual(streamLikeBody);
+      expect(bodySetCount).toEqual(0);
+    });
+
   });
 
   describe('test middleware match and ignore', () => {
