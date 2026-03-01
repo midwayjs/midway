@@ -27,16 +27,20 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
   }
 
   async list(query: CrudQuery, _ctx?: CrudContext): Promise<CrudPageResult<T>> {
+    void _ctx;
     const repo = this.getRepo();
     const filter = this.getScopedFilter(query);
     const listQuery = repo.find(filter);
 
     if (query.sort.length) {
       listQuery.sort(
-        query.sort.reduce((acc, item) => {
-          acc[item.field] = item.order === 'ASC' ? 1 : -1;
-          return acc;
-        }, {} as Record<string, 1 | -1>)
+        query.sort.reduce(
+          (acc, item) => {
+            acc[item.field] = item.order === 'ASC' ? 1 : -1;
+            return acc;
+          },
+          {} as Record<string, 1 | -1>
+        )
       );
     }
 
@@ -60,15 +64,18 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
   }
 
   async findOne(id: CrudIdValue, _ctx?: CrudContext): Promise<T | null> {
+    void _ctx;
     const filter = this.getIdFilter(id);
     return withMongooseErrorMapping(() => this.getRepo().findOne(filter));
   }
 
   async create(data: unknown, _ctx?: CrudContext): Promise<T> {
+    void _ctx;
     return withMongooseErrorMapping(() => this.getRepo().create(data as any));
   }
 
   async update(id: CrudIdValue, data: unknown, _ctx?: CrudContext): Promise<T> {
+    void _ctx;
     const result = await withMongooseErrorMapping(() =>
       this.getRepo().findOneAndUpdate(this.getIdFilter(id), data as any, {
         new: true,
@@ -82,11 +89,16 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
   }
 
   async delete(id: CrudIdValue, _ctx?: CrudContext): Promise<void> {
+    void _ctx;
     const repo = this.getRepo();
     if (this.resolveDeleteMode() === 'soft') {
       assertMongooseSoftDeleteSupported(repo);
       const updated = await withMongooseErrorMapping(() =>
-        repo.findOneAndUpdate(this.getIdFilter(id), { deletedAt: new Date() }, { new: false })
+        repo.findOneAndUpdate(
+          this.getIdFilter(id),
+          { deletedAt: new Date() },
+          { new: false }
+        )
       );
       this.assertEntityFound(updated);
       return;

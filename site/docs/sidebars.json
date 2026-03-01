@@ -233,7 +233,6 @@
         "extensions/info",
         "extensions/validation",
         "extensions/swagger",
-        "extensions/crud",
         "extensions/bullmq",
         "extensions/cron",
         "extensions/jwt",
@@ -270,6 +269,7 @@
       "collapsed": true,
       "collapsible": true,
       "items": [
+        "extensions/crud",
         "extensions/orm",
         "extensions/sequelize",
         "extensions/redis",

@@ -21,7 +21,9 @@ const DEFAULT_ROUTE_DEFINITIONS: Record<CrudRouteName, CrudRouteDefinition> = {
 export function getEnabledCrudRoutes(options: CrudOptions): CrudRouteName[] {
   const only = options.routes?.only;
   const exclude = options.routes?.exclude ?? [];
-  const source = only?.length ? only : (['list', 'detail', 'create', 'update', 'delete'] as CrudRouteName[]);
+  const source = only?.length
+    ? only
+    : (['list', 'detail', 'create', 'update', 'delete'] as CrudRouteName[]);
   return source.filter(route => !exclude.includes(route));
 }
 
@@ -29,7 +31,9 @@ export function getEnabledCrudRoutes(options: CrudOptions): CrudRouteName[] {
  * Builds the default route table for a CRUD resource.
  */
 export function buildCrudRoutes(options: CrudOptions): CrudRouteDefinition[] {
-  return getEnabledCrudRoutes(options).map(name => DEFAULT_ROUTE_DEFINITIONS[name]);
+  return getEnabledCrudRoutes(options).map(
+    name => DEFAULT_ROUTE_DEFINITIONS[name]
+  );
 }
 
 /**
@@ -39,7 +43,7 @@ export function createCrudRouteHandler(
   route: CrudRouteName,
   controllerInstance: unknown,
   options: CrudOptions
-): Function {
+): (payload?: any) => Promise<any> {
   return async function crudRouteHandler(payload: any = {}) {
     const service = (controllerInstance as any)?.[CRUD_SERVICE_KEY];
     if (!service) {
@@ -55,7 +59,10 @@ export function createCrudRouteHandler(
     switch (route) {
       case 'list':
         await applyCrudValidation(route, options, payload);
-        return service.list(parseCrudQuery(payload.query ?? {}, options), ctxPayload);
+        return service.list(
+          parseCrudQuery(payload.query ?? {}, options),
+          ctxPayload
+        );
       case 'detail':
         return service
           .findOne(parseCrudId(payload.params?.id, options), ctxPayload)
@@ -90,7 +97,10 @@ export function createCrudRouteHandler(
           ctxPayload
         );
       case 'delete':
-        return service.delete(parseCrudId(payload.params?.id, options), ctxPayload);
+        return service.delete(
+          parseCrudId(payload.params?.id, options),
+          ctxPayload
+        );
       default:
         throw new CrudConfigError(`Route "${route}" is not implemented`);
     }
@@ -106,7 +116,11 @@ function getRequestBag(input: any) {
     params: input.params ?? request.params ?? {},
     query: input.query ?? request.query ?? {},
     body: input.request?.body ?? input.body ?? request.body,
-    ctx: input.requestContext ? input : request.requestContext ? request : undefined,
+    ctx: input.requestContext
+      ? input
+      : request.requestContext
+        ? request
+        : undefined,
   };
 }
 

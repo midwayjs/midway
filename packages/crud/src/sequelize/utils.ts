@@ -16,9 +16,7 @@ export interface SequelizeLikeModel<T = any> {
   destroy(options: any): Promise<number>;
 }
 
-const UNIQUE_CONSTRAINT_NAMES = new Set([
-  'SequelizeUniqueConstraintError',
-]);
+const UNIQUE_CONSTRAINT_NAMES = new Set(['SequelizeUniqueConstraintError']);
 
 const FOREIGN_KEY_CONSTRAINT_NAMES = new Set([
   'SequelizeForeignKeyConstraintError',
@@ -118,7 +116,9 @@ export function buildSequelizeFindOptions(
 /**
  * Ensures the Sequelize model supports paranoid soft delete.
  */
-export function assertSequelizeSoftDeleteSupported(model: SequelizeLikeModel<any>) {
+export function assertSequelizeSoftDeleteSupported(
+  model: SequelizeLikeModel<any>
+) {
   if (!model?.options?.paranoid) {
     throw new CrudFeatureNotSupportedError(
       'Soft delete requires a paranoid Sequelize model'
@@ -133,7 +133,10 @@ export function mapSequelizeError(error: any): Error {
   if (!error) {
     return error;
   }
-  if (error instanceof CrudNotFoundError || error instanceof CrudPersistenceError) {
+  if (
+    error instanceof CrudNotFoundError ||
+    error instanceof CrudPersistenceError
+  ) {
     return error;
   }
 
@@ -141,7 +144,10 @@ export function mapSequelizeError(error: any): Error {
     return new CrudPersistenceError('Resource already exists', 409);
   }
   if (FOREIGN_KEY_CONSTRAINT_NAMES.has(error.name)) {
-    return new CrudPersistenceError('Resource is referenced by another record', 409);
+    return new CrudPersistenceError(
+      'Resource is referenced by another record',
+      409
+    );
   }
 
   return error;

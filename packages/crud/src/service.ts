@@ -1,11 +1,5 @@
-import {
-  CRUD_DEFAULT_DELETE_MODE,
-  CRUD_DEFAULT_LIMIT,
-} from './constants';
-import {
-  CrudFeatureNotSupportedError,
-  CrudNotFoundError,
-} from './error';
+import { CRUD_DEFAULT_DELETE_MODE, CRUD_DEFAULT_LIMIT } from './constants';
+import { CrudFeatureNotSupportedError, CrudNotFoundError } from './error';
 import {
   CrudContext,
   CrudIdValue,
@@ -26,13 +20,20 @@ export abstract class BaseCrudService<T> implements CrudService<T> {
     this.crudOptions = options;
   }
 
-  abstract list(query: CrudQuery, ctx?: CrudContext): Promise<CrudPageResult<T>>;
+  abstract list(
+    query: CrudQuery,
+    ctx?: CrudContext
+  ): Promise<CrudPageResult<T>>;
 
   abstract findOne(id: CrudIdValue, ctx?: CrudContext): Promise<T | null>;
 
   abstract create(data: unknown, ctx?: CrudContext): Promise<T>;
 
-  abstract update(id: CrudIdValue, data: unknown, ctx?: CrudContext): Promise<T>;
+  abstract update(
+    id: CrudIdValue,
+    data: unknown,
+    ctx?: CrudContext
+  ): Promise<T>;
 
   async replace(id: CrudIdValue, data: unknown, ctx?: CrudContext): Promise<T> {
     return this.update(id, data, ctx);
@@ -69,7 +70,10 @@ export abstract class BaseCrudService<T> implements CrudService<T> {
     };
   }
 
-  protected assertEntityFound<R>(entity: R | null, message = 'Resource not found'): R {
+  protected assertEntityFound<R>(
+    entity: R | null,
+    message = 'Resource not found'
+  ): R {
     if (!entity) {
       throw new CrudNotFoundError(message);
     }

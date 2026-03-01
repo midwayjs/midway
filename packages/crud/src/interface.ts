@@ -130,13 +130,13 @@ export interface CrudSwaggerMeta {
 export interface FunctionalRouteDefinition {
   method: string;
   path: string;
-  handler: Function;
+  handler: (...args: any[]) => any;
 }
 
 export interface FunctionalRouteBuilder {
   method: string;
   path: string;
-  handle(fn: Function): FunctionalRouteDefinition;
+  handle(fn: (...args: any[]) => any): FunctionalRouteDefinition;
 }
 
 export interface FunctionalApiBuilder {
@@ -149,6 +149,8 @@ export interface FunctionalApiBuilder {
 
 export type FunctionalCrudRouteFactory<T = any> = (
   api: FunctionalApiBuilder
-) => Record<string, FunctionalRouteBuilder | FunctionalRouteDefinition>;
+) => Record<string, FunctionalRouteBuilder | FunctionalRouteDefinition> & {
+  __entityType__?: T;
+};
 
 export type FunctionalCrudOptions = CrudOptions;

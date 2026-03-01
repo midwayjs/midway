@@ -47,9 +47,10 @@ const FOREIGN_KEY_CONSTRAINT_CODES = new Set([
 /**
  * Maps a CRUD filter to the closest TypeORM operator.
  */
-export function mapCrudFilterToTypeOrmOperator(
-  filter: CrudFilter
-): { type: string; value: unknown } {
+export function mapCrudFilterToTypeOrmOperator(filter: CrudFilter): {
+  type: string;
+  value: unknown;
+} {
   switch (filter.operator) {
     case 'eq':
       return { type: 'Equal', value: filter.value };
@@ -64,7 +65,10 @@ export function mapCrudFilterToTypeOrmOperator(
     case 'lte':
       return { type: 'LessThanOrEqual', value: filter.value };
     case 'in':
-      return { type: 'In', value: String(filter.value).split(',').filter(Boolean) };
+      return {
+        type: 'In',
+        value: String(filter.value).split(',').filter(Boolean),
+      };
     case 'like':
       return { type: 'Like', value: `%${String(filter.value)}%` };
     default:
@@ -89,8 +93,12 @@ export function assertSoftDeleteSupported<T>(repo: TypeOrmLikeRepository<T>) {
 /**
  * Resolves the delete-date column name for soft-delete filtering.
  */
-export function getSoftDeleteColumnName<T>(repo: TypeOrmLikeRepository<T>): string {
-  const deleteDateColumn = repo.metadata.columns.find(column => column.isDeleteDate);
+export function getSoftDeleteColumnName<T>(
+  repo: TypeOrmLikeRepository<T>
+): string {
+  const deleteDateColumn = repo.metadata.columns.find(
+    column => column.isDeleteDate
+  );
   if (!deleteDateColumn) {
     throw new CrudFeatureNotSupportedError(
       'Soft delete requires a delete date column'
@@ -119,7 +127,10 @@ export function mapTypeOrmError(error: any): Error {
     return new CrudPersistenceError('Resource already exists', 409);
   }
   if (FOREIGN_KEY_CONSTRAINT_CODES.has(code)) {
-    return new CrudPersistenceError('Resource is referenced by another record', 409);
+    return new CrudPersistenceError(
+      'Resource is referenced by another record',
+      409
+    );
   }
   if (error.name === 'EntityNotFoundError') {
     return new CrudNotFoundError();
@@ -174,7 +185,9 @@ function applyFilter<T>(
       });
       break;
     case 'like':
-      qb.andWhere(`${column} LIKE :${key}`, { [key]: `%${String(filter.value)}%` });
+      qb.andWhere(`${column} LIKE :${key}`, {
+        [key]: `%${String(filter.value)}%`,
+      });
       break;
   }
 }
@@ -206,17 +219,22 @@ export function buildTypeOrmQueryBuilder<T>(
     qb.leftJoinAndSelect(`${alias}.${join}`, join);
   });
 
-  query.filters.forEach((filter, index) => applyFilter(qb, alias, filter, index));
+  query.filters.forEach((filter, index) =>
+    applyFilter(qb, alias, filter, index)
+  );
 
   if (query.search && options?.query?.searchable?.length) {
     const searchable = options.query.searchable;
     const queryText = searchable
       .map((field, index) => `${alias}.${field} LIKE :crud_search_${index}`)
       .join(' OR ');
-    const params = searchable.reduce((acc, field, index) => {
-      acc[`crud_search_${index}`] = `%${query.search}%`;
-      return acc;
-    }, {} as Record<string, unknown>);
+    const params = searchable.reduce(
+      (acc, field, index) => {
+        acc[`crud_search_${index}`] = `%${query.search}%`;
+        return acc;
+      },
+      {} as Record<string, unknown>
+    );
     qb.andWhere(`(${queryText})`, params);
   }
 

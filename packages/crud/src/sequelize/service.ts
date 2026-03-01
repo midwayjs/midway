@@ -27,6 +27,7 @@ export class SequelizeCrudService<T> extends BaseCrudService<T> {
   }
 
   async list(query: CrudQuery, _ctx?: CrudContext): Promise<CrudPageResult<T>> {
+    void _ctx;
     const repo = this.getRepo();
     if (this.resolveDeleteMode() === 'soft') {
       assertSequelizeSoftDeleteSupported(repo);
@@ -34,10 +35,16 @@ export class SequelizeCrudService<T> extends BaseCrudService<T> {
     const result = await withSequelizeErrorMapping(() =>
       repo.findAndCountAll(buildSequelizeFindOptions(query, this.crudOptions))
     );
-    return this.normalizePageResult(result.rows, query.page, query.limit, result.count);
+    return this.normalizePageResult(
+      result.rows,
+      query.page,
+      query.limit,
+      result.count
+    );
   }
 
   async findOne(id: CrudIdValue, _ctx?: CrudContext): Promise<T | null> {
+    void _ctx;
     const repo = this.getRepo();
     if (this.resolveDeleteMode() === 'soft') {
       assertSequelizeSoftDeleteSupported(repo);
@@ -46,10 +53,12 @@ export class SequelizeCrudService<T> extends BaseCrudService<T> {
   }
 
   async create(data: unknown, _ctx?: CrudContext): Promise<T> {
+    void _ctx;
     return withSequelizeErrorMapping(() => this.getRepo().create(data as any));
   }
 
   async update(id: CrudIdValue, data: unknown, _ctx?: CrudContext): Promise<T> {
+    void _ctx;
     const repo = this.getRepo();
     const [count] = await withSequelizeErrorMapping(() =>
       repo.update(data as any, {
@@ -69,6 +78,7 @@ export class SequelizeCrudService<T> extends BaseCrudService<T> {
   }
 
   async delete(id: CrudIdValue, _ctx?: CrudContext): Promise<void> {
+    void _ctx;
     const repo = this.getRepo();
     if (this.resolveDeleteMode() === 'soft') {
       assertSequelizeSoftDeleteSupported(repo);

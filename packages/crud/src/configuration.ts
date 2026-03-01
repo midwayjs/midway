@@ -34,11 +34,14 @@ function ensureControllerMetadata(target: any): ControllerOption {
   return controllerOption;
 }
 
-function ensureRouteMetadata(target: any, enabledRoutes: CrudRouteName[]) {
+function ensureRouteMetadata(target: any) {
   const options = getCrudOptions(target)!;
   const existingRoutes =
-    MetadataManager.getOwnMetadata<RouterOption[]>(WEB_ROUTER_KEY, target) || [];
-  const existingKeys = new Set(existingRoutes.map(route => String(route.method)));
+    MetadataManager.getOwnMetadata<RouterOption[]>(WEB_ROUTER_KEY, target) ||
+    [];
+  const existingKeys = new Set(
+    existingRoutes.map(route => String(route.method))
+  );
   const routeNamePrefix = `${target.name || 'crud'}_`;
 
   for (const route of buildCrudRoutes(options)) {
@@ -109,8 +112,11 @@ function ensureParamMetadata(target: any, enabledRoutes: CrudRouteName[]) {
 
   for (const route of enabledRoutes) {
     const existing =
-      MetadataManager.getOwnMetadata<any[]>(CUSTOM_PARAM_INJECT_KEY, target, route) ||
-      [];
+      MetadataManager.getOwnMetadata<any[]>(
+        CUSTOM_PARAM_INJECT_KEY,
+        target,
+        route
+      ) || [];
     if (existing.length) {
       continue;
     }
@@ -133,7 +139,13 @@ function ensureParamMetadata(target: any, enabledRoutes: CrudRouteName[]) {
           ] as const;
           queryFields.forEach(([name, designType], index) => {
             paramTypes[index] = designType;
-            attachSwaggerParamMeta(target, route, index, RouteParamTypes.QUERY, name);
+            attachSwaggerParamMeta(
+              target,
+              route,
+              index,
+              RouteParamTypes.QUERY,
+              name
+            );
           });
         }
         Reflect.defineMetadata('design:paramtypes', paramTypes, proto, route);
@@ -142,7 +154,13 @@ function ensureParamMetadata(target: any, enabledRoutes: CrudRouteName[]) {
       case 'detail':
       case 'delete': {
         Reflect.defineMetadata('design:paramtypes', [String], proto, route);
-        attachSwaggerParamMeta(target, route, 0, RouteParamTypes.PARAM, options.id || 'id');
+        attachSwaggerParamMeta(
+          target,
+          route,
+          0,
+          RouteParamTypes.PARAM,
+          options.id || 'id'
+        );
         break;
       }
       case 'create': {
@@ -153,15 +171,37 @@ function ensureParamMetadata(target: any, enabledRoutes: CrudRouteName[]) {
       }
       case 'update': {
         const bodyType = options.dto?.update ?? Object;
-        Reflect.defineMetadata('design:paramtypes', [String, bodyType], proto, route);
-        attachSwaggerParamMeta(target, route, 0, RouteParamTypes.PARAM, options.id || 'id');
+        Reflect.defineMetadata(
+          'design:paramtypes',
+          [String, bodyType],
+          proto,
+          route
+        );
+        attachSwaggerParamMeta(
+          target,
+          route,
+          0,
+          RouteParamTypes.PARAM,
+          options.id || 'id'
+        );
         attachSwaggerParamMeta(target, route, 1, RouteParamTypes.BODY);
         break;
       }
       case 'replace': {
         const bodyType = options.dto?.replace ?? options.dto?.update ?? Object;
-        Reflect.defineMetadata('design:paramtypes', [String, bodyType], proto, route);
-        attachSwaggerParamMeta(target, route, 0, RouteParamTypes.PARAM, options.id || 'id');
+        Reflect.defineMetadata(
+          'design:paramtypes',
+          [String, bodyType],
+          proto,
+          route
+        );
+        attachSwaggerParamMeta(
+          target,
+          route,
+          0,
+          RouteParamTypes.PARAM,
+          options.id || 'id'
+        );
         attachSwaggerParamMeta(target, route, 1, RouteParamTypes.BODY);
         break;
       }
@@ -189,7 +229,7 @@ export class CrudConfiguration {
       ensureControllerMetadata(module);
       const enabledRoutes = getEnabledCrudRoutes(getCrudOptions(module)!);
       ensurePrototypeMethods(module, enabledRoutes);
-      ensureRouteMetadata(module, enabledRoutes);
+      ensureRouteMetadata(module);
       ensureParamMetadata(module, enabledRoutes);
       ensureSwaggerMetadata(module, enabledRoutes);
     }

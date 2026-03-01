@@ -28,16 +28,20 @@ export class TypeOrmCrudService<T> extends BaseCrudService<T> {
   }
 
   async list(query: CrudQuery, _ctx?: CrudContext): Promise<CrudPageResult<T>> {
+    void _ctx;
     const repo = this.getRepo();
     if (this.resolveDeleteMode() === 'soft') {
       assertSoftDeleteSupported(repo);
     }
     const qb = buildTypeOrmQueryBuilder(repo, query, this.crudOptions);
-    const [data, total] = await withTypeOrmErrorMapping(() => qb.getManyAndCount());
+    const [data, total] = await withTypeOrmErrorMapping(() =>
+      qb.getManyAndCount()
+    );
     return this.normalizePageResult(data, query.page, query.limit, total);
   }
 
   async findOne(id: CrudIdValue, _ctx?: CrudContext): Promise<T | null> {
+    void _ctx;
     const repo = this.getRepo();
     const where: Record<string, unknown> = {};
     if (this.resolveDeleteMode() === 'soft') {
@@ -54,12 +58,14 @@ export class TypeOrmCrudService<T> extends BaseCrudService<T> {
   }
 
   async create(data: unknown, _ctx?: CrudContext): Promise<T> {
+    void _ctx;
     const repo = this.getRepo();
     const entity = repo.create(data as any);
     return withTypeOrmErrorMapping(() => repo.save(entity));
   }
 
   async update(id: CrudIdValue, data: unknown, _ctx?: CrudContext): Promise<T> {
+    void _ctx;
     const repo = this.getRepo();
     const idField = this.getIdField();
     const existing = this.assertEntityFound(
@@ -78,6 +84,7 @@ export class TypeOrmCrudService<T> extends BaseCrudService<T> {
   }
 
   async delete(id: CrudIdValue, _ctx?: CrudContext): Promise<void> {
+    void _ctx;
     const repo = this.getRepo();
     const idField = this.getIdField();
     if (this.resolveDeleteMode() === 'soft') {

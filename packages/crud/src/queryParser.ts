@@ -33,7 +33,11 @@ function many(value: unknown): string[] {
   return [String(value)];
 }
 
-function parsePositiveInt(name: string, value: unknown, fallback: number): number {
+function parsePositiveInt(
+  name: string,
+  value: unknown,
+  fallback: number
+): number {
   const raw = first(value);
   if (!raw) {
     return fallback;
@@ -108,7 +112,8 @@ export function assertAllowedJoin(value: string, options: CrudOptions): void {
 /**
  * Parses route ids using the configured id field semantics.
  */
-export function parseCrudId(input: unknown, _options: CrudOptions): CrudIdValue {
+export function parseCrudId(input: unknown, options: CrudOptions): CrudIdValue {
+  void options;
   const raw = first(input);
   if (!raw) {
     throw new CrudQueryError('Missing resource id');

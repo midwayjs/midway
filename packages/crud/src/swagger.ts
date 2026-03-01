@@ -22,8 +22,9 @@ const SUMMARY_MAP: Record<CrudRouteName, string> = {
  */
 export function resolveCrudSwaggerMeta(
   route: CrudRouteName,
-  _options: CrudOptions
+  options: CrudOptions
 ): CrudSwaggerMeta {
+  void options;
   return {
     summary: SUMMARY_MAP[route],
     hasBody: route === 'create' || route === 'update' || route === 'replace',
@@ -61,10 +62,14 @@ function attachMethodSwaggerMetadata(
 function getResponseType(route: CrudRouteName, options: CrudOptions) {
   switch (route) {
     case 'create':
-      return options.serialize?.create || options.serialize?.get || options.model;
+      return (
+        options.serialize?.create || options.serialize?.get || options.model
+      );
     case 'update':
     case 'replace':
-      return options.serialize?.update || options.serialize?.get || options.model;
+      return (
+        options.serialize?.update || options.serialize?.get || options.model
+      );
     case 'detail':
       return options.serialize?.get || options.model;
     default:
@@ -86,7 +91,12 @@ export function attachCrudSwaggerMetadata(
     description: '',
   });
 
-  if (route === 'detail' || route === 'update' || route === 'replace' || route === 'delete') {
+  if (
+    route === 'detail' ||
+    route === 'update' ||
+    route === 'replace' ||
+    route === 'delete'
+  ) {
     attachMethodSwaggerMetadata(target, route, API_PARAMETERS, {
       in: 'path',
       name: options.id || 'id',

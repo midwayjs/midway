@@ -1,4 +1,8 @@
-import { getClassMetadata, saveClassMetadata, saveModule } from '@midwayjs/core';
+import {
+  getClassMetadata,
+  saveClassMetadata,
+  saveModule,
+} from '@midwayjs/core';
 import { CRUD_KEY } from './constants';
 import { CrudConfigError } from './error';
 import { CrudOptions } from './interface';
@@ -18,7 +22,9 @@ function assertCrudOptions(options: CrudOptions) {
 /**
  * Marks a controller class as a CRUD resource.
  */
-export function Crud<T = any>(options: CrudOptions): ClassDecorator {
+export function Crud<T = any>(
+  options: CrudOptions & { model: new (...args: any[]) => T }
+): ClassDecorator {
   assertCrudOptions(options);
   return target => {
     saveModule(CRUD_KEY, target);

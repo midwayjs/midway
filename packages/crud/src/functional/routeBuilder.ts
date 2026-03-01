@@ -9,11 +9,14 @@ import {
 } from '../interface';
 import { buildCrudRoutes, createCrudRouteHandler } from '../routeBuilder';
 
-function createFallbackBuilder(method: string, path: string): FunctionalRouteBuilder {
+function createFallbackBuilder(
+  method: string,
+  path: string
+): FunctionalRouteBuilder {
   return {
     method,
     path,
-    handle(fn: Function): FunctionalRouteDefinition {
+    handle(fn: (...args: any[]) => any): FunctionalRouteDefinition {
       return {
         method,
         path,
@@ -30,7 +33,10 @@ export function createFunctionalCrudRouteMap(
   api: FunctionalApiBuilder,
   options: FunctionalCrudOptions
 ): Record<string, FunctionalRouteBuilder | FunctionalRouteDefinition> {
-  const routes: Record<string, FunctionalRouteBuilder | FunctionalRouteDefinition> = {};
+  const routes: Record<
+    string,
+    FunctionalRouteBuilder | FunctionalRouteDefinition
+  > = {};
 
   for (const route of buildCrudRoutes(options)) {
     const methodName = route.method.toLowerCase() as keyof FunctionalApiBuilder;
@@ -71,5 +77,6 @@ export function createFunctionalCrudRouteMap(
 export function buildFunctionalCrudRoutes<T = any>(
   options: FunctionalCrudOptions
 ): FunctionalCrudRouteFactory<T> {
-  return (api: FunctionalApiBuilder) => createFunctionalCrudRouteMap(api, options);
+  return (api: FunctionalApiBuilder) =>
+    createFunctionalCrudRouteMap(api, options);
 }

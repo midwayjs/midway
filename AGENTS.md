@@ -35,6 +35,7 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - Match existing doc style/tone/structure for consistency.
 - Show dependency installation in both bash (npm) and JSON `package.json` forms.
 - Doc changes do not require a build check.
+- For component docs, write for beginners first: start from what the component solves, when to use it, and the simplest working path, then go deeper into advanced usage, configuration, and extension points. Prefer tutorial-style progression over API-only lists.
 
 ## Practical tips
 - Prefer `pnpm -C <package> test` to scope tests.
