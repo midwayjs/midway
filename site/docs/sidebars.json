@@ -233,6 +233,7 @@
         "extensions/info",
         "extensions/validation",
         "extensions/swagger",
+        "extensions/crud",
         "extensions/bullmq",
         "extensions/cron",
         "extensions/jwt",
