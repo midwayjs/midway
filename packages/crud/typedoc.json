@@ -1,0 +1,8 @@
+{
+  "entryPoints": [
+    "src/index.ts",
+    "src/typeorm/index.ts",
+    "src/functional/index.ts"
+  ],
+  "out": "docs"
+}

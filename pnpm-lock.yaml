@@ -550,6 +550,43 @@ importers:
         specifier: workspace:^
         version: link:../web
 
+  packages/crud:
+    dependencies:
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
+    devDependencies:
+      '@midwayjs/mikro':
+        specifier: workspace:^
+        version: link:../mikro
+      '@midwayjs/mock':
+        specifier: workspace:^
+        version: link:../mock
+      '@midwayjs/mongoose':
+        specifier: workspace:^
+        version: link:../mongoose
+      '@midwayjs/sequelize':
+        specifier: workspace:^
+        version: link:../sequelize
+      '@midwayjs/typeorm':
+        specifier: workspace:^
+        version: link:../typeorm
+      mongoose:
+        specifier: 8.9.5
+        version: 8.9.5(socks@2.8.7)
+      sequelize:
+        specifier: 6.37.5
+        version: 6.37.5(mysql2@3.16.0)(sqlite3@5.1.7)
+      sequelize-typescript:
+        specifier: 2.1.6
+        version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7))
+      sqlite3:
+        specifier: 5.1.7
+        version: 5.1.7
+      typeorm:
+        specifier: 0.3.26
+        version: 0.3.26(ioredis@5.9.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+
   packages/etcd:
     dependencies:
       etcd3:
@@ -1166,7 +1203,7 @@ importers:
         version: link:../mock
       sequelize:
         specifier: 6.37.5
-        version: 6.37.5(sqlite3@5.1.7)
+        version: 6.37.5(mysql2@3.16.0)(sqlite3@5.1.7)
       sequelize-typescript:
         specifier: 2.1.6
         version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7))
@@ -23332,27 +23369,28 @@ snapshots:
       '@types/validator': 13.15.10
       glob: 7.2.0
       reflect-metadata: 0.2.2
-      sequelize: 6.37.5(sqlite3@5.1.7)
+      sequelize: 6.37.5(mysql2@3.16.0)(sqlite3@5.1.7)
 
-  sequelize@6.37.5(sqlite3@5.1.7):
+  sequelize@6.37.5(mysql2@3.16.0)(sqlite3@5.1.7):
     dependencies:
       '@types/debug': 4.1.12
       '@types/validator': 13.15.10
       debug: 4.4.3(supports-color@8.1.1)
       dottie: 2.0.6
       inflection: 1.13.4
-      lodash: 4.17.21
+      lodash: 4.17.23
       moment: 2.30.1
       moment-timezone: 0.5.48
       pg-connection-string: 2.9.1
       retry-as-promised: 7.1.1
-      semver: 7.7.3
+      semver: 7.7.4
       sequelize-pool: 7.1.0
       toposort-class: 1.0.1
       uuid: 8.3.2
       validator: 13.15.26
       wkx: 0.5.0
     optionalDependencies:
+      mysql2: 3.16.0
       sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color

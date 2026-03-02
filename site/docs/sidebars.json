@@ -269,6 +269,7 @@
       "collapsed": true,
       "collapsible": true,
       "items": [
+        "extensions/crud",
         "extensions/orm",
         "extensions/sequelize",
         "extensions/redis",
