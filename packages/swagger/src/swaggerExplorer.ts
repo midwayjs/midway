@@ -784,9 +784,7 @@ export class SwaggerExplorer {
     return normalized;
   }
 
-  private normalizeOperationResponse(
-    response: Record<string, any>
-  ) {
+  private normalizeOperationResponse(response: Record<string, any>) {
     const normalized: Record<string, any> = this.cloneOpenAPIValue(response);
 
     if (normalized.schema) {

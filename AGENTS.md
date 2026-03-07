@@ -28,6 +28,7 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - Each component is an independent npm package and can communicate via DI.
 - New/changed components must include tests. Run `npm run test` in the package.
 - Use `mwts` for linting (`npm run lint:fix` when needed).
+- After code changes, rerun the relevant lint command and keep necessary lint-fix output in the patch instead of reverting it casually.
 - Add meaningful comments for functions/classes/interfaces/enums.
 
 ## Docs rules
