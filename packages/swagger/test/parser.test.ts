@@ -2425,6 +2425,237 @@ describe('test property metadata parse', () => {
 });
 
 describe('test @ApiOperation', () => {
+  it('should passthrough operation parameters requestBody and responses', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiOperation({
+        parameters: [
+          {
+            name: 'keyword',
+            in: 'query',
+            description: 'search keyword',
+            schema: {
+              type: String,
+            },
+          },
+        ],
+        requestBody: {
+          description: 'update payload',
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  age: {
+                    type: Number,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'updated',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    success: {
+                      type: Boolean,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+      @Post('/update_user')
+      async updateUser() {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    const operation = data.paths['/api/update_user'].post;
+
+    expect(operation.parameters).toEqual([
+      {
+        name: 'keyword',
+        in: 'query',
+        description: 'search keyword',
+        schema: {
+          type: 'string',
+        },
+      },
+    ]);
+    expect(operation.requestBody).toEqual({
+      description: 'update payload',
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              age: {
+                type: 'number',
+              },
+            },
+          },
+        },
+      },
+    });
+    expect(operation.responses).toEqual({
+      200: {
+        description: 'updated',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                success: {
+                  type: 'boolean',
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  });
+
+  it('should allow specific decorators override operation docs', () => {
+    @Controller('/api')
+    class APIController {
+      @ApiOperation({
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'operation path id',
+            required: true,
+            schema: {
+              type: String,
+            },
+          },
+          {
+            name: 'keyword',
+            in: 'query',
+            description: 'operation keyword',
+            schema: {
+              type: String,
+            },
+          },
+        ],
+        requestBody: {
+          description: 'operation body',
+          required: false,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  source: {
+                    type: String,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'operation ok',
+          },
+          400: {
+            description: 'operation bad request',
+          },
+        },
+      })
+      @ApiParam({
+        name: 'id',
+        description: 'decorator path id',
+        type: 'string',
+      })
+      @ApiBody({
+        description: 'decorator body',
+        required: true,
+        schema: {
+          type: 'object',
+          properties: {
+            nickname: {
+              type: String,
+            },
+          },
+        },
+      })
+      @ApiResponse({
+        status: 200,
+        description: 'decorator ok',
+      })
+      @Post('/update_user/:id')
+      async updateUser(@Param('id') id: string) {
+        // ...
+      }
+    }
+
+    const explorer = new CustomSwaggerExplorer();
+    explorer.generatePath(APIController);
+    const data = explorer.getData() as any;
+    const operation = data.paths['/api/update_user/{id}'].post;
+    const idParameter = operation.parameters.find(item => item.name === 'id');
+    const keywordParameter = operation.parameters.find(
+      item => item.name === 'keyword'
+    );
+
+    expect(idParameter).toEqual({
+      name: 'id',
+      in: 'path',
+      description: 'decorator path id',
+      required: true,
+      schema: {
+        type: 'string',
+      },
+    });
+    expect(keywordParameter).toEqual({
+      name: 'keyword',
+      in: 'query',
+      description: 'operation keyword',
+      schema: {
+        type: 'string',
+      },
+    });
+    expect(operation.requestBody).toEqual({
+      description: 'decorator body',
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              nickname: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    });
+    expect(operation.responses).toEqual({
+      200: {
+        description: 'decorator ok',
+      },
+      400: {
+        description: 'operation bad request',
+      },
+    });
+  });
+
   it('should test deprecated', () => {
     @Controller('/api')
     class APIController {

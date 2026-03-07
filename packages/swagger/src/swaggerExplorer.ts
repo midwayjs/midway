@@ -21,6 +21,9 @@ import {
 import {
   MixDecoratorMetadata,
   PathItemObject,
+  ParameterObject,
+  RequestBodyObject,
+  ResponsesObject,
   SchemaObject,
   Type,
 } from './interfaces';
@@ -411,7 +414,17 @@ export class SwaggerExplorer {
     if (!opts) {
       opts = {};
     }
-    const parameters = [];
+    const operationParameters = this.normalizeOperationParameters(
+      operMeta?.metadata?.parameters
+    );
+    const operationRequestBody = this.normalizeOperationRequestBody(
+      operMeta?.metadata?.requestBody
+    );
+    const operationResponses = this.normalizeOperationResponses(
+      operMeta?.metadata?.responses
+    );
+    const parameters = [...operationParameters];
+    let requestBodyFromOperation = !!operationRequestBody;
     opts[webRouter.requestMethod] = {
       summary: getNotEmptyValue(operMeta?.metadata?.summary, webRouter.summary),
       description: getNotEmptyValue(
@@ -422,6 +435,8 @@ export class SwaggerExplorer {
         operMeta?.metadata?.operationId ||
         this.getOperationId(target.name, webRouter),
       tags: routerTags.length ? routerTags : (operMeta?.metadata?.tags ?? []),
+      ...(operationRequestBody ? { requestBody: operationRequestBody } : {}),
+      ...(operationResponses ? { responses: operationResponses } : {}),
     };
     if (operMeta?.metadata?.deprecated != null) {
       opts[webRouter.requestMethod].deprecated =
@@ -475,7 +490,7 @@ export class SwaggerExplorer {
       p.schema = this.formatType(param.metadata.schema);
 
       if (p.in === 'query' || p.in === 'path' || p.in === 'header') {
-        parameters.push(p);
+        this.upsertOperationParameter(parameters, p);
       } else if (p.in === 'body') {
         p.content = p.content ?? {};
         if (Object.keys(p.content).length === 0) {
@@ -494,13 +509,27 @@ export class SwaggerExplorer {
         // if requestBody is already set, skip
         opts[webRouter.requestMethod].requestBody =
           opts[webRouter.requestMethod].requestBody ?? {};
-        opts[webRouter.requestMethod].requestBody.description =
-          opts[webRouter.requestMethod].requestBody.description ??
-          p.description;
-        opts[webRouter.requestMethod].requestBody.content =
-          opts[webRouter.requestMethod].requestBody.content ?? p.content;
-        opts[webRouter.requestMethod].requestBody.required =
-          opts[webRouter.requestMethod].requestBody.required ?? p.required;
+        if (requestBodyFromOperation) {
+          if (p.description !== undefined) {
+            opts[webRouter.requestMethod].requestBody.description =
+              p.description;
+          }
+          if (p.content !== undefined) {
+            opts[webRouter.requestMethod].requestBody.content = p.content;
+          }
+          if (p.required !== undefined) {
+            opts[webRouter.requestMethod].requestBody.required = p.required;
+          }
+          requestBodyFromOperation = false;
+        } else {
+          opts[webRouter.requestMethod].requestBody.description =
+            opts[webRouter.requestMethod].requestBody.description ??
+            p.description;
+          opts[webRouter.requestMethod].requestBody.content =
+            opts[webRouter.requestMethod].requestBody.content ?? p.content;
+          opts[webRouter.requestMethod].requestBody.required =
+            opts[webRouter.requestMethod].requestBody.required ?? p.required;
+        }
       }
     }
 
@@ -546,7 +575,7 @@ export class SwaggerExplorer {
               schema: schema.properties[pName],
               required: schema.required?.includes(pName) || false,
             };
-            parameters.push(pp);
+            this.upsertOperationParameter(parameters, pp);
           });
           continue;
         } else {
@@ -628,11 +657,13 @@ export class SwaggerExplorer {
         continue;
       }
 
-      parameters.push(p);
+      this.upsertOperationParameter(parameters, p);
     }
     // class header 需要使用 ApiHeader 装饰器
     if (headers && headers.length) {
-      headers.forEach(header => parameters.unshift(header));
+      headers.forEach(header =>
+        this.upsertOperationParameter(parameters, header, true)
+      );
     }
 
     // 获取方法上的 @ApiHeader
@@ -641,7 +672,9 @@ export class SwaggerExplorer {
     );
 
     if (methodHeaders.length > 0) {
-      methodHeaders.forEach(item => parameters.unshift(item.metadata));
+      methodHeaders.forEach(item =>
+        this.upsertOperationParameter(parameters, item.metadata, true)
+      );
     }
 
     opts[webRouter.requestMethod].parameters = parameters;
@@ -651,62 +684,9 @@ export class SwaggerExplorer {
         item.key === DECORATORS.API_RESPONSE &&
         item.propertyName === webRouter.method
     );
-    const returnResponses = {};
+    const returnResponses = operationResponses ?? {};
     for (const r of responses) {
-      const resp = r.metadata;
-      const keys = Object.keys(resp);
-      for (const k of keys) {
-        // 这里是引用，赋值可以直接更改
-        const tt = resp[k];
-
-        if (tt.schema) {
-          // response 的 schema 需要包含在 content 内
-          tt.content = {
-            'application/json': {
-              schema: this.formatType(tt.schema),
-            },
-          };
-          delete tt.schema;
-        } else if (tt.type) {
-          if (Types.isClass(tt.type)) {
-            this.parseClzz(tt.type);
-
-            if (tt.isArray) {
-              tt.content = {
-                'application/json': {
-                  schema: {
-                    type: 'array',
-                    items: {
-                      $ref: '#/components/schemas/' + tt.type.name,
-                    },
-                  },
-                },
-              };
-            } else {
-              tt.content = {
-                'application/json': {
-                  schema: {
-                    $ref: '#/components/schemas/' + tt.type.name,
-                  },
-                },
-              };
-            }
-          } else {
-            tt.content = {
-              'text/plain': {
-                schema: {
-                  type: convertSchemaType(tt.type),
-                },
-              },
-            };
-          }
-        }
-        delete tt.status;
-        delete tt.type;
-        delete tt.isArray;
-        delete tt.format;
-      }
-
+      const resp = this.normalizeOperationResponses(r.metadata);
       Object.assign(returnResponses, resp);
     }
 
@@ -721,6 +701,160 @@ export class SwaggerExplorer {
     }
 
     paths[url] = opts;
+  }
+
+  private upsertOperationParameter(
+    parameters: Array<ParameterObject | Record<string, any>>,
+    parameter: ParameterObject | Record<string, any>,
+    prepend = false
+  ) {
+    const index = parameters.findIndex(item => {
+      return item?.name === parameter?.name && item?.in === parameter?.in;
+    });
+
+    if (index >= 0) {
+      parameters.splice(index, 1);
+    }
+
+    if (prepend) {
+      parameters.unshift(parameter);
+    } else {
+      parameters.push(parameter);
+    }
+  }
+
+  private cloneOpenAPIValue<T>(value: T): T {
+    if (Array.isArray(value)) {
+      return value.map(item => this.cloneOpenAPIValue(item)) as T;
+    }
+
+    if (value && typeof value === 'object') {
+      const cloned = {};
+      for (const key in value as Record<string, any>) {
+        cloned[key] = this.cloneOpenAPIValue(value[key]);
+      }
+      return cloned as T;
+    }
+
+    return value;
+  }
+
+  private normalizeContentSchemas(content?: Record<string, any>) {
+    if (!content) {
+      return content;
+    }
+
+    for (const key in content) {
+      if (content[key]?.schema) {
+        content[key].schema = this.formatType(content[key].schema);
+      }
+    }
+
+    return content;
+  }
+
+  private normalizeOperationParameters(parameters?: any[]) {
+    if (!Array.isArray(parameters)) {
+      return [];
+    }
+
+    return parameters.map(parameter => {
+      const normalized = this.cloneOpenAPIValue(parameter);
+
+      if (normalized?.schema) {
+        normalized.schema = this.formatType(normalized.schema);
+      }
+
+      if (normalized.content) {
+        normalized.content = this.normalizeContentSchemas(normalized.content);
+      }
+      return normalized;
+    });
+  }
+
+  private normalizeOperationRequestBody(requestBody?: RequestBodyObject) {
+    if (!requestBody) {
+      return undefined;
+    }
+
+    const normalized = this.cloneOpenAPIValue(requestBody);
+    if (normalized.content) {
+      normalized.content = this.normalizeContentSchemas(normalized.content);
+    }
+    return normalized;
+  }
+
+  private normalizeOperationResponse(response: Record<string, any>) {
+    const normalized: Record<string, any> = this.cloneOpenAPIValue(response);
+
+    if (normalized.schema) {
+      normalized.content = {
+        'application/json': {
+          schema: this.formatType(normalized.schema),
+        },
+      };
+      delete normalized.schema;
+    } else if (normalized.type) {
+      if (Types.isClass(normalized.type)) {
+        this.parseClzz(normalized.type);
+
+        if (normalized.isArray) {
+          normalized.content = {
+            'application/json': {
+              schema: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/' + normalized.type.name,
+                },
+              },
+            },
+          };
+        } else {
+          normalized.content = {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/' + normalized.type.name,
+              },
+            },
+          };
+        }
+      } else {
+        normalized.content = {
+          'text/plain': {
+            schema: {
+              type: convertSchemaType(normalized.type),
+            },
+          },
+        };
+      }
+    } else if (normalized.content) {
+      normalized.content = this.normalizeContentSchemas(normalized.content);
+    }
+
+    delete normalized.status;
+    delete normalized.type;
+    delete normalized.isArray;
+    delete normalized.format;
+
+    return normalized;
+  }
+
+  private normalizeOperationResponses(
+    responses?: ResponsesObject | Record<string, any>
+  ) {
+    if (!responses) {
+      return undefined;
+    }
+
+    const normalizedResponses = this.cloneOpenAPIValue(responses);
+
+    for (const status in normalizedResponses) {
+      normalizedResponses[status] = this.normalizeOperationResponse(
+        normalizedResponses[status]
+      );
+    }
+
+    return normalizedResponses;
   }
 
   getOperationId(controllerKey: string, webRouter: RouterOption) {
