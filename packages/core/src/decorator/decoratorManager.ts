@@ -155,7 +155,7 @@ export class DecoratorManager {
           propertyName,
           key: decoratorKey,
           metadata,
-          options: implOrOptions,
+          options: implOrOpt,
         },
         target,
         propertyName
