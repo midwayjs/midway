@@ -123,6 +123,39 @@ describe('/test/decoratorManager.test.ts', () => {
     });
   });
 
+  it('should normalize boolean options for custom property decorator', () => {
+    const decorator = DecoratorManager.createCustomPropertyDecorator(
+      'testKey',
+      { test: 'value' },
+      false
+    );
+
+    class TestClass {
+      @decorator
+      testProperty: string;
+    }
+
+    const metadata = MetadataManager.getOwnPropertiesWithMetadata(
+      CUSTOM_PROPERTY_INJECT_KEY,
+      TestClass
+    );
+
+    expect(metadata).toEqual({
+      testProperty: [
+        {
+          key: 'testKey',
+          metadata: {
+            test: 'value',
+          },
+          options: {
+            impl: false,
+          },
+          propertyName: 'testProperty',
+        },
+      ],
+    });
+  });
+
   it('should create custom method decorator', () => {
     const decorator = DecoratorManager.createCustomMethodDecorator('testKey', { test: 'value' });
     class TestClass {
