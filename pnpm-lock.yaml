@@ -585,7 +585,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.26
-        version: 0.3.26(ioredis@5.9.2)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 0.3.26(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(reflect-metadata@0.2.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/etcd:
     dependencies:
