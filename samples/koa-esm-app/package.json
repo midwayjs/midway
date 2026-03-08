@@ -1,7 +1,7 @@
 {
   "name": "@samples/koa-esm-app",
   "private": true,
-  "version": "4.0.0-beta.15",
+  "version": "4.0.0-beta.16",
   "type": "module",
   "scripts": {
     "build": "node -e \"require('fs').rmSync('dist',{ recursive: true, force: true })\" && tsc -p tsconfig.json",

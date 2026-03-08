@@ -1,6 +1,32 @@
 # Change Log
 
 
+## v4.0.0-beta.16 (2026-03-08)
+
+#### :rocket: New Feature
+* `crud`
+  * [#4516](https://github.com/midwayjs/midway/pull/4516) feat: add crud component ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `core`
+  * [#4522](https://github.com/midwayjs/midway/pull/4522) fix: decorator option naming ([@czy88840616](https://github.com/czy88840616))
+* `swagger`
+  * [#4521](https://github.com/midwayjs/midway/pull/4521) fix: Swagger documentation for ApiOperation passthrough ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `oss`
+  * [#4506](https://github.com/midwayjs/midway/pull/4506) fix(deps): update dependency @types/ali-oss to v6.23.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4518](https://github.com/midwayjs/midway/pull/4518) chore(deps): update dependency axios to v1.13.6 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4495](https://github.com/midwayjs/midway/pull/4495) chore(deps): update hashicorp/consul docker tag to v1.22.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bullmq`
+  * [#4514](https://github.com/midwayjs/midway/pull/4514) fix(deps): update dependency bullmq to v5.70.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.15 (2026-02-24)
 
 #### :bug: Bug Fix

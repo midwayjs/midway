@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web-bridge",
-  "version": "4.0.0-beta.15",
+  "version": "4.0.0-beta.16",
   "description": "Midway web bridge for API contract client and build transforms",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
