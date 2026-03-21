@@ -1292,8 +1292,8 @@ importers:
         specifier: 1.0.1
         version: 1.0.1
       tablestore:
-        specifier: 5.5.1
-        version: 5.5.1
+        specifier: 5.6.3
+        version: 5.6.3
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -11686,8 +11686,8 @@ packages:
     resolution: {integrity: sha512-9kY+CygyYM6j02t5YFHbNz2FN5QmYGv9zAjVp4lCDjlCw7amdckXlEt/bjMhUIfj4ThGRE4gCUH5+yGnNuPo5A==}
     engines: {node: '>=10.0.0'}
 
-  tablestore@5.5.1:
-    resolution: {integrity: sha512-MWDxdBGIEJaFKPffFtwKjGzOZe2MmT8G0QBmN5ErF90CYr4wge67GI1GRHCdLafJ9A5MOeCBLDfkP2oYD7AY3A==}
+  tablestore@5.6.3:
+    resolution: {integrity: sha512-9DrBbp/Pxaiua9pfyoGAzw+Xl20ZZhMVyoKvGgobJY5lIA6IEz+1tZUmfrrCvztXzKhuf2VF6LQLARhL1aol2w==}
 
   tapable@2.3.0:
     resolution: {integrity: sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==}
@@ -24261,7 +24261,7 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
 
-  tablestore@5.5.1:
+  tablestore@5.6.3:
     dependencies:
       buffer: 4.9.1
       flatbuffers: 1.12.0
