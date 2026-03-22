@@ -12,8 +12,10 @@ export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
+    keys?: string | string[];
     express?: IMidwayExpressConfigurationOptions;
     cookieParser?: {
+      enable?: boolean;
       secret?: string | string[];
       options?: CookieOptions;
     };

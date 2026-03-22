@@ -15,6 +15,11 @@ declare module '@midwayjs/core/dist/interface' {
     keys?: string | string[];
     koa?: IMidwayKoaConfigurationOptions;
     cookies?: CookieSetOptions;
+    cookiesExtra?: {
+      defaultGetOptions?: {
+        sign?: boolean;
+      };
+    };
     /**
      * onerror middleware options
      */
