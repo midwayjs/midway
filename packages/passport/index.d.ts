@@ -4,7 +4,10 @@ export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    passport?: AuthenticateOptions;
+    passport?: Omit<AuthenticateOptions, 'assignProperty'> & {
+      assignProperty?: boolean | string;
+      sessionUserProperty?: string;
+    };
   }
 }
 

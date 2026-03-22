@@ -23,7 +23,7 @@ declare module '@midwayjs/core/dist/interface' {
       /**
        * character to use with angle brackets for open/close
        */
-      delimiter?: string;
+      delimiter?: string | null;
       /**
        * when set to true, generated function is in strict mode
        */
