@@ -641,7 +641,7 @@ importers:
         specifier: workspace:^
         version: link:../core
       '@midwayjs/serverless-http-parser':
-        specifier: ^4.0.0-beta.16
+        specifier: ^4.0.0-beta.17
         version: link:../../packages-serverless/serverless-http-parser
       '@midwayjs/simple-lock':
         specifier: ^1.1.4

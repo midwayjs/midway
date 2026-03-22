@@ -1,6 +1,36 @@
 # Change Log
 
 
+## v4.0.0-beta.17 (2026-03-22)
+
+#### :bug: Bug Fix
+* `passport`, `validation`, `view-ejs`, `web-express`, `web-koa`
+  * [#4528](https://github.com/midwayjs/midway/pull/4528) fix: align config typings with runtime ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `axios`
+  * [#4529](https://github.com/midwayjs/midway/pull/4529) fix(deps): update dependency axios to v1.13.5 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `http-proxy`
+  * [#4527](https://github.com/midwayjs/midway/pull/4527) fix(deps): update dependency axios to v1.13.5 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `mcp`
+  * [#4456](https://github.com/midwayjs/midway/pull/4456) chore(deps): update dependency @modelcontextprotocol/sdk to v1.26.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4513](https://github.com/midwayjs/midway/pull/4513) chore(deps): update redis docker tag to v7.4.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bullmq`
+  * [#4523](https://github.com/midwayjs/midway/pull/4523) fix(deps): update dependency bullmq to v5.71.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4519](https://github.com/midwayjs/midway/pull/4519) fix(deps): update dependency bullmq to v5.70.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#4524](https://github.com/midwayjs/midway/pull/4524) fix(deps): update dependency qs to v6.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#4525](https://github.com/midwayjs/midway/pull/4525) fix(deps): update dependency tablestore to v5.6.3 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `validation-zod`
+  * [#4526](https://github.com/midwayjs/midway/pull/4526) fix(deps): update dependency zod-validation-error to v3.5.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0-beta.16 (2026-03-08)
 
 #### :rocket: New Feature
