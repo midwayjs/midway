@@ -146,8 +146,8 @@ importers:
   packages/axios:
     dependencies:
       axios:
-        specifier: 1.12.0
-        version: 1.12.0
+        specifier: 1.13.5
+        version: 1.13.5
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
