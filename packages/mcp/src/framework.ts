@@ -31,6 +31,96 @@ export class MidwayMCPFramework extends BaseFramework<
 > {
   protected frameworkLoggerName = 'mcpLogger';
   protected server: McpServer;
+  private toolRegistrations: Array<{
+    name: string;
+    config: any;
+    cb: any;
+  }> = [];
+  private promptRegistrations: Array<{
+    name: string;
+    config: any;
+    cb: any;
+  }> = [];
+  private resourceRegistrations: Array<{
+    name: string;
+    uriOrTemplate: any;
+    config: any;
+    cb: any;
+  }> = [];
+  private activeServers = new Set<McpServer>();
+
+  private createServer(trackRegistrations = false): McpServer {
+    const { serverInfo, serverOptions } = this.configurationOptions;
+    const server = new McpServer(serverInfo, serverOptions);
+
+    if (trackRegistrations) {
+      this.patchRegistrationTracking(server);
+    } else {
+      this.replayRegistrations(server);
+    }
+
+    return server;
+  }
+
+  private patchRegistrationTracking(server: McpServer) {
+    const registerTool = server.registerTool.bind(server);
+    server.registerTool = ((name, config, cb) => {
+      this.toolRegistrations.push({ name, config, cb });
+      return registerTool(name, config, cb);
+    }) as typeof server.registerTool;
+
+    const registerPrompt = server.registerPrompt.bind(server);
+    server.registerPrompt = ((name, config, cb) => {
+      this.promptRegistrations.push({ name, config, cb });
+      return registerPrompt(name, config, cb);
+    }) as typeof server.registerPrompt;
+
+    const registerResource = server.registerResource.bind(server);
+    server.registerResource = ((name, uriOrTemplate, config, cb) => {
+      this.resourceRegistrations.push({ name, uriOrTemplate, config, cb });
+      return registerResource(name, uriOrTemplate, config, cb);
+    }) as typeof server.registerResource;
+  }
+
+  private replayRegistrations(server: McpServer) {
+    for (const registration of this.toolRegistrations) {
+      server.registerTool(
+        registration.name,
+        registration.config,
+        registration.cb
+      );
+    }
+    for (const registration of this.promptRegistrations) {
+      server.registerPrompt(
+        registration.name,
+        registration.config,
+        registration.cb
+      );
+    }
+    for (const registration of this.resourceRegistrations) {
+      server.registerResource(
+        registration.name,
+        registration.uriOrTemplate,
+        registration.config,
+        registration.cb
+      );
+    }
+  }
+
+  private async createConnectedServer(transport: {
+    connect(server: McpServer): Promise<void>;
+  }): Promise<McpServer> {
+    const server = this.createServer();
+    this.activeServers.add(server);
+    try {
+      await transport.connect(server);
+      return server;
+    } catch (error) {
+      this.activeServers.delete(server);
+      await server.close();
+      throw error;
+    }
+  }
 
   private async runWithMCPEntrySpan<T = unknown>(
     name: string,
@@ -79,15 +169,10 @@ export class MidwayMCPFramework extends BaseFramework<
     return this.configService.getConfiguration('mcp');
   }
 
-  async applicationInitialize(options) {
+  async applicationInitialize() {
     this.app = {} as any;
-    const {
-      serverInfo,
-      serverOptions,
-      transportType = 'stdio',
-    } = this.configurationOptions;
-
-    this.server = new McpServer(serverInfo, serverOptions);
+    const { transportType = 'stdio' } = this.configurationOptions;
+    this.server = this.createServer(true);
 
     // Handle backward compatibility: convert 'sse' to 'stream-http'
     const actualTransportType =
@@ -118,8 +203,10 @@ export class MidwayMCPFramework extends BaseFramework<
     // Map to store transports by session ID
     const transports: { [sessionId: string]: StreamableHTTPServerTransport } =
       {};
+    const sessionServers: { [sessionId: string]: McpServer } = {};
     // Store SSE transports separately for legacy endpoint management
     const sseTransports: { [sessionId: string]: SSEServerTransport } = {};
+    const sseServers: { [sessionId: string]: McpServer } = {};
 
     const isExpress = webApp.getNamespace() === 'express';
     const mcpMiddleware = async (ctx: any, resOrNext?: any, next?: any) => {
@@ -146,10 +233,14 @@ export class MidwayMCPFramework extends BaseFramework<
           } else if (ctx.method === 'POST' && !sessionId) {
             // New initialization request - use configured transport options
             const streamHttpOptions = transportOptions.streamHttp || {};
+            const userOnSessionInitialized =
+              streamHttpOptions.onsessioninitialized;
             const transportConfig = {
               sessionIdGenerator: () => randomUUID(),
               onsessioninitialized: (sessionId: string) => {
                 transports[sessionId] = transport;
+                sessionServers[sessionId] = server;
+                userOnSessionInitialized?.(sessionId);
               },
               ...streamHttpOptions,
             };
@@ -161,10 +252,19 @@ export class MidwayMCPFramework extends BaseFramework<
               if (sid && transports[sid]) {
                 delete transports[sid];
               }
+              if (sid && sessionServers[sid]) {
+                const currentServer = sessionServers[sid];
+                delete sessionServers[sid];
+                this.activeServers.delete(currentServer);
+                void currentServer.close();
+              }
             };
 
-            // Connect to MCP server
-            await this.server.connect(transport);
+            // Streamable HTTP transport must not share a server instance across
+            // sessions in SDK >= 1.26.0.
+            const server = await this.createConnectedServer({
+              connect: currentServer => currentServer.connect(transport),
+            });
           } else {
             // Invalid request
             ctx.res.statusCode = 400;
@@ -190,7 +290,10 @@ export class MidwayMCPFramework extends BaseFramework<
           }
         } catch (error) {
           this.logger.error('Error handling StreamHTTP request:', error);
-          if (!ctx.response.headersSent) {
+          const headersSent = isExpress
+            ? ctx.res.headersSent
+            : (ctx.response?.headersSent ?? ctx.res.headersSent);
+          if (!headersSent) {
             ctx.res.statusCode = 500;
             ctx.res.end(
               JSON.stringify({
@@ -216,10 +319,19 @@ export class MidwayMCPFramework extends BaseFramework<
           sseOptions
         );
         sseTransports[transport.sessionId] = transport;
+        const server = await this.createConnectedServer({
+          connect: currentServer => currentServer.connect(transport),
+        });
+        sseServers[transport.sessionId] = server;
         ctx.res.on('close', () => {
           delete sseTransports[transport.sessionId];
+          const currentServer = sseServers[transport.sessionId];
+          delete sseServers[transport.sessionId];
+          if (currentServer) {
+            this.activeServers.delete(currentServer);
+            void currentServer.close();
+          }
         });
-        await this.server.connect(transport);
       } else if (ctx.path === messagesPath && ctx.method === 'POST') {
         ctx.respond = false; // we will handle the response ourselves
         const sessionId = ctx.query.sessionId as string;
@@ -409,6 +521,12 @@ export class MidwayMCPFramework extends BaseFramework<
   }
 
   protected async beforeStop(): Promise<void> {
+    await Promise.all(
+      Array.from(this.activeServers).map(async server => {
+        this.activeServers.delete(server);
+        await server.close();
+      })
+    );
     await this.server.close();
   }
 
