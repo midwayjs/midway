@@ -169,7 +169,7 @@ export class MidwayMCPFramework extends BaseFramework<
     return this.configService.getConfiguration('mcp');
   }
 
-  async applicationInitialize(options) {
+  async applicationInitialize() {
     this.app = {} as any;
     const { transportType = 'stdio' } = this.configurationOptions;
     this.server = this.createServer(true);
@@ -245,7 +245,6 @@ export class MidwayMCPFramework extends BaseFramework<
               ...streamHttpOptions,
             };
             transport = new StreamableHTTPServerTransport(transportConfig);
-            let server: McpServer;
 
             // Set up cleanup on close
             transport.onclose = () => {
@@ -263,7 +262,7 @@ export class MidwayMCPFramework extends BaseFramework<
 
             // Streamable HTTP transport must not share a server instance across
             // sessions in SDK >= 1.26.0.
-            server = await this.createConnectedServer({
+            const server = await this.createConnectedServer({
               connect: currentServer => currentServer.connect(transport),
             });
           } else {
@@ -293,7 +292,7 @@ export class MidwayMCPFramework extends BaseFramework<
           this.logger.error('Error handling StreamHTTP request:', error);
           const headersSent = isExpress
             ? ctx.res.headersSent
-            : ctx.response?.headersSent ?? ctx.res.headersSent;
+            : (ctx.response?.headersSent ?? ctx.res.headersSent);
           if (!headersSent) {
             ctx.res.statusCode = 500;
             ctx.res.end(
