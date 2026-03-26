@@ -20,7 +20,7 @@ Midway 提供基于 [etcd3](https://github.com/microsoft/etcd3) 模块封装的�
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/etcd@3 --save
+$ npm i @midwayjs/etcd@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -28,7 +28,7 @@ $ npm i @midwayjs/etcd@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/etcd": "^3.0.0",
+    "@midwayjs/etcd": "^4.0.0",
     // ...
   },
 }

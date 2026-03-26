@@ -31,14 +31,14 @@ To use OSS components, you need to apply for an OSS bucket in advance. Bucket is
 `@midwayjs/oss` is the main function package of oss.
 
 ```bash
-$ npm i @midwayjs/oss@3 --save
+$ npm i @midwayjs/oss@4 --save
 ```
 Or reinstall the following dependencies in `package.json`.
 
 ```json
 {
   "dependencies": {
-    "@midwayjs/oss": "^3.0.0",
+    "@midwayjs/oss": "^4.0.0",
     // ...
   }
 }

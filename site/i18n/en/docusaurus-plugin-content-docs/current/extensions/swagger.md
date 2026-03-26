@@ -19,7 +19,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm install @midwayjs/swagger@3 --save
+$ npm install @midwayjs/swagger@4 --save
 $ npm install swagger-ui-dist --save-dev
 ```
 
@@ -34,7 +34,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/swagger": "^3.0.0",
+    "@midwayjs/swagger": "^4.0.0",
     // If you want to use it on the server
     "swagger-ui-dist": "4.2.1",
     // ...

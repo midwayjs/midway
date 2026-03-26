@@ -33,7 +33,7 @@ Install the mqtt component.
 
 
 ```bash
-$ npm i @midwayjs/mqtt@3 --save
+$ npm i @midwayjs/mqtt@4 --save
 ```
 
 Or add the following dependencies in `package.json` and reinstall.
@@ -41,7 +41,7 @@ Or add the following dependencies in `package.json` and reinstall.
 ```json
 {
    "dependencies": {
-     "@midwayjs/mqtt": "^3.0.0",
+     "@midwayjs/mqtt": "^4.0.0",
      // ...
    },
    "devDependencies": {

@@ -17,7 +17,7 @@ Related information:
 ## Usage:
 
 ```bash
-$ npm i @midwayjs/sequelize@3 sequelize --save
+$ npm i @midwayjs/sequelize@4 sequelize --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -25,7 +25,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/sequelize": "^3.0.0",
+    "@midwayjs/sequelize": "^4.0.0",
     "sequelize": "^6.13.0"
     // ...
   },

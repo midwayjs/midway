@@ -20,7 +20,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm i @midwayjs/http-proxy@3 --save
+$ npm i @midwayjs/http-proxy@4 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -28,7 +28,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/http-proxy": "^3.0.0"
+    "@midwayjs/http-proxy": "^4.0.0"
     // ...
   },
   "devDependencies": {

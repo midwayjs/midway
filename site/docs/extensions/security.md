@@ -26,7 +26,7 @@ $ npm i @midwayjs/security --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/security": "^3.0.0",
+    "@midwayjs/security": "^4.0.0",
     // ...
   },
   "devDependencies": {

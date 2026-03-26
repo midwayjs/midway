@@ -41,7 +41,7 @@
 
 
 ```bash
-$ npm i @midwayjs/typeorm@3 typeorm --save
+$ npm i @midwayjs/typeorm@4 typeorm --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -49,7 +49,7 @@ $ npm i @midwayjs/typeorm@3 typeorm --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/typeorm": "^3.0.0",
+    "@midwayjs/typeorm": "^4.0.0",
     "typeorm": "~0.3.0",
     // ...
   },

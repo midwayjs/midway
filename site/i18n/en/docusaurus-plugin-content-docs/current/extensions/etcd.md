@@ -20,7 +20,7 @@ Related Information:
 ## Install dependencies
 
 ```bash
-$ npm i @midwayjs/etcd@3 --save
+$ npm i @midwayjs/etcd@4 --save
 ```
 
 Or add the following dependencies in `package.json` and reinstall.
@@ -28,7 +28,7 @@ Or add the following dependencies in `package.json` and reinstall.
 ```json
 {
   "dependencies": {
-    "@midwayjs/etcd": "^3.0.0",
+    "@midwayjs/etcd": "^4.0.0",
     //...
   },
 }

@@ -31,7 +31,7 @@
 首先安装 Midway 提供的任务组件：
 
 ```bash
-$ npm install @midwayjs/task@3 @types/bull --save
+$ npm install @midwayjs/task@4 @types/bull --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -39,7 +39,7 @@ $ npm install @midwayjs/task@3 @types/bull --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/task": "^3.0.0",
+    "@midwayjs/task": "^4.0.0",
     // ...
   },
   "devDependencies": {

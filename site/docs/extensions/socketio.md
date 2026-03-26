@@ -31,7 +31,7 @@ Midway 当前采用了最新的 [Socket.io (v4.0.0)](https://socket.io/docs/v4) 
 在现有项目中安装 Socket.io 的依赖。
 
 ```bash
-$ npm i @midwayjs/socketio@3 --save
+$ npm i @midwayjs/socketio@4 --save
 ## 客户端可选
 $ npm i @types/socket.io-client socket.io-client --save-dev
 ```
@@ -41,7 +41,7 @@ $ npm i @types/socket.io-client socket.io-client --save-dev
 ```json
 {
   "dependencies": {
-    "@midwayjs/socket.io": "^3.0.0",
+    "@midwayjs/socket.io": "^4.0.0",
     // 客户端可选
     "socket.io-client": "^4.4.1",
     // ...

@@ -40,7 +40,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm i @midwayjs/grpc@3 --save
+$ npm i @midwayjs/grpc@4 --save
 $ npm i @midwayjs/grpc-helper --save-dev
 ```
 
@@ -49,7 +49,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/grpc": "^3.0.0",
+    "@midwayjs/grpc": "^4.0.0",
     // ...
   },
   "devDependencies": {

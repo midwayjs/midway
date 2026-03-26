@@ -37,7 +37,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/sequelize@3 sequelize sequelize-typescript --save
+$ npm i @midwayjs/sequelize@4 sequelize sequelize-typescript --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -45,7 +45,7 @@ $ npm i @midwayjs/sequelize@3 sequelize sequelize-typescript --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/sequelize": "^3.0.0",
+    "@midwayjs/sequelize": "^4.0.0",
     "sequelize": "^6.21.3",
     "sequelize-typescript": "^2.1.0"
     // ...

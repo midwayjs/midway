@@ -41,7 +41,7 @@ The differences from the upload component are:
 ## Install dependencies
 
 ```bash
-$ npm i @midwayjs/busboy@3 --save
+$ npm i @midwayjs/busboy@4 --save
 ```
 
 Or add the following dependencies to `package.json` and reinstall.
@@ -49,7 +49,7 @@ Or add the following dependencies to `package.json` and reinstall.
 ```json
 {
 "dependencies": {
-  "@midwayjs/busboy": "^3.0.0",
+  "@midwayjs/busboy": "^4.0.0",
   	// ...
   },
   "devDependencies": {

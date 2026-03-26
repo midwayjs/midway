@@ -16,7 +16,7 @@ Midway 提供了 info 组件，用于展示应用的基本信息，方便排查�
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/info@3 --save
+$ npm i @midwayjs/info@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -24,7 +24,7 @@ $ npm i @midwayjs/info@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/info": "^3.0.0",
+    "@midwayjs/info": "^4.0.0",
     // ...
   },
 }

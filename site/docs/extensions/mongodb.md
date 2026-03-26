@@ -127,7 +127,7 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 
 **请务必注意，请查看第一小节提前编写/安装 mongoose 等相关依赖包。**
 ```bash
-$ npm i @midwayjs/typegoose@3 --save
+$ npm i @midwayjs/typegoose@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -136,7 +136,7 @@ $ npm i @midwayjs/typegoose@3 --save
 {
   "dependencies": {
     // 组件
-    "@midwayjs/typegoose": "^3.0.0",
+    "@midwayjs/typegoose": "^4.0.0",
     // 上一节中的 mongoose 依赖
   },
   "devDependencies": {
@@ -427,7 +427,7 @@ mongoose 组件是 typegoose 的基础组件，有时候我们可以直接使用
 **请务必注意，请查看第一小节提前编写/安装 mongoose 等相关依赖包。**
 
 ```bash
-$ npm i @midwayjs/mongoose@3 --save
+$ npm i @midwayjs/mongoose@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -436,7 +436,7 @@ $ npm i @midwayjs/mongoose@3 --save
 {
   "dependencies": {
     // 组件
-    "@midwayjs/mongoose": "^3.0.0",
+    "@midwayjs/mongoose": "^4.0.0",
     // 上一节中的 mongoose 依赖
   },
   "devDependencies": {

@@ -237,7 +237,7 @@ In the scenario of a function elastic container, the Session module is not built
 ```json
 {
    "dependencies": {
-     "@midwayjs/session": "^3.0.0",
+     "@midwayjs/session": "^4.0.0",
      // ...
    },
 }

@@ -15,7 +15,7 @@ The access effect is as follows:
 First install the indicator monitoring component provided by Midway:
 
 ```bash
-$ npm install @midwayjs/prometheus@3 --save
+$ npm install @midwayjs/prometheus@4 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -23,7 +23,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/prometheus": "^3.0.0",
+    "@midwayjs/prometheus": "^4.0.0",
     // ...
   },
   "devDependencies": {
@@ -263,7 +263,7 @@ Of course, it can also support other custom operations.
 Usage:
 
 ```bash
-$ npm install @midwayjs/prometheus-socket-io@3 --save
+$ npm install @midwayjs/prometheus-socket-io@4 --save
 ```
 
 Usage:

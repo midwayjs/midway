@@ -48,7 +48,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm i @midwayjs/casbin@3 --save
+$ npm i @midwayjs/casbin@4 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -56,7 +56,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/casbin": "^3.0.0",
+    "@midwayjs/casbin": "^4.0.0",
     // ...
   },
 }

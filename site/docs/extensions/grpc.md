@@ -40,7 +40,7 @@ Midway 当前采用了最新的 gRPC 官方推荐的 [@grpc/grpc-js](https://git
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/grpc@3 --save
+$ npm i @midwayjs/grpc@4 --save
 $ npm i @midwayjs/grpc-helper --save-dev
 ```
 
@@ -49,7 +49,7 @@ $ npm i @midwayjs/grpc-helper --save-dev
 ```json
 {
   "dependencies": {
-    "@midwayjs/grpc": "^3.0.0",
+    "@midwayjs/grpc": "^4.0.0",
     // ...
   },
   "devDependencies": {

@@ -31,7 +31,7 @@ Related information:
 First install the task components provided by Midway:
 
 ```bash
-$ npm install @midwayjs/task@3 @types/bull --save
+$ npm install @midwayjs/task@4 @types/bull --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -39,7 +39,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/task": "^3.0.0",
+    "@midwayjs/task": "^4.0.0",
     // ...
   },
   "devDependencies": {

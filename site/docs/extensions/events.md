@@ -15,7 +15,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/event-emitter@3 --save
+$ npm i @midwayjs/event-emitter@4 --save
 ```
 
 或者在 `package.json` 中增加依赖后，重新安装
@@ -23,7 +23,7 @@ $ npm i @midwayjs/event-emitter@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/event-emitter": "^3.0.0"
+    "@midwayjs/event-emitter": "^4.0.0"
   }
 }
 ```

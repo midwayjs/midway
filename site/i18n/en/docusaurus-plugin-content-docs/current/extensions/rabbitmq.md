@@ -52,7 +52,7 @@ Simply understand, messages are published to Exchange (switches) through Publish
 
 Midway provides the ability to subscribe to rabbitMQ and can be deployed and used independently. Install the `@midwayjs/rabbitmq` module and its definition.
 ```bash
-$ npm i @midwayjs/rabbitmq@3 --save
+$ npm i @midwayjs/rabbitmq@4 --save
 $ npm i amqplib --save
 $ npm i @types/amqplib --save-dev
 ```
@@ -62,7 +62,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/rabbitmq": "^3.0.0",
+    "@midwayjs/rabbitmq": "^4.0.0",
     "amqplib": "^0.10.1 ",
     // ...
   },

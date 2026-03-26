@@ -16,7 +16,7 @@ Midway 默认的示例都是基于该包。
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/koa@3 --save
+$ npm i @midwayjs/koa@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -24,7 +24,7 @@ $ npm i @midwayjs/koa@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/koa": "^3.0.0",
+    "@midwayjs/koa": "^4.0.0",
     // ...
   },
 }

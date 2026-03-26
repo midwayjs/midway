@@ -30,7 +30,7 @@ Related information:
 
 Install Socket.io dependencies in existing projects.
 ```bash
-$ npm i @midwayjs/socketio@3 --save
+$ npm i @midwayjs/socketio@4 --save
 ## optional dependencies
 $ npm i @types/socket.io-client socket.io-client --save-dev
 ```
@@ -40,7 +40,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/socket.io": "^3.0.0",
+    "@midwayjs/socket.io": "^4.0.0",
     // Client optional
     "socket.io-client": "^4.4.1 ",
     // ...

@@ -11,9 +11,9 @@ $ npm i @midwayjs/react @midwayjs/web-bridge @midwayjs/mock
 ```json
 {
   "dependencies": {
-    "@midwayjs/react": "^4.0.0-beta.11",
-    "@midwayjs/web-bridge": "^4.0.0-beta.11",
-    "@midwayjs/mock": "^4.0.0-beta.11"
+    "@midwayjs/react": "^4.0.0",
+    "@midwayjs/web-bridge": "^4.0.0",
+    "@midwayjs/mock": "^4.0.0"
   }
 }
 ```

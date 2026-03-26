@@ -33,7 +33,7 @@ Related Information:
 ## Install dependencies
 
 ```bash
-$ npm i @midwayjs/code-dye@3 --save
+$ npm i @midwayjs/code-dye@4 --save
 ```
 
 Or add the following dependencies in `package.json` and reinstall.
@@ -41,7 +41,7 @@ Or add the following dependencies in `package.json` and reinstall.
 ```json
 {
    "dependencies": {
-     "@midwayjs/code-dye": "^3.0.0"
+     "@midwayjs/code-dye": "^4.0.0"
      //...
    },
 }

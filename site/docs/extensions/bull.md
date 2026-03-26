@@ -38,7 +38,7 @@ Bull 使用 Redis 来保存作业数据，在使用 Redis 时，Queue 架构是�
 ## 安装组件
 
 ```bash
-$ npm i @midwayjs/bull@3 --save
+$ npm i @midwayjs/bull@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -46,7 +46,7 @@ $ npm i @midwayjs/bull@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/bull": "^3.0.0",
+    "@midwayjs/bull": "^4.0.0",
     // ...
   },
 }
@@ -749,7 +749,7 @@ export default {
 和 bull 组件类似，需要独立安装和启用。
 
 ```bash
-$ npm i @midwayjs/bull-board@3 --save
+$ npm i @midwayjs/bull-board@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -757,7 +757,7 @@ $ npm i @midwayjs/bull-board@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/bull-board": "^3.0.0",
+    "@midwayjs/bull-board": "^4.0.0",
     // ...
   },
 }

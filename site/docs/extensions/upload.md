@@ -22,7 +22,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/upload@3 --save
+$ npm i @midwayjs/upload@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -30,7 +30,7 @@ $ npm i @midwayjs/upload@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/upload": "^3.0.0",
+    "@midwayjs/upload": "^4.0.0",
     // ...
   },
   "devDependencies": {

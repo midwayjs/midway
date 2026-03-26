@@ -64,7 +64,7 @@ $ npm i @midwayjs/kafka --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/kafka": "^3.0.0",
+    "@midwayjs/kafka": "^4.0.0",
     // ...
   }
 }

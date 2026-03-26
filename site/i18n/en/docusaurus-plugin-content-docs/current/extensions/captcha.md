@@ -19,7 +19,7 @@ Related information:
 ## Install dependencies
 
 ```bash
-$ npm i @midwayjs/captcha@3 --save
+$ npm i @midwayjs/captcha@4 --save
 ```
 
 Or add the following dependencies in `package.json` and reinstall.
@@ -27,7 +27,7 @@ Or add the following dependencies in `package.json` and reinstall.
 ```json
 {
   "dependencies": {
-    "@midwayjs/captcha": "^3.0.0",
+    "@midwayjs/captcha": "^4.0.0",
     // ...
   },
 }

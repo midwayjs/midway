@@ -181,7 +181,7 @@ Related information:
 ### Installation dependency
 
 ```bash
-$ npm i @midwayjs/axios@3 --save
+$ npm i @midwayjs/axios@4 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -189,7 +189,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/axios": "^3.0.0",
+    "@midwayjs/axios": "^4.0.0",
     // ...
   },
 }

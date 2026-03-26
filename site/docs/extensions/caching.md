@@ -25,7 +25,7 @@ Midway 提供基于 [cache-manager v5](https://github.com/node-cache-manager/nod
 首先安装相关的组件模块。
 
 ```bash
-$ npm i @midwayjs/cache-manager@3 --save
+$ npm i @midwayjs/cache-manager@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -33,7 +33,7 @@ $ npm i @midwayjs/cache-manager@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/cache-manager": "^3.0.0",
+    "@midwayjs/cache-manager": "^4.0.0",
     // ...
   },
 }

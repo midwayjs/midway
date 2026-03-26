@@ -12,7 +12,7 @@ This chapter mainly introduces how to use Express as the upper-level framework i
 ## Installation dependency
 
 ```bash
-$ npm i @midwayjs/express@3 --save
+$ npm i @midwayjs/express@4 --save
 $ npm i @types/body-parser @types/express @types/express-session --save-dev
 ```
 
@@ -21,7 +21,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/express": "^3.0.0",
+    "@midwayjs/express": "^4.0.0",
     // ...
   },
   "devDependencies": {

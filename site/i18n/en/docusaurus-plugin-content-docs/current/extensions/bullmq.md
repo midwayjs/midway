@@ -32,7 +32,7 @@ Related Information:
 ## Installation
 
 ```bash
-$ npm i @midwayjs/bullmq@3 --save
+$ npm i @midwayjs/bullmq@4 --save
 ```
 
 Or add the following dependency to your `package.json` and reinstall.
@@ -40,7 +40,7 @@ Or add the following dependency to your `package.json` and reinstall.
 ```json
 {
   "dependencies": {
-    "@midwayjs/bullmq": "^3.0.0",
+    "@midwayjs/bullmq": "^4.0.0",
     // ...
   },
 }
@@ -493,7 +493,7 @@ In a distributed scenario, we can leverage the Bull UI to simplify management.
 Similar to the bull component, it needs to be installed and enabled independently.
 
 ```bash
-$ npm i @midwayjs/bull-board@3 --save
+$ npm i @midwayjs/bull-board@4 --save
 ```
 
 Or reinstall it after adding the following dependencies to ``package.json``.
@@ -501,7 +501,7 @@ Or reinstall it after adding the following dependencies to ``package.json``.
 ```json
 {
   "dependencies": {
-    "@midwayjs/bull-board": "^3.0.0",
+    "@midwayjs/bull-board": "^4.0.0",
     // ...
   },
 }

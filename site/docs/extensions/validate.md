@@ -71,7 +71,7 @@ export class HomeController {
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/validate@3 --save
+$ npm i @midwayjs/validate@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -79,7 +79,7 @@ $ npm i @midwayjs/validate@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/validate": "^3.0.0"
+    "@midwayjs/validate": "^4.0.0"
     // ...
   },
   "devDependencies": {
