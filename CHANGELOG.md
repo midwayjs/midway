@@ -1,6 +1,16 @@
 # Change Log
 
 
+## v4.0.0 (2026-03-26)
+
+#### :package: Dependencies
+* Other
+  * [#4531](https://github.com/midwayjs/midway/pull/4531) chore(deps): update dependency @types/node to v20.19.37 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#4530](https://github.com/midwayjs/midway/pull/4530) chore(deps): update dependency axios to v1.13.5 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+
+
 ## v4.0.0-beta.17 (2026-03-22)
 
 #### :bug: Bug Fix

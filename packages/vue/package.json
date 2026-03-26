@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/vue",
-  "version": "4.0.0-beta.17",
+  "version": "4.0.0",
   "description": "Midway Vue API bridge component",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
