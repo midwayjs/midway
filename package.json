@@ -39,7 +39,7 @@
     "release": "sh scripts/publish.sh",
     "bootstrap": "rm -f ./packages/.DS* && lerna bootstrap --concurrency 4",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json && rm -f package-lock.json && rm -rf ./packages/**/pnpm-lock.json ",
-    "build": "sh scripts/build.sh",
+    "build": "lerna exec -- rm -rf ./dist && lerna run build --concurrency=4 --no-bail",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "version": "if [ \"$SKIP_VERSION_SCRIPTS\" != \"true\" ]; then node ./scripts/generate_rollback.js && node ./scripts/generate_version.js; fi && node ./scripts/generate_changelog.js && git add .",
     "lint": "lerna exec mwts check",
@@ -70,5 +70,10 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/midway"
-  }
+  },
+  "workspaces": [
+    "packages/*",
+    "packages-serverless/*",
+    "packages-resource/*"
+  ]
 }

@@ -55,6 +55,6 @@ jobs:
 
       # ✅ 各种业务逻辑执行不变
       - run: pnpm install
-      - run: pnpm build --if-present
+      - run: pnpm run build
       - run: pnpm lint
       - run: pnpm lint:cycle

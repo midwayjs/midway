@@ -1,44 +1,37 @@
-name: Node.js CI
+name: Bun CI
 
 on:
   push:
     branches: [v4-next]
     paths-ignore:
       - '.github/workflows/**'
-      - '!.github/workflows/nodejs.yml'
+      - '!.github/workflows/bun.yml'
       - 'site/**'
       - '*.md'
   pull_request:
     paths-ignore:
       - '.github/workflows/**'
-      - '!.github/workflows/nodejs.yml'
+      - '!.github/workflows/bun.yml'
       - 'site/**'
       - '*.md'
 
 jobs:
-  build:
+  test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [20]
+        bun-version: [latest]
 
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 9
-          run_install: false
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          bun-version: ${{ matrix.bun-version }}
 
       - name: Install Docker Compose v2
         run: |
@@ -67,19 +60,13 @@ jobs:
         run: scripts/wait-for-services.sh
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Build
-        run: pnpm run build
+        run: bun run build
 
-      - name: Test ESM dist artifacts
-        run: pnpm test:dist
-
-      - name: Run sample tests
-        run: pnpm run test:samples
-
-      - name: Run tests and coverage
-        run: pnpm run cov
+      - name: Run tests with Bun
+        run: bun test
         env:
           RABBITMQ_URL: amqp://localhost:5672
           ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
@@ -91,24 +78,3 @@ jobs:
           ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
           ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
           ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-
-#
-#   build-windows:
-#     runs-on: windows-latest
-#
-#     strategy:
-#       matrix:
-#         node-version: [12, 14.x]
-#
-#     steps:
-#     - uses: actions/checkout@v2
-#     - name: Use Node.js ${{ matrix.node-version }}
-#       uses: actions/setup-node@v1
-#       with:
-#         node-version: ${{ matrix.node-version }}
-#     - run: npm install
-#     - run: npm run build --if-present
-#     - run: npm run cov
