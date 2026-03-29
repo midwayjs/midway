@@ -19,7 +19,7 @@
 $ npm init midway@latest -y
 ```
 
-选择 `koa-v3` 项目进行初始化创建，项目名可以自定，比如 `weather-sample`。
+选择 `koa-v4` 项目进行初始化创建，项目名可以自定，比如 `weather-sample`。
 
 现在可以启动应用来体验下。
 
