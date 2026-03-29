@@ -44,9 +44,9 @@
     "build:tutorial-site": "npm --prefix tutorial run build",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "version": "if [ \"$SKIP_VERSION_SCRIPTS\" != \"true\" ]; then node ./scripts/generate_rollback.js && node ./scripts/generate_version.js; fi && node ./scripts/generate_changelog.js && git add .",
-    "lint": "lerna exec mwts check",
+    "lint": "lerna exec --ignore @midwayjs/version -- mwts check",
     "lint:cycle": "lerna exec --ignore @midwayjs/version --ignore @midwayjs/faas-typings --ignore @midwayjs/*-layer --ignore @midwayjs/core -- madge --circular --extensions ts src",
-    "lint:fix": "lerna exec mwts fix",
+    "lint:fix": "lerna exec --ignore @midwayjs/version -- mwts fix",
     "changelog": "lerna-changelog",
     "test:samples": "pnpm -r --filter \"./samples/*\" --workspace-concurrency=1 run test",
     "test:samples:hmr": "node scripts/samples-hmr-e2e.mjs"

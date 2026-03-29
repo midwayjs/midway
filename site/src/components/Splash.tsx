@@ -3,6 +3,8 @@ import { useWindupString } from 'windups';
 import { styled } from '../styled';
 import { keyframes } from '@stitches/react';
 import Translate from '@docusaurus/Translate';
+import { translate } from '@docusaurus/Translate';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 // ------------------------------------------------------------------
 // Animations
@@ -721,16 +723,15 @@ function HUDTickMarks() {
   );
 }
 
-const targets = [
-  'Web',
-  'Fullstack',
-  'Architecture',
-  'API',
-  'Microservice',
-  'Serverless',
-];
-
 export function Splash() {
+  const targets = [
+    translate({ id: 'homepage.splash.target.web', message: 'Web' }),
+    translate({ id: 'homepage.splash.target.fullstack', message: 'Fullstack' }),
+    translate({ id: 'homepage.splash.target.architecture', message: 'Architecture' }),
+    translate({ id: 'homepage.splash.target.api', message: 'API' }),
+    translate({ id: 'homepage.splash.target.microservice', message: 'Microservice' }),
+    translate({ id: 'homepage.splash.target.serverless', message: 'Serverless' }),
+  ];
   const [index, setIndex] = React.useState(0);
   const [text] = useWindupString(targets[index], {
     onFinished() {
@@ -741,6 +742,7 @@ export function Splash() {
     },
     pace: () => 100,
   });
+  const introUrl = useBaseUrl('/docs/intro');
 
   return (
     <Container>
@@ -755,7 +757,7 @@ export function Splash() {
         <TextColumn>
           <Badge>
             <BadgeDot />
-            Midway v4.0 // System Ready
+            <Translate id="homepage.splash.badge">Midway v4.0 // System Ready</Translate>
           </Badge>
 
           <Title>
@@ -778,7 +780,7 @@ export function Splash() {
           </SubTitle>
 
           <ButtonGroup>
-            <PrimaryButton href="/docs/intro">
+            <PrimaryButton href={introUrl}>
               <Translate id="homepage.splash.primaryBtn">Initialize Project</Translate>
             </PrimaryButton>
             <SecondaryButton href="https://github.com/midwayjs/midway" target="_blank">
@@ -792,15 +794,21 @@ export function Splash() {
           <StatsRow>
             <StatItem>
               <StatValue>7<span>K+</span></StatValue>
-              <StatLabel>GitHub Stars</StatLabel>
+              <StatLabel>
+                <Translate id="homepage.splash.stats.stars">GitHub Stars</Translate>
+              </StatLabel>
             </StatItem>
             <StatItem>
               <StatValue>4<span>M+</span></StatValue>
-              <StatLabel>Monthly Downloads</StatLabel>
+              <StatLabel>
+                <Translate id="homepage.splash.stats.downloads">Monthly Downloads</Translate>
+              </StatLabel>
             </StatItem>
             <StatItem>
               <StatValue>v4<span>.0</span></StatValue>
-              <StatLabel>Latest Release</StatLabel>
+              <StatLabel>
+                <Translate id="homepage.splash.stats.release">Latest Release</Translate>
+              </StatLabel>
             </StatItem>
           </StatsRow>
         </TextColumn>
@@ -821,10 +829,16 @@ export function Splash() {
           <RadarCenter />
 
           {/* Data labels */}
-          <DataPoint pos="tl">SYS.READY</DataPoint>
+          <DataPoint pos="tl">
+            <Translate id="homepage.splash.hud.ready">SYS.READY</Translate>
+          </DataPoint>
           <DataPoint pos="tr" style={{ animationDelay: '0.5s' }}>V.4.0.0</DataPoint>
-          <DataPoint pos="bl" style={{ animationDelay: '1s' }}>CORE.ACTIVE</DataPoint>
-          <DataPoint pos="br" style={{ animationDelay: '1.5s' }}>NET: ONLINE</DataPoint>
+          <DataPoint pos="bl" style={{ animationDelay: '1s' }}>
+            <Translate id="homepage.splash.hud.core">CORE.ACTIVE</Translate>
+          </DataPoint>
+          <DataPoint pos="br" style={{ animationDelay: '1.5s' }}>
+            <Translate id="homepage.splash.hud.net">NET: ONLINE</Translate>
+          </DataPoint>
 
           {/* Floating particles */}
           <Particle idx="1" />
@@ -836,7 +850,9 @@ export function Splash() {
       </Content>
 
       <ScrollIndicator>
-        <ScrollText>Scroll</ScrollText>
+        <ScrollText>
+          <Translate id="homepage.splash.scroll">Scroll</Translate>
+        </ScrollText>
         <ScrollArrow />
       </ScrollIndicator>
     </Container>

@@ -11,6 +11,62 @@
     "message": "🚧 Beta Docs (v4)",
     "description": "The text for the beta documentation button"
   },
+  "homepage.splash.target.web": {
+    "message": "Web",
+    "description": "Rotating keyword in homepage splash"
+  },
+  "homepage.splash.target.fullstack": {
+    "message": "Fullstack",
+    "description": "Rotating keyword in homepage splash"
+  },
+  "homepage.splash.target.architecture": {
+    "message": "Architecture",
+    "description": "Rotating keyword in homepage splash"
+  },
+  "homepage.splash.target.api": {
+    "message": "API",
+    "description": "Rotating keyword in homepage splash"
+  },
+  "homepage.splash.target.microservice": {
+    "message": "Microservice",
+    "description": "Rotating keyword in homepage splash"
+  },
+  "homepage.splash.target.serverless": {
+    "message": "Serverless",
+    "description": "Rotating keyword in homepage splash"
+  },
+  "homepage.splash.badge": {
+    "message": "Midway v4.0 // System Ready",
+    "description": "Homepage hero badge text"
+  },
+  "homepage.splash.stats.stars": {
+    "message": "GitHub Stars",
+    "description": "Homepage hero stats label"
+  },
+  "homepage.splash.stats.downloads": {
+    "message": "Monthly Downloads",
+    "description": "Homepage hero stats label"
+  },
+  "homepage.splash.stats.release": {
+    "message": "Latest Release",
+    "description": "Homepage hero stats label"
+  },
+  "homepage.splash.hud.ready": {
+    "message": "SYS.READY",
+    "description": "Homepage hero HUD label"
+  },
+  "homepage.splash.hud.core": {
+    "message": "CORE.ACTIVE",
+    "description": "Homepage hero HUD label"
+  },
+  "homepage.splash.hud.net": {
+    "message": "NET: ONLINE",
+    "description": "Homepage hero HUD label"
+  },
+  "homepage.splash.scroll": {
+    "message": "Scroll",
+    "description": "Homepage scroll indicator"
+  },
   "homepage.recommend.title": {
     "message": "Recommended Projects",
     "description": "The title for the recommended projects section"

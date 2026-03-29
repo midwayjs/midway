@@ -11,6 +11,62 @@
     "message": "🚧 Beta 版文档 (v4)",
     "description": "Beta版文档按钮的文本"
   },
+  "homepage.splash.target.web": {
+    "message": "Web",
+    "description": "首页首屏轮播关键词"
+  },
+  "homepage.splash.target.fullstack": {
+    "message": "全栈",
+    "description": "首页首屏轮播关键词"
+  },
+  "homepage.splash.target.architecture": {
+    "message": "架构",
+    "description": "首页首屏轮播关键词"
+  },
+  "homepage.splash.target.api": {
+    "message": "API",
+    "description": "首页首屏轮播关键词"
+  },
+  "homepage.splash.target.microservice": {
+    "message": "微服务",
+    "description": "首页首屏轮播关键词"
+  },
+  "homepage.splash.target.serverless": {
+    "message": "Serverless",
+    "description": "首页首屏轮播关键词"
+  },
+  "homepage.splash.badge": {
+    "message": "Midway v4.0 // 系统就绪",
+    "description": "首页首屏徽标文本"
+  },
+  "homepage.splash.stats.stars": {
+    "message": "GitHub Stars",
+    "description": "首页首屏统计标签"
+  },
+  "homepage.splash.stats.downloads": {
+    "message": "月下载量",
+    "description": "首页首屏统计标签"
+  },
+  "homepage.splash.stats.release": {
+    "message": "最新版本",
+    "description": "首页首屏统计标签"
+  },
+  "homepage.splash.hud.ready": {
+    "message": "系统就绪",
+    "description": "首页首屏 HUD 标签"
+  },
+  "homepage.splash.hud.core": {
+    "message": "核心激活",
+    "description": "首页首屏 HUD 标签"
+  },
+  "homepage.splash.hud.net": {
+    "message": "网络在线",
+    "description": "首页首屏 HUD 标签"
+  },
+  "homepage.splash.scroll": {
+    "message": "向下滚动",
+    "description": "首页滚动提示"
+  },
   "homepage.recommend.title": {
     "message": "推荐项目",
     "description": "推荐项目部分的标题"
