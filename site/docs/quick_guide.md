@@ -19,7 +19,7 @@
 $ npm init midway@latest -y
 ```
 
-选择 `koa-v4` 项目进行初始化创建，项目名可以自定，比如 `weather-sample`。
+选择 `koa-v4` 项目进行初始化创建，项目名可以自定，比如 `weather-sample`。如果你想创建函数式一体化项目，可以选择 `react-functional-v4` 或 `vue-functional-v4`。
 
 现在可以启动应用来体验下。
 
@@ -28,7 +28,7 @@ $ npm run dev
 $ open http://localhost:7001
 ```
 
-同时，我们也提供了完整的实例，可以在 `npm init midway` 之后，选择 `quick-start` 项目，创建即可，方便对照学习。
+如果你想体验函数式一体化开发，也可以在 `npm init midway@latest` 后选择 `react-functional-v4` 或 `vue-functional-v4`，方便对照学习。
 
 
 

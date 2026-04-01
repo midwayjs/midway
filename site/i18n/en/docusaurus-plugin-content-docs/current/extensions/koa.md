@@ -34,10 +34,10 @@ Examples can also be created directly using scaffolding.
 
 ```bash
 # npm v6
-$ npm init midway --type=koa-v3 my_project
+$ npm init midway --type=koa-v4 my_project
 
 # npm v7
-$ npm init midway -- --type=koa-v3 my_project
+$ npm init midway -- --type=koa-v4 my_project
 ```
 
 

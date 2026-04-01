@@ -28,26 +28,18 @@ For example, execute
 $ npm init midway@latest -y
 ```
 
-will output
+It will open the template picker. This doc targets v4, so the latest templates are shown first. The output below is illustrative only, and the actual list depends on the CLI version.
 
 ```bash
-➜ ~ npm init midway
+➜ ~ npm init midway@latest
 ? Hello, traveler.
    Which template do you like? …
 
-  ⊙ v3
-❯ koa-v3 - A web application boilerplate with midway v3(koa)
-   egg-v3 - A web application boilerplate with midway v3(egg 2.0)
-   faas-v3 - A serverless application boilerplate with midway v3(faas)
-   component-v3 - A midway component boilerplate for v3
-   quick-start - A midway quickstart exmaple for v3
-
-  ⊙ v3-esm
-   koa-v3-esm - A web application boilerplate with midway v3(koa)
-
-  ⊙ v2
-   web - A web application boilerplate with midway and Egg.js
-   koa - A web application boilerplate with midway and koa
+  ⊙ v4
+❯ koa-v4 - A web application boilerplate with midway v4(koa)
+   koa-v4-esm - A web application boilerplate with midway v4(koa)
+   react-functional-v4 - A functional web application boilerplate with midway v4(react)
+   vue-functional-v4 - A functional web application boilerplate with midway v4(vue)
 ```
 
 In this mode, templates will be created according to user selections and guidelines.
@@ -84,12 +76,12 @@ $ npm init midway -- -a
 
 ### Specify template name
 
-Each template has a template name and template description. For example, the template name of `koa-v3 - A web application boilerplate with midway v3(koa)` is `koa-v3`.
+Each template has a template name and template description. For example, the template name of `koa-v4 - A web application boilerplate with midway v4 (koa)` is `koa-v4`.
 
 The template name can be specified via the `--type` parameter.
 
 ```bash
-$ npm init midway -- --type=koa-v3
+$ npm init midway -- --type=koa-v4
 ```
 
 
@@ -114,16 +106,16 @@ $ npm init midway -- -t=./custom-template
 
 The directory to be created can be specified through the `--target` parameter, which must be used together with the `type` or `template` parameter.
 
-For example, the following command specifies the `koa-v3` template and generates it into the current abc directory. If the directory does not exist, it will be created.
+For example, the following command specifies the `koa-v4` template and generates it into the current `abc` directory. If the directory does not exist, it will be created.
 
 ```bash
-$ npm init midway -- --type=koa-v3 --target=abc
+$ npm init midway -- --type=koa-v4 --target=abc
 ```
 
 Generally, `target` can be omitted and the path can be placed as the last parameter.
 
 ```bash
-$ npm init midway -- --type=koa-v3 abc
+$ npm init midway -- --type=koa-v4 abc
 ```
 
 
@@ -159,7 +151,7 @@ $ npm init midway -- --bbb=ccc
 If the parameter name is the same as the parameter of the tool, you can use the parameter of `t_`, which will be automatically processed when the tool is passed to the scaffold.
 
 ```bash
-$ npm init midway -- --type=koa-v3 --t_type=ccc
+$ npm init midway -- --type=koa-v4 --t_type=ccc
 ```
 
 
@@ -168,4 +160,4 @@ $ npm init midway -- --type=koa-v3 --t_type=ccc
 
 Midway scaffolding uses the self-developed light-generator tool. For specific usage, please refer to [https://github.com/midwayjs/light-generator](https://github.com/midwayjs/light-generator).
 
-You can also refer to Midway's own [template project](https://github.com/midwayjs/midway-boilerplate/tree/master/v3).
+You can also refer to Midway's own [template project](https://github.com/midwayjs/midway-boilerplate).

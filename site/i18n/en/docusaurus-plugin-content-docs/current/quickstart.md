@@ -12,10 +12,10 @@ Midway has multiple sets of technical solutions to choose from. We will distingu
 | --------------- | ------------------------------------------------------------ |
 | Pure Node.js project | Midway traditional project, pure Node.js research and development, modules represented by `@midwayjs/koa`, supports back-end projects in the most complete way, and uses **dependency injection + Class** as the technology stack.  |
 | Serverless project | Midway is a technology stack developed separately for Serverless scenarios. Modules represented by `@midwayjs/faas` are connected to different Serverless platforms in a lightweight way.  |
-| Integration project | Midway's innovative technology scheme adopts the integrated development method of front and back ends to save the time of front and back ends. For modules represented by `@midwayjs/hooks`, **functional** is used as the main coding paradigm.  |
+| Integration project | Midway's innovative technology scheme adopts the integrated development method of front and back ends to save the time of front and back ends. It is represented by modules such as `@midwayjs/core/functional` and `@midwayjs/web-bridge`, and uses **functional** as the main programming paradigm. |
 
 :::tip
-This chapter and subsequent documents will use the **pure Node.js project** as the basic example. If you need to use the Serverless project, please jump to the [Serverless](serverless/serverless_intro). If you need to learn about the integration project, please visit [integration](hooks/intro).
+This chapter and subsequent documents will use the **pure Node.js project** as the basic example. If you need to use the Serverless project, please jump to the [Serverless](serverless/serverless_intro). If you need to learn about the integration project, please visit [Functional](functional/intro).
 :::
 
 
@@ -29,7 +29,7 @@ Use `npm init midway` to view the complete list of scaffolds. After a project is
 $ npm init midway@latest -y
 ```
 
-For a v3 project, select `koa-v3`, pay attention to [Node.js environment requirements](/docs/intro#environmental-preparation).
+For a v4 project, select `koa-v4`, and make sure your environment meets the [Node.js requirements](/docs/intro#environmental-preparation).
 
 The example will create a directory structure similar to the following, where the simplest Midway project example is as follows.
 

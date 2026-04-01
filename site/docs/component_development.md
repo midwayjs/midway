@@ -17,7 +17,7 @@
 
 ### 脚手架
 
-只需执行下面的脚本，模板列表中选择 `component-v3` 模板，即可快速生成示例组件。
+只需执行下面的脚本，模板列表中选择 `component-v4` 模板，即可快速生成示例组件。
 
 ```bash
 $ npm init midway@latest -y
