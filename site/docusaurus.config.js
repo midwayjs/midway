@@ -1,7 +1,9 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const { join } = require('path');
+const path = require('path');
+const webpack = require('webpack');
+const { join } = path;
 const {themes} = require('prism-react-renderer');
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
@@ -22,6 +24,21 @@ const config = {
     locales: ['zh-cn', 'en'],
   },
   plugins: [
+    function typedocVersionBannerPatchPlugin() {
+      return {
+        name: 'typedoc-version-banner-patch',
+        configureWebpack() {
+          return {
+            plugins: [
+              new webpack.NormalModuleReplacementPlugin(
+                /docusaurus-plugin-typedoc-api[\\/]lib[\\/]components[\\/]VersionBanner\.js$/,
+                path.resolve(__dirname, './src/patches/typedoc-version-banner.js')
+              ),
+            ],
+          };
+        },
+      };
+    },
     [
       require.resolve('./src/plugins/changelog/index.js'),
       {
@@ -132,7 +149,21 @@ const config = {
         debug:true,
         minimal: true,
         gitRefName: '3.x',
-        lastVersion: '3.0.0',
+        versions: {
+          current: {
+            label: '4.0.0',
+          },
+          '3.0.0': {
+            banner: 'none',
+          },
+          '2.0.0': {
+            banner: 'none',
+          },
+          '1.0.0': {
+            banner: 'none',
+          },
+        },
+        lastVersion: 'current',
       },
     ],
   ],
@@ -147,10 +178,10 @@ const config = {
           editUrl: 'https://github.com/midwayjs/midway/tree/main/site/',
           versions: {
             current: {
-              label: '4.0.0 🚧',
+              label: '4.0.0',
             },
           },
-          lastVersion: '3.0.0',
+          lastVersion: 'current',
           sidebarCollapsed: false,
         },
         blog: {

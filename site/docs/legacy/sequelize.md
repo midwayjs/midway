@@ -17,7 +17,7 @@
 ## 使用方法：
 
 ```bash
-$ npm i @midwayjs/sequelize@3 sequelize --save
+$ npm i @midwayjs/sequelize@4 sequelize --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -25,7 +25,7 @@ $ npm i @midwayjs/sequelize@3 sequelize --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/sequelize": "^3.0.0",
+    "@midwayjs/sequelize": "^4.0.0",
     "sequelize": "^6.13.0"
     // ...
   },

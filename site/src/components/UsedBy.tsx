@@ -20,13 +20,14 @@ const BrandImage = styled('img', {
   marginRight: '64px',
   opacity: 0.8,
   transition: 'all 0.4s ease',
-  filter: 'grayscale(30%) brightness(1.1) contrast(1.2)',
-  borderRadius: '8px',
+  filter: 'grayscale(100%) brightness(1.2)',
+  borderRadius: '4px',
   
   '&:hover': {
-    filter: 'grayscale(0%) brightness(1.2) contrast(1.3)',
+    filter: 'grayscale(0%) brightness(1.2)',
     opacity: 1,
     transform: 'scale(1.1) translateY(-4px)',
+    boxShadow: '0 0 20px var(--midway-glow)',
   },
   
   '@mobile': {
@@ -37,7 +38,7 @@ const BrandImage = styled('img', {
 
 const BrandIcon = styled('i', {
   fontSize: '64px',
-  color: 'var(--ifm-color-emphasis-700)',
+  color: 'var(--midway-text-sec)',
   display: 'inline-block',
   marginRight: '64px',
   opacity: 0.8,
@@ -46,9 +47,9 @@ const BrandIcon = styled('i', {
   
   '&:hover': {
     opacity: 1,
-    color: 'var(--ifm-color-primary)',
+    color: 'var(--midway-primary)',
     transform: 'scale(1.1) translateY(-4px)',
-    textShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+    textShadow: '0 0 20px var(--midway-glow)',
   },
   
   '@mobile': {
@@ -59,7 +60,7 @@ const BrandIcon = styled('i', {
 
 const EnhancedBlock = styled('div', {
   padding: '120px 0',
-  background: 'var(--ifm-color-emphasis-100)',
+  background: 'var(--midway-bg)',
   position: 'relative',
   overflow: 'hidden',
   
@@ -68,10 +69,14 @@ const EnhancedBlock = styled('div', {
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
-    background: 'radial-gradient(circle at 20% 80%, var(--ifm-color-emphasis-200) 0%, transparent 50%), radial-gradient(circle at 80% 20%, var(--ifm-color-emphasis-300) 0%, transparent 50%)',
-    opacity: 0.4,
+    width: '100%',
+    height: '100%',
+    backgroundImage: `
+      linear-gradient(var(--midway-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--midway-grid) 1px, transparent 1px)
+    `,
+    backgroundSize: '40px 40px',
+    opacity: 0.3,
   },
   
   '@mobile': {
@@ -94,15 +99,16 @@ const BlockContent = styled('div', {
 const BlockTitle = styled('h2', {
   fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
   fontWeight: 800,
-  color: 'var(--ifm-color-emphasis-900)',
+  color: 'var(--midway-text-main)',
   textAlign: 'center',
   margin: '0 0 24px 0',
   animation: `${fadeInUp} 0.8s ease-out`,
+  textShadow: '0 0 20px var(--midway-glow)',
 })
 
 const BlockSubtitle = styled('p', {
   fontSize: '1.25rem',
-  color: 'var(--ifm-color-emphasis-700)',
+  color: 'var(--midway-text-sec)',
   textAlign: 'center',
   maxWidth: '600px',
   margin: '0 auto 80px',
@@ -122,7 +128,7 @@ const MarqueeContainer = styled('div', {
   '& .marquee': {
     '&:hover': {
       '& img, & i': {
-        filter: 'grayscale(0%) brightness(1.2) contrast(1.3)',
+        filter: 'grayscale(0%) brightness(1.2)',
         opacity: 1,
         transform: 'scale(1.05)',
       }
@@ -145,26 +151,31 @@ const FloatingElement = styled('div', {
   width: '60px',
   height: '60px',
   borderRadius: '50%',
-  background: 'var(--ifm-color-emphasis-200)',
+  border: '1px solid var(--midway-border)',
+  background: 'transparent',
   animation: `${float} 10s ease-in-out infinite`,
+  opacity: 0.3,
   
   '&:nth-child(1)': {
     top: '15%',
     left: '10%',
     animationDelay: '0s',
     animationDuration: '12s',
+    borderColor: 'var(--midway-primary)',
   },
   '&:nth-child(2)': {
     top: '65%',
     right: '15%',
     animationDelay: '4s',
     animationDuration: '15s',
+    borderColor: 'var(--midway-secondary)',
   },
   '&:nth-child(3)': {
     bottom: '25%',
     left: '20%',
     animationDelay: '8s',
     animationDuration: '18s',
+    borderColor: 'var(--midway-text-sec)',
   },
 })
 

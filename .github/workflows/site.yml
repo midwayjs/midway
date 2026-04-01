@@ -52,13 +52,6 @@ jobs:
           cache: 'npm'
           cache-dependency-path: site/package-lock.json
 
-      # tutorial 目录使用 npm，需要单独配置 npm 缓存
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: tutorial/package-lock.json
-
       # 安装和构建 site 目录
       - name: Install and build site
         working-directory: site

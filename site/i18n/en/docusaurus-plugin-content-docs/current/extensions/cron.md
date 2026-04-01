@@ -19,7 +19,7 @@ Related Information:
 ## Install components
 
 ```bash
-$ npm i @midwayjs/cron@3 --save
+$ npm i @midwayjs/cron@4 --save
 ```
 
 Or add the following dependencies in `package.json` and reinstall.
@@ -27,7 +27,7 @@ Or add the following dependencies in `package.json` and reinstall.
 ```json
 {
    "dependencies": {
-     "@midwayjs/cron": "^3.0.0",
+     "@midwayjs/cron": "^4.0.0",
      //...
    },
 }

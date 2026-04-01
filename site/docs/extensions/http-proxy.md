@@ -22,7 +22,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/http-proxy@3 --save
+$ npm i @midwayjs/http-proxy@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -30,7 +30,7 @@ $ npm i @midwayjs/http-proxy@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/http-proxy": "^3.0.0"
+    "@midwayjs/http-proxy": "^4.0.0"
     // ...
   },
   "devDependencies": {

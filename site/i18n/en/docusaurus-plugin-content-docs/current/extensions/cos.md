@@ -17,7 +17,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm i @midwayjs/cos@3 --save
+$ npm i @midwayjs/cos@4 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -25,7 +25,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/cos": "^3.0.0",
+    "@midwayjs/cos": "^4.0.0",
     // ...
   },
 }

@@ -28,20 +28,19 @@ const Container = styled('div', {
 
 const ExtensionCard = styled('a', {
   display: 'block',
-  borderRadius: '20px',
+  borderRadius: '4px',
   overflow: 'hidden',
   cursor: 'pointer',
   transition: 'all 0.4s ease',
-  background: 'rgba(255, 255, 255, 0.95)',
-  backdropFilter: 'blur(20px)',
-  border: '1px solid rgba(255, 255, 255, 0.3)',
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+  background: 'var(--midway-surface)',
+  backdropFilter: 'blur(10px)',
+  border: '1px solid var(--midway-border)',
   position: 'relative',
   
   '&:hover': {
-    transform: 'translateY(-12px) scale(1.02)',
-    boxShadow: '0 24px 80px rgba(0, 0, 0, 0.2)',
-    borderColor: 'rgba(102, 126, 234, 0.5)',
+    transform: 'translateY(-5px)',
+    borderColor: 'var(--midway-primary)',
+    boxShadow: '0 0 20px var(--midway-glow)',
     
     '& .extension-image': {
       transform: 'scale(1.05)',
@@ -58,7 +57,7 @@ const ExtensionCard = styled('a', {
   },
   
   '&:active': {
-    transform: 'translateY(-8px) scale(1.01)',
+    transform: 'translateY(-2px)',
   },
 });
 
@@ -75,7 +74,7 @@ const CardOverlay = styled('div', {
   left: 0,
   right: 0,
   bottom: 0,
-  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%)',
+  background: 'rgba(0, 0, 0, 0.7)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -84,7 +83,7 @@ const CardOverlay = styled('div', {
 });
 
 const CardTitle = styled('h3', {
-  color: '#ffffff',
+  color: 'var(--midway-primary)',
   fontSize: '1.5rem',
   fontWeight: 700,
   textAlign: 'center',
@@ -93,11 +92,12 @@ const CardTitle = styled('h3', {
   transform: 'translateY(20px)',
   opacity: 0,
   transition: 'all 0.4s ease',
+  textShadow: '0 0 10px var(--midway-glow)',
 });
 
 const EnhancedBlock = styled('div', {
   padding: '120px 0',
-  background: 'linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%)',
+  background: 'var(--midway-bg)',
   position: 'relative',
   overflow: 'hidden',
   
@@ -106,9 +106,14 @@ const EnhancedBlock = styled('div', {
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
-    background: 'radial-gradient(circle at 30% 70%, rgba(102, 126, 234, 0.08) 0%, transparent 50%), radial-gradient(circle at 70% 30%, rgba(118, 75, 162, 0.08) 0%, transparent 50%)',
+    width: '100%',
+    height: '100%',
+    backgroundImage: `
+      linear-gradient(var(--midway-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--midway-grid) 1px, transparent 1px)
+    `,
+    backgroundSize: '40px 40px',
+    opacity: 0.3,
   },
   
   '@mobile': {
@@ -131,18 +136,15 @@ const BlockContent = styled('div', {
 const BlockTitle = styled('h2', {
   fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
   fontWeight: 800,
-  color: '#2d3748',
+  color: 'var(--midway-text-main)',
   textAlign: 'center',
   margin: '0 0 24px 0',
-  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
+  textShadow: '0 0 20px var(--midway-glow)',
 });
 
 const BlockSubtitle = styled('p', {
   fontSize: '1.25rem',
-  color: '#718096',
+  color: 'var(--midway-text-sec)',
   textAlign: 'center',
   maxWidth: '600px',
   margin: '0 auto 80px',

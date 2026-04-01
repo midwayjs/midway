@@ -27,7 +27,7 @@ During development, different users need to be stored in different data sources,
 `@midwayjs/tenant` is the main function package.
 
 ```bash
-$ npm i @midwayjs/tenant@3 --save
+$ npm i @midwayjs/tenant@4 --save
 ```
 
 Or add the following dependencies in `package.json` and reinstall.
@@ -35,7 +35,7 @@ Or add the following dependencies in `package.json` and reinstall.
 ```json
 {
    "dependencies": {
-     "@midwayjs/tenant": "^3.0.0",
+     "@midwayjs/tenant": "^4.0.0",
      // ...
    }
 }

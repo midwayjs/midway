@@ -1,4 +1,3 @@
-import { Block } from './Block'
 import React from 'react'
 import { styled } from '../styled'
 import { keyframes } from '@stitches/react'
@@ -9,85 +8,248 @@ const fadeInUp = keyframes({
   '100%': { opacity: 1, transform: 'translateY(0)' },
 });
 
-const pulse = keyframes({
-  '0%, 100%': { transform: 'scale(1)' },
-  '50%': { transform: 'scale(1.05)' },
+const flowBorder = keyframes({
+  '0%': { backgroundPosition: '0% 50%' },
+  '100%': { backgroundPosition: '200% 50%' },
 });
 
-const ComponentContainer = styled('div', {
+const iconGlow = keyframes({
+  '0%, 100%': { boxShadow: '0 0 0px transparent' },
+  '50%': { boxShadow: '0 0 12px var(--midway-glow)' },
+});
+
+const Container = styled('div', {
+  padding: '140px 0',
+  width: '100%',
+  position: 'relative',
+  overflow: 'hidden',
+  backgroundColor: 'var(--midway-bg)',
+
+  // 顶部分隔线渐变
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '60%',
+    height: '1px',
+    background: 'linear-gradient(90deg, transparent, var(--midway-border), transparent)',
+  },
+
+  // 背景点阵
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: `radial-gradient(var(--midway-grid) 1px, transparent 1px)`,
+    backgroundSize: '30px 30px',
+    opacity: 0.3,
+    pointerEvents: 'none',
+  },
+
+  '@mobile': {
+    padding: '80px 0',
+  }
+})
+
+const Content = styled('div', {
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 24px',
+  position: 'relative',
+  zIndex: 2,
+
+  '@mobile': {
+    padding: '0 16px',
+  }
+})
+
+const SectionTitle = styled('div', {
+  marginBottom: '60px',
+  textAlign: 'center',
+  animation: `${fadeInUp} 0.8s ease-out`,
+})
+
+const SectionLabel = styled('div', {
+  fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+  fontSize: '0.85rem',
+  color: 'var(--midway-secondary)',
+  marginBottom: '12px',
+  textTransform: 'uppercase',
+  letterSpacing: '0.08em',
   display: 'flex',
-  flexDirection: 'row',
   alignItems: 'center',
-  padding: '24px',
-  borderRadius: '16px',
-  background: 'rgba(255, 255, 255, 0.8)',
-  backdropFilter: 'blur(20px)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-  transition: 'all 0.3s ease',
-  cursor: 'pointer',
-  
-  '&:hover': {
-    transform: 'translateY(-4px)',
-    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
-    background: 'rgba(255, 255, 255, 0.95)',
-    
-    '& .icon-container': {
-      transform: 'scale(1.1)',
-      animation: `${pulse} 2s ease-in-out infinite`,
-    },
-    
-    '& .title': {
-      color: '#667eea',
-    },
+  justifyContent: 'center',
+  gap: '8px',
+
+  '&::before': {
+    content: '""',
+    display: 'inline-block',
+    width: '20px',
+    height: '1px',
+    background: 'var(--midway-secondary)',
+  },
+  '&::after': {
+    content: '""',
+    display: 'inline-block',
+    width: '20px',
+    height: '1px',
+    background: 'var(--midway-secondary)',
+  }
+})
+
+const SectionHeading = styled('h2', {
+  fontSize: '2.8rem',
+  fontWeight: 800,
+  color: 'var(--midway-text-main)',
+  margin: '0 0 10px 0',
+  display: 'inline-block',
+  position: 'relative',
+
+  '&::after': {
+    content: '""',
+    display: 'block',
+    width: '40%',
+    height: '4px',
+    background: 'linear-gradient(90deg, transparent, var(--midway-secondary), transparent)',
+    margin: '10px auto 0',
+    borderRadius: '2px',
+  }
+})
+
+const Grid = styled('div', {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+  gap: '20px',
+
+  '@mobile': {
+    gridTemplateColumns: '1fr',
+    gap: '14px',
   },
 })
 
-const IconContainer = styled('div', {
-  width: '64px',
-  height: '64px',
-  borderRadius: '16px',
-  background: 'linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-darker) 100%)',
+// 流光边框容器
+const CardWrapper = styled('div', {
+  position: 'relative',
+  borderRadius: '6px',
+  padding: '1px',
+  background: 'var(--midway-border)',
+  transition: 'background 0.3s',
+
+  '&:hover': {
+    background: 'linear-gradient(90deg, var(--midway-primary), var(--midway-secondary), var(--midway-primary))',
+    backgroundSize: '200% 100%',
+    animation: `${flowBorder} 2s linear infinite`,
+
+    '& .arrow-icon': {
+      opacity: 1,
+      transform: 'translateY(-50%) translateX(0px)',
+    },
+
+    '& .icon': {
+      color: 'var(--midway-primary)',
+      animation: `${iconGlow} 1.5s ease-in-out infinite`,
+    },
+
+    '& .card-label': {
+      color: 'var(--midway-primary)',
+    }
+  },
+})
+
+const ComponentCard = styled('a', {
   display: 'flex',
-  justifyContent: 'center',
   alignItems: 'center',
-  transition: 'all 0.3s ease',
+  padding: '20px 22px',
+  background: 'var(--midway-surface)',
+  borderRadius: '5px',
+  textDecoration: 'none',
+  transition: 'all 0.3s',
+  cursor: 'pointer',
+  position: 'relative',
+  overflow: 'hidden',
+  backdropFilter: 'blur(10px)',
+
+  '&:hover': {
+    textDecoration: 'none',
+  },
+
+  // 悬停内部高光
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%)',
+    opacity: 0,
+    transition: 'opacity 0.3s',
+    pointerEvents: 'none',
+  },
+
+  '&:hover::before': {
+    opacity: 1,
+  }
+})
+
+const IconWrapper = styled('div', {
+  width: '48px',
+  height: '48px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: 'var(--midway-bg)',
+  border: '1px solid var(--midway-border)',
+  borderRadius: '6px',
+  marginRight: '16px',
   flexShrink: 0,
+  transition: 'all 0.3s',
 })
 
 const Icon = styled('i', {
-  fontSize: '28px',
-  color: '#ffffff',
-  transition: 'all 0.3s ease',
+  fontSize: '24px',
+  color: 'var(--midway-text-sec)',
+  transition: 'color 0.3s',
 })
 
-const TextContainer = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  marginLeft: '20px',
+const TextWrapper = styled('div', {
   flex: 1,
+  minWidth: 0,
 })
 
-const Title = styled('a', {
-  fontSize: '1.25rem',
-  fontWeight: 600,
-  color: '#2d3748',
-  textDecoration: 'none',
-  marginBottom: '8px',
-  transition: 'all 0.3s ease',
-  display: 'block',
-  
-  '&:hover': {
-    color: '#667eea',
-    textDecoration: 'none',
-  },
+const CardTitle = styled('h4', {
+  fontSize: '1.05rem',
+  fontWeight: 700,
+  color: 'var(--midway-text-main)',
+  margin: '0 0 3px 0',
+  transition: 'color 0.3s',
 })
 
-const Description = styled('span', {
-  fontSize: '1rem',
-  color: '#718096',
-  lineHeight: 1.5,
+const CardDesc = styled('p', {
+  fontSize: '0.85rem',
+  color: 'var(--midway-text-sec)',
   margin: 0,
+  lineHeight: 1.4,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+})
+
+const ArrowIcon = styled('i', {
+  position: 'absolute',
+  right: '18px',
+  top: '50%',
+  transform: 'translateY(-50%) translateX(-8px)',
+  fontSize: '16px',
+  color: 'var(--midway-primary)',
+  opacity: 0,
+  transition: 'all 0.3s ease',
+  flexShrink: 0,
 })
 
 type ComponentProps = {
@@ -99,15 +261,18 @@ type ComponentProps = {
 
 function Component(props: ComponentProps) {
   return (
-    <ComponentContainer onClick={() => window.open(props.link, '_blank')}>
-      <IconContainer className="icon-container">
-        <Icon className={`${props.icon} iconfont`} />
-      </IconContainer>
-      <TextContainer>
-        <Title href={props.link} className="title">{props.title}</Title>
-        <Description>{props.description}</Description>
-      </TextContainer>
-    </ComponentContainer>
+    <CardWrapper>
+      <ComponentCard href={props.link} target="_blank">
+        <IconWrapper>
+          <Icon className={`iconfont ${props.icon} icon`} />
+        </IconWrapper>
+        <TextWrapper>
+          <CardTitle className="card-label">{props.title}</CardTitle>
+          <CardDesc>{props.description}</CardDesc>
+        </TextWrapper>
+        <ArrowIcon className="iconfont icon-arrow-right arrow-icon" />
+      </ComponentCard>
+    </CardWrapper>
   )
 }
 
@@ -121,131 +286,173 @@ const components = [
   {
     title: 'Redis',
     link: '/docs/extensions/redis',
-    description: 'In-memory database for midway.js',
+    description: 'In-memory data store',
     icon: 'icon-redis',
   },
   {
     title: 'Swagger',
     link: '/docs/extensions/swagger',
-    description: 'Generate API documentation',
+    description: 'Auto-generate OpenAPI docs',
     icon: 'icon-swagger',
   },
   {
     title: 'Mongodb',
     link: '/docs/extensions/mongodb',
-    description: 'NoSQL Database',
+    description: 'Flexible NoSQL database',
     icon: 'icon-MongoDB',
   },
   {
     title: 'Cache',
     link: '/docs/extensions/cache',
-    description: 'Memory cache support',
+    description: 'In-memory cache layer',
     icon: 'icon-memcacheyunshujukuMemcac',
   },
   {
     title: 'OSS',
     link: '/docs/extensions/oss',
-    description: 'Aliyun OSS Support',
+    description: 'Aliyun object storage',
     icon: 'icon-ossduixiangcunchuOSS',
+  },
+  {
+    title: 'gRPC',
+    link: '/docs/extensions/grpc',
+    description: 'High-performance RPC protocol',
+    icon: 'icon-grpc',
+  },
+  {
+    title: 'RabbitMQ',
+    link: '/docs/extensions/rabbitmq',
+    description: 'Message queue integration',
+    icon: 'icon-mq',
+  },
+  {
+    title: 'Kafka',
+    link: '/docs/extensions/kafka',
+    description: 'Distributed event streaming',
+    icon: 'icon-kafka',
+  },
+  {
+    title: 'Validate',
+    link: '/docs/extensions/validate',
+    description: 'Parameter & schema validation',
+    icon: 'icon-shujuyanzheng',
+  },
+  {
+    title: 'JWT',
+    link: '/docs/extensions/jwt',
+    description: 'Token-based auth',
+    icon: 'icon-token',
+  },
+  {
+    title: 'Prometheus',
+    link: '/docs/extensions/prometheus',
+    description: 'Metrics & monitoring',
+    icon: 'icon-prometheus',
   },
 ] as ComponentProps[]
 
-const Grid = styled('div', {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-  gap: '24px',
-  maxWidth: '1200px',
-  margin: '0 auto',
-  
-  '@mobile': {
-    gridTemplateColumns: '1fr',
-    gap: '16px',
-    padding: '0 16px',
-  },
+const GridFadeWrapper = styled('div', {
+  position: 'relative',
+
+  // 底部渐隐遮罩 - 按主题色深度渐变
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '120px',
+    background: 'linear-gradient(to bottom, transparent, var(--midway-bg))',
+    pointerEvents: 'none',
+    zIndex: 3,
+  }
 })
 
-const EnhancedBlock = styled('div', {
-  padding: '120px 0',
-  background: 'var(--ifm-color-background)',
+const ViewAllRow = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: '36px',
+  gap: '16px',
+})
+
+const ViewAllButton = styled('a', {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px',
+  padding: '12px 28px',
+  border: '1px solid var(--midway-border)',
+  color: 'var(--midway-text-main)',
+  background: 'var(--midway-surface)',
+  borderRadius: '6px',
+  textDecoration: 'none',
+  fontWeight: 600,
+  fontSize: '0.9rem',
+  transition: 'all 0.3s',
+  backdropFilter: 'blur(8px)',
   position: 'relative',
   overflow: 'hidden',
-  
+
   '&::before': {
     content: '""',
     position: 'absolute',
     top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: 'radial-gradient(circle at 30% 70%, var(--ifm-color-emphasis-200) 0%, transparent 50%), radial-gradient(circle at 70% 30%, var(--ifm-color-emphasis-300) 0%, transparent 50%)',
+    left: '-100%',
+    width: '100%',
+    height: '100%',
+    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)',
+    transition: 'left 0.4s',
   },
-  
-  '@mobile': {
-    padding: '80px 0',
+
+  '&:hover': {
+    borderColor: 'var(--midway-primary)',
+    color: 'var(--midway-primary)',
+    textDecoration: 'none',
+    boxShadow: '0 0 20px var(--midway-glow)',
+    transform: 'translateY(-2px)',
+
+    '&::before': { left: '100%' },
   }
 })
 
-const BlockContent = styled('div', {
-  position: 'relative',
-  zIndex: 2,
-  maxWidth: '1200px',
-  margin: '0 auto',
-  padding: '0 24px',
-  
-  '@mobile': {
-    padding: '0 16px',
-  }
-})
-
-const BlockTitle = styled('h2', {
-  fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
-  fontWeight: 800,
-  color: 'var(--ifm-color-emphasis-900)',
-  textAlign: 'center',
-  margin: '0 0 24px 0',
-  background: 'linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-darker) 100%)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
-})
-
-const BlockSubtitle = styled('p', {
-  fontSize: '1.25rem',
-  color: '#718096',
-  textAlign: 'center',
-  maxWidth: '600px',
-  margin: '0 auto 80px',
-  lineHeight: 1.6,
-  
-  '@mobile': {
-    fontSize: '1.1rem',
-    marginBottom: '60px',
-  }
+const ComponentCount = styled('span', {
+  fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+  fontSize: '0.8rem',
+  color: 'var(--midway-text-sec)',
+  letterSpacing: '0.05em',
 })
 
 export function EssentialsComponents() {
   return (
-    <EnhancedBlock>
-      <BlockContent>
-        <BlockTitle>
-          <Translate id="homepage.essentials.title">
-            核心组件
-          </Translate>
-        </BlockTitle>
-        <BlockSubtitle>
-          <Translate id="homepage.essentials.subtitle">
-            提供丰富的企业级组件，满足各种开发需求，让开发更加高效
-          </Translate>
-        </BlockSubtitle>
-        
-        <Grid>
-          {components.map((component, index) => (
-            <div key={index} style={{ animation: `${fadeInUp} 0.8s ease-out ${0.1 + index * 0.1}s both` }}>
-              <Component {...component} />
-            </div>
-          ))}
-        </Grid>
-      </BlockContent>
-    </EnhancedBlock>
+    <Container>
+      <Content>
+        <SectionTitle>
+          <SectionLabel>04 // Ecosystem</SectionLabel>
+          <SectionHeading>
+            <Translate id="homepage.essentials.title">
+              Core Extensions
+            </Translate>
+          </SectionHeading>
+        </SectionTitle>
+
+        <GridFadeWrapper>
+          <Grid>
+            {components.map((component, index) => (
+              <div key={index} style={{ animation: `${fadeInUp} 0.7s ease-out ${0.06 + index * 0.06}s both` }}>
+                <Component {...component} />
+              </div>
+            ))}
+          </Grid>
+        </GridFadeWrapper>
+
+        <ViewAllRow>
+          <ComponentCount>Showing {components.length} of 50+ extensions</ComponentCount>
+          <ViewAllButton href="/docs/extensions/orm">
+            Browse all extensions
+            <i className="iconfont icon-arrow-right" />
+          </ViewAllButton>
+        </ViewAllRow>
+      </Content>
+    </Container>
   )
 }

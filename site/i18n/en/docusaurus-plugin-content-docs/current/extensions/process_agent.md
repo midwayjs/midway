@@ -28,7 +28,7 @@ Related information:
 Usage:
 
 ```bash
-$ npm install @midwayjs/process-agent@3 --save
+$ npm install @midwayjs/process-agent@4 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -36,7 +36,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/process-agent": "^3.0.0",
+    "@midwayjs/process-agent": "^4.0.0",
     // ...
   },
   "devDependencies": {

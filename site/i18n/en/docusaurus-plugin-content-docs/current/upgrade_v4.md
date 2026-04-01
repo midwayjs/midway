@@ -20,8 +20,6 @@ midway v4 supports from node v20 onwards, it's best to use the LTS version.
 
 All component packages and core packages will be upgraded to 4.x versions.
 
-> Currently in beta stage
-
 ```diff
 {
   "dependencies": {
@@ -29,14 +27,14 @@ All component packages and core packages will be upgraded to 4.x versions.
 -    "@midwayjs/core": "^3.0.0",
 -    "@midwayjs/koa": "^3.0.0",
 -    "@midwayjs/logger": "^3.0.0",
-+    "@midwayjs/bootstrap": "^4.0.0-beta.1",
-+    "@midwayjs/core": "^4.0.0-beta.1",
-+    "@midwayjs/koa": "^4.0.0-beta.1",
++    "@midwayjs/bootstrap": "^4.0.0",
++    "@midwayjs/core": "^4.0.0",
++    "@midwayjs/koa": "^4.0.0",
 +    "@midwayjs/logger": "^4.0.0",
   },
   "devDependencies": {
 -    "@midwayjs/mock": "^3.0.0",
-+    "@midwayjs/mock": "^4.0.0-beta.1",
++    "@midwayjs/mock": "^4.0.0",
     // ...
   }
 }

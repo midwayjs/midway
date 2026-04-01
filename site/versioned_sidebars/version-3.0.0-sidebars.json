@@ -33,6 +33,7 @@
     {
       "type": "category",
       "label": "进阶",
+      "key": "core-advanced",
       "collapsed": true,
       "collapsible": true,
       "items": [
@@ -150,6 +151,7 @@
         {
           "type": "category",
           "label": "一体化",
+          "key": "hooks-legacy",
           "collapsed": true,
           "collapsible": true,
           "items": [
@@ -181,6 +183,7 @@
             {
               "type": "category",
               "label": "一体化",
+              "key": "hooks-legacy-fullstack",
               "collapsed": false,
               "collapsible": false,
               "items": [
@@ -191,6 +194,7 @@
             {
               "type": "category",
               "label": "进阶",
+              "key": "hooks-legacy-advanced",
               "collapsed": false,
               "collapsible": false,
               "items": [

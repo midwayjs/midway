@@ -27,7 +27,7 @@
 `@midwayjs/tenant` 是主要的功能包。
 
 ```bash
-$ npm i @midwayjs/tenant@3 --save
+$ npm i @midwayjs/tenant@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -35,7 +35,7 @@ $ npm i @midwayjs/tenant@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/tenant": "^3.0.0",
+    "@midwayjs/tenant": "^4.0.0",
     // ...
   }
 }

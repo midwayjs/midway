@@ -32,7 +32,7 @@ BullMQ 是一个分布式任务管理系统，必须依赖 redis
 ## 安装组件
 
 ```bash
-$ npm i @midwayjs/bullmq@3 --save
+$ npm i @midwayjs/bullmq@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -40,7 +40,7 @@ $ npm i @midwayjs/bullmq@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/bullmq": "^3.0.0",
+    "@midwayjs/bullmq": "^4.0.0",
     // ...
   },
 }
@@ -493,7 +493,7 @@ import { BullMQ } from '@midwayjs/bullmq';
 和 bull 组件类似，需要独立安装和启用。
 
 ```bash
-$ npm i @midwayjs/bull-board@3 --save
+$ npm i @midwayjs/bull-board@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -501,7 +501,7 @@ $ npm i @midwayjs/bull-board@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/bull-board": "^3.0.0",
+    "@midwayjs/bull-board": "^4.0.0",
     // ...
   },
 }

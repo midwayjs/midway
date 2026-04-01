@@ -36,24 +36,88 @@ const Grid = styled('div', {
   }
 })
 
+const EnhancedBlock = styled('div', {
+  padding: '120px 0',
+  background: 'var(--midway-bg)',
+  position: 'relative',
+  overflow: 'hidden',
+  
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundImage: `
+      linear-gradient(var(--midway-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--midway-grid) 1px, transparent 1px)
+    `,
+    backgroundSize: '40px 40px',
+    opacity: 0.3,
+  },
+  
+  '@mobile': {
+    padding: '80px 0',
+  }
+})
+
+const BlockTitle = styled('h2', {
+  fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+  fontWeight: 800,
+  color: 'var(--midway-text-main)',
+  textAlign: 'center',
+  margin: '0 0 24px 0',
+  textShadow: '0 0 20px var(--midway-glow)',
+})
+
+const BlockSubtitle = styled('p', {
+  fontSize: '1.25rem',
+  color: 'var(--midway-text-sec)',
+  textAlign: 'center',
+  maxWidth: '600px',
+  margin: '0 auto 80px',
+  lineHeight: 1.6,
+  
+  '@mobile': {
+    fontSize: '1.1rem',
+    marginBottom: '60px',
+  }
+})
+
 const ShowCaseContainer = styled('a', {
   display: 'block',
-  borderRadius: '16px',
+  borderRadius: '4px',
   overflow: 'hidden',
   cursor: 'pointer',
   transition: 'all 0.3s ease',
-  background: 'rgba(255, 255, 255, 0.1)',
-  backdropFilter: 'blur(20px)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+  background: 'var(--midway-surface)',
+  backdropFilter: 'blur(10px)',
+  border: '1px solid var(--midway-border)',
+  position: 'relative',
+  
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    boxShadow: 'inset 0 0 20px var(--midway-glow)',
+    opacity: 0,
+    transition: 'opacity 0.3s',
+  },
   
   '&:hover': {
-    transform: 'translateY(-8px) scale(1.02)',
-    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2)',
-    borderColor: 'rgba(255, 255, 255, 0.4)',
+    transform: 'translateY(-5px)',
+    borderColor: 'var(--midway-primary)',
+    
+    '&::after': {
+      opacity: 0.3,
+    },
     
     '& .showcase': {
-      transform: 'scale(1.1)',
+      transform: 'scale(1.05)',
     },
   },
 })
@@ -65,27 +129,6 @@ const ShowCase = styled('img', {
   display: 'block',
 })
 
-const EnhancedBlock = styled('div', {
-  padding: '120px 0',
-  background: 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)',
-  position: 'relative',
-  overflow: 'hidden',
-  
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: 'radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.2) 0%, transparent 50%)',
-  },
-  
-  '@mobile': {
-    padding: '80px 0',
-  }
-})
-
 const BlockContent = styled('div', {
   position: 'relative',
   zIndex: 2,
@@ -95,28 +138,6 @@ const BlockContent = styled('div', {
   
   '@mobile': {
     padding: '0 16px',
-  }
-})
-
-const BlockTitle = styled('h2', {
-  fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
-  fontWeight: 800,
-  color: '#ffffff',
-  textAlign: 'center',
-  margin: '0 0 24px 0',
-})
-
-const BlockSubtitle = styled('p', {
-  fontSize: '1.25rem',
-  color: 'rgba(255, 255, 255, 0.8)',
-  textAlign: 'center',
-  maxWidth: '600px',
-  margin: '0 auto 80px',
-  lineHeight: 1.6,
-  
-  '@mobile': {
-    fontSize: '1.1rem',
-    marginBottom: '60px',
   }
 })
 

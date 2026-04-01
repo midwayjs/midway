@@ -25,7 +25,7 @@ Install orm components to provide database ORM capabilities.
 
 
 ```bash
-$ npm i @midwayjs/orm@3 typeorm --save
+$ npm i @midwayjs/orm@4 typeorm --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -33,7 +33,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/orm": "^3.0.0",
+    "@midwayjs/orm": "^4.0.0",
     "typeorm": "~0.3.0 ",
     // ...
   },

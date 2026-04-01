@@ -28,7 +28,7 @@ passport 是社区使用较多的身份验证库，通过称为策略的可扩�
 
 ```bash
 ## 必选
-$ npm i @midwayjs/passport@3 --save
+$ npm i @midwayjs/passport@4 --save
 
 ## 可选
 ## 下面安装本地策略
@@ -45,7 +45,7 @@ $ npm i passport-jwt --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/passport": "^3.0.0",
+    "@midwayjs/passport": "^4.0.0",
     // 本地策略
     "passport-local": "^1.0.0"
     // Jwt 策略

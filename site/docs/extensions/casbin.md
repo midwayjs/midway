@@ -48,7 +48,7 @@ Casbin 不能：
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/casbin@3 --save
+$ npm i @midwayjs/casbin@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -56,7 +56,7 @@ $ npm i @midwayjs/casbin@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/casbin": "^3.0.0",
+    "@midwayjs/casbin": "^4.0.0",
     // ...
   },
 }

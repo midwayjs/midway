@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midway.js - Modern SaaS Style</title>
+    <style>
+        :root {
+            --primary: #5B4EF5;
+            --primary-dark: #463BC2;
+            --bg: #F7F9FC;
+            --surface: #FFFFFF;
+            --text-main: #1A202C;
+            --text-sec: #718096;
+            --accent: #00D4AA;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F0F4FF 100%);
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(91, 78, 245, 0.05) 0%, transparent 60%);
+            animation: pulse 10s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(90deg, #1A202C 0%, #5B4EF5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--text-sec);
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(91, 78, 245, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(91, 78, 245, 0.4);
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--text-main);
+            border: 1px solid #E2E8F0;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: var(--surface);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-sec);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: var(--bg);
+            padding: 40px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-color: #E2E8F0;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .feature-card p {
+            color: var(--text-sec);
+        }
+        
+        /* Preview Section */
+        .preview {
+            padding: 100px 0;
+            background: #F0F4FF;
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .code-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(91, 78, 245, 0.1);
+        }
+        
+        .code-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .feature-list li {
+            list-style: none;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-sec);
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Essentials */
+        .essentials {
+            padding: 100px 0;
+        }
+
+        .essentials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .essential-item {
+            display: flex;
+            align-items: center;
+            padding: 24px;
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .essential-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(91, 78, 245, 0.1);
+        }
+
+        .essential-icon {
+            width: 48px;
+            height: 48px;
+            background: #F0F4FF;
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        /* Used By */
+        .used-by {
+            padding: 80px 0;
+            background: white;
+            border-top: 1px solid #E2E8F0;
+        }
+
+        .logo-marquee {
+            display: flex;
+            gap: 60px;
+            overflow: hidden;
+            opacity: 0.6;
+            filter: grayscale(100%);
+        }
+
+        /* Footer */
+        footer {
+            background: #1A202C;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        footer h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            background: linear-gradient(90deg, #5B4EF5 0%, #00D4AA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Midway<br>Node.js Framework For Fullstack</h1>
+            <p>Develop. Build. Ship. 专为现代 Node.js 应用设计，提供企业级的开发体验。</p>
+            <div class="hero-btns">
+                <a href="#" class="btn btn-primary">📖 稳定版文档 (v3.x)</a>
+                <a href="#" class="btn btn-secondary">🚧 Beta 版文档 (v4)</a>
+            </div>
+            <iframe src="https://ghbtns.com/github-btn.html?user=midwayjs&repo=midway&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>核心特性</h2>
+                <p>专为现代 Node.js 应用设计，提供企业级的开发体验和性能表现</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡️</div>
+                    <h3>Reliable & Fast</h3>
+                    <p>Class + IoC = 更优雅的架构<br>Function + Hooks = 更高的研发效率</p>
+                </div>
+                <div class="feature-card" style="border-color: var(--primary); background: #F8F7FF;">
+                    <div class="feature-icon">🛠</div>
+                    <h3>API & Fullstack</h3>
+                    <p>不仅支持开发 API 服务，也提供业界首创的一体化全栈开发模式</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Progressive</h3>
+                    <p>渐进式设计，提供从基础到入门再到企业级的升级方案</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preview -->
+    <section class="preview">
+        <div class="container">
+            <div class="section-header">
+                <h2>交互式教程</h2>
+                <p>WebContainer 功能正在开发中，即将提供真实的开发环境体验</p>
+            </div>
+            <div class="preview-grid">
+                <div class="code-card">
+                    <h3>💠 Class 语法教程</h3>
+                    <p>学习如何使用 Class 语法开发 Midway.js 应用</p>
+                    <ul class="feature-list" style="margin-top: 20px;">
+                        <li>基于装饰器的路由定义</li>
+                        <li>依赖注入与服务管理</li>
+                        <li>TypeORM 数据库集成</li>
+                        <li>组件化开发模式</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="margin-top: 24px; width: 100%; justify-content: center; opacity: 0.6; cursor: not-allowed;">🚧 即将开放</a>
+                </div>
+                <div class="code-card">
+                    <h3>ƒ Function 语法教程</h3>
+                    <p>学习如何使用 Function 语法开发 Midway.js 应用</p>
+                    <ul class="feature-list" style="margin-top: 20px;">
+                        <li>前后端一体化开发</li>
+                        <li>函数式 API 设计</li>
+                        <li>React Hooks 后端开发</li>
+                        <li>零 API 调用模式</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary" style="margin-top: 24px; width: 100%; justify-content: center; opacity: 0.6; cursor: not-allowed;">🚧 即将开放</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Essentials -->
+    <section class="essentials">
+        <div class="container">
+            <div class="section-header">
+                <h2>核心组件</h2>
+                <p>提供丰富的企业级组件，满足各种开发需求</p>
+            </div>
+            <div class="essentials-grid">
+                <div class="essential-item">
+                    <div class="essential-icon">🗄</div>
+                    <div>
+                        <h4>ORM</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-sec);">TypeORM-based database SDK</p>
+                    </div>
+                </div>
+                <div class="essential-item">
+                    <div class="essential-icon">🚀</div>
+                    <div>
+                        <h4>Redis</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-sec);">In-memory database</p>
+                    </div>
+                </div>
+                <div class="essential-item">
+                    <div class="essential-icon">📄</div>
+                    <div>
+                        <h4>Swagger</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-sec);">Generate API docs</p>
+                    </div>
+                </div>
+                <div class="essential-item">
+                    <div class="essential-icon">🍃</div>
+                    <div>
+                        <h4>MongoDB</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-sec);">NoSQL Database</p>
+                    </div>
+                </div>
+                <div class="essential-item">
+                    <div class="essential-icon">☁️</div>
+                    <div>
+                        <h4>OSS</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-sec);">Aliyun OSS Support</p>
+                    </div>
+                </div>
+                <div class="essential-item">
+                    <div class="essential-icon">⚡️</div>
+                    <div>
+                        <h4>Cache</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-sec);">Memory cache support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <h2>Develop. Build. Ship.</h2>
+            <p style="opacity: 0.7;">让 Node.js 开发更加高效，让应用部署更加简单</p>
+        </div>
+    </footer>
+
+</body>
+</html>

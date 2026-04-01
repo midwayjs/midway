@@ -26,7 +26,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/security": "^3.0.0",
+    "@midwayjs/security": "^4.0.0",
     // ...
   },
   "devDependencies": {

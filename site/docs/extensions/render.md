@@ -22,7 +22,7 @@
 
 选择对应的模板安装依赖。
 ```bash
-$ npm i @midwayjs/view-ejs@3 --save
+$ npm i @midwayjs/view-ejs@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -30,7 +30,7 @@ $ npm i @midwayjs/view-ejs@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/view-ejs": "^3.0.0",
+    "@midwayjs/view-ejs": "^4.0.0",
     // ...
   },
   "devDependencies": {
@@ -230,7 +230,7 @@ export default {
 
 1、选择对应的模板安装依赖。
 ```bash
-$ npm i @midwayjs/view-nunjucks@3 --save
+$ npm i @midwayjs/view-nunjucks@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -238,7 +238,7 @@ $ npm i @midwayjs/view-nunjucks@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/view-nunjucks": "^3.0.0",
+    "@midwayjs/view-nunjucks": "^4.0.0",
     // ...
   },
   "devDependencies": {

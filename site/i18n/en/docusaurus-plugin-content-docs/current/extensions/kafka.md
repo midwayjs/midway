@@ -57,7 +57,7 @@ Or add the following dependency to `package.json` and reinstall.
 ```json
 {
   "dependencies": {
-    "@midwayjs/kafka": "^3.0.0",
+    "@midwayjs/kafka": "^4.0.0",
     // ...
   }
 }

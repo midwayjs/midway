@@ -12,7 +12,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/express@3 --save
+$ npm i @midwayjs/express@4 --save
 $ npm i @types/body-parser @types/express @types/express-session --save-dev
 ```
 
@@ -21,7 +21,7 @@ $ npm i @types/body-parser @types/express @types/express-session --save-dev
 ```json
 {
   "dependencies": {
-    "@midwayjs/express": "^3.0.0",
+    "@midwayjs/express": "^4.0.0",
     // ...
   },
   "devDependencies": {

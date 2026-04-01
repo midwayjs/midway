@@ -19,7 +19,7 @@ Midway 提供了 jwt 组件，简单提供了一些 jwt 相关的 API，可以�
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/jwt@3 --save
+$ npm i @midwayjs/jwt@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -27,7 +27,7 @@ $ npm i @midwayjs/jwt@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/jwt": "^3.0.0"
+    "@midwayjs/jwt": "^4.0.0"
     // ...
   },
 }

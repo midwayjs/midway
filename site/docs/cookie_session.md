@@ -237,7 +237,7 @@ export default {
 ```json
 {
   "dependencies": {
-    "@midwayjs/session": "^3.0.0",
+    "@midwayjs/session": "^4.0.0",
     // ...
   },
 }

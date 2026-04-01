@@ -24,7 +24,7 @@ Related information:
 
 Install WebSocket dependencies in existing projects.
 ```bash
-$ npm i @midwayjs/ws@3 --save
+$ npm i @midwayjs/ws@4 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -32,7 +32,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/ws": "^3.0.0",
+    "@midwayjs/ws": "^4.0.0",
     // ...
   }
 }

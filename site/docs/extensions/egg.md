@@ -12,7 +12,7 @@ Midway 可以使用 EggJS 作为上层 Web 框架，EggJS 提供了非常多常�
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/web@3 egg --save
+$ npm i @midwayjs/web@4 egg --save
 $ npm i @midwayjs/egg-ts-helper --save-dev
 ```
 
@@ -20,8 +20,8 @@ $ npm i @midwayjs/egg-ts-helper --save-dev
 
 ```json
   "dependencies": {
-    "@midwayjs/web": "^3.0.0",
-    "@midwayjs/core": "^3.0.0",
+    "@midwayjs/web": "^4.0.0",
+    "@midwayjs/core": "^4.0.0",
     "egg": "^2.0.0",
     "egg-scripts": "^2.10.0"
   },

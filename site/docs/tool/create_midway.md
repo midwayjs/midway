@@ -28,26 +28,18 @@ $ npm init midway@latest -y
 $ npm init midway@latest -y
 ```
 
-则会输出
+会进入模板选择界面。当前文档以 v4 为准，默认会优先展示最新模板。下面的输出为示意，具体列表以 CLI 实际输出为准。
 
 ```bash
-➜  ~ npm init midway
+➜  ~ npm init midway@latest
 ? Hello, traveller.
   Which template do you like? …
 
- ⊙ v3
-❯ koa-v3 - A web application boilerplate with midway v3(koa)
-  egg-v3 - A web application boilerplate with midway v3(egg 2.0)
-  faas-v3 - A serverless application boilerplate with midway v3(faas)
-  component-v3 - A midway component boilerplate for v3
-  quick-start - A midway quickstart exmaple for v3
-
- ⊙ v3-esm
-  koa-v3-esm - A web application boilerplate with midway v3(koa)
-
- ⊙ v2
-  web - A web application boilerplate with midway and Egg.js
-  koa - A web application boilerplate with midway and koa
+ ⊙ v4
+❯ koa-v4 - A web application boilerplate with midway v4(koa)
+  koa-v4-esm - A web application boilerplate with midway v4(koa)
+  react-functional-v4 - A functional web application boilerplate with midway v4(react)
+  vue-functional-v4 - A functional web application boilerplate with midway v4(vue)
 ```
 
 该模式下，会根据用户选择，按照指引创建模版。
@@ -84,12 +76,12 @@ $ npm init midway -- -a
 
 ### 指定模版名
 
-每个模版都有一个模版名和模版描述，比如 `koa-v3 - A web application boilerplate with midway v3(koa)` 的模板名为 `koa-v3`。
+每个模版都有一个模版名和模版描述，比如 `koa-v4 - A web application boilerplate with midway v4 (koa)` 的模板名为 `koa-v4`。
 
 可以通过 `--type` 参数指定模板名。
 
 ```bash
-$ npm init midway -- --type=koa-v3
+$ npm init midway -- --type=koa-v4
 ```
 
 
@@ -114,16 +106,16 @@ $ npm init midway -- -t=./custom-template
 
 通过 `--target` 参数可以指定创建的目录，必须和 `type` 或者 `template` 参数一同使用。
 
-比如，下面的命令指定了 `koa-v3` 模版，将其生成到当前 abc 目录下，如果目录不存在，则会新建。
+比如，下面的命令指定了 `koa-v4` 模版，将其生成到当前 `abc` 目录下，如果目录不存在，则会新建。
 
 ```bash
-$ npm init midway -- --type=koa-v3 --target=abc
+$ npm init midway -- --type=koa-v4 --target=abc
 ```
 
 一般 `target` 可以省略，把路径放到最后一个参数即可。
 
 ```bash
-$ npm init midway -- --type=koa-v3 abc
+$ npm init midway -- --type=koa-v4 abc
 ```
 
 
@@ -159,7 +151,7 @@ $ npm init midway -- --bbb=ccc
 如果参数名和工具的参数重复了，可以使用 `t_` 的参数，在工具传递给脚手架时，会自动处理。
 
 ```bash
-$ npm init midway -- --type=koa-v3 --t_type=ccc
+$ npm init midway -- --type=koa-v4 --t_type=ccc
 ```
 
 
@@ -168,4 +160,4 @@ $ npm init midway -- --type=koa-v3 --t_type=ccc
 
 Midway 脚手架使用了自研的 light-generator 工具，具体的使用可以参考 [https://github.com/midwayjs/light-generator](https://github.com/midwayjs/light-generator)。
 
-也可以参考 Midway 自己的 [模版工程](https://github.com/midwayjs/midway-boilerplate/tree/master/v3)。
+也可以参考 Midway 自己的 [模版工程](https://github.com/midwayjs/midway-boilerplate)。

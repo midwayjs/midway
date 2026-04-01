@@ -19,7 +19,7 @@ import TabItem from '@theme/TabItem';
 ## 安装依赖
 
 ```bash
-$ npm install @midwayjs/swagger@3 --save
+$ npm install @midwayjs/swagger@4 --save
 $ npm install swagger-ui-dist --save-dev
 ```
 
@@ -34,7 +34,7 @@ $ npm install swagger-ui-dist --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/swagger": "^3.0.0",
+    "@midwayjs/swagger": "^4.0.0",
     // 如果你希望在服务器上使用
     "swagger-ui-dist": "^4.2.1",
     // ...

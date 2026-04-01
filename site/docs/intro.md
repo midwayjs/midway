@@ -53,24 +53,23 @@ export class HomeController {
 
 ### 函数式（FP + Function + Hooks）
 
-Midway 也支持函数式的编程范式，为应用提供更高的研发效率。
-
+Midway 也支持函数式的编程范式。当前推荐的函数式写法，是通过 `defineApi` 在 `src/server/api` 中声明接口契约，并在函数体里使用 `useContext`、`useInject` 等能力。
 
 下面是基于函数式，开发路由接口的示例。
 ```typescript
-// src/api/index.ts
+// src/server/api/home.api.ts
+import { defineApi, useContext } from '@midwayjs/core/functional';
 
-import { useContext } from '@midwayjs/hooks'
-import { Context } from '@midwayjs/koa';
+export const homeApi = defineApi('/', api => ({
+  getHome: api.get('/', async () => {
+    const ctx = useContext();
 
-export default async function home () {
-  const ctx = useContext<Context>()
-
-  return {
-    message: 'Hello Midwayjs!',
-    query: ctx.ip
-  }
-}
+    return {
+      message: 'Hello Midwayjs!',
+      query: ctx.ip,
+    };
+  }),
+}));
 ```
 
 
@@ -116,4 +115,3 @@ Midway 运行请预先安装 Node.js 环境和 npm，在国内可以修改 npm �
 ## 官方宣传渠道
 
 - [哔哩哔哩](https://space.bilibili.com/1746017680)，会提供更新信息和教程
-

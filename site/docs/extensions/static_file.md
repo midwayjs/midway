@@ -22,7 +22,7 @@ midway 提供了基于 [koa-static-cache](https://github.com/koajs/static-cache)
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/static-file@3 --save
+$ npm i @midwayjs/static-file@4 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -30,7 +30,7 @@ $ npm i @midwayjs/static-file@3 --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/static-file": "^3.0.0",
+    "@midwayjs/static-file": "^4.0.0",
     // ...
   },
   "devDependencies": {

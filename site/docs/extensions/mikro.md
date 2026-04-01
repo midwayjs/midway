@@ -33,7 +33,7 @@ MikroORM 的官网文档在 [这里](https://mikro-orm.io/docs)。
 
 
 ```bash
-$ npm i @midwayjs/mikro@3 @mikro-orm/core --save
+$ npm i @midwayjs/mikro@4 @mikro-orm/core --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -41,7 +41,7 @@ $ npm i @midwayjs/mikro@3 @mikro-orm/core --save
 ```json
 {
   "dependencies": {
-    "@midwayjs/mikro": "^3.0.0",
+    "@midwayjs/mikro": "^4.0.0",
     "@mikro-orm/core": "^6.0.2",
     // ...
   },

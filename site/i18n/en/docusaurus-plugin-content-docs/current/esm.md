@@ -29,7 +29,7 @@ Due to many changes, Midway provides a brand-new scaffolding in ESM format. If t
 $ npm init midway@latest -y
 ```
 
-Select the scaffolding in the esm group.
+Select `koa-v4-esm` from the v4 template list.
 
 
 

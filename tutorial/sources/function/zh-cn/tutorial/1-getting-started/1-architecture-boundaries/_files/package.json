@@ -1,0 +1,22 @@
+{
+  "name": "midway-functional-tutorial",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/app.js"
+  },
+  "dependencies": {
+    "@midwayjs/bootstrap": "^4.0.0-beta.13",
+    "@midwayjs/core": "^4.0.0-beta.13",
+    "@midwayjs/koa": "^4.0.0-beta.13",
+    "@midwayjs/web-bridge": "^4.0.0-beta.13",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@midwayjs/mock": "^4.0.0-beta.13",
+    "@types/node": "^18.19.0",
+    "cross-env": "^7.0.3",
+    "mwtsc": "^1.4.0",
+    "typescript": "^5.3.0"
+  }
+}

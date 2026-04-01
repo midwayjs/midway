@@ -63,26 +63,25 @@ export class HomeController {
 
 
 
-### Functional formula (FP + Function + Hooks)
+### Functional (FP + Function + Hooks)
 
-Midway also supports a functional programming paradigm that provides higher R & D efficiency for applications.
+Midway also supports a functional programming style. The recommended approach now is to declare API contracts with `defineApi` in `src/server/api`, and use capabilities such as `useContext` and `useInject` inside handlers.
 
-
-The following is an example of developing a routing interface based on a function.
+Here is a simple functional API example:
 ```typescript
-// src/api/index.ts
+// src/server/api/home.api.ts
+import { defineApi, useContext } from '@midwayjs/core/functional';
 
-import { useContext } from '@midwayjs/hooks'
-import { Context } from '@midwayjs/koa';
+export const homeApi = defineApi('/', api => ({
+  getHome: api.get('/', async () => {
+    const ctx = useContext();
 
-export default async function home () {
-  const ctx = useContext<Context>()
-
-  return {
-    message: 'Hello Midwayjs!',
-    query: ctx.ip
-  }
-}
+    return {
+      message: 'Hello Midwayjs!',
+      query: ctx.ip,
+    };
+  }),
+}));
 ```
 
 
@@ -94,13 +93,13 @@ Please install Node.js environment and npm in advance to run Midway. cnpm can be
 
 
 - Operating system: supports macOS,Linux,Windows
-- Running environment: We recommend that you select [LTS](http://nodejs.org/). The minimum requirement is **18.0.0**.
+- Running environment: We recommend that you select [LTS](http://nodejs.org/). The minimum requirement is **20.0.0**.
 
 After continuous iteration, Midway's version requirements are as follows:
 
 | Midway Version | Development environment Node.js version requirements | Deployment environment Node.js version requirements |
 | -------------- | ---------------------------------------------------- | --------------------------------------------------- |
-| >=v4.0.0       | >= v18, LTS version recommended                      | >= v18.0.0                                         |
+| >=v4.0.0       | >= v20, LTS version recommended                      | >= v20.0.0                                         |
 | >=v3.9.0       | >= v14, LTS version recommended                      | >= v12.11.0                                        |
 | 3.0.0 ~ 3.9.0  | >= v12, LTS version recommended                      | >= v12.0.0                                         |
 | 2.x            | >= v12, LTS version recommended                      | >= v10.0.0                                         |
@@ -128,4 +127,3 @@ There will be enthusiastic friends in the group and new versions will be release
 ## Official publicity channels
 
 - [Bilibili](https://space.bilibili.com/1746017680) provides updated information and tutorials.
-

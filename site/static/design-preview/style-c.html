@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midway.js - Glassmorphism Style</title>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --text-main: #2D3748;
+            --text-sec: #4A5568;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(45deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: -1;
+            opacity: 0.8;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .blob-1 { top: 10%; left: 10%; width: 300px; height: 300px; background: #a18cd1; animation-delay: 0s; }
+        .blob-2 { bottom: 20%; right: 10%; width: 400px; height: 400px; background: #fbc2eb; animation-delay: 2s; }
+        .blob-3 { top: 40%; left: 40%; width: 200px; height: 200px; background: #8fd3f4; animation-delay: 4s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -50px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.9);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-weight: 500;
+        }
+
+        .hero-card {
+            padding: 60px 40px;
+            margin-bottom: 80px;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn {
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-primary {
+            background: rgba(255,255,255,0.8);
+            color: #6a11cb;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            background: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 100px;
+        }
+
+        .feature-card {
+            padding: 40px 30px;
+            text-align: left;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #2D3748;
+        }
+
+        .feature-card p {
+            color: #4A5568;
+            font-size: 1.05rem;
+        }
+
+        /* Tutorials */
+        .tutorial-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 100px;
+        }
+
+        .tutorial-card {
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tutorial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        .tutorial-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .tutorial-list li {
+            margin-bottom: 12px;
+            list-style: none;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .tutorial-list li::before {
+            content: '•';
+            color: #6a11cb;
+            font-weight: bold;
+            font-size: 1.5em;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 60px 0;
+            color: rgba(0,0,0,0.6);
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="container">
+        <section class="hero">
+            <div class="glass-card hero-card">
+                <h1>Midway</h1>
+                <p>Node.js Framework For The Future. Develop. Build. Ship.</p>
+                <div style="display: flex; justify-content: center; gap: 20px;">
+                    <a href="#" class="btn btn-primary">Start Building</a>
+                    <a href="#" class="btn" style="background: rgba(255,255,255,0.3); color: white;">Documentation</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-grid">
+            <div class="glass-card feature-card">
+                <span class="icon">⚡️</span>
+                <h3>Fast & Reliable</h3>
+                <p>Built on top of Koa/Express/Egg, optimized for serverless and traditional applications.</p>
+            </div>
+            <div class="glass-card feature-card">
+                <span class="icon">🛡</span>
+                <h3>Type Safe</h3>
+                <p>Written in TypeScript. Enjoy the best developer experience with intelligent code completion.</p>
+            </div>
+            <div class="glass-card feature-card">
+                <span class="icon">🧩</span>
+                <h3>Extensible</h3>
+                <p>Rich plugin ecosystem. Easy to integrate with database, cache, and other services.</p>
+            </div>
+        </section>
+
+        <section class="tutorial-section">
+            <div class="glass-card tutorial-card">
+                <h3>Class Style</h3>
+                <p style="margin-bottom: 20px; opacity: 0.8;">Traditional OOP pattern with decorators.</p>
+                <ul class="tutorial-list">
+                    <li>Decorator-based Routing</li>
+                    <li>Dependency Injection</li>
+                    <li>Enterprise Grade</li>
+                </ul>
+            </div>
+            <div class="glass-card tutorial-card">
+                <h3>Function Style</h3>
+                <p style="margin-bottom: 20px; opacity: 0.8;">Modern functional pattern with hooks.</p>
+                <ul class="tutorial-list">
+                    <li>Zero-API Call</li>
+                    <li>React Hooks for Backend</li>
+                    <li>Simpler Mental Model</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Made with ❤️ by Midway Team</p>
+        </footer>
+    </div>
+
+</body>
+</html>

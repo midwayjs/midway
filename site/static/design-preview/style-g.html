@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midway.js - Advanced Cyber</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            /* Light Mode (Laboratory Style) */
+            --bg-light: #F2F4F8;
+            --surface-light: rgba(255, 255, 255, 0.7);
+            --border-light: rgba(0, 0, 0, 0.1);
+            --primary-light: #4A00E0; /* Deep Purple */
+            --secondary-light: #00D2FF; /* Cyan */
+            --text-main-light: #1A202C;
+            --text-sec-light: #5A6A85;
+            --grid-light: rgba(0, 0, 0, 0.05);
+            --glow-light: rgba(74, 0, 224, 0.15);
+
+            /* Dark Mode (Cyber Space Style) */
+            --bg-dark: #030308;
+            --surface-dark: rgba(20, 20, 35, 0.6);
+            --border-dark: rgba(255, 255, 255, 0.1);
+            --primary-dark: #00F0FF; /* Neon Cyan */
+            --secondary-dark: #BC13FE; /* Neon Purple */
+            --text-main-dark: #EAEAEA;
+            --text-sec-dark: #8892B0;
+            --grid-dark: rgba(0, 240, 255, 0.08);
+            --glow-dark: rgba(0, 240, 255, 0.15);
+        }
+
+        /* Default (Light) */
+        body {
+            --bg: var(--bg-light);
+            --surface: var(--surface-light);
+            --border: var(--border-light);
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --text-main: var(--text-main-light);
+            --text-sec: var(--text-sec-light);
+            --grid: var(--grid-light);
+            --glow: var(--glow-light);
+        }
+
+        /* Dark Override */
+        html.dark body {
+            --bg: var(--bg-dark);
+            --surface: var(--surface-dark);
+            --border: var(--border-dark);
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --text-main: var(--text-main-dark);
+            --text-sec: var(--text-sec-dark);
+            --grid: var(--grid-dark);
+            --glow: var(--glow-dark);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, border-color 0.3s; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background Grid Animation */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) scale(2);
+            transform-origin: top center;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 50px; }
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 0%, var(--bg) 90%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 100;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        /* HUD Corners */
+        .hud-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            transition: all 0.3s;
+            opacity: 0.7;
+        }
+        .hud-tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .hud-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .hud-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        .hud-br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+        /* Typography */
+        h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--text-main) 30%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        h2::after {
+            content: '';
+            display: block;
+            width: 40%;
+            height: 4px;
+            background: var(--secondary);
+            margin-top: 8px;
+            border-radius: 2px;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 0;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 4px;
+            margin-bottom: 24px;
+            background: rgba(0,0,0,0.05);
+            font-size: 0.8rem;
+        }
+
+        .hero-desc {
+            font-size: 1.5rem;
+            color: var(--text-sec);
+            margin-bottom: 48px;
+            max-width: 600px;
+        }
+
+        /* Glitch Button */
+        .btn {
+            position: relative;
+            padding: 16px 40px;
+            background: var(--primary);
+            color: var(--bg);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-right: 20px;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--glow);
+            filter: brightness(1.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            clip-path: none;
+            border-radius: 4px;
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Cards */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 120px;
+        }
+
+        .tech-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px var(--glow);
+        }
+
+        .tech-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .tech-card p {
+            color: var(--text-sec);
+            font-size: 1rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--primary);
+        }
+
+        /* Split Section */
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 120px;
+        }
+
+        .code-window {
+            background: #0E1116; /* Always dark for code */
+            border: 1px solid #30363D;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .code-header {
+            background: #161B22;
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid #30363D;
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #30363D; }
+
+        .code-content {
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #C9D1D9;
+            line-height: 1.6;
+        }
+
+        .kw { color: #FF7B72; }
+        .func { color: #D2A8FF; }
+        .str { color: #A5D6FF; }
+        .dec { color: #79C0FF; }
+
+        /* Ecosystem */
+        .eco-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .eco-tag {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            color: var(--text-sec);
+            font-size: 0.9rem;
+            background: var(--surface);
+            cursor: default;
+            transition: all 0.3s;
+        }
+
+        .eco-tag:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 80px 0;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 16px;
+        }
+
+        .footer-col h4 {
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--text-sec);
+            text-decoration: none;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary);
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" onclick="document.documentElement.classList.toggle('dark')">
+        🌗
+    </button>
+
+    <div class="grid-bg"></div>
+    <div class="vignette"></div>
+
+    <div class="container">
+        
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <span class="badge mono">Midway v3.0 // System Ready</span>
+                <h1>Fullstack<br>Framework For<br>Mission Critical</h1>
+                <p class="hero-desc">
+                    Enterprise-grade Node.js architecture. <br>
+                    Build scalable serverless and traditional applications with confidence.
+                </p>
+                <div>
+                    <a href="#" class="btn">Initialize Project</a>
+                    <a href="#" class="btn btn-outline">Read The Docs</a>
+                </div>
+            </div>
+            
+            <!-- Decorative HUD on right -->
+            <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0.3; pointer-events: none;">
+                <div style="width: 200px; height: 200px; border: 1px dashed var(--secondary); border-radius: 50%; animation: spin 20s linear infinite;"></div>
+                <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section>
+            <div style="margin-bottom: 60px;">
+                <span class="mono" style="color: var(--secondary);">01 // Capabilities</span>
+                <h2>Core Architecture</h2>
+            </div>
+            
+            <div class="grid-3">
+                <div class="tech-card">
+                    <div class="hud-corner hud-tl"></div>
+                    <div class="hud-corner hud-br"></div>
+                    <div class="card-icon">⚡️</div>
+                    <h3>Reliable & Fast</h3>
+                    <p>Class + IoC based architecture ensures maintainability. Function + Hooks accelerates development velocity.</p>
+                </div>
+                <div class="tech-card">
+                    <div class="hud-corner hud-tl"></div>
+                    <div class="hud-corner hud-br"></div>
+                    <div class="card-icon">🔗</div>
+                    <h3>Fullstack Protocol</h3>
+                    <p>Unified development experience. Type-safe communication between API and UI layers.</p>
+                </div>
+                <div class="tech-card">
+                    <div class="hud-corner hud-tl"></div>
+                    <div class="hud-corner hud-br"></div>
+                    <div class="card-icon">📦</div>
+                    <h3>Progressive</h3>
+                    <p>Start small, grow big. Scales seamlessly from single function to microservices cluster.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Split 1 -->
+        <section class="split-section">
+            <div>
+                <span class="mono" style="color: var(--secondary);">02 // Development</span>
+                <h2>Class Syntax</h2>
+                <p style="color: var(--text-sec); font-size: 1.1rem; margin-bottom: 32px;">
+                    Traditional OOP approach with Decorators. Perfect for large-scale enterprise applications requiring strict structure and dependency injection.
+                </p>
+                <div class="eco-strip">
+                    <div class="eco-tag">Decorators</div>
+                    <div class="eco-tag">IoC Container</div>
+                    <div class="eco-tag">TypeORM</div>
+                </div>
+            </div>
+            <div class="code-window">
+                <div class="code-header">
+                    <div class="dot" style="background: #FF5F56;"></div>
+                    <div class="dot" style="background: #FFBD2E;"></div>
+                    <div class="dot" style="background: #27C93F;"></div>
+                </div>
+                <div class="code-content">
+<span class="dec">@Controller</span>(<span class="str">'/'</span>)<br>
+<span class="kw">export class</span> Home {<br>
+&nbsp;&nbsp;<span class="dec">@Inject</span>()<br>
+&nbsp;&nbsp;ctx: Context;<br>
+<br>
+&nbsp;&nbsp;<span class="dec">@Get</span>(<span class="str">'/api'</span>)<br>
+&nbsp;&nbsp;<span class="kw">async</span> <span class="func">getData</span>() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="str">"Midway Connected"</span>;<br>
+&nbsp;&nbsp;}<br>
+}
+                </div>
+            </div>
+        </section>
+
+        <!-- Split 2 -->
+        <section class="split-section">
+            <div class="code-window">
+                <div class="code-header">
+                    <div class="dot" style="background: #FF5F56;"></div>
+                    <div class="dot" style="background: #FFBD2E;"></div>
+                    <div class="dot" style="background: #27C93F;"></div>
+                </div>
+                <div class="code-content">
+<span class="kw">export default async</span> () => {<br>
+&nbsp;&nbsp;<span class="kw">const</span> ctx = <span class="func">useContext</span>();<br>
+&nbsp;&nbsp;<span class="kw">const</span> db = <span class="func">usePlugin</span>(TypeORM);<br>
+<br>
+&nbsp;&nbsp;<span class="kw">return</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;status: <span class="str">"Active"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data: <span class="kw">await</span> db.<span class="func">find</span>()<br>
+&nbsp;&nbsp;};<br>
+}
+                </div>
+            </div>
+            <div>
+                <span class="mono" style="color: var(--secondary);">03 // Agility</span>
+                <h2>Function Syntax</h2>
+                <p style="color: var(--text-sec); font-size: 1.1rem; margin-bottom: 32px;">
+                    Modern functional approach with Hooks. Ideal for rapid development, serverless functions, and simpler mental models.
+                </p>
+                <div class="eco-strip">
+                    <div class="eco-tag">Zero API</div>
+                    <div class="eco-tag">React Hooks</div>
+                    <div class="eco-tag">Lightweight</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">Midway</div>
+                    <p style="color: var(--text-sec); font-size: 0.9rem; max-width: 250px;">
+                        Open source Node.js framework designed for the future of web development.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="#">Documentation</a>
+                    <a href="#">Examples</a>
+                    <a href="#">Tutorials</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Community</h4>
+                    <a href="#">GitHub</a>
+                    <a href="#">Discord</a>
+                    <a href="#">Twitter</a>
+                </div>
+                <div class="footer-col">
+                    <h4>More</h4>
+                    <a href="#">Blog</a>
+                    <a href="#">Showcase</a>
+                    <a href="#">About Us</a>
+                </div>
+            </div>
+            <div style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; color: var(--text-sec); font-size: 0.8rem;">
+                <span>© 2024 MidwayJS Team. MIT License.</span>
+                <span class="mono">STATUS: ONLINE</span>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>

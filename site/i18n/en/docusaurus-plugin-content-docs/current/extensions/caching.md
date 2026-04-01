@@ -25,7 +25,7 @@ Related Information:
 First install the relevant component modules.
 
 ```bash
-$ npm i @midwayjs/cache-manager@3 --save
+$ npm i @midwayjs/cache-manager@4 --save
 ```
 
 Or add the following dependencies in `package.json` and reinstall.
@@ -33,7 +33,7 @@ Or add the following dependencies in `package.json` and reinstall.
 ```json
 {
    "dependencies": {
-     "@midwayjs/cache-manager": "^3.0.0",
+     "@midwayjs/cache-manager": "^4.0.0",
      // ...
    },
 }

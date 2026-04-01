@@ -19,7 +19,7 @@ We recommend using scaffolding directly, with only a few simple instructions, yo
 $ npm init midway@latest -y
 ```
 
-Select `koa-v3` to initialize the project. You can customize the project name, such as `weather-sample`.
+Select `koa-v4` to initialize the project. You can choose any project name, such as `weather-sample`. If you want a functional full-stack project instead, choose `react-functional-v4` or `vue-functional-v4`.
 
 Now you can start the application to experience it.
 
@@ -28,7 +28,7 @@ $ npm run dev
 $ open http://localhost:7001
 ```
 
-At the same time, we also provide a complete example. After `npm init midway`, you can select the `quick-start` project and create it, which is convenient for comparison and learning.
+If you want to try the functional full-stack workflow, run `npm init midway@latest` and choose `react-functional-v4` or `vue-functional-v4` for comparison and learning.
 
 
 

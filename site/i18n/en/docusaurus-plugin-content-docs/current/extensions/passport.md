@@ -34,7 +34,7 @@ It itself contains several parts:
 
 ```bash
 ## Required
-$ npm i @midwayjs/passport@3 --save
+$ npm i @midwayjs/passport@4 --save
 
 ## Optional
 ## Install the local policy below
@@ -51,7 +51,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/passport": "^3.0.0",
+    "@midwayjs/passport": "^4.0.0",
     // Local policy
     "passport-local": "^1.0.0"
     // Jwt strategy

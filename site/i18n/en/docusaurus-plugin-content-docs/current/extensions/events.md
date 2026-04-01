@@ -15,7 +15,7 @@ Related Information:
 ## Installation
 
 ```bash
-$ npm i @midwayjs/event-emitter@3 --save
+$ npm i @midwayjs/event-emitter@4 --save
 ```
 
 Or add the dependency to your `package.json` and reinstall:
@@ -23,7 +23,7 @@ Or add the dependency to your `package.json` and reinstall:
 ```json
 {
   "dependencies": {
-    "@midwayjs/event-emitter": "^3.0.0"
+    "@midwayjs/event-emitter": "^4.0.0"
   }
 }
 ```

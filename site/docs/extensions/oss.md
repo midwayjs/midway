@@ -31,14 +31,14 @@
 `@midwayjs/oss` 是主要的功能包。
 
 ```bash
-$ npm i @midwayjs/oss@3 --save
+$ npm i @midwayjs/oss@4 --save
 ```
 或者在 `package.json` 中增加如下依赖后，重新安装。
 
 ```json
 {
   "dependencies": {
-    "@midwayjs/oss": "^3.0.0",
+    "@midwayjs/oss": "^4.0.0",
     // ...
   },
 }

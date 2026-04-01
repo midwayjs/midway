@@ -19,7 +19,7 @@ Related information:
 ## Installation dependency
 
 ```bash
-$ npm i @midwayjs/jwt@3 --save
+$ npm i @midwayjs/jwt@4 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -27,7 +27,7 @@ Or reinstall the following dependencies in `package.json`.
 ```json
 {
   "dependencies": {
-    "@midwayjs/jwt": "^3.0.0"
+    "@midwayjs/jwt": "^4.0.0"
     // ...
   },
 }
