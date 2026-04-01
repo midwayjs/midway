@@ -29,7 +29,7 @@
 $ npm init midway@latest -y
 ```
 
-选择 esm 分组中的脚手架。
+在 v4 模板列表中选择 `koa-v4-esm`。
 
 
 
@@ -82,7 +82,7 @@ $ npm init midway@latest -y
 * alias path，请用 Node.js 自带的 [子路径导出](https://nodejs.org/api/packages.html#subpath-exports) 代替
 * 构建时非 js 文件的拷贝，将非代码文件放到 src 外部，或者在 build 时添加自定义命令
 
-具体差异可以参考 [脚手架](https://github.com/midwayjs/midway-boilerplate/blob/master/v3/midway-framework-koa-esm/boilerplate/_package.json) 进行核对。
+具体差异可以参考 Midway 官方脚手架仓库中的最新 ESM 模板：[midwayjs/midway-boilerplate](https://github.com/midwayjs/midway-boilerplate)。
 
 
 
@@ -149,4 +149,3 @@ export class MainConfiguration {
   // ...
 }
 ```
-
