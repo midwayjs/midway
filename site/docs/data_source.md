@@ -523,7 +523,7 @@ interface MySQLOptions {
 }
 
 // 使用 DataSourceManagerConfigOption 定义配置
-declare module '@midwayjs/core/dist/interface' {
+declare module '@midwayjs/core' {
   interface MidwayConfig {
     mysql?: DataSourceManagerConfigOption<MySQLOptions>;
   }

@@ -75,9 +75,13 @@ export interface ValidateResult {
 export interface IValidator<Schema> {
   schemaHelper: SchemaHelper<Schema>;
   validateService?: IValidationService<Schema>;
+  /**
+   * Validator adapters may construct their service synchronously or lazily.
+   * The registry normalizes both forms with `await`.
+   */
   validateServiceHandler: (
     container: IMidwayContainer
-  ) => Promise<IValidationService<Schema>>;
+  ) => IValidationService<Schema> | Promise<IValidationService<Schema>>;
 }
 
 export interface IValidationService<Schema> {

@@ -609,7 +609,7 @@ interface HTTPClientConfig {
 }
 
 // 使用 ServiceFactoryConfigOption 定义配置
-declare module '@midwayjs/core/dist/interface' {
+declare module '@midwayjs/core' {
   interface MidwayConfig {
     httpClient?: ServiceFactoryConfigOption<HTTPClientConfig>;
   }

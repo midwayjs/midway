@@ -602,7 +602,7 @@ interface HTTPClientConfig {
 }
 
 // Use ServiceFactoryConfigOption to define configuration
-declare module '@midwayjs/core/dist/interface' {
+declare module '@midwayjs/core' {
   interface MidwayConfig {
     httpClient?: ServiceFactoryConfigOption<HTTPClientConfig>;
   }
