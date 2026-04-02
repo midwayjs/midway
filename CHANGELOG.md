@@ -1,6 +1,16 @@
 # Change Log
 
 
+## v4.0.1-4.0.1-beta.1.0 (2026-04-02)
+
+#### :rocket: New Feature
+* [#4533](https://github.com/midwayjs/midway/pull/4533) feat: new site ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0 (2026-03-26)
 
 #### :package: Dependencies
