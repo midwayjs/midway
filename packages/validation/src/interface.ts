@@ -1,5 +1,13 @@
 import { IMidwayContainer } from '@midwayjs/core';
 
+export interface IValidatorModule<Schema> {
+  default: IValidator<Schema>;
+}
+
+export type ValidatorLike<Schema> =
+  | IValidator<Schema>
+  | IValidatorModule<Schema>;
+
 export interface ValidationOptions {
   /**
    * The status code to return when validation fails, default is 422.
@@ -17,7 +25,7 @@ export interface ValidationOptions {
   /**
    * The validators to use for validation.
    */
-  validators?: Record<string, IValidator<any>>;
+  validators?: Record<string, ValidatorLike<any>>;
   /**
    * The default validator to use for validation.
    */

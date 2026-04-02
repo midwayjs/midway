@@ -1,5 +1,5 @@
 import { IMidwayContainer, MidwayCommonError } from '@midwayjs/core';
-import { IValidator } from './interface';
+import { IValidator, ValidatorLike } from './interface';
 
 class ValidatorRegistry {
   private static instance: ValidatorRegistry;
@@ -13,8 +13,21 @@ class ValidatorRegistry {
     return ValidatorRegistry.instance;
   }
 
-  register(name: string, validator: IValidator<any>) {
-    this.validators.set(name, validator);
+  register(name: string, validator: ValidatorLike<any>) {
+    this.validators.set(name, this.unwrapValidator(validator));
+  }
+
+  private isValidatorModule(
+    validator: ValidatorLike<any>
+  ): validator is { default: IValidator<any> } {
+    return 'default' in validator;
+  }
+
+  private unwrapValidator(validator: ValidatorLike<any>): IValidator<any> {
+    if (this.isValidatorModule(validator)) {
+      return validator.default;
+    }
+    return validator;
   }
 
   getValidator(name: string) {
