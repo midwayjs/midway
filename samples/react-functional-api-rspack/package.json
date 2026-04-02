@@ -1,7 +1,7 @@
 {
   "name": "@samples/react-functional-api-rspack",
   "private": true,
-  "version": "4.0.0",
+  "version": "4.0.1-alpha.0",
   "type": "module",
   "scripts": {
     "dev": "pnpm run dev:web",
