@@ -1885,9 +1885,6 @@ importers:
       joi:
         specifier: ^17.13.3
         version: 17.13.3
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: 0.2.2
     devDependencies:
       '@midwayjs/mock':
         specifier: workspace:*
