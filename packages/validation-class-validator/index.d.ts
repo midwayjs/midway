@@ -1,8 +1,10 @@
-export * from './dist/index';
-export { default } from './dist/index';
 import { ValidatorOptions } from 'class-validator';
 
-declare module '@midwayjs/core/dist/interface' {
+export * from './dist/index';
+declare const classValidator: typeof import('./dist/index').default;
+export default classValidator;
+
+declare module '@midwayjs/core' {
   interface MidwayConfig {
     classValidator?: ValidatorOptions;
   }

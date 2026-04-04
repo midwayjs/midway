@@ -17,8 +17,7 @@
     "@midwayjs/logger": "^4.0.0",
     "@midwayjs/validation": "workspace:*",
     "@midwayjs/validation-joi": "workspace:*",
-    "joi": "^17.13.3",
-    "reflect-metadata": "^0.2.2"
+    "joi": "^17.13.3"
   },
   "devDependencies": {
     "@midwayjs/mock": "workspace:*",

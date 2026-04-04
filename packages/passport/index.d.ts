@@ -2,7 +2,7 @@ import { AuthenticateOptions } from './dist/index';
 
 export * from './dist/index';
 
-declare module '@midwayjs/core/dist/interface' {
+declare module '@midwayjs/core' {
   interface MidwayConfig {
     passport?: Omit<AuthenticateOptions, 'assignProperty'> & {
       assignProperty?: boolean | string;

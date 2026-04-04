@@ -497,7 +497,7 @@ interface MySQLOptions {
 }
 
 // Use DataSourceManagerConfigOption to define configuration
-declare module '@midwayjs/core/dist/interface' {
+declare module '@midwayjs/core' {
   interface MidwayConfig {
     mysql?: DataSourceManagerConfigOption<MySQLOptions>;
   }

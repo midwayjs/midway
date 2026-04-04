@@ -397,7 +397,7 @@ export interface ParamDecoratorOptions {
  *
  * import { IMidwayLogger } from '@midwayjs/logger';
  *
- * declare module '@midwayjs/core/dist/interface' {
+ * declare module '@midwayjs/core' {
  *   interface ILogger extends IMidwayLogger {
  *   }
  * }
@@ -418,7 +418,7 @@ export interface ILogger {
  *
  * import { LoggerOptions } from '@midwayjs/logger';
  *
- * declare module '@midwayjs/core/dist/interface' {
+ * declare module '@midwayjs/core' {
  *   interface MidwayLoggerOptions extends LoggerOptions {
  *     logDir?: string;
  *     level?: string;

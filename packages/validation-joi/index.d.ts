@@ -1,8 +1,10 @@
-export * from './dist/index';
-export { default } from './dist/index';
 import * as Joi from 'joi';
 
-declare module '@midwayjs/core/dist/interface' {
+export * from './dist/index';
+declare const joi: typeof import('./dist/index').default;
+export default joi;
+
+declare module '@midwayjs/core' {
   interface MidwayConfig {
     joi?: Joi.ValidationOptions;
   }

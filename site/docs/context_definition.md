@@ -65,7 +65,7 @@ declare module '@midwayjs/core' {
 // index.d.ts
 
 // 下面这段可以对所有的 Context 做扩展
-declare module '@midwayjs/core/dist/interface' {
+declare module '@midwayjs/core' {
   interface Context {
     abc: string;
   }
