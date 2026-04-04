@@ -198,7 +198,7 @@ export class BullFramework
             },
           },
           async () => {
-            ctx.logger.info(
+            ctx.logger.debug(
               `start process job ${job.id} from ${processor.name}`
             );
 
@@ -219,7 +219,7 @@ export class BullFramework
               );
             });
             const result = await Promise.resolve(await fn(ctx));
-            ctx.logger.info(
+            ctx.logger.debug(
               `complete process job ${job.id} from ${processor.name}`
             );
             return result;

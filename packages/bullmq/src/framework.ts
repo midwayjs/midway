@@ -358,7 +358,7 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
               },
             },
             async () => {
-              ctx.logger.info(
+              ctx.logger.debug(
                 `start process job ${job.id} from ${processor.name}`
               );
 
@@ -378,7 +378,7 @@ export class BullMQFramework extends BaseFramework<Application, Context, any> {
                 )(job.data, job, token);
               });
               const result = await Promise.resolve(await fn(ctx));
-              ctx.logger.info(
+              ctx.logger.debug(
                 `complete process job ${job.id} from ${processor.name}`
               );
               return result;
