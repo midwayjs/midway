@@ -484,8 +484,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       koa:
-        specifier: 3.0.3
-        version: 3.0.3
+        specifier: 3.1.2
+        version: 3.1.2
       mm:
         specifier: 3.4.0
         version: 3.4.0
@@ -1756,8 +1756,8 @@ importers:
         specifier: 6.15.0
         version: 6.15.0
       koa:
-        specifier: 3.0.3
-        version: 3.0.3
+        specifier: 3.1.2
+        version: 3.1.2
       koa-bodyparser:
         specifier: 4.4.1
         version: 4.4.1
@@ -8707,7 +8707,6 @@ packages:
   keygrip@1.1.0:
     resolution: {integrity: sha512-iYSchDJ+liQ8iwbSI2QqsQOvqv58eJCEanyJPJi+Khyu8smkcKSFUCbPwzFcL7YVtZ6eONjqRX/38caJ7QjRAQ==}
     engines: {node: '>= 0.6'}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   keyv@3.1.0:
     resolution: {integrity: sha512-9ykJ/46SN/9KPM/sichzQ7OvXyGDYKGTaDlKMGCAlg2UK8KRy4jb0d8sFc+0Tt0YYnThq8X2RZgCg74RPxgcVA==}
@@ -8814,8 +8813,8 @@ packages:
     resolution: {integrity: sha512-zPPuIt+ku1iCpFBRwseMcPYQ1cJL8l60rSmKeOuGfOXyE6YnTBmf2aEFNL2HQGrD0cPcLO/t+v9RTgC+fwEh/g==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
-  koa@3.0.3:
-    resolution: {integrity: sha512-MeuwbCoN1daWS32/Ni5qkzmrOtQO2qrnfdxDHjrm6s4b59yG4nexAJ0pTEFyzjLp0pBVO80CZp0vW8Ze30Ebow==}
+  koa@3.1.2:
+    resolution: {integrity: sha512-2LOQnFKu3m0VxpE+5sb5+BRTSKrXmNxGgxVRiKwD9s5KQB1zID/FRXhtzeV7RT1L2GVpdEEAfVuclFOMGl1ikA==}
     engines: {node: '>= 18'}
 
   latest-version@5.1.0:
@@ -20643,10 +20642,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  koa@3.0.3:
+  koa@3.1.2:
     dependencies:
       accepts: 1.3.8
-      content-disposition: 0.5.4
+      content-disposition: 1.0.1
       content-type: 1.0.5
       cookies: 0.9.1
       delegates: 1.0.0
