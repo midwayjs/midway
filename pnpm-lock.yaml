@@ -468,8 +468,8 @@ importers:
         specifier: ^1.0.2
         version: 1.1.1
       '@opentelemetry/api':
-        specifier: 1.9.0
-        version: 1.9.0
+        specifier: 1.9.1
+        version: 1.9.1
       picomatch:
         specifier: 2.3.1
         version: 2.3.1
@@ -933,7 +933,7 @@ importers:
         version: 9.2.1(@babel/core@7.28.5)(webpack@5.104.1)
       next:
         specifier: ~16.1.0
-        version: 16.1.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.1.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       null-loader:
         specifier: ^4.0.1
         version: 4.0.1(webpack@5.104.1)
@@ -3975,8 +3975,8 @@ packages:
   '@octokit/types@9.3.2':
     resolution: {integrity: sha512-D4iHGTdAnEEVsB8fl95m1hiz7D5YiRdQ9b/OEb3BYRVwbLsGHcRVPz+u+BgRLNk0Q0/4iZCBqDN96j2XNxfXrA==}
 
-  '@opentelemetry/api@1.9.0':
-    resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
+  '@opentelemetry/api@1.9.1':
+    resolution: {integrity: sha512-gLyJlPHPZYdAk1JENA9LeHejZe1Ti77/pTeFm/nMXmQH/HFZlcS/O2XJB+L8fkbrNSqhdtlvjBVjxwUYanNH5Q==}
     engines: {node: '>=8.0.0'}
 
   '@paralleldrive/cuid2@2.3.1':
@@ -14608,7 +14608,7 @@ snapshots:
     dependencies:
       '@octokit/openapi-types': 18.1.1
 
-  '@opentelemetry/api@1.9.0': {}
+  '@opentelemetry/api@1.9.1': {}
 
   '@paralleldrive/cuid2@2.3.1':
     dependencies:
@@ -21715,7 +21715,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@16.1.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@16.1.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 16.1.6
       '@swc/helpers': 0.5.15
@@ -21734,7 +21734,7 @@ snapshots:
       '@next/swc-linux-x64-musl': 16.1.6
       '@next/swc-win32-arm64-msvc': 16.1.6
       '@next/swc-win32-x64-msvc': 16.1.6
-      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/api': 1.9.1
       sharp: 0.34.5
     transitivePeerDependencies:
       - '@babel/core'
