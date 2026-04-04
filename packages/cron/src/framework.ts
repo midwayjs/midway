@@ -121,7 +121,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
               },
             },
             async () => {
-              ctx.logger.info(`start job ${name.name}`);
+              ctx.logger.debug(`start job ${name.name}`);
 
               const isPassed = await self.app
                 .getFramework()
@@ -139,7 +139,7 @@ export class CronFramework extends BaseFramework<Application, Context, any> {
 
               try {
                 const result = await Promise.resolve(await fn(ctx));
-                ctx.logger.info(`complete job ${name.name}`);
+                ctx.logger.debug(`complete job ${name.name}`);
                 await service.onComplete?.(result);
                 return result;
               } catch (err) {
