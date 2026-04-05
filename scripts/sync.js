@@ -1,5 +1,5 @@
 const { execSync } = require('child_process');
-const execa = require('execa');
+const { execa } = require('execa');
 const { resolve } = require('path');
 
 const originData = execSync('npx lerna ls --json').toString();
