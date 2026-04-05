@@ -1,6 +1,34 @@
 # Change Log
 
 
+## v4.0.1 (2026-04-05)
+
+#### :rocket: New Feature
+* [#4533](https://github.com/midwayjs/midway/pull/4533) feat: new site ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `core`, `react`, `vue`
+  * [#4545](https://github.com/midwayjs/midway/pull/4545) fix(core): Improve the type derivation document and example of the functional API input schema ([@czy88840616](https://github.com/czy88840616))
+* `axios`, `bull-board`, `bull`, `bullmq`, `busboy`, `cache-manager`, `captcha`, `casbin`, `code-dye`, `commander`, `consul`, `core`, `cos`, `cron`, `cross-domain`, `etcd`, `event-emitter`, `express-session`, `grpc`, `http-proxy`, `i18n`, `info`, `jwt`, `kafka`, `leoric`, `mcp`, `mikro`, `mongoose`, `mqtt`, `nextjs`, `one-shot`, `oss`, `passport`, `piscina`, `prometheus`, `rabbitmq`, `redis`, `security`, `sequelize`, `session`, `socketio`, `static-file`, `swagger`, `tablestore`, `tags`, `tenant`, `typeorm`, `upload`, `validate`, `validation-class-validator`, `validation-joi`, `validation-zod`, `validation-zod4`, `validation`, `view-ejs`, `view-nunjucks`, `view`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4537](https://github.com/midwayjs/midway/pull/4537) fix: use public core typing entrypoints ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* Other
+  * [#4543](https://github.com/midwayjs/midway/pull/4543) chore(deps): update dependency @types/node to v20.19.39 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4535](https://github.com/midwayjs/midway/pull/4535) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.6.10 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4539](https://github.com/midwayjs/midway/pull/4539) chore(deps): update hashicorp/consul docker tag to v1.22.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#4532](https://github.com/midwayjs/midway/pull/4532) chore(deps): update dependency dayjs to v1.11.20 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#4540](https://github.com/midwayjs/midway/pull/4540) fix(deps): update dependency @opentelemetry/api to v1.9.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `web-koa`
+  * [#4542](https://github.com/midwayjs/midway/pull/4542) fix(deps): update dependency koa to v3.1.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.0 (2026-03-26)
 
 #### :package: Dependencies

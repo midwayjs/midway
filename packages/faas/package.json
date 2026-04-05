@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Midway Framework for FaaS (Function as a Service)",
   "main": "dist/index.js",
   "typings": "index.d.ts",
