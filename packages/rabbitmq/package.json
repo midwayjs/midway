@@ -27,7 +27,7 @@
     "@midwayjs/core": "workspace:^",
     "@types/amqplib": "0.10.8",
     "amqplib": "0.10.9",
-    "fs-extra": "11.3.3"
+    "fs-extra": "11.3.4"
   },
   "dependencies": {
     "@midwayjs/core": "workspace:^",
