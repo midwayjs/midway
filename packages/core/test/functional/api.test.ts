@@ -145,6 +145,28 @@ describe('test/functional/api.test.ts', function () {
     );
   });
 
+  it('should infer input schema type in handler', async () => {
+    const paramsSchema = {
+      parse(value: any): { id: string } {
+        return value;
+      },
+    };
+
+    defineApi('/users', api => ({
+      getUser: api
+        .get('/:id')
+        .input({
+          params: paramsSchema,
+        })
+        .handle(async ({ input }) => {
+          const id: string = input.params.id;
+          return { id };
+        }),
+    }));
+
+    expect(true).toBe(true);
+  });
+
   it('should validate output schema at invoke time', async () => {
     const outputSchema = {
       parse(value) {

@@ -42,34 +42,90 @@ function createNamedFunctionalController(
   }[className] as new () => any;
 }
 
-export interface FunctionalRouteInput {
-  params?: unknown;
-  query?: unknown;
-  body?: unknown;
-  headers?: unknown;
+export interface FunctionalRouteInput<
+  TParams = unknown,
+  TQuery = unknown,
+  TBody = unknown,
+  THeaders = unknown,
+> {
+  params?: TParams;
+  query?: TQuery;
+  body?: TBody;
+  headers?: THeaders;
 }
 
-export interface FunctionalRouteHandlerArgs {
-  input: FunctionalRouteInput;
+type EmptyFunctionalRouteInput = FunctionalRouteInput<
+  undefined,
+  undefined,
+  undefined,
+  undefined
+>;
+
+type InferSafeParseData<TResult> =
+  Extract<TResult, { success: true }> extends {
+    data: infer TData;
+  }
+    ? TData
+    : unknown;
+
+type InferSchemaValue<TSchema> = [TSchema] extends [undefined]
+  ? unknown
+  : TSchema extends { parseAsync(value: any): Promise<infer TResult> }
+    ? TResult
+    : TSchema extends { parse(value: any): infer TResult }
+      ? TResult
+      : TSchema extends { safeParseAsync(value: any): Promise<infer TResult> }
+        ? InferSafeParseData<TResult>
+        : TSchema extends { safeParse(value: any): infer TResult }
+          ? InferSafeParseData<TResult>
+          : unknown;
+
+type InferFunctionalRouteInput<TInput extends FunctionalRouteInput> = ([
+  TInput['params'],
+] extends [undefined]
+  ? { params?: unknown }
+  : { params: InferSchemaValue<TInput['params']> }) &
+  ([TInput['query']] extends [undefined]
+    ? { query?: unknown }
+    : { query: InferSchemaValue<TInput['query']> }) &
+  ([TInput['body']] extends [undefined]
+    ? { body?: unknown }
+    : { body: InferSchemaValue<TInput['body']> }) &
+  ([TInput['headers']] extends [undefined]
+    ? { headers?: unknown }
+    : { headers: InferSchemaValue<TInput['headers']> });
+
+export interface FunctionalRouteHandlerArgs<
+  TInput extends FunctionalRouteInput = EmptyFunctionalRouteInput,
+> {
+  input: InferFunctionalRouteInput<TInput>;
   ctx: any;
   next?: NextFunction;
 }
 
-export interface FunctionalRouteDefinition {
+export interface FunctionalRouteDefinition<
+  TInput extends FunctionalRouteInput = EmptyFunctionalRouteInput,
+  TOutput = unknown,
+> {
   method: string;
   path: string | RegExp;
-  options: FunctionalRouteOptions;
-  handle: (args: FunctionalRouteHandlerArgs) => Promise<unknown> | unknown;
+  options: FunctionalRouteOptions<TInput, TOutput>;
+  handle: (
+    args: FunctionalRouteHandlerArgs<TInput>
+  ) => Promise<unknown> | unknown;
 }
 
-export interface FunctionalRouteOptions {
+export interface FunctionalRouteOptions<
+  TInput extends FunctionalRouteInput = EmptyFunctionalRouteInput,
+  TOutput = unknown,
+> {
   routerName?: string;
   middleware?: any[];
   summary?: string;
   description?: string;
   ignoreGlobalPrefix?: boolean;
-  input?: FunctionalRouteInput;
-  output?: unknown;
+  input?: TInput;
+  output?: TOutput;
 }
 
 export type FunctionalControllerOptions = {
@@ -92,17 +148,37 @@ export interface FunctionalApiModuleMeta {
   versionPrefix?: string;
 }
 
-export interface RouteBuilder {
-  input(schema: FunctionalRouteOptions['input']): RouteBuilder;
-  output(schema: FunctionalRouteOptions['output']): RouteBuilder;
-  middleware(mw: any[]): RouteBuilder;
-  meta(options: Omit<FunctionalRouteOptions, 'input' | 'output'>): RouteBuilder;
-  handle(fn: FunctionalRouteDefinition['handle']): FunctionalRouteDefinition;
+export interface RouteBuilder<
+  TInput extends FunctionalRouteInput = EmptyFunctionalRouteInput,
+  TOutput = unknown,
+> {
+  input<
+    TParams = undefined,
+    TQuery = undefined,
+    TBody = undefined,
+    THeaders = undefined,
+  >(
+    schema: FunctionalRouteInput<TParams, TQuery, TBody, THeaders>
+  ): RouteBuilder<
+    FunctionalRouteInput<TParams, TQuery, TBody, THeaders>,
+    TOutput
+  >;
+  output<TNextOutput>(schema: TNextOutput): RouteBuilder<TInput, TNextOutput>;
+  middleware(mw: any[]): RouteBuilder<TInput, TOutput>;
+  meta(
+    options: Omit<FunctionalRouteOptions<TInput, TOutput>, 'input' | 'output'>
+  ): RouteBuilder<TInput, TOutput>;
+  handle(
+    fn: FunctionalRouteDefinition<TInput, TOutput>['handle']
+  ): FunctionalRouteDefinition<TInput, TOutput>;
 }
 
-interface RouteBuilderInternal extends RouteBuilder {
+interface RouteBuilderInternal<
+  TInput extends FunctionalRouteInput = EmptyFunctionalRouteInput,
+  TOutput = unknown,
+> extends RouteBuilder<TInput, TOutput> {
   __isRouteBuilder: true;
-  __build: () => FunctionalRouteDefinition;
+  __build: () => FunctionalRouteDefinition<TInput, TOutput>;
 }
 
 const HTTP_METHODS = [
@@ -116,12 +192,15 @@ const HTTP_METHODS = [
   RequestMethod.ALL,
 ] as const;
 
-function createRouteBuilder(
+function createRouteBuilder<
+  TInput extends FunctionalRouteInput = EmptyFunctionalRouteInput,
+  TOutput = unknown,
+>(
   method: string,
   path: string | RegExp = '/'
-): RouteBuilderInternal {
-  const route: Omit<FunctionalRouteDefinition, 'handle'> & {
-    handle?: FunctionalRouteDefinition['handle'];
+): RouteBuilderInternal<TInput, TOutput> {
+  const route: Omit<FunctionalRouteDefinition<TInput, TOutput>, 'handle'> & {
+    handle?: FunctionalRouteDefinition<TInput, TOutput>['handle'];
   } = {
     method,
     path,
@@ -130,15 +209,15 @@ function createRouteBuilder(
     },
   };
 
-  const builder: RouteBuilderInternal = {
+  const builder: RouteBuilderInternal<TInput, TOutput> = {
     __isRouteBuilder: true,
     input(schema) {
-      route.options.input = schema;
-      return builder;
+      route.options.input = schema as any;
+      return builder as any;
     },
     output(schema) {
-      route.options.output = schema;
-      return builder;
+      route.options.output = schema as any;
+      return builder as any;
     },
     middleware(mw) {
       route.options.middleware = mw || [];
@@ -161,14 +240,16 @@ function createRouteBuilder(
           'Functional route is missing handler, call .handle(fn) to finish route definition'
         );
       }
-      return route as FunctionalRouteDefinition;
+      return route as FunctionalRouteDefinition<TInput, TOutput>;
     },
   };
 
   return builder;
 }
 
-function getInputFromContext(ctx: any): FunctionalRouteInput {
+function getInputFromContext(
+  ctx: any
+): FunctionalRouteInput<unknown, unknown, unknown, unknown> {
   return {
     params: ctx?.params,
     query: ctx?.query,
@@ -219,12 +300,12 @@ async function runSchemaValidation(
   return value;
 }
 
-async function validateInput(
-  schema: FunctionalRouteDefinition['options']['input'],
+async function validateInput<TInput extends FunctionalRouteInput>(
+  schema: FunctionalRouteDefinition<TInput>['options']['input'],
   input: FunctionalRouteInput
-): Promise<FunctionalRouteInput> {
+): Promise<InferFunctionalRouteInput<TInput>> {
   if (!schema) {
-    return input;
+    return input as InferFunctionalRouteInput<TInput>;
   }
 
   return {
@@ -240,16 +321,22 @@ async function validateInput(
       input.headers,
       'input.headers'
     ),
-  };
+  } as InferFunctionalRouteInput<TInput>;
 }
 
-function normalizeRouteDefinition(
+function normalizeRouteDefinition<
+  TInput extends FunctionalRouteInput = EmptyFunctionalRouteInput,
+  TOutput = unknown,
+>(
   routeName: string,
-  routeValue: FunctionalRouteDefinition | RouteBuilderInternal
-): FunctionalRouteDefinition {
-  const route = (routeValue as RouteBuilderInternal)?.__isRouteBuilder
-    ? (routeValue as RouteBuilderInternal).__build()
-    : (routeValue as FunctionalRouteDefinition);
+  routeValue:
+    | FunctionalRouteDefinition<TInput, TOutput>
+    | RouteBuilderInternal<TInput, TOutput>
+): FunctionalRouteDefinition<TInput, TOutput> {
+  const route = (routeValue as RouteBuilderInternal<TInput, TOutput>)
+    ?.__isRouteBuilder
+    ? (routeValue as RouteBuilderInternal<TInput, TOutput>).__build()
+    : (routeValue as FunctionalRouteDefinition<TInput, TOutput>);
 
   if (!route || typeof route !== 'object') {
     throw new Error(
@@ -270,10 +357,31 @@ function normalizeRouteDefinition(
       middleware: [],
       ...route.options,
     },
-  };
+  } as FunctionalRouteDefinition<TInput, TOutput>;
 }
 
-export function defineApi(
+type NormalizeDefinedRoute<T> =
+  T extends RouteBuilderInternal<infer TInput, infer TOutput>
+    ? FunctionalRouteDefinition<TInput, TOutput>
+    : T extends FunctionalRouteDefinition<infer TInput, infer TOutput>
+      ? FunctionalRouteDefinition<TInput, TOutput>
+      : never;
+
+type NormalizeDefinedRoutes<
+  TRoutes extends Record<
+    string,
+    FunctionalRouteDefinition | RouteBuilderInternal
+  >,
+> = {
+  [K in keyof TRoutes]: NormalizeDefinedRoute<TRoutes[K]>;
+};
+
+export function defineApi<
+  TRoutes extends Record<
+    string,
+    FunctionalRouteDefinition<any, any> | RouteBuilderInternal<any, any>
+  >,
+>(
   prefix: string,
   factory: (api: {
     get(path?: string | RegExp): RouteBuilder;
@@ -284,12 +392,12 @@ export function defineApi(
     options(path?: string | RegExp): RouteBuilder;
     head(path?: string | RegExp): RouteBuilder;
     all(path?: string | RegExp): RouteBuilder;
-  }) => Record<string, FunctionalRouteDefinition | RouteBuilderInternal>,
+  }) => TRoutes,
   controllerOptions: FunctionalControllerOptions = {
     middleware: [],
     sensitive: true,
   }
-): Record<string, FunctionalRouteDefinition> {
+): NormalizeDefinedRoutes<TRoutes> {
   const routeFactory = {
     get(path: string | RegExp = '/') {
       return createRouteBuilder(RequestMethod.GET, path);
@@ -318,7 +426,10 @@ export function defineApi(
   };
 
   const definedRoutes = factory(routeFactory);
-  const normalizedRoutes: Record<string, FunctionalRouteDefinition> = {};
+  const normalizedRoutes = {} as Record<
+    string,
+    FunctionalRouteDefinition<any, any>
+  >;
   const routeNames = Object.keys(definedRoutes || {});
 
   const FunctionalApiController = createNamedFunctionalController(
@@ -442,5 +553,5 @@ export function defineApi(
     writable: false,
   });
 
-  return normalizedRoutes;
+  return normalizedRoutes as NormalizeDefinedRoutes<TRoutes>;
 }

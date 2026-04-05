@@ -38,7 +38,6 @@ describe('vue api bridge', () => {
 
   it('should install api client with vue plugin', () => {
     const client = {
-      transport: 'http',
       call: jest.fn(),
       has: jest.fn(),
       operationIds: jest.fn(),

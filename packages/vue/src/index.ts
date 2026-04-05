@@ -1,4 +1,3 @@
-import type { ApiClient } from '@midwayjs/web-bridge';
 import { createClient } from '@midwayjs/web-bridge';
 import {
   defineComponent,
@@ -10,11 +9,17 @@ import {
 
 export { createClient };
 
-const MidwayApiClientInjectionKey: InjectionKey<ApiClient<any, any>> =
+interface MidwayApiClientLike {
+  call(operationId: string, input: unknown): Promise<unknown>;
+  has(operationId: string): Promise<boolean> | boolean;
+  operationIds(): Promise<string[]> | string[];
+}
+
+const MidwayApiClientInjectionKey: InjectionKey<MidwayApiClientLike> =
   Symbol('MidwayApiClient');
 
 export interface MidwayApiProviderProps {
-  client: ApiClient<any, any>;
+  client: MidwayApiClientLike;
 }
 
 export const MidwayApiProvider = defineComponent({
@@ -26,12 +31,12 @@ export const MidwayApiProvider = defineComponent({
     },
   },
   setup(props, { slots }) {
-    provide(MidwayApiClientInjectionKey, props.client as ApiClient<any, any>);
+    provide(MidwayApiClientInjectionKey, props.client as MidwayApiClientLike);
     return () => (slots.default ? slots.default() : null);
   },
 });
 
-export function createMidwayApiPlugin(client: ApiClient<any, any>): Plugin {
+export function createMidwayApiPlugin(client: MidwayApiClientLike): Plugin {
   return {
     install(app) {
       app.provide(MidwayApiClientInjectionKey, client);
@@ -46,7 +51,11 @@ export function useMidwayApiClient<TInput = unknown, TOutput = unknown>() {
       'useMidwayApiClient must be used inside app.use(createMidwayApiPlugin(client)) or <MidwayApiProvider>'
     );
   }
-  return client as ApiClient<TInput, TOutput>;
+  return client as {
+    call(operationId: string, input: TInput): Promise<TOutput>;
+    has(operationId: string): Promise<boolean> | boolean;
+    operationIds(): Promise<string[]> | string[];
+  };
 }
 
 export function useMidwayApiOperation<TInput = unknown, TOutput = unknown>(

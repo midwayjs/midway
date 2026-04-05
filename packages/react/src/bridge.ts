@@ -1,4 +1,5 @@
 import {
+  ApiCallClient,
   ApiBridgeOperation,
   ApiModulesMap,
   ClientFromApiModules,
@@ -56,6 +57,6 @@ export type ReactCreateClientOptions = CreateClientOptions;
 export function createClient<TModules extends ApiModulesMap>(
   modules: TModules,
   options: ReactCreateClientOptions = {}
-): ClientFromApiModules<TModules> {
+): ClientFromApiModules<TModules> & ApiCallClient {
   return createBridgeClient(modules, options);
 }

@@ -1,4 +1,3 @@
-import { ApiClient } from '@midwayjs/web-bridge';
 import {
   createContext,
   createElement,
@@ -7,10 +6,16 @@ import {
   type ReactNode,
 } from 'react';
 
-const MidwayApiClientContext = createContext<ApiClient<any, any> | null>(null);
+interface MidwayApiClientLike {
+  call(operationId: string, input: unknown): Promise<unknown>;
+  has(operationId: string): Promise<boolean> | boolean;
+  operationIds(): Promise<string[]> | string[];
+}
+
+const MidwayApiClientContext = createContext<MidwayApiClientLike | null>(null);
 
 export interface MidwayApiProviderProps {
-  client: ApiClient<any, any>;
+  client: MidwayApiClientLike;
   children?: ReactNode;
 }
 
@@ -31,7 +36,11 @@ export function useMidwayApiClient<TInput = unknown, TOutput = unknown>() {
       'useMidwayApiClient must be used inside <MidwayApiProvider />'
     );
   }
-  return client as ApiClient<TInput, TOutput>;
+  return client as {
+    call(operationId: string, input: TInput): Promise<TOutput>;
+    has(operationId: string): Promise<boolean> | boolean;
+    operationIds(): Promise<string[]> | string[];
+  };
 }
 
 export function useMidwayApiOperation<TInput = unknown, TOutput = unknown>(
