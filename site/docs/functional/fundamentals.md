@@ -34,7 +34,7 @@ import {
 | Class 写法 | 函数式写法 | 作用 |
 | --- | --- | --- |
 | `@Configuration` class | `defineConfiguration(...)` | 定义应用入口配置、组件导入、运行时参数 |
-| `@Controller` + `@Get/@Post` | `defineApi(...)` + `api.get/api.post` | 声明路由与 API 契约 |
+| `@Controller` + `@Get/@Post` | `defineApi(...)` + `api.get/api.post` | 声明路由、输入输出契约，并把 schema 类型传给 handler |
 | `@Inject()` | `useInject(...)` | 获取服务实例（IoC 注入） |
 | `@Config()` / `ctx.logger` 等 | `useConfig(...)` / `useLogger(...)` / `useContext(...)` | 读取配置、日志与上下文能力 |
 
@@ -72,6 +72,7 @@ export default defineConfiguration({
 - 把服务端 API 契约直接暴露给前端
 - 前端可直接使用类型化 client 调用
 - 减少手写 `method/path` 和联调偏差
+- `input/output` 既做运行时校验，也提供 handler 内的类型提示
 
 ### `defineApi` 与 class 路由对比
 

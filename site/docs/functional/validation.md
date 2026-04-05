@@ -7,6 +7,7 @@
 - Class 写法通常用参数装饰器 + pipe 机制做校验。
 - Functional 写法用 `input(...)` / `output(...)` 做校验。
 - 两者都能保证运行时安全，只是声明方式不同。
+- Functional 场景下，`input(...)` 的 schema 类型还会继续传给 `handle(...)`。
 
 ## Functional 的校验入口
 
@@ -40,12 +41,17 @@ export const userApi = defineApi('/users', api => ({
     )
     .handle(async ({ input }) => {
       return {
-        id: input.params?.id ?? '',
+        id: input.params.id,
         name: 'harry',
       };
     }),
 }));
 ```
+
+上面这段代码里：
+
+- `params.id` 在请求进入业务逻辑前会先做运行时校验
+- `handle(...)` 里的 `input.params.id` 会直接拿到 `string` 类型提示
 
 ## 失败时会发生什么
 
@@ -63,4 +69,3 @@ Functional 内部会调用 schema 的解析接口（如 `safeParse/safeParseAsyn
 1. 先给核心接口加 `input(...)`，特别是写操作接口。  
 2. 再补 `output(...)`，保证前后端返回结构稳定。  
 3. 把业务校验（如权限、业务规则）留在 service 层，不要全堆在 schema。  
-

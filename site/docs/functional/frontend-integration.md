@@ -58,12 +58,17 @@ export const userApi = defineApi('/users', api => ({
     )
     .handle(async ({ input }) => {
       return {
-        id: input.params?.id ?? 'u-1',
+        id: input.params.id,
         name: 'harry',
       };
     }),
 }));
 ```
+
+这里有两个效果：
+
+1. `input(...)` 会在运行时校验 `params/query/body/headers`
+2. schema 的类型会继续传给 `handle(...)`，所以上面可以直接写 `input.params.id`
 
 ## 4. 创建前端 client
 

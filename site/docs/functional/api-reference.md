@@ -44,13 +44,21 @@ export default defineConfiguration({
 ```ts
 // src/server/api/user.api.ts
 import { defineApi } from '@midwayjs/core/functional';
+import { z } from 'zod';
 
 export const userApi = defineApi('/users', api => ({
-  getUser: api.get('/:id').handle(async ({ input }) => {
-    return { id: input.params?.id, name: 'harry' };
-  }),
+  getUser: api
+    .get('/:id')
+    .input({
+      params: z.object({ id: z.string() }),
+    })
+    .handle(async ({ input }) => {
+      return { id: input.params.id, name: 'harry' };
+    }),
 }));
 ```
+
+- 说明：`input(...)` 不只做校验，也会把类型传到 `handle(...)`
 
 ## Hooks
 
@@ -123,13 +131,19 @@ export const pluginApi = defineApi('/plugin', api => ({
 ```ts
 // src/server/api/user.api.ts
 import { defineApi, useInject } from '@midwayjs/core/functional';
+import { z } from 'zod';
 import { UserService } from '../service/user.service';
 
 export const userApi = defineApi('/users', api => ({
-  getUser: api.get('/:id').handle(async ({ input }) => {
-    const userService = await useInject(UserService);
-    return userService.find(input.params?.id);
-  }),
+  getUser: api
+    .get('/:id')
+    .input({
+      params: z.object({ id: z.string() }),
+    })
+    .handle(async ({ input }) => {
+      const userService = await useInject(UserService);
+      return userService.find(input.params.id);
+    }),
 }));
 ```
 
