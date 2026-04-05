@@ -10,7 +10,7 @@
     "@vercel/ncc": "0.38.4",
     "autocannon": "7.15.0",
     "execa": "9.6.1",
-    "fs-extra": "11.3.3",
+    "fs-extra": "11.3.4",
     "jest": "29.7.0",
     "lerna": "8.1.2",
     "lerna-changelog": "2.2.0",
