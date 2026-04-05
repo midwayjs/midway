@@ -162,6 +162,43 @@ describe('react api bridge', () => {
     expect(user).toEqual({ id: 'u-1' });
   });
 
+  it('should provide namespaced api client by MidwayApiProvider', () => {
+    const adapter = jest.fn().mockResolvedValue({ id: 'p-2' });
+    const userApi = {
+      __midwayApiMeta: {
+        prefix: '/users',
+      },
+      getUser: {
+        method: 'get',
+        path: '/:id',
+        options: {
+          routerName: 'getUser',
+        },
+      },
+    };
+    const client = createClient(
+      {
+        user: userApi,
+      },
+      {
+        basePath: '/api',
+        adapter,
+      }
+    );
+    function App() {
+      const api = useMidwayApiClient();
+      return createElement('div', null, api.has('user.getUser') ? 'yes' : 'no');
+    }
+    const html = renderToString(
+      createElement(
+        MidwayApiProvider,
+        { client },
+        createElement(App)
+      )
+    );
+    expect(html).toContain('yes');
+  });
+
   it('should use built-in http adapter when adapter is not provided', async () => {
     const fetchMock = jest.fn().mockResolvedValue({
       ok: true,
