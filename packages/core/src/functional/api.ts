@@ -61,11 +61,12 @@ type EmptyFunctionalRouteInput = FunctionalRouteInput<
   undefined
 >;
 
-type InferSafeParseData<TResult> = Extract<TResult, { success: true }> extends {
-  data: infer TData;
-}
-  ? TData
-  : unknown;
+type InferSafeParseData<TResult> =
+  Extract<TResult, { success: true }> extends {
+    data: infer TData;
+  }
+    ? TData
+    : unknown;
 
 type InferSchemaValue<TSchema> = [TSchema] extends [undefined]
   ? unknown
@@ -79,7 +80,9 @@ type InferSchemaValue<TSchema> = [TSchema] extends [undefined]
           ? InferSafeParseData<TResult>
           : unknown;
 
-type InferFunctionalRouteInput<TInput extends FunctionalRouteInput> = ([TInput['params']] extends [undefined]
+type InferFunctionalRouteInput<TInput extends FunctionalRouteInput> = ([
+  TInput['params'],
+] extends [undefined]
   ? { params?: unknown }
   : { params: InferSchemaValue<TInput['params']> }) &
   ([TInput['query']] extends [undefined]
@@ -107,7 +110,9 @@ export interface FunctionalRouteDefinition<
   method: string;
   path: string | RegExp;
   options: FunctionalRouteOptions<TInput, TOutput>;
-  handle: (args: FunctionalRouteHandlerArgs<TInput>) => Promise<unknown> | unknown;
+  handle: (
+    args: FunctionalRouteHandlerArgs<TInput>
+  ) => Promise<unknown> | unknown;
 }
 
 export interface FunctionalRouteOptions<
@@ -363,7 +368,10 @@ type NormalizeDefinedRoute<T> =
       : never;
 
 type NormalizeDefinedRoutes<
-  TRoutes extends Record<string, FunctionalRouteDefinition | RouteBuilderInternal>,
+  TRoutes extends Record<
+    string,
+    FunctionalRouteDefinition | RouteBuilderInternal
+  >,
 > = {
   [K in keyof TRoutes]: NormalizeDefinedRoute<TRoutes[K]>;
 };
@@ -418,7 +426,10 @@ export function defineApi<
   };
 
   const definedRoutes = factory(routeFactory);
-  const normalizedRoutes = {} as Record<string, FunctionalRouteDefinition<any, any>>;
+  const normalizedRoutes = {} as Record<
+    string,
+    FunctionalRouteDefinition<any, any>
+  >;
   const routeNames = Object.keys(definedRoutes || {});
 
   const FunctionalApiController = createNamedFunctionalController(
