@@ -52,7 +52,9 @@ export function installSkill(
     const destinationPaths = files.map(file =>
       path.join(projectRoot, file.relativePath)
     );
-    const overwritten = destinationPaths.some(filePath => fs.existsSync(filePath));
+    const overwritten = destinationPaths.some(filePath =>
+      fs.existsSync(filePath)
+    );
 
     if (overwritten && !options.overwrite) {
       throw new Error(

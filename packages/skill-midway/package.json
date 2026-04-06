@@ -27,6 +27,7 @@
     "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
     "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
     "generate": "node -r ts-node/register src/cli/cli.ts build",
+    "lint": "../../node_modules/.bin/mwts check",
     "lint:fix": "../../node_modules/.bin/mwts fix"
   },
   "dependencies": {

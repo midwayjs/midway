@@ -20,8 +20,8 @@ interface CollectDocRecordsOptions {
 export function collectDocRecords(
   options: CollectDocRecordsOptions
 ): DocRecord[] {
-  const markdownFiles = listFilesRecursively(options.docsRoot).filter(filePath =>
-    /\.(md|mdx)$/i.test(filePath)
+  const markdownFiles = listFilesRecursively(options.docsRoot).filter(
+    filePath => /\.(md|mdx)$/i.test(filePath)
   );
 
   return markdownFiles
@@ -33,7 +33,9 @@ function createDocRecord(
   filePath: string,
   options: CollectDocRecordsOptions
 ): DocRecord {
-  const relativeDocPath = toPosixPath(path.relative(options.docsRoot, filePath));
+  const relativeDocPath = toPosixPath(
+    path.relative(options.docsRoot, filePath)
+  );
   const slug = stripFileExtension(relativeDocPath);
   const fallbackTitle = path.basename(slug);
   const content = fs.readFileSync(filePath, 'utf8');

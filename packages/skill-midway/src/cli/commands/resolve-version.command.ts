@@ -4,7 +4,8 @@ import { resolveBundleVersion, resolveDefaultBundleRoot } from '../support';
 
 @Command({
   name: 'resolve-version',
-  description: 'Resolve a requested Midway version against the local skill bundle',
+  description:
+    'Resolve a requested Midway version against the local skill bundle',
   arguments: '[version]',
 })
 export class ResolveVersionCommand implements CommandRunner {

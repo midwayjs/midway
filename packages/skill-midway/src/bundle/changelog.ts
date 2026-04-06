@@ -29,7 +29,7 @@ export function collectChangelogRecords(options: {
     const sectionStart = match.index ?? 0;
     const sectionEnd =
       index + 1 < matches.length
-        ? matches[index + 1].index ?? content.length
+        ? (matches[index + 1].index ?? content.length)
         : content.length;
     const releaseVersion = match[1];
     const releaseDate = match[2];

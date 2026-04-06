@@ -8,7 +8,8 @@ import { resolveInvocationCwd } from '../support';
 
 @Command({
   name: 'update',
-  description: 'Overwrite an existing installed Midway skill for a local AI client target',
+  description:
+    'Overwrite an existing installed Midway skill for a local AI client target',
 })
 export class UpdateCommand implements CommandRunner {
   @Inject()
@@ -24,7 +25,8 @@ export class UpdateCommand implements CommandRunner {
 
   @Option({
     flags: '--dest [path]',
-    description: 'Override the project root used for target-relative installation',
+    description:
+      'Override the project root used for target-relative installation',
   })
   parseDestination(value: string) {
     return path.resolve(resolveInvocationCwd(), value);

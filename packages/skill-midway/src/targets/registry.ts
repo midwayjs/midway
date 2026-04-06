@@ -45,9 +45,9 @@ function descriptionArgumentHintAdapter(
         {
           relativePath: relativePath(content),
           content:
-            `---\n` +
+            '---\n' +
             `description: ${content.description}\n` +
-            `argument-hint: command arguments\n` +
+            'argument-hint: command arguments\n' +
             `---\n\n${content.body}\n`,
         },
       ];
@@ -66,7 +66,7 @@ function namedCommandAdapter(
         {
           relativePath: relativePath(content),
           content:
-            `---\n` +
+            '---\n' +
             `name: ${escapeYamlValue(content.name)}\n` +
             `description: ${escapeYamlValue(content.description)}\n` +
             `category: ${escapeYamlValue(content.category)}\n` +
@@ -89,7 +89,7 @@ function simpleNamedCommandAdapter(
         {
           relativePath: relativePath(content),
           content:
-            `---\n` +
+            '---\n' +
             `name: ${content.name}\n` +
             `description: ${content.description}\n` +
             `category: ${content.category}\n` +
@@ -148,7 +148,7 @@ function cursorLikeAdapter(
         {
           relativePath: relativePath(content),
           content:
-            `---\n` +
+            '---\n' +
             `name: /opsx-${content.id}\n` +
             `id: opsx-${content.id}\n` +
             `category: ${escapeYamlValue(content.category)}\n` +
@@ -166,12 +166,16 @@ function continueAdapter(): SkillTargetAdapter {
     getFiles(content) {
       return [
         {
-          relativePath: path.join('.continue', 'prompts', `opsx-${content.id}.prompt`),
+          relativePath: path.join(
+            '.continue',
+            'prompts',
+            `opsx-${content.id}.prompt`
+          ),
           content:
-            `---\n` +
+            '---\n' +
             `name: opsx-${content.id}\n` +
             `description: ${content.description}\n` +
-            `invokable: true\n` +
+            'invokable: true\n' +
             `---\n\n${content.body}\n`,
         },
       ];
@@ -185,12 +189,17 @@ function codebuddyAdapter(): SkillTargetAdapter {
     getFiles(content) {
       return [
         {
-          relativePath: path.join('.codebuddy', 'commands', 'opsx', `${content.id}.md`),
+          relativePath: path.join(
+            '.codebuddy',
+            'commands',
+            'opsx',
+            `${content.id}.md`
+          ),
           content:
-            `---\n` +
+            '---\n' +
             `name: ${content.name}\n` +
             `description: "${content.description.replace(/"/g, '\\"')}"\n` +
-            `argument-hint: "[command arguments]"\n` +
+            'argument-hint: "[command arguments]"\n' +
             `---\n\n${content.body}\n`,
         },
       ];
@@ -210,7 +219,12 @@ function codexAdapter(): SkillTargetAdapter {
             : `${content.rawSkillMarkdown}\n`,
         },
         ...content.assetFiles.map(file => ({
-          relativePath: path.join('.codex', 'skills', content.id, file.relativePath),
+          relativePath: path.join(
+            '.codex',
+            'skills',
+            content.id,
+            file.relativePath
+          ),
           content: file.content,
         })),
       ];
@@ -224,7 +238,11 @@ function kilocodeAdapter(): SkillTargetAdapter {
     getFiles(content) {
       return [
         {
-          relativePath: path.join('.kilocode', 'workflows', `opsx-${content.id}.md`),
+          relativePath: path.join(
+            '.kilocode',
+            'workflows',
+            `opsx-${content.id}.md`
+          ),
           content: `${content.body}\n`,
         },
       ];
@@ -244,7 +262,12 @@ function traeAdapter(): SkillTargetAdapter {
             : `${content.rawSkillMarkdown}\n`,
         },
         ...content.assetFiles.map(file => ({
-          relativePath: path.join('.trae', 'skills', content.id, file.relativePath),
+          relativePath: path.join(
+            '.trae',
+            'skills',
+            content.id,
+            file.relativePath
+          ),
           content: file.content,
         })),
       ];
@@ -276,11 +299,16 @@ const adapters: SkillTargetAdapter[] = [
     getFiles(content) {
       return [
         {
-          relativePath: path.join('.cospec', 'openspec', 'commands', `opsx-${content.id}.md`),
+          relativePath: path.join(
+            '.cospec',
+            'openspec',
+            'commands',
+            `opsx-${content.id}.md`
+          ),
           content:
-            `---\n` +
+            '---\n' +
             `description: "${content.description.replace(/"/g, '\\"')}"\n` +
-            `argument-hint: command arguments\n` +
+            'argument-hint: command arguments\n' +
             `---\n\n${content.body}\n`,
         },
       ];

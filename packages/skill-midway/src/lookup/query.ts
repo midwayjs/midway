@@ -12,7 +12,9 @@ import type {
 import { readJsonFile } from '../utils';
 
 export function loadManifest(bundleRoot: string): KnowledgeManifest {
-  return readJsonFile<KnowledgeManifest>(path.join(bundleRoot, 'manifest.json'));
+  return readJsonFile<KnowledgeManifest>(
+    path.join(bundleRoot, 'manifest.json')
+  );
 }
 
 export function resolveVersion(
@@ -122,12 +124,7 @@ export function lookupDocs(
   const locale = options.locale;
   return scoreMatches(
     bundle.docs.filter(record => !locale || record.locale === locale),
-    record => [
-      record.title,
-      record.slug,
-      record.summary,
-      ...record.headings,
-    ],
+    record => [record.title, record.slug, record.summary, ...record.headings],
     options.query,
     options.limit ?? 10
   );
@@ -148,7 +145,8 @@ export function lookupApi(
   }
   return scoreMatches(
     bundle.api.filter(
-      record => !options.packageName || record.packageName === options.packageName
+      record =>
+        !options.packageName || record.packageName === options.packageName
     ),
     record => [
       record.symbolName,
@@ -195,12 +193,17 @@ export function lookupChangelog(
     if (
       options.packageName &&
       !record.packageNames.includes(options.packageName) &&
-      !record.packageNames.includes(options.packageName.replace(/^@midwayjs\//, ''))
+      !record.packageNames.includes(
+        options.packageName.replace(/^@midwayjs\//, '')
+      )
     ) {
       return false;
     }
 
-    if (fromVersion && compareSemverish(record.releaseVersion, fromVersion) < 0) {
+    if (
+      fromVersion &&
+      compareSemverish(record.releaseVersion, fromVersion) < 0
+    ) {
       return false;
     }
 

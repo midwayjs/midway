@@ -72,8 +72,7 @@ export function resolveMarkdownTitle(
 ): { title: string; body: string; headings: string[]; summary: string } {
   const parsed = parseFrontMatter(rawContent);
   const headings = extractMarkdownHeadings(parsed.body);
-  const title =
-    parsed.attributes.title ?? headings[0] ?? fallbackTitle;
+  const title = parsed.attributes.title ?? headings[0] ?? fallbackTitle;
   const summary = resolveMarkdownSummary(parsed.body);
 
   return {
@@ -88,7 +87,9 @@ export function resolveMarkdownSummary(content: string): string {
   const cleaned = content
     .split('\n')
     .map(line => line.trim())
-    .filter(line => line && !line.startsWith('#') && !line.startsWith('import '))
+    .filter(
+      line => line && !line.startsWith('#') && !line.startsWith('import ')
+    )
     .join('\n')
     .split('\n\n')
     .map(paragraph => normalizeWhitespace(paragraph))

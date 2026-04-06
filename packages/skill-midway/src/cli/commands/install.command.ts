@@ -24,7 +24,8 @@ export class InstallCommand implements CommandRunner {
 
   @Option({
     flags: '--dest [path]',
-    description: 'Override the project root used for target-relative installation',
+    description:
+      'Override the project root used for target-relative installation',
   })
   parseDestination(value: string) {
     return path.resolve(resolveInvocationCwd(), value);

@@ -20,8 +20,7 @@ import {
 export function buildKnowledgeBundle(
   options: BuildKnowledgeBundleOptions
 ): BuildKnowledgeBundleResult {
-  const repoBlobBaseUrl =
-    options.repoBlobBaseUrl ?? DEFAULT_REPO_BLOB_BASE_URL;
+  const repoBlobBaseUrl = options.repoBlobBaseUrl ?? DEFAULT_REPO_BLOB_BASE_URL;
   const currentVersion = extractCurrentVersionFromConfig(
     path.join(options.siteRoot, 'docusaurus.config.js')
   );
@@ -87,7 +86,9 @@ export function buildKnowledgeBundle(
 
     versionManifests.push({
       version,
-      locales: Array.from(new Set(docRecords.map(record => record.locale))).sort(),
+      locales: Array.from(
+        new Set(docRecords.map(record => record.locale))
+      ).sort(),
       docsFile: `versions/${version}/docs.json`,
       apiFile: apiSupported ? `versions/${version}/api.json` : undefined,
       packagesFile: `versions/${version}/packages.json`,
@@ -131,7 +132,11 @@ function collectVersionDocs(options: {
   repoBlobBaseUrl: string;
 }) {
   const records = [];
-  const localeRoots = resolveDocLocaleRoots(options.siteRoot, options.version, options.currentVersion);
+  const localeRoots = resolveDocLocaleRoots(
+    options.siteRoot,
+    options.version,
+    options.currentVersion
+  );
 
   for (const localeRoot of localeRoots) {
     if (!fs.existsSync(localeRoot.docsRoot)) {

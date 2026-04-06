@@ -63,15 +63,7 @@ const REFLECTION_KIND_LABELS: Record<number, string> = {
 };
 
 const EXCLUDED_KINDS = new Set<number>([
-  1,
-  2,
-  4096,
-  8192,
-  16384,
-  32768,
-  65536,
-  131072,
-  8388608,
+  1, 2, 4096, 8192, 16384, 32768, 65536, 131072, 8388608,
 ]);
 
 export function collectApiRecords(
@@ -86,7 +78,10 @@ export function collectApiRecords(
   const records: ApiRecord[] = [];
 
   for (const moduleNode of root.children ?? []) {
-    const packageName = resolvePackageName(moduleNode.name ?? '', packageNameMap);
+    const packageName = resolvePackageName(
+      moduleNode.name ?? '',
+      packageNameMap
+    );
     walkTypedocTree(records, moduleNode, {
       version: options.version,
       packageName,
@@ -120,10 +115,12 @@ function walkTypedocTree(
       : context.ancestors;
 
   if (shouldCreateApiRecord(node) && node.name) {
-    records.push(createApiRecord(node, {
-      ...context,
-      qualifiedName: nextAncestors.join('.'),
-    }));
+    records.push(
+      createApiRecord(node, {
+        ...context,
+        qualifiedName: nextAncestors.join('.'),
+      })
+    );
   }
 
   for (const child of node.children ?? []) {
@@ -174,7 +171,7 @@ function createApiRecord(
     summary: resolveCommentSummary(node),
     deprecated: Boolean(
       node.flags?.isDeprecated ||
-        node.comment?.modifierTags?.includes('@deprecated')
+      node.comment?.modifierTags?.includes('@deprecated')
     ),
     sourcePath,
     sourceUrl,
@@ -201,7 +198,9 @@ function resolveSourcePath(
   context: { repoRoot: string; typedocJsonPath: string }
 ): string {
   if (!fileName) {
-    return toPosixPath(path.relative(context.repoRoot, context.typedocJsonPath));
+    return toPosixPath(
+      path.relative(context.repoRoot, context.typedocJsonPath)
+    );
   }
 
   const sourcePath = path.isAbsolute(fileName)

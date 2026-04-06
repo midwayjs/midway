@@ -60,7 +60,9 @@ export function extractCurrentVersionFromConfig(configPath: string): string {
   const content = fs.readFileSync(configPath, 'utf8');
   const match = content.match(/current:\s*\{\s*label:\s*['"]([^'"]+)['"]/m);
   if (!match) {
-    throw new Error(`Unable to resolve current docs version from ${configPath}`);
+    throw new Error(
+      `Unable to resolve current docs version from ${configPath}`
+    );
   }
   return match[1];
 }
@@ -69,7 +71,11 @@ export function collectWorkspacePackages(
   repoRoot: string,
   repoBlobBaseUrl: string
 ): PackageRecord[] {
-  const workspaceDirs = ['packages', 'packages-serverless', 'packages-resource'];
+  const workspaceDirs = [
+    'packages',
+    'packages-serverless',
+    'packages-resource',
+  ];
   const packages: PackageRecord[] = [];
 
   for (const workspaceDir of workspaceDirs) {
@@ -78,7 +84,9 @@ export function collectWorkspacePackages(
       continue;
     }
 
-    for (const entry of fs.readdirSync(absoluteWorkspaceDir, { withFileTypes: true })) {
+    for (const entry of fs.readdirSync(absoluteWorkspaceDir, {
+      withFileTypes: true,
+    })) {
       if (!entry.isDirectory()) {
         continue;
       }
@@ -105,7 +113,11 @@ export function collectWorkspacePackages(
         description: packageJson.description ?? '',
         keywords: packageJson.keywords ?? [],
         sourcePath: toPosixPath(path.relative(repoRoot, packageJsonPath)),
-        sourceUrl: filePathToSourceUrl(repoRoot, packageJsonPath, repoBlobBaseUrl),
+        sourceUrl: filePathToSourceUrl(
+          repoRoot,
+          packageJsonPath,
+          repoBlobBaseUrl
+        ),
       });
     }
   }
@@ -113,8 +125,14 @@ export function collectWorkspacePackages(
   return packages.sort((left, right) => left.name.localeCompare(right.name));
 }
 
-export function createWorkspacePackageMap(repoRoot: string): Map<string, string> {
-  const workspaceDirs = ['packages', 'packages-serverless', 'packages-resource'];
+export function createWorkspacePackageMap(
+  repoRoot: string
+): Map<string, string> {
+  const workspaceDirs = [
+    'packages',
+    'packages-serverless',
+    'packages-resource',
+  ];
   const packageMap = new Map<string, string>();
 
   for (const workspaceDir of workspaceDirs) {
@@ -123,7 +141,9 @@ export function createWorkspacePackageMap(repoRoot: string): Map<string, string>
       continue;
     }
 
-    for (const entry of fs.readdirSync(absoluteWorkspaceDir, { withFileTypes: true })) {
+    for (const entry of fs.readdirSync(absoluteWorkspaceDir, {
+      withFileTypes: true,
+    })) {
       if (!entry.isDirectory()) {
         continue;
       }
