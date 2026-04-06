@@ -175,7 +175,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./docs/sidebars.json'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/midwayjs/midway/tree/main/site/',
+          editUrl: 'https://github.com/midwayjs/midway/tree/v4-next/site/',
           versions: {
             current: {
               label: '4.0.0',

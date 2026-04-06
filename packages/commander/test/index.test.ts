@@ -390,6 +390,32 @@ describe('test/index.test.ts', () => {
     return { app, framework, testService };
   }
 
+  async function createAppWithoutQuestionSet() {
+    const app = await createLightApp({
+      imports: [require('../src')],
+      preloadModules: [
+        HelloCommand,
+        AliasedCommand,
+        DefaultOptionCommand,
+        RequiredOptionCommand,
+        MultiArgsCommand,
+        NumberOptionCommand,
+        WithContextCommand,
+        AskCommand,
+        ReturnTextCommand,
+        ReturnJsonCommand,
+        ReturnStreamCommand,
+        ReturnAsyncIterableCommand,
+        TestService,
+      ],
+    });
+
+    const framework = app.getFramework() as Framework;
+    const testService = await app.getApplicationContext().getAsync(TestService);
+    testService.reset();
+    return { app, framework, testService };
+  }
+
   it('should run cli command', async () => {
     const { app, framework, testService } = await createApp();
     expect(framework.getLogger('commanderLogger')).toBeDefined();
@@ -509,6 +535,30 @@ describe('test/index.test.ts', () => {
     promptMock.mockClear();
 
     const enquirerService = await app.getApplicationContext().getAsync(EnquirerService);
+    const answers = await enquirerService.prompt(ProfileQuestionSet, {
+      useNickname: true,
+    });
+    testService.promptAnswers = answers;
+
+    expect(testService.promptAnswers.age).toEqual(18);
+    expect(testService.promptAnswers.nickname).toEqual('neo');
+    const askedNames = promptMock.mock.calls.map(call => {
+      const question = call[0];
+      return Array.isArray(question) ? question[0].name : question.name;
+    });
+    expect(askedNames).toEqual([ 'age', 'nickname' ]);
+
+    await close(app);
+  });
+
+  it('should auto bind question set definitions when prompting by class reference', async () => {
+    const { app, testService } = await createAppWithoutQuestionSet();
+    const promptMock = enquirer.prompt as jest.Mock;
+    promptMock.mockClear();
+
+    const enquirerService = await app
+      .getApplicationContext()
+      .getAsync(EnquirerService);
     const answers = await enquirerService.prompt(ProfileQuestionSet, {
       useNickname: true,
     });

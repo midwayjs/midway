@@ -1227,6 +1227,22 @@ importers:
         specifier: workspace:^
         version: link:../mock
 
+  packages/skill-midway:
+    dependencies:
+      '@midwayjs/bootstrap':
+        specifier: workspace:^
+        version: link:../bootstrap
+      '@midwayjs/commander':
+        specifier: workspace:^
+        version: link:../commander
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
+    devDependencies:
+      '@midwayjs/mock':
+        specifier: workspace:^
+        version: link:../mock
+
   packages/socketio:
     dependencies:
       socket.io:

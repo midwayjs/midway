@@ -23,7 +23,10 @@
       ]
     },
     "version": {
-      "forcePublish": "@midwayjs/version"
+      "forcePublish": [
+        "@midwayjs/version",
+        "@midwayjs/skill-midway"
+      ]
     }
   },
   "changelog": {
