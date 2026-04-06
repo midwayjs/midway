@@ -6,7 +6,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-  IMidwayContainer,
+  IMidwayGlobalContainer,
 } from '@midwayjs/core';
 import enquirer = require('enquirer');
 import {
@@ -34,7 +34,7 @@ type QuestionSetInput = string | QuestionSetModule;
 @Scope(ScopeEnum.Singleton)
 export class EnquirerService {
   @ApplicationContext()
-  private applicationContext: IMidwayContainer;
+  private applicationContext: IMidwayGlobalContainer;
 
   async prompt<T extends PromptResult = PromptResult>(
     questionSet: string,
@@ -50,6 +50,7 @@ export class EnquirerService {
   ): Promise<T> {
     // Resolve question set by name or class reference.
     const questionSetModule = this.resolveQuestionSetModule(questionSet);
+    this.ensureQuestionSetDefinition(questionSetModule);
     const questionSetInstance = (await this.applicationContext.getAsync(
       questionSetModule
     )) as Record<PropertyKey, unknown>;
@@ -80,6 +81,19 @@ export class EnquirerService {
       }
     }
     throw new MidwayCommonError(`QuestionSet "${questionSetName}" not found`);
+  }
+
+  private ensureQuestionSetDefinition(questionSetModule: QuestionSetModule) {
+    const providerId = DecoratorManager.getProviderUUId(questionSetModule);
+    if (!providerId) {
+      throw new MidwayCommonError(
+        `QuestionSet "${questionSetModule.name}" is missing a provider id`
+      );
+    }
+
+    if (!this.applicationContext.hasDefinition(providerId)) {
+      this.applicationContext.bindClass(questionSetModule);
+    }
   }
 
   private buildQuestions(

@@ -1,0 +1,43 @@
+{
+  "name": "@midwayjs/skill-midway",
+  "version": "0.0.7",
+  "description": "Midway official skill package with knowledge bundle generator and query helpers",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "midway-skill": "dist/cli/cli.js"
+  },
+  "files": [
+    "bundle/**/*",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "skills/**/*"
+  ],
+  "keywords": [
+    "midway",
+    "skill",
+    "knowledge",
+    "docs",
+    "typedoc"
+  ],
+  "author": "czy88840616@gmail.com",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "generate": "node -r ts-node/register src/cli/cli.ts build",
+    "lint:fix": "../../node_modules/.bin/mwts fix"
+  },
+  "dependencies": {
+    "@midwayjs/bootstrap": "workspace:^",
+    "@midwayjs/commander": "workspace:^",
+    "@midwayjs/core": "workspace:^"
+  },
+  "devDependencies": {
+    "@midwayjs/mock": "workspace:^"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

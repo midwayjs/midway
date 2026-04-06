@@ -22,6 +22,8 @@ midway_benchmark_app
 .env
 docs-api
 site/changelog
+site/.midway-skill
+packages/skill-midway/bundle
 .changelog
 **/test/*.txt
 .audit
