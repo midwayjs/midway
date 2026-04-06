@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/cos",
   "description": "midway cos component",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [

@@ -1,6 +1,24 @@
 # Change Log
 
 
+## v4.0.2 (2026-04-06)
+
+#### :rocket: New Feature
+* `commander`, `skill-midway`
+  * [#4549](https://github.com/midwayjs/midway/pull/4549) feat: add skill-midway package and installers ([@czy88840616](https://github.com/czy88840616))
+
+#### :wrench: Maintenance
+* [#4547](https://github.com/midwayjs/midway/pull/4547) fix: execa sync scripts ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `busboy`, `grpc`, `rabbitmq`, `socketio`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4546](https://github.com/midwayjs/midway/pull/4546) chore(deps): update dependency fs-extra to v11.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.1 (2026-04-05)
 
 #### :rocket: New Feature
