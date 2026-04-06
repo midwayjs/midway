@@ -82,7 +82,7 @@ export class MidwayCommanderFramework extends BaseFramework<
             }
             this.logger.error(err);
             process.stderr.write(
-              `${err instanceof Error ? err.stack ?? err.message : String(err)}\n`
+              `${err instanceof Error ? (err.stack ?? err.message) : String(err)}\n`
             );
             process.exit(1);
           }
