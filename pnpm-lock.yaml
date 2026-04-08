@@ -578,11 +578,11 @@ importers:
         specifier: 8.9.5
         version: 8.9.5(socks@2.8.7)
       sequelize:
-        specifier: 6.37.5
-        version: 6.37.5(mysql2@3.16.0)(sqlite3@5.1.7)
+        specifier: 6.37.8
+        version: 6.37.8(mysql2@3.16.0)(sqlite3@5.1.7)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7))
+        version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(sqlite3@5.1.7))
       sqlite3:
         specifier: 5.1.7
         version: 5.1.7
@@ -1205,11 +1205,11 @@ importers:
         specifier: workspace:^
         version: link:../mock
       sequelize:
-        specifier: 6.37.5
-        version: 6.37.5(mysql2@3.16.0)(sqlite3@5.1.7)
+        specifier: 6.37.8
+        version: 6.37.8(mysql2@3.16.0)(sqlite3@5.1.7)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7))
+        version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(sqlite3@5.1.7))
       sqlite3:
         specifier: 5.1.7
         version: 5.1.7
@@ -11180,8 +11180,8 @@ packages:
       reflect-metadata: '*'
       sequelize: '>=6.20.1'
 
-  sequelize@6.37.5:
-    resolution: {integrity: sha512-10WA4poUb3XWnUROThqL2Apq9C2NhyV1xHPMZuybNMCucDsbbFuKg51jhmyvvAUyUqCiimwTZamc3AHhMoBr2Q==}
+  sequelize@6.37.8:
+    resolution: {integrity: sha512-HJ0IQFqcTsTiqbEgiuioYFMSD00TP6Cz7zoTti+zVVBwVe9fEhev9cH6WnM3XU31+ABS356durAb99ZuOthnKw==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       ibm_db: '*'
@@ -14154,7 +14154,7 @@ snapshots:
       js-yaml: 4.1.0
       libnpmpublish: 7.3.0
       load-json-file: 6.2.0
-      lodash: 4.17.21
+      lodash: 4.17.23
       make-dir: 4.0.0
       minimatch: 3.0.5
       multimatch: 5.0.0
@@ -19785,7 +19785,7 @@ snapshots:
       cli-cursor: 3.1.0
       cli-width: 3.0.0
       figures: 3.2.0
-      lodash: 4.17.21
+      lodash: 4.17.23
       mute-stream: 0.0.8
       ora: 5.4.1
       run-async: 2.4.1
@@ -20691,7 +20691,7 @@ snapshots:
       get-package-type: 0.1.0
       getopts: 2.3.0
       interpret: 2.2.0
-      lodash: 4.17.21
+      lodash: 4.17.23
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
       resolve-from: 5.0.0
@@ -23206,7 +23206,7 @@ snapshots:
 
   redis-info@3.1.0:
     dependencies:
-      lodash: 4.17.21
+      lodash: 4.17.23
 
   redis-parser@3.0.0:
     dependencies:
@@ -23598,15 +23598,15 @@ snapshots:
 
   sequelize-pool@7.1.0: {}
 
-  sequelize-typescript@2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.5(sqlite3@5.1.7)):
+  sequelize-typescript@2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(sqlite3@5.1.7)):
     dependencies:
       '@types/node': 22.12.0
       '@types/validator': 13.15.10
       glob: 7.2.0
       reflect-metadata: 0.2.2
-      sequelize: 6.37.5(mysql2@3.16.0)(sqlite3@5.1.7)
+      sequelize: 6.37.8(mysql2@3.16.0)(sqlite3@5.1.7)
 
-  sequelize@6.37.5(mysql2@3.16.0)(sqlite3@5.1.7):
+  sequelize@6.37.8(mysql2@3.16.0)(sqlite3@5.1.7):
     dependencies:
       '@types/debug': 4.1.12
       '@types/validator': 13.15.10
