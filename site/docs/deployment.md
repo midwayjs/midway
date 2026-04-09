@@ -715,6 +715,65 @@ $ npm run bundle_start
 
 
 
+### 使用 Bytenode 编译为字节码（可选）
+
+在已完成 [单文件构建](#构建)（例如得到 `build/index.js`）之后，可以再用 [Bytenode](https://github.com/bytenode/bytenode) 将 JavaScript 编译为 V8 字节码（`.jsc`），进一步减少明文源码暴露。注意：**字节码与编译时使用的 Node.js 主版本强相关**，部署环境应使用相同（或官方保证兼容）的 Node 版本；跨机器部署前请在同版本 Node 下做冒烟验证。
+
+Midway 在运行时会通过 `isClass` 等逻辑识别 ES `class` 构造函数。Bytenode 会替换 `Function.prototype.toString` 所见的源码，旧实现仅依赖 `toString` 可能把类误判为普通函数，从而导致依赖注入异常。**请使用包含该修复版本的 `@midwayjs/core`**（见源码 [`packages/core/src/util/types.ts`](https://github.com/midwayjs/midway/blob/main/packages/core/src/util/types.ts) 中 `isClass`）。
+
+:::warning
+
+Bytenode 官方说明：任何依赖 `Function.prototype.toString` 的逻辑在字节码下都可能异常（参见 [bytenode#34](https://github.com/bytenode/bytenode/issues/34)）。除框架侧识别外，业务代码也应避免依赖函数源码字符串。
+
+:::
+
+#### 前置依赖
+
+```bash
+$ npm i bytenode --save-dev
+```
+
+在 `package.json` 中可写作：
+
+```json
+{
+  "devDependencies": {
+    "bytenode": "^1.5.7"
+  }
+}
+```
+
+（版本号请安装时以 npm 可查到的最新兼容版本为准。）
+
+#### 编译与启动
+
+在单文件产物生成后，将入口 JS 编译为字节码，例如：
+
+```bash
+$ npx bytenode --compile build/index.js
+```
+
+默认会在同目录生成 `build/index.jsc`。使用 Bytenode 自带的方式启动（需已安装 `bytenode`，可为项目依赖或全局）：
+
+```bash
+$ NODE_ENV=production npx bytenode ./build/index.jsc
+```
+
+也可将上述步骤写入 `scripts`，例如：
+
+```json
+{
+  "scripts": {
+    "bundle_jsc": "npm run bundle && npx bytenode --compile build/index.js",
+    "bundle_jsc_start": "NODE_ENV=production npx bytenode ./build/index.jsc"
+  }
+}
+```
+
+[单文件构建部署](#单文件构建部署) 一节的约束仍然适用：例如依赖注入相关代码不要使用默认导出、配置需为对象模式、数据源 `entities` 路径扫描等限制不变。字节码发布后调试难度更高，建议保留未编译的构建流水线用于排障。
+
+
+
 ## 二进制文件部署
 
 将 Node.js 打包为一个单独的可执行文件，部署时直接拷贝执行即可，这种方式包含了 node 运行时，业务代码，有利于保护知识产权。

@@ -23,6 +23,28 @@ describe('/test/util/index.test.ts', () => {
     expect(Types.isString('')).toBeTruthy();
     expect(Types.isString(undefined)).toBeFalsy();
     expect(Types.isString({})).toBeFalsy();
+
+    expect(Types.isClass(class B {})).toBeTruthy();
+
+    class ObscuredCtor {}
+    const origToString = Function.prototype.toString;
+    try {
+      Function.prototype.toString = function (this: unknown) {
+        if (this === ObscuredCtor) {
+          return 'function () {}';
+        }
+        return origToString.call(this);
+      };
+      expect(Types.isClass(ObscuredCtor)).toBeTruthy();
+    } finally {
+      Function.prototype.toString = origToString;
+    }
+
+    function plainFn() {}
+    const asyncFn = async function () {};
+    expect(Types.isClass(plainFn)).toBeFalsy();
+    expect(Types.isClass(asyncFn)).toBeFalsy();
+    expect(Types.isClass(() => {})).toBeFalsy();
   });
 
   it('should test toAsyncFunction', async () => {

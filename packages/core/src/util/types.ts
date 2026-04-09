@@ -16,6 +16,15 @@ export function isClass(fn) {
   if (/^class[\s{]/.test(ToString.call(fn))) {
     return true;
   }
+
+  // Tools like Bytenode replace function source text, so Function#toString is
+  // unreliable. ECMAScript class constructors have a non-writable `prototype`.
+  const descriptor = Object.getOwnPropertyDescriptor(fn, 'prototype');
+  if (descriptor && descriptor.writable === false) {
+    return true;
+  }
+
+  return false;
 }
 
 export function isAsyncFunction(value) {
