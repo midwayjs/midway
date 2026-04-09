@@ -1,6 +1,21 @@
 # Change Log
 
 
+## v3.20.23 (2026-04-09)
+
+#### :bug: Bug Fix
+* `core`, `web-koa`
+  * [#4552](https://github.com/midwayjs/midway/pull/4552) fix: support koa 2.16.4 ([@czy88840616](https://github.com/czy88840616))
+
+#### :wrench: Maintenance
+* `core`, `web-koa`
+  * [#4552](https://github.com/midwayjs/midway/pull/4552) fix: support koa 2.16.4 ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.22 (2026-02-17)
 
 #### :bug: Bug Fix
