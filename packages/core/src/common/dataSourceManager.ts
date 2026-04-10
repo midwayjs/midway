@@ -12,6 +12,7 @@ import { loadModule } from '../util';
 import { ModuleLoadType, DataSourceManagerConfigOption } from '../interface';
 import { Inject } from '../decorator';
 import { MidwayEnvironmentService } from '../service/environmentService';
+import { MidwayConfigService } from '../service/configService';
 import { MidwayPriorityManager } from './priorityManager';
 
 const debug = debuglog('midway:debug');
@@ -31,6 +32,9 @@ export abstract class DataSourceManager<
 
   @Inject()
   protected environmentService: MidwayEnvironmentService;
+
+  @Inject()
+  protected configService: MidwayConfigService;
 
   @Inject()
   protected priorityManager: MidwayPriorityManager;
@@ -57,11 +61,16 @@ export abstract class DataSourceManager<
         entitiesConfigKey: 'entities',
       };
     }
+    const initOptions = baseDirOrOptions;
+    const concurrent =
+      this.configService?.getConfiguration(
+        'core.concurrentDataSourceInitialization'
+      ) ?? false;
 
-    for (const dataSourceName in dataSourceConfig.dataSource) {
+    const processDataSource = async (dataSourceName: string) => {
       const dataSourceOptions = dataSourceConfig.dataSource[dataSourceName];
       const userEntities = dataSourceOptions[
-        baseDirOrOptions.entitiesConfigKey
+        initOptions.entitiesConfigKey
       ] as any[];
       if (userEntities) {
         const entities = new Set();
@@ -71,7 +80,7 @@ export abstract class DataSourceManager<
             // string will be glob file
             const models = await globModels(
               entity,
-              baseDirOrOptions.baseDir,
+              initOptions.baseDir,
               this.environmentService?.getModuleLoadType()
             );
             for (const model of models) {
@@ -84,11 +93,12 @@ export abstract class DataSourceManager<
             this.modelMapping.set(entity, dataSourceName);
           }
         }
-        (dataSourceOptions[baseDirOrOptions.entitiesConfigKey] as any) =
-          Array.from(entities);
+        (dataSourceOptions[initOptions.entitiesConfigKey] as any) = Array.from(
+          entities
+        );
         debug(
           `[core]: DataManager load ${
-            dataSourceOptions[baseDirOrOptions.entitiesConfigKey].length
+            dataSourceOptions[initOptions.entitiesConfigKey].length
           } models from ${dataSourceName}.`
         );
       }
@@ -98,6 +108,15 @@ export abstract class DataSourceManager<
         validateConnection: dataSourceConfig.validateConnection,
       };
       await this.createInstance(dataSourceOptions, dataSourceName, opts);
+    };
+
+    const dataSourceNames = Object.keys(dataSourceConfig.dataSource);
+    if (concurrent) {
+      await Promise.all(dataSourceNames.map(processDataSource));
+    } else {
+      for (const dataSourceName of dataSourceNames) {
+        await processDataSource(dataSourceName);
+      }
     }
   }
 

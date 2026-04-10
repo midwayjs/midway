@@ -6,6 +6,7 @@ export default (appInfo: MidwayAppInfo): MidwayCoreDefaultConfig => {
   return {
     core: {
       healthCheckTimeout: 1000,
+      concurrentDataSourceInitialization: false,
     },
     asyncContextManager: {
       enable: false,

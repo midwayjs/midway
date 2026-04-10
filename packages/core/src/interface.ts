@@ -456,6 +456,7 @@ export interface MidwayCoreDefaultConfig {
   };
   core?: {
     healthCheckTimeout?: number;
+    concurrentDataSourceInitialization?: boolean;
   }
 }
 
