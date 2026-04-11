@@ -16,7 +16,6 @@ import { safeParse, safeStringify } from './flatted';
 import * as crypto from 'crypto';
 import { Types } from './types';
 import { pathToFileURL } from 'url';
-import { tmpdir } from 'os';
 import { normalizePath } from './pathFileUtil';
 import { MetadataManager } from '../decorator/metadataManager';
 import { CONFIGURATION_KEY, CONFIGURATION_OBJECT_KEY } from '../decorator';
@@ -116,7 +115,12 @@ function rewriteEsmSourceWithSpecifierFallback(
   return changed ? output : source;
 }
 
-function shouldUseEsmFallback(originErr: any, filePath: string, rewritten: string, source: string) {
+function shouldUseEsmFallback(
+  originErr: any,
+  filePath: string,
+  rewritten: string,
+  source: string
+) {
   if (rewritten !== source) {
     return true;
   }
@@ -143,7 +147,6 @@ function loadTypeScriptCompiler(sourceFile: string) {
   const searchPaths = [dirname(sourceFile), process.cwd(), __dirname];
   for (const item of searchPaths) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       cachedTypeScriptCompiler = require(
         require.resolve('typescript', {
           paths: [item],
@@ -157,7 +160,9 @@ function loadTypeScriptCompiler(sourceFile: string) {
 }
 
 function createCompiledEsmFallbackGraph(entryFile: string) {
-  const tempDir = mkdtempSync(join(tmpdir(), 'midway-esm-fallback-'));
+  const tempDir = mkdtempSync(
+    join(dirname(entryFile), '.midway-esm-fallback-')
+  );
   const compiledFileMap = new Map<string, string>();
   const tsCompiler = loadTypeScriptCompiler(entryFile);
 
@@ -341,14 +346,14 @@ export const loadModule = async (
       if (options.loadMode === 'commonjs') {
         try {
           return require(p);
-        } catch (_) {
+        } catch {
           for (const extraPath of [
             process.cwd(),
             ...(options.extraModuleRoot || []),
           ]) {
             try {
               return require(require.resolve(p, { paths: [extraPath] }));
-            } catch (_) {
+            } catch {
               // do nothing
             }
           }
@@ -633,7 +638,7 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
 
 export function toPathMatch(pattern) {
   if (typeof pattern === 'boolean') {
-    return ctx => pattern;
+    return () => pattern;
   }
   if (typeof pattern === 'string') {
     const reg = PathToRegexpUtil.toRegexp(pattern.replace('*', '(.*)'));

@@ -12,4 +12,13 @@ const mod = await loadModule(
 );
 
 assert(mod.User.name === 'User');
+
+const packageMod = await loadModule(
+  new URL('./package-import-entry.ts', import.meta.url).pathname,
+  {
+    loadMode: 'esm',
+  }
+);
+
+assert(typeof packageMod.version === 'string');
 process.send('ready');
