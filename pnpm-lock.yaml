@@ -903,8 +903,8 @@ importers:
   packages/mqtt:
     dependencies:
       mqtt:
-        specifier: 5.15.0
-        version: 5.15.0
+        specifier: 5.15.1
+        version: 5.15.1
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -9551,8 +9551,8 @@ packages:
   mqtt-packet@9.0.2:
     resolution: {integrity: sha512-MvIY0B8/qjq7bKxdN1eD+nrljoeaai+qjLJgfRn3TiMuz0pamsIWY2bFODPZMSNmabsLANXsLl4EMoWvlaTZWA==}
 
-  mqtt@5.15.0:
-    resolution: {integrity: sha512-KC+wAssYk83Qu5bT8YDzDYgUJxPhbLeVsDvpY2QvL28PnXYJzC2WkKruyMUgBAZaQ7h9lo9k2g4neRNUUxzgMw==}
+  mqtt@5.15.1:
+    resolution: {integrity: sha512-V1WnkGuJh3ec9QXzy5Iylw8OOBK+Xu1WhxcQ9mMpLThG+/JZIMV1PgLNRgIiqXhZnvnVLsuyxHl5A/3bHHbcAA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
@@ -21660,7 +21660,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mqtt@5.15.0:
+  mqtt@5.15.1:
     dependencies:
       '@types/readable-stream': 4.0.23
       '@types/ws': 8.18.1
