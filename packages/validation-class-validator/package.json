@@ -44,6 +44,6 @@
     "@midwayjs/core": "workspace:*",
     "@midwayjs/mock": "workspace:*",
     "class-validator": "^0.14.1",
-    "tsup": "8.5.0"
+    "tsup": "8.5.1"
   }
 }

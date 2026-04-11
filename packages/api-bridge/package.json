@@ -34,7 +34,7 @@
     "lint": "mwts check"
   },
   "devDependencies": {
-    "tsup": "8.5.0"
+    "tsup": "8.5.1"
   },
   "engines": {
     "node": ">=20"

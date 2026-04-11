@@ -46,7 +46,7 @@
     "@types/react-dom": "^18.3.1",
     "react": "^18",
     "react-dom": "^18",
-    "tsup": "8.5.0"
+    "tsup": "8.5.1"
   },
   "engines": {
     "node": ">=20"

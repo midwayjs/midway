@@ -47,7 +47,7 @@
     "@midwayjs/api-bridge": "workspace:^"
   },
   "devDependencies": {
-    "tsup": "8.5.0"
+    "tsup": "8.5.1"
   },
   "engines": {
     "node": ">=20"
