@@ -1100,6 +1100,20 @@ export type IMidwayApplication<
 
 export type ModuleLoadType = 'commonjs' | 'esm';
 
+export interface ModuleLoadOptions {
+  enableCache?: boolean;
+  loadMode?: ModuleLoadType;
+  safeLoad?: boolean;
+  warnOnLoadError?: boolean;
+  extraModuleRoot?: string[];
+  importQuery?: string;
+}
+
+export type ModuleLoader = (
+  p: string,
+  options?: ModuleLoadOptions
+) => Promise<any>;
+
 export interface IMidwayBootstrapOptions {
   baseDir?: string;
   appDir?: string;
@@ -1113,6 +1127,7 @@ export interface IMidwayBootstrapOptions {
     | Record<string, any>;
   asyncContextManager?: AsyncContextManager;
   loggerFactory?: LoggerFactory<any, any>;
+  moduleLoader?: ModuleLoader;
 }
 
 export interface IConfigurationOptions {

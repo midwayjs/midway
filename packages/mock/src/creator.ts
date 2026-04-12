@@ -41,6 +41,7 @@ import * as https from 'https';
 import * as yaml from 'js-yaml';
 import * as getRawBody from 'raw-body';
 import { defineConfiguration } from '@midwayjs/core/functional';
+import { createSourceModuleLoader } from './sourceLoader';
 
 const debug = debuglog('midway:debug');
 
@@ -181,11 +182,21 @@ export async function create<
       options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
     }
 
+    if (
+      !options.moduleLoader &&
+      options.moduleLoadType === 'esm' &&
+      isTypeScriptEnvironment()
+    ) {
+      options.moduleLoader = createSourceModuleLoader();
+    }
+
+    const moduleLoader = options.moduleLoader ?? loadModule;
+
     if (options.baseDir) {
       if (!isAbsolute(options.baseDir)) {
         options.baseDir = join(appDir, options.baseDir);
       }
-      await loadModule(
+      await moduleLoader(
         join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
         {
           safeLoad: true,
@@ -194,7 +205,7 @@ export async function create<
       );
     } else if (appDir) {
       options.baseDir = join(appDir, 'src');
-      await loadModule(
+      await moduleLoader(
         join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
         {
           safeLoad: true,
@@ -395,9 +406,18 @@ export async function createFunctionApp<
     });
 
     options.moduleLoadType = pkgJSON?.type === 'module' ? 'esm' : 'commonjs';
+    if (
+      !options.moduleLoader &&
+      options.moduleLoadType === 'esm' &&
+      isTypeScriptEnvironment()
+    ) {
+      options.moduleLoader = createSourceModuleLoader();
+    }
+
+    const moduleLoader = options.moduleLoader ?? loadModule;
 
     if (options.baseDir) {
-      await loadModule(
+      await moduleLoader(
         join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
         {
           safeLoad: true,
@@ -406,7 +426,7 @@ export async function createFunctionApp<
       );
     } else if (options.appDir) {
       options.baseDir = `${options.appDir}/src`;
-      await loadModule(
+      await moduleLoader(
         join(`${options.baseDir}`, getFileNameWithSuffix('interface')),
         {
           safeLoad: true,

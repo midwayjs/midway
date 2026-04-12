@@ -60,26 +60,6 @@ describe('/test/util/util.test.ts', () => {
     await sleep(1000);
   });
 
-  it('should fallback relative js specifier to ts file in esm mode', async () => {
-    let child = fork('esm-fallback.mjs', [], {
-      cwd: join(__dirname, './esm-fixtures'),
-    });
-
-    child.on('close', code => {
-      if (code !== 0) {
-        console.log(`process exited with code ${code}`);
-      }
-    });
-
-    await new Promise<void>(resolve => {
-      child.on('message', ready => {
-        if (ready === 'ready') {
-          resolve();
-        }
-      });
-    });
-  });
-
   it('should safeGet be ok', () => {
     const fn = safelyGet(['a', 'b']);
     assert.deepEqual(2, fn({a: {b: 2}}), 'safelyGet one argument not ok');

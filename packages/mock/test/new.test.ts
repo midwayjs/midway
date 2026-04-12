@@ -8,12 +8,13 @@ import {
   mockClassProperty,
   // restoreAllMocks,
   createLegacyLightApp,
-  createFunctionApp
+  createFunctionApp,
 } from '../src';
 // import * as Web from '@midwayjs/web';
 // import * as Koa from '@midwayjs/koa';
 // import * as faas from '@midwayjs/faas';
 import { join } from 'path';
+import { fork } from 'child_process';
 // import { existsSync } from 'fs';
 import { MidwayContainer, MidwayMockService } from '@midwayjs/core';
 // import { BootstrapStarter } from '@midwayjs/fc-starter';
@@ -112,6 +113,36 @@ describe('/test/new.test.ts', () => {
     const app = await createLegacyLightApp(join(__dirname, 'fixtures/base-app-light'));
     expect(app).toBeDefined();
     await close(app);
+  });
+
+  it('should load esm source modules in createLightApp', async () => {
+    const child = fork(
+      join(__dirname, 'fixtures/base-app-light-esm-functional/check.cjs'),
+      [],
+      {
+        execArgv: ['-r', 'ts-node/register'],
+      }
+    );
+
+    child.on('close', code => {
+      if (code !== 0) {
+        console.log(`process exited with code ${code}`);
+      }
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      child.on('message', ready => {
+        if (ready === 'ready') {
+          resolve();
+        }
+      });
+      child.on('error', reject);
+      child.on('exit', code => {
+        if (code !== 0) {
+          reject(new Error(`child exited with code ${code}`));
+        }
+      });
+    });
   });
 
   it('should test repeat load', async () => {

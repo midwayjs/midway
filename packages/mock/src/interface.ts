@@ -14,6 +14,18 @@ export interface MockBootstrapOptions
   entryFile?: string;
   bootstrapMode?: 'faas' | 'app';
   initializeMethodName?: string;
+  // Keep mock self-contained in workspace development before core/dist is rebuilt.
+  moduleLoader?: (
+    p: string,
+    options?: {
+      enableCache?: boolean;
+      loadMode?: 'commonjs' | 'esm';
+      safeLoad?: boolean;
+      warnOnLoadError?: boolean;
+      extraModuleRoot?: string[];
+      importQuery?: string;
+    }
+  ) => Promise<any>;
 }
 
 export type ComponentModule = {

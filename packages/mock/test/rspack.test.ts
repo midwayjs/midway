@@ -7,6 +7,7 @@ describe('mock rspack devPlugin', () => {
 
   it('should inject setupMiddlewares on apply', () => {
     const invalidTaps: Array<(fileName?: string) => void> = [];
+    const info = jest.fn();
     const compiler: any = {
       options: {
         devServer: {},
@@ -19,7 +20,7 @@ describe('mock rspack devPlugin', () => {
         },
       },
       getInfrastructureLogger: () => ({
-        info: jest.fn(),
+        info,
         error: jest.fn(),
       }),
     };
@@ -40,5 +41,15 @@ describe('mock rspack devPlugin', () => {
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBe(1);
     expect(typeof result[0]).toBe('function');
+
+    invalidTaps[0](
+      `${process.cwd()}/src/server/.midway-esm-fallback-abc/hash.mjs`
+    );
+    expect(info).not.toHaveBeenCalled();
+
+    invalidTaps[0](`${process.cwd()}/src/server/user.ts`);
+    expect(info).toHaveBeenCalledWith(
+      expect.stringContaining('reload midway app')
+    );
   });
 });

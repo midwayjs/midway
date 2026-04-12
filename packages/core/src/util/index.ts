@@ -1,15 +1,9 @@
-import { dirname, resolve, sep, posix, join, relative } from 'path';
-import {
-  readFileSync,
-  writeFileSync,
-  existsSync,
-  mkdtempSync,
-  rmSync,
-} from 'fs';
+import { dirname, resolve, sep, posix, join } from 'path';
+import { readFileSync } from 'fs';
 import { debuglog } from 'util';
 import { PathToRegexpUtil } from './pathToRegexp';
 import { MidwayCommonError } from '../error';
-import { FunctionMiddleware, IgnoreMatcher } from '../interface';
+import { FunctionMiddleware, IgnoreMatcher, ModuleLoader } from '../interface';
 import { camelCase, pascalCase } from './camelCase';
 import { randomUUID } from './uuid';
 import { safeParse, safeStringify } from './flatted';
@@ -21,257 +15,6 @@ import { MetadataManager } from '../decorator/metadataManager';
 import { CONFIGURATION_KEY, CONFIGURATION_OBJECT_KEY } from '../decorator';
 
 const debug = debuglog('midway:debug');
-
-let cachedTypeScriptCompiler: any;
-
-function resolveRelativeEsmSpecifierPath(
-  importerFile: string,
-  specifier: string
-): string | undefined {
-  if (
-    !specifier ||
-    (!specifier.startsWith('./') && !specifier.startsWith('../'))
-  ) {
-    return undefined;
-  }
-
-  const absolute = resolve(dirname(importerFile), specifier);
-  const candidates: string[] = [absolute];
-
-  if (/\.(mjs|cjs|js)$/i.test(specifier)) {
-    candidates.push(
-      absolute.replace(/\.(mjs|cjs|js)$/i, '.mts'),
-      absolute.replace(/\.(mjs|cjs|js)$/i, '.cts'),
-      absolute.replace(/\.(mjs|cjs|js)$/i, '.ts'),
-      absolute.replace(/\.(mjs|cjs|js)$/i, '.tsx')
-    );
-  } else if (!/\.[a-z0-9]+$/i.test(specifier)) {
-    candidates.push(
-      `${absolute}.mts`,
-      `${absolute}.cts`,
-      `${absolute}.ts`,
-      `${absolute}.tsx`,
-      `${absolute}.mjs`,
-      `${absolute}.cjs`,
-      `${absolute}.js`,
-      `${absolute}.json`,
-      join(absolute, 'index.mts'),
-      join(absolute, 'index.cts'),
-      join(absolute, 'index.ts'),
-      join(absolute, 'index.tsx'),
-      join(absolute, 'index.mjs'),
-      join(absolute, 'index.cjs'),
-      join(absolute, 'index.js'),
-      join(absolute, 'index.json')
-    );
-  }
-
-  for (const item of candidates) {
-    if (existsSync(item)) {
-      return item;
-    }
-  }
-
-  return undefined;
-}
-
-function resolveRelativeEsmSpecifierFallback(
-  importerFile: string,
-  specifier: string
-): string | undefined {
-  const resolved = resolveRelativeEsmSpecifierPath(importerFile, specifier);
-  if (resolved) {
-    const normalized = resolved.split(sep).join('/');
-    const baseDir = dirname(importerFile).split(sep).join('/');
-    if (normalized.startsWith(baseDir + '/')) {
-      return './' + normalized.slice(baseDir.length + 1);
-    }
-    return specifier;
-  }
-
-  return undefined;
-}
-
-function rewriteEsmSourceWithSpecifierFallback(
-  importerFile: string,
-  source: string
-): string {
-  let changed = false;
-  const rewriteByPattern = (pattern: RegExp, input: string) => {
-    return input.replace(pattern, (full, head, spec, tail) => {
-      const fallback = resolveRelativeEsmSpecifierFallback(importerFile, spec);
-      if (!fallback || fallback === spec) {
-        return full;
-      }
-      changed = true;
-      return `${head}${fallback}${tail}`;
-    });
-  };
-
-  let output = source;
-  output = rewriteByPattern(/(from\s+['"])([^'"]+)(['"])/g, output);
-  output = rewriteByPattern(/(import\s*\(\s*['"])([^'"]+)(['"]\s*\))/g, output);
-
-  return changed ? output : source;
-}
-
-function shouldUseEsmFallback(
-  originErr: any,
-  filePath: string,
-  rewritten: string,
-  source: string
-) {
-  if (rewritten !== source) {
-    return true;
-  }
-
-  return (
-    originErr?.code === 'ERR_UNKNOWN_FILE_EXTENSION' &&
-    /\.(mts|cts|ts|tsx)$/i.test(filePath)
-  );
-}
-
-function formatFallbackImportSpecifier(fromFile: string, toFile: string) {
-  let specifier = relative(dirname(fromFile), toFile).split(sep).join('/');
-  if (!specifier.startsWith('.')) {
-    specifier = `./${specifier}`;
-  }
-  return specifier;
-}
-
-function loadTypeScriptCompiler(sourceFile: string) {
-  if (cachedTypeScriptCompiler) {
-    return cachedTypeScriptCompiler;
-  }
-
-  const searchPaths = [dirname(sourceFile), process.cwd(), __dirname];
-  for (const item of searchPaths) {
-    try {
-      cachedTypeScriptCompiler = require(
-        require.resolve('typescript', {
-          paths: [item],
-        })
-      );
-      return cachedTypeScriptCompiler;
-    } catch {
-      // try next path
-    }
-  }
-}
-
-function createCompiledEsmFallbackGraph(entryFile: string) {
-  const tempDir = mkdtempSync(
-    join(dirname(entryFile), '.midway-esm-fallback-')
-  );
-  const compiledFileMap = new Map<string, string>();
-  const tsCompiler = loadTypeScriptCompiler(entryFile);
-
-  const compileFile = (sourceFile: string): string => {
-    const existed = compiledFileMap.get(sourceFile);
-    if (existed) {
-      return existed;
-    }
-
-    const compiledFile = join(
-      tempDir,
-      `${crypto.createHash('sha1').update(sourceFile).digest('hex')}.mjs`
-    );
-    compiledFileMap.set(sourceFile, compiledFile);
-
-    if (sourceFile.endsWith('.json')) {
-      const jsonSource = readFileSync(sourceFile, { encoding: 'utf-8' });
-      writeFileSync(compiledFile, `export default ${jsonSource};`, {
-        encoding: 'utf-8',
-      });
-      return compiledFile;
-    }
-
-    const source = readFileSync(sourceFile, { encoding: 'utf-8' });
-    const rewriteByPattern = (pattern: RegExp, input: string) => {
-      return input.replace(pattern, (full, head, spec, tail) => {
-        const resolved = resolveRelativeEsmSpecifierPath(sourceFile, spec);
-        if (!resolved) {
-          return full;
-        }
-        const compiledDependency = compileFile(resolved);
-        const fallbackSpecifier = formatFallbackImportSpecifier(
-          compiledFile,
-          compiledDependency
-        );
-        return `${head}${fallbackSpecifier}${tail}`;
-      });
-    };
-
-    let rewritten = source;
-    rewritten = rewriteByPattern(/(from\s+['"])([^'"]+)(['"])/g, rewritten);
-    rewritten = rewriteByPattern(
-      /(import\s*\(\s*['"])([^'"]+)(['"]\s*\))/g,
-      rewritten
-    );
-
-    let output = rewritten;
-    if (/\.(mts|cts|ts|tsx)$/i.test(sourceFile)) {
-      if (!tsCompiler) {
-        throw new Error(
-          `[core]: can not transpile esm typescript file "${sourceFile}", please install "typescript" in current project`
-        );
-      }
-
-      output = tsCompiler.transpileModule(rewritten, {
-        fileName: sourceFile,
-        compilerOptions: {
-          module: tsCompiler.ModuleKind.ESNext,
-          target: tsCompiler.ScriptTarget.ES2020,
-          moduleResolution: tsCompiler.ModuleResolutionKind.NodeNext,
-          esModuleInterop: true,
-          allowSyntheticDefaultImports: true,
-          resolveJsonModule: true,
-          jsx: tsCompiler.JsxEmit.ReactJSX,
-        },
-      }).outputText;
-    }
-
-    writeFileSync(compiledFile, output, { encoding: 'utf-8' });
-    return compiledFile;
-  };
-
-  return {
-    entryFile: compileFile(entryFile),
-    cleanup() {
-      rmSync(tempDir, {
-        recursive: true,
-        force: true,
-      });
-    },
-  };
-}
-
-async function importWithSpecifierFallback(
-  p: string,
-  fileUrl: URL,
-  importQuery?: string
-) {
-  try {
-    return await import(fileUrl.href);
-  } catch (originErr) {
-    const source = readFileSync(p, { encoding: 'utf-8' });
-    const rewritten = rewriteEsmSourceWithSpecifierFallback(p, source);
-    if (!shouldUseEsmFallback(originErr, p, rewritten, source)) {
-      throw originErr;
-    }
-
-    const fallbackGraph = createCompiledEsmFallbackGraph(p);
-    try {
-      const tmpUrl = pathToFileURL(fallbackGraph.entryFile);
-      if (importQuery) {
-        tmpUrl.searchParams.set('mwImportQuery', importQuery);
-      }
-      return await import(tmpUrl.href);
-    } finally {
-      fallbackGraph.cleanup();
-    }
-  }
-}
 
 /**
  * @since 2.0.0
@@ -369,11 +112,7 @@ export const loadModule = async (
           if (options.importQuery) {
             fileUrl.searchParams.set('mwImportQuery', options.importQuery);
           }
-          return await importWithSpecifierFallback(
-            p,
-            fileUrl,
-            options.importQuery
-          );
+          return await import(fileUrl.href);
         }
       }
     } else {
@@ -865,14 +604,15 @@ export function isConfigurationExport(exports): boolean {
 export async function findProjectEntryFile(
   appDir: string,
   baseDir: string,
-  loadMode: 'commonjs' | 'esm'
+  loadMode: 'commonjs' | 'esm',
+  moduleLoader: ModuleLoader = loadModule
 ) {
   /**
    * 查找常用文件中的 midway 入口，入口文件包括 Configuration 对象或者 defineConfiguration 函数
    */
   async function containsConfiguration(filePath: string) {
     // 加载文件
-    const content = await loadModule(filePath, {
+    const content = await moduleLoader(filePath, {
       safeLoad: true,
       loadMode,
       warnOnLoadError: true,

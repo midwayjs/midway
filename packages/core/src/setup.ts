@@ -25,6 +25,7 @@ import { MidwayTraceService } from './service/traceService';
 import { ComponentConfigurationLoader } from './context/componentLoader';
 import { findProjectEntryFile, findProjectEntryFileSync } from './util';
 import { AsyncLocalStorageContextManager } from './common/asyncContextManager';
+import { MODULE_LOADER_KEY } from './constants';
 import {
   MidwayInitializerPerformanceManager,
   MidwayPerformanceManager,
@@ -199,6 +200,12 @@ export async function prepareGlobalApplicationContextAsync(
   // register baseDir and appDir
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
+  if (globalOptions.moduleLoader) {
+    applicationContext.registerObject(
+      MODULE_LOADER_KEY,
+      globalOptions.moduleLoader
+    );
+  }
 
   if (!globalOptions.asyncContextManager) {
     globalOptions.asyncContextManager = new AsyncLocalStorageContextManager();
@@ -224,7 +231,12 @@ export async function prepareGlobalApplicationContextAsync(
   // set entry file
   globalOptions.imports = [
     ...(globalOptions.imports ?? []),
-    await findProjectEntryFile(appDir, baseDir, globalOptions.moduleLoadType),
+    await findProjectEntryFile(
+      appDir,
+      baseDir,
+      globalOptions.moduleLoadType,
+      globalOptions.moduleLoader
+    ),
   ];
 
   MidwayInitializerPerformanceManager.markEnd(
@@ -366,6 +378,12 @@ export function prepareGlobalApplicationContext(
   // register baseDir and appDir
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
+  if (globalOptions.moduleLoader) {
+    applicationContext.registerObject(
+      MODULE_LOADER_KEY,
+      globalOptions.moduleLoader
+    );
+  }
 
   if (!globalOptions.asyncContextManager) {
     globalOptions.asyncContextManager = new AsyncLocalStorageContextManager();
