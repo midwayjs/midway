@@ -82,7 +82,10 @@ export function devPlugin(options: DevPluginOptions) {
   const resolvedBaseDir = baseDir;
   const basePath = options.basePath || '/api';
   const watchInclude = options.watch?.include || [/\.(ts|tsx|js|mjs|cjs)$/];
-  const watchExclude = options.watch?.exclude || [/\.d\.ts$/];
+  const watchExclude = options.watch?.exclude || [
+    /\.d\.ts$/,
+    /\/\.midway-esm-fallback-[^/]+\/.+$/,
+  ];
   const getRequestHandler =
     options.getRequestHandler || getDefaultRequestHandler;
   const routeManifestOptions =
