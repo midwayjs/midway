@@ -1,7 +1,7 @@
 {
   "name": "@samples/functional-api-service",
   "private": true,
-  "version": "4.0.2",
+  "version": "4.0.3",
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",

@@ -1,6 +1,29 @@
 # Change Log
 
 
+## v4.0.3 (2026-04-12)
+
+#### :bug: Bug Fix
+* `core`, `mock`
+  * [#4557](https://github.com/midwayjs/midway/pull/4557) fix: Node 20 ESM fallback for TypeScript module graphs ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `casbin-typeorm-adapter`, `crud`, `typeorm`
+  * [#4559](https://github.com/midwayjs/midway/pull/4559) chore(deps): update dependency typeorm to v0.3.28 ([@renovate[bot]](https://github.com/apps/renovate))
+* `api-bridge`, `react`, `validation-class-validator`, `validation-joi`, `validation-zod`, `validation-zod4`, `vue`, `web-bridge`
+  * [#4558](https://github.com/midwayjs/midway/pull/4558) chore(deps): update dependency tsup to v8.5.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4554](https://github.com/midwayjs/midway/pull/4554) fix(deps): update dependency mqtt to v5.15.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `i18n`, `info`, `security`
+  * [#4555](https://github.com/midwayjs/midway/pull/4555) fix(deps): update dependency picomatch to v2.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `crud`, `sequelize`
+  * [#4548](https://github.com/midwayjs/midway/pull/4548) chore(deps): update dependency sequelize to v6.37.8 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.0.2 (2026-04-06)
 
 #### :rocket: New Feature

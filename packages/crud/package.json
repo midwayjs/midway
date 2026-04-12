@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/crud",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Midway Component for declarative CRUD APIs",
   "main": "dist/index.js",
   "typings": "index.d.ts",
