@@ -1,5 +1,11 @@
-import { dirname, resolve, sep, posix, join } from 'path';
-import { readFileSync, writeFileSync, unlinkSync, existsSync } from 'fs';
+import { dirname, resolve, sep, posix, join, relative } from 'path';
+import {
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  mkdtempSync,
+  rmSync,
+} from 'fs';
 import { debuglog } from 'util';
 import { PathToRegexpUtil } from './pathToRegexp';
 import { MidwayCommonError } from '../error';
@@ -16,7 +22,9 @@ import { CONFIGURATION_KEY, CONFIGURATION_OBJECT_KEY } from '../decorator';
 
 const debug = debuglog('midway:debug');
 
-function resolveRelativeEsmSpecifierFallback(
+let cachedTypeScriptCompiler: any;
+
+function resolveRelativeEsmSpecifierPath(
   importerFile: string,
   specifier: string
 ): string | undefined {
@@ -28,7 +36,7 @@ function resolveRelativeEsmSpecifierFallback(
   }
 
   const absolute = resolve(dirname(importerFile), specifier);
-  const candidates: string[] = [];
+  const candidates: string[] = [absolute];
 
   if (/\.(mjs|cjs|js)$/i.test(specifier)) {
     candidates.push(
@@ -43,23 +51,44 @@ function resolveRelativeEsmSpecifierFallback(
       `${absolute}.cts`,
       `${absolute}.ts`,
       `${absolute}.tsx`,
+      `${absolute}.mjs`,
+      `${absolute}.cjs`,
+      `${absolute}.js`,
+      `${absolute}.json`,
       join(absolute, 'index.mts'),
       join(absolute, 'index.cts'),
       join(absolute, 'index.ts'),
-      join(absolute, 'index.tsx')
+      join(absolute, 'index.tsx'),
+      join(absolute, 'index.mjs'),
+      join(absolute, 'index.cjs'),
+      join(absolute, 'index.js'),
+      join(absolute, 'index.json')
     );
   }
 
   for (const item of candidates) {
     if (existsSync(item)) {
-      const normalized = item.split(sep).join('/');
-      const baseDir = dirname(importerFile).split(sep).join('/');
-      if (normalized.startsWith(baseDir + '/')) {
-        return './' + normalized.slice(baseDir.length + 1);
-      }
-      return specifier;
+      return item;
     }
   }
+
+  return undefined;
+}
+
+function resolveRelativeEsmSpecifierFallback(
+  importerFile: string,
+  specifier: string
+): string | undefined {
+  const resolved = resolveRelativeEsmSpecifierPath(importerFile, specifier);
+  if (resolved) {
+    const normalized = resolved.split(sep).join('/');
+    const baseDir = dirname(importerFile).split(sep).join('/');
+    if (normalized.startsWith(baseDir + '/')) {
+      return './' + normalized.slice(baseDir.length + 1);
+    }
+    return specifier;
+  }
+
   return undefined;
 }
 
@@ -86,6 +115,137 @@ function rewriteEsmSourceWithSpecifierFallback(
   return changed ? output : source;
 }
 
+function shouldUseEsmFallback(
+  originErr: any,
+  filePath: string,
+  rewritten: string,
+  source: string
+) {
+  if (rewritten !== source) {
+    return true;
+  }
+
+  return (
+    originErr?.code === 'ERR_UNKNOWN_FILE_EXTENSION' &&
+    /\.(mts|cts|ts|tsx)$/i.test(filePath)
+  );
+}
+
+function formatFallbackImportSpecifier(fromFile: string, toFile: string) {
+  let specifier = relative(dirname(fromFile), toFile).split(sep).join('/');
+  if (!specifier.startsWith('.')) {
+    specifier = `./${specifier}`;
+  }
+  return specifier;
+}
+
+function loadTypeScriptCompiler(sourceFile: string) {
+  if (cachedTypeScriptCompiler) {
+    return cachedTypeScriptCompiler;
+  }
+
+  const searchPaths = [dirname(sourceFile), process.cwd(), __dirname];
+  for (const item of searchPaths) {
+    try {
+      cachedTypeScriptCompiler = require(
+        require.resolve('typescript', {
+          paths: [item],
+        })
+      );
+      return cachedTypeScriptCompiler;
+    } catch {
+      // try next path
+    }
+  }
+}
+
+function createCompiledEsmFallbackGraph(entryFile: string) {
+  const tempDir = mkdtempSync(
+    join(dirname(entryFile), '.midway-esm-fallback-')
+  );
+  const compiledFileMap = new Map<string, string>();
+  const tsCompiler = loadTypeScriptCompiler(entryFile);
+
+  const compileFile = (sourceFile: string): string => {
+    const existed = compiledFileMap.get(sourceFile);
+    if (existed) {
+      return existed;
+    }
+
+    const compiledFile = join(
+      tempDir,
+      `${crypto.createHash('sha1').update(sourceFile).digest('hex')}.mjs`
+    );
+    compiledFileMap.set(sourceFile, compiledFile);
+
+    if (sourceFile.endsWith('.json')) {
+      const jsonSource = readFileSync(sourceFile, { encoding: 'utf-8' });
+      writeFileSync(compiledFile, `export default ${jsonSource};`, {
+        encoding: 'utf-8',
+      });
+      return compiledFile;
+    }
+
+    const source = readFileSync(sourceFile, { encoding: 'utf-8' });
+    const rewriteByPattern = (pattern: RegExp, input: string) => {
+      return input.replace(pattern, (full, head, spec, tail) => {
+        const resolved = resolveRelativeEsmSpecifierPath(sourceFile, spec);
+        if (!resolved) {
+          return full;
+        }
+        const compiledDependency = compileFile(resolved);
+        const fallbackSpecifier = formatFallbackImportSpecifier(
+          compiledFile,
+          compiledDependency
+        );
+        return `${head}${fallbackSpecifier}${tail}`;
+      });
+    };
+
+    let rewritten = source;
+    rewritten = rewriteByPattern(/(from\s+['"])([^'"]+)(['"])/g, rewritten);
+    rewritten = rewriteByPattern(
+      /(import\s*\(\s*['"])([^'"]+)(['"]\s*\))/g,
+      rewritten
+    );
+
+    let output = rewritten;
+    if (/\.(mts|cts|ts|tsx)$/i.test(sourceFile)) {
+      if (!tsCompiler) {
+        throw new Error(
+          `[core]: can not transpile esm typescript file "${sourceFile}", please install "typescript" in current project`
+        );
+      }
+
+      output = tsCompiler.transpileModule(rewritten, {
+        fileName: sourceFile,
+        compilerOptions: {
+          module: tsCompiler.ModuleKind.ESNext,
+          target: tsCompiler.ScriptTarget.ES2020,
+          moduleResolution: tsCompiler.ModuleResolutionKind.NodeNext,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+          resolveJsonModule: true,
+          jsx: tsCompiler.JsxEmit.ReactJSX,
+        },
+      }).outputText;
+    }
+
+    writeFileSync(compiledFile, output, { encoding: 'utf-8' });
+    return compiledFile;
+  };
+
+  return {
+    entryFile: compileFile(entryFile),
+    cleanup() {
+      rmSync(tempDir, {
+        recursive: true,
+        force: true,
+      });
+    },
+  };
+}
+
 async function importWithSpecifierFallback(
   p: string,
   fileUrl: URL,
@@ -96,26 +256,19 @@ async function importWithSpecifierFallback(
   } catch (originErr) {
     const source = readFileSync(p, { encoding: 'utf-8' });
     const rewritten = rewriteEsmSourceWithSpecifierFallback(p, source);
-    if (rewritten === source) {
+    if (!shouldUseEsmFallback(originErr, p, rewritten, source)) {
       throw originErr;
     }
 
-    const tmpFile = `${p}.mw-esm-fallback-${Date.now()}-${Math.random()
-      .toString(36)
-      .slice(2)}.ts`;
-    writeFileSync(tmpFile, rewritten, { encoding: 'utf-8' });
+    const fallbackGraph = createCompiledEsmFallbackGraph(p);
     try {
-      const tmpUrl = pathToFileURL(tmpFile);
+      const tmpUrl = pathToFileURL(fallbackGraph.entryFile);
       if (importQuery) {
         tmpUrl.searchParams.set('mwImportQuery', importQuery);
       }
       return await import(tmpUrl.href);
     } finally {
-      try {
-        unlinkSync(tmpFile);
-      } catch {
-        // ignore cleanup failure
-      }
+      fallbackGraph.cleanup();
     }
   }
 }
@@ -193,14 +346,14 @@ export const loadModule = async (
       if (options.loadMode === 'commonjs') {
         try {
           return require(p);
-        } catch (_) {
+        } catch {
           for (const extraPath of [
             process.cwd(),
             ...(options.extraModuleRoot || []),
           ]) {
             try {
               return require(require.resolve(p, { paths: [extraPath] }));
-            } catch (_) {
+            } catch {
               // do nothing
             }
           }
@@ -485,7 +638,7 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
 
 export function toPathMatch(pattern) {
   if (typeof pattern === 'boolean') {
-    return ctx => pattern;
+    return () => pattern;
   }
   if (typeof pattern === 'string') {
     const reg = PathToRegexpUtil.toRegexp(pattern.replace('*', '(.*)'));
