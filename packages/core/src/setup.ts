@@ -201,6 +201,8 @@ export async function prepareGlobalApplicationContextAsync(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
   if (globalOptions.moduleLoader) {
+    // Keep the custom loader on the container so later module discovery
+    // phases (for example file detectors) can follow the same load strategy.
     applicationContext.registerObject(
       MODULE_LOADER_KEY,
       globalOptions.moduleLoader
@@ -379,6 +381,8 @@ export function prepareGlobalApplicationContext(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
   if (globalOptions.moduleLoader) {
+    // Keep the custom loader on the container so later module discovery
+    // phases (for example file detectors) can follow the same load strategy.
     applicationContext.registerObject(
       MODULE_LOADER_KEY,
       globalOptions.moduleLoader

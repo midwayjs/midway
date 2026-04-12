@@ -295,6 +295,8 @@ export function createSourceModuleLoader(
             safeLoad: false,
           });
         } catch {
+          // Mock dev mode loads TS source files directly. This fallback stays in
+          // mock on purpose so core.loadModule() can remain a plain loader.
           return await importWithSpecifierFallback(p, options.importQuery);
         }
       }

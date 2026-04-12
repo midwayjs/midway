@@ -118,6 +118,8 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
 
   async loadAsync(container: IMidwayGlobalContainer, namespace: string) {
     this.options = this.options || {};
+    // When mock injects a dev-only source loader, detector scans must reuse it
+    // instead of falling back to the generic core loader.
     const moduleLoader: typeof loadModule = container.hasObject(
       MODULE_LOADER_KEY
     )

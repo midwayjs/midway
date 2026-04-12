@@ -1127,6 +1127,8 @@ export interface IMidwayBootstrapOptions {
     | Record<string, any>;
   asyncContextManager?: AsyncContextManager;
   loggerFactory?: LoggerFactory<any, any>;
+  // Internal hook for callers like @midwayjs/mock that need a custom module
+  // loader during bootstrap. Core should keep loadModule() itself generic.
   moduleLoader?: ModuleLoader;
 }
 
