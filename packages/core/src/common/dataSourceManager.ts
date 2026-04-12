@@ -93,9 +93,8 @@ export abstract class DataSourceManager<
             this.modelMapping.set(entity, dataSourceName);
           }
         }
-        (dataSourceOptions[initOptions.entitiesConfigKey] as any) = Array.from(
-          entities
-        );
+        (dataSourceOptions[initOptions.entitiesConfigKey] as any) =
+          Array.from(entities);
         debug(
           `[core]: DataManager load ${
             dataSourceOptions[initOptions.entitiesConfigKey].length
