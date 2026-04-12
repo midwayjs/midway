@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "tsup": "8.5.0",
+    "tsup": "8.5.1",
     "zod": "4.2.1"
   },
   "scripts": {
