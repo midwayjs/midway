@@ -58,6 +58,6 @@
     "sequelize": "6.37.8",
     "sequelize-typescript": "2.1.6",
     "sqlite3": "5.1.7",
-    "typeorm": "0.3.26"
+    "typeorm": "0.3.28"
   }
 }

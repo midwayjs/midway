@@ -17,7 +17,7 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "sqlite3": "5.1.7",
-    "typeorm": "0.3.26"
+    "typeorm": "0.3.28"
   },
   "author": {
     "name": "czy88840616",
