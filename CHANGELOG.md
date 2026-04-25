@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.24 (2026-04-25)
+
+#### :nail_care: Polish
+* `core`, `info`
+  * [#4556](https://github.com/midwayjs/midway/pull/4556) feat(core): gate concurrent datasource init by config ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.23 (2026-04-09)
 
 #### :bug: Bug Fix
