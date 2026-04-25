@@ -3,6 +3,10 @@ import { globModels, formatGlobString } from '../../src/common/dataSourceManager
 import { join } from 'path';
 import * as assert from 'assert';
 
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 describe('test/common/dataSourceManager.test.ts', () => {
 
   class CustomDataSourceFactory extends DataSourceManager<any> {
@@ -245,6 +249,86 @@ describe('test/common/dataSourceManager.test.ts', () => {
     expect(result.length).toEqual(6);
   });
 
+});
+
+describe('test concurrent data source initialization', () => {
+  class TimedDataSourceFactory extends DataSourceManager<any> {
+    getName() {
+      return 'timed';
+    }
+
+    async init(options) {
+      return super.initDataSource(options, __dirname);
+    }
+
+    protected async createDataSource(config, dataSourceName: string): Promise<any> {
+      await sleep(100);
+      return {
+        ...config,
+        dataSourceName,
+        createdAt: Date.now(),
+      };
+    }
+
+    protected async checkConnected(): Promise<boolean> {
+      return true;
+    }
+
+    protected async destroyDataSource(): Promise<void> {
+      return;
+    }
+  }
+
+  it('should initialize data sources serially by default', async () => {
+    const instance = new TimedDataSourceFactory();
+    const startTime = Date.now();
+
+    await instance.init({
+      dataSource: {
+        ds1: {},
+        ds2: {},
+        ds3: {},
+      },
+    });
+
+    const dataSources = Array.from(instance.getAllDataSources().values());
+    const creationTimes = dataSources.map(ds => ds.createdAt);
+
+    for (let i = 1; i < creationTimes.length; i++) {
+      expect(creationTimes[i] - creationTimes[i - 1]).toBeGreaterThanOrEqual(90);
+    }
+
+    expect(Date.now() - startTime).toBeGreaterThanOrEqual(290);
+  });
+
+  it('should initialize data sources concurrently when core config is enabled', async () => {
+    const instance = new TimedDataSourceFactory();
+    const startTime = Date.now();
+    instance['configService'] = {
+      getConfiguration(configKey: string) {
+        if (configKey === 'core.concurrentDataSourceInitialization') {
+          return true;
+        }
+      },
+    } as any;
+
+    await instance.init({
+      dataSource: {
+        ds1: {},
+        ds2: {},
+        ds3: {},
+      },
+    });
+
+    const dataSources = Array.from(instance.getAllDataSources().values());
+    const creationTimes = dataSources.map(ds => ds.createdAt);
+
+    for (let i = 1; i < creationTimes.length; i++) {
+      expect(Math.abs(creationTimes[i] - creationTimes[i - 1])).toBeLessThan(50);
+    }
+
+    expect(Date.now() - startTime).toBeLessThan(220);
+  });
 });
 
 describe('test global pattern', () => {
