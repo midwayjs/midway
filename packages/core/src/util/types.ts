@@ -13,14 +13,20 @@ export function isClass(fn) {
     return false;
   }
 
-  if (/^class[\s{]/.test(ToString.call(fn))) {
+  const fnSource = ToString.call(fn);
+  if (/^class[\s{]/.test(fnSource)) {
     return true;
   }
 
   // Tools like Bytenode replace function source text, so Function#toString is
   // unreliable. ECMAScript class constructors have a non-writable `prototype`.
+  // Native constructors also satisfy this shape, so skip "[native code]" here.
   const descriptor = Object.getOwnPropertyDescriptor(fn, 'prototype');
-  if (descriptor && descriptor.writable === false) {
+  if (
+    descriptor &&
+    descriptor.writable === false &&
+    !/\[native code\]/.test(fnSource)
+  ) {
     return true;
   }
 

@@ -24,27 +24,41 @@ describe('/test/util/index.test.ts', () => {
     expect(Types.isString(undefined)).toBeFalsy();
     expect(Types.isString({})).toBeFalsy();
 
-    expect(Types.isClass(class B {})).toBeTruthy();
-
-    class ObscuredCtor {}
-    const origToString = Function.prototype.toString;
-    try {
-      Function.prototype.toString = function (this: unknown) {
-        if (this === ObscuredCtor) {
-          return 'function () {}';
-        }
-        return origToString.call(this);
-      };
-      expect(Types.isClass(ObscuredCtor)).toBeTruthy();
-    } finally {
-      Function.prototype.toString = origToString;
-    }
-
     function plainFn() {}
     const asyncFn = async function () {};
     expect(Types.isClass(plainFn)).toBeFalsy();
     expect(Types.isClass(asyncFn)).toBeFalsy();
     expect(Types.isClass(() => {})).toBeFalsy();
+    expect(Types.isClass(Object)).toBeFalsy();
+    expect(Types.isClass(Array)).toBeFalsy();
+    expect(Types.isClass(Function)).toBeFalsy();
+  });
+
+  it('should detect class when toString source is obscured', () => {
+    class ObscuredCtor {}
+    const origToString = Function.prototype.toString;
+    try {
+      jest.resetModules();
+      Function.prototype.toString = function () {
+        if (this === ObscuredCtor) {
+          return 'function () {}';
+        }
+        return origToString.call(this);
+      };
+
+      let isolatedTypes!: typeof Types;
+      jest.isolateModules(() => {
+        isolatedTypes = require('../../../src/util/types').Types;
+      });
+
+      expect(isolatedTypes.isClass(ObscuredCtor)).toBeTruthy();
+      expect(isolatedTypes.isClass(Object)).toBeFalsy();
+      expect(isolatedTypes.isClass(Array)).toBeFalsy();
+      expect(isolatedTypes.isClass(Function)).toBeFalsy();
+    } finally {
+      Function.prototype.toString = origToString;
+      jest.resetModules();
+    }
   });
 
   it('should test toAsyncFunction', async () => {
