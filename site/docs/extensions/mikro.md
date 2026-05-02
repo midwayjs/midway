@@ -23,17 +23,18 @@ MikroORM 的官网文档在 [这里](https://mikro-orm.io/docs)。
 
 * 从 `v3.14.0` 版本的组件开始，支持 mikro v5/v6 版本，由于 mikro v5 到 v6 有较大的变化，如从 mikro 老版本升级请提前阅读 [Upgrading from v5 to v6](https://mikro-orm.io/docs/upgrading-v5-to-v6)
 * 组件示例已更新为 v6 版本
+* MikroORM v7 已切换为 native ESM，并调整了装饰器包路径。v7 项目请使用 `@midwayjs/mikro7`，不要和 `@midwayjs/mikro` 混用。
 
 
 
 ## 安装组件
 
 
-安装 mikro 组件，提供接入 mikro-orm 的能力。
+安装 mikro 组件，提供接入 mikro-orm 的能力。`@midwayjs/mikro` 对应 MikroORM v6。
 
 
 ```bash
-$ npm i @midwayjs/mikro@4 @mikro-orm/core --save
+$ npm i @midwayjs/mikro@4 @mikro-orm/core@^6 @mikro-orm/sqlite@^6 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -71,6 +72,27 @@ $ npm i @midwayjs/mikro@4 @mikro-orm/core --save
 ```
 
 更多驱动程序请查看 [官方文档](https://mikro-orm.io/docs/usage-with-sql/)。
+
+如果使用 MikroORM v7，请安装独立的 v7 组件。
+
+```bash
+$ npm i @midwayjs/mikro7@4 @mikro-orm/core@^7 @mikro-orm/decorators@^7 @mikro-orm/sqlite@^7 --save
+```
+
+对应 `package.json` 依赖如下。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/mikro7": "^4.0.0",
+    "@mikro-orm/core": "^7.0.0",
+    "@mikro-orm/decorators": "^7.0.0",
+    "@mikro-orm/sqlite": "^7.0.0"
+  }
+}
+```
+
+v7 使用 legacy TypeScript 装饰器时，Entity 装饰器需要从 `@mikro-orm/decorators/legacy` 导入，并在配置中显式设置 `metadataProvider: ReflectMetadataProvider`。同时，项目的 TypeScript 配置需要使用 `moduleResolution: "nodenext"`、`"node20"` 或 `"bundler"`。
 
 
 
@@ -497,4 +519,3 @@ export class BookController {
   }
 }
 ```
-

@@ -23,17 +23,18 @@ Related information:
 
 * Starting from the `v3.14.0` version of the component, mikro v5/v6 versions are supported. Since there are major changes from mikro v5 to v6, if you want to upgrade from an old version of mikro, please read [Upgrading from v5 to v6](https:/ /mikro-orm.io/docs/upgrading-v5-to-v6)
 * Component examples updated to v6
+* MikroORM v7 is native ESM and moves decorators to a separate package. Use `@midwayjs/mikro7` for v7 projects and do not mix it with `@midwayjs/mikro`.
 
 
 
 ## Installation Components
 
 
-Install mikro components to provide access to mikro-orm.
+Install mikro components to provide access to mikro-orm. `@midwayjs/mikro` is the MikroORM v6 integration.
 
 
 ```bash
-$ npm i @midwayjs/mikro@4 @mikro-orm/core --save
+$ npm i @midwayjs/mikro@4 @mikro-orm/core@^6 @mikro-orm/sqlite@^6 --save
 ```
 
 Or reinstall the following dependencies in `package.json`.
@@ -71,6 +72,27 @@ For example:
 ```
 
 For more information about drivers, see [Official documentation](https://mikro-orm.io/docs/usage-with-sql/).
+
+For MikroORM v7, install the dedicated v7 component.
+
+```bash
+$ npm i @midwayjs/mikro7@4 @mikro-orm/core@^7 @mikro-orm/decorators@^7 @mikro-orm/sqlite@^7 --save
+```
+
+The matching `package.json` dependencies are:
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/mikro7": "^4.0.0",
+    "@mikro-orm/core": "^7.0.0",
+    "@mikro-orm/decorators": "^7.0.0",
+    "@mikro-orm/sqlite": "^7.0.0"
+  }
+}
+```
+
+When using legacy TypeScript decorators with v7, import entity decorators from `@mikro-orm/decorators/legacy` and set `metadataProvider: ReflectMetadataProvider` explicitly in the MikroORM config. The project TypeScript config must also use `moduleResolution: "nodenext"`, `"node20"`, or `"bundler"`.
 
 
 
@@ -499,4 +521,3 @@ export class BookController {
   }
 }
 ```
-
