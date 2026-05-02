@@ -710,6 +710,65 @@ If boot access is fine, then you can distribute your build in the build director
 
 
 
+### Optional: compile to bytecode with Bytenode
+
+After a [single-file build](#construct) (for example `build/index.js`), you can use [Bytenode](https://github.com/bytenode/bytenode) to compile JavaScript into V8 bytecode (`.jsc`) and further reduce plaintext source exposure. **Bytecode is tied to the Node.js major version used at compile time**; production should run the same (or officially compatible) Node version, and you should smoke-test on that version before rollout.
+
+Midway identifies ES `class` constructors in places like `isClass`. Bytenode replaces what `Function.prototype.toString` returns, so an implementation that only checks `toString` may treat classes as plain functions and break dependency injection. **Use a `@midwayjs/core` release that includes this fix** (see `isClass` in [`packages/core/src/util/types.ts`](https://github.com/midwayjs/midway/blob/main/packages/core/src/util/types.ts)).
+
+:::warning
+
+Bytenode documents that anything relying on `Function.prototype.toString` may break with bytecode (see [bytenode#34](https://github.com/bytenode/bytenode/issues/34)). Besides framework detection, avoid depending on function source strings in application code.
+
+:::
+
+#### Prerequisites
+
+```bash
+$ npm i bytenode --save-dev
+```
+
+In `package.json`:
+
+```json
+{
+  "devDependencies": {
+    "bytenode": "^1.5.7"
+  }
+}
+```
+
+(Use a current compatible version from npm when you install.)
+
+#### Compile and run
+
+After the single-file bundle exists, compile the entry file:
+
+```bash
+$ npx bytenode --compile build/index.js
+```
+
+This typically produces `build/index.jsc` next to the source. Start it with Bytenode (local `node_modules` or global install):
+
+```bash
+$ NODE_ENV=production npx bytenode ./build/index.jsc
+```
+
+You can script it, for example:
+
+```json
+{
+  "scripts": {
+    "bundle_jsc": "npm run bundle && npx bytenode --compile build/index.js",
+    "bundle_jsc_start": "NODE_ENV=production npx bytenode ./build/index.jsc"
+  }
+}
+```
+
+All constraints from the [single-file deployment](#single-file-deployment) section still apply: no default exports in DI-related code, config as object mode, datasource `entities` path scanning limitations, etc. Bytecode is harder to debug; keep an uncompiled build path for troubleshooting.
+
+
+
 ## Binary deployment
 
 Package Node.js into a single executable file, which can be directly copied and executed during deployment. This method includes the node runtime and business code, which is conducive to the protection of intellectual property rights.
