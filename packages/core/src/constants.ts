@@ -18,6 +18,7 @@ export const REQUEST_CTX_UNIQUE_KEY = '_midway_ctx_unique_key';
 
 export const ASYNC_CONTEXT_KEY = Symbol('ASYNC_CONTEXT_KEY');
 export const ASYNC_CONTEXT_MANAGER_KEY = 'MIDWAY_ASYNC_CONTEXT_MANAGER_KEY';
+export const MODULE_LOADER_KEY = 'MIDWAY_MODULE_LOADER_KEY';
 
 export const DEFAULT_PATTERN = [
   '**/**.ts',

@@ -6,7 +6,11 @@ import {
 import { Types } from '../util/types';
 import { run } from '@midwayjs/glob';
 import { MidwayDuplicateClassNameError } from '../error';
-import { DEFAULT_PATTERN, IGNORE_PATTERN } from '../constants';
+import {
+  DEFAULT_PATTERN,
+  IGNORE_PATTERN,
+  MODULE_LOADER_KEY,
+} from '../constants';
 import { loadModule } from '../util';
 import { DecoratorManager } from '../decorator';
 import { debuglog } from 'util';
@@ -114,6 +118,13 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
 
   async loadAsync(container: IMidwayGlobalContainer, namespace: string) {
     this.options = this.options || {};
+    // When mock injects a dev-only source loader, detector scans must reuse it
+    // instead of falling back to the generic core loader.
+    const moduleLoader: typeof loadModule = container.hasObject(
+      MODULE_LOADER_KEY
+    )
+      ? container.getObject(MODULE_LOADER_KEY)
+      : loadModule;
     const loadDirs = [].concat(
       this.options.loadDir ?? container.get('baseDir')
     );
@@ -171,7 +182,7 @@ export class CommonJSFileDetector extends AbstractFileDetector<{
               ? `${Date.now()}_${Math.random()}`
               : undefined;
         }
-        const exports = await loadModule(file, {
+        const exports = await moduleLoader(file, {
           loadMode: 'esm',
           importQuery: currentImportQuery,
         });
