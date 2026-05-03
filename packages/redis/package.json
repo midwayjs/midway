@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/redis",
   "description": "midway redis component",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [

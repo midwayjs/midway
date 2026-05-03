@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/piscina",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "description": "Midway Component for Piscina worker thread pool",
   "main": "dist/index.js",
   "typings": "index.d.ts",

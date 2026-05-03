@@ -1,6 +1,43 @@
 # Change Log
 
 
+## v4.1.0 (2026-05-03)
+
+#### :rocket: New Feature
+* `mikro`, `mikro7`
+  * [#4576](https://github.com/midwayjs/midway/pull/4576) feat: Add MikroORM v7 component support ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#4577](https://github.com/midwayjs/midway/pull/4577) feat: add sse ai sdk forwarding ([@czy88840616](https://github.com/czy88840616))
+
+#### :bug: Bug Fix
+* `core`, `mock`
+  * [#4563](https://github.com/midwayjs/midway/pull/4563) refactor: mock source loading out of core ([@czy88840616](https://github.com/czy88840616))
+* `core`
+  * [#4553](https://github.com/midwayjs/midway/pull/4553) fix(core): detect class when Function#toString is unreliable ([@nobu121](https://github.com/nobu121))
+
+#### :memo: Documentation
+* [#4567](https://github.com/midwayjs/midway/pull/4567) chore: Add meadmin recommendation ([@yuntian001](https://github.com/yuntian001))
+
+#### :package: Dependencies
+* `captcha`, `security`
+  * [#4574](https://github.com/midwayjs/midway/pull/4574) fix(deps): update dependency nanoid to v3.3.12 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4573](https://github.com/midwayjs/midway/pull/4573) chore(deps): update hashicorp/consul docker tag to v1.22.7 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4560](https://github.com/midwayjs/midway/pull/4560) chore(deps): update rspack monorepo to v1.7.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#4568](https://github.com/midwayjs/midway/pull/4568) fix(deps): update dependency qs to v6.15.1 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#4569](https://github.com/midwayjs/midway/pull/4569) fix(deps): update dependency tablestore to v5.6.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mock`, `web`
+  * [#4561](https://github.com/midwayjs/midway/pull/4561) fix(deps): update dependency supertest to v6.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- [@nobu121](https://github.com/nobu121)
+- yuntian001 ([@yuntian001](https://github.com/yuntian001))
+
+
+
 ## v4.0.3 (2026-04-12)
 
 #### :bug: Bug Fix
