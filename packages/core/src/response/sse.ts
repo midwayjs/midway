@@ -1,5 +1,10 @@
 import { Transform } from 'stream';
-import { IMidwayContext, ServerSendEventStreamOptions } from '../interface';
+import {
+  IMidwayContext,
+  ServerSendEventForwardOptions,
+  ServerSendEventMessage,
+  ServerSendEventStreamOptions,
+} from '../interface';
 
 interface MessageEvent {
   data?: string | object;
@@ -15,6 +20,7 @@ export class ServerSendEventStream<
   private isActive = false;
   private readonly closeEvent: string;
   private options: ServerSendEventStreamOptions<CTX>;
+  private readonly closeHandlers = new Set<() => void>();
 
   constructor(ctx, options: ServerSendEventStreamOptions<CTX> = {}) {
     super({
@@ -105,7 +111,7 @@ export class ServerSendEventStream<
     });
   }
 
-  sendEnd(message?: MessageEvent) {
+  sendEnd(message: MessageEvent = {}) {
     message.event = this.closeEvent;
     this.send(message);
   }
@@ -114,7 +120,121 @@ export class ServerSendEventStream<
     super.write(this.options.tpl(message, this.ctx));
   }
 
+  /**
+   * Forward async iterable SDK stream chunks as protocol-compatible SSE frames.
+   */
+  async forward<T>(
+    source: AsyncIterable<T>,
+    options: ServerSendEventForwardOptions<T, CTX> = {}
+  ): Promise<void> {
+    const protocol = options.protocol || 'eventsource';
+    const abort = () => {
+      options.abortController?.abort();
+    };
+    this.closeHandlers.add(abort);
+
+    try {
+      for await (const rawChunk of source) {
+        if (!this.writable || this.destroyed) {
+          break;
+        }
+
+        const chunk = options.transform
+          ? await options.transform(rawChunk, this.ctx)
+          : rawChunk;
+
+        if (chunk === null) {
+          continue;
+        }
+
+        this.send(this.createForwardMessage(chunk, protocol));
+      }
+
+      this.sendForwardEnd(protocol, options.closeEvent);
+    } catch (err) {
+      if (options.abortController?.signal.aborted || !this.writable) {
+        this.end();
+        return;
+      }
+      this.ctx.logger.error(err);
+      this.sendError(err as Error);
+      this.end();
+    } finally {
+      this.closeHandlers.delete(abort);
+    }
+  }
+
+  private createForwardMessage(
+    chunk: unknown,
+    protocol: ServerSendEventForwardOptions['protocol']
+  ): ServerSendEventMessage {
+    if (protocol === 'anthropic') {
+      return {
+        event: this.getChunkType(chunk),
+        data: this.getForwardData(chunk),
+      };
+    }
+
+    return {
+      data: this.getForwardData(chunk),
+    };
+  }
+
+  private sendForwardEnd(
+    protocol: ServerSendEventForwardOptions['protocol'],
+    closeEvent: string | false
+  ) {
+    if (!this.writable || this.destroyed) {
+      return;
+    }
+
+    if (protocol === 'openai') {
+      this.send({
+        data: '[DONE]',
+      });
+      this.end();
+      return;
+    }
+
+    if (protocol === 'eventsource' && closeEvent !== false) {
+      this.send({
+        event: closeEvent || this.closeEvent,
+        data: '',
+      });
+    }
+
+    this.end();
+  }
+
+  private getChunkType(chunk: unknown): string | undefined {
+    if (chunk && typeof chunk === 'object') {
+      const type = (chunk as { type?: unknown }).type;
+      if (typeof type === 'string') {
+        return type;
+      }
+    }
+  }
+
+  private getForwardData(chunk: unknown): string | object {
+    if (typeof chunk === 'string') {
+      return chunk;
+    }
+
+    if (Buffer.isBuffer(chunk)) {
+      return chunk.toString();
+    }
+
+    if (chunk && typeof chunk === 'object') {
+      return chunk;
+    }
+
+    return String(chunk);
+  }
+
   private handleClose() {
+    for (const handler of this.closeHandlers) {
+      handler();
+    }
     this.end();
   }
 }

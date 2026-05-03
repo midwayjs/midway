@@ -1279,6 +1279,39 @@ export interface ServerStreamOptions<CTX extends IMidwayContext> {
   tpl?: (data: unknown, ctx: CTX) => unknown;
 }
 
+/**
+ * The protocol used to serialize forwarded Server-Sent Events.
+ */
+export type ServerSendEventForwardProtocol =
+  | 'eventsource'
+  | 'openai'
+  | 'anthropic';
+
+/**
+ * Options for forwarding async iterable SDK streams as Server-Sent Events.
+ */
+export interface ServerSendEventForwardOptions<
+  T = unknown,
+  CTX extends IMidwayContext = IMidwayContext,
+> {
+  /**
+   * Protocol-compatible SSE framing strategy.
+   */
+  protocol?: ServerSendEventForwardProtocol;
+  /**
+   * Transform or drop chunks before they are serialized.
+   */
+  transform?: (chunk: T, ctx: CTX) => T | null | Promise<T | null>;
+  /**
+   * Abort controller for the upstream SDK request.
+   */
+  abortController?: AbortController;
+  /**
+   * Event name emitted when generic EventSource forwarding completes.
+   */
+  closeEvent?: string | false;
+}
+
 export interface ServerSendEventStreamOptions<CTX extends IMidwayContext> {
   closeEvent?: string;
   tpl?: (data: ServerSendEventMessage, ctx: CTX) => ServerSendEventMessage;
