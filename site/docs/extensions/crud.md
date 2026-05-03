@@ -126,7 +126,7 @@ $ npm i @midwayjs/crud@4 --save
 $ npm i @midwayjs/typeorm@4 typeorm --save
 
 # MikroORM
-$ npm i @midwayjs/mikro@4 @mikro-orm/core --save
+$ npm i @midwayjs/mikro@4 @mikro-orm/core@^6 --save
 
 # Sequelize
 $ npm i @midwayjs/sequelize@4 sequelize sequelize-typescript --save

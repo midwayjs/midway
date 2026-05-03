@@ -9,6 +9,9 @@
     "dist/**/*.d.ts",
     "index.d.ts"
   ],
+  "peerDependencies": {
+    "@mikro-orm/core": "^6.0.0"
+  },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",

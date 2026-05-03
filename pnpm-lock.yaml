@@ -401,7 +401,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.28
-        version: 0.3.28(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 0.3.28(better-sqlite3@12.9.0)(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/code-dye:
     devDependencies:
@@ -594,7 +594,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.28
-        version: 0.3.28(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 0.3.28(better-sqlite3@12.9.0)(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/etcd:
     dependencies:
@@ -846,10 +846,34 @@ importers:
         version: 6.4.5
       '@mikro-orm/entity-generator':
         specifier: 6.4.5
-        version: 6.4.5(@mikro-orm/core@6.4.5)
+        version: 6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.5
-        version: 6.4.5(@mikro-orm/core@6.4.5)
+        version: 6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)
+
+  packages/mikro7:
+    devDependencies:
+      '@midwayjs/core':
+        specifier: workspace:^
+        version: link:../core
+      '@midwayjs/koa':
+        specifier: workspace:^
+        version: link:../web-koa
+      '@midwayjs/mock':
+        specifier: workspace:^
+        version: link:../mock
+      '@mikro-orm/core':
+        specifier: 7.0.13
+        version: 7.0.13(dataloader@2.2.3)
+      '@mikro-orm/decorators':
+        specifier: 7.0.13
+        version: 7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))(reflect-metadata@0.2.2)
+      '@mikro-orm/entity-generator':
+        specifier: 7.0.13
+        version: 7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))
+      '@mikro-orm/sqlite':
+        specifier: 7.0.13
+        version: 7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))
 
   packages/mock:
     dependencies:
@@ -1392,7 +1416,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 0.3.28
-        version: 0.3.28(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 0.3.28(better-sqlite3@12.9.0)(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/upload:
     dependencies:
@@ -3327,11 +3351,36 @@ packages:
     resolution: {integrity: sha512-9/CZ5oSbf4P1oBZA2HHKzuxh5yYKDNUZZq/RvJmzMdJDgV8fpTt26po/7J6UytABqZp9yXj1jXc+Kqv73vGGOA==}
     engines: {node: '>= 18.12.0'}
 
+  '@mikro-orm/core@7.0.13':
+    resolution: {integrity: sha512-TC1ize8Eo8fxnBdbIV3Af/oHkF8aD77PllieYqZv98geKGKRiXxGu99zC18KjdOjwf6FxdVp/DOvhGAQIhsPZw==}
+    engines: {node: '>= 22.17.0'}
+    peerDependencies:
+      dataloader: 2.2.3
+    peerDependenciesMeta:
+      dataloader:
+        optional: true
+
+  '@mikro-orm/decorators@7.0.13':
+    resolution: {integrity: sha512-AStwKw1cGTqjytl/jNGl09yPYh0iEqOWrEsRNbaQHwEw6Khc7LQtKVD7KjJITKT//2vA6UFqqn++3RFu8kML9w==}
+    engines: {node: '>= 22.17.0'}
+    peerDependencies:
+      '@mikro-orm/core': 7.0.13
+      reflect-metadata: ^0.1.0 || ^0.2.0
+    peerDependenciesMeta:
+      reflect-metadata:
+        optional: true
+
   '@mikro-orm/entity-generator@6.4.5':
     resolution: {integrity: sha512-lGTA8lOGmEJvFHJL65RMNbwx8AS36tGuCTjb3+uHk5ADX6xe6bBcd6eB7yXTGAsIX9lzMFvxGZDeqm5tAOc2jw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
+
+  '@mikro-orm/entity-generator@7.0.13':
+    resolution: {integrity: sha512-jxioRmZsTmlWmRnJPMglDMZpfLDhJYCtapPumOtoxqOpIRCIYQF1j00aPuNhogXmgBVdwMxqzDFWU49YKrBwAA==}
+    engines: {node: '>= 22.17.0'}
+    peerDependencies:
+      '@mikro-orm/core': 7.0.13
 
   '@mikro-orm/knex@6.4.5':
     resolution: {integrity: sha512-5D4NGD9bxmROUf8MVhR4mmZjzQtuM/Sg+eOnfOPzVaIkvuQItE4zR0Bg7gRr1XSgZ/OcJ/6q2ZoXH1HxSjykkw==}
@@ -3349,11 +3398,23 @@ packages:
       mariadb:
         optional: true
 
+  '@mikro-orm/sql@7.0.13':
+    resolution: {integrity: sha512-HPCPHnXBQTDSqpOfKfC3NkanPoqXHnqlrqegkGBoCspzJb2rTBza17PYlk4LsxCMMMNrTaYaa2K7j7NrSrcAFw==}
+    engines: {node: '>= 22.17.0'}
+    peerDependencies:
+      '@mikro-orm/core': 7.0.13
+
   '@mikro-orm/sqlite@6.4.5':
     resolution: {integrity: sha512-v/t10BxvMVxCIaqXjytGSZMTc/6YJzNRjUfBe81S4kzAE/YUv7ptWulFaQ2JNoXN7he6+K0JcjYEERlWOgSuIQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
+
+  '@mikro-orm/sqlite@7.0.13':
+    resolution: {integrity: sha512-qWUuTQXVVy23C+KjuwoVJFsghaS8yqKm3ZMP2yYrKHkP71ofrHVbg+PbK03gonG4or/TG74+09ScNBSvbou8QQ==}
+    engines: {node: '>= 22.17.0'}
+    peerDependencies:
+      '@mikro-orm/core': 7.0.13
 
   '@modelcontextprotocol/sdk@1.26.0':
     resolution: {integrity: sha512-Y5RmPncpiDtTXDbLKswIJzTqu2hyBKxTNsgKqKclDbhIgg1wgtf1fRuvxgTnRfcnxtvvgbIEcqUOzZrJ6iSReg==}
@@ -5308,6 +5369,10 @@ packages:
 
   before-after-hook@2.2.3:
     resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
+
+  better-sqlite3@12.9.0:
+    resolution: {integrity: sha512-wqUv4Gm3toFpHDQmaKD4QhZm3g1DjUBI0yzS4UBl6lElUmXFYdTQmmEDpAFa5o8FiFiymURypEnfVHzILKaxqQ==}
+    engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x}
 
   big.js@5.2.2:
     resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
@@ -8762,6 +8827,10 @@ packages:
   koa@3.1.2:
     resolution: {integrity: sha512-2LOQnFKu3m0VxpE+5sb5+BRTSKrXmNxGgxVRiKwD9s5KQB1zID/FRXhtzeV7RT1L2GVpdEEAfVuclFOMGl1ikA==}
     engines: {node: '>= 18'}
+
+  kysely@0.28.16:
+    resolution: {integrity: sha512-3i5pmOiZvMDj00qhrIVbH0AnioVTx22DMP7Vn5At4yJO46iy+FM8Y/g61ltenLVSo3fiO8h8Q3QOFgf/gQ72ww==}
+    engines: {node: '>=20.0.0'}
 
   latest-version@5.1.0:
     resolution: {integrity: sha512-weT+r0kTkRQdCdYCNtkMwWXQTMEswKrFBkm4ckQOMVhhqhIMI1UT2hMj+1iigIhgSZm5gTmrRXBNoGUgaTY1xA==}
@@ -14048,10 +14117,20 @@ snapshots:
       mikro-orm: 6.4.5
       reflect-metadata: 0.2.2
 
-  '@mikro-orm/entity-generator@6.4.5(@mikro-orm/core@6.4.5)':
+  '@mikro-orm/core@7.0.13(dataloader@2.2.3)':
+    optionalDependencies:
+      dataloader: 2.2.3
+
+  '@mikro-orm/decorators@7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))(reflect-metadata@0.2.2)':
+    dependencies:
+      '@mikro-orm/core': 7.0.13(dataloader@2.2.3)
+    optionalDependencies:
+      reflect-metadata: 0.2.2
+
+  '@mikro-orm/entity-generator@6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)':
     dependencies:
       '@mikro-orm/core': 6.4.5
-      '@mikro-orm/knex': 6.4.5(@mikro-orm/core@6.4.5)(sqlite3@5.1.7)
+      '@mikro-orm/knex': 6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(sqlite3@5.1.7)
       fs-extra: 11.3.0
     transitivePeerDependencies:
       - better-sqlite3
@@ -14065,12 +14144,19 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.5(@mikro-orm/core@6.4.5)(sqlite3@5.1.7)':
+  '@mikro-orm/entity-generator@7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))':
+    dependencies:
+      '@mikro-orm/core': 7.0.13(dataloader@2.2.3)
+      '@mikro-orm/sql': 7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))
+
+  '@mikro-orm/knex@6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.5
       fs-extra: 11.3.0
-      knex: 3.1.0(sqlite3@5.1.7)
+      knex: 3.1.0(better-sqlite3@12.9.0)(sqlite3@5.1.7)
       sqlstring: 2.3.3
+    optionalDependencies:
+      better-sqlite3: 12.9.0
     transitivePeerDependencies:
       - mysql
       - mysql2
@@ -14080,10 +14166,15 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/sqlite@6.4.5(@mikro-orm/core@6.4.5)':
+  '@mikro-orm/sql@7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))':
+    dependencies:
+      '@mikro-orm/core': 7.0.13(dataloader@2.2.3)
+      kysely: 0.28.16
+
+  '@mikro-orm/sqlite@6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)':
     dependencies:
       '@mikro-orm/core': 6.4.5
-      '@mikro-orm/knex': 6.4.5(@mikro-orm/core@6.4.5)(sqlite3@5.1.7)
+      '@mikro-orm/knex': 6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(sqlite3@5.1.7)
       fs-extra: 11.3.0
       sqlite3: 5.1.7
       sqlstring-sqlite: 0.1.1
@@ -14098,6 +14189,13 @@ snapshots:
       - pg-native
       - supports-color
       - tedious
+
+  '@mikro-orm/sqlite@7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))':
+    dependencies:
+      '@mikro-orm/core': 7.0.13(dataloader@2.2.3)
+      '@mikro-orm/sql': 7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))
+      better-sqlite3: 12.9.0
+      kysely: 0.28.16
 
   '@modelcontextprotocol/sdk@1.26.0(zod@3.25.76)':
     dependencies:
@@ -16140,6 +16238,11 @@ snapshots:
       tweetnacl: 0.14.5
 
   before-after-hook@2.2.3: {}
+
+  better-sqlite3@12.9.0:
+    dependencies:
+      bindings: 1.5.0
+      prebuild-install: 7.1.3
 
   big.js@5.2.2: {}
 
@@ -20491,7 +20594,7 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  knex@3.1.0(sqlite3@5.1.7):
+  knex@3.1.0(better-sqlite3@12.9.0)(sqlite3@5.1.7):
     dependencies:
       colorette: 2.0.19
       commander: 10.0.1
@@ -20508,6 +20611,7 @@ snapshots:
       tarn: 3.0.2
       tildify: 2.0.0
     optionalDependencies:
+      better-sqlite3: 12.9.0
       sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color
@@ -20629,6 +20733,8 @@ snapshots:
       statuses: 2.0.2
       type-is: 2.0.1
       vary: 1.1.2
+
+  kysely@0.28.16: {}
 
   latest-version@5.1.0:
     dependencies:
@@ -24728,7 +24834,7 @@ snapshots:
       typescript: 5.6.3
       yaml: 2.8.2
 
-  typeorm@0.3.28(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
+  typeorm@0.3.28(better-sqlite3@12.9.0)(ioredis@5.9.3)(mongodb@6.12.0(socks@2.8.7))(mysql2@3.16.0)(redis@3.1.2)(sqlite3@5.1.7)(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
     dependencies:
       '@sqltools/formatter': 1.2.5
       ansis: 4.2.0
@@ -24746,6 +24852,7 @@ snapshots:
       uuid: 11.1.0
       yargs: 17.7.2
     optionalDependencies:
+      better-sqlite3: 12.9.0
       ioredis: 5.9.3
       mongodb: 6.12.0(socks@2.8.7)
       mysql2: 3.16.0
