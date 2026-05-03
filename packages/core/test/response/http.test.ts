@@ -8,9 +8,38 @@ import { once } from 'events';
 import { existsSync } from 'fs';
 
 describe('response/http.test.ts', () => {
+  async function requestText(port: number): Promise<string> {
+    let result = '';
+    await new Promise<void>(resolve => {
+      const req = request(
+        {
+          hostname: 'localhost',
+          port,
+        },
+        res => {
+          res.on('data', chunk => {
+            result += chunk.toString();
+          });
+
+          res.on('end', () => {
+            resolve();
+          });
+        }
+      );
+      req.end();
+    });
+    return result;
+  }
+
+  async function listen(server: any): Promise<number> {
+    server.listen(0);
+    await once(server, 'listening');
+    return server.address().port;
+  }
+
   describe('test sse in base http', () => {
     it('should test push server send event', async () => {
-      const port = 7001;
+      let port: number;
       const server = createServer((req, res) => {
         const stream =  new HttpServerResponse({
           req,
@@ -40,7 +69,8 @@ describe('response/http.test.ts', () => {
           });
         });
         stream.pipe(res);
-      }).listen(port);
+      });
+      port = await listen(server);
 
       let result = [];
       await new Promise<void>(resolve => {
@@ -74,7 +104,7 @@ describe('response/http.test.ts', () => {
     });
 
     it('should send base format', async () => {
-      const port = 7001;
+      let port: number;
       const server = createServer((req, res) => {
         const stream = new HttpServerResponse({
           req,
@@ -93,7 +123,8 @@ describe('response/http.test.ts', () => {
           });
         });
         stream.pipe(res);
-      }).listen(port);
+      });
+      port = await listen(server);
 
       let result = [];
       await new Promise<void>(resolve => {
@@ -124,7 +155,7 @@ describe('response/http.test.ts', () => {
     });
 
     it('should close when client emit stream close', async () => {
-      const port = 7001;
+      let port: number;
       let handler = null;
       const server = createServer((req, res) => {
         const stream = new HttpServerResponse({
@@ -138,7 +169,8 @@ describe('response/http.test.ts', () => {
           });
         }, 300);
         stream.pipe(res);
-      }).listen(port);
+      });
+      port = await listen(server);
 
 
       let count = 0;
@@ -173,7 +205,7 @@ describe('response/http.test.ts', () => {
 
     it('should server response throw error', async () => {
       let handler = null;
-      const port = 7001;
+      let port: number;
       const server = createServer((req, res) => {
         const stream = new HttpServerResponse({
           req,
@@ -189,7 +221,8 @@ describe('response/http.test.ts', () => {
           stream.destroy();
         }, 300);
         stream.pipe(res);
-      }).listen(port);
+      });
+      port = await listen(server);
 
       await new Promise<void>((resolve, reject) => {
         const eventSource = new EventSource('http://localhost:' + port + '/sse');
@@ -213,7 +246,8 @@ describe('response/http.test.ts', () => {
     });
 
     it('should test with tpl', async () => {
-      const port = 7001;
+      let port: number;
+      const originTpl = HttpServerResponse.SSE_TPL;
       const server = createServer((req, res) => {
 
         HttpServerResponse.SSE_TPL = (chunk: ServerSendEventMessage) => {
@@ -249,7 +283,8 @@ describe('response/http.test.ts', () => {
           });
         });
         stream.pipe(res);
-      }).listen(port);
+      });
+      port = await listen(server);
 
       let result = [];
       await new Promise<void>(resolve => {
@@ -276,13 +311,213 @@ describe('response/http.test.ts', () => {
       })
 
       expect(result).toEqual(['hhhh', 'hhhh', 'hhhh', 'hhhh']);
+      HttpServerResponse.SSE_TPL = originTpl;
       server.close();
+    });
+
+    it('should forward async iterable as eventsource sse', async () => {
+      let port: number;
+      const server = createServer((req, res) => {
+        const stream = new HttpServerResponse({
+          req,
+          res,
+          logger: console,
+        } as any).sse();
+
+        stream.forward(
+          (async function* () {
+            yield { type: 'message', data: 'a' };
+            yield { type: 'message', data: 'b' };
+          })()
+        );
+        stream.pipe(res);
+      });
+      port = await listen(server);
+
+      const result = await requestText(port);
+      server.close();
+
+      expect(result).toContain(': ok\n');
+      expect(result).toContain('data: {"type":"message","data":"a"}\n\n');
+      expect(result).toContain('data: {"type":"message","data":"b"}\n\n');
+      expect(result).toContain('event: close\ndata: \n\n');
+    });
+
+    it('should forward anthropic async iterable with event names', async () => {
+      let port: number;
+      const server = createServer((req, res) => {
+        const stream = new HttpServerResponse({
+          req,
+          res,
+          logger: console,
+        } as any).sse();
+
+        stream.forward(
+          (async function* () {
+            yield {
+              type: 'content_block_delta',
+              index: 0,
+              delta: {
+                type: 'thinking_delta',
+                thinking: 'hello',
+              },
+            };
+            yield {
+              type: 'message_stop',
+            };
+          })(),
+          {
+            protocol: 'anthropic',
+          }
+        );
+        stream.pipe(res);
+      });
+      port = await listen(server);
+
+      const result = await requestText(port);
+      server.close();
+
+      expect(result).toContain('event: content_block_delta\n');
+      expect(result).toContain(
+        'data: {"type":"content_block_delta","index":0,"delta":{"type":"thinking_delta","thinking":"hello"}}\n\n'
+      );
+      expect(result).toContain('event: message_stop\n');
+      expect(result).not.toContain('event: close\n');
+    });
+
+    it('should forward openai async iterable with done marker', async () => {
+      let port: number;
+      const server = createServer((req, res) => {
+        const stream = new HttpServerResponse({
+          req,
+          res,
+          logger: console,
+        } as any).sse();
+
+        stream.forward(
+          (async function* () {
+            yield {
+              id: 'chatcmpl-1',
+              object: 'chat.completion.chunk',
+              choices: [
+                {
+                  delta: {
+                    content: 'hello',
+                  },
+                },
+              ],
+            };
+          })(),
+          {
+            protocol: 'openai',
+          }
+        );
+        stream.pipe(res);
+      });
+      port = await listen(server);
+
+      const result = await requestText(port);
+      server.close();
+
+      expect(result).toContain(
+        'data: {"id":"chatcmpl-1","object":"chat.completion.chunk","choices":[{"delta":{"content":"hello"}}]}\n\n'
+      );
+      expect(result).toContain('data: [DONE]\n\n');
+      expect(result).not.toContain('event: close\n');
+    });
+
+    it('should skip null transformed chunks when forwarding', async () => {
+      let port: number;
+      const server = createServer((req, res) => {
+        const stream = new HttpServerResponse({
+          req,
+          res,
+          logger: console,
+        } as any).sse();
+
+        stream.forward(
+          (async function* () {
+            yield { type: 'message', data: 'keep' };
+            yield { type: 'message', data: 'drop' };
+          })(),
+          {
+            closeEvent: false,
+            transform: chunk => {
+              if (chunk.data === 'drop') {
+                return null;
+              }
+              return chunk;
+            },
+          }
+        );
+        stream.pipe(res);
+      });
+      port = await listen(server);
+
+      const result = await requestText(port);
+      server.close();
+
+      expect(result).toContain('data: {"type":"message","data":"keep"}\n\n');
+      expect(result).not.toContain('drop');
+      expect(result).not.toContain('event: close\n');
+    });
+
+    it('should abort upstream when client closes', async () => {
+      let port: number;
+      let abortController: AbortController;
+      const server = createServer((req, res) => {
+        abortController = new AbortController();
+        const stream = new HttpServerResponse({
+          req,
+          res,
+          logger: console,
+        } as any).sse();
+
+        stream.forward(
+          (async function* () {
+            yield { type: 'message', data: 'first' };
+            await new Promise(resolve => {
+              abortController.signal.addEventListener('abort', resolve, {
+                once: true,
+              });
+            });
+          })(),
+          {
+            abortController,
+          }
+        );
+        stream.pipe(res);
+      });
+      port = await listen(server);
+
+      await new Promise<void>(resolve => {
+        const req = request(
+          {
+            hostname: 'localhost',
+            port,
+          },
+          res => {
+            res.once('data', () => {
+              req.destroy();
+            });
+          }
+        );
+        req.on('close', () => {
+          resolve();
+        });
+        req.end();
+      });
+
+      await sleep();
+      server.close();
+
+      expect(abortController.signal.aborted).toBeTruthy();
     });
   });
 
   describe('test stream in base http', () => {
     it('should test stream write', async () => {
-      const port = 7001;
+      let port: number;
       const server = createServer((req, res) => {
         const stream = new HttpServerResponse({
           req,
@@ -298,7 +533,8 @@ describe('response/http.test.ts', () => {
           stream.end();
         }).catch(console.error);
         stream.pipe(res);
-      }).listen(port);
+      });
+      port = await listen(server);
 
       let result = '';
       await new Promise<void>(resolve => {
@@ -329,7 +565,7 @@ describe('response/http.test.ts', () => {
     });
 
     it('should server response throw error', async () => {
-      const port = 7001;
+      let port: number;
       const server = createServer((req, res) => {
         const stream = new HttpServerResponse({
           req,
@@ -347,7 +583,8 @@ describe('response/http.test.ts', () => {
           stream.send('</body>');
         });
         stream.pipe(res);
-      }).listen(port);
+      });
+      port = await listen(server);
 
       let result = '';
       await new Promise<void>((resolve, reject) => {
@@ -378,7 +615,7 @@ describe('response/http.test.ts', () => {
     });
 
     it('should test stream write with tpl', async () => {
-      const port = 7001;
+      let port: number;
       const server = createServer((req, res) => {
 
         HttpServerResponse.STREAM_TPL = (chunk) => {
@@ -400,7 +637,8 @@ describe('response/http.test.ts', () => {
           stream.end();
         }).catch(console.error);
         stream.pipe(res);
-      }).listen(port);
+      });
+      port = await listen(server);
 
       let result = '';
       await new Promise<void>(resolve => {
