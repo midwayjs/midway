@@ -107,13 +107,7 @@ export class MikroConfiguration implements ILifeCycle {
       // https://mikro-orm.io/docs/identity-map
       this.applicationManager.getApplications().forEach(app => {
         app.useMiddleware(async (ctx, next) => {
-          if (RequestContext['createAsync']) {
-            // mikro-orm 5.x
-            return await RequestContext['createAsync'](entityManagers, next);
-          } else {
-            // mikro-orm 6.x
-            return await RequestContext.create(entityManagers, next);
-          }
+          return await RequestContext.create(entityManagers, next);
         });
       });
     }
