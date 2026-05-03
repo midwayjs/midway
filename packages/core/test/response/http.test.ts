@@ -7,6 +7,9 @@ import { createWriteStream, readFileSync, unlinkSync } from 'fs';
 import { once } from 'events';
 import { existsSync } from 'fs';
 
+const OpenAI = require('openai').default;
+const Anthropic = require('@anthropic-ai/sdk').default;
+
 describe('response/http.test.ts', () => {
   async function requestText(port: number): Promise<string> {
     let result = '';
@@ -512,6 +515,183 @@ describe('response/http.test.ts', () => {
       server.close();
 
       expect(abortController.signal.aborted).toBeTruthy();
+    });
+
+    it('should forward openai protocol stream that openai sdk can consume', async () => {
+      let port: number;
+      const server = createServer((req, res) => {
+        const stream = new HttpServerResponse({
+          req,
+          res,
+          logger: console,
+        } as any).sse();
+
+        stream.forward(
+          (async function* () {
+            yield {
+              id: 'chatcmpl-1',
+              object: 'chat.completion.chunk',
+              created: 0,
+              model: 'test-model',
+              choices: [
+                {
+                  index: 0,
+                  delta: {
+                    role: 'assistant',
+                    content: 'hello',
+                  },
+                  finish_reason: null,
+                },
+              ],
+            };
+            yield {
+              id: 'chatcmpl-1',
+              object: 'chat.completion.chunk',
+              created: 0,
+              model: 'test-model',
+              choices: [
+                {
+                  index: 0,
+                  delta: {},
+                  finish_reason: 'stop',
+                },
+              ],
+            };
+          })(),
+          {
+            protocol: 'openai',
+          }
+        );
+        stream.pipe(res);
+      });
+      port = await listen(server);
+
+      const client = new OpenAI({
+        apiKey: 'test',
+        baseURL: `http://localhost:${port}/v1`,
+      });
+      const upstream = await client.chat.completions.create({
+        model: 'test-model',
+        messages: [{ role: 'user', content: 'hi' }],
+        stream: true,
+      });
+      const chunks = [];
+
+      for await (const chunk of upstream) {
+        chunks.push(chunk);
+      }
+
+      server.close();
+
+      expect(chunks.length).toEqual(2);
+      expect(chunks[0].choices[0].delta.content).toEqual('hello');
+      expect(chunks[1].choices[0].finish_reason).toEqual('stop');
+    });
+
+    it('should forward anthropic protocol stream that anthropic sdk can consume', async () => {
+      let port: number;
+      const server = createServer((req, res) => {
+        const stream = new HttpServerResponse({
+          req,
+          res,
+          logger: console,
+        } as any).sse();
+
+        stream.forward(
+          (async function* () {
+            yield {
+              type: 'message_start',
+              message: {
+                id: 'msg_1',
+                type: 'message',
+                role: 'assistant',
+                model: 'test-model',
+                content: [],
+                stop_reason: null,
+                stop_sequence: null,
+                stop_details: null,
+                container: null,
+                usage: {
+                  input_tokens: 1,
+                  output_tokens: 0,
+                  cache_creation: null,
+                  cache_creation_input_tokens: null,
+                  cache_read_input_tokens: null,
+                  inference_geo: null,
+                  server_tool_use: null,
+                  service_tier: null,
+                },
+              },
+            };
+            yield {
+              type: 'content_block_start',
+              index: 0,
+              content_block: {
+                type: 'text',
+                text: '',
+              },
+            };
+            yield {
+              type: 'content_block_delta',
+              index: 0,
+              delta: {
+                type: 'text_delta',
+                text: 'hello',
+              },
+            };
+            yield {
+              type: 'content_block_stop',
+              index: 0,
+            };
+            yield {
+              type: 'message_delta',
+              delta: {
+                stop_reason: 'end_turn',
+                stop_sequence: null,
+              },
+              usage: {
+                input_tokens: 1,
+                output_tokens: 1,
+              },
+            };
+            yield {
+              type: 'message_stop',
+            };
+          })(),
+          {
+            protocol: 'anthropic',
+          }
+        );
+        stream.pipe(res);
+      });
+      port = await listen(server);
+
+      const client = new Anthropic({
+        apiKey: 'test',
+        baseURL: `http://localhost:${port}`,
+      });
+      const upstream = client.messages.stream({
+        model: 'test-model',
+        max_tokens: 1024,
+        messages: [{ role: 'user', content: 'hi' }],
+      });
+      const events = [];
+
+      for await (const event of upstream) {
+        events.push(event);
+      }
+
+      server.close();
+
+      expect(events.map(event => event.type)).toEqual([
+        'message_start',
+        'content_block_start',
+        'content_block_delta',
+        'content_block_stop',
+        'message_delta',
+        'message_stop',
+      ]);
+      expect(events[2].delta.text).toEqual('hello');
     });
   });
 

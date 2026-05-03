@@ -22,7 +22,11 @@
 - [x] 3.4 Add tests for transform returning `null`.
 - [x] 3.5 Add tests for aborting upstream work on client close.
 - [x] 3.6 Run `pnpm -C packages/core test`.
+- [x] 3.7 Add OpenAI and Anthropic SDK consumption tests against the forwarded SSE output.
 
 ## 4. Validation
 - [x] 4.1 Run `openspec validate add-sse-ai-sdk-forwarding --strict --no-interactive`.
 - [x] 4.2 Review final API naming before implementation approval.
+
+## 5. Documentation
+- [x] 5.1 Document `sse().forward()` usage for OpenAI, Anthropic, generic EventSource, transform filtering, and upstream abort handling.

@@ -1,16 +1,14 @@
-# 数据响应
+# Data Response
 
-从 v3.17.0 开始，框架添加了 `ServerResponse` 和 `HttpServerResponse` 的实现。
+Since v3.17.0, Midway provides `ServerResponse` and `HttpServerResponse`.
 
-通过这个功能，可以定制服务端的响应成功和失败时的通用格式，规范整个返回逻辑。
+This feature helps you customize common success and failure response formats on the server side and keep response logic consistent across the application.
 
+## Common HTTP Response
 
+In Koa applications, handlers usually run some logic and finally return a result. The result may be a success response or a failure response.
 
-## Http 通用响应
-
-在 koa 场景下，一般都会处理一些逻辑，最后返回一个结果。在此过程中，会出现返回成功和失败的情况。
-
-最为常见实现会在 `ctx` 增加一些方法，包括数据后返回。
+A common approach is to add helper methods to `ctx` and call them after preparing the data.
 
 ```typescript
 import { Controller, Get, Inject } from '@midwayjs/core';
@@ -20,7 +18,7 @@ import { Context } from '@midwayjs/koa';
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     try {
@@ -33,13 +31,13 @@ export class HomeController {
 }
 ```
 
-也有人会在 Web 中间件中处理成功的返回，在错误过滤器中处理失败的返回。
+Some applications also handle successful responses in Web middleware and failures in error filters.
 
-为了解决这类代码难以统一维护的问题，框架提供了一套统一返回的方案。
+Midway provides a unified response solution for this kind of code, so the response format is easier to maintain.
 
-我们以最为常见的返回 JSON 数据为例。
+The most common case is returning JSON data.
 
-通过创建 `HttpServerResponse` 实例后，调用 `json()` 方法，链式返回数据。
+Create an `HttpServerResponse` instance and call `json()` at the end of the chain.
 
 ```typescript
 import { Controller, Get, Inject, HttpServerResponse } from '@midwayjs/core';
@@ -49,14 +47,14 @@ import { Context } from '@midwayjs/koa';
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/success')
   async home() {
     return new HttpServerResponse(this.ctx).success().json({
       // ...
     });
   }
-  
+
   @Get('/fail')
   async home2() {
     return new HttpServerResponse(this.ctx).fail().json({
@@ -66,18 +64,18 @@ export class HomeController {
 }
 ```
 
-默认情况下，`HttpServerResponse` 在成功和失败的场景上会提供 JSON 的通用包裹结构。
+By default, `HttpServerResponse` wraps JSON responses with a common success or failure structure.
 
-比如在成功的场景下，接收到的数据如下。
+A successful response looks like this:
 
 ```json
 {
-  success: 'true',
-  data: //...
+  "success": "true",
+  "data": {}
 }
 ```
 
-而在失败的场景下，接收到的数据如下。
+A failed response looks like this:
 
 ```typescript
 {
@@ -86,19 +84,17 @@ export class HomeController {
 }
 ```
 
-注意，`json()` 方法是数据设置的方法，必须在最后一个调用。
+The `json()` method sets the response data and must be the last method in the chain.
 
+### Common Response Formats
 
-
-### 常用的响应格式
-
-`HttpServerResponse` 需要传递一个当前请求的上下文对象 `ctx` 才能实例化。
+`HttpServerResponse` requires the current request context `ctx` when it is created.
 
 ```typescript
 const serverResponse = new HttpServerResponse(this.ctx);
 ```
 
-之后以链式的形式进行调用。
+Then you can call response methods in a chain.
 
 ```typescript
 // json
@@ -111,7 +107,7 @@ serverResponse.text('abcde');
 serverResponse.blob(Buffer.from('hello world'));
 ```
 
-除了设置数据的方法，还提供了一些其他的快捷方法可以组合使用。
+You can also combine data methods with status and header helpers.
 
 ```typescript
 // status
@@ -123,16 +119,13 @@ serverResponse.headers({
   'Content-Type': 'text/plain',
   'Content-Length': '100'
 }).text('a'.repeat(100));
-
 ```
 
+### Response Templates
 
+Midway provides templates for different data-setting methods so you can customize the returned structure.
 
-### 响应模版
-
-针对不同的设置数据的方法，框架提供了不同模版以供用户自定义。
-
-比如 `json()` 方法的模版如下。
+For example, the default `json()` template looks like this:
 
 ```typescript
 class ServerResponse {
@@ -153,7 +146,7 @@ class ServerResponse {
 }
 ```
 
-我们可以将全局的模版进行覆盖达到自定义的目的。
+You can override the global template.
 
 ```typescript
 HttpServerResponse.JSON_TPL = (data, isSuccess) => {
@@ -165,7 +158,7 @@ HttpServerResponse.JSON_TPL = (data, isSuccess) => {
 };
 ```
 
-也可以通过继承，自定义不同的响应模版，这样可以不影响全局的默认模板。
+You can also extend `HttpServerResponse` and override templates on a custom response class without changing the global default.
 
 ```typescript
 class CustomServerResponse extends HttpServerResponse {}
@@ -178,7 +171,7 @@ CustomServerResponse.JSON_TPL = (data, isSuccess) => {
 };
 ```
 
-在使用时，创建实例即可。
+Use the custom response class when creating the response.
 
 ```typescript
 // ...
@@ -187,7 +180,7 @@ CustomServerResponse.JSON_TPL = (data, isSuccess) => {
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     return new CustomServerResponse(this.ctx).success().json({
@@ -197,18 +190,16 @@ export class HomeController {
 }
 ```
 
-此外，针对 `text` ，`blob` 方法的模版均可以覆盖。
+The `text` and `blob` templates can be overridden in the same way.
 
 ```typescript
 HttpServerResponse.TEXT_TPL = (data, isSuccess) => { /*...*/};
 HttpServerResponse.BLOB_TPL = (data, isSuccess) => { /*...*/};
 ```
 
+### Streaming Data Response
 
-
-### 数据流式响应
-
-使用内置的 `HttpServerResponse` 中的 `stream` 方法来处理流式数据返回。
+Use the built-in `stream()` method on `HttpServerResponse` to return streaming data.
 
 ```typescript
 import { Controller, Get, Inject, sleep, HttpServerResponse } from '@midwayjs/core';
@@ -218,7 +209,7 @@ import { Context } from '@midwayjs/koa';
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     const res = new HttpServerResponse(this.ctx).stream();
@@ -235,21 +226,19 @@ export class HomeController {
 }
 ```
 
-通过 `STEAM_TPL` 可以修改数据的返回结构
+You can use `STREAM_TPL` to customize the returned data structure.
 
 ```typescript
 HttpServerResponse.STREAM_TPL = (data) => { /*...*/};
 ```
 
-注意，这个模版只处理成功的数据。
+This template only handles successful data.
 
+### File Streaming Response
 
+Since v3.17.0, `HttpServerResponse` can also handle file downloads.
 
-### 文件流式响应
-
-从 v3.17.0 开始，可以通过 `HttpServerResponse` 简单处理文件下载。
-
-传递一个文件路径即可，默认会使用 `application/octet-stream` 响应头返回。
+Pass a file path to return the file. The default response content type is `application/octet-stream`.
 
 ```typescript
 import { Controller, Get, Inject, sleep, HttpServerResponse } from '@midwayjs/core';
@@ -259,7 +248,7 @@ import { Context } from '@midwayjs/koa';
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     const filePath = join(__dirname, '../../package.json');
@@ -268,7 +257,7 @@ export class HomeController {
 }
 ```
 
-如需返回不同的类型，可以通过第二个参数指定类型。
+To return a different content type, pass the type as the second argument.
 
 ```typescript
 import { Controller, Get, Inject, sleep, HttpServerResponse } from '@midwayjs/core';
@@ -278,7 +267,7 @@ import { Context } from '@midwayjs/koa';
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     const filePath = join(__dirname, '../../package.json');
@@ -287,19 +276,17 @@ export class HomeController {
 }
 ```
 
-通过 `FILE_TPL` 可以修改返回结构。
+You can use `FILE_TPL` to customize the returned structure.
 
 ```typescript
 HttpServerResponse.FILE_TPL = (data: Readable, isSuccess: boolean) => { /*...*/};
 ```
 
+### SSE Response
 
+Since v3.17.0, Midway provides built-in SSE (Server-Sent Events) support.
 
-### SSE 响应
-
-从 v3.17.0 开始，框架提供了内置的 SSE （Server-Sent Events）支持。
-
-SSE 的数据定义如下，你需要按下面的格式返回。
+SSE messages use the following shape:
 
 ```typescript
 export interface ServerSendEventMessage {
@@ -310,7 +297,7 @@ export interface ServerSendEventMessage {
 }
 ```
 
-通过 `HttpServerResponse` 定义一个返回实例。
+Create an SSE response through `HttpServerResponse`.
 
 ```typescript
 import { Controller, Get, Inject, sleep, HttpServerResponse } from '@midwayjs/core';
@@ -320,7 +307,7 @@ import { Context } from '@midwayjs/koa';
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     const res = new HttpServerResponse(this.ctx).sse();
@@ -330,7 +317,7 @@ export class HomeController {
 }
 ```
 
-可以通过 `send` 和 `sendEnd` 进行数据传递。
+Use `send` and `sendEnd` to send data.
 
 ```typescript
 const res = new HttpServerResponse(this.ctx).sse();
@@ -344,9 +331,9 @@ res.sendEnd({
 });
 ```
 
-调用 `sendEnd` 后，请求将被关闭。
+After `sendEnd` is called, the request will be closed.
 
-也可以通过 `sendError` 发送错误。
+You can also use `sendError` to send an error event.
 
 ```typescript
 const res = new HttpServerResponse(this.ctx).sse();
@@ -354,21 +341,21 @@ const res = new HttpServerResponse(this.ctx).sse();
 res.sendError(new Error('test error'));
 ```
 
-### 转发 AI SDK 的 SSE 响应
+### Forward AI SDK SSE Responses
 
-在一些 AI 网关场景中，服务端需要负责鉴权、隐藏系统提示词、组装工具参数，然后把 OpenAI、Anthropic 等 SDK 的流式返回原样转发给前端。
+In AI gateway scenarios, the server often handles authentication, keeps system prompts private, assembles tool parameters, and forwards streaming results from OpenAI, Anthropic, or other SDKs to the frontend.
 
-`sse()` 返回的对象提供了 `forward()` 方法，可以把 SDK 返回的 `AsyncIterable` 转换为客户端可解析的 SSE 响应。
+The object returned by `sse()` provides a `forward()` method. It converts an SDK `AsyncIterable` stream into an SSE response that frontend clients can parse.
 
-当前内置支持 `openai` 和 `anthropic` 两种 SDK 协议格式。其他 SDK 可以使用通用的 `eventsource` 协议，或者通过 `transform` 转换为自定义事件结构。
+The built-in provider-compatible protocols currently support the OpenAI and Anthropic SDK formats. Other SDKs can use the generic `eventsource` protocol or convert chunks to a custom event shape with `transform`.
 
-安装 SDK：
+Install the SDKs:
 
 ```bash
 npm i openai @anthropic-ai/sdk
 ```
 
-也可以在 `package.json` 中声明依赖：
+You can also declare the dependencies in `package.json`:
 
 ```json
 {
@@ -379,7 +366,7 @@ npm i openai @anthropic-ai/sdk
 }
 ```
 
-OpenAI 示例：
+OpenAI example:
 
 ```typescript
 import { Controller, Get, Inject, HttpServerResponse } from '@midwayjs/core';
@@ -398,15 +385,15 @@ export class HomeController {
   @Get('/openai')
   async openai() {
     const upstream = await client.chat.completions.create({
-      model: 'gpt-4o-mini', // 替换为你要使用的模型
+      model: 'gpt-4o-mini', // Replace with the model you want to use
       messages: [
         {
           role: 'system',
-          content: '你是一个有帮助的助手。',
+          content: 'You are a helpful assistant.',
         },
         {
           role: 'user',
-          content: '请介绍 Midway。',
+          content: 'Please introduce Midway.',
         },
       ],
       stream: true,
@@ -422,9 +409,9 @@ export class HomeController {
 }
 ```
 
-`protocol: 'openai'` 会输出 OpenAI 客户端可解析的 SSE 数据帧，并在上游正常结束时发送 `data: [DONE]`。
+`protocol: 'openai'` outputs OpenAI-client-compatible SSE frames and sends `data: [DONE]` when the upstream stream completes normally.
 
-Anthropic 示例：
+Anthropic example:
 
 ```typescript
 import { Controller, Get, Inject, HttpServerResponse } from '@midwayjs/core';
@@ -443,12 +430,12 @@ export class HomeController {
   @Get('/anthropic')
   async anthropic() {
     const upstream = client.messages.stream({
-      model: 'claude-sonnet-4-5', // 替换为你要使用的模型
+      model: 'claude-sonnet-4-5', // Replace with the model you want to use
       max_tokens: 2048,
       messages: [
         {
           role: 'user',
-          content: '请介绍 Midway。',
+          content: 'Please introduce Midway.',
         },
       ],
       thinking: {
@@ -467,9 +454,9 @@ export class HomeController {
 }
 ```
 
-`protocol: 'anthropic'` 会保留 Anthropic 的事件名，例如 `message_start`、`content_block_delta`、`message_stop` 等，前端可以继续按 Anthropic 的事件格式解析。
+`protocol: 'anthropic'` preserves Anthropic event names such as `message_start`, `content_block_delta`, and `message_stop`, so the frontend can continue parsing events with Anthropic's event format.
 
-如果只需要普通浏览器 `EventSource` 或自定义前端解析器，可以使用默认的 `eventsource` 协议。
+If you only need browser `EventSource` or a custom frontend parser, use the default `eventsource` protocol.
 
 ```typescript
 const res = new HttpServerResponse(this.ctx).sse();
@@ -481,7 +468,7 @@ res.forward(upstream, {
 return res;
 ```
 
-`forward()` 也支持对事件做轻量处理。返回 `null` 表示跳过当前事件。
+`forward()` also supports lightweight event processing. Return `null` to skip the current event.
 
 ```typescript
 const res = new HttpServerResponse(this.ctx).sse();
@@ -499,12 +486,12 @@ res.forward(upstream, {
 return res;
 ```
 
-当上游 SDK 调用传入了 `AbortController` 时，也可以把它传给 `forward()`。客户端断开连接后，框架会调用 `abort()`，用于终止上游请求。
+If the upstream SDK call uses an `AbortController`, pass it to `forward()`. When the client disconnects, Midway calls `abort()` to stop the upstream request.
 
 ```typescript
 const abortController = new AbortController();
 const upstream = await client.chat.completions.create({
-  model: 'gpt-4o-mini', // 替换为你要使用的模型
+  model: 'gpt-4o-mini', // Replace with the model you want to use
   messages,
   stream: true,
 }, {
@@ -521,10 +508,10 @@ return res;
 ```
 
 :::info
-`forward()` 只负责把 SDK 流式事件转换为对应协议的 SSE 响应，不会解析或改写模型返回的 `thinking`、`reasoning`、工具调用等内容。如果前端需要展示这些信息，请在前端按 OpenAI 或 Anthropic 的事件格式自行解析。
+`forward()` only converts SDK streaming events into protocol-compatible SSE responses. It does not parse or rewrite model `thinking`, `reasoning`, tool calls, or similar content. If the frontend needs to display that information, parse it on the frontend according to the OpenAI or Anthropic event format.
 :::
 
-通过 `SSE_TPL` 可以修改返回结构。
+You can use `SSE_TPL` to customize the returned structure.
 
 ```typescript
 import { ServerSendEventMessage } from '@midwayjs/core';
@@ -532,21 +519,19 @@ import { ServerSendEventMessage } from '@midwayjs/core';
 HttpServerResponse.SSE_TPL = (data: ServerSendEventMessage) => { /*...*/};
 ```
 
-注意，这个模版只处理成功的数据，不会处理 `sendError` 的情况，且返回也必须是 `ServerSendEventMessage` 格式。
+This template only handles successful data. It does not handle `sendError`, and the returned value must still use the `ServerSendEventMessage` shape.
 
+## Base Data Response
 
+Besides HTTP scenarios, Midway also provides a base `ServerResponse` class for other scenarios.
 
-## 基础数据响应
+`ServerResponse` includes `json`, `text`, and `blob` response methods, plus `success` and `fail` state methods.
 
-除了 Http 场景之外，框架提供了基础的 `ServerResponse` 类，用于其他的场景。
+Its behavior is consistent with `HttpServerResponse`.
 
-`ServerResponse` 包含 `json`，`text`，`blob` 三种数据返回方法，以及 `success` 和 `fail` 这两个设置状态的方法。
+By extending and overriding response templates, you can handle response values very simply.
 
-行为和 `HttpServerResponse` 一致。
-
-通过继承、覆盖等行为，可以非常简单的处理响应值。
-
-比如我们对不同的用户做返回区分。
+For example, you can distinguish response formats for different users.
 
 ```typescript
 // src/response/api.ts
@@ -583,7 +568,7 @@ AdminServerResponse.JSON_TPL = (data, isSuccess) => {
 };
 ```
 
-使用返回。
+Use the response classes like this:
 
 ```typescript
 import { Controller, Get, Inject, sleep, HttpServerResponse } from '@midwayjs/core';
@@ -594,7 +579,7 @@ import { UserServerResponse, AdminServerResponse } from '../response/api';
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     // ...
