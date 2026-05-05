@@ -51,7 +51,10 @@
   "@midwayjs/security": "4.1.0",
   "@midwayjs/sequelize": "4.1.0",
   "@midwayjs/session": "4.1.0",
-  "@midwayjs/skill-midway": "4.1.0",
+  "@midwayjs/skill-midway": [
+    "4.1.0",
+    "4.1.1"
+  ],
   "@midwayjs/socketio": "4.1.0",
   "@midwayjs/static-file": "4.1.0",
   "@midwayjs/swagger": "4.1.0",
@@ -66,7 +69,10 @@
   "@midwayjs/validation-joi": "4.1.0",
   "@midwayjs/validation-zod": "4.1.0",
   "@midwayjs/validation-zod4": "4.1.0",
-  "@midwayjs/version": "4.1.0",
+  "@midwayjs/version": [
+    "4.1.0",
+    "4.1.1"
+  ],
   "@midwayjs/view": "4.1.0",
   "@midwayjs/view-ejs": "4.1.0",
   "@midwayjs/view-nunjucks": "4.1.0",
