@@ -3,7 +3,7 @@ set -e
 
 rm -f ./packages/.DS* 
 source `dirname $0`/build.sh
-npm run build:skill-midway
+pnpm -w run build:skill-midway
 git add .
 
 RELEASE_TYPE="$1"
