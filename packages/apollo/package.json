@@ -1,0 +1,49 @@
+{
+  "name": "@midwayjs/apollo",
+  "version": "4.1.0",
+  "description": "Midway Framework for Apollo GraphQL",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "lint:fix": "../../node_modules/.bin/mwts fix"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "framework",
+    "apollo",
+    "graphql"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@apollo/server": "5.5.1",
+    "@graphql-tools/schema": "10.0.33",
+    "@midwayjs/glob": "1.1.1",
+    "@midwayjs/graphql": "workspace:^",
+    "graphql": "16.14.0",
+    "graphql-ws": "6.0.8",
+    "ws": "8.20.0"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
+    "@midwayjs/express": "workspace:^",
+    "@midwayjs/mock": "workspace:^",
+    "@types/ws": "8.18.1"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,7 @@
+extend type Query {
+  decoratedEcho(message: String!): String!
+}
+
+type Subscription {
+  counter: Int!
+}
