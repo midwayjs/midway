@@ -276,6 +276,38 @@ export class MidwayWebRouterService {
     }
   }
 
+  protected getWebRouterInfoWithMetaTarget(controllerClz: any) {
+    const webRouterInfoWithTarget: Array<{
+      webRouter: RouterOption;
+      metaTarget: any;
+    }> = [];
+    const seenMethodKeys = new Set<string>();
+    let currentTarget = controllerClz;
+
+    while (currentTarget && currentTarget !== Function.prototype) {
+      const webRouterInfo: RouterOption[] = MetadataManager.getOwnMetadata(
+        WEB_ROUTER_KEY,
+        currentTarget
+      );
+      if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
+        for (const webRouter of webRouterInfo) {
+          const methodKey = String(webRouter.method);
+          if (seenMethodKeys.has(methodKey)) {
+            continue;
+          }
+          webRouterInfoWithTarget.push({
+            webRouter,
+            metaTarget: currentTarget,
+          });
+          seenMethodKeys.add(methodKey);
+        }
+      }
+      currentTarget = Object.getPrototypeOf(currentTarget);
+    }
+
+    return webRouterInfoWithTarget;
+  }
+
   protected sortPrefixAndRouter() {
     // filter empty prefix
     this.routesPriority = this.routesPriority.filter(item => {
@@ -407,10 +439,9 @@ export class MidwayWebRouterService {
       }
     }
 
-    const webRouterInfo: RouterOption[] = MetadataManager.getOwnMetadata(
-      WEB_ROUTER_KEY,
-      controllerClz
-    );
+    const webRouterInfoWithTarget =
+      this.getWebRouterInfoWithMetaTarget(controllerClz);
+    const webRouterInfo = webRouterInfoWithTarget.map(item => item.webRouter);
     const hasRouteIgnoreGlobalPrefix =
       !!webRouterInfo &&
       webRouterInfo.some(route => route?.ignoreGlobalPrefix === true);
@@ -430,21 +461,24 @@ export class MidwayWebRouterService {
       }
     }
 
-    if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
-      for (const webRouter of webRouterInfo) {
+    if (
+      webRouterInfoWithTarget &&
+      typeof webRouterInfoWithTarget[Symbol.iterator] === 'function'
+    ) {
+      for (const { webRouter, metaTarget } of webRouterInfoWithTarget) {
         const isRouteIgnoreGlobalPrefixConfigured =
           webRouter.__ignoreGlobalPrefixConfigured === true;
         const routeArgsInfo =
           MetadataManager.getOwnMetadata(
             WEB_ROUTER_PARAM_KEY,
-            controllerClz,
+            metaTarget,
             webRouter.method
           ) || [];
 
         const routerResponseData =
           MetadataManager.getOwnMetadata(
             WEB_RESPONSE_KEY,
-            controllerClz,
+            metaTarget,
             webRouter.method
           ) || [];
 

@@ -73,6 +73,32 @@ describe('/test/service/webRouterService.test.ts', function () {
     expect(fullUrls).toMatchSnapshot();
   });
 
+  it('should inherit router metadata from base controller', async () => {
+    clearAllModule();
+    const framework = await createLightFramework(
+      path.join(__dirname, '../fixtures/inherit-base-controller/src')
+    );
+    const collector = (await framework
+      .getApplicationContext()
+      .getAsync('midwayWebRouterService')) as any;
+    const routes = await collector.getFlattenRouterTable();
+    const list = routes
+      .map(item => `${item.requestMethod.toUpperCase()} ${item.fullUrl}`)
+      .sort();
+    expect(list).toEqual(
+      [
+        'GET /role/list',
+        'GET /user/list',
+        'POST /role/add',
+        'POST /role/del',
+        'POST /role/update',
+        'POST /user/add',
+        'POST /user/del',
+        'POST /user/update',
+      ].sort()
+    );
+  });
+
   it('should test generate router and flatten router', async () => {
     const framework = await createLightFramework(path.join(
       __dirname,
