@@ -45,6 +45,13 @@ export class ConsulServiceFactory extends ServiceFactory<ConsulClient> {
     config: ConsulOptions,
     clientName: string
   ): Promise<InstanceType<typeof Consul>> {
+    const { customClientClass, ...otherConfig } = config as any;
+    if (customClientClass) {
+      const client = new customClientClass(otherConfig);
+      this.bindTraceContext(client as any, clientName);
+      return client;
+    }
+
     this.logger.info(
       '[midway:consul] init %s at %s:%s',
       clientName,

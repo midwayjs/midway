@@ -42,6 +42,13 @@ export class ETCDServiceFactory extends ServiceFactory<Etcd3> {
   protected traceInjector;
 
   async createClient(config: IOptions): Promise<Etcd3> {
+    const { customClientClass, ...otherConfig } = config as any;
+    if (customClientClass) {
+      const client = new customClientClass(otherConfig);
+      this.bindTraceContext(client as any);
+      return client;
+    }
+
     this.logger.info('[midway:etcd] init %s', config.hosts);
     const client = new Etcd3(config);
     this.bindTraceContext(client);

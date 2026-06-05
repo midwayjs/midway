@@ -43,6 +43,13 @@ export class COSServiceFactory extends ServiceFactory<COS> {
   protected traceInjector;
 
   async createClient(config: COS.COSOptions): Promise<COS> {
+    const { customClientClass, ...otherConfig } = config as any;
+    if (customClientClass) {
+      const client = new customClientClass(otherConfig);
+      this.bindTraceContext(client as any);
+      return client;
+    }
+
     assert.ok(
       config.SecretKey && config.SecretId,
       '[@midwayjs/cos] secretId secretKey is required on config'
