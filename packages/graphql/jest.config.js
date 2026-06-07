@@ -5,4 +5,9 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/test/', '<rootDir>/dist/'],
   setupFilesAfterEnv: ['./jest.setup.js'],
   coverageProvider: 'v8',
+  coverageThreshold: {
+    global: {
+      branches: 90,
+    },
+  },
 };
