@@ -35,6 +35,7 @@ export class ContainerConfiguration {
     const u = new User();
     u.name = 'oneuser1';
     const uu = await this.userModel.save(u);
+    expect(this.app.getAttr('typeormSubscriberInjected')).toBeTruthy();
     console.log('user one id = ', uu.id);
     const user = new User();
     user.id = 1;

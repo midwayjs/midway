@@ -16,8 +16,8 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "sqlite3": "5.1.7",
-    "typeorm": "0.3.28"
+    "better-sqlite3": "12.9.0",
+    "typeorm": "1.0.0"
   },
   "author": {
     "name": "czy88840616",

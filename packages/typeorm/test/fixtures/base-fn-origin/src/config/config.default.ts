@@ -8,7 +8,7 @@ export default (appInfo) => {
     typeorm: {
       dataSource: {
         default: {
-          type: 'sqlite',
+          type: 'better-sqlite3',
           synchronize: true,
           database: join(__dirname, '../../test.sqlite'),
           logging: true,

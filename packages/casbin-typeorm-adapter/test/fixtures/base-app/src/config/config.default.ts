@@ -8,7 +8,7 @@ export default (appInfo: MidwayAppInfo) => {
     typeorm: {
       dataSource: {
         'node-casbin-official': {
-          type: 'sqlite',
+          type: 'better-sqlite3',
           synchronize: true,
           database: join(__dirname, '../../casbin.sqlite'),
           logging: true,

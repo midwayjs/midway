@@ -12,8 +12,8 @@ import {
 } from '@midwayjs/core';
 import { ORM_DATA_SOURCE_KEY, ORM_MODEL_KEY } from './decorator';
 import { TypeORMDataSourceManager } from './dataSourceManager';
+import * as typeorm from 'typeorm';
 import {
-  useContainer,
   EntityTarget,
   TreeRepository,
   MongoRepository,
@@ -105,7 +105,10 @@ export class OrmConfiguration implements ILifeCycle {
   }
 
   async onReady(container: IMidwayContainer) {
-    useContainer(container as any);
+    // TypeORM 1.0 removes useContainer, but keep the hook for 0.3 compatible installs.
+    if (typeof (typeorm as any).useContainer === 'function') {
+      (typeorm as any).useContainer(container);
+    }
     this.dataSourceManager = await container.getAsync(TypeORMDataSourceManager);
   }
 
