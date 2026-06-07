@@ -1,0 +1,44 @@
+{
+  "name": "@midwayjs/graphql",
+  "version": "4.1.0",
+  "description": "Midway GraphQL base SDK",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",
+    "cov": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand --coverage --forceExit",
+    "lint:fix": "../../node_modules/.bin/mwts fix"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "framework",
+    "graphql"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "workspace:^",
+    "@midwayjs/mock": "workspace:^"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

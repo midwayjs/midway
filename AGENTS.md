@@ -41,3 +41,4 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 ## Practical tips
 - Prefer `pnpm -C <package> test` to scope tests.
 - Keep changes aligned with existing patterns in the targeted package.
+- Pull request titles must use standard commit format, such as `feat: xxx` or `fix: xxx`.
