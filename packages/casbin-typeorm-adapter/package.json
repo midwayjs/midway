@@ -13,8 +13,8 @@
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "casbin": "5.38.0",
-    "sqlite3": "5.1.7",
-    "typeorm": "0.3.28"
+    "better-sqlite3": "12.9.0",
+    "typeorm": "1.0.0"
   },
   "dependencies": {
     "@midwayjs/casbin": "workspace:^",

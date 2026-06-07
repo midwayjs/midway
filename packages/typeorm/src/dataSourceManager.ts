@@ -54,6 +54,11 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
     }
 
     const { customDataSourceClass, ...otherConfig } = config;
+    otherConfig.invalidWhereValuesBehavior = {
+      null: 'ignore',
+      undefined: 'ignore',
+      ...otherConfig.invalidWhereValuesBehavior,
+    };
 
     let dataSource: DataSource;
     if (customDataSourceClass) {

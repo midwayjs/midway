@@ -123,7 +123,7 @@ $ npm i @midwayjs/crud@4 --save
 
 ```bash
 # TypeORM
-$ npm i @midwayjs/typeorm@4 typeorm --save
+$ npm i @midwayjs/typeorm@4 typeorm@^1.0.0 --save
 
 # MikroORM
 $ npm i @midwayjs/mikro@4 @mikro-orm/core@^6 --save
@@ -145,7 +145,7 @@ $ npm i @midwayjs/mongoose@4 mongoose --save
     "@midwayjs/mikro": "^4.0.0",
     "@midwayjs/sequelize": "^4.0.0",
     "@midwayjs/mongoose": "^4.0.0",
-    "typeorm": "^0.3.26",
+    "typeorm": "^1.0.0",
     "@mikro-orm/core": "^6.4.5",
     "sequelize": "^6.37.5",
     "sequelize-typescript": "^2.1.6",

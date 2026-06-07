@@ -408,7 +408,7 @@ export default (appInfo: MidwayAppInfo) => {
 需要依赖 `@midwayjs/casbin-typeorm-adapter` 包和 typeorm 组件。
 
 ```
-$ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
+$ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm typeorm@^1.0.0 better-sqlite3 --save
 ```
 
 启用 typeorm 组件。
@@ -433,7 +433,7 @@ export class MainConfiguration {
 }
 ```
 
-配置适配器，下面以 sqlite 存储为例，mysql 的配置可以查看 typeorm 组件。
+配置适配器，下面以 better-sqlite3 存储为例，mysql 的配置可以查看 typeorm 组件。
 
 ```typescript
 import { MidwayAppInfo } from '@midwayjs/core';
@@ -447,7 +447,7 @@ export default (appInfo: MidwayAppInfo) => {
       dataSource: {
         // 为 casbin 定义了一个连接
         'node-casbin-official': {
-          type: 'sqlite',
+          type: 'better-sqlite3',
           synchronize: true,
           database: join(appInfo.appDir, 'casbin.sqlite'),
           // 注意这里显式引入了 Entity

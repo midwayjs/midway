@@ -41,7 +41,7 @@
 
 
 ```bash
-$ npm i @midwayjs/typeorm@4 typeorm --save
+$ npm i @midwayjs/typeorm@4 typeorm@^1.0.0 --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -50,7 +50,7 @@ $ npm i @midwayjs/typeorm@4 typeorm --save
 {
   "dependencies": {
     "@midwayjs/typeorm": "^4.0.0",
-    "typeorm": "~0.3.0",
+    "typeorm": "^1.0.0",
     // ...
   },
   "devDependencies": {
@@ -100,7 +100,7 @@ npm install mysql2 --save
 npm install pg --save
 
 # for SQLite
-npm install sqlite3 --save
+npm install better-sqlite3 --save
 
 # for Microsoft SQL Server
 npm install mssql --save
@@ -454,10 +454,10 @@ export default {
 :::
 
 
- `type` 字段你可以使用其他的数据库类型，包括`mysql`, `mariadb`, `postgres`, `cockroachdb`, `sqlite`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
+ `type` 字段你可以使用其他的数据库类型，包括`mysql`, `mariadb`, `postgres`, `cockroachdb`, `better-sqlite3`, `mssql`, `oracle`, `cordova`, `nativescript`, `react-native`, `expo`, or `mongodb`
 
 
- 比如 sqlite，需要以下信息。
+ 比如 better-sqlite3，需要以下信息。
 
 
 ```typescript
@@ -467,7 +467,7 @@ export default {
   typeorm: {
     dataSource: {
       default: {
-        type: 'sqlite',
+        type: 'better-sqlite3',
         database: path.join(__dirname, '../../test.sqlite'),
         synchronize: true,
         logging: true,
@@ -1265,7 +1265,7 @@ export default {
   typeorm: {
     dataSource: {
       default: {
-        type: 'sqlite',
+        type: 'better-sqlite3',
         database: join(__dirname, '../../default.sqlite'),
         // ...
       },

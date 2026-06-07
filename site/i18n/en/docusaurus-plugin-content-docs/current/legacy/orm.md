@@ -34,7 +34,7 @@ Or reinstall the following dependencies in `package.json`.
 {
   "dependencies": {
     "@midwayjs/orm": "^4.0.0",
-    "typeorm": "~0.3.0 ",
+    "typeorm": "^1.0.0",
     // ...
   },
   "devDependencies": {
@@ -85,8 +85,8 @@ npm install mysql2 --save
 # for PostgreSQL or CockroachDB
 npm install pg --save
 
-# for SQLite
-npm install sqlite3 --save
+# for better-sqlite3
+npm install better-sqlite3 --save
 
 # for Microsoft SQL Server
 npm install mssql --save
@@ -453,7 +453,7 @@ For example, sqlite only needs the following information.
 export default {
   // ...
   orm: {
-    type: 'sqlite',
+    type: 'better-sqlite3',
     database: path.join(__dirname, '../../test.sqlite')
     synchronize: true
     logging: true
@@ -1294,7 +1294,7 @@ import {join} from 'path';
 export default {
   orm: {
     default: {
-      type: 'sqlite',
+      type: 'better-sqlite3',
       database: join(__dirname, '../../default.sqlite')
       logging: true
     },

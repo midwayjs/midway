@@ -408,7 +408,7 @@ export default (appInfo: MidwayAppInfo) => {
 You need to rely on `@midwayjs/casbin-typeorm-adapter` packages and typeorm components.
 
 ```
-$ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm --save
+$ npm i @midwayjs/casbin-typeorm-adapter @midwayjs/typeorm typeorm@^1.0.0 better-sqlite3 --save
 ```
 
 Enable typeorm components.
@@ -433,7 +433,7 @@ export class MainConfiguration {
 }
 ```
 
-Configure the adapter. Take sqlite storage as an example. You can view the typeorm components for mysql configuration.
+Configure the adapter. Take better-sqlite3 storage as an example. You can view the typeorm components for mysql configuration.
 
 ```typescript
 import { MidwayAppInfo } from '@midwayjs/core';
@@ -447,7 +447,7 @@ export default (appInfo: MidwayAppInfo) => {
       dataSource: {
         // Defines a connection for casbin
         node-casbin-official ': {
-          type: 'sqlite',
+          type: 'better-sqlite3',
           synchronize: true
           database: join(appInfo.appDir, 'casbin.sqlite')
           // Note that Entity is explicitly introduced here.
