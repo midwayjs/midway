@@ -10,7 +10,7 @@ import {
   IMidwayContainer,
   MidwayLoggerService,
 } from '@midwayjs/core';
-import { DataSource } from 'typeorm';
+import { DataSource, EntitySubscriberInterface } from 'typeorm';
 import { TypeORMLogger } from './logger';
 import { typeormConfigOptions } from './interface';
 
@@ -54,6 +54,12 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
     }
 
     const { customDataSourceClass, ...otherConfig } = config;
+    const subscriberClasses = this.filterSubscriberClasses(
+      otherConfig.subscribers
+    );
+    otherConfig.subscribers = this.filterTypeORMManagedSubscribers(
+      otherConfig.subscribers
+    );
     otherConfig.invalidWhereValuesBehavior = {
       null: 'ignore',
       undefined: 'ignore',
@@ -68,7 +74,46 @@ export class TypeORMDataSourceManager extends DataSourceManager<DataSource> {
     }
 
     await dataSource.initialize();
+    dataSource.subscribers.push(
+      ...(await this.createSubscriberInstances(subscriberClasses))
+    );
     return dataSource;
+  }
+
+  private filterSubscriberClasses(subscribers: any) {
+    return this.toSubscriberArray(subscribers).filter(
+      subscriber => typeof subscriber === 'function'
+    );
+  }
+
+  private filterTypeORMManagedSubscribers(subscribers: any) {
+    return this.toSubscriberArray(subscribers).filter(
+      subscriber => typeof subscriber !== 'function'
+    );
+  }
+
+  private toSubscriberArray(subscribers: any) {
+    if (!subscribers) {
+      return [];
+    }
+
+    return Array.isArray(subscribers)
+      ? subscribers
+      : Object.values(subscribers);
+  }
+
+  private async createSubscriberInstances(subscriberClasses: any[]) {
+    return Promise.all(
+      subscriberClasses.map(async subscriberClass => {
+        try {
+          return (await this.applicationContext.getAsync(
+            subscriberClass
+          )) as EntitySubscriberInterface;
+        } catch {
+          return new subscriberClass() as EntitySubscriberInterface;
+        }
+      })
+    );
   }
 
   protected async checkConnected(dataSource: DataSource) {

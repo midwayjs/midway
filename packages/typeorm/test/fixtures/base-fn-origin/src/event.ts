@@ -1,18 +1,19 @@
 import { EventSubscriberModel } from '../../../../src';
 import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from 'typeorm';
-import { MainApp } from '@midwayjs/core';
+import { IMidwayApplication, MainApp } from '@midwayjs/core';
 
 @EventSubscriberModel()
 export class EverythingSubscriber implements EntitySubscriberInterface {
 
   @MainApp()
-  app;
+  app: IMidwayApplication;
 
   /**
    * Called before entity insertion.
    */
   beforeInsert(event: InsertEvent<any>) {
     console.log(`BEFORE ENTITY INSERTED: `, event.entity, this.app);
+    this.app.setAttr('typeormSubscriberInjected', true);
   }
 
   /**
