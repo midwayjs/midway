@@ -13,7 +13,10 @@
   "@midwayjs/captcha": "4.1.0",
   "@midwayjs/casbin": "4.1.0",
   "@midwayjs/casbin-redis-adapter": "4.1.0",
-  "@midwayjs/casbin-typeorm-adapter": "4.1.0",
+  "@midwayjs/casbin-typeorm-adapter": [
+    "4.1.0",
+    "4.2.0"
+  ],
   "@midwayjs/code-dye": "4.1.0",
   "@midwayjs/commander": "4.1.0",
   "@midwayjs/consul": "4.1.0",
@@ -21,7 +24,10 @@
   "@midwayjs/cos": "4.1.0",
   "@midwayjs/cron": "4.1.0",
   "@midwayjs/cross-domain": "4.1.0",
-  "@midwayjs/crud": "4.1.0",
+  "@midwayjs/crud": [
+    "4.1.0",
+    "4.2.0"
+  ],
   "@midwayjs/etcd": "4.1.0",
   "@midwayjs/event-emitter": "4.1.0",
   "@midwayjs/express-session": "4.1.0",
@@ -53,7 +59,8 @@
   "@midwayjs/session": "4.1.0",
   "@midwayjs/skill-midway": [
     "4.1.0",
-    "4.1.1"
+    "4.1.1",
+    "4.2.0"
   ],
   "@midwayjs/socketio": "4.1.0",
   "@midwayjs/static-file": "4.1.0",
@@ -61,7 +68,10 @@
   "@midwayjs/tablestore": "4.1.0",
   "@midwayjs/tenant": "4.1.0",
   "@midwayjs/typegoose": "4.1.0",
-  "@midwayjs/typeorm": "4.1.0",
+  "@midwayjs/typeorm": [
+    "4.1.0",
+    "4.2.0"
+  ],
   "@midwayjs/upload": "4.1.0",
   "@midwayjs/validate": "4.1.0",
   "@midwayjs/validation": "4.1.0",
@@ -71,7 +81,8 @@
   "@midwayjs/validation-zod4": "4.1.0",
   "@midwayjs/version": [
     "4.1.0",
-    "4.1.1"
+    "4.1.1",
+    "4.2.0"
   ],
   "@midwayjs/view": "4.1.0",
   "@midwayjs/view-ejs": "4.1.0",
@@ -82,5 +93,7 @@
   "@midwayjs/express": "4.1.0",
   "@midwayjs/koa": "4.1.0",
   "@midwayjs/ws": "4.1.0",
-  "@midwayjs/decorator": "3.18.0"
+  "@midwayjs/decorator": "3.18.0",
+  "@midwayjs/apollo": "4.2.0",
+  "@midwayjs/graphql": "4.2.0"
 }

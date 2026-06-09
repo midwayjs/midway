@@ -1,6 +1,25 @@
 # Change Log
 
 
+## v4.2.0 (2026-06-09)
+
+#### :rocket: New Feature
+* `apollo`, `graphql`
+  * [#4578](https://github.com/midwayjs/midway/pull/4578) feat: add Apollo GraphQL component ([@czy88840616](https://github.com/czy88840616))
+
+#### :nail_care: Polish
+* `casbin-typeorm-adapter`, `crud`, `typeorm`
+  * [#4590](https://github.com/midwayjs/midway/pull/4590) fix: support typeorm 1.0 ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* [#4579](https://github.com/midwayjs/midway/pull/4579) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.6.11 ([@renovate[bot]](https://github.com/apps/renovate))
+* [#4580](https://github.com/midwayjs/midway/pull/4580) chore(deps): update redis docker tag to v7.4.9 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.1.0 (2026-05-03)
 
 #### :rocket: New Feature

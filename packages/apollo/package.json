@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/apollo",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Midway Framework for Apollo GraphQL",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -33,8 +33,8 @@
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
-    "@midwayjs/koa": "workspace:^",
     "@midwayjs/express": "workspace:^",
+    "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@types/ws": "8.18.1"
   },
