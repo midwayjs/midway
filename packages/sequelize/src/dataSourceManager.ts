@@ -35,9 +35,9 @@ export class SequelizeDataSourceManager extends DataSourceManager<Sequelize> {
     dataSourceName: string
   ): Promise<Sequelize> {
     let client: Sequelize;
-    const { customClientClass, ...otherConfig } = config;
-    if (customClientClass) {
-      client = new customClientClass(otherConfig);
+    const { customDataSourceClass, ...otherConfig } = config;
+    if (customDataSourceClass) {
+      client = new customDataSourceClass(otherConfig);
     } else {
       client = new Sequelize(otherConfig);
     }
