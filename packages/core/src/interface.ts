@@ -489,11 +489,15 @@ export type TraceMetaResolver =
         | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
     };
 
+export type BaseServiceFactoryConfigOption<OPTIONS> = PowerPartial<OPTIONS> & {
+  customClientClass?: any;
+};
+
 export type ServiceFactoryConfigOption<OPTIONS> = {
-  default?: PowerPartial<OPTIONS>;
-  client?: PowerPartial<OPTIONS>;
+  default?: BaseServiceFactoryConfigOption<OPTIONS>;
+  client?: BaseServiceFactoryConfigOption<OPTIONS>;
   clients?: {
-    [key: string]: PowerPartial<OPTIONS>;
+    [key: string]: BaseServiceFactoryConfigOption<OPTIONS>;
   };
   defaultClientName?: string;
   clientPriority?: {

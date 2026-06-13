@@ -1,4 +1,10 @@
-import { ServiceFactory, DEFAULT_PRIORITY, MidwayPriorityManager, sleep } from '../../src';
+import {
+  ServiceFactory,
+  ServiceFactoryConfigOption,
+  DEFAULT_PRIORITY,
+  MidwayPriorityManager,
+  sleep,
+} from '../../src';
 
 describe('test/common/serviceFactory.test.ts', () => {
 
@@ -72,6 +78,30 @@ describe('test/common/serviceFactory.test.ts', () => {
       }
     });
     expect(instance.get('default')).toBeDefined();
+  });
+
+  it('should support custom client class in service factory config types', () => {
+    class CustomClient {}
+
+    const options: ServiceFactoryConfigOption<{ host: string }> = {
+      default: {
+        customClientClass: CustomClient,
+      },
+      client: {
+        customClientClass: CustomClient,
+        host: '127.0.0.1',
+      },
+      clients: {
+        backup: {
+          customClientClass: CustomClient,
+          host: '127.0.0.2',
+        },
+      },
+    };
+
+    expect(options.default.customClientClass).toBe(CustomClient);
+    expect(options.client.customClientClass).toBe(CustomClient);
+    expect(options.clients.backup.customClientClass).toBe(CustomClient);
   });
 
   it('should test default name', async () => {

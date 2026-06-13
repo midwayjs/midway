@@ -59,6 +59,13 @@ export class OSSServiceFactory<
   async createClient(
     config: OSSServiceFactoryCreateClientConfigType
   ): Promise<T> {
+    const { customClientClass, ...otherConfig } = config as any;
+    if (customClientClass) {
+      const client = new customClientClass(otherConfig);
+      this.bindTraceContext(client as any);
+      return client;
+    }
+
     if (config['cluster'] && !config.clusters) {
       config.clusters = config['cluster'];
     }

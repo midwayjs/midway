@@ -49,44 +49,51 @@ export class RedisServiceFactory extends ServiceFactory<Redis> {
   protected async createClient(config, name: string): Promise<Redis> {
     let client;
 
-    if (config.cluster === true) {
-      assert.ok(
-        config.nodes && config.nodes.length !== 0,
-        `[midway:redis] client(${name}) cluster nodes configuration is required when use cluster redis`
-      );
-
-      config.nodes.forEach(client => {
-        assert.ok(
-          client.host && client.port,
-          `[midway:redis] client(${name}) 'host: ${client.host}', 'port: ${client.port}' are required on config`
-        );
-      });
-      client = new Redis.Cluster(config.nodes, config);
-      this.logger.info('[midway:redis] cluster is connecting');
-    } else if (config.sentinels) {
-      assert.ok(
-        config.sentinels && config.sentinels.length !== 0,
-        `[midway:redis] client(${name}) sentinels configuration is required when use redis sentinel`
-      );
-
-      config.sentinels.forEach(sentinel => {
-        assert.ok(
-          sentinel.host && sentinel.port,
-          `[midway:redis] client(${name}) 'host: ${sentinel.host}', 'port: ${sentinel.port}' are required on config`
-        );
-      });
-
-      client = new Redis(config);
-      this.logger.info(`[midway:redis] client(${name}) sentinel is connecting`);
+    const { customClientClass, ...otherConfig } = config;
+    if (customClientClass) {
+      client = new customClientClass(otherConfig);
     } else {
-      assert.ok(
-        config.host && config.port,
-        `[midway:redis] client(${name}) 'host: ${config.host}', 'port: ${config.port}' are required on config`
-      );
-      client = new Redis(config);
-      this.logger.info(
-        `[midway:redis] client(${name}) server is connecting redis://:***@${config.host}:${config.port}`
-      );
+      if (config.cluster === true) {
+        assert.ok(
+          config.nodes && config.nodes.length !== 0,
+          `[midway:redis] client(${name}) cluster nodes configuration is required when use cluster redis`
+        );
+
+        config.nodes.forEach(client => {
+          assert.ok(
+            client.host && client.port,
+            `[midway:redis] client(${name}) 'host: ${client.host}', 'port: ${client.port}' are required on config`
+          );
+        });
+        client = new Redis.Cluster(config.nodes, config);
+        this.logger.info('[midway:redis] cluster is connecting');
+      } else if (config.sentinels) {
+        assert.ok(
+          config.sentinels && config.sentinels.length !== 0,
+          `[midway:redis] client(${name}) sentinels configuration is required when use redis sentinel`
+        );
+
+        config.sentinels.forEach(sentinel => {
+          assert.ok(
+            sentinel.host && sentinel.port,
+            `[midway:redis] client(${name}) 'host: ${sentinel.host}', 'port: ${sentinel.port}' are required on config`
+          );
+        });
+
+        client = new Redis(config);
+        this.logger.info(
+          `[midway:redis] client(${name}) sentinel is connecting`
+        );
+      } else {
+        assert.ok(
+          config.host && config.port,
+          `[midway:redis] client(${name}) 'host: ${config.host}', 'port: ${config.port}' are required on config`
+        );
+        client = new Redis(config);
+        this.logger.info(
+          `[midway:redis] client(${name}) server is connecting redis://:***@${config.host}:${config.port}`
+        );
+      }
     }
 
     await new Promise<void>((resolve, reject) => {
