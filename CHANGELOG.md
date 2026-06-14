@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v4.2.1 (2026-06-14)
+
+#### :nail_care: Polish
+* `consul`, `core`, `cos`, `etcd`, `oss`, `redis`, `sequelize`
+  * [#4587](https://github.com/midwayjs/midway/pull/4587) feat: Add custom client class support ([@itmajing](https://github.com/itmajing))
+
+#### Committers: 1
+- [@itmajing](https://github.com/itmajing)
+
+
+
 ## v4.2.0 (2026-06-09)
 
 #### :rocket: New Feature

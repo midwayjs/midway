@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/tags",
-  "version": "4.1.0",
+  "version": "4.2.1",
   "private": true,
   "description": "Midway Tag System",
   "main": "dist/index.js",

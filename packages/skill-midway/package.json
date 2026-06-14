@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/skill-midway",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Midway official skill package with knowledge bundle generator and query helpers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

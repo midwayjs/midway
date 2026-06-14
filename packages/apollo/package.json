@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/apollo",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Midway Framework for Apollo GraphQL",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
