@@ -4,17 +4,17 @@ GraphQL is useful when clients need to query only the fields they need, aggregat
 
 Related information:
 
-| Description            |      |
-| ---------------------- | ---- |
-| Available for standard projects | ✅    |
-| Available for Serverless        | ❌    |
-| Available for integrated apps   | ✅    |
+| Description                         |      |
+| ----------------------------------- | ---- |
+| Available for standard projects     | ✅    |
+| Available for Serverless            | ❌    |
+| Available for integrated apps       | ✅    |
 | Contains independent main framework | ❌    |
-| Contains independent logs       | ❌    |
+| Contains independent logs           | ❌    |
 
-## Install dependencies
+## Install Dependencies
 
-The Apollo component includes the Apollo Server and GraphQL runtime dependencies.
+The Apollo component includes Apollo Server, GraphQL, and WebSocket subscription runtime dependencies. You do not need to install `@apollo/server` or `graphql` separately.
 
 ```bash
 $ npm i @midwayjs/apollo@4 --save
@@ -39,7 +39,7 @@ Or add the dependencies to `package.json` and reinstall.
 }
 ```
 
-## Enable component
+## Enable Component
 
 Import Apollo and one web framework component in `src/configuration.ts`.
 
@@ -57,9 +57,11 @@ import * as apollo from '@midwayjs/apollo';
 export class MainConfiguration {}
 ```
 
+The component mounts the GraphQL endpoint at `/graphql` by default and accepts `GET` and `POST` requests by default.
+
 ## Minimal Example
 
-Configure Apollo in `src/config/config.default.ts`.
+Configure GraphQL schema and resolvers in `src/config/config.default.ts`.
 
 ```typescript
 export const apollo = {
@@ -77,12 +79,12 @@ export const apollo = {
 };
 ```
 
-Send a query to `/graphql`:
+After the application starts, request `/graphql`.
 
-```graphql
-query {
-  hello
-}
+```bash
+$ curl -X POST http://127.0.0.1:7001/graphql \
+  -H 'content-type: application/json' \
+  -d '{"query":"{ hello }"}'
 ```
 
 Response:
@@ -95,9 +97,42 @@ Response:
 }
 ```
 
-## Use Midway Context
+In development, you can also open `/graphql` in a browser to use GraphiQL.
 
-The third resolver argument is the active Midway request context itself. You do not need to unwrap `context.ctx`. Use `context.requestContext` directly for request-scoped dependencies.
+## Use Schema Files
+
+When the schema grows, place SDL in `.graphql` files and load them with `typePaths`.
+
+```graphql
+# src/graphql/schema.graphql
+type Query {
+  user(id: ID!): User
+}
+
+type Mutation {
+  updateUserName(id: ID!, name: String!): User
+}
+
+type User {
+  id: ID!
+  name: String!
+}
+```
+
+Use `typePaths` in config.
+
+```typescript
+export const apollo = {
+  path: '/graphql',
+  typePaths: ['./graphql/**/*.graphql'],
+};
+```
+
+Relative paths in `typePaths` are resolved from the application `baseDir`. Both exact file paths and glob patterns are supported. You can also use `typeDefs` and `typePaths` together; the component merges them during startup.
+
+## Resolver Map
+
+You can write an Apollo resolver map directly in config.
 
 ```typescript
 import { UserService } from '../service/user';
@@ -106,6 +141,10 @@ export const apollo = {
   typeDefs: `
     type Query {
       userName(id: ID!): String
+    }
+
+    type Mutation {
+      updateUserName(id: ID!, name: String!): String
     }
   `,
   resolvers: {
@@ -116,19 +155,28 @@ export const apollo = {
         return user?.name;
       },
     },
+    Mutation: {
+      updateUserName: async (_parent, args, context) => {
+        const userService = await context.requestContext.getAsync(UserService);
+        const user = await userService.updateName(args.id, args.name);
+        return user.name;
+      },
+    },
   },
 };
 ```
 
-In Koa, `context` is the Midway-augmented Koa ctx. In Express, it is the Midway-augmented Express request/context. Midway attaches `requestContext`, `logger`, `getLogger()`, `setAttr()`, `getAttr()`, and `getApp()`.
+The third resolver argument is the active Midway request context itself. You do not need to unwrap `context.ctx`. In Koa, `context` is the Midway-augmented Koa ctx. In Express, it is the Midway-augmented Express request/context.
+
+Midway attaches `requestContext`, `logger`, `getLogger()`, `setAttr()`, `getAttr()`, and `getApp()` to the context.
 
 ## Resolver Classes
 
-`@midwayjs/apollo` re-exports GraphQL resolver decorators, so you can import them directly from the Apollo component.
+You can also use resolver classes for a more natural dependency injection experience. Import GraphQL decorators directly from `@midwayjs/apollo`.
 
 ```typescript
 import { Inject } from '@midwayjs/core';
-import { Args, Context, Query, Resolver } from '@midwayjs/apollo';
+import { Args, Context, Mutation, Query, Resolver } from '@midwayjs/apollo';
 import { UserService } from '../service/user';
 
 @Resolver()
@@ -138,23 +186,102 @@ export class UserResolver {
 
   @Query('userName')
   async userName(@Args('id') id: string, @Context() context) {
-    const user = await this.userService.findById(id);
     context.logger.info('query user %s', id);
+    const user = await this.userService.findById(id);
     return user?.name;
+  }
+
+  @Mutation('updateUserName')
+  async updateUserName(@Args('id') id: string, @Args('name') name: string) {
+    const user = await this.userService.updateName(id, name);
+    return user.name;
   }
 }
 ```
 
+Resolver classes are managed by the Midway container and support `@Inject()` and request-scoped dependencies. The component automatically discovers classes marked with `@Resolver()`. You can also pass them explicitly through `resolverClasses`.
+
+```typescript
+import { UserResolver } from '../resolver/user';
+
+export const apollo = {
+  typePaths: ['./graphql/**/*.graphql'],
+  resolverClasses: [UserResolver],
+};
+```
+
+Available resolver decorators:
+
+| Decorator         | Description                        |
+| ----------------- | ---------------------------------- |
+| `@Resolver()`     | Marks a resolver class             |
+| `@Query()`        | Marks a Query field                |
+| `@Mutation()`     | Marks a Mutation field             |
+| `@Subscription()` | Marks a Subscription field         |
+
 Available parameter decorators:
 
-| Decorator    | Description                         |
-| ------------ | ----------------------------------- |
-| `@Parent()`  | Injects the parent resolver value   |
-| `@Args()`    | Injects GraphQL arguments           |
-| `@Context()` | Injects the Midway request context  |
-| `@Info()`    | Injects GraphQL resolve info        |
+| Decorator    | Description                       |
+| ------------ | --------------------------------- |
+| `@Parent()`  | Injects the parent resolver value |
+| `@Args()`    | Injects GraphQL arguments         |
+| `@Context()` | Injects the Midway request context |
+| `@Info()`    | Injects GraphQL resolve info      |
 
 Without a field name, the full object is injected. With a field name, only that field is injected, for example `@Args('id')`.
+
+## Extend Context
+
+Use `contextFactory` to add fields for each GraphQL request.
+
+```typescript
+export const apollo = {
+  typeDefs,
+  resolvers,
+  contextFactory: async context => {
+    return {
+      currentUserId: context.headers['x-user-id'],
+    };
+  },
+};
+```
+
+Then read it in resolvers:
+
+```typescript
+const userId = context.currentUserId;
+```
+
+Built-in fields such as `requestContext`, `logger`, `getLogger`, `setAttr`, `getAttr`, and `getApp` are reserved and should not be overwritten.
+
+## GraphiQL
+
+GraphiQL is enabled by default in development. Visiting `/graphql` in a browser opens the GraphiQL page. It is disabled by default in production.
+
+```typescript
+export const apollo = {
+  graphiql: true,
+};
+```
+
+You can disable it explicitly:
+
+```typescript
+export const apollo = {
+  graphiql: false,
+};
+```
+
+You can also customize the page title and request endpoint.
+
+```typescript
+export const apollo = {
+  graphiql: {
+    title: 'My GraphQL Console',
+    endpoint: '/graphql',
+  },
+};
+```
 
 ## Subscriptions
 
@@ -204,20 +331,50 @@ export const apollo = {
 };
 ```
 
-## Use Schema Files
+Clients need to connect with the `graphql-ws` protocol.
 
-You can configure `typePaths` to load `.graphql` files instead of writing all schema definitions inline in `typeDefs`.
+```typescript
+import { createClient } from 'graphql-ws';
+
+const client = createClient({
+  url: 'ws://127.0.0.1:7001/graphql',
+});
+
+client.subscribe(
+  {
+    query: 'subscription { counter }',
+  },
+  {
+    next: data => {
+      console.log(data);
+    },
+    error: err => {
+      console.error(err);
+    },
+    complete: () => {},
+  }
+);
+```
+
+## HTTP Behavior
+
+By default, only `GET` and `POST` requests are handled. Other methods sent to the GraphQL path return `405 Method Not Allowed`.
 
 ```typescript
 export const apollo = {
-  path: '/graphql',
-  typePaths: ['./schema.graphql', './graphql/**/*.graphql'],
+  methods: ['POST'],
 };
 ```
 
-Relative paths in `typePaths` are resolved from the application `baseDir`. Both exact file paths and glob patterns are supported. You can also use `typeDefs` and `typePaths` together; the component merges them during startup.
+If you change the GraphQL path, both HTTP and subscriptions use the new path by default.
 
-## Apollo Options
+```typescript
+export const apollo = {
+  path: '/api/graphql',
+};
+```
+
+## Apollo Server Options
 
 Apollo Server specific options live under `apollo.apollo` so they do not mix with shared GraphQL fields.
 
@@ -232,54 +389,32 @@ export const apollo = {
 };
 ```
 
-## GraphiQL
+Common options:
 
-GraphiQL is enabled by default in development. Visiting `/graphql` in a browser opens the GraphiQL page. It is disabled by default in production.
+| Option            | Description                                  |
+| ----------------- | -------------------------------------------- |
+| `path`            | GraphQL HTTP path, defaults to `/graphql`    |
+| `methods`         | Allowed HTTP methods, defaults to `['GET', 'POST']` |
+| `typeDefs`        | Inline GraphQL SDL                           |
+| `typePaths`       | `.graphql` file paths or glob patterns       |
+| `resolvers`       | Apollo resolver map                          |
+| `resolverClasses` | Midway resolver class list                   |
+| `contextFactory`  | Extends GraphQL context for each request     |
+| `graphiql`        | GraphiQL switch or options                   |
+| `subscriptions`   | GraphQL WebSocket subscription switch or options |
+| `apollo`          | Options passed to Apollo Server              |
 
-```typescript
-export const apollo = {
-  graphiql: true,
-};
-```
+## Production Recommendations
 
-You can disable it explicitly:
+In production, explicitly disable GraphiQL and decide whether to enable introspection based on your security requirements.
 
 ```typescript
 export const apollo = {
   graphiql: false,
-};
-```
-
-## HTTP Behavior
-
-By default, only `GET` and `POST` requests are handled. Other methods sent to the GraphQL path return `405 Method Not Allowed`.
-
-```typescript
-export const apollo = {
-  methods: ['POST'],
-};
-```
-
-## Extend Context
-
-Use `contextFactory` to add fields for each GraphQL request.
-
-```typescript
-export const apollo = {
-  typeDefs,
-  resolvers,
-  contextFactory: async context => {
-    return {
-      currentUserId: context.headers['x-user-id'],
-    };
+  apollo: {
+    introspection: false,
   },
 };
 ```
 
-Then read it in resolvers:
-
-```typescript
-const userId = context.currentUserId;
-```
-
-Built-in fields such as `requestContext`, `logger`, and `getApp` are reserved and should not be overwritten.
+For file uploads, prefer returning upload credentials from GraphQL and uploading directly from the client to OSS, S3, or another object storage service. GraphQL multipart upload is not enabled by default in this component.

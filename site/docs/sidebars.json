@@ -238,6 +238,7 @@
         "extensions/info",
         "extensions/validation",
         "extensions/swagger",
+        "extensions/apollo",
         "extensions/bullmq",
         "extensions/cron",
         "extensions/jwt",
