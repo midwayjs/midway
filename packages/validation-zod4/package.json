@@ -16,7 +16,7 @@
   "dependencies": {
     "@midwayjs/i18n": "workspace:^",
     "@midwayjs/validation": "workspace:^",
-    "@semihbou/zod-i18n-map": "0.0.3",
+    "@semihbou/zod-i18n-map": "0.0.4",
     "i18next": "24.2.3",
     "zod-validation-error": "5.0.0"
   },
