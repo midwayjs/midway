@@ -463,7 +463,7 @@ export class MainConfiguration {
 import {
   Mock,
   ISimulation,
-  App,
+  MainApp,
   Inject,
   IMidwayApplication,
   MidwayMockService,
@@ -472,7 +472,7 @@ import { WeatherService } from '../service/weather.service';
 
 @Mock()
 export class WeatherDataMock implements ISimulation {
-  @App()
+  @MainApp()
   app: IMidwayApplication;
 
   @Inject()

@@ -464,7 +464,7 @@ We need to create a `src/mock/data.mock.ts` file with the following content:
 import {
    Mock,
    ISimulation,
-   apps,
+   MainApp,
    Inject,
    IMidwayApplication,
    MidwayMockService,
@@ -473,7 +473,7 @@ import { WeatherService } from '../service/weather.service';
 
 @Mock()
 export class WeatherDataMock implements ISimulation {
-   @App()
+   @MainApp()
    app: IMidwayApplication;
 
    @Inject()

@@ -296,12 +296,12 @@ import { Controller, Post, Body } from '@midwayjs/core';
 export class UserController {
   @Post('/')
   async updateUser(@Body('uid') uid: string): Promise<User> {
-    // id 等价于 ctx.request.body.uid
+    // uid 等价于 ctx.request.body.uid
   }
 }
 ```
 
-**示例：获取整个 body **
+**示例：获取整个 body**
 
 ```typescript
 // src/controller/user.ts
@@ -933,7 +933,7 @@ import { Context } from '@midwayjs/koa';
 export class HomeController {
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
     this.ctx.status = 200;
@@ -942,7 +942,7 @@ export class HomeController {
       await sleep(100);
       this.ctx.res.write('abc'.repeat(100));
     }
-    
+
     this.ctx.res.end();
   }
 }
@@ -958,7 +958,7 @@ export class HomeController {
 
 ## 内部重定向
 
-从 v3.12.0 开始，框架提供了一个内部重定向 API `ctx.forward(url)`，仅支持 koa/egg 类型。 
+从 v3.12.0 开始，框架提供了一个内部重定向 API `ctx.forward(url)`，仅支持 koa/egg 类型。
 
 和外部重定向不同的地方在于，内部重定向不会修改浏览器的 URL，只在程序内部流转。
 
@@ -974,7 +974,7 @@ export class HomeController {
   async home() {
     return this.ctx.forward('/api');
   }
-  
+
   @Get('/api')
   async api() {
     return 'abc';
