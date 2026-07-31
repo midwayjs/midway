@@ -464,7 +464,7 @@ We need to create a `src/mock/data.mock.ts` file with the following content:
 import {
    Mock,
    ISimulation,
-   apps,
+   App,
    Inject,
    IMidwayApplication,
    MidwayMockService,
