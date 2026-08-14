@@ -319,10 +319,7 @@ import { UserCrudService } from '../service/user.crud';
   model: UserEntity,
   service: UserCrudService,
 })
-export class UserController {
-  @Inject()
-  crudService: UserCrudService;
-}
+export class UserController { }
 ```
 
 默认会生成：
@@ -333,14 +330,40 @@ export class UserController {
 - `PATCH /users/:id`
 - `DELETE /users/:id`
 
-### 为什么还要 `@Inject() crudService`
+以及设置控制器实例属性`crudService`
 
-因为 `@Crud()` 只是声明“这个 Controller 是一个 CRUD 资源”，真正执行业务的是你绑定的 `crudService`。
+### 自定义服务属性名
+
+```typescript
+import { Controller, Inject } from '@midwayjs/core';
+import { Crud } from '@midwayjs/crud';
+
+import { UserEntity } from '../entity/user';
+import { UserCrudService } from '../service/user.crud';
+
+@Controller('/users')
+@Crud<UserEntity>({
+  model: UserEntity,
+  service: 'userService',
+})
+export class UserController {
+  @Inject()
+  userService: UserCrudService
+}
+```
+
+:::tip
+仅设置属性名未手动注入同名服务，调用Rest接口会因获取不到服务实例而异常
+:::
+
+### 为什么还要 `@Inject() [name]`
+
+因为 `@Crud()` 只是声明“这个 Controller 是一个 CRUD 资源”，真正执行业务的是你绑定的 `[serviceName]`。
 
 也就是说：
 
 - `@Crud()` 负责生成默认路由
-- `crudService` 负责真正执行 CRUD 逻辑
+- `[serviceName]` 负责真正执行 CRUD 逻辑
 
 这是这个组件最重要的设计原则之一。
 
@@ -380,7 +403,7 @@ export class UserController {
 
 ### 裁剪默认路由
 
-如果你不想暴露所有默认路由，可以通过 `routes.only` 或 `routes.exclude` 控制。
+如果你不想暴露所有默认路由，可以通过 `routes.only` 或 `routes.include` 或 `routes.exclude` 控制。
 
 ```typescript
 @Crud<UserEntity>({
@@ -393,6 +416,10 @@ export class UserController {
 ```
 
 这对于“只能查、不能删”或“只开放后台管理的一部分动作”的场景很有用。
+
+- `routes.only` 仅支持的路由，设置后忽略`include`和`exclude`
+- `routes.include` 设置后将与默认路由合并 (默认包括[list,detail,create,update,delete])
+- `routes.exclude` 默认排除为空，排除优先级高于`routes.include`
 
 ## 函数式路由模式
 
@@ -433,6 +460,70 @@ export default defineApi('/users', api => ({
 ```
 
 这样可以让“标准资源动作”和“业务动作”共存在同一个资源路由下。
+
+## 路由模式
+
+`routes.mode` 支持 RESTful | RPC | CUSTOM，默认为 `RESTful` 模式
+
+- `RESTful` 资源型路由，通过 HTTP Method 表达操作（如：`POST /users`、`DELETE /users/:id`）
+- `RPC`     行为型路由，通过 URL 表达操作（如：`POST /users/create`、`POST /users/delete/:id`）
+- `CUSTOM`  自定义路由，通过 `{ name, method, path }` 描述数据操作
+
+### 重写内置路由
+
+`routes.mode` 设置为 RESTful / RPC 时，也可以通过 `routes.overrides` 进行增量覆盖
+
+```typescript
+@Controller('/users')
+@Crud<UserEntity>({
+  model: UserEntity,
+  service: UserCrudService,
+  routes: {
+    mode: 'RESTful',
+    overrides: {
+      list: {
+        path: '/list',
+        method: 'GET'
+      },
+      delete: {
+        enabled: false
+      }
+    }
+  }
+})
+export class UserController {
+
+}
+```
+
+### 自定义路由
+
+`routes.mode` 设置为 `CUSTOM` 时，`routes.overrides` 是必填项，完整定义接口对应的路由和方法
+
+```typescript
+@Controller('/users')
+@Crud<UserEntity>({
+  model: UserEntity,
+  service: UserCrudService,
+  routes: {
+    mode: 'CUSTOM',
+    overrides: {
+      create: {
+        path: '/add',
+        method: 'POST'
+      },
+      delete: {
+        path: '/del/:id',
+        method: 'POST'
+      }
+    }
+  }
+})
+export class UserController {
+
+}
+```
+
 
 ## 查询协议
 
