@@ -1,4 +1,4 @@
-import * as LRUCache from 'lru-cache';
+import LRUCache from 'lru-cache';
 import * as cloneDeep from 'lodash.clonedeep';
 import { MemoryConfig, MemoryStore, LRU } from './types';
 

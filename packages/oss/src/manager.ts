@@ -10,7 +10,7 @@ import {
   MidwayCommonError,
   MidwayTraceService,
 } from '@midwayjs/core';
-import * as OSS from 'ali-oss';
+import OSS from 'ali-oss';
 import * as assert from 'assert';
 import type {
   OSSServiceFactoryReturnType,
