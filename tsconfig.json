@@ -15,6 +15,7 @@
     "moduleResolution": "NodeNext",
     "target": "ES2022",
     "lib": ["ES2023"],
+    "esModuleInterop": true,
     "types": ["node", "jest"]
   },
   "exclude": [
