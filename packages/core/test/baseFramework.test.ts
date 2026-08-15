@@ -1,6 +1,6 @@
-import * as assert from 'assert';
+import assert from 'assert';
 import * as path from 'path';
-import * as mm from 'mm';
+import mm from 'mm';
 import {
   getCurrentApplicationContext,
   getCurrentMainApp,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as assert from 'assert';
+import assert from 'assert';
 import { EventEmitter } from 'events';
 import { ASYNC_ROOT_CONTEXT, AsyncLocalStorageContextManager } from '../../src/common/asyncContextManager';
 

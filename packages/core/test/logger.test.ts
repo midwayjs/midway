@@ -1,6 +1,6 @@
 import { MidwayContextLogger } from '@midwayjs/logger';
 import { join } from 'path';
-import * as mm from 'mm';
+import mm from 'mm';
 import { tmpdir } from 'os';
 import { existsSync } from 'fs';
 import { createLightFramework } from './util';

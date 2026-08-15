@@ -1,5 +1,5 @@
 import { Provide, MidwayMiddlewareService, MidwayContainer, Init, IgnoreMatcher, createMiddleware } from '../../src';
-import * as assert from 'assert';
+import assert from 'assert';
 
 describe('/test/services/middlewareService.test.ts', () => {
 

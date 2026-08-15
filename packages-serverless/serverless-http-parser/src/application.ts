@@ -1,7 +1,7 @@
 import { context } from './context';
 import { request } from './request';
 import { response } from './response';
-import * as only from 'only';
+import only from 'only';
 import { EventEmitter } from 'events';
 import { format } from 'util';
 

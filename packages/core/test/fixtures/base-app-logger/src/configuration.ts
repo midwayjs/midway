@@ -1,5 +1,5 @@
 import { Configuration, App, Logger, IMidwayApplication } from '../../../../src';
-import * as assert from 'assert';
+import assert from 'assert';
 import { ILogger } from '@midwayjs/logger';
 
 @Configuration()

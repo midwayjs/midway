@@ -19,7 +19,7 @@ import {
   ScopeEnum,
 } from '../interface';
 import * as util from 'util';
-import * as EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import {
   MidwayCommonError,
   MidwayDefinitionNotFoundError,

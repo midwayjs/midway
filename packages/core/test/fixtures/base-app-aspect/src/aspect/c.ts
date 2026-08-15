@@ -1,6 +1,6 @@
 import { Aspect, IMethodAspect, JoinPoint, Provide } from '../../../../../src';
 import { UserController } from '../home';
-import * as assert from 'assert';
+import assert from 'assert';
 
 @Provide()
 @Aspect([UserController])

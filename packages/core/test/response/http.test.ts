@@ -1,5 +1,5 @@
 // import whyIsNodeRunning from 'why-is-node-running'
-import * as EventSource from 'eventsource';
+import EventSource from 'eventsource';
 import { HttpServerResponse, ServerSendEventMessage, sleep } from '../../src';
 import { createServer, request, ServerResponse } from 'http';
 import { join } from 'path';

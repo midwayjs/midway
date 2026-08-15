@@ -1,5 +1,5 @@
 import { Utils } from '../../../src';
-import * as assert from 'assert';
+import assert from 'assert';
 
 describe('test/util/uuid.test.ts', () => {
 
