@@ -8,7 +8,7 @@ import {
   MidwayConfigService,
 } from '@midwayjs/core';
 import session from 'express-session';
-import * as cookieSession from 'cookie-session';
+import cookieSession from 'cookie-session';
 import { SessionStoreManager } from '../store';
 
 @Middleware()
