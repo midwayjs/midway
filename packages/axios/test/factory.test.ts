@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { HttpServiceFactory } from '../src';
 import { close, createLightApp } from '@midwayjs/mock';
-import * as nock from 'nock';
+import nock from 'nock';
 import { MidwayTraceService } from '@midwayjs/core';
 
 describe('/test/factory.test.ts', () => {

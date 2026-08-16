@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { HttpService, Axios } from '../src';
 import { createLightApp } from '@midwayjs/mock';
-import * as nock from 'nock';
+import nock from 'nock';
 
 describe('/test/index.test.ts', () => {
   let httpService: any;
