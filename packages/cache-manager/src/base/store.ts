@@ -1,5 +1,5 @@
 import LRUCache from 'lru-cache';
-import * as cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash.clonedeep';
 import { MemoryConfig, MemoryStore, LRU } from './types';
 
 function clone<T>(object: T): T {
