@@ -2,7 +2,7 @@ import { close, createLegacyApp, createHttpRequest, createLightApp } from '@midw
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 import { MidwayWebRouterService } from '@midwayjs/core';
-import * as SwaggerParser from "@apidevtools/swagger-parser";
+import SwaggerParser from '@apidevtools/swagger-parser';
 import * as swagger from '../src';
 
 describe('/test/index.test.ts', () => {
