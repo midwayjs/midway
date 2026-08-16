@@ -10,7 +10,7 @@ import {
 import * as bullmq from '../src';
 import { Processor, Application, IProcessor, Context } from '../src';
 import { JobsOptions, Job } from 'bullmq';
-import * as assert from 'node:assert';
+import assert from 'node:assert';
 
 describe(`/test/index.test.ts`, () => {
   it('test auto repeat processor', async () => {
