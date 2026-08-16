@@ -1,5 +1,5 @@
 import { URL } from 'url';
-import * as pm from 'picomatch';
+import pm from 'picomatch';
 export const parseUrl = (url: string, prop?: string) => {
   try {
     const parsed = new URL(url);

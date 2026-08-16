@@ -1,5 +1,5 @@
 import { IMiddleware, Middleware } from '@midwayjs/core';
-import * as escape from 'escape-html';
+import escape from 'escape-html';
 import { filterXSS } from 'xss';
 
 @Middleware()
