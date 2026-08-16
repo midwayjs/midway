@@ -1,5 +1,5 @@
 import { DecoratorManager, MetadataManager } from '@midwayjs/core';
-import * as request from 'request';
+import request from 'request';
 import * as path from 'path';
 import * as os from 'os';
 import { isPrimary } from '../utils/utils';
