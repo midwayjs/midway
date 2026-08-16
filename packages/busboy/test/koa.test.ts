@@ -5,7 +5,7 @@ import * as koa from '@midwayjs/koa';
 import * as busboy from '../src';
 import { Controller, createMiddleware, Fields, Files, Post, File } from "@midwayjs/core";
 import { ensureDir, removeSync } from "fs-extra";
-import * as assert from 'assert';
+import assert from 'assert';
 import { tmpdir } from "os";
 import { randomUUID } from "node:crypto";
 

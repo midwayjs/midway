@@ -1,5 +1,5 @@
 import { MATCH_TYPE, TAG_ERROR, TagServiceFactory } from '../src';
-import * as assert from 'assert';
+import assert from 'assert';
 import { createLightApp, close } from '@midwayjs/mock';
 import { join } from 'path';
 describe('mysql.test.ts', () => {

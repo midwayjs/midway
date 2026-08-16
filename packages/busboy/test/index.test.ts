@@ -2,7 +2,7 @@ import { createHttpRequest, createLightApp, close } from '@midwayjs/mock';
 import * as koa from '@midwayjs/koa';
 import { join } from 'path';
 import { createWriteStream, statSync, writeFileSync, unlinkSync, existsSync } from 'fs';
-import * as assert from 'assert';
+import assert from 'assert';
 import { Controller, createMiddleware, Post } from '@midwayjs/core';
 import { tmpdir } from 'os';
 import { UploadMiddleware, UploadStreamFileInfo } from '../src';

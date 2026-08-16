@@ -1,6 +1,6 @@
 import { ILogger, Inject } from '@midwayjs/core';
 import { Context, IMqttSubscriber, MqttSubscriber } from '../../../../../src';
-import * as assert from 'node:assert';
+import assert from 'node:assert';
 
 @MqttSubscriber('test')
 export class UserConsumer implements IMqttSubscriber {
