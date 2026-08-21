@@ -1,3 +1,4 @@
+import type { ServiceFactoryConfigOption } from '@midwayjs/core';
 import { ConsulOptions } from './dist';
 
 export * from './dist/index';

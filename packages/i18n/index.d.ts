@@ -1,3 +1,4 @@
+import type { PowerPartial } from '@midwayjs/core';
 import { I18nOptions } from './dist/';
 
 export * from './dist/index';

@@ -1,3 +1,4 @@
+import type { PowerPartial } from '@midwayjs/core';
 import { MikroConfigOptions } from './dist/index.js';
 
 export * from './dist/index.js';

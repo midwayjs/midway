@@ -1,9 +1,9 @@
-import { CommanderConfigOptions } from './dist/index';
+import { ICommanderConfigurationOptions } from './dist/index';
 
 export * from './dist/index';
 
 declare module '@midwayjs/core' {
   interface MidwayConfig {
-    commander?: Partial<CommanderConfigOptions>;
+    commander?: Partial<ICommanderConfigurationOptions>;
   }
 }

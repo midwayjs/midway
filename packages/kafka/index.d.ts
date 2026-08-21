@@ -1,3 +1,4 @@
+import type { PowerPartial } from '@midwayjs/core';
 import { IMidwayKafkaConfigurationOptions } from './dist';
 export * from './dist/index';
 export {

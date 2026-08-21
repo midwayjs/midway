@@ -1,4 +1,4 @@
-import { MidwayEtcdConfigOptions } from './dist/index';
+import { MidwayEtcdConfigOptions } from './dist/interface';
 export * from './dist/index';
 
 declare module '@midwayjs/core' {

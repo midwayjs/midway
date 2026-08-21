@@ -1,3 +1,4 @@
+import type { PowerPartial } from '@midwayjs/core';
 import { BullBoardOption } from './dist/index';
 export * from './dist/index';
 

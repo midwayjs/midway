@@ -1,3 +1,4 @@
+import type { ServiceFactoryConfigOption } from '@midwayjs/core';
 import { CacheManagerOptions } from './dist/index';
 
 export * from './dist/index';

@@ -1,3 +1,4 @@
+import type { ServiceFactoryConfigOption } from '@midwayjs/core';
 import { AxiosRequestConfig } from './dist/index';
 
 export * from './dist/index';
