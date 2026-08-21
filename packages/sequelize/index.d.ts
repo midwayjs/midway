@@ -1,3 +1,4 @@
+import type { PowerPartial } from '@midwayjs/core';
 import { SequelizeConfigOptions } from './dist';
 
 import { SequelizeOptions } from 'sequelize-typescript';

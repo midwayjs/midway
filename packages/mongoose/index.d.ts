@@ -1,3 +1,4 @@
+import type { DataSourceManagerConfigOption } from '@midwayjs/core';
 import { ConnectionOptions } from './dist';
 export * from './dist/index';
 

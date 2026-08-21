@@ -28,7 +28,7 @@ declare module '@midwayjs/core' {
       json?: (err: Error, ctx: KoaContext) => void;
       html?: (err: Error, ctx: KoaContext) => void;
       redirect?: string;
-      accepts?: (...args) => any;
+      accepts?: (...args: any[]) => any;
     };
     bodyParser?: BodyParserOptions;
     siteFile?: {

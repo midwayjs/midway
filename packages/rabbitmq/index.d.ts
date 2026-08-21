@@ -1,3 +1,4 @@
+import type { PowerPartial } from '@midwayjs/core';
 import { IMidwayRabbitMQConfigurationOptions } from './dist';
 export * from './dist/index';
 

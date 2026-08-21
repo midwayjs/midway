@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
+import * as ts from 'typescript';
 import { close, createLegacyLightApp } from '@midwayjs/mock';
 import { IMidwayApplication } from '@midwayjs/core';
 import {
@@ -120,6 +121,27 @@ describe('/test/index.test.ts', () => {
     ]);
     expect((manager as any).filterSubscriberClasses(undefined)).toEqual([]);
   });
+
+  it('should compile package type entry', () => {
+    const declarationFile = join(__dirname, '../index.d.ts');
+    const program = ts.createProgram([declarationFile], {
+      noEmit: true,
+      strict: true,
+      moduleResolution: ts.ModuleResolutionKind.Node10,
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2021,
+      skipLibCheck: false,
+      esModuleInterop: true,
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
+    });
+
+    const diagnostics = ts
+      .getPreEmitDiagnostics(program)
+      .filter(diagnostic => diagnostic.file?.fileName === declarationFile);
+
+    expect(formatDiagnostics(diagnostics)).toEqual([]);
+  });
 });
 
 function cleanFile(file) {
@@ -153,4 +175,10 @@ async function createSubscriberDataSource(
     },
     'default'
   ) as Promise<DataSource>;
+}
+
+function formatDiagnostics(diagnostics: readonly ts.Diagnostic[]) {
+  return diagnostics.map(diagnostic =>
+    ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')
+  );
 }

@@ -1,3 +1,4 @@
+import type { PowerPartial } from '@midwayjs/core';
 import { IMidwayMQTTConfigurationOptions } from './dist';
 export * from './dist/index';
 

@@ -8,7 +8,7 @@ declare module '@midwayjs/core' {
 }
 declare module '@midwayjs/koa/dist/interface' {
   interface Context {
-    files?: UploadFileInfo<any>[];
+    files?: UploadFileInfo[];
     fields?: { [fieldName: string]: any };
     cleanupRequestFiles?: () => Promise<Array<boolean>>;
   }
@@ -16,7 +16,7 @@ declare module '@midwayjs/koa/dist/interface' {
 
 declare module '@midwayjs/web/dist/interface' {
   interface Context {
-    files?: UploadFileInfo<any>[];
+    files?: UploadFileInfo[];
     fields?: { [fieldName: string]: any };
     cleanupRequestFiles?: () => Promise<Array<boolean>>;
   }
@@ -24,7 +24,7 @@ declare module '@midwayjs/web/dist/interface' {
 
 declare module '@midwayjs/faas/dist/interface' {
   interface Context {
-    files?: UploadFileInfo<any>[];
+    files?: UploadFileInfo[];
     fields?: { [fieldName: string]: any };
     cleanupRequestFiles?: () => Promise<Array<boolean>>;
   }
@@ -32,7 +32,7 @@ declare module '@midwayjs/faas/dist/interface' {
 
 declare module '@midwayjs/express/dist/interface' {
   interface Context {
-    files?: UploadFileInfo<any>[];
+    files?: UploadFileInfo[];
     fields?: { [fieldName: string]: any };
     cleanupRequestFiles?: () => Promise<Array<boolean>>;
   }

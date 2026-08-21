@@ -1,3 +1,4 @@
+import type { ServiceFactoryConfigOption } from '@midwayjs/core';
 import { TableStoreConfig } from './dist';
 export * from './dist/index';
 
