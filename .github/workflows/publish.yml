@@ -1,0 +1,85 @@
+name: Publish npm packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Release type
+        required: true
+        default: release
+        type: choice
+        options:
+          - release
+          - next
+          - beta
+          - canary
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    timeout-minutes: 90
+    runs-on: ubuntu-latest
+    environment: npm-publish
+
+    steps:
+      - name: Validate branch
+        run: |
+          if [ "${GITHUB_REF_NAME}" != "v4-next" ]; then
+            echo "Publishing is only allowed from v4-next."
+            exit 1
+          fi
+
+      - name: Git checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Use npm with trusted publishing support
+        run: npm install -g npm@11.19.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Publish packages
+        env:
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          case "${{ inputs.release_type }}" in
+            beta)
+              bash scripts/publish.sh beta
+              ;;
+            next)
+              bash scripts/publish.sh next
+              ;;
+            canary)
+              bash scripts/publish.sh canary
+              ;;
+            release)
+              bash scripts/publish.sh
+              ;;
+          esac
