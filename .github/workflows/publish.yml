@@ -14,11 +14,12 @@ on:
           - beta
           - canary
       version_bump:
-        description: Version bump
+        description: Version bump, or existing to retry a generated tag
         required: true
         default: patch
         type: choice
         options:
+          - existing
           - patch
           - minor
           - major
