@@ -63,6 +63,13 @@ jobs:
           registry-url: https://registry.npmjs.org
           cache: pnpm
 
+      - name: Configure npm for trusted publishing
+        run: |
+          npmrc="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+          if [ -f "$npmrc" ]; then
+            sed -i '/_authToken/d' "$npmrc"
+          fi
+
       - name: Use npm with trusted publishing support
         run: npm install -g npm@11.19.0
 
