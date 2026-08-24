@@ -17,13 +17,19 @@ version() {
   fi
 }
 
+version_if_needed() {
+  if [ "$VERSION_BUMP" != "existing" ]; then
+    version "$@"
+  fi
+}
+
 case "$RELEASE_TYPE" in
   "beta")
-    SKIP_VERSION_SCRIPTS=true version --force-publish=*
+    SKIP_VERSION_SCRIPTS=true version_if_needed --force-publish=*
     lerna publish from-git --yes --dist-tag beta
     ;;
   "next")
-    SKIP_VERSION_SCRIPTS=true version
+    SKIP_VERSION_SCRIPTS=true version_if_needed
     lerna publish from-git --yes --dist-tag next
     ;;
   "canary")
@@ -32,7 +38,7 @@ case "$RELEASE_TYPE" in
     ;;
   *)
     # release (default) - 只有这个会执行完整的 version 脚本
-    version
+    version_if_needed
     lerna publish from-git --yes
     ;;
 esac
